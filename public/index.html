@@ -1,0 +1,288 @@
+<html>
+    <head>
+        <title>Aptana RadRails</title>
+        <style>
+            html {
+                height: 95%;
+                width: 99%;
+                padding: 0;
+                margin: 0;
+            }
+            
+            body {
+                font: 10pt verdana;
+                font-family: verdana;
+                height: 100%;
+                padding: 0;
+                margin: 0;
+            }
+            
+            #contents {
+                width: 100%;
+                height: 95%;
+            }
+            
+            #editOrSave {
+                width: 100%;
+            }
+            
+            .readonly {
+                font: 8pt verdana;
+                background-color: #f0f0ff;
+                border: none;
+                padding: 8px;
+            }
+            
+            td {
+                font: 10pt verdana;
+                font-family: verdana;
+                height: 100%;
+                padding: 10px;
+                margin: 0;
+            }
+            
+            .note {
+                padding: 10px;
+                border: 1px solid #CCCCCC;
+            }
+            
+            h2 {
+                width: 100%;
+                background-color: #b43530;
+                color: #FFFFFF;
+                padding: 20px;
+            }
+            
+            pre {
+                font-size: 80%;
+                padding: 10px;
+                border: 1px solid #EEEEEE;
+            }
+            
+            #search {
+                margin: 0;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                font-size: 11px;
+            }
+            
+            #search input {
+                font-size: 11px;
+                margin: 2px;
+            }
+            
+            #search-text {
+                width: 170px
+            }
+            
+            #sidebar {
+                border-left: 1px solid #DDDDDD;
+            }
+            
+            #sidebar ul {
+                margin-left: 0;
+                padding-left: 0;
+            }
+            
+            #sidebar ul h3 {
+                margin-top: 25px;
+                font-size: 16px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #ccc;
+            }
+            
+            #sidebar li {
+                list-style-type: none;
+            }
+            
+            #sidebar ul.links li {
+                margin-bottom: 5px;
+            }
+        </style>
+        <script type="text/javascript" src="javascripts/prototype.js">
+        </script>
+        <script type="text/javascript" src="javascripts/effects.js">
+        </script>
+        <script type="text/javascript">
+            function about(){
+                if (Element.empty('about-content')) {
+                    new Ajax.Updater('about-content', 'rails/info/properties', {
+                        method: 'get',
+                        onFailure: function(){
+                            Element.classNames('about-content').add('failure')
+                        },
+                        onComplete: function(){
+                            new Effect.BlindDown('about-content', {
+                                duration: 0.25
+                            })
+                        }
+                    });
+                }
+                else {
+                    new Effect[Element.visible('about-content') ? 'BlindUp' : 'BlindDown']('about-content', {
+                        duration: 0.25
+                    });
+                }
+            }
+            
+            window.onload = function(){
+                $('search-text').value = '';
+                $('search').onsubmit = function(){
+                    $('search-text').value = 'site:rubyonrails.org ' + $F('search-text');
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <h2>Welcome to Aptana RadRails</h2>
+        <table cellpadding="10">
+            <tr>
+                <td colspan="2">
+                    <p>
+                        <img src="images/rails.png" align="left" style="padding-right:10px">Aptana RadRails provides a rich and powerful user interface for creating Ruby on Rails applications. You can create projects,
+                        edit them with ease, and debug them with a variety of tools. RadRails ships with an embedded jRuby interpreter ready to go,
+                        or you can configure it to use an external Rails installation.
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">
+                    <h3>Getting Started</h3>
+                    <p>
+                        Below is a short introduction to using the functionality of Aptana RadRails.
+                        <div id="about">
+                            <h3><a href="rails/info/properties" onclick="about(); return false">About your application&rsquo;s environment</a></h3>
+                            <div id="about-content" style="display: none">
+                            </div>
+                        </div>
+                    </p>
+                    <h4>Creating a simple application</h4>
+                    <p>
+                        <ol>
+                            <li>
+                                Make sure this project is selected in the Ruby Explorer view, and select the <b>Generators</b>
+                                view at the bottom of the screen.
+                            </li>
+                            <li>
+                                Select <b>scaffold</b>
+                                from the dropdown, and paste in the following:<pre>
+recipe title:string author:string description:text
+</pre>
+                            </li>
+                            <li>
+                                Press <b>Go</b>. Rails will create a complete skeleton application including form entry fields and a database schema based on the above information.
+                            </li>
+                            <li>
+                            Once it has finished writing information to the console, go to the </b>Rake Tasks</b>
+                        view and choose <b>db:migrate</b>. Press <b>Go</b>.
+                        </li>
+                        <li>
+                            This populates the database with an empty recipe table.
+                        </li>
+                        <li>
+                            Once that has finished, click <a href="/recipes">here</a>
+                            (note the url it created) to start populating data. Enter a few records.
+                        </li>
+                        <li>
+                            If you lose this tab, you can re-launch your application from the <b>Run</b>
+                            button in the top toolbar. Click on the arrow to the right-hand side of the button to launch the web browser again.
+                        </li>
+                    </ol>
+                    </p>
+                    <h4>Viewing your data</h4>
+                    <p>
+                        Go to to Window > Open Perspective > Data. Make sure the Data Navigator view is selected. You can expand out the data navigator tree for your project and view the data in the tables.
+                    </p>
+                    <h4>Viewing your server</h4>
+                    <p>
+                        Click on the <b>Servers</b>
+                        view in order to stop and restart your internal Rails server.
+                    </p>
+                    <h4>Customizing your Application</h4>
+                    <p>
+                        You can begin editing the files under app/views to edit the template pages of your application. For further customization options and more advanced topics, see the RadRails documentation.
+                        Key file locations:
+                        <ol>
+                            <li>
+                                <b>/config/database.yml</b>: your database configuration
+                            </li>
+                            <li>
+                                <b>/db/schema.db</b>: your database schema
+                            </li>
+                            <li>
+                                <b>/public</b>: the root of your web site (including the location of this file)
+                            </li>
+                        </ol>
+                    </p>
+                </td>
+                <td valign="top" id="sidebar">
+                <h3>Exploring Rails</h3>
+                <li>
+                    <form id="search" action="http://www.google.com/search" method="get">
+                        <input type="hidden" name="hl" value="en" /><input type="text" id="search-text" name="q" value="site:rubyonrails.org " /><input type="submit" value="Search" />the Rails site
+                    </form>
+                </li>
+                <li>
+                    <h3>RadRails Community</h3>
+                    <ul class="links">
+                        <li>
+                            <a href="http://www.aptana.org/rails">RadRails home</a>
+                        </li>
+                        <li>
+                            <a href="http://www.aptana.com/blog">Weblog</a>
+                        </li>
+                        <li>
+                            <a href="http://forums.aptana.com/">Forums</a>
+                        </li>
+                        <li>
+                            <a href="http://support.aptana.com/asap/">Bug tracker</a>
+                        </li>
+                    </ul>
+                </li>
+                <h3>Other Community Links</h3>
+                <ul class="links">
+                    <li>
+                        <a href="http://www.rubyonrails.org/">Ruby on Rails</a>
+                    </li>
+                    <li>
+                        <a href="http://weblog.rubyonrails.org/">Official weblog</a>
+                    </li>
+                    <li>
+                        <a href="http://lists.rubyonrails.org/">Mailing lists</a>
+                    </li>
+                    <li>
+                        <a href="http://wiki.rubyonrails.org/rails/pages/IRC">IRC channel</a>
+                    </li>
+                    <li>
+                        <a href="http://wiki.rubyonrails.org/">Wiki</a>
+                    </li>
+                    <li>
+                        <a href="http://dev.rubyonrails.org/">Bug tracker</a>
+                    </li>
+                </ul>
+                </li>
+                <li>
+                    <h3>Browse the documentation</h3>
+                    <ul class="links">
+                        <li>
+                            <b>Rails API:</b>
+                            <br/>
+                            Window > Show View > Rails API
+                        </li>
+                        <li>
+                            <b>Ruby standard library:</b>
+                            <br/>
+                            Window > Show View > Ruby Standard Library API
+                        </li>
+                        <li>
+                            <b>Core documentation:</b>
+                            <br/>
+                            Window > Show View > Ruby Core API
+                        </li>
+                    </ul>
+                </li>
+            </td>
+            </tr>
+        </table>
+    </body>
+</html>
