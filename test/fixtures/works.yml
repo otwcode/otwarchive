@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  id: 1
+  title: MyString
+  summary: MyText
+  notes: MyText
+  date: 2008-03-27 21:28:25
+  expected_number_of_chapters: 1
+  is_complete: false
+
+two:
+  id: 1
+  title: MyString
+  summary: MyText
+  notes: MyText
+  date: 2008-03-27 21:28:25
+  expected_number_of_chapters: 1
+  is_complete: false

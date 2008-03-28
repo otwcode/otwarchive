@@ -1,0 +1,33 @@
+<p>
+  <b>Title:</b>
+  <%=h @work.title %>
+</p>
+
+<p>
+  <b>Summary:</b>
+  <%=h @work.summary %>
+</p>
+
+<p>
+  <b>Notes:</b>
+  <%=h @work.notes %>
+</p>
+
+<p>
+  <b>Date:</b>
+  <%=h @work.date %>
+</p>
+
+<p>
+  <b>Expected number of chapters:</b>
+  <%=h @work.expected_number_of_chapters %>
+</p>
+
+<p>
+  <b>Is complete:</b>
+  <%=h @work.is_complete %>
+</p>
+
+
+<%= link_to 'Edit', edit_work_path(@work) %> |
+<%= link_to 'Back', works_path %>

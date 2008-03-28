@@ -1,0 +1,30 @@
+<h1>Listing works</h1>
+
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Summary</th>
+    <th>Notes</th>
+    <th>Date</th>
+    <th>Expected number of chapters</th>
+    <th>Is complete</th>
+  </tr>
+
+<% for work in @works %>
+  <tr>
+    <td><%=h work.title %></td>
+    <td><%=h work.summary %></td>
+    <td><%=h work.notes %></td>
+    <td><%=h work.date %></td>
+    <td><%=h work.expected_number_of_chapters %></td>
+    <td><%=h work.is_complete %></td>
+    <td><%= link_to 'Show', work %></td>
+    <td><%= link_to 'Edit', edit_work_path(work) %></td>
+    <td><%= link_to 'Destroy', work, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New work', new_work_path %>
