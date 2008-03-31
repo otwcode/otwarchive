@@ -1,29 +1,17 @@
-<h1>Listing works</h1>
-
-<table>
-  <tr>
-    <th>Title</th>
-    <th>Summary</th>
-    <th>Notes</th>
-    <th>Date</th>
-    <th>Expected number of chapters</th>
-    <th>Is complete</th>
-  </tr>
+<h1>View All Stories</h1>
 
 <% for work in @works %>
-  <tr>
-    <td><%=h work.title %></td>
-    <td><%=h work.summary %></td>
-    <td><%=h work.notes %></td>
-    <td><%=h work.date %></td>
-    <td><%=h work.expected_number_of_chapters %></td>
-    <td><%=h work.is_complete %></td>
-    <td><%= link_to 'Show', work %></td>
-    <td><%= link_to 'Edit', edit_work_path(work) %></td>
-    <td><%= link_to 'Destroy', work, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
+<!--There must be a more elegant way of assigning class/id to elements, mustn't there? -->
+<div class="story" id="<%=h work.id %>"><%= link_to h(work.title), work %> by #:user
+    <%=h work.summary %>
+    <%=h work.notes %>
+    <%=h work.created_at %>
+    <%=h work.expected_number_of_chapters %><!--Should probably only be shown on incomplete works -->
+    <%=h work.is_complete %><!--This returns a boolean, rather than some meaningful text.  That's no good. -->
+    <%= link_to 'Edit', edit_work_path(work) %>
+    <%= link_to 'Delete', work, :confirm => 'Are you sure?', :method => :delete %>
+</p>
 <% end %>
-</table>
 
 <br />
 

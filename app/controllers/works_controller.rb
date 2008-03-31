@@ -70,7 +70,7 @@ class WorksController < ApplicationController
       end
     end
   end
-
+   
   # DELETE /works/1
   # DELETE /works/1.xml
   def destroy
