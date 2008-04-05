@@ -6,7 +6,7 @@ class WorksController < ApplicationController
     
     # This is here just as an example of how to set a flash alert.
     # You can use flash[:notice], flash[:warning], and flash[:error].
-    flash[:notice] = 'This is a notification box. With a <a href="#" title="Story Title" class="story-title">Story Title</a>.'
+    flash[:notice] = 'This is a sample notice box. It is appearing here only because it has been manually set in the show method in the controller as an example.'
 
     respond_to do |format|
       format.html # index.html.erb
@@ -21,7 +21,7 @@ class WorksController < ApplicationController
 
     # This is here just as an example of how to set a flash alert.
     # You can use flash[:notice], flash[:warning], and flash[:error].
-    flash[:error] = 'This is an error box.'
+    flash[:error] = 'This is a sample error box. It is appearing here only because it has been manually set in the show method in the controller as an example.'
 
     respond_to do |format|
       format.html # show.html.erb
