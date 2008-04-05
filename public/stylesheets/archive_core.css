@@ -16,7 +16,7 @@ html {
 a {
 	color: #111111;
 	text-decoration: underline;
-	font: bold verdana, tahoma, arial, sans-serif;
+	font: bold Verdana, Tahoma, Arial, sans-serif;
 }
 a:hover {
 	color: #999999;

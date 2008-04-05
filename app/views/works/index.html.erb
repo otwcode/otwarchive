@@ -2,7 +2,7 @@
 <ul class="story-list">
 <% for work in @works %>
 <!--There must be a more elegant way of assigning class/id to elements, mustn't there? -->
-<li class="story" id="<%=h work.id %>"><h3 title="Story Title"></h3><%= link_to h(work.title), work %></h3> by <a href="" class="storytitle">#:user</a>
+<li class="story" id="<%=h work.id %>"><h3 title="Story Title"></h3><%= link_to h(work.title), work %></h3> by <a href="" class="story-author">#:user</a>
     <div class="story-date"><%=h work.created_at %></div>
     <p class="story-desc"><%=h work.summary %></p>
     <%=h work.notes %>
