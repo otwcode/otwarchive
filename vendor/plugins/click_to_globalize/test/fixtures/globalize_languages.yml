@@ -1,0 +1,21 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+english:
+  id: 1
+  iso_639_1: en
+  iso_639_2: eng
+  english_name: English
+  native_name: English
+  direction: ltr
+  scope: L
+  macro_language: false
+  pluralization: 'c == 1 ? 1 : 2'
+italian:
+  id: 2
+  iso_639_1: it
+  iso_639_2: ita
+  english_name: Italian
+  native_name: Italian
+  direction: ltr
+  scope: L
+  macro_language: false
+  pluralization: 'c == 1 ? 1 : 2'

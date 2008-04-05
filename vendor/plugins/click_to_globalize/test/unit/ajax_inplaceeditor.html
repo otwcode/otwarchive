@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>ClickToGlobalize Unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../../../../public/javascripts/prototype.js" type="text/javascript"></script>
+  <script src="../../../../../public/javascripts/effects.js" type="text/javascript"></script>
+  <script src="../../../../../public/javascripts/controls.js" type="text/javascript"></script>
+  <script src="../../../../../public/javascripts/click_to_globalize.js" type="text/javascript"></script>
+  <script src="../lib/unittest.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../test.css" type="text/css" />
+  <style type="text/css" media="screen">
+  /* <![CDATA[ */
+    #testcss1 { font-size:11px; color: #f00; }
+    #testcss2 { font-size:12px; color: #0f0; display: none; }
+  /* ]]> */
+  </style>
+</head>
+<body>
+<h1>ClickToGlobalize Unit test file</h1>
+<p>
+  Test InPlaceEditor element.
+</p>
+  
+  <!-- Fixtures -->
+  <div id="fixtures" style="display:none;">
+    <p id="paragraph">paragraph text</p>
+    <p id="paragraph2">paragraph text</p>
+    <table>
+      <tbody id="table">
+        <tr>
+          <th id="first_header">First Header</th>
+          <td id="first_cell">First Cell</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+<!-- Log output -->
+<div id="testlog"> </div>
+
+<!-- Tests follow -->
+<script type="text/javascript" language="javascript" charset="utf-8">
+// <![CDATA[
+
+  // Override this method, to avoid useless AJAX requests and elements binding.
+  ClickToGlobalize.init = function() { };
+  
+  new Test.Unit.Runner({
+    setup: function(){
+      url = '/foo/bar';
+      element_klass = Element;
+    },
+    testRespondTo: function() {
+      this.assertRespondsTo('createHiddenField', Ajax.InPlaceEditor.prototype);
+    },
+    testInitialize: function() {
+      element = $('paragraph');
+      
+      ipe = new Ajax.InPlaceEditor(element, url, {});
+      this.assertInstanceOf(Ajax.InPlaceEditor, ipe);
+      this.assertEqual(element, ipe.element);
+      this.assertEqual(url, ipe.url);
+    },
+    testInitializeCellElement: function() {
+      element = $('first_header');
+      ipe = new Ajax.InPlaceEditor(element, url, {});
+      this.assertInstanceOf(Ajax.InPlaceEditor, ipe);
+      this.assertEqual(url, ipe.url);
+      span = element.descendants().first();
+      this.assertNotNull(span);
+      if(Prototype.Browser.Gecko) element_klass = HTMLSpanElement;
+      this.assertInstanceOf(element_klass, span);
+      this.assertEqual('First Header', span.getText());
+      
+      element = $('first_cell');
+      ipe = new Ajax.InPlaceEditor(element, url, {});
+      this.assertInstanceOf(Ajax.InPlaceEditor, ipe);
+      this.assertEqual(url, ipe.url);
+      span = element.descendants().first();
+      this.assertNotNull(span);
+      if(Prototype.Browser.Gecko) element_klass = HTMLSpanElement;
+      this.assertInstanceOf(element_klass, span);
+      this.assertEqual('First Cell', span.getText());
+    },
+    testCreateForm: function() {
+      element = $('paragraph2');
+      ipe = new Ajax.InPlaceEditor(element, url, {});
+
+      Event.simulateMouse('paragraph2','click');
+      form = ipe._form
+      this.assertInstanceOf(HTMLFormElement, form);
+      this.assertEqual(4, form.descendants().size());
+
+      input_text = $$('form input[type~=text]').first();
+      this.assertInstanceOf(HTMLInputElement, input_text);
+      this.assertEqual('paragraph text', input_text.value);
+
+      submit_button = $$('form input[type~=submit]').first();
+      if(!Prototype.Browser.Opera) element_klass = HTMLInputElement;
+      this.assertInstanceOf(HTMLInputElement, submit_button);
+      
+      cancel_link = $$('form a').first();
+      this.assertInstanceOf(HTMLAnchorElement, cancel_link);
+      
+      hidden_field = $$('form input[type~=hidden]').first();
+      this.assertInstanceOf(HTMLInputElement, hidden_field);
+    }
+  }, "testlog");
+// ]]>
+</script>
+</body>
+</html>

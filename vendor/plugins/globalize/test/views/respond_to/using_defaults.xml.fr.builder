@@ -1,0 +1,1 @@
+xml.p "Bonjour le monde !"

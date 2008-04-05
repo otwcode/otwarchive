@@ -1,0 +1,89 @@
+=Welcome to Globalize
+
+*Globalize* is a Ruby on Rails plugin designed to support globalized applications.
+It supports translation into multiple languages (for both db content and controller
+and view code) and localization of time, data, and numbers.
+It's under the MIT License, same as Ruby on Rails.
+
+== How to use it
+
+Decide where you'd like globalize to store your translations.
+
+By default globalize stores translations externally in a dedicated table but now
+you also have the option to store translations within the model's own table.
+
+To set this method as the default for add:
+
+ Globalize::DbTranslate.keep_translations_in_model = true
+
+to your environment.rb.
+
+=== In your models
+
+  #All translations stored in a separate table
+  class Product < ActiveRecord::Base
+    translates :name, :description, :specs
+  end
+
+or you can override the global setting per model by:
+
+  #All translations stored 'products' table
+  class Product < ActiveRecord::Base
+
+    self.keep_translations_in_model = true
+
+    translates
+    :name, :description, :specs
+  end
+
+Then:
+
+Using <i>keep_translations_in_model = false</i>:
+
+  Locale.set("en-US")
+  prod = Product.find(1)
+
+<tt>prod.name -> "Meatballs"</tt>
+
+  Locale.set("es-ES")
+  prod = Product.find(1) #Note: A reload of the model instance is required after a locale change.
+
+<tt>prod.name -> "Albondigas"</tt>
+
+
+Using <i>keep_translations_in_model = true</i>:
+
+  Locale.set("en-US")
+  prod = Product.find(1)
+
+<tt>prod.name -> "Meatballs"</tt>
+
+  Locale.set("es-ES")
+
+<tt>prod.name -> "Albondigas"</tt> #Note: No reload of model is required
+
+=== In your views (or anywhere else)
+
+  Locale.set("he-IL")
+  <%= "Thanks for ordering!".t %> -> "תודה על ההזמנה!"
+  <%= "You've got %d items in your cart" / 5 %> -> "יש 5 מוצרים בסל שלך"
+
+  Locale.set("es-ES")
+  <%= Time.now.loc("%d %B %Y") %> -> "17 Octubre 2005"
+  <%= 12345.45.loc %> -> "12.345,45"
+
+See the wiki (http://www.globalize-rails.org/) for more documentation.
+
+== How to install
+
+From your rails app root directory:
+
+1. <tt>script/plugin install http://svn.globalize-rails.org/svn/globalize/trunk</tt>
+2. <tt>rake globalize:setup</tt> (might take a while, about a minute or so)
+
+...and you're globalized, dude!
+
+Optionally, try:
+
+* <tt>rake test_plugins</tt>
+* <tt>rake plugindoc</tt>

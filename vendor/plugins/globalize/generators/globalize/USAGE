@@ -1,0 +1,86 @@
+Usage: script/generate globalize [tiny|internal] [lang|lang1,lang2...]
+
+Description:
+    Generates globalize specific migrations. The default migration creates and
+    populates the "globalize" db tables.
+    All tables are prefixed with "globalize_", so they won't conflict with
+    other application tables. Run 'rake db:migrate' afterwards to synch the db.
+
+    You can also specify the extra argument "tiny" to generate a compact version
+    of the data files (major languages only).
+
+    Specify "internal" to generate a migration which adds the required
+    language-suffixed columns for those model attributes marked as translatable
+    when using the internal storage mechanism
+    (i.e. keep_translations_in_model is true.)
+
+
+
+Example:
+
+    Firstly, the command:
+
+    ./script/generate globalize
+
+    will create:
+      db/migrate/xxx_globalize_migration.rb
+
+    which contains the db schema commands necessary to create the globalize tables
+    preloaded with a large amount of language/country data and certain translations
+    used for the ActionView date helper.
+
+    Secondly, the command:
+
+    ./script/generate globalize tiny
+
+    will also create:
+      db/migrate/xxx_globalize_migration.rb
+
+    but with a reduced amount of language and country data.
+
+
+  Assuming you have these two models:
+
+  class Product
+    self.keep_translations_in_model = true
+    translates :title
+  end
+
+  class Client
+    set_table_name :customers
+    self.keep_translations_in_model = true
+    translates :name
+  end
+
+  The following command:
+
+  ./script/generate globalize internal es,ca,fr
+
+  will create:
+	db/migrate/xxx_globalize_add_translated_fields_for_products_clients.rb
+
+  class GlobalizeAddTranslatedFieldsForProductsClients < ActiveRecord::Migration
+    def self.up
+        add_column :products, :title_es, :string
+        add_column :products, :title_ca, :string
+        add_column :products, :title_fr, :string
+
+        add_column :customers, :name_es, :string
+        add_column :customers, :name_ca, :string
+        add_column :customers, :name_fr, :string
+    end
+
+    def self.down
+        remove_column :products, :title_es
+        remove_column :products, :title_ca
+        remove_column :products, :title_fr
+        remove_column :customers, :name_es
+        remove_column :customers, :name_ca
+        remove_column :customers, :name_fr
+    end
+  end
+
+  Note: It will only generate the language-suffixed columns if they currently
+  do not exist in the table (for the current environment).
+
+  Remember to run rake db:migrate to add these migrations to your database.

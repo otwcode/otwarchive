@@ -1,0 +1,59 @@
+usa:
+  id: 1
+  code: US
+  english_name: United States
+  date_format: '%m-%d-%y'
+  currency_format: '$%n'
+  thousands_sep: ','
+  decimal_sep: '.'
+  currency_code: USD
+israel:
+  id: 2
+  code: IL
+  english_name: Israel
+  date_format: '%d.%m.%Y'
+  currency_format: '%n ₪'
+  thousands_sep: ','
+  decimal_sep: '.'
+  currency_code: ILS
+germany:
+  id: 3
+  code: DE
+  english_name: Germany
+  date_format: '%d-%m-%Y'
+  thousands_sep: '.'
+  decimal_sep: ','
+india:
+  id: 4
+  code: IN
+  english_name: India
+  thousands_sep: ','
+  decimal_sep: '.'
+  number_grouping_scheme: indian
+switzerland:
+  id: 5
+  code: CH
+  english_name: Switzerland
+  currency_format: 'SFr. %n'
+  currency_code: CHF
+  thousands_sep: "'"
+  decimal_sep: ','
+  currency_decimal_sep: '.'
+spain:
+  id: 6
+  code: ES
+  english_name: Spain
+  currency_format: '%n €'
+  currency_code: EUR
+  thousands_sep: "."
+  decimal_sep: ','
+  currency_decimal_sep: ','
+poland:
+  id: 7
+  code: PL
+  english_name: Poland
+  currency_format: '%n PLN'
+  currency_code: PLN
+  thousands_sep: "."
+  decimal_sep: ','
+  currency_decimal_sep: ','

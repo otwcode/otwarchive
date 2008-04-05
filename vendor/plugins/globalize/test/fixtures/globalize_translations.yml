@@ -1,0 +1,413 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+prod_1_facet_1_he_tr:
+  id: 4
+  table_name: globalize_products
+  item_id: 1
+  facet: description
+  language_id: 2
+  text: זהו תיאור המוצר הראשון
+  type: ModelTranslation
+mfr_1_facet_1_he_tr:
+  id: 5
+  table_name: globalize_manufacturers
+  item_id: 1
+  facet: name
+  language_id: 2
+  text: רברנד
+  type: ModelTranslation
+prod_3_facet_1_he_tr:
+  id: 9
+  table_name: globalize_products
+  item_id: 3
+  facet: name
+  language_id: 2
+  text: סקר
+  type: ModelTranslation
+prod_4_facet_1_he_tr:
+  id: 10
+  table_name: globalize_products
+  item_id: 4
+  facet: name
+  language_id: 2
+  text: סארט
+  type: ModelTranslation
+prod_5_facet_1_he_tr:
+  id: 11
+  table_name: globalize_products
+  item_id: 5
+  facet: name
+  language_id: 2
+  text: סארי
+  type: ModelTranslation
+
+view_he_tr_1:
+  id: 12
+  type: ViewTranslation
+  language_id: 2
+  pluralization_index: 1
+  tr_key: And now in Hebrew
+  text: "ועכשיו בעברית"
+
+view_pl_tr_1_1:
+  id: 13
+  type: ViewTranslation
+  language_id: 4
+  tr_key: "%d file"
+  pluralization_index: 1
+  text: "%d plik"
+view_pl_tr_1_2:
+  id: 14
+  type: ViewTranslation
+  language_id: 4
+  pluralization_index: 2
+  tr_key: "%d file"
+  text: "%d pliki"
+view_pl_tr_1_3:
+  id: 15
+  type: ViewTranslation
+  language_id: 4
+  pluralization_index: 3
+  tr_key: "%d file"
+  text: "%d plików"
+
+
+
+view_ur_tr_1_1:
+  id: 16
+  type: ViewTranslation
+  language_id: 3
+  tr_key: "I have %d bogus numbers"
+  pluralization_index: 1
+  text: "I have %d bogus number"
+view_ur_tr_1_2:
+  id: 17
+  type: ViewTranslation
+  language_id: 3
+  tr_key: "I have %d bogus numbers"
+  pluralization_index: 2
+  text: "I have %d bogus numbers"
+
+view_he_tr_singular:
+  id: 18
+  type: ViewTranslation
+  language_id: 2
+  tr_key: "I have %d files"
+  pluralization_index: 1
+  text: "יש לי קובץ אחד"
+
+view_he_tr_validation_1:
+  id: 19
+  type: ViewTranslation
+  language_id: 2
+  tr_key: "Specs is too long (maximum is %d characters)"
+  pluralization_index: 1
+  text: "המפרט ארוך מדי (המקסימום הוא תו אחד)"
+view_he_tr_validation_2:
+  id: 20
+  type: ViewTranslation
+  language_id: 2
+  tr_key: "Specs is too long (maximum is %d characters)"
+  pluralization_index: 2
+  text: "המפרט ארוך מדי (המקסימום הוא %d תווים)"
+
+date_he_oct_abbr:
+  id: 21
+  type: ViewTranslation
+  language_id: 2
+  tr_key: 'Oct [abbreviated month]'
+  pluralization_index: 1
+  text: "אוק"
+
+date_he_mon_abbr:
+  id: 22
+  type: ViewTranslation
+  language_id: 2
+  tr_key: 'Mon [abbreviated weekday]'
+  pluralization_index: 1
+  text: "יום ב'"
+
+text_substitution_en:
+  id: 23
+  type: ViewTranslation
+  language_id: 1
+  tr_key: 'welcome, %s'
+  pluralization_index: 1
+  text: 'Welcome, %s'
+
+text_substitution_he:
+  id: 24
+  type: ViewTranslation
+  language_id: 2
+  tr_key: 'welcome, %s'
+  pluralization_index: 1
+  text: 'ברוכים הבאים, %s'
+
+view_he_tr_plural:
+  id: 25
+  type: ViewTranslation
+  language_id: 2
+  tr_key: "I have %d files"
+  pluralization_index: 2
+  text: "יש לי %d קבצים"
+
+view_he_tr_ltm:
+  id: 26
+  type: ViewTranslation
+  language_id: 2
+  tr_key: "less than a minute"
+  pluralization_index: 1
+  text: "פחות מדקה"
+
+view_he_tr_lts:
+  id: 27
+  type: ViewTranslation
+  language_id: 2
+  tr_key: "less than %d seconds"
+  pluralization_index: 1
+  text: "פחות משנייה"
+
+view_he_tr_lts_pl:
+  id: 28
+  type: ViewTranslation
+  language_id: 2
+  tr_key: "less than %d seconds"
+  pluralization_index: 2
+  text: "פחות מ-‏%d שניות"
+
+view_he_tr_hm:
+  id: 29
+  type: ViewTranslation
+  language_id: 2
+  tr_key: "half a minute"
+  pluralization_index: 1
+  text: "חצי דקה"
+
+view_he_tr_minutes:
+  id: 30
+  type: ViewTranslation
+  language_id: 2
+  tr_key: "%d minutes"
+  pluralization_index: 1
+  text: "דקה"
+
+view_he_tr_minutes_pl:
+  id: 31
+  type: ViewTranslation
+  language_id: 2
+  tr_key: "%d minutes"
+  pluralization_index: 2
+  text: "%d דקות"
+
+view_he_tr_hours:
+  id: 32
+  type: ViewTranslation
+  language_id: 2
+  tr_key: "about %d hours"
+  pluralization_index: 1
+  text: "כשעה"
+
+view_he_tr_hours_pl:
+  id: 33
+  type: ViewTranslation
+  language_id: 2
+  tr_key: "about %d hours"
+  pluralization_index: 2
+  text: "כ-‏%d שעות"
+
+view_he_tr_days:
+  id: 34
+  type: ViewTranslation
+  language_id: 2
+  tr_key: "%d days"
+  pluralization_index: 1
+  text: "יום אחד"
+
+view_he_tr_days_pl:
+  id: 35
+  type: ViewTranslation
+  language_id: 2
+  tr_key: "%d days"
+  pluralization_index: 2
+  text: "%d ימים"
+
+view_he_tr_month_jan:
+  id: 36
+  type: ViewTranslation
+  language_id: 2
+  tr_key: 'January [month]'
+  pluralization_index: 1
+  text: "ינואר"
+
+view_he_tr_month_feb:
+  id: 37
+  type: ViewTranslation
+  language_id: 2
+  tr_key: 'February [month]'
+  pluralization_index: 1
+  text: "פברואר"
+
+view_he_tr_month_feb:
+  id: 38
+  type: ViewTranslation
+  language_id: 2
+  tr_key: 'February [month]'
+  pluralization_index: 1
+  text: "פברואר"
+
+view_he_tr_month_mar:
+  id: 39
+  type: ViewTranslation
+  language_id: 2
+  tr_key: 'March [month]'
+  pluralization_index: 1
+  text: "מרץ"
+
+view_he_tr_month_apr:
+  id: 40
+  type: ViewTranslation
+  language_id: 2
+  tr_key: 'April [month]'
+  pluralization_index: 1
+  text: "אפריל"
+
+view_he_tr_month_may:
+  id: 41
+  type: ViewTranslation
+  language_id: 2
+  tr_key: 'May [month]'
+  pluralization_index: 1
+  text: "מאי"
+
+view_he_tr_month_jun:
+  id: 43
+  type: ViewTranslation
+  language_id: 2
+  tr_key: 'June [month]'
+  pluralization_index: 1
+  text: "יוני"
+
+view_he_tr_month_jul:
+  id: 44
+  type: ViewTranslation
+  language_id: 2
+  tr_key: 'July [month]'
+  pluralization_index: 1
+  text: "יולי"
+
+view_he_tr_month_aug:
+  id: 45
+  type: ViewTranslation
+  language_id: 2
+  tr_key: 'August [month]'
+  pluralization_index: 1
+  text: "אוגוסט"
+
+view_he_tr_month_sep:
+  id: 46
+  type: ViewTranslation
+  language_id: 2
+  tr_key: 'September [month]'
+  pluralization_index: 1
+  text: "ספטמבר"
+
+view_he_tr_month_oct:
+  id: 47
+  type: ViewTranslation
+  language_id: 2
+  tr_key: 'October [month]'
+  pluralization_index: 1
+  text: "אוקטובר"
+
+view_he_tr_month_nov:
+  id: 48
+  type: ViewTranslation
+  language_id: 2
+  tr_key: 'November [month]'
+  pluralization_index: 1
+  text: "נובמבר"
+
+view_he_tr_month_dec:
+  id: 49
+  type: ViewTranslation
+  language_id: 2
+  tr_key: 'December [month]'
+  pluralization_index: 1
+  text: "דצמבר"
+
+model_simple_name_1:
+  id: 50
+  table_name: globalize_simples
+  item_id: 1
+  facet: name
+  language_id: 2
+  text: זהו השם הראשון
+  type: ModelTranslation
+
+model_simple_desc_1:
+  id: 51
+  table_name: globalize_simples
+  item_id: 1
+  facet: description
+  language_id: 2
+  text: זהו התיאור הראשון
+  type: ModelTranslation
+
+view_es_tr_namespace_1:
+  id: 60
+  type: ViewTranslation
+  language_id: 7
+  pluralization_index: 1
+  tr_key: draw
+  text: "dibujar"
+
+view_es_tr_namespace_2:
+  id: 61
+  type: ViewTranslation
+  language_id: 7
+  pluralization_index: 1
+  tr_key: draw
+  namespace: lottery
+  text: "seleccionar"
+
+view_es_tr_namespace_3:
+  id: 62
+  type: ViewTranslation
+  language_id: 7
+  pluralization_index: 1
+  tr_key: "draw %d times"
+  text: "dibujar una vez"
+
+view_es_tr_namespace_4:
+  id: 63
+  type: ViewTranslation
+  language_id: 7
+  pluralization_index: 2
+  tr_key: "draw %d times"
+  text: "dibujar %d veces"
+
+
+view_es_tr_namespace_5:
+  id: 64
+  type: ViewTranslation
+  language_id: 7
+  pluralization_index: 1
+  namespace: lottery
+  tr_key: "draw %d times"
+  text: "seleccionar una vez"
+
+view_es_tr_namespace_6:
+  id: 65
+  type: ViewTranslation
+  language_id: 7
+  pluralization_index: 2
+  namespace: lottery
+  tr_key: "draw %d times"
+  text: "seleccionar %d veces"
+
+view_es_tr_namespace_7:
+  id: 66
+  type: ViewTranslation
+  language_id: 1
+  pluralization_index: 1
+  tr_key: "draw %d times"
+  text: "draw once"

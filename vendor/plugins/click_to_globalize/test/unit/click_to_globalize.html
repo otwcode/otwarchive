@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>ClickToGlobalize Unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../../../../public/javascripts/prototype.js" type="text/javascript"></script>
+  <script src="../../../../../public/javascripts/effects.js" type="text/javascript"></script>
+  <script src="../../../../../public/javascripts/controls.js" type="text/javascript"></script>
+  <script src="../../../../../public/javascripts/click_to_globalize.js" type="text/javascript"></script>
+  <script src="../lib/unittest.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../test.css" type="text/css" />
+  <style type="text/css" media="screen">
+  /* <![CDATA[ */
+    #testcss1 { font-size:11px; color: #f00; }
+    #testcss2 { font-size:12px; color: #0f0; display: none; }
+  /* ]]> */
+  </style>
+</head>
+<body>
+<h1>ClickToGlobalize Unit test file</h1>
+<p>
+  Test ClickToGlobalize.
+</p>
+  
+  <!-- Fixtures -->
+  <div id="fixtures" style="display:none;">
+    <p id="paragraph">Hello World</p>
+    <p id="paragraph2">paragraph text</p>
+    <p id="paragraph3">paragraph no. three</p>
+  </div>
+  
+<!-- Log output -->
+<div id="testlog"> </div>
+
+<!-- Tests follow -->
+<script type="text/javascript" language="javascript" charset="utf-8">
+// <![CDATA[
+
+  // Override this method, cause on the page loading, it start with AJAX requests and we aren't ready.
+  ClickToGlobalize.init = function() { };
+
+  var TestUtil = {
+    prepareForRequest: function(){
+      ClickToGlobalize.httpMethod      = 'get';
+      ClickToGlobalize.translations    = $H(jsonResponse);
+      ClickToGlobalize.translationsUrl = 'fixtures/translations.json';
+    }
+  };
+
+  new Test.Unit.Runner({
+    setup: function() {
+      translationsUrl   = '/locale/translations';
+      httpMethod        = 'post';
+      jsonResponse      = {hello_world: 'Hello World'};
+      authenticityToken = '45c0a7bf277d5e40d490438f41a67069e5334d96';
+      // Now, we should be ready for init stuff.
+      ClickToGlobalize.init = function(authenticityToken) { 
+        this.authenticityToken = encodeURIComponent(authenticityToken);
+        this.setTranslationsFromServer();
+        this.generateEditors();
+      };
+    },
+    teardown: function() {
+      ClickToGlobalize.httpMethod      = httpMethod;
+      ClickToGlobalize.translationsUrl = translationsUrl;
+    },
+    testRespondTo: function() {
+      this.assertRespondsTo('init',                      ClickToGlobalize);
+      this.assertRespondsTo('generateEditors',           ClickToGlobalize);
+      this.assertRespondsTo('bindEditor',                ClickToGlobalize);
+      this.assertRespondsTo('unbindEditor',              ClickToGlobalize);
+      this.assertRespondsTo('setTranslationsFromServer', ClickToGlobalize);      
+    },
+    testClassVariables: function() {
+      translateUrl            = '/locale/translate';
+      translateUnformattedUrl = '/locale/translate_unformatted';
+      asynchronous            = true;
+      textarea                = {rows: 5, cols: 40};
+      inputText               = {rows: 1, cols: 20};
+      textLength              = 160;
+      clickToEditText         = 'Click to globalize';
+      textileElements = ['a', 'acronym', 'blockquote', 'bold', 'cite', 'code',
+                         'del', 'em', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'i',
+                         'img', 'ins', 'span', 'strong', 'sub', 'sup', 'table',
+                        ].collect(function(element){return element.toUpperCase();});
+      
+      this.assertEqual(translateUrl,            ClickToGlobalize.translateUrl);
+      this.assertEqual(translateUnformattedUrl, ClickToGlobalize.translateUnformattedUrl);
+      this.assertEqual(translationsUrl,         ClickToGlobalize.translationsUrl);
+      this.assertEqual(httpMethod,              ClickToGlobalize.httpMethod);
+      this.assertEqual(asynchronous,            ClickToGlobalize.asynchronous);
+      this.assertEnumEqual(textarea,            ClickToGlobalize.textarea);
+      this.assertEnumEqual(inputText,           ClickToGlobalize.inputText);
+      this.assertEqual(textLength,              ClickToGlobalize.textLength);
+      this.assertEqual(clickToEditText,         ClickToGlobalize.clickToEditText);
+      this.assertEnumEqual(textileElements,     ClickToGlobalize.textileElements);
+
+      this.assertNull(ClickToGlobalize.authenticityToken)
+    },
+    testSetTranslationsFromServer: function() {
+      TestUtil.prepareForRequest();
+      ClickToGlobalize.init(authenticityToken);
+      
+      this.assertEqual(authenticityToken, ClickToGlobalize.authenticityToken);
+      this.assertInstanceOf(Hash,         ClickToGlobalize.translations);
+      this.assertHashEqual(jsonResponse,  ClickToGlobalize.translations);
+    },
+    testGenerateEditors: function() {
+      TestUtil.prepareForRequest();
+      ClickToGlobalize.init(authenticityToken);
+      
+      this.assertEqual(ClickToGlobalize.clickToEditText, $('paragraph').getAttribute('title'));
+    },
+    testBindEditor: function() {
+      ClickToGlobalize.bindEditor($('paragraph2'), 'paragraph_text', 'paragraph text');
+      this.assertEqual(ClickToGlobalize.clickToEditText, $('paragraph2').getAttribute('title'));
+    },
+    testUnbindEditor: function() {
+      element = $('paragraph3');
+      ipe = new Ajax.InPlaceEditor(element, ClickToGlobalize.translateUrl, {});
+      ClickToGlobalize.unbindEditor(element, ipe);
+      Event.simulateMouse('paragraph3','click');
+      this.assertNullOrUndefined(ipe._form);
+    }
+  }, "testlog");
+// ]]>
+</script>
+</body>
+</html>

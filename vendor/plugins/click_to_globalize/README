@@ -1,0 +1,137 @@
+ClickToGlobalize
+=================
+
+ClickToGlobalize is an extension for Globalize plugin, it allows to edit in
+place globalized labels. With this plugin you don't have to create a
+globalization back-end, but just edit your interface in place!!
+
+If you have a previous globalization experience, you probably noticed that the
+main problem of dedicated back-ends is the lack of the context where the
+string will be placed in. It isn't a trivial issue: you'll never know if the
+meaning of your string is harmonious with other labels and how your string will
+be rendered, until the page load.
+
+Now you can forget this issues, you can directly globalize in place!!
+
+Check for news and tutorials at the project home page[http://www.lucaguidi.com/pages/click-to-globalize].
+
+Getting Started
+===============
+
+1. Install Globalize[http://www.globalize-rails.org/].
+
+2. Install Click To Globalize:
+   $ ./scripts/plugin install http://dev.23labs.net/svn/rails/plugins/click_to_globalize/trunk
+
+3. Add at the end of your layout the following code:
+   <%= click_to_globalize -%>
+
+4. Put in your view:
+   <%= 'hello_world'.t %>
+
+5. Start your server and click to globalize.
+
+Prerequisites
+=============
+
+* Globalize plugin: www.globalize-rails.org.
+  
+* RedCloth gem (optional) for textile formatting.
+
+* BlueCloth gem (optional) for markdown formatting.
+
+Install
+=======
+
+1. Install Globalize, if you don't already done.
+
+2. Install Click To Globalize:
+   Rails 2.0
+   $ ./scripts/plugin install http://dev.23labs.net/svn/rails/plugins/click_to_globalize/trunk
+   Rails 1.2.x
+   $ ./scripts/plugin install http://dev.23labs.net/svn/rails/plugins/click_to_globalize/branches/for-1.2.x
+
+3. Run the setup task:
+   $ rake click:setup
+   
+4. Run the tests (optional):
+   $ rake click:test
+
+5. Choose your languages, they will be used to create a picker menu.
+   class ApplicationController < ActionController::Base
+     self.languages = { :english => 'en-US', :italian => 'it-IT' }
+   end
+   
+6. If you like to use wiki-formatting styles, you could use textile (RedCloth)
+   or markdown (BlueCloth).
+   class ApplicationController < ActionController::Base
+     self.formatting :textile
+   end
+
+7. Personalize the access to the globalization features, overriding #globalize:
+   class ApplicationController < ActionController::Base
+     def globalize?
+       current_user.admin?
+     end
+   end
+   
+   NOTE: #globalize? is method to turn on/off all the Click to Globalize features.
+   NOTE: self.globalize? has been deprecated in favor of globalize?.
+
+8. Add at the end of your layout the following code:
+   <%= click_to_globalize -%>
+
+Uninstall
+=========
+
+1. $ ./script/plugin remove click_to_globalize
+
+Features
+========
+
+* In place editing for each globalized string.
+
+* Easy and painless plug-in/plug-out process.
+
+* Unobtrusive Javascripts.
+
+* Textile and Markdown support.
+
+* Auto transformation from input text to textarea for long strings.
+
+Common Issues
+=============
+
+* Since the Globalize plugin creates folders like 'for-1.2', be sure to rename
+  the folder to 'globalize'.
+
+* Due to unobtrusive nature of the plugin, each page is parsed by javascript
+  to find the right element and bind to it an Ajax.InPlaceEditor.
+  Be sure your (X)HTML is wellformed.
+
+  NOTE: If you use the Rails scaffold system, Click To Globalize
+  doesn't works. Cleanup the code before to use.
+
+* If you use a wiki-formatting style it could be advisable to use #h to avoid
+  security problems (i.e. XSS).
+  <%= textilize(h('some_text'.t)) %>
+  
+Contribute
+==========
+
+* Check out the code and test it:
+  $ svn co http://dev.23labs.net/svn/rails/plugins/click_to_globalize/trunk
+  $ rake click:test
+
+* Create a ticket to: http://dev.23labs.net/rails/trac.cgi
+
+* Create a patch and add as attachement to the ticket.
+
+Credits
+=======
+
+Javascript tests are based on Prototype[http://prototypejs.org] test libs.
+
+
+
+Copyright (c) 2007-2008 Luca Guidi - http://23labs.net, released under the MIT license

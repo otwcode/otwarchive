@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>ClickToGlobalize Unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../../../../public/javascripts/prototype.js" type="text/javascript"></script>
+  <script src="../../../../../public/javascripts/effects.js" type="text/javascript"></script>
+  <script src="../../../../../public/javascripts/controls.js" type="text/javascript"></script>
+  <script src="../../../../../public/javascripts/click_to_globalize.js" type="text/javascript"></script>
+  <script src="../lib/unittest.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../test.css" type="text/css" />
+  <style type="text/css" media="screen">
+  /* <![CDATA[ */
+    #testcss1 { font-size:11px; color: #f00; }
+    #testcss2 { font-size:12px; color: #0f0; display: none; }
+  /* ]]> */
+  </style>
+</head>
+<body>
+<h1>ClickToGlobalize Unit test file</h1>
+<p>
+  Test Element extentions.
+</p>
+  
+  <!-- Fixtures -->
+  <div id="base" style="display:none;">base</div>
+  <div id="empty"></div>
+  <div id="nested" style="display:none;"><div id="nested_child">nested</div></div>
+
+<!-- Log output -->
+<div id="testlog"> </div>
+
+<!-- Tests follow -->
+<script type="text/javascript" language="javascript" charset="utf-8">
+// <![CDATA[
+
+  // Override this method, to avoid useless AJAX requests and elements binding.
+  ClickToGlobalize.init = function() { };
+  
+  new Test.Unit.Runner({
+    testRespondTo: function() {
+      element = $('base');
+      this.assertRespondsTo('getText', element);
+    },
+    testGetText: function() {
+      base = $('base');
+      this.assertInstanceOf(HTMLDivElement, base);
+      this.assertEqual('base', base.getText());
+      
+      empty = $('empty');
+      this.assertInstanceOf(HTMLDivElement, empty);
+      this.assertEqual('', empty.getText());
+      
+      nested = $('nested');
+      this.assertInstanceOf(HTMLDivElement, nested);
+      this.assertEqual('', nested.getText());
+      
+      nested_child = $('nested_child');
+      this.assertInstanceOf(HTMLDivElement, nested_child);
+      this.assertEqual('nested', nested_child.getText());      
+    }
+  }, "testlog");
+// ]]>
+</script>
+</body>
+</html>
