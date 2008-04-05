@@ -1,0 +1,8 @@
+<%= javascript_include_tag 'click_to_globalize' %>
+<%= stylesheet_link_tag 'click_to_globalize', :media => 'all' %>
+<div id="click_to_globalize"><%= languages_menu %></div>
+<script type="text/javascript" language="javascript" charset="utf-8">
+// <![CDATA[
+  ClickToGlobalize.init('<%= form_authenticity_token %>');
+// ]]>
+</script>

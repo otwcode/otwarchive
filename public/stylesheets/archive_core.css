@@ -16,7 +16,7 @@ html {
 a {
 	color: #111111;
 	text-decoration: underline;
-	font: bold Verdana, Tahoma, Arial, sans-serif;
+	font-family: Verdana, Tahoma, Arial, sans-serif;
 }
 a:hover {
 	color: #999999;
@@ -114,7 +114,7 @@ hr {
 	font-weight: bold;
 }
 .username-admin:after {
-  content: url( 'images/admin.gif' );
+  content: url( '/images/admin.gif' );
 }
 /*Just a note, the main div is automagically 
  * assigned a different class for every different
@@ -175,13 +175,13 @@ a.story-title {
 	font-size: 110%;
 	font-family: Georgia, serif;
 }
-.show-works .story-notes {
+.works-show .story-notes {
 	font-size: 90%;
 	margin-right: auto;
 	margin-left: auto;
 	width: 70%;
 }
-.show-works hr {
+.works-show hr {
 	border-bottom-color: #999999;
 	border-bottom-style: solid;
 	border-right-width: 0px;
@@ -197,8 +197,24 @@ a.story-title {
 .list-right {
 	float: right;
 }
-.notification {
-	margin-bottom: 2em;
-	padding: 1em;
+
+/* The flash divs are intended for use to show error messages
+ * from just notices to warnings to fatal errors. Errors get
+ * set in the model or controller like so: flash[:notice] = "notification"
+ * and are displayed in the view with <%= flash_div :error, :warning, :notice -%>
+ */
+.flash {
+	margin: 2em;
+	padding: 1em;	
+}
+.notice {
 	background-color: #feffd4;
+}
+.warning {
+	background-color: #b3d4ef;
+	border: 1px dashed #53a0df;	
+}
+.error {
+	background-color: #efd1d1;
+	border: 2px solid #af2020;
 }
