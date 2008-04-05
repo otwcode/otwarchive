@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+    <head>
+        <meta name="generator" content="HTML Tidy, see www.w3.org">
+        <meta http-equiv="Content-Type" content=
+        "text/html; charset=iso-8859-1">
+
+        <title>OTW FanArchive &gt;&gt;
+        <%= controller.action_name %></title>
+        <%= stylesheet_link_tag 'archive_core', :media => 'screen' %>
+		<%= javascript_include_tag :defaults %>
+    </head>
+
+    <body>
+        <!-- START alerts, if any -->
+
+        <p style="color: red"><%= flash[:error] %></p>
+
+        <p style="color: green"><%= flash[:notice] %></p>
+        <!-- END alerts -->
+        <!-- BEGIN header -->
+
+        <div id="header">
+            <!-- BEGIN login block (user)
+                          <div id="login-block">
+                            Hi, <a href="#" class="username">username</a>!
+                            <ul>
+                              <li class="first-link"><a href="#" title="Post New">Post New</a></li>
+                              <li><a href="#" title="Logout">Logout</a></li>
+                            </ul>
+                          </div>
+                          END login block (user) -->
+            <!-- BEGIN login block (admin) -->
+
+            <div id="login-block">
+                Hello, <a href="#" class=
+                "username username-admin">admin</a>! 
+
+                <ul>
+                    <li><a href="#" title="Logout">Logout</a></li>
+                </ul>
+            </div>
+            <!-- END login block admin -->
+
+            <h1>An Archive Of Our Own: Extreme Alpha</h1>
+        </div>
+        <!-- END header -->
+
+        <div id="main" class="<%= controller.action_name + "-" + controller.controller_name %>">
+            <%= yield  %>
+        </div>
+        <!-- END main -->
+        <!-- BEGIN footer -->
+
+        <div id="footer">
+            <a href="#" title="View Licence">GPL/CC</a> by the <a
+            href="#" title=
+            "The Organization for Transformative Works">OTW</a>
+            &mdash; <a href="#" title=
+            "Terms and Conditions">Terms and Conditions</a>
+        </div>
+        <!-- END footer -->
+    </body>
+</html>
+

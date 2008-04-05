@@ -1,0 +1,204 @@
+/* REDEFINED HTML */
+body {
+	color: #111111;
+	background-color: white;
+	padding: 0px;
+	margin: 0px;
+	font: 0.8725em Verdana, Tahoma, Arial, sans-serif;
+	line-height: 1.2;
+}
+
+html {
+	padding: 0px;
+	margin: 0px;
+}
+
+a {
+	color: #111111;
+	text-decoration: underline;
+	font: bold verdana, tahoma, arial, sans-serif;
+}
+a:hover {
+	color: #999999;
+}
+h1 {
+	font-style: normal;
+	font-weight: normal;
+	font: 120% "Gill Sans", Georgia, Verdana, sans-serif;
+}
+h2, h3, h4, h5, h6 {
+	font-family: "Gill Sans", Georgia, Verdana, sans-serif;
+	font-weight: normal;
+}
+h2 {
+	font-size: 200%;
+}
+h3 {
+	font-size: 180%;
+}
+h4 {
+	font-size: 150%;
+}
+
+hr {
+	height: 1em;
+	background: #ddd;
+	color: #333;
+}
+
+
+/* LAYOUT ELEMENTS */
+#header {
+	color: white;
+	padding: 1em;
+	background-color: #990000;
+}
+#login-block {
+	text-align: right;
+	font-size: 80%;
+	float: right;
+}
+#login-block ul {
+	padding-left: 0px;
+	margin-left: 0px;
+}
+
+#login-block li {
+	display: inline;
+	list-style-type: none;
+}
+#login-block .first-link:after {
+  content: ' | ';
+}
+
+#navi {
+	padding-right: 1em;
+	margin-right: 0px;
+	padding-left: 1em;
+	margin-left: 0px;
+	font-family: "Gill Sans", Georgia, Verdana, sans-serif;
+	border-width: 100%;
+}
+#navi li {
+	list-style-type: none;
+}
+#main {
+	margin-right: auto;
+	margin-left: auto;
+	width: 80%;
+	padding-right: 2em;
+	padding-left: 2em;
+}
+#login-block a:link, #login-block a:visited {
+	color: white;
+}
+#footer {
+	color: #999999;
+	font-size: 90%;
+	padding: 1em;
+	text-align: center;
+	border-top-color: #999999;
+	border-top-style: solid;
+	border-top-width: 1px;
+}
+#footer a:link {
+	border-bottom-color: #111111;
+	border-bottom-width: 1px;
+	border-bottom-style: dotted;
+	color: #999999;
+}
+.clearboth {
+	clear: both;
+}
+.username {
+	font-weight: bold;
+}
+.username-admin:after {
+  content: url( 'images/admin.gif' );
+}
+/*Just a note, the main div is automagically 
+ * assigned a different class for every different
+ * functional page, if you want to make use of 
+ * this to style child elements.  
+ */
+.story-list {
+	font-size: 90%;
+	padding-left: 0px;
+	margin-left: 0px;
+}
+.story-list li {
+	margin-bottom: 2em;
+	list-style-type: none;
+}
+.story-list h3 {
+	font-family: Verdana, Tahoma, Arial, sans-serif;
+	display: inline;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 120%;
+}
+a.story-title {
+	font-style: normal;
+	font-weight: normal;
+}
+.story-date {
+	margin-top: -1em;
+	float: right;
+	font-size: 90%;
+	color: #999999;
+}
+.story-desc {
+	margin-top: 0em;
+}
+.story-show {
+}
+.story-show h2 {
+	margin-bottom: 0px;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: center;
+}
+.story-show .story-author {
+	margin-top: 0px;
+	text-align: center;
+}
+.story-show .story-author .username {
+	font-size: 70%;
+	color: #111111;
+	font-style: normal;
+	font-weight: normal;
+}
+.story-show p {
+	margin-right: auto;
+	margin-left: auto;
+	width: 90%;
+	font-size: 110%;
+	font-family: Georgia, serif;
+}
+.show-works .story-notes {
+	font-size: 90%;
+	margin-right: auto;
+	margin-left: auto;
+	width: 70%;
+}
+.show-works hr {
+	border-bottom-color: #999999;
+	border-bottom-style: solid;
+	border-right-width: 0px;
+	border-left-width: 0px;
+	border-bottom-width: 1px;
+	border-top-width: 0px;
+	height: 0px;
+	width: 50%;
+}
+.list-left {
+	float: left;
+}
+.list-right {
+	float: right;
+}
+.notification {
+	margin-bottom: 2em;
+	padding: 1em;
+	background-color: #feffd4;
+}

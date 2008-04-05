@@ -1,26 +1,14 @@
-<p>
-  <b>Title:</b>
-  <%=h @work.title %>
-</p>
+<h2 id="story-title"> 
+  <%=h @work.title %></h2>
+<h3 class="story-author"><a href="#" class="username">username</a></h3>
 
-<p>
-  <b>Summary:</b>
-  <%=h @work.summary %>
-</p>
-
-<p>
-  <b>Notes:</b>
+<p class="story-notes">
   <%=h @work.notes %>
 </p>
+<hr />
 
 <p>
-  <b>Date:</b>
-  <%=h @work.created_at %>
-</p>
-
-<p>
-  <b>Expected number of chapters:</b>
-  <%=h @work.expected_number_of_chapters %>
+	<!--Chapters go here -->
 </p>
 
 <p>

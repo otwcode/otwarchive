@@ -1,18 +1,18 @@
 <h1>View All Stories</h1>
-
+<ul class="story-list">
 <% for work in @works %>
 <!--There must be a more elegant way of assigning class/id to elements, mustn't there? -->
-<div class="story" id="<%=h work.id %>"><%= link_to h(work.title), work %> by #:user
-    <%=h work.summary %>
+<li class="story" id="<%=h work.id %>"><h3 title="Story Title"></h3><%= link_to h(work.title), work %></h3> by <a href="" class="storytitle">#:user</a>
+    <div class="story-date"><%=h work.created_at %></div>
+    <p class="story-desc"><%=h work.summary %></p>
     <%=h work.notes %>
-    <%=h work.created_at %>
     <%=h work.expected_number_of_chapters %><!--Should probably only be shown on incomplete works -->
     <%=h work.is_complete %><!--This returns a boolean, rather than some meaningful text.  That's no good. -->
     <%= link_to 'Edit', edit_work_path(work) %>
-    <%= link_to 'Delete', work, :confirm => 'Are you sure?', :method => :delete %>
-</p>
-<% end %>
+    <%= link_to 'Delete', work, :confirm => 'Are you sure?', :method => :delete %></li>
 
+<% end %>
+</ul>
 <br />
 
 <%= link_to 'New work', new_work_path %>
