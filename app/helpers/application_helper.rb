@@ -5,9 +5,13 @@ module ApplicationHelper
   #       <%= flash_div :key %> 
   # is placed in the views. That is, if a controller or model sets
   #       flash[:error] = "OMG ERRORZ AIE"
-  # then this error will appear in the view where you have
+  # or
+  #       flash.now[:error] = "OMG ERRORZ AIE"
+  #
+  # then that error will appear in the view where you have
   #       <%= flash_div :error %>
-  # The resulting HTML will look like:
+  #
+  # The resulting HTML will look like this:
   #       <div class="flash error">OMG ERRORZ AIE</div>
   #
   # The CSS classes are specified in archive_core.css.

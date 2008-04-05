@@ -12,14 +12,9 @@
     <p class="story-desc">
       <%=h work.summary %>
     </p>
-    <%=h work.notes %>
-    <%=h work.expected_number_of_chapters %><!--Should probably only be shown on incomplete works -->
-    <%=h work.is_complete %><!--This returns a boolean, rather than some meaningful text.  That's no good. -->
-    <%= link_to 'Edit', edit_work_path(work) %>
-    <%= link_to 'Delete', work, :confirm => 'Are you sure?', :method => :delete %>
   </li>
   <% end %>
 </ul>
 <p>
-  <%= link_to 'New work', new_work_path %>
+  <%= link_to 'Post New Story'.t, new_work_path %>
 </p>
