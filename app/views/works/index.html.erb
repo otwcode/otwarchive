@@ -1,18 +1,25 @@
-<h1>View All Stories</h1>
+<h2>View All Stories</h2>
+<%= flash_div :error, :warning, :notice -%>
 <ul class="story-list">
-<% for work in @works %>
-<!--There must be a more elegant way of assigning class/id to elements, mustn't there? -->
-<li class="story" id="<%=h work.id %>"><h3 title="Story Title"></h3><%= link_to h(work.title), work %></h3> by <a href="" class="story-author">#:user</a>
-    <div class="story-date"><%=h work.created_at %></div>
-    <p class="story-desc"><%=h work.summary %></p>
+  <% for work in @works %>
+  <!--There must be a more elegant way of assigning class/id to elements, mustn't there? -->
+  <li class="story" id="<%=h work.id %>">
+    <h3 title="Story Title"><%= link_to h(work.title), work %></h3>
+    by <a href="#" class="username story-author">#:user</a>
+    <div class="story-date">
+      <%=h work.created_at.localize("%d %B %Y") %>
+    </div>
+    <p class="story-desc">
+      <%=h work.summary %>
+    </p>
     <%=h work.notes %>
     <%=h work.expected_number_of_chapters %><!--Should probably only be shown on incomplete works -->
     <%=h work.is_complete %><!--This returns a boolean, rather than some meaningful text.  That's no good. -->
     <%= link_to 'Edit', edit_work_path(work) %>
-    <%= link_to 'Delete', work, :confirm => 'Are you sure?', :method => :delete %></li>
-
-<% end %>
+    <%= link_to 'Delete', work, :confirm => 'Are you sure?', :method => :delete %>
+  </li>
+  <% end %>
 </ul>
-<br />
-
-<%= link_to 'New work', new_work_path %>
+<p>
+  <%= link_to 'New work', new_work_path %>
+</p>

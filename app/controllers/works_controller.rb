@@ -3,6 +3,10 @@ class WorksController < ApplicationController
   # GET /works.xml
   def index
     @works = Work.find(:all)
+    
+    # This is here just as an example of how to set a flash alert.
+    # You can use flash[:notice], flash[:warning], and flash[:error].
+    flash[:notice] = 'This is a notification box. With a <a href="#" title="Story Title" class="story-title">Story Title</a>.'
 
     respond_to do |format|
       format.html # index.html.erb
@@ -14,6 +18,10 @@ class WorksController < ApplicationController
   # GET /works/1.xml
   def show
     @work = Work.find(params[:id])
+
+    # This is here just as an example of how to set a flash alert.
+    # You can use flash[:notice], flash[:warning], and flash[:error].
+    flash[:error] = 'This is an error box.'
 
     respond_to do |format|
       format.html # show.html.erb

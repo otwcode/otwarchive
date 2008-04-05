@@ -7,21 +7,16 @@
         <meta http-equiv="Content-Type" content=
         "text/html; charset=iso-8859-1">
 
-        <title>OTW FanArchive &gt;&gt;
-        <%= controller.action_name %></title>
+        <title>
+        	An Archive Of Our Own &gt;&gt;
+        	<%= controller.action_name %>
+		</title>
         <%= stylesheet_link_tag 'archive_core', :media => 'screen' %>
 		<%= javascript_include_tag :defaults %>
     </head>
 
     <body>
-        <!-- START alerts, if any -->
-
-        <p style="color: red"><%= flash[:error] %></p>
-
-        <p style="color: green"><%= flash[:notice] %></p>
-        <!-- END alerts -->
         <!-- BEGIN header -->
-
         <div id="header">
             <!-- BEGIN login block (user)
                           <div id="login-block">
@@ -33,11 +28,9 @@
                           </div>
                           END login block (user) -->
             <!-- BEGIN login block (admin) -->
-			<!-- This is fakity fake fake.  Replace with so mething real when we get users implemented -->
+			<!-- This is fakity fake fake.  Replace with something real when we get users implemented -->
             <div id="login-block">
-                Hello, <a href="#" class=
-                "username username-admin">admin</a>! 
-
+                Hello, <a href="#" class="username username-admin">admin</a>! 
                 <ul>
                     <li><a href="#" title="Logout">Logout</a></li>
                 </ul>
@@ -45,21 +38,20 @@
             <!-- END login block admin -->
 
             <h1>An Archive Of Our Own: Extreme Alpha</h1>
+			<div class="clearboth"></div>
         </div>
         <!-- END header -->
 
-        <div id="main" class="<%= controller.action_name + "-" + controller.controller_name %>">
+        <div id="main" class="<%= controller.controller_name + '-' + controller.action_name -%>">
             <%= yield  %>
         </div>
         <!-- END main -->
+		
         <!-- BEGIN footer -->
-
         <div id="footer">
-            <a href="#" title="View Licence">GPL/CC</a> by the <a
-            href="#" title=
-            "The Organization for Transformative Works">OTW</a>
-            &mdash; <a href="#" title=
-            "Terms and Conditions">Terms and Conditions</a>
+            <a href="#" title="View License">GPL/CC</a> by the 
+			<a href="#" title="The Organization for Transformative Works">OTW</a> &mdash; 
+			<a href="#" title="Terms and Conditions">Terms and Conditions</a>
         </div>
         <!-- END footer -->
     </body>
