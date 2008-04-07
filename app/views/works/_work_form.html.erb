@@ -1,0 +1,31 @@
+<% form_for(@work) do |f| %>
+  <p>
+    <b>Title</b><br />
+    <%= f.text_field :title %>
+  </p>
+
+  <p>
+    <b>Summary</b><br />
+    <%= f.text_area :summary %>
+  </p>
+
+  <p>
+    <b>Notes</b><br />
+    <%= f.text_area :notes %>
+  </p>
+
+  <p>
+    <b>Expected number of chapters</b><br />
+    <%= f.text_field :expected_number_of_chapters %>
+  </p>
+
+  <p>
+    <b>Is complete</b><br />
+    <%= f.check_box :is_complete %>
+  </p>
+
+  <p>
+    <%= f.submit button_text %>
+  </p>
+<% end %>
+
