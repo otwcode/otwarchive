@@ -9,7 +9,7 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters
   # GET /work/:work_id/chapters.xml
   def index
-    @chapters = @work.chapters.find(:all)
+    @chapters = @work.chapters
 
     respond_to do |format|
       format.html # index.html.erb
