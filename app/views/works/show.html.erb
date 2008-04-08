@@ -21,6 +21,11 @@
   <hr/>
   <p>
     <!--Chapters go here -->
+    <% unless @work.chapters.nil? %>
+      <% @work.chapters.each do |chapter| %>
+        <%= chapter.content -%><br/>
+      <% end %>
+    <% end %>
   </p>
   <p>
     <b>This work is complete:</b>

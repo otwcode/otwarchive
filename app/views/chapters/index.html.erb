@@ -1,0 +1,15 @@
+<% for chapter in @chapters %>
+  <p>
+  <%=h chapter.title %><br/>
+  <%=h chapter.content %><br/>
+  <%=h chapter.order %><br/>
+  <%=h chapter.work %><br/>
+  <%= link_to 'Show', [@work, chapter] %><br/>
+  <%= link_to 'Edit', [:edit, @work, chapter] %><br/>
+  <%= link_to 'Destroy', [@work, chapter], :confirm => 'Are you sure?', :method => :delete %><br/>
+  </p>
+<% end %>
+
+<br />
+
+<%= link_to 'New chapter', new_work_chapter_path(@work) %>

@@ -1,0 +1,17 @@
+<p>
+  <b>Title:</b>
+  <%=h @chapter.title %>
+</p>
+
+<p>
+  <b>Content:</b>
+  <%=h @chapter.content %>
+</p>
+
+<p>
+  <b>Order:</b>
+  <%=h @chapter.order %>
+</p>
+
+<%= link_to 'Edit', [:edit, @work, @chapter] %> |
+<%= link_to 'Back', work_chapters_path(@work) %>

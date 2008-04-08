@@ -9,7 +9,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 3) do
+ActiveRecord::Schema.define(:version => 4) do
+
+  create_table "chapters", :force => true do |t|
+    t.string   "title"
+    t.text     "content"
+    t.integer  "order",      :default => 1
+    t.integer  "work_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "globalize_countries", :force => true do |t|
     t.string "code",                   :limit => 2

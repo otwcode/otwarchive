@@ -1,0 +1,7 @@
+<h1>Add new chapter</h1>
+
+<%= error_messages_for :chapter %>
+
+<%= render :partial => 'chapters_form', :locals => { :button_text => "Create" } %>
+
+<%= link_to 'Back', work_chapters_path %>

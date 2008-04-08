@@ -37,6 +37,7 @@ class WorksController < ApplicationController
   # GET /works/new.xml
   def new
     @work = Work.new
+    @work.chapters.build
 
     respond_to do |format|
       format.html # new.html.erb

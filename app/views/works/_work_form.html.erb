@@ -15,6 +15,16 @@
   </p>
 
   <p>
+  <b>Story, in plain text</b><br />
+  <% fields_for "work[chapter_attributes][]", @work.chapters.first do |c| %>
+    <%= c.text_area :content, :index => nil -%>
+    <% unless @work.chapters.first.new_record? %>
+      <%= c.hidden_field :id, :index => nil -%>
+    <% end %>
+  <% end %>
+  </p>
+
+  <p>
     <b>Expected number of chapters</b><br />
     <%= f.text_field :expected_number_of_chapters %>
   </p>
