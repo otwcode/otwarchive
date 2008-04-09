@@ -1,11 +1,14 @@
 ActionController::Routing::Routes.draw do |map|
   
-  map.root :controller => 'works', :action => 'index'
+  map.root :controller => 'session', :action => 'new'
+  
   map.resources :admins
 
   map.resources :users
 
   map.resources :works, :has_many => :chapters
+
+  map.open_id_complete 'session', :controller => "session", :action => "create", :requirements => { :method => :get }
   
   map.resource :session, :controller => 'session'
   map.login '/login', :controller => 'session', :action => 'new'
@@ -15,7 +18,7 @@ ActionController::Routing::Routes.draw do |map|
   map.admin_login '/admin_login', :controller => 'admin_session', :action => 'new'
   map.admin_logout '/admin_logout', :controller => 'admin_session', :action => 'destroy'
   
-  map.open_id_complete 'session', :controller => "session", :action => "create", :requirements => { :method => :get }
+
 
   # BERO delete
   # map.resources :chapters
