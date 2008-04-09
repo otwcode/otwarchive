@@ -9,7 +9,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 4) do
+ActiveRecord::Schema.define(:version => 8) do
+
+  create_table "admins", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "crypted_password"
+    t.string   "salt"
+    t.string   "email"
+    t.string   "login"
+  end
 
   create_table "chapters", :force => true do |t|
     t.string   "title"
@@ -71,6 +80,19 @@ ActiveRecord::Schema.define(:version => 4) do
 
   add_index "globalize_translations", ["tr_key", "language_id"], :name => "index_globalize_translations_on_tr_key_and_language_id"
   add_index "globalize_translations", ["table_name", "item_id", "language_id"], :name => "globalize_translations_table_name_and_item_and_language"
+
+  create_table "users", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "crypted_password"
+    t.string   "salt"
+    t.string   "remember_token"
+    t.datetime "remember_token_expires_at"
+    t.string   "activation_code"
+    t.string   "email"
+    t.string   "login"
+    t.datetime "activated_at"
+  end
 
   create_table "works", :force => true do |t|
     t.string   "title",                       :default => "", :null => false

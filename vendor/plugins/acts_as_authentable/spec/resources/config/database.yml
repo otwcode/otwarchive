@@ -1,0 +1,10 @@
+sqlite3:
+  :adapter: sqlite3
+  :dbfile: db/acts_as_authenticated.db
+
+mysql:
+  :adapter: mysql
+  :database: acts_as_authenticated
+  :username: root
+  :password:
+  :host: localhost

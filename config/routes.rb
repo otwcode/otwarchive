@@ -1,5 +1,17 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :admins
+
+  map.resources :users
+
   map.resources :works, :has_many => :chapters
+  
+  map.resource :session, :controller => 'session'
+  map.login '/login', :controller => 'session', :action => 'new'
+  map.logout '/logout', :controller => 'session', :action => 'destroy'
+  
+  map.resource :admin_session, :controller => 'admin_session'
+  map.admin_login '/admin_login', :controller => 'admin_session', :action => 'new'
+  map.admin_logout '/admin_logout', :controller => 'admin_session', :action => 'destroy'
 
   # BERO delete
   # map.resources :chapters

@@ -1,0 +1,62 @@
+acts_as_authenticated (altered for OTW purposes!)
+=====================
+
+-Using SHA1 instead of Bcrypt, due to Windows compatibility issues 
+-Separated remember me functionality into its own module
+-Split features for users and admins: users get remember me and activation columns; admins get their own authentication methods
+
+=====================
+
+Old README:
+
+Largely based on restful_authentication by Rick Olson. Changes include:
+
+  * Bcrypt is used for password storage.
+  * Specified with RSpec.
+  * Authentication mechanisms are separated into
+    modules contained within the plugin.
+  * Generators are only used for migrations.
+  * Does not include email verification.
+
+This plugin does not generate controller code for you. Partly because
+I'm lazy and partly since example code (taken from restful_authentication)
+can be found in the resources directory of the plugins spec folder.
+
+For a rationale on why SHA1 with individual salts is sub-par to bcrypt
+read Thomas Ptacek's article[1].
+
+[1]: http://www.matasano.com/log/958/enough-with-the-rainbow-tables-what-you-need-to-know-about-secure-password-schemes/
+
+Example
+=======
+
+Using acts_as_authentable is as easy as:
+
+Installing bcrypt-ruby:
+
+  gem install bcrypt-ruby
+
+Installing acts_as_authentable:
+
+  ./script/plugin install http://acts-as-authentable.googlecode.com/svn/trunk/acts_as_authentable
+
+Annotate the model object you want to be authentable:
+
+  class User < ActiveRecord::Base
+    acts_as_authentable
+  end
+
+Creating a migration for adding fields to the authentable model: 
+
+  ./script/generate authentable user
+
+    creates a migration:
+      db/migrate/XXX_add_authentable_fields_for_users.rb
+
+If you have rspec and rspec_on_rails installed verify the plugin with:
+
+  rake spec:plugins
+
+
+Copyright (c) 2007 Eivind Uggedal <eu@redflavor.com>, released under
+the MIT license.

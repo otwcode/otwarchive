@@ -1,0 +1,8 @@
+Description:
+    Generates a migration for authentable fields.
+
+Example:
+    `./script/generate authentable user`
+
+        creates a migration:
+            db/migrate/XXX_add_authentable_fields_for_users.rb

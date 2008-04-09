@@ -1,0 +1,12 @@
+michael:
+  id: 1
+  login: michael
+  crypted_password: $2a$10$dTrEHB5YJiSGo5GyAcJ9GeiZDGG04UjQJQ2j2WrjCk2n6xgPkgFtK # apollonia
+  remember_token: mich4el
+  remember_token_expires_at: <%= 1.week.ago.to_s :db %>
+sonny:
+  id: 2
+  login: sonny
+  crypted_password: $2a$10$dTrEHB5YJiSGo5GyAcJ9GeiZDGG04UjQJQ2j2WrjCk2n6xgPkgFtK # apollonia
+  remember_token: s0nnyb0y
+  remember_token_expires_at: <%= 3.weeks.from_now.to_s :db %>
