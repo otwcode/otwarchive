@@ -1,0 +1,11 @@
+<h1><%= "Log in as Admin" .t %></h1>
+
+	<% form_tag admin_session_path do -%>
+	  <p><label for="login"><%= "Login" .t %></label><br/>
+	  <%= text_field_tag 'login' %></p>
+	
+	  <p><label for="password"><%= "Password" .t %></label><br/>
+	  <%= password_field_tag 'password' %></p>
+	
+	  <p><%= submit_tag 'Log in' %></p>
+	<% end -%>
