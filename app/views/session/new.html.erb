@@ -2,12 +2,22 @@
 
   <p>Log in or <%= link_to 'sign up for a new account', new_user_path %>.</p>
   
-	<% form_tag admin_session_path do -%>
+	<% form_tag session_path do -%>
 	  <p><label for="login"><%= "Login" .t %></label><br/>
 	  <%= text_field_tag 'login' %></p>
 	
 	  <p><label for="password"><%= "Password" .t %></label><br/>
 	  <%= password_field_tag 'password' %></p>
+	  
+	  <p><label for="remember_me"><%= "Remember me:" .t %></label>
+		<%= check_box_tag 'remember_me' %></p>
+	  
+	  <p>or use...</p>
+	  
+	  <p>
+	    <label for="openid_url">OpenID URL</label><br />
+      <%= text_field_tag "openid_url" %>
+	  </p>
 	
 	  <p><%= submit_tag 'Log in' %></p>
 	<% end -%>
