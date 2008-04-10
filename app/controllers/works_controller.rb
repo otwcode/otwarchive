@@ -59,6 +59,8 @@ class WorksController < ApplicationController
   # POST /works.xml
   def create
     @work = Work.new(params[:work])
+    @work.chapters.build params[:chapter_attributes]
+    @work.metadata = Metadata.new(params[:metadata_attributes])
 
     respond_to do |format|
       if @work.save
@@ -76,6 +78,8 @@ class WorksController < ApplicationController
   # PUT /works/1.xml
   def update
     @work = Work.find(params[:id])
+    @work.chapters.update params[:chapter_attributes].keys, params[:chapter_attributes].values
+    @work.metadata.update_attributes params[:metadata_attributes]
 
     respond_to do |format|
       if @work.update_attributes(params[:work])

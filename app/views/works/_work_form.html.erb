@@ -1,5 +1,5 @@
 <% form_for(@work) do |f| %>
-  <% fields_for "work[metadata_attributes]", @work.metadata do |m| %>
+  <% fields_for :metadata_attributes, @work.metadata do |m| %>
     <p>
     <b>Title</b><br />
     <%= m.text_field :title %>
@@ -17,10 +17,9 @@
   <% end %>
   <p>
   <b>Story, in plain text</b><br />
-  <% fields_for "work[chapter_attributes][]", @work.chapters.first do |c| %>
-    <%= c.text_area :content, :index => nil -%>
-    <% unless @work.chapters.first.new_record? %>
-      <%= c.hidden_field :id, :index => nil -%>
+  <% @work.chapters.each do |chapter| %>
+    <% fields_for :chapter_attributes, chapter do |c| %>
+      <%= c.text_area :content, :index => chapter.id -%>
     <% end %>
   <% end %>
   </p>
