@@ -2,8 +2,9 @@ defaults: &defaults
   adapter: mysql
   encoding: utf8
   username: root
-  password: 
-
+	password: b0bd0l3
+  socket: /var/run/mysqld/mysqld.sock
+  
 development:
   database: otwarchive_development
   <<: *defaults
