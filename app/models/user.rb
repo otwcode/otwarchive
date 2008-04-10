@@ -1,7 +1,13 @@
 class User < ActiveRecord::Base
-  acts_as_authentable
   has_many :pseuds
+
+  # Acts_as_authentable plugin
+  acts_as_authentable
   
-  # For OpenID
+  # Authorization plugin
+  acts_as_authorized_user
+  acts_as_authorizable  
+  
+  # OpenID plugin
   attr_accessible :identity_url
 end

@@ -9,15 +9,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 10) do
+ActiveRecord::Schema.define(:version => 11) do
 
   create_table "admins", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "email"
-    t.string   "login"
     t.string   "crypted_password"
     t.string   "salt"
+    t.string   "email"
+    t.string   "login"
   end
 
   create_table "chapters", :force => true do |t|
@@ -104,17 +104,32 @@ ActiveRecord::Schema.define(:version => 10) do
     t.string  "salt",       :default => "", :null => false
   end
 
+  create_table "roles", :force => true do |t|
+    t.string   "name",              :limit => 40
+    t.string   "authorizable_type", :limit => 40
+    t.integer  "authorizable_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "roles_users", :id => false, :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "role_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "users", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "remember_token"
-    t.string   "email"
-    t.datetime "remember_token_expires_at"
-    t.string   "activation_code"
-    t.string   "login"
-    t.datetime "activated_at"
     t.string   "crypted_password"
     t.string   "salt"
+    t.string   "remember_token"
+    t.datetime "remember_token_expires_at"
+    t.string   "activation_code"
+    t.string   "email"
+    t.string   "login"
+    t.datetime "activated_at"
     t.string   "identity_url"
   end
 

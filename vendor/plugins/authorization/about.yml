@@ -1,0 +1,8 @@
+author: Bill Katz
+summary: Adds a flexible mechanism for authorization.
+description: "Adds a flexible mechanism for authorization. Differs from other authorization systems in the following ways: (1) You can specify roles programmatically with model code or use a mixin to keep roles in a database. (2) The plugin uses a clean language for specifying authorization expressions. (3) Ability to handle roles on instances of a model. (4) Rights are explicitly declared in controller and view code. (5) Different levels of authorization complexity are provided through mixins available with the plugin. If you don't want to use the database for authorization, you mixin a HardwiredRoles module. If you want full database support for roles on model instances, you mixin the ObjectRolesTable module."
+homepage: http://www.writertopia.com/developers/authorization
+plugin: http://svn.writertopia.com/svn/plugins/authorization/
+license: MIT
+version: 1.0.10
+rails_version: 2.0+
