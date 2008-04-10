@@ -42,6 +42,7 @@ class WorksController < ApplicationController
   def new
     @work = Work.new
     @work.chapters.build
+    @work.metadata = Metadata.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -92,6 +93,8 @@ class WorksController < ApplicationController
   # DELETE /works/1.xml
   def destroy
     @work = Work.find(params[:id])
+    @work.chapters.each { |c| c.destroy }
+    @work.metadata.destroy
     @work.destroy
 
     respond_to do |format|

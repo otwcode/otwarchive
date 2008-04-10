@@ -3,13 +3,13 @@
   <% for work in @works %>
   <!--There must be a more elegant way of assigning class/id to elements, mustn't there? -->
   <li class="story" id="<%=h work.id %>">
-    <h3 title="Story Title"><%= link_to h(work.title), work %></h3>
+    <h3 title="Story Title"><%= link_to h(work.metadata.title), work %></h3>
     by <a href="#" class="username story-author">#:user</a>
     <div class="story-date">
       <%=h work.created_at.localize("%d %B %Y") %>
     </div>
     <p class="story-desc">
-      <%=h work.summary %>
+      <%=h work.metadata.summary %>
     </p>
   </li>
   <% end %>

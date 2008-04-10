@@ -9,24 +9,24 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 12) do
+ActiveRecord::Schema.define(:version => 16) do
 
   create_table "admins", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "email"
     t.string   "login"
     t.string   "crypted_password"
     t.string   "salt"
+    t.string   "email"
   end
 
   create_table "chapters", :force => true do |t|
-    t.string   "title"
     t.text     "content"
-    t.integer  "order",      :default => 1
+    t.integer  "order",       :default => 1
     t.integer  "work_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "metadata_id"
   end
 
   create_table "creatorships", :force => true do |t|
@@ -79,7 +79,7 @@ ActiveRecord::Schema.define(:version => 12) do
     t.string  "table_name"
     t.integer "item_id"
     t.string  "facet"
-    t.boolean "built_in",            :default => true
+    t.boolean "built_in"
     t.integer "language_id"
     t.integer "pluralization_index"
     t.text    "text"
@@ -88,6 +88,16 @@ ActiveRecord::Schema.define(:version => 12) do
 
   add_index "globalize_translations", ["tr_key", "language_id"], :name => "index_globalize_translations_on_tr_key_and_language_id"
   add_index "globalize_translations", ["table_name", "item_id", "language_id"], :name => "globalize_translations_table_name_and_item_and_language"
+
+  create_table "metadatas", :force => true do |t|
+    t.string   "title"
+    t.text     "summary"
+    t.text     "notes"
+    t.integer  "described_id"
+    t.string   "described_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "open_id_authentication_associations", :force => true do |t|
     t.integer "issued"
@@ -131,25 +141,23 @@ ActiveRecord::Schema.define(:version => 12) do
   create_table "users", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "remember_token"
-    t.string   "email"
-    t.datetime "remember_token_expires_at"
     t.string   "activation_code"
     t.string   "login"
     t.datetime "activated_at"
     t.string   "crypted_password"
     t.string   "salt"
+    t.string   "remember_token"
+    t.datetime "remember_token_expires_at"
+    t.string   "email"
     t.string   "identity_url"
   end
 
   create_table "works", :force => true do |t|
-    t.string   "title",                       :default => "", :null => false
-    t.text     "summary"
-    t.text     "notes"
     t.integer  "expected_number_of_chapters"
     t.boolean  "is_complete"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "metadata_id"
   end
 
 end
