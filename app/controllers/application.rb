@@ -4,6 +4,8 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
 
+
+  #### -- GLOBALIZATION -- ####
   before_filter :set_locale
   self.languages = { :english => 'en-US', :italian => 'it-IT', :french => 'fr-FR', :german => 'de-DE', :hebrew => 'he-IL', :japanese => 'ja-JP', :polish => 'pl-PL', :spanish => 'es-ES', :czech => 'cs-CZ', :chinese => 'zh-CHS', :russian => 'ru-RU' }
  
@@ -27,6 +29,19 @@ class ApplicationController < ActionController::Base
       Locale.set default_locale
     end
   end 
+  #### -- GLOBALIZATION -- ####
+
+  #### -- AUTHORIZATION -- ####
+  def is_registered_user?
+    logged_in? || logged_in_as_admin?
+  end
+  
+  def is_admin?
+    logged_in_as_admin?
+  end
+  
+  #### -- AUTHORIZATION -- ####
+
 
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store

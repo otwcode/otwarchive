@@ -9,15 +9,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 9) do
+ActiveRecord::Schema.define(:version => 10) do
 
   create_table "admins", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "crypted_password"
-    t.string   "salt"
     t.string   "email"
     t.string   "login"
+    t.string   "crypted_password"
+    t.string   "salt"
   end
 
   create_table "chapters", :force => true do |t|
@@ -25,6 +25,14 @@ ActiveRecord::Schema.define(:version => 9) do
     t.text     "content"
     t.integer  "order",      :default => 1
     t.integer  "work_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "creatorships", :force => true do |t|
+    t.integer  "creation_id"
+    t.string   "creation_type"
+    t.integer  "pseud_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -99,14 +107,14 @@ ActiveRecord::Schema.define(:version => 9) do
   create_table "users", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "crypted_password"
-    t.string   "salt"
     t.string   "remember_token"
+    t.string   "email"
     t.datetime "remember_token_expires_at"
     t.string   "activation_code"
-    t.string   "email"
     t.string   "login"
     t.datetime "activated_at"
+    t.string   "crypted_password"
+    t.string   "salt"
     t.string   "identity_url"
   end
 
