@@ -8,11 +8,18 @@
 	<p><label for="email"><%= "Email" .t %></label><br/>
 	<%= f.text_field :email %></p>
 	
+	<p>Choose a password OR use your OpenID: </p>
+	
 	<p><label for="password"><%= "Password" .t %></label><br/>
 	<%= f.password_field :password %></p>
 	
 	<p><label for="password_confirmation"><%= "Confirm Password" .t %></label><br/>
 	<%= f.password_field :password_confirmation %></p>
+	
+	<p>
+    <label for="openid_url">OpenID URL</label><br />
+    <%= f.text_field :identity_url %>
+  </p>
 	
 	<p><%= submit_tag 'Sign up' %></p>
 	<% end -%>

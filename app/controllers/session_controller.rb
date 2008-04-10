@@ -26,16 +26,15 @@ class SessionController < ApplicationController
     protected
 
     def open_id_authentication(openid_url)
-      authenticate_with_open_id(openid_url, :required => [:nickname, :email]) do |result, identity_url, registration|
+      authenticate_with_open_id(openid_url) do |result, identity_url, registration|
         if result.successful?
-          @user = User.find_or_initialize_by_identity_url(identity_url)
-          if @user.new_record?
-            @user.login = registration['nickname']
-            @user.email = registration['email']
-            @user.save(false)
+          @user = User.find_by_identity_url(identity_url)
+          if @user
+            self.current_user = @user
+            successful_login
+          else
+            failed_login
           end
-          self.current_user = @user
-          successful_login
         else
           failed_login result.message
         end
@@ -61,7 +60,8 @@ class SessionController < ApplicationController
         self.current_user.remember_me
         cookies[:auth_token] = { :value => self.current_user.remember_token , :expires => self.current_user.remember_token_expires_at }
       end
-      redirect_back_or_default('/')
+      #redirect_back_or_default('/')
+      redirect_to :controller => 'works', :action => 'index'
       flash[:notice] = "Logged in successfully"
     end
   end

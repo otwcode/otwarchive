@@ -41,11 +41,12 @@ class UsersController < ApplicationController
   # POST /users.xml
   def create
     @user = User.new(params[:user])
+    @user.identity_url = OpenIdAuthentication.normalize_url(@user.identity_url)
 
     respond_to do |format|
       if @user.save
         flash[:notice] = 'User was successfully created.'
-        format.html { redirect_to(@user) }
+        format.html { redirect_to :controller => 'works', :action => 'index' }
         format.xml  { render :xml => @user, :status => :created, :location => @user }
       else
         format.html { render :action => "new" }

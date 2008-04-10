@@ -53,6 +53,12 @@ module AuthentableEntity
     end
     
     def password_required?
-      crypted_password.blank? || !password.blank?
+      if crypted_password.blank? || !password.blank?
+        !using_openid?
+      end
+    end
+    
+    def using_openid?
+      !identity_url.blank?
     end
 end
