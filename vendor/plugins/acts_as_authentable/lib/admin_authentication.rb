@@ -20,7 +20,7 @@ module AdminAuthentication
 
     # Filter method - keeps users out of admin areas
     def admin_only
-      logged_in_as_admin?
+      logged_in_as_admin? || access_denied
     end
     
     # Filter method - prevents users from logging in with more than one kind of account at once

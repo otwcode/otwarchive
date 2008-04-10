@@ -116,6 +116,14 @@ hr {
 .username-admin:after {
   content: url( '/images/admin.gif' );
 }
+
+/* Debug Style (development only) */ 
+#debug {
+	margin: 10%;
+	border: 1px dashed;
+	padding: 10px;
+}
+
 /*Just a note, the main div is automagically 
  * assigned a different class for every different
  * functional page, if you want to make use of 

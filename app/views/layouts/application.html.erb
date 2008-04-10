@@ -18,24 +18,24 @@
     <body>
         <!-- BEGIN header -->
         <div id="header">
-            <!-- BEGIN login block (user)
-                          <div id="login-block">
-                            Hi, <a href="#" class="username">username</a>!
-                            <ul>
-                              <li class="first-link"><a href="#" title="Post New">Post New</a></li>
-                              <li><a href="#" title="Logout">Logout</a></li>
-                            </ul>
-                          </div>
-                          END login block (user) -->
-            <!-- BEGIN login block (admin) -->
-			<!-- This is fakity fake fake.  Replace with something real when we get users implemented -->
             <div id="login-block">
-                Hello, <a href="#" class="username username-admin">admin</a>! 
+            <% if logged_in? -%>
+	              Hi, <%= link_to current_user.login, user_path(current_user), :class => 'username' -%>!
+	              <ul>
+	                <li class="first-link"><%= link_to 'Post New'.t, new_work_path -%></li>
+	                <li><%= link_to 'Logout'.t, logout_path -%></li>
+	              </ul>
+            <% elsif logged_in_as_admin? -%>
+                Hello, <%= link_to current_admin.login, admin_path(current_admin), :class => 'username username-admin' -%>!
                 <ul>
-                    <li><a href="#" title="Logout">Logout</a></li>
+                    <li><%= link_to 'Logout'.t, admin_logout_path -%></li>
                 </ul>
+			<% else -%>
+                <ul>
+                    <li><%= link_to 'Login'.t, login_path -%></li>
+                </ul>			
+			<% end -%>
             </div>
-            <!-- END login block admin -->
 
             <h1>An Archive Of Our Own: Extreme Alpha</h1>
 			<div class="clearboth"></div>
@@ -43,6 +43,7 @@
         <!-- END header -->
 
         <div id="main" class="<%= controller.controller_name + '-' + controller.action_name -%>">
+			<%= flash_div :error, :warning, :notice -%>
             <%= yield  %>
         </div>
         <!-- END main -->
@@ -54,6 +55,38 @@
 			<a href="#" title="Terms and Conditions">Terms and Conditions</a>
         </div>
         <!-- END footer -->
+
+        <% if ENV["RAILS_ENV"]=="development" %>
+		<div id="debug">
+			<h1>Development Notice</h1>
+			<p>
+				This is a development site. That means, please don't put in 
+				anything you need to keep secure or want to preserve.
+				All the contents of this site (including user accounts) can and 
+				probably will be wiped without notice as we work.  
+			</p>
+			<p>
+				Please <strong>do</strong> help us out and 
+				<a href="http://code.google.com/p/otwarchive/issues/list">report any problems</a>!
+				
+			</p>
+			<p>
+				These links below here are just to provide debugging info for your friendly neighborhood coders,
+				please ignore. 
+			</p>
+			<dl class="debug_navigation">
+				<dt><a href="#" onclick="Element.toggle('params_debug_info'); return false;">params</a></dt>
+					<dd id="params_debug_info" class="debug_info" style="display:none"><%= debug(params) %></dd>
+				<dt><a href="#" onclick="Element.toggle('session_debug_info'); return false;">session</a></dt>
+					<dd id="session_debug_info" class="debug_info" style="display:none"><%= debug(session) %></dd>
+				<dt><a href="#" onclick="Element.toggle('env_debug_info'); return false;">env</a></dt>
+					<dd id="env_debug_info" class="debug_info" style="display:none"><%= debug(request.env) %></dd>
+				<dt><a href="#" onclick="Element.toggle('request_debug_info'); return false;">request</a></dt>
+					<dd id="request_debug_info" class="debug_info" style="display:none"><%= debug(request) %></dd>
+			</dl>
+		</div>
+        <% end %>
+
     </body>
 </html>
 

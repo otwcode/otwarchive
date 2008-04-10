@@ -1,4 +1,6 @@
 class AdminsController < ApplicationController
+  before_filter :admin_only
+  
   # GET /admins
   # GET /admins.xml
   def index
@@ -21,37 +23,9 @@ class AdminsController < ApplicationController
     end
   end
 
-  # GET /admins/new
-  # GET /admins/new.xml
-  def new
-    @admin = Admin.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @admin }
-    end
-  end
-
   # GET /admins/1/edit
   def edit
     @admin = Admin.find(params[:id])
-  end
-
-  # POST /admins
-  # POST /admins.xml
-  def create
-    @admin = Admin.new(params[:admin])
-
-    respond_to do |format|
-      if @admin.save
-        flash[:notice] = 'Admin was successfully created.'
-        format.html { redirect_to(@admin) }
-        format.xml  { render :xml => @admin, :status => :created, :location => @admin }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @admin.errors, :status => :unprocessable_entity }
-      end
-    end
   end
 
   # PUT /admins/1

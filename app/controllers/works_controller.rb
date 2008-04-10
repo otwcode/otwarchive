@@ -1,4 +1,8 @@
 class WorksController < ApplicationController
+  # only registered users and NOT admin should be able to create new works
+  before_filter :users_only, :except => [ :index, :show, :destroy ]
+  
+  
   # GET /works
   # GET /works.xml
   def index
@@ -8,7 +12,7 @@ class WorksController < ApplicationController
     # You can use flash[:notice], flash[:warning], and flash[:error].
     # * flash.now[...] gets used if you are dropping through to the default action or using render.
     # * flash[...] gets used if you are redirecting.
-    flash.now[:notice] = 'This is a sample notice box. It is appearing here only because it has been manually set in the show method in the controller as an example.'
+    # flash.now[:notice] = 'This is a sample notice box. It is appearing here only because it has been manually set in the show method in the controller as an example.'
 
     respond_to do |format|
       format.html # index.html.erb
@@ -25,7 +29,7 @@ class WorksController < ApplicationController
     # You can use flash[:notice], flash[:warning], and flash[:error].
     # * flash.now[...] gets used if you are dropping through to the default action or using render.
     # * flash[...] gets used if you are redirecting.
-    flash.now[:error] = 'This is a sample error box. It is appearing here only because it has been manually set in the show method in the controller as an example.'
+    # flash.now[:error] = 'This is a sample error box. It is appearing here only because it has been manually set in the show method in the controller as an example.'
 
     respond_to do |format|
       format.html # show.html.erb

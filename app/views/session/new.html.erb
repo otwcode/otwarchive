@@ -1,7 +1,5 @@
 <h1><%= "Log In!" .t %></h1>
 
-  <% if flash[:error] %><div class="error"><%= flash[:error] %></div><% end %>
-
   <p>Log in or <%= link_to 'sign up for a new account', new_user_path %>.</p>
   
 	<% form_tag session_path do -%>

@@ -1,5 +1,4 @@
 <h2>View All Stories</h2>
-<%= flash_div :error, :warning, :notice -%>
 <ul class="story-list">
   <% for work in @works %>
   <!--There must be a more elegant way of assigning class/id to elements, mustn't there? -->
@@ -15,6 +14,3 @@
   </li>
   <% end %>
 </ul>
-<p>
-  <%= link_to 'Post New Story'.t, new_work_path %>
-</p>

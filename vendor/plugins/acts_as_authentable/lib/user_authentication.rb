@@ -60,6 +60,11 @@ module UserAuthentication
       end
     end
 
+    # Filter method to prevent admin users from accessing certain actions
+    def users_only
+      logged_in? || access_denied
+    end
+
     # Redirect as appropriate when an access request fails.
     #
     # The default action is to redirect to the login screen.
@@ -69,6 +74,7 @@ module UserAuthentication
     # to access the requested action.  For example, a popup window might
     # simply close itself.
     def access_denied
+      flash[:error] = "You aren't allowed to access that page, sorry! Maybe you need to login?"
       respond_to do |accepts|
         accepts.html do
           store_location
