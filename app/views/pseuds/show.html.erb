@@ -1,0 +1,23 @@
+<p>
+  <b>User:</b>
+  <%=h @pseud.user %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%=h @pseud.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @pseud.description %>
+</p>
+
+<p>
+  <b>Is default:</b>
+  <%=h @pseud.is_default %>
+</p>
+
+
+<%= link_to 'Edit', edit_pseud_path(@pseud) %> |
+<%= link_to 'Back', pseuds_path %>

@@ -1,0 +1,2 @@
+module PseudsHelper
+end

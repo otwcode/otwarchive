@@ -1,0 +1,26 @@
+<h1>Listing pseuds</h1>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Is default</th>
+  </tr>
+
+<% for pseud in @pseuds %>
+  <tr>
+    <td><%=h pseud.user %></td>
+    <td><%=h pseud.name %></td>
+    <td><%=h pseud.description %></td>
+    <td><%=h pseud.is_default %></td>
+    <td><%= link_to 'Show', pseud %></td>
+    <td><%= link_to 'Edit', edit_pseud_path(pseud) %></td>
+    <td><%= link_to 'Destroy', pseud, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New pseud', new_pseud_path %>
