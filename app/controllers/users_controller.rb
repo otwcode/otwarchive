@@ -47,7 +47,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        flash[:notice] = 'Your account was successfully created. Please log in!'
+        flash[:notice] = 'Your account was successfully created. You should receive an activation code by email shortly.'
         format.html { redirect_to login_path }
         format.xml  { render :xml => @user, :status => :created, :location => @user }
       else
@@ -55,6 +55,15 @@ class UsersController < ApplicationController
         format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
       end
     end
+  end
+  
+  def activate
+    self.current_user = params[:id].blank? ? :false : User.find_by_activation_code(params[:id])
+    if logged_in? && !current_user.active?
+      current_user.activate
+      flash[:notice] = "Signup complete!"
+    end
+    redirect_back_or_default('/')
   end
 
   # PUT /users/1

@@ -11,7 +11,8 @@ module ActiveRecord #:nodoc:
           send :include, AuthentableEntity
           # Add features that apply to users but not to admins, or vice versa
           if bells_and_whistles
-            send :include, SessionPersistence
+            send :include, SessionPersistence     
+            send :include, Activation
           end
         end
 

@@ -20,48 +20,51 @@ module ActionMailer # :nodoc:
     # This method is overriden by Globalize to support multiple templates
     # for different locales. For example, use:
     #   signup_notification.en-US.text.html.rhtml
-    # It is fully backwards compatible with the original rails version.
-    def create!(method_name, *parameters) #:nodoc:
-      initialize_defaults(method_name)
-      send(method_name, *parameters)
+    # It is fully backwards compatible with the original rails version.          
+    
+    # FEATURE DISABLED 
+    
+#    def create!(method_name, *parameters) #:nodoc:
+#      initialize_defaults(method_name)
+#      send(method_name, *parameters)
       
       # If an explicit, textual body has not been set, we check assumptions.
-      unless String === @body
+#      unless String === @body
         # First, we look to see if there are any likely templates that match,
         # which include the content-type in their file name (i.e.,
         # "the_template_file.text.html.rhtml", etc.). Only do this if parts
         # have not already been specified manually.
-        if @parts.empty?
-          append_localized_parts
-          unless @parts.empty?
-            @content_type = "multipart/alternative"
-            @parts = sort_parts(@parts, @implicit_parts_order)
-          end
-        end
+#        if @parts.empty?
+#          append_localized_parts
+#          unless @parts.empty?
+#            @content_type = "multipart/alternative"
+#            @parts = sort_parts(@parts, @implicit_parts_order)
+#          end
+#        end
         
         # Then, if there were such templates, we check to see if we ought to
         # also render a "normal" template (without the content type). If a
         # normal template exists (or if there were no implicit parts) we render
         # it.
-        render_localized_normal_template
+#        render_localized_normal_template
 
         # Finally, if there are other message parts and a textual body exists,
         # we shift it onto the front of the parts and set the body to nil (so
         # that create_mail doesn't try to render it in addition to the parts).
-        if !@parts.empty? && String === @body
-          @parts.unshift Part.new(:charset => charset, :body => @body)
-          @body = nil
-        end
-      end
+#        if !@parts.empty? && String === @body
+#          @parts.unshift Part.new(:charset => charset, :body => @body)
+#          @body = nil
+#        end
+#      end
 
       # If this is a multipart e-mail add the mime_version if it is not
       # already set.
-      @mime_version ||= "1.0" if !@parts.empty?
+#      @mime_version ||= "1.0" if !@parts.empty?
 
       # build the mail object itself
-      @mail = create_mail
+#      @mail = create_mail
 
-    end
+#    end
 
     private
       def append_localized_parts
