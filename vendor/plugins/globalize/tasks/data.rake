@@ -62,7 +62,7 @@ namespace :globalize do
       t.column :table_name,             :string
       t.column :item_id,                :integer
       t.column :facet,                  :string
-      t.column :built_in,               :boolean, :default => true
+      t.column :built_in,               :boolean
       t.column :language_id,            :integer
       t.column :pluralization_index,    :integer
       t.column :text,                   :text
