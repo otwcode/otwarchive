@@ -2,8 +2,8 @@ defaults: &defaults
   adapter: mysql
   encoding: utf8
   username: root
-	password:
-  
+  password:
+
 development:
   database: otwarchive_development
   <<: *defaults
