@@ -1,23 +1,56 @@
-<h1><%= "Log In!" .t %></h1>
+		<h2>An Archive Of Our Own</h2>
 
-  <p>Log in or <%= link_to 'sign up for a new account', new_user_path %>.</p>
+<!-- Please note the tabindex: for logical progression through the page, I have it set to tab through this link, then the "report" link, then the username/password/forgot/submit options.  Questions: Should the username box receive initial tab focus?  Should the username box be first in the tab index? -->
+		<h3 class="authentication-subheading">A project of the <a href="http://transformativeworks.org" tabindex="1">Organization For Transformative Works</a></h3>
+
+<!-- loginform floated right -->
+<div id="authentication-loginform">
+			
+  <% form_tag session_path do -%>	
+	
+<!-- Username field -->
+	<p>
+	<span class="authentication-label"><label for="login"><%= "Username" .t %>:</label></span><br />
+	<%= text_field_tag 'login', '', :class => 'authentication-textfield', :tabindex => '2' %>
+	</p>
+			
+<!-- Password field -->
+	<p>
+	<span class="authentication-label"><label for="password"><%= "Password" .t %>:</label></span><br />
+	<%= password_field_tag 'password', '', :class => 'authentication-textfield', :tabindex => '3' %>
+	</p>
+	
+	<p><%= "or use..." .t %></p>
+	  
+<!-- OpenID field -->	
+	<p>  
+	  <span class="authentication-label"><label for="openid_url"><%= "OpenID URL" .t %>:</label></span><br />
+      <%= text_field_tag "openid_url", '', :class => 'authentication-textfield', :tabindex => '4' %>
+	</p>
+
+<!-- Remember me checkbox -->
+	<p><span class="authentication-label"><label for="remember_me"><%= "Remember me" .t %>: </label></span>
+	<%= check_box_tag 'remember_me' %></p>
+
+<!-- Submit button -->
+	<p><%= submit_tag 'Log in', :tabindex => '5' %></p>
   
-	<% form_tag session_path do -%>
-	  <p><label for="login"><%= "Login" .t %></label><br/>
-	  <%= text_field_tag 'login' %></p>
+  <% end -%>
+
+<!-- forgot/change password link -->
+	<p><%= link_to 'Forgot/change password?', new_password_path, :tabindex => '6' %>
+	</p>
+	<br />
 	
-	  <p><label for="password"><%= "Password" .t %></label><br/>
-	  <%= password_field_tag 'password' %></p>
-	  
-	  <p><label for="remember_me"><%= "Remember me:" .t %></label>
-		<%= check_box_tag 'remember_me' %></p>
-	  
-	  <p>or use...</p>
-	  
-	  <p>
-	    <label for="openid_url">OpenID URL</label><br />
-      <%= text_field_tag "openid_url" %>
-	  </p>
-	
-	  <p><%= submit_tag 'Log in' %></p>
-	<% end -%>
+<!-- Create account link -->
+	<p>
+	<span class="authentication-footnote"><%= "New tester?" .t %> <%= link_to 'Create an account', new_user_path, :tabindex => '7' %></span>
+	</p>
+
+</div>
+
+<!-- And now the non-floated div. -->
+<div id="authentication-logo"><img src="images/logo.png" alt="Logo" /></div>
+
+<!-- And now we clear the floats so the footer information will show up properly. -->
+<div class="clearboth"></div>

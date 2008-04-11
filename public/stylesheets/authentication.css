@@ -1,0 +1,70 @@
+/* All CSS for the site as a whole is stored in the site-specific stylesheet.  This stylesheet contains only the styles needed to place and style elements on the login/create account pages. */
+
+/* Merging styles, site-specific */
+	/* Subheading style for login page, "A project of..." */
+.authentication-subheading {
+	margin-top: -20px;
+	font-size: 90%;
+}
+
+/* Page-specific styles, site-independent */
+	/* Login page */
+#authentication-logo { width: 50%;
+}
+#authentication-loginform { width: 50%;
+	float:right;
+}
+	/* Create account page */
+	/* Account confirm page */
+/* Style for "Return to home page" link; adds visual space between link and preceding elements */
+.return { margin-top: 60px;
+}
+	/* Create profile page */
+	/* User profile page */
+.userprofilelabel { font-weight: bold;
+	float: left;
+	width: 15%;
+	text-align: right;
+	clear: left;
+	margin: 10px 0px 10px 0px;
+}
+.userprofile { margin: 10px 0px 10px 0px;
+	width: 83%;
+	text-align: left;
+	float: right;
+	clear: right;
+}
+
+	/* Universal styles */
+/* Afterthought-type content, such as "New tester? Create an account" */
+.authentication-footnote { border-top: 1px #000 solid;
+	margin: 15px 0px 15px 0px;
+	padding: 15px 0px;
+}
+.wideleftmargin {
+	margin-left: 500px;
+}
+.widebottommargin {
+	margin-bottom: 50px;
+}
+	/* Form-related styles */
+.checkbox { margin: 0px 10px 0px 0px;
+}
+.checkboxfield { margin: 10px 0px 15px 0px;
+}
+.authentication-label { margin: 10px 0px 10px 0px;
+}
+.largebutton {
+	font-size: 115%;
+	margin-top: 15px;
+	margin-right: 10px;
+}
+.selectfield { margin: 10px 0px 15px 0px;
+}
+.textareafield { text-align: left;
+	margin: 10px 0px 0px 0px;
+}
+.authentication-textfield { width: 300px;
+	text-align: left;
+	margin: 10px 0px 15px 0px;
+}
