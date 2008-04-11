@@ -2,31 +2,9 @@
 
 <%= error_messages_for :pseud %>
 
-<% form_for(@pseud) do |f| %>
-  <p>
-    <b>User</b><br />
-    <%= f.text_field :user %>
-  </p>
+<%= render :partial => 'pseuds_form', :locals => { :button_text => "Update" } %>
 
-  <p>
-    <b>Name</b><br />
-    <%= f.text_field :name %>
-  </p>
-
-  <p>
-    <b>Description</b><br />
-    <%= f.text_area :description %>
-  </p>
-
-  <p>
-    <b>Is default</b><br />
-    <%= f.check_box :is_default %>
-  </p>
-
-  <p>
-    <%= f.submit "Update" %>
-  </p>
-<% end %>
-
-<%= link_to 'Show', @pseud %> |
-<%= link_to 'Back', pseuds_path %>
+<p>
+	<%= link_to 'Show', [@user, @pseud] %> |
+	<%= link_to 'Back', user_pseuds_path(@user) %>
+</p>

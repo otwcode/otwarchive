@@ -1,6 +1,4 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :pseuds
-                          
   map.activate '/activate/:id', :controller => 'users', :action => 'activate'    
   
   map.root :controller => 'session', :action => 'new'      
@@ -9,7 +7,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :admins
 
-  map.resources :users
+  map.resources :users, :has_many => :pseuds
 
   map.resources :works, :has_many => :chapters
 

@@ -44,6 +44,7 @@ class UsersController < ApplicationController
     unless params[:user][:identity_url].blank?
       @user.identity_url = OpenIdAuthentication.normalize_url(@user.identity_url)
     end
+    @user.pseuds << Pseud.new(:name => @user.login, :description => "Default pseud".t, :is_default => :true)
 
     respond_to do |format|
       if @user.save
@@ -63,7 +64,7 @@ class UsersController < ApplicationController
       current_user.activate
       flash[:notice] = "Signup complete!"
     end
-    redirect_back_or_default('/')
+    redirect_to :action => :show, :id => current_user.id
   end
 
   # PUT /users/1

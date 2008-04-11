@@ -12,7 +12,7 @@
 
 <div class="story-show">
   <h2 class="story-title"><%=h @work.metadata.title %></h2>
-  <h3 class="story-author"><a href="#" class="username">username</a></h3>
+  <h3 class="story-author"><%= render :partial => 'pseuds/byline', :locals => { :creation => @work } -%></h3>
   <p class="story-notes">
     <%=h @work.metadata.notes %>
   </p>

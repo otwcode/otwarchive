@@ -1,0 +1,24 @@
+<% form_for([@user, @pseud]) do |f| %>
+  <p>
+    <b>Name</b><br />
+	<% if @pseud.name && @user.login == @pseud.name -%>
+		<b><%=h @pseud.name -%></b> (<%= "cannot change your fallback pseud".t -%>)
+	<% else -%>
+    	<%= f.text_field :name %>
+	<% end -%>
+  </p>
+
+  <p>
+    <b>Description</b><br />
+    <%= f.text_area :description, :rows => 4, :cols => 60 -%>
+  </p>
+
+  <p>
+    <b>Is default</b><br />
+    <%= f.check_box :is_default %>
+  </p>
+
+  <p>
+    <%= f.submit button_text %>
+  </p>
+<% end %>

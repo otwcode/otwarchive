@@ -4,6 +4,13 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
 
+  # Store the current user as a class variable in the User class,
+  # so other models can access it with "User.current_user"
+  before_filter :set_current_user
+  def set_current_user
+    User.current_user = current_user
+  end
+
 
   #### -- GLOBALIZATION -- ####
   before_filter :set_locale

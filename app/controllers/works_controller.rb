@@ -43,7 +43,7 @@ class WorksController < ApplicationController
     @work = Work.new
     @work.chapters.build
     @work.metadata = Metadata.new
-
+    
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @work }

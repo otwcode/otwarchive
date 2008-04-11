@@ -82,7 +82,16 @@ class PseudsController < ApplicationController
   # DELETE /pseuds/1.xml
   def destroy
     @pseud = @user.pseuds.find(params[:id])
-    @pseud.destroy
+    if @pseud.is_default
+      flash[:error] = "You cannot delete your default pseudonym, sorry!".t
+    elsif @pseud.name == @user.login
+      flash[:error] = "You cannot delete the pseud matching your username, sorry!".t
+    else 
+      @pseud.destroy
+      flash[:notice] = "Pseud destroyed".t
+      # Here is where we will have to reset all the stories owned by this pseud
+      # to the default pseud of the user
+    end
 
     respond_to do |format|
       format.html { redirect_to(user_pseuds_url(@user)) }

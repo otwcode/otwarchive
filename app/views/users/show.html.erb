@@ -5,9 +5,18 @@
 </ul>
 <div class="clearboth"></div>
 
-<h2>Nothing here yet!</h2>
+<h2><%=h "%s's home" / @user.login -%></h2>
 
 <p>
-	User profile and more goodness coming soon. 
+	User profile and more goodness here. 
 </p>
 
+<% @user.pseuds.each do |pseud| -%>
+
+<h3><%=h "Works under the name %s...".t / pseud.name -%></h3>
+	<% pseud.works.each do |work| -%>
+	<h4><%= link_to h(work.metadata.title), work_path(work) -%></h4>
+	<% end -%>
+<% end -%>
+
+<p><%= link_to 'Manage Names'.t, user_pseuds_path(@user) -%></p>
