@@ -3,7 +3,9 @@ ActionController::Routing::Routes.draw do |map|
                           
   map.activate '/activate/:id', :controller => 'users', :action => 'activate'    
   
-  map.root :controller => 'session', :action => 'new'
+  map.root :controller => 'session', :action => 'new'      
+  
+  map.resources :passwords
   
   map.resources :admins
 

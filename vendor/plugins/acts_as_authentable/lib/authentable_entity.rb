@@ -33,11 +33,23 @@ module AuthentableEntity
     def authenticate(login, cleartext)
       u = find_by_login(login)
       u && u.authenticated?(cleartext, u.salt) && !u.activation_code ? u : nil
-    end
+    end   
   end
 
   def authenticated?(cleartext, salt)
     crypted_password == encrypt(cleartext, salt)
+  end           
+  
+  def generate_password(length=8)
+    chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ23456789'
+    password = ''
+    length.downto(1) { |i| password << chars[rand(chars.length - 1)] }
+    password
+  end         
+  
+  def reset_user_password
+    self.password = self.generate_password 
+    self.password_confirmation = self.password
   end
 
   protected

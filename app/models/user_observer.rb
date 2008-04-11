@@ -4,8 +4,9 @@ class UserObserver < ActiveRecord::Observer
   end
 
   def after_save(user)
-    UserMailer.deliver_activation(user) if user.pending?
+    UserMailer.deliver_activation(user) if user.pending?    
   end
+
 end
 
 
