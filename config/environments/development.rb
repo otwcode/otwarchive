@@ -16,3 +16,9 @@ config.action_view.cache_template_extensions         = false
 
 # Don't care if the mailer can't send
 config.action_mailer.raise_delivery_errors = false
+
+ActionMailer::Base.smtp_settings = {
+  :address  => "mail.transformativeworks.org", # Replace this with the smtp server of your ISP
+  :port  => 25, 
+  :domain  => 'transformativeworks.org'
+} 
