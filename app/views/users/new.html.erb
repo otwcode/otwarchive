@@ -1,25 +1,61 @@
-<h1><%= "Sign up!" .t %></h1>	
+<h2><%= "Create Account" .t %></h2>
+
+<p><%= "Please select a user name. You will be allowed to post stories under multiple pseudonyms, but you will only have one user name, which is hard for us to change - please choose wisely!" .t %></p>
 
 	<%= error_messages_for :user %>
+
 	<% form_for :user, :url => users_path do |f| -%>
-	<p><label for="login"><%= "Login" .t %></label><br/>
-	<%= f.text_field :login %></p>
+	  <p>
+	  <!-- Create username -->
+	  <span class="authentication-label"><label for="login"><%= "What would you like as your username?" .t %></label></span><br />
+	  <%= f.text_field :login, :class => 'authentication-textfield', :tabindex => '1' %><br />
+
+	  <!-- Password with link to strong password info (still needs to be added) -->
+	  <span class="authentication-label"><label for="password">And your password?  (Make it a <a href="#" tabindex="2">strong</a> one!)</label></span><br />	
+	  <%= f.password_field :password, :class => 'authentication-textfield', :tabindex => '3' %><br />
+	  
+	  <!-- Confirm password -->
+	  <span class="authentication-label"><label for="password_confirmation"><%= "Enter it again so we're sure we've got it?" .t %></label></span><br />
+	  <%= f.password_field :password_confirmation, :class => 'authentication-textfield', :tabindex => '4' %><br />
+	  
+	  <!-- OpenID address - I'm not sure the layout/label text is entirely clear here, the designers may need to look at it -->
+	  <span class="authentication-label"><label for="openid_url"><%= "Alternatively, enter your OpenID address" .t %></label></span><br />
+	  <%= f.text_field :identity_url, :class => 'authentication-textfield', :tabindex => '5' %><br />
+	  
+	  <!-- Email address -->
+	  <span class="authentication-label"><label for="email"><%= "What email address would you like us to use?" .t %></label></span><br />
+	  <%= f.text_field :email, :class => 'authentication-textfield', :tabindex => '6' %><br />
+	  
+	  <!-- Confirm email address - functionality still has to be added for this! -->
+	  <span class="authentication-label"><label for="email_confirmation"><%= "Could you repeat that email address, please?" .t %></label></span><br />
+	  <input type="text" name="email_confirmation" class="authentication-textfield" tabindex="7" /><br />
+	  </p>
+	  
+	  <!-- Age Check -->
+	  <!-- Needs to actually check this value on submission - functionality still has to be added for this! -->
+	  <p class="authentication-widebottommargin">
+	  <span class="authentication-label"><label for="age-check"><%= "Are you over 13?" .t %></label></span>
+	  <input type="radio" name="age-check" value="Over13" tabindex="8"/><%= "Yes" .t %>
+	  <input type="radio" name="age-check" value="Under13" tabindex="9" /><%= "No" .t %>
+	  </p>
+	  
+	  <!-- Terms of Service (actual TOS still needs to be added) -->
+	  <p>
+	  <span class="authentication-label"><label for="tos-agree">And -- really important -- we need you to agree to our <a href="#" tabindex="10">Terms of Service</a>:</label></span><br />
+	  </p>
+
+	  <p class="authentication-textareafield"><textarea name="terms-of-service" rows="8" cols="63" readonly="readonly">This is where the Terms of Service will go when they're finished.  This is FAKE FAKE FAKE!  Placeholder only!  In no way should any of the text inside this box be assumed to have anything to do with the real live Terms of Service as devised by the Archive of Our Own project.  No promises are intended.  No policies are implemented.  This is just a little something the coder is writing so the text box will scroll and she can see how the scrolling looks.  Is it too big?  Too small?  Too short?  Too tall?  How do the dimensions look?
+      The real Terms of Service are forthcoming and should be pasted into this section of this document.</textarea>
+	  </p>
+	  
+	  <!-- If this box is not checked, needs a modal dialog box: "You must agree to the Terms of Service in order to create an account.", with OK as the only choice. -->
+	  <p class="authentication-checkboxfield"><input type="checkbox" name="tos-agree" class="authentication-checkbox" tabindex="11" /><%= "Yes, I have read the Terms of Service and agree to them." .t %></p>
+
+	  <!-- Buttons for "Cancel" and "Create Account" -->
+      <!-- "Create Account" needs to submit form information and send out an email to the user with confirmation information; the confirmation info should send the user back to accountconfirm.html -->
+      <!-- Functionality still needs to be added for the cancel button - where should it take the user? -->
+	  <p class="authentication-wideleftmargin">
+	  <input type="submit" name="cancel-create-account" class="authentication-largebutton" value="Cancel" tabindex="12" /><%= submit_tag 'Create Account' .t, :class => 'authentication-largebutton', :tabindex => '13' %>
+	  </p>
 	
-	<p><label for="email"><%= "Email" .t %></label><br/>
-	<%= f.text_field :email %></p>
-	
-	<p>Choose a password OR use your OpenID: </p>
-	
-	<p><label for="password"><%= "Password" .t %></label><br/>
-	<%= f.password_field :password %></p>
-	
-	<p><label for="password_confirmation"><%= "Confirm Password" .t %></label><br/>
-	<%= f.password_field :password_confirmation %></p>
-	
-	<p>
-    <label for="openid_url">OpenID URL</label><br />
-    <%= f.text_field :identity_url %>
-  </p>
-	
-	<p><%= submit_tag 'Sign up' %></p>
 	<% end -%>

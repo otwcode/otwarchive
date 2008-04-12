@@ -14,10 +14,10 @@ ActiveRecord::Schema.define(:version => 19) do
   create_table "admins", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "salt"
     t.string   "email"
     t.string   "login"
     t.string   "crypted_password"
-    t.string   "salt"
   end
 
   create_table "bookmarks", :force => true do |t|
@@ -150,14 +150,14 @@ ActiveRecord::Schema.define(:version => 19) do
   create_table "users", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "activation_code"
-    t.string   "email"
-    t.string   "login"
-    t.datetime "activated_at"
-    t.string   "crypted_password"
     t.string   "salt"
     t.string   "remember_token"
     t.datetime "remember_token_expires_at"
+    t.string   "email"
+    t.string   "activation_code"
+    t.string   "login"
+    t.datetime "activated_at"
+    t.string   "crypted_password"
     t.string   "identity_url"
   end
 

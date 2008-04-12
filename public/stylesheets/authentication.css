@@ -17,7 +17,7 @@
 	/* Create account page */
 	/* Account confirm page */
 /* Style for "Return to home page" link; adds visual space between link and preceding elements */
-.return { margin-top: 60px;
+.authentication-return { margin-top: 60px;
 }
 	/* Create profile page */
 	/* User profile page */
@@ -41,27 +41,27 @@
 	margin: 15px 0px 15px 0px;
 	padding: 15px 0px;
 }
-.wideleftmargin {
+.authentication-wideleftmargin {
 	margin-left: 500px;
 }
-.widebottommargin {
+.authentication-widebottommargin {
 	margin-bottom: 50px;
 }
 	/* Form-related styles */
-.checkbox { margin: 0px 10px 0px 0px;
+.authentication-checkbox { margin: 0px 10px 0px 0px;
 }
-.checkboxfield { margin: 10px 0px 15px 0px;
+.authentication-checkboxfield { margin: 10px 0px 15px 0px;
 }
 .authentication-label { margin: 10px 0px 10px 0px;
 }
-.largebutton {
+.authentication-largebutton {
 	font-size: 115%;
 	margin-top: 15px;
 	margin-right: 10px;
 }
 .selectfield { margin: 10px 0px 15px 0px;
 }
-.textareafield { text-align: left;
+.authentication-textareafield { text-align: left;
 	margin: 10px 0px 0px 0px;
 }
 .authentication-textfield { width: 300px;
