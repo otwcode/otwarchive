@@ -1,0 +1,6 @@
+<% form_for(@creation) do |f| %>
+	<!-- TODO this will update the creation's pseud_id, but not add 
+	the creation to the selected pseud, fix later? Do we need to? --> 
+	<% f.collection_select :creation, :pseud_id, current_user.pseuds.find(:all), :id, :name %>
+	<% f.submit "Change Pseud" %>
+<% end %>

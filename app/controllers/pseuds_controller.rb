@@ -6,6 +6,7 @@ class PseudsController < ApplicationController
     @user = User.find(params[:user_id])
   end
   
+
   # GET /pseuds
   # GET /pseuds.xml
   def index
@@ -48,7 +49,10 @@ class PseudsController < ApplicationController
   # POST /pseuds.xml
   def create
     @pseud = @user.pseuds.build(params[:pseud])
-
+    # if setting this one as default, unset the attribute of the current active pseud
+    if params[:is_default]
+      @user.active_pseud.is_default = false
+    end
     respond_to do |format|
       if @pseud.save
         flash[:notice] = 'Pseud was successfully created.'
@@ -65,9 +69,13 @@ class PseudsController < ApplicationController
   # PUT /pseuds/1.xml
   def update
     @pseud = @user.pseuds.find(params[:id])
-
+    # if setting this one as default, unset the attribute of the current active pseud
+    if params[:is_default]
+      @user.active_pseud.is_default = false
+    end
     respond_to do |format|
       if @pseud.update_attributes(params[:pseud])
+                
         flash[:notice] = 'Pseud was successfully updated.'
         format.html { redirect_to([@user, @pseud]) }
         format.xml  { head :ok }
@@ -86,11 +94,9 @@ class PseudsController < ApplicationController
       flash[:error] = "You cannot delete your default pseudonym, sorry!".t
     elsif @pseud.name == @user.login
       flash[:error] = "You cannot delete the pseud matching your username, sorry!".t
-    else 
+    else
       @pseud.destroy
       flash[:notice] = "Pseud destroyed".t
-      # Here is where we will have to reset all the stories owned by this pseud
-      # to the default pseud of the user
     end
 
     respond_to do |format|
