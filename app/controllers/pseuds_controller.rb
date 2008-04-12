@@ -49,13 +49,14 @@ class PseudsController < ApplicationController
   # POST /pseuds.xml
   def create
     @pseud = @user.pseuds.build(params[:pseud])
-    # if setting this one as default, unset the attribute of the current active pseud
-    if params[:is_default] = 'true'
-      @user.active_pseud.update_attribute(:is_default, false)
-    end
+    active_pseud = @user.active_pseud
     respond_to do |format|
       if @pseud.save
         flash[:notice] = 'Pseud was successfully created.'
+        if @pseud.is_default
+          # if setting this one as default, unset the attribute of the current active pseud
+          active_pseud.update_attribute(:is_default, false)
+        end
         format.html { redirect_to([@user, @pseud]) }
         format.xml  { render :xml => @pseud, :status => :created, :location => @pseud }
       else
@@ -69,13 +70,14 @@ class PseudsController < ApplicationController
   # PUT /pseuds/1.xml
   def update
     @pseud = @user.pseuds.find(params[:id])
-    # if setting this one as default, unset the attribute of the current active pseud
-    if params[:is_default] = 'true'
-      @user.active_pseud.update_attribute(:is_default, false)
-    end
+    active_pseud = @user.active_pseud
     respond_to do |format|
       if @pseud.update_attributes(params[:pseud])
-                
+        # if setting this one as default, unset the attribute of the current active pseud
+        if @pseud.is_default and not(active_pseud == @pseud)
+          # if setting this one as default, unset the attribute of the current active pseud
+          active_pseud.update_attribute(:is_default, false)
+        end   
         flash[:notice] = 'Pseud was successfully updated.'
         format.html { redirect_to([@user, @pseud]) }
         format.xml  { head :ok }
