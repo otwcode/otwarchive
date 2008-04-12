@@ -10,6 +10,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :users, :has_many => :pseuds
 
   map.resources :works, :has_many => :chapters
+  
+  map.resources :bookmarks
 
   map.open_id_complete 'session', :controller => "session", :action => "create", :requirements => { :method => :get }
   

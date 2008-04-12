@@ -1,0 +1,52 @@
+ActsAsBookmarkable
+==================
+
+== Resources
+
+Install
+ * Run the following command:
+ script/plugin install http://juixe.com/svn/acts_as_bookmarkable
+  
+ * Create a new rails migration and add the following self.up and self.down methods
+ 
+  def self.up
+    create_table "bookmarks", :force => true do |t|
+      t.column "title", :string, :limit => 50, :default => ""
+      t.column "created_at", :datetime, :null => false
+      t.column "bookmarkable_type", :string, :limit => 15, :default => "", :null => false
+      t.column "bookmarkable_id", :integer, :default => 0, :null => false
+      t.column "user_id", :integer, :default => 0, :null => false
+    end
+  
+    add_index "bookmarks", ["user_id"], :name => "fk_bookmarks_user"
+  end
+
+  def self.down
+    drop_table :bookmarks
+  end
+ 
+== Usage
+ * Make you ActiveRecord model act as bookmarkable.
+ 
+ class Model < ActiveRecord::Base
+ 	acts_as_bookmarkable
+ end
+ 
+ * Add a bookmark to a model instance
+ 
+ model = Model.new
+ bookmark = Bookmark.new(:title => 'bmark title')
+ model.bookmarks << bookmark
+ 
+ * Each bookmark references the bookmarkable object
+ 
+ model = Model.find(1)
+ model.bookmarks.get(0).bookmarkable == model
+
+== Credits
+
+Xelipe - This plugin is heavily influced by Acts As Tagglable.
+
+== More
+
+http://www.juixe.com/projects/acts_as_bookmarkable
