@@ -10,6 +10,8 @@
 /* Page-specific styles, site-independent */
 	/* Login page */
 #authentication-logo { width: 50%;
+	/* Could a CSS coder please check this margin setting is okay? */
+	margin-left: -70px;
 }
 #authentication-loginform { width: 50%;
 	float:right;
