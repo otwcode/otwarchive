@@ -1,17 +1,15 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
+basic_work:
   id: 1
-  title: MyString
-  summary: MyText
-  notes: MyText
   expected_number_of_chapters: 1
-  is_complete: false
+  is_complete: true
+  major_version: 1
+  minor_version: 0
 
-two:
+incomplete_work:
   id: 2
-  title: MyString
-  summary: MyText
-  notes: MyText
   expected_number_of_chapters: 1
   is_complete: false
+  major_version: 1
+  minor_version: 1

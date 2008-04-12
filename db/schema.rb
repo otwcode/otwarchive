@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 17) do
+ActiveRecord::Schema.define(:version => 18) do
 
   create_table "admins", :force => true do |t|
     t.datetime "created_at"
@@ -22,11 +22,10 @@ ActiveRecord::Schema.define(:version => 17) do
 
   create_table "chapters", :force => true do |t|
     t.text     "content"
-    t.integer  "order",       :default => 1
+    t.integer  "order",      :default => 1
     t.integer  "work_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "metadata_id"
   end
 
   create_table "creatorships", :force => true do |t|
@@ -109,9 +108,9 @@ ActiveRecord::Schema.define(:version => 17) do
   end
 
   create_table "open_id_authentication_nonces", :force => true do |t|
-    t.integer "timestamp",                  :null => false
+    t.integer "timestamp",  :null => false
     t.string  "server_url"
-    t.string  "salt",       :default => "", :null => false
+    t.string  "salt",       :null => false
   end
 
   create_table "pseuds", :force => true do |t|
@@ -146,9 +145,9 @@ ActiveRecord::Schema.define(:version => 17) do
     t.datetime "activated_at"
     t.string   "crypted_password"
     t.string   "salt"
+    t.string   "email"
     t.string   "remember_token"
     t.datetime "remember_token_expires_at"
-    t.string   "email"
     t.string   "identity_url"
   end
 
@@ -157,7 +156,6 @@ ActiveRecord::Schema.define(:version => 17) do
     t.boolean  "is_complete"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "metadata_id"
     t.integer  "major_version"
     t.integer  "minor_version"
   end

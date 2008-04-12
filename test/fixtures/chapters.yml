@@ -1,10 +1,9 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  title: First Chapter of completed stroy
+basic_chapter:
   content: looooong text for first chapter
   order: 1
-  work: 1
+  work: basic_work
 
 #two:
 #  title: MyString

@@ -1,9 +1,9 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  references: 
-  references: 
+creatorship1:
+  creation: basic_work
+  pseud: default_pseud
 
-two:
-  references: 
-  references: 
+creatorship2:
+  creation: basic_chapter 
+  pseud: non_default_pseud 

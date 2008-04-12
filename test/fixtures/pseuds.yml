@@ -1,13 +1,13 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  user: 
-  name: MyString
-  description: MyText
-  is_default: false
+default_pseud:
+  user: user1
+  name: Default Pseud
+  description: This is a default pseud.
+  is_default: true
 
-two:
-  user: 
-  name: MyString
-  description: MyText
+non_default_pseud:
+  user: user1
+  name: Non-Default Pseud
+  description: This is a non default pseud.
   is_default: false

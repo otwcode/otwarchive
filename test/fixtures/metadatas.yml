@@ -4,10 +4,10 @@ one:
   title: MyString
   summary: MyText
   notes: MyText
-  described: 
+  described: basic_work
 
 two:
   title: MyString
   summary: MyText
   notes: MyText
-  described: 
+  described: basic_chapter
