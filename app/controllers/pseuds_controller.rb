@@ -50,8 +50,8 @@ class PseudsController < ApplicationController
   def create
     @pseud = @user.pseuds.build(params[:pseud])
     # if setting this one as default, unset the attribute of the current active pseud
-    if params[:is_default]
-      @user.active_pseud.is_default = false
+    if params[:is_default] = 'true'
+      @user.active_pseud.update_attribute(:is_default, false)
     end
     respond_to do |format|
       if @pseud.save
@@ -70,8 +70,8 @@ class PseudsController < ApplicationController
   def update
     @pseud = @user.pseuds.find(params[:id])
     # if setting this one as default, unset the attribute of the current active pseud
-    if params[:is_default]
-      @user.active_pseud.is_default = false
+    if params[:is_default] = 'true'
+      @user.active_pseud.update_attribute(:is_default, false)
     end
     respond_to do |format|
       if @pseud.update_attributes(params[:pseud])
