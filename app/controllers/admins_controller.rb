@@ -23,28 +23,6 @@ class AdminsController < ApplicationController
     end
   end
 
-  # GET /admins/1/edit
-  def edit
-    @admin = Admin.find(params[:id])
-  end
-
-  # PUT /admins/1
-  # PUT /admins/1.xml
-  def update
-    @admin = Admin.find(params[:id])
-
-    respond_to do |format|
-      if @admin.update_attributes(params[:admin])
-        flash[:notice] = 'Admin was successfully updated.'
-        format.html { redirect_to(@admin) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @admin.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
-
   # DELETE /admins/1
   # DELETE /admins/1.xml
   def destroy

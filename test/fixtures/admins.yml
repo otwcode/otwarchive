@@ -12,3 +12,11 @@ admin:
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
   login: admin
   email: test@admin.com
+  
+admin_to_destroy:
+  id: 2
+  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
+  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
+  login: admin2
+  email: test2@admin.com
+  

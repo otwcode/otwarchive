@@ -35,4 +35,22 @@ class Test::Unit::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+
+  def login_setup
+    #@request    = ActionController::TestRequest.new
+    #@response   = ActionController::TestResponse.new
+  end
+  
+  # Sets the current user in the session from the user fixtures.
+  def login_as_user(user)
+    login_setup
+    @request.session[:user] = user ? users(user).id : nil
+  end
+
+  # Sets the current user in the session from the user fixtures.
+  def login_as_admin(admin)
+    login_setup
+    @request.session[:admin] = admin ? admins(admin).id : nil
+  end
+
 end
