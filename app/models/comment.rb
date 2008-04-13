@@ -3,8 +3,13 @@ class Comment < ActiveRecord::Base
   belongs_to :commentable, :polymorphic => true
   acts_as_commentable
   
-  validates_presence_of :content  
-                             
+  validates_presence_of :content
+  validates_presence_of :name, :email, :unless => :pseud 
+    
+    # Returns the last thread number assigned
+    def self.max_thread
+      ActiveRecord::Base.connection.select_value('SELECT MAX(thread) FROM comments')
+    end
 
     # Returns true if the comment is a reply to another comment                     
     def reply_comment?
@@ -33,7 +38,7 @@ class Comment < ActiveRecord::Base
     # Returns comment itself if unthreaded
     def full_set 
       if self.threaded_left
-        Comment.find(:all, :conditions => ["threaded_left BETWEEN (?) and (?)", self.threaded_left, self.threaded_right])
+        Comment.find(:all, :conditions => ["threaded_left BETWEEN (?) and (?) AND thread = #{self.thread}", self.threaded_left, self.threaded_right])
       else
         return [self]
       end
@@ -41,8 +46,14 @@ class Comment < ActiveRecord::Base
 
     # Returns all sub-comments
     def all_children
-      Comment.find(:all, :conditions => "(threaded_left > #{self.threaded_left}) and (threaded_right < #{self.threaded_right})" )
-    end             
+      Comment.find(:all, :conditions => "(threaded_left > #{self.threaded_left}) and (threaded_right < #{self.threaded_right}) and thread = #{self.thread}" )
+    end
+    
+    # Returns a full comment thread
+    def full_thread
+      Comment.find(:all, :conditions => "thread = #{thread}")
+    end
+                  
 
     # Adds a child to this object in the tree. This method will update all of the
     # other elements in the tree and shift them to the right, keeping everything
@@ -70,9 +81,10 @@ class Comment < ActiveRecord::Base
         child.threaded_left = right_bound
         child.threaded_right = right_bound + 1
         self.threaded_right += 2
+        # Updates all comments in the thread to set their relative positions
         Comment.transaction {
-          Comment.update_all( "threaded_left = (threaded_left + 2)",  "threaded_left >= #{right_bound}" )
-          Comment.update_all( "threaded_right = (threaded_right + 2)",  "threaded_right >= #{right_bound}" )
+          Comment.update_all("threaded_left = (threaded_left + 2)", "thread = #{self.thread} AND threaded_left >= #{right_bound}")
+          Comment.update_all("threaded_right = (threaded_right + 2)",  "thread = #{self.thread} AND threaded_right >= #{right_bound}")
           self.save
           child.save
         }

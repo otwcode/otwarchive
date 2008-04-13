@@ -14,6 +14,13 @@ class UserMailer < ActionMailer::Base
      setup_email(user)
      @subject    += 'Password reset'
    end
+   
+   def send_comments(user, comment)
+      setup_email(user)
+      @subject        += 'Reply to your comment'
+      @body[:comment] = comment
+      @body[:url]     += "comments/#{comment.commentable_id}"
+   end
 
    protected
      def setup_email(user)

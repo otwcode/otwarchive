@@ -15,16 +15,32 @@
   <p>Posted at: <%= @comment.created_at %></p>
      
   <p>
-    <%= link_to_function('Reply', "Element.toggle('add-comment#{@comment.id}')") %>
-    <% if logged_in? && @comment.pseud == current_user.active_pseud %> | 
+    <% if logged_in? && @comment.pseud == current_user.active_pseud %>
       <%= link_to 'Edit', edit_comment_path(@comment) %> | 
       <%= link_to 'Destroy', @comment, :confirm => 'Are you sure?', :method => :delete %> 
     <% end %>
   </p>
 
-  <div id="add-comment<%= @comment.id %>" style="display : none;">   
-    <%= render :partial => @comment = Comment.new, :locals => {:commentable => @comment, :button_name => 'Create'}%> 
+  <div id="comments-display">
+    <p>
+      <%= link_to_function('Add a comment', "Element.toggle('add-comment')") %>
+    </p>
+
+    <div id="add-comment" style="display : none;">
+      <% first_comment = @comment %>   
+      <%= render :partial => @comment = Comment.new, :locals => {:commentable => first_comment, :button_name => 'Create'}%> 
+    </div>  
+
+    <p>
+    <%= link_to_function('Read comments', "Element.toggle('comments')") %>   
+    </p>
+
+    <div id="comments" style="display : none;">   
+      <%= render :partial => 'comment_view' %> 
+    </div>
   </div>
+  
+  
 <% end %>
 
 <%= link_to 'Back', comments_path %>

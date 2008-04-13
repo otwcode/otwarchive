@@ -15,6 +15,7 @@ class CommentsController < ApplicationController
   # GET /comments/1.xml
   def show
     @comment = Comment.find(params[:id])
+    @comments = @comment.all_children
 
     respond_to do |format|
       format.html # show.html.erb
@@ -48,7 +49,21 @@ class CommentsController < ApplicationController
     @comment.set_depth
     if @comment.reply_comment?
       @old_comment = Comment.find(@comment.commentable_id)
+      @comment.thread = @old_comment.thread
       @old_comment.add_child(@comment)
+
+      # Disabling email for now but leaving this here as a placeholder
+      # if @old_comment.pseud_id
+         # @recipient = User.find(@old_comment.pseud.user_id)
+         # UserMailer.deliver_send_comments(@recipient, @comment)
+      # end
+      
+    else
+      if Comment.max_thread
+        @comment.thread = Comment.max_thread.to_i + 1
+      else
+        @comment.thread = 1
+      end
     end
 
     respond_to do |format|
@@ -57,7 +72,7 @@ class CommentsController < ApplicationController
         format.html { redirect_to(@comment) }
         format.xml  { render :xml => @comment, :status => :created, :location => @comment }
       else
-        format.html { render :action => "new" }
+        format.html { render :action => "new", :locals => {:commentable => @comment.commentable, :button_name => 'Create'} }
         format.xml  { render :xml => @comment.errors, :status => :unprocessable_entity }
       end
     end
