@@ -2,11 +2,7 @@
 
 <%= error_messages_for :comment %>
 
-<% form_for(@comment) do |f| %>
-  <p>
-    <%= f.submit "Update" %>
-  </p>
-<% end %>
+<%= render :partial => @comment, :locals => {:commentable => @comment.commentable, :button_name => 'Update'}%>
 
 <%= link_to 'Show', @comment %> |
 <%= link_to 'Back', comments_path %>

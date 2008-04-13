@@ -42,7 +42,9 @@ class CommentsController < ApplicationController
   # POST /comments.xml
   def create
     @comment = Comment.new(params[:comment])
-    @comment.pseud_id = current_user.active_pseud.id
+    if logged_in?
+      @comment.pseud_id = current_user.active_pseud.id
+    end
     @comment.set_depth
     if @comment.reply_comment?
       @old_comment = Comment.find(@comment.commentable_id)

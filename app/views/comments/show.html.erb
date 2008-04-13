@@ -1,3 +1,30 @@
+<% if @comment.is_deleted %>
+  <p>(comment deleted)</p>
+<% else %>  
 
-<%= link_to 'Edit', edit_comment_path(@comment) %> |
+  <h3>
+  <% if @comment.pseud_id %>
+    <%= link_to @comment.pseud.name, @comment %> says:
+  <% else %>
+    <%= mail_to @comment.email, @comment.name %> says:
+  <% end %>  
+  </h3>
+
+  <p><%=h @comment.content %></p>
+  
+  <p>Posted at: <%= @comment.created_at %></p>
+     
+  <p>
+    <%= link_to_function('Reply', "Element.toggle('add-comment#{@comment.id}')") %>
+    <% if logged_in? && @comment.pseud == current_user.active_pseud %> | 
+      <%= link_to 'Edit', edit_comment_path(@comment) %> | 
+      <%= link_to 'Destroy', @comment, :confirm => 'Are you sure?', :method => :delete %> 
+    <% end %>
+  </p>
+
+  <div id="add-comment<%= @comment.id %>" style="display : none;">   
+    <%= render :partial => @comment = Comment.new, :locals => {:commentable => @comment, :button_name => 'Create'}%> 
+  </div>
+<% end %>
+
 <%= link_to 'Back', comments_path %>
