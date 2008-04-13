@@ -1,6 +1,8 @@
 class Pseud < ActiveRecord::Base
   belongs_to :user
-  has_many_polymorphs :creations, :from => [:works, :chapters], :through => :creatorships
+  has_many_polymorphs :creations, :from => [:works, :chapters], :through => :creatorships   
+  has_many :comments
+  acts_as_commentable
   #  before_destroy :move_creations_to_default
   #TODO - add this
   #after_save :check_for_inconsistencies

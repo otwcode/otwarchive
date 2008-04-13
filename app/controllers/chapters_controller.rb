@@ -21,6 +21,7 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/1.xml
   def show
     @chapter = @work.chapters.find(params[:id])
+    @comments = @chapter.find_all_comments
 
     respond_to do |format|
       format.html # show.html.erb

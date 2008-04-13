@@ -1,0 +1,32 @@
+<ul>
+  <% for comment in @comments %>
+    <li class="comment<%= comment.depth %>" id="<%= comment.id %>">
+      <% if comment.is_deleted %>
+        <p>(comment deleted)</p>
+      <% else %>  
+        <h3><%= comment.pseud.name %> says:</h3>
+        <p><%=h comment.content %></p>
+        
+        <p>
+          Posted at: <%= comment.created_at %><br />
+        <% if comment.created_at != comment.updated_at %>
+          Updated at: <%= comment.updated_at %> 
+        <% end %>
+        </p>
+           
+        <p>
+          <%= link_to_function('Reply', "Element.toggle('add-comment#{comment.id}')") %>
+          <% if comment.pseud == current_user.active_pseud %>
+            &nbsp;|&nbsp;
+            <%= link_to 'Destroy', comment, :confirm => 'Are you sure?', :method => :delete %> 
+          <% end %>
+        </p>
+
+        <div id="add-comment<%= comment.id %>" style="display : none;">   
+          <%= render :partial => @comment = Comment.new, :locals => {:commentable => comment, :button_name => 'Create'}%> 
+        </div>
+      <% end %>
+    </li>    
+    
+  <% end %>
+</ul>

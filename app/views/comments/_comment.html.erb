@@ -1,0 +1,12 @@
+<% form_for([commentable, @comment]) do |f| %>     
+  <p>
+    <%= f.text_area :content %>
+  </p>  
+    
+    <%= f.hidden_field :commentable_id, :value => commentable.id %>
+    <%= f.hidden_field :commentable_type, :value => commentable.class.to_s %>    
+
+  <p>
+    <%= f.submit button_name %>
+  </p>
+<% end %>

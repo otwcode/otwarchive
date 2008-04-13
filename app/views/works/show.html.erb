@@ -33,3 +33,21 @@
     <%= link_to 'Edit', edit_work_path(@work) %>
   </p>
 </div>
+
+<div id="comments-display">
+  <p>
+    <%= link_to_function('Add a comment', "Element.toggle('add-comment')") %>
+  </p>
+                  
+  <div id="add-comment" style="display : none;">   
+    <%= render :partial => @comment = Comment.new, :locals => {:commentable => @work, :button_name => 'Create'}%> 
+  </div>  
+
+  <p>
+  <%= link_to_function('Read comments', "Element.toggle('comments')") %>   
+  </p>
+
+  <div id="comments" style="display : none;">   
+    <%= render :partial => 'comments/comment_view' %> 
+  </div>
+</div>

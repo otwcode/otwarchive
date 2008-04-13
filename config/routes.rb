@@ -1,4 +1,6 @@
-ActionController::Routing::Routes.draw do |map|
+ActionController::Routing::Routes.draw do |map|         
+  map.resources :comments, :has_many => :comments
+  
   map.activate '/activate/:id', :controller => 'users', :action => 'activate'    
   
   map.root :controller => 'session', :action => 'new'      
@@ -9,7 +11,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :users, :has_many => :pseuds
 
-  map.resources :works, :has_many => :chapters
+  map.resources :works, :has_many => :chapters, :has_many => :comments
   
   map.resources :bookmarks
 
@@ -23,11 +25,6 @@ ActionController::Routing::Routes.draw do |map|
   map.admin_login '/admin_login', :controller => 'admin_session', :action => 'new'
   map.admin_logout '/admin_logout', :controller => 'admin_session', :action => 'destroy'
   
-
-
-  # BERO delete
-  # map.resources :chapters
-  #map.resources :works
 
   # The priority is based upon order of creation: first created -> highest priority.
 

@@ -1,6 +1,7 @@
 class Work < ActiveRecord::Base
   has_many :chapters
-  has_one :metadata, :as => :described
+  has_one :metadata, :as => :described     
+  acts_as_commentable
   validates_associated :chapters, :metadata
 
   def after_save

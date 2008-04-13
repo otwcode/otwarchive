@@ -115,7 +115,8 @@ hr {
 }
 .username-admin:after {
   content: url( '/images/admin.gif' );
-}
+}  
+
 
 /* Debug Style (development only) */ 
 #debug {
@@ -204,6 +205,32 @@ a.story-title {
 }
 .list-right {
 	float: right;
+}    
+
+#comments-display {
+	margin-right: auto;
+	margin-left: auto;
+	width: 90%;
+	font-size: 110%;
+	font-family: Georgia, serif;	
+}
+
+/* Comment styles! Not sure how best to deal with a potentially infinite number of indentations */    
+
+.comment1 {
+	margin-left: 50px;
+} 
+
+.comment2 {
+	margin-left: 100px;
+} 
+
+.comment3 {
+	margin-left: 150px;
+} 
+
+.comment4 {
+	margin-left: 200px;
 }
 
 /* The flash divs are intended for use to show error messages

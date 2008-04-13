@@ -14,7 +14,7 @@ pre {
 
 a { color: #000; }
 a:visited { color: #666; }
-a:hover { color: #fff; background-color:#000; }
+a:hover { color: #fff; background-color:#000; }    
 
 .fieldWithErrors {
   padding: 2px;

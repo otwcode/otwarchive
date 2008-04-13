@@ -24,6 +24,7 @@ class WorksController < ApplicationController
   # GET /works/1.xml
   def show
     @work = Work.find(params[:id])
+    @comments = @work.find_all_comments
 
     # This is here just as an example of how to set a flash alert.
     # You can use flash[:notice], flash[:warning], and flash[:error].
