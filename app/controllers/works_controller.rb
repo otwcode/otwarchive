@@ -98,8 +98,6 @@ class WorksController < ApplicationController
   # DELETE /works/1.xml
   def destroy
     @work = Work.find(params[:id])
-    @work.chapters.each { |c| c.destroy }
-    @work.metadata.destroy
     @work.destroy
 
     respond_to do |format|

@@ -1,6 +1,6 @@
 class Work < ActiveRecord::Base
-  has_many :chapters
-  has_one :metadata, :as => :described     
+  has_many :chapters, :dependent => :destroy
+  has_one :metadata, :as => :described, :dependent => :destroy
   acts_as_commentable
   validates_associated :chapters, :metadata
 
