@@ -8,6 +8,10 @@ module ActiveRecord #:nodoc:
       module ClassMethods
         def acts_as_commentable
           send :include, CommentableEntity
+        end
+        
+        def has_comment_methods
+          send :include, CommentMethods
         end    
       end   
     end

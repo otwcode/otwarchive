@@ -3,7 +3,7 @@ class <%= migration_name %> < ActiveRecord::Migration
     create_table :comments do |t|    
       t.references  :pseud
       t.text        :content  
-      t.integer     :depth, :threaded_left, :threaded_right
+      t.integer     :depth, :threaded_left, :threaded_right, :thread
       t.boolean     :is_deleted
       t.string      :name, :email, :ip_address
       t.integer     :commentable_id

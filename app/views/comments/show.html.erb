@@ -30,14 +30,16 @@
       <% first_comment = @comment %>   
       <%= render :partial => @comment = Comment.new, :locals => {:commentable => first_comment, :button_name => 'Create'}%> 
     </div>  
+    
+    <% if @comments %>
+      <p>
+        <%= link_to_function('Read comments', "Element.toggle('comments')") %>   
+      </p>
 
-    <p>
-    <%= link_to_function('Read comments', "Element.toggle('comments')") %>   
-    </p>
-
-    <div id="comments" style="display : none;">   
-      <%= render :partial => 'comment_view' %> 
-    </div>
+      <div id="comments" style="display : none;">   
+        <%= render :partial => 'comment_view' %> 
+      </div>
+    <% end %>
   </div>
   
   

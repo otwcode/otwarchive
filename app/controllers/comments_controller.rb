@@ -43,31 +43,9 @@ class CommentsController < ApplicationController
   # POST /comments.xml
   def create
     @comment = Comment.new(params[:comment])
-    if logged_in?
-      @comment.pseud_id = current_user.active_pseud.id
-    end
-    @comment.set_depth
-    if @comment.reply_comment?
-      @old_comment = Comment.find(@comment.commentable_id)
-      @comment.thread = @old_comment.thread
-      @old_comment.add_child(@comment)
-
-      # Disabling email for now but leaving this here as a placeholder
-      # if @old_comment.pseud_id
-         # @recipient = User.find(@old_comment.pseud.user_id)
-         # UserMailer.deliver_send_comments(@recipient, @comment)
-      # end
-      
-    else
-      if Comment.max_thread
-        @comment.thread = Comment.max_thread.to_i + 1
-      else
-        @comment.thread = 1
-      end
-    end
 
     respond_to do |format|
-      if @comment.save
+      if @comment.set_and_save
         flash[:notice] = 'Comment was successfully created.'
         format.html { redirect_to(@comment) }
         format.xml  { render :xml => @comment, :status => :created, :location => @comment }
@@ -99,12 +77,7 @@ class CommentsController < ApplicationController
   # DELETE /comments/1.xml
   def destroy
     @comment = Comment.find(params[:id])
-    if @comment.children_count > 0 
-      @comment.is_deleted = true
-      @comment.save
-    else
-      @comment.destroy
-    end
+    @comment.destroy_or_mark_deleted
 
     respond_to do |format|
       format.html { redirect_to(comments_url) }
