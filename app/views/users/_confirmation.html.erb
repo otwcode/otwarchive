@@ -2,7 +2,7 @@
 
 <!-- Boilerplate text for account creation confirmation -->
   <p>
-  In just a few minutes, you should receive an email at the address you gave us.  This will have the URL you need to go to in order to verify your account and complete the account creation process.  You might want to add <strong>account-verification@archiveofourown.org</strong> to your address book to make sure you get the mail.
+  <%= "In just a few minutes, you should receive an email at the address you gave us".t %>.  <%= "This will have the URL you need to go to in order to verify your account and complete the account creation process".t %>.  <%= "You might want to add <strong>account-verification@archiveofourown.org</strong> to your address book to make sure you get the mail".t %>.
   </p>
 
   <p>
@@ -10,10 +10,10 @@
   </p>
 
   <p>
-  <strong>Important!</strong>  You must verify your account within 48 hours, or your registration will expire.
+  <strong><%= "Important!".t %></strong>  <%= "You must verify your account within 48 hours, or your registration will expire".t %>.
   </p>
 
-<!-- Class "return" has large top margin, in keeping with wireframe -->
+<!-- Class "authentication-return" has large top margin, in keeping with wireframe -->
   <p class="authentication-return">
   <%= link_to 'Return to home page'.t, root_path -%>
   </p>

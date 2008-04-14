@@ -1,4 +1,4 @@
-		<h2>An Archive Of Our Own</h2>
+		<h2><%= "An Archive Of Our Own" .t %></h2>
 
 <!-- Please note the tabindex: for logical progression through the page, I have it set to tab through this link, then the "report" link, then the username/password/forgot/submit options.  Questions: Should the username box receive initial tab focus?  Should the username box be first in the tab index? -->
 		<h3 class="authentication-subheading">A project of the <a href="http://transformativeworks.org" tabindex="1">Organization For Transformative Works</a></h3>
@@ -11,13 +11,13 @@
 <!-- Username field -->
 	<p>
 	<span class="authentication-label"><label for="login"><%= "Username" .t %>:</label></span><br />
-	<%= text_field_tag 'login', '', :class => 'authentication-textfield', :tabindex => '2' %>
-	</p>
+	<%= text_field_tag 'login', '', :class => 'authentication-textfield', :tabindex => '2' %><br />
+	
 			
 <!-- Password field -->
-	<p>
+	
 	<span class="authentication-label"><label for="password"><%= "Password" .t %>:</label></span><br />
-	<%= password_field_tag 'password', '', :class => 'authentication-textfield', :tabindex => '3' %>
+	<%= password_field_tag 'password', '', :class => 'authentication-textfield', :tabindex => '3' %><br />
 	</p>
 	
 	<p><%= "or use..." .t %></p>
@@ -25,12 +25,12 @@
 <!-- OpenID field -->	
 	<p>  
 	  <span class="authentication-label"><label for="openid_url"><%= "OpenID URL" .t %>:</label></span><br />
-      <%= text_field_tag "openid_url", '', :class => 'authentication-textfield', :tabindex => '4' %>
+      <%= text_field_tag "openid_url", '', :class => 'authentication-textfield', :tabindex => '4' %><br />
 	</p>
 
 <!-- Remember me checkbox -->
 	<p><span class="authentication-label"><label for="remember_me"><%= "Remember me" .t %>: </label></span>
-	<%= check_box_tag 'remember_me' %></p>
+	<%= check_box_tag 'remember_me', :class => 'authentication-checkboxfield' %></p>
 
 <!-- Submit button -->
 	<p><%= submit_tag 'Log in', :tabindex => '5' %></p>
@@ -38,13 +38,13 @@
   <% end -%>
 
 <!-- forgot/change password link -->
-	<p><%= link_to 'Forgot/change password?', new_password_path, :tabindex => '6' %>
+	<p><%= link_to 'Forgot/change password?' .t, new_password_path, :tabindex => '6' %>
 	</p>
 	<br />
 	
 <!-- Create account link -->
 	<p>
-	<span class="authentication-footnote"><%= "New tester?" .t %> <%= link_to 'Create an account', new_user_path, :tabindex => '7' %></span>
+	<span class="authentication-footnote"><%= "New tester?" .t %> <%= link_to 'Create an account' .t, new_user_path, :tabindex => '7' %></span>
 	</p>
 
 </div>

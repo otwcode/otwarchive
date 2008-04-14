@@ -21,14 +21,14 @@
 }
 	/* Create profile page */
 	/* User profile page */
-.userprofilelabel { font-weight: bold;
+.authentication-userprofilelabel { font-weight: bold;
 	float: left;
 	width: 15%;
 	text-align: right;
 	clear: left;
 	margin: 10px 0px 10px 0px;
 }
-.userprofile { margin: 10px 0px 10px 0px;
+.authentication-userprofile { margin: 10px 0px 10px 0px;
 	width: 83%;
 	text-align: left;
 	float: right;
@@ -59,7 +59,7 @@
 	margin-top: 15px;
 	margin-right: 10px;
 }
-.selectfield { margin: 10px 0px 15px 0px;
+.authentication-selectfield { margin: 10px 0px 15px 0px;
 }
 .authentication-textareafield { text-align: left;
 	margin: 10px 0px 0px 0px;

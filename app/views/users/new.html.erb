@@ -1,6 +1,6 @@
 <h2><%= "Create Account" .t %></h2>
 
-<p><%= "Please select a user name. You will be allowed to post stories under multiple pseudonyms, but you will only have one user name, which is hard for us to change - please choose wisely!" .t %></p>
+<p><%= "Please select a user name" .t %>. <%= "You will be allowed to post stories under multiple pseudonyms, but you will only have one user name, which is hard for us to change - please choose wisely!" .t %></p>
 
 	<%= error_messages_for :user %>
 
@@ -11,7 +11,7 @@
 	  <%= f.text_field :login, :class => 'authentication-textfield', :tabindex => '1' %><br />
 
 	  <!-- Password with link to strong password info (still needs to be added) -->
-	  <span class="authentication-label"><label for="password">And your password?  (Make it a <a href="#" tabindex="2">strong</a> one!)</label></span><br />	
+	  <span class="authentication-label"><label for="password"><%= "And your password?" .t %> (Make it a <a href="#" tabindex="2">strong</a> one!)</label></span><br />	
 	  <%= f.password_field :password, :class => 'authentication-textfield', :tabindex => '3' %><br />
 	  
 	  <!-- Confirm password -->
@@ -39,7 +39,7 @@
 	  <input type="radio" name="age-check" value="Under13" tabindex="9" /><%= "No" .t %>
 	  </p>
 	  
-	  <!-- Terms of Service (actual TOS still needs to be added) -->
+	  <!-- Terms of Service (actual TOS still needs to be added, as does functionality for the checkbox) -->
 	  <p>
 	  <span class="authentication-label"><label for="tos-agree">And -- really important -- we need you to agree to our <a href="#" tabindex="10">Terms of Service</a>:</label></span><br />
 	  </p>
@@ -49,7 +49,7 @@
 	  </p>
 	  
 	  <!-- If this box is not checked, needs a modal dialog box: "You must agree to the Terms of Service in order to create an account.", with OK as the only choice. -->
-	  <p class="authentication-checkboxfield"><input type="checkbox" name="tos-agree" class="authentication-checkbox" tabindex="11" /><%= "Yes, I have read the Terms of Service and agree to them." .t %></p>
+	  <p class="authentication-checkboxfield"><input type="checkbox" name="tos-agree" class="authentication-checkbox" tabindex="11" />Yes, I have read the Terms of Service and agree to them.</p>
 
 	  <!-- Buttons for "Cancel" and "Create Account" -->
       <!-- "Create Account" needs to submit form information and send out an email to the user with confirmation information; the confirmation info should send the user back to accountconfirm.html -->
