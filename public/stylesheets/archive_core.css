@@ -215,23 +215,12 @@ a.story-title {
 	font-family: Georgia, serif;	
 }
 
-/* Comment styles! Not sure how best to deal with a potentially infinite number of indentations */    
+/* Comment styles! To add zebra striping, use .odd-comment or .even-comment */    
 
-.comment1 {
+.comment {
 	margin-left: 50px;
-} 
-
-.comment2 {
-	margin-left: 100px;
-} 
-
-.comment3 {
-	margin-left: 150px;
-} 
-
-.comment4 {
-	margin-left: 200px;
 }
+
 
 /* The flash divs are intended for use to show error messages
  * from just notices to warnings to fatal errors. Errors get

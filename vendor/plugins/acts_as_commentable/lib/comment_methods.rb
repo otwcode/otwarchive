@@ -18,9 +18,6 @@ module CommentMethods
     
     # Sets pseud, depth and thread values and adjusts threading for sub-comments
     def set_and_save
-      if User.current_user
-        self.pseud_id = User.current_user.active_pseud.id
-      end
       self.set_depth
       if self.reply_comment?
         old_comment = Comment.find(self.commentable_id)

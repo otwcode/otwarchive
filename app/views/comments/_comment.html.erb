@@ -1,6 +1,14 @@
 <% form_for([commentable, @comment]) do |f| %>
   
-  <% unless logged_in? %>
+  <% if logged_in? %>
+    <p>
+      <% if current_user.pseuds.count > 1 %>
+        <%= f.collection_select :pseud_id, current_user.pseuds, :id, :name %>
+      <% else %>
+        <%= f.hidden_field :pseud_id, :value => "#{current_user.active_pseud.id}" %>
+      <% end %>
+    </p>
+  <% else %>  
     <p>
       Name: <%= f.text_field :name %><br />
       Email: <%= f.text_field :email %>
