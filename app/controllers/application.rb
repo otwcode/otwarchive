@@ -13,11 +13,21 @@ class ApplicationController < ActionController::Base
 
 
   #### -- GLOBALIZATION -- ####
+  layout 'application'
   before_filter :set_locale
-  self.languages = { :english => 'en-US', :italian => 'it-IT', :french => 'fr-FR', :german => 'de-DE', :hebrew => 'he-IL', :japanese => 'ja-JP', :polish => 'pl-PL', :spanish => 'es-ES', :czech => 'cs-CZ', :chinese => 'zh-CHS', :russian => 'ru-RU' }
- 
+  self.languages = { :english => 'en-US', :italian => 'it-IT', :french => 'fr-FR', 
+    :german => 'de-DE', :japanese => 'ja-JP', :spanish => 'es-ES', :czech => 'cs-CZ', 
+    :chinese => 'zh-CHS', :russian => 'ru-RU', :portuguese => 'pt-BR', :dutch => 'nl-NL', 
+    :indonesian => 'id-ID', :finnish => 'fi-FI'
+  }
+  
   def globalize?
     true
+    #logged_in? && current_user.is_translating
+  end
+  
+  def languages
+    return self.languages
   end
   
   # Determines the user's language of choice

@@ -95,4 +95,18 @@ class UsersController < ApplicationController
       format.xml  { head :ok }
     end
   end
+  
+  # Toggles is_translating on and off 
+  def translating_toggle_image
+    user = User.find(params["id"])
+    # change the is_translating state
+    user.toggle(:is_translating)
+    if user.save
+      redirect_to :back
+    else
+      render :text => "Couldn't change to translate mode"
+    end
+  end
+  
+  
 end

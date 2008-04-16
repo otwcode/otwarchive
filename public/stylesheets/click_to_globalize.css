@@ -1,15 +1,12 @@
 #click_to_globalize {
-  position: absolute;
-  top: 0; right: 0;
-  padding: 0;
-  padding-right: 10px;
-  font-family: Arial, "MS Trebuchet", sans-serif;
   font-size: 78%;
-  background-color: #DDD;
+  margin: auto;
+  position: absolute;
+  left: 30px;
+  font-family: "Helvetica Neue", Verdana, Arial, sans-serif;
 }
 
 #click_to_globalize a:link, #click_to_globalize a:visited {
-  color: #333;
   text-decoration: none;
 }
 
@@ -20,18 +17,36 @@
 
 #click_to_globalize ul {
   color: #666;
-  margin: auto;
-  margin-left: -30px;
   list-style-type: none;
+  margin-left: -30px;
 }
 
 #click_to_globalize ul li {
   display: inline;
+  margin: 3px;
+}
+
+#click_to_globalize form {
+  display: inline;
+}
+
+#click_to_globalize select {
+  border:1px solid #BDC7D8;
+  font-family: "Helvetica Neue", Verdana, Arial, sans-serif;
+  /* font-family:"lucida grande",tahoma,verdana,arial,sans-serif;*/
+  font-size:11px;
+  padding:2px;
+  background-color: #666;
+  color: #fff;
+}
+
+.inplaceeditor-form {
 }
 
 .inplaceeditor-form input[type=text],
 .inplaceeditor-form textarea {
   border: 1px solid #999;
+  width: 300px;
 }
 
 .inplaceeditor-form a:link, .inplaceeditor-form a:visited, .inplaceeditor-form a:hover, .inplaceeditor-form a:active {
