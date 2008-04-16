@@ -100,7 +100,10 @@ class UsersController < ApplicationController
   def translating_toggle_image
     user = User.find(params[:id])
     # change the is_translating state
+    # the puts lines are debugging code to make this work for now, but a proper fix is still needed!
+    puts "\n\n******\n\ngot here with user #{user.login} and #{user.is_translating}\n\n******\n\n"
     user.toggle(:is_translating)
+    puts "\n\n******\n\ngot here with user #{user.login} and #{user.is_translating}\n\n******\n\n"
     if user.save
       redirect_to :back
     else

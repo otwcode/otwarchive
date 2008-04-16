@@ -29,9 +29,9 @@
 				    <li>
 				    <a href="<%= url_for :controller => 'users', :action => 'translating_toggle_image', :id => current_user.id %>">	
 				      <% if current_user.is_translating -%>
-				        <%= image_tag("translation_button_down.gif", :alt => "Stop translating") -%>
+				        <%= image_tag("translation_button_down.gif", :alt => "Stop translating", :border => "0") -%>
 					  <% else -%>
-			            <%= image_tag("translation_button_up.gif", :alt => "Start translating") -%>
+			            <%= image_tag("translation_button_up.gif", :alt => "Start translating", :border => "0") -%>
 			          <% end -%>
 					</a>
 					</li>
