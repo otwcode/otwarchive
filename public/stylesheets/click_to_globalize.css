@@ -31,13 +31,13 @@
 }
 
 #click_to_globalize select {
-  border:1px solid #BDC7D8;
+  border:1px solid #999;
   font-family: "Helvetica Neue", Verdana, Arial, sans-serif;
   /* font-family:"lucida grande",tahoma,verdana,arial,sans-serif;*/
   font-size:11px;
   padding:2px;
-  background-color: #666;
-  color: #fff;
+  background-color: #fff;
+  color: #000;
 }
 
 .inplaceeditor-form {
