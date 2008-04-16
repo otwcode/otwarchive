@@ -98,7 +98,7 @@ class UsersController < ApplicationController
   
   # Toggles is_translating on and off 
   def translating_toggle_image
-    user = User.find(params["id"])
+    user = User.find(params[:id])
     # change the is_translating state
     user.toggle(:is_translating)
     if user.save

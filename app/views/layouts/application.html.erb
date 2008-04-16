@@ -15,6 +15,7 @@
 		<%= stylesheet_link_tag 'authentication', :media => 'screen' %>
 		<%= stylesheet_link_tag 'click_to_globalize', :media => 'screen' %>
 		<%= javascript_include_tag :defaults %>
+		<%= javascript_include_tag 'click_to_globalize' %>
     </head>
 
     <body>
@@ -24,14 +25,16 @@
             <% if logged_in? -%>
 	              <ul>
 				    <li>Hi, <%= link_to current_user.login, user_path(current_user), :class => 'username' -%>! </li>
-				  <!-- Translation button
+				  <!-- Translation button -->
 				    <li>
-					<% if current_user.is_translating -%>
-				      <%= image_tag("translation_button_down.gif", :alt => "Stop translating", :url => { :controller => 'users', :action => 'translating_toggle_image', :id => current_user.id }) %>
-			        <% else -%>
-			          <%= image_tag("translation_button_up.gif", :alt => "Start translating", :url => { :controller => 'users', :action => 'translating_toggle_image', :id => current_user.id }) %>
-			        <% end -%>
-					</li>-->
+				    <a href="<%= url_for :controller => 'users', :action => 'translating_toggle_image', :id => current_user.id %>">	
+				      <% if current_user.is_translating -%>
+				        <%= image_tag("translation_button_down.gif", :alt => "Stop translating") -%>
+					  <% else -%>
+			            <%= image_tag("translation_button_up.gif", :alt => "Start translating") -%>
+			          <% end -%>
+					</a>
+					</li>
 				  </ul>	
 	              <ul>
 	                <li class="first-link"><%= link_to 'Post New'.t, new_work_path -%></li>

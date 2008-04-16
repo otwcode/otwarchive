@@ -22,8 +22,7 @@ class ApplicationController < ActionController::Base
   }
   
   def globalize?
-    true
-    #logged_in? && current_user.is_translating
+    logged_in? && current_user.is_translating
   end
   
   def languages
