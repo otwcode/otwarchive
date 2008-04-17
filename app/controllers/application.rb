@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
   before_filter :set_current_user
   def set_current_user
     User.current_user = current_user
+    @current_user = current_user
   end
 
 
@@ -22,7 +23,7 @@ class ApplicationController < ActionController::Base
   }
   
   def globalize?
-    logged_in? && current_user.is_translating
+    logged_in? && @current_user.translation_mode_active?
   end
   
   def languages

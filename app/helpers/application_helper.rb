@@ -53,6 +53,15 @@ module ApplicationHelper
     #    end
     #    return result
   end  
+
+  # Get the translating button
+  def translating_button
+    if @current_user.translation_mode_active?
+      image_tag("translation_button_down.gif", :alt => "Stop translating", :border => 0)
+    else
+      image_tag("translation_button_up.gif", :alt => "Start translating", :border => 0)
+    end
+  end
   
   
 end

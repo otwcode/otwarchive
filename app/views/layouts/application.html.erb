@@ -24,16 +24,10 @@
             <div id="login-block">
             <% if logged_in? -%>
 	              <ul>
-				    <li>Hi, <%= link_to current_user.login, user_path(current_user), :class => 'username' -%>! </li>
+				    <li><span><%= "Hi,".t -%></span> <%= link_to current_user.login, user_path(current_user), :class => 'username' -%>! </li>
 				  <!-- Translation button -->
 				    <li>
-				    <a href="<%= url_for :controller => 'users', :action => 'translating_toggle_image', :id => current_user.id %>">	
-				      <% if current_user.is_translating -%>
-				        <%= image_tag("translation_button_down.gif", :alt => "Stop translating", :border => "0") -%>
-					  <% else -%>
-			            <%= image_tag("translation_button_up.gif", :alt => "Start translating", :border => "0") -%>
-			          <% end -%>
-					</a>
+				    	<%= link_to translating_button, :controller => :users, :action => :translation_mode_toggle, :id => @current_user.id -%>
 					</li>
 				  </ul>	
 	              <ul>
@@ -41,7 +35,7 @@
 	                <li><%= link_to 'Logout'.t, logout_path -%></li>
 	              </ul>
             <% elsif logged_in_as_admin? -%>
-                Hello, <%= link_to current_admin.login, admin_path(current_admin), :class => 'username username-admin' -%>!
+                <li><span><%= "Hello,".t -%></span> <%= link_to current_admin.login, admin_path(current_admin), :class => 'username username-admin' -%>!</li>
                 <ul>
                     <li><%= link_to 'Logout'.t, admin_logout_path -%></li>
                 </ul>

@@ -96,15 +96,11 @@ class UsersController < ApplicationController
     end
   end
   
-  # Toggles is_translating on and off 
-  def translating_toggle_image
+  # Toggles translation mode on and off 
+  def translation_mode_toggle
     user = User.find(params[:id])
-    # change the is_translating state
-    # the puts lines are debugging code to make this work for now, but a proper fix is still needed!
-    puts "\n\n******\n\ngot here with user #{user.login} and #{user.is_translating}\n\n******\n\n"
-    user.toggle(:is_translating)
-    puts "\n\n******\n\ngot here with user #{user.login} and #{user.is_translating}\n\n******\n\n"
-    if user.save
+    user.toggle(:translation_mode_active)
+    if user.save!
       redirect_to :back
     else
       render :text => "Couldn't change to translate mode"

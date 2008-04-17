@@ -9,15 +9,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 22) do
+ActiveRecord::Schema.define(:version => 23) do
 
   create_table "admins", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "salt"
     t.string   "email"
     t.string   "login"
     t.string   "crypted_password"
+    t.string   "salt"
   end
 
   create_table "bookmarks", :force => true do |t|
@@ -167,16 +167,16 @@ ActiveRecord::Schema.define(:version => 22) do
   create_table "users", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "salt"
     t.string   "remember_token"
-    t.datetime "remember_token_expires_at"
     t.string   "email"
+    t.datetime "remember_token_expires_at"
     t.string   "activation_code"
     t.string   "login"
     t.datetime "activated_at"
     t.string   "crypted_password"
+    t.string   "salt"
     t.string   "identity_url"
-    t.boolean  "is_translating",            :default => false
+    t.boolean  "translation_mode_active"
   end
 
   create_table "works", :force => true do |t|

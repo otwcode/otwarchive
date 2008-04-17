@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user
+  attr_accessor :translation_mode_active
   
   # Acts_as_authentable plugin
   acts_as_authentable

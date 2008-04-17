@@ -11,7 +11,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :users, :has_many => :pseuds
 
-  map.resources :works, :has_many => :chapters, :has_many => :comments
+  map.resources :works, :has_many => :comments
   
   map.resources :bookmarks
 
