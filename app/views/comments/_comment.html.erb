@@ -5,7 +5,7 @@
       <% if current_user.pseuds.count > 1 %>
         <%= f.collection_select :pseud_id, current_user.pseuds, :id, :name %>
       <% else %>
-        <%= f.hidden_field :pseud_id, :value => "#{current_user.active_pseud.id}" %>
+        <%= f.hidden_field :pseud_id, :value => "#{current_user.default_pseud.id}" %>
       <% end %>
     </p>
   <% else %>  

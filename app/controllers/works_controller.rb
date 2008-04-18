@@ -65,6 +65,12 @@ class WorksController < ApplicationController
 
     respond_to do |format|
       if @work.save
+        #set the pseud for this work
+        pseud = params[:user][:default_pseud]
+        @work.set_pseud(pseud)
+        @work.chapters.each do |c|
+          c.set_pseud(pseud)
+        end
         flash[:notice] = 'Work was successfully created.'
         format.html { redirect_to(@work) }
         format.xml  { render :xml => @work, :status => :created, :location => @work }

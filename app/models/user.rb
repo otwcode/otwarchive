@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
   validates_format_of :password, :with => /^(?=.*\d)(?=.*([a-z]|[A-Z]))([\x20-\x7E]){6,40}$/
 
   # Retrieve the current default pseud
-  def active_pseud
+  def default_pseud
     pseuds.each do |p|
       if p.is_default
         return p

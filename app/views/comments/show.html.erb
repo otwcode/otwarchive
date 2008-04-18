@@ -15,7 +15,7 @@
   <p>Posted at: <%= @comment.created_at %></p>
      
   <p>
-    <% if logged_in? && @comment.pseud == current_user.active_pseud %>
+    <% if logged_in? && @comment.pseud == current_user.default_pseud %>
       <%= link_to 'Edit', edit_comment_path(@comment) %> | 
       <%= link_to 'Destroy', @comment, :confirm => 'Are you sure?', :method => :delete %> 
     <% end %>

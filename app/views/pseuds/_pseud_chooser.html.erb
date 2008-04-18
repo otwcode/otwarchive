@@ -1,5 +1,5 @@
-<% form_for(@creation) do |f| %>
+<% form_for(@work) do |f| %>
 	<!-- TODO this will not actually work -> figure out how to make it work --> 
-	<% f.collection_select :creation, :psueds, current_user.pseuds.find(:all), :id, :name %>
-	<% f.submit "Change Pseud" %>
+	<%= collection_select :user, :default_pseud, current_user.pseuds, :id ,:name %>
+ 	<%= f.submit "Change Pseud" %>
 <% end %>

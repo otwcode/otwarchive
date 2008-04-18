@@ -11,10 +11,12 @@ class Pseud < ActiveRecord::Base
    def add_creations (other_creations)
       creations << other_creations
     end
-  
+  def remove_creation(creation)
+    creations.delete(creation)
+  end
     #moves the creations of the current pseud to the default
     #for some reason, is not actually moving creations before destroying it
     def move_creations_to_default
-        User.find(user_id).active_pseud.add_creations creations
+        User.find(user_id).default_pseud.add_creations creations
     end
 end

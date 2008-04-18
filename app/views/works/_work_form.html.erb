@@ -1,4 +1,13 @@
 <% form_for(@work) do |f| %>
+	<p>
+	<b>Pseud:</b><br />
+	<% if current_user.pseuds.count > 1 %> 
+		<%= collection_select :user, :default_pseud, current_user.pseuds, :id ,:name %>
+	<% else %>
+		<b><%= current_user.login %></b>
+	<% end %>
+				<%= link_to 'Create pseud?', new_user_pseud_path(current_user) %>
+	</p>
   <% fields_for :metadata_attributes, @work.metadata do |m| %>
     <p>
     <b>Title</b><br />
@@ -23,7 +32,6 @@
     <% end %>
   <% end %>
   </p>
-
   <p>
     <b>Expected number of chapters</b><br />
     <%= f.text_field :expected_number_of_chapters %>
