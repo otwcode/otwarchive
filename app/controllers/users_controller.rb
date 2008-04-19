@@ -99,8 +99,7 @@ class UsersController < ApplicationController
   # Toggles translation mode on and off 
   def translation_mode_toggle
     user = User.find(params[:id])
-    user.toggle(:translation_mode_active)
-    if user.save!
+    if user.toggle!(:translation_mode_active)
       redirect_to :back
     else
       render :text => "Couldn't change to translate mode"

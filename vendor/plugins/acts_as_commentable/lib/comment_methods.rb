@@ -10,7 +10,7 @@ module CommentMethods
   module ClassMethods
     # Returns the last thread number assigned
     def max_thread
-      ActiveRecord::Base.connection.select_value('SELECT MAX(thread) FROM comments')
+      Comment.maximum(:thread)
     end
   end
 

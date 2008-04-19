@@ -1,16 +1,23 @@
 <h2><%= "View All Stories".t %></h2>
 <ul class="story-list">
   <% for work in @works %>
-  <!--There must be a more elegant way of assigning class/id to elements, mustn't there? -->
-  <li class="story" id="<%=h work.id %>">
-    <h3 title="Story Title"><%= link_to h(work.metadata.title), work %></h3>
-	by <%= render :partial => 'pseuds/byline', :locals => { :creation => work } -%>
-    <div class="story-date">
-      <%=h work.created_at.localize("%d %B %Y") %>
-    </div>
-    <p class="story-desc">
-      <%=h work.metadata.summary %>
-    </p>
-  </li>
+
+    <!--There must be a more elegant way of assigning class/id to elements, mustn't there? -->
+    <li class="story" id="<%=h work.id %>">
+
+      <h3 title="Story Title"><%= link_to h(work.metadata.title), work %></h3>
+
+  	  by <%= render :partial => 'pseuds/byline', :locals => { :creation => work } -%>
+
+      <div class="story-date">
+        <%=h work.created_at.localize("%d %B %Y") %>
+      </div>
+
+      <p class="story-desc">
+        <%=h work.metadata.summary %>
+      </p>
+
+    </li>
+
   <% end %>
 </ul>

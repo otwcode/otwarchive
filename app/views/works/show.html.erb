@@ -13,24 +13,37 @@
 <div class="story-show">
   <h2 class="story-title"><%=h @work.metadata.title %></h2>
   <h3 class="story-author"><%= render :partial => 'pseuds/byline', :locals => { :creation => @work } -%></h3>
+  
+  <p class="story-summary">
+    <%=h @work.metadata.summary %>
+  </p>
+  
   <p class="story-notes">
     <%=h @work.metadata.notes %>
   </p>
+  
+  <p class="story-complete">
+    <b>This work is <% unless @work.is_complete %>not<% end %> complete.</b>
+  </p>
+  
   <hr/>
+
   <p>
     <!--Chapters go here -->
-    <% unless @work.chapters.nil? %>
-      <% @work.chapters.each do |chapter| %>
-        <%= chapter.content -%><br/>
-      <% end %>
-    <% end %>
+    <%= render :partial => 'chapters/chapter', :locals => {:chapter => @work.chapters.first} %>
   </p>
+
+  <hr/>
+
   <p>
-    <b>This work is complete:</b>
-    <%=h @work.is_complete %>
-  </p>
-  <p>
-    <%= link_to 'Edit', edit_work_path(@work) %>
+    <%= link_to 'See all chapters', work_chapters_path(@work) %>
+    
+    <%- for pseud in @work.pseuds -%>
+      <%- if logged_in? && current_user.pseuds.include?(pseud) -%> | 
+        <%= link_to 'Add new chapter', new_work_chapter_path(@work) %> | 
+        <%= link_to 'Edit work', edit_work_path(@work) %>
+      <%- end -%>
+    <%- end -%>  
   </p>
 </div>
 

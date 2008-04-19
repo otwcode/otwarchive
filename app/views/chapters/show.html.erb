@@ -1,17 +1,32 @@
 <p>
-  <b>Title:</b>
-  <%=h @chapter.title %>
-</p>
+  <strong>Chapter <%=h @chapter.position %></strong><br/>
+  <strong>
+    Author: 
+    <%- for pseud in @chapter.pseuds -%>
+      <%=h pseud.name %>
+    <%- end -%>
+  </strong>
 
-<p>
-  <b>Content:</b>
-  <%=h @chapter.content %>
-</p>
+  <%- if @chapter.metadata -%>
+    <p>Title: <%=h @chapter.metadata.title %></p>
+    <p>Summary: <%=h @chapter.metadata.summary %></p>
+    <p>Notes: <%=h @chapter.metadata.notes %></p>
+  <%- end -%>
 
-<p>
-  <b>Order:</b>
-  <%=h @chapter.order %>
+  <p>
+    <%=h @chapter.content %>
+  </p>
+  
+  <p>
+    <%= link_to 'Back', work_chapters_path(@work) %>
+    <%- for pseud in @work.pseuds -%>
+      <%- if logged_in? && current_user.pseuds.include?(pseud) -%> |   
+        <%= link_to 'Edit chapter', [:edit, @work, @chapter] %> |
+        <%= link_to 'Add a new chapter', new_work_chapter_path(@work) %>
+        <%- if @chapter.position > 1 -%> |
+          <%= link_to 'Destroy chapter', [@work, @chapter], :confirm => 'Are you sure?', :method => :delete %><br/>
+        <%- end -%>
+      <%- end -%>
+    <%- end -%> 
+  </p> 
 </p>
-
-<%= link_to 'Edit', [:edit, @work, @chapter] %> |
-<%= link_to 'Back', work_chapters_path(@work) %>

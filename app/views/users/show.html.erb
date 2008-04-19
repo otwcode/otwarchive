@@ -13,10 +13,16 @@
 
 <% @user.pseuds.each do |pseud| -%>
 
-<h3><%=h "Works under the name %s...".t / pseud.name -%></h3>
-	<% pseud.works.each do |work| -%>
-	<h4><%= link_to h(work.metadata.title), work_path(work) -%></h4>
-	<% end -%>
-<% end -%>
+  <h3><%=h "Works under the name %s...".t / pseud.name -%></h3>
+
+	<%- pseud.works.each do |work| -%>
+	  <h4><%= link_to h(work.metadata.title), work_path(work) -%></h4>
+
+  	<%- if current_user == pseud.user -%>
+  	  <%= link_to 'Edit', edit_work_path(work) %>
+  	<%- end -%>
+
+   <%- end -%>
+<%- end -%>
 
 <p><%= link_to 'Manage Names'.t, user_pseuds_path(@user) -%></p>

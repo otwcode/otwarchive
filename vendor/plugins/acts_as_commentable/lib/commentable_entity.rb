@@ -10,14 +10,9 @@ module CommentableEntity
   module ClassMethods
   end
 
-  # Returns comments made directly to the commentable item
-  def find_direct_comments
-    Comment.find(:all, :conditions => ["commentable_type = (?) and commentable_id = (?)", self.class.to_s, self.id], :order => "created_at")
-  end
-
   # Returns all comments
   def find_all_comments
-    direct_comments = self.find_direct_comments
+    direct_comments = self.comments
     if direct_comments 
       @comments = []
       for comment in direct_comments
@@ -29,7 +24,7 @@ module CommentableEntity
 
   # Returns the total number of comments
   def count_all_comments
-    direct_comments = self.find_direct_comments
+    direct_comments = self.comments
     grandchildren = direct_comments.collect { |comment| comment.children_count }
     direct_comments.empty? ? 0 : direct_comments.length + grandchildren.sum
   end  

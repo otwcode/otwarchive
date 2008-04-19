@@ -26,8 +26,8 @@ class LocaleController < ApplicationController
   
   def translations
     if request.xhr?
-      logger.debug("Translations got from the server: #{session[:__globalize_translations].inspect}")
-      render :json => session[:__globalize_translations].to_json, :status => 200
+       logger.debug("Translations got from the server: #{session[:__globalize_translations].inspect}")
+       render :json => session[:__globalize_translations].to_json, :status => 200
     end
   end
   

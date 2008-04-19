@@ -1,7 +1,9 @@
 ActionController::Routing::Routes.draw do |map|         
-  map.resources :comments, :has_many => :comments
+  map.resources :comments, :has_many => :comments  
   
-  map.activate '/activate/:id', :controller => 'users', :action => 'activate'    
+  map.resources :chapters, :has_many => :comments
+
+  map.activate '/activate/:id', :controller => 'users', :action => 'activate'
   
   map.root :controller => 'session', :action => 'new'      
   
@@ -11,6 +13,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :users, :has_many => :pseuds
 
+  map.resources :works, :has_many => :chapters
   map.resources :works, :has_many => :comments
   
   map.resources :bookmarks

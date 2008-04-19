@@ -1,0 +1,46 @@
+<% form_for([@work, @chapter]) do |f| %>
+  
+  <p>
+  	<b>Author:</b>
+  	<% if current_user.pseuds.count > 1 %> 
+  		<br /><%= collection_select :pseud, :id, current_user.pseuds, :id ,:name %><br />
+  	<% else %>
+  	  <%= hidden_field :pseud, :id, :value => "#{current_user.default_pseud.id}" %>
+  		<b><%= current_user.default_pseud.name %></b><br />
+  	<% end %>
+  	<%= link_to 'Create new pseud?', new_user_pseud_path(current_user) %>
+	</p>
+  
+  <% fields_for :metadata_attributes, @chapter.metadata do |m| %>
+    <p>
+      <b>Chapter Title</b><br />
+      <%= m.text_field :title %>
+    </p>
+
+    <p>
+      <b>Chapter Summary</b><br />
+      <%= m.text_area :summary %>
+    </p>
+
+    <p>
+      <b>Chapter Notes</b><br />
+      <%= m.text_area :notes %>
+    </p>
+  <% end %>
+
+  <p>
+    <b>Chapter text</b><br />
+    <%= f.text_area :content %>
+  </p>
+  
+  <% fields_for :work_attributes, @chapter.work do |w| %>
+    <p>
+      <b>Is this the last chapter?</b><br />
+      <%= w.check_box :is_complete %> Yes
+    </p>
+  <% end %>
+
+  <p>
+    <%= f.submit button_text %>
+  </p>
+<% end %>

@@ -1,4 +1,6 @@
 class ChaptersController < ApplicationController
+  # only registered users and NOT admin should be able to create new chapters
+  before_filter :users_only, :except => [ :index, :show, :destroy ]  
   before_filter :load_work
 
   # fetch work these chapters belong to from db
@@ -8,7 +10,7 @@ class ChaptersController < ApplicationController
 
   # GET /work/:work_id/chapters
   # GET /work/:work_id/chapters.xml
-  def index
+  def index 
     @chapters = @work.chapters
 
     respond_to do |format|
@@ -33,6 +35,7 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/new.xml
   def new
     @chapter = @work.chapters.build
+    @chapter.metadata = Metadata.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -49,9 +52,12 @@ class ChaptersController < ApplicationController
   # POST /work/:work_id/chapters.xml
   def create
     @chapter = @work.chapters.build(params[:chapter])
+    @chapter.metadata = Metadata.new(params[:metadata_attributes])
+    @pseud = Pseud.find(params[:pseud][:id])
 
     respond_to do |format|
       if @chapter.save
+        @pseud.add_creations(@chapter)
         flash[:notice] = 'Chapter was successfully created.'
         format.html { redirect_to([@work, @chapter]) }
         format.xml  { render :xml => [@work, @chapter], :status => :created, :location => [@work, @chapter] }
@@ -66,6 +72,13 @@ class ChaptersController < ApplicationController
   # PUT /work/:work_id/chapters/1.xml
   def update
     @chapter = @work.chapters.find(params[:id])
+    @chapter.work.update_attributes params[:work_attributes] 
+
+    if @chapter.metadata
+      @chapter.metadata.update_attributes params[:metadata_attributes]
+    else
+      @chapter.metadata = Metadata.new(params[:metadata_attributes])
+    end
 
     respond_to do |format|
       if @chapter.update_attributes(params[:chapter])

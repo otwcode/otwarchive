@@ -6,7 +6,7 @@ class WorksController < ApplicationController
   # GET /works
   # GET /works.xml
   def index
-    @works = Work.find(:all)
+    @works = Work.find(:all) 
     
     # This is here just as an example of how to set a flash alert.
     # You can use flash[:notice], flash[:warning], and flash[:error].
@@ -23,7 +23,7 @@ class WorksController < ApplicationController
   # GET /works/1
   # GET /works/1.xml
   def show
-    @work = Work.find(params[:id])
+    @work = Work.find(params[:id]) 
     @comments = @work.find_all_comments
 
     # This is here just as an example of how to set a flash alert.
@@ -60,17 +60,15 @@ class WorksController < ApplicationController
   # POST /works.xml
   def create
     @work = Work.new(params[:work])
-    @work.chapters.build params[:chapter_attributes]
+    @chapter = @work.chapters.build params[:chapter_attributes]
     @work.metadata = Metadata.new(params[:metadata_attributes])
+    @pseud = Pseud.find(params[:pseud][:id])
 
     respond_to do |format|
       if @work.save
-        #set the pseud for this work
-        pseud = params[:user][:default_pseud]
-        @work.set_pseud(pseud)
-        @work.chapters.each do |c|
-          c.set_pseud(pseud)
-        end
+        @pseud.add_creations(@work)
+        @pseud.add_creations(@work.chapters.first)
+
         flash[:notice] = 'Work was successfully created.'
         format.html { redirect_to(@work) }
         format.xml  { render :xml => @work, :status => :created, :location => @work }
@@ -87,6 +85,7 @@ class WorksController < ApplicationController
     @work = Work.find(params[:id])
     @work.chapters.update params[:chapter_attributes].keys, params[:chapter_attributes].values
     @work.metadata.update_attributes params[:metadata_attributes]
+    @pseud = Pseud.find(params[:pseud][:id])
 
     respond_to do |format|
       if @work.update_attributes(params[:work])

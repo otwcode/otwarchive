@@ -52,7 +52,7 @@
         <!-- END header -->
 
         <div id="main" class="<%= controller.controller_name + '-' + controller.action_name -%>">
-			<%= flash_div :error, :warning, :notice -%>
+			<%= flash_div :error, :warning, :notice -%> 
             <%= yield  %>
         </div>
         <!-- END main -->

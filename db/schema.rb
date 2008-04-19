@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 23) do
+ActiveRecord::Schema.define(:version => 24) do
 
   create_table "admins", :force => true do |t|
     t.datetime "created_at"
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(:version => 23) do
 
   create_table "chapters", :force => true do |t|
     t.text     "content"
-    t.integer  "order",      :default => 1
+    t.integer  "position",      :default => 1
     t.integer  "work_id"
     t.datetime "created_at"
     t.datetime "updated_at"
