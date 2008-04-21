@@ -44,6 +44,7 @@ class WorksController < ApplicationController
     @work = Work.new
     @work.chapters.build
     @work.metadata = Metadata.new
+    @pseud = current_user.default_pseud
     
     respond_to do |format|
       format.html # new.html.erb
@@ -54,6 +55,7 @@ class WorksController < ApplicationController
   # GET /works/1/edit
   def edit
     @work = Work.find(params[:id])
+    @pseud = current_user.default_pseud
   end
 
   # POST /works
@@ -63,7 +65,7 @@ class WorksController < ApplicationController
     @chapter = @work.chapters.build params[:chapter_attributes]
     @work.metadata = Metadata.new(params[:metadata_attributes])
     @pseuds = Pseud.parse_extra_pseuds(params[:extra_pseuds])
-    pseud_ids = params[:pseuds][:id]
+    pseud_ids = params[:pseud][:id]
     for pseud_id in pseud_ids
       @pseuds << Pseud.find(pseud_id)
     end
@@ -93,7 +95,7 @@ class WorksController < ApplicationController
     @work.chapters.update params[:chapter_attributes].keys, params[:chapter_attributes].values
     @work.metadata.update_attributes params[:metadata_attributes]
     @pseuds = Pseud.parse_extra_pseuds(params[:extra_pseuds])
-    pseud_ids = params[:pseuds][:id]
+    pseud_ids = params[:pseud][:id]
     for pseud_id in pseud_ids
       @pseuds << Pseud.find(pseud_id)
     end

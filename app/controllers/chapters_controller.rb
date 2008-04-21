@@ -36,6 +36,7 @@ class ChaptersController < ApplicationController
   def new
     @chapter = @work.chapters.build
     @chapter.metadata = Metadata.new
+    @pseud = current_user.default_pseud
 
     respond_to do |format|
       format.html # new.html.erb
@@ -46,6 +47,7 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/1/edit
   def edit
     @chapter = @work.chapters.find(params[:id])
+    @pseud = current_user.default_pseud
   end
 
   # POST /work/:work_id/chapters
@@ -54,7 +56,7 @@ class ChaptersController < ApplicationController
     @chapter = @work.chapters.build(params[:chapter])
     @chapter.metadata = Metadata.new(params[:metadata_attributes]) 
     @pseuds = Pseud.parse_extra_pseuds(params[:extra_pseuds])
-    pseud_ids = params[:pseuds][:id]
+    pseud_ids = params[:pseud][:id]
     for pseud_id in pseud_ids
       @pseuds << Pseud.find(pseud_id)
     end
@@ -93,7 +95,7 @@ class ChaptersController < ApplicationController
     end
     
     @pseuds = Pseud.parse_extra_pseuds(params[:extra_pseuds])
-    pseud_ids = params[:pseuds][:id]
+    pseud_ids = params[:pseud][:id]
     for pseud_id in pseud_ids
       @pseuds << Pseud.find(pseud_id)
     end
@@ -122,6 +124,7 @@ class ChaptersController < ApplicationController
   def destroy
     @chapter = @work.chapters.find(params[:id])
     @chapter.destroy
+    @work.adjust_chapters(@chapter.position)
 
     respond_to do |format|
       format.html { redirect_to(work_chapters_url) }

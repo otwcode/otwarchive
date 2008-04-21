@@ -2,7 +2,7 @@
 
 <%= error_messages_for :chapter %>
 
-<%= render :partial => 'chapter_form', :locals => { :button_text => "Update" } %>
+<%= render :partial => 'chapter_form', :locals => { :chapter => @chapter, :button_text => "Update" } %>
 
 <%= link_to 'Show', @chapter %> |
 <%= link_to 'Back', work_chapters_path %>

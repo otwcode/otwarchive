@@ -2,6 +2,6 @@
 
 <%= error_messages_for :chapter %>
 
-<%= render :partial => 'chapter_form', :locals => { :button_text => "Create" } %>
+<%= render :partial => 'chapter_form', :locals => { :chapter => @chapter, :button_text => "Create" } %>
 
 <%= link_to 'Back', work_chapters_path %>

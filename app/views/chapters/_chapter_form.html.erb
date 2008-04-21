@@ -1,10 +1,8 @@
-<% @chapter = chapter if chapter %>
-
-<% form_for([@work, @chapter]) do |f| %>
+<% form_for([@work, chapter]) do |f| %>
   
   <p>
   	<b>Author:</b><br />
- 		<%= collection_select :pseuds, :id, @work.pseuds, :id ,:name, {}, :multiple => 'multiple' %>
+ 		<%= collection_select :pseud, :id, @work.pseuds, :id ,:name, {}, :multiple => 'multiple' %>
 	</p> 
 	
 	<p>
@@ -17,7 +15,7 @@
     <p>Example: <strong>username:pseud, username:pseud</strong></p>
 	</div>
   
-  <% fields_for :metadata_attributes, @chapter.metadata do |m| %>
+  <% fields_for :metadata_attributes, chapter.metadata do |m| %>
     <p>
       <b>Chapter Title</b><br />
       <%= m.text_field :title %>
@@ -39,7 +37,7 @@
     <%= f.text_area :content %>
   </p>
   
-  <% fields_for :work_attributes, @chapter.work do |w| %>
+  <% fields_for :work_attributes, chapter.work do |w| %>
     <p>
       <b>Is this the last chapter?</b><br />
       <%= w.check_box :is_complete %> Yes

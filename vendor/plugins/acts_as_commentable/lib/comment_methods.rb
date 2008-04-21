@@ -126,8 +126,8 @@ module CommentMethods
         self.threaded_right += 2
         # Updates all comments in the thread to set their relative positions
         Comment.transaction {
-          Comment.update_all("threaded_left = (threaded_left + 2)", "thread = #{self.thread} AND threaded_left >= #{right_bound}")
-          Comment.update_all("threaded_right = (threaded_right + 2)",  "thread = #{self.thread} AND threaded_right >= #{right_bound}")
+          Comment.update_all("threaded_left = (threaded_left + 2)", ["thread = (?) AND threaded_left >= (?)", self.thread, right_bound])
+          Comment.update_all("threaded_right = (threaded_right + 2)",  ["thread = (?) AND threaded_right >= (?)", self.thread, right_bound])
           self.save
           child.save
         }

@@ -3,7 +3,7 @@
 	<p>
   	<b>Pseud:</b>
   	<% if current_user.pseuds.count > 1 %>
-  	  <p><%= collection_select :pseuds, :id, current_user.pseuds, :id ,:name, {}, :multiple => 'multiple' %></p> 
+  	  <p><%= collection_select :pseud, :id, current_user.pseuds, :id ,:name, {}, :multiple => 'multiple' %></p> 
   	<% else %>
   	  <%= hidden_field :pseud, :id, :value => "#{current_user.default_pseud.id}" %>
   		<b><%= current_user.default_pseud.name %></b><br />
