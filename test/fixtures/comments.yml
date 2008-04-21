@@ -1,11 +1,20 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 comment1:
-  content: Some sample content here
-  pseud: default_pseud
-  commentable: basic_work
+  content:          my thoughts on yaoi
+  pseud:            joss
+  commentable_type: Work
+  commentable:      bsg
+  thread:           666
+  depth:            0
+  threaded_left:    1
+  threaded_right:   4
   
-comment2:
-  content: Another sample comment here
-  pseud: default_pseud
-  commentable: basic_work
+reply_comment1:
+  content:          reasons why you suck
+  pseud:            notacylon
+  commentable_type: Comment
+  commentable:      comment1
+  thread:           1
+  threaded_left:    2
+  threaded_right:   3

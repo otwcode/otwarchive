@@ -13,3 +13,17 @@ incomplete_work:
   is_complete: false
   major_version: 1
   minor_version: 1
+
+btvs:
+  id: 3
+  expected_number_of_chapters: 1
+  is_complete: true
+  major_version: 1
+  minor_version: 0
+
+bsg:
+  id: 4
+  expected_number_of_chapters: 2
+  is_complete: false
+  major_version: 1
+  minor_version: 1

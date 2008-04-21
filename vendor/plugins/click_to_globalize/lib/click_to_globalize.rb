@@ -158,7 +158,7 @@ module Globalize # :nodoc:
         Globalize::Locale.add_observer(locale_observer)
         yield
         Globalize::Locale.remove_observer(locale_observer)
-        if logged_in? && current_user.translation_mode_active
+        if false #logged_in? && current_user.translation_mode_active
           session[:__globalize_translations] = if Locale.formatting
                                                  locale_observer.translations.each{|key, translation| locale_observer.translations[key] = strip_tags(self.send(Locale.formatting_method, translation)) }
                                                else

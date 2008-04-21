@@ -62,12 +62,19 @@ class WorksController < ApplicationController
     @work = Work.new(params[:work])
     @chapter = @work.chapters.build params[:chapter_attributes]
     @work.metadata = Metadata.new(params[:metadata_attributes])
-    @pseud = Pseud.find(params[:pseud][:id])
+    @pseuds = Pseud.parse_extra_pseuds(params[:extra_pseuds])
+    pseud_ids = params[:pseuds][:id]
+    for pseud_id in pseud_ids
+      @pseuds << Pseud.find(pseud_id)
+    end
 
     respond_to do |format|
       if @work.save
-        @pseud.add_creations(@work)
-        @pseud.add_creations(@work.chapters.first)
+        
+        for pseud in @pseuds
+          pseud.add_creations(@work)
+          pseud.add_creations(@work.chapters.first)
+        end
 
         flash[:notice] = 'Work was successfully created.'
         format.html { redirect_to(@work) }
@@ -85,10 +92,21 @@ class WorksController < ApplicationController
     @work = Work.find(params[:id])
     @work.chapters.update params[:chapter_attributes].keys, params[:chapter_attributes].values
     @work.metadata.update_attributes params[:metadata_attributes]
-    @pseud = Pseud.find(params[:pseud][:id])
+    @pseuds = Pseud.parse_extra_pseuds(params[:extra_pseuds])
+    pseud_ids = params[:pseuds][:id]
+    for pseud_id in pseud_ids
+      @pseuds << Pseud.find(pseud_id)
+    end
 
     respond_to do |format|
       if @work.update_attributes(params[:work])
+        
+        for pseud in @pseuds
+          unless @work.pseuds.include?(pseud)
+            pseud.add_creations(@work)
+          end
+        end
+        
         flash[:notice] = 'Work was successfully updated.'
         format.html { redirect_to(@work) }
         format.xml  { head :ok }

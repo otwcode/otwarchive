@@ -1,15 +1,21 @@
+<% @chapter = chapter if chapter %>
+
 <% form_for([@work, @chapter]) do |f| %>
   
   <p>
-  	<b>Author:</b>
-  	<% if current_user.pseuds.count > 1 %> 
-  		<br /><%= collection_select :pseud, :id, current_user.pseuds, :id ,:name %><br />
-  	<% else %>
-  	  <%= hidden_field :pseud, :id, :value => "#{current_user.default_pseud.id}" %>
-  		<b><%= current_user.default_pseud.name %></b><br />
-  	<% end %>
-  	<%= link_to 'Create new pseud?', new_user_pseud_path(current_user) %>
-	</p>
+  	<b>Author:</b><br />
+ 		<%= collection_select :pseuds, :id, @work.pseuds, :id ,:name, {}, :multiple => 'multiple' %>
+	</p> 
+	
+	<p>
+    <%= link_to_function('Add new co-authors', "Element.toggle('extra-pseuds')") %>
+  </p>
+	
+	<div id="extra-pseuds" style="display : none;">
+	  <b>Co-Authors</b><br />
+	  <%= text_field_tag :extra_pseuds %>
+    <p>Example: <strong>username:pseud, username:pseud</strong></p>
+	</div>
   
   <% fields_for :metadata_attributes, @chapter.metadata do |m| %>
     <p>

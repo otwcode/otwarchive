@@ -52,12 +52,24 @@ class ChaptersController < ApplicationController
   # POST /work/:work_id/chapters.xml
   def create
     @chapter = @work.chapters.build(params[:chapter])
-    @chapter.metadata = Metadata.new(params[:metadata_attributes])
-    @pseud = Pseud.find(params[:pseud][:id])
+    @chapter.metadata = Metadata.new(params[:metadata_attributes]) 
+    @pseuds = Pseud.parse_extra_pseuds(params[:extra_pseuds])
+    pseud_ids = params[:pseuds][:id]
+    for pseud_id in pseud_ids
+      @pseuds << Pseud.find(pseud_id)
+    end
 
     respond_to do |format|
-      if @chapter.save
-        @pseud.add_creations(@chapter)
+      if @chapter.save 
+        
+        for pseud in @pseuds
+          author = Pseud.find(pseud)
+          author.add_creations(@chapter)
+          unless @work.pseuds.include?(author)
+            author.add_creations(@work)
+          end
+        end
+        
         flash[:notice] = 'Chapter was successfully created.'
         format.html { redirect_to([@work, @chapter]) }
         format.xml  { render :xml => [@work, @chapter], :status => :created, :location => [@work, @chapter] }
@@ -79,9 +91,22 @@ class ChaptersController < ApplicationController
     else
       @chapter.metadata = Metadata.new(params[:metadata_attributes])
     end
+    
+    @pseuds = Pseud.parse_extra_pseuds(params[:extra_pseuds])
+    pseud_ids = params[:pseuds][:id]
+    for pseud_id in pseud_ids
+      @pseuds << Pseud.find(pseud_id)
+    end
 
     respond_to do |format|
       if @chapter.update_attributes(params[:chapter])
+        
+        for pseud in @pseuds
+          unless @chapter.pseuds.include?(pseud)
+            pseud.add_creations(@chapter)
+          end
+        end
+        
         flash[:notice] = 'Chapter was successfully updated.'
         format.html { redirect_to([@work, @chapter]) }
         format.xml  { head :ok }

@@ -11,3 +11,15 @@ non_default_pseud:
   name: Non-Default Pseud
   description: This is a non default pseud.
   is_default: false
+
+joss_whedon:
+  user: josswhedon
+  name: joss
+  description: evil overlord
+  is_default: true
+
+ron_moore:
+  user: ronmoore
+  name: notacylon
+  description: totally a cylon
+  is_default: false

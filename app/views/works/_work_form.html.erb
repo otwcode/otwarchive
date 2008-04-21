@@ -1,15 +1,25 @@
 <% form_for(@work) do |f| %> 
    
 	<p>
-  	<b>Pseud:</b><br />
-  	<% if current_user.pseuds.count > 1 %> 
-  		<%= collection_select :pseud, :id, current_user.pseuds, :id ,:name %>
+  	<b>Pseud:</b>
+  	<% if current_user.pseuds.count > 1 %>
+  	  <p><%= collection_select :pseuds, :id, current_user.pseuds, :id ,:name, {}, :multiple => 'multiple' %></p> 
   	<% else %>
   	  <%= hidden_field :pseud, :id, :value => "#{current_user.default_pseud.id}" %>
-  		<b><%= current_user.default_pseud.name %></b>
+  		<b><%= current_user.default_pseud.name %></b><br />
   	<% end %>
   	<%= link_to 'Create pseud?', new_user_pseud_path(current_user) %>
 	</p>
+	
+  <p>
+    <%= link_to_function('Add co-authors', "Element.toggle('extra-pseuds')") %>
+  </p>
+	
+	<div id="extra-pseuds" style="display : none;">
+	  <b>Co-Authors</b><br />
+	  <%= text_field_tag :extra_pseuds %>
+    <p>Example: <strong>username:pseud, username:pseud</strong></p>
+	</div>
 	
   <% fields_for :metadata_attributes, @work.metadata do |m| %>
     <p>

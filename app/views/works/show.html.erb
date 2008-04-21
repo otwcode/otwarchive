@@ -36,14 +36,12 @@
   <hr/>
 
   <p>
-    <%= link_to 'See all chapters', work_chapters_path(@work) %>
+    <%= link_to 'See all chapters', work_chapters_path(@work) %> 
     
-    <%- for pseud in @work.pseuds -%>
-      <%- if logged_in? && current_user.pseuds.include?(pseud) -%> | 
-        <%= link_to 'Add new chapter', new_work_chapter_path(@work) %> | 
-        <%= link_to 'Edit work', edit_work_path(@work) %>
-      <%- end -%>
-    <%- end -%>  
+    <%- if logged_in? && @work.pseuds - current_user.pseuds != @work.pseuds -%> | 
+      <%= link_to 'Add new chapter', new_work_chapter_path(@work) %> | 
+      <%= link_to 'Edit work', edit_work_path(@work) %>
+    <%- end -%>
   </p>
 </div>
 

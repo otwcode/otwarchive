@@ -2,9 +2,7 @@
   <strong>Chapter <%=h chapter.position %></strong><br/>
   <strong>
     Author: 
-    <%- for pseud in chapter.pseuds -%>
-      <%=h pseud.name %>
-    <%- end -%>
+    <%= render :partial => 'pseuds/byline', :locals => { :creation => chapter } -%>
   </strong>
 
   <%- if chapter.metadata -%>
@@ -20,13 +18,11 @@
   <p>
     <%= link_to 'Show chapter', [@work, chapter] %> 
     
-    <%- for pseud in @work.pseuds -%>
-      <%- if logged_in? && current_user.pseuds.include?(pseud) -%> |
-         <%= link_to 'Edit chapter', [:edit, @work, chapter] %>
-         <%- if chapter.position > 1 -%> |
-           <%= link_to 'Destroy chapter', [@work, chapter], :confirm => 'Are you sure?', :method => :delete %><br/>
-         <%- end -%>
-       <%- end -%>
-     <%- end -%>
+    <%- if logged_in? && @work.pseuds - current_user.pseuds != @work.pseuds -%> |
+      <%= link_to 'Edit chapter', [:edit, @work, chapter] %>
+      <%- if chapter.position > 1 -%> |
+        <%= link_to 'Destroy chapter', [@work, chapter], :confirm => 'Are you sure?', :method => :delete %><br/>
+      <%- end -%>
+    <%- end -%>
   </p> 
 </p>

@@ -2,11 +2,21 @@
 
 basic_chapter:
   content: looooong text for first chapter
-  order: 1
+  position: 1
   work: basic_work
 
-#two:
-#  title: MyString
-#  content: MyText
-#  order: 1
-#  work: 
+  #two:
+  #  title: MyString
+  #  content: MyText
+  #  position: 1
+  #  work:
+ 
+buffy_chapter:
+  content: one girl in all the world, yadda, yadda, yadda
+  position: 1
+  work: btvs
+
+bsg_chapter:
+  content: and they have a plan
+  position: 1
+  work: bsg

@@ -11,3 +11,15 @@ two:
   summary: MyText
   notes: MyText
   described: basic_chapter
+  
+three:
+  title: Buffy the Vampire Slayer
+  summary: Cheerleader vs. vampires
+  notes: If the apocalypse comes, beep me
+  described: btvs
+
+four:
+  title: Battlestar Galactica
+  summary: Man vs. toaster
+  notes: 
+  described: bsg

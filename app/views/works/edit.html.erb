@@ -2,7 +2,33 @@
 
 <%= error_messages_for :work %>
 
-<%= render :partial => "work_form", :locals => { :button_text => "Update" } -%>
+<p>
+  <%= link_to_function "Add chapter", 
+      update_page {|page| page.replace_html 'editing-choice', :partial => 'chapters/chapter_form', :locals => {:chapter => Chapter.new, :button_text => "Create"}} %> |  
+  
+  <%= link_to_function "Edit work", 
+      update_page {|page| page.replace_html 'editing-choice', :partial => 'work_form', :locals => {:button_text => "Update"}} %> | 
+
+  Edit chapter:
+  <% for chapter in @work.chapters %>
+    <%= link_to_function h(chapter.position), 
+        update_page {|page| page.replace_html 'editing-choice', :partial => 'chapters/chapter_form', :locals => {:chapter => chapter, :button_text => "Update"}} %> | 
+  <% end %>
+  
+  <%= link_to_function "Manage authors", 
+      update_page {|page| page.replace_html 'editing-choice', :partial => 'manage_authors'} %> |  
+
+  <%= link_to_function "Delete/reorder chapters", 
+      update_page {|page| page.replace_html 'editing-choice', :partial => 'chapter_order'} %> |  
+  
+  <%= link_to_function "Clear", 
+      update_page {|page| page.replace_html 'editing-choice'} %>  
+
+</p>					
+					
+<div id="editing-choice">
+</div> 
+
 
 <%= link_to 'Show', @work %> |
 <%= link_to 'Back', works_path %>

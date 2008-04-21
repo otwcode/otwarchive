@@ -6,8 +6,6 @@
 
 <br />
 
-<%- for pseud in @work.pseuds -%>
-  <%- if logged_in? && current_user.pseuds.include?(pseud) -%>
-    <%= link_to 'New chapter', new_work_chapter_path(@work) %>
-  <%- end -%>
+<%- if logged_in? && @work.pseuds - current_user.pseuds != @work.pseuds -%>
+  <%= link_to 'New chapter', new_work_chapter_path(@work) %>
 <%- end -%>
