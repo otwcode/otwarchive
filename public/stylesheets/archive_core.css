@@ -228,15 +228,22 @@ a.story-title {
  * and are displayed in the view with <%= flash_div :error, :warning, :notice -%>
  */
 .flash {
-	margin: 2em;
-	padding: 1em;	
+	margin: 0.2em 0 0.2em 0;
+	padding: 1em;
+	float: left;	
+}
+.flash_icon {
+	border: 0;
+	float: left;
+	padding: 0 0.5em 0 0;
 }
 .notice {
-	background-color: #feffd4;
+	background-color: #b3d4ef;
+	border: 2px solid #b3d4ef;
 }
 .warning {
-	background-color: #b3d4ef;
-	border: 1px dashed #53a0df;	
+	background-color: #feffd4;
+	border: 1px dashed #fec844;	
 }
 .error {
 	background-color: #efd1d1;

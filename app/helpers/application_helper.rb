@@ -21,20 +21,23 @@ module ApplicationHelper
   # (These are the three varieties currently defined.) 
   #
   def flash_div *keys
-    keys.collect { |key| content_tag(:div, flash[key],
-                                     :class => "flash #{key}") if flash[key] }.join
+    keys.collect { |key| 
+      if flash[key] 
+        content_tag(:div, 
+                image_tag("icon-#{key}.gif", :class => "flash_icon") + "\n" + flash[key], 
+                :class => "flash #{key}") if flash[key] 
+      end
+    }.join
   end
 
-    # Create a nicer language menu than the Click-To-Globalize default
+  # Create a nicer language menu than the Click-To-Globalize default
   def languages_menu
     result = "<form action=" + url_for(:action => 'set', :controller => 'locale') + ">\n" 
     result << "<select name='id' onchange='this.form.submit()'>\n"
-    # We'll sort the languages by their keyname rather than 
-    languages.sort {|a, b| a.first.to_s <=> b.first.to_s }.each do |language, locale|
-      # get the native name of the language
-      langname = (langobj = Language.pick(locale)).nil? ? language.to_s : langobj.native_name
-      langname = langname.titleize;
-      
+    # We'll sort the languages by their keyname rather than have all the non-arabic-character-set
+    # ones end up at the end of the list.
+    LANGUAGE_NAMES.sort {|a, b| a.first.to_s <=> b.first.to_s }.each do |locale, langname|
+      langname = langname.titleize;     
       if locale == Locale.active.code
         result << "<option value=#{locale} selected><strong>#{langname}</strong></option>\n"
       else
@@ -45,13 +48,6 @@ module ApplicationHelper
     result << "<noscript><input type=submit name=commit value='Go'></noscript>"
     result << "</form>"
     return result
-    
-    #    result = ''
-    #    translated_languages.each do |langname, locale|
-    #      result << "<li>#{link_to langname.titleize, {:controller => 'locale', :action => 'set', :id => locale}, {:title => "#{langname} [#{locale}]"}}</li>"
-    #      result << "\n"
-    #    end
-    #    return result
   end  
 
   # Get the translating button
