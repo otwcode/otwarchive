@@ -40,7 +40,9 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.xml
   def create
-    @user = User.new(params[:user])
+    @user = User.new(params[:user])   
+    @user.profile = Profile.new
+    
     unless params[:user][:identity_url].blank?
       @user.identity_url = OpenIdAuthentication.normalize_url(@user.identity_url)
     end
@@ -72,8 +74,14 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
 
+    if @user.profile
+      @user.profile.update_attributes params[:profile_attributes]
+    else
+      @user.profile = Profile.new(params[:profile_attributes])
+    end
+    
     respond_to do |format|
-      if @user.update_attributes(params[:user])
+      if @user.update_attributes(params[:user]) && @user.profile.update_attributes(params[:profile_attributes])
         flash[:notice] = 'User was successfully updated.'
         format.html { redirect_to(@user) }
         format.xml  { head :ok }

@@ -7,10 +7,26 @@
 
 <h2><%=h "%s's home" / @user.login -%></h2>
 
-<p>
-	User profile and more goodness here. 
-</p>
+<h3><%= "Profile".t -%></h3>
+  <p>
+    <b><%= "Location".t -%>:</b> 
+    <%=h @user.profile.location -%>
+  </p>
 
+  <p>
+    <b><%= "Date of Birth".t -%>:</b> 
+    <%=h @user.profile.date_of_birth -%>
+  </p>
+
+  <p>
+    <b><%= "About Me".t -%>:</b><br />
+    <%=h @user.profile.about_me -%>
+  </p>
+
+  <%- if current_user == @user -%>
+    <%= link_to "Edit profile".t, edit_user_path(@user) -%>
+  <%- end -%>
+  
 <% @user.pseuds.each do |pseud| -%>
 
   <h3><%=h "Works under the name %s...".t / pseud.name -%></h3>

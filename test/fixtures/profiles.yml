@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  location: MyString
+  about_me: MyText
+  date_of_birth: 2008-04-21
+
+two:
+  location: MyString
+  about_me: MyText
+  date_of_birth: 2008-04-21

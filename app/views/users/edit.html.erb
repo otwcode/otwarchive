@@ -3,7 +3,6 @@
 <%= error_messages_for :user %>
 
 <% form_for(@user) do |f| %>  
-  
   <p><label for="email"><%= "Change Email" .t %></label><br/>
 	<%= f.text_field :email %></p>
 	
@@ -17,6 +16,22 @@
     <label for="openid_url"><%= "Add or Change an OpenID URL" .t %></label><br />
     <%= f.text_field :identity_url %>
   </p>        
+
+  <% fields_for :profile_attributes,  @user.profile do |p| %>
+    <p>
+      <b><%= "Location".t %></b><br />
+      <%= p.text_field :location %>
+    </p>
+    <p>
+       <b><%= "Date of Birth".t %></b><br />
+       <%= p.date_select :date_of_birth %>
+     </p>
+     <p>
+       <b><%= "About Me".t %></b><br />
+       <%= p.text_area :about_me %>
+     </p>
+  <% end %>
+  
   
   <p>
     <%= f.submit "Update" %>
