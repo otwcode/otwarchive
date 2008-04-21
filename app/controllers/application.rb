@@ -22,15 +22,9 @@ class ApplicationController < ActionController::Base
     request_language = request.env['HTTP_ACCEPT_LANGUAGE']
     request_language = request_language.nil? ? nil : 
       request_language[/[^,;]+/]
-    if session[:locale_changed]
-      @locale = session[:locale]
-      session[:locale_changed] = nil
-    else
-      @locale = params[:locale] || session[:locale] ||
+    @locale = params[:locale] || session[:locale] ||
               request_language || default_locale
-    end
     session[:locale] = @locale
-    puts "\n\n\nLocale: #{@locale}\n\n\n"
     begin
       Locale.set SUPPORTED_LOCALES[@locale]
     rescue
