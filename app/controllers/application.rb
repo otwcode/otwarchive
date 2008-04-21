@@ -12,7 +12,6 @@ class ApplicationController < ActionController::Base
     @current_user = current_user
   end
 
-
   #### -- GLOBALIZATION -- ####
   layout 'application'
   before_filter :set_locale  
@@ -24,9 +23,15 @@ class ApplicationController < ActionController::Base
       request_language[/[^,;]+/]
     @locale = params[:locale] || session[:locale] ||
               request_language || default_locale
-    session[:locale] = @locale
     begin
-      Locale.set SUPPORTED_LOCALES[@locale]
+      unless SUPPORTED_LOCALES[@locale]
+        flash[:warning] = "We don't currently support your locale, sorry, so 
+            we're falling back to the default locale (#{LANGUAGE_NAMES[default_locale]}). Please contact our 
+            volunteers committee if you'd be willing to help out as a translator!"
+        redirect_to url_for :overwrite_params => {:locale => default_locale}
+      end
+      session[:locale] = @locale
+      Locale.set SUPPORTED_LOCALES[@locale]      
     rescue
       Locale.set SUPPORTED_LOCALES[default_locale]
     end
