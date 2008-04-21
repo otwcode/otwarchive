@@ -15,35 +15,26 @@ class ApplicationController < ActionController::Base
 
   #### -- GLOBALIZATION -- ####
   layout 'application'
-  before_filter :set_locale
-  self.languages = { :english => 'en-US', :italian => 'it-IT', :french => 'fr-FR', 
-    :german => 'de-DE', :japanese => 'ja-JP', :spanish => 'es-ES', :czech => 'cs-CZ', 
-    :chinese => 'zh-CHS', :russian => 'ru-RU', :portuguese => 'pt-BR', :dutch => 'nl-NL', 
-    :indonesian => 'id-ID', :finnish => 'fi-FI'
-  }
-  
-  def globalize?
-    logged_in? && @current_user.translation_mode_active?
-  end
-  
-  def languages
-    return self.languages
-  end
-  
+  before_filter :set_locale  
   # Determines the user's language of choice
   def set_locale
-    default_locale = 'en-US'
+    default_locale = 'en'
     request_language = request.env['HTTP_ACCEPT_LANGUAGE']
     request_language = request_language.nil? ? nil : 
       request_language[/[^,;]+/]
-  
-    @locale = params[:locale] || session[:locale] ||
+    if session[:locale_changed]
+      @locale = session[:locale]
+      session[:locale_changed] = nil
+    else
+      @locale = params[:locale] || session[:locale] ||
               request_language || default_locale
+    end
     session[:locale] = @locale
+    puts "\n\n\nLocale: #{@locale}\n\n\n"
     begin
-      Locale.set @locale
+      Locale.set SUPPORTED_LOCALES[@locale]
     rescue
-      Locale.set default_locale
+      Locale.set SUPPORTED_LOCALES[default_locale]
     end
   end 
   #### -- GLOBALIZATION -- ####
@@ -62,5 +53,5 @@ class ApplicationController < ActionController::Base
 
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
-  protect_from_forgery :secret => 'ac9a60d7583c3455f6ac2ad6ba21d83e'
+  protect_from_forgery # :secret => 'ac9a60d7583c3455f6ac2ad6ba21d83e'
 end

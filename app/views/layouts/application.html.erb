@@ -15,7 +15,6 @@
 		<%= stylesheet_link_tag 'authentication', :media => 'screen' %>
 		<%= stylesheet_link_tag 'click_to_globalize', :media => 'screen' %>
 		<%= javascript_include_tag :defaults %>
-		<%= javascript_include_tag 'click_to_globalize' %>
     </head>
 
     <body>
@@ -52,7 +51,8 @@
         <!-- END header -->
 
         <div id="main" class="<%= controller.controller_name + '-' + controller.action_name -%>">
-			<%= flash_div :error, :warning, :notice -%> 
+			<%= flash_div :error, :warning, :notice %> 
+			<div class="clearboth"></div>
             <%= yield  %>
         </div>
         <!-- END main -->
@@ -65,13 +65,6 @@
             <a href="#" title="View License">GPL/CC</a> by the 
 			<a href="#" title="The Organization for Transformative Works">OTW</a> &mdash; 
 			<a href="#" title="Terms and Conditions">Terms and Conditions</a>
-			<% if controller.globalize? %>
-      		  <script type="text/javascript" language="javascript" charset="utf-8">
-                // <![CDATA[
-                  ClickToGlobalize.init('<%= form_authenticity_token %>');
-                // ]]>
-              </script>
-            <% end %>
 		</div>
         <!-- END footer -->
 

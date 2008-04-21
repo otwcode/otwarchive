@@ -230,11 +230,13 @@ a.story-title {
 .flash {
 	margin: 0.2em 0 0.2em 0;
 	padding: 1em;
-	float: left;	
+	float: left;
+	width: inherit;
 }
 .flash_icon {
 	border: 0;
 	float: left;
+	width: 50px;
 	padding: 0 0.5em 0 0;
 }
 .notice {

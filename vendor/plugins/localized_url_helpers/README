@@ -1,0 +1,16 @@
+# Localized url_helpers
+
+Intended for use with i18n solutions like Globalize (http://globalize-rails.org)
+where you want to use urls like:
+
+http://your-domain.com/en/controller/action/id
+
+Allows you to use url_helpers in a more concise manner.
+
+(TODO expand this)
+
+
+For a description of the problem, see:
+
+http://www.artweb-design.de/2007/4/24/concise_and_transparently_localized_rails_url_helper_methods
+http://jeremyhubert.com/2007/4/7/getting-resource-helpers-to-play-nice-with-globalize-in-rails

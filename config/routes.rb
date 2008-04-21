@@ -1,34 +1,33 @@
 ActionController::Routing::Routes.draw do |map|         
-  map.resources :comments, :has_many => :comments  
+  map.root :controller => 'session', :action => 'new', :locale => 'en'      
   
-  map.resources :chapters, :has_many => :comments
+  map.resources :passwords, :path_prefix => ':locale'
+  
+  map.resources :admins, :path_prefix => ':locale'
 
-  map.activate '/activate/:id', :controller => 'users', :action => 'activate'
-  
-  map.root :controller => 'session', :action => 'new'      
-  
-  map.resources :passwords
-  
-  map.resources :admins
+  map.resources :users, :has_many => :pseuds, :path_prefix => ':locale'
 
-  map.resources :users, :has_many => :pseuds
+  map.resources :works, :has_many => :chapters, :path_prefix => ':locale'
+  map.resources :works, :has_many => :comments, :path_prefix => ':locale'
+  
+  map.resources :chapters, :has_many => :comments, :path_prefix => ':locale'
 
-  map.resources :works, :has_many => :chapters
-  map.resources :works, :has_many => :comments
+  map.resources :comments, :has_many => :comments, :path_prefix => ':locale'  
   
-  map.resources :bookmarks
+  map.resources :bookmarks, :path_prefix => ':locale'
 
-  map.open_id_complete 'session', :controller => "session", :action => "create", :requirements => { :method => :get }
+  map.open_id_complete 'session', :controller => "session", :action => "create", :requirements => { :method => :get }, :path_prefix => ':locale'
   
-  map.resource :session, :controller => 'session'
-  map.login '/login', :controller => 'session', :action => 'new'
-  map.logout '/logout', :controller => 'session', :action => 'destroy'
+  map.resource :session, :controller => 'session', :path_prefix => ':locale'
+  map.login '/login', :controller => 'session', :action => 'new', :path_prefix => ':locale'
+  map.logout '/logout', :controller => 'session', :action => 'destroy', :path_prefix => ':locale'
   
-  map.resource :admin_session, :controller => 'admin_session'
-  map.admin_login '/admin_login', :controller => 'admin_session', :action => 'new'
-  map.admin_logout '/admin_logout', :controller => 'admin_session', :action => 'destroy'
+  map.resource :admin_session, :controller => 'admin_session', :path_prefix => ':locale'
+  map.admin_login '/admin_login', :controller => 'admin_session', :action => 'new', :path_prefix => ':locale'
+  map.admin_logout '/admin_logout', :controller => 'admin_session', :action => 'destroy', :path_prefix => ':locale'
   
-
+  map.activate '/activate/:id', :controller => 'users', :action => 'activate', :path_prefix => ':locale'
+  
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:
@@ -60,6 +59,7 @@ ActionController::Routing::Routes.draw do |map|
   # See how all your routes lay out with "rake routes"
 
   # Install the default routes as the lowest priority.
+  map.connect ':locale/:controller/:action/:id'
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
 end

@@ -54,7 +54,7 @@ class PseudsController < ApplicationController
       if @pseud.save
         flash[:notice] = 'Pseud was successfully created.'
         if @pseud.is_default
-          # if setting this one as default, unset the attribute of the current active pseud
+          # if setting this one as default, unset the attribute of the current default pseud
           default.update_attribute(:is_default, false)
         end
         format.html { redirect_to([@user, @pseud]) }
@@ -73,8 +73,8 @@ class PseudsController < ApplicationController
     default = @user.default_pseud
     respond_to do |format|
       if @pseud.update_attributes(params[:pseud])
-        # if setting this one as default, unset the attribute of the current active pseud
-        if @pseud.is_default and not(active_pseud == @pseud)
+        # if setting this one as default, unset the attribute of the current default pseud
+        if @pseud.is_default and not(default == @pseud)
           # if setting this one as default, unset the attribute of the current active pseud
           default.update_attribute(:is_default, false)
         end   

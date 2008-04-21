@@ -37,8 +37,9 @@ module ApplicationHelper
     # We'll sort the languages by their keyname rather than have all the non-arabic-character-set
     # ones end up at the end of the list.
     LANGUAGE_NAMES.sort {|a, b| a.first.to_s <=> b.first.to_s }.each do |locale, langname|
-      langname = langname.titleize;     
-      if locale == Locale.active.code
+      langname = langname.titleize;   
+      puts "#{locale}, #{langname}, #{Locale.active.language.code}\n\n"
+      if locale == Locale.active.language.code
         result << "<option value=#{locale} selected><strong>#{langname}</strong></option>\n"
       else
         result << "<option value=#{locale}>#{langname}</option>\n"
