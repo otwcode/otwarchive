@@ -35,7 +35,7 @@ class Test::Unit::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
-
+  
   def login_setup
     #@request    = ActionController::TestRequest.new
     #@response   = ActionController::TestResponse.new

@@ -4,22 +4,26 @@ one:
   title: MyString
   summary: MyText
   notes: MyText
-  described: basic_work
+  described_id: 1
+  described_type: Work
 
 two:
   title: MyString
   summary: MyText
   notes: MyText
-  described: basic_chapter
+  described_id: 1
+  described_type: Chapter
   
 three:
   title: Buffy the Vampire Slayer
   summary: Cheerleader vs. vampires
   notes: If the apocalypse comes, beep me
-  described: btvs
+  described_id: 3
+  described_type: Work
 
 four:
   title: Battlestar Galactica
   summary: Man vs. toaster
   notes: 
-  described: bsg
+  described_id: 4
+  described_type: Work

@@ -28,7 +28,7 @@ CREATE TABLE `chapters` (
   `created_at` datetime default NULL,
   `updated_at` datetime default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `comments` (
   `id` int(11) NOT NULL auto_increment,
@@ -57,7 +57,7 @@ CREATE TABLE `creatorships` (
   `created_at` datetime default NULL,
   `updated_at` datetime default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `globalize_countries` (
   `id` int(11) NOT NULL auto_increment,
@@ -72,7 +72,7 @@ CREATE TABLE `globalize_countries` (
   `number_grouping_scheme` varchar(255) default NULL,
   PRIMARY KEY  (`id`),
   KEY `index_globalize_countries_on_code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=240 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `globalize_languages` (
   `id` int(11) NOT NULL auto_increment,
@@ -95,7 +95,7 @@ CREATE TABLE `globalize_languages` (
   KEY `index_globalize_languages_on_iso_639_2` (`iso_639_2`),
   KEY `index_globalize_languages_on_iso_639_3` (`iso_639_3`),
   KEY `index_globalize_languages_on_rfc_3066` (`rfc_3066`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7597 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `globalize_translations` (
   `id` int(11) NOT NULL auto_increment,
@@ -112,7 +112,7 @@ CREATE TABLE `globalize_translations` (
   PRIMARY KEY  (`id`),
   KEY `index_globalize_translations_on_tr_key_and_language_id` (`tr_key`,`language_id`),
   KEY `globalize_translations_table_name_and_item_and_language` (`table_name`,`item_id`,`language_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7133 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `metadatas` (
   `id` int(11) NOT NULL auto_increment,
@@ -124,7 +124,7 @@ CREATE TABLE `metadatas` (
   `created_at` datetime default NULL,
   `updated_at` datetime default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `open_id_authentication_associations` (
   `id` int(11) NOT NULL auto_increment,
@@ -145,6 +145,17 @@ CREATE TABLE `open_id_authentication_nonces` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `profiles` (
+  `id` int(11) NOT NULL auto_increment,
+  `user_id` int(11) default NULL,
+  `location` varchar(255) default NULL,
+  `about_me` text,
+  `date_of_birth` date default NULL,
+  `created_at` datetime default NULL,
+  `updated_at` datetime default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
 CREATE TABLE `pseuds` (
   `id` int(11) NOT NULL auto_increment,
   `user_id` int(11) default NULL,
@@ -154,7 +165,7 @@ CREATE TABLE `pseuds` (
   `created_at` datetime default NULL,
   `updated_at` datetime default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `roles` (
   `id` int(11) NOT NULL auto_increment,
@@ -175,7 +186,7 @@ CREATE TABLE `roles_users` (
 
 CREATE TABLE `schema_info` (
   `version` int(11) default NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL auto_increment,
@@ -190,9 +201,8 @@ CREATE TABLE `users` (
   `crypted_password` varchar(255) default NULL,
   `salt` varchar(255) default NULL,
   `identity_url` varchar(255) default NULL,
-  `translation_mode_active` tinyint(1) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `works` (
   `id` int(11) NOT NULL auto_increment,
@@ -203,6 +213,6 @@ CREATE TABLE `works` (
   `major_version` int(11) default NULL,
   `minor_version` int(11) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
-INSERT INTO `schema_info` (version) VALUES (25)
+INSERT INTO `schema_info` (version) VALUES (27)

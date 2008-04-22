@@ -1,6 +1,7 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 comment1:
+  id:               1
   content:          my thoughts on yaoi
   pseud:            joss
   commentable_type: Work
@@ -11,6 +12,7 @@ comment1:
   threaded_right:   4
   
 reply_comment1:
+  id:               2
   content:          reasons why you suck
   pseud:            notacylon
   commentable_type: Comment

@@ -1,22 +1,19 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 basic_chapter:
+  id: 1
   content: looooong text for first chapter
   position: 1
-  work: basic_work
+  work_id: 1
 
-  #two:
-  #  title: MyString
-  #  content: MyText
-  #  position: 1
-  #  work:
- 
 buffy_chapter:
+  id: 3
   content: one girl in all the world, yadda, yadda, yadda
   position: 1
-  work: btvs
+  work_id: 3
 
 bsg_chapter:
+  id: 4
   content: and they have a plan
   position: 1
-  work: bsg
+  work_id: 4
