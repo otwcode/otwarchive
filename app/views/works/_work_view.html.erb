@@ -1,0 +1,40 @@
+<% form_for(@work) do |f| %>
+  
+  <p>Authors: 
+    <% for pseud in @pseuds %>
+      <%=h pseud.name %>  
+    <% end %>
+  </p>
+  
+  <!-- Need to put "display:none" into a proper css file when doing the real styling here -->
+  <select name="pseud[id][]" multiple="multiple" style="display : none;">
+    <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
+  </select>
+  
+  <% fields_for :metadata_attributes, @work.metadata do |m| %>
+    <p>Title: <%=h @work.metadata.title %></p>
+    <%= m.hidden_field :title, :value => "#{@work.metadata.title}" %>    
+
+    <p>Summary: <%=h @work.metadata.summary %></p>
+    <%= m.hidden_field :summary, :value => "#{@work.metadata.summary}" %>
+
+    <p>Notes: <%=h @work.metadata.notes %></p>
+    <%= m.hidden_field :notes, :value => "#{@work.metadata.notes}" %> 
+  <% end %>
+
+  <p><b>This work is <% unless @work.is_complete %>not<% end %> complete.</b></p>
+  <%= f.hidden_field :is_complete, :value => "#{@work.is_complete}" %>
+  
+  <p>Expected Number of Chapters: <%=h @work.expected_number_of_chapters %></p>
+  <%= f.hidden_field :expected_number_of_chapters, :value => "#{@work.expected_number_of_chapters}" %>   
+  
+  <% fields_for :chapter_attributes, @chapter do |c| %>
+    <p><%=h @work.chapters.first.content %></p>
+    <%= c.hidden_field :content, :value => "#{@work.chapters.first.content}" %>
+  <% end %>
+
+  <p><%= submit_tag 'Create', :name => 'create_button' %></p>
+  
+<% end %>
+
+  

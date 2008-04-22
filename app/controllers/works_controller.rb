@@ -13,11 +13,6 @@ class WorksController < ApplicationController
     # * flash.now[...] gets used if you are dropping through to the default action or using render.
     # * flash[...] gets used if you are redirecting.
     # flash.now[:notice] = 'This is a sample notice box. It is appearing here only because it has been manually set in the show method in the controller as an example.'
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @works }
-    end
   end
 
   # GET /works/1
@@ -31,11 +26,6 @@ class WorksController < ApplicationController
     # * flash.now[...] gets used if you are dropping through to the default action or using render.
     # * flash[...] gets used if you are redirecting.
     # flash.now[:error] = 'This is a sample error box. It is appearing here only because it has been manually set in the show method in the controller as an example.'
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @work }
-    end
   end
 
   # GET /works/new
@@ -44,18 +34,15 @@ class WorksController < ApplicationController
     @work = Work.new
     @work.chapters.build
     @work.metadata = Metadata.new
-    @pseud = current_user.default_pseud
-    
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @work }
-    end
+    @pseuds = current_user.pseuds
+    @selected = current_user.default_pseud.id
   end
 
   # GET /works/1/edit
   def edit
     @work = Work.find(params[:id])
-    @pseud = current_user.default_pseud
+    @pseuds = @work.pseuds
+    @selected = @work.pseuds.collect { |pseud| pseud.id.to_i }
   end
 
   # POST /works
@@ -64,27 +51,22 @@ class WorksController < ApplicationController
     @work = Work.new(params[:work])
     @chapter = @work.chapters.build params[:chapter_attributes]
     @work.metadata = Metadata.new(params[:metadata_attributes])
-    @pseuds = Pseud.parse_extra_pseuds(params[:extra_pseuds])
-    pseud_ids = params[:pseud][:id]
-    for pseud_id in pseud_ids
-      @pseuds << Pseud.find(pseud_id)
-    end
-
-    respond_to do |format|
+    
+    # Display the collected data if we're in preview mode, save it if we're not
+    if params[:preview_button] && !params[:create_button]
+      @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id], params[:extra_pseuds])
+      @selected = @pseuds.collect { |pseud| pseud.id.to_i }
+      render :partial => 'work_view', :layout => 'application'
+    else 
+      @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id])
       if @work.save
-        
-        for pseud in @pseuds
-          pseud.add_creations(@work)
-          pseud.add_creations(@work.chapters.first)
-        end
-
+        Creatorship.add_authors(@work, @pseuds)
+        Creatorship.add_authors(@work.chapters.first, @pseuds)
         flash[:notice] = 'Work was successfully created.'
-        format.html { redirect_to(@work) }
-        format.xml  { render :xml => @work, :status => :created, :location => @work }
+        redirect_to(@work)
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @work.errors, :status => :unprocessable_entity }
-      end
+        render :action => "new" 
+      end 
     end
   end
 
@@ -94,29 +76,15 @@ class WorksController < ApplicationController
     @work = Work.find(params[:id])
     @work.chapters.update params[:chapter_attributes].keys, params[:chapter_attributes].values
     @work.metadata.update_attributes params[:metadata_attributes]
-    @pseuds = Pseud.parse_extra_pseuds(params[:extra_pseuds])
-    pseud_ids = params[:pseud][:id]
-    for pseud_id in pseud_ids
-      @pseuds << Pseud.find(pseud_id)
-    end
+    @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id], params[:extra_pseuds])
 
-    respond_to do |format|
-      if @work.update_attributes(params[:work])
-        
-        for pseud in @pseuds
-          unless @work.pseuds.include?(pseud)
-            pseud.add_creations(@work)
-          end
-        end
-        
-        flash[:notice] = 'Work was successfully updated.'
-        format.html { redirect_to(@work) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @work.errors, :status => :unprocessable_entity }
-      end
-    end
+    if @work.update_attributes(params[:work])
+      Creatorship.add_authors(@work, @pseuds)
+      flash[:notice] = 'Work was successfully updated.'
+      redirect_to(@work)
+    else
+      render :action => "edit" 
+    end 
   end
    
   # DELETE /works/1
@@ -124,10 +92,6 @@ class WorksController < ApplicationController
   def destroy
     @work = Work.find(params[:id])
     @work.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(works_url) }
-      format.xml  { head :ok }
-    end
+    redirect_to(works_url)
   end
 end

@@ -3,7 +3,11 @@
 	<p>
   	<b>Pseud:</b>
   	<% if current_user.pseuds.count > 1 %>
-  	  <p><%= collection_select :pseud, :id, current_user.pseuds, :id ,:name, {}, :multiple => 'multiple' %></p> 
+  	  <p>
+    	  <select name="pseud[id][]" multiple="multiple">
+          <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
+        </select> 
+  	  </p>
   	<% else %>
   	  <%= hidden_field :pseud, :id, :value => "#{current_user.default_pseud.id}" %>
   		<b><%= current_user.default_pseud.name %></b><br />
@@ -56,7 +60,7 @@
   </p>
 
   <p>
-    <%= f.submit button_text %>
+    <%= submit_tag 'Preview', :name => 'preview_button' %>
   </p>
 <% end %>
 

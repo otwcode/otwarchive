@@ -2,7 +2,11 @@
   
   <p>
   	<b>Author:</b><br />
- 		<%= collection_select :pseud, :id, @work.pseuds, :id ,:name, {}, :multiple => 'multiple' %>
+	  <p>
+  	  <select name="pseud[id][]" multiple="multiple">
+        <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
+      </select> 
+	  </p>
 	</p> 
 	
 	<p>
@@ -45,6 +49,6 @@
   <% end %>
 
   <p>
-    <%= f.submit button_text %>
+    <%= submit_tag 'Preview', :name => 'preview_button' %>
   </p>
 <% end %>
