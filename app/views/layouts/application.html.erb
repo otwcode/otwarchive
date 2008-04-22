@@ -23,29 +23,31 @@
             <div id="login-block">
             <% if logged_in? -%>
 	              <ul>
-				    <li><span><%= "Hi,".t -%></span> <%= link_to current_user.login, user_path(current_user), :class => 'username' -%>! </li>
+				    <li><span><%=h "Hi,".t -%></span> <%= link_to current_user.login, user_path(current_user), :class => 'username' -%>! </li>
 				  <!-- Translation button -->
 				    <li>
-				    	<%= link_to translating_button, :controller => :users, :action => :translation_mode_toggle, :id => @current_user.id -%>
+				      <a href="<%= url_for :controller => 'translation', :action => 'index' -%>">
+				        <%= image_tag("translation_button.gif", :alt => h('Link to translation page'.t), :border => 0) %>	
+				      </a>
 					</li>
 				  </ul>	
 	              <ul>
-	                <li class="first-link"><%= link_to 'Post New'.t, new_work_path -%></li>
-	                <li><%= link_to 'Logout'.t, logout_path -%></li>
+	                <li class="first-link"><%= link_to h('Post New'.t), new_work_path -%></li>
+	                <li><%= link_to h('Logout'.t), logout_path -%></li>
 	              </ul>
             <% elsif logged_in_as_admin? -%>
-                <li><span><%= "Hello,".t -%></span> <%= link_to current_admin.login, admin_path(current_admin), :class => 'username username-admin' -%>!</li>
+                <li><span><%=h "Hello,".t -%></span> <%= link_to current_admin.login, admin_path(current_admin), :class => 'username username-admin' -%>!</li>
                 <ul>
-                    <li><%= link_to 'Logout'.t, admin_logout_path -%></li>
+                    <li><%= link_to h('Logout'.t), admin_logout_path -%></li>
                 </ul>
 			<% else -%>
                 <ul>
-                    <li><%= link_to 'Login'.t, login_path -%></li>
+                    <li><%= link_to h('Login'.t), login_path -%></li>
                 </ul>			
 			<% end -%>
             </div>
 
-            <h1>An Archive Of Our Own: Extreme Alpha</h1>
+            <h1><%=h "An Archive Of Our Own: Extreme Alpha".t %></h1>
 			<div class="clearboth"></div>
         </div>
         <!-- END header -->
