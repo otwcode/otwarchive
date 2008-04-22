@@ -19,9 +19,9 @@ class User < ActiveRecord::Base
   has_one :profile
   validates_associated :profile
   
-  validates_confirmation_of :email
-  validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create
-  validates_format_of :password, :with => /^(?=.*\d)(?=.*([a-z]|[A-Z]))([\x20-\x7E]){6,40}$/
+  validates_email_veracity_of :email, :message => 'does not seem to be a valid email address.'
+  # validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create
+  # validates_format_of :password, :with => /(?=.*\d)(?=.*([a-z]|[A-Z]))/, :message => 'must have at least one digit and one alphabet character.'
 
   # Retrieve the current default pseud
   def default_pseud

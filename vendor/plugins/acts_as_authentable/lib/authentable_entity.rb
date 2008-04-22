@@ -1,6 +1,13 @@
 require 'digest/sha1'
 module AuthentableEntity
 
+  PASSWORD_LENGTH_MIN = 6
+  PASSWORD_LENGTH_MAX = 40
+  LOGIN_LENGTH_MIN = 3
+  LOGIN_LENGTH_MAX = 40
+  EMAIL_LENGTH_MIN = 3
+  EMAIL_LENGTH_MAX = 100
+
 
   def self.included(authentable)
     authentable.class_eval do
@@ -11,10 +18,10 @@ module AuthentableEntity
       validates_presence_of     :login, :email
       validates_presence_of     :password,                   :if => :password_required?
       validates_presence_of     :password_confirmation,      :if => :password_required?
-      validates_length_of       :password, :within => 4..40, :if => :password_required?
+      validates_length_of       :password, :within => PASSWORD_LENGTH_MIN..PASSWORD_LENGTH_MAX, :if => :password_required?
       validates_confirmation_of :password,                   :if => :password_required?
-      validates_length_of       :login,    :within => 3..40
-      validates_length_of       :email,    :within => 3..100
+      validates_length_of       :login,    :within => LOGIN_LENGTH_MIN..LOGIN_LENGTH_MAX
+      validates_length_of       :email,    :within => EMAIL_LENGTH_MIN..EMAIL_LENGTH_MAX
       validates_uniqueness_of   :login, :email, :case_sensitive => false
 
       before_save :encrypt_password

@@ -1,0 +1,18 @@
+sqlite:
+  :adapter: sqlite
+  :dbfile: validates_email_veracity_of_test.sqlite.db
+sqlite3:
+  :adapter: sqlite3
+  :dbfile: validates_email_veracity_of_test.sqlite3.db
+postgresql:
+  :adapter: postgresql
+  :username: postgres
+  :password: postgres
+  :database: validates_email_veracity_of_test
+  :min_messages: ERROR
+mysql:
+  :adapter: mysql
+  :host: localhost
+  :username: root
+  :password:
+  :database: validates_email_veracity_of_validation_test

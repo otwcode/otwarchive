@@ -1,0 +1,57 @@
+= Validates Email Veracity Of
+
+Author:: Carsten Nielsen (mailto:carsten.nielsen@savvica.com)
+License:: MIT
+Type:: Rails Validation Plugin
+
+
+Validates the form of an email address and verifies it's domain by checking if there are any
+mail exchange or address servers associated with it.
+
+=== Options
+
+* <b>message</b>
+  - Changes the default error message.
+* <b>domain_check</b>
+  - Skips server lookup unless true.
+* <b>timeout</b>
+  - Time (in seconds) before the domain lookup is skipped. Default is 2.
+* <b>fail_on_timeout</b>
+  - Causes validation to fail if a timeout occurs.
+* <b>timeout_message</b>
+  - Changes the default timeout error message.
+* <b>mx_only</b>
+  - When set, only mail exchange servers (MX) are looked up and the address server (A)
+    lookup is skipped.
+* <b>invalid_domains</b>
+  - An array of domain names that are not to be used. Useful for stuff like dodgeit.com
+    and other services.
+* <b>invalid_domain_message</b>
+  - Changes the default invalid domain error message.
+
+
+=== Examples
+
+* <tt>validates_email_veracity_of :email, :message => 'is not correct.'</tt>
+  - Changes the default error message from 'is invalid.' to 'is not correct.'
+* <tt>validates_email_veracity_of :email, :domain_check => false</tt>
+  - Domain lookup is skipped.
+* <tt>validates_email_veracity_of :email, :timeout => 0.5</tt>
+  - Causes the domain lookup to timeout if it does not complete within half a second.
+* <tt>validates_email_veracity_of :email, :fail_on_timeout => true, :timeout_message => 'is invalid.'</tt>
+  - Causes the validation to fail on timeout and changes the error message to 'is invalid.'
+    to obfuscate it.
+* <tt>validates_email_veracity_of :email, :mx_only => true</tt>
+  - The validator will only check the domain for mail exchange (MX) servers, ignoring address
+    servers (A) records.
+* <tt>validates_email_veracity_of :email, :invalid_domains => %w[dodgeit.com harvard.edu]</tt>
+  - Any email addresses @dodgeit.com or @harvard.edu will be rejected.
+
+
+=== Notes
+
+* You will need to be connected to the internet to utilize the remote features of the plugin
+  and to properly run the tests.
+* To run the tests type <tt>rake test</tt> in the console from the plugin's root directory.
+* The Resolv library has been known to screw up internally with a <tt>nil.include?</tt> error if
+  your domain resolver is ill-configured or out of service.

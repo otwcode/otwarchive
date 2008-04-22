@@ -23,13 +23,8 @@
 	  <%= f.text_field :identity_url, :class => 'authentication-textfield', :tabindex => '5' %><br />
 	  
 	  <!-- Email address -->
-	  <span class="authentication-label"><label for="email"><%= "What email address would you like us to use?" .t %></label></span><br />
+	  <span class="authentication-label"><label for="email"><%= "What email address would you like us to use? (This has to be valid -- we'll be sending you a confirmation email before you can activate your account.)" .t %></label></span><br />
 	  <%= f.text_field :email, :class => 'authentication-textfield', :tabindex => '6' %><br />
-	  
-	  <!-- Confirm email address - functionality still has to be added for this! -->
-	  <span class="authentication-label"><label for="email_confirmation"><%= "Could you repeat that email address, please?" .t %></label></span><br />
-	  <input type="text" name="email_confirmation" class="authentication-textfield" tabindex="7" /><br />
-	  </p>
 	  
 	  <!-- Age Check -->
 	  <!-- Needs to actually check this value on submission - functionality still has to be added for this! -->
