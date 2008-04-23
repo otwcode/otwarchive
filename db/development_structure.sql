@@ -28,7 +28,7 @@ CREATE TABLE `chapters` (
   `created_at` datetime default NULL,
   `updated_at` datetime default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `comments` (
   `id` int(11) NOT NULL auto_increment,
@@ -57,7 +57,7 @@ CREATE TABLE `creatorships` (
   `created_at` datetime default NULL,
   `updated_at` datetime default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `globalize_countries` (
   `id` int(11) NOT NULL auto_increment,
@@ -112,7 +112,7 @@ CREATE TABLE `globalize_translations` (
   PRIMARY KEY  (`id`),
   KEY `index_globalize_translations_on_tr_key_and_language_id` (`tr_key`,`language_id`),
   KEY `globalize_translations_table_name_and_item_and_language` (`table_name`,`item_id`,`language_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7133 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7165 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `metadatas` (
   `id` int(11) NOT NULL auto_increment,
@@ -124,7 +124,7 @@ CREATE TABLE `metadatas` (
   `created_at` datetime default NULL,
   `updated_at` datetime default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `open_id_authentication_associations` (
   `id` int(11) NOT NULL auto_increment,
@@ -213,6 +213,6 @@ CREATE TABLE `works` (
   `major_version` int(11) default NULL,
   `minor_version` int(11) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 INSERT INTO `schema_info` (version) VALUES (27)

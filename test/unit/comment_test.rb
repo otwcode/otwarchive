@@ -6,8 +6,6 @@ class CommentTest < ActiveSupport::TestCase
     assert true
   end 
   
-  fixtures :comments
-  
   def test_max_thread
     assert_equal(666, Comment.max_thread)
   end

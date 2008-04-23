@@ -16,7 +16,7 @@ reply_comment1:
   content:          reasons why you suck
   pseud:            notacylon
   commentable_type: Comment
-  commentable:      comment1
+  commentable_id:   1
   thread:           1
   threaded_left:    2
   threaded_right:   3

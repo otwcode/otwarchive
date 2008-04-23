@@ -1,5 +1,12 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+
+  # load the native language names into a constant
+  LANGUAGE_NAMES = Hash.new 
+  SUPPORTED_LOCALES.each do |lang, locale|
+    LANGUAGE_NAMES.merge!({lang => (langobj = Language.pick(locale)).nil? ? lang.to_s : langobj.native_name })
+  end  
+      
   
   # Inserts the flash alert messages for flash[:key] wherever 
   #       <%= flash_div :key %> 
