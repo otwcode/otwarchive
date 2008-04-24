@@ -12,8 +12,8 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :chapters, :has_many => :comments, :path_prefix => ':locale'
 
-  map.resources :comments, :has_many => :comments, :path_prefix => ':locale'  
-  
+  map.resources :comments, :has_many => :comments, :path_prefix => ':locale', :member => { :approve => :put, :reject => :put }
+
   map.resources :bookmarks, :path_prefix => ':locale'
 
   map.open_id_complete 'session', :controller => "session", :action => "create", :requirements => { :method => :get }, :path_prefix => ':locale'

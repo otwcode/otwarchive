@@ -75,4 +75,8 @@ Rails::Initializer.run do |config|
 
   # Make Active Record use UTC-base instead of local time
   # config.active_record.default_timezone = :utc
+  
+  #variables for Askimet
+  ASKIMET_KEY = '6833ee7298cf'
+  SITE_NAME = 'http://transformativeworks.org'
 end

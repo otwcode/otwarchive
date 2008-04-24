@@ -1,26 +1,28 @@
 <%- current_depth = nil -%>
 <%- for comment in @comments -%>
+<!-- For now, show unapproved comments to logged in users. Probably want
+		to specifically target the authors of the work/chapter? -->
+  <% if comment.approved or logged_in? %>
+ 	 <%- if current_depth && comment.depth <= current_depth -%>
+  	  <%- (current_depth - comment.depth + 1).times do -%>
+ 	     </div>
+	    <%- end -%>  
+	  <%- end -%>
+
+ 	 <%- if current_depth.nil? || comment.depth == 0 -%>
+ 	   <div class="thread">
+ 	 <%- end -%>
+
+
+ 	 <div class="comment" id="<%=comment.id %>">
+ 	   <%- if comment.depth % 2 == 0 -%>
+ 	     <span class='even-comment'>
+ 	   <%- else -%>
+ 	     <span class='odd-comment'>
+ 	   <%- end -%>  
     
-  <%- if current_depth && comment.depth <= current_depth -%>
-    <%- (current_depth - comment.depth + 1).times do -%>
-      </div>
-    <%- end -%>  
-  <%- end -%>
-
-  <%- if current_depth.nil? || comment.depth == 0 -%>
-    <div class="thread">
-  <%- end -%>
-
-
-  <div class="comment" id="<%=comment.id %>">
-    <%- if comment.depth % 2 == 0 -%>
-      <span class='even-comment'>
-    <%- else -%>
-      <span class='odd-comment'>
-    <%- end -%>  
-    
-    <%- if comment.is_deleted -%>
-      <p>(comment deleted)</p>
+  	  <%- if comment.is_deleted -%>
+ 	     <p>(comment deleted)</p>
     <%- else -%>  
 
       <h3>
@@ -39,8 +41,11 @@
         <%= link_to_function('Reply', "Element.toggle('add-comment#{comment.id}')") %>
         <% if logged_in? && comment.pseud == current_user.default_pseud %> | 
           <%= link_to 'Edit', edit_comment_path(comment) %> | 
-          <%= link_to 'Destroy', comment, :confirm => 'Are you sure?', :method => :delete %> 
+          <%= link_to 'Destroy', comment, :confirm => 'Are you sure?', :method => :delete %>
         <% end %>
+				<% if !comment.pseud && logged_in? %>
+						| <%= (comment.approved ? (link_to 'Spam', reject_comment_path(comment), :method => :put) : (link_to 'Not Spam', approve_comment_path(comment), :method => :put ))%>
+				<% end %>
       </p>
 
       <div id="add-comment<%= comment.id %>" style="display : none;">
@@ -50,8 +55,8 @@
     <%- end -%> 
     </span>
     <%- current_depth = comment.depth -%>
+	<%- end -%>
 <%- end -%>
-
 <%- (current_depth + 1).times do -%>
   </div>
 <%- end -%>
