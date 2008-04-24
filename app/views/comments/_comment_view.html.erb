@@ -1,3 +1,7 @@
+<!-- Comment divs are nested to make them easier to display; every comment has a depth value, and by comparing 
+it to the depth of the previous comment, you can figure out how many closing div tags you need, if any. Then all 
+you need is one "margin-left: 50px" line in the css to make some nice cascading indentation. -->
+
 <%- current_depth = nil -%>
 <%- for comment in @comments -%>
 <!-- For now, show unapproved comments to logged in users. Probably want
@@ -13,15 +17,14 @@
  	   <div class="thread">
  	 <%- end -%>
 
-
- 	 <div class="comment" id="<%=comment.id %>">
- 	   <%- if comment.depth % 2 == 0 -%>
- 	     <span class='even-comment'>
- 	   <%- else -%>
- 	     <span class='odd-comment'>
- 	   <%- end -%>  
+  <div class="comment">
+    <%- if comment.depth % 2 == 0 -%>
+      <span class='even-comment' id="comment<%=comment.id %>">
+    <%- else -%>
+      <span class='odd-comment' id="comment<%=comment.id %>">
+    <%- end -%>  
     
-  	  <%- if comment.is_deleted -%>
+ 	  <%- if comment.is_deleted -%>
  	     <p>(comment deleted)</p>
     <%- else -%>  
 
@@ -38,9 +41,13 @@
       <p>Posted at: <%= comment.created_at %></p>
       
       <p> 
-        <%= link_to_function('Reply', "Element.toggle('add-comment#{comment.id}')") %>
-        <% if logged_in? && comment.pseud == current_user.default_pseud %> | 
-          <%= link_to 'Edit', edit_comment_path(comment) %> | 
+        <%= link_to_function "Reply", 
+            update_page {|page| page.replace_html "add-comment#{comment.id}", :partial => @comment = Comment.new, :locals => {:commentable => comment, :button_name => 'Create'}}, 
+            :href => new_comment_comment_path(comment) %> | 
+        <% if logged_in? && current_user.pseuds.include?(comment.pseud) %> | 
+          <%= link_to_function "Edit", 
+              update_page {|page| page.replace_html "comment#{comment.id}", :partial => @comment = comment, :locals => {:commentable => comment.commentable, :button_name => 'Update'}}, 
+              :href => edit_comment_path(comment) %> |
           <%= link_to 'Destroy', comment, :confirm => 'Are you sure?', :method => :delete %>
         <% end %>
 				<% if !comment.pseud && logged_in? %>
@@ -48,9 +55,7 @@
 				<% end %>
       </p>
 
-      <div id="add-comment<%= comment.id %>" style="display : none;">
-        <%= render :partial => @comment = Comment.new, :locals => {:commentable => comment, :button_name => 'Create'} %>
-      </div>
+      <div id="add-comment<%= comment.id %>"></div>
     
     <%- end -%> 
     </span>

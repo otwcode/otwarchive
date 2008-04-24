@@ -4,15 +4,18 @@
 
 <p>
   <%= link_to_function "Add chapter", 
-      update_page {|page| page.replace_html 'editing-choice', :partial => 'chapters/chapter_form', :locals => {:chapter => Chapter.new, :button_text => "Create"}} %> |  
+      update_page {|page| page.replace_html 'editing-choice', :partial => 'chapters/chapter_form', :locals => {:chapter => Chapter.new, :button_text => "Create"}}, 
+      :href => new_work_chapter_path(@work) %> |  
   
   <%= link_to_function "Edit work", 
-      update_page {|page| page.replace_html 'editing-choice', :partial => 'work_form', :locals => {:button_text => "Update"}} %> | 
+      update_page {|page| page.replace_html 'editing-choice', :partial => 'work_form', :locals => {:button_text => "Update"}},
+      :href => edit_work_path(@work) %> | 
 
   Edit chapter:
   <% for chapter in @work.chapters %>
     <%= link_to_function h(chapter.position), 
-        update_page {|page| page.replace_html 'editing-choice', :partial => 'chapters/chapter_form', :locals => {:chapter => chapter, :button_text => "Update"}} %> | 
+        update_page {|page| page.replace_html 'editing-choice', :partial => 'chapters/chapter_form', :locals => {:chapter => chapter, :button_text => "Update"}},
+        :href => [:edit, @work, chapter] %> | 
   <% end %>
   
   <%= link_to_function "Manage authors", 

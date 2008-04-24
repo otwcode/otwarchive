@@ -47,7 +47,7 @@
 
 <div id="comments-display">
   <p>
-    <%= link_to_function('Add a comment', "Element.toggle('add-comment')") %>
+    <%= link_to_function('Add a comment', "Element.toggle('add-comment')", :href => new_work_comment_path(@work)) %>
   </p>
                   
   <div id="add-comment" style="display : none;">   
@@ -56,7 +56,7 @@
 
   <% unless @comments.empty? %>
     <p>
-      <%= link_to_function('Read comments', "Element.toggle('comments')") %>   
+      <%= link_to_function('Read comments', "Element.toggle('comments')", :href => work_comments_path(@work)) %>   
     </p>
 
     <div id="comments" style="display : none;">   

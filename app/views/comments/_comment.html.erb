@@ -1,3 +1,5 @@
+<% commentable = @commentable if @commentable %> 
+
 <% form_for([commentable, @comment]) do |f| %>
   
   <% if logged_in? %>
