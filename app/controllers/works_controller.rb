@@ -79,6 +79,10 @@ class WorksController < ApplicationController
     elsif params[:cancel_button]
       # Not quite working yet - should send the user back to wherever they were before they hit "post new"
       redirect_back_or_default('/')
+    elsif params[:edit_button] 
+      @pseuds = current_user.pseuds
+      @selected = params[:pseud][:id]
+      render :action => "new"
     else 
       @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id])
       if @work.save
