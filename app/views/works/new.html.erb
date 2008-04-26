@@ -1,7 +1,15 @@
-<h1>Post Story</h1>
+  <div>
+	  <h2 class="nomargin"><span class="list-left">Post Story</span></h2>
+	  
+    <!-- Need a mailto address for the report link. -->		
+    <!-- The "morefeatures" span can be removed at will without breaking the page. -->
+	  <span class="list-left leftmargin">Further features coming soon.  Questions?  <a href="mailto:#">Email us.</a></span>
+		<span class="list-right required">* Required field</span>
+	  <p class="clearbothdrop"></p>
+  </div>
 
 <%= error_messages_for :work %>
 
 <%= render :partial => "work_form" %>
 
-<%= link_to 'Back', works_path %>
+<%= link_to 'Back', works_path %> 

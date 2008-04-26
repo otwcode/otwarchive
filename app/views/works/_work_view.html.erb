@@ -1,40 +1,105 @@
+<div>
+  <h2 class="nomargin"><span class="list-left">Preview Story</span></h2>
+  
+  <!-- Need a mailto address for the report link. -->		
+  <!-- The "morefeatures" span can be removed at will without breaking the page. -->
+	<span class="list-left leftmargin">Further features coming soon.  Questions?  <a href="mailto:#">Email us.</a></span>
+	<span class="list-right required">* Required field</span>
+	<div class="clearboth"></div>
+</div>
+
+<!-- Space for the preview pane; giving it an id and an associated style in archive_core.css, to be changed by backend as required -->
+
 <% form_for(@work) do |f| %>
+
+  <div id="previewpane">
   
-  <p>Authors: 
-    <% for pseud in @pseuds %>
-      <%=h pseud.name %>  
+    <p><strong>Author(s): </strong> 
+      <% for pseud in @pseuds %>
+        <%=h pseud.name %>  
+      <% end %>
+    </p>
+  
+    <select name="pseud[id][]" multiple="multiple" style="display : none;">
+      <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
+    </select>
+  
+    <% fields_for :metadata_attributes, @work.metadata do |m| %>
+      <p><strong>Title: </strong><%=h @work.metadata.title %></p>
+      <%= m.hidden_field :title, :value => "#{@work.metadata.title}" %>    
+
+      <p><strong>Summary: </strong><%=h @work.metadata.summary %></p>
+      <%= m.hidden_field :summary, :value => "#{@work.metadata.summary}" %>
+
+      <p><strong>Notes: </strong><%=h @work.metadata.notes %></p>
+      <%= m.hidden_field :notes, :value => "#{@work.metadata.notes}" %> 
+    <% end %>  
+  
+    <% fields_for :chapter_attributes, @chapter do |c| %>
+      <p class="chapter-content"><%=h @work.chapters.first.content %></p>
+      <%= c.hidden_field :content, :value => "#{@work.chapters.first.content}" %>
     <% end %>
-  </p>
+    
+    <p>This work is <% unless @work.is_complete %><strong>not</strong><% end %> complete.</p>
+    <%= f.hidden_field :is_complete, :value => "#{@work.is_complete}" %>
   
-  <!-- Need to put "display:none" into a proper css file when doing the real styling here -->
-  <select name="pseud[id][]" multiple="multiple" style="display : none;">
-    <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
-  </select>
+    <% unless @work.is_complete %> 
+      <p><strong>Expected Number of Chapters: </strong><%=h @work.expected_number_of_chapters %></p>
+      <%= f.hidden_field :expected_number_of_chapters, :value => "#{@work.expected_number_of_chapters}" %>
+    <% end %>
+
+  </div>
+
+  <!-- This part of the form does not currently do anything!  Needs attention from Rails coders -->
+	<p>
+
+  <!-- Tags -->
+  <!-- Fandom field (storyfandom) -->
+		<span class="field-left">
+			<span class="required storylabel"><label for="storyfandom">Fandom*</label></span><br />
+			<input type="text" name="storytitle" class="storyinputfield" tabindex="1" /><%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
+
+      <!-- Rating field (storyrating) -->
+			<span class="required storylabel"><label for="storyrating">Rating*</label></span>
+      <!-- Fake options!  These need to be populated by the backend or hard-coded as appropriate. -->
+			<select name="storyrating" class="storyinputfield" tabindex="2">
+				<option>(Not Rated)</option>
+				<option>All ages</option>
+				<option>Teen</option>
+				<option>Adult</option>
+			</select>
+			<%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
+
+      <!-- Category field (storycategory) -->
+			<span class="required storylabel"><label for="storycategory">Category*</label></span>
+			<input type="text" name="storycategory" class="storyinputfield" tabindex="3" /><%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
+		</span>
+
+		<span class="field-right">
+      <!-- Warnings field (storywarnings) -->
+      <!-- "Allows multiple choices": meant to be there or no? -->
+			<span class="storylabel"><label for="storywarnings">Warnings (allows multiple choices)</label></span>
+			<input type="text" name="storywarnings" class="storyinputfield" tabindex="4" /><%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
+
+      <!-- Pairing(s)/Characters field (storycharacters) -->
+			<span class="storylabel"><label for="storycharacters">Pairing(s)/Characters</label></span>
+			<input type="text" name="storycharacters" class="storyinputfield" tabindex="5" /><%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
+
+      <!-- Tags field (storytags) -->
+      <!-- Label on this: ?? -->
+			<span class="storylabel"><label for="storytags">Free Tags (User defined)</label></span>
+			<input type="text" name="storytags" class="storyinputfield" tabindex="6" /><%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
+		</span>
+	</p>
+
+  <p class="clearbothdrop"></p>  
+
+  <p class="field-right">
+    <%= submit_tag 'Create', :name => 'create_button' %>
+    <%= submit_tag 'Edit', :name => 'edit_button' %>
+    <%= submit_tag 'Cancel', :name => 'cancel_button' %>
+  </p> 
   
-  <% fields_for :metadata_attributes, @work.metadata do |m| %>
-    <p>Title: <%=h @work.metadata.title %></p>
-    <%= m.hidden_field :title, :value => "#{@work.metadata.title}" %>    
-
-    <p>Summary: <%=h @work.metadata.summary %></p>
-    <%= m.hidden_field :summary, :value => "#{@work.metadata.summary}" %>
-
-    <p>Notes: <%=h @work.metadata.notes %></p>
-    <%= m.hidden_field :notes, :value => "#{@work.metadata.notes}" %> 
-  <% end %>
-
-  <p><b>This work is <% unless @work.is_complete %>not<% end %> complete.</b></p>
-  <%= f.hidden_field :is_complete, :value => "#{@work.is_complete}" %>
-  
-  <p>Expected Number of Chapters: <%=h @work.expected_number_of_chapters %></p>
-  <%= f.hidden_field :expected_number_of_chapters, :value => "#{@work.expected_number_of_chapters}" %>   
-  
-  <% fields_for :chapter_attributes, @chapter do |c| %>
-    <p><%=h @work.chapters.first.content %></p>
-    <%= c.hidden_field :content, :value => "#{@work.chapters.first.content}" %>
-  <% end %>
-
-  <p><%= submit_tag 'Create', :name => 'create_button' %></p>
+  <p class="clearbothdrop"></p>
   
 <% end %>
-
-  

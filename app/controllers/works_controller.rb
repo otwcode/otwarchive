@@ -51,9 +51,10 @@ class WorksController < ApplicationController
   def new
     @work = Work.new
     @work.chapters.build
+    @chapter = @work.chapters.first
     @work.metadata = Metadata.new
     @pseuds = current_user.pseuds
-    @selected = current_user.default_pseud.id
+    @selected = current_user.default_pseud.id 
   end
   
   # GET /works/1/edit
@@ -75,6 +76,9 @@ class WorksController < ApplicationController
       @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id], params[:extra_pseuds])
       @selected = @pseuds.collect { |pseud| pseud.id.to_i }
       render :partial => 'work_view', :layout => 'application'
+    elsif params[:cancel_button]
+      # Not quite working yet - should send the user back to wherever they were before they hit "post new"
+      redirect_back_or_default('/')
     else 
       @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id])
       if @work.save

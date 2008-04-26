@@ -1,66 +1,116 @@
-<% form_for(@work) do |f| %> 
-   
-	<p>
-  	<b>Pseud:</b>
-  	<% if current_user.pseuds.count > 1 %>
-  	  <p>
-    	  <select name="pseud[id][]" multiple="multiple">
-          <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
-        </select> 
-  	  </p>
-  	<% else %>
-  	  <%= hidden_field :pseud, :id, :value => "#{current_user.default_pseud.id}" %>
-  		<b><%= current_user.default_pseud.name %></b><br />
-  	<% end %>
-  	<%= link_to 'Create pseud?', new_user_pseud_path(current_user) %>
-	</p>
-	
-  <p>
-    <%= link_to_function('Add co-authors', "Element.toggle('extra-pseuds')") %>
-  </p>
-	
-	<div id="extra-pseuds" style="display : none;">
-	  <b>Co-Authors</b><br />
-	  <%= text_field_tag :extra_pseuds %>
-    <p>Example: <strong>username:pseud, username:pseud</strong></p>
-	</div>
-	
-  <% fields_for :metadata_attributes, @work.metadata do |m| %>
-    <p>
-      <b>Title</b><br />
-      <%= m.text_field :title %>
+<div id="story-form">
+  <% form_for(@work) do |f| %> 
+    <p class="field-left">   
+ 
+      <% fields_for :metadata_attributes, @work.metadata do |m| %>
+    
+      <!-- Story title field (metadata_attributes_title) -->
+        <%= m.label :title, "Story Title*", :class => "required" %><br />
+        <%= m.text_field :title, :class => "storyinputfield" %>
+        <%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
+
+      <!-- Chaptered checkbox (work_is_complete) -->
+      <!-- Checking this box causes the expected number of chapters box to appear; unchecking it causes it to disappear. -->
+      <%= f.check_box :is_complete, {:onclick => "Element.toggle('number-of-chapters')"}, "0", "1" %> Chaptered story?
+
+      <!-- Series checkbox (storyseriescheck) -->
+      <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear.  STILL NEEDS Rails integration. -->
+      <input type="checkbox" name="storyseriescheck" tabindex="3" onclick="new Effect.toggle($('seriesmanage'),'appear')"/>Part of a series?<br />
+
     </p>
 
-    <p>
-      <b>Summary</b><br />
-      <%= m.text_area :summary %>
+    <!-- Toggles on with series checkbox -->
+    <p id="seriesmanage" class="field-right" style="display:none;">
+      <span class="storylabel"><label for="storyseries">Select Series</label></span><br />
+
+      <!-- Dropdown/text field for adding series -->
+    	<select name="storyseries" class="storyinputfield" tabindex="4">
+
+      <!-- Fake options!  These need to be populated by the backend. -->
+    		<option>New Series (enter title below)</option>
+    		<option>Series 1</option>
+    		<option>Series 2</option>
+    	</select>
+    	<%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
+
+    	<span class="storylabel"><label for="newseriesinput">...or add a new Series Title</label></span><br />
+    	<input type="text" name="newseriesinput" class="storyinputfield" tabindex="5" />
     </p>
 
+    <p class="clearbothdrop"></p>
+    
+    <!-- Number of chapters (work_expected_number_of_chapters) -->
+    <div id="number-of-chapters" style="display:none;">
+      <p>
+        <%= f.label :expected_number_of_chapters, "How many chapters do you expect the story to have?" %><br />
+        <%= f.text_field :expected_number_of_chapters, :class => "number-field" %>
+      </p>
+    </div>    
+
+    <!-- Story text field (chapter_attributes_content) -->
     <p>
-      <b>Notes</b><br />
-      <%= m.text_area :notes %> 
+      <% fields_for :chapter_attributes, @chapter do |c| %>
+        <%= c.label :content, "Story, in plain text with limited HTML*", :class => "required" %><br />
+        <%= c.text_area :content -%>
+      <% end %>
     </p>
-  <% end %>
-  <p>
-  <b>Story, in plain text</b><br />
-  <% @work.chapters.each do |chapter| %>
-    <% fields_for :chapter_attributes, chapter do |c| %>
-      <%= c.text_area :content, :index => chapter.id -%>
+  
+    <!-- Author dropdown (pseud_id) -->
+  	<p class="field-left">
+  	  <%= label :pseud, :id, "Select author/pseudonym(s)" %><br />
+   	  <select name="pseud[id][]" multiple="multiple">
+        <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
+      </select> 
+  	</p>
+	
+    <p class="field-right"> 
+      <%= link_to 'Create pseud?', new_user_pseud_path(current_user) %><br />  
+      <%= link_to_function('Add co-authors?', "Element.toggle('co-authors')") %>
+    </p>
+	
+  	<p class="clearboth"></p>
+	 
+	  <!-- Co-authorship - obviously this has to change -->
+  	<div id="co-authors" style="display : none;">
+  	  <p id="coauthormanage">
+  	    <p>
+      	  <span class="storylabel"><label for="storycoauthor">Enter co-author name(s):</label></span>
+    	    <%= text_field :user, :login %>
+  	    </p>
+      </p>
+  	</div>
+
+  	<p class="clearboth"></p> 
+	
+  	<!-- Privacy dropdown (storyprivacy) -->
+  	<p>
+      <span class="storylabel"><label for="storyprivacy">Privacy level</label></span><br />
+      <select name="storyprivacy" class="storyinputfield" tabindex="10">
+        <!-- Fake options!  These need to be populated by the backend or hard-coded, as appropriate. -->
+      	<option>Public: Everyone can read</option>
+      	<option>Fake option: insert real option here</option>
+      	<option>Fake option #2: insert real option #2 here</option>
+      </select>
+      <%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br /> 
+    </p>
+	
+    <!-- Summary field (metadata_attributes_summary) -->
+    <p>
+    	<%= m.label :summary, "Summary (max 250 words)" %><br />
+      <%= m.text_area :summary, :class => "metadata-field" %>
+    </p>
+
+    <!-- Notes field (metadata_attributes_notes) -->
+    <p>
+     	<%= m.label :notes, "Notes (max 500 words)" %><br />
+      <%= m.text_area :notes, :class => "metadata-field" %> 
+    </p>
     <% end %>
+
+    <p class="field-right">
+      <%= submit_tag 'Preview', :name => 'preview_button' %>
+      <%= submit_tag 'Cancel', :name => 'cancel_button' %>
+    </p>
   <% end %>
-  </p>
-  <p>
-    <b>Expected number of chapters</b><br />
-    <%= f.text_field :expected_number_of_chapters %>
-  </p>
-
-  <p>
-    <b>Is complete</b><br />
-    <%= f.check_box :is_complete %>
-  </p>
-
-  <p>
-    <%= submit_tag 'Preview', :name => 'preview_button' %>
-  </p>
-<% end %>
-
+  <p class="clearboth"></p> 
+</div>

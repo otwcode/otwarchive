@@ -115,7 +115,77 @@ hr {
 }
 .username-admin:after {
   content: url( '/images/admin.gif' );
+}   
+  
+
+/* Post and Preview Story styles */
+.field-left { float: left;
+	width: 350px;
+	margin: 0px;
+}
+.field-right { float: right;
+	width: 350px;
+	margin: 0px;
 }  
+
+.clearbothdrop { clear: both;
+	margin-bottom: 30px;
+}
+
+.textareafield { margin-bottom: 20px; }
+
+.leftmargin { margin-left: 50px; }
+
+.nomargin { margin: 0px; }
+
+.required { color: #ff0000; }
+
+#story-form label { margin: 10px 0px 0px 0px; }
+	
+.storyinputfield { 
+	width: 300px;
+	text-align: left;
+	margin: 0px 0px 15px 0px;
+}
+
+#story-form textarea {
+	width: 600px;
+}
+
+.metadata-field {
+	height: 100px;
+}
+
+.number-field {
+	width: 50px;
+}
+
+.storytextfield { margin: 10px 0px 10px 0px; }
+
+.moreinfoicon { margin: 0px 0px 10px 25px;
+	align: top;
+}
+
+#chaptermanage { margin: 0px 0px 10px 0px;
+	color: #00aa00;
+}
+
+#seriesmanage { margin: 15px 0px 10px 0px;
+	color: #00aa00;
+}
+
+#previewpane {
+	border: 1px solid #000;
+	height: auto;
+	width: 800px;
+	padding: 30px;
+}
+
+.chapter-content {
+	padding: 50px;
+}
+
+#coauthormanage { margin: 0px 0px 0px 0px; }
 
 
 /* Debug Style (development only) */ 
