@@ -1,9 +1,56 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+#
 
-creatorship1:
-  creation: basic_work
-  pseud: default_pseud
+# A work and a chapter owned by default_pseud, where the chapter belongs to the work. 
+basic_creatorship:
+  creation_id: 1
+  creation_type: Work
+  pseud_id: 1
 
-creatorship2:
-  creation: basic_chapter 
-  pseud: non_default_pseud 
+basic_creatorship2:
+  creation_id: 1 
+  creation_type: Chapter
+  pseud_id: 1 
+
+# For testing the cases where a user might have 0, 1, or > 2 works
+# Work and chapter both owner by same pseud
+creatorship_1_of_1: 
+  creation_id: 3
+  creation_type: Work  
+  pseud_id: 6
+  
+creatorship_1_of_1_chapter: 
+  creation_id: 3
+  creation_type: Chapter
+  pseud_id: 6
+
+creatorship_1_of_3: 
+  creation_id: 4
+  creation_type: Work
+  pseud_id: 7
+  
+creatorship_1_of_3_chapter: 
+  creation_id: 4
+  creation_type: Chapter
+  pseud_id: 7
+
+creatorship_2_of_3: 
+  creation_id: 5
+  creation_type: Work
+  pseud_id: 7
+  
+creatorship_2_of_3_chapter: 
+  creation_id: 5
+  creation_type: Chapter
+  pseud_id: 7
+  
+creatorship_3_of_3: 
+  creation_id: 6
+  creation_type: Work
+  pseud_id: 7  
+  
+creatorship_3_of_3_chapter: 
+  creation_id: 6
+  creation_type: Chapter
+  pseud_id: 7  
+  

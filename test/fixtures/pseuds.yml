@@ -1,25 +1,59 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 default_pseud:
-  user: user1
+  id: 1
+  user_id: 1
   name: Default Pseud
-  description: This is a default pseud.
+  description: This is a default pseud for user1.
   is_default: true
 
 non_default_pseud:
-  user: user1
+  id: 2
+  user_id: 1
   name: Non-Default Pseud
   description: This is a non default pseud.
   is_default: false
 
-joss_whedon:
-  user: josswhedon
+pseud_1_for_user_3:
+  id: 3
+  user_id: 3
   name: joss
   description: evil overlord
   is_default: true
 
-ron_moore:
-  user: ronmoore
-  name: notacylon
-  description: totally a cylon
+pseud_2_for_user_3:
+  id: 4
+  user_id: 3
+  name: buffy
+  description: chosen one
   is_default: false
+
+pseud_3_for_user_3:
+  id: 5
+  user_id: 3
+  name: willow
+  description: witch
+  is_default: false
+
+pseud_with_one_work:
+  id: 6
+  user_id: 1
+  name: Pseud With One Work
+  description: This is a non default pseud.
+  is_default: false
+
+pseud_with_three_works:
+  id: 7
+  user_id: 1
+  name: Pseud With Three Works
+  description: This is a non default pseud.
+  is_default: false
+
+pseud_with_no_works: 
+  id: 99
+  user_id: 1
+  name: Pseud With No Works
+  description: This is a non default pseud.
+  is_default: false
+
+

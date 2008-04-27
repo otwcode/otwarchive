@@ -8,13 +8,13 @@ class WorksControllerTest < ActionController::TestCase
   end
 
   def test_should_get_new
-    login_as_user(:user1)
+    login_as_user(:basic_user)
     get :new, :locale => 'en'
     assert_response :success
   end
 
   def test_should_create_work
-    login_as_user(:user1)
+    login_as_user(:basic_user)
     assert_difference('Work.count') do
       post :create, :locale => 'en', :work => { }
     end
@@ -28,14 +28,18 @@ class WorksControllerTest < ActionController::TestCase
   end
 
   def test_should_get_edit
-    login_as_user(:user1)
+    login_as_user(:basic_user)
     get :edit, :locale => 'en', :id => works(:basic_work).id
     assert_response :success
   end
 
   def test_should_update_work
-    put :update, :locale => 'en', :id => works(:basic_work).id, :work => { }
+    new_title = "New Title"
+    work = works(:basic_work)
+    login_as_user(:basic_user)
+    put :update, :locale => 'en', :id => work.id, :work => { :metadata => {:title => new_title} }
     assert_redirected_to work_path(assigns(:work))
+    assert_equal(new_title, work.metadata.title)
   end
   
   def test_should_destroy_work

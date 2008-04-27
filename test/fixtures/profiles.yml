@@ -1,11 +1,19 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
+default_profile:
+  user_id: 1
   location: MyString
   about_me: MyText
-  date_of_birth: 2008-04-21
+  date_of_birth: 1970-04-21
 
-two:
+profile_for_user_2:
+  user_id: 2
   location: MyString
   about_me: MyText
-  date_of_birth: 2008-04-21
+  date_of_birth: 1970-04-21
+
+profile_for_user_3:
+  user_id: 3
+  location: MyString
+  about_me: MyText
+  date_of_birth: 1970-04-21

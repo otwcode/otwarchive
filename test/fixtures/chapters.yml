@@ -6,14 +6,37 @@ basic_chapter:
   position: 1
   work_id: 1
 
-buffy_chapter:
+second_chapter:
+  id: 2
+  content: looooong text for second chapter
+  position: 1
+  work_id: 1
+
+chapter_1_of_work_1_of_1:
   id: 3
-  content: one girl in all the world, yadda, yadda, yadda
+  content: Chapter for work_1_of_1
   position: 1
   work_id: 3
 
-bsg_chapter:
+chapter_1_of_work_1_of_3:
   id: 4
-  content: and they have a plan
+  content: Chapter for work_1_of_3
   position: 1
   work_id: 4
+
+chapter_1_of_work_2_of_3:
+  id: 5
+  content: Chapter for work_2_of_3
+  position: 1
+  work_id: 5
+
+chapter_1_of_work_3_of_3:
+  id: 6
+  content: Chapter for work_3_of_3
+  position: 1
+  work_id: 6
+
+ 
+ 
+ 
+  
