@@ -28,23 +28,43 @@
 	  
 	  <!-- Age Check -->
 	  <!-- Needs to actually check this value on submission - functionality still has to be added for this! -->
-	  <p class="authentication-widebottommargin">
-	  <span class="authentication-label"><label for="age-check"><%= "Are you over 13?" .t %></label></span>
-	  <input type="radio" name="age-check" value="Over13" tabindex="8"/><%= "Yes" .t %>
-	  <input type="radio" name="age-check" value="Under13" tabindex="9" /><%= "No" .t %>
+	  <p>
+	  <span class="authentication-label">
+	  	<label for="age-check">
+	  		You need to be over 13 years old to become a registered member of the archive. 
+	    	(Sorry to our younger readers! You'll be more than welcome when the time comes.)
+		</label>
+	  </span>
 	  </p>
+	  
+	  <p class="authentication-checkboxfield">
+	  <%= f.check_box :age_over_13, :class => 'authentication-checkbox', :tabindex => '9' %>
+	  Yes, I am over 13.
+	  </p>
+	  
+	  <p class="authentication-widebottommargin"></p>
 	  
 	  <!-- Terms of Service (actual TOS still needs to be added, as does functionality for the checkbox) -->
 	  <p>
 	  <span class="authentication-label"><label for="tos-agree">And -- really important -- we need you to agree to our <a href="#" tabindex="10">Terms of Service</a>:</label></span><br />
 	  </p>
 
-	  <p class="authentication-textareafield"><textarea name="terms-of-service" rows="8" cols="63" readonly="readonly">This is where the Terms of Service will go when they're finished.  This is FAKE FAKE FAKE!  Placeholder only!  In no way should any of the text inside this box be assumed to have anything to do with the real live Terms of Service as devised by the Archive of Our Own project.  No promises are intended.  No policies are implemented.  This is just a little something the coder is writing so the text box will scroll and she can see how the scrolling looks.  Is it too big?  Too small?  Too short?  Too tall?  How do the dimensions look?
-      The real Terms of Service are forthcoming and should be pasted into this section of this document.</textarea>
+	  <p class="authentication-textareafield">
+	  	<textarea name="terms-of-service" rows="8" cols="63" readonly="readonly"><%= %w{
+			This is where the Terms of Service will go when they're finished.  This is FAKE FAKE FAKE!  Placeholder only!  
+			In no way should any of the text inside this box be assumed to have anything to do with the real live Terms of Service 
+			as devised by the Archive of Our Own project.  No promises are intended.  No policies are implemented.  
+			This is just a little something the coder is writing so the text box will scroll and she can see how the scrolling looks.  
+			Is it too big?  Too small?  Too short?  Too tall?  How do the dimensions look?
+			The real Terms of Service are forthcoming and should be pasted into this section of this document.
+		}.join(' ') -%></textarea>
 	  </p>
 	  
 	  <!-- If this box is not checked, needs a modal dialog box: "You must agree to the Terms of Service in order to create an account.", with OK as the only choice. -->
-	  <p class="authentication-checkboxfield"><input type="checkbox" name="tos-agree" class="authentication-checkbox" tabindex="11" />Yes, I have read the Terms of Service and agree to them.</p>
+	  <p class="authentication-checkboxfield">
+	  	<%= f.check_box :terms_of_service, :class => 'authentication-checkbox', :tabindex => '11' -%>
+	  	Yes, I have read the Terms of Service and agree to them.
+	  </p>
 
 	  <!-- Buttons for "Cancel" and "Create Account" -->
       <!-- "Create Account" needs to submit form information and send out an email to the user with confirmation information; the confirmation info should send the user back to accountconfirm.html -->

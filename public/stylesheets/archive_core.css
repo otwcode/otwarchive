@@ -162,8 +162,9 @@ hr {
 
 .storytextfield { margin: 10px 0px 10px 0px; }
 
-.moreinfoicon { margin: 0px 0px 10px 25px;
-	align: top;
+.moreinfoicon { 
+	margin: 0px 0px 10px 25px;
+	vertical-align: top;
 }
 
 #chaptermanage { margin: 0px 0px 10px 0px;
@@ -298,7 +299,7 @@ a.story-title {
  * and are displayed in the view with <%= flash_div :error, :warning, :notice -%>
  */
 .flash {
-	margin: 0.2em 0 0.2em 0;
+	margin: 0.4em 0 0.2em 0;
 	padding: 1em;
 	float: left;
 	width: inherit;
@@ -321,3 +322,40 @@ a.story-title {
 	background-color: #efd1d1;
 	border: 2px solid #af2020;
 }
+
+/* Rails will automatically add the errorExplanation and fieldWithErrors divs
+ * after doing validation of models. 
+ */
+.errorExplanation {
+	margin: 0.4em 0 0.2em 0;
+	padding: 1em;
+	background-color: #efd1d1;
+	border: 2px solid #af2020;	
+}
+
+.errorExplanation h3 {}
+
+.errorExplanation p {}
+
+.errorExplanation ul {}
+
+.errorExplanation li {}
+
+.fieldWithErrors {
+	width: 500px;
+}
+
+.fieldWithErrors ul {
+	font-size: 0.9em;
+	margin-bottom: 0;
+}
+
+.fieldWithErrors label {
+	color: #af2020;
+	background-color: #efd1d1;
+}
+
+.fieldWithErrors input {
+	border: 2px solid #af2020;
+}
+

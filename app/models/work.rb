@@ -1,8 +1,13 @@
 class Work < ActiveRecord::Base
   has_many :chapters, :dependent => :destroy
+  validates_associated :chapters, :message => nil
+
   has_one :metadata, :as => :described, :dependent => :destroy
+  validates_presence_of :metadata
+  validates_associated :metadata, :message => nil
+
   acts_as_commentable
-  validates_associated :chapters, :metadata
+  
   attr_reader :pseud 
   
   def number_of_chapters

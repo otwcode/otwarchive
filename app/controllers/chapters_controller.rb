@@ -21,7 +21,7 @@ class ChaptersController < ApplicationController
   
   # if is_author returns true allow them to update, otherwise redirect them to the work page with an error message
   def is_author_true
-    is_author || [ redirect_to (@work), flash[:error] = 'Sorry, but you don\'t have permission to make edits.' ]
+    is_author || [ redirect_to(@work), flash[:error] = 'Sorry, but you don\'t have permission to make edits.' ]
   end
   
   # fetch work these chapters belong to from db

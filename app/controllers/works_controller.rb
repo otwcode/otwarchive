@@ -18,7 +18,7 @@ class WorksController < ApplicationController
   
   # if is_author returns true allow them to update, otherwise redirect them to the work page with an error message
   def is_author_true
-    is_author || [ redirect_to (@work), flash[:error] = 'Sorry, but you don\'t have permission to make edits.' ]
+    is_author || [ redirect_to(@work), flash[:error] = 'Sorry, but you don\'t have permission to make edits.' ]
   end
   
   # GET /works
@@ -53,6 +53,7 @@ class WorksController < ApplicationController
     @work.chapters.build
     @chapter = @work.chapters.first
     @work.metadata = Metadata.new
+    @metadata = @work.metadata
     @pseuds = current_user.pseuds
     @selected = current_user.default_pseud.id 
   end

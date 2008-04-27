@@ -22,6 +22,30 @@ class User < ActiveRecord::Base
   validates_email_veracity_of :email, :message => 'does not seem to be a valid email address.'
   # validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create
   # validates_format_of :password, :with => /(?=.*\d)(?=.*([a-z]|[A-Z]))/, :message => 'must have at least one digit and one alphabet character.'
+
+
+  # Virtual attribute for age check and terms of service
+  attr_accessor :age_over_13
+  attr_accessor :terms_of_service
+  attr_accessible :age_over_13, :terms_of_service
+  
+  validates_acceptance_of :terms_of_service,
+                          :message => 'must be accepted.',
+                          :allow_nil => false,
+                          :if => :first_save?
+                         
+  validates_acceptance_of :age_over_13,
+                          :message => 'must be confirmed.',
+                          :allow_nil => false,
+                          :if => :first_save?                            
+                 
+  protected                            
+    def first_save?
+      crypted_password.blank?  
+    end
+
+  
+  public
   
   # Retrieve the current default pseud
   def default_pseud
