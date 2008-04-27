@@ -18,7 +18,7 @@
   <p>
     <%= link_to 'Show chapter', [@work, chapter] %> 
     
-    <%- if logged_in? && @work.pseuds - current_user.pseuds != @work.pseuds -%> |
+    <%- if is_author_of?(@work) -%> |
       <%= link_to 'Edit chapter', [:edit, @work, chapter] %>
       <%- if chapter.position > 1 -%> |
         <%= link_to 'Destroy chapter', [@work, chapter], :confirm => 'Are you sure?', :method => :delete %><br/>

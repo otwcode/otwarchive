@@ -8,7 +8,6 @@
     <% end %>
   </p>
   
-  <!-- Need to put "display:none" into a proper css file when doing the real styling here -->
   <select name="pseud[id][]" multiple="multiple" style="display : none;">
     <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
   </select>

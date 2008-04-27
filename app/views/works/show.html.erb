@@ -38,7 +38,7 @@
   <p>
     <%= link_to 'See all chapters', work_chapters_path(@work) %> 
     
-    <%- if logged_in? && @work.pseuds - current_user.pseuds != @work.pseuds -%> | 
+    <%- if is_author_of?(@work) -%> | 
       <%= link_to 'Add new chapter', new_work_chapter_path(@work) %> | 
       <%= link_to 'Edit work', edit_work_path(@work) %>
     <%- end -%>

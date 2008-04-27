@@ -43,8 +43,8 @@ you need is one "margin-left: 50px" line in the css to make some nice cascading 
       <p> 
         <%= link_to_function "Reply", 
             update_page {|page| page.replace_html "add-comment#{comment.id}", :partial => @comment = Comment.new, :locals => {:commentable => comment, :button_name => 'Create'}}, 
-            :href => new_comment_comment_path(comment) %> | 
-        <% if logged_in? && current_user.pseuds.include?(comment.pseud) %> | 
+            :href => new_comment_comment_path(comment) %>
+        <% if is_author_of?(comment) %> | 
           <%= link_to_function "Edit", 
               update_page {|page| page.replace_html "comment#{comment.id}", :partial => @comment = comment, :locals => {:commentable => comment.commentable, :button_name => 'Update'}}, 
               :href => edit_comment_path(comment) %> |

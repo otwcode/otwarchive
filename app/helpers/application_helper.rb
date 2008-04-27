@@ -1,5 +1,14 @@
 # Methods added to this helper will be available to all templates in the application.
-module ApplicationHelper
+module ApplicationHelper 
+  
+  # Can be used to check ownership of any item that has a pseud attached to it
+  def is_author_of?(item) 
+    if item.class == Work || item.class == Chapter
+      logged_in? && item.pseuds - current_user.pseuds != item.pseuds
+    else
+      logged_in? && current_user.pseuds.include?(item.pseud)
+    end
+  end
   
   # load the native language names into a constant
   LANGUAGE_NAMES = Hash.new 
