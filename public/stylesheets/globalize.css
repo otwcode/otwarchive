@@ -1,4 +1,4 @@
-#click_to_globalize {
+#globalize {
   font-size: 78%;
   margin: auto;
   position: absolute;
@@ -6,31 +6,31 @@
   font-family: "Helvetica Neue", Verdana, Arial, sans-serif;
 }
 
-#click_to_globalize a:link, #click_to_globalize a:visited {
+#globalize a:link, #globalize a:visited {
   text-decoration: none;
 }
 
-#click_to_globalize a:hover, #click_to_globalize a:active {
+#globalize a:hover, #globalize a:active {
   background-color: #333;
   color: #fff;
 }
 
-#click_to_globalize ul {
+#globalize ul {
   color: #666;
   list-style-type: none;
   margin-left: -30px;
 }
 
-#click_to_globalize ul li {
+#globalize ul li {
   display: inline;
   margin: 3px;
 }
 
-#click_to_globalize form {
+#globalize form {
   display: inline;
 }
 
-#click_to_globalize select {
+#globalize select {
   border:1px solid #999;
   font-family: "Helvetica Neue", Verdana, Arial, sans-serif;
   /* font-family:"lucida grande",tahoma,verdana,arial,sans-serif;*/
