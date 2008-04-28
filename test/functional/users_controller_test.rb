@@ -21,7 +21,7 @@ class UsersControllerTest < ActionController::TestCase
                                                 }
     end
 
-    assert_redirected_to user_path
+    assert_response :success
     assert_equal(1, ActionMailer::Base.deliveries.length)
   end
 

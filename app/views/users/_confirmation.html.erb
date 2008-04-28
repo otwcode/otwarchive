@@ -1,19 +1,24 @@
 <h2><%= "Account Created!" .t %></h2>
 
 <!-- Boilerplate text for account creation confirmation -->
-  <p>
-  <%= "In just a few minutes, you should receive an email at the address you gave us".t %>.  <%= "This will have the URL you need to go to in order to verify your account and complete the account creation process".t %>.  <%= "You might want to add <strong>account-verification@archiveofourown.org</strong> to your address book to make sure you get the mail".t %>.
-  </p>
+<p>
+  <%= "In just a few minutes, you should receive an email at the address you gave us.".t %>  
+  <%= "This will have the URL you need to go to in order to verify your account and complete the account creation process.".t %>  
+  <%= "You might want to add".t -%> 
+  <strong>account-verification@archiveofourown.org</strong>
+  <%= "to your address book to make sure you get the mail.".t -%>
+</p>
 
-  <p>
+<p>
   If you don't hear from us within two hours, and you don't find our email in your spam filter, please drop us a line at <a href="mailto:support@archiveofourown.org">support@archiveofourown.org</a>.
-  </p>
+</p>
 
-  <p>
-  <strong><%= "Important!".t %></strong>  <%= "You must verify your account within 48 hours, or your registration will expire".t %>.
-  </p>
+<p>
+  <strong><%= "Important!".t %></strong>
+  <%= "You must verify your account within 48 hours, or your registration will expire.".t %>
+</p>
 
 <!-- Class "authentication-return" has large top margin, in keeping with wireframe -->
-  <p class="authentication-return">
-  <%= link_to 'Return to home page'.t, root_path -%>
-  </p>
+<p class="authentication-return">
+  <%= link_to 'Return to archive front page'.t, root_path -%>
+</p>
