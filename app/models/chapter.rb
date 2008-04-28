@@ -1,8 +1,13 @@
 class Chapter < ActiveRecord::Base
   belongs_to :work
-  has_one :metadata, :as => :described
   acts_as_commentable
 
+  # A chapter does NOT have to have a metadata, so we don't 
+  # validate for its presence. ???
+  has_one :metadata, :as => :described
+  validates_associated :metadata, :message => nil
+
+  validates_presence_of :content
   validates_length_of :content, :maximum=>16777215
 
   # Set the position if this isn't the first chapter

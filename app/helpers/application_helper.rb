@@ -79,7 +79,6 @@ module ApplicationHelper
     end
   }
   
-  
   # A custom version of the error message display when something goes wrong 
   # with model validation. Currently this is actually just the same as the
   # default Rails method with translation included 
@@ -90,8 +89,8 @@ module ApplicationHelper
     else
       objects = params.collect {|object_name| instance_variable_get("@#{object_name}") }.compact
     end
-    count   = objects.inject(0) {|sum, obj| sum + obj.errors.count }
-    unless count.zero?
+    error_count   = objects.inject(0) {|sum, obj| sum + obj.errors.count }
+    unless error_count.zero?
       html = {}
       [:id, :class].each do |key|
         if options.include?(key)
@@ -116,6 +115,11 @@ module ApplicationHelper
           ''
     end
   end
-  
-  
+
+    
+  # Validation messages
+  def valid_length_message
+    "Thanks, that length looks good.".t
+  end
+    
 end
