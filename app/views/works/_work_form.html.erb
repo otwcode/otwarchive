@@ -1,5 +1,5 @@
 <div id="story-form">
-  <% form_for(:work) do |f| %> 
+  <% form_for(@work) do |f| %> 
     <p class="field-left">   
  
       <% fields_for :metadata_attributes, @work.metadata do |m| %>
