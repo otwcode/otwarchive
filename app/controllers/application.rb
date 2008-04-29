@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
         flash[:warning] = "We don't currently support your locale, sorry, so 
             we're falling back to the default locale (#{LANGUAGE_NAMES[default_locale]}). Please contact our 
             volunteers committee if you'd be willing to help out as a translator!"
-        redirect_to url_for :overwrite_params => {:locale => default_locale}
+        redirect_to url_for(:overwrite_params => {:locale => default_locale})
       end
       session[:locale] = @locale
       Locale.set SUPPORTED_LOCALES[@locale]      

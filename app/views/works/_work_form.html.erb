@@ -51,7 +51,7 @@
     <p>
       <% fields_for :chapter_attributes, @chapter do |c| %>
         <%= c.label :content, "Story, in plain text with limited HTML*", :class => "required" %><br />
-        <%= c.text_area :content -%>
+        <%= c.text_area :content, :index => @chapter.id -%>
       <% end %>
     </p>
   

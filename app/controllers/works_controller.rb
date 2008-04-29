@@ -61,6 +61,7 @@ class WorksController < ApplicationController
   # GET /works/1/edit
   def edit
     @work = Work.find(params[:id])
+    @chapter = @work.chapters.first
     @pseuds = @work.pseuds
     @selected = @work.pseuds.collect { |pseud| pseud.id.to_i }
   end
