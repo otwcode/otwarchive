@@ -9,15 +9,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 25) do
+ActiveRecord::Schema.define(:version => 29) do
 
   create_table "admins", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "email"
     t.string   "login"
     t.string   "crypted_password"
     t.string   "salt"
+    t.string   "email"
   end
 
   create_table "bookmarks", :force => true do |t|
@@ -32,10 +32,10 @@ ActiveRecord::Schema.define(:version => 25) do
 
   create_table "chapters", :force => true do |t|
     t.text     "content"
-    t.integer  "position",      :default => 1
     t.integer  "work_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "position",   :default => 1
   end
 
   create_table "comments", :force => true do |t|
@@ -53,6 +53,8 @@ ActiveRecord::Schema.define(:version => 25) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "thread"
+    t.string   "user_agent"
+    t.boolean  "approved"
   end
 
   create_table "creatorships", :force => true do |t|
@@ -140,6 +142,15 @@ ActiveRecord::Schema.define(:version => 25) do
     t.string  "salt",       :default => "", :null => false
   end
 
+  create_table "profiles", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "location"
+    t.text     "about_me"
+    t.date     "date_of_birth"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "pseuds", :force => true do |t|
     t.integer  "user_id"
     t.string   "name"
@@ -164,19 +175,28 @@ ActiveRecord::Schema.define(:version => 25) do
     t.datetime "updated_at"
   end
 
+  create_table "sessions", :force => true do |t|
+    t.string   "session_id", :default => "", :null => false
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
+  add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
+
   create_table "users", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "remember_token"
-    t.string   "email"
     t.datetime "remember_token_expires_at"
     t.string   "activation_code"
     t.string   "login"
     t.datetime "activated_at"
     t.string   "crypted_password"
     t.string   "salt"
+    t.string   "email"
     t.string   "identity_url"
-    t.boolean  "translation_mode_active"
   end
 
   create_table "works", :force => true do |t|
@@ -184,8 +204,8 @@ ActiveRecord::Schema.define(:version => 25) do
     t.boolean  "is_complete"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "major_version"
-    t.integer  "minor_version"
+    t.integer  "major_version",               :default => 0
+    t.integer  "minor_version",               :default => 0
   end
 
 end

@@ -75,6 +75,7 @@ class ChaptersController < ApplicationController
       if @chapter.save
         Creatorship.add_authors(@chapter, @pseuds)
         Creatorship.add_authors(@work, @pseuds)
+        @work.inc_major_version
         flash[:notice] = 'Chapter was successfully created.'
         redirect_to([@work, @chapter])
       else
@@ -99,6 +100,7 @@ class ChaptersController < ApplicationController
     
     if @chapter.update_attributes(params[:chapter])
       Creatorship.add_authors(@chapter, @pseuds)
+      @work.inc_minor_version
       flash[:notice] = 'Chapter was successfully updated.'
       redirect_to([@work, @chapter])
     else
@@ -112,6 +114,7 @@ class ChaptersController < ApplicationController
     @chapter = @work.chapters.find(params[:id])
     @chapter.destroy
     @work.adjust_chapters(@chapter.position)
+    @work.inc_minor_version
     redirect_to(work_chapters_url)
   end
 end
