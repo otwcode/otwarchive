@@ -4,47 +4,22 @@
     <%= link_to '&lt;&lt; ' + 'Back to story list'.t, works_path, :class => 'list-left' -%>
   </li>
   <li>
-	<%= link_to 'Delete', @work, :confirm => 'Are you sure?', :method => :delete, :class => 'list-right' -%>
+  	<% if is_author_of?(@work) -%>
+	<div class="list-right">
+		<strong><%= link_to 'Edit', edit_work_path(@work) %></strong>
+		|
+		<%= link_to 'Delete', @work, :confirm => 'Are you sure?', :method => :delete -%>
+	</div>
+	<% end -%>
   </li>
 </ul>
 <div class="clearboth"></div>
 <!-- END navigation -->
 
-<div class="story-show">
-  <h2 class="story-title"><%=h @work.metadata.title %></h2>
-  <h3 class="story-author"><%= render :partial => 'pseuds/byline', :locals => { :creation => @work } -%></h3>
-  
-  <p class="story-summary">
-    <%=h @work.metadata.summary %>
-  </p>
-  
-  <p class="story-notes">
-    <%=h @work.metadata.notes %>
-  </p>
-  
-  <p class="story-complete">
-    <b>This work is <% unless @work.is_complete %>not<% end %> complete.</b>
-  </p>
-  
-  <hr/>
+<!-- Show the work --> 
+<%= render :partial => 'work' -%>
 
-  <p>
-    <!--Chapters go here -->
-    <%= render :partial => 'chapters/chapter', :locals => {:chapter => @work.chapters.first} %>
-  </p>
-
-  <hr/>
-
-  <p>
-    <%= link_to 'See all chapters', work_chapters_path(@work) %> 
-    
-    <%- if is_author_of?(@work) -%> | 
-      <%= link_to 'Add new chapter', new_work_chapter_path(@work) %> | 
-      <%= link_to 'Edit work', edit_work_path(@work) %>
-    <%- end -%>
-  </p>
-</div>
-
+<!-- comments -->
 <div id="comments-display">
   <p>
     <%= link_to_function('Add a comment', "Element.toggle('add-comment')", :href => new_work_comment_path(@work)) %>

@@ -9,6 +9,12 @@ module ApplicationHelper
       logged_in? && current_user.pseuds.include?(item.pseud)
     end
   end
+
+  def byline(creation)
+    creation.pseuds.collect { |pseud|
+      link_to pseud.name, user_path(pseud.user), :class => "username story-author"
+    }.join(', ')
+  end
   
   # load the native language names into a constant
   LANGUAGE_NAMES = Hash.new 
@@ -48,7 +54,7 @@ module ApplicationHelper
   
   # Create a nicer language menu than the Click-To-Globalize default
   def languages_menu
-    result = "<form action=" + url_for(:action => 'set', :controller => 'locale') + ">\n" 
+    result = "<form action=\"" + url_for(:action => 'set', :controller => 'locale') + "\">\n" 
     result << "<select name='url' onchange='this.form.submit()'>\n"
     # We'll sort the languages by their keyname rather than have all the non-arabic-character-set
     # ones end up at the end of the list.

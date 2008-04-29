@@ -1,0 +1,8 @@
+<!-- This partial requires local variables 'work' -->
+<% if @work.chapters.count > 1 -%>
+	<% @work.chapters.each do |chapter| -%>
+		<%= render :partial => 'chapters/chapter', :locals => { :chapter => chapter } -%>
+	<% end -%>
+<% else %>
+	<%=h @work.chapters.first.content %>
+<% end %>

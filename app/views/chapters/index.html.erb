@@ -1,7 +1,7 @@
-<h1><%=h @work.metadata.title %></h1>
+<h1><%= link_to h(@work.metadata.title), @work -%></h1>
 
 <% for chapter in @chapters %>
-  <%= render :partial => 'chapter', :locals => {:chapter => chapter} %>
+  <%= render :partial => 'chapters/chapter', :locals => {:chapter => chapter} %>
 <% end %>
 
 <br />

@@ -1,3 +1,4 @@
+<%= error_messages_for :work, :metadata, :chapter, :object => @work.metadata, :chapter => @work.chapters.first -%>
 <div>
   <h2 class="nomargin"><span class="list-left">Preview Story</span></h2>
   
@@ -8,45 +9,37 @@
 	<div class="clearboth"></div>
 </div>
 
+<div id="previewpane">
+	<!-- The preview and show pages use the same underlying partial (_work.html.erb) 
+		 so that the preview is an accurate reflection of what the work will look like. -->
+	<%= render :partial => 'work' -%>
+</div>
+  	
+
 <% form_for(@work) do |f| %>
 
-  <div id="previewpane">
-  
-    <p><strong>Author(s): </strong> 
-      <% for pseud in @pseuds %>
-        <%=h pseud.name %>  
-      <% end %>
-    </p>
   
     <select name="pseud[id][]" multiple="multiple" style="display : none;">
       <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
     </select>
   
     <% fields_for :metadata_attributes, @work.metadata do |m| %>
-      <p><strong>Title: </strong><%=h @work.metadata.title %></p>
       <%= m.hidden_field :title, :value => "#{@work.metadata.title}" %>    
 
-      <p><strong>Summary: </strong><%=h @work.metadata.summary %></p>
       <%= m.hidden_field :summary, :value => "#{@work.metadata.summary}" %>
 
-      <p><strong>Notes: </strong><%=h @work.metadata.notes %></p>
       <%= m.hidden_field :notes, :value => "#{@work.metadata.notes}" %> 
     <% end %>  
   
     <% fields_for :chapter_attributes, @chapter do |c| %>
-      <p class="chapter-content"><%=h @work.chapters.first.content %></p>
       <%= c.hidden_field :content, :value => "#{@work.chapters.first.content}" %>
     <% end %>
     
-    <p>This work is <% unless @work.is_complete %><strong>not</strong><% end %> complete.</p>
     <%= f.hidden_field :is_complete, :value => "#{@work.is_complete}" %>
   
     <% unless @work.is_complete %> 
-      <p><strong>Expected Number of Chapters: </strong><%=h @work.expected_number_of_chapters %></p>
       <%= f.hidden_field :expected_number_of_chapters, :value => "#{@work.expected_number_of_chapters}" %>
     <% end %>
-
-  </div>
 
   <!-- This part of the form does not currently do anything!  Needs attention from Rails coders -->
 	<p>

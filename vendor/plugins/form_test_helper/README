@@ -1,0 +1,136 @@
+== form_test_helper (edge docs as of revision $revision)
+
+=== What is form_test_helper?
+
+form_test_helper is a Rails plugin that uses assert_select to verify and manipulate HTML forms. It solves the problem
+we've all run into where you change the form, but the test doesn't break because you're 
+doing this test:
+  post :create, :book => {:name => 'Pickaxe', :category => 1, :out_of_print => 0}
+  assert_response :success
+
+Instead, you can work with the below form:
+  submit_form do |form|              # or select by dom_id or url if multiple forms on the page
+    form.book.name = 'Pickaxe'
+    form.book.category.options         =>   [['Programming', '1'], ['Self-help', '2'], ...]
+    form.book.category = "Programming" # Can set using the option label or the option value
+    form.book.out_of_print.uncheck     # Uncheck the checkbox
+  end
+  assert_response :success
+  
+...or simply:
+  submit_form :book => {:name => 'Pickaxe', :category => 'Programming', :out_of_print => false}
+
+What's the benefit of this over post :create...?  It uses the action of the form, it verifies that the form and the fields you specify are present and not misspelled, and it preserves any hidden or default values that may be in the form.
+
+=== Installing
+
+As an external:
+  ./script/plugin install -x http://form-test-helper.googlecode.com/svn/form_test_helper/
+
+Not as an external:
+  ./script/plugin install http://form-test-helper.googlecode.com/svn/form_test_helper/
+
+With piston:
+  piston import http://form-test-helper.googlecode.com/svn/form_test_helper/
+  
+=== Features
+
+* Ability to select_form / submit_form by DOM id or form action.  Without arguments, expects only one form.
+    select_form messages_path      # selecting by action (URL)
+    select_form 'message_form'     # selects <form id='message_form'...
+* Specifying a field name that doesn't exist raises an exception
+* Fields that are selects (dropdowns) or radio buttons won't let you set a value that's not in its options
+* Selects can set using the option label or the option value
+* Enumerate/inspect/assert the options for selects and radio buttons
+* Works with RESTful links and forms - :method => :put, :delete, etc....
+* Checks for the presence of a submit button when you submit the form
+* Works in functional and integration tests and the console
+* Sets HTTP_REFERER header so redirect_to :back works in tests
+* Can assert presence of and follow links using select_link and #follow
+* Allows you to specify which value to use for a form submission when you have multiple submit buttons on a form
+
+== Examples
+
+See select_form and submit_form for more examples.
+
+==== IRB example
+  >> get '/books/new'
+  => 200
+  >> form = select_form               # Verifies only 1 form on page and parses it
+                                      # You can also select by DOM id or form action
+  => <#FormTestHelper::Form...
+  >> form.field_names                 # What fields do we have in our little form?
+  => ["commit", "book[title]", "book[category]", "book[rating]", "book[classic]"]
+  >> form.book.title
+  => ""
+  >> form.book.title = "Pickaxe"
+  => "Pickaxe"
+  >> form.book.category
+  => "1"
+  >> form.book.category = "Ruby"
+  RuntimeError: Can't set value for book[category] that isn't one of the menu options.
+  >> form.book.category.options       # Okay, what are the options?
+  => [["Mining", "1"], ["Programming", "2"]]
+  >> form.with_object(:book) do |book| # A shortcut so you don't have to say form.book over and over
+  ?>   book.category = "Programming"
+  >>   book.classic.check             # Definitely one of the greats
+  >> end
+  => "1"
+  >> book = {:rating => '12'}         # You can make a hash of field values...
+  => {:rating=>'12'}
+  >> form.book.update(book)           # and then assign it to the book object of the form
+  => {"rating"=>#<FormTestHelper::Field...
+  >> form.book.rating                 # Did it work? (It did)
+  => "12"
+  >> form.action         
+  => "/books/create"
+  >> form.request_method
+  => :post
+  # TODO: Show form.submit and how all the params from the form are submitted (once the
+  bug with recycle! is fixed (Ruby on Rails Ticket #6353))
+  >> follow_redirect!
+  => 200
+  >> select_link('Edit').follow       # Can verify the presence of and follow links
+  => 200
+
+==== Dan Kubb's test example:
+
+  new_book = {
+    :name => 'Pickaxe',
+    :category => 'Programming',
+    :classic => true,
+  }
+  
+  get :new
+  
+  submit_form do |form|
+    form.book.update(new_book)
+  end
+  
+  book = assigns(:book)
+  
+  assert_kind_of Book, book
+  assert_valid book
+  
+  new_book.each do |attribute,expects|
+    assert_equal expects, book.send(attribute)
+  end
+
+
+=== Requirements
+This requires Rails Edge (greater than revision 7420).
+
+=== Other Versions
+* Use form_test_helper 1.0.0 if you are using Rails 1.2.x up to Rails Edge revision 6763
+* Use form_test_helper 1.1.0 if you are using Rails Edge revisions 6764 up to 7420
+
+See http://code.google.com/p/form-test-helper for more information.
+
+=== Acknowledgments
+
+form_test_helper was inspired by the excellent work of choonkeat on hpricot_forms, which is based on the hpricot library.  If you prefer hpricot over assert_select, give hpricot_forms a try!
+
+It was authored by Jason Garber. It is currently being developed and maintained by Zach Dennis.
+
+* Jason Garber - http://www.jasongarber.com
+* Zach Dennis - http://www.continuousthinking.com

@@ -1,0 +1,30 @@
+
+<div class="story-show">
+
+  <%= render :partial => 'metadatas/metadata', :locals => {:metadata => @work.metadata } -%>
+
+  <h2 class="story-title"><%=h @work.metadata.title %></h2>
+  <h3 class="story-author">
+	 <%= byline(@work) -%>
+  </h3>
+  
+  <p class="story-summary">
+    <%=h @work.metadata.summary %>
+  </p>
+  
+  <p class="story-notes">
+    <%=h @work.metadata.notes %>
+  </p>
+  
+  <% if !@work.is_complete && @work.expected_number_of_chapters -%>
+  <p class="story-complete">
+  	Please note this is a work in progress, with <%= @work.chapters.count -%> of <%=h @work.expected_number_of_chapters -%> chapters posted.
+  </p>
+  <% end -%>
+
+  <p>
+    <!--Chapters go here -->
+	<%= render :partial => 'chapters/chapters' -%>
+  </p>
+
+</div>

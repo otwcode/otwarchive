@@ -1,10 +1,15 @@
-		<h2><%= "An Archive Of Our Own" .t %></h2>
+<h2><%= "An Archive Of Our Own" .t %></h2>
 
-<!-- Please note the tabindex: for logical progression through the page, I have it set to tab through this link, then the "report" link, then the username/password/forgot/submit options.  Questions: Should the username box receive initial tab focus?  Should the username box be first in the tab index? -->
-		<h3 class="authentication-subheading">A project of the <a href="http://transformativeworks.org" tabindex="1">Organization For Transformative Works</a></h3>
+<!-- Please note the tabindex: for logical progression through the page, 
+I have it set to tab through this link, then the "report" link, then the 
+username/password/forgot/submit options.  Questions: Should the username box 
+receive initial tab focus?  Should the username box be first in the tab index? -->
+<h3 class="authentication-subheading">A project of the <a href="http://transformativeworks.org" tabindex="1">Organization For Transformative Works</a></h3>
 
 <!-- loginform floated right -->
 <div id="authentication-loginform">
+
+  <p>Welcome! You can <%= link_to 'browse the posted works', works_path -%> or log in below.</p>
 			
   <% form_tag session_path do -%>	
 	

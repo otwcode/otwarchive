@@ -1,3 +1,1 @@
-<% creation.pseuds.each do |pseud| -%>
-	<%= link_to pseud.name, user_path(pseud.user), :class => "username story-author" %>
-<% end -%>
+<%= byline(creation) -%>

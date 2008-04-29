@@ -1,28 +1,31 @@
+<!-- This partial requires local variable 'chapter' -->
 <p>
-  <strong>Chapter <%=h chapter.position %></strong><br/>
-  <strong>
-    Author: 
-    <%= render :partial => 'pseuds/byline', :locals => { :creation => chapter } -%>
-  </strong>
+  <div class="chapter-title">	
+  <strong>Chapter <%=h chapter.position %></strong>
+  <% if chapter.metadata && chapter.metadata.title -%>: <%=h chapter.metadata.title %><% end -%>
 
-  <%- if chapter.metadata -%>
-    <p>Title: <%=h chapter.metadata.title %></p>
-    <p>Summary: <%=h chapter.metadata.summary %></p>
-    <p>Notes: <%=h chapter.metadata.notes %></p>
+  <!-- chapter management -->  
+  <%- if is_author_of?(@work) -%>
+   <span class="chapter-control">
+   (<%= link_to 'edit', [:edit, @work, chapter] -%> 
+    <%- if @work.chapters.count > 1 -%>
+      | <%= link_to 'delete', [@work, chapter], :confirm => 'Are you sure?', :method => :delete %>)
+    <%- end -%>
+	</span>	
   <%- end -%>
 
+  <!-- only display byline if different from the main byline -->
+  <% if chapter.pseuds != @work.pseuds -%>
+  	<br />Chapter by <%= render :partial => 'pseuds/byline', :locals => { :creation => chapter } -%>
+  <% end -%>
+  </div>
+  
+  <!-- we want to hide this information by default if javascript is available -->
+  <% if chapter.metadata && chapter.metadata.summary -%><br /><%=h chapter.metadata.summary -%><% end -%>
+  <% if chapter.metadata && chapter.metadata.notes -%><br /><%=h chapter.metadata.notes -%><% end -%>
+  
   <p>
     <%=h chapter.content %>
   </p>
   
-  <p>
-    <%= link_to 'Show chapter', [@work, chapter] %> 
-    
-    <%- if is_author_of?(@work) -%> |
-      <%= link_to 'Edit chapter', [:edit, @work, chapter] %>
-      <%- if chapter.position > 1 -%> |
-        <%= link_to 'Destroy chapter', [@work, chapter], :confirm => 'Are you sure?', :method => :delete %><br/>
-      <%- end -%>
-    <%- end -%>
-  </p> 
 </p>
