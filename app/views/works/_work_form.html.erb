@@ -1,5 +1,5 @@
 <div id="story-form">
-  <% form_for @work, :url => {:action => :preview}, :html => {:id => 'work_form'} do |f| %> 
+  <% form_for :work, @work, :url => {:action => :preview}, :html => {:id => 'work_form'} do |f| %> 
     <p class="field-left">   
  
       <% fields_for :metadata_attributes, @work.metadata do |m| %>
@@ -51,7 +51,7 @@
     <p>
       <% fields_for :chapter_attributes, @chapter do |c| %>
         <%= c.label :content, "Story, in plain text with limited HTML*", :class => "required" %><br />
-        <%= c.text_area :content, :index => @chapter.id -%>
+        <%= c.text_area :content -%>
       <% end %>
     </p>
   
