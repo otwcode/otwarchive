@@ -87,6 +87,7 @@ class WorksController < ApplicationController
   def edit
     @work = Work.find(params[:id])
     @chapter = @work.chapters.first
+    @chapters = Chapter.find(:all, :conditions => {:work_id => @work.id}, :order => "position")
     @pseuds = @work.pseuds
     @selected = @work.pseuds.collect { |pseud| pseud.id.to_i }
   end
@@ -118,4 +119,12 @@ class WorksController < ApplicationController
     @work.destroy
     redirect_to(works_url)
   end
+  
+  def update_positions
+    params[:sortable_chapter_list].each_with_index do |id, position|
+      Chapter.update(id, :position => position + 1)
+    end
+    render :nothing => true
+  end
+  
 end

@@ -26,14 +26,13 @@ class ChaptersController < ApplicationController
   
   # fetch work these chapters belong to from db
   def load_work
-    #@work = Work.find(params[:work_id])
     @work = Work.find(params[:work_id])    
   end
   
   # GET /work/:work_id/chapters
   # GET /work/:work_id/chapters.xml
   def index 
-    @chapters = @work.chapters
+    @chapters = Chapter.find(:all, :conditions => {:work_id => @work.id}, :order => "position")
   end
   
   # GET /work/:work_id/chapters/1
