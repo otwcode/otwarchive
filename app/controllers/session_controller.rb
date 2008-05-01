@@ -5,6 +5,9 @@ class SessionController < ApplicationController
   # before_filter :admin_logout_required
   
   def new
+    if logged_in?
+      redirect_to :controller => 'works', :action => 'index'
+    end
   end
   
   def create
