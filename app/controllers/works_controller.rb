@@ -45,42 +45,23 @@ class WorksController < ApplicationController
     @pseuds = current_user.pseuds
     @selected = current_user.default_pseud.id 
   end
-  
-  # GET /works/preview
-  def preview
-    @work = Work.new(params[:work])
-    @work.chapters.build params[:chapter_attributes]
-    @chapter = @work.chapters.first
-    @work.metadata = Metadata.new(params[:metadata_attributes])
-    @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id], params[:extra_pseuds])
-    @selected = @pseuds.collect { |pseud| pseud.id.to_i }
-    
-    if !@work.valid?
-      # error_messages_for will report the errors
-      render :action => 'new'
-    end
-  end
-  
+
+  # POST /works
   def create
     @work = Work.new(params[:work])
     @chapter = @work.chapters.build params[:chapter_attributes]
     @work.metadata = Metadata.new(params[:metadata_attributes])
-
-    if params[:edit_button] 
+    @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id])
+    if @work.save
+      Creatorship.add_authors(@work, @pseuds)
+      Creatorship.add_authors(@work.chapters.first, @pseuds)
+      flash[:notice] = 'Work was successfully created.'
+      redirect_to preview_work_path(@work)
+    else
       @pseuds = current_user.pseuds
       @selected = params[:pseud][:id]
-      render :action => :new
-    else 
-      @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id])
-      if @work.save
-        Creatorship.add_authors(@work, @pseuds)
-        Creatorship.add_authors(@work.chapters.first, @pseuds)
-        flash[:notice] = 'Work was successfully created.'
-        redirect_to(@work)
-      else
-        redirect_to :action => :preview 
-      end 
-    end
+      render :action => :index 
+    end 
   end
   
   # GET /works/1/edit
@@ -96,7 +77,7 @@ class WorksController < ApplicationController
   def update
     @work = Work.find(params[:id])
     if params[:chapter_attributes]
-      @work.chapters.update params[:chapter_attributes].keys, params[:chapter_attributes].values
+      @work.chapters.first.update_attributes params[:chapter_attributes]
     end
     if params[:metadata_attributes]
       @work.metadata.update_attributes params[:metadata_attributes]
@@ -107,10 +88,28 @@ class WorksController < ApplicationController
       Creatorship.add_authors(@work, @pseuds)
       @work.inc_minor_version
       flash[:notice] = 'Work was successfully updated.'
-      redirect_to(@work)
+      redirect_to preview_work_path(@work)
     else
       render :action => "edit" 
     end 
+  end
+ 
+  # GET /works/1/preview
+  def preview
+    @work = Work.find(params[:id])
+  end
+  
+  # POST /works/1/post
+  def post
+    @work = Work.find(params[:id])
+    @work.posted = true
+    # Will save tags here when tags exist!
+    if @work.save
+      flash[:notice] = 'Work has been posted!'
+      redirect_to(@work)
+    else
+      render :action => "preview"
+    end
   end
   
   # DELETE /works/1

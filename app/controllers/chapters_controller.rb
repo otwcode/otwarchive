@@ -63,24 +63,18 @@ class ChaptersController < ApplicationController
   def create
     @chapter = @work.chapters.build(params[:chapter])
     @chapter.metadata = Metadata.new(params[:metadata_attributes]) 
-    
-    # Display the collected data if we're in preview mode, save it if we're not
-    if params[:preview_button] && !params[:create_button]
-      @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id], params[:extra_pseuds])
-      @selected = @pseuds.collect { |pseud| pseud.id.to_i }
-      render :partial => 'chapter_view', :layout => 'application'
-    else 
-      @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id])
-      if @chapter.save
-        Creatorship.add_authors(@chapter, @pseuds)
-        Creatorship.add_authors(@work, @pseuds)
-        @work.inc_major_version
-        flash[:notice] = 'Chapter was successfully created.'
-        redirect_to([@work, @chapter])
-      else
-        render :action => "new" 
-      end 
-    end
+    @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id])
+    if @chapter.save
+      Creatorship.add_authors(@chapter, @pseuds)
+      Creatorship.add_authors(@work, @pseuds)
+      @work.inc_major_version
+      flash[:notice] = 'Chapter was successfully created.'
+      redirect_to [:preview, @work, @chapter]
+    else
+      @pseuds = current_user.pseuds
+      @selected = params[:pseud][:id]
+      render :action => "new" 
+    end 
   end
   
   # PUT /work/:work_id/chapters/1
@@ -88,23 +82,38 @@ class ChaptersController < ApplicationController
   def update
     @chapter = @work.chapters.find(params[:id])
     @chapter.work.update_attributes params[:work_attributes] 
-    
     if @chapter.metadata
       @chapter.metadata.update_attributes params[:metadata_attributes]
     else
       @chapter.metadata = Metadata.new(params[:metadata_attributes])
     end
-    
     @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id], params[:extra_pseuds])
-    
     if @chapter.update_attributes(params[:chapter])
       Creatorship.add_authors(@chapter, @pseuds)
       @work.inc_minor_version
       flash[:notice] = 'Chapter was successfully updated.'
-      redirect_to([@work, @chapter])
+      redirect_to [:preview, @work, @chapter]
     else
       render :action => "edit" 
     end 
+  end 
+  
+  # GET /chapters/1/preview
+  def preview
+    @chapter = @work.chapters.find(params[:id])
+  end
+  
+  # POST /chapters/1/post
+  def post
+    @chapter = @work.chapters.find(params[:id])
+    @chapter.posted = true
+    # Will save tags here when tags exist!
+    if @chapter.save
+      flash[:notice] = 'Chapter has been posted!'
+      redirect_to(@work)
+    else
+      render :action => "preview"
+    end
   end
   
   # DELETE /work/:work_id/chapters/1

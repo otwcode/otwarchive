@@ -1,5 +1,5 @@
 <div id="story-form">
-  <% form_for :work, @work, :url => {:action => :preview}, :html => {:id => 'work_form'} do |f| %> 
+  <% form_for(@work) do |f| %> 
     <p class="field-left">   
  
       <% fields_for :metadata_attributes, @work.metadata do |m| %>
@@ -109,7 +109,7 @@
     <% end %>
 
     <p class="field-right">
-      <%= submit_tag 'Preview', :name => 'preview_button' %>
+      <%= submit_tag 'Preview', :name => 'create' %>
       <%= submit_tag 'Cancel', :name => 'cancel_button' %>
     </p>
   <% end %>

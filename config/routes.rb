@@ -6,12 +6,13 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :admins, :path_prefix => ':locale'
 
   map.resources :users, :has_many => :pseuds, :path_prefix => ':locale'
-
-  map.resources :works, :has_many => :chapters, :path_prefix => ':locale'
-  map.resources :works, :has_many => :comments, :path_prefix => ':locale'
-  map.resources :works, :collection => {:preview => 'post'}, :path_prefix => ':locale'
   
-  map.resources :chapters, :has_many => :comments, :path_prefix => ':locale'
+  map.resources :works, :member => { :preview => :get, :post => :post }, :path_prefix => ':locale' do |w|
+    w.resources :chapters, :member => { :preview => :get, :post => :post }
+    w.resources :comments
+  end
+  
+  map.resources :chapters, :member => { :preview => :get, :post => :post }, :has_many => :comments, :path_prefix => ':locale'
 
   map.resources :comments, :has_many => :comments, :path_prefix => ':locale', :member => { :approve => :put, :reject => :put }
 

@@ -21,7 +21,7 @@ class Work < ActiveRecord::Base
     elsif method == "add"
       Chapter.update_all("position = (position + 1)", ["work_id = (?) AND position > (?)", self.id, position])
     end
-  end
+  end  
 
   # provide an interface to increment major version number
   def inc_major_version
