@@ -29,16 +29,16 @@ class User < ActiveRecord::Base
   attr_accessor :terms_of_service
   attr_accessible :age_over_13, :terms_of_service
   
-  validates_acceptance_of :terms_of_service,
+  validates_inclusion_of :terms_of_service,
+                         :in => %w{ 1 },
+                         :message => 'must be accepted.',
+                         :if => :first_save?
+                         
+  validates_inclusion_of  :age_over_13,
+                          :in => %w{ 1 },
                           :message => 'must be accepted.',
-                          :allow_nil => false,
                           :if => :first_save?
                          
-  validates_acceptance_of :age_over_13,
-                          :message => 'must be confirmed.',
-                          :allow_nil => false,
-                          :if => :first_save?                            
-                 
   protected                            
     def first_save?
       crypted_password.blank?  
