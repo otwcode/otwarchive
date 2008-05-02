@@ -83,14 +83,26 @@ class WorksController < ApplicationController
       @work.metadata.update_attributes params[:metadata_attributes]
     end
     @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id], params[:extra_pseuds])
+    @selected = @pseuds.collect { |pseud| pseud.id.to_i }
+    @chapter = @work.chapters.first
     
-    if @work.update_attributes(params[:work])
-      Creatorship.add_authors(@work, @pseuds)
-      @work.inc_minor_version
-      flash[:notice] = 'Work was successfully updated.'
-      redirect_to preview_work_path(@work)
-    else
-      render :action => "edit" 
+    # Display the collected data if we're in preview mode, save it if we're not
+    if params[:preview_button]
+      render :partial => 'preview_edit', :layout => 'application'
+    elsif params[:cancel_button]
+      # Not quite working yet - should send the user back to wherever they were before they hit edit
+      redirect_back_or_default('/')
+    elsif params[:edit_button]
+      render :partial => 'work_form', :layout => 'application'
+    else  
+      if @work.update_attributes(params[:work])
+        Creatorship.add_authors(@work, @pseuds)
+        @work.inc_minor_version
+        flash[:notice] = 'Work was successfully updated.'
+        redirect_to(@work)
+      else
+        render :partial => 'work_form', :layout => 'application' 
+      end
     end 
   end
  

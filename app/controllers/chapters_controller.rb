@@ -88,13 +88,25 @@ class ChaptersController < ApplicationController
       @chapter.metadata = Metadata.new(params[:metadata_attributes])
     end
     @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id], params[:extra_pseuds])
-    if @chapter.update_attributes(params[:chapter])
-      Creatorship.add_authors(@chapter, @pseuds)
-      @work.inc_minor_version
-      flash[:notice] = 'Chapter was successfully updated.'
-      redirect_to [:preview, @work, @chapter]
+    @selected = @chapter.pseuds.collect { |pseud| pseud.id.to_i }
+
+    # Display the collected data if we're in preview mode, save it if we're not
+    if params[:preview_button]
+      render :partial => 'preview_edit', :layout => 'application'
+    elsif params[:cancel_button]
+      # Not quite working yet - should send the user back to wherever they were before they hit edit
+      redirect_back_or_default('/')
+    elsif params[:edit_button]
+      render :action => "edit"
     else
-      render :action => "edit" 
+      if @chapter.update_attributes(params[:chapter])
+        Creatorship.add_authors(@chapter, @pseuds)
+        @work.inc_minor_version
+        flash[:notice] = 'Chapter was successfully updated.'
+        redirect_to [@work, @chapter]
+      else
+        render :action => "edit" 
+      end
     end 
   end 
   

@@ -1,0 +1,29 @@
+<%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } %>
+
+<%- form_for([@work, @chapter]) do |f| -%>
+
+  <select name="pseud[id][]" multiple="multiple" style="display : none;">
+    <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
+  </select>
+  
+  <% fields_for :metadata_attributes, @chapter.metadata do |m| %>
+    <%= m.hidden_field :title, :value => "#{@chapter.metadata.title}" %>
+    <%= m.hidden_field :summary, :value => "#{@chapter.metadata.summary}" %>
+    <%= m.hidden_field :notes, :value => "#{@chapter.metadata.notes}" %>
+  <% end %>
+
+  <%= f.hidden_field :content, :value => "#{@chapter.content}" %>
+  
+  <% fields_for :work_attributes, @work do |w| %>
+    <%= w.hidden_field :is_complete, :value => "#{@work.is_complete}" %>
+  <% end %>
+
+  <p class="field-right">
+    <%= submit_tag 'Update', :name => 'update_button' %>
+    <%= submit_tag 'Edit', :name => 'edit_button' %>
+    <%= submit_tag 'Cancel', :name => 'cancel_button' %> 
+  </p>
+
+  <p class="clearbothdrop"></p>
+
+<% end %>
