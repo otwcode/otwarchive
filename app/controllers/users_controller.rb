@@ -22,7 +22,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(params[:user])   
     @user.profile = Profile.new
-    
+    @user.preference = Preference.new
     unless params[:user][:identity_url].blank?
       @user.identity_url = OpenIdAuthentication.normalize_url(@user.identity_url)
     end
@@ -54,6 +54,12 @@ class UsersController < ApplicationController
       @user.profile.update_attributes params[:profile_attributes]
     else
       @user.profile = Profile.new(params[:profile_attributes])
+    end
+    
+    if @user.preference
+      @user.preference.update_attributes params[:preference_attributes]
+    else
+      @user.preference = Preference.new(params[:preference_attributes])
     end
     
     if @user.update_attributes(params[:user]) && @user.profile.update_attributes(params[:profile_attributes])

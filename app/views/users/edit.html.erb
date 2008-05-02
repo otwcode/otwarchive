@@ -24,15 +24,23 @@
     </p>
     <p>
        <b><%= "Date of Birth".t %></b><br />
-       <%= p.date_select :date_of_birth %>
+       <%= p.date_select :date_of_birth, :start_year => 1930 %>
      </p>
      <p>
        <b><%= "About Me".t %></b><br />
        <%= p.text_area :about_me %>
      </p>
   <% end %>
-  
-  
+	
+  <b><%= h "Preferences:".t %> </b>
+	<% fields_for :preference_attributes, @user.preference do |r| %>
+   <p>
+      <%= r.check_box :history_enabled %> <%= "Enable History".t %>
+    </p>
+    <p>
+       <%= r.check_box :email_visible %> <%= "Display Email Address".t %>
+     </p>
+  <% end %>
   <p>
     <%= f.submit "Update" %>
   </p>

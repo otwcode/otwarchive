@@ -22,11 +22,15 @@
     <b><%= "About Me".t -%>:</b><br />
     <%=h @user.profile.about_me -%>
   </p>
-
-  <%- if current_user == @user -%>
+	<% if @user.preference.email_visible %>
+  <p>
+    <b><%= "Email".t -%>:</b>
+    <%= mail_to @user.email, nil, :encode => "hex" -%>
+  </p>
+	<% end %>
+	<%- if current_user == @user -%>
     <%= link_to "Edit profile".t, edit_user_path(@user) -%>
   <%- end -%>
-  
 <% @user.pseuds.each do |pseud| -%>
 
   <h3><%=h "Works under the name %s...".t / pseud.name -%></h3>
@@ -35,7 +39,7 @@
 	  <h4><%= link_to h(work.metadata.title), work_path(work) -%></h4>
 
   	<%- if current_user == pseud.user -%>
-  	  <%= link_to 'Edit', edit_work_path(work) %>
+  	  <%= link_to 'Edit'.t, edit_work_path(work) %>
   	<%- end -%>
 
    <%- end -%>
