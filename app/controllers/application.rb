@@ -33,9 +33,11 @@ class ApplicationController < ActionController::Base
       end
       session[:locale] = @locale
       Locale.set SUPPORTED_LOCALES[@locale]      
+      # prepend the user's locale to their view path
+      prepend_view_path File.join(File.dirname(__FILE__), '..', "views/localized/#{@locale}")
     rescue
       Locale.set SUPPORTED_LOCALES[default_locale]
-    end
+    end  
   end 
   #### -- GLOBALIZATION -- ####
 

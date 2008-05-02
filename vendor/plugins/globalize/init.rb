@@ -23,7 +23,6 @@ require "globalize/models/currency"
 
 # Load overriden Rails modules
 require "globalize/rails/active_record"
-require "globalize/rails/action_view"
 require "globalize/rails/action_mailer"
 require "globalize/rails/date_helper"
 require "globalize/rails/active_record_helper"
