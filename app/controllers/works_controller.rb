@@ -51,7 +51,8 @@ class WorksController < ApplicationController
     @work = Work.new(params[:work])
     @chapter = @work.chapters.build params[:chapter_attributes]
     @work.metadata = Metadata.new(params[:metadata_attributes])
-    @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id])
+    @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id]) 
+
     if @work.save
       Creatorship.add_authors(@work, @pseuds)
       Creatorship.add_authors(@work.chapters.first, @pseuds)
@@ -61,7 +62,7 @@ class WorksController < ApplicationController
       @pseuds = current_user.pseuds
       @selected = params[:pseud][:id]
       render :action => :index 
-    end 
+    end
   end
   
   # GET /works/1/edit
@@ -113,14 +114,18 @@ class WorksController < ApplicationController
   
   # POST /works/1/post
   def post
-    @work = Work.find(params[:id])
-    @work.posted = true
-    # Will save tags here when tags exist!
-    if @work.save
-      flash[:notice] = 'Work has been posted!'
-      redirect_to(@work)
+    if params[:cancel_button]
+      redirect_back_or_default('/')
     else
-      render :action => "preview"
+      @work = Work.find(params[:id])
+      @work.posted = true
+      # Will save tags here when tags exist!
+      if @work.save
+        flash[:notice] = 'Work has been posted!'
+        redirect_to(@work)
+      else
+        render :action => "preview"
+      end
     end
   end
   

@@ -63,7 +63,8 @@ class ChaptersController < ApplicationController
   def create
     @chapter = @work.chapters.build(params[:chapter])
     @chapter.metadata = Metadata.new(params[:metadata_attributes]) 
-    @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id])
+    @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id]) 
+
     if @chapter.save
       Creatorship.add_authors(@chapter, @pseuds)
       Creatorship.add_authors(@work, @pseuds)
@@ -117,14 +118,18 @@ class ChaptersController < ApplicationController
   
   # POST /chapters/1/post
   def post
-    @chapter = @work.chapters.find(params[:id])
-    @chapter.posted = true
-    # Will save tags here when tags exist!
-    if @chapter.save
-      flash[:notice] = 'Chapter has been posted!'
-      redirect_to(@work)
+    if params[:cancel_button]
+      redirect_back_or_default('/')
     else
-      render :action => "preview"
+      @chapter = @work.chapters.find(params[:id])
+      @chapter.posted = true
+      # Will save tags here when tags exist!
+      if @chapter.save
+        flash[:notice] = 'Chapter has been posted!'
+        redirect_to(@work)
+      else
+        render :action => "preview"
+      end
     end
   end
   

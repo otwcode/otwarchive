@@ -50,6 +50,6 @@
 
   <p>
     <%= submit_tag 'Preview', :name => 'preview_button' %>
-    <%= submit_tag 'Cancel', :name => 'cancel_button' %>
+    <%= button_to_function "Cancel", "javascript:history.back()" %>
   </p>
 <% end %>
