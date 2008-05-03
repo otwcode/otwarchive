@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
   validates_associated :profile
   
   has_one :preference
-   validates_associated :preference
+  validates_associated :preference
    
   validates_email_veracity_of :email, :message => 'does not seem to be a valid email address.'
   # validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create
