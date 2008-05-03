@@ -33,16 +33,24 @@ class PseudsController < ApplicationController
   # POST /pseuds
   # POST /pseuds.xml
   def create
-    @pseud = @user.pseuds.build(params[:pseud])
-    default = @user.default_pseud
-    if @pseud.save
-      flash[:notice] = 'Pseud was successfully created.'
-      if @pseud.is_default
-        # if setting this one as default, unset the attribute of the current default pseud
-        default.update_attribute(:is_default, false)
+    @pseud = Pseud.new(params[:pseud])
+    unless @user.has_pseud?(@pseud.name)
+      @user.pseuds << @pseud
+      default = @user.default_pseud
+      if @pseud.save
+        flash[:notice] = 'Pseud was successfully created.'
+        if @pseud.is_default
+          # if setting this one as default, unset the attribute of the current default pseud
+          default.update_attribute(:is_default, false)
+        end
+        redirect_to([@user, @pseud])
+      else
+        render :action => "new"
       end
-      redirect_to([@user, @pseud])
     else
+      # user tried to add pseud he already has
+      flash[:error] = 'You already have a pseud with that name.'
+      @pseud.name = '' if @user.default_pseud.name == @pseud.name
       render :action => "new"
     end
   end

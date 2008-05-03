@@ -3,6 +3,8 @@ class Pseud < ActiveRecord::Base
   has_many_polymorphs :creations, :from => [:works, :chapters], :through => :creatorships   
   has_many :comments
   acts_as_commentable
+  validates_presence_of :name
+
   #  before_destroy :move_creations_to_default
   #TODO - add this
   #after_save :check_for_inconsistencies

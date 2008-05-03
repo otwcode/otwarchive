@@ -49,7 +49,12 @@ class User < ActiveRecord::Base
 
   
   public
-  
+
+  # checks if user already has a pseud called name
+  def has_pseud?(name)
+    return self.pseuds.collect{ |p| p.name }.include?(name)
+  end
+
   # Retrieve the current default pseud
   def default_pseud
     pseuds.each do |p|
