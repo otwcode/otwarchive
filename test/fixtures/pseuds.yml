@@ -1,59 +1,77 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-default_pseud:
+# mary's pseuds:
+
+mary_sue:
   id: 1
   user_id: 1
-  name: Default Pseud
-  description: This is a default pseud for user1.
+  name: mary sue
+  description: This is the default pseud for mary sue.
   is_default: true
 
-non_default_pseud:
+marie:
   id: 2
   user_id: 1
-  name: Non-Default Pseud
-  description: This is a non default pseud.
+  name: marie
+  description: Alternative (non-default) pseud for mary sue
   is_default: false
 
-pseud_1_for_user_3:
+placeboforever:
+  id: 6
+  user_id: 1
+  name: placeboforever
+  description: mary sue's non-default pseud for writing placebo stories.
+  is_default: false
+
+peteandpatrick:
+  id: 7
+  user_id: 1
+  name: peteandpatrick
+  description: mary sue's non-default pseud for writing bandom stories.
+  is_default: false
+
+heroes:
+  id: 99
+  user_id: 1
+  name: heroes
+  description: mary sue's non-default pseud for heroes stories (but no works yet)
+  is_default: false
+
+
+# jossfan's pseuds:
+joss:
   id: 3
   user_id: 3
   name: joss
   description: evil overlord
   is_default: true
 
-pseud_2_for_user_3:
+buffy:
   id: 4
   user_id: 3
   name: buffy
   description: chosen one
   is_default: false
 
-pseud_3_for_user_3:
+willow:
   id: 5
   user_id: 3
   name: willow
   description: witch
   is_default: false
 
-pseud_with_one_work:
-  id: 6
-  user_id: 1
-  name: Pseud With One Work
-  description: This is a non default pseud.
+# dsfan's pseuds:
+benton:
+  id: 8
+  user_id: 2
+  name: benton
+  description: dsfan's only pseud
   is_default: false
 
-pseud_with_three_works:
-  id: 7
-  user_id: 1
-  name: Pseud With Three Works
-  description: This is a non default pseud.
-  is_default: false
-
-pseud_with_no_works: 
-  id: 99
-  user_id: 1
-  name: Pseud With No Works
-  description: This is a non default pseud.
-  is_default: false
-
-
+# lurker's pseuds:
+lurker:
+  id: 9
+  user_id: 4
+  name: lurker
+  description: lurker's only pseud
+  is_default: true

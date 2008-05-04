@@ -6,24 +6,41 @@
 # two:
 #   column: value
 
-basic_user:
+# mary has 6 pseuds:
+#  - a default_pseud: mary sue
+#  - a non_default_pseud: marie
+#  - a non_default pseud with one story: placeboforever
+#  - a non_default  pseud with three works: peteandpatrick
+#  - a non_default pseud with no works: heroes
+mary:
   id: 1
-  login: user1
+  login: mary
   email: user1@example.com
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
 
-user_with_one_pseud:
+# dsfan has only one pseud: benton (which is not his default)
+dsfan:
   id: 2
-  login: user2
-  email: user2@example.com
+  login: dsfan
+  email: dsfan@example.com
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
 
-user_with_three_pseuds:
+# jossfan has three pseuds: buffy, willow and joss
+# and currently XXX works with XXX chapters
+# he has ID 3
+jossfan:
   id: 3
-  login: user3
-  email: user3@example.com
+  login: jossfan
+  email: jossfan@example.com
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
 
+# lurker has only one pseud (his default pseud) and has no stories OR comments
+lurker:
+  id: 4
+  login: lurker
+  email: lurker@example.com
+  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
+  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
