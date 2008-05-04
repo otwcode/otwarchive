@@ -22,6 +22,9 @@ class User < ActiveRecord::Base
   has_one :preference
   validates_associated :preference
    
+  has_many :works, :through => :readings
+  #has_many :readings
+  
   validates_email_veracity_of :email, :message => 'does not seem to be a valid email address.'
   # validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create
   # validates_format_of :password, :with => /(?=.*\d)(?=.*([a-z]|[A-Z]))/, :message => 'must have at least one digit and one alphabet character.'

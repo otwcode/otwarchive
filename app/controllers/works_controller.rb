@@ -3,17 +3,12 @@ class WorksController < ApplicationController
   before_filter :users_only, :except => [ :index, :show, :destroy ]
   # only authors of a work should be able to edit it
   before_filter :is_author_true, :only => [ :edit, :update ]
+  before_filter :update_or_create_reading, :only => [ :show ]
   
   # check if the user's current pseud is one associated with the work
   def is_author
     @work = Work.find(params[:id])
-    
-    current_user.pseuds.each do |pseud|
-      if pseud.creations.include?(@work)
-        return true
-      end
-    end
-    return false
+    not (current_user.pseuds & @work.pseuds).empty?
   end  
   
   # if is_author returns true allow them to update, otherwise redirect them to the work page with an error message
@@ -143,4 +138,13 @@ class WorksController < ApplicationController
     render :nothing => true
   end
   
+  protected
+  def update_or_create_reading
+    puts "update_or_create_reading called"
+    unless is_author
+      reading = Reading.find_or_initialize_by_work_id_and_user_id(@work.id, current_user.id)
+      reading.major_version_read, reading.minor_version_read = @work.major_version, @work.minor_version
+      reading.save
+    end
+  end
 end

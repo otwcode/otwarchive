@@ -9,15 +9,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 30) do
+ActiveRecord::Schema.define(:version => 34) do
 
   create_table "admins", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "email"
-    t.string   "login"
     t.string   "crypted_password"
     t.string   "salt"
+    t.string   "email"
+    t.string   "login"
   end
 
   create_table "bookmarks", :force => true do |t|
@@ -32,10 +32,10 @@ ActiveRecord::Schema.define(:version => 30) do
 
   create_table "chapters", :force => true do |t|
     t.text     "content"
-    t.integer  "position",   :default => 1
     t.integer  "work_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "position",   :default => 1
     t.boolean  "posted"
   end
 
@@ -143,6 +143,14 @@ ActiveRecord::Schema.define(:version => 30) do
     t.string  "salt",       :default => "", :null => false
   end
 
+  create_table "preferences", :force => true do |t|
+    t.integer  "user_id"
+    t.boolean  "history_enabled", :default => true
+    t.boolean  "email_visible",   :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "profiles", :force => true do |t|
     t.integer  "user_id"
     t.string   "location"
@@ -157,6 +165,15 @@ ActiveRecord::Schema.define(:version => 30) do
     t.string   "name"
     t.text     "description"
     t.boolean  "is_default"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "readings", :force => true do |t|
+    t.integer  "major_version_read"
+    t.integer  "minor_version_read"
+    t.integer  "user_id"
+    t.integer  "work_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -176,17 +193,27 @@ ActiveRecord::Schema.define(:version => 30) do
     t.datetime "updated_at"
   end
 
+  create_table "sessions", :force => true do |t|
+    t.string   "session_id", :default => "", :null => false
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
+  add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
+
   create_table "users", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "remember_token"
-    t.string   "email"
-    t.datetime "remember_token_expires_at"
-    t.string   "activation_code"
-    t.string   "login"
     t.datetime "activated_at"
     t.string   "crypted_password"
     t.string   "salt"
+    t.string   "remember_token"
+    t.datetime "remember_token_expires_at"
+    t.string   "activation_code"
+    t.string   "email"
+    t.string   "login"
     t.string   "identity_url"
   end
 
