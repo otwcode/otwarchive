@@ -55,17 +55,12 @@ class User < ActiveRecord::Base
 
   # checks if user already has a pseud called name
   def has_pseud?(name)
-    return self.pseuds.collect{ |p| p.name }.include?(name)
+    return self.pseuds.collect {|p| p.name }.include?(name)
   end
 
   # Retrieve the current default pseud
   def default_pseud
-    pseuds.each do |p|
-      if p.is_default
-        return p
-      end
-    end
-    pseuds.first
+    pseuds.select {|p| p.is_default? }.first || pseuds.first
   end
   
   # fetch all pseuds belong to a user
