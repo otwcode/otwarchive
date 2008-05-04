@@ -1,11 +1,16 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  reference: 
+basic_users_preferences:
+  user_id: 1
+  history_enabled: true
+  email_visible: true
+
+user_with_one_pseud_preferences:
+  user_id: 2
   history_enabled: false
   email_visible: false
 
-two:
-  reference: 
+user_with_three_pseuds_preferences:
+  user_id: 3
   history_enabled: false
-  email_visible: false
+  email_visible: true
