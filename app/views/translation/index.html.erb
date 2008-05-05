@@ -2,6 +2,7 @@
 <p>
     <span class="globalize_bug"><%= "Use this sparingly".t %></span>: <%= link_to "Get strings to translate".t, :action => "get_translatable_strings" %>
 </p>
+
 <% if Locale.language -%>
 <h1 class="language"><%= "Language: " .t + Locale.language.native_name %></h1>
 <% end -%>
@@ -21,11 +22,12 @@
     <dd id="tr_<%= tr.id %>">
         <%= render :partial => 'translation_text' %>
         <%- form_tag ( :action => :set_translation_text, :id => tr.id ) do %>
-        <%= text_field_tag 'translation', tr.text || tr.tr_key, :size => 30 %>
-        <%= submit_tag( "translate" ) .t %>
+        <%= text_area_tag 'translation', tr.text || tr.tr_key, :cols => 35, :rows => rows_for_words(tr.text || tr.tr_key) %>
+        <%= submit_tag( "translate".t ) %>
         <% end -%>
     </dd>
     <br/>
     <% end -%>
 </dl>
 <% end -%>
+
