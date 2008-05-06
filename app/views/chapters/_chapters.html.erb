@@ -4,5 +4,5 @@
 		<%= render :partial => 'chapters/chapter', :locals => { :chapter => chapter } -%>
 	<% end -%>
 <% else %>
-	<%=h @work.chapters.first.content %>
+	<%=sanitize_format @work.chapters.first.content %>
 <% end %>

@@ -5,7 +5,7 @@
     <!--There must be a more elegant way of assigning class/id to elements, mustn't there? -->
     <li class="story" id="<%=h work.id %>">
 
-      <h3 title="Story Title"><%= link_to h(work.metadata.title), work %></h3>
+      <h3 title="Story Title"><%= link_to sanitize(work.metadata.title), work %></h3>
 
   	  by <%= render :partial => 'pseuds/byline', :locals => { :creation => work } -%>
 
@@ -14,7 +14,7 @@
       </div>
 
       <p class="story-desc">
-        <%=h work.metadata.summary %>
+        <%= sanitize_format work.metadata.summary %>
       </p>
 
     </li>

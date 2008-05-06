@@ -8,7 +8,7 @@
     <% for chapter in @chapters %>
       <li id="chapter_<%= chapter.id %>">
         <% if chapter.metadata && chapter.metadata.title %>
-          <%=h chapter.metadata.title %><br />
+          <%=sanitize chapter.metadata.title %><br />
         <% else %>
           Chapter <%=h chapter.position %><br />
         <% end %>

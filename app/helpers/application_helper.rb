@@ -127,5 +127,10 @@ module ApplicationHelper
   def valid_length_message
     "Thanks, that length looks good.".t
   end
-    
+
+  #santizes and formats a string with paragraphs
+  def sanitize_format(content)
+    sanitize(simple_format(content))
+  end
+  
 end

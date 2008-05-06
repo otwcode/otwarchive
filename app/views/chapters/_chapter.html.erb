@@ -2,7 +2,7 @@
 <p>
   <div class="chapter-title">	
   <strong>Chapter <%=h chapter.position %></strong>
-  <% if chapter.metadata && chapter.metadata.title -%>: <%=h chapter.metadata.title %><% end -%>
+  <% if chapter.metadata && chapter.metadata.title -%>: <%=sanitize chapter.metadata.title %><% end -%>
 
   <!-- chapter management -->  
   <%- if is_author_of?(@work) -%>
@@ -21,11 +21,11 @@
   </div>
   
   <!-- we want to hide this information by default if javascript is available -->
-  <% if chapter.metadata && chapter.metadata.summary -%><br /><%=h chapter.metadata.summary -%><% end -%>
-  <% if chapter.metadata && chapter.metadata.notes -%><br /><%=h chapter.metadata.notes -%><% end -%>
+  <% if chapter.metadata && chapter.metadata.summary -%><br /><%=sanitize_format chapter.metadata.summary -%><% end -%>
+  <% if chapter.metadata && chapter.metadata.notes -%><br /><%=sanitize_format chapter.metadata.notes -%><% end -%>
   
   <p>
-    <%=h chapter.content %>
+    <%=sanitize_format chapter.content %>
   </p>
   
 </p>

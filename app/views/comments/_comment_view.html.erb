@@ -36,7 +36,7 @@ you need is one "margin-left: 50px" line in the css to make some nice cascading 
         <%- end -%>  
       </h3>
 
-      <p><%=h comment.content %></p>
+      <p><%=sanitize_format comment.content %></p>
         
       <p>Posted at: <%= comment.created_at %></p>
       
