@@ -10,7 +10,7 @@ class TranslationController < ApplicationController
     @view_translations = ViewTranslation.find(:all, 
                                               :conditions => [ 'built_in IS NULL AND language_id = ?', 
     Locale.language.id ], 
-    :order => 'text')                                                
+    :order => 'id')                                                
   end
   
   def translation_text
@@ -32,7 +32,7 @@ class TranslationController < ApplicationController
     @strs = []
     allowed = ' \w0-9%:;@&#<>\/\\\?\!\+\)\(-=\*'
     regexp = Regexp.new('[\"](['+allowed+'\']*)[\"]\.t|[\'](['+allowed+'\"]*)[\']\.t')
-    Dir.glob("#{RAILS_ROOT}/app/views/**/*.rhtml").collect do |f|
+    Dir.glob("#{RAILS_ROOT}/app/views/**/*.erb").collect do |f|
       @strs << File.read(f).scan(regexp)
     end
     @new_strs=Array.new
@@ -56,11 +56,11 @@ class TranslationController < ApplicationController
         end
       end
     end
-    @new_strs=@new_strs.uniq.sort
+    @new_strs=@new_strs.uniq
     @new_strs.each do |str|
       str.to_s.translate
     end
-    flash[:notice] = "Strings collected"
+    flash[:notice] = "Strings collected".t
     redirect_to :action => 'index'
   end
 end
