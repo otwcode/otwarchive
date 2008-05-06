@@ -8,7 +8,7 @@ class WorksController < ApplicationController
   # check if the user's current pseud is one associated with the work
   def is_author
     @work = Work.find(params[:id])
-    not (current_user.pseuds & @work.pseuds).empty?
+    not (logged_in? && (current_user.pseuds & @work.pseuds).empty?)
   end  
   
   # if is_author returns true allow them to update, otherwise redirect them to the work page with an error message
