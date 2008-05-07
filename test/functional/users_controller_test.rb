@@ -26,23 +26,23 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   def test_should_show_user
-    get :show, :locale => 'en', :id => users(:mary).id
+    get :show, :locale => 'en', :id => users(:basic_user).id
     assert_response :success
   end
 
   def test_should_get_edit
-    get :edit, :locale => 'en', :id => users(:mary).id
+    get :edit, :locale => 'en', :id => users(:basic_user).id
     assert_response :success
   end
 
   def test_should_update_user
-    put :update, :locale => 'en', :id => users(:mary).id, :user => { }
+    put :update, :locale => 'en', :id => users(:basic_user).id, :user => { }
     assert_redirected_to user_path(assigns(:user))
   end
 
   def test_should_destroy_user
     assert_difference('User.count', -1) do
-      delete :destroy, :locale => 'en', :id => users(:mary).id
+      delete :destroy, :locale => 'en', :id => users(:basic_user).id
     end
 
     assert_redirected_to users_path

@@ -1,77 +1,59 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-# mary's pseuds:
-
-mary_sue:
+default_pseud:
   id: 1
   user_id: 1
-  name: mary sue
-  description: This is the default pseud for mary sue.
+  name: Default Pseud
+  description: This is a default pseud for user1.
   is_default: true
 
-marie:
+non_default_pseud:
   id: 2
   user_id: 1
-  name: marie
-  description: Alternative (non-default) pseud for mary sue
+  name: Non-Default Pseud
+  description: This is a non default pseud.
   is_default: false
 
-placeboforever:
-  id: 6
-  user_id: 1
-  name: placeboforever
-  description: mary sue's non-default pseud for writing placebo stories.
-  is_default: false
-
-peteandpatrick:
-  id: 7
-  user_id: 1
-  name: peteandpatrick
-  description: mary sue's non-default pseud for writing bandom stories.
-  is_default: false
-
-heroes:
-  id: 99
-  user_id: 1
-  name: heroes
-  description: mary sue's non-default pseud for heroes stories (but no works yet)
-  is_default: false
-
-
-# jossfan's pseuds:
-joss:
+pseud_1_for_user_3:
   id: 3
   user_id: 3
   name: joss
   description: evil overlord
   is_default: true
 
-buffy:
+pseud_2_for_user_3:
   id: 4
   user_id: 3
   name: buffy
   description: chosen one
   is_default: false
 
-willow:
+pseud_3_for_user_3:
   id: 5
   user_id: 3
   name: willow
   description: witch
   is_default: false
 
-# dsfan's pseuds:
-benton:
-  id: 8
-  user_id: 2
-  name: benton
-  description: dsfan's only pseud
+pseud_with_one_work:
+  id: 6
+  user_id: 1
+  name: Pseud With One Work
+  description: This is a non default pseud.
   is_default: false
 
-# lurker's pseuds:
-lurker:
-  id: 9
-  user_id: 4
-  name: lurker
-  description: lurker's only pseud
-  is_default: true
+pseud_with_three_works:
+  id: 7
+  user_id: 1
+  name: Pseud With Three Works
+  description: This is a non default pseud.
+  is_default: false
+
+pseud_with_no_works: 
+  id: 99
+  user_id: 1
+  name: Pseud With No Works
+  description: This is a non default pseud.
+  is_default: false
+
+

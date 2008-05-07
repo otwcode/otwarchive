@@ -8,14 +8,14 @@ class WorksControllerTest < ActionController::TestCase
   end
   
   def test_should_get_new
-    login_as_user(:mary)
+    login_as_user(:basic_user)
     get :new, :locale => 'en'
     assert_response :success
   end
   
   # Currently this only tests the first step of work creation
   def test_should_create_work
-    login_as_user(:mary)
+    login_as_user(:basic_user)
     
     get :new, :locale => 'en'
     submit_form 'work_form' do |form|
@@ -32,14 +32,14 @@ class WorksControllerTest < ActionController::TestCase
   end
   
   def test_should_get_edit
-    login_as_user(:mary)
+    login_as_user(:basic_user)
     @work = works(:basic_work)
     get :edit, :locale => 'en', :id => @work.id
     assert_response :success
   end
   
   def test_should_update_work
-    login_as_user(:mary)
+    login_as_user(:basic_user)
     @work = works(:basic_work)
     
     new_title = "New Title"
