@@ -345,6 +345,7 @@ a.story-title {
 	float: left;
 	width: inherit;
 }
+
 .flash_icon {
 	border: 0;
 	float: left;
@@ -354,6 +355,7 @@ a.story-title {
 .notice {
 	background-color: #b3d4ef;
 	border: 2px solid #b3d4ef;
+	width: 98%;
 }
 .warning {
 	background-color: #feffd4;
