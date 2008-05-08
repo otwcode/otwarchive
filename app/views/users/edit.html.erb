@@ -24,7 +24,7 @@
     </p>
     <p>
        <b><%= "Date of Birth".t %></b><br />
-       <%= p.date_select :date_of_birth, :start_year => 1930 %>
+       <%= p.date_select :date_of_birth, :start_year => 1930, :end_year => 13.years.ago.year %>
      </p>
      <p>
        <b><%= "About Me".t %></b><br />
