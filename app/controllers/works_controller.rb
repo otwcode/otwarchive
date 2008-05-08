@@ -140,7 +140,6 @@ class WorksController < ApplicationController
   
   protected
   def update_or_create_reading
-    puts "update_or_create_reading called"
     unless is_author
       reading = Reading.find_or_initialize_by_work_id_and_user_id(@work.id, current_user.id)
       reading.major_version_read, reading.minor_version_read = @work.major_version, @work.minor_version

@@ -47,8 +47,6 @@ class CommentsController < ApplicationController
   # POST /comments
   # POST /comments.xml
   def create
-    puts "comments#create called"
-    puts params.inspect
     @comment = Comment.new(params[:comment])
     @comment.update_attribute(:user_agent,request.env['HTTP_USER_AGENT'])
     
