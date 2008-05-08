@@ -327,7 +327,7 @@ a.story-title {
 	font-family: Georgia, serif;	
 }
 
-/* Comment styles! To add zebra striping, use .odd-comment or .even-comment */    
+/* Comment styles! To add zebra striping, use .oddcomment or .evencomment */    
 
 .comment {
 	margin-left: 50px;

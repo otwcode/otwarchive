@@ -4,12 +4,12 @@ class CommentsController < ApplicationController
   # Get the parent of the desired comment(s) 
   # Just covering all the bases here for now
   def load_commentable
-    if params[:work_id]
-      @commentable = Work.find(params[:work_id])
+    if params[:comment_id]
+      @commentable = Comment.find(params[:comment_id])
     elsif params[:chapter_id]
       @commentable = Chapter.find(params[:chapter_id])
-    elsif params[:comment_id]
-      @commentable = Comment.find(params[:comment_id])
+    elsif params[:work_id]
+      @commentable = Work.find(params[:work_id])
     elsif params[:user_id]
       @commentable = User.find(params[:user_id])
     elsif params[:pseud_id]
@@ -33,6 +33,9 @@ class CommentsController < ApplicationController
   # GET /comments/new
   # GET /comments/new.xml
   def new
+    if @commentable.kind_of?(Work)
+      @commentable = @commentable.chapters.last
+    end
     @comment = Comment.new
   end
   
@@ -44,6 +47,8 @@ class CommentsController < ApplicationController
   # POST /comments
   # POST /comments.xml
   def create
+    puts "comments#create called"
+    puts params.inspect
     @comment = Comment.new(params[:comment])
     @comment.update_attribute(:user_agent,request.env['HTTP_USER_AGENT'])
     
