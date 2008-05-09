@@ -18,7 +18,7 @@ module ApplicationHelper
   
   # load the native language names into a constant
   LANGUAGE_NAMES = Hash.new 
-  AppConfig.supported_locales.each do |lang, locale|
+  ArchiveConfig.supported_locales.each do |lang, locale|
     LANGUAGE_NAMES.merge!({lang => (langobj = Language.pick(locale)).nil? ? lang.to_s : langobj.native_name })
   end  
   

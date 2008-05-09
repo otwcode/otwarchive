@@ -1,9 +1,9 @@
 # Email settings
 ActionMailer::Base.delivery_method = :smtp
 ActionMailer::Base.smtp_settings = {
-  :address => AppConfig.smtp_server,
-  :user => AppConfig.smtp_user,
-  :secret => AppConfig.smtp_password,
-  :domain => AppConfig.smtp_domain
+  :address => ArchiveConfig.smtp_server,
+  :user => ArchiveConfig.smtp_user,
+  :secret => ArchiveConfig.smtp_password,
+  :domain => ArchiveConfig.smtp_domain
 }
 

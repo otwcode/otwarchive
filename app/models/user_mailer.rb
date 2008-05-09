@@ -25,11 +25,11 @@ class UserMailer < ActionMailer::Base
    protected
      def setup_email(user)
        @recipients  = "#{user.email}"
-       @from        = AppConfig.return_address
-       @subject     = "#{AppConfig.app_name} - "
+       @from        = ArchiveConfig.return_address
+       @subject     = "#{ArchiveConfig.app_name} - "
        @sent_on     = Time.now
        @body[:user] = user
-       @body[:url]  = AppConfig.app_url
+       @body[:url]  = ArchiveConfig.app_url
        @content_type = "text/html"
      end
  end

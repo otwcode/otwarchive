@@ -1,4 +1,4 @@
-<h2><%=h AppConfig.app_name .t %></h2>
+<h2><%=h ArchiveConfig.app_name .t %></h2>
 
 <!-- Please note the tabindex: for logical progression through the page, 
 I have it set to tab through this link, then the "report" link, then the 
@@ -55,7 +55,7 @@ receive initial tab focus?  Should the username box be first in the tab index? -
 </div>
 
 <!-- And now the non-floated div. -->
-<div id="authentication-logo"><%=h image_tag(AppConfig.logo, :alt => AppConfig.alt_logo) -%></div>
+<div id="authentication-logo"><%=h image_tag(ArchiveConfig.logo, :alt => ArchiveConfig.alt_logo) -%></div>
 
 <!-- And now we clear the floats so the footer information will show up properly. -->
 <div class="clearboth"></div>

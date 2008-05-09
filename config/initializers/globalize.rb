@@ -1,4 +1,4 @@
 # Include Globalize!
 include Globalize 
-Locale.set_base_language(AppConfig.base_language) 
+Locale.set_base_language(ArchiveConfig.base_language) 
 
