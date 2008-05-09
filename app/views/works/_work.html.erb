@@ -3,7 +3,7 @@
 
   <%= render :partial => 'metadatas/metadata', :locals => {:metadata => @work.metadata } -%>
 
-  <h2 class="story-title"><%=sanitize @work.metadata.title %></h2>
+  <h2 class="story-title"><%=h @work.metadata.title %></h2>
   <h3 class="story-author">
 	 <%= byline(@work) -%>
   </h3>
