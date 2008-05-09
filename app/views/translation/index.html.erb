@@ -1,4 +1,6 @@
-<h1 class="language"><%= "Please choose language for translation".t %></h1>
+<h1 class="language"><%= "Please choose language for translation.".t %></h1>
+<p>
+  <%=h "Strings which have not yet been translated are marked with asterisks.".t %>
 <p>
     <span class="globalize_bug"><%= "Use this sparingly".t %></span>: <%= link_to "Get strings to translate".t, :action => "get_translatable_strings" %>
 </p>
@@ -17,7 +19,10 @@
     <br/>
     <% @view_translations.each do |tr| -%>
     <dt>
-        <%= tr.tr_key %>
+    	<% unless tr.text -%>
+		  ***
+		<% end -%>
+        <%= tr.tr_key -%>
     </dt>
     <dd id="tr_<%= tr.id %>">
         <%= render :partial => 'translation_text' %>
