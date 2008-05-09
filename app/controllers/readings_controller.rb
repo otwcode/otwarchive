@@ -1,4 +1,4 @@
-class ReadingController < ApplicationController
+class ReadingsController < ApplicationController
 
   def index
   end
