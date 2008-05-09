@@ -9,6 +9,31 @@ class Work < ActiveRecord::Base
   acts_as_commentable
 
   attr_reader :pseud 
+  
+  after_update :save_associated     
+  
+  #virtual attribute for metadata
+  def new_metadata_attributes=(attributes)
+    self.metadata = Metadata.new(attributes)
+  end  
+  
+  def existing_metadata_attributes=(attributes)
+    self.metadata.attributes = attributes
+  end
+  
+  #virtual attribute for first chapter
+  def new_chapter_attributes=(attributes)
+    chapters.build(attributes)
+  end 
+  
+  def existing_chapter_attributes=(attributes)
+    chapters.first.attributes = attributes
+  end 
+  
+  def save_associated
+    self.metadata.save(false)
+    chapters.first.save(false)
+  end
 
   def number_of_chapters
      Chapter.maximum(:position, :conditions => ['work_id = ?', self.id])

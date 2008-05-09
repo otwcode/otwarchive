@@ -6,10 +6,12 @@
     <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
   </select>
   
-  <% fields_for :metadata_attributes, @chapter.metadata do |m| %>
-    <%= m.hidden_field :title, :value => "#{@chapter.metadata.title}" %>
-    <%= m.hidden_field :summary, :value => "#{@chapter.metadata.summary}" %>
-    <%= m.hidden_field :notes, :value => "#{@chapter.metadata.notes}" %>
+  <% if @chapter.metadata %>
+    <% fields_for_metadata(@chapter.metadata) do |m| %>
+      <%= m.hidden_field :title, :value => "#{@chapter.metadata.title}" %>
+      <%= m.hidden_field :summary, :value => "#{@chapter.metadata.summary}" %>
+      <%= m.hidden_field :notes, :value => "#{@chapter.metadata.notes}" %>
+    <% end %> 
   <% end %>
 
   <%= f.hidden_field :content, :value => "#{@chapter.content}" %>

@@ -1,12 +1,11 @@
 <div id="story-form">
   <%- form_for(@work) do |f| -%> 
     <p class="field-left">   
- 
-      <% fields_for :metadata_attributes, @work.metadata do |m| %>
     
+	<% fields_for_associated(@work.metadata) do |m| %>
       <!-- Story title field (metadata_attributes_title) -->
         <%= m.label :title, "Story Title*", :class => "required" %><br />
-        <%= m.text_field :title, :class => "storyinputfield", :live => true, :object => :metadata, :validMessage => valid_length_message -%>
+        <%= m.text_field :title, :class => "storyinputfield", :live => true, :object => :metadata, :validMessage => valid_length_message %>
         <%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
 
       <!-- Chaptered checkbox (work_is_complete) -->
@@ -48,12 +47,12 @@
     </div>    
 
     <!-- Story text field (chapter_attributes_content) -->
-    <p>
-      <% fields_for :chapter_attributes, @chapter do |c| %>
+	<% fields_for_associated(@work.chapters.first) do |c| %>
+      <p>
         <%= c.label :content, "Story, in plain text with limited HTML*", :class => "required" %><br />
-        <%= c.text_area :content -%>
-      <% end %>
-    </p>
+      	<%= c.text_area :content %>
+      </p>
+    <% end %>
   
     <!-- Author dropdown (pseud_id) -->
   	<p class="field-left">
@@ -97,16 +96,16 @@
 	
     <!-- Summary field (metadata_attributes_summary) -->
     <p>
-    	<%= m.label :summary, "Summary (max %d letters)"/Metadata::SUMMARY_MAX %><br />
-      <%= m.text_area :summary, :live => true, :object => :metadata, :class => "metadata-field", :validMessage => valid_length_message %>
+      <%= m.label :summary, "Summary (max %d letters)"/Metadata::SUMMARY_MAX %><br />
+      <%= m.text_area :summary, :class => "metadata-field", :live => true, :object => :metadata, :validMessage => valid_length_message %>
     </p>
 
     <!-- Notes field (metadata_attributes_notes) -->
     <p>
-     	<%= m.label :notes, "Notes (max %d letters)"/Metadata::NOTES_MAX %><br />
-      <%= m.text_area :notes, :live => true, :object => :metadata, :class => "metadata-field", :validMessage => valid_length_message %> 
+      <%= m.label :notes, "Notes (max %d letters)"/Metadata::NOTES_MAX %><br />
+      <%= m.text_area :notes, :class => "metadata-field", :live => true, :object => :metadata, :validMessage => valid_length_message %> 
     </p>
-    <%- end -%>
+	<%- end -%>
 
     <p class="field-right">
       <%= submit_tag 'Preview', :name => 'preview_button' %>

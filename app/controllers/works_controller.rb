@@ -44,8 +44,6 @@ class WorksController < ApplicationController
   # POST /works
   def create
     @work = Work.new(params[:work])
-    @chapter = @work.chapters.build params[:chapter_attributes]
-    @work.metadata = Metadata.new(params[:metadata_attributes])
     @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id]) 
 
     if @work.save
@@ -56,7 +54,9 @@ class WorksController < ApplicationController
     else
       @pseuds = current_user.pseuds
       @selected = params[:pseud][:id]
-      render :action => :index 
+      @work.chapters.build 
+      @work.metadata = Metadata.new
+      render :action => :new 
     end
   end
   
@@ -72,12 +72,7 @@ class WorksController < ApplicationController
   # PUT /works/1
   def update
     @work = Work.find(params[:id])
-    if params[:chapter_attributes]
-      @work.chapters.first.update_attributes params[:chapter_attributes]
-    end
-    if params[:metadata_attributes]
-      @work.metadata.update_attributes params[:metadata_attributes]
-    end
+    @work.attributes = params[:work]
     @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id], params[:extra_pseuds])
     @selected = @pseuds.collect { |pseud| pseud.id.to_i }
     @chapter = @work.chapters.first

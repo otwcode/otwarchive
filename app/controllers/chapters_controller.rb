@@ -62,7 +62,6 @@ class ChaptersController < ApplicationController
   # POST /work/:work_id/chapters.xml
   def create
     @chapter = @work.chapters.build(params[:chapter])
-    @chapter.metadata = Metadata.new(params[:metadata_attributes]) 
     @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id]) 
 
     if @chapter.save
@@ -81,13 +80,9 @@ class ChaptersController < ApplicationController
   # PUT /work/:work_id/chapters/1
   # PUT /work/:work_id/chapters/1.xml
   def update
-    @chapter = @work.chapters.find(params[:id])
+    @chapter = @work.chapters.find(params[:id]) 
+    @chapter.attributes = params[:chapter]
     @chapter.work.update_attributes params[:work_attributes] 
-    if @chapter.metadata
-      @chapter.metadata.update_attributes params[:metadata_attributes]
-    else
-      @chapter.metadata = Metadata.new(params[:metadata_attributes])
-    end
     @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id], params[:extra_pseuds])
     @selected = @chapter.pseuds.collect { |pseud| pseud.id.to_i }
 

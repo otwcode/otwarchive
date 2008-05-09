@@ -19,7 +19,7 @@
     <p>Example: <strong>username:pseud, username:pseud</strong></p>
 	</div>
   
-  <% fields_for :metadata_attributes, chapter.metadata do |m| %>
+  <% fields_for_metadata(chapter.metadata ||= Metadata.new) do |m| %>
     <p>
       <b>Chapter Title</b><br />
       <%= m.text_field :title %>
