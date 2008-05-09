@@ -14,6 +14,13 @@ non_default_pseud:
   description: This is a non default pseud.
   is_default: false
 
+pseud_for_user_2:
+  id: 98
+  user_id: 2
+  name: Default Pseud
+  description: This is a default pseud for user1
+  is_default: true
+
 pseud_1_for_user_3:
   id: 3
   user_id: 3

@@ -23,8 +23,8 @@ class User < ActiveRecord::Base
   validates_associated :preference
    
   has_many :works, :through => :readings
-  #has_many :readings
-  
+  has_many :readings
+
   validates_email_veracity_of :email, :message => 'does not seem to be a valid email address.'
   # validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create
   # validates_format_of :password, :with => /(?=.*\d)(?=.*([a-z]|[A-Z]))/, :message => 'must have at least one digit and one alphabet character.'
@@ -53,23 +53,19 @@ class User < ActiveRecord::Base
   
   public
 
-  # checks if user already has a pseud called name
-  def has_pseud?(name)
-    return self.pseuds.collect {|p| p.name }.include?(name)
+  # checks if user already has a pseud called newname
+  def has_pseud?(newname)
+    return self.pseuds.collect(&:name).include?(newname)
   end
 
   # Retrieve the current default pseud
   def default_pseud
-    pseuds.select {|p| p.is_default? }.first || pseuds.first
+    pseuds.to_enum.find(&:is_default?) || pseuds.first
   end
   
-  # fetch all pseuds belong to a user
+  # fetch all creations a user own (via pseuds)
   def creations
-    pseuds.collect do |pseud| 
-      unless pseud.creations.nil?
-        pseud.creations.entries
-      end
-    end
+    pseuds.collect(&:creations).reject(&:empty?).flatten
   end
   
 end
