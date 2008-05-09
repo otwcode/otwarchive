@@ -28,6 +28,15 @@ RAILS_GEM_VERSION = '2.0.2' unless defined? RAILS_GEM_VERSION
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
 
+# Site configuration (needed before Initializer)
+require 'ostruct'
+require 'yaml'
+hash = YAML.load_file("#{RAILS_ROOT}/config/config.yml")
+if File.exist?("#{RAILS_ROOT}/config/local.yml")
+  hash.merge! YAML.load_file("#{RAILS_ROOT}/config/local.yml")
+end
+::AppConfig = OpenStruct.new(hash)
+
 Rails::Initializer.run do |config|
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
@@ -55,8 +64,8 @@ Rails::Initializer.run do |config|
   # Make sure the secret is at least 30 characters and all random, 
   # no regular words or you'll be exposed to dictionary attacks.
   config.action_controller.session = {
-    :session_key => '_otwarchive_session',
-    :secret      => '898f6d0363863ec79d782238cd1c5767636d712cc0d138238bcd5bfc9d2672fb852380050e52c03a0401175d909c09dba48512a119d46b126a84c2dd05716eb5'
+    :session_key => AppConfig.session_key,
+    :secret      => AppConfig.session_secret
   }
 
   # Use the database for sessions instead of the cookie-based default,
@@ -79,7 +88,4 @@ Rails::Initializer.run do |config|
   # Make Active Record use UTC-base instead of local time
   # config.active_record.default_timezone = :utc
   
-  #variables for Askimet
-  ASKIMET_KEY = '6833ee7298cf'
-  SITE_NAME = 'http://transformativeworks.org'
 end

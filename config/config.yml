@@ -1,0 +1,48 @@
+# WARNING: NEVER EDIT config.yml
+# Instead, copy any sections you want to change to local.yml and edit them there.
+#
+
+# Your secret key for verifying cookie session data integrity.
+# If you change this key, all old sessions will become invalid!
+# Make sure the secret is at least 30 characters and all random,
+# no regular words or you'll be exposed to dictionary attacks.
+
+# do not use the defaults in production!
+session_key: '_otwarchive_session'
+session_secret: '898f6d0363863ec79d782238cd1c5767636d712cc0d138238bcd5bfc9d2672fb852380050e52c03a0401175d909c09dba48512a119d46b126a84c2dd05716eb5'
+
+return_address: 'otwdb-do-not-reply@archiveofourown.org'
+support_address: 'support@archiveofourown.org'
+abuse_address: 'abuse@archiveofourown.org'
+question_address: 'questions@archiveofourown.org'
+app_url: 'http://www.archiveofourown.org'
+app_name: 'An Archive Of Our Own'
+logo: 'OTWLogo.jpg'
+alt_logo: 'OTW Logo'
+
+smtp_server: 'localhost'
+smtp_domain: 'localhost'
+# if required for email authentication
+smtp_user: ''
+smtp_password: ''
+
+# variables for Askimet http://akismet.com/
+askimet_key: = '6833ee7298cf'
+askimet_name: = 'http://transformativeworks.org'
+
+base_language: 'en-US'    # must be one of the following
+supported_locales: { en: en-US,
+ it: it-IT,
+ fr: fr-FR,
+ de: de-DE,
+ ja: ja-JP,
+ es: es-ES,
+ cs: cs-CZ,
+ zh: zh-CHS,
+ ru: ru-RU,
+ pt: pt-BR,
+ nl: nl-NL,
+ id: id-ID,
+ fi: fi-FI }
+
+tos: This is where the Terms of Service will go when they're finished. This is FAKE FAKE FAKE! Placeholder only! In no way should any of the text inside this box be assumed to have anything to do with the real live Terms of Service as devised by the Archive of Our Own project. No promises are intended. No policies are implemented. This is just a little something the coder is writing so the text box will scroll and she can see how the scrolling looks. Is it too big? Too small? Too short? Too tall? How do the dimensions look? The real Terms of Service are forthcoming and should be pasted into this section of this document.

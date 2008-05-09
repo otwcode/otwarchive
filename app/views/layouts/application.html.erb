@@ -8,7 +8,7 @@
         "text/html; charset=iso-8859-1">
 
         <title>
-        	An Archive Of Our Own &gt;&gt;
+        	<%=h AppConfig.app_name .t %> &gt;&gt;
         	<%= controller.action_name %>
 		</title>
         <%= stylesheet_link_tag 'archive_core', :media => 'screen' %>
@@ -49,7 +49,7 @@
 			<% end -%>
             </div>
 
-            <h1><%=h "An Archive Of Our Own: Extreme Alpha".t %></h1>
+            <h1><%=h AppConfig.app_name .t %><%=h ": Extreme Alpha".t %></h1>
 			<div class="clearboth"></div>
         </div>
         <!-- END header -->

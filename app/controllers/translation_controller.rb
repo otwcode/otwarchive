@@ -3,8 +3,8 @@ class TranslationController < ApplicationController
   def index    
     @title = "Translation Interface"
     if !Locale.language
-      default_loc = Locale.new(APPLICATION_DEFAULT_LOCALE)
-      Locale.set default_loc
+       default_loc = Locale.new(AppConfig.base_language)
+       Locale.set default_loc
     end
     
     @view_translations = ViewTranslation.find(:all, 
