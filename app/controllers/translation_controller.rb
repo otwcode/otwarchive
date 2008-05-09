@@ -3,7 +3,7 @@ class TranslationController < ApplicationController
   def index    
     @title = "Translation Interface"
     if !Locale.language
-       default_loc = Locale.new(ArchiveConfig.base_language)
+       default_loc = Locale.new(ArchiveConfig.BASE_LANGUAGE)
        Locale.set default_loc
     end
     

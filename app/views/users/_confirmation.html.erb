@@ -5,12 +5,12 @@
   <%= "In just a few minutes, you should receive an email at the address you gave us.".t %>  
   <%= "This will have the URL you need to go to in order to verify your account and complete the account creation process.".t %>  
   <%= "You might want to add".t -%> 
-  <strong><%=h ArchiveConfig.return_address %></strong>
+  <strong><%=h ArchiveConfig.RETURN_ADDRESS %></strong>
   <%= "to your address book to make sure you get the mail.".t -%>
 </p>
 
 <p>
-  If you don't hear from us within two hours, and you don't find our email in your spam filter, please drop us a line at <%= mail_to ArchiveConfig.support_address, ArchiveConfig.support_address %>.
+  If you don't hear from us within two hours, and you don't find our email in your spam filter, please drop us a line at <%= mail_to ArchiveConfig.SUPPORT_ADDRESS, ArchiveConfig.SUPPORT_ADDRESS %>.
 </p>
 
 <p>

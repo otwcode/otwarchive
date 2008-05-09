@@ -25,18 +25,18 @@ class ApplicationController < ActionController::Base
     @locale = params[:locale] || session[:locale] ||
               request_language || default_locale
     begin
-      unless ArchiveConfig.supported_locales[@locale]
+      unless ArchiveConfig.SUPPORTED_LOCALES[@locale]
         flash[:warning] = "We don't currently support your locale, sorry, so 
             we're falling back to the default locale (#{LANGUAGE_NAMES[default_locale]}). Please contact our 
             volunteers committee if you'd be willing to help out as a translator!"
         redirect_to url_for(:overwrite_params => {:locale => default_locale})
       end
       session[:locale] = @locale
-      Locale.set ArchiveConfig.supported_locales[@locale]      
+      Locale.set ArchiveConfig.SUPPORTED_LOCALES[@locale]      
       # prepend the user's locale to their view path
       prepend_view_path File.join(File.dirname(__FILE__), '..', "views/localized/#{@locale}")
     rescue
-      Locale.set ArchiveConfig.supported_locales[default_locale]
+      Locale.set ArchiveConfig.SUPPORTED_LOCALES[default_locale]
     end  
   end 
   #### -- GLOBALIZATION -- ####

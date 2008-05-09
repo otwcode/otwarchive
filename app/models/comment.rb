@@ -17,8 +17,8 @@ class Comment < ActiveRecord::Base
   
   def akismet_attributes
     {
-      :key => ArchiveConfig.askimet_key,
-      :blog => ArchiveConfig.askimet_name,
+      :key => ArchiveConfig.ASKIMET_KEY,
+      :blog => ArchiveConfig.ASKIMET_NAME,
       :user_ip => ip_address,
       :user_agent => user_agent,
       :comment_author => name,
