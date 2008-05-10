@@ -5,3 +5,9 @@ SESSION_SECRET: 'Eipo1iufaokiechoomameingeeguzu ohW1aevoteishumieforeiquoopeez'
 RETURN_ADDRESS: 'do-not-reply@test.com'
 
 SUPPORTED_LOCALES: { en: en-US, fr: fr-FR }
+
+RETURN_ADDRESS: 'do-not-reply@test.com'
+ABUSE_ADDRESS: 'abuse@test.com'
+WEBMASTER_ADDRESS: 'webmaster@test.com'
+APP_URL: 'http://www.archiveofourown.org'
+APP_NAME: 'Test Archive'
