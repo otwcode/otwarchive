@@ -29,8 +29,8 @@ SMTP_USER: ''
 SMTP_PASSWORD: ''
 
 # variables for Askimet http://akismet.com/
-ASKIMET_KEY: = '6833ee7298cf'
-ASKIMET_NAME: = 'http://transformativeworks.org'
+AKISMET_KEY: '6833ee7298cf'
+AKISMET_NAME: 'http://transformativeworks.org'
 
 BASE_LANGUAGE: 'en-US'    # must be one of the following
 SUPPORTED_LOCALES: { en: en-US,

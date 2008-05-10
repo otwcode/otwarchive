@@ -17,8 +17,8 @@ class Comment < ActiveRecord::Base
   
   def akismet_attributes
     {
-      :key => ArchiveConfig.ASKIMET_KEY,
-      :blog => ArchiveConfig.ASKIMET_NAME,
+      :key => ArchiveConfig.AKISMET_KEY,
+      :blog => ArchiveConfig.AKISMET_NAME,
       :user_ip => ip_address,
       :user_agent => user_agent,
       :comment_author => name,
@@ -29,7 +29,7 @@ class Comment < ActiveRecord::Base
   
   def check_for_spam
     #don't check for spam if the comment is 'signed'
-    self.approved = self.pseud_id || !Akismetor.spam?(akismet_attributes)
+    self.approved = !self.pseud_id.nil? || !Akismetor.spam?(akismet_attributes)
     true # return true so it doesn't stop save
   end
   
