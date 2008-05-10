@@ -80,8 +80,8 @@ class CommentsController < ApplicationController
   # DELETE /comments/1.xml
   def destroy
     @comment = Comment.find(params[:id])
-    @comment.destroy_or_mark_delete
-    redirect_to(comments_url)
+    @comment.destroy_or_mark_deleted
+    redirect_to(@comment.commentable)
   end
   
 
