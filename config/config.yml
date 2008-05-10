@@ -20,6 +20,7 @@ APP_URL: 'http://www.archiveofourown.org'
 APP_NAME: 'An Archive Of Our Own'
 LOGO: 'OTWLogo.jpg'
 ALT_LOGO: 'OTW Logo'
+REVISION: ''
 
 SMTP_SERVER: 'localhost'
 SMTP_DOMAIN: 'localhost'

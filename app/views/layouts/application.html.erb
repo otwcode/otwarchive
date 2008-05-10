@@ -49,7 +49,9 @@
 			<% end -%>
             </div>
 
-            <h1><%=h ArchiveConfig.APP_NAME .t %><%=h ": Extreme Alpha".t %></h1>
+            <h1><%=h ArchiveConfig.APP_NAME .t %><%=h ": Extreme Alpha".t %>
+                <% unless ArchiveConfig.REVISION.blank? %>(rev. <%= ArchiveConfig.REVISION %>)<% end %>
+            </h1>
 			<div class="clearboth"></div>
         </div>
         <!-- END header -->
