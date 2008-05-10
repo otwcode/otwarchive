@@ -56,7 +56,7 @@ class CommentsController < ApplicationController
         redirect_to(@comment.commentable)
       else
         flash[:notice] = 'Comment was marked as spam by Akismet.'
-        redirect_to(comments_url)
+        redirect_to(@comment.commentable)
       end
     else
       render :action => "new", :locals => {:commentable => @comment.commentable, :button_name => 'Create'}
