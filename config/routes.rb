@@ -1,5 +1,8 @@
 ActionController::Routing::Routes.draw do |map|         
   map.root :controller => 'session', :action => 'new', :locale => 'en'      
+
+  map.abuse_reports '/abuse/fix', :controller => 'abuse_reports', :action => 'create', :path_prefix => ':locale'
+  map.new_abuse_report '/abuse/', :controller => 'abuse_reports', :action => 'new', :path_prefix => ':locale'
   
   map.resources :passwords, :path_prefix => ':locale'
   

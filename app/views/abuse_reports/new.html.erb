@@ -1,0 +1,26 @@
+<%= error_messages_for :abuse_report %>
+
+<% form_for(@abuse_report) do |f| %>
+  <p>
+    <b><%=h "If you wish to be contacted, fill in a valid email address.".t %><br />
+    <%= "Otherwise leave it blank and this will be treated as an anonymous report".t %></b><br />
+    <%= f.text_field :email, :size => 60 %>
+  </p>
+
+  <p>
+    <b><%=h "Please fill in the URL of the page in question.".t %><br />
+    <%=h "If you came here via the link at the bottom of the page,".t %><br />
+    <%=h "this will be pre-filled in for you".t %></b><br />
+    <%= f.text_field :url, :size => 60 %>
+  </p>
+
+  <p>
+    <b><%=h "Please describe the problem in as much detail as possible." .t %></b><br />
+    <%= f.text_area :comment, :cols => 60 %>
+  </p>
+  <%=h "Submitting this form will send an email to the abuse team." %>
+
+  <p>
+    <%= f.submit "Submit" %>
+  </p>
+<% end %>

@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+good:
+  email: test@test.com
+  url: http://www.test.com/en/work/2
+  comment: I hate work 2
+
+anonymous:
+  email: 
+  url: http://www.test.com/
+  comment: anonymouse report
