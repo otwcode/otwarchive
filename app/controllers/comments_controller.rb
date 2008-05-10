@@ -18,9 +18,8 @@ class CommentsController < ApplicationController
   end
   
   # GET /comments
-  # GET /comments.xml
   def index 
-    @comments = @commentable.find_all_comments
+    @comments = @commentable.nil? ? Comment.find(:all) : @commentable.find_all_comments
   end
   
   # GET /comments/1
