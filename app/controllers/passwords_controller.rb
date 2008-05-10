@@ -14,7 +14,7 @@ class PasswordsController < ApplicationController
       flash[:notice] = 'Check your email for your new password.'
       redirect_to login_path 
     else
-      flash[:notice] = 'No Such User.'
+      flash[:error] = 'No Such User.'
       render :action => "new"
     end
   end    
