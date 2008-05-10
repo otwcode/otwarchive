@@ -15,13 +15,13 @@ class AbuseReportsControllerTest < ActionController::TestCase
     assert_difference('AbuseReport.count') do
       post :create, :locale => 'en', :abuse_report => 
        { :email => 'test_create@example.com',
-         :url => 'http://test.com/en/works/2',
+         :url => 'http://www.test.com/en/works/2',
          :comment => 'I hate work 2' }
     end
 
     assert_equal(1, ActionMailer::Base.deliveries.length)
     assert flash.has_key?(:notice)
-    assert_redirected_to 'http://test.com/en/works/2'
+    assert_redirected_to 'http://www.test.com/en/works/2'
   end
 
   def test_didnt_save   # a missing url will prevent save
