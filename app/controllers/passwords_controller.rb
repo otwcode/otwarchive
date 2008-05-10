@@ -6,13 +6,15 @@ class PasswordsController < ApplicationController
   
   def create
     @user = User.find_by_login(params[:login])
-    @user.reset_user_password
     
-    if @user.save
+    if @user 
+      @user.reset_user_password
+      @user.save
       UserMailer.deliver_reset_password(@user)
       flash[:notice] = 'Check your email for your new password.'
       redirect_to login_path 
     else
+      flash[:notice] = 'No Such User.'
       render :action => "new"
     end
   end    
