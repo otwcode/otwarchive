@@ -29,7 +29,6 @@ class UsersController < ApplicationController
     @user.pseuds << Pseud.new(:name => @user.login, :description => "Default pseud".t, :is_default => :true)
     
     if @user.save
-      flash[:error] = 'Mailing currently is not working, so instead please use <a href=' + activate_path(@user.activation_code) + '>your activation url</a>.'
       render :partial => "confirmation", :layout => "application"
     else
       render :action => "new"
@@ -37,12 +36,20 @@ class UsersController < ApplicationController
   end
   
   def activate
-    self.current_user = params[:id].blank? ? :false : User.find_by_activation_code(params[:id])
-    if logged_in? && !current_user.active?
-      current_user.activate
-      flash[:notice] = "Signup complete!"
+    if params[:id].blank?
+      flash[:error] = "Your activation key is missing."
+      redirect_to ''
+    else
+      @user = User.find_by_activation_code(params[:id])
+      if @user
+        @user.activate
+        flash[:notice] = "Signup complete! This is your public profile. Please log in to edit it."
+        redirect_to(@user)
+      else
+        flash[:error] = "Your activation key is invalid. Perhaps it has expired."
+        redirect_to '' 
+      end
     end
-    redirect_to :action => :show, :id => current_user.id
   end
   
   # PUT /users/1

@@ -28,7 +28,7 @@ ActionController::Routing::Routes.draw do |map|
   map.admin_login '/admin_login', :controller => 'admin_session', :action => 'new', :path_prefix => ':locale'
   map.admin_logout '/admin_logout', :controller => 'admin_session', :action => 'destroy', :path_prefix => ':locale'
   
-  map.activate '/activate/:id', :controller => 'users', :action => 'activate', :path_prefix => ':locale'
+  map.activate '/activate/:id', :controller => 'users', :action => 'activate'
   
   # The priority is based upon order of creation: first created -> highest priority.
 
