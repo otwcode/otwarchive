@@ -36,7 +36,9 @@ chapter_1_of_work_3_of_3:
   position: 1
   work_id: 6
 
- 
- 
- 
-  
+only_chapter_of_incomplete_work:
+  id: 7
+  content: Chapter text here
+  position: 1
+  work_id: 2
+

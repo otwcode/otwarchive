@@ -10,7 +10,17 @@ basic_creatorship:
 basic_creatorship2:
   creation_id: 1 
   creation_type: Chapter
-  pseud_id: 1 
+  pseud_id: 1
+
+creatorship_incomplete_work:
+  creation_id: 2
+  creation_type: Work
+  pseud_id: 2
+
+creatorship_first_chapter_of_incomplete_work:
+  creation_id: 7
+  creation_type: Chapter
+  pseud_id: 2
 
 # For testing the cases where a user might have 0, 1, or > 2 works
 # Work and chapter both owner by same pseud
