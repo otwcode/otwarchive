@@ -35,9 +35,6 @@ hash = YAML.load_file("#{RAILS_ROOT}/config/config.yml")
 if File.exist?("#{RAILS_ROOT}/config/local.yml")
   hash.merge! YAML.load_file("#{RAILS_ROOT}/config/local.yml")
 end
-if ENV['RAILS_ENV'] == 'test'
-  hash.merge! YAML.load_file("#{RAILS_ROOT}/config/test.yml")
-end
 ::ArchiveConfig = OpenStruct.new(hash)
 
 Rails::Initializer.run do |config|

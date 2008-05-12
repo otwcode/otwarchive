@@ -6,9 +6,9 @@ class AdminMailerTest < ActionMailer::TestCase
     url = reporter = comment = ""
     mail = AdminMailer.create_abuse_report(reporter, url, comment)
 
-    assert_equal ['do-not-reply@test.com'], mail.from
-    assert_equal ['abuse@test.com'], mail.to
-    assert_equal "Test Archive - Admin Abuse Report", mail.subject
+    assert_equal ['do-not-reply@example.org'], mail.from
+    assert_equal ['abuse@example.org'], mail.to
+    assert_equal "Example Archive - Admin Abuse Report", mail.subject
   end
   def test_abuse_report_body
     url = "http://localhost:3001/en/works/2"
