@@ -30,6 +30,9 @@ SMTP_DOMAIN: 'localhost'
 # if required for email authentication
 SMTP_USER: ''
 SMTP_PASSWORD: ''
+SMTP_PORT: 25
+SMTP_AUTHENTICATION: ''
+
 
 # variables for Askimet http://akismet.com/
 AKISMET_KEY: '6833ee7298cf'
