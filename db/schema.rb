@@ -9,15 +9,23 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 34) do
+ActiveRecord::Schema.define(:version => 36) do
+
+  create_table "abuse_reports", :force => true do |t|
+    t.string   "email"
+    t.string   "url"
+    t.text     "comment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "admins", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "login"
     t.string   "crypted_password"
     t.string   "salt"
     t.string   "email"
-    t.string   "login"
   end
 
   create_table "bookmarks", :force => true do |t|
@@ -138,17 +146,18 @@ ActiveRecord::Schema.define(:version => 34) do
   end
 
   create_table "open_id_authentication_nonces", :force => true do |t|
-    t.integer "timestamp",                  :null => false
+    t.integer "timestamp",  :null => false
     t.string  "server_url"
-    t.string  "salt",       :default => "", :null => false
+    t.string  "salt",       :null => false
   end
 
   create_table "preferences", :force => true do |t|
     t.integer  "user_id"
-    t.boolean  "history_enabled", :default => true
-    t.boolean  "email_visible",   :default => false
+    t.boolean  "history_enabled",       :default => true
+    t.boolean  "email_visible",         :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "date_of_birth_visible", :default => false
   end
 
   create_table "profiles", :force => true do |t|
@@ -194,7 +203,7 @@ ActiveRecord::Schema.define(:version => 34) do
   end
 
   create_table "sessions", :force => true do |t|
-    t.string   "session_id", :default => "", :null => false
+    t.string   "session_id", :null => false
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -206,14 +215,14 @@ ActiveRecord::Schema.define(:version => 34) do
   create_table "users", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "activation_code"
+    t.string   "login"
     t.datetime "activated_at"
     t.string   "crypted_password"
     t.string   "salt"
     t.string   "remember_token"
-    t.datetime "remember_token_expires_at"
-    t.string   "activation_code"
     t.string   "email"
-    t.string   "login"
+    t.datetime "remember_token_expires_at"
     t.string   "identity_url"
   end
 

@@ -13,10 +13,12 @@
     <%=h @user.profile.location -%>
   </p>
 
+	<% if @user.preference.date_of_birth_visible %>
   <p>
     <b><%= "Date of Birth".t -%>:</b> 
     <%=h @user.profile.date_of_birth -%>
   </p>
+	<%- end -%>
 
   <p>
     <b><%= "About Me".t -%>:</b><br />
