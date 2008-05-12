@@ -78,7 +78,7 @@ module CommentMethods
     def full_set 
       if self.threaded_left
         Comment.find(:all, :conditions => ["threaded_left BETWEEN (?) and (?) AND thread = (?)", self.threaded_left, self.threaded_right, self.thread],
-                            :include => :pseud)
+                            :include => :pseud, :order => "threaded_left")
       else
         return [self]
       end
