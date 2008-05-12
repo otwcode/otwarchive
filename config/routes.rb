@@ -14,7 +14,7 @@ ActionController::Routing::Routes.draw do |map|
     work.resources :chapters, :has_many => :comments, :member => { :preview => :get, :post => :post }
   end
   
-  map.resources :comments, :has_many => :comments, :path_prefix => ':locale'
+  map.resources :comments, :has_many => :comments, :path_prefix => ':locale', :member => { :approve => :put, :reject => :put }
 
   map.resources :bookmarks, :path_prefix => ':locale'
 
