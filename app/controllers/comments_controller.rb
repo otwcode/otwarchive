@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController 
-  before_filter :load_commentable, :only => [ :index, :new ]
+  before_filter :load_commentable, :only => [ :index, :new, :create, :edit, :update ]
   
   # Get the parent of the desired comment(s) 
   # Just covering all the bases here for now
@@ -30,13 +30,16 @@ class CommentsController < ApplicationController
   end
   
   # GET /comments/new
-  # GET /comments/new.xml
   def new
-    if @commentable.kind_of?(Work)
+    if @commentable.nil?
+      flash[:error] = "What did you want to comment on?".t
+      redirect_to :back
+    elsif @commentable.kind_of?(Work)
       @commentable = @commentable.chapters.last
     end
     @comment = Comment.new
   end
+  
   
   # GET /comments/1/edit
   def edit
@@ -46,19 +49,24 @@ class CommentsController < ApplicationController
   # POST /comments
   # POST /comments.xml
   def create
-    @comment = Comment.new(params[:comment])
-    @comment.update_attribute(:user_agent,request.env['HTTP_USER_AGENT'])
-    
-    if @comment.set_and_save
-      if @comment.approved?
-        flash[:notice] = 'Comment was successfully created.'
-        redirect_to(@comment.commentable)
-      else
-        flash[:notice] = 'Comment was marked as spam by Akismet.'
-        redirect_to(@comment.commentable)
-      end
+    if @commentable.nil?
+      flash[:error] = "What did you want to comment on?".t
+      redirect_to :back
     else
-      render :action => "new", :locals => {:commentable => @comment.commentable, :button_name => 'Create'}
+      @comment = Comment.new(params[:comment])
+      @comment.update_attribute(:user_agent,request.env['HTTP_USER_AGENT'])
+      
+      if @comment.set_and_save
+        if @comment.approved?
+          flash[:notice] = 'Comment was successfully created.'
+          redirect_to(@comment.commentable)
+        else
+          flash[:notice] = 'Comment was marked as spam by Akismet.'
+          redirect_to(@comment.commentable)
+        end
+      else
+        render :action => "new", :locals => {:commentable => @comment.commentable, :button_name => 'Create'}
+      end
     end
   end
   

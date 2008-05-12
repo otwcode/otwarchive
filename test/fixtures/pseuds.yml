@@ -1,64 +1,70 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
+# Rules for pseuds:
+# - every user must have a default pseud
+# - every user must have a pseud matching their username
+# - only one of a user's pseuds may be default
+# 
+
 default_pseud:
   id: 1
-  user_id: 1
-  name: Default Pseud
-  description: This is a default pseud for user1.
+  user_id: 1 # basic_user
+  name: basic_user
+  description: This is a default pseud for basic_user.
   is_default: true
 
 non_default_pseud:
   id: 2
-  user_id: 1
+  user_id: 1 # basic_user
   name: Non-Default Pseud
-  description: This is a non default pseud.
+  description: This is a non default pseud for basic_user.
   is_default: false
 
-pseud_for_user_2:
-  id: 98
-  user_id: 2
-  name: Default Pseud
-  description: This is a default pseud for user1
-  is_default: true
-
-pseud_1_for_user_3:
+pseud_1_of_3:
   id: 3
-  user_id: 3
-  name: joss
+  user_id: 2 # user_with_three_pseuds 
+  name: user_with_three_pseuds
   description: evil overlord
   is_default: true
 
-pseud_2_for_user_3:
+pseud_2_of_3:
   id: 4
-  user_id: 3
+  user_id: 2 # user_with_three_pseuds
   name: buffy
   description: chosen one
   is_default: false
 
-pseud_3_for_user_3:
+pseud_3_of_3:
   id: 5
-  user_id: 3
+  user_id: 2 # user_with_three_pseuds
   name: willow
   description: witch
   is_default: false
 
 pseud_with_one_work:
   id: 6
-  user_id: 1
+  user_id: 1 # basic_user
   name: Pseud With One Work
   description: This is a non default pseud.
   is_default: false
 
 pseud_with_three_works:
   id: 7
-  user_id: 1
+  user_id: 1 # basic_user
   name: Pseud With Three Works
   description: This is a non default pseud.
   is_default: false
 
+pseud_1_of_1:
+  id: 8
+  user_id: 3 # user_with_one_pseud
+  name: user_with_one_pseud
+  description: oneandonlypseud
+  is_default: true
+
 pseud_with_no_works: 
   id: 99
-  user_id: 1
+  user_id: 1 # basic_user
   name: Pseud With No Works
   description: This is a non default pseud.
   is_default: false
