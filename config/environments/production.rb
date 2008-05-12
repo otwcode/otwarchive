@@ -17,3 +17,7 @@ config.action_view.cache_template_loading            = true
 
 # Disable delivery errors, bad email addresses will be ignored
 # config.action_mailer.raise_delivery_errors = false
+
+ExceptionNotifier.exception_recipients = ArchiveConfig.ERROR_ADDRESS
+ExceptionNotifier.sender_address = ArchiveConfig.RETURN_ADDRESS
+ExceptionNotifier.email_prefix = ArchiveConfig.ERROR_PREFIX

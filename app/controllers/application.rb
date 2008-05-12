@@ -4,6 +4,8 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
 
+  include ExceptionNotifiable
+
   # Store the current user as a class variable in the User class,
   # so other models can access it with "User.current_user"
   before_filter :set_current_user

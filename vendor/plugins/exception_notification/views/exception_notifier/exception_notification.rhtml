@@ -1,0 +1,3 @@
+<%= @exception.class %> occurred in <%= @controller.controller_name %>#<%= @controller.action_name %>:
+
+<%= @sections.map { |section| render_section(section) }.join %>

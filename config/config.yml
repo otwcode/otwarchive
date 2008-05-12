@@ -16,6 +16,9 @@ SUPPORT_ADDRESS: 'support@example.org'
 ABUSE_ADDRESS: 'abuse@example.org'
 QUESTION_ADDRESS: 'questions@example.org'
 WEBMASTER_ADDRESS: 'webmaster@example.org'
+ERROR_ADDRESS: errors@example.org
+ERROR_PREFIX: "[ERROR] "
+
 APP_URL: 'http://www.example.org'
 APP_NAME: 'Example Archive'
 LOGO: 'OTWLogo.jpg'

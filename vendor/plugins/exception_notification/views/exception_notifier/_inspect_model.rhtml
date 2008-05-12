@@ -1,0 +1,16 @@
+<% if show_attributes -%>
+[attributes]
+<% attrs = inspect_model.attributes -%>
+<% max = attrs.keys.max { |a,b| a.length <=> b.length } -%>
+<% attrs.keys.sort.each do |attr| -%>
+* <%= "%*-s: %s" % [max.length, attr, object_to_yaml(attrs[attr]).gsub(/\n/, "\n  ").strip] %>
+<% end -%>
+<% end -%>
+
+<% if show_instance_variables -%>
+[instance variables]
+<% inspect_model.instance_variables.sort.each do |variable| -%>
+<%- next if variable == "@attributes" -%>
+* <%= variable %>: <%= inspect_value(inspect_model.instance_variable_get(variable)) %>
+<% end -%>
+<% end -%>

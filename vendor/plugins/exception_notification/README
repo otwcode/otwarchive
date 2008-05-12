@@ -1,0 +1,111 @@
+= Exception Notifier Plugin for Rails
+
+The Exception Notifier plugin provides a mailer object and a default set of
+templates for sending email notifications when errors occur in a Rails
+application. The plugin is configurable, allowing programmers to specify:
+
+* the sender address of the email
+* the recipient addresses
+* the text used to prefix the subject line
+
+The email includes information about the current request, session, and
+environment, and also gives a backtrace of the exception.
+
+== Usage
+
+First, include the ExceptionNotifiable mixin in whichever controller you want
+to generate error emails (typically ApplicationController):
+
+  class ApplicationController < ActionController::Base
+    include ExceptionNotifiable
+    ...
+  end
+
+Then, specify the email recipients in your environment:
+
+  ExceptionNotifier.exception_recipients = %w(joe@schmoe.com bill@schmoe.com)
+
+And that's it! The defaults take care of the rest.
+
+== Configuration
+
+You can tweak other values to your liking, as well. In your environment file,
+just set any or all of the following values:
+
+  # defaults to exception.notifier@default.com
+  ExceptionNotifier.sender_address =
+    %("Application Error" <app.error@myapp.com>)
+
+  # defaults to "[ERROR] "
+  ExceptionNotifier.email_prefix = "[APP] "
+
+Email notifications will only occur when the IP address is determined not to
+be local. You can specify certain addresses to always be local so that you'll
+get a detailed error instead of the generic error page. You do this in your
+controller (or even per-controller):
+
+  consider_local "64.72.18.143", "14.17.21.25"
+
+You can specify subnet masks as well, so that all matching addresses are
+considered local:
+
+  consider_local "64.72.18.143/24"
+
+The address "127.0.0.1" is always considered local. If you want to completely
+reset the list of all addresses (for instance, if you wanted "127.0.0.1" to
+NOT be considered local), you can simply do, somewhere in your controller:
+
+  local_addresses.clear
+
+== Customization
+
+By default, the notification email includes four parts: request, session,
+environment, and backtrace (in that order). You can customize how each of those
+sections are rendered by placing a partial named for that part in your
+app/views/exception_notifier directory (e.g., _session.rhtml). Each partial has
+access to the following variables:
+
+* @controller: the controller that caused the error
+* @request: the current request object
+* @exception: the exception that was raised
+* @host: the name of the host that made the request
+* @backtrace: a sanitized version of the exception's backtrace
+* @rails_root: a sanitized version of RAILS_ROOT
+* @data: a hash of optional data values that were passed to the notifier
+* @sections: the array of sections to include in the email
+
+You can reorder the sections, or exclude sections completely, by altering the
+ExceptionNotifier.sections variable. You can even add new sections that
+describe application-specific data--just add the section's name to the list
+(whereever you'd like), and define the corresponding partial. Then, if your
+new section requires information that isn't available by default, make sure
+it is made available to the email using the exception_data macro:
+
+  class ApplicationController < ActionController::Base
+    ...
+    protected
+      exception_data :additional_data
+
+      def additional_data
+        { :document => @document,
+          :person => @person }
+      end
+    ...
+  end
+
+In the above case, @document and @person would be made available to the email
+renderer, allowing your new section(s) to access and display them. See the
+existing sections defined by the plugin for examples of how to write your own.
+
+== Advanced Customization
+
+By default, the email notifier will only notify on critical errors. For
+ActiveRecord::RecordNotFound and ActionController::UnknownAction, it will
+simply render the contents of your public/404.html file. Other exceptions
+will render public/500.html and will send the email notification. If you want
+to use different rules for the notification, you will need to implement your
+own rescue_action_in_public method. You can look at the default implementation
+in ExceptionNotifiable for an example of how to go about that.
+
+
+Copyright (c) 2005 Jamis Buck, released under the MIT license
