@@ -29,6 +29,8 @@ class UsersController < ApplicationController
     @user.pseuds << Pseud.new(:name => @user.login, :description => "Default pseud".t, :is_default => :true)
     
     if @user.save
+      flash[:notice] = 'during testing you can activate via <a href=' + activate_path(@user.activation_code) + '>your activation url</a>.'
+
       render :partial => "confirmation", :layout => "application"
     else
       render :action => "new"
