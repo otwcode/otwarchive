@@ -130,7 +130,64 @@ module ApplicationHelper
 
   #santizes and formats a string with paragraphs
   def sanitize_format(content)
-    sanitize(simple_format(content))
+    close_tags(sanitize(simple_format(content)))
   end
-  
+    
+  #closes tags in html (uses http://snippets.dzone.com/posts/show/3822, but
+  #modified)
+  def close_tags(html)
+    # no closing tag necessary for these
+    soloTags = ["br","hr"]
+    # Analyze all <> elements
+    stack = Array.new
+    result = html.gsub( /(<.*?>)/m ) do | element |
+      if element =~ /\A<\/(\w+)/ then
+        # </tag>
+        tag = $1.downcase
+        if stack.include?(tag) then
+          # If allowed and on the stack
+          # Then pop down the stack
+          top = stack.pop
+          out = "</#{top}>"
+          until top == tag do
+            top = stack.pop
+            out << "</#{top}>"
+          end
+          out
+        end
+      elsif element =~ /\A<(\w+)\s*\/>/
+        # <tag />
+        tag = $1.downcase
+        "<#{tag} />"
+      elsif element =~ /\A<(\w+)/ then
+        # <tag ...>
+        tag = $1.downcase
+        if ! soloTags.include?(tag) then
+            stack.push(tag)
+        end
+        out = "<#{tag}"
+        tag = $1.downcase
+        while ( $' =~ /(\w+)=("[^"]+")/ )
+           attr = $1.downcase
+           valu = $2
+           out << " #{attr}=#{valu}"
+        end
+        out << ">"
+      end
+    end
+
+    # eat up unmatched leading >
+    while result.sub!(/\A([^<]*)>/m) { $1 } do end
+
+    # eat up unmatched trailing <
+    while result.sub!(/<([^>]*)\Z/m) { $1 } do end
+
+    # clean up the stack
+    if stack.length > 0 then
+      result << "</#{stack.reverse.join('></')}>"
+    end
+
+    result
+  end
+
 end
