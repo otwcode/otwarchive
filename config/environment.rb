@@ -32,7 +32,7 @@ require File.join(File.dirname(__FILE__), 'boot')
 require 'ostruct'
 require 'yaml'
 hash = YAML.load_file("#{RAILS_ROOT}/config/config.yml")
-if File.exist?("#{RAILS_ROOT}/config/local.yml")
+if File.exist?("#{RAILS_ROOT}/config/local.yml") && !ENV['RAILS_ENV'] == 'test'
   hash.merge! YAML.load_file("#{RAILS_ROOT}/config/local.yml")
 end
 ::ArchiveConfig = OpenStruct.new(hash)
