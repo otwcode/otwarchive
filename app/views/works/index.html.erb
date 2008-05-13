@@ -1,6 +1,6 @@
 <h2><%= "View All Stories".t %></h2>
 <ul class="story-list">
-  <% for work in @works %>
+  <% for work in @works.reverse %>
 
     <!--There must be a more elegant way of assigning class/id to elements, mustn't there? -->
     <li class="story" id="<%=h work.id %>">
