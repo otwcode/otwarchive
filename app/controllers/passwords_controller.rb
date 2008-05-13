@@ -5,8 +5,10 @@ class PasswordsController < ApplicationController
   end
   
   def create
-    @user = User.find_by_login(params[:login])
-    
+    if params[:login]
+      @user = User.find_by_login(params[:login]) || User.find_by_email(params[:login])
+    end
+       
     if @user 
       @user.reset_user_password
       @user.save

@@ -3,7 +3,7 @@
   <p> <%= "Enter your username below, and a new password will be emailed to you." .t %>  </p>
   
 	<% form_tag passwords_path do -%>
-	  <p><label for="login"><%= "Login" .t %></label><br/>
+	  <p><label for="login"><%= "Login or Email Address" .t %></label><br/>
 	  <%= text_field_tag 'login' %></p>
 	
 	  <p><%= submit_tag 'Reset my password' %></p>
