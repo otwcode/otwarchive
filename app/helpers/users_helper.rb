@@ -2,7 +2,7 @@ module UsersHelper
   #print all works that belong to a given pseud
   def print_works(pseud)
     result = ""
-    pseud.works.each do |work|
+    pseud.works.find(:all, :order => "created_at DESC", :conditions => ["posted = 1"]).each do |work|
       if work.posted
         result += "<h4>" + link_to(h(work.metadata.title), work_path(work)) + "</h4>"
 

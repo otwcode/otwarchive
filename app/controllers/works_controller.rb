@@ -18,7 +18,7 @@ class WorksController < ApplicationController
   
   # GET /works
   def index
-    @works = Work.find(:all, :conditions => ["posted = 1"]) 
+    @works = Work.find(:all, :order => "created_at DESC", :conditions => ["posted = 1"]) 
     
   end
   
