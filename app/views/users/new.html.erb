@@ -17,11 +17,11 @@
 	  <!-- Confirm password -->
 	  <span class="authentication-label"><label for="password_confirmation"><%= "Enter it again so we're sure we've got it?" .t %></label></span><br />
 	  <%= f.password_field :password_confirmation, :class => 'authentication-textfield', :tabindex => '4' %><br />
-	  
+	  <% if ArchiveConfig.USE_OPENID %>
 	  <!-- OpenID address - I'm not sure the layout/label text is entirely clear here, the designers may need to look at it -->
 	  <span class="authentication-label"><label for="openid_url"><%= "Alternatively, enter your OpenID address" .t %></label></span><br />
 	  <%= f.text_field :identity_url, :class => 'authentication-textfield', :tabindex => '5' %><br />
-	  
+	  <% end %>
 	  <!-- Email address -->
 	  <span class="authentication-label"><label for="email"><%= "What email address would you like us to use? (This has to be valid -- we'll be sending you a confirmation email before you can activate your account.)" .t %></label></span><br />
 	  <%= f.text_field :email, :class => 'authentication-textfield', :tabindex => '6' %><br />

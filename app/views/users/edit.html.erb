@@ -12,10 +12,12 @@
 	<p><label for="password_confirmation"><%= "Confirm New Password" .t %></label><br/>
 	<%= f.password_field :password_confirmation %></p>
 	
+    <% if ArchiveConfig.USE_OPENID %>
 	<p>
     <label for="openid_url"><%= "Add or Change an OpenID URL" .t %></label><br />
     <%= f.text_field :identity_url %>
   </p>        
+    <% end %>
 
   <% fields_for :profile_attributes,  @user.profile do |p| %>
     <p>

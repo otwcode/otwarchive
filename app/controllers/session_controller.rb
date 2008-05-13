@@ -11,7 +11,7 @@ class SessionController < ApplicationController
   end
   
   def create
-    if using_open_id?
+    if ArchiveConfig.USE_OPENID && using_open_id?
       open_id_authentication(params[:openid_url])
     else
       password_authentication(params[:login], params[:password])

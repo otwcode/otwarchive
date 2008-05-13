@@ -54,3 +54,6 @@ SUPPORTED_LOCALES: { en: en-US,
  fi: fi-FI }
 
 TOS: This is where the Terms of Service will go when they're finished. This is FAKE FAKE FAKE! Placeholder only! In no way should any of the text inside this box be assumed to have anything to do with the real live Terms of Service as devised by the Archive of Our Own project. No promises are intended. No policies are implemented. This is just a little something the coder is writing so the text box will scroll and she can see how the scrolling looks. Is it too big? Too small? Too short? Too tall? How do the dimensions look? The real Terms of Service are forthcoming and should be pasted into this section of this document.
+
+#Allow OpenID Authentication
+USE_OPENID: true

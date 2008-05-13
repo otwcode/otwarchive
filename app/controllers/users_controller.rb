@@ -23,7 +23,7 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])   
     @user.profile = Profile.new
     @user.preference = Preference.new
-    unless params[:user][:identity_url].blank?
+    unless !ArchiveConfig.USE_OPENID || params[:user][:identity_url].blank?
       @user.identity_url = OpenIdAuthentication.normalize_url(@user.identity_url)
     end
     @user.pseuds << Pseud.new(:name => @user.login, :description => "Default pseud".t, :is_default => :true)
@@ -73,6 +73,9 @@ class UsersController < ApplicationController
     
     if @user.update_attributes(params[:user]) && @user.profile.update_attributes(params[:profile_attributes])
       flash[:notice] = 'User was successfully updated.'
+      unless !ArchiveConfig.USE_OPENID || params[:user][:identity_url].blank?
+        @user.identity_url = OpenIdAuthentication.normalize_url(@user.identity_url)
+      end
       redirect_to(@user) 
     else
       render :action => "edit"
