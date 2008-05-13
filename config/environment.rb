@@ -89,3 +89,4 @@ Rails::Initializer.run do |config|
   # config.active_record.default_timezone = :utc
   
 end
+ActionController::AbstractRequest.relative_url_root = ArchiveConfig.PRODUCTION_URL_ROOT if ArchiveConfig.PRODUCTION_URL_ROOT && ENV['RAILS_ENV'] == 'production'
