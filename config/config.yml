@@ -25,13 +25,13 @@ LOGO: 'OTWLogo.jpg'
 ALT_LOGO: 'OTW Logo'
 REVISION: ''
 
-SMTP_SERVER: 'localhost'
-SMTP_DOMAIN: 'localhost'
-# if required for email authentication
-SMTP_USER: ''
-SMTP_PASSWORD: ''
+SMTP_SERVER: localhost
 SMTP_PORT: 25
-SMTP_AUTHENTICATION: ''
+SMTP_DOMAIN: localhost
+# if required for email authentication
+#SMTP_USER: 
+#SMTP_PASSWORD: 
+#SMTP_AUTHENTICATION: # :plain, :login or :cram_md5
 
 
 # variables for Askimet http://akismet.com/
