@@ -44,6 +44,10 @@ class User < ActiveRecord::Base
                           :in => %w{ 1 },
                           :message => 'must be accepted.',
                           :if => :first_save?
+                          
+  def to_param
+    login
+  end
                          
   protected                            
     def first_save?

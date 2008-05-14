@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.xml
   def show
-    @user = User.find(params[:id])
+    @user = User.find_by_login(params[:id])
   end
   
   # GET /users/new
@@ -14,7 +14,7 @@ class UsersController < ApplicationController
   
   # GET /users/1/edit
   def edit
-    @user = User.find(params[:id])
+    @user = User.find_by_login(params[:id])
   end
   
   # POST /users
@@ -57,7 +57,7 @@ class UsersController < ApplicationController
   # PUT /users/1
   # PUT /users/1.xml
   def update
-    @user = User.find(params[:id])
+    @user = User.find_by_login(params[:id])
     
     if @user.profile
       @user.profile.update_attributes params[:profile_attributes]
@@ -85,7 +85,7 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.xml
   def destroy
-    @user = User.find(params[:id])
+    @user = User.find_by_login(params[:id])
     @user.destroy
     
     redirect_to(users_url) 

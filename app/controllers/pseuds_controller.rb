@@ -3,7 +3,7 @@ class PseudsController < ApplicationController
   before_filter :load_user
   
   def load_user
-    @user = User.find(params[:user_id])
+    @user = User.find_by_login(params[:user_id])
   end
   
   

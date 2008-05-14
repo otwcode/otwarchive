@@ -11,7 +11,7 @@ class CommentsController < ApplicationController
     elsif params[:work_id]
       @commentable = Work.find(params[:work_id])
     elsif params[:user_id]
-      @commentable = User.find(params[:user_id])
+      @commentable = User.find_by_login(params[:user_id])
     elsif params[:pseud_id]
       @commentable = Pseud.find(params[:pseud_id])
     end    
