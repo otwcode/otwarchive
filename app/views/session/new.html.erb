@@ -2,8 +2,8 @@
 
 <!-- Please note the tabindex: for logical progression through the page, 
 I have it set to tab through this link, then the "report" link, then the 
-username/password/forgot/submit options.  Questions: Should the username box 
-receive initial tab focus?  Should the username box be first in the tab index? -->
+login/password/forgot/submit options.  Questions: Should the login box 
+receive initial tab focus?  Should the login box be first in the tab index? -->
 <h3 class="authentication-subheading">A project of the <a href="http://transformativeworks.org" tabindex="1">Organization For Transformative Works</a></h3>
 
 <!-- loginform floated right -->
@@ -13,9 +13,9 @@ receive initial tab focus?  Should the username box be first in the tab index? -
 			
   <% form_tag session_path do -%>	
 	
-<!-- Username field -->
+<!-- login field -->
 	<p>
-	<span class="authentication-label"><label for="login"><%= "Username" .t %>:</label></span><br />
+	<span class="authentication-label"><label for="login"><%= "user name".t.capitalize %>:</label></span><br />
 	<%= text_field_tag 'login', '', :class => 'authentication-textfield', :tabindex => '2' %><br />
 	
 			

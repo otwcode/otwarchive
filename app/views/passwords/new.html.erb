@@ -1,9 +1,9 @@
 <h1><%= "Forgot your password?" .t %></h1>
 
-  <p> <%= "Enter your username below, and a new password will be emailed to you." .t %>  </p>
+  <p> <%= "Enter your  ".t + "user name".t  + " or email address below, and a new password will be emailed to you." .t %>  </p>
   
 	<% form_tag passwords_path do -%>
-	  <p><label for="login"><%= "Login or Email Address" .t %></label><br/>
+	  <p>
 	  <%= text_field_tag 'login' %></p>
 	
 	  <p><%= submit_tag 'Reset my password' %></p>

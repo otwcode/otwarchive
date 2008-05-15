@@ -25,7 +25,7 @@
             <div id="login-block">
             <% if logged_in? -%>
 	              <ul>
-				    <li><span><%=h "Hi,".t -%></span> <%= link_to current_user.login, user_path(current_user), :class => 'username' -%>! </li>
+				    <li><span><%=h "Hi,".t -%></span> <%= link_to current_user.login, user_path(current_user), :class => 'login' -%>! </li>
 				  <!-- Translation button -->
 				    <li>
 				      <a href="<%= url_for :controller => 'translation', :action => 'index' -%>">
@@ -35,16 +35,16 @@
 				  </ul>	
 	              <ul>
 	                <li class="first-link"><%= link_to h('Post New'.t), new_work_path -%></li>
-	                <li><%= link_to h('Logout'.t), logout_path -%></li>
+	                <li><%= link_to h('Log out'.t), logout_path -%></li>
 	              </ul>
             <% elsif logged_in_as_admin? -%>
-                <li><span><%=h "Hello,".t -%></span> <%= link_to current_admin.login, admin_path(current_admin), :class => 'username username-admin' -%>!</li>
+                <li><span><%=h "Hello,".t -%></span> <%= link_to current_admin.login, admin_path(current_admin), :class => 'login login-admin' -%>!</li>
                 <ul>
-                    <li><%= link_to h('Logout'.t), admin_logout_path -%></li>
+                    <li><%= link_to h('Log out'.t), admin_logout_path -%></li>
                 </ul>
 			<% else -%>
                 <ul>
-                    <li><%= link_to h('Login'.t), login_path -%></li>
+                    <li><%= link_to h('Log in'.t), login_path -%></li>
                 </ul>			
 			<% end -%>
             </div>

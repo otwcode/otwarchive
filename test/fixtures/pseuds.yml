@@ -2,7 +2,7 @@
 
 # Rules for pseuds:
 # - every user must have a default pseud
-# - every user must have a pseud matching their username
+# - every user must have a pseud matching their login
 # - only one of a user's pseuds may be default
 # 
 

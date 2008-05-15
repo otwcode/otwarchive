@@ -1,13 +1,13 @@
 <h2><%= "Create Account" .t %></h2>
 
-<p><%= "Please select a user name" .t %>. <%= "You will be allowed to post stories under multiple pseudonyms, but you will only have one user name, which is hard for us to change - please choose wisely!" .t %></p>
+<p><%=h "Please select a ".t + "user name".t + ". You will be allowed to post stories under multiple pseudonyms, but you will only have one ".t + "user name".t + ", which is hard for us to change - please choose wisely!" .t %></p>
 
 	<%= error_messages_for :user %>
 
 	<% form_for :user, :url => users_path do |f| -%>
 	  <p>
-	  <!-- Create username -->
-	  <span class="authentication-label"><label for="login"><%= "What would you like as your username?" .t %></label></span><br />
+	  <!-- Create login -->
+	  <span class="authentication-label"><label for="login"><%= "What would you like as your ".t + "user name".t%>?</label></span><br />
 	  <%= f.text_field :login, :class => 'authentication-textfield', :tabindex => '1' %><br />
 
 	  <!-- Password with link to strong password info (still needs to be added) -->

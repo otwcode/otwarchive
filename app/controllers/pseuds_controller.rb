@@ -81,7 +81,7 @@ class PseudsController < ApplicationController
     if @pseud.is_default
       flash[:error] = "You cannot delete your default pseudonym, sorry!".t
     elsif @pseud.name == @user.login
-      flash[:error] = "You cannot delete the pseud matching your username, sorry!".t
+      flash[:error] = "You cannot delete the pseud matching your ".t + "user name".t + ", sorry!".t
     else
       @pseud.destroy
       flash[:notice] = "Pseud destroyed".t

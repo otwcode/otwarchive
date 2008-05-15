@@ -12,7 +12,7 @@ module ApplicationHelper
 
   def byline(creation)
     creation.pseuds.collect { |pseud|
-      link_to pseud.name, user_path(pseud.user), :class => "username story-author"
+      link_to pseud.name, user_path(pseud.user), :class => "login story-author"
     }.join(', ')
   end
   

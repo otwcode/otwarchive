@@ -16,7 +16,6 @@
 	<div id="extra-pseuds" style="display : none;">
 	  <b>Co-Authors</b><br />
 	  <%= text_field_tag :extra_pseuds %>
-    <p>Example: <strong>username:pseud, username:pseud</strong></p>
 	</div>
   
   <% fields_for_metadata(chapter.metadata ||= Metadata.new) do |m| %>

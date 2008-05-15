@@ -116,10 +116,10 @@ hr {
 .clearboth {
 	clear: both;
 }
-.username {
+.login {
 	font-weight: bold;
 }
-.username-admin:after {
+.login-admin:after {
   content: url( '/images/admin.gif' );
 }   
   
@@ -283,7 +283,7 @@ a.story-title {
 	margin-top: 0px;
 	text-align: center;
 }
-.story-show .story-author .username {
+.story-show .story-author .login {
 	font-size: 70%;
 	color: #111111;
 	font-style: normal;
