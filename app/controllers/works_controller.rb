@@ -44,6 +44,7 @@ class WorksController < ApplicationController
   # POST /works
   def create
     @work = Work.new(params[:work])
+    @work.set_initial_version
     @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id]) 
 
     if @work.save
@@ -134,11 +135,18 @@ class WorksController < ApplicationController
   end
   
   protected
+
+  # create a reading object when showing a work, but only if the user has reading 
+  # history enabled and is not the author of the work
   def update_or_create_reading
-    unless is_author
-      reading = Reading.find_or_initialize_by_work_id_and_user_id(@work.id, current_user.id)
-      reading.major_version_read, reading.minor_version_read = @work.major_version, @work.minor_version
-      reading.save
+    if logged_in? && current_user.preference.history_enabled
+      unless is_author
+        reading = Reading.find_or_initialize_by_work_id_and_user_id(@work.id, current_user.id)
+        reading.major_version_read, reading.minor_version_read = @work.major_version, @work.minor_version
+        reading.save
+      end
     end
+    true
   end
+
 end

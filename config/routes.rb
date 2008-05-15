@@ -9,6 +9,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :admins, :path_prefix => ':locale'
 
   map.resources :users, :has_many => :pseuds, :path_prefix => ':locale'
+
+  map.resources :readings, :path_prefix => ':locale'
   
   map.resources :works, :has_many => :comments, :member => { :preview => :get, :post => :post }, :path_prefix => ':locale' do |work|
     work.resources :chapters, :has_many => :comments, :member => { :preview => :get, :post => :post }

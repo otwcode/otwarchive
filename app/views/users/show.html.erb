@@ -38,6 +38,12 @@
   <h3><%=h "Works under the name %s...".t / pseud.name -%></h3>
 
 	<%= print_works(pseud) %>
+
+     
 <%- end -%>
 
 <p><%= link_to 'Manage Names'.t, user_pseuds_path(@user) -%></p>
+
+<% if logged_in? && current_user == @user %>
+  <%= link_to "Reading history".t, readings_url -%>
+<% end %>

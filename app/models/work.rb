@@ -48,6 +48,12 @@ class Work < ActiveRecord::Base
     end
   end  
 
+
+  # sets initial version of work to 1.0
+  def set_initial_version
+    major_version, minor_version = 1, 0
+  end
+
   # provide an interface to increment major version number
   # resets minor_version to 0
   def update_major_version
