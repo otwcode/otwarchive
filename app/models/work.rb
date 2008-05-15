@@ -49,12 +49,13 @@ class Work < ActiveRecord::Base
   end  
 
   # provide an interface to increment major version number
-  def inc_major_version
-    self.update_attribute(:major_version, self.major_version+1)
+  # resets minor_version to 0
+  def update_major_version
+    self.update_attributes({:major_version => self.major_version+1, :minor_version => 0})
   end
 
   # provide an interface to increment minor version number
-  def inc_minor_version
+  def update_minor_version
     self.update_attribute(:minor_version, self.minor_version+1)
   end
 end

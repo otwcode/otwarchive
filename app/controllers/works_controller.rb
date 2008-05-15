@@ -88,7 +88,7 @@ class WorksController < ApplicationController
     else  
       if @work.update_attributes(params[:work])
         Creatorship.add_authors(@work, @pseuds)
-        @work.inc_minor_version
+        @work.update_minor_version
         flash[:notice] = 'Work was successfully updated.'
         redirect_to(@work)
       else
