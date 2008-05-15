@@ -18,6 +18,10 @@ QUESTION_ADDRESS: 'questions@example.org'
 WEBMASTER_ADDRESS: 'webmaster@example.org'
 ERROR_ADDRESS: errors@example.org
 ERROR_PREFIX: "[ERROR] "
+# Because the default email addresses are fake,
+# email delivery is turned off by default, even for production.
+# The log file will nonetheless show "Sent mail:"
+PERFORM_DELIVERIES: false
 
 APP_URL: 'http://www.example.org'
 APP_NAME: 'Example Archive'

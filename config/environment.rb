@@ -87,6 +87,9 @@ Rails::Initializer.run do |config|
 
   # Make Active Record use UTC-base instead of local time
   # config.active_record.default_timezone = :utc
+
+  # allow Action Mailer to attempt mail delivery?
+  config.action_mailer.perform_deliveries = ArchiveConfig.PERFORM_DELIVERIES
   
 end
 ActionController::AbstractRequest.relative_url_root = ArchiveConfig.PRODUCTION_URL_ROOT if ArchiveConfig.PRODUCTION_URL_ROOT && ENV['RAILS_ENV'] == 'production'
