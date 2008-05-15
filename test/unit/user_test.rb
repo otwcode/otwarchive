@@ -4,7 +4,7 @@ class UserTest < ActiveSupport::TestCase
 
   def test_has_pseud_with_pseudnames_user_has
     user = users(:basic_user)
-    assert user.has_pseud?("Default Pseud")
+    assert user.has_pseud?("basic_user")
     assert user.has_pseud?("Non-Default Pseud")
   end
 
@@ -31,7 +31,7 @@ class UserTest < ActiveSupport::TestCase
 
   def test_creations_for_user_with_creations
     user = users(:basic_user)
-    no_of_creations = 10
+    no_of_creations = 12
     assert_equal no_of_creations, user.creations.length
   end
 
