@@ -25,6 +25,9 @@ class User < ActiveRecord::Base
   has_many :works, :through => :readings
   has_many :readings
 
+  validates_format_of :login, :message => 'must begin and end with a letter or number; may also contain underscores but no other characters.',
+    :with => /\A[A-Za-z0-9]+\w*[A-Za-z0-9]+\Z/
+
   validates_email_veracity_of :email, :message => 'does not seem to be a valid email address.'
   # validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create
   # validates_format_of :password, :with => /(?=.*\d)(?=.*([a-z]|[A-Z]))/, :message => 'must have at least one digit and one alphabet character.'
