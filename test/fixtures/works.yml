@@ -6,13 +6,15 @@ basic_work:
   is_complete: true
   major_version: 1
   minor_version: 0
+  posted: true
 
 incomplete_work:
   id: 2
   expected_number_of_chapters: 2
   is_complete: false
   major_version: 1
-  minor_version: 1
+  minor_version: 0
+  posted: true
 
 work_1_of_1:
   id: 3
@@ -20,24 +22,28 @@ work_1_of_1:
   is_complete: true
   major_version: 1
   minor_version: 0
+  posted: true
 
 work_1_of_3:
   id: 4
   expected_number_of_chapters: 1
   is_complete: false
   major_version: 1
-  minor_version: 1
+  minor_version: 0
+  posted: true
   
 work_2_of_3:
   id: 5
   expected_number_of_chapters: 1
   is_complete: false
   major_version: 1
-  minor_version: 1
+  minor_version: 0
+  posted: true
   
 work_3_of_3:
   id: 6
   expected_number_of_chapters: 1
   is_complete: false
   major_version: 1
-  minor_version: 1  
+  minor_version: 0
+  posted: true

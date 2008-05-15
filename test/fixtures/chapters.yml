@@ -5,40 +5,47 @@ basic_chapter:
   content: looooong text for first chapter
   position: 1
   work_id: 1
+  posted: true
 
 second_chapter:
   id: 2
   content: looooong text for second chapter
   position: 1
   work_id: 1
+  posted: true
 
 chapter_1_of_work_1_of_1:
   id: 3
   content: Chapter for work_1_of_1
   position: 1
   work_id: 3
+  posted: true
 
 chapter_1_of_work_1_of_3:
   id: 4
   content: Chapter for work_1_of_3
   position: 1
   work_id: 4
+  posted: true
 
 chapter_1_of_work_2_of_3:
   id: 5
   content: Chapter for work_2_of_3
   position: 1
   work_id: 5
+  posted: true
 
 chapter_1_of_work_3_of_3:
   id: 6
   content: Chapter for work_3_of_3
   position: 1
   work_id: 6
+  posted: true
 
 only_chapter_of_incomplete_work:
   id: 7
   content: Chapter text here
   position: 1
   work_id: 2
+  posted: true
 
