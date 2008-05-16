@@ -6,8 +6,8 @@ module FixtureReplacement
   ## Note2: fixtures must be valid
   
   attributes_for :abuse_report do |a|    
-    a.email = [random_email, ""].rand
-    a.url = ArchiveConfig.APP_URL + '/' + random_phrase("/")[0...20]
+    a.email = random_email
+    a.url = random_url(ArchiveConfig.APP_URL)
     a.comment = random_paragraph
   end
 
@@ -97,7 +97,7 @@ module FixtureReplacement
 
   ##### some random generators used above
   def random_word(replace=false)
-    word = case [:short, :med, :long, :proper, :compound].rand
+    word = case [:short, :med, :med, :long, :longer, :proper, :compound].rand
       when :short: [['I', 'A', 'O', 'E', 'U'].rand, String.random(rand(2)+2)].rand
       when :med: String.random(rand(2)+4)
       when :long: String.random(rand(3)+6)
@@ -142,6 +142,12 @@ module FixtureReplacement
   
   def random_email()
     random_phrase("_") + '@' + random_domain
+  end
+  
+  def random_url(host=nil,path=nil)
+    host = host ? host : 'http://www.' + random_domain
+    path = path ? path : random_phrase("/")[0...20]
+    return host + '/' + path
   end
   
 end

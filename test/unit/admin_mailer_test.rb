@@ -2,22 +2,17 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class AdminMailerTest < ActionMailer::TestCase
   tests AdminMailer
-  def test_abuse_report_header
-    url = reporter = comment = ""
+  def test_new_admin_mailer_abuse_report
+    reporter = random_email
+    url = random_url(ArchiveConfig.APP_URL)
+    comment = random_phrase
     mail = AdminMailer.create_abuse_report(reporter, url, comment)
 
-    assert_equal ['do-not-reply@example.org'], mail.from
-    assert_equal ['abuse@example.org'], mail.to
-    assert_equal "Example Archive - Admin Abuse Report", mail.subject
-  end
-  def test_abuse_report_body
-    url = "http://localhost:3001/en/works/2"
-    reporter = "test@test.com"
-    comment = "work 2 is abusive"
-    mail = AdminMailer.create_abuse_report(reporter, url, comment)
-
-    assert_match /test@test.com/, mail.body 
-    assert_match /en\/works\/2/, mail.body
-    assert_match /work 2 is abusive/, mail.body
+    assert_equal [ArchiveConfig.RETURN_ADDRESS], mail.from
+    assert_equal [ArchiveConfig.ABUSE_ADDRESS], mail.to
+    assert_equal ArchiveConfig.APP_NAME + " - Admin Abuse Report", mail.subject
+    assert_match Regexp.new(reporter), mail.body
+    assert_match Regexp.new(url), mail.body 
+    assert_match Regexp.new(comment), mail.body
   end
 end
