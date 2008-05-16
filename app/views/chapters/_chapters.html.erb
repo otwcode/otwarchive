@@ -1,8 +1,6 @@
 <!-- This partial requires local variables 'work' -->
 <% if @work.chapters.count > 1 -%>
-	<% @work.chapters.each do |chapter| -%>
-		<%= render :partial => 'chapters/chapter', :locals => { :chapter => chapter } -%>
-	<% end -%>
+  <%= render :partial => 'chapters/chapter', :collection => @work.chapters.find(:all, :order => "position") %>
 <% else %>
 	<%=sanitize_format @work.chapters.first.content %>
 <% end %>
