@@ -1,0 +1,11 @@
+module FixtureReplacement
+<% ActiveRecord::Base.connection.tables.each do |table_name| -%>
+<% begin table_name.classify.constantize -%>
+<% columns = table_name.classify.constantize.columns -%>
+  attributes_for :<%= table_name.singularize %> do |a|
+    
+	end
+
+<% rescue; end -%>
+<% end -%>
+end

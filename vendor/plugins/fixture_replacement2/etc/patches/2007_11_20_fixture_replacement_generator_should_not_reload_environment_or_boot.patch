@@ -1,0 +1,13 @@
+Index: vendor/plugins/fixture_replacement/generators/fixture_replacement/fixture_replacement_generator.rb
+===================================================================
+--- vendor/plugins/fixture_replacement/generators/fixture_replacement/fixture_replacement_generator.rb	(revision 83)
++++ vendor/plugins/fixture_replacement/generators/fixture_replacement/fixture_replacement_generator.rb	(working copy)
+@@ -1,6 +1,6 @@
+ require 'rbconfig'
+-require 'config/boot'
+-require 'config/environment'
++require 'config/environment' unless RAILS_GEM_VERSION
++require 'config/boot' unless RAILS_ROOT
+ 
+ class FixtureReplacementGenerator < Rails::Generator::Base
+   DEFAULT_SHEBANG = File.join(Config::CONFIG['bindir'],

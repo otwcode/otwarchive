@@ -1,0 +1,26 @@
+Index: lib/fixture_replacement/fixture_replacement.rb
+===================================================================
+--- lib/fixture_replacement/fixture_replacement.rb	(revision 1151)
++++ lib/fixture_replacement/fixture_replacement.rb	(working copy)
+@@ -40,7 +40,8 @@
+       def merge_unevaluated_method(obj, method_for_instantiation, hash={})
+         hash.each do |key, value|
+           if value.kind_of?(::FixtureReplacement::DelayedEvaluationProc)
+-            hash[key] = obj.send("#{method_for_instantiation}_#{value.call}")
++            model_name, args = value.call
++            hash[key] = obj.send("#{method_for_instantiation}_#{model_name}", args)
+           end
+         end
+       end
+@@ -63,9 +64,9 @@
+       default_method = "default_#{model_name}".to_sym
+ 
+       fixture_module.module_eval do
+-        define_method(default_method) do
++        define_method(default_method) do |*args|
+           ::FixtureReplacement::DelayedEvaluationProc.new do
+-            model_as_string
++            [model_as_string, args[0]]
+           end
+         end
+       end

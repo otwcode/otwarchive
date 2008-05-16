@@ -1,0 +1,12 @@
+Index: README
+===================================================================
+--- README	(revision 65)
++++ README	(working copy)
+@@ -144,7 +144,6 @@
+   - default_* methods can take a hash (applied in rev. 11)
+ - Wincent Colaiuta (Huge Thanks)
+   - patch for spelling error in comments (applied in revision 31)
+-  - extra documentation (http://wincent.com/knowledge-base/FixtureReplacement)
+   - patch for specs with sqlite3 (applied in revision 35)
+   - patch to ignore attr_protected in mass assignment (applied in revision 57)
+   - README Documentation (applied in revision 62)

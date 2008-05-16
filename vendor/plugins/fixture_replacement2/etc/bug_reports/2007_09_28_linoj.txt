@@ -1,0 +1,51 @@
+Hi Scott,
+
+I'm wondering if you have insight into this or if I should go ask somewhere else.
+
+I installed 2 plug-in today, 
+first fixture_replacement plugin
+and been using it successfully
+
+Then I installed validates_email_format_of plugin
+http://code.dunae.ca/validates_email_format_of
+
+and added this to my User model
+	validates_email_format_of :email
+
+then script/server wont start
+When I comment out this line, it's fine
+
+Here's the error:
+
+$ script/server
+=> Booting Mongrel (use 'script/server webrick' to force WEBrick)
+=> Rails application starting on http://0.0.0.0:3000
+=> Call with -d to detach
+=> Ctrl-C to shutdown server
+** Starting Mongrel listening at 0.0.0.0:3000
+** Starting Rails with development environment...
+Exiting
+/Users/jonathan/rails/reviewramp/vendor/plugins/fixture_replacement/init.rb:9:in `evaluate': Error in FixtureReplacement Plugin: undefined method `validates_email_format_of' for #<Class:0x241cc68> (RuntimeError)
+        from ./script/../config/../vendor/rails/railties/lib/rails/plugin/loader.rb:107:in `evaluate'
+        from /Users/jonathan/rails/reviewramp/vendor/rails/activesupport/lib/active_support/core_ext/kernel/reporting.rb:11:in `silence_warnings'
+        from ./script/../config/../vendor/rails/railties/lib/rails/plugin/loader.rb:107:in `evaluate'
+        from ./script/../config/../vendor/rails/railties/lib/rails/plugin/loader.rb:24:in `load'
+        from /Users/jonathan/rails/reviewramp/vendor/rails/railties/lib/initializer.rb:183:in `load_plugins'
+        from ./script/../config/../vendor/rails/railties/lib/rails/plugin/locator.rb:16:in `each'
+        from ./script/../config/../vendor/rails/railties/lib/rails/plugin/locator.rb:16:in `each'
+        from /Users/jonathan/rails/reviewramp/vendor/rails/railties/lib/initializer.rb:182:in `load_plugins'
+         ... 31 levels...
+        from /Users/jonathan/rails/reviewramp/vendor/rails/activesupport/lib/active_support/dependencies.rb:495:in `require'
+        from /Users/jonathan/rails/reviewramp/vendor/rails/railties/lib/commands/server.rb:39
+        from script/server:3:in `require'
+        from script/server:3
+
+
+I havent tried it in a different project (without fixture_replacement) but looks like yours is getting the blame... :)
+
+(I'm on Rails Edge)
+
+-- linoj
+
+
+

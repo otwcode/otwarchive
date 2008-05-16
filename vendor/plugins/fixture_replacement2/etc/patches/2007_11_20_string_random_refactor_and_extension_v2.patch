@@ -1,0 +1,108 @@
+Index: lib/fixture_replacement/string.rb
+===================================================================
+--- lib/fixture_replacement/string.rb	(revision 83)
++++ lib/fixture_replacement/string.rb	(working copy)
+@@ -1,10 +1,25 @@
++class String
++  def random_chr
++    self[rand(size)].chr
++  end
++  
++  def random_str(length=10)
++    (1..length).collect {random_chr}.join
++  end
++  
++  def formatted_random_str(format, length=10)
++    result = format.dup
++    while result.match(/(%(\d*)s)/) do
++      result.sub!($1, random_str($2.empty? ? length : $2.to_i))
++    end
++    result
++  end
+ 
+-class String
+   def self.random(length=10)
+-    chars = ("a".."z").to_a
+-    string = ""
+-    1.upto(length) { |i| string << chars[rand(chars.size-1)]}
+-    return string
++    ("a".."z").sort.join.random_str(length)
+   end
++  
++  def self.formatted_random(format, length=10)
++    ("a".."z").sort.join.formatted_random_str(format, length)
++  end
+ end
+-
+Index: spec/fixture_replacement/extentions_spec.rb
+===================================================================
+--- spec/fixture_replacement/extentions_spec.rb	(revision 83)
++++ spec/fixture_replacement/extentions_spec.rb	(working copy)
+@@ -2,7 +2,9 @@
+ 
+ describe "String.random" do
+   it "should not be the same as another randomly generated string" do
+-    String.random.should_not == String.random
++    (1..100).each do |ctr|
++      String.random.should_not == String.random
++    end
+   end
+   
+   it "should by default be 10 characters long" do
+@@ -12,9 +14,51 @@
+   it "should be able to specify the length of the random string" do
+     String.random(100).size.should == 100
+   end
+-  
++    
+   it "should only generate lowercase letters" do
+-    s = String.random(100)
+-    s.upcase.should == s.swapcase
++    String.random(100).should =~ /^[a-z]{100}/
+   end
+-end
+\ No newline at end of file
++end
++
++describe "String.formatted_random" do
++  it "should require a format argument to be given" do
++    lambda { String.formatted_random }.should raise_error(ArgumentError)
++  end
++
++  it "should be able to generate simple formatted random strings" do
++    String.formatted_random('%s@%s.%s').should =~ /^[a-z]{10}@[a-z]{10}\.[a-z]{10}$/
++  end
++end
++
++describe "String#random_chr" do
++  before(:each) do
++    @string = "abcde"
++  end
++
++  it "should always provide a random character from the string" do
++    (1..100).each do |ctr|
++      @string.include?(@string.random_chr).should be_true
++    end
++  end
++
++  it "should rarely generate the same character twice in a row given a very large, random distribution" do
++    string = String.random(100)
++    ctr = 0
++    (1..100).each do |i|
++      string.random_chr == string.random_chr && ctr += 1
++    end
++    ctr.should < 10
++  end
++end
++
++describe "String#random_str" do
++  it "should be able to generate random strings from a given string of characters" do
++    "Jim Beth Sam Cassie".random_str(100).should =~ /^[ BCJSaehimst]{100}$/
++  end
++end
++
++describe "String#formatted_random_str" do
++  it "should be able to generate random strings from a given string of characters" do
++    "Jim Beth Sam Cassie".formatted_random_str('%s@%s.%s').should =~ /^[ BCJSaehimst]{10}@[ BCJSaehimst]{10}\.[ BCJSaehimst]{10}$/
++  end
++end

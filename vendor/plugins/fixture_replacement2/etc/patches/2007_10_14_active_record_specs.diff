@@ -1,0 +1,396 @@
+Index: spec/fixture_replacement/fixture_replacement_spec.rb
+===================================================================
+--- spec/fixture_replacement/fixture_replacement_spec.rb	(revision 31)
++++ spec/fixture_replacement/fixture_replacement_spec.rb	(working copy)
+@@ -1,53 +1,52 @@
+-
+ require File.dirname(__FILE__) + "/../spec_helper"
++require 'activesupport'
++require 'activerecord'
+ 
+-# It would be better if these things were actual mocks/stubs
+-# of ActiveRecord Classes.  
+-class ARBase
+-  class << self
+-    def create!(h={})
+-      obj = new(h)
+-      obj.save!
+-      obj
+-    end
++ActiveRecord::Base.establish_connection :adapter => 'sqlite3', :database  => ':memory:'
++class User < ActiveRecord::Base
++  belongs_to :gender
++  attr_accessor :saved
++  def save!
++    @saved = true
+   end
++end
++class Gender < ActiveRecord::Base
++  attr_accessor :saved
++  def save!
++    @saved = true
++  end
++end
++class Alien < ActiveRecord::Base
++  belongs_to :gender
++end
+ 
+-  def initialize(hash={})
+-    @hash = hash
++ActiveRecord::Schema.define do
++  create_table :users do |t|
++    t.string  :key
++    t.string  :other_key
++    t.integer :gender_id
+   end
+-  
+-  attr_reader :hash
+-  
+-  def gender # this would be a has_many call in rails
+-    17
++  create_table :genders do |t|
++    t.string  :sex
+   end
+-  
+-  def save!
+-    @saved = true
++  create_table :aliens do |t|
++    t.integer :gender_id
+   end
+-  
+-  def saved?
+-    @saved || false
+-  end  
+-  
+ end
+ 
+-class User < ARBase; end
+-class Gender < ARBase; end
+-class Alien < ARBase; end
++include FixtureReplacement
+ 
+-
+ module FixtureReplacement
+   describe Generator, "creation" do
+     before :each do
+       @generator = Generator.new("user")
+     end
+     
+-    it "should take a lowecase-model name as it's paramaters" do
++    it "should take a lowercase-model name as its paramaters" do
+       @generator.model_name.should == "user"
+     end
+     
+-    it "should be able to take tell the name of model in  string" do
++    it "should be able to take tell the name of model in string" do
+       @generator.model_name.to_s.should == "user"
+     end
+     
+@@ -84,16 +83,11 @@
+       FixtureReplacement.module_eval do
+         def user_attributes
+           {
+-            :key => :val
++            :key => "val"
+           }
+         end
+       end      
+       @generator = Generator.new("user")
+-      
+-      @class = Class.new do
+-        include FixtureReplacement
+-      end
+-      @instance = @class.new
+     end
+     
+     it "should generate the method default_user in the module" do
+@@ -103,45 +97,34 @@
+     
+     it "should return a ::FixtureReplacement::DelayedEvaluationProc" do
+       @generator.generate_default_method
+-      @instance.default_user.class.should == ::FixtureReplacement::DelayedEvaluationProc
++      default_user.class.should == ::FixtureReplacement::DelayedEvaluationProc
+     end
+     
+     it %(should return the special proc, which in turn should return an array 
+         of the name of the model ('user') if no params were given) do
+       @generator.generate_default_method
+-      @instance.default_user.call.should == ["user"]
++      default_user.call.should == ["user"]
+     end
+     
+     it %(should return the special proc, which in turn should return an array
+         of the name of the model ('user') and the params given) do
+       @generator.generate_default_method
+-      @instance.default_user({:some => :hash}).call.should == ["user", {:some => :hash}]
++      default_user({:key => "hash"}).call.should == ["user", {:key => "hash"}]
+     end
+   end
+ 
+   describe Generator, "generate_create_method for User when user_attributes is defined (and valid)" do
+-    before :each do
+-      User.class_eval do
+-        def save!
+-          @saved = true
+-        end
+-      end
+-      
++    before :each do      
+       FixtureReplacement.module_eval do
+         def user_attributes
+           {
+-            :key => :val
++            :key => "val"
+           }
+         end
+       end      
+       @generator = Generator.new("user")
+       @generator.generate_new_method
+       @generator.generate_create_method
+-      
+-      @class = Class.new do
+-        include FixtureReplacement
+-      end
+-      @instance = @class.new      
+     end
+     
+     it "should generate the method create_user in the module" do
+@@ -150,38 +133,32 @@
+     
+     it "should generate the method create_user which takes one parameter - a hash" do
+       @generator.generate_create_method
+-      @instance.create_user({:key => :value})
++      create_user({:key => "value"})
+     end
+     
+     it "should return a user" do
+       @generator.generate_create_method
+-      @instance.create_user.should be_a_kind_of(User)
++      create_user.should be_a_kind_of(User)
+     end
+     
+-    it "should return a user which has been saved (with create!)" do
++    it "should return a user which has been saved (with save!)" do
+       @generator.generate_create_method
+-      @instance.create_user.should be_saved
++      create_user.saved.should == true
+     end
+     
+     it "should overwrite the hash parameters given" do
+       @generator.generate_create_method
+-      @instance.create_user(:key => :value).hash.should == {:key => :value}      
++      create_user(:key => "value").key.should == "value"
+     end
+     
+     it "should not overwrite the default hash parameters, if none are given" do
+       @generator.generate_create_method
+-      @instance.create_user.hash.should == {:key => :val}
++      create_user.key.should == "val"
+     end
+   end
+   
+   describe Generator, "generate_create_method for User when user_attributes is defined (and valid)" do
+     before :each do
+-      User.class_eval do
+-        def save!
+-          @saved = true
+-        end
+-      end
+-      
+       FixtureReplacement.module_eval do
+         def user_attributes
+           {
+@@ -203,60 +180,40 @@
+       @generator = Generator.new("user")
+       @generator.generate_new_method
+       @generator.generate_create_method
+-      
+-      @class = Class.new do
+-        include FixtureReplacement
+-      end
+-      @instance = @class.new      
+     end
+     
+     it "should save the associated join models which have a default_* method (if it is not overwritten)" do
+-      created_user = @instance.create_user
+-      created_gender = created_user.hash[:gender]
+-      created_gender.hash.should == {:sex => "Male"}
++      created_gender = create_user.gender
++      created_gender.sex.should == "Male"
+     end
+     
+     it "should not save the associated join model, but not as the default_* method (in the case that it is overwritten)" do
+-      created_user = @instance.create_user(:gender => Gender.create!(:sex => "Female"))
+-      created_gender = created_user.hash[:gender]
+-      created_gender.hash.should == {:sex => "Female"}
++      created_user = create_user(:gender => Gender.create!(:sex => "Female"))
++      created_gender = created_user.gender
++      created_gender.sex.should == "Female"
+     end
+     
+-    it "should call Gender.create! when the default_gender method is evaluated by default_gender" do
+-      gender = Gender.new
+-      Gender.should_receive(:create!).and_return gender
+-      @instance.create_user
++    it "should call Gender.save! when the default_gender method is evaluated by default_gender" do
++      create_user.gender.saved.should == true
+     end
+     
+-    it "should not call Gender.create! if the default_gender is overwritten by another value (say, a string)" do
+-      Gender.should_not_receive(:create!)
+-      @instance.create_user(:gender => "a string")
++    it "should not call Gender.save! if the default_gender is overwritten by another value" do
++      create_user(:gender => Gender.new).gender.saved.should_not == true
+     end
+   end
+   
+   describe Generator, "generate_create_method for User when user_attributes is defined, but not valid" do
+-    before :each do
+-      User.class_eval do
+-        def save!
+-          @saved = true
+-        end
+-      end      
+-      
++    before :each do      
+       FixtureReplacement.module_eval do
+         def user_attributes
+           {
+-            :key => :val
++            :key => "val"
+           }
+         end
+       end      
+       @generator = Generator.new("user")
+       @generator.generate_new_method
+       @generator.generate_create_method
+-      
+-      @class = Class.new do
+-        include FixtureReplacement
+-      end
+-      @instance = @class.new      
+     end
+     
+     it "should generate the method create_user in the module" do
+@@ -265,22 +222,9 @@
+     
+     it "should generate the method create_user which takes one parameter - a hash" do
+       @generator.generate_create_method
+-      @instance.create_user({:key => :value})
++      create_user({:key => "value"})
+     end
+     
+-    it "should raise an error with a user which has been saved (with create!)" do
+-      User.class_eval do
+-        def save!
+-          raise
+-        end
+-      end
+-      
+-      @generator.generate_create_method
+-      lambda {
+-        @instance.create_user  
+-      }.should raise_error
+-    end    
+-    
+   end
+ 
+   describe Generator, "generate_new_method for User when user_attributes is defined" do
+@@ -290,7 +234,7 @@
+       FixtureReplacement.module_eval do
+         def user_attributes
+           {
+-            :key => :val
++            :key => "val"
+           }
+         end
+         
+@@ -302,12 +246,6 @@
+       end      
+       @generator = Generator.new("user")
+       @generator.generate_new_method
+-      
+-      @class = Class.new do
+-        include FixtureReplacement
+-      end
+-      @instance = @class.new      
+-      
+     end
+     
+     it "should respond to new_user in the module" do
+@@ -316,19 +254,21 @@
+     
+     it "should return a new User object" do
+       User.stub!(:new).and_return @user
+-      @instance.new_user.should == @user
++      new_user.should == @user
+     end
+     
+     it "should return a new User object with the keys given in user_attributes" do
+-      @instance.new_user.hash.should == {:key => :val}
++      new_user.key.should == "val"
+     end
+     
+     it "should over-write the User's hash with any hash given to new_user" do
+-      @instance.new_user(:key => :other_value).hash.should == {:key => :other_value}
++      new_user(:key => "other_value").key.should == "other_value"
+     end
+     
+     it "should add any hash key-value pairs which weren't previously given in user_attributes" do
+-      @instance.new_user(:other_key => :other_value).hash.should == {:key => :val, :other_key => :other_value}
++      u = new_user(:other_key => "other_value")
++      u.key.should == "val"
++      u.other_key.should == "other_value"
+     end    
+   end
+   
+@@ -365,39 +305,30 @@
+ 
+       @generator = Generator.new("alien")
+       @generator.generate_new_method
+-      
+-      @class = Class.new do
+-        include FixtureReplacement
+-      end
+-      @instance = @class.new      
+     end
+   
+     it "should evaluate any of the default_* methods before returning (if no over-writing key is given)" do      
+-      new_user = @instance.new_user
+-      new_gender = new_user.hash[:gender]
+-      new_gender.hash.should == {:sex => "Male"}
++      new_gender = new_user.gender
++      new_gender.sex.should == "Male"
+     end
+     
+     it %(should evaluate any of the default_* methods before returning, with the hash params given to default_* method) do
+-      new_alien = @instance.new_alien
+-      new_gender = new_alien.hash[:gender]
+-      new_gender.hash.should == {:sex => "unknown"}
++      new_gender = new_alien.gender
++      new_gender.sex.should == "unknown"
+     end
+     
+     it "should call Gender.save! when the default_gender method is evaluated by default_gender" do
+-      Gender.should_receive(:create!)
+-      @instance.new_user
++      new_user.gender.saved.should == true
+     end
+     
+-    it "should not call Gender.new if the default_gender is overwritten by another value (say, a string)" do
+-      Gender.should_not_receive(:create!)
+-      @instance.new_user(:gender => "a string")
++    it "should not call Gender.new if the default_gender is overwritten by another value" do
++      new_user(:gender => Gender.new).gender.saved.should_not == true
+     end
+   
+     it "should be able to overwrite a default_* method" do
+-      new_user = @instance.new_user(:gender => Gender.create!(:sex => "Female"))
+-      created_gender = new_user.hash[:gender]
+-      created_gender.hash.should == {:sex => "Female"}
++      new_user = new_user(:gender => Gender.create!(:sex => "Female"))
++      created_gender = new_user.gender
++      created_gender.sex.should == "Female"
+     end
+   end
+     

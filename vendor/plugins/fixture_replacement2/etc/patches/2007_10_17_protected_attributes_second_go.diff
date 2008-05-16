@@ -1,0 +1,212 @@
+Index: lib/fixture_replacement/fixture_replacement.rb
+===================================================================
+--- lib/fixture_replacement/fixture_replacement.rb	(revision 52)
++++ lib/fixture_replacement/fixture_replacement.rb	(working copy)
+@@ -70,7 +70,12 @@
+           hash_given = args[0] || Hash.new
+           merged_hash = self.send(attributes_method).merge(hash_given)
+           evaluated_hash = Generator.merge_unevaluated_method(self, :create, merged_hash)        
+-          obj = class_name.create!(evaluated_hash)
++          
++          # we are NOT doing the following, because of attr_protected:
++          #   obj = class_name.create!(evaluated_hash)
++          obj = class_name.new
++          evaluated_hash.each { |key, value| obj.send("#{key}=", value) }
++          obj.save!
+           obj          
+         end
+       end
+@@ -86,7 +91,11 @@
+           hash_given = args[0] || Hash.new
+           merged_hash = self.send(attributes_method).merge(hash_given)
+           evaluated_hash = Generator.merge_unevaluated_method(self, :create, merged_hash)
+-          class_name.new(evaluated_hash)
++          
++          # we are also doing the following because of attr_protected:
++          obj = class_name.new
++          evaluated_hash.each { |key, value| obj.send("#{key}=", value) }
++          obj
+         end
+       end
+     end
+Index: spec/fixture_replacement/fixture_replacement_spec.rb
+===================================================================
+--- spec/fixture_replacement/fixture_replacement_spec.rb	(revision 52)
++++ spec/fixture_replacement/fixture_replacement_spec.rb	(working copy)
+@@ -9,9 +9,88 @@
+   belongs_to :gender
+ end
+ 
++class Admin < ActiveRecord::Base
++  attr_protected :admin_status
++end
++
+ class Gender < ActiveRecord::Base; end
+ 
++
++
++
+ module FixtureReplacement
++
++  describe "create_user with attr_protected attributes" do
++    before :each do
++      FixtureReplacement.module_eval do
++        def admin_attributes
++          {
++            :admin_status => true,
++            :name => "Scott"
++          }
++        end
++      end
++      
++      @generator = Generator.new("admin")
++      @generator.generate_create_method
++    end
++
++    it "should not complain when an apparent mass assignment has happened with default values" do
++      lambda {
++        create_admin
++      }.should_not raise_error
++    end
++    
++    it "should have admin_status equal to the default value (when it has not been overwritten)" do
++      create_admin.admin_status.should == true
++    end
++    
++    it "should have admin_status equal to the overwritten value" do
++      create_admin(:admin_status => false).admin_status.should be_false
++    end
++    
++    it "should have the other attributes assigned when the attr_value has been overwritten" do
++      create_admin(:admin_status => false).name.should == "Scott"
++    end
++
++    it "should have the other attributes assigned even when the attr_value has not been overwritten" do
++      create_admin.name.should == "Scott"
++    end    
++  end
++  
++  describe "new_user with attr_protected attributes" do
++    before :each do
++      FixtureReplacement.module_eval do
++        def admin_attributes
++          {
++            :admin_status => true,
++            :name => "Scott"
++          }
++        end
++      end
++      
++      @generator = Generator.new("admin")
++      @generator.generate_new_method
++    end
++    
++    it "should have admin_status equal to the default value (when it has not been overwritten)" do
++      new_admin.admin_status.should == true
++    end
++    
++    it "should have admin_status equal to the overwritten value" do
++      new_admin(:admin_status => false).admin_status.should be_false
++    end
++    
++    it "should have the other attributes assigned when the attr_value has been overwritten" do
++      new_admin(:admin_status => false).name.should == "Scott"
++    end
++
++    it "should have the other attributes assigned even when the attr_value has not been overwritten" do
++      new_admin.name.should == "Scott"
++    end    
++  end
++
++    
+   describe Generator, "creation" do
+     before :each do
+       @generator = Generator.new("user")
+@@ -121,9 +200,14 @@
+       create_user.should_not be_a_new_record
+     end
+     
+-    it "should save the user with create!" do
++    it "should save the user with save!" do
+       @generator.generate_create_method
+-      User.should_receive(:create!).with({:key => "val"})
++      
++      @user = mock('User', :null_object => true)
++      @user.stub!(:save!).and_return true      
++      User.stub!(:new).and_return @user
++      
++      @user.should_receive(:save!).with(no_args)
+       create_user
+     end
+     
+@@ -175,13 +259,20 @@
+       created_gender.sex.should == "Female"
+     end
+     
+-    it "should call Gender.create! when the default_gender method is evaluated by default_gender" do
+-      Gender.should_receive(:create!).with({:sex => "Male"})
++    it "should call save! when the default_gender method is evaluated by default_gender" do
++      @gender = mock('Gender', :null_object => true)
++      Gender.stub!(:new).and_return @gender
++      
++      @user = mock('User', :null_object => true)
++      User.stub!(:new).and_return @user
++      @user.stub!(:gender=).and_return @gender
++
++      @gender.should_receive(:save!).with(no_args)
+       create_user
+     end
+     
+-    it "should not call Gender.create! if the default_gender is overwritten by another value" do
+-      Gender.should_not_receive(:create!)
++    it "should not call Gender.save! if the default_gender is overwritten by another value" do
++      Gender.should_not_receive(:save!)
+       create_user(:gender => Gender.new)
+     end
+   end
+@@ -324,18 +415,24 @@
+       new_gender.sex.should == "unknown"
+     end
+     
+-    it "should call Gender.create! when the default_gender method is evaluated by default_gender" do
+-      Gender.should_receive(:create!).with({:sex => "Male"})
++    it "should call Gender.save! when the default_gender method is evaluated by default_gender" do
++      @gender = mock('Gender', :null_object => true)
++      Gender.stub!(:new).and_return @gender
++      @user = mock('User')
++      @user.stub!(:gender=).and_return @gender
++      User.stub!(:new).and_return @user
++      
++      @gender.should_receive(:save!)
+       new_user
+     end
+     
+-    it "should not call Gender.create! if the default_gender is overwritten by another value" do
+-      Gender.should_not_receive(:create!)
++    it "should not call Gender.save! if the default_gender is overwritten by another value" do
++      Gender.should_not_receive(:save!)
+       new_user(:gender => Gender.new)
+     end
+   
+     it "should be able to overwrite a default_* method" do
+-      Gender.should_not_receive(:create!).with({:sex => "Male"})
++      Gender.should_not_receive(:save!)
+       new_user(:gender => Gender.create!(:sex => "Female"))
+     end
+   end
+Index: spec/spec_helper.rb
+===================================================================
+--- spec/spec_helper.rb	(revision 52)
++++ spec/spec_helper.rb	(working copy)
+@@ -21,6 +21,11 @@
+     t.column :gender_id, :string
+   end
+   
++  create_table :admins do |t|
++    t.column :admin_status, :boolean
++    t.column :name, :string
++  end
++  
+ end
+ 
+ 

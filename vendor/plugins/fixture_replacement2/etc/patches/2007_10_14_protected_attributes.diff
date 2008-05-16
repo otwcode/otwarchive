@@ -1,0 +1,26 @@
+Index: lib/fixture_replacement/fixture_replacement.rb
+===================================================================
+--- lib/fixture_replacement/fixture_replacement.rb	(revision 31)
++++ lib/fixture_replacement/fixture_replacement.rb	(working copy)
+@@ -70,7 +70,9 @@
+           hash_given = args[0] || Hash.new
+           merged_hash = self.send(attributes_method).merge(hash_given)
+           evaluated_hash = Generator.merge_unevaluated_method(self, :create, merged_hash)        
+-          obj = class_name.create!(evaluated_hash)
++          obj = class_name.new
++          evaluated_hash.each { |k, v| obj.update_attribute(k, v) }
++          obj.save!
+           obj          
+         end
+       end
+@@ -86,7 +88,9 @@
+           hash_given = args[0] || Hash.new
+           merged_hash = self.send(attributes_method).merge(hash_given)
+           evaluated_hash = Generator.merge_unevaluated_method(self, :create, merged_hash)
+-          class_name.new(evaluated_hash)
++          obj = class_name.new
++          evaluated_hash.each { |k, v| obj.update_attribute(k, v) }
++          obj
+         end
+       end
+     end

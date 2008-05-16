@@ -1,0 +1,137 @@
+Index: README
+===================================================================
+--- README	(revision 60)
++++ README	(working copy)
+@@ -1,32 +1,92 @@
+ = FixtureReplacement
+ 
+-=== How to use FixtureReplacement
++== What is FixtureReplacement
+ 
+-Full Documentation is coming, when time permits.  For now, watch this screencast (and forward
+-through my stupidity):
++FixtureReplacement is a Rails[http://rubyonrails.org/] plugin that provides a simple way to quickly populate your test database with model objects without having to manage multiple, brittle fixture files. You can easily set up complex object graphs (with models which reference other models) and add new objects on the fly.
+ 
+-http://railsnewbie.com/files/fixture_replacement_demo.mov
++Not only can FixtureReplacement make your test data easier to maintain, it can also help to make your tests and specs much more readable and intention-revealing by allowing you to omit extraneous details and focus only on the attributes that are important for a particular behaviour. It works well with both RSpec[http://rspec.rubyforge.org/] and Test::Unit[http://www.ruby-doc.org/stdlib/libdoc/test/unit/rdoc/classes/Test/Unit.html].
+ 
+-There is also some documentation at the following link, although the screencast is still advised:
++== How to use FixtureReplacement
+ 
+-http://wincent.com/knowledge-base/FixtureReplacement_cheatsheet
++=== Defining default attributes
+ 
++At the heart of FixtureReplacement is the <tt>db/example_data.rb</tt> file where you define the default attributes for each of your test models. This example shows a <tt>user_attributes</tt> method that returns the attributes for an instance of the <tt>User</tt> model:
+ 
+-=== Installation
++  module FixtureReplacement
++    def user_attributes
++      password = String.random
++      {
++        :value                  => "a value",
++        :other                  => "other value",
++        :another                => String.random,     # random string 10 characters long
++        :one_more               => String.random(15), # 15 characters long
++        :password               => password,
++        :password_confirmation  => password,
++        :associated_object      => default_bar        # expects bar_attributes to be defined
++      }
++    end
++  end
+ 
++Note that:
++
++- the method returns a hash of attributes
++- a String.random method is provided for attributes whose exact value isn't important; this means you can create multiple, unique model instances
++- you can perform arbitrary set-up and execute any Ruby code prior to returning the hash (as shown here where a <tt>password</tt> is generated and then used for both the <tt>:password</tt> and <tt>:password_confirmation</tt> attributes)
++- a <tt>default_modelname</tt> method is automatically provided that allows you to set up dependent model objects (in this case an instance of the <tt>Bar</tt> model)
++
++=== Available methods
++
++Based on the above definition FixtureReplacement makes the following methods available:
++
++- String.random: generates a random string as shown above
++- <tt>new_user</tt>: equivalent to <tt>User.new(user_attributes)</tt>.
++- <tt>create_user</tt>: equivalent to <tt>User.create!(user_attributes)</tt>.
++- <tt>default_user</tt>: for use inside <tt>model_attributes</tt> definitions; this basically returns a <tt>Proc</tt> object which allows the actual creation of the object to be deferred until it is actually needed: in this way unnecessary object creation is avoided until it is known for sure that a particular attribute is not going to be overridden.
++
++=== Overriding attributes
++
++Overrides of specific attributes can be performed as follows:
++
++  new_user(:thing => "overridden") 
++  create_user(:thing => "overridden")
++
++=== Screencast
++
++Further documentation is forthcoming, but for now the following screencast provides a powerful demonstration of how FixtureReplacement can help you to set up complex, flexible object graphs with ease:
++
++http://railsnewbie.com/files/fixture_replacement_demo.mov
++
++== Installation
++
+   ruby script/plugin install http://thmadb.com/public_svn/plugins/fixture_replacement/
+   
+ Or use externals:
+ 
+   ruby script/plugin install -x http://thmadb.com/public_svn/plugins/fixture_replacement/
+   
+-Run the generator if you don't have the file db/example_data.rb
++Run the generator if you don't have the file <tt>db/example_data.rb</tt>:
+ 
+   ruby script/generate fixture_replacement
+ 
++=== Using from within <tt>script/console</tt>
+ 
+-=== Running the Specs/Tests for FixtureReplacement
++  % script/console
++  >> include FixtureReplacement
+ 
++=== Using from with RSpec
++
++Add the following to your <tt>spec/spec_helper.rb</tt> file:
++
++  include FixtureReplacement
++
++=== Using with Test::Unit
++
++Add the following to your <tt>test/test_helper.rb</tt> file:
++
++  include FixtureReplacement
++
++== Running the Specs/Tests for FixtureReplacement
++
+ You will need rspec (version 1.0.8 or later) to run the specs, as well as the sqlite3-ruby gem 
+ (and sqlite3 installed):
+ 
+@@ -37,16 +97,16 @@
+   
+   % cd vendor/plugins/fixture_replacement
+   
+-Then run with rake
++Then run with <tt>rake<tt>
+ 
+   % rake
+   
+-=== Specdocs
++== Specdocs
+ 
+ Specdocs can be found here[http://replacefixtures.rubyforge.org/specdoc.html]
+ 
+ 
+-=== Patches, Contributions:
++== Patches, Contributions:
+ 
+ Thanks to the following:
+ 
+@@ -62,8 +122,7 @@
+   
+ If you would like to change how this software works, please submit a patch with specs to scott@railsnewbie.com
+ 
++== License
+ 
+-=== License
+-
+ This software is released under the MIT License.  See the license agreement 
+-in lib/fixture_replacement.rb
++in <tt>lib/fixture_replacement.rb</tt>

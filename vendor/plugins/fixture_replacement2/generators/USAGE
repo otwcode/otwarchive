@@ -1,0 +1,9 @@
+
+./script/generate fixture_replacement
+
+This will install a file in your 'db' directory, db/example_data.rb.  It should contain
+a series of methods which mirror your models.  These methods *must* return a 
+hash which contains the hash keys and values you would use to create a valid record.
+
+Use String.random(10) for a random, 10 char long string, and use default_association_name
+for a belongs_to association.  See the Fixture Replacement README for more info.

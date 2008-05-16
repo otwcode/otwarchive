@@ -1,0 +1,640 @@
+== 02/18/07
+* Bug Fix, closes [#18042] example_data doesn't accept default_x for HABTM relationships
+* Refactoring: Now classes are specified in FixtureReplacementController::ClassFactory
+
+== 02/13/07
+Better error support
+Bug Fix: [#17249] String.random in a STI base class works, but doesn't work with inherited classes
+Removed after_include hook
+
+== 01/12/07
+Adding this CHANGELOG
+Added test/unit tests for integration with test/unit
+Fixed [#16858] Unable to create relationships between fixtures
+
+== Before 01/12/07: SVN LOG
+------------------------------------------------------------------------
+r250 | smt | 2008-01-11 01:45:15 -0500 (Fri, 11 Jan 2008) | 1 line
+
+some refactoring
+------------------------------------------------------------------------
+r225 | smt | 2007-12-16 03:06:40 -0500 (Sun, 16 Dec 2007) | 1 line
+
+badly needed refactoring
+------------------------------------------------------------------------
+r219 | smt | 2007-12-06 17:09:34 -0500 (Thu, 06 Dec 2007) | 1 line
+
+comments
+------------------------------------------------------------------------
+r218 | smt | 2007-12-06 17:03:46 -0500 (Thu, 06 Dec 2007) | 1 line
+
+spelling fix
+------------------------------------------------------------------------
+r217 | smt | 2007-12-06 16:42:04 -0500 (Thu, 06 Dec 2007) | 1 line
+
+changing instances of Object#send to Object#__send__
+------------------------------------------------------------------------
+r216 | smt | 2007-12-06 15:48:58 -0500 (Thu, 06 Dec 2007) | 1 line
+
+adding FixtureReplacement.after_include { }, so that any piece of code can be executed automatically after the module is included
+------------------------------------------------------------------------
+r210 | smt | 2007-12-05 01:46:31 -0500 (Wed, 05 Dec 2007) | 1 line
+
+correcting the rake file, regarding the specdoc filename
+------------------------------------------------------------------------
+r209 | smt | 2007-12-05 01:45:04 -0500 (Wed, 05 Dec 2007) | 1 line
+
+updating the README
+------------------------------------------------------------------------
+r208 | smt | 2007-12-05 01:18:19 -0500 (Wed, 05 Dec 2007) | 1 line
+
+better handeling of specs in the rake file
+------------------------------------------------------------------------
+r201 | smt | 2007-12-04 11:37:29 -0500 (Tue, 04 Dec 2007) | 1 line
+
+changing the generator
+------------------------------------------------------------------------
+r200 | smt | 2007-12-02 20:37:40 -0500 (Sun, 02 Dec 2007) | 1 line
+
+updating the generator
+------------------------------------------------------------------------
+r199 | smt | 2007-12-02 20:34:16 -0500 (Sun, 02 Dec 2007) | 1 line
+
+updating the docs, paritally
+------------------------------------------------------------------------
+r197 | smt | 2007-12-02 19:31:55 -0500 (Sun, 02 Dec 2007) | 1 line
+
+fixing a spec failure
+------------------------------------------------------------------------
+r196 | smt | 2007-12-02 19:23:10 -0500 (Sun, 02 Dec 2007) | 1 line
+
+some more refactoring
+------------------------------------------------------------------------
+r195 | smt | 2007-12-02 19:15:54 -0500 (Sun, 02 Dec 2007) | 1 line
+
+some refactoring
+------------------------------------------------------------------------
+r194 | smt | 2007-12-02 17:32:23 -0500 (Sun, 02 Dec 2007) | 1 line
+
+adding another spec to deal with inherited attributes, and load evaluation
+------------------------------------------------------------------------
+r193 | smt | 2007-12-02 15:26:45 -0500 (Sun, 02 Dec 2007) | 1 line
+
+removing some redundancies in the specs
+------------------------------------------------------------------------
+r192 | smt | 2007-12-02 15:25:14 -0500 (Sun, 02 Dec 2007) | 1 line
+
+adding some extra classes to the fixtures
+------------------------------------------------------------------------
+r191 | smt | 2007-12-02 14:41:11 -0500 (Sun, 02 Dec 2007) | 1 line
+
+spacing
+------------------------------------------------------------------------
+r190 | smt | 2007-12-02 13:47:46 -0500 (Sun, 02 Dec 2007) | 1 line
+
+adding some more tests
+------------------------------------------------------------------------
+r189 | smt | 2007-12-02 02:38:47 -0500 (Sun, 02 Dec 2007) | 1 line
+
+more bug fixing, dealing with delayed evaluation
+------------------------------------------------------------------------
+r188 | smt | 2007-12-02 02:13:44 -0500 (Sun, 02 Dec 2007) | 1 line
+
+delaying the evaluation of the block given to attributes_for for a longer period of time - the old way would evaluate too quickly, causing a bug
+------------------------------------------------------------------------
+r187 | smt | 2007-12-02 01:19:35 -0500 (Sun, 02 Dec 2007) | 1 line
+
+not yielding to the block with attributes_for, if no block is given
+------------------------------------------------------------------------
+r186 | smt | 2007-12-02 00:59:07 -0500 (Sun, 02 Dec 2007) | 1 line
+
+some refactoring
+------------------------------------------------------------------------
+r185 | smt | 2007-12-02 00:56:44 -0500 (Sun, 02 Dec 2007) | 1 line
+
+using FixtureReplacement as the module by default
+------------------------------------------------------------------------
+r184 | smt | 2007-12-02 00:50:23 -0500 (Sun, 02 Dec 2007) | 1 line
+
+grammar fix
+------------------------------------------------------------------------
+r183 | smt | 2007-12-02 00:48:16 -0500 (Sun, 02 Dec 2007) | 1 line
+
+consolidating the extensions into extensions - this time for OpenStruct
+------------------------------------------------------------------------
+r182 | smt | 2007-12-02 00:45:37 -0500 (Sun, 02 Dec 2007) | 1 line
+
+moving string into extensions/
+------------------------------------------------------------------------
+r181 | smt | 2007-12-02 00:44:00 -0500 (Sun, 02 Dec 2007) | 1 line
+
+oops...once again, a bad path to spec_helper
+------------------------------------------------------------------------
+r180 | smt | 2007-12-02 00:43:02 -0500 (Sun, 02 Dec 2007) | 1 line
+
+spec rename
+------------------------------------------------------------------------
+r179 | smt | 2007-12-02 00:41:37 -0500 (Sun, 02 Dec 2007) | 1 line
+
+better error handeling
+------------------------------------------------------------------------
+r178 | smt | 2007-12-02 00:37:45 -0500 (Sun, 02 Dec 2007) | 1 line
+
+consolidating specs
+------------------------------------------------------------------------
+r177 | smt | 2007-12-02 00:34:51 -0500 (Sun, 02 Dec 2007) | 1 line
+
+moving a spec
+------------------------------------------------------------------------
+r176 | smt | 2007-12-02 00:33:29 -0500 (Sun, 02 Dec 2007) | 1 line
+
+oops..fixing a path
+------------------------------------------------------------------------
+r175 | smt | 2007-12-02 00:31:52 -0500 (Sun, 02 Dec 2007) | 1 line
+
+updating some hashes which were using the wrong keys
+------------------------------------------------------------------------
+r174 | smt | 2007-12-01 18:43:13 -0500 (Sat, 01 Dec 2007) | 1 line
+
+better handeling of constants
+------------------------------------------------------------------------
+r173 | smt | 2007-12-01 18:22:55 -0500 (Sat, 01 Dec 2007) | 1 line
+
+cleaning up a spec
+------------------------------------------------------------------------
+r172 | smt | 2007-12-01 18:17:59 -0500 (Sat, 01 Dec 2007) | 1 line
+
+fixing default_* specs
+------------------------------------------------------------------------
+r171 | smt | 2007-12-01 17:07:47 -0500 (Sat, 01 Dec 2007) | 1 line
+
+removing extraneous class definition in a spec
+------------------------------------------------------------------------
+r170 | smt | 2007-12-01 17:07:17 -0500 (Sat, 01 Dec 2007) | 1 line
+
+spacing
+------------------------------------------------------------------------
+r169 | smt | 2007-12-01 17:04:20 -0500 (Sat, 01 Dec 2007) | 1 line
+
+some refactoring to the new and create methods
+------------------------------------------------------------------------
+r168 | smt | 2007-12-01 16:57:54 -0500 (Sat, 01 Dec 2007) | 1 line
+
+adding back support attr_protected attributes
+------------------------------------------------------------------------
+r167 | smt | 2007-12-01 16:54:19 -0500 (Sat, 01 Dec 2007) | 1 line
+
+fixing a failing spec
+------------------------------------------------------------------------
+r166 | smt | 2007-12-01 16:05:52 -0500 (Sat, 01 Dec 2007) | 1 line
+
+moving around a spec
+------------------------------------------------------------------------
+r165 | smt | 2007-12-01 16:02:50 -0500 (Sat, 01 Dec 2007) | 1 line
+
+adding an extra assertion
+------------------------------------------------------------------------
+r164 | smt | 2007-12-01 16:00:12 -0500 (Sat, 01 Dec 2007) | 1 line
+
+moving around some commented out specs
+------------------------------------------------------------------------
+r163 | smt | 2007-12-01 15:55:51 -0500 (Sat, 01 Dec 2007) | 1 line
+
+restructuring some specs
+------------------------------------------------------------------------
+r162 | smt | 2007-12-01 15:51:12 -0500 (Sat, 01 Dec 2007) | 1 line
+
+better requiring in spec_helper
+------------------------------------------------------------------------
+r161 | smt | 2007-12-01 15:49:33 -0500 (Sat, 01 Dec 2007) | 1 line
+
+splitting up a spec
+------------------------------------------------------------------------
+r160 | smt | 2007-12-01 15:47:11 -0500 (Sat, 01 Dec 2007) | 1 line
+
+moving around the fixture replacement main spec (for method generator)
+------------------------------------------------------------------------
+r159 | smt | 2007-12-01 15:44:51 -0500 (Sat, 01 Dec 2007) | 1 line
+
+cleaning up some specs
+------------------------------------------------------------------------
+r158 | smt | 2007-12-01 15:39:22 -0500 (Sat, 01 Dec 2007) | 1 line
+
+getting another set of specs to pass for MethodGenerator#generate_new_method
+------------------------------------------------------------------------
+r157 | smt | 2007-12-01 15:15:57 -0500 (Sat, 01 Dec 2007) | 1 line
+
+checking in generate_create_user
+------------------------------------------------------------------------
+r156 | smt | 2007-12-01 14:30:51 -0500 (Sat, 01 Dec 2007) | 1 line
+
+substituting FixtureReplacementController::MethodGenerator with MethodGenerator in specs
+------------------------------------------------------------------------
+r155 | smt | 2007-12-01 14:30:07 -0500 (Sat, 01 Dec 2007) | 1 line
+
+MethodGenerator#generate_default_methods
+------------------------------------------------------------------------
+r154 | smt | 2007-12-01 04:43:34 -0500 (Sat, 01 Dec 2007) | 1 line
+
+adding some more pieces to the puzzle, before I go to sleep
+------------------------------------------------------------------------
+r153 | smt | 2007-12-01 03:15:56 -0500 (Sat, 01 Dec 2007) | 1 line
+
+moving out the spec for attr_protected attributes (which is currently commented out)
+------------------------------------------------------------------------
+r152 | smt | 2007-12-01 03:14:22 -0500 (Sat, 01 Dec 2007) | 1 line
+
+abstracting fixtues out of specs
+------------------------------------------------------------------------
+r151 | smt | 2007-12-01 03:05:37 -0500 (Sat, 01 Dec 2007) | 1 line
+
+The beginning of the method generator
+------------------------------------------------------------------------
+r150 | smt | 2007-12-01 02:45:26 -0500 (Sat, 01 Dec 2007) | 1 line
+
+changing attributes to use two parameters
+------------------------------------------------------------------------
+r149 | smt | 2007-12-01 02:18:48 -0500 (Sat, 01 Dec 2007) | 1 line
+
+adding back specs for fixture replacement methods, but so far they are commented out
+------------------------------------------------------------------------
+r148 | smt | 2007-12-01 01:36:59 -0500 (Sat, 01 Dec 2007) | 1 line
+
+small change - a local variable instead of an instance variable
+------------------------------------------------------------------------
+r147 | smt | 2007-12-01 01:21:39 -0500 (Sat, 01 Dec 2007) | 1 line
+
+adding a spec for DelayedEvaluationProc
+------------------------------------------------------------------------
+r146 | smt | 2007-12-01 01:19:52 -0500 (Sat, 01 Dec 2007) | 1 line
+
+adding some comments
+------------------------------------------------------------------------
+r145 | smt | 2007-12-01 01:17:57 -0500 (Sat, 01 Dec 2007) | 1 line
+
+filling out FixtureReplacementController::Attributes
+------------------------------------------------------------------------
+r144 | smt | 2007-11-30 02:35:05 -0500 (Fri, 30 Nov 2007) | 1 line
+
+need to move to git, because my commits are no longer atomic
+------------------------------------------------------------------------
+r143 | smt | 2007-11-30 02:13:18 -0500 (Fri, 30 Nov 2007) | 1 line
+
+comming what I have so far...I'm tired
+------------------------------------------------------------------------
+r142 | smt | 2007-11-29 20:00:05 -0500 (Thu, 29 Nov 2007) | 1 line
+
+getting started with the API
+------------------------------------------------------------------------
+r141 | smt | 2007-11-29 19:40:16 -0500 (Thu, 29 Nov 2007) | 1 line
+
+removing the guts of fixture replacement for version2
+------------------------------------------------------------------------
+r135 | smt | 2007-11-28 11:24:07 -0500 (Wed, 28 Nov 2007) | 1 line
+
+copying fixture_replacement for FixtureReplacement2
+------------------------------------------------------------------------
+r129 | smt | 2007-11-26 02:51:12 -0500 (Mon, 26 Nov 2007) | 1 line
+
+more refactoring
+------------------------------------------------------------------------
+r128 | smt | 2007-11-26 02:44:28 -0500 (Mon, 26 Nov 2007) | 1 line
+
+more refactoring
+------------------------------------------------------------------------
+r127 | smt | 2007-11-26 02:32:39 -0500 (Mon, 26 Nov 2007) | 1 line
+
+adding some comments
+------------------------------------------------------------------------
+r126 | smt | 2007-11-26 02:32:06 -0500 (Mon, 26 Nov 2007) | 1 line
+
+some more refactoring
+------------------------------------------------------------------------
+r125 | smt | 2007-11-26 02:25:56 -0500 (Mon, 26 Nov 2007) | 1 line
+
+better naming: @method_base_name instead of @model_name
+------------------------------------------------------------------------
+r124 | smt | 2007-11-26 02:07:49 -0500 (Mon, 26 Nov 2007) | 1 line
+
+some refactoring
+------------------------------------------------------------------------
+r123 | smt | 2007-11-25 23:26:00 -0500 (Sun, 25 Nov 2007) | 1 line
+
+adding a task to upload the website
+------------------------------------------------------------------------
+r122 | smt | 2007-11-25 22:47:48 -0500 (Sun, 25 Nov 2007) | 1 line
+
+an extra spec for requiring.  Now 100% code coverage
+------------------------------------------------------------------------
+r121 | smt | 2007-11-25 22:39:46 -0500 (Sun, 25 Nov 2007) | 1 line
+
+using the jay fields method for swapping out require - the usual way broke rcov
+------------------------------------------------------------------------
+r120 | smt | 2007-11-25 22:30:09 -0500 (Sun, 25 Nov 2007) | 1 line
+
+reorganizing specs
+------------------------------------------------------------------------
+r119 | smt | 2007-11-25 22:26:38 -0500 (Sun, 25 Nov 2007) | 1 line
+
+refactoring FixtureReplacement.rails_root
+------------------------------------------------------------------------
+r118 | smt | 2007-11-25 22:25:15 -0500 (Sun, 25 Nov 2007) | 1 line
+
+Ok: Now environments can really be specified
+------------------------------------------------------------------------
+r117 | smt | 2007-11-25 22:07:28 -0500 (Sun, 25 Nov 2007) | 1 line
+
+customizable db/example_data.rb file - it no longer needs to be in that path, or with that file name
+------------------------------------------------------------------------
+r116 | smt | 2007-11-25 21:38:39 -0500 (Sun, 25 Nov 2007) | 1 line
+
+spacing
+------------------------------------------------------------------------
+r115 | smt | 2007-11-25 21:37:06 -0500 (Sun, 25 Nov 2007) | 1 line
+
+better handeling of RAILS_ENV - now raises an error if the module is included in production
+------------------------------------------------------------------------
+r114 | smt | 2007-11-25 20:59:09 -0500 (Sun, 25 Nov 2007) | 1 line
+
+adding excluded environments accessor
+------------------------------------------------------------------------
+r113 | smt | 2007-11-25 20:52:08 -0500 (Sun, 25 Nov 2007) | 1 line
+
+using Module#included now, instead of generating the methods automatically
+------------------------------------------------------------------------
+r112 | smt | 2007-11-25 20:22:33 -0500 (Sun, 25 Nov 2007) | 1 line
+
+removing nonsense in the specs
+------------------------------------------------------------------------
+r111 | smt | 2007-11-25 18:29:33 -0500 (Sun, 25 Nov 2007) | 1 line
+
+refactoring to the internals of FixtureReplacement - method generation
+------------------------------------------------------------------------
+r95 | smt | 2007-11-23 18:24:33 -0500 (Fri, 23 Nov 2007) | 1 line
+
+adding google analytics tracking
+------------------------------------------------------------------------
+r94 | smt | 2007-11-23 04:07:59 -0500 (Fri, 23 Nov 2007) | 1 line
+
+adding a link to the rcov report
+------------------------------------------------------------------------
+r93 | smt | 2007-11-23 04:05:44 -0500 (Fri, 23 Nov 2007) | 1 line
+
+ignoring doc/
+------------------------------------------------------------------------
+r92 | smt | 2007-11-23 04:05:01 -0500 (Fri, 23 Nov 2007) | 1 line
+
+adding rcov report to document generation
+------------------------------------------------------------------------
+r91 | smt | 2007-11-23 04:03:35 -0500 (Fri, 23 Nov 2007) | 1 line
+
+adding rcov option specdoc
+------------------------------------------------------------------------
+r90 | smt | 2007-11-20 12:23:06 -0500 (Tue, 20 Nov 2007) | 1 line
+
+removing requires for config/environment.rb and config/boot.rb for the generator
+------------------------------------------------------------------------
+r89 | smt | 2007-11-20 11:50:32 -0500 (Tue, 20 Nov 2007) | 1 line
+
+moving bugs to bug_reports
+------------------------------------------------------------------------
+r88 | smt | 2007-11-20 11:40:23 -0500 (Tue, 20 Nov 2007) | 1 line
+
+moving spec/bugs to etc/bugs
+------------------------------------------------------------------------
+r87 | smt | 2007-11-20 11:38:35 -0500 (Tue, 20 Nov 2007) | 1 line
+
+moving patches into etc
+------------------------------------------------------------------------
+r86 | smt | 2007-11-20 11:35:37 -0500 (Tue, 20 Nov 2007) | 1 line
+
+adding etc dir
+------------------------------------------------------------------------
+r85 | smt | 2007-11-20 11:34:40 -0500 (Tue, 20 Nov 2007) | 1 line
+
+adding patches which I need to look at
+------------------------------------------------------------------------
+r84 | smt | 2007-11-20 10:53:32 -0500 (Tue, 20 Nov 2007) | 1 line
+
+updating TODO and README to point to the rubyforge pages
+------------------------------------------------------------------------
+r83 | smt | 2007-11-15 16:42:22 -0500 (Thu, 15 Nov 2007) | 1 line
+
+more TODO
+------------------------------------------------------------------------
+r80 | smt | 2007-11-06 12:47:10 -0500 (Tue, 06 Nov 2007) | 1 line
+
+updating the docs for test::unit
+------------------------------------------------------------------------
+r79 | smt | 2007-11-06 00:26:52 -0500 (Tue, 06 Nov 2007) | 1 line
+
+better documentation for inclusion with rspec
+------------------------------------------------------------------------
+r75 | smt | 2007-10-27 15:38:10 -0400 (Sat, 27 Oct 2007) | 1 line
+
+updating readme for Carl Porth and Wincent's contributions, as well as adding a large section for the motivation behind FixtureReplacement, along with it's disadvantages
+------------------------------------------------------------------------
+r74 | smt | 2007-10-25 23:28:31 -0400 (Thu, 25 Oct 2007) | 1 line
+
+changing the generator to use Rails' camelize instead of classify
+------------------------------------------------------------------------
+r73 | smt | 2007-10-25 23:27:31 -0400 (Thu, 25 Oct 2007) | 1 line
+
+changing around the documentation for wincent
+------------------------------------------------------------------------
+r72 | smt | 2007-10-25 23:23:56 -0400 (Thu, 25 Oct 2007) | 1 line
+
+adding patch from wincent to silence migrations
+------------------------------------------------------------------------
+r71 | smt | 2007-10-25 23:12:07 -0400 (Thu, 25 Oct 2007) | 1 line
+
+adding patch to change classify to camelize
+------------------------------------------------------------------------
+r70 | smt | 2007-10-19 16:22:03 -0400 (Fri, 19 Oct 2007) | 1 line
+
+adding unapplied patches from wincent
+------------------------------------------------------------------------
+r65 | smt | 2007-10-18 12:36:43 -0400 (Thu, 18 Oct 2007) | 1 line
+
+adding attr_protected notes to README
+------------------------------------------------------------------------
+r64 | smt | 2007-10-18 12:29:29 -0400 (Thu, 18 Oct 2007) | 1 line
+
+moving patches around to be named by date
+------------------------------------------------------------------------
+r63 | smt | 2007-10-18 12:25:41 -0400 (Thu, 18 Oct 2007) | 1 line
+
+more updating of docs
+------------------------------------------------------------------------
+r62 | smt | 2007-10-18 12:02:59 -0400 (Thu, 18 Oct 2007) | 1 line
+
+updating README
+------------------------------------------------------------------------
+r61 | smt | 2007-10-18 12:01:39 -0400 (Thu, 18 Oct 2007) | 1 line
+
+Adding wincent's README patch
+------------------------------------------------------------------------
+r60 | smt | 2007-10-17 22:38:17 -0400 (Wed, 17 Oct 2007) | 1 line
+
+removing element from TODO
+------------------------------------------------------------------------
+r59 | smt | 2007-10-17 22:37:13 -0400 (Wed, 17 Oct 2007) | 1 line
+
+getting specs to work from RAILS_ROOT
+------------------------------------------------------------------------
+r58 | smt | 2007-10-17 22:34:38 -0400 (Wed, 17 Oct 2007) | 1 line
+
+updating documentation to reflect last patch sent in by wincent
+------------------------------------------------------------------------
+r57 | smt | 2007-10-17 22:30:23 -0400 (Wed, 17 Oct 2007) | 1 line
+
+Applying a patch from wincent to deal with mass assignment with attr_protected fields
+------------------------------------------------------------------------
+r56 | smt | 2007-10-17 22:13:47 -0400 (Wed, 17 Oct 2007) | 1 line
+
+updating Docs
+------------------------------------------------------------------------
+r53 | smt | 2007-10-17 19:52:11 -0400 (Wed, 17 Oct 2007) | 1 line
+
+adding patch to apply
+------------------------------------------------------------------------
+r46 | smt | 2007-10-16 20:34:45 -0400 (Tue, 16 Oct 2007) | 1 line
+
+Adding link to wincent's site, for documentation
+------------------------------------------------------------------------
+r35 | smt | 2007-10-15 20:20:36 -0400 (Mon, 15 Oct 2007) | 1 line
+
+Huge patch from Wincent Colaiuta to overhall the specs to use sqlite3 in memory databases + real models (just a change to the specs)
+------------------------------------------------------------------------
+r33 | smt | 2007-10-14 19:05:24 -0400 (Sun, 14 Oct 2007) | 1 line
+
+Spelling Error Fix for comments, patch from Wincent Colaiuta
+------------------------------------------------------------------------
+r32 | smt | 2007-10-14 19:00:49 -0400 (Sun, 14 Oct 2007) | 1 line
+
+adding patches sent in by wincent
+------------------------------------------------------------------------
+r31 | smt | 2007-10-03 00:50:27 -0400 (Wed, 03 Oct 2007) | 1 line
+
+Another tiny change to README (fixing link to specdocs)
+------------------------------------------------------------------------
+r30 | smt | 2007-10-03 00:46:35 -0400 (Wed, 03 Oct 2007) | 1 line
+
+Adding specdocs to README
+------------------------------------------------------------------------
+r29 | smt | 2007-10-03 00:42:06 -0400 (Wed, 03 Oct 2007) | 1 line
+
+update rake, specdoc, to both use doc/ directory
+------------------------------------------------------------------------
+r28 | smt | 2007-10-03 00:41:37 -0400 (Wed, 03 Oct 2007) | 1 line
+
+Tiny change to README
+------------------------------------------------------------------------
+r27 | smt | 2007-10-03 00:16:48 -0400 (Wed, 03 Oct 2007) | 1 line
+
+adding rake tasks to build specdoc + all documentation + rake spec
+------------------------------------------------------------------------
+r26 | smt | 2007-10-02 03:34:26 -0400 (Tue, 02 Oct 2007) | 1 line
+
+small changes to docs
+------------------------------------------------------------------------
+r25 | smt | 2007-09-30 15:51:52 -0400 (Sun, 30 Sep 2007) | 1 line
+
+removing rspec banner from generator
+------------------------------------------------------------------------
+r24 | smt | 2007-09-30 15:21:43 -0400 (Sun, 30 Sep 2007) | 1 line
+
+more README
+------------------------------------------------------------------------
+r23 | smt | 2007-09-30 15:20:57 -0400 (Sun, 30 Sep 2007) | 1 line
+
+adding spec rake task and making the default task the spec task
+------------------------------------------------------------------------
+r22 | smt | 2007-09-30 14:55:02 -0400 (Sun, 30 Sep 2007) | 1 line
+
+todo update
+------------------------------------------------------------------------
+r21 | smt | 2007-09-30 14:54:06 -0400 (Sun, 30 Sep 2007) | 1 line
+
+removing tasks/ directory
+------------------------------------------------------------------------
+r20 | smt | 2007-09-30 14:53:46 -0400 (Sun, 30 Sep 2007) | 1 line
+
+more readme updates
+------------------------------------------------------------------------
+r19 | smt | 2007-09-30 14:51:26 -0400 (Sun, 30 Sep 2007) | 1 line
+
+updating README
+------------------------------------------------------------------------
+r18 | smt | 2007-09-30 14:36:42 -0400 (Sun, 30 Sep 2007) | 1 line
+
+moving specs into fixture_replacement directory
+------------------------------------------------------------------------
+r17 | smt | 2007-09-30 14:35:18 -0400 (Sun, 30 Sep 2007) | 1 line
+
+adding fixture_replacement directory in spec/
+------------------------------------------------------------------------
+r16 | smt | 2007-09-30 14:34:04 -0400 (Sun, 30 Sep 2007) | 1 line
+
+moving TODO into it's own file
+------------------------------------------------------------------------
+r15 | smt | 2007-09-30 14:31:26 -0400 (Sun, 30 Sep 2007) | 1 line
+
+removing TODO's that have been done
+------------------------------------------------------------------------
+r14 | smt | 2007-09-30 14:30:31 -0400 (Sun, 30 Sep 2007) | 1 line
+
+Adding the MIT license
+------------------------------------------------------------------------
+r13 | smt | 2007-09-30 14:27:19 -0400 (Sun, 30 Sep 2007) | 1 line
+
+updating readme
+------------------------------------------------------------------------
+r12 | smt | 2007-09-30 14:24:29 -0400 (Sun, 30 Sep 2007) | 1 line
+
+adding patches directory, with simon's patch
+------------------------------------------------------------------------
+r11 | smt | 2007-09-30 13:44:10 -0400 (Sun, 30 Sep 2007) | 1 line
+
+Allow default_* methods to take params, just as create_* and default_* do (Patch from Simon Peter Nicholls)
+------------------------------------------------------------------------
+r10 | smt | 2007-09-30 12:53:14 -0400 (Sun, 30 Sep 2007) | 1 line
+
+Readme update
+------------------------------------------------------------------------
+r9 | smt | 2007-09-30 12:44:32 -0400 (Sun, 30 Sep 2007) | 1 line
+
+Updating docs
+------------------------------------------------------------------------
+r8 | smt | 2007-09-28 17:42:10 -0400 (Fri, 28 Sep 2007) | 1 line
+
+Moving around the require lines so that the specs can be run
+------------------------------------------------------------------------
+r7 | smt | 2007-09-28 17:39:00 -0400 (Fri, 28 Sep 2007) | 1 line
+
+(hopeful) bugfix (without regression) for linoj's bug
+------------------------------------------------------------------------
+r6 | smt | 2007-09-28 01:36:52 -0400 (Fri, 28 Sep 2007) | 1 line
+
+Fixing tiny bug in generator of fixture replacement
+------------------------------------------------------------------------
+r5 | smt | 2007-09-27 23:35:30 -0400 (Thu, 27 Sep 2007) | 1 line
+
+removing trunk
+------------------------------------------------------------------------
+r4 | smt | 2007-09-27 23:34:42 -0400 (Thu, 27 Sep 2007) | 1 line
+
+
+------------------------------------------------------------------------
+r3 | smt | 2007-09-27 23:31:40 -0400 (Thu, 27 Sep 2007) | 1 line
+
+removing branches and tags
+------------------------------------------------------------------------
+r2 | smt | 2007-09-27 17:49:20 -0400 (Thu, 27 Sep 2007) | 1 line
+
+tagging release 1.0
+------------------------------------------------------------------------
+r1 | smt | 2007-09-27 17:46:58 -0400 (Thu, 27 Sep 2007) | 1 line
+
+Initial import of plugins (and Fixture Replacement plugin, which came from the urbis repository at revision 1935)
+------------------------------------------------------------------------

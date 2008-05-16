@@ -1,0 +1,38 @@
+Index: lib/fixture_replacement/fixture_replacement.rb
+===================================================================
+--- lib/fixture_replacement/fixture_replacement.rb	(revision 70)
++++ lib/fixture_replacement/fixture_replacement.rb	(working copy)
+@@ -40,7 +40,7 @@
+     
+     def initialize(method_name, fixture_mod=FixtureReplacement)
+       @model_name = method_name
+-      @model_class = method_name.classify
++      @model_class = method_name.camelize
+       @fixture_module = fixture_mod
+       
+       add_to_class_singleton(@model_class)
+Index: spec/fixture_replacement/fixture_replacement_spec.rb
+===================================================================
+--- spec/fixture_replacement/fixture_replacement_spec.rb	(revision 70)
++++ spec/fixture_replacement/fixture_replacement_spec.rb	(working copy)
+@@ -14,6 +14,7 @@
+ end
+ 
+ class Gender < ActiveRecord::Base; end
++class Actress < ActiveRecord::Base; end
+ 
+ 
+ 
+@@ -118,6 +119,12 @@
+       }.should raise_error
+     end
+     
++    it "should not raise an error if the model ends with 's'" do
++      lambda {
++        Generator.new("actress")
++      }.should_not raise_error
++    end
++    
+     it "should be able to respond to generate_default_method" do
+       @generator.should respond_to(:generate_default_method)
+     end

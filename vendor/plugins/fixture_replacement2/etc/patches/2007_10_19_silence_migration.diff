@@ -1,0 +1,12 @@
+Index: spec/spec_helper.rb
+===================================================================
+--- spec/spec_helper.rb	(revision 65)
++++ spec/spec_helper.rb	(working copy)
+@@ -5,6 +5,7 @@
+ 
+ ActiveRecord::Base.establish_connection :adapter => 'sqlite3', :database  => ':memory:'
+ 
++ActiveRecord::Migration.verbose = false
+ ActiveRecord::Schema.define do
+   
+   create_table :users do |t|

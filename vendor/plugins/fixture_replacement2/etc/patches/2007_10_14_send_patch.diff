@@ -1,0 +1,79 @@
+Index: lib/fixture_replacement/fixture_replacement.rb
+===================================================================
+--- lib/fixture_replacement/fixture_replacement.rb	(revision 31)
++++ lib/fixture_replacement/fixture_replacement.rb	(working copy)
+@@ -70,7 +70,9 @@
+           hash_given = args[0] || Hash.new
+           merged_hash = self.send(attributes_method).merge(hash_given)
+           evaluated_hash = Generator.merge_unevaluated_method(self, :create, merged_hash)        
+-          obj = class_name.create!(evaluated_hash)
++          obj = class_name.new
++          evaluated_hash.each { |k, v| obj.send("#{k}=", v) }
++          obj.save!
+           obj          
+         end
+       end
+@@ -86,7 +88,9 @@
+           hash_given = args[0] || Hash.new
+           merged_hash = self.send(attributes_method).merge(hash_given)
+           evaluated_hash = Generator.merge_unevaluated_method(self, :create, merged_hash)
+-          class_name.new(evaluated_hash)
++          obj = class_name.new
++          evaluated_hash.each { |k, v| obj.send("#{k}=", v) }
++          obj
+         end
+       end
+     end
+Index: spec/fixture_replacement/fixture_replacement_spec.rb
+===================================================================
+--- spec/fixture_replacement/fixture_replacement_spec.rb	(revision 31)
++++ spec/fixture_replacement/fixture_replacement_spec.rb	(working copy)
+@@ -18,6 +18,14 @@
+   
+   attr_reader :hash
+   
++  def method_missing symbol, *args
++    if symbol.id2name =~ /\A(.+)=\z/
++      @hash[$~[1].to_sym] = *args
++    else
++      super
++    end
++  end
++  
+   def gender # this would be a has_many call in rails
+     17
+   end
+@@ -222,14 +230,14 @@
+       created_gender.hash.should == {:sex => "Female"}
+     end
+     
+-    it "should call Gender.create! when the default_gender method is evaluated by default_gender" do
++    it "should call Gender.save! when the default_gender method is evaluated by default_gender" do
+       gender = Gender.new
+-      Gender.should_receive(:create!).and_return gender
++      Gender.should_receive(:save!).and_return gender
+       @instance.create_user
+     end
+     
+-    it "should not call Gender.create! if the default_gender is overwritten by another value (say, a string)" do
+-      Gender.should_not_receive(:create!)
++    it "should not call Gender.save! if the default_gender is overwritten by another value (say, a string)" do
++      Gender.should_not_receive(:save!)
+       @instance.create_user(:gender => "a string")
+     end
+   end
+@@ -385,12 +393,12 @@
+     end
+     
+     it "should call Gender.save! when the default_gender method is evaluated by default_gender" do
+-      Gender.should_receive(:create!)
++      Gender.should_receive(:save!)
+       @instance.new_user
+     end
+     
+     it "should not call Gender.new if the default_gender is overwritten by another value (say, a string)" do
+-      Gender.should_not_receive(:create!)
++      Gender.should_not_receive(:save!)
+       @instance.new_user(:gender => "a string")
+     end
+   
