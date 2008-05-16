@@ -12,12 +12,23 @@ class TranslationController < ApplicationController
     Locale.language.id ], 
     :order => 'id')                                                
   end
+ 
+# Shows only strings which have not yet been translated  
+  def hide_translated
+    if !Locale.language
+      default_loc = Locale.new(ArchiveConfig.BASE_LANGUAGE)
+      Locale.set default_loc
+    end
+    
+    @view_translations = ViewTranslation.find(:all, :conditions => [ 'built_in IS NULL AND text IS NULL AND language_id = ?',
+    Locale.language.id ], :order => 'id')
+  end
   
   def translation_text
     @translation = ViewTranslation.find(params[:id])
     render :text => @translation.text || ""  
   end
-  
+
   def set_translation_text
     @translation = ViewTranslation.find(params[:id])
     previous = @translation.text
@@ -61,6 +72,7 @@ class TranslationController < ApplicationController
       str.to_s.translate
     end
     flash[:notice] = "Strings collected".t
-    redirect_to :action => 'index'
+    #Now redirects to back because it could be coming from index or hide_translated
+    redirect_to :back
   end
 end
