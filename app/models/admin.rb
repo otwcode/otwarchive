@@ -6,10 +6,4 @@ class Admin < ActiveRecord::Base
   def identity_url
     return nil   #can't log in as admin with openid
   end
-  def activation_code=(code)
-    return code  #admin objects are created manually, they don't need a code
-  end
-  def activated_at=(time)
-    return time  #not needed since activated at creation
-  end
 end
