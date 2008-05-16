@@ -39,7 +39,11 @@ module AuthentableEntity
     # Returns the user or nil.
     def authenticate(login, cleartext)
       u = find_by_login(login)
-      u && u.authenticated?(cleartext, u.salt) && !u.activation_code ? u : nil
+      if u && u.authenticated?(cleartext, u.salt)
+	  u.attributes.include?("activation_code") && u.activation_code ? nil : u
+	else
+	  nil
+	end
     end   
   end
 
