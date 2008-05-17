@@ -22,6 +22,8 @@ class User < ActiveRecord::Base
   has_one :preference
   validates_associated :preference
    
+  before_create :create_default_associateds
+  
   has_many :works, :through => :readings
   has_many :readings
 
@@ -52,6 +54,12 @@ class User < ActiveRecord::Base
     login
   end
                          
+  def create_default_associateds
+    self.pseuds << Pseud.new(:name => self.login, :description => "Default pseud".t, :is_default => :true)  
+    self.profile = Profile.new
+    self.preference = Preference.new
+  end
+  
   protected                            
     def first_save?
       crypted_password.blank? && identity_url.blank?

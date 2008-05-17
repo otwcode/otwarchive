@@ -21,12 +21,9 @@ class UsersController < ApplicationController
   # POST /users.xml
   def create
     @user = User.new(params[:user])   
-    @user.profile = Profile.new
-    @user.preference = Preference.new
     unless !ArchiveConfig.USE_OPENID || params[:user][:identity_url].blank?
       @user.identity_url = OpenIdAuthentication.normalize_url(@user.identity_url)
     end
-    @user.pseuds << Pseud.new(:name => @user.login, :description => "Default pseud".t, :is_default => :true)
     
     if @user.save
       flash[:notice] = 'during testing you can activate via <a href=' + activate_path(@user.activation_code) + '>your activation url</a>.'
