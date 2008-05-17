@@ -40,6 +40,7 @@ module ActiveRecord # :nodoc:
           if attr == "base"
             full_messages << msg_text / msg_num
           else
+            msg_text = "" unless msg_text
             full_messages <<
               (@base.class.human_attribute_name(attr) + " " + msg_text) / msg_num
           end
