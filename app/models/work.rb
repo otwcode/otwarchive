@@ -6,8 +6,6 @@ class Work < ActiveRecord::Base
   validates_presence_of :metadata
   validates_associated :metadata, :message => nil
 
-  has_many :readings, :dependent => :destroy
-
   acts_as_commentable
 
   attr_reader :pseud 
