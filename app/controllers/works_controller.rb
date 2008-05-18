@@ -18,18 +18,17 @@ class WorksController < ApplicationController
   
   # GET /works
   def index
-   # @works = Work.find(:all, :order => "created_at DESC", :conditions => ["posted = 1"]) 
-    
-    # Get only works in the current locale
-    if Locale.active
-      @works = Work.find(:all, 
-                         :order => "created_at DESC", 
-      :conditions => ["posted = 1",  'language_id = ?', Locale.active.language.id ] )
-      
+   
+   # Get only works in the current locale
+   if Locale.active
+      @works = Work.find (:all, 
+                          :conditions => ["posted = 1 AND language_id = ?", Locale.active.language.id],
+                          :order => "created_at DESC" )
+     
     else
       @works = Work.find(:all,
                          :order => "created_at DESC", 
-      :conditions => ["posted = 1"])
+                         :conditions => ["posted = 1"])
     end
         
   end
