@@ -31,11 +31,11 @@ class ChapterTest < ActiveSupport::TestCase
     assert create_chapter(:content => String.random(1))
   end
   def test_create_chapter_largest
-    long_string = ""
-    (1..16777215).each {|i| long_string << "a" }
-    assert create_chapter(:content => long_string)
-    bad_chapter = new_chapter(:content => long_string + "a" )
-    assert !bad_chapter.save    
+    long_string = "aa"
+    (1..23).each {|i| long_string << long_string }
+    chapter = new_chapter(:content => long_string)
+    assert !chapter.save    
+    assert create_chapter(:content => long_string.chop)
   end
   def test_create_single_chapter_in_work
     work = create_work
