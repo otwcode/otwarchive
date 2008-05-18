@@ -18,8 +18,20 @@ class WorksController < ApplicationController
   
   # GET /works
   def index
-    @works = Work.find(:all, :order => "created_at DESC", :conditions => ["posted = 1"]) 
+   # @works = Work.find(:all, :order => "created_at DESC", :conditions => ["posted = 1"]) 
     
+    # Get only works in the current locale
+    if Locale.active
+      @works = Work.find(:all, 
+                         :order => "created_at DESC", 
+      :conditions => ["posted = 1",  'language_id = ?', Locale.active.language.id ] )
+      
+    else
+      @works = Work.find(:all,
+                         :order => "created_at DESC", 
+      :conditions => ["posted = 1"])
+    end
+        
   end
   
   # GET /works/1
@@ -38,7 +50,7 @@ class WorksController < ApplicationController
     @work.metadata = Metadata.new
     @metadata = @work.metadata
     @pseuds = current_user.pseuds
-    @selected = current_user.default_pseud.id 
+    @selected = current_user.default_pseud.id  
   end
 
   # POST /works

@@ -10,7 +10,26 @@ class Work < ActiveRecord::Base
 
   attr_reader :pseud 
   
-  after_update :save_associated     
+  after_update :save_associated   
+  
+    # Associating works with languages. 
+    
+    belongs_to :language, :foreign_key => 'language_id',
+    :class_name => '::Globalize::Language'
+    
+    
+    
+    before_save :set_language
+    
+    def set_language
+      return if self.language
+      if Locale.active && Locale.active.language
+        self.language = Locale.active.language
+      else
+        self.language = ArchiveConfig.BASE_LANGUAGE
+      end
+    end
+    
   
   #virtual attribute for metadata
   def new_metadata_attributes=(attributes)
