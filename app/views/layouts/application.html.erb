@@ -26,12 +26,7 @@
             <% if logged_in? -%>
 	              <ul>
 				    <li><span><%=h "Hi,".t -%></span> <%= link_to current_user.login, user_path(current_user), :class => 'login' -%>! </li>
-				  <!-- Translation button -->
-				    <li>
-				      <a href="<%= url_for :controller => 'translation', :action => 'index' -%>">
-				        <%= image_tag("translation_button.gif", :alt => h('Link to translation page'.t), :border => 0) %>	
-				      </a>
-					</li>
+				    <%= translation_button %>	
 				  </ul>	
 	              <ul>
 	                <li class="first-link"><%= link_to h('Post New'.t), new_work_path -%></li>
