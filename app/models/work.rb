@@ -25,8 +25,6 @@ class Work < ActiveRecord::Base
       return if self.language
       if Locale.active && Locale.active.language
         self.language = Locale.active.language
-      else
-        self.language = ArchiveConfig.BASE_LANGUAGE
       end
     end
     
