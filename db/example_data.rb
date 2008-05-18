@@ -3,7 +3,7 @@ module FixtureReplacement
   #### models 
   ## Note1: attributes are what it takes to *create* an object, not what's stored 
   ## in the database - this is different from regular fixtures)
-  ## Note2: fixtures must be valid
+  ## Note2: fixtures must be valid to use _create. To test for errors, use _new
   
   attributes_for :abuse_report do |a|    
     a.email = random_email
@@ -23,8 +23,6 @@ module FixtureReplacement
   attributes_for :chapter do |a|
     a.content = random_chapter
     a.work = default_work
-    a.metadata = default_metadata
-    a.posted = 1
   end
 
   attributes_for :comment do |a|
@@ -36,15 +34,8 @@ module FixtureReplacement
 
   attributes_for :creatorship do |a|
     a.pseud = default_pseud
-    type = ["work", "chapter"].rand
-    if type == "work"
-      a.creation_type = "work"
-      a.creation = default_work
-      
-    else type == "chapter"  
-      a.creation_type = "chapter"
-      a.creation = default_chapter
-    end
+    a.creation_type = "work"
+    a.creation = default_work
   end
 
   attributes_for :metadata do |a|
@@ -85,14 +76,10 @@ module FixtureReplacement
     a.email = random_email
     a.password = password
     a.password_confirmation = password
-    a.profile = default_profile
-    a.preference = default_preference 
   end
 
   attributes_for :work do |a|
     a.metadata = default_metadata
-    a.expected_number_of_chapters = [rand(30)+1, 1].rand
-    a.posted = 1
   end
 
   ##### some random generators used above
