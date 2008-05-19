@@ -16,7 +16,7 @@
 
   <!-- only display byline if different from the main byline -->
   <% if chapter.pseuds != @work.pseuds -%>
-  	<br />Chapter by <%= render :partial => 'pseuds/byline', :locals => { :creation => chapter } -%>
+  	<br />Chapter by <%= byline(chapter) -%>
   <% end -%>
   </div>
   

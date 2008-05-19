@@ -1,0 +1,2 @@
+page.insert_html :bottom, :return_coauthors, :partial => 'coauthor_form', :locals => {:creation => @creation}, :object => @coauthor_results
+page['pseud_name'].value = ''

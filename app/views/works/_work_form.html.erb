@@ -1,10 +1,9 @@
 <div id="story-form">
   <%- form_for(@work) do |f| -%> 
-
-  
+ 
     <p class="field-left">   
     
-	<% fields_for_associated(@work.metadata) do |m| %>
+	  <% fields_for_associated('work', @work.metadata) do |m| %>
       <!-- Story title field (metadata_attributes_title) -->
         <%= m.label :title, "Story Title*", :class => "required" %><br />
         <%= m.text_field :title, :class => "storyinputfield", :live => true, :object => :metadata, :validMessage => valid_length_message %>
@@ -49,17 +48,17 @@
     </div>    
 
     <!-- Story text field (chapter_attributes_content) -->
-	<% fields_for_associated(@work.chapters.first) do |c| %>
-      <p>
-        <%= c.label :content, "Story, in plain text with limited HTML*", :class => "required" %><br />
-      	<%= c.text_area :content %>
-      </p>
-    <% end %>
-  
+	<% fields_for_associated('work', @work.chapters.first) do |c| %>
+    <p>
+      <%= c.label :content, "Story, in plain text with limited HTML*", :class => "required" %><br />
+    	<%= c.text_area :content %>
+    </p>
+  <% end %>
+
     <!-- Author dropdown (pseud_id) -->
   	<p class="field-left">
   	  <%= label :pseud, :id, "Select author/pseudonym(s)" %><br />
-   	  <select name="pseud[id][]" multiple="multiple">
+   	  <select name="work[author_attributes][ids][]" multiple="multiple">
         <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
       </select> 
   	</p>
@@ -70,17 +69,29 @@
     </p>
 	
   	<p class="clearboth"></p>
-	 
-	<!-- Co-authorship - obviously this has to change 
-  	<div id="co-authors" style="display : none;">
-  	  <p id="coauthormanage">
-  	    <p>
-      	  <span class="storylabel"><label for="storycoauthor">Enter co-author name(s):</label></span>
-    	     text_field :user, :login 
-  	    </p>
-      </p>
-  	</div>
-	-->
+  	
+  	<% fields_for "work[author_attributes]" do |a| %>
+  	<noscript>
+    	<div id="co-authors">
+    	  <label for="storycoauthor">Enter co-author name(s): </label><br />
+    	  <%= a.text_field :name %>
+    	</div>
+  	</noscript>
+  	<%- end -%>
+
+    <div id="co-authors" style="display : none;"> 	  
+      <p id="coauthormanage">
+        <p>
+       	  <span class="storylabel"><label for="storycoauthor">Enter co-author name(s):</label></span>
+          <%= text_field_with_auto_complete :pseud, :name, { :size => 30 }, { :tokens => ',', :skip_style => true } %>
+          <%= link_to_remote "Choose co-authors", :url=>{ :controller => :pseuds, :action => :choose_coauthors }, :with => "'names='+$F('pseud_name')+'&creation=work'" %> | 
+          <%= link_to_function "Clear co-authors", update_page {|page| page.replace_html 'return_coauthors'} %>
+        </p> 
+      </p>                   
+    </div>
+    	
+  	<div id="return_coauthors">
+   	</div> 
 
   	<p class="clearboth"></p> 
 	

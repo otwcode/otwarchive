@@ -3,7 +3,47 @@ class WorksController < ApplicationController
   before_filter :users_only, :except => [ :index, :show, :destroy ]
   # only authors of a work should be able to edit it
   before_filter :is_author_true, :only => [ :edit, :update ]
+  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :preview, :post ]
   before_filter :update_or_create_reading, :only => [ :show ]
+  
+  auto_complete_for :pseud, :name
+  
+  # Sets values for @work, @chapter, @metadata, @pseuds, and @selected
+  def set_instance_variables
+    if params[:id] # edit, update, preview, post
+      @work = Work.find(params[:id])
+    elsif params[:work]  # create
+      @work = Work.new(params[:work])
+    else # new
+      @work = Work.new
+      @work.chapters.build
+      @work.metadata = Metadata.new
+    end
+
+    @chapter = @work.chapters.first
+    @metadata = @work.metadata
+
+    if @work.authors && !@work.authors.empty?
+      @pseuds = @work.authors
+      if @work.pseuds && !@work.pseuds.empty?
+        @pseuds = (@pseuds + @work.pseuds).uniq
+      end 
+    elsif @work.pseuds && !@work.pseuds.empty?
+      @pseuds = @work.pseuds 
+    else
+      @pseuds = current_user.pseuds
+    end
+
+    if params[:work] && params[:work]["author_attributes"] && params[:work]["author_attributes"]["ids"]
+      @selected = params[:work]["author_attributes"]["ids"].collect {|id| id.to_i }
+    elsif @work.authors && !@work.authors.empty?
+      @selected = @work.authors.collect {|pseud| pseud.id.to_i }
+    elsif @work.pseuds && !@work.pseuds.empty?
+      @selected = @work.pseuds.collect {|pseud| pseud.id.to_i }
+    else
+      @selected = current_user.default_pseud.id
+    end  
+  end
   
   # check if the user's current pseud is one associated with the work
   def is_author
@@ -18,7 +58,6 @@ class WorksController < ApplicationController
   
   # GET /works
   def index
-   
    # Get only works in the current locale
    if Locale.active
       @works = Work.find (:all, 
@@ -30,7 +69,6 @@ class WorksController < ApplicationController
                          :order => "created_at DESC", 
                          :conditions => ["posted = 1"])
     end
-        
   end
   
   # GET /works/1
@@ -38,59 +76,39 @@ class WorksController < ApplicationController
   def show
     @work = Work.find(params[:id]) 
     @comments = @work.find_all_comments
-    
   end
   
   # GET /works/new
   def new
-    @work = Work.new
-    @work.chapters.build
-    @chapter = @work.chapters.first
-    @work.metadata = Metadata.new
-    @metadata = @work.metadata
-    @pseuds = current_user.pseuds
-    @selected = current_user.default_pseud.id  
   end
 
   # POST /works
   def create
-    @work = Work.new(params[:work])
     @work.set_initial_version
-    @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id]) 
-
     if @work.save
-      Creatorship.add_authors(@work, @pseuds)
-      Creatorship.add_authors(@work.chapters.first, @pseuds)
       flash[:notice] = 'Work was successfully created.'
       redirect_to preview_work_path(@work)
     else
       @pseuds = current_user.pseuds
-      @selected = params[:pseud][:id]
       @work.chapters.build 
-      @work.metadata = Metadata.new
+      @work.metadata = Metadata.new(params[:work][:metadata_attributes])
       render :action => :new 
     end
   end
   
   # GET /works/1/edit
   def edit
-    @work = Work.find(params[:id])
-    @chapter = @work.chapters.first
     @chapters = Chapter.find(:all, :conditions => {:work_id => @work.id}, :order => "position")
-    @pseuds = @work.pseuds
-    @selected = @work.pseuds.collect { |pseud| pseud.id.to_i }
   end
   
   # PUT /works/1
   def update
-    @work = Work.find(params[:id])
     @work.attributes = params[:work]
-    @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id], params[:extra_pseuds])
-    @selected = @pseuds.collect { |pseud| pseud.id.to_i }
-    @chapter = @work.chapters.first
     
     # Display the collected data if we're in preview mode, save it if we're not
     if params[:preview_button]
+      @pseuds = (@work.authors + @work.pseuds).uniq
+      @selected = @work.authors.collect {|pseud| pseud.id.to_i }
       render :partial => 'preview_edit', :layout => 'application'
     elsif params[:cancel_button]
       # Not quite working yet - should send the user back to wherever they were before they hit edit
@@ -99,7 +117,6 @@ class WorksController < ApplicationController
       render :partial => 'work_form', :layout => 'application'
     else  
       if @work.update_attributes(params[:work])
-        Creatorship.add_authors(@work, @pseuds)
         @work.update_minor_version
         flash[:notice] = 'Work was successfully updated.'
         redirect_to(@work)
@@ -111,7 +128,6 @@ class WorksController < ApplicationController
  
   # GET /works/1/preview
   def preview
-    @work = Work.find(params[:id])
   end
   
   # POST /works/1/post
@@ -119,7 +135,6 @@ class WorksController < ApplicationController
     if params[:cancel_button]
       redirect_back_or_default('/')
     else
-      @work = Work.find(params[:id])
       @work.posted = true
       # Will save tags here when tags exist!
       if @work.save

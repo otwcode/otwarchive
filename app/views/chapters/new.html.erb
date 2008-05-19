@@ -1,6 +1,6 @@
 <h1>Add new chapter for "<%=h @work.metadata.title %>"</h1>
 
-<%= error_messages_for :chapter, :object => @chapter.metadata %>
+<%= error_messages_for :chapter %>
 
 <%= render :partial => 'chapter_form', :locals => { :chapter => @chapter, :button_text => "Create" } %>
 

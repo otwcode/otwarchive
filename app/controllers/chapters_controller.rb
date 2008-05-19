@@ -1,10 +1,13 @@
 class ChaptersController < ApplicationController
   # only registered users and NOT admin should be able to create new chapters
-  before_filter :users_only, :except => [ :index, :show, :destroy ]  
-  before_filter :load_work
+  before_filter :users_only, :except => [ :index, :show, :destroy ]
+  before_filter :load_work, :except => :auto_complete_for_pseud_name
+  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :preview, :post ]
   # only authors of a chapter should be able to edit it
   # should actually be that all authors of a work should be able to edit all chapters
-  before_filter :is_author_true, :only => [ :edit, :update ]
+  before_filter :is_author_true, :only => [ :edit, :update ] 
+  
+  auto_complete_for :pseud, :name
   
   # check if the user's current pseud is one associated with the chapter
   def is_author
@@ -29,6 +32,30 @@ class ChaptersController < ApplicationController
     @work = Work.find(params[:work_id])    
   end
   
+  # Sets values for @chapter, @pseuds, and @selected
+  def set_instance_variables
+    if params[:id] # edit, update, preview, post
+      @chapter = @work.chapters.find(params[:id])
+    elsif params[:chapter] # create
+      @chapter = @work.chapters.build(params[:chapter])
+    else # new
+      @chapter = @work.chapters.build
+      @chapter.metadata = Metadata.new
+    end
+    
+    @pseuds = @work.pseuds
+    
+    if params[:chapter] && params[:chapter]["author_attributes"] && params[:chapter]["author_attributes"]["ids"]
+      @selected = params[:chapter]["author_attributes"]["ids"].collect {|id| id.to_i }
+    elsif @chapter.authors
+      @selected = @chapter.authors.collect {|pseud| pseud.id.to_i }
+    elsif @chapter.pseuds
+      @selected = @chapter.pseuds.collect {|pseud| pseud.id.to_i }  
+    else
+      @selected = @work.pseuds.collect {|pseud| pseud.id.to_i }
+    end  
+  end
+  
   # GET /work/:work_id/chapters
   # GET /work/:work_id/chapters.xml
   def index 
@@ -45,34 +72,20 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/new
   # GET /work/:work_id/chapters/new.xml
   def new
-    @chapter = @work.chapters.build
-    @chapter.metadata = Metadata.new
-    @pseuds = current_user.pseuds
-    @selected = current_user.default_pseud.id
   end
   
   # GET /work/:work_id/chapters/1/edit
   def edit
-    @chapter = @work.chapters.find(params[:id])
-    @pseuds = @work.pseuds
-    @selected = @chapter.pseuds.collect { |pseud| pseud.id.to_i }
   end
   
   # POST /work/:work_id/chapters
   # POST /work/:work_id/chapters.xml
   def create
-    @chapter = @work.chapters.build(params[:chapter])
-    @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id]) 
-
     if @chapter.save
-      Creatorship.add_authors(@chapter, @pseuds)
-      Creatorship.add_authors(@work, @pseuds)
       @work.update_major_version
       flash[:notice] = 'Chapter was successfully created.'
       redirect_to [:preview, @work, @chapter]
     else
-      @pseuds = current_user.pseuds
-      @selected = params[:pseud][:id]
       render :action => "new" 
     end 
   end
@@ -80,14 +93,13 @@ class ChaptersController < ApplicationController
   # PUT /work/:work_id/chapters/1
   # PUT /work/:work_id/chapters/1.xml
   def update
-    @chapter = @work.chapters.find(params[:id]) 
     @chapter.attributes = params[:chapter]
     @chapter.work.update_attributes params[:work_attributes] 
-    @pseuds = Pseud.get_pseuds_from_params(params[:pseud][:id], params[:extra_pseuds])
-    @selected = @chapter.pseuds.collect { |pseud| pseud.id.to_i }
 
     # Display the collected data if we're in preview mode, save it if we're not
     if params[:preview_button]
+      @pseuds = (@chapter.authors + @work.pseuds).uniq
+      @selected = @chapter.authors.collect {|pseud| pseud.id.to_i }
       render :partial => 'preview_edit', :layout => 'application'
     elsif params[:cancel_button]
       # Not quite working yet - should send the user back to wherever they were before they hit edit
@@ -96,7 +108,6 @@ class ChaptersController < ApplicationController
       render :action => "edit"
     else
       if @chapter.update_attributes(params[:chapter])
-        Creatorship.add_authors(@chapter, @pseuds)
         @work.update_minor_version
         flash[:notice] = 'Chapter was successfully updated.'
         redirect_to [@work, @chapter]
@@ -108,7 +119,6 @@ class ChaptersController < ApplicationController
   
   # GET /chapters/1/preview
   def preview
-    @chapter = @work.chapters.find(params[:id])
   end
   
   # POST /chapters/1/post
@@ -116,7 +126,6 @@ class ChaptersController < ApplicationController
     if params[:cancel_button]
       redirect_back_or_default('/')
     else
-      @chapter = @work.chapters.find(params[:id])
       @chapter.posted = true
       # Will save tags here when tags exist!
       if @chapter.save

@@ -2,7 +2,7 @@
 
 <%- form_for([@work, @chapter]) do |f| -%>
 
-  <select name="pseud[id][]" multiple="multiple" style="display : none;">
+  <select name="chapter[author_attributes][ids][]" multiple="multiple" style="display : none;">
     <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
   </select>
   

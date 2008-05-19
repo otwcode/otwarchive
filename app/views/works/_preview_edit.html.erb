@@ -1,18 +1,20 @@
+<%= debug(@pseuds) %>
+
 <%= render :partial => 'work' %>
 
 <%- form_for(@work) do |f| -%>
 
-  <select name="pseud[id][]" multiple="multiple" style="display : none;">
+  <select name="work[author_attributes][ids][]" multiple="multiple" style="display : none;">
     <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
   </select>
 
-  <% fields_for_associated(@work.metadata) do |m| %>
+  <% fields_for_associated('work', @work.metadata) do |m| %>
     <%= m.hidden_field :title, :value => "#{@work.metadata.title}" %>
     <%= m.hidden_field :summary, :value => "#{@work.metadata.summary}" %>
     <%= m.hidden_field :notes, :value => "#{@work.metadata.notes}" %>
   <%- end -%>
 
-  <% fields_for_associated(@chapter) do |c| %>
+  <% fields_for_associated('work', @chapter) do |c| %>
     <%= c.hidden_field :content, :value => "#{@work.chapters.first.content}" %>
   <%- end -%>
 

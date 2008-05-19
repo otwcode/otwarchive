@@ -1,23 +1,45 @@
 <% form_for([@work, chapter]) do |f| %>
   
-  <p>
-  	<b>Author:</b><br />
-	  <p>
-  	  <select name="pseud[id][]" multiple="multiple">
-        <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
-      </select> 
-	  </p>
-	</p> 
-	
-	<p>
-    <%= link_to_function('Add new co-authors', "Element.toggle('extra-pseuds')") %>
+  <!-- Author dropdown (pseud_id) -->
+	<p class="field-left">
+	  <%= label :pseud, :id, "Select author/pseudonym(s)" %><br />
+ 	  <select name="chapter[author_attributes][ids][]" multiple="multiple">
+      <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
+    </select> 
+	</p>
+
+  <p class="field-right"> 
+    <%= link_to 'Create pseud?', new_user_pseud_path(current_user) %><br />  
+    <%= link_to_function('Add co-authors?', "Element.toggle('co-authors')") %>
   </p>
+
+	<p class="clearboth"></p>
 	
-	<div id="extra-pseuds" style="display : none;">
-	  <b>Co-Authors</b><br />
-	  <%= text_field_tag :extra_pseuds %>
-	</div>
-  
+	<% fields_for "chapter[author_attributes]" do |a| %>
+	<noscript>
+  	<div id="co-authors">
+  	  <label for="storycoauthor">Enter co-author name(s): </label><br />
+  	  <%= a.text_field "byline" %>
+      <p>Example: <strong>username:pseud, username:pseud</strong></p>
+  	</div>
+	</noscript>
+ 	<%- end -%>
+
+  <div id="co-authors" style="display : none;"> 	  
+    <p id="coauthormanage">
+      <p>
+        <span class="storylabel"><label for="storycoauthor">Enter co-author name(s):</label></span>
+       	<%= text_field_with_auto_complete :pseud, :name, { :size => 30 }, { :tokens => ',', :skip_style => true } %>
+       	<%= link_to_remote "Choose co-authors", :url=>{ :controller => :pseuds, :action => :choose_coauthors }, :with => "'names='+$F('pseud_name')+'&creation=chapter'" %>
+     	</p> 
+    </p>
+        
+    <%= link_to_function "Clear co-authors", update_page {|page| page.replace_html 'return_coauthors'} %>
+   </div>
+   
+   <div id="return_coauthors">
+   </div>
+    
   <% fields_for_metadata(chapter.metadata ||= Metadata.new) do |m| %>
     <p>
       <b>Chapter Title</b><br />

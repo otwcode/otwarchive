@@ -1,57 +1,83 @@
 class Work < ActiveRecord::Base
   has_many :chapters, :dependent => :destroy
-  validates_associated :chapters, :message => nil
-
-  has_one :metadata, :as => :described, :dependent => :destroy
-  validates_presence_of :metadata
-  validates_associated :metadata, :message => nil
+  validates_associated :chapters, :message => "must have content."
 
   acts_as_commentable
 
-  attr_reader :pseud 
+  has_one :metadata, :as => :described, :dependent => :destroy
+  validates_presence_of :metadata
+  validates_associated :metadata, :message => "must have a title."
+
+  # Virtual attribute to use as a placeholder for pseuds before the work has been saved
+  # Can't write to work.pseuds until the work has an id
+  attr_accessor :authors
+   
+  before_save :validate_authors
+  before_save :set_language
+  after_save :save_creatorships
+  after_update :save_associated, :save_creatorships     
+
+  # Associating works with languages. 
   
-  after_update :save_associated   
-  
-    # Associating works with languages. 
-    
-    belongs_to :language, :foreign_key => 'language_id',
-    :class_name => '::Globalize::Language'
-    
-    
-    
-    before_save :set_language
-    
-    def set_language
-      return if self.language
-      if Locale.active && Locale.active.language
-        self.language = Locale.active.language
-      end
+  belongs_to :language, :foreign_key => 'language_id', :class_name => '::Globalize::Language'
+   
+  def set_language
+    return if self.language
+    if Locale.active && Locale.active.language
+      self.language = Locale.active.language
     end
+  end 
     
-  
-  #virtual attribute for metadata
-  def new_metadata_attributes=(attributes)
-    self.metadata = Metadata.new(attributes)
+  # Virtual attribute for metadata
+  def metadata_attributes=(attributes)
+    self.new_record? ? self.metadata = Metadata.new(attributes) : self.metadata.attributes = attributes
   end  
   
-  def existing_metadata_attributes=(attributes)
-    self.metadata.attributes = attributes
+  # Virtual attribute for first chapter
+  def chapter_attributes=(attributes)
+    self.new_record? ? self.chapters.build(attributes) : self.chapters.first.attributes = attributes
+  end 
+  
+  # Virtual attribute for pseuds
+  def author_attributes=(attributes)
+    self.authors ||= []
+    ids = attributes[:ids]
+    ids += attributes[:valid_pseuds].split "," if attributes[:valid_pseuds]
+    ids += attributes[:ambiguous_pseuds].values if attributes[:ambiguous_pseuds]
+    for id in ids
+      self.authors << Pseud.find(id)
+    end
   end
   
-  #virtual attribute for first chapter
-  def new_chapter_attributes=(attributes)
-    chapters.build(attributes)
-  end 
+  # Checks that work has at least one author
+  def validate_authors
+    if self.authors.nil? || self.authors.empty?
+      if self.pseuds.empty?
+        errors.add_to_base("Work must have at least one author.")
+        return false
+      else
+        true
+      end
+    else
+      true
+    end
+  end
   
-  def existing_chapter_attributes=(attributes)
-    chapters.first.attributes = attributes
-  end 
+  # Save creatorships after the work is saved
+  def save_creatorships
+    if self.authors
+      Creatorship.add_authors(self, self.authors)
+      Creatorship.add_authors(self.chapters.first, self.authors)
+    end
+  end
   
+  # Save metadata and chapter data when the work is updated
   def save_associated
     self.metadata.save(false)
     chapters.first.save(false)
   end
-
+  
+  # Get the total number of chapters for a work
   def number_of_chapters
      Chapter.maximum(:position, :conditions => ['work_id = ?', self.id])
   end
@@ -64,7 +90,6 @@ class Work < ActiveRecord::Base
       Chapter.update_all("position = (position + 1)", ["work_id = (?) AND position > (?)", self.id, position])
     end
   end  
-
 
   # sets initial version of work to 1.0
   def set_initial_version

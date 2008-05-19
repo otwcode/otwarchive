@@ -11,7 +11,8 @@ module ApplicationHelper
   end
 
   def byline(creation)
-    creation.pseuds.collect { |pseud|
+    pseuds = creation.authors ? creation.authors : creation.pseuds 
+    pseuds.collect { |pseud|
       link_to pseud.name, user_path(pseud.user), :class => "login story-author"
     }.join(', ')
   end

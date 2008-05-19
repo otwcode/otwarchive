@@ -6,7 +6,6 @@ class PseudsController < ApplicationController
     @user = User.find_by_login(params[:user_id])
   end
   
-  
   # GET /pseuds
   # GET /pseuds.xml
   def index
@@ -17,6 +16,27 @@ class PseudsController < ApplicationController
   # GET /pseuds/1.xml
   def show
     @pseud = @user.pseuds.find(params[:id])
+  end
+  
+  def choose_coauthors
+    @creation = params[:creation]
+    list = params[:names]
+    pseud_names = list.split ","
+    @pseuds = []
+    @ambiguous_pseuds = {}
+    @invalid_pseuds = []
+    for name in pseud_names
+      name.strip!
+      result = Pseud.find(:all, :conditions => {:name => name}, :include => :user)
+      if result.nil? || result.empty?
+        @invalid_pseuds << name
+      elsif result.length > 1
+        @ambiguous_pseuds[name] = result
+      else
+        @pseuds << result.first
+      end
+    end
+    @coauthor_results = {:pseuds => @pseuds, :ambiguous_pseuds => @ambiguous_pseuds, :invalid_pseuds => @invalid_pseuds}
   end
   
   # GET /pseuds/new
