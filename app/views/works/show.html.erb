@@ -16,10 +16,11 @@
 <div class="clearboth"></div>
 <!-- END navigation -->
 
-<!-- Show the work --> 
+<!-- BEGIN work --> 
 <%= render :partial => 'work' -%>
+<!-- END work --> 
 
-<!-- comments -->
+<!-- BEGIN comment section -->
 <div id="comments-display">
   <p>
     <%= link_to_function('Add a comment', "Element.toggle('add-comment')", :href => new_work_comment_path(@work)) %>
@@ -29,6 +30,7 @@
     <%= render :partial => @comment = Comment.new, :locals => {:commentable => @work, :button_name => 'Create'}%> 
   </div>  
 
+  <!-- BEGIN comments -->
   <% unless @comments.empty? %>
     <p>
       <%= link_to_function('Read comments', "Element.toggle('comments')", :href => work_comments_path(@work)) %>   
@@ -37,5 +39,7 @@
     <div id="comments" style="display : none;">   
       <%= render :partial => 'comments/comment_view' %> 
     </div>
-   <% end %>
+  <% end %>
+  <!-- END comments -->
 </div>
+<!-- END comment section -->

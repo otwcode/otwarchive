@@ -1,27 +1,35 @@
 <!-- Comment divs are nested to make them easier to display; every comment has a depth value, and by comparing 
 it to the depth of the previous comment, you can figure out how many closing div tags you need, if any. Then all 
 you need is one "margin-left: 50px" line in the css to make some nice cascading indentation. -->
-
 <%- current_depth = nil -%>
 <%- @comments.each do |comment| -%>
-<!-- For now, show unapproved comments to logged in users. Probably want
-		to specifically target the authors of the work/chapter? -->
-  	<% if comment.approved or logged_in? %>
- 			 <%- if current_depth && comment.depth <= current_depth -%>
-  	  		<%= print_closing_divs(current_depth - comment.depth + 1) -%>
-					<% if comment.depth == 0 %>
-						</div>
-					<% end%>
-   		 <%- end -%>
-
- 	 		 <%- if current_depth.nil? || comment.depth == 0 -%>
- 	   			<div class="thread">
- 	 		 <%- end -%>
-  		 <div class="comment">
-  			<%= render :partial => 'comments/single_comment', :object => comment %>
-    		<%- current_depth = comment.depth -%>
-		<%- end -%>
+  <!-- For now, show unapproved comments to logged in users. Probably want
+  to specifically target the authors of the work/chapter? -->
+  <% if comment.approved or logged_in? %>
+    <%- if current_depth && comment.depth <= current_depth -%>
+      </div>
+      <!-- END comment -->
+      <%= print_closing_divs(current_depth - comment.depth) -%>
+      <!-- END comment thread -->
+      <% if comment.depth == 0 %>
+        </div>
+        <!-- END thread--> 
+      <% end%>
+    <%- end -%>
+  
+    <%- if current_depth.nil? || comment.depth == 0 -%>
+      <div class="thread">
+    <%- end -%>
+    <div class="comment">
+    <%= render :partial => 'comments/single_comment', :object => comment %>
+    <%- current_depth = comment.depth -%>
+  <%- end -%>
 <%- end -%>
+</div>
+<!-- END comment -->
 <%- unless current_depth.nil? %>
- 		<%= print_closing_divs(current_depth + 1) -%>
+  </div>
+  <!-- END comment thread -->
+  <%= print_closing_divs(current_depth) -%>
 <% end %>
+<!-- END thread--> 
