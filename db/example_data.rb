@@ -6,7 +6,7 @@ module FixtureReplacement
   ## Note2: fixtures must be valid to use _create. To test for errors, use _new
   
   attributes_for :abuse_report do |a|    
-    a.email = random_email(:real)
+    a.email = random_email
     a.url = random_url(ArchiveConfig.APP_URL)
     a.comment = random_paragraph
   end
@@ -15,7 +15,7 @@ module FixtureReplacement
     password = random_password
     
     a.login = String.random
-    a.email = random_email(:real)
+    a.email = random_email
     a.password = password
     a.password_confirmation = password
   end
@@ -32,7 +32,7 @@ module FixtureReplacement
     a.pseud = default_pseud
     a.content = random_paragraph
     a.name = random_phrase
-    a.email = random_email(:real)
+    a.email = random_email
   end
 
   attributes_for :creatorship do |a|
@@ -75,7 +75,7 @@ module FixtureReplacement
     a.age_over_13 = "1"
     a.terms_of_service = "1"
     a.login = String.random
-    a.email = random_email(:real)
+    a.email = random_email
     a.password = password
     a.password_confirmation = password
   end
@@ -117,8 +117,8 @@ module FixtureReplacement
     chapter << random_paragraph
   end
 
-  def random_domain(type=:fake)   # fake domains may not resolve in dns
-    return Faker::Internet.domain_name if type==:fake
+  def random_domain(fake=true)   # fake domains may not resolve in dns
+    return Faker::Internet.domain_name if fake
     ['test', 'google', 'amazon', 'yahoo', 'livejournal'].rand + ['.com', '.net', '.org', '.ca'].rand
   end
 
@@ -126,8 +126,8 @@ module FixtureReplacement
     random_word + Faker::Address.zip_code + random_word.capitalize
   end
   
-  def random_email(type=:fake)
-    Faker::Internet.user_name + '@' + random_domain(type)
+  def random_email(fake=false)
+    Faker::Internet.user_name + '@' + random_domain(fake)
   end
   
   def random_url(host=nil,path=nil)
