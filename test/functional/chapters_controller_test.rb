@@ -5,9 +5,10 @@ class ChaptersControllerTest < ActionController::TestCase
   # GET    /:locale/works/:work_id/chapters :action=>"index"
   def test_work_chapters
     # TODO check chapter order
-    work = create_work
-    chapters = []
-    (1..10).each do |i|
+    chapter = new_chapter
+    work = create_work(:chapters => [chapter])
+    chapters = [chapter]
+    (2..10).each do |i|
      chapters << create_chapter(:work => work)
      get :index, :locale => 'en', :work_id => work.id
      assert_response :success
@@ -20,10 +21,11 @@ class ChaptersControllerTest < ActionController::TestCase
   def test_create_chapter
     user = create_user
     @request.session[:user] = user    
-    work = create_work
+    chapter = new_chapter
+    work = create_work(:chapters => [chapter])
     work.pseuds << user.pseuds
     assert_difference('Chapter.count') do
-      post :create, :locale => 'en', :work_id => work.id, :chapter => { :content => random_chapter, :new_metadata_attributes => {:title => random_phrase, "notes"=>"", "summary"=>""}}, :pseud => { :id => user.pseuds.collect { |p| p.id } }
+      post :create, :locale => 'en', :work_id => work.id, :chapter => { :content => random_chapter, :metadata_attributes => {:title => random_phrase, "notes"=>"", "summary"=>""}, :author_attributes => { :ids => user.pseuds.collect { |p| p.id } }}
     end
     assert_redirected_to preview_work_chapter_path(assigns(:work),assigns(:chapter))
   end
@@ -32,7 +34,8 @@ class ChaptersControllerTest < ActionController::TestCase
   def test_new_work_chapter
     user = create_user
     @request.session[:user] = user    
-    work = create_work
+    chapter = new_chapter
+    work = create_work(:chapters => [chapter])
     work.pseuds << user.pseuds
     get :new, :locale => 'en', :work_id => work.id
     assert_equal assigns(:work), work
@@ -44,8 +47,8 @@ class ChaptersControllerTest < ActionController::TestCase
     # FIXME should need to be chapter's author to post
     user = create_user
     @request.session[:user] = user  
-    work = create_work
-    chapter = create_chapter(:work => work)
+    chapter = new_chapter
+    work = create_work(:chapters => [chapter])
     post :post, :locale => 'en', :work_id => work.id, :id => chapter.id  
     assert Chapter.find(chapter.id).posted
     assert_redirected_to work_path(assigns(:work))
@@ -56,16 +59,14 @@ class ChaptersControllerTest < ActionController::TestCase
   def test_edit_work_chapter
     user = create_user
     @request.session[:user] = user
-    work = create_work
-    work.pseuds << user.pseuds    
-    chapter = create_chapter(:work => work)
-    chapter.pseuds << user.pseuds
+    chapter = new_chapter(:authors => user.pseuds)
+    work = create_work(:chapters => [chapter], :authors => user.pseuds)
     get :edit, :locale => 'en', :work_id => work.id, :id => chapter.id
     assert_response :success
     assert_equal assigns(:work), work
     assert_equal assigns(:chapter), chapter
     assert_equal assigns(:pseuds), work.pseuds
-    assert_equal assigns(:selected), chapter.pseuds.collect{|p| p.id}
+    assert_equal assigns(:selected), user.pseuds.collect{|p| p.id}
   end
 
   # GET    /:locale/works/:work_id/chapters/:id/preview :action=>"preview"
@@ -73,8 +74,8 @@ class ChaptersControllerTest < ActionController::TestCase
     # FIXME should need to be chapter's author to preview
     user = create_user
     @request.session[:user] = user
-    work = create_work
-    chapter = create_chapter(:work => work)
+    chapter = new_chapter
+    work = create_work(:chapters => [chapter])
     get :preview, :locale => 'en', :work_id => work.id, :id => chapter.id
     assert_response :success
     assert_equal assigns(:work), work
@@ -83,8 +84,8 @@ class ChaptersControllerTest < ActionController::TestCase
 
   # GET    /:locale/works/:work_id/chapters/:id :action=>"show"
   def test_work_chapter
-    work = create_work
-    chapter = create_chapter(:work => work)
+    chapter = new_chapter
+    work = create_work(:chapters => [chapter])
     get :show, :locale => 'en', :work_id => work.id, :id => chapter.id
     assert_response :success
     assert_equal assigns(:work), work
@@ -96,8 +97,8 @@ class ChaptersControllerTest < ActionController::TestCase
   def test_update_chapter
     user = create_user
     @request.session[:user] = user
-    work = create_work
-    chapter = create_chapter(:work => work)
+    chapter = new_chapter
+    work = create_work(:chapters => [chapter])
     chapter.pseuds << user.pseuds    
     new_content = random_chapter
     assert_not_equal Chapter.find(chapter.id).content, new_content
@@ -108,19 +109,16 @@ class ChaptersControllerTest < ActionController::TestCase
   # DELETE /:locale/works/:work_id/chapters/:id :action=>"destroy"
   # FIXME shouldn't be able to destroy the only chapter in a work.
   def test_destroy_only_chapter
-    work = create_work
-    chapter1 = create_chapter(:work => work) 
-    chapter2 = create_chapter(:work => work) 
-    work.chapters << [chapter1, chapter2]
+    chapter = new_chapter
+    work = create_work(:chapters => [chapter])
 #    delete :destroy, :locale => 'en', :work_id => work.id, :id => chapter1.id
 #    assert flash.has_key?(:error)
   end
 
   def test_destroy_chapter
-    work = create_work
-    chapter1 = create_chapter(:work => work) 
-    chapter2 = create_chapter(:work => work) 
-    work.chapters << [chapter1, chapter2]
+    chapter1 = new_chapter
+    chapter2 = new_chapter
+    work = create_work(:chapters => [chapter1, chapter2], :authors => [create_pseud])
     assert_difference('Chapter.count', -1) do
       delete :destroy, :locale => 'en', :work_id => work.id, :id => chapter1.id
     end
