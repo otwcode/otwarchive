@@ -6,16 +6,16 @@ module FixtureReplacement
   ## Note2: fixtures must be valid to use _create. To test for errors, use _new
   
   attributes_for :abuse_report do |a|    
-    a.email = random_email
+    a.email = random_email(:real)
     a.url = random_url(ArchiveConfig.APP_URL)
     a.comment = random_paragraph
   end
 
   attributes_for :admin do |a|
-    password = String.random
+    password = random_password
     
-    a.login = random_phrase("_")[0...40].sub(/_\Z/, "")
-    a.email = random_email
+    a.login = String.random
+    a.email = random_email(:real)
     a.password = password
     a.password_confirmation = password
   end
@@ -32,12 +32,12 @@ module FixtureReplacement
     a.pseud = default_pseud
     a.content = random_paragraph
     a.name = random_phrase
-    a.email = random_email
+    a.email = random_email(:real)
   end
 
   attributes_for :creatorship do |a|
     a.pseud = default_pseud
-    a.creation_type = "work"
+    a.creation_type = :work
     a.creation = default_work
   end
 
@@ -58,7 +58,6 @@ module FixtureReplacement
     a.user = default_user
     a.name = random_phrase
     a.description = random_phrase
-    a.is_default = [0, 1].rand
   end
 
   attributes_for :reading do |a|
@@ -71,12 +70,12 @@ module FixtureReplacement
   end
 
   attributes_for :user do |a|
-    password = String.random
+    password = random_password
 
     a.age_over_13 = "1"
     a.terms_of_service = "1"
-    a.login = random_phrase("_")[0...40].sub(/_\Z/, "")
-    a.email = random_email
+    a.login = String.random
+    a.email = random_email(:real)
     a.password = password
     a.password_confirmation = password
   end
@@ -89,58 +88,51 @@ module FixtureReplacement
     a.authors = [default_pseud]
   end
 
-  ##### some random generators used above
-  def random_word(replace=false)
-    word = case [:short, :med, :med, :long, :longer, :proper, :compound].rand
-      when :short: [['I', 'A', 'O', 'E', 'U'].rand, String.random(rand(2)+2)].rand
-      when :med: String.random(rand(2)+4)
-      when :long: String.random(rand(3)+6)
-      when :longer: String.random(rand(4)+8)
-      when :proper: String.random(rand(3)+5).capitalize
-      when :compound: String.random(rand(3)+4) + ["'", "-"].rand + String.random(rand(3)+1)
-    end
-    return word.gsub(/[^\w]/, replace) if replace
-    return word
+  ##### some random generators
+  def random_word
+    Faker::Lorem.words(1).to_s
   end
-  
-  def random_phrase(replace=false)  # 2-4 words
+ 
+  def random_phrase(count=nil)  # 2-4 words
+    count = count ? count : rand(3)+2
     phrase=random_word.capitalize + ' '
     (1..rand(3)).each {|i| phrase << random_word + " "}
     phrase << random_word
-    return phrase.gsub(/[^\w]/, replace) if replace
-    return phrase
   end
   
-  def random_sentence  # 3-12 words
-    sentence = random_word.capitalize + ' '
-    (1..rand(10)+1).each {|i| sentence << random_word + ' '}
-    sentence << random_word
-    sentence << ['.','.','.','.','.','.','?','?','!'].rand
+  def random_sentence(count=nil)  # 3-12 words
+    count = count ? count : rand(10)+3
+    Faker::Lorem.sentence(count)
   end
   
-  def random_paragraph  # 2-11 sentences
-    para = ""
-    (1..rand(10)+1).each {|i| para << random_sentence + ' '}
-    para << random_sentence
+  def random_paragraph(count=nil)  # 2-10 sentences
+    count = count ? count : rand(9)+2
+    Faker::Lorem.paragraph(count)
   end
 
-  def random_chapter   # 1-30 paragraphs
-    page = ""
-    (1..rand(30)+1).each {|i| page << random_paragraph + "\n\n"}
-    return page
+  def random_chapter(count=nil)   # 1-20 paragraphs
+    count = count ? count : rand(20)
+    chapter = ""
+    (1...rand(count)).each {|i| chapter << random_paragraph + "\n\n"}
+    chapter << random_paragraph
   end
 
-  def random_domain   # must resolve for email validation
+  def random_domain(type=:fake)   # fake domains may not resolve in dns
+    return Faker::Internet.domain_name if type==:fake
     ['test', 'google', 'amazon', 'yahoo', 'livejournal'].rand + ['.com', '.net', '.org', '.ca'].rand
   end
+
+  def random_password   # strong?
+    random_word + Faker::Address.zip_code + random_word.capitalize
+  end
   
-  def random_email()
-    random_phrase("_") + '@' + random_domain
+  def random_email(type=:fake)
+    Faker::Internet.user_name + '@' + random_domain(type)
   end
   
   def random_url(host=nil,path=nil)
     host = host ? host : 'http://www.' + random_domain
-    path = path ? path : random_phrase("/")[0...20]
+    path = path ? path : random_phrase[1...10].gsub(/ /, '/')
     return host + '/' + path
   end
   

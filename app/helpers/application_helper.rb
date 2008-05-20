@@ -186,7 +186,7 @@ module ApplicationHelper
   
   def translation_button
     if current_user.has_role? 'translator'
-      return '<li> <a href="' + url_for (:controller => 'translation', :action => 'index') + '"' +
+      return '<li> <a href="' + url_for(:controller => 'translation', :action => 'index') + '"' +
       image_tag("translation_button.gif", :alt => h('Link to translation page'.t), :border => 0) + "</a></li>"
     end
   end
