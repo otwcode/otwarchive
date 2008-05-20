@@ -1,5 +1,11 @@
 class UsersController < ApplicationController
-  
+ 
+
+  # checks if the current user and the given user are the same
+  def is_user?(user)
+    current_user == user
+  end 
+
   # GET /users/1
   # GET /users/1.xml
   def show
@@ -15,6 +21,10 @@ class UsersController < ApplicationController
   # GET /users/1/edit
   def edit
     @user = User.find_by_login(params[:id])
+    unless is_user?(@user)
+      flash[:error] = "You are not allowed to perform this action."
+      redirect_to user_url(@user)
+    end
   end
   
   # POST /users
@@ -56,6 +66,11 @@ class UsersController < ApplicationController
   def update
     @user = User.find_by_login(params[:id])
     
+    unless is_user?(@user)
+      flash[:error] = "You are not allowed to perform this action."
+      redirect_to user_url(@user)
+    end
+
     if @user.profile
       @user.profile.update_attributes params[:profile_attributes]
     else
