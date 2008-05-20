@@ -3,12 +3,8 @@ class Comment < ActiveRecord::Base
   belongs_to :commentable, :polymorphic => true
  
   validates_presence_of :content
-  validates_presence_of :name, :email, :unless => :logged_in? 
+  validates_presence_of :name, :email, :unless => :pseud_id
   before_create :check_for_spam
-  
-  def logged_in?
-    User.current_user
-  end
   
   # Gets methods and associations from acts_as_commentable plugin
   acts_as_commentable  
