@@ -27,9 +27,9 @@ you need is one "margin-left: 50px" line in the css to make some nice cascading 
 <%- end -%>
 </div>
 <!-- END comment -->
+</div>
+<!-- END comment thread -->
 <%- unless current_depth.nil? %>
-  </div>
-  <!-- END comment thread -->
   <%= print_closing_divs(current_depth) -%>
 <% end %>
 <!-- END thread--> 
