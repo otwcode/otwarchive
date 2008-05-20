@@ -20,9 +20,12 @@ module FixtureReplacement
     a.password_confirmation = password
   end
   
+  # to create a new chapter:
+  # c=new_chapter
+  # w=create_work(:chapters => [c])  
   attributes_for :chapter do |a|
     a.content = random_chapter
-    a.work = default_work
+    a.authors = [default_pseud]
   end
 
   attributes_for :comment do |a|
@@ -78,8 +81,12 @@ module FixtureReplacement
     a.password_confirmation = password
   end
 
+  # to create a new work:
+  # c=new_chapter
+  # w=create_work(:chapters => [c])
   attributes_for :work do |a|
     a.metadata = default_metadata
+    a.authors = [default_pseud]
   end
 
   ##### some random generators used above

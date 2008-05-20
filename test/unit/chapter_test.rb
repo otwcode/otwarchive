@@ -1,51 +1,44 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class ChapterTest < ActiveSupport::TestCase
-  def test_create_default_chapter
-    assert chapter = create_chapter
-    assert_nil chapter.metadata
-  end
-  def test_create_chapter_with_metadata
-    new_meta = create_metadata
-    assert chapter = create_chapter(:metadata => new_meta)
-    assert_equal chapter.metadata, new_meta
-  end
-  def test_create_chapter_with_bad_metadata
-    meta = new_metadata(:title => "")
-    chapter = new_chapter(:metadata => meta)
-    assert !chapter.save
+  def test_create_single_chapter   #after_save adds authors to the work, so must create work as well
+    chapter = new_chapter
+    work = create_work(:chapters => [chapter])
+    assert_equal work.chapters.first, chapter
   end
   def test_update_chapter_metadata
     original_meta = create_metadata
-    assert chapter = create_chapter(:metadata => original_meta)
+    chapter = new_chapter(:metadata => original_meta)
+    work = create_work(:chapters => [chapter])
     new_title = random_phrase
-    original_meta.title=new_title
-    assert chapter.save
-    assert_equal chapter.metadata.title, new_title
+    work.chapters.first.metadata.title=new_title
+    work.save
+    assert_equal work.chapters.first.metadata.title, new_title
   end
   def test_create_chapter_without_content
-    bad_chapter = new_chapter(:content => "")
-    assert !bad_chapter.save
+    chapter = new_chapter(:content => "")
+    work = new_work(:chapters => [chapter])
+    assert !work.save
   end
   def test_create_chapter_smallest    
-    assert create_chapter(:content => String.random(1))
+    assert chapter = new_chapter(:content => String.random(1))
+    assert work = create_work(:chapters => [chapter])
+    assert_equal work.chapters.first, chapter
   end
   def test_create_chapter_largest
     long_string = "aa"
     (1..23).each {|i| long_string << long_string }
     chapter = new_chapter(:content => long_string)
-    assert !chapter.save    
-    assert create_chapter(:content => long_string.chop)
-  end
-  def test_create_single_chapter_in_work
-    work = create_work
-    assert_nil work.number_of_chapters
-    chapter = create_chapter(:work => work)
-    assert_equal [chapter], work.chapters.find(:all)
+    work = new_work(:chapters => [chapter])
+    assert !work.save
+    chapter = new_chapter(:content => long_string.chop)
+    work = new_work(:chapters => [chapter])
+    assert work.save
   end
   def test_add_new_chapters_in_work
-    work = create_work    
-    (1..10).each do |i| 
+    chapter = new_chapter
+    work = create_work(:chapters => [chapter])
+    (2..10).each do |i| 
       chapter = create_chapter(:work => work)
       assert_equal i, chapter.position
       assert_equal i, work.number_of_chapters
@@ -53,17 +46,21 @@ class ChapterTest < ActiveSupport::TestCase
     end
   end
   def test_add_single_comment_to_chapter
-    chapter = create_chapter
+    chapter = new_chapter
+    work = create_work(:chapters => [chapter])
     comment = create_comment
     chapter.comments << [comment]
-    assert_equal Chapter.find(chapter.id).comments.first, comment
+    assert chapter.save
+    assert_equal chapter.comments.first, comment
   end
   def test_add_new_comment_to_chapter
-    chapter = create_chapter
+    chapter = new_chapter
+    work = create_work(:chapters => [chapter])
     (1..10).each do |i|
       comment = create_comment
       chapter.comments << [comment]
-      assert_equal Chapter.find(chapter.id).comments.size, i
+      chapter.save
+      assert_equal chapter.comments.size, i
     end
   end
 end
