@@ -1,23 +1,29 @@
-<h1>Change your email address or password: </h1>
+<h1>Change your Profile or Preferences</h1>
 
 <%= error_messages_for :user %>
 
 <% form_for(@user) do |f| %>  
   <p><label for="email"><%= "Change Email" .t %></label><br/>
 	<%= f.text_field :email %></p>
-	
+
+  <div id="passwd">
 	<p><label for="password"><%= "Change Password" .t %></label><br/>
-	<%= f.password_field :password %></p>
-	
+	<%= f.password_field :password %>
+	<% if ArchiveConfig.USE_OPENID %>
+    <%= link_to_function image_tag('openid.png', :alt=>"Use OpenID to log in".t), "Element.hide('passwd'); Element.show('openid')" %>
+  <% end -%>
+  </p>
 	<p><label for="password_confirmation"><%= "Confirm New Password" .t %></label><br/>
 	<%= f.password_field :password_confirmation %></p>
-	
-    <% if ArchiveConfig.USE_OPENID %>
-	<p>
-    <label for="openid_url"><%= "Add or Change an OpenID URL" .t %></label><br />
+  </div>
+  <% if ArchiveConfig.USE_OPENID %>	
+    <div id="openid" style="display: none">
+    <label for="openid_url"><%= "Add or Change an OpenID URL" .t %></label>
+    <br />
     <%= f.text_field :identity_url %>
-  </p>        
-    <% end %>
+    <%= link_to_function "Add or Change a Password".t, "Element.hide('openid'); Element.show('passwd')" %>
+    </div>
+  <% end -%>
 
   <% fields_for :profile_attributes,  @user.profile do |p| %>
     <p>
