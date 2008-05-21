@@ -4,27 +4,16 @@
 
 	<%= error_messages_for :user %>
 
-	<% form_for :user, :url => users_path do |f| -%>
+	<% form_for :user, :url => users_path do |@f| -%>
 	  <p>
 	  <!-- Create login -->
-	  <span class="authentication-label"><label for="login"><%= "What would you like as your ".t + "user name".t%>?</label></span><br />
-	  <%= f.text_field :login, :class => 'authentication-textfield', :tabindex => '1' %><br />
-
-	  <!-- Password with link to strong password info (still needs to be added) -->
-	  <span class="authentication-label"><label for="password"><%= "And your password?" .t %> (Make it a <a href="#" tabindex="2">strong</a> one!)</label></span><br />	
-	  <%= f.password_field :password, :class => 'authentication-textfield', :tabindex => '3' %><br />
-	  
-	  <!-- Confirm password -->
-	  <span class="authentication-label"><label for="password_confirmation"><%= "Enter it again so we're sure we've got it?" .t %></label></span><br />
-	  <%= f.password_field :password_confirmation, :class => 'authentication-textfield', :tabindex => '4' %><br />
-	  <% if ArchiveConfig.USE_OPENID %>
-	  <!-- OpenID address - I'm not sure the layout/label text is entirely clear here, the designers may need to look at it -->
-	  <span class="authentication-label"><label for="openid_url"><%= "Alternatively, enter your OpenID address" .t %></label></span><br />
-	  <%= f.text_field :identity_url, :class => 'authentication-textfield', :tabindex => '5' %><br />
-	  <% end %>
+    <div id="passwd"><%= render :partial => "passwd" %></div>
+    <% if ArchiveConfig.USE_OPENID %>	
+      <div id="openid" style="display: none"><%= render :partial => 'openid' %></div>
+    <% end -%>
 	  <!-- Email address -->
 	  <span class="authentication-label"><label for="email"><%= "What email address would you like us to use? (This has to be valid -- we'll be sending you a confirmation email before you can activate your account.)" .t %></label></span><br />
-	  <%= f.text_field :email, :class => 'authentication-textfield', :tabindex => '6' %><br />
+	  <%= @f.text_field :email, :class => 'authentication-textfield', :tabindex => '6' %><br />
 	  
 	  <!-- Age Check -->
 	  <!-- Needs to actually check this value on submission - functionality still has to be added for this! -->
@@ -38,7 +27,7 @@
 	  </p>
 	  
 	  <p class="authentication-checkboxfield">
-	  <%= f.check_box :age_over_13, :class => 'authentication-checkbox', :tabindex => '9' %>
+	  <%= @f.check_box :age_over_13, :class => 'authentication-checkbox', :tabindex => '9' %>
 	  Yes, I am over 13.
 	  </p>
 	  
@@ -55,7 +44,7 @@
 	  
 	  <!-- If this box is not checked, needs a modal dialog box: "You must agree to the Terms of Service in order to create an account.", with OK as the only choice. -->
 	  <p class="authentication-checkboxfield">
-	  	<%= f.check_box :terms_of_service, :class => 'authentication-checkbox', :tabindex => '11' -%>
+	  	<%= @f.check_box :terms_of_service, :class => 'authentication-checkbox', :tabindex => '11' -%>
 	  	Yes, I have read the Terms of Service and agree to them.
 	  </p>
 

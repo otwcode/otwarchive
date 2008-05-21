@@ -17,6 +17,8 @@ receive initial tab focus?  Should the login box be first in the tab index? -->
     <% if ArchiveConfig.USE_OPENID %>	
       <div id="openid" style="display: none"><%= render :partial => 'openid' %></div>
     <% end -%>
+<!-- Submit button -->
+    <%= submit_tag 'Log in', :tabindex => '5' %>
 <!-- Remember me checkbox -->
     <%= check_box_tag 'remember_me', :class => 'authentication-checkboxfield' %>
     <span class="authentication-label"><label for="remember_me"><%= "Remember me" .t %></label></span>

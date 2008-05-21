@@ -1,0 +1,8 @@
+<!-- OpenID field -->	
+<span class="authentication-label"><label for="openid_url">
+</label></span>
+<%= link_to "OpenID", 'http://openid.net/', :popup => true %> URL:
+<br />
+<%= @f.text_field :identity_url, :class => 'openid-url', :tabindex => '5' %>
+  <%= link_to_function "I don't want to use OpenID".t, "Element.hide('openid'); Element.show('passwd')" %>
+<br />
