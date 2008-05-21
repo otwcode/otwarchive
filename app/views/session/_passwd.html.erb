@@ -1,0 +1,12 @@
+<span class="authentication-label"><label for="login"><%= "user name".t.capitalize %>:</label></span>
+<br />
+<%= text_field_tag 'login', '', :class => 'authentication-textfield', :tabindex => '2' %>
+<% if ArchiveConfig.USE_OPENID %>
+  <%= link_to_function image_tag('openid.png', :alt=>"Use OpenID to log in".t), "Element.hide('passwd'); Element.show('openid')" %>
+<% end -%>
+<br />
+<!-- Password field -->
+<span class="authentication-label"><label for="password"><%= "Password" .t %>:</label></span><br />
+<%= password_field_tag 'password', '', :class => 'authentication-textfield', :tabindex => '3' %>
+<!-- Submit button -->
+<%= submit_tag 'Log in', :tabindex => '5' %>

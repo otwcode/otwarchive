@@ -1,11 +1,7 @@
 <h1><%= "Log in as Admin" .t %></h1>
 
-	<% form_tag admin_session_path do -%>
-	  <p><label for="login"><%= "Admin ".t  + "user name" .t %></label><br/>
-	  <%= text_field_tag 'login' %></p>
-	
-	  <p><label for="password"><%= "Admin password" .t %></label><br/>
-	  <%= password_field_tag 'password' %></p>
-	
-	  <p><%= submit_tag 'Log in' %></p>
-	<% end -%>
+    <div id="passwd"><%= render :partial => "passwd" %></div>
+    <% if ArchiveConfig.USE_OPENID %>	
+      <div id="openid" style="display: none"><%= render :partial => 'openid' %></div>
+    <% end -%>
+

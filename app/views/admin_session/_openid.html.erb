@@ -1,0 +1,6 @@
+<!-- OpenID field -->	
+<span class="authentication-label"><label for="openid_url"><%= "Admin OpenID URL" .t %>:</label></span>
+<br />
+<%= text_field_tag "openid_url", '', :class => 'openid-url', :tabindex => '4' %>
+<!-- Submit button -->
+<%= submit_tag 'Log in', :tabindex => '5' %>
