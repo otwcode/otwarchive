@@ -1,12 +1,8 @@
 class Work < ActiveRecord::Base
   has_many :chapters, :dependent => :destroy
-  validates_associated :chapters, :message => "must have content."
+  has_one :metadata, :as => :described, :dependent => :destroy
 
   acts_as_commentable
-
-  has_one :metadata, :as => :described, :dependent => :destroy
-  validates_presence_of :metadata
-  validates_associated :metadata, :message => "must have a title."
 
   # Virtual attribute to use as a placeholder for pseuds before the work has been saved
   # Can't write to work.pseuds until the work has an id
@@ -27,6 +23,18 @@ class Work < ActiveRecord::Base
       self.language = Locale.active.language
     end
   end 
+  
+  # Adds customized error messages and clears the "chapters is invalid" message for invalid chapters
+  def validate
+    unless self.chapters.first && self.chapters.first.valid?
+      errors.clear
+      errors.add_to_base("Please enter your story in the text field below.")
+    end
+    
+    unless self.metadata && self.metadata.valid?
+      errors.add_to_base("Please enter a title for your story (between 3 and 255 characters).")
+    end
+  end
     
   # Virtual attribute for metadata
   def metadata_attributes=(attributes)
