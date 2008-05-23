@@ -1,4 +1,7 @@
 class TranslationController < ApplicationController
+  #permit('translator',
+          #:permission_denied_redirection => {:controller => :works, :action => :index },
+          #:permission_denied_message => 'Sorry, the page you have requested is for translators only! Please contact an admin if you think you should have access.' )
   
   def index    
     @title = "Translation Interface"
