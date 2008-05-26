@@ -9,7 +9,7 @@ class CommentsController < ApplicationController
     elsif params[:chapter_id]
       @commentable = Chapter.find(params[:chapter_id])
     elsif params[:work_id]
-      @commentable = Work.find(params[:work_id])
+      @commentable = Work.find(params[:work_id]).last_chapter
     elsif params[:user_id]
       @commentable = User.find_by_login(params[:user_id])
     elsif params[:pseud_id]
@@ -35,7 +35,7 @@ class CommentsController < ApplicationController
       flash[:error] = "What did you want to comment on?".t
       redirect_to :back
     elsif @commentable.kind_of?(Work)
-      @commentable = @commentable.chapters.last
+      @commentable = @commentable.last_chapter
     end
     @comment = Comment.new
   end

@@ -2,11 +2,8 @@ class Work < ActiveRecord::Base
   has_many :chapters, :dependent => :destroy
   has_one :metadata, :as => :described, :dependent => :destroy
 
-  acts_as_commentable
-  # all the comments for a work should include all the comments on all the chapters as well
-  alias old_find_all_comments find_all_comments
   def find_all_comments
-    self.chapters.collect { |c| c.find_all_comments }.flatten + self.old_find_all_comments
+    self.chapters.collect { |c| c.find_all_comments }.flatten
   end
 
   # Virtual attribute to use as a placeholder for pseuds before the work has been saved
@@ -93,6 +90,11 @@ class Work < ActiveRecord::Base
   # Get the total number of chapters for a work
   def number_of_chapters
      Chapter.maximum(:position, :conditions => ['work_id = ?', self.id])
+  end 
+  
+  # Gets the current last chapter
+  def last_chapter
+    Chapter.find(:first, :conditions => ['work_id = ?', self.id], :order => 'position DESC')
   end
 
   # Change the position of multiple chapters when one is deleted or moved

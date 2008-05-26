@@ -60,6 +60,7 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters.xml
   def index 
     @chapters = Chapter.find(:all, :conditions => {:work_id => @work.id}, :order => "position")
+    @comments = @work.find_all_comments
   end
   
   # GET /work/:work_id/chapters/1

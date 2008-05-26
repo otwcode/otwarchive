@@ -12,9 +12,11 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :readings, :path_prefix => ':locale'
   
-  map.resources :works, :has_many => :comments, :member => { :preview => :get, :post => :post }, :path_prefix => ':locale' do |work|
+  map.resources :works, :member => { :preview => :get, :post => :post }, :path_prefix => ':locale' do |work|
     work.resources :chapters, :has_many => :comments, :member => { :preview => :get, :post => :post }
   end
+  
+  map.resources :chapters, :has_many => :comments, :member => { :preview => :get, :post => :post }, :path_prefix => ':locale'
   
   map.resources :comments, :has_many => :comments, :path_prefix => ':locale', :member => { :approve => :put, :reject => :put }
 

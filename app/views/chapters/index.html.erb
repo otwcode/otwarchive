@@ -8,4 +8,29 @@
 
 <%- if is_author_of?(@work) -%>
   <%= link_to 'New chapter', new_work_chapter_path(@work) %>
-<%- end -%>
+<%- end -%> 
+
+<!-- BEGIN comment section -->
+<div id="comments-display">
+  <p>
+    <%= link_to_function('Add a comment', "Element.toggle('add-comment')", :href => new_chapter_comment_path(@work.last_chapter)) %>
+  </p>
+                  
+  <div id="add-comment" style="display : none;">   
+    <%= render :partial => @comment = Comment.new, :locals => {:commentable => @work.last_chapter, :button_name => 'Create'}%> 
+  </div>  
+
+  <!-- BEGIN comments -->
+  <% unless @comments.empty? %>
+    <p>
+      <%= link_to_function('Show/hide comments', "Element.toggle('comments')", :href => chapter_comments_path(@work.last_chapter)) %>   
+    </p>
+  <% end %>
+  
+  <div id="comments">   
+    <%= render :partial => 'comments/comment_view' %> 
+  </div>
+  
+  <!-- END comments -->
+</div>
+<!-- END comment section -->
