@@ -25,8 +25,8 @@ class Chapter < ActiveRecord::Base
     end
   end
 
-  # check if this chapter is the last chapter of its work
-  def is_last_chapter?
+  # check if this chapter is the only chapter of its work
+  def is_only_chapter?
     self.work.chapters.length == 1
   end
 
