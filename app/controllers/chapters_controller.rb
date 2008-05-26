@@ -84,7 +84,7 @@ class ChaptersController < ApplicationController
   def create
     if @chapter.save
       @work.update_major_version
-      flash[:notice] = 'Chapter was successfully created.'
+      flash[:notice] = 'This is a preview of what this chapter will look like when it\'s posted to the Archive. You should probably read the whole thing to check for problems before posting.'
       redirect_to [:preview, @work, @chapter]
     else
       render :action => "new" 
