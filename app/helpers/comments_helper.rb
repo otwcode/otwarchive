@@ -7,7 +7,20 @@ module CommentsHelper
     else
       mail_to comment.email, comment.name
     end
-  end
+  end 
+  
+  # return 'cancel' button to clear form or restore existing comment
+  def create_cancel_button(comment, commentable)
+    if comment.new_record?
+      if commentable.class == comment.class
+        button_to_function "Cancel", update_page {|page| page.replace_html "add-comment#{commentable.id}" }
+      else
+        button_to_function "Cancel", update_page {|page| page.hide 'add-comment' }
+      end
+    else
+      # still a work in progress
+    end
+  end  
   
   # return html link to unhide reply-to-comment-form
   def create_reply_link(comment)
@@ -21,7 +34,7 @@ module CommentsHelper
   # return html link to edit comment
   def create_edit_link(comment)
     link_to_function "Edit",
-      update_page {|page| page.replace_html "comment#{comment.id}",
+      update_page {|page| page.replace_html "data_for_comment_#{comment.id}",
       :partial => @comment = comment,
       :locals => {:commentable => comment.commentable, :button_name => 'Update'}}, 
       :href => edit_comment_path(comment)

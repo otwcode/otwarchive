@@ -1,0 +1,25 @@
+# Make sure comments are visible!
+page << "showComments();"
+                                 
+# Add newly-created comment into the appropriate div and clear/hide the comment form
+comment_id = "comment#{@comment.id}"
+commentable_id = "comment#{@comment.commentable.id}"  
+new_comment_div = "<div class='comment' id='" + comment_id + "'></div>"
+new_thread = "<div class='thread'>" + new_comment_div + "</div>"
+reply_form = "add-comment" + @comment.commentable.id.to_s
+
+if @comment.reply_comment?
+  page.insert_html :bottom, commentable_id, new_comment_div
+  page.insert_html :bottom, comment_id, :partial => 'single_comment', :object => @comment
+  page.replace_html reply_form, ""
+else
+  page.insert_html :bottom, :comments, new_thread
+  page.insert_html :bottom, comment_id, :partial => 'single_comment', :object => @comment
+  page['comment_content'].value = ''
+  page.toggle('add-comment')
+end                           
+
+# Send the user to the right comment on the page and clear the flash message
+page.assign 'new_hash', '#' + comment_id
+page << "location.hash = new_hash;"
+flash.discard 

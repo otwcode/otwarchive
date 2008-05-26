@@ -14,7 +14,17 @@ module CommentMethods
     end
   end
 
-  module InstanceMethods
+  module InstanceMethods      
+    
+    # Gets the object (chapter, bookmark, etc.) that the comment ultimately belongs to
+    def ultimate_parent
+      if self.reply_comment?
+        first_comment = Comment.find(:first, :conditions => ["thread = (?) AND depth = 0", self.thread])
+      else
+        first_comment = self
+      end
+      first_comment.commentable
+    end
     
     # Sets pseud, depth and thread values and adjusts threading for sub-comments
     def set_and_save

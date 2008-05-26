@@ -33,13 +33,14 @@
   <!-- BEGIN comments -->
   <% unless @comments.empty? %>
     <p>
-      <%= link_to_function('Read comments', "Element.toggle('comments')", :href => work_comments_path(@work)) %>   
+      <%= link_to_function('Show/hide comments', "Element.toggle('comments')", :href => work_comments_path(@work)) %>   
     </p>
-
-    <div id="comments" style="display : none;">   
-      <%= render :partial => 'comments/comment_view' %> 
-    </div>
   <% end %>
+  
+  <div id="comments">   
+    <%= render :partial => 'comments/comment_view' %> 
+  </div>
+  
   <!-- END comments -->
 </div>
 <!-- END comment section -->

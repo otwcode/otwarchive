@@ -59,10 +59,14 @@ class CommentsController < ApplicationController
       if @comment.set_and_save
         if @comment.approved?
           flash[:notice] = 'Comment was successfully created.'
-          redirect_to(@comment.commentable)
+          parent = @comment.ultimate_parent
+          respond_to do |format|
+              format.html { redirect_to :controller => parent.class.to_s.pluralize, :action => 'show', :id => parent.id, :anchor => "comment#{@comment.id}" }
+              format.js
+            end
         else
           flash[:notice] = 'Comment was marked as spam by Akismet.'
-          redirect_to(@comment.commentable)
+          redirect_to :back
         end
       else
         render :action => "new", :locals => {:commentable => @comment.commentable, :button_name => 'Create'}
@@ -77,7 +81,11 @@ class CommentsController < ApplicationController
     
     if @comment.update_attributes(params[:comment])
       flash[:notice] = 'Comment was successfully updated.'
-      redirect_to(@comment.commentable)
+      parent = @comment.ultimate_parent
+      respond_to do |format|
+          format.html { redirect_to :controller => parent.class.to_s.pluralize, :action => 'show', :id => parent.id, :anchor => "comment#{@comment.id}" }
+          format.js
+        end
     else
       render :action => "edit" 
     end

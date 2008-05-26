@@ -2,7 +2,7 @@
 it to the depth of the previous comment, you can figure out how many closing div tags you need, if any. Then all 
 you need is one "margin-left: 50px" line in the css to make some nice cascading indentation. -->
 <%- current_depth = nil -%>
-<%- @comments.each do |comment| -%>
+<%- for comment in @comments -%>
   <!-- For now, show unapproved comments to logged in users. Probably want
   to specifically target the authors of the work/chapter? -->
   <% if comment.approved or logged_in? %>
@@ -14,13 +14,13 @@ you need is one "margin-left: 50px" line in the css to make some nice cascading 
       <% if comment.depth == 0 %>
         </div>
         <!-- END thread--> 
-      <% end%>
+      <% end %>
     <%- end -%>
   
     <%- if current_depth.nil? || comment.depth == 0 -%>
       <div class="thread">
     <%- end -%>
-    <div class="comment">
+    <div class="comment" id="comment<%= comment.id %>">
     <%= render :partial => 'comments/single_comment', :object => comment %>
     <%- current_depth = comment.depth -%>
   <%- end -%>

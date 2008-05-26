@@ -1,9 +1,8 @@
 <% if !commentable && @commentable %>
-  <% commentable = @commentable %>
-<% end %> 
-<% form_for([commentable, @comment]) do |f| %>
-  
-  <% if logged_in? %>
+  <%- commentable = @commentable -%>
+<%- end -%> 
+<%- remote_form_for([commentable, @comment]) do |f| -%>  
+  <%- if logged_in? -%>
     <p>
       <% if current_user.pseuds.count > 1 %>
         <%= f.collection_select :pseud_id, current_user.pseuds, :id, :name %>
@@ -28,5 +27,6 @@
 
   <p>
     <%= f.submit button_name %>
+    <%= create_cancel_button(@comment, commentable) %>
   </p>
-<% end %>
+<%- end -%>
