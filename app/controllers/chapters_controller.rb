@@ -142,9 +142,14 @@ class ChaptersController < ApplicationController
   # DELETE /work/:work_id/chapters/1.xml
   def destroy
     @chapter = @work.chapters.find(params[:id])
-    @chapter.destroy
-    @work.adjust_chapters(@chapter.position)
-    @work.update_minor_version
-    redirect_to(work_chapters_url)
+    if @chapter.is_last_chapter?
+      flash[:error] = "You can't delete the last chapter of your story. If you want to delete the story, choose 'Delete work'."
+      redirect_to(edit_work_url(@work))
+    else
+      @chapter.destroy
+      @work.adjust_chapters(@chapter.position)
+      @work.update_minor_version
+      redirect_to(edit_work_url(@work))
+    end
   end
 end

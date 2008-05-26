@@ -25,6 +25,11 @@ class Chapter < ActiveRecord::Base
     end
   end
 
+  # check if this chapter is the last chapter of its work
+  def is_last_chapter?
+    self.work.chapters.length == 1
+  end
+
   # Virtual attribute for pseuds
   def author_attributes=(attributes)
     self.authors ||= []

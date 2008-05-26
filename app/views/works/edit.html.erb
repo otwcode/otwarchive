@@ -11,6 +11,8 @@
       update_page {|page| page.replace_html 'editing-choice', :partial => 'work_form', :locals => {:button_text => "Update"}},
       :href => edit_work_path(@work) %> | 
 
+  <%= link_to 'Delete work', @work, :confirm => 'Are you sure?', :method => :delete -%> |
+
   Edit chapter:
   <% for chapter in @work.chapters %>
     <%= link_to_function h(chapter.position), 
