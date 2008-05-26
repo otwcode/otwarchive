@@ -7,6 +7,7 @@ basic_work:
   major_version: 1
   minor_version: 0
   posted: true
+  language_id: 1819
 
 incomplete_work:
   id: 2
@@ -15,6 +16,7 @@ incomplete_work:
   major_version: 1
   minor_version: 0
   posted: true
+  language_id: 1819
 
 work_1_of_1:
   id: 3
@@ -23,6 +25,7 @@ work_1_of_1:
   major_version: 1
   minor_version: 0
   posted: true
+  language_id: 1819
 
 work_1_of_3:
   id: 4
@@ -31,6 +34,7 @@ work_1_of_3:
   major_version: 1
   minor_version: 0
   posted: true
+  language_id: 1819
   
 work_2_of_3:
   id: 5
@@ -39,6 +43,7 @@ work_2_of_3:
   major_version: 1
   minor_version: 0
   posted: true
+  language_id: 1819
   
 work_3_of_3:
   id: 6
@@ -47,3 +52,4 @@ work_3_of_3:
   major_version: 1
   minor_version: 0
   posted: true
+  language_id: 1819
