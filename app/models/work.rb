@@ -3,6 +3,11 @@ class Work < ActiveRecord::Base
   has_one :metadata, :as => :described, :dependent => :destroy
 
   acts_as_commentable
+  # all the comments for a work should include all the comments on all the chapters as well
+  alias old_find_all_comments find_all_comments
+  def find_all_comments
+    self.chapters.collect { |c| c.find_all_comments }.flatten + self.old_find_all_comments
+  end
 
   # Virtual attribute to use as a placeholder for pseuds before the work has been saved
   # Can't write to work.pseuds until the work has an id
