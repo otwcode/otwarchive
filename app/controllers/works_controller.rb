@@ -66,7 +66,7 @@ class WorksController < ApplicationController
   # GET /works
   def index
    # Get only works in the current locale
-   if Locale.active
+   if Locale.active && Locale.active.language
       @works = Work.find(:all, 
                           :conditions => ["posted = 1 AND language_id = ?", Locale.active.language.id],
                           :order => "created_at DESC" )
