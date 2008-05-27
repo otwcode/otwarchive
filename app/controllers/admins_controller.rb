@@ -2,9 +2,9 @@ class AdminsController < ApplicationController
   before_filter :admin_only
   
   def access_denied
-    flash[:error] = "Maybe you need to login?"
+    flash[:error] = "Access denied. Please log in as an Admin."
     store_location
-    redirect_to :controller => 'admin_session', :action => 'new'
+    redirect_to new_admin_session_path
     false
   end
   
