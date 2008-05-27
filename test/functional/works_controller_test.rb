@@ -1,69 +1,75 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
+# TODO error checking
+# TODO work as admin
 class WorksControllerTest < ActionController::TestCase
-  def test_should_get_index
+
+  # Test create  POST  /:locale/works
+  def test_create_work
+    user = create_user
+    @request.session[:user] = user    
+    get :new, :locale => 'en', 
+        :work => { :metadata_attributes => {:title => 'New work title'}, 
+                   :chapter_attributes => {:content => 'Stuff in new chapter'}}
+    assert_response :success
+  end
+  # Test destroy  DELETE /:locale/works/:id
+  def test_should_destroy_work
+    user = create_user
+    @request.session[:user] = user
+    @work = create_work(:authors => [user.default_pseud])
+    assert_difference('Work.count', -1) do
+      delete :destroy, :locale => 'en', :id => works(:basic_work).id
+    end    
+    assert_redirected_to works_path
+  end
+  # Test edit  GET  /:locale/works/:id/edit  (named path: edit_work)
+  def test_should_get_edit
+    user = create_user
+    @request.session[:user] = user
+    @work = create_work(:authors => [user.default_pseud])
+    get :edit, :locale => 'en', :id => @work.id
+    assert_response :success
+  end
+  # Test index  GET  /:locale/works  (named path: works)
+  def test_works_path
+    # FIXME Called id for nil if no language
+    Locale.set 'en'
     get :index, :locale => 'en'
     assert_response :success
     assert_not_nil assigns(:works)
   end
-  
-  def test_should_get_new
+  # Test new  GET  /:locale/works/new  (named path: new_work)
+  def test_new_work_path
     login_as_user(:basic_user)
     get :new, :locale => 'en'
     assert_response :success
   end
-  
-  # Currently this only tests the first step of work creation
-  def test_should_create_work
-    login_as_user(:basic_user)
-    
-    get :new, :locale => 'en'
-    submit_form 'work_form' do |form|
-      form.pseud.id = '1'
-      form.metadata_attributes.title = 'New work title'
-      form.chapter_attributes.content = 'Stuff in new chapter'
-    end
-    assert_response :success
-  end
-  
-  def test_should_show_work
+  # Test post  POST  /:locale/works/:id/post  (named path: post_work)
+    # TODO test post
+  # Test preview  GET  /:locale/works/:id/preview  (named path: preview_work)
+    # TODO test preview
+  # Test show  GET  /:locale/works/:id  (named path: work)
+  def test_work_path
     get :show, :locale => 'en', :id => works(:basic_work).id
     assert_response :success
+    # TODO test comments
   end
-  
-  def test_should_get_edit
-    login_as_user(:basic_user)
-    @work = works(:basic_work)
-    get :edit, :locale => 'en', :id => @work.id
-    assert_response :success
-  end
-  
-  def test_should_update_work
-    login_as_user(:basic_user)
-    @work = works(:basic_work)
-    
+  # Test update  PUT  /:locale/works/:id
+  def test_update_work
+    user = create_user
+    @request.session[:user] = user
+    @work = create_work(:authors => [user.default_pseud])    
     new_title = "New Title"
     new_content = "New Content"
-    
-    get :edit, :locale => 'en', :id => @work.id
-    select_link('Edit work').follow
-    assert_response :success
-
-    put :update, :locale => 'en', :id => @work.id, :work => { :metadata_attributes => {:title => new_title}, 
-                                                              :chapter_attributes => {:content => new_content}, 
-                                                              :pseud => {:id => '1'},
-                                                              :extra_pseuds => '' }
-#    assert_redirected_to work_path(assigns(:work))
+    put :update, 
+        :locale => 'en', 
+        :id => @work.id, 
+        :work => { :metadata_attributes => {:title => new_title}, 
+                   :chapter_attributes => {:content => new_content}}
+    assert_redirected_to work_path(assigns(:work))
+    @work = Work.find(@work.id)
     assert_equal(new_title, @work.metadata.title)
-    assert_equal(new_content, @work.chapters.first.content)
-    
-  end
-  
-  def test_should_destroy_work
-    assert_difference('Work.count', -1) do
-      delete :destroy, :locale => 'en', :id => works(:basic_work).id
-    end
-    
-    assert_redirected_to works_path
+    assert_equal(new_content, @work.chapters.first.content)    
   end
 end

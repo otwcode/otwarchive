@@ -31,6 +31,14 @@ module FixtureReplacement
     a.password = password
     a.password_confirmation = password
   end
+
+# FIXME can't define until work model is acts_as_bookmarkable
+#  attributes_for :bookmark do |a|
+#    a.title = random_string
+#    a.user = default_user
+#    a.bookmarkable_type = 'Work'
+#    a.bookmarkable_id = create_work.id
+#  end
   
   # to create (save) a new chapter you have to have a work first
   # first_chapter=new_chapter

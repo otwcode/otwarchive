@@ -1,52 +1,77 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class PseudsControllerTest < ActionController::TestCase
-  def test_should_get_index
-    get :index, :locale => 'en', :user_id => users(:basic_user).id
+
+# TODO error checking
+
+  # Test create  POST  /:locale/users/:user_id/pseuds
+  def test_should_create_pseud
+    user = create_user
+    @request.session[:user] = user
+    assert_difference('Pseud.count') do
+      post :create, :locale => 'en', 
+                    :user_id => user.login, 
+                    :pseud => { :name => 'New Pseud' }
+    end
+
+    assert_redirected_to user_pseud_path(user, assigns(:pseud))
+  end
+  # Test destroy  DELETE /:locale/users/:user_id/pseuds/:id
+  def test_should_destroy_pseud
+    user = create_user
+    pseud = create_pseud(:user => user)
+    user = User.find(user.id)
+    @request.session[:user] = user
+    assert_difference('Pseud.count', -1) do
+      delete :destroy, :locale => 'en', 
+      :user_id => user.login, 
+      :id => Pseud.find(pseud.id).id
+    end
+
+    assert_redirected_to user_pseuds_path(user)
+  end
+  # Test edit  GET  /:locale/users/:user_id/pseuds/:id/edit  (named path: edit_user_pseud)
+  def test_should_get_edit
+    user = create_user
+    @request.session[:user] = user
+    default = user.default_pseud
+    get :edit, :locale => 'en', 
+               :user_id => user.login,
+               :id => default.id
+    assert_response :success
+  end
+  # Test index  GET  /:locale/users/:user_id/pseuds  (named path: user_pseuds)
+  def test_user_pseuds_path
+    user = create_user
+    get :index, :locale => 'en', :user_id => user.login
     assert_response :success
     assert_not_nil assigns(:pseuds)
   end
-
-  def test_should_get_new
-    login_as_user(:basic_user)
-    get :new, :locale => 'en', :user_id => users(:basic_user).id
+  # Test new  GET  /:locale/users/:user_id/pseuds/new  (named path: new_user_pseud)
+  def test_new_user_pseud_path
+    user = create_user
+    @request.session[:user] = user
+    get :new, :locale => 'en', :user_id => user.login
     assert_response :success
   end
-
-  def test_should_create_pseud
-    login_as_user(:basic_user)
-    assert_difference('Pseud.count') do
-      post :create, :locale => 'en', :user_id => users(:basic_user).id, :pseud => { :name => 'New Pseud' }
-    end
-
-    assert_redirected_to user_pseud_path(users(:basic_user), assigns(:pseud))
-  end
-
-  def test_should_show_pseud
-    get :show, :locale => 'en', :user_id => users(:basic_user).id, :id => pseuds(:default_pseud).id
+  # Test show  GET  /:locale/users/:user_id/pseuds/:id  (named path: user_pseud)
+  def test_user_pseud_path
+    user = create_user
+    default = user.default_pseud
+    get :show, :locale => 'en', 
+               :user_id => user.login, 
+               :id => default.id
     assert_response :success
   end
-
-  def test_should_get_edit
-    get :edit, :locale => 'en', :user_id => users(:basic_user).id, :id => pseuds(:default_pseud).id
-    assert_response :success
-  end
-
-  def test_should_update_pseud
-    login_as_user(:basic_user)
+  # Test update  PUT  /:locale/users/:user_id/pseuds/:id
+  def test_update_pseud
+    user = create_user
+    @request.session[:user] = user
     put :update, :locale => 'en', 
-                 :user_id => users(:basic_user).id, 
-                 :id => pseuds(:default_pseud).id, 
+                 :user_id => user.login, 
+                 :id => user.default_pseud.id, 
                  :pseud => { :name => 'Changed Pseud' }
-    assert_redirected_to user_pseud_path(users(:basic_user), assigns(:pseud))
+    assert_redirected_to user_pseud_path(user, assigns(:pseud))
   end
 
-  def test_should_destroy_pseud
-    login_as_user(:basic_user)
-    assert_difference('Pseud.count', -1) do
-      delete :destroy, :locale => 'en', :user_id => users(:basic_user).id, :id => pseuds(:non_default_pseud).id
-    end
-
-    assert_redirected_to user_pseuds_path(users(:basic_user))
-  end
 end
