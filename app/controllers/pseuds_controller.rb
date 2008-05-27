@@ -108,13 +108,12 @@ class PseudsController < ApplicationController
   # DELETE /pseuds/1.xml
   def destroy
     @pseud = @user.pseuds.find(params[:id])
-    @pseud.move_creations_to_default
     if @pseud.is_default
       flash[:error] = "You cannot delete your default pseudonym, sorry!".t
     elsif @pseud.name == @user.login
       flash[:error] = "You cannot delete the pseud matching your ".t + "user name".t + ", sorry!".t
     else
-      @pseud.destroy
+      @pseud.move_creations_to_default && @pseud.destroy
       flash[:notice] = "Pseud destroyed".t
     end
     
