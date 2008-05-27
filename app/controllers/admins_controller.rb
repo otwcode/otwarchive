@@ -1,6 +1,13 @@
 class AdminsController < ApplicationController
   before_filter :admin_only
   
+  def access_denied
+    flash[:error] = "Maybe you need to login?"
+    store_location
+    redirect_to :controller => 'admin_session', :action => 'new'
+    false
+  end
+  
   # GET /admins
   # GET /admins.xml
   def index
