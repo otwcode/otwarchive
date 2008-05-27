@@ -1,44 +1,60 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class UserTest < ActiveSupport::TestCase
+  # Test accessors
+    # TODO test accessors
+  # Test validations
+    # TODO validates_associated pseuds, profile, preference
+    # TODO validates_format_of_login
+    # TODO validates_email_veracity_of
+    # TODO validates_inclusion_of terms_of_service, age_over_13
+  
+  # Test assocations
+    # TODO has_many :pseuds, works, readings
+    # TODO has_one :profile, preference
+  
+  # Test acts_as
+    # TODO  acts_as_authentable
+    # TODO  acts_as_authorized_user
+    # TODO  acts_as_authorizable
 
-  def test_has_pseud_with_pseudnames_user_has
-    user = users(:basic_user)
-    assert user.has_pseud?("basic_user")
-    assert user.has_pseud?("Non-Default Pseud")
-  end
-
-  def test_has_pseud_with_pseudnames_user_doesnt_have
-    user = users(:basic_user)
-    assert !user.has_pseud?("Default")
-    assert !user.has_pseud?("Not one of his pseuds")
-    assert !user.has_pseud?("Foo")
-  end
-
-  def test_has_pseud_with_crazy_arguments
-    user = users(:basic_user)
-    pseud = pseuds(:default_pseud)
-    assert !user.has_pseud?(pseud)
+  # Test before and after
+    # TODO create_default_associateds
+  
+  # Test methods
+  def test_has_pseud
+    user = create_user
+    assert user.has_pseud?(user.login)
+    newname = random_phrase
+    create_pseud(:user => user, :name => newname)
+    assert User.find(user.id).has_pseud?(newname)
+    assert !user.has_pseud?(random_phrase)
     assert !user.has_pseud?("")
     assert !user.has_pseud?(nil)
   end
-
   def test_default_pseud
-    user = users(:basic_user)
-    default_pseud = pseuds(:default_pseud)
-    assert_equal default_pseud, user.default_pseud
+    user = create_user
+    assert default = user.default_pseud
+    assert_equal default.name, user.login
+    pseud = create_pseud(:user => user)
+    assert_not_equal user.default_pseud, pseud
+    # FIXME no error checking on is_default - can have two or none
+    default.is_default = false  
+    default.save
+    pseud.is_default = true
+    pseud.save
+    assert_equal User.find(user.id).default_pseud, pseud
   end
-
-  def test_creations_for_user_with_creations
-    user = users(:basic_user)
-    no_of_creations = 12
-    assert_equal no_of_creations, user.creations.length
+  def test_creations
+    user = create_user
+    assert_equal 0, user.creations.length
+    work = create_work(:authors => [user.default_pseud])
+    assert_equal 2, user.creations.length
+    create_chapter(:work_id => work.id, :authors =>[user.default_pseud])
+    assert_equal 3, user.creations.length  
+    pseud = create_pseud(:user => user)
+    create_work(:authors => [pseud])
+    assert_equal 5, User.find(user.id).creations.length
   end
-
-  def test_creations_for_user_without_creations
-    user = users(:user_with_one_pseud)
-    no_of_creations = 0
-    assert_equal no_of_creations, user.creations.length
-  end
-
+  
 end

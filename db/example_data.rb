@@ -5,6 +5,18 @@ module FixtureReplacement
   ## in the database - this is different from regular fixtures)
   ## Note2: fixtures must be valid to use _create. To test for errors, use _new
   
+  attributes_for :language do |a|
+    a.id = 1819
+    a.iso_639_1 = 'en'
+    a.english_name = 'English'    
+  end
+  
+  attributes_for :country do |a|
+    a.id = 223
+    a.code = 'US'
+    a.english_name = 'United States of America'
+  end
+  
   attributes_for :abuse_report do |a|    
     a.email = random_email
     a.url = random_url(ArchiveConfig.APP_URL)
@@ -20,19 +32,27 @@ module FixtureReplacement
     a.password_confirmation = password
   end
   
-  # to create a new chapter:
-  # c=new_chapter
-  # w=create_work(:chapters => [c])  
+  # to create (save) a new chapter you have to have a work first
+  # first_chapter=new_chapter
+  # w=create_work(:chapters => [first_chapter]) 
+  # or
+  # w=create_work
+  # second_chapter=create_chapter(:work_id => w.id)
   attributes_for :chapter do |a|
     a.content = random_chapter
     a.authors = [default_pseud]
   end
 
+  # note: to get threading, you must use
+  # comment = new_comment && comment.set_and_save
+  # and it doesn't update the parent, so be sure to re-retrieve it
+  # note2: to create a pseud comment, be sure to set email & name blank
   attributes_for :comment do |a|
-    a.pseud = default_pseud
     a.content = random_paragraph
     a.name = random_phrase
     a.email = random_email
+    a.commentable_type = 'Chapter'
+    a.commentable_id = create_work.chapters.first.id
   end
 
   attributes_for :creatorship do |a|
@@ -80,12 +100,10 @@ module FixtureReplacement
     a.password_confirmation = password
   end
 
-  # to create a new work:
-  # c=new_chapter
-  # w=create_work(:chapters => [c])
   attributes_for :work do |a|
     a.metadata = default_metadata
     a.authors = [default_pseud]
+    a.chapters = [new_chapter]
   end
 
   ##### some random generators
@@ -119,7 +137,7 @@ module FixtureReplacement
 
   def random_domain(fake=true)   # fake domains may not resolve in dns
     return Faker::Internet.domain_name if fake
-    ['test', 'google', 'amazon', 'yahoo', 'livejournal'].rand + ['.com', '.net', '.org', '.ca'].rand
+    ['aol.com', 'gmail.com', 'hotmail.com', 'mac.com', 'msn.com', 'rogers.com', 'sympatico.ca', 'yahoo.com'].rand  # domains listed in the plugin as known
   end
 
   def random_password   # strong?

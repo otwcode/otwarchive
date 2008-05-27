@@ -21,7 +21,7 @@ class ArchiveConfigTest < Test::Unit::TestCase
       "zh"=>"zh-CHS" 
      }, ArchiveConfig.SUPPORTED_LOCALES)
   end
-  def test_misspelling
+  def test_all_caps
     assert  ArchiveConfig.SESSION_KEY
     assert !ArchiveConfig.SESSION_KEy
   end

@@ -1,8 +1,13 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class AdminTest < ActiveSupport::TestCase
-  # Replace this with your real tests.
-  def test_truth
-    assert true
+  # Test acts_as_authentable
+  def test_acts_as_authentable
+    # TODO write admin authentable tests
+  end
+
+  # Test methods
+  def test_identity_url
+    # FIXME identity_url is a hack, it shouldn't be tested
   end
 end

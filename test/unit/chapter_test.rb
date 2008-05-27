@@ -1,31 +1,18 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class ChapterTest < ActiveSupport::TestCase
-  def test_create_single_chapter   #after_save adds authors to the work, so must create work as well
-    chapter = new_chapter
-    work = create_work(:chapters => [chapter])
-    assert_equal work.chapters.first, chapter
-  end
-  def test_update_chapter_metadata
-    original_meta = create_metadata
-    chapter = new_chapter(:metadata => original_meta)
-    work = create_work(:chapters => [chapter])
-    new_title = random_phrase
-    work.chapters.first.metadata.title=new_title
-    work.save
-    assert_equal work.chapters.first.metadata.title, new_title
-  end
-  def test_create_chapter_without_content
+  # Test validations
+  def test_presence_of_content_fails
     chapter = new_chapter(:content => "")
     work = new_work(:chapters => [chapter])
     assert !work.save
   end
-  def test_create_chapter_smallest    
-    assert chapter = new_chapter(:content => String.random(1))
-    assert work = create_work(:chapters => [chapter])
-    assert_equal work.chapters.first, chapter
+  def test_presence_of_content_passes    
+    chapter = new_chapter(:content => String.random(1))
+    work = new_work(:chapters => [chapter])
+    assert work.save
   end
-  def test_create_chapter_largest
+  def test_length_of_content
     long_string = "aa"
     (1..23).each {|i| long_string << long_string }
     chapter = new_chapter(:content => long_string)
@@ -35,32 +22,68 @@ class ChapterTest < ActiveSupport::TestCase
     work = new_work(:chapters => [chapter])
     assert work.save
   end
-  def test_add_new_chapters_in_work
+
+  # Test associations
+  def test_belongs_to_work
     chapter = new_chapter
     work = create_work(:chapters => [chapter])
-    (2..10).each do |i| 
-      chapter = create_chapter(:work => work)
-      assert_equal i, chapter.position
-      assert_equal i, work.number_of_chapters
-      assert_equal chapter, work.chapters.find_by_position(i)
-    end
+    assert_equal work, chapter.work
   end
-  def test_add_single_comment_to_chapter
+  def test_has_one_metadata
+    metadata = create_metadata
+    chapter = new_chapter(:metadata => metadata)
+    work = create_work(:chapters => [chapter])
+    assert_equal metadata, chapter.metadata
+  end
+
+  # Test acts_as
+  # commentable: CommentableEntity methods find_all_comments & count_all_comments
+  def test_acts_as_commentable
     chapter = new_chapter
     work = create_work(:chapters => [chapter])
-    comment = create_comment
-    chapter.comments << [comment]
-    assert chapter.save
-    assert_equal chapter.comments.first, comment
+    comment = new_comment(:commentable_id => chapter.id)
+    comment.set_and_save
+    assert chapter.find_all_comments.include?(comment)
+    assert_equal 1, chapter.count_all_comments
   end
-  def test_add_new_comment_to_chapter
+
+  # Test before and after
+  def test_before_save_validate_authors
+    chapter = new_chapter(:authors => [])
+    work = new_work(:chapters => [chapter], :authors => [])
+    assert !work.save
+    pseud = create_pseud
+    chapter.authors = [pseud]
+    assert !work.save
+  end
+  def test_after_update_save_associated
+    original_meta = create_metadata
+    chapter = new_chapter(:metadata => original_meta)
+    work = create_work(:chapters => [chapter])
+    chapter = Chapter.find(chapter.id)
+    new_title = random_phrase
+    chapter.metadata.title=new_title
+    chapter.save
+    assert_equal new_title, Chapter.find(chapter.id).metadata.title
+  end
+  def test_after_both_save_creatorships
+    # TODO tests for save_creatorship
+  end
+
+  # Test methods
+  def test_is_only_chapter
     chapter = new_chapter
     work = create_work(:chapters => [chapter])
-    (1..10).each do |i|
-      comment = create_comment
-      chapter.comments << [comment]
-      chapter.save
-      assert_equal chapter.comments.size, i
-    end
+    assert chapter.is_only_chapter?    
+    chapter2 = create_chapter(:work_id => work.id)
+    assert !Chapter.find(chapter.id).is_only_chapter?
+    chapter.destroy
+    assert Chapter.find(chapter2.id).is_only_chapter?
   end
+  # FIXME didn't create methods for the following, because they could/should be private
+    # author_attributes=
+    # validate_authors
+    # save_creatorships
+    # metadata_attributes=
+    # save_associated
 end
