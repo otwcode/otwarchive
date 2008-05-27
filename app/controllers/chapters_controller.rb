@@ -8,6 +8,13 @@ class ChaptersController < ApplicationController
   before_filter :is_author_true, :only => [ :edit, :update ] 
   
   auto_complete_for :pseud, :name
+
+  def access_denied
+    flash[:error] = "Please log in first."
+    store_location
+    redirect_to new_session_path
+    false
+  end
   
   # check if the user's current pseud is one associated with the chapter
   def is_author

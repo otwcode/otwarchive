@@ -2,6 +2,13 @@ class ReadingsController < ApplicationController
   before_filter :users_only
   before_filter :history_enabled?
 
+  def access_denied
+    flash[:error] = "Please log in first."
+    store_location
+    redirect_to new_session_path
+    false
+  end
+  
   def index
     @readings = current_user.readings.find(:all, :order => "updated_at DESC")
   end

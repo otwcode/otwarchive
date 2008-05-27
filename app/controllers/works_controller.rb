@@ -8,6 +8,13 @@ class WorksController < ApplicationController
   
   auto_complete_for :pseud, :name
   
+  def access_denied
+    flash[:error] = "Please log in first."
+    store_location
+    redirect_to new_session_path
+    false
+  end
+
   # Sets values for @work, @chapter, @metadata, @pseuds, and @selected
   def set_instance_variables
     if params[:id] # edit, update, preview, post
