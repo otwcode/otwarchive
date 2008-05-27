@@ -1,7 +1,7 @@
 <% if @comment.commentable_type == @comment.class.to_s %>
-  <%=h @comment.pseud.name || @comment.name %> replied to your comment:
+  <%=h @comment.name || @comment.pseud.name %> replied to your comment:
 <% else %>  
-  <%=h @comment.pseud.name || @comment.name %> commented on your <%= @comment.commentable_type.downcase %>:
+  <%=h @comment.name || @comment.pseud.name %> commented on your <%= @comment.commentable_type.downcase %>:
 <% end %>
 
 <p><%=h @comment.content %></p>
