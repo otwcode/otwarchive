@@ -14,12 +14,14 @@ class Chapter < ActiveRecord::Base
   # Can't write to chapter.pseuds until the chapter has an id
   attr_accessor :authors
 
+  before_validation_on_create :set_position
   before_save :validate_authors
   after_save :save_creatorships
-  after_update :save_associated, :save_creatorships
+  after_update :save_associated
 
   # Set the position if this isn't the first chapter
-  def before_create
+  def set_position
+    return unless self.work
     if self.work.number_of_chapters
       self.position = self.work.number_of_chapters + 1
     end
@@ -36,9 +38,7 @@ class Chapter < ActiveRecord::Base
     ids = attributes[:ids]
     ids += attributes[:valid_pseuds].split "," if attributes[:valid_pseuds]
     ids += attributes[:ambiguous_pseuds].values if attributes[:ambiguous_pseuds]
-    for id in ids
-      self.authors << Pseud.find(id)
-    end
+    ids.each { |id| self.authors << Pseud.find(id) } if ids
   end
   
   # Checks that chapter has at least one author

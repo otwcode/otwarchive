@@ -48,13 +48,20 @@ class ChapterTest < ActiveSupport::TestCase
   end
 
   # Test before and after
+  def test_before_save_set_position
+    work = create_work
+    chapter2 = new_chapter(:work_id => work.id)
+    assert_equal 1, chapter2.position
+    chapter2.save
+    assert_equal 2, chapter2.position
+  end
   def test_before_save_validate_authors
-    chapter = new_chapter(:authors => [])
-    work = new_work(:chapters => [chapter], :authors => [])
-    assert !work.save
+    work = create_work
+    chapter = new_chapter(:work_id => work.id, :authors => [])
+    assert !chapter.save
     pseud = create_pseud
     chapter.authors = [pseud]
-    assert !work.save
+    assert chapter.save
   end
   def test_after_update_save_associated
     original_meta = create_metadata
@@ -66,7 +73,13 @@ class ChapterTest < ActiveSupport::TestCase
     chapter.save
     assert_equal new_title, Chapter.find(chapter.id).metadata.title
   end
-  def test_after_both_save_creatorships
+  def test_after_create_save_creatorships
+    pseud = create_pseud
+    work = create_work
+    chapter = create_chapter(:work_id => work.id, :authors => [pseud])
+    assert_equal [pseud], Chapter.find(chapter.id).pseuds
+  end
+  def test_after_update_save_creatorships
     # TODO tests for save_creatorship
   end
 
