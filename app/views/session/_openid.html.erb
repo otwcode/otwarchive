@@ -4,3 +4,5 @@
 <%= link_to "OpenID", 'http://openid.net/', :popup => true %> URL:
 <br />
 <%= text_field_tag "openid_url", '', :class => 'openid-url', :tabindex => '4' %>
+<%= link_to_function "Back".t , "Element.hide('openid'); Element.show('passwd')" %>
+<br />
