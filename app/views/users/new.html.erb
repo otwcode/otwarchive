@@ -7,6 +7,8 @@
 	<% form_for :user, :url => users_path do |@f| -%>
 	  <p>
 	  <!-- Create login -->
+	  <span class="authentication-label"><label for="login"><%= "What would you like as your ".t + "user name".t%>?</label></span><br />
+	  <%= @f.text_field :login, :class => 'authentication-textfield', :tabindex => '1' %><br />
     <div id="passwd"><%= render :partial => "passwd" %></div>
     <% if ArchiveConfig.USE_OPENID %>	
       <div id="openid" style="display: none"><%= render :partial => 'openid' %></div>

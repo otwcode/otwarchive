@@ -1,6 +1,3 @@
-<span class="authentication-label"><label for="login"><%= "What would you like as your ".t + "user name".t%>?</label></span><br />
-<%= @f.text_field :login, :class => 'authentication-textfield', :tabindex => '1' %>
-<br />
 <!-- Password with link to strong password info (still needs to be added) -->
 <span class="authentication-label"><label for="password"><%= "And your password?" .t %> (Make it a <a href="#" tabindex="2">strong</a> one!)</label></span><br />	
 <%= @f.password_field :password, :class => 'authentication-textfield', :tabindex => '3' %>
