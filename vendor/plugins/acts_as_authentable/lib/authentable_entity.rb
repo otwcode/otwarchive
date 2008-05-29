@@ -23,7 +23,7 @@ module AuthentableEntity
       validates_length_of       :login,    :within => LOGIN_LENGTH_MIN..LOGIN_LENGTH_MAX
       validates_length_of       :email,    :within => EMAIL_LENGTH_MIN..EMAIL_LENGTH_MAX
       validates_uniqueness_of   :login, :email, :case_sensitive => false
-      validates_uniqueness_of   :identity_url, :allow_nil => true
+      validates_uniqueness_of   :identity_url, :allow_blank => true
 
       before_save :encrypt_password
       
