@@ -3,10 +3,11 @@ module ApplicationHelper
   
   # Can be used to check ownership of any item that has a pseud attached to it
   def is_author_of?(item) 
+    return false unless logged_in?
     if item.class == Work || item.class == Chapter
-      logged_in? && item.pseuds - current_user.pseuds != item.pseuds
+      item.pseuds & current_user.pseuds != []
     else
-      logged_in? && current_user.pseuds.include?(item.pseud)
+      current_user.pseuds.include?(item.pseud)
     end
   end
 

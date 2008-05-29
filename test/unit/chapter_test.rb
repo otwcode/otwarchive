@@ -78,9 +78,13 @@ class ChapterTest < ActiveSupport::TestCase
     work = create_work
     chapter = create_chapter(:work_id => work.id, :authors => [pseud])
     assert_equal [pseud], Chapter.find(chapter.id).pseuds
+    new_pseud = create_pseud
+    chapter.authors=[new_pseud]
+    chapter.save
+    assert Chapter.find(chapter.id).pseuds.include?(new_pseud)
   end
-  def test_after_update_save_creatorships
-    # TODO tests for save_creatorship
+  def test_after_create_remove_creatorships
+    # FIXME test remove only yourself as author of a chapter
   end
 
   # Test methods

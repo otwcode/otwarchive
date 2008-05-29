@@ -15,10 +15,8 @@ class Pseud < ActiveRecord::Base
   end
   
   #add a group of creations to this pseud
-  def add_creations(new_creation)
-    unless self.creations.include?(new_creation)
-      self.creations << new_creation             
-    end
+  def add_creations(new_creations)
+    self.creations << new_creations             
   end
   
   def remove_creation(creation)
