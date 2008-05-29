@@ -1,6 +1,9 @@
-<!-- This partial requires local variables 'work' -->
-<% if @work.chapters.count > 1 -%>
-  <%= render :partial => 'chapters/chapter', :collection => @work.chapters.find(:all, :order => "position") %>
+<% if @chapters.size > 1 -%>
+  <% for chapter in @chapters %>
+    <% if chapter.posted? || is_author_of?(chapter) -%>
+      <%= render :partial => 'chapters/chapter', :locals => {:chapter => chapter} %>
+   <% end -%>
+  <% end %>
 <% else %>
-	<%=sanitize_format @work.chapters.first.content %>
+	<%=sanitize_format @chapters.first.content %>
 <% end %>

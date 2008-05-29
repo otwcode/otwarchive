@@ -7,9 +7,12 @@
   <!-- chapter management -->  
   <%- if is_author_of?(@work) -%>
    <span class="chapter-control">
-   (<%= link_to 'edit', [:edit, @work, chapter] -%> 
+   (<% unless chapter.posted? -%>
+    <%= link_to 'post', [:post, @work, chapter] -%> |
+    <% end -%>
+    <%= link_to 'edit', [:edit, @work, chapter] -%> 
     <%- if @work.chapters.count > 1 -%>
-      | <%= link_to 'delete', [@work, chapter], :confirm => 'Are you sure?', :method => :delete %>)
+      | <%= link_to 'delete', [@work, chapter], :confirm => 'Are you sure?', :method => :delete %> )
     <%- end -%>
 	</span>	
   <%- end -%>

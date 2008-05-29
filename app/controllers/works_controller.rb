@@ -82,6 +82,7 @@ class WorksController < ApplicationController
   # GET /works/1.xml
   def show
     @work = Work.find(params[:id]) 
+    @chapters = @work.chapters.find(:all, :order => 'position')
     @comments = @work.find_all_comments
   end
   

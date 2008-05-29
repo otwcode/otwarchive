@@ -1,7 +1,9 @@
 <h1><%= link_to h(@work.metadata.title), @work -%></h1>
 
 <% for chapter in @chapters %>
-  <%= render :partial => 'chapters/chapter', :locals => {:chapter => chapter} %>
+  <% if chapter.posted? || is_author_of?(chapter) -%>
+    <%= render :partial => 'chapters/chapter', :locals => {:chapter => chapter} %>
+  <% end -%>
 <% end %>
 
 <br />
