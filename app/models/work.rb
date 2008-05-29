@@ -50,26 +50,22 @@ class Work < ActiveRecord::Base
   
   # Virtual attribute for pseuds
   def author_attributes=(attributes)
-    self.authors ||= []
     ids = attributes[:ids]
     ids += attributes[:valid_pseuds].split "," if attributes[:valid_pseuds]
     ids += attributes[:ambiguous_pseuds].values if attributes[:ambiguous_pseuds]
-    for id in ids
-      self.authors << Pseud.find(id)
+    unless attributes[:name].blank?
+      coauthors = Pseud.get_coauthor_hash(attributes[:name]) 
+      ids += coauthors[:pseuds].collect(&:id)
     end
+    ids.uniq! unless ids.blank?
+    ids.each { |id| (self.authors ||= [] ) << Pseud.find(id) } if ids
   end
   
   # Checks that work has at least one author
   def validate_authors
-    if self.authors.nil? || self.authors.empty?
-      if self.pseuds.empty?
-        errors.add_to_base("Work must have at least one author.")
-        return false
-      else
-        true
-      end
-    else
-      true
+    if self.authors.blank? && self.pseuds.empty?
+      errors.add_to_base("Work must have at least one author.")
+      return false 
     end
   end
   

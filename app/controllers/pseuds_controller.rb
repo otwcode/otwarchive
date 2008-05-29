@@ -30,24 +30,8 @@ class PseudsController < ApplicationController
   end
   
   def choose_coauthors
+    @coauthor_results = Pseud.get_coauthor_hash(params[:names])
     @creation = params[:creation]
-    list = params[:names]
-    pseud_names = list.split ","
-    @pseuds = []
-    @ambiguous_pseuds = {}
-    @invalid_pseuds = []
-    for name in pseud_names
-      name.strip!
-      result = Pseud.find(:all, :conditions => {:name => name}, :include => :user)
-      if result.nil? || result.empty?
-        @invalid_pseuds << name
-      elsif result.length > 1
-        @ambiguous_pseuds[name] = result
-      else
-        @pseuds << result.first
-      end
-    end
-    @coauthor_results = {:pseuds => @pseuds, :ambiguous_pseuds => @ambiguous_pseuds, :invalid_pseuds => @invalid_pseuds}
   end
   
   # GET /pseuds/new

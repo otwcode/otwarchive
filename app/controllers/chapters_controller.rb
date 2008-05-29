@@ -39,28 +39,25 @@ class ChaptersController < ApplicationController
     @work = Work.find(params[:work_id])    
   end
   
-  # Sets values for @chapter, @pseuds, and @selected
+  # Sets values for @chapter, @coauthor_results, @pseuds, and @selected
   def set_instance_variables
     if params[:id] # edit, update, preview, post
       @chapter = @work.chapters.find(params[:id])
     elsif params[:chapter] # create
       @chapter = @work.chapters.build(params[:chapter])
+      @chapter.metadata = Metadata.new(params[:chapter][:metadata_attributes])
     else # new
       @chapter = @work.chapters.build
       @chapter.metadata = Metadata.new
     end
     
-    @pseuds = @work.pseuds
+    if params[:chapter] && params[:chapter][:author_attributes] && !params[:chapter][:author_attributes][:name].blank?
+      @coauthor_results = Pseud.get_coauthor_hash(params[:chapter][:author_attributes][:name])
+    end
     
-    if params[:chapter] && params[:chapter]["author_attributes"] && params[:chapter]["author_attributes"]["ids"]
-      @selected = params[:chapter]["author_attributes"]["ids"].collect {|id| id.to_i }
-    elsif @chapter.authors
-      @selected = @chapter.authors.collect {|pseud| pseud.id.to_i }
-    elsif @chapter.pseuds
-      @selected = @chapter.pseuds.collect {|pseud| pseud.id.to_i }  
-    else
-      @selected = @work.pseuds.collect {|pseud| pseud.id.to_i }
-    end  
+    @pseuds = (@work.pseuds + (@chapter.authors ||= [])).uniq
+    to_select = @chapter.authors.blank? ? @chapter.pseuds.blank? ? @work.pseuds : @chapter.pseuds : @chapter.authors 
+    @selected = to_select.collect {|pseud| pseud.id.to_i } 
   end
   
   # GET /work/:work_id/chapters
@@ -89,25 +86,41 @@ class ChaptersController < ApplicationController
   # POST /work/:work_id/chapters
   # POST /work/:work_id/chapters.xml
   def create
-    if @chapter.save
-      @work.update_major_version
-      flash[:notice] = 'This is a preview of what this chapter will look like when it\'s posted to the Archive. You should probably read the whole thing to check for problems before posting.'
-      redirect_to [:preview, @work, @chapter]
-    else
-      render :action => "new" 
-    end 
+    if params[:no_script] && !(@coauthor_results ||= {}).blank?
+      if @chapter.valid?
+        render :partial => 'choose_coauthor', :layout => 'application'
+      else
+        render :action => :new
+      end
+    elsif params[:edit_button]
+      render :action => :new
+    elsif params[:cancel_button]
+      redirect_back_or_default('/')    
+    else  
+      if @chapter.save
+        @work.update_major_version
+        flash[:notice] = 'This is a preview of what this chapter will look like when it\'s posted to the Archive. You should probably read the whole thing to check for problems before posting.'
+        redirect_to [:preview, @work, @chapter]
+      else
+        render :action => :new 
+      end
+    end    
   end
   
   # PUT /work/:work_id/chapters/1
   # PUT /work/:work_id/chapters/1.xml
   def update
+   
     @chapter.attributes = params[:chapter]
     @chapter.work.update_attributes params[:work_attributes] 
 
-    # Display the collected data if we're in preview mode, save it if we're not
-    if params[:preview_button]
-      @pseuds = (@chapter.authors + @work.pseuds).uniq
-      @selected = @chapter.authors.collect {|pseud| pseud.id.to_i }
+    if params[:no_script] && !(@coauthor_results ||= {}).blank?
+      if @chapter.valid?
+        render :partial => 'choose_coauthor', :layout => 'application'
+      else
+        render :action => :new
+      end
+    elsif params[:preview_button]
       render :partial => 'preview_edit', :layout => 'application'
     elsif params[:cancel_button]
       # Not quite working yet - should send the user back to wherever they were before they hit edit

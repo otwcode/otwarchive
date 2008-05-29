@@ -17,11 +17,11 @@
 	
 	<% fields_for "chapter[author_attributes]" do |a| %>
 	<noscript>
-  	<div id="co-authors">
+  	<div id="no_js_co-authors">
   	  <label for="storycoauthor">Enter co-author name(s): </label><br />
-  	  <%= a.text_field "byline" %>
-      <p>Example: <strong>username:pseud, username:pseud</strong></p>
+  	  <%= a.text_field :name %>
   	</div>
+  	<%= hidden_field "no_script", :true %>
 	</noscript>
  	<%- end -%>
 

@@ -34,27 +34,24 @@ class Chapter < ActiveRecord::Base
 
   # Virtual attribute for pseuds
   def author_attributes=(attributes)
-    self.authors ||= []
     ids = attributes[:ids]
     ids += attributes[:valid_pseuds].split "," if attributes[:valid_pseuds]
     ids += attributes[:ambiguous_pseuds].values if attributes[:ambiguous_pseuds]
-    ids.each { |id| self.authors << Pseud.find(id) } if ids
+    unless attributes[:name].blank?
+      coauthors = Pseud.get_coauthor_hash(attributes[:name]) 
+      ids += coauthors[:pseuds].collect(&:id)
+    end 
+    ids.uniq! unless ids.blank?
+    ids.each { |id| (self.authors ||= [] ) << Pseud.find(id) } if ids
   end
   
   # Checks that chapter has at least one author
   # Skip the initial creation of the first chapter, since that's covered in the works model
   def validate_authors
-    if self.new_record? && self.position == 1
-      return true
-    elsif self.authors.nil? || self.authors.empty?
-      if self.pseuds.empty?
-        errors.add_to_base("Chapter must have at least one author.")
-        return false
-      else
-        true
-      end
-    else
-      true
+    return if self.new_record? && self.position == 1
+    if self.authors.blank? && self.pseuds.empty?
+      errors.add_to_base("Chapter must have at least one author.")
+      return false
     end
   end
   
@@ -62,13 +59,7 @@ class Chapter < ActiveRecord::Base
   def save_creatorships
     if self.authors
       Creatorship.add_authors(self, self.authors)
-      Creatorship.add_authors(self.work, self.authors)
-      if self.pseuds && self.pseuds.length > 1 && (self.pseuds - self.authors).length > 0
-        to_remove = self.pseuds - self.authors
-        for author in to_remove
-          author.remove_creation(self)
-        end
-      end        
+      Creatorship.add_authors(self.work, self.authors)       
     end
   end
   

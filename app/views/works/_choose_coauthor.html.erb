@@ -1,9 +1,11 @@
-<%= render :partial => 'work' %>
+<p>Please verify the names of your co-authors</p>
 
 <%- form_for(@work) do |f| -%>
+  
+  <%= render :partial => 'pseuds/coauthor_form', :locals => {:creation => 'work'} %> 
 
   <select name="work[author_attributes][ids][]" multiple="multiple" style="display : none;">
-    <%= options_from_collection_for_select(@work.authors, :id, :name, @work.authors.collect {|pseud| pseud.id.to_i }) %>
+    <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
   </select>
 
   <% fields_for_associated('work', @work.metadata) do |m| %>
@@ -12,7 +14,7 @@
     <%= m.hidden_field :notes, :value => "#{@work.metadata.notes}" %>
   <%- end -%>
 
-  <% fields_for_associated('work', @chapter) do |c| %>
+  <% fields_for_associated('work', @work.chapters.first) do |c| %>
     <%= c.hidden_field :content, :value => "#{@work.chapters.first.content}" %>
   <%- end -%>
 
@@ -20,7 +22,7 @@
   <%= f.hidden_field :expected_number_of_chapters, :value => "#{@work.expected_number_of_chapters}" %>
 
   <p class="field-right">
-    <%= submit_tag 'Update', :name => 'update_button' %>
+    <%= submit_tag 'Preview', :name => 'preview_button' %>
     <%= submit_tag 'Edit', :name => 'edit_button' %>
     <%= submit_tag 'Cancel', :name => 'cancel_button' %> 
   </p>

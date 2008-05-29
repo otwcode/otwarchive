@@ -15,12 +15,14 @@ class WorksController < ApplicationController
     false
   end
 
-  # Sets values for @work, @chapter, @metadata, @pseuds, and @selected
+  # Sets values for @work, @chapter, @metadata, @coauthor_results, @pseuds, and @selected
   def set_instance_variables
     if params[:id] # edit, update, preview, post
       @work = Work.find(params[:id])
     elsif params[:work]  # create
       @work = Work.new(params[:work])
+      @work.chapters.build params[:work][:chapter_attributes] 
+      @work.metadata = Metadata.new(params[:work][:metadata_attributes])
     else # new
       @work = Work.new
       @work.chapters.build
@@ -28,28 +30,16 @@ class WorksController < ApplicationController
     end
 
     @chapter = @work.chapters.first
+    @chapters = @work.chapters.find(:all, :order => 'position')
     @metadata = @work.metadata
-
-    if @work.authors && !@work.authors.empty?
-      @pseuds = @work.authors
-      if @work.pseuds && !@work.pseuds.empty?
-        @pseuds = (@pseuds + @work.pseuds).uniq
-      end 
-    elsif @work.pseuds && !@work.pseuds.empty?
-      @pseuds = @work.pseuds 
-    else
-      @pseuds = current_user.pseuds
+    
+    if params[:work] && params[:work][:author_attributes] && !params[:work][:author_attributes][:name].blank?
+      @coauthor_results = Pseud.get_coauthor_hash(params[:work][:author_attributes][:name])
     end
-
-    if params[:work] && params[:work]["author_attributes"] && params[:work]["author_attributes"]["ids"]
-      @selected = params[:work]["author_attributes"]["ids"].collect {|id| id.to_i }
-    elsif @work.authors && !@work.authors.empty?
-      @selected = @work.authors.collect {|pseud| pseud.id.to_i }
-    elsif @work.pseuds && !@work.pseuds.empty?
-      @selected = @work.pseuds.collect {|pseud| pseud.id.to_i }
-    else
-      @selected = current_user.default_pseud.id
-    end  
+    
+    @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
+    to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 
+    @selected = to_select.collect {|pseud| pseud.id.to_i } 
   end
   
   # check if the user's current pseud is one associated with the work
@@ -92,15 +82,25 @@ class WorksController < ApplicationController
 
   # POST /works
   def create
-    @work.set_initial_version
-    if @work.save
-      flash[:notice] = 'Work was successfully created.'
-      redirect_to preview_work_path(@work)
-    else
-      @pseuds = current_user.pseuds
-      @work.chapters.build 
-      @work.metadata = Metadata.new(params[:work][:metadata_attributes])
-      render :action => :new 
+    @work.set_initial_version     
+    
+    if params[:no_script] && !(@coauthor_results ||= {}).blank?
+      if @work.valid?
+        render :partial => 'choose_coauthor', :layout => 'application'
+      else
+        render :action => :new
+      end
+    elsif params[:edit_button]
+      render :action => :new
+    elsif params[:cancel_button]
+      redirect_back_or_default('/')    
+    else  
+      if @work.save
+        flash[:notice] = 'Work was successfully created.'
+        redirect_to preview_work_path(@work)
+      else
+        render :action => :new 
+      end
     end
   end
   
@@ -112,11 +112,14 @@ class WorksController < ApplicationController
   # PUT /works/1
   def update
     @work.attributes = params[:work]
-    
-    # Display the collected data if we're in preview mode, save it if we're not
-    if params[:preview_button]
-      @pseuds = (@work.authors + @work.pseuds).uniq
-      @selected = @work.authors.collect {|pseud| pseud.id.to_i }
+   
+    if params[:no_script] && !(@coauthor_results ||= {}).blank? 
+      if @work.valid?
+        render :partial => 'choose_coauthor', :layout => 'application'
+      else
+        render :partial => 'work_form', :layout => 'application'
+      end
+    elsif params[:preview_button]
       render :partial => 'preview_edit', :layout => 'application'
     elsif params[:cancel_button]
       # Not quite working yet - should send the user back to wherever they were before they hit edit

@@ -6,7 +6,7 @@
 	  <% fields_for_associated('work', @work.metadata) do |m| %>
       <!-- Story title field (metadata_attributes_title) -->
         <%= m.label :title, "Story Title*", :class => "required" %><br />
-        <%= m.text_field :title, :class => "storyinputfield", :live => true, :object => :metadata, :validMessage => valid_length_message %>
+        <%= m.text_field :title, :class => "storyinputfield" , :live => true, :object => :metadata, :validMessage => valid_length_message %>
         <%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
 
       <!-- Chaptered checkbox (work_is_complete) -->
@@ -72,10 +72,13 @@
   	
   	<% fields_for "work[author_attributes]" do |a| %>
   	<noscript>
-    	<div id="co-authors">
+    	<div id="no_js_co-authors">
     	  <label for="storycoauthor">Enter co-author name(s): </label><br />
     	  <%= a.text_field :name %>
     	</div>
+    	
+    	<%= hidden_field "no_script", :true %>
+    	
   	</noscript>
   	<%- end -%>
 
