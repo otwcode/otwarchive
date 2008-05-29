@@ -9,15 +9,23 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 32) do
+ActiveRecord::Schema.define(:version => 39) do
+
+  create_table "abuse_reports", :force => true do |t|
+    t.string   "email"
+    t.string   "url"
+    t.text     "comment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "admins", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "salt"
-    t.string   "email"
     t.string   "login"
     t.string   "crypted_password"
+    t.string   "email"
+    t.string   "salt"
   end
 
   create_table "bookmarks", :force => true do |t|
@@ -145,10 +153,11 @@ ActiveRecord::Schema.define(:version => 32) do
 
   create_table "preferences", :force => true do |t|
     t.integer  "user_id"
-    t.boolean  "history_enabled", :default => true
-    t.boolean  "email_visible",   :default => false
+    t.boolean  "history_enabled",       :default => true
+    t.boolean  "email_visible",         :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "date_of_birth_visible", :default => false
   end
 
   create_table "profiles", :force => true do |t|
@@ -165,6 +174,15 @@ ActiveRecord::Schema.define(:version => 32) do
     t.string   "name"
     t.text     "description"
     t.boolean  "is_default"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "readings", :force => true do |t|
+    t.integer  "major_version_read"
+    t.integer  "minor_version_read"
+    t.integer  "user_id"
+    t.integer  "work_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -197,14 +215,14 @@ ActiveRecord::Schema.define(:version => 32) do
   create_table "users", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "salt"
-    t.string   "remember_token"
     t.datetime "remember_token_expires_at"
     t.string   "activation_code"
-    t.string   "email"
     t.string   "login"
     t.datetime "activated_at"
     t.string   "crypted_password"
+    t.string   "email"
+    t.string   "salt"
+    t.string   "remember_token"
     t.string   "identity_url"
   end
 
@@ -216,6 +234,7 @@ ActiveRecord::Schema.define(:version => 32) do
     t.integer  "major_version",               :default => 0
     t.integer  "minor_version",               :default => 0
     t.boolean  "posted"
+    t.integer  "language_id"
   end
 
 end
