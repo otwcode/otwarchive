@@ -8,7 +8,7 @@
   <%- if is_author_of?(@work) -%>
    <span class="chapter-control">
    (<% unless chapter.posted? -%>
-    <%= link_to 'post', [:post, @work, chapter] -%> |
+    <%= link_to 'post', [:post, @work, chapter], :method => :post -%> |
     <% end -%>
     <%= link_to 'edit', [:edit, @work, chapter] -%> 
     <%- if @work.chapters.count > 1 -%>
