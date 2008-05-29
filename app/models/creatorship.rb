@@ -3,11 +3,7 @@ class Creatorship < ActiveRecord::Base
   belongs_to :creation, :polymorphic => true
 
   def self.add_authors(creation, pseuds)
-    for pseud in pseuds
-      unless creation.pseuds.include?(pseud)
-        pseud.add_creations(creation)
-      end
-    end
+    pseuds.each { |p| p.add_creations([creation]) } if pseuds
   end
   
 end
