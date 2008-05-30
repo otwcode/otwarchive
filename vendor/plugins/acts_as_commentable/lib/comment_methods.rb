@@ -18,11 +18,7 @@ module CommentMethods
     
     # Gets the object (chapter, bookmark, etc.) that the comment ultimately belongs to
     def ultimate_parent
-      if self.reply_comment?
-        first_comment = Comment.find(:first, :conditions => ["thread = (?) AND depth = 0", self.thread])
-      else
-        first_comment = self
-      end
+      first_comment = self.reply_comment? ? Comment.find(:first, :conditions => ["thread = (?) AND depth = 0", self.thread]) : self
       first_comment.commentable
     end
     
@@ -32,7 +28,7 @@ module CommentMethods
       if self.reply_comment?
         old_comment = Comment.find(self.commentable_id)
         self.thread = old_comment.thread
-        old_comment.add_child(self)
+        self.depth && self.thread ? old_comment.add_child(self) : false
 
         # Disabling email for now but leaving this here as a placeholder
         # if old_comment.pseud_id
@@ -41,12 +37,8 @@ module CommentMethods
         # end
 
       else
-        if Comment.max_thread
-          self.thread = Comment.max_thread.to_i + 1
-        else
-          self.thread = 1
-        end
-        self.save
+        self.thread = Comment.max_thread ? Comment.max_thread.to_i + 1 : 1 
+        self.depth && self.thread ? self.save : false
       end
     end
     
@@ -67,20 +59,12 @@ module CommentMethods
 
     # Sets the depth value for threaded display purposes (higher depth value = more indenting)                     
     def set_depth
-      if self.reply_comment?
-        self.depth = self.commentable.depth + 1 
-      else
-        self.depth = 0
-      end
+      self.depth = self.reply_comment? ? self.commentable.depth + 1 : 0 
     end     
 
     # Returns the total number of sub-comments
     def children_count
-      if self.threaded_right
-        return (self.threaded_right - self.threaded_left - 1)/2
-      else
-        return 0
-      end
+      self.threaded_right ? (self.threaded_right - self.threaded_left - 1)/2 : 0
     end
 
     # Returns all sub-comments plus the comment itself 
@@ -96,15 +80,14 @@ module CommentMethods
 
     # Returns all sub-comments
     def all_children
-      if self.children_count > 0
-        Comment.find(:all, :conditions => ["threaded_left > (?) and threaded_right < (?) and thread = (?)", self.threaded_left, self.threaded_right, self.thread],
-                            :include => :pseud)
-      end
+      self.children_count > 0 ? Comment.find(:all, 
+                                             :conditions => ["threaded_left > (?) and threaded_right < (?) and thread = (?)", self.threaded_left, self.threaded_right, self.thread],
+                                             :order => "threaded_left", :include => :pseud) : []
     end
 
     # Returns a full comment thread
     def full_thread
-      Comment.find(:all, :conditions => ["thread = (?)", self.thread])
+      Comment.find(:all, :conditions => ["thread = (?)", self.thread], :order => "threaded_left")
     end
             
 
