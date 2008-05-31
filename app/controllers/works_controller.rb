@@ -147,8 +147,9 @@ class WorksController < ApplicationController
       redirect_back_or_default('/')
     else
       @work.posted = true
+      @work.chapters.first.posted = true
       # Will save tags here when tags exist!
-      if @work.save
+      if @work.save && @work.chapters.first.save
         flash[:notice] = 'Work has been posted!'
         redirect_to(@work)
       else
