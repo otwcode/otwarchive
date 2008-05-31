@@ -19,6 +19,10 @@
   <% fields_for :work_attributes, @work do |w| %>
     <%= w.hidden_field :is_complete, :value => "#{@work.is_complete}" %>
   <% end %>
+  
+  <%- unless @chapter.posted -%>
+    <p><%= f.check_box :posted %> Post! </p> 
+  <%- end -%>
 
   <p class="field-right">
     <%= submit_tag 'Update', :name => 'update_button' %>

@@ -24,9 +24,13 @@ class WorksController < ApplicationController
       @work.chapters.build params[:work][:chapter_attributes] 
       @work.metadata = Metadata.new(params[:work][:metadata_attributes])
     else # new
-      @work = Work.new
-      @work.chapters.build
-      @work.metadata = Metadata.new
+      if current_user.unposted_work
+        @work = current_user.unposted_work
+      else
+        @work = Work.new
+        @work.chapters.build
+        @work.metadata = Metadata.new
+      end
     end
 
     @chapter = @work.chapters.first

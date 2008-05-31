@@ -1,4 +1,4 @@
-<%= render :partial => 'work' %>
+<%= render :partial => 'work' %> 
 
 <%- form_for(@work) do |f| -%>
 
@@ -18,6 +18,10 @@
 
   <%= f.hidden_field :is_complete, :value => "#{@work.is_complete}" %>
   <%= f.hidden_field :expected_number_of_chapters, :value => "#{@work.expected_number_of_chapters}" %>
+  
+  <% unless @work.posted %>
+    <p><%= f.check_box :posted %> Post! </p> 
+  <% end %>
 
   <p class="field-right">
     <%= submit_tag 'Update', :name => 'update_button' %>

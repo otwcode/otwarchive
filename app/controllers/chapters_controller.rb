@@ -47,8 +47,12 @@ class ChaptersController < ApplicationController
       @chapter = @work.chapters.build(params[:chapter])
       @chapter.metadata = Metadata.new(params[:chapter][:metadata_attributes])
     else # new
-      @chapter = @work.chapters.build
-      @chapter.metadata = Metadata.new
+      if current_user.unposted_chapter(@work)
+        @chapter = current_user.unposted_chapter(@work)
+      else
+        @chapter = @work.chapters.build
+        @chapter.metadata = Metadata.new
+      end
     end
     
     if params[:chapter] && params[:chapter][:author_attributes] && !params[:chapter][:author_attributes][:name].blank?

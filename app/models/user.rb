@@ -83,4 +83,14 @@ class User < ActiveRecord::Base
     pseuds.collect(&:creations).reject(&:empty?).flatten
   end
   
+  # Gets the user's one allowed unposted work
+  def unposted_work
+    creations.select{|c| c.class == Work && c.posted != true}.first
+  end
+  
+  # Gets the user's one allowed unposted chapter per work
+  def unposted_chapter(work)
+    creations.select{|c| c.class == Chapter && c.work_id == work.id && c.posted != true}.first
+  end
+  
 end

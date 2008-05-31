@@ -10,10 +10,9 @@ class Work < ActiveRecord::Base
   # Can't write to work.pseuds until the work has an id
   attr_accessor :authors
    
-  before_save :validate_authors
-  before_save :set_language
+  before_save :validate_authors, :set_language
   after_save :save_creatorships
-  after_update :save_associated, :save_creatorships     
+  after_update :save_associated, :save_creatorships    
 
   # Associating works with languages. 
   
@@ -46,6 +45,7 @@ class Work < ActiveRecord::Base
   # Virtual attribute for first chapter
   def chapter_attributes=(attributes)
     self.new_record? ? self.chapters.build(attributes) : self.chapters.first.attributes = attributes
+    self.chapters.first.posted = self.posted
   end 
   
   # Virtual attribute for pseuds
@@ -116,5 +116,6 @@ class Work < ActiveRecord::Base
   # provide an interface to increment minor version number
   def update_minor_version
     self.update_attribute(:minor_version, self.minor_version+1)
-  end
+  end 
+
 end
