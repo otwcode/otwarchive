@@ -5,7 +5,7 @@ class Chapter < ActiveRecord::Base
   # A chapter does NOT have to have a metadata, so we don't 
   # validate for its presence. ???
   has_one :metadata, :as => :described
-  # validates_associated :metadata, :message => nil
+  validates_associated :metadata
 
   validates_presence_of :content
   validates_length_of :content, :maximum=>16777215
@@ -65,7 +65,9 @@ class Chapter < ActiveRecord::Base
   
   # Virtual attribute for metadata
   def metadata_attributes=(attributes)
-    !self.metadata ? self.metadata = Metadata.new(attributes) : self.metadata.attributes = attributes
+    unless attributes.values.to_s.blank?
+      !self.metadata ? self.metadata = Metadata.new(attributes) : self.metadata.attributes = attributes
+    end
   end  
   
   # Save metadata after the chapter is updated
