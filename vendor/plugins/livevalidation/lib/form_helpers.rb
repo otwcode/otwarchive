@@ -9,9 +9,9 @@ module ActionView
         define_method "#{field_type}_with_live_validations" do |object_name, method, options|
           live = options.delete(:live)
           live = ActionView::live_validations if live.nil?
-          live_options = options.dup
+          live_options = options.dup 
           send("#{field_type}_without_live_validations", object_name, method, options) +
-          ( live ? live_validations_for(object_name, method, live_options) : '' )
+          ( live ? live_validations_for(remove_brackets(object_name), method, live_options) : '' )
         end
         alias_method_chain field_type, :live_validations
       end
@@ -21,6 +21,17 @@ module ActionView
       end
       
       private
+      
+      # For use with fields_for fields and virtual attributes
+      def remove_brackets(name)
+        name = name.to_s
+        if name.include?("[")
+          name.gsub!(/\[/, '_')
+          name.gsub!(/\]/, '')
+        else
+          name
+        end  
+      end
       
       def live_validation(object_name, method, options)
         object = options.delete(:object) || self.instance_variable_get("@#{object_name.to_s}") || nil
