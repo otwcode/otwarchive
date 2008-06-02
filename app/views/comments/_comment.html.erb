@@ -12,13 +12,14 @@
     </p>
   <% else %>  
     <p>
-      Name: <%= f.text_field :name, :live => true %><br />
-      Email: <%= f.text_field :email, :live => true %>
+      <%= f.label :name, "Name: " %><%= f.text_field :name, :live => true %><br />
+      <%= f.label :email, "Email: " %><%= f.text_field :email, :live => true %>
       <%= f.hidden_field :ip_address, :value => "#{request.remote_addr}" %>      
     </p>
   <% end %>
        
   <p>
+    <%= f.label :content, "Comment: " %><br />
     <%= f.text_area :content, :live => true %>
   </p>  
     
