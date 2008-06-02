@@ -2,7 +2,7 @@ module CommentableEntity
   
   def self.included(commentable)
     commentable.class_eval do      
-      has_many :comments, :as => :commentable
+      has_many :comments, :as => :commentable, :dependent => :destroy
       extend ClassMethods
     end
   end

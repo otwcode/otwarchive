@@ -33,7 +33,7 @@ class Work < ActiveRecord::Base
     end
     
     unless self.metadata && self.metadata.valid?
-      errors.add_to_base("Please enter a title for your story (between 3 and 255 characters).")
+      self.metadata.errors.full_messages.each { |msg| errors.add_to_base(msg) }
     end
   end
     

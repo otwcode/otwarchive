@@ -6,8 +6,15 @@
 	  <% fields_for_associated('work', @work.metadata) do |m| %>
       <!-- Story title field (metadata_attributes_title) -->
         <%= m.label :title, "Story Title*", :class => "required" %><br />
-        <%= m.text_field :title, :class => "storyinputfield" , :live => true, :object => :metadata, :validMessage => valid_length_message %>
+        <%= m.text_field :title, :class => "storyinputfield" %>
         <%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
+        
+        <script>
+          var work_metadata_attributes_title = new LiveValidation('work_metadata_attributes_title', { validMessage: 'Thanks, that length looks good.', wait: 500 });
+          work_metadata_attributes_title.add(Validate.Length, {"failureMessage": "must be at least 3 letters long.", "minimum": 3, "validMessage": ""});
+          work_metadata_attributes_title.add(Validate.Length, {"failureMessage": "must be less than 255 letters long.", "maximum": 255, "validMessage": ""});
+          work_metadata_attributes_title.add(Validate.Presence, {"if": "is_work?", "failureMessage": "is required.", "validMessage": ""})
+        </script>
 
       <!-- Chaptered checkbox (work_is_complete) -->
       <!-- Checking this box causes the expected number of chapters box to appear; unchecking it causes it to disappear. -->
@@ -52,6 +59,11 @@
     <p>
       <%= c.label :content, "Story, in plain text with limited HTML*", :class => "required" %><br />
     	<%= c.text_area :content %>
+    	<script>
+        var work_chapter_attributes_content = new LiveValidation('work_chapter_attributes_content', { validMessage: 'Thanks, that length looks good.', wait: 500 });
+        work_chapter_attributes_content.add(Validate.Length, {"failureMessage": "must be less than 16777215 letters long.", "maximum": 16777215, "validMessage": ""});
+        work_chapter_attributes_content.add(Validate.Presence, {"failureMessage": "is required.", "validMessage": ""})
+      </script>
     </p>
   <% end %>
 
@@ -113,13 +125,22 @@
     <!-- Summary field (metadata_attributes_summary) -->
     <p>
       <%= m.label :summary, "Summary (max %d letters)"/Metadata::SUMMARY_MAX %><br />
-      <%= m.text_area :summary, :class => "metadata-field", :live => true, :object => :metadata, :validMessage => valid_length_message %>
+      <%= m.text_area :summary, :class => "metadata-field" %>
+      <script>
+        var work_metadata_attributes_summary = new LiveValidation('work_metadata_attributes_summary', { validMessage: 'Thanks, that length looks good.', wait: 500 });
+        work_metadata_attributes_summary.add(Validate.Length, {"failureMessage": "must be less than 1250 letters long.", "maximum": 1250, "validMessage": ""})
+      </script>
+      
     </p>
 
     <!-- Notes field (metadata_attributes_notes) -->
     <p>
       <%= m.label :notes, "Notes (max %d letters)"/Metadata::NOTES_MAX %><br />
-      <%= m.text_area :notes, :class => "metadata-field", :live => true, :object => :metadata, :validMessage => valid_length_message %> 
+      <%= m.text_area :notes, :class => "metadata-field" %> 
+      <script>
+        var work_metadata_attributes_notes = new LiveValidation('work_metadata_attributes_notes', { validMessage: 'Thanks, that length looks good.', wait: 500 });
+        work_metadata_attributes_notes.add(Validate.Length, {"failureMessage": "must be less than 2500 letters long.", "maximum": 2500, "validMessage": ""})
+      </script>
     </p>
 	<%- end -%>
 

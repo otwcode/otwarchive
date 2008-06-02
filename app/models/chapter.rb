@@ -4,7 +4,7 @@ class Chapter < ActiveRecord::Base
 
   # A chapter does NOT have to have a metadata, so we don't 
   # validate for its presence. ???
-  has_one :metadata, :as => :described
+  has_one :metadata, :as => :described, :dependent => :destroy
   validates_associated :metadata
 
   validates_presence_of :content
