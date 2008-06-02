@@ -18,9 +18,11 @@
     	<%= stylesheet_link_tag 'auto_complete', :media => 'screen' %>
     	<%= javascript_include_tag :defaults %>
     	<%= javascript_include_tag 'live_validation' %>
+		<%= javascript_include_tag 'accessible' %>
     </head>
 
-    <body onload="hideComments()">
+    <body onload="hideComments(); initSelect('languages_menu')" ">
+  
         <!-- BEGIN header -->
         <div id="header">
             <div id="login-block">

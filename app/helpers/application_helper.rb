@@ -49,8 +49,9 @@ module ApplicationHelper
   
   # Create a nicer language menu than the Click-To-Globalize default
   def languages_menu
+
     result = "<form action=\"" + url_for(:action => 'set', :controller => 'locale') + "\">\n" 
-    result << "<select name='url' onchange='this.form.submit()'>\n"
+    result << "<select id='accessible_menu' name='url' >\n"
     # We'll sort the languages by their keyname rather than have all the non-arabic-character-set
     # ones end up at the end of the list.
     LANGUAGE_NAMES.sort {|a, b| a.first.to_s <=> b.first.to_s }.each do |locale, langname|
