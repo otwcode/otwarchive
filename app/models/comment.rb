@@ -2,9 +2,11 @@ class Comment < ActiveRecord::Base
   belongs_to :pseud         
   belongs_to :commentable, :polymorphic => true
  
+  COMMENT_MAX = 4300
   validates_presence_of :content
   validates_presence_of :name, :email, :unless => :pseud_id
   validates_format_of :email, :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i, :on => :create, :unless => :pseud_id
+  validates_length_of :content, :maximum => COMMENT_MAX, :message => "must be less than %d letters long."/COMMENT_MAX
   before_create :check_for_spam
   
   # Gets methods and associations from acts_as_commentable plugin
