@@ -85,8 +85,40 @@ class WorkTest < ActiveSupport::TestCase
   def test_update_major_version
     # TODO test_update_major_version
   end
-  def update_minor_version
+  def test_update_minor_version
     # TODO update_minor_version
+  end
+  def test_wip
+    work = create_work
+    # default is complete one-shot
+    assert work.is_complete
+    assert !work.is_wip
+    # author marks it as wip, but doesn't give expected chapters
+    work.is_wip="1"
+    assert work.is_wip
+    assert !work.is_complete
+    assert_equal 0, work.expected_number_of_chapters
+    # author decides on two chapters
+    work.expected_number_of_chapters = 2
+    assert work.is_wip
+    assert !work.is_complete
+    # author toggles it again as a wip, should still expect two chapters
+    work.is_wip="1"
+    assert_equal 2, work.expected_number_of_chapters
+    # author creates the second chapter
+    create_chapter(:work_id => work.id)
+    assert work.is_complete
+    assert !work.is_wip
+    # author decides two isn't enough, but doesn't specify how many
+    work.is_wip="1"
+    assert work.is_wip
+    assert !work.is_complete
+    assert_equal 0, work.expected_number_of_chapters
+    # author decides two was enough after all
+    work.is_complete="1"
+    assert work.is_complete
+    assert !work.is_wip
+    assert_equal 2, work.expected_number_of_chapters
   end
   
   # FIXME didn't create methods for the following, because they could/should be private

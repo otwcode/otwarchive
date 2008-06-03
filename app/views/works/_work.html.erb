@@ -15,9 +15,16 @@
     <%=sanitize_format @work.metadata.notes %>
   </p>
   
-  <% if !@work.is_complete && @work.expected_number_of_chapters -%>
+  <% if @work.is_wip -%>
   <p class="story-complete">
-  	Please note this is a work in progress, with <%= @work.chapters.count -%> of <%=h @work.expected_number_of_chapters -%> chapters posted.
+  	Please note this is a work in progress, with 
+  	<%= @work.chapters.count -%> of 
+  	<% if @work.expected_number_of_chapters == 0 %>
+  	  ?
+  	<% else %>
+    	<%=h @work.expected_number_of_chapters -%> 
+    <% end %>
+  	chapters posted.
   </p>
   <% end -%>
 

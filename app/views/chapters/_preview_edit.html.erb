@@ -16,10 +16,6 @@
 
   <%= f.hidden_field :content, :value => "#{@chapter.content}" %>
   
-  <% fields_for :work_attributes, @work do |w| %>
-    <%= w.hidden_field :is_complete, :value => "#{@work.is_complete}" %>
-  <% end %>
-  
   <%- unless @chapter.posted -%>
     <p><%= f.check_box :posted %> Post! </p> 
   <%- end -%>

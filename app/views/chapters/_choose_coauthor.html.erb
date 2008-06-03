@@ -18,10 +18,6 @@
 
   <%= f.hidden_field :content, :value => "#{@chapter.content}" %>
   
-  <% fields_for :work_attributes, @work do |w| %>
-    <%= w.hidden_field :is_complete, :value => "#{@work.is_complete}" %>
-  <% end %>
-
   <p class="field-right">
     <%= submit_tag 'Preview', :name => 'preview_button' %>
     <%= submit_tag 'Edit', :name => 'edit_button' %>

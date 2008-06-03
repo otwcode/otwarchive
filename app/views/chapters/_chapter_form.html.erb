@@ -75,10 +75,12 @@
   </p>
   
   <% fields_for :work_attributes, chapter.work do |w| %>
+   <% if @work.last_chapter == chapter %>
     <p>
       <b>Is this the last chapter?</b><br />
       <%= w.check_box :is_complete %> Yes
     </p>
+    <% end %>
   <% end %>
 
   <p>

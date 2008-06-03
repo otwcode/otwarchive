@@ -16,9 +16,9 @@
           work_metadata_attributes_title.add(Validate.Presence, {"if": "is_work?", "failureMessage": "is required.", "validMessage": ""})
         </script>
 
-      <!-- Chaptered checkbox (work_is_complete) -->
+      <!-- Chaptered checkbox (work_is_wip) -->
       <!-- Checking this box causes the expected number of chapters box to appear; unchecking it causes it to disappear. -->
-      <%= f.check_box :is_complete, {:onclick => "Element.toggle('number-of-chapters')"}, "0", "1" %> Chaptered story?
+      <%= f.check_box :is_wip, {:onclick => "Element.toggle('number-of-chapters')"}, 1 %> Chaptered work?
 
       <!-- Series checkbox (storyseriescheck) -->
       <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear.  STILL NEEDS Rails integration. -->
@@ -48,7 +48,11 @@
     <p class="clearbothdrop"></p>
     
     <!-- Number of chapters (work_expected_number_of_chapters) -->
-    <div id="number-of-chapters" style="display:none;">
+    <% if @work.is_wip %>
+      <div id="number-of-chapters"> 
+    <% else %>
+      <div id="number-of-chapters" style="display:none;">
+    <% end %>
       <p>
         <%= f.label :expected_number_of_chapters, "How many chapters do you expect the story to have?" %><br />
         <%= f.text_field :expected_number_of_chapters, :class => "number-field" %>

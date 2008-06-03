@@ -118,4 +118,36 @@ class Work < ActiveRecord::Base
     self.update_attribute(:minor_version, self.minor_version+1)
   end 
 
+  def is_wip
+    return false unless self.expected_number_of_chapters
+    return false if self.expected_number_of_chapters == self.number_of_chapters
+    return true
+  end
+  
+  def is_complete
+    return !self.is_wip
+  end
+  
+  def is_wip=(toggle)
+    if toggle == "0"
+      self.expected_number_of_chapters = self.number_of_chapters
+    elsif toggle == "1"
+       self.expected_number_of_chapters = 0 unless self.expected_number_of_chapters
+       if self.number_of_chapters == self.expected_number_of_chapters
+         self.expected_number_of_chapters = 0
+       end
+    else
+       raise Exception.new, 'toggle must be "0" or "1"'
+    end
+  end
+
+  def is_complete=(toggle)
+    if toggle == "0"
+      self.is_wip="1"
+    elsif toggle == "1"
+      self.is_wip="0"
+    else
+       raise Exception.new, 'toggle must be "0" or "1"'
+    end
+  end
 end

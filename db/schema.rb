@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 39) do
+ActiveRecord::Schema.define(:version => 41) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -228,7 +228,6 @@ ActiveRecord::Schema.define(:version => 39) do
 
   create_table "works", :force => true do |t|
     t.integer  "expected_number_of_chapters"
-    t.boolean  "is_complete"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "major_version",               :default => 0
