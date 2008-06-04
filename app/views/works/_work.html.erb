@@ -4,7 +4,7 @@
 
   <h2 class="story-title"><%=h @work.metadata.title %></h2>
   <h3 class="story-author">
-	 <%= byline(@work) -%>
+   <%= byline(@work) -%>
   </h3>
   
   <p class="story-summary">
@@ -17,20 +17,25 @@
   
   <% if @work.is_wip -%>
   <p class="story-complete">
-  	Please note this is a work in progress, with 
-  	<%= @work.chapters.count -%> of 
-  	<% if @work.expected_number_of_chapters == 0 %>
-  	  ?
-  	<% else %>
-    	<%=h @work.expected_number_of_chapters -%> 
+    Please note this is a work in progress, with 
+    <% if @work.last_chapter.posted %>
+      <%= @work.chapters.count -%>
+    <% else %>
+      <%= @work.chapters.count - 1 -%>
     <% end %>
-  	chapters posted.
+    of 
+    <% if @work.expected_number_of_chapters == 0 %>
+      ?
+    <% else %>
+      <%=h @work.expected_number_of_chapters -%> 
+    <% end %>
+    chapters posted.
   </p>
   <% end -%>
 
   <p>
     <!--Chapters go here -->
-	<%= render :partial => 'chapters/chapters' -%>
+  <%= render :partial => 'chapters/chapters' -%>
   </p>
 
 </div>
