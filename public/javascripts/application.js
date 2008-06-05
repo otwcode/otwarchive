@@ -17,7 +17,7 @@ function showComments() {
 // Toggles the chaptered story section of the work form and resets the wip_length field
 function showChapteredStoryOptions() {
 	var item = document.getElementById('work_wip_length');
-	if (item.value == '1') {item.value = '?';}
-	else {item.value = '1';}
+	if (item.value == 1) {item.value = '?';}
+	else {item.value = 1;}
 	Element.toggle('number-of-chapters');
 }

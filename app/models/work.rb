@@ -63,7 +63,7 @@ class Work < ActiveRecord::Base
   
   # Virtual attribute for # of chapters
   def wip_length
-    self.expected_number_of_chapters.nil? ? "?" : self.expected_number_of_chapters.to_s
+    self.expected_number_of_chapters.nil? ? "?" : self.expected_number_of_chapters
   end
   
   def wip_length=(number)

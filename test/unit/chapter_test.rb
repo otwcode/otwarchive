@@ -22,7 +22,7 @@ class ChapterTest < ActiveSupport::TestCase
     work = new_work(:chapters => [chapter])
     assert work.save
   end
-
+  
   # Test associations
   def test_belongs_to_work
     chapter = new_chapter
@@ -48,16 +48,11 @@ class ChapterTest < ActiveSupport::TestCase
   end
 
   # Test before and after
-  def test_before_save_set_position
-    work = create_work
-    chapter2 = new_chapter(:work_id => work.id)
-    assert_equal 1, chapter2.position
-    chapter2.save
-    assert_equal 2, chapter2.position
-  end
   def test_before_save_validate_authors
     work = create_work
     chapter = new_chapter(:work_id => work.id, :authors => [])
+    assert chapter.save
+    chapter = new_chapter(:work_id => work.id, :authors => [], :position => 2)
     assert !chapter.save
     pseud = create_pseud
     chapter.authors = [pseud]
