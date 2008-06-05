@@ -7,7 +7,7 @@ module UsersHelper
         result += "<h4>" + link_to(h(work.metadata.title), work_path(work)) + "</h4>"
 
         if current_user == pseud.user
-          result += link_to 'Edit'.t, edit_work_path(work)
+          result += link_to 'Edit this story'.t, edit_work_path(work)
         end
       end
     end
