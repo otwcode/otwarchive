@@ -15,6 +15,7 @@
   <% end %>
 
   <%= f.hidden_field :content, :value => "#{@chapter.content}" %>
+  <%= f.hidden_field :wip_length, :value => "#{@chapter.wip_length_placeholder}" %>
   
   <%- unless @chapter.posted -%>
     <p><%= f.check_box :posted %> Post! </p> 

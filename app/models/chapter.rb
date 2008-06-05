@@ -13,23 +13,51 @@ class Chapter < ActiveRecord::Base
   # Virtual attribute to use as a placeholder for pseuds before the chapter has been saved
   # Can't write to chapter.pseuds until the chapter has an id
   attr_accessor :authors
+  attr_accessor :wip_length_placeholder
 
-  before_validation_on_create :set_position
   before_save :validate_authors
-  after_save :save_creatorships
+  after_save :save_creatorships, :save_associated
   after_update :save_associated
 
   # Set the position if this isn't the first chapter
-  def set_position
-    return unless self.work
-    if self.work.number_of_chapters
-      self.position = self.work.number_of_chapters + 1
-    end
+  def current_position
+    self.position = (self.work.number_of_chapters ||= 0) + 1 if self.work && self.new_record?
+    self.position
   end
 
   # check if this chapter is the only chapter of its work
   def is_only_chapter?
     self.work.chapters.length == 1
+  end
+  
+  # Virtual attribute for chapter title (used in work form)
+  def title
+    self.metadata ||= Metadata.new()
+    self.metadata.title
+  end
+  
+  def title=(title)
+    unless title.blank?
+      !self.metadata ? self.metadata = Metadata.new(:title => title, :summary => "", :notes => "") : self.metadata.title = title
+    end 
+  end
+  
+  # Virtual attribute for work wip_length
+  # Chapter needed its own version for sense-checking purposes
+  def wip_length
+    if self.new_record? && self.work.expected_number_of_chapters == self.work.number_of_chapters
+      self.work.expected_number_of_chapters += 1
+    elsif self.work.expected_number_of_chapters && self.work.expected_number_of_chapters < self.work.number_of_chapters
+      "?"
+    else
+      self.work.wip_length
+    end
+  end
+
+  # Can't directly access work from a chapter virtual attribute
+  # Using a placeholder variable for edits, where the value isn't saved immediately
+  def wip_length=(number)
+    self.wip_length_placeholder = number
   end
 
   # Virtual attribute for pseuds
@@ -68,7 +96,7 @@ class Chapter < ActiveRecord::Base
     unless attributes.values.to_s.blank?
       !self.metadata ? self.metadata = Metadata.new(attributes) : self.metadata.attributes = attributes
     end
-  end  
+  end
   
   # Save metadata after the chapter is updated
   def save_associated

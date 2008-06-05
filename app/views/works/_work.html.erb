@@ -17,19 +17,7 @@
   
   <% if @work.is_wip -%>
   <p class="story-complete">
-    Please note this is a work in progress, with 
-    <% if @work.last_chapter.posted %>
-      <%= @work.chapters.count -%>
-    <% else %>
-      <%= @work.chapters.count - 1 -%>
-    <% end %>
-    of 
-    <% if @work.expected_number_of_chapters == 0 %>
-      ?
-    <% else %>
-      <%=h @work.expected_number_of_chapters -%> 
-    <% end %>
-    chapters posted.
+    <%= wip_message(@work) %>
   </p>
   <% end -%>
 

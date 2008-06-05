@@ -1,4 +1,9 @@
 <% form_for([@work, chapter]) do |f| %>
+    <p>
+      Chapter <%=h chapter.current_position %> of <%= f.text_field :wip_length, :class => "number-field" %>
+      <%= f.hidden_field :position, :value => "#{chapter.current_position}" %> 
+    </p>
+
   
   <!-- Author dropdown (pseud_id) -->
 	<p class="field-left">
@@ -73,15 +78,6 @@
     <b>Chapter text</b><br />
     <%= f.text_area :content, :live => true %>
   </p>
-  
-  <% fields_for :work_attributes, chapter.work do |w| %>
-   <% if @work.last_chapter == chapter %>
-    <p>
-      <b>Is this the last chapter?</b><br />
-      <%= w.check_box :is_complete %> Yes
-    </p>
-    <% end %>
-  <% end %>
 
   <p>
     <%= submit_tag 'Preview', :name => 'preview_button' %>

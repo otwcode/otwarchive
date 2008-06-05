@@ -23,7 +23,7 @@ class Work < ActiveRecord::Base
     if Locale.active && Locale.active.language
       self.language = Locale.active.language
     end
-  end 
+  end
   
   # Adds customized error messages and clears the "chapters is invalid" message for invalid chapters
   def validate
@@ -59,6 +59,16 @@ class Work < ActiveRecord::Base
     end
     ids.uniq! unless ids.blank?
     ids.each { |id| (self.authors ||= [] ) << Pseud.find(id) } if ids
+  end 
+  
+  # Virtual attribute for # of chapters
+  def wip_length
+    self.expected_number_of_chapters.nil? ? "?" : self.expected_number_of_chapters.to_s
+  end
+  
+  def wip_length=(number)
+    number = number.to_i
+    self.expected_number_of_chapters = (number != 0 && number >= self.number_of_chapters) ? number : nil
   end
   
   # Checks that work has at least one author
@@ -85,8 +95,13 @@ class Work < ActiveRecord::Base
   
   # Get the total number of chapters for a work
   def number_of_chapters
-     Chapter.maximum(:position, :conditions => ['work_id = ?', self.id])
+     Chapter.maximum(:position, :conditions => {:work_id => self.id}) || 0
   end 
+  
+  # Get the total number of posted chapters for a work
+  def number_of_posted_chapters
+     Chapter.maximum(:position, :conditions => {:work_id => self.id, :posted => true}) || 0
+  end  
   
   # Gets the current last chapter
   def last_chapter
@@ -116,38 +131,25 @@ class Work < ActiveRecord::Base
   # provide an interface to increment minor version number
   def update_minor_version
     self.update_attribute(:minor_version, self.minor_version+1)
-  end 
-
-  def is_wip
-    return false unless self.expected_number_of_chapters
-    return false if self.expected_number_of_chapters == self.number_of_chapters
-    return true
   end
   
+  # Returns true if a work has or will have more than one chapter
+  def chaptered?
+    !self.new_record? && (self.multipart? || self.is_wip)  
+  end
+  
+  # Returns true if a work has more than one chapter
+  def multipart?
+    self.number_of_chapters > 1  
+  end 
+  
+  # Returns true if a work is not yet complete
+  def is_wip
+    self.expected_number_of_chapters.nil? || self.expected_number_of_chapters != self.number_of_chapters
+  end
+  
+  # Returns true if a work is complete
   def is_complete
     return !self.is_wip
-  end
-  
-  def is_wip=(toggle)
-    if toggle == "0"
-      self.expected_number_of_chapters = self.number_of_chapters
-    elsif toggle == "1"
-       self.expected_number_of_chapters = 0 unless self.expected_number_of_chapters
-       if self.number_of_chapters == self.expected_number_of_chapters
-         self.expected_number_of_chapters = 0
-       end
-    else
-       raise Exception.new, 'toggle must be "0" or "1"'
-    end
-  end
-
-  def is_complete=(toggle)
-    if toggle == "0"
-      self.is_wip="1"
-    elsif toggle == "1"
-      self.is_wip="0"
-    else
-       raise Exception.new, 'toggle must be "0" or "1"'
-    end
   end
 end

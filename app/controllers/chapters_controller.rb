@@ -45,7 +45,6 @@ class ChaptersController < ApplicationController
       @chapter = @work.chapters.find(params[:id])
     elsif params[:chapter] # create
       @chapter = @work.chapters.build(params[:chapter])
-      #@chapter.metadata = Metadata.new(params[:chapter][:metadata_attributes])
     else # new
       @chapter = current_user.unposted_chapter(@work) || @work.chapters.build
       @chapter.metadata ||= Metadata.new
@@ -76,7 +75,7 @@ class ChaptersController < ApplicationController
   
   # GET /work/:work_id/chapters/new
   # GET /work/:work_id/chapters/new.xml
-  def new
+  def new 
   end
   
   # GET /work/:work_id/chapters/1/edit
@@ -86,6 +85,8 @@ class ChaptersController < ApplicationController
   # POST /work/:work_id/chapters
   # POST /work/:work_id/chapters.xml
   def create
+	@work.wip_length = params[:chapter][:wip_length]
+  
     if params[:no_script] && !(@coauthor_results ||= {}).blank?
       if @chapter.valid?
         render :partial => 'choose_coauthor', :layout => 'application'
@@ -97,7 +98,7 @@ class ChaptersController < ApplicationController
     elsif params[:cancel_button]
       redirect_back_or_default('/')    
     else  
-      if @chapter.save
+      if @chapter.save && @work.save
         @work.update_major_version
         flash[:notice] = 'This is a preview of what this chapter will look like when it\'s posted to the Archive. You should probably read the whole thing to check for problems before posting.'
         redirect_to [:preview, @work, @chapter]
@@ -112,7 +113,7 @@ class ChaptersController < ApplicationController
   def update
    
     @chapter.attributes = params[:chapter]
-    @chapter.work.update_attributes params[:work_attributes] 
+    @work.wip_length = params[:chapter][:wip_length]
 
     if params[:no_script] && !(@coauthor_results ||= {}).blank?
       if @chapter.valid?
@@ -128,7 +129,7 @@ class ChaptersController < ApplicationController
     elsif params[:edit_button]
       render :action => "edit"
     else
-      if @chapter.update_attributes(params[:chapter])
+      if @chapter.update_attributes(params[:chapter]) && @work.save
         @work.update_minor_version
         flash[:notice] = 'Chapter was successfully updated.'
         redirect_to [@work, @chapter]

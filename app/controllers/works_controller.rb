@@ -21,8 +21,6 @@ class WorksController < ApplicationController
       @work = Work.find(params[:id])
     elsif params[:work]  # create
       @work = Work.new(params[:work])
-      @work.chapters.build params[:work][:chapter_attributes] 
-      @work.metadata = Metadata.new(params[:work][:metadata_attributes])
     else # new
       if current_user.unposted_work
         @work = current_user.unposted_work

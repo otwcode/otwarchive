@@ -18,7 +18,8 @@
 
       <!-- Chaptered checkbox (work_is_wip) -->
       <!-- Checking this box causes the expected number of chapters box to appear; unchecking it causes it to disappear. -->
-      <%= f.check_box :is_wip, {:onclick => "Element.toggle('number-of-chapters')"}, 1 %> Chaptered work?
+      <input type="checkbox" name="is-wip" tabindex="2" 
+      onclick="showChapteredStoryOptions()" <%- if @work.chaptered? -%>checked="checked"<%- end -%>/> Chaptered work?
 
       <!-- Series checkbox (storyseriescheck) -->
       <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear.  STILL NEEDS Rails integration. -->
@@ -47,20 +48,20 @@
 
     <p class="clearbothdrop"></p>
     
+    <!-- Story text field (chapter_attributes_content) -->
+  	<% fields_for_associated('work', @work.chapters.first) do |c| %>
+    
     <!-- Number of chapters (work_expected_number_of_chapters) -->
-    <% if @work.is_wip %>
+    <% if @work.chaptered? %>
       <div id="number-of-chapters"> 
     <% else %>
       <div id="number-of-chapters" style="display:none;">
     <% end %>
       <p>
-        <%= f.label :expected_number_of_chapters, "How many chapters do you expect the story to have?" %><br />
-        <%= f.text_field :expected_number_of_chapters, :class => "number-field" %>
+        Chapter 1 of <%= f.text_field :wip_length, :class => "number-field" %> Title: <%= c.text_field :title %>
       </p>
     </div>    
 
-    <!-- Story text field (chapter_attributes_content) -->
-	<% fields_for_associated('work', @work.chapters.first) do |c| %>
     <p>
       <%= c.label :content, "Story, in plain text with limited HTML*", :class => "required" %><br />
     	<%= c.text_area :content %>

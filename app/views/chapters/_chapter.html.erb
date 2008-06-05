@@ -1,7 +1,7 @@
 <!-- This partial requires local variable 'chapter' -->
 <p>
   <div class="chapter-title">	
-  <strong><%= link_to "Chapter #{chapter.position.to_s}", [@work, chapter] %></strong>
+  <strong><%= link_to "Chapter #{chapter.current_position}", [@work, chapter] %></strong>
   <% if chapter.metadata && chapter.metadata.title -%>: <%=h chapter.metadata.title %><% end -%>
 
   <!-- chapter management -->  
