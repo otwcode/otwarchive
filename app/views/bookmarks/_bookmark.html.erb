@@ -1,0 +1,23 @@
+<!-- This partial requires local variable 'bookmark' -->
+<div class="bookmark">
+
+  <p>
+    <% if bookmark.bookmarkable_type == "ExternalWork" %>
+      <a href="#{boookmark.bookmarkable.url}"><%= bookmark.bookmarkable.metadata.title %></a> by <%= bookmark.bookmarkable.author %>
+    <% else %>
+      <%= link_to bookmark.bookmarkable.metadata.title, bookmark.bookmarkable %> by <%= byline(bookmark.bookmarkable) %>
+    <% end %>  
+
+    <br /><%=sanitize_format bookmark.bookmarkable.metadata.summary %>
+  </p>
+  
+  <p>
+    <%- unless bookmark.notes.blank? -%>
+      User's notes: <br />
+      <%= bookmark.notes %> - <%= link_to bookmark.user.login, bookmark.user %>
+    <%- else -%>
+      Bookmarked by: <%= link_to bookmark.user.login, bookmark.user %>
+    <%- end -%>
+  </p>
+  
+</div>

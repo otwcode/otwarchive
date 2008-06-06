@@ -1,0 +1,19 @@
+<% form_for([@bookmarkable, @bookmark]) do |f| %>
+
+  <p>
+    <b>Notes</b><br />
+    <%= f.text_area :notes %>
+  </p>
+  
+  <p>
+    <%= f.check_box :private %> Private bookmark?
+  </p> 
+  
+  <%= f.hidden_field :user_id, :value => current_user.id %>
+  <%= f.hidden_field :bookmarkable_id, :value => @bookmarkable.id %>
+  <%= f.hidden_field :bookmarkable_type, :value => @bookmarkable.class.to_s %>
+
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>

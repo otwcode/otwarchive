@@ -1,4 +1,8 @@
-ActionController::Routing::Routes.draw do |map|         
+ActionController::Routing::Routes.draw do |map|
+  map.resources :bookmarks
+
+  map.resources :external_works
+         
   map.root :controller => 'session', :action => 'new', :locale => 'en'      
 
   map.abuse_reports '/abuse/fix', :controller => 'abuse_reports', :action => 'create', :path_prefix => ':locale'
@@ -8,12 +12,18 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :admins, :path_prefix => ':locale'
 
-  map.resources :users, :has_many => :pseuds, :path_prefix => ':locale'
+  map.resources :users, :path_prefix => ':locale' do |user|
+    user.resources :pseuds, :has_many => :works
+    user.resources :bookmarks
+    user.resources :works
+    user.resources :comments, :member => { :approve => :put, :reject => :put } 
+  end
 
   map.resources :readings, :path_prefix => ':locale'
   
   map.resources :works, :member => { :preview => :get, :post => :post }, :path_prefix => ':locale' do |work|
     work.resources :chapters, :has_many => :comments, :member => { :preview => :get, :post => :post }
+    work.resources :bookmarks
   end
   
   map.resources :chapters, :has_many => :comments, :member => { :preview => :get, :post => :post }, :path_prefix => ':locale'

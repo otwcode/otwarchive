@@ -25,7 +25,8 @@ class User < ActiveRecord::Base
   before_create :create_default_associateds
   
   has_many :works, :through => :readings
-  has_many :readings
+  has_many :readings 
+  has_many :bookmarks
 
   validates_format_of :login, :message => 'must begin and end with a letter or number; may also contain underscores but no other characters.',
     :with => /\A[A-Za-z0-9]+\w*[A-Za-z0-9]+\Z/

@@ -1,6 +1,7 @@
 class Work < ActiveRecord::Base
   has_many :chapters, :dependent => :destroy
   has_one :metadata, :as => :described, :dependent => :destroy
+  has_many :bookmarks, :as => :bookmarkable
 
   def find_all_comments
     self.chapters.collect { |c| c.find_all_comments }.flatten
