@@ -122,13 +122,15 @@ class WorksController < ApplicationController
         render :partial => 'work_form', :layout => 'application'
       end
     elsif params[:preview_button]
+	  @chapters = [@work.chapters.first]
       render :partial => 'preview_edit', :layout => 'application'
     elsif params[:cancel_button]
       # Not quite working yet - should send the user back to wherever they were before they hit edit
       redirect_back_or_default('/')
     elsif params[:edit_button]
       render :partial => 'work_form', :layout => 'application'
-    else  
+    else
+	  params[:work][:posted] = true if params[:post_button]
       if @work.update_attributes(params[:work])
         @work.update_minor_version
         flash[:notice] = 'Work was successfully updated.'

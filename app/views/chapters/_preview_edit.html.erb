@@ -16,13 +16,13 @@
 
   <%= f.hidden_field :content, :value => "#{@chapter.content}" %>
   <%= f.hidden_field :wip_length, :value => "#{@chapter.wip_length_placeholder}" %>
-  
-  <%- unless @chapter.posted -%>
-    <p><%= f.check_box :posted %> Post! </p> 
-  <%- end -%>
 
   <p class="field-right">
-    <%= submit_tag 'Update', :name => 'update_button' %>
+  	<% if @chapter.posted? %>
+		<%= submit_tag 'Update', :name => 'update_button' %>
+	<% else %>
+		<%= submit_tag 'Post', :name => 'post_button' %>
+	<% end %>
     <%= submit_tag 'Edit', :name => 'edit_button' %>
     <%= submit_tag 'Cancel', :name => 'cancel_button' %> 
   </p>

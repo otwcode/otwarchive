@@ -129,6 +129,7 @@ class ChaptersController < ApplicationController
     elsif params[:edit_button]
       render :action => "edit"
     else
+	  params[:chapter][:posted] = true if params[:post_button]
       if @chapter.update_attributes(params[:chapter]) && @work.save
         @work.update_minor_version
         flash[:notice] = 'Chapter was successfully updated.'
