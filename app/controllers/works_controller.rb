@@ -3,7 +3,7 @@ class WorksController < ApplicationController
   before_filter :users_only, :except => [ :index, :show, :destroy ]
   # only authors of a work should be able to edit it
   before_filter :is_author_true, :only => [ :edit, :update ]
-  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :preview, :post ]
+  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :post ]
   before_filter :update_or_create_reading, :only => [ :show ]
   
   auto_complete_for :pseud, :name
@@ -17,7 +17,7 @@ class WorksController < ApplicationController
 
   # Sets values for @work, @chapter, @metadata, @coauthor_results, @pseuds, and @selected
   def set_instance_variables
-    if params[:id] # edit, update, preview, post
+    if params[:id] # edit, update, preview, post, manage_chapters
       @work = Work.find(params[:id])
     elsif params[:work]  # create
       @work = Work.new(params[:work])
@@ -148,7 +148,9 @@ class WorksController < ApplicationController
   # POST /works/1/post
   def post
     if params[:cancel_button]
-      redirect_back_or_default('/')
+      redirect_back_or_default('/') 
+    elsif params[:edit_button]
+      redirect_to edit_work_path(@work)
     else
       @work.posted = true
       @work.chapters.first.posted = true
@@ -167,13 +169,6 @@ class WorksController < ApplicationController
     @work = Work.find(params[:id])
     @work.destroy
     redirect_to(works_url)
-  end
-  
-  def update_positions
-    params[:sortable_chapter_list].each_with_index do |id, position|
-      Chapter.update(id, :position => position + 1)
-    end
-    render :nothing => true
   end
   
   protected

@@ -1,7 +1,7 @@
 class ChaptersController < ApplicationController
   # only registered users and NOT admin should be able to create new chapters
   before_filter :users_only, :except => [ :index, :show, :destroy ]
-  before_filter :load_work, :except => :auto_complete_for_pseud_name
+  before_filter :load_work, :except => [:auto_complete_for_pseud_name, :update_positions]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :preview, :post ]
   # only authors of a chapter should be able to edit it
   # should actually be that all authors of a work should be able to edit all chapters
@@ -62,8 +62,13 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters
   # GET /work/:work_id/chapters.xml
   def index 
-    @chapters = Chapter.find(:all, :conditions => {:work_id => @work.id}, :order => "position")
+    @chapters = @work.chapters.find(:all, :conditions => {:posted => true}, :order => "position")
     @comments = @work.find_all_comments
+  end
+  
+  # GET /work/:work_id/chapters/manage
+  def manage
+    @chapters = @work.chapters.find(:all, :conditions => {:posted => true}, :order => "position")                    
   end
   
   # GET /work/:work_id/chapters/1
@@ -138,6 +143,13 @@ class ChaptersController < ApplicationController
         render :action => "edit" 
       end
     end 
+  end
+  
+  def update_positions
+    params[:sortable_chapter_list].each_with_index do |id, position|
+      Chapter.update(id, :position => position + 1)
+    end
+    render :nothing => true
   end 
   
   # GET /chapters/1/preview
@@ -147,7 +159,9 @@ class ChaptersController < ApplicationController
   # POST /chapters/1/post
   def post
     if params[:cancel_button]
-      redirect_back_or_default('/')
+      redirect_back_or_default('/') 
+    elsif params[:edit_button]
+      redirect_to [:edit, @work, @chapter]
     else
       @chapter.posted = true
       # Will save tags here when tags exist!

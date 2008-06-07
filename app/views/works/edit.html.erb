@@ -4,31 +4,17 @@
 
 <p>
   <%= link_to "Add chapter", new_work_chapter_path(@work) %> |  
-  
-  <%= link_to_function "Edit work", 
-      update_page {|page| page.replace_html 'editing-choice', :partial => 'work_form', :locals => {:button_text => "Update"}},
-      :href => edit_work_path(@work) %> | 
-
-  <%= link_to 'Delete work', @work, :confirm => 'Are you sure?', :method => :delete -%> |
 
   Edit chapter:
-  <% for chapter in @work.chapters %>
+  <% for chapter in @chapters %>
     <%= link_to h(chapter.position), [:edit, @work, chapter] %> | 
-  <% end %>
+  <% end %>   
+  <%= link_to "Manage chapters", manage_work_chapters_path(@work) %> | 
+  <%= link_to 'Delete work', @work, :confirm => 'Are you sure?', :method => :delete -%>
   
-  <%= link_to_function "Manage authors", 
-      update_page {|page| page.replace_html 'editing-choice', :partial => 'manage_authors'} %> |  
-
-  <%= link_to_function "Delete/reorder chapters", 
-      update_page {|page| page.replace_html 'editing-choice', :partial => 'chapter_order'} %> |  
-  
-  <%= link_to_function "Clear", 
-      update_page {|page| page.replace_html 'editing-choice'} %>  
-
 </p>					
 					
-<div id="editing-choice">
-</div> 
+<%= render :partial => 'work_form', :locals => {:button_text => "Update"} %> 
 
 
 <%= link_to 'Show', @work %> |

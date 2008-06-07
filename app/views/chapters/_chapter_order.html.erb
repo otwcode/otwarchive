@@ -4,7 +4,7 @@
 
   <p>Drag chapters to change their order.<p>
 
-  <ol> id="sortable_chapter_list"
+  <ol id="sortable_chapter_list">
     <% for chapter in @chapters %>
       <li id="chapter_<%= chapter.id %>">
         <% if chapter.metadata && chapter.metadata.title %>
