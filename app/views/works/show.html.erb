@@ -18,7 +18,12 @@
 
 <!-- BEGIN work --> 
 <%= render :partial => 'work' -%>
-<!-- END work --> 
+<!-- END work -->
+
+<!-- BEGIN bookmark link -->
+<%= bookmark_link(@work) %>
+<div id="dynamic-bookmark" style="display:none"></div> 
+<!-- END bookmark link -->
 
 <!-- BEGIN comment section -->
 <div id="comments-display">

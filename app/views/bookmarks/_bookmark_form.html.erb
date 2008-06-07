@@ -1,4 +1,10 @@
-<% form_for([@bookmarkable, @bookmark]) do |f| %>
+<% bookmarkable ||= @bookmarkable %>
+<% @bookmark ||= Bookmark.new %>
+<% if @bookmark.new_record? %>
+  <p>Add a new bookmark for "<%=h bookmarkable.metadata.title %>"</p>
+<% end %>
+
+<% form_for([bookmarkable, @bookmark]) do |f| %>
 
   <p>
     <b>Notes</b><br />
@@ -10,8 +16,8 @@
   </p> 
   
   <%= f.hidden_field :user_id, :value => current_user.id %>
-  <%= f.hidden_field :bookmarkable_id, :value => @bookmarkable.id %>
-  <%= f.hidden_field :bookmarkable_type, :value => @bookmarkable.class.to_s %>
+  <%= f.hidden_field :bookmarkable_id, :value => bookmarkable.id %>
+  <%= f.hidden_field :bookmarkable_type, :value => bookmarkable.class.to_s %>
 
   <p>
     <%= f.submit "Create" %>

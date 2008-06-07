@@ -12,7 +12,8 @@ class BookmarksController < ApplicationController
   # GET /bookmarks
   # GET /bookmarks.xml
   def index
-    @bookmarks = Bookmark.find(:all)
+    @bookmarks = @bookmarkable.nil? ? Bookmark.find(:all) : 
+      Bookmark.find(:all, :conditions => {:bookmarkable_id => @bookmarkable.id, :bookmarkable_type => @bookmarkable.class.to_s})
   end
 
   # GET /bookmarks/1

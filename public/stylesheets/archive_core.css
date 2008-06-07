@@ -444,4 +444,28 @@ textarea.story-edit-notes {
 
 .chapter-control a {
 	color: #4F709F;
+}  
+
+/* Temporary bookmark content */
+#dynamic-bookmark {
+	position: fixed;
+	background-color: #ffffff;
+	border: 2px solid black;
+	height: 250px;
+	width: 500px;
+	padding: 15px 30px;
+	bottom: 30px;
+	right: 30px;
+	z-index: 42;	
+} 
+
+#bookmark_notes {
+	width: 450px;
+	height: 100px;
+}
+
+#close-popup {
+	position:absolute;
+	top: 5px;
+	right: 10px;
 }
