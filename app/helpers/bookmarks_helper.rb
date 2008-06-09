@@ -8,7 +8,7 @@ module BookmarksHelper
       else
         fallback = bookmarks_path # more options if necessary
       end
-      link_to_function ("Bookmark".t, :href => fallback) do |page| 
+      link_to_function("Bookmark".t, :href => fallback) do |page| 
         page.show 'dynamic-bookmark'
         page.draggable 'dynamic-bookmark'
         page.replace_html 'dynamic-bookmark', :partial => 'bookmarks/bookmark_form', :locals => {:bookmarkable => bookmarkable}

@@ -65,7 +65,6 @@ class User < ActiveRecord::Base
     def first_save?
       crypted_password.blank? && identity_url.blank?
     end
-
   
   public
 
@@ -82,6 +81,11 @@ class User < ActiveRecord::Base
   # fetch all creations a user own (via pseuds)
   def creations
     pseuds.collect(&:creations).reject(&:empty?).flatten
+  end 
+  
+  # Returns an array (of pseuds) of this user's co-authors
+  def coauthors
+     self.creations.collect(&:pseuds).flatten.uniq - self.pseuds
   end
   
   # Gets the user's one allowed unposted work

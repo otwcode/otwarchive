@@ -118,13 +118,8 @@
 	
   	<!-- Privacy dropdown (storyprivacy) -->
   	<p>
-      <span class="storylabel"><label for="storyprivacy">Privacy level</label></span><br />
-      <select name="storyprivacy" class="storyinputfield" tabindex="10">
-        <!-- Fake options!  These need to be populated by the backend or hard-coded, as appropriate. -->
-      	<option>Public: Everyone can read</option>
-      	<option>Fake option: insert real option here</option>
-      	<option>Fake option #2: insert real option #2 here</option>
-      </select>
+      <%= f.check_box :restricted %>
+      <%= f.label :restricted, "Only make my story visible to registered users" %>
       <%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br /> 
     </p>
 	

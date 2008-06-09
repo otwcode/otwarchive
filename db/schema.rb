@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 41) do
+ActiveRecord::Schema.define(:version => 44) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -22,28 +22,30 @@ ActiveRecord::Schema.define(:version => 41) do
   create_table "admins", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "email"
     t.string   "login"
     t.string   "crypted_password"
-    t.string   "email"
     t.string   "salt"
   end
 
   create_table "bookmarks", :force => true do |t|
-    t.string   "title",             :limit => 50, :default => ""
     t.datetime "created_at",                                      :null => false
     t.string   "bookmarkable_type", :limit => 15, :default => "", :null => false
     t.integer  "bookmarkable_id",                 :default => 0,  :null => false
     t.integer  "user_id",                         :default => 0,  :null => false
+    t.text     "notes"
+    t.boolean  "private"
+    t.datetime "updated_at"
   end
 
   add_index "bookmarks", ["user_id"], :name => "fk_bookmarks_user"
 
   create_table "chapters", :force => true do |t|
     t.text     "content"
+    t.integer  "position",   :default => 1
     t.integer  "work_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "position",   :default => 1
     t.boolean  "posted"
   end
 
@@ -70,6 +72,14 @@ ActiveRecord::Schema.define(:version => 41) do
     t.integer  "creation_id"
     t.string   "creation_type"
     t.integer  "pseud_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "external_works", :force => true do |t|
+    t.string   "url"
+    t.string   "author"
+    t.boolean  "dead"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -146,9 +156,9 @@ ActiveRecord::Schema.define(:version => 41) do
   end
 
   create_table "open_id_authentication_nonces", :force => true do |t|
-    t.integer "timestamp",  :null => false
+    t.integer "timestamp",                  :null => false
     t.string  "server_url"
-    t.string  "salt",       :null => false
+    t.string  "salt",       :default => "", :null => false
   end
 
   create_table "preferences", :force => true do |t|
@@ -202,32 +212,22 @@ ActiveRecord::Schema.define(:version => 41) do
     t.datetime "updated_at"
   end
 
-  create_table "sessions", :force => true do |t|
-    t.string   "session_id", :null => false
-    t.text     "data"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
-  add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
-
   create_table "users", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "remember_token"
+    t.string   "email"
     t.datetime "remember_token_expires_at"
     t.string   "activation_code"
     t.string   "login"
     t.datetime "activated_at"
     t.string   "crypted_password"
-    t.string   "email"
     t.string   "salt"
-    t.string   "remember_token"
     t.string   "identity_url"
   end
 
   create_table "works", :force => true do |t|
-    t.integer  "expected_number_of_chapters"
+    t.integer  "expected_number_of_chapters", :default => 1
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "major_version",               :default => 0
