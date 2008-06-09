@@ -17,6 +17,7 @@
   <%- end -%>
 
   <%= f.hidden_field :expected_number_of_chapters, :value => "#{@work.expected_number_of_chapters}" %>
+  <%= f.hidden_field :restricted, :value => "#{@work.restricted}" %>
 
   <p class="field-right">
 	<% if @work.posted? %>

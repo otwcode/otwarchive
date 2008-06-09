@@ -5,7 +5,8 @@ class ChaptersController < ApplicationController
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :preview, :post ]
   # only authors of a chapter should be able to edit it
   # should actually be that all authors of a work should be able to edit all chapters
-  before_filter :is_author_true, :only => [ :edit, :update ] 
+  before_filter :is_author_true, :only => [ :edit, :update ]
+  before_filter :check_permission_to_view, :only => [:index, :show]
   
   auto_complete_for :pseud, :name
 
@@ -34,9 +35,14 @@ class ChaptersController < ApplicationController
     is_author || [ redirect_to(@work), flash[:error] = 'Sorry, but you don\'t have permission to make edits.' ]
   end
   
+  # Only logged-in users should be able to access restricted works
+  def check_permission_to_view
+	access_denied if !logged_in? && @work.restricted?
+  end
+  
   # fetch work these chapters belong to from db
   def load_work
-    @work = Work.find(params[:work_id])    
+    @work = Work.find(params[:work_id])   
   end
   
   # Sets values for @chapter, @coauthor_results, @pseuds, and @selected

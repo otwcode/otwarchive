@@ -5,6 +5,7 @@ class WorksController < ApplicationController
   before_filter :is_author_true, :only => [ :edit, :update ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :post ]
   before_filter :update_or_create_reading, :only => [ :show ]
+  before_filter :check_permission_to_view, :only => :show
   
   auto_complete_for :pseud, :name
   
@@ -55,25 +56,24 @@ class WorksController < ApplicationController
     is_author || [ redirect_to(@work), flash[:error] = 'Sorry, but you don\'t have permission to make edits.' ]
   end
   
+  # Only logged-in users should be able to access restricted works
+  def check_permission_to_view
+    @work = Work.find(params[:id])
+	access_denied if !logged_in? && @work.restricted?
+  end
+   
   # GET /works
   def index
-   # Get only works in the current locale
-   if Locale.active && Locale.active.language
-      @works = Work.find(:all, 
-                          :conditions => ["posted = 1 AND language_id = ?", Locale.active.language.id],
-                          :order => "created_at DESC" )
-     
-    else
-      @works = Work.find(:all,
-                         :order => "created_at DESC", 
-                         :conditions => ["posted = 1"])
-    end
+    conditions = "posted = true"
+    # Get only works in the current locale
+	conditions << " AND language_id = #{Locale.active.language.id}" if Locale.active && Locale.active.language
+    conditions << " AND restricted = 0 OR restricted IS NULL" unless logged_in?
+    @works = Work.find(:all, :conditions => conditions, :order => "works.created_at DESC", :include => [:pseuds, :metadata] )
   end
   
   # GET /works/1
   # GET /works/1.xml
   def show
-    @work = Work.find(params[:id]) 
     @chapters = @work.chapters.find(:all, :order => 'position')
     @comments = @work.find_all_comments
   end
