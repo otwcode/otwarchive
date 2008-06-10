@@ -469,3 +469,8 @@ textarea.story-edit-notes {
 	top: 5px;
 	right: 10px;
 }
+
+.chapter-position-list { 
+	padding: 10px; 
+	list-style-type: none;
+}

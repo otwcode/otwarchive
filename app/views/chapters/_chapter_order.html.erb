@@ -4,19 +4,23 @@
 
   <p>Drag chapters to change their order.<p>
 
-  <ol id="sortable_chapter_list">
+  <% form_tag url_for(:action => 'update_positions') do %>
+  <ul id="sortable_chapter_list">
     <% for chapter in @chapters %>
-      <li id="chapter_<%= chapter.id %>">
+      <li id="chapter_<%= chapter.id %>" class='chapter-position-list'>
+        <%= text_field_tag "chapters[#{chapter.position}]", nil, :size => 3, :maxlength => 3, :class => 'chapter-position-field' -%>
+        <span id='position-for-<%= chapter.id %>'><%= chapter.position %></span>. 
         <% if chapter.metadata && chapter.metadata.title %>
-          <%=h chapter.metadata.title %><br />
+          <%=h chapter.metadata.title %>    
         <% else %>
-          Chapter <%=h chapter.position %><br />
+          Chapter <%=h chapter.position %>    
         <% end %>
-        <%= link_to 'Delete', [@work, chapter], :confirm => 'Are you sure?', :method => :delete %>
+        <%= link_to 'Delete', [@work, chapter], :confirm => 'Are you sure?', :method => :delete %><br />
       </li>
     <% end %>    
-  </ol>
-
+  </ul>
+  <%= submit_tag "Update Positions" %>
+  <% end %>
 </div>
 
 <%= sortable_element('sortable_chapter_list', :url => {:action => :update_positions}) %>

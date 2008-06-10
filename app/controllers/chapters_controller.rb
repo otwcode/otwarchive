@@ -152,10 +152,17 @@ class ChaptersController < ApplicationController
   end
   
   def update_positions
-    params[:sortable_chapter_list].each_with_index do |id, position|
-      Chapter.update(id, :position => position + 1)
+    if params[:chapters]
+      @work = Work.find(params[:work_id])
+      @work.reorder_chapters(params[:chapters])
+      flash[:error] = 'Chapter order form not functional yet.'
+      redirect_to(@work)
+    else 
+      params[:sortable_chapter_list].each_with_index do |id, position|
+        Chapter.update(id, :position => position + 1)
+        (@chapters ||= []) << Chapter.find(id)
+      end
     end
-    render :nothing => true
   end 
   
   # GET /chapters/1/preview

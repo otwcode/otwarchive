@@ -116,7 +116,12 @@ class Work < ActiveRecord::Base
     elsif method == "add"
       Chapter.update_all("position = (position + 1)", ["work_id = (?) AND position > (?)", self.id, position])
     end
-  end  
+  end 
+  
+  # Reorder chapters based on form data
+  def reorder_chapters(positions)
+  	# this should be fun 
+  end
 
   # sets initial version of work to 1.0
   def set_initial_version

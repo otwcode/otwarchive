@@ -22,7 +22,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :readings, :path_prefix => ':locale'
   
   map.resources :works, :member => { :preview => :get, :post => :post }, :path_prefix => ':locale' do |work|
-    work.resources :chapters, :has_many => :comments, :collection => {:manage => :get}, :member => { :preview => :get, :post => :post }
+    work.resources :chapters, :has_many => :comments, :collection => {:manage => :get, :update_positions => :post}, :member => { :preview => :get, :post => :post }
     work.resources :bookmarks
   end
   
