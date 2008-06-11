@@ -118,9 +118,18 @@ class Work < ActiveRecord::Base
     end
   end 
   
-  # Reorder chapters based on form data
+  # Reorders chapters based on form data
   def reorder_chapters(positions)
-  	# this should be fun 
+    chapters = self.chapters.find(:all, :conditions => {:posted=>true}, :order => 'position')
+    changed = {}
+    positions.collect!(&:to_i).each_with_index do |new_position, old_position|
+    	if new_position != 0 && new_position <= self.number_of_posted_chapters && !changed.has_key?(new_position)
+    		changed.merge!({new_position => chapters[old_position]})
+    	end
+    end
+    chapters -= changed.values
+    changed.sort.each {|pair| pair.first > chapters.length ? chapters << pair.last : chapters.insert(pair.first-1, pair.last)}
+    chapters.each_with_index {|chapter, index| chapter.update_attribute(:position, index + 1)}
   end
 
   # sets initial version of work to 1.0

@@ -154,8 +154,8 @@ class ChaptersController < ApplicationController
   def update_positions
     if params[:chapters]
       @work = Work.find(params[:work_id])
-      @work.reorder_chapters(params[:chapters])
-      flash[:error] = 'Chapter order form not functional yet.'
+      @work.reorder_chapters(params[:chapters]) 
+      flash[:notice] = 'Chapter orders have been successfully updated.'
       redirect_to(@work)
     else 
       params[:sortable_chapter_list].each_with_index do |id, position|
