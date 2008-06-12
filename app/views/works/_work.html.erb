@@ -4,7 +4,7 @@
 
   <h2 class="story-title">
     <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)") %><% end %>
-    <%=h @work.metadata.title %>
+    <%=sanitize @work.metadata.title, :tags => %w(em i b strong strike small) %>
   </h2>
   <h3 class="story-author">
    <%= byline(@work) -%>
