@@ -4,13 +4,28 @@ class ExternalWork < ActiveRecord::Base
   
   validates_presence_of :url
   validates_presence_of :author
-  before_create :check_url
   after_update :save_associated 
   
-  # Make sure urls are valid and check to see if they're active or not
-  def check_url
+  # Makes sure urls are valid and checks to see if they're active or not
+  def validate_url
     self.url = "http://" + self.url if /http/.match(self.url[0..3]).nil?
-    # check to see if link is active
+    errors.add_to_base("Not a valid URL") unless self.url_active?
+  end
+  
+  # Sets the dead? attribute to true if the link is no longer active
+  def set_url_status
+    self.update_attribute(:dead, true) unless self.url_active?
+  end
+  
+  # Checks the status of the webpage at the external work's url
+  def url_active?
+    begin
+      response = Net::HTTP.get_response URI.parse(self.url)
+      active_status = %w(200 301 302)
+      active_status.include? response.code
+    rescue
+      false
+    end          
   end
   
   # Virtual attribute for metadata
@@ -22,6 +37,7 @@ class ExternalWork < ActiveRecord::Base
   
   # Validates associated metadata
   def validate
+    self.validate_url
     if self.metadata && !self.metadata.valid?
       self.metadata.errors.full_messages.each { |msg| errors.add_to_base(msg) }
     end
