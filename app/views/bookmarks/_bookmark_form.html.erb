@@ -1,13 +1,47 @@
 <% bookmarkable ||= @bookmarkable %>
 <% @bookmark ||= Bookmark.new %>
-<% if @bookmark.new_record? %>
+<% if @bookmark.new_record? && bookmarkable.class != ExternalWork %>
   <p>Add a new bookmark for "<%=h bookmarkable.metadata.title %>"</p>
 <% end %>
 
-<% form_for([bookmarkable, @bookmark]) do |f| %>
+<% form_for([bookmarkable, @bookmark], :url => {:controller => 'bookmarks', :action => (action ||= 'create')}) do |f| %>
+
+  <% if bookmarkable.class == ExternalWork %>
+    <% fields_for 'bookmark[external]', bookmarkable do |ew| %>
+      
+      <p>
+        <%= ew.label :url, "URL: " %>
+        <%= ew.text_field :url %>
+      </p>
+      
+      <p>
+        <%= ew.label :author, "Author: " %>
+        <%= ew.text_field :author %>  
+      </p>
+      
+      <% fields_for 'bookmark[external][metadata_attributes]', (bookmarkable.metadata ||= Metadata.new) do |m| %>
+        
+        <p>
+          <%= m.label :title, "Title: " %>
+          <%= m.text_field :title %> 
+        </p>
+        
+        <p>
+          <%= m.label :summary, "Author's Summary" %><br />
+          <%= m.text_area :summary %> 
+        </p>
+        
+        <p>
+          <%= m.label :notes, "Author's Notes" %><br />
+          <%= m.text_area :notes %> 
+        </p>  
+      
+      <% end %>
+    <% end %>
+  <% end %>
 
   <p>
-    <b>Notes</b><br />
+    Your Notes<br />
     <%= f.text_area :notes %>
   </p>
   
@@ -20,6 +54,6 @@
   <%= f.hidden_field :bookmarkable_type, :value => bookmarkable.class.to_s %>
 
   <p>
-    <%= f.submit "Create" %>
+    <%= f.submit (button_name ||= "Create") %>
   </p>
 <% end %>

@@ -5,10 +5,12 @@ module BookmarksHelper
     if logged_in?
       if bookmarkable.class == Work
         fallback = new_work_bookmark_path(bookmarkable)
-      else
+        text = "Bookmark"
+      elsif bookmarkable.class == ExternalWork
         fallback = bookmarks_path # more options if necessary
+        text = "Add a new bookmark"
       end
-      link_to_function("Bookmark".t, :href => fallback) do |page| 
+      link_to_function(text.t, :href => fallback) do |page| 
         page.show 'dynamic-bookmark'
         page.draggable 'dynamic-bookmark'
         page.replace_html 'dynamic-bookmark', :partial => 'bookmarks/bookmark_form', :locals => {:bookmarkable => bookmarkable}

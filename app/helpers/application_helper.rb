@@ -1,11 +1,13 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper 
   
-  # Can be used to check ownership of any item that has a pseud attached to it
+  # Can be used to check ownership of items
   def is_author_of?(item) 
     return false unless logged_in?
     if item.class == Work || item.class == Chapter
       item.pseuds & current_user.pseuds != []
+    elsif item.class == Bookmark
+      current_user == item.user
     else
       current_user.pseuds.include?(item.pseud)
     end

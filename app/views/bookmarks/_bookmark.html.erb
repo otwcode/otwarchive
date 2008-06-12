@@ -2,9 +2,11 @@
 <div class="bookmark">
 
   <p>
+    <% if bookmark.private %><%= image_tag("lockblack.png", :size => "15x15", :alt => "(Private)") %><% end %>
     <% if bookmark.bookmarkable_type == "ExternalWork" %>
-      <a href="#{boookmark.bookmarkable.url}"><%= bookmark.bookmarkable.metadata.title %></a> by <%= bookmark.bookmarkable.author %>
+      <%= link_to bookmark.bookmarkable.metadata.title, bookmark.bookmarkable.url %> by <%= bookmark.bookmarkable.author %>
     <% else %>
+      <% if bookmark.bookmarkable.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)") %><% end %>
       <%= link_to bookmark.bookmarkable.metadata.title, bookmark.bookmarkable %> by <%= byline(bookmark.bookmarkable) %>
     <% end %>  
 
@@ -19,5 +21,12 @@
       Bookmarked by: <%= link_to bookmark.user.login, bookmark.user %>
     <%- end -%>
   </p>
+  
+  <% if is_author_of?(bookmark) %>
+    <p>
+      <%= link_to "Edit".t, edit_bookmark_path(bookmark) %> | 
+      <%= link_to "Delete".t, bookmark, :confirm => 'Are you sure?', :method => :delete %>  
+    </p>
+  <% end %>
   
 </div>

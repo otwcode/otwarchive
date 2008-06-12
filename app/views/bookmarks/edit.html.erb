@@ -2,7 +2,7 @@
 
 <%= error_messages_for :bookmark %>
 
-<%= render :partial => 'bookmark_form' %>
+<%= render :partial => 'bookmark_form', :locals => {:button_name => 'Update', :action => 'update'} %>
 
 <%= link_to 'Show', @bookmark %> |
 <%= link_to 'Back', bookmarks_path %>

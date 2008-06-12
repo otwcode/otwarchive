@@ -2,7 +2,10 @@
 
   <%= render :partial => 'metadatas/metadata', :locals => {:metadata => @work.metadata } -%>
 
-  <h2 class="story-title"><%=h @work.metadata.title %></h2>
+  <h2 class="story-title">
+    <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)") %><% end %>
+    <%=h @work.metadata.title %>
+  </h2>
   <h3 class="story-author">
    <%= byline(@work) -%>
   </h3>

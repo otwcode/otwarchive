@@ -1,8 +1,4 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :bookmarks
-
-  map.resources :external_works
-         
   map.root :controller => 'session', :action => 'new', :locale => 'en'      
 
   map.abuse_reports '/abuse/fix', :controller => 'abuse_reports', :action => 'create', :path_prefix => ':locale'
@@ -31,6 +27,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :comments, :has_many => :comments, :path_prefix => ':locale', :member => { :approve => :put, :reject => :put }
 
   map.resources :bookmarks, :path_prefix => ':locale'
+  
+  map.resources :external_works, :has_many => :bookmarks, :path_prefix => ':locale' 
 
   map.open_id_complete 'session', :controller => "session", :action => "create", :requirements => { :method => :get }, :path_prefix => ':locale'
   

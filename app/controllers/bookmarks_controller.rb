@@ -42,6 +42,7 @@ class BookmarksController < ApplicationController
       flash[:notice] = 'Bookmark was successfully created.'
       redirect_to(@bookmark) 
     else
+      @bookmarkable = @bookmark.bookmarkable || ExternalWork.new
       render :action => "new" 
     end 
   end
