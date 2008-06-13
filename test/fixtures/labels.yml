@@ -1,0 +1,101 @@
+--- 
+labels_024: 
+  name: humour
+  meta: resembles
+  id: "24"
+labels_013: 
+  name: Jack
+  meta: ambiguous
+  id: "13"
+labels_002: 
+  name: Characters
+  meta: official
+  id: "2"
+labels_025: 
+  name: tentacles
+  meta: resembles
+  id: "25"
+labels_014: 
+  name: Stargate
+  meta: parent
+  id: "14"
+labels_003: 
+  name: Ratings
+  meta: official
+  id: "3"
+labels_015: 
+  name: Jack Harkness
+  meta: canonical
+  id: "15"
+labels_004: 
+  name: Warnings
+  meta: official
+  id: "4"
+labels_016: 
+  name: Torchwood
+  meta: canonical
+  id: "16"
+labels_005: 
+  name: Rodney McKay
+  meta: canonical
+  id: "5"
+labels_017: 
+  name: Dr. Meredith Rodney McKay
+  meta: 
+  id: "17"
+labels_006: 
+  name: John Sheppard
+  meta: canonical
+  id: "6"
+labels_018: 
+  name: sga
+  meta: 
+  id: "18"
+labels_007: 
+  name: Stargate Atlantis
+  meta: canonical
+  id: "7"
+labels_019: 
+  name: sg1
+  meta: 
+  id: "19"
+labels_008: 
+  name: Stargate SG-1
+  meta: canonical
+  id: "8"
+labels_020: 
+  name: gender bender
+  meta: parent
+  id: "20"
+labels_009: 
+  name: Jack O'Neil
+  meta: canonical
+  id: "9"
+labels_021: 
+  name: cross-dressing
+  meta: resembles
+  id: "21"
+labels_010: 
+  name: Daniel Jackson
+  meta: canonical
+  id: "10"
+labels_022: 
+  name: transgender
+  meta: resembles
+  id: "22"
+labels_011: 
+  name: written by Real Name
+  meta: banned
+  id: "11"
+labels_023: 
+  name: crackfic
+  meta: resembles
+  id: "23"
+labels_012: 
+  name: ugly epithet
+  meta: banned
+  id: "12"
+labels_001: 
+  name: Fandoms
+  meta: official
+  id: "1"

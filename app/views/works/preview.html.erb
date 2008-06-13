@@ -18,21 +18,20 @@
 
 <% form_for :work, @work, :url => {:action => :post} do |f| %>
 
-	<p><strong>This section does not work yet: tags have not been implemented!</strong></p> 
+	<p><strong>Tag implementation is very basic at this point!</strong></p> 
 
-  <!-- This part of the form does not currently do anything!  Needs attention from Rails coders -->
 	<p>
 
   <!-- Tags -->
   <!-- Fandom field (storyfandom) -->
 		<span class="field-left">
 			<span class="required storylabel"><label for="storyfandom">Fandom*</label></span><br />
-			<input type="text" name="storytitle" class="storyinputfield" tabindex="1" /><%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
+			<input type="text" name="fandoms" class="storyinputfield" tabindex="1" /><%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
 
       <!-- Rating field (storyrating) -->
 			<span class="required storylabel"><label for="storyrating">Rating*</label></span>
       <!-- Fake options!  These need to be populated by the backend or hard-coded as appropriate. -->
-			<select name="storyrating" class="storyinputfield" tabindex="2">
+			<select name="ratings" class="storyinputfield" tabindex="2">
 				<option>(Not Rated)</option>
 				<option>All ages</option>
 				<option>Teen</option>
@@ -40,25 +39,20 @@
 			</select>
 			<%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
 
-      <!-- Category field (storycategory) -->
-			<span class="required storylabel"><label for="storycategory">Category*</label></span>
-			<input type="text" name="storycategory" class="storyinputfield" tabindex="3" /><%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
-		</span>
-
 		<span class="field-right">
       <!-- Warnings field (storywarnings) -->
       <!-- "Allows multiple choices": meant to be there or no? -->
 			<span class="storylabel"><label for="storywarnings">Warnings (allows multiple choices)</label></span>
-			<input type="text" name="storywarnings" class="storyinputfield" tabindex="4" /><%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
+			<input type="text" name="warnings" class="storyinputfield" tabindex="4" /><%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
 
       <!-- Pairing(s)/Characters field (storycharacters) -->
 			<span class="storylabel"><label for="storycharacters">Pairing(s)/Characters</label></span>
-			<input type="text" name="storycharacters" class="storyinputfield" tabindex="5" /><%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
+			<input type="text" name="characters" class="storyinputfield" tabindex="5" /><%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
 
       <!-- Tags field (storytags) -->
       <!-- Label on this: ?? -->
 			<span class="storylabel"><label for="storytags">Free Tags (User defined)</label></span>
-			<input type="text" name="storytags" class="storyinputfield" tabindex="6" /><%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
+			<input type="text" name="freeforms" class="storyinputfield" tabindex="6" /><%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
 		</span>
 	</p>
 

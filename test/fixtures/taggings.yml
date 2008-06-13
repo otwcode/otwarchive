@@ -1,0 +1,187 @@
+--- 
+taggings_025: 
+  tagger_id: "20"
+  tag_id: "22"
+  id: "25"
+  tagger_type: Label
+  tag_type: Label
+taggings_014: 
+  tagger_id: "25"
+  tag_id: "23"
+  id: "14"
+  tagger_type: Label
+  tag_type: Label
+taggings_003: 
+  tagger_id: "1"
+  tag_id: "8"
+  id: "3"
+  tagger_type: Work
+  tag_type: Label
+taggings_026: 
+  tagger_id: "22"
+  tag_id: "20"
+  id: "26"
+  tagger_type: Label
+  tag_type: Label
+taggings_015: 
+  tagger_id: "23"
+  tag_id: "25"
+  id: "15"
+  tagger_type: Label
+  tag_type: Label
+taggings_004: 
+  tagger_id: "5"
+  tag_id: "2"
+  id: "4"
+  tagger_type: Label
+  tag_type: Label
+taggings_027: 
+  tagger_id: "14"
+  tag_id: "7"
+  id: "27"
+  tagger_type: Label
+  tag_type: Label
+taggings_016: 
+  tagger_id: "23"
+  tag_id: "24"
+  id: "16"
+  tagger_type: Label
+  tag_type: Label
+taggings_005: 
+  tagger_id: "6"
+  tag_id: "2"
+  id: "5"
+  tagger_type: Label
+  tag_type: Label
+taggings_028: 
+  tagger_id: "14"
+  tag_id: "8"
+  id: "28"
+  tagger_type: Label
+  tag_type: Label
+taggings_017: 
+  tagger_id: "24"
+  tag_id: "23"
+  id: "17"
+  tagger_type: Label
+  tag_type: Label
+taggings_006: 
+  tagger_id: "9"
+  tag_id: "2"
+  id: "6"
+  tagger_type: Label
+  tag_type: Label
+taggings_029: 
+  tagger_id: "15"
+  tag_id: "13"
+  id: "29"
+  tagger_type: Label
+  tag_type: Label
+taggings_018: 
+  tagger_id: "5"
+  tag_id: "7"
+  id: "18"
+  tagger_type: Label
+  tag_type: Label
+taggings_007: 
+  tagger_id: "10"
+  tag_id: "2"
+  id: "7"
+  tagger_type: Label
+  tag_type: Label
+taggings_030: 
+  tagger_id: "9"
+  tag_id: "13"
+  id: "30"
+  tagger_type: Label
+  tag_type: Label
+taggings_019: 
+  tagger_id: "6"
+  tag_id: "7"
+  id: "19"
+  tagger_type: Label
+  tag_type: Label
+taggings_008: 
+  tagger_id: "15"
+  tag_id: "2"
+  id: "8"
+  tagger_type: Label
+  tag_type: Label
+taggings_020: 
+  tagger_id: "9"
+  tag_id: "8"
+  id: "20"
+  tagger_type: Label
+  tag_type: Label
+taggings_009: 
+  tagger_id: "17"
+  tag_id: "2"
+  id: "9"
+  tagger_type: Label
+  tag_type: Label
+taggings_021: 
+  tagger_id: "15"
+  tag_id: "16"
+  id: "21"
+  tagger_type: Label
+  tag_type: Label
+taggings_010: 
+  tagger_id: "10"
+  tag_id: "8"
+  id: "10"
+  tagger_type: Label
+  tag_type: Label
+taggings_022: 
+  tagger_id: "5"
+  tag_id: "8"
+  id: "22"
+  tagger_type: Label
+  tag_type: Label
+taggings_011: 
+  tagger_id: "7"
+  tag_id: "1"
+  id: "11"
+  tagger_type: Label
+  tag_type: Label
+taggings_023: 
+  tagger_id: "20"
+  tag_id: "21"
+  id: "23"
+  tagger_type: Label
+  tag_type: Label
+taggings_012: 
+  tagger_id: "8"
+  tag_id: "1"
+  id: "12"
+  tagger_type: Label
+  tag_type: Label
+taggings_001: 
+  tagger_id: "1"
+  tag_id: "5"
+  id: "1"
+  tagger_type: Work
+  tag_type: Label
+taggings_024: 
+  tagger_id: "21"
+  tag_id: "20"
+  id: "24"
+  tagger_type: Label
+  tag_type: Label
+taggings_013: 
+  tagger_id: "16"
+  tag_id: "1"
+  id: "13"
+  tagger_type: Label
+  tag_type: Label
+taggings_002: 
+  tagger_id: "1"
+  tag_id: "25"
+  id: "2"
+  tagger_type: Work
+  tag_type: Label
+taggings_031: 
+  tagger_id: "2"
+  tag_id: "8"
+  id: "31"
+  tagger_type: Work
+  tag_type: Label

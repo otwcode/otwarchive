@@ -29,6 +29,8 @@ LOGO: 'OTWLogo.jpg'
 ALT_LOGO: 'OTW Logo'
 REVISION: ''
 
+DELIMITER: ', '  # if you change this, you probably need to change the label regexp as well
+
 SMTP_SERVER: localhost
 SMTP_PORT: 25
 SMTP_DOMAIN: localhost

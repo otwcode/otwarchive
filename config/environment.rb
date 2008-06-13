@@ -93,3 +93,5 @@ Rails::Initializer.run do |config|
   
 end
 ActionController::AbstractRequest.relative_url_root = ArchiveConfig.PRODUCTION_URL_ROOT if ArchiveConfig.PRODUCTION_URL_ROOT && ENV['RAILS_ENV'] == 'production'
+
+require 'tagging_extensions'

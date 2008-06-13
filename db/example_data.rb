@@ -68,6 +68,10 @@ module FixtureReplacement
     a.creation_type = :work
     a.creation = default_work
   end
+  
+  attributes_for :label do |a|
+    a.name = random_phrase
+  end
 
   attributes_for :metadata do |a|
     a.title = random_phrase
@@ -95,6 +99,11 @@ module FixtureReplacement
 
   attributes_for :role do |a|
     a.name = random_phrase[0..40]
+  end
+  
+  attributes_for :tagging do |a|
+    a.tag = create_label
+    a.tagger = create_work
   end
 
   attributes_for :user do |a|

@@ -152,10 +152,14 @@ class WorksController < ApplicationController
     elsif params[:edit_button]
       redirect_to edit_work_path(@work)
     else
+      tagstring = ""
+      ["fandoms", "ratings", "warnings", "characters", "freeforms"].each do |kind|
+        tagstring = params[kind] + ', ' + tagstring
+        Label.create_tags(params[kind], kind)
+      end
       @work.posted = true
       @work.chapters.first.posted = true
-      # Will save tags here when tags exist!
-      if @work.save && @work.chapters.first.save
+      if @work.tag_with(tagstring) && @work.save && @work.chapters.first.save
         flash[:notice] = 'Work has been posted!'
         redirect_to(@work)
       else
