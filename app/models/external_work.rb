@@ -4,11 +4,18 @@ class ExternalWork < ActiveRecord::Base
   
   validates_presence_of :url
   validates_presence_of :author
-  after_update :save_associated 
+  after_update :save_associated
+  
+  # Standardizes format of urls so they're easier to validate and compare
+  def self.format_url(url)
+    url = "http://" + url if /http/.match(url[0..3]).nil?
+    url.chop! if url.last == "/"
+    url  
+  end 
   
   # Makes sure urls are valid and checks to see if they're active or not
   def validate_url
-    self.url = "http://" + self.url if /http/.match(self.url[0..3]).nil?
+    self.url = ExternalWork.format_url(self.url)
     errors.add_to_base("Not a valid URL") unless self.url_active?
   end
   

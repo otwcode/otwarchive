@@ -38,6 +38,7 @@ class BookmarksController < ApplicationController
   # POST /bookmarks.xml
   def create
     @bookmark = Bookmark.new(params[:bookmark])
+    @bookmark.set_external(params[:fetched][:value].to_i) unless params[:fetched].blank? || params[:fetched][:value].blank?
     if @bookmark.save
       flash[:notice] = 'Bookmark was successfully created.'
       redirect_to(@bookmark) 
