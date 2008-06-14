@@ -10,6 +10,11 @@ module ActiveRecord #:nodoc:
     # The association class for a <tt>has_many_polymorphs</tt> association.
     class PolymorphicAssociation < HasManyThroughAssociation
 
+    #added to prevent the inheritence of the new include? method from association_collection.rb
+    if RAILS_GEM_VERSION != "2.0.2"
+      undef_method(:include?)
+    end
+    
       # Push a record onto the association. Triggers a database load for a uniqueness check only if <tt>:skip_duplicates</tt> is <tt>true</tt>. Return value is undefined.
       def <<(*records)
         return if records.empty?

@@ -13,7 +13,7 @@
   <%- end -%>
 
   <% fields_for_associated('work', @chapter) do |c| %>
-    <%= c.hidden_field :content, :value => "#{@work.chapters.first.content}" %>
+    <%= c.hidden_field :content, :value => "#{@chapter.content}" %>
   <%- end -%>
 
   <%= f.hidden_field :expected_number_of_chapters, :value => "#{@work.expected_number_of_chapters}" %>

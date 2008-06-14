@@ -3,7 +3,7 @@ class WorksController < ApplicationController
   before_filter :users_only, :except => [ :index, :show, :destroy ]
   # only authors of a work should be able to edit it
   before_filter :is_author_true, :only => [ :edit, :update ]
-  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :post ]
+  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :post, :show ]
   before_filter :update_or_create_reading, :only => [ :show ]
   before_filter :check_permission_to_view, :only => :show
   
@@ -33,6 +33,9 @@ class WorksController < ApplicationController
     end
 
     @chapter = @work.chapters.first
+    if params[:work] && params[:work][:chapter_attributes]
+      @chapter.content = params[:work][:chapter_attributes][:content]
+    end
     @chapters = @work.chapters.find(:all, :order => 'position')
     @metadata = @work.metadata
     
@@ -40,9 +43,11 @@ class WorksController < ApplicationController
       @coauthor_results = Pseud.get_coauthor_hash(params[:work][:author_attributes][:name])
     end
     
-    @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
-    to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 
-    @selected = to_select.collect {|pseud| pseud.id.to_i } 
+    unless current_user == :false
+      @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
+      to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 
+      @selected = to_select.collect {|pseud| pseud.id.to_i } 
+    end
   end
   
   # check if the user's current pseud is one associated with the work
@@ -74,7 +79,6 @@ class WorksController < ApplicationController
   # GET /works/1
   # GET /works/1.xml
   def show
-    @chapters = @work.chapters.find(:all, :order => 'position')
     @comments = @work.find_all_comments
   end
   
@@ -108,7 +112,6 @@ class WorksController < ApplicationController
   
   # GET /works/1/edit
   def edit
-    @chapters = Chapter.find(:all, :conditions => {:work_id => @work.id}, :order => "position")
   end
   
   # PUT /works/1
@@ -122,7 +125,7 @@ class WorksController < ApplicationController
         render :partial => 'work_form', :layout => 'application'
       end
     elsif params[:preview_button]
-	  @chapters = [@work.chapters.first]
+  	  @chapters = [@chapter]
       render :partial => 'preview_edit', :layout => 'application'
     elsif params[:cancel_button]
       # Not quite working yet - should send the user back to wherever they were before they hit edit
@@ -130,8 +133,8 @@ class WorksController < ApplicationController
     elsif params[:edit_button]
       render :partial => 'work_form', :layout => 'application'
     else
-	  params[:work][:posted] = true if params[:post_button]
-      if @work.update_attributes(params[:work])
+	    params[:work][:posted] = true if params[:post_button]
+      if @work.update_attributes(params[:work]) && @chapter.save
         @work.update_minor_version
         flash[:notice] = 'Work was successfully updated.'
         redirect_to(@work)
