@@ -1,0 +1,31 @@
+<h1>New book</h1>
+
+<%= error_messages_for :book %>
+
+<% form_for(@book) do |f| %>
+  <p>
+    <b>Title</b><br />
+    <%= f.text_field :title %>
+  </p>
+
+  <p>
+    <b>Author</b><br />
+    <%= f.text_field :author %>
+  </p>
+
+  <p>
+    <b>Category</b><br />
+    <%= f.text_field :category %>
+  </p>
+
+  <p>
+    <b>Description</b><br />
+    <%= f.text_area :description %>
+  </p>
+
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', books_path %>

@@ -1,0 +1,27 @@
+<h1>Editing poem</h1>
+
+<%= error_messages_for :poem %>
+
+<% form_for(@poem) do |f| %>
+  <p>
+    <b>Title</b><br />
+    <%= f.text_field :title %>
+  </p>
+
+  <p>
+    <b>Author</b><br />
+    <%= f.text_field :author %>
+  </p>
+
+  <p>
+    <b>Book</b><br />
+    <%= f.text_field :book %>
+  </p>
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @poem %> |
+<%= link_to 'Back', poems_path %>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<libraryInfos>
+<libraryInfo home="c:\ruby" version="1.8.6" vmTypeId="org.rubypeople.rdt.launching.StandardVMType">
+<bootpath>
+<entry path="c:/ruby/lib/ruby/site_ruby/1.8"/>
+<entry path="c:/ruby/lib/ruby/site_ruby/1.8/i386-msvcrt"/>
+<entry path="c:/ruby/lib/ruby/site_ruby"/>
+<entry path="c:/ruby/lib/ruby/1.8"/>
+<entry path="c:/ruby/lib/ruby/1.8/i386-mswin32"/>
+</bootpath>
+</libraryInfo>
+<libraryInfo home="C:\ruby" version="1.8.6" vmTypeId="org.rubypeople.rdt.launching.StandardVMType">
+<bootpath>
+<entry path="C:/ruby/lib/ruby/site_ruby/1.8"/>
+<entry path="C:/ruby/lib/ruby/site_ruby/1.8/i386-msvcrt"/>
+<entry path="C:/ruby/lib/ruby/site_ruby"/>
+<entry path="C:/ruby/lib/ruby/1.8"/>
+<entry path="C:/ruby/lib/ruby/1.8/i386-mswin32"/>
+</bootpath>
+</libraryInfo>
+</libraryInfos>

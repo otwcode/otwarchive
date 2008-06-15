@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.rubypeople.rdt.launching.LaunchConfigurationTypeRubyApplication">
+<booleanAttribute key="org.eclipse.debug.ui.private" value="true"/>
+<stringAttribute key="org.rubypeople.rdt.launching.VM_INSTALL_NAME" value="Ruby 1.8.6"/>
+<booleanAttribute key="org.eclipse.debug.ui.ATTR_CONSOLE_OUTPUT_ON" value="false"/>
+<booleanAttribute key="org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND" value="true"/>
+<booleanAttribute key="org.rubypeople.rdt.launching.IS_SUDO" value="false"/>
+<mapAttribute key="org.rubypeople.rdt.launchingVM_INSTALL_TYPE_SPECIFIC_ATTRS_MAP">
+<mapEntry key="org.rubypeople.rdt.launching.RUBY_COMMAND" value="ruby"/>
+</mapAttribute>
+<booleanAttribute key="org.rubypeople.rdt.launching.FORCE_NO_CONSOLE" value="true"/>
+<stringAttribute key="org.rubypeople.rdt.launching.INTERPRETER_ARGUMENTS" value="-r rubygems -e p(Gem.path)"/>
+<stringAttribute key="org.rubypeople.rdt.launching.VM_INSTALL_TYPE_ID" value="org.rubypeople.rdt.launching.StandardVMType"/>
+<stringAttribute key="org.rubypeople.rdt.launching.FILE_NAME" value="C:\ruby\bin\gem"/>
+<stringAttribute key="org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE" value="C:\Documents and Settings\AmandaB\My Documents\Aptana Studio\.metadata\.plugins\com.aptana.rdt\gems\1211001202859\install_path.txt"/>
+<stringAttribute key="org.rubypeople.rdt.launching.PROGRAM_ARGUMENTS" value=""/>
+</launchConfiguration>

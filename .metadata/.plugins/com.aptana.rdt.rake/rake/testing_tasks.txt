@@ -1,0 +1,61 @@
+(in C:/Documents and Settings/AmandaB/My Documents/Aptana Studio/testing)
+rake db:abort_if_pending_migrations  # Raises an error if there are pending migrations
+rake db:charset                      # Retrieves the charset for the current environment's database
+rake db:collation                    # Retrieves the collation for the current environment's database
+rake db:create                       # Create the database defined in config/database.yml for the current RAILS_ENV
+rake db:create:all                   # Create all the local databases defined in config/database.yml
+rake db:drop                         # Drops the database for the current RAILS_ENV
+rake db:drop:all                     # Drops all the local databases defined in config/database.yml
+rake db:fixtures:identify            # Search for a fixture given a LABEL or ID.
+rake db:fixtures:load                # Load fixtures into the current environment's database.  Load specific fixtures using FIXTURES=x,y
+rake db:migrate                      # Migrate the database through scripts in db/migrate. Target specific version with VERSION=x. Turn off output with VERBOSE=false.
+rake db:migrate:redo                 # Rollbacks the database one migration and re migrate up. If you want to rollback more than one step, define STEP=x
+rake db:migrate:reset                # Resets your database using your migrations for the current environment
+rake db:reset                        # Drops and recreates the database from db/schema.rb for the current environment.
+rake db:rollback                     # Rolls the schema back to the previous version. Specify the number of steps with STEP=n
+rake db:schema:dump                  # Create a db/schema.rb file that can be portably used against any DB supported by AR
+rake db:schema:load                  # Load a schema.rb file into the database
+rake db:sessions:clear               # Clear the sessions table
+rake db:sessions:create              # Creates a sessions migration for use with CGI::Session::ActiveRecordStore
+rake db:structure:dump               # Dump the database structure to a SQL file
+rake db:test:clone                   # Recreate the test database from the current environment's database schema
+rake db:test:clone_structure         # Recreate the test databases from the development structure
+rake db:test:prepare                 # Prepare the test database and load the schema
+rake db:test:purge                   # Empty the test database
+rake db:version                      # Retrieves the current schema version number
+rake doc:app                         # Build the app HTML Files
+rake doc:clobber_app                 # Remove rdoc products
+rake doc:clobber_plugins             # Remove plugin documentation
+rake doc:clobber_rails               # Remove rdoc products
+rake doc:plugins                     # Generate documentation for all installed plugins
+rake doc:rails                       # Build the rails HTML Files
+rake doc:reapp                       # Force a rebuild of the RDOC files
+rake doc:rerails                     # Force a rebuild of the RDOC files
+rake log:clear                       # Truncates all *.log files in log/ to zero bytes
+rake notes                           # Enumerate all annotations
+rake notes:fixme                     # Enumerate all FIXME annotations
+rake notes:optimize                  # Enumerate all OPTIMIZE annotations
+rake notes:todo                      # Enumerate all TODO annotations
+rake rails:freeze:edge               # Lock to latest Edge Rails or a specific revision with REVISION=X (ex: REVISION=4021) or a tag with TAG=Y (ex: TAG=rel_1-1-0)
+rake rails:freeze:gems               # Lock this application to the current gems (by unpacking them into vendor/rails)
+rake rails:unfreeze                  # Unlock this application from freeze of gems or edge and return to a fluid use of system gems
+rake rails:update                    # Update both configs, scripts and public/javascripts from Rails
+rake rails:update:configs            # Update config/boot.rb from your current rails install
+rake rails:update:javascripts        # Update your javascripts from your current rails install
+rake rails:update:scripts            # Add new scripts to the application script/ directory
+rake routes                          # Print out all defined routes in match order, with names.
+rake secret                          # Generate a crytographically secure secret key. This is typically used to generate a secret for cookie sessions. Pass a unique identifier to the generator using ID="some unique identifier" for greater security.
+rake stats                           # Report code statistics (KLOCs, etc) from the application
+rake test                            # Test all units and functionals
+rake test:functionals                # Run the functional tests in test/functional
+rake test:integration                # Run the integration tests in test/integration
+rake test:plugins                    # Run the plugin tests in vendor/plugins/*/**/test (or specify with PLUGIN=name)
+rake test:recent                     # Test recent changes
+rake test:uncommitted                # Test changes since last checkin (only Subversion)
+rake test:units                      # Run the unit tests in test/unit
+rake tmp:cache:clear                 # Clears all files and directories in tmp/cache
+rake tmp:clear                       # Clear session, cache, and socket files from tmp/
+rake tmp:create                      # Creates tmp directories for sessions, cache, and sockets
+rake tmp:pids:clear                  # Clears all files in tmp/pids
+rake tmp:sessions:clear              # Clears all files in tmp/sessions
+rake tmp:sockets:clear               # Clears all files in tmp/sockets

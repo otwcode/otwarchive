@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.radrails.server.ui.RailsAppLaunchConfigurationType">
+<booleanAttribute key="org.radrails.server.core.launching.launch_browser" value="true"/>
+<stringAttribute key="org.radrails.server.core.launching.project_name" value="catalogue"/>
+<booleanAttribute key="org.radrails.server.core.launching.internal_browser" value="true"/>
+<stringAttribute key="org.radrails.server.core.launching.server_name" value="catalogueServer"/>
+</launchConfiguration>

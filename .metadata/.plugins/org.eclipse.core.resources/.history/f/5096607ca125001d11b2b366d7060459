@@ -1,0 +1,27 @@
+<h1>Editing publication_data</h1>
+
+<%= error_messages_for :publication_data %>
+
+<% form_for(@publication_data) do |f| %>
+  <p>
+    <b>Book</b><br />
+    <%= f.text_field :book %>
+  </p>
+
+  <p>
+    <b>Publisher</b><br />
+    <%= f.text_field :publisher %>
+  </p>
+
+  <p>
+    <b>Pagelength</b><br />
+    <%= f.text_field :pagelength %>
+  </p>
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @publication_data %> |
+<%= link_to 'Back', publication_datas_path %>

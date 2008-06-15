@@ -1,0 +1,3 @@
+#Sat May 17 04:39:21 EDT 2008
+eclipse.preferences.version=1
+org.eclipse.debug.ui.user_view_bindings=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<viewBindings>\r\n<view id\="org.eclipse.ui.console.ConsoleView">\r\n<perspective id\="com.aptana.ide.js.ui.WebPerspective" userAction\="closed"/>\r\n</view>\r\n</viewBindings>\r\n

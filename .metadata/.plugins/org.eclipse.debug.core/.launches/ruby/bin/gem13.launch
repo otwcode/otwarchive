@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.rubypeople.rdt.launching.LaunchConfigurationTypeRubyApplication">
+<booleanAttribute key="org.eclipse.debug.ui.private" value="true"/>
+<stringAttribute key="org.rubypeople.rdt.launching.VM_INSTALL_NAME" value="Ruby 1.8.6"/>
+<booleanAttribute key="org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND" value="false"/>
+<booleanAttribute key="org.rubypeople.rdt.launching.IS_SUDO" value="true"/>
+<stringAttribute key="org.rubypeople.rdt.launching.WORKING_DIRECTORY" value="C:\Documents and Settings\AmandaB\My Documents\Aptana Studio\.metadata\.plugins\com.aptana.rdt"/>
+<mapAttribute key="org.rubypeople.rdt.launchingVM_INSTALL_TYPE_SPECIFIC_ATTRS_MAP">
+<mapEntry key="org.rubypeople.rdt.launching.RUBY_COMMAND" value="ruby"/>
+</mapAttribute>
+<stringAttribute key="org.rubypeople.rdt.launching.TERMINAL_COMMAND" value="gem install -l mongrel-1.1.2-x86-mswin32.gem"/>
+<stringAttribute key="org.rubypeople.rdt.launching.USE_TERMINAL" value="org.radrails.rails.shell"/>
+<stringAttribute key="org.rubypeople.rdt.launching.INTERPRETER_ARGUMENTS" value=""/>
+<stringAttribute key="org.rubypeople.rdt.launching.VM_INSTALL_TYPE_ID" value="org.rubypeople.rdt.launching.StandardVMType"/>
+<stringAttribute key="org.rubypeople.rdt.launching.FILE_NAME" value="C:\ruby\bin\gem"/>
+<stringAttribute key="org.rubypeople.rdt.launching.PROGRAM_ARGUMENTS" value="install -l mongrel-1.1.2-x86-mswin32.gem"/>
+</launchConfiguration>

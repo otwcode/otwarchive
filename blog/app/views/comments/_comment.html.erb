@@ -1,0 +1,10 @@
+<% form_for([@post, @comment]) do |f| %>
+  <p>
+    <b>Body</b><br />
+    <%= f.text_area :body %>
+  </p>
+
+  <p>
+    <%= f.submit button_name %>
+  </p>
+<% end %>

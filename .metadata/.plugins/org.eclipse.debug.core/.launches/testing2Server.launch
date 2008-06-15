@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.rubypeople.rdt.launching.LaunchConfigurationTypeRubyApplication">
+<booleanAttribute key="org.eclipse.debug.ui.private" value="false"/>
+<stringAttribute key="org.rubypeople.rdt.launching.VM_INSTALL_NAME" value="Ruby 1.8.6"/>
+<booleanAttribute key="org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND" value="true"/>
+<stringAttribute key="org.rubypeople.rdt.launching.PROJECT_NAME" value="testing2"/>
+<stringAttribute key="org.rubypeople.rdt.launching.WORKING_DIRECTORY" value="C:\Documents and Settings\AmandaB\My Documents\Aptana Studio\testing2"/>
+<mapAttribute key="org.rubypeople.rdt.launchingVM_INSTALL_TYPE_SPECIFIC_ATTRS_MAP">
+<mapEntry key="org.rubypeople.rdt.launching.RUBY_COMMAND" value="ruby"/>
+</mapAttribute>
+<stringAttribute key="org.eclipse.debug.core.source_locator_id" value="org.rubypeople.rdt.debug.ui.rubySourceLocator"/>
+<stringAttribute key="org.rubypeople.rdt.launching.INTERPRETER_ARGUMENTS" value="-e p(Process.pid.to_s) -e load(ARGV.shift)"/>
+<stringAttribute key="org.rubypeople.rdt.launching.VM_INSTALL_TYPE_ID" value="org.rubypeople.rdt.launching.StandardVMType"/>
+<stringAttribute key="org.rubypeople.rdt.launching.FILE_NAME" value="script/server"/>
+<stringAttribute key="org.rubypeople.rdt.launching.PROGRAM_ARGUMENTS" value="mongrel --port=3001 --environment=development --binding=127.0.0.1"/>
+</launchConfiguration>

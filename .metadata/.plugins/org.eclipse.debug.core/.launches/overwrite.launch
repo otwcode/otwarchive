@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.rubypeople.rdt.launching.LaunchConfigurationTypeRubyApplication">
+<stringAttribute key="org.rubypeople.rdt.launching.PROJECT_NAME" value="blog"/>
+<booleanAttribute key="org.rubypeople.rdt.launching.REQUIRES_REFRESH" value="true"/>
+<stringAttribute key="org.rubypeople.rdt.launching.WORKING_DIRECTORY" value="C:\Documents and Settings\AmandaB\My Documents\Aptana Studio\blog"/>
+<stringAttribute key="org.rubypeople.rdt.launching.USE_TERMINAL" value="org.radrails.rails.shell"/>
+<stringAttribute key="org.rubypeople.rdt.launching.FILE_NAME" value="overwrite"/>
+<stringAttribute key="org.rubypeople.rdt.launching.PROGRAM_ARGUMENTS" value="log/development.log? (enter &quot;h&quot; for help) [Ynaqdh] y"/>
+</launchConfiguration>

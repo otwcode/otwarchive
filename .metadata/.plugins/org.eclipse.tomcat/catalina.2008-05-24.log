@@ -1,0 +1,87 @@
+WebappLoader[]: Deploying class repositories to work directory C:\Documents and Settings\AmandaB\My Documents\Aptana Studio\.metadata\.plugins\org.eclipse.tomcat\ROOT
+ContextConfig[]: Added certificates -> request attribute Valve
+StandardManager[]: Seeding random number generator class java.security.SecureRandom
+StandardManager[]: Seeding of random number generator has been completed
+StandardWrapper[:default]: Loading container servlet default
+StandardWrapper[:invoker]: Loading container servlet invoker
+CoyoteConnector Coyote can't register jmx for protocol
+WebappLoader[/help]: Deploying class repositories to work directory C:\Documents and Settings\AmandaB\My Documents\Aptana Studio\.metadata\.plugins\org.eclipse.tomcat\help
+WebappLoader[/help]: Deploy JAR /WEB-INF/lib/jsp.jar to C:\Program Files\Aptana\Aptana Studio\plugins\org.eclipse.help.webapp_3.2.2.R322_v20061114\WEB-INF\lib\jsp.jar
+WebappLoader[/help]: Deploy JAR /WEB-INF/lib/servlets.jar to C:\Program Files\Aptana\Aptana Studio\plugins\org.eclipse.help.webapp_3.2.2.R322_v20061114\WEB-INF\lib\servlets.jar
+ContextConfig[/help]: Added certificates -> request attribute Valve
+StandardManager[/help]: Seeding random number generator class java.security.SecureRandom
+StandardManager[/help]: Seeding of random number generator has been completed
+StandardWrapper[/help:default]: Loading container servlet default
+StandardWrapper[/help:invoker]: Loading container servlet invoker
+StandardWrapperValve[org.eclipse.help.internal.webapp.jsp.advanced.searchView_jsp]: Servlet.service() for servlet org.eclipse.help.internal.webapp.jsp.advanced.searchView_jsp threw exception
+javax.servlet.ServletException: PermGen space
+	at org.apache.jasper.runtime.PageContextImpl.handlePageException(PageContextImpl.java:536)
+	at org.eclipse.help.internal.webapp.jsp.advanced.searchView_jsp._jspService(searchView_jsp.java:271)
+	at org.apache.jasper.runtime.HttpJspBase.service(HttpJspBase.java:137)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:853)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:247)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:256)
+	at org.apache.catalina.core.StandardPipeline$StandardPipelineValveContext.invokeNext(StandardPipeline.java:643)
+	at org.apache.catalina.core.StandardPipeline.invoke(StandardPipeline.java:480)
+	at org.apache.catalina.core.ContainerBase.invoke(ContainerBase.java:995)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:191)
+	at org.apache.catalina.core.StandardPipeline$StandardPipelineValveContext.invokeNext(StandardPipeline.java:643)
+	at org.apache.catalina.valves.CertificatesValve.invoke(CertificatesValve.java:246)
+	at org.apache.catalina.core.StandardPipeline$StandardPipelineValveContext.invokeNext(StandardPipeline.java:641)
+	at org.apache.catalina.core.StandardPipeline.invoke(StandardPipeline.java:480)
+	at org.apache.catalina.core.ContainerBase.invoke(ContainerBase.java:995)
+	at org.apache.catalina.core.StandardContext.invoke(StandardContext.java:2422)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:180)
+	at org.apache.catalina.core.StandardPipeline$StandardPipelineValveContext.invokeNext(StandardPipeline.java:643)
+	at org.apache.catalina.valves.ErrorDispatcherValve.invoke(ErrorDispatcherValve.java:171)
+	at org.apache.catalina.core.StandardPipeline$StandardPipelineValveContext.invokeNext(StandardPipeline.java:641)
+	at org.eclipse.tomcat.internal.EclipseErrorReportValve.invoke(EclipseErrorReportValve.java:153)
+	at org.apache.catalina.core.StandardPipeline$StandardPipelineValveContext.invokeNext(StandardPipeline.java:641)
+	at org.apache.catalina.core.StandardPipeline.invoke(StandardPipeline.java:480)
+	at org.apache.catalina.core.ContainerBase.invoke(ContainerBase.java:995)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:174)
+	at org.apache.catalina.core.StandardPipeline$StandardPipelineValveContext.invokeNext(StandardPipeline.java:643)
+	at org.apache.catalina.core.StandardPipeline.invoke(StandardPipeline.java:480)
+	at org.apache.catalina.core.ContainerBase.invoke(ContainerBase.java:995)
+	at org.apache.coyote.tomcat4.CoyoteAdapter.service(CoyoteAdapter.java:199)
+	at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:828)
+	at org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.processConnection(Http11Protocol.java:700)
+	at org.apache.tomcat.util.net.TcpWorkerThread.runIt(PoolTcpEndpoint.java:584)
+	at org.apache.tomcat.util.threads.ThreadPool$ControlRunnable.run(ThreadPool.java:683)
+	at java.lang.Thread.run(Thread.java:619)
+----- Root Cause -----
+java.lang.OutOfMemoryError: PermGen space
+	at java.lang.ClassLoader.defineClass1(Native Method)
+	at java.lang.ClassLoader.defineClass(ClassLoader.java:620)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.defineClass(DefaultClassLoader.java:161)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.defineClass(ClasspathManager.java:501)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findClassImpl(ClasspathManager.java:471)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClassImpl(ClasspathManager.java:430)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:413)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:189)
+	at org.eclipse.osgi.framework.internal.core.BundleLoader.findLocalClass(BundleLoader.java:334)
+	at org.eclipse.osgi.framework.internal.core.BundleLoader.findClass(BundleLoader.java:386)
+	at org.eclipse.osgi.framework.internal.core.BundleLoader.findClass(BundleLoader.java:347)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:83)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:251)
+	at java.lang.ClassLoader.loadClassInternal(ClassLoader.java:319)
+	at org.apache.lucene.search.PhraseQuery.createWeight(PhraseQuery.java:238)
+	at org.apache.lucene.search.Query.weight(Query.java:85)
+	at org.apache.lucene.search.IndexSearcher.search(IndexSearcher.java:85)
+	at org.apache.lucene.search.Hits.getMoreDocs(Hits.java:64)
+	at org.apache.lucene.search.Hits.<init>(Hits.java:43)
+	at org.apache.lucene.search.Searcher.search(Searcher.java:33)
+	at org.apache.lucene.search.Searcher.search(Searcher.java:27)
+	at org.eclipse.help.internal.search.SearchIndex.search(SearchIndex.java:623)
+	at org.eclipse.help.internal.search.SearchManager.searchPass1(SearchManager.java:719)
+	at org.eclipse.help.internal.search.SearchManager.search(SearchManager.java:635)
+	at org.eclipse.help.internal.webapp.data.SearchData.loadSearchResults(SearchData.java:282)
+	at org.eclipse.help.internal.webapp.data.SearchData.<init>(SearchData.java:81)
+	at org.eclipse.help.internal.webapp.jsp.advanced.searchView_jsp._jspService(searchView_jsp.java:66)
+	at org.apache.jasper.runtime.HttpJspBase.service(HttpJspBase.java:137)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:853)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:247)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:256)
+

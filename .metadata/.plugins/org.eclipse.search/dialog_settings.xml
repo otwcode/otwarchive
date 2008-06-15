@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="DialogBounds_SearchDialog">
+		<item value="754" key="DIALOG_WIDTH"/>
+		<item value="-21" key="DIALOG_Y_ORIGIN"/>
+		<item value="622" key="DIALOG_HEIGHT"/>
+		<item value="154" key="DIALOG_X_ORIGIN"/>
+		<item value="1|Microsoft Sans Serif|12.0|0|WINDOWS|1|-16|0|0|0|400|0|0|0|0|0|0|0|0|Microsoft Sans Serif" key="DIALOG_FONT_NAME"/>
+	</section>
+	<section name="Search">
+		<list key="Search.processedPageIds">
+			<item value="com.aptana.ide.search.epl.internal.ui.text.TextSearchPage"/>
+			<item value="org.eclipse.search.internal.ui.text.TextSearchPage"/>
+			<item value="org.rubypeople.rdt.ui.RubySearchPage"/>
+		</list>
+		<list key="Search.enabledPageIds">
+			<item value="com.aptana.ide.search.epl.internal.ui.text.TextSearchPage"/>
+			<item value="org.eclipse.search.internal.ui.text.TextSearchPage"/>
+			<item value="org.rubypeople.rdt.ui.RubySearchPage"/>
+		</list>
+	</section>
+	<section name="org.eclipse.search.text.FileSearchResultPage">
+	</section>
+	<section name="TextSearchPage">
+		<item value="false" key="CASE_SENSITIVE"/>
+		<item value="OTHER" key="ADDED_SCOPES"/>
+		<item value="" key="SEARCH_DIRECTORY"/>
+		<item value="0" key="STORE_LINEDELIMETER"/>
+		<item value="false" key="REG_EX_SEARCH"/>
+		<item value="false" key="SEARCH_DERIVED"/>
+		<item value="false" key="IGNORE_LINES_ENDINGS_SEARCH"/>
+		<item value="false" key="SEARCH_MULTILINE"/>
+		<item value="1" key="HISTORY_SIZE"/>
+		<section name="HISTORY0">
+			<item value="false" key="isRegExSearch"/>
+			<item value="" key="textPattern"/>
+			<item value="0" key="scope"/>
+			<item value="false" key="ignoreCase"/>
+			<list key="fileNamePatterns">
+				<item value="/config/database.yml"/>
+			</list>
+			<list key="workingSets">
+			</list>
+		</section>
+	</section>
+	<section name="SearchDialog.ScopePart">
+		<item value="0" key="scope"/>
+	</section>
+</section>

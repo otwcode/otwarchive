@@ -1,0 +1,1143 @@
+  [4;36;1mSQL (0.000000)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mCREATE DATABASE `catalogue_development` DEFAULT CHARACTER SET `utf8` COLLATE `utf8_general_ci`[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.078000)[0m   [0;1mCREATE TABLE `schema_info` (version int(11))[0m
+  [4;35;1mSQL (0.015000)[0m   [0mINSERT INTO `schema_info` (version) VALUES(0)[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mMysql::Error: Table 'schema_info' already exists: CREATE TABLE `schema_info` (version int(11))[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+Migrating to CreateBooks (1)
+  [4;36;1mSQL (0.078000)[0m   [0;1mCREATE TABLE `books` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `title` varchar(255) DEFAULT NULL, `author` varchar(255) DEFAULT NULL, `category` varchar(255) DEFAULT NULL, `description` text DEFAULT NULL, `created_at` datetime DEFAULT NULL, `updated_at` datetime DEFAULT NULL) ENGINE=InnoDB[0m
+  [4;35;1mSQL (0.015000)[0m   [0mUPDATE schema_info SET version = 1[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT * FROM schema_info[0m
+  [4;35;1mSQL (0.016000)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (0.015000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+  [4;35;1mSQL (0.016000)[0m   [0mdescribe `books`[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSHOW KEYS FROM `books`[0m
+
+
+Processing BooksController#index (for 127.0.0.1 at 2008-05-19 03:26:14) [GET]
+  Session ID: a11ec187a491d6891d0d9577410fdd7f
+  Parameters: {"action"=>"index", "controller"=>"books"}
+  [4;36;1mSQL (0.000000)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mBook Load (0.000000)[0m   [0;1mSELECT * FROM `books` [0m
+Rendering template within layouts/books
+Rendering books/index
+Completed in 0.06200 (16 reqs/sec) | Rendering: 0.01500 (24%) | DB: 0.00000 (0%) | 200 OK [http://127.0.0.1/books]
+
+
+Processing BooksController#new (for 127.0.0.1 at 2008-05-19 03:26:30) [GET]
+  Session ID: BAh7BiIKZmxhc2hJQzonQWN0aW9uQ29udHJvbGxlcjo6Rmxhc2g6OkZsYXNo%0ASGFzaHsABjoKQHVzZWR7AA%3D%3D--1ba7cccf109f5676051742c38bacaeb32345bba7
+  Parameters: {"action"=>"new", "controller"=>"books"}
+  [4;35;1mBook Columns (0.015000)[0m   [0mSHOW FIELDS FROM `books`[0m
+Rendering template within layouts/books
+Rendering books/new
+Completed in 0.07800 (12 reqs/sec) | Rendering: 0.03100 (39%) | DB: 0.01500 (19%) | 200 OK [http://127.0.0.1/books/new]
+
+
+Processing BooksController#create (for 127.0.0.1 at 2008-05-19 03:29:30) [POST]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"commit"=>"Create", "authenticity_token"=>"ad86c094ed49d5a43cfa8a571fea61cb5655f894", "action"=>"create", "controller"=>"books", "book"=>{"category"=>"fiction", "title"=>"Nine Tomorrows", "author"=>"Isaac Asimov", "description"=>"A collection of short stories including \"The Ugly Little Boy\" and \"The Gentle Vultures\""}}
+  [4;36;1mBook Columns (0.016000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+  [4;35;1mSQL (0.031000)[0m   [0mBEGIN[0m
+  [4;36;1mBook Create (0.016000)[0m   [0;1mINSERT INTO `books` (`category`, `updated_at`, `title`, `author`, `description`, `created_at`) VALUES('fiction', '2008-05-19 03:29:31', 'Nine Tomorrows', 'Isaac Asimov', 'A collection of short stories including \"The Ugly Little Boy\" and \"The Gentle Vultures\"', '2008-05-19 03:29:31')[0m
+  [4;35;1mSQL (0.062000)[0m   [0mCOMMIT[0m
+Redirected to http://127.0.0.1:3003/books/1
+Completed in 0.32800 (3 reqs/sec) | DB: 0.12500 (38%) | 302 Found [http://127.0.0.1/books]
+
+
+Processing BooksController#show (for 127.0.0.1 at 2008-05-19 03:29:31) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7BjoLbm90aWNlIiNCb29rIHdhcyBzdWNjZXNzZnVsbHkgY3JlYXRlZC4G%0AOgpAdXNlZHsGOwdU--ddbeb8c642cc2c768efa4ffa015ac2345281e78f
+  Parameters: {"action"=>"show", "id"=>"1", "controller"=>"books"}
+  [4;36;1mBook Columns (0.015000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+  [4;35;1mBook Load (0.000000)[0m   [0mSELECT * FROM `books` WHERE (`books`.`id` = 1) [0m
+Rendering template within layouts/books
+Rendering books/show
+Completed in 0.07900 (12 reqs/sec) | Rendering: 0.01600 (20%) | DB: 0.01500 (18%) | 200 OK [http://127.0.0.1/books/1]
+
+
+Processing BooksController#index (for 127.0.0.1 at 2008-05-19 03:29:42) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"index", "controller"=>"books"}
+  [4;36;1mBook Load (0.000000)[0m   [0;1mSELECT * FROM `books` [0m
+Rendering template within layouts/books
+Rendering books/index
+  [4;35;1mBook Columns (0.016000)[0m   [0mSHOW FIELDS FROM `books`[0m
+Completed in 0.06300 (15 reqs/sec) | Rendering: 0.01600 (25%) | DB: 0.01600 (25%) | 200 OK [http://127.0.0.1/books]
+
+
+Processing BooksController#new (for 127.0.0.1 at 2008-05-19 03:29:44) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"new", "controller"=>"books"}
+  [4;36;1mBook Columns (0.000000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+Rendering template within layouts/books
+Rendering books/new
+Completed in 0.06200 (16 reqs/sec) | Rendering: 0.01500 (24%) | DB: 0.00000 (0%) | 200 OK [http://127.0.0.1/books/new]
+
+
+Processing BooksController#create (for 127.0.0.1 at 2008-05-19 03:31:28) [POST]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"commit"=>"Create", "authenticity_token"=>"ad86c094ed49d5a43cfa8a571fea61cb5655f894", "action"=>"create", "controller"=>"books", "book"=>{"category"=>"fiction", "title"=>"The Lathe of Heaven", "author"=>"Ursula K. Le Guin", "description"=>"A mans dreams change reality"}}
+  [4;35;1mBook Columns (0.016000)[0m   [0mSHOW FIELDS FROM `books`[0m
+  [4;36;1mSQL (0.016000)[0m   [0;1mBEGIN[0m
+  [4;35;1mBook Create (0.000000)[0m   [0mINSERT INTO `books` (`category`, `updated_at`, `title`, `author`, `description`, `created_at`) VALUES('fiction', '2008-05-19 03:31:28', 'The Lathe of Heaven', 'Ursula K. Le Guin', 'A mans dreams change reality', '2008-05-19 03:31:28')[0m
+  [4;36;1mSQL (0.015000)[0m   [0;1mCOMMIT[0m
+Redirected to http://127.0.0.1:3003/books/2
+Completed in 0.09400 (10 reqs/sec) | DB: 0.04700 (50%) | 302 Found [http://127.0.0.1/books]
+
+
+Processing BooksController#show (for 127.0.0.1 at 2008-05-19 03:31:28) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7BjoLbm90aWNlIiNCb29rIHdhcyBzdWNjZXNzZnVsbHkgY3JlYXRlZC4G%0AOgpAdXNlZHsGOwdU--ddbeb8c642cc2c768efa4ffa015ac2345281e78f
+  Parameters: {"action"=>"show", "id"=>"2", "controller"=>"books"}
+  [4;35;1mBook Columns (0.015000)[0m   [0mSHOW FIELDS FROM `books`[0m
+  [4;36;1mBook Load (0.000000)[0m   [0;1mSELECT * FROM `books` WHERE (`books`.`id` = 2) [0m
+Rendering template within layouts/books
+Rendering books/show
+Completed in 0.06200 (16 reqs/sec) | Rendering: 0.01500 (24%) | DB: 0.01500 (24%) | 200 OK [http://127.0.0.1/books/2]
+
+
+Processing BooksController#edit (for 127.0.0.1 at 2008-05-19 03:31:32) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"edit", "id"=>"2", "controller"=>"books"}
+  [4;35;1mBook Columns (0.000000)[0m   [0mSHOW FIELDS FROM `books`[0m
+  [4;36;1mBook Load (0.016000)[0m   [0;1mSELECT * FROM `books` WHERE (`books`.`id` = 2) [0m
+Rendering template within layouts/books
+Rendering books/edit
+Completed in 0.07800 (12 reqs/sec) | Rendering: 0.03100 (39%) | DB: 0.01600 (20%) | 200 OK [http://127.0.0.1/books/2/edit]
+
+
+Processing BooksController#update (for 127.0.0.1 at 2008-05-19 03:31:52) [PUT]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"commit"=>"Update", "authenticity_token"=>"ad86c094ed49d5a43cfa8a571fea61cb5655f894", "_method"=>"put", "action"=>"update", "id"=>"2", "controller"=>"books", "book"=>{"category"=>"fiction", "title"=>"The Lathe of Heaven", "author"=>"Ursula K. Le Guin", "description"=>"A man's dreams change reality."}}
+  [4;35;1mBook Columns (0.015000)[0m   [0mSHOW FIELDS FROM `books`[0m
+  [4;36;1mBook Load (0.016000)[0m   [0;1mSELECT * FROM `books` WHERE (`books`.`id` = 2) [0m
+  [4;35;1mSQL (0.000000)[0m   [0mBEGIN[0m
+  [4;36;1mBook Update (0.000000)[0m   [0;1mUPDATE `books` SET `created_at` = '2008-05-19 03:31:28', `title` = 'The Lathe of Heaven', `category` = 'fiction', `description` = 'A man\'s dreams change reality.', `updated_at` = '2008-05-19 03:31:53', `author` = 'Ursula K. Le Guin' WHERE `id` = 2[0m
+  [4;35;1mSQL (0.016000)[0m   [0mCOMMIT[0m
+Redirected to http://127.0.0.1:3003/books/2
+Completed in 0.17100 (5 reqs/sec) | DB: 0.04700 (27%) | 302 Found [http://127.0.0.1/books/2]
+
+
+Processing BooksController#show (for 127.0.0.1 at 2008-05-19 03:31:53) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7BjoLbm90aWNlIiNCb29rIHdhcyBzdWNjZXNzZnVsbHkgdXBkYXRlZC4G%0AOgpAdXNlZHsGOwdU--97ab91af420b01bdf9361bb664fa328593fef515
+  Parameters: {"action"=>"show", "id"=>"2", "controller"=>"books"}
+  [4;36;1mBook Columns (0.015000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+  [4;35;1mBook Load (0.016000)[0m   [0mSELECT * FROM `books` WHERE (`books`.`id` = 2) [0m
+Rendering template within layouts/books
+Rendering books/show
+Completed in 0.15600 (6 reqs/sec) | Rendering: 0.01500 (9%) | DB: 0.03100 (19%) | 200 OK [http://127.0.0.1/books/2]
+
+
+Processing BooksController#index (for 127.0.0.1 at 2008-05-19 03:31:59) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"index", "controller"=>"books"}
+  [4;36;1mBook Load (0.000000)[0m   [0;1mSELECT * FROM `books` [0m
+Rendering template within layouts/books
+Rendering books/index
+  [4;35;1mBook Columns (0.000000)[0m   [0mSHOW FIELDS FROM `books`[0m
+Completed in 0.06200 (16 reqs/sec) | Rendering: 0.03100 (50%) | DB: 0.00000 (0%) | 200 OK [http://127.0.0.1/books]
+
+
+Processing BooksController#new (for 127.0.0.1 at 2008-05-19 03:32:01) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"new", "controller"=>"books"}
+  [4;36;1mBook Columns (0.016000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+Rendering template within layouts/books
+Rendering books/new
+Completed in 0.04700 (21 reqs/sec) | Rendering: 0.01600 (34%) | DB: 0.01600 (34%) | 200 OK [http://127.0.0.1/books/new]
+
+
+Processing BooksController#create (for 127.0.0.1 at 2008-05-19 03:35:37) [POST]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"commit"=>"Create", "authenticity_token"=>"ad86c094ed49d5a43cfa8a571fea61cb5655f894", "action"=>"create", "controller"=>"books", "book"=>{"category"=>"poetry", "title"=>"Collected Shorter Poems", "author"=>"W.H. Auden", "description"=>"A rich collection containing most of nAuden's best known work."}}
+  [4;35;1mBook Columns (0.015000)[0m   [0mSHOW FIELDS FROM `books`[0m
+  [4;36;1mSQL (0.032000)[0m   [0;1mBEGIN[0m
+  [4;35;1mBook Create (0.015000)[0m   [0mINSERT INTO `books` (`category`, `updated_at`, `title`, `author`, `description`, `created_at`) VALUES('poetry', '2008-05-19 03:35:37', 'Collected Shorter Poems', 'W.H. Auden', 'A rich collection containing most of nAuden\'s best known work.', '2008-05-19 03:35:37')[0m
+  [4;36;1mSQL (0.031000)[0m   [0;1mCOMMIT[0m
+Redirected to http://127.0.0.1:3003/books/3
+Completed in 0.12500 (8 reqs/sec) | DB: 0.09300 (74%) | 302 Found [http://127.0.0.1/books]
+
+
+Processing BooksController#show (for 127.0.0.1 at 2008-05-19 03:35:37) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7BjoLbm90aWNlIiNCb29rIHdhcyBzdWNjZXNzZnVsbHkgY3JlYXRlZC4G%0AOgpAdXNlZHsGOwdU--ddbeb8c642cc2c768efa4ffa015ac2345281e78f
+  Parameters: {"action"=>"show", "id"=>"3", "controller"=>"books"}
+  [4;35;1mBook Columns (0.000000)[0m   [0mSHOW FIELDS FROM `books`[0m
+  [4;36;1mBook Load (0.015000)[0m   [0;1mSELECT * FROM `books` WHERE (`books`.`id` = 3) [0m
+Rendering template within layouts/books
+Rendering books/show
+Completed in 0.06200 (16 reqs/sec) | Rendering: 0.01600 (25%) | DB: 0.01500 (24%) | 200 OK [http://127.0.0.1/books/3]
+
+
+Processing BooksController#index (for 127.0.0.1 at 2008-05-19 03:35:41) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"index", "controller"=>"books"}
+  [4;35;1mBook Load (0.000000)[0m   [0mSELECT * FROM `books` [0m
+Rendering template within layouts/books
+Rendering books/index
+  [4;36;1mBook Columns (0.016000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+Completed in 0.06200 (16 reqs/sec) | Rendering: 0.01500 (24%) | DB: 0.01600 (25%) | 200 OK [http://127.0.0.1/books]
+
+
+Processing BooksController#new (for 127.0.0.1 at 2008-05-19 03:35:46) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"new", "controller"=>"books"}
+  [4;35;1mBook Columns (0.016000)[0m   [0mSHOW FIELDS FROM `books`[0m
+Rendering template within layouts/books
+Rendering books/new
+Completed in 0.06300 (15 reqs/sec) | Rendering: 0.01600 (25%) | DB: 0.01600 (25%) | 200 OK [http://127.0.0.1/books/new]
+
+
+Processing BooksController#create (for 127.0.0.1 at 2008-05-19 03:41:18) [POST]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"commit"=>"Create", "authenticity_token"=>"ad86c094ed49d5a43cfa8a571fea61cb5655f894", "action"=>"create", "controller"=>"books", "book"=>{"category"=>"biography", "title"=>"Blind in one Ear", "author"=>"Patrick MacNee", "description"=>"The actor best known as John Steed in The Avengers tells a sad and hilarious story in his autobiography."}}
+  [4;36;1mBook Columns (0.016000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+  [4;35;1mSQL (0.031000)[0m   [0mBEGIN[0m
+  [4;36;1mBook Create (0.015000)[0m   [0;1mINSERT INTO `books` (`category`, `updated_at`, `title`, `author`, `description`, `created_at`) VALUES('biography', '2008-05-19 03:41:19', 'Blind in one Ear', 'Patrick MacNee', 'The actor best known as John Steed in The Avengers tells a sad and hilarious story in his autobiography.', '2008-05-19 03:41:19')[0m
+  [4;35;1mSQL (0.032000)[0m   [0mCOMMIT[0m
+Redirected to http://127.0.0.1:3003/books/4
+Completed in 0.12500 (8 reqs/sec) | DB: 0.09400 (75%) | 302 Found [http://127.0.0.1/books]
+
+
+Processing BooksController#show (for 127.0.0.1 at 2008-05-19 03:41:19) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7BjoLbm90aWNlIiNCb29rIHdhcyBzdWNjZXNzZnVsbHkgY3JlYXRlZC4G%0AOgpAdXNlZHsGOwdU--ddbeb8c642cc2c768efa4ffa015ac2345281e78f
+  Parameters: {"action"=>"show", "id"=>"4", "controller"=>"books"}
+  [4;36;1mBook Columns (0.016000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+  [4;35;1mBook Load (0.000000)[0m   [0mSELECT * FROM `books` WHERE (`books`.`id` = 4) [0m
+Rendering template within layouts/books
+Rendering books/show
+Completed in 0.07800 (12 reqs/sec) | Rendering: 0.01600 (20%) | DB: 0.01600 (20%) | 200 OK [http://127.0.0.1/books/4]
+
+
+Processing BooksController#index (for 127.0.0.1 at 2008-05-19 03:41:36) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"index", "controller"=>"books"}
+  [4;36;1mBook Load (0.000000)[0m   [0;1mSELECT * FROM `books` [0m
+Rendering template within layouts/books
+Rendering books/index
+  [4;35;1mBook Columns (0.000000)[0m   [0mSHOW FIELDS FROM `books`[0m
+Completed in 0.29700 (3 reqs/sec) | Rendering: 0.03100 (10%) | DB: 0.00000 (0%) | 200 OK [http://127.0.0.1/books]
+
+
+Processing BooksController#edit (for 127.0.0.1 at 2008-05-19 03:43:34) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"edit", "id"=>"3", "controller"=>"books"}
+  [4;36;1mBook Columns (0.015000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+  [4;35;1mBook Load (0.000000)[0m   [0mSELECT * FROM `books` WHERE (`books`.`id` = 3) [0m
+Rendering template within layouts/books
+Rendering books/edit
+Completed in 0.07800 (12 reqs/sec) | Rendering: 0.03100 (39%) | DB: 0.01500 (19%) | 200 OK [http://127.0.0.1/books/3/edit]
+
+
+Processing BooksController#update (for 127.0.0.1 at 2008-05-19 03:43:49) [PUT]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"commit"=>"Update", "authenticity_token"=>"ad86c094ed49d5a43cfa8a571fea61cb5655f894", "_method"=>"put", "action"=>"update", "id"=>"3", "controller"=>"books", "book"=>{"category"=>"poetry", "title"=>"Collected Shorter Poems", "author"=>"W.H. Auden", "description"=>"A rich collection containing most of Auden's best known work."}}
+  [4;36;1mBook Columns (0.015000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+  [4;35;1mBook Load (0.000000)[0m   [0mSELECT * FROM `books` WHERE (`books`.`id` = 3) [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mBEGIN[0m
+  [4;35;1mBook Update (0.000000)[0m   [0mUPDATE `books` SET `created_at` = '2008-05-19 03:35:37', `title` = 'Collected Shorter Poems', `category` = 'poetry', `description` = 'A rich collection containing most of Auden\'s best known work.', `updated_at` = '2008-05-19 03:43:49', `author` = 'W.H. Auden' WHERE `id` = 3[0m
+  [4;36;1mSQL (0.031000)[0m   [0;1mCOMMIT[0m
+Redirected to http://127.0.0.1:3003/books/3
+Completed in 0.07800 (12 reqs/sec) | DB: 0.04600 (58%) | 302 Found [http://127.0.0.1/books/3]
+
+
+Processing BooksController#show (for 127.0.0.1 at 2008-05-19 03:43:50) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7BjoLbm90aWNlIiNCb29rIHdhcyBzdWNjZXNzZnVsbHkgdXBkYXRlZC4G%0AOgpAdXNlZHsGOwdU--97ab91af420b01bdf9361bb664fa328593fef515
+  Parameters: {"action"=>"show", "id"=>"3", "controller"=>"books"}
+  [4;35;1mBook Columns (0.000000)[0m   [0mSHOW FIELDS FROM `books`[0m
+  [4;36;1mBook Load (0.015000)[0m   [0;1mSELECT * FROM `books` WHERE (`books`.`id` = 3) [0m
+Rendering template within layouts/books
+Rendering books/show
+Completed in 0.06300 (15 reqs/sec) | Rendering: 0.01600 (25%) | DB: 0.01500 (23%) | 200 OK [http://127.0.0.1/books/3]
+
+
+Processing BooksController#index (for 127.0.0.1 at 2008-05-19 03:43:54) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"index", "controller"=>"books"}
+  [4;35;1mBook Load (0.000000)[0m   [0mSELECT * FROM `books` [0m
+Rendering template within layouts/books
+Rendering books/index
+  [4;36;1mBook Columns (0.000000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+Completed in 0.06200 (16 reqs/sec) | Rendering: 0.03100 (49%) | DB: 0.00000 (0%) | 200 OK [http://127.0.0.1/books]
+
+
+Processing BooksController#index (for 127.0.0.1 at 2008-05-19 03:56:53) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"index", "controller"=>"books"}
+  [4;35;1mBook Load (0.000000)[0m   [0mSELECT * FROM `books` [0m
+Rendering template within layouts/books
+Rendering books/index
+  [4;36;1mBook Columns (0.000000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+Completed in 0.07800 (12 reqs/sec) | Rendering: 0.04700 (60%) | DB: 0.00000 (0%) | 200 OK [http://127.0.0.1/]
+
+
+Processing BooksController#index (for 127.0.0.1 at 2008-05-19 04:01:57) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"index", "controller"=>"books"}
+  [4;35;1mBook Load (0.000000)[0m   [0mSELECT * FROM `books` [0m
+Rendering template within layouts/books
+Rendering books/index
+  [4;36;1mBook Columns (0.000000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+Completed in 0.18700 (5 reqs/sec) | Rendering: 0.03100 (16%) | DB: 0.00000 (0%) | 200 OK [http://127.0.0.1/]
+
+
+Processing BooksController#new (for 127.0.0.1 at 2008-05-19 04:02:30) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"new", "controller"=>"books"}
+  [4;35;1mBook Columns (0.016000)[0m   [0mSHOW FIELDS FROM `books`[0m
+Rendering template within layouts/books
+Rendering books/new
+Completed in 0.26600 (3 reqs/sec) | Rendering: 0.21900 (82%) | DB: 0.01600 (6%) | 200 OK [http://127.0.0.1/books/new]
+
+
+Processing BooksController#create (for 127.0.0.1 at 2008-05-19 04:08:55) [POST]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"commit"=>"Create", "authenticity_token"=>"ad86c094ed49d5a43cfa8a571fea61cb5655f894", "action"=>"create", "controller"=>"books", "book"=>{"category"=>"non-fiction", "title"=>"The Mismeasure of Man", "author"=>"Stephen Jay Gould", "description"=>"Gould discusses the influence of biological determinism on our concept of intelligence."}}
+  [4;36;1mBook Columns (0.000000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+  [4;35;1mSQL (0.000000)[0m   [0mBEGIN[0m
+  [4;36;1mBook Create (0.000000)[0m   [0;1mINSERT INTO `books` (`category`, `updated_at`, `title`, `author`, `description`, `created_at`) VALUES('non-fiction', '2008-05-19 04:08:55', 'The Mismeasure of Man', 'Stephen Jay Gould', 'Gould discusses the influence of biological determinism on our concept of intelligence.', '2008-05-19 04:08:55')[0m
+  [4;35;1mSQL (0.031000)[0m   [0mCOMMIT[0m
+Redirected to http://127.0.0.1:3003/books/5
+Completed in 0.09300 (10 reqs/sec) | DB: 0.03100 (33%) | 302 Found [http://127.0.0.1/books]
+
+
+Processing BooksController#show (for 127.0.0.1 at 2008-05-19 04:08:55) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7BjoLbm90aWNlIiNCb29rIHdhcyBzdWNjZXNzZnVsbHkgY3JlYXRlZC4G%0AOgpAdXNlZHsGOwdU--ddbeb8c642cc2c768efa4ffa015ac2345281e78f
+  Parameters: {"action"=>"show", "id"=>"5", "controller"=>"books"}
+  [4;36;1mBook Columns (0.015000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+  [4;35;1mBook Load (0.016000)[0m   [0mSELECT * FROM `books` WHERE (`books`.`id` = 5) [0m
+Rendering template within layouts/books
+Rendering books/show
+Completed in 0.06300 (15 reqs/sec) | Rendering: 0.01600 (25%) | DB: 0.03100 (49%) | 200 OK [http://127.0.0.1/books/5]
+
+
+Processing BooksController#index (for 127.0.0.1 at 2008-05-19 04:09:01) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"index", "controller"=>"books"}
+  [4;36;1mBook Load (0.000000)[0m   [0;1mSELECT * FROM `books` [0m
+Rendering template within layouts/books
+Rendering books/index
+  [4;35;1mBook Columns (0.000000)[0m   [0mSHOW FIELDS FROM `books`[0m
+Completed in 0.06200 (16 reqs/sec) | Rendering: 0.03100 (49%) | DB: 0.00000 (0%) | 200 OK [http://127.0.0.1/books]
+
+
+Processing BooksController#index (for 127.0.0.1 at 2008-05-19 04:19:08) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"index", "controller"=>"books"}
+  [4;36;1mBook Load (0.000000)[0m   [0;1mSELECT * FROM `books` [0m
+Rendering template within layouts/books
+Rendering books/index
+  [4;35;1mBook Columns (0.015000)[0m   [0mSHOW FIELDS FROM `books`[0m
+Completed in 0.21900 (4 reqs/sec) | Rendering: 0.01600 (7%) | DB: 0.01500 (6%) | 200 OK [http://127.0.0.1/]
+
+
+Processing BooksController#edit (for 127.0.0.1 at 2008-05-19 04:19:39) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"edit", "id"=>"4", "controller"=>"books"}
+  [4;36;1mBook Columns (0.016000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+  [4;35;1mBook Load (0.000000)[0m   [0mSELECT * FROM `books` WHERE (`books`.`id` = 4) [0m
+Rendering template within layouts/books
+Rendering books/edit
+Completed in 0.07800 (12 reqs/sec) | Rendering: 0.03100 (39%) | DB: 0.01600 (20%) | 200 OK [http://127.0.0.1/books/4/edit]
+
+
+Processing BooksController#index (for 127.0.0.1 at 2008-05-19 04:19:49) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"index", "controller"=>"books"}
+  [4;36;1mBook Load (0.000000)[0m   [0;1mSELECT * FROM `books` [0m
+Rendering template within layouts/books
+Rendering books/index
+  [4;35;1mBook Columns (0.000000)[0m   [0mSHOW FIELDS FROM `books`[0m
+Completed in 0.06300 (15 reqs/sec) | Rendering: 0.03200 (50%) | DB: 0.00000 (0%) | 200 OK [http://127.0.0.1/books]
+
+
+Processing BooksController#edit (for 127.0.0.1 at 2008-05-19 04:20:16) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"edit", "id"=>"3", "controller"=>"books"}
+  [4;36;1mBook Columns (0.015000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+  [4;35;1mBook Load (0.000000)[0m   [0mSELECT * FROM `books` WHERE (`books`.`id` = 3) [0m
+Rendering template within layouts/books
+Rendering books/edit
+Completed in 0.07900 (12 reqs/sec) | Rendering: 0.03200 (40%) | DB: 0.01500 (18%) | 200 OK [http://127.0.0.1/books/3/edit]
+
+
+Processing BooksController#index (for 127.0.0.1 at 2008-05-19 04:20:39) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"index", "controller"=>"books"}
+  [4;36;1mBook Load (0.000000)[0m   [0;1mSELECT * FROM `books` [0m
+Rendering template within layouts/books
+Rendering books/index
+  [4;35;1mBook Columns (0.000000)[0m   [0mSHOW FIELDS FROM `books`[0m
+Completed in 0.12500 (8 reqs/sec) | Rendering: 0.07800 (62%) | DB: 0.00000 (0%) | 200 OK [http://127.0.0.1/books]
+
+
+Processing BooksController#index (for 127.0.0.1 at 2008-05-19 04:25:20) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"index", "controller"=>"books"}
+  [4;36;1mBook Load (0.000000)[0m   [0;1mSELECT * FROM `books` [0m
+Rendering template within layouts/books
+Rendering books/index
+  [4;35;1mBook Columns (0.000000)[0m   [0mSHOW FIELDS FROM `books`[0m
+Completed in 0.06200 (16 reqs/sec) | Rendering: 0.03100 (49%) | DB: 0.00000 (0%) | 200 OK [http://127.0.0.1/]
+
+
+Processing BooksController#new (for 127.0.0.1 at 2008-05-19 04:26:09) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"new", "controller"=>"books"}
+  [4;36;1mBook Columns (0.016000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+Rendering template within layouts/books
+Rendering books/new
+Completed in 0.06200 (16 reqs/sec) | Rendering: 0.01500 (24%) | DB: 0.01600 (25%) | 200 OK [http://127.0.0.1/books/new]
+
+
+Processing BooksController#create (for 127.0.0.1 at 2008-05-19 04:26:28) [POST]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"commit"=>"Create", "authenticity_token"=>"ad86c094ed49d5a43cfa8a571fea61cb5655f894", "action"=>"create", "controller"=>"books", "book"=>{"category"=>"fiction", "title"=>"", "author"=>"", "description"=>""}}
+  [4;35;1mBook Columns (0.016000)[0m   [0mSHOW FIELDS FROM `books`[0m
+  [4;36;1mSQL (0.015000)[0m   [0;1mBEGIN[0m
+  [4;35;1mSQL (0.000000)[0m   [0mCOMMIT[0m
+Rendering template within layouts/books
+Rendering books/new
+Completed in 0.06200 (16 reqs/sec) | Rendering: 0.01600 (25%) | DB: 0.03100 (49%) | 200 OK [http://127.0.0.1/books]
+
+
+Processing BooksController#create (for 127.0.0.1 at 2008-05-19 04:30:01) [POST]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"commit"=>"Create", "authenticity_token"=>"ad86c094ed49d5a43cfa8a571fea61cb5655f894", "action"=>"create", "controller"=>"books", "book"=>{"category"=>"fiction", "title"=>"Reflex", "author"=>"Dick Francis", "description"=>"A jump jockey's photographic hobby is more dangerous than his job."}}
+  [4;36;1mBook Columns (0.000000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+  [4;35;1mSQL (0.000000)[0m   [0mBEGIN[0m
+  [4;36;1mBook Create (0.000000)[0m   [0;1mINSERT INTO `books` (`category`, `updated_at`, `title`, `author`, `description`, `created_at`) VALUES('fiction', '2008-05-19 04:30:01', 'Reflex', 'Dick Francis', 'A jump jockey\'s photographic hobby is more dangerous than his job.', '2008-05-19 04:30:01')[0m
+  [4;35;1mSQL (0.031000)[0m   [0mCOMMIT[0m
+Redirected to http://127.0.0.1:3003/books/6
+Completed in 0.09400 (10 reqs/sec) | DB: 0.03100 (32%) | 302 Found [http://127.0.0.1/books]
+
+
+Processing BooksController#show (for 127.0.0.1 at 2008-05-19 04:30:02) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7BjoLbm90aWNlIiNCb29rIHdhcyBzdWNjZXNzZnVsbHkgY3JlYXRlZC4G%0AOgpAdXNlZHsGOwdU--ddbeb8c642cc2c768efa4ffa015ac2345281e78f
+  Parameters: {"action"=>"show", "id"=>"6", "controller"=>"books"}
+  [4;36;1mBook Columns (0.000000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+  [4;35;1mBook Load (0.000000)[0m   [0mSELECT * FROM `books` WHERE (`books`.`id` = 6) [0m
+Rendering template within layouts/books
+Rendering books/show
+Completed in 0.06300 (15 reqs/sec) | Rendering: 0.01600 (25%) | DB: 0.00000 (0%) | 200 OK [http://127.0.0.1/books/6]
+
+
+Processing BooksController#index (for 127.0.0.1 at 2008-05-19 04:30:09) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"index", "controller"=>"books"}
+  [4;36;1mBook Load (0.000000)[0m   [0;1mSELECT * FROM `books` [0m
+Rendering template within layouts/books
+Rendering books/index
+  [4;35;1mBook Columns (0.016000)[0m   [0mSHOW FIELDS FROM `books`[0m
+Completed in 0.07900 (12 reqs/sec) | Rendering: 0.03100 (39%) | DB: 0.01600 (20%) | 200 OK [http://127.0.0.1/books]
+  [4;36;1mSQL (0.000000)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mMysql::Error: Table 'schema_info' already exists: CREATE TABLE `schema_info` (version int(11))[0m
+  [4;35;1mSQL (0.000000)[0m   [0mMysql::Error: Table 'schema_info' already exists: CREATE TABLE `schema_info` (version int(11))[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+Migrating to CreatePublicationDatas (2)
+  [4;36;1mSQL (0.109000)[0m   [0;1mCREATE TABLE `publication_datas` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `book_id` int(11) DEFAULT NULL, `publisher` varchar(255) DEFAULT NULL, `pagelength` varchar(255) DEFAULT NULL, `created_at` datetime DEFAULT NULL, `updated_at` datetime DEFAULT NULL) ENGINE=InnoDB[0m
+  [4;35;1mSQL (0.031000)[0m   [0mUPDATE schema_info SET version = 2[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT * FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (0.031000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+  [4;35;1mSQL (0.016000)[0m   [0mdescribe `books`[0m
+  [4;36;1mSQL (0.016000)[0m   [0;1mSHOW KEYS FROM `books`[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSHOW FIELDS FROM `publication_datas`[0m
+  [4;36;1mSQL (0.016000)[0m   [0;1mdescribe `publication_datas`[0m
+  [4;35;1mSQL (0.015000)[0m   [0mSHOW KEYS FROM `publication_datas`[0m
+
+
+Processing BooksController#index (for 127.0.0.1 at 2008-05-19 05:26:14) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"index", "controller"=>"books"}
+  [4;36;1mBook Load (0.000000)[0m   [0;1mSELECT * FROM `books` [0m
+Rendering template within layouts/books
+Rendering books/index
+  [4;35;1mBook Columns (0.000000)[0m   [0mSHOW FIELDS FROM `books`[0m
+Completed in 0.06300 (15 reqs/sec) | Rendering: 0.03100 (49%) | DB: 0.00000 (0%) | 200 OK [http://127.0.0.1/]
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2008-05-19 05:27:01) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {}
+
+
+ActionController::RoutingError (No route matches "/publication_data" with {:method=>:get}):
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/routing.rb:1441:in `recognize_path'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/routing.rb:1424:in `recognize'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:170:in `handle_request'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:115:in `dispatch'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:126:in `dispatch_cgi'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:9:in `dispatch'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:76:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:74:in `synchronize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:74:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:159:in `process_client'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:158:in `each'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:158:in `process_client'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `initialize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `new'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `initialize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `new'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:282:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:281:in `each'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:281:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/mongrel_rails:128:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/command.rb:212:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/mongrel_rails:281
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/rails-2.0.2/lib/commands/servers/mongrel.rb:64
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require'
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:496:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:496:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/rails-2.0.2/lib/commands/server.rb:39
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require'
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    ./script/server:3
+    -e:2:in `load'
+    -e:2
+
+Rendering C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/templates/rescues/layout.erb (not_found)
+
+
+Processing PublicationDatasController#index (for 127.0.0.1 at 2008-05-19 05:27:15) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"index", "controller"=>"publication_datas"}
+  [4;36;1mPublicationData Load (0.000000)[0m   [0;1mSELECT * FROM `publication_datas` [0m
+Rendering template within layouts/publication_datas
+Rendering publication_datas/index
+Completed in 0.04700 (21 reqs/sec) | Rendering: 0.01600 (34%) | DB: 0.00000 (0%) | 200 OK [http://127.0.0.1/publication_datas]
+
+
+Processing PublicationDatasController#new (for 127.0.0.1 at 2008-05-19 05:27:27) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"new", "controller"=>"publication_datas"}
+  [4;35;1mPublicationData Columns (0.016000)[0m   [0mSHOW FIELDS FROM `publication_datas`[0m
+Rendering template within layouts/publication_datas
+Rendering publication_datas/new
+Completed in 0.07800 (12 reqs/sec) | Rendering: 0.03100 (39%) | DB: 0.01600 (20%) | 200 OK [http://127.0.0.1/publication_datas/new]
+
+
+Processing PublicationDatasController#create (for 127.0.0.1 at 2008-05-19 05:29:07) [POST]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"publication_data"=>{"publisher"=>"Norton", "book"=>"The Mismeasure of Man", "pagelength"=>"352 pages"}, "commit"=>"Create", "authenticity_token"=>"ad86c094ed49d5a43cfa8a571fea61cb5655f894", "action"=>"create", "controller"=>"publication_datas"}
+  [4;36;1mPublicationData Columns (0.015000)[0m   [0;1mSHOW FIELDS FROM `publication_datas`[0m
+
+
+ActiveRecord::AssociationTypeMismatch (Book expected, got String):
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/associations/association_proxy.rb:150:in `raise_on_type_mismatch'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/associations/belongs_to_association.rb:22:in `replace'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/associations.rb:1009:in `book='
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/base.rb:2117:in `send'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/base.rb:2117:in `attributes='
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/base.rb:2116:in `each'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/base.rb:2116:in `attributes='
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/base.rb:1926:in `initialize'
+    /app/controllers/publication_datas_controller.rb:43:in `new'
+    /app/controllers/publication_datas_controller.rb:43:in `create'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:1158:in `send'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:1158:in `perform_action_without_filters'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/filters.rb:697:in `call_filters'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/filters.rb:689:in `perform_action_without_benchmark'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    C:/ruby/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/rescue.rb:199:in `perform_action_without_caching'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/caching.rb:678:in `perform_action'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/connection_adapters/abstract/query_cache.rb:33:in `cache'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/query_cache.rb:8:in `cache'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/caching.rb:677:in `perform_action'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:524:in `send'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:524:in `process_without_filters'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/filters.rb:685:in `process_without_session_management_support'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/session_management.rb:123:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:388:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:171:in `handle_request'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:115:in `dispatch'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:126:in `dispatch_cgi'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:9:in `dispatch'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:76:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:74:in `synchronize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:74:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:159:in `process_client'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:158:in `each'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:158:in `process_client'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `initialize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `new'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `initialize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `new'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:282:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:281:in `each'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:281:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/mongrel_rails:128:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/command.rb:212:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/mongrel_rails:281
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/rails-2.0.2/lib/commands/servers/mongrel.rb:64
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require'
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:496:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:496:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/rails-2.0.2/lib/commands/server.rb:39
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require'
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    ./script/server:3
+    -e:2:in `load'
+    -e:2
+
+Rendering C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/templates/rescues/layout.erb (internal_server_error)
+
+
+Processing PublicationDatasController#create (for 127.0.0.1 at 2008-05-19 05:29:59) [POST]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"publication_data"=>{"publisher"=>"Norton", "book"=>"The Mismeasure of Man", "pagelength"=>"352 pages"}, "commit"=>"Create", "authenticity_token"=>"ad86c094ed49d5a43cfa8a571fea61cb5655f894", "action"=>"create", "controller"=>"publication_datas"}
+  [4;35;1mPublicationData Columns (0.015000)[0m   [0mSHOW FIELDS FROM `publication_datas`[0m
+
+
+ActiveRecord::AssociationTypeMismatch (Book expected, got String):
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/associations/association_proxy.rb:150:in `raise_on_type_mismatch'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/associations/belongs_to_association.rb:22:in `replace'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/associations.rb:1009:in `book='
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/base.rb:2117:in `send'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/base.rb:2117:in `attributes='
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/base.rb:2116:in `each'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/base.rb:2116:in `attributes='
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/base.rb:1926:in `initialize'
+    /app/controllers/publication_datas_controller.rb:43:in `new'
+    /app/controllers/publication_datas_controller.rb:43:in `create'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:1158:in `send'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:1158:in `perform_action_without_filters'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/filters.rb:697:in `call_filters'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/filters.rb:689:in `perform_action_without_benchmark'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    C:/ruby/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/rescue.rb:199:in `perform_action_without_caching'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/caching.rb:678:in `perform_action'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/connection_adapters/abstract/query_cache.rb:33:in `cache'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/query_cache.rb:8:in `cache'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/caching.rb:677:in `perform_action'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:524:in `send'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:524:in `process_without_filters'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/filters.rb:685:in `process_without_session_management_support'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/session_management.rb:123:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:388:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:171:in `handle_request'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:115:in `dispatch'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:126:in `dispatch_cgi'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:9:in `dispatch'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:76:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:74:in `synchronize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:74:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:159:in `process_client'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:158:in `each'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:158:in `process_client'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `initialize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `new'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `initialize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `new'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:282:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:281:in `each'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:281:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/mongrel_rails:128:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/command.rb:212:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/mongrel_rails:281
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/rails-2.0.2/lib/commands/servers/mongrel.rb:64
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require'
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:496:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:496:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/rails-2.0.2/lib/commands/server.rb:39
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require'
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    ./script/server:3
+    -e:2:in `load'
+    -e:2
+
+Rendering C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/templates/rescues/layout.erb (internal_server_error)
+
+
+Processing PublicationDatasController#new (for 127.0.0.1 at 2008-05-19 05:30:22) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"new", "controller"=>"publication_datas"}
+  [4;36;1mPublicationData Columns (0.016000)[0m   [0;1mSHOW FIELDS FROM `publication_datas`[0m
+Rendering template within layouts/publication_datas
+Rendering publication_datas/new
+Completed in 0.12500 (8 reqs/sec) | Rendering: 0.01500 (11%) | DB: 0.04600 (36%) | 200 OK [http://127.0.0.1/publication_datas/new]
+
+
+Processing PublicationDatasController#index (for 127.0.0.1 at 2008-05-19 05:30:45) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"index", "controller"=>"publication_datas"}
+  [4;35;1mPublicationData Load (0.000000)[0m   [0mSELECT * FROM `publication_datas` [0m
+Rendering template within layouts/publication_datas
+Rendering publication_datas/index
+Completed in 0.03100 (32 reqs/sec) | Rendering: 0.00000 (0%) | DB: 0.00000 (0%) | 200 OK [http://127.0.0.1/publication_datas]
+
+
+Processing BooksController#index (for 127.0.0.1 at 2008-05-19 05:31:17) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"index", "controller"=>"books"}
+  [4;36;1mBook Load (0.000000)[0m   [0;1mSELECT * FROM `books` [0m
+Rendering template within layouts/books
+Rendering books/index
+  [4;35;1mBook Columns (0.016000)[0m   [0mSHOW FIELDS FROM `books`[0m
+Completed in 0.06200 (16 reqs/sec) | Rendering: 0.01500 (24%) | DB: 0.01600 (25%) | 200 OK [http://127.0.0.1/books]
+
+
+Processing PublicationDatasController#index (for 127.0.0.1 at 2008-05-19 05:32:11) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"index", "controller"=>"publication_datas"}
+  [4;36;1mPublicationData Load (0.000000)[0m   [0;1mSELECT * FROM `publication_datas` [0m
+Rendering template within layouts/publication_datas
+Rendering publication_datas/index
+Completed in 0.03200 (31 reqs/sec) | Rendering: 0.00000 (0%) | DB: 0.00000 (0%) | 200 OK [http://127.0.0.1/publication_datas]
+
+
+Processing PublicationDatasController#new (for 127.0.0.1 at 2008-05-19 05:32:16) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"new", "controller"=>"publication_datas"}
+  [4;35;1mPublicationData Columns (0.015000)[0m   [0mSHOW FIELDS FROM `publication_datas`[0m
+Rendering template within layouts/publication_datas
+Rendering publication_datas/new
+Completed in 0.42200 (2 reqs/sec) | Rendering: 0.25000 (59%) | DB: 0.01500 (3%) | 200 OK [http://127.0.0.1/publication_datas/new]
+
+
+Processing PublicationDatasController#create (for 127.0.0.1 at 2008-05-19 05:32:56) [POST]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"publication_data"=>{"publisher"=>"Norton", "book"=>"5", "pagelength"=>"352 pages"}, "commit"=>"Create", "authenticity_token"=>"ad86c094ed49d5a43cfa8a571fea61cb5655f894", "action"=>"create", "controller"=>"publication_datas"}
+  [4;36;1mPublicationData Columns (0.016000)[0m   [0;1mSHOW FIELDS FROM `publication_datas`[0m
+
+
+ActiveRecord::AssociationTypeMismatch (Book expected, got String):
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/associations/association_proxy.rb:150:in `raise_on_type_mismatch'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/associations/belongs_to_association.rb:22:in `replace'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/associations.rb:1009:in `book='
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/base.rb:2117:in `send'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/base.rb:2117:in `attributes='
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/base.rb:2116:in `each'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/base.rb:2116:in `attributes='
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/base.rb:1926:in `initialize'
+    /app/controllers/publication_datas_controller.rb:43:in `new'
+    /app/controllers/publication_datas_controller.rb:43:in `create'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:1158:in `send'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:1158:in `perform_action_without_filters'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/filters.rb:697:in `call_filters'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/filters.rb:689:in `perform_action_without_benchmark'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    C:/ruby/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/rescue.rb:199:in `perform_action_without_caching'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/caching.rb:678:in `perform_action'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/connection_adapters/abstract/query_cache.rb:33:in `cache'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/query_cache.rb:8:in `cache'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/caching.rb:677:in `perform_action'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:524:in `send'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:524:in `process_without_filters'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/filters.rb:685:in `process_without_session_management_support'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/session_management.rb:123:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:388:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:171:in `handle_request'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:115:in `dispatch'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:126:in `dispatch_cgi'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:9:in `dispatch'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:76:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:74:in `synchronize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:74:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:159:in `process_client'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:158:in `each'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:158:in `process_client'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `initialize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `new'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `initialize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `new'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:282:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:281:in `each'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:281:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/mongrel_rails:128:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/command.rb:212:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/mongrel_rails:281
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/rails-2.0.2/lib/commands/servers/mongrel.rb:64
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require'
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:496:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:496:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/rails-2.0.2/lib/commands/server.rb:39
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require'
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    ./script/server:3
+    -e:2:in `load'
+    -e:2
+
+Rendering C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/templates/rescues/layout.erb (internal_server_error)
+
+
+Processing PublicationDatasController#new (for 127.0.0.1 at 2008-05-19 05:33:10) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"new", "controller"=>"publication_datas"}
+  [4;35;1mPublicationData Columns (0.000000)[0m   [0mSHOW FIELDS FROM `publication_datas`[0m
+Rendering template within layouts/publication_datas
+Rendering publication_datas/new
+Completed in 0.10900 (9 reqs/sec) | Rendering: 0.01600 (14%) | DB: 0.01600 (14%) | 200 OK [http://127.0.0.1/publication_datas/new]
+
+
+Processing PublicationDatasController#index (for 127.0.0.1 at 2008-05-19 05:33:20) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"index", "controller"=>"publication_datas"}
+  [4;36;1mPublicationData Load (0.000000)[0m   [0;1mSELECT * FROM `publication_datas` [0m
+Rendering template within layouts/publication_datas
+Rendering publication_datas/index
+Completed in 0.03100 (32 reqs/sec) | Rendering: 0.00000 (0%) | DB: 0.00000 (0%) | 200 OK [http://127.0.0.1/publication_datas]
+
+
+Processing BooksController#index (for 127.0.0.1 at 2008-05-19 08:46:33) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"index", "controller"=>"books"}
+  [4;35;1mBook Load (0.016000)[0m   [0mSELECT * FROM `books` [0m
+Rendering template within layouts/books
+Rendering books/index
+  [4;36;1mBook Columns (0.016000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+Completed in 0.12500 (8 reqs/sec) | Rendering: 0.03100 (24%) | DB: 0.03200 (25%) | 200 OK [http://127.0.0.1/]
+
+
+Processing BooksController#5 (for 127.0.0.1 at 2008-05-19 08:47:33) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"5", "id"=>"publication_data", "controller"=>"books"}
+
+
+ActionController::UnknownAction (No action responded to 5):
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/filters.rb:697:in `call_filters'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/filters.rb:689:in `perform_action_without_benchmark'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    C:/ruby/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/rescue.rb:199:in `perform_action_without_caching'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/caching.rb:678:in `perform_action'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/connection_adapters/abstract/query_cache.rb:33:in `cache'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/query_cache.rb:8:in `cache'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/caching.rb:677:in `perform_action'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:524:in `send'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:524:in `process_without_filters'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/filters.rb:685:in `process_without_session_management_support'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/session_management.rb:123:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:388:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:171:in `handle_request'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:115:in `dispatch'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:126:in `dispatch_cgi'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:9:in `dispatch'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:76:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:74:in `synchronize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:74:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:159:in `process_client'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:158:in `each'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:158:in `process_client'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `initialize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `new'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `initialize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `new'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:282:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:281:in `each'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:281:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/mongrel_rails:128:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/command.rb:212:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/mongrel_rails:281
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/rails-2.0.2/lib/commands/servers/mongrel.rb:64
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require'
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:496:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:496:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/rails-2.0.2/lib/commands/server.rb:39
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require'
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    ./script/server:3
+    -e:2:in `load'
+    -e:2
+
+Rendering C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/templates/rescues/layout.erb (not_found)
+
+
+Processing BooksController#1 (for 127.0.0.1 at 2008-05-19 08:47:52) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"1", "id"=>"publication_data", "controller"=>"books"}
+
+
+ActionController::UnknownAction (No action responded to 1):
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/filters.rb:697:in `call_filters'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/filters.rb:689:in `perform_action_without_benchmark'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    C:/ruby/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/rescue.rb:199:in `perform_action_without_caching'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/caching.rb:678:in `perform_action'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/connection_adapters/abstract/query_cache.rb:33:in `cache'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/query_cache.rb:8:in `cache'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/caching.rb:677:in `perform_action'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:524:in `send'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:524:in `process_without_filters'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/filters.rb:685:in `process_without_session_management_support'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/session_management.rb:123:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:388:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:171:in `handle_request'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:115:in `dispatch'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:126:in `dispatch_cgi'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:9:in `dispatch'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:76:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:74:in `synchronize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:74:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:159:in `process_client'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:158:in `each'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:158:in `process_client'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `initialize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `new'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `initialize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `new'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:282:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:281:in `each'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:281:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/mongrel_rails:128:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/command.rb:212:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/mongrel_rails:281
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/rails-2.0.2/lib/commands/servers/mongrel.rb:64
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require'
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:496:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:496:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/rails-2.0.2/lib/commands/server.rb:39
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require'
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    ./script/server:3
+    -e:2:in `load'
+    -e:2
+
+Rendering C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/templates/rescues/layout.erb (not_found)
+
+
+Processing BooksController#1 (for 127.0.0.1 at 2008-05-19 08:47:59) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"1", "id"=>"publication_data", "controller"=>"books"}
+
+
+ActionController::UnknownAction (No action responded to 1):
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/filters.rb:697:in `call_filters'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/filters.rb:689:in `perform_action_without_benchmark'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    C:/ruby/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/rescue.rb:199:in `perform_action_without_caching'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/caching.rb:678:in `perform_action'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/connection_adapters/abstract/query_cache.rb:33:in `cache'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/query_cache.rb:8:in `cache'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/caching.rb:677:in `perform_action'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:524:in `send'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:524:in `process_without_filters'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/filters.rb:685:in `process_without_session_management_support'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/session_management.rb:123:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:388:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:171:in `handle_request'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:115:in `dispatch'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:126:in `dispatch_cgi'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:9:in `dispatch'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:76:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:74:in `synchronize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:74:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:159:in `process_client'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:158:in `each'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:158:in `process_client'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `initialize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `new'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `initialize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `new'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:282:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:281:in `each'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:281:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/mongrel_rails:128:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/command.rb:212:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/mongrel_rails:281
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/rails-2.0.2/lib/commands/servers/mongrel.rb:64
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require'
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:496:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:496:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/rails-2.0.2/lib/commands/server.rb:39
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require'
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    ./script/server:3
+    -e:2:in `load'
+    -e:2
+
+Rendering C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/templates/rescues/layout.erb (not_found)
+
+
+Processing BooksController#index (for 127.0.0.1 at 2008-05-19 08:51:24) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"index", "controller"=>"books"}
+  [4;35;1mBook Load (0.000000)[0m   [0mSELECT * FROM `books` [0m
+Rendering template within layouts/books
+Rendering books/index
+  [4;36;1mBook Columns (0.016000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+Completed in 0.07800 (12 reqs/sec) | Rendering: 0.03100 (39%) | DB: 0.01600 (20%) | 200 OK [http://127.0.0.1/]
+
+
+Processing PublicationDatasController#index (for 127.0.0.1 at 2008-05-19 08:52:09) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"index", "controller"=>"publication_datas", "book_id"=>"5"}
+  [4;35;1mBook Columns (0.000000)[0m   [0mSHOW FIELDS FROM `books`[0m
+  [4;36;1mBook Load (0.031000)[0m   [0;1mSELECT * FROM `books` WHERE (`books`.`id` = 5) [0m
+  [4;35;1mPublicationData Load (0.015000)[0m   [0mSELECT * FROM `publication_datas` [0m
+Rendering template within layouts/publication_datas
+Rendering publication_datas/index
+Completed in 0.32900 (3 reqs/sec) | Rendering: 0.03200 (9%) | DB: 0.04600 (13%) | 200 OK [http://127.0.0.1/books/5/publication_datas]
+
+
+Processing PublicationDatasController#new (for 127.0.0.1 at 2008-05-19 08:52:16) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"action"=>"new", "controller"=>"publication_datas", "book_id"=>"5"}
+  [4;36;1mBook Columns (0.016000)[0m   [0;1mSHOW FIELDS FROM `books`[0m
+  [4;35;1mBook Load (0.000000)[0m   [0mSELECT * FROM `books` WHERE (`books`.`id` = 5) [0m
+  [4;36;1mPublicationData Columns (0.016000)[0m   [0;1mSHOW FIELDS FROM `publication_datas`[0m
+Rendering template within layouts/publication_datas
+Rendering publication_datas/new
+Completed in 0.10900 (9 reqs/sec) | Rendering: 0.03100 (28%) | DB: 0.03200 (29%) | 200 OK [http://127.0.0.1/books/5/publication_datas/new]
+
+
+Processing PublicationDatasController#create (for 127.0.0.1 at 2008-05-19 08:53:08) [POST]
+  Session ID: BAh7BzoMY3NyZl9pZCIlOThkNDZiODgxODYzNzBlZDQ4NWE2ZDdhMTc3M2I5%0ANmUiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh%0Ac2h7AAY6CkB1c2VkewA%3D--8b93f1a6f4122f249bfe27a46eaf4cef582eaaaf
+  Parameters: {"publication_data"=>{"publisher"=>"Norton", "pagelength"=>"352 pages"}, "commit"=>"Create", "authenticity_token"=>"ad86c094ed49d5a43cfa8a571fea61cb5655f894", "action"=>"create", "controller"=>"publication_datas", "book_id"=>"5"}
+  [4;35;1mBook Columns (0.000000)[0m   [0mSHOW FIELDS FROM `books`[0m
+  [4;36;1mBook Load (0.000000)[0m   [0;1mSELECT * FROM `books` WHERE (`books`.`id` = 5) [0m
+  [4;35;1mPublicationData Columns (0.000000)[0m   [0mSHOW FIELDS FROM `publication_datas`[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mBEGIN[0m
+  [4;35;1mPublicationData Create (0.000000)[0m   [0mINSERT INTO `publication_datas` (`updated_at`, `publisher`, `book_id`, `created_at`, `pagelength`) VALUES('2008-05-19 08:53:08', 'Norton', NULL, '2008-05-19 08:53:08', '352 pages')[0m
+  [4;36;1mSQL (0.032000)[0m   [0;1mCOMMIT[0m
+
+
+NoMethodError (undefined method `publication_data_url' for #<PublicationDatasController:0x3f371d8>):
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/polymorphic_routes.rb:27:in `send!'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/polymorphic_routes.rb:27:in `polymorphic_url'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:618:in `url_for'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:1060:in `redirect_to'
+    /app/controllers/publication_datas_controller.rb:53:in `create'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/mime_responds.rb:131:in `call'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/mime_responds.rb:131:in `custom'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/mime_responds.rb:152:in `call'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/mime_responds.rb:152:in `respond'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/mime_responds.rb:150:in `each'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/mime_responds.rb:150:in `respond'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/mime_responds.rb:107:in `respond_to'
+    /app/controllers/publication_datas_controller.rb:50:in `create'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:1158:in `send'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:1158:in `perform_action_without_filters'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/filters.rb:697:in `call_filters'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/filters.rb:689:in `perform_action_without_benchmark'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    C:/ruby/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/rescue.rb:199:in `perform_action_without_caching'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/caching.rb:678:in `perform_action'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/connection_adapters/abstract/query_cache.rb:33:in `cache'
+    C:/ruby/lib/ruby/gems/1.8/gems/activerecord-2.0.2/lib/active_record/query_cache.rb:8:in `cache'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/caching.rb:677:in `perform_action'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:524:in `send'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:524:in `process_without_filters'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/filters.rb:685:in `process_without_session_management_support'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/session_management.rb:123:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/base.rb:388:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:171:in `handle_request'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:115:in `dispatch'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:126:in `dispatch_cgi'
+    C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/dispatcher.rb:9:in `dispatch'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:76:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:74:in `synchronize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/../lib/mongrel/rails.rb:74:in `process'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:159:in `process_client'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:158:in `each'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:158:in `process_client'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `initialize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `new'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:285:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `initialize'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `new'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel.rb:268:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:282:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:281:in `each'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/configurator.rb:281:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/mongrel_rails:128:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/lib/mongrel/command.rb:212:in `run'
+    C:/ruby/lib/ruby/gems/1.8/gems/mongrel-1.1.2-mswin32/bin/mongrel_rails:281
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:489:in `load'
+    C:/ruby/lib/ruby/gems/1.8/gems/rails-2.0.2/lib/commands/servers/mongrel.rb:64
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require'
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:496:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+    C:/ruby/lib/ruby/gems/1.8/gems/activesupport-2.0.2/lib/active_support/dependencies.rb:496:in `require'
+    C:/ruby/lib/ruby/gems/1.8/gems/rails-2.0.2/lib/commands/server.rb:39
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require'
+    C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    ./script/server:3
+    -e:2:in `load'
+    -e:2
+
+Rendering C:/ruby/lib/ruby/gems/1.8/gems/actionpack-2.0.2/lib/action_controller/templates/rescues/layout.erb (internal_server_error)

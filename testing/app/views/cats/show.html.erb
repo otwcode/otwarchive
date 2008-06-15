@@ -1,0 +1,13 @@
+<p>
+  <b>Name:</b>
+  <%=h @cat.name %>
+</p>
+
+<p>
+  <b>Breed:</b>
+  <%=h @cat.breed %>
+</p>
+
+
+<%= link_to 'Edit', edit_cat_path(@cat) %> |
+<%= link_to 'Back', cats_path %>

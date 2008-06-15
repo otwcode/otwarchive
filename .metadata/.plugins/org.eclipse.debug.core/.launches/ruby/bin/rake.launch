@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.rubypeople.rdt.launching.LaunchConfigurationTypeRubyApplication">
+<stringAttribute key="org.rubypeople.rdt.launching.PROJECT_NAME" value="blog"/>
+<booleanAttribute key="org.rubypeople.rdt.launching.REQUIRES_REFRESH" value="true"/>
+<stringAttribute key="org.rubypeople.rdt.launching.WORKING_DIRECTORY" value="C:\blog"/>
+<mapAttribute key="org.rubypeople.rdt.launchingVM_INSTALL_TYPE_SPECIFIC_ATTRS_MAP">
+<mapEntry key="org.rubypeople.rdt.launching.RUBY_COMMAND" value="ruby"/>
+</mapAttribute>
+<stringAttribute key="org.rubypeople.rdt.launching.TERMINAL_COMMAND" value="rake db:migrate"/>
+<stringAttribute key="org.rubypeople.rdt.launching.USE_TERMINAL" value="org.radrails.rails.shell"/>
+<stringAttribute key="org.rubypeople.rdt.launching.FILE_NAME" value="C:\ruby\bin\rake"/>
+<stringAttribute key="org.rubypeople.rdt.launching.PROGRAM_ARGUMENTS" value="db:migrate "/>
+</launchConfiguration>

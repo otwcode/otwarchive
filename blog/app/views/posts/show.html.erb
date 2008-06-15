@@ -1,0 +1,24 @@
+<p>
+  <b>Title:</b>
+  <%=h @post.title %>
+</p>
+
+<p>
+  <b>Body:</b>
+  <%=h @post.body %>
+</p>
+
+<!-- list the existing posts -->
+<% unless @post.comments.empty? %>
+  <h3>Comments</h3>
+  <% @post.comments.each do |comment| %>
+  <p><%=h comment.body %></p>
+  <% end %>
+<% end %>
+
+<!-- allow creating a new comment right here -->
+<h3>New Comment</h3>
+<%= render :partial => @comment = Comment.new, :locals => { :button_name => 'Create'}%>
+
+<%= link_to 'Edit', edit_post_path(@post) %> |
+<%= link_to 'Back', posts_path %>

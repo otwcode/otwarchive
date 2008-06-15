@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gems>
+	<gem>
+		<name>ruby-debug-base</name>
+		<version>0.10.0</version>
+		<description>Fast Ruby debugger - core component</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>win32-process</name>
+		<version>0.5.3</version>
+		<description>Adds fork, wait, wait2, waitpid, waitpid2 and a special kill method</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>mysql</name>
+		<version>2.7.3</version>
+		<description>A win32-native build of the MySQL API module for Ruby.</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>win32-eventlog</name>
+		<version>0.4.6</version>
+		<description>Interface for the MS Windows Event Log.</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>win32-clipboard</name>
+		<version>0.4.3</version>
+		<description>A package for interacting with the Windows clipboard</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>activeresource</name>
+		<version>2.0.2</version>
+		<description>Think Active Record for web resources.</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>win32-dir</name>
+		<version>0.3.2</version>
+		<description>Extra constants and methods for the Dir class on Windows.</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>sqlite3-ruby</name>
+		<version>1.2.1</version>
+		<description>SQLite3/Ruby is a module to allow Ruby scripts to interface with a SQLite database.</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>hpricot</name>
+		<version>0.6</version>
+		<description>a swift, liberal HTML parser with a fantastic library</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>gem_plugin</name>
+		<version>0.2.3</version>
+		<description>A plugin system based on rubygems that uses dependencies only</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>rails</name>
+		<version>2.0.2</version>
+		<description>Web-application framework with template engine, control-flow layer, and ORM.</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>log4r</name>
+		<version>1.0.5</version>
+		<description>Log4r is a comprehensive and flexible logging library for Ruby.</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>activesupport</name>
+		<version>2.0.2</version>
+		<description>Support and utility classes used by the Rails framework.</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>win32-api</name>
+		<version>1.0.4</version>
+		<description>A superior replacement for Win32API</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>activerecord</name>
+		<version>2.0.2</version>
+		<description>Implements the ActiveRecord pattern for ORM.</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>win32-sapi</name>
+		<version>0.1.4</version>
+		<description>An interface to the MS SAPI (Sound API) library.</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>rake</name>
+		<version>0.7.3</version>
+		<description>Ruby based make-like utility.</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>windows-api</name>
+		<version>0.2.0</version>
+		<description>An easier way to create methods using Win32API</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>win32-file</name>
+		<version>0.5.4</version>
+		<description>Extra or redefined methods for the File class on Windows.</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>windows-pr</name>
+		<version>0.7.2</version>
+		<description>Windows functions and constants bundled via Win32::API</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>win32-sound</name>
+		<version>0.4.1</version>
+		<description>A library for playing with sound on MS Windows.</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>ruby-debug-ide</name>
+		<version>0.1.10</version>
+		<description>IDE interface for ruby-debug.</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>mongrel</name>
+		<version>1.1.2</version>
+		<description>A small fast HTTP library and server that runs Rails, Camping, Nitro and Iowa apps.</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>actionpack</name>
+		<version>2.0.2</version>
+		<description>Web-flow and rendering framework putting the VC in MVC.</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>sources</name>
+		<version>0.0.1</version>
+		<description>This package provides download sources for remote gem installation</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>fxruby</name>
+		<version>1.6.12</version>
+		<description>FXRuby is the Ruby binding to the FOX GUI toolkit.</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>actionmailer</name>
+		<version>2.0.2</version>
+		<description>Service layer for easy email delivery and testing.</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>win32-file-stat</name>
+		<version>1.2.7</version>
+		<description>A File::Stat class tailored to MS Windows</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>cgi_multipart_eof_fix</name>
+		<version>2.5.0</version>
+		<description>Fix an exploitable bug in CGI multipart parsing.</description>
+		<platform>ruby</platform>
+	</gem>
+	<gem>
+		<name>fxri</name>
+		<version>0.3.6</version>
+		<description>Graphical interface to the RI documentation, with search engine.</description>
+		<platform>ruby</platform>
+	</gem>
+</gems>

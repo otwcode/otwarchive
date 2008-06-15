@@ -1,0 +1,2 @@
+class PublicationData < ActiveRecord::Base
+end

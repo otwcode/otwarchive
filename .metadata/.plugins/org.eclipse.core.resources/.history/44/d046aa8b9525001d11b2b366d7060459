@@ -1,0 +1,24 @@
+<h1>Listing publication_datas</h1>
+
+<table>
+  <tr>
+    <th>Book</th>
+    <th>Publisher</th>
+    <th>Pagelength</th>
+  </tr>
+
+<% for publication_data in @publication_datas %>
+  <tr>
+    <td><%=h publication_data.book %></td>
+    <td><%=h publication_data.publisher %></td>
+    <td><%=h publication_data.pagelength %></td>
+    <td><%= link_to 'Show', publication_data %></td>
+    <td><%= link_to 'Edit', edit_publication_data_path(publication_data) %></td>
+    <td><%= link_to 'Destroy', publication_data, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New publication_data', new_publication_data_path %>

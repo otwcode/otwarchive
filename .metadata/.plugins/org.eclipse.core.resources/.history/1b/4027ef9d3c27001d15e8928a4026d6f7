@@ -1,0 +1,25 @@
+<!-- app/views/comments/index.html.erb -->
+<h1>Listing comments</h1>
+
+<table>
+  <tr>
+    <th>Post</th>
+    <th>Body</th>
+  </tr>
+
+<% for comment in @comments %>
+  <tr>
+    <td><%=h comment.post_id %></td>
+    <td><%=h comment.body %></td>
+    <td><%= link_to 'Show', [@post, comment] %></td>
+    <td><%= link_to 'Edit', [:edit, @post, comment] %></td>
+    <td><%= link_to 'Destroy', [@post, comment], 
+      :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New comment', 
+  new_post_comment_path(@post) %>

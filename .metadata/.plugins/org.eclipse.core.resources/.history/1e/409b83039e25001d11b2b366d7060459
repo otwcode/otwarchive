@@ -1,0 +1,18 @@
+<p>
+  <b>Book:</b>
+  <%=h @publication_data.book %>
+</p>
+
+<p>
+  <b>Publisher:</b>
+  <%=h @publication_data.publisher %>
+</p>
+
+<p>
+  <b>Pagelength:</b>
+  <%=h @publication_data.pagelength %>
+</p>
+
+
+<%= link_to 'Edit', edit_publication_data_path(@publication_data) %> |
+<%= link_to 'Back', publication_datas_path %>

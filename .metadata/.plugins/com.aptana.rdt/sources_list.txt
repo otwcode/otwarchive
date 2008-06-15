@@ -1,0 +1,4 @@
+*** CURRENT SOURCES ***
+
+Bulk updating Gem source index for: http://gems.rubyforge.org
+http://gems.rubyforge.org

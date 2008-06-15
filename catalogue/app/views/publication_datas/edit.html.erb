@@ -1,0 +1,22 @@
+<!-- app/views/publication_datas/edit.html.erb -->
+<h1>Editing publication_data</h1>
+
+<%= error_messages_for :publication_data %>
+
+<% form_for([@book, @publication_data]) do |f| %>
+  <p>
+    <b>Publisher</b><br />
+    <%= f.text_area :publisher %>
+  </p>
+  <p>
+    <b>Pagelength</b><br />
+    <%= f.text_area :pagelength %>
+  </p>
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', [@book, @publication_data] %> |
+<%= link_to 'Back', book_publication_datas_path(@book) %>
