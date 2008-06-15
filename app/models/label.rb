@@ -8,6 +8,28 @@ class Label < ActiveRecord::Base
     self.name = name.strip.squeeze(" ")
   end
 
+  # simple sort by label name. could be much fancier
+  def <=>(other_label)
+    self.name <=> other_label.name
+  end
+ 
+  def tagees
+    self.taggers.collect{|t| t if t.is_a? Label}.compact.uniq
+  end
+  def all_tags
+    (self.tags + self.tagees).compact.uniq
+  end
+  def tag_cloud(size=1)
+    return self.all_tags if size==1 
+    cloud = []
+    self.all_tags.each do |t|
+      next if t.is_official?
+      next if t.is_ambiguous?
+      cloud << t.tag_cloud(size-1)
+    end
+    (cloud + self.all_tags - [self]).flatten.compact.uniq
+  end
+
   # class methods
   def self.find_popular(args = {})
     find(:all, :select => 'labels.*, count(*) as popularity', 
@@ -60,7 +82,7 @@ class Label < ActiveRecord::Base
   # current metas: banned, official, canonical, parent, resembles, ambiguous
  
   # "is" metas - defines the label as a 'kind' of tag
-  [ 'banned', 'official', 'canonical' ].each do |kind|
+  [ 'banned', 'official', 'canonical', 'ambiguous', 'parent' ].each do |kind|
     define_method("is_#{kind}?") { meta == kind }
   end
   def is_freeform?
