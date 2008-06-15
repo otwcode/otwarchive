@@ -1,1 +1,0 @@
-["C:/ruby/lib/ruby/gems/1.8"]

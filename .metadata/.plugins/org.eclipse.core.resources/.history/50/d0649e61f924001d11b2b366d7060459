@@ -1,8 +1,0 @@
-<!-- app/views/comments/new.html.erb -->
-<h1>New comment</h1>
-
-<%= error_messages_for :comment %>
-
-<%= render :partial => @comment %>
-
-<%= link_to 'Back', post_comments_path(@post) %>
