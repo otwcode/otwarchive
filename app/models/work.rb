@@ -156,7 +156,7 @@ class Work < ActiveRecord::Base
   
   # Returns true if a work has or will have more than one chapter
   def chaptered?
-    !self.new_record? && (self.multipart? || self.is_wip)  
+    self.expected_number_of_chapters != 1  
   end
   
   # Returns true if a work has more than one chapter
