@@ -8,7 +8,20 @@ class ChaptersController < ApplicationController
   before_filter :is_author_true, :only => [ :edit, :update ]
   before_filter :check_permission_to_view, :only => [:index, :show]
   
-  auto_complete_for :pseud, :name
+  # For the auto-complete field in the works form
+  def auto_complete_for_pseud_byline
+    byline = request.raw_post.to_s.strip
+    if byline.include? "["
+      split = byline.split('[', 2)
+      pseud_name = split.first.strip
+      user_login = split.last.strip.chop
+      conditions = [ 'LOWER(users.login) LIKE ? AND LOWER(name) LIKE ?','%' + user_login + '%',  '%' + pseud_name + '%' ]
+    else
+      conditions = [ 'LOWER(name) LIKE ?', '%' + byline + '%' ]
+    end
+    @pseuds = Pseud.find(:all, :include => :user, :conditions => conditions, :limit => 10)
+    render :inline => "<%= auto_complete_result(@pseuds, 'byline')%>"
+  end
 
   def access_denied
     flash[:error] = "Please log in first."
@@ -47,6 +60,11 @@ class ChaptersController < ApplicationController
   
   # Sets values for @chapter, @coauthor_results, @pseuds, and @selected
   def set_instance_variables
+    if params[:pseud] && params[:pseud][:byline] && params[:chapter][:author_attributes]
+      params[:chapter][:author_attributes][:byline] = params[:pseud][:byline]
+      params[:pseud][:byline] = ""
+    end
+    
     if params[:id] # edit, update, preview, post
       @chapter = @work.chapters.find(params[:id])
     elsif params[:chapter] # create
@@ -54,10 +72,6 @@ class ChaptersController < ApplicationController
     else # new
       @chapter = current_user.unposted_chapter(@work) || @work.chapters.build
       @chapter.metadata ||= Metadata.new
-    end
-    
-    if params[:chapter] && params[:chapter][:author_attributes] && !params[:chapter][:author_attributes][:name].blank?
-      @coauthor_results = Pseud.get_coauthor_hash(params[:chapter][:author_attributes][:name])
     end
     
     @pseuds = (@work.pseuds + (@chapter.authors ||= [])).uniq
@@ -96,14 +110,10 @@ class ChaptersController < ApplicationController
   # POST /work/:work_id/chapters
   # POST /work/:work_id/chapters.xml
   def create
-	@work.wip_length = params[:chapter][:wip_length]
+  	@work.wip_length = params[:chapter][:wip_length]
   
-    if params[:no_script] && !(@coauthor_results ||= {}).blank?
-      if @chapter.valid?
-        render :partial => 'choose_coauthor', :layout => 'application'
-      else
-        render :action => :new
-      end
+    if !@chapter.invalid_pseuds.blank? || !@chapter.ambiguous_pseuds.blank?
+      @chapter.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
     elsif params[:edit_button]
       render :action => :new
     elsif params[:cancel_button]
@@ -116,8 +126,8 @@ class ChaptersController < ApplicationController
       else
         render :action => :new 
       end
-    end    
-  end
+    end
+  end    
   
   # PUT /work/:work_id/chapters/1
   # PUT /work/:work_id/chapters/1.xml
@@ -126,12 +136,8 @@ class ChaptersController < ApplicationController
     @chapter.attributes = params[:chapter]
     @work.wip_length = params[:chapter][:wip_length]
 
-    if params[:no_script] && !(@coauthor_results ||= {}).blank?
-      if @chapter.valid?
-        render :partial => 'choose_coauthor', :layout => 'application'
-      else
-        render :action => :new
-      end
+    if !@chapter.invalid_pseuds.blank? || !@chapter.ambiguous_pseuds.blank?
+      @chapter.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
     elsif params[:preview_button]
       render :partial => 'preview_edit', :layout => 'application'
     elsif params[:cancel_button]

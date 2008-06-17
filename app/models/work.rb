@@ -10,6 +10,8 @@ class Work < ActiveRecord::Base
   # Virtual attribute to use as a placeholder for pseuds before the work has been saved
   # Can't write to work.pseuds until the work has an id
   attr_accessor :authors
+  attr_accessor :invalid_pseuds
+  attr_accessor :ambiguous_pseuds
    
   before_save :validate_authors, :set_language
   after_save :save_creatorships
@@ -51,15 +53,17 @@ class Work < ActiveRecord::Base
   
   # Virtual attribute for pseuds
   def author_attributes=(attributes)
-    ids = attributes[:ids]
-    ids += attributes[:valid_pseuds].split "," if attributes[:valid_pseuds]
-    ids += attributes[:ambiguous_pseuds].values if attributes[:ambiguous_pseuds]
-    unless attributes[:name].blank?
-      coauthors = Pseud.get_coauthor_hash(attributes[:name]) 
-      ids += coauthors[:pseuds].collect(&:id)
+    self.authors ||= []
+    attributes[:ids].each { |id| self.authors << Pseud.find(id) }
+    attributes[:ambiguous_pseuds].each { |id| self.authors << Pseud.find(id) } if attributes[:ambiguous_pseuds]
+    if attributes[:byline]
+      results = Pseud.parse_bylines(attributes[:byline])
+      self.authors << results[:pseuds]
+      self.invalid_pseuds = results[:invalid_pseuds]
+      self.ambiguous_pseuds = results[:ambiguous_pseuds] 
     end
-    ids.uniq! unless ids.blank?
-    ids.each { |id| (self.authors ||= [] ) << Pseud.find(id) } if ids
+    self.authors.flatten!
+    self.authors.uniq! 
   end 
   
   # Virtual attribute for # of chapters
@@ -76,7 +80,9 @@ class Work < ActiveRecord::Base
   def validate_authors
     if self.authors.blank? && self.pseuds.empty?
       errors.add_to_base("Work must have at least one author.")
-      return false 
+      return false
+    elsif !self.invalid_pseuds.blank?
+      errors.add_to_base("These pseuds are invalid: " + self.invalid_pseuds.inspect) 
     end
   end
   

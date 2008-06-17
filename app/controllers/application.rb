@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   end
 
   #### -- GLOBALIZATION -- ####
-  layout 'application'
+  #layout 'application'
   
   before_filter :set_locale  
   # Determines the user's language of choice

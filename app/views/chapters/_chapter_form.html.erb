@@ -19,30 +19,16 @@
   </p>
 
 	<p class="clearboth"></p>
-	
-	<% fields_for "chapter[author_attributes]" do |a| %>
-	<noscript>
-  	<div id="no_js_co-authors">
-  	  <label for="storycoauthor">Enter co-author name(s): </label><br />
-  	  <%= a.text_field :name %>
-  	</div>
-  	<%= hidden_field "no_script", :true %>
-	</noscript>
- 	<%- end -%>
 
-  <div id="co-authors" style="display : none;"> 	  
+  <div id="co-authors"> 	  
     <p id="coauthormanage">
       <p>
         <span class="storylabel"><label for="storycoauthor">Enter co-author name(s):</label></span>
-       	<%= text_field_with_auto_complete :pseud, :name, { :size => 30 }, { :tokens => ',', :skip_style => true } %>
-       	<%= link_to_remote "Choose co-authors", :url=>{ :controller => :pseuds, :action => :choose_coauthors }, :with => "'names='+$F('pseud_name')+'&creation=chapter'" %>
-     	</p> 
+     	  <%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
+            { :url => {:controller => 'pseuds', :action => 'choose_coauthors'}, :method => :get, :param_name => 'search', 
+              :tokens => ',', :min_chars => 2, :skip_style => true } %>
+      </p> 
     </p>
-        
-    <%= link_to_function "Clear co-authors", update_page {|page| page.replace_html 'return_coauthors'} %>
-   </div>
-   
-   <div id="return_coauthors">
    </div>
     
   <% fields_for_metadata(chapter.metadata ||= Metadata.new) do |m| %>

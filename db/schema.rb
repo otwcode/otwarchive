@@ -137,7 +137,7 @@ ActiveRecord::Schema.define(:version => 46) do
   add_index "globalize_translations", ["table_name", "item_id", "language_id"], :name => "globalize_translations_table_name_and_item_and_language"
 
   create_table "labels", :force => true do |t|
-    t.string "name", :null => false
+    t.string "name", :default => "", :null => false
     t.string "meta"
   end
 

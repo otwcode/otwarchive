@@ -1,25 +1,21 @@
-<%- if @coauthor_results[:pseuds] && !@coauthor_results[:pseuds].empty? -%> 
-  <p>These pseuds are good: </p>    
-  <ul>
-  <% for pseud in @coauthor_results[:pseuds] %>
-    <li><%= pseud.name %></li>
-  <%- end -%>
-  </ul>
-  <%= hidden_field name_attributes(creation, "author"), :valid_pseuds, :value => "#{@coauthor_results[:pseuds].collect{|pseud| pseud.id.to_s + ","}.to_s}" %>  
-<%- end -%>
-
-<%- if @coauthor_results[:invalid_pseuds] && !@coauthor_results[:invalid_pseuds].empty? -%> 
+<%- unless creation.invalid_pseuds.blank? -%> 
   <p>These pseuds are invalid: </p>
   <ul>
-  <%- for name in @coauthor_results[:invalid_pseuds] -%>
+  <%- for name in creation.invalid_pseuds -%>
     <li><%= name %></li>
   <%- end -%>
   </ul>
+  <p>Try again:</p>
+  <%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
+      { :url => {:controller => 'pseuds', :action => 'choose_coauthors'}, :method => :get, :param_name => 'search', 
+        :tokens => ',', :min_chars => 2, :skip_style => true } %>
 <%- end -%> 
 
-<%- if @coauthor_results[:ambiguous_pseuds] && !@coauthor_results[:ambiguous_pseuds].empty? -%>
-  <%- @coauthor_results[:ambiguous_pseuds].each_pair do |name, pseuds| -%>
+<%- unless creation.ambiguous_pseuds.blank? -%>
+  <%- creation.ambiguous_pseuds.each_pair do |name, pseuds| -%>
     <p>There's more than one user with the pseud "<%=h name %>". Please choose the one you want: </p>
-    <%= collection_select(name_attributes(creation, "author") + "[ambiguous_pseuds]", name, pseuds, :id, :user_name) %>
+    <select name="<%= creation.class.to_s.downcase %>[author_attributes][ambiguous_pseuds][]">
+      <%= options_from_collection_for_select(pseuds, :id, :user_name) %>
+    </select>  
   <%- end -%>  
 <%- end -%>

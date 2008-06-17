@@ -21,3 +21,8 @@ function showChapteredStoryOptions() {
 	else {item.value = 1;}
 	Element.toggle('number-of-chapters');
 }
+
+function hideCoAuthorField() {
+	var item = document.getElementById('co-authors');
+	if (item != null) item.style.display='none';
+}

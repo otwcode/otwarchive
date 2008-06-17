@@ -29,9 +29,22 @@ class PseudsController < ApplicationController
     @pseud = @user.pseuds.find(params[:id])
   end
   
+  # For use with work/chapter forms
   def choose_coauthors
-    @coauthor_results = Pseud.get_coauthor_hash(params[:names])
-    @creation = params[:creation]
+    byline = params[:search].strip
+    if byline.include? "["
+      split = byline.split('[', 2)
+      pseud_name = split.first.strip
+      user_login = split.last.chop
+      conditions = [ 'LOWER(users.login) LIKE ? AND LOWER(name) LIKE ?','%' + user_login + '%',  '%' + pseud_name + '%' ]
+    else
+      conditions = [ 'LOWER(name) LIKE ?', '%' + byline + '%' ]
+    end
+    @pseuds = Pseud.find(:all, :include => :user, :conditions => conditions, :limit => 10)
+    respond_to do |format|
+        format.html
+        format.js
+      end
   end
   
   # GET /pseuds/new

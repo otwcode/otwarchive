@@ -7,7 +7,20 @@ class WorksController < ApplicationController
   before_filter :update_or_create_reading, :only => [ :show ]
   before_filter :check_permission_to_view, :only => :show
   
-  auto_complete_for :pseud, :name
+  # For the auto-complete field in the works form
+  def auto_complete_for_pseud_byline
+    byline = request.raw_post.to_s.strip
+    if byline.include? "["
+      split = byline.split('[', 2)
+      pseud_name = split.first.strip
+      user_login = split.last.strip.chop
+      conditions = [ 'LOWER(users.login) LIKE ? AND LOWER(name) LIKE ?','%' + user_login + '%',  '%' + pseud_name + '%' ]
+    else
+      conditions = [ 'LOWER(name) LIKE ?', '%' + byline + '%' ]
+    end
+    @pseuds = Pseud.find(:all, :include => :user, :conditions => conditions, :limit => 10)
+    render :inline => "<%= auto_complete_result(@pseuds, 'byline')%>"
+  end
   
   def access_denied
     flash[:error] = "Please log in first."
@@ -18,6 +31,11 @@ class WorksController < ApplicationController
 
   # Sets values for @work, @chapter, @metadata, @coauthor_results, @pseuds, and @selected
   def set_instance_variables
+    if params[:pseud] && params[:pseud][:byline] && params[:work][:author_attributes]
+      params[:work][:author_attributes][:byline] = params[:pseud][:byline]
+      params[:pseud][:byline] = ""
+    end
+    
     if params[:id] # edit, update, preview, post, manage_chapters
       @work = Work.find(params[:id])
     elsif params[:work]  # create
@@ -38,10 +56,6 @@ class WorksController < ApplicationController
     end
     @chapters = @work.chapters.find(:all, :order => 'position')
     @metadata = @work.metadata
-    
-    if params[:work] && params[:work][:author_attributes] && !params[:work][:author_attributes][:name].blank?
-      @coauthor_results = Pseud.get_coauthor_hash(params[:work][:author_attributes][:name])
-    end
     
     unless current_user == :false
       @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
@@ -71,7 +85,7 @@ class WorksController < ApplicationController
   def index
     conditions = "posted = true"
     # Get only works in the current locale
-	conditions << " AND language_id = #{Locale.active.language.id}" if Locale.active && Locale.active.language
+	  conditions << " AND language_id = #{Locale.active.language.id}" if Locale.active && Locale.active.language
     conditions << " AND restricted = 0 OR restricted IS NULL" unless logged_in?
     @works = Work.find(:all, :conditions => conditions, :order => "works.created_at DESC", :include => [:pseuds, :metadata] )
   end
@@ -89,13 +103,9 @@ class WorksController < ApplicationController
   # POST /works
   def create
     @work.set_initial_version     
-    
-    if params[:no_script] && !(@coauthor_results ||= {}).blank?
-      if @work.valid?
-        render :partial => 'choose_coauthor', :layout => 'application'
-      else
-        render :action => :new
-      end
+
+    if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
+      @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
     elsif params[:edit_button]
       render :action => :new
     elsif params[:cancel_button]
@@ -117,13 +127,14 @@ class WorksController < ApplicationController
   # PUT /works/1
   def update
     @work.attributes = params[:work]
+    
+    # Need to update @pseuds and @selected values so we don't lose new co-authors if the form needs to be rendered again
+    @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
+    to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 
+    @selected = to_select.collect {|pseud| pseud.id.to_i }
    
-    if params[:no_script] && !(@coauthor_results ||= {}).blank? 
-      if @work.valid?
-        render :partial => 'choose_coauthor', :layout => 'application'
-      else
-        render :partial => 'work_form', :layout => 'application'
-      end
+    if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank? 
+      @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
     elsif params[:preview_button]
   	  @chapters = [@chapter]
       render :partial => 'preview_edit', :layout => 'application'

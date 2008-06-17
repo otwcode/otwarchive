@@ -2,11 +2,11 @@
 
 <%- form_for([@work, @chapter]) do |f| -%>
   
-  <%= render :partial => 'pseuds/coauthor_form', :locals => {:creation => 'chapter'} %> 
-
+  <%= render :partial => 'pseuds/coauthor_form', :locals => {:creation => @chapter} %>
+   
   <select name="chapter[author_attributes][ids][]" multiple="multiple" style="display : none;">
-    <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
-  </select>
+    <%= options_from_collection_for_select(@chapter.authors, :id, :name, @chapter.authors.collect {|pseud| pseud.id.to_i }) %>
+  </select> 
   
   <% if @chapter.metadata %>
     <% fields_for_metadata(@chapter.metadata) do |m| %>
@@ -20,7 +20,6 @@
   
   <p class="field-right">
     <%= submit_tag 'Preview', :name => 'preview_button' %>
-    <%= submit_tag 'Edit', :name => 'edit_button' %>
     <%= submit_tag 'Cancel', :name => 'cancel_button' %> 
   </p>
 

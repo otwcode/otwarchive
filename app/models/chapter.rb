@@ -13,6 +13,8 @@ class Chapter < ActiveRecord::Base
   # Virtual attribute to use as a placeholder for pseuds before the chapter has been saved
   # Can't write to chapter.pseuds until the chapter has an id
   attr_accessor :authors
+  attr_accessor :invalid_pseuds
+  attr_accessor :ambiguous_pseuds
   attr_accessor :wip_length_placeholder
 
   before_save :validate_authors
@@ -62,15 +64,17 @@ class Chapter < ActiveRecord::Base
 
   # Virtual attribute for pseuds
   def author_attributes=(attributes)
-    ids = attributes[:ids]
-    ids += attributes[:valid_pseuds].split "," if attributes[:valid_pseuds]
-    ids += attributes[:ambiguous_pseuds].values if attributes[:ambiguous_pseuds]
-    unless attributes[:name].blank?
-      coauthors = Pseud.get_coauthor_hash(attributes[:name]) 
-      ids += coauthors[:pseuds].collect(&:id)
-    end 
-    ids.uniq! unless ids.blank?
-    ids.each { |id| (self.authors ||= [] ) << Pseud.find(id) } if ids
+    self.authors ||= []
+    attributes[:ids].each { |id| self.authors << Pseud.find(id) }
+    attributes[:ambiguous_pseuds].each { |id| self.authors << Pseud.find(id) } if attributes[:ambiguous_pseuds]
+    if attributes[:byline]
+      results = Pseud.parse_bylines(attributes[:byline])
+      self.authors << results[:pseuds]
+      self.invalid_pseuds = results[:invalid_pseuds]
+      self.ambiguous_pseuds = results[:ambiguous_pseuds] 
+    end
+    self.authors.flatten!
+    self.authors.uniq!
   end
   
   # Checks that chapter has at least one author
