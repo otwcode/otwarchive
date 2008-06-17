@@ -14,7 +14,6 @@
 
       <div class="story-date">
         <%=h work.created_at.localize("%d %B %Y") %><br />
-        <%= bookmark_link(work) %>
       </div>
 
       <p class="story-desc">
@@ -25,5 +24,3 @@
 
   <% end %>
 </ul>
-
-<div id="dynamic-bookmark" style="display:none"></div>
