@@ -16,7 +16,7 @@
   <p>
     <%- unless bookmark.notes.blank? -%>
       User's notes: <br />
-      <%= bookmark.notes %> - <%= link_to bookmark.user.login, bookmark.user %>
+      <%= bookmark.notes %> - <% if bookmark.user %><%= link_to bookmark.user.login, bookmark.user %><% end %>
     <%- else -%>
       Bookmarked by: <%= link_to bookmark.user.login, bookmark.user %>
     <%- end -%>
