@@ -92,7 +92,12 @@ class WorkTest < ActiveSupport::TestCase
     # TODO test_update_minor_version
   end 
   def test_chaptered
-    # TODO test_chaptered
+    work = create_work(:expected_number_of_chapters => 1)
+    assert !work.chaptered?
+    work.expected_number_of_chapters = nil
+    assert work.chaptered?
+    work.expected_number_of_chapters = 42
+    assert work.chaptered?
   end
   def test_multipart
     # TODO test_multipart

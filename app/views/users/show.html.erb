@@ -1,49 +1,57 @@
-<ul id="navi">
-  <li>
-    <%= link_to '&lt;&lt; ' + 'Back to story list'.t, works_path, :class => 'list-left' -%>
-  </li>
-</ul>
-<div class="clearboth"></div>
-
-<h2><%=h "%s's home" / @user.login -%></h2>
-
-<h3><%= "Profile".t -%></h3>
-  <p>
-    <b><%= "Location".t -%>:</b> 
-    <%=h @user.profile.location -%>
-  </p>
-
-	<% if @user.preference.date_of_birth_visible %>
-  <p>
-    <b><%= "Date of Birth".t -%>:</b> 
-    <%=h @user.profile.date_of_birth -%>
-  </p>
-	<%- end -%>
-
-  <p>
-    <b><%= "About Me".t -%>:</b><br />
-    <%=sanitize_format @user.profile.about_me -%>
-  </p>
-	<% if @user.preference.email_visible %>
-  <p>
-    <b><%= "Email".t -%>:</b>
-    <%= mail_to @user.email, nil, :encode => "hex" -%>
-  </p>
-	<% end %>
-	<%- if current_user == @user -%>
-    <%= link_to "Edit profile".t, edit_user_path(@user) -%>
+<div id="user-page">
+  <h1><%=h @user.login %>'s User Page</h1>
+  
+  <%- if logged_in? && current_user == @user -%>
+      <p>
+        <%= link_to "Edit profile".t, edit_user_path(@user) %> | 
+        <%= link_to 'Manage pseuds'.t, user_pseuds_path(@user) %> | 
+        <%= link_to "Reading history".t, readings_url %>
+      </p>
   <%- end -%>
-<% @user.pseuds.each do |pseud| -%>
 
-  <h3><%=h "Works under the name %s...".t / pseud.name -%></h3>
+  <div class="user-category" id="user-pseuds">
+    <span class="two-column-left">Pseuds (<%= @user.pseuds.count %>)</span>
+    <div class="two-column-right"><%= print_pseuds(@user) %></div>
+  </div>
 
-	<%= print_works(pseud) %>
+  <div class="user-category" id="user-location">
+    <span class="two-column-left">Location</span>
+    <div class="two-column-right"><%=h @user.profile.location -%></div>
+  </div>
+  
+  <%- if @user.preference.date_of_birth_visible -%>
+  <div class="user-category" id="user-birthday">
+    <span class="two-column-left">Birthday</span>
+    <div class="two-column-right"><%=h @user.profile.date_of_birth -%></div> 
+  </div>
+  <%- end -%>
 
-     
-<%- end -%>
+  <div class="user-category" id="user-bio">
+    <span class="two-column-left">Bio</span>
+    <div class="two-column-right"><%=sanitize_format @user.profile.about_me -%></div>
+  </div>
+  
+  <%- if @user.preference.email_visible -%>
+  <div class="user-category" id="user-email">
+    <span class="two-column-left">Email</span>
+    <div class="two-column-right"><%= mail_to @user.email, nil, :encode => "hex" %></div>
+  </div>
+  <%- end -%>
 
-<p><%= link_to 'Manage Names'.t, user_pseuds_path(@user) -%></p>
+  <div class="user-category" id="user-bookmarks">
+    <span class="two-column-left"><%= link_to 'Bookmarks (' + @user.bookmarks.count.to_s + ')', user_bookmarks_path(@user) %></span>
+  </div>
+  
+  <div id="user-works">
+    <% for pseud in @user.pseuds %>
+      <div class="pseud-works">
+        <a name="pseud-<%= pseud.id %>"></a>
+        <h2>Works by <%= pseud.name %>:</h2>
+        <ul><%= print_works(pseud) %></ul>
+      </div>
+    <% end %>
+  </div>
 
-<% if logged_in? && current_user == @user %>
-  <%= link_to "Reading history".t, readings_url -%>
-<% end %>
+</div> 
+
+

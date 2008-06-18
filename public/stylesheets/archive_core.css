@@ -474,3 +474,51 @@ textarea.story-edit-notes {
 	padding: 10px; 
 	list-style-type: none;
 }
+
+/* INTERIM SPIFFING UP OF USER PAGE */
+
+.user-category {
+	width: 570px;
+	height: auto;
+	clear: both;
+	padding: 20px;
+	font-size: 110%;
+}
+
+#user-page li {
+	list-style-type: none;
+	left: 0px;
+}
+
+#user-page h1 {
+	font-size: 200%;
+}
+
+#user-page h2 {
+	font-size: 150%;
+}
+
+#user-page h3 {
+	font-size: 120%;
+}
+
+#user-works {
+	clear: both;
+	padding-top: 30px;
+}                   
+
+.pseud-works {
+	border-top: 2px solid black;
+	padding-bottom: 20px;
+}
+
+.two-column-left {
+	width: 150px;
+	float: left;
+	padding-right: 20px;
+}
+
+.two-column-right {
+	width: 400px;
+	float: right;
+}
