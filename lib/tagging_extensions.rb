@@ -1,81 +1,63 @@
-class ActiveRecord::Base
   # note, if you modify this file you have to restart the server or console
 
-  module TaggingExtensions
-    # Replace the existing tags on self given a string of delimited names 
-    def tag_with name_string
-      return false unless name_string.is_a? String
-      name_array = name_string.split(ArchiveConfig.DELIMITER).map {|name| name.strip.squeeze(" ")}
-      name_array = name_array - [""]
-      current = tags.map(&:name)
-      tag_add(name_array - current)
-      tag_del(current - name_array)
-      return true
-   end
-
-   # Returns the tags on self as a string.
-    def tag_string
-      self.reload
-      tags.map(&:name).sort.join(ArchiveConfig.DELIMITER)
-    end
-
-    # current official tags: Fandoms, Characters, Ratings, Warnings
-    
-    # return the fandom tags as a string
-    def fandoms
-      tags.select{|t| t.is_fandom? }.map(&:name).sort.join(ArchiveConfig.DELIMITER)
-    end
-    
-    # return the character tags as a string
-    def characters
-      if self.is_a?(Label) && self.is_fandom?
-        taggers.select{|t| t.is_character? }.map(&:name).sort.join(ArchiveConfig.DELIMITER)
-      else
-       tags.select{|t| t.is_character? }.map(&:name).sort.join(ArchiveConfig.DELIMITER)
-      end
-    end
-    
-    # return the ratings tags as a string
-    def ratings
-      tags.select{|t| t.is_rating? }.map(&:name).sort.join(ArchiveConfig.DELIMITER)
-    end
-
-    # return the ratings tags as a string
-    def warnings
-      tags.select{|t| t.is_warning? }.map(&:name).sort.join(ArchiveConfig.DELIMITER)
-    end
-    
-    # return unofficial tags as a string
-    def freeforms
-      alltags = self.tags.select{|t| t.is_freeform? }.map(&:name)
-      others = [self.fandoms, self.characters, self.ratings, self.warnings].join(ArchiveConfig.DELIMITER)
-      others = others.split(ArchiveConfig.DELIMITER)
-      (alltags - others).sort.join(ArchiveConfig.DELIMITER)
-    end
-
-    private 
-
-    # Add tags to self.
-    def tag_add incoming
-      incoming.each do |tag_name|
-        begin
-          tag = Label.find_or_create_by_name(tag_name)
-          raise Label::Error, "tag could not be saved: #{tag_name}" if tag.new_record?
-          tag.taggers << self unless tag.is_banned?
-        rescue ActiveRecord::StatementInvalid => e
-          raise unless e.to_s =~ /duplicate/i
-        end
-      end
-    end
+module TaggingExtensions
   
-    # Removes tags from self. 
-    def tag_del outgoing
-      tags.delete(*(tags.select do |tag|
-        outgoing.include? tag.name    
-      end))
-      end
-
+  # returns an array of tag objects
+  def tags(category=['all'])
+    self.reload
+    if category == ['all']
+      Array(taggings.collect(&:valid_tag).compact)
+    else
+      a = category.collect do |c| 
+        cat = TagCategory.find_by_name(c)
+        return false unless cat
+        taggings.find_by_category(cat).collect(&:valid_tag)
+      end.flatten.compact
+    end
   end
   
-  include TaggingExtensions
+  # returns a delimited string of tag names
+  def tag_string(category=['all'])
+    self.reload
+    if category == ['all']
+      tags.map(&:name).sort.join(ArchiveConfig.DELIMITER)
+    else
+      (category.collect {|c| tags([c]).map(&:name)}).sort.join(ArchiveConfig.DELIMITER)
+    end
+  end
+
+  # usage:
+  # tag_with(:freeform => 'a, few, tags', :fandom => 'stargate atlantis', :rating => 'adult')
+  # note, this replaces the tags in the categories given (and only in those categories)
+  def tag_with(tag_category_hash)
+    tag_category_hash.each_pair do |category, tag_string| 
+      category = TagCategory.find_by_name(category.to_s)
+      return false unless category
+      # create the new tags
+      if tag_string.blank?
+        tag_array = []
+      else
+        new_tags = tag_string.split(ArchiveConfig.DELIMITER).collect do |tag_name|
+          tag = Tag.find_or_create_by_name(tag_name)
+          if tag.tag_category
+            return false unless tag.tag_category == category
+          else
+            tag.tag_category = category
+            tag.save
+          end
+          tag
+        end
+        tag_array = new_tags.flatten.compact
+      end
+      # add and remove tags to make the taggable's tags equal to the new tag_array
+      self.reload
+      current = tags(category.name)
+      add = tag_array - current
+      remove = current - tag_array
+      add.each {|t| Tagging.create(:tag => t, :taggable => self) }
+      remove.each {|t| self.taggings.find_by_tag(t).each(&:destroy)}
+      self.tags
+    end
+  end
+  
 end

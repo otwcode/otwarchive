@@ -1,0 +1,21 @@
+<h1>New tag</h1>
+
+<%= error_messages_for :tag %>
+
+<% form_for(@tag) do |f| %>
+  <p>
+  Name: <%= f.text_field("name") %>
+  <br>
+  <%= f.check_box("banned") %>Banned    (this tag will not show up anywhere)
+  <br>
+  <%= f.check_box("canonical") %>Canonical    (this tag will show up in selections and lists)
+  <br>
+  <% TagCategory.find(:all).each do |category| -%>
+    <%= f.radio_button("tag_category_id", category.id) %><%= category.name %>
+  <% end -%>
+  <br>
+  <%= f.submit %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', tags_path %>

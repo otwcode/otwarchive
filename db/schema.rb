@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 46) do
+ActiveRecord::Schema.define(:version => 47) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -136,13 +136,6 @@ ActiveRecord::Schema.define(:version => 46) do
   add_index "globalize_translations", ["tr_key", "language_id"], :name => "index_globalize_translations_on_tr_key_and_language_id"
   add_index "globalize_translations", ["table_name", "item_id", "language_id"], :name => "globalize_translations_table_name_and_item_and_language"
 
-  create_table "labels", :force => true do |t|
-    t.string "name", :default => "", :null => false
-    t.string "meta"
-  end
-
-  add_index "labels", ["name"], :name => "index_labels_on_name", :unique => true
-
   create_table "metadatas", :force => true do |t|
     t.string   "title"
     t.text     "summary"
@@ -219,14 +212,47 @@ ActiveRecord::Schema.define(:version => 46) do
     t.datetime "updated_at"
   end
 
-  create_table "taggings", :force => true do |t|
-    t.integer "tag_id"
-    t.string  "tag_type"
-    t.integer "tagger_id"
-    t.string  "tagger_type"
+  create_table "tag_categories", :force => true do |t|
+    t.string   "name",       :null => false
+    t.boolean  "required"
+    t.boolean  "official"
+    t.boolean  "exclusive"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  add_index "taggings", ["tag_id", "tagger_id", "tagger_type"], :name => "index_taggings_on_tag_id_and_tagger_id_and_tagger_type", :unique => true
+  add_index "tag_categories", ["name"], :name => "index_tag_categories_on_name", :unique => true
+
+  create_table "tag_relationships", :force => true do |t|
+    t.string   "name",        :null => false
+    t.string   "verb_phrase", :null => false
+    t.boolean  "loose"
+    t.boolean  "reciprocal"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tag_relationships", ["name"], :name => "index_tag_relationships_on_name", :unique => true
+
+  create_table "taggings", :force => true do |t|
+    t.integer  "tag_id"
+    t.integer  "tag_relationship_id"
+    t.integer  "taggable_id"
+    t.string   "taggable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tags", :force => true do |t|
+    t.string   "name",            :null => false
+    t.boolean  "canonical"
+    t.boolean  "banned"
+    t.integer  "tag_category_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tags", ["name"], :name => "index_tags_on_name", :unique => true
 
   create_table "users", :force => true do |t|
     t.datetime "created_at"

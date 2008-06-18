@@ -1,0 +1,7 @@
+<%= @tag_category.name %>
+<br>
+<% if @tag_category.required? %>is Required<br><% end -%>
+<% if @tag_category.official? %>is Official<br><% end -%>
+<% if @tag_category.exclusive? %>is Exclusive<br><% end -%>
+<%= link_to 'Edit', edit_tag_category_path(@tag_category) %> |
+<%= link_to 'Back', tag_categories_path %>

@@ -1,0 +1,14 @@
+<%= error_messages_for :tag_categories %>
+<% form_for(@tag_category) do |f| %>
+  <p>
+  Name: <%= f.text_field("name") %>
+  <br>
+  <%= f.check_box("required") %>Required    (this tag must be filled in) (not implemented yet)
+  <br>
+  <%= f.check_box("official") %>Official    (this tag will show up in menus)
+  <br>
+  <%= f.check_box("exclusive") %>Exclusive    (this tag will only allow one choice)   (not implemented yet, and will break things badly!)
+  <br>
+  <%= f.submit %>
+  </p>
+<% end %>

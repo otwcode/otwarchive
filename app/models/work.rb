@@ -2,6 +2,9 @@ class Work < ActiveRecord::Base
   has_many :chapters, :dependent => :destroy
   has_one :metadata, :as => :described, :dependent => :destroy
   has_many :bookmarks, :as => :bookmarkable
+  has_many :taggings, :as => :taggable, :dependent => :destroy
+
+  include TaggingExtensions
 
   def find_all_comments
     self.chapters.collect { |c| c.find_all_comments }.flatten
@@ -172,5 +175,10 @@ class Work < ActiveRecord::Base
   # Returns true if a work is complete
   def is_complete
     return !self.is_wip
+  end
+
+  TagCategory.official.each do |c|
+    define_method(c.name){tag_string()}
+    define_method(c.name='='){|tag_name| tag_with(c.name.to_sym => tag_name)}
   end
 end

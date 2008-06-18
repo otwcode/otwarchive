@@ -1,0 +1,23 @@
+<h1>Listing tag_categories</h1>
+
+<table>
+  <tr>
+  </tr>
+
+<% for tag_category in @tag_categories %>
+  <tr>
+    <td><%= tag_category.name %>
+    <td><% if tag_category.required? %> Required <% end -%></td>
+    <td><% if tag_category.official? %> Official <% end -%></td>
+    <td><% if tag_category.exclusive? %> Exclusive<br><% end -%></td>
+
+    <td><%= link_to 'Show', tag_category %></td>
+    <td><%= link_to 'Edit', edit_tag_category_path(tag_category) %></td>
+    <td><%= link_to 'Destroy', tag_category, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New tag_category', new_tag_category_path %>

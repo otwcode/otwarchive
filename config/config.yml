@@ -29,7 +29,24 @@ LOGO: 'OTWLogo.jpg'
 ALT_LOGO: 'OTW Logo'
 REVISION: ''
 
+# tag settings
 DELIMITER: ', '  # if you change this, you probably need to change the label regexp as well
+# note, this is just to prime an empty database, it is not used subsequently
+FIRST_CATEGORIES: 
+- { name: Rating, required: true, official: true, exclusive: true }
+- { name: Warning, required: true, official: true, exclusive: false }
+- { name: Fandom, required: true, official: true, exclusive: false }
+- { name: Character, required: false, official: true, exclusive: false }
+- { name: Pairing, required: false, official: true, exclusive: false }
+- { name: Freeform, required: false, official: true, exclusive: false }
+- { name: Ambiguous, required: false, official: false, exclusive: false }
+# note, this is just to prime an empty database, it is not used subsequently
+FIRST_RATINGS: 
+- Adult
+- All ages
+- (No Rating)
+
+
 
 SMTP_SERVER: localhost
 SMTP_PORT: 25

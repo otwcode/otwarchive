@@ -1,0 +1,8 @@
+<%= @tag.name %>
+<br>
+<% if @tag.banned? %>is Banned<br><% end -%>
+<% if @tag.canonical? %>is Canonical<br><% end -%>
+Category: <%= @tag.tag_category.name %>
+<br>
+<%= link_to 'Edit', edit_tag_path(@tag) %> |
+<%= link_to 'Back', tags_path %>

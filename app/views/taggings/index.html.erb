@@ -1,0 +1,18 @@
+<h1>Listing taggings</h1>
+
+<table>
+  <tr>
+  </tr>
+
+<% for tagging in @taggings %>
+  <tr>
+    <td><%= link_to 'Show', tagging %></td>
+    <td><%= link_to 'Edit', edit_tagging_path(tagging) %></td>
+    <td><%= link_to 'Destroy', tagging, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New tagging', new_tagging_path %>

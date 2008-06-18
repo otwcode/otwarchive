@@ -1,16 +1,28 @@
 class Tagging < ActiveRecord::Base
-  belongs_to :tag, :polymorphic => true
-  belongs_to :tagger, :polymorphic => true
+  belongs_to :tag
+  belongs_to :tag_relationship
+  belongs_to :taggable, :polymorphic => true
+
+  def valid_tag
+    return tag unless tag.banned
+  end
   
-  acts_as_double_polymorphic_join(
-    :tags => [:labels],    # models that can be used as tags
-    :taggers => [:works, :bookmarks, :labels]  # models that can be tagged
-  )
+  def self.tagees(options = {})
+    with_scope :find => options do
+      find(:all).collect(&:taggable).compact
+    end
+  end
+  
+  def self.find_by_category(category, options = {})
+    with_scope :find => options do
+      find(:all, :include => :tag, :conditions => ["tag_category_id = ?", category.id])
+    end
+  end
 
-  # work.tags are the tags added to a work
-  # label.tags are the tags added to a label
-  # label.taggers are the objects that have that label added to them
-
-  # TODO only tag wranglers can tag labels (to create a heirarchy)
+  def self.find_by_tag(tag, options = {})
+    with_scope :find => options do
+      find(:all, :include => :tag, :conditions => ["tag_id = ?", tag.id])
+    end
+  end
 
 end

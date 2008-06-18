@@ -32,13 +32,11 @@ module FixtureReplacement
     a.password_confirmation = password
   end
 
-# FIXME can't define until work model is acts_as_bookmarkable
-#  attributes_for :bookmark do |a|
-#    a.title = random_string
-#    a.user = default_user
-#    a.bookmarkable_type = 'Work'
-#    a.bookmarkable_id = create_work.id
-#  end
+  attributes_for :bookmark do |a|
+    a.notes = random_phrase
+    a.user = default_user
+    a.bookmarkable = create_work
+  end
   
   # to create (save) a new chapter you have to have a work first
   # first_chapter=new_chapter
@@ -68,10 +66,6 @@ module FixtureReplacement
     a.creation_type = :work
     a.creation = default_work
   end
-  
-  attributes_for :label do |a|
-    a.name = random_phrase
-  end
 
   attributes_for :metadata do |a|
     a.title = random_phrase
@@ -100,10 +94,24 @@ module FixtureReplacement
   attributes_for :role do |a|
     a.name = random_phrase[0..40]
   end
+ 
+  attributes_for :tag do |a|
+    a.tag_category = default_tag_category
+    a.name = random_phrase
+  end
   
   attributes_for :tagging do |a|
-    a.tag = create_label
-    a.tagger = create_work
+    a.tag = default_tag
+    a.taggable = default_work
+  end
+
+  attributes_for :tag_category do |a|
+    a.name = random_phrase
+  end
+  
+  attributes_for :tag_relationship do |a|
+    a.name = random_word
+    a.verb_phrase = random_phrase.downcase
   end
 
   attributes_for :user do |a|
@@ -118,9 +126,10 @@ module FixtureReplacement
   end
 
   attributes_for :work do |a|
+    user = create_user
     a.metadata = default_metadata
-    a.authors = [default_pseud]
-    a.chapters = [new_chapter]
+    a.authors = [user.default_pseud]
+    a.chapters = [new_chapter(:authors => [user.default_pseud])]
   end
 
   ##### some random generators

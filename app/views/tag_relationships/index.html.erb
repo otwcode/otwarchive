@@ -1,0 +1,18 @@
+<h1>Listing tag_relationships</h1>
+
+<table>
+  <tr>
+  </tr>
+
+<% for tag_relationship in @tag_relationships %>
+  <tr>
+    <td><%= link_to 'Show', tag_relationship %></td>
+    <td><%= link_to 'Edit', edit_tag_relationship_path(tag_relationship) %></td>
+    <td><%= link_to 'Destroy', tag_relationship, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New tag_relationship', new_tag_relationship_path %>

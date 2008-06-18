@@ -23,36 +23,23 @@
 	<p>
 
   <!-- Tags -->
-  <!-- Fandom field (storyfandom) -->
+  <!-- Fandom field -->
 		<span class="field-left">
-			<span class="required storylabel"><label for="storyfandom">Fandom*</label></span><br />
-			<input type="text" name="fandoms" class="storyinputfield" tabindex="1" /><%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
-
-      <!-- Rating field (storyrating) -->
-			<span class="required storylabel"><label for="storyrating">Rating*</label></span>
-      <!-- Fake options!  These need to be populated by the backend or hard-coded as appropriate. -->
-			<select name="ratings" class="storyinputfield" tabindex="2">
-				<option>(Not Rated)</option>
-				<option>All ages</option>
-				<option>Teen</option>
-				<option>Adult</option>
-			</select>
-			<%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
-
-		<span class="field-right">
-      <!-- Warnings field (storywarnings) -->
-      <!-- "Allows multiple choices": meant to be there or no? -->
-			<span class="storylabel"><label for="storywarnings">Warnings (allows multiple choices)</label></span>
-			<input type="text" name="warnings" class="storyinputfield" tabindex="4" /><%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
-
-      <!-- Pairing(s)/Characters field (storycharacters) -->
-			<span class="storylabel"><label for="storycharacters">Pairing(s)/Characters</label></span>
-			<input type="text" name="characters" class="storyinputfield" tabindex="5" /><%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
-
-      <!-- Tags field (storytags) -->
-      <!-- Label on this: ?? -->
-			<span class="storylabel"><label for="storytags">Free Tags (User defined)</label></span>
-			<input type="text" name="freeforms" class="storyinputfield" tabindex="6" /><%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
+		  <% TagCategory.find_all_by_official(true).each do |category| %>
+        <% if category.required %>
+          <span class="required storylabel">
+        <% else %>
+          <span class="storylabel">
+        <% end %>
+        <%= category.name %>
+          </span>
+        <% if category.exclusive %>
+          <%= collection_select(:work, category.name.to_sym, TagCategory.official_tags(category.name), :name, :name) %>		
+        <% else %>
+          <%= f.text_field category.name %>
+        <% end %>
+        <%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
+	    <% end %>		
 		</span>
 	</p>
 
