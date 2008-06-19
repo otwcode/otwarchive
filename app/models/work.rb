@@ -1,7 +1,7 @@
 class Work < ActiveRecord::Base
   has_many :chapters, :dependent => :destroy
   has_one :metadata, :as => :described, :dependent => :destroy
-  has_many :bookmarks, :as => :bookmarkable
+  has_bookmarks
   has_many :taggings, :as => :taggable, :dependent => :destroy
 
   include TaggingExtensions

@@ -39,7 +39,7 @@
   <%- end -%>
 
   <div class="user-category" id="user-bookmarks">
-    <span class="two-column-left"><%= link_to 'Bookmarks (' + @user.bookmarks.count.to_s + ')', user_bookmarks_path(@user) %></span>
+    <span class="two-column-left"><%= print_bookmarks_link(@user) %></span>
   </div>
   
   <div id="user-works">
