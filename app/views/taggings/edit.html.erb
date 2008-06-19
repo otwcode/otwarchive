@@ -4,6 +4,11 @@
 
 <% form_for(@tagging) do |f| %>
   <p>
+  <%= @tagging.taggable.name %>
+  <%= f.select("tag_relationship_id", TagRelationship.find(:all).collect {|p| [ p.verb_phrase, p.id ] }, {:include_blank => 'points to'}) %>
+
+  <%= @tagging.tag.name %>
+
     <%= f.submit "Update" %>
   </p>
 <% end %>

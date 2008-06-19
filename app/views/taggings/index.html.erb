@@ -6,6 +6,17 @@
 
 <% for tagging in @taggings %>
   <tr>
+ <td> <%= tagging.taggable.name %></td>
+ 
+ <td><% if tagging.tag_relationship %>
+   <%= tagging.tag_relationship.verb_phrase %>
+  <% else %>
+  points to
+  <% end %>
+   </td>
+
+  <td><%= tagging.tag.name %> </td>
+
     <td><%= link_to 'Show', tagging %></td>
     <td><%= link_to 'Edit', edit_tagging_path(tagging) %></td>
     <td><%= link_to 'Destroy', tagging, :confirm => 'Are you sure?', :method => :delete %></td>

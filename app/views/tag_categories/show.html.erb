@@ -1,7 +1,8 @@
-<%= @tag_category.name %>
-<br>
-<% if @tag_category.required? %>is Required<br><% end -%>
-<% if @tag_category.official? %>is Official<br><% end -%>
-<% if @tag_category.exclusive? %>is Exclusive<br><% end -%>
+<h1><%= @tag_category.name %></h1>
+<h2>Tags in this category</h2>
+<% @tag_category.tags.each do |t| %>
+  <%= link_to t.name, tag_path(t) %>
+<% end %>
+<p>
 <%= link_to 'Edit', edit_tag_category_path(@tag_category) %> |
 <%= link_to 'Back', tag_categories_path %>

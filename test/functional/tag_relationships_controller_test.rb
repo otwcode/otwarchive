@@ -14,7 +14,7 @@ class TagRelationshipsControllerTest < ActionController::TestCase
 
   def test_should_create_tag_relationship
     assert_difference('TagRelationship.count') do
-      post :create, :tag_relationship => { :name => random_word, :verb_phrase => random_phrase }
+      post :create, :tag_relationship => { :name => random_word, :verb_phrase => random_phrase, :distance => rand(4) }
     end
 
     assert_redirected_to tag_relationship_path(assigns(:tag_relationship))
@@ -34,7 +34,7 @@ class TagRelationshipsControllerTest < ActionController::TestCase
 
   def test_should_update_tag_relationship
     tag_relationship = create_tag_relationship
-    put :update, :id => tag_relationship.id, :tag_relationship => { }, :locale => 'en'
+    put :update, :id => tag_relationship.id, :tag_relationship => { :verb_phrase => random_phrase }, :locale => 'en'
     assert_redirected_to tag_relationship_path(assigns(:tag_relationship))
   end
 

@@ -83,8 +83,8 @@ class TaggingTest < ActiveSupport::TestCase
     tag2 = create_tag(:tag_category => category2)
     tagging = create_tagging(:taggable => work, :tag => tag1) 
     tagging = create_tagging(:taggable => work, :tag => tag2) 
-    assert_not_equal work.tag_string(category1.name), work.tag_string(category2.name)
-    assert_equal tag1.name, work.tag_string(category1.name)
+    assert_not_equal work.tag_string(category1), work.tag_string(category2)
+    assert_equal tag1.name, work.tag_string(category1)
   end
   def test_tag_with
     work = create_work

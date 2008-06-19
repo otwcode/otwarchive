@@ -1,4 +1,9 @@
 class TagCategoriesController < ApplicationController
+#  permit('wranglers',
+#          :permission_denied_redirection => {:controller => :works, :action => :index },
+#          :permission_denied_message => 'Sorry, the page you have requested is for tag wranglers only! Please contact an admin if you think you should have access.',
+#          :except => [ :show, :index ])
+
   # GET /tag_categories
   # GET /tag_categories.xml
   def index

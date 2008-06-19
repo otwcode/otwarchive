@@ -1,3 +1,20 @@
-
+<h1><%= @tag_relationship.name %></h1>
+<p>
+Distance: <%= @tag_relationship.distance %>
+<% if @tag_relationship.distance == 0 %>
+(tags in this relationship are equivalent)
+<% elsif @tag_relationship.distance == 1 %>
+(tags in this relationship are very closely related)
+<% elsif @tag_relationship.distance == 2 %>
+(tags in this relationship are related)
+<% else %>
+(tags in this relationship are only loosly associated)
+<% end %>
+<p>
+<% @tags.each do |array|%>
+  <%= array[0] %> <%= @tag_relationship.verb_phrase %> <%= array[1] %> <%= link_to 'Edit', edit_tagging_path(array[2]) %>
+<br>
+<% end %>
+<p>
 <%= link_to 'Edit', edit_tag_relationship_path(@tag_relationship) %> |
 <%= link_to 'Back', tag_relationships_path %>

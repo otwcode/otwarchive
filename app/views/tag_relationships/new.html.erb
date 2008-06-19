@@ -1,11 +1,4 @@
 <h1>New tag_relationship</h1>
 
-<%= error_messages_for :tag_relationship %>
-
-<% form_for(@tag_relationship) do |f| %>
-  <p>
-    <%= f.submit "Create" %>
-  </p>
-<% end %>
-
+<%= render :partial => 'form' %>
 <%= link_to 'Back', tag_relationships_path %>

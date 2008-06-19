@@ -2,10 +2,19 @@
 
 <table>
   <tr>
+    <td><b>Name</b></td>
+    <td><b>Why tag1 points to tag2</b></td>
+    <td><b>Distance</b> between tag1 and tag2</td>
+    <td><b>Reciprocal?</b> (tag2 also points to tag1)</td>
   </tr>
+
 
 <% for tag_relationship in @tag_relationships %>
   <tr>
+    <td><%= tag_relationship.name %></td>
+    <td>"<%= tag_relationship.verb_phrase %>"</td>
+    <td><%= tag_relationship.distance%></td>
+    <td><% if tag_relationship.reciprocal? %>X<%end %></td>
     <td><%= link_to 'Show', tag_relationship %></td>
     <td><%= link_to 'Edit', edit_tag_relationship_path(tag_relationship) %></td>
     <td><%= link_to 'Destroy', tag_relationship, :confirm => 'Are you sure?', :method => :delete %></td>

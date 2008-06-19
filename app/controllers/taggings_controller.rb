@@ -1,8 +1,15 @@
 class TaggingsController < ApplicationController
+
+#  permit('wranglers',
+#          :permission_denied_redirection => {:controller => :works, :action => :index },
+#          :permission_denied_message => 'Sorry, the page you have requested is for tag wranglers only! Please contact an admin if you think you should have access.',
+#          :except => [ :show, :index ])
+  
   # GET /taggings
   # GET /taggings.xml
   def index
-    @taggings = Tagging.find(:all)
+    # only interested in tag to tag taggings
+    @taggings = Tagging.find(:all, :conditions => {:taggable_type => 'Tag'})
 
     respond_to do |format|
       format.html # index.html.erb
@@ -25,6 +32,7 @@ class TaggingsController < ApplicationController
   # GET /taggings/new.xml
   def new
     @tagging = Tagging.new
+    @tags = Tag.find(:all, :order => 'name')
 
     respond_to do |format|
       format.html # new.html.erb
@@ -41,6 +49,7 @@ class TaggingsController < ApplicationController
   # POST /taggings.xml
   def create
     @tagging = Tagging.new(params[:tagging])
+    @tagging.taggable_type = 'Tag'
 
     respond_to do |format|
       if @tagging.save

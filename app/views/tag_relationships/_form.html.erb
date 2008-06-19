@@ -1,0 +1,19 @@
+<%= error_messages_for :tag_relationship %>
+<% form_for(@tag_relationship) do |f| %>
+  <p>
+  Name: <%= f.text_field("name", :size => 10)%>
+  <p>
+  Phrase: <%= f.text_field("verb_phrase") %>(will be used: 'tag1 phrase tag2')
+  <p>
+<%= f.radio_button("distance", 0) %>0 (these tags are synonymous - they are exactly the same)
+  <br>
+<%= f.radio_button("distance", 1) %>1 (these tags are closely related)
+  <br>
+<%= f.radio_button("distance", 2) %>2 (these tags are related)
+  <br>
+<%= f.radio_button("distance", 3) %>3 (these tags are similar)
+  <p>
+  <%= f.check_box("reciprocal") %>This relationship point both ways. If tag1 points to tag2, then tag2 points to tag1 as well. In other words, a search for either will find the other.  <br>
+  <%= f.submit %>
+  </p>
+<% end %>

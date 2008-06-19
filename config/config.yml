@@ -31,6 +31,9 @@ REVISION: ''
 
 # tag settings
 DELIMITER: ', '  # if you change this, you probably need to change the label regexp as well
+AMBIGUOUS_CATEGORY: 'Ambiguous'  # this category blocks distance counts for tags on each side
+DEFAULT_CATEGORY: 'Freeform'  # this category is a catch-all
+
 # note, this is just to prime an empty database, it is not used subsequently
 FIRST_CATEGORIES: 
 - { name: Rating, required: true, official: true, exclusive: true }
@@ -38,13 +41,6 @@ FIRST_CATEGORIES:
 - { name: Fandom, required: true, official: true, exclusive: false }
 - { name: Character, required: false, official: true, exclusive: false }
 - { name: Pairing, required: false, official: true, exclusive: false }
-- { name: Freeform, required: false, official: true, exclusive: false }
-- { name: Ambiguous, required: false, official: false, exclusive: false }
-# note, this is just to prime an empty database, it is not used subsequently
-FIRST_RATINGS: 
-- Adult
-- All ages
-- (No Rating)
 
 
 

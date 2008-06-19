@@ -4,6 +4,6 @@ class AddPrivacyOptionToWorks < ActiveRecord::Migration
   end
 
   def self.down
-    add_column :works, :restricted
+    remove_column :works, :restricted
   end
 end

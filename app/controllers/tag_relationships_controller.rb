@@ -1,8 +1,13 @@
 class TagRelationshipsController < ApplicationController
+#  permit('wranglers',
+#          :permission_denied_redirection => {:controller => :works, :action => :index },
+#          :permission_denied_message => 'Sorry, the page you have requested is for tag wranglers only! Please contact an admin if you think you should have access.',
+#          :except => [ :show, :index ])
+
   # GET /tag_relationships
   # GET /tag_relationships.xml
   def index
-    @tag_relationships = TagRelationship.find(:all)
+    @tag_relationships = TagRelationship.find(:all, :order => 'distance')
 
     respond_to do |format|
       format.html # index.html.erb
@@ -14,6 +19,10 @@ class TagRelationshipsController < ApplicationController
   # GET /tag_relationships/1.xml
   def show
     @tag_relationship = TagRelationship.find(params[:id])
+    # only interested in tag to tag taggings
+    @taggings = @tag_relationship.taggings.select{|tagging| tagging.taggable_type == 'Tag'}
+    @tags = Set.new
+    @taggings.each { |g| @tags.add([g.taggable.name, g.tag.name, g.id]) }
 
     respond_to do |format|
       format.html # show.html.erb

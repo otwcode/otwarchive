@@ -4,17 +4,21 @@
 
 <% form_for(@tag) do |f| %>
   <p>
-  <%= f.check_box("banned") %>Banned    (this tag will not show up anywhere)
+  <%= f.check_box("banned") %>Banned (this tag will not show up in tags lists)
   <br>
-  <%= f.check_box("canonical") %>Canonical    (this tag will show up in selections and lists)
-  <br>
-  <% TagCategory.find(:all).each do |category| -%>
-    <%= f.radio_button("tag_category_id", category.id) %><%= category.name %>
+  <%= f.check_box("canonical") %>Canonical (this tag will show up as a selection in lists)
+  <p>
+  <% @categories.each do |category| -%>
+      <%= f.radio_button("tag_category_id", category.id) %><%= category.name %>
   <% end -%>
-  <br>
+  <p><% if @categories.size > 2 %>
+WARNING: once you changed a tag's category to <%= link_to TagCategory.ambiguous.name, tag_category_path(TagCategory.ambiguous) %> or <%= link_to TagCategory.default.name, tag_category_path(TagCategory.default) %> you can not change it back to one of the other categories without administrative assisance!
+  <% end %>
+  <p>
   <%= f.submit %>
   </p>
 <% end %>
+
 
 <%= link_to 'Show', @tag %> |
 <%= link_to 'Back', tags_path %>

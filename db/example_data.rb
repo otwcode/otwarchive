@@ -96,8 +96,8 @@ module FixtureReplacement
   end
  
   attributes_for :tag do |a|
-    a.tag_category = default_tag_category
-    a.name = random_phrase
+    a.tag_category = TagCategory.default
+    a.name = random_phrase[0..42]
   end
   
   attributes_for :tagging do |a|
@@ -112,6 +112,7 @@ module FixtureReplacement
   attributes_for :tag_relationship do |a|
     a.name = random_word
     a.verb_phrase = random_phrase.downcase
+    a.distance = rand(4)
   end
 
   attributes_for :user do |a|

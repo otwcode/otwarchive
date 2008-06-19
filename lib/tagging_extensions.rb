@@ -1,28 +1,33 @@
-  # note, if you modify this file you have to restart the server or console
+# note, if you modify this file you have to restart the server or console
 
 module TaggingExtensions
   
-  # returns an array of tag objects
-  def tags(category=['all'])
+  # returns an array of (valid) tag objects
+  # accepts either a category object, or a category name
+  def tags(category='all')
     self.reload
-    if category == ['all']
-      Array(taggings.collect(&:valid_tag).compact)
-    else
-      a = category.collect do |c| 
-        cat = TagCategory.find_by_name(c)
-        return false unless cat
-        taggings.find_by_category(cat).collect(&:valid_tag)
-      end.flatten.compact
+    if category == 'all'
+      tags = taggings.collect(&:valid_tag)
+    else 
+      category = TagCategory.find_by_name(category) if category.is_a?(String)
+      return false unless category.is_a?(TagCategory)
+      tags = []
+      if category == TagCategory.default  # ambiguous tags get retrieved into the default category
+         tags << taggings.find_by_category(TagCategory.default).collect(&:valid_tag)
+      end
+      tags << taggings.find_by_category(category).collect(&:valid_tag)
     end
+    tags.flatten.compact
   end
   
   # returns a delimited string of tag names
-  def tag_string(category=['all'])
+  # accepts either a category object, or a category name
+  def tag_string(category='all')
     self.reload
-    if category == ['all']
+    if category == 'all'
       tags.map(&:name).sort.join(ArchiveConfig.DELIMITER)
-    else
-      (category.collect {|c| tags([c]).map(&:name)}).sort.join(ArchiveConfig.DELIMITER)
+    else 
+      tags(category).map(&:name).sort.join(ArchiveConfig.DELIMITER)
     end
   end
 
@@ -39,11 +44,13 @@ module TaggingExtensions
       else
         new_tags = tag_string.split(ArchiveConfig.DELIMITER).collect do |tag_name|
           tag = Tag.find_or_create_by_name(tag_name)
-          if tag.tag_category
-            return false unless tag.tag_category == category
-          else
+          if tag.tag_category == nil
             tag.tag_category = category
-            tag.save
+            tag.save 
+          elsif tag.tag_category == TagCategory.ambiguous
+            #TODO pop up a warning - add a special tag to the array?
+          elsif tag.tag_category != category
+             return false  # can't reassign a tag from within tag_with
           end
           tag
         end

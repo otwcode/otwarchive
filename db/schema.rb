@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 47) do
+ActiveRecord::Schema.define(:version => 48) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -226,10 +226,10 @@ ActiveRecord::Schema.define(:version => 47) do
   create_table "tag_relationships", :force => true do |t|
     t.string   "name",        :null => false
     t.string   "verb_phrase", :null => false
-    t.boolean  "loose"
     t.boolean  "reciprocal"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "distance",    :null => false
   end
 
   add_index "tag_relationships", ["name"], :name => "index_tag_relationships_on_name", :unique => true
@@ -242,6 +242,8 @@ ActiveRecord::Schema.define(:version => 47) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "taggings", ["tag_id", "taggable_id", "taggable_type"], :name => "index_taggings_on_tag_id_and_taggable_id_and_taggable_type", :unique => true
 
   create_table "tags", :force => true do |t|
     t.string   "name",            :null => false

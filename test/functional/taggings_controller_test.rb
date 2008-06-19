@@ -21,19 +21,19 @@ class TaggingsControllerTest < ActionController::TestCase
   end
 
   def test_should_show_tagging
-    tagging = create_tagging
+    tagging = create_tagging(:taggable => create_tag)
     get :show, :id => tagging.id, :locale => 'en'
     assert_response :success
   end
 
   def test_should_get_edit
-    tagging = create_tagging
+    tagging = create_tagging(:taggable => create_tag)
     get :edit, :id => tagging.id, :locale => 'en'
     assert_response :success
   end
 
   def test_should_update_tagging
-    tagging = create_tagging
+    tagging = create_tagging(:taggable => create_tag)
     put :update, :id => tagging.id, :tagging => { }, :locale => 'en'
     assert_redirected_to tagging_path(assigns(:tagging))
   end

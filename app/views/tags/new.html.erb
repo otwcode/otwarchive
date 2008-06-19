@@ -5,15 +5,20 @@
 <% form_for(@tag) do |f| %>
   <p>
   Name: <%= f.text_field("name") %>
-  <br>
+  <p>
   <%= f.check_box("banned") %>Banned    (this tag will not show up anywhere)
   <br>
   <%= f.check_box("canonical") %>Canonical    (this tag will show up in selections and lists)
-  <br>
+  <p>
   <% TagCategory.find(:all).each do |category| -%>
     <%= f.radio_button("tag_category_id", category.id) %><%= category.name %>
   <% end -%>
-  <br>
+  <p>
+  Please be careful.
+  <p>Once you've created a tag you can never change its name, nor can you delete it (although it can be banned. and if it is not banned, and it is not being used to tag anything, or is itself being tagged, it may be purged).
+  <p>
+  Once you have selected a category, you will not be able to change it to anything other than <%= link_to TagCategory.ambiguous.name, tag_category_path(TagCategory.ambiguous) %> or <%= link_to TagCategory.default.name, tag_category_path(TagCategory.default) %>
+  <p>
   <%= f.submit %>
   </p>
 <% end %>

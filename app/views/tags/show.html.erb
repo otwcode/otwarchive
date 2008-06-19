@@ -1,8 +1,14 @@
-<%= @tag.name %>
-<br>
+<h2><%= @tag.name %></h2>
 <% if @tag.banned? %>is Banned<br><% end -%>
-<% if @tag.canonical? %>is Canonical<br><% end -%>
-Category: <%= @tag.tag_category.name %>
-<br>
+Category: <%= link_to @tag.tag_category.name, tag_category_path(@tag.tag_category) %>
+<h3>Works that have been tagged with this tag</h3>
+<% @works.each do |work| %>
+<%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
+<% end %>
+<%= link_to 'Edit', edit_tag_path(@tag) %> |
+<%= link_to 'Back', tags_path %>
+<h3>Bookmarks that have been tagged with this tag</h3>
+<%= render :partial => 'bookmarks/bookmarks'%>
+<p>
 <%= link_to 'Edit', edit_tag_path(@tag) %> |
 <%= link_to 'Back', tags_path %>

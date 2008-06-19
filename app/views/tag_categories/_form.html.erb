@@ -1,14 +1,23 @@
 <%= error_messages_for :tag_categories %>
+  <% if (@tag_category == TagCategory.ambiguous) || (@tag_category == TagCategory.default) %>
+  Name: 
+  <%= @tag_category.name %> (to change this category, speak to an admin)
+  <% else %>
 <% form_for(@tag_category) do |f| %>
+    Name: <%= f.text_field("name") %>
   <p>
-  Name: <%= f.text_field("name") %>
-  <br>
-  <%= f.check_box("required") %>Required    (this tag must be filled in) (not implemented yet)
-  <br>
-  <%= f.check_box("official") %>Official    (this tag will show up in menus)
+  <%= f.check_box("required") %>Required    (there must be at least one tag in this category whenever it is used - not implemented yet)
   <br>
   <%= f.check_box("exclusive") %>Exclusive    (this tag will only allow one choice)
   <br>
-  <%= f.submit %>
+  <%= f.check_box("official") %>Official    (this tag will show up in menus)
+  <p>
+WARNING: If a tag category is not official, then there is no way for users to add or remove tags in this category (except for the special <%= link_to TagCategory.ambiguous.name, tag_category_path(TagCategory.ambiguous) %> category which can be used anywhere). 
+<p>
+Only set a category to non-official when it is reserved for admin use.
+<p>   <%= f.submit %>
   </p>
 <% end %>
+
+ <% end %>
+<p>
