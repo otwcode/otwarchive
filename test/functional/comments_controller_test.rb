@@ -1,25 +1,26 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class CommentsControllerTest < ActionController::TestCase
-# FIXME very slow
 # FIXME no error checking
 # TODO test before filter
 # TODO test the rest of the routes
 # TODO test the anchor redirects
   def create_comments
-    @pseud = create_pseud
-    @chapter1 = new_chapter
+    # runs much faster when you don't keep creating new users for everything
+    user = create_user
+    @pseud = user.default_pseud
+    @chapter1 = new_chapter(:authors => [@pseud])
     @work = create_work(:chapters => [@chapter1], :authors => [@pseud])
     @chapter1.save
-    @chapter2 = new_chapter(:work_id => @work.id)
+    @chapter2 = new_chapter(:work_id => @work.id, :authors => [@pseud])
     @chapter2.save
-    @comment1 = create_comment(:commentable_id => @chapter1.id, :content => 'first comment')
+    @comment1 = create_comment(:commentable => @chapter1, :content => 'first comment', :pseud => @pseud)
     @comment1.set_and_save
-    @comment2 = create_comment(:commentable_id => @chapter2.id, :content => 'second comment')
+    @comment2 = create_comment(:commentable => @chapter2, :content => 'second comment', :pseud => @pseud)
     @comment2.set_and_save
-    @child1 = create_comment(:commentable_type => 'Comment', :commentable_id => @comment1.id, :content => 'first child')
+    @child1 = create_comment(:commentable => @comment1, :content => 'first child', :pseud => @pseud)
     @child1.set_and_save
-    @work = Work.find(@work.id)
+    @work.reload
   end
   
   # Test approve  PUT  /:locale/comments/:id/approve  (named path: approve_comment)
@@ -89,20 +90,22 @@ class CommentsControllerTest < ActionController::TestCase
     assert_no_difference('Comment.count') do
       delete :destroy, :locale => 'en', :id => @comment1.id
     end
-    assert Comment.find(@comment1.id).is_deleted?
+    @comment1.reload
+    assert @comment1.is_deleted?
   end
   def test_delete_comment2
     create_comments
     assert_difference('Comment.count', -1) do
       delete :destroy, :locale => 'en', :id => @comment2.id
     end
-    assert_raises(ActiveRecord::RecordNotFound) { Comment.find(@comment2.id) }
+    assert_raises(ActiveRecord::RecordNotFound) { @comment2.reload }
   end
   # Test destroy  DELETE /:locale/works/:work_id/chapters/:chapter_id/comments/:id
   def test_delete_work_chapter_comment
     create_comments
     delete :destroy, :locale => 'en', :work_id => @work.id, :chapter_id => @chapter1.id, :id => @comment1.id
-    assert Comment.find(@comment1.id).is_deleted?
+    @comment1.reload
+    assert @comment1.is_deleted?
   end
   # Test edit  GET  /:locale/chapters/:chapter_id/comments/:id/edit  (named path: edit_chapter_comment)
   def test_edit_chapter_comment_path
@@ -226,15 +229,16 @@ class CommentsControllerTest < ActionController::TestCase
                  :id => @comment1.id, 
                  :pseud_id => @pseud.id, 
                  :comment => { :content => 'more content' }
-    assert_equal 'more content', Comment.find(@comment1.id).content  
-    assert_not_equal 'first comment', Comment.find(@comment1.id).content  
+    @comment1.reload
+    assert_equal 'more content', @comment1.content  
   end
   # Test update  PUT  /:locale/comments/:comment_id/comments/:id
   # Test update  PUT  /:locale/comments/:id
   def test_update_comment_comment
     create_comments
     put :update, :locale => 'en', :id => @comment1.id, :comment => { :content => 'new content' }
-    assert_equal 'new content', Comment.find(@comment1.id).content
+    @comment1.reload
+    assert_equal 'new content', @comment1.content
   end
   # Test update  PUT  /:locale/works/:work_id/chapters/:chapter_id/comments/:id
   def test_update_work_chapter_comment
@@ -244,6 +248,7 @@ class CommentsControllerTest < ActionController::TestCase
                  :chapter_id => @chapter1.id, 
                  :id => @comment1.id, 
                  :comment => { :content => 'new content' }
-    assert_equal 'new content', Comment.find(@comment1.id).content
+    @comment1.reload
+    assert_equal 'new content', @comment1.content
   end
 end
