@@ -12,8 +12,8 @@ class BookmarksController < ApplicationController
   # GET /bookmarks
   # GET /bookmarks.xml
   def index
-    @bookmarks = @bookmarkable.nil? ? Bookmark.find(:all) : 
-      Bookmark.find(:all, :conditions => {:bookmarkable_id => @bookmarkable.id, :bookmarkable_type => @bookmarkable.class.to_s})
+    @user = User.find_by_login(params[:user_id]) if params[:user_id]
+    @bookmarks = @user ? @user.bookmarks : @bookmarkable.nil? ? Bookmark.find(:all) : @bookmarkable.bookmarks
   end
 
   # GET /bookmarks/1

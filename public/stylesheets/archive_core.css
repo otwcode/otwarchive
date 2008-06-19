@@ -263,7 +263,8 @@ a.story-title {
 	font-weight: normal;
 }
 .story-date {
-	margin-top: -1em;
+	margin-top: -2em;
+	margin-right: 0px;
 	float: right;
 	font-size: 90%;
 	color: #999999;
@@ -521,4 +522,8 @@ textarea.story-edit-notes {
 .two-column-right {
 	width: 400px;
 	float: right;
+}                
+
+#user-bio-display {
+	margin-top: -1em;
 }

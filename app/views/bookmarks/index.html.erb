@@ -1,7 +1,7 @@
 <h1>Listing bookmarks</h1>
 
 <!-- BEGIN bookmark link -->
-<%= link_to "Add a new bookmark", new_external_work_path %> 
+<% if @user %><%= link_to "Add a new bookmark", new_external_work_path %><% end %> 
 <!-- END bookmark link -->
 
 <%= render :partial => 'bookmarks/bookmarks' %>

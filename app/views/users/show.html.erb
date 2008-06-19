@@ -2,11 +2,11 @@
   <h1><%=h @user.login %>'s User Page</h1>
   
   <%- if logged_in? && current_user == @user -%>
-      <p>
-        <%= link_to "Edit profile".t, edit_user_path(@user) %> | 
-        <%= link_to 'Manage pseuds'.t, user_pseuds_path(@user) %> | 
-        <%= link_to "Reading history".t, readings_url %>
-      </p>
+    <p>
+      <%= link_to "Edit profile".t, edit_user_path(@user) %> | 
+      <%= link_to 'Manage pseuds'.t, user_pseuds_path(@user) %> | 
+      <%= link_to "Reading history".t, readings_url %>
+    </p>
   <%- end -%>
 
   <div class="user-category" id="user-pseuds">
@@ -28,7 +28,7 @@
 
   <div class="user-category" id="user-bio">
     <span class="two-column-left">Bio</span>
-    <div class="two-column-right"><%=sanitize_format @user.profile.about_me -%></div>
+    <div class="two-column-right" id="user-bio-display"><%=sanitize_format @user.profile.about_me -%></div>
   </div>
   
   <%- if @user.preference.email_visible -%>
@@ -43,13 +43,13 @@
   </div>
   
   <div id="user-works">
-    <% for pseud in @user.pseuds %>
+    <%- for pseud in @user.pseuds -%>
       <div class="pseud-works">
         <a name="pseud-<%= pseud.id %>"></a>
         <h2>Works by <%= pseud.name %>:</h2>
         <ul><%= print_works(pseud) %></ul>
       </div>
-    <% end %>
+    <%- end -%>
   </div>
 
 </div> 
