@@ -3,17 +3,18 @@
   <p>
   Name: <%= f.text_field("name", :size => 10)%>
   <p>
-  Phrase: <%= f.text_field("verb_phrase") %>(will be used: 'tag1 phrase tag2')
+  Phrase: <%= f.text_field("verb_phrase") %>(will be used as follows: 'tag1 phrase tag2')
   <p>
-<%= f.radio_button("distance", 0) %>0 (these tags are synonymous - they are exactly the same)
+<%= f.radio_button("distance", 0) %> If I search for tag1 I absolutely want to find tag2 - they are the same thing
   <br>
-<%= f.radio_button("distance", 1) %>1 (these tags are closely related)
+<%= f.radio_button("distance", 1) %> If I search for tag1 I probably want to find tag2 - they are closely related
   <br>
-<%= f.radio_button("distance", 2) %>2 (these tags are related)
+<%= f.radio_button("distance", 2) %> If I search for tag1 I might want to find tag2 - they are similar
   <br>
-<%= f.radio_button("distance", 3) %>3 (these tags are similar)
+<%= f.radio_button("distance", 3) %> If I search for tag1 I might like to be offered tag2 as a possible alternative - they have something in common
   <p>
-  <%= f.check_box("reciprocal") %>This relationship point both ways. If tag1 points to tag2, then tag2 points to tag1 as well. In other words, a search for either will find the other.  <br>
+  <%= f.check_box("reciprocal") %>This relationship is inclusive in both directions. If I want a search for tag1 to include things tagged with tag2, I am equally likely to want a search for tag2 to include things tagged with tag1.<br>
+  <p>
   <%= f.submit %>
-  </p>
+  <p>
 <% end %>
