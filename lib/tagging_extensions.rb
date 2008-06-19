@@ -13,7 +13,7 @@ module TaggingExtensions
       return false unless category.is_a?(TagCategory)
       tags = []
       if category == TagCategory.default  # ambiguous tags get retrieved into the default category
-         tags << taggings.find_by_category(TagCategory.default).collect(&:valid_tag)
+         tags << taggings.find_by_category(TagCategory.ambiguous).collect(&:valid_tag)
       end
       tags << taggings.find_by_category(category).collect(&:valid_tag)
     end
