@@ -16,6 +16,7 @@
 
   <%= f.hidden_field :content, :value => "#{@chapter.content}" %>
   <%= f.hidden_field :wip_length, :value => "#{@chapter.wip_length_placeholder}" %>
+  <%= f.hidden_field :current_position, :value => "#{@chapter.position_placeholder}" %>
 
   <p class="field-right">
   	<% if @chapter.posted? %>
@@ -29,4 +30,4 @@
 
   <p class="clearbothdrop"></p>
 
-<% end %>
+<% end %>               

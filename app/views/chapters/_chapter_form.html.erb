@@ -1,7 +1,6 @@
 <% form_for([@work, chapter]) do |f| %>
     <p>
-      Chapter <%=h chapter.current_position %> of <%= f.text_field :wip_length, :class => "number-field" %>
-      <%= f.hidden_field :position, :value => "#{chapter.current_position}" %> 
+      Chapter <%= f.text_field :current_position, :class => "number-field" %> of <%= f.text_field :wip_length, :class => "number-field" %> 
     </p>
 
   

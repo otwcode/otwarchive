@@ -15,7 +15,7 @@ class Chapter < ActiveRecord::Base
   attr_accessor :authors
   attr_accessor :invalid_pseuds
   attr_accessor :ambiguous_pseuds
-  attr_accessor :wip_length_placeholder
+  attr_accessor :wip_length_placeholder, :position_placeholder
 
   before_save :validate_authors
   after_save :save_creatorships, :save_associated
@@ -23,9 +23,26 @@ class Chapter < ActiveRecord::Base
 
   # Set the position if this isn't the first chapter
   def current_position
-    self.position = (self.work.number_of_chapters ||= 0) + 1 if self.work && self.new_record?
-    self.position
+		if self.position_placeholder.nil?
+			self.work && self.new_record? ? (self.work.number_of_chapters ||= 0) + 1 : self.position
+		else
+			self.position_placeholder
+		end
   end
+	
+	# Get form value for position and store it in a placeholder if it's necessary to reorder multiple chapters
+	def current_position=(new_position)
+	  self.position_placeholder = new_position.to_i
+	end
+	
+	# Changes position of a chapter and adjusts other chapters where necessary
+	def move_to(new_position)
+	  if new_position.is_a?(Fixnum) && new_position > 0
+		  chapters = self.work.chapters.find(:all, :order => :position) - [self]
+		  chapters.insert((new_position - 1), self)
+		  chapters.each_with_index {|chapter, index| chapter.update_attribute(:position, index + 1) unless chapter.position == (index + 1)}
+	  end			
+	end
 
   # check if this chapter is the only chapter of its work
   def is_only_chapter?

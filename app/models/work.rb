@@ -118,16 +118,13 @@ class Work < ActiveRecord::Base
     Chapter.find(:first, :conditions => ['work_id = ?', self.id], :order => 'position DESC')
   end
 
-  # Change the position of multiple chapters when one is deleted or moved
-  def adjust_chapters(position, method = "subtract")
-    if method == "subtract"
-      Chapter.update_all("position = (position - 1)", ["work_id = (?) AND position > (?)", self.id, position])
-    elsif method == "add"
-      Chapter.update_all("position = (position + 1)", ["work_id = (?) AND position > (?)", self.id, position])
-    end
-  end 
+  # Change the position of multiple chapters when one is deleted
+  def adjust_chapters(position)
+    Chapter.update_all("position = (position - 1)", ["work_id = (?) AND position > (?)", self.id, position])
+  end
   
   # Reorders chapters based on form data
+	# Removes changed chapters from array, sorts them in order of position, re-inserts them into the array and uses the array index values to determine the new positions
   def reorder_chapters(positions)
     chapters = self.chapters.find(:all, :conditions => {:posted=>true}, :order => 'position')
     changed = {}
