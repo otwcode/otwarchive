@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController 
-  before_filter :load_commentable, :only => [ :index, :new, :create, :edit, :update ]
+  before_filter :load_commentable, :only => [ :index, :new, :create, :edit, :update, :showcomments ]
   
   # Get the parent of the desired comment(s) 
   # Just covering all the bases here for now
@@ -58,18 +58,18 @@ class CommentsController < ApplicationController
       
       if @comment.set_and_save
         if @comment.approved?
-          flash[:notice] = 'Comment was successfully created.'
+          flash[:notice] = 'Comment was successfully created.'.t
           parent = @comment.ultimate_parent
           respond_to do |format|
               format.html { redirect_to :controller => parent.class.to_s.pluralize, :action => 'show', :id => parent.id, :anchor => "comment#{@comment.id}" }
               format.js
             end
         else
-          flash[:notice] = 'Comment was marked as spam by Akismet.'
+          flash[:notice] = 'Comment was marked as spam by Akismet.'.t
           redirect_to :back
         end
       else
-        render :action => "new", :locals => {:commentable => @comment.commentable, :button_name => 'Create'}
+        render :action => "new", :locals => {:commentable => @comment.commentable, :button_name => 'Create'.t}
       end
     end
   end
@@ -80,7 +80,7 @@ class CommentsController < ApplicationController
     @comment = Comment.find(params[:id])
     
     if @comment.update_attributes(params[:comment])
-      flash[:notice] = 'Comment was successfully updated.'
+      flash[:notice] = 'Comment was successfully updated.'.t
       parent = @comment.ultimate_parent
       respond_to do |format|
           format.html { redirect_to :controller => parent.class.to_s.pluralize, :action => 'show', :id => parent.id, :anchor => "comment#{@comment.id}" }
@@ -111,5 +111,24 @@ class CommentsController < ApplicationController
    @comment.mark_as_spam!
    redirect_to(comments_url)
   end
+
+ # Shows comments for JS users if they click the 'show comments' link
+  def showcomments
+   # if comments are on a work
+   if params[:work_id]
+     @work = Work.find(params[:work_id])
+     @comments = @work.find_all_comments
+     respond_to do |format|
+       format.js
+     end
+   # if comments are on a chapter  
+   elsif params[:chapter_id]
+     @chapter = Chapter.find(params[:chapter_id])
+     @comments = @chapter.find_all_comments
+     respond_to do |format|
+       format.js
+     end
+   end
+  end  
   
 end

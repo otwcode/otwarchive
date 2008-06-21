@@ -12,16 +12,21 @@
   </div>  
 
   <!-- BEGIN comments -->
-  <% unless @comments.empty? %>
-    <p>
-      <%= link_to_function('Show/hide comments', "Element.toggle('comments')", :href => chapter_comments_path(@chapter)) %>   
-    </p>
-  <% end %>
-  
-  <div id="comments">   
-    <%= render :partial => 'comments/comment_view' %> 
+
+    <% unless @comments.empty? %>
+		<div id="show_comments_link">
+		  <p>
+		  	<%= chapter_show_hide_comments_link %>
+			</p>
+		</div>
+		<%- end -%>	
+	
+  <div id="comments">
+    <%- if params[:show_comments] -%>   
+      <%= render :partial => 'comments/comment_view' %>
+	  <%- end -%> 
   </div>
-  
+   
   <!-- END comments -->
 </div>
 <!-- END comment section -->

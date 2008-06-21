@@ -1,0 +1,2 @@
+page.replace_html(:show_comments_link, :partial => 'comments/show_link')
+page.replace_html(:comments, :partial => 'comments/comment_view')

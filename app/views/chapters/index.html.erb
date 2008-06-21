@@ -24,13 +24,17 @@
 
   <!-- BEGIN comments -->
   <% unless @comments.empty? %>
-    <p>
-      <%= link_to_function('Show/hide comments', "Element.toggle('comments')", :href => chapter_comments_path(@work.last_chapter)) %>   
-    </p>
+    <div id="show_comments_link">
+      <p>
+        <%= index_show_hide_comments_link %>
+			</p>
+	  </div>
   <% end %>
   
   <div id="comments">   
-    <%= render :partial => 'comments/comment_view' %> 
+    <%- if params[:show_comments] -%>   
+      <%= render :partial => 'comments/comment_view' %>
+	  <%- end -%>  
   </div>
   
   <!-- END comments -->
