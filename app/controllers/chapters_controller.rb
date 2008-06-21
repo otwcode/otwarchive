@@ -120,8 +120,8 @@ class ChaptersController < ApplicationController
       redirect_back_or_default('/')    
     else  
       if @chapter.save && @work.save
-				@chapter.move_to(@chapter.position_placeholder) if @chapter.position_placeholder
         @work.update_major_version
+				@chapter.move_to(@chapter.position_placeholder) if @chapter.position_placeholder
         flash[:notice] = 'This is a preview of what this chapter will look like when it\'s posted to the Archive. You should probably read the whole thing to check for problems before posting.'
         redirect_to [:preview, @work, @chapter]
       else
@@ -149,8 +149,8 @@ class ChaptersController < ApplicationController
     else
 	  params[:chapter][:posted] = true if params[:post_button]
       if @chapter.update_attributes(params[:chapter]) && @work.save
-				@chapter.move_to(@chapter.position_placeholder) if @chapter.position_placeholder
-        @work.update_minor_version
+        @work.update_minor_version      
+        @chapter.move_to(@chapter.position_placeholder) if @chapter.position_placeholder
         flash[:notice] = 'Chapter was successfully updated.'
         redirect_to [@work, @chapter]
       else
