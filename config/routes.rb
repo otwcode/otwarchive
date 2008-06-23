@@ -1,4 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
+  
+  map.feedbacks '/feedback/fix', :controller => 'feedbacks', :action => 'create', :path_prefix => ':locale'
+  map.new_abuse_report '/feedback/', :controller => 'feedbacks', :action => 'new', :path_prefix => ':locale'
+
   map.resources :tag_relationships, :path_prefix => ':locale'
 
   map.resources :taggings, :path_prefix => ':locale'

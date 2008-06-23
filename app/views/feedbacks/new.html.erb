@@ -1,0 +1,21 @@
+<%= error_messages_for :feedback %>
+
+<% form_for(@feedback) do |f| %>
+  <p>
+    <b><%=h "Thanks for your time testing the archive! We appreciate the help a lot." .t %></b>
+  </p>	
+  <p>
+	<b><%=h "If you have any additional feedback about the archive - comments, concerns,
+	haikus - you can leave them here." .t %>
+	<%=h " We promise to read it all!" .t %></b><br/>
+  </p>
+  <p>
+	    <%= f.text_area :comment, :cols => 60 %>
+  </p>
+
+  <p>
+    <%= f.submit "Send feedback" %>
+  </p>
+<% end %>
+
+
