@@ -23,17 +23,13 @@ class Tagging < ActiveRecord::Base
   
   def self.find_by_category(category, options = {})
     with_scope :find => options do
-      find(:all, :include => :tag, :conditions => ["tag_category_id = ?", category.id])
-#FIXME for 2.1 use:
-#      find(:all, :include => :tag, :conditions => ["tags.tag_category_id = ?", category.id])
+      find(:all, :include => :tag, :conditions => ["tags.tag_category_id = ?", category.id])
     end
   end
 
   def self.find_by_tag(tag, options = {})
     with_scope :find => options do
-      find(:all, :include => :tag, :conditions => ["tag_id = ?", tag.id])
-#FIXME for 2.1 use:
-#      find(:all, :include => :tag, :conditions => ["tags.id = ?", tag.id])
+      find(:all, :include => :tag, :conditions => ["tags.id = ?", tag.id])
     end
   end
 
