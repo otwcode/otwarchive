@@ -92,6 +92,6 @@ Rails::Initializer.run do |config|
   config.action_mailer.perform_deliveries = ArchiveConfig.PERFORM_DELIVERIES
   
 end
-ActionController::AbstractRequest.relative_url_root = ArchiveConfig.PRODUCTION_URL_ROOT if ArchiveConfig.PRODUCTION_URL_ROOT && ENV['RAILS_ENV'] == 'production'
+ActionController::AbstractRequest.relative_url_root = ArchiveConfig.PRODUCTION_URL_ROOT if ArchiveConfig.PRODUCTION_URL_ROOT 
 
 require 'tagging_extensions'
