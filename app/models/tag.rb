@@ -9,7 +9,7 @@ class Tag < ActiveRecord::Base
                       :message => "tags can only be made up of letters, numbers, spaces and basic punctuation, but not commas and colons"
   validates_presence_of :tag_category_id
   
-  def before_save
+  def before_create
     self.name = name.strip.squeeze(" ")
   end
   

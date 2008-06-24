@@ -6,6 +6,8 @@ class TagTest < ActiveSupport::TestCase
       tag = Tag.new(:name => name, :tag_category_id => 1)
       assert !tag.save
      end
+    tag = Tag.new(:name => random_phrase[0..42], :tag_category_id => nil)
+    assert !tag.save
   end
   def test_validations_pass
     ['a'*42, 'tag with / in it', 'tag with ! in it'].each do |name|
@@ -16,6 +18,16 @@ class TagTest < ActiveSupport::TestCase
   def test_before_save
     tag = create_tag(:name => "  lots    of extra   spaces     ")
     assert_equal "lots of extra spaces", tag.name
+  end
+  def test_name_override
+    name = random_phrase[0..42]
+    tag = create_tag(:name => name)
+    tag.reload
+    assert_equal name, tag.name
+    tag.canonical = true
+    assert_equal name.titlecase, tag.name
+    tag.canonical = false
+    assert_equal name, tag.name
   end
   def test_tagees
     tag = create_tag
