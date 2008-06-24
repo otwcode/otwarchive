@@ -50,9 +50,9 @@
     <%= TagCategory.ambiguous.name %>
   </div>
 </div>
-<%= drop_receiving_element("ambiguous", :url =>
-   { :controller => "tags", :action => "update", :tag => {:tag_category_id => TagCategory.ambiguous.id}}
-   , :confirm => "WARNING! Changes category irreversibly (except to #{TagCategory.default.name}). Are you sure you want to do this?" 
+<%= drop_receiving_element("ambiguous", 
+   :confirm => "WARNING! Changes category irreversibly (except to #{TagCategory.default.name}). Are you sure you want to do this?",
+   :url => { :controller => "tags", :action => "update", :tag => {:tag_category_id => TagCategory.ambiguous.id}}
    )%>
 
 <p>
@@ -61,9 +61,9 @@
   <div id="freeform" class="droppable">
     <%=TagCategory.default.name %>
   </div>
-  <%= drop_receiving_element("freeform", :url =>
-    { :controller => "tags", :action => "update", :tag => {:tag_category_id => TagCategory.default.id}}
-    , :confirm => "WARNING! Changes category irreversibly (except to #{TagCategory.ambiguous.name}). Are you sure you want to do this?"    
+  <%= drop_receiving_element("freeform", 
+    :url => { :controller => "tags", :action => "update", :tag => {:tag_category_id => TagCategory.default.id}}, 
+    :confirm => "WARNING! Changes category irreversibly (except to #{TagCategory.ambiguous.name}). Are you sure you want to do this?"    
     )%>
 </div>
 
