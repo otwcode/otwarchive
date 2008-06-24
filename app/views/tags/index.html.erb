@@ -1,21 +1,94 @@
-<h1>Listing tags</h1>
+<style type="text/css">
+  .droppable { color: red;}
+</style>
 
-<table>
-  <tr>
-  </tr>
+<p><b>Drag tags to one of the the following:</b><p>
 
-<% for tag in @tags %>
-  <tr>
-    <td><%= tag.name %>
-    <% if tag.banned? %>(Banned)<% end -%>
-    <% if tag.canonical? %>(Canonical)<% end -%></td>
-    <td><%= tag.tag_category.name %></td>
-    <td><%= link_to 'Show', tag %></td>
-    <td><%= link_to 'Edit', edit_tag_path(tag) %></td>
-  </tr>
-<% end %>
-</table>
 
-<br />
+<div id="banned_container" >
+  <div id="banned" class="droppable" >
+    Ban
+  </div>
+</div>
+<%= drop_receiving_element("banned", :url =>
+  { :controller => "tags", :action => "update", :tag => {:banned => true} }) %>
 
-<%= link_to 'New tag', new_tag_path %>
+<p>
+
+<div id="not_banned_container" >
+  <div id="not_banned" class="droppable" >
+    Remove Ban
+  </div>
+</div>
+<%= drop_receiving_element("not_banned", :url =>
+    { :controller => "tags", :action => "update", :tag => {:banned => false} }) %>
+
+<p>
+
+<div id="canonical_container">
+  <div id="canonical" class="droppable" >
+    Make canonical
+  </div>
+</div>
+<%= drop_receiving_element("canonical", :url =>
+    { :controller => "tags", :action => "update", :tag => {:canonical => true} }) %>
+
+<p>
+
+<div id="not_canonical_container">
+  <div id="not_canonical" class="droppable" >
+    Remove canonical flag
+  </div>
+</div>
+<%= drop_receiving_element("not_canonical", :url =>
+    { :controller => "tags", :action => "update", :tag => {:canonical => false} }) %>
+
+<p>
+
+<div id="ambiguous_container">
+  <div id="ambiguous" class="droppable">
+    <%= TagCategory.ambiguous.name %>
+  </div>
+</div>
+<%= drop_receiving_element("ambiguous", :url =>
+   { :controller => "tags", :action => "update", :tag => {:tag_category_id => TagCategory.ambiguous.id}}
+   #FIXME uncomment for 2.1.0 
+   #, :confirm => "WARNING! Changes category irreversibly (except to #{TagCategory.default.name}). Are you sure you want to do this?" 
+   )%>
+
+<p>
+
+<div id="freeform_container">
+  <div id="freeform" class="droppable">
+    <%=TagCategory.default.name %>
+  </div>
+  <%= drop_receiving_element("freeform", :url =>
+    { :controller => "tags", :action => "update", :tag => {:tag_category_id => TagCategory.default.id}}
+    #FIXME uncomment for 2.1.0 
+    #, :confirm => "WARNING! Changes category irreversibly (except to #{TagCategory.ambiguous.name}). Are you sure you want to do this?"    
+    )%>
+</div>
+
+<p>
+    <div id="changed_container" >
+      <b>Tags you've modified:</b>
+      <p>
+    </div>
+
+  <p>
+
+<% (@categories + [TagCategory.ambiguous]).each do |category| -%>
+  <p><b><%= category.name %> Tags:</b>
+  <% category.tags.each do |tag| -%>
+    <div id="<%= tag.id -%>">
+      <%= render :partial => 'tag', :locals => { :tag => tag }%>
+    </div>
+    <%= draggable_element(tag.id.to_s, :scroll => 'window') %>
+  <% end %> 
+  </p>
+<% end %> 
+
+<%= link_to 'Create new tag', new_tag_path %>
+<%= link_to 'Tag Categories', tag_categories_path %>
+<%= link_to 'Tag Relationships', tag_relationships_path %>
+<%= link_to 'Taggings', taggings_path %>

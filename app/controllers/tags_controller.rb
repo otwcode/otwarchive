@@ -8,7 +8,7 @@ class TagsController < ApplicationController
   # GET /tags
   # GET /tags.xml
   def index
-    @tags = Tag.find(:all, :order => 'tag_category_id')
+    @categories = TagCategory.official(:include => 'tags')
 
     respond_to do |format|
       format.html # index.html.erb
@@ -58,7 +58,7 @@ class TagsController < ApplicationController
     respond_to do |format|
       if @tag.save
         flash[:notice] = 'Tag was successfully created.'
-        format.html { redirect_to(@tag) }
+        format.html { redirect_to tags_path }
         format.xml  { render :xml => @tag, :status => :created, :location => @tag }
       else
         format.html { render :action => "new" }
@@ -72,15 +72,20 @@ class TagsController < ApplicationController
   def update
     @tag = Tag.find(params[:id])
 
-    respond_to do |format|
-      if @tag.update_attributes(params[:tag])
-        flash[:notice] = 'Tag was successfully updated.'
-        format.html { redirect_to(@tag) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @tag.errors, :status => :unprocessable_entity }
+    if params[:commit]
+      respond_to do |format|
+        if @tag.update_attributes(params[:tag])
+          flash[:notice] = 'Tag was successfully updated.'
+          format.html { redirect_to(@tag) }
+          format.xml  { head :ok }
+        else
+          format.html { render :action => "edit" }
+          format.xml  { render :xml => @tag.errors, :status => :unprocessable_entity }
+        end
       end
+    else
+      @tag.update_attributes(params[:tag])
+      @tag
     end
   end
 

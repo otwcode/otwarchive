@@ -7,7 +7,8 @@ class Tag < ActiveRecord::Base
   validates_format_of :name, 
                       :with => /\A[-a-zA-Z0-9 \/?.!''"";\|\]\[}{=~!@#\$%^&()_+]+\z/, 
                       :message => "tags can only be made up of letters, numbers, spaces and basic punctuation, but not commas and colons"
-
+  validates_presence_of :tag_category_id
+  
   def before_save
     self.name = name.strip.squeeze(" ")
   end
@@ -26,5 +27,9 @@ class Tag < ActiveRecord::Base
   
   def <=>(another_tag)
     name <=> another_tag.name
+  end
+
+  def name
+    self.canonical? ? super.titlecase : super
   end
 end

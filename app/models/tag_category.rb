@@ -18,8 +18,10 @@ class TagCategory < ActiveRecord::Base
     find_by_name(ArchiveConfig.DEFAULT_CATEGORY)
   end
 
-  def self.official
-    find_all_by_official(true, :order => 'required DESC')
+  def self.official(options = {})
+    with_scope :find => options do
+      find_all_by_official(true, :order => 'required DESC')
+    end
   end
   
   def self.official_tags(category_name)

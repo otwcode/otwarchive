@@ -3,18 +3,18 @@ require File.dirname(__FILE__) + '/../test_helper'
 class TagTest < ActiveSupport::TestCase
   def test_validations_fail
     ['a'*43, 'tag with : in it', 'tag with , in it'].each do |name|
-      tag = Tag.new(:name => name)
+      tag = Tag.new(:name => name, :tag_category_id => 1)
       assert !tag.save
      end
   end
   def test_validations_pass
     ['a'*42, 'tag with / in it', 'tag with ! in it'].each do |name|
-      tag = Tag.new(:name => name)
+      tag = Tag.new(:name => name, :tag_category_id => 1)
       assert tag.save
      end
   end
   def test_before_save
-    tag = Tag.create(:name => "  lots    of extra   spaces     ")
+    tag = create_tag(:name => "  lots    of extra   spaces     ")
     assert_equal "lots of extra spaces", tag.name
   end
   def test_tagees
