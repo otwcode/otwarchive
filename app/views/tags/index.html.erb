@@ -52,8 +52,7 @@
 </div>
 <%= drop_receiving_element("ambiguous", :url =>
    { :controller => "tags", :action => "update", :tag => {:tag_category_id => TagCategory.ambiguous.id}}
-   #FIXME uncomment for 2.1.0 
-   #, :confirm => "WARNING! Changes category irreversibly (except to #{TagCategory.default.name}). Are you sure you want to do this?" 
+   , :confirm => "WARNING! Changes category irreversibly (except to #{TagCategory.default.name}). Are you sure you want to do this?" 
    )%>
 
 <p>
@@ -64,8 +63,7 @@
   </div>
   <%= drop_receiving_element("freeform", :url =>
     { :controller => "tags", :action => "update", :tag => {:tag_category_id => TagCategory.default.id}}
-    #FIXME uncomment for 2.1.0 
-    #, :confirm => "WARNING! Changes category irreversibly (except to #{TagCategory.ambiguous.name}). Are you sure you want to do this?"    
+    , :confirm => "WARNING! Changes category irreversibly (except to #{TagCategory.ambiguous.name}). Are you sure you want to do this?"    
     )%>
 </div>
 
