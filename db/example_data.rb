@@ -66,6 +66,10 @@ module FixtureReplacement
     a.creation_type = :work
     a.creation = default_work
   end
+  
+  attributes_for :feedback do |a|    
+    a.comment = random_paragraph
+  end
 
   attributes_for :metadata do |a|
     a.title = random_phrase

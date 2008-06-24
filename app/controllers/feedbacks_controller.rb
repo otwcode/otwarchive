@@ -28,21 +28,6 @@ class FeedbacksController < ApplicationController
     end
   end
   
-  # PUT /feedbacks/1
-  # PUT /feedbacks/1.xml
-  def update
-    @feedback = Feedback.find(params[:id])
-    
-    respond_to do |format|
-      if @feedback.update_attributes(params[:feedback])
-        flash[:notice] = 'Feedback was successfully updated.'
-        format.html { redirect_to(@feedback) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @feedback.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
+ 
   
 end

@@ -14,7 +14,7 @@ class FeedbacksControllerTest < ActionController::TestCase
     end
     assert_equal(1, ActionMailer::Base.deliveries.length)
     assert flash.has_key?(:notice)
-    assert_redirected_to (:controller => "session", :action => "new")
+    assert_redirected_to(:controller => "session", :action => "new")
   end
   # if ! @feedback.save render new
   def test_feedbacks_path_error
