@@ -85,8 +85,11 @@ Rails::Initializer.run do |config|
   ### see issue 38 in the google issue tracker
   config.active_record.observers = :user_observer
 
-  # Make Active Record use UTC-base instead of local time
-  # config.active_record.default_timezone = :utc
+  # Make Time.zone default to the specified zone, and make Active Record store time values
+  # in the database in UTC, and return them converted to the specified local zone.
+  # Run "rake -D time" for a list of tasks for finding time zone names. Uncomment to use default local time.
+#  config.time_zone = 'UTC'
+
 
   # allow Action Mailer to attempt mail delivery?
   config.action_mailer.perform_deliveries = ArchiveConfig.PERFORM_DELIVERIES

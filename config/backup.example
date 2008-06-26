@@ -32,5 +32,5 @@ tables:
   chapters: 
     split: 100
     split_owner: work
-#  schema_info:
+#  schema_migrations:
 #    days: 1
