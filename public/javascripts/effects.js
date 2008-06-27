@@ -1,6 +1,4 @@
-// script.aculo.us effects.js v1.8.1, Thu Jan 03 22:07:12 -0500 2008
-
-// Copyright (c) 2005-2007 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
+// Copyright (c) 2005-2008 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
 // Contributors:
 //  Justin Palmer (http://encytemedia.com/)
 //  Mark Pilgrim (http://diveintomark.org/)
@@ -1076,11 +1074,11 @@ if (document.defaultView && document.defaultView.getComputedStyle) {
   Element.getStyles = function(element) {
     element = $(element);
     var css = element.currentStyle, styles;
-    styles = Element.CSS_PROPERTIES.inject({ }, function(results, property) {
-      results[property] = css[property];
-      return results;
+    styles = Element.CSS_PROPERTIES.inject({ }, function(hash, property) {
+      hash.set(property, css[property]);
+      return hash;
     });
-    if (!styles.opacity) styles.opacity = element.getOpacity();
+    if (!styles.opacity) styles.set('opacity', element.getOpacity());
     return styles;
   };
 };
