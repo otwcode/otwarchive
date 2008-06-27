@@ -20,6 +20,12 @@ module CommentsHelper
     else
       # still a work in progress
     end
+  end
+  
+  # return html link to add new comment
+  def create_add_comment_link(commentable)
+    href = eval("new_#{commentable.class.to_s.downcase}_comment_path(commentable)")
+    link_to_function "Add a comment".t, "Element.toggle('add-comment')", :href => href  
   end  
   
   # return html link to unhide reply-to-comment-form

@@ -2,31 +2,5 @@
 <%= render :partial => 'chapters/chapter_control', :locals => {:work => @work } -%>
 
 <!-- BEGIN comment section -->
-<div id="comments-display">
-  <p>
-    <%= link_to_function('Add a comment', "Element.toggle('add-comment')", :href => new_chapter_comment_path(@chapter)) %>
-  </p>
-                  
-  <div id="add-comment" style="display : none;">   
-    <%= render :partial => @comment = Comment.new, :locals => {:commentable => @chapter, :button_name => 'Create'}%> 
-  </div>  
-
-  <!-- BEGIN comments -->
-
-    <% unless @comments.empty? %>
-		<div id="show_comments_link">
-		  <p>
-		  	<%= chapter_show_hide_comments_link %>
-			</p>
-		</div>
-		<%- end -%>	
-	
-  <div id="comments">
-    <%- if params[:show_comments] -%>   
-      <%= render :partial => 'comments/comment_view' %>
-	  <%- end -%> 
-  </div>
-   
-  <!-- END comments -->
-</div>
+<%= render :partial => 'comments/commentable', :locals => {:commentable => @chapter} %>
 <!-- END comment section -->

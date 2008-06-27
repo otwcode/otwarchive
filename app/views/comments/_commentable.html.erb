@@ -1,0 +1,24 @@
+<div id="comments-display">
+  <p>
+    <%= create_add_comment_link(commentable) %>
+  </p>
+                  
+  <div id="add-comment" style="display : none;">   
+    <%= render :partial => @comment = Comment.new, :locals => {:commentable => commentable, :button_name => 'Create'}%> 
+  </div>  
+
+  <!-- BEGIN comments -->
+  <div id="show_comments_link">
+  <% unless @comments.empty? %>
+    <p><%= show_hide_comments_link %></p>
+  <% end %>
+	</div> 
+  
+  <div id="comments">   
+    <%- if params[:show_comments] -%>   
+      <%= render :partial => 'comments/comment_view' %>
+	  <%- end -%>     
+  </div>
+  
+  <!-- END comments -->
+</div>
