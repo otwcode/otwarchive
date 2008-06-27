@@ -1,6 +1,6 @@
 <!-- Requires local 'work' -->
 <p>
-  <%= link_to 'See chapter index', work_chapters_path(work) %>
+  <%= link_to 'See all chapters', work_path(work) %>
   <%- if is_author_of?(work) -%> |   
     <%= link_to 'Add a new chapter', new_work_chapter_path(work) %>
 	| <%= link_to 'Edit work', edit_work_path(work) %>
