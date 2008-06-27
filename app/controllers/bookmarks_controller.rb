@@ -65,6 +65,7 @@ class BookmarksController < ApplicationController
   def destroy
     @bookmark = Bookmark.find(params[:id])
     @bookmark.destroy
-    redirect_to(bookmarks_url)
+    flash[:notice] = 'Bookmark was successfully deleted.'
+    redirect_to user_bookmarks_path(current_user)
   end
 end
