@@ -1,5 +1,5 @@
 # This file is auto-generated from the current state of the database. Instead of editing this file, 
-# please use the migrations feature of ActiveRecord to incrementally modify your database, and
+# please use the migrations feature of Active Record to incrementally modify your database, and
 # then regenerate this schema definition.
 #
 # Note that this schema.rb definition is the authoritative source for your database schema. If you need
@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 48) do
+ActiveRecord::Schema.define(:version => 49) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -31,8 +31,8 @@ ActiveRecord::Schema.define(:version => 48) do
   create_table "bookmarks", :force => true do |t|
     t.datetime "created_at",                                      :null => false
     t.string   "bookmarkable_type", :limit => 15, :default => "", :null => false
-    t.integer  "bookmarkable_id",                 :default => 0,  :null => false
-    t.integer  "user_id",                         :default => 0,  :null => false
+    t.integer  "bookmarkable_id",   :limit => 11, :default => 0,  :null => false
+    t.integer  "user_id",           :limit => 11, :default => 0,  :null => false
     t.text     "notes"
     t.boolean  "private"
     t.datetime "updated_at"
@@ -41,37 +41,37 @@ ActiveRecord::Schema.define(:version => 48) do
   add_index "bookmarks", ["user_id"], :name => "fk_bookmarks_user"
 
   create_table "chapters", :force => true do |t|
-    t.text     "content"
-    t.integer  "position",   :default => 1
-    t.integer  "work_id"
+    t.text     "content",    :limit => 16777215
+    t.integer  "position",   :limit => 11,       :default => 1
+    t.integer  "work_id",    :limit => 11
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "posted"
   end
 
   create_table "comments", :force => true do |t|
-    t.integer  "pseud_id"
+    t.integer  "pseud_id",         :limit => 11
     t.text     "content"
-    t.integer  "depth"
-    t.integer  "threaded_left"
-    t.integer  "threaded_right"
+    t.integer  "depth",            :limit => 11
+    t.integer  "threaded_left",    :limit => 11
+    t.integer  "threaded_right",   :limit => 11
     t.boolean  "is_deleted"
     t.string   "name"
     t.string   "email"
     t.string   "ip_address"
-    t.integer  "commentable_id"
+    t.integer  "commentable_id",   :limit => 11
     t.string   "commentable_type"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "thread"
+    t.integer  "thread",           :limit => 11
     t.string   "user_agent"
     t.boolean  "approved"
   end
 
   create_table "creatorships", :force => true do |t|
-    t.integer  "creation_id"
+    t.integer  "creation_id",   :limit => 11
     t.string   "creation_type"
-    t.integer  "pseud_id"
+    t.integer  "pseud_id",      :limit => 11
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -80,6 +80,12 @@ ActiveRecord::Schema.define(:version => 48) do
     t.string   "url"
     t.string   "author"
     t.boolean  "dead"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "feedbacks", :force => true do |t|
+    t.text     "comment"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -124,11 +130,11 @@ ActiveRecord::Schema.define(:version => 48) do
     t.string  "type"
     t.string  "tr_key"
     t.string  "table_name"
-    t.integer "item_id"
+    t.integer "item_id",             :limit => 11
     t.string  "facet"
     t.boolean "built_in"
-    t.integer "language_id"
-    t.integer "pluralization_index"
+    t.integer "language_id",         :limit => 11
+    t.integer "pluralization_index", :limit => 11
     t.text    "text"
     t.string  "namespace"
   end
@@ -140,15 +146,15 @@ ActiveRecord::Schema.define(:version => 48) do
     t.string   "title"
     t.text     "summary"
     t.text     "notes"
-    t.integer  "described_id"
+    t.integer  "described_id",   :limit => 11
     t.string   "described_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "open_id_authentication_associations", :force => true do |t|
-    t.integer "issued"
-    t.integer "lifetime"
+    t.integer "issued",     :limit => 11
+    t.integer "lifetime",   :limit => 11
     t.string  "handle"
     t.string  "assoc_type"
     t.binary  "server_url"
@@ -156,22 +162,22 @@ ActiveRecord::Schema.define(:version => 48) do
   end
 
   create_table "open_id_authentication_nonces", :force => true do |t|
-    t.integer "timestamp",                  :null => false
+    t.integer "timestamp",  :limit => 11,                 :null => false
     t.string  "server_url"
-    t.string  "salt",       :default => "", :null => false
+    t.string  "salt",                     :default => "", :null => false
   end
 
   create_table "preferences", :force => true do |t|
-    t.integer  "user_id"
-    t.boolean  "history_enabled",       :default => true
-    t.boolean  "email_visible",         :default => false
+    t.integer  "user_id",               :limit => 11
+    t.boolean  "history_enabled",                     :default => true
+    t.boolean  "email_visible",                       :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "date_of_birth_visible", :default => false
+    t.boolean  "date_of_birth_visible",               :default => false
   end
 
   create_table "profiles", :force => true do |t|
-    t.integer  "user_id"
+    t.integer  "user_id",       :limit => 11
     t.string   "location"
     t.text     "about_me"
     t.date     "date_of_birth"
@@ -180,7 +186,7 @@ ActiveRecord::Schema.define(:version => 48) do
   end
 
   create_table "pseuds", :force => true do |t|
-    t.integer  "user_id"
+    t.integer  "user_id",     :limit => 11
     t.string   "name"
     t.text     "description"
     t.boolean  "is_default"
@@ -189,10 +195,10 @@ ActiveRecord::Schema.define(:version => 48) do
   end
 
   create_table "readings", :force => true do |t|
-    t.integer  "major_version_read"
-    t.integer  "minor_version_read"
-    t.integer  "user_id"
-    t.integer  "work_id"
+    t.integer  "major_version_read", :limit => 11
+    t.integer  "minor_version_read", :limit => 11
+    t.integer  "user_id",            :limit => 11
+    t.integer  "work_id",            :limit => 11
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -200,14 +206,14 @@ ActiveRecord::Schema.define(:version => 48) do
   create_table "roles", :force => true do |t|
     t.string   "name",              :limit => 40
     t.string   "authorizable_type", :limit => 40
-    t.integer  "authorizable_id"
+    t.integer  "authorizable_id",   :limit => 11
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "roles_users", :id => false, :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "role_id"
+    t.integer  "user_id",    :limit => 11
+    t.integer  "role_id",    :limit => 11
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -224,20 +230,20 @@ ActiveRecord::Schema.define(:version => 48) do
   add_index "tag_categories", ["name"], :name => "index_tag_categories_on_name", :unique => true
 
   create_table "tag_relationships", :force => true do |t|
-    t.string   "name",        :null => false
-    t.string   "verb_phrase", :null => false
+    t.string   "name",                      :null => false
+    t.string   "verb_phrase",               :null => false
     t.boolean  "reciprocal"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "distance",    :null => false
+    t.integer  "distance",    :limit => 11, :null => false
   end
 
   add_index "tag_relationships", ["name"], :name => "index_tag_relationships_on_name", :unique => true
 
   create_table "taggings", :force => true do |t|
-    t.integer  "tag_id"
-    t.integer  "tag_relationship_id"
-    t.integer  "taggable_id"
+    t.integer  "tag_id",              :limit => 11
+    t.integer  "tag_relationship_id", :limit => 11
+    t.integer  "taggable_id",         :limit => 11
     t.string   "taggable_type"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -246,10 +252,10 @@ ActiveRecord::Schema.define(:version => 48) do
   add_index "taggings", ["tag_id", "taggable_id", "taggable_type"], :name => "index_taggings_on_tag_id_and_taggable_id_and_taggable_type", :unique => true
 
   create_table "tags", :force => true do |t|
-    t.string   "name",            :null => false
+    t.string   "name",                          :null => false
     t.boolean  "canonical"
     t.boolean  "banned"
-    t.integer  "tag_category_id"
+    t.integer  "tag_category_id", :limit => 11
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -271,13 +277,13 @@ ActiveRecord::Schema.define(:version => 48) do
   end
 
   create_table "works", :force => true do |t|
-    t.integer  "expected_number_of_chapters", :default => 1
+    t.integer  "expected_number_of_chapters", :limit => 11, :default => 1
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "major_version",               :default => 0
-    t.integer  "minor_version",               :default => 0
+    t.integer  "major_version",               :limit => 11, :default => 0
+    t.integer  "minor_version",               :limit => 11, :default => 0
     t.boolean  "posted"
-    t.integer  "language_id"
+    t.integer  "language_id",                 :limit => 11
     t.boolean  "restricted"
   end
 
