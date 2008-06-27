@@ -12,7 +12,7 @@ class Tagging < ActiveRecord::Base
 
 
   def valid_tag
-    return tag unless tag.banned
+    return tag if tag && !tag.banned?
   end
   
   def self.tagees(options = {})
