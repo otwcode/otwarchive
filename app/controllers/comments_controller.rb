@@ -60,6 +60,7 @@ class CommentsController < ApplicationController
         if @comment.approved?
           flash[:notice] = 'Comment was successfully created.'.t
           parent = @comment.ultimate_parent
+          @comments = @comment.commentable.find_all_comments
           respond_to do |format|
               format.html { redirect_to :controller => parent.class.to_s.pluralize, :action => 'show', :id => parent.id, :anchor => "comment#{@comment.id}" }
               format.js
