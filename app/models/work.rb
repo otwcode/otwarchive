@@ -4,7 +4,6 @@ class Work < ActiveRecord::Base
   has_bookmarks
   has_many :taggings, :as => :taggable, :dependent => :destroy
   
-  named_scope :posted, :conditions => {:posted => true}
   named_scope :public, :conditions => "restricted = 0 OR restricted IS NULL"
 
   include TaggingExtensions

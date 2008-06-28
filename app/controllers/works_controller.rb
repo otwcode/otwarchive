@@ -171,8 +171,7 @@ class WorksController < ApplicationController
         tag_hash[kind] = params[:work][kind]
       end
       @work.posted = true
-      @work.chapters.first.posted = true
-      if @work.save && @work.chapters.first.save && @work.tag_with(tag_hash) 
+      if @work.save && @work.chapters.first.update_attribute(:posted, true) && @work.tag_with(tag_hash) 
         flash[:notice] = 'Work has been posted!'
         redirect_to(@work)
       else
