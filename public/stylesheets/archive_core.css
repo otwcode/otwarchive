@@ -27,20 +27,20 @@ a img {
 h1 {
 	font-style: normal;
 	font-weight: normal;
-	font: 120% "Gill Sans", Georgia, Verdana, sans-serif;
+	font: 200% "Gill Sans", Georgia, Verdana, sans-serif;
 }
 h2, h3, h4, h5, h6 {
 	font-family: "Gill Sans", Georgia, Verdana, sans-serif;
 	font-weight: normal;
 }
 h2 {
-	font-size: 200%;
-}
-h3 {
 	font-size: 180%;
 }
-h4 {
+h3 {
 	font-size: 150%;
+}
+h4 {
+	font-size: 120%;
 }
 
 hr {
@@ -52,10 +52,14 @@ hr {
 
 /* LAYOUT ELEMENTS */
 #header {
-	color: white;
 	padding: 1em;
-	background-color: #990000;
+	border-bottom: 1px solid black;
 }
+
+#header h1 {
+	color: red;
+}
+
 #login-block {
 	text-align: right;
 	font-size: 80%;
@@ -70,6 +74,13 @@ hr {
 	display: inline;
 	list-style-type: none;
 }
+
+#main-navigation li {
+	display:inline;
+	list-style-type: none;
+	padding-right: 5%;
+}
+
 .first-link:after {
   content: ' | ';
 }
@@ -95,9 +106,7 @@ hr {
 	padding-right: 2em;
 	padding-left: 2em;
 }
-#login-block a:link, #login-block a:visited {
-	color: white;
-}
+
 #footer {
 	color: #999999;
 	font-size: 90%;
