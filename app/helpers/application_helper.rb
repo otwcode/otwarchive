@@ -1,6 +1,11 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper 
   
+  # Used in navigation link list in header
+  def home_link
+    logged_in? ? user_path(current_user) : root_path
+  end
+  
   # Can be used to check ownership of items
   def is_author_of?(item) 
     return false unless logged_in?

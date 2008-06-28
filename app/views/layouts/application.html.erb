@@ -26,7 +26,7 @@
   <!-- BEGIN header -->
     <div id="header">
       <div id="login-block">
-        <% if logged_in? -%>
+        <%- if logged_in? -%>
 	      <ul>
 				  <li><span><%=h "Hi,".t -%></span> <%= link_to current_user.login, user_path(current_user), :class => 'login' -%>! </li>
 				  <%= translation_button %>	
@@ -56,7 +56,7 @@
       </h1>
       
       <ul id="main-navigation">
-        <li><%= link_to_unless_current "home".t, user_path(current_user) %></li>
+        <li><%= link_to_unless_current "home".t, home_link %></li>       
         <li><%= link_to_unless_current "fandoms".t, works_path %></li>
         <li><%= link_to_unless_current "people".t, users_path %></li>
         <li><%= link_to_unless_current "groups".t, '#' %></li>
