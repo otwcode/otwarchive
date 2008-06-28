@@ -1,9 +1,12 @@
 class UsersController < ApplicationController
- 
 
   # checks if the current user and the given user are the same
   def is_user?(user)
     current_user == user
+  end
+  
+  def index
+    @users = User.all
   end 
 
   # GET /users/1
