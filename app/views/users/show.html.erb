@@ -9,38 +9,40 @@
     </p>
   <%- end -%>
 
-  <div class="user-category" id="user-pseuds">
-    <span class="two-column-left">Pseuds (<%= @user.pseuds.count %>)</span>
-    <div class="two-column-right"><%= print_pseuds(@user) %></div>
-  </div>
+  <table id="user-data">
+    <tr id="user-pseuds">
+      <td class="user-data-label"><span id="user-pseuds-label"><%= "Pseuds".t  + " (#{@user.pseuds.count})" %></span></td>
+      <td><%= print_pseuds(@user) %></td>
+    </tr>
 
-  <div class="user-category" id="user-location">
-    <span class="two-column-left">Location</span>
-    <div class="two-column-right"><%=h @user.profile.location -%></div>
-  </div>
+    <tr id="user-location">
+      <td class="user-data-label"><span id="user-location-label"><%= "Location".t %></span></td>
+      <td><%=h @user.profile.location -%></td>
+    </tr>
   
-  <%- if @user.preference.date_of_birth_visible -%>
-  <div class="user-category" id="user-birthday">
-    <span class="two-column-left">Birthday</span>
-    <div class="two-column-right"><%=h @user.profile.date_of_birth -%></div> 
-  </div>
-  <%- end -%>
+    <%- if @user.preference.date_of_birth_visible -%>
+    <tr id="user-birthday">
+      <td class="user-data-label"><span id="user-birthday-label"><%= "Birthday".t %></span></td>
+      <td><%=h @user.profile.date_of_birth -%></td> 
+    </tr>
+    <%- end -%>
 
-  <div class="user-category" id="user-bio">
-    <span class="two-column-left">Bio</span>
-    <div class="two-column-right" id="user-bio-display"><%=sanitize_format @user.profile.about_me -%></div>
-  </div>
+    <tr id="user-bio">
+      <td class="user-data-label"><span id="user-bio-label"><%= "Bio".t %></span></td>
+      <td><%=sanitize_format @user.profile.about_me -%></td>
+    </tr>
   
-  <%- if @user.preference.email_visible -%>
-  <div class="user-category" id="user-email">
-    <span class="two-column-left">Email</span>
-    <div class="two-column-right"><%= mail_to @user.email, nil, :encode => "hex" %></div>
-  </div>
-  <%- end -%>
+    <%- if @user.preference.email_visible -%>
+    <tr id="user-email">
+      <td class="user-data-label"><span id="user-email-label"><%= "Email".t %></span></td>
+      <td><%= mail_to @user.email, nil, :encode => "hex" %></td>
+    </tr>
+    <%- end -%>
 
-  <div class="user-category" id="user-bookmarks">
-    <span class="two-column-left"><%= print_bookmarks_link(@user) %></span>
-  </div>
+    <tr id="user-bookmarks">
+      <td class="user-data-label"><%= print_bookmarks_link(@user) %></td>
+    </tr> 
+  </table>
   
   <div id="user-works">
     <%- for pseud in @user.pseuds -%>

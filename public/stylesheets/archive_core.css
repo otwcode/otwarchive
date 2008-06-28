@@ -478,12 +478,14 @@ textarea.story-edit-notes {
 
 /* INTERIM SPIFFING UP OF USER PAGE */
 
-.user-category {
-	width: 570px;
-	height: auto;
-	clear: both;
-	padding: 20px;
-	font-size: 110%;
+#user-page table {
+	width: auto;
+	margin-left: 5%;
+	margin-right: 30%;
+}
+
+#user-data td {
+	padding-bottom: .5em;
 }
 
 #user-page li {
@@ -506,24 +508,13 @@ textarea.story-edit-notes {
 #user-works {
 	clear: both;
 	padding-top: 30px;
+}
+
+.user-data-label {
+	width: 10em;
 }                   
 
 .pseud-works {
-	border-top: 2px solid black;
+	border-top: 1px solid black;
 	padding-bottom: 20px;
-}
-
-.two-column-left {
-	width: 150px;
-	float: left;
-	padding-right: 20px;
-}
-
-.two-column-right {
-	width: 400px;
-	float: right;
-}                
-
-#user-bio-display {
-	margin-top: -1em;
 }

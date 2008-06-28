@@ -19,7 +19,9 @@ class Chapter < ActiveRecord::Base
 
   before_save :validate_authors
   after_save :save_creatorships, :save_associated
-  after_update :save_associated
+  after_update :save_associated 
+  
+  named_scope :in_order, {:order => :position}
 
   # Set the position if this isn't the first chapter
   def current_position
