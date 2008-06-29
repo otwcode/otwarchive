@@ -64,6 +64,10 @@ class UsersController < ApplicationController
     end
   end
   
+  def after_reset
+    @user = User.find_by_login(params[:id])  
+  end
+  
   # PUT /users/1
   # PUT /users/1.xml
   def update
@@ -85,6 +89,8 @@ class UsersController < ApplicationController
     else
       @user.preference = Preference.new(params[:preference_attributes])
     end
+    
+    @user.recently_reset = nil if params[:change_password]
     
     if @user.update_attributes(params[:user]) && @user.profile.update_attributes(params[:profile_attributes])
       flash[:notice] = 'User was successfully updated.'

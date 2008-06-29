@@ -50,11 +50,11 @@ class WorksController < ApplicationController
       end
     end
 
-    @chapter = @work.chapters.first
+    @chapter = @work.first_chapter
     if params[:work] && params[:work][:chapter_attributes]
       @chapter.content = params[:work][:chapter_attributes][:content]
     end
-    @chapters = @work.chapters.find(:all, :order => 'position')
+    @chapters = @work.chapters.in_order
     @metadata = @work.metadata
     
     unless current_user == :false
@@ -171,7 +171,7 @@ class WorksController < ApplicationController
         tag_hash[kind] = params[:work][kind]
       end
       @work.posted = true
-      if @work.save && @work.chapters.first.update_attribute(:posted, true) && @work.tag_with(tag_hash) 
+      if @work.save && @work.first_chapter.update_attribute(:posted, true) && @work.tag_with(tag_hash) 
         flash[:notice] = 'Work has been posted!'
         redirect_to(@work)
       else

@@ -113,11 +113,16 @@ class Work < ActiveRecord::Base
   # Get the total number of posted chapters for a work
   def number_of_posted_chapters
      Chapter.maximum(:position, :conditions => {:work_id => self.id, :posted => true}) || 0
+  end
+  
+  # Gets the current first chapter
+  def first_chapter
+    self.chapters.find(:first, :order => 'position ASC')
   end  
   
   # Gets the current last chapter
   def last_chapter
-    Chapter.find(:first, :conditions => ['work_id = ?', self.id], :order => 'position DESC')
+    self.chapters.find(:first, :order => 'position DESC')
   end
 
   # Change the position of multiple chapters when one is deleted

@@ -62,6 +62,7 @@ module AuthentableEntity
   def reset_user_password
     self.password = self.generate_password 
     self.password_confirmation = self.password
+    self.recently_reset = true
   end
 
   protected

@@ -1,10 +1,15 @@
 <h1><%= "Forgot your password?" .t %></h1>
 
-  <p> <%= "Enter your  ".t + "user name".t  + " or email address below, and a new password will be emailed to you." .t %>  </p>
-  
-	<% form_tag passwords_path do -%>
-	  <p>
-	  <%= text_field_tag 'login' %></p>
-	
-	  <p><%= submit_tag 'Reset my password' %></p>
-	<% end -%>
+<p><%= "Never fear - if you've forgotten your password, we can send you a  link to reset it." .t %></p>
+<p><%= "Please tell us the username or email address you used when you signed up for your Archive account." .t %></p>
+
+<%- form_tag passwords_path do -%>
+  <p>
+	  <label>Email address <strong>or</strong> username: </label> 
+	  <%= text_field_tag 'login' %>
+	  <%= submit_tag 'Reset password' %>
+	</p>
+
+<%- end -%>
+
+<p><%= "If you no longer have access to the email address you used, please contact us directly.".t %></p>  
