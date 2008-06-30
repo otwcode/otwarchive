@@ -4,7 +4,7 @@ class TagWrangles < ActiveRecord::Migration
     add_column :tags, :taggings_count, :integer, :default => 0
     Tag.reset_column_information
     Tag.find(:all).each do |t|
-      t.update_attributes :taggings_count, t.taggings.length
+      t.update_attributes(:taggings_count => t.taggings.length)
     end
   end
 
