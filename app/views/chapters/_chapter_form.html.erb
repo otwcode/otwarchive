@@ -5,17 +5,25 @@
 
   
   <!-- Author dropdown (pseud_id) -->
-	<p class="field-left">
-	  <%= label :pseud, :id, "Select author/pseudonym(s)" %><br />
- 	  <select name="chapter[author_attributes][ids][]" multiple="multiple">
-      <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
-    </select> 
-	</p>
+		<%- if @pseuds.size > 1 -%>
+  	  <p class="field-left">
+  	<%- else -%>
+		  <p style="display:none;">
+		<%- end -%>	
+	    <%= label :pseud, :id, "Select author/pseudonym(s)" %><br />
+ 	    <select name="chapter[author_attributes][ids][]" multiple="multiple">
+        <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
+      </select> 
+	    </p>
 
-  <p class="field-right"> 
-    <%= link_to 'Create pseud?', new_user_pseud_path(current_user) %><br />  
+		<%- if @pseuds.size > 1 -%>
+      <p class="field-right"> 
+        <%= link_to 'Create pseud?', new_user_pseud_path(current_user) %><br />
+		<%- else -%>
+		  <p class="field-left">
+		<%- end -%>  
     <%= link_to_function('Add co-authors?', "Element.toggle('co-authors')") %>
-  </p>
+      </p>
 
 	<p class="clearboth"></p>
 
