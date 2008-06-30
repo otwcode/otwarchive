@@ -25,9 +25,9 @@ class TagsController < ApplicationController
     @bookmarks = @tag.tagees('Bookmarks')
     @tags = @tag.tagees('Tags')
     @tag.synonyms.each do |t|
-      @works =+ t.tagees('Works')
-      @bookmarks =+ t.tagees('Bookmarks')
-      @tags =+ t.tagees('Tags')
+      @works += t.tagees('Works')
+      @bookmarks += t.tagees('Bookmarks')
+      @tags += t.tagees('Tags')
     end
     @tags = @tags - @tag.synonyms - [@tag] - @ambiguous
     @works.uniq!
