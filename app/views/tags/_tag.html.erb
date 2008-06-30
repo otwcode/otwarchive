@@ -1,7 +1,0 @@
-<span class=draggable >
-<%= tag.tag_category.name %>: <%= tag.name -%> 
- <% if tag.canonical? %>(Canonical)<% end -%>
- <% if tag.banned? %>(Banned!)<% end -%>
- (<%= link_to 'tagees', tag %> | <%= link_to 'edit without dragging', edit_tag_path(tag) %>)
-<br/>
-</span>

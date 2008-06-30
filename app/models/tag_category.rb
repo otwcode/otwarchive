@@ -1,7 +1,12 @@
 class TagCategory < ActiveRecord::Base
   has_many :tags
   
+  validates_uniqueness_of :name
+  
   before_destroy :remove_me_from_my_tags
+  
+  named_scope :ordered, :order => 'official, required DESC, exclusive DESC'
+  named_scope :official, :conditions => 'official', :order => 'official, required DESC, exclusive DESC'
   
   def remove_me_from_my_tags
     self.tags.each do |t| 
@@ -10,24 +15,24 @@ class TagCategory < ActiveRecord::Base
     end
   end
   
+  # required ambiguous category, if it doesn't exist, create it.
   def self.ambiguous
-    find_by_name(ArchiveConfig.AMBIGUOUS_CATEGORY)
+    find_by_name('ambiguous') || TagCategory.create({ :name => 'ambiguous', :display_name => 'Ambiguous' })
   end
 
+  # required default category, if it doesn't exist, create it.
   def self.default
-    find_by_name(ArchiveConfig.DEFAULT_CATEGORY)
+    find_by_name('default') || TagCategory.create({ :name => 'default', :official => true, :display_name => 'Freeform' })
   end
 
-  def self.official(options = {})
-    with_scope :find => options do
-      find_all_by_official(true, :order => 'required DESC')
-    end
-  end
-  
   def self.official_tags(category_name)
     category = find_by_name(category_name)
-    return false unless category
-    category.tags.map(&:visible).compact.sort
+    return [] unless category
+    category.tags.map(&:official).compact.sort
+  end
+  
+  def display_name
+    display_name? ? super : name
   end
 
 end

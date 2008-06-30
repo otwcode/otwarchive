@@ -1,23 +1,21 @@
-<h1>Listing tag_categories</h1>
-
+<h2>TagWrangler: Category wrangling</h2>
 <table>
   <tr>
+    <th>Name</th>
+    <th>Required</th>
+    <th>Exclusive</th>
+    <th>Work menu</th>
   </tr>
-
-<% for tag_category in @tag_categories %>
+  <% @tag_categories.each do |tag_category| %>
   <tr>
-    <td><%= tag_category.name %>
-    <td><% if tag_category.required? %> Required <% end -%></td>
-    <td><% if tag_category.official? %> Official <% end -%></td>
-    <td><% if tag_category.exclusive? %> Exclusive<br><% end -%></td>
-
-    <td><%= link_to 'Show', tag_category %></td>
-    <td><%= link_to 'Edit', edit_tag_category_path(tag_category) %></td>
-    <td><%= link_to 'Destroy', tag_category, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= tag_category.display_name %></td>
+    <td><% if tag_category.required %>X<% end %></td>
+    <td><% if tag_category.exclusive %>X<% end %></td>
+    <td><% if tag_category.official %>X<% end %></td>
+    <td><%= link_to 'edit', edit_tag_category_path(tag_category) %></td>
+    <td><%= link_to 'show tags', tag_category_path(tag_category) %></td>
   </tr>
-<% end %>
+  <% end %>
 </table>
 
-<br />
-
-<%= link_to 'New tag_category', new_tag_category_path %>
+<%= tag_wrangler_footer %>

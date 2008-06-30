@@ -9,8 +9,9 @@ class TagCategoryTest < ActiveSupport::TestCase
     assert TagCategory.official.include?(category)
     # TODO test sort
   end
-  def test_ambiguous
-    assert_equal ArchiveConfig.AMBIGUOUS_CATEGORY, TagCategory.ambiguous.name
+  def test_required_categories
+    assert_equal 'ambiguous', TagCategory.ambiguous.name
+    assert_equal 'default', TagCategory.default.name
   end
   def test_official_tags
     category = create_tag_category

@@ -1,2 +1,0 @@
-page.remove @tag.id.to_s
-page.insert_html :bottom, 'changed_container', :partial => 'tag', :locals => { :tag => @tag }

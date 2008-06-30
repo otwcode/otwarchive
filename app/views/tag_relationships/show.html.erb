@@ -1,20 +1,22 @@
-<h1><%= @tag_relationship.name %></h1>
-<p>
-Distance: <%= @tag_relationship.distance %>
-<% if @tag_relationship.distance == 0 %>
-(tags in this relationship are equivalent)
-<% elsif @tag_relationship.distance == 1 %>
-(tags in this relationship are very closely related)
-<% elsif @tag_relationship.distance == 2 %>
-(tags in this relationship are related)
-<% else %>
-(tags in this relationship are only loosly associated)
+<h2>TagWrangler: Tags in Relationship <%= @tag_relationship.name %></h2>
+<table id='table'>
+  <tr>
+    <th></th>
+    <th><%= @tag_relationship.verb_phrase %></th>
+  </tr>
+<% @taggings.each do |tagging| -%>
+  <%= render :partial => 'table', :locals => { :tag => tagging.tag, :taggable => tagging.taggable }%>   
+<% end -%>
+</table>
+<p>Drag a tag by it's handle (<img src="/images/drag.png" alt="drag me">) and drop it onto another tag, in order to create a <%= @tag_relationship.name%> relationship where the first tag <%=@tag_relationship.verb_phrase%> the second tag</p>
+
+<% @categories.each do |category| -%>
+  <p><b><%= category.display_name %> Tags:</b>
+  <% category.tags.each do |tag| -%>
+    <%= render :partial => 'droppable', :locals => { :tag => tag }%>
+  <% end %>
+  </p>
 <% end %>
-<p>
-<% @tags.each do |array|%>
-  <%= array[0] %> <%= @tag_relationship.verb_phrase %> <%= array[1] %> <%= link_to 'Edit', edit_tagging_path(array[2]) %>
-<br>
-<% end %>
-<p>
-<%= link_to 'Edit', edit_tag_relationship_path(@tag_relationship) %> |
-<%= link_to 'Back', tag_relationships_path %>
+
+<%= tag_wrangler_footer %>
+

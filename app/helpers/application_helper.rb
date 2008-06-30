@@ -200,4 +200,8 @@ module ApplicationHelper
     end
   end
 
+  def tag_wrangler_footer
+    '<p>' + link_to('New tag', new_tag_path) + ' | ' +link_to('Tag categories', tag_categories_path)  + ' | ' +  link_to('New category', new_tag_category_path) + ' | ' + link_to('Tag relationships', tag_relationships_path) + ' | ' + link_to('New relationship', new_tag_relationship_path)
+  end
+
 end

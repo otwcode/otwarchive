@@ -1,8 +1,8 @@
 class TagRelationshipsController < ApplicationController
-#  permit('wranglers',
-#          :permission_denied_redirection => {:controller => :works, :action => :index },
-#          :permission_denied_message => 'Sorry, the page you have requested is for tag wranglers only! Please contact an admin if you think you should have access.',
-#          :except => [ :show, :index ])
+
+#permit('wranglers',
+# :permission_denied_redirection => {:controller => :works, :action => :index },
+# :permission_denied_message => 'Sorry, the page you have requested is for tag wranglers only! Please contact an admin if you think you should have access.')
 
   # GET /tag_relationships
   # GET /tag_relationships.xml
@@ -19,15 +19,11 @@ class TagRelationshipsController < ApplicationController
   # GET /tag_relationships/1.xml
   def show
     @tag_relationship = TagRelationship.find(params[:id])
-    # only interested in tag to tag taggings
-    @taggings = @tag_relationship.taggings.select{|tagging| tagging.taggable_type == 'Tag'}
-    @tags = Set.new
-    @taggings.each { |g| @tags.add([g.taggable.name, g.tag.name, g.id]) }
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @tag_relationship }
+    if @tag_relationship == TagRelationship.disambiguate
+      redirect_to tag_category_path(TagCategory.ambiguous)
     end
+    @taggings = @tag_relationship.taggings.select{|tagging| tagging.taggable_type == 'Tag'}
+    @categories = TagCategory.official(:include => 'tags')
   end
 
   # GET /tag_relationships/new
@@ -91,4 +87,12 @@ class TagRelationshipsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+  
+  def update_tag
+    @tag = Tag.find(params[:id])
+    @tag_relationship = TagRelationship.find(params[:relationship])
+    @taggable = Tag.find(params[:taggable])
+    Tagging.create(:tag => @tag, :taggable => @taggable, :tag_relationship => @tag_relationship)
+  end
+
 end

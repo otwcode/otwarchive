@@ -1,0 +1,11 @@
+<div id="<%= tag.id -%>">
+  <img src="/images/drag.png" alt="drag me">
+  <%= link_to tag.name, tag, :popup => true %>
+  <% if tag.canonical? %>(Canonical)<% end -%>
+  <% if tag.banned? %>(Banned!)<% end -%>
+  <br/>
+</div>
+<%= draggable_element(tag.id.to_s, :scroll => 'window', :revert => true) %>
+<%= drop_receiving_element(tag.id.to_s,
+  :url => {:controller => 'tag_relationships', :action => 'update_tag', :taggable => tag.id, :relationship => @tag_relationship.id}
+  ) %>

@@ -17,7 +17,7 @@ class TagCategoriesControllerTest < ActionController::TestCase
       post :create, :tag_category => { :name => random_word }, :locale => 'en'
     end
 
-    assert_redirected_to tag_category_path(assigns(:tag_category))
+    assert_redirected_to tag_categories_path
   end
 
   def test_should_show_tag_category
@@ -35,7 +35,7 @@ class TagCategoriesControllerTest < ActionController::TestCase
   def test_should_update_tag_category
     tag_category = create_tag_category
     put :update, :id => tag_category.id, :tag_category => { }, :locale => 'en'
-    assert_redirected_to tag_category_path(assigns(:tag_category))
+    assert_redirected_to tag_categories_path
   end
 
   def test_should_destroy_tag_category

@@ -10,8 +10,8 @@
   <br>
   <%= f.check_box("canonical") %>Canonical    (this tag will show up in selections and lists)
   <p>
-  <% TagCategory.find(:all).each do |category| -%>
-    <%= f.radio_button("tag_category_id", category.id) %><%= category.name %>
+  <% TagCategory.ordered(:all).each do |category| -%>
+    <%= f.radio_button("tag_category_id", category.id) %><%= category.display_name %>
   <% end -%>
   <p>
   Please be careful.
@@ -20,7 +20,8 @@
   Once you have selected a category, you will not be able to change it to anything other than <%= link_to TagCategory.ambiguous.name, tag_category_path(TagCategory.ambiguous) %> or <%= link_to TagCategory.default.name, tag_category_path(TagCategory.default) %>
   <p>
   <%= f.submit %>
-  </p>
+  <p>
+  If, after you have created a tag, you need to change it's banned or canonical status, go to the <%= link_to 'category page', tag_categories_path %> and select the tags link in the category it is in.
 <% end %>
+<%= tag_wrangler_footer %>
 
-<%= link_to 'Back', tags_path %>

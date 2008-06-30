@@ -1,6 +1,7 @@
 class Tag < ActiveRecord::Base
   belongs_to :tag_category
   has_many :taggings, :as => :taggable, :dependent => :destroy
+  belongs_to :tagging, :dependent => :destroy
   include TaggingExtensions
 
   validates_length_of :name, :maximum => 42
@@ -8,6 +9,7 @@ class Tag < ActiveRecord::Base
                       :with => /\A[-a-zA-Z0-9 \/?.!''"";\|\]\[}{=~!@#\$%^&()_+]+\z/, 
                       :message => "tags can only be made up of letters, numbers, spaces and basic punctuation, but not commas and colons"
   validates_presence_of :tag_category_id
+  validates_uniqueness_of :name
   
   def before_create
     self.name = name.strip.squeeze(" ")
@@ -21,15 +23,25 @@ class Tag < ActiveRecord::Base
     return self if !banned
   end
   
-  def visible
+  def official
     return self if canonical
   end
   
+  # sort tags by name
   def <=>(another_tag)
     name <=> another_tag.name
   end
+  
+  def synonyms
+    Tagging.find(:all, :conditions => {:taggable_id => self.id, :taggable_type => 'Tag', :tag_relationship_id => TagRelationship.synonym.id}).collect(&:tag) - [self]
+  end
+  
+  def disambiguates
+    Tagging.find(:all, :conditions => {:taggable_id => self.id, :taggable_type => 'Tag', :tag_relationship_id => TagRelationship.disambiguate.id}).collect(&:tag) - [self]
+  end
 
   def name
-    self.canonical? ? super.titlecase : super
+    self.canonical? ? super.gsub(/\b([a-z])/) { $1.capitalize } : super
   end
+  
 end

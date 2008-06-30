@@ -1,0 +1,29 @@
+<h2>TagWrangler: <%= @tag_category.display_name %> tag category </h2>
+
+<p>Drag a tag by it's handle (<img src="/images/drag.png" alt="drag me">) and drop it on the following line to move it to the <%= @tag_category.display_name %> category, or onto a <%= @tag_category.display_name %> Tag, in order to create a <%= link_to TagRelationship.disambiguate.name, tag_relationship_path(TagRelationship.disambiguate) %> relationship</p>
+
+<div id=<%= @tag_category.display_name %> class="droppable">
+    Move to <%= @tag_category.display_name %> category
+</div>
+<%= drop_receiving_element(@tag_category.display_name, 
+   :url => { :action => 'change_tag', :tag => {:tag_category_id => @tag_category.id}},
+   :confirm => "WARNING! Changes category irreversibly (except to #{TagCategory.ambiguous.display_name}). Are you sure you want to do this?"
+   )%>
+
+<p><b><%= @tag_category.display_name %> Tags:</b>
+<div id="change">
+  <% @tag_category.tags.each do |tag| -%>
+    <%= render :partial => 'droppable', :locals => { :tag => tag }%>
+  <% end %> 
+</div>
+
+<% (TagCategory.official(:include => 'tags') - [TagCategory.default]).each do |category| -%>
+  <p><b><%= category.display_name %> Tags:</b>
+  <% category.tags.each do |tag| -%>
+    <%= render :partial => 'draggable', :locals => { :tag => tag }%>
+  <% end %>
+<% end %>
+
+<%= tag_wrangler_footer %>
+
+

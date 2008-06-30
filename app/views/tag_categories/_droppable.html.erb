@@ -1,0 +1,10 @@
+<div id="<%= tag.id -%>" class="droppable">
+  <%= tag.name -%> 
+  <% if tag.canonical? %>(Canonical)<% end -%>
+  <% if tag.banned? %>(Banned!)<% end -%>
+  (<%= link_to 'show', tag, :popup => true %>)
+  <br/>
+</div>
+<%= drop_receiving_element(tag.id.to_s,
+  :url => { :controller => "tag_categories", :action => "add_relationship", :taggable => tag.id, :category => tag.tag_category.id}
+  ) %>

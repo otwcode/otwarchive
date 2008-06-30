@@ -96,12 +96,12 @@ module FixtureReplacement
   end
 
   attributes_for :role do |a|
-    a.name = random_phrase[0..40]
+    a.name = random_phrase[1...40]
   end
  
   attributes_for :tag do |a|
     a.tag_category = TagCategory.default
-    a.name = random_phrase[0..42]
+    a.name = random_phrase[1...42]
   end
   
   attributes_for :tagging do |a|

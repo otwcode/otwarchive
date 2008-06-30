@@ -1,27 +1,21 @@
-<h1>Listing tag_relationships</h1>
+<h2>TagWrangler: Relationships</h2>
 
-<table>
-  <tr>
-    <td><b>Name</b></td>
-    <td><b>Why tag1 points to tag2</b></td>
-    <td><b>Distance</b> between tag1 and tag2</td>
-    <td><b>Reciprocal?</b> (tag2 also points to tag1)</td>
+<table>  <tr>
+    <th>Name<br></th>
+    <th>Relationship<br></th>
+    <th>Distance</th>
+    <th>Reciprocal?</th>
   </tr>
-
-
-<% for tag_relationship in @tag_relationships %>
-  <tr>
-    <td><%= tag_relationship.name %></td>
-    <td>"<%= tag_relationship.verb_phrase %>"</td>
-    <td><%= tag_relationship.distance%></td>
-    <td><% if tag_relationship.reciprocal? %>X<%end %></td>
-    <td><%= link_to 'Show', tag_relationship %></td>
-    <td><%= link_to 'Edit', edit_tag_relationship_path(tag_relationship) %></td>
-    <td><%= link_to 'Destroy', tag_relationship, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
+<% @tag_relationships.each do |relationship| %>
+	<tr>
+ <td> <%= relationship.name%></td>
+ <td><%= relationship.verb_phrase %> </td>
+ <td> <%= relationship.distance %></td>
+ <td> <%= relationship.reciprocal? %></td>
+ <td> <%= link_to 'edit', edit_tag_relationship_path(relationship) %></td>
+		<td><%= link_to 'wrangle tags', tag_relationship_path(relationship) %> </td>
+ </tr>
 <% end %>
 </table>
-
-<br />
-
-<%= link_to 'New tag_relationship', new_tag_relationship_path %>
+<p>
+<%= tag_wrangler_footer %>

@@ -1,14 +1,14 @@
 class TagsController < ApplicationController
 
-#  permit 'wranglers',
-#          :permission_denied_redirection => {:controller => :works, :action => :index },
-#          :permission_denied_message => 'Sorry, the page you have requested is for tag wranglers only! Please contact an admin if you think you should have access.',
-#          :except => [ :show, :index ]
-  
+#permit('wranglers',
+# :permission_denied_redirection => {:controller => :works, :action => :index },
+# :permission_denied_message => 'Sorry, the page you have requested is for tag wranglers only! Please contact an admin if you think you should have access.',
+# :except => [ :show, :index ]
+
   # GET /tags
   # GET /tags.xml
   def index
-    @categories = TagCategory.official(:include => 'tags')
+    @tags = Tag.find(:all, :order => "taggings_count DESC", :limit => 100)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -20,8 +20,19 @@ class TagsController < ApplicationController
   # GET /tags/1.xml
   def show
     @tag = Tag.find(params[:id])
+    @ambiguous = @tag.disambiguates
     @works = @tag.tagees('Works')
     @bookmarks = @tag.tagees('Bookmarks')
+    @tags = @tag.tagees('Tags')
+    @tag.synonyms.each do |t|
+      @works =+ t.tagees('Works')
+      @bookmarks =+ t.tagees('Bookmarks')
+      @tags =+ t.tagees('Tags')
+    end
+    @tags = @tags - @tag.synonyms - [@tag] - @ambiguous
+    @works.uniq!
+    @bookmarks.uniq!
+    @tags.uniq!
 
     respond_to do |format|
       format.html # show.html.erb
@@ -40,16 +51,6 @@ class TagsController < ApplicationController
     end
   end
 
-  # GET /tags/1/edit
-  def edit
-    @tag = Tag.find(params[:id])
-    if @tag.tag_category
-      @categories = [ @tag.tag_category, TagCategory.ambiguous, TagCategory.default ].uniq
-    else # should never be nil, but just in case
-      @categories = TagCategory.find(:all, :order => 'name')
-    end
-  end
-
   # POST /tags
   # POST /tags.xml
   def create
@@ -58,34 +59,12 @@ class TagsController < ApplicationController
     respond_to do |format|
       if @tag.save
         flash[:notice] = 'Tag was successfully created.'
-        format.html { redirect_to tags_path }
+        format.html { redirect_to tag_relationships_path }
         format.xml  { render :xml => @tag, :status => :created, :location => @tag }
       else
         format.html { render :action => "new" }
         format.xml  { render :xml => @tag.errors, :status => :unprocessable_entity }
       end
-    end
-  end
-
-  # PUT /tags/1
-  # PUT /tags/1.xml
-  def update
-    @tag = Tag.find(params[:id])
-
-    if params[:commit]
-      respond_to do |format|
-        if @tag.update_attributes(params[:tag])
-          flash[:notice] = 'Tag was successfully updated.'
-          format.html { redirect_to(@tag) }
-          format.xml  { head :ok }
-        else
-          format.html { render :action => "edit" }
-          format.xml  { render :xml => @tag.errors, :status => :unprocessable_entity }
-        end
-      end
-    else
-      @tag.update_attributes(params[:tag])
-      @tag
     end
   end
 

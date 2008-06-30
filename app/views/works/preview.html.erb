@@ -25,13 +25,13 @@
   <!-- Tags -->
   <!-- Fandom field -->
 		<span class="field-left">
-		  <% TagCategory.find_all_by_official(true).each do |category| %>
+		  <% TagCategory.official.each do |category| %>
         <% if category.required %>
           <span class="required storylabel">
         <% else %>
           <span class="storylabel">
         <% end %>
-        <%= category.name %>
+        <%= category.display_name %>
           </span>
         <% if category.exclusive %>
           <%= collection_select(:work, category.name.to_sym, TagCategory.official_tags(category.name), :name, :name) %>		

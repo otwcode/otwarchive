@@ -1,6 +1,0 @@
-<%= @tagging.tag.name %> points to <%= @tagging.taggable.name %> 
-<% if @tagging.tag_relationship %> because they are <%= link_to @tagging.tag_relationship.name.pluralize, tag_relationship_path(@tagging.tag_relationship) %><% end %>
-<p>
-
-<%= link_to 'Edit', edit_tagging_path(@tagging) %> |
-<%= link_to 'Back', taggings_path %>

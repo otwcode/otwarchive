@@ -1,4 +1,31 @@
-<h1>New tag_relationship</h1>
+<h2>TagWrangler: New Relationship</h2>
 
-<%= render :partial => 'form' %>
-<%= link_to 'Back', tag_relationships_path %>
+<% form_for(@tag_relationship) do |f| %>
+  <p>
+  Name: <%= f.text_field("name", :size => 12)%>
+  <p>
+  Phrase: <%= f.text_field("verb_phrase") %>
+  <br>
+  (used in the instructions in the draggable interface:
+  <br>
+  'tag1 phrase tag2' when tag1 is dropped on tag2)
+  <p>
+  Distance:
+    <%= f.radio_button("distance", 0) %> 0
+    <%= f.radio_button("distance", 1, :checked => 'checked')%> 1
+    <%= f.radio_button("distance", 2) %> 2
+    <%= f.radio_button("distance", 3) %> 3
+  <br>
+  (tags are sorted based on the distance of their relationships:
+  <br>0 means they are the same, 3 means they have something in common, 1 is the default)
+  <p>
+  Reciprocal: <%= f.check_box("reciprocal") %>
+  <br>This relationship is the same in both directions.<br>If I drop tag1 on tag2, tag2 will be created with the same relationship towards tag1.
+  <br>e.g. 'synonym' is reciprocal, 'is a child of' is not
+  <p>
+  <%= f.submit %>
+  <p>
+<% end %>
+
+<%= tag_wrangler_footer %>
+

@@ -1,8 +1,18 @@
-<h1><%= @tag_category.name %></h1>
-<h2>Tags in this category</h2>
-<% @tag_category.tags.each do |t| %>
-  <%= link_to t.name, tag_path(t) %>
+<h2>TagWrangler: Set Banned and Canonical Flags for <%= @tag_category.display_name %> tags</h2>
+<p>Drag a tag by it's handle (<img src="/images/drag.png" alt="drag me">) and drop it on one of the following four lines:</p>
+
+<% ['banned', 'canonical'].each do |kind| %>
+  <p><div id=<%=kind%> class="droppable" >mark <%= kind.capitalize %></div>
+  <p><div id="not_<%=kind%>" class="droppable" >remove the <%= kind.capitalize %> flag</div>
+  <%= drop_receiving_element(kind, :url =>
+    { :action => "update_tag", :tag => {kind => true} }) %>
+  <%= drop_receiving_element("not_#{kind}", :url =>
+    { :action => "update_tag", :tag => {kind => false} }) %>
 <% end %>
-<p>
-<%= link_to 'Edit', edit_tag_category_path(@tag_category) %> |
-<%= link_to 'Back', tag_categories_path %>
+
+<p><b><%= @tag_category.display_name %> Tags:</b>
+<% @tag_category.tags.each do |tag| -%>
+  <%= render :partial => 'draggable', :locals => { :tag => tag }%>
+<% end %> 
+
+<%= tag_wrangler_footer %>

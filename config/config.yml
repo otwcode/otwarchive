@@ -32,18 +32,6 @@ REVISION: ''
 
 # tag settings
 DELIMITER: ', '  # if you change this, you probably need to change the label regexp as well
-AMBIGUOUS_CATEGORY: 'Ambiguous'  # this category blocks distance counts for tags on each side
-DEFAULT_CATEGORY: 'Freeform'  # this category is a catch-all
-
-# note, this is just to prime an empty database, it is not used subsequently
-FIRST_CATEGORIES: 
-- { name: Rating, required: true, official: true, exclusive: true }
-- { name: Warning, required: true, official: true, exclusive: false }
-- { name: Fandom, required: true, official: true, exclusive: false }
-- { name: Character, required: false, official: true, exclusive: false }
-- { name: Pairing, required: false, official: true, exclusive: false }
-
-
 
 SMTP_SERVER: localhost
 SMTP_PORT: 25

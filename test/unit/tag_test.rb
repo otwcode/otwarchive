@@ -20,12 +20,12 @@ class TagTest < ActiveSupport::TestCase
     assert_equal "lots of extra spaces", tag.name
   end
   def test_name_override
-    name = random_phrase[0..42]
+    name = "all lower-case/ugly"
     tag = create_tag(:name => name)
     tag.reload
     assert_equal name, tag.name
     tag.canonical = true
-    assert_equal name.titlecase, tag.name
+    assert_equal "All Lower-Case/Ugly", tag.name
     tag.canonical = false
     assert_equal name, tag.name
   end

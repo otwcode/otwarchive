@@ -1,0 +1,13 @@
+if flash[:warning]
+  page.insert_html :after, 'header', show_flash
+  flash.clear
+else
+  page.remove @tag.id.to_s
+  page.insert_html :bottom, 'change', :partial => 'droppable', :locals => { :tag => @tag }
+end
+
+def show_flash
+  [:notice, :warning, :message].collect do |key|
+    content_tag(:div, flash[key], :class => "flash flash_#{key}") unless flash[key].blank?
+  end.join
+end

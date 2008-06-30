@@ -1,6 +1,21 @@
-<h1>Editing tag_relationship</h1>
+<h2>TagWrangler: Edit Relationship <%= @tag_relationship.name %></h2>
 
-<%= render :partial => 'form' %>
+<% form_for(@tag_relationship) do |f| %>
+  tag1 <%= f.text_field("verb_phrase") %> tag2
+  <p>
+  <p>
+  tag1 is
+    <%= f.radio_button("distance", 0) %> 0
+    <%= f.radio_button("distance", 1)%> 1
+    <%= f.radio_button("distance", 2) %> 2
+    <%= f.radio_button("distance", 3) %> 3
+  far away from tag2 when sorted
+  <p>
+  the relationship goes both ways: <%= f.check_box("reciprocal") %>
+  <p>
+  <%= f.submit %>
+  <p>
+<% end %>
 
-<%= link_to 'Show', @tag_relationship %> |
-<%= link_to 'Back', tag_relationships_path %>
+<%= tag_wrangler_footer %>
+
