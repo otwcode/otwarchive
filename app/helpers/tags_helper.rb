@@ -2,8 +2,8 @@ module TagsHelper
   def tag_cloud(tags, classes)
     max, min = 0, 0
     tags.each { |t|
-      max = t.taggings_count if t.taggings_count > max
-      min = t.taggings_count if t.taggings_count < min
+      max = t.taggings_count.to_i if t.taggings_count.to_i > max
+      min = t.taggings_count.to_i if t.taggings_count.to_i < min
     }
   
     divisor = ((max - min) / classes.size) + 1
