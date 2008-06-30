@@ -10,10 +10,12 @@ class ReadingsController < ApplicationController
   end
   
   def index
+    @user = User.find_by_login(params[:user_id])
     @readings = current_user.readings.find(:all, :order => "updated_at DESC")
   end
 
   def show
+    @user = User.find_by_login(params[:user_id]) 
     @reading = current_user.readings.find(params[:id], :options => {:order => :updated_at})
   end
 

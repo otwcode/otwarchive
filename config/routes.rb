@@ -22,12 +22,12 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :users, :path_prefix => ':locale' do |user|
     user.resources :pseuds, :has_many => :works
+    user.resource :profile, :controller => 'profile'
     user.resources :bookmarks
     user.resources :works
+    user.resources :readings
     user.resources :comments, :member => { :approve => :put, :reject => :put } 
   end
-
-  map.resources :readings, :path_prefix => ':locale'
   
   map.resources :works, :member => { :preview => :get, :post => :post }, :path_prefix => ':locale' do |work|
     work.resources :chapters, :has_many => :comments, :collection => {:manage => :get, :update_positions => :post}, :member => { :preview => :get, :post => :post }

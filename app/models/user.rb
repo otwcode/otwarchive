@@ -83,6 +83,16 @@ class User < ActiveRecord::Base
   # fetch all creations a user own (via pseuds)
   def creations
     pseuds.collect(&:creations).reject(&:empty?).flatten
+  end
+  
+  # Find all works for a given user
+  def works
+    pseuds.collect(&:works).reject(&:empty?).flatten  
+  end
+  
+  # Get the total number of works for a given user
+  def work_count
+    pseuds.collect{|pseud| pseud.works.count}.sum
   end 
   
   # Returns an array (of pseuds) of this user's co-authors

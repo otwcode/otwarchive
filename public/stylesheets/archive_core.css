@@ -99,12 +99,39 @@ hr {
 #navi li {
 	list-style-type: none;
 }
-#main {
-	margin-right: auto;
-	margin-left: auto;
-	width: 80%;
+
+#dashboard-sidebar {
+	float: left;
+	width: 15%;
+	border: 2px solid black;
+	margin: 1.5em 0em 1.5em 1.5em;
+	padding: .5em;
+}
+
+#dashboard-sidebar li {
+ 	list-style-type: none;
+    margin-left: -3em;
+	line-height: 2em;
+}
+
+#dashboard-sidebar a {
+	text-decoration: none;
+}
+#dashboard-sidebar a:hover {
+	color: red;
+}
+
+#user-icon {
+	float:left;
 	padding-right: 2em;
-	padding-left: 2em;
+	margin-top: .2em;
+}
+
+
+#main {
+	float: left;
+	width: 70%;
+	margin-left: 2em;
 }
 
 #footer {
@@ -115,6 +142,7 @@ hr {
 	border-top-color: #999999;
 	border-top-style: solid;
 	border-top-width: 1px;
+	clear: both;
 }
 #footer a:link {
 	border-bottom-color: #111111;

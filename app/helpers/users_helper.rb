@@ -18,8 +18,9 @@ module UsersHelper
   # Prints link to bookmarks page with user-appropriate number of bookmarks
   # (The total should reflect the number of bookmarks the user can actually see.)
   def print_bookmarks_link(user)
-    @user == current_user ? total = @user.total_bookmark_count : total = @user.public_bookmark_count
-    link_to 'Bookmarks (' + total.to_s + ')', user_bookmarks_path(@user)
+    total = (@user == current_user) ? @user.total_bookmark_count : @user.public_bookmark_count
+    prefix = (@user == current_user) ? "My " : ""
+    link_to_unless_current prefix + "Bookmarks (" + total.to_s + ")", user_bookmarks_path(@user)
   end
   
 end

@@ -1,58 +1,13 @@
 <div id="user-page">
-  <h1><%=h @user.login %>'s User Page</h1>
-  
+  <div id="user-icon"><%= image_tag("user_icon.png", :size => "100x100", :alt => "(Icon!)") %></div>
+  <h1><%=h @user.login %></h1>
+    
   <%- if logged_in? && current_user == @user -%>
     <p>
       <%= link_to "Edit profile".t, edit_user_path(@user) %> | 
-      <%= link_to 'Manage pseuds'.t, user_pseuds_path(@user) %> | 
-      <%= link_to "Reading history".t, readings_url %>
+      <%= link_to 'Manage pseuds'.t, user_pseuds_path(@user) %>
     </p>
   <%- end -%>
-
-  <table id="user-data">
-    <tr id="user-pseuds">
-      <td class="user-data-label"><span id="user-pseuds-label"><%= "Pseuds".t  + " (#{@user.pseuds.count})" %></span></td>
-      <td><%= print_pseuds(@user) %></td>
-    </tr>
-
-    <tr id="user-location">
-      <td class="user-data-label"><span id="user-location-label"><%= "Location".t %></span></td>
-      <td><%=h @user.profile.location -%></td>
-    </tr>
-  
-    <%- if @user.preference.date_of_birth_visible -%>
-    <tr id="user-birthday">
-      <td class="user-data-label"><span id="user-birthday-label"><%= "Birthday".t %></span></td>
-      <td><%=h @user.profile.date_of_birth -%></td> 
-    </tr>
-    <%- end -%>
-
-    <tr id="user-bio">
-      <td class="user-data-label"><span id="user-bio-label"><%= "Bio".t %></span></td>
-      <td><%=sanitize_format @user.profile.about_me -%></td>
-    </tr>
-  
-    <%- if @user.preference.email_visible -%>
-    <tr id="user-email">
-      <td class="user-data-label"><span id="user-email-label"><%= "Email".t %></span></td>
-      <td><%= mail_to @user.email, nil, :encode => "hex" %></td>
-    </tr>
-    <%- end -%>
-
-    <tr id="user-bookmarks">
-      <td class="user-data-label"><%= print_bookmarks_link(@user) %></td>
-    </tr> 
-  </table>
-  
-  <div id="user-works">
-    <%- for pseud in @user.pseuds -%>
-      <div class="pseud-works">
-        <a name="pseud-<%= pseud.id %>"></a>
-        <h2>Works by <%= pseud.name %>:</h2>
-        <ul><%= print_works(pseud) %></ul>
-      </div>
-    <%- end -%>
-  </div>
 
 </div> 
 

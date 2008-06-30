@@ -1,0 +1,33 @@
+<h1><%=h @user.login %>'s Profile</h1>
+
+<table id="user-data">
+  <tr id="user-pseuds">
+    <td class="user-data-label"><span id="user-pseuds-label"><%= "Pseuds".t  + " (#{@user.pseuds.count})" %></span></td>
+    <td><%= print_pseuds(@user) %></td>
+  </tr>
+
+  <tr id="user-location">
+    <td class="user-data-label"><span id="user-location-label"><%= "Location".t %></span></td>
+    <td><%=h @user.profile.location -%></td>
+  </tr>
+
+  <%- if @user.preference.date_of_birth_visible -%>
+  <tr id="user-birthday">
+    <td class="user-data-label"><span id="user-birthday-label"><%= "Birthday".t %></span></td>
+    <td><%=h @user.profile.date_of_birth -%></td> 
+  </tr>
+  <%- end -%>
+
+  <tr id="user-bio">
+    <td class="user-data-label"><span id="user-bio-label"><%= "Bio".t %></span></td>
+    <td><%=sanitize_format @user.profile.about_me -%></td>
+  </tr>
+
+  <%- if @user.preference.email_visible -%>
+  <tr id="user-email">
+    <td class="user-data-label"><span id="user-email-label"><%= "Email".t %></span></td>
+    <td><%= mail_to @user.email, nil, :encode => "hex" %></td>
+  </tr>
+  <%- end -%>
+
+</table> 

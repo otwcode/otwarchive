@@ -117,7 +117,7 @@ class Work < ActiveRecord::Base
   
   # Gets the current first chapter
   def first_chapter
-    self.chapters.find(:first, :order => 'position ASC')
+    self.chapters.find(:first, :order => 'position ASC') || self.chapters.first
   end  
   
   # Gets the current last chapter

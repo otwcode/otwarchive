@@ -67,10 +67,17 @@
     </div>
   <!-- END header -->
   
+  <!-- BEGIN sidebar -->
+  <%- if @user -%> 
+  <div id="dashboard-sidebar">
+    <%= render :partial => 'users/sidebar' %>
+  </div>
+  <%- end -%>
+  <!-- END sidebar -->
+  
   <!-- BEGIN main -->
     <div id="main" class="<%= controller.controller_name + '-' + controller.action_name -%>">
   	  <%= flash_div :error, :warning, :notice %> 
-  		<div class="clearboth"></div>
       <%= yield  %>
     </div>
   <!-- END main -->

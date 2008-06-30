@@ -1,0 +1,15 @@
+<% prefix = @user == current_user ? "My " : "" %>
+<ul>
+  <li><%= link_to_unless_current prefix + "Dashboard", user_path(@user) %></li>
+  <li><%= link_to_unless_current prefix + "Profile", user_profile_path(@user) %></li>
+  <li><%= link_to_unless_current prefix + "Works (" + @user.work_count.to_s + ")", user_works_path(@user) %></li>
+  <li><%= link_to_unless_current prefix + "Series", '#' %></li>
+  <li><%= print_bookmarks_link(@user) %></li>
+  <li><%= link_to_unless_current prefix + "Communities", '#' %></li>
+  <% if @user == current_user %>    
+  <li><%= link_to_unless_current prefix + "Inbox", '#' %></li>
+  <li><%= link_to_unless_current prefix + "Reading History", user_readings_path(@user) %></li>
+  <li><%= link_to_unless_current prefix + "Subscriptions", '#' %></li>
+  <li><%= link_to_unless_current prefix + "Preferences", '#' %></li>
+  <% end %>
+</ul>

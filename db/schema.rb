@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 49) do
+ActiveRecord::Schema.define(:version => 20080629142053) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -41,8 +41,8 @@ ActiveRecord::Schema.define(:version => 49) do
   add_index "bookmarks", ["user_id"], :name => "fk_bookmarks_user"
 
   create_table "chapters", :force => true do |t|
-    t.text     "content",    :limit => 16777215
-    t.integer  "position",   :limit => 11,       :default => 1
+    t.text     "content"
+    t.integer  "position",   :limit => 11, :default => 1
     t.integer  "work_id",    :limit => 11
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -219,7 +219,7 @@ ActiveRecord::Schema.define(:version => 49) do
   end
 
   create_table "tag_categories", :force => true do |t|
-    t.string   "name",       :null => false
+    t.string   "name",       :default => "", :null => false
     t.boolean  "required"
     t.boolean  "official"
     t.boolean  "exclusive"
@@ -230,12 +230,12 @@ ActiveRecord::Schema.define(:version => 49) do
   add_index "tag_categories", ["name"], :name => "index_tag_categories_on_name", :unique => true
 
   create_table "tag_relationships", :force => true do |t|
-    t.string   "name",                      :null => false
-    t.string   "verb_phrase",               :null => false
+    t.string   "name",                      :default => "", :null => false
+    t.string   "verb_phrase",               :default => "", :null => false
     t.boolean  "reciprocal"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "distance",    :limit => 11, :null => false
+    t.integer  "distance",    :limit => 11,                 :null => false
   end
 
   add_index "tag_relationships", ["name"], :name => "index_tag_relationships_on_name", :unique => true
@@ -252,7 +252,7 @@ ActiveRecord::Schema.define(:version => 49) do
   add_index "taggings", ["tag_id", "taggable_id", "taggable_type"], :name => "index_taggings_on_tag_id_and_taggable_id_and_taggable_type", :unique => true
 
   create_table "tags", :force => true do |t|
-    t.string   "name",                          :null => false
+    t.string   "name",                          :default => "", :null => false
     t.boolean  "canonical"
     t.boolean  "banned"
     t.integer  "tag_category_id", :limit => 11
@@ -274,6 +274,7 @@ ActiveRecord::Schema.define(:version => 49) do
     t.string   "crypted_password"
     t.string   "salt"
     t.string   "identity_url"
+    t.boolean  "recently_reset"
   end
 
   create_table "works", :force => true do |t|

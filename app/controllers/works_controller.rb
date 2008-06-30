@@ -87,7 +87,12 @@ class WorksController < ApplicationController
     # Get only works in the current locale
 	  conditions << " AND language_id = #{Locale.active.language.id}" if Locale.active && Locale.active.language
     conditions << " AND restricted = 0 OR restricted IS NULL" unless logged_in?
-    @works = Work.find(:all, :conditions => conditions, :order => "works.created_at DESC", :include => [:pseuds, :metadata] )
+    if params[:user_id]
+      @user = User.find_by_login(params[:user_id])
+      @works = @user.works
+    else
+      @works = Work.find(:all, :conditions => conditions, :order => "works.created_at DESC", :include => [:pseuds, :metadata] )
+    end
   end
   
   # GET /works/1
