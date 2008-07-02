@@ -10,7 +10,7 @@ class TagCategory < ActiveRecord::Base
   
   def remove_me_from_my_tags
     self.tags.each do |t| 
-      t.tag_category_id = TagCategory.default.id
+      t.tag_category_id = nil
       t.save
     end
   end

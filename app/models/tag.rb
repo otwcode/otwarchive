@@ -8,7 +8,6 @@ class Tag < ActiveRecord::Base
   validates_format_of :name, 
                       :with => /\A[-a-zA-Z0-9 \/?.!''"";\|\]\[}{=~!@#\$%^&()_+]+\z/, 
                       :message => "tags can only be made up of letters, numbers, spaces and basic punctuation, but not commas and colons"
-  validates_presence_of :tag_category_id
   validates_uniqueness_of :name
   
   def before_create

@@ -31,8 +31,28 @@ module TaggingExtensions
     end
   end
 
+  # for use on bookmarks where there are no categories
+  def tag_string=(tag_string)
+    self.reload
+    if tag_string.blank?
+      tag_array = []
+    else
+      new_tags = tag_string.split(ArchiveConfig.DELIMITER).collect do |tag_name|
+        Tag.find_or_create_by_name(tag_name)
+      end
+      tag_array = new_tags.flatten.compact
+    end
+    # add and remove tags to make the taggable's tags equal to the new tag_array
+    current = tags
+    add = tag_array - current
+    remove = current - tag_array
+    add.each {|t| Tagging.create(:tag => t, :taggable => self) }
+    remove.each {|t| self.taggings.find_by_tag(t).each(&:destroy)}
+    self.tags
+  end
+
   # usage:
-  # tag_with(:freeform => 'a, few, tags', :fandom => 'stargate atlantis', :rating => 'adult')
+  # tag_with(:default => 'a, few, tags', :fandom => 'stargate atlantis', :rating => 'adult')
   # note, this replaces the tags in the categories given (and only in those categories)
   def tag_with(tag_category_hash)
     tag_category_hash.each_pair do |category, tag_string| 

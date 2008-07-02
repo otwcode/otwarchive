@@ -8,7 +8,7 @@ class TagsController < ApplicationController
   # GET /tags
   # GET /tags.xml
   def index
-    @tags = Tag.find(:all, :order => "taggings_count DESC", :limit => 100)
+    @tags = Tag.find(:all, :order => "name")
 
     respond_to do |format|
       format.html # index.html.erb

@@ -26,6 +26,6 @@ class TagCategoryTest < ActiveSupport::TestCase
     assert_equal category.id, tag.tag_category_id
     category.destroy
     assert tag.reload
-    assert_equal TagCategory.default.id, tag.tag_category_id
+    assert !tag.tag_category_id
   end
 end

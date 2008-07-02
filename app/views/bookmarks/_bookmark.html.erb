@@ -21,6 +21,15 @@
       Bookmarked by: <%= link_to bookmark.user.login, bookmark.user %>
     <%- end -%>
   </p>
+
+  <p>
+    <%- unless bookmark.tag_string.blank? -%>
+      User's tags: 
+      <% bookmark.tags.each do |tag| -%>
+        <%= link_to(tag.name, tag_path(tag))%>
+      <% end -%>
+    <% end %>
+  </p>
   
   <% if is_author_of?(bookmark) %>
     <p>
