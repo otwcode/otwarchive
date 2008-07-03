@@ -12,16 +12,17 @@ class ChapterTest < ActiveSupport::TestCase
     work = new_work(:chapters => [chapter])
     assert work.save
   end
-  def test_length_of_content
-    long_string = "aa"
-    (1..23).each {|i| long_string << long_string }
-    chapter = new_chapter(:content => long_string)
-    work = new_work(:chapters => [chapter])
-    assert !work.save
-    chapter = new_chapter(:content => long_string.chop)
-    work = new_work(:chapters => [chapter])
-    assert work.save
-  end
+  # FIXME uncomment after ruby is fixed (core dumps in 1.8.7)
+#  def test_length_of_content
+#    long_string = "aa"
+#    (1..23).each {|i| long_string << long_string }
+#    chapter = new_chapter(:content => long_string)
+#    work = new_work(:chapters => [chapter])
+#    assert !work.save
+#    chapter = new_chapter(:content => long_string.chop)
+#    work = new_work(:chapters => [chapter])
+#    assert work.save
+#  end
   
   # Test associations
   def test_belongs_to_work
