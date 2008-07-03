@@ -18,11 +18,17 @@ class TagCategoriesController < ApplicationController
   # GET /tag_categories/1
   # GET /tag_categories/1.xml
   def show
-    @tag_category = TagCategory.find(params[:id], :include => 'tags')
-    if @tag_category == TagCategory.ambiguous
-     render :action => 'ambiguous'
-    elsif @tag_category == TagCategory.default
-     render :action => 'freeform'
+    if params[:id] == "0"
+      @tag_categories = TagCategory.ordered(:all)
+      @tags = Tag.find_all_by_tag_category_id(nil)
+      render :action => 'unsorted'
+    else
+      @tag_category = TagCategory.find(params[:id], :include => 'tags')
+      if @tag_category == TagCategory.ambiguous
+       render :action => 'ambiguous'
+      elsif @tag_category == TagCategory.default
+       render :action => 'freeform'
+      end
     end
   end
 
@@ -94,6 +100,11 @@ class TagCategoriesController < ApplicationController
   end
   
   def change_tag
+    @tag = Tag.find(params[:id])
+    @tag.update_attributes(params[:tag])
+  end
+   
+  def move_tag
     @tag = Tag.find(params[:id])
     @tag.update_attributes(params[:tag])
   end

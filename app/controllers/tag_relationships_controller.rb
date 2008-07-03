@@ -92,7 +92,7 @@ class TagRelationshipsController < ApplicationController
     @tag = Tag.find(params[:id])
     @tag_relationship = TagRelationship.find(params[:relationship])
     @taggable = Tag.find(params[:taggable])
-    Tagging.create(:tag => @tag, :taggable => @taggable, :tag_relationship => @tag_relationship)
+    @tagging = Tagging.create(:tag => @tag, :taggable => @taggable, :tag_relationship => @tag_relationship)
   end
 
 end

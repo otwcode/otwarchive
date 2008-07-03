@@ -5,10 +5,11 @@
     <th><%= @tag_relationship.verb_phrase %></th>
   </tr>
 <% @taggings.each do |tagging| -%>
-  <%= render :partial => 'table', :locals => { :tag => tagging.tag, :taggable => tagging.taggable }%>   
+  <%= render :partial => 'table', :locals => { :tagging => tagging }%>   
 <% end -%>
 </table>
-<p>Drag a tag by it's handle (<img src="/images/drag.png" alt="drag me">) and drop it onto another tag, in order to create a <%= @tag_relationship.name%> relationship where the first tag <%=@tag_relationship.verb_phrase%> the second tag</p>
+<p>Drag a tag by it's handle (<img src="/images/drag.png" alt="drag me">) and drop it onto another tag, in order to create a <%= @tag_relationship.name%> relationship where the first tag <%=@tag_relationship.verb_phrase%> the second tag.</p>
+<% if @tag_relationship.reciprocal? %><p>Note: this relationship is reciprocal, but only the first relationship will show up in the table after dragging. Both relationships will be created, however, and can be seen if you refresh the page. Also, deleting one relationship will also delete its reciprocal</p><% end -%>
 
 <% @categories.each do |category| -%>
   <p><b><%= category.display_name %> Tags:</b>

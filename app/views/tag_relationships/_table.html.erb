@@ -1,4 +1,5 @@
 <tr>
-  <td><%= tag.name %></td> 
-  <td><%= taggable.name %></td>
+  <td><%= tagging.tag.name %></td> 
+  <td><%= tagging.taggable.name %></td>
+  <td><%= link_to "delete", tagging, :method => :delete, :confirm => "This destroys the relationship for these tags, are you sure?"%></td>
 </tr>

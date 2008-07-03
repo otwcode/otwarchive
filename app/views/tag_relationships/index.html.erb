@@ -1,21 +1,27 @@
 <h2>TagWrangler: Relationships</h2>
 
-<table>  <tr>
-    <th>Name<br></th>
-    <th>Relationship<br></th>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Relationship</th>
     <th>Distance</th>
     <th>Reciprocal?</th>
   </tr>
-<% @tag_relationships.each do |relationship| %>
+  <% @tag_relationships.each do |relationship| %>
 	<tr>
- <td> <%= relationship.name%></td>
- <td><%= relationship.verb_phrase %> </td>
- <td> <%= relationship.distance %></td>
- <td> <%= relationship.reciprocal? %></td>
- <td> <%= link_to 'edit', edit_tag_relationship_path(relationship) %></td>
-		<td><%= link_to 'wrangle tags', tag_relationship_path(relationship) %> </td>
- </tr>
-<% end %>
+    <td> <%= relationship.name%></td>
+    <td><%= relationship.verb_phrase %> </td>
+    <td> <%= relationship.distance %></td>
+    <td> <%= relationship.reciprocal? %></td>
+    <td> <%= link_to 'edit', edit_tag_relationship_path(relationship) %></td>
+    <td>
+      <%= link_to "delete", relationship, :confirm => "This destroys the relationship for all current tags, are you sure?", :method => :delete %><% if relationship == TagRelationship.synonym || relationship == TagRelationship.disambiguate -%>*<% end -%>
+    </td>
+    <td><%= link_to 'wrangle tags', tag_relationship_path(relationship) %> </td>
+  </tr>
+  <% end %>
 </table>
 <p>
+<p>*Note: If deleted, this relationship will be re-generated (without any associated tags) when you refresh the page
+
 <%= tag_wrangler_footer %>

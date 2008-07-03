@@ -9,6 +9,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :tags, :path_prefix => ':locale'
 
+  map.resources :taggings, :path_prefix => ':locale'
+
   map.root :controller => 'session', :action => 'new', :locale => 'en'      
 
   map.abuse_reports '/abuse/fix', :controller => 'abuse_reports', :action => 'create', :path_prefix => ':locale'
