@@ -1,0 +1,23 @@
+<h2>TagWrangler: Unsorted tag category </h2>
+
+<p>Drag a tag by it's handle (<img src="/images/drag.png" alt="drag me">) and drop it on one of the category names to move it to that category.</p>
+
+<% @tag_categories.each do |tag_category| %>
+  <div id=<%= tag_category.display_name %> class="droppable">
+    <p><%= tag_category.display_name %> category</p>
+    <div id=<%= tag_category.display_name + "_tags" %> class ="tags">
+    </div>
+  </div>
+  <%= drop_receiving_element(tag_category.display_name, 
+    :url => { :action => 'move_tag', :tag => {:tag_category_id => tag_category.id}}
+    )%>
+<% end -%>
+
+<p>
+<% @tags.each do |tag| -%>
+  <%= render :partial => 'draggable', :locals => { :tag => tag }%>
+<% end %>
+
+<%= tag_wrangler_footer %>
+
+
