@@ -33,17 +33,21 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.xml
   def create
-    @user = User.new(params[:user])   
-    unless !ArchiveConfig.USE_OPENID || params[:user][:identity_url].blank?
-      @user.identity_url = OpenIdAuthentication.normalize_url(@user.identity_url)
-    end
-    
-    if @user.save
-      flash[:notice] = 'during testing you can activate via <a href=' + activate_path(@user.activation_code) + '>your activation url</a>.'
-
-      render :partial => "confirmation", :layout => "application"
+    if params["cancel-create-account"] == "Cancel"
+      redirect_to '/'
     else
-      render :action => "new"
+      @user = User.new(params[:user])   
+      unless !ArchiveConfig.USE_OPENID || params[:user][:identity_url].blank?
+        @user.identity_url = OpenIdAuthentication.normalize_url(@user.identity_url)
+      end
+      
+      if @user.save
+        flash[:notice] = 'during testing you can activate via <a href=' + activate_path(@user.activation_code) + '>your activation url</a>.'
+  
+        render :partial => "confirmation", :layout => "application"
+      else
+        render :action => "new"
+      end
     end
   end
   
