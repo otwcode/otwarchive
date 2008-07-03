@@ -55,7 +55,7 @@ class ChaptersController < ApplicationController
   
   # fetch work these chapters belong to from db
   def load_work
-    @work = Work.find(params[:work_id])   
+    @work = params[:work_id] ? Work.find(params[:work_id]) : Chapter.find(params[:id]).work  
   end
   
   # Sets values for @chapter, @coauthor_results, @pseuds, and @selected

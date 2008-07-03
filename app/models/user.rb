@@ -1,4 +1,8 @@
 class User < ActiveRecord::Base
+  
+  # Methods for associations via pseuds
+  include UserOwnedObjects
+
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user
   attr_accessor :translation_mode_active
@@ -24,7 +28,6 @@ class User < ActiveRecord::Base
    
   before_create :create_default_associateds
   
-  has_many :works, :through => :readings
   has_many :readings 
   can_create_bookmarks
   
@@ -78,36 +81,6 @@ class User < ActiveRecord::Base
   # Retrieve the current default pseud
   def default_pseud
     pseuds.to_enum.find(&:is_default?) || pseuds.first
-  end
-  
-  # fetch all creations a user own (via pseuds)
-  def creations
-    pseuds.collect(&:creations).reject(&:empty?).flatten
-  end
-  
-  # Find all works for a given user
-  def works
-    pseuds.collect(&:works).reject(&:empty?).flatten  
-  end
-  
-  # Get the total number of works for a given user
-  def work_count
-    pseuds.collect{|pseud| pseud.works.count}.sum
-  end 
-  
-  # Returns an array (of pseuds) of this user's co-authors
-  def coauthors
-     self.creations.collect(&:pseuds).flatten.uniq - self.pseuds
-  end
-  
-  # Gets the user's one allowed unposted work
-  def unposted_work
-    creations.select{|c| c.class == Work && c.posted != true}.first
-  end
-  
-  # Gets the user's one allowed unposted chapter per work
-  def unposted_chapter(work)
-    creations.select{|c| c.class == Chapter && c.work_id == work.id && c.posted != true}.first
   end
   
 end

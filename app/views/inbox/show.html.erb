@@ -1,0 +1,7 @@
+<h1>Your Inbox (<%= @inbox.length %>)</h1>
+
+<%- for comment in @inbox -%>
+  <p>In response to <%= commentable_description_link(comment) %>:</p>
+  <%= render :partial => 'comments/single_comment', :object => comment %>
+  <hr />
+<%- end -%>

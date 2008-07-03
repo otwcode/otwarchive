@@ -105,20 +105,26 @@ hr {
 	width: 15%;
 	border: 2px solid black;
 	margin: 1.5em 0em 1.5em 1.5em;
-	padding: .5em;
+	line-height: 2em;	
 }
 
-#dashboard-sidebar li {
+#dashboard-sidebar ul {
  	list-style-type: none;
-    margin-left: -3em;
-	line-height: 2em;
+    margin: 0;
+	padding: 0;
+	text-indent: .5em;
 }
 
 #dashboard-sidebar a {
+	display: block;
+	width: 100%;
+	height: 2em;
+	line-height: 2em;
 	text-decoration: none;
 }
 #dashboard-sidebar a:hover {
-	color: red;
+	background-color: red;
+	color: white;
 }
 
 #user-icon {

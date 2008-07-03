@@ -21,6 +21,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :users, :path_prefix => ':locale' do |user|
     user.resources :pseuds, :has_many => :works
     user.resource :profile, :controller => 'profile'
+    user.resource :inbox, :controller => 'inbox'
     user.resources :bookmarks
     user.resources :works
     user.resources :readings

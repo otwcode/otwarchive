@@ -5,6 +5,7 @@ class Work < ActiveRecord::Base
   has_many :taggings, :as => :taggable, :dependent => :destroy
   
   named_scope :public, :conditions => "restricted = 0 OR restricted IS NULL"
+  named_scope :recent, :order => 'created_at DESC', :limit => 5
 
   include TaggingExtensions
 
