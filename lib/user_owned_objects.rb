@@ -7,17 +7,17 @@ module UserOwnedObjects
   
   # Find all works for a given user
   def works
-    pseuds.collect(&:works).reject(&:empty?).flatten  
+    Work.find(:all, :conditions => ["creatorships.pseud_id IN (?)", self.pseuds.collect(&:id).to_s], :include => :creatorships)  
   end
   
   # Find all chapters for a given user
   def chapters
-    pseuds.collect(&:chapters).reject(&:empty?).flatten  
+    Chapter.find(:all, :conditions => ["creatorships.pseud_id IN (?)", self.pseuds.collect(&:id).to_s], :include => :creatorships)  
   end
   
   # Get the total number of works for a given user
   def work_count
-    pseuds.collect{|pseud| pseud.works.count}.sum
+    Work.count(:all, :conditions => ["creatorships.pseud_id IN (?)", self.pseuds.collect(&:id).to_s], :include => :creatorships)
   end 
   
   # Returns an array (of pseuds) of this user's co-authors
@@ -37,7 +37,7 @@ module UserOwnedObjects
   
   # Find all comments for a given user
   def comments
-    pseuds.collect{|pseud| Comment.find_all_by_pseud_id(pseud.id)}.reject(&:empty?).flatten
+    Comment.find(:all, :conditions => ["pseud_id IN (?)", self.pseuds.collect(&:id).to_s])
   end
   
   # TODO: Needs refinement!
