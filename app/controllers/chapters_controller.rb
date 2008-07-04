@@ -30,7 +30,7 @@ class ChaptersController < ApplicationController
     false
   end
   
-  # check if the user's current pseud is one associated with the chapter
+  # check if the user's current pseud is one associated with the work
   def is_author
     @work = Work.find(params[:work_id])
     current_user.pseuds.each do |pseud|

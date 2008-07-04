@@ -139,11 +139,11 @@ class ChaptersControllerTest < ActionController::TestCase
     user = create_user
     @request.session[:user] = user
     chapter = new_chapter
-    work = create_work(:chapters => [chapter])
-    chapter.pseuds << user.pseuds    
+    work = create_work(:chapters => [chapter], :authors => [user.default_pseud])
     new_content = random_chapter
     assert_not_equal Chapter.find(chapter.id).content, new_content
     put :update, :locale => 'en', :work_id => work.id, :id => chapter.id, :chapter => { :content => new_content}, :pseud => { :id => chapter.pseuds.collect { |p| p.id }}
-    assert_equal Chapter.find(chapter.id).content, new_content
+    chapter.reload
+    assert_equal chapter.content, new_content
   end
 end
