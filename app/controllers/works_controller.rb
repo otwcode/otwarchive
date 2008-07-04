@@ -78,7 +78,7 @@ class WorksController < ApplicationController
   # Only logged-in users should be able to access restricted works
   def check_permission_to_view
     @work = Work.find(params[:id])
-	access_denied if !logged_in? && @work.restricted?
+	  access_denied if !logged_in? && @work.restricted?
   end
    
   # GET /works

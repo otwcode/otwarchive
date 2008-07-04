@@ -5,7 +5,7 @@ class ChaptersController < ApplicationController
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :preview, :post ]
   # only authors of a chapter should be able to edit it
   # should actually be that all authors of a work should be able to edit all chapters
-  before_filter :is_author_true, :only => [ :edit, :update ]
+  before_filter :is_author_true, :only => [ :edit, :update, :manage ]
   before_filter :check_permission_to_view, :only => [:index, :show]
   
   # For the auto-complete field in the works form
@@ -33,10 +33,8 @@ class ChaptersController < ApplicationController
   # check if the user's current pseud is one associated with the chapter
   def is_author
     @work = Work.find(params[:work_id])
-    @chapter = @work.chapters.find(params[:id])
-    
     current_user.pseuds.each do |pseud|
-      if pseud.creations.include?(@chapter)
+      if pseud.creations.include?(@work)
         return true
       end
     end
