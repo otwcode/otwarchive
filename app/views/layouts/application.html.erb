@@ -22,7 +22,7 @@
 	  <%= javascript_include_tag 'accessible' %>
   </head> 
 
-  <body onload="hideCoAuthorField(); initSelect('languages_menu')" >
+  <body onload="hideFormFields(); initSelect('languages_menu')" >
   
   <!-- BEGIN header -->
     <div id="header">
@@ -69,7 +69,7 @@
   <!-- END header -->
   
   <!-- BEGIN sidebar -->
-  <%- if @user -%> 
+  <%- if @user && !@user.login.blank? -%> 
   <div id="dashboard-sidebar">
     <%= render :partial => 'users/sidebar' %>
   </div>

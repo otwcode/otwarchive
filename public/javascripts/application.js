@@ -10,7 +10,12 @@ function showChapteredStoryOptions() {
 	Element.toggle('number-of-chapters');
 }
 
-function hideCoAuthorField() {
-	var item = document.getElementById('co-authors');
-	if (item != null) item.style.display='none';
+// Hides expandable form field options if Javascript is enabled
+function hideFormFields() {
+	var coAuthors = document.getElementById('co-authors');
+	if (coAuthors != null) coAuthors.style.display='none';
+	 
+	if (document.storyForm != null) var isWip = document.storyForm.isWip;
+	var chapteredOptions = document.getElementById('number-of-chapters');
+	if (isWip != null && chapteredOptions != null && !isWip.checked) chapteredOptions.style.display='none';
 }
