@@ -105,6 +105,12 @@ class ChaptersController < ApplicationController
   
   # GET /work/:work_id/chapters/1/edit
   def edit
+    if params["remove"] == "me"
+      @chapter.pseuds = @chapter.pseuds - current_user.pseuds
+      @chapter.save
+      flash[:notice] = "You have been removed as an author from the chapter"
+      redirect_to @work
+    end
   end
   
   # POST /work/:work_id/chapters

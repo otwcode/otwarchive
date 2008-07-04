@@ -127,6 +127,19 @@ class WorksController < ApplicationController
   
   # GET /works/1/edit
   def edit
+    if params["remove"] == "me"
+      @work.pseuds = @work.pseuds - current_user.pseuds
+      @work.save
+      @work.chapters.each do |c| 
+        c.pseuds = c.pseuds - current_user.pseuds
+        if c.pseuds.empty?
+          c.pseuds = @work.pseuds
+        end
+        c.save
+      end
+      flash[:notice] = "You have been removed as an author from the work"
+      redirect_to current_user
+    end
   end
   
   # PUT /works/1

@@ -18,7 +18,10 @@
         <span class='chapter-control'>
           (<%= link_to 'edit', [:edit, @work, chapter] -%> 
            <%- if @work.chapters.count > 1 -%>
-            | <%= link_to 'delete', [@work, chapter], :confirm => 'Are you sure?', :method => :delete %>
+             | <%= link_to 'delete', [@work, chapter], :confirm => 'Are you sure?', :method => :delete %>
+             <% if @work.pseuds.size > 1 && chapter.pseuds.size > 1 -%>
+               | <%= link_to "Remove me as author", {:action => "edit", :id => chapter.id, :remove => "me"}, :confirm => 'You will no longer be able to edit this chapter. Are you sure?' %>
+             <% end -%> 
           <%- end -%> )
       	</span><br />
       </li>
