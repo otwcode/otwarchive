@@ -1,37 +1,23 @@
 <h2><%=h ArchiveConfig.APP_NAME .t %></h2>
 
-<!-- Please note the tabindex: for logical progression through the page, 
-I have it set to tab through this link, then the "report" link, then the 
-login/password/forgot/submit options.  Questions: Should the login box 
-receive initial tab focus?  Should the login box be first in the tab index? -->
-<h3 class="authentication-subheading">A project of the <a href="http://transformativeworks.org" tabindex="1">Organization For Transformative Works</a></h3>
+<h3 class="authentication-subheading"><%=h "A project of the".t %> <a href="http://transformativeworks.org" tabindex = '13'><%=h "Organization For Transformative Works".t %></a></h3>
 
 <!-- loginform floated right -->
 <div id="authentication-loginform">
-
-  <p>Welcome! You can <%= link_to 'browse the posted works', works_path -%> or log in below.</p>
+  <h2 class="authentication-loginheading"><%=h "Login".t %></h2>
+	<p><strong><%=h "Warning:".t %></strong> <span><%=h "This site is in extreme alpha. Things may break or crash without notice. Please".t %></span> <a href="mailto:otw-testers@transformativeworks.org" tabindex = '12'><%=h "report".t %></a> <span><%=h "all crashes to us, and remain seated until the test has come to a full and complete stop.".t %></span></p>
 			
   <% form_tag session_path do -%>	
 <!-- login field -->
     <div id="passwd"><%= render :partial => "passwd" %></div>
-    <% if ArchiveConfig.USE_OPENID %>	
+    <%- if ArchiveConfig.USE_OPENID -%>	
       <div id="openid" style="display: none"><%= render :partial => 'openid' %></div>
-    <% end -%>
-<!-- Submit button -->
-    <%= submit_tag 'Log in', :tabindex => '5' %>
-<!-- Remember me checkbox -->
-    <%= check_box_tag 'remember_me', :class => 'authentication-checkboxfield' %>
-    <span class="authentication-label"><label for="remember_me"><%= "Remember me" .t %></label></span>
-  <% end -%><!-- END form -->
-
-<!-- forgot/change password link -->
-	<p><%= link_to 'Forgot password?' .t, new_password_path, :tabindex => '6' %>
-	</p>
-	<br />
-	
+    <%- end -%>
+  <%- end -%><!-- END form -->
+  <br/><br/>
 <!-- Create account link -->
 	<p>
-	<span class="authentication-footnote"><%= "New tester?" .t %> <%= link_to 'Create an account' .t, new_user_path, :tabindex => '7' %></span>
+	<span class="authentication-footnote"><%=h "New tester?".t -%> <a href="<%= url_for(:action => 'new', :controller => 'users') -%>"><button tabindex="11"><%=h "Create an account".t %></button></a></span>
 	</p>
 
 </div>

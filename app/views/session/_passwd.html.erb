@@ -1,11 +1,20 @@
 <span class="authentication-label"><label for="login"><%= "user name".t.capitalize %>:</label></span>
 <br />
-<%= text_field_tag 'login', '', :class => 'authentication-textfield', :tabindex => '2' %>
-<% if ArchiveConfig.USE_OPENID %>
-  <%= link_to_function image_tag('openid.png', :alt=>"Use OpenID to log in".t), "Element.hide('passwd'); Element.show('openid')" %>
-<% end -%>
+<%= text_field_tag 'login', '', :class => 'authentication-textfield', :tabindex => '1' %>
+<%- if ArchiveConfig.USE_OPENID -%>
+  <%= link_to_function image_tag('openid.png', :alt=>h("Use OpenID to log in".t)), "Element.hide('passwd'); Element.show('openid')", {:tabindex => '5'} %>
+<%- end -%>
 <br />
 <!-- Password field -->
-<span class="authentication-label"><label for="password"><%= "Password" .t %>:</label></span><br />
-<%= password_field_tag 'password', '', :class => 'authentication-textfield', :tabindex => '3' %>
-
+<span class="authentication-label"><label for="password"><%=h "Password".t %>:</label></span>
+<br />
+<%= password_field_tag 'password', '', :class => 'authentication-textfield', :tabindex => '2' %>
+<!-- Submit button -->
+<%= submit_tag h('Login').t, :tabindex => '4' %>
+<br/>
+<!-- Remember me checkbox -->
+<%= check_box_tag ('remember_me', '1', false, :class => 'authentication-checkboxfield', :tabindex => '3') %>
+  <span class="authentication-label"><label for="remember_me"><%=h "Remember me".t %></label></span>
+<br/>
+<!-- forgot/change password link -->
+<%= link_to h('forgot password?').t, new_password_path, :tabindex => '6', :class =>'authentication-subheading' %>

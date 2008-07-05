@@ -9,6 +9,9 @@
 
 /* Page-specific styles, site-independent */
 	/* Login page */
+.authentication-loginheading {
+	margin-bottom: -10px;
+}	
 #authentication-logo { width: 50%;
 }
 #authentication-loginform { width: 50%;
@@ -18,21 +21,6 @@
 	/* Account confirm page */
 /* Style for "Return to home page" link; adds visual space between link and preceding elements */
 .authentication-return { margin-top: 60px;
-}
-	/* Create profile page */
-	/* User profile page */
-.authentication-userprofilelabel { font-weight: bold;
-	float: left;
-	width: 15%;
-	text-align: right;
-	clear: left;
-	margin: 10px 0px 10px 0px;
-}
-.authentication-userprofile { margin: 10px 0px 10px 0px;
-	width: 83%;
-	text-align: left;
-	float: right;
-	clear: right;
 }
 
 	/* Universal styles */
