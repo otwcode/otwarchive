@@ -26,5 +26,5 @@
 <!-- END bookmark link -->
 
 <!-- BEGIN comment section -->
-<%= render :partial => 'comments/commentable', :locals => {:commentable => @work.last_chapter} %>
+<%= render :partial => 'comments/commentable', :locals => {:commentable => @work.last_chapter, :is_work => true} %>
 <!-- END comment section -->

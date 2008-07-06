@@ -10,7 +10,9 @@
   <!-- BEGIN comments -->
   <div id="show_comments_link">
   <% unless @comments.empty? %>
-    <p><%= show_hide_comments_link %></p>
+    <p id="comments_link">
+    	<%= show_hide_comments_link(commentable, (is_work ||= false)) %>
+		</p>	
   <% end %>
 	</div> 
   

@@ -26,7 +26,20 @@ module CommentsHelper
   def create_add_comment_link(commentable)
     href = eval("new_#{commentable.class.to_s.downcase}_comment_path(commentable)")
     link_to_function "Add a comment".t, "Element.toggle('add-comment')", :href => href  
-  end  
+  end
+  
+  # return link to show or hide comments
+  def show_hide_comments_link(commentable, is_work)
+    if is_work
+      commentable = @work
+    end
+    commentable_id = eval(":#{commentable.class.to_s.downcase}_id")
+    if params[:show_comments]
+      link_to "Hide comments".t, :controller => commentable.class.to_s.pluralize, :action => :show, :id => commentable.id
+    else
+      link_to_remote("Show comments".t, {:url =>{ :controller => :comments, :action => :showcomments, commentable_id => (commentable.id)}}, :href => url_for(:controller => commentable.class.to_s.pluralize, :action => 'show', :id => commentable.id, :show_comments => true))
+    end   
+  end
   
   # return html link to unhide reply-to-comment-form
   def create_reply_link(comment)

@@ -24,9 +24,14 @@
   </p>
   <% end -%>
 
-  <p>
-    <!--Chapters go here -->
-  <%= render :partial => 'chapters/chapters' -%>
-  </p>
+  <!--Toggle between single-chapter view / view entire work -->
+	<div id="single_all_chaps">
+    <%= render :partial => 'link_single_chap' %>
+  </div>
+  
+	<!--Chapters go here -->
+  <div id="chapters">
+	  <%= render :partial => 'chapters/chapters' -%>
+ 	</div>
   
 </div>

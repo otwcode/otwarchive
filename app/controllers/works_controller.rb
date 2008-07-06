@@ -205,6 +205,26 @@ class WorksController < ApplicationController
     redirect_to(works_url)
   end
   
+  # Shows single-chapter view on work page
+  def singlechapter
+    @work = Work.find(params[:id])
+    @chapter = @work.first_chapter
+    @comments = @chapter.find_all_comments
+    respond_to do |format|
+      format.js
+    end
+  end
+  
+  # Toggles back to showing all chapters
+  def allchapters
+    @work = Work.find(params[:id])
+    @chapters = @work.chapters.in_order
+    @comments = @work.find_all_comments
+    respond_to do |format|
+      format.js
+    end
+  end
+  
   protected
 
   # create a reading object when showing a work, but only if the user has reading 

@@ -16,12 +16,6 @@ module WorksHelper
     "Please note this is a work in progress, with " + posted.to_s + " of " + work.wip_length.to_s + " chapters posted."  
   end
   
-  def show_hide_comments_link
-    if params[:show_comments]
-      link_to "Hide comments", :controller => :works, :action => :show, :id => @work.id
-    else
-      link_to_remote("Show comments", {:url =>{ :controller => :comments, :action => :showcomments, :work_id => (@work.id)}}, :href => url_for(:controller => :works, :action => 'show', :id => @work.id, :show_comments => true))
-    end
-  end
+
   
 end
