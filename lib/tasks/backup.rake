@@ -10,7 +10,7 @@ def setup
     @mysql = @config["mysql"] || "mysql"
     @mysqldump = @config["mysqldump"] || "mysqldump"
     @path = @config[:path] || RAILS_ROOT + '/db/backup/'
-    @today = @path + Date.today.to_s + '/'
+    @today = @path + 'today/'
     @yesterday = @path + (Date.today - 1 ).to_s + '/'
     @db_args = []
     @db_args << '--user=' + @config["username"] if @config["username"]
@@ -28,6 +28,7 @@ namespace :db do
   desc 'Backup mysql database - requires RAILS_ROOT/config/backup.yml'
   task :backup => [:environment] do
     setup
+    FileUtils.mv(@today, @yesterday)
     FileUtils.mkdir_p(@today, :mode => 0777)
     
     # backup most of the tables to their own files
