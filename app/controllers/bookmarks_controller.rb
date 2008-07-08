@@ -32,6 +32,7 @@ class BookmarksController < ApplicationController
   def edit
     @bookmark = Bookmark.find(params[:id])
     @bookmarkable = @bookmark.bookmarkable
+    @tag_string = @bookmark.tag_string
   end
 
   # POST /bookmarks
