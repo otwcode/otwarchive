@@ -183,7 +183,7 @@ class Work < ActiveRecord::Base
   end
 
   TagCategory.official.each do |c|
-    define_method(c.name){tag_string()}
-    define_method(c.name='='){|tag_name| tag_with(c.name.to_sym => tag_name)}
+    define_method(c.name){tag_string(c)}
+    define_method(c.name+'='){|tag_name| tag_with(c.name.to_sym => tag_name)}
   end
 end

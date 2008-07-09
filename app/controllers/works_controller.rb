@@ -162,12 +162,18 @@ class WorksController < ApplicationController
     elsif params[:edit_button]
       render :partial => 'work_form', :layout => 'application'
     else
-	    params[:work][:posted] = true if params[:post_button]
-      if @work.update_attributes(params[:work]) && @chapter.save
+      begin
+        @chapter.save!
+        @work.posted = true 
+        @work.save!
         @work.update_minor_version
-        flash[:notice] = 'Work was successfully updated.'
+        if params[:post_button]
+          flash[:notice] = 'Work was successfully posted.'
+        elsif params[:update_button]
+          flash[:notice] = 'Work was successfully updated.'
+        end
         redirect_to(@work)
-      else
+      rescue
         render :partial => 'work_form', :layout => 'application' 
       end
     end 
@@ -184,12 +190,8 @@ class WorksController < ApplicationController
     elsif params[:edit_button]
       redirect_to edit_work_path(@work)
     else
-      tag_hash = {}
-      TagCategory.official.map(&:name).each do |kind|
-        tag_hash[kind] = params[:work][kind]
-      end
       @work.posted = true
-      if @work.save && @work.first_chapter.update_attribute(:posted, true) && @work.tag_with(tag_hash) 
+      if @work.save && @work.first_chapter.update_attribute(:posted, true) 
         flash[:notice] = 'Work has been posted!'
         redirect_to(@work)
       else

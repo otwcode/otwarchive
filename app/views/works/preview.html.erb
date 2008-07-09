@@ -2,55 +2,8 @@
 <div>
   <h2 class="nomargin"><span class="list-left">Preview Story</span></h2>
   
-  <!-- Need a mailto address for the report link. -->		
-  <!-- The "morefeatures" span can be removed at will without breaking the page. -->
-	<span class="list-left leftmargin">Further features coming soon.  Questions?  <a href="mailto:#">Email us.</a></span>
-	<span class="list-right required">* Required field</span>
+	<span class="list-left leftmargin">Further features coming soon.  Questions?  <a href="mailto:<%=ArchiveConfig.QUESTION_ADDRESS%>">Email us.</a></span>
 	<div class="clearboth"></div>
 </div>
 
-<div id="previewpane">
-	<!-- The preview and show pages use the same underlying partial (_work.html.erb) 
-		 so that the preview is an accurate reflection of what the work will look like. -->
-	<%= render :partial => 'work' -%>
-</div>
-  	
-
-<% form_for :work, @work, :url => {:action => :post} do |f| %>
-
-	<p><strong>Tag implementation is very basic at this point!</strong></p> 
-
-	<p>
-
-  <!-- Tags -->
-  <!-- Fandom field -->
-		<span class="field-left">
-		  <% TagCategory.official.each do |category| %>
-        <% if category.required %>
-          <span class="required storylabel">
-        <% else %>
-          <span class="storylabel">
-        <% end %>
-        <%= category.display_name %>
-          </span>
-        <% if category.exclusive %>
-          <%= collection_select(:work, category.name.to_sym, TagCategory.official_tags(category.name), :name, :name) %>		
-        <% else %>
-          <%= f.text_field category.name %>
-        <% end %>
-        <%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
-	    <% end %>		
-		</span>
-	</p>
-
-  <p class="clearbothdrop"></p>  
-
-  <p class="field-right">
-    <%= submit_tag 'Post', :name => 'post_button' %>
-    <%= submit_tag 'Edit', :name => 'edit_button' %>
-    <%= submit_tag 'Cancel', :name => 'cancel_button' %>
-  </p> 
-  
-  <p class="clearbothdrop"></p>
-  
-<% end %>
+<%= render :partial => 'preview_edit' -%>

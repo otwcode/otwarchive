@@ -1,4 +1,6 @@
-<%= render :partial => 'work' %> 
+<div id="previewpane">
+  <%= render :partial => 'work' %> 
+</div>
 
 <%- form_for(@work) do |f| -%>
 
@@ -18,6 +20,31 @@
 
   <%= f.hidden_field :expected_number_of_chapters, :value => "#{@work.expected_number_of_chapters}" %>
   <%= f.hidden_field :restricted, :value => "#{@work.restricted}" %>
+
+	<p>
+  <!-- Tags -->
+ 
+	 <span class="required">* Required field</span> <%= image_tag("question.png", :size => "20x20", :alt => "More info") %>
+	 <p>
+		<span class="field-left">
+		  <% TagCategory.official.each do |category| %>
+        <% if category.required -%>
+          <span class="required storylabel">
+        <% else-%>
+          <span class="storylabel">
+        <% end -%>
+        <%= category.display_name %>
+          </span>
+        <% if category.exclusive %>
+          <%= collection_select(:work, category.name.to_sym, TagCategory.official_tags(category.name), :name, :name) %>		
+        <% else %>
+          <%= f.text_field category.name %>
+        <% end %>
+        <br />
+	    <% end %>		
+		</span>
+	</p>
+  <p class="clearbothdrop"></p>
 
   <p class="field-right">
 	<% if @work.posted? %>
