@@ -22,7 +22,7 @@ class SessionController < ApplicationController
     self.current_user.forget_me if logged_in?
     cookies.delete :auth_token
     reset_session
-    flash[:notice] = "You have been logged out."
+    flash[:notice] = "You have been logged out.".t
     # During testing, logout redirects to the feedback page.
     # Code commented out below would be default when out of testing. 
     ##   redirect_back_or_default('/')
@@ -56,7 +56,7 @@ class SessionController < ApplicationController
     end
   end
   
-  def failed_login(message = "Authentication failed.")
+  def failed_login(message = "Sorry, something went wrong! Please try again.".t)
     flash.now[:error] = message
     render :action => 'new'
   end
@@ -69,6 +69,6 @@ class SessionController < ApplicationController
     self.current_user.recently_reset? ? 
         (redirect_to :controller => 'users', :action => 'after_reset', :id => self.current_user.login) : 
         (redirect_to :controller => 'works', :action => 'index')
-    flash[:notice] = "Logged in successfully"
+    flash[:notice] = "Logged in successfully".t
   end
 end
