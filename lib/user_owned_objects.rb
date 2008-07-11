@@ -15,6 +15,16 @@ module UserOwnedObjects
     Chapter.find(:all, :conditions => ["creatorships.pseud_id IN (?)", self.pseuds.collect(&:id).to_s], :include => :creatorships)  
   end
   
+  # Find all series for a given user
+  def series
+    Series.find(:all, :conditions => ["creatorships.pseud_id IN (?)", self.pseuds.collect(&:id).to_s], :include => :creatorships)  
+  end
+  
+  # Get the total number of series for a given user
+  def series_count
+    Series.count(:all, :conditions => ["creatorships.pseud_id IN (?)", self.pseuds.collect(&:id).to_s], :include => :creatorships)  
+  end
+  
   # Get the total number of works for a given user
   def work_count
     Work.count(:all, :conditions => ["creatorships.pseud_id IN (?)", self.pseuds.collect(&:id).to_s], :include => :creatorships)
@@ -27,12 +37,12 @@ module UserOwnedObjects
   
   # Gets the user's one allowed unposted work
   def unposted_work
-    creations.select{|c| c.class == Work && c.posted != true}.first
+    works.select{|w| w.posted != true}.first
   end
   
   # Gets the user's one allowed unposted chapter per work
   def unposted_chapter(work)
-    creations.select{|c| c.class == Chapter && c.work_id == work.id && c.posted != true}.first
+    chapters.select{|c| c.work_id == work.id && c.posted != true}.first
   end 
   
   # Find all comments for a given user

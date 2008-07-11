@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  series: 
+  work: 
+  position: 1
+
+two:
+  series: 
+  work: 
+  position: 1

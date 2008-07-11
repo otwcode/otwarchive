@@ -49,6 +49,8 @@ class WorksController < ApplicationController
         @work.metadata = Metadata.new
       end
     end
+    
+    @series = current_user.series
 
     @chapter = @work.first_chapter
     if params[:work] && params[:work][:chapter_attributes]

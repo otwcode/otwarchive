@@ -1,0 +1,30 @@
+<h1>Editing series</h1>
+
+<% form_for(@series) do |f| %>
+  <%= f.error_messages %>
+  
+  <p>
+    <%= f.label :title, "Series Title" %><br />
+    <%= f.text_field :title %>
+  </p>
+  
+  <%- fields_for_associated('series', @series.metadata) do |m| -%>
+    
+  <p>
+    <%= m.label :summary, "Series Description" %><br />
+    <%= m.text_area :summary %> 
+  </p>
+  
+  <p>
+    <%= m.label :notes, "Series Notes" %><br />
+    <%= m.text_area :notes %>
+  <%- end -%>
+  </p>    
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @series %> |
+<%= link_to 'Back', series_path %>

@@ -29,21 +29,16 @@
 
     <!-- Toggles on with series checkbox -->
     <p id="seriesmanage" class="field-right" style="display:none;">
-      <span class="required"><strong>Not yet implemented! Series data will not be saved.</strong></span><br /><br />
-      <span class="storylabel"><label for="storyseries">Select Series</label></span><br />
+      <% fields_for "work[series_attributes]" do |s| %>
 
-      <!-- Dropdown/text field for adding series -->
-    	<select name="storyseries" class="storyinputfield" tabindex="4">
-
-      <!-- Fake options!  These need to be populated by the backend. -->
-    		<option>New Series (enter title below)</option>
-    		<option>Series 1</option>
-    		<option>Series 2</option>
-    	</select>
+      <%= s.label 'series_id', 'Choose a series:' %><br /> 
+      <%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>
     	<%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
+    	
+    	<%= s.label :title, "Or add a new one:" %><br />
+      <%= s.text_field :title, :class => "storyinputfield" %>
 
-    	<span class="storylabel"><label for="newseriesinput">...or add a new Series Title</label></span><br />
-    	<input type="text" name="newseriesinput" class="storyinputfield" tabindex="5" />
+    	<%- end -%>
     </p>
 
     <p class="clearbothdrop"></p>
@@ -133,6 +128,9 @@
       </script>
     </p>
 	<%- end -%>
+	
+	<p>If your story is a remix or was inspired by another story in the archive, copy and paste that story's url below:<br />
+	<%= f.text_field :parent_url %></p>
 
     <p class="field-right">
       <%= submit_tag 'Preview', :name => 'preview_button' %>

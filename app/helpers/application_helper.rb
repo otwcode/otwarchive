@@ -9,7 +9,7 @@ module ApplicationHelper
   # Can be used to check ownership of items
   def is_author_of?(item) 
     return false unless logged_in?
-    if item.class == Work || item.class == Chapter
+    if item.class == Work || item.class == Chapter || item.class == Series
       item.pseuds & current_user.pseuds != []
     elsif item.class == Bookmark
       current_user == item.user

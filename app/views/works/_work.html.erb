@@ -1,6 +1,10 @@
 <div class="story-show">
 
   <%= render :partial => 'metadatas/metadata', :locals => {:metadata => @work.metadata } -%>
+  
+  <%- unless @work.series.blank? -%>
+  <p>Series: <%= link_to @work.series.first.title, @work.series %></p>
+  <%- end -%> 
 
   <h2 class="story-title">
     <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)") %><% end %>
@@ -32,6 +36,17 @@
 	<!--Chapters go here -->
   <div id="chapters">
 	  <%= render :partial => 'chapters/chapters' -%>
+ 	</div>
+ 	
+ 	<%- unless @work.parents.blank? -%>
+ 	<div id="parents">
+ 	  <p>Inspired by:<p>
+ 	  <ul>
+ 	  <%- for parent in @work.parents -%>
+ 	    <li><%= link_to parent.metadata.title, parent %></li>
+ 	  <%- end -%>
+ 	  </ul>
+ 	<%- end -%>
  	</div>
   
 </div>

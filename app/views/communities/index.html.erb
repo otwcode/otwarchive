@@ -1,0 +1,24 @@
+<h1>Listing communities</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Open membership</th>
+  </tr>
+
+<% for community in @communities %>
+  <tr>
+    <td><%=h community.name %></td>
+    <td><%=h community.description %></td>
+    <td><%=h community.open_membership %></td>
+    <td><%= link_to 'Show', community %></td>
+    <td><%= link_to 'Edit', edit_community_path(community) %></td>
+    <td><%= link_to 'Destroy', community, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New community', new_community_path %>

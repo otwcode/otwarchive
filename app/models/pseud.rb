@@ -1,6 +1,6 @@
 class Pseud < ActiveRecord::Base
   belongs_to :user
-  has_many_polymorphs :creations, :from => [:works, :chapters], :through => :creatorships   
+  has_many_polymorphs :creations, :from => [:works, :chapters, :series], :through => :creatorships   
   has_many :comments
   acts_as_commentable
   validates_presence_of :name

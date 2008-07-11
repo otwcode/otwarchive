@@ -1,5 +1,4 @@
 ActionController::Routing::Routes.draw do |map|
-  
   map.feedbacks '/feedback/fix', :controller => 'feedbacks', :action => 'create', :path_prefix => ':locale'
   map.new_abuse_report '/feedback/', :controller => 'feedbacks', :action => 'new', :path_prefix => ':locale'
 
@@ -26,12 +25,14 @@ ActionController::Routing::Routes.draw do |map|
     user.resource :inbox, :controller => 'inbox'
     user.resources :bookmarks
     user.resources :works
+    user.resources :series
     user.resources :readings
     user.resources :comments, :member => { :approve => :put, :reject => :put } 
   end
   
   map.resources :works, :member => { :preview => :get, :post => :post }, :path_prefix => ':locale' do |work|
     work.resources :chapters, :has_many => :comments, :collection => {:manage => :get, :update_positions => :post}, :member => { :preview => :get, :post => :post }
+    work.resources :comments, :member => { :approve => :put, :reject => :put }
     work.resources :bookmarks
   end
   
@@ -41,7 +42,13 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :bookmarks, :path_prefix => ':locale'
   
-  map.resources :external_works, :has_many => :bookmarks, :path_prefix => ':locale' 
+  map.resources :external_works, :has_many => :bookmarks, :path_prefix => ':locale'
+  
+  map.resources :communities, :path_prefix => ':locale'
+
+  map.resources :related_works, :path_prefix => ':locale'
+
+  map.resources :series, :path_prefix => ':locale' 
 
   map.open_id_complete 'session', :controller => "session", :action => "create", :requirements => { :method => :get }, :path_prefix => ':locale'
   

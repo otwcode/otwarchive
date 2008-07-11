@@ -1,0 +1,24 @@
+<h1>Editing community</h1>
+
+<% form_for(@community) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :description %><br />
+    <%= f.text_area :description %>
+  </p>
+  <p>
+    <%= f.label :open_membership %><br />
+    <%= f.check_box :open_membership %>
+  </p>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @community %> |
+<%= link_to 'Back', communities_path %>

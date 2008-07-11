@@ -251,11 +251,13 @@ hr {
 	vertical-align: top;
 }
 
-#chaptermanage { margin: 0px 0px 10px 0px;
+#chaptermanage { 
+	margin: 0px 0px 10px 0px;
 	color: #00aa00;
 }
 
-#seriesmanage { margin: 15px 0px 10px 0px;
+#seriesmanage { 
+	margin: 15px 0px 10px 0px;
 	color: #00aa00;
 }
 

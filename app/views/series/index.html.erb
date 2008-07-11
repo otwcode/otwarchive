@@ -1,0 +1,7 @@
+<h1>Listing series</h1>
+
+<ul>
+<%- for series in @series -%>
+  <li><%= link_to series.title + " (" + series.serial_works.count.to_s + ")", series %></li>
+<%- end -%>
+</ul>

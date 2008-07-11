@@ -1,0 +1,24 @@
+<h1>Editing related_work</h1>
+
+<% form_for(@related_work) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :parent_id %><br />
+    <%= f.text_field :parent_id %>
+  </p>
+  <p>
+    <%= f.label :work %><br />
+    <%= f.text_field :work %>
+  </p>
+  <p>
+    <%= f.label :reciprocal %><br />
+    <%= f.check_box :reciprocal %>
+  </p>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @related_work %> |
+<%= link_to 'Back', related_works_path %>

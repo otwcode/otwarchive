@@ -1,6 +1,9 @@
 class Work < ActiveRecord::Base
   has_many :chapters, :dependent => :destroy
   has_one :metadata, :as => :described, :dependent => :destroy
+  has_many :serial_works
+  has_many :series, :through => :serial_works
+  has_many :related_works, :as => :parent
   has_bookmarks
   has_many :taggings, :as => :taggable, :dependent => :destroy
   
@@ -18,9 +21,10 @@ class Work < ActiveRecord::Base
   attr_accessor :authors
   attr_accessor :invalid_pseuds
   attr_accessor :ambiguous_pseuds
+  attr_accessor :new_parent
    
   before_save :validate_authors, :set_language
-  after_save :save_creatorships
+  after_save :save_associated, :save_creatorships
   after_update :save_associated, :save_creatorships    
 
   # Associating works with languages. 
@@ -55,6 +59,17 @@ class Work < ActiveRecord::Base
   def chapter_attributes=(attributes)
     self.new_record? ? self.chapters.build(attributes) : self.chapters.first.attributes = attributes
     self.chapters.first.posted = self.posted
+  end
+  
+  # Virtual attribute for series
+  def series_attributes=(attributes)
+    self.series << Series.find(attributes[:id]) unless attributes[:id].blank?
+    unless attributes[:title].blank?
+       new_series = Series.new
+       new_series.title = attributes[:title]
+       new_series.save
+       self.series << new_series
+    end
   end 
   
   # Virtual attribute for pseuds
@@ -70,6 +85,29 @@ class Work < ActiveRecord::Base
     end
     self.authors.flatten!
     self.authors.uniq! 
+  end
+  
+  # Works this work belongs to through related_works
+  def parents
+    Work.find(:all, :conditions => ["related_works.work_id = (?)", self.id], :include => :related_works)
+  end
+  
+  # Works that this work belongs to through related_works
+  def children
+    Work.find(:all, :conditions => ["related_works.parent_id = (?)", self.id], :include => :related_works)
+  end
+  
+  # Virtual attribute for parent work, via related_works
+  def parent_url
+    self.new_parent
+  end
+  
+  def parent_url=(url)
+    unless url.blank?
+      id = url.match(/works\/\d+/).to_a.first
+      id = id.split("/").last
+      self.new_parent = Work.find(id)
+    end
   end 
   
   # Virtual attribute for # of chapters
@@ -97,13 +135,19 @@ class Work < ActiveRecord::Base
     if self.authors
       Creatorship.add_authors(self, self.authors)
       Creatorship.add_authors(self.chapters.first, self.authors)
+      self.series.each {|series| Creatorship.add_authors(series, self.authors)} unless self.series.empty?
     end
   end
   
   # Save metadata and chapter data when the work is updated
+  # Save relationship to parent work if applicable
   def save_associated
     self.metadata.save(false)
     chapters.first.save(false)
+    if self.new_parent 
+      relationship = self.new_parent.related_works.build :work_id => self.id
+      relationship.save(false)
+    end
   end
   
   # Get the total number of chapters for a work

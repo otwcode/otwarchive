@@ -1,0 +1,20 @@
+<h1><%=h @series.title %></h1>
+<p>
+  Series begun: <%=h @series.created_at.localize("%d %B %Y") %><br />
+  Works included: <%= @series.works.length %><br />
+  Authors: <%= print_pseud_list(@series.pseuds) %>
+</p>
+
+<p><strong>Description: </strong> <%= @series.metadata.summary unless !@series.metadata || @series.metadata.summary.blank? %></p>
+
+<p><strong>Notes: </strong> <%= @series.metadata.notes unless !@series.metadata || @series.metadata.notes.blank? %></p>
+
+<%- if is_author_of?(@series) -%>
+  <%= link_to "Edit", edit_series_path(@series) %>
+<%- end -%>
+
+<ol>
+  <%- for work in @series.works -%>
+    <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
+  <%- end -%>
+</ol>

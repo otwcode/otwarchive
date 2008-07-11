@@ -1,0 +1,18 @@
+<p>
+  <b>Parent:</b>
+  <%=h @related_work.parent_id %>
+</p>
+
+<p>
+  <b>Work:</b>
+  <%=h @related_work.work %>
+</p>
+
+<p>
+  <b>Reciprocal:</b>
+  <%=h @related_work.reciprocal %>
+</p>
+
+
+<%= link_to 'Edit', edit_related_work_path(@related_work) %> |
+<%= link_to 'Back', related_works_path %>

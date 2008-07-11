@@ -12,15 +12,15 @@
     </p>
   <% else %>  
     <p>
-      <%= f.label :name, "Name: " %><%= f.text_field :name, :live => true %><br />
-      <%= f.label :email, "Email: " %><%= f.text_field :email, :live => true %>
+      <%= f.label :name, "Name: " %><%= f.text_field :name %><br />
+      <%= f.label :email, "Email: " %><%= f.text_field :email %>
       <%= f.hidden_field :ip_address, :value => "#{request.remote_addr}" %>      
     </p>
   <% end %>
        
   <p>
     <%= f.label :content, "Comment: " %><br />
-    <%= f.text_area :content, :live => true %>
+    <%= f.text_area :content %>
   </p>  
     
     <%= f.hidden_field :commentable_id, :value => commentable.id %>
@@ -28,6 +28,5 @@
 
   <p>
     <%= f.submit button_name %>
-    <%= create_cancel_button(@comment, commentable) %>
   </p>
 <%- end -%>
