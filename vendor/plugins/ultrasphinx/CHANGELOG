@@ -1,0 +1,36 @@
+
+v1.8.1. Use multifind/multiget for record loading; avoid using HashWithIndifferentAccess internally for speed; other minor performance improvements.
+
+v1.8. Update client for compatibility with Sphinx 0.9.8 r1112. This is a breaking release! You need to update Sphinx along with Ultrasphinx. Float range bugfix; text faceting on association_include bugfix. Postgres users, please note that the return type of CRC32() has changed to bigint.
+
+v1.7. Deployment docs. Postgres fixes. Support association_name instead of class_name (Daniel Higginbotham). 
+
+v1.6.7. Fix GROUP_CONCAT aggregate problem. Discourage enable_star in default.base. Allow faceting on includes.
+
+v1.6.6. Only use DISTINCT when necessary to improve indexing speed.
+
+v1.6.5. Many PostgreSQL improvements.
+
+v1.6. API changes! Drop Sphinx 0.9.7 compatibility; switch to Pat Allan's 0.9.8 client plugin; remove legacy keynames; fix string sorting bug; improve error handling.
+
+v1.5.4. Various things.
+
+v1.5.3. 90% test coverage; support multiple spelling dictionaries per machine (configurable in the .base file); association_name key is right out.
+
+v1.5.2. Fix association reloading issue; support float attributes on Sphinx 0.9.8; fix date range filters; import and update sample app (Mark Lane); start a comprehensive integration suite.
+
+v1.5.1. Various bugfixes.
+
+v1.5. API change. Change layout of base files to allow overriding of more options, see examples/default.base. Allow sorting on text fields (use the 'sortable' key).
+
+v1.4. New is_indexed 'fields' => {'function_sql'} key for custom field mangling; support setting textual keys in the 'filters'. 
+
+v1.3. Facets; configurable finder method array; support symbolic keys very reluctantly for legacy purposes.
+
+v1.2. API change. Support searching with empty query. Most keys are now singular strings (plural only if they *require* an Array value). Verbs have been un-nouned ('concatenate', not 'concats'; 'include', not 'includes'). 'filter', not 'raw_filters'; 'class_name', not 'model'. Finally, use a 'query' keypair instead of the first parameter to Ultrasphinx::Search.new for the query string (this simplifies form helpers). 
+
+v1.1. Parser rewrite and tests.
+
+v1. Documentation; refactoring.
+
+v0. Spike.

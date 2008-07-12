@@ -1,0 +1,15 @@
+
+== Available Rake tasks
+
+These Rake tasks are made available to your Rails app:
+
+<tt>ultrasphinx:configure</tt>:: Rebuild the configuration file for this particular environment.
+<tt>ultrasphinx:index</tt>:: Reindex the database and send an update signal to the search daemon.
+<tt>ultrasphinx:daemon:restart</tt>:: Restart the search daemon.
+<tt>ultrasphinx:daemon:start</tt>:: Start the search daemon.
+<tt>ultrasphinx:daemon:stop</tt>:: Stop the search daemon.
+<tt>ultrasphinx:daemon:status</tt>:: Check if the search daemon is running.
+<tt>ultrasphinx:spelling:build</tt>:: Rebuild the custom spelling dictionary. You may need to use <tt>sudo</tt> if your Aspell folder is not writable by the app user.
+<tt>ultrasphinx:bootstrap</tt>:: Bootstrap a full Sphinx environment by running configure, index, then daemon:start.
+
+All tasks have shortcuts. Use <tt>us:conf</tt>, <tt>us:in</tt>, <tt>us:restart</tt>, <tt>us:start</tt>, <tt>us:stop</tt>, <tt>us:stat</tt>, <tt>us:spell</tt>, and <tt>us:boot</tt>.

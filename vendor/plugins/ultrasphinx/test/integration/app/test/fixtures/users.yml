@@ -1,0 +1,11 @@
+<% 1.upto(41) do |num| %>
+<%="user#{num}:" %>
+  id: <%= num.to_s %>
+  login: <%= "user#{num}" %>
+  crypted_password: "2fdefe5c83d80a03a828dd65e90cfff65f0fb42d043a254ca2cad6af968d0e15" #password
+  email: <%= "user#{num}@test.com" %>
+  salt: "1000"
+  updated_at: <%= (time = Time.parse("Tue Oct 23 04:28:11")).to_s(:db) %>
+  created_at: <%= (time - 180).to_s(:db) %>
+  deleted: <%= num == 41 ? true : false %>
+<% end %>

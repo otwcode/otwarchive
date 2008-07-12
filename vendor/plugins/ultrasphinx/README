@@ -1,0 +1,123 @@
+
+Ultrasphinx 
+
+Ruby on Rails configurator and client to the Sphinx full text search engine.
+
+== License
+
+Copyright 2008 Cloudburst, LLC. Licensed under the AFL 3. See the included LICENSE file. Some portions copyright Pat Allan, distributed under the MIT license, and used with permission. Some portions copyright PJ Hyett and Mislav Marohnić, distributed under the MIT license, and used with permission. 
+
+The public certificate for the gem is here[http://rubyforge.org/frs/download.php/25331/evan_weaver-original-public_cert.pem]. 
+
+If you use this software, please {make a donation}[http://blog.evanweaver.com/donate/], or {recommend Evan}[http://www.workingwithrails.com/person/7739-evan-weaver] at Working with Rails.
+
+== Requirements
+
+* MySQL 5.0, or PostgreSQL 8.2
+* Sphinx 0.9.8-dev r1112
+* Rails 2.0.2
+
+More recent versions than listed are usually ok.
+
+== Features
+
+Sphinx/Ultrasphinx is the fastest and most stable Rails fulltext search solution.
+
+Features include:
+
+* searching and ranking across orthogonal models
+* excerpt highlighting
+* Google-style query parser
+* spellcheck
+* faceting on text, date, and numeric fields
+* field weighting, merging, and aliases
+* <tt>belongs_to</tt> and <tt>has_many</tt> includes
+* drop-in compatibility with Interlock[http://blog.evanweaver.com/files/doc/fauna/interlock/]
+* drop-in compatibility with will_paginate[http://err.lighthouseapp.com/projects/466/home]
+* multiple deployment environments
+* comprehensive Rake tasks
+
+And some other things.
+
+= Usage
+
+== Installation
+  
+First, install Sphinx itself. Get the {0.9.8 snapshot}[http://www.sphinxsearch.com/downloads.html], then run <tt>./configure</tt>, <tt>make</tt>, and <tt>sudo make install</tt>. Make sure to set your <tt>./configure</tt> flags: <tt>----prefix</tt> if necessary, and also <tt>----with-pgsql</tt> if you need Postgres support.
+
+You also need the <tt>chronic</tt> gem:
+  sudo gem install chronic
+
+Then, install the plugin:
+  script/plugin install -x svn://rubyforge.org/var/svn/fauna/ultrasphinx/trunk
+ 
+Next, copy the <tt>examples/default.base</tt> file to <tt>RAILS_ROOT/config/ultrasphinx/default.base</tt>. This file sets up the  Sphinx daemon options such as port, host, and index location.
+  
+If you need per-environment configuration, you can use <tt>RAILS_ROOT/config/ultrasphinx/development.base</tt>, etc. 
+
+Now, in your models, use the <tt>is_indexed</tt> method to configure a model as searchable. For example:
+  
+  class Post
+    is_indexed :fields => ['created_at', 'title', 'body']
+  end
+  
+For more index options, see ActiveRecord::Base .is_indexed.
+
+== Building the index
+
+Now run:
+
+  rake ultrasphinx:configure
+  rake ultrasphinx:index
+  rake ultrasphinx:daemon:start
+
+To rotate the index, just rerun <tt>rake ultrasphinx:index</tt>. If the search daemon is running, it will have its index rotated live. Otherwise the new index will be installed but the daemon will remain stopped.
+
+== Running queries
+    
+Query the daemon as so:
+
+  @search = Ultrasphinx::Search.new(:query => @query)
+  @search.run
+  @search.results
+  
+For more query options, including excerpt mode, see Ultrasphinx::Search.
+  
+= Extras  
+
+== Pagination
+
+Once the <tt>@search</tt> object has been <tt>run</tt>, it is directly compatible with the <tt>will_paginate</tt> view helper. In your view, just do:
+  <%= will_paginate(@search) %>
+  
+== Spell checking
+
+See Ultrasphinx::Spell.
+  
+== Available Rake tasks
+
+See RAKE_TASKS[link:files/RAKE_TASKS.html].
+
+== Gotchas
+
+Since Ultrasphinx pre-loads indexed models at its load time, any monkey-patches or plugins loaded after Ultrasphinx that your models depend on will raise LoadErrors. You may have to pluginize your monkey-patches to get them to work.
+
+== Deployment notes
+
+See DEPLOYMENT_NOTES[link:files/DEPLOYMENT_NOTES.html].
+
+== A note about PostgreSQL
+
+PostgreSQL 8.2 and higher are well supported. However, make sure you have executed <tt>CREATE LANGUAGE plpgsql;</tt> at least once. This step does not need to be repeated, so depending on your DB permissions, you might be able to put it in a migration.
+
+== Reporting problems
+
+The support forum is here[http://rubyforge.org/forum/forum.php?forum_id=14244].
+
+Patches and contributions are very welcome. Please note that contributors are required to assign copyright for their additions to Cloudburst, LLC. 
+
+== Further resources
+
+* http://sphinxsearch.com/doc.html
+* http://sphinxsearch.com/forum/forum.html?id=1
+* http://blog.evanweaver.com/articles/2007/07/09/ultrasphinx-searching-the-world-in-231-seconds

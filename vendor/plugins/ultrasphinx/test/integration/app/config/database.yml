@@ -1,0 +1,17 @@
+defaults: &defaults 
+  adapter: <%= ENV['DB'] || 'mysql' %>
+  host: localhost
+  username: root
+  password:
+  
+development:
+  <<: *defaults
+  database: ultrasphinx_development
+
+test:
+  <<: *defaults
+  database: ultrasphinx_test
+  
+production:
+  <<: *defaults
+  database: ultrasphinx_production

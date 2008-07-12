@@ -1,0 +1,13 @@
+
+Planned:
+
+* Finish unifying filters and textfields
+* Support exclude filters
+* Make sure filters can be set to nil
+* Geolocation search
+
+Not sure:
+
+* Delta indexing
+* Use Pat Allan's association configurator, possibly with an API change to avoid the message-passing DSL
+* Use Treetop for the query parser instead of regexes

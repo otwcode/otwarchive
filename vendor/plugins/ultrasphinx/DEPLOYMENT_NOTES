@@ -1,0 +1,29 @@
+
+== The configuration files
+
+Please note that the generated <tt>.conf</tt> file in <tt>config/ultrasphinx</tt> should not be modified by hand. This is the configuration for Sphinx itself, and includes all the generated SQL. It is <b>never the same</b> as the <tt>.base</tt> file.
+
+You will want to keep your generated <tt>production.conf</tt> in your repository. You can get a <tt>production.conf</tt> by running:
+
+  RAILS_ENV=production rake ultrasphinx:configure
+    
+If you don't have local read access to the production database, you'll need to write a post-deploy task to generate the configuration server-side. It is important that every checkout of the app has a copy of <tt>production.conf</tt>. It is not enough to only have it on the server where the search daemon is running--Rails uses it too.
+
+You will <b>not</b> want to keep the generated <tt>development.conf</tt> in the repository. This helps to catch bugs by discouraging out-of-date configurations.
+
+== Indexing and monitoring
+
+It's easy to keep the search daemon and the indexer running in a production environment. Cronjobs are the best way:
+
+  0,30 * * * * bash -c 'cd /path/to/production/current/; RAILS_ENV=production \
+    rake ultrasphinx:index >> /log/ultrasphinx-index.log 2>&1'
+  */3 * * * * bash -c 'cd /path/to/production/current/; RAILS_ENV=production \
+    rake ultrasphinx:daemon:start >> /log/ultrasphinx-daemon.log 2>&1'
+
+The first line runs the indexer every thirty minutes. The second line will try to restart the search daemon every three minutes. If it's already running, nothing happens. 
+
+If you are under severe memory limitations you might want to manage the daemon with Monit instead, so you can keep a closer eye on it. The search daemon is extremely reliable, so don't bother with fancy monitoring infrastructure unless you're sure you need it.
+
+== Gotchas
+
+If you change the field configuration or model set, you will need to rerun <tt>rake ultrasphinx:configure</tt> to update the <tt>.conf</tt> file. Make sure to completely stop and restart the search daemon when you deploy a changed <tt>.conf</tt>. It will not reload it automatically.

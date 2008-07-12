@@ -1,0 +1,216 @@
+AA:<% id = 0 %>
+  id: <%= (id=id+1).to_s %>
+  name: AA
+  abbreviation: AA
+AE:
+  id: <%= (id=id+1).to_s %>
+  name: AE
+  abbreviation: AE
+AP:
+  id: <%= (id=id+1).to_s %>
+  name: AP
+  abbreviation: AP
+AL:
+  id: <%= (id=id+1).to_s %>
+  name: Alabama
+  abbreviation: AL
+AK:
+  id: <%= (id=id+1).to_s %>
+  name: Alaska
+  abbreviation: AK
+AZ:
+  id: <%= (id=id+1).to_s %>
+  name: Arizona
+  abbreviation: AZ
+AR:
+  id: <%= (id=id+1).to_s %>
+  name: Arkansas
+  abbreviation: AR
+CA:
+  id: <%= (id=id+1).to_s %>
+  name: California
+  abbreviation: CA
+CO:
+  id: <%= (id=id+1).to_s %>
+  name: Colorado
+  abbreviation: CO
+CT:
+  id: <%= (id=id+1).to_s %>
+  name: Connecticut
+  abbreviation: CT
+DE:
+  id: <%= (id=id+1).to_s %>
+  name: Delaware
+  abbreviation: DE
+DC:
+  id: <%= (id=id+1).to_s %>
+  name: District of Columbia
+  abbreviation: DC
+FL:
+  id: <%= (id=id+1).to_s %>
+  name: Florida
+  abbreviation: FL
+GA:
+  id: <%= (id=id+1).to_s %>
+  name: Georgia
+  abbreviation: GA
+HI:
+  id: <%= (id=id+1).to_s %>
+  name: Hawaii
+  abbreviation: HI
+ID:
+  id: <%= (id=id+1).to_s %>
+  name: Idaho
+  abbreviation: ID
+IL:
+  id: <%= (id=id+1).to_s %>
+  name: Illinois
+  abbreviation: IL
+IN:
+  id: <%= (id=id+1).to_s %>
+  name: Indiana
+  abbreviation: IN
+IA:
+  id: <%= (id=id+1).to_s %>
+  name: Iowa
+  abbreviation: IA
+KS:
+  id: <%= (id=id+1).to_s %>
+  name: Kansas
+  abbreviation: KS
+KY:
+  id: <%= (id=id+1).to_s %>
+  name: Kentucky
+  abbreviation: KY
+LA:
+  id: <%= (id=id+1).to_s %>
+  name: Louisiana
+  abbreviation: LA
+ME:
+  id: <%= (id=id+1).to_s %>
+  name: Maine
+  abbreviation: ME
+MD:
+  id: <%= (id=id+1).to_s %>
+  name: Maryland
+  abbreviation: MD
+MA:
+  id: <%= (id=id+1).to_s %>
+  name: Massachusetts
+  abbreviation: MA
+MI:
+  id: <%= (id=id+1).to_s %>
+  name: Michigan
+  abbreviation: MI
+MN:
+  id: <%= (id=id+1).to_s %>
+  name: Minnesota
+  abbreviation: MN
+MS:
+  id: <%= (id=id+1).to_s %>
+  name: Mississippi
+  abbreviation: MS
+MO:
+  id: <%= (id=id+1).to_s %>
+  name: Missouri
+  abbreviation: MO
+MT:
+  id: <%= (id=id+1).to_s %>
+  name: Montana
+  abbreviation: MT
+NE:
+  id: <%= (id=id+1).to_s %>
+  name: Nebraska
+  abbreviation: NE
+NV:
+  id: <%= (id=id+1).to_s %>
+  name: Nevada
+  abbreviation: NV
+NH:
+  id: <%= (id=id+1).to_s %>
+  name: New Hampshire
+  abbreviation: NH
+NJ:
+  id: <%= (id=id+1).to_s %>
+  name: New Jersey
+  abbreviation: NJ
+NM:
+  id: <%= (id=id+1).to_s %>
+  name: New Mexico
+  abbreviation: NM
+NY:
+  id: <%= (id=id+1).to_s %>
+  name: New York
+  abbreviation: NY
+NC:
+  id: <%= (id=id+1).to_s %>
+  name: North Carolina
+  abbreviation: NC
+ND:
+  id: <%= (id=id+1).to_s %>
+  name: North Dakota
+  abbreviation: ND
+OH:
+  id: <%= (id=id+1).to_s %>
+  name: Ohio
+  abbreviation: OH
+OK:
+  id: <%= (id=id+1).to_s %>
+  name: Oklahoma
+  abbreviation: OK
+OR:
+  id: <%= (id=id+1).to_s %>
+  name: Oregon
+  abbreviation: OR
+PA:
+  id: <%= (id=id+1).to_s %>
+  name: Pennsylvania
+  abbreviation: PA
+RI:
+  id: <%= (id=id+1).to_s %>
+  name: Rhode Island
+  abbreviation: RI
+SC:
+  id: <%= (id=id+1).to_s %>
+  name: South Carolina
+  abbreviation: SC
+SD:
+  id: <%= (id=id+1).to_s %>
+  name: South Dakota
+  abbreviation: SD
+TN:
+  id: <%= (id=id+1).to_s %>
+  name: Tennessee
+  abbreviation: TN
+TX:
+  id: <%= (id=id+1).to_s %>
+  name: Texas
+  abbreviation: TX
+UT:
+  id: <%= (id=id+1).to_s %>
+  name: Utah
+  abbreviation: UT
+VT:
+  id: <%= (id=id+1).to_s %>
+  name: Vermont
+  abbreviation: VT
+VA:
+  id: <%= (id=id+1).to_s %>
+  name: Virginia
+  abbreviation: VA
+WA:
+  id: <%= (id=id+1).to_s %>
+  name: Washington
+  abbreviation: WA
+WV:
+  id: <%= (id=id+1).to_s %>
+  name: West Virginia
+  abbreviation: WV
+WI:
+  id: <%= (id=id+1).to_s %>
+  name: Wisconsin
+  abbreviation: WI
+WY:
+  id: <%= (id=id+1).to_s %>
+  name: Wyoming
+  abbreviation: WY
