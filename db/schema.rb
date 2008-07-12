@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080706165429) do
+ActiveRecord::Schema.define(:version => 20080712153137) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -238,7 +238,7 @@ ActiveRecord::Schema.define(:version => 20080706165429) do
   create_table "serial_works", :force => true do |t|
     t.integer  "series_id",  :limit => 11
     t.integer  "work_id",    :limit => 11
-    t.integer  "position",   :limit => 11
+    t.integer  "position",   :limit => 11, :default => 1
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -249,12 +249,13 @@ ActiveRecord::Schema.define(:version => 20080706165429) do
   end
 
   create_table "tag_categories", :force => true do |t|
-    t.string   "name",       :default => "", :null => false
+    t.string   "name",         :default => "", :null => false
     t.boolean  "required"
     t.boolean  "official"
     t.boolean  "exclusive"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "display_name"
   end
 
   add_index "tag_categories", ["name"], :name => "index_tag_categories_on_name", :unique => true
@@ -288,6 +289,7 @@ ActiveRecord::Schema.define(:version => 20080706165429) do
     t.integer  "tag_category_id", :limit => 11
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "taggings_count",  :limit => 11, :default => 0
   end
 
   add_index "tags", ["name"], :name => "index_tags_on_name", :unique => true
