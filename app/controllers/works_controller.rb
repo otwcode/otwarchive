@@ -50,7 +50,9 @@ class WorksController < ApplicationController
       end
     end
     
-    @series = current_user.series
+    unless current_user == :false 
+      @series = current_user.series
+    end
 
     @chapter = @work.first_chapter
     if params[:work] && params[:work][:chapter_attributes]
