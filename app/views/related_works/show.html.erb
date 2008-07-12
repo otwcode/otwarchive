@@ -1,18 +1,15 @@
-<p>
-  <b>Parent:</b>
-  <%=h @related_work.parent_id %>
-</p>
+<h1>Approve Link</h1>
 
-<p>
-  <b>Work:</b>
-  <%=h @related_work.work %>
-</p>
+<p>Would you like to create a link from your story <%= link_to @related_work.parent.metadata.title, @related_work.parent %> to 
+<%= link_to @related_work.work.metadata.title, @related_work.parent %> by <%= print_pseud_list(@related_work.work.pseuds) %>?</p>
 
-<p>
-  <b>Reciprocal:</b>
-  <%=h @related_work.reciprocal %>
-</p>
+<p>(Nothing will be linked directly from your stories without your express approval.)</p> 
 
-
-<%= link_to 'Edit', edit_related_work_path(@related_work) %> |
-<%= link_to 'Back', related_works_path %>
+<% form_for(@related_work) do |f| %>
+  <p>
+    <%= f.check_box :reciprocal %> <%= f.label :reciprocal, "Yes, link me!" %>
+  </p>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>

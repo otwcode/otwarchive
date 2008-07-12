@@ -3,7 +3,7 @@
   <%= render :partial => 'metadatas/metadata', :locals => {:metadata => @work.metadata } -%>
   
   <%- unless @work.series.blank? -%>
-  <p>Series: <%= link_to @work.series.first.title, @work.series %></p>
+  <%= show_series_data(@work) %>
   <%- end -%> 
 
   <h2 class="story-title">
@@ -44,6 +44,17 @@
  	  <ul>
  	  <%- for parent in @work.parents -%>
  	    <li><%= link_to parent.metadata.title, parent %></li>
+ 	  <%- end -%>
+ 	  </ul>
+	</div>
+ 	<%- end -%>
+ 	
+ 	<%- unless @work.approved_children.blank? -%>
+ 	<div id="children">
+ 	  <p>Stories inspired by this one:<p>
+ 	  <ul>
+ 	  <%- for child in @work.approved_children -%>
+ 	    <li><%= link_to child.metadata.title, child %></li>
  	  <%- end -%>
  	  </ul>
 	</div>

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080629142053) do
+ActiveRecord::Schema.define(:version => 20080706165429) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -66,6 +66,14 @@ ActiveRecord::Schema.define(:version => 20080629142053) do
     t.integer  "thread",           :limit => 11
     t.string   "user_agent"
     t.boolean  "approved"
+  end
+
+  create_table "communities", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.boolean  "open_membership"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "creatorships", :force => true do |t|
@@ -203,6 +211,15 @@ ActiveRecord::Schema.define(:version => 20080629142053) do
     t.datetime "updated_at"
   end
 
+  create_table "related_works", :force => true do |t|
+    t.integer  "parent_id",   :limit => 11
+    t.integer  "work_id",     :limit => 11
+    t.boolean  "reciprocal"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "parent_type"
+  end
+
   create_table "roles", :force => true do |t|
     t.string   "name",              :limit => 40
     t.string   "authorizable_type", :limit => 40
@@ -214,6 +231,19 @@ ActiveRecord::Schema.define(:version => 20080629142053) do
   create_table "roles_users", :id => false, :force => true do |t|
     t.integer  "user_id",    :limit => 11
     t.integer  "role_id",    :limit => 11
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "serial_works", :force => true do |t|
+    t.integer  "series_id",  :limit => 11
+    t.integer  "work_id",    :limit => 11
+    t.integer  "position",   :limit => 11
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "series", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
   end

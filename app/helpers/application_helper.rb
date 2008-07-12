@@ -47,9 +47,7 @@ module ApplicationHelper
   def flash_div *keys
     keys.collect { |key| 
       if flash[key] 
-        content_tag(:div, 
-                    image_tag("icon-#{key}.gif", :class => "flash_icon") + "\n" + flash[key], 
-        :class => "flash #{key}") if flash[key] 
+        content_tag(:div, flash[key], :class => "flash #{key}") if flash[key] 
       end
     }.join
   end

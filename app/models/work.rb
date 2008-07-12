@@ -89,12 +89,17 @@ class Work < ActiveRecord::Base
   
   # Works this work belongs to through related_works
   def parents
-    Work.find(:all, :conditions => ["related_works.work_id = (?)", self.id], :include => :related_works)
+    RelatedWork.find(:all, :conditions => {:work_id => self.id}, :include => :parent).collect(&:parent)
   end
   
-  # Works that this work belongs to through related_works
+  # Works that belong to this work through related_works
   def children
-    Work.find(:all, :conditions => ["related_works.parent_id = (?)", self.id], :include => :related_works)
+    RelatedWork.find(:all, :conditions => {:parent_id => self.id}, :include => :work).collect(&:work) 
+  end
+  
+  # Works that belongs to this work and which have been approved for linking back
+  def approved_children
+    RelatedWork.find(:all, :conditions => {:parent_id => self.id, :reciprocal => true}, :include => :work).collect(&:work)
   end
   
   # Virtual attribute for parent work, via related_works
