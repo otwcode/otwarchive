@@ -17,7 +17,7 @@ module ApplicationHelper
       current_user.pseuds.include?(item.pseud)
     end
   end
-
+  
   def byline(creation)
     pseuds = ((creation.authors ||= []) + (creation.pseuds ||= [])).uniq 
     pseuds.collect { |pseud|
@@ -54,7 +54,7 @@ module ApplicationHelper
   
   # Create a nicer language menu than the Click-To-Globalize default
   def languages_menu
-
+    
     result = "<form action=\"" + url_for(:action => 'set', :controller => 'locale') + "\">\n" 
     result << "<select id='accessible_menu' name='url' >\n"
     # We'll sort the languages by their keyname rather than have all the non-arabic-character-set
@@ -72,7 +72,7 @@ module ApplicationHelper
     result << "</form>"
     return result
   end  
-
+  
   # Set a custom error-message handler that puts the errors on 
   # their respective fields instead of on the top of the page
   ActionView::Base.field_error_proc = Proc.new {|html_tag, instance|
@@ -122,18 +122,18 @@ module ApplicationHelper
           ''
     end
   end
-
-    
+  
+  
   # Validation messages
   def valid_length_message
     "Thanks, that length looks good.".t
   end
-
+  
   #santizes and formats a string with paragraphs
   def sanitize_format(content)
     close_tags(sanitize(simple_format(content)))
   end
-    
+  
   #closes tags in html (uses http://snippets.dzone.com/posts/show/3822, but
   #modified)
   def close_tags(html)
@@ -164,30 +164,30 @@ module ApplicationHelper
         # <tag ...>
         tag = $1.downcase
         if ! soloTags.include?(tag) then
-            stack.push(tag)
+          stack.push(tag)
         end
         out = "<#{tag}"
         tag = $1.downcase
         while ( $' =~ /(\w+)=("[^"]+")/ )
-           attr = $1.downcase
-           valu = $2
-           out << " #{attr}=#{valu}"
+          attr = $1.downcase
+          valu = $2
+          out << " #{attr}=#{valu}"
         end
         out << ">"
       end
     end
-
+    
     # eat up unmatched leading >
     while result.sub!(/\A([^<]*)>/m) { $1 } do end
-
+    
     # eat up unmatched trailing <
     while result.sub!(/<([^>]*)\Z/m) { $1 } do end
-
+    
     # clean up the stack
     if stack.length > 0 then
       result << "</#{stack.reverse.join('></')}>"
     end
-
+    
     result
   end
   
@@ -197,9 +197,21 @@ module ApplicationHelper
       image_tag("translation_button.gif", :alt => h('Link to translation page'.t), :border => 0) + "</a></li>"
     end
   end
-
+  
   def tag_wrangler_footer
     '<p>' + link_to('New tag', new_tag_path) + ' | ' +link_to('Tag categories', tag_categories_path)  + ' | ' +  link_to('New category', new_tag_category_path) + ' | ' + link_to('Tag relationships', tag_relationships_path) + ' | ' + link_to('New relationship', new_tag_relationship_path)
   end
   
+end
+
+## Allow use of tiny_mce WYSIWYG editor
+def use_tinymce
+  @content_for_tinymce = "" 
+  content_for :tinymce do
+    javascript_include_tag "tiny_mce/tiny_mce"
+  end
+  @content_for_tinymce_init = "" 
+  content_for :tinymce_init do
+    javascript_include_tag "mce_editor"
+  end
 end
