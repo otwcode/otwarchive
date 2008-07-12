@@ -6,6 +6,10 @@ class Work < ActiveRecord::Base
   has_many :related_works, :as => :parent
   has_bookmarks
   has_many :taggings, :as => :taggable, :dependent => :destroy
+  is_indexed :fields => ['created_at'], :include => [{:association_name => 'metadata', :field => 'title', :as => 'title'},
+            {:association_name => 'metadata', :field => 'summary', :as => 'summary'},
+            {:association_name => 'metadata', :field => 'notes', :as => 'notes'}],
+            :concatenate => [{:association_name => 'chapters', :field => 'content', :as => 'body'}]
   
   named_scope :public, :conditions => "restricted = 0 OR restricted IS NULL"
   named_scope :recent, :order => 'created_at DESC', :limit => 5
@@ -24,6 +28,7 @@ class Work < ActiveRecord::Base
   attr_accessor :new_parent
    
   before_save :validate_authors, :set_language
+  before_save :post_first_chapter
   after_save :save_associated, :save_creatorships
   after_update :save_associated, :save_creatorships    
 
@@ -234,5 +239,14 @@ class Work < ActiveRecord::Base
   TagCategory.official.each do |c|
     define_method(c.name){tag_string(c)}
     define_method(c.name+'='){|tag_name| tag_with(c.name.to_sym => tag_name)}
+  end 
+  
+  # If the work is posted, the first chapter should be posted too
+  def post_first_chapter
+    if self.posted? && !self.first_chapter.posted?
+       chapter = self.first_chapter
+       chapter.posted = true
+       chapter.save(false)
+    end
   end
 end

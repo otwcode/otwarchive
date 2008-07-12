@@ -195,7 +195,7 @@ class WorksController < ApplicationController
       redirect_to edit_work_path(@work)
     else
       @work.posted = true
-      if @work.save && @work.first_chapter.update_attribute(:posted, true) 
+      if @work.save 
         flash[:notice] = 'Work has been posted!'
         redirect_to(@work)
       else

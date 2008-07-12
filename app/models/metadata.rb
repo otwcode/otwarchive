@@ -1,6 +1,5 @@
 class Metadata < ActiveRecord::Base
   belongs_to :described, :polymorphic => true
-  is_indexed :fields => ['title', 'summary', 'notes']
   
   TITLE_MAX = 255
   TITLE_MIN = 3
