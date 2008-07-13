@@ -1,4 +1,5 @@
 class UserMailer < ActionMailer::Base
+  include ActionController::UrlWriter
 
   def signup_notification(user)
      setup_email(user)
@@ -15,11 +16,11 @@ class UserMailer < ActionMailer::Base
      @subject    += 'Password reset'
    end
    
-   def send_comments(user, comment)
+   # When someone comments on something that belongs to you
+   def feedback_notification(user, comment)
       setup_email(user)
-      @subject        += 'Reply to your comment'
+      @subject        += "New Feedback"
       @body[:comment] = comment
-      @body[:url]     += "/comments/#{comment.commentable_id}"
    end
 
    protected

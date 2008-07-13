@@ -31,6 +31,9 @@ class User < ActiveRecord::Base
   has_many :readings 
   can_create_bookmarks
   
+  has_many :inbox_comments
+  has_many :feedback_comments, :through => :inbox_comments
+  
   named_scope :alphabetical, :order => :login
 
   validates_format_of :login, :message => 'must begin and end with a letter or number; may also contain underscores but no other characters.',

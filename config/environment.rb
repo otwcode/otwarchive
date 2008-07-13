@@ -83,7 +83,7 @@ Rails::Initializer.run do |config|
   ### XXX:
   ### Commented out because it keeps db:create from working,
   ### see issue 38 in the google issue tracker
-  config.active_record.observers = :user_observer
+  config.active_record.observers = [:user_observer, :comment_observer, :work_observer, :related_work_observer]
 
   # Make Time.zone default to the specified zone, and make Active Record store time values
   # in the database in UTC, and return them converted to the specified local zone.

@@ -71,7 +71,7 @@
   <!-- END header -->
   
   <!-- BEGIN sidebar -->
-  <%- if @user && !@user.login.blank? -%> 
+  <%- if @user && !@user.new_record? -%> 
   <div id="dashboard-sidebar">
     <%= render :partial => 'users/sidebar' %>
   </div>

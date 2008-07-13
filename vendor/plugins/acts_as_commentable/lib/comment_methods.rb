@@ -29,13 +29,6 @@ module CommentMethods
         old_comment = Comment.find(self.commentable_id)
         self.thread = old_comment.thread
         self.depth && self.thread ? old_comment.add_child(self) : false
-
-        # Disabling email for now but leaving this here as a placeholder
-        # if old_comment.pseud_id
-        #   recipient = User.find(old_comment.pseud.user_id)
-        #   UserMailer.deliver_send_comments(recipient, self)
-        # end
-
       else
         self.thread = Comment.max_thread ? Comment.max_thread.to_i + 1 : 1 
         self.depth && self.thread ? self.save : false

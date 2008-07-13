@@ -1,6 +1,7 @@
 class Comment < ActiveRecord::Base         
   belongs_to :pseud         
   belongs_to :commentable, :polymorphic => true
+  has_many :users, :through => :inbox_comments
  
   COMMENT_MAX = 4300
   validates_presence_of :content

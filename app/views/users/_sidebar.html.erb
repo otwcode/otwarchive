@@ -7,7 +7,7 @@
   <li><%= print_bookmarks_link(@user) %></li>
   <li><%= link_to_unless_current prefix + "Communities", '#' %></li>
   <% if @user == current_user %>    
-  <li><%= link_to_unless_current prefix + "Inbox", user_inbox_path(@user) %></li>
+  <li><%= link_to_unless_current prefix + "Inbox (" + @user.feedback_comments.count.to_s + ")", user_inbox_path(@user) %></li>
   <li><%= link_to_unless_current prefix + "Reading History", user_readings_path(@user) %></li>
   <li><%= link_to_unless_current prefix + "Subscriptions", '#' %></li>
   <li><%= link_to_unless_current prefix + "Preferences", '#' %></li>
