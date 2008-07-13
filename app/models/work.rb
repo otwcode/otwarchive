@@ -236,10 +236,18 @@ class Work < ActiveRecord::Base
     return !self.is_wip
   end
 
-  TagCategory.official.each do |c|
-    define_method(c.name){tag_string(c)}
-    define_method(c.name+'='){|tag_name| tag_with(c.name.to_sym => tag_name)}
-  end 
+  # create dynamic methods based on the tag categories
+  begin
+    TagCategory.official.each do |c|
+      define_method(c.name){tag_string(c)}
+      define_method(c.name+'='){|tag_name| tag_with(c.name.to_sym => tag_name)}
+    end 
+  rescue
+    define_method('ambiguous'){tag_string('ambiguous')}
+    define_method('ambiguous='){|tag_name| tag_with(:ambiguous => tag_name)}
+    define_method('default'){tag_string('default')}
+    define_method('default='){|tag_name| tag_with(:default => tag_name)}
+  end
   
   # If the work is posted, the first chapter should be posted too
   def post_first_chapter
