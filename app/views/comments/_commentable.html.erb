@@ -9,12 +9,12 @@
 
   <!-- BEGIN comments -->
   <div id="show_comments_link">
-  <% unless @comments.empty? %>
-    <p id="comments_link">
-    	<%= show_hide_comments_link(commentable, (is_work ||= false)) %>
+  	<p id="comments_link">
+    	<%- unless @comments.empty? -%>
+			<%= show_hide_comments_link(commentable, (is_work ||= false)) %>
+		  <%- end -%>
 		</p>	
-  <% end %>
-	</div> 
+  </div> 
   
   <div id="comments">   
     <%- if params[:show_comments] -%>   
