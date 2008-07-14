@@ -69,7 +69,9 @@
 
   <p>
     <b>Chapter text</b><br />
-    <%= f.text_area :content, :live => true %>
+	<% use_tinymce -%>
+		<p><a href="javascript:addEditor('content');">Rich text</a>  <a href="javascript:removeEditor('content');">HTML</a></p>
+    <%= f.text_area :content, :live => true, :class => "mce-editor", :id => "content" %>
   </p>
 
   <p>
