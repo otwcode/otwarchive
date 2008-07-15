@@ -7,28 +7,28 @@ module UserOwnedObjects
   
   # Find all works for a given user
   def works
-    Work.find(:all, :conditions => ["creatorships.pseud_id IN (?)", self.pseuds.collect(&:id).to_s], :include => :creatorships)  
+    pseuds.collect(&:works).reject(&:empty?).flatten
   end
   
   # Find all chapters for a given user
   def chapters
-    Chapter.find(:all, :conditions => ["creatorships.pseud_id IN (?)", self.pseuds.collect(&:id).to_s], :include => :creatorships)  
+    pseuds.collect(&:chapters).reject(&:empty?).flatten  
   end
   
   # Find all series for a given user
   def series
-    Series.find(:all, :conditions => ["creatorships.pseud_id IN (?)", self.pseuds.collect(&:id).to_s], :include => :creatorships)  
+    pseuds.collect(&:series).reject(&:empty?).flatten  
   end
   
   # Get the total number of series for a given user
   def series_count
-    Series.count(:all, :conditions => ["creatorships.pseud_id IN (?)", self.pseuds.collect(&:id).to_s], :include => :creatorships)  
+    series.length  
   end
   
   # Get the total number of works for a given user
   def work_count
-    Work.count(:all, :conditions => ["creatorships.pseud_id IN (?)", self.pseuds.collect(&:id).to_s], :include => :creatorships)
-  end 
+		works.length
+	end  
   
   # Returns an array (of pseuds) of this user's co-authors
   def coauthors
@@ -48,13 +48,6 @@ module UserOwnedObjects
   # Find all comments for a given user
   def comments
     Comment.find(:all, :conditions => ["pseud_id IN (?)", self.pseuds.collect(&:id).to_s])
-  end
-  
-  # TODO: Needs refinement!
-  # Find all comments left on things that belong to this user
-  def feedback
-     fb = ([self] + chapters + comments).collect(&:comments).reject(&:empty?).flatten
-     fb.sort {|x,y| y.created_at <=> x.created_at }.uniq
   end
   
 end
