@@ -25,24 +25,12 @@ class UserMailerTest < ActionMailer::TestCase
     assert_match user.password, mail.body 
     assert_equal [user.email], mail.to
   end
-  def test_send_comments_pseud
+  def test_feedback_notification
     user = create_user
     comment = create_comment(:pseud_id => create_pseud)
-    mail = UserMailer.create_send_comments(user, comment)
-    assert_match 'Reply to your comment', mail.subject
-    assert_match 'comment', mail.body
-    assert_match comment.content, mail.body 
-    assert_match comment.commentable_id.to_s, mail.body
-    assert_equal [user.email], mail.to    
-  end
-  def test_send_comments_name
-    user = create_user
-    comment = create_comment
-    mail = UserMailer.create_send_comments(user, comment)
-    assert_match 'Reply to your comment', mail.subject
-    assert_match 'comment', mail.body
-    assert_match comment.content, mail.body 
-    assert_match comment.commentable_id.to_s, mail.body
+    mail = UserMailer.create_feedback_notification(user, comment)
+    assert_match 'New Feedback', mail.subject
+    assert_match comment.content, mail.body
     assert_equal [user.email], mail.to    
   end
 end
