@@ -6,10 +6,12 @@ class BuildInbox < ActiveRecord::Migration
       else
         users = comment.commentable.respond_to?(:pseuds) ? comment.commentable.pseuds.collect(&:user) : [comment.commentable.user]
       end
-      users.each do |user|  
-        new_feedback = user.inbox_comments.build
-        new_feedback.feedback_comment_id = comment.id
-        new_feedback.save
+      unless users.blank?
+        users.compact.each do |user|  
+          new_feedback = user.inbox_comments.build
+          new_feedback.feedback_comment_id = comment.id
+          new_feedback.save
+        end
       end
     end
   end

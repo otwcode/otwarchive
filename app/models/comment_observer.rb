@@ -7,7 +7,7 @@ class CommentObserver < ActiveRecord::Observer
       users = comment.commentable.respond_to?(:pseuds) ? comment.commentable.pseuds.collect(&:user) : [comment.commentable.user]
     end
     unless users.blank?
-      users.each do |user|  
+      users.compact.each do |user|  
         new_feedback = user.inbox_comments.build
         new_feedback.feedback_comment_id = comment.id
         new_feedback.save
