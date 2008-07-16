@@ -2,48 +2,60 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class AbuseReportsControllerTest < ActionController::TestCase
 
-  # create  /:locale/abuse/fix  (named path: abuse_reports)
-  # if @abuse_report.save deliver_abuse_report
-  def test_abuse_reports_path
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.deliveries = []
-    url = random_url(ArchiveConfig.APP_URL)
-    assert_difference('AbuseReport.count') do
-      post :create, :locale => 'en', :abuse_report => 
-       { :email => random_email,
-         :url => url,
-         :comment => random_phrase }
+  context "on GET to :new" do
+    context "in general" do
+      setup do
+        @url = random_url(ArchiveConfig.APP_URL)
+        @request.env["HTTP_REFERER"] = @url
+        get :new, :locale => 'en'
+      end
+      should_assign_to :abuse_report
+      should_respond_with :success
+      should_render_template :new
+      should "preset url" do
+        assert_equal @url, assigns(:abuse_report).url
+      end
     end
-    assert_equal(1, ActionMailer::Base.deliveries.length)
-    assert flash.has_key?(:notice)
-    assert_redirected_to url
-  end
-  # if ! @abuse_report.save render new
-  def test_abuse_reports_path_error
-    bad_url = random_url
-    post :create, :locale => 'en', :abuse_report => 
-       { :email => random_email,
-         :url => bad_url,
-         :comment => random_phrase }
-    assert !flash.has_key?(:notice)
-    assert_template "abuse_reports/new"
+
+    context "when logged in" do
+      setup do
+        @user = create_user
+        @request.session[:user] = @user 
+        get :new, :locale => 'en'
+      end
+
+      should "preset user's email" do
+        assert_equal @user.email, assigns(:abuse_report).email
+      end
+    end
   end
 
-  # new  /:locale/abuse  (named path: new_abuse_report)
-  # if User.current_user
-  def test_new_abuse_report_path_user
-    user = create_user
-    @request.session[:user] = user 
-    get :new, :locale => 'en'
-    assert_response :success
-    assert_equal user.email, assigns["abuse_report"][:email]
-  end
-  # if ! User.current_user
-  def test_should_get_new
-    get :new, :locale => 'en'
-    assert_response :success
-    assert_equal '',  assigns["abuse_report"][:email]
-  end
+  context "on POST to :create" do
+    context "on failure" do
+      setup do
+        put :create, :locale => 'en', :abuse_report=>{"email"=>"filled in"}
+      end
+      should_assign_to :abuse_report
+      should "remember filled in fields" do
+        assert_equal "filled in", assigns(:abuse_report).email
+      end
+      should_render_template :new
+      should "show validation errors" do
+        assert_tag :tag => "div", :attributes => {:id => "errorExplanation"}
+      end
+    end
 
+    context "on success" do
+      setup do
+        put :create, :locale => 'en', :abuse_report =>
+          {"url"=>ArchiveConfig.APP_URL, 
+           "comment"=>"a comment",
+           "email"=>"user@google.com"}
+      end
+      should_redirect_to '"/"'
+    end
+
+  end
 end
+
+

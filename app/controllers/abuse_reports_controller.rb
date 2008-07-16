@@ -13,7 +13,6 @@ class AbuseReportsController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @abuse_report }
     end
   end
 
@@ -27,10 +26,9 @@ class AbuseReportsController < ApplicationController
         AdminMailer.deliver_abuse_report(@abuse_report.email, @abuse_report.url, @abuse_report.comment)
 
         flash[:notice] = 'The Abuse Report was sent to the abuse team email alias.'
-        format.html { redirect_to(@abuse_report.url) }
+        format.html { redirect_to '' }
       else
         format.html { render :action => "new" }
-        format.xml  { render :xml => @abuse_report.errors, :status => :unprocessable_entity }
       end
     end
   end

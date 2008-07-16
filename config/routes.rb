@@ -1,7 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
-  map.feedbacks '/feedback/fix', :controller => 'feedbacks', :action => 'create', :path_prefix => ':locale'
-  map.new_abuse_report '/feedback/', :controller => 'feedbacks', :action => 'new', :path_prefix => ':locale'
-
+  map.feedbacks '/feedback/', :controller => 'feedbacks', :action => 'create', :path_prefix => ':locale', :conditions => { :method => :post }
+  map.new_feedback_report '/feedback/', :controller => 'feedbacks', :action => 'new', :path_prefix => ':locale'
+  
   map.resources :tag_relationships, :path_prefix => ':locale'
 
   map.resources :tag_categories, :path_prefix => ':locale'
@@ -12,7 +12,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.root :controller => 'session', :action => 'new', :locale => 'en'      
 
-  map.abuse_reports '/abuse/fix', :controller => 'abuse_reports', :action => 'create', :path_prefix => ':locale'
+  map.abuse_reports '/abuse/', :controller => 'abuse_reports', :action => 'create', :path_prefix => ':locale', :conditions => { :method => :post }
   map.new_abuse_report '/abuse/', :controller => 'abuse_reports', :action => 'new', :path_prefix => ':locale'
   
   map.resources :passwords, :path_prefix => ':locale'

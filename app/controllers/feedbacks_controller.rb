@@ -7,7 +7,6 @@ class FeedbacksController < ApplicationController
     
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @feedback }
     end
   end
   
@@ -19,11 +18,10 @@ class FeedbacksController < ApplicationController
       if @feedback.save
         AdminMailer.deliver_feedback(@feedback.comment)
         flash[:notice] = 'Your feedback was sent to the archive team - thanks for your input!'
-        format.html { redirect_to :controller => 'session', :action => 'new' }
+        format.html { redirect_to '' }
       
       else
         format.html { render :action => "new" }
-        format.xml  { render :xml => @feedback.errors, :status => :unprocessable_entity }
       end
     end
   end

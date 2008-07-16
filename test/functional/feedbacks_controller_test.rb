@@ -2,28 +2,36 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class FeedbacksControllerTest < ActionController::TestCase
 
-  # create  /:locale/feedback/fix  (named path: feedbacks)
-  # if @feedback.save deliver_feedback
-  def test_feedbacks_path
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.deliveries = []
-    assert_difference('Feedback.count') do
-      post :create, :locale => 'en', :feedback => 
-       { :comment => random_phrase }
+  context "on GET to :new" do
+    setup do
+      get :new, :locale => 'en'
     end
-    assert_equal(1, ActionMailer::Base.deliveries.length)
-    assert flash.has_key?(:notice)
-    assert_redirected_to(:controller => "session", :action => "new")
-  end
-  # if ! @feedback.save render new
-  def test_feedbacks_path_error
-    
-    post :create, :locale => 'en', :feedback => 
-       { :comment => "" }
-    assert !flash.has_key?(:notice)
-    assert_template "feedbacks/new"
+    should_assign_to :feedback
+    should_respond_with :success
+    should_render_template :new
   end
 
- 
+  context "on POST to :create" do
+    context "on failure" do
+      setup do
+        put :create, :locale => 'en', :feedback => {:comment=>""}
+      end
+      should_assign_to :feedback
+      should_render_template :new
+      should "show validation errors" do
+        assert_tag :tag => "div", :attributes => {:id => "errorExplanation"}
+      end
+    end
+
+    context "on success" do
+      setup do
+        put :create, :locale => 'en', :feedback => {:comment=>"a comment"}
+      end
+      should_set_the_flash_to /thanks/
+      should_redirect_to '"/"'
+    end
+
+  end
 end
+
+
