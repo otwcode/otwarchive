@@ -53,8 +53,7 @@ class Chapter < ActiveRecord::Base
   
   # Virtual attribute for chapter title (used in work form)
   def title
-    self.metadata ||= Metadata.new()
-    self.metadata.title
+    self.metadata.title if self.metadata
   end
   
   def title=(title)

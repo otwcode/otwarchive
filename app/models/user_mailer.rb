@@ -16,11 +16,32 @@ class UserMailer < ActionMailer::Base
      @subject    += 'Password reset'
    end
    
-   # When someone comments on something that belongs to you
+   # Sends email to the owner of the commentable when a new comment is created
    def feedback_notification(user, comment)
       setup_email(user)
       @subject        += "New Feedback"
       @body[:comment] = comment
+   end
+   
+   # Sends email when a user is added as a co-author
+   def coauthor_notification(user, work)
+     setup_email(user)
+     @subject    += "Co-Author Notification"
+     @body[:work] = work
+   end
+   
+   # Sends email to authors when a work is edited
+   def edit_work_notification(user, work)
+     setup_email(user)
+     @subject    += "Your story has been updated"
+     @body[:work] = work
+   end
+   
+   # Sends email to authors when a creation is deleted
+   def delete_work_notification(user, work)
+     setup_email(user)
+     @subject    += "Your story has been deleted"
+     @body[:work] = work
    end
 
    protected

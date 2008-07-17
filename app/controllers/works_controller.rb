@@ -64,7 +64,8 @@ class WorksController < ApplicationController
     unless current_user == :false
       @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
       to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 
-      @selected = to_select.collect {|pseud| pseud.id.to_i } 
+      @selected = to_select.collect {|pseud| pseud.id.to_i }
+      @work.poster = current_user 
     end
   end
   

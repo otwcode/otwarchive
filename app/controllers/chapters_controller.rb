@@ -74,7 +74,11 @@ class ChaptersController < ApplicationController
     
     @pseuds = (@work.pseuds + (@chapter.authors ||= [])).uniq
     to_select = @chapter.authors.blank? ? @chapter.pseuds.blank? ? @work.pseuds : @chapter.pseuds : @chapter.authors 
-    @selected = to_select.collect {|pseud| pseud.id.to_i } 
+    @selected = to_select.collect {|pseud| pseud.id.to_i }
+    
+    unless current_user == :false
+      @work.poster = current_user 
+    end 
   end
   
   # GET /work/:work_id/chapters
