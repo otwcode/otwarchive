@@ -1,0 +1,5 @@
+page.show 'dynamic-bookmark'
+page.draggable 'dynamic-bookmark'
+page.replace_html 'dynamic-bookmark', :partial => 'bookmarks/bookmark_form', :locals => {:bookmarkable => @bookmarkable}
+page.insert_html :top, 'dynamic-bookmark', "<span id='close-popup'></span>"
+page.replace_html 'close-popup', link_to_function('Close', update_page {|page| page.hide 'dynamic-bookmark'})

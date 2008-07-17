@@ -26,6 +26,10 @@ class BookmarksController < ApplicationController
   # GET /bookmarks/new.xml
   def new
     @bookmark = Bookmark.new
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # GET /bookmarks/1/edit
