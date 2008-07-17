@@ -43,19 +43,13 @@ module CommentsHelper
   
   # return html link to unhide reply-to-comment-form
   def create_reply_link(comment)
-    link_to_function "Reply".t, 
-      update_page {|page| page.replace_html "add-comment#{comment.id}",
-      :partial => @comment = Comment.new,
-      :locals => {:commentable => comment, :button_name => 'Create'}}, 
+    link_to_remote "Reply".t, {:url => new_comment_comment_path(comment), :method => :get}, 
       :href => new_comment_comment_path(comment)
   end
   
   # return html link to edit comment
   def create_edit_link(comment)
-    link_to_function "Edit",
-      update_page {|page| page.replace_html "data_for_comment_#{comment.id}",
-      :partial => @comment = comment,
-      :locals => {:commentable => comment.commentable, :button_name => 'Update'}}, 
+    link_to_remote "Edit".t, {:url => edit_comment_path(comment), :method => :get}, 
       :href => edit_comment_path(comment)
   end
   

@@ -38,12 +38,20 @@ class CommentsController < ApplicationController
       @commentable = @commentable.last_chapter
     end
     @comment = Comment.new
+    respond_to do |format|
+        format.html
+        format.js
+      end
   end
   
   
   # GET /comments/1/edit
   def edit
     @comment = Comment.find(params[:id])
+    respond_to do |format|
+        format.html
+        format.js
+      end
   end
   
   # POST /comments

@@ -1,0 +1,2 @@
+page.replace_html "add-comment#{@commentable.id}", :partial => @comment = Comment.new,
+                  :locals => {:commentable => @commentable, :button_name => 'Create'}
