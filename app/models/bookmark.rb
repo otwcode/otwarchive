@@ -26,8 +26,9 @@ class Bookmark < ActiveRecord::Base
     self.bookmarkable = fetched if same  
   end
   
-  # Adds customized error messages and clears the "chapters is invalid" message for invalid chapters
+  # Adds customized error messages for External Work fields
   def validate
+    return false if self.bookmarkable_type.blank?
     if self.bookmarkable.class == ExternalWork && !self.bookmarkable.valid?
       self.bookmarkable.errors.full_messages.each { |msg| errors.add_to_base(msg) }
     end

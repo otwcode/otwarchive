@@ -1,47 +1,66 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class BookmarksControllerTest < ActionController::TestCase
-  # Test create  POST  /:locale/bookmarks
-  def test_create_bookmark
-    # FIXME route exists but no action responded
-    #post :create, :locale => 'en'
+  context "when indexing all bookmarks" do
+    setup do
+      get :index, :locale => 'en'
+    end
+    should_respond_with :success
+    should_render_template :index
+    should_assign_to :bookmarks
   end
-  # Test destroy  DELETE /:locale/bookmarks/:id
-  def test_destroy_bookmark
-    # FIXME can't create a bookmark until a model is acts_as_bookmarkable
-    # bookmark = create_bookmark
-    # FIXME route exists but no action responded
-    #delete :destroy, :locale => 'en', :id => bookmark.id
+
+  context "when indexing a user's bookmarks" do
+    setup do
+      @user = create_user
+      @bookmark = create_bookmark(:user => @user)
+      get :index, :locale => 'en', :user_id => @user.login
+    end
+    
+    should_assign_to :user
   end
-  # Test edit  GET  /:locale/bookmarks/:id/edit  (named path: edit_bookmark)
-  def test_edit_bookmark_path
-    # FIXME can't create a bookmark until a model is acts_as_bookmarkable
-    # bookmark = create_bookmark
-    # FIXME route exists but no action responded
-    # get :edit, :locale => 'en', :id => bookmark.id
+
+  context "when indexing my own bookmarks" do
+    setup do
+      @user = create_user
+      @request.session[:user] = @user 
+      @bookmark = create_bookmark(:user => @user)
+      get :index, :locale => 'en', :user_id => @user.login
+    end
+    
   end
-  # Test index  GET  /:locale/bookmarks  (named path: bookmarks)
-  def test_bookmarks_path
-    # FIXME route exists but no action responded
-    # get :index, :locale => 'en'
+
+  context "when showing a bookmark" do
+    setup do
+      @bookmark = create_bookmark
+      get :show, :locale => 'en', :id => @bookmark.id
+    end
+    should_respond_with :success
+    should_render_template :show
+    should_assign_to :bookmark
   end
-  # Test new  GET  /:locale/bookmarks/new  (named path: new_bookmark)
-  def test_new_bookmark_path
-    # FIXME route exists but no action responded
-    # get :new, :locale => 'en'    
+
+  context "when showing my own bookmark" do
+    setup do
+      @user = create_user
+      @bookmark = create_bookmark(:user => @user, :private => true)
+      @request.session[:user] = @user 
+      get :show, :locale => 'en', :id => @bookmark.id
+    end
+    
+    should_respond_with :success
   end
-  # Test show  GET  /:locale/bookmarks/:id  (named path: bookmark)
-  def test_bookmark_path
-    # FIXME can't create a bookmark until a model is acts_as_bookmarkable
-    # bookmark = create_bookmark
-    # FIXME route exists but no action responded
-    # get :show, :locale => 'en', :id => bookmark.id
+  context "when showing a private bookmark, not my own" do
+    setup do
+      @user = create_user
+      @request.session[:user] = @user 
+      @bookmark = create_bookmark(:private => true)
+      @request.session[:user] = @user 
+      get :show, :locale => 'en', :id => @bookmark.id
+    end
+    
+    should_eventually "respond with failure"
   end
-  # Test update  PUT  /:locale/bookmarks/:id
-  def test_update_bookmark
-    # FIXME can't create a bookmark until a model is acts_as_bookmarkable
-    # bookmark = create_bookmark
-    # FIXME route exists but no action responded
-    # put :update, :locale => 'en', :id => bookmark.id
-  end
+  
+#  FIXME needs many more tests
 end

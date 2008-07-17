@@ -35,7 +35,7 @@ module FixtureReplacement
   attributes_for :bookmark do |a|
     a.notes = random_phrase
     a.user = default_user
-    a.bookmarkable = create_work
+    a.bookmarkable = default_work
   end
   
   # to create (save) a new chapter you have to have a work first
@@ -65,6 +65,11 @@ module FixtureReplacement
     a.pseud = default_pseud
     a.creation_type = :work
     a.creation = default_work
+  end
+  
+  attributes_for :external_work do |a|
+    a.url = random_url(random_domain(false),"")
+    a.author = random_phrase
   end
   
   attributes_for :feedback do |a|    
