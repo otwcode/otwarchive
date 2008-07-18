@@ -18,7 +18,8 @@ module CommentsHelper
         button_to_function "Cancel", update_page {|page| page.hide 'add-comment' }
       end
     else
-      # still a work in progress
+      button_to_function "Cancel", update_page {|page| page.replace_html "data_for_comment_#{comment.id}", 
+                          :partial => 'comments/single_comment', :locals => {:single_comment => comment}}
     end
   end
   
