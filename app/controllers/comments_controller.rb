@@ -34,24 +34,25 @@ class CommentsController < ApplicationController
     if @commentable.nil?
       flash[:error] = "What did you want to comment on?".t
       redirect_to :back
-    elsif @commentable.kind_of?(Work)
-      @commentable = @commentable.last_chapter
-    end
-    @comment = Comment.new
-    respond_to do |format|
+    else
+      if @commentable.kind_of?(Work)
+        @commentable = @commentable.last_chapter
+      end
+      @comment = Comment.new
+      respond_to do |format|
         format.html
         format.js
       end
+    end
   end
-  
   
   # GET /comments/1/edit
   def edit
     @comment = Comment.find(params[:id])
     respond_to do |format|
-        format.html
-        format.js
-      end
+      format.html
+      format.js
+    end
   end
   
   # POST /comments
@@ -118,7 +119,8 @@ class CommentsController < ApplicationController
   def reject
    @comment = Comment.find(params[:id])
    @comment.mark_as_spam!
-   redirect_to(comments_url)
+   # Needs better redirect
+   redirect_to(@comment.ultimate_parent)
   end
 
  # Shows comments for JS users if they click the 'show comments' link

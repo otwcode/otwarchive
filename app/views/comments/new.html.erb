@@ -4,4 +4,4 @@
 
 <%= render :partial => @comment, :locals => {:commentable => @comment.commentable, :button_name => 'Create'}%>
 
-<%= link_to 'Back', comments_path %>
+<%= link_to 'Back', @commentable %>
