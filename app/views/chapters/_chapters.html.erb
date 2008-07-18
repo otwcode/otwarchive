@@ -1,9 +1,12 @@
-<% if @chapters.size > 1 -%>
-  <% for chapter in @chapters %>
-    <% if chapter.posted? || is_author_of?(chapter) -%>
+<%- if @chapters.size > 1 -%>
+  <%- for chapter in @chapters -%>
+    <%- if chapter.posted? || is_author_of?(chapter) -%>
       <%= render :partial => 'chapters/chapter', :locals => {:chapter => chapter} %>
-   <% end -%>
-  <% end %>
-<% else %>
+			<%- unless chapter == @work.last_chapter -%>
+			<%= render :partial => 'comments/commentable', :locals => {:commentable => chapter} %>
+			<%- end -%>
+		<%- end -%>	
+  <%- end -%>
+<%- else -%>
 	<%=sanitize_format @chapters.first.content %>
-<% end %>
+<%- end -%>

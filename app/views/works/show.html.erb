@@ -1,14 +1,14 @@
 <!-- BEGIN navigation -->
 <ul id="navi">
   <li>
-    <%= link_to '&lt;&lt; ' + 'Back to story list'.t, works_path, :class => 'list-left' -%>
+    <%= link_to '&lt;&lt; ' + h('Back to story list').t, works_path, :class => 'list-left' -%>
   </li>
   <li>
   	<% if is_author_of?(@work) -%>
 	<div class="list-right">
-		<strong><%= link_to 'Edit', edit_work_path(@work) %></strong>
+		<strong><%= link_to h('Edit').t, edit_work_path(@work) %></strong>
 		|
-		<%= link_to 'Delete', @work, :confirm => 'Are you sure?', :method => :delete -%>
+		<%= link_to h('Delete').t, @work, :confirm => h('Are you sure?').t, :method => :delete -%>
 	</div>
 	<% end -%>
   </li>

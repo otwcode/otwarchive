@@ -1,5 +1,4 @@
 page.replace_html(:single_all_chaps, :partial => 'link_single_chap')
 page.replace_html(:chapters, :partial => 'chapters/chapters')
-page.replace_html(:comments_link, show_hide_comments_link(@work, (is_work ||= false)))
-page.replace_html(:comments)
-page.show(:comments)
+page.replace_html("comments_link_chapter_#{@work.last_chapter.id}", show_hide_comments_link(@work, (is_work ||= false)))
+page.show("comments_display_chapter_#{@work.last_chapter.id}")

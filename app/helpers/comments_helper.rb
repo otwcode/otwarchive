@@ -13,9 +13,9 @@ module CommentsHelper
   def create_cancel_button(comment, commentable)
     if comment.new_record?
       if commentable.class == comment.class
-        button_to_function "Cancel", update_page {|page| page.replace_html "add-comment#{commentable.id}" }
+        button_to_function "Cancel", update_page {|page| page.replace_html "add_comment_#{commentable.class.to_s.downcase}_#{commentable.id}" }
       else
-        button_to_function "Cancel", update_page {|page| page.hide 'add-comment' }
+        button_to_function "Cancel", update_page {|page| page.hide "add_comment_#{commentable.class.to_s.downcase}_#{commentable.id}" }
       end
     else
       button_to_function "Cancel", update_page {|page| page.replace_html "data_for_comment_#{comment.id}", 
@@ -26,7 +26,7 @@ module CommentsHelper
   # return html link to add new comment
   def create_add_comment_link(commentable)
     href = eval("new_#{commentable.class.to_s.downcase}_comment_path(commentable)")
-    link_to_function "Add a comment".t, "Element.toggle('add-comment')", :href => href  
+    link_to_function "Add a comment".t, "Element.toggle('add_comment_#{commentable.class.to_s.downcase}_#{commentable.id}')", :href => href  
   end
   
   # return link to show or hide comments

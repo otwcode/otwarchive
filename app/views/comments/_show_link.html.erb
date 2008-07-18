@@ -1,3 +1,1 @@
-<p id="comments_link">
-	<%= link_to_function('Show/hide comments', "Element.toggle('comments')") %>   
-</p>
+<%= link_to_function ('Show/hide comments', "Element.toggle('comments_#{@commentable.class.to_s.downcase}_#{@commentable.id}')") %>   

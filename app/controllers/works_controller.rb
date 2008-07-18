@@ -23,7 +23,7 @@ class WorksController < ApplicationController
   end
   
   def access_denied
-    flash[:error] = "Please log in first."
+    flash[:error] = "Please log in first.".t
     store_location
     redirect_to new_session_path
     false
@@ -77,7 +77,7 @@ class WorksController < ApplicationController
   
   # if is_author returns true allow them to update, otherwise redirect them to the work page with an error message
   def is_author_true
-    is_author || [ redirect_to(@work), flash[:error] = 'Sorry, but you don\'t have permission to make edits.' ]
+    is_author || [ redirect_to(@work), flash[:error] = 'Sorry, but you don\'t have permission to make edits.'.t ]
   end
   
   # Only logged-in users should be able to access restricted works
@@ -122,7 +122,7 @@ class WorksController < ApplicationController
       redirect_back_or_default('/')    
     else  
       if @work.save
-        flash[:notice] = 'Work was successfully created.'
+        flash[:notice] = 'Work was successfully created.'.t
         redirect_to preview_work_path(@work)
       else
         render :action => :new 
@@ -142,7 +142,7 @@ class WorksController < ApplicationController
         end
         c.save
       end
-      flash[:notice] = "You have been removed as an author from the work"
+      flash[:notice] = "You have been removed as an author from the work".t
       redirect_to current_user
     end
   end
@@ -173,9 +173,9 @@ class WorksController < ApplicationController
         @work.save!
         @work.update_minor_version
         if params[:post_button]
-          flash[:notice] = 'Work was successfully posted.'
+          flash[:notice] = 'Work was successfully posted.'.t
         elsif params[:update_button]
-          flash[:notice] = 'Work was successfully updated.'
+          flash[:notice] = 'Work was successfully updated.'.t
         end
         redirect_to(@work)
       rescue
@@ -197,7 +197,7 @@ class WorksController < ApplicationController
     else
       @work.posted = true
       if @work.save 
-        flash[:notice] = 'Work has been posted!'
+        flash[:notice] = 'Work has been posted!'.t
         redirect_to(@work)
       else
         render :action => "preview"
@@ -216,6 +216,7 @@ class WorksController < ApplicationController
   def singlechapter
     @work = Work.find(params[:id])
     @chapter = @work.first_chapter
+    @commentable = @work.first_chapter
     @comments = @chapter.find_all_comments
     respond_to do |format|
       format.js
