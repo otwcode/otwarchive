@@ -8,7 +8,7 @@ class Chapter < ActiveRecord::Base
   validates_associated :metadata
 
   validates_presence_of :content
-  validates_length_of :content, :maximum=>16777215
+  validates_length_of :content, :in => 1..16777215
   
   # Virtual attribute to use as a placeholder for pseuds before the chapter has been saved
   # Can't write to chapter.pseuds until the chapter has an id
@@ -17,6 +17,7 @@ class Chapter < ActiveRecord::Base
   attr_accessor :ambiguous_pseuds
   attr_accessor :wip_length_placeholder, :position_placeholder
 
+  before_validation_on_create :set_position
   before_save :validate_authors
   after_save :save_creatorships, :save_associated
   after_update :save_associated 
@@ -30,6 +31,10 @@ class Chapter < ActiveRecord::Base
 		else
 			self.position_placeholder
 		end
+  end
+  
+  def set_position
+    self.position = self.current_position
   end
 	
 	# Get form value for position and store it in a placeholder if it's necessary to reorder multiple chapters

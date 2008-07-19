@@ -6,7 +6,7 @@ class WorkTest < ActiveSupport::TestCase
   def test_has_many_chapters
     work = create_work
     assert chapter = work.chapters.first
-    chapter2 = create_chapter(:work_id => work.id)
+    chapter2 = create_chapter(:work => work, :authors => work.pseuds)
     Work.find(work.id).destroy
     assert_raises(ActiveRecord::RecordNotFound) { Chapter.find(chapter.id) }
     assert_raises(ActiveRecord::RecordNotFound) { Chapter.find(chapter2.id) }
@@ -54,8 +54,8 @@ class WorkTest < ActiveSupport::TestCase
     pseud = create_pseud
     chapter1 = new_chapter
     work = create_work(:chapters => [chapter1])
-    chapter2 = create_chapter(:work_id => work.id)
-    chapter3 = create_chapter(:work_id => work.id)
+    chapter2 = create_chapter(:work => work, :authors => work.pseuds)
+    chapter3 = create_chapter(:work => work, :authors => work.pseuds)
     comment1 = new_comment(:commentable_id => chapter1.id, :email => '', :name => '', :pseud_id => pseud.id)
     comment1.set_and_save
     comment2 = new_comment(:commentable_id => chapter2.id, :email => '', :name => '', :pseud_id => pseud.id)
@@ -67,9 +67,9 @@ class WorkTest < ActiveSupport::TestCase
   def test_number_of_chapters
     work = create_work
     assert 1, work.number_of_chapters
-    chapter2 = create_chapter(:work_id => work.id)
+    chapter2 = create_chapter(:work => work, :authors => work.pseuds)
     assert 2, work.number_of_chapters
-    chapter3 = create_chapter(:work_id => work.id)
+    chapter3 = create_chapter(:work => work, :authors => work.pseuds)
     assert 3, chapter3.position
     assert 3, work.number_of_chapters
     chapter2.destroy
@@ -103,7 +103,7 @@ class WorkTest < ActiveSupport::TestCase
     # TODO test_multipart
   end
   def test_wip
-    work = create_work(:expected_number_of_chapters => 1)
+    work = create_work
     # default is complete one-shot
     assert work.is_complete
     assert !work.is_wip
@@ -114,11 +114,13 @@ class WorkTest < ActiveSupport::TestCase
     assert_equal nil, work.expected_number_of_chapters
     # author decides on two chapters
     work.wip_length = 2
+    work.save
     assert work.is_wip
     assert !work.is_complete
     assert_equal 2, work.expected_number_of_chapters
     # author creates the second chapter
-    create_chapter(:work_id => work.id, :position => 2)
+    create_chapter(:work => work, :authors => work.pseuds)
+    work.reload
     assert work.is_complete
     assert !work.is_wip
     # author tries to enter invalid # of chapters

@@ -39,14 +39,12 @@ module FixtureReplacement
   end
   
   # to create (save) a new chapter you have to have a work first
-  # first_chapter=new_chapter
-  # w=create_work(:chapters => [first_chapter]) 
-  # or
-  # w=create_work
-  # second_chapter=create_chapter(:work_id => w.id)
+  # FIXME: authors are only added by default for the first chapter
+  # chapter1=new_chapter
+  # w=create_work(:chapters => [chapter1]) 
+  # chapter2 = create_chapter(:work => work, :authors = work.pseuds)
   attributes_for :chapter do |a|
     a.content = random_chapter
-    a.authors = [default_pseud]
   end
 
   # note: to get threading, you must use

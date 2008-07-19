@@ -28,9 +28,10 @@ class ChaptersControllerTest < ActionController::TestCase
     assert_equal Work.find(work.id).number_of_chapters, 1
   end
   def test_destroy_work_chapter
+    pseud = create_pseud
     chapter1 = new_chapter
-    chapter2 = new_chapter
-    work = create_work(:chapters => [chapter1, chapter2], :authors => [create_pseud])
+    work = create_work(:chapters => [chapter1], :authors => [pseud])
+    chapter2 = create_chapter(:authors => work.pseuds, :work => work)
     assert_difference('Chapter.count', -1) do
       delete :destroy, :locale => 'en', :work_id => work.id, :id => chapter1.id
     end
@@ -64,7 +65,7 @@ class ChaptersControllerTest < ActionController::TestCase
     chapter.save
     get :index, :locale => 'en', :work_id => work.id
     assert_equal assigns(:chapters), [chapter]
-    new_chapter = create_chapter(:work => work, :posted=> true)
+    new_chapter = create_chapter(:work => work, :posted=> true, :authors => work.pseuds)
     get :index, :locale => 'en', :work_id => work.id
     assert_response :success
     assert_equal assigns(:work), work
