@@ -28,6 +28,20 @@ class SessionController < ApplicationController
     ##   redirect_back_or_default('/')
     redirect_to :controller => "feedbacks", :action => "new"
   end
+
+  # switches to the openid version of the login form
+  def openid
+    respond_to do |format|
+      format.js
+    end
+  end
+ 
+  # switches to the password version of the login form
+  def passwd
+    respond_to do |format|
+      format.js
+    end
+  end
   
   protected
   

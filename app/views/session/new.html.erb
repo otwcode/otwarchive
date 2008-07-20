@@ -7,12 +7,15 @@
   <h2 class="authentication-loginheading"><%=h "Login".t %></h2>
 	<p><strong><%=h "Warning:".t %></strong> <span><%=h "This site is in extreme alpha. Things may break or crash without notice. Please".t %></span> <a href="mailto:otw-testers@transformativeworks.org" tabindex = '12'><%=h "report".t %></a> <span><%=h "all crashes to us, and remain seated until the test has come to a full and complete stop.".t %></span></p>
 			
-  <% form_tag session_path do -%>	
-<!-- login field -->
-    <div id="passwd"><%= render :partial => "passwd" %></div>
-    <%- if ArchiveConfig.USE_OPENID -%>	
-      <div id="openid" style="display: none"><%= render :partial => 'openid' %></div>
-    <%- end -%>
+  <% form_tag session_path do -%>
+  <!-- renders either the normal or openid version of the form -->	
+    <div id="loginform">
+    	<%- if params[:use_openid] -%>
+			  <%= render :partial => "openid" %>
+			<%- else -%>
+    	  <%= render :partial => "passwd" %>
+			<%- end -%>
+		</div>
   <%- end -%><!-- END form -->
   <br/><br/>
 <!-- Create account link -->

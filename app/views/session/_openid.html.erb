@@ -3,12 +3,10 @@
 <%= link_to h("OpenID").t, 'http://openid.net/', :popup => true %> <%=h "URL:".t %>
 <br />
 <%= text_field_tag "openid_url", '', :class => 'openid-url', :tabindex => '7' %>
-<%= link_to_function h("Back").t , "Element.hide('openid'); Element.show('passwd')", {:tabindex => '10'} %>
+<%= link_to_remote h("Back").t , {:url => {:action => 'passwd'}}, :href => url_for( :action => 'new', :use_openid => false ), :tabindex => '10' %>
 <br />
-<!-- Submit button -->
 <%= submit_tag h('Login').t, :tabindex => '9' %>
 <br /><br />
 
-<!-- Remember me checkbox -->
 <%= check_box_tag('remember_me', '1', false, :class => 'authentication-checkboxfield', :tabindex => '8') %>
 <span class="authentication-label"><label for="remember_me"><%=h "Remember me".t %></label></span>
