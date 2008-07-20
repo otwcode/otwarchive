@@ -1,6 +1,6 @@
 class WorksController < ApplicationController
   # only registered users and NOT admin should be able to create new works
-  before_filter :users_only, :except => [ :index, :show, :destroy ]
+  before_filter :users_only, :except => [ :index, :show, :destroy, :singlechapter, :allchapters ]
   # only authors of a work should be able to edit it
   before_filter :is_author_true, :only => [ :edit, :update ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :post, :show ]

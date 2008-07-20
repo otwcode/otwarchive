@@ -1,7 +1,7 @@
 <% if !commentable && @commentable %>
   <%- commentable = @commentable -%>
 <%- end -%> 
-<%- remote_form_for([commentable, @comment]) do |f| -%>  
+<%- remote_form_for([commentable, @comment], :html => {:id => "new_comment_#{commentable.class.to_s.downcase}_#{commentable.id}"}) do |f| -%>  
   <%- if logged_in? -%>
     <p>
       <% if current_user.pseuds.count > 1 %>
