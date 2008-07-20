@@ -29,7 +29,7 @@ class WorksController < ApplicationController
     false
   end
 
-  # Sets values for @work, @chapter, @metadata, @coauthor_results, @pseuds, and @selected
+  # Sets values for @work, @chapter, @coauthor_results, @pseuds, and @selected
   def set_instance_variables
     if params[:pseud] && params[:pseud][:byline] && params[:work][:author_attributes]
       params[:work][:author_attributes][:byline] = params[:pseud][:byline]
@@ -46,7 +46,6 @@ class WorksController < ApplicationController
       else
         @work = Work.new
         @work.chapters.build
-        @work.metadata = Metadata.new
       end
     end
     
@@ -59,7 +58,6 @@ class WorksController < ApplicationController
       @chapter.content = params[:work][:chapter_attributes][:content]
     end
     @chapters = @work.chapters.in_order
-    @metadata = @work.metadata
     
     unless current_user == :false
       @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
@@ -96,7 +94,7 @@ class WorksController < ApplicationController
       @user = User.find_by_login(params[:user_id])
       @works = @user.works
     else
-      @works = Work.find(:all, :conditions => conditions, :order => "works.created_at DESC", :include => [:pseuds, :metadata] )
+      @works = Work.find(:all, :conditions => conditions, :order => "works.created_at DESC", :include => :pseuds )
     end
   end
   
@@ -112,7 +110,6 @@ class WorksController < ApplicationController
 
   # POST /works
   def create
-    @work.set_initial_version     
 
     if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
       @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)

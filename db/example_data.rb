@@ -68,16 +68,11 @@ module FixtureReplacement
   attributes_for :external_work do |a|
     a.url = random_url(random_domain(false),"")
     a.author = random_phrase
+    a.title = random_phrase
   end
   
   attributes_for :feedback do |a|    
     a.comment = random_paragraph
-  end
-
-  attributes_for :metadata do |a|
-    a.title = random_phrase
-    a.summary = random_paragraph[0...1250]
-    a.notes = random_paragraph
   end
 
   attributes_for :preference do |a|
@@ -135,7 +130,7 @@ module FixtureReplacement
 
   attributes_for :work do |a|
     user = create_user
-    a.metadata = default_metadata
+    a.title = random_phrase
     a.authors = [user.default_pseud]
     a.chapters = [new_chapter(:authors => [user.default_pseud])]
   end

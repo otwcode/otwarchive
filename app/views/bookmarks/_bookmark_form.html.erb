@@ -1,7 +1,7 @@
 <% bookmarkable ||= @bookmarkable %>
 <% @bookmark ||= Bookmark.new %>
 <% if @bookmark.new_record? && bookmarkable.class != ExternalWork %>
-  <p>Add a new bookmark for "<%=h bookmarkable.metadata.title %>"</p>
+  <p>Add a new bookmark for "<%=h bookmarkable.title %>"</p>
 <% end %>
 
 <% form_for([bookmarkable, @bookmark], :url => {:controller => 'bookmarks', :action => (action ||= 'create')}) do |f| %>
@@ -22,40 +22,32 @@
         <%= ew.text_field :author %>  
       </p>
       
-      <% fields_for 'bookmark[external][metadata_attributes]', (bookmarkable.metadata ||= Metadata.new) do |m| %>
-        
-        <p>
-          <%= m.label :title, "Title: " %>
-          <%= m.text_field :title %> 
-        </p>
-        
-        <p>
-          <%= m.label :summary, "Author's Summary" %><br />
-          <%= m.text_area :summary %> 
-        </p>
-        
-        <p>
-          <%= m.label :notes, "Author's Notes" %><br />
-          <%= m.text_area :notes %> 
-        </p>  
+      <p>
+        <%= m.label :title, "Title: " %>
+        <%= m.text_field :title %> 
+      </p>
       
-      <% end %>
+      <p>
+        <%= m.label :summary, "Author's Summary" %><%= "(please copy and past from original work)".t %><br />
+        <%= m.text_area :summary %> 
+      </p>
+      
     <% end %>
   <% end %>
 
   <p>
-    Your Notes<br />
+    <%= "Your Notes".t %><br />
     <%= f.text_area :notes %>
   </p>
 
   <p>
-    Your Tags<br />
+    <%= "Your Tags".t %><br />
     <%= text_field_tag 'tag_string', @tag_string %>
   </p>
 
   
   <p>
-    <%= f.check_box :private %> Private bookmark?
+    <%= f.check_box :private %> <%= "Private bookmark?".t %>
   </p> 
   
   <%= f.hidden_field :user_id, :value => current_user.id %>

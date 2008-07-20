@@ -3,17 +3,15 @@
  
     <p class="field-left">   
     
-	  <% fields_for_associated('work', @work.metadata) do |m| %>
-      <!-- Story title field (metadata_attributes_title) -->
-        <%= m.label :title, "Story Title*", :class => "required" %><br />
-        <%= m.text_field :title, :class => "storyinputfield" %>
+        <%= f.label :title, "Story Title*", :class => "required" %><br />
+        <%= f.text_field :title, :class => "storyinputfield" %>
         <%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
         
         <script>
-          var work_metadata_attributes_title = new LiveValidation('work_metadata_attributes_title', { validMessage: 'Thanks, that length looks good.', wait: 500 });
-          work_metadata_attributes_title.add(Validate.Length, {"failureMessage": "must be at least 3 letters long.", "minimum": 3, "validMessage": ""});
-          work_metadata_attributes_title.add(Validate.Length, {"failureMessage": "must be less than 255 letters long.", "maximum": 255, "validMessage": ""});
-          work_metadata_attributes_title.add(Validate.Presence, {"if": "is_work?", "failureMessage": "is required.", "validMessage": ""})
+          var work_title = new LiveValidation('work_title', { validMessage: 'Thanks, that length looks good.', wait: 500 });
+          work_title.add(Validate.Length, {"failureMessage": "must be at least 3 letters long.", "minimum": 3, "validMessage": ""});
+          work_title.add(Validate.Length, {"failureMessage": "must be less than 255 letters long.", "maximum": 255, "validMessage": ""});
+          work_title.add(Validate.Presence, {"if": "is_work?", "failureMessage": "is required.", "validMessage": ""})
         </script>
 
       <!-- Chaptered checkbox (work_is_wip) -->
@@ -31,12 +29,12 @@
     <p id="seriesmanage" class="field-right" style="display:none;">
       <% fields_for "work[series_attributes]" do |s| %>
 
-      <%= s.label 'series_id', 'Choose a series:' %><br /> 
-      <%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>
-    	<%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
-    	
-    	<%= s.label :title, "Or add a new one:" %><br />
-      <%= s.text_field :title, :class => "storyinputfield" %>
+        <%= s.label 'series_id', 'Choose a series:' %><br /> 
+        <%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>
+        <%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
+        
+        <%= s.label :title, "Or add a new one:" %><br />
+        <%= s.text_field :title, :class => "storyinputfield" %>
 
     	<%- end -%>
     </p>
@@ -67,7 +65,6 @@
         work_chapter_attributes_content.add(Validate.Presence, {"failureMessage": "is required.", "validMessage": ""})
       </script>
     </p>
-  <% end %>
 
     <!-- Author dropdown (pseud_id) - hidden if user has only one pseud -->
 		<%- if @pseuds.size > 1 -%>
@@ -112,24 +109,22 @@
       <%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br /> 
     </p>
 	
-    <!-- Summary field (metadata_attributes_summary) -->
     <p>
-      <%= m.label :summary, "Summary (max %d letters)"/Metadata::SUMMARY_MAX %><br />
-      <%= m.text_area :summary, :class => "metadata-field" %>
+      <%= f.label :summary, "Summary (max %d letters)"/ArchiveConfig.SUMMARY_MAX %><br />
+      <%= f.text_area :summary, :class => "summary-field" %>
       <script>
-        var work_metadata_attributes_summary = new LiveValidation('work_metadata_attributes_summary', { validMessage: 'Thanks, that length looks good.', wait: 500 });
-        work_metadata_attributes_summary.add(Validate.Length, {"failureMessage": "must be less than 1250 letters long.", "maximum": 1250, "validMessage": ""})
+        var work_summary = new LiveValidation('work_summary', { validMessage: 'Thanks, that length looks good.', wait: 500 });
+        work_summary.add(Validate.Length, {"failureMessage": "must be less than 1250 letters long.", "maximum": 1250, "validMessage": ""})
       </script>
       
     </p>
 
-    <!-- Notes field (metadata_attributes_notes) -->
     <p>
-      <%= m.label :notes, "Notes (max %d letters)"/Metadata::NOTES_MAX %><br />
-      <%= m.text_area :notes, :class => "metadata-field" %> 
+      <%= f.label :notes, "Notes (max %d letters)"/ArchiveConfig.NOTES_MAX %><br />
+      <%= f.text_area :notes, :class => "notes-field" %> 
       <script>
-        var work_metadata_attributes_notes = new LiveValidation('work_metadata_attributes_notes', { validMessage: 'Thanks, that length looks good.', wait: 500 });
-        work_metadata_attributes_notes.add(Validate.Length, {"failureMessage": "must be less than 2500 letters long.", "maximum": 2500, "validMessage": ""})
+        var work_notes = new LiveValidation('work_notes', { validMessage: 'Thanks, that length looks good.', wait: 500 });
+        work_notes.add(Validate.Length, {"failureMessage": "must be less than 2500 letters long.", "maximum": 2500, "validMessage": ""})
       </script>
     </p>
 	<%- end -%>

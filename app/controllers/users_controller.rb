@@ -59,7 +59,8 @@ class UsersController < ApplicationController
       @user = User.find_by_activation_code(params[:id])
       if @user
         @user.activate
-        flash[:notice] = "Signup complete! This is your public profile. Please log in to edit it."
+        self.current_user = @user
+        flash[:notice] = "Signup complete! This is your public profile."
         redirect_to(@user)
       else
         flash[:error] = "Your activation key is invalid. Perhaps it has expired."

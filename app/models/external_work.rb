@@ -1,6 +1,9 @@
 class ExternalWork < ActiveRecord::Base
-  has_one :metadata, :as => :described, :dependent => :destroy
   has_bookmarks
+
+  validates_presence_of :title
+  validates_length_of :title, :within => ArchiveConfig.TITLE_MIN..ArchiveConfig.TITLE_MAX, :message => "must be within #{ArchiveConfig.TITLE_MIN} and #{ArchiveConfig.TITLE_MAX} letters long.".t
+  validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, :too_long => "must be less than %d letters long."/ArchiveConfig.SUMMARY_MAX
   
   validates_presence_of :url
   validates_presence_of :author
@@ -33,25 +36,5 @@ class ExternalWork < ActiveRecord::Base
     rescue
       false
     end          
-  end
-  
-  # Virtual attribute for metadata
-  def metadata_attributes=(attributes)
-    unless attributes.values.to_s.blank?
-      !self.metadata ? self.metadata = Metadata.new(attributes) : self.metadata.attributes = attributes
-    end
-  end
-  
-  # Validates associated metadata
-  def validate
-    self.validate_url
-    if self.metadata && !self.metadata.valid?
-      self.metadata.errors.full_messages.each { |msg| errors.add_to_base(msg) }
-    end
-  end
-  
-  # Save metadata after the bookmark is updated
-  def save_associated
-    self.metadata.save(false) if self.metadata
   end
 end

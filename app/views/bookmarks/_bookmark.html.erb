@@ -4,13 +4,13 @@
   <p>
     <% if bookmark.private %><%= image_tag("lockblack.png", :size => "15x15", :alt => "(Private)") %><% end %>
     <% if bookmark.bookmarkable_type == "ExternalWork" %>
-      <%= link_to bookmark.bookmarkable.metadata.title, bookmark.bookmarkable.url %> by <%= bookmark.bookmarkable.author %>
+      <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable.url %> by <%= bookmark.bookmarkable.author %>
     <% else %>
       <% if bookmark.bookmarkable.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)") %><% end %>
-      <%= link_to bookmark.bookmarkable.metadata.title, bookmark.bookmarkable %> by <%= byline(bookmark.bookmarkable) %>
+      <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable %> by <%= byline(bookmark.bookmarkable) %>
     <% end %>  
 
-    <br /><%=sanitize_format bookmark.bookmarkable.metadata.summary %>
+    <br /><%=sanitize_format bookmark.bookmarkable.summary %>
   </p>
   
   <p>

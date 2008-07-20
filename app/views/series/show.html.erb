@@ -5,9 +5,9 @@
   Authors: <%= print_pseud_list(@series.pseuds) %>
 </p>
 
-<p><strong>Description: </strong> <%= @series.metadata.summary unless !@series.metadata || @series.metadata.summary.blank? %></p>
+<p><strong>Description: </strong> <%= @series.summary unless @series.summary.blank? %></p>
 
-<p><strong>Notes: </strong> <%= @series.metadata.notes unless !@series.metadata || @series.metadata.notes.blank? %></p>
+<p><strong>Notes: </strong> <%= @series.notes unless @series.notes.blank? %></p>
 
 <%- if is_author_of?(@series) -%>
   <%= link_to "Edit", edit_series_path(@series) %>

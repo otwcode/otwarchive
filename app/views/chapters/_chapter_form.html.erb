@@ -10,11 +10,11 @@
   	<%- else -%>
 		  <p style="display:none;">
 		<%- end -%>	
-	    <%= label :pseud, :id, "Select author/pseudonym(s)" %><br />
- 	    <select name="chapter[author_attributes][ids][]" multiple="multiple">
-        <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
-      </select> 
-	    </p>
+    <%= label :pseud, :id, "Select author/pseudonym(s)" %><br />
+    <select name="chapter[author_attributes][ids][]" multiple="multiple">
+      <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
+    </select> 
+    </p>
 
 		<%- if @pseuds.size > 1 -%>
       <p class="field-right"> 
@@ -38,10 +38,9 @@
     </p>
    </div>
     
-  <% fields_for_metadata(chapter.metadata ||= Metadata.new) do |m| %>
     <p>
       <b>Chapter Title</b><br />
-      <%= m.text_field :title %> 
+      <%= f.text_field :title %> 
       <script>
         var chapter_metadata_attributes_title = new LiveValidation('chapter_metadata_attributes_title', { validMessage: 'Thanks, that length looks good.', wait: 500 });
         chapter_metadata_attributes_title.add(Validate.Length, {"failureMessage": "must be less than 255 letters long.", "maximum": 255, "validMessage": ""});
@@ -50,7 +49,7 @@
 
     <p>
       <b>Chapter Summary</b><br />
-      <%= m.text_area :summary %>
+      <%= f.text_area :summary %>
       <script>
         var chapter_metadata_attributes_summary = new LiveValidation('chapter_metadata_attributes_summary', { validMessage: 'Thanks, that length looks good.', wait: 500 });
         chapter_metadata_attributes_summary.add(Validate.Length, {"failureMessage": "must be less than 1250 letters long.", "maximum": 1250, "validMessage": ""})
@@ -59,13 +58,12 @@
 
     <p>
       <b>Chapter Notes</b><br />
-      <%= m.text_area :notes %>
+      <%= f.text_area :notes %>
       <script>
         var chapter_metadata_attributes_notes = new LiveValidation('chapter_metadata_attributes_notes', { validMessage: 'Thanks, that length looks good.', wait: 500 });
         chapter_metadata_attributes_notes.add(Validate.Length, {"failureMessage": "must be less than 2500 letters long.", "maximum": 2500, "validMessage": ""})
       </script>
     </p>
-  <% end %>
 
   <p>
     <b>Chapter text</b><br />

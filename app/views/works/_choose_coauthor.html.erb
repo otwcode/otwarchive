@@ -8,11 +8,9 @@
     <%= options_from_collection_for_select(@work.authors, :id, :name, @work.authors.collect {|pseud| pseud.id.to_i }) %>
   </select> 
 
-  <% fields_for_associated('work', @work.metadata) do |m| %>
-    <%= m.hidden_field :title, :value => "#{@work.metadata.title}" %>
-    <%= m.hidden_field :summary, :value => "#{@work.metadata.summary}" %>
-    <%= m.hidden_field :notes, :value => "#{@work.metadata.notes}" %>
-  <%- end -%>
+  <%= f.hidden_field :title, :value => "#{@work.metadata.title}" %>
+  <%= f.hidden_field :summary, :value => "#{@work.metadata.summary}" %>
+  <%= f.hidden_field :notes, :value => "#{@work.metadata.notes}" %>
 
   <% fields_for_associated('work', @work.chapters.first) do |c| %>
     <%= c.hidden_field :content, :value => "#{@work.chapters.first.content}" %>

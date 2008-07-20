@@ -8,7 +8,7 @@ class BookmarkTest < ActiveSupport::TestCase
     should_belong_to :bookmarkable
     should_belong_to :user
     should_have_many :taggings
-    should_ensure_length_in_range :notes, (0..4300)
+    should_ensure_length_in_range :notes, (0..2500)
     should "invert public and private" do
       assert_equal @bookmark.private?, !@bookmark.public?
     end

@@ -1,11 +1,11 @@
 class Chapter < ActiveRecord::Base
   belongs_to :work
+
   acts_as_commentable
 
-  # A chapter does NOT have to have a metadata, so we don't 
-  # validate for its presence. ???
-  has_one :metadata, :as => :described, :dependent => :destroy
-  validates_associated :metadata
+  validates_length_of :title, :allow_blank => true, :within => ArchiveConfig.TITLE_MIN..ArchiveConfig.TITLE_MAX, :message => "must be within #{ArchiveConfig.TITLE_MIN} and #{ArchiveConfig.TITLE_MAX} letters long.".t
+  validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, :too_long => "must be less than %d letters long."/ArchiveConfig.SUMMARY_MAX
+  validates_length_of :notes, :allow_blank => true, :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than %d letters long."/ArchiveConfig.NOTES_MAX
 
   validates_presence_of :content
   validates_length_of :content, :in => 1..16777215
@@ -19,8 +19,7 @@ class Chapter < ActiveRecord::Base
 
   before_validation_on_create :set_position
   before_save :validate_authors
-  after_save :save_creatorships, :save_associated
-  after_update :save_associated 
+  after_save :save_creatorships
   
   named_scope :in_order, {:order => :position}
 
@@ -54,17 +53,6 @@ class Chapter < ActiveRecord::Base
   # check if this chapter is the only chapter of its work
   def is_only_chapter?
     self.work.chapters.length == 1
-  end
-  
-  # Virtual attribute for chapter title (used in work form)
-  def title
-    self.metadata.title if self.metadata
-  end
-  
-  def title=(title)
-    unless title.blank?
-      !self.metadata ? self.metadata = Metadata.new(:title => title, :summary => "", :notes => "") : self.metadata.title = title
-    end 
   end
   
   # Virtual attribute for work wip_length
@@ -118,16 +106,4 @@ class Chapter < ActiveRecord::Base
     end
   end
   
-  # Virtual attribute for metadata
-  def metadata_attributes=(attributes)
-    unless attributes.values.to_s.blank?
-      !self.metadata ? self.metadata = Metadata.new(attributes) : self.metadata.attributes = attributes
-    end
-  end
-  
-  # Save metadata after the chapter is updated
-  def save_associated
-    self.metadata.save(false) if self.metadata
-  end
-
 end

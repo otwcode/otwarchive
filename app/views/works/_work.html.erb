@@ -1,6 +1,15 @@
 <div class="story-show">
 
-  <%= render :partial => 'metadatas/metadata', :locals => {:metadata => @work.metadata } -%>
+  <div id="story-meta">
+  <ul>
+    <% TagCategory.official.each do |category| -%>
+    <li><strong><%= category.display_name %>:</strong> 
+      <% @work.tags(category).each do |tag| -%>
+      <%= link_to(tag.name, tag_path(tag))%>
+      <% end -%></li>
+    <% end -%>
+  </ul>
+  </div>
   
   <%- unless @work.series.blank? -%>
   <%= show_series_data(@work) %>
@@ -8,18 +17,18 @@
 
   <h2 class="story-title">
     <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)") %><% end %>
-    <%=sanitize @work.metadata.title, :tags => %w(em i b strong strike small) %>
+    <%=sanitize @work.title, :tags => %w(em i b strong strike small) %>
   </h2>
   <h3 class="story-author">
    <%= byline(@work) -%>
   </h3>
   
   <p class="story-summary">
-    <%=sanitize_format @work.metadata.summary %>
+    <%=sanitize_format @work.summary %>
   </p>
   
   <p class="story-notes">
-    <%=sanitize_format @work.metadata.notes %>
+    <%=sanitize_format @work.notes %>
   </p>
   
   <% if @work.is_wip -%>
@@ -43,7 +52,7 @@
  	  <p>Inspired by:<p>
  	  <ul>
  	  <%- for parent in @work.parents -%>
- 	    <li><%= link_to parent.metadata.title, parent %></li>
+ 	    <li><%= link_to parent.title, parent %></li>
  	  <%- end -%>
  	  </ul>
 	</div>
@@ -54,7 +63,7 @@
  	  <p>Stories inspired by this one:<p>
  	  <ul>
  	  <%- for child in @work.approved_children -%>
- 	    <li><%= link_to child.metadata.title, child %></li>
+ 	    <li><%= link_to child.title, child %></li>
  	  <%- end -%>
  	  </ul>
 	</div>

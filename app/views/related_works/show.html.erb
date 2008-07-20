@@ -1,6 +1,6 @@
 <h1>Approve Link</h1>
 
-<p>Would you like to create a link from your story <%= link_to @related_work.parent.metadata.title, @related_work.parent %> to 
+<p>Would you like to create a link from your story <%= link_to @related_work.parent.title, @related_work.parent %> to 
 <%= link_to @related_work.work.metadata.title, @related_work.parent %> by <%= print_pseud_list(@related_work.work.pseuds) %>?</p>
 
 <p>(Nothing will be linked directly from your stories without your express approval.)</p> 

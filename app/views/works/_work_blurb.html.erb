@@ -4,7 +4,7 @@
       <div class="story-title-line">
         <h3 title="Story Title">
           <% if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)") %><% end %>
-          <%= link_to sanitize(work.metadata.title), work %>
+          <%= link_to sanitize(work.title), work %>
         </h3>
       
         <div class="story-date">
@@ -21,7 +21,7 @@
       </p>
       
       <p class="story-desc">
-        <%= sanitize_format work.metadata.summary %>
+        <%= sanitize_format work.summary %>
       </p>
       
     </li>

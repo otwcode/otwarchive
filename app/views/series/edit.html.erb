@@ -8,16 +8,14 @@
     <%= f.text_field :title %>
   </p>
   
-  <%- fields_for_associated('series', @series.metadata) do |m| -%>
-    
   <p>
-    <%= m.label :summary, "Series Description" %><br />
-    <%= m.text_area :summary %> 
+    <%= f.label :summary, "Series Description" %><br />
+    <%= f.text_area :summary %> 
   </p>
   
   <p>
-    <%= m.label :notes, "Series Notes" %><br />
-    <%= m.text_area :notes %>
+    <%= f.label :notes, "Series Notes" %><br />
+    <%= f.text_area :notes %>
   <%- end -%>
   </p>    
 

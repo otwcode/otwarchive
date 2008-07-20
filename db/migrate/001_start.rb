@@ -1,20 +1,8 @@
-# This file is auto-generated from the current state of the database. Instead of editing this file, 
-# please use the migrations feature of Active Record to incrementally modify your database, and
-# then regenerate this schema definition.
-#
-# Note that this schema.rb definition is the authoritative source for your database schema. If you need
-# to create the application database on another system, you should be using db:schema:load, not running
-# all the migrations from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
-#
-# It's strongly recommended to check this file into your version control system.
-
-ActiveRecord::Schema.define(:version => 1) do
-
+class Start < ActiveRecord::Migration
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
-    t.string   "url",        :null => false
-    t.text     "comment",    :null => false
+    t.string   "url",                            :null => false
+    t.text     "comment",                        :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -41,7 +29,7 @@ ActiveRecord::Schema.define(:version => 1) do
   add_index "bookmarks", ["user_id"], :name => "fk_bookmarks_user"
 
   create_table "chapters", :force => true do |t|
-    t.text     "content",    :limit => 2147483647,                :null => false
+    t.text     "content",    :limit => 16777215,   :null => false
     t.integer  "position",   :limit => 11,         :default => 1
     t.integer  "work_id",    :limit => 11
     t.datetime "created_at"
@@ -54,7 +42,7 @@ ActiveRecord::Schema.define(:version => 1) do
 
   create_table "comments", :force => true do |t|
     t.integer  "pseud_id",         :limit => 11
-    t.text     "content",                        :null => false
+    t.text     "content",                          :null => false
     t.integer  "depth",            :limit => 11
     t.integer  "threaded_left",    :limit => 11
     t.integer  "threaded_right",   :limit => 11
@@ -88,17 +76,17 @@ ActiveRecord::Schema.define(:version => 1) do
   end
 
   create_table "external_works", :force => true do |t|
-    t.string   "url",        :null => false
-    t.string   "author",     :null => false
+    t.string   "url",                               :null => false
+    t.string   "author",                            :null => false
     t.boolean  "dead"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title",      :null => false
+    t.string   "title",                             :null => false
     t.text     "summary"
   end
 
   create_table "feedbacks", :force => true do |t|
-    t.text     "comment",    :null => false
+    t.text     "comment",                           :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -199,7 +187,7 @@ ActiveRecord::Schema.define(:version => 1) do
 
   create_table "pseuds", :force => true do |t|
     t.integer  "user_id",     :limit => 11
-    t.string   "name",                      :null => false
+    t.string   "name",                               :null => false
     t.text     "description"
     t.boolean  "is_default"
     t.datetime "created_at"
@@ -250,7 +238,7 @@ ActiveRecord::Schema.define(:version => 1) do
   create_table "series", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title",      :null => false
+    t.string   "title",                             :null => false
     t.text     "summary"
     t.text     "notes"
   end
@@ -325,7 +313,7 @@ ActiveRecord::Schema.define(:version => 1) do
     t.boolean  "posted"
     t.integer  "language_id",                 :limit => 11
     t.boolean  "restricted"
-    t.string   "title",                                                    :null => false
+    t.string   "title",                                      :null => false
     t.text     "summary"
     t.text     "notes"
   end

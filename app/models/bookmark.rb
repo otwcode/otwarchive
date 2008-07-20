@@ -4,8 +4,7 @@ class Bookmark < ActiveRecord::Base
   has_many :taggings, :as => :taggable, :dependent => :destroy
   include TaggingExtensions
 
-  NOTES_MAX = 4300
-  validates_length_of :notes, :maximum => NOTES_MAX, :message => "must be less than %d letters long."/NOTES_MAX
+  validates_length_of :notes, :maximum => ArchiveConfig.NOTES_MAX, :message => "must be less than %d letters long."/ArchiveConfig.NOTES_MAX
     
   def public?
     !self.private?
@@ -22,7 +21,7 @@ class Bookmark < ActiveRecord::Base
   def set_external(id)
     fetched = ExternalWork.find(id)
     same = fetched.author == self.bookmarkable.author ? true : false
-    %w(title summary notes).each {|a| same = false unless self.bookmarkable.metadata[a.to_sym] == fetched.metadata[a.to_sym]}
+    %w(title summary notes).each {|a| same = false unless self.bookmarkable[a.to_sym] == fetched[a.to_sym]}
     self.bookmarkable = fetched if same  
   end
   

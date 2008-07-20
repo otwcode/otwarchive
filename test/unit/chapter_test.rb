@@ -8,8 +8,11 @@ class ChapterTest < ActiveSupport::TestCase
       @work = create_work(:chapters => [@chapter1], :authors => [@pseud1])
     end
     should_belong_to :work
-    should_have_one :metadata
+    should_require_attributes :content
     should_ensure_length_in_range :content, (1..16777215)
+    should_ensure_length_in_range :title, (ArchiveConfig.TITLE_MIN..ArchiveConfig.TITLE_MAX)
+    should_ensure_length_in_range :summary, (0..ArchiveConfig.SUMMARY_MAX)
+    should_ensure_length_in_range :notes, (0..ArchiveConfig.NOTES_MAX)
 
     should "not able to remove the only author" do
         @chapter1.pseuds -= @work.pseuds
@@ -96,31 +99,6 @@ class ChapterTest < ActiveSupport::TestCase
       end
     end
 
-    context "without metadata" do
-      should "not have a title, but shouldn't error on the request" do
-        assert_equal nil, @chapter1.title
-      end
-    end
-
-    context "with metadata" do
-      setup do
-        @metadata = create_metadata(:title=>"A real title")
-        @chapter1.metadata = @metadata
-      end
-      should "have a real title" do
-        assert_equal "A real title", @chapter1.title
-      end
-
-      context "with updated title metadata" do
-        setup do
-          @metadata.title = "New Title"
-          @metadata.save
-        end
-        should "update its title" do
-          assert_equal "New Title", @chapter1.title
-        end
-      end
-    end
   end
 
 end

@@ -1,6 +1,6 @@
 module WorksHelper 
   
-  # For use with metadata and chapter virtual attributes
+  # For use with chapter virtual attributes
   def fields_for_associated(creation, associated, &block)
     fields_for(name_attributes(creation, associated.class.to_s.downcase), associated, &block)
   end

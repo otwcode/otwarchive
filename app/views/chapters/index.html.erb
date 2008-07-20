@@ -1,4 +1,4 @@
-<h1><%= link_to h(@work.metadata.title), @work -%></h1>
+<h1><%= link_to h(@work.title), @work -%></h1>
 
 <% for chapter in @chapters %>
   <% if chapter.posted? || is_author_of?(chapter) -%>

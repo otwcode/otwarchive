@@ -9,7 +9,7 @@ class WorksControllerTest < ActionController::TestCase
     user = create_user
     @request.session[:user] = user    
     get :new, :locale => 'en', 
-        :work => { :metadata_attributes => {:title => 'New work title'}, 
+        :work => { :title => 'New work title', 
                    :chapter_attributes => {:content => 'Stuff in new chapter'}}
     assert_response :success
   end
@@ -65,11 +65,11 @@ class WorksControllerTest < ActionController::TestCase
     put :update, 
         :locale => 'en', 
         :id => @work.id, 
-        :work => { :metadata_attributes => {:title => new_title}, 
+        :work => { :title => new_title, 
                    :chapter_attributes => {:content => new_content}}
     assert_redirected_to work_path(assigns(:work))
     @work = Work.find(@work.id)
-    assert_equal(new_title, @work.metadata.title)
+    assert_equal(new_title, @work.title)
     assert_equal(new_content, @work.chapters.first.content)    
   end
 end

@@ -8,14 +8,9 @@
     <%= options_from_collection_for_select(@chapter.authors, :id, :name, @chapter.authors.collect {|pseud| pseud.id.to_i }) %>
   </select> 
   
-  <% if @chapter.metadata %>
-    <% fields_for_metadata(@chapter.metadata) do |m| %>
-      <%= m.hidden_field :title, :value => "#{@chapter.metadata.title}" %>
-      <%= m.hidden_field :summary, :value => "#{@chapter.metadata.summary}" %>
-      <%= m.hidden_field :notes, :value => "#{@chapter.metadata.notes}" %>
-    <% end %> 
-  <% end %>
-
+  <%= f.hidden_field :title, :value => "#{@chapter.title}" %>
+  <%= f.hidden_field :summary, :value => "#{@chapter.summary}" %>
+  <%= f.hidden_field :notes, :value => "#{@chapter.notes}" %>
   <%= f.hidden_field :content, :value => "#{@chapter.content}" %>
   
   <p class="field-right">

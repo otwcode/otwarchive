@@ -1,7 +1,7 @@
 unless @external_work.blank?
    page['bookmark_external_author'].value = @external_work.author 
-   page['bookmark_external__metadata_attributes_title'].value = @external_work.metadata.title
-   page['bookmark_external__metadata_attributes_summary'].value = @external_work.metadata.summary
-   page['bookmark_external__metadata_attributes_notes'].value = @external_work.metadata.notes
+   page['bookmark_external_title'].value = @external_work.title
+   page['bookmark_external_summary'].value = @external_work.summary
+   page['bookmark_external_notes'].value = @external_work.notes
    page['fetched_value'].value = @external_work.id
 end

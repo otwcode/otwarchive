@@ -7,7 +7,7 @@ class TagCategory < ActiveRecord::Base
   
   named_scope :ordered, :order => 'official, required DESC, exclusive DESC'
   named_scope :official, :conditions => 'official', :order => 'official, required DESC, exclusive DESC'
-  
+
   def remove_me_from_my_tags
     self.tags.each do |t| 
       t.tag_category_id = nil
@@ -25,6 +25,7 @@ class TagCategory < ActiveRecord::Base
     find_by_name('default') || TagCategory.create({ :name => 'default', :official => true, :display_name => 'Freeform' })
   end
 
+
   def self.official_tags(category_name)
     category = find_by_name(category_name)
     return [] unless category
@@ -35,4 +36,8 @@ class TagCategory < ActiveRecord::Base
     display_name? ? super : name
   end
 
+  # force creation in an empty database
+  self.ambiguous
+  self.default
+  
 end

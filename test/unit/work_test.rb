@@ -11,16 +11,13 @@ class WorkTest < ActiveSupport::TestCase
     assert_raises(ActiveRecord::RecordNotFound) { Chapter.find(chapter.id) }
     assert_raises(ActiveRecord::RecordNotFound) { Chapter.find(chapter2.id) }
   end
-  #   has_one :metadata, :as => :described, :dependent => :destroy
-  def test_metadata
-    meta = create_metadata
-    work = create_work(:metadata => meta)
+  #   validates presence of title
+  def test_title
+    work = new_work(:title => "")
+    assert !work.save
     new_title = random_phrase
-    work.metadata.title=new_title
-    work.save
-    assert_equal new_title, work.metadata.title
-    Work.find(work.id).destroy
-    assert_raises(ActiveRecord::RecordNotFound) { Metadata.find(meta.id) }
+    work.title=new_title
+    assert work.save
   end
   # belongs_to :language
   # TODO test_belongs_to_language

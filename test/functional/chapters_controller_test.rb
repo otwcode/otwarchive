@@ -10,10 +10,10 @@ class ChaptersControllerTest < ActionController::TestCase
     user = create_user
     @request.session[:user] = user    
     chapter = new_chapter
-    work = create_work(:chapters => [chapter])
-    work.pseuds << user.pseuds
+    work = create_work(:chapters => [chapter], :authors => user.pseuds)
     assert_difference('Chapter.count') do
-      post :create, :locale => 'en', :work_id => work.id, :chapter => { :content => random_chapter, :metadata_attributes => {:title => random_phrase, "notes"=>"", "summary"=>""}, :author_attributes => { :ids => user.pseuds.collect { |p| p.id } }}
+      post :create, :locale => 'en', :work_id => work.id, 
+      :chapter => {:content => random_chapter, :author_attributes => {:ids => [work.pseuds.first.id]}}
     end
     assert_redirected_to preview_work_chapter_path(assigns(:work),assigns(:chapter))
   end

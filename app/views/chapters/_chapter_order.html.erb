@@ -10,8 +10,8 @@
       <li id="chapter_<%= chapter.id %>" class='chapter-position-list'>
         <%= text_field_tag 'chapters[]', nil, :size => 3, :maxlength => 3, :class => 'chapter-position-field' -%>
         <span id='position-for-<%= chapter.id %>'><%= chapter.position %></span>. 
-        <% if chapter.metadata && chapter.metadata.title %>
-          <%=h chapter.metadata.title %>    
+        <% if chapter.title %>
+          <%=h chapter.title %>    
         <% else %>
           Chapter <%=h chapter.position %>    
         <% end %>

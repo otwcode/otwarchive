@@ -1,24 +1,27 @@
 class Work < ActiveRecord::Base
   has_many :chapters, :dependent => :destroy
-  has_one :metadata, :as => :described, :dependent => :destroy
+
   has_many :serial_works
   has_many :series, :through => :serial_works
+
   has_many :related_works, :as => :parent
+
   has_bookmarks
+
   has_many :taggings, :as => :taggable, :dependent => :destroy
-  is_indexed :fields => ['created_at'], :include => [{:association_name => 'metadata', :field => 'title', :as => 'title'},
-            {:association_name => 'metadata', :field => 'summary', :as => 'summary'},
-            {:association_name => 'metadata', :field => 'notes', :as => 'notes'}],
-            :concatenate => [{:association_name => 'chapters', :field => 'content', :as => 'body'}]
+  include TaggingExtensions
+
+
+  is_indexed :fields => ['created_at', 'title', 'summary', 'notes'], 
+             :concatenate => [{:association_name => 'chapters', :field => 'content', :as => 'body'}]
   
   named_scope :public, :conditions => "restricted = 0 OR restricted IS NULL"
   named_scope :recent, :order => 'created_at DESC', :limit => 5
 
-  include TaggingExtensions
-
-  def find_all_comments
-    self.chapters.collect { |c| c.find_all_comments }.flatten
-  end
+  validates_presence_of :title
+  validates_length_of :title, :within => ArchiveConfig.TITLE_MIN..ArchiveConfig.TITLE_MAX, :message => "must be within #{ArchiveConfig.TITLE_MIN} and #{ArchiveConfig.TITLE_MAX} letters long.".t
+  validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, :too_long => "must be less than %d letters long."/ArchiveConfig.SUMMARY_MAX
+  validates_length_of :notes, :allow_blank => true, :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than %d letters long."/ArchiveConfig.NOTES_MAX
 
   # Virtual attribute to use as a placeholder for pseuds before the work has been saved
   # Can't write to work.pseuds until the work has an id
@@ -43,23 +46,18 @@ class Work < ActiveRecord::Base
     end
   end
   
+  def find_all_comments
+    self.chapters.collect { |c| c.find_all_comments }.flatten
+  end
+
   # Adds customized error messages and clears the "chapters is invalid" message for invalid chapters
   def validate
     unless self.chapters.first && self.chapters.first.valid?
       errors.clear
       errors.add_to_base("Please enter your story in the text field below.")
     end
-    
-    unless self.metadata && self.metadata.valid?
-      self.metadata.errors.full_messages.each { |msg| errors.add_to_base(msg) }
-    end
   end
     
-  # Virtual attribute for metadata
-  def metadata_attributes=(attributes)
-    self.new_record? ? self.metadata = Metadata.new(attributes) : self.metadata.attributes = attributes
-  end  
-  
   # Virtual attribute for first chapter
   def chapter_attributes=(attributes)
     self.new_record? ? self.chapters.build(attributes) : self.chapters.first.attributes = attributes
@@ -149,10 +147,9 @@ class Work < ActiveRecord::Base
     end
   end
   
-  # Save metadata and chapter data when the work is updated
+  # Save chapter data when the work is updated
   # Save relationship to parent work if applicable
   def save_associated
-    self.metadata.save(false)
     chapters.first.save(false)
     if self.new_parent 
       relationship = self.new_parent.related_works.build :work_id => self.id
@@ -198,11 +195,6 @@ class Work < ActiveRecord::Base
     chapters -= changed.values
     changed.sort.each {|pair| pair.first > chapters.length ? chapters << pair.last : chapters.insert(pair.first-1, pair.last)}
     chapters.each_with_index {|chapter, index| chapter.update_attribute(:position, index + 1)}
-  end
-
-  # sets initial version of work to 1.0
-  def set_initial_version
-    major_version, minor_version = 1, 0
   end
 
   # provide an interface to increment major version number

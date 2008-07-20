@@ -41,6 +41,12 @@ SMTP_DOMAIN: localhost
 #SMTP_PASSWORD: 
 #SMTP_AUTHENTICATION: # :plain, :login or :cram_md5
 
+TITLE_MAX: 255
+TITLE_MIN: 3
+SUMMARY_MAX: 1250
+NOTES_MAX: 2500
+COMMENT_MAX: 4300
+TAG_MAX: 42
 
 # variables for Askimet http://akismet.com/
 AKISMET_KEY: '6833ee7298cf'
