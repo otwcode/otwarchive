@@ -40,29 +40,17 @@
     
     <p>
       <b>Chapter Title</b><br />
-      <%= f.text_field :title %> 
-      <script>
-        var chapter_metadata_attributes_title = new LiveValidation('chapter_metadata_attributes_title', { validMessage: 'Thanks, that length looks good.', wait: 500 });
-        chapter_metadata_attributes_title.add(Validate.Length, {"failureMessage": "must be less than 255 letters long.", "maximum": 255, "validMessage": ""});
-      </script>
+      <%= f.text_field :title, :live => true %> 
     </p>
 
     <p>
       <b>Chapter Summary</b><br />
-      <%= f.text_area :summary %>
-      <script>
-        var chapter_metadata_attributes_summary = new LiveValidation('chapter_metadata_attributes_summary', { validMessage: 'Thanks, that length looks good.', wait: 500 });
-        chapter_metadata_attributes_summary.add(Validate.Length, {"failureMessage": "must be less than 1250 letters long.", "maximum": 1250, "validMessage": ""})
-      </script>
+      <%= f.text_area :summary, :live => true %>
     </p>
 
     <p>
       <b>Chapter Notes</b><br />
-      <%= f.text_area :notes %>
-      <script>
-        var chapter_metadata_attributes_notes = new LiveValidation('chapter_metadata_attributes_notes', { validMessage: 'Thanks, that length looks good.', wait: 500 });
-        chapter_metadata_attributes_notes.add(Validate.Length, {"failureMessage": "must be less than 2500 letters long.", "maximum": 2500, "validMessage": ""})
-      </script>
+      <%= f.text_area :notes, :live => true %>
     </p>
 
   <p>

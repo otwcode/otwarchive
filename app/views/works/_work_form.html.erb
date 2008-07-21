@@ -4,15 +4,8 @@
     <p class="field-left">   
     
         <%= f.label :title, "Story Title*", :class => "required" %><br />
-        <%= f.text_field :title, :class => "storyinputfield" %>
+        <%= f.text_field :title, :class => "storyinputfield", :live => true %>
         <%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
-        
-        <script>
-          var work_title = new LiveValidation('work_title', { validMessage: 'Thanks, that length looks good.', wait: 500 });
-          work_title.add(Validate.Length, {"failureMessage": "must be at least 3 letters long.", "minimum": 3, "validMessage": ""});
-          work_title.add(Validate.Length, {"failureMessage": "must be less than 255 letters long.", "maximum": 255, "validMessage": ""});
-          work_title.add(Validate.Presence, {"if": "is_work?", "failureMessage": "is required.", "validMessage": ""})
-        </script>
 
       <!-- Chaptered checkbox (work_is_wip) -->
       <!-- Checking this box causes the expected number of chapters box to appear; unchecking it causes it to disappear. -->
@@ -111,21 +104,12 @@
 	
     <p>
       <%= f.label :summary, "Summary (max %d letters)"/ArchiveConfig.SUMMARY_MAX %><br />
-      <%= f.text_area :summary, :class => "summary-field" %>
-      <script>
-        var work_summary = new LiveValidation('work_summary', { validMessage: 'Thanks, that length looks good.', wait: 500 });
-        work_summary.add(Validate.Length, {"failureMessage": "must be less than 1250 letters long.", "maximum": 1250, "validMessage": ""})
-      </script>
-      
+      <%= f.text_area :summary, :class => "summary-field", :live => true %>
     </p>
 
     <p>
       <%= f.label :notes, "Notes (max %d letters)"/ArchiveConfig.NOTES_MAX %><br />
-      <%= f.text_area :notes, :class => "notes-field" %> 
-      <script>
-        var work_notes = new LiveValidation('work_notes', { validMessage: 'Thanks, that length looks good.', wait: 500 });
-        work_notes.add(Validate.Length, {"failureMessage": "must be less than 2500 letters long.", "maximum": 2500, "validMessage": ""})
-      </script>
+      <%= f.text_area :notes, :class => "notes-field", :live => true %> 
     </p>
 	<%- end -%>
 	
