@@ -15,6 +15,7 @@
     <td><%= link_to 'Show', [@user, pseud] %>
 	<% if current_user == @user -%>
      | <%= link_to 'Edit', [:edit, @user, pseud] -%>
+     | <%= link_to 'Orphan Stories', {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} -%>
 		 <% unless @user.login == pseud.name || pseud.is_default -%>
  		 | <%= link_to 'Destroy', [@user, pseud], :confirm => 'Are you sure?', :method => :delete %>
 		 <% end -%>

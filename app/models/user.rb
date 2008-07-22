@@ -86,4 +86,24 @@ class User < ActiveRecord::Base
     pseuds.to_enum.find(&:is_default?) || pseuds.first
   end
   
+  # Gets the user account for authored objects if orphaning is enabled
+  def self.orphan_account
+    User.fetch_orphan_account if ArchiveConfig.ORPHANING_ALLOWED
+  end
+  
+  private
+  
+  # Create and/or return a user account for holding orphaned works
+  def self.fetch_orphan_account
+    orphan_account = User.find_or_create_by_login("orphan_account")
+    if orphan_account.new_record?
+      orphan_account.password = orphan_account.generate_password(12)
+      orphan_account.save(false)
+      orphan_account.activation_code = nil
+      orphan_account.activated_at = Time.now
+      orphan_account.save(false)
+    end
+    orphan_account   
+  end
+  
 end

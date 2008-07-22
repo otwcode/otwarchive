@@ -42,6 +42,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :bookmarks, :path_prefix => ':locale'
   
+  map.resources :orphans, :collection => {:about => :get}, :path_prefix => ':locale'
+  
   map.resources :external_works, :has_many => :bookmarks, :path_prefix => ':locale'
   
   map.resources :communities, :path_prefix => ':locale'

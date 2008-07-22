@@ -5,7 +5,8 @@
   <%- if logged_in? && current_user == @user -%>
     <p>
       <%= link_to "Edit profile".t, edit_user_path(@user) %> | 
-      <%= link_to 'Manage pseuds'.t, user_pseuds_path(@user) %>
+      <%= link_to 'Manage pseuds'.t, user_pseuds_path(@user) %> | 
+      <%= link_to 'Orphan works'.t, orphans_path %>
     </p>
   <%- end -%>
 

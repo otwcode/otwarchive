@@ -72,5 +72,8 @@ TOS: This is where the Terms of Service will go when they're finished. This is F
 #Allow OpenID Authentication
 USE_OPENID: true
 
+# Allow orphaninig
+ORPHANING_ALLOWED: true
+
 # only use if you are running your app completely in a subfolder of your domain
 #PRODUCTION_URL_ROOT: "/archive"

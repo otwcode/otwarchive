@@ -50,7 +50,6 @@
     	<% use_tinymce -%>
 		<p><a href="javascript:addEditor('content');">Rich text</a>  <a href="javascript:removeEditor('content');">HTML</a></p>
 		<%= c.text_area :content, :class => "mce-editor", :id => "content" %>
-				
 		
     	<script>
         var work_chapter_attributes_content = new LiveValidation('work_chapter_attributes_content', { validMessage: 'Thanks, that length looks good.', wait: 500 });

@@ -12,9 +12,8 @@
   <%= link_to "Manage chapters", manage_work_chapters_path(@work) %> | 
   <% if @work.pseuds.size > 1 %>
      <%= link_to "Remove me as author", { :action => "edit", :remove => "me"}, :confirm => 'This will remove you from all chapters as well. Are you sure?' %> | 
-  <% else %>
-     <%= "Orphan work" %> |
   <% end %>
+  <%= link_to "Orphan work", {:controller => 'orphans', :action => 'new', :work_id => @work.id} %> |
   <%= link_to 'Delete work', @work, :confirm => 'Are you sure?', :method => :delete -%>
   
 </p>					

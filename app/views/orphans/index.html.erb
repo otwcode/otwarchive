@@ -1,0 +1,7 @@
+<h1>Orphaned Stories</h1>
+
+<ul class="story-list">
+  <% for work in @works %>
+	<%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
+  <% end %>
+</ul>

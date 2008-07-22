@@ -1,0 +1,9 @@
+<h1>Orphan All Stories by '<%= pseud.name %>'</h1>
+
+<p>Are you sure you want to <strong>permanently</strong> remove all identifying information from all stories you've 
+posted to the archive under this pseud, along with their chapters, associated series and any feedback replies you may have left?</p>
+
+<%- form_tag orphans_path do -%>
+  <%= hidden_field_tag 'pseud_id', pseud.id %> 
+  <p><%= submit_tag h("Yes, I'm sure").t %></p>
+<%- end -%>

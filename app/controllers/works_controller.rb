@@ -48,10 +48,6 @@ class WorksController < ApplicationController
         @work.chapters.build
       end
     end
-    
-    unless current_user == :false 
-      @series = current_user.series
-    end
 
     @chapter = @work.first_chapter
     if params[:work] && params[:work][:chapter_attributes]
@@ -63,7 +59,8 @@ class WorksController < ApplicationController
       @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
       to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 
       @selected = to_select.collect {|pseud| pseud.id.to_i }
-      @work.poster = current_user 
+      @work.poster = current_user
+      @series = current_user.series 
     end
   end
   
