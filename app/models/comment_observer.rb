@@ -3,6 +3,7 @@ class CommentObserver < ActiveRecord::Observer
   # Add new comments to the inbox of the person to whom they're directed
   # Send that user a notification email
   def after_create(comment)
+		orphan_account = User.orphan_account
     if comment.reply_comment?
       users = [comment.commentable.pseud.user] unless comment.commentable.pseud.blank? 
     else
@@ -13,7 +14,7 @@ class CommentObserver < ActiveRecord::Observer
         new_feedback = user.inbox_comments.build
         new_feedback.feedback_comment_id = comment.id
         new_feedback.save
-        unless user.preference.comment_emails_off?
+        unless user.preference.comment_emails_off? || user == orphan_account
           UserMailer.deliver_feedback_notification(user, comment)
         end
       end 
