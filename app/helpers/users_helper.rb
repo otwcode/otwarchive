@@ -11,8 +11,7 @@ module UsersHelper
   
   # Prints user pseuds with links to anchors for each pseud on the page and the description as the title
   def print_pseuds(user)
-    user.pseuds.collect {|pseud| '<a href="' + url_for(:anchor => "pseud-#{pseud.id}") + 
-                          '" title="' + pseud.description + '">' + pseud.name + '</a>'}.join(", ")
+    user.pseuds.collect(&:name).join(", ")
   end 
   
   # Prints link to bookmarks page with user-appropriate number of bookmarks

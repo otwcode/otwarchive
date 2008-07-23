@@ -20,8 +20,9 @@ class OrphansController < ApplicationController
   def create
     pseuds = current_user.pseuds
     if params[:work_id]
-      pseuds = current_user.pseuds
-      works = [Work.find(params[:work_id])]      
+      work = Work.find(params[:work_id])
+      pseuds = (current_user.pseuds & work.pseuds)
+      works = [work]      
     elsif params[:pseud_id]
       pseuds = [Pseud.find(params[:pseud_id])]
       works = pseuds.first.works
@@ -29,7 +30,8 @@ class OrphansController < ApplicationController
       pseuds = current_user.pseuds
       works = current_user.works      
     end
-    if !pseuds.blank? && !works.blank? && Creatorship.orphan(pseuds, works)
+    use_default = params[:use_default] == "true"
+    if !pseuds.blank? && !works.blank? && Creatorship.orphan(pseuds, works, use_default)
       flash[:notice] = 'Orphaning was successful.'.t
       redirect_to(current_user)
     else

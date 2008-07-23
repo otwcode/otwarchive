@@ -4,6 +4,7 @@
 posted to the archive under this pseud, along with their chapters, associated series and any feedback replies you may have left?</p>
 
 <%- form_tag orphans_path do -%>
+  <%= render :partial => 'orphans/choose_pseud' %>
   <%= hidden_field_tag 'pseud_id', pseud.id %> 
   <p><%= submit_tag h("Yes, I'm sure").t %></p>
 <%- end -%>
