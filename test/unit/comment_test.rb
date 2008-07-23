@@ -1,46 +1,52 @@
 require File.dirname(__FILE__) + '/../test_helper'
   
 class CommentTest < ActiveSupport::TestCase
-  # Test validations
-  def test_validations
-    # test example_data.rb
-    assert new_comment.set_and_save
-    # validates_presence_of :content
-    assert !new_comment(:content => "").set_and_save
-    # validates_presence_of :name, :email, :unless => :pseud_id
-    assert !new_comment(:email => "").set_and_save
-    assert !new_comment(:name => "").set_and_save
-    assert new_comment(:pseud_id => create_user.default_pseud.id, :email => '', :name => '').set_and_save
-  end
+  context "A comment" do
+    setup do
+      @comment = create_comment
+    end
+    should_belong_to :pseud
+    should_belong_to :commentable
+    should_have_many :users
+    should_require_attributes :content
   
-  # Test associations
-  # belongs_to :pseud
-  def test_belongs_to_pseud
-    pseud = create_pseud
-    comment = new_comment(:pseud_id => pseud.id)
-    comment.set_and_save
-    assert_equal pseud, comment.pseud
-  end  
-  # belongs_to :commentable, :polymorphic => true
-  def test_belongs_to_commentable
-    chapter = new_chapter
-    work = create_work(:chapters => [chapter])
-    comment = new_comment(:commentable_id => chapter.id)
-    assert_equal chapter, comment.commentable
+    # acts_as_commentable: CommentableEntity methods find_all_comments & count_all_comments
+    context "with its own comment" do
+      setup do
+        @comment2 = create_comment(:commentable => @comment)
+      end
+      should "find that comment" do
+        assert @comment.find_all_comments.include?(@comment2)
+      end
+      should "count that comment" do
+        assert_equal 1, @comment.count_all_comments
+      end
+    end
   end
-  
-  # Test acts_as
-  # acts_as_commentable: CommentableEntity methods find_all_comments & count_all_comments
-  def test_commentable_entity
-    comment = new_comment
-    comment.set_and_save
-    child = new_comment(:commentable_type => 'Comment', :commentable_id => comment.id)
-    child.set_and_save
-    grandchild = new_comment(:commentable_type => 'Comment', :commentable_id => child.id)
-    grandchild.set_and_save
-    assert_equal [child, grandchild], comment.find_all_comments
-    assert_equal 2, comment.count_all_comments
+
+  context "A user's comment" do
+    setup do
+      user = create_user
+      work = create_work
+      assert @comment = Comment.new(:pseud_id => user.default_pseud.id, :commentable => work)
+    end
+    should "not have an email or name value" do
+      assert_equal nil, @comment.email
+      assert_equal nil, @comment.name
+    end
   end
+
+  context "A non-user's comment" do
+    setup do
+      user = create_user
+      work = create_work
+      assert @comment = Comment.new(:email => random_email, :name => random_phrase, :commentable => work)
+    end
+    should "not have a pseud" do
+      assert_equal nil, @comment.pseud_id
+    end
+  end
+
   # has_comment_methods: set_and_save, destroy_or_mark_deleted, full_set
   # TODO test rest of comment methods, if used
   def test_set_and_save

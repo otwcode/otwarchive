@@ -25,4 +25,7 @@ class ArchiveConfigTest < Test::Unit::TestCase
     assert  ArchiveConfig.SESSION_KEY
     assert !ArchiveConfig.SESSION_KEy
   end
+  def test_number
+    assert_equal 255, ArchiveConfig.TITLE_MAX
+  end
 end

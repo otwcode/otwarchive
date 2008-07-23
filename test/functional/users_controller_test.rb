@@ -1,65 +1,134 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class UsersControllerTest < ActionController::TestCase
-  # TODO error checking 
-  
-  # Test activate  activate  /activate/:id
-   # TODO test activate
-  # Test create  POST  /:locale/users
-  def test_create_user
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.deliveries = []
-    
-    assert_difference('User.count') do
-      post :create, :locale => 'en', :user => { :login => 'test_create', 
-                                                :email => 'test_create@example.com', 
-                                                :password => 'foobar', 
-                                                :password_confirmation => 'foobar',
-                                                :age_over_13 => '1',
-                                                :terms_of_service => '1',
-                                                }
+  context "UsersController" do
+    context "on Get to :new" do
+      setup do
+        get :new, :locale => 'en'
+      end
+      should_assign_to :user
+      should_render_template :new
+      should_render_a_form
+      should_not_set_the_flash
+      should_respond_with :success
     end
-
-    assert_response :success
-    assert_equal(1, ActionMailer::Base.deliveries.length)
-  end
-  # Test destroy  DELETE /:locale/users/:id
-  def test_destroy_user
-    user = create_user
-    @request.session[:user] = user
-    assert_difference('User.count', -1) do
-      delete :destroy, :locale => 'en', :id => user.login
+    context "on POST to :create" do
+      setup do
+        password = String.random
+        put :create, :locale => 'en', :user=>{"age_over_13" => "1",
+                                              "terms_of_service" => "1",
+                                              "login" => String.random,
+                                              "email" => random_email,
+                                              "password" => password,
+                                              "password_confirmation" => password}
+      end
+      should_assign_to :user
+      should_set_the_flash_to /during testing you can activate via/
+      should_render_template :_confirmation
     end
-
-    assert_redirected_to users_path
-  end
-  # Test edit  GET  /:locale/users/:id/edit  (named path: edit_user)
-  def test_edit_user_path
-    user = create_user
-    @request.session[:user] = user
-    get :edit, :locale => 'en', :id => user.login
-    assert_response :success
-  end
-  # Test index  GET  /:locale/users  (named path: users)
-  # TODO test index
-  # Test new  GET  /:locale/users/new  (named path: new_user)
-  def test_new_user_path
-    get :new, :locale => 'en'
-    assert_response :success
-  end
-  # Test show  GET  /:locale/users/:id  (named path: user)
-  def test_user_path
-    user = create_user
-    get :show, :locale => 'en', :id => user.login
-    assert_response :success
-  end
-  # Test update  PUT  /:locale/users/:id
-  def test_update_user
-    # FIXME DoubleRenderError
-#    user = create_user
-#    put :update, :locale => 'en', :id => user.login, :user => {:email => 'new@google.com'}
-#    assert_redirected_to user_path(assigns(:user))
-#    assert_equal 'new@google.com', User.find(user.id).email
+    context "on POST to :edit self" do
+      setup do
+        assert @user = create_user
+        assert @request.session[:user] = @user 
+        get :edit, :locale => 'en', :id => @user.login
+      end      
+      should_assign_to :user
+      should "assign assign @user to user" do
+        assert_equal @user, assigns(:user)
+      end
+      should_render_a_form
+      should_not_set_the_flash
+      should_render_template :edit
+      should_respond_with :success
+      
+    end
+    context "on POST to :edit someone else" do
+      setup do
+        assert @user = create_user
+        get :edit, :locale => 'en', :id => @user.login
+      end      
+      should "not display a form" do
+         assert_select "form", false           
+      end
+      should_redirect_to 'user_url(@user)'
+      should_set_the_flash_to /not allowed/      
+    end
+    context "on DELETE of self" do
+      setup do
+        assert @user = create_user
+        assert @request.session[:user] = @user 
+        delete :destroy, :locale => 'en', :id => @user.login
+      end
+      should "destroy the record" do
+        assert_raises(ActiveRecord::RecordNotFound) { @user.reload }
+      end
+      should_redirect_to 'users_url'
+    end
+    context "on DELETE of someone else" do
+      setup do
+        assert @user = create_user
+        delete :destroy, :locale => 'en', :id => @user.login
+      end
+      should "not destroy the record" do
+        assert @user.reload
+      end
+      should_redirect_to 'user_url(@user)'
+      should_set_the_flash_to /not allowed/      
+    end
+    context "on GET to :index" do
+      setup do
+        assert @user = create_user
+        get :index, :locale => 'en'
+      end
+      should_assign_to :users
+      should_not_set_the_flash
+      should_render_template :index
+      should_respond_with :success
+    end
+    context "on GET to :show" do
+      setup do
+        assert @user = create_user
+        get :show, :locale => 'en', :id => @user.login
+      end
+      should_assign_to :user
+      should_not_set_the_flash
+      should_render_template :show
+      should_respond_with :success
+    end
+    context "on PUT to :update self" do
+      setup do
+        @new_email = random_email
+        assert @user = create_user
+        assert @profile = create_profile
+        assert @user.profile = @profile
+        assert @request.session[:user] = @user 
+        put :update, :locale => 'en', :id => @user.login, :user => {"email" => @new_email}
+      end      
+      should_assign_to :user
+      should "assign assign @user to user" do
+        assert_equal @user, assigns(:user)
+      end
+      should "make the change" do
+        @user.reload
+        assert_equal @new_email, @user.email
+      end
+      should_set_the_flash_to /success/
+      should_redirect_to 'user_url(@user)'      
+    end
+    context "on PUT to :update someone else" do
+      setup do
+        @new_about = random_paragraph
+        assert @user = create_user
+        assert @profile = create_profile
+        assert @user.profile = @profile
+        put :update, :locale => 'en', :id => @user.login, :user => {"email" => @new_email}
+      end      
+      should "not make the change" do
+        assert_not_equal @new_email, @user.email
+      end
+      should_redirect_to 'user_url(@user)'
+      should_set_the_flash_to /not allowed/      
+    end
   end
 end
+

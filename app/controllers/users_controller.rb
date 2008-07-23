@@ -78,33 +78,34 @@ class UsersController < ApplicationController
   def update
     @user = User.find_by_login(params[:id])
     
-    unless is_user?(@user)
+    if !is_user?(@user)
       flash[:error] = "You are not allowed to perform this action."
       redirect_to user_url(@user)
-    end
+    else
 
-    if @user.profile
-      @user.profile.update_attributes params[:profile_attributes]
-    else
-      @user.profile = Profile.new(params[:profile_attributes])
-    end
-    
-    if @user.preference
-      @user.preference.update_attributes params[:preference_attributes]
-    else
-      @user.preference = Preference.new(params[:preference_attributes])
-    end
-    
-    @user.recently_reset = nil if params[:change_password]
-    
-    if @user.update_attributes(params[:user]) && @user.profile.update_attributes(params[:profile_attributes])
-      flash[:notice] = 'User was successfully updated.'
-      unless !ArchiveConfig.USE_OPENID || params[:user][:identity_url].blank?
-        @user.identity_url = OpenIdAuthentication.normalize_url(@user.identity_url)
+      if @user.profile
+        @user.profile.update_attributes params[:profile_attributes]
+      else
+        @user.profile = Profile.new(params[:profile_attributes])
       end
-      redirect_to(@user) 
-    else
-      render :action => "edit"
+      
+      if @user.preference
+        @user.preference.update_attributes params[:preference_attributes]
+      else
+        @user.preference = Preference.new(params[:preference_attributes])
+      end
+      
+      @user.recently_reset = nil if params[:change_password]
+      
+      if @user.update_attributes(params[:user]) && @user.profile.update_attributes(params[:profile_attributes])
+        flash[:notice] = 'User was successfully updated.'
+        unless !ArchiveConfig.USE_OPENID || params[:user][:identity_url].blank?
+          @user.identity_url = OpenIdAuthentication.normalize_url(@user.identity_url)
+        end
+        redirect_to(@user) 
+      else
+        render :action => "edit"
+      end
     end
   end
   
@@ -112,9 +113,14 @@ class UsersController < ApplicationController
   # DELETE /users/1.xml
   def destroy
     @user = User.find_by_login(params[:id])
-    @user.destroy
+    if !is_user?(@user)
+      flash[:error] = "You are not allowed to perform this action."
+      redirect_to user_url(@user)
+    else
+      @user.destroy
     
-    redirect_to(users_url) 
+      redirect_to(users_url) 
+    end
   end
   
   
