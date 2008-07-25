@@ -27,6 +27,8 @@
   <body onload="hideFormFields(); initSelect('languages_menu')" >
   
   <!-- BEGIN header -->
+	<!-- hides header on login page -->
+	<%- unless current_page?({:controller => 'session', :action => 'new'}) || (login_path) || (session_path) -%>
     <div id="header">
       <div id="login-block">
         <%- if logged_in? -%>
@@ -69,6 +71,7 @@
       </ul>
       
     </div>
+		<%- end -%>
   <!-- END header -->
   
   <!-- BEGIN sidebar -->

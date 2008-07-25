@@ -1,20 +1,21 @@
 <span class="authentication-label"><label for="login"><%= "user name".t.capitalize %>:</label></span>
 <br />
 <%= text_field_tag 'login', '', :class => 'authentication-textfield', :tabindex => '1' %>
-<%- if ArchiveConfig.USE_OPENID -%>
-  <%= link_to_remote(image_tag("openid.png", :alt=>h("Use OpenID to log in".t)), {:url => { :action => 'openid' }}, :href => url_for(:action => 'new', :use_openid => true ), :tabindex => '5' )%>
-<%- end -%>
 <br />
 
 <span class="authentication-label"><label for="password"><%=h "Password".t %>:</label></span>
 <br />
 <%= password_field_tag 'password', '', :class => 'authentication-textfield', :tabindex => '2' %>
 
-<%= submit_tag h('Login').t, :tabindex => '4' %>
 <br/>
 
 <%= check_box_tag('remember_me', '1', false, :class => 'authentication-checkboxfield', :tabindex => '3') %>
-  <span class="authentication-label"><label for="remember_me"><%=h "Remember me".t %></label></span>
+  <span class="authentication-label"><label for="remember_me"><%=h "Remember me".t %></label></span> 
+	<%= submit_tag h('Login').t, :tabindex => '4' %>
 <br/>
 
 <%= link_to h('forgot password?').t, new_password_path, :tabindex => '6', :class =>'authentication-subheading' %>
+<br/><br/><br/>
+<% if ArchiveConfig.USE_OPENID %>
+  <%= image_tag("openid.png", :alt => h('OpenID logo').t) %> <%= link_to_remote('Login with OpenID'.t, {:url => { :action => 'openid' }}, :href => url_for(:action => 'new', :use_openid => true ), :class =>'authentication-subheading', :tabindex => '5' )%>
+<%- end -%>

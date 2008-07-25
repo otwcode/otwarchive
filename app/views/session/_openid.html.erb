@@ -1,12 +1,10 @@
 <!-- OpenID field -->	
-<span class="authentication-label"><label for="openid_url"></label></span>
-<%= link_to h("OpenID").t, 'http://openid.net/', :popup => true %> <%=h "URL:".t %>
+<span class="authentication-label"><label for="openid_url"><%=h 'Login with OpenID'.t %></label></span>
 <br />
-<%= text_field_tag "openid_url", '', :class => 'openid-url', :tabindex => '7' %>
-<%= link_to_remote h("Back").t , {:url => {:action => 'passwd'}}, :href => url_for( :action => 'new', :use_openid => false ), :tabindex => '10' %>
+<%= image_tag("openid.png", :alt => h('OpenID logo').t) %> <%= text_field_tag "openid_url", '', :class => 'authentication-textfield', :tabindex => '1' %>
 <br />
-<%= submit_tag h('Login').t, :tabindex => '9' %>
-<br /><br />
-
-<%= check_box_tag('remember_me', '1', false, :class => 'authentication-checkboxfield', :tabindex => '8') %>
+<%= check_box_tag('remember_me', '1', false, :class => 'authentication-checkboxfield', :tabindex => '2') %>
 <span class="authentication-label"><label for="remember_me"><%=h "Remember me".t %></label></span>
+<%= submit_tag h('Login').t, :tabindex => '3' %>
+<br /><br /><br />
+<%= link_to_remote h('Return to standard login').t , {:url => {:action => 'passwd'}}, :href => url_for( :action => 'new', :use_openid => false ), :class =>'authentication-subheading', :tabindex => '4' %>

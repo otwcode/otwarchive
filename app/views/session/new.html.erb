@@ -1,11 +1,11 @@
 <h2><%=h ArchiveConfig.APP_NAME .t %></h2>
 
-<h3 class="authentication-subheading"><%=h "A project of the".t %> <a href="http://transformativeworks.org" tabindex = '13'><%=h "Organization For Transformative Works".t %></a></h3>
+<h3 class="authentication-subheading"><%=h "A project of the".t %> <a href="http://transformativeworks.org" tabindex = '9'><%=h "Organization For Transformative Works".t %></a></h3>
 
 <!-- loginform floated right -->
 <div id="authentication-loginform">
   <h2 class="authentication-loginheading"><%=h "Login".t %></h2>
-	<p><strong><%=h "Warning:".t %></strong> <span><%=h "This site is in extreme alpha. Things may break or crash without notice. Please".t %></span> <a href="mailto:otw-testers@transformativeworks.org" tabindex = '12'><%=h "report".t %></a> <span><%=h "all crashes to us, and remain seated until the test has come to a full and complete stop.".t %></span></p>
+	<p><strong><%=h "Warning:".t %></strong> <span><%=h "This site is in extreme alpha. Things may break or crash without notice. Please".t %></span> <a href="mailto:otw-testers@transformativeworks.org" tabindex = '8'><%=h "report".t %></a> <span><%=h "all crashes to us, and remain seated until the test has come to a full and complete stop.".t %></span></p>
 			
   <% form_tag session_path do -%>
   <!-- renders either the normal or openid version of the form -->	
@@ -17,10 +17,10 @@
 			<%- end -%>
 		</div>
   <%- end -%><!-- END form -->
-  <br/><br/>
+  <br/>
 <!-- Create account link -->
 	<p>
-	<span class="authentication-footnote"><%= "New tester?" .t %> <%= link_to 'Create an account' .t, new_user_path, :tabindex => '11' %></span>
+	<span class="authentication-footnote"><%= "New tester?" .t %> <%= link_to 'Create an account now' .t, new_user_path, :tabindex => '7' %></span>
 	</p>
 
 </div>
