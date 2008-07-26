@@ -18,6 +18,7 @@ module ActiveRecord #:nodoc:
 
         COLUMNS = { :login => :string,
                     :email => :string,
+                    :identity_url => :string,
                     :crypted_password => :string,
                     :salt => :string,
                     :remember_token => :string,

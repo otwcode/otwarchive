@@ -12,19 +12,43 @@ class UsersControllerTest < ActionController::TestCase
       should_not_set_the_flash
       should_respond_with :success
     end
-    context "on POST to :create" do
+    context "on POST to :create with password" do
       setup do
+        @login = String.random
         password = String.random
         put :create, :locale => 'en', :user=>{"age_over_13" => "1",
                                               "terms_of_service" => "1",
-                                              "login" => String.random,
+                                              "login" => @login,
+                                              "identity_url"=>"",
                                               "email" => random_email,
                                               "password" => password,
                                               "password_confirmation" => password}
       end
       should_assign_to :user
-      should_set_the_flash_to /during testing you can activate via/
       should_render_template :_confirmation
+      should_set_the_flash_to /during testing you can activate via/
+      should "create the user" do
+        assert User.find_by_login(@login)
+      end
+    end
+    context "on POST to :create with open id" do
+      setup do
+        @login = String.random
+        password = String.random
+        put :create, :locale => 'en', :user=>{"age_over_13" => "1",
+                                              "terms_of_service" => "1",
+                                              "login" => @login,
+                                              "identity_url"=> random_url,
+                                              "email" => random_email,
+                                              "password" => "",
+                                              "password_confirmation" => ""}
+      end
+      should_assign_to :user
+      should_render_template :_confirmation
+      should_set_the_flash_to /during testing you can activate via/
+      should "create the user" do
+        assert User.find_by_login(@login)
+      end
     end
     context "on POST to :edit self" do
       setup do
@@ -97,10 +121,10 @@ class UsersControllerTest < ActionController::TestCase
     end
     context "on PUT to :update self" do
       setup do
+        @old_email = random_email
+        assert @user = create_user(:email => @old_email)
         @new_email = random_email
-        assert @user = create_user
-        assert @profile = create_profile
-        assert @user.profile = @profile
+        assert @old_email != @new_email
         assert @request.session[:user] = @user 
         put :update, :locale => 'en', :id => @user.login, :user => {"email" => @new_email}
       end      

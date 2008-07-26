@@ -2,6 +2,10 @@ require 'uri'
 require 'openid/extensions/sreg'
 require 'openid/store/filesystem'
 
+require File.dirname(__FILE__) + '/open_id_authentication/db_store'
+require File.dirname(__FILE__) + '/open_id_authentication/mem_cache_store'
+require File.dirname(__FILE__) + '/open_id_authentication/timeout_fixes' if OpenID::VERSION == "2.0.4"
+
 module OpenIdAuthentication
   OPEN_ID_AUTHENTICATION_DIR = RAILS_ROOT + "/tmp/openids"
 
@@ -9,15 +13,22 @@ module OpenIdAuthentication
     @@store
   end
 
-  def self.store=(value)
-    @@store = value
+  def self.store=(*store_option)
+    store, *parameters = *([ store_option ].flatten)
+
+    @@store = case store
+    when :db
+      OpenIdAuthentication::DbStore.new
+    when :mem_cache
+      OpenIdAuthentication::MemCacheStore.new(*parameters)
+    when :file
+      OpenID::Store::Filesystem.new(OPEN_ID_AUTHENTICATION_DIR)
+    else
+      raise "Unknown store: #{store}"
+    end
   end
 
   self.store = :db
-
-  def store
-    OpenIdAuthentication.store
-  end
 
   class InvalidOpenId < StandardError
   end
@@ -25,6 +36,7 @@ module OpenIdAuthentication
   class Result
     ERROR_MESSAGES = {
       :missing      => "Sorry, the OpenID server couldn't be found",
+      :invalid      => "Sorry, but this does not appear to be a valid OpenID",
       :canceled     => "OpenID verification was canceled",
       :failed       => "OpenID verification failed",
       :setup_needed => "OpenID verification needs setup"
@@ -38,12 +50,8 @@ module OpenIdAuthentication
       @code = code
     end
 
-    def ===(code)
-      if code == :unsuccessful && unsuccessful?
-        true
-      else
-        @code == code
-      end
+    def status
+      @code
     end
 
     ERROR_MESSAGES.keys.each { |state| define_method("#{state}?") { @code == state } }
@@ -83,7 +91,7 @@ module OpenIdAuthentication
 
     def authenticate_with_open_id(identity_url = params[:openid_url], options = {}, &block) #:doc:
       if params[:open_id_complete].nil?
-        begin_open_id_authentication(normalize_url(identity_url), options, &block)
+        begin_open_id_authentication(identity_url, options, &block)
       else
         complete_open_id_authentication(&block)
       end
@@ -91,10 +99,13 @@ module OpenIdAuthentication
 
   private
     def begin_open_id_authentication(identity_url, options = {})
+      identity_url = normalize_url(identity_url)
       return_to = options.delete(:return_to)
       open_id_request = open_id_consumer.begin(identity_url)
       add_simple_registration_fields(open_id_request, options)
       redirect_to(open_id_redirect_url(open_id_request, return_to))
+    rescue OpenIdAuthentication::InvalidOpenId => e
+      yield Result[:invalid], identity_url, nil
     rescue OpenID::OpenIDError, Timeout::Error => e
       logger.error("[OPENID] #{e}")
       yield Result[:missing], identity_url, nil
@@ -104,7 +115,7 @@ module OpenIdAuthentication
       params_with_path = params.reject { |key, value| request.path_parameters[key] }
       params_with_path.delete(:format)
       open_id_response = timeout_protection_from_identity_server { open_id_consumer.complete(params_with_path, requested_url) }
-      identity_url     = normalize_url(open_id_response.endpoint.claimed_id) if open_id_response.endpoint.claimed_id
+      identity_url     = normalize_url(open_id_response.display_identifier) if open_id_response.display_identifier
 
       case open_id_response.status
       when OpenID::Consumer::SUCCESS
@@ -119,18 +130,7 @@ module OpenIdAuthentication
     end
 
     def open_id_consumer
-      OpenID::Consumer.new(session, open_id_store)
-    end
-
-    def open_id_store
-      case store
-      when :db
-        OpenIdAuthentication::DbStore.new
-      when :file
-        OpenID::FilesystemStore.new(OPEN_ID_AUTHENTICATION_DIR)
-      else
-        raise "Unknown store: #{store}"
-      end
+      OpenID::Consumer.new(session, OpenIdAuthentication.store)
     end
 
     def add_simple_registration_fields(open_id_request, fields)

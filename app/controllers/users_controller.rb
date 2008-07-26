@@ -37,10 +37,6 @@ class UsersController < ApplicationController
       redirect_to '/'
     else
       @user = User.new(params[:user])   
-      unless !ArchiveConfig.USE_OPENID || params[:user][:identity_url].blank?
-        @user.identity_url = OpenIdAuthentication.normalize_url(@user.identity_url)
-      end
-      
       if @user.save
         flash[:notice] = 'during testing you can activate via <a href=' + activate_path(@user.activation_code) + '>your activation url</a>.'
   
@@ -83,27 +79,24 @@ class UsersController < ApplicationController
       redirect_to user_url(@user)
     else
 
-      if @user.profile
-        @user.profile.update_attributes params[:profile_attributes]
-      else
-        @user.profile = Profile.new(params[:profile_attributes])
-      end
-      
-      if @user.preference
-        @user.preference.update_attributes params[:preference_attributes]
-      else
-        @user.preference = Preference.new(params[:preference_attributes])
-      end
-      
-      @user.recently_reset = nil if params[:change_password]
-      
-      if @user.update_attributes(params[:user]) && @user.profile.update_attributes(params[:profile_attributes])
-        flash[:notice] = 'User was successfully updated.'
-        unless !ArchiveConfig.USE_OPENID || params[:user][:identity_url].blank?
-          @user.identity_url = OpenIdAuthentication.normalize_url(@user.identity_url)
+      begin 
+        if @user.profile
+          @user.profile.update_attributes! params[:profile_attributes]
+        else
+          @user.profile = Profile.new(params[:profile_attributes])
+          @user.profile.save!
         end
+        if @user.preference
+          @user.preference.update_attributes! params[:preference_attributes]
+        else
+          @user.preference = Preference.new(params[:preference_attributes])
+          @user.preference.save!
+        end
+        @user.update_attributes!(params[:user]) 
+        @user.recently_reset = nil if params[:change_password]
+        flash[:notice] = 'User was successfully updated.'
         redirect_to(@user) 
-      else
+      rescue
         render :action => "edit"
       end
     end

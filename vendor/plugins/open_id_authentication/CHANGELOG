@@ -1,3 +1,9 @@
+* Return open_id_response.display_identifier to the application instead of .endpoints.claimed_id. [nbibler]
+
+* Add Timeout protection [Rick]
+
+* An invalid identity url passed through authenticate_with_open_id will no longer raise an InvalidOpenId exception. Instead it will return Result[:missing] to the completion block.
+
 * Allow a return_to option to be used instead of the requested url [Josh Peek]
 
 * Updated plugin to use Ruby OpenID 2.x.x [Josh Peek]

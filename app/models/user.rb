@@ -17,13 +17,13 @@ class User < ActiveRecord::Base
   # OpenID plugin
   attr_accessible :identity_url
   
-  has_many :pseuds
+  has_many :pseuds, :dependent => :destroy
   validates_associated :pseuds
   
-  has_one :profile
+  has_one :profile, :dependent => :destroy
   validates_associated :profile
   
-  has_one :preference
+  has_one :preference, :dependent => :destroy
   validates_associated :preference
    
   before_create :create_default_associateds

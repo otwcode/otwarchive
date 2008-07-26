@@ -1,60 +1,41 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class UserTest < ActiveSupport::TestCase
-  # Test accessors
-    # TODO test accessors
-  # Test validations
-    # TODO validates_associated pseuds, profile, preference
-    # TODO validates_format_of_login
-    # TODO validates_email_veracity_of
-    # TODO validates_inclusion_of terms_of_service, age_over_13
-  
-  # Test assocations
-    # TODO has_many :pseuds, works, readings
-    # TODO has_one :profile, preference
-  
-  # Test acts_as
-    # TODO  acts_as_authentable
-    # TODO  acts_as_authorized_user
-    # TODO  acts_as_authorizable
-
-  # Test before and after
-    # TODO create_default_associateds
-  
-  # Test methods
-  def test_has_pseud
-    user = create_user
-    assert user.has_pseud?(user.login)
-    newname = random_phrase
-    create_pseud(:user => user, :name => newname)
-    assert User.find(user.id).has_pseud?(newname)
-    assert !user.has_pseud?(random_phrase)
-    assert !user.has_pseud?("")
-    assert !user.has_pseud?(nil)
+  context "a user" do
+    setup do
+      assert create_user
+    end
+    should_require_attributes :login, :email
+    should_require_attributes :age_over_13, :terms_of_service, :message => /must be accepted/
+    should_require_unique_attributes :login, :email
+    should_ensure_length_in_range :login, (3..40)
+    should_ensure_length_in_range :email, (3..100)
+    should_have_many :pseuds, :readings, :inbox_comments
+    should_have_one :profile, :preference
+    should_not_allow_values_for :login, "_startswithunderscore", "endswithunderscore_", "with spaces", :message => /must/
+    should_allow_values_for :login, "underscore_in_the_middle", "words1with2numbers", "ends123", "123start"
+    should_not_allow_values_for :email, "noatsign", "user@badbadbad", :message => /valid email/
+    should_allow_values_for :email, random_email
+    
+    context "using a password" do
+      should_require_attributes :password, :password_confirmation
+      should_ensure_length_in_range :password, (6..40)
+    end
+    context "without a password" do
+      setup do
+        @url = random_url
+        assert @user = create_user(:password => nil, :password_confirmation => nil, :identity_url => @url)
+      end
+      should "require an identity_url" do
+        @user.identity_url=""
+        assert !@user.valid?
+        assert @user.errors.on("identity_url")
+      end
+      should "require a unique identity_url" do
+        user2 = new_user(:password => nil, :password_confirmation => nil, :identity_url => @url)
+        assert !user2.valid?
+        assert user2.errors.on("identity_url")
+      end
+    end
   end
-  def test_default_pseud
-    user = create_user
-    assert default = user.default_pseud
-    assert_equal default.name, user.login
-    pseud = create_pseud(:user => user)
-    assert_not_equal user.default_pseud, pseud
-    # FIXME no error checking on is_default - can have two or none
-    default.is_default = false  
-    default.save
-    pseud.is_default = true
-    pseud.save
-    assert_equal User.find(user.id).default_pseud, pseud
-  end
-  def test_creations
-    user = create_user
-    assert_equal 0, user.creations.length
-    work = create_work(:authors => [user.default_pseud])
-    assert_equal 2, user.creations.length
-    create_chapter(:work_id => work.id, :authors =>[user.default_pseud])
-    assert_equal 3, user.creations.length  
-    pseud = create_pseud(:user => user)
-    create_work(:authors => [pseud])
-    assert_equal 5, User.find(user.id).creations.length
-  end
-  
 end
