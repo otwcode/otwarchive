@@ -44,6 +44,7 @@ class TaggingTest < ActiveSupport::TestCase
     assert_equal [], work.tags           # no category, not valid
     tag = create_tag(:banned => false)
     tagging = create_tagging(:taggable => work, :tag => tag)
+    work.reload
     assert_equal Array(tag), work.tags   # no category, valid
   end
   def test_tags_with_category
@@ -70,9 +71,11 @@ class TaggingTest < ActiveSupport::TestCase
     assert_equal tag.name, work.tag_string
     tag2 = create_tag(:name => 'b comes second')
     tagging = create_tagging(:taggable => work, :tag => tag2) 
+    work.reload
     assert_equal "a comes first, b comes second", work.tag_string
     tag3 = create_tag(:name => 'an comes second')
     tagging = create_tagging(:taggable => work, :tag => tag3) 
+    work.reload
     assert_equal "a comes first, an comes second, b comes second", work.tag_string
   end
   def test_tag_string_by_category
@@ -96,6 +99,7 @@ class TaggingTest < ActiveSupport::TestCase
     # replace tags
     tag = create_tag(:tag_category => category)
     work.tag_with(category.name.to_sym => tag.name)
+    work.reload
     assert_equal Array(tag), work.tags
     # different category won't wipe out first
     category2 = create_tag_category

@@ -154,7 +154,7 @@ class WorksController < ApplicationController
       @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
     elsif params[:preview_button]
   	  @chapters = [@chapter]
-      render :partial => 'preview_edit', :layout => 'application'
+      render :action => "preview"
     elsif params[:cancel_button]
       # Not quite working yet - should send the user back to wherever they were before they hit edit
       redirect_back_or_default('/')

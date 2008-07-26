@@ -5,7 +5,6 @@ module TaggingExtensions
   # returns an array of (valid) tag objects
   # accepts either a category object, or a category name
   def tags(category='all')
-    self.reload
     if category == 'all'
       tags = taggings.collect(&:valid_tag)
     else 
@@ -23,7 +22,6 @@ module TaggingExtensions
   # returns a delimited string of tag names
   # accepts either a category object, or a category name
   def tag_string(category='all')
-    self.reload
     if category == 'all'
       tags.map(&:name).sort.join(ArchiveConfig.DELIMITER)
     else 
@@ -33,7 +31,6 @@ module TaggingExtensions
 
   # for use on bookmarks where there are no categories
   def tag_string=(tag_string)
-    self.reload
     if tag_string.blank?
       tag_array = []
     else
@@ -77,7 +74,6 @@ module TaggingExtensions
         tag_array = new_tags.flatten.compact
       end
       # add and remove tags to make the taggable's tags equal to the new tag_array
-      self.reload
       current = tags(category.name)
       add = tag_array - current
       remove = current - tag_array
