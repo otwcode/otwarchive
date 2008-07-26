@@ -28,7 +28,7 @@
   
   <!-- BEGIN header -->
 	<!-- hides header on login page -->
-	<%- unless current_page?({:controller => 'session', :action => 'new'}) || (login_path) || (session_path) -%>
+	<%- unless current_page?(:controller => 'session', :action => 'new') -%>
     <div id="header">
       <div id="login-block">
         <%- if logged_in? -%>
