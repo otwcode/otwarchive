@@ -13,6 +13,7 @@
 	margin-bottom: -10px;
 }	
 #authentication-logo { width: 50%;
+  display: inline; /* Needed for IE */
 }
 #authentication-loginform { width: 50%;
 	float:right;
@@ -38,7 +39,8 @@
 	/* Form-related styles */
 .authentication-checkbox { margin: 0px 10px 0px 0px;
 }
-.authentication-checkboxfield { margin: 10px 0px 15px 0px;
+.authentication-checkboxfield { margin: 10px 0px 10px 0px;
+  vertical-align: middle;
 }
 .authentication-label { margin: 10px 0px 10px 0px;
 }
@@ -54,6 +56,14 @@
 }
 .authentication-textfield { width: 250px;
 	text-align: left;
-	margin: 10px 0px 15px 0px;
+	margin: 5px 0px 5px 0px;
+	vertical-align: middle;
 }
-
+.authentication-submitbutton {
+	margin-left: 76px;
+	vertical-align: middle;
+}
+.authentication-openidlogo {
+	margin-left: -20px;
+	vertical-align: middle;
+}

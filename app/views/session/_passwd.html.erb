@@ -11,7 +11,7 @@
 
 <%= check_box_tag('remember_me', '1', false, :class => 'authentication-checkboxfield', :tabindex => '3') %>
   <span class="authentication-label"><label for="remember_me"><%=h "Remember me".t %></label></span> 
-	<%= submit_tag h('Login').t, :tabindex => '4' %>
+	<%= submit_tag h('Login').t, :class => 'authentication-submitbutton', :tabindex => '4' %>
 <br/>
 
 <%= link_to h('forgot password?').t, new_password_path, :tabindex => '6', :class =>'authentication-subheading' %>
