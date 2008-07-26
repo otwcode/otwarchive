@@ -112,6 +112,8 @@ class WorksController < ApplicationController
       @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
     elsif params[:edit_button]
       render :action => :new
+    elsif params[:cancel_coauthor_button]
+      render :action => :new
     elsif params[:cancel_button]
       redirect_back_or_default('/')    
     else  
