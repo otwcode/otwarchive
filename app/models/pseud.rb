@@ -58,4 +58,22 @@ class Pseud < ActiveRecord::Base
     user.default_pseud.add_creations creations
   end
   
+  # Change the ownership of a creation from one pseud to another
+  def change_ownership(creation, pseud)
+    creation.pseuds.delete(self)
+    creation.pseuds << pseud unless creation.pseuds.include?(pseud)
+    if creation.is_a?(Work)
+      creation.chapters.each {|chapter| self.change_ownership(chapter, pseud)}
+      for series in creation.series
+        if series.works.count > 1 && (series.works - [creation]).collect(&:pseuds).flatten.include?(self)
+          series.pseuds << pseud unless series.pseuds.include?(pseud)
+        else
+          self.change_ownership(series, pseud)
+        end
+      end
+      comment_ids = creation.find_all_comments.collect(&:id).join(",")
+      Comment.update_all("pseud_id = #{pseud.id}", "pseud_id = '#{self.id}' AND id IN (#{comment_ids})") unless comment_ids.blank?
+    end
+  end
+  
 end

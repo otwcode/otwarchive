@@ -8,26 +8,14 @@ class Creatorship < ActiveRecord::Base
   end 
   
   # Change authorship of work(s) from a particular pseud to the orphan account
-  # Include appropriate chapters and comments (not all comments, just comments left on the work that would identify the author)
   def self.orphan(pseuds, works, default=true)
     for pseud in pseuds
       for work in works
         unless pseud.blank? || work.blank? || !work.pseuds.include?(pseud)
-          creatorship = work.creatorships.find(:first, :conditions => {:pseud_id => pseud.id})
-          orphan_pseud = default ? User.orphan_account.default_pseud : User.orphan_account.pseuds.find_or_create_by_name(pseud.name)          
-          creatorship.pseud_id = orphan_pseud.id
-          creatorship.save
-          chapter_ids = work.chapters.collect(&:id).join(",")
-          comment_ids = work.find_all_comments.collect(&:id).join(",")
-          series_ids = work.series.collect(&:id).join(",")
-          Creatorship.update_all("pseud_id = #{orphan_pseud.id}", 
-                                 "pseud_id = '#{pseud.id}' AND creation_type = 'Chapter' AND creation_id IN (#{chapter_ids})") unless chapter_ids.blank?
-          Comment.update_all("pseud_id = #{orphan_pseud.id}", "pseud_id = '#{pseud.id}' AND id IN (#{comment_ids})") unless comment_ids.blank?
-          Creatorship.update_all("pseud_id = #{orphan_pseud.id}", 
-                                 "pseud_id = '#{pseud.id}' AND creation_type = 'Series' AND creation_id IN (#{series_ids})") unless series_ids.blank? 
+          orphan_pseud = default ? User.orphan_account.default_pseud : User.orphan_account.pseuds.find_or_create_by_name(pseud.name)
+          pseud.change_ownership(work, orphan_pseud)
         end   
       end
     end    
-  end
-  
+  end  
 end
