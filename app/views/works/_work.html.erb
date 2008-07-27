@@ -1,15 +1,6 @@
 <div class="story-show">
 
-  <div id="story-meta">
-  <ul>
-    <% TagCategory.official.each do |category| -%>
-    <li><strong><%= category.display_name %>:</strong> 
-      <% @work.tags(category).each do |tag| -%>
-      <%= link_to(tag.name, tag_path(tag))%>
-      <% end -%></li>
-    <% end -%>
-  </ul>
-  </div>
+  <%= render :partial => 'meta' %>
   
   <%- unless @work.series.blank? -%>
   <%= show_series_data(@work) %>
