@@ -8,10 +8,16 @@ class TagsController < ApplicationController
   # GET /tags
   # GET /tags.xml
   def index
-    @tags = Tag.find(:all, :order => "name")
+    if params[:search]
+      category = TagCategory.find(params[:tag_category_id])
+      @tags = category.tags.find(:all, :conditions => [ 'LOWER(name) LIKE ?', '%' + params[:search].strip + '%' ], :limit => 10)
+    else
+      @tags = Tag.find(:all, :order => "name")
+    end
 
     respond_to do |format|
       format.html # index.html.erb
+      format.js
       format.xml  { render :xml => @tags }
     end
   end

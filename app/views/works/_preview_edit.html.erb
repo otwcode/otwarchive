@@ -36,7 +36,9 @@
         <% if category.exclusive %>
           <%= collection_select(:work, category.name.to_sym, TagCategory.official_tags(category.name), :name, :name) %>		
         <% else %>
-          <%= f.text_field category.name %>
+          <%= text_field_with_auto_complete :work, category.name.downcase.to_sym, { :size => 50 }, 
+            { :url => { :controller => 'tags', :action => 'index', :tag_category_id => category.id}, :method => :get, :param_name => 'search', 
+                        :tokens => ',', :min_chars => 2, :skip_style => true } %>
         <% end %>
         <br />
 	    <% end %>		

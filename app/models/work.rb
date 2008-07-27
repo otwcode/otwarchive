@@ -33,8 +33,8 @@ class Work < ActiveRecord::Base
   before_save :validate_authors, :set_language
   before_save :post_first_chapter
   after_save :save_associated, :save_creatorships
-  after_update :save_associated, :save_creatorships    
-
+  after_update :save_associated, :save_creatorships 
+  
   # Associating works with languages. 
   
   belongs_to :language, :foreign_key => 'language_id', :class_name => '::Globalize::Language'
@@ -249,4 +249,16 @@ class Work < ActiveRecord::Base
        chapter.save(false)
     end
   end
+  
+  # I'm not sure if this is the same thing that's happening up above, but that didn't seem to be getting executed
+  # Need to be able to access 'work.warnings' etc. for the auto-complete fields
+  def self.generate_category_methods
+    TagCategory.official.each do |c|
+      define_method(c.name.downcase){tag_string(c)}
+      define_method(c.name.downcase+'='){|tag_name| tag_with(c.name.to_sym => tag_name)}
+    end  
+  end
+  
+  generate_category_methods
+  
 end
