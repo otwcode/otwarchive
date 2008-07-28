@@ -102,9 +102,9 @@ class WorksController < ApplicationController
     conditions << " AND restricted = 0 OR restricted IS NULL" unless logged_in?
     if params[:user_id]
       @user = User.find_by_login(params[:user_id])
-      @works = @user.works
+      @works = @user.works.paginate(:page => params[:page])
     else
-      @works = Work.find(:all, :conditions => conditions, :order => "works.created_at DESC", :include => :pseuds )
+      @works = Work.paginate(:all, :conditions => conditions, :order => "works.created_at DESC", :include => :pseuds, :page => params[:page], :per_page => 2)
     end
   end
   

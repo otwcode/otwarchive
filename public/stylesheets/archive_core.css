@@ -21,6 +21,7 @@ a {
 a:hover {
 	color: #999999;
 }
+
 a img {
   border: 0px;
 }
@@ -562,4 +563,11 @@ textarea.story-edit-notes {
 .pseud-works {
 	border-top: 1px solid black;
 	padding-bottom: 20px;
+}
+
+/*PAGINATION STYLING */
+
+.pagination {
+  text-align: center;
+  padding: .3em; 
 }

@@ -4,3 +4,9 @@
 	<%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
   <% end %>
 </ul>
+
+<div class="pagination">
+	  <%= will_paginate @works, :prev_label =>  "&laquo; Previous".t,:next_label => "Next &raquo;".t %>
+</div>
+<p></p>
+

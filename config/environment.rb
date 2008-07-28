@@ -94,7 +94,20 @@ Rails::Initializer.run do |config|
   # allow Action Mailer to attempt mail delivery?
   config.action_mailer.perform_deliveries = ArchiveConfig.PERFORM_DELIVERIES
   
+  # Specify gems for the project. Run rake:gems:install on setup to install required gems.
+  # It's necessary to specify the libraries for openid and will_paginate, otherwise the auto-require doesn't work.
+  # This is possibly because the name of the gem is different from the main file  it may crop up with other gems. 
+  
+
+  config.gem 'ruby-openid', :lib => 'openid'
+  config.gem 'chronic'
+  config.gem 'mislav-will_paginate', :lib => 'will_paginate', :source => 'http://gems.github.com'
+
+    
 end
+
 ActionController::AbstractRequest.relative_url_root = ArchiveConfig.PRODUCTION_URL_ROOT if ArchiveConfig.PRODUCTION_URL_ROOT && ENV['RAILS_ENV'] == 'production'
 
 require 'tagging_extensions'
+
+
