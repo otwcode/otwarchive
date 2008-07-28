@@ -1,11 +1,10 @@
 <!-- Password with link to strong password info (still needs to be added) -->
 <span class="authentication-label"><label for="password"><%= "And your password?" .t %> (Make it a <a href="#" tabindex="2">strong</a> one!)</label></span><br />	
-<%= @f.password_field :password, :class => 'authentication-textfield', :tabindex => '3' %>
-<% if ArchiveConfig.USE_OPENID %>
-  <%= link_to_function image_tag('openid.png', :alt=>"Use OpenID to log in".t), "Element.hide('passwd'); Element.show('openid')" %>
-<% end -%>
+<%= f.password_field :password, :class => 'authentication-textfield', :tabindex => '3' %>
 <br />
 <!-- Confirm password -->
 <span class="authentication-label"><label for="password_confirmation"><%= "Enter it again so we're sure we've got it?" .t %></label></span><br />
-<%= @f.password_field :password_confirmation, :class => 'authentication-textfield', :tabindex => '4' %><br />
+<%= f.password_field :password_confirmation, :class => 'authentication-textfield', :tabindex => '4' %>
+<br />
+
 	  

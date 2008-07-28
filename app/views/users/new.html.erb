@@ -4,20 +4,55 @@
 
 	<%= error_messages_for :user %>
 
-	<% form_for :user, :url => users_path do |@f| -%>
+	<% form_for :user, :url => users_path do |f| -%>
 	  <!-- Create login -->
 	  <span class="authentication-label"><label for="login"><%= "What would you like as your ".t + "user name".t%>?</label></span><br />
-	  <%= @f.text_field :login, :class => 'authentication-textfield', :tabindex => '1' %><br />
-    <div id="passwd"><%= render :partial => "passwd" %></div>
-    <% if ArchiveConfig.USE_OPENID %>	
-      <div id="openid" style="display: none"><%= render :partial => 'openid' %></div>
-    <% end -%>
+	  <%= f.text_field :login, :class => 'authentication-textfield', :tabindex => '1' %><br />
+    <!-- The password or OpenID login fields are shown in this div -->
+		<div id="switch_fields">
+			<!-- use_openid set by link_to_passwd and link_to_openid below; needed for non-JS users to distinguish between versions of the page --> 
+    	<%- if params[:use_openid] -%>
+			  <%= render :partial => 'openid', :locals => {:f => f} %>
+			<%- else -%>	
+			  <%= render :partial => 'passwd', :locals => {:f => f} %>
+      <% end -%>
+		</div>
+
+		<!-- Link to toggle between password and OpenID. Ugly code! :( -->
+		<!-- Two versions of the div tag here so the link to passwd is not shown
+		when the page is first loaded; for non-JS users clicking the link sets use_openid
+		to true, showing the div on reload; for JS users the display is toggled -->
+		<%- if params[:use_openid] -%>
+		  <div id="link_to_passwd">
+		<%- else -%>
+		  <div id="link_to_passwd" style="display: none;">
+		<%- end -%>
+		<!-- Moving the links into a helper didn't work as f wasn't being found :( -->	
+		<%= link_to_function("Sign up using a password", :href => url_for(:action => 'new', :use_openid => false), :class => 'authentication-subheading') do |page| 
+          page.replace_html "switch_fields", :partial => 'passwd', :locals => {:f => f}
+          page[:link_to_passwd].hide
+          page[:link_to_openid].show
+          end %>
+		  </div>
+		<div id="link_to_openid">
+			<!-- !params[:use_openid] ensures this is hidden on the openid version of the page for non-JS users -->			
+			<%- if !params[:use_openid] -%>		
+		    <%- if ArchiveConfig.USE_OPENID -%>
+          <%= image_tag("openid.png", :alt => h('OpenID logo').t) %>
+          <%= link_to_function("Sign up using OpenID", :href => url_for(:action => 'new', :use_openid => true), :class => 'authentication-subheading') do |page| 
+              page.replace_html "switch_fields", :partial => 'openid', :locals => {:f => f}           
+              page[:link_to_openid].hide
+              page[:link_to_passwd].show
+              end %>
+        <%- end -%>
+			<%- end -%> 
+		</div>
+		<br/>
 	  <!-- Email address -->
 	  <span class="authentication-label"><label for="email"><%= "What email address would you like us to use? (This has to be valid -- we'll be sending you a confirmation email before you can activate your account.)" .t %></label></span><br />
-	  <%= @f.text_field :email, :class => 'authentication-textfield', :tabindex => '6' %><br />
+	  <%= f.text_field :email, :class => 'authentication-textfield', :tabindex => '6' %><br />
 	  
 	  <!-- Age Check -->
-	  <!-- Needs to actually check this value on submission - functionality still has to be added for this! -->
 	  <p>
 	  <span class="authentication-label">
 	  	<label for="age-check">
@@ -28,13 +63,13 @@
 	  </p>
 	  
 	  <p class="authentication-checkboxfield">
-	  <%= @f.check_box :age_over_13, :class => 'authentication-checkbox', :tabindex => '9' %>
+	  <%= f.check_box :age_over_13, :class => 'authentication-checkbox', :tabindex => '9' %>
 	  Yes, I am over 13.
 	  </p>
 	  
 	  <p class="authentication-widebottommargin"></p>
 	  
-	  <!-- Terms of Service (actual TOS still needs to be added, as does functionality for the checkbox) -->
+	  <!-- Terms of Service (actual TOS still needs to be added) -->
 	  <p>
 	  <span class="authentication-label"><label for="tos-agree">And -- really important -- we need you to agree to our <a href="#" tabindex="10">Terms of Service</a>:</label></span><br />
 	  </p>
@@ -45,13 +80,12 @@
 	  
 	  <!-- If this box is not checked, needs a modal dialog box: "You must agree to the Terms of Service in order to create an account.", with OK as the only choice. -->
 	  <p class="authentication-checkboxfield">
-	  	<%= @f.check_box :terms_of_service, :class => 'authentication-checkbox', :tabindex => '11' -%>
+	  	<%= f.check_box :terms_of_service, :class => 'authentication-checkbox', :tabindex => '11' -%>
 	  	Yes, I have read the Terms of Service and agree to them.
 	  </p>
 
 	  <!-- Buttons for "Cancel" and "Create Account" -->
       <!-- "Create Account" needs to submit form information and send out an email to the user with confirmation information; the confirmation info should send the user back to accountconfirm.html -->
-      <!-- Functionality still needs to be added for the cancel button - where should it take the user? -->
 	  <p class="authentication-wideleftmargin">
 	  <input type="submit" name="cancel-create-account" class="authentication-largebutton" value="Cancel" tabindex="12" /><%= submit_tag 'Create Account' .t, :class => 'authentication-largebutton', :tabindex => '13' %>
 	  </p>
