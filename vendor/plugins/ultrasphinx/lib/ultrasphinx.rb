@@ -1,6 +1,6 @@
 
 require 'fileutils'
-require 'chronic'
+require 'chronic' if defined? Chronic
 require 'singleton'
 
 if defined? RAILS_ENV and RAILS_ENV == "development"
