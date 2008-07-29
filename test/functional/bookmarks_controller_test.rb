@@ -33,6 +33,7 @@ class BookmarksControllerTest < ActionController::TestCase
   context "when showing a bookmark" do
     setup do
       @bookmark = create_bookmark
+      @bookmark.bookmarkable.update_attribute(:posted, true)
       get :show, :locale => 'en', :id => @bookmark.id
     end
     should_respond_with :success
@@ -44,23 +45,23 @@ class BookmarksControllerTest < ActionController::TestCase
     setup do
       @user = create_user
       @bookmark = create_bookmark(:user => @user, :private => true)
+      @bookmark.bookmarkable.update_attribute(:posted, true)
       @request.session[:user] = @user 
       get :show, :locale => 'en', :id => @bookmark.id
-    end
-    
+    end    
     should_respond_with :success
   end
+  
   context "when showing a private bookmark, not my own" do
     setup do
       @user = create_user
       @request.session[:user] = @user 
       @bookmark = create_bookmark(:private => true)
+      @bookmark.bookmarkable.update_attribute(:posted, true)
       @request.session[:user] = @user 
       get :show, :locale => 'en', :id => @bookmark.id
     end
     
-    should_eventually "respond with failure"
+    should_respond_with 403
   end
-  
-#  FIXME needs many more tests
 end

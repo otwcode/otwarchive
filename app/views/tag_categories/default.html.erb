@@ -1,6 +1,6 @@
 <h2>TagWrangler: <%= @tag_category.display_name %> tag category </h2>
 
-<p>Drag a tag by it's handle (<img src="/images/drag.png" alt="drag me">) and drop it on the following line to move it to the <%= @tag_category.display_name %> category, or onto a <%= @tag_category.display_name %> Tag, in order to create a <%= link_to TagRelationship.disambiguate.name, tag_relationship_path(TagRelationship.disambiguate) %> relationship</p>
+<p>Drag a tag by it's handle (<img src="/images/drag.png" alt="drag me">) and drop it on the following line to move it to the <%= @tag_category.display_name %> category</p>
 
 <div id=<%= @tag_category.display_name %> class="droppable">
     Move to <%= @tag_category.display_name %> category
@@ -13,7 +13,7 @@
 <p><b><%= @tag_category.display_name %> Tags:</b>
 <div id="change">
   <% @tag_category.tags.each do |tag| -%>
-    <%= render :partial => 'droppable', :locals => { :tag => tag }%>
+    <%= render :partial => 'tag', :locals => { :tag => tag }%>
   <% end %> 
 </div>
 

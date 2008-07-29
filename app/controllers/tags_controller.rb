@@ -26,16 +26,23 @@ class TagsController < ApplicationController
   # GET /tags/1.xml
   def show
     @tag = Tag.find(params[:id])
-    @ambiguous = @tag.disambiguates
-    @works = @tag.tagees('Works')
-    @bookmarks = @tag.tagees('Bookmarks')
-    @tags = @tag.tagees('Tags')
-    @tag.synonyms.each do |t|
-      @works += t.tagees('Works')
-      @bookmarks += t.tagees('Bookmarks')
-      @tags += t.tagees('Tags')
+    unless @tag.valid
+      render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 and return
     end
+
+    @works = @tag.visible('Works', current_user)
+    @bookmarks = @tag.visible('Bookmarks', current_user)
+    @tags = @tag.visible('Tags', current_user)
+    @ambiguous = @tag.disambiguates
+
+    @tag.synonyms.each do |t|
+      @works += t.visible('Works', current_user)
+      @bookmarks += t.visible('Bookmarks', current_user)
+      @tags += t.visible('Tags', current_user)
+    end
+
     @tags = @tags - @tag.synonyms - [@tag] - @ambiguous
+
     @works.uniq!
     @bookmarks.uniq!
     @tags.uniq!

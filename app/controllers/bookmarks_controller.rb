@@ -1,25 +1,43 @@
 class BookmarksController < ApplicationController 
   before_filter :load_bookmarkable, :only => [ :index, :new, :create ]
   
-  # Get the parent of the desired comment(s) 
-  # Just covering all the bases here for now
+  # get the parent
   def load_bookmarkable
     if params[:work_id]
       @bookmarkable = Work.find(params[:work_id])
     end    
+    if params[:external_work_id]
+      @bookmarkable = ExternalWork.find(params[:external_work_id])
+    end    
+    if params[:user_id]
+      @user = User.find_by_login(params[:user_id]) 
+    end
   end  
   
-  # GET /bookmarks
-  # GET /bookmarks.xml
+  # GET    /:locale/bookmarks
+  # GET    /:locale/users/:user_id/bookmarks 
+  # GET    /:locale/works/:work_id/bookmarks 
+  # GET    /:locale/external_works/:external_work_id/bookmarks
   def index
-    @user = User.find_by_login(params[:user_id]) if params[:user_id]
-    @bookmarks = @user ? @user.bookmarks : @bookmarkable.nil? ? Bookmark.find(:all) : @bookmarkable.bookmarks
+    @bookmarks = @user ? @user.bookmarks.visible(current_user) : @bookmarkable.nil? ? Bookmark.visible(current_user) : @bookmarkable.bookmarks.visible(current_user)
+    if @bookmarkable
+      unless @bookmarkable.visible(current_user)
+        render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 
+      end
+    end
   end
 
-  # GET /bookmarks/1
-  # GET /bookmarks/1.xml
+  # GET    /:locale/bookmark/:id
+  # GET    /:locale/users/:user_id/bookmarks/:id
+  # GET    /:locale/works/:work_id/bookmark/:id
+  # GET    /:locale/external_works/:external_work_id/bookmark/:id
   def show
     @bookmark = Bookmark.find(params[:id])
+    if @bookmark
+      unless @bookmark.visible(current_user)
+        render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 
+      end
+    end
   end
 
   # GET /bookmarks/new

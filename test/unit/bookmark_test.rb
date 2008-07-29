@@ -1,34 +1,71 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class BookmarkTest < ActiveSupport::TestCase
-  context "A Bookmark, in general" do
+  context "A Bookmark" do
     setup do
-      @bookmark = create_bookmark()
+      @bookmark = create_bookmark
     end
     should_belong_to :bookmarkable
     should_belong_to :user
     should_have_many :taggings
     should_ensure_length_in_range :notes, (0..2500)
-    should "invert public and private" do
-      assert_equal @bookmark.private?, !@bookmark.public?
+  end
+  context "A public bookmark on a posted work" do
+    setup do
+      @bookmark = create_bookmark(:private => false)
+      @bookmark.bookmarkable.update_attribute(:posted, true)
+    end
+    should "be visible" do
+      assert @bookmark.visible
+    end
+    should "be visible en group" do
+      assert Bookmark.visible.include?(@bookmark)
+    end
+    context "which is restricted" do
+      setup do
+        @bookmark.bookmarkable.update_attribute(:restricted, true)
+      end
+      should "not be visible by default" do
+        assert !@bookmark.visible
+      end
+      should "be visible to a user" do
+        assert @bookmark.visible(create_user)
+      end
+    end
+    context "on an external work" do
+      setup do
+        @external_work = create_external_work
+        @bookmark.bookmarkable = @external_work
+        @bookmark.save
+      end
+      should "be visible" do
+        assert @bookmark.visible
+      end
+    end
+    context "on a user" do
+      setup do
+        @user = create_user
+        @bookmark.bookmarkable = @user
+        @bookmark.save
+      end
+      should "be visible" do
+        assert @bookmark.visible
+      end
     end
   end
-  context "A Bookmark on a work" do
+  context "A private bookmark on a posted work" do
     setup do
-      @work = create_work
-      @bookmark = create_bookmark(:bookmarkable => @work)
+      @bookmark = create_bookmark(:private => true)
+      @bookmark.bookmarkable.update_attribute(:posted, true)
     end
-    should "have a work bookmarkable type" do
-      assert_equal "Work", @bookmark.bookmarkable_type
+    should "not be visible by default" do
+      assert !@bookmark.visible
     end
-  end
-  context "A Bookmark on an external work" do
-    setup do
-      assert @work = create_external_work
-      assert @bookmark = create_bookmark(:bookmarkable => @work)
+    should "not be visible to a random user" do
+      assert !@bookmark.visible(create_user)
     end
-    should "have an external work bookmarkable type" do
-      assert_equal "ExternalWork", @bookmark.bookmarkable_type
+    should "be visible to it's owner" do
+      assert @bookmark.visible(@bookmark.user)
     end
   end
 end

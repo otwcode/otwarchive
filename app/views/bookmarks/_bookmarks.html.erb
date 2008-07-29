@@ -1,7 +1,5 @@
 <div id="bookmarks">
   <%- for bookmark in @bookmarks -%>
-    <%- if bookmark.public? || (bookmark.private? && is_author_of?(bookmark)) -%>
-      <%= render :partial => 'bookmarks/bookmark', :locals => {:bookmark => bookmark} %>
-    <%- end -%>
+    <%= render :partial => 'bookmarks/bookmark', :locals => {:bookmark => bookmark} %>
   <%- end -%> 
 </div>

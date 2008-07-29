@@ -11,6 +11,7 @@ class ChaptersControllerTest < ActionController::TestCase
     @request.session[:user] = user    
     chapter = new_chapter
     work = create_work(:chapters => [chapter], :authors => user.pseuds)
+    work.reload
     assert_difference('Chapter.count') do
       post :create, :locale => 'en', :work_id => work.id, 
       :chapter => {:content => random_chapter, :author_attributes => {:ids => [work.pseuds.first.id]}}
@@ -28,10 +29,12 @@ class ChaptersControllerTest < ActionController::TestCase
     assert_equal Work.find(work.id).number_of_chapters, 1
   end
   def test_destroy_work_chapter
+    # FIXME - this should fail - no session means anyone can do it...
     pseud = create_pseud
-    chapter1 = new_chapter
-    work = create_work(:chapters => [chapter1], :authors => [pseud])
-    chapter2 = create_chapter(:authors => work.pseuds, :work => work)
+    chapter1 = new_chapter(:authors => [pseud])
+    chapter2 = new_chapter(:authors => [pseud])
+    work = create_work(:chapters => [chapter1, chapter2], :authors => [pseud])
+    work.update_attribute(:posted, true)
     assert_difference('Chapter.count', -1) do
       delete :destroy, :locale => 'en', :work_id => work.id, :id => chapter1.id
     end

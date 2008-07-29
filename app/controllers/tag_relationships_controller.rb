@@ -19,11 +19,11 @@ class TagRelationshipsController < ApplicationController
   # GET /tag_relationships/1.xml
   def show
     @tag_relationship = TagRelationship.find(params[:id])
-    if @tag_relationship == TagRelationship.disambiguate
-      redirect_to tag_category_path(TagCategory.ambiguous)
-    end
     @taggings = @tag_relationship.taggings.select{|tagging| tagging.taggable_type == 'Tag'}
     @categories = TagCategory.official(:include => 'tags')
+    if @tag_relationship == TagRelationship.disambiguate
+     render :action => 'ambiguous'
+    end
   end
 
   # GET /tag_relationships/new

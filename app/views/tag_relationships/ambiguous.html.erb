@@ -1,0 +1,13 @@
+<h2>TagWrangler: Tags in Relationship <%= @tag_relationship.name %></h2>
+<table id='table'>
+  <tr>
+    <th></th>
+    <th><%= @tag_relationship.verb_phrase %></th>
+  </tr>
+<% @taggings.each do |tagging| -%>
+  <%= render :partial => 'table', :locals => { :tagging => tagging }%>   
+<% end -%>
+</table>
+<p>To create new taggings go to the <%= link_to TagCategory.ambiguous.name, tag_category_path(TagCategory.ambiguous) %> tag category page</p>
+<%= tag_wrangler_footer %>
+

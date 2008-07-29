@@ -3,39 +3,41 @@ require File.dirname(__FILE__) + '/../test_helper'
 # the tests here are for the tagging model, and the tagging_extensions library
 
 class TaggingTest < ActiveSupport::TestCase
-  def test_tagees
-    tag = create_tag
-    tagged = create_tag
-    tagging = create_tagging(:taggable => tagged, :tag => tag)
-    assert_equal Array(tagged), tag.tagees
+  context "a tagging" do
+    setup do
+      @tag_category = create_tag_category
+      @tag1 = create_tag(:tag_category => @tag_category)
+      @tagging = create_tagging(:tag => @tag1)
+    end
+    should_belong_to :tag, :tag_relationship, :taggable
+    should_require_attributes :tag, :taggable
+    should "be able to find_by_category" do
+      assert Tagging.find_by_category(@tag_category).include?(@tagging)
+    end
+    should "be able to find_by_tag" do
+      assert Tagging.find_by_tag(@tag1).include?(@tagging)
+    end
   end
-  def test_find_by_category
-    category = create_tag_category
-    tag = create_tag(:tag_category => category)
-    work = create_work
-    tagging = create_tagging(:tag => tag, :taggable => work)
-    assert_equal work.taggings, Tagging.find_by_category(category)
-    # tag the work with a tag in a different category
-    category2 = create_tag_category
-    tag2 = create_tag(:tag_category => category2)
-    tagging = create_tagging(:taggable => work, :tag => tag2)
-    work.reload
-    # the taggings should be different, but together should make up all the work's taggings
-    assert_not_equal Tagging.find_by_category(category), Tagging.find_by_category(category2)
-    assert_equal work.taggings, Tagging.find_by_category(category) + Tagging.find_by_category(category2)
+  context "a tagging with a reciprocal relationship" do
+    setup do
+      @tag1 = create_tag
+      @tag2 = create_tag
+      @tag_relationship = create_tag_relationship(:reciprocal => true)
+      @tagging = create_tagging(:tag => @tag1, :taggable => @tag2, :tag_relationship => @tag_relationship)
+    end
+    should "duplicate the tagging" do
+      assert Tagging.find_by_tag(@tag2)
+    end
+    context "which destroys the relationship one way" do
+      setup do
+        @tagging.destroy
+      end
+      should "destroy it the other way as well" do
+        assert_equal [], Tagging.find_by_tag(@tag2)
+      end
+    end
   end
-  def test_find_by_tag
-    tag = create_tag
-    work = create_work
-    tagging = create_tagging(:tag => tag, :taggable => work)
-    work.reload
-    # work has one tagging, with this tag
-    assert_equal work.taggings, work.taggings.find_by_tag(tag)
-    tagging = create_tagging(:taggable => work)
-    work.reload
-    # work now has two taggings
-    assert_not_equal work.taggings, work.taggings.find_by_tag(tag)
-  end
+
   def test_tags
     tag = create_tag(:banned => true)
     work = create_work

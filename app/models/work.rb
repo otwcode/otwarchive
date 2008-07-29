@@ -1,5 +1,6 @@
 class Work < ActiveRecord::Base
   has_many :chapters, :dependent => :destroy
+  validates_associated :chapters
 
   has_many :serial_works
   has_many :series, :through => :serial_works
@@ -15,7 +16,6 @@ class Work < ActiveRecord::Base
   is_indexed :fields => ['created_at', 'title', 'summary', 'notes'], 
              :concatenate => [{:association_name => 'chapters', :field => 'content', :as => 'body'}]
   
-  named_scope :public, :conditions => "restricted = 0 OR restricted IS NULL"
   named_scope :recent, :order => 'created_at DESC', :limit => 5
 
   validates_presence_of :title
@@ -25,7 +25,7 @@ class Work < ActiveRecord::Base
 
   # Virtual attribute to use as a placeholder for pseuds before the work has been saved
   # Can't write to work.pseuds until the work has an id
-  attr_accessor :authors, :poster
+  attr_accessor :authors
   attr_accessor :invalid_pseuds
   attr_accessor :ambiguous_pseuds
   attr_accessor :new_parent
@@ -39,6 +39,23 @@ class Work < ActiveRecord::Base
   
   belongs_to :language, :foreign_key => 'language_id', :class_name => '::Globalize::Language'
    
+  def self.visible(current_user=:false, options = {})
+    with_scope :find => options do
+      find(:all).collect {|w| w if w.visible(current_user)}.compact
+    end
+  end
+  
+  def visible(current_user=:false)
+    if current_user == :false
+      return self if self.posted unless self.restricted
+    elsif self.posted
+      return self
+    else
+      return self if (self.pseuds & current_user.pseuds).size > 0      
+    end
+  end
+  
+
   def set_language
     return if self.language
     if Locale.active && Locale.active.language
@@ -50,14 +67,14 @@ class Work < ActiveRecord::Base
     self.chapters.collect { |c| c.find_all_comments }.flatten
   end
 
-  # Adds customized error messages and clears the "chapters is invalid" message for invalid chapters
-  def validate
-    unless self.chapters.first && self.chapters.first.valid?
-      errors.clear
-      errors.add_to_base("Please enter your story in the text field below.")
+  # rephrases the "chapters is invalid" message
+  def after_validation
+    if self.errors.on(:chapters)
+      self.errors.add(:base, "Please enter your story in the text field below.")
+      self.errors.delete(:chapters)
     end
   end
-    
+
   # Virtual attribute for first chapter
   def chapter_attributes=(attributes)
     self.new_record? ? self.chapters.build(attributes) : self.chapters.first.attributes = attributes

@@ -1,65 +1,58 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class WorkTest < ActiveSupport::TestCase
-  # Test associations
-  #   has_many :chapters, :dependent => :destroy
-  def test_has_many_chapters
-    work = create_work
-    assert chapter = work.chapters.first
-    chapter2 = create_chapter(:work => work, :authors => work.pseuds)
-    Work.find(work.id).destroy
-    assert_raises(ActiveRecord::RecordNotFound) { Chapter.find(chapter.id) }
-    assert_raises(ActiveRecord::RecordNotFound) { Chapter.find(chapter2.id) }
-  end
-  #   validates presence of title
-  def test_title
-    work = new_work(:title => "")
-    assert !work.save
-    new_title = random_phrase
-    work.title=new_title
-    assert work.save
-  end
-  # belongs_to :language
-  # TODO test_belongs_to_language
-   
-  # Test before and after 
-  # before_save :validate_authors
-  # before_save :set_language 
-  def test_before_save
-    Locale.set 'en'
-    pseud = create_pseud
-    chapter = new_chapter(:authors => [pseud])
-    work = new_work(:authors => [], :chapters => [chapter])
-    assert !work.save
-    work.authors = [pseud]
-    assert work.save
-    assert_equal [pseud], Work.find(work.id).pseuds
-    assert_equal work.language, Locale.active.language  #English
-    
-    # setting a work language that doesn't match the locale shouldn't get overwritten
-    language = create_language(:id => 1556, :iso_639_1 => 'de', :english_name => 'German', :native_name => 'Deutsch')
-    work.language = language
-    work.save
-    assert_equal language, Work.find(work.id).language    
-    assert_not_equal Locale.active.language, Work.find(work.id).language
-  end
-  # TODO test after_save :save_creatorships
-  # TODO test after_update :save_associated, :save_creatorships
-  
-  # Test methods
-  def test_find_all_comments
-    pseud = create_pseud
-    chapter1 = new_chapter
-    work = create_work(:chapters => [chapter1])
-    chapter2 = create_chapter(:work => work, :authors => work.pseuds)
-    chapter3 = create_chapter(:work => work, :authors => work.pseuds)
-    comment1 = new_comment(:commentable_id => chapter1.id, :email => '', :name => '', :pseud_id => pseud.id)
-    comment1.set_and_save
-    comment2 = new_comment(:commentable_id => chapter2.id, :email => '', :name => '', :pseud_id => pseud.id)
-    comment2.set_and_save
-    comment3 = new_comment(:commentable_id => chapter3.id, :email => '', :name => '', :pseud_id => pseud.id)
-    comment3.set_and_save
-    assert_equal [comment1, comment2, comment3], Work.find(work.id).find_all_comments 
+  context "a work" do
+    setup do
+      assert @work = create_work
+    end
+    should_have_many :chapters, :serial_works, :series, :related_works, :bookmarks, :taggings, :pseuds
+    should_require_attributes :title
+    should_ensure_length_in_range :title, 3..255
+    should_ensure_length_in_range :notes, 0..2500, :long_message => /must be less/
+    should_ensure_length_in_range :summary, 0..1250, :long_message => /must be less/
+    should_belong_to :language
+    should "have an author" do
+      work = new_work(:authors => [])
+      assert !work.save
+      assert_contains work.errors.on(:base), /must have at least one author/
+    end
+    should_eventually "have a valid author" do
+    end
+    should "be visible to it's owner even if unposted" do
+      assert @work.visible(@work.pseuds.first.user)
+    end
+    context "which has been posted" do
+      setup do
+        @work.posted = true
+        @work.save
+      end
+      should "be visible" do
+        assert @work.visible
+      end
+      should "be visible en group" do
+        assert Work.visible.include?(@work)
+      end
+      context "which is restricted" do
+        setup do
+          @work.restricted = true
+          @work.save
+        end
+        should "not be visible by default" do
+          assert !@work.visible
+        end
+        should "be visible to a user" do
+          assert @work.visible(create_user)
+        end
+      end
+    end
+    context "with a comment on a chapter" do
+      setup do
+        @comment = create_comment(:commentable => @work.chapters.first)
+      end
+      should "find that comment" do
+        assert @work.find_all_comments.include?(@comment)
+      end
+    end
   end
   def test_number_of_chapters
     work = create_work
@@ -73,21 +66,6 @@ class WorkTest < ActiveSupport::TestCase
     assert 2, work.number_of_chapters
     assert 2, chapter3.position
   end 
-  def test_number_of_posted_chapters
-    # TODO test_last_chapter
-  end
-  def test_last_chapter
-    # TODO test_last_chapter
-  end
-  def test_adjust_chapters
-    # TODO test_adjust_chapters
-  end
-  def test_update_major_version
-    # TODO test_update_major_version
-  end
-  def test_update_minor_version
-    # TODO test_update_minor_version
-  end 
   def test_chaptered
     work = create_work(:expected_number_of_chapters => 1)
     assert !work.chaptered?
@@ -95,9 +73,6 @@ class WorkTest < ActiveSupport::TestCase
     assert work.chaptered?
     work.expected_number_of_chapters = 42
     assert work.chaptered?
-  end
-  def test_multipart
-    # TODO test_multipart
   end
   def test_wip
     work = create_work
@@ -132,15 +107,4 @@ class WorkTest < ActiveSupport::TestCase
     work.expected_number_of_chapters = nil
     assert_equal "?", work.wip_length  
   end
-  
-  # FIXME didn't create methods for the following, because they could/should be private
-  # validate
-  # set_language
-  # metadata_attributes=
-  # chapter_attributes=
-  # author_attributes=
-  # validate_authors
-  # save_creatorships
-  # save_associated
-  # set_initial_version  
 end

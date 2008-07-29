@@ -72,7 +72,6 @@ class WorksController < ApplicationController
       @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
       to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 
       @selected = to_select.collect {|pseud| pseud.id.to_i }
-      @work.poster = current_user
       @series = current_user.series 
     end
   end
@@ -96,21 +95,20 @@ class WorksController < ApplicationController
    
   # GET /works
   def index
-    conditions = "posted = true"
-    # Get only works in the current locale
-	  conditions << " AND language_id = #{Locale.active.language.id}" if Locale.active && Locale.active.language
-    conditions << " AND restricted = 0 OR restricted IS NULL" unless logged_in?
     if params[:user_id]
       @user = User.find_by_login(params[:user_id])
-      @works = @user.works.paginate(:page => params[:page])
+      @works = @user.works.visible(current_user).paginate(:page => params[:page])
     else
-      @works = Work.paginate(:all, :conditions => conditions, :order => "works.created_at DESC", :include => :pseuds, :page => params[:page], :per_page => 2)
+      @works = Work.visible(current_user).paginate(:page => params[:page], :per_page => 2)
     end
   end
   
   # GET /works/1
   # GET /works/1.xml
   def show
+    unless @work.visible(current_user)
+      render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 and return
+    end
     @comments = @work.find_all_comments
   end
   
@@ -176,18 +174,20 @@ class WorksController < ApplicationController
     elsif params[:edit_button]
       render :partial => 'work_form', :layout => 'application'
     else
-      begin
-        @chapter.save!
-        @work.posted = true 
-        @work.save!
-        @work.update_minor_version
+      saved = true
+      @chapter.save || saved = false
+      @work.posted = true 
+      @work.save || saved = false
+      @work.update_minor_version
+      if saved
         if params[:post_button]
           flash[:notice] = 'Work was successfully posted.'.t
         elsif params[:update_button]
           flash[:notice] = 'Work was successfully updated.'.t
         end
         redirect_to(@work)
-      rescue
+      else
+        flash[:notice] = 'Something went wrong.'.t
         render :partial => 'work_form', :layout => 'application' 
       end
     end 

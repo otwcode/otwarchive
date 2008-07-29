@@ -22,7 +22,7 @@ class TagCategory < ActiveRecord::Base
 
   # required default category, if it doesn't exist, create it.
   def self.default
-    find_by_name('default') || TagCategory.create({ :name => 'default', :official => true, :display_name => 'Freeform' })
+    find_by_name('default') || TagCategory.create({ :name => 'default', :official => true, :display_name => 'Tags' })
   end
 
 

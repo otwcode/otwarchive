@@ -1,21 +1,28 @@
 class Tag < ActiveRecord::Base
   belongs_to :tag_category
   has_many :taggings, :as => :taggable, :dependent => :destroy
-  belongs_to :tagging, :dependent => :destroy
   include TaggingExtensions
 
+  validates_presence_of :name
+  validates_uniqueness_of :name
   validates_length_of :name, :maximum => ArchiveConfig.TAG_MAX
   validates_format_of :name, 
                       :with => /\A[-a-zA-Z0-9 \/?.!''"";\|\]\[}{=~!@#\$%^&()_+]+\z/, 
-                      :message => "tags can only be made up of letters, numbers, spaces and basic punctuation, but not commas and colons"
-  validates_uniqueness_of :name
+                      :message => "tags can only be made up of letters, numbers, spaces and basic punctuation, but not commas, colons, asterisks or angle brackets"
   
-  def before_create
-    self.name = name.strip.squeeze(" ")
+  def before_validation
+    self.name = name.strip.squeeze(" ") if self.name
   end
   
-  def tagees(kind=['Tags', 'Works', 'Bookmarks'])
-    kind.collect {|k| Tagging.tagees(:conditions => {:tag_id => self.id, :taggable_type => k.singularize}) }.flatten.compact
+  # kind is one of 'Tags', 'Works', 'Bookmarks'
+  # this function returns an array of visible 'kind's that have been tagged with the given tag.
+  def visible(kind, current_user=:false)
+    case kind
+      when 'Works', 'Bookmarks'
+        Tagging.tagees(:conditions => {:tag_id => self.id, :taggable_type => kind.singularize}).select {|t| t if t.visible(current_user)}
+      when 'Tags'
+        Tagging.tagees(:conditions => {:tag_id => self.id, :taggable_type => kind.singularize}).map(&:valid).compact
+    end
   end
   
   def valid

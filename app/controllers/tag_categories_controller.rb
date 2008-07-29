@@ -27,7 +27,7 @@ class TagCategoriesController < ApplicationController
       if @tag_category == TagCategory.ambiguous
        render :action => 'ambiguous'
       elsif @tag_category == TagCategory.default
-       render :action => 'freeform'
+       render :action => 'default'
       end
     end
   end

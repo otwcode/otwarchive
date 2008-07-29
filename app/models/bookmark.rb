@@ -6,10 +6,28 @@ class Bookmark < ActiveRecord::Base
 
   validates_length_of :notes, :maximum => ArchiveConfig.NOTES_MAX, :message => "must be less than %d letters long."/ArchiveConfig.NOTES_MAX
     
-  def public?
-    !self.private?
+  def self.visible(current_user=:false, options = {})
+    with_scope :find => options do
+      find(:all).collect {|b| b if b.visible(current_user)}.compact
+    end
   end
-
+  
+  def visible(current_user=:false)
+    visibility = false
+    if self.private?
+      visibility = true if user == current_user
+    else
+      visibility = true
+    end
+    if visibility
+      if self.bookmarkable_type == 'Work'
+        return self if self.bookmarkable.visible(current_user)
+      else
+        return self
+      end
+    end
+  end
+  
   # Virtual attribute for external works
   def external=(attributes)   
     unless attributes.values.to_s.blank?
