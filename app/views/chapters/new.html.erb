@@ -1,7 +1,10 @@
-<h1>Add new chapter for "<%=h @work.title %>"</h1>
-
 <%= error_messages_for :chapter %>
+
+<h2 class="nomargin list-left"><%=h 'Add chapter'.t %></h2>
+<span class="list-right required"><%=h '* Required field'.t %></span>
+  <p class="clearbothdrop"></p>
+<h3 class="nomargin list-left"><%=h @work.title %></h3>
+  <p class="clearbothdrop"></p>
 
 <%= render :partial => 'chapter_form', :locals => { :chapter => @chapter, :button_text => "Create" } %>
 
-<%= link_to 'Back', work_chapters_path %>

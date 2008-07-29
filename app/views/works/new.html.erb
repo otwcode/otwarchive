@@ -1,12 +1,12 @@
 <%= error_messages_for :work %>
 
 <div>
-  <h2 class="nomargin"><span class="list-left">Post Story</span></h2>
+  <h2 class="nomargin list-left"><%=h 'Post Story'.t %></h2>
   
   <!-- The "morefeatures" span can be removed at will without breaking the page. -->
-  <span class="list-left leftmargin">Further features coming soon.  Questions? <%= mail_to ArchiveConfig.QUESTION_ADDRESS, "Email us" %>.</span>
+  <span class="list-left leftmargin"><%=h 'Further features coming soon. Questions?'.t %> <%= mail_to ArchiveConfig.QUESTION_ADDRESS, h("Email us").t %>.</span>
   
-  <span class="list-right required">* Required field</span>
+  <span class="list-right required"><%=h '* Required field'.t %></span>
 
   <p class="clearbothdrop"></p>
 

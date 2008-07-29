@@ -1,16 +1,28 @@
+<div id="story-form">
 <% form_for([@work, chapter], :html => {:name => "storyForm"}) do |f| %>
     <p>
-      Chapter <%= f.text_field :current_position, :class => "number-field" %> of <%= f.text_field :wip_length, :class => "number-field" %> 
+      <%=h 'Chapter'.t %> <%= f.text_field :current_position, :class => "number-field" %> <%=h 'of'.t %> <%= f.text_field :wip_length, :class => "number-field" %> 
+    </p>
+   
+    <p>
+      <%= f.label :title, h('Chapter title').t %><br />
+      <%= f.text_field :title, :class => "storyinputfield", :live => true %> 
     </p>
 
-  
-  <!-- Author dropdown (pseud_id) -->
+    <p>
+      <%= f.label :content, h('Chapter, in plain text with limited HTML*').t, :class => "required" %><br />
+		  <%- use_tinymce -%>
+		  <a href="javascript:addEditor('content');"><%=h 'Rich text'.t %></a>  <a href="javascript:removeEditor('content');"><%=h 'HTML'.t %></a><br />
+		  <%= f.text_area :content, :live => true, :class => "mce-editor", :id => "content" %>
+		</p>
+		
+		  <!-- Author dropdown (pseud_id) -->
 		<%- if @pseuds.size > 1 -%>
   	  <p class="field-left">
   	<%- else -%>
 		  <p style="display:none;">
 		<%- end -%>	
-    <%= label :pseud, :id, "Select author/pseudonym(s)" %><br />
+    <%= label :pseud, :id, h('Select author/pseudonym(s)').t %><br />
     <select name="chapter[author_attributes][ids][]" multiple="multiple">
       <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
     </select> 
@@ -18,50 +30,38 @@
 
 		<%- if @pseuds.size > 1 -%>
       <p class="field-right"> 
-        <%= link_to 'Create pseud?', new_user_pseud_path(current_user) %><br />
+        <%= link_to h('Create pseud?').t, new_user_pseud_path(current_user) %><br />
 		<%- else -%>
 		  <p class="field-left">
 		<%- end -%>  
-    <%= link_to_function('Add co-authors?', "Element.toggle('co-authors')") %>
+    <%= link_to_function(h('Add co-authors?'.t), "Element.toggle('co-authors')") %>
       </p>
 
 	<p class="clearboth"></p>
 
   <div id="co-authors"> 	  
     <p id="coauthormanage">
-      <p>
-        <span class="storylabel"><label for="storycoauthor">Enter co-author name(s):</label></span>
+        <span class="storylabel"><label for="storycoauthor"><%=h "Enter co-author name(s):".t %></label></span>
      	  <%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
             { :url => {:controller => 'pseuds', :action => 'choose_coauthors'}, :method => :get, :param_name => 'search', 
               :tokens => ',', :min_chars => 2, :skip_style => true } %>
-      </p> 
     </p>
    </div>
-    
-    <p>
-      <b>Chapter Title</b><br />
-      <%= f.text_field :title, :live => true %> 
-    </p>
+	 <br />
 
     <p>
-      <b>Chapter Summary</b><br />
+      <%= f.label :summary, "Chapter summary (max %d letters)"/ArchiveConfig.SUMMARY_MAX %><br />
       <%= f.text_area :summary, :live => true %>
     </p>
 
     <p>
-      <b>Chapter Notes</b><br />
+      <%= f.label :notes, "Chapter notes (max %d letters)"/ArchiveConfig.NOTES_MAX %><br />
       <%= f.text_area :notes, :live => true %>
     </p>
 
-  <p>
-    <b>Chapter text</b><br />
-	<% use_tinymce -%>
-		<p><a href="javascript:addEditor('content');">Rich text</a>  <a href="javascript:removeEditor('content');">HTML</a></p>
-    <%= f.text_area :content, :live => true, :class => "mce-editor", :id => "content" %>
-  </p>
-
-  <p>
-    <%= submit_tag 'Preview', :name => 'preview_button' %>
-    <%= button_to_function "Cancel", "javascript:history.back()" %>
+  <p class="field-right">
+    <%= submit_tag h('Preview').t, :name => 'preview_button' %>
+    <%= button_to_function h('Cancel').t, "javascript:history.back()" %>
   </p>
 <% end %>
+</div>

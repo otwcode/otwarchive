@@ -3,18 +3,18 @@
  
     <p class="field-left">   
     
-        <%= f.label :title, "Story Title*", :class => "required" %><br />
+        <%= f.label :title, h("Story Title*").t, :class => "required" %><br />
         <%= f.text_field :title, :class => "storyinputfield", :live => true %>
-        <%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
+        <%= image_tag("question.png", :size => "20x20", :alt => h("More info").t) %><br />
 
       <!-- Chaptered checkbox (work_is_wip) -->
       <!-- Checking this box causes the expected number of chapters box to appear; unchecking it causes it to disappear. -->
       <input type="checkbox" name="isWip" tabindex="2" 
-      onclick="showChapteredStoryOptions()" <%- if @work.chaptered? -%>checked="checked"<%- end -%>/> Chaptered work?
+      onclick="showChapteredStoryOptions()" <%- if @work.chaptered? -%>checked="checked"<%- end -%>/> <%=h 'Chaptered work?'.t %>
 
       <!-- Series checkbox (storyseriescheck) -->
       <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear.  STILL NEEDS Rails integration. -->
-      <input type="checkbox" name="storyseriescheck" tabindex="3" onclick="new Effect.toggle($('seriesmanage'),'appear')"/>Part of a series?<br />
+      <input type="checkbox" name="storyseriescheck" tabindex="3" onclick="new Effect.toggle($('seriesmanage'),'appear')"/><%=h 'Part of a series?'.t %><br />
 
     </p>
 
@@ -22,11 +22,11 @@
     <p id="seriesmanage" class="field-right" style="display:none;">
       <% fields_for "work[series_attributes]" do |s| %>
 
-        <%= s.label 'series_id', 'Choose a series:' %><br /> 
+        <%= s.label 'series_id', h('Choose a series:').t %><br /> 
         <%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>
-        <%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br />
+        <%= image_tag("question.png", :size => "20x20", :alt => h("More info").t) %><br />
         
-        <%= s.label :title, "Or add a new one:" %><br />
+        <%= s.label :title, h("Or add a new one:").t %><br />
         <%= s.text_field :title, :class => "storyinputfield" %>
 
     	<%- end -%>
@@ -45,10 +45,9 @@
     </div>    
 
     <p>
-      <%= c.label :content, "Story, in plain text with limited HTML*", :class => "required" %><br />
-
+      <%= c.label :content, h("Story, in plain text with limited HTML*").t, :class => "required" %><br />
     	<% use_tinymce -%>
-		<p><a href="javascript:addEditor('content');">Rich text</a>  <a href="javascript:removeEditor('content');">HTML</a></p>
+		<a href="javascript:addEditor('content');"><%=h 'Rich text'.t %></a>  <a href="javascript:removeEditor('content');"><%=h 'HTML'.t %></a><br />
 		<%= c.text_area :content, :class => "mce-editor", :id => "content" %>
 		
     	<script>
@@ -59,36 +58,34 @@
     </p>
 
     <!-- Author dropdown (pseud_id) - hidden if user has only one pseud -->
-		<%- if @pseuds.size > 1 -%>
+		<% if @pseuds.size > 1 -%>
   	  <p class="field-left">
   	<%- else -%>
 		  <p style="display:none;">
 		<%- end -%>	
-  	  <%= label :pseud, :id, "Select author/pseudonym(s)" %><br />
+  	  <%= label :pseud, :id, h("Select author/pseudonym(s)").t %><br />
    	  <select name="work[author_attributes][ids][]" multiple="multiple">
         <%= options_from_collection_for_select(@pseuds, :id, :name, @selected) %>
       </select>	 
   	  </p>
 		
-		<%- if @pseuds.size > 1 -%>
+		<% if @pseuds.size > 1 -%>
       <p class="field-right"> 
-        <%= link_to 'Create pseud?', new_user_pseud_path(current_user) %><br />
+        <%= link_to h('Create pseud?').t, new_user_pseud_path(current_user) %><br />
 		<%- else -%>
 		  <p class="field-left">
 		<%- end -%>		  
-        <%= link_to_function('Add co-authors?', "Element.toggle('co-authors')") %>
+        <%= link_to_function(h('Add co-authors?').t, "Element.toggle('co-authors')") %>
       </p>
 	
   	<p class="clearboth"></p>
 
     <div id="co-authors"> 	  
       <p id="coauthormanage">
-        <p>
-       	  <span class="storylabel"><label for="storycoauthor">Enter co-author name(s):</label></span>
+      	  <span class="storylabel"><label for="storycoauthor"><%=h 'Enter co-author name(s):'.t %></label></span>
        	  <%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
               { :url => {:controller => 'pseuds', :action => 'choose_coauthors'}, :method => :get, :param_name => 'search', 
                 :tokens => ',', :min_chars => 2, :skip_style => true } %>
-        </p> 
       </p>                   
     </div>
 
@@ -97,8 +94,8 @@
   	<!-- Privacy dropdown (storyprivacy) -->
   	<p>
       <%= f.check_box :restricted %>
-      <%= f.label :restricted, "Only make my story visible to registered users" %>
-      <%= image_tag("question.png", :size => "20x20", :alt => "More info") %><br /> 
+      <%= f.label :restricted, h("Only make my story visible to registered users").t %>
+      <%= image_tag("question.png", :size => "20x20", :alt => h("More info").t) %><br /> 
     </p>
 	
     <p>
@@ -112,12 +109,12 @@
     </p>
 	<%- end -%>
 	
-	<p>If your story is a remix or was inspired by another story in the archive, copy and paste that story's url below:<br />
+	<p><%=h "If your story is a remix or was inspired by another story in the archive, copy and paste that story's url below:".t %><br />
 	<%= f.text_field :parent_url %></p>
 
     <p class="field-right">
-      <%= submit_tag 'Preview', :name => 'preview_button' %>
-      <%= button_to_function "Cancel", "javascript:history.back()" %>
+      <%= submit_tag h('Preview').t, :name => 'preview_button' %>
+      <%= button_to_function h("Cancel").t, "javascript:history.back()" %>
     </p> 
     
   <%- end -%>
