@@ -99,7 +99,7 @@ class WorksController < ApplicationController
       @user = User.find_by_login(params[:user_id])
       @works = @user.works.visible(current_user).paginate(:page => params[:page])
     else
-      @works = Work.visible(current_user).paginate(:page => params[:page], :per_page => 2)
+      @works = Work.visible(current_user).paginate(:page => params[:page])
     end
   end
   
