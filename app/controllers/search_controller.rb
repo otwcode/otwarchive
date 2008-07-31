@@ -4,7 +4,7 @@ class SearchController < ApplicationController
     if params[:query]
       @search = Ultrasphinx::Search.new(:query => params[:query])
       @search.run
-      @results = @search.results
+      @results = @search.results.paginate( :page => params[:page])
     end
   end
   

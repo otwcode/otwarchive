@@ -19,7 +19,7 @@ class BookmarksController < ApplicationController
   # GET    /:locale/works/:work_id/bookmarks 
   # GET    /:locale/external_works/:external_work_id/bookmarks
   def index
-    @bookmarks = @user ? @user.bookmarks.visible(current_user) : @bookmarkable.nil? ? Bookmark.visible(current_user) : @bookmarkable.bookmarks.visible(current_user)
+    @bookmarks = @user ? @user.bookmarks.visible(current_user).paginate(:page => params[:page]) : @bookmarkable.nil? ? Bookmark.visible(current_user).paginate(:page => params[:page]) : @bookmarkable.bookmarks.visible(current_user).external_works/:external_work_id/bookmarks
     if @bookmarkable
       unless @bookmarkable.visible(current_user)
         render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 

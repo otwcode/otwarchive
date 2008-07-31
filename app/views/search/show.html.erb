@@ -14,3 +14,7 @@
     <p>No results were found!</p>
   <%- end -%>
 <%- end -%>
+
+<div class="pagination">
+	  <%= will_paginate @results, :prev_label =>  "&laquo; Previous".t,:next_label => "Next &raquo;".t %>
+</div>

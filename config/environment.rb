@@ -103,6 +103,11 @@ Rails::Initializer.run do |config|
   config.gem 'chronic'
   config.gem 'mislav-will_paginate', :lib => 'will_paginate', :source => 'http://gems.github.com'
 
+
+  # Override the sanitize defaults to allow some extra formatting attributes. 
+  config.action_view.sanitized_allowed_attributes = 'class', 'style'
+
+
     
 end
 
