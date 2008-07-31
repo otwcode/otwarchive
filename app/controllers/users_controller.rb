@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   end
   
   def index
-    @users = User.alphabetical.paginate(:page => params[:page], :per_page => 2)
+    @users = User.alphabetical.paginate(:page => params[:page])
   end 
 
   # GET /users/1
