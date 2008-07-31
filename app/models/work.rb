@@ -267,15 +267,4 @@ class Work < ActiveRecord::Base
     end
   end
   
-  # I'm not sure if this is the same thing that's happening up above, but that didn't seem to be getting executed
-  # Need to be able to access 'work.warnings' etc. for the auto-complete fields
-  def self.generate_category_methods
-    TagCategory.official.each do |c|
-      define_method(c.name.downcase){tag_string(c)}
-      define_method(c.name.downcase+'='){|tag_name| tag_with(c.name.to_sym => tag_name)}
-    end  
-  end
-  
-  generate_category_methods
-  
 end
