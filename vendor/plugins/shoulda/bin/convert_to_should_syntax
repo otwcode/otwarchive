@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
 require 'fileutils'
+require 'tmpdir'
+
+TMP = Dir::tmpdir
 
 def usage(msg = nil)
   puts "Error: #{msg}" if msg
@@ -18,23 +21,22 @@ def usage(msg = nil)
   puts "    ..."
   puts "  end"
   puts
-  puts "A copy of the old file will be left under /tmp/ in case this script just seriously screws up"
+  puts "A copy of the old file will be left under #{TMP} in case\nthis script just seriously screws up"
   puts
   exit (msg ? 2 : 0)
 end
 
 usage("Wrong number of arguments.") unless ARGV.size == 1
-usage("This system doesn't have a /tmp directory.  wtf?") unless File.directory?('/tmp')
+usage("Temp directory '#{TMP}' is not valid. Set TMPDIR environment variable to a writeable directory.") unless File.directory?(TMP) && File.writable?(TMP)
 
 file = ARGV.shift
-tmpfile = "/tmp/#{File.basename(file)}"
+tmpfile = File.join(TMP, File.basename(file))
 usage("File '#{file}' doesn't exist") unless File.exists?(file)
 
 FileUtils.cp(file, tmpfile)
 contents = File.read(tmpfile)
-contents.gsub!(/def test_should_(.*)\s*$/, 'should "\1" do')
-contents.gsub!(/def test_(.*)\s*$/, 'should "RENAME ME: test \1" do')
-contents.gsub!(/should ".*" do$/) {|line| line.tr!('_', ' ')}
+contents.gsub!(/def test_should_(\S+)/) {|line| "should \"#{$1.tr('_', ' ')}\" do"}
+contents.gsub!(/def test_(\S+)/) {|line| "should \"RENAME ME: test #{$1.tr('_', ' ')}\" do"}
 File.open(file, 'w') { |f| f.write(contents) }
 
 puts "File '#{file}' has been converted to 'should' syntax.  Old version has been stored in '#{tmpfile}'"
