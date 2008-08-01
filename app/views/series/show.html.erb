@@ -10,7 +10,10 @@
 <p><strong>Notes: </strong> <%= @series.notes unless @series.notes.blank? %></p>
 
 <%- if is_author_of?(@series) -%>
-  <%= link_to "Edit", edit_series_path(@series) %>
+  <p>
+    <%= link_to "Edit", edit_series_path(@series) %> | 
+    <%= link_to 'Delete series', @series, :confirm => 'Are you sure?', :method => :delete %>
+  </p>
 <%- end -%>
 
 <ol>

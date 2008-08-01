@@ -10,11 +10,17 @@ class Work < ActiveRecord::Base
   has_bookmarks
 
   has_many :taggings, :as => :taggable, :dependent => :destroy
+  has_many :tags, :through => :taggings
   include TaggingExtensions
 
 
   is_indexed :fields => ['created_at', 'title', 'summary', 'notes'], 
-             :concatenate => [{:association_name => 'chapters', :field => 'content', :as => 'body'}]
+             :concatenate => [{:association_name => 'chapters', :field => 'content', :as => 'body'},
+                               {:class_name => 'Tag', :field => 'name', :as => 'tag_names',
+                               :association_sql => "LEFT OUTER JOIN taggings ON (works.`id` = taggings.`taggable_id` AND taggings.`taggable_type` = 'Work') LEFT OUTER JOIN tags ON (tags.`id` = taggings.`tag_id`)"},
+                               {:class_name => 'Pseud', :field => 'name', :as => 'pseud_names',
+                               :association_sql => "LEFT OUTER JOIN creatorships ON (works.`id` = creatorships.`creation_id` AND creatorships.`creation_type` = 'Work') LEFT OUTER JOIN pseuds ON (pseuds.`id` = creatorships.`pseud_id`)"}]
+
   
   named_scope :recent, :order => 'created_at DESC', :limit => 5
 

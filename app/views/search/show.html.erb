@@ -1,7 +1,5 @@
 <%= render :partial => 'search_box' %>
 
-<p>Under construction; currently searching by: title, summary, notes, chapter content.</p> 
-
 <%- unless @results.nil? -%>
   <h1><%= @results.length %> search result(s) for '<%= h params[:query] %>'</h1>
   <%- unless @results.empty? -%>

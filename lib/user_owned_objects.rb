@@ -7,27 +7,27 @@ module UserOwnedObjects
   
   # Find all works for a given user
   def works
-    pseuds.collect(&:works).reject(&:empty?).flatten
+    Work.find(:all, :include => :creatorships, :conditions => ["creatorships.pseud_id IN (?)", pseuds.collect(&:id).join(",")])
   end
   
   # Find all chapters for a given user
   def chapters
-    pseuds.collect(&:chapters).reject(&:empty?).flatten  
+    Chapter.find(:all, :include => :creatorships, :conditions => ["creatorships.pseud_id IN (?)", pseuds.collect(&:id).join(",")])  
   end
   
   # Find all series for a given user
   def series
-    pseuds.collect(&:series).reject(&:empty?).flatten  
+    Series.find(:all, :include => :creatorships, :conditions => ["creatorships.pseud_id IN (?)", pseuds.collect(&:id).join(",")])  
   end
   
   # Get the total number of series for a given user
   def series_count
-    series.length  
+    Series.count(:all, :include => :creatorships, :conditions => ["creatorships.pseud_id IN (?)", pseuds.collect(&:id).join(",")])  
   end
   
   # Get the total number of works for a given user
   def work_count
-		works.length
+		Work.count(:all, :include => :creatorships, :conditions => ["creatorships.pseud_id IN (?)", pseuds.collect(&:id).join(",")])
 	end  
   
   # Returns an array (of pseuds) of this user's co-authors
