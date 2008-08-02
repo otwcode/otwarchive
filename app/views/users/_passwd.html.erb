@@ -1,10 +1,10 @@
 <!-- Password with link to strong password info (still needs to be added) -->
-<span class="authentication-label"><label for="password"><%= "And your password?" .t %> (Make it a <a href="#" tabindex="2">strong</a> one!)</label></span><br />	
+<%= f.label :password, h("And your password?").t, :class => "authentication-label" %> <%=h "(Make it a".t %> <a href="#" tabindex="2"><%=h "strong".t %></a> <%=h "one!)" %><br/>	
 <%= f.password_field :password, :class => 'authentication-textfield', :tabindex => '3' %>
-<br />
+<br/>
 <!-- Confirm password -->
-<span class="authentication-label"><label for="password_confirmation"><%= "Enter it again so we're sure we've got it?" .t %></label></span><br />
+<%= f.label :password_confirmation, h("Enter it again so we're sure we've got it?").t, :class => "authentication-label" %><br/>
 <%= f.password_field :password_confirmation, :class => 'authentication-textfield', :tabindex => '4' %>
-<br />
+<br/>
 
 	  

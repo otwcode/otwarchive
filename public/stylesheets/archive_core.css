@@ -414,8 +414,8 @@ a.story-title {
 }
 
 /* Rails will automatically add the errorExplanation and fieldWithErrors divs
- * after doing validation of models. 
- */
+ * after doing validation of models - just make sure you're using f.label 
+ * or similar! */
 .errorExplanation {
 	margin: 0.4em 0 0.2em 0;
 	padding: 1em;
@@ -431,11 +431,18 @@ a.story-title {
 
 .errorExplanation li {}
 
+/*If you don't want all the errors to be listed in the header errorExplanation div
+ * you can set the id of the div to be errorExplanationNone to hide them (you'll 
+ * probably want to set :message to nil too) */
+#errorExplanationNone ul { display:none; }
+
 .fieldWithErrors {
 	width: 500px;
+	color: #af2020;
 }
 
 .fieldWithErrors ul {
+	color: #af2020;
 	font-size: 0.9em;
 	margin-bottom: 0;
 }

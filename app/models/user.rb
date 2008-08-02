@@ -36,10 +36,10 @@ class User < ActiveRecord::Base
   
   named_scope :alphabetical, :order => :login
 
-  validates_format_of :login, :message => 'must begin and end with a letter or number; may also contain underscores but no other characters.',
+  validates_format_of :login, :message => 'Your user name must begin and end with a letter or number; it may also contain underscores but no other characters.'.t,
     :with => /\A[A-Za-z0-9]+\w*[A-Za-z0-9]+\Z/
 
-  validates_email_veracity_of :email, :message => 'does not seem to be a valid email address.'
+  validates_email_veracity_of :email, :message => 'This does not seem to be a valid email address.'.t
   # validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create
   # validates_format_of :password, :with => /(?=.*\d)(?=.*([a-z]|[A-Z]))/, :message => 'must have at least one digit and one alphabet character.'
 
@@ -51,12 +51,12 @@ class User < ActiveRecord::Base
   
   validates_inclusion_of :terms_of_service,
                          :in => %w{ 1 },
-                         :message => 'must be accepted.',
+                         :message => 'Sorry, you need to accept the Terms of Service in order to sign up.'.t,
                          :if => :first_save?
                          
   validates_inclusion_of  :age_over_13,
                           :in => %w{ 1 },
-                          :message => 'must be accepted.',
+                          :message => 'Sorry, you have to be over 13!'.t,
                           :if => :first_save?
                           
   def to_param
