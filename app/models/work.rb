@@ -10,7 +10,6 @@ class Work < ActiveRecord::Base
   has_bookmarks
 
   has_many :taggings, :as => :taggable, :dependent => :destroy
-  has_many :tags, :through => :taggings
   include TaggingExtensions
 
 
