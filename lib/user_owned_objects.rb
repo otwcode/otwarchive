@@ -6,8 +6,10 @@ module UserOwnedObjects
   end
   
   # Find all works for a given user
-  def works
-    Work.find(:all, :include => :creatorships, :conditions => ["creatorships.pseud_id IN (?)", pseuds.collect(&:id).join(",")])
+  def works(current_user=false)
+    visibility = " AND posted=1"
+    visibility += " AND restricted=0" unless current_user.is_a?(User)
+    Work.find(:all, :include => :creatorships, :conditions => ["creatorships.pseud_id IN (?)" + visibility, pseuds.collect(&:id).join(",")])
   end
   
   # Find all chapters for a given user
@@ -26,8 +28,10 @@ module UserOwnedObjects
   end
   
   # Get the total number of works for a given user
-  def work_count
-		Work.count(:all, :include => :creatorships, :conditions => ["creatorships.pseud_id IN (?)", pseuds.collect(&:id).join(",")])
+  def work_count(current_user=false)
+    visibility = " AND posted=1"
+    visibility += " AND restricted=0" unless current_user.is_a?(User)
+		Work.count(:all, :include => :creatorships, :conditions => ["creatorships.pseud_id IN (?)" + visibility, pseuds.collect(&:id).join(",")])
 	end  
   
   # Returns an array (of pseuds) of this user's co-authors

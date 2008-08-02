@@ -12,7 +12,7 @@ class Work < ActiveRecord::Base
   has_many :taggings, :as => :taggable, :dependent => :destroy
   include TaggingExtensions
 
-
+  # Index for Ultrasphinx
   is_indexed :fields => ['created_at', 'title', 'summary', 'notes'], 
              :concatenate => [{:association_name => 'chapters', :field => 'content', :as => 'body'},
                                {:class_name => 'Tag', :field => 'name', :as => 'tag_names',
