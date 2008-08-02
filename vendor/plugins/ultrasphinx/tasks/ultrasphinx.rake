@@ -26,7 +26,7 @@ namespace :ultrasphinx do
     index_path = Ultrasphinx::INDEX_SETTINGS['path']
     mkdir_p index_path unless File.directory? index_path
     
-    cmd = "indexer --config '#{Ultrasphinx::CONF_PATH}'"
+    cmd = 'indexer --config "'#{Ultrasphinx::CONF_PATH}'"'
     cmd << " #{ENV['OPTS']} " if ENV['OPTS']
     cmd << " --rotate" if rotate
     cmd << " #{Ultrasphinx::UNIFIED_INDEX_NAME}"
@@ -52,7 +52,7 @@ namespace :ultrasphinx do
     task :start => [:_environment] do
       FileUtils.mkdir_p File.dirname(Ultrasphinx::DAEMON_SETTINGS["log"]) rescue nil
       raise Ultrasphinx::DaemonError, "Already running" if ultrasphinx_daemon_running?
-      system "searchd --config '#{Ultrasphinx::CONF_PATH}'"
+      system 'searchd --config "'#{Ultrasphinx::CONF_PATH}'"'
       sleep(4) # give daemon a chance to write the pid file
       if ultrasphinx_daemon_running?
         say "started successfully"
