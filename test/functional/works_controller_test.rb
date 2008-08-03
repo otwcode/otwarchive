@@ -19,7 +19,7 @@ class WorksControllerTest < ActionController::TestCase
     @request.session[:user] = user
     @work = create_work(:authors => [user.default_pseud])
     assert_difference('Work.count', -1) do
-      delete :destroy, :locale => 'en', :id => works(:basic_work).id
+      delete :destroy, :locale => 'en', :id => @work.id
     end    
     assert_redirected_to works_path
   end
@@ -51,7 +51,9 @@ class WorksControllerTest < ActionController::TestCase
     # TODO test preview
   # Test show  GET  /:locale/works/:id  (named path: work)
   def test_work_path
-    get :show, :locale => 'en', :id => works(:basic_work).id
+    @work = create_work
+    @work.update_attribute(:posted, true)
+    get :show, :locale => 'en', :id => @work.id
     assert_response :success
     # TODO test comments
   end
