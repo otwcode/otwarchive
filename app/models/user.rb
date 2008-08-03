@@ -1,7 +1,4 @@
 class User < ActiveRecord::Base
-  
-  # Methods for associations via pseuds
-  include UserOwnedObjects
 
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user
@@ -30,6 +27,12 @@ class User < ActiveRecord::Base
   
   has_many :readings 
   can_create_bookmarks
+  
+  has_many :comments, :through => :pseuds
+  has_many :creatorships, :through => :pseuds  
+  has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work'
+  has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter'
+  has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series'
   
   has_many :inbox_comments
   has_many :feedback_comments, :through => :inbox_comments
@@ -75,6 +78,21 @@ class User < ActiveRecord::Base
     end
   
   public
+  
+  # Returns an array (of pseuds) of this user's co-authors
+  def coauthors
+     works.collect(&:pseuds).flatten.uniq - pseuds
+  end
+  
+  # Gets the user's one allowed unposted work
+  def unposted_work
+    works.find(:first, :conditions => 'posted IS NULL OR posted = 0') 
+  end
+  
+  # Gets the user's one allowed unposted chapter per work
+  def unposted_chapter(work)
+    chapters.select{|c| c.work_id == work.id && c.posted != true}.first
+  end
 
   # checks if user already has a pseud called newname
   def has_pseud?(newname)
@@ -105,5 +123,5 @@ class User < ActiveRecord::Base
     end
     orphan_account   
   end
-  
+   
 end

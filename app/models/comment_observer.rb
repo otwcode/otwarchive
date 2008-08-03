@@ -10,12 +10,14 @@ class CommentObserver < ActiveRecord::Observer
       users = comment.commentable.respond_to?(:pseuds) ? comment.commentable.pseuds.collect(&:user) : [comment.commentable.user]
     end
     unless users.blank?
-      users.compact.each do |user|  
-        new_feedback = user.inbox_comments.build
-        new_feedback.feedback_comment_id = comment.id
-        new_feedback.save
-        unless user.preference.comment_emails_off? || user == orphan_account
-          UserMailer.deliver_feedback_notification(user, comment)
+      users.compact.each do |user|
+        unless comment.pseud && comment.pseud.user == user  
+          new_feedback = user.inbox_comments.build
+          new_feedback.feedback_comment_id = comment.id
+          new_feedback.save
+          unless user.preference.comment_emails_off? || user == orphan_account
+            UserMailer.deliver_feedback_notification(user, comment)
+          end
         end
       end 
     end

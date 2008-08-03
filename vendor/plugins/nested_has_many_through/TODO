@@ -1,0 +1,10 @@
+* get C2 up to 100%
+  - spec a polymorphic relationship
+  
+* quote table names
+
+* make more use of rails in construct_has_many_or_belongs_to_attributes to reduce brittleness
+
+* Add more coverage
+  - scopes
+    - raise an error when nhmt is being used in a perverse way

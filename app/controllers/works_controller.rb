@@ -97,7 +97,7 @@ class WorksController < ApplicationController
   def index
     if params[:user_id]
       @user = User.find_by_login(params[:user_id])
-      @works = @user.works(current_user).paginate(:page => params[:page])
+      @works = @user.works.visible(current_user).paginate(:page => params[:page])
     else
      @works = Work.visible(current_user, :order => "works.created_at DESC").paginate(:page => params[:page])
     end

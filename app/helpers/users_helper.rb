@@ -22,4 +22,20 @@ module UsersHelper
     link_to_unless_current prefix + "Bookmarks (" + total.to_s + ")", user_bookmarks_path(@user)
   end
   
+  # Prints link to works page with user-appropriate number of works
+  # (The total should reflect the number of works the user can actually see.)
+  def print_works_link(user)
+    total = current_user.is_a?(User) ? @user.works.count : @user.works.count(:all, :conditions => {:restricted => false})
+    prefix = (@user == current_user) ? "My " : ""
+    link_to_unless_current prefix + "Works (" + total.to_s + ")", user_works_path(@user)
+  end
+  
+  # Prints link to series page with user-appropriate number of series
+  # There's no option to restrict the visibility of a series right now, but there probably will be in the future
+  def print_series_link(user)
+    total = @user.series.count(:all)
+    prefix = (@user == current_user) ? "My " : ""
+    link_to_unless_current prefix + "Series (" + total.to_s + ")", user_series_index_path(@user)
+  end
+  
 end
