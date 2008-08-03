@@ -12,8 +12,9 @@
     <p>
         Posted at: <%= single_comment.created_at %>
     </p>
-    <p>
-        <%= create_reply_link single_comment -%>
+    <p> 
+        <%= link_to_unless_current "Thread", single_comment %> 
+        | <%= create_reply_link single_comment -%>
         <%- if is_author_of?(single_comment) -%>
         | <%= create_edit_link single_comment %>
         | <%= create_destroy_link single_comment %>
