@@ -36,6 +36,7 @@ class Work < ActiveRecord::Base
   attr_accessor :new_parent
    
   before_save :validate_authors, :set_language
+  before_save :set_word_count
   before_save :post_first_chapter
   after_save :save_associated, :save_creatorships
   after_update :save_associated, :save_creatorships 
@@ -261,6 +262,11 @@ class Work < ActiveRecord::Base
     define_method('ambiguous='){|tag_name| tag_with(:ambiguous => tag_name)}
     define_method('default'){tag_string('default')}
     define_method('default='){|tag_name| tag_with(:default => tag_name)}
+  end
+  
+  # Set the value of word_count to reflect the length of the chapter content
+  def set_word_count
+    self.word_count = self.chapters.collect(&:word_count).compact.sum
   end
   
   # If the work is posted, the first chapter should be posted too

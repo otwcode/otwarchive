@@ -19,6 +19,7 @@ class Chapter < ActiveRecord::Base
 
   before_validation_on_create :set_position
   before_save :validate_authors
+  before_save :set_word_count
   after_save :save_creatorships
   
   named_scope :in_order, {:order => :position}
@@ -96,6 +97,11 @@ class Chapter < ActiveRecord::Base
       errors.add_to_base("Chapter must have at least one author.")
       return false
     end
+  end
+  
+  # Set the value of word_count to reflect the length of the chapter content
+  def set_word_count
+    self.word_count = self.content.split.length
   end
   
   # Save creatorships after the chapter is saved
