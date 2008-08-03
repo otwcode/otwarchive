@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 1) do
+ActiveRecord::Schema.define(:version => 20080803125332) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -29,27 +29,30 @@ ActiveRecord::Schema.define(:version => 1) do
   end
 
   create_table "bookmarks", :force => true do |t|
-    t.datetime "created_at",                      :null => false
-    t.string   "bookmarkable_type", :limit => 15, :null => false
-    t.integer  "bookmarkable_id",   :limit => 11, :null => false
-    t.integer  "user_id",           :limit => 11, :null => false
+    t.datetime "created_at",                                         :null => false
+    t.string   "bookmarkable_type", :limit => 15,                    :null => false
+    t.integer  "bookmarkable_id",   :limit => 11,                    :null => false
+    t.integer  "user_id",           :limit => 11,                    :null => false
     t.text     "notes"
-    t.boolean  "private"
+    t.boolean  "private",                         :default => false
     t.datetime "updated_at"
+    t.boolean  "hidden_by_admin"
   end
 
   add_index "bookmarks", ["user_id"], :name => "fk_bookmarks_user"
 
   create_table "chapters", :force => true do |t|
-    t.text     "content",    :limit => 2147483647,                :null => false
-    t.integer  "position",   :limit => 11,         :default => 1
-    t.integer  "work_id",    :limit => 11
+    t.text     "content",         :limit => 2147483647,                :null => false
+    t.integer  "position",        :limit => 11,         :default => 1
+    t.integer  "work_id",         :limit => 11
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "posted"
     t.string   "title"
     t.text     "notes"
     t.text     "summary"
+    t.integer  "word_count",      :limit => 11
+    t.boolean  "hidden_by_admin"
   end
 
   create_table "comments", :force => true do |t|
@@ -69,6 +72,7 @@ ActiveRecord::Schema.define(:version => 1) do
     t.integer  "thread",           :limit => 11
     t.string   "user_agent"
     t.boolean  "approved"
+    t.boolean  "hidden_by_admin"
   end
 
   create_table "communities", :force => true do |t|
@@ -87,14 +91,17 @@ ActiveRecord::Schema.define(:version => 1) do
     t.datetime "updated_at"
   end
 
+  add_index "creatorships", ["creation_id", "creation_type", "pseud_id"], :name => "creation_id_creation_type_pseud_id", :unique => true
+
   create_table "external_works", :force => true do |t|
-    t.string   "url",        :null => false
-    t.string   "author",     :null => false
+    t.string   "url",             :null => false
+    t.string   "author",          :null => false
     t.boolean  "dead"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title",      :null => false
+    t.string   "title",           :null => false
     t.text     "summary"
+    t.boolean  "hidden_by_admin"
   end
 
   create_table "feedbacks", :force => true do |t|
@@ -250,9 +257,10 @@ ActiveRecord::Schema.define(:version => 1) do
   create_table "series", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title",      :null => false
+    t.string   "title",           :null => false
     t.text     "summary"
     t.text     "notes"
+    t.boolean  "hidden_by_admin"
   end
 
   create_table "tag_categories", :force => true do |t|
@@ -314,6 +322,8 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string   "salt"
     t.string   "identity_url"
     t.boolean  "recently_reset"
+    t.boolean  "suspended"
+    t.boolean  "banned"
   end
 
   create_table "works", :force => true do |t|
@@ -324,10 +334,12 @@ ActiveRecord::Schema.define(:version => 1) do
     t.integer  "minor_version",               :limit => 11, :default => 0
     t.boolean  "posted"
     t.integer  "language_id",                 :limit => 11
-    t.boolean  "restricted"
-    t.string   "title",                                                    :null => false
+    t.boolean  "restricted",                                :default => false
+    t.string   "title",                                                        :null => false
     t.text     "summary"
     t.text     "notes"
+    t.integer  "word_count",                  :limit => 11
+    t.boolean  "hidden_by_admin"
   end
 
 end
