@@ -106,9 +106,14 @@ Rails::Initializer.run do |config|
 
   # Override the sanitize defaults to allow some extra formatting attributes. 
   config.action_view.sanitized_allowed_attributes = 'class', 'style'
-
-
-    
+  
+  #Disallow div tags in sanitize.
+  config.after_initialize do
+    ActionView::Base.sanitized_allowed_tags.delete 'div'
+  end
+  
+  
+  
 end
 
 ActionController::AbstractRequest.relative_url_root = ArchiveConfig.PRODUCTION_URL_ROOT if ArchiveConfig.PRODUCTION_URL_ROOT && ENV['RAILS_ENV'] == 'production'
