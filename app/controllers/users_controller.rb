@@ -13,6 +13,9 @@ class UsersController < ApplicationController
   # GET /users/1.xml
   def show
     @user = User.find_by_login(params[:id])
+    @works = @user.works.visible(current_user, {:limit => 5, :order => 'updated_at DESC'})
+    @series = @user.series.find(:all, :limit => 5, :order => 'updated_at DESC')
+    @bookmarks = @user.bookmarks.visible(current_user, {:limit => 5, :order => 'updated_at DESC'})
   end
   
   # GET /users/new

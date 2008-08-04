@@ -531,45 +531,11 @@ textarea.story-edit-notes {
 
 /* INTERIM SPIFFING UP OF USER PAGE */
 
-#user-page table {
-	width: auto;
-	margin-left: 5%;
-	margin-right: 30%;
-}
-
-#user-data td {
-	padding-bottom: .5em;
-}
-
-#user-page li {
-	list-style-type: none;
-	left: 0px;
-}
-
-#user-page h1 {
-	font-size: 200%;
-}
-
-#user-page h2 {
-	font-size: 150%;
-}
-
-#user-page h3 {
-	font-size: 120%;
-}
-
-#user-works {
+.user-module {
 	clear: both;
-	padding-top: 30px;
-}
-
-.user-data-label {
-	width: 10em;
-}                   
-
-.pseud-works {
-	border-top: 1px solid black;
-	padding-bottom: 20px;
+	border: 2px solid black;
+	padding: 1em;
+	margin-bottom: 1em;
 }
 
 /*PAGINATION STYLING */
