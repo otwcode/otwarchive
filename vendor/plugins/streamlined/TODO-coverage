@@ -1,0 +1,20 @@
+Why not all the code is covered, and what you can do about it:
+
+* render_helper: needs to be merged with relevance tools implementation
+* integration_tests: generic test code, had some trouble getting this to run inside Streamlined sans Rails
+* window_link_helper: need to refactor to unobtrusive JavaScript (also begs question of acceptance testing for JavaScript)
+* integration_test_support: same as integration_tests
+* relationship_methods: code that only Justin understands
+* quick_add_methods: new code, should be easy
+* edit_views: simple
+* controller_test_support: see integration_tests
+* reflection: code needs refactoring
+* render_methods: simple
+* helper: simple, might need refactoring
+* controller: very difficult to mock!
+* base: code is incomplete
+
+When you get coverage up, make sure the feature covered is demoed in sports and documented in the wiki.
+
+
+

@@ -1,0 +1,9 @@
+myth1:
+  id: 1
+  title: Ruby vs. Java Myth #1: Project Size
+  author_id: 1
+
+myth2:
+  id: 2
+  title: Ruby vs. Java Myth #2: Ruby feature X makes code unmaintainable
+  author_id: 1

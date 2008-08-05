@@ -1,0 +1,8 @@
+haiku:
+  id: 1
+  text: With YAML fixtures/ haikus are often kept/ on a single line
+  poet_id: 1
+limerick:
+  id: 2
+  text: There once was a man from Nantucket.
+  poet_id: 2

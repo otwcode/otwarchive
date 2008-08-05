@@ -1,0 +1,4 @@
+<% view = params[:action].to_sym %>
+<% unless model_ui.footer_partials[view].blank? %>
+	<%= render :partial => model_ui.footer_partials[view] %>
+<% end %>

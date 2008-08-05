@@ -1,0 +1,16 @@
+<% filter_columns = advanced_filter_columns %>
+
+<% form_name = "filter_#{session[:filter_index]}" %>    
+<%= form_remote_tag( :url => { :action => :update_filter, :id => session[:filter_index] }, 
+    :html => { :id => form_name } ) %>
+    <div>
+        <select name="filter_column__<%= session[:filter_index] %>"> 
+            <%= options_for_select(filter_columns, @column) %>
+        </select>
+        <%= link_to_remote(image_tag("streamlined/delete_16.png", :border => "0", :alt => "Delete" ), :url => {:action => "delete_filter", :id => session[:filter_index]} ) %>
+    </div>
+    <div><input type='text' name='filter_value__<%= session[:filter_index] %>' value='<%=@value%>'></div>
+</form>	
+<%= observe_form form_name,  :frequency => 2,
+    :update => {},
+    :url => {:action => 'update_filter', :id => session[:filter_index]} %>    

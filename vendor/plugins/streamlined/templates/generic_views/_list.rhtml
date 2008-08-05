@@ -1,0 +1,49 @@
+<table class="sl_list" id="sl_list_<%= model_name.tableize %>">
+  <thead>
+	<tr>
+  <% list_columns.each do |column| %>
+    <%= column.render_th(self, streamlined_request_context)%>
+  <% end %>
+  <%= streamlined_table_row_button_header %>
+  </tr>
+  </thead>
+  <tbody>
+  <% if @streamlined_items.empty? %>
+    <tr class="odd">
+      <td colspan="<%= list_columns.size + 1 %>">
+        <div class="sl_list_empty_message">
+          <%= Streamlined::View::Base.empty_list_content %>
+        </div>
+      </td>
+    </tr>
+  <% end %>
+  <% odd = false %>
+  <% for item in @streamlined_items %>
+    <% odd = !odd %>
+    <tr id="<%= item.streamlined_css_id %>" class="<%= odd ? 'odd' : 'even'%> <%= model_ui.style_class_for(:list, :row, item) %>">
+    <% list_columns.each do |column| %>
+      <% if column.is_displayable_in_context?(self, item) %>
+        <td class="<%= model_ui.style_class_for(:list, :cell, item) %>">
+		      <% contents = column.render_td(self, item) %>
+		      <%= contents.blank? ? '&nbsp;' : contents %>
+	      </td>
+        <% end %>
+      <% end %>
+    <%= streamlined_table_row_buttons(item) %>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<% if @streamlined_item_pages != [] %>
+  <% if @streamlined_item_pages.current.previous %>  
+      <%= javascript_tag "if ($('previous_page')) Element.show('previous_page');" %>
+  <% else %>
+			<%= javascript_tag "if ($('previous_page')) Element.hide('previous_page');" %>
+  <% end %>
+  <% if @streamlined_item_pages.current.next %>
+      <%= javascript_tag "if ($('next_page')) Element.show('next_page');" %>
+  <% else %>
+      <%= javascript_tag "if ($('next_page')) Element.hide('next_page');" %>
+  <% end %>
+<% end %>

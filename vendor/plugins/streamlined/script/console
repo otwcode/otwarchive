@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+irb = RUBY_PLATFORM =~ /mswin32/ ? 'irb.bat' : 'irb'
+
+libs =  " -r irb/completion"
+libs = " -r test/test_helper"
+
+exec "#{irb} #{libs} --simple-prompt"

@@ -1,0 +1,147 @@
+/*----------------------------------*/
+/* Generic style */
+/*----------------------------------*/
+body        { margin: 0; font-family: "Lucida Grande", Verdana, Arial;}
+#hd         { background-color: #7594A1; padding: 8px;}
+#branding   { font-family: "Lucida Grande", Verdana, Arial; font-size: 14pt; color: white; display:block; padding: 0.4em;}
+#branding a { color: white; text-decoration: none;}
+#branding a:hover { text-decoration: underline;}
+#main       { background-color: #BAD0CC; padding: 5px; font-family: Verdana, Arial; font-size: 8pt;}
+.yui-b      { }
+#bd         { background-color: #DDDDDD; margin-top: -16px;}
+#ft         { background-color: #7594A1; margin-top: -16px; }
+.clear      { clear:  both;   overflow:  hidden;  width:  1px;   height:  1px;  margin:   0  -1px  -1px  0;   border:  0;  padding:   0;  font-size:  0;  line-height:   0;  }
+#streamlined_breadcrumb { font-size: 80%; font-weight: bold; margin-top: 5px; margin-bottom: 5px;}
+.streamlined_help { font-size: 80%; }
+
+/*----------------------------------*/
+
+/*----------------------------------*/
+/* Table styles */
+/*----------------------------------*/
+table.streamlined               {font-family: Lucida Grande, Arial; font-size: 8pt; border-collapse: collapse;}
+table.streamlined thead tr th a {color: black;}
+table.streamlined tr td         {vertical-align: top; padding-left: 3px; padding-top: 3px;}
+table.streamlined tr            {border-top: solid 1px gray; }
+table.streamlined tr.odd        {background-color: #7594A1; }
+div#streamlined_table_header    { border-bottom: solid 1px #7594A1; }
+div#streamlined_table_header #title {font-size: 12pt; font-weight: bold;}
+#filter                         { }
+#controls                       {padding-top: 5px; }
+/*----------------------------------*/
+
+/*----------------------------------*/
+/* Relationship styles */
+/*----------------------------------*/
+.streamlined_relationship { background-color: #FFFFDC; height: 100px; overflow: auto; min-width: 100px; border: solid 1px gray;}
+table.streamlined table.streamlined { border: solid 1px gray; width: 150px;}
+/*----------------------------------*/
+
+/*----------------------------------*/
+/* JavaWin internal styles */
+/*----------------------------------*/
+.dialog_content         { background-color: #FFFFDC; padding: 5px;}
+
+/* streamlined forms */
+table.sl_list {cellpadding: 0; cellspacing: 0;}
+table.sl_show_form tr td { padding: 2px; }
+table.sl_edit_form tr td { padding: 2px; }
+td.sl_show_label      { font-weight: bold; font-family: Verdana, Arial; font-size: 10pt; text-align: right; width: 100px; vertical-align: top;}
+td.sl_show_value { font-family: Verdana, Arial; font-size: 10pt; margin-left: 10px;}
+td.sl_edit_label      { font-weight: bold; font-family: Verdana, Arial; font-size: 10pt; text-align: right; width: 100px; vertical-align: top;}
+td.sl_edit_value { font-family: Verdana, Arial; font-size: 10pt; margin-left: 10px;}
+.required {color: red;}
+
+/*----------------------------------*/
+
+/*----------------------------------*/
+/* Errors and notices */
+/*----------------------------------*/
+.fieldWithErrors        { padding: 2px; background-color: red; display: table; }
+#errorExplanation       { width: 400px; border: 2px solid red; padding: 7px; padding-bottom: 12px; margin-bottom: 20px; background-color: #f0f0f0; }
+#errorExplanation h2    { text-align: left; font-weight: bold; padding: 5px 5px 5px 15px; font-size: 12px; margin: -7px; background-color: #c00; color: #fff; }
+#errorExplanation p     { color: #333; margin-bottom: 0; padding: 5px; }
+#errorExplanation ul li { font-size: 12px; list-style: square; }
+#notice                 { color: green; }
+/*----------------------------------*/
+
+/*----------------------------------*/
+/* AJAX progress indicators */
+/*----------------------------------*/
+div.uploadStatus            { margin: 5px; }
+div.progressBar             { margin: 5px; }
+div.progressBar div.border  { background-color: #fff; border: 1px solid grey; width: 100%; }
+div.progressBar div.background { background-color: #333; height: 18px; width: 0%; }
+#spinner                    { position: absolute; padding-top: 50px; top: 2px; right: 5px; height: 20px; }
+/*----------------------------------*/
+
+#filter {
+	padding: 0 0 0 0.5em;
+}
+
+#advanced_filter form {
+	padding-top: 0.5em;
+	border-top: thin solid #999999;
+}
+
+#top_nav {
+	color: white;
+  background-color: #003399;
+	margin: 0;
+  padding: 1ex 1ex 1ex 1.5mm;
+	font-size: 8pt;
+}
+
+#top_nav a {
+	color: white;
+	background-color: transparent;
+	text-decoration: none;
+	font-weight: bold;
+	margin: 0;
+	padding: 0 0.75ex 0 0.5ex;
+}
+
+#top_nav a:hover {
+	text-decoration: underline;
+}
+
+#button {
+	font-family: 'Trebuchet MS', 'Lucida Grande', Verdana, Lucida, Geneva, Helvetica, Arial, sans-serif;
+	color: #333;
+	font-size: 10pt;
+	}
+	
+	#button ul {
+		list-style-type: none;
+  		list-style-position: outside;
+  		margin: 0;
+  		padding: 0 0 1.1em 0;
+		}
+		
+	#button li {
+		height: 2.2em;
+		margin: 0;
+		padding: 0.1ex 0;  /* Circumvents a rendering bug (?) in MSIE 6.0 */
+		}
+	
+	#button li a {
+		  color: #0066CC;
+		  background-color: transparent;
+		  text-decoration: none;
+		  margin: 0;
+		  padding: 0.75em 1ex 0.75em 5mm;
+		  display: block;		
+		}
+
+	html>body #button li a {
+		width: auto;
+		}
+
+	#button li a:hover {
+		color: white;
+	    background-color: #6487DC;
+	    text-decoration: none;
+		}
+		
+		
+

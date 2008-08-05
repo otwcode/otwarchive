@@ -1,0 +1,72 @@
+07/16/08 - patched template query to handle HAML extensions [Matthew Bass]
+
+06/23/08 - added Sandro's patch for help text below edit fields [Matthew Bass]
+
+06/16/08 - fixed partial rendering calls that had been missed during RC3 refactoring [Matthew Bass]
+
+05/07/08 - added quick_show_button option for hiding the show button on the list view [Matthew Bass]
+
+1.0RC03 -- 02/29/08
+         - public API change: streamlined_model now called streamlined_ui
+         - added CSS IDs to each item table row on the list view (MJB)
+         - now outputting flash notices on the list view (MJB)
+         - fixed enumeration editing bugs (MJB)
+
+1.0RC02 -- 02/22/08
+         - fixed show stopper bug on editing relationships (SDH)
+         - fixed html escaping bug (SDH)
+         - security check on quick add model
+         - security check on quick add model_name_method
+         - fixed bugs around STREAMLINED_SELECT_NONE    
+         - fixed bug: was treating all delegate_targets as associations
+         
+1.0RC01 -- 02/15/08
+
+02/15/08 - changed #breadcrumb method to #streamlined_breadcrumb
+         - changed breadcrumb div id from breadcrumb to streamlined_breadcrumb
+         - added select component that lets you select none for has_manies
+         - fixed habtm bug #162 (thanks ErsatzTom)
+
+01/27/08 - fixed streamlined support for Postgres
+
+01/20/08 - renamed db_action_filter to before_streamlined_create
+         - renamed db_action_methods to callbacks
+
+New Year - working on Rails 2.0.x
+         - add multi_rails for different Rails version testing
+
+12/21/07 - Moved all tests to test-spec [SDH, JNR]
+
+10/30/07 - Moved the init code setting up various path constants (STREAMLINED_ROOT, etc) from controller to the Streamlined:Environment module [Rob Sanheim]
+
+10/30/07 - update copyrights, urls, various other little cleanups [Rob Sanheim]
+
+10/24/07 - Merged in Luis' additional_includes declaration [Matthew Bass]
+         - added classic_pagination so that Pagination would work out of the box with Rails 2.x
+
+10/24/07 - Added :filterable option for ActiveRecord columns [Matthew Bass]
+
+10/19/07 - Added export form with options and column selector. Removed icons. [Kerry Foley and Michael Anton]
+         - Added xml and stylesheet exports that match the list.  Added yaml.
+
+10/06/07 - Linked "Streamlined" branding above top menu to the default route [Matthew Bass]
+
+10/06/07 - Applied new styling patch from ticket #114 [Matthew Bass]
+
+10/02/07 - Removed @streamlined_items_count variable from the list action since it's not being used anywhere [Matthew Bass]
+
+10/01/07 - Fixed bug with incorrect partial look-up for namespaced controller [Jason Rudolph and Stu Halloway]
+
+09/22/07 - Added rdoc for the new #ui_for syntax to the top of ui.rb (ticket #93) [Matthew Bass]
+
+09/22/07 - Applied patch to fix next/previous page buttons (ticket #26) [Matthew Bass]
+
+09/22/07 - Updated streamlined:model rake task to use new #ui_for syntax (ticket #92) [Matthew Bass]
+
+09/19/07 - Added :sort_column option for Addition columns [Matthew Bass]
+
+09/14/07 - Additional options can now be set with the #pagination declaration [Matthew Bass]
+
+09/14/07 - Created CHANGELOG [Matthew Bass]
+
+0.9 -- 9/12/2007

@@ -1,0 +1,16 @@
+<div class="n_to_one_relationship">
+  <form id="rel_<%= @enumeration_name %>_<%= item.id %>">
+	<input type="hidden" name="id" value="<%= item.id %>">
+	<input type="hidden" name="rel_name" value="<%= @enumeration_name %>">
+	<select name="item" id="item">
+	  <%= unassigned_if_allowed(model, relationship, @items) %>	
+<% for an_item in @all_items %>
+    <option <%= 'selected' if @selected_item == an_item[1] %> value="<%= an_item[1] %>"><%= an_item[0] %></option>
+<% end %>
+   </select>
+  </form>
+<%= observe_form  "rel_#{@enumeration_name}_#{item.id}", 
+				  :frequency => 0.5,
+				  :url => {:action => 'update_enumeration'},
+				  :with => "foo = Form.serialize('rel_#{@enumeration_name}_#{item.id}')"%>
+</div>

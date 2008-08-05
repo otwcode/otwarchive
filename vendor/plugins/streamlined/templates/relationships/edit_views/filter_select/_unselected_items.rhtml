@@ -1,0 +1,5 @@
+<% for item in @all_items %>
+    <% unless @items.include?(item) %>
+	  <span id="rel_<%= @rel_name %>_<%= @root.id %>_<%= item.class.name %>_<%= item.id %>"><input type="checkbox" name="item[<%= item.id %>]" id="item_[<%= item.id %>]">&nbsp;<%= item.streamlined_name(model_ui.relationships[@rel_name.to_sym].edit_view.fields,model_ui.relationships[@rel_name.to_sym].edit_view.separator) %><br/></span>
+	<% end %>
+<% end %>

@@ -1,0 +1,8 @@
+if @expired
+  page.replace_html "advanced_filter", :file => STREAMLINED_TEMPLATE_ROOT + '/shared/_new_filter.rhtml', :use_full_path => false
+else
+  page.insert_html :bottom, "advanced_filter", :file => STREAMLINED_TEMPLATE_ROOT + '/shared/_new_filter.rhtml', :use_full_path => false
+end
+page.form.reset 'add_filter_form'
+page << "$('page_options_advanced_filter').value =  \"#{@conditions}\" "
+page.hide "filter_session_expired_msg"

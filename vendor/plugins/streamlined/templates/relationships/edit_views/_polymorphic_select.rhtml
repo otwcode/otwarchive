@@ -1,0 +1,19 @@
+<div class="n_to_one_relationship">
+  <form id="rel_<%= @rel_name %>_<%= @root.id %>">
+	<input type="hidden" name="id" value="<%= @root.id %>">
+	<input type="hidden" name="rel_name" value="<%= @rel_name %>">
+	<input type="hidden" name="klass" value="<%= @klass %>">
+	<select name="item" id="item">
+	  <%= unassigned_if_allowed(model, relationship, @items) %>	
+	  <% @all_items.keys.each do |key| %>
+	    <option value="nil">--<%= key.capitalize %>--</option>
+	    <% @all_items[key].each do |item| %>
+	        <option <%= 'selected' if @items == item %> value="<%= item.id %>::<%= item.class.name %>"><%= item.streamlined_name(model_ui.relationships[@rel_name.to_sym].edit_view.fields, model_ui.relationships[@rel_name.to_sym].edit_view.separator) %></option>
+	    <% end %>
+	  <% end %>
+  </form>
+<%= observe_form  "rel_#{@rel_name}_#{@root.id}", 
+				  :frequency => 0,
+				  :url => {:action => 'update_n_to_one'},
+				  :with => "foo = Form.serialize('rel_#{@rel_name}_#{@root.id}')"%>
+</div>

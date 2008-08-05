@@ -1,0 +1,15 @@
+<div class="streamlined_relationship">
+  <form id="rel_<%= @rel_name %>_<%= @root.id %>">
+	<input type="hidden" name="id" value="<%= @root.id %>">
+	<input type="hidden" name="rel_name" value="<%= @rel_name %>">
+	<input type="hidden" name="klass" value="<%= @klass %>">
+<% for item in @all_items %>
+	<input type="checkbox" <%= 'checked' if @items.include?(item) %> name="item[<%= item.id %>]" id="item_<%= item.id %>">
+		&nbsp;<%= item.streamlined_name(model_ui.relationships[@rel_name.to_sym].edit_view.fields,model_ui.relationships[@rel_name.to_sym].edit_view.separator) %><br/>
+<% end %>
+  </form>
+<%= observe_form  "rel_#{@rel_name}_#{@root.id}", 
+				  :frequency => 0.5,
+				  :url => {:action => 'update_relationship'},
+				  :with => "foo = Form.serialize('rel_#{@rel_name}_#{@root.id}')"%>
+</div>

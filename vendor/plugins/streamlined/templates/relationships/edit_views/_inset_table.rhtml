@@ -1,0 +1,29 @@
+<table class="streamlined">
+  <thead>
+	<tr>
+  <% for column in @klass_ui.user_columns %>
+    <th scope="col" class="sortSelector"><%= column.human_name %></th>
+  <% end %>
+
+
+    <th width="100">&nbsp;</th>
+	</tr>
+  </thead>
+  
+  <tbody>
+<% alt = 0 %>
+<% for item in @items %>
+<% alt = 1 - alt %>
+  <tr <%= "class='odd'" if alt == 0 %>>
+  <% for column in @klass_ui.user_columns %>
+    <td><%= column.render_td_show(self, item) %></td>
+  <% end %>
+
+    <td><%= link_to_function image_tag('streamlined/search_16.png', {:alt => 'Show', :title => 'Show', :border => '0'}), "Streamlined.Windows.open_window('Show', '#{url_for(:controller => Inflector.tableize(@klass.name), :action => 'show', :id => item.id)}', #{item.id})" %>
+    <%= link_to_function image_tag('streamlined/edit_16.png', {:alt => 'Edit', :title => 'Edit', :border => '0'}), "Streamlined.Windows.open_window('Edit', '#{url_for(:controller => Inflector.tableize(@klass.name), :action => 'edit', :id => item.id)}', #{item.id})" %>
+    <%= link_to image_tag('streamlined/delete_16.png', {:alt => 'Destroy', :title => 'Destroy', :border => '0'}), { :controller => Inflector.tableize(@klass.name), :action => 'destroy', :id => item }, :confirm => 'Are you sure?', :method => "post" %></td>
+  </tr>
+<% end %>
+  </tbody>
+</table>
+

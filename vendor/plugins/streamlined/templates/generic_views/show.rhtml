@@ -1,0 +1,22 @@
+<%= render_show_header %>
+
+<div id="content">
+  <table class="sl_show_form">
+    <% for column in model_ui.show_columns %>
+      <% if column.is_displayable_in_context?(self, @streamlined_item) %>
+        <tr id="<%= column.render_id(self, @streamlined_item) %>">
+          <td class="sl_show_label"><%= column.human_name %>:</td>
+          <td class="sl_show_value"><%= !column.render_td(self, @streamlined_item).blank? ? column.render_td(self, @streamlined_item) : '&nbsp;' %></td>
+        </tr>
+      <% end %>
+    <% end %>
+  </table>
+<script>
+if (top.Streamlined.PageOptions.form()) {
+  top.Streamlined.PageOptions.poke();
+}
+</script>
+</div>
+<% unless model_ui.read_only %>
+<%= link_to 'Edit', {:action => 'edit', :id => @streamlined_item} %> 
+<% end %>

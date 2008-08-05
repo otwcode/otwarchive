@@ -1,0 +1,552 @@
+/* AjaxScaffoldGenerator version 3.1.0 (c) 2006 Richard White <rrwhite@gmail.com>
+
+ AjaxScaffoldGenerator is freely distributable under the terms of an MIT-style license.
+
+ For details, see the AjaxScaffoldGenerator web site: http://www.ajaxscaffold.com/ */
+ 
+/* Holy Grail styling from A List Apart (http://www.alistapart.com/articles/holygrail/) */
+#header {
+	background-color: #2175bc; 
+}
+
+#left {
+	float: left;
+	width: 13em;
+	padding-bottom: 0.5em;
+	border-right: 1px solid #999999;
+}
+
+#center {
+	color: black;
+	background-color: white;
+	text-align: justify;
+	line-height: 1.5em;
+	margin: 0 0 0 13em;
+	padding: 0.5mm 5mm 0.5em 5mm;
+	border-left: 1px solid #999999;
+}
+
+#content_for_layout {
+	width: 100%;
+}
+
+#footer {
+	height: 25px;
+	clear: both; 
+}
+
+ .column { position: relative; float: left; }
+
+#footer, #footer a {background-color: #2175bc; color: white; text-align: center; font-style: italic; font-size: 9pt;}
+#footer a:hover {color:  orange;}
+ 
+ body {
+	background-color:  #F0F0F0;
+}
+ 
+ .mac_os_x_content {background-color: #DAFFCD; color: #555555; }
+ .mac_os_x_content table label {font-size: 10px;}
+ .mac_os_x_content table input {font-weight: bold;}
+
+ /*
+  AjaxScaffoldGenerator version 3.1.0
+  (c) 2006 Richard White <rrwhite@gmail.com>
+
+  AjaxScaffoldGenerator is freely distributable under the terms of an MIT-style license.
+
+  For details, see the AjaxScaffoldGenerator web site: http://www.ajaxscaffold.com/
+ */
+
+ #streamlined_list form,
+ #streamlined_list table,
+ #streamlined_list p,
+ #streamlined_list div,
+ #streamlined_list fieldset {
+ margin: 0;
+ padding: 0;
+ }
+
+ #streamlined_list {
+ margin: 5px 0;
+ }
+
+ #streamlined_list table {
+ width: 100%;
+ }
+
+ #streamlined_list a {
+ color: #06c;
+ text-decoration: none;
+ }
+
+ #streamlined_list a:hover {
+ background-color: #ff8;
+ }
+
+ /* Header Styling
+    ======================== */
+
+ .streamlined_header {
+ background-color: #005CB8;
+ position: relative;
+ }
+
+ .streamlined_header h2 {
+ color: #fff;
+ padding: 2px 5px 4px 5px;
+ margin: 0;
+ font: normal 17px verdana, sans-serif;
+ }
+
+ .streamlined_header div.actions a {
+ color: #fff;
+ background: url(../images/add.gif) 1px 50% no-repeat;
+ font: bold 14px arial, sans-serif;
+ letter-spacing: -1px;
+ text-decoration: none;
+ padding: 1px 2px 1px 19px;
+ }
+
+ .streamlined_header div.actions a:hover {
+ background: #378CDF url(../images/add.gif) 1px 50% no-repeat;
+ }
+
+ .streamlined_header div.actions {
+ position: absolute;
+ right: 30px;
+ top: 3px;
+ width: 220px;
+ text-align: right;
+ color: white;
+ font-size: 10pt;
+ }
+
+ .streamlined_header div.actions img {
+ margin-bottom: -3px;
+ }
+
+ /* Header Styling : Nested
+    ======================== */
+
+ #streamlined_list #streamlined_list {
+ margin: 2px 5px;
+ }
+
+ #streamlined_list #streamlined_list .streamlined_header h2 {
+ font-size: 13px;
+ font-weight: bold;
+ }
+
+ #streamlined_list #streamlined_list .streamlined_header div.actions a {
+ font: bold 11px verdana, sans-serif;
+ padding: 0 2px 1px 17px;
+ }
+
+ #streamlined_list #streamlined_list .streamlined_header div.actions {
+ top: 4px;
+ }
+
+ /* Table Column Headers
+    ============================= */
+
+ #streamlined_list th {
+ background-color: #555;
+ text-align: left;
+ white-space: nowrap;
+ font: bold 11px arial, sans-serif;
+ color: white;
+ }
+
+ #streamlined_list th a,
+ #streamlined_list th p {
+ font: bold 11px arial, sans-serif;
+ display: block;
+ background-color: #555;
+ }
+
+ #streamlined_list th a {
+ color: #fff;
+ padding: 2px 15px 2px 5px;
+ }
+
+ #streamlined_list th p {
+ color: #eee;
+ padding: 2px 5px;
+ }
+
+ #streamlined_list th a:hover {
+ background-color: #000;
+ color: #ff8;
+ }
+
+ #streamlined_list th.sorted {
+ background-color: #333;
+ }
+
+ #streamlined_list th.asc a,
+ #streamlined_list th.asc a:hover {
+ background: #333 url(../images/arrow_up.gif) right 50% no-repeat;
+ }
+
+ #streamlined_list th.desc a,
+ #streamlined_list th.desc a:hover {
+ background: #333 url(../images/arrow_down.gif) right 50% no-repeat;
+ }
+
+ #streamlined_list th.loading a,
+ #streamlined_list th.loading a:hover {
+ background: #333 url(../images/indicator-small.gif) right 50% no-repeat;
+ }
+
+ /* Table Body Styling
+    ============================= */
+
+ #streamlined_list td {
+ padding: 5px 4px;
+ color: #333;
+ font-family: Verdana, sans-serif;
+ font-size: 11px;
+ background-color: #E6F2FF;
+ border-bottom: solid 1px #C5DBF7;
+ border-left: solid 1px #C5DBF7;
+ }
+
+ #streamlined_list td.actions {
+ border-right: solid 1px #ccc;
+ }
+
+ #streamlined_list tr.even td {
+ background-color: #fff;
+ border-left: solid 1px #ddd;
+ }
+
+ #streamlined_list tr td.sorted {
+ background-color: #B9DCFF;
+ border-bottom: solid 1px #AFD0F5;
+ }
+
+ #streamlined_list tr.even td.sorted {
+ background-color: #E6F2FF;
+ border-bottom: solid 1px #AFD0F5;
+ }
+
+ #streamlined_list td.empty {
+ color: #999;
+ text-align: center;
+ }
+
+ /* Table Actions (Edit, Delete) Styling
+    ============================= */
+
+ #streamlined_list td.actions {
+ padding: 0;
+ width: 1%;
+ }
+
+ #streamlined_list td.actions table {
+ float: right;
+ width: auto;
+ margin-right: 5px;
+ }
+
+ #streamlined_list td.actions table td {
+ border: none;
+ text-align: right;
+ padding: 0 2px;
+ }
+
+ #streamlined_list td.actions a {
+ font: bold 11px verdana, sans-serif;
+ letter-spacing: -1px;
+ padding: 2px;
+ margin: 0 2px;
+ line-height: 16px;
+ }
+
+ /* Footer Styling
+    ========================== */
+
+ #streamlined_list-totals td {
+ 	border-top: 2px solid #005CB8;
+ 	font: bold 12px arial, sans-serif;
+ }
+
+ #streamlined_list #streamlined_list-footer {
+ text-align: right;
+ background-color: #005CB8;
+ padding: 3px 5px 2px 5px;
+ border-bottom: none;
+ color: #ccc;
+ font: bold 12px arial, sans-serif;
+ }
+
+ #streamlined_list-footer a {
+ color: #fff;
+ text-decoration: none;
+ letter-spacing: 0;
+ padding: 0 2px;
+ margin: 0 -2px;
+ font: bold 12px arial, sans-serif;
+ }
+
+ #streamlined_list-footer a:hover {
+ background-color: #378CDF;
+ }
+
+ #streamlined_list-footer .next {
+ margin-left: 0;
+ padding-left: 5px;
+ border-left: solid 1px #ccc;
+ }
+
+ #streamlined_list-footer .previous {
+ margin-right: 0;
+ padding-right: 5px;
+ border-right: solid 1px #ccc;
+ }
+
+ /* Messages
+    ========================= */
+
+ #streamlined_list .messages-container,
+ #streamlined_list #streamlined_list .messages-container{
+ padding: 0;
+ margin: 0 7px;
+ border: none;
+ }
+
+ #streamlined_list .empty-message {
+ background-color: #e8e8e8;
+ padding: 4px;
+ text-align: center;
+ color: #666;
+ }
+
+ #streamlined_list .message {
+ font-size: 11px;
+ font-weight: bold;
+ padding: 5px 20px 5px 5px;
+ color: #333;
+ position: relative;
+ margin: 2px 7px;
+ line-height: 12px;
+ }
+
+ #streamlined_list .message a {
+ position: absolute;
+ right: 10px;
+ top: 4px;
+ padding: 0;
+ font: bold 11px verdana, sans-serif;
+ letter-spacing: -1px;
+ }
+
+ #streamlined_list .messages-container .message {
+ margin: 0;
+ }
+
+ #streamlined_list .error-message {
+ border-left: solid 5px #f66;
+ background-color: #fbb;
+ }
+
+ #streamlined_list .warning-message {
+ border-left: solid 5px #ff6;
+ background-color: #ffb;
+ }
+
+ #streamlined_list .info-message {
+ border-left: solid 5px #66f;
+ background-color: #bbf;
+ }
+
+ /* Error Styling
+    ========================== */
+
+ #streamlined_list #errorExplanation {
+ background-color: #fcc;
+ margin: 2px 0;
+ border: solid 1px #f66;
+ float: left;
+ }
+
+ #streamlined_list fieldset {
+ clear: both;
+ }
+
+ #streamlined_list #errorExplanation h2 {
+ padding: 2px 5px;
+ color: #333;
+ font-size: 11px;
+ margin: 0;
+ letter-spacing: 0;
+ font-family: Verdana;
+ background-color: #f66;
+ }
+
+ #streamlined_list #errorExplanation ul {
+ margin: 0;
+ padding: 0 2px 4px 25px;
+ list-style: disc;
+ }
+
+ #streamlined_list #errorExplanation p {
+ font-size: 11px;
+ padding: 2px 5px;
+ font-family: Verdana;
+ margin: 0;
+ }
+
+ #streamlined_list #errorExplanation ul li {
+ font: bold 11px verdana;
+ letter-spacing: -1px;
+ margin: 0;
+ padding: 0;
+ background-color: transparent;
+ }
+
+ #streamlined_list .fieldWithErrors input {
+ border: solid 1px #f00;
+ }
+
+ /* Loading Indicators
+    ============================== */
+
+ #streamlined_list .loading-indicator {
+ vertical-align: bottom;
+ margin: 0;
+ }
+
+ #streamlined_list .streamlined_header .loading-indicator,
+ #streamlined_list .update .loading-indicator,
+ #streamlined_list .create .loading-indicator {
+ vertical-align: bottom;
+ margin-bottom: 3px;
+ }
+
+ /* Form Styling
+    ============================== */
+
+ #streamlined_list td.update,
+ #streamlined_list td.create {
+ background-color: #DAFFCD;
+ padding: 4px;
+ border: solid 1px #7FcF00;
+ border-top: none;
+ }
+
+ #streamlined_list #streamlined_list td.update,
+ #streamlined_list #streamlined_list td.create {
+ background-color: #ffb;
+ border: solid 1px #DDDF37;
+ border-top: none;
+ }
+
+ #streamlined_list .submit {
+ font-weight: bold;
+ font-size: 14px;
+ font-family: Arial, sans-serif;
+ letter-spacing: 0;
+ margin: 0;
+ margin-top: 5px;
+ }
+
+ #streamlined_list fieldset {
+ border: none;
+ }
+
+ #streamlined_list label.required{
+ font-weight: bold;
+ }
+
+ #streamlined_list label.example {
+ font-size: 11px;
+ font-family: arial;
+ color: #888;
+ }
+
+ #streamlined_list h4 {
+ padding: 2px;
+ margin: 0;
+ text-transform: none;
+ color: #1F7F00;
+ letter-spacing: -1px;
+ font: bold 16px arial;
+ }
+
+ #streamlined_list p.form-footer a {
+ font: bold 14px arial, sans-serif;
+ letter-spacing: 0;
+ }
+
+ #streamlined_list p {
+ clear: both;
+ }
+
+ #streamlined_list div.row {
+ clear: both;
+ float: none;
+ padding: 2px;
+ margin-left: 5px;
+ }
+
+ #streamlined_list div.form-element {
+ float: left;
+ margin-right: 10px;
+ margin-bottom: 2px;
+ }
+
+ #streamlined_list label {
+ display: block;
+ font-family: Verdana, sans-serif;
+ color: #555;
+ font-size: 11px;
+ padding-bottom: 1px;
+ }
+
+ #streamlined_list input.text-input,
+ #streamlined_list select {
+ font-size: 16px;
+ font-weight: bold;
+ font-family: Arial, sans-serif;
+ letter-spacing: -1px;
+ border: solid 1px #1F7F00;
+ }
+
+ #streamlined_list .form-element input {
+ padding: 1px;
+ }
+
+ #streamlined_list textarea {
+ height: 65px;
+ font-family: Arial, sans-serif;
+ font-size: 12px;
+ padding: 1px;
+ border: solid 1px #1F7F00;
+ }
+
+ #show_export {
+ background-color:#F0F0F0;
+ border:1px solid #999999;
+ padding:4px;
+ }
+
+ #show_export p {
+ display: inline;	
+ }
+
+ #show_export label {
+ display: inline;	
+ margin-right: 20px;
+ }
+
+ /* IE hacks
+    ==================================== */
+
+ * html .streamlined_header {
+ height: 1%;
+ }
+
+ * html #streamlined_list td .messages-container {
+ border-top: solid 1px #DAFFCD;
+ }

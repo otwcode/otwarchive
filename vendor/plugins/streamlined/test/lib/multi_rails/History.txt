@@ -1,0 +1,26 @@
+== 0.0.4
+
+* add autotest railsplugin discovery, so I can use autotest to test multi_rails
+* grab exception for the all task so that we can run through all versions of Rails
+* add an output of the rails gem from the load path as a sanity check 
+
+== 0.0.3 
+
+* add support for using multi_rails with regular Rails apps, which was way more work then it should have been.
+* add the bootstrap task to add our multi_rails require line at the top of environment.rb in a rails app
+* renames vendor/rails to vendor/rails.off in a Rails app, in order to fall back to rubygems
+* added multi_rails_runner to allow multi_rails to set the RAILS_GEM_VERSION before the Rails Rakefile ever gets loaded
+* improve rdoc
+* move svn hosting to google code, to make it publicly accessible
+
+== 0.0.2 / Tuesday; October 23, 2007
+
+* first public release!
+* add link to email group
+* improve docs
+* add hook file to load rake tasks when used as a gem
+* change the env var for specifying the rails version under test to avoid name conflicts
+
+== 0.0.1 / Sunday; October 21, 2007
+
+* initial release, no public announcment

@@ -1,0 +1,20 @@
+
+  <form id="rel_<%= @rel_name %>_<%= @root.id %>">
+	<input type="text" id="filter" size="12" name="filter"/><%= image_tag 'streamlined/loading.gif', :id=>"rel_#{@rel_name}_#{@root.id}_spinner", :style=>"display:none; position: relative; top: 2px; left: 5px; width: 15px; height: 15px;" %><br/>
+	<input type="hidden" name="id" value="<%= @root.id %>">
+	<input type="hidden" name="rel_name" value="<%= @rel_name %>">
+	<input type="hidden" name="klass" value="<%= @klass %>">
+	<div id="rel_<%= @rel_name %>_<%= @root.id %>_unselected" class="streamlined_relationship">
+	<%= render_streamlined_file '/relationships/edit_views/filter_select/_unselected_items.rhtml' %>
+</div>
+<hr>
+<div id="rel_<%= @rel_name %>_<%= @root.id %>_selected">
+<%= render_streamlined_file '/relationships/edit_views/filter_select/_selected_items.rhtml' %>
+</div>
+  </form>
+<%= observe_form  "rel_#{@rel_name}_#{@root.id}", 
+				  :frequency => 0.5,
+				  :before => "if($('rel_#{@rel_name}_#{@root.id}_spinner')) {new Effect.Appear('rel_#{@rel_name}_#{@root.id}_spinner');}",
+				  :complete => "if($('rel_#{@rel_name}_#{@root.id}_spinner')) {new Effect.Fade('rel_#{@rel_name}_#{@root.id}_spinner');}",
+				  :url => {:action => 'update_relationship'},
+				  :with => "foo = Form.serialize('rel_#{@rel_name}_#{@root.id}')"%>

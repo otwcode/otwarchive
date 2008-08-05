@@ -1,0 +1,1 @@
+require "streamlined/components/select"

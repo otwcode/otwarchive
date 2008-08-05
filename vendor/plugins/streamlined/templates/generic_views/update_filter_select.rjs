@@ -1,0 +1,2 @@
+page.replace_html "rel_#{@rel_name}_#{@current_id}_unselected", :file => File.join(STREAMLINED_TEMPLATE_ROOT, 'relationships/edit_views/filter_select/_unselected_items.rhtml', :use_full_path => false
+page.replace_html "rel_#{@rel_name}_#{@current_id}_selected", :file => File.join(STREAMLINED_TEMPLATE_ROOT, 'relationships/edit_views/filter_select/_selected_items.rhtml', :use_full_path => false

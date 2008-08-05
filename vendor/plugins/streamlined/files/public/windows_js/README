@@ -1,0 +1,45 @@
+== Installation/Usage
+
+Just copy windows.js in your javascript directory, and default.css + default directory in your stylesheets directory 
+See samples/index.html for more details and go on my web page :http://blogus.xilinus.com/pages/javawin
+
+== Change log
+- 04/15/06  V 0.70
+					  - Add autoposition in setContent. The window will at the element location
+					  - Add draggable/closable parameter if you need to specify is the window is draggable/closable or not
+					  - Add parent parameter if you need a specific parent instead of body
+					  - Better resize
+					  - Add setCookie to store window location/size in a cookie
+					  - Add parent.html sample
+
+- 04/05/06  V 0.65 
+           - Update to Prototype 1.5.0_pre1, script.aculo.us 1.6.0
+				   - Add setDestoyOnClose
+				   - Add Windows Observer with onStartResize(), onEndResize(), onStartMove(), onEndMove(), onClose(), onDestroy() events
+				   - Add setContent(id, autoresize)
+
+- 03/29/06  V 0.6  
+           - Add Window delegate to manage close action
+			     - Add modal mode and Dialog class with common panels: alert, confirm
+				   - Clean HTML code and change caracters to lowercase to be XHTML compliant (thanks to nuxygen and Joseph)
+				   - Add showEffectOptions, hideEffectOptions, effectOptions to Window constructor (thanks to Jon)
+				   - Fix checkbox IE bug (big thanks to JCA)
+				   - Fix other little bugs (thanks to nuxygen, Dennis, and all who sent me emails)
+				   - Update samples/index.html
+				   - Add new sample usng frame (samples/inset.html and samples/inframe.html but use only samples/inset.html)
+				
+- 03/27/06 	V 0.51 
+           - New CSS theme structure 
+           - Add url: constructor parameter to have a window with an URL content
+				   - Add bottom/right constructor parameters	
+				   - Update sample files.
+			
+- 03/24/06  V 0.50 Initial revision
+
+
+== License
+
+it is licensed under the terms of the MIT License, see the included MIT-LICENSE file.
+
+== Thanks
+To all of you who sent me bugs, patches and feature requests

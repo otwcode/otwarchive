@@ -1,0 +1,2 @@
+class MultiRailsError < RuntimeError
+end

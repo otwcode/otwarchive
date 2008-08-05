@@ -1,0 +1,5 @@
+<% sum = 0 %>
+<% item.send(relationship.name).each do |record| %>
+  <% sum = sum + record.send(streamlined_def.fields[0]) %>
+<% end %>
+<%= sum %>

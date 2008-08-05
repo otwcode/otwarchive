@@ -1,0 +1,11 @@
+<%= render_edit_header %>
+
+<% options = {:url => {:action => 'update', :id=>@streamlined_item}} %>
+<% if model_ui.edit_submit_button[:ajax] %>
+  <% options[:html] = {:onsubmit=>'Streamlined.Form.submit(this); return false;'} %>
+<% end %>
+
+<% form_for model_underscore.to_sym, @streamlined_item, options do |form| %>
+  <%= render :partial => 'form', :locals=>{:form=>form} %>
+  <%= submit_tag 'Save' %>
+<% end %>

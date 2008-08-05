@@ -1,0 +1,30 @@
+xml.instruct!
+
+xml.tag! :"xsl:stylesheet", :version => "1.0", :"xmlns:xsl" => "http://www.w3.org/1999/XSL/Transform" do
+  xml.tag! :"xsl:template", :match => "/" do
+    xml.tag! "html" do
+      xml.tag! "body" do
+        xml.tag! "h2", Inflector.pluralize(model_name)
+        xml.tag! "table", :border => "1" do
+          xml.tag! "tr", :bgcolor => "#9acd32" do
+            @export_columns.each do |column|
+              xml.tag! "th", :align=>"left" do 
+                xml.text! "#{Inflector.humanize(column.name)}" 
+              end
+            end
+          end  
+          xml.tag! "xsl:for-each", :select => "#{Inflector.pluralize(model_name)}/#{model_name}" do
+            xml.tag! "tr" do
+              @export_columns.each do |column|
+                xml.tag! "td" do
+                  xml.tag! "xsl:value-of", :select=>"#{column.name}"
+                end
+              end  
+            end  
+          end  
+        end
+      end
+    end
+  end
+end
+

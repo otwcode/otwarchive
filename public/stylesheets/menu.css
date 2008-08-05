@@ -1,0 +1,23 @@
+#nav_ul { 
+	font-family: Verdana, Arial; 
+	list-style: none; 
+	top: 0; 
+	font-size: 10pt;
+}
+#nav_ul li { 
+	display: block; 
+	background-color: #2586d7; 
+	padding-left: 10px; 
+	padding-right: 10px; 
+	padding-bottom: 8px; 
+	padding-top: 8px; 
+	margin-left: 5px;
+}
+#nav_ul li#first { border-left: none; }
+#nav_ul li a { text-decoration: none; color: white;}
+
+#sub_nav_ul {background-color: white; font-family: Verdana, Arial; list-style: none;  font-size: 10pt; padding-top: 5px; padding-bottom: 5px; margin-left: 10px; padding-left: 5px; margin-top: 16px;}
+#sub_nav_ul li { display: block; }
+#sub_nav_ul li#first { border-left: none; }
+#sub_nav_ul li a { text-decoration: none; color: black;}
+#sub_nav_ul li a:hover { text-decoration: underline; }

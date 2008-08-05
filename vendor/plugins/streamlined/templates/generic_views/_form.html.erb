@@ -1,0 +1,14 @@
+<%= error_messages_for model_underscore %>
+
+<!--[form:<%= model_underscore %>]-->
+
+<table class="sl_edit_form">
+  <% model_ui.edit_columns.each do |column| %>
+    <% if column.is_displayable_in_context?(self, @streamlined_item) %>
+      <%= column.render_tr_edit(self, @streamlined_item) %>
+    <% end %>
+  <% end %>
+</table><!--[eoform:<%= model_underscore %>]-->
+
+
+

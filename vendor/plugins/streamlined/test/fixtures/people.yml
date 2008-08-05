@@ -1,0 +1,16 @@
+justin:
+  id: 1
+  first_name: Justin
+  last_name: Gehtland
+stu:
+  id: 2
+  first_name: Stu
+  last_name: Halloway
+jason:
+  id: 3
+  first_name: Jason
+  last_name: Rudolph
+glenn:
+  id: 4
+  first_name: Glenn
+  last_name: Vanderburg

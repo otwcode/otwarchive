@@ -1,0 +1,32 @@
+<%
+	url_options = {:action => :list}
+    export_config = model_ui
+-%>
+
+<%= form_tag url_for(url_options), :id => :export %>
+<%  columns_header = "<h4>Columns to export&nbsp;&nbsp;(Enhanced XML and XML Stylesheet)</h4>" -%>
+<%= columns_header if show_columns_to_export %>
+<p> 
+<% if show_columns_to_export -%>
+  <% model_ui.list_columns.each do |column| -%>
+    <%= content_tag(:label, check_box_tag("export_columns[#{column.name}]", 1, !export_config.default_deselected_column?(column.name.to_sym)) + "&nbsp;#{Inflector.humanize(column.name)}") %>
+  <% end -%>  
+<% end -%>  
+</p>
+<br/>
+<%  options_header = "<h4>Options</h4>" -%>
+<%= options_header if export_config.displays_exporter?(:csv) || export_config.allow_full_download %>
+<p>
+<%= content_tag(:label, check_box_tag('skip_header', 1, export_config.default_skip_header) + '&nbsp;Without&nbsp;header&nbsp;(csv)') 			  if export_config.displays_exporter?(:csv) %>
+<%= content_tag(:label, text_field_tag('separator', export_config.default_separator, :size => 1, :maxlength => 1) + '&nbsp;Separator&nbsp;(csv)') if export_config.displays_exporter?(:csv) %>
+<%= content_tag(:label, radio_button_tag('full_download', "false", !export_config.default_full_download) + '&nbsp;This&nbsp;Page') if export_config.allow_full_download %>
+<%= content_tag(:label, radio_button_tag('full_download', "true", export_config.default_full_download) + '&nbsp;All&nbsp;Pages')   if export_config.allow_full_download %>
+</p>
+<h4>Format</h4>
+<p>
+<%= export_formats %>	
+</p>
+<br/>
+  <%= link_to_submit_export(url_options) -%>&nbsp;
+  <%= link_to_hide_export -%>
+</form>

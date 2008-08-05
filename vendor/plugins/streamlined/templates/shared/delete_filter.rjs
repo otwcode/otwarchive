@@ -1,0 +1,3 @@
+page.remove "filter_#{@filter_num}"
+page << "$('page_options_advanced_filter').value =  \"#{@conditions}\" "
+page.hide "filter_session_expired_msg"

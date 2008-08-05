@@ -1,0 +1,8 @@
+stu:
+  id: 1
+  first_name: Stu
+  last_name: Halloway
+kurt:
+  id: 2
+  first_name: Kurt
+  last_name: Vonnegut

@@ -1,0 +1,5 @@
+<hr>
+<% item.send(relationship.name).each do |record| %>
+	<%= streamlined_def.fields.collect {|f| record.send(f)}.reject{|f| f.blank?}.join(streamlined_def.separator) + "<br/>" %>
+<% end %>
+<hr>

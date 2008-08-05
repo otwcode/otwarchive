@@ -1,0 +1,50 @@
+<%= render_streamlined_file '/shared/_notice.rhtml' %>
+<%= render_streamlined_file '/shared/_header_partials.rhtml' %>
+<% form_for :page_options, @page_options, 
+            :url => { :action => "list"}, :html=> {:method => "get", :id => :page_options, :style => 'display: none;'} do |form| %>
+  <%# TODO: hide this form when JavaScript is available, then use it behind scenes%>
+  Filter <%= form.text_field 'filter', {:autocomplete=>"off"} %>
+  Advanced Filter <%= form.text_field 'advanced_filter', {:autocomplete=>"off"} %>
+  Page <%= form.text_field 'page', {:autocomplete=>"off"} %>
+  Sort Order <%= form.text_field 'sort_order', {:autocomplete=>"off"} %>
+  Sort Column <%= form.text_field 'sort_column', {:autocomplete=>"off"} %>
+  Counter <%= form.text_field 'counter', {:autocomplete=>"off"} %>
+  <%= submit_tag "Show Me" %>
+<% end %>
+
+<% if Rails::VERSION::MAJOR >= 2 -%>
+  <!-- Embedded authenticity token for use in JavaScript that sends custom AJAX requests -->
+  <div id="authenticity_token" style="display: none">
+    <%= form_authenticity_token if protect_against_forgery? %>
+  </div>
+<% end -%>
+
+<div id="streamlined_list">
+  <div class="actions" id="list-filter">
+    <%= streamlined_filter %>
+  </div>
+	<div class="streamlined_header">
+	  <h2><%= image_tag_if_exists("#{model_table}.png", {:align => 'top'}) %> <%= model_name.titleize.pluralize %></h2>	
+	</div>
+	<%= render_streamlined_file '/shared/_after_header_partials.rhtml' %>
+	<div id="show_export">
+		<%= render_streamlined_file '/generic_views/_show_export.rhtml' %>	
+	</div>
+	<div id="model_list">
+		<%= render_streamlined_file '/generic_views/_list.html.erb' %>
+	</div>
+	<div class="#streamlined_list-footer"> 
+		<div id="controls">
+		  <%= link_to_new_model -%>&nbsp;
+    	<%= link_to_toggle_export -%>&nbsp;
+		  <%= link_to_previous_page -%>
+		  <%= link_to_next_page -%>
+			<br />
+		</div>
+	</div>
+</div>
+<%= render_streamlined_files '/shared/_footer_partials.rhtml' %>
+<%= update_page_tag do |page|
+    page.hide 'show_export'
+  end 
+%>

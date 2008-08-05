@@ -1,0 +1,26 @@
+xml.instruct!
+xml.instruct! :"xml-stylesheet", :type => "text/xsl", :href => "#{model_underscore}.xsl" if @xml_file
+
+xml.tag! Inflector.pluralize(model_name) do
+  for item in @streamlined_items 
+    xml.tag! model_name do
+      # model columns
+      @export_columns.each do |column|
+        if column.is_displayable_in_context?(self, item)
+          if column.is_a?(Streamlined::Column::Association)
+            contents =  render(:file => column.show_view.partial, :use_full_path => false, 
+                :locals => { :item => item, :relationship => column, 
+                :streamlined_def => column.show_view })
+            # strip out html tags
+            contents = contents.gsub("<br/>\n\n<hr>","")
+            contents = contents.gsub("<hr>","")
+            contents = contents.gsub("<br/>",", ")
+            xml.tag!(column.name, contents)
+          else  
+            xml.tag!(column.name, item.send(column.name))
+          end        
+        end
+      end
+    end  
+  end
+end

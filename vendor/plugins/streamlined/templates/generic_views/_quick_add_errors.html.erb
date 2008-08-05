@@ -1,0 +1,9 @@
+<div class="error">
+	<big>Error creating <%= @model_name %>:</big><br/>
+	<%= @model.errors.full_messages.join('<br/>') %>
+	<br/>
+	<% @model.class.delegate_target_associations.each do |assoc| %>
+		<% assoc_name = assoc.class_name.variableize.to_sym %>
+		<%= instance_variable_get("@#{assoc_name}").errors.full_messages.join('<br/>') %>
+  <% end %>
+</div>

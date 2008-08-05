@@ -1,0 +1,48 @@
+Streamlined - http://streamlinedframework.org/
+===================
+
+
+Streamlined allows you to quickly generate useful user interfaces, declaratively.
+
+Streamlined is not a code generator. It relies on you having an existing database schema,
+controllers and models. If you have not done so yet, follow the instructions in the
+"Rolling with Ruby on Rails Revisited" article series at...
+
+http://www.onlamp.com/pub/a/onlamp/2006/12/14/revisiting-ruby-on-rails-revisited.html
+
+...to create a database and some controllers and models. Then, to make any controller
+into a Streamlined controller, do the following:
+
+  class MyNiftyController < ApplicationController
+    layout 'streamlined'
+    acts_as_streamlined
+    
+    ...[anything else you want to do]
+  end
+
+More documentation can be found on the Streamlined wiki at http://trac.streamlinedframework.org/
+
+NOTE: You cannot extend ApplicationController with acts_as_streamlined, only children of ApplicationController.
+
+
+== Running tests
+
+Streamlined comes bundled with a set of unit and functional tests. You must install the latest
+versions of the following gems to run these tests:
+
+* flexmock (0.6.2 or higher)
+* rcov (0.7.0.1 or higher)
+* mocha (0.5.5)
+* test-spec (0.4.0 or higher)
+
+To initialize your local database and run the tests, execute:
+
+> cd vendor/plugins/streamlined
+> rake test:build_mysql_databases
+> rake
+
+If database creation task fails, make sure your config/database.yml file is configured properly
+for your local installation of MySQL.
+
+Clone or view the Streamlined Source at: http://github.com/relevance/streamlined/
+Clone or view some sample apps as:       http://github.com/relevance/streamlined_samples/

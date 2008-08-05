@@ -1,0 +1,5 @@
+<% if item.send(relationship.name) %>
+	<%= item.send(relationship.name).streamlined_name(streamlined_def.fields, streamlined_def.separator) %>
+<% else %>
+	<%= relationship.unassigned_value %>
+<% end %>

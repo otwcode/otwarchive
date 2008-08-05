@@ -1,0 +1,9 @@
+# Sample database config file. Copy this file to config/database.yml and
+# change the settings to match your local environment.
+
+streamlined_unittest:
+  adapter: mysql
+  database: streamlined_unittest
+  username: root
+  password:
+

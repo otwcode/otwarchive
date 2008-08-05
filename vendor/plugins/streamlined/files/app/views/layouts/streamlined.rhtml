@@ -1,0 +1,40 @@
+<html>
+<head>
+  <title><%= controller.action_name %></title>
+  <%= streamlined_auto_discovery_link_tag %>
+  <%= javascript_include_tag :defaults %>
+  <%= javascript_include_tag 'streamlined' %>
+  <%= javascript_include_tag '/windows_js/javascripts/window' %>
+  <%= javascript_include_tag '/overlib/overlib' %>
+  <%= javascript_include_tag 'tabber' %>
+  <%= javascript_include_tag 'tabber-minimized' %>
+  <%= stylesheet_link_tag '/windows_js/themes/mac_os_x' %>
+  <%= stylesheet_link_tag '/windows_js/themes/default' %>
+  <%= stylesheet_link_tag 'as_style' %>
+  <%= stylesheet_link_tag 'streamlined' %>
+  <%= stylesheet_link_tag 'menu' %>
+  <%= stylesheet_link_tag 'tabber' %>
+</head>
+<body>
+	<div id="header">
+		<span id="branding"><%= streamlined_branding %></span>
+	  	<div id="top_nav"><%= render(:partial => 'shared/streamlined/top_menu') %></div>
+	</div>
+	 <div id="left">
+	   <%= render(:partial => "shared/streamlined/side_menu")%>
+	   <% if advanced_filtering %>
+         <%= render_streamlined_file '/shared/_filter.rhtml' %>	   
+       <% end %>
+	 </div>
+	 <div id="center">
+	   <% if streamlined_breadcrumb %>
+	   	 <%= render_breadcrumb %>
+	   <% end %>
+	   <%= image_tag 'streamlined/loading.gif', :id=>'spinner', :style=>"display:none;" %>
+	   <div id="content_for_layout"><%= @content_for_layout %></div>
+	 </div>
+	<div id="footer">
+	  <%= streamlined_footer %>
+	</div>
+</body>
+</html>

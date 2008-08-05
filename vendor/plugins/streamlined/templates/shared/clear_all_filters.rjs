@@ -1,0 +1,3 @@
+page << "$('page_options_advanced_filter').value =  \"\" "
+page.replace_html "advanced_filter", ""
+page.hide "filter_session_expired_msg"

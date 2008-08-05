@@ -1,0 +1,3 @@
+This directory must exist for the functional tests, so that 
+we can calculate the relative path from RAILS_ROOT to the 
+STREAMLINED_GENERIC_VIEW_ROOT!
