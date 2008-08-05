@@ -6,9 +6,9 @@
     <%= options_from_collection_for_select(@chapter.authors, :id, :name, @chapter.authors.collect {|pseud| pseud.id.to_i }) %>
   </select>
   
-  <%= f.hidden_field :title, :value => "#{@chapter.metadata.title}" %>
-  <%= f.hidden_field :summary, :value => "#{@chapter.metadata.summary}" %>
-  <%= f.hidden_field :notes, :value => "#{@chapter.metadata.notes}" %>
+  <%= f.hidden_field :title, :value => "#{@chapter.title}" %>
+  <%= f.hidden_field :summary, :value => "#{@chapter.summary}" %>
+  <%= f.hidden_field :notes, :value => "#{@chapter.notes}" %>
   <%= f.hidden_field :content, :value => "#{@chapter.content}" %>
   <%= f.hidden_field :wip_length, :value => "#{@chapter.wip_length_placeholder}" %>
   <%= f.hidden_field :current_position, :value => "#{@chapter.position_placeholder}" %>
