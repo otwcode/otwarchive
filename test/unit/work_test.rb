@@ -1,6 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class WorkTest < ActiveSupport::TestCase
+
   context "a work" do
     setup do
       assert @work = create_work
@@ -21,6 +22,7 @@ class WorkTest < ActiveSupport::TestCase
     should "be visible to it's owner even if unposted" do
       assert @work.visible(@work.pseuds.first.user)
     end
+
     context "which has been posted" do
       setup do
         @work.posted = true
@@ -32,6 +34,7 @@ class WorkTest < ActiveSupport::TestCase
       should "be visible en group" do
         assert Work.visible.include?(@work)
       end
+
       context "which is restricted" do
         setup do
           @work.restricted = true
@@ -45,6 +48,7 @@ class WorkTest < ActiveSupport::TestCase
         end
       end
     end
+
     context "with a comment on a chapter" do
       setup do
         @comment = create_comment(:commentable => @work.chapters.first)
@@ -53,6 +57,36 @@ class WorkTest < ActiveSupport::TestCase
         assert @work.find_all_comments.include?(@comment)
       end
     end
+
+    context "with a non-adult tag" do
+      setup do
+        @tagna = create_tag(:adult => false)
+        @work.update_attribute('default', @tagna.name)
+      end
+      should "not be marked adult" do
+        assert !@work.adult
+      end
+
+      context "and an adult tag" do
+        setup do
+          @taga = create_tag(:adult => true)
+          @work.update_attribute('default', @taga.name + ', ' + @tagna.name)
+        end
+        should "be marked adult" do
+          assert @work.adult
+        end
+  
+        context "when the adult tag is removed" do
+          setup do
+            @work.update_attribute('default', @tagna.name)
+          end
+          should "not be marked adult" do
+            assert !@work.adult
+          end        
+        end
+      end
+    end
+
   end
   def test_number_of_chapters
     work = create_work

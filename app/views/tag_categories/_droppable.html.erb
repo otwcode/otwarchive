@@ -2,6 +2,7 @@
   <%= tag.name -%> 
   <% if tag.canonical? %>(Canonical)<% end -%>
   <% if tag.banned? %>(Banned!)<% end -%>
+  <% if tag.adult? %>(Adult!)<% end -%>
   (<%= link_to 'show', tag, :popup => true %>)
   <br/>
 </div>

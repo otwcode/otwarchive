@@ -1,11 +1,11 @@
 class WorksController < ApplicationController
   # only registered users and NOT admin should be able to create new works
-  before_filter :users_only, :except => [ :index, :show, :destroy, :singlechapter, :allchapters ]
+  before_filter :users_only, :only => [ :new, :create ]
   # only authors of a work should be able to edit it
-  before_filter :is_author_true, :only => [ :edit, :update ]
+  before_filter :is_author_true, :only => [ :edit, :update, :destroy ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :post, :show ]
   before_filter :update_or_create_reading, :only => [ :show ]
-  before_filter :check_permission_to_view, :only => :show
+  before_filter :check_permission_to_view, :only => [ :show ]
   
   # We may want to move this to a module
   def self.auto_complete_for_taggable(model)
@@ -79,7 +79,9 @@ class WorksController < ApplicationController
   # check if the user's current pseud is one associated with the work
   def is_author
     @work = Work.find(params[:id])
-    not (logged_in? && (current_user.pseuds & @work.pseuds).empty?)
+    return false if current_user == :false
+    return true if !(current_user.pseuds & @work.pseuds).empty?
+    return false
   end  
   
   # if is_author returns true allow them to update, otherwise redirect them to the work page with an error message
@@ -106,8 +108,16 @@ class WorksController < ApplicationController
   # GET /works/1
   # GET /works/1.xml
   def show
-    unless @work.visible(current_user)
+    if !@work.visible(current_user)
       render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 and return
+    elsif @work.adult? &&  !see_adult? 
+      @back = request.env["HTTP_REFERER"]
+      @back = root_path unless @back
+      if @back == work_url(@work)
+        session[:adult] = true
+      else
+        render :action => "adult" and return
+      end
     end
     @comments = @work.find_all_comments
   end

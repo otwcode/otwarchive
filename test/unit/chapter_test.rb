@@ -98,7 +98,7 @@ class ChapterTest < ActiveSupport::TestCase
         assert_equal 1, @chapter1.count_all_comments
       end
     end
-
+    
   end
 
 end

@@ -72,7 +72,7 @@ class TagsController < ApplicationController
     respond_to do |format|
       if @tag.save
         flash[:notice] = 'Tag was successfully created.'
-        format.html { redirect_to tag_relationships_path }
+        format.html { redirect_to tag_categories_path }
         format.xml  { render :xml => @tag, :status => :created, :location => @tag }
       else
         format.html { render :action => "new" }

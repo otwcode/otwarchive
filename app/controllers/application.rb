@@ -52,8 +52,15 @@ class ApplicationController < ActionController::Base
     logged_in_as_admin?
   end
   
+  def see_adult?
+    return true if session[:adult]
+    return false if current_user == :false
+    return true if is_author
+    return true if current_user.preference && current_user.preference.adult
+    return false
+  end
+  
   #### -- AUTHORIZATION -- ####
-
 
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store

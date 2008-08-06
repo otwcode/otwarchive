@@ -1,7 +1,7 @@
-<h2>TagWrangler: Set Banned and Canonical Flags for <%= @tag_category.display_name %> tags</h2>
+<h2>TagWrangler: Set Adult, Banned and Canonical Flags for <%= @tag_category.display_name %> tags</h2>
 <p>Drag a tag by it's handle (<img src="/images/drag.png" alt="drag me">) and drop it on one of the following four lines:</p>
 
-<% ['banned', 'canonical'].each do |kind| %>
+<% ['banned', 'canonical', 'adult'].each do |kind| %>
   <p><div id=<%=kind%> class="droppable" >mark <%= kind.capitalize %></div>
   <p><div id="not_<%=kind%>" class="droppable" >remove the <%= kind.capitalize %> flag</div>
   <%= drop_receiving_element(kind, :url =>

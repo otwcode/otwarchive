@@ -4,74 +4,216 @@ require File.dirname(__FILE__) + '/../test_helper'
 # TODO work as admin
 class WorksControllerTest < ActionController::TestCase
 
-  # Test create  POST  /:locale/works
-  def test_create_work
-    user = create_user
-    @request.session[:user] = user    
-    get :new, :locale => 'en', 
-        :work => { :title => 'New work title', 
-                   :chapter_attributes => {:content => 'Stuff in new chapter'}}
-    assert_response :success
+  context "if you are not logged in" do
+    setup do
+      @work = create_work
+    end
+    context "when browsing works" do
+      setup do
+        get :index, :locale => 'en'
+      end
+      should_render_template :index
+      should_assign_to :works
+    end
+    context "works that aren't posted" do
+      setup do
+        get :show, :locale => 'en', :id => @work.id
+      end
+      should_respond_with 403
+    end
+    context "works which are posted" do
+      setup do
+        @work.update_attribute("posted", true)
+        get :show, :locale => 'en', :id => @work.id
+      end
+      should_render_template :show
+      should_assign_to :work
+    end
+    context "works that are adult" do
+      setup do
+        @work.update_attribute("posted", true)
+        @tag = create_tag(:adult => true)
+        @work.update_attribute('default', @tag.name)
+        get :show, :locale => 'en', :id => @work.id
+      end
+      should_render_template :adult
+    end
+    context "when creating a work" do
+      setup do
+        get :new, :locale => 'en', 
+            :work => { :title => 'New work title', 
+            :chapter_attributes => {:content => 'Stuff in new chapter'}}
+        end
+      should_redirect_to 'new_session_url'
+    end
+    context "when destroying a work" do
+      setup do
+        delete :destroy, :locale => 'en', :id => @work.id
+      end
+      should "not destroy the record" do
+        assert @work.reload
+      end
+    end
+    context "when updating a work" do
+      setup do
+        put :update, :locale => 'en', :id => @work.id, 
+            :work => { :title => "New Title", 
+                   :chapter_attributes => {:content => "New Content"}}
+      end
+      should "not update the record" do
+        assert_not_equal "New Title", @work.title
+        assert_not_equal "New Content", @work.chapters.first.content
+      end
+    end
   end
-  # Test destroy  DELETE /:locale/works/:id
-  def test_should_destroy_work
-    user = create_user
-    @request.session[:user] = user
-    @work = create_work(:authors => [user.default_pseud])
-    assert_difference('Work.count', -1) do
-      delete :destroy, :locale => 'en', :id => @work.id
-    end    
-    assert_redirected_to works_path
+  
+  context "when logged in" do
+    setup do
+      @user = create_user
+      @request.session[:user] = @user 
+    end
+    context "when creating a work" do
+      setup do
+        get :new, :locale => 'en', 
+          :work => { :title => 'New work title', 
+          :chapter_attributes => {:content => 'Stuff in new chapter'}}
+      end
+      should_assign_to :work
+      should_render_template :new
+    end
+
+    context "when working with your own work" do
+      setup do
+        @work = create_work(:authors => [@user.default_pseud])
+      end
+      context "works that are adult" do
+        setup do
+          @work.update_attribute("posted", true)
+          @tag = create_tag(:adult => true)
+          @work.update_attribute('default', @tag.name)
+          get :show, :locale => 'en', :id => @work.id
+        end
+        should_render_template :show
+        should_assign_to :work
+      end
+      context "when browsing works" do
+        setup do
+          get :index, :locale => 'en'
+        end
+        should_render_template :index
+        should_assign_to :works
+      end
+      context "works that aren't posted" do
+        setup do
+          @work.update_attribute("posted", true)
+          get :show, :locale => 'en', :id => @work.id
+        end
+        should_render_template :show
+        should_assign_to :work
+      end
+      context "when editing a work" do
+        setup do
+          get :edit, :locale => 'en', :id => @work.id
+        end
+        should_render_template :edit
+        should_assign_to :work
+      end
+      context "when updating a work" do
+        setup do
+          put :update, :locale => 'en', :id => @work.id, 
+              :work => { :title => "New Title", 
+                     :chapter_attributes => {:content => "New Content"}}
+          @work.reload
+        end
+        should "update the record" do
+          assert_equal "New Title", @work.title
+          assert_equal "New Content", @work.chapters.first.content
+        end
+      end
+      context "when destroying a work" do
+        setup do
+          delete :destroy, :locale => 'en', :id => @work.id
+        end
+        should "destroy the record" do
+          assert_raises(ActiveRecord::RecordNotFound) { @work.reload }
+        end
+      end
+    end
+
+    context "when working with someone else's work" do
+      setup do
+        @work = create_work
+      end
+      context "when browsing works" do
+        setup do
+          get :index, :locale => 'en'
+        end
+        should_render_template :index
+        should_assign_to :works
+      end
+      context "works that aren't posted" do
+        setup do
+          get :show, :locale => 'en', :id => @work.id
+        end
+        should_respond_with 403
+      end
+      context "works which are posted" do
+        setup do
+          @work.update_attribute("posted", true)
+          get :show, :locale => 'en', :id => @work.id
+        end
+        should_render_template :show
+        should_assign_to :work
+      end
+      context "works that are adult" do
+        setup do
+          @work.update_attribute("posted", true)
+          @tag = create_tag(:adult => true)
+          @work.update_attribute('default', @tag.name)
+          get :show, :locale => 'en', :id => @work.id
+        end
+        should_render_template :adult
+      end
+      context "if you set your preference, works that are adult" do
+        setup do
+          @user.preference.update_attribute("adult", true)
+          @request.session[:user] = @user 
+          @work.update_attribute("posted", true)
+          @tag = create_tag(:adult => true)
+          @work.update_attribute('default', @tag.name)
+          get :show, :locale => 'en', :id => @work.id
+        end
+        should_render_template :show
+      end
+      context "when editing a work" do
+        setup do
+          get :edit, :locale => 'en', :id => @work.id
+        end
+        should_redirect_to 'work_path(@work)'
+        should_set_the_flash_to /have permission/      
+      end
+      context "when updating a work" do
+        setup do
+          put :update, :locale => 'en', :id => @work.id, 
+              :work => { :title => "New Title", 
+                     :chapter_attributes => {:content => "New Content"}}
+        end
+        should "not update the record" do
+          assert_not_equal "New Title", @work.title
+          assert_not_equal "New Content", @work.chapters.first.content
+        end
+      end
+      context "when destroying a work" do
+        setup do
+          delete :destroy, :locale => 'en', :id => @work.id
+        end
+        should_redirect_to 'work_path(@work)'
+        should "not destroy the record" do
+          assert @work.reload
+        end
+        should_set_the_flash_to /have permission/      
+      end
+    end
   end
-  # Test edit  GET  /:locale/works/:id/edit  (named path: edit_work)
-  def test_should_get_edit
-    user = create_user
-    @request.session[:user] = user
-    @work = create_work(:authors => [user.default_pseud])
-    get :edit, :locale => 'en', :id => @work.id
-    assert_response :success
-  end
-  # Test index  GET  /:locale/works  (named path: works)
-  def test_works_path
-    # FIXME Called id for nil if no language
-    Locale.set 'en'
-    get :index, :locale => 'en'
-    assert_response :success
-    assert_not_nil assigns(:works)
-  end
-  # Test new  GET  /:locale/works/new  (named path: new_work)
-  def test_new_work_path
-    login_as_user(:basic_user)
-    get :new, :locale => 'en'
-    assert_response :success
-  end
-  # Test post  POST  /:locale/works/:id/post  (named path: post_work)
-    # TODO test post
-  # Test preview  GET  /:locale/works/:id/preview  (named path: preview_work)
-    # TODO test preview
-  # Test show  GET  /:locale/works/:id  (named path: work)
-  def test_work_path
-    @work = create_work
-    @work.update_attribute(:posted, true)
-    get :show, :locale => 'en', :id => @work.id
-    assert_response :success
-    # TODO test comments
-  end
-  # Test update  PUT  /:locale/works/:id
-  def test_update_work
-    user = create_user
-    @request.session[:user] = user
-    @work = create_work(:authors => [user.default_pseud])    
-    new_title = "New Title"
-    new_content = "New Content"
-    put :update, 
-        :locale => 'en', 
-        :id => @work.id, 
-        :work => { :title => new_title, 
-                   :chapter_attributes => {:content => new_content}}
-    assert_redirected_to work_path(assigns(:work))
-    @work = Work.find(@work.id)
-    assert_equal(new_title, @work.title)
-    assert_equal(new_content, @work.chapters.first.content)    
-  end
+    
 end

@@ -42,6 +42,7 @@ class TaggingTest < ActiveSupport::TestCase
     tag = create_tag(:banned => true)
     work = create_work
     tagging = create_tagging(:taggable => work, :tag => tag)
+    work.reload
     assert_equal Array(tag), work.taggings.map(&:tag)
     assert_equal [], work.tags           # no category, not valid
     tag = create_tag(:banned => false)
@@ -53,7 +54,8 @@ class TaggingTest < ActiveSupport::TestCase
     category = create_tag_category
     tag = create_tag(:tag_category => category)
     work = create_work
-    tagging = create_tagging(:taggable => work, :tag => tag)    
+    tagging = create_tagging(:taggable => work, :tag => tag)  
+    work.reload
     assert_equal Array(tag), work.tags(category.name)  # category, valid
     bad_tag = create_tag(:banned => true)
     tagging = create_tagging(:taggable => work, :tag => bad_tag)    
@@ -69,7 +71,8 @@ class TaggingTest < ActiveSupport::TestCase
   def test_tag_string
     work = create_work
     tag = create_tag(:name => 'a comes first')
-    tagging = create_tagging(:taggable => work, :tag => tag)   
+    tagging = create_tagging(:taggable => work, :tag => tag) 
+    work.reload
     assert_equal tag.name, work.tag_string
     tag2 = create_tag(:name => 'b comes second')
     tagging = create_tagging(:taggable => work, :tag => tag2) 
@@ -96,6 +99,7 @@ class TaggingTest < ActiveSupport::TestCase
     category = create_tag_category
     # new tags
     work.tag_with(category.name.to_sym => "a new tag")
+    work.reload
     assert_equal 'a new tag', work.tag_string
     assert_equal category, Tag.find_by_name('a new tag').tag_category
     # replace tags

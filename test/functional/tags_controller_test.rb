@@ -27,7 +27,7 @@ class TagsControllerTest < ActionController::TestCase
       @name = random_phrase
       put :create, :locale => 'en', :tag => {"name" => @name}
     end
-    should_redirect_to 'tag_relationships_path'
+    should_redirect_to 'tag_categories_path'
     should_set_the_flash_to /successfully created/
     should_assign_to :tag
     should "create the tag" do

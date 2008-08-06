@@ -29,7 +29,8 @@ module TaggingExtensions
     end
   end
 
-  # for use on bookmarks where there are no categories
+  # for use on objects which don't care about categories (currently bookmarks)
+  # tag_string('a, few, tags')
   def tag_string=(tag_string)
     if tag_string.blank?
       tag_array = []
@@ -45,13 +46,15 @@ module TaggingExtensions
     remove = current - tag_array
     add.each {|t| Tagging.create(:tag => t, :taggable => self) }
     remove.each {|t| self.taggings.find_by_tag(t).each(&:destroy)}
-    self.tags
+    tag_array
   end
 
-  # usage:
+  # for use on objects which care about categories (currently works)
   # tag_with(:default => 'a, few, tags', :fandom => 'stargate atlantis', :rating => 'adult')
-  # note, this replaces the tags in the categories given (and only in those categories)
+  # note, this replaces the tags and sets new_tags only for the categories given
+  # it doesn't do error checking to ensure that the category set is accurate or complete
   def tag_with(tag_category_hash)
+    new_tags = []
     tag_category_hash.each_pair do |category, tag_string| 
       category = TagCategory.find_by_name(category.to_s)
       return false unless category
@@ -73,14 +76,15 @@ module TaggingExtensions
         end
         tag_array = new_tags.flatten.compact
       end
+      new_tags << tag_array
       # add and remove tags to make the taggable's tags equal to the new tag_array
       current = tags(category.name)
       add = tag_array - current
       remove = current - tag_array
       add.each {|t| Tagging.create(:tag => t, :taggable => self) }
       remove.each {|t| self.taggings.find_by_tag(t).each(&:destroy)}
-      self.tags
     end
+    self.new_tags = new_tags.flatten
   end
   
 end

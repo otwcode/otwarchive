@@ -34,12 +34,14 @@ class Work < ActiveRecord::Base
   attr_accessor :invalid_pseuds
   attr_accessor :ambiguous_pseuds
   attr_accessor :new_parent
+  attr_accessor :new_tags
    
   before_save :validate_authors, :set_language
   before_save :set_word_count
   before_save :post_first_chapter
   after_save :save_associated, :save_creatorships
   after_update :save_associated, :save_creatorships 
+  before_save :set_adult
   
   # Associating works with languages. 
   
@@ -277,5 +279,15 @@ class Work < ActiveRecord::Base
        chapter.save(false)
     end
   end
-  
+
+  def set_adult
+    new_adult = false
+    if new_tags
+      new_tags.each do |tag|
+        new_adult = true if tag.adult
+      end
+      self.adult = new_adult
+    end
+    return true
+  end
 end

@@ -33,6 +33,7 @@ class ChaptersController < ApplicationController
   # check if the user's current pseud is one associated with the work
   def is_author
     @work = Work.find(params[:work_id])
+    return false if current_user == :false
     current_user.pseuds.each do |pseud|
       if pseud.creations.include?(@work)
         return true
@@ -93,6 +94,17 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/1.xml
   def show
     @chapter = @work.chapters.find(params[:id])
+    if !@work.visible(current_user)
+      render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 and return
+    elsif @work.adult? && !see_adult?
+      @back = request.env["HTTP_REFERER"]
+      @back = root_path unless @back
+      if @back == work_chapter_url(@work, @chapter)
+        session[:adult] = true
+      else
+        render :action => "adult" and return
+      end
+    end
     @comments = @chapter.find_all_comments
   end
   

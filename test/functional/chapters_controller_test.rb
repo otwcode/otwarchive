@@ -131,6 +131,7 @@ class ChaptersControllerTest < ActionController::TestCase
   def test_work_chapter_path
     chapter = new_chapter
     work = create_work(:chapters => [chapter])
+    work.update_attribute('posted', true)
     get :show, :locale => 'en', :work_id => work.id, :id => chapter.id
     assert_response :success
     assert_equal assigns(:work), work
