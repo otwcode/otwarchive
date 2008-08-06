@@ -14,6 +14,19 @@ class Tag < ActiveRecord::Base
     self.name = name.strip.squeeze(" ") if self.name
   end
   
+  def after_update
+    if self.adult_changed?
+      Tagging.tagees(:conditions => {:tag_id => self.id, :taggable_type => 'Work'}).each do |work|
+        adult = false
+        work.tags.each do |tag|
+          adult = true if tag.adult
+        end
+        work.update_attribute('adult', adult)
+      end
+    end
+    return true
+  end
+  
   # kind is one of 'Tags', 'Works', 'Bookmarks'
   # this function returns an array of visible 'kind's that have been tagged with the given tag.
   def visible(kind, current_user=:false)

@@ -82,6 +82,35 @@ class TagTest < ActiveSupport::TestCase
           assert @tag.visible('Works', create_user).include?(@work)
         end
       end
+      context "which is set to adult" do
+        setup do
+          @tag.update_attribute("adult", true)
+          @work.reload
+        end
+        should "set the work to adult" do
+          assert @work.adult
+        end
+        context "and then set to non-adult (but the work still has an adult tag)" do
+          setup do
+            @tag2 = create_tag(:adult => true)
+            tagging = create_tagging(:taggable => @work, :tag => @tag2)
+            @tag.update_attribute("adult", false) 
+            @work.reload
+          end
+          should "set the work adult" do
+            assert @work.adult
+          end
+          context "when all tags are set to not-adult" do
+            setup do
+              @tag2.update_attribute("adult", false)
+              @work.reload
+            end
+            should "set the work not-adult" do
+              assert !@work.adult
+            end
+          end          
+        end
+      end
     end
     context "of a bookmark on a posted work" do
       setup do
