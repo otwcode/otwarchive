@@ -10,10 +10,10 @@ class TranslationController < ApplicationController
        Locale.set default_loc
     end
     
-    @view_translations = ViewTranslation.find(:all, 
+    @view_translations = ViewTranslation.paginate(:all, 
                                               :conditions => [ 'built_in IS NULL AND language_id = ?', 
     Locale.language.id ], 
-    :order => 'id')                                                
+    :order => 'id', :page => params[:page])                                                
   end
  
 # Shows only strings which have not yet been translated  
@@ -23,8 +23,8 @@ class TranslationController < ApplicationController
       Locale.set default_loc
     end
     
-    @view_translations = ViewTranslation.find(:all, :conditions => [ 'built_in IS NULL AND text IS NULL AND language_id = ?',
-    Locale.language.id ], :order => 'id')
+    @view_translations = ViewTranslation.paginate(:all, :conditions => [ 'built_in IS NULL AND text IS NULL AND language_id = ?',
+    Locale.language.id ], :order => 'id', :page => params[:page])
   end
   
   def translation_text
