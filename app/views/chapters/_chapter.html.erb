@@ -1,5 +1,5 @@
 <!-- This partial requires local variable 'chapter' -->
-<p>
+
   <div class="chapter-title">	
   <strong><%= chapter_link(chapter) %></strong>
   <% if chapter.title -%>: <%=h chapter.title %><% end -%>
@@ -24,11 +24,22 @@
   </div>
   
   <!-- we want to hide this information by default if javascript is available -->
-  <% if chapter.summary -%><br /><%=sanitize_format chapter.summary -%><% end -%>
-  <% if chapter.notes -%><br /><%=sanitize_format chapter.notes -%><% end -%>
-  
+	<!-- Shows work info on the first chapter of multi-chapter work except when this
+	partial is being displayed as part of a full work, when the work details come above
+	the chapters -->
+	<%- if chapter == @work.first_chapter -%>
+		<%- unless (hide_work_info ||= false) -%>
+	    <% if @work.summary -%><br /><%=sanitize_format @work.summary -%><% end -%>
+      <% if @work.notes -%><br /><%=sanitize_format @work.notes -%><% end -%>
+			<% if @work.is_wip -%><br /><p><%= wip_message(@work) %></p><% end -%>
+		<%- end -%>
+	<%- else -%>
+    <% if chapter.summary -%><br /><%=sanitize_format chapter.summary -%><% end -%>
+    <% if chapter.notes -%><br /><%=sanitize_format chapter.notes -%><% end -%>
+	<% end %>
+	
+  <br />
   <p>
     <%=sanitize_format chapter.content %>
   </p>
   
-</p>
