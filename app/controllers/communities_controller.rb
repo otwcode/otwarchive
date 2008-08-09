@@ -2,7 +2,7 @@ class CommunitiesController < ApplicationController
   # GET /communities
   # GET /communities.xml
   def index
-    @communities = Community.find(:all)
+    @communities = Community.paginate(:all, :page => params[:page])
 
     respond_to do |format|
       format.html # index.html.erb

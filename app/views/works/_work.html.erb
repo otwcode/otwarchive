@@ -15,7 +15,7 @@
   </h3>
   
   <p class="story-summary">
-    <%=sanitize_format @work.summary %>
+    <%=sanitize @work.summary, :tags => %w(em i b strong strike small a href) %>
   </p>
   
   <p class="story-notes">

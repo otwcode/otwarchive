@@ -11,7 +11,7 @@ class ReadingsController < ApplicationController
   
   def index
     @user = User.find_by_login(params[:user_id])
-    @readings = current_user.readings.find(:all, :order => "updated_at DESC")
+    @readings = current_user.readings.paginate(:all, :order => "updated_at DESC", :page => params[:page])
   end
 
   def show

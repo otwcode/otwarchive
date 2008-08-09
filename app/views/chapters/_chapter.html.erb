@@ -29,12 +29,12 @@
 	the chapters -->
 	<%- if chapter == @work.first_chapter -%>
 		<%- unless (hide_work_info ||= false) -%>
-	    <% if @work.summary -%><br /><%=sanitize_format @work.summary -%><% end -%>
+	    <% if @work.summary -%><br /><%=sanitize @work.summary,  :tags => %w(em i b strong strike small a href) -%><% end -%>
       <% if @work.notes -%><br /><%=sanitize_format @work.notes -%><% end -%>
 			<% if @work.is_wip -%><br /><p><%= wip_message(@work) %></p><% end -%>
 		<%- end -%>
 	<%- else -%>
-    <% if chapter.summary -%><br /><%=sanitize_format chapter.summary -%><% end -%>
+    <% if chapter.summary -%><br /><%=sanitize chapter.summary,  :tags => %w(em i b strong strike small a href) -%><% end -%>
     <% if chapter.notes -%><br /><%=sanitize_format chapter.notes -%><% end -%>
 	<% end %>
 	
