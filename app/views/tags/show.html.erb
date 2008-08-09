@@ -1,22 +1,26 @@
 <h2><%= @tag.name %></h2>
+
 <% unless @works.size == 0 %>
   <h3>Works that have been tagged with this tag or one of its synonyms</h3>
   <% @works.each do |work| %>
     <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
   <% end %>
 <% end %>
+
 <% unless @bookmarks.size == 0 %>
   <h3>Bookmarks that have been tagged with this tag or one of its synonyms</h3>
   <% @bookmarks.each do |bookmark| %>
     <%= render :partial => 'bookmarks/bookmark', :locals => {:bookmark => bookmark }%>
   <% end %>
 <% end %>
+
 <% unless @tags.size == 0 %>
   <h3>Related Tags</h3>
   <% @tags.each do |tag| %>
     <%= link_to tag.name, tag_path(tag) %>
   <% end %>
 <% end %>
+
 <% unless @ambiguous.size == 0 %>
   <h3>Possibly Related Tags</h3>
   <% @ambiguous.each do |tag| %>
@@ -24,5 +28,4 @@
   <% end %>
 <% end %>
   
-<p>
-<%= link_to 'All tags', tags_path %>
+<p><%= link_to 'All tags', tags_path %></p>

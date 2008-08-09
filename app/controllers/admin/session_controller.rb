@@ -22,6 +22,6 @@ class Admin::SessionController < ApplicationController
     cookies.delete :auth_token
     reset_session
     flash[:notice] = "You have been logged out."
-    redirect_to admin_login_path
+    redirect_to new_admin_session_path
   end
 end

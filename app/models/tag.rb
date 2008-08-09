@@ -1,6 +1,8 @@
 class Tag < ActiveRecord::Base
   belongs_to :tag_category
-  has_many :taggings, :as => :taggable, :dependent => :destroy
+  has_many :taggings, :dependent => :destroy
+  has_many :works, :through => :taggings, :source => :taggable, :source_type => 'Work'
+  has_many :bookmarks, :through => :taggings, :source => :taggable, :source_type => 'Bookmark'
   include TaggingExtensions
 
   validates_presence_of :name

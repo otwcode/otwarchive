@@ -30,8 +30,8 @@ class TagsController < ApplicationController
       render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 and return
     end
 
-    @works = @tag.visible('Works', current_user)
-    @bookmarks = @tag.visible('Bookmarks', current_user)
+    @works = @tag.works.visible(current_user)
+    @bookmarks = @tag.bookmarks.visible(current_user)
     @tags = @tag.visible('Tags', current_user)
     @ambiguous = @tag.disambiguates
 
