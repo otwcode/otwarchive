@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+  <head>
+    <meta name="generator" content="HTML Tidy, see www.w3.org">
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+    <title><%=h ArchiveConfig.APP_NAME .t %>&gt;&gt;<%= controller.controller_name %>
+        <%= controller.action_name %>
+        </title>
+        <%= stylesheet_link_tag 'archive_core', :media => 'screen' %>
+        <%= stylesheet_link_tag 'authentication', :media => 'screen' %>
+        <%= stylesheet_link_tag 'globalize', :media => 'screen' %>
+        <%= stylesheet_link_tag 'live_validation', :media => 'screen' %>
+        <%= stylesheet_link_tag 'auto_complete', :media => 'screen' %>
+        <%= stylesheet_link_tag 'tags', :media => 'screen' %>
+        <!-- yield :tinymce needs to be before the scriptaculous elements. See http://wiki.moxiecode.com/index.php/TinyMCE:Ruby_on_Rails for more information. -->
+        <%= yield :tinymce %>
+        <%= javascript_include_tag :defaults %>
+        <%= javascript_include_tag 'live_validation' %>
+        <%= javascript_include_tag 'accessible' %>
+		 <%= yield :tinymce_init %> 
+
+        </head>
+
+  <body>
+  
+  <!-- BEGIN header -->
+    <div id="header">
+      <div id="login-block">
+        <%- if logged_in? -%>
+	      <ul>
+				  <li><span><%=h "Hi,".t -%></span> <%= link_to current_user.login, user_path(current_user), :class => 'login' -%>! </li>
+				  <%= translation_button %>	
+				</ul>	
+
+	      <ul>
+          <li class="first-link"><%= link_to h('Post New'.t), new_work_path -%></li>
+	        <li><%= link_to h('Log out'.t), logout_path -%></li>
+	      </ul>
+        
+        <% elsif logged_in_as_admin? -%>
+        <ul>
+          <li><span><%=h "Hello,".t -%></span> <%= link_to current_admin.login, admin_path(current_admin), :class => 'login login-admin' -%>!</li>
+          <li><%= link_to h('Log out'.t), admin_logout_path -%></li>
+        </ul>
+			  
+			  <% else -%>
+        <ul>
+          <li><%= link_to h('Log in'.t), login_path -%></li>
+        </ul>			
+			  <% end -%>
+				<%= render :partial => 'search/search_box' %>
+      </div>
+
+      <h1>
+        <%=h ArchiveConfig.APP_NAME .t %><%=h ": Extreme Alpha".t %>
+        <% unless ArchiveConfig.REVISION.blank? %>(rev. <%= ArchiveConfig.REVISION %>)<% end %>
+      </h1>
+      
+      <ul id="main-navigation">
+        <li><%= link_to_unless_current "home".t, home_link %></li>       
+        <li><%= link_to_unless_current "fandoms".t, works_path %></li>
+        <li><%= link_to_unless_current "people".t, admin_users_path %></li>
+        <li><%= link_to_unless_current "groups".t, '#' %></li>
+        <li><%= link_to_unless_current "recs".t, bookmarks_path %></li>
+        <li><%= link_to_unless_current "tags".t, tags_path %></li>
+      </ul>
+      
+    </div>
+  <!-- END header -->
+  
+  <!-- BEGIN sidebar -->
+  <%- if @user && !@user.new_record? -%> 
+  <div id="dashboard-sidebar">
+    <%= render :partial => 'users/sidebar' %>
+  </div>
+  <%- end -%>
+  <!-- END sidebar -->
+  
+  <!-- BEGIN main -->
+    <div id="admin_main" class="<%= controller.controller_name + '-' + controller.action_name -%>">
+  	  <%= flash_div :error, :warning, :notice %>
+			<div class="clearboth"></div>
+      <%= yield  %>
+    </div>
+  <!-- END main -->
+		
+  <!-- BEGIN footer -->
+    <div id="footer">
+     	<span id="globalize">
+        <%= languages_menu %>	
+      </span>
+      <a href="http://creativecommons.org/licenses/GPL/2.0/" title="View License">GPL/CC</a> by the 
+			<a href="http://transformativeworks.org/" title="The Organization for Transformative Works">OTW</a> &mdash; 
+			<a href="public/placeholder.html" title="Terms and Conditions">Terms and Conditions</a> &mdash; 
+			<%= link_to 'Report Abuse' .t, new_abuse_report_path %>
+		</div>
+  <!-- END footer -->
+
+    <% if ENV["RAILS_ENV"]=="development" %>
+  	<div id="debug">
+  		<h1>Development Notice</h1>
+  		<p>
+  			This is a development site. That means, please don't put in 
+  			anything you need to keep secure or want to preserve.
+  			All the contents of this site (including user accounts) can and 
+  			probably will be wiped without notice as we work.  
+  		</p>
+  		<p>
+  			Please <strong>do</strong> help us out and 
+  			<a href="http://code.google.com/p/otwarchive/issues/list">report any problems</a>!
+			
+  		</p>
+  		<p>
+  			These links below here are just to provide debugging info for your friendly neighborhood coders,
+  			please ignore. 
+  		</p>
+  		<dl class="debug_navigation">
+  			<dt><a href="#" onclick="Element.toggle('params_debug_info'); return false;">params</a></dt>
+  				<dd id="params_debug_info" class="debug_info" style="display:none"><%= debug(params) %></dd>
+  			<dt><a href="#" onclick="Element.toggle('session_debug_info'); return false;">session</a></dt>
+  				<dd id="session_debug_info" class="debug_info" style="display:none"><%= debug(session) %></dd>
+  			<dt><a href="#" onclick="Element.toggle('env_debug_info'); return false;">env</a></dt>
+  				<dd id="env_debug_info" class="debug_info" style="display:none"><%= debug(request.env) %></dd>
+  			<dt><a href="#" onclick="Element.toggle('request_debug_info'); return false;">request</a></dt>
+  				<dd id="request_debug_info" class="debug_info" style="display:none"><%= debug(request) %></dd>
+  		</dl>
+  	</div>
+    <% end %>
+
+  </body>
+</html>
+

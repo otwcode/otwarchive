@@ -18,7 +18,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :passwords, :path_prefix => ':locale'
   
   map.resources :admins, :path_prefix => ':locale'
-
+    
   map.resources :users, :path_prefix => ':locale' do |user|
     user.resources :pseuds, :has_many => :works
     user.resource :profile, :controller => 'profile'
@@ -60,9 +60,13 @@ ActionController::Routing::Routes.draw do |map|
   map.login '/login', :controller => 'session', :action => 'new', :path_prefix => ':locale'
   map.logout '/logout', :controller => 'session', :action => 'destroy', :path_prefix => ':locale'
   
-  map.resource :admin_session, :controller => 'admin_session', :path_prefix => ':locale'
-  map.admin_login '/admin_login', :controller => 'admin_session', :action => 'new', :path_prefix => ':locale'
-  map.admin_logout '/admin_logout', :controller => 'admin_session', :action => 'destroy', :path_prefix => ':locale'
+  map.admin_login '/admin/login', :controller => 'admin/session', :action => 'new', :path_prefix => ':locale'
+  map.admin_logout '/admin/logout', :controller => 'admin/session', :action => 'destroy', :path_prefix => ':locale'
+  
+  map.namespace :admin, :path_prefix => ':locale/admin' do |admin|
+    admin.resources :users
+    admin.resource :session, :controller => 'session'
+  end
   
   map.activate '/activate/:id', :controller => 'users', :action => 'activate'
   

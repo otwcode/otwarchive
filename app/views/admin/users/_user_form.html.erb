@@ -1,0 +1,9 @@
+<%- form_for :user, user, :url => {:controller => "admin/users", :action => "update"} do |f| -%> 
+<td><%=h user.login %><%= f.hidden_field :login %></td>
+<td><%= f.text_field :email %></td>
+<td><%= f.check_box :translator %> <%= f.label :translator, "Translator" %></td>
+<td><%= f.check_box :tag_wrangler %> <%= f.label :tag_wrangler, "Tag Wrangler" %></td>
+<td><%= f.check_box :suspended %> <%= f.label :suspended, "Suspended" %></td>
+<td><%= f.check_box :banned %> <%= f.label :banned, "Banned" %></td>
+<td><%= f.submit "Update" %></td>
+<%- end -%>

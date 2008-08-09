@@ -1,5 +1,5 @@
 # Handles admin logins
-class AdminSessionController < ApplicationController
+class Admin::SessionController < ApplicationController
   
   # Prevents multiple logins for people with both user and admin accounts
   before_filter :user_logout_required
@@ -22,6 +22,6 @@ class AdminSessionController < ApplicationController
     cookies.delete :auth_token
     reset_session
     flash[:notice] = "You have been logged out."
-    redirect_back_or_default('/')
+    redirect_to admin_login_path
   end
 end

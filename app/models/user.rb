@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
 
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user
-  attr_accessor :translation_mode_active
+  attr_accessible :suspended, :banned, :translator, :tag_wrangler
   
   # Acts_as_authentable plugin
   acts_as_authentable
@@ -107,6 +107,28 @@ class User < ActiveRecord::Base
   # Gets the user account for authored objects if orphaning is enabled
   def self.orphan_account
     User.fetch_orphan_account if ArchiveConfig.ORPHANING_ALLOWED
+  end
+  
+  # Is this user an authorized translator?
+  def translator
+    self.roles.include?(Role.find_or_create_by_name("Translator"))
+  end
+  
+  # Set translator role for this user
+  def translator=(is_translator)
+    translator_role = Role.find_or_create_by_name("Translator")
+    is_translator == "1" ? (self.roles << translator_role unless self.translator) : (self.roles.delete(translator_role) if self.translator)
+  end
+  
+  # Is this user an authorized tag wrangler?
+  def tag_wrangler
+    self.roles.include?(Role.find_or_create_by_name("TagWrangler"))
+  end
+  
+  # Set tag wrangler role for this user
+  def tag_wrangler=(is_tag_wrangler)
+    tag_wrangler_role = Role.find_or_create_by_name("TagWrangler")
+    is_tag_wrangler == "1" ? (self.roles << tag_wrangler_role unless self.tag_wrangler) : (self.roles.delete(tag_wrangler_role) if self.tag_wrangler)
   end
   
   private

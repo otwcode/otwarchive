@@ -95,8 +95,8 @@ class UsersController < ApplicationController
           @user.preference = Preference.new(params[:preference_attributes])
           @user.preference.save!
         end
+        @user.recently_reset = nil if params[:change_password] 
         @user.update_attributes!(params[:user]) 
-        @user.recently_reset = nil if params[:change_password]
         flash[:notice] = 'User was successfully updated.'
         redirect_to(@user) 
       rescue
