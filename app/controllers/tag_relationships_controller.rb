@@ -1,8 +1,17 @@
 class TagRelationshipsController < ApplicationController
-
-#permit('wranglers',
-# :permission_denied_redirection => {:controller => :works, :action => :index },
-# :permission_denied_message => 'Sorry, the page you have requested is for tag wranglers only! Please contact an admin if you think you should have access.')
+  
+  before_filter :wranglers_only
+  
+  # Only authorized users should be able to manage tags, tag categories and tag relationships
+  def wranglers_only
+    (logged_in? && current_user.tag_wrangler) || access_denied
+  end
+  
+  def access_denied
+    flash[:error] = "Sorry, the page you have requested is for tag wranglers only! Please contact an admin if you think you should have access."
+    redirect_to works_path
+    false
+  end
 
   # GET /tag_relationships
   # GET /tag_relationships.xml
