@@ -2,7 +2,7 @@ class WorksController < ApplicationController
   # only registered users and NOT admin should be able to create new works
   before_filter :users_only, :only => [ :new, :create ]
   # only authors of a work should be able to edit it
-  before_filter :is_author_true, :only => [ :edit, :update, :destroy ]
+  before_filter :is_author, :only => [ :edit, :update, :destroy ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :post, :show ]
   before_filter :update_or_create_reading, :only => [ :show ]
   before_filter :check_permission_to_view, :only => [ :show ]
@@ -77,42 +77,46 @@ class WorksController < ApplicationController
     end
   end
   
-  # check if the user's current pseud is one associated with the work
+  # Only authors of the work should be able to edit it
   def is_author
     @work = Work.find(params[:id])
-    return false if current_user == :false
-    return true if !(current_user.pseuds & @work.pseuds).empty?
-    return false
-  end  
-  
-  # if is_author returns true allow them to update, otherwise redirect them to the work page with an error message
-  def is_author_true
-    is_author || [ redirect_to(@work), flash[:error] = 'Sorry, but you don\'t have permission to make edits.'.t ]
+    unless current_user.is_a?(User) && current_user.is_author_of?(@work)
+      flash[:error] = 'Sorry, but you don\'t have permission to make edits.'.t
+      redirect_to(@work)     
+    end
   end
   
-  # Only logged-in users should be able to access restricted works
+  # Only authorized users should be able to access restricted/hidden works
   def check_permission_to_view
     @work = Work.find(params[:id])
-	  access_denied if !logged_in? && @work.restricted?
+    can_view_hidden = is_admin? || (current_user.is_a?(User) && current_user.is_author_of?(@work))
+	  access_denied if (!is_registered_user? && @work.restricted?)
+	  if (!can_view_hidden && @work.hidden_by_admin?)
+	    flash[:error] = 'This page is unavailable.'.t
+      redirect_to works_path
+    end
   end
    
   # GET /works
   def index
     if params[:user_id]
       @user = User.find_by_login(params[:user_id])
-      @works = @user.works.visible(current_user, :order => "works.created_at DESC").paginate(:page => params[:page])
+      @works = is_admin? ? @user.works.find(:all, :order => "works.created_at DESC").paginate(:page => params[:page]) : 
+                           @user.works.visible(current_user, :order => "works.created_at DESC").paginate(:page => params[:page])
     elsif params[:fandom_id]
       @tag = Tag.find(params[:fandom_id])
-      @works = @tag.works.visible(current_user, :order => "works.created_at DESC").paginate(:page => params[:page])
+      @works = is_admin? ? @tag.works.find(:all, :order => "works.created_at DESC").paginate(:page => params[:page]) : 
+                           @tag.works.visible(current_user, :order => "works.created_at DESC").paginate(:page => params[:page])
     else
-     @works = Work.visible(current_user, :order => "works.created_at DESC").paginate(:page => params[:page])
+     @works = is_admin? ? Work.find(:all, :order => "works.created_at DESC").paginate(:page => params[:page]) : 
+                          Work.visible(current_user, :order => "works.created_at DESC").paginate(:page => params[:page])
     end
   end
   
   # GET /works/1
   # GET /works/1.xml
   def show
-    if !@work.visible(current_user)
+    if !is_admin? && !@work.visible(current_user)
       render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 and return
     elsif @work.adult? &&  !see_adult? 
       @back = request.env["HTTP_REFERER"]
@@ -122,7 +126,7 @@ class WorksController < ApplicationController
       else
         render :action => "adult" and return
       end
-    end
+    end 
     @comments = @work.find_all_comments
   end
   
@@ -262,7 +266,7 @@ class WorksController < ApplicationController
   # history enabled and is not the author of the work
   def update_or_create_reading
     if logged_in? && current_user.preference.history_enabled
-      unless is_author
+      unless current_user.is_author_of?(@work)
         reading = Reading.find_or_initialize_by_work_id_and_user_id(@work.id, current_user.id)
         reading.major_version_read, reading.minor_version_read = @work.major_version, @work.minor_version
         reading.save

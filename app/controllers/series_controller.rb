@@ -1,5 +1,23 @@
-class SeriesController < ApplicationController
+class SeriesController < ApplicationController 
+  before_filter :is_author, :only => [ :edit, :update, :destroy ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
+  before_filter :check_permission_to_view :only => [:show]
+  
+  # Only authors of the series should be able to edit it
+  def is_author
+    @series = Series.find(params[:id])
+    unless current_user.is_a?(User) && current_user.is_author_of?(@series)
+      flash[:error] = 'Sorry, but you don\'t have permission to make edits.'.t
+      redirect_to(@series)     
+    end
+  end
+  
+  # Hidden series should only be visible to admins and authors
+  def check_permission_to_view
+    @series = Series.find(params[:id])
+    can_view_hidden = is_admin? || (current_user.is_a?(User) && current_user.is_author_of?(@series))
+	  access_denied if (@series.hidden_by_admin? && !can_view_hidden)
+  end
   
   # GET /series
   # GET /series.xml

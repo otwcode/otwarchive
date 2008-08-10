@@ -104,6 +104,19 @@ class User < ActiveRecord::Base
     pseuds.to_enum.find(&:is_default?) || pseuds.first
   end
   
+  # Checks authorship of any sort of object
+  def is_author_of?(item)
+    if item.respond_to?(:user)
+      self == item.user
+    elsif item.respond_to?(:pseud)
+      self.pseuds.include?(item.pseud)
+    elsif item.respond_to?(:pseuds)
+      !(self.pseuds & item.pseuds).empty? 
+    else
+      false
+    end
+  end
+  
   # Gets the user account for authored objects if orphaning is enabled
   def self.orphan_account
     User.fetch_orphan_account if ArchiveConfig.ORPHANING_ALLOWED

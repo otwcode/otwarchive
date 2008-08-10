@@ -4,6 +4,7 @@
       <div class="story-title-line">
         <h3 title="Story Title">
           <% if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)") %><% end %>
+          <% if work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)") %><% end %>  
           <%= link_to sanitize(work.title), work %>
         </h3>
       

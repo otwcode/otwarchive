@@ -3,9 +3,8 @@ class ChaptersController < ApplicationController
   before_filter :users_only, :except => [ :index, :show, :destroy ]
   before_filter :load_work, :except => [:auto_complete_for_pseud_name, :update_positions]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :preview, :post ]
-  # only authors of a chapter should be able to edit it
-  # should actually be that all authors of a work should be able to edit all chapters
-  before_filter :is_author_true, :only => [ :edit, :update, :manage ]
+  # only authors of a work should be able to edit its chapters
+  before_filter :is_author, :only => [ :edit, :update, :manage ]
   before_filter :check_permission_to_view, :only => [:index, :show]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
   
@@ -30,27 +29,20 @@ class ChaptersController < ApplicationController
     redirect_to new_session_path
     false
   end
-  
-  # check if the user's current pseud is one associated with the work
+    
+  # Only authors of the work should be able to edit it
   def is_author
     @work = Work.find(params[:work_id])
-    return false if current_user == :false
-    current_user.pseuds.each do |pseud|
-      if pseud.creations.include?(@work)
-        return true
-      end
+    unless current_user.is_a?(User) && current_user.is_author_of?(@work)
+      flash[:error] = 'Sorry, but you don\'t have permission to make edits.'.t
+      redirect_to(@work)     
     end
-    return false
-  end  
+  end 
   
-  # if is_author returns true allow them to update, otherwise redirect them to the work page with an error message
-  def is_author_true
-    is_author || [ redirect_to(@work), flash[:error] = 'Sorry, but you don\'t have permission to make edits.' ]
-  end
-  
-  # Only logged-in users should be able to access restricted works
+  # Only authorized users should be able to access restricted/hidden works
   def check_permission_to_view
-	access_denied if !logged_in? && @work.restricted?
+    can_view_hidden = is_admin? || (current_user.is_a?(User) && current_user.is_author_of?(@work))
+	  access_denied if (!is_registered_user? && @work.restricted?) || (!can_view_hidden && @work.hidden_by_admin?)
   end
   
   # fetch work these chapters belong to from db
@@ -202,7 +194,6 @@ class ChaptersController < ApplicationController
       redirect_to [:edit, @work, @chapter]
     else
       @chapter.posted = true
-      # Will save tags here when tags exist!
       if @chapter.save
         flash[:notice] = 'Chapter has been posted!'
         redirect_to(@work)

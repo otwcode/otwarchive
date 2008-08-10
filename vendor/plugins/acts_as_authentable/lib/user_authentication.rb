@@ -56,7 +56,7 @@ module UserAuthentication
     def admin_logout_required
       if logged_in_as_admin?
         flash[:notice] = 'Please log out of your admin account first!'
-        # Add a logical redirect here
+        redirect_to admin_users_path
       end
     end
 

@@ -70,6 +70,7 @@ ActionController::Routing::Routes.draw do |map|
   map.admin_logout '/admin/logout', :controller => 'admin/session', :action => 'destroy', :path_prefix => ':locale'
   
   map.namespace :admin, :path_prefix => ':locale/admin' do |admin|
+    admin.resources :user_creations, :member => { :hide => :get }
     admin.resources :users
     admin.resource :session, :controller => 'session'
   end

@@ -1,3 +1,7 @@
 <%= render :partial => 'bookmark', :locals => { :bookmark => @bookmark } -%>
 
+<%- if logged_in_as_admin? -%>
+<%= render :partial => 'admin/admin_options', :locals => {:item => @bookmark} %>
+<%- end -%>
+
 <%= link_to 'Back', user_bookmarks_path(@bookmark.user) %>

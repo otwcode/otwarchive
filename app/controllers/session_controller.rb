@@ -2,7 +2,7 @@
 class SessionController < ApplicationController
   
   # Prevents multiple logins for people with both user and admin accounts
-  # before_filter :admin_logout_required
+  before_filter :admin_logout_required
   
   def new
     if logged_in?

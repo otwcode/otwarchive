@@ -1,6 +1,15 @@
 class CommentsController < ApplicationController 
   before_filter :load_commentable, :only => [ :index, :new, :create, :edit, :update, :showcomments ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
+  before_filter :check_permission_to_view, :only => [:show]
+  
+  # Make sure hidden comments aren't publically visible
+  def check_permission_to_view
+    @comment = Comment.find(params[:id])
+    if @comment.hidden_by_admin?
+      access_denied if !logged_in_as_admin? || !(logged_in? && current_user.is_author_of?(@comment))
+    end
+  end
     
   # Get the parent of the desired comment(s) 
   # Just covering all the bases here for now

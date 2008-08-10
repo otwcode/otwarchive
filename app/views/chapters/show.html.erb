@@ -5,3 +5,8 @@
 <!-- BEGIN comment section -->
 <%= render :partial => 'comments/commentable', :locals => {:commentable => @chapter} %>
 <!-- END comment section -->
+
+<%- if logged_in_as_admin? -%>
+<!-- BEGIN admin options -->
+<%= render :partial => 'admin/admin_options', :locals => {:item => @chapter} %>
+<%- end -%>

@@ -1,0 +1,10 @@
+<!-- BEGIN admin options -->
+<div id="admin-options">
+  <% if item.hidden_by_admin? %>
+    <%= link_to h('Make visible').t, {:controller=>"admin/user_creations", :action=>"hide", :id=>item, :creation_type => item.class, :hidden=>'false'} %> | 
+  <%- else -%>
+    <%= link_to h('Hide').t, {:controller=>"admin/user_creations", :action=>"hide", :id=>item, :creation_type => item.class, :hidden=>'true'} %> | 
+  <%- end -%>  
+  <%= link_to h('Delete').t, {:controller=>"admin/user_creations", :action=>"destroy", :id=>item, :creation_type => item.class}, :confirm => h('Are you sure?').t, :method => :delete %>
+</div>
+<!-- END admin options -->

@@ -16,6 +16,11 @@
   </p>
 <%- end -%>
 
+<%- if logged_in_as_admin? -%>
+<!-- BEGIN admin options -->
+<%= render :partial => 'admin/admin_options', :locals => {:item => @series} %>
+<%- end -%>
+
 <ol>
   <%- for work in @series.works -%>
     <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>

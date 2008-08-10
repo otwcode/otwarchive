@@ -43,8 +43,7 @@ class Work < ActiveRecord::Base
   after_update :save_associated, :save_creatorships 
   before_save :set_adult
   
-  # Associating works with languages. 
-  
+  # Associating works with languages.  
   belongs_to :language, :foreign_key => 'language_id', :class_name => '::Globalize::Language'
    
   def self.visible(current_user=:false, options = {})
@@ -55,11 +54,11 @@ class Work < ActiveRecord::Base
   
   def visible(current_user=:false)
     if current_user == :false
-      return self if self.posted unless self.restricted
-    elsif self.posted
+      return self if self.posted unless self.restricted || self.hidden_by_admin
+    elsif self.posted && !self.hidden_by_admin
       return self
     else
-      return self if (self.pseuds & current_user.pseuds).size > 0      
+      return self if current_user.is_author_of?(self)      
     end
   end
   

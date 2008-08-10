@@ -13,12 +13,7 @@ class Bookmark < ActiveRecord::Base
   end
   
   def visible(current_user=:false)
-    visibility = false
-    if self.private?
-      visibility = true if user == current_user
-    else
-      visibility = true
-    end
+    visibility = (user == current_user || !(self.private? || self.hidden_by_admin?))
     if visibility
       if self.bookmarkable_type == 'Work'
         return self if self.bookmarkable.visible(current_user)
