@@ -21,7 +21,7 @@
       </p>
       
       <p class="story-desc">
-        <%= sanitize_format work.summary %>
+        <%= sanitize_limited work.summary %>
       </p>
       
       <p>Words: <%=h number_with_delimiter(work.word_count) %></p>
