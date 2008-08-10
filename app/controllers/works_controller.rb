@@ -6,6 +6,7 @@ class WorksController < ApplicationController
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :post, :show ]
   before_filter :update_or_create_reading, :only => [ :show ]
   before_filter :check_permission_to_view, :only => [ :show ]
+  before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview, :post]
   
   # We may want to move this to a module
   def self.auto_complete_for_taggable(model)

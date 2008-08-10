@@ -60,6 +60,18 @@ class ApplicationController < ActionController::Base
     return false
   end
   
+  # Prevents banned and suspended users from adding/editing content
+  def check_user_status
+    if current_user.is_a?(User) && (current_user.suspended? || current_user.banned?)
+      if current_user.suspended? 
+        flash[:error] = "Your account has been suspended. You may not add or edit content until your suspension has been resolved. Please contact us for more information."
+      else
+        flash[:error] = "Your account has been banned. You are not permitted to add or edit archive content. Please contact us for more information."
+      end
+      redirect_to current_user
+    end
+  end
+  
   #### -- AUTHORIZATION -- ####
 
   # See ActionController::RequestForgeryProtection for details

@@ -7,6 +7,7 @@ class ChaptersController < ApplicationController
   # should actually be that all authors of a work should be able to edit all chapters
   before_filter :is_author_true, :only => [ :edit, :update, :manage ]
   before_filter :check_permission_to_view, :only => [:index, :show]
+  before_filter :check_user_status, :only => [:new, :create, :edit, :update]
   
   # For the auto-complete field in the works form
   def auto_complete_for_pseud_byline

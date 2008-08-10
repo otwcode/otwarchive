@@ -1,6 +1,7 @@
 class CommentsController < ApplicationController 
   before_filter :load_commentable, :only => [ :index, :new, :create, :edit, :update, :showcomments ]
-  
+  before_filter :check_user_status, :only => [:new, :create, :edit, :update]
+    
   # Get the parent of the desired comment(s) 
   # Just covering all the bases here for now
   def load_commentable

@@ -2,6 +2,7 @@ class PseudsController < ApplicationController
   
   before_filter :load_user
   before_filter :is_user_true, :only => [:create, :edit, :destroy, :new, :update]
+  before_filter :check_user_status, :only => [:new, :create, :edit, :update]
 
   def load_user
     @user = User.find_by_login(params[:user_id])

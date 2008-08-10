@@ -1,4 +1,5 @@
 class TagsController < ApplicationController
+  before_filter :check_user_status, :only => [:new, :create]
 
 #permit('wranglers',
 # :permission_denied_redirection => {:controller => :works, :action => :index },

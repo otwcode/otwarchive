@@ -1,4 +1,6 @@
 class ExternalWorksController < ApplicationController
+  before_filter :check_user_status, :only => [:new]
+  
   def new
   end
   

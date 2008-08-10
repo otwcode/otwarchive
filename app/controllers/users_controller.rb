@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_filter :check_user_status, :only => [:edit, :update]
 
   # checks if the current user and the given user are the same
   def is_user?(user)

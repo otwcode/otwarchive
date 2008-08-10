@@ -1,4 +1,6 @@
 class SeriesController < ApplicationController
+  before_filter :check_user_status, :only => [:new, :create, :edit, :update]
+  
   # GET /series
   # GET /series.xml
   def index

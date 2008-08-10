@@ -1,6 +1,7 @@
 class TagRelationshipsController < ApplicationController
   
   before_filter :wranglers_only
+  before_filter :check_user_status
   
   # Only authorized users should be able to manage tags, tag categories and tag relationships
   def wranglers_only

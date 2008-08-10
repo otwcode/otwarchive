@@ -1,8 +1,18 @@
 class TranslationController < ApplicationController
-  #permit('translator',
-          #:permission_denied_redirection => {:controller => :works, :action => :index },
-          #:permission_denied_message => 'Sorry, the page you have requested is for translators only! Please contact an admin if you think you should have access.' )
+  before_filter :translators_only
+  before_filter :check_user_status
   
+  # Only authorized users should be able to submit translations
+  def translators_only
+    (logged_in? && current_user.translator) || access_denied
+  end
+  
+  def access_denied
+    flash[:error] = "Sorry, the page you have requested is for authorized translators only! Please contact an admin if you think you should have access."
+    redirect_to works_path
+    false
+  end
+    
   def index    
     @title = "Translation Interface"
     if !Locale.language

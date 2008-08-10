@@ -1,5 +1,6 @@
 class BookmarksController < ApplicationController 
   before_filter :load_bookmarkable, :only => [ :index, :new, :create ]
+  before_filter :check_user_status, :only => [:new, :create, :edit, :update]
   
   # get the parent
   def load_bookmarkable

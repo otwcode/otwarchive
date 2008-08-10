@@ -1,4 +1,6 @@
 class CommunitiesController < ApplicationController
+  before_filter :check_user_status, :only => [:new, :create, :edit, :update]
+  
   # GET /communities
   # GET /communities.xml
   def index
