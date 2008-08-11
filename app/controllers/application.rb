@@ -55,7 +55,7 @@ class ApplicationController < ActionController::Base
   def see_adult?
     return true if session[:adult]
     return false if current_user == :false
-    return true if is_author
+    return true if current_user.is_author_of?(@work)
     return true if current_user.preference && current_user.preference.adult
     return false
   end

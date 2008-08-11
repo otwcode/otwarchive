@@ -1,0 +1,5 @@
+author: simon@redhillconsulting.com.au
+summary: Ensures your migration scripts--both up and down--run within a transaction.
+homepage: http://www.redhillonrails.org
+license: MIT
+rails_version: EDGE

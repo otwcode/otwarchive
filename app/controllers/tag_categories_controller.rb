@@ -10,7 +10,7 @@ class TagCategoriesController < ApplicationController
   
   def access_denied
     flash[:error] = "Sorry, the page you have requested is for tag wranglers only! Please contact an admin if you think you should have access."
-    redirect_to works_path
+    redirect_to root_path
     false
   end
 

@@ -74,9 +74,7 @@ class WorksControllerTest < ActionController::TestCase
     end
     context "when creating a work" do
       setup do
-        get :new, :locale => 'en', 
-          :work => { :title => 'New work title', 
-          :chapter_attributes => {:content => 'Stuff in new chapter'}}
+        get :new, :locale => 'en'
       end
       should_assign_to :work
       should_render_template :new
