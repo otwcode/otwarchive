@@ -58,7 +58,33 @@ hr {
 }
 
 #header h1 {
+	font-size: 160%;
 	color: red;
+}
+
+#header ul {
+	margin-left: 0em;
+	padding-left: 0em; 
+}
+
+#header li {
+	font-size: 140%;
+	font-weight: bold;
+	display: inline;
+	list-style-type: none;
+}
+
+#header a {
+	font-weight: normal;
+	text-decoration: none;
+}
+
+#header a:active {
+	font-weight: bold;
+}
+
+#header a:hover {
+	font-weight: bold;
 }
 
 #login-block {
