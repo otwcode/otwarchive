@@ -1,11 +1,5 @@
 /* All CSS for the site as a whole is stored in the site-specific stylesheet.  This stylesheet contains only the styles needed to place and style elements on the login/create account pages. */
 
-/* Merging styles, site-specific */
-	/* Subheading style for login page, "A project of..." */
-.authentication-subheading {
-	margin-top: -20px;
-	font-size: 90%;
-}
 
 /* Page-specific styles, site-independent */
 	/* Login page */
@@ -36,6 +30,11 @@
 .authentication-widebottommargin {
 	margin-bottom: 50px;
 }
+.authentication-small {
+	margin-top: -20px;
+	font-size: 90%;
+}
+
 	/* Form-related styles */
 .authentication-checkbox { margin: 0px 10px 0px 0px;
 }

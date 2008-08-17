@@ -28,7 +28,7 @@
 		  <div id="link_to_passwd" style="display: none;">
 		<%- end -%>
 		<!-- Moving the links into a helper didn't work as f wasn't being found :( -->	
-		<%= link_to_function(h("Sign up using a password").t, :href => url_for(:action => 'new', :use_openid => false), :class => 'authentication-subheading') do |page| 
+		<%= link_to_function(h("Sign up using a password").t, :href => url_for(:action => 'new', :use_openid => false), :class => 'authentication-small') do |page| 
           page.replace_html "switch_fields", :partial => 'passwd', :locals => {:f => f}
           page[:link_to_passwd].hide
           page[:link_to_openid].show
@@ -39,7 +39,7 @@
 			<%- if !params[:use_openid] -%>		
 		    <%- if ArchiveConfig.USE_OPENID -%>
           <%= image_tag("openid.png", :alt => h('OpenID logo').t) %>
-          <%= link_to_function(h("Sign up using OpenID").t, :href => url_for(:action => 'new', :use_openid => true), :class => 'authentication-subheading') do |page| 
+          <%= link_to_function(h("Sign up using OpenID").t, :href => url_for(:action => 'new', :use_openid => true), :class => 'authentication-small') do |page| 
               page.replace_html "switch_fields", :partial => 'openid', :locals => {:f => f}           
               page[:link_to_openid].hide
               page[:link_to_passwd].show
