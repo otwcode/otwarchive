@@ -1,7 +1,7 @@
 class SeriesController < ApplicationController 
   before_filter :is_author, :only => [ :edit, :update, :destroy ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
-  before_filter :check_permission_to_view :only => [:show]
+  before_filter :check_permission_to_view, :only => [:show]
   
   # Only authors of the series should be able to edit it
   def is_author

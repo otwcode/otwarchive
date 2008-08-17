@@ -50,8 +50,10 @@ module CommentsHelper
   
   # return html link to edit comment
   def create_edit_link(comment)
-    link_to_remote "Edit".t, {:url => edit_comment_path(comment), :method => :get}, 
-      :href => edit_comment_path(comment)
+    if comment.count_all_comments == 0
+      link_to_remote "Edit".t, {:url => edit_comment_path(comment), :method => :get}, 
+        :href => edit_comment_path(comment)
+    end
   end
   
   # return html link to delete comments
