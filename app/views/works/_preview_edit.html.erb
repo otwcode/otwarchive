@@ -22,7 +22,7 @@
 	<p>
   <!-- Tags -->
  
-	 <span class="required">* Required field</span> <%= image_tag("question.png", :size => "20x20", :alt => "More info") %>
+	 <span class="required"><%=h '* Required field'.t %></span> <%= image_tag("question.png", :size => "20x20", :alt => "More info") %>
 	 <p>
 		<span class="field-left">
 		  <% TagCategory.official.each do |category| %>

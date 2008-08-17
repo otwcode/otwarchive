@@ -1,29 +1,29 @@
-<h1>Editing series</h1>
-<p><%= link_to 'Delete series', @series, :confirm => 'Are you sure?', :method => :delete %></p>
+<h1><%=h 'Editing series'.t %></h1>
+<p><%= link_to 'Delete series'.t, @series, :confirm => 'Are you sure?'.t, :method => :delete %></p>
 
 <% form_for(@series) do |f| %>
   <%= f.error_messages %>
   
   <p>
-    <%= f.label :title, "Series Title" %><br />
+    <%= f.label :title, "Series Title".t %><br />
     <%= f.text_field :title %>
   </p>
   
   <p>
-    <%= f.label :summary, "Series Description" %><br />
+    <%= f.label :summary, "Series Description".t %><br />
     <%= f.text_area :summary %> 
   </p>
   
   <p>
-    <%= f.label :notes, "Series Notes" %><br />
+    <%= f.label :notes, "Series Notes".t %><br />
     <%= f.text_area :notes %>
   <%- end -%>
   </p>    
 
   <p>
-    <%= f.submit "Update" %>
+    <%= f.submit "Update".t %>
   </p>
 <% end %>
 
-<%= link_to 'Show', @series %> |
-<%= link_to 'Back', series_path %>
+<%= link_to 'Show'.t, @series %> |
+<%= link_to 'Back'.t, series_path %>

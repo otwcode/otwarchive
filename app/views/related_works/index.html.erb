@@ -1,10 +1,10 @@
-<h1>Listing related_works</h1>
+<h1><%=h 'Listing related_works'.t %></h1>
 
 <table>
   <tr>
-    <th>Parent</th>
-    <th>Work</th>
-    <th>Reciprocal</th>
+    <th><%=h 'Parent'.t %></th>
+    <th><%=h 'Work'.t %></th>
+    <th><%=h 'Reciprocal'.t %></th>
   </tr>
 
 <% for related_work in @related_works %>
@@ -12,13 +12,13 @@
     <td><%=h related_work.parent_id %></td>
     <td><%=h related_work.work %></td>
     <td><%=h related_work.reciprocal %></td>
-    <td><%= link_to 'Show', related_work %></td>
-    <td><%= link_to 'Edit', edit_related_work_path(related_work) %></td>
-    <td><%= link_to 'Destroy', related_work, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= link_to 'Show'.t, related_work %></td>
+    <td><%= link_to 'Edit'.t, edit_related_work_path(related_work) %></td>
+    <td><%= link_to 'Destroy'.t, related_work, :confirm => 'Are you sure?'.t, :method => :delete %></td>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New related_work', new_related_work_path %>
+<%= link_to 'New related_work'.t, new_related_work_path %>

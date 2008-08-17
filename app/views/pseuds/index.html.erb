@@ -1,10 +1,10 @@
-<h1><%= "Pseuds for %s" / @user.login -%></h1>
+<h1><%= "Pseuds for %s".t / @user.login -%></h1>
 
 <table>
   <tr>
-    <th>Name</th>
-    <th>Description</th>
-    <th>Is default</th>
+    <th><%=h 'Name'.t %></th>
+    <th><%=h 'Description'.t %></th>
+    <th><%=h 'Is default'.t %></th>
   </tr>
 
 <% for pseud in @pseuds %>
@@ -12,12 +12,12 @@
     <td><%=h pseud.name %></td>
     <td><%=h pseud.description %></td>
     <td><%=h pseud.is_default %></td>
-    <td><%= link_to 'Show', [@user, pseud] %>
+    <td><%= link_to 'Show'.t, [@user, pseud] %>
 	<% if current_user == @user -%>
-     | <%= link_to 'Edit', [:edit, @user, pseud] -%>
-     | <%= link_to 'Orphan Stories', {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} -%>
+     | <%= link_to 'Edit'.t, [:edit, @user, pseud] -%>
+     | <%= link_to 'Orphan Stories'.t, {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} -%>
 		 <% unless @user.login == pseud.name || pseud.is_default -%>
- 		 | <%= link_to 'Destroy', [@user, pseud], :confirm => 'Are you sure?', :method => :delete %>
+ 		 | <%= link_to 'Destroy'.t, [@user, pseud], :confirm => 'Are you sure?'.t, :method => :delete %>
 		 <% end -%>
 	<% end -%>
 	</td>
@@ -31,6 +31,6 @@
 
 <p>
 	<% if current_user == @user -%>
-	<%= link_to 'New pseud', new_user_pseud_path(@user) %>
+	<%= link_to 'New pseud'.t, new_user_pseud_path(@user) %>
 	<% end -%>
 </p>

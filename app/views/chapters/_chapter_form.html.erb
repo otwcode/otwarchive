@@ -30,11 +30,11 @@
 
 		<%- if @pseuds.size > 1 -%>
       <p class="field-right"> 
-        <%= link_to h('Create pseud?').t, new_user_pseud_path(current_user) %><br />
+        <%= link_to 'Create pseud?'.t, new_user_pseud_path(current_user) %><br />
 		<%- else -%>
 		  <p class="field-left">
 		<%- end -%>  
-    <%= link_to_function(h('Add co-authors?'.t), "Element.toggle('co-authors')") %>
+    <%= link_to_function(h('Add co-authors?').t, "Element.toggle('co-authors')") %>
       </p>
 
 	<p class="clearboth"></p>
@@ -50,12 +50,12 @@
 	 <br />
 
     <p>
-      <%= f.label :summary, "Chapter summary (max %d letters)"/ArchiveConfig.SUMMARY_MAX %><br />
+      <%= f.label :summary, "Chapter summary (max %d letters)".t/ArchiveConfig.SUMMARY_MAX %><br />
       <%= f.text_area :summary, :live => true %>
     </p>
 
     <p>
-      <%= f.label :notes, "Chapter notes (max %d letters)"/ArchiveConfig.NOTES_MAX %><br />
+      <%= f.label :notes, "Chapter notes (max %d letters)".t/ArchiveConfig.NOTES_MAX %><br />
       <%= f.text_area :notes, :live => true %>
     </p>
 

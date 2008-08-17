@@ -3,7 +3,7 @@ class UserMailer < ActionMailer::Base
 
   def signup_notification(user)
      setup_email(user)
-     @subject    += 'Please activate your new account'  
+     @subject    += 'Please activate your new account'.t 
      @body[:url] += "/activate/#{user.activation_code}"  
   end
    
@@ -13,34 +13,34 @@ class UserMailer < ActionMailer::Base
    
    def reset_password(user)
      setup_email(user)
-     @subject    += 'Password reset'
+     @subject    += 'Password reset'.t
    end
    
    # Sends email to the owner of the commentable when a new comment is created
    def feedback_notification(user, comment)
       setup_email(user)
-      @subject        += "New Feedback"
+      @subject        += "New Feedback".t
       @body[:comment] = comment
    end
    
    # Sends email when a user is added as a co-author
    def coauthor_notification(user, work)
      setup_email(user)
-     @subject    += "Co-Author Notification"
+     @subject    += "Co-Author Notification".t
      @body[:work] = work
    end
    
    # Sends email to authors when a work is edited
    def edit_work_notification(user, work)
      setup_email(user)
-     @subject    += "Your story has been updated"
+     @subject    += "Your story has been updated".t
      @body[:work] = work
    end
    
    # Sends email to authors when a creation is deleted
    def delete_work_notification(user, work)
      setup_email(user)
-     @subject    += "Your story has been deleted"
+     @subject    += "Your story has been deleted".t
      @body[:work] = work
    end
 

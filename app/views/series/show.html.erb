@@ -1,18 +1,18 @@
 <h1><%=h @series.title %></h1>
 <p>
-  Series begun: <%=h @series.created_at.localize("%d %B %Y") %><br />
-  Works included: <%= @series.works.length %><br />
-  Authors: <%= print_pseud_list(@series.pseuds) %>
+  <%=h 'Series begun:'.t %> <%=h @series.created_at.localize("%d %B %Y") %><br />
+  <%=h 'Works included:'.t %> <%= @series.works.length %><br />
+  <%=h 'Authors:'.t %> <%= print_pseud_list(@series.pseuds) %>
 </p>
 
-<p><strong>Description: </strong> <%= @series.summary unless @series.summary.blank? %></p>
+<p><strong><%=h 'Description:'.t %> </strong> <%= @series.summary unless @series.summary.blank? %></p>
 
-<p><strong>Notes: </strong> <%= @series.notes unless @series.notes.blank? %></p>
+<p><strong><%=h 'Notes:'.t %> </strong> <%= @series.notes unless @series.notes.blank? %></p>
 
 <%- if is_author_of?(@series) -%>
   <p>
-    <%= link_to "Edit", edit_series_path(@series) %> | 
-    <%= link_to 'Delete series', @series, :confirm => 'Are you sure?', :method => :delete %>
+    <%= link_to "Edit".t, edit_series_path(@series) %> | 
+    <%= link_to 'Delete series'.t, @series, :confirm => 'Are you sure?'.t, :method => :delete %>
   </p>
 <%- end -%>
 

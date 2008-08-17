@@ -2,8 +2,8 @@ class ExternalWork < ActiveRecord::Base
   has_bookmarks
 
   validates_presence_of :title
-  validates_length_of :title, :within => ArchiveConfig.TITLE_MIN..ArchiveConfig.TITLE_MAX, :message => "must be within #{ArchiveConfig.TITLE_MIN} and #{ArchiveConfig.TITLE_MAX} letters long.".t
-  validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, :too_long => "must be less than %d letters long."/ArchiveConfig.SUMMARY_MAX
+  validates_length_of :title, :within => ArchiveConfig.TITLE_MIN..ArchiveConfig.TITLE_MAX, :message => "must be within".t + " #{ArchiveConfig.TITLE_MIN} " + "and".t + " #{ArchiveConfig.TITLE_MAX} " + "letters long.".t
+  validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, :too_long => "must be less than %d letters long.".t/ArchiveConfig.SUMMARY_MAX
   
   validates_presence_of :url
   validates_presence_of :author
@@ -19,7 +19,7 @@ class ExternalWork < ActiveRecord::Base
   # Makes sure urls are valid and checks to see if they're active or not
   def validate_url
     self.url = ExternalWork.format_url(self.url)
-    errors.add_to_base("Not a valid URL") unless self.url_active?
+    errors.add_to_base("Not a valid URL".t) unless self.url_active?
   end
   
   # Sets the dead? attribute to true if the link is no longer active

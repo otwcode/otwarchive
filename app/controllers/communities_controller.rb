@@ -46,7 +46,7 @@ class CommunitiesController < ApplicationController
 
     respond_to do |format|
       if @community.save
-        flash[:notice] = 'Community was successfully created.'
+        flash[:notice] = 'Community was successfully created.'.t
         format.html { redirect_to(@community) }
         format.xml  { render :xml => @community, :status => :created, :location => @community }
       else
@@ -63,7 +63,7 @@ class CommunitiesController < ApplicationController
 
     respond_to do |format|
       if @community.update_attributes(params[:community])
-        flash[:notice] = 'Community was successfully updated.'
+        flash[:notice] = 'Community was successfully updated.'.t
         format.html { redirect_to(@community) }
         format.xml  { head :ok }
       else

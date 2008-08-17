@@ -277,12 +277,12 @@ module ApplicationHelper
   def translation_button
     if current_user.has_role? 'translator'
       return '<li> <a href="' + url_for(:controller => 'translation', :action => 'index') + '"' +
-      image_tag("translation_button.gif", :alt => h('Link to translation page'.t), :border => 0) + "</a></li>"
+      image_tag("translation_button.gif", :alt => 'Link to translation page'.t, :border => 0) + "</a></li>"
     end
   end
   
   def tag_wrangler_footer
-    '<div><p>' + link_to('New tag', new_tag_path) + ' | ' +link_to('Tag categories', tag_categories_path)  + ' | ' +  link_to('New category', new_tag_category_path) + ' | ' + link_to('Tag relationships', tag_relationships_path) + ' | ' + link_to('New relationship', new_tag_relationship_path) + '</p></div>'
+    '<div><p>' + link_to('New tag'.t, new_tag_path) + ' | ' +link_to('Tag categories'.t, tag_categories_path)  + ' | ' +  link_to('New category'.t, new_tag_category_path) + ' | ' + link_to('Tag relationships'.t, tag_relationships_path) + ' | ' + link_to('New relationship'.t, new_tag_relationship_path) + '</p></div>'
   end
   
 end

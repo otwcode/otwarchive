@@ -1,5 +1,5 @@
-<h2>TagWrangler: Set Adult, Banned and Canonical Flags for <%= @tag_category.display_name %> tags</h2>
-<p>Drag a tag by it's handle (<img src="/images/drag.png" alt="drag me">) and drop it on one of the following four lines:</p>
+<h2><%=h 'TagWrangler: Set Adult, Banned and Canonical Flags for'.t %> <%= @tag_category.display_name %> <%=h 'tags'.t %></h2>
+<p><%=h 'Drag a tag by its handle'.t %> (<img src="/images/drag.png" alt="drag me">) <%=h 'and drop it on one of the following four lines:'.t %></p>
 
 <% ['banned', 'canonical', 'adult'].each do |kind| %>
   <p><div id=<%=kind%> class="droppable" >mark <%= kind.capitalize %></div>
@@ -10,7 +10,7 @@
     { :action => "update_tag", :tag => {kind => false} }) %>
 <% end %>
 
-<p><b><%= @tag_category.display_name %> Tags:</b>
+<p><b><%= @tag_category.display_name %> <%=h 'Tags:'.t %></b>
 <% @tag_category.tags.each do |tag| -%>
   <%= render :partial => 'draggable', :locals => { :tag => tag }%>
 <% end %> 

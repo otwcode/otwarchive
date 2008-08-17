@@ -1,4 +1,4 @@
-<h1>New community</h1>
+<h1><%=h 'New community'.t %></h1>
 
 <% form_for(@community) do |f| %>
   <%= f.error_messages %>
@@ -16,8 +16,8 @@
     <%= f.check_box :open_membership %>
   </p>
   <p>
-    <%= f.submit "Create" %>
+    <%= f.submit "Create".t %>
   </p>
 <% end %>
 
-<%= link_to 'Back', communities_path %>
+<%= link_to 'Back'.t, communities_path %>

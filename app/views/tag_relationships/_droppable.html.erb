@@ -1,8 +1,8 @@
 <div id="<%= tag.id -%>">
   <img src="/images/drag.png" alt="drag me">
   <%= link_to tag.name, tag, :popup => true %>
-  <% if tag.canonical? %>(Canonical)<% end -%>
-  <% if tag.banned? %>(Banned!)<% end -%>
+  <% if tag.canonical? %>(<%=h 'Canonical'.t %>)<% end -%>
+  <% if tag.banned? %>(<%=h 'Banned!'.t %>)<% end -%>
   <br/>
 </div>
 <%= draggable_element(tag.id.to_s, :scroll => 'window', :revert => true) %>

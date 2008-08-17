@@ -18,24 +18,24 @@ module UsersHelper
   # (The total should reflect the number of bookmarks the user can actually see.)
   def print_bookmarks_link(user)
     total = logged_in_as_admin? ? @user.bookmarks.count : @user.bookmarks.visible(current_user).size
-    prefix = (@user == current_user) ? "My " : ""
-    link_to_unless_current prefix + "Bookmarks (" + total.to_s + ")", user_bookmarks_path(@user)
+    prefix = (@user == current_user) ? "My ".t : ""
+    link_to_unless_current prefix + "Bookmarks".t + " (" + total.to_s + ")", user_bookmarks_path(@user)
   end
   
   # Prints link to works page with user-appropriate number of works
   # (The total should reflect the number of works the user can actually see.)
   def print_works_link(user)
     total = logged_in_as_admin? ? @user.works.count : @user.works.visible(current_user).size
-    prefix = (@user == current_user) ? "My " : ""
-    link_to_unless_current prefix + "Works (" + total.to_s + ")", user_works_path(@user)
+    prefix = (@user == current_user) ? "My ".t : ""
+    link_to_unless_current prefix + "Works".t + " (" + total.to_s + ")", user_works_path(@user)
   end
   
   # Prints link to series page with user-appropriate number of series
   # There's no option to restrict the visibility of a series right now, but there probably will be in the future
   def print_series_link(user)
     total = @user.series.count(:all)
-    prefix = (@user == current_user) ? "My " : ""
-    link_to_unless_current prefix + "Series (" + total.to_s + ")", user_series_index_path(@user)
+    prefix = (@user == current_user) ? "My ".t : ""
+    link_to_unless_current prefix + "Series".t + " (" + total.to_s + ")", user_series_index_path(@user)
   end
   
 end

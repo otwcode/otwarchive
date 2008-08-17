@@ -9,17 +9,17 @@
 <br />
 
 <%- if is_author_of?(@work) -%>
-  <%= link_to 'New chapter', new_work_chapter_path(@work) %>
+  <%= link_to 'New chapter'.t, new_work_chapter_path(@work) %>
 <%- end -%> 
 
 <!-- BEGIN comment section -->
 <div id="comments-display">
   <p>
-    <%= link_to_function('Add a comment', "Element.toggle('add-comment')", :href => new_chapter_comment_path(@work.last_chapter)) %>
+    <%= link_to_function('Add a comment'.t, "Element.toggle('add-comment')", :href => new_chapter_comment_path(@work.last_chapter)) %>
   </p>
                   
   <div id="add-comment" style="display : none;">   
-    <%= render :partial => @comment = Comment.new, :locals => {:commentable => @work.last_chapter, :button_name => 'Create'}%> 
+    <%= render :partial => @comment = Comment.new, :locals => {:commentable => @work.last_chapter, :button_name => 'Create'.t}%> 
   </div>  
 
   <!-- BEGIN comments -->

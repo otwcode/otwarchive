@@ -7,7 +7,7 @@ class Comment < ActiveRecord::Base
   validates_presence_of :content
   validates_presence_of :name, :email, :unless => :pseud_id
   validates_format_of :email, :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i, :on => :create, :unless => :pseud_id
-  validates_length_of :content, :maximum => ArchiveConfig.COMMENT_MAX, :message => "must be less than %d letters long."/ArchiveConfig.COMMENT_MAX
+  validates_length_of :content, :maximum => ArchiveConfig.COMMENT_MAX, :message => "must be less than %d letters long.".t/ArchiveConfig.COMMENT_MAX
   before_create :check_for_spam
   
   # Gets methods and associations from acts_as_commentable plugin

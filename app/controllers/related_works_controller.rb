@@ -5,12 +5,12 @@ class RelatedWorksController < ApplicationController
   
   def parent_author_only
     @related_work = RelatedWork.find(params[:id])
-    (logged_in? && !(current_user.pseuds & @related_work.parent.pseuds).empty?) || [ redirect_to(works_url), flash[:error] = 'Sorry, but you don\'t have permission to make edits.' ]  
+    (logged_in? && !(current_user.pseuds & @related_work.parent.pseuds).empty?) || [ redirect_to(works_url), flash[:error] = 'Sorry, but you don\'t have permission to make edits.'.t ]  
   end
   
   def child_author_only
     @related_work = RelatedWork.find(params[:id])
-    (logged_in? && !(current_user.pseuds & @related_work.work.pseuds).empty?) || [ redirect_to(works_url), flash[:error] = 'Sorry, but you don\'t have permission to make edits.' ]  
+    (logged_in? && !(current_user.pseuds & @related_work.work.pseuds).empty?) || [ redirect_to(works_url), flash[:error] = 'Sorry, but you don\'t have permission to make edits.'.t ]  
   end
 
   # GET /related_works/1
@@ -22,10 +22,10 @@ class RelatedWorksController < ApplicationController
   # PUT /related_works/1.xml
   def update
     if @related_work.update_attributes(params[:related_work])
-      flash[:notice] = 'Link was successfully approved.'
+      flash[:notice] = 'Link was successfully approved.'.t
       redirect_to(@related_work.parent) 
     else
-      flash[:notice] = 'Please try again.'
+      flash[:notice] = 'Please try again.'.t
       redirect_to(@related_work)
     end
   end

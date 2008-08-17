@@ -1,10 +1,9 @@
-<h1>Orphan All Stories by '<%= pseud.name %>'</h1>
+<h1><%=h 'Orphan All Stories by'.t %> '<%= pseud.name %>'</h1>
 
-<p>Are you sure you want to <strong>permanently</strong> remove all identifying information from all stories you've 
-posted to the archive under this pseud, along with their chapters, associated series and any feedback replies you may have left?</p>
+<p><%=h 'Are you sure you want to'.t %> <strong><%=h 'permanently'.t %></strong> <%=h "remove all identifying information from all stories you've posted to the archive under this pseud, along with their chapters, associated series and any feedback replies you may have left?".t %></p>
 
 <%- form_tag orphans_path do -%>
   <%= render :partial => 'orphans/choose_pseud' %>
   <%= hidden_field_tag 'pseud_id', pseud.id %> 
-  <p><%= submit_tag h("Yes, I'm sure").t %></p>
+  <p><%= submit_tag "Yes, I'm sure".t %></p>
 <%- end -%>

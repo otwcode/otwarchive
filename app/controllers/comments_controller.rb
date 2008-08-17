@@ -16,7 +16,7 @@ class CommentsController < ApplicationController
   def check_permission_to_edit
     @comment = Comment.find(params[:id])
     unless current_user.is_a?(User) && current_user.is_author_of?(@comment)
-      flash[:error] = 'Sorry, but you don\'t have permission to make edits.'.t
+      flash[:error] = "Sorry, but you don't have permission to make edits.".t
       redirect_to(@work)     
     end
     unless @comment.count_all_comments == 0

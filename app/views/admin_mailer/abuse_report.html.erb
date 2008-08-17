@@ -1,7 +1,7 @@
 <%=h "The following abuse report has been made:".t %>
 <p>
-<%= "Email of the person who reported the abuse, if given".t %>: <%= mail_to(@email, @email) %> 
+<%=h "Email of the person who reported the abuse, if given".t %>: <%= mail_to(@email, @email) %> 
 <p>
-<%= "URL of the page the abuse is on".t %>: <%= link_to(@url, @url) %>
+<%=h "URL of the page the abuse is on".t %>: <%= link_to(@url, @url) %>
 <p>
-<%= "Description of the abuse".t %>: <%=h @comment %>
+<%=h "Description of the abuse".t %>: <%=h @comment %>

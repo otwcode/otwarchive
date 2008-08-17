@@ -3,7 +3,7 @@
 <% form_for(@abuse_report) do |f| %>
   <p>
     <b><%=h "If you wish to be contacted, fill in a valid email address.".t %><br />
-    <%= "Otherwise leave it blank and this will be treated as an anonymous report".t %></b><br />
+    <%=h "Otherwise leave it blank and this will be treated as an anonymous report".t %></b><br />
     <%= f.text_field :email, :size => 60 %>
   </p>
 
@@ -18,9 +18,9 @@
     <b><%=h "Please describe the problem in as much detail as possible." .t %></b><br />
     <%= f.text_area :comment, :cols => 60 %>
   </p>
-  <%=h "Submitting this form will send an email to the abuse team." %>
+  <%=h "Submitting this form will send an email to the abuse team.".t %>
 
   <p>
-    <%= f.submit "Submit" %>
+    <%= f.submit "Submit".t %>
   </p>
 <% end %>

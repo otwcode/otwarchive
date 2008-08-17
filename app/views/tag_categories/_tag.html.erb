@@ -1,7 +1,7 @@
 <div id="<%= tag.id -%>">
   <%= link_to tag.name, tag, :popup => true %>
-  <% if tag.canonical? %>(Canonical)<% end -%>
-  <% if tag.banned? %>(Banned!)<% end -%>
-  <% if tag.adult? %>(Adult!)<% end -%>
+  <% if tag.canonical? %>(<%=h 'Canonical'.t %>)<% end -%>
+  <% if tag.banned? %>(<%=h 'Banned!'.t %>)<% end -%>
+  <% if tag.adult? %>(<%=h 'Adult!'.t %>)<% end -%>
   <br/>
 </div>

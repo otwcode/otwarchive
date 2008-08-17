@@ -1,6 +1,6 @@
 <%=h "The following feedback has been submitted".t %>
 <p>
-	<%=h "Archive revision:".t %><% unless ArchiveConfig.REVISION.blank? %>(rev. <%= ArchiveConfig.REVISION %>)<% end %>
+	<%=h "Archive revision:".t %><% unless ArchiveConfig.REVISION.blank? %>(<%=h "rev.".t %> <%= ArchiveConfig.REVISION %>)<% end %>
 </p>
 <p>
 <%=h "Feedback".t %>: <%=h @comment %>

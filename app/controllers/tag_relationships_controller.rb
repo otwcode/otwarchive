@@ -9,7 +9,7 @@ class TagRelationshipsController < ApplicationController
   end
   
   def access_denied
-    flash[:error] = "Sorry, the page you have requested is for tag wranglers only! Please contact an admin if you think you should have access."
+    flash[:error] = "Sorry, the page you have requested is for tag wranglers only! Please contact an admin if you think you should have access.".t
     redirect_to root_path
     false
   end
@@ -59,7 +59,7 @@ class TagRelationshipsController < ApplicationController
 
     respond_to do |format|
       if @tag_relationship.save
-        flash[:notice] = 'TagRelationship was successfully created.'
+        flash[:notice] = 'TagRelationship was successfully created.'.t
         format.html { redirect_to(@tag_relationship) }
         format.xml  { render :xml => @tag_relationship, :status => :created, :location => @tag_relationship }
       else
@@ -76,7 +76,7 @@ class TagRelationshipsController < ApplicationController
 
     respond_to do |format|
       if @tag_relationship.update_attributes(params[:tag_relationship])
-        flash[:notice] = 'TagRelationship was successfully updated.'
+        flash[:notice] = 'TagRelationship was successfully updated.'.t
         format.html { redirect_to(@tag_relationship) }
         format.xml  { head :ok }
       else

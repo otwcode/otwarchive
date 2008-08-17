@@ -9,7 +9,7 @@ class TagCategoriesController < ApplicationController
   end
   
   def access_denied
-    flash[:error] = "Sorry, the page you have requested is for tag wranglers only! Please contact an admin if you think you should have access."
+    flash[:error] = "Sorry, the page you have requested is for tag wranglers only! Please contact an admin if you think you should have access.".t
     redirect_to root_path
     false
   end
@@ -65,7 +65,7 @@ class TagCategoriesController < ApplicationController
 
     respond_to do |format|
       if @tag_category.save
-        flash[:notice] = 'TagCategory was successfully created.'
+        flash[:notice] = 'TagCategory was successfully created.'.t
         format.html { redirect_to tag_categories_path }
         format.xml  { render :xml => @tag_category, :status => :created, :location => @tag_category }
       else
@@ -82,7 +82,7 @@ class TagCategoriesController < ApplicationController
 
     respond_to do |format|
       if @tag_category.update_attributes(params[:tag_category])
-        flash[:notice] = 'TagCategory was successfully updated.'
+        flash[:notice] = 'TagCategory was successfully updated.'.t
         format.html { redirect_to tag_categories_path }
         format.xml  { head :ok }
       else
@@ -126,7 +126,7 @@ class TagCategoriesController < ApplicationController
       @tag_relationship = TagRelationship.disambiguate
       Tagging.create(:tag => @tag, :taggable => Tag.find(params[:taggable]), :tag_relationship => @tag_relationship)
     else
-        flash[:error] = 'Unknown Tag Relationship.'       
+        flash[:error] = 'Unknown Tag Relationship.'.t       
     end
   end
 end

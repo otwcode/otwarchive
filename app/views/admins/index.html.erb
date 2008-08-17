@@ -1,4 +1,4 @@
-<h1>Listing admins</h1>
+<h1><%=h "Listing admins".t %></h1>
 
 <table>
   <tr>
@@ -6,8 +6,8 @@
 
 <% for admin in @admins %>
   <tr>
-    <td><%= link_to 'Show', admin %></td>
-    <td><%= link_to 'Destroy', admin, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= link_to h('Show').t, admin %></td>
+    <td><%= link_to h('Destroy').t, admin, :confirm => h('Are you sure?').t, :method => :delete %></td>
   </tr>
 <% end %>
 </table>

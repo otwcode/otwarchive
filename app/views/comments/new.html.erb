@@ -1,7 +1,7 @@
-<h1>New comment</h1>
+<h1><%=h 'New comment'.t %></h1>
 
 <%= error_messages_for :comment %>
 
-<%= render :partial => @comment, :locals => {:commentable => @comment.commentable, :button_name => 'Create'}%>
+<%= render :partial => @comment, :locals => {:commentable => @comment.commentable, :button_name => 'Create'.t}%>
 
-<%= link_to 'Back', @commentable %>
+<%= link_to 'Back'.t, @commentable %>

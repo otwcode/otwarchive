@@ -64,9 +64,9 @@ class ApplicationController < ActionController::Base
   def check_user_status
     if current_user.is_a?(User) && (current_user.suspended? || current_user.banned?)
       if current_user.suspended? 
-        flash[:error] = "Your account has been suspended. You may not add or edit content until your suspension has been resolved. Please contact us for more information."
+        flash[:error] = "Your account has been suspended. You may not add or edit content until your suspension has been resolved. Please contact us for more information.".t
       else
-        flash[:error] = "Your account has been banned. You are not permitted to add or edit archive content. Please contact us for more information."
+        flash[:error] = "Your account has been banned. You are not permitted to add or edit archive content. Please contact us for more information.".t
       end
       redirect_to current_user
     end

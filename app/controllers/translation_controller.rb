@@ -8,7 +8,7 @@ class TranslationController < ApplicationController
   end
   
   def access_denied
-    flash[:error] = "Sorry, the page you have requested is for authorized translators only! Please contact an admin if you think you should have access."
+    flash[:error] = "Sorry, the page you have requested is for authorized translators only! Please contact an admin if you think you should have access.".t
     redirect_to works_path
     false
   end
@@ -70,6 +70,42 @@ class TranslationController < ApplicationController
     end
     @strs = []
     Dir.glob("#{RAILS_ROOT}/app/controllers/**/*.rb").collect do |f|
+      @strs << File.read(f).scan(regexp)
+    end
+    @strs=@strs.flatten.uniq
+    0.upto @strs.size-1 do |i|
+      if @strs[i] then
+        @strs[i].each do |str|
+          @new_strs << str
+        end
+      end
+    end
+    @strs = []
+    Dir.glob("#{RAILS_ROOT}/app/helpers/**/*.rb").collect do |f|
+      @strs << File.read(f).scan(regexp)
+    end
+    @strs=@strs.flatten.uniq
+    0.upto @strs.size-1 do |i|
+      if @strs[i] then
+        @strs[i].each do |str|
+          @new_strs << str
+        end
+      end
+    end
+    @strs = []
+    Dir.glob("#{RAILS_ROOT}/app/models/**/*.rb").collect do |f|
+      @strs << File.read(f).scan(regexp)
+    end
+    @strs=@strs.flatten.uniq
+    0.upto @strs.size-1 do |i|
+      if @strs[i] then
+        @strs[i].each do |str|
+          @new_strs << str
+        end
+      end
+    end
+    @strs = []
+    Dir.glob("#{RAILS_ROOT}/app/views/**/*.rjs").collect do |f|
       @strs << File.read(f).scan(regexp)
     end
     @strs=@strs.flatten.uniq

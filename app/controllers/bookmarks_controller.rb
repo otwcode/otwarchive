@@ -16,7 +16,7 @@ class BookmarksController < ApplicationController
   def is_author
     @bookmark = Bookmark.find(params[:id])
     unless current_user.is_a?(User) && current_user.is_author_of?(@bookmark)
-      flash[:error] = 'Sorry, but you don\'t have permission to make edits.'.t
+      flash[:error] = "Sorry, but you don't have permission to make edits.".t
       redirect_to(@bookmark)     
     end
   end
@@ -92,7 +92,7 @@ class BookmarksController < ApplicationController
     @bookmark = Bookmark.new(params[:bookmark])
     @bookmark.set_external(params[:fetched][:value].to_i) unless params[:fetched].blank? || params[:fetched][:value].blank?
     if @bookmark.save && @bookmark.tag_string=params[:tag_string]
-      flash[:notice] = 'Bookmark was successfully created.'
+      flash[:notice] = 'Bookmark was successfully created.'.t
       redirect_to(@bookmark) 
     else
       @bookmarkable = @bookmark.bookmarkable || ExternalWork.new
@@ -105,7 +105,7 @@ class BookmarksController < ApplicationController
   def update
     @bookmark = Bookmark.find(params[:id])
     if @bookmark.update_attributes(params[:bookmark]) && @bookmark.tag_string=params[:tag_string]
-      flash[:notice] = 'Bookmark was successfully updated.'
+      flash[:notice] = 'Bookmark was successfully updated.'.t
       redirect_to(@bookmark) 
     else
       render :action => "edit" 
@@ -117,7 +117,7 @@ class BookmarksController < ApplicationController
   def destroy
     @bookmark = Bookmark.find(params[:id])
     @bookmark.destroy
-    flash[:notice] = 'Bookmark was successfully deleted.'
+    flash[:notice] = 'Bookmark was successfully deleted.'.t
     redirect_to user_bookmarks_path(current_user)
   end
 end

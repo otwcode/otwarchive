@@ -1,8 +1,8 @@
-<h1>Edit Chapter</h1>
+<h1><%=h 'Edit Chapter'.t %></h1>
 
 <%= error_messages_for :chapter %>
 
-<%= render :partial => 'chapter_form', :locals => { :chapter => @chapter, :button_text => "Update" } %>
+<%= render :partial => 'chapter_form', :locals => { :chapter => @chapter, :button_text => "Update".t } %>
 
-<%= link_to 'Show', [@work, @chapter] %> |
-<%= link_to 'Back', work_chapters_path %>
+<%= link_to 'Show'.t, [@work, @chapter] %> |
+<%= link_to 'Back'.t, work_chapters_path %>

@@ -1,8 +1,8 @@
-<h1 class="language"><%= "Please choose language for translation.".t %></h1>
+<h1 class="language"><%=h "Please choose language for translation.".t %></h1>
 <p>
   <%=h "Strings which have not yet been translated are marked with asterisks.".t %>
 <p>
-    <span class="globalize_bug"><%= "Use this sparingly".t %></span>: <%= link_to "Get strings to translate".t, :action => "get_translatable_strings" %>
+    <span class="globalize_bug"><%=h "Use this sparingly".t %></span>: <%= link_to "Get strings to translate".t, :action => "get_translatable_strings" %>
 </p>
 <p>
 	<%= button_to button_name, :action => button_action %>

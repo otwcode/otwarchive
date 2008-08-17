@@ -3,9 +3,9 @@ class Chapter < ActiveRecord::Base
 
   acts_as_commentable
 
-  validates_length_of :title, :allow_blank => true, :within => ArchiveConfig.TITLE_MIN..ArchiveConfig.TITLE_MAX, :message => "must be within #{ArchiveConfig.TITLE_MIN} and #{ArchiveConfig.TITLE_MAX} letters long.".t
-  validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, :too_long => "must be less than %d letters long."/ArchiveConfig.SUMMARY_MAX
-  validates_length_of :notes, :allow_blank => true, :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than %d letters long."/ArchiveConfig.NOTES_MAX
+  validates_length_of :title, :allow_blank => true, :within => ArchiveConfig.TITLE_MIN..ArchiveConfig.TITLE_MAX, :message => "must be within".t + " #{ArchiveConfig.TITLE_MIN} " + "and".t + " #{ArchiveConfig.TITLE_MAX} " + "letters long.".t
+  validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, :too_long => "must be less than %d letters long.".t/ArchiveConfig.SUMMARY_MAX
+  validates_length_of :notes, :allow_blank => true, :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than %d letters long.".t/ArchiveConfig.NOTES_MAX
 
   validates_presence_of :content
   validates_length_of :content, :in => 1..16777215
@@ -94,7 +94,7 @@ class Chapter < ActiveRecord::Base
   def validate_authors
     return if self.new_record? && self.position == 1
     if self.authors.blank? && self.pseuds.empty?
-      errors.add_to_base("Chapter must have at least one author.")
+      errors.add_to_base("Chapter must have at least one author.".t)
       return false
     end
   end

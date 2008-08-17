@@ -2,12 +2,12 @@
 <div class="bookmark">
 
   <p>
-    <% if bookmark.private %><%= image_tag("lockblack.png", :size => "15x15", :alt => "(Private)") %><% end %>
+    <% if bookmark.private %><%= image_tag("lockblack.png", :size => "15x15", :alt => "(Private)".t) %><% end %>
     <% if bookmark.bookmarkable_type == "ExternalWork" %>
-      <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable.url %> by <%= bookmark.bookmarkable.author %>
+      <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable.url %> <%=h 'by'.t %> <%= bookmark.bookmarkable.author %>
     <% else %>
-      <% if bookmark.bookmarkable.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)") %><% end %>
-      <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable %> by <%= byline(bookmark.bookmarkable) %>
+      <% if bookmark.bookmarkable.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)".t) %><% end %>
+      <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable %> <%=h 'by'.t %> <%= byline(bookmark.bookmarkable) %>
     <% end %>  
 
     <br /><%=sanitize_format bookmark.bookmarkable.summary %>
@@ -15,16 +15,16 @@
   
   <p>
     <%- unless bookmark.notes.blank? -%>
-      User's notes: <br />
+      <%=h "User's notes:".t %> <br />
       <%= bookmark.notes %> - <% if bookmark.user %><%= link_to bookmark.user.login, bookmark.user %><% end %>
     <%- else -%>
-      Bookmarked by: <%= link_to bookmark.user.login, bookmark.user %>
+      <%=h "Bookmarked by:".t %> <%= link_to bookmark.user.login, bookmark.user %>
     <%- end -%>
   </p>
 
   <p>
     <%- unless bookmark.tag_string.blank? -%>
-      User's tags: 
+      <%=h "User's tags:".t %> 
       <% bookmark.tags.each do |tag| -%>
         <%= link_to(tag.name, tag_path(tag))%>
       <% end -%>
@@ -34,7 +34,7 @@
   <% if is_author_of?(bookmark) %>
     <p>
       <%= link_to "Edit".t, edit_bookmark_path(bookmark) %> | 
-      <%= link_to "Delete".t, bookmark, :confirm => 'Are you sure?', :method => :delete %>  
+      <%= link_to "Delete".t, bookmark, :confirm => 'Are you sure?'.t, :method => :delete %>  
     </p>
   <% end %>
   

@@ -13,7 +13,7 @@ module WorksHelper
   def wip_message(work)
     posted = work.number_of_posted_chapters
     posted = 1 if posted == 0
-    "Please note this is a work in progress, with " + posted.to_s + " of " + work.wip_length.to_s + " chapters posted."  
+    "Please note this is a work in progress, with ".t + posted.to_s + " of ".t + work.wip_length.to_s + " chapters posted.".t  
   end
   
 

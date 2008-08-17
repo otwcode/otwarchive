@@ -1,4 +1,4 @@
-<h1>All Users:</h1>
+<h1><%=h 'All Users:'.t %></h1>
 
 <ul><%= @users.map{|user| "<li>" + link_to(user.login, user_path(user)) + "</li>"} %></ul>
 

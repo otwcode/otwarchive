@@ -17,12 +17,12 @@ class TagCategory < ActiveRecord::Base
   
   # required ambiguous category, if it doesn't exist, create it.
   def self.ambiguous
-    find_by_name('ambiguous') || TagCategory.create({ :name => 'ambiguous', :display_name => 'Ambiguous' })
+    find_by_name('ambiguous') || TagCategory.create({ :name => 'ambiguous'.t, :display_name => 'Ambiguous'.t })
   end
 
   # required default category, if it doesn't exist, create it.
   def self.default
-    find_by_name('default') || TagCategory.create({ :name => 'default', :official => true, :display_name => 'Tags' })
+    find_by_name('default') || TagCategory.create({ :name => 'default'.t, :official => true, :display_name => 'Tags'.t })
   end
 
 

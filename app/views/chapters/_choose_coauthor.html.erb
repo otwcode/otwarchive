@@ -1,4 +1,4 @@
-<p>Please verify the names of your co-authors</p>
+<p><%=h 'Please verify the names of your co-authors'.t %></p>
 
 <%- form_for([@work, @chapter]) do |f| -%>
   
@@ -14,8 +14,8 @@
   <%= f.hidden_field :content, :value => "#{@chapter.content}" %>
   
   <p class="field-right">
-    <%= submit_tag 'Preview', :name => 'preview_button' %>
-    <%= submit_tag 'Cancel', :name => 'cancel_button' %> 
+    <%= submit_tag 'Preview'.t, :name => 'preview_button' %>
+    <%= submit_tag 'Cancel'.t, :name => 'cancel_button' %> 
   </p>
 
   <p class="clearbothdrop"></p>

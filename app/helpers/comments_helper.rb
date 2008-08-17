@@ -13,12 +13,12 @@ module CommentsHelper
   def create_cancel_button(comment, commentable)
     if comment.new_record?
       if commentable.class == comment.class
-        button_to_function "Cancel", update_page {|page| page.replace_html "add_comment_#{commentable.class.to_s.downcase}_#{commentable.id}" }
+        button_to_function "Cancel".t, update_page {|page| page.replace_html "add_comment_#{commentable.class.to_s.downcase}_#{commentable.id}" }
       else
-        button_to_function "Cancel", update_page {|page| page.hide "add_comment_#{commentable.class.to_s.downcase}_#{commentable.id}" }
+        button_to_function "Cancel".t, update_page {|page| page.hide "add_comment_#{commentable.class.to_s.downcase}_#{commentable.id}" }
       end
     else
-      button_to_function "Cancel", update_page {|page| page.replace_html "data_for_comment_#{comment.id}", 
+      button_to_function "Cancel".t, update_page {|page| page.replace_html "data_for_comment_#{comment.id}", 
                           :partial => 'comments/single_comment', :locals => {:single_comment => comment}}
     end
   end
@@ -58,17 +58,17 @@ module CommentsHelper
   
   # return html link to delete comments
   def create_destroy_link(comment)
-    link_to 'Destroy', comment,
-      :confirm => 'Are you sure?', 
+    link_to 'Destroy'.t, comment,
+      :confirm => 'Are you sure?'.t, 
       :method => :delete
   end
   
   # return html link to mark/unmark comment as spam
   def create_tag_as_spam_link(comment)
     if comment.approved
-      link_to 'Spam', reject_comment_path(comment), :method => :put
+      link_to 'Spam'.t, reject_comment_path(comment), :method => :put
     else
-      link_to 'Not Spam', approve_comment_path(comment), :method => :put 
+      link_to 'Not Spam'.t, approve_comment_path(comment), :method => :put 
     end
   end
 

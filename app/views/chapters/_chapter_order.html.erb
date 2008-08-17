@@ -1,8 +1,8 @@
 <div id="manage-chapters">
 
-  <strong>Delete/reorder chapters</strong>
+  <strong><%=h "Delete/reorder chapters".t %></strong>
 
-  <p>Drag chapters to change their order.<p>
+  <p><%=h "Drag chapters to change their order.".t %><p>
 
   <% form_tag url_for(:action => 'update_positions') do %>
   <ul id="sortable_chapter_list">
@@ -13,21 +13,21 @@
         <% if chapter.title %>
           <%=h chapter.title %>    
         <% else %>
-          Chapter <%=h chapter.position %>    
+          <%=h "Chapter".t %> <%=h chapter.position %>    
         <% end %>
         <span class='chapter-control'>
-          (<%= link_to 'edit', [:edit, @work, chapter] -%> 
+          (<%= link_to 'edit'.t, [:edit, @work, chapter] -%> 
            <%- if @work.chapters.count > 1 -%>
-             | <%= link_to 'delete', [@work, chapter], :confirm => 'Are you sure?', :method => :delete %>
+             | <%= link_to 'delete'.t, [@work, chapter], :confirm => 'Are you sure?'.t, :method => :delete %>
              <% if @work.pseuds.size > 1 && chapter.pseuds.size > 1 -%>
-               | <%= link_to "Remove me as author", {:action => "edit", :id => chapter.id, :remove => "me"}, :confirm => 'You will no longer be able to edit this chapter. Are you sure?' %>
+               | <%= link_to "Remove me as author".t, {:action => "edit", :id => chapter.id, :remove => "me"}, :confirm => 'You will no longer be able to edit this chapter. Are you sure?'.t %>
              <% end -%> 
           <%- end -%> )
       	</span><br />
       </li>
     <% end %>    
   </ul>
-  <%= submit_tag "Update Positions" %>
+  <%= submit_tag "Update Positions".t %>
   <% end %>
 </div>
 

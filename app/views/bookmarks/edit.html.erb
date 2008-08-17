@@ -1,8 +1,8 @@
-<h1>Editing bookmark</h1>
+<h1><%=h 'Editing bookmark'.t %></h1>
 
 <%= error_messages_for :bookmark %>
 
-<%= render :partial => 'bookmark_form', :locals => {:button_name => 'Update', :action => 'update'} %>
+<%= render :partial => 'bookmark_form', :locals => {:button_name => 'Update'.t, :action => 'update'} %>
 
-<%= link_to 'Show', @bookmark %> |
-<%= link_to 'Back', bookmarks_path %>
+<%= link_to 'Show'.t, @bookmark %> |
+<%= link_to 'Back'.t, bookmarks_path %>

@@ -10,7 +10,7 @@
 	</p>
 
 	<%- div_for(commentable, :add_comment, :style => "display : none;") do -%>   
-    <%= render :partial => @comment = Comment.new, :locals => {:commentable => commentable, :button_name => 'Create'}%> 
+    <%= render :partial => @comment = Comment.new, :locals => {:commentable => commentable, :button_name => 'Create'.t}%> 
   <%- end -%> 
   
   <%- div_for(commentable, :comments) do -%>   

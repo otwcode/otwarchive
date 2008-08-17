@@ -8,18 +8,18 @@
   <%- if is_author_of?(@work) -%>
    <span class="chapter-control">
    (<% unless chapter.posted? -%>
-    <%= link_to 'post', [:post, @work, chapter], :method => :post -%> |
+    <%= link_to 'post'.t, [:post, @work, chapter], :method => :post -%> |
     <% end -%>
-    <%= link_to 'edit', [:edit, @work, chapter] -%> 
+    <%= link_to 'edit'.t, [:edit, @work, chapter] -%> 
     <%- if @work.chapters.count > 1 -%>
-      | <%= link_to 'delete', [@work, chapter], :confirm => 'Are you sure?', :method => :delete %> )
+      | <%= link_to 'delete'.t, [@work, chapter], :confirm => 'Are you sure?'.t, :method => :delete %> )
     <%- end -%>
 	</span>	
   <%- end -%>
 
   <!-- only display byline if different from the main byline -->
   <% if chapter.pseuds != @work.pseuds -%>
-  	<br />Chapter by <%= byline(chapter) -%>
+  	<br /><%=h 'Chapter by'.t %> <%= byline(chapter) -%>
   <% end -%>
   </div>
   

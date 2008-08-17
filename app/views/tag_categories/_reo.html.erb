@@ -1,9 +1,9 @@
 <% unless @tag_category == TagCategory.ambiguous || @tag_category == TagCategory.default %>
-<p><%= check_box 'tag_category', "required" %> Required*
-   <%= check_box 'tag_category', "exclusive" %> Exclusive*
-   <%= check_box 'tag_category', "official" %> Work Menu*<p>*Required: there must be at least one tag in this category whenever it is used (not implemented yet)
-<p>*Exclusive: there can only be one tag used at a time in this category
-<p>*Work Menu: this category will show up as an option to be filled in when tagging a work
-<p>WARNING: If a tag category is not marked 'Work Menu', then there is no way for users to use tags in this category, either to add them or remove them, on their works.
+<p><%= check_box 'tag_category', "required" %> <%=h 'Required*'.t %>
+   <%= check_box 'tag_category', "exclusive" %> <%=h 'Exclusive*'.t %>
+   <%= check_box 'tag_category', "official" %> <%=h 'Work Menu*'.t %><p><%=h '*Required: there must be at least one tag in this category whenever it is used (not implemented yet)'.t %>
+<p><%=h '*Exclusive: there can only be one tag used at a time in this category'.t %>
+<p><%=h '*Work Menu: this category will show up as an option to be filled in when tagging a work'.t %>
+<p><%=h "WARNING: If a tag category is not marked 'Work Menu', then there is no way for users to use tags in this category, either to add them or remove them, on their works.".t %>
 <% end %>
 <p>

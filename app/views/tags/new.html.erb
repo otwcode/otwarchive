@@ -1,17 +1,17 @@
-<h1>New tag</h1>
+<h1><%=h 'New tag'.t %></h1>
 
 <%= error_messages_for :tag %>
 
 <% form_for(@tag) do |f| %>
   <p>
-  Name: <%= f.text_field("name") %>
+  <%=h 'Name:'.t %> <%= f.text_field("name") %>
   </p>
   <p>
-  <%= f.check_box("banned") %>Banned    (this tag will not show up anywhere)
+  <%= f.check_box("banned") %><%=h 'Banned'.t %>    (<%=h 'this tag will not show up anywhere'.t %>)
   <br>
-  <%= f.check_box("canonical") %>Canonical    (this tag will show up in selections and lists)
+  <%= f.check_box("canonical") %><%=h 'Canonical'.t %>    (<%=h 'this tag will show up in selections and lists'.t %>)
   <br>
-  <%= f.check_box("adult") %>Adult    (this tag indicates adult content, any work tagged with this will trigger the "do you agree to see this" page)
+  <%= f.check_box("adult") %><%=h 'Adult'.t %>    (<%=h 'this tag indicates adult content, any work tagged with this will trigger the "do you agree to see this" page'.t %>)
   </p>
   <p>
   <% TagCategory.ordered(:all).each do |category| -%>
@@ -19,17 +19,17 @@
   <% end -%>
   </p>
   <p>
-  Please be careful.
+  <%=h 'Please be careful.'.t %>
   </p>
-  <p>Once you've created a tag you can never change its name, nor can you delete it (although it can be banned. and if it is not banned, and it is not being used to tag anything, or is itself being tagged, it may be purged).
+  <p><%=h "Once you've created a tag you can never change its name, nor can you delete it (although it can be banned. and if it is not banned, and it is not being used to tag anything, or is itself being tagged, it may be purged).".t %>
   </p>
   <p>
-  Once you have selected a category, you will not be able to change it to anything other than <%= link_to TagCategory.ambiguous.display_name, tag_category_path(TagCategory.ambiguous) %> or <%= link_to TagCategory.default.display_name, tag_category_path(TagCategory.default) %>
+  <%=h 'Once you have selected a category, you will not be able to change it to anything other than'.t %> <%= link_to TagCategory.ambiguous.display_name, tag_category_path(TagCategory.ambiguous) %> <%=h 'or'.t %> <%= link_to TagCategory.default.display_name, tag_category_path(TagCategory.default) %>
   </p>
   <%= f.submit %>
   <% end %>
   <p>
-  If, after you have created a tag, you need to change it's banned or canonical status, go to the <%= link_to 'category page', tag_categories_path %> and select the tags link in the category it is in.
+  <%=h 'If, after you have created a tag, you need to change its banned or canonical status, go to the'.t %> <%= link_to 'category page'.t, tag_categories_path %> <%=h 'and select the tags link in the category it is in.'.t %>
   </p>
 <%= tag_wrangler_footer %>
 

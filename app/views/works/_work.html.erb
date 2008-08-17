@@ -7,8 +7,8 @@
   <%- end -%> 
 
   <h2 class="story-title">
-    <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)") %><% end %>
-    <% if @work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)") %><% end %>
+    <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)".t) %><% end %>
+    <% if @work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)".t) %><% end %>
     <%=sanitize @work.title, :tags => %w(em i b strong strike small) %>
   </h2>
   <h3 class="story-author">

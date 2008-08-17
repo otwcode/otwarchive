@@ -24,9 +24,9 @@ class Work < ActiveRecord::Base
   named_scope :recent, :order => 'created_at DESC', :limit => 5
 
   validates_presence_of :title
-  validates_length_of :title, :within => ArchiveConfig.TITLE_MIN..ArchiveConfig.TITLE_MAX, :message => "must be within #{ArchiveConfig.TITLE_MIN} and #{ArchiveConfig.TITLE_MAX} letters long.".t
-  validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, :too_long => "must be less than %d letters long."/ArchiveConfig.SUMMARY_MAX
-  validates_length_of :notes, :allow_blank => true, :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than %d letters long."/ArchiveConfig.NOTES_MAX
+  validates_length_of :title, :within => ArchiveConfig.TITLE_MIN..ArchiveConfig.TITLE_MAX, :message => "must be within".t + " #{ArchiveConfig.TITLE_MIN} " + "and".t + " #{ArchiveConfig.TITLE_MAX} " + "letters long.".t
+  validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, :too_long => "must be less than %d letters long.".t/ArchiveConfig.SUMMARY_MAX
+  validates_length_of :notes, :allow_blank => true, :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than %d letters long.".t/ArchiveConfig.NOTES_MAX
 
   # Virtual attribute to use as a placeholder for pseuds before the work has been saved
   # Can't write to work.pseuds until the work has an id
@@ -77,7 +77,7 @@ class Work < ActiveRecord::Base
   # rephrases the "chapters is invalid" message
   def after_validation
     if self.errors.on(:chapters)
-      self.errors.add(:base, "Please enter your story in the text field below.")
+      self.errors.add(:base, "Please enter your story in the text field below.".t)
       self.errors.delete(:chapters)
     end
   end
@@ -155,10 +155,10 @@ class Work < ActiveRecord::Base
   # Checks that work has at least one author
   def validate_authors
     if self.authors.blank? && self.pseuds.empty?
-      errors.add_to_base("Work must have at least one author.")
+      errors.add_to_base("Work must have at least one author.".t)
       return false
     elsif !self.invalid_pseuds.blank?
-      errors.add_to_base("These pseuds are invalid: " + self.invalid_pseuds.inspect) 
+      errors.add_to_base("These pseuds are invalid: ".t + self.invalid_pseuds.inspect) 
     end
   end
   

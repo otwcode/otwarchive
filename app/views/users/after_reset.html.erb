@@ -1,19 +1,19 @@
-<h1>Please Change Your Password</h1> 
+<h1><%=h 'Please Change Your Password'.t %></h1> 
 
-<p>We sent you an automated password by email, but it's a good idea to change it for security reasons  
-(and because random collections of letters and numbers are hard to remember!)</p>
+<p><%=h "We sent you an automated password by email, but it's a good idea to change it for security reasons".t %>  
+<%=h "(and because random collections of letters and numbers are hard to remember!)".t %></p>
 
 <%- form_for(@user) do |f| -%>
   <p>
-  <%= f.label :password, "New Password".t %> <span>(Make it a <a href="#" tabindex="1">strong</a> one!)</span><br />	
+  <%= f.label :password, "New Password".t %> <span><%=h '(Make it a'.t %> <a href="#" tabindex="1"><%=h 'strong'.t %></a> <%=h 'one!)'.t %></span><br />	
   <%= f.password_field :password, :class => 'authentication-textfield', :tabindex => '2' %>
   </p>
   
   <p>
-  <%= f.label :password_confirmation, "Confirm Password" %><br />
+  <%= f.label :password_confirmation, "Confirm Password".t %><br />
   <%= f.password_field :password_confirmation, :class => 'authentication-textfield', :tabindex => '3' %>
   </p>
   
-  <p><%= submit_tag 'Change Password', :name => 'change_password' %></p> 
+  <p><%= submit_tag 'Change Password'.t, :name => 'change_password' %></p> 
   
 <%- end -%>

@@ -1,7 +1,7 @@
 <% bookmarkable ||= @bookmarkable %>
 <% @bookmark ||= Bookmark.new %>
 <% if @bookmark.new_record? && bookmarkable.class != ExternalWork %>
-  <p>Add a new bookmark for "<%=h bookmarkable.title %>"</p>
+  <p><%=h "Add a new bookmark for".t %> "<%=h bookmarkable.title %>"</p>
 <% end %>
 
 <% form_for([bookmarkable, @bookmark], :url => {:controller => 'bookmarks', :action => (action ||= 'create')}) do |f| %>
@@ -10,7 +10,7 @@
     <% fields_for 'bookmark[external]', bookmarkable do |ew| %>
       
       <p>
-        <%= ew.label :url, "URL: " %>
+        <%= ew.label :url, "URL: ".t %>
         <%= ew.text_field :url %>
         <%= observe_field 'bookmark_external_url', :url => {:controller => 'external_works', :action => 'fetch'},
             :with => 'external_url', :on => 'blur' %>
@@ -18,17 +18,17 @@
       </p>
       
       <p>
-        <%= ew.label :author, "Author: " %>
+        <%= ew.label :author, "Author: ".t %>
         <%= ew.text_field :author %>  
       </p>
       
       <p>
-        <%= ew.label :title, "Title: " %>
+        <%= ew.label :title, "Title: ".t %>
         <%= ew.text_field :title %> 
       </p>
       
       <p>
-        <%= ew.label :summary, "Author's Summary" %><%= "(please copy and paste from original work)".t %><br />
+        <%= ew.label :summary, "Author's Summary".t %><%=h "(please copy and paste from original work)".t %><br />
         <%= ew.text_area :summary %> 
       </p>
       
@@ -36,18 +36,18 @@
   <% end %>
 
   <p>
-    <%= "Your Notes".t %><br />
+    <%=h "Your Notes".t %><br />
     <%= f.text_area :notes %>
   </p>
 
   <p>
-    <%= "Your Tags".t %><br />
+    <%=h "Your Tags".t %><br />
     <%= text_field_tag 'tag_string', @tag_string %>
   </p>
 
   
   <p>
-    <%= f.check_box :private %> <%= "Private bookmark?".t %>
+    <%= f.check_box :private %> <%=h "Private bookmark?".t %>
   </p> 
   
   <%= f.hidden_field :user_id, :value => current_user.id %>
@@ -55,6 +55,6 @@
   <%= f.hidden_field :bookmarkable_type, :value => bookmarkable.class.to_s %>
 
   <p>
-    <%= f.submit(button_name ||= "Create") %>
+    <%= f.submit(button_name ||= "Create".t) %>
   </p>
 <% end %>

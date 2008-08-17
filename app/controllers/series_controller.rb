@@ -7,7 +7,7 @@ class SeriesController < ApplicationController
   def is_author
     @series = Series.find(params[:id])
     unless current_user.is_a?(User) && current_user.is_author_of?(@series)
-      flash[:error] = 'Sorry, but you don\'t have permission to make edits.'.t
+      flash[:error] = "Sorry, but you don't have permission to make edits.".t
       redirect_to(@series)     
     end
   end
@@ -60,7 +60,7 @@ class SeriesController < ApplicationController
 
     respond_to do |format|
       if @series.save
-        flash[:notice] = 'Series was successfully created.'
+        flash[:notice] = 'Series was successfully created.'.t
         format.html { redirect_to(@series) }
         format.xml  { render :xml => @series, :status => :created, :location => @series }
       else
@@ -77,7 +77,7 @@ class SeriesController < ApplicationController
 
     respond_to do |format|
       if @series.update_attributes(params[:series])
-        flash[:notice] = 'Series was successfully updated.'
+        flash[:notice] = 'Series was successfully updated.'.t
         format.html { redirect_to(@series) }
         format.xml  { head :ok }
       else

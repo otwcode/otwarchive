@@ -1,9 +1,9 @@
 <!-- Requires local 'work' -->
 <p>
-  <%= link_to 'See all chapters', work_path(work) %>
+  <%= link_to 'See all chapters'.t, work_path(work) %>
   <%- if is_author_of?(work) -%> |   
-    <%= link_to 'Add a new chapter', new_work_chapter_path(work) %>
-	| <%= link_to 'Edit work', edit_work_path(work) %>
+    <%= link_to 'Add a new chapter'.t, new_work_chapter_path(work) %>
+	| <%= link_to 'Edit work'.t, edit_work_path(work) %>
   <%- end -%> 
   
 </p> 

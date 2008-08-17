@@ -40,7 +40,7 @@
     <!-- Number of chapters (work_expected_number_of_chapters) -->
     <div id="number-of-chapters">
       <p>
-        Chapter 1 of <%= f.text_field :wip_length, :class => "number-field" %> Title: <%= c.text_field :title %>
+        <%=h 'Chapter 1 of'.t %> <%= f.text_field :wip_length, :class => "number-field" %> <%=h 'Title:'.t %> <%= c.text_field :title %>
       </p>
     </div>    
 

@@ -1,9 +1,9 @@
 <div id="<%= tag.id -%>" class="droppable">
   <%= tag.name -%> 
-  <% if tag.canonical? %>(Canonical)<% end -%>
-  <% if tag.banned? %>(Banned!)<% end -%>
-  <% if tag.adult? %>(Adult!)<% end -%>
-  (<%= link_to 'show', tag, :popup => true %>)
+  <% if tag.canonical? %>(<%=h 'Canonical'.t %>)<% end -%>
+  <% if tag.banned? %>(<%=h 'Banned!'.t %>)<% end -%>
+  <% if tag.adult? %>(<%=h 'Adult!'.t %>)<% end -%>
+  (<%= link_to 'show'.t, tag, :popup => true %>)
   <br/>
 </div>
 <%= drop_receiving_element(tag.id.to_s,

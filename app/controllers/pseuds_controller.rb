@@ -15,7 +15,7 @@ class PseudsController < ApplicationController
 
   #displays error if someone tries to modify another user's pseuds
   def is_user_true
-    is_user? || [redirect_to(:action => "index"), flash[:error] = 'Sorry, but you don\'t have permission to make edits.' ]
+    is_user? || [redirect_to(:action => "index"), flash[:error] = "Sorry, but you don't have permission to make edits.".t ]
   end
 
   # GET /pseuds
@@ -67,7 +67,7 @@ class PseudsController < ApplicationController
       @user.pseuds << @pseud
       default = @user.default_pseud
       if @pseud.save
-        flash[:notice] = 'Pseud was successfully created.'
+        flash[:notice] = 'Pseud was successfully created.'.t
         if @pseud.is_default
           # if setting this one as default, unset the attribute of the current default pseud
           default.update_attribute(:is_default, false)
@@ -78,7 +78,7 @@ class PseudsController < ApplicationController
       end
     else
       # user tried to add pseud he already has
-      flash[:error] = 'You already have a pseud with that name.'
+      flash[:error] = 'You already have a pseud with that name.'.t
       @pseud.name = '' if @user.default_pseud.name == @pseud.name
       render :action => "new"
     end
@@ -95,7 +95,7 @@ class PseudsController < ApplicationController
         # if setting this one as default, unset the attribute of the current active pseud
         default.update_attribute(:is_default, false)
       end   
-      flash[:notice] = 'Pseud was successfully updated.'
+      flash[:notice] = 'Pseud was successfully updated.'.t
       redirect_to([@user, @pseud]) 
     else
       render :action => "edit"

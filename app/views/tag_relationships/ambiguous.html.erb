@@ -1,4 +1,4 @@
-<h2>TagWrangler: Tags in Relationship <%= @tag_relationship.name %></h2>
+<h2><%=h 'TagWrangler: Tags in Relationship'.t %> <%= @tag_relationship.name %></h2>
 <table id='table'>
   <tr>
     <th></th>
@@ -8,6 +8,6 @@
   <%= render :partial => 'table', :locals => { :tagging => tagging }%>   
 <% end -%>
 </table>
-<p>To create new taggings go to the <%= link_to TagCategory.ambiguous.name, tag_category_path(TagCategory.ambiguous) %> tag category page</p>
+<p><%=h 'To create new taggings go to the'.t %> <%= link_to TagCategory.ambiguous.name, tag_category_path(TagCategory.ambiguous) %> <%=h 'tag category page'.t %></p>
 <%= tag_wrangler_footer %>
 

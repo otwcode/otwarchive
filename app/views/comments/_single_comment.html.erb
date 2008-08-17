@@ -2,18 +2,18 @@
   <a name="comment<%=single_comment.id %>"></a>
 	<%- if single_comment.is_deleted -%>
     <p>
-        (comment deleted)
+        <%=h '(comment deleted)'.t %>
     </p>
   <%- else -%>
-    <h3><%= get_pseud_or_mailaddress(single_comment) %> says:</h3>
+    <h3><%= get_pseud_or_mailaddress(single_comment) %> <%=h 'says:'.t %></h3>
     <p>
         <%=sanitize_format single_comment.content %>
     </p>
     <p>
-        Posted at: <%= single_comment.created_at %>
+        <%=h 'Posted at:'.t %> <%= single_comment.created_at %>
     </p>
     <p> 
-        <%= link_to_unless_current "Thread", single_comment %> 
+        <%= link_to_unless_current "Thread".t, single_comment %> 
         | <%= create_reply_link single_comment -%>
         <%- if is_author_of?(single_comment) -%>
         | <%= create_edit_link single_comment %>

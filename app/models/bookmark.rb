@@ -4,7 +4,7 @@ class Bookmark < ActiveRecord::Base
   has_many :taggings, :as => :taggable, :dependent => :destroy
   include TaggingExtensions
 
-  validates_length_of :notes, :maximum => ArchiveConfig.NOTES_MAX, :message => "must be less than %d letters long."/ArchiveConfig.NOTES_MAX
+  validates_length_of :notes, :maximum => ArchiveConfig.NOTES_MAX, :message => "must be less than %d letters long.".t/ArchiveConfig.NOTES_MAX
     
   def self.visible(current_user=:false, options = {})
     with_scope :find => options do

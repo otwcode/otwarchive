@@ -24,7 +24,7 @@ class ChaptersController < ApplicationController
   end
 
   def access_denied
-    flash[:error] = "Please log in first."
+    flash[:error] = "Please log in first.".t
     store_location
     redirect_to new_session_path
     false
@@ -34,7 +34,7 @@ class ChaptersController < ApplicationController
   def is_author
     @work = Work.find(params[:work_id])
     unless current_user.is_a?(User) && current_user.is_author_of?(@work)
-      flash[:error] = 'Sorry, but you don\'t have permission to make edits.'.t
+      flash[:error] = "Sorry, but you don't have permission to make edits.".t
       redirect_to(@work)     
     end
   end 
@@ -111,7 +111,7 @@ class ChaptersController < ApplicationController
     if params["remove"] == "me"
       @chapter.pseuds = @chapter.pseuds - current_user.pseuds
       @chapter.save
-      flash[:notice] = "You have been removed as an author from the chapter"
+      flash[:notice] = "You have been removed as an author from the chapter".t
       redirect_to @work
     end
   end
@@ -131,7 +131,7 @@ class ChaptersController < ApplicationController
       if @chapter.save! && @work.save!
         @work.update_major_version
 				@chapter.move_to(@chapter.position_placeholder) if @chapter.position_placeholder
-        flash[:notice] = 'This is a preview of what this chapter will look like when it\'s posted to the Archive. You should probably read the whole thing to check for problems before posting.'
+        flash[:notice] = "This is a preview of what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting.".t
         redirect_to [:preview, @work, @chapter]
       else
         render :action => :new 
@@ -160,7 +160,7 @@ class ChaptersController < ApplicationController
       if @chapter.update_attributes(params[:chapter]) && @work.save
         @work.update_minor_version      
         @chapter.move_to(@chapter.position_placeholder) if @chapter.position_placeholder
-        flash[:notice] = 'Chapter was successfully updated.'
+        flash[:notice] = 'Chapter was successfully updated.'.t
         redirect_to [@work, @chapter]
       else
         render :action => "edit" 
@@ -172,7 +172,7 @@ class ChaptersController < ApplicationController
     if params[:chapters]
       @work = Work.find(params[:work_id])
       @work.reorder_chapters(params[:chapters]) 
-      flash[:notice] = 'Chapter orders have been successfully updated.'
+      flash[:notice] = 'Chapter orders have been successfully updated.'.t
       redirect_to(@work)
     else 
       params[:sortable_chapter_list].each_with_index do |id, position|
@@ -195,7 +195,7 @@ class ChaptersController < ApplicationController
     else
       @chapter.posted = true
       if @chapter.save
-        flash[:notice] = 'Chapter has been posted!'
+        flash[:notice] = 'Chapter has been posted!'.t
         redirect_to(@work)
       else
         render :action => "preview"
@@ -208,7 +208,7 @@ class ChaptersController < ApplicationController
   def destroy
     @chapter = @work.chapters.find(params[:id])
     if @chapter.is_only_chapter?
-      flash[:error] = "You can't delete the only chapter in your story. If you want to delete the story, choose 'Delete work'."
+      flash[:error] = "You can't delete the only chapter in your story. If you want to delete the story, choose 'Delete work'.".t
       redirect_to(edit_work_url(@work))
     else
       @chapter.destroy

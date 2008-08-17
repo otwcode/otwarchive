@@ -1,4 +1,4 @@
-<h1>History</h1>
+<h1><%=h 'History'.t %></h1>
 <% if logged_in? && !current_user.readings.empty? %>
   <ul>
     <%= render :partial => 'reading', :collection => @readings %>

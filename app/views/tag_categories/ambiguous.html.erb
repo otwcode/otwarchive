@@ -1,9 +1,9 @@
-<h2>TagWrangler: <%= @tag_category.display_name %> tag category </h2>
+<h2><%=h 'TagWrangler:'.t %> <%= @tag_category.display_name %> <%=h 'tag category'.t %> </h2>
 
-<p>Drag a tag by it's handle (<img src="/images/drag.png" alt="drag me">) and drop it on the following line to move it to the <%= @tag_category.display_name %> category, or onto an <%= @tag_category.display_name %> Tag, in order to create a <%= link_to TagRelationship.disambiguate.name, tag_relationship_path(TagRelationship.disambiguate) %> relationship</p>
+<p><%=h 'Drag a tag by its handle'.t %> (<img src="/images/drag.png" alt="drag me">) <%=h 'and drop it on the following line to move it to the'.t %> <%= @tag_category.display_name %> <%=h 'category, or onto an'.t %> <%= @tag_category.display_name %> <%=h 'Tag, in order to create a'.t %> <%= link_to TagRelationship.disambiguate.name, tag_relationship_path(TagRelationship.disambiguate) %> <%=h 'relationship'.t %></p>
 
 <div id=<%= @tag_category.display_name %> class="droppable">
-    Move to <%= @tag_category.display_name %> category
+    <%=h 'Move to'.t %> <%= @tag_category.display_name %> <%=h 'category'.t %>
 </div>
 <%= drop_receiving_element(@tag_category.display_name, 
    :url => { :action => 'change_tag', :tag => {:tag_category_id => @tag_category.id}},
@@ -18,7 +18,7 @@
 </div>
 
 <% TagCategory.official(:include => 'tags').each do |category| -%>
-  <p><b><%= category.display_name %> Tags:</b>
+  <p><b><%= category.display_name %> <%=h 'Tags:'.t %></b>
   <% category.tags.each do |tag| -%>
     <%= render :partial => 'draggable', :locals => { :tag => tag }%>
   <% end %>

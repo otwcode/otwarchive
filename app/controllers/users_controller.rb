@@ -29,7 +29,7 @@ class UsersController < ApplicationController
   def edit
     @user = User.find_by_login(params[:id])
     unless is_user?(@user)
-      flash[:error] = "You are not allowed to perform this action."
+      flash[:error] = "You are not allowed to perform this action.".t
       redirect_to user_url(@user)
     end
   end
@@ -53,17 +53,17 @@ class UsersController < ApplicationController
   
   def activate
     if params[:id].blank?
-      flash[:error] = "Your activation key is missing."
+      flash[:error] = "Your activation key is missing.".t
       redirect_to ''
     else
       @user = User.find_by_activation_code(params[:id])
       if @user
         @user.activate
         self.current_user = @user
-        flash[:notice] = "Signup complete! This is your public profile."
+        flash[:notice] = "Signup complete! This is your public profile.".t
         redirect_to(@user)
       else
-        flash[:error] = "Your activation key is invalid. Perhaps it has expired."
+        flash[:error] = "Your activation key is invalid. Perhaps it has expired.".t
         redirect_to '' 
       end
     end
@@ -79,7 +79,7 @@ class UsersController < ApplicationController
     @user = User.find_by_login(params[:id])
     
     if !is_user?(@user)
-      flash[:error] = "You are not allowed to perform this action."
+      flash[:error] = "You are not allowed to perform this action.".t
       redirect_to user_url(@user)
     else
 
@@ -98,7 +98,7 @@ class UsersController < ApplicationController
         end
         @user.recently_reset = nil if params[:change_password] 
         @user.update_attributes!(params[:user]) 
-        flash[:notice] = 'User was successfully updated.'
+        flash[:notice] = 'User was successfully updated.'.t
         redirect_to(@user) 
       rescue
         render :action => "edit"
@@ -111,7 +111,7 @@ class UsersController < ApplicationController
   def destroy
     @user = User.find_by_login(params[:id])
     if !is_user?(@user)
-      flash[:error] = "You are not allowed to perform this action."
+      flash[:error] = "You are not allowed to perform this action.".t
       redirect_to user_url(@user)
     else
       @user.destroy

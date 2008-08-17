@@ -13,7 +13,7 @@
         </div>
       </div>
 
-  	  by <%= render :partial => 'pseuds/byline', :locals => { :creation => work } -%>
+  	  <%=h 'by'.t %> <%= render :partial => 'pseuds/byline', :locals => { :creation => work } -%>
 
       <p class="story-tags">
         <% work.tags.each do |tag| %>
@@ -25,6 +25,6 @@
         <%= sanitize_limited work.summary %>
       </p>
       
-      <p>Words: <%=h number_with_delimiter(work.word_count) %></p>
+      <p><%=h 'Words:'.t %> <%=h number_with_delimiter(work.word_count) %></p>
       
     </li>

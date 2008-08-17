@@ -1,8 +1,8 @@
-<h2>TagWrangler: Edit <%= @tag_category.display_name %> tag category </h2>
+<h2><%=h 'TagWrangler: Edit'.t %> <%= @tag_category.display_name %> <%=h 'tag category'.t %> </h2>
 
 <%= error_messages_for :tag_category %>
 <% form_for(@tag_category) do |f| %>
-  <p>Name: <%= f.text_field("display_name") %>
+  <p><%=h 'Name:'.t %> <%= f.text_field("display_name") %>
   <%= render :partial => 'reo' %>
   <%= f.submit %>
 <% end %>

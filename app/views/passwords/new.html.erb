@@ -1,15 +1,15 @@
-<h1><%= "Forgot your password?" .t %></h1>
+<h1><%=h "Forgot your password?" .t %></h1>
 
-<p><%= "Never fear - if you've forgotten your password, we can send you a  link to reset it." .t %></p>
-<p><%= "Please tell us the user name or email address you used when you signed up for your Archive account." .t %></p>
+<p><%=h "Never fear - if you've forgotten your password, we can send you a  link to reset it." .t %></p>
+<p><%=h "Please tell us the user name or email address you used when you signed up for your Archive account." .t %></p>
 
 <%- form_tag passwords_path do -%>
   <p>
-	  <label>Email address <strong>or</strong> user name: </label> 
+	  <label><%=h 'Email address'.t %> <strong><%=h 'or'.t %></strong> <%=h 'user name:'.t %> </label> 
 	  <%= text_field_tag 'login' %>
-	  <%= submit_tag 'Reset password' %>
+	  <%= submit_tag 'Reset password'.t %>
 	</p>
 
 <%- end -%>
 
-<p><%= "If you no longer have access to the email address you used, please contact us directly.".t %></p>  
+<p><%=h "If you no longer have access to the email address you used, please contact us directly.".t %></p>  

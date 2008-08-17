@@ -1,15 +1,15 @@
-<h1>Approve Link</h1>
+<h1><%=h 'Approve Link'.t %></h1>
 
-<p>Would you like to create a link from your story <%= link_to @related_work.parent.title, @related_work.parent %> to 
-<%= link_to @related_work.work.metadata.title, @related_work.parent %> by <%= print_pseud_list(@related_work.work.pseuds) %>?</p>
+<p><%=h 'Would you like to create a link from your story'.t %> <%= link_to @related_work.parent.title, @related_work.parent %> <%=h 'to'.t %> 
+<%= link_to @related_work.work.metadata.title, @related_work.parent %> <%=h 'by'.t %> <%= print_pseud_list(@related_work.work.pseuds) %>?</p>
 
-<p>(Nothing will be linked directly from your stories without your express approval.)</p> 
+<p>(<%=h 'Nothing will be linked directly from your stories without your express approval.'.t %>)</p> 
 
 <% form_for(@related_work) do |f| %>
   <p>
-    <%= f.check_box :reciprocal %> <%= f.label :reciprocal, "Yes, link me!" %>
+    <%= f.check_box :reciprocal %> <%= f.label :reciprocal, "Yes, link me!".t %>
   </p>
   <p>
-    <%= f.submit "Update" %>
+    <%= f.submit "Update".t %>
   </p>
 <% end %>

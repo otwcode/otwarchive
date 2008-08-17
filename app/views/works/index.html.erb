@@ -1,4 +1,4 @@
-<h2><%= "View All Stories".t %></h2>
+<h2><%=h "View All Stories".t %></h2>
 <ul class="story-list">
   <% for work in @works %>
 	<%= render :partial => 'works/work_blurb', :locals => {:work => work} %>

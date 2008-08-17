@@ -2,9 +2,9 @@
 <% if reading.work.nil? %>
   <i>(deleted work, last read <%=h reading.updated_at -%>)</i>
 <% else %>
-  <b>Title: </b><%=h reading.work.title %><br/>
-  <b>by: </B><%= byline(reading.work) %><br/>
-  <b>First read: </B><%=h reading.created_at %><br/>
-  <b>Last read: </B><%=h reading.updated_at %> (Version <%= reading.major_version_read -%>.<%= reading.minor_version_read -%>)<br/>
+  <b><%=h 'Title:'.t %> </b><%=h reading.work.title %><br/>
+  <b><%=h 'by:'.t %> </B><%= byline(reading.work) %><br/>
+  <b><%=h 'First read:'.t %> </B><%=h reading.created_at %><br/>
+  <b><%=h 'Last read:'.t %> </B><%=h reading.updated_at %> (<%=h 'Version'.t %> <%= reading.major_version_read -%>.<%= reading.minor_version_read -%>)<br/>
 <% end %>
 </p>

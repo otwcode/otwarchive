@@ -1,8 +1,8 @@
-<p><%=h User.current_user.login %> listed you as a co-author of the following story:</p>
+<p><%=h User.current_user.login %> <%=h 'listed you as a co-author of the following story:'.t %></p>
 
 <p><a href="#"><%=h @work.title %></a></p>
 
-<p><a href="#">Click here</a> if you've been added in error or don't want to be listed as an author.</p>
+<p><a href="#"><%=h 'Click here'.t %></a> <%=h "if you've been added in error or don't want to be listed as an author.".t %></p>
 
 
 

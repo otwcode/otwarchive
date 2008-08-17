@@ -1,11 +1,11 @@
 <% if @comment.commentable_type == @comment.class.to_s %>
-  <%=h @comment.name || @comment.pseud.name %> replied to your comment:
+  <%=h @comment.name || @comment.pseud.name %> <%=h 'replied to your comment:'.t %>
 <% else %>  
-  <%=h @comment.name || @comment.pseud.name %> left feedback on your <%= @comment.commentable_type.downcase %>:
+  <%=h @comment.name || @comment.pseud.name %> <%=h 'left feedback on your'.t %> <%= @comment.commentable_type.downcase %>:
 <% end %>
 
 <p><%=h @comment.content %></p>
 
-<p>Posted at: <%= @comment.created_at %></p>
+<p><%=h 'Posted at:'.t %> <%= @comment.created_at %></p>
 
-View all feedback here (will be a link)
+<%=h 'View all feedback here'.t %> (will be a link)

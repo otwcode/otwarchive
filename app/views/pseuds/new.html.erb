@@ -1,9 +1,9 @@
-<h1>New pseud</h1>
+<h1><%=h 'New pseud'.t %></h1>
 
 <%= error_messages_for :pseud %>
 
-<%= render :partial => 'pseuds_form', :locals => { :button_text => "Create" }%>
+<%= render :partial => 'pseuds_form', :locals => { :button_text => "Create".t }%>
 
 <p>
-	<%= link_to 'Back', user_pseuds_path(@user) %>
+	<%= link_to 'Back'.t, user_pseuds_path(@user) %>
 </p>

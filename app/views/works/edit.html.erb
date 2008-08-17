@@ -1,25 +1,25 @@
-<h1>Editing work</h1>
+<h1><%=h 'Editing work'.t %></h1>
 
 <%= error_messages_for :work %>
 
 <p>
-  <%= link_to "Add chapter", new_work_chapter_path(@work) %> |  
+  <%= link_to "Add chapter".t, new_work_chapter_path(@work) %> |  
 
   Edit chapter:
   <% for chapter in @chapters %>
     <%= link_to h(chapter.position), [:edit, @work, chapter] %> | 
   <% end %>   
-  <%= link_to "Manage chapters", manage_work_chapters_path(@work) %> | 
+  <%= link_to "Manage chapters".t, manage_work_chapters_path(@work) %> | 
   <% if @work.pseuds.size > 1 %>
-     <%= link_to "Remove me as author", { :action => "edit", :remove => "me"}, :confirm => 'This will remove you from all chapters as well. Are you sure?' %> | 
+     <%= link_to "Remove me as author".t, { :action => "edit", :remove => "me"}, :confirm => 'This will remove you from all chapters as well. Are you sure?'.t %> | 
   <% end %>
-  <%= link_to "Orphan work", {:controller => 'orphans', :action => 'new', :work_id => @work.id} %> |
-  <%= link_to 'Delete work', @work, :confirm => 'Are you sure?', :method => :delete -%>
+  <%= link_to "Orphan work".t, {:controller => 'orphans', :action => 'new', :work_id => @work.id} %> |
+  <%= link_to 'Delete work'.t, @work, :confirm => 'Are you sure?'.t, :method => :delete -%>
   
 </p>					
 					
-<%= render :partial => 'work_form', :locals => {:button_text => "Update"} %> 
+<%= render :partial => 'work_form', :locals => {:button_text => "Update".t} %> 
 
 
-<%= link_to 'Show', @work %> |
-<%= link_to 'Back', works_path %>
+<%= link_to 'Show'.t, @work %> |
+<%= link_to 'Back'.t, works_path %>

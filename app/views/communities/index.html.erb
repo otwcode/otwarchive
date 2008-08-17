@@ -1,10 +1,10 @@
-<h1>Listing communities</h1>
+<h1><%=h 'Listing communities'.t %></h1>
 
 <table>
   <tr>
-    <th>Name</th>
-    <th>Description</th>
-    <th>Open membership</th>
+    <th><%=h 'Name'.t %></th>
+    <th><%=h 'Description'.t %></th>
+    <th><%=h 'Open membership'.t %></th>
   </tr>
 
 <% for community in @communities %>
@@ -12,16 +12,16 @@
     <td><%=h community.name %></td>
     <td><%=h community.description %></td>
     <td><%=h community.open_membership %></td>
-    <td><%= link_to 'Show', community %></td>
-    <td><%= link_to 'Edit', edit_community_path(community) %></td>
-    <td><%= link_to 'Destroy', community, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= link_to 'Show'.t, community %></td>
+    <td><%= link_to 'Edit'.t, edit_community_path(community) %></td>
+    <td><%= link_to 'Destroy'.t, community, :confirm => 'Are you sure?'.t, :method => :delete %></td>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New community', new_community_path %>
+<%= link_to 'New community'.t, new_community_path %>
 
 
 <div class="pagination">

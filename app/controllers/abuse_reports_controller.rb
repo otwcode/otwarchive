@@ -25,7 +25,7 @@ class AbuseReportsController < ApplicationController
       if @abuse_report.save
         AdminMailer.deliver_abuse_report(@abuse_report.email, @abuse_report.url, @abuse_report.comment)
 
-        flash[:notice] = 'The Abuse Report was sent to the abuse team email alias.'
+        flash[:notice] = 'The Abuse Report was sent to the abuse team email alias.'.t
         format.html { redirect_to '' }
       else
         format.html { render :action => "new" }

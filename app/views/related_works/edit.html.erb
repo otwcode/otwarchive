@@ -1,4 +1,4 @@
-<h1>Editing related_work</h1>
+<h1><%=h 'Editing related_work'.t %></h1>
 
 <% form_for(@related_work) do |f| %>
   <%= f.error_messages %>
@@ -20,5 +20,5 @@
   </p>
 <% end %>
 
-<%= link_to 'Show', @related_work %> |
-<%= link_to 'Back', related_works_path %>
+<%= link_to 'Show'.t, @related_work %> |
+<%= link_to 'Back'.t, related_works_path %>

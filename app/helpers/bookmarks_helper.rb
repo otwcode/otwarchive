@@ -5,12 +5,12 @@ module BookmarksHelper
     if logged_in?
       if bookmarkable.class == Work
         fallback = new_work_bookmark_path(bookmarkable)
-        text = 'Bookmark'
+        text = 'Bookmark'.t
       elsif bookmarkable.class == ExternalWork
         fallback = bookmarks_path # more options if necessary
-        text = 'Add a new bookmark'
+        text = 'Add a new bookmark'.t
       end
-      link_to_remote text.t, {:url => fallback, :method => :get}, :href => fallback 
+      link_to_remote text, {:url => fallback, :method => :get}, :href => fallback 
     end
   end
   

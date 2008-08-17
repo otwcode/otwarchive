@@ -1,18 +1,18 @@
 <p>
-  <b>Name:</b>
+  <b><%=h 'Name:'.t %></b>
   <%=h @community.name %>
 </p>
 
 <p>
-  <b>Description:</b>
+  <b><%=h 'Description:'.t %></b>
   <%=h @community.description %>
 </p>
 
 <p>
-  <b>Open membership:</b>
+  <b><%=h 'Open membership:'.t %></b>
   <%=h @community.open_membership %>
 </p>
 
 
-<%= link_to 'Edit', edit_community_path(@community) %> |
-<%= link_to 'Back', communities_path %>
+<%= link_to 'Edit'.t, edit_community_path(@community) %> |
+<%= link_to 'Back'.t, communities_path %>

@@ -3,7 +3,7 @@ class ReadingsController < ApplicationController
   before_filter :history_enabled?
 
   def access_denied
-    flash[:error] = "Please log in first."
+    flash[:error] = "Please log in first.".t
     store_location
     redirect_to new_session_path
     false
@@ -22,7 +22,7 @@ class ReadingsController < ApplicationController
   def destroy
     @reading = current_user.readings.find(params[:id])
     @reading.destroy
-    flash[:notice] = 'Story deleted from your history.'
+    flash[:notice] = 'Story deleted from your history.'.t
     redirect_to user_readings_url(current_user)
   end
 

@@ -1,7 +1,7 @@
 <%= render :partial => 'search_box' %>
 
 <%- unless @results.nil? -%>
-  <h1><%= @results.length %> search result(s) for '<%= h params[:query] %>'</h1>
+  <h1><%= @results.length %> <%=h 'search result(s) for'.t %> '<%= h params[:query] %>'</h1>
   <%- unless @results.empty? -%>
     <ul class="story-list">
     <%- for result in @results -%>
@@ -9,7 +9,7 @@
     <%- end -%>
     </ul>
   <%- else -%>
-    <p>No results were found!</p>
+    <p><%=h 'No results were found!'.t %></p>
   <%- end -%>
 <%- end -%>
 
