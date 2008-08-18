@@ -1,2 +1,8 @@
 page.replace_html "add_comment_#{@commentable.class.to_s.downcase}_#{@commentable.id}", :partial => @comment = Comment.new,
                   :locals => {:commentable => @commentable, :button_name => 'Create'.t}
+                  
+if @commentable.is_a?(Comment)                    
+  comment_id = "comment#{@commentable.id}"
+  page.assign 'new_hash', '#' + comment_id
+  page << "location.hash = new_hash;"
+end
