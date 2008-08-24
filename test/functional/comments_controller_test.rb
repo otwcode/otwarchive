@@ -7,8 +7,8 @@ class CommentsControllerTest < ActionController::TestCase
 # TODO test the anchor redirects
   def create_comments
     # runs much faster when you don't keep creating new users for everything
-    user = create_user
-    @pseud = user.default_pseud
+    @user = create_user
+    @pseud = @user.default_pseud
     @chapter1 = new_chapter(:authors => [@pseud])
     @work = create_work(:chapters => [@chapter1], :authors => [@pseud])
     @chapter1.save
@@ -110,20 +110,23 @@ class CommentsControllerTest < ActionController::TestCase
   # Test edit  GET  /:locale/chapters/:chapter_id/comments/:id/edit  (named path: edit_chapter_comment)
   def test_edit_chapter_comment_path
     create_comments
-    get :edit, :locale => 'en', :chapter_id => @chapter1.id, :id => @comment1.id
+    @request.session[:user] = @user
+    get :edit, :locale => 'en', :chapter_id => @chapter1.id, :id => @comment2.id
     assert_response :success
   end
   # Test edit  GET  /:locale/comments/:comment_id/comments/:id/edit  (named path: edit_comment_comment)
   # Test edit  GET  /:locale/comments/:id/edit  (named path: edit_comment)
   def test_edit_comment
     create_comments
-    get :edit, :locale => 'en', :id => @comment1.id
+    @request.session[:user] = @user
+    get :edit, :locale => 'en', :id => @comment2.id
     assert_response :success
   end
   # Test edit  GET  /:locale/works/:work_id/chapters/:chapter_id/comments/:id/edit  (named path: edit_work_chapter_comment)
   def test_edit_work_chapter_comment_path
     create_comments
-    get :edit, :locale => 'en', :work_id => @work.id, :chapter_id => @chapter1.id, :id => @comment1.id
+    @request.session[:user] = @user
+    get :edit, :locale => 'en', :work_id => @work.id, :chapter_id => @chapter1.id, :id => @comment2.id
     assert_response :success
     assert_not_nil assigns(:commentable)
   end
@@ -224,31 +227,46 @@ class CommentsControllerTest < ActionController::TestCase
   # Test update  PUT  /:locale/chapters/:chapter_id/comments/:id
   def test_update_chapter_comment
     create_comments
+    @request.session[:user] = @user
     put :update, :locale => 'en', 
                  :chapter_id => @chapter1.id, 
-                 :id => @comment1.id, 
+                 :id => @comment2.id, 
                  :pseud_id => @pseud.id, 
                  :comment => { :content => 'more content' }
-    @comment1.reload
-    assert_equal 'more content', @comment1.content  
+    @comment2.reload
+    assert_equal 'more content', @comment2.content  
   end
   # Test update  PUT  /:locale/comments/:comment_id/comments/:id
   # Test update  PUT  /:locale/comments/:id
   def test_update_comment_comment
     create_comments
-    put :update, :locale => 'en', :id => @comment1.id, :comment => { :content => 'new content' }
-    @comment1.reload
-    assert_equal 'new content', @comment1.content
+    @request.session[:user] = @user
+    put :update, :locale => 'en', :id => @child1.id, :comment => { :content => 'new content' }
+    @child1.reload
+    assert_equal 'new content', @child1.content
   end
   # Test update  PUT  /:locale/works/:work_id/chapters/:chapter_id/comments/:id
   def test_update_work_chapter_comment
     create_comments
+    @request.session[:user] = @user
+    put :update, :locale => 'en', 
+                 :work_id => @work.id, 
+                 :chapter_id => @chapter1.id, 
+                 :id => @comment2.id, 
+                 :comment => { :content => 'new content' }
+    @comment2.reload
+    assert_equal 'new content', @comment2.content
+  end
+  # Test update  PUT  /:locale/works/:work_id/chapters/:chapter_id/comments/:id
+  def test_update_work_chapter_comment_fail_because_of_child
+    create_comments
+    @request.env['HTTP_REFERER'] = 'http://www.google.com/'
+    @request.session[:user] = @user
     put :update, :locale => 'en', 
                  :work_id => @work.id, 
                  :chapter_id => @chapter1.id, 
                  :id => @comment1.id, 
                  :comment => { :content => 'new content' }
-    @comment1.reload
-    assert_equal 'new content', @comment1.content
+    assert_redirected_to 'http://www.google.com/'
   end
 end

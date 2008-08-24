@@ -17,11 +17,11 @@ class CommentsController < ApplicationController
     @comment = Comment.find(params[:id])
     unless current_user.is_a?(User) && current_user.is_author_of?(@comment)
       flash[:error] = "Sorry, but you don't have permission to make edits.".t
-      redirect_to(@work)     
+      redirect_to :back and return
     end
     unless @comment.count_all_comments == 0
       flash[:error] = 'Comments with replies cannot be edited'.t
-      redirect_to :back
+      redirect_to :back and return
     end  
   end
     
