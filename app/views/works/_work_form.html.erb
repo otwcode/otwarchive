@@ -51,9 +51,9 @@
 		<%= c.text_area :content, :class => "mce-editor", :id => "content" %>
 		
     	<script>
-        var work_chapter_attributes_content = new LiveValidation('work_chapter_attributes_content', { validMessage: 'Thanks, that length looks good.', wait: 500 });
-        work_chapter_attributes_content.add(Validate.Length, {"failureMessage": "must be less than 16777215 letters long.", "maximum": 16777215, "validMessage": ""});
-        work_chapter_attributes_content.add(Validate.Presence, {"failureMessage": "is required.", "validMessage": ""})
+        var content = new LiveValidation('content', { validMessage: 'Thanks, that length looks good.', wait: 500 });
+        content.add(Validate.Length, {"failureMessage": "must be less than 16777215 letters long.", "maximum": 16777215, "validMessage": ""});
+        content.add(Validate.Presence, {"failureMessage": "is required.", "validMessage": ""})
       </script>
     </p>
 

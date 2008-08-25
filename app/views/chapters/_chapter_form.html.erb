@@ -13,8 +13,14 @@
       <%= f.label :content, h('Chapter, in plain text with limited HTML*').t, :class => "required" %><br />
 		  <%- use_tinymce -%>
 		  <a href="javascript:addEditor('content');"><%=h 'Rich text'.t %></a>  <a href="javascript:removeEditor('content');"><%=h 'HTML'.t %></a><br />
-		  <%= f.text_area :content, :live => true, :class => "mce-editor", :id => "content" %>
+		  <%= f.text_area :content, :class => "mce-editor", :id => "content" %>
 		</p>
+		
+		<script>
+			var content = new LiveValidation('content', { validMessage: 'Thanks, that length looks good.', wait: 500 });
+			content.add(Validate.Length, {"failureMessage": "must be less than 16777215 letters long.", "maximum": 16777215, "validMessage": ""});
+			content.add(Validate.Presence, {"failureMessage": "is required.", "validMessage": ""})
+		</script>
 		
 		  <!-- Author dropdown (pseud_id) -->
 		<%- if @pseuds.size > 1 -%>
