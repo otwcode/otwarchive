@@ -15,7 +15,7 @@
 <!-- BEGIN comment section -->
 <div id="comments-display">
   <p>
-    <%= link_to_function('Add a comment'.t, "Element.toggle('add-comment')", :href => new_chapter_comment_path(@work.last_chapter)) %>
+    <%= link_to_function('Leave feedback'.t, "Element.toggle('add-comment')", :href => new_chapter_comment_path(@work.last_chapter)) %>
   </p>
                   
   <div id="add-comment" style="display : none;">   

@@ -33,6 +33,11 @@ class Chapter < ActiveRecord::Base
 		end
   end
   
+  # returns number of visible (not deleted, not hidden) comments on a chapter
+  def count_visible_comments
+    self.find_all_comments.select {|c| !c.hidden_by_admin and !c.is_deleted }.length
+  end
+
   def set_position
     self.position = self.current_position
   end

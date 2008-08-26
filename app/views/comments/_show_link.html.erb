@@ -1,1 +1,1 @@
-<%= link_to_function ('Show/hide comments'.t, "Element.toggle('comments_#{@commentable.class.to_s.downcase}_#{@commentable.id}')") %>   
+<%= link_to_function "Read feedback (#{ @commentable.count_visible_comments })".t, "Element.toggle('comments_#{@commentable.class.to_s.downcase}_#{@commentable.id}')" %>   

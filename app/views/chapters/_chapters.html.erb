@@ -2,11 +2,9 @@
   <%- for chapter in @chapters -%>
     <%- if chapter.posted? || is_author_of?(chapter) -%>
       <%= render :partial => 'chapters/chapter', :locals => {:chapter => chapter, :hide_work_info => true} %>
-			<%- unless chapter == @work.last_chapter -%>
-			<%= render :partial => 'comments/commentable', :locals => {:commentable => chapter} %>
-			<%- end -%>
-		<%- end -%>	
+      <%= render :partial => 'comments/commentable', :locals => {:commentable => chapter} %>
+    <%- end -%>
   <%- end -%>
 <%- else -%>
-	<%=sanitize_format @chapters.first.content %>
+  <%=sanitize_format @chapters.first.content %>
 <%- end -%>
