@@ -158,17 +158,22 @@ class WorksController < ApplicationController
   # GET /works/1/edit
   def edit
     if params["remove"] == "me"
-      @work.pseuds = @work.pseuds - current_user.pseuds
-      @work.save
-      @work.chapters.each do |c| 
-        c.pseuds = c.pseuds - current_user.pseuds
-        if c.pseuds.empty?
-          c.pseuds = @work.pseuds
+      pseuds_with_author_removed = @work.pseuds - current_user.pseuds
+      if pseuds_with_author_removed.empty? 
+        redirect_to :controller => 'orphans', :action => 'new', :work_id => @work.id    
+      else
+        @work.pseuds = pseuds_with_author_removed
+        @work.save
+        @work.chapters.each do |c| 
+          c.pseuds = c.pseuds - current_user.pseuds
+          if c.pseuds.empty?
+            c.pseuds = @work.pseuds
+          end
+          c.save
         end
-        c.save
+        flash[:notice] = "You have been removed as an author from the work".t
+        redirect_to current_user
       end
-      flash[:notice] = "You have been removed as an author from the work".t
-      redirect_to current_user
     end
   end
   

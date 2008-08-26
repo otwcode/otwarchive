@@ -10,7 +10,7 @@
     <%= link_to h(chapter.position), [:edit, @work, chapter] %> | 
   <% end %>   
   <%= link_to "Manage chapters".t, manage_work_chapters_path(@work) %> | 
-  <% if @work.pseuds.size > 1 %>
+  <% unless (@work.pseuds - current_user.pseuds).empty? %>
      <%= link_to "Remove me as author".t, { :action => "edit", :remove => "me"}, :confirm => 'This will remove you from all chapters as well. Are you sure?'.t %> | 
   <% end %>
   <%= link_to "Orphan work".t, {:controller => 'orphans', :action => 'new', :work_id => @work.id} %> |
