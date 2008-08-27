@@ -5,7 +5,7 @@ module BookmarksHelper
     if logged_in?
       if bookmarkable.class == Work
         fallback = new_work_bookmark_path(bookmarkable)
-        text = 'Bookmark'.t
+        text = 'Bookmark this story'.t
       elsif bookmarkable.class == ExternalWork
         fallback = bookmarks_path # more options if necessary
         text = 'Add a new bookmark'.t

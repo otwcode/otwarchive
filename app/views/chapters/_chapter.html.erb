@@ -2,14 +2,14 @@
 
   <div class="chapter-title">	
   <strong><%= chapter_link(chapter) %></strong>
-  <% if chapter.title -%>: <%=h chapter.title %><% end -%>
+  <%- unless chapter.title.blank? -%>: <%=h chapter.title %><%- end -%>
 
   <!-- chapter management -->  
   <%- if is_author_of?(@work) -%>
    <span class="chapter-control">
    (<% unless chapter.posted? -%>
     <%= link_to 'post'.t, [:post, @work, chapter], :method => :post -%> |
-    <% end -%>
+    <%- end -%>
     <%= link_to 'edit'.t, [:edit, @work, chapter] -%> 
     <%- if @work.chapters.count > 1 -%>
       | <%= link_to 'delete'.t, [@work, chapter], :confirm => 'Are you sure?'.t, :method => :delete %> )
@@ -18,9 +18,9 @@
   <%- end -%>
 
   <!-- only display byline if different from the main byline -->
-  <% if chapter.pseuds != @work.pseuds -%>
+  <%- if chapter.pseuds != @work.pseuds -%>
   	<br /><%=h 'Chapter by'.t %> <%= byline(chapter) -%>
-  <% end -%>
+  <%- end -%>
   </div>
   
   <!-- we want to hide this information by default if javascript is available -->
@@ -29,16 +29,15 @@
 	the chapters -->
 	<%- if chapter == @work.first_chapter -%>
 		<%- unless (hide_work_info ||= false) -%>
-	    <% if @work.summary -%><br /><%=sanitize @work.summary,  :tags => %w(em i b strong strike small a href) -%><% end -%>
-      <% if @work.notes -%><br /><%=sanitize_format @work.notes -%><% end -%>
-			<% if @work.is_wip -%><br /><p><%= wip_message(@work) %></p><% end -%>
+	    <%- unless @work.summary.blank? -%><br /><%=sanitize @work.summary,  :tags => %w(em i b strong strike small a href) -%><%- end -%>
+      <%- unless @work.notes.blank? -%><br /><%=sanitize_format @work.notes -%><%- end -%>
+			<%- if @work.is_wip -%><br /><p><%= wip_message(@work) %></p><%- end -%>
 		<%- end -%>
 	<%- else -%>
-    <% if chapter.summary -%><br /><%=sanitize chapter.summary,  :tags => %w(em i b strong strike small a href) -%><% end -%>
-    <% if chapter.notes -%><br /><%=sanitize_format chapter.notes -%><% end -%>
-	<% end %>
+    <%- unless chapter.summary.blank? -%><br /><%=sanitize chapter.summary,  :tags => %w(em i b strong strike small a href) -%><%- end -%>
+    <%- unless chapter.notes.blank? -%><br /><%=sanitize_format chapter.notes -%><%- end -%>
+	<%- end -%>
 	
-  <br />
   <p>
     <%=sanitize_format chapter.content %>
   </p>

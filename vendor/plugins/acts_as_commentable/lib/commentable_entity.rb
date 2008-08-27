@@ -27,6 +27,11 @@ module CommentableEntity
     direct_comments = self.comments
     grandchildren = direct_comments.collect { |comment| comment.children_count }
     direct_comments.empty? ? 0 : direct_comments.length + grandchildren.sum
+  end
+  
+  # returns number of visible (not deleted, not hidden) comments
+  def count_visible_comments
+    self.find_all_comments.select {|c| !c.hidden_by_admin and !c.is_deleted }.length
   end  
    
 end

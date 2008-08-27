@@ -2,9 +2,21 @@
 
   <%= render :partial => 'meta' %>
   
-  <%- unless @work.series.blank? -%>
-  <%= show_series_data(@work) %>
-  <%- end -%> 
+  <div id="series-and-view-data">
+    <%- unless @work.series.blank? -%>
+      <span id="work-series-data">
+      <%= show_series_data(@work) %>
+      </span>
+    <%- end -%> 
+    
+    <span id="chapter-view-option">
+      <%- if @chapters.length == 1 -%>
+      <%= view_all_chapters_link(@work, @chapters.first) %>
+      <%- else -%>
+      <%= view_first_chapter_link(@work) %>
+      <%- end -%>
+    </span>
+  </div>
 
   <h2 class="story-title">
     <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)".t) %><% end %>
@@ -28,11 +40,6 @@
     <%= wip_message(@work) %>
   </p>
   <% end -%>
-
-  <!--Toggle between single-chapter view / view entire work -->
-	<div id="single_all_chaps">
-    <%= render :partial => 'link_single_chap' %>
-  </div>
   
 	<!--Chapters go here -->
   <div id="chapters">

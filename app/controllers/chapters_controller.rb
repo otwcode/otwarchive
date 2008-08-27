@@ -73,9 +73,15 @@ class ChaptersController < ApplicationController
   
   # GET /work/:work_id/chapters
   # GET /work/:work_id/chapters.xml
-  def index 
+  def index
+    @old_chapter = params[:old_chapter] ? @work.chapters.find(params[:old_chapter]) : @work.first_chapter 
     @chapters = @work.chapters.find(:all, :conditions => {:posted => true}, :order => "position")
+    @commentable = @work
     @comments = @work.find_all_comments
+    respond_to do |format|
+      format.html { render :controller => :works, :action => :show }
+      format.js
+    end
   end
   
   # GET /work/:work_id/chapters/manage
@@ -87,6 +93,8 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/1.xml
   def show
     @chapter = @work.chapters.find(params[:id])
+    @chapters = [@chapter]
+    @commentable = @work
     if !@work.visible(current_user)
       render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 and return
     elsif @work.adult? && !see_adult?
@@ -99,6 +107,10 @@ class ChaptersController < ApplicationController
       end
     end
     @comments = @chapter.find_all_comments
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
   
   # GET /work/:work_id/chapters/new

@@ -126,8 +126,14 @@ class WorksController < ApplicationController
       else
         render :action => "adult" and return
       end
-    end 
-    @comments = @work.find_all_comments
+    end
+    if params[:view] == "all"
+      @commentable = @work
+    else
+      @chapters = [@work.first_chapter] 
+      @commentable = @work.first_chapter
+    end
+    @comments = @commentable.find_all_comments
   end
   
   # GET /works/new
@@ -210,8 +216,8 @@ class WorksController < ApplicationController
         end
         redirect_to(@work)
       else
-        flash[:notice] = 'Something went wrong.'.t
-        render :partial => 'work_form', :layout => 'application' 
+        @work.errors.add(:base, "Please double-check the length of your story: it cannot be blank and must be less than 16MB in size.".t) unless @chapter.valid?
+        render :action => :edit 
       end
     end 
   end
@@ -242,27 +248,6 @@ class WorksController < ApplicationController
     @work = Work.find(params[:id])
     @work.destroy
     redirect_to(works_url)
-  end
-  
-  # Shows single-chapter view on work page
-  def singlechapter
-    @work = Work.find(params[:id])
-    @chapter = @work.first_chapter
-    @commentable = @work.first_chapter
-    @comments = @chapter.find_all_comments
-    respond_to do |format|
-      format.js
-    end
-  end
-  
-  # Toggles back to showing all chapters
-  def allchapters
-    @work = Work.find(params[:id])
-    @chapters = @work.chapters.in_order
-    @comments = @work.find_all_comments
-    respond_to do |format|
-      format.js
-    end
   end
   
   protected

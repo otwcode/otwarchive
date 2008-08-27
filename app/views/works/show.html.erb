@@ -20,15 +20,27 @@
 <%= render :partial => 'work' -%>
 <!-- END work -->
 
+<div id="bookmark-and-comment-links">
 <!-- BEGIN bookmark link -->
-<%= bookmark_link(@work) %>
-<div id="dynamic-bookmark" style="display:none"></div> 
+  <span id="bookmark-link"><%= bookmark_link(@work) %></span>
 <!-- END bookmark link -->
 
+<!-- BEGIN comment links -->
+  <span id="comment-links">
+    <ul class="inline-link-list">
+      <li class="first-link"><span id="add_comment_link"><%= create_add_comment_link(@commentable) %></span></li>              
+      <%- unless @comments.blank? -%>
+        <li> <span id="comments_link_<%= @commentable.class.to_s.downcase %>_<%= @commentable.id %>"><%= render :partial => 'comments/show_link', :locals => {:commentable => @commentable} %></span></li>
+      <%- end -%> 
+    </ul>
+  </span>
+<!-- END comment links -->
+</div>
+
+<div id="dynamic-bookmark" style="display:none"></div> 
+
 <!-- BEGIN comment section -->
-<% unless @work.chapters.size > 1 %>
-  <%= render :partial => 'comments/commentable', :locals => {:commentable => @work.last_chapter, :is_work => true} %>
-<% end %>
+<%= render :partial => 'comments/commentable', :locals => {:commentable => @commentable} %>
 <!-- END comment section -->
 
 <%- if logged_in_as_admin? -%>

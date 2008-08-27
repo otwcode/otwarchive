@@ -1,0 +1,9 @@
+page.replace_html "chapter-view-option", view_all_chapters_link(@work, @chapter)
+page.replace_html "chapters", :partial => 'chapters/chapters'
+
+page.replace_html "add_comment_link", create_add_comment_link(@chapter)
+page.replace "comments_link_work_#{@chapter.work.id}", "<span id='comments_link_chapter_#{@chapter.id}'></span>"
+page.replace "comments_display_work_#{@chapter.work.id}", :partial => 'comments/commentable', :locals => {:commentable => @chapter}
+
+page.replace_html "comments_link_chapter_#{@chapter.id}", show_hide_comments_link(@chapter, is_work = false)
+page.toggle("comments_display_chapter_#{@chapter.id}")

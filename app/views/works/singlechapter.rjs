@@ -1,5 +1,0 @@
-page.replace_html(:single_all_chaps, :partial => 'link_all_chaps')
-page.replace_html(:chapters, :partial => 'chapters/chapter', :locals => {:hide_work_info => true})
-page.insert_html :bottom, 'chapters', :partial => 'comments/commentable', :object => @commentable
-page.replace_html("comments_link_chapter_#{@work.first_chapter.id}", show_hide_comments_link(@chapter, (is_work ||= false)))
-page.toggle("comments_display_chapter_#{@work.last_chapter.id}")

@@ -1,2 +1,0 @@
-page.replace_html "comments_link_#{@commentable.class.to_s.downcase}_#{@commentable.id}", :partial => 'comments/show_link'
-page.replace_html "comments_#{@commentable.class.to_s.downcase}_#{@commentable.id}", :partial => 'comments/comment_view'

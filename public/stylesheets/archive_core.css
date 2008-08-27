@@ -299,7 +299,43 @@ hr {
 	padding: 50px;
 }
 
-#coauthormanage { margin: 0px 0px 0px 0px; }
+#coauthormanage { margin: 0px 0px 0px 0px; } 
+
+.story-title {
+	clear: both;
+} 
+
+#series-and-view-data {
+	font-size: 90%;
+	width: 100%;
+	clear: both;
+}
+
+#work-series-data {
+	float: left;
+}
+
+#chapter-view-option {
+	float: right;
+}
+
+#bookmark-and-comment-links {
+	font-size: 90%;
+	width: 100%;
+	clear: both;
+}
+
+#bookmark-link {
+	float: left;
+}
+
+#comment-links {
+	float: right;
+}
+
+.inline-link-list li {
+	display: inline;
+}
 
 
 /* Debug Style (development only) */ 
@@ -392,18 +428,17 @@ a.story-title {
 	float: right;
 }    
 
-#comments-display {
-	margin-right: auto;
-	margin-left: auto;
-	width: 90%;
-	font-size: 110%;
-	font-family: Georgia, serif;	
+.comments_display {
+	margin-top: 5em;
+	clear: both;
 }
 
 /* Comment styles! To add zebra striping, use .oddcomment or .evencomment */    
 
 .comment {
-	margin-left: 50px;
+	padding-left: 50px;
+	border-top: 1px solid black;
+	clear: both;
 }
 
 

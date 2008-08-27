@@ -33,17 +33,25 @@ class CommentsController < ApplicationController
     elsif params[:chapter_id]
       @commentable = Chapter.find(params[:chapter_id])
     elsif params[:work_id]
-      @commentable = Work.find(params[:work_id]).last_chapter
+      @commentable_object = Work.find(params[:work_id])
+      @commentable = @commentable_object.last_chapter
     elsif params[:user_id]
       @commentable = User.find_by_login(params[:user_id])
     elsif params[:pseud_id]
       @commentable = Pseud.find(params[:pseud_id])
-    end    
+    end
+    @commentable_object ||= @commentable    
   end
   
   # GET /comments
-  def index 
+  def index
+    @commentable = @commentable_object 
     @comments = @commentable.nil? ? Comment.find(:all) : @commentable.find_all_comments
+    @show_comments = true
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
   
   # GET /comments/1
@@ -88,12 +96,16 @@ class CommentsController < ApplicationController
     else
       @comment = Comment.new(params[:comment])
       @comment.update_attribute(:user_agent,request.env['HTTP_USER_AGENT'])
+      if @comment.commentable.kind_of?(Work)
+        @comment.commentable = @comment.commentable.last_chapter
+      end
       
       if @comment.set_and_save
+        @commentable = @commentable_object
         if @comment.approved?
           flash[:notice] = 'Comment was successfully created.'.t
           parent = @comment.ultimate_parent
-          @comments = @comment.commentable.find_all_comments
+          @comments = @commentable.find_all_comments
           respond_to do |format|
               format.html { redirect_to :controller => parent.class.to_s.pluralize, :action => 'show', :id => parent.id, :anchor => "comment#{@comment.id}" }
               format.js
@@ -114,6 +126,7 @@ class CommentsController < ApplicationController
     @comment = Comment.find(params[:id])
     
     if @comment.update_attributes(params[:comment])
+      @commentable = @commentable_object
       flash[:notice] = 'Comment was successfully updated.'.t
       parent = @comment.ultimate_parent
       respond_to do |format|
@@ -130,7 +143,8 @@ class CommentsController < ApplicationController
   def destroy
     @comment = Comment.find(params[:id])
     @comment.destroy_or_mark_deleted
-    redirect_to(@comment.commentable)
+    @commentable = @commentable_object
+    redirect_to(@commentable)
   end
   
 
@@ -146,24 +160,5 @@ class CommentsController < ApplicationController
    # Needs better redirect
    redirect_to(@comment.ultimate_parent)
   end
-
- # Shows comments for JS users if they click the 'show comments' link
-  def showcomments
-   # if comments are on a work
-   if params[:work_id]
-     @work = Work.find(params[:work_id])
-     @comments = @work.find_all_comments
-     respond_to do |format|
-       format.js
-     end
-   # if comments are on a chapter  
-   elsif params[:chapter_id]
-     @chapter = Chapter.find(params[:chapter_id])
-     @comments = @chapter.find_all_comments
-     respond_to do |format|
-       format.js
-     end
-   end
-  end  
   
 end

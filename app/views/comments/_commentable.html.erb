@@ -1,17 +1,5 @@
 <!-- BEGIN comments -->
-<%- div_for(commentable, :comments_display) do -%>
-  <p>
-    <%- content_tag_for(:span, commentable, :comments_link) do -%>
-     <%- unless @comments.empty? -%>
-       <%= show_hide_comments_link(commentable, (is_work ||= false)) %>
-     <%- end -%>
-    <%- end -%>
-    <% unless @comments.empty? -%>
-      |
-    <% end %>
-    <%= create_add_comment_link(commentable) %>
-  </p>
-
+<%- div_for(commentable, :comments_display, :class => 'comments_display') do -%>
 	<%- div_for(commentable, :add_comment, :style => "display : none;") do -%>   
     <%= render :partial => @comment = Comment.new, :locals => {:commentable => commentable, :button_name => 'Create'.t}%> 
   <%- end -%> 

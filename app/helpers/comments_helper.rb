@@ -26,7 +26,7 @@ module CommentsHelper
   # return html link to add new comment
   def create_add_comment_link(commentable)
     href = eval("new_#{commentable.class.to_s.downcase}_comment_path(commentable)")
-    link_to_function "Leave feedback".t, "Element.toggle('add_comment_#{commentable.class.to_s.downcase}_#{commentable.id}')", :href => href  
+    link_to_function "Leave feedback".t, "Element.toggle('add_comment_#{commentable.class.to_s.downcase}_#{commentable.id}')" #, :href => href  
   end
   
   # return link to show or hide comments
@@ -35,10 +35,10 @@ module CommentsHelper
       commentable = @work
     end
     commentable_id = eval(":#{commentable.class.to_s.downcase}_id")
-    if params[:show_comments]
-      link_to "Hide comments".t, :controller => commentable.class.to_s.pluralize, :action => :show, :id => commentable.id
+    if params[:show_comments] || (@show_comments ||= false)
+      link_to "Hide Feedback".t, :controller => commentable.class.to_s.pluralize, :action => :show, :id => commentable.id
     else
-      link_to_remote("Read feedback (#{commentable.count_visible_comments})".t, {:url =>{ :controller => :comments, :action => :showcomments, commentable_id => (commentable.id)}}, :href => url_for(:controller => commentable.class.to_s.pluralize, :action => 'show', :id => commentable.id, :show_comments => true))
+      link_to_remote("Read feedback (#{commentable.count_visible_comments})".t, {:url =>{ :controller => :comments, :action => :index, commentable_id => (commentable.id)}, :method => :get}, :href => url_for(:controller => commentable.class.to_s.pluralize, :action => 'show', :id => commentable.id, :show_comments => true))
     end   
   end
   

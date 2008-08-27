@@ -40,13 +40,13 @@ class BookmarksController < ApplicationController
   # GET    /:locale/external_works/:external_work_id/bookmarks
   def index
     if @user 
-      @bookmarks = is_admin? ? @user.bookmarks.find(:all, :order => "created_at DESC").paginate(:page => params[:page]) : 
+      @bookmarks = is_admin? ? @user.bookmarks.find(:all, :conditions => {:private => false}, :order => "created_at DESC").paginate(:page => params[:page]) : 
                                @user.bookmarks.visible(current_user, :order => "created_at DESC").paginate(:page => params[:page]) 
     elsif @bookmarkable.nil? 
-      @bookmarks = is_admin? ? Bookmark.find(:all, :order => "created_at DESC").paginate(:page => params[:page]) : 
+      @bookmarks = is_admin? ? Bookmark.find(:all, :conditions => {:private => false}, :order => "created_at DESC").paginate(:page => params[:page]) : 
                                Bookmark.visible(current_user, :order => "created_at DESC").paginate(:page => params[:page]) 
     else 
-      @bookmarks = is_admin? ? @bookmarkable.bookmarks.find(:all, :order => "created_at DESC").paginate(:page => params[:page]) :
+      @bookmarks = is_admin? ? @bookmarkable.bookmarks.find(:all, :conditions => {:private => false}, :order => "created_at DESC").paginate(:page => params[:page]) :
                                @bookmarkable.bookmarks.visible(current_user, :order => "created_at DESC").paginate(:page => params[:page])
     end
     if @bookmarkable

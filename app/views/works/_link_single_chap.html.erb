@@ -1,5 +1,0 @@
-<%- if @work.multipart? -%>
-  <p>
-  <%= link_to_remote("Show single chapter".t, {:url =>{ :controller => :works, :action => :singlechapter, :id => (@work.id)}}, :href => url_for(:controller => :chapters, :action => 'show', :id => (@work.first_chapter.id)))%>
-  </p>  
-<%- end -%>

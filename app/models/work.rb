@@ -35,13 +35,6 @@ class Work < ActiveRecord::Base
   attr_accessor :ambiguous_pseuds
   attr_accessor :new_parent
   attr_accessor :new_tags
-   
-
-
-  # returns number of visible (not deleted, not hidden) comments on a work
-  def count_visible_comments
-    self.chapters.inject(0) {|sum,chapter| sum + chapter.count_visible_comments}
-  end
 
   before_save :validate_authors, :set_language
   before_save :set_word_count
@@ -77,9 +70,15 @@ class Work < ActiveRecord::Base
     end
   end
   
+  # Gets comments for all chapters in the work
   def find_all_comments
     self.chapters.collect { |c| c.find_all_comments }.flatten
   end
+  
+  # Returns number of visible (not deleted, not hidden) comments
+  def count_visible_comments
+    self.find_all_comments.select {|c| !c.hidden_by_admin and !c.is_deleted }.length
+  end 
 
   # rephrases the "chapters is invalid" message
   def after_validation
