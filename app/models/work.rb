@@ -36,6 +36,13 @@ class Work < ActiveRecord::Base
   attr_accessor :new_parent
   attr_accessor :new_tags
    
+
+
+  # returns number of visible (not deleted, not hidden) comments on a work
+  def count_visible_comments
+    self.chapters.inject(0) {|sum,chapter| sum + chapter.count_visible_comments}
+  end
+
   before_save :validate_authors, :set_language
   before_save :set_word_count
   before_save :post_first_chapter
