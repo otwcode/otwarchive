@@ -474,6 +474,12 @@ a.story-title {
 	border: 2px solid #af2020;
 }
 
+.fielderror {
+	font-size: 80%;
+	color: #990000;
+	margin: 0.1em 0 0.1em 0;
+}
+
 /* Rails will automatically add the errorExplanation and fieldWithErrors divs
  * after doing validation of models - just make sure you're using f.label 
  * or similar! */

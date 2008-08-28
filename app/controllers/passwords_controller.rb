@@ -1,5 +1,6 @@
 # Use for resetting lost passwords
 class PasswordsController < ApplicationController      
+  layout "session"
   
   def new
   end
@@ -16,7 +17,7 @@ class PasswordsController < ApplicationController
       flash[:notice] = 'Check your email for your new password.'.t
       redirect_to login_path 
     else
-      flash[:error] = "We couldn't find an account with that email address or username.".t
+      flash[:login] = "We couldn't find an account with that email address or username. Please try again?".t + "<br />"
       render :action => "new"
     end
   end    

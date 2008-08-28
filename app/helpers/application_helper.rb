@@ -51,6 +51,13 @@ module ApplicationHelper
       end
     }.join
   end
+
+  # Gets an error for a given field if it exists. 
+  def flash_field(fieldname)
+    if flash[fieldname]
+      content_tag(:span, flash[fieldname], :class => "fielderror")
+    end
+  end
   
   # Create a nicer language menu than the Click-To-Globalize default
   def languages_menu

@@ -5,11 +5,13 @@
 
 <%- form_tag passwords_path do -%>
   <p>
-	  <label><%=h 'Email address'.t %> <strong><%=h 'or'.t %></strong> <%=h 'user name:'.t %> </label> 
-	  <%= text_field_tag 'login' %>
-	  <%= submit_tag 'Reset password'.t %>
-	</p>
+  	<%= label_tag 'login', 'Email address'.t + ' <strong>' + 'or'.t + '</strong> ' + 'user name:', :class => 'authentication-label' -%>
+  	<br />
+	<%= flash_field(:login) -%>	
+  	<%= text_field_tag 'login', '', :class => 'authentication-textfield', :tabindex => '1' -%> 
+  	<br />
+    <%= submit_tag 'Reset password'.t %>
+  	<br /><br />
+  </p>
 
 <%- end -%>
-
-<p><%=h "If you no longer have access to the email address you used, please contact us directly.".t %></p>  
