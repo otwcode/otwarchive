@@ -76,10 +76,14 @@ class ChaptersController < ApplicationController
   def index
     @old_chapter = params[:old_chapter] ? @work.chapters.find(params[:old_chapter]) : @work.first_chapter 
     @chapters = @work.chapters.find(:all, :conditions => {:posted => true}, :order => "position")
+    if @chapters.empty?
+      flash[:notice] = "That work has no posted chapters".t
+      redirect_to ('/') and return
+    end
     @commentable = @work
     @comments = @work.find_all_comments
     respond_to do |format|
-      format.html { render :controller => :works, :action => :show }
+      format.html { render :template => "works/show" }
       format.js
     end
   end

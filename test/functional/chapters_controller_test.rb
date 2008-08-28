@@ -57,16 +57,19 @@ class ChaptersControllerTest < ActionController::TestCase
   end
   # Test index  GET  /:locale/chapters  (named path: chapters)
   # Test index  GET  /:locale/works/:work_id/chapters  (named path: work_chapters)
-  def test_work_chapters_path
+  def test_work_chapters_path_fail
     chapter = new_chapter
     work = create_work(:chapters => [chapter])
     get :index, :locale => 'en', :work_id => work.id
+    assert_redirected_to '/'
+  end
+  def test_work_chapters_path
+    chapter = new_chapter
+    work = create_work(:chapters => [chapter])
+    work.update_attribute("posted", true)
+    get :index, :locale => 'en', :work_id => work.id
     assert_response :success
     assert_equal assigns(:work), work
-    assert_equal assigns(:chapters), []
-    chapter.posted = true
-    chapter.save
-    get :index, :locale => 'en', :work_id => work.id
     assert_equal assigns(:chapters), [chapter]
     new_chapter = create_chapter(:work => work, :posted=> true, :authors => work.pseuds)
     get :index, :locale => 'en', :work_id => work.id

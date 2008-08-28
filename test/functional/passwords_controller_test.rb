@@ -20,7 +20,7 @@ class PasswordsControllerTest < ActionController::TestCase
   end
   def test_create_password_reset_fail
     post :create, :locale => 'en', :login => "no such user"
-    assert flash.has_key?(:error)
+    assert flash.has_key?(:login)
     assert_template "new"
     assert_response :success
   end

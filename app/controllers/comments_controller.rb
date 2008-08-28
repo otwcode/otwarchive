@@ -142,8 +142,8 @@ class CommentsController < ApplicationController
   # DELETE /comments/1.xml
   def destroy
     @comment = Comment.find(params[:id])
+    @commentable = @commentable_object || @comment.ultimate_parent
     @comment.destroy_or_mark_deleted
-    @commentable = @commentable_object
     redirect_to(@commentable)
   end
   
