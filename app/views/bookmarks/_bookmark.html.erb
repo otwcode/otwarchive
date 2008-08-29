@@ -1,41 +1,52 @@
 <!-- This partial requires local variable 'bookmark' -->
-<div class="bookmark">
-
-  <p>
-    <% if bookmark.private %><%= image_tag("lockblack.png", :size => "15x15", :alt => "(Private)".t) %><% end %>
+<dl class="bookmark">
+  <dt>
     <% if bookmark.bookmarkable_type == "ExternalWork" %>
-      <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable.url %> <%=h 'by'.t %> <%= bookmark.bookmarkable.author %>
+    <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable.url %>
+	<%=h 'by'.t %>
+	<%= bookmark.bookmarkable.author %>
     <% else %>
-      <% if bookmark.bookmarkable.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)".t) %><% end %>
-      <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable %> <%=h 'by'.t %> <%= byline(bookmark.bookmarkable) %>
-    <% end %>  
-
-    <br /><%=sanitize_format bookmark.bookmarkable.summary %>
-  </p>
-  
-  <p>
-    <%- unless bookmark.notes.blank? -%>
-      <%=h "User's notes:".t %> <br />
-      <%= bookmark.notes %> - <% if bookmark.user %><%= link_to bookmark.user.login, bookmark.user %><% end %>
-    <%- else -%>
-      <%=h "Bookmarked by:".t %> <%= link_to bookmark.user.login, bookmark.user %>
-    <%- end -%>
-  </p>
-
-  <p>
-    <%- unless bookmark.tag_string.blank? -%>
-      <%=h "User's tags:".t %> 
-      <% bookmark.tags.each do |tag| -%>
-        <%= link_to(tag.name, tag_path(tag))%>
-      <% end -%>
+    <% if bookmark.bookmarkable.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)".t) %><% end %>
+    <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable %>
+	<%=h 'by'.t %>
+	<%= byline(bookmark.bookmarkable) %>
     <% end %>
-  </p>
-  
-  <% if is_author_of?(bookmark) %>
-    <p>
-      <%= link_to "Edit".t, edit_bookmark_path(bookmark) %> | 
-      <%= link_to "Delete".t, bookmark, :confirm => 'Are you sure?'.t, :method => :delete %>  
-    </p>
+    <% if bookmark.private %><%= image_tag("lockblack.png", :size => "15x15", :alt => "(Private)".t) %><% end %>
+    <br/>
+    <%=sanitize_format bookmark.bookmarkable.summary %>
+  </dt>
+  <%- unless bookmark.notes.blank? -%>
+  <dd>
+    <% if is_author_of?(bookmark) %>
+    <%=h "Your notes:".t -%>
+    <% else -%>
+    <%=h "Bookmarker's notes:".t -%>
+    <% end -%>
+    <%= bookmark.notes %>
+    <% if !is_author_of?(bookmark) && bookmark.user %>- <%= link_to bookmark.user.login, bookmark.user %><% end -%>
+  </dd>
+  <%- else -%>
+  <% if !is_author_of?(bookmark) && bookmark.user -%>
+  <dd>
+    <%=h "Bookmarked by:".t %><%= link_to bookmark.user.login, bookmark.user %>
+  </dd>
+  <% end -%>
+  <%- end -%>
+  <%- unless bookmark.tag_string.blank? -%>
+  <dd>
+    <% if is_author_of?(bookmark) %>
+    <%=h "Your tags:".t -%>
+    <% else -%>
+    <%=h "Bookmarker's tags:".t %>
+	<% end -%>
+    <% bookmark.tags.each do |tag| -%>
+    <%= link_to(tag.name, tag_path(tag)) %>
+    <% end -%>
+  </dd>
   <% end %>
-  
-</div>
+  <% if is_author_of?(bookmark) %>
+  <dd>
+    <%= link_to "Edit".t, edit_bookmark_path(bookmark) %> | <%= link_to "Delete".t, bookmark, :confirm => 'Are you sure?'.t, :method => :delete %>
+  </dd>
+  <% end %>
+</dl>
