@@ -1,0 +1,34 @@
+#tabs ul {
+    position: relative;
+    clear: both;
+    border-left: 1px inset #600;
+    border-right: 1px inset #600;
+}
+
+#tabs li {
+    float: left;
+}
+
+#tabs a {
+    color: #900;
+    background: #fff;
+    font-weight: 400;
+    display: block;
+    float: left;
+    border-left: 1px inset #660000;
+    border-top: 1px inset #660000;
+}
+
+#tabs a:hover {
+    color: #000;
+    background: #ddd;
+    font-weight: 400;
+    display: block;
+    float: left;
+}
+
+#tabs a span {
+    float: left;
+    display: block;
+    padding: 0.4em;
+}

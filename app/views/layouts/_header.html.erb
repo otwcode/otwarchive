@@ -1,0 +1,64 @@
+<!-- BEGIN header -->
+<div id="header">
+  <h1>
+  	 <%= image_tag 'title_banner.gif' %>
+     <% unless ArchiveConfig.REVISION.blank? %>(rev. <%= ArchiveConfig.REVISION %>)<% end %>
+  </h1>
+  <div id="login-block">
+    <%- if logged_in? -%>
+    <ul id="greeting">
+      <li>
+        <%=h "Hi,".t -%><%= link_to current_user.login, user_path(current_user), :class => 'login' -%>!
+      </li>
+    </ul>
+    <ul id="login">
+      <li>
+        <%= link_to 'Post New'.t, new_work_path -%>|
+      </li>
+      <li>
+        <%= link_to h('Log out'.t), logout_path -%>
+      </li>
+    </ul>
+    <% elsif logged_in_as_admin? -%>
+    <ul id="greeting">
+      <li>
+        <span><%=h "Hello,".t -%></span>
+        <%= link_to current_admin.login, admin_path(current_admin), :class => 'login login-admin' -%>!
+      </li>
+      <li>
+        <%= link_to 'Log out'.t, admin_logout_path -%>
+      </li>
+    </ul>
+    <% else -%>
+    <ul id="greeting">
+      <li>
+        <%= link_to 'Log in'.t, login_path -%>
+      </li>
+    </ul>
+    <% end -%>
+    <%= render :partial => 'search/search_box' %>
+  </div>
+  <ul id="tabs">
+    <li>
+      <%= link_to_unless_current "<span>" + "home".t + "</span>", home_link %>
+    </li>
+    <li>
+      <%= link_to_unless_current "<span>" + "fandoms".t + "</span>", fandoms_path %>
+    </li>
+    <li>
+      <%= link_to_unless_current "<span>" + "people".t + "</span>", users_path %>
+    </li>
+    <li>
+      <%= link_to_unless_current "<span>" + "groups".t + "</span>", '#' %>
+    </li>
+    <li>
+      <%= link_to_unless_current "<span>" + "recs".t + "</span>", bookmarks_path %>
+    </li>
+    <li>
+      <%= link_to_unless_current "<span>" + "tags".t + "</span>", tags_path %>
+    </li>
+  </ul>
+  <hr class="clear" />
+</div>
+<!-- END header -->
+

@@ -1,6 +1,4 @@
-<div id="search">
-  <% form_tag search_path, :method => :get do -%>
+  <% form_tag search_path, :id => 'search', :method => :get do -%>
   <%= text_field_tag :query, params[:query], :class => 'text' %>
   <%= submit_tag 'Search', :class => 'button', :name => nil %>
   <% end -%>
-</div>

@@ -55,23 +55,9 @@ hr {
 #header {
 	padding: 1em;
 	border-bottom: 1px solid black;
-}
-
-#header h1 {
-	font-size: 160%;
-	color: red;
-}
-
-#header ul {
-	margin-left: 0em;
-	padding-left: 0em; 
-}
-
-#header li {
-	font-size: 140%;
+	background: #990000 no-repeat left top;
 	font-weight: bold;
-	display: inline;
-	list-style-type: none;
+	font-size: 140%;
 }
 
 #header a {
@@ -87,19 +73,27 @@ hr {
 	font-weight: bold;
 }
 
-#login-block {
-	text-align: right;
-	font-size: 80%;
-	float: right;
-}
-#login-block ul {
-	padding-left: 0px;
-	margin-left: 0px;
+#header ul {
+	padding-left: 0;
+	margin-left: 0;
 }
 
-#login-block li {
+#header li {
 	display: inline;
 	list-style-type: none;
+}
+
+#login-block {
+	position: absolute;
+	top: 3em;
+	right: 3em;
+	text-align: right;
+	font-size: 65%;
+}
+
+#search {
+	float: right;
+	font-size: 80%;
 }
 
 #main-navigation li {
@@ -113,6 +107,15 @@ hr {
 }
 .next-link {
   margin-left: 0.3em;
+}
+
+hr.clear {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	height: 0;
+	background-color: #990000;
+	clear: both;
 }
 
 #navi {
@@ -430,7 +433,7 @@ a.story-title {
 
 .comments_display {
 	margin-top: 5em;
-	clear: both;
+	: both;
 }
 
 /* Comment styles! To add zebra striping, use .oddcomment or .evencomment */    
@@ -438,7 +441,7 @@ a.story-title {
 .comment {
 	padding-left: 50px;
 	border-top: 1px solid black;
-	clear: both;
+	: both;
 }
 
 
@@ -599,7 +602,7 @@ textarea.story-edit-notes {
 /* INTERIM SPIFFING UP OF USER PAGE */
 
 .user-module {
-	clear: both;
+	: both;
 	border: 2px solid black;
 	padding: 1em;
 	margin-bottom: 1em;

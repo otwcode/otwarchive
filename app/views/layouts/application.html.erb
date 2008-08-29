@@ -10,6 +10,7 @@
         <%= controller.action_name %>
         </title>
         <%= stylesheet_link_tag 'archive_core', :media => 'screen' %>
+        <%= stylesheet_link_tag 'navigation_tabs', :media => 'screen' %>
         <%= stylesheet_link_tag 'authentication', :media => 'screen' %>
         <%= stylesheet_link_tag 'globalize', :media => 'screen' %>
         <%= stylesheet_link_tag 'live_validation', :media => 'screen' %>
@@ -26,50 +27,7 @@
 
   <body onload="hideFormFields(); initSelect('languages_menu')" >
   
-  <!-- BEGIN header -->
-    <div id="header">
-      <div id="login-block">
-        <%- if logged_in? -%>
-	      <ul>
-				  <li><span><%=h "Hi,".t -%></span> <%= link_to current_user.login, user_path(current_user), :class => 'login' -%>! </li>
-				  <%= translation_button %>	
-				</ul>	
-
-	      <ul>
-          <li class="first-link"><%= link_to 'Post New'.t, new_work_path -%></li>
-	        <li><%= link_to h('Log out'.t), logout_path -%></li>
-	      </ul>
-        
-        <% elsif logged_in_as_admin? -%>
-        <ul>
-          <li><span><%=h "Hello,".t -%></span> <%= link_to current_admin.login, admin_path(current_admin), :class => 'login login-admin' -%>!</li>
-          <li><%= link_to 'Log out'.t, admin_logout_path -%></li>
-        </ul>
-			  
-			  <% else -%>
-        <ul>
-          <li><%= link_to 'Log in'.t, login_path -%></li>
-        </ul>			
-			  <% end -%>
-				<%= render :partial => 'search/search_box' %>
-      </div>
-
-      <h1>
-        <%=h ArchiveConfig.APP_NAME .t %><%=h ": Extreme Alpha".t %>
-        <% unless ArchiveConfig.REVISION.blank? %>(rev. <%= ArchiveConfig.REVISION %>)<% end %>
-      </h1>
-      
-      <ul id="main-navigation">
-        <li><%= link_to_unless_current "home".t, home_link %></li>       
-        <li><%= link_to_unless_current "fandoms".t, fandoms_path %></li>
-        <li><%= link_to_unless_current "people".t, users_path %></li>
-        <li><%= link_to_unless_current "groups".t, '#' %></li>
-        <li><%= link_to_unless_current "recs".t, bookmarks_path %></li>
-        <li><%= link_to_unless_current "tags".t, tags_path %></li>
-      </ul>
-      
-    </div>
-  <!-- END header -->
+	<%= render :partial => 'layouts/header' %>
   
   <!-- BEGIN sidebar -->
   <%- if @user && !@user.new_record? -%> 
