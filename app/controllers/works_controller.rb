@@ -101,8 +101,8 @@ class WorksController < ApplicationController
   def index
     if params[:user_id]
       @user = User.find_by_login(params[:user_id])
-      @works = is_admin? ? @user.works.find(:all, :order => "works.created_at DESC").paginate(:page => params[:page]) : 
-                           @user.works.visible(current_user, :order => "works.created_at DESC").paginate(:page => params[:page])
+      @works = is_admin? ? @user.works.find(:all, :order => "works.created_at DESC").uniq.paginate(:page => params[:page]) : 
+                           @user.works.visible(current_user, :order => "works.created_at DESC").uniq.paginate(:page => params[:page])
     elsif params[:fandom_id]
       @tag = Tag.find(params[:fandom_id])
       @works = is_admin? ? @tag.works.find(:all, :order => "works.created_at DESC").paginate(:page => params[:page]) : 
