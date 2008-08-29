@@ -291,17 +291,24 @@ module ApplicationHelper
   def tag_wrangler_footer
     '<div><p>' + link_to('New tag'.t, new_tag_path) + ' | ' +link_to('Tag categories'.t, tag_categories_path)  + ' | ' +  link_to('New category'.t, new_tag_category_path) + ' | ' + link_to('Tag relationships'.t, tag_relationships_path) + ' | ' + link_to('New relationship'.t, new_tag_relationship_path) + '</p></div>'
   end
-  
-end
 
-## Allow use of tiny_mce WYSIWYG editor
-def use_tinymce
-  @content_for_tinymce = "" 
-  content_for :tinymce do
-    javascript_include_tag "tiny_mce/tiny_mce"
+  def sort_link(title, column, options = {})
+    condition = options[:unless] if options.has_key?(:unless)
+    sort_dir = params[:sort_direction] == 'ASC' ? 'DESC' : 'ASC'
+    link_to_unless condition, title, request.parameters.merge( {:sort_column => column, :sort_direction => sort_dir} )
   end
-  @content_for_tinymce_init = "" 
-  content_for :tinymce_init do
-    javascript_include_tag "mce_editor"
-  end
-end
+
+  ## Allow use of tiny_mce WYSIWYG editor
+  def use_tinymce
+    @content_for_tinymce = "" 
+    content_for :tinymce do
+      javascript_include_tag "tiny_mce/tiny_mce"
+    end
+    @content_for_tinymce_init = "" 
+    content_for :tinymce_init do
+      javascript_include_tag "mce_editor"
+    end
+  end  
+
+
+end # end of ApplicationHelper

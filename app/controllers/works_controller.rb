@@ -99,17 +99,28 @@ class WorksController < ApplicationController
    
   # GET /works
   def index
+    case params[:sort_column]
+      when "title" then
+        sort_order = "works.title " + (params[:sort_direction] == "DESC" ? "DESC" : "ASC")
+      when "word_count" then
+        sort_order = "works.word_count " + (params[:sort_direction] == "DESC" ? "DESC" : "ASC")
+      when "date" then
+        sort_order = "works.created_at " + (params[:sort_direction] == "DESC" ? "DESC" : "ASC")
+      else
+        sort_order = "works.created_at DESC" # default sort order
+    end
+    
     if params[:user_id]
       @user = User.find_by_login(params[:user_id])
-      @works = is_admin? ? @user.works.find(:all, :order => "works.created_at DESC").uniq.paginate(:page => params[:page]) : 
-                           @user.works.visible(current_user, :order => "works.created_at DESC").uniq.paginate(:page => params[:page])
+      @works = is_admin? ? @user.works.find(:all, :order => sort_order).paginate(:page => params[:page]) : 
+                           @user.works.visible(current_user, :order => sort_order).paginate(:page => params[:page])
     elsif params[:fandom_id]
       @tag = Tag.find(params[:fandom_id])
-      @works = is_admin? ? @tag.works.find(:all, :order => "works.created_at DESC").paginate(:page => params[:page]) : 
-                           @tag.works.visible(current_user, :order => "works.created_at DESC").paginate(:page => params[:page])
+      @works = is_admin? ? @tag.works.find(:all, :order => sort_order).paginate(:page => params[:page]) : 
+                           @tag.works.visible(current_user, :order => sort_order).paginate(:page => params[:page])
     else
-     @works = is_admin? ? Work.find(:all, :order => "works.created_at DESC").paginate(:page => params[:page]) : 
-                          Work.visible(current_user, :order => "works.created_at DESC").paginate(:page => params[:page])
+     @works = is_admin? ? Work.find(:all, :order => sort_order).paginate(:page => params[:page]) : 
+                          Work.visible(current_user, :order => sort_order).paginate(:page => params[:page])
     end
   end
   

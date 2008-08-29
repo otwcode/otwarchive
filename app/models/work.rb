@@ -48,7 +48,7 @@ class Work < ActiveRecord::Base
    
   def self.visible(current_user=:false, options = {})
     with_scope :find => options do
-      find(:all).collect {|w| w if w.visible(current_user)}.compact
+      find(:all).collect {|w| w if w.visible(current_user)}.compact.uniq
     end
   end
   

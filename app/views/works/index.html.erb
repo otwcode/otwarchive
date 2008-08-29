@@ -1,4 +1,12 @@
 <h2><%=h "View All Stories".t %></h2>
+
+<p>
+	Sort by: 
+	<%= sort_link 'Title', :title -%> |
+	<%= sort_link 'Date', :date -%> |
+	<%= sort_link 'Word Count', :word_count -%> 	
+</p>
+
 <ul class="story-list">
   <% for work in @works %>
 	<%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
