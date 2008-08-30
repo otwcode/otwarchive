@@ -13,7 +13,7 @@
     <% end %>
     <% if bookmark.private %><%= image_tag("lockblack.png", :size => "15x15", :alt => "(Private)".t) %><% end %>
     <br/>
-    <%=sanitize_format bookmark.bookmarkable.summary %>
+    <%=sanitize_limited bookmark.bookmarkable.summary %>
   </dt>
   <%- unless bookmark.notes.blank? -%>
   <dd>
