@@ -1,6 +1,6 @@
 <h1><%= "Log in as Admin" .t %></h1>
 
-<% form_tag(:controller => 'admin/session', :action => :create) do %>
+<% form_tag(:controller => 'admin/admin_session', :action => :create) do %>
 
   <p><label for="login"><%= "Admin ".t  + "user name" .t %></label><br/>
   <%= text_field_tag 'login' %></p>

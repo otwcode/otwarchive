@@ -1,4 +1,4 @@
-<%- form_for :user, user, :url => {:controller => "admin/users", :action => "update"} do |f| -%> 
+<%- form_for :user, user, :url => {:controller => "admin/admin_users", :action => "update"} do |f| -%> 
 <td><%=h user.login %><%= f.hidden_field :login %></td>
 <td><%= f.text_field :email %></td>
 <td><%= f.check_box :translator %> <%= f.label :translator, "Translator" %></td>
