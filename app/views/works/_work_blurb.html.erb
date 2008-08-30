@@ -19,7 +19,7 @@
 		<li class="story-tags">
 			<ul class="story-tags">
 			    <% work.tags.each do |tag| %>
-			    <li><%= link_to tag.name, tag_path(tag) %></li>
+			    <li class="story-tags"><%= link_to tag.name, tag_path(tag) %></li>
 		    	<% end %>			
 			</ul>
 		</li>
