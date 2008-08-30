@@ -9,12 +9,12 @@
 <% end -%>
 </table>
 <p><%=h 'Drag a tag by its handle'.t %> (<img src="/images/drag.png" alt="drag me">) <%=h 'and drop it onto another tag, in order to create a'.t %> <%= @tag_relationship.name%> <%=h 'relationship where the first tag'.t %> <%=@tag_relationship.verb_phrase%> <%=h 'the second tag.'.t %></p>
-<% if @tag_relationship.reciprocal? %><p><%=h 'Note: this relationship is reciprocal, but only the first relationship will show up in the table after dragging.".t %> <%=h "Both relationships will be created, however, and can be seen if you refresh the page. Also, deleting one relationship will also delete its reciprocal".t %></p><% end -%>
+<% if @tag_relationship.reciprocal? %><p><%=h "Note: this relationship is reciprocal, but only the first relationship will show up in the table after dragging.".t %> <%=h "Both relationships will be created, however, and can be seen if you refresh the page. Also, deleting one relationship will also delete its reciprocal".t %></p><% end -%>
 
 <% @categories.each do |category| -%>
   <p><b><%= category.display_name %> Tags:</b>
   <% category.tags.each do |tag| -%>
-    <%= render :partial => 'droppable', :locals => { :tag => tag }%>
+    <%= render :partial => 'droppable', :locals => { :tag => tag } %>
   <% end %>
   </p>
 <% end %>
