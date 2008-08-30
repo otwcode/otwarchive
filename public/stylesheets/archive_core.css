@@ -12,7 +12,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, blockquot
     list-style: none;
 }
 
-: focus {
+:focus {
     outline: 0;
 }
 /************************************************end of uneditable rules  */
@@ -728,4 +728,8 @@ cite em, em cite {
 
 div.story-title, .chapter-title {
         text-align: center;
+}
+
+td th {
+	padding-right: 3em;
 }
