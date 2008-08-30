@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080803125332) do
+ActiveRecord::Schema.define(:version => 20080805021608) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -193,6 +193,7 @@ ActiveRecord::Schema.define(:version => 20080803125332) do
     t.boolean  "date_of_birth_visible",               :default => false
     t.boolean  "edit_emails_off"
     t.boolean  "comment_emails_off"
+    t.boolean  "adult",                               :default => false
   end
 
   create_table "profiles", :force => true do |t|
@@ -298,13 +299,14 @@ ActiveRecord::Schema.define(:version => 20080803125332) do
   add_index "taggings", ["tag_id", "taggable_id", "taggable_type"], :name => "index_taggings_on_tag_id_and_taggable_id_and_taggable_type", :unique => true
 
   create_table "tags", :force => true do |t|
-    t.string   "name",                                         :null => false
+    t.string   "name",                                             :null => false
     t.boolean  "canonical"
     t.boolean  "banned"
     t.integer  "tag_category_id", :limit => 11
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "taggings_count",  :limit => 11, :default => 0
+    t.boolean  "adult",                         :default => false
   end
 
   add_index "tags", ["name"], :name => "index_tags_on_name", :unique => true
@@ -340,6 +342,7 @@ ActiveRecord::Schema.define(:version => 20080803125332) do
     t.text     "notes"
     t.integer  "word_count",                  :limit => 11
     t.boolean  "hidden_by_admin"
+    t.boolean  "adult",                                     :default => false
   end
 
 end
