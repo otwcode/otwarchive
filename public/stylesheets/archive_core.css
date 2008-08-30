@@ -1,616 +1,232 @@
-/* REDEFINED HTML */
-body {
-	color: #111111;
-	background-color: white;
-	padding: 0px;
-	margin: 0px;
-	font: 0.8725em Verdana, Tahoma, Arial, sans-serif;
-	line-height: 1.2;
-}
+/*MEYERS RESET.***********************************************do not edit */
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{border:0;outline:0;font-weight:inherit;font-style:inherit;font-size:100%;font-family:inherit;vertical-align:baseline;margin:0;padding:0;list-style:none;}
+:focus{outline:0;}
+/************************************************end of uneditable rules  */
 
-html {
-	padding: 0px;
-	margin: 0px;
-}
+body{color:#111;background:#fff;font:0.8725em Corbel,Calibri,Candara, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif;line-height:1.5;}
 
-a {
-	color: #111111;
-	text-decoration: underline;
-	font-family: Verdana, Tahoma, Arial, sans-serif;
-}
-a:hover {
-	color: #999999;
-}
+a,a:link{color:#111;}
+a:hover{color:#999;}
+a:visited{color:#777;}
+a img{border:0;}
 
-a img {
-  border: 0px;
-}
-h1 {
-	font-style: normal;
-	font-weight: normal;
-	font: 200% "Gill Sans", Georgia, Verdana, sans-serif;
-}
-h2, h3, h4, h5, h6 {
-	font-family: "Gill Sans", Georgia, Verdana, sans-serif;
-	font-weight: normal;
-}
-h2 {
-	font-size: 180%;
-}
-h3 {
-	font-size: 150%;
-}
-h4 {
-	font-size: 120%;
-}
+h1{font:100 200% Cambria, Constantia, Palatino, Georgia, serif;}
+h2,h3,h4,h5,h6{font-family:Cambria, Constantia, Palatino, Georgia, sans-serif;font-weight:400;}
+h2{font-size:180%;}
+h3{font-size:150%;}
+h4{font-size:120%;}
 
-hr {
-	height: 1em;
-	background: #ddd;
-	color: #333;
-}
+hr{height:1em;background:#ddd;color:#333;}
+hr.clear{clear:both;height:0;border:0;}
 
+pre,kbd,tt,code{font:normal 99% consolas, courier, monospace;margin:auto;padding:0.25em;}
+strong,bold{font-weight:600;}
+em,cite,i{font-variant:oblique;}
 
-/* LAYOUT ELEMENTS */
-#header {
-	padding: 1em;
-	border-bottom: 1px solid black;
-	background: #990000 no-repeat left top;
-	font-weight: bold;
-	font-size: 140%;
-}
+table{border-collapse:separate;border-spacing:0;}
+caption,th,td{text-align:left;font-weight:400;}
+blockquote:before,blockquote:after,q:before,q:after{content:"";}
+blockquote,q{quotes:"" "";}
 
-#header a {
-	font-weight: normal;
-	text-decoration: none;
-}
+/* LAYOUT ELEMENTS   MASTHEAD BLOCK  */
 
-#header a:active {
-	font-weight: bold;
-}
+#header{background:#900 url(../images/title.png) top left no-repeat; border-bottom: 6px solid #111; font-weight:600;font-size:140%;position:relative;padding:1em 1em 0}
+#header h1{display:none;}
+#header a{font-weight:600;text-decoration:none;}
+#header li{display:inline;list-style-type:none;}
 
-#header a:hover {
-	font-weight: bold;
-}
+#login-block{float:right;text-align:right;font-size:75%;clear:both;}
+#login-block ul {padding-right:0.25em}
+#greeting li{font-weight:100; padding-left:0.25em}
+#search{float:right;clear:both;font-size:80%;}
 
-#header ul {
-	padding-left: 0;
-	margin-left: 0;
-}
+/*TABS /MAIN NAVIGATION*/
 
-#header li {
-	display: inline;
-	list-style-type: none;
-}
+ul#main-navigation {position:relative;clear:both;border-left:1px solid #111;}
+#main-navigation li {background:#fff;display:block;float:left;}
 
-#login-block {
-	position: absolute;
-	top: 3em;
-	right: 3em;
-	text-align: right;
-	font-size: 65%;
-}
+#main-navigation a:link {color:#900;font-weight:400}
+#main-navigation a:hover,#main-navigation a:active {color:#111;font-weight:100}
 
-#search {
-	float: right;
-	font-size: 80%;
-}
+#main-navigation a span:hover {background:#ddd;}
+#main-navigation span {font-weight:100;background:#111;float:left;display:block;padding:0.4em; color:#fff; border:1px solid #111; border-bottom:0}
+#main-navigation a span {background:#fff; border:1px solid #111; border-bottom:0; color:#111}
 
-#main-navigation li {
-	display:inline;
-	list-style-type: none;
-	padding-right: 5%;
-}
+/* END HEADER  */
 
-.first-link:after {
-  content: ' | ';
-}
-.next-link {
-  margin-left: 0.3em;
-}
+/*A MYSTERY*/
 
-hr.clear {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	height: 0;
-	background-color: #990000;
-	clear: both;
-}
-
-#navi {
-	padding-right: 1em;
-	margin-right: 0px;
-	padding-left: 1em;
-	margin-left: 0px;
-	font-family: "Gill Sans", Georgia, Verdana, sans-serif;
-	border-width: 100%;
-}
-#navi li {
-	list-style-type: none;
-}
-
-#dashboard-sidebar {
-	float: left;
-	width: 15%;
-	border: 2px solid black;
-	margin: 1.5em 0em 1.5em 1.5em;
-	line-height: 2em;	
-}
-
-#dashboard-sidebar ul {
- 	list-style-type: none;
-    margin: 0;
-	padding: 0;
-	text-indent: .5em;
-}
-
-#dashboard-sidebar a {
-	display: block;
-	width: 100%;
-	height: 2em;
-	line-height: 2em;
-	text-decoration: none;
-}
-#dashboard-sidebar a:hover {
-	background-color: red;
-	color: white;
-}
-
-#user-icon {
-	float:left;
-	padding-right: 2em;
-	margin-top: .2em;
-}
+#work_navigation{padding:0 1em;margin:auto 0;font-family:"Gill Sans", Georgia, Verdana, sans-serif;border-width:100%;}
 
 
-#main {
-	float: left;
-	width: 70%;
-	margin-left: 2em;
-}
+/*DASHBOARD STUFF */
 
-#footer {
-	color: #999999;
-	font-size: 90%;
-	padding: 1em;
-	text-align: center;
-	border-top-color: #999999;
-	border-top-style: solid;
-	border-top-width: 1px;
-	clear: both;
-}
-#footer a:link {
-	border-bottom-color: #111111;
-	border-bottom-width: 1px;
-	border-bottom-style: dotted;
-	color: #999999;
-}
-.clearboth {
-	clear: both;
-}
-.login {
-	font-weight: bold;
-}
-.login-admin:after {
-  content: url( '/images/admin.gif' );
-}   
-  
+#dashboard-sidebar{float:left;width:10em;border:2px inset #000;line-height:2em;margin:1.5em;}
+#dashboard-sidebar ul{text-indent:.5em;}
+#dashboard-sidebar li {whitespace:no-wrap;}
+#dashboard-sidebar a{display:block;width:100%;height:2em;line-height:2;text-decoration:none; whitespace:pre;}
+#dashboard-sidebar a:hover{background:#900;color:#FFF;}
+#user-icon{float:left;padding-right:2em;margin-top:.2em;}
 
-/* Post and Preview Story styles */
-.field-left { float: left;
-	width: 350px;
-	margin: 0px;
-}
-.field-right { float: right;
-	width: 350px;
-	margin: 0px;
-}  
+/*MAIN CONTENT BLOCK*/
+#main {margin:auto; padding:1em 3.5em; background:url(../images/headergradient.png) top left repeat-x; border-top:1px solid #666}
+#main h1 {text-align:right;border-bottom:1px dotted #777;}
 
-.clearbothdrop { clear: both;
-	margin-bottom: 30px;
-}
+/*PAGE BY PAGE STYLING: HOME HOME SUBPAGES FANDOMS PEOPLE GROUPS RECS TAGS*/
 
-.textareafield { margin-bottom: 20px; }
+/* USERS-SHOW */
 
-.leftmargin { margin-left: 50px; }
+#user-page{width:65%; float:left; position:relative; padding:0; margin:0.25em 1.5em 1em}
+#main.users-show ul.story-list {margin:auto;}
 
-.nomargin { margin: 0px; }
+.user-module h2 { clear:both; background:#111; color:#fff; border-bottom:4px double #fff; padding:0.15em; margin:1em auto}
 
-.required { color: #ff0000; }
+/* WORKS-INDEX */
 
-#story-form label { margin: 10px 0px 0px 0px; }
-	
-.storyinputfield { 
-	width: 300px;
-	text-align: left;
-	margin: 0px 0px 15px 0px;
-}
+/*FANDOMS-INDEX */
 
-#story-form textarea {
-	width: 600px;
-}
+.fandoms-index ul {margin:1em auto}
+.fandoms-index li {line-height: 2;}
+.fandoms-index a  {text-decoration:none; border-bottom:1px dotted;}
+.fandoms-index a:visited {text-decoration:strike;}
 
-#story-meta {
-	background-repeat: no-repeat;
-	background-image: url(../images/story-meta.nw.gif);
-	margin-top: 1em;
-	background-color: #e6e6e6;
-	font-size: 80%;
-}
-#story-meta .north-east {
-	float: right;
-	width: 5px;
-	height: 5px;
-	background-image: url(../images/story-meta.ne.gif);
-}
-#story-meta .south-east {
-  float: right;
-	width: 5px;
-	height: 5px;
-	background-image: url(../images/story-meta.se.gif);
-}
-#story-meta .south-west {
-	width: 5px;
-	height: 5px;
-	background-image: url(../images/story-meta.sw.gif);
-}
+#footer{color:#999;font-size:90%;text-align:center;border-top:1px solid #999;clear:both;padding:1em;}
+#footer a:link{border-bottom:1px dotted;}
+
+/*BOOKMARKS-INDEX*/
 
 
-#story-meta ul {
-	margin-left: 0px;
-	padding: 1em;
-}
+/*BOOKMARKS*/
 
-#story-meta li {
-	list-style-type: none;
-}
-
-.metadata-field {
-	height: 100px;
-}
-
-.number-field {
-	width: 50px;
-}
-
-.storytextfield { margin: 10px 0px 10px 0px; }
-
-.moreinfoicon { 
-	margin: 0px 0px 10px 25px;
-	vertical-align: top;
-}
-
-#chaptermanage { 
-	margin: 0px 0px 10px 0px;
-	color: #00aa00;
-}
-
-#seriesmanage { 
-	margin: 15px 0px 10px 0px;
-	color: #00aa00;
-}
-
-#previewpane {
-	border: 1px solid #000;
-	height: auto;
-	width: 800px;
-	padding: 30px;
-}
-
-.chapter-content {
-	padding: 50px;
-}
-
-#coauthormanage { margin: 0px 0px 0px 0px; } 
-
-.story-title {
-	clear: both;
-} 
-
-#series-and-view-data {
-	font-size: 90%;
-	width: 100%;
-	clear: both;
-}
-
-#work-series-data {
-	float: left;
-}
-
-#chapter-view-option {
-	float: right;
-}
-
-#bookmark-and-comment-links {
-	font-size: 90%;
-	width: 100%;
-	clear: both;
-}
-
-#bookmark-link {
-	float: left;
-}
-
-#comment-links {
-	float: right;
-}
-
-.inline-link-list li {
-	display: inline;
-}
+dl.bookmark {margin: 1em 0; padding:0.4em 0;}
+.bookmark dt a{font:600 110% Cambria, Constantia, Georgia, Verdana, sans-serif; text-decoration:none;}
+.bookmark dd {margin:0.5em;}
 
 
-/* Debug Style (development only) */ 
-#debug {
-	margin: 10%;
-	border: 1px dashed;
-	padding: 10px;
-}
+/*TAGS-INDEX*/
+
+.tags-index ul {width:90%; margin:2em auto; text-align:center;}
+.tags-index li {display:inline; padding: .3em 0.4em}
+.tags-index a {text-decoration:none; font-weight:normal;}
+
+/* NOTE: where is the scaling coming from? There were no size declarations here but the tags still scaled up with frequency on the page*/
+
+a.cloud1 {font-size: 90%; font-weight:100; color:#111}
+a.cloud2 {font-size: 100%; font-weight:200; color:##240F0F}
+a.cloud3 {font-size: 115%; font-weight:300; color:#380C0C}
+a.cloud4 {font-size: 130%; font-weight:400; color:#4B0A0A}
+a.cloud5 {font-size: 145%; font-weight:500; color:#5F0707}
+a.cloud6 {font-size: 165%; font-weight:600; color:#720505}
+a.cloud7 {font-size: 180%; font-weight:700; color:#860202}
+a.cloud8 {font-size: 210%; font-weight:800; color:#900;}
+
+/*SOME UNORGANIZED CLASSES*/
+
+.clearboth{clear:both;}
+.login-admin:after{content:url( '../images/admin.gif' );}
+
+
+/* STORY-LIST: story information module*/
+
+ul.story-list li.story-tags {display:inline;}
+li.story-date { text-align:right; color:#999}
+.story-show h2{font-size:130%;font-weight:700;text-align:center;}
+.story-show .story-author{text-align:center;}
+.story-show .story-author .login{font-size:70%;color:#111;font-style:normal;font-weight:400;}
+.works-show .story-notes{font-size:90%;margin:0 auto;width:70%;}
+.works-show hr{border-bottom: 1px solid #999;height:0;width:50%;}
+.list-left{float:left;}
+.list-right{float:right;}
+
+
+/* Post and Preview Story styles  */
+
+.field-left{float:left;width:350px;margin:0;}
+.field-right{float:right;width:350px;margin:0;}
+.clearbothdrop{clear:both;margin-bottom:30px;}
+.textareafield{margin-bottom:20px;}
+.required{color:red;}
+#story-form label{margin:10px 0 0;}
+.storyinputfield{width:300px;text-align:left;margin:0 0 15px;}
+#story-form textarea{width:600px;}
+#story-meta{background-repeat:no-repeat;background-image:url(../images/story-meta.nw.gif);margin-top:1em;background-color:#e6e6e6;font-size:80%;}
+#story-meta .north-east{float:right;width:5px;height:5px;background-image:url(../images/story-meta.ne.gif);}
+#story-meta .south-east{float:right;width:5px;height:5px;background-image:url(../images/story-meta.se.gif);}
+#story-meta .south-west{width:5px;height:5px;background-image:url(../images/story-meta.sw.gif);}
+#story-meta ul{margin-left:0;padding:1em;}
+.metadata-field{height:100px;}
+.number-field{width:50px;}
+.storytextfield{margin:10px 0;}
+.moreinfoicon{vertical-align:top;margin:0 0 10px 25px;}
+#chaptermanage{color:#0a0;margin:0 0 10px;}
+#seriesmanage{color:#0a0;margin:15px 0 10px;}
+#previewpane{border:1px solid #000;height:auto;width:800px;padding:30px;}
+.chapter-content{padding:50px;}
+
+/* Debug Style (development only)  */
+
+#debug{border:1px dashed;margin:10%;padding:10px;}
 
 /*Just a note, the main div is automagically 
  * assigned a different class for every different
  * functional page, if you want to make use of 
  * this to style child elements.  
- */
-.story-list {
-	font-size: 90%;
-	padding-left: 0px;
-	margin-left: 0px;
-}
-.story-list li {
-	margin-bottom: 2em;
-	list-style-type: none;
-}
-.story-list h3 {
-	font-family: Verdana, Tahoma, Arial, sans-serif;
-	display: inline;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 120%;
-}
-a.story-title {
-	font-style: normal;
-	font-weight: normal;
-}
-.story-date {
-	margin-top: -2em;
-	margin-right: 0px;
-	float: right;
-	font-size: 90%;
-	color: #999999;
-}
-.story-desc {
-	margin-top: 0em;
-}
-.story-show {
-}
-.story-show h2 {
-	margin-bottom: 0px;
-	font-size: 130%;
-	font-weight: bold;
-	text-align: center;
-}
-.story-show .story-author {
-	margin-top: 0px;
-	text-align: center;
-}
-.story-show .story-author .login {
-	font-size: 70%;
-	color: #111111;
-	font-style: normal;
-	font-weight: normal;
-}
-.story-show p {
-	margin-right: auto;
-	margin-left: auto;
-	width: 90%;
-	font-size: 110%;
-	font-family: Georgia, serif;
-}
-.works-show .story-notes {
-	font-size: 90%;
-	margin-right: auto;
-	margin-left: auto;
-	width: 70%;
-}
-.works-show hr {
-	border-bottom-color: #999999;
-	border-bottom-style: solid;
-	border-right-width: 0px;
-	border-left-width: 0px;
-	border-bottom-width: 1px;
-	border-top-width: 0px;
-	height: 0px;
-	width: 50%;
-}
-.list-left {
-	float: left;
-}
-.list-right {
-	float: right;
-}    
+  */
 
-.comments_display {
-	margin-top: 5em;
-	: both;
-}
 
-/* Comment styles! To add zebra striping, use .oddcomment or .evencomment */    
-
-.comment {
-	padding-left: 50px;
-	border-top: 1px solid black;
-	: both;
-}
 
 
 /* The flash divs are intended for use to show error messages
  * from just notices to warnings to fatal errors. Errors get
  * set in the model or controller like so: flash[:notice] = "notification"
  * and are displayed in the view with <%= flash_div :error, :warning, :notice -%>
- */
-.flash {
-	margin: 0.4em 0 0.2em 0;
-	padding: 1em;
-	float: left;
-	width: inherit;
-}
+  */
 
-.flash_icon {
-	border: 0;
-	float: left;
-	width: 50px;
-	padding: 0 0.5em 0 0;
-}
-.notice {
-	background-color: #b3d4ef;
-	border: 2px solid #b3d4ef;
-	width: 98%;
-}
-.warning {
-	background-color: #feffd4;
-	border: 1px dashed #fec844;	
-}
-.error {
-	background-color: #efd1d1;
-	border: 2px solid #af2020;
-}
-
-.fielderror {
-	font-size: 80%;
-	color: #990000;
-	margin: 0.1em 0 0.1em 0;
-}
+.flash{float:left;width:inherit;margin:0.4em 0 0.2em;padding:1em;}
+.flash_icon{border:0;float:left;width:50px;padding:0 0.5em 0 0;}
+.notice{background-color:#b3d4ef;border:2px solid #b3d4ef;width:98%;}
+.warning{background-color:#feffd4;border:1px dashed #fec844;}
+.error{background-color:#efd1d1;border:2px solid #af2020;}
 
 /* Rails will automatically add the errorExplanation and fieldWithErrors divs
  * after doing validation of models - just make sure you're using f.label 
- * or similar! */
-.errorExplanation {
-	margin: 0.4em 0 0.2em 0;
-	padding: 1em;
-	background-color: #efd1d1;
-	border: 2px solid #af2020;	
-}
+ * or similar!  */
 
-.errorExplanation h3 {}
-
-.errorExplanation p {}
-
-.errorExplanation ul {}
-
-.errorExplanation li {}
+.errorexplanation{background-color:#efd1d1;border:2px solid #af2020;margin:0.4em 0 0.2em;padding:1em;}
 
 /*If you don't want all the errors to be listed in the header errorExplanation div
  * you can set the id of the div to be errorExplanationNone to hide them (you'll 
- * probably want to set :message to nil too) */
-#errorExplanationNone ul { display:none; }
+ * probably want to set :message to nil too)  */
 
-.fieldWithErrors {
-	width: 500px;
-	color: #af2020;
-}
+#errorexplanationnone ul{display:none;}
+.fieldwitherrors{width:500px;color:#af2020;}
+.fieldwitherrors ul{color:#af2020;font-size:0.9em;margin-bottom:0;}
+.fieldwitherrors label{color:#af2020;background-color:#efd1d1;}
+.fieldwitherrors input{border:2px solid #af2020;}
+.story-edit{background-color:#ffe5af;border:2px solid #ffdb8b;font:0.8725em Verdana, Tahoma, Arial, sans-serif;padding:0.5em;}
+.story-edit-title{font-size:130%;font-weight:700;text-align:center;}
+textarea.story-edit-notes{display:block;}
+.story-edit-text{width:100%;}
+.chapter-control{font-size:80%;color:#4F709F;}
+.chapter-control a{color:#4F709F;}
 
-.fieldWithErrors ul {
-	color: #af2020;
-	font-size: 0.9em;
-	margin-bottom: 0;
-}
+/* Temporary bookmark content  */
 
-.fieldWithErrors label {
-	color: #af2020;
-	background-color: #efd1d1;
-}
+#dynamic-bookmark{position:fixed;background-color:#fff;border:2px solid #000;height:300px;width:500px;bottom:30px;right:30px;z-index:42;padding:15px 30px;}
+#bookmark_notes{width:450px;height:100px;}
+#close-popup{position:absolute;top:5px;right:10px;}
+.chapter-position-list{list-style-type:none;padding:10px;}
 
-.fieldWithErrors input {
-	border: 2px solid #af2020;
-}
 
-.story-edit {
-	background-color: #ffe5af;
-	border: 2px solid #ffdb8b;
-	padding: 0.5em;
-	font: 0.8725em Verdana, Tahoma, Arial, sans-serif;
-}
 
-.story-edit-meta {
-	width: 80%;
-}
+/*PAGINATION STYLING  */
 
-.story-edit-title {
-	font-size: 130%;
-	font-weight: bold;
-	text-align: center;
-}
-div.story-title {
-  text-align: center;
-}
+.pagination{text-align:center;padding:.3em;}
+cite em,em cite{font-variant:normal;}
 
-.story-edit-notes {
-	width: 80%;
-}
-textarea.story-edit-notes {
-  display: block;
-}
-
-.story-edit-text {
-	width: 100%;
-}
-
-.chapter-title {
-	text-align: center;
-}
-
-.chapter-control {
-	font-size: 80%;
-	color: #4F709F;
-}
-
-.chapter-control a {
-	color: #4F709F;
-}  
-
-/* Temporary bookmark content */
-#dynamic-bookmark {
-	position: fixed;
-	background-color: #ffffff;
-	border: 2px solid black;
-	height: 300px;
-	width: 500px;
-	padding: 15px 30px;
-	bottom: 30px;
-	right: 30px;
-	z-index: 42;	
-} 
-
-#bookmark_notes {
-	width: 450px;
-	height: 100px;
-}
-
-#close-popup {
-	position:absolute;
-	top: 5px;
-	right: 10px;
-}
-
-.chapter-position-list { 
-	padding: 10px; 
-	list-style-type: none;
-}
-
-/* INTERIM SPIFFING UP OF USER PAGE */
-
-.user-module {
-	: both;
-	border: 2px solid black;
-	padding: 1em;
-	margin-bottom: 1em;
-}
-
-/*PAGINATION STYLING */
-
-.pagination {
-  text-align: center;
-  padding: .3em; 
-}
+#work_navigation li,#story-meta li{list-style-type:none;}
+.leftmargin,.comment{margin-left:50px;}
+.nomargin,#coauthormanage{margin:0;}
+.story-show p,#comments-display{margin-right:auto;margin-left:auto;width:90%;font-size:110%;font-family:Georgia, serif;}
+.story-edit-meta,.story-edit-notes{width:80%;}
+div.story-title,.chapter-title{text-align:center;}

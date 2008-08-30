@@ -66,13 +66,14 @@ ActionController::Routing::Routes.draw do |map|
   map.login '/login', :controller => 'session', :action => 'new', :path_prefix => ':locale'
   map.logout '/logout', :controller => 'session', :action => 'destroy', :path_prefix => ':locale'
   
-  map.admin_login '/admin/login', :controller => 'admin/session', :action => 'new', :path_prefix => ':locale'
-  map.admin_logout '/admin/logout', :controller => 'admin/session', :action => 'destroy', :path_prefix => ':locale'
+  map.admin_login '/admin/login', :controller => 'admin/admin_session', :action => 'new', :path_prefix => ':locale'
+  map.admin_logout '/admin/logout', :controller => 'admin/admin_session', :action => 'destroy', :path_prefix => ':locale'
+  
   
   map.namespace :admin, :path_prefix => ':locale/admin' do |admin|
     admin.resources :user_creations, :member => { :hide => :get }
-    admin.resources :users
-    admin.resource :session, :controller => 'session'
+    admin.resources :users, :controller => 'admin_users'
+    admin.resource :session, :controller => 'admin_session'
   end
   
   map.activate '/activate/:id', :controller => 'users', :action => 'activate'

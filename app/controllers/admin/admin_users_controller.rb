@@ -1,4 +1,4 @@
-class Admin::UsersController < ApplicationController
+class Admin::AdminUsersController < ApplicationController
   
   before_filter :admin_only
   layout 'admin'

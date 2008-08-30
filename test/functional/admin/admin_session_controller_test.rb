@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../../test_helper'
 
-class Admin::SessionControllerTest < ActionController::TestCase
+class Admin::AdminSessionControllerTest < ActionController::TestCase
   # TODO test   before_filter :user_logout_required
 
   # create  POST  /:locale/admin/session

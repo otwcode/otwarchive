@@ -1,10 +1,13 @@
-<div id="story-meta">
-  <ul>
-    <% TagCategory.official.each do |category| -%>
-    <li><strong><%= category.display_name %>:</strong> 
-      <% @work.tags(category).each do |tag| -%>
-      <%= link_to(tag.name, tag_path(tag))%>
-      <% end -%></li>
-    <% end -%>
-  </ul>
-</div>
+<dl id="story-meta">
+<% TagCategory.official.each do |category| -%>
+<dt>
+  <%= category.display_name %>:
+</dt>
+<% @work.tags(category).each do |tag| -%>
+<dd class="<%= category.display_name -%>">
+  <%= link_to(tag.name, tag_path(tag)) %>
+</dd>
+<% end -%>
+</li>
+<% end -%>
+</dl>
