@@ -6,9 +6,11 @@
     <meta name="generator" content="HTML Tidy, see www.w3.org">
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
-    <title><%=h ArchiveConfig.APP_NAME .t %>&gt;&gt;<%= controller.controller_name %>
+    <title><%=h ArchiveConfig.APP_NAME .t %> 
+		<% unless ArchiveConfig.REVISION.blank? %>(rev. <%= ArchiveConfig.REVISION %>)<% end %>
+		&gt;&gt;<%= controller.controller_name %>
         <%= controller.action_name %>
-        </title>
+    </title>
         <%= stylesheet_link_tag 'archive_core', :media => 'screen' %>
         <%= stylesheet_link_tag 'authentication', :media => 'screen' %>
         <%= stylesheet_link_tag 'globalize', :media => 'screen' %>
@@ -20,9 +22,9 @@
         <%= javascript_include_tag :defaults %>
         <%= javascript_include_tag 'live_validation' %>
         <%= javascript_include_tag 'accessible' %>
-		 <%= yield :tinymce_init %> 
+		<%= yield :tinymce_init %> 
 
-        </head>
+  </head>
 
   <body onload="hideFormFields(); initSelect('languages_menu')" >
   
