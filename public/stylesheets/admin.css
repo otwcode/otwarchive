@@ -1,0 +1,5 @@
+/* anything in here should override other styles for admin users */
+
+#header {
+    background: #066 top left no-repeat;
+}
