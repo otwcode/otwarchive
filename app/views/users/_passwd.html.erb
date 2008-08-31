@@ -1,5 +1,5 @@
 <!-- Password with link to strong password info (still needs to be added) -->
-<%= f.label :password, h("And your password?").t, :class => "authentication-label" %> <%=h "(Make it a".t %> <a href="#" tabindex="2"><%=h "strong".t %></a> <%=h "one!)".t %><br/>	
+<%= f.label :password, h("And your password?").t, :class => "authentication-label" %> <%=h "(Make it a".t %>&nbsp;<a href="http://passwordstrength.net" tabindex="2"><%=h "strong".t %></a>&nbsp;<%=h "one! It needs to be at least 6 characters long.)".t %><br/>	
 <%= f.password_field :password, :class => 'authentication-textfield', :tabindex => '3' %>
 <br/>
 <!-- Confirm password -->
