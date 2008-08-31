@@ -10,10 +10,12 @@
     <%- end -%> 
     
     <span id="chapter-view-option">
-      <%- if @chapters.length == 1 -%>
-      <%= view_all_chapters_link(@work, @chapters.first) %>
-      <%- else -%>
-      <%= view_first_chapter_link(@work) %>
+      <%- if @work.number_of_posted_chapters > 1 -%>
+        <%- if @chapters.length == 1 -%>
+        <%= view_all_chapters_link(@work, @chapters.first) %>
+        <%- else -%>
+        <%= view_first_chapter_link(@work) %>
+        <%- end -%>
       <%- end -%>
     </span>
   </div>
