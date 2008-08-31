@@ -7,15 +7,15 @@
 <br />
 <%= password_field_tag 'password', '', :class => 'authentication-textfield', :tabindex => '2' %>
 
-<br/>
+<br />
 
 <%= check_box_tag('remember_me', '1', false, :class => 'authentication-checkboxfield', :tabindex => '3') %>
   <%= label_tag 'remember_me', 'Remember me'.t, :class => 'authentication-label' %> 
 	<%= submit_tag 'Login'.t, :class => 'authentication-submitbutton', :tabindex => '4' %>
-<br/>
+<br />
 
 <%= link_to 'forgot password?'.t, new_password_path, :tabindex => '6', :class =>'authentication-small' %>
-<br/><br/><br/>
+<br /><br /><br />
 <% if ArchiveConfig.USE_OPENID %>
   <%= image_tag("openid.png", :alt => 'OpenID logo'.t) %> <%= link_to_remote('Login with OpenID'.t, {:url => { :action => 'openid' }}, :href => url_for(:action => 'new', :use_openid => true ), :class =>'authentication-small', :tabindex => '5' )%>
 <%- end -%>

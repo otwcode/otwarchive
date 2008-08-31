@@ -10,7 +10,7 @@
     { :action => "update_tag", :tag => {kind => false} }) %>
 <% end %>
 
-<p><b><%= @tag_category.display_name %> <%=h 'Tags:'.t %></b>
+<p><strong><%= @tag_category.display_name %> <%=h 'Tags:'.t %></strong>
 <% @tag_category.tags.each do |tag| -%>
   <%= render :partial => 'draggable', :locals => { :tag => tag }%>
 <% end %> 

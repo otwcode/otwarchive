@@ -1,15 +1,9 @@
 <%= error_messages_for :work %>
 
-<div>
-  <h2 class="nomargin list-left"><%=h 'Post Story'.t %></h2>
-  
-  <!-- The "morefeatures" span can be removed at will without breaking the page. -->
-  <span class="list-left leftmargin"><%=h 'Further features coming soon. Questions?'.t %> <%= mail_to ArchiveConfig.QUESTION_ADDRESS, h("Email us").t %>.</span>
-  
-  <span class="list-right required"><%=h '* Required field'.t %></span>
+  <h2><%=h 'Post Story'.t %></h2>
+  <!-- The "morefeatures" span can be removed at will without breaking the page.  lim 31/08/08: WHAT DOES THIS NOTE REFER TO?-->
+  <p class="message"><%=h 'Further features coming soon. Questions?'.t %> <%= mail_to ArchiveConfig.QUESTION_ADDRESS, h("Email us").t %>.</p>
+  <p class="message required"><%=h '* Required information'.t %></p>
 
-  <p class="clearbothdrop"></p>
-
-</div>
 <%= render :partial => "work_form" %>
 <%= link_to 'Back'.t, works_path %>

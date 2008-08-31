@@ -1,8 +1,7 @@
 <h1 class="language"><%=h "Please choose language for translation.".t %></h1>
 <p>
-  <%=h "Strings which have not yet been translated are marked with asterisks.".t %>
-<p>
-    <span class="globalize_bug"><%=h "Use this sparingly".t %></span>: <%= link_to "Get strings to translate".t, :action => "get_translatable_strings" %>
+	<%=h "Strings which have not yet been translated are marked with asterisks.".t %>
+	<span class="globalize_bug"><%=h "Use this sparingly".t %></span>: <%= link_to "Get strings to translate".t, :action => "get_translatable_strings" %>
 </p>
 <p>
 	<%= button_to button_name, :action => button_action %>
@@ -19,7 +18,6 @@
     <dd class="header">
         <%= 'Translation'.t %>
     </dd>
-    <br/>
     <% @view_translations.each do |tr| -%>
     <dt>
     	<% unless tr.text -%>
@@ -34,7 +32,6 @@
         <%= submit_tag( "translate".t ) %>
         <% end -%>
     </dd>
-    <br/>
     <% end -%>
 </dl>
 <% end -%>

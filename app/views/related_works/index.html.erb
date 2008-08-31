@@ -1,7 +1,23 @@
 <h1><%=h 'Listing related_works'.t %></h1>
 
+<!-- this table should be formatted like this: <table>
+		<caption>A summary of the table contents and purpose</caption>
+		<tr>
+			<th scope="col"></th>
+			<th scope="col">Category #1</th>
+			<th scope="col">Category #2</th>
+		</tr>
+		<tr>
+			<th scope="row">Entry Id</th>
+			<td>Data</td>
+			<td>Data</td>
+		</tr>
+	</table>-->
+
+
 <table>
-  <tr>
+  <caption><!--this needs to be a short summary of what the table shows--></caption>
+<tr>
     <th><%=h 'Parent'.t %></th>
     <th><%=h 'Work'.t %></th>
     <th><%=h 'Reciprocal'.t %></th>

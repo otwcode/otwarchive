@@ -5,15 +5,13 @@
   </li>
   <li>
   	<% if is_author_of?(@work) -%>
-	<div class="list-right">
 		<strong><%= link_to h('Edit').t, edit_work_path(@work) %></strong>
 		|
 		<%= link_to h('Delete').t, @work, :confirm => h('Are you sure?').t, :method => :delete -%>
-	</div>
 	<% end -%>
   </li>
 </ul>
-<div class="clearboth"></div>
+
 <!-- END navigation -->
 
 <!-- BEGIN work --> 

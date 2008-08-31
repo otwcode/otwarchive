@@ -1,11 +1,12 @@
 <!-- BEGIN footer -->
 <div id="footer">
-  <span id="globalize"><%= languages_menu %>
-  </span>
-  <a href="http://creativecommons.org/licenses/GPL/2.0/" title="View License">GPL/CC</a>
-  by the <a href="http://transformativeworks.org/" title="The Organization for Transformative Works">OTW</a>
-  &mdash; <a href="public/placeholder.html" title="Terms and Conditions">Terms and Conditions</a>
-  &mdash; <%= link_to 'Report Abuse' .t, new_abuse_report_path %>
+  <p>
+	<span id="globalize"><%= languages_menu %></span>
+  	<a href="http://creativecommons.org/licenses/GPL/2.0/" title="View License">GPL/CC</a>
+  	by the <a href="http://transformativeworks.org/" title="The Organization for Transformative Works">OTW</a>
+  	&#8212; <a href="public/placeholder.html" title="Terms and Conditions">Terms and Conditions</a>
+  	&#8212; <%= link_to 'Report Abuse' .t, new_abuse_report_path %>
+</p>
 </div>
 <!-- END footer --><% if ENV["RAILS_ENV"]=="development" %>
 <div id="debug">

@@ -4,7 +4,7 @@
   <% if tag.banned? %>(<%=h 'Banned!'.t %>)<% end -%>
   <% if tag.adult? %>(<%=h 'Adult!'.t %>)<% end -%>
   (<%= link_to 'show'.t, tag, :popup => true %>)
-  <br/>
+  <br />
 </div>
 <%= drop_receiving_element(tag.id.to_s,
   :url => { :controller => "tag_categories", :action => "add_relationship", :taggable => tag.id, :category => tag.tag_category.id}

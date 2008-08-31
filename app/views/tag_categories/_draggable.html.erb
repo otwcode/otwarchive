@@ -4,6 +4,6 @@
   <% if tag.canonical? %>(Canonical)<% end -%>
   <% if tag.banned? %>(Banned!)<% end -%>
   <% if tag.adult? %>(Adult!)<% end -%>
-  <br/>
+  <br />
 </div>
 <%= draggable_element(tag.id.to_s, :scroll => 'window', :revert => true) %>

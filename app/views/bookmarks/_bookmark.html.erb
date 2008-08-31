@@ -12,7 +12,6 @@
 	<%= byline(bookmark.bookmarkable) %>
     <% end %>
     <% if bookmark.private %><%= image_tag("lockblack.png", :size => "15x15", :alt => "(Private)".t) %><% end %>
-    <br/>
     <%=sanitize_limited bookmark.bookmarkable.summary %>
   </dt>
   <%- unless bookmark.notes.blank? -%>

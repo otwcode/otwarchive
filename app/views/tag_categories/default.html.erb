@@ -10,7 +10,7 @@
    :confirm => "WARNING! Changes category irreversibly (except to #{TagCategory.ambiguous.display_name}). Are you sure you want to do this?"
    )%>
 
-<p><b><%= @tag_category.display_name %> <%=h 'Tags:'.t %></b>
+<p><strong><%= @tag_category.display_name %> <%=h 'Tags:'.t %></strong>
 <div id="change">
   <% @tag_category.tags.each do |tag| -%>
     <%= render :partial => 'tag', :locals => { :tag => tag }%>
@@ -18,7 +18,7 @@
 </div>
 
 <% (TagCategory.official(:include => 'tags') - [TagCategory.default]).each do |category| -%>
-  <p><b><%= category.display_name %> <%=h 'Tags:'.t %></b>
+  <p><strong><%= category.display_name %> <%=h 'Tags:'.t %></strong>
   <% category.tags.each do |tag| -%>
     <%= render :partial => 'draggable', :locals => { :tag => tag }%>
   <% end %>

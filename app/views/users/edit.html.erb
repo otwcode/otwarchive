@@ -3,17 +3,17 @@
 <%= error_messages_for :user %>
 
 <% form_for(@user) do |f| %>  
-  <p><label for="email"><%=h "Change Email" .t %></label><br/>
+  <p><label for="email"><%=h "Change Email" .t %></label><br />
 	<%= f.text_field :email %></p>
 
   <div id="passwd">
-	<p><label for="password"><%=h "Change Password" .t %></label><br/>
+	<p><label for="password"><%=h "Change Password" .t %></label><br />
 	<%= f.password_field :password %>
 	<% if ArchiveConfig.USE_OPENID %>
     <%= link_to_function image_tag('openid.png', :alt=>"Use OpenID to log in".t), "Element.hide('passwd'); Element.show('openid')" %>
   <% end -%>
   </p>
-	<p><label for="password_confirmation"><%=h "Confirm New Password" .t %></label><br/>
+	<p><label for="password_confirmation"><%=h "Confirm New Password" .t %></label><br />
 	<%= f.password_field :password_confirmation %></p>
   </div>
   <% if ArchiveConfig.USE_OPENID %>	
@@ -27,20 +27,20 @@
 
   <% fields_for :profile_attributes,  @user.profile do |p| %>
     <p>
-      <b><%=h "Location".t %></b><br />
+      <strong><%=h "Location".t %></strong><br />
       <%= p.text_field :location %>
     </p>
     <p>
-       <b><%=h "Date of Birth".t %></b><br />
+       <strong><%=h "Date of Birth".t %></strong><br />
        <%= p.date_select :date_of_birth, :start_year => 1930, :end_year => 13.years.ago.year %>
      </p>
      <p>
-       <b><%=h "About Me".t %></b><br />
+       <strong><%=h "About Me".t %></strong><br />
        <%= p.text_area :about_me %>
      </p>
   <% end %>
 	
-  <b><%=h "Preferences:".t %> </b>
+  <strong><%=h "Preferences:".t %> </strong>
 	<% fields_for :preference_attributes, @user.preference do |r| %>
    <p>
       <%= r.check_box :history_enabled %> <%=h "Enable History".t %>

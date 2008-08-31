@@ -5,25 +5,23 @@
 <% end %>
 
 <% form_for([bookmarkable, @bookmark], :url => {:controller => 'bookmarks', :action => (action ||= 'create')}) do |f| %>
-
+<dl>
   <% if bookmarkable.class == ExternalWork && bookmarkable.new_record? %>
     <% fields_for 'bookmark[external]', bookmarkable do |ew| %>
       
-      <p>
-        <%= ew.label :url, "URL: ".t %>
-        <%= ew.text_field :url %>
+      <dt><%= ew.label :url, "URL: ".t %></dt>
+        <dd><%= ew.text_field :url %>
         <%= observe_field 'bookmark_external_url', :url => {:controller => 'external_works', :action => 'fetch'},
             :with => 'external_url', :on => 'blur' %>
         <%= hidden_field 'fetched', :value => '' %>
-      </p>
+      </dd>
       
-      <p>
-        <%= ew.label :author, "Author: ".t %>
-        <%= ew.text_field :author %>  
-      </p>
+      <dt><%= ew.label :author, "Author: ".t %></dt>
+       <dd> <%= ew.text_field :author %>  
+      </dd>
       
-      <p>
-        <%= ew.label :title, "Title: ".t %>
+      <dt>
+        <%= ew.label :title, "Title: ".t %></dt>
         <%= ew.text_field :title %> 
       </p>
       

@@ -1,9 +1,7 @@
 <%= error_messages_for :work -%>
-<div>
-  <h2 class="nomargin"><span class="list-left"><%=h 'Preview Story'.t %></span></h2>
-  
-	<span class="list-left leftmargin"><%=h 'Further features coming soon. Questions?'.t %>  <a href="mailto:<%=ArchiveConfig.QUESTION_ADDRESS%>"><%=h 'Email us.'.t %></a></span>
-	<div class="clearboth"></div>
-</div>
+
+  <h2><%=h 'Preview Story'.t %></h2>
+  <p class="message"><%=h 'Further features coming soon. Questions?'.t %>  <a href="mailto:<%=ArchiveConfig.QUESTION_ADDRESS%>"><%=h 'Email us.'.t %></a>
+	</p>
 
 <%= render :partial => 'preview_edit' -%>
