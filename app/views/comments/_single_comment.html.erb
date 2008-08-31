@@ -1,17 +1,14 @@
-<span class="<%= cycle :oddcomment, :evencomment %>" id="data_for_comment_<%= single_comment.id %>">
-  <a name="comment<%=single_comment.id %>"></a>
+<div class="<%= cycle :oddcomment, :evencomment %>" id="<%= single_comment.id %>">
 	<%- if single_comment.is_deleted -%>
-    <p>
-        <%=h '(comment deleted)'.t %>
-    </p>
-  <%- else -%>
+    	<p><%=h '(comment deleted)'.t %></p>
+	<%- else -%>
     <h3><%= get_pseud_or_mailaddress(single_comment) %> <%=h 'says:'.t %></h3>
+    <blockquote> 
+		<%=sanitize_format single_comment.content %>
+	</blockquote>
     <p>
-        <%=sanitize_format single_comment.content %>
-    </p>
-    <p>
-        <%=h 'Posted at:'.t %> <%= single_comment.created_at %>
-    </p>
+		<%=h 'Posted at:'.t %> <%= single_comment.created_at %>
+	</p>
     <p> 
         <%= link_to_unless_current "Thread".t, single_comment %> 
         | <%= create_reply_link(single_comment, (controller_name ||= @controller.controller_name)) -%>
@@ -26,4 +23,4 @@
     <div id="add_comment_comment_<%= single_comment.id -%>">
     </div>
   <%- end -%>
-</span>      
+</div>      

@@ -259,6 +259,7 @@ ul#main-navigation {
 #main h1 {
     text-align: right;
     border-bottom: 1px dotted #777;
+    clear: both;
 }
 /*PAGE BY PAGE STYLING: HOME HOME SUBPAGES FANDOMS PEOPLE GROUPS RECS TAGS*/
 /*  USERS-SHOW  */
@@ -470,40 +471,12 @@ li.story-date {
 #story-form textarea {
     width: 600px;
 }
-
-#story-meta {
-    background-repeat: no-repeat;
-    background-image: url(../images/story-meta.nw.gif);
-    margin-top: 1em;
-    background-color: #e6e6e6;
-    font-size: 80%;
-}
-
-#story-meta .north-east {
-    float: right;
-    width: 5px;
-    height: 5px;
-    background-image: url(../images/story-meta.ne.gif);
-}
-
-#story-meta .south-east {
-    float: right;
-    width: 5px;
-    height: 5px;
-    background-image: url(../images/story-meta.se.gif);
-}
-
-#story-meta .south-west {
-    width: 5px;
-    height: 5px;
-    background-image: url(../images/story-meta.sw.gif);
-}
-
-#story-meta ul {
-    margin-left: 0;
-    padding: 1em;
-}
-
+/* WHAT ARE THESE RULES FOR?
+ #story-meta{background-repeat:no-repeat;background-image:url(../images/story-meta.nw.gif);margin-top:1em;background-color:#e6e6e6;font-size:80%;}
+ #story-meta .north-east{float:right;width:5px;height:5px;background-image:url(../images/story-meta.ne.gif);}
+ #story-meta .south-east{float:right;width:5px;height:5px;background-image:url(../images/story-meta.se.gif);}
+ #story-meta .south-west{width:5px;height:5px;background-image:url(../images/story-meta.sw.gif);}
+ #story-meta ul{margin-left:0;padding:1em;}*/
 .metadata-field {
     height: 100px;
 }

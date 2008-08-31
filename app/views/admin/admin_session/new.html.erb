@@ -1,12 +1,11 @@
 <h1><%= "Log in as Admin" .t %></h1>
 
 <% form_tag(:controller => 'admin/admin_session', :action => :create) do %>
-
-  <p><label for="login"><%= "Admin ".t  + "user name" .t %></label><br />
-  <%= text_field_tag 'login' %></p>
-
-  <p><label for="password"><%= "Admin password" .t %></label><br />
-  <%= password_field_tag 'password' %></p>
-
-  <p><%= submit_tag 'Log in' %></p>
+	<dl>
+		<dt><label for="login"><%= "Admin ".t  + "user name" .t %></label></dt>
+  			<dd><%= text_field_tag 'login' %></dd>
+		<dt><label for="password"><%= "Admin password" .t %></label></dt>
+  			<dd><%= password_field_tag 'password' %></dd>
+	</dl>
+  	<p><%= submit_tag 'Log in' %></p>
 <% end -%>
