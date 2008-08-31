@@ -1,19 +1,19 @@
 <%= error_messages_for :abuse_report %>
 
+<h1><%=h "Report Abuse".t %></h1>
 <% form_for(@abuse_report) do |f| %>
   <dl>
   	<dt><label for="url"><%=h "Link to the page you are reporting:".t %></label></dt>
-    	<dd><%= f.text_field :url, :size => 60 %></dd>
-		<dd><p class="footnote"><%=h "If you came here from the abuse link at the bottom of the page,".t %>
+    	<dd><%= f.text_field :url, :size => 60 %>
+			<p class="footnote"><%=h "If you came here from the abuse link at the bottom of the page,".t %>
 	    <%=h "this will be filled in for you".t %></p></dd>
   	
-	<dt><label for="comment"><%=h "Please describe the problem in as much detail as possible:" .t %></label></dt>
+	<dt><label for="comment"><%=h "Describe the problem in as much detail as possible:" .t %></label></dt>
     	<dd><%= f.text_area :comment, :cols => 60 %></dd>
-	<dt><label for="email"><%=h "Email me (optional):".t %></label></dt>
+	<dt><label for="email"><%=h "Your email (optional):".t %></label></dt>
 	    	<dd><%= f.text_field :email, :size => 60 %>
 				<p class="footnote">Leave this blank to file an anonymous report.</p>
 			</dd>
-			</dl>
- 	<p><%=h "Submit your message to the abuse team.".t %></p>
-	<p><%= f.submit "Submit".t %></p>
+ 	<dt><%=h "Submit your message to the abuse team:".t %></dt>
+	<dd><%= f.submit "Submit".t %></dd>
 <% end %>
