@@ -39,8 +39,7 @@ class Work < ActiveRecord::Base
   before_save :validate_authors, :set_language
   before_save :set_word_count
   before_save :post_first_chapter
-  after_save :save_associated, :save_creatorships
-  after_update :save_associated, :save_creatorships 
+  after_save :save_creatorships, :save_associated 
   before_save :set_adult
   
   # Associating works with languages.  

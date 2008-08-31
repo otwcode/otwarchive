@@ -28,6 +28,14 @@ class UserMailer < ActionMailer::Base
      setup_email(user)
      @subject    += "Co-Author Notification".t
      @body[:work] = work
+   end 
+   
+   # Sends emails to authors whose stories were listed as the inspiration of another work
+   def related_work_notification(user, related_work)
+     setup_email(user)
+     @subject    += "Related work notification".t
+     @body[:related_work] = related_work
+     @body[:url] += "/en/related_works/#{related_work.id}"     
    end
    
    # Sends email to authors when a work is edited

@@ -4,12 +4,20 @@ class RelatedWorksController < ApplicationController
   before_filter :child_author_only, :only => :destroy
   
   def parent_author_only
-    @related_work = RelatedWork.find(params[:id])
+    if params[:parent_id]
+      @related_work = RelatedWork.find(:first, :conditions => {:parent_id => params[:parent_id], :work_id => params[:work_id]})
+    else
+      @related_work = RelatedWork.find(params[:id])
+    end
     (logged_in? && !(current_user.pseuds & @related_work.parent.pseuds).empty?) || [ redirect_to(works_url), flash[:error] = 'Sorry, but you don\'t have permission to make edits.'.t ]  
   end
   
   def child_author_only
-    @related_work = RelatedWork.find(params[:id])
+    if params[:parent_id]
+      @related_work = RelatedWork.find(:first, :conditions => {:parent_id => params[:parent_id], :work_id => params[:work_id]})
+    else
+      @related_work = RelatedWork.find(params[:id])
+    end
     (logged_in? && !(current_user.pseuds & @related_work.work.pseuds).empty?) || [ redirect_to(works_url), flash[:error] = 'Sorry, but you don\'t have permission to make edits.'.t ]  
   end
 
@@ -21,8 +29,10 @@ class RelatedWorksController < ApplicationController
   # PUT /related_works/1
   # PUT /related_works/1.xml
   def update
-    if @related_work.update_attributes(params[:related_work])
-      flash[:notice] = 'Link was successfully approved.'.t
+    @related_work.reciprocal = !@related_work.reciprocal?
+    if @related_work.update_attribute(:reciprocal, @related_work.reciprocal)
+      status = @related_work.reciprocal? ? "approved" : "removed"
+      flash[:notice] = "Link was successfully #{status}.".t
       redirect_to(@related_work.parent) 
     else
       flash[:notice] = 'Please try again.'.t
