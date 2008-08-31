@@ -12,6 +12,7 @@ else
     page.insert_html :bottom, comment_id, :partial => 'single_comment', :object => @comment
     page.replace_html reply_form, ""
   else
+    page.show "comments_link"
     page.replace_html "comments_link_#{@commentable.class.to_s.downcase}_#{@commentable.id}", :partial => 'comments/show_link', :locals => {:commentable => @commentable}, :object => (@show_comments = true)
     page.replace_html "comments_#{@commentable.class.to_s.downcase}_#{@commentable.id}", :partial => 'comments/comment_view'
     page['comment_content'].value = ''

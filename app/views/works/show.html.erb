@@ -28,7 +28,9 @@
     <ul class="inline-link-list">
       <li class="first-link"><span id="add_comment_link"><%= create_add_comment_link(@commentable) %></span></li>              
       <%- unless @comments.blank? -%>
-        <li> <span id="comments_link_<%= @commentable.class.to_s.downcase %>_<%= @commentable.id %>"><%= render :partial => 'comments/show_link', :locals => {:commentable => @commentable} %></span></li>
+        <li id="comments_link"> <span id="comments_link_<%= @commentable.class.to_s.downcase %>_<%= @commentable.id %>"><%= render :partial => 'comments/show_link', :locals => {:commentable => @commentable} %></span></li>
+      <%- else -%>
+        <li id="comments_link" style="display:none"> <span id="comments_link_<%= @commentable.class.to_s.downcase %>_<%= @commentable.id %>"><%= render :partial => 'comments/show_link', :locals => {:commentable => @commentable} %></span></li>
       <%- end -%> 
     </ul>
   </span>
