@@ -1,7 +1,6 @@
 <h1><%=h 'Your Inbox'.t %> (<%= @inbox.length %>)</h1>
-
 <%- for comment in @inbox -%>
   <p><%=h 'In response to'.t %> <%= commentable_description_link(comment) %>:</p>
-  <%= render :partial => 'comments/single_comment', :object => comment %>
+  <%= render :partial => 'comments/single_comment', :object => comment, :locals => {:controller_name => "inbox"} %>
   <hr />
 <%- end -%>

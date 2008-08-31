@@ -1,21 +1,25 @@
-# Add newly-created comment into the appropriate div and clear/hide the comment form
-comment_id = "comment#{@comment.id}"
-commentable_id = "comment#{@comment.commentable.id}"  
-new_comment_div = "<div class='comment' id='" + comment_id + "'></div>"
-reply_form = "add_comment_comment_" + @comment.commentable.id.to_s
-
-if @comment.reply_comment?
-  page.insert_html :bottom, commentable_id, new_comment_div
-  page.insert_html :bottom, comment_id, :partial => 'single_comment', :object => @comment
-  page.replace_html reply_form, ""
+if @controller_name == "inbox"
+  page.redirect_to user_inbox_path(current_user)
 else
-  page.replace_html "comments_link_#{@commentable.class.to_s.downcase}_#{@commentable.id}", :partial => 'comments/show_link', :locals => {:commentable => @commentable}, :object => (@show_comments = true)
-  page.replace_html "comments_#{@commentable.class.to_s.downcase}_#{@commentable.id}", :partial => 'comments/comment_view'
-  page['comment_content'].value = ''
-  page.toggle "add_comment_#{@commentable.class.to_s.downcase}_#{@commentable.id}"
-end                           
+  # Add newly-created comment into the appropriate div and clear/hide the comment form
+  comment_id = "comment#{@comment.id}"
+  commentable_id = "comment#{@comment.commentable.id}"  
+  new_comment_div = "<div class='comment' id='" + comment_id + "'></div>"
+  reply_form = "add_comment_comment_" + @comment.commentable.id.to_s
 
-# Send the user to the right comment on the page and clear the flash message
-page.assign 'new_hash', '#' + comment_id
-page << "location.hash = new_hash;"
-flash.discard 
+  if @comment.reply_comment?
+    page.insert_html :bottom, commentable_id, new_comment_div
+    page.insert_html :bottom, comment_id, :partial => 'single_comment', :object => @comment
+    page.replace_html reply_form, ""
+  else
+    page.replace_html "comments_link_#{@commentable.class.to_s.downcase}_#{@commentable.id}", :partial => 'comments/show_link', :locals => {:commentable => @commentable}, :object => (@show_comments = true)
+    page.replace_html "comments_#{@commentable.class.to_s.downcase}_#{@commentable.id}", :partial => 'comments/comment_view'
+    page['comment_content'].value = ''
+    page.toggle "add_comment_#{@commentable.class.to_s.downcase}_#{@commentable.id}"
+  end                           
+
+  # Send the user to the right comment on the page and clear the flash message
+  page.assign 'new_hash', '#' + comment_id
+  page << "location.hash = new_hash;"
+  flash.discard
+end

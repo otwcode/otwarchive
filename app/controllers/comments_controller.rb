@@ -69,6 +69,7 @@ class CommentsController < ApplicationController
     else
       @comment = Comment.new
       @commentable = @commentable_object
+      @controller_name = params[:controller_name] if params[:controller_name]
       respond_to do |format|
         format.html
         format.js
@@ -94,6 +95,7 @@ class CommentsController < ApplicationController
     else
       @comment = Comment.new(params[:comment])
       @comment.update_attribute(:user_agent,request.env['HTTP_USER_AGENT'])
+      @controller_name = params[:controller_name]
       if @comment.commentable.kind_of?(Work)
         @comment.commentable = @comment.commentable.last_chapter
       end
@@ -105,9 +107,9 @@ class CommentsController < ApplicationController
           parent = @comment.ultimate_parent
           @comments = @commentable.find_all_comments
           respond_to do |format|
-              format.html { redirect_to :controller => parent.class.to_s.pluralize, :action => 'show', :id => parent.id, :anchor => "comment#{@comment.id}" }
-              format.js
-            end
+            format.html { redirect_to :controller => parent.class.to_s.pluralize, :action => 'show', :id => parent.id, :anchor => "comment#{@comment.id}" }
+            format.js
+          end 
         else
           flash[:notice] = 'Comment was marked as spam by Akismet.'.t
           redirect_to :back

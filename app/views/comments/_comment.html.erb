@@ -24,7 +24,8 @@
   </p>  
     
     <%= f.hidden_field :commentable_id, :value => commentable.id %>
-    <%= f.hidden_field :commentable_type, :value => commentable.class.to_s %>    
+    <%= f.hidden_field :commentable_type, :value => commentable.class.to_s %>
+    <input type="hidden" id="controller_name" name="controller_name" value="<%= @controller_name ||= @controller.controller_name %>" />  
 
   <p>
     <%= f.submit button_name %>

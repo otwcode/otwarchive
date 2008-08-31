@@ -47,8 +47,8 @@ module CommentsHelper
   end
   
   # return html link to unhide reply-to-comment-form
-  def create_reply_link(comment)
-    link_to_remote "Reply".t, {:url => new_comment_comment_path(comment), :method => :get}, 
+  def create_reply_link(comment, controller_name="comments")
+    link_to_remote "Reply".t, {:url => {:controller => :comments, :action => :new, :comment_id => comment, :controller_name => controller_name}, :method => :get}, 
       :href => new_comment_comment_path(comment)
   end
   
