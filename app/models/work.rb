@@ -24,9 +24,19 @@ class Work < ActiveRecord::Base
   named_scope :recent, :order => 'created_at DESC', :limit => 5
 
   validates_presence_of :title
-  validates_length_of :title, :within => ArchiveConfig.TITLE_MIN..ArchiveConfig.TITLE_MAX, :message => "must be within".t + " #{ArchiveConfig.TITLE_MIN} " + "and".t + " #{ArchiveConfig.TITLE_MAX} " + "letters long.".t
-  validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, :too_long => "must be less than %d letters long.".t/ArchiveConfig.SUMMARY_MAX
-  validates_length_of :notes, :allow_blank => true, :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than %d letters long.".t/ArchiveConfig.NOTES_MAX
+  validates_length_of :title, 
+    :minimum => ArchiveConfig.TITLE_MIN, :too_short=> "must be at least %d letters long."/ArchiveConfig.TITLE_MIN
+
+  validates_length_of :title, 
+    :maximum => ArchiveConfig.TITLE_MAX, :too_long=> "must be less than %d letters long."/ArchiveConfig.TITLE_MAX
+    
+  validates_length_of :summary, 
+    :allow_blank => true, 
+    :maximum => ArchiveConfig.SUMMARY_MAX, :too_long => "must be less than %d letters long.".t/ArchiveConfig.SUMMARY_MAX
+    
+  validates_length_of :notes, 
+    :allow_blank => true, 
+    :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than %d letters long.".t/ArchiveConfig.NOTES_MAX
 
   # Virtual attribute to use as a placeholder for pseuds before the work has been saved
   # Can't write to work.pseuds until the work has an id

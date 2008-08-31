@@ -1,39 +1,109 @@
-# Don't change this file. Configuration is done in config/environment.rb and config/environments/*.rb
+# Don't change this file!
+# Configure your app in config/environment.rb and config/environments/*.rb
 
 RAILS_ROOT = "#{File.dirname(__FILE__)}/.." unless defined?(RAILS_ROOT)
 
-unless defined?(Rails::Initializer)
-  if File.directory?("#{RAILS_ROOT}/vendor/rails")
-    require "#{RAILS_ROOT}/vendor/rails/railties/lib/initializer"
-  else
-    require 'rubygems'
-
-    rails_gem_version =
-      if defined? RAILS_GEM_VERSION
-        RAILS_GEM_VERSION
-      else
-        File.read("#{File.dirname(__FILE__)}/environment.rb") =~ /^[^#]*RAILS_GEM_VERSION\s+=\s+'([\d.]+)'/
-        $1
+module Rails
+  class << self
+    def boot!
+      unless booted?
+        preinitialize
+        pick_boot.run
       end
+    end
 
-    if rails_gem_version
-      rails_gem = Gem.cache.search('rails', "=#{rails_gem_version}.0").sort_by { |g| g.version.version }.last
+    def booted?
+      defined? Rails::Initializer
+    end
 
-      if rails_gem
-        gem "rails", "=#{rails_gem.version.version}"
-        require rails_gem.full_gem_path + '/lib/initializer'
-      else
-        STDERR.puts %(Cannot find gem for Rails =#{rails_gem_version}.0:
-    Install the missing gem with 'gem install -v=#{rails_gem_version} rails', or
-    change environment.rb to define RAILS_GEM_VERSION with your desired version.
-  )
-        exit 1
-      end
-    else
-      gem "rails"
-      require 'initializer'
+    def pick_boot
+      (vendor_rails? ? VendorBoot : GemBoot).new
+    end
+
+    def vendor_rails?
+      File.exist?("#{RAILS_ROOT}/vendor/rails")
+    end
+
+    def preinitialize
+      load(preinitializer_path) if File.exist?(preinitializer_path)
+    end
+
+    def preinitializer_path
+      "#{RAILS_ROOT}/config/preinitializer.rb"
     end
   end
 
-  Rails::Initializer.run(:set_load_path)
+  class Boot
+    def run
+      load_initializer
+      Rails::Initializer.run(:set_load_path)
+    end
+  end
+
+  class VendorBoot < Boot
+    def load_initializer
+      require "#{RAILS_ROOT}/vendor/rails/railties/lib/initializer"
+      Rails::Initializer.run(:install_gem_spec_stubs)
+    end
+  end
+
+  class GemBoot < Boot
+    def load_initializer
+      self.class.load_rubygems
+      load_rails_gem
+      require 'initializer'
+    end
+
+    def load_rails_gem
+      if version = self.class.gem_version
+        gem 'rails', version
+      else
+        gem 'rails'
+      end
+    rescue Gem::LoadError => load_error
+      $stderr.puts %(Missing the Rails #{version} gem. Please `gem install -v=#{version} rails`, update your RAILS_GEM_VERSION setting in config/environment.rb for the Rails version you do have installed, or comment out RAILS_GEM_VERSION to use the latest version installed.)
+      exit 1
+    end
+
+    class << self
+      def rubygems_version
+        Gem::RubyGemsVersion if defined? Gem::RubyGemsVersion
+      end
+
+      def gem_version
+        if defined? RAILS_GEM_VERSION
+          RAILS_GEM_VERSION
+        elsif ENV.include?('RAILS_GEM_VERSION')
+          ENV['RAILS_GEM_VERSION']
+        else
+          parse_gem_version(read_environment_rb)
+        end
+      end
+
+      def load_rubygems
+        require 'rubygems'
+
+        unless rubygems_version >= '0.9.4'
+          $stderr.puts %(Rails requires RubyGems >= 0.9.4 (you have #{rubygems_version}). Please `gem update --system` and try again.)
+          exit 1
+        end
+
+      rescue LoadError
+        $stderr.puts %(Rails requires RubyGems >= 0.9.4. Please install RubyGems and try again: http://rubygems.rubyforge.org)
+        exit 1
+      end
+
+      def parse_gem_version(text)
+        $1 if text =~ /^[^#]*RAILS_GEM_VERSION\s*=\s*["']([!~<>=]*\s*[\d.]+)["']/
+      end
+
+      private
+        def read_environment_rb
+          File.read("#{RAILS_ROOT}/config/environment.rb")
+        end
+    end
+  end
 end
+
+# All that for this:
+Rails.boot!

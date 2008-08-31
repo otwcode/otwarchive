@@ -4,7 +4,7 @@
     <p class="field-left">   
     
         <%= f.label :title, h("Story Title*").t, :class => "required" %><br />
-        <%= f.text_field :title, :class => "storyinputfield", :live => true %>
+        <%= f.text_field :title, :class => "storyinputfield" %>
         <%= image_tag("question.png", :size => "20x20", :alt => h("More info").t) %><br />
 
       <!-- Chaptered checkbox (work_is_wip) -->
@@ -49,12 +49,6 @@
     	<% use_tinymce -%>
 		<a href="javascript:addEditor('content');"><%=h 'Rich text'.t %></a>  <a href="javascript:removeEditor('content');"><%=h 'HTML'.t %></a><br />
 		<%= c.text_area :content, :class => "mce-editor", :id => "content" %>
-		
-    	<script>
-        var content = new LiveValidation('content', { validMessage: 'Thanks, that length looks good.', wait: 500 });
-        content.add(Validate.Length, {"failureMessage": "must be less than 16777215 letters long.", "maximum": 16777215, "validMessage": ""});
-        content.add(Validate.Presence, {"failureMessage": "is required.", "validMessage": ""})
-      </script>
     </p>
 
     <!-- Author dropdown (pseud_id) - hidden if user has only one pseud -->
@@ -100,12 +94,12 @@
 	
     <p>
       <%= f.label :summary, "Summary (max %d letters)"/ArchiveConfig.SUMMARY_MAX %><br />
-      <%= f.text_area :summary, :class => "summary-field", :live => true %>
+      <%= f.text_area :summary, :class => "summary-field" %>
     </p>
 
     <p>
       <%= f.label :notes, "Notes (max %d letters)"/ArchiveConfig.NOTES_MAX %><br />
-      <%= f.text_area :notes, :class => "notes-field", :live => true %> 
+      <%= f.text_area :notes, :class => "notes-field" %> 
     </p>
 	<%- end -%>
 	

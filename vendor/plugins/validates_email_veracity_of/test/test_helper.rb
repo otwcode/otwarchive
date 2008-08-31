@@ -1,4 +1,4 @@
-ENV['RAILS_ENV'] ||= 'sqlite3'
+ENV['RAILS_ENV'] ||= 'mysql'
 require File.dirname(__FILE__) + '/rails_root/config/environment.rb'
  
 # Load the testing framework

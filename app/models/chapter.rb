@@ -3,12 +3,23 @@ class Chapter < ActiveRecord::Base
 
   acts_as_commentable
 
-  validates_length_of :title, :allow_blank => true, :within => ArchiveConfig.TITLE_MIN..ArchiveConfig.TITLE_MAX, :message => "must be within".t + " #{ArchiveConfig.TITLE_MIN} " + "and".t + " #{ArchiveConfig.TITLE_MAX} " + "letters long.".t
-  validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, :too_long => "must be less than %d letters long.".t/ArchiveConfig.SUMMARY_MAX
-  validates_length_of :notes, :allow_blank => true, :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than %d letters long.".t/ArchiveConfig.NOTES_MAX
+  validates_length_of :title, 
+    :allow_blank => true, 
+    :minimum => ArchiveConfig.TITLE_MIN, :too_short=> "must be at least %d letters long."/ArchiveConfig.TITLE_MIN
+
+  validates_length_of :title, 
+    :allow_blank => true, 
+    :maximum => ArchiveConfig.TITLE_MAX, :too_long=> "must be less than %d letters long."/ArchiveConfig.TITLE_MAX
+    
+  validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, :too_long => "must be less than %d letters long."/ArchiveConfig.SUMMARY_MAX
+  validates_length_of :notes, :allow_blank => true, :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than %d letters long."/ArchiveConfig.NOTES_MAX
 
   validates_presence_of :content
-  validates_length_of :content, :in => 1..16777215
+  validates_length_of :content, 
+    :minimum => ArchiveConfig.CONTENT_MIN, :too_short => "must be at least %d letters long."/ArchiveConfig.CONTENT_MIN
+
+  validates_length_of :content, 
+    :maximum => ArchiveConfig.CONTENT_MAX, :too_long => "cannot be more than %d characters long."/ArchiveConfig.CONTENT_MAX
   
   # Virtual attribute to use as a placeholder for pseuds before the chapter has been saved
   # Can't write to chapter.pseuds until the chapter has an id

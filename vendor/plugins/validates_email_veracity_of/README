@@ -4,6 +4,8 @@ Author:: Carsten Nielsen (mailto:carsten.nielsen@savvica.com)
 License:: MIT
 Type:: Rails Validation Plugin
 
+NOTE: to test under different databases than sqlite3, edit the first line of 
+test/test_helper.rb to specify the database type. 
 
 Validates the form of an email address and verifies it's domain by checking if there are any
 mail exchange or address servers associated with it.
