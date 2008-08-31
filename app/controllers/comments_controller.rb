@@ -67,10 +67,8 @@ class CommentsController < ApplicationController
       flash[:error] = "What did you want to comment on?".t
       redirect_to :back
     else
-      if @commentable.kind_of?(Work)
-        @commentable = @commentable.last_chapter
-      end
       @comment = Comment.new
+      @commentable = @commentable_object
       respond_to do |format|
         format.html
         format.js

@@ -25,8 +25,12 @@ module CommentsHelper
   
   # return html link to add new comment
   def create_add_comment_link(commentable)
-    href = eval("new_#{commentable.class.to_s.downcase}_comment_path(commentable)")
-    link_to_function "Leave feedback".t, "Element.toggle('add_comment_#{commentable.class.to_s.downcase}_#{commentable.id}')" #, :href => href  
+    if commentable.is_a?(Work)
+      href = {:controller => :comments, :action => :new, :work_id => commentable}
+    else
+      href = eval("new_#{commentable.class.to_s.downcase}_comment_path(commentable)")
+    end
+    link_to_remote "Leave feedback".t, {:url => href, :method => :get}, :href => href  
   end
   
   # return link to show or hide comments

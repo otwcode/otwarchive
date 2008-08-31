@@ -1,6 +1,7 @@
 <!-- BEGIN comments -->
 <%- div_for(commentable, :comments_display, :class => 'comments_display') do -%>
-	<%- div_for(commentable, :add_comment, :style => "display : none;") do -%>   
+	<%- div_for(commentable, :add_comment, :style => "display : none;") do -%>
+	  <a name="add_comment_#{commentable.class.to_s.downcase}_#{commentable.id}"></a>   
     <%= render :partial => @comment = Comment.new, :locals => {:commentable => commentable, :button_name => 'Create'.t}%> 
   <%- end -%> 
   

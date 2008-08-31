@@ -6,4 +6,4 @@ page.replace "comments_link_work_#{@chapter.work.id}", "<span id='comments_link_
 page.replace "comments_display_work_#{@chapter.work.id}", :partial => 'comments/commentable', :locals => {:commentable => @chapter}
 
 page.replace_html "comments_link_chapter_#{@chapter.id}", show_hide_comments_link(@chapter, is_work = false)
-page.toggle("comments_display_chapter_#{@chapter.id}")
+page.show("comments_display_chapter_#{@chapter.id}")
