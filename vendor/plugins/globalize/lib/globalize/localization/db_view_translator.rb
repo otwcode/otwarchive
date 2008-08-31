@@ -128,7 +128,7 @@ module Globalize # :nodoc:
       end
 
       def fetch_from_cache(key, language, real_default, num, namespace = nil)
-        return real_default if language.nil?
+        return real_default if language.nil? || language == Locale.base_language
 
         zero_form   = num == 0
         plural_idx  = language.plural_index(num)        # language-defined plural form
@@ -143,9 +143,12 @@ module Globalize # :nodoc:
           # set to plural_form if no zero-form exists
           result ||= fetch_view_translation(key, language, plural_idx, namespace) if zero_form
 
+          # cache default in case
+          result ||= real_default 
+          
           cache_add(key, language, zplural_idx, result, namespace)
         end
-        result ||= real_default
+        result
       end
 
   end
