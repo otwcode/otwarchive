@@ -40,7 +40,7 @@ class User < ActiveRecord::Base
   named_scope :alphabetical, :order => :login
 
   validates_format_of :login, :message => 'Your user name must begin and end with a letter or number; it may also contain underscores but no other characters.'.t,
-    :with => /\A[A-Za-z0-9]+\w*[A-Za-z0-9]+\Z/
+    :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
 
   validates_email_veracity_of :email, :message => 'This does not seem to be a valid email address.'.t
   # validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create
