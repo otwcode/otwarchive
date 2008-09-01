@@ -2,7 +2,7 @@ class Work < ActiveRecord::Base
   has_many :chapters, :dependent => :destroy
   validates_associated :chapters
 
-  has_many :serial_works
+  has_many :serial_works, :dependent => :destroy
   has_many :series, :through => :serial_works
 
   has_many :related_works, :as => :parent
