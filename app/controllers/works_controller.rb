@@ -127,6 +127,17 @@ class WorksController < ApplicationController
   # GET /works/1
   # GET /works/1.xml
   def show
+    unless @work.series.blank?
+      @series_previous = {}
+      @series_next = {}
+      for series in @work.series
+        serial = series.serial_works.find(:first, :conditions => {:work_id => @work.id})
+        sw_previous = series.serial_works.find(:first, :conditions => {:position => (serial.position - 1)})
+        sw_next = series.serial_works.find(:first, :conditions => {:position => (serial.position + 1)})
+        @series_previous[series.id] = sw_previous.work if sw_previous
+        @series_next[series.id] = sw_next.work if sw_next
+      end
+    end
     if !is_admin? && !@work.visible(current_user)
       render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 and return
     elsif @work.adult? &&  !see_adult? 
