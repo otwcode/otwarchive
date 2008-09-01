@@ -14,7 +14,7 @@
 
       <!-- Series checkbox (storyseriescheck) -->
       <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear. -->
-      <input type="checkbox" name="storyseriescheck" tabindex="3" onclick="showWorkSeriesOptions()" <%- unless @work.series.blank? -%>checked="checked"<%- end -%>/><%=h 'Part of a series?'.t %><br />
+      <input type="checkbox" id="storyseriescheck" name="storyseriescheck" tabindex="3" onclick="showWorkSeriesOptions()" <%- unless @work.series.blank? -%>checked="checked"<%- end -%>/><%=h 'Part of a series?'.t %><br />
 
     </p>
 

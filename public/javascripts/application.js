@@ -12,6 +12,13 @@ function showChapteredStoryOptions() {
 
 // Toggles the chaptered story section of the work form and resets the wip_length field
 function showWorkSeriesOptions() {
+	var checkbox = document.getElementById('storyseriescheck');
+	var seriesField = document.getElementById('work_series_attributes_title');
+	var seriesSelect = document.getElementById('work_series_attributes_id');
+	if (!checkbox.checked) {
+		seriesField.value = '';
+		seriesSelect.selectedIndex = 0;
+	}
 	Element.toggle('seriesmanage');
 }
 
