@@ -1,8 +1,8 @@
 <div id="user-header">
-  <div id="user-icon"><%= image_tag("user_icon.png", :size => "100x100", :alt => "(Icon!)") %></div>
-  <h1><%= link_to_unless_current user.login, user %></h1>
+	<h1><%= link_to_unless_current user.login, user %></h1>
+	<h2><%= image_tag("user_icon.png", :size => "100x100", :alt => "(Icon!)") %></h2>
 
-  <ul>
+  <ul class="navigation">
     <li><%= link_to_unless_current "profile".t, user_profile_path(user) %></li>
     <li><%= link_to_unless_current "bookmark".t, '#' %></li>
     <li><%= link_to_unless_current "subscribe".t, '#' %></li>  

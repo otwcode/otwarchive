@@ -6,7 +6,8 @@
 
 	<% form_for :user, :url => users_path do |f| -%>
 	  <!-- Create login -->
-	  <%= f.label :login, h("What would you like as your user name?").t, :class => "authentication-label" %><br />
+	  <!--Currently this form is invalid. needs to be rewritten with the form elements wrapped in block level elements such as p, dl,dt,dd or li-->
+	h<%= f.label :login, h("What would you like as your user name?").t, :class => "authentication-label" %><br />
 	  <%= f.text_field :login, :class => 'authentication-textfield', :tabindex => '1' %><br />
     <!-- The password or OpenID login fields are shown in this div -->
 		<div id="switch_fields">

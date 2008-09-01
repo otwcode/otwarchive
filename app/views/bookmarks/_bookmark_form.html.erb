@@ -34,18 +34,18 @@
   <% end %>
 
   <p>
-    <%=h "Your Notes".t %><br />
+    <%= f.label :notes, "Your Notes".t %><br />
     <%= f.text_area :notes %>
   </p>
 
   <p>
-    <%=h "Your Tags".t %><br />
+    <%= f.label :tag_string, "Your Tags".t %><br />
     <%= text_field_tag 'tag_string', @tag_string %>
   </p>
 
   
   <p>
-    <%= f.check_box :private %> <%=h "Private bookmark?".t %>
+    <%= f.check_box :private %> <%= f.label :private, "Private bookmark?".t %>
   </p> 
   
   <%= f.hidden_field :user_id, :value => current_user.id %>

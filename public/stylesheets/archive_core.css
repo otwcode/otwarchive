@@ -77,12 +77,16 @@ pre, kbd, tt, code {
     padding: 0.25em;
 }
 
-strong, bold {
-    font-weight: 600;
+strong, b {
+    font-weight: 900;
 }
 
 em, cite, i {
     font-variant: oblique;
+}
+
+cite em, em cite {
+    font-variant: normal;
 }
 /* TABLES AND LISTS */
 table {
@@ -97,6 +101,10 @@ caption {
 
 caption, th, td {
     text-align: left;
+}
+
+td th {
+    padding-right: 3em;
 }
 
 dt {
@@ -116,6 +124,10 @@ form.new_abuse_report dd {
     margin-bottom: .5em;
 }
 
+label {
+    font-weight: 900;
+}
+
 blockquote:before, blockquote:after, q:before, q:after {
     content: "";
 }
@@ -133,6 +145,11 @@ blockquote, q {
     padding: 1em 1em 0;
 }
 
+#header h1 {
+    display: none;
+}
+}
+
 #header a {
     font-weight: 600;
     text-decoration: none;
@@ -140,7 +157,7 @@ blockquote, q {
 
 #login-block {
     float: right;
-    text-align: right;
+    text-align: left;
     font-size: 75%;
     clear: both;
 }
@@ -151,7 +168,10 @@ blockquote, q {
 
 #greeting li {
     font-weight: 100;
-    padding-left: 0.25em;
+}
+
+#login li {
+    display: inline;
 }
 
 #search {
@@ -261,7 +281,8 @@ ul#main-navigation {
     border-bottom: 1px dotted #777;
     clear: both;
 }
-/*PAGE BY PAGE STYLING: HOME HOME SUBPAGES FANDOMS PEOPLE GROUPS RECS TAGS   USERS-SHOW   */
+/*PAGE BY PAGE STYLING: HOME HOME SUBPAGES FANDOMS PEOPLE GROUPS RECS TAGS*/
+/*USERS SHOW*/
 #user-page {
     width: 65%;
     float: left;
@@ -282,19 +303,34 @@ ul#main-navigation {
     margin: 1em auto;
     padding: 0.15em;
 }
-/* WORKS-INDEX  */
 
-.works-index ul.story-list, #user-profile {
+#user-header {
+    position: relative;
+}
+
+#user-header img {
+    padding: 0;
+    margin: 0 0.5em 0.5em 0;
+    top: 0;
+    left: 0;
+    position: absolute
+}
+
+#user-header ul {margin-left:110px;}
+
+#user-header ul li {
+    display: inline;
+    padding: 0.25em
+}
+/*All these are elements containing the main content on pages where the sidebar shows up --may group these with the sidebar declarations*/
+.works-index ul.story-list, #user-profile, .pseuds-new form, .readings-index ul {
     width: 65%;
     float: left;
     position: relative;
     margin: 0.25em 1.5em 1em;
-    padding: 0;
 }
-
-
+/* WORKS-INDEX  */
 /*FANDOMS-INDEX   */
-
 .fandoms-index ul {
     margin: 1em auto;
 }
@@ -661,10 +697,6 @@ textarea.story-edit-notes {
     clear: both;
 }
 /* SOME POORLY GROUPED RULES, TO BE SORTED BACK INTO DOCUMENT FLOW 31/08/08  */
-cite em, em cite {
-    font-variant: normal;
-}
-
 #work_navigation li, #story-meta li {
     list-style-type: none;
 }
@@ -689,15 +721,11 @@ cite em, em cite {
     width: 80%;
 }
 
-td th {
-    padding-right: 3em;
-}
-
-#header h1, #errorexplanationnone ul {
+#errorexplanationnone ul {
     display: none;
 }
 
-#header li, #story-meta dd {
+#story-meta dd {
     display: inline;
     list-style-type: none;
 }

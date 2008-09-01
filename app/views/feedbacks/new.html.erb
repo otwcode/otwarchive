@@ -3,9 +3,9 @@
 <% form_for(@feedback) do |f| %>
   <p class="message"><%=h "Thanks for your time testing the archive! We appreciate the help a lot." .t %>
   </p>	
-  <p class="message"><label for="comment"><%=h "If you have any additional feedback about the archive - comments, concerns,
+  <p class="message"><%= f.label :comment, "If you have any additional feedback about the archive - comments, concerns,
 	haikus - you can leave them here." .t %>
-	<%=h " We promise to read it all!" .t %></label></p>
+	<%=h " We promise to read it all!" .t %></p>
   <p>
 	    <%= f.text_area :comment, :cols => 60 %>
   </p>

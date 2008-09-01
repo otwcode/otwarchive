@@ -1,5 +1,6 @@
 <!-- OpenID field -->	
-<%= f.label :identity_url, h("OpenID URL:").t, :class => 'authentication-label' %><br />
+	  <!--This partial form is invalid. needs to be rewritten with the form elements wrapped in block level elements such as p, dl,dt,dd or li. I will totally do it as soon as I grok what the assembled form looks like. Or you could do it now, gentle reader.-->
+	<p><%= f.label :identity_url, h("OpenID URL:").t, :class => 'authentication-label' %><br />
 <%= image_tag("openid.png", :alt => h('OpenID logo').t, :class => 'authentication-openidlogo') %> <%= f.text_field :identity_url, :class => 'authentication-textfield', :tabindex => '5' %>
 <br />
 

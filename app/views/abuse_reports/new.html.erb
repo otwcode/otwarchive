@@ -3,14 +3,14 @@
 <h1><%=h "Report Abuse".t %></h1>
 <% form_for(@abuse_report) do |f| %>
   <dl>
-  	<dt><label for="url"><%=h "Link to the page you are reporting:".t %></label></dt>
+  	<dt><%= f.label :url, "Link to the page you are reporting:".t %></dt>
     	<dd><%= f.text_field :url, :size => 60 %>
 			<p class="footnote"><%=h "If you came here from the abuse link at the bottom of the page,".t %>
 	    <%=h "this will be filled in for you".t %></p></dd>
   	
-	<dt><label for="comment"><%=h "Describe the problem in as much detail as possible:" .t %></label></dt>
+	<dt><%= f.label :comment, "Describe the problem in as much detail as possible:" .t %></dt>
     	<dd><%= f.text_area :comment, :cols => 60 %></dd>
-	<dt><label for="email"><%=h "Your email (optional):".t %></label></dt>
+	<dt><%= f.label :email, "Your email (optional):".t %></dt>
 	    	<dd><%= f.text_field :email, :size => 60 %>
 				<p class="footnote">Leave this blank to file an anonymous report.</p>
 			</dd>

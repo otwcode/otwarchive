@@ -76,7 +76,7 @@
 
     <div id="co-authors"> 	  
       <p id="coauthormanage">
-      	  <span class="storylabel"><label for="storycoauthor"><%=h 'Enter co-author name(s):'.t %></label></span>
+      	  <span class="storylabel"><%= f.label :storycoauthor, 'Enter co-author name(s):'.t %></label></span>
        	  <%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
               { :url => {:controller => 'pseuds', :action => 'choose_coauthors'}, :method => :get, :param_name => 'search', 
                 :tokens => ',', :min_chars => 2, :skip_style => true } %>
