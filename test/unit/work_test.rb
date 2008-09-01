@@ -8,7 +8,7 @@ class WorkTest < ActiveSupport::TestCase
     end
     should_have_many :chapters, :serial_works, :series, :related_works, :bookmarks, :taggings, :pseuds
     should_require_attributes :title
-    should_ensure_length_in_range :title, 3..255
+    should_ensure_length_in_range :title, 3..255, :short_message => /must be at least/
     should_ensure_length_in_range :notes, 0..2500, :long_message => /must be less/
     should_ensure_length_in_range :summary, 0..1250, :long_message => /must be less/
     should_belong_to :language

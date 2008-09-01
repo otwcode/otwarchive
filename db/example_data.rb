@@ -84,7 +84,7 @@ module FixtureReplacement
 
   attributes_for :pseud do |a|
     a.user = default_user
-    a.name = random_phrase
+    a.name = random_phrase[1...40]
     a.description = random_phrase
   end
 

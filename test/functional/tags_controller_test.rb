@@ -24,7 +24,7 @@ class TagsControllerTest < ActionController::TestCase
   context "on POST with :create" do
     # TODO restricted to tag_wrangler
     setup do
-      @name = random_phrase
+      @name = random_phrase[1...ArchiveConfig.TAG_MAX]
       put :create, :locale => 'en', :tag => {"name" => @name}
     end
     should_redirect_to 'tag_categories_path'
