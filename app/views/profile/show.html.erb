@@ -10,35 +10,23 @@
     <p><%= link_to "set my preferences".t, edit_user_path(@user) %></p>
   <%- end -%>
 
-
-  <table id="user-data">
-    <tr id="user-pseuds">
-      <td class="user-data-label"><span id="user-pseuds-label"><%= "My pseuds:".t %></span></td>
-      <td><%= print_pseuds(@user) %></td>
-    </tr>
-
-    <tr id="user-location">
-      <td class="user-data-label"><span id="user-location-label"><%=h "I live in:".t %></span></td>
-      <td><%=h @user.profile.location -%></td>
-    </tr>
-
+  <dl id="user-data">
+    <dt class="pseuds"><%= "My pseuds:".t %></dt>
+      <dd class="pseuds"><%= print_pseuds(@user) %></dd>
+    <dt class="location"><%=h "I live in:".t %></dt>
+      <dd><%=h @user.profile.location -%></dd>
     <%- if @user.preference.date_of_birth_visible -%>
-    <tr id="user-birthday">
-      <td class="user-data-label"><span id="user-birthday-label"><%=h "My birthday:".t %></span></td>
-      <td><%=h @user.profile.date_of_birth -%></td> 
-    </tr>
+    <dt class="birthday">><%=h "My birthday:".t %></dt>
+      <dd class="birthday"><%=h @user.profile.date_of_birth -%></dd> 
+	<%- end -%>
+	<%- if @user.preference.email_visible -%>
+    <dt class="email"><%=h "My email address:".t %></dt>
+      <dd class="email"><%= mail_to @user.email, nil, :encode => "hex" %></dd class="email">
     <%- end -%>
-  
-    <%- if @user.preference.email_visible -%>
-    <tr id="user-email">
-      <td class="user-data-label"><span id="user-email-label"><%=h "My email address:".t %></span></td>
-      <td><%= mail_to @user.email, nil, :encode => "hex" %></td>
-    </tr>
-    <%- end -%>
-  </table>
+  </dl>
 
   <div id="user-bio">
-    <p><%=h "About me:".t %></p>
-    <p><%=sanitize_format @user.profile.about_me -%></p>
+    <h3><%=h "About me:".t %></h3>
+    <%=sanitize_format @user.profile.about_me -%>
   </div>
 </div>

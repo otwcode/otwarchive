@@ -1,24 +1,15 @@
-<p>
-  <strong><%=h 'User:'.t %></strong>
-  <%=h @pseud.user.login %>
-</p>
-
-<p>
-  <strong><%=h 'Name:'.t %></strong>
-  <%=h @pseud.name %>
-</p>
-
-<p>
-  <strong><%=h 'Description:'.t %></strong>
-  <%=h @pseud.description %>
-</p>
-
-<p>
-  <strong><%=h 'Is default:'.t %></strong>
-  <%=h @pseud.is_default %>
-</p>
-
-<p>
-	<%= link_to 'Edit'.t, [:edit, @user, @pseud] %> |
-	<%= link_to 'Back'.t, user_pseuds_path(@user) %>
-</p>
+<dl>
+	<dt><%=h 'User:'.t %></dt>
+  	<dd><%=h @pseud.user.login %></dd>
+	<dt><%=h 'Name:'.t %></dt>
+  	<dd><%=h @pseud.name %></dd>
+	<dt><%=h 'Description:'.t %></dt>
+  	<dd><%=h @pseud.description %></dd>
+	<dt><%=h 'Is default:'.t %></dt>
+  	<dd><%=h @pseud.is_default %></dd>
+</dl>
+	
+<ul class="navigation">
+	<li><%= link_to 'Edit'.t, [:edit, @user, @pseud] %></li>
+	<li><%= link_to 'Back'.t, user_pseuds_path(@user) %></li>
+</ul>

@@ -1,4 +1,4 @@
-/*MEYERS RESET.***********************************************do not edit  */
+/*MEYERS RESET.***********************************************do not edit   */
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
     border: 0;
     outline: 0;
@@ -15,7 +15,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, blockquot
 : focus {
     outline: 0;
 }
-/************************************************end of uneditable rules   */
+/************************************************end of uneditable rules    */
 body {
     color: #111;
     background: #fff;
@@ -62,7 +62,7 @@ h4 {
 
 hr {
     border-bottom: 3px double;
-    margin: 0.75em auto
+    margin: 0.75em auto;
 }
 
 hr.clear {
@@ -84,7 +84,7 @@ strong, bold {
 em, cite, i {
     font-variant: oblique;
 }
-/* TABLES AND LISTS*/
+/* TABLES AND LISTS */
 table {
     border-collapse: separate;
     border-spacing: 0;
@@ -100,14 +100,14 @@ caption, th, td {
 }
 
 dt {
-    font-weight: bold;
-    clear: left
+    font-weight: 700;
+    clear: left;
 }
 
 dd {
     clear: left;
 }
-/*FORMS*/
+/*FORMS */
 form.new_abuse_report dt {
     margin-top: 1.5em;
 }
@@ -123,7 +123,7 @@ blockquote:before, blockquote:after, q:before, q:after {
 blockquote, q {
     quotes: "" "";
 }
-/* LAYOUT ELEMENTS   MASTHEAD BLOCK   */
+/* LAYOUT ELEMENTS   MASTHEAD BLOCK    */
 #header {
     background: #900 url(../images/title.png) top left no-repeat;
     border-bottom: 6px solid #111;
@@ -159,7 +159,7 @@ blockquote, q {
     clear: both;
     font-size: 80%;
 }
-/*TABS /MAIN NAVIGATION */
+/*TABS /MAIN NAVIGATION  */
 ul#main-navigation {
     position: relative;
     clear: both;
@@ -203,15 +203,15 @@ ul#main-navigation {
     border-bottom: 0;
     color: #111;
 }
-/* END HEADER   */
-/*CURRENTLY A MYSTERY */
+/* END HEADER*/
+/*CURRENTLY A MYSTERY  */
 #work_navigation {
     font-family: "Gill Sans", Georgia, Verdana, sans-serif;
     border-width: 100%;
     margin: auto 0;
     padding: 0 1em;
 }
-/*DASHBOARD STUFF  */
+/*DASHBOARD STUFF   */
 #dashboard-sidebar {
     float: left;
     width: 10em;
@@ -247,13 +247,13 @@ ul#main-navigation {
     padding-right: 2em;
     margin-top: .2em;
 }
-/*MAIN CONTENT BLOCK */
+/*MAIN CONTENT BLOCK  */
 #main {
     background: url(../images/headergradient.png) top left repeat-x;
     border-top: 1px solid #666;
+    position: relative;
     margin: auto;
     padding: 1em 3.5em;
-    position: relative;
 }
 
 #main h1 {
@@ -261,8 +261,7 @@ ul#main-navigation {
     border-bottom: 1px dotted #777;
     clear: both;
 }
-/*PAGE BY PAGE STYLING: HOME HOME SUBPAGES FANDOMS PEOPLE GROUPS RECS TAGS*/
-/*  USERS-SHOW  */
+/*PAGE BY PAGE STYLING: HOME HOME SUBPAGES FANDOMS PEOPLE GROUPS RECS TAGS   USERS-SHOW   */
 #user-page {
     width: 65%;
     float: left;
@@ -283,7 +282,19 @@ ul#main-navigation {
     margin: 1em auto;
     padding: 0.15em;
 }
-/* WORKS-INDEX  FANDOMS-INDEX  */
+/* WORKS-INDEX  */
+
+.works-index ul.story-list, #user-profile {
+    width: 65%;
+    float: left;
+    position: relative;
+    margin: 0.25em 1.5em 1em;
+    padding: 0;
+}
+
+
+/*FANDOMS-INDEX   */
+
 .fandoms-index ul {
     margin: 1em auto;
 }
@@ -313,7 +324,7 @@ ul#main-navigation {
 #footer a:link {
     border-bottom: 1px dotted;
 }
-/*BOOKMARKS-INDEX BOOKMARKS */
+/*BOOKMARKS-INDEX BOOKMARKS  */
 dl.bookmark {
     margin: 1em 0;
     padding: 0.4em 0;
@@ -327,12 +338,12 @@ dl.bookmark {
 .bookmark dd {
     margin: 0.5em;
 }
-/*TAGS-INDEX */
+/*TAGS-INDEX  */
 .tags-index ul {
     width: 90%;
     text-align: center;
-    margin: 2em auto;
     min-height: 100%;
+    margin: 2em auto;
 }
 
 .tags-index li {
@@ -392,7 +403,7 @@ a.cloud8 {
     font-weight: 800;
     color: #900;
 }
-/*SOME UNORGANIZED CLASSES */
+/*SOME UNORGANIZED CLASSES  */
 .clearboth {
     clear: both;
 }
@@ -424,7 +435,7 @@ li.story-date {
     height: 0;
     width: 50%;
 }
-/* UNSEMANTIC BODGES, TO BE SORTED THROUGH 31/08/08 */
+/* UNSEMANTIC BODGES, TO BE SORTED THROUGH 31/08/08  */
 .list-left {
     float: left;
 }
@@ -449,13 +460,13 @@ li.story-date {
     clear: both;
     margin-bottom: 30px;
 }
-/* Post and Preview Story styles   */
+/* Post and Preview Story styles    */
 .textareafield {
     margin-bottom: 20px;
 }
 
 .required {
-    color: red;
+    color: #900;
 }
 
 #story-form label {
@@ -471,12 +482,7 @@ li.story-date {
 #story-form textarea {
     width: 600px;
 }
-/* WHAT ARE THESE RULES FOR?
- #story-meta{background-repeat:no-repeat;background-image:url(../images/story-meta.nw.gif);margin-top:1em;background-color:#e6e6e6;font-size:80%;}
- #story-meta .north-east{float:right;width:5px;height:5px;background-image:url(../images/story-meta.ne.gif);}
- #story-meta .south-east{float:right;width:5px;height:5px;background-image:url(../images/story-meta.se.gif);}
- #story-meta .south-west{width:5px;height:5px;background-image:url(../images/story-meta.sw.gif);}
- #story-meta ul{margin-left:0;padding:1em;}*/
+
 .metadata-field {
     height: 100px;
 }
@@ -514,23 +520,21 @@ li.story-date {
 .chapter-content {
     padding: 50px;
 }
-/*SYSTEM/ ADMIN MESSAGES AND WARNINGS */
+/*SYSTEM/ ADMIN MESSAGES AND WARNINGS  */
 .message {
     font-size: larger;
 }
 
 .warning {
-    font-weight: bold;
+    font-weight: 700;
+    background-color: #feffd4;
+    border: 1px dashed #fec844;
 }
 
 .footnote {
     font-size: smaller;
 }
-
-.required {
-    color: #900;
-}
-/* Debug Style (development only)   */
+/* Debug Style (development only)    */
 #debug {
     border: 1px dashed;
     margin: 10%;
@@ -565,18 +569,13 @@ li.story-date {
     width: 98%;
 }
 
-.warning {
-    background-color: #feffd4;
-    border: 1px dashed #fec844;
-}
-
 .error {
     background-color: #efd1d1;
     border: 2px solid #af2020;
 }
 /* Rails will automatically add the errorExplanation and fieldWithErrors divs
  * after doing validation of models - just make sure you're using f.label
- * or similar!   */
+ * or similar!    */
 .errorexplanation {
     background-color: #efd1d1;
     border: 2px solid #af2020;
@@ -627,7 +626,7 @@ textarea.story-edit-notes {
 .chapter-control a {
     color: #4F709F;
 }
-/* Temporary bookmark content   */
+/* Temporary bookmark content    */
 #dynamic-bookmark {
     position: fixed;
     background-color: #fff;
@@ -655,12 +654,13 @@ textarea.story-edit-notes {
     list-style-type: none;
     padding: 10px;
 }
-/*PAGINATION STYLING   */
+/*PAGINATION STYLING    */
 .pagination {
     text-align: center;
     padding: .3em;
+    clear: both;
 }
-/* SOME POORLY GROUPED RULES, TO BE SORTED BACK INTO DOCUMENT FLOW 31/08/08 */
+/* SOME POORLY GROUPED RULES, TO BE SORTED BACK INTO DOCUMENT FLOW 31/08/08  */
 cite em, em cite {
     font-variant: normal;
 }

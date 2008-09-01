@@ -1,15 +1,14 @@
 <h1><%= "Pseuds for %s".t / @user.login -%></h1>
-
 <table>
+<caption><!--A summary of the table contents and purpose here please--></caption>
   <tr>
-    <th><%=h 'Name'.t %></th>
-    <th><%=h 'Description'.t %></th>
-    <th><%=h 'Is default'.t %></th>
+    <th scope="col"><%=h 'Name'.t %></th>
+    <th scope="col"><%=h 'Description'.t %></th>
+    <th scope="col"><%=h 'Is default'.t %></th>
   </tr>
-
 <% for pseud in @pseuds %>
   <tr>
-    <td><%=h pseud.name %></td>
+    <th scope="row"><%=h pseud.name %></th>
     <td><%=h pseud.description %></td>
     <td><%=h pseud.is_default %></td>
     <td><%= link_to 'Show'.t, [@user, pseud] %>
@@ -24,11 +23,6 @@
   </tr>
 <% end %>
 </table>
-
-
-
-<br />
-
 <p>
 	<% if current_user == @user -%>
 	<%= link_to 'New pseud'.t, new_user_pseud_path(@user) %>
