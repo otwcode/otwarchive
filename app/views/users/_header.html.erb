@@ -1,0 +1,15 @@
+<div id="user-header">
+  <div id="user-icon"><%= image_tag("user_icon.png", :size => "100x100", :alt => "(Icon!)") %></div>
+  <h1><%= link_to_unless_current user.login, user %></h1>
+
+  <ul>
+    <li><%= link_to_unless_current "profile".t, user_profile_path(user) %></li>
+    <li><%= link_to_unless_current "bookmark".t, '#' %></li>
+    <li><%= link_to_unless_current "subscribe".t, '#' %></li>  
+  <%- if logged_in? && current_user == @user -%>
+    <li><%= link_to "edit my account".t, edit_user_path(user) %></li>
+    <li><%= link_to 'manage my pseuds'.t, user_pseuds_path(user) %></li> 
+    <li><%= link_to 'orphan my works'.t, orphans_path %></li>
+  <%- end -%>
+  </ul>
+</div>

@@ -18,7 +18,7 @@
 	<%= render :partial => 'layouts/header' %>
   
 	  <!-- BEGIN sidebar -->
-	  <%- if @user && !@user.new_record? -%> 
+	  <%- if @user && !@user.new_record? && !@hide_dashboard -%> 
 	  <div id="dashboard-sidebar">
 	    <%= render :partial => 'users/sidebar' %>
 	  </div>

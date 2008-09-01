@@ -1,15 +1,6 @@
 <div id="user-page">
-  <div id="user-icon"><%= image_tag("user_icon.png", :size => "100x100", :alt => "(Icon!)") %></div>
-  <h1><%=h @user.login %></h1>
-    
-  <%- if logged_in? && current_user == @user -%>
-    <p>
-      <%= link_to "Edit profile".t, edit_user_path(@user) %> | 
-      <%= link_to 'Manage pseuds'.t, user_pseuds_path(@user) %> | 
-      <%= link_to 'Orphan works'.t, orphans_path %>
-    </p>
-  <%- end -%>
-  
+  <%= render :partial => 'users/header', :locals => {:user => @user} %>
+ 
   <%- unless @works.blank? -%>
   <div class="user-module" id="user-works">
     <h2><%=h 'Recent stories'.t %></h2>

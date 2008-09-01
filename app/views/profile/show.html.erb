@@ -1,33 +1,44 @@
-<h1><%=h @user.login %><%=h "'s Profile".t %></h1>
+<div id="user-profile">
+  <%= render :partial => 'users/header', :locals => {:user => @user} %>
 
-<table id="user-data">
-  <tr id="user-pseuds">
-    <td class="user-data-label"><span id="user-pseuds-label"><%= "Pseuds".t  + " (#{@user.pseuds.count})" %></span></td>
-    <td><%= print_pseuds(@user) %></td>
-  </tr>
+  <h2><%=h "About ".t %><%=h @user.login %></h2>
+  <p><%= "Member since: ".t %><%= @user.created_at.localize("%B %Y") %></p>
+  <p><%= "Beta tester".t %></p>
+  <p>Look, it's a catchy subtitle!</p>
 
-  <tr id="user-location">
-    <td class="user-data-label"><span id="user-location-label"><%=h "Location".t %></span></td>
-    <td><%=h @user.profile.location -%></td>
-  </tr>
-
-  <%- if @user.preference.date_of_birth_visible -%>
-  <tr id="user-birthday">
-    <td class="user-data-label"><span id="user-birthday-label"><%=h "Birthday".t %></span></td>
-    <td><%=h @user.profile.date_of_birth -%></td> 
-  </tr>
+  <%- if logged_in? && current_user == @user -%>
+    <p><%= link_to "set my preferences".t, edit_user_path(@user) %></p>
   <%- end -%>
 
-  <tr id="user-bio">
-    <td class="user-data-label"><span id="user-bio-label"><%=h "Bio".t %></span></td>
-    <td><%=sanitize_format @user.profile.about_me -%></td>
-  </tr>
 
-  <%- if @user.preference.email_visible -%>
-  <tr id="user-email">
-    <td class="user-data-label"><span id="user-email-label"><%=h "Email".t %></span></td>
-    <td><%= mail_to @user.email, nil, :encode => "hex" %></td>
-  </tr>
-  <%- end -%>
+  <table id="user-data">
+    <tr id="user-pseuds">
+      <td class="user-data-label"><span id="user-pseuds-label"><%= "My pseuds:".t %></span></td>
+      <td><%= print_pseuds(@user) %></td>
+    </tr>
 
-</table> 
+    <tr id="user-location">
+      <td class="user-data-label"><span id="user-location-label"><%=h "I live in:".t %></span></td>
+      <td><%=h @user.profile.location -%></td>
+    </tr>
+
+    <%- if @user.preference.date_of_birth_visible -%>
+    <tr id="user-birthday">
+      <td class="user-data-label"><span id="user-birthday-label"><%=h "My birthday:".t %></span></td>
+      <td><%=h @user.profile.date_of_birth -%></td> 
+    </tr>
+    <%- end -%>
+  
+    <%- if @user.preference.email_visible -%>
+    <tr id="user-email">
+      <td class="user-data-label"><span id="user-email-label"><%=h "My email address:".t %></span></td>
+      <td><%= mail_to @user.email, nil, :encode => "hex" %></td>
+    </tr>
+    <%- end -%>
+  </table>
+
+  <div id="user-bio">
+    <p><%=h "About me:".t %></p>
+    <p><%=sanitize_format @user.profile.about_me -%></p>
+  </div>
+</div>
