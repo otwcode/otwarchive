@@ -1,7 +1,7 @@
 <h1><%=h @series.title %></h1>
 <p>
   <%=h 'Series begun:'.t %> <%=h @series.created_at.localize("%d %B %Y") %><br />
-  <%=h 'Works included:'.t %> <%= @works.length %><br />
+  <%=h 'Works included:'.t %> <%= @serial_works.length %><br />
   <%=h 'Authors:'.t %> <%= print_pseud_list(@series.pseuds) %>
 </p>
 
@@ -23,7 +23,8 @@
 <%- end -%>
 
 <ul class="story-list" id="series-story-list">
-  <%- for work in @works -%>
-    <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
+  <%- for serial in @serial_works -%>
+    <%= render :partial => 'works/work_blurb', :locals => {:work => serial.work} %>
+    <%= link_to 'Remove from series'.t, serial, :confirm => 'Are you sure?'.t, :method => :delete %>
   <%- end -%>
 </ul>
