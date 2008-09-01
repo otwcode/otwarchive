@@ -24,9 +24,9 @@ class SeriesController < ApplicationController
   def index
     if params[:user_id]
       @user = User.find_by_login(params[:user_id])
-      @series = @user.series
+      @series = @user.series.find(:all, :order => 'created_at DESC').paginate(:page => params[:page])
     else
-      @series = Series.all
+      @series = Series.find(:all, :order => 'created_at DESC').paginate(:page => params[:page])
     end
 
   end
@@ -35,6 +35,7 @@ class SeriesController < ApplicationController
   # GET /series/1.xml
   def show
     @series = Series.find(params[:id])
+    @works = @series.works.find(:all, :order => 'serial_works.position') 
   end
 
   # GET /series/new
@@ -51,6 +52,12 @@ class SeriesController < ApplicationController
   # GET /series/1/edit
   def edit
     @series = Series.find(params[:id])
+  end
+  
+  # GET /series/1/manage
+  def manage
+    @series = Series.find(params[:id])
+    @serial_works = @series.serial_works.find(:all, :order => :position)
   end
 
   # POST /series
@@ -74,15 +81,22 @@ class SeriesController < ApplicationController
   # PUT /series/1.xml
   def update
     @series = Series.find(params[:id])
-
-    respond_to do |format|
-      if @series.update_attributes(params[:series])
-        flash[:notice] = 'Series was successfully updated.'.t
-        format.html { redirect_to(@series) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @series.errors, :status => :unprocessable_entity }
+    
+    if params[:sortable_series_list]
+      params[:sortable_series_list].each_with_index do |id, position|
+        SerialWork.update(id, :position => position + 1)
+        (@serial_works ||= []) << SerialWork.find(id)
+      end
+    else
+      respond_to do |format|
+        if @series.update_attributes(params[:series])
+          flash[:notice] = 'Series was successfully updated.'.t
+          format.html { redirect_to(@series) }
+          format.xml  { head :ok }
+        else
+          format.html { render :action => "edit" }
+          format.xml  { render :xml => @series.errors, :status => :unprocessable_entity }
+        end
       end
     end
   end

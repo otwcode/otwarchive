@@ -31,7 +31,7 @@ ActionController::Routing::Routes.draw do |map|
     user.resource :inbox, :controller => 'inbox'
     user.resources :bookmarks
     user.resources :works
-    user.resources :series
+    user.resources :series, :member => {:manage => :get}
     user.resources :readings
     user.resources :comments, :member => { :approve => :put, :reject => :put } 
   end
@@ -56,7 +56,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :related_works, :path_prefix => ':locale'
 
-  map.resources :series, :path_prefix => ':locale' 
+  map.resources :series, :path_prefix => ':locale', :member => {:manage => :get} 
   
   map.resource :search, :controller => 'search', :path_prefix => ':locale'
 

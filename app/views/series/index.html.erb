@@ -1,7 +1,11 @@
-<h1><%=h 'Listing series'.t %></h1>
+<h1><%=h "View All Series".t %></h1>
 
-<ul>
-<%- for series in @series -%>
-  <li><%= link_to series.title + " (" + series.serial_works.count.to_s + ")", series %></li>
-<%- end -%>
+<ul class="story-list">
+  <% for series in @series %>
+	<%= render :partial => 'series/series_blurb', :locals => {:series => series} %>
+  <% end %>
 </ul>
+
+<div class="pagination">
+	  <%= will_paginate @series, :prev_label =>  "&laquo; Previous".t,:next_label => "Next &raquo;".t %>
+</div>
