@@ -27,6 +27,10 @@
 
   <% fields_for :profile_attributes,  @user.profile do |p| %>
     <p>
+      <strong><%=h "Title".t %></strong><br />
+      <%= p.text_field :title %>
+    </p>
+    <p>
       <strong><%=h "Location".t %></strong><br />
       <%= p.text_field :location %>
     </p>

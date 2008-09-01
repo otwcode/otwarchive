@@ -2,9 +2,14 @@
   <%= render :partial => 'users/header', :locals => {:user => @user} %>
 
   <h2><%=h "About ".t %><%=h @user.login %></h2>
+
   <p><%= "Member since: ".t %><%= @user.created_at.localize("%B %Y") %></p>
-  <p><%= "Beta tester".t %></p>
-  <p>Look, it's a catchy subtitle!</p>
+
+  <%- if @user.is_beta_tester? -%>
+    <p><%= "Beta tester".t %></p>
+  <%- end -%>
+  
+  <p><%=h @user.profile.title %></p>
 
   <%- if logged_in? && current_user == @user -%>
     <p><%= link_to "set my preferences".t, edit_user_path(@user) %></p>
@@ -16,7 +21,7 @@
     <dt class="location"><%=h "I live in:".t %></dt>
       <dd><%=h @user.profile.location -%></dd>
     <%- if @user.preference.date_of_birth_visible -%>
-    <dt class="birthday">><%=h "My birthday:".t %></dt>
+    <dt class="birthday"><%=h "My birthday:".t %></dt>
       <dd class="birthday"><%=h @user.profile.date_of_birth -%></dd> 
 	<%- end -%>
 	<%- if @user.preference.email_visible -%>
