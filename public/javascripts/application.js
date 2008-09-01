@@ -10,6 +10,11 @@ function showChapteredStoryOptions() {
 	Element.toggle('number-of-chapters');
 }
 
+// Toggles the chaptered story section of the work form and resets the wip_length field
+function showWorkSeriesOptions() {
+	Element.toggle('seriesmanage');
+}
+
 // Hides expandable form field options if Javascript is enabled
 function hideFormFields() {
 	var coAuthors = document.getElementById('co-authors');
@@ -18,4 +23,8 @@ function hideFormFields() {
 	if (document.storyForm != null) var isWip = document.storyForm.isWip;
 	var chapteredOptions = document.getElementById('number-of-chapters');
 	if (isWip != null && chapteredOptions != null && !isWip.checked) chapteredOptions.style.display='none';
+	
+	if (document.storyForm != null) var hasSeries = document.storyForm.storyseriescheck;
+	var seriesOptions = document.getElementById('seriesmanage');
+	if (hasSeries != null && seriesOptions != null && !hasSeries.checked) seriesOptions.style.display='none';
 }

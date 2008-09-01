@@ -68,6 +68,7 @@ class WorksController < ApplicationController
       @chapter.content = params[:work][:chapter_attributes][:content]
     end
     @chapters = @work.chapters.in_order
+    @serial_works = @work.serial_works
     
     unless current_user == :false
       @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq

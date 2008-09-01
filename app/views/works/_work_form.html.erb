@@ -13,13 +13,13 @@
       onclick="showChapteredStoryOptions()" <%- if @work.chaptered? -%>checked="checked"<%- end -%>/> <%=h 'Chaptered work?'.t %>
 
       <!-- Series checkbox (storyseriescheck) -->
-      <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear.  STILL NEEDS Rails integration. -->
-      <input type="checkbox" name="storyseriescheck" tabindex="3" onclick="new Effect.toggle($('seriesmanage'),'appear')"/><%=h 'Part of a series?'.t %><br />
+      <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear. -->
+      <input type="checkbox" name="storyseriescheck" tabindex="3" onclick="showWorkSeriesOptions()" <%- unless @work.series.blank? -%>checked="checked"<%- end -%>/><%=h 'Part of a series?'.t %><br />
 
     </p>
 
     <!-- Toggles on with series checkbox -->
-    <p id="seriesmanage" class="field-right" style="display:none;">
+    <div id="seriesmanage" class="field-right">
       <% fields_for "work[series_attributes]" do |s| %>
 
         <%= s.label 'series_id', h('Choose a series:').t %><br /> 
@@ -30,7 +30,20 @@
         <%= s.text_field :title, :class => "storyinputfield" %>
 
     	<%- end -%>
-    </p>
+    	
+    	<%- unless @serial_works.blank? -%>
+      	<%= "Current Series:".t %>
+      	<ul>
+      	  <%- for serial in @serial_works -%>
+      	    <li>
+      	      <%= link_to serial.series.title, serial.series %> |  
+      	      <%= link_to 'Remove'.t, serial, :confirm => 'Are you sure?'.t, :method => :delete %> | 
+      	      <%= link_to 'Delete'.t, serial.series, :confirm => 'Are you sure?'.t, :method => :delete %>
+      	    </li>
+      	  <%- end -%>
+      	  </ul>
+    	<%- end -%>
+    </div>
 
     <p class="clearbothdrop"></p>
     
