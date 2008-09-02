@@ -496,6 +496,14 @@ li.story-date {
     clear: both;
     margin-bottom: 30px;
 }
+/* STORY VIEWS */
+
+#main.works-show ul#navigation {margin: 0.75em 0; text-align:right}
+.works-show #navigation li {display:inline;}
+.works-show #navigation li.go-back {padding:0 0.25em 0 0;display:block; float:left}
+
+#series-and-view-data {clear:both}
+
 /* Post and Preview Story styles    */
 .textareafield {
     margin-bottom: 20px;
