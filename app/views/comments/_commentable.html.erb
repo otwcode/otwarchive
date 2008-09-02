@@ -37,7 +37,7 @@
 
 	<!-- If not, and show_comments is true, here is where the comments will be rendered -->
 	<%- if params[:show_comments] -%>
-		<%= render :partial => 'comments/comment_thread', :locals => { :comments => commentable.find_all_comments, :depth => 0 }%>
+		<%= render :partial => 'comments/comment_thread', :locals => { :comments => commentable.comments, :depth => 0 }%>
 	<%- end -%>
 
 

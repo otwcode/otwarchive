@@ -4,10 +4,7 @@
 <%- end -%>
 <div id="comment_form">
   <a name="#comment_form"></a>
-  <%- remote_form_for([commentable, comment], 
-					:html => {:id => "new_comment_#{commentable.class.to_s.downcase}_#{commentable.id}"}
-					) do |f| -%>  
-
+	<%- form_for [commentable, comment] do |f| -%>
 	  <%- if logged_in? -%>
 	    <p>
 	      <%=h "Name: ".t -%>
@@ -37,7 +34,6 @@
 	
 	  <p>
 	    <%= f.submit button_name %>
-	    <%= create_cancel_button(comment, commentable) %>
 	  </p>
-  <%- end -%>
+  <% end -%>
 </div> 

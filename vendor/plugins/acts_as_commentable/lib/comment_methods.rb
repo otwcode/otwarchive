@@ -52,7 +52,7 @@ module CommentMethods
 
     # Sets the depth value for threaded display purposes (higher depth value = more indenting)                     
     def set_depth
-      self.depth = self.reply_comment? ? (self.commentable.depth ? self.commentable.depth + 1 : 1) : 0 
+      self.depth = self.reply_comment? ? self.commentable.depth + 1 : 0 
     end     
 
     # Returns the total number of sub-comments

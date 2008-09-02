@@ -79,7 +79,7 @@ class Work < ActiveRecord::Base
     end
   end
   
-  # Gets comments for all chapters in the work
+  # Gets all comments for all chapters in the work
   def find_all_comments
     self.chapters.collect { |c| c.find_all_comments }.flatten
   end
@@ -88,6 +88,11 @@ class Work < ActiveRecord::Base
   def count_visible_comments
     self.find_all_comments.select {|c| !c.hidden_by_admin and !c.is_deleted }.length
   end 
+  
+  # returns the top-level comments for all chapters in the work
+  def comments
+    self.chapters.collect { |c| c.comments }.flatten
+  end
 
   # rephrases the "chapters is invalid" message
   def after_validation

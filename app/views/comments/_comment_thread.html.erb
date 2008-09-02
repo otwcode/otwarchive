@@ -11,6 +11,8 @@
 			  <%= render :partial => 'comments/comment_thread', :locals => {:comments => comment.comments, :depth => depth+1 } -%>
 		    <%- end -%>
 		  <%- end -%>
+		  <!-- a new comment would be added just before this placeholder by javascript -->	
+		  <div class="new_comment_reply_placeholder_<%= comment.id -%>" style="display:none;"></div>
 		<%- end -%>
 	<%- end -%>
 </div>

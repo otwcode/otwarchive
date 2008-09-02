@@ -46,7 +46,7 @@ class CommentsController < ApplicationController
   
   # GET /comments
   def show_comments
-    @comments = @commentable.find_all_comments
+    @comments = @commentable.comments
   end
 
   def hide_comments
@@ -119,9 +119,15 @@ class CommentsController < ApplicationController
         if @comment.approved?
           flash[:notice] = 'Comment was successfully created.'.t
           parent = @comment.ultimate_parent
-          @comments = @commentable.find_all_comments
+          @comments = @commentable.comments
           respond_to do |format|
-            format.html { redirect_to :controller => parent.class.to_s.pluralize, :action => 'show', :id => parent.id, :anchor => "comment#{@comment.id}" }
+            format.html { 
+              redirect_to :controller => parent.class.to_s.pluralize, 
+                          :action => 'show', 
+                          :id => parent.id, 
+                          :anchor => "comment_#{@comment.id}", 
+                          :show_comments => true 
+            }
             format.js
           end 
         else
@@ -129,7 +135,9 @@ class CommentsController < ApplicationController
           redirect_to :back
         end
       else
-        render :action => "new", :locals => {:commentable => @comment.commentable, :button_name => 'Create'.t}
+        #render :action => "new", :locals => {:commentable => @comment.commentable, :button_name => 'Create'.t}
+        flash[:error] = "There was a problem saving your comment.".t
+        redirect_to :back
       end
     end
   end
