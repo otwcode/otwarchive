@@ -17,15 +17,15 @@
 		</li>
 	
 		<li class="story-tags">
-			<ul class="story-tags">
+			<ul>
 			    <% work.tags.each do |tag| %>
-			    <li class="story-tags"><%= link_to tag.name, tag_path(tag) %></li>
+			    <li><%= link_to tag.name, tag_path(tag) %></li>
 		    	<% end %>			
 			</ul>
 		</li>
 
 		<li class="story-desc">
-			<p><%= sanitize_limited work.summary %></p>
+			<%= sanitize_limited work.summary %>
 			<p><%=h 'Words:'.t %> <%=h number_with_delimiter(work.word_count) %></p>
 		</li>
 	</ul>

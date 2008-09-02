@@ -316,7 +316,7 @@ ul#main-navigation {
     position: absolute
 }
 
-#user-header ul {margin-left:110px;}
+#user-header ul {margin-left:110px; margin-bottom:50px} /*sized in pixels because the icon is a fixed pixel value*/
 
 #user-header ul li {
     display: inline;

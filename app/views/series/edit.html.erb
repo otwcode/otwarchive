@@ -3,25 +3,17 @@
 
 <% form_for(@series) do |f| %>
   <%= f.error_messages %>
-  
-  <p>
-    <%= f.label :title, "Series Title".t %><br />
-    <%= f.text_field :title %>
-  </p>
-  
-  <p>
-    <%= f.label :summary, "Series Description".t %><br />
-    <%= f.text_area :summary %> 
-  </p>
-  
-  <p>
-    <%= f.label :notes, "Series Notes".t %><br />
-    <%= f.text_area :notes %>
-  </p>    
-
-  <p>
-    <%= f.submit "Update".t %>
-  </p>
+<dl>
+	<dt><%= f.label :title, "Series Title".t %></dt>
+	<dd><%= f.text_field :title %></dd>
+	<dt><%= f.label :summary, "Series Description".t %><dt>
+	<dd><%= f.text_area :summary %> </dd>
+	<dt><%= f.label :notes, "Series Notes".t %><dt>
+	<dd><%= f.text_area :notes %></dd>    
+</dl>
+<p>
+	<%= f.submit "Update".t %>
+</p>
 <% end %>
 
 <%= link_to 'Show'.t, @series %> |

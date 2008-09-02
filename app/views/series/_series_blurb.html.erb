@@ -1,31 +1,32 @@
 <li class="story" id="series_<%=h series.id %>_blurb">
 	<ul>
 		<li class="story-title-line">
-		    <h3 title="Series Title">
-		    <% if series.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)") %><% end %>
-		    <%= link_to sanitize(series.title), series %>
-		    </h3>
+			<h3 title="Series Title">
+				<% if series.hidden_by_admin %>
+				<%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)") %>
+				<% end %>
+				<%= link_to sanitize(series.title), series %>
+			</h3>
 		</li>
-		
-	    <li class="story-date">
-	      <%= "Posted: ".t %><%=h series.created_at.localize("%d %B %Y") %><br />
-	      <%= "Updated: ".t %><%=h series.updated_at.localize("%d %B %Y") %>
-	    </li>
-
-	  	<li class="story-byline">
-	  		<%=h 'by'.t %> <%= print_pseud_list(series.pseuds) -%>
-		</li>
-	
-		<li class="story-tags">
-			<ul class="story-tags">
-			    <% series.works.collect(&:tags).flatten.compact.uniq.each do |tag| %>
-			    <li class="story-tags"><%= link_to tag.name, tag_path(tag) %></li>
-		    	<% end %>			
+		<li class="story-date">
+			<ul>
+				<li><%= "Posted: ".t %><%=h series.created_at.localize("%d %B %Y") %></li>
+				<li><%= "Updated: ".t %><%=h series.updated_at.localize("%d %B %Y") %></li>
 			</ul>
 		</li>
-
+		<li class="story-byline">
+			<%=h 'by'.t %>
+			<%= print_pseud_list(series.pseuds) -%>
+		</li>
+		<li class="story-tags">
+			<ul>
+				<% series.works.collect(&:tags).flatten.compact.uniq.each do |tag| %>
+				<li><%= link_to tag.name, tag_path(tag) %></li>
+				<% end %>
+			</ul>
+		</li>
 		<li class="story-desc">
-			<p><%= sanitize_limited series.summary %></p>
+			<%= sanitize_limited series.summary %>
 			<p><%=h 'Stories:'.t %> <%=h series.serial_works.count %></p>
 			<p><%=h 'Words:'.t %> <%=h number_with_delimiter(series.works.collect(&:word_count).sum) %></p>
 		</li>
