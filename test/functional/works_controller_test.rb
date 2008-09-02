@@ -44,7 +44,7 @@ class WorksControllerTest < ActionController::TestCase
             :work => { :title => 'New work title', 
             :chapter_attributes => {:content => 'Stuff in new chapter'}}
         end
-      should_redirect_to 'new_session_url'
+      should_redirect_to 'new_session_url(:restricted => true)'
     end
     context "when destroying a work" do
       setup do

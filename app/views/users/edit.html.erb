@@ -18,7 +18,7 @@
   </div>
   <% if ArchiveConfig.USE_OPENID %>	
     <div id="openid" style="display: none">
-    <%= f.label :openid_url"><%=h "Add or Change an OpenID URL" .t %>
+    <%= f.label :identity_url, "Add or Change an OpenID URL" .t %>
     <br />
     <%= f.text_field :identity_url %>
     <%= link_to_function "Add or Change a Password".t, "Element.hide('openid'); Element.show('passwd')" %>

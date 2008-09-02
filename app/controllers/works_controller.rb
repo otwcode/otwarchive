@@ -37,8 +37,8 @@ class WorksController < ApplicationController
   end
   
   def access_denied
-    store_location
-    redirect_to url_for(:controller => :session, :action => :new, :restricted => true)
+    store_location 
+    redirect_to new_session_path(:restricted => true)
     false
   end
 
