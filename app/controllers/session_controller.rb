@@ -8,6 +8,7 @@ class SessionController < ApplicationController
     if logged_in?
       redirect_to :controller => 'works', :action => 'index'
     end
+    @restricted = true if params[:restricted]
   end
   
   def create
@@ -82,7 +83,7 @@ class SessionController < ApplicationController
     end
     self.current_user.recently_reset? ? 
         (redirect_to :controller => 'users', :action => 'after_reset', :id => self.current_user.login) : 
-        (redirect_to :controller => 'works', :action => 'index')
+        redirect_back_or_default(works_path)
     flash[:notice] = "Logged in successfully".t
   end
 end

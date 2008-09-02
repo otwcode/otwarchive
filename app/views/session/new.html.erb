@@ -1,10 +1,21 @@
-<!-- loginform floated right --><h2 class="authentication-loginheading"><%=h "Login".t %></h2>
-<p>
-  <strong><%=h "Warning:".t %></strong>
-  <span><%=h "This site is in extreme alpha. Things may break or crash without notice. Please".t %></span>
-  <a href="mailto:otw-testers@transformativeworks.org" tabindex = '8'><%=h "report".t %></a>
-  <span><%=h "all crashes to us, and remain seated until the test has come to a full and complete stop.".t %></span>
-</p>
+<!-- loginform floated right -->
+<%- if @restricted -%>
+  <h2 class="authentication-loginheading"><%=h "Sorry!".t %></h2>
+  <p>
+    <%=h "This story is only available to registered users of the Archive. ".t %>
+    <%=h "If you already have an Archive of Our Own account, sign in now. ".t %>
+    <%=h "Or join us for free - it's easy.".t %>
+  </p>
+<%- else -%>
+  <h2 class="authentication-loginheading"><%=h "Login".t %></h2>
+  <p>
+    <strong><%=h "Warning:".t %></strong>
+    <span><%=h "This site is in extreme alpha. Things may break or crash without notice. Please".t %></span>
+    <a href="mailto:otw-testers@transformativeworks.org" tabindex = '8'><%=h "report".t %></a>
+    <span><%=h "all crashes to us, and remain seated until the test has come to a full and complete stop.".t %></span>
+  </p>
+<%- end -%>
+
 <% form_tag session_path do -%>
 <!-- renders either the normal or openid version of the form -->
 <div id="loginform">

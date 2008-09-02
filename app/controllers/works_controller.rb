@@ -37,9 +37,8 @@ class WorksController < ApplicationController
   end
   
   def access_denied
-    flash[:error] = "Please log in first.".t
     store_location
-    redirect_to new_session_path
+    redirect_to url_for(:controller => :session, :action => :new, :restricted => true)
     false
   end
 
