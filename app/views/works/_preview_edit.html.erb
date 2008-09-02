@@ -1,5 +1,7 @@
 <div id="previewpane">
-  <%= render :partial => 'work' %> 
+    <%= render :partial => 'works/work_header' -%>
+	<%= render :partial => 'chapters/chapters' %>
+	<%= render :partial => 'works/work_footer' -%>
 </div>
 
 <%- form_for(@work) do |f| -%>
