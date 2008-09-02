@@ -14,5 +14,29 @@ module ChaptersHelper
       link_to_remote("Show comments".t, {:url =>{ :controller => :comments, :action => :showcomments, :work_id => (@work.id)}}, :href => url_for(:controller => :chapters, :action => 'index', :work_id => @work.id, :show_comments => true))
     end
   end 
+
+  # returns next/previous links as appropriate with the given chapter as the starting point
+  def next_and_previous_links(work, chapter)
+    number_of_chapters = work.chapters.size 
+    chapter_position = work.chapters.index(chapter)
+    links = []
+    
+    links << link_to_chapter("First Chapter".t, work, 0)
+    links << (chapter_position == 0 ? 
+                "Previous Chapter".t : 
+                link_to_chapter("Previous Chapter".t, work, chapter_position-1))
+    links << (chapter_position == (number_of_chapters - 1) ? 
+                "Next Chapter".t : 
+                link_to_chapter("Next Chapter".t, work, chapter_position+1))
+    links << link_to_chapter("Last Chapter".t, work, number_of_chapters-1)
+
+    links.join(" | ")
+  end
+  
+  def link_to_chapter(string, work, chapter_position)
+    link_to_unless_current string, 
+      url_for({:controller => :chapters, :action => :show, :work_id => work, 
+               :id => work.chapters[chapter_position]})
+  end
   
 end

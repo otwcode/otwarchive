@@ -1,5 +1,14 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper 
+
+  # A more gracefully degrading link_to_remote.
+  def link_to_remote(name, options = {}, html_options = {})
+    unless html_options[:href]
+      html_options[:href] = url_for(options[:url])
+    end
+    
+    link_to_function(name, remote_function(options), html_options)
+  end
   
   # Used in navigation link list in header
   def home_link

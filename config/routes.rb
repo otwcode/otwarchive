@@ -44,7 +44,12 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :chapters, :has_many => :comments, :member => { :preview => :get, :post => :post }, :path_prefix => ':locale'
   
-  map.resources :comments, :has_many => :comments, :path_prefix => ':locale', :member => { :approve => :put, :reject => :put }
+  map.resources :comments, 
+    :has_many => :comments, 
+    :path_prefix => ':locale', 
+    :member => { :approve => :put, :reject => :put }, 
+    :collection => {:hide_comments => :get, :show_comments => :get, :add_comment => :get, :cancel_comment => :get,
+                    :add_comment_reply => :get, :cancel_comment_reply => :get}
 
   map.resources :bookmarks, :path_prefix => ':locale'
   

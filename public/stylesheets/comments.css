@@ -1,0 +1,35 @@
+ul.navigation {
+	border-bottom: 1px solid;
+	text-align: right;
+}
+ul.navigation li {
+	display: inline;
+	padding: 0 0 0.5em 0.5em;
+}
+div.comment {
+	position: relative;
+	clear: both;
+}
+.comment img.icon {
+	height: 100px;
+	width: 100px;
+	float: left;
+	margin: 0 0.5em 0.5em 0;
+}
+h4.datestamp {
+	clear: left;
+	font-size: smaller;
+	text-align: right;
+}
+.comment ul {
+	margin-top: -1.5em;
+}
+.comment ul	li {
+	display: inline;
+}
+.thread .thread {
+	margin-left: 3em;
+}
+.even {
+	background: #eee;
+}

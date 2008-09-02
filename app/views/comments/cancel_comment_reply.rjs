@@ -1,0 +1,6 @@
+# replace the "Cancel" link with "Reply" 
+page.replace_html "add_comment_reply_link_#{@commentable.id}", add_comment_reply_link(@commentable) 
+
+# get rid of the comments
+page.visual_effect :blind_up, "add_comment_reply_placeholder_#{@commentable.id}"
+page.delay(1) {page.replace_html "add_comment_reply_placeholder_#{@commentable.id}", "" }

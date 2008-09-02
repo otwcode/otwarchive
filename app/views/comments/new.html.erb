@@ -2,6 +2,7 @@
 
 <%= error_messages_for :comment %>
 
-<%= render :partial => @comment, :locals => {:commentable => @comment.commentable, :button_name => 'Create'.t}%>
+<%= render :partial => 'comments/comment_form', :locals => {:comment => @comment, :commentable => @comment.commentable, 
+												:button_name => 'Create'.t} -%>
 
 <%= link_to 'Back'.t, @commentable %>

@@ -16,15 +16,16 @@ module WorksHelper
     "Please note this is a work in progress, with ".t + posted.to_s + " of ".t + work.wip_length.to_s + " chapters posted.".t  
   end
   
-  def view_all_chapters_link(work, chapter)
-    link_to_remote "View all chapters".t, {:url => {:controller => :chapters, :action => :index, :work_id => work, :old_chapter => chapter.id}, :method => :get},
-                                          {:href => work_chapters_path(work)} 
-  end
+#  def view_all_chapters_link(work)
+#    #link_to_remote "View entire work".t, {:url => {:controller => :chapters, :action => :index, :work_id => work, :old_chapter => chapter.id}, :method => :get},
+#    #                                      {:href => work_path(work)} 
+#    link_to "View entire work".t, work_path(work) 
+#  end
   
-  def view_first_chapter_link(work)
-    link_to_remote "View single chapter".t, {:url => {:controller => :chapters, :action => :show, :work_id => work, :id => work.first_chapter}, :method => :get},
-                                            {:href => url_for({:controller => :chapters, :action => :show, :work_id => work, :id => work.first_chapter})} 
-    
+  def view_chapter_link(work, chapter)
+    #link_to_remote "View by chapters".t, {:url => {:controller => :chapters, :action => :show, :work_id => work, :id => work.first_chapter}, :method => :get},
+    #                                        {:href => url_for({:controller => :chapters, :action => :show, :work_id => work, :id => work.first_chapter})} 
+    link_to "View by chapters".t, url_for({:controller => :chapters, :action => :show, :work_id => work, :id => chapter})
   end
   
 end

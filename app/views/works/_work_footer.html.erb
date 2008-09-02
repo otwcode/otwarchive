@@ -1,0 +1,29 @@
+<!-- footer for work -->
+ 	<%- unless @work.parents.blank? -%>
+ 	<div id="parents">
+ 	  <p>Inspired by:<p>
+ 	  <ul>
+ 	  <%- for parent in @work.parents -%>
+ 	    <li><%= link_to parent.title, parent %></li>
+ 	    <%- if is_author_of?(@work) -%>
+    		<%= link_to h('Remove relationship').t, {:controller => :related_works, :action => :destroy, :parent_id => parent.id, :work_id => @work.id},  :confirm => h('Are you sure?').t, :method => :delete %>
+    	<%- end -%>
+ 	  <%- end -%>
+ 	  </ul>
+	</div>
+ 	<%- end -%>
+ 	
+ 	<%- unless @work.approved_children.blank? -%>
+ 	<div id="children">
+ 	  <p>Stories inspired by this one:<p>
+ 	  <ul>
+ 	  <%- for child in @work.approved_children -%>
+ 	    <li><%= link_to child.title, child %></li>
+ 	    <%- if is_author_of?(@work) -%>
+    		<%= link_to h('Remove link').t, {:controller => :related_works, :action => :update, :parent_id => @work.id, :work_id => child.id}, :method => :put %>
+    	<%- end -%>
+ 	  <%- end -%>
+ 	  </ul>
+	</div>
+ 	<%- end -%>
+<!-- end of footer for work -->

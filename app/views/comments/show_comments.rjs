@@ -1,0 +1,9 @@
+# replace the "Read Comments" link with "Hide Comments" 
+page.replace_html "show_comments_link", hide_comments_link(@commentable) 
+
+# load up the comments in their placeholder div
+page.replace_html "comments_placeholder", 
+  :partial => 'comments/comment_thread', 
+  :locals => {:comments => @comments, :depth => 0}
+  
+page.visual_effect :blind_down, "comments_placeholder"

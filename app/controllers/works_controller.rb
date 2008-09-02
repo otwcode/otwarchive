@@ -149,13 +149,7 @@ class WorksController < ApplicationController
         render :action => "adult" and return
       end
     end
-    if params[:view] == "all"
-      @commentable = @work
-    else
-      @chapters = [@work.first_chapter] 
-      @commentable = @work.first_chapter
-    end
-    @comments = @commentable.find_all_comments
+    @chapters = @work.chapters
   end
   
   # GET /works/new

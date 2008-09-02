@@ -1,46 +1,17 @@
-<!-- BEGIN navigation -->
-<ul id="navi">
-  <li>
-    <%= link_to '&lt;&lt; ' + h('Back to story list').t, works_path, :class => 'list-left' -%>
-  </li>
-  <li>
-  	<% if is_author_of?(@work) -%>
-		<strong><%= link_to h('Edit').t, edit_work_path(@work) %></strong>
-		|
-		<%= link_to h('Delete').t, @work, :confirm => h('Are you sure?').t, :method => :delete -%>
-	<% end -%>
-  </li>
-</ul>
-
-<!-- END navigation -->
-
 <!-- BEGIN work --> 
-<%= render :partial => 'works/work' -%>
+<div class="story-show">
+	<%= render :partial => 'works/work_header' -%>
+	
+	<div id="chapters">
+	<%= render :partial => 'chapters/chapters' -%>
+	</div>
+	
+	<%= render :partial => 'works/work_footer' -%>
+</div>
 <!-- END work -->
 
-<div id="bookmark-and-comment-links">
-<!-- BEGIN bookmark link -->
-  <span id="bookmark-link"><%= bookmark_link(@work) %></span>
-<!-- END bookmark link -->
-
-<!-- BEGIN comment links -->
-  <span id="comment-links">
-    <ul class="inline-link-list">
-      <li class="first-link"><span id="add_comment_link"><%= create_add_comment_link(@commentable) %></span></li>              
-      <%- unless @comments.blank? -%>
-        <li id="comments_link"> <span id="comments_link_<%= @commentable.class.to_s.downcase %>_<%= @commentable.id %>"><%= render :partial => 'comments/show_link', :locals => {:commentable => @commentable} %></span></li>
-      <%- else -%>
-        <li id="comments_link" style="display:none"> <span id="comments_link_<%= @commentable.class.to_s.downcase %>_<%= @commentable.id %>"><%= render :partial => 'comments/show_link', :locals => {:commentable => @commentable} %></span></li>
-      <%- end -%> 
-    </ul>
-  </span>
-<!-- END comment links -->
-</div>
-
-<div id="dynamic-bookmark" style="display:none"></div> 
-
 <!-- BEGIN comment section -->
-<%= render :partial => 'comments/commentable', :locals => {:commentable => @commentable} %>
+<%= render :partial => 'comments/commentable', :locals => {:commentable => @work} %>
 <!-- END comment section -->
 
 <%- if logged_in_as_admin? -%>

@@ -2,17 +2,24 @@ if @controller_name == "inbox"
   page.redirect_to user_inbox_path(current_user)
 else
   # Add newly-created comment into the appropriate div and clear/hide the comment form
-  comment_id = "comment#{@comment.id}"
-  commentable_id = "comment#{@comment.commentable.id}"  
-  new_comment_div = "<div class='comment' id='" + comment_id + "'></div>"
-  reply_form = "add_comment_comment_" + @comment.commentable.id.to_s
+  comment_id = "comment_#{@comment.id}"
+  commentable_id = "comment_#{@comment.commentable.id}"  
+  new_comment_div = "<div class='comment' id='#{comment_id}' style='display:none;'></div>"
 
   if @comment.reply_comment?
+    # Reset the comment reply form 
+    reply_form = "add_comment_reply_placeholder_#{@commentable.id}"
+    page.visual_effect :blind_up, reply_form
+    page.delay(1) {page.replace_html reply_form, "" }
+    
+    # Insert the exciting new comment after the one we are replying to
+    # note: not ideal! we would rather be adding this at the END
+    
     page.insert_html :bottom, commentable_id, new_comment_div
     page.insert_html :bottom, comment_id, :partial => 'single_comment', :object => @comment
     page.replace_html reply_form, ""
   else
-    page.show "comments_link"
+    #page.show "comments_link"
     page.replace_html "comments_link_#{@commentable.class.to_s.downcase}_#{@commentable.id}", :partial => 'comments/show_link', :locals => {:commentable => @commentable}, :object => (@show_comments = true)
     page.replace_html "comments_#{@commentable.class.to_s.downcase}_#{@commentable.id}", :partial => 'comments/comment_view'
     page['comment_content'].value = ''

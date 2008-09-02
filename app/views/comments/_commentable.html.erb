@@ -1,15 +1,46 @@
-<!-- BEGIN comments -->
-<%- div_for(commentable, :comments_display, :class => 'comments_display') do -%>
-	<%- div_for(commentable, :add_comment, :style => "display : none;") do -%>
-	  <a name="add_comment_#{commentable.class.to_s.downcase}_#{commentable.id}"></a>   
-    <%= render :partial => @comment = Comment.new, :locals => {:commentable => commentable, :button_name => 'Create'.t}%> 
-  <%- end -%> 
-  
-  <%- div_for(commentable, :comments) do -%>   
-    <%- if params[:show_comments] -%>   
-      <%= render :partial => 'comments/comment_view' %>
-	  <%- end -%>     
-  <%- end -%>
-  
-<%- end -%>
+<!-- Gets embedded anywhere we need to list comments on a top-level commentable. We need the local variable "commentable" here. -->
+<a name="comments"></a>
+<div id="feedback">
+	<ul class="navigation">
+		
+		<%- if commentable.class == Chapter || CanHasBookmarks > commentable.class -%>
+			<li id="add_bookmark_link"><%= bookmark_link(commentable) %></li>			
+		<%- end -%>
+		<li id="show_comments_link">
+			<%= show_hide_comments_link(commentable) -%>
+		</li>
+		<li id="add_comment_link">
+			<%= add_cancel_comment_link(commentable) -%>
+		</li>
+		
+	</ul>
+
+	<!-- if we have javascript, here is where the bookmark window will pop up -->
+	<div id="dynamic-bookmark" style="display:none;">	
+	</div>
+
+	<!-- If we have javascript, here is where the Add Comment window will appear. 
+		 If not, and we have params telling us to comment on this object, we will 
+	     manually display the comment window. --> 
+	<div id="add_comment_placeholder" style="display:none;">
+	</div>
+
+	<%- if params[:add_comment] -%>
+	<div id="add_comment">
+	  <%= render :partial => 'comments/comment_form', :locals => {:comment => Comment.new, :commentable => commentable, :button_name => 'Add Comment'.t}%> 		
+	</div>
+	<%- end -%>	
+
+	<!-- If we have javascript, here is where the comments will be spiffily inserted -->
+    <div id="comments_placeholder" style="display: none;">
+	</div>
+
+	<!-- If not, and show_comments is true, here is where the comments will be rendered -->
+	<%- if params[:show_comments] -%>
+		<%= render :partial => 'comments/comment_thread', :locals => { :comments => commentable.find_all_comments, :depth => 0 }%>
+	<%- end -%>
+
+
+	
+</div>
 <!-- END comments -->

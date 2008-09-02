@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController 
-  before_filter :load_commentable, :only => [ :index, :new, :create, :edit, :update, :showcomments ]
+  before_filter :load_commentable, :only => [ :index, :new, :create, :edit, :update, :show_comments, :hide_comments, :add_comment, :cancel_comment, :add_comment_reply, :cancel_comment_reply ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
   before_filter :check_permission_to_view, :only => [:show]
   before_filter :check_permission_to_edit, :only => [:edit, :update]
@@ -33,32 +33,47 @@ class CommentsController < ApplicationController
     elsif params[:chapter_id]
       @commentable = Chapter.find(params[:chapter_id])
     elsif params[:work_id]
-      @commentable_object = Work.find(params[:work_id])
-      @commentable = @commentable_object.last_chapter
+      #@commentable_object = Work.find(params[:work_id])
+      #@commentable = @commentable_object.last_chapter
+      @commentable =  Work.find(params[:work_id])
     elsif params[:user_id]
       @commentable = User.find_by_login(params[:user_id])
     elsif params[:pseud_id]
       @commentable = Pseud.find(params[:pseud_id])
     end
-    @commentable_object ||= @commentable    
+    @commentable_object ||= @commentable
   end
   
   # GET /comments
-  def index
-    @commentable = @commentable_object 
-    @comments = @commentable.nil? ? Comment.find(:all) : @commentable.find_all_comments
-    @show_comments = true
-    respond_to do |format|
-      format.html
-      format.js
-    end
+  def show_comments
+    @comments = @commentable.find_all_comments
+  end
+
+  def hide_comments
+    
+  end
+
+  def add_comment
+    @comment = Comment.new
+  end
+  
+  def add_comment_reply
+    @comment = Comment.new
+  end
+  
+  def cancel_comment
+    
+  end
+
+  def cancel_comment_reply
+    
   end
   
   # GET /comments/1
   # GET /comments/1.xml
   def show
-    comment = Comment.find(params[:id])
-    @comments = comment.full_set
+    @comment = Comment.find(params[:id])
+    @comments = @comment.full_set
   end
   
   # GET /comments/new
@@ -68,7 +83,6 @@ class CommentsController < ApplicationController
       redirect_to :back
     else
       @comment = Comment.new
-      @commentable = @commentable_object
       @controller_name = params[:controller_name] if params[:controller_name]
       respond_to do |format|
         format.html

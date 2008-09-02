@@ -1,0 +1,9 @@
+# replace the "Read Comments" link with "Hide Comments" 
+page.replace_html "add_comment_link", cancel_comment_link(@commentable) 
+
+# render the form into the spot for it on the page
+page.replace_html "add_comment_placeholder", 
+  :partial => 'comments/comment_form', 
+  :locals => {:comment => @comment, :commentable => @commentable, :button_name => "Add Comment"}
+  
+page.visual_effect :blind_down, "add_comment_placeholder"

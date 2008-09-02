@@ -1,26 +1,37 @@
-<div class="<%= cycle :oddcomment, :evencomment %>" id="<%= single_comment.id %>">
+<!-- START of single comment -->
+<div class="comment <%= cycle :odd, :even %>" id="comment_<%= single_comment.id -%>">
 	<%- if single_comment.is_deleted -%>
-    	<p><%=h '(comment deleted)'.t %></p>
+	  <p>(<%=h 'comment deleted'.t %>)</p>
 	<%- else -%>
-    <h3><%= get_pseud_or_mailaddress(single_comment) %> <%=h 'says:'.t %></h3>
-    <blockquote> 
+		<a name="comment<%=single_comment.id %>"></a>
+		<%- unless single_comment.pseud.nil? -%>
+		  <p><img class="icon" src="/images/icon_placeholder.png" alt="icon placeholder"></p>
+		<%- end -%>
+		<h3><%= get_pseud_or_mailaddress(single_comment) %></h3>
 		<%=sanitize_format single_comment.content %>
-	</blockquote>
-    <p>
-		<%=h 'Posted at:'.t %> <%= single_comment.created_at %>
-	</p>
-    <p> 
-        <%= link_to_unless_current "Thread".t, single_comment %> 
-        | <%= create_reply_link(single_comment, (controller_name ||= @controller.controller_name)) -%>
-        <%- if is_author_of?(single_comment) -%>
-        | <%= create_edit_link single_comment %>
-        | <%= create_destroy_link single_comment %>
-        <%- end -%>
-        <%- if !single_comment.pseud && logged_in? -%>
-        | <%= create_tag_as_spam_link single_comment %>
-        <%- end -%>
-    </p>
-    <div id="add_comment_comment_<%= single_comment.id -%>">
-    </div>
-  <%- end -%>
-</div>      
+		<h4 class="datestamp"><%=h 'Posted'.t %>&nbsp;<%= single_comment.created_at.localize("%a %d %B %Y %I:%M %p") %></h4>
+		<ul class="">
+			<li id="add_comment_reply_link_<%= single_comment.id -%>"><%= add_comment_reply_link single_comment -%></li>
+			<li id="thread_link">(<%= link_to "Thread".t, single_comment -%>)</li>
+			<%- if is_author_of?(single_comment) -%>
+				<li>(<%= create_edit_link single_comment -%>)</li>
+				<li>(<%= create_destroy_link single_comment -%>)</li>
+			<%- end -%>
+			<%- if single_comment.pseud.nil? and logged_in? -%>
+				<li>(<%= create_tag_as_spam_link single_comment -%>)</li>
+			<%- end -%>
+		</ul>
+
+		<!-- This is where the reply-to box will be added when "Reply" is hit, if the user has javascript -->	
+		<div id="add_comment_reply_placeholder_<%= single_comment.id -%>" style="display: none;">
+	    </div>
+
+		<!-- if not, we will render the comment form if this is the comment we are replying to. -->
+		<%- if params[:add_comment_reply_id] && params[:add_comment_reply_id] == single_comment.id.to_s -%>
+		  <%= render :partial => 'comments/comment_form', 
+					 :locals => {:comment => Comment.new, :commentable => single_comment, :button_name => "Add Comment"} -%>
+		<%- end -%>
+		
+	<%- end -%>
+</div>
+<!-- END of single comment -->

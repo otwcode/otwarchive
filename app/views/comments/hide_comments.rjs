@@ -1,0 +1,6 @@
+# replace the "Hide Comments" link with "Read Comments" 
+page.replace_html "show_comments_link", show_comments_link(@commentable) 
+
+# get rid of the comments
+page.visual_effect :blind_up, "comments_placeholder"
+page.delay(1) {page.replace_html "comments_placeholder", "" }

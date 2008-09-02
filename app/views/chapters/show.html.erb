@@ -1,6 +1,16 @@
-<%= render :partial => 'works/meta' %>
-<%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } -%>
-<%= render :partial => 'chapters/chapter_control', :locals => {:work => @work } -%>
+<!-- BEGIN work --> 
+<div class="story-show">
+  <%= render :partial => 'works/work_header' -%>
+
+  <div id="chapters">
+    <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } -%>
+	<%= render :partial => 'chapters/chapter_control', :locals => {:work => @work, :chapter => @chapter } -%>
+  </div>
+
+  <%= render :partial => 'works/work_footer' -%>
+  
+</div>
+<!-- END work -->
 
 <!-- BEGIN comment section -->
 <%= render :partial => 'comments/commentable', :locals => {:commentable => @chapter} %>
