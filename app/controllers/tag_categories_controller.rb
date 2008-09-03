@@ -1,18 +1,7 @@
 class TagCategoriesController < ApplicationController
 
-  before_filter :wranglers_only
+  permit "tag_wrangler", :permission_denied_message => "Sorry, the page you tried to access is for authorized tag wranglers only.".t
   before_filter :check_user_status
-  
-  # Only authorized users should be able to manage tags, tag categories and tag relationships
-  def wranglers_only
-    (logged_in? && current_user.is_tag_wrangler?) || access_denied
-  end
-  
-  def access_denied
-    flash[:error] = "Sorry, the page you have requested is for tag wranglers only! Please contact an admin if you think you should have access.".t
-    redirect_to tags_path
-    false
-  end
 
   # GET /tag_categories
   # GET /tag_categories.xml

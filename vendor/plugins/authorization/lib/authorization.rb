@@ -95,10 +95,10 @@ module Authorization
         # authentication
         send( STORE_LOCATION_METHOD ) if respond_to? STORE_LOCATION_METHOD
         if @current_user && !@current_user.nil? && @current_user != :false
-          flash[:notice] = @options[:permission_denied_message] || "Permission denied. You cannot access the requested page."
+          flash[:notice] = @options[:permission_denied_message] || "Sorry, you don't have permission to access the requested page."
           redirect_to @options[:permission_denied_redirection] || PERMISSION_DENIED_REDIRECTION
         else
-          flash[:notice] = @options[:login_required_message] || "Login is required to access the requested page."
+          flash[:notice] = @options[:login_required_message] || "Please log in to access the requested page."
           redirect_to @options[:login_required_redirection] || LOGIN_REQUIRED_REDIRECTION
         end
         false  # Want to short-circuit the filters
