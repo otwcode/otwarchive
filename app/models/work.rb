@@ -51,6 +51,7 @@ class Work < ActiveRecord::Base
   before_save :post_first_chapter
   after_save :save_creatorships, :save_associated 
   before_save :set_adult
+  before_validation_on_update :validate_tags
   
   # Associating works with languages.  
   belongs_to :language, :foreign_key => 'language_id', :class_name => '::Globalize::Language'
@@ -288,6 +289,16 @@ class Work < ActiveRecord::Base
   # Set the value of word_count to reflect the length of the chapter content
   def set_word_count
     self.word_count = self.chapters.collect(&:word_count).compact.sum
+  end
+  
+  # Check to see that a work is tagged appropriately
+  def has_required_tags?
+    TagCategory.required - self.tags.collect(&:tag_category) == []
+  end
+  
+  def validate_tags
+    errors.add_to_base("Work must have required tags.".t) unless self.has_required_tags?
+    self.has_required_tags?  
   end
   
   # If the work is posted, the first chapter should be posted too
