@@ -1,36 +1,36 @@
-## full path to mysql in case it's not in cron's path
-#mysql: /usr/local/mysql/bin/mysql
-#mysqldump: /usr/local/mysql/bin/mysqldump
+## full path to mysql and mysqldump if they are not in PATH
+
+#mysql: /opt/local/bin/mysql5
+#mysqldump: /opt/local/bin/mysqldump5
 
 ## database to dump
+
 database: otwarchive_production
 encoding: utf8
 
 ## username must have GRANT FILE ON *.* 
 ## and SELECT and LOCK TABLES ON database.*
-## access in mysql
-#username: backup
-#password: 
+
+username: root
+password: 
 
 ## path must exist and be writable by mysql and whoever runs the script
-## should be 770 with user and mysql group or mysql and user group
 ## path defaults to RAILS_ROOT/db/backup but must still be manually created
-#path:
+## with permissions 770 and group mysql
 
-## days is the default time in days a table should be kept in backups
-## if not listed individually in tables
-## TODO - purge not implemented yet
-days: 365
+#path: /backup/archive/
 
-## tables have two properties that can be overridden
-##  days - how long to keep before purging
-## and split properties
-##  split_owner - what field to split on
-##  split - how many split_owners in a file
-## TODO - be able to split on joins, not just _id
-tables:
-  chapters: 
-    split: 100
-    split_owner: work
-#  schema_migrations:
-#    days: 1
+## tables can be customized as to how long old copies are retained
+
+#days:
+#  users: 1
+#  chapters: 30
+
+## if huge database files need to be split into smaller files for convenience:
+## field - what field to split on (must be numeric!)
+## number - how many of each field should be in a single file
+
+#split:
+#  chapters: 
+#    field: work_id
+#    number: 100

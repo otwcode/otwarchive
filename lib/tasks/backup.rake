@@ -6,154 +6,172 @@ def backtick(cmd,*args)
 end
 
 def setup
-    @config = YAML.load_file(config_file = RAILS_ROOT + '/config/backup.yml')
-    @mysql = @config["mysql"] || "mysql"
-    @mysqldump = @config["mysqldump"] || "mysqldump"
-    @path = @config[:path] || RAILS_ROOT + '/db/backup/'
-    @today = @path + 'today/'
-    @yesterday = @path + (Date.today - 1 ).to_s + '/'
-    @db_args = []
-    @db_args << '--user=' + @config["username"] if @config["username"]
-    @db_args << '--password=' + @config["password"]  if @config["password"]
-    @db_args << '--default-character-set=' + @config["encoding"]  if @config["encoding"]
-    args = Array.new(@db_args)
-    args << '--skip-column-names'
-    args << '--execute=show tables'
-    args << @config['database']
-    @all_tables = backtick(@mysql, *args).chomp.split
-    @config_tables = @config["tables"].keys
+  @debug = false
+  @config = YAML.load_file(config_file = RAILS_ROOT + '/config/backup.yml')
+  y @config if @debug
+  @database = @config["database"]
+  unless @database
+    puts "must specify database!" 
+    exit
+  end
+  @mysql = @config["mysql"] || "mysql"
+  @mysqldump = @config["mysqldump"] || "mysqldump"
+  @path = @config[:path] || RAILS_ROOT + '/db/backup/'
+  unless FileTest.exists?(@path)
+    puts "#{@path} must exist and be 770 with group mysql"
+    exit
+  end
+  @skip_tables = @config["split"] if @config["split"]
+  @purge_tables = @config["days"] if @config["days"] 
+  @now = @path + '/latest/' 
+  @previous = @path + '/older/' 
+  @last = (DateTime.now - 1.hour ).to_s(:db).gsub(" ", '-') 
+  @last_path = @previous + @last + '/'
+  @db_args = []
+  @db_args << '--user=' + @config["username"] if @config["username"]
+  @db_args << '--password=' + @config["password"]  if @config["password"]
+  @db_args << '--default-character-set=' + @config["encoding"]  if @config["encoding"]
 end
 
 namespace :db do  
-  desc 'Backup mysql database - requires RAILS_ROOT/config/backup.yml'
-  task :backup => [:environment] do
+  desc 'Backup mysql database - requires backup.yml'
+  task :backup do
     setup
-    FileUtils.mv(@today, @yesterday)
-    FileUtils.mkdir_p(@today, :mode => 0777)
+    FileUtils.mkdir_p(@previous, :mode => 0700)
+    FileUtils.mv(@now, @last_path) if File.exists?(@now)
+    FileUtils.mkdir_p(@now, :mode => 0777)
     
-    # backup most of the tables to their own files
     args = Array.new(@db_args)
     args << '--opt'
     args << '--compact'
     args << '--quote-name'
-    @config_tables.each { |t| args << "--ignore-table=#{@config['database']}.#{t}" }
-    args << "--tab=#{@today}"
-    args << @config['database']
+    @skip_tables.keys.each { |t| args << "--ignore-table=#{@database}.#{t}" } if @skip_tables
+    args << "--tab=#{@now}"
+    args << @database
+    puts "mysqldump with : " if @debug
+    y args if @debug
     system(@mysqldump, *args)
-
-    # backup special tables
-    @config_tables.each do |t|
-      # backup sql
-      args = Array.new(@db_args)
-      args << '--opt'
-      args << '--compact'
-      args << '--quote-name'
-      args << '--no-data'
-      args << "--result-file=#{@today}#{t}.sql"
-      args << @config['database']
-      args << t
-      system(@mysqldump, *args)
-      # get split info
-      owner = @config["tables"][t]["split_owner"]
-      if owner
+ 
+    if @skip_tables
+      puts "skip_tables: " if @debug
+      y @skip_tables if @debug
+      @skip_tables.each_pair do |table, config|
+        field = config["field"]
+        number = config["number"].to_i
+        # backup sql
+        args = Array.new(@db_args)
+        args << '--opt'
+        args << '--compact'
+        args << '--quote-name'
+        args << '--no-data'
+        args << "--result-file=#{@now}#{table}.sql"
+        args << @database
+        args << table
+        puts "mysqldump with: " if @debug
+        y args if @debug
+        system(@mysqldump, *args)
+        
+        # backup contents
         args = Array.new(@db_args)
         args << '--skip-column-names'
-        args << "--execute=select max(id) from #{owner.pluralize}"
-        args << @config['database']
-        number_of_owners = backtick(@mysql, *args).chomp.to_i
-        i = 0
-        j = @config["tables"][t]["split"]
-        tpath = @today + t + '/*/' + t + ".txt "
-        while (i < number_of_owners ) do
-          cpath = @today + t + '/' + i.to_s + '/'
+        args << "--execute=select max(#{field}) from #{table}"
+        args << @database
+        puts "mysql with: " if @debug
+        y args if @debug
+        total_fields = backtick(@mysql, *args).chomp.to_i
+        puts "total_fields: " if @debug
+        y total_fields if @debug
+        start = 0
+        finish = start + number
+        while (start < total_fields ) do          
+          cpath = @now + table + '/' + start.to_s + '/'
           FileUtils.mkdir_p(cpath, :mode => 0777)
           args = Array.new(@db_args)
-          args << "--execute=select * from #{t} where #{owner}_id>=#{i} and #{owner}_id<#{i}+#{j} into outfile '#{cpath}#{t}.txt'"
-          args << @config['database']
+          args << "--execute=SELECT * FROM #{table} WHERE #{field}>=#{start} AND #{field}<#{finish} INTO OUTFILE '#{cpath}#{table}.txt'"
+          args << @database
+          puts "mysql with: " if @debug
+          y args if @debug
           system(@mysql, *args)
-          i += j
+          start += number
+          puts "new start: " if @debug
+          y start if @debug
         end # while
-      else
-        args = Array.new(@db_args)
-        args << "--execute=select * from #{t} into outfile '#{@today}#{t}.txt'"
-        args << @config['database']
-        system(@mysql, *args)
-      end # owner
-    end # back up special tables
+      end # each @skip_table
+    end # if @skip_tables
+
     # recover disk space
-    @all_tables.each do |t|
-      # sql
-      new = @today + t + '.sql'
-      old = @yesterday + t + '.sql'
-      if File.exists?(old)
-         `diff -Naur #{new} #{old} > #{old}.patch` unless FileUtils.identical?(old, new)
-         FileUtils.rm(old) 
-      end
-      # txt
-      split = @config["tables"][t]["split_owner"] if @config["tables"][t] 
-      if split
-        Find.find(@today + t) do |path|
-          if FileTest.file?(path)
-            new = path
-            old = path.gsub(@today, @yesterday)
-            if File.exists?(old)
-              `diff -Naur #{new} #{old} > #{old}.patch` unless FileUtils.identical?(old, new)
-              FileUtils.rm(old)
-            end
-          end
-        end   
-        `rmdir #{@yesterday + t + '/'}* 2> /dev/null`
-      else
-        old = @yesterday + t + '.txt'
-        new = @today + t + '.txt'
+    Find.find(@now) do |path|
+      if FileTest.file?(path)
+        new = path
+        old = path.gsub(@now, @last_path)
+        patch = old + ".patch"
         if File.exists?(old)
-          `diff -Naur #{new} #{old} > #{old}.patch` unless FileUtils.identical?(old, new)
-          FileUtils.rm(old)
+          `diff -Naur #{new} #{old} > #{patch}` unless FileUtils.identical?(old, new)
+          FileUtils.rm(old) 
         end
       end
-    end #recover disk space
+    end # recover
+    # remove empty directories
+    cmd = "find -d #{@previous} -type d -empty -exec rmdir {} \\;"
+    puts cmd if @debug
+    puts "#{cmd} failed" unless system(cmd)
   end #backup
-
-  desc 'prepare for restore, DATE=yyyy-mm-dd, default today.'
+  
+  desc 'prepare for restore, DATE=yyyy-mm-dd-hh:mm:ss, default latest.'
   task :restore do
     setup
     rpath = @path + 'restore' + '/'
     FileUtils.rm_rf rpath
-    puts "getting full backup from today"
-    FileUtils.cp_r @today, rpath
-    date = ENV['DATE'] || Date.today.to_s
-    date = Date.parse(date)
-    restore =  Date.today - 1
-    while date <= restore
-      puts "patching from #{restore}"
-      Find.find(@path + restore.to_s) do |path|
-        puts "can't find #{restore}" unless FileTest.exists?(path)
-        if FileTest.file?(path)
-          patch = path
-          file = path.gsub(@path + restore.to_s, rpath).gsub('.patch', '')
-          cmd = "patch -s -p0 #{file} #{patch}"
-          puts "#{cmd} failed" unless system(cmd)
-        end
-      end 
-      restore -= 1
+    puts "getting full backup from latest" if @debug
+    FileUtils.cp_r @now, rpath
+    last = ENV['DATE'] || DateTime.now.to_s
+    date = DateTime.parse(last)
+    Dir.new(@previous).each do |backup|
+      begin
+        backup_time = DateTime.parse(backup)
+        if date <= backup_time 
+          puts "patching from #{backup}" if @debug
+          Find.find(@previous + backup) do |path|
+            if FileTest.file?(path)
+              patch = path
+              file = path.gsub(@previous + backup.to_s, rpath).gsub('.patch', '')
+              cmd = "patch -s -p0 #{file} #{patch}"
+              puts cmd if @debug
+              puts "#{cmd} failed" unless system(cmd)
+            end
+          end
+        end 
+      rescue
+      end
     end
-    puts "restore using (with any other required arguments):"
-    puts "$ mysqladmin create database"
-    puts "$ cat #{rpath}*.sql | mysql database"
-    puts "$ mysqlimport database #{rpath}*.txt"
-    puts "$ mysqlimport database #{rpath}*/*/*.txt"
+    puts "restore (assuming empty database) using:"
+    puts "$ mysqladmin -uroot -p create #{@database}"
+    puts "$ cat #{rpath}*.sql | mysql -uroot -p #{@database}"
+    puts "$ mysqlimport -uroot -p #{@database} #{rpath}*.txt"
+    puts "$ mysqlimport -uroot -p #{@database} #{rpath}*/*/*.txt"
   end
   
   desc 'purge old files from backup'
   task :purge_backup do
     setup
-    @all_tables.each do |t|
-      if @config["tables"][t]
-        days = @config["tables"][t]["days"] || @config["days"]
-      else
-        days = @config["days"]
+    now = DateTime.now
+    @purge_tables.each_pair do |table, days|
+      Dir.new(@previous).each do |backup|
+        next if backup =~ /\./
+        puts "Backup time: " if @debug
+        puts backup if @debug
+        backup_time = DateTime.parse(backup)
+        puts "Purge time: " if @debug
+        puts (now - days.days).to_s(:db) if @debug
+        if now - days.days > backup_time 
+          puts "purging #{table}" if @debug
+          puts @previous + backup + '/' + table + ".patch" if @debug
+          FileUtils.rm_rf(@previous + backup + '/' + table + ".patch")        
+          puts @previous + backup + '/' + table if @debug
+          FileUtils.rm_rf(@previous + backup + '/' + table)        
+        end
       end
-    # TODO purge
-    end # all_tables.each
+    end 
   end # purge_backup
-end #db
+
+end # db namespace
