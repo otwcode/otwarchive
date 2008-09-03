@@ -112,7 +112,7 @@ namespace :db do
       end
     end # recover
     # remove empty directories
-    cmd = "find -d #{@previous} -type d -empty -exec rmdir {} \\;"
+    cmd = "find #{@previous} -depth -type d -empty -exec rmdir {} \\;"
     puts cmd if @debug
     puts "#{cmd} failed" unless system(cmd)
   end #backup
