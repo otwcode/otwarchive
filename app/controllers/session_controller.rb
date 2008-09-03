@@ -67,7 +67,9 @@ class SessionController < ApplicationController
     if logged_in?
       successful_login
     else
-      failed_login
+      message = User.find_by_login(login) ? "The password you entered doesn't match our records. Please try again or click the 'forgot password' link below.".t : 
+                                            "We couldn't find that name in our database. Please try again.".t
+      failed_login(message)
     end
   end
   

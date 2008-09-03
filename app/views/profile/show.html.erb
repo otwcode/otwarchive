@@ -12,7 +12,7 @@
   <p><%=h @user.profile.title %></p>
 
   <%- if logged_in? && current_user == @user -%>
-    <p><%= link_to "set my preferences".t, edit_user_path(@user) %></p>
+    <p><%= link_to "set my preferences".t, user_preferences_path(@user) %></p>
   <%- end -%>
 
   <dl id="user-data">
@@ -34,4 +34,8 @@
     <h3><%=h "About me:".t %></h3>
     <%=sanitize_format @user.profile.about_me -%>
   </div>
+  
+  <%- if logged_in? && current_user == @user -%>
+    <p><%= link_to "Edit".t, edit_user_path(@user) %></p>
+  <%- end -%>
 </div>

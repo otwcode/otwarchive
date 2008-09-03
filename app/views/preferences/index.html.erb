@@ -1,0 +1,18 @@
+<h1><%=h 'Update My Preferences'.t %></h1>
+
+<%= error_messages_for :preference %>
+
+<%- form_for(@preference, :url => { :action => "update", :user_id => @user }) do |f| -%>  
+  <ul>
+    <li><%= f.check_box :history_enabled %> <%= f.label :history_enabled, "Enable History".t %></li>
+    <li><%= f.check_box :email_visible %> <%= f.label :email_visible, "Display Email Address".t %></li>
+    <li><%= f.check_box :date_of_birth_visible %> <%= f.label :date_of_birth_visible, "Display Date of Birth".t %></li>
+    <li><%= f.check_box :adult %> <%= f.label :adult, "Show me adult content without prompting".t %></li> 
+  </ul>		 
+
+  <p>
+    <%= f.submit "Update".t %>
+  </p>
+<%- end -%>
+
+<p><%= link_to "Edit my profile".t, edit_user_path(@user) %></p>

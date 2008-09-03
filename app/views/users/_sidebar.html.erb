@@ -9,6 +9,6 @@
   <li><%= link_to_unless_current prefix + "Inbox (".t + @user.feedback_comments.count.to_s + ")", user_inbox_path(@user) %></li>
   <li><%= link_to_unless_current prefix + "Reading History".t, user_readings_path(@user) %></li>
   <li><%= link_to_unless_current prefix + "Subscriptions".t, '#' %></li>
-  <li><%= link_to_unless_current prefix + "Preferences".t, '#' %></li>
+  <li><%= link_to_unless_current prefix + "Preferences".t, user_preferences_path(@user) %></li>
   <% end %>
 </ul>

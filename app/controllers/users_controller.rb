@@ -1,9 +1,11 @@
 class UsersController < ApplicationController
   before_filter :check_user_status, :only => [:edit, :update]
-
-  # checks if the current user and the given user are the same
-  def is_user?(user)
-    current_user == user
+  before_filter :is_owner, :only => [:edit, :update, :destroy]
+  
+  # Ensure that the current user is authorized to make changes
+  def is_owner
+    @user = User.find_by_login(params[:id])
+    @user == current_user || access_denied
   end
   
   def index
@@ -28,10 +30,6 @@ class UsersController < ApplicationController
   # GET /users/1/edit
   def edit
     @user = User.find_by_login(params[:id])
-    unless is_user?(@user)
-      flash[:error] = "You are not allowed to perform this action.".t
-      redirect_to user_url(@user)
-    end
   end
   
   # POST /users
@@ -77,32 +75,19 @@ class UsersController < ApplicationController
   # PUT /users/1.xml
   def update
     @user = User.find_by_login(params[:id])
-    
-    if !is_user?(@user)
-      flash[:error] = "You are not allowed to perform this action.".t
-      redirect_to user_url(@user)
-    else
-
-      begin 
-        if @user.profile
-          @user.profile.update_attributes! params[:profile_attributes]
-        else
-          @user.profile = Profile.new(params[:profile_attributes])
-          @user.profile.save!
-        end
-        if @user.preference
-          @user.preference.update_attributes! params[:preference_attributes]
-        else
-          @user.preference = Preference.new(params[:preference_attributes])
-          @user.preference.save!
-        end
-        @user.recently_reset = nil if params[:change_password] 
-        @user.update_attributes!(params[:user]) 
-        flash[:notice] = 'User was successfully updated.'.t
-        redirect_to(@user) 
-      rescue
-        render :action => "edit"
+    begin 
+      if @user.profile
+        @user.profile.update_attributes! params[:profile_attributes]
+      else
+        @user.profile = Profile.new(params[:profile_attributes])
+        @user.profile.save!
       end
+      @user.recently_reset = nil if params[:change_password] 
+      @user.update_attributes!(params[:user]) 
+      flash[:notice] = 'User was successfully updated.'.t
+      redirect_to(@user) 
+    rescue
+      render :action => "edit"
     end
   end
   
@@ -110,14 +95,8 @@ class UsersController < ApplicationController
   # DELETE /users/1.xml
   def destroy
     @user = User.find_by_login(params[:id])
-    if !is_user?(@user)
-      flash[:error] = "You are not allowed to perform this action.".t
-      redirect_to user_url(@user)
-    else
-      @user.destroy
-    
-      redirect_to(users_url) 
-    end
+    @user.destroy
+    redirect_to(users_url) 
   end
   
   

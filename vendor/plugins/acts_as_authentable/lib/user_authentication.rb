@@ -74,11 +74,16 @@ module UserAuthentication
     # to access the requested action.  For example, a popup window might
     # simply close itself.
     def access_denied
-      flash[:error] = "You aren't allowed to access that page, sorry! Maybe you need to login?"
       respond_to do |accepts|
         accepts.html do
           store_location
-          redirect_to :controller => 'session', :action => 'new'
+          if logged_in?
+            flash[:error] = "Sorry, you don't have permission to access the page you were trying to reach." 
+            redirect_to current_user
+          else
+            flash[:error] = "Sorry, you don't have permission to access the page you were trying to reach. Please log in." 
+            redirect_to :controller => 'session', :action => 'new'            
+          end
         end
         accepts.xml do
           headers["Status"]           = "Unauthorized"

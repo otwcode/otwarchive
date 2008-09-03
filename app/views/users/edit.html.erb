@@ -36,17 +36,6 @@
        		<dd><%= p.text_area :about_me %></dd>
   <% end %>
 	
-  		<dt><%= f.label :preference_attributes, "Preferences:".t %> </dt>
-	<% fields_for :preference_attributes, @user.preference do |r| %>
-   <dd><ul>
-<li><%= r.check_box :history_enabled %> <%=h "Enable History".t %></li>
-<li><%= r.check_box :email_visible %> <%=h "Display Email Address".t %></li>
-<li><%= r.check_box :date_of_birth_visible %> <%=h "Display Date of Birth".t %></li>
-     </p>		 
-    <p>
-       <%= r.check_box :adult %> <%=h "Show me adult content without prompting".t %>
-     </p>		 
-  <% end %>
   <p>
     <%= f.submit "Update".t %>
   </p>
