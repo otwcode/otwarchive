@@ -6,9 +6,9 @@
   <%- end -%>
   </ul>
   <p><%= f.label :pseud, 'Try again:'.t %></p>
-  <%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
+  <p><%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
       { :url => {:controller => 'pseuds', :action => 'choose_coauthors'}, :method => :get, :param_name => 'search', 
-        :tokens => ',', :min_chars => 2, :skip_style => true } %>
+        :tokens => ',', :min_chars => 2, :skip_style => true } %></p>
 <%- end -%> 
 
 <%- unless creation.ambiguous_pseuds.blank? -%>

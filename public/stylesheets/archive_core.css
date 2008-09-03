@@ -82,11 +82,11 @@ strong, b {
 }
 
 em, cite, i {
-    font-variant: oblique;
+    font-style: oblique;
 }
 
 cite em, em cite {
-    font-variant: normal;
+    font-style: normal;
 }
 /* TABLES AND LISTS */
 table {
@@ -109,11 +109,9 @@ td th {
 
 dt {
     font-weight: 700;
-    clear: left;
 }
 
 dd {
-    clear: left;
 }
 /*FORMS */
 form.new_abuse_report dt {
@@ -160,6 +158,11 @@ blockquote, q {
     text-align: left;
     font-size: 75%;
     clear: both;
+    color: #fff;
+}
+
+#login-block a:link, #login-block a:visited {
+    color: #fff;
 }
 
 #login-block ul {
@@ -316,8 +319,10 @@ ul#main-navigation {
     position: absolute
 }
 
-#user-header ul {margin-left:110px; margin-bottom:50px} /*sized in pixels because the icon is a fixed pixel value*/
-
+#user-header ul {
+    margin-left: 110px;
+    margin-bottom: 50px
+} /*sized in pixels because the icon is a fixed pixel value*/
 #user-header ul li {
     display: inline;
     padding: 0.25em
@@ -497,13 +502,89 @@ li.story-date {
     margin-bottom: 30px;
 }
 /* STORY VIEWS */
+#main.works-show ul#navigation {
+    margin: 0.75em 0;
+    text-align: right
+}
 
-#main.works-show ul#navigation {margin: 0.75em 0; text-align:right}
-.works-show #navigation li {display:inline;}
-.works-show #navigation li.go-back {padding:0 0.25em 0 0;display:block; float:left}
+.works-show #navigation li {
+    display: inline;
+}
 
-#series-and-view-data {clear:both}
+.works-show #navigation li.go-back {
+    padding: 0 0.25em 0 0;
+    display: block;
+    float: left
+}
 
+dl#story-meta {
+    position: relative;
+    background: #ddd;
+    border: 1px solid #ccc;
+    padding: 0.5em
+}
+
+#story-meta dt {
+    float: left;
+    clear: left;
+    width: 10em;
+    margin: 0 1em 0 0;
+}
+
+#story-meta dd {
+    clear: right;
+}
+
+#story-meta dd p {
+    clear: both;
+}
+
+#story-preface {
+    border-bottom: 3px double;
+    margin-bottom: 1.5em
+}
+
+h2.story-title {
+    font: 500 200% Cambria, Constantia, Palatino, Georgia, sans-serif;
+    margin: 1.5em auto 0
+}
+/* SERIES */
+#series-and-view-data {
+    clear: both
+}
+
+dl#series-meta {
+    position: relative;
+}
+
+#series-meta dt {
+    float: left;
+    clear: left;
+    width: 10em;
+    margin: 0 1em 0 0;
+}
+
+#series-meta dd {
+    clear: right;
+}
+
+#series-meta dd p {
+    clear: both;
+}
+
+.series-show ul {
+    clear: both;
+}
+
+.series-show ul li {
+    display: inline;
+    padding-right: 0.5em
+}
+
+.series-show ul#series-story-list li {
+    display: block;
+    padding: 0;
+}
 /* Post and Preview Story styles    */
 .textareafield {
     margin-bottom: 20px;
@@ -570,9 +651,8 @@ li.story-date {
 }
 
 .warning {
-    font-weight: 700;
+    font-weight: 900;
     background-color: #feffd4;
-    border: 1px dashed #fec844;
 }
 
 .footnote {
@@ -733,12 +813,7 @@ textarea.story-edit-notes {
     display: none;
 }
 
-#story-meta dd {
-    display: inline;
-    list-style-type: none;
-}
-
-ul.story-list li.story-tags, #story-meta dt {
+ul.story-list li.story-tags {
     display: inline;
 }
 

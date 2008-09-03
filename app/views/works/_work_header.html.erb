@@ -37,7 +37,7 @@
     </span>
   </div>
 
-  <h2 class="story-title">
+  <div id="story-preface"><h2 class="story-title">
     <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)".t) %><% end %>
     <% if @work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)".t) %><% end %>
     <%=sanitize @work.title, :tags => %w(em i b strong strike small) %>
@@ -46,17 +46,17 @@
    <%= byline(@work) -%>
   </h3>
   
-  <p class="story-summary">
+  <blockquote class="story-summary">
     <%=sanitize_limited @work.summary %>
-  </p>
+  </blockquote>
   
-  <p class="story-notes">
+  <blockquote class="story-notes">
     <%=sanitize_format @work.notes %>
-  </p>
+  </blockquote>
   
   <% if @work.is_wip -%>
   <p class="story-complete">
     <%= wip_message(@work) %>
   </p>
-  <% end -%>
+  <% end -%></div>
   
