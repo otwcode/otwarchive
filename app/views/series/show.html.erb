@@ -1,15 +1,15 @@
 <h1><%=h @series.title %></h1>
 <dl id="series-meta">
 	<dt><%=h 'Series begun:'.t %></dt>
-	<dd><%=h @series.created_at.localize("%d %B %Y") %></dd>
+		<dd><%=h @series.created_at.localize("%d %B %Y") %></dd>
   	<dt><%=h 'Works included:'.t %></dt>
- 	<dd><%= @serial_works.length %></dd>
+ 		<dd><%= @serial_works.length %></dd>
   	<dt><%=h 'Authors:'.t %></dt>
- 	<dd><%= print_pseud_list(@series.pseuds) %></dd>
+ 		<dd><%= print_pseud_list(@series.pseuds) %></dd>
 	<dt><%=h 'Description:'.t %></dt>
-	<dd><%= @series.summary %></dd>
+		<dd><%= @series.summary %></dd>
 	<dt><%=h 'Notes:'.t %><dt>
-	<dd><%= @series.notes %></dd>
+		<dd><%= @series.notes %></dd>
 </dl>
 
 <%- if is_author_of?(@series) -%>

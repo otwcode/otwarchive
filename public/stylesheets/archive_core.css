@@ -90,8 +90,7 @@ cite em, em cite {
 }
 /* TABLES AND LISTS */
 table {
-    border-collapse: separate;
-    border-spacing: 0;
+    border:1px solid #ddd; padding:0.75em;
 }
 
 caption {
@@ -103,21 +102,20 @@ caption, th, td {
     text-align: left;
 }
 
+th {font-weight:900;}
+
 td th {
     padding-right: 3em;
 }
 
-dt {
-    font-weight: 700;
-}
 
-dd {
-}
 /*FORMS */
 
-form dt{float:left; clear:left;margin:0 1em 0 0;}
+/* these rules are for the two column forms:  form dt{float:left; clear:left;margin:0 1em 0 0;} form dd{clear:right; margin:0;} */
 
-form dd{clear:right; margin:0;}
+form dt {
+    font-weight: 700;
+}
 
 form.new_abuse_report dt {
     margin-top: 1.5em;
@@ -339,8 +337,11 @@ ul#main-navigation {
     display: inline;
     padding: 0.25em
 }
+
+.pseuds-index p {clear:both;}
+
 /*All these are elements containing the main content on pages where the sidebar shows up --may group these with the sidebar declarations*/
-.works-index ul.story-list, #user-profile, .pseuds-new form, .readings-index ul {
+.works-index ul.story-list, #user-profile, .pseuds-index table, .pseuds-new form, .readings-index ul {
     width: 65%;
     float: left;
     position: relative;
@@ -456,6 +457,7 @@ a.cloud8 {
     font-weight: 800;
     color: #900;
 }
+
 /*SOME UNORGANIZED CLASSES  */
 .clearboth {
     clear: both;
@@ -477,11 +479,6 @@ li.story-date {
     font-weight: 400;
 }
 
-.works-show .story-notes {
-    font-size: 90%;
-    width: 70%;
-    margin: 0 auto;
-}
 
 .works-show hr {
     border-bottom: 1px solid #999;
@@ -555,11 +552,15 @@ dl #story-meta dd.rating {margin:1em 0 0}
 
 #story-preface {
     border-bottom: 3px double;
-    margin-bottom: 1.5em
+    margin-bottom: 1.5em;
 }
 
-h2.story-title {
-    font: 500 200% Cambria, Constantia, Palatino, Georgia, sans-serif;
+#story-preface blockquote {
+	font-size:smaller;
+}
+
+#story-preface h2 {
+    font: 800 200% Cambria, Constantia, Palatino, Georgia, sans-serif;
     margin: 1.5em auto 0
 }
 /* SERIES */
@@ -837,6 +838,6 @@ ul.story-list li.story-tags {
     text-align: center;
 }
 
-.story-show .story-author, div.story-title, .chapter-title {
+.story-show .story-author, .story-title, .chapter-title {
     text-align: center;
 }

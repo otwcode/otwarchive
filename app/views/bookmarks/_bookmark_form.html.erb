@@ -15,21 +15,19 @@
 		<%= hidden_field 'fetched', :value => '' %>
 	</dd>
 	<dt><%= ew.label :author, "Author: ".t %></dt>
-	<dd> <%= ew.text_field :author %>       </dd>
-	<dt>       <%= ew.label :title, "Title: ".t %></dt>
-	<dd> <%= ew.text_field :title %> </dd>
+		<dd> <%= ew.text_field :author %></dd>
+	<dt><%= ew.label :title, "Title: ".t %></dt>
+		<dd> <%= ew.text_field :title %> </dd>
 	<dt>
 	<%= ew.label :summary, "Author's Summary".t %>
-	<%=h "(please copy and paste from original work)".t %><br />
-	<dd> <%= ew.text_area :summary %> </dd>
+	<%=h "(please copy and paste from original work)".t %></dt>
+		<dd> <%= ew.text_area :summary %> </dd>
 	<% end %>
 	<% end %>
-	<dt>
-	<%= f.label :notes, "Your Notes".t %>/dt>
-	<dd> <%= f.text_area :notes %></dd>
-	<dt>
-	<%= f.label :tag_string, "Your Tags".t %>/dt>
-	<dd> <%= text_field_tag 'tag_string', @tag_string %></dd>
+	<dt><%= f.label :notes, "Your Notes".t %></dt>
+		<dd><%= f.text_area :notes %></dd>
+	<dt><%= f.label :tag_string, "Your Tags".t %></dt>
+		<dd><%= text_field_tag 'tag_string', @tag_string %></dd>
 </dl>
 <p>   <%= f.check_box :private %> <%= f.label :private, "Private bookmark?".t %> </p>
 <%= f.hidden_field :user_id, :value => current_user.id %>

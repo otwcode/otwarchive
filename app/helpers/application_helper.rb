@@ -72,19 +72,19 @@ module ApplicationHelper
   def languages_menu
     
     result = "<form action=\"" + url_for(:action => 'set', :controller => 'locale') + "\">\n" 
-    result << "<select id='accessible_menu' name='url' >\n"
+    result << "<div><select id='accessible_menu' name='url' >\n"
     # We'll sort the languages by their keyname rather than have all the non-arabic-character-set
     # ones end up at the end of the list.
     LANGUAGE_NAMES.sort {|a, b| a.first.to_s <=> b.first.to_s }.each do |locale, langname|
       langname = langname.titleize;   
       if Locale.active && Locale.active.language && locale == Locale.active.language.code
-        result << "<option value=\"#{url_for :overwrite_params => {:locale => locale}}\" selected><strong>#{langname} (#{locale})</strong></option>\n"
+        result << "<option value=\"#{url_for :overwrite_params => {:locale => locale}}\" selected=\"selected\"><strong>#{langname} (#{locale})</strong></option>\n"
       else
         result << "<option value=\"#{url_for :overwrite_params => {:locale => locale}}\">#{langname} (#{locale})</option>\n"
       end
     end
-    result << "</select>"
-    result << "<noscript><input type=submit name=commit value='Go'></noscript>"
+    result << "</select></div>"
+    result << "<div><noscript><input type=\"submit\" name=\"commit\" value=\"Go\" /></noscript></div>"
     result << "</form>"
     return result
   end  
