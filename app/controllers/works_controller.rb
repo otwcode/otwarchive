@@ -234,7 +234,13 @@ class WorksController < ApplicationController
         redirect_to(@work)
       else
         @work.errors.add(:base, "Please double-check the length of your story: it cannot be blank and must be less than 16MB in size.".t) unless @chapter.valid?
-        render :action => :edit 
+        if !@work.has_required_tags?
+          @preview_mode = true
+      	  @chapters = [@chapter]
+          render :action => "preview"
+        else
+          render :action => :edit
+        end
       end
     end 
   end

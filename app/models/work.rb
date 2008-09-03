@@ -297,8 +297,10 @@ class Work < ActiveRecord::Base
   end
   
   def validate_tags
-    errors.add_to_base("Work must have required tags.".t) unless self.has_required_tags?
-    self.has_required_tags?  
+    unless self.new_record? || self.first_chapter.new_record?
+      errors.add_to_base("Work must have required tags.".t) unless self.has_required_tags?
+      self.has_required_tags?
+    end  
   end
   
   # If the work is posted, the first chapter should be posted too
