@@ -124,24 +124,22 @@ class User < ActiveRecord::Base
   
   # Is this user an authorized translator?
   def translator
-    self.roles.include?(Role.find_or_create_by_name("Translator"))
+    self.is_translator?
   end
   
   # Set translator role for this user
   def translator=(is_translator)
-    translator_role = Role.find_or_create_by_name("Translator")
-    is_translator == "1" ? (self.roles << translator_role unless self.translator) : (self.roles.delete(translator_role) if self.translator)
+    is_translator == "1" ? self.is_translator : self.is_not_translator
   end
   
   # Is this user an authorized tag wrangler?
   def tag_wrangler
-    self.roles.include?(Role.find_or_create_by_name("TagWrangler"))
+    self.is_tag_wrangler?
   end
   
   # Set tag wrangler role for this user
   def tag_wrangler=(is_tag_wrangler)
-    tag_wrangler_role = Role.find_or_create_by_name("TagWrangler")
-    is_tag_wrangler == "1" ? (self.roles << tag_wrangler_role unless self.tag_wrangler) : (self.roles.delete(tag_wrangler_role) if self.tag_wrangler)
+    is_tag_wrangler == "1" ? self.is_tag_wrangler : self.is_not_tag_wrangler
   end
   
   private

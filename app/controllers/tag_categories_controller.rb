@@ -5,12 +5,12 @@ class TagCategoriesController < ApplicationController
   
   # Only authorized users should be able to manage tags, tag categories and tag relationships
   def wranglers_only
-    (logged_in? && current_user.tag_wrangler) || access_denied
+    (logged_in? && current_user.is_tag_wrangler?) || access_denied
   end
   
   def access_denied
     flash[:error] = "Sorry, the page you have requested is for tag wranglers only! Please contact an admin if you think you should have access.".t
-    redirect_to root_path
+    redirect_to tags_path
     false
   end
 

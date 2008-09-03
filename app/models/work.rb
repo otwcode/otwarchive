@@ -67,7 +67,7 @@ class Work < ActiveRecord::Base
       return self if self.posted unless self.restricted || self.hidden_by_admin
     elsif self.posted && !self.hidden_by_admin
       return self
-    else
+    elsif self.hidden_by_admin?
       return self if current_user.is_author_of?(self)      
     end
   end

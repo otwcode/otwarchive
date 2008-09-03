@@ -4,7 +4,7 @@ class TranslationController < ApplicationController
   
   # Only authorized users should be able to submit translations
   def translators_only
-    (logged_in? && current_user.translator) || access_denied
+    (logged_in? && current_user.is_translator?) || access_denied
   end
   
   def access_denied
