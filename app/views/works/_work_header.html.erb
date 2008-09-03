@@ -1,12 +1,14 @@
 <!-- BEGIN navigation -->
-<ul id="navigation">
-  <li class="go-back"><%= link_to '&lt;&lt; ' + h('Back to story list').t, works_path -%></li>
+<%- unless @preview_mode -%>
+  <ul id="navigation">
+    <li class="go-back"><%= link_to '&lt;&lt; ' + h('Back to story list').t, works_path -%></li>
   	
-	<% if is_author_of?(@work) -%>
-	<li><%= link_to h('Edit').t, edit_work_path(@work) %>&nbsp;|</li>
-	<li><%= link_to h('Delete').t, @work, :confirm => h('Are you sure?').t, :method => :delete -%></li>
-	<% end -%>
-</ul>
+  	<% if is_author_of?(@work) -%>
+  	<li><%= link_to h('Edit').t, edit_work_path(@work) %>&nbsp;|</li>
+  	<li><%= link_to h('Delete').t, @work, :confirm => h('Are you sure?').t, :method => :delete -%></li>
+  	<% end -%>
+  </ul>
+<%- end -%>
 <!-- END navigation -->
 
 <%= render :partial => 'works/meta' %>

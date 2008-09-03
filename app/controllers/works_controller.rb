@@ -211,6 +211,7 @@ class WorksController < ApplicationController
     if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank? 
       @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
     elsif params[:preview_button]
+      @preview_mode = true
   	  @chapters = [@chapter]
       render :action => "preview"
     elsif params[:cancel_button]
@@ -240,6 +241,7 @@ class WorksController < ApplicationController
  
   # GET /works/1/preview
   def preview
+    @preview_mode = true
   end
   
   # POST /works/1/post
