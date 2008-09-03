@@ -1,9 +1,9 @@
 <p>
 <% if reading.work.nil? %>
-  <i>(deleted work, last read <%=h reading.updated_at -%>)</i>
+  <span>(deleted work, last read <%=h reading.updated_at -%>)</span>
 <% else %>
   <%= render :partial => 'works/work_blurb', :locals => {:work => reading.work} %>
-  <b><%=h 'Last read:'.t %> </B><%=h reading.updated_at.localize("%d %B %Y") %> 
+  <strong><%=h 'Last read:'.t %> </strong><%=h reading.updated_at.localize("%d %B %Y") %> 
   <% if reading.major_version_read < reading.work.major_version -%>
     (<%=h 'New version available.'.t -%>)
   <% elsif reading.minor_version_read != reading.work.minor_version -%>

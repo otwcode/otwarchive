@@ -2,19 +2,14 @@
 
 <% form_for(@related_work) do |f| %>
   <%= f.error_messages %>
-
-  <p>
-    <%= f.label :parent_id %><br />
-    <%= f.text_field :parent_id %>
-  </p>
-  <p>
-    <%= f.label :work %><br />
-    <%= f.text_field :work %>
-  </p>
-  <p>
-    <%= f.label :reciprocal %><br />
-    <%= f.check_box :reciprocal %>
-  </p>
+<dl>
+	<dt><%= f.label :parent_id %></dt>
+    	<dd><%= f.text_field :parent_id %></dd>
+  	<dt><%= f.label :work %></dt>
+    	<dd><%= f.text_field :work %></dd>
+  	<dt><%= f.label :reciprocal %></dt>
+    	<dd><%= f.check_box :reciprocal %></dd>
+</dl>
   <p>
     <%= f.submit "Update" %>
   </p>

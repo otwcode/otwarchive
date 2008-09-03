@@ -1,10 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <meta name="generator" content="HTML Tidy, see www.w3.org">
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <title><%=h ArchiveConfig.APP_NAME .t %>&gt;&gt;<%= controller.controller_name %>
-      <%= controller.action_name %>
+    <meta name="generator" content="HTML Tidy, see www.w3.org" />
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title><%=h ArchiveConfig.APP_NAME .t %> 
+		<% unless ArchiveConfig.REVISION.blank? -%>(rev. <%= ArchiveConfig.REVISION %>)<% end %>&gt;&gt;<%= controller.controller_name %>
+        <%= controller.action_name %>
     </title>
 
 	<%= render :partial => 'layouts/includes' %>
@@ -14,20 +15,17 @@
     <!-- BEGIN main -->
     <div id="main" class="<%= controller.controller_name + '-' + controller.action_name -%>">
       <%= flash_div :error, :warning, :notice %>
-      <div class="clearboth">
-      </div>
-      <h2><%=h ArchiveConfig.APP_NAME .t %></h2>
-      <h3 class="authentication-small">
-      	<%=h "A project of the".t %> 
+      <h1><%=h ArchiveConfig.APP_NAME .t %></h1>
+      <h2><%=h "A project of the".t %> 
 		<a href="http://transformativeworks.org" tabindex = '9'><%=h "Organization For Transformative Works".t %></a>
-	  </h3>
+	  </h2>
       <div id="authentication-loginform">
         <%= yield %>
       </div>
       <!-- And now the non-floated div. -->
-      <div id="authentication-logo">
+      <p id="authentication-logo">
         <%= image_tag(ArchiveConfig.LOGO, :alt => ArchiveConfig.ALT_LOGO) -%>
-      </div>
+      </p>
       <!-- And now we clear the floats so the footer information will show up properly. -->
       <div class="clearboth">
       </div>

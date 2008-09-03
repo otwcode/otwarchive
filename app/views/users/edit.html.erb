@@ -3,57 +3,45 @@
 <%= error_messages_for :user %>
 
 <% form_for(@user) do |f| %>  
-  <p><%= f.label :email, "Change Email" .t %><br />
-	<%= f.text_field :email %></p>
-
-  <div id="passwd">
-	<p><%= f.label :password, "Change Password" .t %><br />
-	<%= f.password_field :password %>
+  <dl>
+	<dt><%= f.label :email, "Change Email" .t %></dt>
+		<dd><%= f.text_field :email %></dd>
+</dl>
+  <dl id="passwd">
+	<dt><%= f.label :password, "Change Password" .t %></dt>
+	<dd><%= f.password_field :password %></dd>
 	<% if ArchiveConfig.USE_OPENID %>
-    <%= link_to_function image_tag('openid.png', :alt=>"Use OpenID to log in".t), "Element.hide('passwd'); Element.show('openid')" %>
+    <dd><%= link_to_function image_tag('openid.png', :alt=>"Use OpenID to log in".t), "Element.hide('passwd'); Element.show('openid')" %></dd>
   <% end -%>
-  </p>
-	<p><%= f.label :password_confirmation, "Confirm New Password" .t %><br />
-	<%= f.password_field :password_confirmation %></p>
-  </div>
+  <dt><%= f.label :password_confirmation, "Confirm New Password" .t %></dt>
+	<dd><%= f.password_field :password_confirmation %></dd>
+  </dl>
   <% if ArchiveConfig.USE_OPENID %>	
-    <div id="openid" style="display: none">
-    <%= f.label :identity_url, "Add or Change an OpenID URL" .t %>
-    <br />
-    <%= f.text_field :identity_url %>
+    <dl id="openid" style="display: none">
+    <dt<%= f.label :identity_url, "Add or Change an OpenID URL" .t %></dt>
+    <dd><%= f.text_field :identity_url %></dd>
     <%= link_to_function "Add or Change a Password".t, "Element.hide('openid'); Element.show('passwd')" %>
-    </div>
+    </dl>
   <% end -%>
 
   <% fields_for :profile_attributes,  @user.profile do |p| %>
-    <p>
-      <strong><%= f.label :title, "Title".t %></strong><br />
-      <%= p.text_field :title %>
-    </p>
-    <p>
-      <strong><%= f.label :location, "Location".t %></strong><br />
-      <%= p.text_field :location %>
-    </p>
-    <p>
-       <strong><%= f.label :date_of_birth, "Date of Birth".t %></strong><br />
-       <%= p.date_select :date_of_birth, :start_year => 1930, :end_year => 13.years.ago.year %>
-     </p>
-     <p>
-       <strong><%= f.label :about_me, "About Me".t %></strong><br />
-       <%= p.text_area :about_me %>
-     </p>
+    <dl>
+		<dt><%= f.label :title, "Title".t %></dt>
+      		<dd><%= p.text_field :title %></dt>
+    	<dt><%= f.label :location, "Location".t %></dt>
+      		<dd><%= p.text_field :location %></dd>
+    	<dt><%= f.label :date_of_birth, "Date of Birth".t %></dt>
+       		<dd><%= p.date_select :date_of_birth, :start_year => 1930, :end_year => 13.years.ago.year %></dd>
+     	<dt><%= f.label :about_me, "About Me".t %></dt>
+       		<dd><%= p.text_area :about_me %></dd>
   <% end %>
 	
-  <strong><%= f.label :preference_attributes, "Preferences:".t %> </strong>
+  		<dt><%= f.label :preference_attributes, "Preferences:".t %> </dt>
 	<% fields_for :preference_attributes, @user.preference do |r| %>
-   <p>
-      <%= r.check_box :history_enabled %> <%=h "Enable History".t %>
-    </p>
-    <p>
-       <%= r.check_box :email_visible %> <%=h "Display Email Address".t %>
-     </p>
-    <p>
-       <%= r.check_box :date_of_birth_visible %> <%=h "Display Date of Birth".t %>
+   <dd><ul>
+<li><%= r.check_box :history_enabled %> <%=h "Enable History".t %></li>
+<li><%= r.check_box :email_visible %> <%=h "Display Email Address".t %></li>
+<li><%= r.check_box :date_of_birth_visible %> <%=h "Display Date of Birth".t %></li>
      </p>		 
     <p>
        <%= r.check_box :adult %> <%=h "Show me adult content without prompting".t %>

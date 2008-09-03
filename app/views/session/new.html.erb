@@ -1,13 +1,13 @@
 <!-- loginform floated right -->
 <%- if @restricted -%>
-  <h2 class="authentication-loginheading"><%=h "Sorry!".t %></h2>
+  <h3 class="authentication-loginheading"><%=h "Sorry!".t %></h3>
   <p>
     <%=h "This story is only available to registered users of the Archive. ".t %>
     <%=h "If you already have an Archive of Our Own account, sign in now. ".t %>
     <%=h "Or join us for free - it's easy.".t %>
   </p>
 <%- else -%>
-  <h2 class="authentication-loginheading"><%=h "Login".t %></h2>
+  <h3 class="authentication-loginheading"><%=h "Login".t %></h3>
   <p>
     <strong><%=h "Warning:".t %></strong>
     <span><%=h "This site is in extreme alpha. Things may break or crash without notice. Please".t %></span>

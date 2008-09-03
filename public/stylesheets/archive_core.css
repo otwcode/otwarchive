@@ -114,6 +114,11 @@ dt {
 dd {
 }
 /*FORMS */
+
+form dt{float:left; clear:left;margin:0 1em 0 0;}
+
+form dd{clear:right; margin:0;}
+
 form.new_abuse_report dt {
     margin-top: 1.5em;
 }
@@ -284,8 +289,14 @@ ul#main-navigation {
     border-bottom: 1px dotted #777;
     clear: both;
 }
-/*PAGE BY PAGE STYLING: HOME HOME SUBPAGES FANDOMS PEOPLE GROUPS RECS TAGS*/
-/*USERS SHOW*/
+/*PAGE BY PAGE STYLING: NEW SESSION HOME HOME SUBPAGES FANDOMS PEOPLE GROUPS RECS TAGS*/
+
+/*SESSION (front front page)*/
+
+#main.session-new h1 {text-align:left; border:0}
+#main.session-new h2 {font:100 80% "Gill Sans", Georgia, Verdana, sans-serif; margin: 0 auto 2em}
+
+/* HOME: USERS SHOW*/
 #user-page {
     width: 65%;
     float: left;
@@ -320,9 +331,10 @@ ul#main-navigation {
 }
 
 #user-header ul {
-    margin-left: 110px;
+    /*sized in pixels because the icon it is avoiding has a fixed pixel value*/
+	margin-left: 110px;
     margin-bottom: 50px
-} /*sized in pixels because the icon is a fixed pixel value*/
+} 
 #user-header ul li {
     display: inline;
     padding: 0.25em
@@ -534,6 +546,8 @@ dl#story-meta {
 #story-meta dd {
     clear: right;
 }
+
+dl #story-meta dd.rating {margin:1em 0 0}
 
 #story-meta dd p {
     clear: both;

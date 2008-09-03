@@ -4,16 +4,12 @@
 <%=h "(and because random collections of letters and numbers are hard to remember!)".t %></p>
 
 <%- form_for(@user) do |f| -%>
-  <p>
-  <%= f.label :password, "New Password".t %> <span><%=h '(Make it a'.t %> <a href="#" tabindex="1"><%=h 'strong'.t %></a> <%=h 'one!)'.t %></span><br />	
-  <%= f.password_field :password, :class => 'authentication-textfield', :tabindex => '2' %>
-  </p>
-  
-  <p>
-  <%= f.label :password_confirmation, "Confirm Password".t %><br />
-  <%= f.password_field :password_confirmation, :class => 'authentication-textfield', :tabindex => '3' %>
-  </p>
-  
+  <dl>
+	<dt><%= f.label :password, "New Password".t %> <span><%=h '(Make it a'.t %> <a href="#" tabindex="1"><%=h 'strong'.t %></a> <%=h 'one!)'.t %></span></dt>	
+  		<dd><%= f.password_field :password, :class => 'authentication-textfield', :tabindex => '2' %></dd>
+  	<dt><%= f.label :password_confirmation, "Confirm Password".t %></dt>
+  		<dd><%= f.password_field :password_confirmation, :class => 'authentication-textfield', :tabindex => '3' %></dd>
+ </dl>
   <p><%= submit_tag 'Change Password'.t, :name => 'change_password' %></p> 
   
 <%- end -%>
