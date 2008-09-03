@@ -214,7 +214,7 @@ module ApplicationHelper
   end
   
   # Closes tags in html and limits allowed tags to a small subgroup.
-  def limit_tags(html, okTags = 'a href, b, br, p, i, em')
+  def limit_tags(html, okTags = 'a href, b, br, p, i, em, strong, strike, u, ins, q, del, cite, blockquote, pre, code, small, sup, sub')
     # no closing tag necessary for these
     soloTags = ["br","hr"]
 
