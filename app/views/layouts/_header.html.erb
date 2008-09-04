@@ -1,8 +1,8 @@
 <!-- BEGIN header -->
 <div id="header">
   <h1>
-  	<%= ArchiveConfig.APPNAME -%>
-     <% unless ArchiveConfig.REVISION.blank? %>(rev. <%= ArchiveConfig.REVISION %>)<% end %>
+  	<span><%= ArchiveConfig.APPNAME -%>
+     <% unless ArchiveConfig.REVISION.blank? %>(rev. <%= ArchiveConfig.REVISION %>)<% end %></span>
   </h1>
   <div id="login-block">
     <%- if logged_in? -%>

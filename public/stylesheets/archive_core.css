@@ -90,10 +90,11 @@ cite em, em cite {
 }
 /* TABLES AND LISTS */
 table {
-    border:1px solid #ddd; padding:0.75em;
+    border: 1px solid #ddd;
+    padding: 0.75em;
 }
 
-caption {
+ul#skiplinks, caption {
     margin-left: -999em;
     position: absolute;
 }
@@ -102,17 +103,15 @@ caption, th, td {
     text-align: left;
 }
 
-th {font-weight:900;}
+th {
+    font-weight: 900;
+}
 
 td th {
     padding-right: 3em;
 }
-
-
 /*FORMS */
-
 /* these rules are for the two column forms:  form dt{float:left; clear:left;margin:0 1em 0 0;} form dd{clear:right; margin:0;} */
-
 form dt {
     font-weight: 700;
 }
@@ -147,8 +146,11 @@ blockquote, q {
 }
 
 #header h1 {
-    display: none;
+    height: 65px;
 }
+
+#header h1 span {
+    display: none;
 }
 
 #header a {
@@ -157,11 +159,14 @@ blockquote, q {
 }
 
 #login-block {
-    float: right;
+    top: 1em;
+    right: 0;
     text-align: left;
     font-size: 75%;
     clear: both;
     color: #fff;
+    position: absolute;
+    width: 16.17em
 }
 
 #login-block a:link, #login-block a:visited {
@@ -180,10 +185,12 @@ blockquote, q {
     display: inline;
 }
 
-#search {
-    float: right;
+#search p {
+    float: left;
     clear: both;
     font-size: 80%;
+    padding: 0;
+    margin: 0;
 }
 /*TABS /MAIN NAVIGATION  */
 ul#main-navigation {
@@ -288,12 +295,16 @@ ul#main-navigation {
     clear: both;
 }
 /*PAGE BY PAGE STYLING: NEW SESSION HOME HOME SUBPAGES FANDOMS PEOPLE GROUPS RECS TAGS*/
-
 /*SESSION (front front page)*/
+#main.session-new h1 {
+    text-align: left;
+    border: 0
+}
 
-#main.session-new h1 {text-align:left; border:0}
-#main.session-new h2 {font:100 80% "Gill Sans", Georgia, Verdana, sans-serif; margin: 0 auto 2em}
-
+#main.session-new h2 {
+    font: 100 80% "Gill Sans", Georgia, Verdana, sans-serif;
+    margin: 0 auto 2em
+}
 /* HOME: USERS SHOW*/
 #user-page {
     width: 65%;
@@ -330,16 +341,23 @@ ul#main-navigation {
 
 #user-header ul {
     /*sized in pixels because the icon it is avoiding has a fixed pixel value*/
-	margin-left: 110px;
+    margin-left: 110px;
     margin-bottom: 50px
-} 
+}
+
 #user-header ul li {
     display: inline;
     padding: 0.25em
 }
 
-.pseuds-index p {clear:both;}
+li.story-tags ul li {
+    display: inline;
+    padding-right: 0.4em
+}
 
+.pseuds-index p {
+    clear: both;
+}
 /*All these are elements containing the main content on pages where the sidebar shows up --may group these with the sidebar declarations*/
 .works-index ul.story-list, #user-profile, .pseuds-index table, .pseuds-new form, .readings-index ul {
     width: 65%;
@@ -457,7 +475,6 @@ a.cloud8 {
     font-weight: 800;
     color: #900;
 }
-
 /*SOME UNORGANIZED CLASSES  */
 .clearboth {
     clear: both;
@@ -478,7 +495,6 @@ li.story-date {
     font-style: normal;
     font-weight: 400;
 }
-
 
 .works-show hr {
     border-bottom: 1px solid #999;
@@ -544,7 +560,9 @@ dl#story-meta {
     clear: right;
 }
 
-dl #story-meta dd.rating {margin:1em 0 0}
+dl #story-meta dd.rating {
+    margin: 1em 0 0
+}
 
 #story-meta dd p {
     clear: both;
@@ -556,7 +574,7 @@ dl #story-meta dd.rating {margin:1em 0 0}
 }
 
 #story-preface blockquote {
-	font-size:smaller;
+    font-size: smaller;
 }
 
 #story-preface h2 {
