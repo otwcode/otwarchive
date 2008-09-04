@@ -22,7 +22,7 @@ class TagRelationshipsControllerTest < ActionController::TestCase
   context "when logged in as a tag_wrangler" do
     setup do
       @user = create_user
-      @user.roles << Role.find_or_create_by_name("TagWrangler")
+      @user.roles << Role.find_or_create_by_name("tag_wrangler")
       @request.session[:user] = @user
     end
     context "when looking at tag relationships" do
