@@ -26,7 +26,12 @@
 
 		<li class="story-desc">
 			<%= sanitize_limited work.summary %>
-			<p><%=h 'Words:'.t %> <%=h number_with_delimiter(work.word_count) %></p>
+			<p>
+				<%=h 'Words: %s'/number_with_delimiter(work.word_count) %>
+				<%- if work.count_visible_comments.size > 0 -%>
+					| <%=h 'Comments: %d'.t/work.count_visible_comments -%>
+				<%- end -%>
+			</p>
 		</li>
 	</ul>
 </li>
