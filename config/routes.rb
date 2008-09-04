@@ -49,8 +49,11 @@ ActionController::Routing::Routes.draw do |map|
     :has_many => :comments, 
     :path_prefix => ':locale', 
     :member => { :approve => :put, :reject => :put }, 
-    :collection => {:hide_comments => :get, :show_comments => :get, :add_comment => :get, :cancel_comment => :get,
-                    :add_comment_reply => :get, :cancel_comment_reply => :get}
+    :collection => {:hide_comments => :get, :show_comments => :get, 
+                    :add_comment => :get, :cancel_comment => :get,
+                    :add_comment_reply => :get, :cancel_comment_reply => :get, 
+                    :cancel_comment_edit => :get, :delete_comment => :get ,
+                    :cancel_comment_delete => :get}
 
   map.resources :bookmarks, :path_prefix => ':locale'
   

@@ -39,6 +39,7 @@ module CommentMethods
     def destroy_or_mark_deleted
       if self.children_count > 0 
         self.is_deleted = true
+        self.content = "deleted comment" # wipe out the content
         self.save
       else
         self.destroy

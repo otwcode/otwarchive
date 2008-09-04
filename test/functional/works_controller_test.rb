@@ -102,12 +102,16 @@ class WorksControllerTest < ActionController::TestCase
         should_assign_to :works
       end
       context "works that aren't posted" do
+#        setup do
+#          @work.update_attribute("posted", true)
+#          get :show, :locale => 'en', :id => @work.id
+#        end
+#        should_render_template :show
+#        should_assign_to :work
         setup do
-          @work.update_attribute("posted", true)
           get :show, :locale => 'en', :id => @work.id
         end
-        should_render_template :show
-        should_assign_to :work
+        should_respond_with 403
       end
       context "when editing a work" do
         setup do

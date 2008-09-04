@@ -1,0 +1,9 @@
+# replace the "Reply" link with "Cancel" 
+page.replace_html "delete_comment_link_#{@comment.id}", cancel_delete_comment_link(@comment) 
+
+# render the form into the spot for it on the page
+page.replace_html "delete_comment_placeholder_#{@comment.id}", 
+  :partial => 'comments/confirm_delete', 
+  :locals => {:comment => @comment}
+  
+page.visual_effect :blind_down, "delete_comment_placeholder_#{@comment.id}"

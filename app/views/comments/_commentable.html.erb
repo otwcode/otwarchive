@@ -32,13 +32,14 @@
 	<%- end -%>	
 
 	<!-- If we have javascript, here is where the comments will be spiffily inserted -->
-    <div id="comments_placeholder" style="display: none;">
-	</div>
-
 	<!-- If not, and show_comments is true, here is where the comments will be rendered -->
 	<%- if params[:show_comments] -%>
+    <div id="comments_placeholder">
 		<%= render :partial => 'comments/comment_thread', :locals => { :comments => commentable.comments, :depth => 0 }%>
-	<%- end -%>
+	<%- else -%>
+    <div id="comments_placeholder" style="display: none;">
+ 	<%- end -%>
+	</div>
 
 
 	

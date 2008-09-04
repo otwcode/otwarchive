@@ -1,0 +1,12 @@
+<div class="comment <%= cycle :odd, :even %>" id="comment_<%= single_comment.id -%>">
+	<%- unless single_comment.pseud.nil? -%>
+		<p><img class="icon" src="/images/icon_placeholder.png" alt="icon placeholder"></p>
+	<%- end -%>
+	
+	<h3>Posted on <%= link_to_comment_ultimate_parent(single_comment) %>
+	by <%= get_pseud_or_mailaddress(single_comment) %></h3>
+	
+	<%=sanitize_format single_comment.content %>
+	
+	<h4 class="datestamp"><%=h 'Posted'.t %>&nbsp;<%= single_comment.created_at.localize("%a %d %B %Y %I:%M %p") %></h4>
+</div>

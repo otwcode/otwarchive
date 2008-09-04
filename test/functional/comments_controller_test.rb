@@ -86,7 +86,9 @@ class CommentsControllerTest < ActionController::TestCase
   # Test destroy  DELETE /:locale/comments/:comment_id/comments/:id
   # Test destroy  DELETE /:locale/comments/:id
   def test_delete_comment1
+    @request.env['HTTP_REFERER'] = 'http://www.google.com/'
     create_comments
+    @request.session[:user] = @user
     assert_no_difference('Comment.count') do
       delete :destroy, :locale => 'en', :id => @comment1.id
     end
@@ -95,6 +97,7 @@ class CommentsControllerTest < ActionController::TestCase
   end
   def test_delete_comment2
     create_comments
+    @request.session[:user] = @user
     assert_difference('Comment.count', -1) do
       delete :destroy, :locale => 'en', :id => @comment2.id
     end
@@ -103,6 +106,7 @@ class CommentsControllerTest < ActionController::TestCase
   # Test destroy  DELETE /:locale/works/:work_id/chapters/:chapter_id/comments/:id
   def test_delete_work_chapter_comment
     create_comments
+    @request.session[:user] = @user
     delete :destroy, :locale => 'en', :work_id => @work.id, :chapter_id => @chapter1.id, :id => @comment1.id
     @comment1.reload
     assert @comment1.is_deleted?

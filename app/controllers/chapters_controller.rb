@@ -110,7 +110,7 @@ class ChaptersController < ApplicationController
         render :action => "adult" and return
       end
     end
-    @comments = @chapter.find_all_comments
+    @comments = @chapter.comments
     respond_to do |format|
       format.html
       format.js

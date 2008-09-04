@@ -1,2 +1,14 @@
-page.replace_html "data_for_comment_#{@comment.id}", :partial => 'comments/single_comment', :locals => {:single_comment => @comment}
-flash.discard
+# Update an edited comment
+
+comment_field_id = "comment_#{@comment.id}"
+
+# Roll up the editing form
+page.visual_effect :highlight, comment_field_id
+page.visual_effect :blind_up, comment_field_id
+
+# Redraw the comment 
+page.delay(1) {page.replace_html comment_field_id, :partial => 'comments/single_comment', 
+                  :locals => {:single_comment => @comment, :commentable => @comment.commentable}}
+
+# Roll down the comment 
+page.delay(1.5) {page.visual_effect :blind_down, comment_field_id }
