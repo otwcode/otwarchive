@@ -22,7 +22,8 @@ class User < ActiveRecord::Base
   
   has_one :preference, :dependent => :destroy
   validates_associated :preference
-   
+  
+  before_create :check_account_creation_status 
   before_create :create_default_associateds
   
   has_many :readings 
@@ -64,6 +65,11 @@ class User < ActiveRecord::Base
                           
   def to_param
     login
+  end
+  
+  def check_account_creation_status
+    self.errors.add(:base, "Account creation is currently disabled.".t) unless ArchiveConfig.ACCOUNT_CREATION_ENABLED
+    ArchiveConfig.ACCOUNT_CREATION_ENABLED
   end
                          
   def create_default_associateds

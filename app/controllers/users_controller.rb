@@ -1,11 +1,19 @@
 class UsersController < ApplicationController
   before_filter :check_user_status, :only => [:edit, :update]
   before_filter :is_owner, :only => [:edit, :update, :destroy]
+  before_filter :check_account_creation_status, :only => [:new, :create]
   
   # Ensure that the current user is authorized to make changes
   def is_owner
     @user = User.find_by_login(params[:id])
     @user == current_user || access_denied
+  end
+  
+  def check_account_creation_status
+    unless ArchiveConfig.ACCOUNT_CREATION_ENABLED
+      flash[:error] = "Account creation is suspended at the moment. Please check back with us later.".t
+      redirect_to login_path 
+    end
   end
   
   def index
