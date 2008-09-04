@@ -42,7 +42,7 @@ module ApplicationHelper
   end
 
   # Currently, help files are static. We may eventually want to make these dynamic? 
-  def link_to_help(link, help_entry)
+  def link_to_help(help_entry, link = image_tag("question.png", :size => "20x20", :alt => h("More info").t))
     help_file = ""
     if Locale.active && Locale.active.language
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{Locale.active.language.code}/#{help_entry}.html"

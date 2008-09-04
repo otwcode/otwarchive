@@ -5,7 +5,7 @@
     
         <%= f.label :title, h("Story Title*").t, :class => "required" %><br />
         <%= f.text_field :title, :class => "storyinputfield" %>
-        <%= link_to_help image_tag("question.png", :size => "20x20", :alt => h("More info").t), "story-title" %><br />
+        <%= link_to_help "story-title" -%><br />
 
       <!-- Chaptered checkbox (work_is_wip) -->
       <!-- Checking this box causes the expected number of chapters box to appear; unchecking it causes it to disappear. -->
@@ -26,7 +26,7 @@
 
         <%= s.label 'series_id', h('Choose one of your existing series:').t %><br /> 
         <%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>
-        <%= link_to_help image_tag("question.png", :size => "20x20", :alt => h("More info").t), "choosing-series" -%><br />
+        <%= link_to_help "choosing-series" -%><br />
         <%= s.label :title, h("Or add a new one:").t %><br />
         <%= s.text_field :title, :class => "storyinputfield" %>
 
