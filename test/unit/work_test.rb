@@ -19,9 +19,6 @@ class WorkTest < ActiveSupport::TestCase
     end
     should_eventually "have a valid author" do
     end
-    should "be visible to it's owner even if unposted" do
-      assert @work.visible(@work.pseuds.first.user)
-    end
 
     context "which has been posted" do
       setup do

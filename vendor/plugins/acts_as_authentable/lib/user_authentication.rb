@@ -79,7 +79,7 @@ module UserAuthentication
           store_location
           if logged_in?
             flash[:error] = "Sorry, you don't have permission to access the page you were trying to reach." 
-            redirect_to current_user
+            redirect_to user_path(current_user)
           else
             flash[:error] = "Sorry, you don't have permission to access the page you were trying to reach. Please log in." 
             redirect_to :controller => 'session', :action => 'new'            

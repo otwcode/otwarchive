@@ -69,13 +69,15 @@ class UsersControllerTest < ActionController::TestCase
     context "on POST to :edit someone else" do
       setup do
         assert @user = create_user
+        assert @second_user = create_user
+        @request.session[:user] = @second_user
         get :edit, :locale => 'en', :id => @user.login
       end      
       should "not display a form" do
          assert_select "form", false           
       end
-      should_redirect_to 'user_url(@user)'
-      should_set_the_flash_to /not allowed/      
+      should_redirect_to 'user_url(@second_user)'
+      should_set_the_flash_to /have permission/      
     end
     context "on DELETE of self" do
       setup do
@@ -91,13 +93,15 @@ class UsersControllerTest < ActionController::TestCase
     context "on DELETE of someone else" do
       setup do
         assert @user = create_user
+        assert @second_user = create_user
+        @request.session[:user] = @second_user
         delete :destroy, :locale => 'en', :id => @user.login
       end
       should "not destroy the record" do
         assert @user.reload
       end
-      should_redirect_to 'user_url(@user)'
-      should_set_the_flash_to /not allowed/      
+      should_redirect_to 'user_url(@second_user)'
+      should_set_the_flash_to /have permission/      
     end
     context "on GET to :index" do
       setup do
@@ -145,13 +149,15 @@ class UsersControllerTest < ActionController::TestCase
         assert @user = create_user
         assert @profile = create_profile
         assert @user.profile = @profile
+        assert @second_user = create_user
+        @request.session[:user] = @second_user
         put :update, :locale => 'en', :id => @user.login, :user => {"email" => @new_email}
       end      
       should "not make the change" do
         assert_not_equal @new_email, @user.email
       end
-      should_redirect_to 'user_url(@user)'
-      should_set_the_flash_to /not allowed/      
+      should_redirect_to 'user_url(@second_user)'
+      should_set_the_flash_to /have permission/      
     end
   end
 end

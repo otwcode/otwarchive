@@ -5,8 +5,8 @@ class TagRelationshipsControllerTest < ActionController::TestCase
     setup do
       get :index, :locale => 'en'
     end
-    should_redirect_to 'root_path'
-    should_set_the_flash_to /tag wranglers only/      
+    should_redirect_to "{:controller => :session, :action => 'new'}"
+    should_set_the_flash_to /log in/      
   end
   
   context "when logged in" do
@@ -15,14 +15,14 @@ class TagRelationshipsControllerTest < ActionController::TestCase
       @request.session[:user] = @user
       get :index, :locale => 'en'
     end
-    should_redirect_to 'root_path'
+    should_redirect_to "{:controller => :works, :action => 'index'}"
     should_set_the_flash_to /tag wranglers only/      
   end
   
   context "when logged in as a tag_wrangler" do
     setup do
       @user = create_user
-      @user.roles << Role.find_or_create_by_name("tag_wrangler")
+      @user.is_tag_wrangler
       @request.session[:user] = @user
     end
     context "when looking at tag relationships" do
