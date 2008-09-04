@@ -33,6 +33,7 @@ class UsersController < ApplicationController
   # GET /users/new.xml
   def new
     @user = User.new
+		@hide_dashboard = true
   end
   
   # GET /users/1/edit
@@ -43,6 +44,7 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.xml
   def create
+	  @hide_dashboard = true
     if params["cancel-create-account"] == "Cancel"
       redirect_to '/'
     else

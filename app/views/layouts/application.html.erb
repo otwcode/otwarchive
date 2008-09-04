@@ -17,7 +17,7 @@
 	<%= render :partial => 'layouts/header' %>
   
 	  <!-- BEGIN sidebar -->
-	  <%- if @user && !@user.new_record? && !@hide_dashboard -%> 
+	  <%- if @user && !@hide_dashboard -%> 
 	  <div id="dashboard-sidebar">
 	    <%= render :partial => 'users/sidebar' %>
 	  </div>
@@ -25,7 +25,7 @@
 	  <!-- END sidebar -->
   
 	  <!-- BEGIN main -->
-	  <div id="main" class="<%= controller.controller_name + '-' + controller.action_name -%>">
+	  <div id="main" class="<%= classes_for_main %>">
 	    <%= flash_div :error, :warning, :notice %>
 	    <%= yield  %>
 	  </div>

@@ -1,5 +1,12 @@
 # Methods added to this helper will be available to all templates in the application.
-module ApplicationHelper 
+module ApplicationHelper
+
+	# Generates class names for the main div in the application layout
+	def classes_for_main
+		class_names = controller.controller_name + '-' + controller.action_name
+		class_names += " sidebar" unless @user.blank? || @hide_dashboard
+		class_names
+	end
 
   # A more gracefully degrading link_to_remote.
   def link_to_remote(name, options = {}, html_options = {})
