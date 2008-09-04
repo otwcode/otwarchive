@@ -40,6 +40,20 @@ module ApplicationHelper
       link_to pseud.name, user_path(pseud.user), :class => "login story-author"
     }.join(', ')
   end
+
+  # Currently, help files are static. We may eventually want to make these dynamic? 
+  def link_to_help(link, help_entry)
+    help_file = ""
+    if Locale.active && Locale.active.language
+      help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{Locale.active.language.code}/#{help_entry}.html"
+    end
+    
+    unless !help_file.blank? && File.exists?("#{RAILS_ROOT}/public/#{help_file}")
+      help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
+    end
+    
+    link_to_ibox link, :for => help_file
+  end
   
   # Inserts the flash alert messages for flash[:key] wherever 
   #       <%= flash_div :key %> 

@@ -81,5 +81,10 @@ USE_OPENID: true
 # Allow orphaninig
 ORPHANING_ALLOWED: true
 
+# Help directory, must be in the public folder. 
+# Create subfolders for each supported language 
+# (eg, /help/fr/ contains the French versions of the help)
+HELP_DIRECTORY: '/help'
+
 # only use if you are running your app completely in a subfolder of your domain
 #PRODUCTION_URL_ROOT: "/archive"
