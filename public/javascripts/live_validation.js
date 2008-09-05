@@ -80,12 +80,12 @@ LiveValidation.prototype = {
     this.form = this.element.form;
     // overwrite the options defaults with passed in ones
     this.options = Object.extend({
-      validMessage: 'Thank you!',
+      validMessage: '',
       onValid: function(){ this.insertMessage(this.createMessageSpan()); this.addFieldClass(); },
       onInvalid: function(){ this.insertMessage(this.createMessageSpan()); this.addFieldClass(); },
       insertAfterWhatNode: this.element,
-      onlyOnBlur: false,
-      wait: 0,
+      onlyOnBlur: true,
+      wait: 50,
       onlyOnSubmit: false
     }, optionsObj || {});
 	var node = this.options.insertAfterWhatNode || this.element;

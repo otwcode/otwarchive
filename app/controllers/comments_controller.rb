@@ -37,7 +37,6 @@ class CommentsController < ApplicationController
     end
   end
     
-    
   # Get the parent of the desired comment(s) 
   # Just covering all the bases here for now
   def load_commentable
@@ -113,6 +112,12 @@ class CommentsController < ApplicationController
       @controller_name = params[:controller_name]
       if @comment.commentable.kind_of?(Work)
         @comment.commentable = @comment.commentable.last_chapter
+      end
+
+      # First, try saving the comment
+      unless @comment.valid?
+        flash[:comment_error] = "There was a problem with your comment.".t
+        redirect_to :back, :anchor => "comments" and return
       end
       
       if @comment.set_and_save

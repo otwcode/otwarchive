@@ -159,13 +159,7 @@ module ApplicationHelper
           ''
     end
   end
-  
-  
-  # Validation messages
-  def valid_length_message
-    "Thanks, that length looks good.".t
-  end
-  
+
   #santizes and formats a string with paragraphs
   def sanitize_format(content)
     close_tags(sanitize(simple_format(content)))

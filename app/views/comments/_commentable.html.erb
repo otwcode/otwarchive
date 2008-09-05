@@ -1,6 +1,7 @@
 <!-- Gets embedded anywhere we need to list comments on a top-level commentable. We need the local variable "commentable" here. -->
 <a name="comments"></a>
 <div id="feedback">
+	<%= flash_div :comment_error -%>
 	<ul class="navigation">
 		
 		<%- if commentable.class == Chapter || CanHasBookmarks > commentable.class -%>
