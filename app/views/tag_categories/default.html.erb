@@ -1,6 +1,6 @@
 <h2><%=h 'TagWrangler:'.t %> <%= @tag_category.display_name %> <%=h 'tag category'.t %> </h2>
 
-<p><%=h 'Drag a tag by its handle'.t %> (<img src="/images/drag.png" alt="drag me">) <%=h 'and drop it on the following line to move it to the'.t %> <%= @tag_category.display_name %> <%=h 'category'.t %></p>
+<p><%=h 'Drag a tag by its handle'.t %> (<img src="/images/drag.png" alt="drag me" />) <%=h 'and drop it on the following line to move it to the'.t %> <%= @tag_category.display_name %> <%=h 'category'.t %></p>
 
 <div id=<%= @tag_category.display_name %> class="droppable">
     <%=h 'Move to'.t %> <%= @tag_category.display_name %> <%=h 'category'.t %>

@@ -1,68 +1,57 @@
-/* All CSS for the site as a whole is stored in the site-specific stylesheet.  This stylesheet contains only the styles needed to place and style elements on the login/create account pages. */
-
-
-/* Page-specific styles, site-independent */
-	/* Login page */
-.authentication-loginheading {
-	margin-bottom: -10px;
-}	
-#authentication-logo { width: 50%;
-  display: inline; /* Needed for IE */
+/*SESSIONS (front front pages - login, create, etc)*/
+#main.session h1, #main.session h1, #main.passwords-new h1 {
+    text-align: left;
+    border: 0
 }
-#authentication-loginform { width: 50%;
-	float:right;
+
+#main.session h2, #main.session h2, #main.passwords-new h2 {
+    font: 100 80% "Gill Sans", Georgia, Verdana, sans-serif;
+    margin: 0 auto 2em
 }
-	/* Create account page */
-	/* Account confirm page */
+/* Login page */
+#authentication-logo {
+    width: 49%;
+    display: inline; /* Needed for IE */
+    margin-bottom: 1.5em
+}
+
+#authentication-loginform {
+    width: 49%;
+    float: right;
+    margin-bottom: 1.5em;
+}
 /* Style for "Return to home page" link; adds visual space between link and preceding elements */
-.authentication-return { margin-top: 60px;
+.authentication-return {
+    margin-top: 60px;
+}
+/* Form */
+#authentication-openidlogo {
+    margin-left: -20px;
+    vertical-align: middle;
 }
 
-	/* Universal styles */
-/* Afterthought-type content, such as "New tester? Create an account" */
-.authentication-footnote { border-top: 1px #000 solid;
-	margin: 15px 0px 15px 0px;
-	padding: 15px 0px;
-}
-.authentication-wideleftmargin {
-	margin-left: 500px;
-}
-.authentication-widebottommargin {
-	margin-bottom: 50px;
-}
-.authentication-small {
-	margin-top: -20px;
-	font-size: 90%;
+.session form {
+    border-bottom: 1px solid;
+    margin-bottom: 1.5em;
+    padding-bottom: 1.5em;
 }
 
-	/* Form-related styles */
-.authentication-checkbox { margin: 0px 10px 0px 0px;
+.session form p {
+    position: relative;
 }
-.authentication-checkboxfield { margin: 10px 0px 10px 0px;
-  vertical-align: middle;
+
+.session input#login, .session input#password {
+    width: 24em
 }
-.authentication-label { margin: 10px 0px 10px 0px;
+
+.session form input.submit {
+    margin: 0 0 0 6em
 }
-.authentication-largebutton {
-	font-size: 115%;
-	margin-top: 15px;
-	margin-right: 10px;
+
+.footnote {
+    font-size: 100%;
 }
-.authentication-selectfield { margin: 10px 0px 15px 0px;
-}
-.authentication-textareafield { text-align: left;
-	margin: 10px 0px 0px 0px;
-}
-.authentication-textfield { width: 250px;
-	text-align: left;
-	margin: 5px 0px 5px 0px;
-	vertical-align: middle;
-}
-.authentication-submitbutton {
-	margin-left: 76px;
-	vertical-align: middle;
-}
-.authentication-openidlogo {
-	margin-left: -20px;
-	vertical-align: middle;
+
+form .footnote {
+    font-size: smaller;
 }

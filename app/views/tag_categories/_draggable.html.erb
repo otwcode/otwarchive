@@ -1,5 +1,5 @@
 <div id="<%= tag.id -%>" class=draggable>
-  <img src="/images/drag.png" alt="drag me">
+  <img src="/images/drag.png" alt="drag me" />
   <%= link_to tag.name, tag, :popup => true %>
   <% if tag.canonical? %>(Canonical)<% end -%>
   <% if tag.banned? %>(Banned!)<% end -%>

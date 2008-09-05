@@ -26,8 +26,8 @@ PERFORM_DELIVERIES: false
 
 APP_URL: 'http://www.example.org'
 APP_NAME: 'Example Archive'
-LOGO: 'OTWLogo.jpg'
-ALT_LOGO: 'OTW Logo'
+LOGO: 'OTWLogo.png'
+ALT_LOGO: 'OTW Logo:closing the circle of the copyright symbol, it symbolizes our creative engagement with media: participating and not just consuming.'
 REVISION: ''
 
 # tag settings

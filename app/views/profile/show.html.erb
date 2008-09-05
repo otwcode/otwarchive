@@ -26,7 +26,7 @@
 	<%- end -%>
 	<%- if @user.preference.email_visible -%>
     <dt class="email"><%=h "My email address:".t %></dt>
-      <dd class="email"><%= mail_to @user.email, nil, :encode => "hex" %></dd class="email">
+      <dd class="email"><%= mail_to @user.email, nil, :encode => "hex" %></dd>
     <%- end -%>
   </dl>
 

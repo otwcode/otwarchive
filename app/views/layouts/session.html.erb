@@ -13,7 +13,7 @@
   </head>
   <body onload="hideFormFields(); initSelect('languages_menu')">
     <!-- BEGIN main -->
-    <div id="main" class="<%= controller.controller_name + '-' + controller.action_name -%>">
+    <div id="main" class="<%= controller.controller_name + '-' + controller.action_name -%> session">
       <%= flash_div :error, :warning, :notice %>
       <h1><%=h ArchiveConfig.APP_NAME .t %></h1>
       <h2><%=h "A project of the".t %> 
@@ -26,9 +26,6 @@
       <p id="authentication-logo">
         <%= image_tag(ArchiveConfig.LOGO, :alt => ArchiveConfig.ALT_LOGO) -%>
       </p>
-      <!-- And now we clear the floats so the footer information will show up properly. -->
-      <div class="clearboth">
-      </div>
     </div>
     <!-- END main -->
 	

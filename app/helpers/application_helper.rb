@@ -105,7 +105,7 @@ module ApplicationHelper
       end
     end
     result << "</select></div>"
-    result << "<div><noscript><input type=\"submit\" name=\"commit\" value=\"Go\" /></noscript></div>"
+    result << "<noscript><p><input type=\"submit\" name=\"commit\" value=\"Go\" /></p></noscript>"
     result << "</form>"
     return result
   end  

@@ -1,6 +1,7 @@
 <h1>All Users:</h1>
 
 <table id="admin_users_table">
+<caption><!--A summary of the table contents and purpose here pleasee--></caption>
 <%- for user in @users -%>
   <tr id="user_<%= user.id %>">
     <%= render :partial => 'user_form', :locals => {:user => user} %>

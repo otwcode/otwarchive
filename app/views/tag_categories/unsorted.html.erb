@@ -1,6 +1,6 @@
 <h2><%=h 'TagWrangler: Unsorted tag category'.t %> </h2>
 
-<p><%=h 'Drag a tag by its handle'.t %> (<img src="/images/drag.png" alt="drag me">) <%=h 'and drop it on one of the category names to move it to that category.'.t %></p>
+<p><%=h 'Drag a tag by its handle'.t %> (<img src="/images/drag.png" alt="drag me" />) <%=h 'and drop it on one of the category names to move it to that category.'.t %></p>
 
 <% @tag_categories.each do |tag_category| %>
   <div id=<%= tag_category.display_name %> class="droppable">

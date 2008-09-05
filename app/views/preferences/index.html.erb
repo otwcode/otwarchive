@@ -15,4 +15,10 @@
   </p>
 <%- end -%>
 
-<p><%= link_to "Edit my profile".t, edit_user_path(@user) %></p>
+<ul>
+	<li><%= link_to "edit my account".t, edit_user_path(@user) %></li>
+	<li><%= link_to 'manage my pseuds'.t, user_pseuds_path(@user) %></li>
+	<li><%= link_to 'orphan my works'.t, orphans_path %></li>
+</ul>
+
+

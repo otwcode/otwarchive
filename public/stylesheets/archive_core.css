@@ -138,11 +138,9 @@ blockquote, q {
 /* LAYOUT ELEMENTS   MASTHEAD BLOCK    */
 #header {
     background: #900 url(../images/title.png) top left no-repeat;
-    border-bottom: 6px solid #111;
     font-weight: 600;
     font-size: 140%;
     position: relative;
-    padding: 1em 1em 0;
 }
 
 #header h1 {
@@ -197,6 +195,7 @@ ul#main-navigation {
     position: relative;
     clear: both;
     border-left: 1px solid #111;
+    margin: 0 0 0 1em;
 }
 
 #main-navigation li {
@@ -235,6 +234,12 @@ ul#main-navigation {
     border: 1px solid #111;
     border-bottom: 0;
     color: #111;
+}
+
+#header hr.clear {
+    background: url(../images/headergradient.png) top left repeat-x;
+    border-top: 6px solid #111;
+    height: 20px;
 }
 /* END HEADER*/
 /*CURRENTLY A MYSTERY  */
@@ -282,8 +287,6 @@ ul#main-navigation {
 }
 /*MAIN CONTENT BLOCK  */
 #main {
-    background: url(../images/headergradient.png) top left repeat-x;
-    border-top: 1px solid #666;
     position: relative;
     margin: auto;
     padding: 1em 3.5em;
@@ -294,17 +297,15 @@ ul#main-navigation {
     border-bottom: 1px dotted #777;
     clear: both;
 }
-/*PAGE BY PAGE STYLING: NEW SESSION HOME HOME SUBPAGES FANDOMS PEOPLE GROUPS RECS TAGS*/
-/*SESSION (front front page)*/
-#main.session-new h1 {
-    text-align: left;
-    border: 0
-}
 
-#main.session-new h2 {
-    font: 100 80% "Gill Sans", Georgia, Verdana, sans-serif;
-    margin: 0 auto 2em
+#main.sidebar {
+    width: 65%;
+    float: left;
+    position: relative;
+    margin: 0.25em 1.5em 1em;
 }
+/*PAGE BY PAGE STYLING: NEW SESSION HOME HOME SUBPAGES FANDOMS PEOPLE GROUPS RECS TAGS*/
+
 /* HOME: USERS SHOW*/
 #user-page {
     width: 65%;
@@ -357,13 +358,6 @@ li.story-tags ul li {
 
 .pseuds-index p {
     clear: both;
-}
-/*All these are elements containing the main content on pages where the sidebar shows up --may group these with the sidebar declarations*/
-.works-index ul.story-list, #user-profile, .pseuds-index table, .pseuds-new form, .readings-index ul {
-    width: 65%;
-    float: left;
-    position: relative;
-    margin: 0.25em 1.5em 1em;
 }
 /* WORKS-INDEX  */
 /*FANDOMS-INDEX   */
@@ -678,87 +672,6 @@ dl#series-meta {
 .chapter-content {
     padding: 50px;
 }
-/*SYSTEM/ ADMIN MESSAGES AND WARNINGS  */
-.message {
-    font-size: larger;
-}
-
-.warning {
-    font-weight: 900;
-    background-color: #feffd4;
-}
-
-.footnote {
-    font-size: smaller;
-}
-/* Debug Style (development only)    */
-#debug {
-    border: 1px dashed;
-    margin: 10%;
-    padding: 10px;
-}
-/*Just a note, the main div is automagically
- * assigned a different class for every different
- * functional page, if you want to make use of
- * this to style child elements.
- The flash divs are intended for use to show error messages
- * from just notices to warnings to fatal errors. Errors get
- * set in the model or controller like so: flash[:notice] = "notification"
- * and are displayed in the view with <%= flash_div :error, :warning, :notice -%>
- */
-.flash {
-    float: left;
-    width: inherit;
-    margin: 0.4em 0 0.2em;
-    padding: 1em;
-}
-
-.flash_icon {
-    border: 0;
-    float: left;
-    width: 50px;
-    padding: 0 0.5em 0 0;
-}
-
-.notice {
-    background-color: #b3d4ef;
-    border: 2px solid #b3d4ef;
-    width: 98%;
-}
-
-.error {
-    background-color: #efd1d1;
-    border: 2px solid #af2020;
-}
-/* Rails will automatically add the errorExplanation and fieldWithErrors divs
- * after doing validation of models - just make sure you're using f.label
- * or similar!    */
-.errorexplanation {
-    background-color: #efd1d1;
-    border: 2px solid #af2020;
-    margin: 0.4em 0 0.2em;
-    padding: 1em;
-}
-
-.fieldwitherrors {
-    width: 500px;
-    color: #af2020;
-}
-
-.fieldwitherrors ul {
-    color: #af2020;
-    font-size: 0.9em;
-    margin-bottom: 0;
-}
-
-.fieldwitherrors label {
-    color: #af2020;
-    background-color: #efd1d1;
-}
-
-.fieldwitherrors input {
-    border: 2px solid #af2020;
-}
 
 .story-edit {
     background-color: #ffe5af;
@@ -842,10 +755,6 @@ textarea.story-edit-notes {
     width: 80%;
 }
 
-#errorexplanationnone ul {
-    display: none;
-}
-
 ul.story-list li.story-tags {
     display: inline;
 }
@@ -858,4 +767,93 @@ ul.story-list li.story-tags {
 
 .story-show .story-author, .story-title, .chapter-title {
     text-align: center;
+}
+/*SYSTEM/ ADMIN MESSAGES AND WARNINGS  */
+.message {
+    font-size: larger;
+}
+
+.warning {
+    font-weight: 900;
+    background-color: #feffd4;
+}
+
+.footnote {
+    font-size: smaller;
+}
+/* Debug Style (development only)    */
+#debug {
+    border: 1px dashed;
+    margin: 10%;
+    padding: 10px;
+}
+/*Just a note, the main div is automagically
+ * assigned a different class for every different
+ * functional page, if you want to make use of
+ * this to style child elements.
+ The flash divs are intended for use to show error messages
+ * from just notices to warnings to fatal errors. Errors get
+ * set in the model or controller like so: flash[:notice] = "notification"
+ * and are displayed in the view with <%= flash_div :error, :warning, :notice -%>
+ */
+.flash {
+    float: left;
+    width: inherit;
+    margin: 0.4em 0 0.2em;
+    padding: 1em;
+}
+
+.flash_icon {
+    border: 0;
+    float: left;
+    width: 50px;
+    padding: 0 0.5em 0 0;
+}
+
+.notice {
+    background-color: #b3d4ef;
+    border: 2px solid #b3d4ef;
+    width: 98%;
+}
+
+.error {
+    background-color: #efd1d1;
+    border: 2px solid #af2020;
+}
+/* Rails will automatically add the errorExplanation and fieldWithErrors divs
+ * after doing validation of models - just make sure you're using f.label
+ * or similar!    */
+.errorexplanation, .errorExplanation {
+    background-color: #efd1d1;
+    border: 2px solid #af2020;
+    margin: 0.4em 0 0.2em;
+    padding: 1em;
+}
+
+.errorexplanation ul, .errorExplanation ul {
+    list-style-type: disc
+}
+
+#errorexplanationnone ul {
+    display: none;
+}
+
+.fieldwitherrors {
+    width: 500px;
+    color: #af2020;
+}
+
+.fieldwitherrors ul {
+    color: #af2020;
+    font-size: 0.9em;
+    margin-bottom: 0;
+}
+
+.fieldwitherrors label {
+    color: #af2020;
+    background-color: #efd1d1;
+}
+
+.fieldwitherrors input {
+    border: 2px solid #af2020;
 }

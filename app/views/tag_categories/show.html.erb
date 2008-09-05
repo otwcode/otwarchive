@@ -1,5 +1,5 @@
 <h2><%=h 'TagWrangler: Set Adult, Banned and Canonical Flags for'.t %> <%= @tag_category.display_name %> <%=h 'tags'.t %></h2>
-<p><%=h 'Drag a tag by its handle'.t %> (<img src="/images/drag.png" alt="drag me">) <%=h 'and drop it on one of the following four lines:'.t %></p>
+<p><%=h 'Drag a tag by its handle'.t %> (<img src="/images/drag.png" alt="drag me" />) <%=h 'and drop it on one of the following four lines:'.t %></p>
 
 <% ['banned', 'canonical', 'adult'].each do |kind| %>
   <p><div id=<%=kind%> class="droppable" >mark <%= kind.capitalize %></div>
