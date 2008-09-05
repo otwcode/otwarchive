@@ -2,7 +2,8 @@
 <% if !commentable && @commentable %>
   <%- commentable = @commentable -%>
 <%- end -%>
-<div id="comment_form">
+<div id="comment_form_div">
+	<a name="comment_form"></a>
 	<%- form_for [commentable, comment] do |f| -%>
 	  <dl>
 		<%- if logged_in? -%>

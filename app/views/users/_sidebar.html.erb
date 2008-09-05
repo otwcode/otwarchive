@@ -4,11 +4,11 @@
   <li><%= print_works_link(@user) %></li>
   <li><%= print_series_link(@user) %></li>
   <li><%= print_bookmarks_link(@user) %></li>
-  <li><%= link_to_unless_current prefix + "Communities".t, '#' %></li>
+  <li><%= link_to_help "coming-soon", prefix + "Communities".t %></li>
   <% if @user == current_user %>    
   <li><%= link_to_unless_current prefix + "Inbox (".t + @user.feedback_comments.count.to_s + ")", user_inbox_path(@user) %></li>
   <li><%= link_to_unless_current prefix + "Reading History".t, user_readings_path(@user) %></li>
-  <li><%= link_to_unless_current prefix + "Subscriptions".t, '#' %></li>
+  <li><%= link_to_help "coming-soon", prefix + "Subscriptions".t %></li>
   <li><%= link_to_unless_current prefix + "Preferences".t, user_preferences_path(@user) %></li>
   <% end %>
 </ul>
