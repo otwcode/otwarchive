@@ -1,3 +1,4 @@
+<!-- should this be a definition list? dl dt dd-->
 <p>
   <strong><%=h 'Name:'.t %></strong>
   <%=h @community.name %>
@@ -13,6 +14,7 @@
   <%=h @community.open_membership %>
 </p>
 
-
-<%= link_to 'Edit'.t, edit_community_path(@community) %> |
-<%= link_to 'Back'.t, communities_path %>
+<ul class="navigation">
+	<li><%= link_to 'Edit'.t, edit_community_path(@community) %> |</li>
+	<li><%= link_to 'Back'.t, communities_path %></li>
+</ul>

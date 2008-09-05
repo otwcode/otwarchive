@@ -3,14 +3,14 @@
 <table>
   <caption><!--A summary of the table contents and purpose here please--></caption>
 <tr>
-    <th><%=h 'Name'.t %></th>
-    <th><%=h 'Description'.t %></th>
-    <th><%=h 'Open membership'.t %></th>
+    <th scope="col"><%=h 'Name'.t %></th>
+    <th scope="col"><%=h 'Description'.t %></th>
+    <th scope="col"><%=h 'Open membership'.t %></th>
   </tr>
 
 <% for community in @communities %>
   <tr>
-    <td><%=h community.name %></td>
+    <th scope="row"><%=h community.name %></td>
     <td><%=h community.description %></td>
     <td><%=h community.open_membership %></td>
     <td><%= link_to 'Show'.t, community %></td>
@@ -20,10 +20,7 @@
 <% end %>
 </table>
 
-<br />
-
-<%= link_to 'New community'.t, new_community_path %>
-
+<p><%= link_to 'New community'.t, new_community_path %></p>
 
 <div class="pagination">
 	  <%= will_paginate @communities, :prev_label =>  "&laquo; Previous".t,:next_label => "Next &raquo;".t %>

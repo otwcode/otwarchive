@@ -1,4 +1,4 @@
-<!--WORKING ON THIS 01/09/08. WILL BE FIXED BY 02/09/08 -lim-->
+
 <% form_for([@user, @pseud]) do |f| %>
 <p><%= f.label :name, 'Name'.t %>
 	<% if @pseud.name && @user.login == @pseud.name -%>
@@ -8,8 +8,8 @@
 	<% end -%>
 	</p>
 	<p><%= f.label :is_default, 'Is default'.t %> <%= f.check_box :is_default %></p>
- <p><%= f.label :description, 'Description'.t %></dt>
-    <dd><%= f.text_area :description, :rows => 4, :cols => 60 -%></dd>
+ <p><%= f.label :description, 'Description'.t %><br />
+    <%= f.text_area :description, :rows => 4, :cols => 60 -%></p>
 
 
   <p>

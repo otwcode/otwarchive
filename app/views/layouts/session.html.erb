@@ -18,7 +18,7 @@
 		<div id="main" class="<%= controller.controller_name + '-' + controller.action_name -%> session">
 			<%= flash_div :error, :warning, :notice %>
 			<h1><%=h ArchiveConfig.APP_NAME .t %></h1>
-			<h2><%=h "A project of the".t %><a href="http://transformativeworks.org" tabindex = '9'><%=h "Organization For Transformative Works".t %></a></h2>
+			<h2><%=h "A project of the".t %> <a href="http://transformativeworks.org" tabindex = '9'><%=h "Organization For Transformative Works".t %></a></h2>
 				<div id="signin">
 					<%= yield %>
 				</div>

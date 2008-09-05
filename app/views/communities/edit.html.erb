@@ -2,22 +2,17 @@
 
 <% form_for(@community) do |f| %>
   <%= f.error_messages %>
-
-  <p>
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </p>
-  <p>
-    <%= f.label :description %><br />
-    <%= f.text_area :description %>
-  </p>
-  <p>
-    <%= f.label :open_membership %><br />
-    <%= f.check_box :open_membership %>
-  </p>
-  <p>
-    <%= f.submit "Update".t %>
-  </p>
+	<dl>
+		<dt><%= f.label :name %></dt>
+    	<dd><%= f.text_field :name %></dd>
+  		<dt>%= f.label :description %></dt>
+    	<dd><%= f.text_area :description %></dd>
+  		<dt><%= f.label :open_membership %></dt>
+    	<dd><%= f.check_box :open_membership %></dt>
+  	</dl>
+  	<p>
+    	<%= f.submit "Update".t %>
+  	</p>
 <% end %>
 
 <%= link_to 'Show'.t, @community %> |
