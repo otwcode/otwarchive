@@ -5,10 +5,11 @@
 	<%= error_messages_for :user, :id => "errorExplanationNone", :header_tag => "p", :header_message => "Oops, there's some problems with the stuff you told us.".t, :message => nil  %>
 
 	<% form_for :user, :url => users_path do |f| -%>
-	  <!-- Create login -->
-	  <dl>
-	<dt><%= f.label :login, h("What would you like as your user name?").t %></dt>
+	<!-- Create login -->
+	<dl>
+	  <dt><%= f.label :login, h("What would you like as your user name?").t %></dt>
 	  <dd><%= f.text_field :login, :class => 'authentication-textfield', :tabindex => '1' %></dd>
+    
     <!-- The password or OpenID login fields are shown in this div -->
 		<div id="switch_fields">
 			<!-- use_openid set by link_to_passwd and link_to_openid below; needed for non-JS users to distinguish between versions of the page --> 
@@ -17,8 +18,8 @@
 			<%- else -%>	
 			  <%= render :partial => 'passwd', :locals => {:f => f} %>
       <% end -%>
-	</dl>
 		</div>
+	</dl>
 
 		<!-- Link to toggle between password and OpenID. Ugly code! :( -->
 		<!-- Two versions of the div tag here so the link to passwd is not shown

@@ -4,50 +4,43 @@
 
 <% form_for(@user) do |f| %>  
   <dl>
-	<dt><%= f.label :email, "Change Email" .t %></dt>
+	  <dt><%= f.label :email, "Change Email" .t %></dt>
 		<dd><%= f.text_field :email %></dd>
   </dl>
+  
   <dl id="passwd">
-	<dt><%= f.label :password, "Change Password" .t %></dt>
-	<dd><%= f.password_field :password %></dd>
-	<% if ArchiveConfig.USE_OPENID %>
-      <dd><%= link_to_function image_tag('openid.png', :alt=>"Use OpenID to log in".t), "Element.hide('passwd'); Element.show('openid')" %></dd>
+	  <dt><%= f.label :password, "Change Password" .t %></dt>
+	  <dd><%= f.password_field :password %></dd>
+	  
+	  <% if ArchiveConfig.USE_OPENID %>
+    <dd><%= link_to_function image_tag('openid.png', :alt=>"Use OpenID to log in".t), "Element.hide('passwd'); Element.show('openid')" %></dd>
     <% end -%>
+    
     <dt><%= f.label :password_confirmation, "Confirm New Password" .t %></dt>
-	<dd><%= f.password_field :password_confirmation %></dd>
+	  <dd><%= f.password_field :password_confirmation %></dd>
   </dl>
+  
   <% if ArchiveConfig.USE_OPENID %>	
-    <dl id="openid" style="display: none">
-<<<<<<< .mine
-    <dt><%= f.label :identity_url, "Add or Change an OpenID URL" .t %></dt>
-    <dd><%= f.text_field :identity_url %></dd>
-    <%= link_to_function "Add or Change a Password".t, "Element.hide('openid'); Element.show('passwd')" %>
-=======
-	    <dt><%= f.label :identity_url, "Add or Change an OpenID URL" .t %></dt>
-	    <dd><%= f.text_field :identity_url %></dd>
-	    <%= link_to_function "Add or Change a Password".t, "Element.hide('openid'); Element.show('passwd')" %>
->>>>>>> .r556
-    </dl>
+  <dl id="openid" style="display: none">
+	  <dt><%= f.label :identity_url, "Add or Change an OpenID URL" .t %></dt>
+	  <dd><%= f.text_field :identity_url %></dd>
+	  <%= link_to_function "Add or Change a Password".t, "Element.hide('openid'); Element.show('passwd')" %>
+  </dl>
   <% end -%>
 
   <% fields_for :profile_attributes,  @user.profile do |p| %>
-    <dl>
-		<dt><%= f.label :title, "Title".t %></dt>
-      		<dd><%= p.text_field :title %></dd>
-    	<dt><%= f.label :location, "Location".t %></dt>
-      		<dd><%= p.text_field :location %></dd>
-    	<dt><%= f.label :date_of_birth, "Date of Birth".t %></dt>
-       		<dd><%= p.date_select :date_of_birth, :start_year => 1930, :end_year => 13.years.ago.year %></dd>
-     	<dt><%= f.label :about_me, "About Me".t %></dt>
-       		<dd><%= p.text_area :about_me %></dd>
-<<<<<<< .mine
-</dl>  <% end %>
-
-=======
+  <dl>
+	  <dt><%= p.label :title, "Title".t %></dt>
+    <dd><%= p.text_field :title %></dd>
+    <dt><%= p.label :location, "Location".t %></dt>
+    <dd><%= p.text_field :location %></dd>
+    <dt><%= p.label :date_of_birth, "Date of Birth".t %></dt>
+    <dd><%= p.date_select :date_of_birth, :start_year => 1930, :end_year => 13.years.ago.year %></dd>
+    <dt><%= p.label :about_me, "About Me".t %></dt>
+    <dd><%= p.text_area :about_me %></dd>
 	</dl>
   <% end %>
 	
->>>>>>> .r556
   <p>
     <%= f.submit "Update".t %>
   </p>
