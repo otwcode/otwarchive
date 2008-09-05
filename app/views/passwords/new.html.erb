@@ -4,7 +4,7 @@
 
 <%- form_tag passwords_path do -%>
   <p>
-  	<%= label_tag 'login', 'Email address'.t + ' <strong>' + 'or'.t + '</strong> ' + 'user name:',  -%>
+  	<%= label_tag 'login', 'Email address'.t + ' <strong>' + 'or'.t + '</strong> ' + 'user name:' -%>
   	<br />
 	<%= flash_field(:login) -%>	
   	<%= text_field_tag 'login', '',  :tabindex => '1' -%> 

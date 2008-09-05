@@ -14,15 +14,22 @@ class Bookmark < ActiveRecord::Base
   end
   
   def visible(current_user=:false)
-#    visibility = (user == current_user || !(self.private? || self.hidden_by_admin?))
-#    if visibility
-#      if self.bookmarkable_type == 'Work'
-#        return self if self.bookmarkable.visible(current_user)
-#      else
-#        return self
-#      end
-#    end
-    user == current_user || !(self.private? || self.hidden_by_admin?)
+    visibility = (user == current_user || !(self.private? || self.hidden_by_admin?))
+    if visibility
+      if self.bookmarkable.nil? 
+        # only show bookmarks for deleted works to the user who 
+        # created the bookmark
+        if user == current_user
+          return self
+        else
+          return false
+        end
+      elsif self.bookmarkable_type == 'Work'
+        return self if self.bookmarkable.visible(current_user)
+      else
+        return self
+      end
+    end
   end
   
   # Virtual attribute for external works

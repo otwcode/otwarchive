@@ -52,7 +52,25 @@ class BookmarkTest < ActiveSupport::TestCase
         assert @bookmark.visible
       end
     end
+    context "on a deleted object" do
+      setup do
+        @work_to_destroy = create_work
+        @bookmark.bookmarkable = @work_to_destroy
+        @bookmark.save
+        @work_to_destroy.destroy
+      end
+      should_eventually "have a test that correctly reports it is visible to the bookmark's creator" do
+        #assert @bookmark.visible(@bookmark.user)
+      end
+      should "not be visible by default" do
+        assert !@bookmark.visible
+      end
+      should "not be visible to a random user" do
+        assert !@bookmark.visible(create_user)
+      end      
+    end
   end
+  
   context "A private bookmark on a posted work" do
     setup do
       @bookmark = create_bookmark(:private => true)
