@@ -19,12 +19,12 @@
 			<%= flash_div :error, :warning, :notice %>
 			<h1><%=h ArchiveConfig.APP_NAME .t %></h1>
 			<h2><%=h "A project of the".t %> <a href="http://transformativeworks.org" tabindex = '9'><%=h "Organization For Transformative Works".t %></a></h2>
+			<p id="logo">
+				<%= image_tag(ArchiveConfig.LOGO, :alt => ArchiveConfig.ALT_LOGO) -%>
+			</p>
 				<div id="signin">
 					<%= yield %>
 				</div>
-				<p id="logo">
-					<%= image_tag(ArchiveConfig.LOGO, :alt => ArchiveConfig.ALT_LOGO) -%>
-				</p>
 		</div>
     <!-- END main -->
 		<%= render :partial => 'layouts/footer' %>

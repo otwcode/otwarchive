@@ -1,9 +1,7 @@
 #globalize {
   font-size: 78%;
   margin: auto;
-  position: absolute;
-  left: 30px;
-  font-family: "Helvetica Neue", Verdana, Arial, sans-serif;
+  float:left;
 }
 
 #globalize a:link, #globalize a:visited {
@@ -18,12 +16,11 @@
 #globalize ul {
   color: #666;
   list-style-type: none;
-  margin-left: -30px;
 }
 
 #globalize ul li {
   display: inline;
-  margin: 3px;
+  margin: 0.2em;
 }
 
 #globalize form {
@@ -32,11 +29,9 @@
 
 #globalize select {
   border:1px solid #999;
-  font-family: "Helvetica Neue", Verdana, Arial, sans-serif;
-  /* font-family:"lucida grande",tahoma,verdana,arial,sans-serif;*/
-  font-size:11px;
-  padding:2px;
-  background-color: #fff;
+  font-size:smaller;
+  padding:0.15em;
+  background: #fff;
   color: #000;
 }
 
@@ -50,6 +45,5 @@
 }
 
 .inplaceeditor-form a:link, .inplaceeditor-form a:visited, .inplaceeditor-form a:hover, .inplaceeditor-form a:active {
-  font-family: Arial, "MS Trebuchet", sans-serif;
   font-size: 78%;
 }

@@ -301,13 +301,14 @@ ul#main-navigation {
 
 .session #logo {
     width: 49%;
-    display: inline; /* Needed for IE */
+    float:left;
+	display:block; /* Needed for IE */
     margin-bottom: 1.5em
 }
 
 .session #signin {
     width: 49%;
-    float: right;
+	float:left;
     margin-bottom: 1.5em;
 }
 /* HOME: USERS SHOW*/
