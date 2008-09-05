@@ -3,10 +3,9 @@
   <%- commentable = @commentable -%>
 <%- end -%>
 <div id="comment_form">
-  <a name="#comment_form"></a>
-  <dl>
 	<%- form_for [commentable, comment] do |f| -%>
-	  <%- if logged_in? -%>
+	  <dl>
+		<%- if logged_in? -%>
 	    <dt><%=h "Name: ".t -%></dt>
 		<dd>
 	      <% if current_user.pseuds.count > 1 %>
@@ -22,20 +21,18 @@
 		
 	    <dt><%= f.label :email, "Email: ".t %></dt>
 		<dd><%= f.text_field :email, :live => true -%></dd>
-	    <%= f.hidden_field :ip_address, :value => "#{request.remote_addr}" -%>      
+	    <dd><%= f.hidden_field :ip_address, :value => "#{request.remote_addr}" -%></dd>     
 	  <% end %>
 	       
 	  <dt><%= f.label :content, "Comment: ".t %></dt>
 	  <dd><%= f.text_area :content, :live => true %></dd>
 	    
-	    <%= f.hidden_field :commentable_id, :value => commentable.id %>
+	    <dd><%= f.hidden_field :commentable_id, :value => commentable.id %>
 	    <%= f.hidden_field :commentable_type, :value => commentable.class.to_s %>
-	    <input type="hidden" id="controller_name" name="controller_name" value="<%= @controller_name ||= @controller.controller_name %>" />  
-	
-	  <dd>
-	    <%= f.submit button_name %>
+	    <input type="hidden" id="controller_name" name="controller_name" value="<%= @controller_name ||= @controller.controller_name %>" /></dd>  
+	</dl>
+	    <p><%= f.submit button_name %>
 		<%= cancel_comment_button(comment, commentable) -%>
-	  </dd>
+	  </p>
   <% end -%>
-  </dl>
 </div> 
