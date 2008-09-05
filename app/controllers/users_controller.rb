@@ -93,13 +93,8 @@ class UsersController < ApplicationController
         @user.profile.save!
       end
       @user.recently_reset = nil if params[:change_password] 
-      if @user.email != params[:user][:email]
-        @user.deactivate
-        UserMailer.reactivate_account_notification(@user) if @user.pending?
-        flash[:notice] = 'during testing you can activate via <a href=' + activate_path(@user.activation_code) + '>your activation url</a>.<br />'
-      end
       @user.update_attributes!(params[:user]) 
-      flash[:notice] += 'User was successfully updated.'.t
+      flash[:notice] = 'User was successfully updated.'.t
       redirect_to(@user) 
     rescue
       render :action => "edit"

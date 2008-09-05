@@ -51,13 +51,6 @@ class UserMailer < ActionMailer::Base
      @subject    += "Your story has been deleted".t
      @body[:work] = work
    end
-   
-   #Sends an e-mail when the e-mail address is changed
-   def reactivate_account_notification(user)
-     setup_email(user)
-     @subject += "Your account must be reactivated".t
-     @body[:url] += "/activate/#{user.activation_code}"  
-   end
 
    protected
      def setup_email(user)
