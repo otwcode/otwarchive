@@ -1,0 +1,71 @@
+/* === FORMS RULES === */
+/* === These notes should be stripped out and copied to style book before launch === */
+/*Forms follow two models:
+ * (1) definition lists for paired data: dl dt dd. Most forms use this structure.
+ * (2) paragraphs with breaks for forms which cannot be logically broken down into property value pairs: p br.
+ * All forms are labelled: label.
+ * All forms can be selected through the main div's unique class
+ * Sessions forms can be selected through the main div's general class "session"
+ * User pages forms can be selected through the main div's general class "sidebar"
+ ===*/
+/* these rules are for two column forms when needed:  form dt{float:left; clear:left;margin:0 1em 0 0;} form dd{clear:right; margin:0;} */
+/* GLOBAL */
+form dt, label {
+    font-weight: 900;
+}
+/* USERS */
+.users-new form label {
+    font-weight: 100;
+}
+
+.users-new form .important {
+    font-weight: 900;
+}
+
+.users-new form p.submit {
+    text-align: right
+}
+
+.users-new form .submit input {
+    font-size: larger;
+}
+/*SESSIONS (front front pages - login, create, etc)*/
+img#openid {
+    margin-left: -20px;
+    vertical-align: middle;
+}
+
+.session form {
+    border-bottom: 1px solid;
+    margin-bottom: 1.5em;
+    padding-bottom: 1.5em;
+}
+
+.session label {
+    font-weight: 100;
+}
+
+.session input#login {
+    float: none;
+}
+
+.session input#login, .session input#password, .session input#openid_url {
+    width: 24em
+}
+
+.session form input.submit {
+    margin: 0 0 0 6em;
+    font-size: larger;
+}
+
+.footnote {
+    font-size: 100%;
+}
+
+form .footnote {
+    font-size: smaller;
+}
+
+form p.openid {
+    margin-top: 6em;
+}
