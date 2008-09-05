@@ -26,7 +26,13 @@ module Activation
   def pending?
     @activated
   end
-
+  
+  # Deactivate an account
+  def deactivate
+    @activated = false
+    make_activation_code
+    save(false)
+  end
 protected
 
     def make_activation_code
