@@ -5,7 +5,7 @@ class Bookmark < ActiveRecord::Base
   include TaggingExtensions
 
   validates_length_of :notes, 
-    :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than %d letters long."/ArchiveConfig.NOTES_MAX
+    :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than %d letters long."/ArchiveConfig.NOTES_MAX #/comment here just to fix aptana coloring
     
   def self.visible(current_user=:false, options = {})
     with_scope :find => options do
@@ -14,14 +14,15 @@ class Bookmark < ActiveRecord::Base
   end
   
   def visible(current_user=:false)
-    visibility = (user == current_user || !(self.private? || self.hidden_by_admin?))
-    if visibility
-      if self.bookmarkable_type == 'Work'
-        return self if self.bookmarkable.visible(current_user)
-      else
-        return self
-      end
-    end
+#    visibility = (user == current_user || !(self.private? || self.hidden_by_admin?))
+#    if visibility
+#      if self.bookmarkable_type == 'Work'
+#        return self if self.bookmarkable.visible(current_user)
+#      else
+#        return self
+#      end
+#    end
+    user == current_user || !(self.private? || self.hidden_by_admin?)
   end
   
   # Virtual attribute for external works

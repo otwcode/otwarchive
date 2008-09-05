@@ -1,18 +1,24 @@
 <!-- This partial requires local variable 'bookmark' -->
 <dl class="bookmark">
   <dt>
-    <% if bookmark.bookmarkable_type == "ExternalWork" %>
-    <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable.url %>
-	<%=h 'by'.t %>
-	<%= bookmark.bookmarkable.author %>
+  	<% if bookmark.bookmarkable.nil? -%>
+		(<%= 'Oh noes, this work has been deleted.'.t -%>)
+    <% elsif bookmark.bookmarkable_type == "ExternalWork" %>
+	    <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable.url %>
+		<%=h 'by'.t %>
+		<%= bookmark.bookmarkable.author %>
     <% else %>
-    <% if bookmark.bookmarkable.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)".t) %><% end %>
-    <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable %>
-	<%=h 'by'.t %>
-	<%= byline(bookmark.bookmarkable) %>
+	    <% if bookmark.bookmarkable.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)".t) %><% end %>
+	    <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable %>
+		<%=h 'by'.t %>
+		<%= byline(bookmark.bookmarkable) %>
     <% end %>
+	
     <% if bookmark.private %><%= image_tag("lockblack.png", :size => "15x15", :alt => "(Private)".t) %><% end %>
-    <%=sanitize_limited bookmark.bookmarkable.summary %>
+
+	<%- unless bookmark.bookmarkable.nil? -%>
+	    <%=sanitize_limited bookmark.bookmarkable.summary %>
+	<%- end -%>
   </dt>
   <%- unless bookmark.notes.blank? -%>
   <dd>
