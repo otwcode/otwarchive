@@ -772,10 +772,40 @@ ul.story-list li.story-tags {
 .story-show .story-author, .story-title, .chapter-title {
     text-align: center;
 }
-/*SYSTEM/ ADMIN MESSAGES AND WARNINGS  */
+/* === SYSTEM RULES === */
+/* === These notes should be stripped out and copied to style book before launch === */
+/* System messages use the following colours:
+ * blue: success, messages, additional information,
+ * red: error, go back and fix this problem
+ * yellow: warning, correct this error before you proceed
+ */
+/* SYMBOLS */
+span.symbol {
+    padding: 0.15em;
+    border: 1px solid;
+    display: block;
+    height: 1em;
+    width: 1em;
+    -moz-border-radius: 0.7em;
+    -webkit-border-radius: 0.7em;
+}
+
+span.symbol a {
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    display: block;
+    height: 1em;
+    width: 1em;
+}
+
+span.question {
+    background: url(bluesymbol.png) top left no-repeat #2b547c;
+    border-color: #2a547c;
+}
+
 .important {
     font-weight: 900;
-}
 }
 
 .message {
