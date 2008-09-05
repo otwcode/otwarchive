@@ -1,35 +1,32 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-  <head>
-    <meta name="generator" content="HTML Tidy, see www.w3.org" />
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-	<title><%=h ArchiveConfig.APP_NAME .t %> 
-		<% unless ArchiveConfig.REVISION.blank? -%>(rev. <%= ArchiveConfig.REVISION %>)<% end %>&gt;&gt;<%= controller.controller_name %>
-        <%= controller.action_name %>
-    </title>
-
-	<%= render :partial => 'layouts/includes' %>
-
-  </head>
-  <body onload="hideFormFields(); initSelect('languages_menu')">
+	<head>
+		<meta name="generator" content="HTML Tidy, see www.w3.org" />
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>
+			<%=h ArchiveConfig.APP_NAME .t %>
+			<% unless ArchiveConfig.REVISION.blank? -%>(rev.
+			<%= ArchiveConfig.REVISION %>)
+			<% end %>&gt;&gt;
+			<%= controller.controller_name %>
+			<%= controller.action_name %>
+		</title>
+		<%= render :partial => 'layouts/includes' %>
+	</head>
+	<body onload="hideFormFields(); initSelect('languages_menu')">
     <!-- BEGIN main -->
-    <div id="main" class="<%= controller.controller_name + '-' + controller.action_name -%> session">
-      <%= flash_div :error, :warning, :notice %>
-      <h1><%=h ArchiveConfig.APP_NAME .t %></h1>
-      <h2><%=h "A project of the".t %> 
-		<a href="http://transformativeworks.org" tabindex = '9'><%=h "Organization For Transformative Works".t %></a>
-	  </h2>
-      <div id="authentication-loginform">
-        <%= yield %>
-      </div>
-      <!-- And now the non-floated div. -->
-      <p id="authentication-logo">
-        <%= image_tag(ArchiveConfig.LOGO, :alt => ArchiveConfig.ALT_LOGO) -%>
-      </p>
-    </div>
+		<div id="main" class="<%= controller.controller_name + '-' + controller.action_name -%> session">
+			<%= flash_div :error, :warning, :notice %>
+			<h1><%=h ArchiveConfig.APP_NAME .t %></h1>
+			<h2><%=h "A project of the".t %><a href="http://transformativeworks.org" tabindex = '9'><%=h "Organization For Transformative Works".t %></a></h2>
+				<div id="signin">
+					<%= yield %>
+				</div>
+				<p id="logo">
+					<%= image_tag(ArchiveConfig.LOGO, :alt => ArchiveConfig.ALT_LOGO) -%>
+				</p>
+		</div>
     <!-- END main -->
-	
-    <%= render :partial => 'layouts/footer' %>
-
-  </body>
+		<%= render :partial => 'layouts/footer' %>
+	</body>
 </html>

@@ -1,24 +1,20 @@
-<h2><%=h "Account Created!" .t %></h2>
-
+		<h2><%=h "Account Created!" .t %></h2>
 <!-- Boilerplate text for account creation confirmation -->
-<p>
-  <%=h "In just a few minutes, you should receive an email at the address you gave us.".t %>  
-  <%=h "This will have the URL you need to go to in order to verify your account and complete the account creation process.".t %>  
-  <%=h "You might want to add".t -%> 
-  <strong><%=h ArchiveConfig.RETURN_ADDRESS %></strong>
-  <%=h "to your address book to make sure you get the mail.".t -%>
-</p>
-
-<p>
-  <%=h "If you don't hear from us within two hours, and you don't find our email in your spam filter, please drop us a line at".t %> <%= mail_to ArchiveConfig.SUPPORT_ADDRESS, ArchiveConfig.SUPPORT_ADDRESS %>.
-</p>
-
-<p>
-  <strong><%=h "Important!".t %></strong>
-  <%=h "You must verify your account within 48 hours, or your registration will expire.".t %>
-</p>
-
-<!-- Class "authentication-return" has large top margin, in keeping with wireframe -->
-<p class="authentication-return">
-  <%= link_to 'Return to archive front page'.t, root_path -%>
-</p>
+		<p>
+			<%=h "In just a few minutes, you should receive an email at the address you gave us.".t %>
+			<%=h "This will have the URL you need to go to in order to verify your account and complete the account creation process.".t %>
+			<%=h "You might want to add".t -%>
+			<strong><%=h ArchiveConfig.RETURN_ADDRESS %></strong>
+			<%=h "to your address book to make sure you get the mail.".t -%>
+		</p>
+		<p>
+			<%=h "If you don't hear from us within two hours, and you don't find our email in your spam filter, please drop us a line at".t %>
+			<%= mail_to ArchiveConfig.SUPPORT_ADDRESS, ArchiveConfig.SUPPORT_ADDRESS %>.
+		</p>
+		<p>
+			<strong><%=h "Important!".t %></strong>
+			<%=h "You must verify your account within 48 hours, or your registration will expire.".t %>
+		</p>
+		<p>
+			<%= link_to 'Return to archive front page'.t, root_path -%>
+		</p>

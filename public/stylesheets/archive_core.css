@@ -77,7 +77,7 @@ pre, kbd, tt, code {
     padding: 0.25em;
 }
 
-strong, b {
+strong, b, .important {
     font-weight: 900;
 }
 
@@ -109,23 +109,6 @@ th {
 
 td th {
     padding-right: 3em;
-}
-/*FORMS */
-/* these rules are for the two column forms:  form dt{float:left; clear:left;margin:0 1em 0 0;} form dd{clear:right; margin:0;} */
-form dt {
-    font-weight: 700;
-}
-
-form.new_abuse_report dt {
-    margin-top: 1.5em;
-}
-
-form.new_abuse_report dd {
-    margin-bottom: .5em;
-}
-
-label {
-    font-weight: 900;
 }
 
 blockquote:before, blockquote:after, q:before, q:after {
@@ -305,7 +288,28 @@ ul#main-navigation {
     margin: 0.25em 1.5em 1em;
 }
 /*PAGE BY PAGE STYLING: NEW SESSION HOME HOME SUBPAGES FANDOMS PEOPLE GROUPS RECS TAGS*/
+/*SESSIONS (front front pages - login, create, etc)*/
+#main.session h1, #main.session h1, #main.passwords-new h1 {
+    text-align: left;
+    border: 0
+}
 
+#main.session h2, #main.session h2, #main.passwords-new h2 {
+    font: 100 80% "Gill Sans", Georgia, Verdana, sans-serif;
+    margin: 0 auto 2em
+}
+
+.session #logo {
+    width: 49%;
+    display: inline; /* Needed for IE */
+    margin-bottom: 1.5em
+}
+
+.session #signin {
+    width: 49%;
+    float: right;
+    margin-bottom: 1.5em;
+}
 /* HOME: USERS SHOW*/
 #user-page {
     width: 65%;
@@ -769,6 +773,11 @@ ul.story-list li.story-tags {
     text-align: center;
 }
 /*SYSTEM/ ADMIN MESSAGES AND WARNINGS  */
+.important {
+    font-weight: 900;
+}
+}
+
 .message {
     font-size: larger;
 }

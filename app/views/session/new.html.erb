@@ -1,13 +1,13 @@
 <!-- loginform floated right -->
 <%- if @restricted -%>
-  <h3 class="authentication-loginheading"><%=h "Sorry!".t %></h3>
+  <h3><%=h "Sorry!".t %></h3>
   <p>
     <%=h "This story is only available to registered users of the Archive. ".t %>
     <%=h "If you already have an Archive of Our Own account, sign in now. ".t %>
     <%=h "Or join us for free - it's easy.".t %>
   </p>
 <%- else -%>
-  <h3 class="authentication-loginheading"><%=h "Login".t %></h3>
+  <h3><%=h "Login".t %></h3>
   <p>
     <strong><%=h "Warning:".t %></strong>
     <span><%=h "This site is in extreme alpha. Things may break or crash without notice. Please".t %></span>
@@ -26,13 +26,8 @@
   <%- end -%>
 </div>
 <%- end -%><!-- END form -->
-<br />
 
 <%- if ArchiveConfig.ACCOUNT_CREATION_ENABLED -%>
 <!-- Create account link -->
-<p>
-  <span class="authentication-footnote">
-  <%= "New tester?" .t %> <%= link_to 'Create an account now.' .t, new_user_path, :tabindex => '7' %>
-  </span>
-</p>
+<p><%= "New tester?" .t %> <%= link_to 'Create an account now.' .t, new_user_path, :tabindex => '7' %></p>
 <%- end -%>
