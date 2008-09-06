@@ -204,6 +204,7 @@ class WorksController < ApplicationController
   # PUT /works/1
   def update
     @work.attributes = params[:work]
+    @tag_categories = TagCategory.official
     
     # Need to update @pseuds and @selected values so we don't lose new co-authors if the form needs to be rendered again
     @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
@@ -250,6 +251,7 @@ class WorksController < ApplicationController
   # GET /works/1/preview
   def preview
     @preview_mode = true
+    @tag_categories = TagCategory.official
   end
   
   # POST /works/1/post
