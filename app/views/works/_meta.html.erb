@@ -1,15 +1,15 @@
 <dl id="story-meta">
-   <% # if current_user.preference && current_user.preference.hide_warnings %>
-    <% @tag_categories.each do |category| -%>
-    <dt class="<%= category.display_name.downcase -%>">
-        <%= category.display_name %>:
-    </dt>
-    <% @work.tags(category).each do |tag| -%>
-    <dd class="<%= category.display_name.downcase -%>">
+   <%# if current_user.preference && current_user.preference.hide_warnings %>
+    <%# @tag_categories.each do |category| -%>
+    <% TagCategory.official.each do |category| %>
+      <dt class="<%= category.display_name.downcase -%>">
+      <%= category.display_name %>:
+      </dt>
+      <% @work.tags(category).each do |tag| -%>
+        <dd class="<%= category.display_name.downcase -%>">
         <%= link_to(tag.name, tag_path(tag)) -%>
-    </dd>
-     
-	 <% # end -%>
+        </dd>
+      <% end -%>
     <% end -%>
-    <% end -%>
+  <%# end -%>
 </dl> 
