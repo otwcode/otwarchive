@@ -16,6 +16,11 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, blockquot
     outline: 0;
 }
 /************************************************end of uneditable rules    */
+@font-face {
+		font-family: "Fertigo";
+        src: url(Fertigo.otf)
+}
+
 body {
     color: #111;
     background: #fff;
@@ -40,11 +45,11 @@ a img {
 }
 
 h1 {
-    font: 100 200% Cambria, Constantia, Palatino, Georgia, serif;
+    font: 100 200% Fertigo,Cambria, Constantia, Palatino, Georgia, serif;
 }
 
 h2, h3, h4, h5, h6 {
-    font-family: Cambria, Constantia, Palatino, Georgia, sans-serif;
+    font-family: Fertigo, Cambria, Constantia, Palatino, Georgia, sans-serif;
     font-weight: 400;
 }
 
@@ -120,19 +125,19 @@ blockquote, q {
 }
 /* LAYOUT ELEMENTS   MASTHEAD BLOCK    */
 #header {
-    background: #900 url(../images/title.png) top left no-repeat;
+    background: #900 url(../images/header-red.png) top left repeat-x;
     font-weight: 600;
     font-size: 140%;
     position: relative;
 }
 
 #header h1 {
-    height: 65px;
+    color:#fff;
+	float:left;
+	font-size:110%;
+	margin: 1em 0 -5em 1em;
 }
 
-#header h1 span {
-    display: none;
-}
 
 #header a {
     font-weight: 600;
@@ -140,14 +145,12 @@ blockquote, q {
 }
 
 #login-block {
-    top: 1em;
-    right: 0;
-    text-align: left;
+    float:right;
+	text-align: left;
     font-size: 75%;
     clear: both;
     color: #fff;
-    position: absolute;
-    width: 16.17em
+    width: 16.17em;
 }
 
 #login-block a:link, #login-block a:visited {
@@ -287,6 +290,19 @@ ul#main-navigation {
     position: relative;
     margin: 0.25em 1.5em 1em;
 }
+
+#footer {
+    color: #999;
+    font-size: 90%;
+    text-align: center;
+    border-top: 1px solid #999;
+    clear: both;
+    padding: 1em;
+}
+
+#footer a:link {
+    border-bottom: 1px dotted;
+}
 /*PAGE BY PAGE STYLING: NEW SESSION HOME HOME SUBPAGES FANDOMS PEOPLE GROUPS RECS TAGS*/
 /*SESSIONS (front front pages - login, create, etc)*/
 #main.session h1, #main.session h1, #main.passwords-new h1 {
@@ -312,13 +328,6 @@ ul#main-navigation {
     margin-bottom: 1.5em;
 }
 /* HOME: USERS SHOW*/
-#user-page {
-    width: 65%;
-    float: left;
-    position: relative;
-    margin: 0.25em 1.5em 1em;
-    padding: 0;
-}
 
 #main.users-show ul.story-list {
     margin: auto;
@@ -383,18 +392,6 @@ li.story-tags ul li {
     text-decoration: strike;
 }
 
-#footer {
-    color: #999;
-    font-size: 90%;
-    text-align: center;
-    border-top: 1px solid #999;
-    clear: both;
-    padding: 1em;
-}
-
-#footer a:link {
-    border-bottom: 1px dotted;
-}
 /*BOOKMARKS-INDEX BOOKMARKS  */
 dl.bookmark {
     margin: 1em 0;

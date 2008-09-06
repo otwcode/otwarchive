@@ -1,6 +1,6 @@
 <!-- BEGIN navigation -->
 <%- unless @preview_mode -%>
-  <ul id="navigation">
+  <ul class="navigation">
     <li class="go-back"><%= link_to '&lt;&lt; ' + h('Back to story list').t, works_path -%></li>
   	
   	<% if is_author_of?(@work) -%>

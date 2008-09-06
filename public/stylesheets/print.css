@@ -1,0 +1,16 @@
+body {
+    font: normal 13pt Constantia, Times, serif;
+    color: black;
+    background: white;
+}
+
+a, a:link, a:visited {
+    color:black;
+	text-decoration:underline;
+}
+
+#header, #footer, #dashboard-sidebar, img, #skiplinks, .navigation {
+    display: none;
+}
+
+
