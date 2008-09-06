@@ -27,7 +27,7 @@ class TagTest < ActiveSupport::TestCase
     context "which is synonymous" do
       setup do
         @tag2 = create_tag
-        tagging = create_tagging(:taggable => @tag2, :tag => @tag, :tag_relationship => TagRelationship.synonym)          
+        tagging = create_tagging(:taggable => @tag2, :tag => @tag, :tag_relationship => TagRelationship.synonyms)          
       end
       should "be in the other tag's synonym group" do
         assert @tag2.synonyms.include?(@tag)
@@ -39,13 +39,13 @@ class TagTest < ActiveSupport::TestCase
     context "which is ambiguous" do
       setup do
         @tag2 = create_tag 
-        tagging = create_tagging(:taggable => @tag2, :tag => @tag, :tag_relationship => TagRelationship.disambiguate)          
+        tagging = create_tagging(:taggable => @tag2, :tag => @tag, :tag_relationship => TagRelationship.disambiguations)          
       end
       should "be in the other tag's 'possibly related' group" do
-        assert @tag2.disambiguates.include?(@tag)
+        assert @tag2.disambiguations.include?(@tag)
       end
       should "have the other tag in its own 'possibly related' group" do
-        assert @tag.disambiguates.include?(@tag2)
+        assert @tag.disambiguations.include?(@tag2)
       end
     end
     context "which is made canonical" do

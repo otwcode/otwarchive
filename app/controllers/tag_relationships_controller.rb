@@ -19,8 +19,8 @@ class TagRelationshipsController < ApplicationController
   def show
     @tag_relationship = TagRelationship.find(params[:id])
     @taggings = @tag_relationship.taggings.select{|tagging| tagging.taggable_type == 'Tag'}
-    @categories = TagCategory.official(:include => 'tags')
-    if @tag_relationship == TagRelationship.disambiguate
+    @categories = TagCategory.find(:all, :include => 'tags')
+    if @tag_relationship == TagRelationship.disambiguations
      render :action => 'ambiguous'
     end
   end

@@ -373,6 +373,20 @@ li.story-tags ul li {
     clear: both;
 }
 /* WORKS-INDEX  */
+
+/*MEDIA-INDEX */
+div.wrapper {
+	width:40%; float:left; margin: 0 2em 0 0;
+}
+
+div.category {
+	padding: 1em;
+}
+
+#main.media-index ol {
+    list-style: decimal;
+}
+
 /*FANDOMS-INDEX   */
 .fandoms-index ul {
     margin: 1em auto;

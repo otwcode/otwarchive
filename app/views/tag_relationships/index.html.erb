@@ -16,7 +16,7 @@
     <td> <%= relationship.reciprocal? %></td>
     <td> <%= link_to 'edit'.t, edit_tag_relationship_path(relationship) %></td>
     <td>
-      <%= link_to "delete".t, relationship, :confirm => "This destroys the relationship for all current tags, are you sure?".t, :method => :delete %><% if relationship == TagRelationship.synonym || relationship == TagRelationship.disambiguate -%>*<% end -%>
+      <%= link_to "delete".t, relationship, :confirm => "This destroys the relationship for all current tags, are you sure?".t, :method => :delete %><% if relationship == TagRelationship.synonyms || relationship == TagRelationship.disambiguations -%>*<% end -%>
     </td>
     <td><%= link_to 'wrangle tags'.t, tag_relationship_path(relationship) %> </td>
   </tr>

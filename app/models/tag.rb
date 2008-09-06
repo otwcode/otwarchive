@@ -1,8 +1,11 @@
 class Tag < ActiveRecord::Base
   belongs_to :tag_category
-  has_many :taggings, :dependent => :destroy
-  has_many :works, :through => :taggings, :source => :taggable, :source_type => 'Work'
-  has_many :bookmarks, :through => :taggings, :source => :taggable, :source_type => 'Bookmark'
+  has_many :ownerships, :foreign_key => 'tag_id', :class_name => 'Tagging', :dependent => :destroy
+  has_many :taggings, :as => :taggable, :dependent => :destroy
+  has_many :slaves, :through => :ownerships, :source => :taggable, :source_type => 'Tag'  
+  has_many :masters, :through => :taggings, :source => :tag
+  has_many :works, :through => :ownerships, :source => :taggable, :source_type => 'Work'
+  has_many :bookmarks, :through => :ownerships, :source => :taggable, :source_type => 'Bookmark'
   include TaggingExtensions
 
   validates_presence_of :name
@@ -18,7 +21,7 @@ class Tag < ActiveRecord::Base
   
   def after_update
     if self.adult_changed?
-      Tagging.tagees(:conditions => {:tag_id => self.id, :taggable_type => 'Work'}).each do |work|
+      self.works.each do |work|
         adult = false
         work.tags.each do |tag|
           adult = true if tag.adult
@@ -36,7 +39,7 @@ class Tag < ActiveRecord::Base
       when 'Works', 'Bookmarks'
         Tagging.tagees(:conditions => {:tag_id => self.id, :taggable_type => kind.singularize}).select {|t| t if t.visible(current_user)}
       when 'Tags'
-        Tagging.tagees(:conditions => {:tag_id => self.id, :taggable_type => kind.singularize}).map(&:valid).compact
+        siblings.map(&:valid).compact
     end
   end
   
@@ -53,12 +56,27 @@ class Tag < ActiveRecord::Base
     name <=> another_tag.name
   end
   
-  def synonyms
-    Tagging.find(:all, :conditions => {:taggable_id => self.id, :taggable_type => 'Tag', :tag_relationship_id => TagRelationship.synonym.id}).collect(&:tag) - [self]
+  # Return all tags directly related to this one
+  def siblings(relationship=nil)
+    if relationship.nil?
+      ((self.slaves ||= []) + (self.masters ||= [])).uniq
+    else
+      siblings = self.slaves.find(:all, :conditions => ['taggings.tag_relationship_id = ?', relationship.id]) || []
+      siblings += self.masters.find(:all, :conditions => ['taggings.tag_relationship_id = ?', relationship.id]) || []
+      siblings.uniq
+    end 
   end
   
-  def disambiguates
-    Tagging.find(:all, :conditions => {:taggable_id => self.id, :taggable_type => 'Tag', :tag_relationship_id => TagRelationship.disambiguate.id}).collect(&:tag) - [self]
+  # create dynamic methods based on the tag relationships
+  begin
+    TagRelationship.all.each do |relationship|
+      define_method(relationship.name){
+        relationship.reciprocal? ? siblings(relationship) : slaves.find(:all, :conditions => ['taggings.tag_relationship_id = ?', relationship.id])
+      }
+    end 
+  rescue
+    define_method('synonyms'){ siblings(TagRelationship.synonyms) }
+    define_method('disambiguations'){ siblings(TagRelationship.disambiguations) }
   end
 
   def name

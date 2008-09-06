@@ -110,6 +110,7 @@ class WorksController < ApplicationController
         sort_order = "works.created_at DESC" # default sort order
     end
     
+    @tag_categories = TagCategory.official
     if params[:user_id]
       @user = User.find_by_login(params[:user_id])
       @works = is_admin? ? @user.works.find(:all, :order => sort_order).paginate(:page => params[:page]) : 
@@ -150,6 +151,7 @@ class WorksController < ApplicationController
       end
     end
     @chapters = @work.chapters
+    @tag_categories = TagCategory.official
   end
   
   # GET /works/new

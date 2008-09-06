@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+
+  map.resources :media, :has_many => :fandoms, :path_prefix => ':locale'
   
   map.resources :fandoms, :path_prefix => ':locale' do |fandom|
     fandom.resources :works

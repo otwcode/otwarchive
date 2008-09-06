@@ -82,6 +82,7 @@ class ChaptersController < ApplicationController
     @old_chapter = params[:old_chapter] ? @work.chapters.find(params[:old_chapter]) : @work.first_chapter 
     @commentable = @work
     @comments = @work.find_all_comments
+    @tag_categories = TagCategory.official
     respond_to do |format|
       format.html { render :template => "works/show" }
       format.js
@@ -99,6 +100,7 @@ class ChaptersController < ApplicationController
     @chapter = @work.chapters.find(params[:id])
     @chapters = [@chapter]
     @commentable = @work
+    @tag_categories = TagCategory.official
     if !@work.visible(current_user)
       render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 and return
     elsif @work.adult? && !see_adult?
