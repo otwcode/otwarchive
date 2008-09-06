@@ -1,0 +1,7 @@
+<%=h @comment.name || @comment.pseud.name %> <%=h 'replied to your comment:'.t %>
+
+<p><%=h @comment.content %></p>
+
+<p><%=h 'Posted at:'.t %> <%= @comment.created_at %></p>
+
+<%=h 'View all feedback'.t %> (will be a link)

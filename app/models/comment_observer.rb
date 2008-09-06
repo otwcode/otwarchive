@@ -3,23 +3,34 @@ class CommentObserver < ActiveRecord::Observer
   # Add new comments to the inbox of the person to whom they're directed
   # Send that user a notification email
   def after_create(comment)
-		orphan_account = User.orphan_account
+
+    # find out who has to be notified
     if comment.reply_comment?
-      users = [comment.commentable.pseud.user] unless comment.commentable.pseud.blank? 
+      if comment.commentable.pseud.blank?
+        ExternalMailer.deliver_feedback_notification(comment)
+        return
+      else
+        users = [ comment.commentable.pseud.user ]
+      end
+    elsif comment.commentable.kind_of?(Pseud)
+      users = [ comment.commentable.user ]
     else
-      users = comment.commentable.respond_to?(:pseuds) ? comment.commentable.pseuds.collect(&:user) : [comment.commentable.user]
+      # commentable is a chapter
+      users = comment.commentable.pseuds.collect(&:user)
     end
+
     unless users.blank?
       users.compact.each do |user|
-        unless comment.pseud && comment.pseud.user == user  
+        unless comment.pseud && comment.pseud.user == user
           new_feedback = user.inbox_comments.build
           new_feedback.feedback_comment_id = comment.id
           new_feedback.save
-          unless user.preference.comment_emails_off? || user == orphan_account
+          unless user.preference.comment_emails_off? || user == User.orphan_account
             UserMailer.deliver_feedback_notification(user, comment)
           end
         end
-      end 
+      end
     end
   end
+
 end
