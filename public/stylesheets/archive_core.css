@@ -126,8 +126,7 @@ blockquote, q {
 /* LAYOUT ELEMENTS   MASTHEAD BLOCK    */
 #header {
     background: #900 url(../images/header-red.png) top left repeat-x;
-    font-weight: 600;
-    font-size: 140%;
+    font: 600 140% Fertigo, Corbel, Calibri, Candara, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif;
     position: relative;
 }
 
