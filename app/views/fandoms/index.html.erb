@@ -1,9 +1,9 @@
 <h1><%=h 'Browse by Fandom'.t %></h1>
-<ul>
+<ol>
   <%- for fandom in @fandoms -%>
     <li><%= print_fandom_works_link(fandom) %></li>
   <%- end -%>
-</ul>
+</ol>
 
 <div class="pagination">
 	<%= will_paginate @fandoms, :prev_label =>  "&laquo; Previous".t,:next_label => "Next &raquo;".t %>

@@ -17,8 +17,12 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, blockquot
 }
 /************************************************end of uneditable rules    */
 @font-face {
-		font-family: "Fertigo";
-        src: url(Fertigo.otf)
+
+font-family:
+    "Fertigo";
+
+src:
+    url(Fertigo.otf)
 }
 
 body {
@@ -45,7 +49,7 @@ a img {
 }
 
 h1 {
-    font: 100 200% Fertigo,Cambria, Constantia, Palatino, Georgia, serif;
+    font: 100 200% Fertigo, Cambria, Constantia, Palatino, Georgia, serif;
 }
 
 h2, h3, h4, h5, h6 {
@@ -125,18 +129,17 @@ blockquote, q {
 }
 /* LAYOUT ELEMENTS   MASTHEAD BLOCK    */
 #header {
-    background: #900 url(../images/header-red.png) top left repeat-x;
+    background: #900 url(../images/header-red.png) bottom left repeat-x;
     font: 600 140% Fertigo, Corbel, Calibri, Candara, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif;
     position: relative;
 }
 
 #header h1 {
-    color:#fff;
-	float:left;
-	font-size:110%;
-	margin: 1em 0 -5em 1em;
+    color: #fff;
+    float: left;
+    font-size: 110%;
+    margin: 1em 0 -5em 1em;
 }
-
 
 #header a {
     font-weight: 600;
@@ -144,8 +147,8 @@ blockquote, q {
 }
 
 #login-block {
-    float:right;
-	text-align: left;
+    float: right;
+    text-align: left;
     font-size: 75%;
     clear: both;
     color: #fff;
@@ -249,6 +252,7 @@ ul#main-navigation {
 
 #dashboard-sidebar li {
     whitespace: no-wrap;
+    font-weight: bold;
 }
 
 #dashboard-sidebar a {
@@ -258,6 +262,7 @@ ul#main-navigation {
     line-height: 2;
     text-decoration: none;
     whitespace: pre;
+    font-weight: normal;
 }
 
 #dashboard-sidebar a:hover {
@@ -316,18 +321,17 @@ ul#main-navigation {
 
 .session #logo {
     width: 49%;
-    float:left;
-	display:block; /* Needed for IE */
+    float: left;
+    display: block; /* Needed for IE */
     margin-bottom: 1.5em
 }
 
 .session #signin {
     width: 49%;
-	float:left;
+    float: left;
     margin-bottom: 1.5em;
 }
 /* HOME: USERS SHOW*/
-
 #main.users-show ul.story-list {
     margin: auto;
 }
@@ -388,6 +392,10 @@ div.category {
 }
 
 /*FANDOMS-INDEX   */
+#main.fandoms-index ol, #main.fandoms-show ol {
+    list-style: decimal;
+}
+
 .fandoms-index ul {
     margin: 1em auto;
 }
@@ -404,7 +412,6 @@ div.category {
 .fandoms-index a:visited {
     text-decoration: strike;
 }
-
 /*BOOKMARKS-INDEX BOOKMARKS  */
 dl.bookmark {
     margin: 1em 0;

@@ -9,10 +9,14 @@
  * User pages forms can be selected through the main div's general class "sidebar"
  ===*/
 /* these rules are for two column forms when needed:  form dt{float:left; clear:left;margin:0 1em 0 0;} form dd{clear:right; margin:0;} */
+
 /* GLOBAL */
 form dt, label {
     font-weight: 900;
 }
+
+p.submit {text-align:right;}
+
 /* USERS */
 .users-new form label {
     font-weight: 100;
