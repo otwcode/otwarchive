@@ -103,7 +103,7 @@
   	<p>
       <%= f.check_box :restricted %>
       <%= f.label :restricted, h("Only make my story visible to registered users").t %>
-      <%= image_tag("question.png", :size => "20x20", :alt => h("More info").t) %><br /> 
+      <%= link_to_help "story-privacy" -%><br /> 
     </p>
 	
     <p>
