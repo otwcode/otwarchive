@@ -1,12 +1,14 @@
 <dl id="story-meta">
-	<% TagCategory.official.each do |category| -%>
-		<dt class="<%= category.display_name.downcase -%>">
-		  <%= category.display_name %>:
-		</dt>
-		<% @work.tags(category).each do |tag| -%>
-			<dd class="<%= category.display_name.downcase -%>">
-			  <%= link_to(tag.name, tag_path(tag)) -%> 
-			</dd>
-		<% end -%>
-	<% end -%>
+   <!-- <% if current_user.preference && current_user.preference.hide_warnings %> -->
+    <% TagCategory.official.each do |category| -%>
+    <dt class="<%= category.display_name.downcase -%>">
+        <%= category.display_name %>:
+    </dt>
+    <% @work.tags(category).each do |tag| -%>
+    <dd class="<%= category.display_name.downcase -%>">
+        <%= link_to(tag.name, tag_path(tag)) -%>
+    </dd>
+     
+    <% end %>
+    <% end -%>
 </dl>
