@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080901172442) do
+ActiveRecord::Schema.define(:version => 20080906193922) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -141,10 +141,10 @@ ActiveRecord::Schema.define(:version => 20080901172442) do
     t.string  "scope",                 :limit => 1
   end
 
-  add_index "globalize_languages", ["rfc_3066"], :name => "index_globalize_languages_on_rfc_3066"
-  add_index "globalize_languages", ["iso_639_3"], :name => "index_globalize_languages_on_iso_639_3"
-  add_index "globalize_languages", ["iso_639_2"], :name => "index_globalize_languages_on_iso_639_2"
   add_index "globalize_languages", ["iso_639_1"], :name => "index_globalize_languages_on_iso_639_1"
+  add_index "globalize_languages", ["iso_639_2"], :name => "index_globalize_languages_on_iso_639_2"
+  add_index "globalize_languages", ["iso_639_3"], :name => "index_globalize_languages_on_iso_639_3"
+  add_index "globalize_languages", ["rfc_3066"], :name => "index_globalize_languages_on_rfc_3066"
 
   create_table "globalize_translations", :force => true do |t|
     t.string  "type"
@@ -159,8 +159,8 @@ ActiveRecord::Schema.define(:version => 20080901172442) do
     t.string  "namespace"
   end
 
-  add_index "globalize_translations", ["table_name", "item_id", "language_id"], :name => "globalize_translations_table_name_and_item_and_language"
   add_index "globalize_translations", ["tr_key", "language_id"], :name => "index_globalize_translations_on_tr_key_and_language_id"
+  add_index "globalize_translations", ["table_name", "item_id", "language_id"], :name => "globalize_translations_table_name_and_item_and_language"
 
   create_table "inbox_comments", :force => true do |t|
     t.integer  "user_id",             :limit => 11
@@ -194,6 +194,7 @@ ActiveRecord::Schema.define(:version => 20080901172442) do
     t.boolean  "edit_emails_off"
     t.boolean  "comment_emails_off"
     t.boolean  "adult",                               :default => false
+    t.boolean  "hide_warnings"
   end
 
   create_table "profiles", :force => true do |t|
@@ -277,7 +278,7 @@ ActiveRecord::Schema.define(:version => 20080901172442) do
 
   add_index "tag_categories", ["name"], :name => "index_tag_categories_on_name", :unique => true
 
-  create_table "tag_relationships", :force => true do |t|
+  create_table "tag_relationship_kinds", :force => true do |t|
     t.string   "name",                      :null => false
     t.string   "verb_phrase",               :null => false
     t.boolean  "reciprocal"
@@ -286,13 +287,16 @@ ActiveRecord::Schema.define(:version => 20080901172442) do
     t.integer  "distance",    :limit => 11, :null => false
   end
 
-  add_index "tag_relationships", ["name"], :name => "index_tag_relationships_on_name", :unique => true
+  create_table "tag_relationships", :force => true do |t|
+    t.integer "tag_id",                   :limit => 11
+    t.integer "related_tag_id",           :limit => 11
+    t.integer "tag_relationship_kind_id", :limit => 11
+  end
 
   create_table "taggings", :force => true do |t|
-    t.integer  "tag_id",              :limit => 11, :null => false
-    t.integer  "tag_relationship_id", :limit => 11
-    t.integer  "taggable_id",         :limit => 11, :null => false
-    t.string   "taggable_type",                     :null => false
+    t.integer  "tag_id",        :limit => 11, :null => false
+    t.integer  "taggable_id",   :limit => 11, :null => false
+    t.string   "taggable_type",               :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

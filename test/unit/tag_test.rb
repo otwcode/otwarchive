@@ -24,30 +24,6 @@ class TagTest < ActiveSupport::TestCase
         assert_equal "whitespace'll (be stripped)", @tag.name
       end
     end
-    context "which is synonymous" do
-      setup do
-        @tag2 = create_tag
-        tagging = create_tagging(:taggable => @tag2, :tag => @tag, :tag_relationship => TagRelationship.synonyms)          
-      end
-      should "be in the other tag's synonym group" do
-        assert @tag2.synonyms.include?(@tag)
-      end
-      should "have the other tag in its synonym group" do
-        assert @tag.synonyms.include?(@tag2)
-      end
-    end
-    context "which is ambiguous" do
-      setup do
-        @tag2 = create_tag 
-        tagging = create_tagging(:taggable => @tag2, :tag => @tag, :tag_relationship => TagRelationship.disambiguations)          
-      end
-      should "be in the other tag's 'possibly related' group" do
-        assert @tag2.disambiguations.include?(@tag)
-      end
-      should "have the other tag in its own 'possibly related' group" do
-        assert @tag.disambiguations.include?(@tag2)
-      end
-    end
     context "which is made canonical" do
       setup do
         @tag.update_attribute(:canonical, true)
@@ -134,23 +110,6 @@ class TagTest < ActiveSupport::TestCase
         end
         should "show the bookmark to its owner" do
           assert @tag.visible('Bookmarks', @bookmark.user).include?(@bookmark)
-        end
-      end
-    end
-    context "of a tag" do
-      setup do
-        @tag2 = create_tag
-        tagging = create_tagging(:taggable => @tag2, :tag => @tag)  
-      end
-      should "be visible" do
-        assert @tag.visible('Tags').include?(@tag2)      
-      end
-      context "which is banned" do
-        setup do
-          @tag2.update_attribute(:banned, true)
-        end
-        should "not be visible" do
-          assert !@tag.visible('Tags').include?(@tag2) 
         end
       end
     end

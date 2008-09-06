@@ -1,11 +1,12 @@
 class Tag < ActiveRecord::Base
   belongs_to :tag_category
-  has_many :ownerships, :foreign_key => 'tag_id', :class_name => 'Tagging', :dependent => :destroy
-  has_many :taggings, :as => :taggable, :dependent => :destroy
-  has_many :slaves, :through => :ownerships, :source => :taggable, :source_type => 'Tag'  
-  has_many :masters, :through => :taggings, :source => :tag
-  has_many :works, :through => :ownerships, :source => :taggable, :source_type => 'Work'
-  has_many :bookmarks, :through => :ownerships, :source => :taggable, :source_type => 'Bookmark'
+  has_many :tag_relationships, :dependent => :destroy  
+  has_many :tags, :through => :tag_relationships
+  has_many :related_tags, :through => :tag_relationships
+
+  has_many :taggings, :dependent => :destroy
+  has_many :works, :through => :taggings, :source => :taggable, :source_type => 'Work'
+  has_many :bookmarks, :through => :taggings, :source => :taggable, :source_type => 'Bookmark'
   include TaggingExtensions
 
   validates_presence_of :name
@@ -14,6 +15,8 @@ class Tag < ActiveRecord::Base
   validates_format_of :name, 
                       :with => /\A[-a-zA-Z0-9 \/?.!''"";\|\]\[}{=~!@#\$%^&()_+]+\z/, 
                       :message => "tags can only be made up of letters, numbers, spaces and basic punctuation, but not commas, colons, asterisks or angle brackets".t
+  
+  named_scope :valid, {:conditions => 'banned = 0 OR banned IS NULL'}
   
   def before_validation
     self.name = name.strip.squeeze(" ") if self.name
@@ -57,26 +60,24 @@ class Tag < ActiveRecord::Base
   end
   
   # Return all tags directly related to this one
-  def siblings(relationship=nil)
-    if relationship.nil?
-      ((self.slaves ||= []) + (self.masters ||= [])).uniq
+  def siblings(kind=nil)
+    if kind.nil?
+      conditions = ['tag_relationships.tag_id = ? OR tag_relationships.related_tag_id = ?', self.id, self.id]
     else
-      siblings = self.slaves.find(:all, :conditions => ['taggings.tag_relationship_id = ?', relationship.id]) || []
-      siblings += self.masters.find(:all, :conditions => ['taggings.tag_relationship_id = ?', relationship.id]) || []
-      siblings.uniq
-    end 
+      conditions = ['tag_relationships.tag_relationship_kind_id = ? AND (tag_relationships.tag_id = ? OR tag_relationships.related_tag_id = ?)', kind.id, self.id, self.id]
+    end
+    Tag.find(:all, :include => :tag_relationships, :conditions => conditions) 
   end
   
   # create dynamic methods based on the tag relationships
   begin
-    TagRelationship.all.each do |relationship|
-      define_method(relationship.name){
-        relationship.reciprocal? ? siblings(relationship) : slaves.find(:all, :conditions => ['taggings.tag_relationship_id = ?', relationship.id])
+    TagRelationshipKind.all.each do |kind|
+      define_method(kind.name){
+        kind.reciprocal? ? siblings(kind) : related_tags.find(:all, :conditions => ['tag_relationships.tag_relationship_kind_id = ?', kind.id])
       }
     end 
   rescue
-    define_method('synonyms'){ siblings(TagRelationship.synonyms) }
-    define_method('disambiguations'){ siblings(TagRelationship.disambiguations) }
+    define_method('disambiguation'){ siblings(TagRelationshipKind.disambiguation) }
   end
 
   def name

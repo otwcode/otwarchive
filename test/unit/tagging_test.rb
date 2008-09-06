@@ -9,32 +9,13 @@ class TaggingTest < ActiveSupport::TestCase
       @tag1 = create_tag(:tag_category => @tag_category)
       @tagging = create_tagging(:tag => @tag1)
     end
-    should_belong_to :tag, :tag_relationship, :taggable
+    should_belong_to :tag, :taggable
     should_require_attributes :tag, :taggable
     should "be able to find_by_category" do
       assert Tagging.find_by_category(@tag_category).include?(@tagging)
     end
     should "be able to find_by_tag" do
       assert Tagging.find_by_tag(@tag1).include?(@tagging)
-    end
-  end
-  context "a tagging with a reciprocal relationship" do
-    setup do
-      @tag1 = create_tag
-      @tag2 = create_tag
-      @tag_relationship = create_tag_relationship(:reciprocal => true)
-      @tagging = create_tagging(:tag => @tag1, :taggable => @tag2, :tag_relationship => @tag_relationship)
-    end
-    should "duplicate the tagging" do
-      assert Tagging.find_by_tag(@tag2)
-    end
-    context "which destroys the relationship one way" do
-      setup do
-        @tagging.destroy
-      end
-      should "destroy it the other way as well" do
-        assert_equal [], Tagging.find_by_tag(@tag2)
-      end
     end
   end
 

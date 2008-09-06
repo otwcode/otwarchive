@@ -1,14 +1,19 @@
 <h2><%=h 'TagWrangler: Tags in Relationship'.t %> <%= @tag_relationship.name %></h2>
 <table id='table'>
-<caption><!--please summarise this table's contents and purpose here--></caption>
+  <caption><!--please summarise this table's contents and purpose here--></caption>
   <tr>
     <th></th>
     <th><%= @tag_relationship.verb_phrase %></th>
   </tr>
-<% @taggings.each do |tagging| -%>
-  <%= render :partial => 'table', :locals => { :tagging => tagging }%>   
-<% end -%>
+  <% @taggings.each do |tagging| -%>
+    <%= render :partial => 'table', :locals => { :tagging => tagging }%>   
+  <% end -%>
 </table>
-<p><%=h 'To create new taggings go to the'.t %> <%= link_to TagCategory.ambiguous.name, tag_category_path(TagCategory.ambiguous) %> <%=h 'tag category page'.t %></p>
+
+<p>
+  <%=h 'To create new taggings go to the'.t %> 
+  <%= link_to TagCategory.ambiguous.name, tag_category_path(TagCategory.ambiguous) %> <%=h 'tag category page'.t %>
+</p>
+
 <%= tag_wrangler_footer %>
 

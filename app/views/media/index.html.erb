@@ -1,19 +1,17 @@
 <h1>Fandoms</h1>
-<%- @media.in_groups_of(@groups, false) do |media_columns| -%>
-  <div class="wrapper">
-  <%- for medium in media_columns -%>
-    <div id="medium_<%= medium.id %>" class="category">
-      <h3><%= link_to medium.name, medium_path(medium) %></h3>
-      <ol>
-        <%- for fandom in @fandom_listing[medium] -%>
-        <li><%= print_fandom_works_link(fandom) %></li>
-        <%- end -%>
-      </ol>
-      
-      <%- if medium.masters.count > 5 -%>
-      <p><%= link_to "All " + medium.name + "...", medium_path(medium) %></p>
-      <%- end -%>
+<%- unless @media.blank? -%>
+  <%- @media.in_groups_of(@groups, false) do |media_columns| -%>
+    <div class="wrapper">
+    <%- for medium in media_columns -%>
+      <div id="medium_<%= medium.id %>" class="category">
+        <h3><%= link_to medium.name, medium_path(medium) %></h3>
+        <ol>
+          <%- for fandom in @fandom_listing[medium] -%>
+          <li><%= print_fandom_works_link(fandom) %></li>
+          <%- end -%>
+        </ol>
+      </div>
+    <%- end -%>
     </div>
-  <%- end -%>
-  </div>
+    <%- end -%>
 <%- end -%>

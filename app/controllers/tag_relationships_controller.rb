@@ -6,7 +6,7 @@ class TagRelationshipsController < ApplicationController
   # GET /tag_relationships
   # GET /tag_relationships.xml
   def index
-    @tag_relationships = TagRelationship.find(:all, :order => 'distance')
+    @tag_relationships = TagRelationshipKind.find(:all, :order => 'distance')
 
     respond_to do |format|
       format.html # index.html.erb
@@ -17,10 +17,10 @@ class TagRelationshipsController < ApplicationController
   # GET /tag_relationships/1
   # GET /tag_relationships/1.xml
   def show
-    @tag_relationship = TagRelationship.find(params[:id])
-    @taggings = @tag_relationship.taggings.select{|tagging| tagging.taggable_type == 'Tag'}
+    @tag_relationship = TagRelationshipKind.find(params[:id])
+    @taggings = @tag_relationship.tag_relationships
     @categories = TagCategory.find(:all, :include => 'tags')
-    if @tag_relationship == TagRelationship.disambiguations
+    if @tag_relationship == TagRelationshipKind.disambiguation
      render :action => 'ambiguous'
     end
   end
@@ -38,13 +38,13 @@ class TagRelationshipsController < ApplicationController
 
   # GET /tag_relationships/1/edit
   def edit
-    @tag_relationship = TagRelationship.find(params[:id])
+    @tag_relationship = TagRelationshipKind.find(params[:id])
   end
 
   # POST /tag_relationships
   # POST /tag_relationships.xml
   def create
-    @tag_relationship = TagRelationship.new(params[:tag_relationship])
+    @tag_relationship = TagRelationshipKind.new(params[:tag_relationship])
 
     respond_to do |format|
       if @tag_relationship.save
@@ -61,7 +61,7 @@ class TagRelationshipsController < ApplicationController
   # PUT /tag_relationships/1
   # PUT /tag_relationships/1.xml
   def update
-    @tag_relationship = TagRelationship.find(params[:id])
+    @tag_relationship = TagRelationshipKind.find(params[:id])
 
     respond_to do |format|
       if @tag_relationship.update_attributes(params[:tag_relationship])
@@ -78,7 +78,7 @@ class TagRelationshipsController < ApplicationController
   # DELETE /tag_relationships/1
   # DELETE /tag_relationships/1.xml
   def destroy
-    @tag_relationship = TagRelationship.find(params[:id])
+    @tag_relationship = TagRelationshipKind.find(params[:id])
     @tag_relationship.destroy
 
     respond_to do |format|
@@ -89,9 +89,9 @@ class TagRelationshipsController < ApplicationController
   
   def update_tag
     @tag = Tag.find(params[:id])
-    @tag_relationship = TagRelationship.find(params[:relationship])
+    @tag_relationship = TagRelationshipKind.find(params[:relationship])
     @taggable = Tag.find(params[:taggable])
-    @tagging = Tagging.create(:tag => @tag, :taggable => @taggable, :tag_relationship => @tag_relationship)
+    @tagging = TagRelationship.create(:tag => @tag, :related_tag => @taggable, :tag_relationship_kind => @tag_relationship)
   end
 
 end

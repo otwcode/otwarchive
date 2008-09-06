@@ -34,15 +34,7 @@ class TagsController < ApplicationController
     @works = @tag.works.visible(current_user)
     @bookmarks = @tag.bookmarks.visible(current_user)
     @tags = @tag.visible('Tags', current_user)
-    @ambiguous = @tag.disambiguations
-
-    @tag.synonyms.each do |t|
-      @works += t.visible('Works', current_user)
-      @bookmarks += t.visible('Bookmarks', current_user)
-      @tags += t.visible('Tags', current_user)
-    end
-
-    @tags = @tags - @tag.synonyms - [@tag] - @ambiguous
+    @ambiguous = @tag.disambiguation
 
     @works.uniq!
     @bookmarks.uniq!

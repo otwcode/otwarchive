@@ -10,13 +10,13 @@
   </tr>
   <% @tag_relationships.each do |relationship| %>
 	<tr>
-    <td> <%= relationship.name%></td>
+    <td> <%= relationship.name %></td>
     <td><%= relationship.verb_phrase %> </td>
     <td> <%= relationship.distance %></td>
     <td> <%= relationship.reciprocal? %></td>
     <td> <%= link_to 'edit'.t, edit_tag_relationship_path(relationship) %></td>
     <td>
-      <%= link_to "delete".t, relationship, :confirm => "This destroys the relationship for all current tags, are you sure?".t, :method => :delete %><% if relationship == TagRelationship.synonyms || relationship == TagRelationship.disambiguations -%>*<% end -%>
+      <%= link_to "delete".t, tag_relationship_path(relationship), :confirm => "This destroys the relationship for all current tags, are you sure?".t, :method => :delete %><% if relationship == TagRelationshipKind.disambiguation -%>*<% end -%>
     </td>
     <td><%= link_to 'wrangle tags'.t, tag_relationship_path(relationship) %> </td>
   </tr>

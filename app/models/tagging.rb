@@ -1,10 +1,8 @@
 class Tagging < ActiveRecord::Base
   belongs_to :tag, :counter_cache => true
-  belongs_to :tag_relationship
   belongs_to :taggable, :polymorphic => true
   
   validates_presence_of :tag, :taggable
-  validates_uniqueness_of :tag_relationship_id, :scope => [:tag_id, :taggable_id, :taggable_type]
 
   def valid_tag
     return tag if tag && !tag.banned?
