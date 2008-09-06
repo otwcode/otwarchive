@@ -1,6 +1,6 @@
 <dl id="story-meta">
-   <!-- <% if current_user.preference && current_user.preference.hide_warnings %> -->
-    <% TagCategory.official.each do |category| -%>
+   <% # if current_user.preference && current_user.preference.hide_warnings %>
+    <% @tag_categories.each do |category| -%>
     <dt class="<%= category.display_name.downcase -%>">
         <%= category.display_name %>:
     </dt>
@@ -9,6 +9,7 @@
         <%= link_to(tag.name, tag_path(tag)) -%>
     </dd>
      
-    <% end %>
+	 <% # end -%>
     <% end -%>
-</dl>
+    <% end -%>
+</dl> 
