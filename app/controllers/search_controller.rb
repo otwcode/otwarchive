@@ -6,6 +6,7 @@ class SearchController < ApplicationController
       @search.run
       @results = @search.results.paginate( :page => params[:page])
     end
+    @tag_categories = TagCategory.official
   end
   
 end

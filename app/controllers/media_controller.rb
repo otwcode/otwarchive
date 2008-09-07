@@ -6,7 +6,6 @@ class MediaController < ApplicationController
     @media.each do |medium|
       @fandom_listing[medium] = medium.tags.valid.find(:all, :limit => 5, :order => 'taggings_count DESC')
     end
-    @groups = @media.length.even? ? @media.length / 2 : @media.length / 2 + 1
   end
   
   def show
