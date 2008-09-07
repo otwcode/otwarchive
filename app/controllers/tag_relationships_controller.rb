@@ -32,7 +32,6 @@ class TagRelationshipsController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @tag_relationship }
     end
   end
 
@@ -44,16 +43,18 @@ class TagRelationshipsController < ApplicationController
   # POST /tag_relationships
   # POST /tag_relationships.xml
   def create
-    @tag_relationship = TagRelationshipKind.new(params[:tag_relationship])
-
+    @new_tag_relationship = TagRelationship.new(params[:tag_relationship])
+    @tag_relationship = TagRelationship.new
+    @tag_categories = TagCategory.find(:all, :order => :name)
+    @relationships = TagRelationshipKind.find(:all, :order => :name)
     respond_to do |format|
-      if @tag_relationship.save
-        flash[:notice] = 'TagRelationship was successfully created.'.t
-        format.html { redirect_to(@tag_relationship) }
-        format.xml  { render :xml => @tag_relationship, :status => :created, :location => @tag_relationship }
+      if @new_tag_relationship.save
+        flash[:notice] = 'Tag Relationship was successfully created.'.t
+        format.html { redirect_to(@new_tag_relationship) }
+        format.js
       else
         format.html { render :action => "new" }
-        format.xml  { render :xml => @tag_relationship.errors, :status => :unprocessable_entity }
+        format.js
       end
     end
   end

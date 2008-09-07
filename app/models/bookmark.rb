@@ -2,6 +2,7 @@ class Bookmark < ActiveRecord::Base
   belongs_to :bookmarkable, :polymorphic => true
   belongs_to :user
   has_many :taggings, :as => :taggable, :dependent => :destroy
+  has_many :tags, :through => :taggings
   include TaggingExtensions
 
   validates_length_of :notes, 

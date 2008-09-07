@@ -10,6 +10,10 @@
           <li><%= print_fandom_works_link(fandom) %></li>
           <%- end -%>
         </ol>
+        
+        <%- if medium.tags.valid.count > 5 -%>
+        <p><%= link_to "All " + medium.name + "...", medium_path(medium) %></p>
+        <%- end -%>
       </div>
     <%- end -%>
     </div>

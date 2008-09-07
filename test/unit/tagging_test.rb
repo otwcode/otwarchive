@@ -25,11 +25,11 @@ class TaggingTest < ActiveSupport::TestCase
     tagging = create_tagging(:taggable => work, :tag => tag)
     work.reload
     assert_equal Array(tag), work.taggings.map(&:tag)
-    assert_equal [], work.tags           # no category, not valid
+    assert_equal [], work.tags.valid           # no category, not valid
     tag = create_tag(:banned => false)
     tagging = create_tagging(:taggable => work, :tag => tag)
     work.reload
-    assert_equal Array(tag), work.tags   # no category, valid
+    assert_equal Array(tag), work.tags.valid   # no category, valid
   end
   def test_tags_with_category
     category = create_tag_category
@@ -37,17 +37,17 @@ class TaggingTest < ActiveSupport::TestCase
     work = create_work
     tagging = create_tagging(:taggable => work, :tag => tag)  
     work.reload
-    assert_equal Array(tag), work.tags(category.name)  # category, valid
+    assert_equal Array(tag), work.tags.by_category(category).valid  # category, valid
     bad_tag = create_tag(:banned => true)
     tagging = create_tagging(:taggable => work, :tag => bad_tag)    
-    assert_equal Array(tag), work.tags(category.name)  # category, not valid
+    assert_equal Array(tag), work.tags.by_category(category).valid  # category, not valid
   end
   def test_tags_with_bad_category
     work = create_work
     tag = create_tag
     tagging = create_tagging(:taggable => work, :tag => tag)   
     assert work.tags
-    assert !work.tags('bad category name')
+    #assert !work.tags.by_category('bad category name')
   end
   def test_tag_string
     work = create_work
@@ -87,13 +87,13 @@ class TaggingTest < ActiveSupport::TestCase
     tag = create_tag(:tag_category => category)
     work.tag_with(category.name.to_sym => tag.name)
     work.reload
-    assert_equal Array(tag), work.tags
+    assert_equal Array(tag), work.tags.valid
     # different category won't wipe out first
     category2 = create_tag_category
     tag2 = create_tag(:tag_category => category2)
     work.tag_with(category2.name.to_sym => tag2.name)
-    assert_equal Array(tag), work.tags(category.name)
-    assert_equal Array(tag2), work.tags(category2.name)
+    assert_equal Array(tag), work.tags.by_category(category).valid
+    assert_equal Array(tag2), work.tags.by_category(category2).valid
   end
   def test_tag_with_fails
     # category must exist

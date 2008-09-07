@@ -1,0 +1,3 @@
+page.replace_html 'tag-relationship-form', :partial => 'tag_relationships/form'
+page.insert_html :top, 'relationship-list', 
+  "<li>#{@new_tag_relationship.tag.name} #{@new_tag_relationship.tag_relationship_kind.verb_phrase} #{@new_tag_relationship.related_tag.name}</li>"

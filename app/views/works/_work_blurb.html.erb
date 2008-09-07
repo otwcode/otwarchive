@@ -20,11 +20,11 @@
 			
         <ul>
             <%- @tag_categories.each do |category| -%>
-            <%- unless work.tags(category).blank? -%>
+            <%- unless work.tags.by_category(category).blank? -%>
             <%= category.display_name %>:<% if current_user != :false && category.name == "Warnings" && current_user.preference && current_user.preference.hide_warnings && !is_author_of?(work) -%>
             <%= "Warnings are hidden.".t %>
             <%- else -%>
-            <% work.tags(category).each do |tag| %>
+            <% work.tags.by_category(category).each do |tag| %>
             <li>
                 <%= link_to tag.name, tag_path(tag) %>
             </li>

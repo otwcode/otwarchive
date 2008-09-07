@@ -1,7 +1,8 @@
 class Tag < ActiveRecord::Base
   belongs_to :tag_category
-  has_many :tag_relationships, :dependent => :destroy  
-  has_many :tags, :through => :tag_relationships
+  has_many :tag_relationships, :dependent => :destroy
+  has_many :related_relationships, :foreign_key => 'related_tag_id', :class_name => 'TagRelationship', :dependent => :destroy  
+  has_many :tags, :through => :related_relationships
   has_many :related_tags, :through => :tag_relationships
 
   has_many :taggings, :dependent => :destroy
@@ -17,6 +18,7 @@ class Tag < ActiveRecord::Base
                       :message => "tags can only be made up of letters, numbers, spaces and basic punctuation, but not commas, colons, asterisks or angle brackets".t
   
   named_scope :valid, {:conditions => 'banned = 0 OR banned IS NULL'}
+  named_scope :by_category, lambda { |*args| {:conditions => "tag_category_id IN (#{args.collect(&:id).join(",")})"}}  
   
   def before_validation
     self.name = name.strip.squeeze(" ") if self.name

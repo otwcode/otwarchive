@@ -1,0 +1,3 @@
+page.replace_html('tag1', collection_select('tag_relationship', 'tag_id', @tags, :id, :name)) unless @tags.blank?  
+page.replace_html('verb', @relationship.verb_phrase) unless @relationship.blank?
+page.replace_html('tag2', collection_select('tag_relationship', 'related_tag_id', @related_tags, :id, :name)) unless @related_tags.blank?

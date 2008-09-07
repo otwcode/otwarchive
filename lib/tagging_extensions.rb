@@ -21,11 +21,13 @@ module TaggingExtensions
   
   # returns a delimited string of tag names
   # accepts either a category object, or a category name
-  def tag_string(category='all')
-    if category == 'all'
-      tags.map(&:name).sort.join(ArchiveConfig.DELIMITER)
-    else 
-      tags(category).map(&:name).sort.join(ArchiveConfig.DELIMITER)
+  def tag_string(category='all')    
+    if category.is_a?(TagCategory) 
+      tags.valid.by_category(category).map(&:name).sort.join(ArchiveConfig.DELIMITER)
+    elsif TagCategory.find_by_name(category)
+      tags.valid.by_category(TagCategory.find_by_name(category)).map(&:name).sort.join(ArchiveConfig.DELIMITER)
+    else
+      tags.valid.map(&:name).sort.join(ArchiveConfig.DELIMITER)
     end
   end
 
@@ -78,7 +80,7 @@ module TaggingExtensions
       end
       new_tags << tag_array
       # add and remove tags to make the taggable's tags equal to the new tag_array
-      current = tags(category.name)
+      current = tags.by_category(category)
       add = tag_array - current
       remove = current - tag_array
       add.each {|t| Tagging.create(:tag => t, :taggable => self) }
