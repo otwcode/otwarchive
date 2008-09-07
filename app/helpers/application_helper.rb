@@ -117,11 +117,11 @@ module ApplicationHelper
   ActionView::Base.field_error_proc = Proc.new {|html_tag, instance|
     # don't put errors on the labels, duh
     if !html_tag.match(/label/)
-      %(<span class='fieldWithErrors'>#{html_tag}</span>)
+      %(<span class='error'>#{html_tag}</span>)
     elsif instance.error_message.kind_of?(Array)
-      %(<span class='fieldWithErrors'>#{html_tag} <ul class='errorsList'><li>#{instance.error_message.join('</li><li>')}</li></ul></span>)
+      %(<span class='error'>#{html_tag} <ul class='error'><li>#{instance.error_message.join('</li><li>')}</li></ul></span>)
     else
-      %(<span class='fieldWithErrors'>#{html_tag} #{instance.error_message}</span>)
+      %(<span class='error'>#{html_tag} #{instance.error_message}</span>)
     end
   }
   
@@ -143,7 +143,7 @@ module ApplicationHelper
           value = options[key]
           html[key] = value unless value.blank?
         else
-          html[key] = 'errorExplanation'
+          html[key] = 'error'
         end
       end
       options[:object_name] ||= params.first
