@@ -5,7 +5,7 @@
 				<% if series.hidden_by_admin %>
 				<%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)") %>
 				<% end %>
-				<%= link_to sanitize(series.title), series %>
+				<%= link_to sanitize_and_format_for_display(series.title), series %>
 			</h3>
 		</li>
 		<li class="story-date">
@@ -26,7 +26,7 @@
 			</ul>
 		</li>
 		<li class="story-desc">
-			<%= sanitize_limited series.summary %>
+			<%= sanitize_and_format_for_display series.summary %>
 			<p><%=h 'Stories:'.t %> <%=h series.serial_works.count %></p>
 			<p><%=h 'Words:'.t %> <%=h number_with_delimiter(series.works.collect(&:word_count).sum) %></p>
 		</li>

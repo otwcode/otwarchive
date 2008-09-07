@@ -5,5 +5,5 @@
 		<%- end -%>	
   <%- end -%>
 <%- else -%>
-  <%=sanitize_format @chapters.first.content %>
+  <%=sanitize_and_format_for_display @chapters.first.content %>
 <%- end -%>

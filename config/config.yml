@@ -54,6 +54,10 @@ COMMENT_THREAD_MAX_DEPTH: 2
 MAX_COMMENTS_TO_BROWSE: 30
 NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD: 5
 
+# Tags allowed by default in user-entered HTML
+# Expand this list AT YOUR PERIL *doom doom doom*
+ALLOWED_TAGS: %w(a href, b, br, p, i, em, strong, strike, u, ins, q, del, cite, blockquote, pre, code, small, sup, sub img)
+
 # variables for Askimet http://akismet.com/
 AKISMET_KEY: '6833ee7298cf'
 AKISMET_NAME: 'http://transformativeworks.org'

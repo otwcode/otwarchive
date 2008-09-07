@@ -1,4 +1,6 @@
 class Chapter < ActiveRecord::Base
+  include HtmlFormatter
+
   belongs_to :work
 
   acts_as_commentable
@@ -121,6 +123,12 @@ class Chapter < ActiveRecord::Base
       Creatorship.add_authors(self, self.authors)
       Creatorship.add_authors(self.work, self.authors)       
     end
+  end
+  
+  before_save = :format_content
+  # Format and sanitize the content
+  def format_content
+    self.content = cleanup_and_format(self.content)
   end
   
 end

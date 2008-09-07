@@ -29,16 +29,16 @@
 	the chapters -->
 	<%- if chapter == @work.first_chapter -%>
 		<%- unless (hide_work_info ||= false) -%>
-	    <%- unless @work.summary.blank? -%><br /><%=sanitize_limited @work.summary -%><%- end -%>
-      <%- unless @work.notes.blank? -%><br /><%=sanitize_limited @work.notes -%><%- end -%>
+	    <%- unless @work.summary.blank? -%><br /><%=sanitize_and_format_for_display @work.summary -%><%- end -%>
+      <%- unless @work.notes.blank? -%><br /><%=sanitize_and_format_for_display @work.notes -%><%- end -%>
 			<%- if @work.is_wip -%><br /><p><%= wip_message(@work) %></p><%- end -%>
 		<%- end -%>
 	<%- else -%>
-    <%- unless chapter.summary.blank? -%><br /><%=sanitize_limited chapter.summary -%><%- end -%>
-    <%- unless chapter.notes.blank? -%><br /><%=sanitize_limited chapter.notes -%><%- end -%>
+    <%- unless chapter.summary.blank? -%><br /><%=sanitize_and_format_for_display chapter.summary -%><%- end -%>
+    <%- unless chapter.notes.blank? -%><br /><%=sanitize_and_format_for_display chapter.notes -%><%- end -%>
 	<%- end -%>
 	
   <p>
-    <%=sanitize_format chapter.content %>
+    <%=sanitize_and_format_for_display chapter.content %>
   </p>
   

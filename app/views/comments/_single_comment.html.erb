@@ -7,13 +7,13 @@
                  :locals => {:comment => single_comment, :commentable => single_comment.commentable, :button_name => 'Update'.t} -%>	  
 	<%- else -%>
 		<%- if single_comment.is_deleted -%>
-		  <p>(<%=sanitize 'previous comment by %s deleted'/get_pseud_or_mailaddress(single_comment) -%>)</p>
+		  <p>(<%=sanitize_and_format_for_display 'previous comment by %s deleted'/get_pseud_or_mailaddress(single_comment) -%>)</p>
 		<%- else -%>
 			<%- unless single_comment.pseud.nil? -%>
 			  <p><img class="icon" src="/images/icon_placeholder.png" alt="icon placeholder"></p>
 			<%- end -%>
 			<h3><%= get_pseud_or_mailaddress(single_comment) %></h3>
-			<%=sanitize_format single_comment.content %>
+			<%=sanitize_and_format_for_display single_comment.content %>
 			<h4 class="datestamp"><%=h 'Posted'.t %>&nbsp;<%= single_comment.created_at.localize("%a %d %B %Y %I:%M %p") %></h4>
 			<ul class="">
 				<li id="add_comment_reply_link_<%= single_comment.id -%>"><%= add_comment_reply_link single_comment -%></li>

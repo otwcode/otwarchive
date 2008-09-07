@@ -6,7 +6,7 @@
 	<h3>Posted on <%= link_to_comment_ultimate_parent(single_comment) %>
 	by <%= get_pseud_or_mailaddress(single_comment) %></h3>
 	
-	<%=sanitize_format single_comment.content %>
+	<%=sanitize_and_format_for_display single_comment.content %>
 	
 	<h4 class="datestamp"><%=h 'Posted'.t %>&nbsp;<%= single_comment.created_at.localize("%a %d %B %Y %I:%M %p") %></h4>
 </div>

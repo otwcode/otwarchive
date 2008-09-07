@@ -40,7 +40,7 @@
   <div id="story-preface"><h2 class="story-title">
     <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)".t) %><% end %>
     <% if @work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)".t) %><% end %>
-    <%=sanitize @work.title, :tags => %w(em i b strong strike small) %>
+    <%=sanitize_and_format_for_display @work.title, :tags => %w(em i b strong strike small) %>
 	<!--sup sub ins del code q abbr acronym br dfn cite-->
   </h2>
   <h3 class="story-author">
@@ -48,11 +48,11 @@
   </h3>
   
   <blockquote class="story-summary">
-    <%=sanitize_limited @work.summary %>
+    <%=sanitize_and_format_for_display @work.summary %>
   </blockquote>
   
   <blockquote class="story-notes">
-    <%=sanitize_format @work.notes %>
+    <%=sanitize_and_format_for_display @work.notes %>
   </blockquote>
   
   <% if @work.is_wip -%>

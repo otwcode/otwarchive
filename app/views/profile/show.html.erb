@@ -32,7 +32,7 @@
 
   <div id="user-bio">
     <h3><%=h "About me:".t %></h3>
-    <%=sanitize_format @user.profile.about_me -%>
+    <%=sanitize_and_format_for_display @user.profile.about_me -%>
   </div>
   
   <%- if logged_in? && current_user == @user -%>

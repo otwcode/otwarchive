@@ -4,7 +4,7 @@
 		    <h3 title="Story Title">
 		    <% if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)") %><% end %>
 		    <% if work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)") %><% end %>
-		    <%= link_to sanitize(work.title, :tags => %w(em i b strong strike small)), work %>
+		    <%= link_to sanitize_and_format_for_display(work.title, :tags => %w(em i b strong strike small)), work %>
 		    </h3>
 		</li>
 		
@@ -36,7 +36,7 @@
         </li>
 
 		<li class="story-desc">
-			<%= sanitize_limited work.summary %>
+			<%= sanitize_and_format_for_display work.summary %>
 			<p>
 				<%=h 'Words: %s'/number_with_delimiter(work.word_count) %>
 				<%- if work.count_visible_comments.size > 0 -%>
