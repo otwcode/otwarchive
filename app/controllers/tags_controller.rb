@@ -21,6 +21,7 @@ class TagsController < ApplicationController
       format.js
       format.xml  { render :xml => @tags }
     end
+    
   end
 
   # GET /tags/1
@@ -39,11 +40,12 @@ class TagsController < ApplicationController
     @works.uniq!
     @bookmarks.uniq!
     @tags.uniq!
-
+    @tag_categories = TagCategory.official
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @tag }
     end
+   
   end
 
   # GET /tags/new

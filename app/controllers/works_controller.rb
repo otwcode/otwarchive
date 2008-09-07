@@ -152,6 +152,7 @@ class WorksController < ApplicationController
     end
     @chapters = @work.chapters
     @tag_categories = TagCategory.official
+    @tag_categories_limited = TagCategory.official - [TagCategory.find_by_name("Warning")]
   end
   
   # GET /works/new
