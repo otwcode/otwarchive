@@ -1,4 +1,4 @@
-class TagWranglingController < ApplicationController
+class TagWranglingsController < ApplicationController
   
   def index
     @current_tag_relationships = TagRelationship.all

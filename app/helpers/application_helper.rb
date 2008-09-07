@@ -168,10 +168,6 @@ module ApplicationHelper
       image_tag("translation_button.gif", :alt => 'Link to translation page'.t, :border => 0) + "</a></li>"
     end
   end
-  
-  def tag_wrangler_footer
-    '<div><p>' + link_to('New tag'.t, new_tag_path) + ' | ' +link_to('Tag categories'.t, tag_categories_path)  + ' | ' +  link_to('New category'.t, new_tag_category_path) + ' | ' + link_to('Tag relationships'.t, tag_relationships_path) + ' | ' + link_to('New relationship'.t, new_tag_relationship_path) + '</p></div>'
-  end
 
   def sort_link(title, column, options = {})
     condition = options[:unless] if options.has_key?(:unless)

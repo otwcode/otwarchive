@@ -16,6 +16,6 @@
 
 <%- end -%>
 
-<%= observe_field :tag_tag_category, :url => { :controller => :tag_wrangling, :action => :dynamic_relationships }, :with => 'tag1' %>
-<%= observe_field :tag_relationship_tag_relationship_kind_id, :url => { :controller => :tag_wrangling, :action => :dynamic_relationships }, :with => 'relationship' %>
-<%= observe_field :related_tag_tag_category, :url => { :controller => :tag_wrangling, :action => :dynamic_relationships }, :with => 'tag2' %>
+<%= observe_field :tag_tag_category, :url => { :controller => :tag_wranglings, :action => :dynamic_relationships }, :with => 'tag1' %>
+<%= observe_field :tag_relationship_tag_relationship_kind_id, :url => { :controller => :tag_wranglings, :action => :dynamic_relationships }, :with => 'relationship' %>
+<%= observe_field :related_tag_tag_category, :url => { :controller => :tag_wranglings, :action => :dynamic_relationships }, :with => 'tag2' %>

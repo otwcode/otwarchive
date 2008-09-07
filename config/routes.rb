@@ -10,7 +10,8 @@ ActionController::Routing::Routes.draw do |map|
   map.feedbacks '/feedback/', :controller => 'feedbacks', :action => 'create', :path_prefix => ':locale', :conditions => { :method => :post }
   map.new_feedback_report '/feedback/', :controller => 'feedbacks', :action => 'new', :path_prefix => ':locale'
  
-  map.resources :tag_wrangling, :path_prefix => ':locale'
+  map.resources :tag_wranglings, :path_prefix => ':locale'
+  map.resources :tag_relationship_kinds, :path_prefix => ':locale'
   map.resources :tag_relationships, :path_prefix => ':locale'
   map.resources :tag_categories, :path_prefix => ':locale'
   map.resources :tags, :path_prefix => ':locale'

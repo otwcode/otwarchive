@@ -12,4 +12,9 @@ module TagsHelper
       yield t, classes[(t.taggings_count - min) / divisor]
     }
   end
+  
+  
+  def tag_wrangler_footer
+    render :partial => 'tag_wranglings/footer'
+  end
 end

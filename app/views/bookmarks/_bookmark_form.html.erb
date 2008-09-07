@@ -11,7 +11,7 @@
 	<dt><%= ew.label :url, "URL: ".t %></dt>
 	<dd>
 		<%= ew.text_field :url %>
-		<%= observe_field 'bookmark_external_url', :url => {:controller => 'external_works', :action => 'fetch'},           :with => 'external_url', :on => 'blur' %>
+		<%= observe_field 'bookmark_external_url', :url => {:controller => 'external_works', :action => 'fetch'}, :with => 'external_url', :on => 'blur' %>
 		<%= hidden_field 'fetched', :value => '' %>
 	</dd>
 	<dt><%= ew.label :author, "Author: ".t %></dt>
