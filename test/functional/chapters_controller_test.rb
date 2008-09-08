@@ -53,7 +53,7 @@ class ChaptersControllerTest < ActionController::TestCase
     assert_equal assigns(:work), work
     assert_equal assigns(:chapter), chapter
     assert_equal assigns(:pseuds), work.pseuds
-    assert_equal assigns(:selected), user.pseuds.collect{|p| p.id}
+    assert_equal assigns(:selected_pseuds), user.pseuds.collect{|p| p.id}
   end
   # Test index  GET  /:locale/chapters  (named path: chapters)
   # Test index  GET  /:locale/works/:work_id/chapters  (named path: work_chapters)

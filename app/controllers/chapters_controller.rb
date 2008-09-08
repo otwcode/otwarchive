@@ -50,7 +50,7 @@ class ChaptersController < ApplicationController
     @work = params[:work_id] ? Work.find(params[:work_id]) : Chapter.find(params[:id]).work  
   end
   
-  # Sets values for @chapter, @coauthor_results, @pseuds, and @selected
+  # Sets values for @chapter, @coauthor_results, @pseuds, and @selected_pseuds
   def set_instance_variables
     if params[:pseud] && params[:pseud][:byline] && params[:chapter][:author_attributes]
       params[:chapter][:author_attributes][:byline] = params[:pseud][:byline]
@@ -67,7 +67,7 @@ class ChaptersController < ApplicationController
     
     @pseuds = (@work.pseuds + (@chapter.authors ||= [])).uniq
     to_select = @chapter.authors.blank? ? @chapter.pseuds.blank? ? @work.pseuds : @chapter.pseuds : @chapter.authors 
-    @selected = to_select.collect {|pseud| pseud.id.to_i }
+    @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
     
   end
   

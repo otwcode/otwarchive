@@ -9,7 +9,7 @@
 <%- form_for(@work) do |f| -%>
 
   <select name="work[author_attributes][ids][]" multiple="multiple" style="display : none;">
-    <%= options_from_collection_for_select(@work.authors, :id, :name, @work.authors.collect {|pseud| pseud.id.to_i }) %>
+	<%= options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds) %>  
   </select>
 
   <%= f.hidden_field :title, :value => "#{@work.title}" %>

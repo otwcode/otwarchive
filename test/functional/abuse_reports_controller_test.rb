@@ -41,7 +41,7 @@ class AbuseReportsControllerTest < ActionController::TestCase
       end
       should_render_template :new
       should "show validation errors" do
-        assert_tag :tag => "div", :attributes => {:id => "errorExplanation"}
+        assert_tag :tag => "div", :attributes => {:id => "error"}
       end
     end
 

@@ -42,7 +42,7 @@ class WorksController < ApplicationController
     false
   end
 
-  # Sets values for @work, @chapter, @coauthor_results, @pseuds, and @selected
+  # Sets values for @work, @chapter, @coauthor_results, @pseuds, and @selected_pseuds
   def set_instance_variables
     if params[:pseud] && params[:pseud][:byline] && params[:work][:author_attributes]
       params[:work][:author_attributes][:byline] = params[:pseud][:byline]
@@ -51,8 +51,11 @@ class WorksController < ApplicationController
     
     if params[:id] # edit, update, preview, post, manage_chapters
       @work = Work.find(params[:id])
-    elsif params[:work]  # create
-      @work = Work.new(params[:work])
+      if params[:work]  # editing, don't lose our changes
+        @work.attributes = params[:work]
+      end
+    elsif params[:work]
+      @work = Work.new(params[:work])    
     else # new
       if current_user.unposted_work
         @work = current_user.unposted_work
@@ -62,17 +65,20 @@ class WorksController < ApplicationController
       end
     end
 
-    @chapter = @work.first_chapter
-    if params[:work] && params[:work][:chapter_attributes]
-      @chapter.content = params[:work][:chapter_attributes][:content]
-    end
     @chapters = @work.chapters.in_order
     @serial_works = @work.serial_works
+
+    @chapter = @work.first_chapter
+    logger.info "********* got here with work " + @work.to_yaml
+    if params[:work] && params[:work][:chapter_attributes]
+      logger.info "********* in params work setting chapter content "
+      @chapter.content = params[:work][:chapter_attributes][:content]
+    end
     
     unless current_user == :false
       @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
       to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 
-      @selected = to_select.collect {|pseud| pseud.id.to_i }
+      @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
       @series = current_user.series 
     end
   end
@@ -162,6 +168,7 @@ class WorksController < ApplicationController
   
   # GET /works/new
   def new
+    
   end
 
   # POST /works
@@ -174,7 +181,12 @@ class WorksController < ApplicationController
     elsif params[:cancel_coauthor_button]
       render :action => :new
     elsif params[:cancel_button]
-      redirect_back_or_default('/')    
+      flash[:notice] = "Story posting canceled."
+      # destroy unposted works
+      if current_user.unposted_work
+        current_user.unposted_work.destroy
+      end
+      redirect_to current_user    
     else  
       if @work.save
         flash[:notice] = 'Work was successfully created.'.t
@@ -212,10 +224,10 @@ class WorksController < ApplicationController
     @work.attributes = params[:work]
     @tag_categories = TagCategory.official
     
-    # Need to update @pseuds and @selected values so we don't lose new co-authors if the form needs to be rendered again
+    # Need to update @pseuds and @selected_pseuds values so we don't lose new co-authors if the form needs to be rendered again
     @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
     to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 
-    @selected = to_select.collect {|pseud| pseud.id.to_i }
+    @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
    
     if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank? 
       @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
@@ -224,8 +236,12 @@ class WorksController < ApplicationController
   	  @chapters = [@chapter]
       render :action => "preview"
     elsif params[:cancel_button]
-      # Not quite working yet - should send the user back to wherever they were before they hit edit
-      redirect_back_or_default('/')
+      flash[:notice] = "Story posting canceled."
+      # destroy unposted works
+      if current_user.unposted_work
+        current_user.unposted_work.destroy
+      end
+      redirect_to current_user    
     elsif params[:edit_button]
       render :partial => 'work_form', :layout => 'application'
     else
@@ -248,7 +264,7 @@ class WorksController < ApplicationController
       	  @chapters = [@chapter]
           render :action => "preview"
         else
-          render :action => :edit
+          render :action => :new
         end
       end
     end 
