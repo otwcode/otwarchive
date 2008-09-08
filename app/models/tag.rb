@@ -19,6 +19,7 @@ class Tag < ActiveRecord::Base
   
   named_scope :valid, {:conditions => 'banned = 0 OR banned IS NULL'}
   named_scope :by_category, lambda { |*args| {:conditions => "tag_category_id IN (#{args.collect(&:id).join(",")})"}}  
+  named_scope :by_popularity, {:order => 'taggings_count DESC'}
   
   def before_validation
     self.name = name.strip.squeeze(" ") if self.name
@@ -44,7 +45,7 @@ class Tag < ActiveRecord::Base
       when 'Works', 'Bookmarks'
         Tagging.tagees(:conditions => {:tag_id => self.id, :taggable_type => kind.singularize}).select {|t| t if t.visible(current_user)}
       when 'Tags'
-        siblings.map(&:valid).compact
+        siblings
     end
   end
   
@@ -61,25 +62,34 @@ class Tag < ActiveRecord::Base
     name <=> another_tag.name
   end
   
-  # Return all tags directly related to this one
-  def siblings(kind=nil)
-    if kind.nil?
-      conditions = ['tag_relationships.tag_id = ? OR tag_relationships.related_tag_id = ?', self.id, self.id]
-    else
-      conditions = ['tag_relationships.tag_relationship_kind_id = ? AND (tag_relationships.tag_id = ? OR tag_relationships.related_tag_id = ?)', kind.id, self.id, self.id]
+  # Return all valid tags directly related to this one
+  # options = :kind (TagRelationshipKind), :category (TagCategory), :distance (TagRelationshipKind distance)
+  def siblings(options = {})
+    if options.blank?
+      (self.tags + self.related_tags).uniq
+    else  
+      condition_list = "tags.banned != 1"
+      condition_hash = {:id => self.id}   
+      if options[:kind].is_a?(TagRelationshipKind)
+        condition_list += " AND tag_relationships.tag_relationship_kind_id = :kind_id"
+        condition_hash[:kind_id] = options[:kind].id
+      end
+      unless options[:distance].blank?
+        condition_list += " AND tag_relationship_kinds.distance = :distance"
+        condition_hash[:distance] = options[:distance].to_i      
+      end
+      if options[:category].is_a?(TagCategory)
+        condition_list += " AND tag_categories.id = :category_id"
+        condition_hash[:category_id] = options[:category].id
+      end      
+      siblings = self.tags.find(:all, :include => [:tag_category, {:tag_relationships => :tag_relationship_kind}], :conditions => [condition_list, condition_hash])
+      siblings += self.related_tags.find(:all, :include => [:tag_category, {:tag_relationships => :tag_relationship_kind}], :conditions => [condition_list, condition_hash])
+      siblings.uniq
     end
-    Tag.find(:all, :include => :tag_relationships, :conditions => conditions) 
   end
   
-  # create dynamic methods based on the tag relationships
-  begin
-    TagRelationshipKind.all.each do |kind|
-      define_method(kind.name){
-        kind.reciprocal? ? siblings(kind) : related_tags.find(:all, :conditions => ['tag_relationships.tag_relationship_kind_id = ?', kind.id])
-      }
-    end 
-  rescue
-    define_method('disambiguation'){ siblings(TagRelationshipKind.disambiguation) }
+  def disambiguation
+    siblings(:kind => TagRelationshipKind.disambiguation)
   end
 
   def name

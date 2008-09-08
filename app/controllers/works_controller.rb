@@ -110,19 +110,24 @@ class WorksController < ApplicationController
         sort_order = "works.created_at DESC" # default sort order
     end
     
-    @tag_categories = TagCategory.official
     if params[:user_id]
       @user = User.find_by_login(params[:user_id])
-      @works = is_admin? ? @user.works.find(:all, :order => sort_order).paginate(:page => params[:page]) : 
-                           @user.works.visible(current_user, :order => sort_order).paginate(:page => params[:page])
+      @works = is_admin? ? @user.works.find(:all, :include => :tags, :order => sort_order).paginate(:page => params[:page]) : 
+                           @user.works.visible(current_user, :include => :tags, :order => sort_order).paginate(:page => params[:page])
     elsif params[:fandom_id]
       @tag = Tag.find(params[:fandom_id])
-      @works = is_admin? ? @tag.works.find(:all, :order => sort_order).paginate(:page => params[:page]) : 
-                           @tag.works.visible(current_user, :order => sort_order).paginate(:page => params[:page])
+      @works = is_admin? ? @tag.works.find(:all, :include => :tags, :order => sort_order).paginate(:page => params[:page]) : 
+                           @tag.works.visible(current_user, :include => :tags, :order => sort_order).paginate(:page => params[:page])
     else
-     @works = is_admin? ? Work.find(:all, :order => sort_order).paginate(:page => params[:page]) : 
-                          Work.visible(current_user, :order => sort_order).paginate(:page => params[:page])
+     @works = is_admin? ? Work.find(:all, :include => :tags, :order => sort_order).paginate(:page => params[:page]) : 
+                          Work.visible(current_user, :include => :tags, :order => sort_order).paginate(:page => params[:page])
     end
+    @tag_categories = TagCategory.official
+    @filters = @tag_categories - [TagCategory.default]
+    @tags_by_filter = {}
+    @filters.each do |filter|
+      @tags_by_filter[filter] = Tag.by_category(filter).valid.by_popularity & @works.collect(&:tags).flatten.uniq
+    end   
   end
   
   # GET /works/1
