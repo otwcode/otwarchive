@@ -41,6 +41,10 @@
     border: 1px solid #dfc2c2;
 }
 
+.error ul, .error h2, .error p {margin: 0; padding:0 }
+.error ul {margin:auto ;width:90%}
+.error ul li {margin:0.25em; list-style-type:disc; text-indent:1em}
+
 /* SYMBOLS */
 span.symbol {
     padding: 0.15em;

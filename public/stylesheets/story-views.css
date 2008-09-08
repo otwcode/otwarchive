@@ -15,7 +15,9 @@ set story styles
 #chapters  dd							{ line-height 1.5em; font-size:1em; margin-top: 1.25em; margin-bottom: 1.25em; text-indent:3em; }
 #chapters  dd p							{ margin:0; padding:0; }
 #chapters  ul							{ padding: 0 1em; text-indent:2em; }
-#chapters  ol							{ padding: 0 1.5em; text-indent:1.5em; list-style-type:decimal}
+#chapters  ul li						{ list-style-type: disc}
+#chapters  ol							{ padding: 0 1.5em; text-indent:1.5em;}
+#chapters  ol li						{ list-style-type:decimal}
 #chapters  li							{ font-weight:normal; }
 
 /*headings */
@@ -33,6 +35,8 @@ set story styles
 #chapters hr 							{ width:33% margin:auto; border:1px solid;}
 
 .firstletter							{font:3em Georgia,serif;}
+.flashback								{font-style:oblique; }
+.shouting								{font-variant:small-caps}
 
 
 #main.works-show ul#navigation {
