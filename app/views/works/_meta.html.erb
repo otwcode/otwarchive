@@ -1,18 +1,33 @@
 <dl id="story-meta">
-
-  <%- @tag_categories.each do |category| -%>
+    <%- @tag_categories.each do |category| -%>
     <dt class="<%= category.display_name.downcase -%>">
-         <%= category.display_name %>:
+        <%= category.display_name %>:
     </dt>
-	<% if current_user != :false && category.name == "Warnings" && current_user.preference && current_user.preference.hide_warnings && !is_author_of?(@work) -%>
-	<%= "Warnings are hidden.".t %>
-	<%- else -%>
+    <% if current_user != :false && category.name == "Warnings" && current_user.preference && current_user.preference.hide_warnings && !is_author_of?(@work) -%>
+    <dd class="<%= category.display_name.downcase -%>">
+        <%= "Warnings are hidden. ".t %><a href onclick="Effect.toggle('show_warnings', 'blind'); return false">Show warnings</a>
+        <div id="show_warnings" style="display: none">
+            <% @work.tags.by_category(category).each do |tag| %>
+            <dd class="<%= category.display_name.downcase -%>">
+                <ul>
+                    <li>
+                        <%= link_to(tag.name, tag_path(tag)) -%>
+                    </li>
+                    <% end %>
+                </ul>
+            </dd>
+        </div>
+    </dd>
+    <%- else -%>
     <%- @work.tags.by_category(category).each do |tag| -%>
-      <dd class="<%= category.display_name.downcase -%>">
-        <%= link_to(tag.name, tag_path(tag)) -%>
-      </dd>
-	  <%- end -%>
+    <dd class="<%= category.display_name.downcase -%>">
+        <ul>
+            <li>
+                <%= link_to(tag.name, tag_path(tag)) -%>
+            </li>
+            <%- end -%>
+        </ul>
+    </dd>
     <%- end -%>
-  <%- end -%>
-<!%- end -%>
-</dl> 
+    <%- end -%>
+</dl>
