@@ -18,16 +18,6 @@
     margin: 0.5em auto;
     padding: 1em;
 }
-
-
-/* These are a few qualified styles for flashes -they show up on pages with a conflicting float or an absolute position etc
- * 
- */
-#main.session .flash{float:right;}
-#main.sidebar .flash {float:right;}
-
-
-
 .flash_icon {
     border: 0;
     float: left;
@@ -36,18 +26,19 @@
 }
 
 .notice {
-    background-color: #b3d4ef;
-    border: 2px solid #b3d4ef;
+    background: #d1e1ef;
+    border: 1px solid #c2d2df;
 }
 
 .warning {
     font-weight: 900;
-    background-color: #feffd4;
+    background: #edefd1;
+	border:1px solid #dfdfc2;
 }
 
 .error {
-    background-color: #efd1d1;
-    border: 2px solid #af2020;
+    background: #efd1d1;
+    border: 1px solid #dfc2c2;
 }
 
 /* SYMBOLS */

@@ -1,4 +1,40 @@
 /* STORY VIEWS, NOT YET OVERHAULED. WORKING ON NOW*/
+
+
+/*
+set story styles
+*/
+#chapters 								{ font-family: Candara, Corbel, Geneva, Verdana, Helvetica, Arial, sans-serif; }
+#chapters a, #chapters a:link			{ color:#111; text-decoration:none; border-bottom:1px dotted  #666; padding-right:0.125em}
+#chapters  a:hover						{ border-bottom:0}
+#chapters  a:visited					{ text-decoration:underline}
+
+/*lists*/
+#chapters  dl							{ font-size:105%; margin:1.5em 0; border-bottom:0.25em double #555; }
+#chapters  dt							{ font-weight:bold; }
+#chapters  dd							{ line-height 1.5em; font-size:1em; margin-top: 1.25em; margin-bottom: 1.25em; text-indent:3em; }
+#chapters  dd p							{ margin:0; padding:0; }
+#chapters  ul							{ padding: 0 1em; text-indent:2em; }
+#chapters  ol							{ padding: 0 1.5em; text-indent:1.5em; list-style-type:decimal}
+#chapters  li							{ font-weight:normal; }
+
+/*headings */
+#chapters  h1							{ font-size: 200%; font-family: Constantia,Palatino,Georgia,serif; text-align:center;}
+#chapters  h2							{ font-size: 160%; font-variant:normal; letter-spacing:-0.04em; text-align:left; color:#333; margin:1em 0;}
+#chapters h3							{ font-size: 180%; font-style:oblique; font-weight:100; letter-spacing:0.06em;background:#444; color:#fff; border-bottom:0.25em double #fff; padding:0 0.15em 0 0.15em}
+#chapters h4							{ font-size: 168%; font-variant:small-caps}
+#chapters h5							{ font-size: 135%; font-weight:bolder}
+#chapters h6							{ font-size: 90%; font-weight:bolder; letter-spacing: 0.06em}
+
+/*quotes and stresses*/
+#chapters blockquote					{ border-left:2px solid #999; padding: 0.75em; margin: auto auto auto 1.5em}
+#chapters blockquote blockquote			{ border:0; padding:0.25em; }
+
+#chapters hr 							{ width:33% margin:auto; border:1px solid;}
+
+.firstletter							{font:3em Georgia,serif;}
+
+
 #main.works-show ul#navigation {
     margin: 0.75em 0;
     text-align: right
@@ -154,7 +190,6 @@ dl#series-meta {
 .story-edit {
     background-color: #ffe5af;
     border: 2px solid #ffdb8b;
-    font: 0.8725em Verdana, Tahoma, Arial, sans-serif;
     padding: 0.5em;
 }
 

@@ -223,20 +223,20 @@ ul#main-navigation {
     position: relative;
 }
 
-}#user-header img {
+#user-header img {
     padding: 0;
-    margin: 0 0.5em 0.5em 0;
+    margin: 0 0 0.5em 0;
     top: 0;
     left: 0;
     position: absolute
 }
 
 #user-header h1 {
-	margin-left: 110px;
+	margin-left: 100px;
 	/*sized in pixels because the icon it is avoiding has a fixed pixel value*/
 	}
 #user-header ul {
-    margin-left: 110px;
+    margin-left: 100px;
     margin-bottom: 50px
 }
 

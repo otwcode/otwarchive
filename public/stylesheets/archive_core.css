@@ -22,7 +22,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, blockquot
 body {
     color: #111;
     background: #fff;
-    font: 0.8725em Corbel, Calibri, Candara, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif;
+    font: 0.8725em Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif;
     line-height: 1.5;
 }
 
@@ -88,9 +88,9 @@ em, cite, i {
     font-style: oblique;
 }
 
-cite em, em cite {
-    font-style: normal;
-}
+cite em, em cite, cite i, i cite, i em, em i	{ font-style:normal; }
+em cite, i cite				{ text-decoration:underline; }
+
 /* TABLES AND LISTS */
 table {
     border: 1px solid #ddd;
@@ -194,10 +194,10 @@ li.story-date {
     margin: 0;
 }
 
-.story-show p, #comments-display {
+/*.story-show p, #comments-display {
     margin-right: auto;
     margin-left: auto;
     width: 90%;
     font-size: 110%;
     font-family: Georgia, serif;
-}
+}*/
