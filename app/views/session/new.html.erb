@@ -11,7 +11,7 @@
   <p>
     <strong><%=h "Warning:".t %></strong>
     <span><%=h "This site is in extreme alpha. Things may break or crash without notice. Please".t %></span>
-    <a href="mailto:otw-testers@transformativeworks.org" tabindex = '8'><%=h "report".t %></a>
+    <a href="mailto:otw-testers@transformativeworks.org"><%=h "report".t %></a>
     <span><%=h "all crashes to us, and remain seated until the test has come to a full and complete stop.".t %></span>
   </p>
 <%- end -%>
@@ -29,5 +29,5 @@
 
 <%- if ArchiveConfig.ACCOUNT_CREATION_ENABLED -%>
 <!-- Create account link -->
-<p><%= "New tester?" .t %> <%= link_to 'Create an account now.' .t, new_user_path, :tabindex => '7' %></p>
+<p><%= "New tester?" .t %> <%= link_to 'Create an account now.' .t, new_user_path %></p>
 <%- end -%>

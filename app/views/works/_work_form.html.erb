@@ -6,8 +6,6 @@
 	either dl,dt.dd or p br. All fields need labelling. 
 	All the presentational classes (list-left etc) must be removed 
 	and the whole thing must be validated. Extra points for fieldsets and legends.
-	The tabindex currently conflicts with the scriptaculously revealed openid option and needs to be rethought. 
-	The tabindex is also disabling access to the search bar.	
 -->
 
   <%- form_for(@work, :html => {:name => "storyForm"}) do |f| -%> 
@@ -20,12 +18,12 @@
 
       <!-- Chaptered checkbox (work_is_wip) -->
       <!-- Checking this box causes the expected number of chapters box to appear; unchecking it causes it to disappear. -->
-      <input type="checkbox" name="isWip" tabindex="2" 
+      <input type="checkbox" name="isWip"  
       onclick="showChapteredStoryOptions()" <%- if @work.chaptered? -%>checked="checked"<%- end -%>/> <%=h 'Do you plan to have multiple chapters?'.t %>
 
       <!-- Series checkbox (storyseriescheck) -->
       <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear. -->
-      <input type="checkbox" id="storyseriescheck" name="storyseriescheck" tabindex="3" onclick="showWorkSeriesOptions()" 
+      <input type="checkbox" id="storyseriescheck" name="storyseriescheck"  onclick="showWorkSeriesOptions()" 
 	    <%- unless @work.series.blank? -%>checked="checked"<%- end -%>/>
 		<%=h 'Is this part of a series?'.t %><br />
 

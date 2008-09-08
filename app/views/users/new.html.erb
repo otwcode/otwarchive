@@ -6,7 +6,7 @@
 <!-- Create login -->
 			<p>
 				<%= f.label :login, h("What would you like as your user name?").t %><br />
-				<%= f.text_field :login,  :tabindex => '1' %>
+				<%= f.text_field :login %>
 			</p>
     
 <!-- The password or OpenID login fields are shown in this div -->
@@ -47,28 +47,28 @@
 				</div>
 <!-- Email address -->
 				<p><%= f.label :email, h("What email address would you like us to use? (This has to be valid - we'll be sending a confirmation email before you can activate your account.)").t  %><br />
-				<%= f.text_field :email,  :tabindex => '6' %></p>
+				<%= f.text_field :email %></p>
 <!-- Age Check -->
 				<p>
 					<%=h 'You need to be over 13 years old to become a registered member of the archive.'.t %>
 					<%=h "(Sorry to our younger readers! You'll be more than welcome when the time comes.)".t %><br />
-					<%= f.check_box :age_over_13, :tabindex => '9' %>
+					<%= f.check_box :age_over_13 %>
 					<%= f.label :age_over_13, h("Yes, I am over 13.").t  %>
 				</p>
 <!-- Terms of Service (actual TOS still needs to be added) -->
 				<p>
-					<%=h "And - really important - we need you to agree to our".t %> <a href="#" tabindex="10"><%=h 'Terms of Service'.t %></a>:<br />
+					<%=h "And - really important - we need you to agree to our".t %> <a href="#"><%=h 'Terms of Service'.t %></a>:<br />
 					<textarea name="terms-of-service" rows="8" cols="63" readonly="readonly"><%= ArchiveConfig.TOS -%></textarea>
 				</p>
 <!-- If this box is not checked, needs a modal dialog box: "You must agree to the Terms of Service in order to create an account.", with OK as the only choice. -->
 				<p>
-					<%= f.check_box :terms_of_service, :tabindex => '11' -%>
+					<%= f.check_box :terms_of_service -%>
 					<%= f.label :terms_of_service, h("Yes, I have read the Terms of Service and agree to them.").t,  :class => 'important' %>
 				</p>
 <!-- Buttons for "Cancel" and "Create Account" -->
 <!-- "Create Account" needs to submit form information and send out an email to the user with confirmation information; the confirmation info should send the user back to accountconfirm.html -->
 				<p class="submit">
-					<input type="submit" name="cancel-create-account" value="Cancel" tabindex="12" />
-					<%= submit_tag 'Create Account' .t, :tabindex => '13' %>
+					<input type="submit" name="cancel-create-account" value="Cancel" />
+					<%= submit_tag 'Create Account' .t %>
 				</p>
 			<% end -%>

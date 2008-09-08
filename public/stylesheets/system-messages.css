@@ -56,7 +56,7 @@ span.symbol {
     -webkit-border-radius: 0.7em;
 }
 
-span.symbol a {
+span.symbol span {
     color: #fff;
     text-decoration: none;
     text-align: center;
@@ -66,7 +66,7 @@ span.symbol a {
 }
 
 span.question {
-    background: url(bluesymbol.png) top left no-repeat #2b547c;
+    background: top left no-repeat #2b547c;
     border-color: #2a547c;
 }
 

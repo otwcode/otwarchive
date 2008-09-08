@@ -5,10 +5,10 @@
 
 <%- form_for(@user) do |f| -%>
   <dl>
-	<dt><%= f.label :password, "New Password".t %> <span><%=h '(Make it a'.t %> <a href="#" tabindex="1"><%=h 'strong'.t %></a> <%=h 'one!)'.t %></span></dt>	
-  		<dd><%= f.password_field :password,  :tabindex => '2' %></dd>
+	<dt><%= f.label :password, "New Password".t %> <span><%=h '(Make it a'.t %> <a href="#" ><%=h 'strong'.t %></a> <%=h 'one!)'.t %></span></dt>	
+  		<dd><%= f.password_field :password %></dd>
   	<dt><%= f.label :password_confirmation, "Confirm Password".t %></dt>
-  		<dd><%= f.password_field :password_confirmation,  :tabindex => '3' %></dd>
+  		<dd><%= f.password_field :password_confirmation %></dd>
  </dl>
   <p><%= submit_tag 'Change Password'.t, :name => 'change_password' %></p> 
   
