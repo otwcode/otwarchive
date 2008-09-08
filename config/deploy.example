@@ -1,0 +1,53 @@
+set :user, "myname"
+
+set :deploy_via, :remote_cache
+set :host, "archiveofourown.org"
+set :auth_methods, "publickey"
+set :repository,  "http://otwarchive.googlecode.com/svn/trunk/"
+set :deploy_to, "/var/www/otwarchive"
+set :use_sudo, false
+set :keep_releases, 4
+
+role :app, host
+role :web, host
+role :db, host, :primary => true
+
+before "deploy:setup", :local
+after "deploy:update_code", "local:update"
+
+namespace :local do
+  desc "Create placeholders for configuration files"
+  task :default do
+    run "mkdir -p #{shared_path}/config" 
+    touch "#{shared_path}/config/database.yml" 
+    touch "#{shared_path}/config/local.yml" 
+    touch "#{shared_path}/ultrasphinx/production.base"
+    puts "requires manual configuration"
+  end
+
+  desc "Update version and link to current" 
+  task :update do
+    run "ln -sf #{shared_path}/config/local.yml #{release_path}/config/local.yml" 
+    run "sed -i '$d' #{shared_path}/config/local.yml"
+    run "echo -n 'REVISION: ' >> #{shared_path}/config/local.yml"
+    run "cat #{release_path}/REVISION >> #{shared_path}/config/local.yml"
+    run "ln -sf #{shared_path}/config/database.yml #{release_path}/config/database.yml" 
+    run "rm -rf #{release_path}/config/ultrasphinx"
+    run "ln -sf #{shared_path}/ultrasphinx #{release_path}/config/ultrasphinx" 
+    run "ln -sf #{shared_path}/sphinx #{release_path}/sphinx" 
+  end
+end
+
+after "deploy", "deploy:cleanup"
+after "deploy:migrations", "deploy:cleanup"
+
+namespace :mod_rails do
+  desc "Restart the application altering tmp/restart.txt for mod_rails."
+  task :restart, :roles => :app do
+    run "touch  #{release_path}/tmp/restart.txt"
+  end
+end
+ 
+namespace :deploy do
+  %w(start restart).each { |name| task name, :roles => :app do mod_rails.restart end }
+end
