@@ -3,7 +3,7 @@ module HtmlFormatter
 
   # clean up tags
   def cleanup_and_format(text)
-    text = cleanup_paragraph_tags(close_tags(replace_tags(text)))
+    text = cleanup_paragraph_tags(close_tags(strip_comments(replace_tags(text))))
   end
   
   def sanitize_and_format_for_display(text, tags = ArchiveConfig.ALLOWED_TAGS)

@@ -2,7 +2,14 @@
 module SanitizeParams
 
   def get_white_list_sanitizer
-    @white_list_sanitizer = HTML::WhiteListSanitizer.new    
+    @white_list_sanitizer = HTML::WhiteListSanitizer.new
+  end
+
+  # strip comment and <!whatever> tags like DOCTYPE
+  def strip_comments(text)
+    text.gsub!(/<!--(.*?)-->[\n]?/m, "")
+    text.gsub!(/<!(.*?)>[\n]?/m, "")
+    return text
   end
 
   def sanitize_params(params = params)
@@ -13,7 +20,7 @@ module SanitizeParams
   def walk_hash(hash)
     hash.keys.each do |key|
       if hash[key].is_a? String
-        hash[key] = @white_list_sanitizer.sanitize(hash[key])
+        hash[key] = @white_list_sanitizer.sanitize(strip_comments(hash[key]))
       elsif hash[key].is_a? Hash
         hash[key] = walk_hash(hash[key])
       elsif hash[key].is_a? Array
@@ -26,7 +33,7 @@ module SanitizeParams
   def walk_array(array)
     array.each_with_index do |el,i|
       if el.is_a? String
-        array[i] = @white_list_sanitizer.sanitize(el)
+        array[i] = @white_list_sanitizer.sanitize(strip_comments(el))
       elsif el.is_a? Hash
         array[i] = walk_hash(el)
       elsif el.is_a? Array
