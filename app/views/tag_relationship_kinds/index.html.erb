@@ -1,0 +1,17 @@
+<h1>Kinds of Tag Relationships</h1>
+
+<% for kind in @tag_relationship_kinds %>
+<h2><%= link_to kind.name, kind %></h2>
+<dl>
+	<dt>Verb phrase:</dt>
+	<dd>Tag X <strong><%= kind.verb_phrase %></strong> Tag Y.</dd>
+	
+	<dt>Distance:</dt>
+	<dd><%= kind.distance %></dd>
+
+	<dt>Reciprocal:</dt>
+	<dd><%= kind.reciprocal? ? "Yes" : "No" %></dd>
+</dl>
+<% end %>
+
+<%= tag_wrangler_footer %>
