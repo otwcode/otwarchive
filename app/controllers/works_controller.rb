@@ -69,9 +69,7 @@ class WorksController < ApplicationController
     @serial_works = @work.serial_works
 
     @chapter = @work.first_chapter
-    logger.info "********* got here with work " + @work.to_yaml
     if params[:work] && params[:work][:chapter_attributes]
-      logger.info "********* in params work setting chapter content "
       @chapter.content = params[:work][:chapter_attributes][:content]
     end
     

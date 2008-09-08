@@ -65,7 +65,7 @@ class ChaptersController < ApplicationController
       @chapter = current_user.unposted_chapter(@work) || @work.chapters.build
     end
     
-    @pseuds = (@work.pseuds + (@chapter.authors ||= [])).uniq
+    @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
     to_select = @chapter.authors.blank? ? @chapter.pseuds.blank? ? @work.pseuds : @chapter.pseuds : @chapter.authors 
     @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
     
