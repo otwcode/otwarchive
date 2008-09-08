@@ -53,6 +53,11 @@
     <li>
       <%= link_to_unless_current "<span>" + "recs".t + "</span>", bookmarks_path %>
     </li>
+		<%- if logged_in? && current_user.is_tag_wrangler? -%>
+		<li>
+      <%= link_to_unless_current "<span>" + "tag wrangling".t + "</span>", tag_wranglings_path %>
+    </li>
+		<%- end -%>
     <li>
       <%= link_to_unless_current "<span>" + "tags".t + "</span>", tags_path %>
     </li>
