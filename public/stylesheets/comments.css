@@ -30,6 +30,6 @@ h4.datestamp {
 .thread .thread {
 	margin-left: 3em;
 }
-.even {
+.thread .even {
 	background: #eee;
 }

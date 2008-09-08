@@ -13,7 +13,6 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, blockquot
 }
 /************************************************end of uneditable rules    */
 
-
 @font-face {
 	font-family:"Fertigo"; 
 	src: url(Fertigo.otf)
@@ -125,15 +124,6 @@ blockquote, q {
 /*SOME UNORGANIZED CLASSES  */
 .clearboth {
     clear: both;
-}
-
-.login-admin:after {
-    content: url( '../images/admin.gif' );
-}
-
-li.story-date {
-    text-align: right;
-    color: #999;
 }
 
 .story-show .story-author .login {

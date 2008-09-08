@@ -7,18 +7,18 @@
 		    <%= link_to sanitize_and_format_for_display(work.title, :tags => %w(em i b strong strike small)), work %>
 		    </h3>
 		</li>
-		
-	    <li class="story-date">
-	      <%=h work.created_at.localize("%d %B %Y") %>
-	    </li>
 
 	  	<li class="story-byline">
+			<%=h "by ".t -%>
 	  		<%= byline(work) -%>
 		</li>
-	
+		 <li class="story-date">
+		      <%=h work.created_at.localize("%d %B %Y") %>
+		    </li>
 		<li class="story-tags">
 			
         <ul>
+			<li><!--empty list items to prevent this .story ul closing prematurely--></li>
             <%- @tag_categories.each do |category| -%>
             <%- unless work.tags.by_category(category).blank? -%>
             <%= category.display_name %>:<% if current_user != :false && category.name == "Warnings" && current_user.preference && current_user.preference.hide_warnings && !is_author_of?(work) -%>

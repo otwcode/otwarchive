@@ -15,9 +15,20 @@ form dt, label {
     font-weight: 900;
 }
 
-p.submit {text-align:right;}
+p.submit {text-align:right; clear:both;}
 
-/* USERS */
+/*ADMIN */
+admin_session-new dt {clear: left;
+    float: left;
+    width: 6em;
+    margin: 0.25em 0 0.15em;
+    padding: .25em 0 0 .5em;
+	
+}
+admin_session-new dd {float: left;
+    margin: 0.25em 0 0.15em;
+	
+}/* USERS */
 .users-new form label {
     font-weight: 100;
 }
@@ -73,3 +84,25 @@ form .footnote {
 form p.openid {
     margin-top: 6em;
 }
+
+/*COMMENTS */
+
+#comment_form_div dl {
+    position: relative;
+}
+
+#comment_form_div dt {
+	clear: left;
+    float: left;
+    width: 6em;
+    margin: 0.25em 0 0.15em;
+    padding: .25em 0 0 .5em;
+}
+
+#comment_form_div dd {
+	float: left;
+    margin: 0.5em 0 0.15em;
+}
+
+#comment_form_div #content_content {width:22em !important; height:11em !important}
+

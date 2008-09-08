@@ -132,7 +132,7 @@ ul#main-navigation {
 }
 
 #dashboard-sidebar li {
-    whitespace: no-wrap;
+    white-space: nowrap;
     font-weight: bold;
 }
 
@@ -245,11 +245,19 @@ ul#main-navigation {
     padding: 0.25em
 }
 
-/*FLAG */
-li.story-tags ul li {
-    display: inline;
-    padding-right: 0.4em
-}
+/*story listing */
+
+li.story ul {position:relative;}
+li.story-title-line{float:left; margin:0.75em 1em auto 0; }
+li.story-byline  {float:left; margin:0.5em 0 auto 0.25em;}
+li.story-title-line p {margin:0; padding:0;}
+li.story-byline { font-size: 150%; font-weight:bolder; }
+li.story-byline a {text-decoration:none}
+li.story-date{text-align:right; color:#777 }
+
+li.story-tags ul li {display:inline; padding-right: 0.4em}
+li.story-desc { padding: 0.4em;  border:1px solid #ddd}
+
 
 .pseuds-index p {
     clear: both;
@@ -258,6 +266,7 @@ li.story-tags ul li {
 /*MEDIA-INDEX  (FANDOMS)*/
 .media-index li.category {
     padding: 1em;
+	min-height:15em;
 }
 
 #main.media-index ol, #main.fandoms-index ol, #main.fandoms-show ol {
@@ -267,13 +276,13 @@ li.story-tags ul li {
 .media-index li.odd {
     width: 40%;
     float: left;
-    margin: 0 2em 0 0;
+    margin: 0 0.4em 0 0;
 }
 
 .media-index li.even {
     width: 40%;
     float: right;
-    margin: 0 0 0 2em;
+    margin: 0 0 0 0.4em;
 }
 /*BOOKMARKS-INDEX BOOKMARKS  */
 dl.bookmark {

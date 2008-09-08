@@ -32,7 +32,7 @@
 	    <%= f.hidden_field :commentable_type, :value => commentable.class.to_s %>
 	    <input type="hidden" id="controller_name" name="controller_name" value="<%= @controller_name ||= @controller.controller_name %>" /></dd>  
 	</dl>
-	    <p><%= f.submit button_name %>
+	    <p class="submit"><%= f.submit button_name %>
 		<%= cancel_comment_button(comment, commentable) -%>
 	  </p>
   <% end -%>

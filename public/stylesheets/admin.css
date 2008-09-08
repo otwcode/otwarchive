@@ -3,3 +3,7 @@
 #header {
     background: #066 top left no-repeat;
 }
+
+.login-admin:after {
+    content: url( "\2020" );
+}

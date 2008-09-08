@@ -1,7 +1,9 @@
 <!-- BEGIN work --> 
 <div class="story-show">
 	<%= render :partial => 'works/work_header' -%>
-	
+	<%- if logged_in_as_admin? -%>
+	<%= render :partial => 'admin/admin_options', :locals => {:item => @work} %>
+	<%- end -%>
 	<div id="chapters">
 	<%= render :partial => 'chapters/chapters' -%>
 	</div>
