@@ -1,0 +1,223 @@
+/* STORY VIEWS, NOT YET OVERHAULED. WORKING ON NOW*/
+#main.works-show ul#navigation {
+    margin: 0.75em 0;
+    text-align: right
+}
+
+.works-show #navigation li {
+    display: inline;
+}
+
+.works-show #navigation li.go-back {
+    padding: 0 0.25em 0 0;
+    display: block;
+    float: left
+}
+
+dl#story-meta {
+    position: relative;
+    background: #ddd;
+    border: 1px solid #ccc;
+    padding: 0.5em
+}
+
+#story-meta dt {
+    float: left;
+    clear: left;
+    width: 10em;
+    margin: 0 1em 0 0;
+}
+
+#story-meta dd {
+    clear: right;
+}
+
+dl #story-meta dd.rating {
+    margin: 1em 0 0
+}
+
+#story-meta dd p {
+    clear: both;
+}
+
+#story-preface {
+    border-bottom: 3px double;
+    margin-bottom: 1.5em;
+}
+
+#story-preface blockquote {
+    font-size: smaller;
+}
+
+#story-preface h2 {
+    font: 800 200% Cambria, Constantia, Palatino, Georgia, sans-serif;
+    margin: 1.5em auto 0
+}
+/* SERIES */
+#series-and-view-data {
+    clear: both
+}
+
+dl#series-meta {
+    position: relative;
+}
+
+#series-meta dt {
+    float: left;
+    clear: left;
+    width: 10em;
+    margin: 0 1em 0 0;
+}
+
+#series-meta dd {
+    clear: right;
+}
+
+#series-meta dd p {
+    clear: both;
+}
+
+.series-show ul {
+    clear: both;
+}
+
+.series-show ul li {
+    display: inline;
+    padding-right: 0.5em
+}
+
+.series-show ul#series-story-list li {
+    display: block;
+    padding: 0;
+}
+/* Post and Preview Story styles    */
+.textareafield {
+    margin-bottom: 20px;
+}
+
+.required {
+    color: #900;
+}
+
+#story-form label {
+    margin: 10px 0 0;
+}
+
+.storyinputfield {
+    width: 300px;
+    text-align: left;
+    margin: 0 0 15px;
+}
+
+#story-form textarea {
+    width: 600px;
+}
+
+.metadata-field {
+    height: 100px;
+}
+
+.number-field {
+    width: 50px;
+}
+
+.storytextfield {
+    margin: 10px 0;
+}
+
+.moreinfoicon {
+    vertical-align: top;
+    margin: 0 0 10px 25px;
+}
+
+#chaptermanage {
+    color: #0a0;
+    margin: 0 0 10px;
+}
+
+#seriesmanage {
+    color: #0a0;
+    margin: 15px 0 10px;
+}
+
+#previewpane {
+    border: 1px solid #000;
+    height: auto;
+    width: 800px;
+    padding: 30px;
+}
+
+.chapter-content {
+    padding: 50px;
+}
+
+.story-edit {
+    background-color: #ffe5af;
+    border: 2px solid #ffdb8b;
+    font: 0.8725em Verdana, Tahoma, Arial, sans-serif;
+    padding: 0.5em;
+}
+
+textarea.story-edit-notes {
+    display: block;
+}
+
+.story-edit-text {
+    width: 100%;
+}
+
+.chapter-control {
+    font-size: 80%;
+    color: #4F709F;
+}
+
+.chapter-control a {
+    color: #4F709F;
+}
+/* Temporary bookmark content    */
+#dynamic-bookmark {
+    position: fixed;
+    background-color: #fff;
+    border: 2px solid #000;
+    height: 300px;
+    width: 500px;
+    bottom: 30px;
+    right: 30px;
+    z-index: 42;
+    padding: 15px 30px;
+}
+
+#bookmark_notes {
+    width: 450px;
+    height: 100px;
+}
+
+#close-popup {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+}
+
+.chapter-position-list {
+    list-style-type: none;
+    padding: 10px;
+}
+
+.story-edit-meta, .story-edit-notes {
+    width: 80%;
+}
+
+ul.story-list li.story-tags {
+    display: inline;
+}
+
+.story-show h2, .story-edit-title {
+    font-size: 130%;
+    font-weight: 700;
+    text-align: center;
+}
+
+.story-show .story-author, .story-title, .chapter-title {
+    text-align: center;
+}
+

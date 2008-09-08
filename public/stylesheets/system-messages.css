@@ -1,10 +1,55 @@
 /* === SYSTEM RULES === */
 /* === These notes should be stripped out and copied to style book before launch === */
 /* System messages use the following colours:
- * blue: success, messages, additional information,
- * red: error, go back and fix this problem
- * yellow: warning, correct this error before you proceed
+ * notice => blue: success, messages, additional information,
+ * error => red: error, go back and fix this problem
+ * warning => yellow: warning, correct this error before you proceed
  */
+/*Just a note, the main div is automagically
+ * assigned a different class for every different
+ * functional page, if you want to make use of
+ * this to style child elements.
+ The flash divs are intended for use to show error messages
+ * from just notices to warnings to fatal errors. Errors get
+ * set in the model or controller like so: flash[:notice] = "notification"
+ * and are displayed in the view with <%= flash_div :error, :warning, :notice -%>
+ */
+.flash {
+    margin: 0.5em auto;
+    padding: 1em;
+}
+
+
+/* These are a few qualified styles for flashes -they show up on pages with a conflicting float or an absolute position etc
+ * 
+ */
+#main.session .flash{float:right;}
+#main.sidebar .flash {float:right;}
+
+
+
+.flash_icon {
+    border: 0;
+    float: left;
+    width: 50px;
+    padding: 0 0.5em 0 0;
+}
+
+.notice {
+    background-color: #b3d4ef;
+    border: 2px solid #b3d4ef;
+}
+
+.warning {
+    font-weight: 900;
+    background-color: #feffd4;
+}
+
+.error {
+    background-color: #efd1d1;
+    border: 2px solid #af2020;
+}
+
 /* SYMBOLS */
 span.symbol {
     padding: 0.15em;
@@ -30,64 +75,38 @@ span.question {
     border-color: #2a547c;
 }
 
-.important {
+/* A COLLECTION OF CLASSES TO BE USED AS APPROPRIATE. MINIMAL STYLING
+ * 
+ */
+ 
+ .important{
     font-weight: 900;
 }
 
 .message {
     font-size: larger;
 }
-
-.warning {
-    font-weight: 900;
-    background-color: #feffd4;
+.required {
+	color:#900;
 }
-
 .footnote {
     font-size: smaller;
 }
-/* Debug Style (development only)    */
-#debug {
-    border: 1px dashed;
-    margin: 10%;
-    padding: 10px;
-}
-/*Just a note, the main div is automagically
- * assigned a different class for every different
- * functional page, if you want to make use of
- * this to style child elements.
- The flash divs are intended for use to show error messages
- * from just notices to warnings to fatal errors. Errors get
- * set in the model or controller like so: flash[:notice] = "notification"
- * and are displayed in the view with <%= flash_div :error, :warning, :notice -%>
- */
-.flash {
-    float: left;
-    width: inherit;
-    margin: 0.4em 0 0.2em;
-    padding: 1em;
-}
 
-.flash_icon {
-    border: 0;
-    float: left;
-    width: 50px;
-    padding: 0 0.5em 0 0;
-}
 
-.notice {
-    background-color: #b3d4ef;
-    border: 2px solid #b3d4ef;
-    width: 98%;
-}
-
-.error {
-    background-color: #efd1d1;
-    border: 2px solid #af2020;
-}
 /* Rails will automatically add the errorExplanation and fieldWithErrors divs
  * after doing validation of models - just make sure you're using f.label
  * or similar!    */
+
+/*HOPEFULLY WILL JUNK ALL THESE CLASSES UPON RESOLUTION OF ISSUE 317
+ * WILL PROBABLY NEED TO SELECT SOME SPECIFIC ROUTES SUCH AS
+ * .error p
+ * .error ul
+ * .error input
+ * span.error
+ * div.error
+ * form .error ...
+ */
 .errorexplanation, .errorExplanation {
     background-color: #efd1d1;
     border: 2px solid #af2020;
@@ -121,3 +140,10 @@ span.question {
 
 .fieldwitherrors input {
     border: 2px solid #af2020;
+	
+	/* Debug Style (development only)    */
+#debug {
+    border: 1px dashed;
+    margin: 10%;
+    padding: 10px;
+}

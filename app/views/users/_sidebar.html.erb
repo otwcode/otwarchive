@@ -1,4 +1,4 @@
-<% prefix = @user == current_user ? "My ".t : "" %>
+<% prefix = @user == current_user ? "My&nbsp;".t : "" %>
 <ul>
   <li><%= link_to_unless_current prefix + "Dashboard".t, @user %></li>
   <li><%= print_works_link(@user) %></li>

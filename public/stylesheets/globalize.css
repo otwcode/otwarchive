@@ -1,49 +1,42 @@
 #globalize {
-  font-size: 78%;
-  margin: auto;
-  float:left;
+    float: left;
 }
 
 #globalize a:link, #globalize a:visited {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 #globalize a:hover, #globalize a:active {
-  background-color: #333;
-  color: #fff;
+    background-color: #333;
+    color: #fff;
 }
 
 #globalize ul {
-  color: #666;
-  list-style-type: none;
+    color: #666;
 }
 
 #globalize ul li {
-  display: inline;
-  margin: 0.2em;
+    display: inline;
+    margin: 0.2em;
 }
 
 #globalize form {
-  display: inline;
+    display: inline;
 }
 
 #globalize select {
-  border:1px solid #999;
-  font-size:smaller;
-  padding:0.15em;
-  background: #fff;
-  color: #000;
+    border: 1px solid #999;
+    padding: 0.15em;
+    background: #fff;
+    color: #000;
 }
 
-.inplaceeditor-form {
-}
-
-.inplaceeditor-form input[type=text],
-.inplaceeditor-form textarea {
-  border: 1px solid #999;
-  width: 300px;
+.inplaceeditor-form input
+[ type = text ], .inplaceeditor-form textarea {
+    border: 1px solid #999;
+    width: 300px;
 }
 
 .inplaceeditor-form a:link, .inplaceeditor-form a:visited, .inplaceeditor-form a:hover, .inplaceeditor-form a:active {
-  font-size: 78%;
+    font-size: 95%;
 }
