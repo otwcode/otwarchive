@@ -38,7 +38,6 @@ set story styles
 .flashback								{font-style:oblique; }
 .shouting								{font-variant:small-caps}
 
-
 #main.works-show ul#navigation {
     margin: 0.75em 0;
     text-align: right
@@ -80,13 +79,22 @@ dl #story-meta dd.rating {
     clear: both;
 }
 
+#story-meta dd li {
+	display:inline;
+	padding:0 0.4em 0 0;
+}
+
+#story-meta dt.warning, #story-meta dd.warning {
+	background:transparent; border:0;
+}
+
 #story-preface {
     border-bottom: 3px double;
     margin-bottom: 1.5em;
 }
 
 #story-preface blockquote {
-    font-size: smaller;
+    font-size: 0.75em;
 }
 
 #story-preface h2 {
