@@ -14,7 +14,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :tag_relationship_kinds, :path_prefix => ':locale'
   map.resources :tag_relationships, :path_prefix => ':locale'
   map.resources :tag_categories, :path_prefix => ':locale'
-  map.resources :tags, :path_prefix => ':locale'
+  map.resources :tags, :collection => {:show_hidden => :get}, :path_prefix => ':locale'
   map.resources :taggings, :path_prefix => ':locale'
 
   map.root :controller => 'session', :action => 'new', :locale => 'en'      

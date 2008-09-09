@@ -11,10 +11,11 @@ module TagsHelper
     tags.each { |t|
       yield t, classes[(t.taggings_count - min) / divisor]
     }
-  end
+  end 
   
-  
+  # Displays a list of links for navigating the tag wrangling section of the site
   def tag_wrangler_footer
     render :partial => 'tag_wranglings/footer'
   end
+  
 end

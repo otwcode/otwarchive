@@ -83,13 +83,17 @@ class Tag < ActiveRecord::Base
         condition_hash[:category_id] = options[:category].id
       end      
       siblings = self.tags.find(:all, :include => [:tag_category, {:tag_relationships => :tag_relationship_kind}], :conditions => [condition_list, condition_hash])
-      siblings += self.related_tags.find(:all, :include => [:tag_category, {:tag_relationships => :tag_relationship_kind}], :conditions => [condition_list, condition_hash])
+      siblings += self.related_tags.find(:all, :include => [:tag_category, {:related_relationships => :tag_relationship_kind}], :conditions => [condition_list, condition_hash])
       siblings.uniq
     end
   end
   
   def disambiguation
     siblings(:kind => TagRelationshipKind.disambiguation)
+  end
+  
+  def synonyms
+    siblings(:distance => 0) - self.disambiguation
   end
 
   def name

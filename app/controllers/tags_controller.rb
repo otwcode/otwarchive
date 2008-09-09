@@ -19,9 +19,18 @@ class TagsController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.js
-      format.xml  { render :xml => @tags }
+    end    
+  end
+  
+  def show_hidden
+    unless params[:work_id].blank? || params[:category_id].blank?
+      @display_work = Work.find(params[:work_id])
+      @display_category = TagCategory.find(params[:category_id])
+      @display_tags = @display_work.tags.by_category(@display_category)
     end
-    
+    respond_to do |format|
+      format.js
+    end
   end
 
   # GET /tags/1
@@ -31,21 +40,17 @@ class TagsController < ApplicationController
     unless @tag.valid
       render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 and return
     end
-
-    @works = @tag.works.visible(current_user)
-    @bookmarks = @tag.bookmarks.visible(current_user)
-    @tags = @tag.visible('Tags', current_user)
-    @ambiguous = @tag.disambiguation
+    @tags = @tag.synonyms
+    @works = @tag.works.visible(current_user) + @tags.collect {|tag| tag.works.visible(current_user)}.flatten
+    @bookmarks = @tag.bookmarks.visible(current_user) + @tags.collect {|tag| tag.bookmarks.visible(current_user)}.flatten
+    @ambiguous = @tag.disambiguation   
 
     @works.uniq!
     @bookmarks.uniq!
-    @tags.uniq!
     @tag_categories = TagCategory.official
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @tag }
-    end
-   
+    end   
   end
 
   # GET /tags/new
@@ -55,7 +60,6 @@ class TagsController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @tag }
     end
   end
 
@@ -68,10 +72,8 @@ class TagsController < ApplicationController
       if @tag.save
         flash[:notice] = 'Tag was successfully created.'.t
         format.html { redirect_to tag_categories_path }
-        format.xml  { render :xml => @tag, :status => :created, :location => @tag }
       else
         format.html { render :action => "new" }
-        format.xml  { render :xml => @tag.errors, :status => :unprocessable_entity }
       end
     end
   end

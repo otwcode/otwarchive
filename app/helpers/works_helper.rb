@@ -28,4 +28,15 @@ module WorksHelper
     link_to "View by chapters".t, url_for({:controller => :chapters, :action => :show, :work_id => work, :id => chapter})
   end
   
+  # Determines whether or not to display warnings for a work 
+  def hide_warnings?(work)
+    current_user.is_a?(User) && current_user.preference && current_user.preference.hide_warnings? && !current_user.is_author_of?(work)
+  end
+  
+  # Link to show warnings if they're currently hidden
+  def show_warnings_link(work, category)
+    link_to_remote "Show warnings".t, 
+      :url => {:controller => 'tags', :action => 'show_hidden', :work_id => work.id, :category_id => category.id}, 
+      :method => :get
+  end    
 end
