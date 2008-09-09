@@ -4,6 +4,7 @@ class WorksController < ApplicationController
   # only authors of a work should be able to edit it
   before_filter :is_author, :only => [ :edit, :update, :destroy ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :post, :show ]
+	before_filter :get_works, :only => [:index, :filter]
   before_filter :update_or_create_reading, :only => [ :show ]
   before_filter :check_permission_to_view, :only => [ :show ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview, :post]
@@ -100,39 +101,59 @@ class WorksController < ApplicationController
       redirect_to works_path
     end
   end
-   
-  # GET /works
-  def index
+	
+	def get_works
     case params[:sort_column]
       when "title" then
-        sort_order = "works.title " + (params[:sort_direction] == "DESC" ? "DESC" : "ASC")
+        @sort_order = "works.title " + (params[:sort_direction] == "DESC" ? "DESC" : "ASC")
       when "word_count" then
-        sort_order = "works.word_count " + (params[:sort_direction] == "DESC" ? "DESC" : "ASC")
+        @sort_order = "works.word_count " + (params[:sort_direction] == "DESC" ? "DESC" : "ASC")
       when "date" then
-        sort_order = "works.created_at " + (params[:sort_direction] == "DESC" ? "DESC" : "ASC")
+        @sort_order = "works.created_at " + (params[:sort_direction] == "DESC" ? "DESC" : "ASC")
       else
-        sort_order = "works.created_at DESC" # default sort order
+        @sort_order = "works.created_at DESC" # default sort order
     end
-    
-    if params[:user_id]
-      @user = User.find_by_login(params[:user_id])
-      @works = is_admin? ? @user.works.find(:all, :include => :tags, :order => sort_order).paginate(:page => params[:page]) : 
-                           @user.works.visible(current_user, :include => :tags, :order => sort_order).paginate(:page => params[:page])
-    elsif params[:fandom_id]
-      @tag = Tag.find(params[:fandom_id])
-      @works = is_admin? ? @tag.works.find(:all, :include => :tags, :order => sort_order).paginate(:page => params[:page]) : 
-                           @tag.works.visible(current_user, :include => :tags, :order => sort_order).paginate(:page => params[:page])
-    else
-     @works = is_admin? ? Work.find(:all, :include => :tags, :order => sort_order).paginate(:page => params[:page]) : 
-                          Work.visible(current_user, :include => :tags, :order => sort_order).paginate(:page => params[:page])
-    end
+		
+		if params[:user_id]
+			@user = User.find_by_login(params[:user_id])
+			@current_scope = "@user.works"
+		elsif params[:fandom_id]
+		  @tag = Tag.find(params[:fandom_id])
+			@current_scope = "@tag.works"	
+		else
+			@current_scope = "Work"
+		end
+		user = is_admin? ? "admin" : current_user
+		@works = eval(@current_scope).visible(user, :include => :tags, :order => @sort_order).paginate(:page => params[:page])
     @tag_categories = TagCategory.official
     @filters = @tag_categories - [TagCategory.default]
     @tags_by_filter = {}
     @filters.each do |filter|
-      @tags_by_filter[filter] = Tag.by_category(filter).valid.by_popularity & @works.collect(&:tags).flatten.uniq
-    end   
+      @tags_by_filter[filter] = Tag.by_category(filter).valid.by_popularity.find(:all, :limit => 10) & @works.collect(&:tags).flatten.uniq
+    end
+		@selected_tags = []		
+	end
+   
+  # GET /works
+  def index 
   end
+	
+	def filter
+		user = is_admin? ? "admin" : current_user
+		conditions = ""
+		works_by_category = {}
+		if params[:filters]
+			params[:filters].each_pair do |category_id, tag_ids|
+				@selected_tags << tag_ids
+				conditions = "tags.id IN (#{tag_ids.join(',')})" # NOT GOOD! MUST BE CHANGED! 
+				works_by_category[category_id] = eval(@current_scope).visible(user, :include => :tags, :order => @sort_order, :conditions => conditions).paginate(:page => params[:page])
+			end
+			works_by_category.each_value {|works| @works = @works & works }
+			@works = @works.paginate(:page => params[:page])
+			@selected_tags.flatten!
+		end
+		render :action => :index
+	end
   
   # GET /works/1
   # GET /works/1.xml

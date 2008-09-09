@@ -1,20 +1,6 @@
 <h2><%=h "View All Stories".t %></h2>
 
-<div id="story-filters">
-  <%- form_tag('/tags') do -%>
-    <% field_set_tag 'Filters (not yet functional)' do %>
-      <%- for filter in @filters -%>
-      <h3><%=h filter.name %></h3>
-      <ul>
-        <%- for tag in @tags_by_filter[filter][0..2] -%>
-        <li><%= check_box_tag "filters[#{tag.id}]" %><%= label_tag "filters[#{tag.id}]", tag.name %></li>
-        <%- end -%>
-        <li>More...</li>
-      </ul>
-      <%- end -%>
-    <%- end -%>
-  <%- end -%>
-</div>
+<%= render :partial => 'filters' %>
 
 <p>
 	Sort by: 
