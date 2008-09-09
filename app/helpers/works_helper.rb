@@ -38,5 +38,10 @@ module WorksHelper
     link_to_remote "Show warnings".t, 
       :url => {:controller => 'tags', :action => 'show_hidden', :work_id => work.id, :category_id => category.id}, 
       :method => :get
+  end
+  
+  # Tells the filter form what path to use
+  def current_filter_path
+    request.request_uri.include?('filter') ? request.request_uri : request.request_uri + '/filter'  
   end    
 end

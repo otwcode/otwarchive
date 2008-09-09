@@ -117,14 +117,15 @@ class WorksController < ApplicationController
 		if params[:user_id]
 			@user = User.find_by_login(params[:user_id])
 			@current_scope = "@user.works"
-		elsif params[:fandom_id]
-		  @tag = Tag.find(params[:fandom_id])
-			@current_scope = "@tag.works"	
+		elsif params[:fandom_id] || params[:tag_id]
+		  @tag = Tag.find(params[:fandom_id] || params[:tag_id])
+			@current_scope = "Work" # the regular association involves too many 'taggings' fields for mysql 	
 		else
 			@current_scope = "Work"
 		end
 		user = is_admin? ? "admin" : current_user
-		@works = eval(@current_scope).visible(user, :include => :tags, :order => @sort_order).paginate(:page => params[:page])
+		conditions = @tag.blank? ? "" : ["taggings.tag_id = (?)", @tag.id]
+		@works = eval(@current_scope).visible(user, :include => [:taggings =>:tag], :order => @sort_order, :conditions => conditions).paginate(:page => params[:page])
     @tag_categories = TagCategory.official
     @filters = @tag_categories - [TagCategory.default]
     @tags_by_filter = {}
@@ -145,7 +146,8 @@ class WorksController < ApplicationController
 		if params[:filters]
 			params[:filters].each_pair do |category_id, tag_ids|
 				@selected_tags << tag_ids
-				conditions = "tags.id IN (#{tag_ids.join(',')})" # NOT GOOD! MUST BE CHANGED! 
+				tag_ids << @tag.id unless @tag.blank?
+				conditions = "tags.id IN (#{tag_ids.join(',')})" # NOT GOOD! MUST BE CHANGED!  
 				works_by_category[category_id] = eval(@current_scope).visible(user, :include => :tags, :order => @sort_order, :conditions => conditions).paginate(:page => params[:page])
 			end
 			works_by_category.each_value {|works| @works = @works & works }

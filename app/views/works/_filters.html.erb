@@ -1,5 +1,5 @@
 <div id="story-filters">
-  <%- form_tag(filter_works_path) do -%>
+  <%- form_tag(current_filter_path) do -%>
     <% field_set_tag 'Filters' do %>
 			<dl>
 	      <%- for filter in @filters -%>
