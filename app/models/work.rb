@@ -15,10 +15,10 @@ class Work < ActiveRecord::Base
 
   # Index for Ultrasphinx
   is_indexed :fields => ['created_at', 'title', 'summary', 'notes'], 
-             :concatenate => [{:association_name => 'chapters', :field => 'content', :as => 'body'},
-                               {:class_name => 'Tag', :field => 'name', :as => 'tag_names',
+             :concatenate => [{:association_name => 'chapters', :field => 'content', :as => 'story'},
+                               {:class_name => 'Tag', :field => 'name', :as => 'tag',
                                :association_sql => "LEFT OUTER JOIN taggings ON (works.`id` = taggings.`taggable_id` AND taggings.`taggable_type` = 'Work') LEFT OUTER JOIN tags ON (tags.`id` = taggings.`tag_id`)"},
-                               {:class_name => 'Pseud', :field => 'name', :as => 'pseud_names',
+                               {:class_name => 'Pseud', :field => 'name', :as => 'author',
                                :association_sql => "LEFT OUTER JOIN creatorships ON (works.`id` = creatorships.`creation_id` AND creatorships.`creation_type` = 'Work') LEFT OUTER JOIN pseuds ON (pseuds.`id` = creatorships.`pseud_id`)"}]
 
   

@@ -177,7 +177,8 @@ ul#main-navigation {
 
 #footer a:link {
     border-bottom: 1px dotted;
-}
+} 
+
 /*PAGE BY PAGE STYLING: NEW SESSION HOME HOME SUBPAGES FANDOMS PEOPLE GROUPS RECS TAGS*/
 /*SESSIONS (front front pages - login, create, logout(feedbacks)etc)*/
 #main.session h1, #main.session h1, #main.passwords-new h1 {
@@ -245,24 +246,21 @@ ul#main-navigation {
     padding: 0.25em
 }
 
+/* WORKS-INDEX  */ 
 /*story listing */
-
-li.story ul {position:relative;}
-li.story-title-line{float:left; margin:0.75em 1em auto 0; }
-li.story-byline  {float:left; margin:0.5em 0 auto 0.25em;}
+li.story ul {position:relative; margin:0.5em auto; border:1px solid #bbb; padding:0.25em}
+li.story ul ul {background:#fff; border:0; padding:0}
+li.story-title-line{float:left; margin:0.75em 1em 0.5em 0; }
+li.story-byline  {float:left; margin:0.475em 0 auto 0.25em;}
 li.story-title-line p {margin:0; padding:0;}
 li.story-byline { font-size: 150%; font-weight:bolder; }
 li.story-byline a {text-decoration:none}
-li.story-date{text-align:right; color:#777 }
+li.story-date{text-align:right; color:#777; clear:both; margin:0.5em 0  }
+li.story-tags  {clear:left; font-weight: bold; } 
+li.story-tags a {font-weight:normal; text-decoration:none; border-bottom:1px dotted }
+li.story-tags ul li {display:inline; padding-right: 0.4em; line-height:1.75}
+li.story-desc { padding: 0 0.4em;   margin: 0.25em 0 1.5em;} 
 
-li.story-tags ul li {display:inline; padding-right: 0.4em}
-li.story-desc { padding: 0.4em;  border:1px solid #ddd}
-
-
-.pseuds-index p {
-    clear: both;
-}
-/* WORKS-INDEX  */
 /*MEDIA-INDEX  (FANDOMS)*/
 .media-index li.category {
     padding: 1em;
