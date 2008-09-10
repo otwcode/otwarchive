@@ -4,7 +4,7 @@
 		<dl class="story-filters">
       <%- for filter in @filters -%>
       <dt><%=h filter.name %></dt>
-        <%- for tag in @tags_by_filter[filter] -%>
+        <%- for tag in @tags_by_filter[filter][0..9] -%>
         <dd>
 	        <%= check_box_tag "filters[#{filter.id}][]", tag.id, @selected_tags.include?(tag.id.to_s) %>
 	        <%= label_tag "filters[#{filter.id}][#{tag.id}]", tag.name %>

@@ -72,7 +72,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :series, :path_prefix => ':locale', :member => {:manage => :get}, :has_many => :serial_works 
   
-  map.resource :search, :controller => 'search', :path_prefix => ':locale'
+  map.resource :search, :controller => 'search', :member => {:filter => :post}, :path_prefix => ':locale'
 
   map.open_id_complete 'session', :controller => "session", :action => "create", :requirements => { :method => :get }, :path_prefix => ':locale'
   

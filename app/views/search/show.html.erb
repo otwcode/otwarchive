@@ -1,6 +1,6 @@
-<%= render :partial => 'search_box' %>
-
 <%- unless @results.nil? -%>
+  <%= render :partial => 'filters' %>
+
   <h1><%= @results.length %> <%=h 'search result(s) for'.t %> '<%= h params[:query] %>'</h1>
   <%- unless @results.empty? -%>
     <ul class="story-list">
@@ -11,8 +11,8 @@
   <%- else -%>
     <p><%=h 'No results were found!'.t %></p>
   <%- end -%>
-<%- end -%>
 
-<div class="pagination">
-	  <%= will_paginate @results, :prev_label =>  "&laquo; Previous".t,:next_label => "Next &raquo;".t %>
-</div>
+  <div class="pagination">
+  	  <%= will_paginate @results, :prev_label =>  "&laquo; Previous".t,:next_label => "Next &raquo;".t %>
+  </div>
+<%- end -%>

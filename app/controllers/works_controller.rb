@@ -130,7 +130,7 @@ class WorksController < ApplicationController
     @filters = @tag_categories - [TagCategory.default]
     @tags_by_filter = {}
     @filters.each do |filter|
-      @tags_by_filter[filter] = Tag.by_category(filter).valid.by_popularity.find(:all, :limit => 10) & @works.collect(&:tags).flatten.uniq
+      @tags_by_filter[filter] = Tag.by_category(filter).valid.by_popularity.find(:all, :limit => 50) & @works.collect(&:tags).flatten.uniq
     end
 		@selected_tags = []		
 	end
