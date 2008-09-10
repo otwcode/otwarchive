@@ -57,8 +57,12 @@
 				</p>
 <!-- Terms of Service (actual TOS still needs to be added) -->
 				<p>
-					<%=h "And - really important - we need you to agree to our".t %> <a href="#"><%=h 'Terms of Service'.t %></a>:<br />
-					<textarea name="terms-of-service" rows="8" cols="63" readonly="readonly"><%= ArchiveConfig.TOS -%></textarea>
+					<%=h "And - really important - we need you to agree to our".t %> <%= link_to "Terms of Service".t, tos_path -%>:<br />
+					<textarea name="terms-of-service" rows="8" cols="63" readonly="readonly">
+
+					  <%= html_to_text(render :partial => 'home/tos') %>
+
+          </textarea>
 				</p>
 <!-- If this box is not checked, needs a modal dialog box: "You must agree to the Terms of Service in order to create an account.", with OK as the only choice. -->
 				<p>
