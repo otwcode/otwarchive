@@ -1,0 +1,117 @@
+/*ARCHIVE HOME PAGE WIREFRAME DRAFT STYLE */
+#main.home {
+    margin: 1em 2em;
+}
+
+.home h1 {
+    font-family: "Gill Sans", Georgia, Verdana, sans-serif;
+    text-align: left;
+    float: left;
+    width: 50%;
+    margin: 1.3em 0 auto
+}
+
+.home h2 {
+    font: 100 80% "Gill Sans", Georgia, Verdana, sans-serif;
+    margin: 0 auto 2em;
+    clear: left;
+}
+/* LOGIN BOX
+ *could be qualified ( #main.home #signin ) and integrated into forms.css
+ */
+#signin {
+    float: right;
+    font-size: 80%;
+}
+
+#signin dl {
+    position: relative;
+    float: right
+}
+
+#signin dt {
+    clear: left;
+    float: left;
+    width: 6em;
+    margin: 0.25em 0 0.15em;
+    padding: .25em 0 0 .5em;
+}
+
+#signin dd {
+    float: left;
+    margin: 0 .25em 0;
+    padding: 0;
+    display: block;
+}
+
+#signin p.footnote {
+    margin: 0;
+    text-align: left;
+    font-size: 75%;
+    float: right;
+    margin: 0 26% 0 0
+}
+
+#signin p.submit {
+    text-align: right;
+    clear: both;
+    margin: 0;
+    float: right
+}
+
+#signin label {
+    font-weight: 100;
+}
+
+#signin img#openid {
+    vertical-align: middle;
+    margin: .25em 0 .25em 0;
+    padding: 0;
+    border: 0;
+}
+/* QUOTE BOX */
+blockquote#quotebox {
+    padding: 0.75em 1em;
+    margin: 1em auto;
+    clear: both;
+    background: #eaeaea;
+    font: oblique 100 115% Fertigo, Corbel, Calibri, Candara, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif;
+    border: 1px solid #dee1e3
+}
+
+#quotebox p.attribution {
+    text-align: right;
+}
+
+.home  h3.meter {
+    text-align: center;
+    font-size: smaller;
+    margin: 1.5em auto
+}
+
+.home h4 {
+    text-align: center;
+    margin: 1.5em auto
+}
+/* BOTTOM THIRD */
+.home  .wrapper {
+    position: relative;
+    margin: 1em 0 5em 0
+}
+
+#screencasts {
+    width: 33%;
+    float: left;
+}
+
+.home  .wrapper h5 {
+    width: 33%;
+    float: right;
+    text-align: right;
+    font-size: 100%;
+}
+
+#screencasts h5 {
+	width:100%;
+	text-align:left;
+	}

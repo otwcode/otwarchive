@@ -1,0 +1,55 @@
+	<div id="signin">
+		<% form_tag session_path do -%>
+			<div id="switch_fields">
+      <%- if params[:use_openid] -%>
+        <%= render :partial => "openid" %>
+      <%- else -%>
+        <%= render :partial => "passwd" %>
+      <%- end -%>
+			</div>
+			<%- if params[:use_openid] -%>
+			<p id="link_to_passwd">
+					<%- else -%>
+			<p id="link_to_passwd" style="display: none;">
+					<%- end -%>
+					<%= link_to_passwd %>
+			</p>
+				<p id="link_to_openid">
+          <!-- !params[:use_openid] ensures this is hidden on the openid version of the page for non-JS users -->
+					<%- if !params[:use_openid] -%>
+					  <%- if ArchiveConfig.USE_OPENID -%>
+						  <%= image_tag("openid.png", :alt => '') %>
+						  <%= link_to_openid %>
+					  <%- end -%>
+					<%- end -%>
+				</p>	
+		<% end -%>
+ 	</div>
+  <h1>An Archive of Our Own
+  	<span><%= ArchiveConfig.APPNAME -%>
+     <% unless ArchiveConfig.REVISION.blank? %>(rev. <%= ArchiveConfig.REVISION %>)<% end %></span>
+  </h1>
+	<h2>A project of the <a href="http://transformativeworks.org">Organization For Transformative Works</a></h2>
+	<hr class="clear" />
+	<blockquote id="quotebox">
+		<p>"I came to realize that everything I do is fan fiction.  I think that everything that we all do, all fiction, is fan fiction is that you are always inspired to write by the things that you love.  So much of writing for me is about finding a way to convey my own love of other writers' work."</p>
+		<p class="attribution">~ Michael Chabon</p>
+	</blockquote>
+	<h3 class="meter"><span><%= @works.size.to_s %></span>&nbsp;<%=h 'works by'.t %>&nbsp;<span><%= @users.size.to_s %></span>&nbsp;<%=h 'creators.'.t %>&nbsp;<span><%= @works_today.size.to_s %></span>&nbsp;<%=h 'uploaded today.'.t %></h3>
+	<h4><%=h 'Share your fan works. Discover new favorites. Explore the possibilities.'.t %></h4>
+	<div class="wrapper">
+		<!-- Commenting out until we have screencasts
+		<div id="screencasts">
+			<h5><a href="">Learn more</a>&nbsp;<%=h 'from our screencasts'.t %></h5>
+			
+			<p><object width="400" height="345">
+					<param name="movie" value="http://media.imeem.com/v/C1qAdyIc-E/aus=false/pv=2"></param>
+					<param name="allowFullScreen" value="true"></param>
+					<embed src="http://media.imeem.com/v/C1qAdyIc-E/aus=false/pv=2" type="application/x-shockwave-flash" width="400" height="345" allowFullScreen="true"></embed><a href="http://www.imeem.com/astolat/video/CfuFXf2D/astolat_the_adversary_shortfilm_video/">The Adversary - astolat</a>
+				</object>
+			</p> 
+		</div>
+		-->
+		<h5><%= link_to 'Create an account' .t, new_user_path %></h5>
+	</div>
+

@@ -20,7 +20,9 @@ ActionController::Routing::Routes.draw do |map|
 	end
   map.resources :taggings, :path_prefix => ':locale'
 
-  map.root :controller => 'session', :action => 'new', :locale => 'en'
+  map.root :controller => 'home', :action => 'index', :locale => 'en'
+  
+  map.connect 'home/:action', :controller => "home", :path_prefix => ':locale'
   
   map.tos '/tos', :controller => 'home', :action => 'tos', :path_prefix => ':locale'
 

@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta name="generator" content="HTML Tidy, see www.w3.org" />
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title><%=h ArchiveConfig.APP_NAME .t %> 
+		<% unless ArchiveConfig.REVISION.blank? -%>(rev. <%= ArchiveConfig.REVISION %>)<% end %>&gt;&gt;<%= controller.controller_name %>
+        <%= controller.action_name %>
+    </title>
+
+	<%= render :partial => 'layouts/includes' %>
+
+  </head>
+
+  <body onload="hideFormFields(); initSelect('languages_menu')" >
+  <ul id="skiplinks"><li><a href="#main">Main Content</a></li></ul>
+	
+  <!-- BEGIN main -->
+	  <div id="main" class="home">
+	    <%= flash_div :error, :warning, :notice %>
+	    <%= yield  %>
+	  </div>
+	<!-- END main -->
+	
+	<%= render :partial => 'layouts/footer' %>
+
+  </body>
+</html>
