@@ -7,6 +7,6 @@ class InboxController < ApplicationController
   end
   
   def show
-    @inbox = @user.feedback_comments.find(:all, :order => 'created_at DESC', :conditions => ['(is_deleted IS NULL) OR (is_deleted <> ?)', true]).uniq
+    @inbox = @user.feedback_comments(:all, :order => 'created_at DESC').uniq
   end
 end
