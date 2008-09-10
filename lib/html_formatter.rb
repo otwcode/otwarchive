@@ -1,13 +1,22 @@
+# note, if you modify this file you have to restart the server or console
 module HtmlFormatter
   include SanitizeParams
 
+  # if we're loading up a file from somewhere else, let's take out
+  # <br> tags
+  def cleanup_break_tags(text)
+    text = cleanup_paragraph_tags(text)
+    text.gsub!(/<br \/>/, "\n")
+  end
+
   # clean up tags
   def cleanup_and_format(text)
-    text = cleanup_paragraph_tags(close_tags(strip_comments(replace_tags(text))))
+    text = cleanup_paragraph_tags(close_tags(strip_comments(text)))
+    return text
   end
   
-  def sanitize_and_format_for_display(text, tags = ArchiveConfig.ALLOWED_TAGS)
-    text = add_paragraph_tags_for_display(sanitize(text))
+  def sanitize_and_format_for_display(text, options = {})
+    text = add_paragraph_tags_for_display(sanitize_whitelist(text, options))
   end
 
   # cleans up doubled paragraph/newline tags
@@ -43,15 +52,6 @@ module HtmlFormatter
     text = cleanup_paragraph_tags(text)
     
     return text
-  end
-
-  def replace_tags(html, replaceTags = { 'i' => 'em', 'b' => 'strong'})
-    replaceTags.keys.each do |tagToReplace|
-      open_pattern = Regexp.new('<#{tagToReplace}>')
-      close_pattern = Regexp.new('<\/#{tagToReplace}>')
-      html.gsub!(open_pattern, "<#{replaceTags[tagToReplace]}>")
-      html.gsub!(close_pattern, "</#{replaceTags[tagToReplace]}>")
-    end    
   end
 
   #closes tags in html (uses http://snippets.dzone.com/posts/show/3822, but

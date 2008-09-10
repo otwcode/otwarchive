@@ -126,7 +126,7 @@ class Chapter < ActiveRecord::Base
   end
   
   before_save = :format_content
-  # Format and sanitize the content
+  # Format and clean up (but don't sanitize here) the content
   def format_content
     self.content = cleanup_and_format(self.content)
   end

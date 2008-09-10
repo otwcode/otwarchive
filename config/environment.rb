@@ -102,14 +102,17 @@ Rails::Initializer.run do |config|
   config.gem 'ruby-openid', :lib => 'openid'
   config.gem 'chronic'
   config.gem 'mislav-will_paginate', :lib => 'will_paginate', :source => 'http://gems.github.com'
-
+  config.gem 'hpricot'
 
   # Override the sanitize defaults to allow some extra formatting attributes. 
-  config.action_view.sanitized_allowed_attributes = 'class', 'style'
+  #config.action_view.sanitized_allowed_attributes = 'class', 'style'
+  config.action_view.sanitized_allowed_tags = 'u', 'strike'
   
   #Disallow div tags in sanitize.
   config.after_initialize do
-    ActionView::Base.sanitized_allowed_tags.delete 'div'
+    %w(div h1 h2 h3 h4 h5 h6).each do |tag|
+      ActionView::Base.sanitized_allowed_tags.delete tag
+    end
   end
   
   

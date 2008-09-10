@@ -1,5 +1,3 @@
-<div id="story-form">
-
 <!--
 	This form needs to be completely overhauled. 
     Form controls need to be wrapped in block level containers, 
@@ -7,19 +5,28 @@
 	All the presentational classes (list-left etc) must be removed 
 	and the whole thing must be validated. Extra points for fieldsets and legends.
 -->
+  <p>
+  <%= link_to_function(h('Upload from an existing URL?').t, 
+			"Element.toggle('upload-work-form'); Element.toggle('story-form')", 
+			:href => url_for(:controller => :work, :action => :upload_form)) -%>
+  </p>
+  
+  <div id="upload-work-form" style="display: none;"> 
+    <%= render :partial => 'works/upload_work_form' -%>   
+  </div>
 
+  <div id="story-form">
   <%- form_for(@work, :html => {:name => "storyForm"}) do |f| -%> 
- 
-    <p class="field-left">   
-    
-        <%= f.label :title, h("Story Title*").t, :class => "required" %><br />
-        <%= f.text_field :title, :class => "storyinputfield" %>
-        <%= link_to_help "story-title" -%><br />
+  <dl>    
+        <dt><%= f.label :title, h("Story Title*".t), :class => "required" %></dt>
+        <dd><%= f.text_field :title, :class => "storyinputfield" %>
+        <%= link_to_help "story-title" -%></dd>
 
       <!-- Chaptered checkbox (work_is_wip) -->
       <!-- Checking this box causes the expected number of chapters box to appear; unchecking it causes it to disappear. -->
       <input type="checkbox" name="isWip"  
-      onclick="showChapteredStoryOptions()" <%- if @work.chaptered? -%>checked="checked"<%- end -%>/> <%=h 'Do you plan to have multiple chapters?'.t %>
+      onclick="showChapteredStoryOptions()" <%- if @work.chaptered? -%>checked="checked"<%- end -%>/> 
+      <%=h 'Do you plan to have multiple chapters?'.t %>
 
       <!-- Series checkbox (storyseriescheck) -->
       <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear. -->

@@ -41,10 +41,12 @@ ActionController::Routing::Routes.draw do |map|
     user.resources :comments, :member => { :approve => :put, :reject => :put } 
   end
   
-  map.resources :works, :member => { :preview => :get, :post => :post }, :collection => {:filter => :post}, :path_prefix => ':locale' do |work|
-    work.resources :chapters, :has_many => :comments, :collection => {:manage => :get, :update_positions => :post}, :member => { :preview => :get, :post => :post }
-    work.resources :comments, :member => { :approve => :put, :reject => :put }
-    work.resources :bookmarks
+  map.resources :works, 
+    :collection => {:upload_work => :post, :filter => :post},
+    :member => { :preview => :get, :post => :post }, :path_prefix => ':locale' do |work|
+      work.resources :chapters, :has_many => :comments, :collection => {:manage => :get, :update_positions => :post}, :member => { :preview => :get, :post => :post }
+      work.resources :comments, :member => { :approve => :put, :reject => :put }
+      work.resources :bookmarks
   end
   
   map.resources :chapters, :has_many => :comments, :member => { :preview => :get, :post => :post }, :path_prefix => ':locale'

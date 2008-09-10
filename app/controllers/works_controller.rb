@@ -1,9 +1,11 @@
-class WorksController < ApplicationController
+class WorksController < ApplicationController 
+  include HtmlFormatter  
+    
   # only registered users and NOT admin should be able to create new works
   before_filter :users_only, :only => [ :new, :create ]
   # only authors of a work should be able to edit it
   before_filter :is_author, :only => [ :edit, :update, :destroy ]
-  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :post, :show ]
+  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :post, :show, :upload_work ]
 	before_filter :get_works, :only => [:index, :filter]
   before_filter :update_or_create_reading, :only => [ :show ]
   before_filter :check_permission_to_view, :only => [ :show ]
@@ -73,6 +75,13 @@ class WorksController < ApplicationController
     if params[:work] && params[:work][:chapter_attributes]
       @chapter.content = params[:work][:chapter_attributes][:content]
     end
+    
+    # This is a horrifying kludge for which there is no excuse except that
+    # it makes the chapter attribute change actually get loaded for NO REASON
+    # I can understand! -- Naomi 9/9/08
+    # This only works if it is to_yaml (to_s does NOT) which suggests something is happening
+    # during the yaml dump. More investigation needed. D: 
+    stupid_garbage_variable = @work.to_yaml
     
     unless current_user == :false
       @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
@@ -189,7 +198,6 @@ class WorksController < ApplicationController
   
   # GET /works/new
   def new
-    
   end
 
   # POST /works
@@ -204,7 +212,7 @@ class WorksController < ApplicationController
     elsif params[:cancel_button]
       flash[:notice] = "Story posting canceled."
       # destroy unposted works
-      if current_user.unposted_work
+      while current_user.unposted_work
         current_user.unposted_work.destroy
       end
       redirect_to current_user    
@@ -320,6 +328,38 @@ class WorksController < ApplicationController
     @work.destroy
     redirect_to(works_url)
   end
+
+#    responds_to_parent do
+#      render :update do |page|
+#        page.replace_html 'upload_form', :partial => 'upload_form'
+#      end
+#    end
+  # POST /works/upload_work
+  def upload_work
+    # Do stuff with params[:uploaded_file]
+    # parse the existing work 
+    if params[:uploaded_work]
+      @work = Work.create_from_text(params[:uploaded_work])
+      render :action => "new"
+    elsif params[:work_url]
+      url = params[:work_url].to_s
+      if url.empty? 
+        flash.now[:error] = "Did you want to enter a URL?"
+      else
+        begin
+          @work = Work.create_from_url(url)
+          render :action => :new and return
+        rescue
+          flash.now[:error] = "Sorry, but we couldn't read from that URL. :(".t
+        end
+      end
+      
+      render :partial => "upload_work_form", :layout => "application"
+    else
+      render :partial => "upload_work_form", :layout => "application"
+    end
+  end
+    
   
   protected
 
