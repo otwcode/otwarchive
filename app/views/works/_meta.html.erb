@@ -5,21 +5,13 @@
     </dt>
     
     <% if category.name == "Warnings" && hide_warnings?(@work) -%>
-      <dd class="<%= category.display_name.downcase -%>">
-        <ul>
-          <li id="work_<%= @work.id %>_category_<%= category.id %>">
-            <%= show_warnings_link(@work, category) %>
-          </li>
-        </ul>
+      <dd class="<%= category.display_name.downcase -%>" id="work_<%= @work.id %>_category_<%= category.id %>">
+        <%= show_warnings_link(@work, category) %>
       </dd> 
     <%- else -%>
       <%- @work.tags.by_category(category).each do |tag| -%>
       <dd class="<%= category.display_name.downcase -%>">
-        <ul>
-          <li>
-            <%= link_to(tag.name, tag_path(tag)) -%>
-          </li>
-        </ul> 
+        <%= link_to_tag(tag) %> 
       </dd>
       <%- end -%>
     <%- end -%> 

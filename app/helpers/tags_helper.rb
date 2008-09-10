@@ -17,5 +17,10 @@ module TagsHelper
   def tag_wrangler_footer
     render :partial => 'tag_wranglings/footer'
   end
+	
+	# Adds a consistent class name to tags
+	def link_to_tag(tag)
+		link_to tag.name, tag, :class => "tag"  
+	end
   
 end

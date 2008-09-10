@@ -25,8 +25,8 @@
               </dd>                           
             <%- else -%>
               <%- work.tags.by_category(category).each do |tag| -%>
-              <dd id="work_<%= work.id %>_category_<%= category.id %>">
-                <%= link_to tag.name, tag_path(tag) %>
+              <dd>
+                <%= link_to_tag(tag) %>
               </dd>
               <%- end -%>
             <%- end -%>
