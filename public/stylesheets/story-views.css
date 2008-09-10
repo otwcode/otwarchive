@@ -85,8 +85,8 @@ dl #story-meta dd.rating {
 }
 
 #story-meta dt.warning, #story-meta dd.warning {
-	background:transparent; border:0;
-}
+	background:transparent !important; border:0 !important;
+}/*pos should go in system-messages.css?*/
 
 #story-preface {
     border-bottom: 3px double;

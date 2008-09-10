@@ -14,6 +14,7 @@
 form dt, label {
     font-weight: 900;
 }
+legend {margin-left:-999em; position:absolute;}
 
 p.submit {text-align:right; clear:both;}
 
@@ -84,6 +85,16 @@ form .footnote {
 form p.openid {
     margin-top: 6em;
 }
+
+/*WORKS-INDEX -filters*/
+
+form.story-filters {width:12em; background: #ddd; padding: 0.5em; float: right; font-size:0.9em}
+.story-filters dt {margin:0.5em auto ;}
+.story-filters dd { border:1px solid #fff; padding:0.15em 0.25em 0.35em 0}
+.story-filters dd:hover {background:#900; color:#fff;}
+.story-filters dd label {font-weight:normal;}
+
+form.story-filters p.submit {text-align:right;}
 
 /*COMMENTS */
 

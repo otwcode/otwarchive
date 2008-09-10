@@ -1,6 +1,6 @@
 
-<%- form_tag(current_filter_path) do -%>
-  <%- field_set_tag 'Filters' do -%>
+<%- form_tag(current_filter_path, :class => 'story-filters') do -%>
+  <%- field_set_tag 'Filter the works' do -%>
 		<dl class="story-filters">
       <%- for filter in @filters -%>
       <dt><%=h filter.name %></dt>
@@ -12,6 +12,6 @@
         <%- end -%> 
 			<%- end -%>
 		</dl>
-		<p><%= submit_tag "Filter Stories" %></p>
+		<p class="submit"><%= submit_tag "Filter Stories" %></p>
   <%- end -%>
 <%- end -%>

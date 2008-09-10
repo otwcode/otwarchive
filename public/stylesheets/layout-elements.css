@@ -16,7 +16,7 @@
  */
 /* HEADER (MASTHEAD BLOCK)    */
 #header {
-    background: #900 url(../images/header-red.png) bottom left repeat-x;
+    background: #900 url(../images/header-red.png) top left repeat-x;
     font: 600 140% Fertigo, Corbel, Calibri, Candara, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif;
     position: relative;
     margin: 0 0 2.5em 0;
@@ -35,7 +35,8 @@
 }
 
 #login-block {
-    float: right;
+    background: #900 url(../images/header-red.png) top left repeat-x;
+	float: right;
     text-align: left;
     font-size: 75%;
     clear: both;
@@ -55,10 +56,12 @@
     font-weight: 100;
 }
 
+#greeting.logged-out {
+	 margin-top:1em;	
+}
 #login li {
     display: inline;
 }
-
 #search p {
     float: left;
     clear: both;
@@ -247,20 +250,25 @@ ul#main-navigation {
 }
 
 /* WORKS-INDEX  */ 
+
+/*story filters rules are in forms.css */
+
 /*story listing */
-li.story ul {position:relative; margin:0.5em auto; border:1px solid #bbb; padding:0.25em}
+li.story ul {position:relative; margin:0.5em 13em auto auto; border:1px solid #bbb; padding:0.25em}
 li.story ul ul {background:#fff; border:0; padding:0}
 li.story-title-line{float:left; margin:0.75em 1em 0.5em 0; }
 li.story-byline  {float:left; margin:0.475em 0 auto 0.25em;}
+li.story-title-line img {float:left: vertical-align:middle;}
 li.story-title-line p {margin:0; padding:0;}
 li.story-byline { font-size: 150%; font-weight:bolder; }
 li.story-byline a {text-decoration:none}
-li.story-date{text-align:right; color:#777; clear:both; margin:0.5em 0  }
+li.story-date{text-align:right; color:#777; clear:left; margin:0.5em 0  }
 li.story-tags  {clear:left; font-weight: bold; } 
 li.story-tags a {font-weight:normal; text-decoration:none; border-bottom:1px dotted }
-li.story-tags ul li {display:inline; padding-right: 0.4em; line-height:1.75}
+li.story-tags dt, li.story-tags dd {display:inline; padding-right: 0.4em; line-height:1.75}
 li.story-desc { padding: 0 0.4em;   margin: 0.25em 0 1.5em;} 
-
+li.story-tags  {clear:left; font-weight: bold}
+li.story-tags a {font-weight:normal;}
 /*MEDIA-INDEX  (FANDOMS)*/
 .media-index li.category {
     padding: 1em;

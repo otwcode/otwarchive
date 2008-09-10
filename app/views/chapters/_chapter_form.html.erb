@@ -48,23 +48,36 @@
 		  <%- end -%>
     </dl>
     </fieldset>
+	<dl><dd><%= link_to_function(h('Add co-authors?').t, "Element.toggle('co-authors')") %></dd></dl>
 
-      
-    <dl><dd><%= link_to_function(h('Add co-authors?').t, "Element.toggle('co-authors')") %></dd></dl>
-
-    <div id="co-authors">
-      <fieldset title="Add Co-Authors" id="coauthormanage">
-        <dl>
-          <dt><%= f.label :storycoauthor, "Enter co-author name(s):".t %></dt>
-          <dd>
-            <%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
+	    <div id="co-authors">
+	      <fieldset title="Add Co-Authors" id="coauthormanage">
+	        <dl>
+	          <dt><%= f.label :storycoauthor, "Enter co-author name(s):".t %></dt>
+	          <dd>
+	            <%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
+	             			  { :url => {:controller => 'pseuds', :action => 'choose_coauthors'}, :method => :get, :param_name => 'search', 
+	                			:tokens => ',', :min_chars => 2, :skip_style => true } %>
+	          </dd>
+	        </dl>
+	     </fieldset>    
+	     </div>    
+<!--suggest:
+<fieldset>
+<legend>Add Co-Authors</legend>
+<dl>
+<dt><%= link_to_function(h('Add co-authors?').t, "Element.toggle('co-authors')") %></dt>
+<dd id="co-authors">
+<dl>
+<dt><%= f.label :storycoauthor, "Enter co-author name(s):".t %></dt>
+ <dd><%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
              			  { :url => {:controller => 'pseuds', :action => 'choose_coauthors'}, :method => :get, :param_name => 'search', 
                 			:tokens => ',', :min_chars => 2, :skip_style => true } %>
           </dd>
         </dl>
-     </fieldset>    
-     </div>
-   
+</dd>
+</dl>
+-->
     <dl>      
       <dt><%= f.label :summary, "Chapter summary (max %d letters)".t/ArchiveConfig.SUMMARY_MAX %></dt>
       <dd><%= f.text_area :summary, :live => true %></dd>
