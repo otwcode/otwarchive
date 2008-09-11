@@ -11,7 +11,7 @@
 <%- end -%>
 <!-- END navigation -->
 
-<%= render :partial => 'works/meta' %>
+<%= render :partial => 'works/meta', :locals => {:work => @work} %>
   
   <div id="series-and-view-data">
     <%- unless @work.series.blank? -%>

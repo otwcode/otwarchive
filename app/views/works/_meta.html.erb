@@ -1,19 +1,25 @@
-<dl id="story-meta">
+<dl class-"story-meta">
   <%- @tag_categories.each do |category| -%>
-    <dt class="<%= category.display_name.downcase -%>">
-      <%= category.display_name %>:
-    </dt>
-    
-    <% if category.name == "Warnings" && hide_warnings?(@work) -%>
-      <dd class="<%= category.display_name.downcase -%>" id="work_<%= @work.id %>_category_<%= category.id %>">
-        <%= show_warnings_link(@work, category) %>
-      </dd> 
-    <%- else -%>
-      <%- @work.tags.by_category(category).each do |tag| -%>
-      <dd class="<%= category.display_name.downcase -%>">
-        <%= link_to_tag(tag) %> 
+    <%- unless work.tags.by_category(category).blank? -%>
+      <dt class="<%= category.display_name.downcase -%>">
+        <%= category.display_name %>:
+      </dt>
+	    
+      <dd>
+        <% if category.name == "Warnings" && hide_warnings?(work) -%>
+        <ul class="<%= category.display_name.downcase -%>" id="work_<%= work.id %>_category_<%= category.id %>">
+          <li><%= show_warnings_link(work, category) %></li>
+        </ul> 
+        <%- else -%>
+        <ul>
+          <%- work.tags.by_category(category).each do |tag| -%>
+          <li class="<%= category.display_name.downcase -%>">
+            <%= link_to_tag(tag) %> 
+          </li>
+          <%- end -%>
+        </ul>
+        <%- end -%>
       </dd>
-      <%- end -%>
-    <%- end -%> 
+    <%- end -%>
   <%- end -%>
 </dl>

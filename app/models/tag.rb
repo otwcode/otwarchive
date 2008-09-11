@@ -14,8 +14,8 @@ class Tag < ActiveRecord::Base
   validates_uniqueness_of :name
   validates_length_of :name, :maximum => ArchiveConfig.TAG_MAX
   validates_format_of :name, 
-                      :with => /\A[-a-zA-Z0-9 \/?.!''"";\|\]\[}{=~!@#\$%^&()_+]+\z/, 
-                      :message => "tags can only be made up of letters, numbers, spaces and basic punctuation, but not commas, colons, asterisks or angle brackets".t
+                      :with => /\A[-a-zA-Z0-9 \/?.!''"":;\|\]\[}{=~!@#\$%^&()_+]+\z/, 
+                      :message => "tags can only be made up of letters, numbers, spaces and basic punctuation, but not commas, asterisks or angle brackets".t
   
   named_scope :valid, {:conditions => 'banned = 0 OR banned IS NULL'}
   named_scope :by_category, lambda { |*args| {:conditions => "tag_category_id IN (#{args.collect(&:id).join(",")})"}}  

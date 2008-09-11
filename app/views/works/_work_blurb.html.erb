@@ -15,24 +15,7 @@
       <%=h work.created_at.localize("%d %B %Y") %>
     </li>
     <li class="story-tags">
-      <dl>
-        <%- @tag_categories.each do |category| -%>
-          <%- unless work.tags.by_category(category).blank? -%>
-            <dt><%= category.display_name %>:</dt>
-            <%- if category.name == "Warnings" && hide_warnings?(work) -%>
-              <dd id="work_<%= work.id %>_category_<%= category.id %>">
-                <%= show_warnings_link(work, category) %>
-              </dd>                           
-            <%- else -%>
-              <%- work.tags.by_category(category).each do |tag| -%>
-              <dd>
-                <%= link_to_tag(tag) %>
-              </dd>
-              <%- end -%>
-            <%- end -%>
-          <%- end -%>
-        <%- end -%>
-      </dl>
+			<%= render :partial => 'meta', :locals => {:work => work} %>
     </li>
     <li class="story-desc">
       <%= sanitize_and_format_for_display work.summary %>
