@@ -347,12 +347,12 @@ class WorksController < ApplicationController
       if url.empty? 
         flash.now[:error] = "Did you want to enter a URL?"
       else
-        #begin
+        begin
           @work = storyparser.download_and_parse_story(url)
           render :action => :new and return
-        #rescue
-          #flash.now[:error] = "Sorry, but we couldn't read from that URL. :(".t
-        #end
+        rescue
+          flash.now[:error] = "Sorry, but we couldn't read from that URL. :(".t
+        end
       end
       
       render :partial => "upload_work_form", :layout => "application"
