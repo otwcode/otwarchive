@@ -2,34 +2,34 @@
 
 <%= error_messages_for :tag %>
 
-<% form_for(@tag) do |f| %>
+<%- form_for(@tag) do |f| -%>
+  <dl>  
+    <dt><%= f.label :name, 'Name'.t %></dt> 
+    <dd><%= f.text_field("name") %></dd>
+
+    <dt><%= f.check_box("banned") %><%= f.label :banned, 'Banned'.t %></dt>
+    <dd><%=h 'This tag will not show up anywhere'.t %></dd>
+
+    <dt><%= f.check_box("canonical") %><%= f.label :canonical, 'Canonical'.t %></dt>
+    <dd><%=h 'This is the official name for a fandom/pairing/character/etc.'.t %></dd>
+
+    <dt><%= f.check_box("adult") %><%= f.label :adult, 'Adult'.t %></dt>    
+    <dd><%=h 'This tag indicates adult content; any work tagged with this will trigger the "do you agree to see this" page'.t %></dd>
+
+    <dt><%=h 'Category'.t %></dt>
+    <%- TagCategory.ordered(:all).each do |category| -%>
+    <dd><%= f.radio_button("tag_category_id", category.id) %><%= f.label :tag_category_id, category.display_name %></dd>
+    <%- end -%>    
+  </dl>
+  
+  <h3><%=h 'Please be careful!'.t %></h3>
   <p>
-  <%=h 'Name:'.t %> <%= f.text_field("name") %>
+    <%=h "Once you've created a tag you can never change its name, nor can you delete it (although it can be banned. and if it is not banned, and it is not being used to tag anything, or is itself being tagged, it may be purged).".t %>
+    <%=h 'Once you have selected a category, you will not be able to change it to anything other than'.t %> <%= link_to TagCategory.ambiguous.display_name, tag_category_path(TagCategory.ambiguous) %> <%=h 'or'.t %> <%= link_to TagCategory.default.display_name, tag_category_path(TagCategory.default) %>.
   </p>
-  <p>
-  <%= f.check_box("banned") %><%=h 'Banned'.t %>    (<%=h 'this tag will not show up anywhere'.t %>)
-  <br />
-  <%= f.check_box("canonical") %><%=h 'Canonical'.t %>    (<%=h 'this tag will show up in selections and lists'.t %>)
-  <br />
-  <%= f.check_box("adult") %><%=h 'Adult'.t %>    (<%=h 'this tag indicates adult content, any work tagged with this will trigger the "do you agree to see this" page'.t %>)
-  </p>
-  <p>
-  <% TagCategory.ordered(:all).each do |category| -%>
-    <%= f.radio_button("tag_category_id", category.id) %><%= category.display_name %>
-  <% end -%>
-  </p>
-  <p>
-  <%=h 'Please be careful.'.t %>
-  </p>
-  <p><%=h "Once you've created a tag you can never change its name, nor can you delete it (although it can be banned. and if it is not banned, and it is not being used to tag anything, or is itself being tagged, it may be purged).".t %>
-  </p>
-  <p>
-  <%=h 'Once you have selected a category, you will not be able to change it to anything other than'.t %> <%= link_to TagCategory.ambiguous.display_name, tag_category_path(TagCategory.ambiguous) %> <%=h 'or'.t %> <%= link_to TagCategory.default.display_name, tag_category_path(TagCategory.default) %>
-  </p>
-  <%= f.submit %>
-  <% end %>
-  <p>
-  <%=h 'If, after you have created a tag, you need to change its banned or canonical status, go to the'.t %> <%= link_to 'category page'.t, tag_categories_path %> <%=h 'and select the tags link in the category it is in.'.t %>
-  </p>
+  
+  <p><%= f.submit %></p>
+<%- end -%>
+
 <%= tag_wrangler_footer %>
 
