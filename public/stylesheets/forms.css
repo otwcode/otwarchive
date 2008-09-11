@@ -1,157 +1,53 @@
 /* === FORMS RULES === */
 /* === These notes should be stripped out and copied to style book before launch === */
-/*Forms follow two models:
- * (1) definition lists for paired data: dl dt dd. Most forms use this structure.
- * (2) paragraphs with breaks for forms which cannot be logically broken down into property value pairs: p br.
- * All forms are labelled: label.
- * All forms can be selected through the main div's unique class
- * Sessions forms can be selected through the main div's general class "session"
- * User pages forms can be selected through the main div's general class "sidebar"
- ===*/
-/* these rules are for two column forms when needed:  form dt{float:left; clear:left;margin:0 1em 0 0;} form dd{clear:right; margin:0;} */
+/*Forms follow two models:* (1) definition lists for paired data:dl dt dd. Most forms use this structure.
+* (2) paragraphs with breaks for forms which cannot be logically broken down into property value pairs:p br.
+* All forms are labelled:label.
+* All forms can be selected through the main div's unique class
+* Sessions forms can be selected through the main div's general class "session"
+* User pages forms can be selected through the main div's general class "sidebar"
+===*/
+/* these rules are for two column forms when needed:form dt	{ float:left; clear:left; margin:0 1em 0 0; }
+form dd	{ clear:right; margin:0; }
+*/
 /* GLOBAL */
-form dt, label {
-    font-weight: 900;
-}
+form dt, label	{ font-weight:900; }
+legend	{ margin-left:-999em; position:absolute; }
+p.submit	{ text-align:right; clear:both; }
 
-legend {
-    margin-left: -999em;
-    position: absolute;
-}
-
-p.submit {
-    text-align: right;
-    clear: both;
-}
 /*ADMIN */
-admin_session-new dt {
-    clear: left;
-    float: left;
-    width: 6em;
-    margin: 0.25em 0 0.125em;
-    padding: .25em 0 0 .5em;
-}
+admin_session-new dt	{ width:6em; float:left; clear:left; margin:0.25em 0 0.125em; padding:.25em 0 0 .5em; }
+admin_session-new dd	{ float:left; margin:0.25em 0 0.125em; }
 
-admin_session-new dd {
-    float: left;
-    margin: 0.25em 0 0.125em;
-} /* USERS */
-.users-new form label {
-    font-weight: 100;
-}
+/* USERS */
+.users-new form label	{ font-weight:100; }
+.users-new form .important	{ font-weight:900; }
+.users-new form p.submit	{ text-align:right}
+.users-new form .submit input	{ font-size:1.125em; }
 
-.users-new form .important {
-    font-weight: 900;
-}
-
-.users-new form p.submit {
-    text-align: right
-}
-
-.users-new form .submit input {
-    font-size: 1.125em;
-}
 /*SESSIONS (front front pages - login, create, etc)*/
-img#openid {
-    margin-left: -20px;
-    vertical-align: middle;
-}
+img#openid	{ margin-left:-20px; vertical-align:middle; }
+.session form	{ margin-bottom:1.5em; padding-bottom:1.5em; border-bottom:1px solid; }
+.session label	{ font-weight:100; }
+.session input#login	{ float:none; }
+.session input#login, .session input#password, .session input#openid_url	{ width:24em; }
+.session form input.submit	{ font-size:1.125em; margin:0 0 0 9em; }
+.footnote	{ font-size:0.825em; }
+form .footnote	{ font-size:0.75em; }
+form p.openid	{ margin-top:6em; }
 
-.session form {
-    border-bottom: 1px solid;
-    margin-bottom: 1.5em;
-    padding-bottom: 1.5em;
-}
-
-.session label {
-    font-weight: 100;
-}
-
-.session input#login {
-    float: none;
-}
-
-.session input#login, .session input#password, .session input#openid_url {
-    width: 24em
-}
-
-.session form input.submit {
-    margin: 0 0 0 9em;
-    font-size: 1.125em;
-}
-
-.footnote {
-    font-size: 0.825em;
-}
-
-form .footnote {
-    font-size: 0.75em;
-}
-
-form p.openid {
-    margin-top: 6em;
-}
 /*WORKS-INDEX -filters*/
-form.story-filters {
-    width: 12em;
-    background: #ddd;
-    padding: 0.5em;
-    float: right;
-    font-size: 0.75em
-}
+form.story-filters	{ background:#ddd; font-size:0.8625em; width:12em; float:right; margin-top:1.125em; padding:0.5em; border:1px solid #fffef9;}
+.story-filters dt	{ margin:0.5em auto; border-bottom:1px solid #fffef9; }
+.story-filters dt:hover	{ color:#fffef9; background:#777; }
+.story-filters dd label	{ font-weight:normal; }
+form.story-filters p.submit	{ text-align:right; }
 
-form.story-filters {width:12em; background: #ddd; padding: 0.5em; float: right; font-size:0.9em}
-.story-filters dt {text-decoration:underline; margin:0.5em auto ;}
-.story-filters dt:hover {color:#900;}
-.story-filters dd label {font-weight:normal;}
-.story-filters h4 {
-    margin: 0.5em auto;
-	font: 600 1em Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif;
-}
-
-.story-filters li {
-    border: 1px solid #fff;
-    padding: 0.125em 0.25em 0.375em 0
-}
-
-.story-filters li:hover {
-    background: #900;
-    color: #fff;
-}
-
-.story-filters li label {
-    font-weight: normal;
-}
-
-form.story-filters p.submit {
-    text-align: right;
-}
 /*COMMENTS */
-#comment_form_div dl {
-    position: relative;
-}
+#comment_form_div dl	{ position:relative; }
+#comment_form_div dt	{ clear:left; float:left; width:6em; margin:0.25em 0 0.125em; padding:.25em 0 0 .5em; }
+#comment_form_div dd	{ float:left; margin:0.5em 0 0.125em; }
+textarea#comment_content	{ width:32em !important; height:11em !important}
+#comment_form_div p.submit		{ width:32em}
 
-#comment_form_div dt {
-    clear: left;
-    float: left;
-    width: 6em;
-    margin: 0.25em 0 0.125em;
-    padding: .25em 0 0 .5em;
-}
-
-#comment_form_div dd {
-    float: left;
-    margin: 0.5em 0 0.125em;
-}
-
-textarea#comment_content {
-    width: 32em !important;
-    height: 11em !important
-}
-
-#comment_form_div p.submit {
-    width: 32em
-}
-/* GLOBALIZE (in footer)  you can find this in globalize.css*/
-
-
+/* GLOBALIZE (in footer) you can find this in globalize.css*/

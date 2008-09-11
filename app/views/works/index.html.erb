@@ -2,12 +2,12 @@
 
 <%= render :partial => 'filters' %>
 
-<p>
-	Sort by: 
-	<%= sort_link 'Title', :title -%> |
-	<%= sort_link 'Date', :date -%> |
-	<%= sort_link 'Word Count', :word_count -%> 	
-</p>
+<dl class="navigation">
+	<dt>Sort by</dt> 
+	<dd><%= sort_link 'Title', :title -%></dd>
+	<dd><%= sort_link 'Date', :date -%></dd>
+	<dd><%= sort_link 'Word Count', :word_count -%></dd>	
+</dl>
 
 <ul class="story-list">
   <% for work in @works %>

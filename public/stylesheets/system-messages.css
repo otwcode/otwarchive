@@ -36,6 +36,7 @@
     background: #edefd1;
     border: 1px solid #dfdfc2;
 }
+.story-meta .warning	{ background:transparent !important; border:0 !important; }
 
 .error {
     background: #efd1d1;
@@ -69,7 +70,7 @@ span.symbol {
 }
 
 span.symbol span {
-    color: #fff;
+    color: #fffef9;
     text-decoration: none;
     text-align: center;
     display: block;

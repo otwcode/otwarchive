@@ -1,12 +1,4 @@
-ul.navigation {
-    border-bottom: 1px solid;
-    text-align: right;
-}
-
-ul.navigation li {
-    display: inline;
-    padding: 0 0 0.5em 0.5em;
-}
+.comment .navigation {text-align:right;}
 
 div.comment {
     position: relative;

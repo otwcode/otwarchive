@@ -10,8 +10,8 @@
 				  <%= password_field_tag 'password', '' %>
 				</dd>
 			</dl>
-			<p class="submit"><%= submit_tag 'Login'.t, :class => 'submit' %></p>
 			<p class="footnote">
 				<%= check_box_tag('remember_me', '1', false) %>
 				<%= label_tag 'remember_me', 'Remember me'.t  %><br /><%= link_to 'forgot password?'.t, new_password_path %>
 			</p>
+			<p class="submit"><%= submit_tag 'Login'.t, :class => 'submit' %></p>

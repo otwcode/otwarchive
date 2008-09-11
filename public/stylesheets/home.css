@@ -3,67 +3,67 @@
     margin: 1em 2em;
 }
 
-.home h1 {
+#main.home h1 {
     font-family: "Gill Sans", Georgia, Verdana, sans-serif;
     text-align: left;
     float: left;
     width: 50%;
-    margin: 1.3em 0 auto
+    margin: 1.25em 0 0.25em;
+	border-bottom:0;
 }
 
-.home h2 {
-    font: 100 80% "Gill Sans", Georgia, Verdana, sans-serif;
-    margin: 0 auto 2em;
+#main.home h2 {
+    font: 100 0.75em "Gill Sans", Georgia, Verdana, sans-serif;
+    margin: 0.125em auto 2em;
     clear: left;
 }
 /* LOGIN BOX
  *could be qualified ( #main.home #signin ) and integrated into forms.css
  */
-#signin {
+#main.home #signin {
     float: right;
-    font-size: 80%;
+    font-size: 0.75em;
+border:1px solid;
 }
 
-#signin dl {
+#main.home #signin dl {
     position: relative;
     float: right
 }
 
-#signin dt {
+#main.home #signin dt {
     clear: left;
     float: left;
     width: 6em;
-    margin: 0.25em 0 0.15em;
+    margin: 0.25em 0 0.125em;
     padding: .25em 0 0 .5em;
 }
 
-#signin dd {
+#main.home #signin dd {
     float: left;
     margin: 0 .25em 0;
     padding: 0;
     display: block;
 }
 
-#signin p.footnote {
-    margin: 0;
-    text-align: left;
-    font-size: 75%;
-    float: right;
-    margin: 0 26% 0 0
+#main.home #signin p.footnote {
+    margin: 0 2.25em 0;
+    font-size: 0.625em;
+
 }
 
-#signin p.submit {
+#main.home #signin p.submit {
     text-align: right;
     clear: both;
     margin: 0;
     float: right
 }
 
-#signin label {
+#main.home label {
     font-weight: 100;
 }
 
-#signin img#openid {
+#main.home img#openid {
     vertical-align: middle;
     margin: .25em 0 .25em 0;
     padding: 0;
@@ -75,7 +75,7 @@ blockquote#quotebox {
     margin: 1em auto;
     clear: both;
     background: #eaeaea;
-    font: oblique 100 115% Fertigo, Corbel, Calibri, Candara, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif;
+    font: oblique 100 1.125em Fertigo, Corbel, Calibri, Candara, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif;
     border: 1px solid #dee1e3
 }
 

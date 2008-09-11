@@ -4,5 +4,7 @@
 
 <%= render :partial => 'comments/comment_form', :locals => {:comment => @comment, :commentable => @comment.commentable, :button_name => 'Update'.t}%>
 
-<%= link_to 'Show'.t, @comment %> |
-<%= link_to 'Back'.t, @comment.commentable %>
+<ul class="navigation">
+	<li><%= link_to 'Show'.t, @comment %></li>
+	<li><%= link_to 'Back'.t, @comment.commentable %></li>
+</ul>

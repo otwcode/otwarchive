@@ -1,4 +1,4 @@
-body { background-color: #fff; color: #333; }
+body { background-color: #fffef9; color: #333; }
 
 body, p, ol, ul, td {
   font-family: verdana, arial, helvetica, sans-serif;
@@ -13,8 +13,8 @@ pre {
 }
 
 a { color: #000; }
-a:visited { color: #666; }
-a:hover { color: #fff; background-color:#000; }
+a:visited { color: #777; }
+a:hover { color: #fffef9; background-color:#000; }
 
 .fieldWithErrors {
   padding: 0.125em;
@@ -33,12 +33,12 @@ a:hover { color: #fff; background-color:#000; }
 
 #errorExplanation h2 {
   text-align: left;
-  font-weight: bold;
+  font-weight: 600;
   padding: 5px 5px 5px 15px;
   font-size: 12px;
   margin: -7px;
   background-color: #c00;
-  color: #fff;
+  color: #fffef9;
 }
 
 #errorExplanation p {
@@ -61,7 +61,7 @@ div.progressBar {
 }
 
 div.progressBar div.border {
-  background-color: #fff;
+  background-color: #fffef9;
   border: 1px solid gray;
   width: 100%;
 }

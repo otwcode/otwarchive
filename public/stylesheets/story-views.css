@@ -1,363 +1,99 @@
 /* STORY VIEWS, NOT YET OVERHAULED. WORKING ON NOW*/
 /*
- set story styles
- */
-#chapters {
-    font-family: Candara, Corbel, Geneva, Verdana, Helvetica, Arial, sans-serif;
-}
+set story styles
+*/
+#chapters	{ font-family:Candara, Corbel, Geneva, Verdana, Helvetica, Arial, sans-serif; padding:1.5em 3.5em;}
+#chapters a, #chapters a:link	{ color:#111; text-decoration:none; border-bottom:1px dotted #777; padding-right:0.125em}
+#chapters a:hover	{ border-bottom:0}
+#chapters a:visited	{ text-decoration:underline}
 
-#chapters a, #chapters a:link {
-    color: #111;
-    text-decoration: none;
-    border-bottom: 1px dotted #666;
-    padding-right: 0.125em
-}
-
-#chapters a:hover {
-    border-bottom: 0
-}
-
-#chapters a:visited {
-    text-decoration: underline
-}
 /*lists*/
-#chapters dl {
-    font-size: 1em;
-    margin: 1.5em 0;
-    border-bottom: 0.25em double #555;
-}
+#chapters dl	{ font-size:1em; margin:1.5em 0; border-bottom:0.25em double #777; }
+#chapters dt	{ font-weight:bold; }
+#chapters dd	{ line-height:1.5; font-size:0.825em; margin-top:1.25em; margin-bottom:1.25em; text-indent:3em; }
+#chapters dd p	{ margin:0; padding:0; }
+#chapters ul	{ margin:1.125em auto; padding:0 1em; text-indent:2em; }
+#chapters ul li	{ list-style-type:disc}
+#chapters ol	{ margin:1.125em auto; padding:0 1.5em; text-indent:1.5em; }
+#chapters ol li	{ list-style-type:decimal}
+#chapters li	{ font-weight:normal; }
 
-#chapters dt {
-    font-weight: bold;
-}
-
-#chapters dd {
-    line-height: 1.5;
-    font-size: 0.825em;
-    margin-top: 1.25em;
-    margin-bottom: 1.25em;
-    text-indent: 3em;
-}
-
-#chapters dd p {
-    margin: 0;
-    padding: 0;
-}
-
-#chapters ul {
-    padding: 0 1em;
-    text-indent: 2em;
-}
-
-#chapters ul li {
-    list-style-type: disc
-}
-
-#chapters ol {
-    padding: 0 1.5em;
-    text-indent: 1.5em;
-}
-
-#chapters ol li {
-    list-style-type: decimal
-}
-
-#chapters li {
-    font-weight: normal;
-}
 /*headings */
-#chapters h1 {
-    font-family: Constantia, Palatino, Georgia, serif;
-    text-align: center;
-}
+#chapters h1	{ font-family:Constantia, Palatino, Georgia, serif; text-align:center; }
+#chapters h2	{ font-variant:normal; letter-spacing:-.125em; text-align:left; color:#333; margin:1em 0; }
+#chapters h3	{ font-style:oblique; font-weight:100; background:#444; color:#fffef9; border-bottom:0.25em double #fffef9; padding:0 0.125em 0 0.125em}
+#chapters h4	{ font-variant:small-caps}
+#chapters h5	{ font-weight:bolder}
+#chapters h6	{ font-weight:bolder; }
 
-#chapters h2 {
-    font-variant: normal;
-    letter-spacing: -.125em;
-    text-align: left;
-    color: #333;
-    margin: 1em 0;
-}
-
-#chapters h3 {
-    font-style: oblique;
-    font-weight: 100;
-    background: #444;
-    color: #fff;
-    border-bottom: 0.25em double #fff;
-    padding: 0 0.125em 0 0.125em
-}
-
-#chapters h4 {
-    font-variant: small-caps
-}
-
-#chapters h5 {
-    font-weight: bolder
-}
-
-#chapters h6 {
-    font-weight: bolder;
-}
 /*quotes and stresses*/
-#chapters blockquote {
-    border-left: 2px solid #999;
-    padding: 0.75em;
-    margin: auto auto auto 1.5em;
-    font-size: 1em;
-}
+#chapters blockquote	{ border-left:2px solid #999; padding:0.75em; margin:auto auto auto 1.5em; font-size:1em; }
+#chapters blockquote blockquote	{ border:0; padding:0.25em; }
+#chapters hr	{ width:33%; margin:auto; border:1px solid; }
+.firstletter	{ font:3em Georgia, serif; }
+.flashback	{ font-style:oblique; }
+.shouting	{ font-variant:small-caps}
 
-#chapters blockquote blockquote {
-    border: 0;
-    padding: 0.25em;
-}
+/*STORY PAGE LAYOUT ELEMENTS*/
+#main.works-show ul#navigation	{ margin:0.75em 0; text-align:right}
+.works-show #navigation li	{ display:inline; }
+.works-show #navigation li.go-back	{ padding:0 0.25em 0 0; display:block; float:left}
 
-#chapters hr {
-    width: 33%;
-    margin: auto;
-    border: 1px solid;
-}
+/* STORY META DATA */
+#main.works-show dl.story-meta	{ position:relative; background:#ddd; border:1px solid #ccc; padding:0.5em}
+#main.works-show .story-meta dt	{ float:left; clear:left; width:10em; margin:0 1em 0 0; }
+#main.works-show .story-meta dd	{ clear:right; position:relative; }
+#main.works-show .story-meta dd.rating	{ margin:1em 0 0}
+#main.works-show .story-meta dd p	{ clear:both; }
+#main.works-show .story-meta dd li	{ display:inline; padding:0 0.5em 0 0; }
 
-.firstletter {
-    font: 3em Georgia, serif;
-}
+.story-meta .warning	{ background:transparent !important; border:0 !important; }
+/*pos should go in system-messages.css?*/
 
-.flashback {
-    font-style: oblique;
-}
+/*STORY PREFACE - TITLE AND NOTES */
 
-.shouting {
-    font-variant: small-caps
-}
+#story-preface	{ border-bottom:3px double; margin-bottom:1.5em; }
+#story-preface blockquote	{ font-size:1em; }
+#story-preface h2	{ font:800 2.25em Cambria, Constantia, Palatino, Georgia, sans-serif; margin:1.5em auto 0}
 
-#main.works-show ul#navigation {
-    margin: 0.75em 0;
-    text-align: right
-}
-
-.works-show #navigation li {
-    display: inline;
-}
-
-.works-show #navigation li.go-back {
-    padding: 0 0.25em 0 0;
-    display: block;
-    float: left
-}
-
-dl#story-meta {
-    position: relative;
-    background: #ddd;
-    border: 1px solid #ccc;
-    padding: 0.5em
-}
-
-#story-meta dt {
-    float: left;
-    clear: left;
-    width: 10em;
-    margin: 0 1em 0 0;
-}
-
-#story-meta dd {
-    clear: right;
-}
-
-dl #story-meta dd.rating {
-    margin: 1em 0 0
-}
-
-#story-meta dd p {
-    clear: both;
-}
-
-#story-meta dd li {
-    display: inline;
-    padding: 0 0.5em 0 0;
-}
-
-#story-meta dt.warning, #story-meta dd.warning {
-    background: transparent !important;
-    border: 0 !important;
-} /*pos should go in system-messages.css?*/
-#story-preface {
-    border-bottom: 3px double;
-    margin-bottom: 1.5em;
-}
-
-#story-preface blockquote {
-    font-size: 1em;
-}
-
-#story-preface h2 {
-    font: 800 2.25em Cambria, Constantia, Palatino, Georgia, sans-serif;
-    margin: 1.5em auto 0
-}
 /* SERIES */
-#series-and-view-data {
-    clear: both
-}
+#series-and-view-data	{ clear:both}
+dl#series-meta	{ position:relative; }
+#series-meta dt	{ float:left; clear:left; width:10em; margin:0 1em 0 0; }
+#series-meta dd	{ clear:right; }
+#series-meta dd p	{ clear:both; }
+.series-show ul	{ clear:both; }
+.series-show ul li	{ display:inline; padding-right:0.5em}
+.series-show ul#series-story-list li	{ display:block; padding:0; }
 
-dl#series-meta {
-    position: relative;
-}
 
-#series-meta dt {
-    float: left;
-    clear: left;
-    width: 10em;
-    margin: 0 1em 0 0;
-}
-
-#series-meta dd {
-    clear: right;
-}
-
-#series-meta dd p {
-    clear: both;
-}
-
-.series-show ul {
-    clear: both;
-}
-
-.series-show ul li {
-    display: inline;
-    padding-right: 0.5em
-}
-
-.series-show ul#series-story-list li {
-    display: block;
-    padding: 0;
-}
-/* Post and Preview Story styles    */
-.textareafield {
-    margin-bottom: 1.125em;
-}
-
-.required {
-    color: #900;
-}
-
-#story-form label {
-    margin: 0.625em 0 0;
-}
-
-.storyinputfield {
-    width: 18.75em;
-    text-align: left;
-    margin: 0 0 1em;
-}
-
-#story-form textarea {
-    width: 37.5em;
-}
-
-.metadata-field {
-    height: 6.25em;
-}
-
-.number-field {
-    width: 3.125em;
-}
-
-.storytextfield {
-    margin: 0.625em 0;
-}
-
-.moreinfoicon {
-    vertical-align: top;
-    margin: 0 0 0.625em 1.5em;
-}
-
-#chaptermanage {
-    color: #0a0;
-    margin: 0 0 0.625em;
-}
-
-#seriesmanage {
-    color: #0a0;
-    margin: 1em 0 0.625em;
-}
-
-#previewpane {
-    border: 1px solid #000;
-    height: auto;
-    width: 50em;
-    padding: 2em;
-}
-
-.chapter-content {
-    padding: 3em;
-}
-
-.story-edit {
-    background-color: #ffe5af;
-    border: 2px solid #ffdb8b;
-    padding: 0.5em;
-}
-
-textarea.story-edit-notes {
-    display: block;
-}
-
-.story-edit-text {
-    width: 100%;
-}
-
-.chapter-control {
-    font-size: 0.75em;
-    color: #4F709F;
-}
-
-.chapter-control a {
-    color: #4F709F;
-}
-/* Temporary bookmark content    */
-#dynamic-bookmark {
-    position: fixed;
-    background-color: #fff;
-    border: 2px solid #000;
-    height: 18.75em;
-    width: 31.25em;
-    bottom: 2em;
-    right: 2em;
-    z-index: 42;
-    padding: 1em 2em;
-}
-
-#bookmark_notes {
-    width: 28.125em;
-    height: 6.25em;
-}
-
-#close-popup {
-    position: absolute;
-    top: 0.375em;
-    right: 0.625em;
-}
-
-.chapter-position-list {
-    list-style-type: none;
-    padding: 0.625em;
-}
-
-.story-edit-meta, .story-edit-notes {
-    width: 80%;
-}
-
-ul.story-list li.story-tags {
-    display: inline;
-}
-
-.story-show h2, .story-edit-title {
-    font-size: 1.5em;
-    font-weight: 700;
-    text-align: center;
-}
-
+/* Post and Preview Story styles  UNSORTED 11/09/08*/
+.textareafield	{ margin-bottom:1.125em; }
+.required	{ color:#900; }
+#story-form label	{ margin:0.625em 0 0; }
+.storyinputfield	{ width:18.75em; text-align:left; margin:0 0 1em; }
+#story-form textarea	{ width:37.5em; }
+.metadata-field	{ height:6.25em; }
+.number-field	{ width:3.125em; }
+.storytextfield	{ margin:0.625em 0; }
+.moreinfoicon	{ vertical-align:top; margin:0 0 0.625em 1.5em; }
+#chaptermanage	{ color:#0a0; margin:0 0 0.625em; }
+#seriesmanage	{ color:#0a0; margin:1em 0 0.625em; }
+#previewpane	{ border:1px solid; height:auto; width:50em; padding:2em; }
+.chapter-content	{ padding:3em; }
+.story-edit	{ background-color:#ffe5af; border:2px solid #ffdb8b; padding:0.5em; }
+textarea.story-edit-notes	{ display:block; }
+.story-edit-text	{ width:100%; }
+.chapter-control	{ font-size:0.75em; color:#4F709F; }
+.chapter-control a	{ color:#4F709F; }
+/* Temporary bookmark content */
+#dynamic-bookmark	{ position:fixed; background:#fffef9; border:2px solid; height:18.75em; width:31.25em; bottom:2em; right:2em; z-index:42; padding:1em 2em; }
+#bookmark_notes	{ width:28.125em; height:6.25em; }
+#close-popup	{ position:absolute; top:0.375em; right:0.625em; }
+.chapter-position-list	{ list-style-type:none; padding:0.625em; }
+.story-edit-meta, .story-edit-notes	{ width:80%; }
+ul.story-list li.story-tags	{ display:inline; }
+.story-show h2, .story-edit-title	{ font-size:1.5em; font-weight:700; text-align:center; }
 /* where are these rules affecting?
-.story-show .story-author, .story-title, .chapter-title {
-    text-align: center;
-} */
-
+.story-show .story-author, .story-title, .chapter-title	{ text-align:center; }
+*/

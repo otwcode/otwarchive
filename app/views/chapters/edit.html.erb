@@ -4,5 +4,7 @@
 
 <%= render :partial => 'chapter_form', :locals => { :chapter => @chapter, :button_text => "Update".t } %>
 
-<%= link_to 'Show'.t, [@work, @chapter] %> |
-<%= link_to 'Back'.t, work_chapters_path %>
+<ul class="navigation">
+	<li><%= link_to 'Show'.t, [@work, @chapter] %></li> 
+	<li><%= link_to 'Back'.t, work_chapters_path %></li>
+</ul>

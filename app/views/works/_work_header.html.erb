@@ -4,7 +4,7 @@
     <li class="go-back"><%= link_to '&lt;&lt; ' + h('Back to story list').t, works_path -%></li>
   	
   	<% if is_author_of?(@work) -%>
-  	<li><%= link_to h('Edit').t, edit_work_path(@work) %>&nbsp;|</li>
+  	<li><%= link_to h('Edit').t, edit_work_path(@work) %></li>
   	<li><%= link_to h('Delete').t, @work, :confirm => h('Are you sure?').t, :method => :delete -%></li>
   	<% end -%>
   </ul>
@@ -20,11 +20,10 @@
       </span>
     <%- end -%> 
     
-    <span id="chapter-view-option">
       <%- if @work.number_of_posted_chapters > 1 -%>
-		<ul>
           <%- if @chapters.length == 1 -%> <!-- we're reading chapter-by-chapter -->
-			<li><%= link_to "View entire work".t, @work -%></li>
+			<h4><%= link_to "View entire work".t, @work -%></h4>
+			<ul class="navigation">
 			<li><%= next_and_previous_links(@work, @chapter) -%></li>
           <%- else -%>
 		    <li>
@@ -34,7 +33,6 @@
           <%- end -%>
 		</ul>
       <%- end -%>
-    </span>
   </div>
 
   <div id="story-preface"><h2 class="story-title">

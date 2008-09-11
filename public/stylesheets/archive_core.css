@@ -1,206 +1,47 @@
-/*MEYERS RESET.***********************************************do not edit   */
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
-    border: 0;
-    outline: 0;
-    font-weight: inherit;
-    font-style: inherit;
-    font-size: 100%;
-    font-family: inherit;
-    vertical-align: baseline;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-/************************************************end of uneditable rules    */
-@font-face {
+/*MEYERS RESET.***********************************************do not edit */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, 
+blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, 
+em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, 
+dl, dt, dd, ol, ul, li, fieldset, form, label, legend, 
+table, caption, tbody, tfoot, thead, tr, th, td	
+{ border: 0; outline: 0; font-weight: inherit; font-style: inherit; font-size: 100%; font-family: inherit; vertical-align: baseline; list-style: none; margin: 0; padding: 0; }
+/************************************************end of uneditable rules */
 
-font-family:
-    "Fertigo";
+@font-face	{ font-family: "Fertigo"; src: url(Fertigo.otf); }
 
-src:
-    url(Fertigo.otf)
-}
+body	{ color: #222; background: #fffef9; font: 100%/1.125 Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; }
 
-body {
-    color: #111;
-    background: #fff;
-    font: 100% Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif;
-    line-height: 1.25em;
-}
+a, a:link	{ color: #222; }
+a:hover	{ color: #999; }
+a:visited	{ color: #777; }
+a img	{ border: 0; }
+a.tag	{ color: #111; }
+a.tag:hover	{ color: #fffef9; background: #900}
 
-a, a:link {
-    color: #111;
-}
+body p	{ font-size: 0.875em; line-height: 1.286;  }
 
-a:hover {
-    color: #999;
-}
+h1, h2, h3, h4, h5, h6	{ font-family: Fertigo, Cambria, Constantia, Palatino, Georgia, sans-serif; font-weight: 400; text-transform: capitalize}
+h1	{ font-size: 2.25em; line-height: 0.5; margin: 1.125em 0; }
+h2	{ font-size: 1.5em; line-height: 0.75; margin: .75em 0; }
+h3	{ font-size: 1.125em; line-height: 1; margin: .5625em 0; }
+h4	{ font-size: 1em; line-height: 1.125; margin: .5em 0; }
+h5	{ font-size: 0.75em; line-height: 1.5; margin: .375em 0; }
+h6	{ font-size: 0.625em; line-height: 1.8; margin: .3125em 0; }
 
-a:visited {
-    color: #777;
-}
+hr	{ margin: 0.75em auto; border-bottom: 3px double; }
+hr.clear, .clearboth	{ clear: both; height: 0; border: 0; }
 
-a img {
-    border: 0;
-}
+blockquote	{ font: 100 1em/1.125 Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; margin: 1.5em; }
+pre, kbd, tt, code	{ font: normal 0.75em consolas, courier, monospace; margin: auto; padding: 0.25em; }
+strong, b, .important	{ font-weight: 900; }
+em, cite, i	{ font-style: oblique; }
+cite em, em cite, cite i, i cite, i em, em i, em em, i i, cite cite	{ font-style: normal; }
+em cite, i cite	{ text-decoration: underline; }
+abbr, acronym	{ font-variant: small-caps; }
 
-a.tag {
-    color: #900;
-}
-
-a.tag:hover {
-    color: #fff;
-    background: #900
-}
-
-body p {
-    font-size: 0.875em;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-family: Fertigo, Cambria, Constantia, Palatino, Georgia, sans-serif;
-    font-weight: 400;
-}
-
-h1 {
-    font-size: 2.25em;
-	margin: 1.125em 0;
-}
-
-h2 {
-    font-size: 1.5em;
-	margin: .75em 0;
-}
-
-h3 {
-    font-size: 1.125em;
-	margin: .5625em 0;
-}
-
-h4 {
-    font-size: 1em;
-	margin: .5em 0;
-}
-
-h5 {
-    font-size: 0.75em;
-	margin: .375em 0;
-}
-
-h6 {
-    font-size: 0.625em;
-	margin: .3125em 0;
-}
-
-hr {
-    border-bottom: 3px double;
-    margin: 0.75em auto;
-}
-
-hr.clear {
-    clear: both;
-    height: 0;
-    border: 0;
-}
-
-pre, kbd, tt, code {
-    font: normal 0.75em consolas, courier, monospace;
-    margin: auto;
-    padding: 0.25em;
-}
-
-strong, b, .important {
-    font-weight: 900;
-}
-
-em, cite, i {
-    font-style: oblique;
-}
-
-cite em, em cite, cite i, i cite, i em, em i {
-    font-style: normal;
-}
-
-em cite, i cite {
-    text-decoration: underline;
-}
 /* TABLES AND LISTS */
-table {
-    border: 1px solid #ddd;
-    padding: 0.75em;
-}
-
-ul#skiplinks, caption {
-    margin-left: -999em;
-    position: absolute;
-}
-
-caption, th, td {
-    text-align: left;
-}
-
-th {
-    font-weight: 900;
-}
-
-td th {
-    padding-right: 3em;
-}
-
-blockquote:before, blockquote:after, q:before, q:after {
-    content: "";
-}
-
-blockquote, q {
-    quotes: "" "";
-}
-/*SOME UNORGANIZED CLASSES  */
-.clearboth {
-    clear: both;
-}
-
-.works-show hr {
-    border-bottom: 1px solid #999;
-    height: 0;
-    width: 50%;
-}
-/* UNSEMANTIC BODGES, TO BE SORTED THROUGH 31/08/08  I think now mostly confined to works/_work_form. awaiting rewrite.*/
-.list-left {
-    float: left;
-}
-
-.list-right {
-    float: right;
-}
-
-.field-left {
-    float: left;
-    width: 350px;
-}
-
-.field-right {
-    float: right;
-    width: 21.875em;
-}
-
-.clearbothdrop {
-    clear: both;
-    margin-bottom: 1.5em;
-}
-/*PAGINATION STYLING    */
-.pagination {
-    text-align: center;
-    padding: 0.25em;
-    clear: both;
-}
-/* SOME POORLY GROUPED RULES, TO BE SORTED AND PUT BACK INTO DOCUMENT FLOW 31/08/08  */
-#work_navigation li, #story-meta li {
-    list-style-type: none;
-}
-
-.leftmargin, .comment {
-    margin-left: 3.125em;
-}
-
-.nomargin, #coauthormanage {
-}
+table	{ padding: 0.75em; border: 1px solid #ddd; }
+caption	{ margin-left: -999em; position: absolute; }
+caption, th, td	{ text-align: left; }
+th	{ font-weight: 900; }
+td th	{ padding-right: 3em; }

@@ -13,12 +13,14 @@
     <td><%=h pseud.is_default %></td>
     <td><%= link_to 'Show'.t, [@user, pseud] %>
 	<% if current_user == @user -%>
-     | <%= link_to 'Edit'.t, [:edit, @user, pseud] -%>
-     | <%= link_to 'Orphan Stories'.t, {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} -%>
-		 <% unless @user.login == pseud.name || pseud.is_default -%>
- 		 | <%= link_to 'Destroy'.t, [@user, pseud], :confirm => 'Are you sure?'.t, :method => :delete %>
+     <ul class="navigation">
+		<li><%= link_to 'Edit'.t, [:edit, @user, pseud] -%></li>
+     	<li><%= link_to 'Orphan Stories'.t, {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} -%>
+		 <% unless @user.login == pseud.name || pseud.is_default -%></li>
+ 		 <li><%= link_to 'Destroy'.t, [@user, pseud], :confirm => 'Are you sure?'.t, :method => :delete %></li>
 		 <% end -%>
 	<% end -%>
+	</ul>
 	</td>
   </tr>
 <% end %>

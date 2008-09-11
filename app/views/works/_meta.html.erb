@@ -1,4 +1,4 @@
-<dl class-"story-meta">
+<dl class="story-meta">
   <%- @tag_categories.each do |category| -%>
     <%- unless work.tags.by_category(category).blank? -%>
       <dt class="<%= category.display_name.downcase -%>">

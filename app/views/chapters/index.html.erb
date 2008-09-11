@@ -6,10 +6,10 @@
   <% end -%>
 <% end %>
 
-<br />
-
 <%- if is_author_of?(@work) -%>
-  <%= link_to 'New chapter'.t, new_work_chapter_path(@work) %>
+<ul class="navigation">
+  <li><%= link_to 'New chapter'.t, new_work_chapter_path(@work) %></li>
+</ul>
 <%- end -%> 
 
 <!-- BEGIN comment section -->

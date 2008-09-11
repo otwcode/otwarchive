@@ -53,9 +53,11 @@
       	<ul>
       	  <%- for serial in @serial_works -%>
       	    <li>
-      	      <%= link_to serial.series.title, serial.series %> |  
-      	      <%= link_to 'Remove'.t, serial, :confirm => 'Are you sure?'.t, :method => :delete %> | 
-      	      <%= link_to 'Delete'.t, serial.series, :confirm => 'Are you sure?'.t, :method => :delete %>
+      	      <ul class="navigation">
+				<li><%= link_to serial.series.title, serial.series %></li> 
+      	      	<li><%= link_to 'Remove'.t, serial, :confirm => 'Are you sure?'.t, :method => :delete %></li> 
+      	      	<li><%= link_to 'Delete'.t, serial.series, :confirm => 'Are you sure?'.t, :method => :delete %></li>
+			  </ul>
       	    </li>
       	  <%- end -%>
       	  </ul>

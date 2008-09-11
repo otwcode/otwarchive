@@ -6,15 +6,16 @@
 
   <!-- chapter management -->  
   <%- if is_author_of?(@work) -%>
-   <span class="chapter-control">
+   <ul class="navigation chapter-control">
    (<% unless chapter.posted? -%>
-    <%= link_to 'post'.t, [:post, @work, chapter], :method => :post -%> |
+    <li><%= link_to 'post'.t, [:post, @work, chapter], :method => :post -%> </li>
     <%- end -%>
-    <%= link_to 'edit'.t, [:edit, @work, chapter] -%> 
+    <li><%= link_to 'edit'.t, [:edit, @work, chapter] -%> 
     <%- if @work.chapters.count > 1 -%>
-      | <%= link_to 'delete'.t, [@work, chapter], :confirm => 'Are you sure?'.t, :method => :delete %> )
+      </li>
+ 	<li><%= link_to 'delete'.t, [@work, chapter], :confirm => 'Are you sure?'.t, :method => :delete %> )</li>
     <%- end -%>
-	</span>	
+	</ul>	
   <%- end -%>
 
   <!-- only display byline if different from the main byline -->
