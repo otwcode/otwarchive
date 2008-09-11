@@ -15,90 +15,94 @@
  * and are displayed in the view with <%= flash_div :error, :warning, :notice -%>
  */
 .flash {
-    margin: 0.5em auto;
-    padding: 1em;
+margin: 0.5em auto;
+padding: 1em;
 }
 
 .flash_icon {
-    border: 0;
-    float: left;
-    width: 50px;
-    padding: 0 0.5em 0 0;
+border: 0;
+float: left;
+width: 50px;
+padding: 0 0.5em 0 0;
 }
 
 .notice {
-    background: #d1e1ef;
-    border: 1px solid #c2d2df;
+background: #d1e1ef;
+border: 1px solid #c2d2df;
 }
 
 .warning {
-    font-weight: 900;
-    background: #edefd1;
-    border: 1px solid #dfdfc2;
+font-weight: 900;
+background: #edefd1;
+border: 1px solid #dfdfc2;
 }
-.story-meta .warning	{ background:transparent !important; border:0 !important; }
+.story-meta .warning {
+background: transparent !important;
+border: 0 !important;
+}
 
 .error {
-    background: #efd1d1;
-    border: 1px solid #dfc2c2;
+background: #efd1d1;
+border: 1px solid #dfc2c2;
 }
 
 .error ul, .error h2, .error p {
-    margin: 0;
-    padding: 0
+margin: 0;
+padding: 0
 }
 
 .error ul {
-    margin: auto;
-    width: 90%
+margin: auto;
+width: 90%
 }
 
 .error ul li {
-    margin: 0.25em;
-    list-style-type: disc;
-    text-indent: 1em
+margin: 0.25em;
+list-style-type: disc;
+text-indent: 1em
 }
 /* SYMBOLS */
 span.symbol {
-    padding: 0.125em;
-    border: 1px solid;
-    display: block;
-    height: 1em;
-    width: 1em;
-    -moz-border-radius: 0.7em;
-    -webkit-border-radius: 0.7em;
+border: 1px solid;
+height: 1em;
+width: 1em;
+-moz-border-radius: 0.75em;
+-webkit-border-radius: 0.75em;
 }
 
 span.symbol span {
-    color: #fffef9;
-    text-decoration: none;
-    text-align: center;
-    display: block;
-    height: 1em;
-    width: 1em;
+color: #fffef9;
+height: 1em;
+width: 1em;
+padding: 0.5em;
+}
+
+span.symbol span a {
+text-decoration: none;
+border: none
 }
 
 span.question {
-    background: top left no-repeat #2b547c;
-    border-color: #2a547c;
+background: #2b547c;
+border-color: #2a547c;
 }
 /* A COLLECTION OF CLASSES TO BE USED AS APPROPRIATE. MINIMAL STYLING
  *
  */
 .important {
-    font-weight: 900;
+font-weight: 900;
 }
 
 .message {
-    font-size: 1em;
+font-size: 1em;
 }
 
 .required {
-    color: #900;
+color: #900;
 }
 
 .footnote {
-    font-size: 0.75em;
+font-size: 0.75em;
 }
 /* Rails will automatically add the errorExplanation and fieldWithErrors divs
  * after doing validation of models - just make sure you're using f.label
@@ -113,41 +117,41 @@ span.question {
  * form .error ...
  */
 .errorexplanation, .errorExplanation {
-    background-color: #efd1d1;
-    border: 2px solid #af2020;
-    margin: 0.5em 0 0.25em;
-    padding: 1em;
+background-color: #efd1d1;
+border: 2px solid #af2020;
+margin: 0.5em 0 0.25em;
+padding: 1em;
 }
 
 .errorexplanation ul, .errorExplanation ul {
-    list-style-type: disc
+list-style-type: disc
 }
 
 #errorexplanationnone ul {
-    display: none;
+display: none;
 }
 
 .fieldwitherrors {
-    width: 31.25em;
-    color: #af2020;
+width: 31.25em;
+color: #af2020;
 }
 
 .fieldwitherrors ul {
-    color: #af2020;
-    font-size: 0.75em;
-    margin-bottom: 0;
+color: #af2020;
+font-size: 0.75em;
+margin-bottom: 0;
 }
 
 .fieldwitherrors label {
-    color: #af2020;
-    background-color: #efd1d1;
+color: #af2020;
+background-color: #efd1d1;
 }
 
 .fieldwitherrors input {
-    border: 2px solid #af2020;
+border: 2px solid #af2020;
     /* Debug Style (development only)    */
 #debug {
-        border: 1px dashed;
-        margin: 10%;
-        padding: 0.625em;
+border: 1px dashed;
+margin: 10%;
+padding: 0.625em;
 }
