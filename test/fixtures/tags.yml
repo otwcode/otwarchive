@@ -1,0 +1,168 @@
+General Audience:
+  tag_category: Rating
+  name: General Audience
+  canonical: true
+  banned: false
+  adult: false
+
+Teen and Up:
+  tag_category: Rating
+  name: Teen and Up
+  canonical: true
+  banned: false
+  adult: false
+
+Explicit:
+  tag_category: Rating
+  name: Explicit
+  canonical: true
+  banned: false
+  adult: true
+	
+Mature:
+  tag_category: Rating
+  name: Mature
+  canonical: true
+  banned: false
+  adult: true
+
+Not Rated:
+  tag_category: Rating
+  name: Not Rated
+  canonical: true
+  banned: false
+  adult: true
+
+Gen:
+  tag_category: Genre
+  name: gen
+  canonical: true
+  banned: false
+  adult: false
+
+Het:
+  tag_category: Genre
+  name: het
+  canonical: true
+  banned: false
+  adult: false
+	
+Slash:
+  tag_category: Genre
+  name: slash
+  canonical: true
+  banned: false
+  adult: false
+	
+Other:
+  tag_category: Genre
+  name: other
+  canonical: true
+  banned: false
+  adult: false
+	
+Chooses Not To Warn:
+  tag_category: Warnings
+  name: chooses not to warn
+  canonical: true
+  banned: false
+  adult: false
+	
+Chooses Not To Warn For Some Content:
+  tag_category: Warnings
+  name: chooses not to warn for some content
+  canonical: true
+  banned: false
+  adult: false
+	
+No Warnings Apply:
+  tag_category: Warnings
+  name: no warnings apply
+  canonical: true
+  banned: false
+  adult: false
+	
+Extreme Violence:
+  tag_category: Warnings
+  name: extreme violence
+  canonical: true
+  banned: false
+  adult: false
+	
+Major Character Death:
+  tag_category: Warnings
+  name: major character death
+  canonical: true
+  banned: false
+  adult: false
+	
+Rape:
+  tag_category: Warnings
+  name: rape
+  canonical: true
+  banned: false
+  adult: false
+	
+Underage:
+  tag_category: Warnings
+  name: underage
+  canonical: true
+  banned: false
+  adult: false
+	
+TV Shows:
+  tag_category: Media
+  name: TV Shows
+  canonical: true
+  banned: false
+  adult: false
+	
+Movies:
+  tag_category: Media
+  name: Movies
+  canonical: true
+  banned: false
+  adult: false
+	
+Books:
+  tag_category: Media
+  name: Books
+  canonical: true
+  banned: false
+  adult: false
+	
+Comics & Manga:
+  tag_category: Media
+  name: Comics & Manga
+  canonical: true
+  banned: false
+  adult: false
+	
+Cartoons & Anime:
+  tag_category: Media
+  name: Cartoons & Anime
+  canonical: true
+  banned: false
+  adult: false
+	
+Music & Bands:
+  tag_category: Media
+  name: Music & Bands
+  canonical: true
+  banned: false
+  adult: false
+	
+Real People & Celebrities:
+  tag_category: Media
+  name: Real People & Celebrities
+  canonical: true
+  banned: false
+  adult: false
+	
+Other Media:
+  tag_category: Media
+  name: Other Media
+  canonical: true
+  banned: false
+  adult: false
+	

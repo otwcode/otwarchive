@@ -1,0 +1,41 @@
+Ambiguous:
+  name: ambiguous
+  display_name: Ambiguous
+	
+Default:
+  name: default
+  display_name: Tags
+  official: true
+
+Fandoms:
+  name: Fandoms
+  required: true
+  official: true
+
+Media:
+  name: Media
+
+Rating:
+  name: Rating
+  required: true
+  official: true
+  exclusive: true
+	
+Warnings:
+  name: Warnings
+  required: true
+  official: true
+
+Characters:
+  name: Characters
+  official: true
+
+Pairings:
+  name: Pairings
+  official: true
+	
+Genre:
+  name: Genre
+  required: true
+  official: true
+  exclusive: true
