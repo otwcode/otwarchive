@@ -46,6 +46,7 @@ class WorksController < ApplicationController
   end
 
   # Sets values for @work, @chapter, @coauthor_results, @pseuds, and @selected_pseuds
+  # and @tags[category]
   def set_instance_variables
     if params[:pseud] && params[:pseud][:byline] && params[:work][:author_attributes]
       params[:work][:author_attributes][:byline] = params[:pseud][:byline]
@@ -276,6 +277,7 @@ class WorksController < ApplicationController
     else
       saved = true
       @chapter.save || saved = false
+      logger.info "*************** chapter: " + @chapter.to_yaml
       @work.posted = true 
       @work.save || saved = false
       @work.update_minor_version
@@ -288,13 +290,13 @@ class WorksController < ApplicationController
         redirect_to(@work)
       else
         @work.errors.add(:base, "Please double-check the length of your story: it cannot be blank and must be less than 16MB in size.".t) unless @chapter.valid?
-        if !@work.has_required_tags?
-          @preview_mode = true
-      	  @chapters = [@chapter]
-          render :action => "preview"
-        else
-          render :action => :new
-        end
+#        if !@work.has_required_tags?
+#          @preview_mode = true
+#      	  @chapters = [@chapter]
+#          render :action => "preview"
+#        else
+          redirect_to :action => :new
+#        end
       end
     end 
   end
@@ -349,7 +351,15 @@ class WorksController < ApplicationController
       else
         begin
           @work = storyparser.download_and_parse_story(url)
-          render :action => :new and return
+          @chapter = @work.chapters.first
+          @work.pseuds << current_user.default_pseud
+          @chapter.pseuds << current_user.default_pseud
+          if @chapter.save && @work.save
+            flash[:notice] = "Work successfully uploaded!".t
+            redirect_to edit_work_path(@work) and return
+          else
+            render :action => :new and return
+          end
         rescue
           flash.now[:error] = "Sorry, but we couldn't read from that URL. :(".t
         end

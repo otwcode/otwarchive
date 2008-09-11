@@ -107,9 +107,9 @@ class StoryParser
       meta = {}
       metapatterns = META_PATTERNS
       # add in all the tags -- COmmented out until works are fixed -- NN
-      #TagCategory.official.each do |c|
-      #  metapatterns.merge!({c.name.to_sym => c.name.singularize})
-      #end
+      TagCategory.official.each do |c|
+        metapatterns.merge!({c.name.to_sym => c.name.singularize})
+      end
       metapatterns.each do |metaname, pattern|
         puts "m: #{metaname}, p: #{pattern}"
         # what this does is look for pattern: (whatever) 

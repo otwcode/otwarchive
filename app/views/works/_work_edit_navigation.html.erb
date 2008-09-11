@@ -1,0 +1,27 @@
+<ul class="navigation">
+	<li>
+	  <%= link_to "Add chapter".t, new_work_chapter_path(@work) %>
+	</li>
+  <%- if @chapters.size > 1 -%>
+  	<li>
+    	Edit chapter:
+      <% for chapter in @chapters %>
+        <%= link_to h(chapter.position), [:edit, @work, chapter] %> 
+      <% end %> 
+    </li>
+  	<li>
+      <%= link_to "Manage chapters".t, manage_work_chapters_path(@work) %>
+  	</li>
+  <%- end -%>
+	<li>
+    <% unless (@work.pseuds - current_user.pseuds).empty? %>
+       <%= link_to "Remove me as author".t, { :action => "edit", :remove => "me"}, :confirm => 'This will remove you from all chapters as well. Are you sure?'.t %>
+    <% end %>
+	</li>
+	<li>
+    <%= link_to "Orphan work".t, {:controller => 'orphans', :action => 'new', :work_id => @work.id} %>
+	</li>
+	<li>
+    <%= link_to 'Delete work'.t, @work, :confirm => 'Are you sure?'.t, :method => :delete -%>
+	</li>
+</ul>					

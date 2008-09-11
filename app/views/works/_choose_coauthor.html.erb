@@ -2,27 +2,13 @@
 
 <%- form_for(@work) do |f| -%>
   
-  <%= render :partial => 'pseuds/coauthor_form', :locals => {:creation => @work} %>
+  <%= render :partial => 'pseuds/coauthor_form', :locals => {:creation => @work, :form => f} %>
   
-  <select name="work[author_attributes][ids][]" multiple="multiple" style="display : none;">
-    <%= options_from_collection_for_select(@work.authors, :id, :name, @work.authors.collect {|pseud| pseud.id.to_i }) %>
-  </select> 
-
-  <%= f.hidden_field :title, :value => "#{@work.title}" %>
-  <%= f.hidden_field :summary, :value => "#{@work.summary}" %>
-  <%= f.hidden_field :notes, :value => "#{@work.notes}" %>
-
-  <% fields_for_associated('work', @work.chapters.first) do |c| %>
-    <%= c.hidden_field :content, :value => "#{@work.chapters.first.content}" %>
-  <%- end -%>
-
-  <%= f.hidden_field :expected_number_of_chapters, :value => "#{@work.expected_number_of_chapters}" %>
+  <%= render :partial => 'hidden_fields', :locals => {:form => f} -%>
 
   <p class="field-right">
     <%= submit_tag 'Preview'.t, :name => 'preview_button' %>
     <%= submit_tag 'Cancel'.t, :name => 'cancel_coauthor_button' %> 
   </p>
-
-  <p class="clearbothdrop"></p>
 
 <% end %>

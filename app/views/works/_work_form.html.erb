@@ -1,149 +1,182 @@
-<!--
-	This form needs to be completely overhauled. 
-    Form controls need to be wrapped in block level containers, 
-	either dl,dt.dd or p br. All fields need labelling. 
-	All the presentational classes (list-left etc) must be removed 
-	and the whole thing must be validated. Extra points for fieldsets and legends.
--->
-  <p>
-  <%= link_to_function(h('Upload from an existing URL?').t, 
-			"Element.toggle('upload-work-form'); Element.toggle('story-form')", 
-			:href => url_for(:controller => :work, :action => :upload_form)) -%>
-  </p>
+<p>
+<%= link_to_function(h('Upload from an existing URL?').t, 
+		"Element.toggle('upload-work-form'); Element.toggle('story-form')", 
+		:href => url_for(:controller => :work, :action => :upload_form)) -%>
+</p>
+
+<div id="upload-work-form" style="display: none;"> 
+  <%= render :partial => 'works/upload_work_form' -%>   
+</div>
+
+<div id="story-form">
+<%- form_for(@work, :html => {:name => "storyForm"}) do |f| -%> 
+
+  <%= render :partial => 'work_tags_form' -%>
   
-  <div id="upload-work-form" style="display: none;"> 
-    <%= render :partial => 'works/upload_work_form' -%>   
-  </div>
+  <fieldset>
+    <legend><%= 'Story Preface'.t -%></legend>
+    <dl id="story-preface">
+      <dt class="story-title">
+        <%= f.label :title, h("Add Title".t), :class => "required" %>
+      </dt>
+      <dd class="story-title">
+        <%= f.text_field :title, :class => "storyinputfield" %>
+        <%= link_to_help "story-title" -%>
+      </dd>
+      
+		    <% if @pseuds.size > 1 -%>
+      <dt class="story-author">
+        <%= label :pseud, :id, h("Select author/pseudonym(s)").t %>
+      </dt>
+      <dd class="story-author">
+     	  <select name="work[author_attributes][ids][]" multiple="multiple">
+          <%= options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds) %>
+        </select>	 
+      </dd>
+      <dd class="story-author">
+        <%= link_to h('Create pseud?').t, new_user_pseud_path(current_user) %>
+      </dd>  
+      <% end -%>
+      
+      <dt class="story-author">
+        <%= link_to_function(h('Add co-authors?').t, "Element.toggle('co-authors')") %>          
+      </dt>
 
-  <div id="story-form">
-  <%- form_for(@work, :html => {:name => "storyForm"}) do |f| -%> 
-  <dl>    
-        <dt><%= f.label :title, h("Story Title*".t), :class => "required" %></dt>
-        <dd><%= f.text_field :title, :class => "storyinputfield" %>
-        <%= link_to_help "story-title" -%></dd>
+      <div id="co-authors"> 	  
+     	  <dt class="story-addauthor">
+     	    <%= f.label :storycoauthor, 'Enter co-author name(s):'.t %></label>
+        </dt>
+        <dd class="story-addauthor">
+         	<%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
+              { :url => {:controller => 'pseuds', :action => 'choose_coauthors'}, :method => :get, :param_name => 'search', 
+                :tokens => ',', :min_chars => 2, :skip_style => true } %>            
+        </dd>
+      </div>
+      
+      <dt class="story-summary">
+        <%= f.label :summary, "Summary (max %d letters)"/ArchiveConfig.SUMMARY_MAX %>
+      </dt>
+      <dd class="story-summary">
+        <%= f.text_area :summary, :class => "summary-field" %>
+      </dd>
 
-      <!-- Chaptered checkbox (work_is_wip) -->
-      <!-- Checking this box causes the expected number of chapters box to appear; unchecking it causes it to disappear. -->
-      <input type="checkbox" name="isWip"  
-      onclick="showChapteredStoryOptions()" <%- if @work.chaptered? -%>checked="checked"<%- end -%>/> 
-      <%=h 'Do you plan to have multiple chapters?'.t %>
+      <dt class="story-notes">
+        <%= f.label :notes, "Notes (max %d letters)"/ArchiveConfig.NOTES_MAX %>
+      </dt>
+      <dd class="story-notes">
+        <%= f.text_area :notes, :class => "notes-field" %>
+      </dd>
 
-      <!-- Series checkbox (storyseriescheck) -->
-      <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear. -->
-      <input type="checkbox" id="storyseriescheck" name="storyseriescheck"  onclick="showWorkSeriesOptions()" 
-	    <%- unless @work.series.blank? -%>checked="checked"<%- end -%>/>
-		<%=h 'Is this part of a series?'.t %><br />
+      <dt class="story-parent">
+        <%=h "If your story is a remix or was inspired by another story in the archive, copy and paste that story's url below:".t %>
+      </dt>
+      <dd class="story-parent">
+        <%= f.text_field :parent_url %>
+      </dd>
 
-    </p>
+    	<!-- Privacy dropdown (storyprivacy) -->
+    	<dt class="story-restricted">
+        <%= f.label :restricted, h("Only make my story visible to registered users").t %>
+      </dt>
+      <dd class="story-restricted">
+        <%= f.check_box :restricted %>
+        <%= link_to_help "registered-users" -%>
+      </dd>
 
-    <!-- Toggles on with series checkbox -->
-    <div id="seriesmanage" class="field-right">
-      <% fields_for "work[series_attributes]" do |s| %>
+      <dt class="story-is_serial">
+        <%=h 'Is this part of a series?'.t %>
+      </dt>
+   	  <dd>
+        <input type="checkbox" id="storyseriescheck" name="storyseriescheck"  onclick="showWorkSeriesOptions()" 
+          <%- unless @work.series.blank? -%>checked="checked"<%- end -%>/>
+      </dd>
+    </dl>
+  </fieldset>
 
-        <%= s.label 'series_id', h('Choose one of your existing series:').t %><br /> 
-        <%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>
-        <%= link_to_help "choosing-series" -%><br />
-        <%= s.label :title, h("Or add a new one:").t %><br />
-        <%= s.text_field :title, :class => "storyinputfield" %>
+  <!-- Series checkbox (storyseriescheck) -->
+  <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear. -->
+    
 
-    	<%- end -%>
-    	
-    	<%- unless @serial_works.blank? -%>
-      	<%= "Current Series:".t %>
-      	<ul>
+  <!-- Toggles on with series checkbox -->
+  <div id="seriesmanage">
+    <fieldset>
+      <legend><%= 'Manage Series'.t -%></legend>
+      <dl>
+        <% fields_for "work[series_attributes]" do |s| %>
+          <dt><%= s.label 'series_id', h('Choose one of your existing series:').t %></dt>
+          <dd>
+            <%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>
+            <%= link_to_help "choosing-series" -%>
+          </dd>
+          <dt><%= s.label :title, h("Or add a new one:").t %></dt>
+          <dd><%= s.text_field :title, :class => "storyinputfield" %></dd>
+    	  <%- end -%>
+      	
+      	<%- unless @serial_works.blank? -%>
+      	  <dt><%= 'Current Series'.t -%></dt>
       	  <%- for serial in @serial_works -%>
-      	    <li>
+      	    <dd>
       	      <ul class="navigation">
-				<li><%= link_to serial.series.title, serial.series %></li> 
+				        <li><%= link_to serial.series.title, serial.series %></li> 
       	      	<li><%= link_to 'Remove'.t, serial, :confirm => 'Are you sure?'.t, :method => :delete %></li> 
       	      	<li><%= link_to 'Delete'.t, serial.series, :confirm => 'Are you sure?'.t, :method => :delete %></li>
-			  </ul>
-      	    </li>
-      	  <%- end -%>
-      	  </ul>
-    	<%- end -%>
-    </div>
+			        </ul>
+      	    </dd>
+    	    <%- end -%>
+    	  <%- end -%>          
+      </dl>
+    </fieldset>  
+  </div>
 
-    <p class="clearbothdrop"></p>
-    
+
+  <% fields_for_associated('work', @work.chapters.first) do |c| %>
+    <fieldset>
+      <legend><%= "Add Chapters".t -%></legend>
+      <dl>
+        <!-- Chaptered checkbox (work_is_wip) -->
+        <!-- Checking this box causes the expected number of chapters box to appear; unchecking it causes it to disappear. -->
+        <dt class="story-is_wip">
+          <%=h 'Does this work have multiple chapters?'.t %>
+        </dt>
+        <dd class="story-is_wip">
+          <input type="checkbox" name="isWip"  
+           onclick="showChapteredStoryOptions()" <%- if @work.chaptered? -%>checked="checked"<%- end -%>/>
+        </dd>        
+      </dl>
+          
+      <!-- Number of chapters (work_expected_number_of_chapters) -->
+      <div id="number-of-chapters">
+        <p>
+          <%=h 'Chapter 1 of'.t %> <%= f.text_field :wip_length, :class => "number-field" %> 
+          <%=h 'Title:'.t %> <%= c.text_field :title %>
+        </p>
+      </div>          
+    </fieldset>
+
     <!-- Story text field (chapter_attributes_content) -->
-  	<% fields_for_associated('work', @work.chapters.first) do |c| %>
-    
-    <!-- Number of chapters (work_expected_number_of_chapters) -->
-    <div id="number-of-chapters">
+    <fieldset>
+      <legend><%= 'Story Text'.t -%></legend>
       <p>
-        <%=h 'Chapter 1 of'.t %> <%= f.text_field :wip_length, :class => "number-field" %> <%=h 'Title:'.t %> <%= c.text_field :title %>
+        <%= c.label :content, h("Story, in plain text with limited HTML*").t, :class => "required" %>
       </p>
-    </div>    
+      <p class="rtf-html-switch">
+    	  <% use_tinymce -%>
+        <span><a href="javascript:addEditor('content');"><%=h 'Rich text'.t %></a></span>
+        <span><a href="javascript:removeEditor('content');">HTML</a></span>
+      </p>      
+      <p>
+    		<%= c.text_area :content, :class => "mce-editor", :id => "content" %>
+      </p>      
+    </fieldset>
+  <%- end -%>
 
-    <p>
-      <%= c.label :content, h("Story, in plain text with limited HTML*").t, :class => "required" %><br />
-    	<% use_tinymce -%>
-		<a href="javascript:addEditor('content');"><%=h 'Rich text'.t %></a>  <a href="javascript:removeEditor('content');"><%=h 'HTML'.t %></a><br />
-		<%= c.text_area :content, :class => "mce-editor", :id => "content" %>
-    </p>
-
-    <!-- Author dropdown (pseud_id) - hidden if user has only one pseud -->
-		<% if @pseuds.size > 1 -%>
-  	  <p class="field-left">
-  	<%- else -%>
-		  <p style="display:none;">
-		<%- end -%>	
-  	  <%= label :pseud, :id, h("Select author/pseudonym(s)").t %><br />
-   	  <select name="work[author_attributes][ids][]" multiple="multiple">
-        <%= options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds) %>
-      </select>	 
-  	  </p>
-		
-		<% if @pseuds.size > 1 -%>
-      <p class="field-right"> 
-        <%= link_to h('Create pseud?').t, new_user_pseud_path(current_user) %><br />
-		<%- else -%>
-		  <p class="field-left">
-		<%- end -%>		  
-        <%= link_to_function(h('Add co-authors?').t, "Element.toggle('co-authors')") %>
-      </p>
-	
-  	<p class="clearboth"></p>
-
-    <div id="co-authors"> 	  
-      <p id="coauthormanage">
-      	  <span class="storylabel"><%= f.label :storycoauthor, 'Enter co-author name(s):'.t %></label></span>
-       	  <%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
-              { :url => {:controller => 'pseuds', :action => 'choose_coauthors'}, :method => :get, :param_name => 'search', 
-                :tokens => ',', :min_chars => 2, :skip_style => true } %>
-      </p>                   
-    </div>
-
-  	<p class="clearboth"></p> 
-	
-  	<!-- Privacy dropdown (storyprivacy) -->
-  	<p>
-      <%= f.check_box :restricted %>
-      <%= f.label :restricted, h("Only make my story visible to registered users").t %>
-      <%= link_to_help "registered-users" -%><br /> 
-    </p>
-	
-    <p>
-      <%= f.label :summary, "Summary (max %d letters)"/ArchiveConfig.SUMMARY_MAX %><br />
-      <%= f.text_area :summary, :class => "summary-field" %>
-    </p>
-
-    <p>
-      <%= f.label :notes, "Notes (max %d letters)"/ArchiveConfig.NOTES_MAX %><br />
-      <%= f.text_area :notes, :class => "notes-field" %> 
-    </p>
-	<%- end -%>
-	
-	<p><%=h "If your story is a remix or was inspired by another story in the archive, copy and paste that story's url below:".t %><br />
-	<%= f.text_field :parent_url %></p>
-
-    <p class="field-right">
+  <fieldset>
+    <legend><%= 'Post Story'.t -%></legend>
+    <p class="submit">
       <%= submit_tag 'Preview'.t, :name => 'preview_button' %>
       <%= submit_tag 'Cancel'.t, :name => 'cancel_button' %>
     </p> 
-    
-  <%- end -%>
+  </fieldset>
+<%- end -%>
 
-  <p class="clearboth"></p> 
 </div>

@@ -8,58 +8,19 @@
 
 <%- form_for(@work) do |f| -%>
 
-  <select name="work[author_attributes][ids][]" multiple="multiple" style="display : none;">
-	<%= options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds) %>  
-  </select>
+  <%= render :partial => 'hidden_fields', :locals => {:form => f} -%>
 
-  <%= f.hidden_field :title, :value => "#{@work.title}" %>
-  <%= f.hidden_field :summary, :value => "#{@work.summary}" %>
-  <%= f.hidden_field :notes, :value => "#{@work.notes}" %>
-
-  <% fields_for_associated('work', @chapter) do |c| %>
-    <%= c.hidden_field :content, :value => "#{@chapter.content}" %>
-  <%- end -%>
-
-  <%= f.hidden_field :expected_number_of_chapters, :value => "#{@work.expected_number_of_chapters}" %>
-  <%= f.hidden_field :restricted, :value => "#{@work.restricted}" %>
-
-	<p>
-  <!-- Tags -->
- 
-	 <span class="required"><%=h '* Required field'.t %></span> <%= link_to_help "required-field" -%>
-	 <p>
-		<span class="field-left">
-		  <% TagCategory.official.each do |category| %>
-        <% if category.required -%>
-          <span class="required storylabel">
-        <% else-%>
-          <span class="storylabel">
-        <% end -%>
-        <%= category.display_name %>
-          </span>
-        <% if category.exclusive %>
-          <%= collection_select(:work, category.name.to_sym, TagCategory.official_tags(category.name), :name, :name) %>		
-        <% else %>
-          <%= text_field_with_auto_complete :work, category.name.to_sym, { :size => 50 }, 
-            { :url => { :controller => 'tags', :action => 'index', :tag_category_id => category.id}, :method => :get, :param_name => 'search', 
-                        :tokens => ',', :min_chars => 2, :skip_style => true } %>
-        <% end %>
-        <br />
-	    <% end %>		
-		</span>
-	</p>
-  <p class="clearbothdrop"></p>
-
-  <p class="field-right">
-	<% if @work.posted? %>
-		<%= submit_tag 'Update', :name => 'update_button' %>
-	<% else %>
-		<%= submit_tag 'Post', :name => 'post_button' %>
-	<% end %>
-    <%= submit_tag 'Edit', :name => 'edit_button' %>
-    <%= submit_tag 'Cancel', :name => 'cancel_button' %> 
-  </p>
-
-  <p class="clearbothdrop"></p>
+  <fieldset>
+    <legend><%= "Post Story".t -%></legend>
+    <p class="submit">
+  	<% if @work.posted? %>
+  		<%= submit_tag 'Update', :name => 'update_button' %>
+  	<% else %>
+  		<%= submit_tag 'Post', :name => 'post_button' %>
+  	<% end %>
+      <%= submit_tag 'Edit', :name => 'edit_button' %>
+      <%= submit_tag 'Cancel', :name => 'cancel_button' %> 
+    </p>
+  </fieldset>
 
 <% end %>

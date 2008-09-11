@@ -65,6 +65,8 @@ module TaggingExtensions
         tag_array = []
       else
         new_tags = tag_string.split(ArchiveConfig.DELIMITER).collect do |tag_name|
+          tag_name.gsub!(/^\s*/, "")
+          tag_name.gsub!(/\s*$/, "")
           tag = Tag.find_or_create_by_name(tag_name)
           if tag.tag_category == nil
             tag.tag_category = category

@@ -1,6 +1,4 @@
-class Work < ActiveRecord::Base
-  include HtmlFormatter
-  
+class Work < ActiveRecord::Base  
   has_many :chapters, :dependent => :destroy
   validates_associated :chapters
 
@@ -280,14 +278,55 @@ class Work < ActiveRecord::Base
   begin
     TagCategory.official.each do |c|
       define_method(c.name){tag_string(c)}
-      define_method(c.name+'='){|tag_name| tag_with(c.name.to_sym => tag_name)}
+      define_method(c.name+'=') do |tag_name| 
+        if self.new_record?
+          if @tags_to_tag_with
+            @tags_to_tag_with.merge!({c.name.to_sym => tag_name})
+          else
+            @tags_to_tag_with = {c.name.to_sym => tag_name}
+          end
+        else
+          tag_with(c.name.to_sym => tag_name)
+        end
+      end
     end 
   rescue
     define_method('ambiguous'){tag_string('ambiguous')}
-    define_method('ambiguous='){|tag_name| tag_with(:ambiguous => tag_name)}
+    define_method('ambiguous=') do |tag_name| 
+      if self.new_record?
+        if @tags_to_tag_with
+          @tags_to_tag_with.merge!({:ambiguous => tag_name})
+        else
+          @tags_to_tag_with = {:ambiguous => tag_name}
+        end
+      else
+        tag_with(:ambiguous => tag_name)
+      end      
+    end
+    
     define_method('default'){tag_string('default')}
-    define_method('default='){|tag_name| tag_with(:default => tag_name)}
+    define_method('default=') do |tag_name| 
+      if self.new_record?
+        if @tags_to_tag_with
+          @tags_to_tag_with.merge!({:default => tag_name})
+        else
+          @tags_to_tag_with = {:default => tag_name}
+        end
+      else
+        tag_with(:default => tag_name)
+      end      
+    end
   end
+
+  after_create :tag_after_create
+  def tag_after_create
+    if @tags_to_tag_with
+      @tags_to_tag_with.each do |category, tag|
+        tag_with(category => tag)
+      end
+    end
+  end
+  
   
   # Set the value of word_count to reflect the length of the chapter content
   def set_word_count
