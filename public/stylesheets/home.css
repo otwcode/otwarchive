@@ -22,8 +22,7 @@
  */
 #main.home #signin {
     float: right;
-    font-size: 0.75em;
-border:1px solid;
+	border:1px solid;
 }
 
 #main.home #signin dl {
@@ -48,7 +47,7 @@ border:1px solid;
 
 #main.home #signin p.footnote {
     margin: 0 2.25em 0;
-    font-size: 0.625em;
+    font-size: 0.75em;
 
 }
 

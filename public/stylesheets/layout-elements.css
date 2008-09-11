@@ -23,10 +23,13 @@ ul.navigation li, .navigation dd { display: inline; padding: 0 0.5em; border-lef
 /* HEADER (MASTHEAD BLOCK) */
 #header  {  background: #900 url(../images/header-red.png) top left repeat-x; font-family: Fertigo, Cambria, Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; margin: 0 0 2.5em 0; position: relative; }
 #header h1 { color: #fffef9; font-size: 1.5em; float: left; margin: 1em 0 -2em 1em; }
+#header h1 a, #header h1 a:visited {color:#fffef9;}
+#header h1 a:hover { color:#900;}
 #header a { font-weight: 600; text-decoration: none; }
 
 #login-block { background: #900 url(../images/header-red.png) top left repeat-x; color: #fffef9; font-size: 0.75em; text-align: left; width: 20em; float: right; clear: both; }
 #login-block a:link, #login-block a:visited { color: #fffef9; }
+#login-block a:hover {color:#900;}
 #login-block ul { padding-right: 0.25em; }
 
 #greeting li { font-weight: 100; }

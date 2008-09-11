@@ -9,7 +9,7 @@
    <ul class="navigation chapter-control">
    (<% unless chapter.posted? -%>
     <li><%= link_to 'post'.t, [:post, @work, chapter], :method => :post -%> </li>
-    <%- end -%>
+    <%- end -%>	
     <li><%= link_to 'edit'.t, [:edit, @work, chapter] -%> 
     <%- if @work.chapters.count > 1 -%>
       </li>

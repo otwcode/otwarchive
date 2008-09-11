@@ -19,7 +19,7 @@ set story styles
 #chapters li	{ font-weight:normal; }
 
 /*headings */
-#chapters h1	{ font-family:Constantia, Palatino, Georgia, serif; text-align:center; }
+#chapters h1	{ font-family:Cambria, Constantia, Palatino, Georgia, serif; text-align:center; }
 #chapters h2	{ font-variant:normal; letter-spacing:-.125em; text-align:left; color:#333; margin:1em 0; }
 #chapters h3	{ font-style:oblique; font-weight:100; background:#444; color:#fffef9; border-bottom:0.25em double #fffef9; padding:0 0.125em 0 0.125em}
 #chapters h4	{ font-variant:small-caps}
@@ -47,9 +47,6 @@ set story styles
 #main.works-show .story-meta dd p	{ clear:both; }
 #main.works-show .story-meta dd li	{ display:inline; padding:0 0.5em 0 0; }
 
-.story-meta .warning	{ background:transparent !important; border:0 !important; }
-/*pos should go in system-messages.css?*/
-
 /*STORY PREFACE - TITLE AND NOTES */
 
 #story-preface	{ border-bottom:3px double; margin-bottom:1.5em; }
@@ -66,26 +63,6 @@ dl#series-meta	{ position:relative; }
 .series-show ul li	{ display:inline; padding-right:0.5em}
 .series-show ul#series-story-list li	{ display:block; padding:0; }
 
-
-/* Post and Preview Story styles  UNSORTED 11/09/08*/
-.textareafield	{ margin-bottom:1.125em; }
-.required	{ color:#900; }
-#story-form label	{ margin:0.625em 0 0; }
-.storyinputfield	{ width:18.75em; text-align:left; margin:0 0 1em; }
-#story-form textarea	{ width:37.5em; }
-.metadata-field	{ height:6.25em; }
-.number-field	{ width:3.125em; }
-.storytextfield	{ margin:0.625em 0; }
-.moreinfoicon	{ vertical-align:top; margin:0 0 0.625em 1.5em; }
-#chaptermanage	{ color:#0a0; margin:0 0 0.625em; }
-#seriesmanage	{ color:#0a0; margin:1em 0 0.625em; }
-#previewpane	{ border:1px solid; height:auto; width:50em; padding:2em; }
-.chapter-content	{ padding:3em; }
-.story-edit	{ background-color:#ffe5af; border:2px solid #ffdb8b; padding:0.5em; }
-textarea.story-edit-notes	{ display:block; }
-.story-edit-text	{ width:100%; }
-.chapter-control	{ font-size:0.75em; color:#4F709F; }
-.chapter-control a	{ color:#4F709F; }
 /* Temporary bookmark content */
 #dynamic-bookmark	{ position:fixed; background:#fffef9; border:2px solid; height:18.75em; width:31.25em; bottom:2em; right:2em; z-index:42; padding:1em 2em; }
 #bookmark_notes	{ width:28.125em; height:6.25em; }

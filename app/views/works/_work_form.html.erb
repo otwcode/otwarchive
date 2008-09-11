@@ -18,23 +18,23 @@
     <dl id="story-preface">
       <dt class="story-title">
         <%= f.label :title, h("Add Title".t), :class => "required" %>
+		<%= link_to_help "story-title" -%>
       </dt>
       <dd class="story-title">
         <%= f.text_field :title, :class => "storyinputfield" %>
-        <%= link_to_help "story-title" -%>
       </dd>
-      		  
-      <dt class="story-author" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
-        <%= label :pseud, :id, h("Select author/pseudonym(s)").t %>
-      </dt>
-      <dd class="story-author" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
-     	  <select name="work[author_attributes][ids][]" multiple="multiple">
-          <%= options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds) %>
-        </select>	 
-      </dd>
-      <dd class="story-author" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
-        <%= link_to h('Create pseud?').t, new_user_pseud_path(current_user) %>
-      </dd>  
+      
+		   <dt class="story-author" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
+	        <%= label :pseud, :id, h("Select author/pseudonym(s)").t %>
+	      </dt>
+	      <dd class="story-author" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
+	     	  <select name="work[author_attributes][ids][]" multiple="multiple">
+	          <%= options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds) %>
+	        </select>	 
+	      </dd>
+	      <dd class="story-author" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
+	        <%= link_to h('Create pseud?').t, new_user_pseud_path(current_user) %>
+	      </dd>
       
       <dt class="story-author">
         <%= link_to_function(h('Add co-authors?').t, "Element.toggle('co-authors')") %>          
@@ -60,8 +60,13 @@
       <dd class="story-notes">
         <%= f.text_area :notes, :class => "notes-field" %>
       </dd>
+</dl>
+</fieldset>
+<fieldset id="associations">
+<legend>Associations</legend>
+<dl>
 		<dt class="story-parent">
-        <%=h "If your story is a remix or was inspired by another story in the archive, copy and paste that story's url below:".t %>
+        <%= f.label :parent_url, h("If your story is a remix or was inspired by another story in the archive, copy and paste that story's url below:").t %>
       </dt>
       <dd class="story-parent">
         <%= f.text_field :parent_url %>
@@ -77,9 +82,9 @@
       </dd>
 
       <dt class="story-is_serial">
-        <%=h 'Is this part of a series?'.t %> 
+        <%= f.label :storyseriescheck, h("Is this part of a series?").t %> 
       </dt>
-   	  <dd>
+   	  <dd class="story-is_serial">
        	<input type="checkbox" id="storyseriescheck" name="storyseriescheck"  onclick="showWorkSeriesOptions()" 
          <%- unless @work.series.blank? -%>checked="checked"<%- end -%>/>
       </dd>
@@ -93,7 +98,7 @@
         <% fields_for "work[series_attributes]" do |s| %>
           <dt><%= s.label 'series_id', h('Choose one of your existing series:').t %></dt>
           <dd>
-            <%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>
+			<%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>
             <%= link_to_help "choosing-series" -%>
           </dd>
           <dt><%= s.label :title, h("Or add a new one:").t %></dt>
@@ -115,17 +120,11 @@
       </dl>
      </fieldset> 
   </dd>
-</dl>
-</fieldset>
-
-  <% fields_for_associated('work', @work.chapters.first) do |c| %>
-    <fieldset>
-      <legend><%= "Add Chapters".t -%></legend>
-      <dl>
+<% fields_for_associated('work', @work.chapters.first) do |c| %>
         <!-- Chaptered checkbox (work_is_wip) -->
         <!-- Checking this box causes the expected number of chapters box to appear; unchecking it causes it to disappear. -->
         <dt class="story-is_wip">
-          <%=h 'Does this work have multiple chapters?'.t %>
+           <%= f.label :isWip, h("Does this work have multiple chapters?").t %>
         </dt>
         <dd class="story-is_wip">
           <input type="checkbox" name="isWip"  
