@@ -93,13 +93,22 @@ class UsersController < ApplicationController
         @user.profile = Profile.new(params[:profile_attributes])
         @user.profile.save!
       end
-      @user.recently_reset = nil if params[:change_password] 
-      @user.update_attributes!(params[:user]) 
-      flash[:notice] = 'User was successfully updated.'.t
-      redirect_to(@user) 
-    rescue
+      @user.recently_reset = nil if params[:change_password]
+      if params[:user][:identity_url] != @user.identity_url
+        authenticate_with_open_id(params[:user][:identity_url]) do |result, identity_url|
+          if result.successful?
+            successful_update
+          else
+            flash[:error] = result.message
+            unsuccessful_update
+          end
+        end
+      else
+        successful_update
+      end      
+   rescue
       render :action => "edit"
-    end
+   end
   end
   
   # DELETE /users/1
@@ -110,5 +119,14 @@ class UsersController < ApplicationController
     redirect_to(users_url) 
   end
   
-  
+  protected
+    def successful_update
+      @user.update_attributes!(params[:user]) 
+      flash[:notice] = 'User was successfully updated.'.t
+      redirect_to(@user) 
+    end
+    def unsuccessful_update
+       raise
+    end
+      
 end
