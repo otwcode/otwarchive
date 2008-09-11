@@ -336,22 +336,23 @@ class WorksController < ApplicationController
 #    end
   # POST /works/upload_work
   def upload_work
+    storyparser = StoryParser.new
     # Do stuff with params[:uploaded_file]
     # parse the existing work 
     if params[:uploaded_work]
-      @work = Work.create_from_text(params[:uploaded_work])
+      @work = storyparser.parse_story_from_unknown(params[:uploaded_work])
       render :action => "new"
     elsif params[:work_url]
       url = params[:work_url].to_s
       if url.empty? 
         flash.now[:error] = "Did you want to enter a URL?"
       else
-        begin
-          @work = Work.create_from_url(url)
+        #begin
+          @work = storyparser.download_and_parse_story(url)
           render :action => :new and return
-        rescue
-          flash.now[:error] = "Sorry, but we couldn't read from that URL. :(".t
-        end
+        #rescue
+          #flash.now[:error] = "Sorry, but we couldn't read from that URL. :(".t
+        #end
       end
       
       render :partial => "upload_work_form", :layout => "application"

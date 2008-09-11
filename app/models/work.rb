@@ -1,5 +1,4 @@
 class Work < ActiveRecord::Base
-  require 'hpricot'
   include HtmlFormatter
   
   has_many :chapters, :dependent => :destroy
@@ -326,87 +325,5 @@ class Work < ActiveRecord::Base
     end
     return true
   end
-  
-  # create a new work based on text
-  # here eventually we'll try and do clever things like pick out the title, 
-  # author, etc. 
-  def self.create_from_text(text, options = {})
-    # some basic defaults      
-
-    body = options[:body]
-    body ||= text
     
-    title = options[:title] 
-    title ||= body.match(/Title:\s(.*)$/i) ? $1 : "UPLOADED WORK"
-    
-    notes = options[:notes] 
-    notes ||= body.match(/Notes?:\s(.*)$/i) ? $1 : ""
-    
-    summary = options[:summary]
-    summary ||= body.match(/Summary:\s(.*)$/i) ? $1 : ""
-    
-    fake_work_params = {:title => title, :summary => summary, 
-                        :notes => notes, 
-                        :chapter_attributes => {:content => body}}
-                        
-    return Work.new(fake_work_params)
-  end
-
-  def self.create_from_url(url)
-    # patterns for different websites
-    lj_pattern = Regexp.new('livejournal\.com', Regexp::IGNORECASE)
-    yuletide_pattern = Regexp.new('yuletidetreasure\.org', Regexp::IGNORECASE)
-    
-    # get best URL
-    if url.match(lj_pattern)
-      # livejournal or clone
-      url.gsub!(/\?(.*)$/, "") # strip off any existing params at the end
-      # url += "?format=light" # go to light format
-    end
-    
-    # download & load url into Hpricot
-    doc = Hpricot(Net::HTTP.get(URI.parse(url)))
-    text = (doc/"body").inner_html # default
-
-    # process docs based on site source
-    if url.match(lj_pattern)
-      # here's how we get the text out in LJ
-      # try a variety of options                        
-      text = doc.search("/html/body/div/div/div/div/div[2]").inner_html
-      if text.empty?
-        cw = (doc/"#content-wrapper")
-        divs = (cw/"div")
-        text = divs[1].inner_html
-        if text.empty?
-          text = (doc/"body").inner_html
-        end
-      end
-      text.gsub!(/<br\s*(\/)?>/, "\n")
-      
-    elsif url.match(yuletide_pattern)
-      title = (doc/"title").inner_html
-      notes = (doc/"/html/body/p/table/tr/td[2]/table/tr/td[2]/center/p").inner_html
-      text = (doc/"/html/body/p/table/tr/td[2]/table/tr/td[2]").inner_html
-      if text.empty?
-        text = (doc/"body").inner_html
-      end
-      text.gsub!(/<br\s*(\/)?>/, "\n")
-      
-      # fix the relative links
-      text.gsub!(/<a href="\//, '<a href="http://yuletidetreasure.org/')
-      
-      return create_from_text(text, {:title => title, :notes => notes})
-    else      
-      # default
-    end
-
-    # if we haven't got a better title, go with 
-    # the page title
-    work = create_from_text(text)
-    if work.title == "UPLOADED WORK"
-      work.title = (doc/"title") ? (doc/"title").inner_html : "UPLOADED WORK"
-    end
-    return work
-  end
-  
 end

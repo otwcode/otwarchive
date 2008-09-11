@@ -2,11 +2,15 @@
 module HtmlFormatter
   include SanitizeParams
 
-  # if we're loading up a file from somewhere else, let's take out
-  # <br> tags
+  # clean up the break tags and convert them into newlines
   def cleanup_break_tags(text)
-    text = cleanup_paragraph_tags(text)
-    text.gsub!(/<br \/>/, "\n")
+    text.gsub!(/<br>/, "<br />")
+    while text.gsub!(/<br\s*\/>\s*<br\s*\/><br\s*\/>/, "<br /><br />")
+      # keep going
+    end
+    text.gsub!(/<br\s*\/>/i, "\n")
+    
+    return text
   end
 
   # clean up tags
@@ -23,8 +27,6 @@ module HtmlFormatter
   def cleanup_paragraph_tags(text)
     # Now we want to replace any cases where these have been doubled -- ie, 
     # where a new paragraph tag is opened before an old one is closed
-    text.gsub!(/<br>/, "<br />")
-    text.gsub!(/<br\s*\/>\s*<br\s*\/>/, "<br />")
     text.gsub!(/<p>\s*<p>/, "<p>")
     text.gsub!(/<\/p>\s*<\/p>/, "</p>")
     text.gsub!(/<br\s*\/>\s*<p>/, "<p>")
@@ -35,7 +37,7 @@ module HtmlFormatter
     # also get rid of blank paragraphs inserted by tinymce
     text.gsub!(/<p>&nbsp;<\/p>/, "")
     
-    return text
+    return cleanup_break_tags(text)
   end
 
   # adds paragraphs and newlines, then gets rid of doubled ones
