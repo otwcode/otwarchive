@@ -18,7 +18,7 @@
 			<%= render :partial => 'works/meta', :locals => {:work => work} %>
     </li>
     <li class="story-desc">
-      <%= sanitize_and_format_for_display work.summary %>
+      <%= sanitize_limit_and_format_for_display work.summary %>
       <ul>
         <li><%=h 'Words: %s'/number_with_delimiter(work.word_count) %></li>
         <%- if work.count_visible_comments.size > 0 -%>

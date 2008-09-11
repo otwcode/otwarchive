@@ -17,7 +17,7 @@
     <% if bookmark.private %><%= image_tag("lockblack.png", :size => "15x15", :alt => "(Private)".t) %><% end %>
 
 	<%- unless bookmark.bookmarkable.nil? -%>
-	    <%=sanitize_and_format_for_display bookmark.bookmarkable.summary, :tags => ArchiveConfig.ALLOWED_TAGS %>
+	    <%=sanitize_limit_and_format_for_display bookmark.bookmarkable.summary %>
 	<%- end -%>
   </dt>
   <%- unless bookmark.notes.blank? -%>
@@ -27,7 +27,7 @@
     <% else -%>
     <%=h "Bookmarker's notes:".t -%>
     <% end -%>
-    <%= bookmark.notes %>
+    <%=sanitize_limit_and_format_for_display bookmark.notes %>
     <% if !is_author_of?(bookmark) && bookmark.user %>- <%= link_to bookmark.user.login, bookmark.user %><% end -%>
   </dd>
   <%- else -%>

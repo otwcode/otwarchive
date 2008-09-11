@@ -22,6 +22,10 @@ module HtmlFormatter
   def sanitize_and_format_for_display(text, options = {})
     text = add_paragraph_tags_for_display(sanitize_whitelist(text, options))
   end
+  
+  def sanitize_limit_and_format_for_display(text, options = {:tags => %w(b, em, strong)})
+    text = add_paragraph_tags_for_display(sanitize_whitelist(text, options))
+  end
 
   # cleans up doubled paragraph/newline tags
   def cleanup_paragraph_tags(text)
