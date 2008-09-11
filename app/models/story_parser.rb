@@ -106,17 +106,19 @@ class StoryParser
     def scan_text_for_meta(text)
       meta = {}
       metapatterns = META_PATTERNS
-      # add in all the tags
-      TagCategory.official.each do |c|
-        metapatterns.merge!({c.name.to_sym => c.name.singularize})
-      end
+      # add in all the tags -- COmmented out until works are fixed -- NN
+      #TagCategory.official.each do |c|
+      #  metapatterns.merge!({c.name.to_sym => c.name.singularize})
+      #end
       metapatterns.each do |metaname, pattern|
+        puts "m: #{metaname}, p: #{pattern}"
         # what this does is look for pattern: (whatever) 
         # and then sets meta[:metaname] = whatever
         # eg, if it finds Author: Blah The Great it will set meta[:author] = Blah The Great
         metapattern = Regexp.new("#{pattern}\s*:\s*(.*)", Regexp::IGNORECASE)
         metapattern_plural = Regexp.new("#{pattern.pluralize}\s*:\s*(.*)", Regexp::IGNORECASE)
         if text.match(metapattern) || text.match(metapattern_plural)
+          puts "match #{metapattern.to_s}, #{$1}"
           meta[metaname] = $1
         end        
       end      
