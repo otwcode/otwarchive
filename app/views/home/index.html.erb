@@ -50,7 +50,7 @@
 		<p>"I came to realize that everything I do is fan fiction.  I think that everything that we all do, all fiction, is fan fiction is that you are always inspired to write by the things that you love.  So much of writing for me is about finding a way to convey my own love of other writers' work."</p>
 		<p class="attribution">~ Michael Chabon</p>
 	</blockquote>
-	<h3 class="meter"><span><%= @work_count %></span>&nbsp;<%=h 'works by'.t %>&nbsp;<span><%= @user_count %></span>&nbsp;<%=h 'creators.'.t %>&nbsp;<span><%= @works_today %></span>&nbsp;<%=h 'uploaded today.'.t %></h3>
+	<h3 class="meter"><span><%= @work_count %></span>&nbsp;<%=h 'works by'.t %>&nbsp;<span><%= @user_count %></span>&nbsp;<%= link_to 'creators'.t, :controller => 'users', :action => 'index' %>.&nbsp;<span><%= @works_today %></span>&nbsp;<%=h 'uploaded'.t %>&nbsp;<%= link_to 'today'.t, :controller => 'works', :action => 'index' %>.</h3>
 	<h4><%=h 'Share your fan works. Discover new favorites. Explore the possibilities.'.t %></h4>
 	<div class="wrapper">
 		<!-- Commenting out until we have screencasts
