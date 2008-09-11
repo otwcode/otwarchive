@@ -1,0 +1,23 @@
+Disambiguation:
+  name: disambiguation
+  verb_phrase: might refer to
+  reciprocal: true
+  distance: 0
+	
+Synonym:
+  name: synonym
+  verb_phrase: is the same as
+  reciprocal: true
+  distance: 0
+	
+Child:
+  name: child
+  verb_phrase: belongs to
+  reciprocal: false
+  distance: 1
+	
+Shared Universe:
+  name: shared universe
+  verb_phrase: is set in the same universe as
+  reciprocal: true
+  distance: 2

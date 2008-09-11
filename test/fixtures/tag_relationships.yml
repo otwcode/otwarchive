@@ -1,0 +1,89 @@
+Supernatural belongs to TV Shows:
+  tag: Supernatural
+  related_tag: TV Shows
+  tag_relationship_kind: Child
+
+Stargate Atlantis belongs to TV Shows:
+  tag: Stargate Atlantis
+  related_tag: TV Shows
+  tag_relationship_kind: Child
+	
+Harry Potter belongs to Books:
+  tag: Harry Potter
+  related_tag: Books
+  tag_relationship_kind: Child
+	
+Iron Man belongs to Movies:
+  tag: Iron Man
+  related_tag: Movies
+  tag_relationship_kind: Child
+
+Doctor Who belongs to TV Shows:
+  tag: Doctor Who
+  related_tag: Movies
+  tag_relationship_kind: Child
+	
+Torchwood belongs to TV Shows:
+  tag: Torchwood
+  related_tag: TV Shows
+  tag_relationship_kind: Child
+	
+American Idol belongs to Music & Bands:
+  tag: American Idol
+  related_tag: Music & Bands
+  tag_relationship_kind: Child
+	
+Stargate SG-1 belongs to TV Shows:
+  tag: Stargate SG-1
+  related_tag: TV Shows
+  tag_relationship_kind: Child
+
+Sam Carter belongs to SG-1:
+  tag: Sam Carter
+  related_tag: Stargate SG-1
+  tag_relationship_kind: Child
+	
+Sam Winchester belongs to Supernatural:
+  tag: Sam Winchester
+  related_tag: Supernatural
+  tag_relationship_kind: Child
+	
+Dean Winchester belongs to Supernatural:
+  tag: Dean Winchester
+  related_tag: Supernatural
+  tag_relationship_kind: Child
+	
+Dean Winchester/Sam Winchester belongs to Sam Winchester:
+  tag: Dean Winchester/Sam Winchester
+  related_tag: Sam Winchester
+  tag_relationship_kind: Child
+	
+Dean Winchester/Sam Winchester belongs to Dean Winchester:
+  tag: Dean Winchester/Sam Winchester
+  related_tag: Dean Winchester
+  tag_relationship_kind: Child
+	
+Torchwood shares a universe with Doctor Who:
+  tag: Torchwood
+  related_tag: Doctor Who
+  tag_relationship_kind: Shared Universe
+
+Stargate Atlantis shares a universe with Stargate SG-1:
+  tag: Stargate Atlantis
+  related_tag: Stargate SG-1
+  tag_relationship_kind: Shared Universe
+
+Sam might refer to Sam Winchester:
+  tag: Sam
+  related_tag: Sam Winchester
+  tag_relationship_kind: Disambiguation
+
+Sam might refer to Sam Carter:
+  tag: Sam
+  related_tag: Sam Carter
+  tag_relationship_kind: Disambiguation
+	
+SGA is the same as Stargate Atlantis:
+  tag: SGA
+  related_tag: Stargate Atlantis
+  tag_relationship_kind: Synonym

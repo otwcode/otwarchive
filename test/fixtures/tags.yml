@@ -166,3 +166,71 @@ Other Media:
   banned: false
   adult: false
 	
+Supernatural:
+  tag_category: Fandoms
+  name: Supernatural
+  canonical: true
+	
+Stargate Atlantis:
+  tag_category: Fandoms
+  name: Stargate Atlantis
+  canonical: true
+
+SGA:
+  tag_category: Fandoms
+  name: SGA
+  canonical: false
+	
+Harry Potter:
+  tag_category: Fandoms
+  name: Harry Potter
+  canonical: true
+	
+Iron Man:
+  tag_category: Fandoms
+  name: Iron Man (2008)
+  canonical: true
+
+Doctor Who:
+  tag_category: Fandoms
+  name: Doctor Who
+  canonical: true
+	
+Torchwood:
+  tag_category: Fandoms
+  name: Torchwood
+  canonical: true
+	
+American Idol:
+  tag_category: Fandoms
+  name: American Idol
+  canonical: true
+	
+Stargate SG-1:
+  tag_category: Fandoms
+  name: Stargate SG-1
+  canonical: true
+	
+Sam Winchester:
+  tag_category: Characters
+  name: Sam Winchester
+  canonical: true
+	
+Dean Winchester:
+  tag_category: Characters
+  name: Dean Winchester
+  canonical: true
+	
+Dean Winchester/Sam Winchester:
+  tag_category: Pairings
+  name: Dean Winchester/Sam Winchester
+  canonical: true
+	
+Sam Carter:
+  tag_category: Characters
+  name: Sam Carter
+  canonical: true
+	
+Sam:
+  tag_category: Ambiguous
+  name: Sam
