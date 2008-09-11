@@ -276,7 +276,6 @@ class WorksController < ApplicationController
     else
       saved = true
       @chapter.save || saved = false
-      logger.info "*************** chapter: " + @chapter.to_yaml
       @work.posted = true 
       @work.save || saved = false
       @work.update_minor_version
@@ -289,13 +288,13 @@ class WorksController < ApplicationController
         redirect_to(@work)
       else
         @work.errors.add(:base, "Please double-check the length of your story: it cannot be blank and must be less than 16MB in size.".t) unless @chapter.valid?
-#        if !@work.has_required_tags?
-#          @preview_mode = true
-#      	  @chapters = [@chapter]
-#          render :action => "preview"
-#        else
+        if !@work.has_required_tags?
+          @preview_mode = true
+      	  @chapters = [@chapter]
+          render :action => "preview"
+        else
           redirect_to :action => :new
-#        end
+        end
       end
     end 
   end
