@@ -1,42 +1,134 @@
 /* STORY VIEWS, NOT YET OVERHAULED. WORKING ON NOW*/
-
-
 /*
-set story styles
-*/
-#chapters 								{ font-family: Candara, Corbel, Geneva, Verdana, Helvetica, Arial, sans-serif; }
-#chapters a, #chapters a:link			{ color:#111; text-decoration:none; border-bottom:1px dotted  #666; padding-right:0.125em}
-#chapters  a:hover						{ border-bottom:0}
-#chapters  a:visited					{ text-decoration:underline}
+ set story styles
+ */
+#chapters {
+    font-family: Candara, Corbel, Geneva, Verdana, Helvetica, Arial, sans-serif;
+}
 
+#chapters a, #chapters a:link {
+    color: #111;
+    text-decoration: none;
+    border-bottom: 1px dotted #666;
+    padding-right: 0.125em
+}
+
+#chapters a:hover {
+    border-bottom: 0
+}
+
+#chapters a:visited {
+    text-decoration: underline
+}
 /*lists*/
-#chapters  dl							{ font-size:105%; margin:1.5em 0; border-bottom:0.25em double #555; }
-#chapters  dt							{ font-weight:bold; }
-#chapters  dd							{ line-height 1.5em; font-size:1em; margin-top: 1.25em; margin-bottom: 1.25em; text-indent:3em; }
-#chapters  dd p							{ margin:0; padding:0; }
-#chapters  ul							{ padding: 0 1em; text-indent:2em; }
-#chapters  ul li						{ list-style-type: disc}
-#chapters  ol							{ padding: 0 1.5em; text-indent:1.5em;}
-#chapters  ol li						{ list-style-type:decimal}
-#chapters  li							{ font-weight:normal; }
+#chapters dl {
+    font-size: 1em;
+    margin: 1.5em 0;
+    border-bottom: 0.25em double #555;
+}
 
+#chapters dt {
+    font-weight: bold;
+}
+
+#chapters dd {
+    line-height: 1.5;
+    font-size: 0.825em;
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+    text-indent: 3em;
+}
+
+#chapters dd p {
+    margin: 0;
+    padding: 0;
+}
+
+#chapters ul {
+    padding: 0 1em;
+    text-indent: 2em;
+}
+
+#chapters ul li {
+    list-style-type: disc
+}
+
+#chapters ol {
+    padding: 0 1.5em;
+    text-indent: 1.5em;
+}
+
+#chapters ol li {
+    list-style-type: decimal
+}
+
+#chapters li {
+    font-weight: normal;
+}
 /*headings */
-#chapters  h1							{ font-size: 200%; font-family: Constantia,Palatino,Georgia,serif; text-align:center;}
-#chapters  h2							{ font-size: 160%; font-variant:normal; letter-spacing:-0.04em; text-align:left; color:#333; margin:1em 0;}
-#chapters h3							{ font-size: 180%; font-style:oblique; font-weight:100; letter-spacing:0.06em;background:#444; color:#fff; border-bottom:0.25em double #fff; padding:0 0.15em 0 0.15em}
-#chapters h4							{ font-size: 168%; font-variant:small-caps}
-#chapters h5							{ font-size: 135%; font-weight:bolder}
-#chapters h6							{ font-size: 90%; font-weight:bolder; letter-spacing: 0.06em}
+#chapters h1 {
+    font-family: Constantia, Palatino, Georgia, serif;
+    text-align: center;
+}
 
+#chapters h2 {
+    font-variant: normal;
+    letter-spacing: -.125em;
+    text-align: left;
+    color: #333;
+    margin: 1em 0;
+}
+
+#chapters h3 {
+    font-style: oblique;
+    font-weight: 100;
+    background: #444;
+    color: #fff;
+    border-bottom: 0.25em double #fff;
+    padding: 0 0.125em 0 0.125em
+}
+
+#chapters h4 {
+    font-variant: small-caps
+}
+
+#chapters h5 {
+    font-weight: bolder
+}
+
+#chapters h6 {
+    font-weight: bolder;
+}
 /*quotes and stresses*/
-#chapters blockquote					{ border-left:2px solid #999; padding: 0.75em; margin: auto auto auto 1.5em}
-#chapters blockquote blockquote			{ border:0; padding:0.25em; }
+#chapters blockquote {
+    border-left: 2px solid #999;
+    padding: 0.75em;
+    margin: auto auto auto 1.5em;
+    font-size: 1em;
+}
 
-#chapters hr 							{ width:33% margin:auto; border:1px solid;}
+#chapters blockquote blockquote {
+    border: 0;
+    padding: 0.25em;
+}
 
-.firstletter							{font:3em Georgia,serif;}
-.flashback								{font-style:oblique; }
-.shouting								{font-variant:small-caps}
+#chapters hr {
+    width: 33%;
+    margin: auto;
+    border: 1px solid;
+}
+
+.firstletter {
+    font: 3em Georgia, serif;
+}
+
+.flashback {
+    font-style: oblique;
+}
+
+.shouting {
+    font-variant: small-caps
+}
 
 #main.works-show ul#navigation {
     margin: 0.75em 0;
@@ -80,25 +172,25 @@ dl #story-meta dd.rating {
 }
 
 #story-meta dd li {
-	display:inline;
-	padding:0 0.4em 0 0;
+    display: inline;
+    padding: 0 0.5em 0 0;
 }
 
 #story-meta dt.warning, #story-meta dd.warning {
-	background:transparent !important; border:0 !important;
-}/*pos should go in system-messages.css?*/
-
+    background: transparent !important;
+    border: 0 !important;
+} /*pos should go in system-messages.css?*/
 #story-preface {
     border-bottom: 3px double;
     margin-bottom: 1.5em;
 }
 
 #story-preface blockquote {
-    font-size: 0.75em;
+    font-size: 1em;
 }
 
 #story-preface h2 {
-    font: 800 200% Cambria, Constantia, Palatino, Georgia, sans-serif;
+    font: 800 2.25em Cambria, Constantia, Palatino, Georgia, sans-serif;
     margin: 1.5em auto 0
 }
 /* SERIES */
@@ -140,7 +232,7 @@ dl#series-meta {
 }
 /* Post and Preview Story styles    */
 .textareafield {
-    margin-bottom: 20px;
+    margin-bottom: 1.125em;
 }
 
 .required {
@@ -148,55 +240,55 @@ dl#series-meta {
 }
 
 #story-form label {
-    margin: 10px 0 0;
+    margin: 0.625em 0 0;
 }
 
 .storyinputfield {
-    width: 300px;
+    width: 18.75em;
     text-align: left;
-    margin: 0 0 15px;
+    margin: 0 0 1em;
 }
 
 #story-form textarea {
-    width: 600px;
+    width: 37.5em;
 }
 
 .metadata-field {
-    height: 100px;
+    height: 6.25em;
 }
 
 .number-field {
-    width: 50px;
+    width: 3.125em;
 }
 
 .storytextfield {
-    margin: 10px 0;
+    margin: 0.625em 0;
 }
 
 .moreinfoicon {
     vertical-align: top;
-    margin: 0 0 10px 25px;
+    margin: 0 0 0.625em 1.5em;
 }
 
 #chaptermanage {
     color: #0a0;
-    margin: 0 0 10px;
+    margin: 0 0 0.625em;
 }
 
 #seriesmanage {
     color: #0a0;
-    margin: 15px 0 10px;
+    margin: 1em 0 0.625em;
 }
 
 #previewpane {
     border: 1px solid #000;
     height: auto;
-    width: 800px;
-    padding: 30px;
+    width: 50em;
+    padding: 2em;
 }
 
 .chapter-content {
-    padding: 50px;
+    padding: 3em;
 }
 
 .story-edit {
@@ -214,7 +306,7 @@ textarea.story-edit-notes {
 }
 
 .chapter-control {
-    font-size: 80%;
+    font-size: 0.75em;
     color: #4F709F;
 }
 
@@ -226,28 +318,28 @@ textarea.story-edit-notes {
     position: fixed;
     background-color: #fff;
     border: 2px solid #000;
-    height: 300px;
-    width: 500px;
-    bottom: 30px;
-    right: 30px;
+    height: 18.75em;
+    width: 31.25em;
+    bottom: 2em;
+    right: 2em;
     z-index: 42;
-    padding: 15px 30px;
+    padding: 1em 2em;
 }
 
 #bookmark_notes {
-    width: 450px;
-    height: 100px;
+    width: 28.125em;
+    height: 6.25em;
 }
 
 #close-popup {
     position: absolute;
-    top: 5px;
-    right: 10px;
+    top: 0.375em;
+    right: 0.625em;
 }
 
 .chapter-position-list {
     list-style-type: none;
-    padding: 10px;
+    padding: 0.625em;
 }
 
 .story-edit-meta, .story-edit-notes {
@@ -259,12 +351,13 @@ ul.story-list li.story-tags {
 }
 
 .story-show h2, .story-edit-title {
-    font-size: 130%;
+    font-size: 1.5em;
     font-weight: 700;
     text-align: center;
 }
 
+/* where are these rules affecting?
 .story-show .story-author, .story-title, .chapter-title {
     text-align: center;
-}
+} */
 

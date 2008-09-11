@@ -21,7 +21,7 @@
 	<%- end -%>
   </dt>
   <%- unless bookmark.notes.blank? -%>
-  <dd>
+  <dd class="notes">
     <% if is_author_of?(bookmark) %>
     <%=h "Your notes:".t -%>
     <% else -%>
@@ -38,7 +38,7 @@
   <% end -%>
   <%- end -%>
   <%- unless bookmark.tag_string.blank? -%>
-  <dd>
+  <dd class="tags">
     <% if is_author_of?(bookmark) %>
     <%=h "Your tags:".t -%>
     <% else -%>
@@ -51,7 +51,10 @@
   <% end %>
   <% if is_author_of?(bookmark) %>
   <dd>
-    <%= link_to "Edit".t, edit_bookmark_path(bookmark) %> | <%= link_to "Delete".t, bookmark, :confirm => 'Are you sure?'.t, :method => :delete %>
+    <ul class="navigation">
+		<li><%= link_to "Edit".t, edit_bookmark_path(bookmark) %></li>
+		<li><%= link_to "Delete".t, bookmark, :confirm => 'Are you sure?'.t, :method => :delete %></li>
+	</ul>
   </dd>
   <% end %>
 </dl> 

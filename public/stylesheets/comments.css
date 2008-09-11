@@ -1,35 +1,43 @@
 ul.navigation {
-	border-bottom: 1px solid;
-	text-align: right;
+    border-bottom: 1px solid;
+    text-align: right;
 }
+
 ul.navigation li {
-	display: inline;
-	padding: 0 0 0.5em 0.5em;
+    display: inline;
+    padding: 0 0 0.5em 0.5em;
 }
+
 div.comment {
-	position: relative;
-	clear: both;
+    position: relative;
+    clear: both;
 }
+
 .comment img.icon {
-	height: 100px;
-	width: 100px;
-	float: left;
-	margin: 0 0.5em 0.5em 0;
+    height: 100px;
+    width: 100px;
+    float: left;
+    margin: 0 0.5em 0.5em 0;
 }
+
 h4.datestamp {
-	clear: left;
-	font-size: smaller;
-	text-align: right;
+    clear: left;
+    font-size: 0.75em;
+    text-align: right;
 }
+
 .comment ul {
-	margin-top: -1.5em;
+    margin-top: -1.5em;
 }
-.comment ul	li {
-	display: inline;
+
+.comment ul li {
+    display: inline;
 }
+
 .thread .thread {
-	margin-left: 3em;
+    margin-left: 3em;
 }
+
 .thread .even {
-	background: #eee;
+    background: #eee;
 }

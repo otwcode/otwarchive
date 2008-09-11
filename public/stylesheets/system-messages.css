@@ -18,6 +18,7 @@
     margin: 0.5em auto;
     padding: 1em;
 }
+
 .flash_icon {
     border: 0;
     float: left;
@@ -33,7 +34,7 @@
 .warning {
     font-weight: 900;
     background: #edefd1;
-	border:1px solid #dfdfc2;
+    border: 1px solid #dfdfc2;
 }
 
 .error {
@@ -41,13 +42,24 @@
     border: 1px solid #dfc2c2;
 }
 
-.error ul, .error h2, .error p {margin: 0; padding:0 }
-.error ul {margin:auto ;width:90%}
-.error ul li {margin:0.25em; list-style-type:disc; text-indent:1em}
+.error ul, .error h2, .error p {
+    margin: 0;
+    padding: 0
+}
 
+.error ul {
+    margin: auto;
+    width: 90%
+}
+
+.error ul li {
+    margin: 0.25em;
+    list-style-type: disc;
+    text-indent: 1em
+}
 /* SYMBOLS */
 span.symbol {
-    padding: 0.15em;
+    padding: 0.125em;
     border: 1px solid;
     display: block;
     height: 1em;
@@ -69,30 +81,27 @@ span.question {
     background: top left no-repeat #2b547c;
     border-color: #2a547c;
 }
-
 /* A COLLECTION OF CLASSES TO BE USED AS APPROPRIATE. MINIMAL STYLING
- * 
+ *
  */
- 
- .important{
+.important {
     font-weight: 900;
 }
 
 .message {
-    font-size: larger;
+    font-size: 1em;
 }
+
 .required {
-	color:#900;
+    color: #900;
 }
+
 .footnote {
-    font-size: smaller;
+    font-size: 0.75em;
 }
-
-
 /* Rails will automatically add the errorExplanation and fieldWithErrors divs
  * after doing validation of models - just make sure you're using f.label
  * or similar!    */
-
 /*HOPEFULLY WILL JUNK ALL THESE CLASSES UPON RESOLUTION OF ISSUE 317
  * WILL PROBABLY NEED TO SELECT SOME SPECIFIC ROUTES SUCH AS
  * .error p
@@ -105,7 +114,7 @@ span.question {
 .errorexplanation, .errorExplanation {
     background-color: #efd1d1;
     border: 2px solid #af2020;
-    margin: 0.4em 0 0.2em;
+    margin: 0.5em 0 0.25em;
     padding: 1em;
 }
 
@@ -118,13 +127,13 @@ span.question {
 }
 
 .fieldwitherrors {
-    width: 500px;
+    width: 31.25em;
     color: #af2020;
 }
 
 .fieldwitherrors ul {
     color: #af2020;
-    font-size: 0.9em;
+    font-size: 0.75em;
     margin-bottom: 0;
 }
 
@@ -135,10 +144,9 @@ span.question {
 
 .fieldwitherrors input {
     border: 2px solid #af2020;
-	
-	/* Debug Style (development only)    */
+    /* Debug Style (development only)    */
 #debug {
-    border: 1px dashed;
-    margin: 10%;
-    padding: 10px;
+        border: 1px dashed;
+        margin: 10%;
+        padding: 0.625em;
 }

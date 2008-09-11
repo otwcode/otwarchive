@@ -17,15 +17,14 @@
 /* HEADER (MASTHEAD BLOCK)    */
 #header {
     background: #900 url(../images/header-red.png) top left repeat-x;
-    font: 600 140% Fertigo, Corbel, Calibri, Candara, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif;
     position: relative;
     margin: 0 0 2.5em 0;
 }
 
 #header h1 {
     color: #fff;
+    font-size: 1.5em;
     float: left;
-    font-size: 110%;
     margin: 1em 0 -2em 1em;
 }
 
@@ -36,12 +35,12 @@
 
 #login-block {
     background: #900 url(../images/header-red.png) top left repeat-x;
-	float: right;
+    float: right;
     text-align: left;
-    font-size: 75%;
+    font-size: 0.75em;
     clear: both;
     color: #fff;
-    width: 16.17em;
+    width: 20em;
 }
 
 #login-block a:link, #login-block a:visited {
@@ -57,15 +56,17 @@
 }
 
 #greeting.logged-out {
-	 margin-top:1em;	
+    margin-top: 1em;
 }
+
 #login li {
     display: inline;
 }
+
 #search p {
     float: left;
     clear: both;
-    font-size: 80%;
+    font-size: 0.75em;
     padding: 0;
     margin: 0;
 }
@@ -105,7 +106,7 @@ ul#main-navigation {
     color: #fff;
     border: 1px solid #111;
     border-bottom: 0;
-    padding: 0.4em;
+    padding: 0.5em;
 }
 
 #main-navigation a span {
@@ -137,6 +138,7 @@ ul#main-navigation {
 #dashboard-sidebar li {
     white-space: nowrap;
     font-weight: bold;
+    font-size: 0.825em;
 }
 
 #dashboard-sidebar a {
@@ -145,7 +147,7 @@ ul#main-navigation {
     height: 2em;
     line-height: 2;
     text-decoration: none;
-    whitespace: pre;
+    white-space: pre;
     font-weight: normal;
 }
 
@@ -160,7 +162,7 @@ ul#main-navigation {
 /*MAIN CONTENT */
 #main {
     position: relative;
-    margin: auto;
+    margin: 1.5em auto;
     padding: 0 3.5em;
 }
 
@@ -171,27 +173,28 @@ ul#main-navigation {
 /* FOOTER */
 #footer {
     color: #999;
-    font-size: 90%;
+    font-size: 0.75em;
     text-align: center;
     border-top: 1px solid #999;
     clear: both;
     padding: 1em;
+    margin: 1.5em 0;
 }
 
 #footer a:link {
     border-bottom: 1px dotted;
-} 
-
+}
 /*PAGE BY PAGE STYLING: NEW SESSION HOME HOME SUBPAGES FANDOMS PEOPLE GROUPS RECS TAGS*/
 /*SESSIONS (front front pages - login, create, logout(feedbacks)etc)*/
 #main.session h1, #main.session h1, #main.passwords-new h1 {
     text-align: left;
-    border: 0
+    border: 0;
+    margin: 0.75em 0 0.125em 0;
 }
 
 #main.session h2, #main.session h2, #main.passwords-new h2 {
-    font: 100 80% "Gill Sans", Georgia, Verdana, sans-serif;
-    margin: 0 auto 2em
+    font: 100 0.75em "Gill Sans", Georgia, Verdana, sans-serif;
+    margin: 0.25em auto 2em
 }
 
 .session #logo {
@@ -220,7 +223,7 @@ ul#main-navigation {
     color: #fff;
     border-bottom: 4px double #fff;
     margin: 1em auto;
-    padding: 0.15em;
+    padding: 0.125em;
 }
 
 #user-header {
@@ -228,7 +231,6 @@ ul#main-navigation {
 }
 
 #user-header img {
-    padding: 0;
     margin: 0 0 0.5em 0;
     top: 0;
     left: 0;
@@ -236,43 +238,89 @@ ul#main-navigation {
 }
 
 #user-header h1 {
-	margin-left: 100px;
-	/*sized in pixels because the icon it is avoiding has a fixed pixel value*/
-	}
-#user-header ul {
     margin-left: 100px;
-    margin-bottom: 50px
+    /*sized in pixels because the icon it is avoiding has a fixed pixel value*/
+}
+
+#user-header ul.navigation {
+    margin: 0.5em 0 75px 100px;
 }
 
 #user-header ul li {
     display: inline;
     padding: 0.25em
 }
-
-/* WORKS-INDEX  */ 
-
+/* WORKS-INDEX  */
 /*story filters rules are in forms.css */
-
 /*story listing */
-li.story ul {position:relative; margin:0.5em 13em auto auto; border:1px solid #bbb; padding:0.25em}
-li.story ul ul {background:#fff; border:0; padding:0}
-li.story-title-line{float:left; margin:0.75em 1em 0.5em 0; }
-li.story-byline  {float:left; margin:0.475em 0 auto 0.25em;}
-li.story-title-line img {float:left: vertical-align:middle;}
-li.story-title-line p {margin:0; padding:0;}
-li.story-byline { font-size: 150%; font-weight:bolder; }
-li.story-byline a {text-decoration:none}
-li.story-date{text-align:right; color:#777; clear:left; margin:0.5em 0  }
-li.story-tags  {clear:left; font-weight: bold; } 
-li.story-tags a {font-weight:normal; text-decoration:none; border-bottom:1px dotted }
-li.story-tags dt, li.story-tags dd {display:inline; padding-right: 0.4em; line-height:1.75}
-li.story-desc { padding: 0 0.4em;   margin: 0.25em 0 1.5em;} 
-li.story-tags  {clear:left; font-weight: bold}
-li.story-tags a {font-weight:normal;}
+li.story ul {
+    position: relative;
+    margin: auto 12.5em auto auto;
+    border: 1px solid #bbb;
+    padding: 0.25em
+}
+
+#user-page li.story ul {
+    margin-right: 0;
+}
+
+li.story-title img {
+    float: left;
+    vertical-align: middle;
+}
+
+
+span.story-byline {
+    font-size: 1.125em;
+    font-weight: 400;
+	display:inline;
+}
+
+span.story-byline a {
+    text-decoration: none
+}
+
+li.story-date {
+    text-align: right;
+    color: #777;
+    margin: 0.5em 0;
+    font-size: 0.75em;
+}
+
+li.story-tags {
+    clear: left;
+    font-weight: bold;
+}
+
+li.story-tags a {
+    font-weight: normal;
+    text-decoration: none;
+    border-bottom: 1px dotted
+}
+
+li.story-tags dt, li.story-tags dd {
+    display: inline;
+    padding-right: 0.5em;
+    line-height: 1.75
+}
+
+li.story-desc {
+    padding: 0 0.5em;
+    margin: 0.25em 0 1.5em;
+}
+
+li.story-tags {
+    clear: left;
+    font-weight: bold
+}
+
+li.story-tags a {
+    font-weight: normal;
+}
 /*MEDIA-INDEX  (FANDOMS)*/
 .media-index li.category {
     padding: 1em;
-	min-height:15em;
+    min-height: 15em;
 }
 
 #main.media-index ol, #main.fandoms-index ol, #main.fandoms-show ol {
@@ -282,31 +330,35 @@ li.story-tags a {font-weight:normal;}
 .media-index li.odd {
     width: 40%;
     float: left;
-    margin: 0 0.4em 0 0;
+    margin: 0 0.5em 0 0;
 }
 
 .media-index li.even {
     width: 40%;
     float: right;
-    margin: 0 0 0 0.4em;
+    margin: 0 0 0 0.5em;
 }
 /*BOOKMARKS-INDEX BOOKMARKS  */
 dl.bookmark {
-    margin: 1em 0;
-    padding: 0.4em 0;
+    margin: 0.75em 0;
+    padding: 0.5em 0;
+    border-bottom: 1px solid #ddd;
 }
 
 .bookmark dt a {
-    font: 600 110% Cambria, Constantia, Georgia, Verdana, sans-serif;
+    font: 600 1em Cambria, Constantia, Georgia, Verdana, sans-serif;
     text-decoration: none;
 }
 
 .bookmark dd {
     margin: 0.5em;
 }
+
+.bookmark dd.notes {
+    background: #ddd;
+}
 /*TAGS-INDEX  */
 .tags-index ul {
-    width: 90%;
     text-align: center;
     min-height: 100%;
     margin: 2em auto;
@@ -314,7 +366,7 @@ dl.bookmark {
 
 .tags-index li {
     display: inline;
-    padding: .3em 0.4em;
+    padding: 0.25em 0.5em;
 }
 
 .tags-index a {
@@ -323,49 +375,59 @@ dl.bookmark {
 }
 
 a.cloud1 {
-    font-size: 90%;
+    font-size: 0.5625em;
     font-weight: 100;
     color: #111;
 }
 
 a.cloud2 {
-    font-size: 100%;
+    font-size: 0.625em;
     font-weight: 200;
     color: #240F0F;
 }
 
 a.cloud3 {
-    font-size: 115%;
+    font-size: 0.75em;
     font-weight: 300;
     color: #380C0C;
 }
 
 a.cloud4 {
-    font-size: 130%;
+    font-size: 0.825em;
     font-weight: 400;
     color: #4B0A0A;
 }
 
 a.cloud5 {
-    font-size: 145%;
+    font-size: 1em;
     font-weight: 500;
     color: #5F0707;
 }
 
 a.cloud6 {
-    font-size: 165%;
+    font-size: 1.125em;
     font-weight: 600;
     color: #720505;
 }
 
 a.cloud7 {
-    font-size: 180%;
+    font-size: 1.5em;
     font-weight: 700;
     color: #860202;
 }
 
 a.cloud8 {
-    font-size: 210%;
+    font-size: 2.25em;
     font-weight: 800;
     color: #900;
+}
+/*TAG WRANGLING */
+ul#tag-wrangler-footer {
+    text-align: center;
+    border-top: 1px dotted
+}
+
+#tag-wrangler-footer li {
+    display: inline;
+    padding: 0 0.5em 0 0
 }

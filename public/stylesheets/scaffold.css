@@ -2,14 +2,14 @@ body { background-color: #fff; color: #333; }
 
 body, p, ol, ul, td {
   font-family: verdana, arial, helvetica, sans-serif;
-  font-size:   13px;
-  line-height: 18px;
+  font-size:   0.8125em;
+  line-height: 1.125;
 }
 
 pre {
   background-color: #eee;
-  padding: 10px;
-  font-size: 11px;
+  padding: 0.625em;
+  font-size: 0.846em;
 }
 
 a { color: #000; }
@@ -17,13 +17,13 @@ a:visited { color: #666; }
 a:hover { color: #fff; background-color:#000; }
 
 .fieldWithErrors {
-  padding: 2px;
+  padding: 0.125em;
   background-color: red;
   display: table;
 }
 
 #errorExplanation {
-  width: 400px;
+  width: 25em;
   border: 2px solid red;
   padding: 7px;
   padding-bottom: 12px;

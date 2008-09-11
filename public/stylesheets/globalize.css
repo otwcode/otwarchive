@@ -17,7 +17,7 @@
 
 #globalize ul li {
     display: inline;
-    margin: 0.2em;
+    margin: 0.25em;
 }
 
 #globalize form {
@@ -26,7 +26,7 @@
 
 #globalize select {
     border: 1px solid #999;
-    padding: 0.15em;
+    padding: 0.125em;
     background: #fff;
     color: #000;
 }
@@ -34,9 +34,9 @@
 .inplaceeditor-form input
 [ type = text ], .inplaceeditor-form textarea {
     border: 1px solid #999;
-    width: 300px;
+    width: 16em;
 }
 
 .inplaceeditor-form a:link, .inplaceeditor-form a:visited, .inplaceeditor-form a:hover, .inplaceeditor-form a:active {
-    font-size: 95%;
+    font-size: 0.75em;
 }

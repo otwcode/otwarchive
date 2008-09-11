@@ -9,27 +9,33 @@
  * User pages forms can be selected through the main div's general class "sidebar"
  ===*/
 /* these rules are for two column forms when needed:  form dt{float:left; clear:left;margin:0 1em 0 0;} form dd{clear:right; margin:0;} */
-
 /* GLOBAL */
 form dt, label {
     font-weight: 900;
 }
-legend {margin-left:-999em; position:absolute;}
 
-p.submit {text-align:right; clear:both;}
+legend {
+    margin-left: -999em;
+    position: absolute;
+}
 
+p.submit {
+    text-align: right;
+    clear: both;
+}
 /*ADMIN */
-admin_session-new dt {clear: left;
+admin_session-new dt {
+    clear: left;
     float: left;
     width: 6em;
-    margin: 0.25em 0 0.15em;
+    margin: 0.25em 0 0.125em;
     padding: .25em 0 0 .5em;
-	
 }
-admin_session-new dd {float: left;
-    margin: 0.25em 0 0.15em;
-	
-}/* USERS */
+
+admin_session-new dd {
+    float: left;
+    margin: 0.25em 0 0.125em;
+} /* USERS */
 .users-new form label {
     font-weight: 100;
 }
@@ -43,7 +49,7 @@ admin_session-new dd {float: left;
 }
 
 .users-new form .submit input {
-    font-size: larger;
+    font-size: 1.125em;
 }
 /*SESSIONS (front front pages - login, create, etc)*/
 img#openid {
@@ -70,53 +76,78 @@ img#openid {
 }
 
 .session form input.submit {
-    margin: 0 0 0 6em;
-    font-size: larger;
+    margin: 0 0 0 9em;
+    font-size: 1.125em;
 }
 
 .footnote {
-    font-size: 100%;
+    font-size: 0.825em;
 }
 
 form .footnote {
-    font-size: smaller;
+    font-size: 0.75em;
 }
 
 form p.openid {
     margin-top: 6em;
 }
-
 /*WORKS-INDEX -filters*/
+form.story-filters {
+    width: 12em;
+    background: #ddd;
+    padding: 0.5em;
+    float: right;
+    font-size: 0.75em
+}
 
-form.story-filters {width:12em; background: #ddd; padding: 0.5em; float: right; font-size:0.9em}
-.story-filters dt {margin:0.5em auto ;}
-.story-filters dd { border:1px solid #fff; padding:0.15em 0.25em 0.35em 0}
-.story-filters dd:hover {background:#900; color:#fff;}
-.story-filters dd label {font-weight:normal;}
+.story-filters h4 {
+    margin: 0.5em auto;
+	font: 600 1em Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif;
+}
 
-form.story-filters p.submit {text-align:right;}
+.story-filters li {
+    border: 1px solid #fff;
+    padding: 0.125em 0.25em 0.375em 0
+}
 
+.story-filters li:hover {
+    background: #900;
+    color: #fff;
+}
+
+.story-filters li label {
+    font-weight: normal;
+}
+
+form.story-filters p.submit {
+    text-align: right;
+}
 /*COMMENTS */
-
 #comment_form_div dl {
     position: relative;
 }
 
 #comment_form_div dt {
-	clear: left;
+    clear: left;
     float: left;
     width: 6em;
-    margin: 0.25em 0 0.15em;
+    margin: 0.25em 0 0.125em;
     padding: .25em 0 0 .5em;
 }
 
 #comment_form_div dd {
-	float: left;
-    margin: 0.5em 0 0.15em;
+    float: left;
+    margin: 0.5em 0 0.125em;
 }
 
-#comment_form_div #content_content {width:22em !important; height:11em !important}
+textarea#comment_content {
+    width: 32em !important;
+    height: 11em !important
+}
 
+#comment_form_div p.submit {
+    width: 32em
+}
 /* GLOBALIZE (in footer)  you can find this in globalize.css*/
 
 

@@ -12,17 +12,20 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, blockquot
     padding: 0;
 }
 /************************************************end of uneditable rules    */
-
 @font-face {
-	font-family:"Fertigo"; 
-	src: url(Fertigo.otf)
+
+font-family:
+    "Fertigo";
+
+src:
+    url(Fertigo.otf)
 }
 
 body {
     color: #111;
     background: #fff;
     font: 100% Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif;
-    line-height: 1.125em;
+    line-height: 1.25em;
 }
 
 a, a:link {
@@ -41,29 +44,52 @@ a img {
     border: 0;
 }
 
-.body p {
-    font-size:0.875em;
+a.tag {
+    color: #900;
 }
 
-h1 {
-    font: 100 200% Fertigo, Cambria, Constantia, Palatino, Georgia, serif;
+a.tag:hover {
+    color: #fff;
+    background: #900
 }
 
-h2, h3, h4, h5, h6 {
+body p {
+    font-size: 0.875em;
+}
+
+h1, h2, h3, h4, h5, h6 {
     font-family: Fertigo, Cambria, Constantia, Palatino, Georgia, sans-serif;
     font-weight: 400;
 }
 
+h1 {
+    font-size: 2.25em;
+	margin: 1.125em 0;
+}
+
 h2 {
-    font-size: 180%;
+    font-size: 1.5em;
+	margin: .75em 0;
 }
 
 h3 {
-    font-size: 150%;
+    font-size: 1.125em;
+	margin: .5625em 0;
 }
 
 h4 {
-    font-size: 120%;
+    font-size: 1em;
+	margin: .5em 0;
+}
+
+h5 {
+    font-size: 0.75em;
+	margin: .375em 0;
+}
+
+h6 {
+    font-size: 0.625em;
+	margin: .3125em 0;
 }
 
 hr {
@@ -78,7 +104,7 @@ hr.clear {
 }
 
 pre, kbd, tt, code {
-    font: normal 99% consolas, courier, monospace;
+    font: normal 0.75em consolas, courier, monospace;
     margin: auto;
     padding: 0.25em;
 }
@@ -91,9 +117,13 @@ em, cite, i {
     font-style: oblique;
 }
 
-cite em, em cite, cite i, i cite, i em, em i	{ font-style:normal; }
-em cite, i cite				{ text-decoration:underline; }
+cite em, em cite, cite i, i cite, i em, em i {
+    font-style: normal;
+}
 
+em cite, i cite {
+    text-decoration: underline;
+}
 /* TABLES AND LISTS */
 table {
     border: 1px solid #ddd;
@@ -124,17 +154,9 @@ blockquote:before, blockquote:after, q:before, q:after {
 blockquote, q {
     quotes: "" "";
 }
-
 /*SOME UNORGANIZED CLASSES  */
 .clearboth {
     clear: both;
-}
-
-.story-show .story-author .login {
-    font-size: 70%;
-    color: #111;
-    font-style: normal;
-    font-weight: 400;
 }
 
 .works-show hr {
@@ -142,8 +164,6 @@ blockquote, q {
     height: 0;
     width: 50%;
 }
-
-
 /* UNSEMANTIC BODGES, TO BE SORTED THROUGH 31/08/08  I think now mostly confined to works/_work_form. awaiting rewrite.*/
 .list-left {
     float: left;
@@ -156,23 +176,21 @@ blockquote, q {
 .field-left {
     float: left;
     width: 350px;
-    margin: 0;
 }
 
 .field-right {
     float: right;
-    width: 350px;
-    margin: 0;
+    width: 21.875em;
 }
 
 .clearbothdrop {
     clear: both;
-    margin-bottom: 30px;
+    margin-bottom: 1.5em;
 }
 /*PAGINATION STYLING    */
 .pagination {
     text-align: center;
-    padding: .3em;
+    padding: 0.25em;
     clear: both;
 }
 /* SOME POORLY GROUPED RULES, TO BE SORTED AND PUT BACK INTO DOCUMENT FLOW 31/08/08  */
@@ -181,9 +199,8 @@ blockquote, q {
 }
 
 .leftmargin, .comment {
-    margin-left: 50px;
+    margin-left: 3.125em;
 }
 
 .nomargin, #coauthormanage {
-    margin: 0;
 }
