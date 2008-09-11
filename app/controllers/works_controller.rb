@@ -61,12 +61,8 @@ class WorksController < ApplicationController
     elsif params[:work]
       @work = Work.new(params[:work])    
     else # new
-      if current_user.unposted_work
-        @work = current_user.unposted_work
-      else
         @work = Work.new
         @work.chapters.build
-      end
     end
 
     @chapters = @work.chapters.in_order
@@ -199,6 +195,9 @@ class WorksController < ApplicationController
   
   # GET /works/new
   def new
+    if params[:load_unposted] && current_user.unposted_work
+      @work = current_user.unposted_work
+    end
   end
 
   # POST /works
@@ -342,7 +341,7 @@ class WorksController < ApplicationController
     # Do stuff with params[:uploaded_file]
     # parse the existing work 
     if params[:uploaded_work]
-      @work = storyparser.parse_story_from_unknown(params[:uploaded_work])
+      @work = storyparser.parse_story(params[:uploaded_work])
       render :action => "new"
     elsif params[:work_url]
       url = params[:work_url].to_s

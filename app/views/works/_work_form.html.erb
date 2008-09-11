@@ -42,16 +42,12 @@
         <%= link_to_function(h('Add co-authors?').t, "Element.toggle('co-authors')") %>          
       </dt>
 
-      <div id="co-authors"> 	  
-     	  <dt class="story-addauthor">
-     	    <%= f.label :storycoauthor, 'Enter co-author name(s):'.t %></label>
-        </dt>
-        <dd class="story-addauthor">
+      <dd id="co-authors">
+     	    <%= f.label :storycoauthor, 'Enter co-author name(s):'.t %>
          	<%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
               { :url => {:controller => 'pseuds', :action => 'choose_coauthors'}, :method => :get, :param_name => 'search', 
                 :tokens => ',', :min_chars => 2, :skip_style => true } %>            
-        </dd>
-      </div>
+      </dd>
       
       <dt class="story-summary">
         <%= f.label :summary, "Summary (max %d letters)"/ArchiveConfig.SUMMARY_MAX %>
@@ -66,8 +62,7 @@
       <dd class="story-notes">
         <%= f.text_area :notes, :class => "notes-field" %>
       </dd>
-
-      <dt class="story-parent">
+		<dt class="story-parent">
         <%=h "If your story is a remix or was inspired by another story in the archive, copy and paste that story's url below:".t %>
       </dt>
       <dd class="story-parent">
@@ -84,21 +79,16 @@
       </dd>
 
       <dt class="story-is_serial">
-        <%=h 'Is this part of a series?'.t %>
+        <%=h 'Is this part of a series?'.t %> 
       </dt>
    	  <dd>
-        <input type="checkbox" id="storyseriescheck" name="storyseriescheck"  onclick="showWorkSeriesOptions()" 
-          <%- unless @work.series.blank? -%>checked="checked"<%- end -%>/>
+       	<input type="checkbox" id="storyseriescheck" name="storyseriescheck"  onclick="showWorkSeriesOptions()" 
+         <%- unless @work.series.blank? -%>checked="checked"<%- end -%>/>
       </dd>
-    </dl>
-  </fieldset>
-
-  <!-- Series checkbox (storyseriescheck) -->
+ <!-- Series checkbox (storyseriescheck) -->
   <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear. -->
-    
-
-  <!-- Toggles on with series checkbox -->
-  <div id="seriesmanage">
+ <!-- Toggles on with series checkbox -->
+  <dd id="seriesmanage">
     <fieldset>
       <legend><%= 'Manage Series'.t -%></legend>
       <dl>
@@ -125,9 +115,10 @@
     	    <%- end -%>
     	  <%- end -%>          
       </dl>
-    </fieldset>  
-  </div>
-
+     </fieldset> 
+  </dd>
+</dl>
+</fieldset>
 
   <% fields_for_associated('work', @work.chapters.first) do |c| %>
     <fieldset>
@@ -142,15 +133,13 @@
           <input type="checkbox" name="isWip"  
            onclick="showChapteredStoryOptions()" <%- if @work.chaptered? -%>checked="checked"<%- end -%>/>
         </dd>        
-      </dl>
-          
-      <!-- Number of chapters (work_expected_number_of_chapters) -->
-      <div id="number-of-chapters">
+      <dd id="number-of-chapters">
         <p>
           <%=h 'Chapter 1 of'.t %> <%= f.text_field :wip_length, :class => "number-field" %> 
           <%=h 'Title:'.t %> <%= c.text_field :title %>
         </p>
-      </div>          
+      </dd> 
+	</dl>         
     </fieldset>
 
     <!-- Story text field (chapter_attributes_content) -->
@@ -173,6 +162,7 @@
   <fieldset>
     <legend><%= 'Post Story'.t -%></legend>
     <p class="submit">
+      <input value="<%= 'Reset'.t -%>" type="reset">
       <%= submit_tag 'Preview'.t, :name => 'preview_button' %>
       <%= submit_tag 'Cancel'.t, :name => 'cancel_button' %>
     </p> 

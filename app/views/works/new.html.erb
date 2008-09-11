@@ -5,4 +5,8 @@
   <p class="message"><%=h 'Further features coming soon. Questions?'.t %> <%= mail_to ArchiveConfig.QUESTION_ADDRESS, h("Email us").t %>.</p>
   <p class="message required"><%=h '* Required information'.t %></p>
 
+<% if current_user.unposted_work && !params[:load_unposted] -%>
+  <%= link_to 'Try to restore from last unposted draft?'.t, url_for(:action => :new, :load_unposted => true) -%>
+<%- end -%>
+
 <%= render :partial => "work_form" %>
