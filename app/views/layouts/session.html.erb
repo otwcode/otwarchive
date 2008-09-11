@@ -17,7 +17,7 @@
     <!-- BEGIN main -->
 		<div id="main" class="<%= controller.controller_name + '-' + controller.action_name -%> session">
 			<%= flash_div :error, :warning, :notice %>
-			<h1><%=h ArchiveConfig.APP_NAME .t %></h1>
+			<h1><%= link_to ArchiveConfig.APP_NAME .t, :controller => 'home', :action => 'index' %></h1>
 			<h2><%=h "A project of the".t %> <a href="http://transformativeworks.org"><%=h "Organization For Transformative Works".t %></a></h2>
 			<p id="logo">
 				<%= image_tag(ArchiveConfig.LOGO, :alt => ArchiveConfig.ALT_LOGO) -%>
