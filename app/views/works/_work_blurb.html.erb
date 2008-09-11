@@ -15,7 +15,7 @@
       <%=h work.created_at.localize("%d %B %Y") %>
     </li>
     <li class="story-tags">
-			<%= render :partial => 'meta', :locals => {:work => work} %>
+			<%= render :partial => 'works/meta', :locals => {:work => work} %>
     </li>
     <li class="story-desc">
       <%= sanitize_and_format_for_display work.summary %>
