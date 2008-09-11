@@ -36,6 +36,6 @@
   </div>
   
   <%- if logged_in? && current_user == @user -%>
-    <p><%= link_to "Edit".t, edit_user_path(@user) %></p>
+    <p><%= link_to "Edit profile".t, edit_user_path(@user) %></p>
   <%- end -%>
 </div>

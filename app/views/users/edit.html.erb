@@ -1,4 +1,4 @@
-<h1><%=h 'Change your Profile or Preferences'.t %></h1>
+<h1><%=h 'Change your Profile'.t %></h1>
 
 <%= error_messages_for :user %>
 
@@ -7,27 +7,43 @@
 	  <dt><%= f.label :email, "Change Email" .t %></dt>
 		<dd><%= f.text_field :email %></dd>
   </dl>
+	
+	<!-- The password or OpenID login fields are shown in this div -->
+			<div id="switch_fields">
+<!-- use_openid set by link_to_passwd and link_to_openid below; needed for non-JS users to distinguish between versions of the page -->
+					<%- if params[:use_openid] -%>
+					<%= render :partial => 'profile_openid', :locals => {:f => f} %>
+					<%- else -%>
+					<%= render :partial => 'profile_passwd', :locals => {:f => f} %>
+					<% end -%>
+			</div>
+<!-- Link to toggle between password and OpenID. Ugly code! :( Also, must be a way to reuse partials from new user page? -->
+<!-- Two versions of the div tag here so the link to passwd is not shown when the page is first loaded; for non-JS users clicking the link sets use_openid to true, showing the div on reload; for JS users the display is toggled -->
+				<%- if params[:use_openid] -%>
+					<div id="link_to_passwd">
+			  <%- else -%>
+					<div id="link_to_passwd" style="display: none;">
+				<%- end -%>
+					<%= link_to_function(h("Add or Change a Password").t, :href => url_for(:action => 'edit', :use_openid => false), :class => 'footnote') do |page|
+						page.replace_html "switch_fields", :partial => 'profile_passwd', :locals => {:f => f}
+						page[:link_to_passwd].hide
+						page[:link_to_openid].show
+						end %>
+					</div>
+				<div id="link_to_openid">
+<!-- !params[:use_openid] ensures this is hidden on the openid version of the page for non-JS users -->
+					<%- if !params[:use_openid] -%>
+					<%- if ArchiveConfig.USE_OPENID -%>
+						<%= image_tag("openid.png", :alt => ' ') %>
+						<%= link_to_function(h("Add or Change an OpenID URL").t, :href => url_for(:action => 'edit', :use_openid => true), :class => 'footnote') do |page|
+							page.replace_html "switch_fields", :partial => 'profile_openid', :locals => {:f => f}
+							page[:link_to_openid].hide
+							page[:link_to_passwd].show
+							end %>
+						<%- end -%>
+					<%- end -%>
+				</div>
   
-  <dl id="passwd">
-	  <dt><%= f.label :password, "Change Password" .t %></dt>
-	  <dd><%= f.password_field :password %></dd>
-	  
-	  <% if ArchiveConfig.USE_OPENID %>
-    <dd><%= link_to_function image_tag('openid.png', :alt=>"Use OpenID to log in".t), "Element.hide('passwd'); Element.show('openid')" %></dd>
-    <% end -%>
-    
-    <dt><%= f.label :password_confirmation, "Confirm New Password" .t %></dt>
-	  <dd><%= f.password_field :password_confirmation %></dd>
-  </dl>
-  
-  <% if ArchiveConfig.USE_OPENID %>	
-  <dl id="openid" style="display: none">
-	  <dt><%= f.label :identity_url, "Add or Change an OpenID URL" .t %></dt>
-	  <dd><%= f.text_field :identity_url %></dd>
-	  <%= link_to_function "Add or Change a Password".t, "Element.hide('openid'); Element.show('passwd')" %>
-  </dl>
-  <% end -%>
-
   <% fields_for :profile_attributes,  @user.profile do |p| %>
   <dl>
 	  <dt><%= p.label :title, "Title".t %></dt>
