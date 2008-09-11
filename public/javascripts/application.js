@@ -35,3 +35,8 @@ function hideFormFields() {
 	var seriesOptions = document.getElementById('seriesmanage');
 	if (hasSeries != null && seriesOptions != null && !hasSeries.checked) seriesOptions.style.display='none';
 }
+
+function toggleFilters(id) {
+  	var filter = document.getElementById(id);
+	if (filter != null) Effect.toggle(filter, 'blind');  
+}

@@ -1,5 +1,5 @@
 <%- unless @results.nil? -%>
-  <%= render :partial => 'filters' %>
+  <%= render :partial => 'works/filters' %>
 
   <h1><%= @results.length %> <%=h 'search result(s) for'.t %> '<%= h params[:query] %>'</h1>
   <%- unless @results.empty? -%>

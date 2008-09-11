@@ -1,17 +1,27 @@
 
 <%- form_tag(current_filter_path, :class => 'story-filters') do -%>
-  <%- field_set_tag 'Filter the works' do -%>
+  <%- field_set_tag 'Filter stories by: ' do -%>
 		<dl class="story-filters">
       <%- for filter in @filters -%>
-      <dt><%=h filter.name %></dt>
-        <%- for tag in @tags_by_filter[filter][0..9] -%>
-        <dd>
-	        <%= check_box_tag "filters[#{filter.id}][]", tag.id, @selected_tags.include?(tag.id.to_s) %>
-	        <%= label_tag "filters[#{filter.id}][#{tag.id}]", tag.name %>
-        </dd>
-        <%- end -%> 
+      <dt onclick='toggleFilters("filters_<%= filter.id %>")'><%= filter.name %></dt>
+      <dd id="filters_<%= filter.id %>" style="display:none;">
+        <ul>
+          <%- for tag in @tags_by_filter[filter][0..9] -%>
+          <li>
+            <%- if controller.controller_name == "search" -%>
+              <%= check_box_tag "filters[#{filter.id}][]", tag.name, @selected_tags.include?(tag.name) %>
+  	          <%= label_tag "filters[#{filter.id}][#{tag.name}]", tag.name %> 
+	          <%- else -%>
+    	        <%= check_box_tag "filters[#{filter.id}][]", tag.id, @selected_tags.include?(tag.id.to_s) %>
+    	        <%= label_tag "filters[#{filter.id}][#{tag.id}]", tag.name %> 
+  	        <%- end -%> 
+  	      </li>
+          <%- end -%> 
+        </ul>
+      </dd>
 			<%- end -%>
 		</dl>
+		<p><%= hidden_field_tag("query", @query) if @query %></p>
 		<p class="submit"><%= submit_tag "Filter Stories" %></p>
   <%- end -%>
 <%- end -%>

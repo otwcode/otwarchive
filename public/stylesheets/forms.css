@@ -100,6 +100,10 @@ form.story-filters {
     font-size: 0.75em
 }
 
+form.story-filters {width:12em; background: #ddd; padding: 0.5em; float: right; font-size:0.9em}
+.story-filters dt {text-decoration:underline; margin:0.5em auto ;}
+.story-filters dt:hover {color:#900;}
+.story-filters dd label {font-weight:normal;}
 .story-filters h4 {
     margin: 0.5em auto;
 	font: 600 1em Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif;

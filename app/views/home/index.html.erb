@@ -1,6 +1,17 @@
+<!-- BEGIN BETA CAVEATS! -->
 <%- if request.env['HTTP_USER_AGENT'].downcase =~ /msie/i -%>
   <%= javascript_tag "alert('Sorry! The current beta version of the site has been optimized for Firefox and may not display properly in your browser just yet.')" %>
 <%- end -%>
+
+<noscript>
+  <div id="javascript-warning">
+    <p>
+      While we've done our best to make this site accessible without javascript, it will work better and look prettier with it enabled. 
+      Please consider turning it on! Also, be aware that the current beta version of the site has been optimized for Firefox and may not display properly in other browsers just yet. 
+    </p>
+  </div> 
+</noscript>
+<!-- END BETA CAVEATS! --> 
 
 	<div id="signin">
 		<% form_tag session_path do -%>

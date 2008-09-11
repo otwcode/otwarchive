@@ -42,6 +42,7 @@ module WorksHelper
   
   # Tells the filter form what path to use
   def current_filter_path
+    controller.controller_name == "search" ? filter_search_url : 
     request.request_uri.include?('filter') ? request.request_uri : request.request_uri + '/filter'  
   end    
 end
