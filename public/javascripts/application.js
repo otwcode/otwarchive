@@ -36,7 +36,19 @@ function hideFormFields() {
 	if (hasSeries != null && seriesOptions != null && !hasSeries.checked) seriesOptions.style.display='none';
 }
 
+// Toggles items in filter list
 function toggleFilters(id) {
   	var filter = document.getElementById(id);
 	if (filter != null) Effect.toggle(filter, 'blind');  
+}
+
+// Collapses filter list if Javascript is enabled
+function hideFilters() {
+	var filters = $$('dd.filter-tags');
+	filters.each(function(filter) {
+		var tags = filter.select('input');
+		var selected = false;
+		tags.each(function(tag) {if (tag.checked) selected=true});
+		if (selected != true) filter.toggle();
+	});	
 }

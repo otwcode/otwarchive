@@ -4,7 +4,7 @@
 		<dl class="story-filters">
       <%- for filter in @filters -%>
       <dt onclick='toggleFilters("filters_<%= filter.id %>")'><%= filter.name %></dt>
-      <dd id="filters_<%= filter.id %>" style="display:none;">
+      <dd id="filters_<%= filter.id %>" class="filter-tags">
         <ul>
           <%- for tag in @tags_by_filter[filter][0..9] -%>
           <li>
