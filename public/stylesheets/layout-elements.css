@@ -97,17 +97,22 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 dl.navigation { border:0;}
 
 /*story listing */
-li.story ul { background: #fffef9; position: relative; margin: 0 12.5em 1em auto; padding: 0.25em; border: 1px solid #bbb;}
+li.story ul { background: #fffef9; position: relative; margin: 0 12.5em 1em auto; border: 1px solid #bbb;padding: 0.25em}
 #user-page li.story ul { margin-right: 0; }
-li.story-title, li.story-title h3, li.byline { display:inline;}
-li.story-title img { float: left; vertical-align: middle; }
-span.story-byline { font-size: 1.125em; font-weight: 400; display: inline; }
+li.story ul ul {border:0; margin:0; padding:0; }
+li.story ul ul li,li.story dd ul, li.story dd li {display:inline; border:0; margin: 0.375em ; background: #fff}
+li.story-title-line h3 { font-size: 1.5em; line-height: 0.75; margin: -.25em -.25em .75em -.25em; padding:.25em .125em .125em .25em; background:#ddd}
+li.story-title-line p {padding:0; margin:0;}
+li.story-title-line img { float: left; vertical-align: middle; }
+li.story-byline {margin: -1.125em -.25em 0 -.25em; padding:.25em .125em .125em .25em; background:#bbb}
+span.story-byline { font-size: 1.125em; font-weight: 400;}
 span.story-byline a { text-decoration: none}
-li.story-date { text-align: right; color: #777; margin: 0.5em 0; font-size: 0.75em; }
+li.story-date { text-align: right; color: #777; font-size: 0.75em; }
 li.story-tags { clear: left; font-weight: 600; }
 li.story-tags a { font-weight: normal; text-decoration: none; border-bottom: 1px dotted}
 li.story-tags dt, li.story-tags dd { display: inline; padding-right: 0.5em; line-height: 1.75}
-li.story-desc { padding: 0 0.5em; margin: 0.25em 0 1.5em; }
+li.story-desc { padding: 0 0.5em; margin: 0.25em 0 1.5em; overflow:hidden;}
+li.story-desc ul{padding:0; margin:0; text-align:right}
 li.story-tags { clear: left; font-weight: 600; }
 li.story-tags a { font-weight: normal; }
 
