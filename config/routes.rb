@@ -20,11 +20,10 @@ ActionController::Routing::Routes.draw do |map|
 	end
   map.resources :taggings, :path_prefix => ':locale'
 
-  map.root :controller => 'home', :action => 'index', :locale => 'en'
-  
-  map.connect 'home/:action', :controller => "home", :path_prefix => ':locale'
-  
+  map.root :controller => 'home', :action => 'index', :locale => 'en'  
+  map.connect 'home/:action', :controller => "home", :path_prefix => ':locale'  
   map.tos '/tos', :controller => 'home', :action => 'tos', :path_prefix => ':locale'
+  map.tos_faq '/tos_faq', :controller => 'home', :action => 'tos_faq', :path_prefix => ':locale'
 
   map.abuse_reports '/abuse/', :controller => 'abuse_reports', :action => 'create', :path_prefix => ':locale', :conditions => { :method => :post }
   map.new_abuse_report '/abuse/', :controller => 'abuse_reports', :action => 'new', :path_prefix => ':locale'

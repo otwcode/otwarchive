@@ -1,9 +1,15 @@
 class HomeController < ApplicationController
   
   # terms of service
-  def tos 
+  def tos
+    render :action => "tos", :layout => "application"
   end
   
+  # terms of service faq
+  def tos_faq 
+    render :action => "tos_faq", :layout => "application"
+  end
+
   # home page itself
   def index
     @user_count = User.count(:all)
