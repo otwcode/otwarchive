@@ -9,7 +9,7 @@ class Admin::UserCreationsController < ApplicationController
     creation.hidden_by_admin = (params[:hidden] == "true")
     creation.save(false)
     flash[:notice] = creation.hidden_by_admin? ? 'Item has been hidden.' : 'Item is no longer hidden.'
-    redirect_to(creation)    
+    creation_class == Comment ? redirect_to(creation.ultimate_parent) : redirect_to(creation)    
   end
   
   def destroy

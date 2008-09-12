@@ -69,7 +69,7 @@ class Work < ActiveRecord::Base
     elsif self.posted && !self.hidden_by_admin
       return self
     elsif self.hidden_by_admin?
-      return self if current_user.is_author_of?(self) || current_user == "admin"      
+      return self if current_user == "admin" || current_user.is_author_of?(self)       
     end
   end
   

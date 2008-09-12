@@ -1,3 +1,7 @@
+<%- if logged_in_as_admin? -%>
+<%= render :partial => 'admin/admin_options', :locals => {:item => @work} %>
+<%- end -%>
+
 <!-- BEGIN work --> 
 <div class="story-show">
 	<%= render :partial => 'works/work_header' -%>
@@ -15,7 +19,3 @@
 <!-- BEGIN comment section -->
 <%= render :partial => 'comments/commentable', :locals => {:commentable => @work} %>
 <!-- END comment section -->
-
-<%- if logged_in_as_admin? -%>
-<%= render :partial => 'admin/admin_options', :locals => {:item => @work} %>
-<%- end -%>

@@ -8,6 +8,8 @@
 	<%- else -%>
 		<%- if single_comment.is_deleted -%>
 		  <p>(<%=sanitize_and_format_for_display 'previous comment by %s deleted'/get_pseud_or_mailaddress(single_comment) -%>)</p>
+		<%- elsif single_comment.hidden_by_admin? && !logged_in_as_admin? -%>
+		 <p>(<%=h "This comment is under review by an admin and is currently unavailable.".t -%>)</p>
 		<%- else -%>
 			<%- unless single_comment.pseud.nil? -%>
 			  <p><img class="icon" src="/images/icon_placeholder.png" alt="icon placeholder"></p>
@@ -23,6 +25,8 @@
 				<%- end -%>
 				<%- if is_author_of?(single_comment) || is_author_of?(single_comment.ultimate_parent) -%>				
 					<li id="delete_comment_link_<%= single_comment.id -%>"><%= delete_comment_link single_comment -%></li>
+				<%- elsif logged_in_as_admin? -%>
+          <li><%= render :partial => 'admin/admin_options', :locals => {:item => single_comment} %></li>
 				<%- end -%>
 				<%- if single_comment.pseud.nil? and logged_in? -%>
 					<li id="tag_comment_as_spam_link_<%= single_comment.id -%>"><%= tag_comment_as_spam_link single_comment -%></li>

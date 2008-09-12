@@ -4,6 +4,10 @@
     background: #066 top left no-repeat;
 }
 
+#login-block { background: #066; }
+
 .login-admin:after {
     content: url( "\2020" );
 }
+
+#admin-options a {color: red;}
