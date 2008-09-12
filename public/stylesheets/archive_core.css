@@ -1,6 +1,6 @@
 /*MEYERS RESET.***********************************************do not edit */
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, 
-blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, 
+p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, 
 em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, 
 dl, dt, dd, ol, ul, li, fieldset, form, label, legend, 
 table, caption, tbody, tfoot, thead, tr, th, td	
@@ -13,16 +13,16 @@ body	{ color: #222; background: #fffef9; font: 100%/1.125 Candara, Corbel, Genev
 
 a, a:link	{ color: #222; }
 a:hover	{ color: #999; }
-a:focus, a:active { background:#900; color:#fffef9}
+a:focus { background:#900; color:#fffef9}
 a:visited	{ color: #777; }
 a img	{ border: 0; }
-a.tag	{ color: #111; }
+a.tag	{ color: #111; text-decoration:none; border-bottom:1px dotted; padding: 0 0.125em}
 a.tag:hover	{ color: #fffef9; background: #900}
 
-body p	{ font-size: 0.875em; line-height: 1.286;  }
+body p	{ font-size: 0.875em; line-height: 1.286; margin: 0.5625em 0; }
 
 h1, h2, h3, h4, h5, h6	{ font-family: Fertigo, Cambria, Constantia, Palatino, Georgia, sans-serif; font-weight: 400; text-transform: capitalize}
-h1	{ font-size: 2.25em; line-height: 0.5; margin: 1.125em 0; }
+h1	{ font-size: 2.25em; line-height: 0.5; margin: 1.125em 0 0.8625em; }
 h2	{ font-size: 1.5em; line-height: 0.75; margin: .75em 0; }
 h3	{ font-size: 1.125em; line-height: 1; margin: .5625em 0; }
 h4	{ font-size: 1em; line-height: 1.125; margin: .5em 0; }

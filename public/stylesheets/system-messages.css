@@ -1,158 +1,63 @@
 /* === SYSTEM RULES === */
 /* === These notes should be stripped out and copied to style book before launch === */
-/* System messages use the following colours:
- * notice => blue: success, messages, additional information,
- * error => red: error, go back and fix this problem
- * warning => yellow: warning, correct this error before you proceed
- */
-/*Just a note, the main div is automagically
- * assigned a different class for every different
- * functional page, if you want to make use of
- * this to style child elements.
- The flash divs are intended for use to show error messages
- * from just notices to warnings to fatal errors. Errors get
- * set in the model or controller like so: flash[:notice] = "notification"
- * and are displayed in the view with <%= flash_div :error, :warning, :notice -%>
- */
-.flash {
-margin: 0.5em auto;
-padding: 1em;
-}
+/* System messages use the following colours:* notice => blue:success,messages,additional information,
+* error => red:error,go back and fix this problem
+* warning => yellow:warning,correct this error before you proceed
+*/
+/*Just a note,the main div is automagically
+* assigned a different class for every different
+* functional page,if you want to make use of
+* this to style child elements.
+The flash divs are intended for use to show error messages
+* from just notices to warnings to fatal errors. Errors get
+* set in the model or controller like so:flash[:notice] = "notification"
+* and are displayed in the view with <%= flash_div :error,:warning,:notice -%>
+*/
+.flash	{margin:0.5em auto;padding:1em;}
+.flash_icon	{border:0;float:left;width:50px;padding:0 0.5em 0 0;}
 
-.flash_icon {
-border: 0;
-float: left;
-width: 50px;
-padding: 0 0.5em 0 0;
-}
+.notice	{background:#d1e1ef;border:1px solid #c2d2df;}
+#story-form p.notice{background:#ddd; border:1px double #bbb; margin:1.5em 0 -1.5em 0;}
 
-.notice {
-background: #d1e1ef;
-border: 1px solid #c2d2df;
-}
+.warning	{font-weight:900;background:#edefd1;border:1px solid #dfdfc2;}
+.story-meta .warning,#story-meta .warning	{background:transparent !important;border:0 !important;}
 
-.warning {
-font-weight: 900;
-background: #edefd1;
-border: 1px solid #dfdfc2;
-}
-.story-meta .warning, #story-meta .warning  {
-background: transparent !important;
-border: 0 !important;
-}
+.error	{background:#efd1d1;border:1px solid #dfc2c2;}
+.error ul,.error h2,.error p	{margin:0;padding:0}
+.error ul	{margin:auto;width:90%}
+.error ul li	{margin:0.25em;list-style-type:disc;text-indent:1em}
 
-.error {
-background: #efd1d1;
-border: 1px solid #dfc2c2;
-}
-
-.error ul, .error h2, .error p {
-margin: 0;
-padding: 0
-}
-
-.error ul {
-margin: auto;
-width: 90%
-}
-
-.error ul li {
-margin: 0.25em;
-list-style-type: disc;
-text-indent: 1em
-}
 /* SYMBOLS */
-span.symbol {
-border: 1px solid;
-height: 1em;
-width: 1em;
--moz-border-radius: 0.75em;
--webkit-border-radius: 0.75em;
-font-family: Cambria,Georgia,serif;
-}
+span.symbol{margin:0 0.25em;border:1px solid;height:1em;width:1em;-moz-border-radius:0.75em;-webkit-border-radius:0.75em;font-family:Cambria,Georgia,serif;}
+span.symbol span{color:#fffef9;height:1em;width:1em;padding:0.5em;}
+.symbol a{text-decoration:none;border:none}
+span.question{background:#2b547c;border-color:#2a547c;}
 
-span.symbol span {
-color: #fffef9;
-height: 1em;
-width: 1em;
-padding: 0.5em;
-}
+/* A COLLECTION OF CLASSES TO BE USED WHERE APPROPRIATE. MINIMAL STYLING*/
+.important{font-weight:900;}
+.message{font-size:1em;}
+.required{color:#900;}
+.footnote{font-size:0.75em;}
 
-span.symbol span a {
-text-decoration: none;
-border: none
-}
-
-span.question {
-background: #2b547c;
-border-color: #2a547c;
-}
-/* A COLLECTION OF CLASSES TO BE USED AS APPROPRIATE. MINIMAL STYLING
- *
- */
-.important {
-font-weight: 900;
-}
-
-.message {
-font-size: 1em;
-}
-
-.required {
-color: #900;
-}
-
-.footnote {
-font-size: 0.75em;
-}
 /* Rails will automatically add the errorExplanation and fieldWithErrors divs
- * after doing validation of models - just make sure you're using f.label
- * or similar!    */
+* after doing validation of models - just make sure you're using f.label
+* or similar! */
 /*HOPEFULLY WILL JUNK ALL THESE CLASSES UPON RESOLUTION OF ISSUE 317
- * WILL PROBABLY NEED TO SELECT SOME SPECIFIC ROUTES SUCH AS
- * .error p
- * .error ul
- * .error input
- * span.error
- * div.error
- * form .error ...
- */
-.errorexplanation, .errorExplanation {
-background-color: #efd1d1;
-border: 2px solid #af2020;
-margin: 0.5em 0 0.25em;
-padding: 1em;
-}
+* WILL PROBABLY NEED TO SELECT SOME SPECIFIC ROUTES SUCH AS
+* .error p
+* .error ul
+* .error input
+* span.error
+* div.error
+* form .error ...
+*/
+.errorexplanation,.errorExplanation{background-color:#efd1d1;border:2px solid #af2020;margin:0.5em 0 0.25em;padding:1em;}
+.errorexplanation ul,.errorExplanation ul{list-style-type:disc}
+#errorexplanationnone ul{display:none;}
+.fieldwitherrors{width:31.25em;color:#af2020;}
+.fieldwitherrors ul{color:#af2020;font-size:0.75em;margin-bottom:0;}
+.fieldwitherrors label{color:#af2020;background-color:#efd1d1;}
+.fieldwitherrors input{border:2px solid #af2020;}
 
-.errorexplanation ul, .errorExplanation ul {
-list-style-type: disc
-}
-
-#errorexplanationnone ul {
-display: none;
-}
-
-.fieldwitherrors {
-width: 31.25em;
-color: #af2020;
-}
-
-.fieldwitherrors ul {
-color: #af2020;
-font-size: 0.75em;
-margin-bottom: 0;
-}
-
-.fieldwitherrors label {
-color: #af2020;
-background-color: #efd1d1;
-}
-
-.fieldwitherrors input {
-border: 2px solid #af2020;
-    /* Debug Style (development only)    */
-#debug {
-border: 1px dashed;
-margin: 10%;
-padding: 0.625em;
-}
+/* Debug Style (development only) */
+#debug{border:1px dashed;margin:10%;padding:0.625em;}

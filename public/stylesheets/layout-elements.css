@@ -19,6 +19,7 @@ ul#skiplinks	{ margin-left:-999em; position:absolute; }
 ul.navigation, dl.navigation { border-bottom: 1px solid;}
 ul.navigation li, .navigation dd { display: inline; padding: 0 0.5em; border-left:1px solid; border-right:1px solid #ddd;}
 .navigation dt { display:inline; padding:0 0.5em 0 0; }
+.navigation a:active { background:#900; color:#fffef9; }
 
 /* HEADER (MASTHEAD BLOCK) */
 #header  {  background: #900 url(../images/header-red.png) top left repeat-x; font-family: Fertigo, Cambria, Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; margin: 0 0 2.5em 0; position: relative; }
@@ -103,9 +104,10 @@ li.story ul ul li,li.story dd ul, li.story dd li {display:inline; border:0; marg
 li.story-title-line h3 { font-size: 1.5em; line-height: 0.75; margin: -.25em -.25em .75em -.25em; padding:.25em .125em .125em .25em; background:#ddd}
 li.story-title-line p {padding:0; margin:0;}
 li.story-title-line img { float: left; vertical-align: middle; }
-li.story-byline {margin: -1.125em -.25em 0 -.25em; padding:.25em .125em .125em .25em; background:#777; color:#fffef9;}
-span.story-byline { font-size: 1.125em; font-weight: 400;}
-span.story-byline a { text-decoration: none}
+li.story-byline {margin: -1.125em -.25em 0 -.25em; padding:.25em .125em .125em .25em; background:#bbb; color:#fffef9;}
+.story-byline { font-size: 1.125em; font-weight: 400;}
+.story-byline a { text-decoration: none}
+.story-byline a:visited { color:#fffef9;}
 li.story-date { text-align: right; color: #777; font-size: 0.75em; }
 li.story-tags { clear: left; font-weight: 600; }
 li.story-tags a { font-weight: normal; text-decoration: none; border-bottom: 1px dotted}
@@ -126,10 +128,16 @@ li.story-tags a { font-weight: normal; }
 .media-index li.even { width: 40%; float: right; margin: 0 0 0 0.5em; }
 
 /*BOOKMARKS-INDEX BOOKMARKS */
-dl.bookmark { margin: 0.75em 0; padding: 0.5em 0; border-bottom: 1px solid #ddd; }
-.bookmark dt a { font: 600 1em Cambria, Constantia, Georgia, Verdana, sans-serif; text-decoration: none; }
-.bookmark dd { margin: 0.5em; }
-.bookmark dd.notes { background: #ddd; }
+.bookmark p, .bookmark ul {margin:0.325em 1.5em; text-align:justify; padding:0.125em;}
+dl.bookmark { background: #fffef9; position: relative; margin: 0 auto 1em auto; border: 1px solid #bbb; }
+.bookmark dt { margin: -.125em -.125em 0 -.125em; padding: 0.5625em 0.125em; background:#ddd;}
+.bookmark dt a { font: 400 1.125em/1 Fertigo, Cambria, Constantia, Palatino, Georgia, sans-serif; text-transform: capitalize; text-decoration: none; }
+.bookmark dd {padding:0.125em}
+.bookmark h4 {margin:0;}
+.bookmark dd.date { background: #bbb; min-height:1em}
+.bookmark dd.tags {padding:0.125em;}
+.bookmark .tags li { display:inline; padding-right: 0.5em; line-height: 1.75}
+.bookmark dd .navigation {text-align:right; padding:0; margin:0; border-bottom:0;}
 
 /*TAGS-INDEX */
 .tags-index ul { text-align: center; min-height: 100%; margin: 2em auto; }

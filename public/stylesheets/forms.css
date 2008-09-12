@@ -64,7 +64,7 @@ form p.openid	{ margin-top:6em; }
 
 /* POST WORK */
 
-#story-form fieldset {margin:.5em; padding:0.375em 1.5em; border:1px solid #bbb;background:#fffef9}
+#story-form fieldset {margin: 0.5em 0;; padding:0.375em 1.5em; border:1px solid #bbb;background:#fffef9}
 #story-form fieldset fieldset {margin: 0 0 .5em 0; line-height:1.5;}
 
 #main.works-new dl#story-meta	{ position:relative; background:#ddd; border:1px solid #bbb; padding:0.5em; margin-bottom:0.5em}
