@@ -1,4 +1,4 @@
-.comment .navigation {text-align:right;}
+#feedback .navigation, .comment .navigation {text-align:right;}
 
 div.comment {
     position: relative;

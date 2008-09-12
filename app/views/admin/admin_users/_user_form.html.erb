@@ -1,5 +1,5 @@
 <%- form_for :user, user, :url => {:controller => "admin/admin_users", :action => "update"} do |f| -%> 
-<td><%=h user.login %><%= f.hidden_field :login %></td>
+<th scope="row"><%=h user.login %><%= f.hidden_field :login %></th>
 <td><%= f.text_field :email %></td>
 <td><%= f.check_box :translator %> <%= f.label :translator, "Translator" %></td>
 <td><%= f.check_box :tag_wrangler %> <%= f.label :tag_wrangler, "Tag Wrangler" %></td>

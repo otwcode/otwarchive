@@ -42,7 +42,7 @@ ul.navigation li, .navigation dd { display: inline; padding: 0 0.5em; border-lef
 ul#main-navigation { position: relative; clear: both; border-left: 1px solid #111; margin: 0 0 0 1em; }
 #main-navigation li { background: #fffef9; display: block; float: left; }
 #main-navigation a:link { color: #900; font-weight: 400; }
-#main-navigation a:hover, #main-navigation a: active { color: #111; font-weight: 100; }
+#main-navigation a:hover, #main-navigation a:active { color: #111; font-weight: 100; }
 #main-navigation a span:hover { background: #ddd; }
 #main-navigation span { font-weight: 100; background: #111; float: left; display: block; color: #fffef9; border: 1px solid #111; border-bottom: 0; padding: 0.5em; }
 #main-navigation a span { background: #fffef9; border: 1px solid #111; border-bottom: 0; color: #111; }
@@ -73,6 +73,7 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 
 /*SESSIONS (front front pages - login, create, logout(feedbacks)etc)*/
 #main.session h1, #main.session h1, #main.passwords-new h1 { text-align: left; border: 0; margin: 0.75em 0 0.125em 0; }
+#main.session h1 a, #main.session h1 a, #main.passwords-new h1 a {text-decoration:none;}
 #main.session h2, #main.session h2, #main.passwords-new h2 { font: 100 0.75em "Gill Sans", Georgia, Verdana, sans-serif; margin: 0.25em auto 2em}
 
 .session #logo { width: 49%; float: left; display: block; margin-bottom: 1.5em}
@@ -86,11 +87,18 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 #main.users-show ul.story-list { margin: auto; }
 .user-module h2 { background: #222; color: #fffef9; border-bottom: 4px double #fffef9; margin: 2.25em auto 0 ; padding: 0.125em; }
 
-#user-header { position: relative; }
+#user-header { position: relative; min-height:100px;}
 #user-header img { margin: 0 0 0.5em 0; top: 0; left: 0; position: absolute; }
 #user-header h1 { margin: 0 0 0 100px; /*sized in pixels because the icon it is avoiding has a fixed pixel value*/}
+#user-header h1 a {text-decoration:none; text-transform:lowercase}
 #user-header ul.navigation { margin: 0.5em 0 0 100px; text-align:right; }
 #user-header ul li { display: inline; padding: 0.25em; }
+
+/* USER HOME: PROFILE */
+#main.profile-show h3 { background: #222; color: #fffef9; border-bottom: 4px double #fffef9; margin: 2.25em auto 0 ; padding: 0.125em; }
+dl#user-data { margin: 1.5em 0;}
+dl#user-data dt {width: 9em; font-weight: 900; float:left; clear:left; margin:0.25em 0.8625em 0.25em 0; }
+#user-data dd	{ clear:right; margin:0 0 0 9em; padding: 0.25em 0 0.125em 0; border-bottom:1px solid #ddd; }
 
 /* WORKS-INDEX */
 /*story filters rules are in forms.css */
@@ -118,7 +126,6 @@ li.story-tags { clear: left; font-weight: 600; }
 li.story-tags a { font-weight: normal; }
 
 /* INBOX-SHOW */
-
 .sidebar .comment { clear:none;}
 
 /*MEDIA-INDEX (FANDOMS)*/

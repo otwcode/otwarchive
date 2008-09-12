@@ -1,7 +1,7 @@
 <div id="user-profile">
   <%= render :partial => 'users/header', :locals => {:user => @user} %>
 
-  <h2><%=h "About ".t %><%=h @user.login %></h2>
+  <h3><%=h "About ".t %><%=h @user.login %></h3>
 
   <p><%= "Member since: ".t %><%= @user.created_at.localize("%B %Y") %></p>
 
