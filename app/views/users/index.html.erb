@@ -1,6 +1,10 @@
 <h1><%=h 'All Users:'.t %></h1>
 
-<ul><%= @users.map{|user| "<li>" + link_to(user.login, user_path(user)) + "</li>"} %></ul>
+<ul>
+  <%- @users.each do |user| -%>
+    <%= render :partial => 'user_blurb', :locals => {:user => user} -%>
+  <%- end -%>  
+</ul>
 
 <div class="pagination">
 	  <%= will_paginate @users, :prev_label =>  "&laquo; Previous".t,:next_label => "Next &raquo;".t %>
