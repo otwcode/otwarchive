@@ -160,7 +160,16 @@ class WorksController < ApplicationController
 				works_by_category[filter.id] = eval(@current_scope).visible(user, :include => :tags, :order => @sort_order, :conditions => conditions).paginate(:page => params[:page])
 			end		
 		end
-		
+		if params[:pseuds]
+			works = []
+			@selected_tags << params[:pseuds]
+			for pseud_name in params[:pseuds]
+				pseud = Pseud.find_by_name(pseud_name)
+				works << pseud.works.visible(user).paginate(:page => params[:page]) unless pseud.blank?
+			end
+			works = works.flatten.compact
+			works_by_category['pseud'] = works unless works.blank?
+		end
 		unless works_by_category.blank?
 			works_by_category.each_value {|works| @works = @works & works }
 			@works = @works.paginate(:page => params[:page])

@@ -1,6 +1,21 @@
 <%- form_tag(current_filter_path, :class => 'story-filters', :method => :get) do -%>
   <%- field_set_tag 'Filter stories by: ' do -%>
 		<dl class="story-filters">
+			<%- if @user && @user.pseuds.count > 1 -%>
+      <dt onclick='toggleFilters("filter-pseuds")'>Pseud</dt>
+      <dd id="filter-pseuds" class="filter-tags">
+        <ul>
+          <%- for pseud in @user.pseuds -%>
+					<%- if pseud.works.count > 0 -%>
+          <li>
+    	      <%= check_box_tag 'pseuds[]', pseud.name, @selected_tags.include?(pseud.name) %>
+    	      <%= label_tag "pseuds[#{pseud.name}]", pseud.name %>  
+  	      </li>
+					<%- end -%>
+          <%- end -%> 
+        </ul>
+      </dd>			
+			<%- end -%>
       <%- for filter in @filters -%>
       <dt onclick='toggleFilters("filters_<%= filter.id %>")'><%= filter.name %></dt>
       <dd id="filters_<%= filter.id %>" class="filter-tags">
