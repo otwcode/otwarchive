@@ -94,7 +94,7 @@ class UsersController < ApplicationController
         @user.profile.save!
       end
       @user.recently_reset = nil if params[:change_password]
-      if params[:user][:identity_url] != @user.identity_url
+      if params[:user][:identity_url] != @user.identity_url && !params[:user][:identity_url].blank?
         authenticate_with_open_id(params[:user][:identity_url]) do |result, identity_url|
           if result.successful?
             successful_update
@@ -122,8 +122,8 @@ class UsersController < ApplicationController
   protected
     def successful_update
       @user.update_attributes!(params[:user]) 
-      flash[:notice] = 'User was successfully updated.'.t
-      redirect_to(@user) 
+      flash[:notice] = 'Your profile has been successfully updated.'.t
+      redirect_to(user_profile_path(@user)) 
     end
     def unsuccessful_update
        raise

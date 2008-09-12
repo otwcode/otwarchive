@@ -141,7 +141,7 @@ class UsersControllerTest < ActionController::TestCase
         assert_equal @new_email, @user.email
       end
       should_set_the_flash_to /success/
-      should_redirect_to 'user_url(@user)'      
+      should_redirect_to 'user_profile_url(@user)'      
     end
     context "on PUT to :update someone else" do
       setup do
