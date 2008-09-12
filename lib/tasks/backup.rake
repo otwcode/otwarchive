@@ -16,7 +16,7 @@ def setup
   end
   @mysql = @config["mysql"] || "mysql"
   @mysqldump = @config["mysqldump"] || "mysqldump"
-  @path = @config[:path] || RAILS_ROOT + '/db/backup/'
+  @path = @config["path"] || RAILS_ROOT + '/db/backup/'
   unless FileTest.exists?(@path)
     puts "#{@path} must exist and be 770 with group mysql"
     exit

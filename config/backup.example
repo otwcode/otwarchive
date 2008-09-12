@@ -17,6 +17,7 @@ password:
 ## path must exist and be writable by mysql and whoever runs the script
 ## path defaults to RAILS_ROOT/db/backup but must still be manually created
 ## with permissions 770 and group mysql
+## must end with slash
 
 #path: /backup/archive/
 
