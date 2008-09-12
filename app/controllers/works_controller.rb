@@ -353,7 +353,9 @@ class WorksController < ApplicationController
           @work.pseuds << current_user.default_pseud
           @chapter.pseuds << current_user.default_pseud
           if @chapter.save && @work.save
-            flash[:notice] = "Work successfully uploaded!".t
+            flash[:notice] = "Work successfully uploaded!".t + "<br />" +
+              "(You will want to check the results over carefully before posting, though, 
+                because the poor computer can only figure out so much.)".t
             redirect_to edit_work_path(@work) and return
           else
             render :action => :new and return
