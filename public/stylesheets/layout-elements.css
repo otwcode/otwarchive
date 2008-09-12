@@ -36,7 +36,6 @@ ul.navigation li, .navigation dd { display: inline; padding: 0 0.5em; border-lef
 #greeting.logged-out { margin-top: 1em; }
 
 #login li { display: inline; }
-#search p { float: left; clear: both; font-size: 0.75em; padding: 0; margin: 0; }
 
 /* MAIN NAVIGATION (TABS) */
 ul#main-navigation { position: relative; clear: both; border-left: 1px solid #111; margin: 0 0 0 1em; }
@@ -84,13 +83,13 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 
 /* HOME: USERS SHOW*/
 #main.users-show ul.story-list { margin: auto; }
-.user-module h2 { background: #111; color: #fffef9; border-bottom: 4px double #fffef9; margin: 1em auto; padding: 0.125em; }
+.user-module h2 { background: #222; color: #fffef9; border-bottom: 4px double #fffef9; margin: 2.25em auto 0 ; padding: 0.125em; }
 
 #user-header { position: relative; }
-#user-header img { margin: 0 0 0.5em 0; top: 0; left: 0; position: absolute}
-#user-header h1 { margin-left: 100px; /*sized in pixels because the icon it is avoiding has a fixed pixel value*/}
-#user-header ul.navigation { margin: 0.5em 0 75px 100px; text-align:right;}
-#user-header ul li { display: inline; padding: 0.25em}
+#user-header img { margin: 0 0 0.5em 0; top: 0; left: 0; position: absolute; }
+#user-header h1 { margin: 0 0 0 100px; /*sized in pixels because the icon it is avoiding has a fixed pixel value*/}
+#user-header ul.navigation { margin: 0.5em 0 0 100px; text-align:right; }
+#user-header ul li { display: inline; padding: 0.25em; }
 
 /* WORKS-INDEX */
 /*story filters rules are in forms.css */
@@ -100,11 +99,11 @@ dl.navigation { border:0;}
 li.story ul { background: #fffef9; position: relative; margin: 0 12.5em 1em auto; border: 1px solid #bbb;padding: 0.25em}
 #user-page li.story ul { margin-right: 0; }
 li.story ul ul {border:0; margin:0; padding:0; }
-li.story ul ul li,li.story dd ul, li.story dd li {display:inline; border:0; margin: 0.375em ; background: #fff}
+li.story ul ul li,li.story dd ul, li.story dd li {display:inline; border:0; margin: 0.375em ; background: #fffef9}
 li.story-title-line h3 { font-size: 1.5em; line-height: 0.75; margin: -.25em -.25em .75em -.25em; padding:.25em .125em .125em .25em; background:#ddd}
 li.story-title-line p {padding:0; margin:0;}
 li.story-title-line img { float: left; vertical-align: middle; }
-li.story-byline {margin: -1.125em -.25em 0 -.25em; padding:.25em .125em .125em .25em; background:#bbb}
+li.story-byline {margin: -1.125em -.25em 0 -.25em; padding:.25em .125em .125em .25em; background:#777; color:#fffef9;}
 span.story-byline { font-size: 1.125em; font-weight: 400;}
 span.story-byline a { text-decoration: none}
 li.story-date { text-align: right; color: #777; font-size: 0.75em; }
@@ -136,6 +135,7 @@ dl.bookmark { margin: 0.75em 0; padding: 0.5em 0; border-bottom: 1px solid #ddd;
 .tags-index ul { text-align: center; min-height: 100%; margin: 2em auto; }
 .tags-index li { display: inline; padding: 0.25em 0.5em; }
 .tags-index a { text-decoration: none; }
+.tags-index a:hover	{ color: #fffef9; background: #900}
 
 a.cloud1 { font-size: 0.5625em; font-weight: 100; color: #111; }
 a.cloud2 { font-size: 0.625em; font-weight: 200; color: #240F0F; }
