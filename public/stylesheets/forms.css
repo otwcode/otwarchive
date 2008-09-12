@@ -43,12 +43,11 @@ form p.openid	{ margin-top:6em; }
 #story-form fieldset {margin:.5em; padding:0.375em 1.5em; border:1px solid #bbb;background:#fff}
 #story-form fieldset fieldset {margin: 0 0 .5em 0; line-height:1.5;}
 
-#main.works-new dl.story-meta	{ position:relative; background:#ddd; border:1px solid #bbb; padding:0.5em}
-#main.works-new .story-meta dt	{ float:left; clear:left; width:10em; margin:0 1em 0 0; }
-#main.works-new .story-meta dd	{ clear:right; position:relative; }
-#main.works-new .story-meta dd.rating	{ margin:1em 0 0}
-#main.works-new .story-meta dd p	{ clear:both; }
-#main.works-new .story-meta dd li	{ display:inline; padding:0 0.5em 0 0; }
+#main.works-new dl#story-meta	{ position:relative; background:#ddd; border:1px solid #bbb; padding:0.5em; margin-bottom:0.5em}
+#main.works-new #story-meta dt	{ float:left; clear:left; width:10em; margin:0 1em 0 0; }
+#main.works-new #story-meta dd	{ clear:right; position:relative; }
+#main.works-new #story-meta dd p	{ clear:both; }
+#main.works-new #story-meta dd li	{ display:inline; padding:0 0.5em 0 0; }
 
 #story-form #story-preface textarea {width:99%;margin:auto; height:10em}
 #story-form #story-meta dd input, #story-form #story-meta dd select {width:60%;}

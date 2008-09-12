@@ -36,7 +36,7 @@ font-weight: 900;
 background: #edefd1;
 border: 1px solid #dfdfc2;
 }
-.story-meta .warning {
+.story-meta .warning, #story-meta .warning  {
 background: transparent !important;
 border: 0 !important;
 }
