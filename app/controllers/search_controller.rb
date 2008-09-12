@@ -23,13 +23,15 @@ class SearchController < ApplicationController
   
   def filter
     works_by_category = {}
-		if params[:filters]
-			params[:filters].each_pair do |category_id, tag_names|
-				@selected_tags << tag_names
-				search = Ultrasphinx::Search.new(:query => tag_names.join(" "))
-        search.run  
-				works_by_category[category_id] = search.results.paginate(:page => params[:page])
-			end
+		for filter in @filters
+			unless params[filter.name].blank?
+				@selected_tags << params[filter.name]
+				search = Ultrasphinx::Search.new(:query => params[filter.name].join(" "))
+				search.run  
+				works_by_category[filter.id] = search.results.paginate(:page => params[:page])
+			end		
+		end
+		unless works_by_category.blank?
 			works_by_category.each_value {|works| @results = @results & works }
 			@results = @results.paginate(:page => params[:page])
 			@selected_tags.flatten!

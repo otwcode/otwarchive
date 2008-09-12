@@ -3,7 +3,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :media, :has_many => :fandoms, :path_prefix => ':locale'
   
   map.resources :fandoms, :path_prefix => ':locale' do |fandom|
-    fandom.resources :works, :collection => {:filter => :post}
+    fandom.resources :works, :collection => {:filter => :get}
     fandom.resources :bookmarks
   end
   
@@ -15,7 +15,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :tag_relationships, :path_prefix => ':locale'
   map.resources :tag_categories, :path_prefix => ':locale'
   map.resources :tags, :collection => {:show_hidden => :get}, :path_prefix => ':locale' do |tag|
-    tag.resources :works, :collection => {:filter => :post}
+    tag.resources :works, :collection => {:filter => :get}
     tag.resources :bookmarks	
 	end
   map.resources :taggings, :path_prefix => ':locale'
@@ -38,14 +38,14 @@ ActionController::Routing::Routes.draw do |map|
     user.resource :profile, :controller => 'profile'
     user.resource :inbox, :controller => 'inbox'
     user.resources :bookmarks
-    user.resources :works, :collection => {:filter => :post}
+    user.resources :works, :collection => {:filter => :get}
     user.resources :series, :member => {:manage => :get}, :has_many => :serial_works
     user.resources :readings
     user.resources :comments, :member => { :approve => :put, :reject => :put } 
   end
   
   map.resources :works, 
-    :collection => {:upload_work => :post, :filter => :post},
+    :collection => {:upload_work => :post, :filter => :get},
     :member => { :preview => :get, :post => :post }, :path_prefix => ':locale' do |work|
       work.resources :chapters, :has_many => :comments, :collection => {:manage => :get, :update_positions => :post}, :member => { :preview => :get, :post => :post }
       work.resources :comments, :member => { :approve => :put, :reject => :put }
@@ -77,7 +77,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :series, :path_prefix => ':locale', :member => {:manage => :get}, :has_many => :serial_works 
   
-  map.resource :search, :controller => 'search', :member => {:filter => :post}, :path_prefix => ':locale'
+  map.resource :search, :controller => 'search', :member => {:filter => :get}, :path_prefix => ':locale'
 
   map.open_id_complete 'session', :controller => "session", :action => "create", :requirements => { :method => :get }, :path_prefix => ':locale'
   

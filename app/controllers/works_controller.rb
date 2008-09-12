@@ -149,18 +149,24 @@ class WorksController < ApplicationController
 		user = is_admin? ? "admin" : current_user
 		conditions = ""
 		works_by_category = {}
-		if params[:filters]
-			params[:filters].each_pair do |category_id, tag_ids|
-				@selected_tags << tag_ids
-				tag_ids << @tag.id unless @tag.blank?
-				conditions = "tags.id IN (#{tag_ids.join(',')})" # NOT GOOD! MUST BE CHANGED!  
-				works_by_category[category_id] = eval(@current_scope).visible(user, :include => :tags, :order => @sort_order, :conditions => conditions).paginate(:page => params[:page])
-			end
+		for filter in @filters
+			unless params[filter.name].blank?
+				@selected_tags << params[filter.name]
+				tag_ids = []
+				for tag_name in params[filter.name]
+					tag_ids << Tag.find_by_name(tag_name).id
+				end
+				conditions = "tags.id IN (#{tag_ids.join(',')})" # tag_ids no longer contains user-submitted content
+				works_by_category[filter.id] = eval(@current_scope).visible(user, :include => :tags, :order => @sort_order, :conditions => conditions).paginate(:page => params[:page])
+			end		
+		end
+		
+		unless works_by_category.blank?
 			works_by_category.each_value {|works| @works = @works & works }
 			@works = @works.paginate(:page => params[:page])
 			@selected_tags.flatten!
 		end
-		render :action => :index
+		render :action => :index	
 	end
   
   # GET /works/1

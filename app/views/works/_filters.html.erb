@@ -1,5 +1,4 @@
-
-<%- form_tag(current_filter_path, :class => 'story-filters') do -%>
+<%- form_tag(current_filter_path, :class => 'story-filters', :method => :get) do -%>
   <%- field_set_tag 'Filter stories by: ' do -%>
 		<dl class="story-filters">
       <%- for filter in @filters -%>
@@ -8,13 +7,8 @@
         <ul>
           <%- for tag in @tags_by_filter[filter][0..9] -%>
           <li>
-            <%- if controller.controller_name == "search" -%>
-              <%= check_box_tag "filters[#{filter.id}][]", tag.name, @selected_tags.include?(tag.name) %>
-  	          <%= label_tag "filters[#{filter.id}][#{tag.name}]", tag.name %> 
-	          <%- else -%>
-    	        <%= check_box_tag "filters[#{filter.id}][]", tag.id, @selected_tags.include?(tag.id.to_s) %>
-    	        <%= label_tag "filters[#{filter.id}][#{tag.id}]", tag.name %> 
-  	        <%- end -%> 
+    	      <%= check_box_tag filter.name + '[]', tag.name, @selected_tags.include?(tag.name) %>
+    	      <%= label_tag filter.name + "[#{tag.name}]", tag.name %>  
   	      </li>
           <%- end -%> 
         </ul>
