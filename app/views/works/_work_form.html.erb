@@ -24,7 +24,11 @@
 		<%= link_to_help "story-title" -%>
       </dt>
       <dd class="story-title">
-        <%= f.text_field :title, :class => "storyinputfield" %>
+        <%= f.text_field :title, :class => "storyinputfield", :live => true %>
+        <%= live_validation_for_field('work_title', 
+						:maximum_length => ArchiveConfig.TITLE_MAX, :minimum_length => ArchiveConfig.TITLE_MIN, 
+					  :failureMessage => 'We need a title! (At least %d letters long, please.)'/ArchiveConfig.TITLE_MIN)
+				-%>
       </dd>
       
 		   <dt class="story-author" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
@@ -55,6 +59,8 @@
       </dt>
       <dd class="story-summary">
         <%= f.text_area :summary, :class => "summary-field" %>
+        <%= live_validation_for_field('work_summary', :presence => false,
+						:maximum_length => ArchiveConfig.SUMMARY_MAX) -%>
       </dd>
 
       <dt class="story-notes">
@@ -62,111 +68,123 @@
       </dt>
       <dd class="story-notes">
         <%= f.text_area :notes, :class => "notes-field" %>
+        <%= live_validation_for_field('work_notes', :presence => false,
+						:maximum_length => ArchiveConfig.NOTES_MAX) -%>
       </dd>
 </dl>
 </fieldset>
+
 <fieldset id="associations">
 <legend>Associations</legend>
-<dl>
+  <dl>
 		<dt class="story-parent">
-        <%= f.label :parent_url, h("If your story is a remix or was inspired by another story in the archive, copy and paste that story's url below:").t %>
-      </dt>
-      <dd class="story-parent">
-        <%= f.text_field :parent_url %>
-      </dd>
+      <%= f.label :parent_url, h("If your story is a remix or was inspired by another story in the archive, copy and paste that story's url below:").t %>
+    </dt>
+    <dd class="story-parent">
+      <%= f.text_field :parent_url %>
+    </dd>
 
-    	<!-- Privacy dropdown (storyprivacy) -->
-    	<dt class="story-restricted">
-        <%= f.label :restricted, h("Only make my story visible to registered users").t %>
-      </dt>
-      <dd class="story-restricted">
-        <%= f.check_box :restricted %>
-        <%= link_to_help "registered-users" -%>
-      </dd>
+  	<!-- Privacy dropdown (storyprivacy) -->
+  	<dt class="story-restricted">
+      <%= f.label :restricted, h("Only make my story visible to registered users").t %>
+    </dt>
+    <dd class="story-restricted">
+      <%= f.check_box :restricted %>
+      <%= link_to_help "registered-users" -%>
+    </dd>
 
-      <dt class="story-is_serial">
-        <%= f.label :storyseriescheck, h("Is this part of a series?").t %> 
-      </dt>
-   	  <dd class="story-is_serial">
-       	<input type="checkbox" id="storyseriescheck" name="storyseriescheck"  onclick="showWorkSeriesOptions()" 
-         <%- unless @work.series.blank? -%>checked="checked"<%- end -%>/>
-      </dd>
- <!-- Series checkbox (storyseriescheck) -->
-  <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear. -->
- <!-- Toggles on with series checkbox -->
-  <dd id="seriesmanage">
-    <fieldset>
-      <legend><%= 'Manage Series'.t -%></legend>
-      <dl>
-        <% fields_for "work[series_attributes]" do |s| %>
-          <dt><%= s.label 'series_id', h('Choose one of your existing series:').t %></dt>
-          <dd>
-			<%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>
-            <%= link_to_help "choosing-series" -%>
-          </dd>
-          <dt><%= s.label :title, h("Or add a new one:").t %></dt>
-          <dd><%= s.text_field :title, :class => "storyinputfield" %></dd>
-    	  <%- end -%>
-      	
-      	<%- unless @serial_works.blank? -%>
-      	  <dt><%= 'Current Series'.t -%></dt>
-      	  <%- for serial in @serial_works -%>
-      	    <dd>
-      	      <ul class="navigation">
-				        <li><%= link_to serial.series.title, serial.series %></li> 
-      	      	<li><%= link_to 'Remove'.t, serial, :confirm => 'Are you sure?'.t, :method => :delete %></li> 
-      	      	<li><%= link_to 'Delete'.t, serial.series, :confirm => 'Are you sure?'.t, :method => :delete %></li>
-			        </ul>
-      	    </dd>
-    	    <%- end -%>
-    	  <%- end -%>          
-      </dl>
-     </fieldset> 
-  </dd>
-<% fields_for_associated('work', @work.chapters.first) do |c| %>
-        <!-- Chaptered checkbox (work_is_wip) -->
-        <!-- Checking this box causes the expected number of chapters box to appear; unchecking it causes it to disappear. -->
-        <dt class="story-is_wip">
-           <%= f.label :isWip, h("Does this work have multiple chapters?").t %>
-        </dt>
-        <dd class="story-is_wip">
-          <input type="checkbox" name="isWip"  
-           onclick="showChapteredStoryOptions()" <%- if @work.chaptered? -%>checked="checked"<%- end -%>/>
-        </dd>        
-      <dd id="number-of-chapters">
-        <p>
-          <%=h 'Chapter 1 of'.t %> <%= f.text_field :wip_length, :class => "number-field" %> 
-          <%=h 'Title:'.t %> <%= c.text_field :title %>
-        </p>
-      </dd> 
+    <dt class="story-is_serial">
+      <%= f.label :storyseriescheck, h("Is this part of a series?").t %> 
+    </dt>
+ 	  <dd class="story-is_serial">
+     	<input type="checkbox" id="storyseriescheck" name="storyseriescheck"  onclick="showWorkSeriesOptions()" 
+       <%- unless @work.series.blank? -%>checked="checked"<%- end -%>/>
+    </dd>
+    
+    <!-- Series checkbox (storyseriescheck) -->
+    <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear. -->
+    <!-- Toggles on with series checkbox -->
+    <dd id="seriesmanage">
+      <fieldset>
+        <legend><%= 'Manage Series'.t -%></legend>
+        <dl>
+          <% fields_for "work[series_attributes]" do |s| %>
+            <dt><%= s.label 'series_id', h('Choose one of your existing series:').t %></dt>
+            <dd>
+  			<%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>
+              <%= link_to_help "choosing-series" -%>
+            </dd>
+            <dt><%= s.label :title, h("Or add a new one:").t %></dt>
+            <dd><%= s.text_field :title, :class => "storyinputfield" %></dd>
+      	  <%- end -%>
+        	
+        	<%- unless @serial_works.blank? -%>
+        	  <dt><%= 'Current Series'.t -%></dt>
+        	  <%- for serial in @serial_works -%>
+        	    <dd>
+        	      <ul class="navigation">
+  				        <li><%= link_to serial.series.title, serial.series %></li> 
+        	      	<li><%= link_to 'Remove'.t, serial, :confirm => 'Are you sure?'.t, :method => :delete %></li> 
+        	      	<li><%= link_to 'Delete'.t, serial.series, :confirm => 'Are you sure?'.t, :method => :delete %></li>
+  			        </ul>
+        	    </dd>
+      	    <%- end -%>
+      	  <%- end -%>          
+        </dl>
+       </fieldset> 
+    </dd>
+    
+  <% fields_for_associated('work', @work.chapters.first) do |c| %>
+    <!-- Chaptered checkbox (work_is_wip) -->
+    <!-- Checking this box causes the expected number of chapters box to appear; unchecking it causes it to disappear. -->
+    <dt class="story-is_wip">
+      <%= f.label :isWip, h("Does this work have multiple chapters?").t %>
+    </dt>
+    <dd class="story-is_wip">
+      <input type="checkbox" name="isWip"  
+       onclick="showChapteredStoryOptions()" <%- if @work.chaptered? -%>checked="checked"<%- end -%>/>
+    </dd>        
+    <dd id="number-of-chapters">
+    <p>
+      <%=h 'Chapter 1 of'.t %> <%= f.text_field :wip_length, :class => "number-field" %> 
+      <%=h 'Title:'.t %> <%= c.text_field :title %>
+    </p>
+    </dd> 
 	</dl>         
-    </fieldset>
+</fieldset>
 
-    <!-- Story text field (chapter_attributes_content) -->
-    <fieldset>
-      <legend><%= 'Story Text'.t -%></legend>
-      <p>
-        <%= c.label :content, h("Story, in plain text with limited HTML*").t, :class => "required" %>
-      </p>
-      <p class="rtf-html-switch">
-    	  <% use_tinymce -%>
-        <span><a href="javascript:addEditor('content');"><%=h 'Rich text'.t %></a></span>
-        <span><a href="javascript:removeEditor('content');">HTML</a></span>
-      </p>      
-      <p>
-    		<%= c.text_area :content, :class => "mce-editor", :id => "content" %>
-      </p>      
-    </fieldset>
-  <%- end -%>
+<!-- Story text field (chapter_attributes_content) -->
+<fieldset>
+  <legend><%= 'Story Text'.t -%></legend>
+  <p>
+    <%= c.label :content, h("Story, in plain text with limited HTML*").t, :class => "required" %>
+  </p>
+  <p class="rtf-html-switch">
+	  <% use_tinymce -%>
+    <span><a href="javascript:addEditor('content');"><%=h 'Rich text'.t %></a></span>
+    <span><a href="javascript:removeEditor('content');">HTML</a></span>
+  </p>      
+  <p>
+		<%= c.text_area :content, :class => "mce-editor", :id => "content" %>
+    <%= live_validation_for_field('content', 
+				:maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN, 
+				:tooLongMessage => 'We salute your ambition! But sadly the content must be less than %d letters long. (Maybe you want to create a multi-chaptered work?)'/ArchiveConfig.CONTENT_MAX,
+				:tooShortMessage => 'Brevity is the soul of wit, but your content does have to be at least %d letters long.'/ArchiveConfig.CONTENT_MIN,
+			  :failureMessage => 'You did want to post a story here, right?'.t)
+		-%>
+  </p>      
+</fieldset>
+
+  <%- end -%> <!-- end of fields_for_associated -->
 
   <fieldset>
     <legend><%= 'Post Story'.t -%></legend>
     <p class="submit">
-      <input value="<%= 'Reset'.t -%>" type="reset" />
       <%= submit_tag 'Preview'.t, :name => 'preview_button' %>
+      <input value="<%= 'Reset'.t -%>" type="reset" />
       <%= submit_tag 'Cancel'.t, :name => 'cancel_button' %>
     </p> 
   </fieldset>
-<%- end -%>
+<%- end -%> <!-- end of form_for -->
 
 </div>

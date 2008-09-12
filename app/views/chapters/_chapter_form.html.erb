@@ -16,15 +16,12 @@
 		  <%- use_tinymce -%>
 		  <a href="javascript:addEditor('content');"><%=h 'Rich text'.t %></a>  <a href="javascript:removeEditor('content');"><%=h 'HTML'.t %></a><br />
 		  <%= f.text_area :content, :class => "mce-editor", :id => "content" %>
-		
-			<script>
-				var content = new LiveValidation('content', { wait: 500 });
-				content.add(Validate.Length, {"failureMessage": "<%= "must be less than %d letters long."/ArchiveConfig.CONTENT_MAX -%>", 
-											  "maximum": <%= ArchiveConfig.CONTENT_MAX -%>});
-				content.add(Validate.Length, {"failureMessage": "<%= "must be at least %d letters long."/ArchiveConfig.CONTENT_MIN -%>", 
-											  "minimum": <%= ArchiveConfig.CONTENT_MIN -%>});
-				content.add(Validate.Presence, {"failureMessage": "is required.", "validMessage": ""})
-			</script>
+      <%= live_validation_for_field('content', 
+  				:maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN, 
+  				:tooLongMessage => 'We salute your ambition! But sadly the content must be less than %d letters long. (Maybe you want to create a multi-chaptered work?)'/ArchiveConfig.CONTENT_MAX,
+  				:tooShortMessage => 'Brevity is the soul of wit, but your content does have to be at least %d letters long.'/ArchiveConfig.CONTENT_MIN,
+  			  :failureMessage => 'You did want to post a story here, right?'.t)
+  		-%>
 		</dd>
 		</dl>
     
@@ -87,7 +84,8 @@
     </dl>
     <p>
       <%= submit_tag h('Preview').t, :name => 'preview_button' %>
-      <%= button_to_function h('Cancel').t, "javascript:history.back()" %>      
+      <input value="<%= 'Reset'.t -%>" type="reset" />
+      <%= submit_tag 'Cancel'.t, :name => 'cancel_button' %>
     </p>
 
 <% end %>
