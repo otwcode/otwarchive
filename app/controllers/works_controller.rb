@@ -143,7 +143,6 @@ class WorksController < ApplicationController
 		user = is_admin? ? "admin" : current_user
 		conditions = @tag.blank? ? "" : ["taggings.tag_id = (?)", @tag.id]
 		@works = eval(@current_scope).visible(user, :include => [:taggings =>:tag], :order => @sort_order, :conditions => conditions).paginate(:page => params[:page])
-    @tag_categories = TagCategory.official
     @filters = @tag_categories - [TagCategory.default]
     @tags_by_filter = {}
     @filters.each do |filter|
@@ -208,7 +207,6 @@ class WorksController < ApplicationController
       render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 and return
     end
     @chapters = @work.chapters
-    @tag_categories = TagCategory.official
     @tag_categories_limited = TagCategory.official - [TagCategory.find_by_name("Warning")]
   end
   
@@ -270,9 +268,7 @@ class WorksController < ApplicationController
   
   # PUT /works/1
   def update
-    @work.attributes = params[:work]
-    @tag_categories = TagCategory.official
-    
+    @work.attributes = params[:work]    
     # Need to update @pseuds and @selected_pseuds values so we don't lose new co-authors if the form needs to be rendered again
     @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
     to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 
@@ -315,7 +311,6 @@ class WorksController < ApplicationController
   # GET /works/1/preview
   def preview
     @preview_mode = true
-    @tag_categories = TagCategory.official
   end
   
   # POST /works/1/post

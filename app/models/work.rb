@@ -14,7 +14,7 @@ class Work < ActiveRecord::Base
   include TaggingExtensions
 
   # Index for Ultrasphinx
-  is_indexed :fields => ['created_at', 'title', 'summary', 'notes'], 
+  is_indexed :fields => ['created_at', 'word_count', 'title', 'summary', 'notes'], 
              :concatenate => [{:association_name => 'chapters', :field => 'content', :as => 'story'},
                                {:class_name => 'Tag', :field => 'name', :as => 'tag',
                                :association_sql => "LEFT OUTER JOIN taggings ON (works.`id` = taggings.`taggable_id` AND taggings.`taggable_type` = 'Work') LEFT OUTER JOIN tags ON (tags.`id` = taggings.`tag_id`)"},
@@ -47,7 +47,7 @@ class Work < ActiveRecord::Base
   attr_accessor :new_parent
   attr_accessor :new_tags
 
-  before_save :validate_authors, :set_language, :validate_tags
+  before_save :validate_authors, :set_language
   before_save :set_word_count
   before_save :post_first_chapter
   after_save :save_creatorships, :save_associated 
@@ -347,7 +347,7 @@ class Work < ActiveRecord::Base
     TagCategory.required - my_tag_categories == []
   end
   
-  def validate_tags
+  def validate
     if self.posted
       errors.add_to_base("Work must have required tags.".t) unless self.has_required_tags?      
       self.has_required_tags?

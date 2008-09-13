@@ -12,13 +12,11 @@ class ReadingsController < ApplicationController
   def index
     @user = User.find_by_login(params[:user_id])
     @readings = current_user.readings.paginate(:all, :order => "updated_at DESC", :page => params[:page])
-    @tag_categories = TagCategory.official
   end
 
   def show
     @user = User.find_by_login(params[:user_id]) 
     @reading = current_user.readings.find(params[:id], :options => {:order => :updated_at})
-    @tag_categories = TagCategory.official
   end
 
   def destroy

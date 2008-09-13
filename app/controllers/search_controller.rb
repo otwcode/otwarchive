@@ -3,7 +3,6 @@ class SearchController < ApplicationController
   before_filter :get_search_results
   
   def get_search_results
-    @tag_categories = TagCategory.official
     @filters = @tag_categories - [TagCategory.default]
     @tags_by_filter = {}
     @selected_tags = []
@@ -26,7 +25,9 @@ class SearchController < ApplicationController
 		for filter in @filters
 			unless params[filter.name].blank?
 				@selected_tags << params[filter.name]
-				search = Ultrasphinx::Search.new(:query => params[filter.name].join(" "))
+				query = ''
+				params[filter.name].each {|tag_name| query += 'tag:"' + tag_name + '" ' }
+				search = Ultrasphinx::Search.new(:query => query)
 				search.run  
 				works_by_category[filter.id] = search.results.paginate(:page => params[:page])
 			end		

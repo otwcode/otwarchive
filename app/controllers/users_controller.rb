@@ -26,8 +26,7 @@ class UsersController < ApplicationController
     @user = User.find_by_login(params[:id])
     @works = @user.works.visible(current_user, {:limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'works.updated_at DESC'})
     @series = @user.series.find(:all, :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'series.updated_at DESC')
-    @bookmarks = @user.bookmarks.visible(current_user, {:limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'bookmarks.updated_at DESC'})
-    @tag_categories = TagCategory.official  
+    @bookmarks = @user.bookmarks.visible(current_user, {:limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'bookmarks.updated_at DESC'})  
   end
   
   # GET /users/new

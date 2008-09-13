@@ -64,7 +64,12 @@ module TaggingExtensions
       if tag_string.blank?
         tag_array = []
       else
-        new_tags = tag_string.split(ArchiveConfig.DELIMITER).collect do |tag_name|
+        if tag_string.is_a?(Array)
+          tag_names = tag_string
+        else
+          tag_names = tag_string.split(ArchiveConfig.DELIMITER)
+        end
+        new_tags = tag_names.collect do |tag_name|
           tag_name.gsub!(/^\s*/, "")
           tag_name.gsub!(/\s*$/, "")
           tag = Tag.find_or_create_by_name(tag_name)
@@ -78,7 +83,7 @@ module TaggingExtensions
           end
           tag
         end
-        tag_array = new_tags.flatten.compact
+        tag_array = new_tags.flatten.compact        
       end
       new_tags << tag_array
       # add and remove tags to make the taggable's tags equal to the new tag_array

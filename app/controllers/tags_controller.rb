@@ -44,7 +44,6 @@ class TagsController < ApplicationController
 
     @works.uniq!
     @bookmarks.uniq!
-    @tag_categories = TagCategory.official
     respond_to do |format|
       format.html # show.html.erb
     end   
