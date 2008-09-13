@@ -12,7 +12,7 @@ class TagTest < ActiveSupport::TestCase
     should_require_attributes :name
     should_allow_values_for :adult, true, false
     should_allow_values_for :name, '"./?~!@#$%^&()_-+=', "1234567890", "space's are not tag separators"
-    should_not_allow_values_for :name, "commas, aren't allowed", "colons: are not allowed", :message => /commas, colons/
+    should_not_allow_values_for :name, "commas, aren't allowed", :message => /commas/
     should "invert valid and banned" do
       assert_equal @tag.valid?, !@tag.banned?
     end
@@ -64,27 +64,7 @@ class TagTest < ActiveSupport::TestCase
           @work.reload
         end
         should "set the work to adult" do
-          assert @work.adult
-        end
-        context "and then set to non-adult (but the work still has an adult tag)" do
-          setup do
-            @tag2 = create_tag(:adult => true)
-            tagging = create_tagging(:taggable => @work, :tag => @tag2)
-            @tag.update_attribute("adult", false) 
-            @work.reload
-          end
-          should "set the work adult" do
-            assert @work.adult
-          end
-          context "when all tags are set to not-adult" do
-            setup do
-              @tag2.update_attribute("adult", false)
-              @work.reload
-            end
-            should "set the work not-adult" do
-              assert !@work.adult
-            end
-          end          
+          assert @work.adult_content?
         end
       end
     end
