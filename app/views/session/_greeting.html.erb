@@ -1,0 +1,24 @@
+<%- if logged_in? -%>
+  <ul id="greeting">
+    <li>
+      <%=h "Hi,".t -%>&nbsp;<%= link_to current_user.login, user_path(current_user), :class => 'login' -%>!
+    </li>
+  </ul>
+  <ul id="login">
+    <li>
+      <%= link_to 'Post New'.t, new_work_path -%>&nbsp;|
+    </li>
+    <li>
+      <%= link_to h('Log out'.t), logout_path -%>
+    </li>
+  </ul>
+<% elsif logged_in_as_admin? -%>
+  <ul id="greeting">
+    <li>
+      <span><%=h "Hello,".t -%></span>&nbsp;<%= link_to current_admin.login, admin_path(current_admin), :class => 'login login-admin' -%>!
+    </li>
+    <li>
+      <%= link_to 'Log out'.t, admin_logout_path -%>
+    </li>
+  </ul>
+<%- end -%>

@@ -1,0 +1,13 @@
+<dl>
+	<dt><%= image_tag("openid.png", :alt => ''.t, :class => 'openid') %></dt>
+	<dd>
+		<%= text_field_tag "openid_url", '' %>
+  </dd>
+</dl>	
+<p class="footnote">
+	<%= check_box_tag('remember_me', '1', false) %>
+	<%= label_tag 'remember_me', 'Remember me'.t %>&nbsp;|
+  <%= link_to_remote 'standard login'.t , {:url => {:controller => :session, :action => 'passwd_small'}}, 
+ 										 :href => url_for(:overwrite_params => { :use_openid => false }), :class => 'footnote' %>
+</p>
+<p class="submit"><%= submit_tag 'Login'.t, :class => 'submit' %></p>

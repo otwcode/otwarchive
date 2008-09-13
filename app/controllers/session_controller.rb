@@ -32,18 +32,20 @@ class SessionController < ApplicationController
 
   # switches to the openid version of the login form
   def openid
-    respond_to do |format|
-      format.js
-    end
   end
  
   # switches to the password version of the login form
   def passwd
-    respond_to do |format|
-      format.js
-    end
   end
-  
+
+  # switches to the openid version of the mini login box
+  def openid_small
+  end
+ 
+  # switches to the password version of the mini login box
+  def passwd_small
+  end
+
   protected
   
   def open_id_authentication(openid_url)

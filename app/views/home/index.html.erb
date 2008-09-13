@@ -6,40 +6,23 @@
 <noscript>
   <div id="javascript-warning">
     <p>
-      While we've done our best to make this site accessible without javascript, it will work better and look prettier with it enabled. 
-      Please consider turning it on! Also, be aware that the current beta version of the site has been optimized for Firefox and may not display properly in other browsers just yet. 
+      While we've done our best to make this site accessible without javascript, 
+      it will work better and look prettier with it enabled. 
+      Please consider turning it on! Also, be aware that the current beta version of the 
+      site has been optimized for Firefox and may not display properly in other browsers just yet. 
     </p>
   </div> 
 </noscript>
 <!-- END BETA CAVEATS! --> 
 
-	<div id="signin">
-		<% form_tag session_path do -%>
-			<div id="switch_fields">
-      <%- if params[:use_openid] -%>
-        <%= render :partial => "openid" %>
-      <%- else -%>
-        <%= render :partial => "passwd" %>
-      <%- end -%>
-			</div>
-			<%- if params[:use_openid] -%>
-			<p id="link_to_passwd">
-					<%- else -%>
-			<p id="link_to_passwd" style="display: none;">
-					<%- end -%>
-					<%= link_to_passwd %>
-			</p>
-				<p id="link_to_openid">
-          <!-- !params[:use_openid] ensures this is hidden on the openid version of the page for non-JS users -->
-					<%- if !params[:use_openid] -%>
-					  <%- if ArchiveConfig.USE_OPENID -%>
-						  <%= image_tag("openid.png", :alt => '') %>
-						  <%= link_to_openid %>
-					  <%- end -%>
-					<%- end -%>
-				</p>	
-		<% end -%>
- 	</div>
+<div id="signin">  
+  <%- if logged_in? -%>
+    <%= render :partial => 'session/greeting' -%>
+  <%- else -%>
+    <%= render :partial => 'session/login' -%>
+  <%- end -%>
+</div>
+
   <h1>An Archive of Our Own
   	<span><%= ArchiveConfig.APPNAME -%>
      <% unless ArchiveConfig.REVISION.blank? %>(rev. <%= ArchiveConfig.REVISION %>)<% end %></span>
