@@ -27,7 +27,17 @@
 
 <ul class="story-list" id="series-story-list">
   <%- for serial in @serial_works -%>
-    <%= render :partial => 'works/work_blurb', :locals => {:work => serial.work} %>
-    <%= link_to 'Remove from series'.t, serial, :confirm => 'Are you sure?'.t, :method => :delete %>
+  <li>
+    <ul>
+    <%- if serial.work.visible(current_user) -%>
+      <%= render :partial => 'works/work_blurb', :locals => {:work => serial.work} %>
+    <%- else -%>
+      <li>(<%= "This work is temporarily unavailable.".t %>)</li>
+    <%- end -%>
+    <%- if is_author_of?(@series) -%>
+      <li><%= link_to 'Remove from series'.t, serial, :confirm => 'Are you sure?'.t, :method => :delete %></li>
+    <%- end -%>
+    </ul>
+  </li>
   <%- end -%>
 </ul>

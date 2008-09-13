@@ -36,7 +36,7 @@ class WorksControllerTest < ActionController::TestCase
         @work.update_attribute('default', @tag.name)
         get :show, :locale => 'en', :id => @work.id
       end
-      should_render_template :adult
+      should_render_template '_adult'
     end
     context "when creating a work" do
       setup do
@@ -174,7 +174,7 @@ class WorksControllerTest < ActionController::TestCase
           @work.update_attribute('default', @tag.name)
           get :show, :locale => 'en', :id => @work.id
         end
-        should_render_template :adult
+        should_render_template '_adult'
       end
       context "if you set your preference, works that are adult" do
         setup do

@@ -58,15 +58,6 @@ class TagTest < ActiveSupport::TestCase
           assert @tag.visible('Works', create_user).include?(@work)
         end
       end
-      context "which is set to adult" do
-        setup do
-          @tag.update_attribute("adult", true)
-          @work.reload
-        end
-        should "set the work to adult" do
-          assert @work.adult_content?
-        end
-      end
     end
     context "of a bookmark on a posted work" do
       setup do
@@ -77,7 +68,7 @@ class TagTest < ActiveSupport::TestCase
         tagging = create_tagging(:taggable => @bookmark, :tag => @tag)  
       end
       should "show the bookmark" do
-        assert @tag.visible('Bookmarks').include?(@bookmark)
+        assert @tag.bookmarks.visible.include?(@bookmark)
       end
       context "which is private" do
         setup do
