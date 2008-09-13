@@ -23,18 +23,19 @@ p.submit	{ text-align:right; clear:both; }
 #signin dt	{font-size:0.625em;clear:left;float:left;width:4.875em;margin:0.25em 0 0.125em;padding:.25em 0 0 .125em;}
 #signin dd	{float:left;display:block;}
 #signin p.footnote	{font-size:0.5625em;margin:0 0.5em 0 4.875em;float:left;clear:left}
+input#login, input#password, input#query {border:2px inset #3d0000;}
+.home input#login, .home input#password, .home input#query {border:1px inset #bbb}
 #signin input#remember_me	{margin:0.125em 0.125em 0.125em 0;vertical-align:middle}
 #signin p.submit	{text-align:right;margin:-2.8625em 0 0 0;width:5em;float:right}
 #signin label	{font-weight:100;}
-#signin p#link_to_openid, #signin p#link_to_passwd 	{clear:both;margin:0.125em 0 0 3.55em;border-top:1px solid;}
-#signin img#openid	{vertical-align:middle;margin:.25em 0 .25em 0;padding:0;border:0;}
+#signin img.openid	{vertical-align:top;}
 #signin dt img {display:block; float:right; margin: -.5em 0.75em 0 0}
 
 /* sign in box when present in #header #login-block */
 
-#login-block #signin {width:121%;}
+#login-block #signin {width:121%; }
 #login-block #signin {font-family:Candara,Corbel,Arial,Tahoma,sans-serif}
-#login-block #signin p.submit	{text-align:left;margin:-2.8625em 0 0 -1em;width:7.525em;float:right}
+#login-block #signin p.submit	{margin:-3.5em 0 0 0; text-align:left; width:7.5em}
 
 /* SEARCH */
 

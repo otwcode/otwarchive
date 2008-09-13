@@ -19,7 +19,7 @@ a img	{ border: 0; }
 a.tag	{ color: #111; text-decoration:none; border-bottom:1px dotted; padding: 0 0.125em}
 a.tag:hover	{ color: #fffef9; background: #900}
 
-body p	{ font-size: 0.875em; line-height: 1.286; margin: 0.5625em 0; }
+body p	{ font-size: 0.875em; line-height: 1.286; margin: 0.643em 0; }
 
 h1, h2, h3, h4, h5, h6	{ font-family: Fertigo, Cambria, Constantia, Palatino, Georgia, sans-serif; font-weight: 400; text-transform: capitalize}
 h1	{ font-size: 2.25em; line-height: 0.5; margin: 1.125em 0 0.8625em; }
@@ -41,8 +41,9 @@ em cite, i cite	{ text-decoration: underline; }
 abbr, acronym	{ font-variant: small-caps; }
 
 /* TABLES AND LISTS */
-table	{ padding: 0.75em; border: 1px solid #ddd; }
+table	{ margin:auto; padding: 0.375em; border: 1px solid #ddd; }
 caption	{ margin-left: -999em; position: absolute; }
+table label { display:none;}
 caption, th, td	{ text-align: left; }
-th	{ font-weight: 900; }
+th	{ font-weight: 100; background:#777; color:#fff; padding: 0.25em;}
 td th	{ padding-right: 3em; }

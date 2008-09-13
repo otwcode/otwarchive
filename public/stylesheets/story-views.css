@@ -20,11 +20,11 @@ set story styles
 
 /*headings */
 #chapters h1	{ font-family:Cambria, Constantia, Palatino, Georgia, serif; text-align:center; }
-#chapters h2	{ font-variant:normal; text-align:left; color:#333; margin:1em 0; }
-#chapters h3	{ font-style:oblique; font-weight:100; background:#444; color:#fffef9; border-bottom:0.25em double #fffef9; padding:0 0.125em 0 0.125em}
-#chapters h4	{ font-variant:small-caps}
-#chapters h5	{ font-weight:bolder}
-#chapters h6	{ font-weight:bolder; }
+#chapters h2	{ font-variant:normal; text-align:left; color:#333; margin:1.5em 0; text-transform:none;}
+#chapters h3	{ font-weight:100; background:#333; color:#fffef9; border-bottom:0.25em double #fffef9; padding: 0.125em }
+#chapters h4	{ font-variant:small-caps; font-size:1.25em;}
+#chapters h5	{ font-weight:600; font-size: 1em;}
+#chapters h6	{ font-size: 0.8625em; border-bottom:1px solid; }
 
 /*quotes and stresses*/
 #chapters blockquote	{ border-left:2px solid #999; padding:0.75em; margin:auto auto auto 1.5em; font-size:1em; }

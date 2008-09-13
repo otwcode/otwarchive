@@ -2,7 +2,7 @@
 <div id="header">
   <h1><%= link_to 'An Archive of Our Own'.t, :controller => 'home', :action => 'index' %>
   	<span><%= ArchiveConfig.APPNAME -%>
-     <% unless ArchiveConfig.REVISION.blank? %>(rev. <%= ArchiveConfig.REVISION %>)<% end %></span>
+     <% unless ArchiveConfig.REVISION.blank? %>(<span>rev. <%= ArchiveConfig.REVISION %></span>)<% end %></span>
   </h1>
   
   <div id="login-block">
