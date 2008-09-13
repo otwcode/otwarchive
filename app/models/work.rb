@@ -51,7 +51,6 @@ class Work < ActiveRecord::Base
   before_save :set_word_count
   before_save :post_first_chapter
   after_save :save_creatorships, :save_associated 
-  before_save :set_adult
   before_validation_on_update :validate_tags
   
   # Associating works with languages.  
@@ -359,15 +358,8 @@ class Work < ActiveRecord::Base
     end
   end
 
-  def set_adult
-    new_adult = false
-    if new_tags
-      new_tags.each do |tag|
-        new_adult = true if tag.adult
-      end
-      self.adult = new_adult
-    end
-    return true
+  def adult_content?
+    tags.find(:first, :conditions => {:adult => true})
   end
     
 end

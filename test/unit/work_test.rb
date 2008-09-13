@@ -61,7 +61,7 @@ class WorkTest < ActiveSupport::TestCase
         @work.update_attribute('default', @tagna.name)
       end
       should "not be marked adult" do
-        assert !@work.adult
+        assert !@work.adult_content?
       end
 
       context "and an adult tag" do
@@ -70,7 +70,7 @@ class WorkTest < ActiveSupport::TestCase
           @work.update_attribute('default', @taga.name + ', ' + @tagna.name)
         end
         should "be marked adult" do
-          assert @work.adult
+          assert @work.adult_content?
         end
   
         context "when the adult tag is removed" do

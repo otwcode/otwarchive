@@ -9,6 +9,7 @@ class WorksController < ApplicationController
 	before_filter :get_works, :only => [:index, :filter]
   before_filter :update_or_create_reading, :only => [ :show ]
   before_filter :check_permission_to_view, :only => [ :show ]
+  before_filter :check_adult_status, :only => [:show]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview, :post]
   
   # We may want to move this to a module
@@ -107,7 +108,17 @@ class WorksController < ApplicationController
       redirect_to works_path
     end
   end
+  
+  # Users must explicitly okay viewing of adult content
+  def check_adult_status
+    if params[:view_adult]
+      session[:adult] = true
+    elsif @work.adult_content? &&  !see_adult? 
+      render :partial => "adult", :layout => "application"
+    end  
+  end
 	
+	# Shares some code between index and filter
 	def get_works
     case params[:sort_column]
       when "title" then
@@ -145,6 +156,7 @@ class WorksController < ApplicationController
   def index 
   end
 	
+	# TODO: combine this back into index now that it's just a GET request
 	def filter
 		user = is_admin? ? "admin" : current_user
 		conditions = ""
@@ -194,14 +206,6 @@ class WorksController < ApplicationController
     end
     if !is_admin? && !@work.visible(current_user)
       render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 and return
-    elsif @work.adult? &&  !see_adult? 
-      @back = request.env["HTTP_REFERER"]
-      @back = root_path unless @back
-      if @back == work_url(@work)
-        session[:adult] = true
-      else
-        render :action => "adult" and return
-      end
     end
     @chapters = @work.chapters
     @tag_categories = TagCategory.official

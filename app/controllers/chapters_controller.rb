@@ -6,6 +6,7 @@ class ChaptersController < ApplicationController
   # only authors of a work should be able to edit its chapters
   before_filter :is_author, :only => [ :edit, :update, :manage ]
   before_filter :check_permission_to_view, :only => [:index, :show]
+  before_filter :check_adult_status, :only => [:index, :show]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
   
   # For the auto-complete field in the works form
@@ -43,6 +44,15 @@ class ChaptersController < ApplicationController
   def check_permission_to_view
     can_view_hidden = is_admin? || (current_user.is_a?(User) && current_user.is_author_of?(@work))
 	  access_denied if (!is_registered_user? && @work.restricted?) || (!can_view_hidden && @work.hidden_by_admin?)
+  end
+  
+  # Users must explicitly okay viewing of adult content
+  def check_adult_status
+    if params[:view_adult]
+      session[:adult] = true
+    elsif @work.adult_content? &&  !see_adult? 
+      render :partial => "works/adult", :layout => "application"
+    end  
   end
   
   # fetch work these chapters belong to from db
@@ -103,14 +113,6 @@ class ChaptersController < ApplicationController
     @tag_categories = TagCategory.official
     if !@work.visible(current_user)
       render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 and return
-    elsif @work.adult? && !see_adult?
-      @back = request.env["HTTP_REFERER"]
-      @back = root_path unless @back
-      if @back == work_chapter_url(@work, @chapter)
-        session[:adult] = true
-      else
-        render :action => "adult" and return
-      end
     end
     @comments = @chapter.comments
     respond_to do |format|
