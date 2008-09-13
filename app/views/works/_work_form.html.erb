@@ -2,9 +2,9 @@
 <% if current_user.unposted_work && !params[:load_unposted] -%>
   <li><%= link_to 'Try to restore from last unposted draft?'.t, url_for(:action => :new, :load_unposted => true) -%></li>
 <%- end -%>
-<li><%= link_to_function(h('Upload from an existing URL?').t, 
-		"Element.toggle('upload-work-form'); Element.toggle('story-form')", 
-		:href => url_for(:controller => :work, :action => :upload_form)) -%>
+<li id="upload-link"><%= use_upload_link -%>
+</li>
+<li id="form-link" style="display: none;"><%= use_form_link -%>
 </li>
 </ul>
 

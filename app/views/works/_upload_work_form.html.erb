@@ -1,4 +1,10 @@
 <!-- This partial renders a form for uploading a work from an existing URL -->
+<!-- Link to return to standard form for non-JS users -->
+<noscript>
+	<ul class="navigation">
+		<li><%= use_form_link -%></li>
+	</ul>
+</noscript>
   <% form_tag url_for(:controller => :works, :action => :upload_work) do %>
     <p>
       <%= label_tag "work_url", h("URL for existing work: ".t) -%>

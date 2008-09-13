@@ -216,6 +216,8 @@ class WorksController < ApplicationController
   def new
     if params[:load_unposted] && current_user.unposted_work
       @work = current_user.unposted_work
+    elsif params[:upload_work]
+      render :partial => 'upload_work_form', :layout => "application"
     end
   end
 

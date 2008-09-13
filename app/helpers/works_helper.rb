@@ -45,4 +45,18 @@ module WorksHelper
     controller.controller_name == "search" ? filter_search_url : 
     request.request_uri.include?('filter') ? request.request_uri : request.request_uri + '/filter'  
   end    
+  
+  # On post new work page puts link to the form to upload from existing page
+  def use_upload_link
+    link_to_function(h('Upload from an existing URL?').t,
+    "Element.toggle('upload-work-form'); Element.toggle('story-form'); Element.toggle('upload-link'); Element.toggle('form-link')",
+    :href => url_for(:controller => :works, :action => :new, :upload_work => true))
+  end
+  
+  # On post new work page puts link to the standard upload form
+  def use_form_link
+    link_to_function(h('Return to standard form').t, 
+    "Element.toggle('upload-work-form'); Element.toggle('story-form'); Element.toggle('upload-link'); Element.toggle('form-link')",
+    :href => url_for(:controller => :works, :action => :new, :upload_work => false))
+  end
 end
