@@ -34,6 +34,7 @@ class SeriesController < ApplicationController
   # GET /series/1
   # GET /series/1.xml
   def show
+    @tag_categories = TagCategory.official
     @series = Series.find(params[:id])
     @serial_works = @series.serial_works.find(:all, :order => 'position') 
   end
