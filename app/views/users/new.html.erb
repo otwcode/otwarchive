@@ -6,7 +6,11 @@
 <!-- Create login -->
 			<p>
 				<%= f.label :login, h("What would you like as your user name?").t %><br />
-				<%= f.text_field :login %>
+				<%= f.text_field :login, :class => "user_login" %>
+				        <%= live_validation_for_field('user_login', 
+						:maximum_length => User::LOGIN_LENGTH_MAX, :minimum_length => User::LOGIN_LENGTH_MIN, 
+					  :failureMessage => 'You need a login name! (At least %d letters long, please.)'/User::LOGIN_LENGTH_MIN)
+				-%>
 			</p>
     
 <!-- The password or OpenID login fields are shown in this div -->
@@ -47,7 +51,12 @@
 				</div>
 <!-- Email address -->
 				<p><%= f.label :email, h("What email address would you like us to use? (This has to be valid - we'll be sending a confirmation email before you can activate your account.)").t  %><br />
-				<%= f.text_field :email %></p>
+				<%= f.text_field :email %>
+				<%= live_validation_for_field('user_email', 
+						:maximum_length => User::EMAIL_LENGTH_MAX, :minimum_length => User::EMAIL_LENGTH_MIN, 
+					  :failureMessage => 'You need to enter a valid email address!')
+				-%>
+				</p>
 <!-- Age Check -->
 				<p>
 					<%=h 'You need to be over 13 years old to become a registered member of the archive.'.t %>

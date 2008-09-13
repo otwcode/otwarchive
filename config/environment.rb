@@ -106,7 +106,7 @@ Rails::Initializer.run do |config|
 
   # Override the sanitize defaults to allow some extra formatting attributes. 
   #config.action_view.sanitized_allowed_attributes = 'class', 'style'
-  config.action_view.sanitized_allowed_tags = 'u', 'strike', 'table', 'tr', 'td', 'tbody', 'th', 'thead'
+  config.action_view.sanitized_allowed_tags = 'u', 'strike'
   
   #Disallow div tags in sanitize.
   config.after_initialize do
