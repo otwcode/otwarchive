@@ -7,11 +7,15 @@ tinyMCE.init({
 	plugins : "paste",
 	paste_insert_word_content_callback : "convertWord",
 	paste_auto_cleanup_on_paste : true,
+	// TinyMCE default behaviour uses CSS styling for most things; this is disabled for now
+	// because we're stripping those tags out.
+	inline_styles : false,
+
 
 
 	
 	// Theme options - using the advanced theme for now and just limiting the buttons used - we may want to create a custom theme in future.
-	theme_advanced_buttons1 : "pasteword,|,bold,italic,|,link,unlink,image,|blockquote,|,bullist,numlist,|,undo,redo",
+	theme_advanced_buttons1 : "pasteword,|,bold,italic,underline,strikethrough,|,link,unlink,image,|,blockquote,|,bullist,numlist,|,undo,redo",
 	theme_advanced_buttons2 : "",
 	theme_advanced_buttons3 : "",
 	theme_advanced_toolbar_location : "top",
