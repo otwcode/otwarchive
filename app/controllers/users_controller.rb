@@ -51,7 +51,7 @@ class UsersController < ApplicationController
     else
       @user = User.new(params[:user])   
       if @user.save
-        flash[:notice] = 'during testing you can activate via <a href=' + activate_path(@user.activation_code) + '>your activation url</a>.'
+        flash[:notice] = 'during testing you can activate via <a href=' + activate_path(@user.activation_code) + '>your activation url</a>.' if ENV['RAILS_ENV'] == 'development'
   
         render :partial => "confirmation", :layout => "application"
       else
