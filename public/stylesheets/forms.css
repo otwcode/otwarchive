@@ -97,8 +97,14 @@ input#work_parent_url {width:99%;margin:0.375em auto 0.8625em auto;}
 
 dd.story-title input {width:80%;}
 
+/*EDIT PREFERENCES */
+
+form.edit_preference ul { margin:0.5625em auto; padding:1.5em 0; }
+.edit_preference li { margin:0.5625em 0;}
+.edit_preference label {font-weight:100;}
+
 /*WORKS-INDEX -filters*/
-form.story-filters	{ background:#ddd; font-size:0.8625em; width:12em; float:right; margin-top:1.125em; padding:0.5em; border:1px solid #fffef9;}
+form.story-filters	{ background:#ddd; font-size:0.8625em; width:12.25em; float:right; margin-top:1.125em; padding:0.5em; border:1px solid #fffef9;}
 .story-filters dt	{ margin:0.5em auto; border-bottom:1px solid #fffef9; }
 .story-filters dt:hover	{ color:#fffef9; background:#777; }
 .story-filters dd label	{ font-weight:normal; }

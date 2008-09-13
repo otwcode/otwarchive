@@ -4,4 +4,6 @@
 
 <%= render :partial => 'pseuds_form', :locals => { :button_text => "Create".t }%>
 
-<p><%= link_to 'Back'.t, user_pseuds_path(@user) %></p>
+<ul class="navigation">
+<li><%= link_to 'Back'.t, user_pseuds_path(@user) %></li>
+</ul>

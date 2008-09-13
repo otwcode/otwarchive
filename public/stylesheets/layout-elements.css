@@ -53,8 +53,8 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 /*DASHBOARD SIDEBAR */
 #dashboard-sidebar { float: left; width: 10em; border: 2px solid; line-height: 2em; margin: 0 1em 3em 1.5em; }
 #dashboard-sidebar ul { text-indent: .5em; }
-#dashboard-sidebar li { white-space: nowrap; font-weight: 600; font-size: 0.825em; }
-#dashboard-sidebar a { display: block; width: 100%; height: 2em; line-height: 2; text-decoration: none; white-space: pre; font-weight: normal; }
+#dashboard-sidebar li { font-weight: 600; font-size: 0.825em; }
+#dashboard-sidebar a { display: block; line-height: 2; text-decoration: none; font-weight: normal; }
 #dashboard-sidebar a:hover { background: #900; color: #fffef9; }
 
 #main.sidebar { margin: 0.25em 1em 1em 12em; }
@@ -84,11 +84,11 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 /*HOME PAGE (front page) */
 /*currently living in home.css */
 
-/* HOME: USERS SHOW*/
+/* USER HOME: USERS SHOW*/
 #main.users-show ul.story-list { margin: auto; }
 .user-module h2 { background: #222; color: #fffef9; border-bottom: 4px double #fffef9; margin: 2.25em auto 0 ; padding: 0.125em; }
 
-#user-header { position: relative; min-height:100px;}
+#user-header { position: relative; }
 #user-header img { margin: 0 0 0.5em 0; top: 0; left: 0; position: absolute; }
 #user-header h1 { margin: 0 0 0 100px; /*sized in pixels because the icon it is avoiding has a fixed pixel value*/}
 #user-header h1 a {text-decoration:none; text-transform:lowercase}
@@ -101,11 +101,21 @@ dl#user-data { margin: 1.5em 0;}
 dl#user-data dt {width: 9em; font-weight: 900; float:left; clear:left; margin:0.25em 0.8625em 0.25em 0; }
 #user-data dd	{ clear:right; margin:0 0 0 9em; padding: 0.25em 0 0.125em 0; border-bottom:1px solid #ddd; }
 
+/* DASHBOARD: READING HISTORY */
+#main.readings-index li.story ul { margin: 0.8625em auto  !important;}
+#main.readings-index li.story {font-size:smaller;}
+#main.readings-index li.story-desc p {font-size:1em;}
+
+/* DASHBOARD: PREFERENCES */
+/* preferences form rules are in forms.css */
+/*pseuds-index*/
+#main.pseuds-index table ul.navigation { border-bottom:0; }
+
 /* WORKS-INDEX */
 /*story filters rules are in forms.css */
-dl.navigation { border:0;}
+#main.works-index dl.navigation { border:0;}
 
-/*story listing */
+/*story listing : shows on works, reading history, series, spoofed on bookmarks and users-show*/
 li.story ul { background: #fffef9; position: relative; margin: 0 12.5em 1em auto; border: 1px solid #bbb;padding: 0.25em}
 #user-page li.story ul { margin-right: 0; }
 li.story ul ul {border:0; margin:0; padding:0; }
@@ -184,7 +194,8 @@ a.cloud8 { font-size: 2.25em; font-weight: 800; color: #900; }
 ul#tag-wrangler-footer { text-align: center; border-top: 1px dotted}
 #tag-wrangler-footer li { display: inline; padding: 0 0.5em 0 0}
 
-/*ToS and any other long text pages*/
+/*ToS and any other long text pages.
+* styling duplicates the story-views.css and may be incorporated there*/
 
 #tos {margin: 1.5em; padding: 0 2.25em;}
 

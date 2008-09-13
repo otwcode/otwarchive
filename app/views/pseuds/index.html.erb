@@ -11,9 +11,9 @@
     <th scope="row"><%=h pseud.name %></th>
     <td><%=h pseud.description %></td>
     <td><%=h pseud.is_default %></td>
-    <td><%= link_to 'Show'.t, [@user, pseud] %>
+    <td><ul class="navigation">
+	<li><%= link_to 'Show'.t, [@user, pseud] %></li>
 	<% if current_user == @user -%>
-     <ul class="navigation">
 		<li><%= link_to 'Edit'.t, [:edit, @user, pseud] -%></li>
      	<li><%= link_to 'Orphan Stories'.t, {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} -%>
 		 <% unless @user.login == pseud.name || pseud.is_default -%></li>

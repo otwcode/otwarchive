@@ -13,9 +13,11 @@ set story styles
 #chapters dd	{ line-height:1.5; font-size:0.825em; margin-top:1.25em; margin-bottom:1.25em; text-indent:3em; }
 #chapters dd p	{ margin:0; padding:0; }
 #chapters ul	{ margin:1.125em auto; padding:0 1em; text-indent:2em; }
-#chapters ul li	{ list-style-type:disc}
+#chapters ul li	{ list-style-type:disc; margin:0.75em 0;}
 #chapters ol	{ margin:1.125em auto; padding:0 1.5em; text-indent:1.5em; }
-#chapters ol li	{ list-style-type:decimal}
+#chapters ol li	{ list-style-type:decimal; margin:0.75em 0;}
+#chapters ol li ol li	{ list-style-type: lower-alpha;}
+#chapters ol li ol li ol li	{ list-style-type: lower-roman;}
 #chapters li	{ font-weight:normal; }
 
 /*headings */
