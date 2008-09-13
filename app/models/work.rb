@@ -115,7 +115,8 @@ class Work < ActiveRecord::Base
   
   # Virtual attribute for series
   def series_attributes=(attributes)
-    self.series << Series.find(attributes[:id]) unless attributes[:id].blank?
+    new_series = Series.find(attributes[:id]) unless attributes[:id].blank?
+    self.series << new_series unless new_series.blank? || self.series.include?(new_series)
     unless attributes[:title].blank?
        new_series = Series.new
        new_series.title = attributes[:title]

@@ -1,6 +1,7 @@
 class SerialWork < ActiveRecord::Base
   belongs_to :series
   belongs_to :work
+  validates_uniqueness_of :work_id, :scope => [:series_id]
   
   before_create :set_position
   before_destroy :adjust_positions
