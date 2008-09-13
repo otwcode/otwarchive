@@ -2,36 +2,36 @@
 /*
 set story styles
 */
-#chapters	{ font-family:Candara, Corbel, Geneva, Verdana, Helvetica, Arial, sans-serif; padding:1.5em 3.5em;}
-#chapters a, #chapters a:link	{ color:#111; text-decoration:none; border-bottom:1px dotted #777; padding-right:0.125em}
-#chapters a:hover	{ border-bottom:0}
-#chapters a:visited	{ text-decoration:underline}
+.story-show, #chapters	{ font-family:Candara, Corbel, Geneva, Verdana, Helvetica, Arial, sans-serif; padding:1.5em 3.5em;}
+.story-show a, #chapters a, #chapters a:link	{ color:#111; text-decoration:none; border-bottom:1px dotted #777; padding-right:0.125em}
+.story-show a:hover, #chapters a:hover	{ border-bottom:0}
+.story-show a:visited, #chapters a:visited	{ text-decoration:underline}
 
 /*lists*/
-#chapters dl	{ font-size:1em; margin:1.5em 0; border-bottom:0.25em double #777; }
-#chapters dt	{ font-weight:bold; }
-#chapters dd	{ line-height:1.5; font-size:0.825em; margin-top:1.25em; margin-bottom:1.25em; text-indent:3em; }
-#chapters dd p	{ margin:0; padding:0; }
-#chapters ul	{ margin:1.125em auto; padding:0 1em; text-indent:2em; }
-#chapters ul li	{ list-style-type:disc; margin:0.75em 0;}
-#chapters ol	{ margin:1.125em auto; padding:0 1.5em; text-indent:1.5em; }
-#chapters ol li	{ list-style-type:decimal; margin:0.75em 0;}
-#chapters ol li ol li	{ list-style-type: lower-alpha;}
-#chapters ol li ol li ol li	{ list-style-type: lower-roman;}
-#chapters li	{ font-weight:normal; }
+.story-show dl, #chapters dl	{ font-size:1em; margin:1.5em 0; border-bottom:0.25em double #777; }
+.story-show dt, #chapters dt	{ font-weight:bold; }
+.story-show dd, #chapters dd	{ line-height:1.5; font-size:0.825em; margin-top:1.25em; margin-bottom:1.25em; text-indent:3em; }
+.story-show dd p, #chapters dd p	{ margin:0; padding:0; }
+.story-show ul, #chapters ul	{ margin:1.125em auto; padding:0 1em; text-indent:2em; }
+.story-show ul, #chapters ul li	{ list-style-type:disc; margin:0.75em 0;}
+.story-show ol, #chapters ol	{ margin:1.125em auto; padding:0 1.5em; text-indent:1.5em; }
+.story-show ol li, #chapters ol li	{ list-style-type:decimal; margin:0.75em 0;}
+.story-show ol li ol li, #chapters ol li ol li	{ list-style-type: lower-alpha;}
+.story-show ol li ol li ol li, #chapters ol li ol li ol li	{ list-style-type: lower-roman;}
+.story-show li, #chapters li	{ font-weight:normal; }
 
 /*headings */
-#chapters h1	{ font-family:Cambria, Constantia, Palatino, Georgia, serif; text-align:center; }
-#chapters h2	{ font-variant:normal; text-align:left; color:#333; margin:1.5em 0; text-transform:none;}
-#chapters h3	{ font-weight:100; background:#333; color:#fffef9; border-bottom:0.25em double #fffef9; padding: 0.125em }
-#chapters h4	{ font-variant:small-caps; font-size:1.25em;}
-#chapters h5	{ font-weight:600; font-size: 1em;}
-#chapters h6	{ font-size: 0.8625em; border-bottom:1px solid; }
+.story-show h1, #chapters h1	{ font-family:Cambria, Constantia, Palatino, Georgia, serif; text-align:center !important; text-transform:capitalize;}
+.story-show h2, #chapters h2	{ font-variant:normal; text-align:left; color:#333; margin:1.5em 0; text-transform:none;}
+.story-show h3, #chapters h3	{ font-weight:100; background:#333; color:#fffef9; border-bottom:0.25em double #fffef9; padding: 0.125em }
+.story-show h4, #chapters h4	{ font-variant:small-caps; font-size:1.25em;}
+.story-show h5, #chapters h5	{ font-weight:600; font-size: 1em;}
+.story-show h6, #chapters h6	{ font-size: 0.8625em; border-bottom:1px solid; }
 
 /*quotes and stresses*/
-#chapters blockquote	{ border-left:2px solid #999; padding:0.75em; margin:auto auto auto 1.5em; font-size:1em; }
-#chapters blockquote blockquote	{ border:0; padding:0.25em; }
-#chapters hr	{ width:33%; margin:auto; border:1px solid; }
+.story-show blockquote, #chapters blockquote	{ border-left:2px solid #999; padding:0.75em; margin:auto auto auto 1.5em; font-size:1em; }
+.story-show blockquote blockquote, #chapters blockquote blockquote	{ border:0; padding:0.25em; }
+.story-show hr, #chapters hr	{ width:33%; margin:0.8625em; border:1px solid; }
 .firstletter	{ font:3em Georgia, serif; }
 .flashback	{ font-style:oblique; }
 .shouting	{ font-variant:small-caps}
@@ -42,18 +42,19 @@ set story styles
 .works-show #navigation li.go-back	{ padding:0 0.25em 0 0; display:block; float:left}
 
 /* STORY META DATA */
-#main.works-show dl.story-meta	{ position:relative; background:#ddd; border:1px solid #ccc; padding:0.5em}
-#main.works-show .story-meta dt	{ float:left; clear:left; width:10em; margin:0 1em 0 0; }
-#main.works-show .story-meta dd	{ clear:right; position:relative; }
-#main.works-show .story-meta dd.rating	{ margin:1em 0 0}
-#main.works-show .story-meta dd p	{ clear:both; }
-#main.works-show .story-meta dd li	{ display:inline; padding:0 0.5em 0 0; }
+.story-show dl.story-meta, #main.works-show dl.story-meta	{ position:relative; background:#ddd; border:1px solid #ccc; padding:0.5em}
+.story-show .story-meta dt, #main.works-show .story-meta dt { float:left; clear:left; width:10em; margin:0 1em 0 0; }
+.story-show .story-meta dd, #main.works-show .story-meta dd	{ clear:right; position:relative; }
+.story-show .story-meta dd.rating, #main.works-show .story-meta dd.rating	{ margin:1em 0 0}
+.story-show .story-meta dd p, #main.works-show .story-meta dd p	{ clear:both; }
+.story-show .story-meta dd li, #main.works-show .story-meta dd li	{ display:inline; padding:0 0.5em 0 0; }
 
 /*STORY PREFACE - TITLE AND NOTES */
 
 #story-preface	{ border-bottom:3px double; margin-bottom:1.5em; }
-#story-preface blockquote	{ font-size:1em; }
+#story-preface blockquote	{ font-size:1em; border:0}
 #story-preface h2	{ font:800 2.25em Cambria, Constantia, Palatino, Georgia, sans-serif; margin:1.5em auto 0}
+h3.story-author {background:transparent; border:0;}
 
 /* SERIES */
 #series-and-view-data	{ clear:both}
@@ -71,8 +72,9 @@ dl#series-meta	{ position:relative; }
 #close-popup	{ position:absolute; top:0.375em; right:0.625em; }
 .chapter-position-list	{ list-style-type:none; padding:0.625em; }
 .story-edit-meta, .story-edit-notes	{ width:80%; }
+
+
 ul.story-list li.story-tags	{ display:inline; }
 .story-show h2, .story-edit-title	{ font-size:1.5em; font-weight:700; text-align:center; }
-/* where are these rules affecting?
 .story-show .story-author, .story-title, .chapter-title	{ text-align:center; }
-*/
+

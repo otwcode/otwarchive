@@ -200,6 +200,7 @@ ul#tag-wrangler-footer { text-align: center; border-top: 1px dotted}
 #tos {margin: 1.5em; padding: 0 2.25em;}
 
 /*lists*/
+
 #main.home-tos dl	{ font-size:1em; margin:1.5em 0; border-bottom:0.25em double #777; }
 #main.home-tos dt	{ font-weight:bold; }
 #main.home-tos dd	{ line-height:1.5; font-size:0.825em; margin-top:1.25em; margin-bottom:1.25em; text-indent:3em; }
@@ -211,6 +212,8 @@ ul#tag-wrangler-footer { text-align: center; border-top: 1px dotted}
 #main.home-tos ol li ol li	{ list-style-type: lower-alpha;}
 #main.home-tos ol li ol li ol li	{ list-style-type: lower-roman;}
 #main.home-tos li	{ font-weight:normal; }
+
+#tos .toc li {list-style-type: upper-roman !important; }
 
 /*headings */
 #main.home-tos h1	{ font-family:Cambria, Constantia, Palatino, Georgia, serif; text-align:center; }

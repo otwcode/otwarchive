@@ -1,5 +1,5 @@
 <th scope="row"><%=h user.login %></th>
-<td><%=h user.email %></td>
+<td><%=h user.email, :title => "Email" %>%></td>
 <td><%= "Translator" if user.translator %></td>
 <td><%= "Tag Wrangler" if user.tag_wrangler %></td>
 <td><%= "Suspended" if user.suspended %></td>

@@ -1,13 +1,11 @@
 <!-- BEGIN navigation -->
 <%- unless @preview_mode -%>
-  <ul class="navigation">
-    <li class="go-back"><%= link_to '&lt;&lt; ' + h('Back to story list').t, works_path -%></li>
-  	
-  	<% if is_author_of?(@work) -%>
+  % if is_author_of?(@work) -%>
+	<ul class="navigation">
   	<li><%= link_to h('Edit').t, edit_work_path(@work) %></li>
   	<li><%= link_to h('Delete').t, @work, :confirm => h('Are you sure?').t, :method => :delete -%></li>
-  	<% end -%>
   </ul>
+  	<% end -%>
 <%- end -%>
 <!-- END navigation -->
 

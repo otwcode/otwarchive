@@ -89,16 +89,14 @@ input#work_parent_url {width:99%;margin:0.375em auto 0.8625em auto;}
 #story-form #story-preface {border-bottom:0;}
 #story-form textarea#content {height:31.25em; width:99%;margin:auto;}
 
-#story-form  p.rtf-html-switch {margin:1em 0 -1em 0;padding:0; }
-#story-form .rtf-html-switch span {background:#f0f0ee; padding:0.5em 0.5em 0 0.5em; border:1px solid #ddd;}
-
+p.rtf-html-switch {margin:1em 0 -0.5625em 0;padding:0; }
+.rtf-html-switch span {background:#f0f0ee; padding:0.5em 0.5em 0 0.5em; border:1px solid #ddd;}
 
 #story-form p.submit input {font-size:1em;}
 
 dd.story-title input {width:80%;}
 
 /*EDIT PREFERENCES */
-
 form.edit_preference ul { margin:0.5625em auto; padding:1.5em 0; }
 .edit_preference li { margin:0.5625em 0;}
 .edit_preference label {font-weight:100;}
