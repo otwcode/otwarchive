@@ -108,15 +108,13 @@ Rails::Initializer.run do |config|
   #config.action_view.sanitized_allowed_attributes = 'class', 'style'
   config.action_view.sanitized_allowed_tags = 'u', 'strike'
   
-  #Disallow div tags in sanitize.
-  config.after_initialize do
-    %w(div h1 h2 h3 h4 h5 h6).each do |tag|
-      ActionView::Base.sanitized_allowed_tags.delete tag
-    end
-  end
-  
-  
-  
+  # you can remove tags from sanitize here
+  #config.after_initialize do
+  #  %w().each do |tag|
+  #    ActionView::Base.sanitized_allowed_tags.delete tag
+  #  end
+  #end
+    
 end
 
 ActionController::AbstractRequest.relative_url_root = ArchiveConfig.PRODUCTION_URL_ROOT if ArchiveConfig.PRODUCTION_URL_ROOT && ENV['RAILS_ENV'] == 'production'
