@@ -1,10 +1,7 @@
 class TagsController < ApplicationController
   before_filter :check_user_status, :only => [:new, :create]
-
-#permit('wranglers',
-# :permission_denied_redirection => {:controller => :works, :action => :index },
-# :permission_denied_message => 'Sorry, the page you have requested is for tag wranglers only! Please contact an admin if you think you should have access.',
-# :except => [ :show, :index ]
+  permit "tag_wrangler", :permission_denied_message => "Sorry, the page you tried to access is for authorized tag wranglers only.".t, :except => [ :show, :index ]
+  before_filter :check_user_status
 
   # GET /tags
   # GET /tags.xml
@@ -67,13 +64,17 @@ class TagsController < ApplicationController
   # POST /tags.xml
   def create
     @tag = Tag.new(params[:tag])
-
-    respond_to do |format|
-      if @tag.save
-        flash[:notice] = 'Tag was successfully created.'.t
-        format.html { redirect_to tag_categories_path }
-      else
-        format.html { render :action => "new" }
+    if Tag.find_by_name(@tag.name)
+      flash[:notice] = "A tag by that name already exists.".t
+      redirect_to tag_categories_path
+    else
+      respond_to do |format|
+        if @tag.save
+          flash[:notice] = 'Tag was successfully created.'.t
+          format.html { redirect_to tag_categories_path }
+        else
+          format.html { render :action => "new" }
+        end
       end
     end
   end

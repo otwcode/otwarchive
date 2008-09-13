@@ -1,4 +1,8 @@
-class TagRelationshipKindsController < ApplicationController 
+class TagRelationshipKindsController < ApplicationController
+  
+  permit "tag_wrangler", :permission_denied_message => "Sorry, the page you tried to access is for authorized tag wranglers only.".t
+  before_filter :check_user_status
+   
 	def index
 		@tag_relationship_kinds = TagRelationshipKind.find(:all, :order => :name)
 	end

@@ -72,15 +72,6 @@ class WorkTest < ActiveSupport::TestCase
         should "be marked adult" do
           assert @work.adult_content?
         end
-  
-        context "when the adult tag is removed" do
-          setup do
-            @work.update_attribute('default', @tagna.name)
-          end
-          should "not be marked adult" do
-            assert !@work.adult
-          end        
-        end
       end
     end
 

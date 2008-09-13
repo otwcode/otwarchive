@@ -1,4 +1,7 @@
-class TagWranglingsController < ApplicationController
+class TagWranglingsController < ApplicationController   
+  
+  permit "tag_wrangler", :permission_denied_message => "Sorry, the page you tried to access is for authorized tag wranglers only.".t
+  before_filter :check_user_status
   
   def index
     @current_tag_relationships = TagRelationship.all
