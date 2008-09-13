@@ -26,7 +26,7 @@ class UsersControllerTest < ActionController::TestCase
       end
       should_assign_to :user
       should_render_template :_confirmation
-      should_set_the_flash_to /during testing you can activate via/
+      #should_set_the_flash_to /during testing you can activate via/
       should "create the user" do
         assert User.find_by_login(@login)
       end
@@ -45,7 +45,7 @@ class UsersControllerTest < ActionController::TestCase
       end
       should_assign_to :user
       should_render_template :_confirmation
-      should_set_the_flash_to /during testing you can activate via/
+      #should_set_the_flash_to /during testing you can activate via/
       should "create the user" do
         assert User.find_by_login(@login)
       end

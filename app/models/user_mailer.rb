@@ -8,8 +8,8 @@ class UserMailer < ActionMailer::Base
   end
    
    def activation(user)
-     @subject += 'Your account has been activated.'.t
      setup_email(user)
+     @subject += 'Your account has been activated.'.t
    end 
    
    def reset_password(user)

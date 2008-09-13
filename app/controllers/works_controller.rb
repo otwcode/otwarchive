@@ -85,7 +85,7 @@ class WorksController < ApplicationController
       @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
       to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 
       @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
-      @series = current_user.series 
+      @series = current_user.series.uniq 
     end
   end
   

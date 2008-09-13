@@ -111,7 +111,7 @@
           <% fields_for "work[series_attributes]" do |s| %>
             <dt><%= s.label 'series_id', h('Choose one of your existing series:').t %></dt>
             <dd>
-  			<%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>
+  			      <%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>
               <%= link_to_help "choosing-series" -%>
             </dd>
             <dt><%= s.label :title, h("Or add a new one:").t %></dt>

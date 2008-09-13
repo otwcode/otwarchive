@@ -9,43 +9,6 @@ class TagsControllerTest < ActionController::TestCase
     should_render_template :index
     should_assign_to :tags
   end
-
-  context "on GET with :new" do
-    # TODO restricted to tag_wrangler
-    setup do
-      get :new, :locale => 'en'
-    end
-    should_respond_with :success
-    should_render_template :new
-    should_render_a_form
-    should_assign_to :tag
-  end
-
-  context "on POST with :create" do
-    # TODO restricted to tag_wrangler
-    setup do
-      @name = random_phrase[1...ArchiveConfig.TAG_MAX]
-      put :create, :locale => 'en', :tag => {"name" => @name}
-    end
-    should_redirect_to 'tag_categories_path'
-    should_set_the_flash_to /successfully created/
-    should_assign_to :tag
-    should "create the tag" do
-      assert Tag.find_by_name(@name)
-    end
-  end
-  
-  context "on POST with :create with error" do
-    # TODO restricted to tag_wrangler
-    setup do
-      put :create, :locale => 'en', :tag => {"name" => ""}
-    end
-    should_render_template "new"
-    should_render_a_form
-    should_not_set_the_flash
-    should_assign_to :tag
-  end
-  
   context "on GET with :show of a tag" do
     setup do
       @tag = create_tag
@@ -59,6 +22,71 @@ class TagsControllerTest < ActionController::TestCase
     should_assign_to :bookmarks
     should_assign_to :ambiguous
   end
+  
+  context "when logged out, should not be able to access new tags page" do
+    setup do
+      get :new, :locale => 'en'
+    end
+    should_redirect_to "{:controller => :session, :action => 'new'}"
+    should_set_the_flash_to /log in/  
+  end
+  
+  context "when logged in as a non-tag-wrangler, should not be able to access new tags page" do
+    setup do
+      @user = create_user
+      @request.session[:user] = @user
+      get :new, :locale => 'en'
+    end
+    should_redirect_to "{:controller => :works, :action => 'index'}"
+    should_set_the_flash_to /tag wranglers only/  
+  end
+  
+  context "when logged in as a tag wrangler" do
+    setup do
+      @user = create_user
+      @user.is_tag_wrangler
+      @request.session[:user] = @user
+    end
+    context "on GET with :new" do
+      # TODO restricted to tag_wrangler
+      setup do
+        @user = create_user
+        @user.is_tag_wrangler
+        @request.session[:user] = @user
+        get :new, :locale => 'en'
+      end
+      should_respond_with :success
+      should_render_template :new
+      should_render_a_form
+      should_assign_to :tag
+    end
+
+    context "on POST with :create" do
+      # TODO restricted to tag_wrangler
+      setup do
+        @name = random_phrase[1...ArchiveConfig.TAG_MAX]
+        put :create, :locale => 'en', :tag => {"name" => @name}
+      end
+      should_redirect_to 'tag_categories_path'
+      should_set_the_flash_to /successfully created/
+      should_assign_to :tag
+      should "create the tag" do
+        assert Tag.find_by_name(@name)
+      end
+    end
+  
+    context "on POST with :create with error" do
+      # TODO restricted to tag_wrangler
+      setup do
+        put :create, :locale => 'en', :tag => {"name" => ""}
+      end
+      should_render_template "new"
+      should_render_a_form
+      should_not_set_the_flash
+      should_assign_to :tag
+    end
+  end
+
 
   context "a tag which tags a work" do
     setup do
