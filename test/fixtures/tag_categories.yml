@@ -7,8 +7,8 @@ Default:
   display_name: Tags
   official: true
 
-Fandoms:
-  name: Fandoms
+Fandom:
+  name: Fandom
   required: true
   official: true
 
@@ -21,17 +21,17 @@ Rating:
   official: true
   exclusive: true
 	
-Warnings:
-  name: Warnings
+Warning:
+  name: Warning
   required: true
   official: true
 
-Characters:
-  name: Characters
+Character:
+  name: Character
   official: true
 
-Pairings:
-  name: Pairings
+Pairing:
+  name: Pairing
   official: true
 	
 Genre:
