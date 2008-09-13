@@ -92,12 +92,22 @@ class User < ActiveRecord::Base
   
   # Gets the user's one allowed unposted work
   def unposted_work
-    works.find(:first, :conditions => 'posted IS NULL OR posted = 0') 
+    works.find(:first, :conditions => 'posted IS NULL OR posted = 0', :order => 'created_at DESC', :limit => 1) 
   end
   
   # Gets the user's one allowed unposted chapter per work
   def unposted_chapter(work)
     chapters.select{|c| c.work_id == work.id && c.posted != true}.first
+  end
+  
+  # gets rid of unposted works
+  def cleanup_unposted_works
+    one_allowed_unposted = unposted_work
+    works.find(:all, :conditions => 'posted IS NULL OR posted = 0').each do |w|
+      unless w == one_allowed_unposted
+        w.destroy
+      end
+    end
   end
 
   # checks if user already has a pseud called newname

@@ -47,11 +47,11 @@ class Work < ActiveRecord::Base
   attr_accessor :new_parent
   attr_accessor :new_tags
 
-  before_save :validate_authors, :set_language
+  before_save :validate_authors, :set_language, :validate_tags
   before_save :set_word_count
   before_save :post_first_chapter
   after_save :save_creatorships, :save_associated 
-  before_validation_on_update :validate_tags
+  after_create :tag_after_create
   
   # Associating works with languages.  
   belongs_to :language, :foreign_key => 'language_id', :class_name => '::Globalize::Language'
@@ -71,7 +71,6 @@ class Work < ActiveRecord::Base
       return self if current_user == "admin" || current_user.is_author_of?(self)       
     end
   end
-  
 
   def set_language
     return if self.language
@@ -283,46 +282,52 @@ class Work < ActiveRecord::Base
     TagCategory.official.each do |c|
       define_method(c.name){tag_string(c)}
       define_method(c.name+'=') do |tag_name| 
-        if self.new_record?
-          if @tags_to_tag_with
-            @tags_to_tag_with.merge!({c.name.to_sym => tag_name})
+        unless tag_name.empty?
+          if self.new_record?
+            if @tags_to_tag_with
+              @tags_to_tag_with.merge!({c.name.to_sym => tag_name})
+            else
+              @tags_to_tag_with = {c.name.to_sym => tag_name}
+            end
           else
-            @tags_to_tag_with = {c.name.to_sym => tag_name}
+            tag_with(c.name.to_sym => tag_name)
           end
-        else
-          tag_with(c.name.to_sym => tag_name)
         end
       end
     end 
   rescue
     define_method('ambiguous'){tag_string('ambiguous')}
     define_method('ambiguous=') do |tag_name| 
-      if self.new_record?
-        if @tags_to_tag_with
-          @tags_to_tag_with.merge!({:ambiguous => tag_name})
+      unless tag_name.empty?
+        if self.new_record?
+          if @tags_to_tag_with
+            @tags_to_tag_with.merge!({:ambiguous => tag_name})
+          else
+            @tags_to_tag_with = {:ambiguous => tag_name}
+          end
         else
-          @tags_to_tag_with = {:ambiguous => tag_name}
-        end
-      else
-        tag_with(:ambiguous => tag_name)
-      end      
+          tag_with(:ambiguous => tag_name)
+        end      
+      end
     end
     
     define_method('default'){tag_string('default')}
     define_method('default=') do |tag_name| 
-      if self.new_record?
-        if @tags_to_tag_with
-          @tags_to_tag_with.merge!({:default => tag_name})
+      unless tag_name.empty?
+        if self.new_record?
+          if @tags_to_tag_with
+            @tags_to_tag_with.merge!({:default => tag_name})
+          else
+            @tags_to_tag_with = {:default => tag_name}
+          end
         else
-          @tags_to_tag_with = {:default => tag_name}
+          tag_with(:default => tag_name)
         end
-      else
-        tag_with(:default => tag_name)
       end      
     end
+    
   end
 
-  after_create :tag_after_create
   def tag_after_create
     if @tags_to_tag_with
       @tags_to_tag_with.each do |category, tag|
@@ -331,7 +336,6 @@ class Work < ActiveRecord::Base
     end
   end
   
-  
   # Set the value of word_count to reflect the length of the chapter content
   def set_word_count
     self.word_count = self.chapters.collect(&:word_count).compact.sum
@@ -339,14 +343,18 @@ class Work < ActiveRecord::Base
   
   # Check to see that a work is tagged appropriately
   def has_required_tags?
-    TagCategory.required - self.tags.collect(&:tag_category) == []
+    my_tag_categories = (@tags_to_tag_with ? @tags_to_tag_with.keys : []) + self.tags.collect(&:tag_category)    
+    TagCategory.required - my_tag_categories == []
   end
   
   def validate_tags
-    unless self.new_record? || self.first_chapter.new_record?
-      errors.add_to_base("Work must have required tags.".t) unless self.has_required_tags?
+    if self.posted
+      errors.add_to_base("Work must have required tags.".t) unless self.has_required_tags?      
       self.has_required_tags?
-    end  
+    else
+      # if it's not posted, it's okay
+      true
+    end
   end
   
   # If the work is posted, the first chapter should be posted too

@@ -221,7 +221,6 @@ class WorksController < ApplicationController
 
   # POST /works
   def create
-
     if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
       @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
     elsif params[:edit_button]
@@ -230,17 +229,17 @@ class WorksController < ApplicationController
       render :action => :new
     elsif params[:cancel_button]
       flash[:notice] = "Story posting canceled."
-      # destroy unposted works
-      while current_user.unposted_work
-        current_user.unposted_work.destroy
-      end
+      current_user.cleanup_unposted_works
       redirect_to current_user    
     else  
-      if @work.save
+      unless @work.save && @work.has_required_tags?
+        unless @work.has_required_tags?
+          @work.errors.add(:base, "Required tags are missing.".t)          
+        end
+        render :action => :new 
+      else
         flash[:notice] = 'Work was successfully created.'.t
         redirect_to preview_work_path(@work)
-      else
-        render :action => :new 
       end
     end
   end
@@ -285,10 +284,7 @@ class WorksController < ApplicationController
       render :action => "preview"
     elsif params[:cancel_button]
       flash[:notice] = "Story posting canceled."
-      # destroy unposted works
-      if current_user.unposted_work
-        current_user.unposted_work.destroy
-      end
+      current_user.cleanup_unposted_works
       redirect_to current_user    
     elsif params[:edit_button]
       render :partial => 'work_form', :layout => 'application'
@@ -306,14 +302,10 @@ class WorksController < ApplicationController
         end
         redirect_to(@work)
       else
-        @work.errors.add(:base, "Please double-check the length of your story: it cannot be blank and must be less than 16MB in size.".t) unless @chapter.valid?
-        if !@work.has_required_tags?
-          @preview_mode = true
-      	  @chapters = [@chapter]
-          render :action => "preview"
-        else
-          redirect_to :action => :new
+        unless @chapter.valid?
+          @chapter.errors.each {|err| @work.errors.add(:base, err)}
         end
+        redirect_to :action => :new
       end
     end 
   end
