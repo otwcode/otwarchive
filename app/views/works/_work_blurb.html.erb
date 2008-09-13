@@ -22,7 +22,7 @@
       <ul>
         <li><%=h 'Words: %s'/number_with_delimiter(work.word_count) %></li>
         <%- if work.count_visible_comments > 0 -%>
-          <li><%=h 'Comments: %d'.t/work.count_visible_comments -%></li>
+          <li><%= link_to 'Comments: %d'.t/work.count_visible_comments, work_path(:id => work.id, :anchor => "comments", :show_comments => true) -%></li>
         <%- end -%>
 				<%- if work.count_visible_bookmarks(current_user) > 0 -%>
 					<li><%= link_to 'Bookmarks: %d'.t/work.count_visible_bookmarks(current_user), work_bookmarks_path(:work_id => work.id) -%></li>
