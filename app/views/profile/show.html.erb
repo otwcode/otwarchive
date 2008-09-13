@@ -11,20 +11,18 @@
   
   <p><%=h @user.profile.title %></p>
 
-  <%- if logged_in? && current_user == @user -%>
-    <p><%= link_to "set my preferences".t, user_preferences_path(@user) %></p>
-  <%- end -%>
-
   <dl id="user-data">
     <dt class="pseuds"><%= "My pseuds:".t %></dt>
       <dd class="pseuds"><%= print_pseuds(@user) %></dd>
+    <%- if @user.profile.location? -%>
     <dt class="location"><%=h "I live in:".t %></dt>
       <dd><%=h @user.profile.location -%></dd>
+      <%- end -%>
     <%- if @user.preference.date_of_birth_visible -%>
     <dt class="birthday"><%=h "My birthday:".t %></dt>
       <dd class="birthday"><%=h @user.profile.date_of_birth -%></dd> 
-	<%- end -%>
-	<%- if @user.preference.email_visible -%>
+    <%- end -%>
+    <%- if @user.preference.email_visible -%>
     <dt class="email"><%=h "My email address:".t %></dt>
       <dd class="email"><%= mail_to @user.email, nil, :encode => "hex" %></dd>
     <%- end -%>
@@ -36,6 +34,9 @@
   </div>
   
   <%- if logged_in? && current_user == @user -%>
-    <p><%= link_to "Edit profile".t, edit_user_path(@user) %></p>
+  <ul class="navigation">
+    <li><%= link_to "Edit Profile".t, edit_user_path(@user) %></li>
+    <li><%= link_to "Set My Preferences".t, user_preferences_path(@user) %></li>
+  </ul>
   <%- end -%>
 </div>
