@@ -6,7 +6,7 @@
       </dt>
 	    
       <dd>
-        <% if category.name == "Warnings" && hide_warnings?(work) -%>
+        <% if category.name == "Warning" && hide_warnings?(work) -%>
         <ul class="<%= category.display_name.downcase -%>" id="work_<%= work.id %>_category_<%= category.id %>">
           <li><%= show_warnings_link(work, category) %></li>
         </ul> 
