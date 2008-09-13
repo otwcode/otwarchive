@@ -9,5 +9,5 @@
 
 <p class="message footnote">
 <%=h 'If you accept cookies from our site and you click "Proceed", you will not be asked again during this session 
-(that is, until you close your browser). If you are logged in you can set your preferences so that you are never asked.'.t %>
+(that is, until you close your browser). If you are logged in you can'.t %> <%- if logged_in? %><%= link_to 'set your preferences'.t, user_preferences_path(current_user) %><%- else -%><%=h 'set your preferences'.t %><%- end -%> <%=h 'so that you are never asked.'.t %>
 </p>
