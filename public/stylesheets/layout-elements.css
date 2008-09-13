@@ -164,3 +164,32 @@ a.cloud8 { font-size: 2.25em; font-weight: 800; color: #900; }
 /*TAG WRANGLING */
 ul#tag-wrangler-footer { text-align: center; border-top: 1px dotted}
 #tag-wrangler-footer li { display: inline; padding: 0 0.5em 0 0}
+
+/*ToS and any other long text pages*/
+
+#tos {margin: 1.5em; padding: 0 2.25em;}
+
+/*lists*/
+#main.home-tos dl	{ font-size:1em; margin:1.5em 0; border-bottom:0.25em double #777; }
+#main.home-tos dt	{ font-weight:bold; }
+#main.home-tos dd	{ line-height:1.5; font-size:0.825em; margin-top:1.25em; margin-bottom:1.25em; text-indent:3em; }
+#main.home-tos dd p	{ margin:0; padding:0; text-indent:0;}
+#main.home-tos ul	{ margin:1.125em auto; padding:0 1em; text-indent:2em; }
+#main.home-tos ul li	{ list-style-type:disc; margin:0.75em 0;}
+#main.home-tos ol	{ margin:1.125em auto; padding:0 1.5em; text-indent:1.5em; }
+#main.home-tos ol li	{ list-style-type:decimal; margin:0.75em 0;}
+#main.home-tos ol li ol li	{ list-style-type: lower-alpha;}
+#main.home-tos ol li ol li ol li	{ list-style-type: lower-roman;}
+#main.home-tos li	{ font-weight:normal; }
+
+/*headings */
+#main.home-tos h1	{ font-family:Cambria, Constantia, Palatino, Georgia, serif; text-align:center; }
+#main.home-tos h2	{ font-variant:normal; text-align:left; color:#333; margin:1.5em 0; text-transform:none;}
+#main.home-tos h3	{ font-weight:100; background:#333; color:#fffef9; border-bottom:0.25em double #fffef9; padding: 0.125em }
+#main.home-tos h4	{ font-variant:small-caps; font-size:1.25em;}
+#main.home-tos h5	{ font-weight:600; font-size: 1em;}
+#main.home-tos h6	{ font-size: 0.8625em; border-bottom:1px solid; }
+
+/*quotes and stresses*/
+#main.home-tos blockquote	{ border-left:2px solid #999; padding:0.75em; margin:auto auto auto 1.5em; font-size:1em; }
+#main.home-tos blockquote blockquote	{ border:0; padding:0.25em; }

@@ -23,7 +23,7 @@ body p	{ font-size: 0.875em; line-height: 1.286; margin: 0.5625em 0; }
 
 h1, h2, h3, h4, h5, h6	{ font-family: Fertigo, Cambria, Constantia, Palatino, Georgia, sans-serif; font-weight: 400; text-transform: capitalize}
 h1	{ font-size: 2.25em; line-height: 0.5; margin: 1.125em 0 0.8625em; }
-h2	{ font-size: 1.5em; line-height: 0.75; margin: .75em 0; }
+h2	{ font-size: 1.5em; line-height: 1; margin: .75em 0; }
 h3	{ font-size: 1.125em; line-height: 1; margin: .5625em 0; }
 h4	{ font-size: 1em; line-height: 1.125; margin: .5em 0; }
 h5	{ font-size: 0.75em; line-height: 1.5; margin: .375em 0; }

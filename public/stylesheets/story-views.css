@@ -20,7 +20,7 @@ set story styles
 
 /*headings */
 #chapters h1	{ font-family:Cambria, Constantia, Palatino, Georgia, serif; text-align:center; }
-#chapters h2	{ font-variant:normal; letter-spacing:-.125em; text-align:left; color:#333; margin:1em 0; }
+#chapters h2	{ font-variant:normal; text-align:left; color:#333; margin:1em 0; }
 #chapters h3	{ font-style:oblique; font-weight:100; background:#444; color:#fffef9; border-bottom:0.25em double #fffef9; padding:0 0.125em 0 0.125em}
 #chapters h4	{ font-variant:small-caps}
 #chapters h5	{ font-weight:bolder}
