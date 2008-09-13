@@ -95,6 +95,10 @@ class Work < ActiveRecord::Base
   def comments
     self.chapters.collect { |c| c.comments }.flatten
   end
+  
+  def count_visible_bookmarks(current_user=:false)
+    self.bookmarks.select {|b| b.visible(current_user) }.length
+  end
 
   # rephrases the "chapters is invalid" message
   def after_validation

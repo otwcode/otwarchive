@@ -21,9 +21,12 @@
       <%= sanitize_limit_and_format_for_display work.summary %>
       <ul>
         <li><%=h 'Words: %s'/number_with_delimiter(work.word_count) %></li>
-        <%- if work.count_visible_comments.size > 0 -%>
+        <%- if work.count_visible_comments > 0 -%>
           <li><%=h 'Comments: %d'.t/work.count_visible_comments -%></li>
         <%- end -%>
+				<%- if work.count_visible_bookmarks(current_user) > 0 -%>
+					<li><%= link_to 'Bookmarks: %d'.t/work.count_visible_bookmarks(current_user), work_bookmarks_path(:work_id => work.id) -%></li>
+				<%- end -%>
       </ul>
     </li>
   </ul>
