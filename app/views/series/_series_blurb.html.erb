@@ -8,15 +8,15 @@
 				<%= link_to sanitize_and_format_for_display(series.title), series %>
 			</h3>
 		</li>
+		<li class="story-byline">
+			<%=h 'by'.t %>
+			<%= print_pseud_list(series.pseuds) -%>
+		</li>
 		<li class="story-date">
 			<ul>
 				<li><%= "Posted: ".t %><%=h series.created_at.localize("%d %B %Y") %></li>
 				<li><%= "Updated: ".t %><%=h series.updated_at.localize("%d %B %Y") %></li>
 			</ul>
-		</li>
-		<li class="story-byline">
-			<%=h 'by'.t %>
-			<%= print_pseud_list(series.pseuds) -%>
 		</li>
 		<li class="story-tags">
 			<ul>
@@ -27,8 +27,10 @@
 		</li>
 		<li class="story-desc">
 			<%= sanitize_and_format_for_display series.summary %>
-			<p><%=h 'Stories:'.t %> <%=h series.serial_works.count %></p>
-			<p><%=h 'Words:'.t %> <%=h number_with_delimiter(series.works.collect(&:word_count).sum) %></p>
+			<ul>
+				<li><%=h 'Stories:'.t %> <%=h series.serial_works.count %></li>
+				<li><%=h 'Words:'.t %> <%=h number_with_delimiter(series.works.collect(&:word_count).sum) %></li>
+			</ul>
 		</li>
 	</ul>
 </li>

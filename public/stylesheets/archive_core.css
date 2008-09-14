@@ -41,8 +41,10 @@ em cite, i cite	{ text-decoration: underline; }
 abbr, acronym	{ font-variant: small-caps; cursor: help; }
 
 /* TABLES AND LISTS */
-table	{ margin:auto; padding: 0.375em; border: 1px solid #ddd; }
+table	{ margin:auto; padding: 0.375em; }
 caption	{ margin-left: -999em; position: absolute; }
 caption, th, td	{ text-align: left; }
 th	{ font-weight: 100; background:#777; color:#fff; padding: 0.25em;}
 td th	{ padding-right: 3em; }
+td	{padding:0.375em; border:1px solid #ddd;}
+td .navigation { background:#ddd;}

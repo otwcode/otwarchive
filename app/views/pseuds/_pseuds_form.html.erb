@@ -6,7 +6,7 @@
 	<% else -%>
     	<%= f.text_field :name %>
 	<% end -%>
-	<%= f.label :is_default, 'Is default'.t %> <%= f.check_box :is_default %></p>
+	<%= f.check_box :is_default %> <%= f.label :is_default, 'Is default'.t %></p>
  <p><%= f.label :description, 'Description'.t %><br />
     <%= f.text_area :description, :rows => 4, :cols => 60 -%></p>
 

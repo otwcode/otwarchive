@@ -15,6 +15,7 @@ form focus:outline {thick solid blue;}
 form dt, label	{ font-weight:900; }
 legend	{ margin-left:-999em; position:absolute; }
 p.submit	{ text-align:right; clear:both; }
+p {line-height:2;}
 
 /* SIGN IN BOX */
 

@@ -25,8 +25,9 @@
   </tr>
 <% end %>
 </table>
-<p>
+
 	<% if current_user == @user -%>
-	<%= link_to 'New pseud'.t, new_user_pseud_path(@user) %>
+	<ul class="navigation">
+	<li><%= link_to 'New pseud'.t, new_user_pseud_path(@user) %></li>
+	</ul>
 	<% end -%>
-</p>

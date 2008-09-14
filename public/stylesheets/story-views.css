@@ -45,7 +45,8 @@ dl.story-meta {background:#ddd;padding:0.25em}
 
 /*STORY PREFACE - TITLE AND NOTES */
 #story-preface	{ border-bottom:3px double; margin-bottom:1.5em; }
-#story-preface blockquote	{ font-size:1em; border:0}
+#story-preface blockquote	{ border:0;}
+#story-preface blockquote.story-summary { border-bottom:1px solid #777}
 #story-preface h2	{ font:800 2.25em Cambria, Constantia, Palatino, Georgia, sans-serif; margin:1.5em auto 0}
 h3.story-author {background:transparent; border:0;}
 

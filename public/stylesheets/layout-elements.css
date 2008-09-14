@@ -96,10 +96,11 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 #user-header ul li { display: inline; padding: 0.25em; }
 
 /* USER HOME: PROFILE */
-#main.profile-show h3 { background: #222; color: #fffef9; border-bottom: 4px double #fffef9; margin: 2.25em auto 0 ; padding: 0.125em; }
+#main.profile-show h3 { background: #222; color: #fffef9; border-bottom: 4px double #fffef9; margin: 2.75em auto 0 ; padding: 0.125em; }
 dl#user-data { margin: 1.5em 0;}
 dl#user-data dt {width: 9em; font-weight: 900; float:left; clear:left; margin:0.25em 0.875em 0.25em 0; }
 #user-data dd	{ clear:right; margin:0 0 0 9em; padding: 0.25em 0 0.125em 0; border-bottom:1px solid #ddd; }
+#user-profile ul.navigation { text-align:right; }
 
 /* DASHBOARD: READING HISTORY */
 #main.readings-index li.story ul { margin: 0.875em auto  !important;}
