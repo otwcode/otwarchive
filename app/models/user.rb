@@ -34,6 +34,8 @@ class User < ActiveRecord::Base
   has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work', :uniq => true
   has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter', :uniq => true
   has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series', :uniq => true
+  has_many :tags, :through => :works
+  has_many :bookmark_tags, :through => :bookmarks, :source => :tags
   
   has_many :inbox_comments
   has_many :feedback_comments, :through => :inbox_comments, :conditions => "(is_deleted IS NULL) OR (is_deleted <> true)"
@@ -156,6 +158,17 @@ class User < ActiveRecord::Base
   # Set tag wrangler role for this user
   def tag_wrangler=(is_tag_wrangler)
     is_tag_wrangler == "1" ? self.is_tag_wrangler : self.is_not_tag_wrangler
+  end
+  
+  # Options can include :category and :limit
+  def most_popular_tags(options = {})
+    all_tags = options[:category].blank? ? self.tags + self.bookmark_tags : self.tags.by_category(options[:category]) + self.bookmark_tags.by_category(options[:category])
+    tags_with_count = {}
+    all_tags.uniq.each do |tag|
+      tags_with_count[tag] = all_tags.find_all{|t| t == tag}.size
+    end
+    all_tags = tags_with_count.to_a.sort {|x,y| y.last <=> x.last }
+    popular_tags = options[:limit].blank? ? all_tags.collect {|pair| pair.first} : all_tags.collect {|pair| pair.first}[0..(options[:limit]-1)]
   end
   
   private
