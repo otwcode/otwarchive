@@ -31,9 +31,9 @@ class User < ActiveRecord::Base
   
   has_many :comments, :through => :pseuds
   has_many :creatorships, :through => :pseuds  
-  has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work'
-  has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter'
-  has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series'
+  has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work', :uniq => true
+  has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter', :uniq => true
+  has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series', :uniq => true
   
   has_many :inbox_comments
   has_many :feedback_comments, :through => :inbox_comments, :conditions => "(is_deleted IS NULL) OR (is_deleted <> true)"

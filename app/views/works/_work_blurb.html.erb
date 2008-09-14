@@ -20,6 +20,7 @@
     <li class="story-desc">
       <%= sanitize_limit_and_format_for_display work.summary %>
       <ul>
+        <li><%= 'Chapters'.t + ': ' %><%= work.number_of_posted_chapters %>/<%= work.wip_length %></li>
         <li><%=h 'Words: %s'/number_with_delimiter(work.word_count) %></li>
         <%- if work.count_visible_comments > 0 -%>
           <li><%= link_to 'Comments: %d'.t/work.count_visible_comments, work_path(:id => work.id, :anchor => "comments", :show_comments => true) -%></li>

@@ -43,13 +43,19 @@
    <%= byline(@work) -%>
   </h3>
   
+  <%- unless @work.summary.blank? -%>
   <blockquote class="story-summary">
+    <h3>Summary: </h3>
     <%=sanitize_and_format_for_display @work.summary %>
   </blockquote>
+  <%- end -%>
   
+  <%- unless @work.notes.blank? -%>
   <blockquote class="story-notes">
+    <h3>Notes: </h3>
     <%=sanitize_and_format_for_display @work.notes %>
   </blockquote>
+  <%- end -%>
   
   <% if @work.is_wip -%>
   <p class="story-complete">
