@@ -2,10 +2,10 @@
   <div>
     <h3><%= link_to(user.login, user_path(user)) -%></h3>
     <ul class="pseuds">
-	<li><a href="">dummy pseud</a></li>
-	<li><a href="">dummy pseud</a></li>
-	<li><a href="">dummy pseud</a></li>
-	</ul>
+    	<% user.pseuds.each do |pseud| -%> 
+				<li><%= link_to pseud.name, filter_user_works_path(user, :pseuds => pseud.name) %></li>
+			<% end -%>
+  	</ul>
 	<p><%= image_tag("user_icon.png", :size => "50x50", :alt => "(Icon!)") %></p>
 	<ul class="tags">
 	<li><a class="tag" href="">dummy tag</a></li>
