@@ -101,7 +101,7 @@ module ApplicationHelper
     LANGUAGE_NAMES.sort {|a, b| a.first.to_s <=> b.first.to_s }.each do |locale, langname|
       langname = langname.titleize;   
       if Locale.active && Locale.active.language && locale == Locale.active.language.code
-        result << "<option value=\"#{url_for :overwrite_params => {:locale => locale}}\" selected=\"selected\"><strong>#{langname} (#{locale})</strong></option>\n"
+        result << "<option value=\"#{url_for :overwrite_params => {:locale => locale}}\" selected=\"selected\">#{langname} (#{locale})</option>\n"
       else
         result << "<option value=\"#{url_for :overwrite_params => {:locale => locale}}\">#{langname} (#{locale})</option>\n"
       end

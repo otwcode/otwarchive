@@ -1,6 +1,6 @@
 <fieldset>
   <legend><%= "Story Tags".t -%></legend>
-  <dl id="story-meta">
+  <dl class="story-meta">
     <% TagCategory.official.each do |category| %>
       <dt class="<%= category.display_name.downcase + (category.required ? ' required' : '') -%>">
         <label for=""><%= category.display_name.t -%></label>

@@ -32,13 +32,11 @@ input#login, input#password, input#query {border:2px inset #3d0000;}
 #signin dt img {display:block; float:right; margin: -.5em 0.75em 0 0}
 
 /* sign in box when present in #header #login-block */
-
 #login-block #signin {width:121%; }
 #login-block #signin {font-family:Candara,Corbel,Arial,Tahoma,sans-serif}
 #login-block #signin p.submit	{margin:-3.5em 0 0 0; text-align:left; width:7.5em}
 
 /* SEARCH */
-
 #search p { float: left; clear: both; font-size: 0.75em; padding: 0; margin: 0; }
 
 /*ADMIN */
@@ -46,10 +44,9 @@ admin_session-new dt	{ width:6em; float:left; clear:left; margin:0.25em 0 0.125e
 admin_session-new dd	{ float:left; margin:0.25em 0 0.125em; }
 
 /* USERS */
-.users-new form label	{ font-weight:100; }
-.users-new form .important	{ font-weight:900; }
-.users-new form p.submit	{ text-align:right}
-.users-new form .submit input	{ font-size:1.125em; }
+.users-new label, .users-create label { font-weight:100; }
+.users-new .submit input, .users-create .submit input	{ font-size:1.125em; }
+
 
 /*SESSIONS (front front pages - login, create, etc)*/
 img#openid	{ margin-left:-20px; vertical-align:middle; }
@@ -64,29 +61,23 @@ form .footnote	{ font-size:0.75em; }
 form p.openid	{ margin-top:6em; }
 
 /* POST WORK */
+/*story-meta  and story-show rules in story-views.css */
 
 #story-form fieldset {margin: 0.5em 0;; padding:0.375em 1.5em; border:1px solid #bbb;background:#fffef9}
 #story-form fieldset fieldset {margin: 0 0 .5em 0; line-height:1.5;}
-
-#main.works-new dl#story-meta	{ position:relative; background:#ddd; border:1px solid #bbb; padding:0.5em; margin-bottom:0.5em}
-#main.works-new #story-meta dt	{ float:left; clear:left; width:10em; margin:0 1em 0 0; }
-#main.works-new #story-meta dd	{ clear:right; position:relative; }
-#main.works-new #story-meta dd p	{ clear:both; }
-#main.works-new #story-meta dd li	{ display:inline; padding:0 0.5em 0 0; }
-
 #story-form #story-preface textarea {width:99%;margin:auto; height:10em}
-#story-form #story-meta dd input, #story-form #story-meta dd select {width:60%;}
+.story-meta dd input, .story-meta dd select {width:60%;}
 
-fieldset#associations dt, fieldset#associations label {font-weight:100;font-size:0.8625em;}
-dd#co-authors {margin:0 auto 0.8625em auto;padding:0.375em; border:1px solid #bbb;}
-input#work_parent_url {width:99%;margin:0.375em auto 0.8625em auto;}
+fieldset#associations dt, fieldset#associations label {font-weight:100;font-size:0.875em;}
+dd#co-authors {margin:0 auto 0.875em auto;padding:0.375em; border:1px solid #bbb;}
+input#work_parent_url {width:99%;margin:0.375em auto 0.875em auto;}
 #story-form #story-preface dd {margin-bottom:0.5em;}
 
 #seriesmanage dt, dt.story-restricted, dt.story-is_wip, dt.story-is_serial	{ float:left; clear:left; margin:0 1em 0 0; width: 50%;}
 #seriesmanage dd, dd.story-restricted , dd.story-is_wip, dd.story-is_serial	{ clear:right; margin:0; }
 
-#story-form #story-preface input {width:99%; margin:auto;}
-#story-form #story-preface {border-bottom:0;}
+#story-preface input {width:99%; margin:auto;}
+#story-  form #story-preface {border-bottom:0;}
 #story-form textarea#content {height:31.25em; width:99%;margin:auto;}
 
 p.rtf-html-switch {margin:1em 0 -0.5625em 0;padding:0; }
@@ -102,7 +93,7 @@ form.edit_preference ul { margin:0.5625em auto; padding:1.5em 0; }
 .edit_preference label {font-weight:100;}
 
 /*WORKS-INDEX -filters*/
-form.story-filters	{ background:#ddd; font-size:0.8625em; width:12.25em; float:right; margin-top:1.125em; padding:0.5em; border:1px solid #fffef9;}
+form.story-filters	{ background:#ddd; font-size:0.875em; width:12.25em; float:right; margin-top:1.125em; padding:0.5em; border:1px solid #fffef9;}
 .story-filters dt	{ margin:0.5em auto; border-bottom:1px solid #fffef9; }
 .story-filters dt:hover	{ color:#fffef9; background:#777; }
 .story-filters dd label	{ font-weight:normal; }
