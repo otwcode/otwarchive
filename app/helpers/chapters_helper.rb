@@ -17,8 +17,8 @@ module ChaptersHelper
 
   # returns next/previous links as appropriate with the given chapter as the starting point
   def next_and_previous_links(work, chapter)
-    number_of_chapters = work.chapters.size 
-    chapter_position = work.chapters.index(chapter)
+    number_of_chapters = work.chapters.in_order.size 
+    chapter_position = work.chapters.in_order.index(chapter)
     links = []
     
     links << link_to_chapter("First Chapter".t, work, 0)
@@ -36,7 +36,7 @@ module ChaptersHelper
   def link_to_chapter(string, work, chapter_position)
     link_to_unless_current string, 
       url_for({:controller => :chapters, :action => :show, :work_id => work, 
-               :id => work.chapters[chapter_position]})
+               :id => work.chapters.in_order[chapter_position]})
   end
   
 end

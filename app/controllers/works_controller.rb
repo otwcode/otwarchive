@@ -206,7 +206,6 @@ class WorksController < ApplicationController
     if !is_admin? && !@work.visible(current_user)
       render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 and return
     end
-    @chapters = @work.chapters
     @tag_categories_limited = TagCategory.official - [TagCategory.find_by_name("Warning")]
   end
   
