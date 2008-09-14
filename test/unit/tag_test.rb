@@ -62,8 +62,7 @@ class TagTest < ActiveSupport::TestCase
     context "of a bookmark on a posted work" do
       setup do
         @work = create_work
-        @work.update_attributes(:posted => true)
-        @work.save
+        @work.update_attribute(:posted, true)
         @bookmark = create_bookmark(:bookmarkable => @work)
         tagging = create_tagging(:taggable => @bookmark, :tag => @tag)  
       end

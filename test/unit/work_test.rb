@@ -22,8 +22,7 @@ class WorkTest < ActiveSupport::TestCase
 
     context "which has been posted" do
       setup do
-        @work.posted = true
-        @work.save
+        @work.update_attribute("posted", true)
       end
       should "be visible" do
         assert @work.visible
