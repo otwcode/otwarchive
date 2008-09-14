@@ -6,19 +6,17 @@
       </dt>
 	    
       <dd>
-        <% if category.name == "Warning" && hide_warnings?(work) -%>
         <ul class="<%= category.display_name.downcase -%>" id="work_<%= work.id %>_category_<%= category.id %>">
-          <li><%= show_warnings_link(work, category) %></li>
-        </ul> 
+        <%- if category.name =~ /Warning/ && hide_warnings?(work) -%>        
+          <li><%= show_warnings_link(work, category) %></li> 
         <%- else -%>
-        <ul>
           <%- work.tags.by_category(category).each do |tag| -%>
           <li class="<%= category.display_name.downcase -%>">
             <%= link_to_tag(tag) %> 
           </li>
           <%- end -%>
-        </ul>
         <%- end -%>
+        </ul>
       </dd>
     <%- end -%>
   <%- end -%>
