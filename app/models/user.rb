@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
   has_many :bookmark_tags, :through => :bookmarks, :source => :tags
   
   has_many :inbox_comments
-  has_many :feedback_comments, :through => :inbox_comments, :conditions => "(is_deleted IS NULL) OR (is_deleted <> true)"
+  has_many :feedback_comments, :through => :inbox_comments, :conditions => "(is_deleted IS NULL) OR (NOT is_deleted = true)"
   
   named_scope :alphabetical, :order => :login
 

@@ -7,6 +7,6 @@ class InboxController < ApplicationController
   end
   
   def show
-    @inbox = @user.feedback_comments(:all, :order => 'created_at DESC').uniq
+    @inbox = @user.feedback_comments(:all, :order => 'feedback_comments.created_at DESC').uniq
   end
 end
