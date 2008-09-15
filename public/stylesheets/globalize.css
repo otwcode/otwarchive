@@ -7,7 +7,7 @@
 }
 
 #globalize a:hover, #globalize a:active {
-    background-color: #333;
+    background: #222;
     color: #fffef9;
 }
 
@@ -25,10 +25,10 @@
 }
 
 #globalize select {
-    border: 1px solid #999;
-    padding: 0.125em;
     background: #fffef9;
-    color: #000;
+    color: #222;
+	padding: 0.125em;
+	border: 1px solid #999;
 }
 
 .inplaceeditor-form input

@@ -48,7 +48,7 @@
 
 #ibox_footer_wrapper {
 	border-top:1px solid #ccc;
-	padding: 0.5em;
+	padding: 0.5625em;
 	position:relative;
 	padding-top:0.375em;
 	margin:0 -0.625em;
@@ -74,7 +74,7 @@
 
 #ibox_close a{
 	font-size: 1.125em;
-	padding: 0 0.5em;
+	padding: 0 0.5625em;
 	text-decoration: none;
 	background:#eee;
 	color: #000;

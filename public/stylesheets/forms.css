@@ -7,11 +7,12 @@
 * Sessions forms can be selected through the main div's general class "session"
 * User pages forms can be selected through the main div's general class "sidebar"
 ===*/
-/* these rules are for two column forms when needed:form dt	{ float:left; clear:left; margin:0 1em 0 0; }
-form dd	{ clear:right; margin:0; }
+/* these rules are for two column forms when needed:form dt	{ width:12em; float:left; clear:left; margin:0 1em 0 0; }
+form dd	{ float:left; margin:0; }
+
+To simplify this sheet, will probably declare float globally for form dt, form dd, and then turn off for specific forms
 */
 /* GLOBAL */
-form focus:outline {thick solid blue;}
 form dt, label	{ font-weight:900; }
 legend	{ margin-left:-999em; position:absolute; }
 p.submit	{ text-align:right; clear:both; }
@@ -21,27 +22,27 @@ p {line-height:2;}
 
 #signin		{float:right;width:16.25em;}
 #signin dl	{position:relative;float:left}
-#signin dt	{font-size:0.625em;clear:left;float:left;width:4.875em;margin:0.25em 0 0.125em;padding:.25em 0 0 .125em;}
+#signin dt	{font-size:0.625em; float:left; clear:left; width:4.875em; margin:0.25em 0 0.125em; padding:0.25em 0 0 .125em;}
 #signin dd	{float:left;display:block;}
-#signin p.footnote	{font-size:0.5625em;margin:0 0.5em 0 4.875em;float:left;clear:left}
+#signin p.footnote	{font-size:0.5625em; float:left; clear:left; margin:0 0.5625em 0 4.875em}
 input#login, input#password, input#query {border:2px inset #3d0000;}
 .home input#login, .home input#password, .home input#query {border:1px inset #bbb}
 #signin input#remember_me	{margin:0.125em 0.125em 0.125em 0;vertical-align:middle}
-#signin p.submit	{text-align:right;margin:-2.8625em 0 0 0;width:5em;float:right}
+#signin p.submit	{text-align:right; width:5em;float:right; margin:-2.8625em 0 0 0; }
 #signin label	{font-weight:100;}
 #signin img.openid	{vertical-align:top;}
-#signin dt img {display:block; float:right; margin: -.5em 0.75em 0 0}
+#signin dt img {display:block; float:right; margin: -0.5625em 0.75em 0 0}
 
 /* sign in box when present in #header #login-block */
 #login-block #signin {width:121%; }
 #login-block #signin {font-family:Candara,Corbel,Arial,Tahoma,sans-serif}
-#login-block #signin p.submit	{margin:-3.5em 0 0 0; text-align:left; width:7.5em}
+#login-block #signin p.submit	{ text-align:left; width:7.5em; margin:-3.5em 0 0 0; }
 
 /* SEARCH */
-#search p { float: left; clear: both; font-size: 0.75em; padding: 0; margin: 0; }
+#search p { font-size: 0.75em; float: left; clear: both; padding: 0; margin: 0; }
 
 /*ADMIN */
-admin_session-new dt	{ width:6em; float:left; clear:left; margin:0.25em 0 0.125em; padding:.25em 0 0 .5em; }
+admin_session-new dt	{ width:6em; float:left; clear:left; margin:0.25em 0 0.125em; padding:.25em 0 00.5625em; }
 admin_session-new dd	{ float:left; margin:0.25em 0 0.125em; }
 
 /* USERS */
@@ -57,53 +58,64 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 .session input#login, .session input#password, .session input#openid_url	{ width:24em; }
 .session form input.submit	{ font-size:1.125em; margin:0 0 0 9em; }
 
-.footnote	{ font-size:0.825em; }
+.footnote	{ font-size:0.875em; }
 form .footnote	{ font-size:0.75em; }
 form p.openid	{ margin-top:6em; }
 
 /* POST WORK */
 /*story-meta  and story-show rules in story-views.css */
 
-#story-form fieldset {margin: 0.5em 0;; padding:0.375em 1.5em; border:1px solid #bbb;background:#fffef9}
-#story-form fieldset fieldset {margin: 0 0 .5em 0; line-height:1.5;}
-#story-form #story-preface textarea {width:99%;margin:auto; height:10em}
+form .story-meta dt{ float:left; clear:left; width:9em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
+form .story-meta dd{ float: left; margin:0; padding:0}
 .story-meta dd input, .story-meta dd select {width:60%;}
 
-fieldset#associations dt, fieldset#associations label {font-weight:100;font-size:0.875em;}
-dd#co-authors {margin:0 auto 0.875em auto;padding:0.375em; border:1px solid #bbb;}
-input#work_parent_url {width:99%;margin:0.375em auto 0.875em auto;}
-#story-form #story-preface dd {margin-bottom:0.5em;}
+#story-form fieldset { background:#fffef9; margin: 0.5625em 0; padding:0.375em 1.5em; border:1px solid #bbb; }
+#story-form fieldset fieldset { line-height:1.5; margin: 0 00.5625em 0; }
+#story-form #story-preface textarea {width:99%; height:10em; margin:auto; }
+
+fieldset#associations dt, fieldset#associations label { font-weight:100; font-size:0.875em;}
+dd#co-authors { margin:0 auto 0.875em auto; padding:0.375em; border:1px solid #bbb;}
+input#work_parent_url { width:99%; margin:0.375em auto 0.875em auto;}
+#story-form #story-preface dd { margin-bottom:0.5625em;}
 
 #seriesmanage dt, dt.story-restricted, dt.story-is_wip, dt.story-is_serial	{ float:left; clear:left; margin:0 1em 0 0; width: 50%;}
 #seriesmanage dd, dd.story-restricted , dd.story-is_wip, dd.story-is_serial	{ clear:right; margin:0; }
 
 #story-preface input {width:99%; margin:auto;}
-#story-  form #story-preface {border-bottom:0;}
-#story-form textarea#content {height:31.25em; width:99%;margin:auto;}
+#story-  form #story-preface { border-bottom:0; }
+#story-form textarea#content { height:31.25em; width:99%; margin:auto;}
 
 p.rtf-html-switch {margin:1em 0 -0.5625em 0;padding:0; }
-.rtf-html-switch span {background:#f0f0ee; padding:0.5em 0.5em 0 0.5em; border:1px solid #ddd;}
+.rtf-html-switch span {background:#f0f0ee; padding:0.5625em 0.5625em 0 0.5625em; border:1px solid #ddd;}
 
-#story-form p.submit input {font-size:1em;}
+#story-form p.submit input { font-size:1em; }
 
-dd.story-title input {width:80%;}
+dd.story-title input { width:80%; }
 
 /*EDIT PREFERENCES */
 form.edit_preference ul { margin:0.5625em auto; padding:1.5em 0; }
 .edit_preference li { margin:0.5625em 0;}
 .edit_preference label {font-weight:100;}
 
+/*EDIT PROFILE*/
+#main.users-edit form { position:absolute; }
+#main.users-edit dt	{ clear:left; float:left; width:12em; margin:0.25em 0 0.125em; padding:.25em 0 00.5625em; }
+#main.users-edit dd	{ float:left; margin:0.5625em 0 0.125em; }
+#main.users-edit #link_to_openid p { clear:both;}
+#main.users-edit textarea#profile_attributes_about_me { height:12em; }
+
+
 /*WORKS-INDEX -filters*/
-form.story-filters	{ background:#ddd; font-size:0.875em; width:12.25em; float:right; margin-top:1.125em; padding:0.5em; border:1px solid #fffef9;}
-.story-filters dt	{ margin:0.5em auto; border-bottom:1px solid #fffef9; }
+form.story-filters	{ background:#ddd; font-size:0.875em; width:12.25em; float:right; margin-top:1.125em; padding:0.5625em; border:1px solid #fffef9;}
+.story-filters dt	{ margin:0.5625em auto; border-bottom:1px solid #fffef9; }
 .story-filters dt:hover	{ color:#fffef9; background:#777; }
 .story-filters dd label	{ font-weight:normal; }
 form.story-filters p.submit	{ text-align:right; }
 
 /*COMMENTS */
 #comment_form_div dl	{ position:relative; }
-#comment_form_div dt	{ clear:left; float:left; width:6em; margin:0.25em 0 0.125em; padding:.25em 0 0 .5em; }
-#comment_form_div dd	{ float:left; margin:0.5em 0 0.125em; }
+#comment_form_div dt	{ clear:left; float:left; width:6em; margin:0.25em 0 0.125em; padding:0.25em 0 00.5625em; }
+#comment_form_div dd	{ float:left; margin:0.5625em 0 0.125em; }
 textarea#comment_content	{ width:32em !important; height:11em !important}
 #comment_form_div p.submit		{ width:32em}
 

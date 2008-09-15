@@ -7,17 +7,27 @@ table, caption, tbody, tfoot, thead, tr, th, td
 { border: 0; outline: 0; font-weight: inherit; font-style: inherit; font-size: 100%; font-family: inherit; vertical-align: baseline; list-style: none; margin: 0; padding: 0; }
 /************************************************end of uneditable rules */
 
+/* GLOBAL RULES. 
+See internal wiki "Em scale" to grok the font sizing and measures. body p set to 14px.
+Colours:
+red:	#900 (otw brand red)
+white:	#fffef9 (off-white)
+blacks:	#111, #222 (links, text)
+greys:	#ddd, #ccc, #bbb, #999, #777, #333 (borders, backgrounds, reverse text)
+plus system messages in system-messages.css (red, yellow, green, blue)
+*/
+
 @font-face	{ font-family: "Fertigo"; src: url(Fertigo.otf); }
 
-body	{ color: #222; background: #fffef9; font: 100%/1.125 Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; }
+body	{ background: #fffef9; color: #222; font: 100%/1.125 Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; }
 
 a, a:link	{ color: #222; }
 a:hover	{ color: #999; }
 a:focus { background:#900; color:#fffef9}
 a:visited	{ color: #777; }
 a img	{ border: 0; }
-a.tag	{ color: #111; text-decoration:none; border-bottom:1px dotted; padding: 0 0.125em}
-a.tag:hover	{ color: #fffef9; background: #900}
+a.tag	{ color: #111; text-decoration:none; padding: 0 0.125em; border-bottom:1px dotted; }
+a.tag:hover	{ background: #900; color: #fffef9; }
 
 body p	{ font-size: 0.875em; line-height: 1.286; margin: 0.643em 0; }
 
@@ -25,7 +35,7 @@ h1, h2, h3, h4, h5, h6	{ font-family: Fertigo, Cambria, Constantia, Palatino, Ge
 h1	{ font-size: 2.25em; line-height: 0.5; margin: 1.125em 0 0.875em; }
 h2	{ font-size: 1.5em; line-height: 1; margin: .75em 0; }
 h3	{ font-size: 1.125em; line-height: 1; margin: .5625em 0; }
-h4	{ font-size: 1em; line-height: 1.125; margin: .5em 0; }
+h4	{ font-size: 1em; line-height: 1.125; margin:0.5625em 0; }
 h5	{ font-size: 0.75em; line-height: 1.5; margin: .375em 0; }
 h6	{ font-size: 0.625em; line-height: 1.8; margin: .3125em 0; }
 
@@ -42,9 +52,9 @@ abbr, acronym	{ font-variant: small-caps; cursor: help; }
 
 /* TABLES AND LISTS */
 table	{ margin:auto; padding: 0.375em; }
-caption	{ margin-left: -999em; position: absolute; }
+caption	{ position: absolute; margin-left: -999em; }
 caption, th, td	{ text-align: left; }
-th	{ font-weight: 100; background:#777; color:#fff; padding: 0.25em;}
+th	{ background:#777; color:#fff; font-weight: 100; padding: 0.25em;}
 td th	{ padding-right: 3em; }
-td	{padding:0.375em; border:1px solid #ddd;}
+td	{ padding:0.375em; border:1px solid #ddd;}
 td .navigation { background:#ddd;}

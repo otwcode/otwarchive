@@ -1,21 +1,21 @@
 div.auto_complete {
+	background: #fffef9;
 	width: 350px;
 	height: 100%;
-	background: #fffef9;
 	position: absolute;
 	z-index: 50;
 }
 div.auto_complete ul {
-	border: 1px solid #777;
 	width: 100%;
+	border: 1px solid #777;
 }
 div.auto_complete ul li {
 	background: #fffef9;
-	padding: 0.125em;
 	display: block !important;
+	padding: 0.125em;
 }
 div.auto_complete ul li.selected {
-	background-color: #900;
+	background: #900;
 	color: #fffef9;
 }
 div.auto_complete ul strong.highlight {
