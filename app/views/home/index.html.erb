@@ -37,9 +37,9 @@
 	<h3>Share your fan works</h3>
 	<h4><%= link_to 'People'.t, :controller => 'users', :action => 'index' %></h4>
 	<ul class="meters">
-		<li><span><%= @user_count %></span>&nbsp;<%=h 'users to date'.t %></li>
+		<li><span><%= @user_count %></span> <%=h ' ' + 'users to date'.t %></li>
 		<%- if @random_user -%>
-			<li><%=h 'Try a new author:'.t %>&nbsp;<span><%= link_to @random_user.login, @random_user -%></span></li>
+			<li><%=h 'Try a new author'.t + ': ' %> <span><%= link_to @random_user.login, @random_user -%></span></li>
 		<%- end -%>
 	</ul>
 </div>
@@ -47,9 +47,9 @@
 	<h3>Discover new favorites</h3>
 	<h4><%= link_to 'Fandoms'.t, :controller => 'media', :action => 'index' %></h4>
 	<ul class="meters">
-		<li><span><%= @fandom_count -%></span> fandoms to date</li>
+		<li><span><%= @fandom_count -%></span> <%=h ' ' + 'fandoms to date'.t %></li>
 		<%- if @latest_fandom -%>
-			<li><%=h 'Latest updated:'.t %>&nbsp;<span><%= link_to @latest_fandom.name, @latest_fandom -%></span></li>
+			<li><%=h 'Latest updated'.t + ': '%> <span><%= link_to @latest_fandom.name, @latest_fandom -%></span></li>
 		<%- end -%>
 	</ul>
 </div>
@@ -57,9 +57,9 @@
 	<h3>Explore the possibilities</h3>
 	<h4><%= link_to 'Works'.t, :controller => 'works', :action => 'index' %></h4>
 	<ul class="meters">
-		<li><span><%= @work_count %></span> &nbsp;<%=h 'works to date'.t %></li>
+		<li><span><%= @work_count %></span> <%=h ' ' + 'works to date'.t %></li>
 		<%- if @latest_work -%>
-			<li><%=h 'Latest work:'.t %>&nbsp;<span><%= link_to @latest_work.title, @latest_work -%></span></li>
+			<li><%=h 'Latest work'.t + ': '%> <span><%= link_to @latest_work.title, @latest_work -%></span></li>
 		<%- end -%>
 	</ul>
 </div>
