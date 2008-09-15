@@ -24,14 +24,16 @@ p {line-height:2;}
 #signin dl	{position:relative;float:left}
 #signin dt	{font-size:0.625em; float:left; clear:left; width:4.875em; margin:0.25em 0 0.125em; padding:0.25em 0 0 .125em;}
 #signin dd	{float:left;display:block;}
-#signin p.footnote	{font-size:0.5625em; float:left; clear:left; margin:0 0.5625em 0 4.875em}
+#signin p.footnote	{font-size:0.5625em; float:left; clear:left; margin:0 0.5625em 0 4.875em; padding:0.125em 0 0 .125em;}
 input#login, input#password, input#query {border:2px inset #3d0000;}
 .home input#login, .home input#password, .home input#query {border:1px inset #bbb}
 #signin input#remember_me	{margin:0.125em 0.125em 0.125em 0;vertical-align:middle}
-#signin p.submit	{text-align:right; width:5em;float:right; margin:-2.8625em 0 0 0; }
+#signin p.submit	{text-align:right; width:5em;float:right; margin:-2.5em 0 0 0; }
 #signin label	{font-weight:100;}
 #signin img.openid	{vertical-align:top;}
-#signin dt img {display:block; float:right; margin: -0.5625em 0.75em 0 0}
+#signin dd {position:relative;}
+#signin dd a img {position:absolute; right:-0.875em; top:0}
+
 
 /* sign in box when present in #header #login-block */
 #login-block #signin {width:121%; }

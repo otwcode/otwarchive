@@ -74,7 +74,7 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 /*SESSIONS (front front pages - home, login, create, logout(feedbacks)etc)*/
 #main.session h1, #main.session h1, #main.passwords-new h1, #main.home h1{ text-align: left; margin: 0.75em 0 0.125em 0; border: 0;}
 #main.session h1 a, #main.session h1 a, #main.passwords-new h1 a, #main.home h1 a {text-decoration:none;}
-#main.session h1 span span, #main.home h1 span  {font-size:0.875em;}
+#main.session h1 span span, #main.home h1 span  {font-size:0.5625em;}
 #main.session h2, #main.session h2, #main.passwords-new h2, #main.home h2 { font: 100 0.75em "Gill Sans", Georgia, Verdana, sans-serif; margin: 0.25em auto 2em}
 
 .session #logo { width: 49%; display: block; float: left; margin-bottom: 1.5em}

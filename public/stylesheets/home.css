@@ -2,6 +2,7 @@
     width: 29%;
     float: left;
     margin: 2% 2% 2.5em 2%;
+	min-width:9em;
 }
 
 #main.home .wrapper h3, #main.home h4 {
@@ -22,7 +23,7 @@
     text-decoration: none;
     text-transform: lowercase;
 }
-#main.home .wrapper span {font-weight:600;}
+#main.home .wrapper ul {margin:1em 0 0 0;}
 
 #main.home h5 {
     text-align: right;
@@ -45,17 +46,14 @@ h5#signup a {
     text-decoration: none
 }
 
-blockquote#quotebox {
-    margin: 2.5em auto;
-    width: 23.25em;
+#quotebox {
+    font: 100 1em/1.5 "Gill Sans", Georgia, Verdana, sans-serif; margin:auto; text-align:center}
+#quotebox p.attribution {
+    text-indent:3em;
 }
 
 #main.home img {
     clear: left;
     display: block;
     margin: auto;
-}
-
-#quotebox p.attribution {
-    text-align: right;
 }
