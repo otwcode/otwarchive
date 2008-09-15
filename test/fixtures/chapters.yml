@@ -6,46 +6,30 @@ basic_chapter:
   position: 1
   work_id: 1
   posted: true
+  word_count: 5
+  title: First Chapter Title
+  summary: Summary of first chapter
+  notes: Notes on first chapter
 
-second_chapter:
+basic_chapter2:
   id: 2
-  content: looooong text for second chapter
-  position: 1
+  content: exciting second chapter content woo
+  position: 2
   work_id: 1
   posted: true
+  word_count: 5
+  title: Second Chapter Title
+  summary: Summary of second chapter
+  notes: Notes on second chapter
 
-chapter_1_of_work_1_of_1:
+basic_chapter3:
   id: 3
-  content: Chapter for work_1_of_1
-  position: 1
-  work_id: 3
-  posted: true
-
-chapter_1_of_work_1_of_3:
-  id: 4
-  content: Chapter for work_1_of_3
-  position: 1
-  work_id: 4
-  posted: true
-
-chapter_1_of_work_2_of_3:
-  id: 5
-  content: Chapter for work_2_of_3
-  position: 1
-  work_id: 5
-  posted: true
-
-chapter_1_of_work_3_of_3:
-  id: 6
-  content: Chapter for work_3_of_3
-  position: 1
-  work_id: 6
-  posted: true
-
-only_chapter_of_incomplete_work:
-  id: 7
-  content: Chapter text here
+  content: this is the content of the one and only chapter
   position: 1
   work_id: 2
   posted: true
+  word_count: 10
+  title: Only Chapter Title
+  summary: Summary of one and only chapter
+  notes: Notes on one and only chapter
 
