@@ -142,7 +142,7 @@ class WorksController < ApplicationController
 		end
 		user = is_admin? ? "admin" : current_user
 		conditions = @tag.blank? ? "" : ["taggings.tag_id = (?)", @tag.id]
-		@works = eval(@current_scope).visible(user, :include => [:taggings =>:tag], :order => @sort_order, :conditions => conditions).paginate(:page => params[:page])
+		@works = eval(@current_scope).visible(user, :include => [:pseuds, {:chapters => :comments}, :bookmarks, {:taggings =>:tag}], :order => @sort_order, :conditions => conditions).paginate(:page => params[:page])
     @filters = @tag_categories - [TagCategory.default]
     @tags_by_filter = {}
     @filters.each do |filter|

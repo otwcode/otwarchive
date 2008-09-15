@@ -85,6 +85,13 @@ class Work < ActiveRecord::Base
     self.chapters.collect { |c| c.find_all_comments }.flatten
   end
   
+  # Returns number of comments
+  # Hidden and deleted comments are referenced in the view because of the threading system - we don't necessarily need to 
+  # hide their existence from other users
+  def count_all_comments
+    self.chapters.collect { |c| c.count_all_comments }.sum
+  end
+  
   # Returns number of visible (not deleted, not hidden) comments
   def count_visible_comments
     self.find_all_comments.select {|c| !c.hidden_by_admin and !c.is_deleted }.length
