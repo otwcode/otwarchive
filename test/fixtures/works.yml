@@ -1,0 +1,23 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+TwoChapterWork:
+  id: 1
+  expected_number_of_chapters: 2
+  major_version: 2
+  minor_version: 1
+  restricted: 0
+  title: Work With Two Chapters
+  summary: Summary of test work
+  notes: Notes on test work
+  posted: true
+
+OneChapterWork:
+  id: 2
+  expected_number_of_chapters: 1
+  major_version: 1
+  minor_version: 1
+  restricted: 0
+  title: Work With One Chapter Only
+  summary: Summary of test work with only one chapter
+  notes: Notes on test work with only one chapter
+  posted: true

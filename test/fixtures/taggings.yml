@@ -1,0 +1,24 @@
+tagging1: 
+  tag: General Audiences
+  taggable: TwoChapterWork
+  
+tagging2:
+  tag: Chooses Not To Warn
+  taggable: TwoChapterWork
+  
+tagging3:
+  tag: Supernatural
+  taggable: TwoChapterWork
+  
+tagging4: 
+  tag: General Audiences
+  taggable: OneChapterWork
+
+tagging5:
+  tag: Chooses Not To Warn
+  taggable: OneChapterWork
+
+tagging6:
+  tag: SGA
+  taggable: OneChapterWork
+

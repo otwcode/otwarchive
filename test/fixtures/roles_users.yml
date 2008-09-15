@@ -1,0 +1,8 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+test_user_is_tag_wrangler:
+  user_id: 1
+  role_id: 1
+  
+test_user_is_translator:
+  user_id: 1
+  role_id: 2

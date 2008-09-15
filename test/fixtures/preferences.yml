@@ -5,12 +5,3 @@ basic_users_preferences:
   history_enabled: true
   email_visible: true
 
-user_with_one_pseud_preferences:
-  user_id: 2
-  history_enabled: false
-  email_visible: false
-
-user_with_three_pseuds_preferences:
-  user_id: 3
-  history_enabled: false
-  email_visible: true

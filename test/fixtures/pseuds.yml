@@ -20,53 +20,5 @@ non_default_pseud:
   description: This is a non default pseud for basic_user.
   is_default: false
 
-pseud_1_of_3:
-  id: 3
-  user_id: 2 # user_with_three_pseuds 
-  name: user_with_three_pseuds
-  description: evil overlord
-  is_default: true
-
-pseud_2_of_3:
-  id: 4
-  user_id: 2 # user_with_three_pseuds
-  name: buffy
-  description: chosen one
-  is_default: false
-
-pseud_3_of_3:
-  id: 5
-  user_id: 2 # user_with_three_pseuds
-  name: willow
-  description: witch
-  is_default: false
-
-pseud_with_one_work:
-  id: 6
-  user_id: 1 # basic_user
-  name: Pseud With One Work
-  description: This is a non default pseud.
-  is_default: false
-
-pseud_with_three_works:
-  id: 7
-  user_id: 1 # basic_user
-  name: Pseud With Three Works
-  description: This is a non default pseud.
-  is_default: false
-
-pseud_1_of_1:
-  id: 8
-  user_id: 3 # user_with_one_pseud
-  name: user_with_one_pseud
-  description: oneandonlypseud
-  is_default: true
-
-pseud_with_no_works: 
-  id: 99
-  user_id: 1 # basic_user
-  name: Pseud With No Works
-  description: This is a non default pseud.
-  is_default: false
 
 

@@ -12,55 +12,17 @@ basic_creatorship2:
   creation_type: Chapter
   pseud_id: 1
 
-creatorship_incomplete_work:
+basic_creatorship3:
+  creation_id: 2 
+  creation_type: Chapter
+  pseud_id: 1
+
+basic_creatorship4:
   creation_id: 2
   creation_type: Work
-  pseud_id: 2
+  pseud_id: 1
 
-creatorship_first_chapter_of_incomplete_work:
-  creation_id: 7
+basic_creatorship5:
+  creation_id: 3 
   creation_type: Chapter
-  pseud_id: 2
-
-# For testing the cases where a user might have 0, 1, or > 2 works
-# Work and chapter both owner by same pseud
-creatorship_1_of_1: 
-  creation_id: 3
-  creation_type: Work  
-  pseud_id: 6
-  
-creatorship_1_of_1_chapter: 
-  creation_id: 3
-  creation_type: Chapter
-  pseud_id: 6
-
-creatorship_1_of_3: 
-  creation_id: 4
-  creation_type: Work
-  pseud_id: 7
-  
-creatorship_1_of_3_chapter: 
-  creation_id: 4
-  creation_type: Chapter
-  pseud_id: 7
-
-creatorship_2_of_3: 
-  creation_id: 5
-  creation_type: Work
-  pseud_id: 7
-  
-creatorship_2_of_3_chapter: 
-  creation_id: 5
-  creation_type: Chapter
-  pseud_id: 7
-  
-creatorship_3_of_3: 
-  creation_id: 6
-  creation_type: Work
-  pseud_id: 7  
-  
-creatorship_3_of_3_chapter: 
-  creation_id: 6
-  creation_type: Chapter
-  pseud_id: 7  
-  
+  pseud_id: 1
