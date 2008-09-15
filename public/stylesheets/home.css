@@ -1,59 +1,95 @@
+#main.home {
+padding: 0;
+}
+#main.home h1 {
+font-family: "Gill Sans", Georgia,Verdana, sans-serif;
+text-align: left;
+margin: 0.75em 0 0.125em 0;
+padding-left: .5em;
+border: 0;
+}
+#main.home h1 a {
+text-decoration: none;
+}
+#main.home h1 span {
+font-size: 0.5625em;
+}
+#main.home h2 {
+font: 100 0.75em "Gill Sans", Georgia, Verdana, sans-serif;
+margin: 0.25em 0 2em 0;
+padding-left: 1.5em;
+}
+
+#main.home hr.clear {
+border-bottom: 1px solid #777;
+}
+
 #main.home .wrapper {
-    width: 29%;
-    float: left;
-    margin: 2% 2% 2.5em 2%;
-	min-width:9em;
+background: url(images/box.jpg) bottom left no-repeat;
+width: 29%;
+float: left;
+margin: 2% 2% 2.5em 2%;
+min-width: 9em;
 }
 
 #main.home .wrapper h3, #main.home h4 {
-    color: #900;
-    font: oblique 100 1.25em "Gill Sans", Fertigo, Georgia, serif;
-    text-align: center;
-    margin: 0
+color: #900;
+font: oblique 100 1.25em "Gill Sans", Georgia,Verdana, sans-serif;
+text-align: center;
+margin: 0
 }
 
 #main.home h4 {
-    color: #222;
-    border-bottom: 1px solid;
+color: #222;
+border-bottom: 1px solid #777;
 }
 
 #main.home .wrapper h4 a {
-    color: #222;
-    font: 100 2.25em "Gill Sans", Fertigo, Georgia, serif;
-    text-decoration: none;
-    text-transform: lowercase;
+color: #222;
+font: 600 2.25em "Gill Sans", Georgia,Verdana, sans-serif;
+text-decoration: none;
+text-transform: lowercase;
 }
-#main.home .wrapper ul {margin:1em 0 0 0;}
+#main.home .wrapper ul {
+margin: 1em 0 0 0;
+}
+#main.home .wrapper ul span {
+font-weight: 900;
+font-size: larger;
+}
 
 #main.home h5 {
-    text-align: right;
-    font: 100 2.25em "Gill Sans", Fertigo, Georgia, serif;
-}
+text-align: right;
+font: 100 2.25em "Gill Sans", Georgia,Verdana, sans-serif;
+padding:0 1em}
 
 h5#signup {
-    clear: left;
-    margin: 2.25em auto 0;
-    color: #fff;
-    text-align: center;
-    width: 9em;
-    border: 3px groove #333;
-    background: url(header-red.png) bottom right repeat-x #900;
-    padding: 0.625em
+clear: left;
+margin: 2.25em auto 0;
+color: #fff;
+text-align: center;
+width: 9em;
+border: 3px groove #333;
+background: url(images/header-red.png) bottom right repeat-x #900;
+padding: 0.625em
 }
 
 h5#signup a {
-    color: #fff;
-    text-decoration: none
+color: #fff;
+text-decoration: none
 }
 
 #quotebox {
-    font: 100 1em/1.5 "Gill Sans", Georgia, Verdana, sans-serif; margin:auto; text-align:center}
+font: 100 1em/1.5 "Gill Sans", Georgia, Verdana, sans-serif;
+margin: auto;
+text-align: center
+}
 #quotebox p.attribution {
-    text-indent:3em;
+text-indent: 3em;
 }
 
 #main.home img {
-    clear: left;
-    display: block;
-    margin: auto;
+clear: left;
+display: block;
+margin: auto;
 }
