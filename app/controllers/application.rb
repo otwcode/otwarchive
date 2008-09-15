@@ -21,8 +21,7 @@ class ApplicationController < ActionController::Base
   # Determines which categories are visible on works throughout the site
   before_filter :set_tag_categories
   def set_tag_categories
-    @tag_categories = TagCategory.official_with_tags
-    @valid_tags = Tag.find(:all, :group => :tag_category_id, :conditions => 'NOT banned = 1')
+    @tag_categories = TagCategory.official
   end
 
   #### -- GLOBALIZATION -- ####

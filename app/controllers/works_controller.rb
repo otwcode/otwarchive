@@ -11,13 +11,6 @@ class WorksController < ApplicationController
   before_filter :check_permission_to_view, :only => [ :show ]
   before_filter :check_adult_status, :only => [:show]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview, :post]
-  before_filter :get_valid_tags
-  
-  def get_valid_tags
-    if @work
-      @work_valid_tags = @work.tags.valid.by_category
-    end
-  end
   
   # We may want to move this to a module
   def self.auto_complete_for_taggable(model)
