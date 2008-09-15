@@ -26,10 +26,10 @@ border-bottom: 1px solid #777;
 
 #main.home .wrapper {
 background: url(../images/box.jpg) bottom left no-repeat;
-padding:0 0 2.5em 2.25em;
+padding:0 0 2.75em 2.25em;
 width: 24%;
 float: left;
-margin: 2% 2% 2.5em 2%;
+margin: 2% 2% 0 2%;
 min-width: 9em;
 }
 
