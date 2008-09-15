@@ -1,6 +1,7 @@
 <!-- BEGIN BETA CAVEATS! -->
 <%- if request.env['HTTP_USER_AGENT'].downcase =~ /msie/i -%>
-  <%= javascript_tag "alert('Sorry! The current beta version of the site has been optimized for Firefox and may not display properly in your browser just yet.')" %>
+  <%= javascript_tag "alert('Sorry! The current beta version of the site has been 
+                      optimized for Firefox and may not display properly in your browser just yet.')" -%>
 <%- end -%>
 
 <noscript>
@@ -23,42 +24,52 @@
   <%- end -%>
 </div>
 
-  <h1>An Archive of Our Own
-  	<span><%= ArchiveConfig.APPNAME -%>
-     <% unless ArchiveConfig.REVISION.blank? %>(rev. <%= ArchiveConfig.REVISION %>)<% end %></span>
-  </h1>
-	<h2>A project of the <a href="http://transformativeworks.org">Organization For Transformative Works</a></h2>
-	<hr class="clear" />
-	
-	<div class="wrapper">
-		<h3>Share your fan works</h3
-		<h4><%= link_to 'People'.t, :controller => 'users', :action => 'index' %></h4>
-		<ul class="meters">
-			<li><span><%= @user_count %></span>&nbsp;<%=h 'users to date'.t %></li>
-			<li><%=h 'Latest user:'.t %>&nbsp;<span>XXX</span></li>
-		</ul>
-	</div>
-	<div class="wrapper">
-		<h3>Discover new favorites</h3>
-		<h4><%= link_to 'Fandoms'.t, :controller => 'media', :action => 'index' %></h4>
-		<ul class="meters">
-			<li><span><%= @XXX_count %></span> fandoms to date</li>
-			<li><%=h 'Latest updated:'.t %>&nbsp;<span>XXX</span></li>
-		</ul>
-	</div>
-	<div class="wrapper">
-		<h3>Explore the possibilities</h3>
-		<h4><%= link_to 'Works'.t, :controller => 'works', :action => 'index' %></h4>
-		<ul class="meters">
-			<li><span><%= @work_count %></span> &nbsp;<%=h 'works to date'.t %></li>
-			<li><%=h 'Latest work:'.t %>&nbsp;<span>XXX</span></li>
-		</ul>
-	</div>
-	<p><img src="/public/images/closed.jpg" alt="Hey, we're in closed beta right now, but please come in and browse!" /></p>
-						<!--<h5 id="signup"></h5>
-						<blockquote id="quotebox">
-							<p>"I want us to own the goddamn servers!"
-							</p>
-							<p class="attribution">~ Speranza</p>
-						</blockquote>
-						-->
+<h1>An Archive of Our Own
+	<span><%= ArchiveConfig.APPNAME -%>
+  <% unless ArchiveConfig.REVISION.blank? %>(rev. <%= ArchiveConfig.REVISION %>)<% end %></span>
+</h1>
+
+<h2>A project of the <a href="http://transformativeworks.org">Organization For Transformative Works</a></h2>
+
+<hr class="clear" />
+
+<div class="wrapper">
+	<h3>Share your fan works</h3>
+	<h4><%= link_to 'People'.t, :controller => 'users', :action => 'index' %></h4>
+	<ul class="meters">
+		<li><span><%= @user_count %></span>&nbsp;<%=h 'users to date'.t %></li>
+		<%- if @random_user -%>
+			<li><%=h 'Try a new author:'.t %>&nbsp;<span><%= link_to @random_user.login, @random_user -%></span></li>
+		<%- end -%>
+	</ul>
+</div>
+<div class="wrapper">
+	<h3>Discover new favorites</h3>
+	<h4><%= link_to 'Fandoms'.t, :controller => 'media', :action => 'index' %></h4>
+	<ul class="meters">
+		<li><span><%= @fandom_count -%></span> fandoms to date</li>
+		<%- if @latest_fandom -%>
+			<li><%=h 'Latest updated:'.t %>&nbsp;<span><%= link_to @latest_fandom.name, @latest_fandom -%></span></li>
+		<%- end -%>
+	</ul>
+</div>
+<div class="wrapper">
+	<h3>Explore the possibilities</h3>
+	<h4><%= link_to 'Works'.t, :controller => 'works', :action => 'index' %></h4>
+	<ul class="meters">
+		<li><span><%= @work_count %></span> &nbsp;<%=h 'works to date'.t %></li>
+		<%- if @latest_work -%>
+			<li><%=h 'Latest work:'.t %>&nbsp;<span><%= link_to @latest_work.title, @latest_work -%></span></li>
+		<%- end -%>
+	</ul>
+</div>
+<p><%= image_tag 'closed.jpg', :alt => "Hey, we're in closed beta right now, but please come in and browse!" -%></p>
+<!--<h5 id="signup"></h5>
+<blockquote id="quotebox">
+	<p>"I want us to own the goddamn servers!"
+	</p>
+	<p class="attribution">~ Speranza</p>
+</blockquote>
+-->
+<h5><%= link_to 'Browse'.t, :controller => 'bookmarks', :action => 'index' %></h5>
+
