@@ -94,7 +94,7 @@ class User < ActiveRecord::Base
   
   # Gets the user's one allowed unposted work
   def unposted_work
-    works.find(:first, :conditions => 'posted IS NULL OR posted = 0', :order => 'created_at DESC', :limit => 1) 
+    works.find(:first, :conditions => 'posted IS NULL OR posted = 0', :order => 'works.created_at DESC') 
   end
   
   # Gets the user's one allowed unposted chapter per work
