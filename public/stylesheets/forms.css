@@ -51,7 +51,7 @@ admin_session-new dd	{ float:left; margin:0.25em 0 0.125em; }
 
 
 /*SESSIONS (front front pages - login, create, etc)*/
-img#openid	{ margin-left:-20px; vertical-align:middle; }
+.session img#openid	{ margin-left:-20px; vertical-align:middle; }
 .session form	{ margin-bottom:1.5em; padding-bottom:1.5em; border-bottom:1px solid; }
 .session label	{ font-weight:100; }
 .session input#login	{ float:none; }

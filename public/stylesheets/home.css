@@ -22,6 +22,7 @@
     text-decoration: none;
     text-transform: lowercase;
 }
+#main.home .wrapper span {font-weight:600;}
 
 #main.home h5 {
     text-align: right;

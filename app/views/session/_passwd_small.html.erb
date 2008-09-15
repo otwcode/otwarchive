@@ -6,7 +6,7 @@
       <%= link_to_remote image_tag("openid.png", :class => 'openid', :alt => 'OpenID'.t, :title => 'OpenID'.t) , 
 																	 {:url => {:controller => :session, :action => 'openid_small'}}, 
 							 										 :href => url_for(:overwrite_params => { :use_openid => true }), 
-																	 :class => 'footnote' -%>
+																	 -%>
     <%- end -%>
 	</dd>
 	<dt>
