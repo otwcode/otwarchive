@@ -19,7 +19,9 @@ class HomeController < ApplicationController
     fandom_category = TagCategory.find_or_create_by_name("Fandom")
     @fandom_count = fandom_category.tags.count(:all, :conditions => {:canonical => true})
     @latest_work = Work.find(:first, :conditions => {:restricted => false}, :order => "updated_at DESC")
-    @latest_fandom = fandom_category.tags.find(:first, :conditions => {:name => @latest_work.Fandom})
+    if @latest_work
+      @latest_fandom = fandom_category.tags.find(:first, :conditions => {:name => @latest_work.Fandom})
+    end
     render :action => "index", :layout => "home"
   end
   
