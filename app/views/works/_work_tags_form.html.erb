@@ -1,23 +1,23 @@
 <fieldset>
   <legend><%= "Story Tags".t -%></legend>
   <dl class="story-meta">
-    <% TagCategory.official.each do |category| %>
+    <% @tag_categories.each do |category| %>
       <dt class="<%= category.display_name.downcase + (category.required ? ' required' : '') -%>">
         <label for=""><%= category.display_name.t -%></label>
       </dt>
       <dd class="<%= category.display_name.downcase + (category.required ? ' required' : '') -%>">
         <%- if category.exclusive && category.required -%>
-          <%= collection_select(:work, category.name.to_sym, category.tags.valid, :name, :name) %>		
+          <%= collection_select(:work, category.name.to_sym, category.tags.valid, :name, :name) -%>		
         <%- elsif category.exclusive -%>
-          <%= collection_select(:work, category.name.to_sym, category.tags.valid, :name, :name, {:prompt => true}) %>          
+          <%= collection_select(:work, category.name.to_sym, category.tags.valid, :name, :name, {:prompt => true}) -%>          
         <%- elsif category.name =~ /Warning/ -%>
           <select id="work_<%= category.name %>", name="work[<%= category.name %>][]" multiple="multiple">
-	          <%= options_from_collection_for_select(category.tags.valid, :name, :name, @work.tags.by_category(category).valid.collect(&:name)) %>
+	          <%= options_from_collection_for_select(category.tags.valid, :name, :name, @work.tags.valid.by_category(category).collect(&:name) ) -%>
 	        </select>
         <%- else -%>
           <%= text_field_with_auto_complete :work, category.name.to_sym, { :size => 50 }, 
             { :url => { :controller => 'tags', :action => 'index', :tag_category_id => category.id}, :method => :get, :param_name => 'search', 
-                        :tokens => ',', :min_chars => 2, :skip_style => true } %>
+                        :tokens => ',', :min_chars => 2, :skip_style => true } -%>
         <%- end -%>
         <%- if category.required -%>
           <%= live_validation_for_field('work_' + category.name) -%>

@@ -17,7 +17,7 @@ class Tag < ActiveRecord::Base
                       :with => /\A[-a-zA-Z0-9 \/?.!''"":;\|\]\[}{=~!@#\$%^&()_+]+\z/, 
                       :message => "tags can only be made up of letters, numbers, spaces and basic punctuation, but not commas, asterisks or angle brackets".t
   
-  named_scope :valid, {:conditions => 'banned = 0 OR banned IS NULL'}
+  named_scope :valid, {:conditions => 'NOT banned = 1'}
   named_scope :by_category, lambda { |*args| {:conditions => "tag_category_id IN (#{args.flatten.collect(&:id).join(",")})"}}  
   named_scope :by_popularity, {:order => 'taggings_count DESC'}
   

@@ -12,7 +12,7 @@
   <%= render :partial => 'works/upload_work_form' -%>   
 </div>
 
-<div id="story-form">
+<div id="story-form" class="story-form">
 <%- form_for(@work, :html => {:name => "storyForm"}) do |f| -%> 
   <p class="notice required"><%=h '* Required information'.t %></p>
   <%= render :partial => 'work_tags_form' -%>

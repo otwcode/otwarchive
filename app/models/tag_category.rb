@@ -15,6 +15,12 @@ class TagCategory < ActiveRecord::Base
       t.save
     end
   end
+
+  # return tag categories including tags
+  def self.official_with_tags
+    find(:all, :conditions => {:official => true }, :order => 'official, required DESC, exclusive DESC',
+         :include => :tags )
+  end
   
   # required ambiguous category, if it doesn't exist, create it.
   def self.ambiguous
