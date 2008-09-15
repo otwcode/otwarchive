@@ -8,6 +8,7 @@ class Work < ActiveRecord::Base
   has_many :related_works, :as => :parent
 
   has_bookmarks
+  has_many :user_tags, :through => :bookmarks, :source => :tags
 
   has_many :taggings, :as => :taggable, :dependent => :destroy
   has_many :tags, :through => :taggings
