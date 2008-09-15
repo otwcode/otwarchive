@@ -13,14 +13,7 @@ class HomeController < ApplicationController
   # home page itself
   def index
     @user_count = User.count(:all)
-    @random_user = User.find_by_sql( "SELECT * FROM users WHERE id NOT IN 
-                                      ( SELECT users.id FROM users INNER JOIN pseuds ON users.id = pseuds.user_id 
-                                        INNER JOIN creatorships ON 
-                                        (pseuds.id = creatorships.pseud_id AND creatorships.creation_type = 'Work') 
-                                        INNER JOIN works ON 
-                                        (creatorships.creation_id = works.id AND works.restricted = true) )
-                                      ORDER BY RAND()
-                                      LIMIT 1" ).first
+    @random_user = User.find :first, :offset => rand(@user_count)
     @work_count = Work.count(:all)
     @works_today = Work.count(:all, :conditions => (['created_at > ?', 1.day.ago]))
     fandom_category = TagCategory.find_or_create_by_name("Fandom")

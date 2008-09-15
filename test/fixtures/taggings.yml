@@ -1,24 +1,30 @@
 tagging1: 
   tag: General Audiences
-  taggable: TwoChapterWork
+  taggable_id: 1
+  taggable_type: Work
   
 tagging2:
   tag: Chooses Not To Warn
-  taggable: TwoChapterWork
+  taggable_id: 1
+  taggable_type: Work
   
 tagging3:
   tag: Supernatural
-  taggable: TwoChapterWork
+  taggable_id: 1
+  taggable_type: Work
   
 tagging4: 
   tag: General Audiences
-  taggable: OneChapterWork
+  taggable_id: 2
+  taggable_type: Work
 
 tagging5:
   tag: Chooses Not To Warn
-  taggable: OneChapterWork
+  taggable_id: 2
+  taggable_type: Work
 
 tagging6:
   tag: SGA
-  taggable: OneChapterWork
+  taggable_id: 2
+  taggable_type: Work
 
