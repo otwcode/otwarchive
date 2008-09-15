@@ -68,8 +68,8 @@ form p.openid	{ margin-top:6em; }
 /*story-meta  and story-show rules in story-views.css */
 
 form .story-meta dt{ float:left; clear:left; width:9em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
-form .story-meta dd{ float: left; margin:0; padding:0}
-.story-meta dd input, .story-meta dd select {width:60%;}
+form .story-meta dd{ float: left; margin:0; padding:0; width:60%}
+.story-meta dd input, .story-meta dd select {width:99%;}
 
 #story-form fieldset { background:#fffef9; margin: 0.5625em 0; padding:0.375em 1.5em; border:1px solid #bbb; }
 #story-form fieldset fieldset { line-height:1.5; margin: 0 00.5625em 0; }
@@ -81,10 +81,10 @@ input#work_parent_url { width:99%; margin:0.375em auto 0.875em auto;}
 #story-form #story-preface dd { margin-bottom:0.5625em;}
 
 #seriesmanage dt, dt.story-restricted, dt.story-is_wip, dt.story-is_serial	{ float:left; clear:left; margin:0 1em 0 0; width: 50%;}
-#seriesmanage dd, dd.story-restricted , dd.story-is_wip, dd.story-is_serial	{ clear:right; margin:0; }
+#seriesmanage dd, dd.story-restricted, dd.story-is_wip, dd.story-is_serial	{ clear:right; margin:0; }
 
 #story-preface input {width:99%; margin:auto;}
-#story-  form #story-preface { border-bottom:0; }
+#story-form #story-preface { border-bottom:0; }
 #story-form textarea#content { height:31.25em; width:99%; margin:auto;}
 
 p.rtf-html-switch {margin:1em 0 -0.5625em 0;padding:0; }
