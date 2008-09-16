@@ -22,10 +22,11 @@ set story styles
 /*headings */
 .story-show h1	{ font-family:Cambria, Constantia, Palatino, Georgia, serif; text-align:center; }
 .story-show h2	{ color:#333; font-variant:normal; text-align:left; text-transform:none; margin:1.5em 0;}
-.story-show h3, .chapter title	{ background:#333; color:#fffef9; font-weight:100; padding: 0.125em; border-bottom:0.25em double #fffef9; }
+.story-show h3	{ background:#333; color:#fffef9; font-weight:100; padding: 0.125em; border-bottom:0.25em double #fffef9; }
 .story-show h4	{ font-variant:small-caps; font-size:1.25em;}
 .story-show h5	{ font-weight:600; font-size: 1em;}
 .story-show h6	{ font-size: 0.875em; border-bottom:1px solid; }
+.chapter-title a {color:#fffef9;}
 
 /*quotes and stresses*/
 .story-show blockquote	{ font-size:1em; margin:auto auto auto 1.5em; padding:0.75em; border-left:2px solid #999; }

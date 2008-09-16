@@ -90,7 +90,7 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 
 #user-header { position: relative; }
 #user-header img { top: 0; left: 0; position: absolute; margin: 0 0 0.5625em 0; }
-#user-header h1 { margin: 0 0 0 100px; /*sized in pixels because the icon it is avoiding has a fixed pixel value*/}
+#user-header h1 { text-align: right; margin: 0 0 0 100px; /*sized in pixels because the icon it is avoiding has a fixed pixel value*/}
 #user-header h1 a {text-decoration:none; text-transform:lowercase}
 #user-header ul.navigation { text-align:right;  margin: 0.5625em 0 0 100px;}
 #user-header ul li { display: inline; padding: 0.25em; }
