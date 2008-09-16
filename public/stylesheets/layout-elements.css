@@ -117,30 +117,30 @@ dl#user-data dt {font-weight: 900; width: 9em; float:left; clear:left; margin:0.
 #main.works-index dl.navigation { border:0;}
 
 /*story listing : shows on works, reading history, series, spoofed on bookmarks and users-show*/
-li.story ul { background: #fffef9; position: relative; margin: 0 12.5em 1em auto; padding: 0.25em; border: 1px solid #bbb;}
+li.story ul { background: #fffef9; position: relative; margin: 0 12.5em 0.5625em auto; padding: 0.25em; border: 1px solid #bbb;}
 #user-page li.story ul { margin-right: 0; }
 li.story ul ul { margin:0; padding:0; border:0;}
 li.story ul ul li,li.story dd ul, li.story dd li {background: #fffef9; display:inline; margin: 0.375em; border:0;}
 
-li.story-title-line h3 { background:#ddd; font-size: 1.5em; line-height: 0.75; margin: -.25em -.25em .75em -.25em; padding:.25em .125em .125em .25em; }
+li.story-title-line h3 { background:#ddd; font: 400 1.125em/1.5 Fertigo, Cambria, Constantia, Palatino, Georgia, sans-serif; margin: -.35em -.3em .75em -.3em; padding:.25em .125em .125em .25em; }
 li.story-title-line p { padding:0; margin:0;}
 li.story-title-line img { float: left; margin:0.125em 0.25em 0 0 }
 
-li.story-byline { background:#bbb; margin: -1.125em -.25em 0 -.25em; padding:.25em .125em .125em .25em; }
-.story-byline { font-weight: 400; font-size: 1.125em; }
+li.story-byline { background:#bbb; margin: -1em -.3em 0 -.3em; padding:.25em .125em .125em .25em; }
+.story-byline { font-weight: 400; font-size: 0.875em; }
 .story-byline a { text-decoration: none}
 
 li.story-date { color: #777; font-size: 0.75em; text-align: right; }
 
 li.story-tags { font-weight: 600; clear: left; }
 li.story-tags a { font-weight: normal; text-decoration: none; border-bottom: 1px dotted}
-li.story-tags dl.story-meta dt, li.story-tags dl.story-meta dd { line-height: 1.75; display: inline; margin:0; padding: 0 0.5625em 0 0; background:transparent !important; }
+li.story-tags dl.story-meta dt, li.story-tags dl.story-meta dd { line-height: 1.5; display: inline; margin:0; padding: 0 0.0125em 0 0; background:transparent !important; }
 li.story-tags dl.story-meta dd ul {background:transparent !important}
 li.story-tags dl.story-meta dd ul li {background:transparent !important}
 li.story-tags { font-weight: 600; clear: left; }
-li.story-tags a { font-weight: normal; }
+li.story-tags a.tag { font-weight: normal; padding:0;}
 
-li.story-desc { margin: 0.25em 0 1.5em; padding: 0 0.5625em; overflow:hidden;}
+li.story-desc { margin: 0.25em 0 0 0; padding: 0 0.5625em; overflow:hidden;}
 li.story-desc ul{ text-align:right; margin:0; padding:0; }
 
 /*series listing */
@@ -174,10 +174,11 @@ li.story-desc ul{ text-align:right; margin:0; padding:0; }
 /*BOOKMARKS-INDEX BOOKMARKS */
 .bookmark p, .bookmark ul {text-align:justify; margin:0.325em 1.5em; padding:0.125em;}
 dl.bookmark { background: #fffef9; position: relative; margin: 0 auto 1em auto; border: 1px solid #bbb; }
-.bookmark dt { background:#ddd; margin: -.125em -.125em 0 -.125em; padding: 0.5625em 0.125em; }
-.bookmark dt a { font: 400 1.125em/1 Fertigo, Cambria, Constantia, Palatino, Georgia, sans-serif; text-transform: capitalize; text-decoration: none; }
+.bookmark dt { background:#ddd; margin: -.125em -2px 0 -2px; padding: 0.125em; }
+.bookmark dt a { font: 400 0.875em/1.5 Fertigo, Cambria, Constantia, Palatino, Georgia, sans-serif; text-transform: capitalize; text-decoration: none; }
 .bookmark dd {padding:0.125em}
-.bookmark h4 {margin:0;}
+.bookmark dd ul {padding:0; margin:0 1.5em;}
+.bookmark h4 {margin:0; font: 400 0.875em/1 Fertigo, Cambria, Constantia, Palatino, Georgia, sans-serif;}
 .bookmark dd.date { background: #bbb; color:#fffef9; min-height:1em; }
 .bookmark dd.tags {padding:0.125em;}
 .bookmark .tags li { line-height: 1.75; display:inline; padding-right: 0.5625em; }
