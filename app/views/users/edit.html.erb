@@ -15,7 +15,7 @@
 					<%= render :partial => 'profile_openid', :locals => {:f => f} %>
 					<%- else -%>
 					<%= render :partial => 'profile_passwd', :locals => {:f => f} %>
-					<% end -%>
+					<%- end -%>
 			</div>
 <!-- Link to toggle between password and OpenID. Ugly code! :( Also, must be a way to reuse partials from new user page? -->
 <!-- Two versions of the div tag here so the link to passwd is not shown when the page is first loaded; for non-JS users clicking the link sets use_openid to true, showing the div on reload; for JS users the display is toggled -->
@@ -56,6 +56,7 @@
     <dd><%= p.text_area :about_me %></dd>
 	</dl>
   <% end %>
+	
 	
   <p>
     <%= f.submit "Update".t %>

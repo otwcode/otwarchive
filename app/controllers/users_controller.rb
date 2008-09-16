@@ -95,6 +95,10 @@ class UsersController < ApplicationController
         @user.profile.save!
       end
       @user.recently_reset = nil if params[:change_password]
+      if !params[:user][:password].blank? && !@user.authenticated?(params[:user][:password], @user.salt) && !@user.authenticated?(params[:check][:password_check], @user.salt)
+        flash[:error] = "Your old password was incorrect".t
+        unsuccessful_update
+      end
       if params[:user][:identity_url] != @user.identity_url && !params[:user][:identity_url].blank?
         authenticate_with_open_id(params[:user][:identity_url]) do |result, identity_url|
           if result.successful?
@@ -126,6 +130,7 @@ class UsersController < ApplicationController
       flash[:notice] = 'Your profile has been successfully updated.'.t
       redirect_to(user_profile_path(@user)) 
     end
+    
     def unsuccessful_update
        raise
     end
