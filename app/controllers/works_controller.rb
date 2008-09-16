@@ -68,6 +68,8 @@ class WorksController < ApplicationController
 
     @chapters = @work.chapters.in_order
     @serial_works = @work.serial_works
+    @tags_by_category = {}
+    (TagCategory.exclusive + [TagCategory.find_by_name("Warning")]).each {|category| @tags_by_category[category] = category.tags.valid.canonical}
 
     @chapter = @work.first_chapter
     if params[:work] && params[:work][:chapter_attributes]

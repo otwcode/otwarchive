@@ -8,6 +8,7 @@ class TagCategory < ActiveRecord::Base
   named_scope :ordered, :order => 'official, required DESC, exclusive DESC'
   named_scope :official, :conditions => 'official', :order => 'official, required DESC, exclusive DESC'
   named_scope :required, :conditions => :required
+  named_scope :exclusive, :conditions => :exclusive
 
   def remove_me_from_my_tags
     self.tags.each do |t| 
