@@ -30,7 +30,7 @@ set story styles
 /*quotes and stresses*/
 .story-show blockquote	{ font-size:1em; margin:auto auto auto 1.5em; padding:0.75em; border-left:2px solid #999; }
 .story-show blockquote blockquote	{ padding:0.25em; border:0; }
-.story-show hr	{ width:33%; margin:0.875em; border:1px solid; }
+.story-show hr	{ width:33%; margin:0.875em auto; border:1px solid; }
 
 .dropcap	{ font:3em Georgia, serif; }
 .flashback	{ font-style:italic; }
