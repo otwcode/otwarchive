@@ -8,11 +8,11 @@ class TranslationController < ApplicationController
        default_loc = Locale.new(ArchiveConfig.BASE_LANGUAGE)
        Locale.set default_loc
     end
-    
+
     @view_translations = ViewTranslation.paginate(:all, 
-                                              :conditions => [ 'built_in IS NULL AND language_id = ?', 
-    Locale.language.id ], 
-    :order => 'id', :page => params[:page])                                                
+                                                  :conditions => [ 'built_in IS NULL AND language_id = ?', 
+                                                   Locale.language.id ], 
+                                                  :order => 'id', :page => params[:page])                                                
   end
  
 # Shows only strings which have not yet been translated  
