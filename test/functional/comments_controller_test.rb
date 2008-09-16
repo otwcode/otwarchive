@@ -71,12 +71,13 @@ class CommentsControllerTest < ActionController::TestCase
   def test_create_work_chapter_comment
     create_comments
     assert_difference('Comment.count') do
+      @request.session[:user] = @user      
       post :create, :locale => 'en', 
                     :work_id => @work.id, 
                     :chapter_id => @chapter1.id,
                     :comment => {"commentable_type"=>"Chapter", 
                                  "commentable_id"=>@chapter1.id, 
-                                 "pseud_id"=>"1", 
+                                 "pseud_id"=>@pseud.id, 
                                  "content"=>"new chapter"}
     end
     # TODO check redirect
