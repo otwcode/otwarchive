@@ -24,9 +24,9 @@ class SeriesController < ApplicationController
   def index
     if params[:user_id]
       @user = User.find_by_login(params[:user_id])
-      @series = @user.series.find(:all, :order => 'created_at DESC').paginate(:page => params[:page])
+      @series = @user.series.find(:all, :order => 'series.created_at DESC').paginate(:page => params[:page])
     else
-      @series = Series.find(:all, :order => 'created_at DESC').paginate(:page => params[:page])
+      @series = Series.find(:all, :order => 'series.created_at DESC').paginate(:page => params[:page])
     end
 
   end
@@ -35,7 +35,7 @@ class SeriesController < ApplicationController
   # GET /series/1.xml
   def show
     @series = Series.find(params[:id])
-    @serial_works = @series.serial_works.find(:all, :include => :work, :conditions => 'works.posted = 1', :order => 'position') 
+    @serial_works = @series.serial_works.find(:all, :include => :work, :conditions => 'works.posted = 1', :order => :position) 
   end
 
   # GET /series/new
