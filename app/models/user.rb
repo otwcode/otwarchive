@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
   has_many :bookmark_tags, :through => :bookmarks, :source => :tags
   
   has_many :inbox_comments
-  has_many :feedback_comments, :through => :inbox_comments, :conditions => "(is_deleted IS NULL) OR (NOT is_deleted = true)"
+  has_many :feedback_comments, :through => :inbox_comments, :conditions => "(is_deleted IS NULL) OR (NOT is_deleted = 1)"
   
   named_scope :alphabetical, :order => :login
 
@@ -94,7 +94,8 @@ class User < ActiveRecord::Base
   
   # Gets the user's one allowed unposted work
   def unposted_work
-    works.find(:first, :conditions => 'posted IS NULL OR posted = 0', :order => 'works.created_at DESC') 
+    return @unposted_work if @unposted_work
+    @unposted_work = works.find(:first, :conditions => 'posted IS NULL OR posted = 0', :order => 'works.created_at DESC') 
   end
   
   # Gets the user's one allowed unposted chapter per work
