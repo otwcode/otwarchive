@@ -49,6 +49,19 @@ class Tag < ActiveRecord::Base
     end
   end
   
+  # Gets the work count for this tag and its synonyms
+  def visible_work_count(current_user=:false)
+    ids = ([self] + self.synonyms).collect(&:id).join(',')
+    conditions = "taggings.tag_id IN (#{ids})"
+    if current_user.is_a?(User)
+      pseud_ids = current_user.pseuds.collect(&:id).join(',')
+      conditions += " AND (works.hidden_by_admin = 0 OR works.hidden_by_admin IS NULL OR pseuds.id IN (#{pseud_ids}))"
+    elsif current_user != "admin"
+      conditions += " AND restricted = 0"
+    end
+    Work.posted.count(:all, :include => [:pseuds, {:taggings => :tag}], :conditions => conditions)
+  end
+  
   def valid
     return self if !banned
   end
@@ -68,7 +81,7 @@ class Tag < ActiveRecord::Base
     if options.blank?
       (self.tags + self.related_tags).uniq
     else  
-      condition_list = "tags.banned != 1"
+      condition_list = "(tags.banned = 0 OR tags.banned IS NULL) AND (tag_relationships.tag_id = :id OR tag_relationships.related_tag_id = :id)"
       condition_hash = {:id => self.id}   
       if options[:kind].is_a?(TagRelationshipKind)
         condition_list += " AND tag_relationships.tag_relationship_kind_id = :kind_id"
@@ -81,10 +94,9 @@ class Tag < ActiveRecord::Base
       if options[:category].is_a?(TagCategory)
         condition_list += " AND tag_categories.id = :category_id"
         condition_hash[:category_id] = options[:category].id
-      end      
-      siblings = self.tags.find(:all, :include => [:tag_category, {:tag_relationships => :tag_relationship_kind}], :conditions => [condition_list, condition_hash])
-      siblings += self.related_tags.find(:all, :include => [:tag_category, {:related_relationships => :tag_relationship_kind}], :conditions => [condition_list, condition_hash])
-      siblings.uniq
+      end
+      trs = TagRelationship.find(:all, :include => [:tag_relationship_kind, {:tag => :tag_category}, {:related_tag => :tag_category}], :conditions => [condition_list, condition_hash])      
+      siblings = (trs.collect{|tr| [tr.tag, tr.related_tag]}).flatten.uniq - [self]
     end
   end
   

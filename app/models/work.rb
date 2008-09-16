@@ -24,6 +24,7 @@ class Work < ActiveRecord::Base
 
   
   named_scope :recent, :order => 'created_at DESC', :limit => 5
+  named_scope :posted, :conditions => {:posted => true}
 
   validates_presence_of :title
   validates_length_of :title, 

@@ -131,17 +131,19 @@ class WorksController < ApplicationController
         @sort_order = "works.created_at DESC" # default sort order
     end
 		
+		conditions = ""
 		if params[:user_id]
 			@user = User.find_by_login(params[:user_id])
 			@current_scope = "@user.works"
 		elsif params[:fandom_id] || params[:tag_id]
 		  @tag = Tag.find(params[:fandom_id] || params[:tag_id])
-			@current_scope = "Work" # the regular association involves too many 'taggings' fields for mysql 	
+			@current_scope = "Work" # the regular association involves too many 'taggings' fields for mysql
+			tag_ids = ([@tag] + @tag.synonyms).collect(&:id).join(',')
+		  conditions = "taggings.tag_id IN (#{tag_ids})" 	
 		else
 			@current_scope = "Work"
 		end
 		user = is_admin? ? "admin" : current_user
-		conditions = @tag.blank? ? "" : ["taggings.tag_id = (?)", @tag.id]
 		inclusions = @user ? [{:chapters => :comments}, :bookmarks, {:taggings =>:tag}] : [:pseuds, {:chapters => :comments}, :bookmarks, {:taggings =>:tag}]
 		@works = eval(@current_scope).visible(user, :include => inclusions, :order => @sort_order, :conditions => conditions).paginate(:page => params[:page])
     @filters = @tag_categories - [TagCategory.default]
