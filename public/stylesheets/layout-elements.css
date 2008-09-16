@@ -168,8 +168,6 @@ li.story-desc ul{ text-align:right; margin:0; padding:0; }
 .user .pseuds a {color:#fffef9; text-decoration:none;}
 .user ul li {display:inline;}
 .user ul.tags {font-size:0.75em; text-align:center; }
-.user ul.tags:before {content:' \0093 '; font-family:serif;}
-.user ul.tags:after {content:' \0094 '; font-family:serif;}
 
 /*BOOKMARKS-INDEX BOOKMARKS */
 .bookmark p, .bookmark ul {text-align:justify; margin:0.325em 1.5em; padding:0.125em;}
