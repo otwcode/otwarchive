@@ -1,6 +1,6 @@
 <div id="signin">
 	<% form_tag session_path do -%>
-		<div id="switch_fields">
+		<div id="small_login">
       <%- if params[:use_openid] -%>
         <%= render :partial => "session/openid_small" %>
       <%- else -%>

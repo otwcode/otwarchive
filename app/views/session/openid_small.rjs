@@ -1,1 +1,1 @@
-page.replace_html(:switch_fields, :partial => 'session/openid_small')
+page.replace_html(:small_login, :partial => 'session/openid_small')
