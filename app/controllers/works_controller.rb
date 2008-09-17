@@ -137,9 +137,9 @@ class WorksController < ApplicationController
         when "title"
           case direction
             when :desc
-              @all_works = Work.search(@query, :per_page => 1000).map(&:visible).sort { |a,b| a.title.downcase <=> b.title.downcase }
+              @all_works = Work.search(@query, :per_page => 1000).map(&:visible).compact.sort { |a,b| a.title.downcase <=> b.title.downcase }
             else
-              @all_works = Work.search(@query, :per_page => 1000).map(&:visible).sort { |a,b| b.title.downcase <=> a.title.downcase }
+              @all_works = Work.search(@query, :per_page => 1000).map(&:visible).compact.sort { |a,b| b.title.downcase <=> a.title.downcase }
            end
         when "word_count"
           @all_works = Work.search(@query, :order => :word_count, :sort_mode => direction, :per_page => 1000).map(&:visible)
