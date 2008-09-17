@@ -32,9 +32,9 @@ namespace :local do
     run "echo -n 'REVISION: ' >> #{shared_path}/config/local.yml"
     run "cat #{release_path}/REVISION >> #{shared_path}/config/local.yml"
     run "ln -sf #{shared_path}/config/database.yml #{release_path}/config/database.yml" 
-    run "rm -rf #{release_path}/config/ultrasphinx"
-    run "ln -sf #{shared_path}/ultrasphinx #{release_path}/config/ultrasphinx" 
-    run "ln -sf #{shared_path}/sphinx #{release_path}/sphinx" 
+    run "cd #{release_path} && rake ts:stop RAILS_ENV=production"
+    run "cd #{release_path} && rake ts:index RAILS_ENV=production"
+    run "cd #{release_path} && rake ts:start RAILS_ENV=production"
   end
 end
 
