@@ -15,15 +15,17 @@ class WorkObserver < ActiveRecord::Observer
   
   # Email a copy of the deleted work to all co-authors
   def before_destroy(work)
-    users = work.pseuds.collect(&:user).uniq
-		orphan_account = User.orphan_account
-    unless users.blank?
-      for user in users
-				unless user == orphan_account
-					UserMailer.deliver_delete_work_notification(user, work)
-				end
-      end
-    end
+		if work.posted?
+	    users = work.pseuds.collect(&:user).uniq
+			orphan_account = User.orphan_account
+	    unless users.blank?
+	      for user in users
+					unless user == orphan_account
+						UserMailer.deliver_delete_work_notification(user, work)
+					end
+	      end
+	    end
+		end
   end
   
 end
