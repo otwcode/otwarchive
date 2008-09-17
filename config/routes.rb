@@ -3,7 +3,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :media, :has_many => :fandoms, :path_prefix => ':locale'
   
   map.resources :fandoms, :path_prefix => ':locale' do |fandom|
-    fandom.resources :works, :collection => {:filter => :get}
+    fandom.resources :works
     fandom.resources :bookmarks
   end
   
@@ -15,7 +15,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :tag_relationships, :path_prefix => ':locale'
   map.resources :tag_categories, :path_prefix => ':locale'
   map.resources :tags, :collection => {:show_hidden => :get}, :path_prefix => ':locale' do |tag|
-    tag.resources :works, :collection => {:filter => :get}
+    tag.resources :works
     tag.resources :bookmarks	
 	end
   map.resources :taggings, :path_prefix => ':locale'
@@ -38,7 +38,7 @@ ActionController::Routing::Routes.draw do |map|
     user.resource :profile, :controller => 'profile'
     user.resource :inbox, :controller => 'inbox'
     user.resources :bookmarks
-    user.resources :works, :collection => {:filter => :get}
+    user.resources :works
     user.resources :series, :member => {:manage => :get}, :has_many => :serial_works
     user.resources :readings
     user.resources :comments, :member => { :approve => :put, :reject => :put } 
