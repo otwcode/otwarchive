@@ -108,9 +108,5 @@ class Tag < ActiveRecord::Base
   def synonyms
     siblings(:distance => 0) - self.disambiguation
   end
-
-  def name
-    self.canonical? ? super.gsub(/\b([a-z])/) { $1.capitalize } : super
-  end
   
 end
