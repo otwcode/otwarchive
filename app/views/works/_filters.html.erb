@@ -17,17 +17,19 @@
       </dd>			
 			<%- end -%>
       <%- @filters.each_pair do |tag_category, tags| -%>
-      <dt onclick='toggleFilters("tag_category_<%= tag_category.id %>")'><%= tag_category.name %></dt>
-      <dd id="tag_category_<%= tag_category.id %>" class="filter-tags">
-        <ul>
-          <%- for tag in tags -%>
-          <li>
-            <%= check_box_tag tag_category.name + '[]', tag.name, @selected_tags.include?(tag.name) %>
-            <%= label_tag tag_category.name + "[#{tag.name}]", tag.name %>  
-          </li>
-          <%- end -%> 
-        </ul>
-      </dd>
+				<%- unless tag_category.blank? || tags.blank? -%>
+	      <dt onclick='toggleFilters("tag_category_<%= tag_category.id %>")'><%= tag_category.name %></dt>
+	      <dd id="tag_category_<%= tag_category.id %>" class="filter-tags">
+	        <ul>
+	          <%- for tag in tags -%>
+	          <li>
+	            <%= check_box_tag tag_category.name + '[]', tag.name, @selected_tags.include?(tag.name) %>
+	            <%= label_tag tag_category.name + "[#{tag.name}]", tag.name %>  
+	          </li>
+	          <%- end -%> 
+	        </ul>
+	      </dd>
+				<%- end -%>
 			<%- end -%>
 		</dl>
 		<p><%= hidden_field_tag("query", @query) if @query %></p>

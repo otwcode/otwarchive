@@ -156,20 +156,31 @@ class WorksController < ApplicationController
     if params[:commit] == "Filter Stories"
       excluded_works = []     
       @filters.each_pair do |tag_category, tags|
-        if params[tag_category.name]  # filtering on that tag - remove everything not checked
-          tags.each do |tag|
-            if params[tag_category.name].include?(tag.name)
-              @selected_tags << tag.name
-            else
-              excluded_works << tag.works
-              excluded_works << Work.no_tags(tag_category)
-            end
-          end
-        end
+				unless tag_category.blank? || tags.blank?
+	        if params[tag_category.name]  # filtering on that tag - remove everything not checked
+	          tags.each do |tag|
+	            if params[tag_category.name].include?(tag.name)
+	              @selected_tags << tag.name
+	            else
+	              excluded_works << tag.works
+	              excluded_works << Work.no_tags(tag_category)
+	            end
+	          end
+	        end
+				end
       end
+			if params[:pseuds]
+				included_works = []
+				@selected_tags << params[:pseuds]
+				for pseud_name in params[:pseuds]
+					pseud = Pseud.find_by_name(pseud_name)
+					included_works << pseud.works
+				end
+				@all_works = (@all_works & included_works.flatten.compact) unless included_works.blank?
+			end
       @all_works = (@all_works - excluded_works.flatten)
     end
-
+		@selected_tags.flatten!
     @works = @all_works.compact.paginate(:page => params[:page])
     # limit the filter tags to 10 per category
     @filters.each_key do |tag_category|
