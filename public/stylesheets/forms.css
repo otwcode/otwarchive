@@ -53,7 +53,7 @@ form p.openid	{ margin-top:6em; }
 #story-form #story-preface dt {float:none;}
 #story-form #story-preface dd { margin-bottom:0.5625em;float:none;}
 
-dd.story-title input { width:80%; }
+dd.story-title input, input#chapter_title { width:80%; }
 #story-form #story-preface { border:0; }
 
 fieldset#associations { font-size:0.875em;}
@@ -68,8 +68,12 @@ p.rtf-html-switch {margin:1em 0 -0.375em 0;padding:0; }
 
 #story-form p.submit input { font-size:1em; width: 4.75em; text-align:center}
 
-/*EDIT CHAPTERS 
-#main.chapters-edit dt {width:100%;float:none;} */
+/*EDIT CHAPTERS */ 
+#main.chapters-edit dt {width:100%;float:none;}
+#main.chapters-new #story-form p input {width:auto}
+#main.chapters-new.chapter_title input { width:80%; }
+#main.chapters-new dt, #main.chapters-new dd {clear:both; width:100%;}
+#main.chapters-new dd textarea {width:99%;margin:auto;}
 
 /*EDIT PREFERENCES */
 form.edit_preference ul { margin:0.5625em auto; padding:1.5em 0; }
@@ -82,6 +86,8 @@ form.edit_preference ul { margin:0.5625em auto; padding:1.5em 0; }
 #main.users-edit hr.clear {margin-top:39em;}
 #link_to_openid, #link_to_passwd {clear:both; margin:0 0.25em 0.5625em 11.125em; font-size:1.125em;}
 
+/* NEW PSEUD */
+form#new_pseud {position:absolute;}
 /*WORKS-INDEX -filters*/
 form.story-filters	{ background:#ddd; font-size:0.875em; width:12.25em; float:right; margin-top:3em; padding:0.5625em; border:1px solid #fffef9;}
 .story-filters dt	{ font-weight: 600; text-transform: capitalize; margin:0.5625em auto 0; padding:0; border-bottom:1px solid #fffef9; }

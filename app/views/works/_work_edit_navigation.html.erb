@@ -8,8 +8,8 @@
       <% for chapter in @chapters %>
         <%= link_to h(chapter.position), [:edit, @work, chapter] %> 
       <% end %> 
-    </li>
-  	<li>
+   </li>
+<li>
       <%= link_to "Manage chapters".t, manage_work_chapters_path(@work) %>
   	</li>
   <%- end -%>

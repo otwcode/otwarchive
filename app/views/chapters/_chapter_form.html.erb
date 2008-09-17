@@ -4,6 +4,7 @@
     <%=h 'Chapter'.t %> <%= f.text_field :current_position, :class => "number-field" %> <%=h 'of'.t %> <%= f.text_field :wip_length, :class => "number-field" %> 
   </p>
 
+	<fieldset>
 	<dl>
 		<dt><%= f.label :title, h('Chapter title').t %></dt>
 		<dd>
@@ -24,15 +25,15 @@
   		-%>
 		</dd>
 		</dl>
-    
+    </fieldset>
 		<!-- Author dropdown (pseud_id) -->
 		<%- if @pseuds.size > 1 -%>
-	  <fieldset title="Choose Your Pseud">
+	  <fieldset>
   	<%- else -%>
 	  <fieldset style="display:none;">
 		<%- end -%>	
-    
-    <dl>
+    <legend>Associations</legend>
+	<dl>
       <dt><%= label :pseud, :id, h('Select author/pseudonym(s)').t %></dt>
       <dd>
         <select name="chapter[author_attributes][ids][]" multiple="multiple">
@@ -43,38 +44,20 @@
    		<%- if @pseuds.size > 1 -%>
         <dd><%= link_to 'Create new pseud?'.t, new_user_pseud_path(current_user) %></dd>
 		  <%- end -%>
-    </dl>
-    </fieldset>
-	<dl><dd><%= link_to_function(h('Add co-authors?').t, "Element.toggle('co-authors')") %></dd></dl>
-
-	    <div id="co-authors">
-	      <fieldset title="Add Co-Authors" id="coauthormanage">
-	        <dl>
-	          <dt><%= f.label :storycoauthor, "Enter co-author name(s):".t %></dt>
-	          <dd>
-	            <%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
-	             			  { :url => {:controller => 'pseuds', :action => 'choose_coauthors'}, :method => :get, :param_name => 'search', 
-	                			:tokens => ',', :min_chars => 2, :skip_style => true } %>
-	          </dd>
-	        </dl>
-	     </fieldset>    
-	     </div>    
-<!--suggest:
+	<dt><%= link_to_function(h('Add co-authors?').t, "Element.toggle('co-authors')") %></dt>
+		<dd id="co-authors">
+		<dl>
+		<dt><%= f.label :storycoauthor, "Enter co-author name(s):".t %></dt>
+		 <dd><%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
+		             			  { :url => {:controller => 'pseuds', :action => 'choose_coauthors'}, :method => :get, :param_name => 'search', 
+		                			:tokens => ',', :min_chars => 2, :skip_style => true } %>
+		          </dd>
+		        </dl>
+		</dd>
+		</dl>
+</fieldset>       
 <fieldset>
-<legend>Add Co-Authors</legend>
-<dl>
-<dt><%= link_to_function(h('Add co-authors?').t, "Element.toggle('co-authors')") %></dt>
-<dd id="co-authors">
-<dl>
-<dt><%= f.label :storycoauthor, "Enter co-author name(s):".t %></dt>
- <dd><%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
-             			  { :url => {:controller => 'pseuds', :action => 'choose_coauthors'}, :method => :get, :param_name => 'search', 
-                			:tokens => ',', :min_chars => 2, :skip_style => true } %>
-          </dd>
-        </dl>
-</dd>
-</dl>
--->
+<legend>Chapter Notes</legend>
     <dl>      
       <dt><%= f.label :summary, "Chapter summary (max %d letters)".t/ArchiveConfig.SUMMARY_MAX %></dt>
       <dd><%= f.text_area :summary, :live => true %></dd>
@@ -82,11 +65,14 @@
       <dt><%= f.label :notes, "Chapter notes (max %d letters)".t/ArchiveConfig.NOTES_MAX %></dt>
       <dd><%= f.text_area :notes, :live => true %></dd>
     </dl>
+</fieldset>
+<fieldset>
+<legend>Submit Chapter</legend>
     <p class="submit">
       <%= submit_tag h('Preview').t, :name => 'preview_button' %>
       <input value="<%= 'Reset'.t -%>" type="reset" />
       <%= submit_tag 'Cancel'.t, :name => 'cancel_button' %>
     </p>
-
+</fieldset>
 <% end %>
 </div>
