@@ -73,7 +73,7 @@ class Tag < ActiveRecord::Base
   
   # sort tags by name
   def <=>(another_tag)
-    name <=> another_tag.name
+    name.downcase <=> another_tag.name.downcase
   end
   
   # Return all valid tags directly related to this one
