@@ -14,18 +14,40 @@ class Work < ActiveRecord::Base
   has_many :tags, :through => :taggings
   include TaggingExtensions
 
-  # Index for Ultrasphinx
-  is_indexed :fields => ['created_at', 'word_count', 'title', 'summary', 'notes'], 
-             :concatenate => [{:association_name => 'chapters', :field => 'content', :as => 'story'},
-                               {:class_name => 'Tag', :field => 'name', :as => 'tag',
-                               :association_sql => "LEFT OUTER JOIN taggings ON (works.`id` = taggings.`taggable_id` AND taggings.`taggable_type` = 'Work') LEFT OUTER JOIN tags ON (tags.`id` = taggings.`tag_id`)"},
-                               {:class_name => 'Pseud', :field => 'name', :as => 'author',
-                               :association_sql => "LEFT OUTER JOIN creatorships ON (works.`id` = creatorships.`creation_id` AND creatorships.`creation_type` = 'Work') LEFT OUTER JOIN pseuds ON (pseuds.`id` = creatorships.`pseud_id`)"}]
+  # Index for Thinking Sphinx
+  define_index do
 
+    # fields
+    indexes title
+    indexes summary
+    indexes notes
+
+    # associations
+    indexes chapters.content, :as => 'chapter_content' 
+    indexes tags.name, :as => 'tag_name'
+    indexes pseuds.name, :as => 'pseud_name'
+
+    # attributes
+    has created_at
+    has word_count
+
+    # properties
+    set_property :delta => true
+    set_property :field_weights => { :tag_name => 20, 
+                                     :title => 10, :psued_name => 10, 
+                                     :summary => 5, :notes => 5, 
+                                     :chapter_content => 1} 
+  end
   
   named_scope :recent, :order => 'created_at DESC', :limit => 5
   named_scope :posted, :conditions => {:posted => true}
 
+  # Order the results by the given argument, or 'created_at DESC'
+  # if no arg is given
+  named_scope :ordered, lambda { |*order|
+    { :order => order.flatten.first || 'created_at DESC' }
+  }
+  
   validates_presence_of :title
   validates_length_of :title, 
     :minimum => ArchiveConfig.TITLE_MIN, :too_short=> "must be at least %d letters long."/ArchiveConfig.TITLE_MIN
@@ -58,19 +80,41 @@ class Work < ActiveRecord::Base
   # Associating works with languages.  
   belongs_to :language, :foreign_key => 'language_id', :class_name => '::Globalize::Language'
    
-  def self.visible(current_user=:false, options = {})
+  # returns an array, must come last
+  # TODO: if you know how to turn this into a named_scope, please do!
+  # find all the works that do not have a tag in the given category (i.e. no fandom, no characters etc.)
+  def self.no_tags(tag_category, options = {})
+    tags = tag_category.tags
+    with_scope :find => options do
+      find(:all).collect {|w| w if (w.tags & tags).empty? }.compact.uniq
+    end  
+  end
+
+  # returns an array, must come last
+  # TODO: if you know how to turn this into a named_scope, please do!
+  # find all the works with a given set of tags
+  def self.with_tags(tags = [], options = {})
+    with_scope :find => options do
+      find(:all).collect {|w| w unless (w.tags & tags).empty? }.compact.uniq
+    end  
+  end
+  
+  # returns an array, must come last
+  # TODO: if you know how to turn this into a named_scope, please do!
+  def self.visible(options = {})
+    current_user=User.current_user
     with_scope :find => options do
       find(:all).collect {|w| w if w.visible(current_user)}.compact.uniq
     end
   end
   
-  def visible(current_user=:false)
-    if current_user == :false
+  def visible(current_user=User.current_user)
+    if current_user == :false || !current_user
       return self if self.posted unless self.restricted || self.hidden_by_admin
     elsif self.posted && !self.hidden_by_admin
       return self
     elsif self.hidden_by_admin?
-      return self if current_user == "admin" || current_user.is_author_of?(self)       
+      return self if current_user.is_admin? || current_user.is_author_of?(self)       
     end
   end
 

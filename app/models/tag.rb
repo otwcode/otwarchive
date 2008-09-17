@@ -41,7 +41,7 @@ class Tag < ActiveRecord::Base
   
   # kind is one of 'Tags', 'Works', 'Bookmarks'
   # this function returns an array of visible 'kind's that have been tagged with the given tag.
-  def visible(kind, current_user=:false)
+  def visible(kind, current_user=User.current_user)
     case kind
       when 'Works', 'Bookmarks'
         Tagging.tagees(:conditions => {:tag_id => self.id, :taggable_type => kind.singularize}).select {|t| t if t.visible(current_user)}

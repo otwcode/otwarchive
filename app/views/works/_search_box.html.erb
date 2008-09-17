@@ -1,0 +1,6 @@
+<% form_tag works_path, :id => 'search', :method => :get do -%>
+  <p>
+  <%= text_field_tag :query, params[:query], :class => 'text', :title => 'site search' %>
+  <%= submit_tag 'Search', :class => 'button', :name => nil %>
+  </p>
+<% end -%>

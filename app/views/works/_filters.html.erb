@@ -1,4 +1,4 @@
-<%- form_tag(current_filter_path, :class => 'story-filters', :method => :get) do -%>
+<%- form_tag(works_path, :class => 'story-filters', :method => :get) do -%>
   <%- field_set_tag 'Filter stories by: ' do -%>
 		<dl class="story-filters">
 			<%- if @user && @user.pseuds.count > 1 -%>
@@ -16,21 +16,23 @@
         </ul>
       </dd>			
 			<%- end -%>
-      <%- for filter in @filters -%>
-      <dt onclick='toggleFilters("filters_<%= filter.id %>")'><%= filter.name %></dt>
-      <dd id="filters_<%= filter.id %>" class="filter-tags">
+      <%- @filters.each_pair do |tag_category, tags| -%>
+      <dt onclick='toggleFilters("tag_category_<%= tag_category.id %>")'><%= tag_category.name %></dt>
+      <dd id="tag_category_<%= tag_category.id %>" class="filter-tags">
         <ul>
-          <%- for tag in @tags_by_filter[filter][0..9] -%>
+          <%- for tag in tags -%>
           <li>
-    	      <%= check_box_tag filter.name + '[]', tag.name, @selected_tags.include?(tag.name) %>
-    	      <%= label_tag filter.name + "[#{tag.name}]", tag.name %>  
-  	      </li>
+            <%= check_box_tag tag_category.name + '[]', tag.name, @selected_tags.include?(tag.name) %>
+            <%= label_tag tag_category.name + "[#{tag.name}]", tag.name %>  
+          </li>
           <%- end -%> 
         </ul>
       </dd>
 			<%- end -%>
 		</dl>
 		<p><%= hidden_field_tag("query", @query) if @query %></p>
+		<p><%= hidden_field_tag("tag_id", @tag.id) if @tag %></p>
+		<p><%= hidden_field_tag("user_id", @user.id) if @user %></p>
 		<p class="submit"><%= submit_tag "Filter Stories" %></p>
   <%- end -%>
 <%- end -%>

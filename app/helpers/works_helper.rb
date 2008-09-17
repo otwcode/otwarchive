@@ -39,13 +39,7 @@ module WorksHelper
       :url => {:controller => 'tags', :action => 'show_hidden', :work_id => work.id, :category_id => category.id}, 
       :method => :get
   end
-  
-  # Tells the filter form what path to use
-  def current_filter_path
-    controller.controller_name == "search" ? filter_search_url : 
-    request.request_uri.include?('filter') ? request.request_uri : request.request_uri + '/filter'  
-  end    
-  
+    
   # On post new work page puts link to the form to upload from existing page
   def use_upload_link
     link_to_function(h('Upload from an existing URL?').t,
@@ -59,4 +53,28 @@ module WorksHelper
     "Element.toggle('upload-work-form'); Element.toggle('story-form'); Element.toggle('upload-link'); Element.toggle('form-link')",
     :href => url_for(:controller => :works, :action => :new, :upload_work => false))
   end
+
+  # modified from mislav-will_paginate-2.3.2/lib/will_paginate/view_helpers.rb
+  def search_header(collection, search_query)
+    if search_query.blank?
+      search_query = " found"
+    else
+      search_query = html_escape search_query
+      search_query = " found for '".t + search_query + "'"
+    end
+    if collection.total_pages < 2
+      case collection.size
+      when 0; "0 Works".t + search_query
+      when 1; "1 Work".t + search_query
+      else; collection.total_entries.to_s + " Works".t + search_query
+      end
+    else
+      %{ %d - %d of %d }% [
+        collection.offset + 1,
+        collection.offset + collection.length,
+        collection.total_entries
+      ] + "Works".t + search_query
+    end
+  end
+
 end

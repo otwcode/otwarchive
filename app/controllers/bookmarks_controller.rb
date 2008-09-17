@@ -2,15 +2,6 @@ class BookmarksController < ApplicationController
   before_filter :load_bookmarkable, :only => [ :index, :new, :create ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
   before_filter :is_author, :only => [ :edit, :update, :destroy ]
-  before_filter :check_permission_to_view ,:only => [:show]
-  
-  # Make sure hidden bookmarks aren't publically visible
-  def check_permission_to_view
-    @bookmark = Bookmark.find(params[:id])
-    if @bookmark.hidden_by_admin?
-      access_denied if !logged_in_as_admin? || !(logged_in? && current_user.is_author_of?(@bookmark))
-    end
-  end
   
   # Only the owner of the bookmark should be able to edit it
   def is_author
@@ -41,18 +32,16 @@ class BookmarksController < ApplicationController
   def index
     if @user 
       @bookmarks = is_admin? ? @user.bookmarks.find(:all, :conditions => {:private => false}, :order => "bookmarks.created_at DESC").paginate(:page => params[:page]) : 
-                               @user.bookmarks.visible(current_user, :order => "bookmarks.created_at DESC").paginate(:page => params[:page]) 
+                               @user.bookmarks.visible(:order => "bookmarks.created_at DESC").paginate(:page => params[:page]) 
     elsif @bookmarkable.nil? 
       @bookmarks = is_admin? ? Bookmark.find(:all, :conditions => {:private => false}, :order => "bookmarks.created_at DESC").paginate(:page => params[:page]) : 
-                               Bookmark.visible(current_user, :order => "bookmarks.created_at DESC").paginate(:page => params[:page]) 
+                               Bookmark.visible(:order => "bookmarks.created_at DESC").paginate(:page => params[:page]) 
     else 
       @bookmarks = is_admin? ? @bookmarkable.bookmarks.find(:all, :conditions => {:private => false}, :order => "bookmarks.created_at DESC").paginate(:page => params[:page]) :
-                               @bookmarkable.bookmarks.visible(current_user, :order => "bookmarks.created_at DESC").paginate(:page => params[:page])
+                               @bookmarkable.bookmarks.visible(:order => "bookmarks.created_at DESC").paginate(:page => params[:page])
     end
     if @bookmarkable
-      unless is_admin? || @bookmarkable.visible(current_user)
-        render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 
-      end
+      access_denied unless is_admin? || @bookmarkable.visible
     end
   end
 
@@ -62,9 +51,13 @@ class BookmarksController < ApplicationController
   # GET    /:locale/external_works/:external_work_id/bookmark/:id
   def show
     @bookmark = Bookmark.find(params[:id])
-    if @bookmark
-      unless is_admin? || @bookmark.visible(current_user)
-        render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 
+    unless @bookmark.visible || is_admin?
+      if !current_user.is_a?(User)
+        store_location 
+        redirect_to new_session_path and return        
+      elsif @bookmark.user != current_user
+  	    flash[:error] = 'This page is unavailable.'.t
+        redirect_to user_path(current_user) and return
       end
     end
   end

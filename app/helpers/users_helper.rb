@@ -17,7 +17,7 @@ module UsersHelper
   # Prints link to bookmarks page with user-appropriate number of bookmarks
   # (The total should reflect the number of bookmarks the user can actually see.)
   def print_bookmarks_link(user)
-    total = logged_in_as_admin? ? @user.bookmarks.count : @user.bookmarks.visible(current_user).size
+    total = logged_in_as_admin? ? @user.bookmarks.count : @user.bookmarks.visible.size
     prefix = (@user == current_user) ? "My ".t : ""
     link_to_unless_current prefix + "Bookmarks".t + " (" + total.to_s + ")", user_bookmarks_path(@user)
   end
@@ -25,7 +25,7 @@ module UsersHelper
   # Prints link to works page with user-appropriate number of works
   # (The total should reflect the number of works the user can actually see.)
   def print_works_link(user)
-    total = logged_in_as_admin? ? @user.works.count : @user.works.visible(current_user).size
+    total = logged_in_as_admin? ? @user.works.count : @user.works.visible.size
     prefix = (@user == current_user) ? "My ".t : ""
     link_to_unless_current prefix + "Works".t + " (" + total.to_s + ")", user_works_path(@user)
   end

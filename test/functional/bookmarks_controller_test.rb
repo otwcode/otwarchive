@@ -61,7 +61,9 @@ class BookmarksControllerTest < ActionController::TestCase
       @request.session[:user] = @user 
       get :show, :locale => 'en', :id => @bookmark.id
     end
-    
-    should_respond_with 403
+    should "have error" do
+      assert flash.has_key?(:error)
+    end    
+    should_redirect_to 'user_path(@user)'
   end
 end

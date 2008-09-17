@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080912233749) do
+ActiveRecord::Schema.define(:version => 20080914202646) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -347,6 +347,7 @@ ActiveRecord::Schema.define(:version => 20080912233749) do
     t.text     "notes"
     t.integer  "word_count",                  :limit => 11
     t.boolean  "hidden_by_admin"
+    t.boolean  "delta",                                     :default => false
   end
 
 end

@@ -106,12 +106,18 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/1
   # GET /work/:work_id/chapters/1.xml
   def show
+    unless @work.visible || is_admin?
+      if !current_user.is_a?(User)
+        store_location 
+        redirect_to new_session_path and return        
+      elsif !current_user.is_author_of?(@work)
+  	    flash[:error] = 'This page is unavailable.'.t
+        redirect_to works_path and return
+      end
+    end
     @chapter = @work.chapters.find(params[:id])
     @chapters = [@chapter]
     @commentable = @work
-    if !@work.visible(current_user)
-      render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 and return
-    end
     @comments = @chapter.comments
     respond_to do |format|
       format.html

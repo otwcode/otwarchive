@@ -28,7 +28,7 @@ class TagTest < ActiveSupport::TestCase
       setup do
         @tag.update_attribute(:canonical, true)
       end
-      should "get prettified" do
+      should_eventually "get prettified" do
         assert_equal "All Lower-Case/Words", @tag.name      
       end
       should "revert if un-canonicalized" do

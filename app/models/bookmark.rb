@@ -8,31 +8,34 @@ class Bookmark < ActiveRecord::Base
   validates_length_of :notes, 
     :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than %d letters long."/ArchiveConfig.NOTES_MAX #/comment here just to fix aptana coloring
     
-  def self.visible(current_user=:false, options = {})
+  def self.visible(options = {})
+    current_user=User.current_user
     with_scope :find => options do
       find(:all).collect {|b| b if b.visible(current_user)}.compact
     end
   end
-  
-  def visible(current_user=:false)
-    visibility = (user == current_user || !(self.private? || self.hidden_by_admin?))
-    if visibility
+    
+  def visible(current_user=User.current_user)
+    return self if current_user == self.user
+    unless current_user == :false || !current_user
+      return self if current_user.is_admin?
+    end
+    if !(self.private? || self.hidden_by_admin?)
       if self.bookmarkable.nil? 
         # only show bookmarks for deleted works to the user who 
         # created the bookmark
-        if user == current_user
-          return self
-        else
-          return false
-        end
-      elsif self.bookmarkable_type == 'Work'
-        return self if self.bookmarkable.visible(current_user)
+        return self if user == current_user
       else
-        return self
+        if self.bookmarkable_type == 'Work'
+          return self if self.bookmarkable.visible(current_user)
+        else
+          return self
+        end
       end
     end
+    return false
   end
-  
+
   # Virtual attribute for external works
   def external=(attributes)   
     unless attributes.values.to_s.blank?
@@ -55,5 +58,5 @@ class Bookmark < ActiveRecord::Base
       self.bookmarkable.errors.full_messages.each { |msg| errors.add_to_base(msg) }
     end
   end
-  
+
 end

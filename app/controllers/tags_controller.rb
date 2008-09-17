@@ -38,8 +38,8 @@ class TagsController < ApplicationController
       render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 and return
     end
     @tags = @tag.synonyms
-    @works = @tag.works.visible(current_user) + @tags.collect {|tag| tag.works.visible(current_user)}.flatten
-    @bookmarks = @tag.bookmarks.visible(current_user) + @tags.collect {|tag| tag.bookmarks.visible(current_user)}.flatten
+    @works = @tag.works.visible + @tags.collect {|tag| tag.works.visible}.flatten
+    @bookmarks = @tag.bookmarks.visible + @tags.collect {|tag| tag.bookmarks.visible}.flatten
     @ambiguous = @tag.disambiguation   
 
     @works.uniq!

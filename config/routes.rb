@@ -45,9 +45,13 @@ ActionController::Routing::Routes.draw do |map|
   end
   
   map.resources :works, 
-    :collection => {:upload_work => :post, :filter => :get},
-    :member => { :preview => :get, :post => :post }, :path_prefix => ':locale' do |work|
-      work.resources :chapters, :has_many => :comments, :collection => {:manage => :get, :update_positions => :post}, :member => { :preview => :get, :post => :post }
+                :collection => {:upload_work => :post},
+                :member => { :preview => :get, :post => :post }, 
+                :path_prefix => ':locale' do |work|
+      work.resources :chapters, :has_many => :comments, 
+                                :collection => {:manage => :get, 
+                                                :update_positions => :post}, 
+                                :member => { :preview => :get, :post => :post }
       work.resources :comments, :member => { :approve => :put, :reject => :put }
       work.resources :bookmarks
   end
@@ -77,8 +81,6 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :series, :path_prefix => ':locale', :member => {:manage => :get}, :has_many => :serial_works 
   
-  map.resource :search, :controller => 'search', :member => {:filter => :get}, :path_prefix => ':locale'
-
   map.open_id_complete 'session', :controller => "session", :action => "create", :requirements => { :method => :get }, :path_prefix => ':locale'
   
   map.resource :session, :controller => 'session', :path_prefix => ':locale'

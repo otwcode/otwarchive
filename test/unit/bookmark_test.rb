@@ -59,8 +59,8 @@ class BookmarkTest < ActiveSupport::TestCase
         @bookmark.save
         @work_to_destroy.destroy
       end
-      should_eventually "have a test that correctly reports it is visible to the bookmark's creator" do
-        #assert @bookmark.visible(@bookmark.user)
+      should "be visible to the bookmark's creator" do
+        assert @bookmark.visible(@bookmark.user)
       end
       should "not be visible by default" do
         assert !@bookmark.visible

@@ -6,9 +6,7 @@ class WorksController < ApplicationController
   # only authors of a work should be able to edit it
   before_filter :is_author, :only => [ :edit, :update, :destroy ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :post, :show, :upload_work ]
-	before_filter :get_works, :only => [:index, :filter]
   before_filter :update_or_create_reading, :only => [ :show ]
-  before_filter :check_permission_to_view, :only => [ :show ]
   before_filter :check_adult_status, :only => [:show]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview, :post]
   
@@ -101,17 +99,6 @@ class WorksController < ApplicationController
     end
   end
   
-  # Only authorized users should be able to access restricted/hidden works
-  def check_permission_to_view
-    @work = Work.find(params[:id])
-    can_view_hidden = is_admin? || (current_user.is_a?(User) && current_user.is_author_of?(@work))
-	  access_denied if (!is_registered_user? && @work.restricted?)
-	  if (!can_view_hidden && @work.hidden_by_admin?)
-	    flash[:error] = 'This page is unavailable.'.t
-      redirect_to works_path
-    end
-  end
-  
   # Users must explicitly okay viewing of adult content
   def check_adult_status
     if params[:view_adult]
@@ -120,84 +107,89 @@ class WorksController < ApplicationController
       render :partial => "adult", :layout => "application"
     end  
   end
-	
-	# Shares some code between index and filter
-	def get_works
-    case params[:sort_column]
-      when "title" then
-        @sort_order = "works.title " + (params[:sort_direction] == "DESC" ? "DESC" : "ASC")
-      when "word_count" then
-        @sort_order = "works.word_count " + (params[:sort_direction] == "DESC" ? "DESC" : "ASC")
-      when "date" then
-        @sort_order = "works.created_at " + (params[:sort_direction] == "DESC" ? "DESC" : "ASC")
-      else
-        @sort_order = "works.created_at DESC" # default sort order
-    end
-		
-		conditions = ""
-		if params[:user_id]
-			@user = User.find_by_login(params[:user_id])
-			@current_scope = "@user.works"
-		elsif params[:fandom_id] || params[:tag_id]
-		  @tag = Tag.find(params[:fandom_id] || params[:tag_id])
-			@current_scope = "Work" # the regular association involves too many 'taggings' fields for mysql
-			tag_ids = ([@tag] + @tag.synonyms).collect(&:id).join(',')
-		  conditions = "taggings.tag_id IN (#{tag_ids})" 	
-		else
-			@current_scope = "Work"
-		end
-		user = is_admin? ? "admin" : current_user
-		inclusions = @user ? [{:chapters => :comments}, :bookmarks, {:taggings =>:tag}] : [:pseuds, {:chapters => :comments}, :bookmarks, {:taggings =>:tag}]
-		@works = eval(@current_scope).visible(user, :include => inclusions, :order => @sort_order, :conditions => conditions).paginate(:page => params[:page])
-    @filters = @tag_categories - [TagCategory.default]
-    @tags_by_filter = {}
-    @filters.each do |filter|
-      @tags_by_filter[filter] = Tag.by_category(filter).valid.by_popularity.find(:all, :limit => 50) & @works.collect(&:tags).flatten.uniq
-    end
-		@selected_tags = []		
-	end
-   
+	   
   # GET /works
   def index 
+    case params[:sort_column]
+      when "title" then
+        @sort_order = "title " + (params[:sort_direction] == "DESC" ? "DESC" : "ASC")
+      when "word_count" then
+        @sort_order = "word_count " + (params[:sort_direction] == "DESC" ? "DESC" : "ASC")
+      when "date" then
+        @sort_order = "created_at " + (params[:sort_direction] == "DESC" ? "DESC" : "ASC")
+    end
+
+    @selected_tags = []
+    @query = params[:query]
+    
+    if params[:user_id]
+      @user = User.find_by_login(params[:user_id])
+      @all_works = @user.works.ordered(@sort_order).visible
+    elsif params[:fandom_id] || params[:tag_id]
+      @tag = Tag.find(params[:fandom_id] || params[:tag_id])
+      tags = ([@tag] + @tag.synonyms).compact.uniq
+      @all_works = Work.ordered(@sort_order).visible & Work.with_tags(tags)
+    elsif @query
+      direction = params[:sort_direction] == "DESC" ? :desc : :asc
+      # FIXME: need a better way to get visible works from search using search itself
+      # then wouldn't need to override search's default pagination unless filtering
+      case params[:sort_column]
+        when "title"
+          case direction
+            when :desc
+              @all_works = Work.search(@query, :per_page => 1000).map(&:visible).sort { |a,b| a.title.downcase <=> b.title.downcase }
+            else
+              @all_works = Work.search(@query, :per_page => 1000).map(&:visible).sort { |a,b| b.title.downcase <=> a.title.downcase }
+           end
+        when "word_count"
+          @all_works = Work.search(@query, :order => :word_count, :sort_mode => direction, :per_page => 1000).map(&:visible)
+        when "date"
+          @all_works = Work.search(@query, :order => :created_at, :sort_mode => direction, :per_page => 1000).map(&:visible)
+        else # better matches at the top
+          @all_works = Work.search(@query, :per_page => 1000).map(&:visible)
+      end
+    else
+      @all_works = Work.ordered(@sort_order).visible
+    end
+    @filters = @all_works.compact.collect(&:tags).flatten.uniq.group_by(&:tag_category).to_hash
+
+    if params[:commit] == "Filter Stories"
+      excluded_works = []     
+      @filters.each_pair do |tag_category, tags|
+        if params[tag_category.name]  # filtering on that tag - remove everything not checked
+          tags.each do |tag|
+            if params[tag_category.name].include?(tag.name)
+              @selected_tags << tag.name
+            else
+              excluded_works << tag.works
+              excluded_works << Work.no_tags(tag_category)
+            end
+          end
+        end
+      end
+      @all_works = (@all_works - excluded_works.flatten)
+    end
+
+    @works = @all_works.compact.paginate(:page => params[:page])
+    # limit the filter tags to 10 per category
+    @filters.each_key do |tag_category|
+      @filters[tag_category] = @filters[tag_category].sort {|a,b| a.taggings_count <=> b.taggings_count}[0..10].sort
+    end
   end
-	
-	# TODO: combine this back into index now that it's just a GET request
-	def filter
-		user = is_admin? ? "admin" : current_user
-		conditions = ""
-		works_by_category = {}
-		for filter in @filters
-			unless params[filter.name].blank?
-				@selected_tags << params[filter.name]
-				tag_ids = []
-				for tag_name in params[filter.name]
-					tag_ids << Tag.find_by_name(tag_name).id
-				end
-				conditions = "tags.id IN (#{tag_ids.join(',')})" # tag_ids no longer contains user-submitted content
-				works_by_category[filter.id] = eval(@current_scope).visible(user, :include => :tags, :order => @sort_order, :conditions => conditions).paginate(:page => params[:page])
-			end		
-		end
-		if params[:pseuds]
-			works = []
-			@selected_tags << params[:pseuds]
-			for pseud_name in params[:pseuds]
-				pseud = Pseud.find_by_name(pseud_name)
-				works << pseud.works.visible(user).paginate(:page => params[:page]) unless pseud.blank?
-			end
-			works = works.flatten.compact
-			works_by_category['pseud'] = works unless works.blank?
-		end
-		unless works_by_category.blank?
-			works_by_category.each_value {|works| @works = @works & works }
-			@works = @works.paginate(:page => params[:page])
-			@selected_tags.flatten!
-		end
-		render :action => :index	
-	end
   
   # GET /works/1
   # GET /works/1.xml
   def show
+    @work = Work.find(params[:id])
+    unless @work.visible || is_admin?
+      if !current_user.is_a?(User)
+        store_location 
+        redirect_to new_session_path and return        
+      elsif !current_user.is_author_of?(@work)
+  	    flash[:error] = 'This page is unavailable.'.t
+        redirect_to works_path and return
+      end
+    end
     unless @work.series.blank?
       @series_previous = {}
       @series_next = {}
@@ -208,9 +200,6 @@ class WorksController < ApplicationController
         @series_previous[series.id] = sw_previous.work if sw_previous
         @series_next[series.id] = sw_next.work if sw_next
       end
-    end
-    if !is_admin? && !@work.visible(current_user)
-      render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 and return
     end
     @tag_categories_limited = TagCategory.official - [TagCategory.find_by_name("Warning")]
   end

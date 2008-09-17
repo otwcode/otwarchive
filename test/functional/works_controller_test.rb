@@ -19,7 +19,7 @@ class WorksControllerTest < ActionController::TestCase
       setup do
         get :show, :locale => 'en', :id => @work.id
       end
-      should_respond_with 403
+      should_redirect_to 'new_session_url'
     end
     context "works which are posted" do
       setup do
@@ -102,16 +102,11 @@ class WorksControllerTest < ActionController::TestCase
         should_assign_to :works
       end
       context "works that aren't posted" do
-#        setup do
-#          @work.update_attribute("posted", true)
-#          get :show, :locale => 'en', :id => @work.id
-#        end
-#        should_render_template :show
-#        should_assign_to :work
         setup do
           get :show, :locale => 'en', :id => @work.id
         end
-        should_respond_with 403
+        should_render_template :show
+        should_assign_to :work
       end
       context "when editing a work" do
         setup do
@@ -157,7 +152,7 @@ class WorksControllerTest < ActionController::TestCase
         setup do
           get :show, :locale => 'en', :id => @work.id
         end
-        should_respond_with 403
+        should_redirect_to "works_path"
       end
       context "works which are posted" do
         setup do
