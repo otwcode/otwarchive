@@ -5,4 +5,6 @@
 <%= render :partial => 'comments/comment_form', :locals => {:comment => @comment, :commentable => @comment.commentable, 
 												:button_name => 'Create'.t} -%>
 
-<%= link_to 'Back'.t, @commentable %>
+<ul class="navigation">
+<li><%= link_to 'Back'.t, @commentable %></li>
+</ul>

@@ -14,15 +14,13 @@
     <li><%= f.check_box :date_of_birth_visible %> <%= f.label :date_of_birth_visible, "Display Date of Birth".t %></li>
     <li><%= f.check_box :adult %> <%= f.label :adult, "Show me adult content without prompting".t %></li>
 	<li><%= f.check_box :hide_warnings %> <%= f.label :hide_warnings, "Hide warnings by default (you will still have the option of revealing them)".t  %></li>
-
-
-  </p> 
   </ul>		 
 
-  <p>
+  <p class="submit">
     <%= f.submit "Update".t %>
   </p>
 <%- end -%>
+<hr class="clear" />
 
 
 

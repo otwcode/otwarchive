@@ -6,14 +6,18 @@
  		<dd><%= @serial_works.length %></dd>
   	<dt><%=h 'Authors:'.t %></dt>
  		<dd><%= print_pseud_list(@series.pseuds) %></dd>
-	<dt><%=h 'Description:'.t %></dt>
-		<dd><%= @series.summary %></dd>
-	<dt><%=h 'Notes:'.t %><dt>
-		<dd><%= @series.notes %></dd>
+		<%- unless @series.summary.blank? -%>
+			<dt><%=h 'Description:'.t %></dt>
+			<dd><%= @series.summary %></dd>
+			<%- end -%>
+		<%- unless @series.notes.blank? -%>
+				<dt><%=h 'Description:'.t %></dt>
+				<dd><%= @series.notes %></dd>
+			<%- end -%>
 </dl>
 
 <%- if is_author_of?(@series) -%>
-  <ul>
+  <ul class="navigation">
     <li><%= link_to "Edit".t, edit_series_path(@series) %></li>
     <li><%= link_to 'Delete series'.t, @series, :confirm => 'Are you sure?'.t, :method => :delete %></li>
     <li><%= link_to "Reorder series".t, manage_series_path(@series) %></li>
@@ -35,7 +39,9 @@
       <li>(<%= "This work is temporarily unavailable.".t %>)</li>
     <%- end -%>
     <%- if is_author_of?(@series) -%>
-      <li><%= link_to 'Remove from series'.t, serial, :confirm => 'Are you sure?'.t, :method => :delete %></li>
+      <li><ul class="navigation">
+		<li><%= link_to 'Remove from series'.t, serial, :confirm => 'Are you sure?'.t, :method => :delete %></li>
+		</ul></li>
     <%- end -%>
     </ul>
   </li>

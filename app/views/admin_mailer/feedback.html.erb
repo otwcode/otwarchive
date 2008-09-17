@@ -3,4 +3,5 @@
 	<%=h "Archive revision:".t %><% unless ArchiveConfig.REVISION.blank? %>(<%=h "rev.".t %> <%= ArchiveConfig.REVISION %>)<% end %>
 </p>
 <p>
-<%=h "Feedback".t %>: <%=h @comment %>
+<%=h "Feedback".t %>:</p>
+<%=h @comment %>

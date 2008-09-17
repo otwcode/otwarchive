@@ -1,10 +1,12 @@
 <!-- BEGIN admin options -->
 <div id="admin-options">
-  <% if item.hidden_by_admin? %>
-    <%= link_to 'Make visible'.t, {:controller=>"admin/user_creations", :action=>"hide", :id=>item, :creation_type => item.class, :hidden=>'false'} %> | 
+  <ul class="navigation">
+	<% if item.hidden_by_admin? %>
+    <li><%= link_to 'Make visible'.t, {:controller=>"admin/user_creations", :action=>"hide", :id=>item, :creation_type => item.class, :hidden=>'false'} %></li>
   <%- else -%>
-    <%= link_to 'Hide'.t, {:controller=>"admin/user_creations", :action=>"hide", :id=>item, :creation_type => item.class, :hidden=>'true'} %> | 
+    <li><%= link_to 'Hide'.t, {:controller=>"admin/user_creations", :action=>"hide", :id=>item, :creation_type => item.class, :hidden=>'true'} %></li> 
   <%- end -%>  
-  <%= link_to 'Delete'.t, {:controller=>"admin/user_creations", :action=>"destroy", :id=>item, :creation_type => item.class}, :confirm => 'Are you sure?'.t, :method => :delete %>
+  <li><%= link_to 'Delete'.t, {:controller=>"admin/user_creations", :action=>"destroy", :id=>item, :creation_type => item.class}, :confirm => 'Are you sure?'.t, :method => :delete %></li>
+<ul>
 </div>
 <!-- END admin options -->

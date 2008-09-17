@@ -1,123 +1,96 @@
-/* === FORMS RULES === */
-/* === These notes should be stripped out and copied to style book before launch === */
-/*Forms follow two models:* (1) definition lists for paired data:dl dt dd. Most forms use this structure.
-* (2) paragraphs with breaks for forms which cannot be logically broken down into property value pairs:p br.
-* All forms are labelled:label.
-* All forms can be selected through the main div's unique class
-* Sessions forms can be selected through the main div's general class "session"
-* User pages forms can be selected through the main div's general class "sidebar"
-===*/
-/* these rules are for two column forms when needed:form dt	{ width:12em; float:left; clear:left; margin:0 1em 0 0; }
-form dd	{ float:left; margin:0; }
-
-To simplify this sheet, will probably declare float globally for form dt, form dd, and then turn off for specific forms
-*/
 /* GLOBAL */
-form dt, label	{ font-weight:900; }
 legend	{ margin-left:-999em; position:absolute; }
-p.submit	{ text-align:right; clear:both; }
-p {line-height:2;}
+p.submit, p.submit input { text-align:right; font-size:1.125em; }
+p { line-height:2; clear:both; }
+form dl { position:relative; }
+form dt { float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
+form dd { float: left; }
 
 /* SIGN IN BOX */
-
-#signin		{float:right;width:16.25em;}
-#signin dl	{position:relative;float:left}
-#signin dt	{font-size:0.625em; float:left; clear:left; width:4.875em; margin:0.25em 0 0.125em; padding:0.25em 0 0 .125em;}
-#signin dd	{float:left;display:block;}
-#signin p.footnote	{font-size:0.5625em; float:left; clear:left; margin:0 0.5625em 0 4.875em; padding:0.125em 0 0 .125em;}
-input#login, input#password, input#query {border:2px inset #3d0000;}
-.home input#login, .home input#password, .home input#query {border:1px inset #bbb}
-#signin input#remember_me	{margin:0.125em 0.125em 0.125em 0;vertical-align:middle}
-#signin p.submit	{text-align:right; width:5em;float:right; margin:-2.5em 0 0 0; }
-#signin label	{font-weight:100;}
-#signin img.openid	{vertical-align:top;}
-#signin dd {position:relative;}
-#signin dd a img {position:absolute; right:-0.875em; top:0}
-
+#signin		{ float:right;width:16.25em; }
+#signin dl	{ float:left; }
+#signin dt	{ font-size:0.625em; width:4.875em; margin:0.25em 0 0.125em; padding:0.25em 0 0 .125em;}
+#signin p.footnote	{ font-size:0.5625em; float:left; clear:left; margin:0 0.5625em 0 4.875em; padding:0.125em 0 0 .125em;}
+input#login, input#password, input#query { border:2px inset #bbb;}
+#signin input#remember_me	{ margin:0.125em 0.125em 0.125em 0; vertical-align:middle; }
+#signin p.submit	{ width:5em; float:right; margin:-3.5em 0 0 0; font-size:0.625em; }
+#signin img.openid	{ vertical-align:top; }
+#signin dd { position:relative; }
+#signin dd a img { position:absolute; right:-0.875em; top:0 }
 
 /* sign in box when present in #header #login-block */
-#login-block #signin {width:121%; }
-#login-block #signin {font-family:Candara,Corbel,Arial,Tahoma,sans-serif}
+#login-block #signin { width:121%; }
+#login-block #signin { font-family:Candara,Corbel,Arial,Tahoma,sans-serif; }
+#login-block #signin a img { right:-1.75em;}
 #login-block #signin p.submit	{ text-align:left; width:7.5em; margin:-3.5em 0 0 0; }
 
 /* SEARCH */
 #search p { font-size: 0.75em; float: left; clear: both; padding: 0; margin: 0; }
-
 /*ADMIN */
-admin_session-new dt	{ width:6em; float:left; clear:left; margin:0.25em 0 0.125em; padding:.25em 0 00.5625em; }
-admin_session-new dd	{ float:left; margin:0.25em 0 0.125em; }
-
-/* USERS */
-.users-new label, .users-create label { font-weight:100; }
-.users-new .submit input, .users-create .submit input	{ font-size:1.125em; }
-
+admin_session-new dt { width:6em; }
+/*REPORT ABUSE */
+#main.abuse_reports-new dt { width:100%; float:none; }
 
 /*SESSIONS (front front pages - login, create, etc)*/
 .session img#openid	{ margin-left:-20px; vertical-align:middle; }
 .session form	{ margin-bottom:1.5em; padding-bottom:1.5em; border-bottom:1px solid; }
-.session label	{ font-weight:100; }
 .session input#login	{ float:none; }
 .session input#login, .session input#password, .session input#openid_url	{ width:24em; }
 .session form input.submit	{ font-size:1.125em; margin:0 0 0 9em; }
 
-.footnote	{ font-size:0.875em; }
 form .footnote	{ font-size:0.75em; }
 form p.openid	{ margin-top:6em; }
 
 /* POST WORK */
 /*story-meta  and story-show rules in story-views.css */
-
-form .story-meta dt{ float:left; clear:left; width:9em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
-form .story-meta dd{ float: left; margin:0; padding:0; width:60%}
-.story-meta dd input, .story-meta dd select {width:99%;}
-
-#story-form fieldset { background:#fffef9; margin: 0.5625em 0; padding:0.375em 1.5em; border:1px solid #bbb; }
+#story-form input, #story-form select, #story-form textarea {width:99%; margin:auto}
+#story-form fieldset { background:#fffef9; font-size:0.875em; margin: 0.5625em 0; padding:0.375em 1.5em; border:1px solid #bbb; }
 #story-form fieldset fieldset { line-height:1.5; margin: 0 00.5625em 0; }
-#story-form #story-preface textarea {width:99%; height:10em; margin:auto; }
+#story-form .story-meta dt{ float:left; clear:left; width:9em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
+#story-form .story-meta dd{ float: left; margin:0; padding:0; width:60%}
 
-fieldset#associations dt, fieldset#associations label { font-weight:100; font-size:0.875em;}
-dd#co-authors { margin:0 auto 0.875em auto; padding:0.375em; border:1px solid #bbb;}
-input#work_parent_url { width:99%; margin:0.375em auto 0.875em auto;}
-#story-form #story-preface dd { margin-bottom:0.5625em;}
-
-#seriesmanage dt, dt.story-restricted, dt.story-is_wip, dt.story-is_serial	{ float:left; clear:left; margin:0 1em 0 0; width: 50%;}
-#seriesmanage dd, dd.story-restricted, dd.story-is_wip, dd.story-is_serial	{ clear:right; margin:0; }
-
-#story-preface input {width:99%; margin:auto;}
-#story-form #story-preface { border-bottom:0; }
-#story-form textarea#content { height:31.25em; width:99%; margin:auto;}
-
-p.rtf-html-switch {margin:1em 0 -0.5625em 0;padding:0; }
-.rtf-html-switch span {background:#f0f0ee; padding:0.5625em 0.5625em 0 0.5625em; border:1px solid #ddd;}
-
-#story-form p.submit input { font-size:1em; }
+#story-preface textarea {height:10em;}
+#story-form #story-preface dt {float:none;}
+#story-form #story-preface dd { margin-bottom:0.5625em;float:none;}
 
 dd.story-title input { width:80%; }
+#story-form #story-preface { border:0; }
+
+fieldset#associations { font-size:0.875em;}
+dt.story-parent, dd.story-parent {float:none; width:99%; margin:auto}
+dd#co-authors { margin:0 auto 0.875em auto; padding:0.375em; border:1px solid #bbb;}
+input#work_parent_url {margin:0.375em auto 0.875em auto;}
+#seriesmanage dt, dt.story-restricted, dt.story-is_wip, dt.story-is_serial	{ width: 50%;}
+#seriesmanage dd, dd.story-restricted, dd.story-is_wip, dd.story-is_serial	{ clear:right; margin:0; }
+p.rtf-html-switch {margin:1em 0 -0.375em 0;padding:0; }
+.rtf-html-switch span {background:#f0f0ee; padding:0.5625em 0.5625em 0 0.5625em; border:1px solid #ddd;}
+#story-form textarea#content { height:31.25em;  margin:auto;}
+
+#story-form p.submit input { font-size:1em; width: 4.75em; text-align:center}
+
+/*EDIT CHAPTERS 
+#main.chapters-edit dt {width:100%;float:none;} */
 
 /*EDIT PREFERENCES */
 form.edit_preference ul { margin:0.5625em auto; padding:1.5em 0; }
 .edit_preference li { margin:0.5625em 0;}
-.edit_preference label {font-weight:100;}
 
 /*EDIT PROFILE*/
 #main.users-edit form { position:absolute; }
-#main.users-edit dt	{ clear:left; float:left; width:12em; margin:0.25em 0 0.125em; padding:.25em 0 00.5625em; }
-#main.users-edit dd	{ float:left; margin:0.5625em 0 0.125em; }
-#main.users-edit #link_to_openid p { clear:both;}
+#main.users-edit dt	{ width:12em; }
 #main.users-edit textarea#profile_attributes_about_me { height:12em; }
-
+#main.users-edit hr.clear {margin-top:39em;}
+#link_to_openid, #link_to_passwd {clear:both; margin:0 0.25em 0.5625em 11.125em; font-size:1.125em;}
 
 /*WORKS-INDEX -filters*/
-form.story-filters	{ background:#ddd; font-size:0.875em; width:12.25em; float:right; margin-top:1.125em; padding:0.5625em; border:1px solid #fffef9;}
-.story-filters dt	{ margin:0.5625em auto; border-bottom:1px solid #fffef9; }
-.story-filters dt:hover	{ color:#fffef9; background:#777; }
-.story-filters dd label	{ font-weight:normal; }
-form.story-filters p.submit	{ text-align:right; }
+form.story-filters	{ background:#ddd; font-size:0.875em; width:12.25em; float:right; margin-top:3em; padding:0.5625em; border:1px solid #fffef9;}
+.story-filters dt	{ font-weight: 600; text-transform: capitalize; margin:0.5625em auto 0; padding:0; border-bottom:1px solid #fffef9; }
+.story-filters dd {padding:0;}
+.story-filters dt:hover	{ color:#fffef9; background:#777; } 
+.story-filters p.submit {font-size:0.75em;}
 
 /*COMMENTS */
-#comment_form_div dl	{ position:relative; }
-#comment_form_div dt	{ clear:left; float:left; width:6em; margin:0.25em 0 0.125em; padding:0.25em 0 00.5625em; }
-#comment_form_div dd	{ float:left; margin:0.5625em 0 0.125em; }
+#comment_form_div dt	{ width:6em; }
 textarea#comment_content	{ width:32em !important; height:11em !important}
 #comment_form_div p.submit		{ width:32em}
 

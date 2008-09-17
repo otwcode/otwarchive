@@ -10,10 +10,11 @@
   		<dt><%= f.label :open_membership %></dt>
     	<dd><%= f.check_box :open_membership %></dt>
   	</dl>
-  	<p>
+  	<p class="submit">
     	<%= f.submit "Update".t %>
   	</p>
 <% end %>
-
-<%= link_to 'Show'.t, @community %> |
-<%= link_to 'Back'.t, communities_path %>
+<ul class="navigation">
+<li><%= link_to 'Show'.t, @community %></li>
+<li><%= link_to 'Back'.t, communities_path %></li>
+</ul>

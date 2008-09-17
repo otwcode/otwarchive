@@ -1,7 +1,7 @@
 <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } -%>
 
 <% form_for :chapter, [@work, @chapter], :url => {:action => :post} do |f| %>
-  <p>
+  <p class="submit">
     <%= submit_tag 'Post'.t, :name => 'post_button' %>
     <%= submit_tag 'Edit'.t, :name => 'edit_button' %>
     <%= submit_tag 'Cancel'.t, :name => 'cancel_button' %>

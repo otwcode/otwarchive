@@ -10,10 +10,12 @@
   	<dt><%= f.label :reciprocal %></dt>
     	<dd><%= f.check_box :reciprocal %></dd>
 </dl>
-  <p>
+  <p class="submit">
     <%= f.submit "Update" %>
   </p>
 <% end %>
 
-<%= link_to 'Show'.t, @related_work %> |
-<%= link_to 'Back'.t, related_works_path %>
+<ul class="navigation">
+<li><%= link_to 'Show'.t, @related_work %></li>
+<li><%= link_to 'Back'.t, related_works_path %></li>
+</ul>

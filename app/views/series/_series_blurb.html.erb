@@ -6,11 +6,9 @@
 				<%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)") %>
 				<% end %>
 				<%= link_to sanitize_and_format_for_display(series.title), series %>
+				<%=h 'by'.t %>
+				<%= print_pseud_list(series.pseuds) -%>
 			</h3>
-		</li>
-		<li class="story-byline">
-			<%=h 'by'.t %>
-			<%= print_pseud_list(series.pseuds) -%>
 		</li>
 		<li class="story-date">
 			<ul>

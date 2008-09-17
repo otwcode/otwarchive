@@ -82,7 +82,7 @@
       <dt><%= f.label :notes, "Chapter notes (max %d letters)".t/ArchiveConfig.NOTES_MAX %></dt>
       <dd><%= f.text_area :notes, :live => true %></dd>
     </dl>
-    <p>
+    <p class="submit">
       <%= submit_tag h('Preview').t, :name => 'preview_button' %>
       <input value="<%= 'Reset'.t -%>" type="reset" />
       <%= submit_tag 'Cancel'.t, :name => 'cancel_button' %>

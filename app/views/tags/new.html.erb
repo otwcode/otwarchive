@@ -28,7 +28,7 @@
     <%=h 'Once you have selected a category, you will not be able to change it to anything other than'.t %> <%= link_to TagCategory.ambiguous.display_name, tag_category_path(TagCategory.ambiguous) %> <%=h 'or'.t %> <%= link_to TagCategory.default.display_name, tag_category_path(TagCategory.default) %>.
   </p>
   
-  <p><%= f.submit %></p>
+  <p class="submit"><%= f.submit %></p>
 <%- end -%>
 
 <%= tag_wrangler_footer %>

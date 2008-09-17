@@ -1,10 +1,8 @@
 <%= error_messages_for :chapter %>
 
-<h2 class="nomargin list-left"><%=h 'Add chapter'.t %></h2>
-<span class="list-right required"><%=h '* Required field'.t %></span>
-  <p class="clearbothdrop"></p>
-<h3 class="nomargin list-left"><%=h @work.title %></h3>
-  <p class="clearbothdrop"></p>
+<h2><%=h 'Add chapter'.t %></h2>
+<p class="required"><%=h '* Required field'.t %></p>
+<h3><%=h @work.title %></h3>
 
 <%= render :partial => 'chapter_form', :locals => { :chapter => @chapter, :button_text => "Create".t } %>
 

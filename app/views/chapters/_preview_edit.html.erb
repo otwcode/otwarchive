@@ -2,18 +2,18 @@
 
 <%- form_for([@work, @chapter]) do |f| -%>
 
-  <select name="chapter[author_attributes][ids][]" multiple="multiple" style="display : none;">
+  <p><select name="chapter[author_attributes][ids][]" multiple="multiple" style="display : none;">
     <%= options_from_collection_for_select(@chapter.authors, :id, :name, @chapter.authors.collect {|pseud| pseud.id.to_i }) %>
-  </select>
+  </select></p>
   
-  <%= f.hidden_field :title, :value => "#{@chapter.title}" %>
+  <p><%= f.hidden_field :title, :value => "#{@chapter.title}" %>
   <%= f.hidden_field :summary, :value => "#{@chapter.summary}" %>
   <%= f.hidden_field :notes, :value => "#{@chapter.notes}" %>
   <%= f.hidden_field :content, :value => "#{@chapter.content}" %>
   <%= f.hidden_field :wip_length, :value => "#{@chapter.wip_length_placeholder}" %>
-  <%= f.hidden_field :current_position, :value => "#{@chapter.position_placeholder}" %>
+  <%= f.hidden_field :current_position, :value => "#{@chapter.position_placeholder}" %></p>
 
-  <p class="field-right">
+  <p class="submit">
   	<% if @chapter.posted? %>
 		<%= submit_tag 'Update'.t, :name => 'update_button' %>
 	<% else %>
@@ -22,7 +22,5 @@
     <%= submit_tag 'Edit'.t, :name => 'edit_button' %>
     <%= submit_tag 'Cancel'.t, :name => 'cancel_button' %> 
   </p>
-
-  <p class="clearbothdrop"></p>
 
 <% end %>               

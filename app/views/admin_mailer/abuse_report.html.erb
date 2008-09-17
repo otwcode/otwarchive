@@ -1,4 +1,5 @@
 <h3><%=h "The following abuse report has been made:".t %></h3>
 <p><%=h "Email of the person who reported the abuse, if given".t %>: <%= mail_to(@email, @email) %></p> 
 <p><%=h "URL of the page the abuse is on".t %>: <%= link_to(@url, @url) %></p>
-<p><%=h "Description of the abuse".t %>: <%=h @comment %></p>
+<p><%=h "Description of the abuse".t %>:</p>
+<%=h @comment %>

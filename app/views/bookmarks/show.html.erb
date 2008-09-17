@@ -4,4 +4,6 @@
 <%= render :partial => 'admin/admin_options', :locals => {:item => @bookmark} %>
 <%- end -%>
 
-<%= link_to 'Back'.t, user_bookmarks_path(@bookmark.user) %>
+<ul class="navigation">
+<li><%= link_to 'Back'.t, user_bookmarks_path(@bookmark.user) %></li>
+</ul>

@@ -1,13 +1,17 @@
 /* anything in here should override other styles for admin users */
 
 #header {
-    background: #066 top left no-repeat;
+background: #066 top left no-repeat;
 }
 
-#login-block { background: #066; }
+#login-block {
+background: #066;
+}
 
 .login-admin:after {
-    content: url( "\2020" );
+content: url( "\2020" );
 }
 
-#admin-options a {color: red;}
+#admin-options a {
+color: #900;
+}

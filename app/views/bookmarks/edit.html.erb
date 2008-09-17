@@ -4,5 +4,7 @@
 
 <%= render :partial => 'bookmark_form', :locals => {:button_name => 'Update'.t, :action => 'update'} %>
 
-<%= link_to 'Show'.t, @bookmark %> |
-<%= link_to 'Back'.t, bookmarks_path %>
+<ul class="navigation">
+<li><%= link_to 'Show'.t, @bookmark %></li>
+<li><%= link_to 'Back'.t, bookmarks_path %></li>
+</ul>

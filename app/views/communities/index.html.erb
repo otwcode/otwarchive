@@ -20,7 +20,9 @@
 <% end %>
 </table>
 
-<p><%= link_to 'New community'.t, new_community_path %></p>
+<ul class="navigation">
+<li><%= link_to 'New community'.t, new_community_path %></li>
+</ul>
 
 <div class="pagination">
 	  <%= will_paginate @communities, :prev_label =>  "&laquo; Previous".t,:next_label => "Next &raquo;".t %>
