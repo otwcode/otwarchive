@@ -105,8 +105,8 @@ Rails::Initializer.run do |config|
   config.gem 'hpricot'
 
   # Override the sanitize defaults to allow some extra formatting attributes. 
-  #config.action_view.sanitized_allowed_attributes = 'class', 'style'
-  config.action_view.sanitized_allowed_tags = 'u', 'strike'
+  config.action_view.sanitized_allowed_attributes = 'align'
+  config.action_view.sanitized_allowed_tags = 'u', 'strike', 'center'
   
   # you can remove tags from sanitize here
   #config.after_initialize do
