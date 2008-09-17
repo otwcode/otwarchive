@@ -153,7 +153,7 @@ class WorksController < ApplicationController
     end
     @filters = @all_works.compact.collect(&:tags).flatten.uniq.group_by(&:tag_category).to_hash
 
-    if params[:commit] == "Filter Stories"
+    unless @query.blank?
       excluded_works = []     
       @filters.each_pair do |tag_category, tags|
 				unless tag_category.blank? || tags.blank?

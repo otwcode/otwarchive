@@ -32,7 +32,7 @@
 				<%- end -%>
 			<%- end -%>
 		</dl>
-		<p><%= hidden_field_tag("query", @query) if @query %></p>
+		<p><%= hidden_field_tag("query", "filter") %></p>
 		<p><%= hidden_field_tag("tag_id", @tag.id) if @tag %></p>
 		<p><%= hidden_field_tag("user_id", @user.login) if @user %></p>
 		<p class="submit"><%= submit_tag "Filter Stories" %></p>

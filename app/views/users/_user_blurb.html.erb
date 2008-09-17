@@ -3,13 +3,13 @@
     <h3><%= link_to(user.login, user_path(user)) -%></h3>
     <ul class="pseuds">
     	<% user.pseuds.each do |pseud| -%> 
-				<li><%= link_to pseud.name, user_works_path(user, :pseuds => pseud.name) %></li>
+				<li><%= link_to pseud.name, user_works_path(user, :pseuds => pseud.name, :query => "filter") %></li>
 			<% end -%>
   	</ul>
 	<p><%= image_tag("user_icon.png", :size => "50x50", :alt => "(Icon!)") %></p>
 	<ul class="tags">
     <%- for tag in user.most_popular_tags(:category => @categories, :limit => 5) -%>
-      <li><%= link_to tag.name, user_works_path(user, tag.tag_category.name => tag.name), :class => 'tag' %></li>
+      <li><%= link_to tag.name, user_works_path(user, tag.tag_category.name => tag.name, :query => "filter"), :class => 'tag' %></li>
     <%- end -%>
 	</ul>
   </div>
