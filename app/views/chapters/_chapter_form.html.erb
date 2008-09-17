@@ -1,10 +1,9 @@
 <div id="story-form">
 <% form_for([@work, chapter], :html => {:name => "storyForm"}) do |f| %>
-  <p>
+  <fieldset>
+<p>
     <%=h 'Chapter'.t %> <%= f.text_field :current_position, :class => "number-field" %> <%=h 'of'.t %> <%= f.text_field :wip_length, :class => "number-field" %> 
   </p>
-
-	<fieldset>
 	<dl>
 		<dt><%= f.label :title, h('Chapter title').t %></dt>
 		<dd>

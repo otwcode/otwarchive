@@ -1,4 +1,10 @@
 <h1><%= "Pseuds for %s".t / @user.login -%></h1>
+
+<% if current_user == @user -%>
+<ul class="navigation">
+<li><%= link_to 'New pseud'.t, new_user_pseud_path(@user) %></li>
+</ul>
+<% end -%>
 <table>
 <caption><!--A summary of the table contents and purpose here please--></caption>
   <tr>
@@ -26,8 +32,3 @@
 <% end %>
 </table>
 
-	<% if current_user == @user -%>
-	<ul class="navigation">
-	<li><%= link_to 'New pseud'.t, new_user_pseud_path(@user) %></li>
-	</ul>
-	<% end -%>

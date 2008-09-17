@@ -4,6 +4,7 @@ set story styles
 */
 .story-show { font-family:Candara, Corbel, Geneva, Verdana, Helvetica, Arial, sans-serif; padding:1.5em 3.5em;}
 .story-show a, .story-show a:link { color:#111; text-decoration:none; border-bottom:1px dotted #777; padding-right:0.125em}
+.story-show .navigation a, .story-show .navigation a:link {border:0;text-decoration:underline;}
 .story-show a:hover { border-bottom:0}
 .story-show a:visited { text-decoration:underline}
 
