@@ -3,7 +3,7 @@
     <h3><%= link_to(user.login, user_path(user)) -%></h3>
     <ul class="pseuds">
     	<% user.pseuds.each do |pseud| -%> 
-				<li><%= link_to pseud.name, user_works_path(user, :pseuds => pseud.name, :query => "filter") %></li>
+				<li><%= link_to pseud.name, user_works_path(user, :pseuds => [pseud.name]) %></li>
 			<% end -%>
   	</ul>
 	<p><%= image_tag("user_icon.png", :size => "50x50", :alt => "(Icon!)") %></p>

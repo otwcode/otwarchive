@@ -101,16 +101,24 @@ class WorksController < ApplicationController
 
     sort_column = params[:sort_column] == "date" ? "created_at" : params[:sort_column]
     tag_id = params[:tag_id].blank? ? params[:fandom_id] : params[:tag_id]
+    
+    if params[:user_id]
+      @user = User.find_by_login(params[:user_id])
+      @user_pseuds = @user.pseuds
+    end
 
-    @works, @filters = Work.search_and_filter(
+    @pseuds = params[:pseuds] || []
+    
+    @works, @filters, error = Work.search_and_filter(
        "sort_column" => sort_column,
        "sort_direction" => params[:sort_direction],
        "user_id" => params[:user_id],
        "tag_id" => tag_id,
-       "pseuds" => params[:pseuds],
+       "pseuds" =>@pseuds,
+       "query" => params[:query],
        "selected_tags" => @selected_tags
       )
-    
+    flash[:error] = error unless error.blank?
     @works = @works.paginate(:page => params[:page])
   end
   
@@ -163,7 +171,12 @@ class WorksController < ApplicationController
       current_user.cleanup_unposted_works
       redirect_to current_user    
     else  
-      unless @work.save && @work.has_required_tags?
+      begin
+        saved = @work.save
+      rescue ThinkingSphinx::ConnectionError
+        saved = true
+      end        
+      unless saved && @work.has_required_tags?
         unless @work.has_required_tags?
           @work.errors.add(:base, "Required tags are missing.".t)          
         end
@@ -221,8 +234,12 @@ class WorksController < ApplicationController
       saved = true
       @chapter.save || saved = false
       @work.posted = true 
-      @work.save || saved = false
-      @work.update_minor_version
+      begin
+        saved = @work.save
+        @work.update_minor_version
+      rescue ThinkingSphinx::ConnectionError
+        saved = true
+      end
       if saved
         if params[:post_button]
           flash[:notice] = 'Work was successfully posted.'.t

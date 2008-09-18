@@ -435,20 +435,25 @@ class Work < ActiveRecord::Base
 
 
   def self.search_and_filter(options={})
-    all_works = []    
+    all_works = []  
+    error = ""
     
     if !options["query"].blank?
-      # if there's a query - use search to collect works
-      # because it returns a thinking sphinx object, it can't use the class method for visible
-      # override search's default pagination - get a maximum of 1000 works 
-      # TODO - make maximum number to find configurable
-      if options["sort_column"].blank?
-        # will get best matches at the top
-        all_works = Work.search(options["query"], :per_page => 1000).map(&:visible).compact
-      else 
-        # if there is a sort column, use :order
-        direction = options["sort_direction"] == "DESC" ? :desc : :asc
-        all_works = Work.search(options["query"], :order => options["sort_column"], :sort_mode => direction, :per_page => 1000).map(&:visible).compact
+      begin
+        # if there's a query - use search to collect works
+        # because it returns a thinking sphinx object, it can't use the class method for visible
+        # override search's default pagination - get a maximum of 1000 works 
+        # TODO - make maximum number to find configurable
+        if options["sort_column"].blank?
+          # will get best matches at the top
+          all_works = Work.search(options["query"], :per_page => 1000).map(&:visible).compact
+        else 
+          # if there is a sort column, use :order
+          direction = options["sort_direction"] == "DESC" ? :desc : :asc
+          all_works = Work.search(options["query"], :order => options["sort_column"], :sort_mode => direction, :per_page => 1000).map(&:visible).compact
+        end
+      rescue ThinkingSphinx::ConnectionError
+        error << "The search engine is presently down".t
       end
     else
       # if there is no query - use find to collect works
@@ -505,12 +510,14 @@ class Work < ActiveRecord::Base
     # clean up just in case
     all_works = all_works.flatten.uniq.compact
         
-    # limit the filter tags to 10 per category
     filters.each_key do |tag_category|
+      # limit the filter tags to 10 per category
       filters[tag_category] = filters[tag_category].sort {|a,b| a.taggings_count <=> b.taggings_count}[0..10].sort
+      # remove filters that only have one tag
+      filters.delete(tag_category) if filters[tag_category].size == 1
     end
 
-    return [all_works.compact, filters]
+    return [all_works.compact, filters, error]
   end
 
   # sort works by title
