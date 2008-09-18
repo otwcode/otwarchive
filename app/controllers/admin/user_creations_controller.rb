@@ -8,7 +8,7 @@ class Admin::UserCreationsController < ApplicationController
     creation = creation_class.find(params[:id])
     creation.hidden_by_admin = (params[:hidden] == "true")
     creation.save(false)
-    flash[:notice] = creation.hidden_by_admin? ? 'Item has been hidden.' : 'Item is no longer hidden.'
+    flash[:notice] = creation.hidden_by_admin? ? 'Item has been hidden.'.t : 'Item is no longer hidden.'.t
     creation_class == Comment ? redirect_to(creation.ultimate_parent) : redirect_to(creation)    
   end
   
@@ -16,7 +16,7 @@ class Admin::UserCreationsController < ApplicationController
     creation_class = params[:creation_type].constantize
     creation = creation_class.find(params[:id])
     creation.destroy
-    flash[:notice] = 'Item was successfully deleted.'
+    flash[:notice] = 'Item was successfully deleted.'.t
     redirect_to works_path
   end
   
