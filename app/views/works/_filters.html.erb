@@ -2,7 +2,7 @@
 <%- form_tag(works_path, :class => 'story-filters', :method => :get) do -%>
   <%- field_set_tag 'Filter stories by: ' do -%>
  		<dl class="story-filters">
-			<%- unless (@user.blank? || @user.psueds.size == 1) -%>
+			<%- unless (@user.blank? || @user.pseuds.size == 1) -%>
         <dt onclick='toggleFilters("filter-pseuds")'>Pseud</dt>
         <dd id="filter-pseuds" class="filter-tags">
           <ul>
