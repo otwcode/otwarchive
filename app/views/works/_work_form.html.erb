@@ -81,7 +81,7 @@
       <%= f.label :parent_url, h("If your story is a remix or was inspired by another story in the archive, copy and paste that story's url below:").t %>
     </dt>
     <dd class="story-parent">
-      <%= f.text_field :parent_url %>
+      <%= f.text_field :parent_url, :live => true %>
     </dd>
 
   	<!-- Privacy dropdown (storyprivacy) -->

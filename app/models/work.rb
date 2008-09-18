@@ -62,6 +62,10 @@ class Work < ActiveRecord::Base
   validates_length_of :notes, 
     :allow_blank => true, 
     :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than %d letters long.".t/ArchiveConfig.NOTES_MAX
+  
+  #temporary validation to let people know they can't enter external urls yet
+  validates_format_of :parent_url, :with => Regexp.new(ArchiveConfig.APP_URL, true), :allow_blank => true, :message => "can only be in the archive for now - we're working on expanding that!".t
+  
 
   # Virtual attribute to use as a placeholder for pseuds before the work has been saved
   # Can't write to work.pseuds until the work has an id
@@ -215,9 +219,13 @@ class Work < ActiveRecord::Base
   
   def parent_url=(url)
     unless url.blank?
-      id = url.match(/works\/\d+/).to_a.first
-      id = id.split("/").last
-      self.new_parent = Work.find(id)
+      if url.include?(ArchiveConfig.APP_URL)
+        id = url.match(/works\/\d+/).to_a.first
+        id = id.split("/").last unless id.nil?
+        self.new_parent = Work.find(id)
+      else
+        #TODO: handle related works that are not in the archive
+      end
     end
   end 
   
