@@ -1,6 +1,6 @@
 <div id="user-header">
 	<h1><%= link_to_unless_current user.login, user %></h1>
-	<h2><%= image_tag("user_icon.png", :size => "100x100", :alt => "(Icon!)") %></h2>
+	<h2><%= image_tag("icon_placeholder.png", :size => "100x100", :alt => "(Icon!)") %></h2>
 
   <ul class="navigation">
     <li><%= link_to_unless_current "profile".t, user_profile_path(user) %></li>
