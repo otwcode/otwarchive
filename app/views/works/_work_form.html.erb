@@ -157,7 +157,7 @@
 <fieldset>
   <legend><%= 'Story Text'.t -%></legend>
   <p>
-    <%= c.label :content, h("Story, in plain text with limited HTML*").t, :class => "required" %>
+    <%= c.label :content, h("Story, in plain text with limited HTML*").t, :class => "required" %><%= link_to_help "html-help" -%>
   </p>
   <p class="rtf-html-switch">
 	  <% use_tinymce -%>

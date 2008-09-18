@@ -19,6 +19,8 @@ set story styles
 .story-show ol li ol li	{ list-style-type: lower-alpha;}
 .story-show ol li ol li ol li	{ list-style-type: lower-roman;}
 .story-show li	{ font-weight:normal; }
+#ibox_content dl.story-show ul li { list-style-type: none !important; margin:0; text-indent:0;}
+#ibox_content dl.story-show dt {list-style-type:disc;}
 
 /*headings */
 .story-show h1	{ font-family:Cambria, Constantia, Palatino, Georgia, serif; text-align:center; }
