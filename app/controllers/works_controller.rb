@@ -10,19 +10,6 @@ class WorksController < ApplicationController
   before_filter :check_adult_status, :only => [:show]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview, :post]
   
-  # We may want to move this to a module
-  def self.auto_complete_for_taggable(model)
-    TagCategory.official.each do |c|
-      define_method("auto_complete_for_" + model.to_s.downcase + "_" + c.name.downcase){
-        category = TagCategory.find(params[:tag_category_id])
-        @tags = category.tags.find(:all, :conditions => [ 'LOWER(name) LIKE ?', '%' + params[:search].strip + '%' ], :limit => 10)
-        render :inline => "<%= auto_complete_result(@tags, 'name')%>"        
-      }
-    end
-  end
-  
-  auto_complete_for_taggable :work
-  
   # For the auto-complete field in the works form
   def auto_complete_for_pseud_byline
     byline = request.raw_post.to_s.strip
