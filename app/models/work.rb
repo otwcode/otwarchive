@@ -448,9 +448,12 @@ class Work < ActiveRecord::Base
           # will get best matches at the top
           all_works = Work.search(options["query"], :per_page => 1000).map(&:visible).compact
         else 
+          # FIXME - search with order gives empty set
+          all_works = Work.search(options["query"], :per_page => 1000).map(&:visible).compact
+          error << "Sorting searches is not currently working".t         
           # if there is a sort column, use :order
-          direction = options["sort_direction"] == "DESC" ? :desc : :asc
-          all_works = Work.search(options["query"], :order => options["sort_column"], :sort_mode => direction, :per_page => 1000).map(&:visible).compact
+#          direction = options["sort_direction"] == "DESC" ? :desc : :asc
+#          all_works = Work.search(options["query"], :order => options["sort_column"], :sort_mode => direction, :per_page => 1000).map(&:visible).compact
         end
       rescue ThinkingSphinx::ConnectionError
         error << "The search engine is presently down".t
@@ -458,7 +461,8 @@ class Work < ActiveRecord::Base
     else
       # if there is no query - use find to collect works
       sort_order = nil
-      sort_order = "#{options["sort_column"]} #{options["sort_direction"]}" unless options["sort_column"].blank?
+      direction = options["sort_direction"] == "DESC" ? "DESC" : "ASC"
+      sort_order = "#{options["sort_column"]} #{direction}" unless options["sort_column"].blank?
       if !options["user_id"].blank?
         # if there's a user_id use user.works to find works
         all_works = User.find_by_login(options["user_id"]).works.ordered(sort_order).visible
