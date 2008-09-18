@@ -92,24 +92,29 @@ class User < ActiveRecord::Base
      works.collect(&:pseuds).flatten.uniq - pseuds
   end
   
-  # Gets the user's one allowed unposted work
+  # Gets the user's most recent unposted work
   def unposted_work
     return @unposted_work if @unposted_work
     @unposted_work = works.find(:first, :conditions => 'posted IS NULL OR posted = 0', :order => 'works.created_at DESC') 
   end
   
-  # Gets the user's one allowed unposted chapter per work
-  def unposted_chapter(work)
-    chapters.select{|c| c.work_id == work.id && c.posted != true}.first
+  def unposted_works
+    return @unposted_works if @unposted_works
+    cleanup_unposted_works
+    @unposted_works = works.find(:all, :conditions => 'posted IS NULL OR posted = 0', :order => 'works.created_at DESC')
   end
   
-  # gets rid of unposted works
+  # gets rid of unposted works older than a week
   def cleanup_unposted_works
-    one_allowed_unposted = unposted_work
+    works.find(:all, :conditions => ['posted IS NULL OR posted = 0 AND works.created_at > ?', 1.week_ago]).each do |w|
+      w.destroy
+    end
+  end
+  
+  # removes ALL unposted works
+  def wipeout_unposted_works
     works.find(:all, :conditions => 'posted IS NULL OR posted = 0').each do |w|
-      unless w == one_allowed_unposted
-        w.destroy
-      end
+      w.destroy
     end
   end
 
