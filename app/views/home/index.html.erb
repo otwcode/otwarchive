@@ -1,7 +1,6 @@
 <!-- BEGIN BETA CAVEATS! -->
-<%- if request.env['HTTP_USER_AGENT'].downcase =~ /msie/i -%>
-  <%= javascript_tag "alert('Sorry! The current beta version of the site has been 
-                      optimized for Firefox and may not display properly in your browser just yet.')" -%>
+<%- unless request.user_agent =~ /Firefox/i -%>
+  <%= javascript_tag "alert('Sorry! The current beta version of the site has been optimized for Firefox and may not display properly in your browser just yet.')" -%>
 <%- end -%>
 
 <noscript>
