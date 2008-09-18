@@ -21,7 +21,14 @@ module ApplicationHelper
   
   # Used in navigation link list in header
   def home_link
-    logged_in? ? user_path(current_user) : root_path
+    if logged_in? 
+			text = "my home".t
+			link = user_path(current_user) 
+		else
+			text = "home".t
+			link = root_path
+		end
+		link_to_unless_current "<span>" + text + "</span>", link
   end
   
   # Can be used to check ownership of items
