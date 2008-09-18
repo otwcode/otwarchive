@@ -29,7 +29,7 @@ set story styles
 .story-show h4	{ font-variant:small-caps; font-size:1.25em;}
 .story-show h5	{ font-weight:600; font-size: 1em;}
 .story-show h6	{ font-size: 0.875em; border-bottom:1px solid; }
-.chapter-title h3 a:link, .chapter-title h3 a:visited {color:#fffef9; border-bottom:0}
+.story-show h3 a, .story-show h3 a:link, .story-show h3 a:visited {color:#fffef9; border-bottom:0}
 
 /*quotes and stresses*/
 .story-show blockquote	{ font-size:1em; margin:auto auto auto 1.5em; padding:0.75em; border-left:2px solid #999; }
@@ -49,10 +49,10 @@ dl.story-meta { background:#ddd; padding:0.25em; position:relative;}
 
 /*STORY PREFACE - TITLE AND NOTES */
 #story-preface	{ margin-bottom:1.5em; border-bottom:3px double; }
-#story-preface blockquote	{ border:0;}
+blockquote.story-summary, blockquote.story-notes	{ border:0;}
+blockquote.story-summary h3, blockquote.story-notes h3 {color:#222; background:transparent; border-bottom:1px solid;}
 #story-preface h2	{ font:800 2.25em Cambria, Constantia, Palatino, Georgia, sans-serif; margin:1.5em auto 0}
 h3.story-author {background:transparent; border:0;}
-#story-preface blockquote h3 {color:#222; background:transparent; border-bottom:1px solid;}
 
 /* SERIES */
 #series-and-view-data	{ clear:both}
