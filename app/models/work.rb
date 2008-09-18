@@ -129,7 +129,11 @@ class Work < ActiveRecord::Base
       self.language = Locale.active.language
     end
   end
+
+  # Comment support -- work acts as a commentable object even though really we
+  # override to consolidate the comments on all the chapters.
   
+  acts_as_commentable
   # Gets all comments for all chapters in the work
   def find_all_comments
     self.chapters.collect { |c| c.find_all_comments }.flatten
@@ -142,16 +146,11 @@ class Work < ActiveRecord::Base
     self.chapters.collect { |c| c.count_all_comments }.sum
   end
   
-  # Returns number of visible (not deleted, not hidden) comments
-  def count_visible_comments
-    self.find_all_comments.select {|c| !c.hidden_by_admin and !c.is_deleted }.length
-  end 
-  
   # returns the top-level comments for all chapters in the work
   def comments
     self.chapters.collect { |c| c.comments }.flatten
   end
-  
+
   # Returns the number of visible bookmarks
   def count_visible_bookmarks(current_user=:false)
     self.bookmarks.select {|b| b.visible(current_user) }.length

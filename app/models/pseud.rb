@@ -6,8 +6,6 @@ class Pseud < ActiveRecord::Base
   
   belongs_to :user
   has_many_polymorphs :creations, :from => [:works, :chapters, :series], :through => :creatorships   
-  has_many :comments
-  acts_as_commentable
   validates_presence_of :name
   validates_length_of :name, :within => NAME_LENGTH_MIN..NAME_LENGTH_MAX, :too_short => "That name is too short (minimum is %d characters)".t,
         :too_long => "That name is too long (maximum is %d characters)".t

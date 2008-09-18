@@ -37,31 +37,26 @@ class CommentsController < ApplicationController
     end
   end
     
-  # Get the parent of the desired comment(s) 
-  # Just covering all the bases here for now
+  # Get the thing the user is trying to comment on
   def load_commentable
     if params[:comment_id]
       @commentable = Comment.find(params[:comment_id])
     elsif params[:chapter_id]
       @commentable = Chapter.find(params[:chapter_id])
     elsif params[:work_id]
-      #@commentable_object = Work.find(params[:work_id])
-      #@commentable = @commentable_object.last_chapter
       @commentable =  Work.find(params[:work_id])
-    elsif params[:user_id]
-      @commentable = User.find_by_login(params[:user_id])
-    elsif params[:pseud_id]
-      @commentable = Pseud.find(params[:pseud_id])
-    end
-    @commentable_object ||= @commentable
+    elsif params[:bookmark_id]
+      @commentable = Bookmark.find(params[:bookmark_id])
+    end    
   end
 
   def index
     if @commentable.nil?
-      @comments = Comment.find(:all, :conditions => {:is_deleted => nil}, :limit => ArchiveConfig.MAX_COMMENTS_TO_BROWSE)
+      @comments = Comment.recent
     else
       @comments = @commentable.comments
       if @commentable.class == Comment
+        # we link to the parent object at the top
         @commentable = @commentable.ultimate_parent
       end
     end
@@ -83,10 +78,6 @@ class CommentsController < ApplicationController
     else
       @comment = Comment.new
       @controller_name = params[:controller_name] if params[:controller_name]
-      respond_to do |format|
-        format.html
-        format.js
-      end
     end
   end
   
@@ -94,10 +85,6 @@ class CommentsController < ApplicationController
   def edit
     @comment = Comment.find(params[:id])
     @commentable = @comment.commentable
-    respond_to do |format|
-      format.html 
-      format.js
-    end
   end
   
   # POST /comments
@@ -108,41 +95,28 @@ class CommentsController < ApplicationController
       redirect_to :back
     else
       @comment = Comment.new(params[:comment])
-      @comment.update_attribute(:user_agent,request.env['HTTP_USER_AGENT'])
+      @comment.user_agent = request.env['HTTP_USER_AGENT']
+      @comment.commentable = Comment.commentable_object(@commentable)
       @controller_name = params[:controller_name]
-      if @comment.commentable.kind_of?(Work)
-        @comment.commentable = @comment.commentable.last_chapter
-      end
 
       # First, try saving the comment
       unless @comment.valid?
         flash[:comment_error] = "There was a problem with your comment.".t
-        redirect_to :back, :anchor => "comments" and return
+        redirect_to_all_comments(@commentable) and return
       end
       
       if @comment.set_and_save
-        @commentable = @commentable_object
         if @comment.approved?
-          flash[:notice] = 'Comment was successfully created.'.t
-          parent = @comment.ultimate_parent
-          @comments = @commentable.comments
+          flash[:comment_notice] = 'Comment created!'.t
           respond_to do |format|
-            format.html { 
-              redirect_to :controller => parent.class.to_s.pluralize, 
-                          :action => 'show', 
-                          :id => parent.id, 
-                          :anchor => "comment_#{@comment.id}", 
-                          :show_comments => true 
-            }
-            format.js
+            format.html { redirect_to_comment(@comment) }
           end 
         else
-          flash[:notice] = 'Comment was marked as spam by Akismet.'.t
+          flash[:comment_notice] = 'Comment was marked as spam by Akismet.'.t
           redirect_to :back
         end
       else
-        #render :action => "new", :locals => {:commentable => @comment.commentable, :button_name => 'Create'.t}
-        flash[:error] = "There was a problem saving your comment.".t
+        flash[:comment_error] = "There was a problem saving your comment.".t
         redirect_to :back
       end
     end
@@ -151,22 +125,12 @@ class CommentsController < ApplicationController
   # PUT /comments/1
   # PUT /comments/1.xml
   def update
-    @comment = Comment.find(params[:id])
-    
+    @comment = Comment.find(params[:id])    
     if @comment.update_attributes(params[:comment])
-      @commentable = @commentable_object
-      flash[:notice] = 'Comment was successfully updated.'.t
-      parent = @comment.ultimate_parent
+      flash[:comment_notice] = 'Comment was successfully updated.'.t
       respond_to do |format|
-          format.html { 
-            redirect_to :controller => parent.class.to_s.pluralize, 
-                        :action => 'show', 
-                        :id => parent.id, 
-                        :anchor => "comment_#{@comment.id}", 
-                        :show_comments => true 
-          }
-          format.js
-        end
+        format.html { redirect_to_comment(@comment) }
+      end
     else
       render :action => "edit" 
     end
@@ -176,29 +140,21 @@ class CommentsController < ApplicationController
   # DELETE /comments/1.xml
   def destroy
     @comment = Comment.find(params[:id])    
-
-    anchor = "comments"
-
     parent = @comment.ultimate_parent
-
-    if @comment.reply_comment?
-      # anchor at its parent
-      anchor = "comment_#{@comment.commentable.id}"        
-    end
+    parent_comment = @comment.reply_comment? ? @comment.commentable : nil
 
     @comment.destroy_or_mark_deleted
-    if !@comment.nil? && @comment.is_deleted?
-      # anchor at the comment itself
-      anchor = "comment_#{@comment.id}"        
+    if !@comment.nil? && !@comment.is_deleted?
+      # something went wrong?
+      flash[:comment_error] = "We couldn't delete that comment.".t
+      redirect_to_comment(@comment)
+    elsif parent_comment
+      flash[:comment_notice] = "Comment deleted.".t
+      redirect_to_comment(parent_comment)
+    else
+      redirect_to_all_comments(parent)
     end
-    
-    redirect_to :controller => parent.class.to_s.pluralize, 
-                :action => 'show', 
-                :id => parent.id, 
-                :anchor => anchor, 
-                :show_comments => true 
   end
-  
 
   def approve
     @comment = Comment.find(params[:id])
@@ -210,7 +166,7 @@ class CommentsController < ApplicationController
    @comment = Comment.find(params[:id])
    @comment.mark_as_spam!
    # Needs better redirect
-   redirect_to(@comment.ultimate_parent)
+   redirect_to_comments(@comment.ultimate_parent)
   end
 
   def show_comments
@@ -248,5 +204,28 @@ class CommentsController < ApplicationController
   def cancel_comment_delete
     @comment = Comment.find(params[:id])
   end
+
+  protected 
+    # redirect to a particular comment in a thread, going into the thread
+    # if necessary to display it
+    def redirect_to_comment(comment)
+      if comment.depth > ArchiveConfig.COMMENT_THREAD_MAX_DEPTH
+        # display the comment's direct parent (and its associated thread)
+        redirect_to comment.commentable
+      else
+        redirect_to_all_comments(comment.ultimate_parent, :anchor => "comment_#{comment.id}")
+      end
+    end
+
+    def redirect_to_all_comments(commentable, options = {})
+      default_options = {:anchor => 'comments'}
+      options = default_options.merge(options)
+      redirect_to :controller => commentable.class.to_s.downcase.pluralize,
+                  :action => :show,
+                  :id => commentable.id,
+                  :show_comments => true,
+                  :anchor => options[:anchor]
+    end
+          
     
 end

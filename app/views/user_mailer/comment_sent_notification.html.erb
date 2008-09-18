@@ -1,0 +1,5 @@
+<p>You left the following comment on <%= @commentable.commentable_name -%>:</p> 
+
+<p><%=h @comment.content %></p>
+
+<%= render :partial => 'comment_notification_footer' -%>

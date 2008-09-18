@@ -3,8 +3,8 @@ module CommentsHelper
   def link_to_comment_ultimate_parent(comment)
     ultimate = comment.ultimate_parent
     case ultimate.class.to_s 
-      when 'Chapter' then 
-        link_to sanitize(ultimate.work.title, :tags => %w(em i b strong strike small)), ultimate.work
+      when 'Work' then 
+        link_to sanitize(ultimate.title, :tags => %w(em i b strong strike small)), ultimate
       when 'Pseud' then
         link_to sanitize(ultimate.name), ultimate
       else

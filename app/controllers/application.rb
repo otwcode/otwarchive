@@ -30,7 +30,7 @@ class ApplicationController < ActionController::Base
   before_filter :set_locale  
   # Determines the user's language of choice
   def set_locale
-    default_locale = 'en'
+    default_locale = ArchiveConfig.DEFAULT_LOCALE
     request_language = request.env['HTTP_ACCEPT_LANGUAGE']
     request_language = request_language.nil? ? nil : 
       request_language[/[^,;]+/]

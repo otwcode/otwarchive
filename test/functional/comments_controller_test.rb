@@ -58,14 +58,15 @@ class CommentsControllerTest < ActionController::TestCase
   end
   # Test create  POST  /:locale/comments/:comment_id/comments
   def test_create_comment_comment
-    # FIXME  Called id for nil comments_controller.rb:64
-#    create_comments
-#    assert_difference('Comment.count') do
-#      post :create, :locale => 'en', 
-#                    :comment_id => @comment1.id, 
-#                    :comment => { :content => 'foo', :name => 'Someone', :email => 'someone@someplace.org' }
-#    end    
-#    assert_redirected_to work_path(:locale => 'en', :id => @work.id)
+    create_comments
+    assert_difference('Comment.count') do
+      post :create, :locale => 'en', 
+                    :comment_id => @comment1.id, 
+                    :comment => { :content => 'foo', :name => 'Someone', :email => 'newcommenter@someplace.org' }
+    end
+    @comment = Comment.find_by_email('newcommenter@someplace.org')    
+    assert_redirected_to work_path(:locale => ArchiveConfig.DEFAULT_LOCALE, :id => @work.id, 
+                                   :show_comments => true, :anchor => "comment_#{@comment.id}")
   end
   # Test create  POST  /:locale/works/:work_id/chapters/:chapter_id/comments
   def test_create_work_chapter_comment
@@ -75,9 +76,7 @@ class CommentsControllerTest < ActionController::TestCase
       post :create, :locale => 'en', 
                     :work_id => @work.id, 
                     :chapter_id => @chapter1.id,
-                    :comment => {"commentable_type"=>"Chapter", 
-                                 "commentable_id"=>@chapter1.id, 
-                                 "pseud_id"=>@pseud.id, 
+                    :comment => {"pseud_id"=>@pseud.id, 
                                  "content"=>"new chapter"}
     end
     # TODO check redirect

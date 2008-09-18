@@ -13,7 +13,9 @@
     <li><%= f.check_box :email_visible %> <%= f.label :email_visible, "Display Email Address".t %></li>
     <li><%= f.check_box :date_of_birth_visible %> <%= f.label :date_of_birth_visible, "Display Date of Birth".t %></li>
     <li><%= f.check_box :adult %> <%= f.label :adult, "Show me adult content without prompting".t %></li>
-	<li><%= f.check_box :hide_warnings %> <%= f.label :hide_warnings, "Hide warnings by default (you will still have the option of revealing them)".t  %></li>
+	  <li><%= f.check_box :hide_warnings %> <%= f.label :hide_warnings, "Hide warnings by default (you will still have the option of revealing them)".t  %></li>
+    <li><%= f.check_box :comment_emails_off %> <%= f.label :comment_emails_off, "Turn off comment-notification emails".t  %></li>
+    <li><%= f.check_box :comment_inbox_off %> <%= f.label :comment_inbox_off, "Turn off comment-notification messages to your Inbox".t  %></li>
   </ul>		 
 
   <p class="submit">

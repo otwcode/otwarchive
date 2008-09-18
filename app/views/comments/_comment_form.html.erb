@@ -21,16 +21,15 @@
 		<dd><%= f.text_field :name, :live => true -%></dd>
 		
 	    <dt><%= f.label :email, "Email: ".t %></dt>
-		<dd><%= f.text_field :email, :live => true -%></dd>
+		  <dd><%= f.text_field :email, :live => true -%></dd>
 	    <dd><%= f.hidden_field :ip_address, :value => "#{request.remote_addr}" -%></dd>     
 	  <% end %>
 	       
 	  <dt><%= f.label :content, "Comment: ".t %></dt>
-	  <dd><%= f.text_area :content, :live => true %></dd>
-	    
-	    <dd><%= f.hidden_field :commentable_id, :value => commentable.id %>
-	    <%= f.hidden_field :commentable_type, :value => commentable.class.to_s %>
-	    <input type="hidden" id="controller_name" name="controller_name" value="<%= @controller_name ||= @controller.controller_name %>" /></dd>  
+	  <dd><%= f.text_area :content, :live => true %></dd>	    
+	  <dd>
+	    <input type="hidden" id="controller_name" name="controller_name" value="<%= @controller_name ||= @controller.controller_name %>" />
+	  </dd>  
 	</dl>
 	    <p class="submit"><%= f.submit button_name %>
 		<%= cancel_comment_button(comment, commentable) -%>

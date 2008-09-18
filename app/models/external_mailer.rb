@@ -1,12 +1,6 @@
 class ExternalMailer < ActionMailer::Base
   include ActionController::UrlWriter
-
-  # sends feedback notification to email
-  def feedback_notification(comment)
-    setup_email(comment.commentable.email)
-    @subject        += "New Feedback".t
-    @body[:comment] = comment
-  end
+  helper :application
 
   protected
   def setup_email(email)

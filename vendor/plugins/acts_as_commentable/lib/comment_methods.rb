@@ -18,10 +18,20 @@ module CommentMethods
     
     # Gets the object (chapter, bookmark, etc.) that the comment ultimately belongs to
     def ultimate_parent
-      first_comment = self.reply_comment? ? Comment.find(:first, :conditions => ["thread = (?) AND depth = 0", self.thread]) : self
-      first_comment.commentable
+      thread_parent.commentable
     end
-    
+
+    # gets the comment that is the parent of this thread
+    def thread_parent
+      if self.thread.blank? && self.reply_comment? 
+        self.commentable.thread_parent
+      elsif self.reply_comment?
+        Comment.find(:first, :conditions => ["thread = (?) AND depth = 0", self.thread])
+      else
+        self
+      end
+    end
+
     # Sets pseud, depth and thread values and adjusts threading for sub-comments
     def set_and_save
       self.set_depth
@@ -65,7 +75,8 @@ module CommentMethods
     # Returns comment itself if unthreaded
     def full_set 
       if self.threaded_left
-        Comment.find(:all, :conditions => ["threaded_left BETWEEN (?) and (?) AND thread = (?)", self.threaded_left, self.threaded_right, self.thread],
+        Comment.find(:all, :conditions => ["threaded_left BETWEEN (?) and (?) AND thread = (?)", 
+                            self.threaded_left, self.threaded_right, self.thread],
                             :include => :pseud, :order => "threaded_left")
       else
         return [self]
@@ -75,7 +86,8 @@ module CommentMethods
     # Returns all sub-comments
     def all_children
       self.children_count > 0 ? Comment.find(:all, 
-                                             :conditions => ["threaded_left > (?) and threaded_right < (?) and thread = (?)", self.threaded_left, self.threaded_right, self.thread],
+                                             :conditions => ["threaded_left > (?) and threaded_right < (?) and thread = (?)", 
+                                             self.threaded_left, self.threaded_right, self.thread],
                                              :order => "threaded_left", :include => :pseud) : []
     end
 

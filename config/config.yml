@@ -51,8 +51,15 @@ TAG_MAX: 42
 CONTENT_MIN: 10
 CONTENT_MAX: 500000
 COMMENT_THREAD_MAX_DEPTH: 2
-MAX_COMMENTS_TO_BROWSE: 30
 NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD: 5
+
+# This is used to determine how many recent items
+# to cache for recent lookups -- eg if we want to 
+# provide a "ten most recent" items to browse.
+# used in CacheFinds module -- include CacheFinds in a model
+# and the methods Model.recent and Model.last(#) will be
+# enabled, cached on production/test environments.
+MAX_RECENT: 20
 
 # Only the following fields are allowed to have HTML. In all others, 
 # all HTML tags will be stripped.
@@ -62,6 +69,7 @@ FIELDS_ALLOWING_HTML: %w(content summary notes about_me comment)
 AKISMET_KEY: '6833ee7298cf'
 AKISMET_NAME: 'http://transformativeworks.org'
 
+DEFAULT_LOCALE: 'en'
 BASE_LANGUAGE: 'en-US'    # must be one of the following
 SUPPORTED_LOCALES: { en: en-US,
  it: it-IT,

@@ -130,5 +130,10 @@ class Chapter < ActiveRecord::Base
   def format_content
     self.content = cleanup_and_format(self.content)
   end
+
+  # Return the name to link comments to for this object
+  def commentable_name
+    self.work.title
+  end
   
 end

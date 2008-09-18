@@ -3,34 +3,72 @@ class CommentObserver < ActiveRecord::Observer
   # Add new comments to the inbox of the person to whom they're directed
   # Send that user a notification email
   def after_create(comment)
-
-    # find out who has to be notified
-    if comment.reply_comment?
-      if comment.commentable.pseud.blank?
-        ExternalMailer.deliver_feedback_notification(comment)
-        return
-      else
-        users = [ comment.commentable.pseud.user ]
-      end
-    elsif comment.commentable.kind_of?(Pseud)
-      users = [ comment.commentable.user ]
-    else
-      # commentable is a chapter
-      users = comment.commentable.pseuds.collect(&:user)
+    # eventually we will set the locale to the user's stored language of choice
+    Locale.set ArchiveConfig.SUPPORTED_LOCALES[ArchiveConfig.DEFAULT_LOCALE]    
+    users = []
+    
+    # notify the commenter
+    if comment.comment_owner
+      users << comment.comment_owner
     end
-
-    unless users.blank?
-      users.compact.each do |user|
-        unless comment.pseud && comment.pseud.user == user
-          new_feedback = user.inbox_comments.build
-          new_feedback.feedback_comment_id = comment.id
-          new_feedback.save
-          unless user.preference.comment_emails_off? || user == User.orphan_account
-            UserMailer.deliver_feedback_notification(user, comment)
-          end
+    if notify_user_by_email?(comment.comment_owner)
+      UserMailer.deliver_comment_sent_notification(comment)
+    end    
+    
+    if comment.reply_comment?
+      # send notification to the owner of the original comment if not
+      # the commenter
+      parent_comment = comment.commentable
+      parent_comment_owner = parent_comment.comment_owner
+      if parent_comment_owner != comment.comment_owner
+        if notify_user_by_email?(parent_comment_owner)
+          UserMailer.deliver_comment_reply_notification(parent_comment, comment)
+        end
+        if notify_user_by_inbox?(parent_comment_owner)
+          add_feedback_to_inbox(parent_comment_owner, comment)
+        end
+        if parent_comment_owner              
+          users << parent_comment_owner
         end
       end
     end
+
+    # send notification to the owner(s) of the ultimate parent 
+    if users.empty?
+      users = comment.ultimate_parent.commentable_owners
+    else
+      users = comment.ultimate_parent.commentable_owners - users
+    end
+    
+    users.each do |user|
+      if notify_user_by_email?(user)
+        UserMailer.deliver_comment_notification(user, comment)
+      end
+      if notify_user_by_inbox?(user)
+        add_feedback_to_inbox(user, comment)
+      end
+    end
   end
+
+  protected
+    def add_feedback_to_inbox(user, comment)
+      new_feedback = user.inbox_comments.build
+      new_feedback.feedback_comment_id = comment.id
+      new_feedback.save
+    end
+
+    # notify the user unless 
+    # - they aren't a user :>
+    # - they are the orphan user
+    # - they have preferences set not to be notified
+    def notify_user_by_email?(user)
+      user.nil? ? false : 
+        !(user == User.orphan_account || user.preference.comment_emails_off?)      
+    end
+    
+    def notify_user_by_inbox?(user)
+      user.nil? ? false :
+        !(user == User.orphan_account || user.preference.comment_inbox_off?)       
+    end
 
 end
