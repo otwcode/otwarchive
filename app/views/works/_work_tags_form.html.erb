@@ -1,3 +1,4 @@
+<!-- Autocomplete fields need to be refactored and moved to a helper, but I'd like to make them completely functional first. -->
 <fieldset class="story-meta">
   <legend><%= "Story Tags (comma separated)".t -%></legend>
   <dl class="story-meta">
@@ -15,7 +16,7 @@
 	          <%= options_from_collection_for_select(@tags_by_category[category], :name, :name, @work.tags.by_category(category).valid.collect(&:name) ) -%>
 	        </select>
         <%- else -%>
-          <input type="text" name="work[<%= category.name %>]" id="work_<%= category.name %>" />
+					<input type="text" name="work[<%= category.name %>]" id="work_<%= category.name %>" value="<%= @work.tags.by_category(category).collect(&:name).join(', ') %>" />
           <div class="auto_complete" id="work_<%= category.name %>_auto_complete" ></div>
           <%= javascript_tag("new Autocompleter.Local('work_#{category.name}', 'work_#{category.name}_auto_complete', #{category.tags.valid.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
         <%- end -%>

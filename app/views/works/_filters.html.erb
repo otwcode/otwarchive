@@ -17,8 +17,9 @@
           </ul>
         </dd>			
 			<%- end -%>
-      <%- unless @filters.blank? -%>
+			<%- unless @filters.blank? -%>
         <%- @filters.each_pair do |tag_category, tags| -%>
+				  <%- unless tag_category.blank? || tags.blank? -%>
           <dt onclick='toggleFilters("tag_category_<%= tag_category.id %>")'><%= tag_category.display_name %></dt>
           <dd id="tag_category_<%= tag_category.id %>" class="filter-tags">
             <ul>              
@@ -30,6 +31,7 @@
               <%- end -%> 
            </ul>
           </dd>
+					<%- end -%>
         <%- end -%>         
       <%- end -%>
 		</dl>
