@@ -7,6 +7,6 @@
   
   <%= render :partial => 'orphans/choose_pseud' %>
   
-  <%= hidden_field_tag 'work_id', work.id %>
-  <p><%= submit_tag "Yes, I'm sure".t %></p>
+  <p><%= hidden_field_tag 'work_id', work.id %></p>
+  <p class="submit"><%= submit_tag "Yes, I'm sure".t %></p>
 <%- end -%>

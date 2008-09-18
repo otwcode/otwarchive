@@ -15,15 +15,15 @@
         <% else %>
           <%=h "Chapter".t %> <%=h chapter.position %>    
         <% end %>
-        <span class='chapter-control'>
-          (<%= link_to 'edit'.t, [:edit, @work, chapter] -%> 
+        <ul class='chapter-control navigation'>
+          <li><%= link_to 'edit'.t, [:edit, @work, chapter] -%></li>
            <%- if @work.chapters.count > 1 -%>
-             | <%= link_to 'delete'.t, [@work, chapter], :confirm => 'Are you sure?'.t, :method => :delete %>
+             <li><%= link_to 'delete'.t, [@work, chapter], :confirm => 'Are you sure?'.t, :method => :delete %></li>
              <% if @work.pseuds.size > 1 && chapter.pseuds.size > 1 -%>
-               | <%= link_to "Remove me as author".t, {:action => "edit", :id => chapter.id, :remove => "me"}, :confirm => 'You will no longer be able to edit this chapter. Are you sure?'.t %>
+               <li><%= link_to "Remove me as author".t, {:action => "edit", :id => chapter.id, :remove => "me"}, :confirm => 'You will no longer be able to edit this chapter. Are you sure?'.t %></li>
              <% end -%> 
           <%- end -%> )
-      	</span><br />
+      	</ul>
       </li>
     <% end %>    
   </ul>

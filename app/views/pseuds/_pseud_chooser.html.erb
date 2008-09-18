@@ -1,5 +1,5 @@
 <% form_for(@work) do |f| %>
 	<!-- TODO this will not actually work -> figure out how to make it work --> 
 	<%= collection_select :user, :default_pseud, current_user.pseuds, :id ,:name %>
- 	<%= f.submit "Change Pseud".t %>
+ 	<p class="submit"><%= f.submit "Change Pseud".t %></p>
 <% end %>

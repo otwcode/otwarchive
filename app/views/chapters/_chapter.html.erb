@@ -1,42 +1,65 @@
 <!-- This partial requires local variable 'chapter' -->
+<div class="chapter-title">	
+		<h3>
+		<%= chapter_link(chapter) %>
+			<%- unless chapter.title.blank? -%>: <%=h chapter.title %>
+		<%- end -%>
+		</h3>
 
-  <div class="chapter-title">	
-  <h3><%= chapter_link(chapter) %>
-  <%- unless chapter.title.blank? -%>: <%=h chapter.title %></h3><%- end -%>
-
-  <!-- chapter management -->  
+<!-- chapter management -->  
   <%- if is_author_of?(@work) -%>
    <ul class="navigation chapter-control">
-   (<% unless chapter.posted? -%>
-    <li><%= link_to 'post'.t, [:post, @work, chapter], :method => :post -%> </li>
+	<% unless chapter.posted? -%>
+		<li><%= link_to 'post'.t, [:post, @work, chapter], :method => :post -%> </li>
     <%- end -%>	
-    <li><%= link_to 'edit'.t, [:edit, @work, chapter] -%> 
+    	<li><%= link_to 'edit'.t, [:edit, @work, chapter] -%></li>
     <%- if @work.chapters.count > 1 -%>
-      </li>
- 	<li><%= link_to 'delete'.t, [@work, chapter], :confirm => 'Are you sure?'.t, :method => :delete %> )</li>
+ 		<li><%= link_to 'delete'.t, [@work, chapter], :confirm => 'Are you sure?'.t, :method => :delete %></li>
     <%- end -%>
 	</ul>	
   <%- end -%>
 
-  <!-- only display byline if different from the main byline -->
+<!-- only display byline if different from the main byline -->
   <%- if chapter.pseuds != @work.pseuds -%>
-  <h4><%=h 'Chapter by'.t %> <%= byline(chapter) -%></h4>
+  	<h4><%=h 'Chapter by'.t %> <%= byline(chapter) -%></h4>
   <%- end -%>
-  </div>
+</div>
   
-  <!-- we want to hide this information by default if javascript is available -->
-	<!-- Shows work info on the first chapter of multi-chapter work except when this
-	partial is being displayed as part of a full work, when the work details come above
-	the chapters -->
+<!-- we want to hide this information by default if javascript is available -->
+<!-- Shows work info on the first chapter of multi-chapter work except when this partial is being displayed as part of a full work, when the work details come above the chapters -->
 	<%- if chapter == @work.first_chapter -%>
 		<%- unless (hide_work_info ||= false) -%>
-	    <%- unless @work.summary.blank? -%><%=sanitize_and_format_for_display @work.summary -%><%- end -%>
-      <%- unless @work.notes.blank? -%><%=sanitize_and_format_for_display @work.notes -%><%- end -%>
-			<%- if @work.is_wip -%><p><%= wip_message(@work) %></p><%- end -%>
+	    <%- unless @work.summary.blank? -%>
+		<blockquote class="story-summary">
+	    	<h3><%=h 'Summary:'.t %></h3>
+			<%=sanitize_and_format_for_display @work.summary -%>
+		</blockquote>
+		<%- end -%>
+      <%- unless @work.notes.blank? -%>
+		<blockquote class="story-notes">
+		    <h3><%=h 'Notes:'.t %></h3>
+			<%=sanitize_and_format_for_display @work.notes -%>
+		</blockquote>
+	  <%- end -%>
+		<% if @work.is_wip -%>
+		  <p class="story-complete">
+		    <%= wip_message(@work) %>
+		  </p>
+		<%- end -%>
 		<%- end -%>
 	<%- else -%>
-    <%- unless chapter.summary.blank? -%><br /><%=sanitize_and_format_for_display chapter.summary -%><%- end -%>
-    <%- unless chapter.notes.blank? -%><br /><%=sanitize_and_format_for_display chapter.notes -%><%- end -%>
+    <%- unless chapter.summary.blank? -%>
+	<blockquote class="story-summary">
+    	<h3><%=h 'Summary:'.t %></h3>
+		<%=sanitize_and_format_for_display @work.summary -%>
+	</blockquote>
+	<%- end -%>
+    <%- unless chapter.notes.blank? -%>
+	<blockquote class="story-notes">
+	    <h3><%=h 'Notes:'.t %></h3>
+		<%=sanitize_and_format_for_display @work.notes -%>
+	</blockquote>
+	<%- end -%>
 	<%- end -%>
 	
   <%=sanitize_and_format_for_display chapter.content %>

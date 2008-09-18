@@ -6,7 +6,7 @@
 		<%= label_tag 'password', 'Password:'.t  %><br />
 		<%= password_field_tag 'password', '' %>
 	</p>
-	<p>
+	<p class="submit">
 		<%= check_box_tag('remember_me', '1', false) %>
   		<%= label_tag 'remember_me', 'Remember me'.t  %> 
 		<%= submit_tag 'Login'.t, :class => 'submit' %>

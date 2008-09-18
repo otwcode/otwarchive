@@ -14,27 +14,30 @@
   
   <div id="series-and-view-data">
     <%- unless @work.series.blank? -%>
-      <span id="work-series-data">
+      <h3 id="work-series-data">
       <%= show_series_data(@work) %>
-      </span>
+      </h3>
     <%- end -%> 
     
       <%- if @work.number_of_posted_chapters > 1 -%>
-          <%- if @chapters.length == 1 -%> <!-- we're reading chapter-by-chapter -->
-			<h4><%= link_to "View entire work".t, @work -%></h4>
+          <%- if @chapters.length == 1 -%> 
+<!-- we're reading chapter-by-chapter -->
 			<ul class="navigation">
+			<li><%= link_to "View entire work".t, @work -%></li>
 			<li><%= next_and_previous_links(@work, @chapter) -%></li>
+			</ul>
           <%- else -%>
-		    <li>
-		      <%= link_to "View chapter by chapter".t, 
+		    <ul clas="navigation">
+		      <li><%= link_to "View chapter by chapter".t, 
                     url_for({:controller => :chapters, :action => :show, :work_id => @work, :id => @chapters.first}) -%>
 			</li>
+			</ul>
           <%- end -%>
-		</ul>
       <%- end -%>
   </div>
 
-  <div id="story-preface"><h2 class="story-title">
+  <div id="story-preface">
+	<h2 class="story-title">
     <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)".t) %><% end %>
     <% if @work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)".t) %><% end %>
     <%=sanitize_and_format_for_display @work.title, :tags => %w(em i b strong strike small) %>

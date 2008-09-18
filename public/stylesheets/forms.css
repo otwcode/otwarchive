@@ -1,7 +1,7 @@
 /* GLOBAL */
 legend	{ margin-left:-999em; position:absolute; }
-p.submit, p.submit input { text-align:right; font-size:1.125em; }
-p { line-height:2; clear:both; }
+p.submit { text-align:right; }
+p { line-height:2; clear:both; cd}
 form dl { position:relative; }
 form dt { float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
 form dd { float: left; }
@@ -41,6 +41,8 @@ admin_session-new dt { width:6em; }
 form .footnote	{ font-size:0.75em; }
 form p.openid	{ margin-top:6em; }
 
+#main.users-new form dt {width:100%; float:none;}
+
 /* POST WORK */
 /*story-meta  and story-show rules in story-views.css */
 #story-form input, #story-form select, #story-form textarea {width:99%; margin:auto}
@@ -62,7 +64,7 @@ dd#co-authors { margin:0 auto 0.875em auto; padding:0.375em; border:1px solid #b
 input#work_parent_url {margin:0.375em auto 0.875em auto;}
 #seriesmanage dt, dt.story-restricted, dt.story-is_wip, dt.story-is_serial	{ width: 50%;}
 #seriesmanage dd, dd.story-restricted, dd.story-is_wip, dd.story-is_serial	{ clear:right; margin:0; }
-p.rtf-html-switch {margin:1em 0 -0.375em 0;padding:0; }
+p.rtf-html-switch {margin:1em 0 -0.5625em 0;padding:0; }
 .rtf-html-switch span {background:#f0f0ee; padding:0.5625em 0.5625em 0 0.5625em; border:1px solid #ddd;}
 #story-form textarea#content { height:31.25em;  margin:auto;}
 
@@ -84,12 +86,13 @@ form.edit_preference ul { margin:0.5625em auto; padding:1.5em 0; }
 #main.users-edit dt	{ width:12em; }
 #main.users-edit textarea#profile_attributes_about_me { height:12em; }
 #main.users-edit hr.clear {margin-top:39em;}
-#link_to_openid, #link_to_passwd {clear:both; margin:0 0.25em 0.5625em 11.125em; font-size:1.125em;}
+#main.users-edit #link_to_openid, #main.users-edit #link_to_passwd {clear:both; margin:0 0.25em 0.5625em 11.125em; font-size:1.125em;}
 
 /* NEW PSEUD */
 form#new_pseud {position:absolute;}
+
 /*WORKS-INDEX -filters*/
-form.story-filters	{ background:#ddd; font-size:0.875em; width:12.25em; float:right; margin-top:3em; padding:0.5625em; border:1px solid #fffef9;}
+form.story-filters	{ background:#ddd; font-size:0.875em; width:12.25em; float:right; margin-top:-0.0625em; padding:0.75em 0.5625em; border:1px solid #fffef9;}
 .story-filters dt	{ font-weight: 600; text-transform: capitalize; margin:0.5625em auto 0; padding:0; border-bottom:1px solid #fffef9; }
 .story-filters dd {padding:0;}
 .story-filters dt:hover	{ color:#fffef9; background:#777; } 
