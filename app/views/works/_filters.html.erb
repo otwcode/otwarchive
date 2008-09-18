@@ -23,8 +23,8 @@
 	        <ul>
 	          <%- for tag in tags -%>
 	          <li>
-	            <%= check_box_tag tag_category.name + '[]', tag.name, @selected_tags.include?(tag.name) %>
-	            <%= label_tag tag_category.name + "[#{tag.name}]", tag.name %>  
+	            <%= check_box_tag "selected_tags[" + tag_category.name + '][]', tag.name, @selected_tags[tag_category.name].blank? ? false : @selected_tags[tag_category.name].include?(tag.name) %>
+	            <%= label_tag "selected_tags[" + tag_category.name + "][#{tag.name}]", tag.name %>  
 	          </li>
 	          <%- end -%> 
 	        </ul>

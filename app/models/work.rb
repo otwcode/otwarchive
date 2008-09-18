@@ -30,6 +30,7 @@ class Work < ActiveRecord::Base
     # attributes
     has created_at
     has word_count
+    has title
 
     # properties
     set_property :delta => true
@@ -430,6 +431,91 @@ class Work < ActiveRecord::Base
 
   def adult_content?
     tags.find(:first, :conditions => {:adult => true})
+  end
+
+
+  def self.search_and_filter(options={})
+    all_works = []    
+    
+    if !options["query"].blank?
+      # if there's a query - use search to collect works
+      # because it returns a thinking sphinx object, it can't use the class method for visible
+      # override search's default pagination - get a maximum of 1000 works 
+      # TODO - make maximum number to find configurable
+      if options["sort_column"].blank?
+        # will get best matches at the top
+        all_works = Work.search(options["query"], :per_page => 1000).map(&:visible).compact
+      else 
+        # if there is a sort column, use :order
+        direction = options["sort_direction"] == "DESC" ? :desc : :asc
+        all_works = Work.search(options["query"], :order => options["sort_column"], :sort_mode => direction, :per_page => 1000).map(&:visible).compact
+      end
+    else
+      # if there is no query - use find to collect works
+      sort_order = nil
+      sort_order = "#{options["sort_column"]} #{options["sort_direction"]}" unless options["sort_column"].blank?
+      if !options["user_id"].blank?
+        # if there's a user_id use user.works to find works
+        all_works = User.find_by_login(options["user_id"]).works.ordered(sort_order).visible
+      elsif !options["tag_id"].blank?
+        # if there's a tag_id get works for synonyms also
+        tag = Tag.find(options["tag_id"])
+        tags = ([tag] + tag.synonyms).compact.uniq
+        all_works = Work.ordered(sort_order).visible & Work.with_tags(tags)
+      else
+        # get all works
+        all_works = Work.ordered(sort_order).visible
+      end
+    end
+
+    # get possible filters (all possible tags on found works)
+    filters = all_works.collect(&:tags).flatten.uniq.compact.group_by(&:tag_category).to_hash
+
+    if !options["selected_tags"].blank?
+      # filter on tags - remove works that don't have a tag that was selected
+      excluded_works = []
+      filters.each_pair do |tag_category, tags|
+	      if options["selected_tags"][tag_category.name]  
+	        # filtering should be done on the tag category
+          tags.each do |tag|
+            # remove everything not checked
+            unless options["selected_tags"][tag_category.name].include?(tag.name)
+              excluded_works << tag.works
+            end
+          end
+          # and in cases where a work has no tags in that category
+          # exclude that work also, as it doesn't have one of the selected tags
+          excluded_works << Work.no_tags(tag_category)
+				end
+      end
+      all_works = all_works - excluded_works.flatten
+    end
+    # clean up just in case
+    all_works = all_works.flatten.uniq.compact
+
+    # filter on psueds - only keep works by the selected pseuds
+    unless options["pseuds"].blank?
+      works_by_pseuds = []
+      options["pseuds"].each do |pseud_name|
+        pseud = Pseud.find_by_name(pseud_name)
+        works_by_pseuds << pseud.works
+      end
+      all_works = all_works & works_by_pseuds.flatten
+    end
+    # clean up just in case
+    all_works = all_works.flatten.uniq.compact
+        
+    # limit the filter tags to 10 per category
+    filters.each_key do |tag_category|
+      filters[tag_category] = filters[tag_category].sort {|a,b| a.taggings_count <=> b.taggings_count}[0..10].sort
+    end
+
+    return [all_works.compact, filters]
+  end
+
+  # sort works by title
+  def <=>(another_work)
+    title.strip.downcase <=> another_work.strip.squish.downcase
   end
     
 end

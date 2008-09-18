@@ -109,83 +109,22 @@ class WorksController < ApplicationController
   end
 	   
   # GET /works
-  def index 
-    case params[:sort_column]
-      when "title" then
-        @sort_order = "title " + (params[:sort_direction] == "DESC" ? "DESC" : "ASC")
-      when "word_count" then
-        @sort_order = "word_count " + (params[:sort_direction] == "DESC" ? "DESC" : "ASC")
-      when "date" then
-        @sort_order = "created_at " + (params[:sort_direction] == "DESC" ? "DESC" : "ASC")
-    end
+  def index
+    @selected_tags = params[:selected_tags] || {}
 
-    @selected_tags = []
-    @query = params[:query]
+    sort_column = params[:sort_column] == "date" ? "created_at" : params[:sort_column]
+    tag_id = params[:tag_id].blank? ? params[:fandom_id] : params[:tag_id]
+
+    @works, @filters = Work.search_and_filter(
+       "sort_column" => sort_column,
+       "sort_direction" => params[:sort_direction],
+       "user_id" => params[:user_id],
+       "tag_id" => tag_id,
+       "pseuds" => params[:pseuds],
+       "selected_tags" => @selected_tags
+      )
     
-    if params[:user_id]
-      @user = User.find_by_login(params[:user_id])
-      @all_works = @user.works.ordered(@sort_order).visible
-    elsif params[:fandom_id] || params[:tag_id]
-      @tag = Tag.find(params[:fandom_id] || params[:tag_id])
-      tags = ([@tag] + @tag.synonyms).compact.uniq
-      @all_works = Work.ordered(@sort_order).visible & Work.with_tags(tags)
-    elsif @query
-      direction = params[:sort_direction] == "DESC" ? :desc : :asc
-      # FIXME: need a better way to get visible works from search using search itself
-      # then wouldn't need to override search's default pagination unless filtering
-      case params[:sort_column]
-        when "title"
-          case direction
-            when :desc
-              @all_works = Work.search(@query, :per_page => 1000).map(&:visible).compact.sort { |a,b| a.title.downcase <=> b.title.downcase }
-            else
-              @all_works = Work.search(@query, :per_page => 1000).map(&:visible).compact.sort { |a,b| b.title.downcase <=> a.title.downcase }
-           end
-        when "word_count"
-          @all_works = Work.search(@query, :order => :word_count, :sort_mode => direction, :per_page => 1000).map(&:visible)
-        when "date"
-          @all_works = Work.search(@query, :order => :created_at, :sort_mode => direction, :per_page => 1000).map(&:visible)
-        else # better matches at the top
-          @all_works = Work.search(@query, :per_page => 1000).map(&:visible)
-      end
-    else
-      @all_works = Work.ordered(@sort_order).visible
-    end
-    @filters = @all_works.compact.collect(&:tags).flatten.uniq.group_by(&:tag_category).to_hash
-
-    unless @query.blank?
-      excluded_works = []     
-      @filters.each_pair do |tag_category, tags|
-				unless tag_category.blank? || tags.blank?
-	        if params[tag_category.name]  # filtering on that tag - remove everything not checked
-	          tags.each do |tag|
-	            if params[tag_category.name].include?(tag.name)
-	              @selected_tags << tag.name
-	            else
-	              excluded_works << tag.works
-	              excluded_works << Work.no_tags(tag_category)
-	            end
-	          end
-	        end
-				end
-      end
-			if params[:pseuds]
-				included_works = []
-				@selected_tags << params[:pseuds]
-				for pseud_name in params[:pseuds]
-					pseud = Pseud.find_by_name(pseud_name)
-					included_works << pseud.works
-				end
-				@all_works = (@all_works & included_works.flatten.compact) unless included_works.blank?
-			end
-      @all_works = (@all_works - excluded_works.flatten)
-    end
-		@selected_tags.flatten!
-    @works = @all_works.compact.paginate(:page => params[:page])
-    # limit the filter tags to 10 per category
-    @filters.each_key do |tag_category|
-      @filters[tag_category] = @filters[tag_category].sort {|a,b| a.taggings_count <=> b.taggings_count}[0..10].sort
-    end
+    @works = @works.paginate(:page => params[:page])
   end
   
   # GET /works/1
