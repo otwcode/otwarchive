@@ -19,7 +19,7 @@
 			<%- end -%>
       <%- unless @filters.blank? -%>
         <%- @filters.each_pair do |tag_category, tags| -%>
-          <dt onclick='toggleFilters("tag_category_<%= tag_category.id %>")'><%= tag_category.name %></dt>
+          <dt onclick='toggleFilters("tag_category_<%= tag_category.id %>")'><%= tag_category.display_name %></dt>
           <dd id="tag_category_<%= tag_category.id %>" class="filter-tags">
             <ul>              
               <%- for tag in tags -%>
