@@ -1,4 +1,4 @@
-<%- unless @filters.blank? && (@user.blank? || @user.psueds.size == 1) -%>
+<%- unless @filters.blank? && (@user.blank? || @user.pseuds.size == 1) -%>
 <%- form_tag(works_path, :class => 'story-filters', :method => :get) do -%>
   <%- field_set_tag 'Filter stories by: ' do -%>
  		<dl class="story-filters">
