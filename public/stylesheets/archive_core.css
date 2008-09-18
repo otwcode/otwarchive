@@ -27,7 +27,7 @@ a:focus { background:#900; color:#fffef9}
 a:visited	{ color: #777; }
 a img	{ border: 0; }
 a.tag	{ color: #111; text-decoration:none; padding: 0 0.125em; border-bottom:1px dotted; }
-a.tag:hover	{ background: #900; color: #fffef9; }
+a.tag:hover	{ background: #900 !important; color: #fffef9 !important; }
 
 body p	{ font-size: 0.875em; line-height: 1.286; margin: 0.643em 0; }
 
