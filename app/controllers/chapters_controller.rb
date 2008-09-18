@@ -72,7 +72,7 @@ class ChaptersController < ApplicationController
     elsif params[:chapter] # create
       @chapter = @work.chapters.build(params[:chapter])
     else # new
-      @chapter = current_user.unposted_chapter(@work) || @work.chapters.build
+      @chapter = @work.chapters.build
     end
     
     @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
