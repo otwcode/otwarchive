@@ -97,25 +97,28 @@ class WorksController < ApplicationController
 	   
   # GET /works
   def index
-    @selected_tags = params[:selected_tags] || {}
+    # for nested routes
+    if !params[:user_id].blank?
+      @user = User.find_by_login(params[:user_id])
+    elsif !params[:fandom_id].blank?
+      @fandom = Tag.find(params[:fandom_id])
+    elsif !params[:tag_id].blank?
+      @tag = Tag.find(params[:tag_id])
+    end
 
     sort_column = params[:sort_column] == "date" ? "created_at" : params[:sort_column]
     tag_id = params[:tag_id].blank? ? params[:fandom_id] : params[:tag_id]
-    
-    if params[:user_id]
-      @user = User.find_by_login(params[:user_id])
-      @user_pseuds = @user.pseuds
-    end
+    @pseuds = params[:pseuds] || []    
+    @selected_tags = params[:selected_tags] || {}
+    @query = params[:query]
 
-    @pseuds = params[:pseuds] || []
-    
     @works, @filters, error = Work.search_and_filter(
        "sort_column" => sort_column,
        "sort_direction" => params[:sort_direction],
        "user_id" => params[:user_id],
        "tag_id" => tag_id,
        "pseuds" =>@pseuds,
-       "query" => params[:query],
+       "query" => @query ,
        "selected_tags" => @selected_tags
       )
     flash[:error] = error unless error.blank?

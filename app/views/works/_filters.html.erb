@@ -1,12 +1,12 @@
-<%- unless @user_pseuds.blank? && @filters.blank? -%>
+<%- unless @filters.blank? && (@user.blank? || @user.psueds.size == 1) -%>
 <%- form_tag(works_path, :class => 'story-filters', :method => :get) do -%>
   <%- field_set_tag 'Filter stories by: ' do -%>
  		<dl class="story-filters">
-			<%- unless @user_pseuds.blank? -%>
+			<%- unless (@user.blank? || @user.psueds.size == 1) -%>
         <dt onclick='toggleFilters("filter-pseuds")'>Pseud</dt>
         <dd id="filter-pseuds" class="filter-tags">
           <ul>
-            <%- for pseud in @user_pseuds -%>
+            <%- for pseud in @user.pseuds -%>
               <%- if pseud.works.count > 0 -%>
                 <li>
                   <%= check_box_tag 'pseuds[]', pseud.name, @pseuds.include?(pseud.name) %>
@@ -33,8 +33,9 @@
         <%- end -%>         
       <%- end -%>
 		</dl>
-		<p><%= hidden_field_tag("query", params[:query]) %></p>
+		<p><%= hidden_field_tag("query", @query) if @query %></p>
 		<p><%= hidden_field_tag("tag_id", @tag.id) if @tag %></p>
+		<p><%= hidden_field_tag("fandom_id", @fandom.id) if @fandom %></p>
 		<p><%= hidden_field_tag("user_id", @user.login) if @user %></p>
 		<p class="submit"><%= submit_tag "Filter Stories" %></p>
   <%- end -%>
