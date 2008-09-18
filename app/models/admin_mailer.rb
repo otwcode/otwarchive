@@ -1,4 +1,6 @@
 class AdminMailer < ActionMailer::Base
+  helper :application
+  
   def abuse_report(email,url,comment)
      setup_email
      @recipients = ArchiveConfig.ABUSE_ADDRESS

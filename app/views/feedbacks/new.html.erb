@@ -9,9 +9,25 @@
 	haikus - you can leave them here." .t %>
 		<%=h " We promise to read it all!" .t %>
 	</p>
-  	<p>
-	    <%= f.text_area :comment, :cols => 60 %>
-  	</p>
+	<p class="message">
+	  <strong><%= "PLEASE NOTE!".t -%></strong>
+	  The archive is currently only supporting Firefox. 
+    <a href="http://www.spreadfirefox.com/node&id=0&t=306"><img border="0" alt="Download Firefox" title="Download Firefox"
+       src="http://sfx-images.mozilla.org/affiliates/Buttons/firefox3/110x32_get_ffx.png"/></a>	
+  </p>
+  <p class="message">     
+	  It is quite broken on Internet Explorer,
+	  and may be more or less broken on other browsers. Sorry about that -- putting in all the super-annoying
+	  tweaks for cross-browser compatibility will be one of the last steps we do, because otherwise 
+	  lots of time gets wasted along the way while we're making lots of changes to the interface. 
+	</p>
+	<p class="message">
+	  So for now, if you're seeing a visual bug (stuff like menus in the wrong places, stuff not laid out right, 
+	  font sizes wonky, etc), please only report it if you've found it in Firefox. 
+	</p>
+	<p>
+    <%= f.text_area :comment, :cols => 60 %>
+	</p>
 	<p class="submit">
     	<%= f.submit "Send feedback".t %>
   	</p>
