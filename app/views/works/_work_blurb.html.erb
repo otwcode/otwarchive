@@ -15,15 +15,18 @@
     </li>
     <li class="story-desc">
       <%= sanitize_limit_and_format_for_display work.summary %>
-      <ul>
-        <li><%= 'Chapters'.t + ': ' %><%= work.number_of_posted_chapters %>/<%= work.wip_length %></li>
-        <li><%=h 'Words: %s'/number_with_delimiter(work.word_count) %></li>
+      <ul>        
+				<%- if is_author_of?(work) -%>
+				  <li><%= link_to 'Edit'.t, edit_work_path(work) -%></li>
+				<%- end -%>
         <%- if work.count_visible_comments > 0 -%>
           <li><%= link_to 'Comments: %d'.t/work.count_all_comments, work_path(:id => work.id, :anchor => "comments", :show_comments => true) -%></li>
         <%- end -%>
 				<%- if work.count_visible_bookmarks(current_user) > 0 -%>
 					<li><%= link_to 'Bookmarks: %d'.t/work.count_visible_bookmarks(current_user), work_bookmarks_path(:work_id => work.id) -%></li>
 				<%- end -%>
+        <li><%= 'Chapters'.t + ': ' %><%= work.number_of_posted_chapters %>/<%= work.wip_length %></li>
+        <li><%=h 'Words: %s'/number_with_delimiter(work.word_count) %></li>
       </ul>
     </li>
   </ul>

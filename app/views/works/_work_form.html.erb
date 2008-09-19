@@ -1,18 +1,27 @@
 <ul class="navigation">
-<% if current_user.unposted_work && !params[:load_unposted] -%>
-  <li><%= link_to 'Try to restore from last unposted draft?'.t, url_for(:action => :new, :load_unposted => true) -%></li>
+<% if current_user.unposted_work && !params[:load_unposted] && !@use_upload_form -%>
+  <li id='restore-link'><%= link_to 'Try to restore from last unposted draft?'.t, url_for(:action => :new, :load_unposted => true) -%></li>
 <%- end -%>
-<li id="upload-link"><%= use_upload_link -%>
+
+<li id="upload-link" <%= @use_upload_form ? 'style="display: none;"' : '' -%> >
+  <%= link_to_function(h('Upload from an existing URL?').t,
+  "Element.toggle('upload-work-form'); Element.toggle('story-form'); Element.toggle('upload-link'); 
+   Element.toggle('form-link'); Element.toggle('restore-link')",
+  :href => url_for(:controller => :works, :action => :new, :upload_work => true)) -%>
 </li>
-<li id="form-link" style="display: none;"><%= use_form_link -%>
+<li id="form-link"  <%= @use_upload_form ? '' : 'style="display: none;"' -%> >
+  <%= link_to_function(h('Return to standard form').t, 
+  "Element.toggle('upload-work-form'); Element.toggle('story-form'); Element.toggle('upload-link'); 
+  Element.toggle('form-link'); Element.toggle('restore-link')",
+  :href => url_for(:controller => :works, :action => :new, :upload_work => false)) -%>
 </li>
 </ul>
 
-<div id="upload-work-form" style="display: none;"> 
+<div id="upload-work-form"  <%= @use_upload_form ? '' : 'style="display: none;"' -%> > 
   <%= render :partial => 'works/upload_work_form' -%>   
 </div>
 
-<div id="story-form" class="story-form">
+<div id="story-form" class="story-form" <%= @use_upload_form ? 'style="display: none;"' : '' -%>>
 <%- form_for(@work, :html => {:name => "storyForm"}) do |f| -%> 
   <p class="notice required"><%=h '* Required information'.t %></p>
   <%= render :partial => 'work_tags_form' -%>

@@ -110,7 +110,7 @@ li.story-title-line p { padding:0; margin:0; display:inline;}
 li.story-title-line img { float: left; margin:0.125em 0.25em 0 0 }
 li.story-date { background:#777; color:#fffef9; font-size: 0.75em; text-align: right; }
 
-li.story-tags { font-weight: 600; clear: left; }
+li.story-tags { font-weight: 600; }
 li.story-tags a { font-weight: normal; text-decoration: none; padding:0; border-bottom: 1px dotted}
 li.story-tags dl.story-meta dt, li.story-tags dl.story-meta dd { line-height: 1.5; display: inline; margin:0; padding: 0 0.0125em 0 0; background:transparent !important; }
 li.story-tags dl.story-meta dd ul {background:transparent !important}

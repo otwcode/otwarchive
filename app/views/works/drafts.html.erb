@@ -1,0 +1,15 @@
+<h2>Unposted Drafts</h2>
+
+<p>
+  <strong><%= 'Please note'.t -%></strong>: <%= "Unposted drafts are only saved for a week from the day they 
+  were first created.".t -%>
+</p>
+
+<% paginated_section @works, {:prev_label => '&laquo; Previous'.t, :next_label => 'Next &raquo;'.t} do %>
+
+  <ul class="story-list">
+    <%- for work in @works -%>
+      <%= render :partial => 'work_blurb', :locals => {:work => work} %>
+    <%- end -%>
+  </ul>
+<% end %>

@@ -35,7 +35,12 @@ module UsersHelper
   def print_series_link(user)
     total = @user.series.count(:all)
     prefix = (@user == current_user) ? "My ".t : ""
-    link_to_unless_current prefix + "Series".t + " (" + total.to_s + ")", user_series_index_path(@user)
+    link_to_unless_current prefix + "Series".t + " (#{total})", user_series_index_path(@user)
+  end
+  
+  def print_drafts_link(user)
+    total = @user.unposted_works.size
+    link_to_unless_current "My Drafts".t + "(#{total})", drafts_user_works_path(@user)
   end
   
 end

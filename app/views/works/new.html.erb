@@ -1,7 +1,5 @@
 <%= error_messages_for :work %>
 
-  <h1><%=h 'Post New Story'.t %></h1>
-  <!-- The "morefeatures" span can be removed at will without breaking the page.-->
-  <p class="message"><%=h 'Further features coming soon. Questions?'.t %> <%= mail_to ArchiveConfig.QUESTION_ADDRESS, h("Email us").t %>.</p>
+<h1><%=h 'Post New Story'.t %></h1>
 
 <%= render :partial => "work_form" %>

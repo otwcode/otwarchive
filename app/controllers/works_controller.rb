@@ -127,6 +127,21 @@ class WorksController < ApplicationController
     @works = @works.paginate(:page => params[:page])
   end
   
+  def drafts
+    if params[:user_id]
+      @user = User.find_by_login(params[:user_id])
+      unless current_user == @user
+        flash[:error] = "You can only see your own drafts, sorry!".t
+        redirect_to :action => :index and return
+      end
+    else
+      flash[:error] = "Whose drafts did you want to look at?".t
+      redirect_to :action => :index and return
+    end
+    @works = @user.unposted_works
+    @works = @works.paginate(:page => params[:page])
+  end 
+  
   # GET /works/1
   # GET /works/1.xml
   def show
@@ -159,7 +174,7 @@ class WorksController < ApplicationController
     if params[:load_unposted] && current_user.unposted_work
       @work = current_user.unposted_work
     elsif params[:upload_work]
-      render :partial => 'upload_work_form', :layout => "application"
+      @use_upload_form = true
     end
   end
 
@@ -174,7 +189,7 @@ class WorksController < ApplicationController
       elsif params[:cancel_coauthor_button]
         render :action => :new
       elsif params[:cancel_button]
-        flash[:notice] = "Story posting canceled."
+        flash[:notice] = "New work posting canceled.".t
         current_user.cleanup_unposted_works
         redirect_to current_user    
       else  
@@ -229,20 +244,20 @@ class WorksController < ApplicationController
       @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
       to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 
       @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
-     
+
       if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank? 
         @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
       elsif params[:preview_button]
         @preview_mode = true
-    	  @chapters = [@chapter]
-    	  if @work.has_required_tags?
+        @chapters = [@chapter]
+        if @work.has_required_tags?
           render :action => "preview"
         else
           @work.errors.add_to_base("Please add all required tags.")
           render :action => :edit
         end
       elsif params[:cancel_button]
-        flash[:notice] = "Story posting canceled."
+        flash[:notice] = "This work was not posted. (It will be saved in your drafts for one week, then cleaned up.)".t
         current_user.cleanup_unposted_works
         redirect_to current_user    
       elsif params[:edit_button]
@@ -305,15 +320,18 @@ class WorksController < ApplicationController
   # DELETE /works/1
   def destroy
     @work = Work.find(params[:id])
-    @work.destroy
-    redirect_to(works_url)
+    begin
+      @work.destroy
+    rescue ThinkingSphinx::ConnectionError
+      flash[:error] = "We couldn't delete that right now, sorry! Please try again later.".t
+      if env['RAILS_ENV'] == 'development'
+        flash[:error] += "(Note to developers: this means that the sphinx searchd isn't running. 
+                          You can safely ignore this if you are just testing other things.)"
+      end
+    end
+    redirect_to(user_works_url)
   end
 
-#    responds_to_parent do
-#      render :update do |page|
-#        page.replace_html 'upload_form', :partial => 'upload_form'
-#      end
-#    end
   # POST /works/upload_work
   def upload_work
     storyparser = StoryParser.new
@@ -344,10 +362,11 @@ class WorksController < ApplicationController
           flash.now[:error] = "Sorry, but we couldn't read from that URL. :(".t
         end
       end
-      
-      render :partial => "upload_work_form", :layout => "application"
+      @use_upload_form = true
+      render :action => :new
     else
-      render :partial => "upload_work_form", :layout => "application"
+      @use_upload_form = true
+      render :action => :new
     end
   end
     
