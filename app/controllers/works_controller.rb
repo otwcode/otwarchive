@@ -38,19 +38,21 @@ class WorksController < ApplicationController
       params[:work][:author_attributes][:byline] = params[:pseud][:byline]
       params[:pseud][:byline] = ""
     end
-    
-    if params[:id] # edit, update, preview, post, manage_chapters
-      @work = Work.find(params[:id])
-      if params[:work]  # editing, don't lose our changes
-        @work.attributes = params[:work]
+    begin    
+      if params[:id] # edit, update, preview, post, manage_chapters
+        @work = Work.find(params[:id])
+        if params[:work]  # editing, don't lose our changes
+          @work.attributes = params[:work]
+        end
+      elsif params[:work]
+         @work = Work.new(params[:work])    
+        
+      else # new
+          @work = Work.new
+          @work.chapters.build
       end
-    elsif params[:work]
-      @work = Work.new(params[:work])    
-    else # new
-        @work = Work.new
-        @work.chapters.build
+    rescue
     end
-
     @chapters = @work.chapters.in_order
     @serial_works = @work.serial_works
     @tags_by_category = {}
@@ -163,31 +165,36 @@ class WorksController < ApplicationController
 
   # POST /works
   def create
-    if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
-      @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
-    elsif params[:edit_button]
-      render :action => :new
-    elsif params[:cancel_coauthor_button]
-      render :action => :new
-    elsif params[:cancel_button]
-      flash[:notice] = "Story posting canceled."
-      current_user.cleanup_unposted_works
-      redirect_to current_user    
-    else  
-      begin
-        saved = @work.save
-      rescue ThinkingSphinx::ConnectionError
-        saved = true
-      end        
-      unless saved && @work.has_required_tags?
-        unless @work.has_required_tags?
-          @work.errors.add(:base, "Required tags are missing.".t)          
+    begin
+      raise unless @work.errors.empty?
+      if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
+        @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
+      elsif params[:edit_button]
+        render :action => :new
+      elsif params[:cancel_coauthor_button]
+        render :action => :new
+      elsif params[:cancel_button]
+        flash[:notice] = "Story posting canceled."
+        current_user.cleanup_unposted_works
+        redirect_to current_user    
+      else  
+        begin
+          saved = @work.save
+        rescue ThinkingSphinx::ConnectionError
+          saved = true
+        end        
+        unless saved && @work.has_required_tags?
+          unless @work.has_required_tags?
+            @work.errors.add(:base, "Required tags are missing.".t)          
+          end
+          render :action => :new 
+        else
+          flash[:notice] = 'Work was successfully created.'.t
+          redirect_to preview_work_path(@work)
         end
-        render :action => :new 
-      else
-        flash[:notice] = 'Work was successfully created.'.t
-        redirect_to preview_work_path(@work)
       end
+    rescue
+      render :action => :new
     end
   end
   
@@ -215,57 +222,62 @@ class WorksController < ApplicationController
   
   # PUT /works/1
   def update
-    @work.attributes = params[:work]    
-    # Need to update @pseuds and @selected_pseuds values so we don't lose new co-authors if the form needs to be rendered again
-    @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
-    to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 
-    @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
-   
-    if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank? 
-      @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
-    elsif params[:preview_button]
-      @preview_mode = true
-  	  @chapters = [@chapter]
-  	  if @work.has_required_tags?
-        render :action => "preview"
+    begin
+      raise unless @work.errors.empty?
+      @work.attributes = params[:work]    
+      # Need to update @pseuds and @selected_pseuds values so we don't lose new co-authors if the form needs to be rendered again
+      @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
+      to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 
+      @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
+     
+      if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank? 
+        @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
+      elsif params[:preview_button]
+        @preview_mode = true
+    	  @chapters = [@chapter]
+    	  if @work.has_required_tags?
+          render :action => "preview"
+        else
+          @work.errors.add_to_base("Please add all required tags.")
+          render :action => :edit
+        end
+      elsif params[:cancel_button]
+        flash[:notice] = "Story posting canceled."
+        current_user.cleanup_unposted_works
+        redirect_to current_user    
+      elsif params[:edit_button]
+        render :partial => 'work_form', :layout => 'application'
       else
-        @work.errors.add_to_base("Please add all required tags.")
-        render :action => :edit
-      end
-    elsif params[:cancel_button]
-      flash[:notice] = "Story posting canceled."
-      current_user.cleanup_unposted_works
-      redirect_to current_user    
-    elsif params[:edit_button]
-      render :partial => 'work_form', :layout => 'application'
-    else
-      saved = true
-      @chapter.save || saved = false
-      @work.has_required_tags? || saved = false
-      @work.posted = true 
-      begin
-        saved = @work.save
-        @work.update_minor_version
-      rescue ThinkingSphinx::ConnectionError
         saved = true
-      end
-      if saved
-        if params[:post_button]
-          flash[:notice] = 'Work was successfully posted.'.t
-        elsif params[:update_button]
-          flash[:notice] = 'Work was successfully updated.'.t
+        @chapter.save || saved = false
+        @work.has_required_tags? || saved = false
+        @work.posted = true 
+        begin
+          saved = @work.save
+          @work.update_minor_version
+        rescue ThinkingSphinx::ConnectionError
+          saved = true
         end
-        redirect_to(@work)
-      else
-        unless @chapter.valid?
-          @chapter.errors.each {|err| @work.errors.add(:base, err)}
+        if saved
+          if params[:post_button]
+            flash[:notice] = 'Work was successfully posted.'.t
+          elsif params[:update_button]
+            flash[:notice] = 'Work was successfully updated.'.t
+          end
+          redirect_to(@work)
+        else
+          unless @chapter.valid?
+            @chapter.errors.each {|err| @work.errors.add(:base, err)}
+          end
+          unless @work.has_required_tags?
+            @work.errors.add(:base, "Required tags are missing.".t)          
+          end
+          raise
         end
-        unless @work.has_required_tags?
-          @work.errors.add(:base, "Required tags are missing.".t)          
-        end
-        redirect_to :action => :edit
-      end
-    end 
+      end 
+    rescue
+      render :action => :edit
+    end
   end
  
   # GET /works/1/preview

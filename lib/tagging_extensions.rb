@@ -38,7 +38,12 @@ module TaggingExtensions
       tag_array = []
     else
       new_tags = tag_string.split(ArchiveConfig.DELIMITER).collect do |tag_name|
-        Tag.find_or_create_by_name(tag_name)
+        tag = Tag.find_or_create_by_name(tag_name)
+        unless tag.save
+          tag.errors.full_messages.each { |err| self.errors.add_to_base(err)}
+          raise
+        end
+        tag      
       end
       tag_array = new_tags.flatten.compact
     end
@@ -75,7 +80,10 @@ module TaggingExtensions
           tag = Tag.find_or_create_by_name(tag_name)
           if tag.tag_category == nil
             tag.tag_category = category
-            tag.save 
+            unless tag.save 
+              tag.errors.full_messages.each { |err| self.errors.add_to_base(err)}
+              raise
+            end
           elsif tag.tag_category == TagCategory.ambiguous
             #TODO pop up a warning - add a special tag to the array?
           elsif tag.tag_category != category

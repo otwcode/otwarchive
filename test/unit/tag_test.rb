@@ -8,7 +8,7 @@ class TagTest < ActiveSupport::TestCase
     end
     should_belong_to :tag_category
     should_have_many :taggings
-    should_ensure_length_in_range :name, (1..42), :short_message => /blank/
+    should_ensure_length_in_range :name, (1..42), :short_message => /blank/, :long_message => /limit/
     should_require_attributes :name
     should_allow_values_for :adult, true, false
     should_allow_values_for :name, '"./?~!@#$%^&()_-+=', "1234567890", "space's are not tag separators"

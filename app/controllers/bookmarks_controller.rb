@@ -84,10 +84,14 @@ class BookmarksController < ApplicationController
   def create
     @bookmark = Bookmark.new(params[:bookmark])
     @bookmark.set_external(params[:fetched][:value].to_i) unless params[:fetched].blank? || params[:fetched][:value].blank?
-    if @bookmark.save && @bookmark.tag_string=params[:tag_string]
-      flash[:notice] = 'Bookmark was successfully created.'.t
-      redirect_to(@bookmark) 
-    else
+    begin
+      if @bookmark.save && @bookmark.tag_string=params[:tag_string]
+        flash[:notice] = 'Bookmark was successfully created.'.t
+        redirect_to(@bookmark) 
+      else
+        raise
+      end
+    rescue
       @bookmarkable = @bookmark.bookmarkable || ExternalWork.new
       render :action => "new" 
     end 
@@ -97,11 +101,16 @@ class BookmarksController < ApplicationController
   # PUT /bookmarks/1.xml
   def update
     @bookmark = Bookmark.find(params[:id])
-    if @bookmark.update_attributes(params[:bookmark]) && @bookmark.tag_string=params[:tag_string]
-      flash[:notice] = 'Bookmark was successfully updated.'.t
-      redirect_to(@bookmark) 
-    else
-      render :action => "edit" 
+    begin
+      if @bookmark.update_attributes(params[:bookmark]) && @bookmark.tag_string=params[:tag_string]
+        flash[:notice] = 'Bookmark was successfully updated.'.t
+        redirect_to(@bookmark) 
+      else
+        raise
+      end
+    rescue
+      @bookmarkable = @bookmark.bookmarkable || ExternalWork.new
+      render :action => :edit
     end
   end
 
