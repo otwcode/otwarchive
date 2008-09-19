@@ -5,7 +5,7 @@
 				<% if series.hidden_by_admin %>
 				<%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)") %>
 				<% end %>
-				<%= link_to sanitize_and_format_for_display(series.title), series %>
+				<%= link_to sanitize_title_for_display(series.title), series %>
 				<%=h 'by'.t %>
 				<%= print_pseud_list(series.pseuds) -%>
 			</h3>

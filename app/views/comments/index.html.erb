@@ -7,7 +7,7 @@
 		<%- end -%>
 	<%- end -%>
 <%- else -%>
-	<h2><%=h 'Viewing Comments on'.t %> <%= link_to sanitize_and_format_for_display(@commentable.title, :tags => %w(em i b strong strike small)), @commentable %></h2>  
+	<h2><%=h 'Viewing Comments on'.t %> <%= link_to sanitize_title_for_display(@commentable.title, :tags => %w(em i b strong strike small)), @commentable %></h2>  
 	<%= render :partial => 'comments/comment_thread', :locals => { :comments => @comments, :depth => 0 } %>
 <%- end -%>
 

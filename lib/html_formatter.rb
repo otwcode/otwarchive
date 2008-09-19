@@ -22,6 +22,10 @@ module HtmlFormatter
   def sanitize_and_format_for_display(text, options = {})
     text = add_paragraph_tags_for_display(sanitize_whitelist(text, options))
   end
+  
+  def sanitize_title_for_display(text, options = {:tags => %w(a href, b, br, p, i, em, strong, strike, u, ins, q, del, cite, blockquote, pre, code, small, sup, sub)})
+    sanitize_whitelist(text, options)
+  end
  
   # A more limited display option which strips obtrusive tags for index views.
   def sanitize_limit_and_format_for_display(text, options = {:tags => %w(a href, b, br, p, i, em, strong, strike, u, ins, q, del, cite, blockquote, pre, code, small, sup, sub)})
