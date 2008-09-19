@@ -18,9 +18,9 @@ class Work < ActiveRecord::Base
   define_index do
 
     # fields
-    indexes title
     indexes summary
     indexes notes
+		indexes title
 
     # associations
     indexes chapters.content, :as => 'chapter_content' 
@@ -30,7 +30,6 @@ class Work < ActiveRecord::Base
     # attributes
     has created_at
     has word_count
-    has title
 
     # properties
     set_property :delta => true

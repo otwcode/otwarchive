@@ -7,10 +7,6 @@ class Chapter < ActiveRecord::Base
 
   validates_length_of :title, 
     :allow_blank => true, 
-    :minimum => ArchiveConfig.TITLE_MIN, :too_short=> "must be at least %d letters long."/ArchiveConfig.TITLE_MIN
-
-  validates_length_of :title, 
-    :allow_blank => true, 
     :maximum => ArchiveConfig.TITLE_MAX, :too_long=> "must be less than %d letters long."/ArchiveConfig.TITLE_MAX
     
   validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, :too_long => "must be less than %d letters long."/ArchiveConfig.SUMMARY_MAX
