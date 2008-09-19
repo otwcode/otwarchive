@@ -1,7 +1,7 @@
 /* GLOBAL */
 legend	{ margin-left:-999em; position:absolute; }
-p.submit { text-align:right; }
-p { line-height:2; clear:both; cd}
+form p.submit { text-align:right; }
+form p { line-height:2; clear:both; cd}
 form dl { position:relative; }
 form dt { float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
 form dd { float: left; }
