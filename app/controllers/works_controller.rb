@@ -226,7 +226,12 @@ class WorksController < ApplicationController
     elsif params[:preview_button]
       @preview_mode = true
   	  @chapters = [@chapter]
-      render :action => "preview"
+  	  if @work.has_required_tags?
+        render :action => "preview"
+      else
+        @work.errors.add_to_base("Please add all required tags.")
+        render :action => :edit
+      end
     elsif params[:cancel_button]
       flash[:notice] = "Story posting canceled."
       current_user.cleanup_unposted_works
@@ -236,6 +241,7 @@ class WorksController < ApplicationController
     else
       saved = true
       @chapter.save || saved = false
+      @work.has_required_tags? || saved = false
       @work.posted = true 
       begin
         saved = @work.save
@@ -254,7 +260,10 @@ class WorksController < ApplicationController
         unless @chapter.valid?
           @chapter.errors.each {|err| @work.errors.add(:base, err)}
         end
-        redirect_to :action => :new
+        unless @work.has_required_tags?
+          @work.errors.add(:base, "Required tags are missing.".t)          
+        end
+        redirect_to :action => :edit
       end
     end 
   end

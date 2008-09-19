@@ -1,6 +1,6 @@
 class TagsController < ApplicationController
   before_filter :check_user_status, :only => [:new, :create]
-  permit "tag_wrangler", :permission_denied_message => "Sorry, the page you tried to access is for authorized tag wranglers only.".t, :except => [ :show, :index ]
+  permit "tag_wrangler", :permission_denied_message => "Sorry, the page you tried to access is for authorized tag wranglers only.".t, :except => [ :show, :index, :show_hidden ]
   before_filter :check_user_status
 
   # GET /tags

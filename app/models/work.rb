@@ -75,12 +75,14 @@ class Work < ActiveRecord::Base
   attr_accessor :ambiguous_pseuds
   attr_accessor :new_parent
   attr_accessor :new_tags
+  attr_accessor :tags_to_tag_with
 
   before_save :validate_authors, :set_language
   before_save :set_word_count
   before_save :post_first_chapter
-  after_save :save_creatorships, :save_associated 
-  after_create :tag_after_create
+  after_save :save_creatorships, :save_associated
+  after_create :tag_after_create 
+  before_update :validate_tags
   
   # Associating works with languages.  
   belongs_to :language, :foreign_key => 'language_id', :class_name => '::Globalize::Language'
@@ -344,58 +346,18 @@ class Work < ActiveRecord::Base
     TagCategory.official.each do |c|
       define_method(c.name){tag_string(c)}
       define_method(c.name+'=') do |tag_name| 
-        unless tag_name.empty?
-          if self.new_record?
-            if @tags_to_tag_with
-              @tags_to_tag_with.merge!({c.name.to_sym => tag_name})
-            else
-              @tags_to_tag_with = {c.name.to_sym => tag_name}
-            end
-          else
-            tag_with(c.name.to_sym => tag_name)
-          end
-        end
+        self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({c.name.to_sym => tag_name}) : tag_with(c.name => tag_name)
       end
     end 
   rescue
     define_method('ambiguous'){tag_string('ambiguous')}
     define_method('ambiguous=') do |tag_name| 
-      unless tag_name.empty?
-        if self.new_record?
-          if @tags_to_tag_with
-            @tags_to_tag_with.merge!({:ambiguous => tag_name})
-          else
-            @tags_to_tag_with = {:ambiguous => tag_name}
-          end
-        else
-          tag_with(:ambiguous => tag_name)
-        end      
-      end
-    end
-    
+      self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({:ambiguous => tag_name}) : tag_with(c.name => tag_name)      
+    end    
     define_method('default'){tag_string('default')}
     define_method('default=') do |tag_name| 
-      unless tag_name.empty?
-        if self.new_record?
-          if @tags_to_tag_with
-            @tags_to_tag_with.merge!({:default => tag_name})
-          else
-            @tags_to_tag_with = {:default => tag_name}
-          end
-        else
-          tag_with(:default => tag_name)
-        end
-      end      
-    end
-    
-  end
-
-  def tag_after_create
-    if @tags_to_tag_with
-      @tags_to_tag_with.each do |category, tag|
-        tag_with(category => tag)
-      end
-    end
+      self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({:default => tag_name}) : tag_with(c.name => tag_name)     
+    end    
   end
   
   # Set the value of word_count to reflect the length of the chapter content
@@ -405,17 +367,21 @@ class Work < ActiveRecord::Base
   
   # Check to see that a work is tagged appropriately
   def has_required_tags?
-    my_tag_categories = (@tags_to_tag_with ? @tags_to_tag_with.keys : []) + self.tags.collect(&:tag_category)    
+    my_tag_categories = (self.tags_to_tag_with ? self.tags_to_tag_with.keys : []) + self.tags.collect(&:tag_category)    
     TagCategory.required - my_tag_categories == []
   end
   
-  def validate
-    if self.posted
-      errors.add_to_base("Work must have required tags.".t) unless self.has_required_tags?      
-      self.has_required_tags?
-    else
-      # if it's not posted, it's okay
-      true
+  def validate_tags
+    errors.add_to_base("Work must have required tags.".t) unless self.has_required_tags?      
+    self.has_required_tags? 
+  end
+  
+  def tag_after_create
+    unless self.tags_to_tag_with.blank?
+      self.tags_to_tag_with.each_pair do |category, tag|
+        tag_with(category => tag)
+      end
+      self.tags_to_tag_with = {}
     end
   end
   
