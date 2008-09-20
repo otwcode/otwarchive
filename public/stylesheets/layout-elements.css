@@ -1,5 +1,5 @@
 ul#skiplinks	{ margin-left:-999em; position:absolute; }
-ul.navigation, dl.navigation { background: #fffef9; border-bottom: 1px solid #999; text-align:right;margin: 0 0 0.875em 0;}
+ul.navigation, dl.navigation { background: #fffef9; border-bottom: 1px solid #999; text-align:right;margin: 0 0 0.875em 0; text-transform:capitalize;}
 ul.navigation li, .navigation dd { background: #fffef9; display: inline; padding: 0 0.5625em; border:1px solid #999; border-bottom:0; text-indent:0;}
 .navigation dt { font-weight:600; display:inline; padding:0 0.5625em; }
 .navigation a:active { background:#900; color:#fffef9; }
@@ -34,10 +34,10 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 /* END HEADER*/
 
 /*DASHBOARD SIDEBAR */
-#dashboard-sidebar { line-height: 2em; float: left; width: 10em; margin: 0 1em 3em 1.5em; border: 2px solid;}
+#dashboard-sidebar { line-height:1.75; float: left; width: 10em; margin: 0 1em 3em 1.5em; border: 2px solid;}
 #dashboard-sidebar ul { text-indent:0.5625em; }
-#dashboard-sidebar li { font-weight: 600; font-size: 0.875em; }
-#dashboard-sidebar a { font-weight: normal; line-height: 2; text-decoration: none; display: block;  }
+#dashboard-sidebar li { font-weight: 600;}
+#dashboard-sidebar a { font-weight: normal; text-decoration: none; display: block;}
 #dashboard-sidebar a:hover { background: #900; color: #fffef9; }
 
 #main.sidebar { margin: 0 1em 1em 12em; }
@@ -99,26 +99,20 @@ dl#user-data dt {font-weight: 900; width: 9em; float:left; clear:left; margin:0.
 /* WORKS-INDEX */
 /*story filters rules are in forms.css */
 /*story listing : shows on works, reading history, series, spoofed on bookmarks and users-show*/
-li.story ul { background: #fffef9; position: relative; margin: 0 12.5em 0.5625em auto; border: 1px solid #ddd;}
+
+li.story ul {position: relative; margin: 0 13.5em 0.5625em auto; border-bottom:3px solid #ddd;}
 #user-page li.story ul, #main.series-index  li.story ul, #series-story-list li.story ul{ margin-right: 0; }
 li.story ul ul { margin:0; padding:0; border:0;}
-li.story ul ul li,li.story dd ul, li.story dd li {background: #fffef9; display:inline; margin: 0.375em; border:0;}
-
-li.story-title-line h3 { background:#ddd; font: 400 1.125em/1.5 Fertigo, Cambria, Constantia, Palatino, Georgia, sans-serif; margin:0; padding:.25em .125em .125em .25em; }
-li.story-title-line h3 a:visited {color:#777;}
+li.story ul ul li,li.story dd ul, li.story dd li {display:inline; border:0;}
 li.story-title-line p { padding:0; margin:0; display:inline;}
 li.story-title-line img { float: left; margin:0.125em 0.25em 0 0 }
-li.story-date { background:#777; color:#fffef9; font-size: 0.75em; text-align: right; }
-
-li.story-tags { font-weight: 600; }
-li.story-tags a { font-weight: normal; text-decoration: none; padding:0; border-bottom: 1px dotted}
-li.story-tags dl.story-meta dt, li.story-tags dl.story-meta dd { line-height: 1.5; display: inline; margin:0; padding: 0 0.0125em 0 0; background:transparent !important; }
-li.story-tags dl.story-meta dd ul {background:transparent !important}
-li.story-tags dl.story-meta dd ul li {background:transparent !important}
+li.story-date {display:none;}
+li.story-tags {margin:0;padding:0;}
+li.story-tags a { text-decoration: none; border-bottom: 1px dotted}
+.story dl.story-meta {background:#fffef9 !important; }
+li.story-tags dl.story-meta dt, li.story-tags dl.story-meta dd {font-weight:100; line-height: 1.5; display: inline; margin:0; padding: 0 0.0125em 0 0; }
 #main.series-show ul li ul li ul li dl dd ul li {display:inline;}
-
-li.story-desc { margin: 0.25em 0 0 0; padding: 0 0.5625em; overflow:hidden;}
-li.story-desc ul{ text-align:right; margin:0; padding:0; }
+li.story-desc ul {text-align:right;}
 
 /*series listing */
 #user-series ul	{ text-indent:2em; margin:1.125em auto; padding:0 1em;}

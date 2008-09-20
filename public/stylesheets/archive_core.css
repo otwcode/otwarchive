@@ -29,7 +29,9 @@ a img	{ border: 0; }
 a.tag	{ color: #111; text-decoration:none; padding: 0 0.125em; border-bottom:1px dotted; }
 a.tag:hover	{ background: #900 !important; color: #fffef9 !important; }
 
-body p	{ font-size: 0.875em; line-height: 1.286; margin: 0.643em 0; }
+#main p	{ font-size: 0.875em; line-height: 1.286; margin: 0.643em 0; }
+#main li {font-size: 0.875em; line-height: 1.286; margin: 0.643em 0;}
+#main li li {font-size:1em;}
 
 h1, h2, h3, h4, h5, h6	{ font-family: Fertigo, Cambria, Constantia, Palatino, Georgia, sans-serif; font-weight: 400;}
 h1	{ font-size: 2.25em; line-height: 0.5; margin: 1.125em 0 0.875em; }

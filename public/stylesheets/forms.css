@@ -1,7 +1,7 @@
 /* GLOBAL */
 legend	{ margin-left:-999em; position:absolute; }
 form p.submit { text-align:right; }
-form p { line-height:2; clear:both; cd}
+form p { line-height:2; clear:both;}
 form dl { position:relative; }
 form dt { float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
 form dd { float: left; }
@@ -93,7 +93,7 @@ form.edit_preference ul { margin:0.5625em auto; padding:1.5em 0; }
 form#new_pseud {position:absolute;}
 
 /*WORKS-INDEX -filters*/
-form.story-filters	{ background:#ddd; font-size:0.875em; width:12.25em; float:right; margin-top:-0.0625em; padding:0.75em 0.5625em; border:1px solid #fffef9;}
+form.story-filters	{ background:#ddd; font-size:0.875em; width:12.25em; float:right; margin-top:2.25em; padding:0.75em 0.5625em;}
 .story-filters dt	{ font-weight: 600; text-transform: capitalize; margin:0.5625em auto 0; padding:0; border-bottom:1px solid #fffef9; }
 .story-filters dd {padding:0;}
 .story-filters dt:hover	{ color:#fffef9; background:#777; } 

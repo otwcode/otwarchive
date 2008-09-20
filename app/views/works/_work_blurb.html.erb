@@ -15,7 +15,7 @@
     </li>
     <li class="story-desc">
       <%= sanitize_limit_and_format_for_display work.summary %>
-      <ul>        
+      <ul class="navigation">        
 				<%- if is_author_of?(work) -%>
 				  <li><%= link_to 'Edit'.t, edit_work_path(work) -%></li>
 				<%- end -%>
