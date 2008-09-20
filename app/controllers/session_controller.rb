@@ -69,8 +69,15 @@ class SessionController < ApplicationController
     if logged_in?
       successful_login
     else
-      message = User.find_by_login(login) ? "The password you entered doesn't match our records. Please try again or click the 'forgot password' link below.".t : 
-                                            "We couldn't find that name in our database. Please try again.".t
+      if user = User.find_by_login(login)
+        if user.activated_at 
+          message = "The password you entered doesn't match our records. Please try again or click the 'forgot password' link below.".t
+        else
+          message = "You'll need to activate your account before you can log in. Please check your email or contact an admin.".t
+        end
+      else 
+        message = "We couldn't find that name in our database. Please try again.".t
+      end
       failed_login(message)
     end
   end
