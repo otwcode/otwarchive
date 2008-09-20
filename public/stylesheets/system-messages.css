@@ -19,7 +19,7 @@ The flash divs are intended for use to show error messages
 .notice	{ background:#d1e1ef; border:1px solid #c2d2df;}
 #story-form p.notice { background:#ddd; margin:1.5em 0 -1.5em 0; border:1px double #bbb; }
 
-.warning	{ background:#edefd1; font-weight:900; border:1px solid #dfdfc2;}
+.warning	{ background:#edefd1; border:1px solid #dfdfc2;}
 .story-meta .warning,#story-meta .warning	{ background:transparent !important; border:0 !important;}
 
 .error	{ background:#efd1d1; font-weight:bold; line-height:2; padding:.375em; border:1px solid #900;}

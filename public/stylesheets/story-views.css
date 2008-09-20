@@ -29,7 +29,7 @@ set story styles
 .story-show h4	{ font-variant:small-caps; font-size:1.25em;}
 .story-show h5	{ font-weight:600; font-size: 1em;}
 .story-show h6	{ font-size: 0.875em; border-bottom:1px solid; }
-.story-show h3 a, .story-show h3 a:link, .story-show h3 a:visited {color:#fffef9; border-bottom:0}
+.story-show h3 a, .story-show h3 a:link, .story-show h3 a:visited {color:#fffef9; border-bottom:0} 
 
 /*quotes and stresses*/
 .story-show blockquote	{ font-size:1em; margin:auto auto auto 1.5em; padding:0.75em; border-left:2px solid #999; }
@@ -76,5 +76,7 @@ dl#series-meta	{ position:relative; }
 .works-show #navigation li.go-back	{ display:block; float:left; padding:0 0.25em 0 0; }
 ul.story-list li.story-tags	{ display:inline; }
 .story-show h2, .story-edit-title	{ font-weight:700; font-size:1.5em; text-align:center; }
-.story-show .story-author	{ text-align:center; }
+.story-show .story-author	{ text-align:center;}
+.story-show .story-author a, .story-show .story-author a:link, .story-show .story-author a:visited {color: #333; border-bottom:0} 
+
 
