@@ -49,17 +49,18 @@
 		<%- end -%>
 	<%- else -%>
     <%- unless chapter.summary.blank? -%>
-	<blockquote class="story-summary">
+	  <blockquote class="story-summary">
     	<h3><%=h 'Summary:'.t %></h3>
-		<%=sanitize_and_format_for_display @work.summary -%>
-	</blockquote>
-	<%- end -%>
+		  <%=sanitize_and_format_for_display chapter.summary -%>
+	  </blockquote>
+	  <%- end -%>
+    
     <%- unless chapter.notes.blank? -%>
-	<blockquote class="story-notes">
+	  <blockquote class="story-notes">
 	    <h3><%=h 'Notes:'.t %></h3>
-		<%=sanitize_and_format_for_display @work.notes -%>
-	</blockquote>
-	<%- end -%>
+		  <%=sanitize_and_format_for_display chapter.notes -%>
+	  </blockquote>
+	  <%- end -%>
 	<%- end -%>
 	
   <%=sanitize_and_format_for_display chapter.content %>
