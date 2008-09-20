@@ -1,11 +1,11 @@
 <h1><%=h 'All Users:'.t %></h1>
 
-<ul>
+<% paginated_section @users, {:prev_label => '&laquo; Previous'.t, :next_label => 'Next &raquo;'.t} do %>
+
+ <ul>
   <%- @users.each do |user| -%>
     <%= render :partial => 'user_blurb', :locals => {:user => user} -%>
   <%- end -%>  
 </ul>
 
-<div class="pagination">
-	  <%= will_paginate @users, :prev_label =>  "&laquo; Previous".t,:next_label => "Next &raquo;".t %>
-</div>
+<%- end -%>
