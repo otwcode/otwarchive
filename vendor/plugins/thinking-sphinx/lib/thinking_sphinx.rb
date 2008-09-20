@@ -58,7 +58,7 @@ module ThinkingSphinx
   # Check if delta indexing is enabled.
   # 
   def self.deltas_enabled?
-    @@deltas_enabled  = (ThinkingSphinx::Configuration.environment == 'production') if @@deltas_enabled.nil?
+    @@deltas_enabled  = ArchiveConfig.USE_DELTA_INDEXING if @@deltas_enabled.nil?
     @@deltas_enabled
   end
   

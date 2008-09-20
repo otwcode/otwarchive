@@ -1,30 +1,40 @@
-tagging1: 
-  tag: General Audiences
+work1rating: 
+  tag: General_Audience
   taggable_id: 1
   taggable_type: Work
   
-tagging2:
-  tag: Chooses Not To Warn
+work1warning:
+  tag: Chooses_Not_To_Warn
   taggable_id: 1
   taggable_type: Work
   
-tagging3:
+work1fandom:
   tag: Supernatural
   taggable_id: 1
   taggable_type: Work
   
-tagging4: 
-  tag: General Audiences
+work1genre:
+  tag: Gen
+  taggable_id: 1
+  taggable_type: Work
+  
+work2rating: 
+  tag: General_Audience
   taggable_id: 2
   taggable_type: Work
 
-tagging5:
-  tag: Chooses Not To Warn
+work2warning:
+  tag: Chooses_Not_To_Warn
   taggable_id: 2
   taggable_type: Work
 
-tagging6:
+work2fandom:
   tag: SGA
   taggable_id: 2
   taggable_type: Work
 
+work1genre:
+  tag: Slash
+  taggable_id: 1
+  taggable_type: Work
+  

@@ -52,7 +52,7 @@ class Tag < ActiveRecord::Base
   
   # Gets the work count for this tag and its synonyms
   def visible_work_count(current_user=:false)
-    ids = ([self] + self.synonyms).collect(&:id).join(',')
+    ids = ([self] + self.synonyms).compact.collect(&:id).join(',')
     conditions = "taggings.tag_id IN (#{ids})"
     if current_user.is_a?(User)
       pseud_ids = current_user.pseuds.collect(&:id).join(',')

@@ -33,7 +33,7 @@ class Work < ActiveRecord::Base
 
     # properties
     set_property :delta => true
-    set_property :field_weights => { :tag_name => 20, 
+    set_property :field_weights => { :tag_name => 10, 
                                      :title => 10, :pseud_name => 10, 
                                      :summary => 5, :notes => 5, 
                                      :chapter_content => 1} 
@@ -410,10 +410,10 @@ class Work < ActiveRecord::Base
         # TODO - make maximum number to find configurable
         if options["sort_column"].blank?
           # will get best matches at the top
-          all_works = Work.search(options["query"], :per_page => 1000).map(&:visible).compact
+          all_works = Work.search(options["query"], :per_page => 1000).compact.map(&:visible).compact
         else 
           # FIXME - search with order gives empty set
-          all_works = Work.search(options["query"], :per_page => 1000).map(&:visible).compact
+          all_works = Work.search(options["query"], :per_page => 1000).compact.map(&:visible).compact
           error << "Sorting searches is not currently working".t         
           # if there is a sort column, use :order
 #          direction = options["sort_direction"] == "DESC" ? :desc : :asc

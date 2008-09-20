@@ -1,11 +1,11 @@
-General Audience:
+General_Audience:
   tag_category: Rating
   name: General Audience
   canonical: true
   banned: false
   adult: false
 
-Teen and Up:
+Teen_and_Up:
   tag_category: Rating
   name: Teen and Up
   canonical: true
@@ -26,7 +26,7 @@ Mature:
   banned: false
   adult: true
 
-Not Rated:
+Not_Rated:
   tag_category: Rating
   name: Not Rated
   canonical: true
@@ -61,35 +61,35 @@ Other:
   banned: false
   adult: false
 	
-Chooses Not To Warn:
+Chooses_Not_To_Warn:
   tag_category: Warning
   name: chooses not to warn
   canonical: true
   banned: false
   adult: false
 	
-Chooses Not To Warn For Some Content:
+Chooses_Not_To_Warn_For_Some_Content:
   tag_category: Warning
   name: chooses not to warn for some content
   canonical: true
   banned: false
   adult: false
 	
-No Warnings Apply:
+No_Warnings_Apply:
   tag_category: Warning
   name: no warnings apply
   canonical: true
   banned: false
   adult: false
 	
-Extreme Violence:
+Extreme_Violence:
   tag_category: Warning
   name: extreme violence
   canonical: true
   banned: false
   adult: false
 	
-Major Character Death:
+Major_Character_Death:
   tag_category: Warning
   name: major character death
   canonical: true
@@ -110,7 +110,7 @@ Underage:
   banned: false
   adult: false
 	
-TV Shows:
+TV_Shows:
   tag_category: Media
   name: TV Shows
   canonical: true
@@ -152,14 +152,14 @@ Music & Bands:
   banned: false
   adult: false
 	
-Real People & Celebrities:
+Real_People_Celebrities:
   tag_category: Media
   name: Real People & Celebrities
   canonical: true
   banned: false
   adult: false
 	
-Other Media:
+Other_Media:
   tag_category: Media
   name: Other Media
   canonical: true
@@ -171,7 +171,7 @@ Supernatural:
   name: Supernatural
   canonical: true
 	
-Stargate Atlantis:
+Stargate_Atlantis:
   tag_category: Fandom
   name: Stargate Atlantis
   canonical: true
@@ -181,17 +181,17 @@ SGA:
   name: SGA
   canonical: false
 	
-Harry Potter:
+Harry_Potter:
   tag_category: Fandom
   name: Harry Potter
   canonical: true
 	
-Iron Man:
+Iron_Man:
   tag_category: Fandom
   name: Iron Man (2008)
   canonical: true
 
-Doctor Who:
+Doctor_Who:
   tag_category: Fandom
   name: Doctor Who
   canonical: true
@@ -201,32 +201,32 @@ Torchwood:
   name: Torchwood
   canonical: true
 	
-American Idol:
+American_Idol:
   tag_category: Fandom
   name: American Idol
   canonical: true
 	
-Stargate SG-1:
+Stargate_SG1:
   tag_category: Fandom
   name: Stargate SG-1
   canonical: true
 	
-Sam Winchester:
+Sam_Winchester:
   tag_category: Character
   name: Sam Winchester
   canonical: true
 	
-Dean Winchester:
+Dean_Winchester:
   tag_category: Character
   name: Dean Winchester
   canonical: true
 	
-Dean Winchester/Sam Winchester:
+Dean_Winchester_Sam_Winchester:
   tag_category: Pairing
   name: Dean Winchester/Sam Winchester
   canonical: true
 	
-Sam Carter:
+Sam_Carter:
   tag_category: Character
   name: Sam Carter
   canonical: true

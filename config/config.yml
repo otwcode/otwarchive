@@ -98,3 +98,6 @@ HELP_DIRECTORY: '/help'
 
 # only use if you are running your app completely in a subfolder of your domain
 #PRODUCTION_URL_ROOT: "/archive"
+
+# turn delta indexes on and off
+USE_DELTA_INDEXING: false

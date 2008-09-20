@@ -1,89 +1,89 @@
-Supernatural belongs to TV Shows:
+Supernatural_belongs_to_TV_Shows:
   tag: Supernatural
-  related_tag: TV Shows
+  related_tag: TV_Shows
   tag_relationship_kind: Child
 
-Stargate Atlantis belongs to TV Shows:
-  tag: Stargate Atlantis
-  related_tag: TV Shows
+Stargate_Atlantis_belongs_to_TV_Shows:
+  tag: Stargate_Atlantis
+  related_tag: TV_Shows
   tag_relationship_kind: Child
 	
-Harry Potter belongs to Books:
-  tag: Harry Potter
+Harry_Potter_belongs_to_Books:
+  tag: Harry_Potter
   related_tag: Books
   tag_relationship_kind: Child
 	
-Iron Man belongs to Movies:
-  tag: Iron Man
+Iron_Man_belongs_to_Movies:
+  tag: Iron_Man
   related_tag: Movies
   tag_relationship_kind: Child
 
-Doctor Who belongs to TV Shows:
-  tag: Doctor Who
+Doctor_Who_belongs_to_TV_Shows:
+  tag: Doctor_Who
   related_tag: Movies
   tag_relationship_kind: Child
 	
-Torchwood belongs to TV Shows:
+Torchwood_belongs_to_TV_Shows:
   tag: Torchwood
-  related_tag: TV Shows
+  related_tag: TV_Shows
   tag_relationship_kind: Child
 	
-American Idol belongs to Music & Bands:
-  tag: American Idol
-  related_tag: Music & Bands
+American_Idol_belongs_to_Music_Bands:
+  tag: American_Idol
+  related_tag: Music_Bands
   tag_relationship_kind: Child
 	
-Stargate SG-1 belongs to TV Shows:
-  tag: Stargate SG-1
-  related_tag: TV Shows
+Stargate_SG1_belongs_to_TV_Shows:
+  tag: Stargate_SG1
+  related_tag: TV_Shows
   tag_relationship_kind: Child
 
-Sam Carter belongs to SG-1:
-  tag: Sam Carter
-  related_tag: Stargate SG-1
+Sam_Carter_belongs_to_SG1:
+  tag: Sam_Carter
+  related_tag: Stargate_SG1
   tag_relationship_kind: Child
 	
-Sam Winchester belongs to Supernatural:
-  tag: Sam Winchester
+Sam_Winchester_belongs_to_Supernatural:
+  tag: Sam_Winchester
   related_tag: Supernatural
   tag_relationship_kind: Child
 	
-Dean Winchester belongs to Supernatural:
-  tag: Dean Winchester
+Dean_Winchester_belongs_to_Supernatural:
+  tag: Dean_Winchester
   related_tag: Supernatural
   tag_relationship_kind: Child
 	
-Dean Winchester/Sam Winchester belongs to Sam Winchester:
-  tag: Dean Winchester/Sam Winchester
-  related_tag: Sam Winchester
+Dean_Winchester_Sam_Winchester_belongs_to_Sam_Winchester:
+  tag: Dean_Winchester_Sam_Winchester
+  related_tag: Sam_Winchester
   tag_relationship_kind: Child
 	
-Dean Winchester/Sam Winchester belongs to Dean Winchester:
-  tag: Dean Winchester/Sam Winchester
-  related_tag: Dean Winchester
+Dean_Winchester_Sam_Winchester_belongs_to_Dean_Winchester:
+  tag: Dean_Winchester_Sam_Winchester
+  related_tag: Dean_Winchester
   tag_relationship_kind: Child
 	
-Torchwood shares a universe with Doctor Who:
+Torchwood_shares_a_universe_with_Doctor_Who:
   tag: Torchwood
-  related_tag: Doctor Who
-  tag_relationship_kind: Shared Universe
+  related_tag: Doctor_Who
+  tag_relationship_kind: Shared_Universe
 
-Stargate Atlantis shares a universe with Stargate SG-1:
-  tag: Stargate Atlantis
-  related_tag: Stargate SG-1
-  tag_relationship_kind: Shared Universe
+Stargate_Atlantis_shares_a_universe_with_Stargate_SG1:
+  tag: Stargate_Atlantis
+  related_tag: Stargate_SG1
+  tag_relationship_kind: Shared_Universe
 
-Sam might refer to Sam Winchester:
+Sam_might_refer_to_Sam_Winchester:
   tag: Sam
-  related_tag: Sam Winchester
+  related_tag: Sam_Winchester
   tag_relationship_kind: Disambiguation
 
-Sam might refer to Sam Carter:
+Sam_might_refer_to_Sam_Carter:
   tag: Sam
-  related_tag: Sam Carter
+  related_tag: Sam_Carter
   tag_relationship_kind: Disambiguation
 	
-SGA is the same as Stargate Atlantis:
+SGA_is_the_same_as_Stargate_Atlantis:
   tag: SGA
-  related_tag: Stargate Atlantis
+  related_tag: Stargate_Atlantis
   tag_relationship_kind: Synonym
