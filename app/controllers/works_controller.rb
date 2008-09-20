@@ -329,7 +329,7 @@ class WorksController < ApplicationController
                           You can safely ignore this if you are just testing other things.)"
       end
     end
-    redirect_to(user_works_url)
+    redirect_to(user_works_url(current_user))
   end
 
   # POST /works/upload_work

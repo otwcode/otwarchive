@@ -63,8 +63,8 @@ class TagsController < ApplicationController
   # POST /tags.xml
   def create
     @tag = Tag.new(params[:tag])
-    if Tag.find_by_name(@tag.name)
-      flash[:notice] = "A tag by that name already exists.".t
+    if Tag.find(:first, :conditions => {:name => @tag.name, :tag_category_id => @tag.tag_category_id})
+      flash[:notice] = "A tag by that name already exists in that category.".t
       redirect_to tag_categories_path
     else
       respond_to do |format|

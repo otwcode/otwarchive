@@ -98,11 +98,6 @@ class TaggingTest < ActiveSupport::TestCase
   def test_tag_with_fails
     # category must exist
     work = create_work
-    assert !work.tag_with(:not_at_category => random_phrase)
-    # tag must not have already been created in a different category
-    category = create_tag_category
-    tag = create_tag(:tag_category => category)
-    category2 = create_tag_category
-    assert !work.tag_with(category2.name.to_sym => tag.name)
+    assert !work.tag_with(:not_a_category => random_phrase)
   end
 end

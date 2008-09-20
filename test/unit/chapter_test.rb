@@ -10,7 +10,7 @@ class ChapterTest < ActiveSupport::TestCase
     should_belong_to :work
     should_require_attributes :content
     should_ensure_length_in_range :content, (1..500000), :short_message => "can't be blank"
-    should_ensure_length_in_range :title, (ArchiveConfig.TITLE_MIN..ArchiveConfig.TITLE_MAX), :short_message => "must be at least 3 letters long."
+    should_ensure_length_in_range :title, (0..ArchiveConfig.TITLE_MAX)
     should_ensure_length_in_range :summary, (0..ArchiveConfig.SUMMARY_MAX)
     should_ensure_length_in_range :notes, (0..ArchiveConfig.NOTES_MAX)
 
