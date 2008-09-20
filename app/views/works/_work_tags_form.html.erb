@@ -1,6 +1,7 @@
 <!-- Autocomplete fields need to be refactored and moved to a helper, but I'd like to make them completely functional first. -->
 <fieldset class="story-meta">
   <legend><%= "Story Tags (comma separated)".t -%><%= link_to_help "tagging-help" -%></legend>
+  <%= link_to_help "tagging-help" -%>
   <dl class="story-meta">
     <% @tag_categories.each do |category| %>
       <dt class="<%= category.display_name.downcase + (category.required ? ' required' : '') -%>">
