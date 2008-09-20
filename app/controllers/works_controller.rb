@@ -369,8 +369,7 @@ class WorksController < ApplicationController
       render :action => :new
     end
   end
-    
-  
+      
   protected
 
   # create a reading object when showing a work, but only if the user has reading 

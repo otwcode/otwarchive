@@ -3,7 +3,7 @@ module CanCreateBookmarks
 	# Adds the "has_many" line to the appropriate model
   def self.included(bookmarkable)
     bookmarkable.class_eval do      
-      has_many :bookmarks
+      has_many :bookmarks, :dependent => :destroy
     end
   end
 	

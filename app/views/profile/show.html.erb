@@ -37,6 +37,7 @@
   <ul class="navigation">
     <li><%= link_to "Edit Profile".t, edit_user_path(@user) %></li>
     <li><%= link_to "Set My Preferences".t, user_preferences_path(@user) %></li>
+		<li><%= link_to "Delete Account".t, @user, :confirm => h('This will permanently delete your account and cannot be undone. Are you sure?').t, :method => :delete %></li>
   </ul>
   <%- end -%>
 </div>

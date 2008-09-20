@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
   before_create :check_account_creation_status 
   before_create :create_default_associateds
   
-  has_many :readings 
+  has_many :readings, :dependent => :destroy 
   can_create_bookmarks
   
   has_many :comments, :through => :pseuds
@@ -180,6 +180,39 @@ class User < ActiveRecord::Base
     end
     all_tags = tags_with_count.to_a.sort {|x,y| y.last <=> x.last }
     popular_tags = options[:limit].blank? ? all_tags.collect {|pair| pair.first} : all_tags.collect {|pair| pair.first}[0..(options[:limit]-1)]
+  end
+  
+  # Returns true if user is the sole author of a work
+  # Should also be true if the user has used more than one of their pseuds on a work
+  def is_sole_author_of?(item)
+   other_pseuds = item.pseuds.find(:all) - self.pseuds
+   if self.is_author_of?(item) && other_pseuds.blank?
+     true
+   else
+     false
+   end
+ end
+ 
+  # Returns array of works where the user is the sole author   
+  def sole_authored_works
+    @sole_authored_works = []
+    works.find(:all).each do |w|
+      if self.is_sole_author_of?(w)
+        @sole_authored_works << w
+      end
+    end
+    return @sole_authored_works  
+  end
+  
+  # Returns array of the user's co-authored works   
+  def coauthored_works
+    @coauthored_works = []
+    self.works.find(:all).each do |w|
+      unless self.is_sole_author_of?(w)
+        @coauthored_works << w 
+      end
+    end
+    return @coauthored_works  
   end
   
   private

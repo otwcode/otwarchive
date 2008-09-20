@@ -44,6 +44,9 @@ ActionController::Routing::Routes.draw do |map|
     user.resources :comments, :member => { :approve => :put, :reject => :put } 
   end
   
+  map.delete_confirmation '/delete_confirmation', :controller => 'users', :action => 'delete_confirmation',
+                :path_prefix => ':locale'
+  
   map.resources :works, 
                 :collection => {:upload_work => :post},
                 :member => { :preview => :get, :post => :post }, 

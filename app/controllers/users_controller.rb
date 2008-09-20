@@ -120,11 +120,82 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.xml
   def destroy
+    @hide_dashboard = true
     @user = User.find_by_login(params[:id])
-    @user.destroy
-    redirect_to(users_url) 
+    if @user.works.blank?
+      @user.destroy
+      flash[:notice] = 'You have successfully deleted your account.'.t
+      redirect_to(delete_confirmation_path)
+    elsif params[:coauthor].blank? && params[:sole_author].blank?
+      @sole_authored_works = @user.sole_authored_works
+      @coauthored_works = @user.coauthored_works
+      render :partial => 'delete_preview', :layout => 'application'
+    elsif params[:coauthor] || params[:sole_author]
+      @sole_authored_works = @user.sole_authored_works
+      @coauthored_works = @user.coauthored_works
+      # Orphans co-authored works, keeps the user's pseud on the orphan account
+      if params[:coauthor] == 'keep_pseud'
+        pseuds = @user.pseuds
+        works = @coauthored_works
+        use_default = params[:use_default] == "true"
+        Creatorship.orphan(pseuds, works, use_default)
+      end
+      # Orphans co-authored works, changes pseud to the default orphan pseud
+      if params[:coauthor] == 'orphan_pseud'
+        pseuds = @user.pseuds
+        works = @coauthored_works
+        Creatorship.orphan(pseuds, works)
+      end
+      # Removes user as an author from co-authored works
+      if params[:coauthor] == 'remove'
+        @coauthored_works.each do |w|
+          pseuds_with_author_removed = w.pseuds - @user.pseuds
+          w.pseuds = pseuds_with_author_removed
+          w.save
+          w.chapters.each do |c| 
+            c.pseuds = c.pseuds - @user.pseuds
+            if c.pseuds.empty?
+              c.pseuds = w.pseuds
+            end
+            c.save
+          end
+        end 
+      end
+      # Orphans works where user is sole author, keeps their pseud on the orphan account
+      if params[:sole_author] == 'keep_pseud'
+        pseuds = @user.pseuds
+        works = @sole_authored_works
+        use_default = params[:use_default] == "true"        
+        Creatorship.orphan(pseuds, works, use_default)
+      end
+      # Orphans works where user is sole author, uses the default orphan pseud
+      if params[:sole_author] == 'orphan_pseud'
+        pseuds = @user.pseuds
+        works = @sole_authored_works
+        Creatorship.orphan(pseuds, works)        
+      end
+      # Deletes works where user is sole author
+      if params[:sole_author] == 'delete'
+        @sole_authored_works.each do |s|
+          s.destroy
+        end
+      end
+      @works = @user.works.find(:all)
+      if @works.blank?
+        @user.destroy
+        flash[:notice] = 'You have successfully deleted your account.'.t
+        redirect_to(delete_confirmation_path)
+      else
+        flash[:error] = "Sorry, something went wrong! Please try again.".t
+        redirect_to(@user)      
+      end
+    end
   end
   
+  def delete_confirmation
+  end
+  
+ 
   protected
     def successful_update
       @user.update_attributes!(params[:user]) 
@@ -145,7 +216,8 @@ class UsersController < ApplicationController
         else
           flash[:error] = result.message
           raise
-        end
+        end 
       end
     end
+     
 end

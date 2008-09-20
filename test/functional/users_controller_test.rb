@@ -88,7 +88,7 @@ class UsersControllerTest < ActionController::TestCase
       should "destroy the record" do
         assert_raises(ActiveRecord::RecordNotFound) { @user.reload }
       end
-      should_redirect_to 'users_url'
+      should_redirect_to 'delete_confirmation_path'
     end
     context "on DELETE of someone else" do
       setup do
