@@ -14,26 +14,27 @@
   
   <div id="series-and-view-data">
     <%- unless @work.series.blank? -%>
-      <h3 id="work-series-data">
-      <%= show_series_data(@work) %>
-      </h3>
+      <ul id="work-series-data">
+        <!-- found in series helper -->
+        <%= show_series_data(@work) %>
+      </ul>
     <%- end -%> 
     
-      <%- if @work.number_of_posted_chapters > 1 -%>
-          <%- if @chapters.length == 1 -%> 
-<!-- we're reading chapter-by-chapter -->
+    <%- if @work.number_of_posted_chapters > 1 -%>
+      <%- if @chapters.length == 1 -%> 
+      <!-- we're reading chapter-by-chapter -->
 			<ul class="navigation">
-			<li><%= link_to "View entire work".t, @work -%></li>
-			<li><%= next_and_previous_links(@work, @chapter) -%></li>
+			  <li><%= link_to "View entire work".t, @work -%></li>
+			  <li><%= next_and_previous_links(@work, @chapter) -%></li>
 			</ul>
-          <%- else -%>
-		    <ul clas="navigation">
-		      <li><%= link_to "View chapter by chapter".t, 
-                    url_for({:controller => :chapters, :action => :show, :work_id => @work, :id => @chapters.first}) -%>
-			</li>
+      <%- else -%>
+		  <ul clas="navigation">
+		    <li><%= link_to "View chapter by chapter".t, 
+                 url_for({:controller => :chapters, :action => :show, :work_id => @work, :id => @chapters.first}) -%>
+			  </li>
 			</ul>
-          <%- end -%>
       <%- end -%>
+    <%- end -%>
   </div>
 
   <div id="story-preface">

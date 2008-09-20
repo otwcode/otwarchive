@@ -14,11 +14,11 @@ class HomeController < ApplicationController
   def index
     @user_count = User.count(:all)
     @random_user = User.find :first, :offset => rand(@user_count)
-    @work_count = Work.count(:all)
-    @works_today = Work.count(:all, :conditions => (['created_at > ?', 1.day.ago]))
+    @work_count = Work.posted.count(:all)
+    @works_today = Work.posted.count(:all, :conditions => (['created_at > ?', 1.day.ago]))
     fandom_category = TagCategory.find_or_create_by_name("Fandom")
     @fandom_count = fandom_category.tags.count(:all, :conditions => {:canonical => true})
-    @latest_work = Work.find(:first, :conditions => {:restricted => false}, :order => "updated_at DESC")
+    @latest_work = Work.posted.find(:first, :conditions => {:restricted => false}, :order => "updated_at DESC")
     @latest_fandom = fandom_category.tags.find(:first, :conditions => {:name => @latest_work.Fandom}) if @latest_work
     render :action => "index", :layout => "home"
   end

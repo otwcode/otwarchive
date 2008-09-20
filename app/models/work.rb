@@ -480,7 +480,7 @@ class Work < ActiveRecord::Base
         
     filters.each_key do |tag_category|
       # limit the filter tags to 10 per category
-      filters[tag_category] = filters[tag_category].sort {|a,b| a.taggings_count <=> b.taggings_count}[0..10].sort
+      filters[tag_category] = filters[tag_category].sort {|a,b| a.taggings_count <=> b.taggings_count}[0..9].sort
       # remove filters that only have one tag
       filters.delete(tag_category) if filters[tag_category].size == 1
     end
