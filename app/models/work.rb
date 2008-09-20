@@ -34,7 +34,7 @@ class Work < ActiveRecord::Base
     # properties
     set_property :delta => true
     set_property :field_weights => { :tag_name => 20, 
-                                     :title => 10, :psued_name => 10, 
+                                     :title => 10, :pseud_name => 10, 
                                      :summary => 5, :notes => 5, 
                                      :chapter_content => 1} 
   end
@@ -466,7 +466,7 @@ class Work < ActiveRecord::Base
     # clean up just in case
     all_works = all_works.flatten.uniq.compact
 
-    # filter on psueds - only keep works by the selected pseuds
+    # filter on pseuds - only keep works by the selected pseuds
     unless options["pseuds"].blank?
       works_by_pseuds = []
       options["pseuds"].each do |pseud_name|
