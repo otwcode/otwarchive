@@ -77,17 +77,12 @@ module TaggingExtensions
         new_tags = tag_names.collect do |tag_name|
           tag_name.gsub!(/^\s*/, "")
           tag_name.gsub!(/\s*$/, "")
-          tag = Tag.find_or_create_by_name(tag_name)
-          if tag.tag_category == nil
-            tag.tag_category = category
+          tag = Tag.find(:first, :conditions => {:name => tag_name, :tag_category_id => category.id}) || Tag.new(:name => tag_name, :tag_category => category)
+          if tag.new_record?
             unless tag.save 
               tag.errors.full_messages.each { |err| self.errors.add_to_base(err)}
               raise
             end
-          elsif tag.tag_category == TagCategory.ambiguous
-            #TODO pop up a warning - add a special tag to the array?
-          elsif tag.tag_category != category
-             return false  # can't reassign a tag from within tag_with
           end
           tag
         end

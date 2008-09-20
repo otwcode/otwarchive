@@ -11,7 +11,7 @@ class Tag < ActiveRecord::Base
   include TaggingExtensions
 
   validates_presence_of :name
-  validates_uniqueness_of :name
+  validates_uniqueness_of :name, :scope => :tag_category_id
   validates_length_of :name, :maximum => ArchiveConfig.TAG_MAX, :message => "Your tag has exceeded the character limit. Try using less than 40 characters or using commas to separate your tags.".t
   validates_format_of :name, 
                       :with => /\A[-a-zA-Z0-9 \/?.!''"":;\|\]\[}{=~!@#\$%^&()_+]+\z/, 

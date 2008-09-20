@@ -9,12 +9,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080917165743) do
+ActiveRecord::Schema.define(:version => 20080920020544) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
-    t.string   "url",        :default => "", :null => false
-    t.text     "comment",                    :null => false
+    t.string   "url",        :null => false
+    t.text     "comment",    :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(:version => 20080917165743) do
 
   create_table "bookmarks", :force => true do |t|
     t.datetime "created_at",                                         :null => false
-    t.string   "bookmarkable_type", :limit => 15, :default => "",    :null => false
+    t.string   "bookmarkable_type", :limit => 15,                    :null => false
     t.integer  "bookmarkable_id",   :limit => 11,                    :null => false
     t.integer  "user_id",           :limit => 11,                    :null => false
     t.text     "notes"
@@ -70,9 +70,9 @@ ActiveRecord::Schema.define(:version => 20080917165743) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "thread",           :limit => 11
+    t.string   "user_agent"
     t.boolean  "approved"
     t.boolean  "hidden_by_admin"
-    t.string   "user_agent"
   end
 
   create_table "communities", :force => true do |t|
@@ -94,12 +94,12 @@ ActiveRecord::Schema.define(:version => 20080917165743) do
   add_index "creatorships", ["creation_id", "creation_type", "pseud_id"], :name => "creation_id_creation_type_pseud_id", :unique => true
 
   create_table "external_works", :force => true do |t|
-    t.string   "url",             :default => "", :null => false
-    t.string   "author",          :default => "", :null => false
+    t.string   "url",             :null => false
+    t.string   "author",          :null => false
     t.boolean  "dead"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title",           :default => "", :null => false
+    t.string   "title",           :null => false
     t.text     "summary"
     t.boolean  "hidden_by_admin"
   end
@@ -179,9 +179,9 @@ ActiveRecord::Schema.define(:version => 20080917165743) do
   end
 
   create_table "open_id_authentication_nonces", :force => true do |t|
-    t.integer "timestamp",  :limit => 11,                 :null => false
+    t.integer "timestamp",  :limit => 11, :null => false
     t.string  "server_url"
-    t.string  "salt",                     :default => "", :null => false
+    t.string  "salt",                     :null => false
   end
 
   create_table "preferences", :force => true do |t|
@@ -210,7 +210,7 @@ ActiveRecord::Schema.define(:version => 20080917165743) do
 
   create_table "pseuds", :force => true do |t|
     t.integer  "user_id",     :limit => 11
-    t.string   "name",                      :default => "", :null => false
+    t.string   "name",                      :null => false
     t.text     "description"
     t.boolean  "is_default"
     t.datetime "created_at"
@@ -261,14 +261,14 @@ ActiveRecord::Schema.define(:version => 20080917165743) do
   create_table "series", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title",           :default => "", :null => false
+    t.string   "title",           :null => false
     t.text     "summary"
     t.text     "notes"
     t.boolean  "hidden_by_admin"
   end
 
   create_table "tag_categories", :force => true do |t|
-    t.string   "name",         :default => "", :null => false
+    t.string   "name",         :null => false
     t.boolean  "required"
     t.boolean  "official"
     t.boolean  "exclusive"
@@ -280,12 +280,12 @@ ActiveRecord::Schema.define(:version => 20080917165743) do
   add_index "tag_categories", ["name"], :name => "index_tag_categories_on_name", :unique => true
 
   create_table "tag_relationship_kinds", :force => true do |t|
-    t.string   "name",                      :default => "", :null => false
-    t.string   "verb_phrase",               :default => "", :null => false
+    t.string   "name",                      :null => false
+    t.string   "verb_phrase",               :null => false
     t.boolean  "reciprocal"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "distance",    :limit => 11,                 :null => false
+    t.integer  "distance",    :limit => 11, :null => false
   end
 
   create_table "tag_relationships", :force => true do |t|
@@ -295,9 +295,9 @@ ActiveRecord::Schema.define(:version => 20080917165743) do
   end
 
   create_table "taggings", :force => true do |t|
-    t.integer  "tag_id",        :limit => 11,                 :null => false
-    t.integer  "taggable_id",   :limit => 11,                 :null => false
-    t.string   "taggable_type",               :default => "", :null => false
+    t.integer  "tag_id",        :limit => 11, :null => false
+    t.integer  "taggable_id",   :limit => 11, :null => false
+    t.string   "taggable_type",               :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -305,7 +305,7 @@ ActiveRecord::Schema.define(:version => 20080917165743) do
   add_index "taggings", ["tag_id", "taggable_id", "taggable_type"], :name => "index_taggings_on_tag_id_and_taggable_id_and_taggable_type", :unique => true
 
   create_table "tags", :force => true do |t|
-    t.string   "name",                          :default => "",    :null => false
+    t.string   "name",                                             :null => false
     t.boolean  "canonical"
     t.boolean  "banned"
     t.integer  "tag_category_id", :limit => 11
@@ -315,7 +315,7 @@ ActiveRecord::Schema.define(:version => 20080917165743) do
     t.boolean  "adult",                         :default => false
   end
 
-  add_index "tags", ["name"], :name => "index_tags_on_name", :unique => true
+  add_index "tags", ["name", "tag_category_id"], :name => "index_tags_on_name_and_category", :unique => true
 
   create_table "users", :force => true do |t|
     t.datetime "created_at"
@@ -343,7 +343,7 @@ ActiveRecord::Schema.define(:version => 20080917165743) do
     t.boolean  "posted"
     t.integer  "language_id",                 :limit => 11
     t.boolean  "restricted",                                :default => false
-    t.string   "title",                                     :default => "",    :null => false
+    t.string   "title",                                                        :null => false
     t.text     "summary"
     t.text     "notes"
     t.integer  "word_count",                  :limit => 11
