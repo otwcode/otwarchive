@@ -26,6 +26,13 @@ class UsersController < ApplicationController
   # GET /users/1.xml
   def show
     @user = User.find_by_login(params[:id])
+    if params[:open_id_complete] then
+      begin
+        open_id_authentication(params[:open_id_complete])
+      rescue
+        render :action => "edit"
+      end
+    end
     @works = @user.works.visible(:limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'works.updated_at DESC')
     @series = @user.series.find(:all, :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'series.updated_at DESC')
     @bookmarks = @user.bookmarks.visible(:limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'bookmarks.updated_at DESC')  
@@ -50,12 +57,13 @@ class UsersController < ApplicationController
     if params["cancel-create-account"] == "Cancel"
       redirect_to '/'
     else
-      @user = User.new(params[:user])   
-      if @user.save
+      @user = User.new(params[:user]) 
+      begin @user.save
         flash[:notice] = 'during testing you can activate via <a href=' + activate_path(@user.activation_code) + '>your activation url</a>.' if ENV['RAILS_ENV'] == 'development'
   
         render :partial => "confirmation", :layout => "application"
-      else
+      rescue
+        flash[:error] = "Duplicate OpenID URL.".t
         render :action => "new"
       end
     end
@@ -100,14 +108,7 @@ class UsersController < ApplicationController
         unsuccessful_update
       end
       if params[:user][:identity_url] != @user.identity_url && !params[:user][:identity_url].blank?
-        authenticate_with_open_id(params[:user][:identity_url]) do |result, identity_url|
-          if result.successful?
-            successful_update
-          else
-            flash[:error] = result.message
-            unsuccessful_update
-          end
-        end
+        open_id_authentication(params[:user][:identity_url])
       else
         successful_update
       end      
@@ -135,4 +136,16 @@ class UsersController < ApplicationController
        raise
     end
       
+    def open_id_authentication(openid_url)
+      authenticate_with_open_id(openid_url) do |result, identity_url, registration|
+        if result.successful?
+          @user.update_attribute(:identity_url, identity_url) 
+          flash[:notice] = 'Your profile has been successfully updated.'.t
+          redirect_to(user_profile_path(@user)) 
+        else
+          flash[:error] = result.message
+          raise
+        end
+      end
+    end
 end

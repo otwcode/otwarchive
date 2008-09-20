@@ -490,7 +490,7 @@ class Work < ActiveRecord::Base
 
   # sort works by title
   def <=>(another_work)
-    title.strip.downcase <=> another_work.strip.squish.downcase
+    title.strip.downcase <=> another_work.strip.downcase
   end
     
 end

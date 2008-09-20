@@ -56,7 +56,7 @@ class SessionController < ApplicationController
           self.current_user = @user
           successful_login
         else
-          failed_login
+          failed_login "We couldn't find that url in our database. Please try again.".t
         end
       else
         failed_login result.message
