@@ -8,7 +8,9 @@ class ApplicationController < ActionController::Base
 
   include SanitizeParams
   before_filter :sanitize_params
-  
+
+  # store previous page in session to make redirecting back possible
+  before_filter :store_location
 
   # Store the current user as a class variable in the User class,
   # so other models can access it with "User.current_user"

@@ -3,6 +3,7 @@ class SessionController < ApplicationController
   
   # Prevents multiple logins for people with both user and admin accounts
   before_filter :admin_logout_required
+  skip_before_filter :store_location
   
   def new
     if logged_in?
