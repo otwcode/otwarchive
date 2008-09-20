@@ -139,15 +139,13 @@ class UsersController < ApplicationController
         works = @coauthored_works
         use_default = params[:use_default] == "true"
         Creatorship.orphan(pseuds, works, use_default)
-      end
       # Orphans co-authored works, changes pseud to the default orphan pseud
-      if params[:coauthor] == 'orphan_pseud'
+      elsif params[:coauthor] == 'orphan_pseud'
         pseuds = @user.pseuds
         works = @coauthored_works
         Creatorship.orphan(pseuds, works)
-      end
       # Removes user as an author from co-authored works
-      if params[:coauthor] == 'remove'
+      elsif params[:coauthor] == 'remove'
         @coauthored_works.each do |w|
           pseuds_with_author_removed = w.pseuds - @user.pseuds
           w.pseuds = pseuds_with_author_removed
@@ -159,23 +157,21 @@ class UsersController < ApplicationController
             end
             c.save
           end
-        end 
-      end
+        end
+      end  
       # Orphans works where user is sole author, keeps their pseud on the orphan account
       if params[:sole_author] == 'keep_pseud'
         pseuds = @user.pseuds
         works = @sole_authored_works
         use_default = params[:use_default] == "true"        
         Creatorship.orphan(pseuds, works, use_default)
-      end
       # Orphans works where user is sole author, uses the default orphan pseud
-      if params[:sole_author] == 'orphan_pseud'
+      elsif params[:sole_author] == 'orphan_pseud'
         pseuds = @user.pseuds
         works = @sole_authored_works
         Creatorship.orphan(pseuds, works)        
-      end
       # Deletes works where user is sole author
-      if params[:sole_author] == 'delete'
+      elsif params[:sole_author] == 'delete'
         @sole_authored_works.each do |s|
           s.destroy
         end
