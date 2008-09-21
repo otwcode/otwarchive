@@ -4,7 +4,12 @@ class FeedbacksController < ApplicationController
   # GET /feedbacks/new.xml
   def new
     @feedback = Feedback.new
-    
+     unless User.current_user == :false
+      @feedback.email = User.current_user.email
+    else
+      @feedback.email = ""
+    end
+	
     respond_to do |format|
       format.html # new.html.erb
     end
