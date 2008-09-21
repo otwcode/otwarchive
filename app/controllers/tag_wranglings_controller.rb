@@ -17,7 +17,7 @@ class TagWranglingsController < ApplicationController
       end
       @potential_tags = @category1.tags.valid.find(:all, :order => :name) - currently_tagged
       @potential_related_tags = @category2.tags.valid.find(:all, :order => :name)
-      @tag_relationship_kind = TagRelationshipKind.find_by_name('child')
+      @tag_relationship_kind = TagRelationshipKind.child
     else
       @current_tag_relationships = TagRelationship.all
       @tag_relationship = TagRelationship.new
