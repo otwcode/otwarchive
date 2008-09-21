@@ -1,4 +1,7 @@
-<h2><%= @tag.name %></h2>
+<h2><%= @tag.name %></h2> 
+<%- if current_user.is_a?(User) && current_user.is_tag_wrangler? -%>
+  <span><%= link_to 'edit'.t, edit_tag_path(@tag) %></span>
+<%- end -%>
 
 <% unless @works.size == 0 %>
   <h3><%=h 'Works that have been tagged with this tag or one of its synonyms'.t %></h3>

@@ -1,0 +1,1 @@
+page.replace 'relationship_#{@tag_relationship.id}', ''

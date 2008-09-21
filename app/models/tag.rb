@@ -11,7 +11,7 @@ class Tag < ActiveRecord::Base
   include TaggingExtensions
 
   validates_presence_of :name
-  validates_uniqueness_of :name, :scope => :tag_category_id
+  validates_uniqueness_of :name, :scope => [:tag_category_id]
   validates_length_of :name, :maximum => ArchiveConfig.TAG_MAX, :message => "Your tag has exceeded the character limit. Try using less than 40 characters or using commas to separate your tags.".t
   validates_format_of :name, 
                       :with => /\A[-a-zA-Z0-9 \/?.!''"":;\|\]\[}{=~!@#\$%^&()_+]+\z/, 
@@ -27,6 +27,8 @@ class Tag < ActiveRecord::Base
     ["chooses not to warn"]
   end
 
+  before_validation_on_update :check_for_synonyms
+  
   def before_validation
     self.name = name.strip.squeeze(" ") if self.name
   end
@@ -112,6 +114,36 @@ class Tag < ActiveRecord::Base
   
   def synonyms
     siblings(:distance => 0) - self.disambiguation
+  end
+  
+  def canonical_synonym
+    self.synonyms.select {|tag| tag.canonical?}.first
+  end
+  
+  # When a tag wrangler tries to rename a tag and the name they want is already in use, set the two tags as synonyms
+  # and reassociate the original tag's works. If it's not in use, change the name of the tag and create a new synonym
+  # with the old name. In both cases, create a new default tag with the original name and add it to the tag's works,
+  # giving authors the option to retain it.
+  def check_for_synonyms
+    if self.name_changed? && self.canonical?
+      tag_category = self.tag_category
+      name = self.name_was
+      existing = tag_category.tags.find_by_name(self.name) 
+      if existing
+        unless self.related_tags.include?(existing)
+          relationship = TagRelationship.new :tag => self, :related_tag => existing, :tag_relationship_kind => TagRelationshipKind.synonym
+          relationship.save #reassignment takes place in the relationship callback
+        end        
+      else
+        unless name == self.name
+          new_synonym = tag_category.tags.find_or_create_by_name(name)
+          unless new_synonym == self
+            relationship = TagRelationship.new :tag => new_synonym, :related_tag => self, :tag_relationship_kind => TagRelationshipKind.synonym
+            relationship.save
+          end
+        end
+      end
+    end         
   end
   
 end

@@ -77,7 +77,7 @@ module TaggingExtensions
         new_tags = tag_names.collect do |tag_name|
           tag_name.gsub!(/^\s*/, "")
           tag_name.gsub!(/\s*$/, "")
-          tag = Tag.find(:first, :conditions => {:name => tag_name, :tag_category_id => category.id}) || Tag.new(:name => tag_name, :tag_category => category)
+          tag = category.tags.find_or_create_by_name(tag_name)
           if tag.new_record?
             unless tag.save 
               tag.errors.full_messages.each { |err| self.errors.add_to_base(err)}

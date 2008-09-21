@@ -1,4 +1,13 @@
 
-.droppable { color: red;}
+.droppable { color: red;} 
+
+/* TAG WRANGLING */	
+
+#tags-to-sort {
+	margin-top: 20px;
+	height: 10em;
+	width: 30%;
+	overflow: scroll;
+}
 
 

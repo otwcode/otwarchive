@@ -76,6 +76,21 @@ class TagsController < ApplicationController
         end
       end
     end
+  end 
+  
+  def edit
+    @tag = Tag.find(params[:id])
+  end
+  
+  def update
+    @tag = Tag.find(params[:id])
+    if @tag.update_attributes(params[:tag])
+      flash[:notice] = 'Tag was successfully updated.'.t
+      redirect_to tag_categories_path
+    else
+      flash[:error] = "Tag failed to save."
+      render :action => :edit        
+    end
   end
 
 end

@@ -2,15 +2,19 @@
 
 <div id="error"></div>
 
-<div id="tag-relationship-form">
-<%= render :partial => 'tag_relationships/form' %> 
+<ul>
+  <li><%= link_to_remote 'Sort fandoms by media', :url => {:action => :index, :category1 => 'Fandom', :category2 => 'Media'}, :method => :get %></li>
+  <li><%= link_to_remote 'Sort characters by fandom', :url => {:action => :index, :category1 => 'Character', :category2 => 'Fandom'}, :method => :get %></li>
+  <li><%= link_to_remote 'Sort pairings by fandom', :url => {:action => :index, :category1 => 'Pairing', :category2 => 'Fandom'}, :method => :get %></li>
+  <li><%= link_to_remote 'Sort pairings by character', :url => {:action => :index, :category1 => 'Pairing', :category2 => 'Character'}, :method => :get %></li>
+  <li><%= link_to_remote 'Sort all tags', :url => {:action => :index}, :method => :get %></li>
+</ul>
+
+<div id="tag-relationship-form"> 
 </div>
 
 <div id="current-tag-relationships">
   <ul id="relationship-list">
-  <%- for relationship in @current_tag_relationships -%>
-    <li><%=h relationship.tag.name + " " + relationship.tag_relationship_kind.verb_phrase + " " + relationship.related_tag.name %></li>
-  <%- end -%>
   </ul> 
 </div>
 

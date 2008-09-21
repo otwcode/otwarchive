@@ -1,0 +1,14 @@
+<%- form_remote_tag :url => {:controller => :tag_relationships, :action => :batch_create} do -%>
+    <%= collection_select('tag_relationship', 'related_tag_id', @potential_related_tags, :id, :name) %>
+    <%= hidden_field_tag('tag_relationship[tag_relationship_kind_id]', @tag_relationship_kind.id) %>
+    
+    <ul id="tags-to-sort">
+    <%- for tag in  @potential_tags -%>
+    <li id="tag_<%= tag.id %>"><%= check_box_tag('tag[]', tag.id) %> <%=h tag.name %></li>
+    <%- end -%>
+    </ul>
+    
+    <p><%= check_box_tag 'canonical' %> Mark all of these tags canonical? </p>
+  
+    <p><%= submit_tag 'Sort tags' %></p>
+<%- end -%>

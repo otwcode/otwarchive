@@ -1,0 +1,8 @@
+for id in @tag_ids
+   page.replace 'tag_' + id, ''
+end
+for relationship in @new_tag_relationships
+  phrase = relationship.tag.name + ' ' + relationship.tag_relationship_kind.verb_phrase + ' ' + relationship.related_tag.name
+  link =  link_to('delete'.t, relationship, :confirm => 'Are you sure?'.t, :method => :delete)
+  page.insert_html :top, 'relationship-list', "<li id='relationship_#{relationship.id}'>" + phrase + " " + link + "</li>"  
+end

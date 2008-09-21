@@ -16,7 +16,10 @@
 <div id="current-tag-relationships">
   <ul id="relationship-list">
   <%- for relationship in @current_relationships -%>
-    <li><%=h relationship.tag.name + " " + relationship.tag_relationship_kind.verb_phrase + " " + relationship.related_tag.name %></li>
+    <li>
+      <%=h relationship.tag.name + " " + relationship.tag_relationship_kind.verb_phrase + " " + relationship.related_tag.name %> 
+      <%= link_to('delete'.t, relationship, :confirm => 'Are you sure?'.t, :method => :delete) %>
+    </li>
   <%- end -%>
   </ul> 
 </div>

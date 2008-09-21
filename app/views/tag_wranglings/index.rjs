@@ -1,0 +1,5 @@
+if @category1 && @category2
+  page.replace_html 'tag-relationship-form', :partial => 'tag_wranglings/sort_by_category'
+else
+  page.replace_html 'tag-relationship-form', :partial => 'tag_relationships/form'
+end

@@ -39,6 +39,22 @@ class TagRelationshipsController < ApplicationController
   def edit
     @tag_relationship = TagRelationshipKind.find(params[:id])
   end
+  
+  def batch_create
+    for tag_id in params[:tag]
+      relationship = TagRelationship.new(params[:tag_relationship])
+      relationship.tag_id = tag_id
+      relationship.save
+      (@new_tag_relationships ||= []) << relationship
+    end
+    if params[:canonical]
+      Tag.update_all("canonical = 1", "id IN (#{params[:tag].join(',')})")
+    end
+    @tag_ids = params[:tag]
+    respond_to do |format|
+      format.js
+    end
+  end
 
   # POST /tag_relationships
   # POST /tag_relationships.xml
@@ -62,16 +78,14 @@ class TagRelationshipsController < ApplicationController
   # PUT /tag_relationships/1
   # PUT /tag_relationships/1.xml
   def update
-    @tag_relationship = TagRelationshipKind.find(params[:id])
+    @tag_relationship = TagRelationship.find(params[:id])
 
     respond_to do |format|
       if @tag_relationship.update_attributes(params[:tag_relationship])
         flash[:notice] = 'TagRelationship was successfully updated.'.t
-        format.html { redirect_to(@tag_relationship) }
-        format.xml  { head :ok }
+        format.html { redirect_to(tag_wranglings_url) }
       else
         format.html { render :action => "edit" }
-        format.xml  { render :xml => @tag_relationship.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -79,12 +93,12 @@ class TagRelationshipsController < ApplicationController
   # DELETE /tag_relationships/1
   # DELETE /tag_relationships/1.xml
   def destroy
-    @tag_relationship = TagRelationshipKind.find(params[:id])
+    @tag_relationship = TagRelationship.find(params[:id])
     @tag_relationship.destroy
 
     respond_to do |format|
-      format.html { redirect_to(tag_relationships_url) }
-      format.xml  { head :ok }
+      format.html { redirect_to(tag_wranglings_url) }
+      format.js
     end
   end
   

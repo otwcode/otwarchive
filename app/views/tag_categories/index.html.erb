@@ -8,12 +8,12 @@
     <th scope="col"><%=h 'Work menu'.t %></th>
   </tr>
   <tr>
-    <th><%=h 'Unsorted'.t %></td>
+    <td><%=h 'Unsorted'.t %></td>
     <td></td>
     <td></td>
     <td></td>
     <td></td>
-    <td></td>
+    <%- if logged_in_as_admin? -%><td></td><%- end -%>
     <td><%= link_to 'show tags'.t, tag_category_path(0) %></td>
   </tr>
   <% @tag_categories.each do |tag_category| %>
@@ -23,14 +23,18 @@
     <td><% if tag_category.exclusive %>X<% end %></td>
     <td><% if tag_category.official %>X<% end %></td>
     <td><%= link_to 'edit'.t, edit_tag_category_path(tag_category) %></td>
+    <%- if logged_in_as_admin? -%>
     <td>
         <%= link_to "delete".t, tag_category, :confirm => "This will move all its tags into the unsorted category, are you sure?".t, :method => :delete %><% if tag_category == TagCategory.default || tag_category == TagCategory.ambiguous -%>*<% end -%>
     </td>
+    <%- end -%>
     <td><%= link_to 'show tags'.t, tag_category_path(tag_category) %></td>
   </tr>
   <% end %>
 </table>
 
-<p><%=h '*Note: If deleted, this category will be re-generated (without any tags) when you refresh the page'.t %>
+<%- if logged_in_as_admin? -%>
+<p><%=h '*Note: If deleted, this category will be re-generated (without any tags) when you refresh the page'.t %></p>
+<%- end -%>
 
 <%= tag_wrangler_footer %>
