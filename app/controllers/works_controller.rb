@@ -128,18 +128,19 @@ class WorksController < ApplicationController
   end
   
   def drafts
-    if params[:user_id]
+    unless params[:user_id]
+      flash[:error] = "Whose drafts did you want to look at?".t
+      redirect_to :controller => :users, :action => :index
+    else
       @user = User.find_by_login(params[:user_id])
       unless current_user == @user
         flash[:error] = "You can only see your own drafts, sorry!".t
-        redirect_to :action => :index and return
+        redirect_to current_user
+      else
+        @works = @user.unposted_works
+        @works = @works.paginate(:page => params[:page])
       end
-    else
-      flash[:error] = "Whose drafts did you want to look at?".t
-      redirect_to :action => :index and return
     end
-    @works = @user.unposted_works
-    @works = @works.paginate(:page => params[:page])
   end 
   
   # GET /works/1
