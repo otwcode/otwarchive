@@ -2,13 +2,14 @@
 
 <% form_for(@feedback) do |f| %>
 	<p class="message">
-		<%=h "Thanks for your time testing the archive! We appreciate the help a lot." .t %>
+		<%=h "Thanks for your time testing the archive! We really appreciate the help." .t %>
   	</p>	
  	<p class="message">
 		<%= f.label :comment, "If you have any additional feedback about the archive - comments, concerns,
 	haikus - you can leave them here." .t %>
 		<%=h " We promise to read it all!" .t %>
 	</p>
+		
 	<p class="message">
 	  <strong><%= "PLEASE NOTE!".t -%></strong>
 	  The archive is currently only supporting Firefox. 
@@ -28,6 +29,9 @@
 	<p>
     <%= f.text_area :comment, :cols => 60 %>
 	</p>
+	 <p class="message">
+	 <%= f.label :email, "Your email (optional):".t %></p>
+    <p><%= f.text_field :email, :size => 60 %>	</p>
 	<p class="submit">
     	<%= f.submit "Send feedback".t %>
   	</p>
