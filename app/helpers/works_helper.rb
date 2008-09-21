@@ -63,4 +63,8 @@ module WorksHelper
     end
   end
 
+  # select the default warnings if this is a new work
+  def warning_selected(work)
+    @work.new_record? ? Tag.default_warning.collect : @work.tags.by_category(category).valid.collect(&:name)
+  end
 end

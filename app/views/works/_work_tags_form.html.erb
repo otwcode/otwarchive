@@ -14,7 +14,7 @@
           <%= collection_select(:work, category.name.to_sym, @tags_by_category[category], :name, :name, {:prompt => true}) -%>          
         <%- elsif category.name =~ /Warning/ -%>
           <select id="work_<%= category.name %>" name="work[<%= category.name %>][]" multiple="multiple">
-	          <%= options_from_collection_for_select(@tags_by_category[category], :name, :name, @work.tags.by_category(category).valid.collect(&:name) ) -%>
+	          <%= options_from_collection_for_select(@tags_by_category[category], :name, :name, warning_selected(@work) ) -%>
 	        </select>
         <%- else -%>
 					<input type="text" name="work[<%= category.name %>]" id="work_<%= category.name %>" value="<%= @work.tags.by_category(category).collect(&:name).join(', ') %>" />

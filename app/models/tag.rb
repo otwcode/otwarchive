@@ -21,7 +21,12 @@ class Tag < ActiveRecord::Base
   named_scope :canonical, {:conditions => {:canonical => true}}
   named_scope :by_category, lambda { |*args| {:conditions => "tag_category_id IN (#{args.flatten.collect(&:id).join(",")})"}}  
   named_scope :by_popularity, {:order => 'taggings_count DESC'}
-  
+
+  # the default warning(s) put on a new work
+  def Tag.default_warning
+    ["chooses not to warn"]
+  end
+
   def before_validation
     self.name = name.strip.squeeze(" ") if self.name
   end
