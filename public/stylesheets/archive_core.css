@@ -33,6 +33,8 @@ a.tag:hover	{ background: #900 !important; color: #fffef9 !important; }
 #main li {font-size: 0.875em; line-height: 1.286; margin: 0.643em 0;}
 #main li li {font-size:1em;}
 
+#chapters p {padding-bottom: 0.5em;}
+
 h1, h2, h3, h4, h5, h6	{ font-family: Fertigo, Cambria, Constantia, Palatino, Georgia, sans-serif; font-weight: 400;}
 h1	{ font-size: 2.25em; line-height: 0.5; margin: 1.125em 0 0.875em; }
 h2	{ font-size: 1.5em; line-height: 1; margin: .75em 0; }

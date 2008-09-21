@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080920020544) do
+ActiveRecord::Schema.define(:version => 20080920052318) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -333,6 +333,8 @@ ActiveRecord::Schema.define(:version => 20080920020544) do
     t.boolean  "suspended"
     t.boolean  "banned"
   end
+
+  add_index "users", ["identity_url"], :name => "index_users_on_identity_url", :unique => true
 
   create_table "works", :force => true do |t|
     t.integer  "expected_number_of_chapters", :limit => 11, :default => 1
