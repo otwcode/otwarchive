@@ -3,9 +3,7 @@
 <% form_tag(@user, :method => 'delete') do -%>
 <% unless @user.coauthors.blank? %>
 <p>
-    <%= "You have %d work(s) co-authored with the following users:".t/@coauthored_works.size %>
-    <%- @user.coauthors.each do |c| -%>
-    <%= c.name %>&nbsp;<%- end -%>
+    <%= "You have %d work(s) co-authored with the following users:".t/@coauthored_works.size %>&nbsp;<%= print_coauthors(@user) %>
 </p>
 <p>
     <%= 'You are not able to delete these as they are shared works.'.t %>
@@ -25,9 +23,7 @@
 <% end -%>
 <% unless @sole_authored_works.blank? -%>
 <p>
-    <%= "You have %d work(s)".t/@sole_authored_works.size %><%=h "under the following pseuds:".t %>&nbsp;<%- @user.pseuds.each do |pseud| %>
-    <%= pseud.name %>
-    <%- end -%>
+    <%= "You have %d work(s)".t/@sole_authored_works.size %>&nbsp;<%=h "under the following pseuds:".t %>&nbsp;<%= print_pseuds(@user) %>
 </p>
 <p>
     <%=h 'You are able to delete these works; however, you may wish to orphan them instead.'.t %>
