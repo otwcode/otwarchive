@@ -110,7 +110,7 @@ class Chapter < ActiveRecord::Base
   
   # Set the value of word_count to reflect the length of the chapter content
   def set_word_count
-    self.word_count = self.content.split.length
+    self.word_count = sanitize_fully(self.content).split.length
   end
   
   # Save creatorships after the chapter is saved
