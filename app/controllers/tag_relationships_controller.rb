@@ -41,16 +41,17 @@ class TagRelationshipsController < ApplicationController
   end
   
   def batch_create
-    for tag_id in params[:tag]
+    for tag_id in params[:tag].values
       relationship = TagRelationship.new(params[:tag_relationship])
       relationship.tag_id = tag_id
       relationship.save
       (@new_tag_relationships ||= []) << relationship
     end
+    @category2 = Tag.find(params[:tag_relationship][:related_tag_id]).tag_category
     if params[:canonical]
       Tag.update_all("canonical = 1", "id IN (#{params[:tag].join(',')})")
     end
-    @tag_ids = params[:tag]
+    @tag_ids = params[:tag].values
     respond_to do |format|
       format.js
     end

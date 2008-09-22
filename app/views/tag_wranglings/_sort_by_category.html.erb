@@ -4,7 +4,7 @@
     
     <ul id="tags-to-sort">
     <%- for tag in  @potential_tags -%>
-    <li id="tag_<%= tag.id %>"><%= check_box_tag('tag[]', tag.id) %> <%=h tag.name %></li>
+    <li id="tag_<%= tag.id %>"><%= check_box_tag("tag[#{tag.id}]", tag.id) %> <%=h tag.name %></li>
     <%- end -%>
     </ul>
     
