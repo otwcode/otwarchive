@@ -98,8 +98,9 @@ class Rawk
   HEADER = "Request                                        Count     Sum     Max  Median     Avg     Min     Std"
   HELP = "\nRAWK - Rail's Analyzer With Klass v#{VERSION}\n"+
   "Created by Chris Hobbs of Spongecell, LLC\n"+
-  "Rewritten by Sidra\n"+
+  "Rewritten by Sidra to run DB, Render & Total simultaneously\n"+
   "This tool gives statistics for Ruby on Rails log files. The times for each request are grouped and totals are displayed. "+
+  "If process ids are present in the log files then requests are sorted by ActionController actions otherwise requests are grouped by url. "+
   "The log file is read from standard input unless the -f flag is specified.\n\n"+
   "The options are as follows:\n\n"+
   "  -?  Display this help.\n\n"+
@@ -108,6 +109,7 @@ class Rawk
   "  -r  Include Render data (not available in test log)\n\n" +
   "  -s <count> Display <count> results in each group of data.\n\n"+
   "  -t  Test\n\n"+
+  "  -u  Group requests by url instead of the controller and action used. This is the default behavior if there is are no process ids in the log file.\n\n"+
   "\n"+
   "This software is Beerware, if you like it, buy yourself a beer.\n"+
   "\n"+
@@ -142,8 +144,10 @@ class Rawk
   end
   def init_args
     @sorted_limit=20
+    @force_url_use = false
     @input = $stdin
     keys = @arg_hash.keys
+    @force_url_use = keys.include?("u")
     @sorted_limit = @arg_hash["s"].to_i if @arg_hash["s"]
     $render = 1 if @arg_hash.has_key? "r"
     @input = File.new(@arg_hash["f"]) if @arg_hash["f"]
@@ -152,12 +156,20 @@ class Rawk
     @db_hash = StatHash.new
     @render_hash = StatHash.new if $render
     @total_hash = StatHash.new
-    last_actions = Hash.new
+    action = key = nil
     while @input.gets
+      if $_.index("Processing ")==0
+        action = $_.split[1]
+        next
+      end
       next unless $_.index("Completed in")==0
-      #the below regexp turns "[http://spongecell.com/calendar/view/bob]" to "/calendar/view"
-#      key = $_[/\[\S+\]/].gsub(/\S+\/\/(\w|\.)*/,'')[/\/\w*\/?\w*/]
-      key = $_[/\[\S+\]/].gsub(/\S+\/\/(\w|\.)*/,'')[/\/\w*\/?\w*\/?\w*/]
+      #get the action unless we are forcing url tracking
+      if @force_url_use
+        #the below regexp turns "[http://archiveofourown.org/en/works/5/chapters]" to "/works/5"
+        key = $_[/\[\S+\]/].gsub(/\S+\/\/(\w|\.)*\/?(\w)*/,'')[/\/\w*\/?\w*\/?\w*/] || '/'
+      else
+        key = action
+      end
       db_time = $_[/DB: \d+\.\d+/][/\d+\.\d+/].to_f
       @db_hash.add(key, db_time)
       render_time = $_[/Rendering: \d+\.\d+/] if $render
@@ -168,10 +180,10 @@ class Rawk
   end
   def print_stats
     i = 1
-    array = $render ? [@db_hash, @total_hash, @render_hash] :  [@db_hash, @total_hash]
+    array = $render ? [@total_hash, @db_hash, @render_hash] :  [@db_hash, @total_hash]
     array.each do |stat_hash|
-      string = "Database Time" if i == 1
-      string =  "Completed Time" if i == 2
+      string =  "Completed Time" if i == 1
+      string = "Database Time" if i == 2
       string =  "Render Time" if i == 3
       i = i + 1
       puts "\nTop #{@sorted_limit} by Count (#{string})"
@@ -195,4 +207,5 @@ class Rawk
     end
   end
 end
+
 Rawk.new

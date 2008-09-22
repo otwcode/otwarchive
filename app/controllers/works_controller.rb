@@ -51,31 +51,32 @@ class WorksController < ApplicationController
           @work = Work.new
           @work.chapters.build
       end
-    rescue
-    end
-    @chapters = @work.chapters.in_order
-    @serial_works = @work.serial_works
-    @tags_by_category = {}
-    categories = (TagCategory.exclusive + [TagCategory.find_by_name("Warning")]).flatten.compact.uniq
-    categories.each {|category| @tags_by_category[category] = category.tags.valid.canonical} unless categories.blank?
 
-    @chapter = @work.first_chapter
-    if params[:work] && params[:work][:chapter_attributes]
-      @chapter.content = params[:work][:chapter_attributes][:content]
-    end
-    
-    # This is a horrifying kludge for which there is no excuse except that
-    # it makes the chapter attribute change actually get loaded for NO REASON
-    # I can understand! -- Naomi 9/9/08
-    # This only works if it is to_yaml (to_s does NOT) which suggests something is happening
-    # during the yaml dump. More investigation needed. D: 
-    stupid_garbage_variable = @work.to_yaml
-    
-    unless current_user == :false
-      @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
-      to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 
-      @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
-      @series = current_user.series.uniq 
+      @chapters = @work.chapters.in_order
+      @serial_works = @work.serial_works
+      @tags_by_category = {}
+      categories = (TagCategory.exclusive + [TagCategory.find_by_name("Warning")]).flatten.compact.uniq
+      categories.each {|category| @tags_by_category[category] = category.tags.valid.canonical} unless categories.blank?
+  
+      @chapter = @work.first_chapter
+      if params[:work] && params[:work][:chapter_attributes]
+        @chapter.content = params[:work][:chapter_attributes][:content]
+      end
+      
+      # This is a horrifying kludge for which there is no excuse except that
+      # it makes the chapter attribute change actually get loaded for NO REASON
+      # I can understand! -- Naomi 9/9/08
+      # This only works if it is to_yaml (to_s does NOT) which suggests something is happening
+      # during the yaml dump. More investigation needed. D: 
+      stupid_garbage_variable = @work.to_yaml
+      
+      unless current_user == :false
+        @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
+        to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 
+        @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
+        @series = current_user.series.uniq 
+      end
+    rescue
     end
   end
   
@@ -92,7 +93,7 @@ class WorksController < ApplicationController
   def check_adult_status
     if params[:view_adult]
       session[:adult] = true
-    elsif @work.adult_content? &&  !see_adult? 
+    elsif @work && @work.adult_content? &&  !see_adult? 
       render :partial => "adult", :layout => "application"
     end  
   end
@@ -146,7 +147,10 @@ class WorksController < ApplicationController
   # GET /works/1
   # GET /works/1.xml
   def show
-    @work = Work.find(params[:id])
+    unless @work
+  	  flash[:error] = 'This page is unavailable.'.t
+      redirect_to works_path and return
+    end
     unless @work.visible || is_admin?
       if !current_user.is_a?(User)
         store_location 

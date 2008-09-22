@@ -12,9 +12,11 @@ class HomeController < ApplicationController
 
   # home page itself
   def index
-    @user_count = User.count(:all)
-    @random_user = User.find :first, :offset => rand(@user_count)
-    @work_count = Work.posted.count(:all)
+    @user_count = User.count
+    @work_count = Work.posted.count
+    unless @user_count.zero? && @work_count.zero?
+      @random_user = Work.posted[rand(@work_count)].pseuds.first.user
+    end
     @works_today = Work.posted.count(:all, :conditions => (['created_at > ?', 1.day.ago]))
     fandom_category = TagCategory.find_or_create_by_name("Fandom")
     @fandom_count = fandom_category.tags.count(:all, :conditions => {:canonical => true})
