@@ -24,7 +24,11 @@ class Tag < ActiveRecord::Base
 
   # the default warning(s) put on a new work
   def Tag.default_warning
-    ["chooses not to warn"]
+   ["Chooses Not To Warn"]
+  end
+  #default rating
+  def Tag.default_rating
+    ["Not Rated"]
   end
 
   before_validation_on_update :check_for_synonyms
