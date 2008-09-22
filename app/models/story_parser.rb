@@ -3,6 +3,7 @@
 # 
 # This class depends heavily on the official tag categories of the archive. 
 class StoryParser
+  require 'timeout'
   require 'hpricot'
   include HtmlFormatter
   
@@ -27,6 +28,10 @@ class StoryParser
   SOURCE_LJ = '(live|dead|insane)?journal(fen)?\.com'
   SOURCE_YULETIDE = 'yuletidetreasure\.org'
   SOURCE_FFNET = 'fanfiction\.net'
+  
+  # time out if we can't download fast enough
+  STORY_DOWNLOAD_TIMEOUT = 60
+  MAX_CHAPTER_COUNT = 200
 
   # Downloads a story and passes it on to the parser. 
   # If the URL of the story is from a site for which we have special rules 
@@ -50,13 +55,13 @@ class StoryParser
 
   # Parses the text of a story, optionally from a given location. 
   def parse_story(story, location = nil)
-    work_params = parse_text(story, location)
+    work_params = parse_common(story, location)
     return Work.new(work_params)
   end
 
   # Parses text but returns a chapter instead
   def parse_chapter(chapter, location = nil)
-    work_params = parse_text(chapter, location)
+    work_params = parse_common(chapter, location)
     @chapter = get_chapter_from_work_params(work_params)
     return @chapter
   end
@@ -65,15 +70,6 @@ class StoryParser
   # code -- please use the above functions to parse stories. 
 
   protected
-    def get_source_if_known(known_sources, location)
-      known_sources.each do |source|
-        pattern = Regexp.new(eval("SOURCE_#{source.upcase}"), Regexp::IGNORECASE)
-        if location.match(pattern)
-          return source
-        end
-      end
-      nil
-    end      
   
     def download_and_parse_chaptered_story(source, location)
       work_params = { :title => "UPLOADED WORK", :chapter_attributes => {} }
@@ -89,6 +85,7 @@ class StoryParser
           @work.chapters << get_chapter_from_work_params(chapter_params)
         end
       end
+      puts @work.to_yaml
       return @work
     end
 
@@ -103,14 +100,45 @@ class StoryParser
       story = ""
       source = get_source_if_known(KNOWN_STORY_LOCATIONS, location)
       if source.nil?
-        story = Net::HTTP.get(URI.parse(location))
+        story = download_with_timeout(location)
       else
         story = eval("download_from_#{source.downcase}(location)")
       end
       return story      
     end
   
-    def parse_text(story, location = nil)
+    # canonicalize the url for downloading from lj or clones
+    def download_from_lj(location)
+      url = location
+      url.gsub!(/\?(.*)$/, "") # strip off any existing params at the end
+      url += "?format=light" # go to light format
+      return download_with_timeout(url)
+    end
+    
+    # grab all the chapters of the story from ff.net
+    def download_chaptered_from_ffnet(location)
+      @chapter_contents = []
+      if location.match(/^(.*fanfiction\.net\/s\/[0-9]+\/)([0-9]+)(\/.*)$/i)
+        urlstart = $1
+        urlend = $3       
+        chapnum = 1
+        Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
+          loop do
+            url = "#{urlstart}#{chapnum.to_s}#{urlend}"
+            body = download_with_timeout(url)
+            if body.nil? || chapnum > MAX_CHAPTER_COUNT || body.match(/FanFiction\.Net Message/)
+              break
+            end
+            @chapter_contents << body
+            chapnum = chapnum + 1
+          end
+        }
+      end
+      return @chapter_contents      
+    end
+
+    # used to parse either entire story or chapter
+    def parse_common(story, location = nil)
       work_params = { :title => "UPLOADED WORK", :chapter_attributes => {:content => ""} }
       @doc = Hpricot(story)
 
@@ -124,34 +152,6 @@ class StoryParser
       return work_params.merge!(parse_story_from_unknown(story))
     end
 
-    # canonicalize the url for downloading from lj or clones
-    def download_from_lj(location)
-      url = location
-      url.gsub!(/\?(.*)$/, "") # strip off any existing params at the end
-      url += "?format=light" # go to light format
-      return Net::HTTP.get(URI.parse(url))
-    end
-    
-    # grab all the chapters of the story from ff.net
-    def download_chaptered_from_ffnet(location)
-      @chapter_contents = []
-      if location.match(/^(.*fanfiction\.net\/s\/[0-9]+\/)([0-9]+)(\/.*)$/i)
-        urlstart = $1
-        urlend = $3       
-        chapnum = 1
-        loop do
-          url = "#{urlstart}#{chapnum.to_s}#{urlend}"
-          body = Net::HTTP.get(URI.parse(url))
-          if body.empty?
-            break
-          end
-          @chapter_contents << body
-          chapnum = chapnum + 1
-        end
-      end
-      return @chapter_contents      
-    end
-  
     # our fallback: parse a story from an unknown source, so we have no special
     # rules. 
     def parse_story_from_unknown(story)
@@ -228,42 +228,37 @@ class StoryParser
         author = $1
         work_params[:notes] = $2
       end
-      
-      search_title = work_params[:title].gsub(/[^\w]/, ' ').gsub(/\s+/, '+')
-      search_author = author.nil? ? "" : author.gsub(/[^\w]/, ' ').gsub(/\s+/, '+')
-      search_recip = recip.nil? ? "" : recip.gsub(/[^\w]/, ' ').gsub(/\s+/, '+')
-      search_url = "http://www.yuletidetreasure.org/cgi-bin/search.cgi?" + 
-                    "Recipient=#{search_recip}&Title=#{search_title}&Author=#{search_author}&NumToList=0"
-      search_res = Net::HTTP.get(URI.parse(search_url))
-      search_doc = Hpricot(search_res)
-      summary = ""
-      rating = ""
-      (search_doc/"dd").each do |dd|
-        if dd.attributes['class'] == 'summary'
-          summary = dd.inner_html
-          if summary.gsub!(/<span="rating">\(Rated\s*([\w\-]+)\)/i, '')
-            rating = $1
+
+      # Here we're going to try and get the search results
+      begin
+        search_title = work_params[:title].gsub(/[^\w]/, ' ').gsub(/\s+/, '+')
+        search_author = author.nil? ? "" : author.gsub(/[^\w]/, ' ').gsub(/\s+/, '+')
+        search_recip = recip.nil? ? "" : recip.gsub(/[^\w]/, ' ').gsub(/\s+/, '+')
+        search_url = "http://www.yuletidetreasure.org/cgi-bin/search.cgi?" + 
+                      "Recipient=#{search_recip}&Title=#{search_title}&Author=#{search_author}&NumToList=0"
+        search_res = download_with_timeout(search_url)
+        search_doc = Hpricot(search_res)
+        summary = ""
+        rating = ""
+        (search_doc/"dd").each do |dd|
+          if dd.attributes['class'] == 'summary'
+            summary = dd.inner_html
+            if summary.gsub!(/<span="rating">\(Rated\s*([\w\-]+)\)/i, '')
+              rating = $1
+            end
+            break
           end
-          break
         end
-      end
       
-      work_params[:summary] = summary
-      if TagCategory.official.collect(&:name).include?("Rating")
-        case rating
-        when "NC-17"
-          work_params[:Rating] = "Explicit"
-        when "R"
-          work_params[:Rating] = "Mature"
-        when "PG-13"
-          work_params[:Rating] = "Teen and Up"
-        when "PG"
-          work_params[:Rating] = "General Audience"
-        when "G"
-          work_params[:Rating] = "General Audience"
+        work_params[:summary] = summary
+        rating = convert_rating(rating)
+        if TagCategory.official.collect(&:name).include?("Rating")
+          work_params[:Rating] = rating
+        else
+          tags << "rating:#{rating}"
         end
-      else
-        tags << "rating:#{rating}"
+      rescue Timeout::Error
+        # couldn't get the summary data, oh well, keep going
       end
       
       work_params[:default] = tags.join(ArchiveConfig.DELIMITER)
@@ -273,17 +268,39 @@ class StoryParser
 
     def parse_story_from_ffnet(story)
       work_params = {:chapter_attributes => {}}      
-      storytext = clean_storytext((@doc/"#storytext").to_html)
+      storytext = clean_storytext((@doc/"#storytext").inner_html)
+
+      work_params[:notes] = ((@doc/"#storytext")/"p").first.inner_html
+      
       # put in some blank lines to make it readable in the textarea
       # the processing will strip out the extras 
       storytext.gsub!(/<\/p><p>/, "</p>\n\n<p>")
       
+      tags = []
       pagetitle = (@doc/"title").inner_html
       if pagetitle && pagetitle.match(/(.*), a (.*) fanfic - FanFiction\.Net/)
         work_params[:title] = $1
-        work_params[:Fandom] = $2
+        if TagCategory.official.collect(&:name).include?("Fandom")
+          work_params[:Fandom] = $2
+        else
+          tags << "fandom:#{$2}"
+        end
+      end
+      if story.match(/fiction rated:\s*(.*?)<\/a>/i)
+        rating = convert_rating($1)
+        if TagCategory.official.collect(&:name).include?("Rating")
+          work_params[:Rating] = rating
+        else
+          tags << "rating:#{rating}"
+        end
       end
       
+      if story.match(/fiction rated.*?<\/a> - .*? - (.*?)\/(.*?) -/i)
+        tags << $1
+        tags << $2 unless $1 == $2 
+      end
+      
+      work_params[:default] = tags.join(ArchiveConfig.DELIMITER)
       work_params[:chapter_attributes][:content] = storytext    
       
       return work_params
@@ -305,14 +322,62 @@ class StoryParser
         metapattern = Regexp.new("#{pattern}\s*:\s*(.*)", Regexp::IGNORECASE)
         metapattern_plural = Regexp.new("#{pattern.pluralize}\s*:\s*(.*)", Regexp::IGNORECASE)
         if text.match(metapattern) || text.match(metapattern_plural)
-          meta[metaname] = $1
+          value = $1
+          begin
+            value = eval("convert_#{metaname.downcase}(value)")
+          rescue NameError
+          end
+          meta[metaname] = value
         end        
       end      
       return meta
+    end
+
+    def download_with_timeout(location)
+      Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
+        response = Net::HTTP.get_response(URI.parse(location))
+        case response
+        when Net::HTTPSuccess
+          response.body
+        else 
+          nil
+        end
+      }
+    end     
+  
+    def get_source_if_known(known_sources, location)
+      known_sources.each do |source|
+        pattern = Regexp.new(eval("SOURCE_#{source.upcase}"), Regexp::IGNORECASE)
+        if location.match(pattern)
+          return source
+        end
+      end
+      nil
+    end      
+  
+    # is there something that looks like a story in here
+    def check_for_story(storytext)
+      
     end
 
     def clean_storytext(storytext)
       return sanitize_whitelist(cleanup_and_format(storytext))
     end
 
+    # Convert the common ratings into whatever ratings we're
+    # using on this archive.
+    def convert_rating(rating)
+      case rating.downcase
+      when "nc-17", "nc17", "nc-18", "nc18", "x", "ma"
+        "Explicit"
+      when "r", "m"
+        "Mature"
+      when "pg-13", "pg13", "pg-15", "pg15", "t"
+        "Teen and Up"
+      when "pg", "g", "k+", "k"
+        "General Audience"
+      else
+        "Not Rated"
+      end
+    end
 end

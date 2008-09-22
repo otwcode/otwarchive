@@ -8,11 +8,14 @@ class AdminMailer < ActionMailer::Base
      @body = {:email => email, :url => url, :comment => comment}
   end
   
-    def feedback(comment)
-     setup_email
-     @recipients = ArchiveConfig.FEEDBACK_ADDRESS
-     @subject += "Feedback".t
-     @body = {:comment => comment}
+  def feedback(feedback)
+    setup_email
+    unless feedback.email.blank?
+      @from = feedback.email
+    end
+    @recipients = ArchiveConfig.FEEDBACK_ADDRESS
+    @subject += "Feedback".t
+    @body = {:comment => feedback.comment}
   end
   
   protected

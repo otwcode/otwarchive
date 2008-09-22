@@ -359,8 +359,10 @@ class WorksController < ApplicationController
           else
             render :action => :new and return
           end
+        rescue Timeout::Error
+          flash.now[:error] = "Sorry, but we timed out trying to get that URL.".t
         rescue
-          flash.now[:error] = "Sorry, but we couldn't read from that URL. :(".t
+          flash.now[:error] = "Sorry, but we couldn't find a story at that URL. You can still copy-and-paste the contents into our standard form, though!".t
         end
       end
       @use_upload_form = true

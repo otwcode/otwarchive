@@ -68,7 +68,7 @@ module ApplicationHelper
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
     end
     
-    link_to_ibox link, :for => help_file
+    link_to_ibox link, :for => help_file, :title => help_entry.split('-').join(' ').capitalize, :class => "symbol question"
   end
   
   # Inserts the flash alert messages for flash[:key] wherever 

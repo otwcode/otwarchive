@@ -29,9 +29,10 @@ span.error {border:0;}
 
 /* SYMBOLS */
 span.symbol { font-family:Cambria,Georgia,serif; height:1em; width:1em; margin:0 0.25em; border:1px solid; -moz-border-radius:0.75em; -webkit-border-radius:0.75em;}
-span.symbol span { color:#fffef9; height:1em; width:1em; padding:0.5625em; }
+span.symbol span { color:#fffef9; height:1em; width:1em; padding:0.425em; }
 .symbol a { text-decoration:none; border:none }
 span.question { background:#2b547c; border-color:#2a547c; }
+a.question {text-decoration: none; font-weight: bold;}
 
 /* A COLLECTION OF CLASSES TO BE USED WHERE APPROPRIATE. MINIMAL STYLING*/
 .important { font-weight:900; }
