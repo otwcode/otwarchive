@@ -28,18 +28,9 @@ class Tagging < ActiveRecord::Base
   end
   
   # Tag with canonical synonym instead, if it exists
-  # Use synonym as freeform tag on taggable
   def check_for_synonyms
     synonym = self.tag.canonical_synonym
-    if synonym
-      old_tag = self.tag
-      self.tag = synonym
-      new_default = TagCategory.default.tags.find_or_create_by_name(old_tag.name)
-      self.taggable.tags << new_default unless self.taggable.tags.include?(new_default)
-      return true
-    else
-      return true
-    end
+    self.tag = synonym if synonym
   end
 
 end

@@ -22,11 +22,11 @@ class AdminMailerTest < ActionMailer::TestCase
   end
 
   should "send feedback" do
-    comment = random_phrase
+    feedback = create_feedback
 
-    mail = AdminMailer.create_feedback(comment)
+    mail = AdminMailer.create_feedback(feedback)
 
-    assert_match Regexp.new(comment), mail.body
+    assert_match Regexp.new(feedback.comment), mail.body
     assert_match Regexp.new(ArchiveConfig.REVISION), mail.body
   end
 

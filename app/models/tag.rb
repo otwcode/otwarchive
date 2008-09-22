@@ -30,8 +30,6 @@ class Tag < ActiveRecord::Base
   def Tag.default_rating
     ["Not Rated"]
   end
-
-  before_validation_on_update :check_for_synonyms
   
   def before_validation
     self.name = name.strip.squeeze(" ") if self.name
@@ -122,32 +120,6 @@ class Tag < ActiveRecord::Base
   
   def canonical_synonym
     self.synonyms.select {|tag| tag.canonical?}.first
-  end
-  
-  # When a tag wrangler tries to rename a tag and the name they want is already in use, set the two tags as synonyms
-  # and reassociate the original tag's works. If it's not in use, change the name of the tag and create a new synonym
-  # with the old name. In both cases, create a new default tag with the original name and add it to the tag's works,
-  # giving authors the option to retain it.
-  def check_for_synonyms
-    if self.name_changed? && self.canonical?
-      tag_category = self.tag_category
-      name = self.name_was
-      existing = tag_category.tags.find_by_name(self.name) 
-      if existing
-        unless self.related_tags.include?(existing)
-          relationship = TagRelationship.new :tag => self, :related_tag => existing, :tag_relationship_kind => TagRelationshipKind.synonym
-          relationship.save #reassignment takes place in the relationship callback
-        end        
-      else
-        unless name == self.name
-          new_synonym = tag_category.tags.find_or_create_by_name(name)
-          unless new_synonym == self
-            relationship = TagRelationship.new :tag => new_synonym, :related_tag => self, :tag_relationship_kind => TagRelationshipKind.synonym
-            relationship.save
-          end
-        end
-      end
-    end         
   end
   
 end

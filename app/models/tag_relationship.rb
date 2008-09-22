@@ -13,15 +13,12 @@ class TagRelationship < ActiveRecord::Base
   end
   
   # If this is a synonym relationship and one of the tags is canonical, reassign the synonym's works to the canonical tag
-  # and tag those works with a new default tag with the same name as the synonym
   def reassign_synonyms
     if tag_relationship_kind == TagRelationshipKind.synonym && (related_tag.canonical? || tag.canonical?)
       canonical_tag = related_tag.canonical? ? related_tag : tag
       synonym = related_tag.canonical? ? tag : related_tag 
-      new_default = TagCategory.default.tags.find_or_create_by_name(synonym.name)
       for work in synonym.works
         work.tags << canonical_tag unless work.tags.include?(canonical_tag)
-        work.tags << new_default unless work.tags.include?(new_default)
         work.tags = work.tags - [synonym]
       end
     end
