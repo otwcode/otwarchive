@@ -21,3 +21,12 @@ config.action_view.cache_template_loading            = true
 ExceptionNotifier.exception_recipients = ArchiveConfig.ERROR_ADDRESS
 ExceptionNotifier.sender_address = ArchiveConfig.RETURN_ADDRESS
 ExceptionNotifier.email_prefix = ArchiveConfig.ERROR_PREFIX
+
+case ArchiveConfig.PRODUCTION_CACHE 
+  when "memory"
+    config.cache_store = :memory_store
+  when "memcache"
+    # Use the memcached store with default options (localhost, TCP port 11211)
+    config.cache_store = :mem_cache_store
+end
+

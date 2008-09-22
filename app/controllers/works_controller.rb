@@ -1,5 +1,7 @@
 class WorksController < ApplicationController 
   include HtmlFormatter  
+  
+  cache_sweeper :work_sweeper, :only => [:create, :update, :destroy]
     
   # only registered users and NOT admin should be able to create new works
   before_filter :users_only, :only => [ :new, :create ]
@@ -327,12 +329,8 @@ class WorksController < ApplicationController
     @work = Work.find(params[:id])
     begin
       @work.destroy
-    rescue ThinkingSphinx::ConnectionError
+    rescue
       flash[:error] = "We couldn't delete that right now, sorry! Please try again later.".t
-      if env['RAILS_ENV'] == 'development'
-        flash[:error] += "(Note to developers: this means that the sphinx searchd isn't running. 
-                          You can safely ignore this if you are just testing other things.)"
-      end
     end
     redirect_to(user_works_url(current_user))
   end

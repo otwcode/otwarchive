@@ -101,3 +101,7 @@ HELP_DIRECTORY: '/help'
 
 # turn delta indexes on and off
 USE_DELTA_INDEXING: false
+
+# production caching
+PRODUCTION_CACHE: "memory"
+#PRODUCTION_CACHE: "memcache"

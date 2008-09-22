@@ -400,6 +400,9 @@ class Work < ActiveRecord::Base
     tags.find(:first, :conditions => {:adult => true})
   end
 
+  def self.all_cached
+    Rails.cache.fetch ('Works.all') { all }
+  end
 
   def self.search_and_filter(options={})
     all_works = []  
@@ -440,7 +443,11 @@ class Work < ActiveRecord::Base
         all_works = Work.ordered(sort_order).visible & Work.with_tags(tags)
       else
         # get all works
-        all_works = Work.ordered(sort_order).visible
+        if sort_order
+          all_works = Work.ordered(sort_order).visible
+        else # basic default - use cache
+          all_works = Work.all_cached(&:visible).compact
+        end
       end
     end
 

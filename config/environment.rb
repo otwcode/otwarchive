@@ -114,7 +114,7 @@ Rails::Initializer.run do |config|
   #    ActionView::Base.sanitized_allowed_tags.delete tag
   #  end
   #end
-    
+  config.load_paths << "#{RAILS_ROOT}/app/sweepers"
 end
 
 ActionController::AbstractRequest.relative_url_root = ArchiveConfig.PRODUCTION_URL_ROOT if ArchiveConfig.PRODUCTION_URL_ROOT && ENV['RAILS_ENV'] == 'production'
