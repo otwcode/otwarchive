@@ -122,7 +122,11 @@ class UsersController < ApplicationController
   def destroy
     @hide_dashboard = true
     @user = User.find_by_login(params[:id])
-    if @user.works.blank?
+    @works = @user.works.find(:all, :conditions => 'posted = 1')
+    if @works.blank?
+      if @user.unposted_works
+        @user.wipeout_unposted_works
+      end
       @user.destroy
       flash[:notice] = 'You have successfully deleted your account.'.t
       redirect_to(delete_confirmation_path)
@@ -180,8 +184,11 @@ class UsersController < ApplicationController
             s.destroy
           end
         end
-        @works = @user.works.find(:all)
+        @works = @user.works.find(:all, :conditions => 'posted = 1')
         if @works.blank?
+          if @user.unposted_works
+            @user.wipeout_unposted_works
+          end
           @user.destroy
           flash[:notice] = 'You have successfully deleted your account.'.t
           redirect_to(delete_confirmation_path)

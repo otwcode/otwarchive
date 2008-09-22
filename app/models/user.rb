@@ -196,7 +196,7 @@ class User < ActiveRecord::Base
   # Returns array of works where the user is the sole author   
   def sole_authored_works
     @sole_authored_works = []
-    works.find(:all).each do |w|
+    works.find(:all, :conditions => 'posted = 1').each do |w|
       if self.is_sole_author_of?(w)
         @sole_authored_works << w
       end
@@ -207,7 +207,7 @@ class User < ActiveRecord::Base
   # Returns array of the user's co-authored works   
   def coauthored_works
     @coauthored_works = []
-    self.works.find(:all).each do |w|
+    works.find(:all, :conditions => 'posted = 1').each do |w|
       unless self.is_sole_author_of?(w)
         @coauthored_works << w 
       end
