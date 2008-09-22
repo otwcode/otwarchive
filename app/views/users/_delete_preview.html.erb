@@ -11,7 +11,7 @@
     <%= 'You are not able to delete these as they are shared works.'.t %>
 </p>
 <p>
-    <%= radio_button_tag 'coauthor', 'keep_pseud' %>
+    <%= radio_button_tag 'coauthor', 'keep_pseud', true %>
     <%= label_tag 'coauthor_keep_pseud', 'Leave my pseud but attach to the orphan account'.t %>
 </p>
 <p>
@@ -33,7 +33,7 @@
     <%=h 'You are able to delete these works; however, you may wish to orphan them instead.'.t %>
 </p>
 <p>
-    <%= radio_button_tag 'sole_author', "keep_pseud" %>
+    <%= radio_button_tag 'sole_author', "keep_pseud", true %>
     <%= label_tag 'sole_author_keep_pseud', 'Leave my pseud but attach to the orphan account'.t %>
 </p>
 <p>
@@ -45,7 +45,7 @@
     <%= label_tag 'sole_author_delete', 'Delete works'.t %>
 </p>
 <% end -%>
-<p class="submit">
-    <%= submit_tag "Save".t, :confirm => "Are you sure? This can't be undone!".t %>
+<p class="submit cancel">
+		<%= submit_tag "Save".t, :confirm => "Are you sure? This can't be undone!".t %> <%= submit_tag 'Cancel'.t, :name => 'cancel_button', :class => 'cancel' %>
 </p>
 <%- end %>
