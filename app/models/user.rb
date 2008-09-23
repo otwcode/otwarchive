@@ -105,21 +105,15 @@ class User < ActiveRecord::Base
   
   # gets rid of unposted works older than a week
   def cleanup_unposted_works
-    works.find(:all, :conditions => ['posted IS NULL OR posted = 0 AND works.created_at > ?', 1.week.ago]).each do |w|
-      begin
-        w.destroy
-      rescue ThinkingSphinx::ConnectionError
-      end
+    works.find(:all, :conditions => ['(posted IS NULL OR posted = 0) AND works.created_at < ?', 1.week.ago]).each do |w|
+      w.destroy
     end
   end
   
   # removes ALL unposted works
   def wipeout_unposted_works
     works.find(:all, :conditions => 'posted IS NULL OR posted = 0').each do |w|
-      begin
-        w.destroy
-      rescue ThinkingSphinx::ConnectionError
-      end
+      w.destroy
     end
   end
 
