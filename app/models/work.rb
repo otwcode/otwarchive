@@ -422,8 +422,15 @@ class Work < ActiveRecord::Base
           all_works = Work.search(options["query"], :per_page => 1000).compact.map(&:visible).compact
           error << "Sorting searches is not currently working".t         
           # if there is a sort column, use :order
+       # FIXME :order broken when using query
 #          direction = options["sort_direction"] == "DESC" ? :desc : :asc
 #          all_works = Work.search(options["query"], :order => options["sort_column"], :sort_mode => direction, :per_page => 1000).map(&:visible).compact
+        end
+        # if the search is for a tag that is synonymous with a tag on the work.
+        # FIXME : these works are just getting squished on the end in no particular order
+        tag = Tag.find_by_name(options["query"])
+        if tag
+          all_works = (all_works + Work.with_tags([tag] + tag.synonyms).compact.map(&:visible)).compact.uniq
         end
       rescue ThinkingSphinx::ConnectionError
         error << "The search engine is presently down".t

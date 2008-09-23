@@ -35,14 +35,15 @@ class TagsController < ApplicationController
   def show
     @tag = Tag.find(params[:id])
     unless @tag.valid
-      render :file => "#{RAILS_ROOT}/public/403.html",  :status => 403 and return
+  	  flash[:error] = 'This page is unavailable.'.t
+      redirect_to tags_path and return
     end
     @tags = @tag.synonyms
     @works = @tag.works.visible + @tags.collect {|tag| tag.works.visible}.flatten
     @bookmarks = @tag.bookmarks.visible + @tags.collect {|tag| tag.bookmarks.visible}.flatten
     @ambiguous = @tag.disambiguation   
 
-    @works.uniq!
+    @works = @works.compact.uniq.paginate(:page => params[:page])
     @bookmarks.uniq!
     respond_to do |format|
       format.html # show.html.erb

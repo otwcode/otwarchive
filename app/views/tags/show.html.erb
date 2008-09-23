@@ -5,8 +5,12 @@
 
 <% unless @works.size == 0 %>
   <h3><%=h 'Works that have been tagged with this tag or one of its synonyms'.t %></h3>
-  <% @works.each do |work| %>
-    <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
+  <% paginated_section @works, {:prev_label => '&laquo; Previous'.t, :next_label => 'Next &raquo;'.t} do %>
+    <ul class="story-list">
+      <%- for work in @works -%>
+        <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
+      <%- end -%>
+    </ul>
   <% end %>
 <% end %>
 
