@@ -1,5 +1,12 @@
 // Place your application-specific JavaScript functions and classes here
-// This file is automatically included by javascript_include_tag :defaults
+// This file is automatically included by javascript_include_tag :defaults 
+
+//things to do when the page loads
+document.observe("dom:loaded", function () {
+	hideFormFields(); 
+	hideFilters(); 
+	initSelect('languages_menu');
+});
 
 
 // Toggles the chaptered story section of the work form and resets the wip_length field
