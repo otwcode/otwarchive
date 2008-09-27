@@ -30,8 +30,7 @@ module UsersHelper
   # Prints link to works page with user-appropriate number of works
   # (The total should reflect the number of works the user can actually see.)
   def print_works_link(user)
-    @works ||= Work.owned_by(user).visible
-    total = @works.size
+    total = Work.owned_by(user).visible.count
     prefix = (@user == current_user) ? "My ".t : ""
     link_to_unless_current prefix + "Works".t + " (" + total.to_s + ")", user_works_path(@user)
   end
