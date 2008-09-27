@@ -126,22 +126,24 @@ namespace :db do
     FileUtils.cp_r @now, rpath
     last = ENV['DATE'] || DateTime.now.to_s
     date = DateTime.parse(last)
-    Dir.new(@previous).each do |backup|
-      begin
-        backup_time = DateTime.parse(backup)
-        if date <= backup_time 
-          puts "patching from #{backup}" if @debug
-          Find.find(@previous + backup) do |path|
-            if FileTest.file?(path)
-              patch = path
-              file = path.gsub(@previous + backup.to_s, rpath).gsub('.patch', '')
-              cmd = "patch -s -p0 #{file} #{patch}"
-              puts cmd if @debug
-              puts "#{cmd} failed" unless system(cmd)
+    if File.exists?(@previous)
+      Dir.new(@previous).each do |backup|
+        begin
+          backup_time = DateTime.parse(backup)
+          if date <= backup_time 
+            puts "patching from #{backup}" if @debug
+            Find.find(@previous + backup) do |path|
+              if FileTest.file?(path)
+                patch = path
+                file = path.gsub(@previous + backup.to_s, rpath).gsub('.patch', '')
+                cmd = "patch -s -p0 #{file} #{patch}"
+                puts cmd if @debug
+                puts "#{cmd} failed" unless system(cmd)
+              end
             end
-          end
-        end 
-      rescue
+          end 
+        rescue
+        end
       end
     end
     puts "restore (assuming empty database) using:"
