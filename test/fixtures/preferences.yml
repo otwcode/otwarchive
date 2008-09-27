@@ -5,3 +5,18 @@ basic_users_preferences:
   history_enabled: true
   email_visible: true
 
+basic_users_preferences2:
+  user_id: 2
+  history_enabled: true
+  email_visible: true
+
+basic_users_preferences3:
+  user_id: 3
+  history_enabled: true
+  email_visible: true
+
+basic_users_preferences4:
+  user_id: 4
+  history_enabled: true
+  email_visible: true
+

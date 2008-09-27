@@ -20,9 +20,39 @@ basic_creatorship3:
 basic_creatorship4:
   creation_id: 2
   creation_type: Work
-  pseud_id: 1
+  pseud_id: 5
 
 basic_creatorship5:
   creation_id: 3 
   creation_type: Chapter
-  pseud_id: 1
+  pseud_id: 5
+
+basic_creatorship6:
+  creation_id: 3
+  creation_type: Work
+  pseud_id: 2
+
+basic_creatorship7:
+  creation_id: 4 
+  creation_type: Chapter
+  pseud_id: 2
+
+basic_creatorship8:
+  creation_id: 4
+  creation_type: Work
+  pseud_id: 3
+
+basic_creatorship9:
+  creation_id: 5 
+  creation_type: Chapter
+  pseud_id: 3
+
+basic_creatorship10:
+  creation_id: 5
+  creation_type: Work
+  pseud_id: 4
+
+basic_creatorship11:
+  creation_id: 6 
+  creation_type: Chapter
+  pseud_id: 4

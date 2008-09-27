@@ -234,3 +234,11 @@ Sam_Carter:
 Sam:
   tag_category: Ambiguous
   name: Sam
+  
+angsty:
+  tag_category: Default
+  name: angsty
+  
+fluff:
+  tag_category: Default
+  name: fluff

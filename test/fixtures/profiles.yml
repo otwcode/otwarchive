@@ -6,3 +6,21 @@ default_profile:
   about_me: MyText
   date_of_birth: 1970-04-21
 
+default_profile2:
+  user_id: 2
+  location: MyString
+  about_me: MyText
+  date_of_birth: 1970-04-21
+
+default_profile3:
+  user_id: 3
+  location: MyString
+  about_me: MyText
+  date_of_birth: 1970-04-21
+
+default_profile4:
+  user_id: 4
+  location: MyString
+  about_me: MyText
+  date_of_birth: 1970-04-21
+

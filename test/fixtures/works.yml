@@ -10,6 +10,7 @@ TwoChapterWork:
   summary: Summary of test work
   notes: Notes on test work
   posted: true
+  word_count: 10
 
 OneChapterWork:
   id: 2
@@ -21,3 +22,41 @@ OneChapterWork:
   summary: Summary of test work with only one chapter
   notes: Notes on test work with only one chapter
   posted: true
+  word_count: 11
+
+OneChapterWork2:
+  id: 3
+  expected_number_of_chapters: 1
+  major_version: 1
+  minor_version: 1
+  restricted: 0
+  title: ThirdWork
+  summary: Summary of test work with only one chapter
+  notes: Notes on test work with only one chapter
+  posted: true
+  word_count: 12
+
+OneChapterWork3:
+  id: 4
+  expected_number_of_chapters: 1
+  major_version: 1
+  minor_version: 1
+  restricted: 0
+  title: FourthWork
+  summary: Summary of test work with only one chapter
+  notes: Notes on test work with only one chapter
+  posted: true
+  word_count: 13
+
+OneChapterWork4:
+  id: 5
+  expected_number_of_chapters: 1
+  major_version: 1
+  minor_version: 1
+  restricted: 0
+  title: FifthWork
+  summary: Summary of test work with only one chapter
+  notes: Notes on test work with only one chapter
+  posted: true
+  word_count: 14
+

@@ -24,11 +24,44 @@ basic_chapter2:
 
 basic_chapter3:
   id: 3
-  content: this is the content of the one and only chapter
+  content: this is the content of the one and only chapter yay
   position: 1
   work_id: 2
   posted: true
-  word_count: 10
+  word_count: 11
+  title: Only Chapter Title
+  summary: Summary of one and only chapter
+  notes: Notes on one and only chapter
+
+basic_chapter4:
+  id: 4
+  content: this is the content of the one and only chapter yay woo
+  position: 1
+  work_id: 3
+  posted: true
+  word_count: 12
+  title: Only Chapter Title
+  summary: Summary of one and only chapter
+  notes: Notes on one and only chapter
+
+basic_chapter5:
+  id: 5
+  content: this is the content of the one and only chapter yay woo foo
+  position: 1
+  work_id: 4
+  posted: true
+  word_count: 13
+  title: Only Chapter Title
+  summary: Summary of one and only chapter
+  notes: Notes on one and only chapter
+
+basic_chapter6:
+  id: 6
+  content: this is the content of the one and only chapter yay woo foo bar
+  position: 1
+  work_id: 5
+  posted: true
+  word_count: 14
   title: Only Chapter Title
   summary: Summary of one and only chapter
   notes: Notes on one and only chapter

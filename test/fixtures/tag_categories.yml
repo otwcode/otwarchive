@@ -34,8 +34,7 @@ Pairing:
   name: Pairing
   official: true
 	
-Genre:
-  name: Genre
-  required: true
+Category:
+  name: Category
   official: true
   exclusive: true

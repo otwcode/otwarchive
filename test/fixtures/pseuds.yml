@@ -8,17 +8,35 @@
 
 default_pseud:
   id: 1
-  user_id: 1 # basic_user
-  name: basic_user
-  description: This is a default pseud for basic_user.
+  user_id: 1 
+  name: testuser
+  description: This is a default pseud for testuser.
+  is_default: true
+
+default_pseud2:
+  id: 2
+  user_id: 2 
+  name: testuser2
+  description: This is a default pseud.
+  is_default: true
+
+default_pseud3:
+  id: 3
+  user_id: 3
+  name: testuser3
+  description: This is a default pseud.
+  is_default: true
+
+default_pseud4:
+  id: 4
+  user_id: 4
+  name: testuser4
+  description: This is a default pseud.
   is_default: true
 
 non_default_pseud:
-  id: 2
-  user_id: 1 # basic_user
+  id: 5
+  user_id: 1 
   name: Non-Default Pseud
-  description: This is a non default pseud for basic_user.
+  description: This is a non default pseud for testuser.
   is_default: false
-
-
-

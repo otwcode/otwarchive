@@ -33,8 +33,64 @@ work2fandom:
   taggable_id: 2
   taggable_type: Work
 
-work1genre:
-  tag: Slash
-  taggable_id: 1
+work3rating: 
+  tag: Explicit
+  taggable_id: 3
   taggable_type: Work
-  
+
+work3warning:
+  tag: Rape
+  taggable_id: 3
+  taggable_type: Work
+
+work3fandom:
+  tag: Stargate_Atlantis
+  taggable_id: 3
+  taggable_type: Work
+
+work3genre:
+  tag: Slash
+  taggable_id: 3
+  taggable_type: Work
+
+work4rating: 
+  tag: Not_Rated
+  taggable_id: 4
+  taggable_type: Work
+
+work4warning:
+  tag: Chooses_Not_To_Warn
+  taggable_id: 4
+  taggable_type: Work
+
+work4fandom:
+  tag: Supernatural
+  taggable_id: 4
+  taggable_type: Work
+
+work4default:
+  tag: fluff
+  taggable_id: 4
+  taggable_type: Work
+
+work5rating: 
+  tag: Not_Rated
+  taggable_id: 5
+  taggable_type: Work
+
+work5warning:
+  tag: No_Warnings_Apply
+  taggable_id: 5
+  taggable_type: Work
+
+work5fandom:
+  tag: Supernatural
+  taggable_id: 5
+  taggable_type: Work
+
+work5default:
+  tag: angsty
+  taggable_id: 5
+  taggable_type: Work
+
+
