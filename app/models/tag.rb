@@ -12,10 +12,11 @@ class Tag < ActiveRecord::Base
 
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => [:tag_category_id]
-  validates_length_of :name, :maximum => ArchiveConfig.TAG_MAX, :message => "Your tag has exceeded the character limit. Try using less than 40 characters or using commas to separate your tags.".t
+  validates_length_of :name, :maximum => ArchiveConfig.TAG_MAX, 
+                             :message => "is too long -- try using less than #{ArchiveConfig.TAG_MAX} characters or using commas to separate your tags.".t
   validates_format_of :name, 
                       :with => /\A[-a-zA-Z0-9 \/?.!''"":;\|\]\[}{=~!@#\$%^&()_+]+\z/, 
-                      :message => "tags can only be made up of letters, numbers, spaces and basic punctuation, but not commas, asterisks or angle brackets".t
+                      :message => "can only be made up of letters, numbers, spaces and basic punctuation, but not commas, asterisks or angle brackets.".t
   
   named_scope :valid, {:conditions => 'banned = 0 OR banned IS NULL'}
   named_scope :canonical, {:conditions => {:canonical => true}}

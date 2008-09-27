@@ -56,12 +56,14 @@ class StoryParser
   # Parses the text of a story, optionally from a given location. 
   def parse_story(story, location = nil)
     work_params = parse_common(story, location)
+    work_params = sanitize_params(work_params)
     return Work.new(work_params)
   end
 
   # Parses text but returns a chapter instead
   def parse_chapter(chapter, location = nil)
     work_params = parse_common(chapter, location)
+    work_params = sanitize_params(work_params)
     @chapter = get_chapter_from_work_params(work_params)
     return @chapter
   end
@@ -85,7 +87,6 @@ class StoryParser
           @work.chapters << get_chapter_from_work_params(chapter_params)
         end
       end
-      puts @work.to_yaml
       return @work
     end
 
@@ -355,13 +356,29 @@ class StoryParser
       nil
     end      
   
-    # is there something that looks like a story in here
-    def check_for_story(storytext)
-      
-    end
-
     def clean_storytext(storytext)
       return sanitize_whitelist(cleanup_and_format(storytext))
+    end
+    
+    # convert space-separated tags to comma-separated
+    def convert_default(tags)
+      if tags.match(/,/)
+        # already comma-separated, yay
+        tagslist = tags.split(/,/)
+      elsif tags.match(/\s/)
+        tagslist = tags.split(/\s+/)
+      else
+        tagslist = [tags]
+      end
+      newlist = []
+      tagslist.each do |tag|
+        tag.gsub!(/[\*\<\>]/, '')
+        if tag.length > ArchiveConfig.TAG_MAX
+          tag = tag[0..(ArchiveConfig.TAG_MAX-2)]
+        end
+        newlist << tag
+      end
+      return newlist.join(',')
     end
 
     # Convert the common ratings into whatever ratings we're

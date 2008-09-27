@@ -40,7 +40,7 @@ module SanitizeParams
   def walk_hash(hash)
     hash.keys.each do |key|
       if hash[key].is_a? String
-        if ArchiveConfig.FIELDS_ALLOWING_HTML.include?(key)
+        if ArchiveConfig.FIELDS_ALLOWING_HTML.include?(key.to_s)
           hash[key] = @white_list_sanitizer.sanitize(strip_comments(hash[key]))
         else
           hash[key] = @full_sanitizer.sanitize(hash[key])
