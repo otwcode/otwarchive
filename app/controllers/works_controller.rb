@@ -105,7 +105,7 @@ class WorksController < ApplicationController
     @query = nil
     @user = nil
     @sort_column = params[:sort_column] || 'updated_at'
-    @sort_direction = params["sort_direction_for_#{@sort_column}".to_sym] || 'ASC'
+    @sort_direction = params["sort_direction_for_#{@sort_column}".to_sym] || 'DESC'
     @works = []
     @selected_tags = []
     @selected_pseuds = []

@@ -9,12 +9,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080922060611) do
+ActiveRecord::Schema.define(:version => 20080927191115) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
-    t.string   "url",        :default => "", :null => false
-    t.text     "comment",                    :null => false
+    t.string   "url",        :null => false
+    t.text     "comment",    :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -30,38 +30,38 @@ ActiveRecord::Schema.define(:version => 20080922060611) do
 
   create_table "bookmarks", :force => true do |t|
     t.datetime "created_at",                                         :null => false
-    t.string   "bookmarkable_type", :limit => 15, :default => "",    :null => false
+    t.string   "bookmarkable_type", :limit => 15,                    :null => false
     t.integer  "bookmarkable_id",   :limit => 11,                    :null => false
     t.integer  "user_id",           :limit => 11,                    :null => false
     t.text     "notes"
     t.boolean  "private",                         :default => false
     t.datetime "updated_at"
-    t.boolean  "hidden_by_admin"
+    t.boolean  "hidden_by_admin",                 :default => false, :null => false
   end
 
   add_index "bookmarks", ["user_id"], :name => "fk_bookmarks_user"
 
   create_table "chapters", :force => true do |t|
-    t.text     "content",         :limit => 2147483647,                :null => false
+    t.text     "content",         :limit => 2147483647,                    :null => false
     t.integer  "position",        :limit => 11,         :default => 1
     t.integer  "work_id",         :limit => 11
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "posted"
+    t.boolean  "posted",                                :default => false, :null => false
     t.string   "title"
     t.text     "notes"
     t.text     "summary"
     t.integer  "word_count",      :limit => 11
-    t.boolean  "hidden_by_admin"
+    t.boolean  "hidden_by_admin",                       :default => false, :null => false
   end
 
   create_table "comments", :force => true do |t|
     t.integer  "pseud_id",         :limit => 11
-    t.text     "content",                        :null => false
+    t.text     "content",                                           :null => false
     t.integer  "depth",            :limit => 11
     t.integer  "threaded_left",    :limit => 11
     t.integer  "threaded_right",   :limit => 11
-    t.boolean  "is_deleted"
+    t.boolean  "is_deleted",                     :default => false, :null => false
     t.string   "name"
     t.string   "email"
     t.string   "ip_address"
@@ -70,9 +70,9 @@ ActiveRecord::Schema.define(:version => 20080922060611) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "thread",           :limit => 11
-    t.boolean  "approved"
-    t.boolean  "hidden_by_admin"
     t.string   "user_agent"
+    t.boolean  "approved",                       :default => false, :null => false
+    t.boolean  "hidden_by_admin",                :default => false, :null => false
   end
 
   create_table "communities", :force => true do |t|
@@ -94,14 +94,14 @@ ActiveRecord::Schema.define(:version => 20080922060611) do
   add_index "creatorships", ["creation_id", "creation_type", "pseud_id"], :name => "creation_id_creation_type_pseud_id", :unique => true
 
   create_table "external_works", :force => true do |t|
-    t.string   "url",             :default => "", :null => false
-    t.string   "author",          :default => "", :null => false
-    t.boolean  "dead"
+    t.string   "url",                                :null => false
+    t.string   "author",                             :null => false
+    t.boolean  "dead",            :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title",           :default => "", :null => false
+    t.string   "title",                              :null => false
     t.text     "summary"
-    t.boolean  "hidden_by_admin"
+    t.boolean  "hidden_by_admin", :default => false, :null => false
   end
 
   create_table "feedbacks", :force => true do |t|
@@ -170,6 +170,15 @@ ActiveRecord::Schema.define(:version => 20080922060611) do
     t.datetime "updated_at"
   end
 
+  create_table "invitations", :force => true do |t|
+    t.integer  "sender_id",       :limit => 11
+    t.string   "recipient_email"
+    t.string   "token"
+    t.datetime "sent_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "open_id_authentication_associations", :force => true do |t|
     t.integer "issued",     :limit => 11
     t.integer "lifetime",   :limit => 11
@@ -180,9 +189,9 @@ ActiveRecord::Schema.define(:version => 20080922060611) do
   end
 
   create_table "open_id_authentication_nonces", :force => true do |t|
-    t.integer "timestamp",  :limit => 11,                 :null => false
+    t.integer "timestamp",  :limit => 11, :null => false
     t.string  "server_url"
-    t.string  "salt",                     :default => "", :null => false
+    t.string  "salt",                     :null => false
   end
 
   create_table "preferences", :force => true do |t|
@@ -192,10 +201,10 @@ ActiveRecord::Schema.define(:version => 20080922060611) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "date_of_birth_visible",               :default => false
-    t.boolean  "edit_emails_off"
-    t.boolean  "comment_emails_off"
+    t.boolean  "edit_emails_off",                     :default => false, :null => false
+    t.boolean  "comment_emails_off",                  :default => false, :null => false
     t.boolean  "adult",                               :default => false
-    t.boolean  "hide_warnings"
+    t.boolean  "hide_warnings",                       :default => false, :null => false
     t.boolean  "comment_inbox_off",                   :default => false
   end
 
@@ -211,9 +220,9 @@ ActiveRecord::Schema.define(:version => 20080922060611) do
 
   create_table "pseuds", :force => true do |t|
     t.integer  "user_id",     :limit => 11
-    t.string   "name",                      :default => "", :null => false
+    t.string   "name",                                         :null => false
     t.text     "description"
-    t.boolean  "is_default"
+    t.boolean  "is_default",                :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -231,7 +240,7 @@ ActiveRecord::Schema.define(:version => 20080922060611) do
     t.integer  "parent_id",   :limit => 11
     t.string   "parent_type"
     t.integer  "work_id",     :limit => 11
-    t.boolean  "reciprocal"
+    t.boolean  "reciprocal",                :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -262,17 +271,17 @@ ActiveRecord::Schema.define(:version => 20080922060611) do
   create_table "series", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title",           :default => "", :null => false
+    t.string   "title",                              :null => false
     t.text     "summary"
     t.text     "notes"
-    t.boolean  "hidden_by_admin"
+    t.boolean  "hidden_by_admin", :default => false, :null => false
   end
 
   create_table "tag_categories", :force => true do |t|
-    t.string   "name",         :default => "", :null => false
-    t.boolean  "required"
-    t.boolean  "official"
-    t.boolean  "exclusive"
+    t.string   "name",                            :null => false
+    t.boolean  "required",     :default => false, :null => false
+    t.boolean  "official",     :default => false, :null => false
+    t.boolean  "exclusive",    :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "display_name"
@@ -281,12 +290,12 @@ ActiveRecord::Schema.define(:version => 20080922060611) do
   add_index "tag_categories", ["name"], :name => "index_tag_categories_on_name", :unique => true
 
   create_table "tag_relationship_kinds", :force => true do |t|
-    t.string   "name",                      :default => "", :null => false
-    t.string   "verb_phrase",               :default => "", :null => false
-    t.boolean  "reciprocal"
+    t.string   "name",                                         :null => false
+    t.string   "verb_phrase",                                  :null => false
+    t.boolean  "reciprocal",                :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "distance",    :limit => 11,                 :null => false
+    t.integer  "distance",    :limit => 11,                    :null => false
   end
 
   create_table "tag_relationships", :force => true do |t|
@@ -296,9 +305,9 @@ ActiveRecord::Schema.define(:version => 20080922060611) do
   end
 
   create_table "taggings", :force => true do |t|
-    t.integer  "tag_id",        :limit => 11,                 :null => false
-    t.integer  "taggable_id",   :limit => 11,                 :null => false
-    t.string   "taggable_type",               :default => "", :null => false
+    t.integer  "tag_id",        :limit => 11, :null => false
+    t.integer  "taggable_id",   :limit => 11, :null => false
+    t.string   "taggable_type",               :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -306,9 +315,9 @@ ActiveRecord::Schema.define(:version => 20080922060611) do
   add_index "taggings", ["tag_id", "taggable_id", "taggable_type"], :name => "index_taggings_on_tag_id_and_taggable_id_and_taggable_type", :unique => true
 
   create_table "tags", :force => true do |t|
-    t.string   "name",                          :default => "",    :null => false
-    t.boolean  "canonical"
-    t.boolean  "banned"
+    t.string   "name",                                             :null => false
+    t.boolean  "canonical",                     :default => false, :null => false
+    t.boolean  "banned",                        :default => false, :null => false
     t.integer  "tag_category_id", :limit => 11
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -330,9 +339,11 @@ ActiveRecord::Schema.define(:version => 20080922060611) do
     t.string   "crypted_password"
     t.string   "salt"
     t.string   "identity_url"
-    t.boolean  "recently_reset"
-    t.boolean  "suspended"
-    t.boolean  "banned"
+    t.boolean  "recently_reset",                          :default => false, :null => false
+    t.boolean  "suspended",                               :default => false, :null => false
+    t.boolean  "banned",                                  :default => false, :null => false
+    t.integer  "invitation_id",             :limit => 11
+    t.integer  "invitation_limit",          :limit => 11, :default => 1
   end
 
   add_index "users", ["identity_url"], :name => "index_users_on_identity_url", :unique => true
@@ -343,14 +354,14 @@ ActiveRecord::Schema.define(:version => 20080922060611) do
     t.datetime "updated_at"
     t.integer  "major_version",               :limit => 11, :default => 1
     t.integer  "minor_version",               :limit => 11, :default => 0
-    t.boolean  "posted"
+    t.boolean  "posted",                                    :default => false, :null => false
     t.integer  "language_id",                 :limit => 11
     t.boolean  "restricted",                                :default => false
-    t.string   "title",                                     :default => "",    :null => false
+    t.string   "title",                                                        :null => false
     t.text     "summary"
     t.text     "notes"
     t.integer  "word_count",                  :limit => 11
-    t.boolean  "hidden_by_admin"
+    t.boolean  "hidden_by_admin",                           :default => false, :null => false
     t.boolean  "delta",                                     :default => false
   end
 

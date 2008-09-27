@@ -48,4 +48,9 @@ module UsersHelper
     link_to_unless_current "My Drafts".t + "(#{total})", drafts_user_works_path(@user)
   end
   
+  def user_invitations(user)
+    invitations = user.invitation_limit == 1 ? 'invitation' : 'invitations'
+    user.invitation_limit.to_s + ' ' + invitations
+  end
+  
 end

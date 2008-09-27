@@ -3,6 +3,7 @@
 		</p>
 		<%= error_messages_for :user, :id => "errorExplanationNone", :header_tag => "p", :header_message => "Oops, there's some problems with the stuff you told us.".t, :message => nil  %>
 		<% form_for :user, :url => users_path do |f| -%>
+		  <p><%= f.hidden_field :invitation_token %></p>
 <!-- Create login -->
 			<p>
 				<%= f.label :login, h("What would you like as your user name?").t %><br />

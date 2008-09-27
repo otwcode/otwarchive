@@ -5,6 +5,9 @@
   <ul class="navigation">
     <li><%= link_to_unless_current "profile".t, user_profile_path(user) %></li>
     <li><%= link_to_help "coming-soon", "bookmark".t %></li>
-    <li><%= link_to_help "coming-soon", "subscribe".t %></li>  
+    <li><%= link_to_help "coming-soon", "subscribe".t %></li>
+    <%- if @user == current_user && @user.invitation_limit > 0 -%>
+      <li><%= link_to 'Invite a friend'.t, new_invitation_path %></li>
+    <%- end -%>  
   </ul>
 </div>

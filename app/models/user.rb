@@ -14,6 +14,14 @@ class User < ActiveRecord::Base
   # OpenID plugin
   attr_accessible :identity_url
   
+  ### BETA INVITATIONS ###
+  validates_presence_of :invitation_id, :message => 'is required'
+  validates_uniqueness_of :invitation_id
+  has_many :sent_invitations, :class_name => 'Invitation', :foreign_key => 'sender_id'
+  belongs_to :invitation
+  before_create :set_invitation_limit
+  attr_accessible :invitation_token
+  
   has_many :pseuds, :dependent => :destroy
   validates_associated :pseuds
   
@@ -41,6 +49,7 @@ class User < ActiveRecord::Base
   has_many :feedback_comments, :through => :inbox_comments, :conditions => "(is_deleted IS NULL) OR (NOT is_deleted = 1)"
   
   named_scope :alphabetical, :order => :login
+  named_scope :valid, :conditions => {:banned => false, :suspended => false}
 
   validates_format_of :login, :message => 'Your user name must begin and end with a letter or number; it may also contain underscores but no other characters.'.t,
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
@@ -209,7 +218,21 @@ class User < ActiveRecord::Base
     return @coauthored_works  
   end
   
+  ### BETA INVITATIONS ###
+
+  def invitation_token
+    invitation.token if invitation
+  end
+
+  def invitation_token=(token)
+    self.invitation = Invitation.find_by_token(token)
+  end
+
   private
+
+  def set_invitation_limit
+    self.invitation_limit = ArchiveConfig.INVITATION_LIMIT || 5
+  end
   
   # Create and/or return a user account for holding orphaned works
   def self.fetch_orphan_account

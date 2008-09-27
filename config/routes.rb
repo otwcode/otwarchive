@@ -1,5 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
-
+  map.resources :invitations, :path_prefix => ':locale'
+  
   map.resources :media, :has_many => :fandoms, :path_prefix => ':locale'
   
   map.resources :fandoms, :path_prefix => ':locale' do |fandom|
@@ -31,7 +32,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :passwords, :path_prefix => ':locale'
   
   map.resources :admins, :path_prefix => ':locale'
-    
+  
+  map.signup '/signup/:invitation_token', :controller => 'users', :action => 'new', :path_prefix => ':locale'  
   map.resources :users, :path_prefix => ':locale' do |user|
     user.resources :pseuds, :has_many => :works
     user.resources :preferences
