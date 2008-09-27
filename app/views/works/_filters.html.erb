@@ -1,8 +1,8 @@
-<%- unless @filters.blank? && @pseuds.size <= 1 -%>
+<%- unless @filters.blank? && (@pseuds.size < 1 || (@user && @pseuds.size < 2)) -%>
 <%- form_tag(works_path, :class => 'story-filters', :method => :get) do -%>
   <%- field_set_tag 'Filter these results: '.t do -%>
  		<dl class="story-filters">
-			<%- unless @pseuds.size <= 1 -%>
+			<%- unless (@pseuds.size < 1 || (@user && @pseuds.size < 2)) -%>
         <dt onclick='toggleFilters("filter-pseuds")'>
           <span id="filter-pseuds_closed" style="display: none;"><%= image_tag 'arrow-right.png' -%></span>
           <span id="filter-pseuds_open"><%= image_tag 'arrow-down.png' -%></span>              
@@ -13,7 +13,7 @@
             <%- for pseud in @pseuds -%>
               <%- if pseud.works.count > 0 -%>
                 <li>
-                  <%= check_box_tag 'selected_pseuds[]', pseud.name, @selected_pseuds.include?(pseud.name) %>
+                  <%= check_box_tag 'selected_pseuds[]', pseud.id, @selected_pseuds.include?(pseud) %>
                   <%= label_tag "selected_pseuds[#{pseud.name}]", pseud.name %>  
                 </li>
               <%- end -%>

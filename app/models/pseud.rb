@@ -29,6 +29,10 @@ class Pseud < ActiveRecord::Base
     }
   }
   
+  named_scope :for_user, lambda {|user|
+    { :conditions => ['pseuds.user_id = ?', user.id] }
+  }
+  
   named_scope :with_names, lambda {|pseud_names|
     {:conditions => ['pseuds.name in (?)', pseud_names]}
   }

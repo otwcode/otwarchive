@@ -145,9 +145,10 @@ class WorksController < ApplicationController
       # if we're browsing by a particular user get works by that user      
       unless params[:user_id].blank?
         @user = User.find_by_login(params[:user_id])
-        unless params[:selected_pseuds].blank?
-          @selected_pseuds = @user.pseuds.with_names(params[:selected_pseuds])
-        end
+      end
+
+      unless params[:selected_pseuds].blank?
+        @selected_pseuds = Pseud.find(params[:selected_pseuds])
       end
 
       # Now let's build the query
