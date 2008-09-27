@@ -101,7 +101,7 @@ Rails::Initializer.run do |config|
 
   config.gem 'ruby-openid', :lib => 'openid'
   config.gem 'chronic'
-  config.gem 'mislav-will_paginate', :lib => 'will_paginate', :source => 'http://gems.github.com'
+  config.gem 'mislav-will_paginate', :version => '~> 2.3.4', :lib => 'will_paginate', :source => 'http://gems.github.com'
   config.gem 'hpricot'
 
   # Override the sanitize defaults to allow some extra formatting attributes. 

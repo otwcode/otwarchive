@@ -54,6 +54,9 @@ CONTENT_MAX: 500000
 COMMENT_THREAD_MAX_DEPTH: 2
 NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD: 5
 
+# default number of items per page of search/browse results
+ITEMS_PER_PAGE: 50
+
 # This is used to determine how many recent items
 # to cache for recent lookups -- eg if we want to 
 # provide a "ten most recent" items to browse.

@@ -555,7 +555,7 @@ class Work < ActiveRecord::Base
     end
     
     return Work.search(options[:query], :where => where_clause, :order => order_clause,
-                                :per_page => 1000, :page => options[:page])
+                                :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => options[:page])
   end
   
   def self.filter(works_to_filter, tags_to_filter_on)

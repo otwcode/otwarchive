@@ -152,24 +152,26 @@ class WorksController < ApplicationController
       end
 
       # Now let's build the query
+      page_args = {:page => params[:page], :per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE)}
+      
       if !@selected_pseuds.empty? && !@selected_tags.empty?
         # We have selected pseuds and selected tags
-        @works = Work.written_by_conditions(@selected_pseuds).visible.with_all_tags(@selected_tags).ordered(@sort_column, @sort_direction).paginate(:page => params[:page])
+        @works = Work.written_by_conditions(@selected_pseuds).visible.with_all_tags(@selected_tags).ordered(@sort_column, @sort_direction).paginate(page_args)
       elsif !@selected_pseuds.empty?
         # We only have selected pseuds
-        @works = Work.written_by_conditions(@selected_pseuds).visible.ordered(@sort_column, @sort_direction).paginate(:page => params[:page])
+        @works = Work.written_by_conditions(@selected_pseuds).visible.ordered(@sort_column, @sort_direction).paginate(page_args)
       elsif !@user.nil? && !@selected_tags.empty?
         # no pseuds but a specific user, and selected tags
-        @works = Work.owned_by_conditions(@user).visible.with_all_tags(@selected_tags).ordered(@sort_column, @sort_direction).paginate(:page => params[:page])
+        @works = Work.owned_by_conditions(@user).visible.with_all_tags(@selected_tags).ordered(@sort_column, @sort_direction).paginate(page_args)
       elsif !@user.nil?
         # no tags but a user
-        @works = Work.owned_by_conditions(@user).visible.ordered(@sort_column, @sort_direction).paginate(:page => params[:page])
+        @works = Work.owned_by_conditions(@user).visible.ordered(@sort_column, @sort_direction).paginate(page_args)
       elsif !@selected_tags.empty?
         # no user but selected tags
-        @works = Work.visible.with_all_tags(@selected_tags).ordered(@sort_column, @sort_direction).paginate(:page => params[:page])
+        @works = Work.visible.with_all_tags(@selected_tags).ordered(@sort_column, @sort_direction).paginate(page_args)
       else
         # all visible works
-        @works = Work.visible.ordered(@sort_column, @sort_direction).paginate(:page => params[:page])
+        @works = Work.visible.ordered(@sort_column, @sort_direction).paginate(page_args)
       end
     end
 
