@@ -38,12 +38,11 @@ class TagsController < ApplicationController
   	  flash[:error] = 'This page is unavailable.'.t
       redirect_to tags_path and return
     end
-    @tags = @tag.synonyms
-    @works = @tag.works.visible + @tags.collect {|tag| tag.works.visible}.flatten
+    @tags = @tag.synonyms + [@tag]
+    @works = Work.visible.with_any_tags(@tags).paginate(:page => params[:page])
     @bookmarks = @tag.bookmarks.visible + @tags.collect {|tag| tag.bookmarks.visible}.flatten
     @ambiguous = @tag.disambiguation   
 
-    @works = @works.compact.uniq.paginate(:page => params[:page])
     @bookmarks.uniq!
     respond_to do |format|
       format.html # show.html.erb
