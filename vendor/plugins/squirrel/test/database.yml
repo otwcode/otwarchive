@@ -1,0 +1,18 @@
+sqlite3_file:
+  adapter: sqlite3
+  dbfile: squirrel.sqlite.db
+sqlite3:
+  adapter: sqlite3
+  database: ":memory:"
+postgresql:
+  adapter: postgresql
+  username: postgres
+  password: postgres
+  database: squirrel_test
+  min_messages: ERROR
+mysql:
+  adapter: mysql
+  host: localhost
+  username: squirrel
+  password: squirrel
+  database: squirrel_test

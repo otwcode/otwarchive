@@ -135,8 +135,11 @@ module ApplicationHelper
 
   def sort_link(title, column, options = {})
     condition = options[:unless] if options.has_key?(:unless)
-    sort_dir = params[:sort_direction] == 'ASC' ? 'DESC' : 'ASC'
-    link_to_unless condition, title, request.parameters.merge( {:sort_column => column, :sort_direction => sort_dir} )
+    sort_dir_sym = "sort_direction_for_#{column}".to_sym
+    sort_dir = params[sort_dir_sym] == 'ASC' ? 'DESC' : 'ASC'
+    
+    link_to_unless condition, image_tag(sort_dir == 'ASC' ? 'arrow-up.png' : 'arrow-down.png') + " " + title, 
+      request.parameters.merge( {:sort_column => column, sort_dir_sym => sort_dir} )
   end
 
   ## Allow use of tiny_mce WYSIWYG editor

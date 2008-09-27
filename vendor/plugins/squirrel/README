@@ -1,0 +1,55 @@
+Squirrel
+======
+
+SQL Simplification Plugin for ActiveRecord
+
+This plugin extends the ActiveRecord::Base#find method to be able to
+take a block of Ruby which will get parsed into a nice SQL string
+and have its results returned.
+
+Author::     Jon Yurek (mailto:jyurek@thoughtbot.com)
+Copyright::  Copyright(c) 2008 thoughtbot, inc.
+License::    Distributes under the same terms as Ruby
+Website::    http://www.thoughtbot.com/projects/squirrel
+
+Squirrel is a plugin for ActiveRecord which attempts to make SQL
+querier a much more natural prospect. You can write your queries
+in Ruby code and they get translated, including all proper table
+joins, into relevant SQL code and executed, returning your results.
+
+  User.find(:all) do
+    first_name.contains? params[:first_name]
+    posts.created_at >= 1.week.ago
+  end
+
+This query will return all Users that have a first_name that contains whatever
+was passed in as the "first_name" parameter, and that has any Posts that were
+created"in the past week. Both columns and associations are referenced as
+methods. Columns are referenced exactly as they are in the database, and 
+associations are referenced exactly as they are specified in their respective
+has_many, belongs_to, etc calls. For example, in the snippet above, the User
+has_many :posts, and so we use "posts" as the method to refer to that
+association.
+
+This mechanism works for *all* of ActiveRecord's associations, because it
+piggybacks on AR's eager loading functionality, which always produces the
+joins necessary for getting the columns required.
+
+By default, all conditions specified in the query are ANDed together. If it is
+necessary to have any condition match, you can group your conditions together
+using the "any" method, which takes a block containing the conditions.
+For example:
+
+  Playlist.find(:all) do
+    any do
+      name == "Party Mix"
+      total_length > 3600
+    end
+  end
+
+... will find all Playlists that either have a name of "Party Mix" or that
+have a total length of 1 hour (3600 seconds). There is also an "all" method
+that works similarly, but joins with "AND". These groups are nestable."
+
+Currenly, there is no allowance in Squirrel for either grouping or fetching
+columns that aren't part of any of the included tables.

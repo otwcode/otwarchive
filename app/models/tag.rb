@@ -19,8 +19,26 @@ class Tag < ActiveRecord::Base
   
   named_scope :valid, {:conditions => 'banned = 0 OR banned IS NULL'}
   named_scope :canonical, {:conditions => {:canonical => true}}
-  named_scope :by_category, lambda { |*args| {:conditions => "tag_category_id IN (#{args.flatten.collect(&:id).join(",")})"}}  
+  named_scope :by_category, lambda { |*args| {:conditions => ["tag_category_id IN (?)", args.flatten.collect(&:id).join(",")] }}  
   named_scope :by_popularity, {:order => 'taggings_count DESC'}
+
+  named_scope :with_names, lambda {|tagnames| 
+    {
+      :conditions => ["name IN (?)", tagnames]
+    }
+  }
+  
+  TAGGING_JOIN = "INNER JOIN taggings on tags.id = taggings.tag_id
+                  INNER JOIN works ON (works.id = taggings.taggable_id AND taggings.taggable_type = 'Work')"
+
+  named_scope :on_works, lambda {|tagged_works|
+    {
+      :select => "DISTINCT tags.*",
+      :joins => TAGGING_JOIN,
+      :conditions => ['works.id in (?)', tagged_works.collect(&:id)]
+    }
+  }
+
 
   # the default warning(s) put on a new work
   def Tag.default_warning

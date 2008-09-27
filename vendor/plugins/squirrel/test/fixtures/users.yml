@@ -1,0 +1,15 @@
+first:
+  id: 1
+  name: Jon Yurek
+  email: jyurek@thoughtbot.com
+  company_id: 1
+second:
+  id: 2
+  name: Mister McThoughtbot
+  email: mct@thoughtbot.com
+  company_id: 1
+third:
+  id: 3
+  name: Google Intern
+  email: No_1292@google.com
+  company_id: 3

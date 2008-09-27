@@ -6,14 +6,15 @@
     <dt>Sort by</dt> 
     <dd><%= sort_link 'Title', :title -%></dd>
     <dd><%= sort_link 'Date', :date -%></dd>
-    <dd><%= sort_link 'Word Count', :word_count -%></dd>	
+    <dd><%= sort_link 'Word Count', :word_count -%></dd>
   </dl>
 
-<%= render :partial => 'filters' %>
+  <%= render :partial => 'filters' %>
 
   <ul class="story-list">
     <%- for work in @works -%>
       <%= render :partial => 'work_blurb', :locals => {:work => work} %>
     <%- end -%>
   </ul>
+
 <% end %>

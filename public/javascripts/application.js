@@ -44,9 +44,16 @@ function hideFormFields() {
 }
 
 // Toggles items in filter list
-function toggleFilters(id) {
-  	var filter = document.getElementById(id);
-	if (filter != null) Effect.toggle(filter, 'blind');  
+function toggleFilters(id, blind_duration) {
+	blind_duration = (blind_duration == null ? 0.2 : blind_duration = 0.2)
+  var filter = document.getElementById(id);
+	var filter_open = document.getElementById(id + "_open")
+	var filter_closed = document.getElementById(id + "_closed")
+	if (filter != null) {
+		Effect.toggle(filter, 'blind', {duration: blind_duration});
+		Effect.toggle(filter_open, 'appear', {duration: 0})
+		Effect.toggle(filter_closed, 'appear', {duration: 0})
+	}
 }
 
 // Collapses filter list if Javascript is enabled
@@ -56,6 +63,6 @@ function hideFilters() {
 		var tags = filter.select('input');
 		var selected = false;
 		tags.each(function(tag) {if (tag.checked) selected=true});
-		if (selected != true) filter.toggle();
+		if (selected != true) {toggleFilters(filter.id, 0);}
 	});	
 }

@@ -97,6 +97,7 @@ form.story-filters	{ background:#ddd; font-size:0.875em; width:12.25em; float:ri
 .story-filters dt	{ font-weight: 600; text-transform: capitalize; margin:0.5625em auto 0; padding:0; border-bottom:1px solid #fffef9; }
 .story-filters dd {padding:0;}
 .story-filters dt:hover	{ color:#fffef9; background:#777; } 
+.story-filters span {font-size: 0.75em; font-weight: 500;}
 .story-filters p.submit {font-size:0.75em;}
 
 /*COMMENTS */

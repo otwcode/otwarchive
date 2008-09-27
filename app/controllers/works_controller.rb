@@ -102,32 +102,80 @@ class WorksController < ApplicationController
 	   
   # GET /works
   def index
-    # for nested routes
-    if !params[:user_id].blank?
-      @user = User.find_by_login(params[:user_id])
-    elsif !params[:fandom_id].blank?
-      @fandom = Tag.find(params[:fandom_id])
-    elsif !params[:tag_id].blank?
-      @tag = Tag.find(params[:tag_id])
+    @query = nil
+    @user = nil
+    @sort_column = params[:sort_column] || 'updated_at'
+    @sort_direction = params["sort_direction_for_#{@sort_column}".to_sym] || 'ASC'
+    @works = []
+    @selected_tags = []
+    @selected_pseuds = []
+    @filters = []
+    
+    # if the user is filtering with tags, let's see what they're giving us    
+    unless params[:selected_tags].blank?
+      @selected_tags = Tag.with_names(params[:selected_tags])
     end
 
-    sort_column = params[:sort_column] == "date" ? "created_at" : params[:sort_column]
-    tag_id = params[:tag_id].blank? ? params[:fandom_id] : params[:tag_id]
-    @pseuds = params[:pseuds] || []    
-    @selected_tags = params[:selected_tags] || {}
-    @query = params[:query]
+    # if we have a query, we are searching with sphinx, which will
+    # paginate for us automatically
+    if params[:query]
+      @query = params[:query]
+      begin
+        @works = Work.search_with_sphinx(params)
+      rescue ThinkingSphinx::ConnectionError
+        flash[:error] = "The search engine seems to be down at the moment, sorry!".t
+        redirect_to :action => :index and return
+      end
+      
+      # filter the results
+      unless @selected_tags.empty?
+        @works = Work.filter(@works, @selected_tags)
+      end
+    else
+      # we're browsing instead
+      # if we're browsing by a particular fandom or tag, just add that
+      # fandom/tag to the selected_tags list.
+      unless params[:fandom_id].blank? 
+        @selected_tags << Tag.find(params[:fandom_id])
+      end      
+      unless params[:tag_id].blank?
+        @selected_tags << Tag.find(params[:tag_id])
+      end
+      
+      # if we're browsing by a particular user get works by that user      
+      unless params[:user_id].blank?
+        @user = User.find_by_login(params[:user_id])
+        unless params[:selected_pseuds].blank?
+          @selected_pseuds = @user.pseuds.with_names(params[:selected_pseuds])
+        end
+      end
 
-    @works, @filters, error = Work.search_and_filter(
-       "sort_column" => sort_column,
-       "sort_direction" => params[:sort_direction],
-       "user_id" => params[:user_id],
-       "tag_id" => tag_id,
-       "pseuds" =>@pseuds,
-       "query" => @query ,
-       "selected_tags" => @selected_tags
-      )
-    flash[:error] = error unless error.blank?
-    @works = @works.paginate(:page => params[:page])
+      # Now let's build the query
+      if !@selected_pseuds.empty? && !@selected_tags.empty?
+        # We have selected pseuds and selected tags
+        @works = Work.written_by_conditions(@selected_pseuds).visible.with_all_tags(@selected_tags).ordered(@sort_column, @sort_direction).paginate(:page => params[:page])
+      elsif !@selected_pseuds.empty?
+        # We only have selected pseuds
+        @works = Work.written_by_conditions(@selected_pseuds).visible.ordered(@sort_column, @sort_direction).paginate(:page => params[:page])
+      elsif !@user.nil? && !@selected_tags.empty?
+        # no pseuds but a specific user, and selected tags
+        @works = Work.owned_by_conditions(@user).visible.with_all_tags(@selected_tags).ordered(@sort_column, @sort_direction).paginate(:page => params[:page])
+      elsif !@user.nil?
+        # no tags but a user
+        @works = Work.owned_by_conditions(@user).visible.ordered(@sort_column, @sort_direction).paginate(:page => params[:page])
+      elsif !@selected_tags.empty?
+        # no user but selected tags
+        @works = Work.visible.with_all_tags(@selected_tags).ordered(@sort_column, @sort_direction).paginate(:page => params[:page])
+      else
+        # all visible works
+        @works = Work.visible.ordered(@sort_column, @sort_direction).paginate(:page => params[:page])
+      end
+    end
+
+    # we now have @works found
+    # get the available tags to filter these results on
+    @filters = Work.get_filters(@works)
+    @pseuds = @works.collect(&:pseuds).flatten.uniq.compact
   end
   
   def drafts
@@ -140,8 +188,7 @@ class WorksController < ApplicationController
         flash[:error] = "You can only see your own drafts, sorry!".t
         redirect_to current_user
       else
-        @works = @user.unposted_works
-        @works = @works.paginate(:page => params[:page])
+        @works = @user.unposted_works.paginate(:page => params[:page])
       end
     end
   end 
@@ -200,11 +247,7 @@ class WorksController < ApplicationController
         current_user.cleanup_unposted_works
         redirect_to current_user    
       else  
-        begin
-          saved = @work.save
-        rescue ThinkingSphinx::ConnectionError
-          saved = true
-        end        
+        saved = @work.save
         unless saved && @work.has_required_tags?
           unless @work.has_required_tags?
             @work.errors.add(:base, "Required tags are missing.".t)          
@@ -244,62 +287,57 @@ class WorksController < ApplicationController
   
   # PUT /works/1
   def update
-    begin
-      raise unless @work.errors.empty?
-      @work.attributes = params[:work]    
-      # Need to update @pseuds and @selected_pseuds values so we don't lose new co-authors if the form needs to be rendered again
-      @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
-      to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 
-      @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
-
-      if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank? 
-        @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
-      elsif params[:preview_button]
-        @preview_mode = true
-        @chapters = [@chapter]
-        if @work.has_required_tags?
-          render :action => "preview"
-        else
-          @work.errors.add_to_base("Please add all required tags.")
-          render :action => :edit
-        end
-      elsif params[:cancel_button]
-        flash[:notice] = "This work was not posted. (It will be saved in your drafts for one week, then cleaned up.)".t
-        current_user.cleanup_unposted_works
-        redirect_to current_user    
-      elsif params[:edit_button]
-        render :partial => 'work_form', :layout => 'application'
-      else
-        saved = true
-        @chapter.save || saved = false
-        @work.has_required_tags? || saved = false
-        @work.posted = true 
-        begin
-          saved = @work.save
-          @work.update_minor_version
-        rescue ThinkingSphinx::ConnectionError
-          saved = true
-        end
-        if saved
-          if params[:post_button]
-            flash[:notice] = 'Work was successfully posted.'.t
-          elsif params[:update_button]
-            flash[:notice] = 'Work was successfully updated.'.t
-          end
-          redirect_to(@work)
-        else
-          unless @chapter.valid?
-            @chapter.errors.each {|err| @work.errors.add(:base, err)}
-          end
-          unless @work.has_required_tags?
-            @work.errors.add(:base, "Required tags are missing.".t)          
-          end
-          raise
-        end
-      end 
-    rescue
-      render :action => :edit
+    unless @work.errors.empty?      
+      render :action => :edit and return
     end
+
+    @work.attributes = params[:work]    
+    # Need to update @pseuds and @selected_pseuds values so we don't lose new co-authors if the form needs to be rendered again
+    @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
+    to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 
+    @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
+
+    if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank? 
+      @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
+    elsif params[:preview_button]
+      @preview_mode = true
+      @chapters = [@chapter]
+      if @work.has_required_tags?
+        render :action => "preview"
+      else
+        @work.errors.add_to_base("Please add all required tags.")
+        render :action => :edit
+      end
+    elsif params[:cancel_button]
+      cancel_posting_and_redirect
+    elsif params[:edit_button]
+      render :partial => 'work_form', :layout => 'application'
+    else
+      saved = true
+      @chapter.save || saved = false
+      @work.has_required_tags? || saved = false
+      if saved 
+        @work.posted = true 
+        saved = @work.save
+        @work.update_minor_version
+      end
+      if saved
+        if params[:post_button]
+          flash[:notice] = 'Work was successfully posted.'.t
+        elsif params[:update_button]
+          flash[:notice] = 'Work was successfully updated.'.t
+        end
+        redirect_to(@work)
+      else
+        unless @chapter.valid?
+          @chapter.errors.each {|err| @work.errors.add(:base, err)}
+        end
+        unless @work.has_required_tags?
+          @work.errors.add(:base, "Required tags are missing.".t)          
+        end
+        render :action => :edit
+      end
+    end 
   end
  
   # GET /works/1/preview
@@ -310,7 +348,7 @@ class WorksController < ApplicationController
   # POST /works/1/post
   def post
     if params[:cancel_button]
-      redirect_back_or_default('/') 
+      cancel_posting_and_redirect
     elsif params[:edit_button]
       redirect_to edit_work_path(@work)
     else
@@ -377,17 +415,27 @@ class WorksController < ApplicationController
       
   protected
 
-  # create a reading object when showing a work, but only if the user has reading 
-  # history enabled and is not the author of the work
-  def update_or_create_reading
-    if logged_in? && current_user.preference.history_enabled
-      unless current_user.is_author_of?(@work)
-        reading = Reading.find_or_initialize_by_work_id_and_user_id(@work.id, current_user.id)
-        reading.major_version_read, reading.minor_version_read = @work.major_version, @work.minor_version
-        reading.save
+    # create a reading object when showing a work, but only if the user has reading 
+    # history enabled and is not the author of the work
+    def update_or_create_reading
+      if logged_in? && current_user.preference.history_enabled
+        unless current_user.is_author_of?(@work)
+          reading = Reading.find_or_initialize_by_work_id_and_user_id(@work.id, current_user.id)
+          reading.major_version_read, reading.minor_version_read = @work.major_version, @work.minor_version
+          reading.save
+        end
       end
+      true
     end
-    true
-  end
+
+    def cancel_posting_and_redirect
+      flash[:notice] = "<p>" + "This work was not posted.".t + "</p><p>" + 
+        "It will be saved here in your drafts for one week, then cleaned up.".t + "</p>"
+      begin
+        current_user.cleanup_unposted_works
+      rescue ThinkingSphinx::ConnectionError
+      end
+      redirect_to drafts_user_works_path(current_user)    
+    end
 
 end

@@ -1,0 +1,24 @@
+first:
+  address: 545 Cambridge St.
+  city: Cambridge
+  state: MA
+  zip: 02141
+  company_id: 1
+second:
+  address: 1600 Amphitheatre Parkway
+  city: Mountain View
+  state: CA
+  zip: 94043
+  company_id: 3
+third:
+  address: 1234 Main St.
+  city: Tulsa
+  state: OK
+  zip: 74101
+  company_id: 2
+fourth:
+  address: 22 Wall St
+  city: New York City
+  state: NY
+  zip: 10005
+  company_id: 1

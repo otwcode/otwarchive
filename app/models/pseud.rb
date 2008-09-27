@@ -14,6 +14,24 @@ class Pseud < ActiveRecord::Base
   validates_format_of :name, :message => 'Pseuds must contain at least one letter or number.'.t,
     :with => /[a-zA-Z0-9]/
     
+  
+  TAGGING_JOIN = "INNER JOIN taggings on tags.id = taggings.tag_id
+                  INNER JOIN works ON (works.id = taggings.taggable_id AND taggings.taggable_type = 'Work')"
+
+  OWNERSHIP_JOIN = "INNER JOIN creatorships ON pseuds.id = creatorships.pseud_id
+                    INNER JOIN works ON (creatorships.creation_id = works.id AND creatorships.creation_type = 'Work')"
+
+  named_scope :on_works, lambda {|owned_works|
+    {
+      :select => "DISTINCT pseuds.*",
+      :joins => OWNERSHIP_JOIN,
+      :conditions => ['works.id in (?)', owned_works.collect(&:id)]
+    }
+  }
+  
+  named_scope :with_names, lambda {|pseud_names|
+    {:conditions => ['pseuds.name in (?)', pseud_names]}
+  }
 
   #  before_destroy :move_creations_to_default
   #TODO - add this

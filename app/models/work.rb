@@ -14,39 +14,7 @@ class Work < ActiveRecord::Base
   has_many :tags, :through => :taggings
   include TaggingExtensions
 
-  # Index for Thinking Sphinx
-  define_index do
-
-    # fields
-    indexes summary
-    indexes notes
-		indexes title
-
-    # associations
-    indexes chapters.content, :as => 'chapter_content' 
-    indexes tags.name, :as => 'tag_name'
-    indexes pseuds.name, :as => 'pseud_name'
-
-    # attributes
-    has created_at
-    has word_count
-
-    # properties
-    set_property :delta => true
-    set_property :field_weights => { :tag_name => 10, 
-                                     :title => 10, :pseud_name => 10, 
-                                     :summary => 5, :notes => 5, 
-                                     :chapter_content => 1} 
-  end
-  
-  named_scope :recent, :order => 'created_at DESC', :limit => 5
-  named_scope :posted, :conditions => {:posted => true}
-
-  # Order the results by the given argument, or 'created_at DESC'
-  # if no arg is given
-  named_scope :ordered, lambda { |*order|
-    { :order => order.flatten.first || 'created_at DESC' }
-  }
+  # VALIDATION
   
   validates_presence_of :title
   validates_length_of :title, 
@@ -64,9 +32,9 @@ class Work < ActiveRecord::Base
     :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than %d letters long.".t/ArchiveConfig.NOTES_MAX
   
   #temporary validation to let people know they can't enter external urls yet
-  validates_format_of :parent_url, :with => Regexp.new(ArchiveConfig.APP_URL, true), :allow_blank => true, :message => "can only be in the archive for now - we're working on expanding that!".t
+  validates_format_of :parent_url, :with => Regexp.new(ArchiveConfig.APP_URL, true), 
+    :allow_blank => true, :message => "can only be in the archive for now - we're working on expanding that!".t
   
-
   # Virtual attribute to use as a placeholder for pseuds before the work has been saved
   # Can't write to work.pseuds until the work has an id
   attr_accessor :authors
@@ -82,10 +50,179 @@ class Work < ActiveRecord::Base
   after_save :save_creatorships, :save_associated
   after_create :tag_after_create 
   before_update :validate_tags
+
+  # Index for Thinking Sphinx
+  define_index do
+
+    # fields
+    indexes summary
+    indexes notes
+		indexes title, :sortable => true
+
+    # associations
+    indexes chapters.content, :as => 'chapter_content' 
+    indexes tags.name, :as => 'tag_name'
+    indexes pseuds.name, :as => 'pseud_name', :sortable => true
+
+    # attributes
+    has created_at, updated_at, word_count 
+
+    # properties
+    set_property :delta => true
+    set_property :field_weights => { :tag_name => 10, 
+                                     :title => 10, :pseud_name => 10, 
+                                     :summary => 5, :notes => 5, 
+                                     :chapter_content => 1} 
+  end
   
-  # Associating works with languages.  
-  belongs_to :language, :foreign_key => 'language_id', :class_name => '::Globalize::Language'
-   
+  protected
+  
+  # a string for use in :joins => clause to add ownership lookup 
+  OWNERSHIP_JOIN = "INNER JOIN creatorships ON (creatorships.creation_id = works.id AND creatorships.creation_type = 'Work')
+                    INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
+                    INNER JOIN users ON pseuds.user_id = users.id"
+                    
+  TAGGING_JOIN = "INNER JOIN taggings ON (works.id = taggings.taggable_id AND taggings.taggable_type = 'Work') 
+                  INNER JOIN tags ON taggings.tag_id = tags.id"
+                    
+                    
+  VISIBLE_TO_ALL_CONDITIONS = [ 'works.posted = 1 
+      AND (works.restricted = 0 OR works.restricted IS NULL) 
+      AND (works.hidden_by_admin = 0 OR works.hidden_by_admin IS NULL)' ]
+      
+  VISIBLE_TO_USER_CONDITIONS = ['posted = 1 AND (hidden_by_admin = 0 OR hidden_by_admin IS NULL)']
+  
+  VISIBLE_TO_ADMIN_CONDITIONS = ['posted = 1']
+
+  public
+  
+  named_scope :ordered, lambda {|sort_field, sort_direction|
+    {
+      :order => "#{(Work.column_names.include?(sort_field) ? sort_field : 'updated_at')}" + 
+                " " +
+                "#{(sort_direction.upcase == 'DESC' ? 'DESC' : 'ASC')}"
+    }
+  }    
+  named_scope :limited, lambda {|limit|
+    {:limit => limit.kind_of?(Fixnum) ? limit : 5}
+  }
+
+  named_scope :recent, :order => 'created_at DESC', :limit => 5
+  named_scope :posted, :conditions => {:posted => true}
+  named_scope :unposted, :conditions => ['posted = 0 OR posted IS NULL']
+  named_scope :restricted , :conditions => {:restricted => true}
+  named_scope :unrestricted, :conditions => ['restricted = 0 OR restricted IS NULL']
+  named_scope :hidden, :conditions => {:hidden_by_admin => true}
+  named_scope :unhidden, :conditions => ['hidden_by_admin = 0 OR hidden_by_admin IS NULL']
+  named_scope :visible_to_owner, :conditions => VISIBLE_TO_ADMIN_CONDITIONS
+  named_scope :visible_to_user, :conditions => VISIBLE_TO_USER_CONDITIONS 
+  named_scope :visible_to_all, :conditions => VISIBLE_TO_ALL_CONDITIONS
+  named_scope :all_with_tags, :include => [:tags]
+
+
+  # These named scopes include the OWNERSHIP_JOIN so they can be chained 
+  # with "visible" (visible must go first) without clobbering the combined
+  # joins. 
+  named_scope :with_all_tags, lambda {|tags_to_find|
+    {
+      :select => "DISTINCT works.*",
+      :joins => TAGGING_JOIN + " " + OWNERSHIP_JOIN,
+      :conditions => ["tags.id in (?)", tags_to_find.collect(&:id)],
+      :group => "works.id HAVING count(works.id) = #{tags_to_find.size}"
+    }
+  }
+
+  named_scope :with_any_tags, lambda {|tags_to_find|
+    {
+      :select => "DISTINCT works.*",
+      :joins => TAGGING_JOIN + " " + OWNERSHIP_JOIN,
+      :conditions => ["tags.id in (?)", tags_to_find.collect(&:id)],
+    }
+  }
+
+
+  named_scope :visible, lambda {
+    {
+      :select => "DISTINCT works.*",
+      :joins => TAGGING_JOIN + " " + OWNERSHIP_JOIN
+    }.merge( (User.current_user && User.current_user.kind_of?(Admin)) ?
+      { :conditions => {:posted => true} } :
+      ( (User.current_user && User.current_user != :false) ?
+        {:conditions => ['posted = 1 AND (hidden_by_admin = 0 OR hidden_by_admin IS NULL OR users.id = ?)', User.current_user.id] } :
+        {:conditions => VISIBLE_TO_ALL_CONDITIONS })    
+    )
+  }
+
+  # # Squirrel-based class methods
+  # def self.visible_with_any_tags(tags_to_find, user = User.current_user)
+  #   self.visible.with_any_tags(tags_to_find)
+  # end
+  # 
+  # def self.visible_with_all_tags(tags_to_find, user = User.current_user)
+  #   self.visible.with_all_tags(tags_to_find)
+  # end
+  # 
+  # # This is a squirrel-based class method which can be chained with named
+  # # scopes, although it MUST GO BEFORE THEM. 
+  # def self.visible(user = User.current_user)
+  #   scoped do
+  #     posted == 1
+  #     
+  #     if user && user.kind_of?(Admin)
+  #     elsif user && user != :false
+  #       any do
+  #         hidden_by_admin == 0 
+  #         hidden_by_admin.nil?
+  #         pseuds.user_id == user.id
+  #       end
+  #     else
+  #       any do
+  #         hidden_by_admin == 0 
+  #         hidden_by_admin.nil?
+  #       end
+  #       any do
+  #         restricted == 0
+  #         restricted.nil?
+  #       end
+  #     end
+  #   end
+  # end
+        
+  # def self.owned_by(user = User.current_user)
+  #   scoped do
+  #     pseuds.user_id == user.id
+  #   end
+  # end
+  
+  named_scope :owned_by, lambda {|user|
+    {
+      :select => "DISTINCT works.*",
+      :joins => OWNERSHIP_JOIN,
+      :conditions => ['users.id = ?', user.id]
+    }
+  }
+
+  named_scope :owned_by_conditions, lambda {|user|
+    {
+      :conditions => ['users.id = ?', user.id]
+    }
+  }
+
+  named_scope :written_by, lambda {|pseuds|
+    {
+      :select => "DISTINCT works.*",
+      :joins => "INNER JOIN creatorships ON (creatorships.creation_id = works.id AND creatorships.creation_type = 'Work')
+                 INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id",
+      :conditions => ['pseuds.id IN (?)', pseuds.collect(&:id)]
+    }
+  }
+
+  named_scope :written_by_conditions, lambda {|pseuds|
+    {
+      :conditions => ['pseuds.id IN (?)', pseuds.collect(&:id)]
+    }
+  }
+
   # returns an array, must come last
   # TODO: if you know how to turn this into a named_scope, please do!
   # find all the works that do not have a tag in the given category (i.e. no fandom, no characters etc.)
@@ -96,34 +233,19 @@ class Work < ActiveRecord::Base
     end  
   end
 
-  # returns an array, must come last
-  # TODO: if you know how to turn this into a named_scope, please do!
-  # find all the works with a given set of tags
-  def self.with_tags(tags = [], options = {})
-    with_scope :find => options do
-      find(:all).collect {|w| w unless (w.tags & tags).empty? }.compact.uniq
-    end  
-  end
-  
-  # returns an array, must come last
-  # TODO: if you know how to turn this into a named_scope, please do!
-  def self.visible(options = {})
-    current_user=User.current_user
-    with_scope :find => options do
-      find(:all).collect {|w| w if w.visible(current_user)}.compact.uniq
-    end
-  end
-  
   def visible(current_user=User.current_user)
     if current_user == :false || !current_user
       return self if self.posted unless self.restricted || self.hidden_by_admin
     elsif self.posted && !self.hidden_by_admin
       return self
     elsif self.hidden_by_admin?
-      return self if current_user.is_admin? || current_user.is_author_of?(self)       
+      return self if current_user.kind_of?(Admin) || current_user.is_author_of?(self)       
     end
   end
 
+  # Associating works with languages.  
+  belongs_to :language, :foreign_key => 'language_id', :class_name => '::Globalize::Language'
+   
   def set_language
     return if self.language
     if Locale.active && Locale.active.language
@@ -401,110 +523,54 @@ class Work < ActiveRecord::Base
   end
 
   def self.all_cached
-    Rails.cache.fetch ('Works.all') { all }
+    Rails.cache.fetch('Works.all') { all_with_tags }
   end
-
-  def self.search_and_filter(options={})
-    all_works = []  
-    error = ""
-    
-    if !options["query"].blank?
-      begin
-        # if there's a query - use search to collect works
-        # because it returns a thinking sphinx object, it can't use the class method for visible
-        # override search's default pagination - get a maximum of 1000 works 
-        # TODO - make maximum number to find configurable
-        if options["sort_column"].blank?
-          # will get best matches at the top
-          all_works = Work.search(options["query"], :per_page => 1000).compact.map(&:visible).compact
-        else 
-          # FIXME - search with order gives empty set
-          all_works = Work.search(options["query"], :per_page => 1000).compact.map(&:visible).compact
-          error << "Sorting searches is not currently working".t         
-          # if there is a sort column, use :order
-       # FIXME :order broken when using query
-#          direction = options["sort_direction"] == "DESC" ? :desc : :asc
-#          all_works = Work.search(options["query"], :order => options["sort_column"], :sort_mode => direction, :per_page => 1000).map(&:visible).compact
-        end
-        # if the search is for a tag that is synonymous with a tag on the work.
-        # FIXME : these works are just getting squished on the end in no particular order
-        tag = Tag.find_by_name(options["query"])
-        if tag
-          all_works = (all_works + Work.with_tags([tag] + tag.synonyms).compact.map(&:visible)).compact.uniq
-        end
-      rescue ThinkingSphinx::ConnectionError
-        error << "The search engine is presently down".t
-      end
+  
+  def self.search_with_sphinx(options)
+    # visibility
+    if User.current_user && User.current_user.kind_of?(Admin)
+      where_clause = VISIBLE_TO_ADMIN_CONDITIONS
+    elsif User.current_user && User.current_user != :false
+      where_clause = VISIBLE_TO_USER_CONDITIONS
     else
-      # if there is no query - use find to collect works
-      sort_order = nil
-      direction = options["sort_direction"] == "DESC" ? "DESC" : "ASC"
-      sort_order = "#{options["sort_column"]} #{direction}" unless options["sort_column"].blank?
-      if !options["user_id"].blank?
-        # if there's a user_id use user.works to find works
-        all_works = User.find_by_login(options["user_id"]).works.ordered(sort_order).visible
-      elsif !options["tag_id"].blank?
-        # if there's a tag_id get works for synonyms also
-        tag = Tag.find(options["tag_id"])
-        tags = ([tag] + tag.synonyms).compact.uniq
-        all_works = Work.ordered(sort_order).visible & Work.with_tags(tags)
-      else
-        # get all works
-        if sort_order
-          all_works = Work.ordered(sort_order).visible
-        else # basic default - use cache
-          all_works = Work.all_cached(&:visible).compact
-        end
-      end
+      where_clause = VISIBLE_TO_ALL_CONDITIONS
     end
-
-    # get possible filters (all possible tags on found works)
-    filters = all_works.collect(&:tags).flatten.uniq.compact.group_by(&:tag_category).to_hash
-
-    if !options["selected_tags"].blank?
-      # filter on tags - remove works that don't have a tag that was selected
-      excluded_works = []
-      filters.each_pair do |tag_category, tags|
-	      if options["selected_tags"][tag_category.name]  
-	        # filtering should be done on the tag category
-          tags.each do |tag|
-            # remove everything not checked
-            unless options["selected_tags"][tag_category.name].include?(tag.name)
-              excluded_works << tag.works
-            end
-          end
-          # and in cases where a work has no tags in that category
-          # exclude that work also, as it doesn't have one of the selected tags
-          excluded_works << Work.no_tags(tag_category)
-				end
-      end
-      all_works = all_works - excluded_works.flatten
+  
+    # sphinx ordering must be done on attributes
+    order_clause = ""    
+    case options[:sort_column]
+    when "title"
+      order_clause = "title "
+    when "author"
+      order_clause = "pseud_name "
+    when "word count" 
+      order_clause = "word_count "
+    else
+      order_clause = "updated_at "
     end
-    # clean up just in case
-    all_works = all_works.flatten.uniq.compact
-
-    # filter on pseuds - only keep works by the selected pseuds
-    unless options["pseuds"].blank?
-      works_by_pseuds = []
-      options["pseuds"].each do |pseud_name|
-        pseud = Pseud.find_by_name(pseud_name)
-        works_by_pseuds << pseud.works
-      end
-      all_works = all_works & works_by_pseuds.flatten
+    
+    if !order_clause.blank?
+      sort_dir_sym = "sort_direction_for_#{options[:sort_column]}".to_sym
+      order_clause += (options[sort_dir_sym] == "DESC" ? "DESC" : "ASC")
     end
-    # clean up just in case
-    all_works = all_works.flatten.uniq.compact
-        
-    filters.each_key do |tag_category|
-      # limit the filter tags to 10 per category
-      filters[tag_category] = filters[tag_category].sort {|a,b| a.taggings_count <=> b.taggings_count}[0..9].sort
-      # remove filters that only have one tag
-      filters.delete(tag_category) if filters[tag_category].size == 1
-    end
-
-    return [all_works.compact, filters, error]
+    
+    return Work.search(options[:query], :where => where_clause, :order => order_clause,
+                                :per_page => 1000, :page => options[:page])
   end
-
+  
+  def self.filter(works_to_filter, tags_to_filter_on)
+    works_to_filter.reject {|w| (w.tags & tags_to_filter_on).empty? }
+  end  
+    
+  def self.get_filters(works_to_filter)
+    available_tags = Tag.on_works(works_to_filter).by_popularity.group_by(&:tag_category).to_hash
+  end
+  
+  def self.get_pseuds(works_to_filter)
+    available_pseuds = Pseud.on_works(works_to_filter).by_popularity.group_by(&:tag_category).to_hash
+  end
+    
+    
   # sort works by title
   def <=>(another_work)
     title.strip.downcase <=> another_work.strip.downcase

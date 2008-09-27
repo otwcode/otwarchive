@@ -1,16 +1,20 @@
-<%- unless @filters.blank? && (@user.blank? || @user.pseuds.size == 1) -%>
+<%- unless @filters.blank? && @pseuds.size <= 1 -%>
 <%- form_tag(works_path, :class => 'story-filters', :method => :get) do -%>
-  <%- field_set_tag 'Filter stories by: ' do -%>
+  <%- field_set_tag 'Filter these results: '.t do -%>
  		<dl class="story-filters">
-			<%- unless (@user.blank? || @user.pseuds.size == 1) -%>
-        <dt onclick='toggleFilters("filter-pseuds")'>Pseud</dt>
+			<%- unless @pseuds.size <= 1 -%>
+        <dt onclick='toggleFilters("filter-pseuds")'>
+          <span id="filter-pseuds_closed" style="display: none;"><%= image_tag 'arrow-right.png' -%></span>
+          <span id="filter-pseuds_open"><%= image_tag 'arrow-down.png' -%></span>              
+          Author
+        </dt>
         <dd id="filter-pseuds" class="filter-tags">
           <ul>
-            <%- for pseud in @user.pseuds -%>
+            <%- for pseud in @pseuds -%>
               <%- if pseud.works.count > 0 -%>
                 <li>
-                  <%= check_box_tag 'pseuds[]', pseud.name, @pseuds.include?(pseud.name) %>
-                  <%= label_tag "pseuds[#{pseud.name}]", pseud.name %>  
+                  <%= check_box_tag 'selected_pseuds[]', pseud.name, @selected_pseuds.include?(pseud.name) %>
+                  <%= label_tag "selected_pseuds[#{pseud.name}]", pseud.name %>  
                 </li>
               <%- end -%>
             <%- end -%> 
@@ -20,13 +24,17 @@
 			<%- unless @filters.blank? -%>
         <%- @filters.each_pair do |tag_category, tags| -%>
 				  <%- unless tag_category.blank? || tags.blank? -%>
-          <dt onclick='toggleFilters("tag_category_<%= tag_category.id %>")'><%= tag_category.display_name %></dt>
+          <dt onclick='toggleFilters("tag_category_<%= tag_category.id %>");'>
+            <span id="tag_category_<%= tag_category.id %>_closed" style="display: none;"><%= image_tag 'arrow-right.png' -%></span>
+            <span id="tag_category_<%= tag_category.id %>_open"><%= image_tag 'arrow-down.png' -%></span>              
+            <%= tag_category.display_name %> 
+          </dt>
           <dd id="tag_category_<%= tag_category.id %>" class="filter-tags">
             <ul>              
               <%- for tag in tags -%>
                 <li>
-                  <%= check_box_tag "selected_tags[" + tag_category.name + '][]', tag.name, @selected_tags[tag_category.name].blank? ? false : @selected_tags[tag_category.name].include?(tag.name) %>
-                  <%= label_tag "selected_tags[" + tag_category.name + "][#{tag.name}]", tag.name %>  
+                  <%= check_box_tag "selected_tags[]", tag.name, @selected_tags.include?(tag) -%>
+                  <%= label_tag "selected_tags[#{tag.name}]", tag.name %>  
                 </li>
               <%- end -%> 
            </ul>
@@ -35,10 +43,12 @@
         <%- end -%>         
       <%- end -%>
 		</dl>
-		<p><%= hidden_field_tag("query", @query) if @query %>
-		<%= hidden_field_tag("tag_id", @tag.id) if @tag %>
-		<%= hidden_field_tag("fandom_id", @fandom.id) if @fandom %>
-		<%= hidden_field_tag("user_id", @user.login) if @user %></p>
+		<p>
+  		<%= hidden_field_tag("query", @query) if @query %>
+  		<%= hidden_field_tag("tag_id", @tag.id) if @tag %>
+  		<%= hidden_field_tag("fandom_id", @fandom.id) if @fandom %>
+  		<%= hidden_field_tag("user_id", @user.login) if @user %>
+		</p>
 		<p class="submit"><%= submit_tag "Filter Stories" %></p>
   <%- end -%>
   <%- end -%>

@@ -1,0 +1,30 @@
+first:
+  post_id: 1
+  tag_id: 1
+second:
+  post_id: 1
+  tag_id: 3
+third:
+  post_id: 2
+  tag_id: 2
+fourth:
+  post_id: 3
+  tag_id: 1
+fifth:
+  post_id: 3
+  tag_id: 2
+sixth:
+  post_id: 4
+  tag_id: 3
+seventh:
+  post_id: 5
+  tag_id: 2
+eigth:
+  post_id: 6
+  tag_id: 1
+ninth:
+  post_id: 6
+  tag_id: 3
+tenth:
+  post_id: 7
+  tag_id: 3
