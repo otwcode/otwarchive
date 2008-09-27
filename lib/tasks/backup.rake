@@ -93,6 +93,7 @@ namespace :db do
           y args if @debug
           system(@mysql, *args)
           start += number
+          finish += number
           puts "new start: " if @debug
           y start if @debug
         end # while
