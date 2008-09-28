@@ -8,7 +8,7 @@ class UserMailer < ActionMailer::Base
     from          ArchiveConfig.RETURN_ADDRESS
     sent_on       Time.now
     content_type  "text/html"
-    body          :invitation => invitation, :signup_url => signup_url, :user_name => invitation.sender.login
+    body          :invitation => invitation, :signup_url => signup_url, :user_name => (invitation.sender ? invitation.sender.login : '')
     invitation.update_attribute(:sent_at, Time.now)
   end
 

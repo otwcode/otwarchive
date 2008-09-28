@@ -15,8 +15,8 @@ class User < ActiveRecord::Base
   attr_accessible :identity_url
   
   ### BETA INVITATIONS ###
-  validates_presence_of :invitation_id, :message => 'is required'
-  validates_uniqueness_of :invitation_id
+  #validates_presence_of :invitation_id, :message => 'is required', :unless => ArchiveConfig.ACCOUNT_CREATION_ENABLED
+  validates_uniqueness_of :invitation_id, :allow_blank => true
   has_many :sent_invitations, :class_name => 'Invitation', :foreign_key => 'sender_id'
   belongs_to :invitation
   before_create :set_invitation_limit

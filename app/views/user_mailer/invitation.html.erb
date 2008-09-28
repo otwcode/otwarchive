@@ -1,4 +1,8 @@
+<%- if @user_name.blank? -%>
+You've been invited to join our beta!
+<%- else -%>
 <%= @user_name %> has invited you to join our beta!
+<%- end -%>
 
-You can sign up at the address below:
+You can sign up at the following address:
 <%= link_to @signup_url, @signup_url %>

@@ -74,6 +74,10 @@ module FixtureReplacement
   attributes_for :feedback do |a|    
     a.comment = random_paragraph
   end
+  
+  attributes_for :invitation do |a|    
+    a.recipient_email = random_email
+  end
 
   attributes_for :preference do |a|
   end

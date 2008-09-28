@@ -1,4 +1,8 @@
 class InvitationsController < ApplicationController
+  def index
+    redirect_to new_invitation_path
+  end
+  
   def new
     if !current_user.respond_to?(:invitation_limit)
       flash[:error] = "Sorry, you must be logged in to create invitations.".t
