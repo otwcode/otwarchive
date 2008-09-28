@@ -98,27 +98,16 @@ dl#user-data dt {font-weight: 900; width: 9em; float:left; clear:left; margin:0.
 
 /* WORKS-INDEX */
 /*story filters rules are in forms.css */
-/*story listing : shows on works, reading history, series, spoofed on bookmarks and users-show*/
-
-li.story ul {position: relative; margin: 0 13.5em 0.5625em auto; border-bottom:3px solid #ddd;}
-#user-page li.story ul, #main.series-index  li.story ul, #series-story-list li.story ul{ margin-right: 0; }
-li.story ul ul { margin:0; padding:0; border:0;}
-li.story ul ul li,li.story dd ul, li.story dd li {display:inline; border:0;}
-li.story-title-line p { padding:0; margin:0; display:inline;}
-li.story-title-line img { float: left; margin:0.125em 0.25em 0 0 }
-li.story-date {display:none;}
-li.story-tags {margin:0;padding:0;}
-li.story-tags a { text-decoration: none; border-bottom: 1px dotted; }
-.story dl.story-meta {background:#fffef9 !important; }
-li.story-tags dl.story-meta dt, li.story-tags dl.story-meta dd {font-weight:100; line-height: 1.5; display: inline; margin:0; padding: 0 0.0125em 0 0; }
-#main.series-show ul li ul li ul li dl dd ul li {display:inline;}
-li.story-desc ul {text-align:right;}
+/*works blurb : shows on works, reading history, series, should be spoofed on bookmarks and users-show*/
+li.work ul.work {position: relative; margin: 0 13.5em 0.5625em auto;}
+#user-page li.work ul, #main.series-index  li.work ul, #series-story-list li.work ul{ margin-right: 0; }
 
 ul.work {position:relative; border-bottom:1px solid #ddd; padding-bottom:1.5625em}
 ul.work ul li{ display:inline;}
 li.heading {position:relative;}
 .work ul.required-tags {width:4em;float:left}
-.work ul.required-tags li {width:2em; height:2em;display:block; float:left;}
+.work ul.required-tags li {display:block; float:left;}
+.work span {padding:0;margin:0;}
 /*will use the old image replacement switch for icons for now , just run though and declare them all: li.warnings span {background:url() top left no-repeat; height:25px; width:25px} etc etc*/
 /*
 li.warning-yes span {background:url(../images/warning-yes.png) top left no-repeat; height:25px; width:25px}
@@ -159,13 +148,13 @@ li.category-other img {height:25px; width:25px}
 li.complete-yes img {height:25px; width:25px}
 li.complete-no img {height:25px; width:25px}
 
-.work h3 {margin-left:4em; color:#900; padding: 1em 0 0 0}
+.work h3 {margin:0.3775em 0 0 2em; color:#900;}
 .work h3 a {color:#900;}
-.work h4 {margin-left:4.5em;}
+.work h4 {margin-left:2.25em;}
 .work p.update {font-size:0.875em;position:absolute; top:0; right:0}
-.work .tags dt{font-weight:bold; margin:1.286em 0 0 0}
-.work .tags dd {font-size:0.875em; margin:-1em 0 0 4.5em; }
-.work li.summary {margin:0.5625em 2em;}
+.work .tags dt{font-weight:bold; margin:1.2525em 0 0 0}
+.work .tags dd {font-size:0.875em; margin:-1em 0 0 2.25em; }
+.work li.summary {margin:0.5625em 1em;}
 .work li.stats dl {text-align:right;}
 .work li.stats dt, .work li.stats dd {display:inline; font-size:0.875em}
 .work li.stats dl dd {margin:0 0.375em 0 0;}
