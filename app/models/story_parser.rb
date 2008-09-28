@@ -385,16 +385,16 @@ class StoryParser
     # using on this archive.
     def convert_rating(rating)
       case rating.downcase
-      when "nc-17", "nc17", "nc-18", "nc18", "x", "ma"
-        "Explicit"
-      when "r", "m"
-        "Mature"
-      when "pg-13", "pg13", "pg-15", "pg15", "t"
-        "Teen and Up"
-      when "pg", "g", "k+", "k"
-        "General Audience"
+      when "nc-17", "nc17", "nc-18", "nc18", "x", "ma", "explicit"
+        ArchiveConfig.EXPLICIT_RATING_TAG
+      when "r", "m", 'mature'
+        ArchiveConfig.MATURE_RATING_TAG
+      when "pg-13", "pg13", "pg-15", "pg15", "t", "teen", "teen and up"
+        ArchiveConfig.TEEN_RATING_TAG
+      when "pg", "g", "k+", "k", "general audiences"
+        ArchiveConfig.GENERAL_RATING_TAG
       else
-        "Not Rated"
+        ArchiveConfig.DEFAULT_RATING_TAG
       end
     end
 end

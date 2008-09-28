@@ -67,4 +67,97 @@ module WorksHelper
   def warning_selected(work, category)
     @work.new_record? ? Tag.default_warning.collect : @work.tags.by_category(category).valid.collect(&:name)
   end
+  
+  def get_symbols_for(work)
+    @tags_by_category = Tag.on_works([work]).group_by(&:tag_category_id).to_hash
+
+    warning_class = get_warnings_class(@tags_by_category[WARNING_TAG_CATEGORY.id])
+    warning_string = @tags_by_category[WARNING_TAG_CATEGORY.id].collect(&:name).join(", ")
+    
+    rating = @tags_by_category[RATING_TAG_CATEGORY.id].blank? ? nil : @tags_by_category[RATING_TAG_CATEGORY.id].first
+    rating_class = get_ratings_class(rating)
+    rating_string = rating.nil? ? "No Rating".t : rating.name    
+
+    category = @tags_by_category[CATEGORY_TAG_CATEGORY.id].blank? ? nil : @tags_by_category[CATEGORY_TAG_CATEGORY.id].first
+    category_class = get_category_class(category)
+    category_string = category.nil? ? "No Category".t : category.name
+    
+    iswip_class = get_complete_class(work)
+    iswip_string = work.is_wip ? "Work in Progress".t : "Complete Work".t
+
+    symbol_block = "<ul class=\"required-tags\">\n"
+    %w(rating category warning iswip).each do |w|
+      css_class = eval("#{w}_class")
+      title_string = eval("#{w}_string")
+      symbol_block << "<li class=#{css_class}><span><span title=\"#{title_string}\">"
+      symbol_block << image_tag( "#{css_class}.png", :alt => title_string, :title => title_string)
+      symbol_block << "</span></span></li>\n"
+    end
+    symbol_block << "</ul>\n"
+  end
+  
+  def get_warnings_class(warning_tags)
+    # check for warnings
+    if warning_tags && warning_tags.include?(NO_WARNING_TAG)
+      "warning-no"
+    else
+      "warning-yes"
+    end
+  end
+    
+  def get_ratings_class(rating_tag)
+    case rating_tag
+    when EXPLICIT_RATING_TAG
+      "rating-explicit"
+    when MATURE_RATING_TAG
+      "rating-mature"
+    when TEEN_RATING_TAG
+      "rating-teen"
+    when GENERAL_RATING_TAG
+      "rating-general-audience"
+    else
+      "rating-notrated"
+    end
+  end
+
+
+  def get_category_class(category_tag)
+    case category_tag
+    when GEN_CATEGORY_TAG
+      "category-gen"
+    when SLASH_CATEGORY_TAG
+      "category-slash"
+    when HET_CATEGORY_TAG
+      "category-het"
+    when FEMSLASH_CATEGORY_TAG
+      "category-femslash"
+    when MULTI_CATEGORY_TAG
+      "category-multi"
+    when OTHER_CATEGORY_TAG
+      "category-other"
+    else
+      "category-none"
+    end
+  end
+
+  def get_complete_class(work)
+    if work.is_wip
+      "complete-no"
+    else
+      "complete-yes"
+    end
+  end
+
+
+
+
+
+
+
+
+
+
+
+
+  
 end

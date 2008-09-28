@@ -40,14 +40,17 @@ class Tag < ActiveRecord::Base
     }
   }
 
+  def self.find_or_create_canonical_tag(tagname, category)
+    find_by_name(tagname) || self.create({:name => tagname, :tag_category_id => category.id, :canonical => true})
+  end
 
   # the default warning(s) put on a new work
   def Tag.default_warning
-   ["Chooses Not To Warn"]
+   [ArchiveConfig.DEFAULT_WARNING_TAG]
   end
   #default rating
   def Tag.default_rating
-    ["Not Rated"]
+    [ArchiveConfig.DEFAULT_RATING_TAG]
   end
   
   def before_validation

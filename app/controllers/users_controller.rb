@@ -18,8 +18,8 @@ class UsersController < ApplicationController
   
   def index
     @users = User.alphabetical.paginate(:page => params[:page])
-    filter_out = [TagCategory.find_by_name("Warning")] + [TagCategory.find_by_name("Rating")] + [TagCategory.default]
-    @categories = TagCategory.official - filter_out
+    filter_out = [WARNING_TAG_CATEGORY, RATING_TAG_CATEGORY, DEFAULT_TAG_CATEGORY]
+    @categories = OFFICIAL_TAG_CATEGORIES - filter_out
   end 
 
   # GET /users/1

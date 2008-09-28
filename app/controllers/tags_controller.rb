@@ -10,7 +10,7 @@ class TagsController < ApplicationController
       category = TagCategory.find(params[:tag_category_id])
       @tags = category.tags.find(:all, :conditions => [ 'LOWER(name) LIKE ?', '%' + params[:search].strip + '%' ], :limit => 10)
     else
-      @tags = TagCategory.default.tags.find(:all, :order => "name")
+      @tags = DEFAULT_TAG_CATEGORY.tags.find(:all, :order => "name")
     end
 
     respond_to do |format|

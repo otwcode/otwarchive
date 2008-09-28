@@ -12,7 +12,7 @@
           <%= collection_select(:work, category.name.to_sym, @tags_by_category[category], :name, :name) -%>		
         <%- elsif category.exclusive -%>
           <%= collection_select(:work, category.name.to_sym, @tags_by_category[category], :name, :name, {:prompt => true}) -%>          
-        <%- elsif category.name =~ /Warning/ -%>
+        <%- elsif category == WARNING_TAG_CATEGORY -%>
           <select id="work_<%= category.name %>" name="work[<%= category.name %>][]" multiple="multiple">
 	          <%= options_from_collection_for_select(@tags_by_category[category], :name, :name, warning_selected(@work, category) ) -%>
 	        </select>

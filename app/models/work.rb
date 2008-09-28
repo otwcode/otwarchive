@@ -464,7 +464,7 @@ class Work < ActiveRecord::Base
 
   # create dynamic methods based on the tag categories
   begin
-    TagCategory.official.each do |c|
+    OFFICIAL_TAG_CATEGORIES.each do |c|
       define_method(c.name){tag_string(c)}
       define_method(c.name+'=') do |tag_name| 
         self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({c.name.to_sym => tag_name}) : tag_with(c.name => tag_name)

@@ -23,17 +23,6 @@ class TagCategory < ActiveRecord::Base
          :include => :tags )
   end
   
-  # required ambiguous category, if it doesn't exist, create it.
-  def self.ambiguous
-    find_by_name('ambiguous') || TagCategory.create({ :name => 'ambiguous'.t, :display_name => 'Ambiguous'.t })
-  end
-
-  # required default category, if it doesn't exist, create it.
-  def self.default
-    find_by_name('default') || TagCategory.create({ :name => 'default'.t, :official => true, :display_name => 'Tags'.t })
-  end
-
-
   def self.official_tags(category_name)
     category = find_by_name(category_name)
     return [] unless category
@@ -44,8 +33,9 @@ class TagCategory < ActiveRecord::Base
     display_name? ? super : name
   end
 
-  # force creation in an empty database
-  self.ambiguous
-  self.default
-  
+  def self.find_or_create_official_category(category_name, options = {})
+    find_by_name(category_name) || 
+      self.create({ :name => category_name.downcase, :official => true, :display_name => category_name.capitalize.t }.merge(options))
+  end
+
 end

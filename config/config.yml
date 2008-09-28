@@ -43,6 +43,8 @@ SMTP_DOMAIN: localhost
 
 ACCOUNT_CREATION_ENABLED: true
 INVITATION_LIMIT: 1
+
+# validation values -- max/min lengths
 TITLE_MAX: 255
 TITLE_MIN: 3
 SUMMARY_MAX: 1250
@@ -51,11 +53,33 @@ COMMENT_MAX: 4300
 TAG_MAX: 42
 CONTENT_MIN: 10
 CONTENT_MAX: 500000
-COMMENT_THREAD_MAX_DEPTH: 2
-NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD: 5
 
-# default number of items per page of search/browse results
-ITEMS_PER_PAGE: 50
+# number of items in various displays
+ITEMS_PER_PAGE: 50 
+NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD: 5
+COMMENT_THREAD_MAX_DEPTH: 2
+
+# some tag and tag category names 
+WARNING_CATEGORY_NAME: 'Warning'
+NO_WARNING_TAG_NAME: 'None Of These Warnings Apply'
+DEFAULT_WARNING_TAG_NAME: 'Chooses Not To Warn'
+
+RATING_CATEGORY_NAME: 'Rating'
+DEFAULT_RATING_TAG_NAME: 'Not Rated'
+EXPLICIT_RATING_TAG_NAME: 'Explicit'
+MATURE_RATING_TAG_NAME: 'Mature'
+TEEN_RATING_TAG_NAME: 'Teen And Up Audiences'
+GENERAL_RATING_TAG_NAME: 'General Audiences'
+
+FANDOM_CATEGORY_NAME: 'Fandom'
+
+CATEGORY_CATEGORY_NAME: 'Category'
+GEN_CATEGORY_TAG_NAME: 'Gen'
+HET_CATEGORY_TAG_NAME: 'Het'
+SLASH_CATEGORY_TAG_NAME: 'Slash'
+FEMSLASH_CATEGORY_TAG_NAME: 'Femslash'
+MULTI_CATEGORY_TAG_NAME: 'Multi'
+OTHER_CATEGORY_TAG_NAME: 'Other'
 
 # This is used to determine how many recent items
 # to cache for recent lookups -- eg if we want to 

@@ -114,6 +114,63 @@ li.story-tags dl.story-meta dt, li.story-tags dl.story-meta dd {font-weight:100;
 #main.series-show ul li ul li ul li dl dd ul li {display:inline;}
 li.story-desc ul {text-align:right;}
 
+ul.work {position:relative; border-bottom:1px solid #ddd; padding-bottom:1.5625em}
+ul.work ul li{ display:inline;}
+li.heading {position:relative;}
+.work ul.required-tags {width:4em;float:left}
+.work ul.required-tags li {width:2em; height:2em;display:block; float:left;}
+/*will use the old image replacement switch for icons for now , just run though and declare them all: li.warnings span {background:url() top left no-repeat; height:25px; width:25px} etc etc*/
+/*
+li.warning-yes span {background:url(../images/warning-yes.png) top left no-repeat; height:25px; width:25px}
+li.warning-no span {background:url(../images/warning-no.png) top left no-repeat; height:25px; width:25px}
+
+li.rating-explicit span {background:url(../images/rating-explicit.png) top left no-repeat; height:25px; width:25px}
+li.rating-mature span {background:url(../images/rating-mature.png) top left no-repeat; height:25px; width:25px}
+li.rating-teen span {background:url(../images/rating-teen.png) top left no-repeat; height:25px; width:25px}
+li.rating-general-audience span {background:url(../images/rating-general-audience.png) top left no-repeat; height:25px; width:25px}
+li.rating-notrated span {background:url(../images/rating-notrated.png) top left no-repeat; height:25px; width:25px}
+
+li.category-none span {background:url(../images/category-none.png) top left no-repeat; height:25px; width:25px}
+li.category-gen span {background:url(../images/category-gen.png) top left no-repeat; height:25px; width:25px}
+li.category-het span {background:url(../images/category-het.png) top left no-repeat; height:25px; width:25px}
+li.category-slash span {background:url(../images/category-slash.png) top left no-repeat; height:25px; width:25px}
+li.category-femslash span {background:url(../images/category-femslash.png) top left no-repeat; height:25px; width:25px}
+li.category-other span {background:url(../images/category-other.png) top left no-repeat; height:25px; width:25px}
+
+li.complete-yes span {background:url(../images/complete-yes.png) top left no-repeat; height:25px; width:25px}
+li.complete-no span {background:url(../images/complete-no.png) top left no-repeat; height:25px; width:25px}
+*/
+li.warning-yes img {height:25px; width:25px}
+li.warning-no img {height:25px; width:25px}
+
+li.rating-explicit img {height:25px; width:25px}
+li.rating-mature img {height:25px; width:25px}
+li.rating-teen img {height:25px; width:25px}
+li.rating-general-audience img {height:25px; width:25px}
+li.rating-notrated img {height:25px; width:25px}
+
+li.category-none img {height:25px; width:25px}
+li.category-gen img {height:25px; width:25px}
+li.category-het img {height:25px; width:25px}
+li.category-slash img {height:25px; width:25px}
+li.category-femslash img {height:25px; width:25px}
+li.category-other img {height:25px; width:25px}
+
+li.complete-yes img {height:25px; width:25px}
+li.complete-no img {height:25px; width:25px}
+
+.work h3 {margin-left:4em; color:#900; padding: 1em 0 0 0}
+.work h3 a {color:#900;}
+.work h4 {margin-left:4.5em;}
+.work p.update {font-size:0.875em;position:absolute; top:0; right:0}
+.work .tags dt{font-weight:bold; margin:1.286em 0 0 0}
+.work .tags dd {font-size:0.875em; margin:-1em 0 0 4.5em; }
+.work li.summary {margin:0.5625em 2em;}
+.work li.stats dl {text-align:right;}
+.work li.stats dt, .work li.stats dd {display:inline; font-size:0.875em}
+.work li.stats dl dd {margin:0 0.375em 0 0;}
+
+
 /*series listing */
 #user-series ul	{ text-indent:2em; margin:1.125em auto; padding:0 1em;}
 #user-series ul li	{ list-style-type:disc}
