@@ -120,7 +120,6 @@ module WorksHelper
     end
   end
 
-
   def get_category_class(category_tag)
     case category_tag
     when GEN_CATEGORY_TAG
@@ -149,7 +148,13 @@ module WorksHelper
   end
 
 
-
+  def cast_tags_for(work)
+    []
+  end
+  
+  def freeform_tags_for(work)
+    []
+  end
 
 
 

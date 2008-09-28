@@ -46,7 +46,7 @@ class User < ActiveRecord::Base
   has_many :bookmark_tags, :through => :bookmarks, :source => :tags
   
   has_many :inbox_comments
-  has_many :feedback_comments, :through => :inbox_comments, :conditions => "(is_deleted IS NULL) OR (NOT is_deleted = 1)"
+  has_many :feedback_comments, :through => :inbox_comments, :conditions => {:is_deleted => false}
   
   named_scope :alphabetical, :order => :login
   named_scope :valid, :conditions => {:banned => false, :suspended => false}
@@ -104,24 +104,24 @@ class User < ActiveRecord::Base
   # Gets the user's most recent unposted work
   def unposted_work
     return @unposted_work if @unposted_work
-    @unposted_work = works.find(:first, :conditions => 'posted IS NULL OR posted = 0', :order => 'works.created_at DESC') 
+    @unposted_work = works.find(:first, :conditions => {:posted => false}, :order => 'works.created_at DESC') 
   end
   
   def unposted_works
     return @unposted_works if @unposted_works
-    @unposted_works = works.find(:all, :conditions => 'posted IS NULL OR posted = 0', :order => 'works.created_at DESC')
+    @unposted_works = works.find(:all, :conditions => {:posted => false}, :order => 'works.created_at DESC')
   end
   
   # gets rid of unposted works older than a week
   def cleanup_unposted_works
-    works.find(:all, :conditions => ['(posted IS NULL OR posted = 0) AND works.created_at < ?', 1.week.ago]).each do |w|
+    works.find(:all, :conditions => ['(posted = ? AND works.created_at < ?', false, 1.week.ago]).each do |w|
       w.destroy
     end
   end
   
   # removes ALL unposted works
   def wipeout_unposted_works
-    works.find(:all, :conditions => 'posted IS NULL OR posted = 0').each do |w|
+    works.find(:all, :conditions => {:posted => false}).each do |w|
       w.destroy
     end
   end

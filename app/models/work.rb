@@ -86,19 +86,17 @@ class Work < ActiveRecord::Base
                   INNER JOIN tags ON taggings.tag_id = tags.id"
                     
                     
-  VISIBLE_TO_ALL_CONDITIONS = [ 'works.posted = 1 
-      AND (works.restricted = 0 OR works.restricted IS NULL) 
-      AND (works.hidden_by_admin = 0 OR works.hidden_by_admin IS NULL)' ]
+  VISIBLE_TO_ALL_CONDITIONS = {:posted => true, :restricted => false, :hidden_by_admin => false}
       
-  VISIBLE_TO_USER_CONDITIONS = ['posted = 1 AND (hidden_by_admin = 0 OR hidden_by_admin IS NULL)']
+  VISIBLE_TO_USER_CONDITIONS = {:posted => true, :restricted => false, :hidden_by_admin => false}
   
-  VISIBLE_TO_ADMIN_CONDITIONS = ['posted = 1']
+  VISIBLE_TO_ADMIN_CONDITIONS = {:posted => true}
 
   public
   
   named_scope :ordered, lambda {|sort_field, sort_direction|
     {
-      :order => "#{(Work.column_names.include?(sort_field) ? sort_field : 'updated_at')}" + 
+      :order => "works.#{(Work.column_names.include?(sort_field) ? sort_field : 'updated_at')}" + 
                 " " +
                 "#{(sort_direction.upcase == 'DESC' ? 'DESC' : 'ASC')}"
     }
@@ -107,13 +105,13 @@ class Work < ActiveRecord::Base
     {:limit => limit.kind_of?(Fixnum) ? limit : 5}
   }
 
-  named_scope :recent, :order => 'created_at DESC', :limit => 5
+  named_scope :recent, :order => 'works.created_at DESC', :limit => 5
   named_scope :posted, :conditions => {:posted => true}
-  named_scope :unposted, :conditions => ['posted = 0 OR posted IS NULL']
+  named_scope :unposted, :conditions => {:posted => false}
   named_scope :restricted , :conditions => {:restricted => true}
-  named_scope :unrestricted, :conditions => ['restricted = 0 OR restricted IS NULL']
+  named_scope :unrestricted, :conditions => {:restricted => true}
   named_scope :hidden, :conditions => {:hidden_by_admin => true}
-  named_scope :unhidden, :conditions => ['hidden_by_admin = 0 OR hidden_by_admin IS NULL']
+  named_scope :unhidden, :conditions => {:hidden_by_admin => false}
   named_scope :visible_to_owner, :conditions => VISIBLE_TO_ADMIN_CONDITIONS
   named_scope :visible_to_user, :conditions => VISIBLE_TO_USER_CONDITIONS 
   named_scope :visible_to_all, :conditions => VISIBLE_TO_ALL_CONDITIONS
@@ -148,7 +146,7 @@ class Work < ActiveRecord::Base
     }.merge( (User.current_user && User.current_user.kind_of?(Admin)) ?
       { :conditions => {:posted => true} } :
       ( (User.current_user && User.current_user != :false) ?
-        {:conditions => ['posted = 1 AND (hidden_by_admin = 0 OR hidden_by_admin IS NULL OR users.id = ?)', User.current_user.id] } :
+        {:conditions => ['works.posted = ? AND (works.hidden_by_admin = ? OR users.id = ?)', true, false, User.current_user.id] } :
         {:conditions => VISIBLE_TO_ALL_CONDITIONS })    
     )
   }
@@ -467,17 +465,17 @@ class Work < ActiveRecord::Base
     OFFICIAL_TAG_CATEGORIES.each do |c|
       define_method(c.name){tag_string(c)}
       define_method(c.name+'=') do |tag_name| 
-        self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({c.name.to_sym => tag_name}) : tag_with(c.name => tag_name)
+        self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({c.name.to_sym => tag_name}) : tag_with(c.name.to_sym => tag_name)
       end
     end 
   rescue
     define_method('ambiguous'){tag_string('ambiguous')}
     define_method('ambiguous=') do |tag_name| 
-      self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({:ambiguous => tag_name}) : tag_with(c.name => tag_name)      
+      self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({:ambiguous => tag_name}) : tag_with(:ambiguous => tag_name)      
     end    
     define_method('default'){tag_string('default')}
     define_method('default=') do |tag_name| 
-      self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({:default => tag_name}) : tag_with(c.name => tag_name)     
+      self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({:default => tag_name}) : tag_with(:default => tag_name)     
     end    
   end
   
@@ -522,8 +520,9 @@ class Work < ActiveRecord::Base
     tags.find(:first, :conditions => {:adult => true})
   end
 
+  # this doesn't work right >:(
   def self.all_cached
-    Rails.cache.fetch('Works.all') { all_with_tags }
+    Rails.cache.fetch('Works.all') { all_with_tags }    
   end
   
   def self.search_with_sphinx(options)

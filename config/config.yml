@@ -60,6 +60,9 @@ NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD: 5
 COMMENT_THREAD_MAX_DEPTH: 2
 
 # some tag and tag category names 
+DEFAULT_CATEGORY_NAME: 'default'
+AMBIGUOUS_CATEGORY_NAME: 'ambiguous'
+
 WARNING_CATEGORY_NAME: 'Warning'
 NO_WARNING_TAG_NAME: 'None Of These Warnings Apply'
 DEFAULT_WARNING_TAG_NAME: 'Chooses Not To Warn'

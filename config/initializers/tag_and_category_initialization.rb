@@ -4,8 +4,8 @@ begin
   RATING_TAG_CATEGORY = TagCategory.find_or_create_official_category(ArchiveConfig.RATING_CATEGORY_NAME, :required => true, :exclusive => true)
   FANDOM_TAG_CATEGORY = TagCategory.find_or_create_official_category(ArchiveConfig.FANDOM_CATEGORY_NAME, :required => true)
   CATEGORY_TAG_CATEGORY = TagCategory.find_or_create_official_category(ArchiveConfig.CATEGORY_CATEGORY_NAME, :required => false, :exclusive => true)
-  DEFAULT_TAG_CATEGORY = TagCategory.find_or_create_official_category('default', :display_name => 'Tags'.t)
-  AMBIGUOUS_TAG_CATEGORY = TagCategory.find_or_create_official_category('ambiguous', :display_name => 'Ambiguous'.t)
+  DEFAULT_TAG_CATEGORY = TagCategory.find_or_create_official_category(ArchiveConfig.DEFAULT_CATEGORY_NAME, :display_name => 'Tags'.t)
+  AMBIGUOUS_TAG_CATEGORY = TagCategory.find_or_create_official_category(ArchiveConfig.AMBIGUOUS_CATEGORY_NAME, :display_name => 'Ambiguous'.t)
 
   OFFICIAL_TAG_CATEGORIES = TagCategory.official
 
@@ -30,5 +30,8 @@ begin
   OFFICIAL_FANDOM_TAGS =  Tag.by_category(FANDOM_TAG_CATEGORY).canonical
   OFFICIAL_CATEGORY_TAGS = Tag.by_category(CATEGORY_TAG_CATEGORY).canonical  
 rescue
-  
+  puts "\n\n\n\n*******************************************\n"
+  puts "database connection not established -- you might need to do a rake db:test:prepare or rake db:seed\n"
+  puts "ignore if you're doing just that :)\n"
+  puts "*******************************************\n\n\n\n\n"
 end

@@ -18,8 +18,8 @@ class UsersController < ApplicationController
   
   def index
     @users = User.alphabetical.paginate(:page => params[:page])
-    filter_out = [WARNING_TAG_CATEGORY, RATING_TAG_CATEGORY, DEFAULT_TAG_CATEGORY]
-    @categories = OFFICIAL_TAG_CATEGORIES - filter_out
+    @categories = OFFICIAL_TAG_CATEGORIES - [WARNING_TAG_CATEGORY, RATING_TAG_CATEGORY, DEFAULT_TAG_CATEGORY]
+    logger.info "categories: " + @categories.to_yaml
   end 
 
   # GET /users/1
@@ -123,7 +123,7 @@ class UsersController < ApplicationController
   def destroy
     @hide_dashboard = true
     @user = User.find_by_login(params[:id])
-    @works = @user.works.find(:all, :conditions => 'posted = 1')
+    @works = @user.works.find(:all, :conditions => {:posted => true})
     if @works.blank?
       if @user.unposted_works
         @user.wipeout_unposted_works
@@ -185,7 +185,7 @@ class UsersController < ApplicationController
             s.destroy
           end
         end
-        @works = @user.works.find(:all, :conditions => 'posted = 1')
+        @works = @user.works.find(:all, :conditions => {:posted => true})
         if @works.blank?
           if @user.unposted_works
             @user.wipeout_unposted_works

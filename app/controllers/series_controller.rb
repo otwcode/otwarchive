@@ -35,7 +35,7 @@ class SeriesController < ApplicationController
   # GET /series/1.xml
   def show
     @series = Series.find(params[:id])
-    @serial_works = @series.serial_works.find(:all, :include => :work, :conditions => 'works.posted = 1', :order => :position) 
+    @serial_works = @series.serial_works.find(:all, :include => :work, :conditions => ['works.posted = ?', true], :order => :position) 
   end
 
   # GET /series/new

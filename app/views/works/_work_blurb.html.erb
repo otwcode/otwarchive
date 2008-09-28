@@ -25,14 +25,17 @@
 			<dt><%=h 'Cast'.t + ': ' %></dt>
 			<dd>
 				<ul>
-					<li>PAIRINGS AND CHARACTERS</li>
+				  <%- cast_tags_for(work).each do |tag| -%>
+					  <li><%= link_to_tag(tag) -%></li>
+					<%- end -%>
 				</ul>
 			</dd>
 			<dt><%=h 'Tags'.t + ': ' %></dt>
 			<dd>
 				<ul>
-					<!-- for each freeform tag do -->
-					<li>FREEFORM TAGS</li>
+				  <%- freeform_tags_for(work).each do |tag| -%>
+					<li><%= link_to_tag(tag) -%></li>
+					<%- end -%>
 				</ul>
 			</dd>
 		</dl>

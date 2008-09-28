@@ -100,7 +100,8 @@ class WorkTest < ActiveSupport::TestCase
       @tagged_work = create_work
       @untagged_work = create_work
       @tag = create_tag
-      @tagged_work.update_attribute('default', @tag.name)
+      @tagged_work.tags << @tag
+      @tagged_work.save
     end
     should "be returned/not returned by with_any_tags, respectively" do
       assert Work.with_any_tags([@tag]).include?(@tagged_work)
@@ -277,6 +278,18 @@ class WorkTest < ActiveSupport::TestCase
     #    "query" => @query ,
     #    "selected_tags" => @selected_tags
     #   )    
+  end
+  
+  def test_tagged
+    work = create_work
+    tag = create_tag
+    work.tags << tag
+    work.save
+    assert work.tags.include?(tag)
+
+    tagged_work = create_work
+    tagged_work.update_attribute('default', tag.name)
+    assert tagged_work.tags.include?(tag)
   end
   
   def test_number_of_chapters

@@ -102,7 +102,7 @@ module FixtureReplacement
   end
  
   attributes_for :tag do |a|
-    a.tag_category = TagCategory.default
+    a.tag_category = DEFAULT_TAG_CATEGORY
     a.name = random_phrase[1...42]
   end
   
