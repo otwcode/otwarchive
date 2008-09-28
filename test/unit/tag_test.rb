@@ -8,11 +8,14 @@ class TagTest < ActiveSupport::TestCase
     end
     should_belong_to :tag_category
     should_have_many :taggings
-    should_ensure_length_in_range :name, (1..42), :short_message => /blank/, :long_message => /limit/
+    should_ensure_length_in_range :name, (1..42), :short_message => /blank/, :long_message => /too long/
     should_require_attributes :name
     should_allow_values_for :adult, true, false
-    should_allow_values_for :name, '"./?~!@#$%^&()_-+=', "1234567890", "space's are not tag separators"
+    should_allow_values_for :name, '"./?~!@#$%^&()_-+=', "1234567890", "spaces are not tag separators"
     should_not_allow_values_for :name, "commas, aren't allowed", :message => /commas/
+    should_not_allow_values_for :name, "asterisks* aren't allowed", :message => /asterisk/
+    should_not_allow_values_for :name, "angle brackets < aren't allowed", :message => /angle/
+    should_not_allow_values_for :name, "angle brackets > aren't allowed", :message => /angle/
     should "invert valid and banned" do
       assert_equal @tag.valid?, !@tag.banned?
     end
