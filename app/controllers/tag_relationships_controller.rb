@@ -46,11 +46,11 @@ class TagRelationshipsController < ApplicationController
       relationship.tag_id = tag_id
       relationship.save
       (@new_tag_relationships ||= []) << relationship
+      if params[:canonical]
+        Tag.find(tag_id).update_attribute("canonical", true)
+      end
     end
     @category2 = Tag.find(params[:tag_relationship][:related_tag_id]).tag_category
-    if params[:canonical]
-      Tag.update_all("canonical = 1", "id IN (#{params[:tag].join(',')})")
-    end
     @tag_ids = params[:tag].values
     respond_to do |format|
       format.js

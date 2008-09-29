@@ -1,13 +1,13 @@
-General_Audience:
+General_Audiences:
   tag_category: Rating
-  name: General Audience
+  name: General Audiences
   canonical: true
   banned: false
   adult: false
 
 Teen_and_Up:
   tag_category: Rating
-  name: Teen and Up
+  name: Teen and Up Audiences
   canonical: true
   banned: false
   adult: false
@@ -34,50 +34,57 @@ Not_Rated:
   adult: true
 
 Gen:
-  tag_category: Genre
-  name: gen
+  tag_category: Category
+  name: Gen
   canonical: true
   banned: false
   adult: false
 
 Het:
-  tag_category: Genre
-  name: het
+  tag_category: Category
+  name: Het
   canonical: true
   banned: false
   adult: false
 	
 Slash:
-  tag_category: Genre
-  name: slash
+  tag_category: Category
+  name: Slash
   canonical: true
   banned: false
   adult: false
 	
 Other:
-  tag_category: Genre
-  name: other
+  tag_category: Category
+  name: Other
+  canonical: true
+  banned: false
+  adult: false
+
+Multi:
+  tag_category: Category
+  name: Multi
+  canonical: true
+  banned: false
+  adult: false
+
+Femslash:
+  tag_category: Category
+  name: Femslash
   canonical: true
   banned: false
   adult: false
 	
 Chooses_Not_To_Warn:
   tag_category: Warning
-  name: chooses not to warn
-  canonical: true
-  banned: false
-  adult: false
-	
-Chooses_Not_To_Warn_For_Some_Content:
-  tag_category: Warning
-  name: chooses not to warn for some content
+  name: Chooses Not To Warn
   canonical: true
   banned: false
   adult: false
 	
 No_Warnings_Apply:
   tag_category: Warning
-  name: no warnings apply
+  name: None Of These Warnings Apply
   canonical: true
   banned: false
   adult: false

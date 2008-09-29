@@ -1,5 +1,5 @@
 work1rating: 
-  tag: General_Audience
+  tag: General_Audiences
   taggable_id: 1
   taggable_type: Work
   
@@ -19,7 +19,7 @@ work1genre:
   taggable_type: Work
   
 work2rating: 
-  tag: General_Audience
+  tag: General_Audiences
   taggable_id: 2
   taggable_type: Work
 

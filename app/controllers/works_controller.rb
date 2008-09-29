@@ -57,8 +57,8 @@ class WorksController < ApplicationController
       @chapters = @work.chapters.in_order
       @serial_works = @work.serial_works
       @tags_by_category = {}
-      categories = TagCategory.exclusive
-      categories << TagCategory.warning_tag_category
+      categories = TagCategory.official_tag_categories
+      #categories << TagCategory.warning_tag_category
       categories.each {|category| @tags_by_category[category] = category.tags.valid.canonical} unless categories.blank?
   
       @chapter = @work.first_chapter

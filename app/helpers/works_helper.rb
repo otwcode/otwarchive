@@ -65,7 +65,7 @@ module WorksHelper
 
   # select the default warnings if this is a new work
   def warning_selected(work, category)
-    @work.new_record? ? Tag.default_warning.collect : @work.tags.by_category(category).valid.collect(&:name)
+    @work.new_record? ? Tag.default_warning : @work.tags.by_category(category).valid.collect(&:name)
   end
   
   def get_tags_by_category(work)
@@ -166,7 +166,7 @@ module WorksHelper
     relationship = TagRelationshipKind.find_by_name('child')
     if relationship 
       pairings.each do |pairing|
-        characters.reject!{|c| is_in_relationship_with?(pairing, relationship)}
+        characters.reject!{|c| c.is_in_relationship_with?(pairing, relationship)}
       end
     end
     

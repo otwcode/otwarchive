@@ -8,33 +8,40 @@ Default:
   official: true
 
 Fandom:
-  name: Fandom
+  name: fandom
+  display_name: Fandom
   required: true
   official: true
 
 Media:
-  name: Media
+  name: media
+  display_name: Media
 
 Rating:
-  name: Rating
+  name: rating
   required: true
   official: true
   exclusive: true
+  display_name: Rating
 	
 Warning:
-  name: Warning
+  name: warning
   required: true
   official: true
+  display_name: Warning
 
 Character:
-  name: Character
+  name: character
   official: true
+  display_name: Character
 
 Pairing:
-  name: Pairing
+  name: pairing
   official: true
+  display_name: Pairing
 	
 Category:
-  name: Category
+  name: category
   official: true
   exclusive: true
+  display_name: Category

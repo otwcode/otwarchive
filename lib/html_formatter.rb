@@ -8,7 +8,7 @@ module HtmlFormatter
     while text.gsub!(/<br\s*\/>\s*<br\s*\/><br\s*\/>/, "<br /><br />")
       # keep going
     end
-    text.gsub!(/<br\s*\/>/i, "\n")
+    text.gsub!(/<br\s*\/>/i, "<br />\n")
     
     return text
   end

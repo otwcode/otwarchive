@@ -57,7 +57,8 @@ class StoryParser
   def parse_story(story, location = nil)
     work_params = parse_common(story, location)
     work_params = sanitize_params(work_params)
-    return Work.new(work_params)
+    @work = Work.new(work_params)
+    return @work
   end
 
   # Parses text but returns a chapter instead
@@ -213,7 +214,7 @@ class StoryParser
       if storytext.match(/Fandom: <(.*)>(.*)<\/a>/i)
         fandom_tag = $2
         if TagCategory.official.collect(&:name).include?("Fandom")
-          work_params[:Fandom] = fandom_tag
+          work_params[:fandom] = fandom_tag
         else
           tags << "fandom:#{fandom_tag}"
         end
@@ -254,7 +255,7 @@ class StoryParser
         work_params[:summary] = summary
         rating = convert_rating(rating)
         if TagCategory.official.collect(&:name).include?("Rating")
-          work_params[:Rating] = rating
+          work_params[:rating] = rating
         else
           tags << "rating:#{rating}"
         end
@@ -282,7 +283,7 @@ class StoryParser
       if pagetitle && pagetitle.match(/(.*), a (.*) fanfic - FanFiction\.Net/)
         work_params[:title] = $1
         if TagCategory.official.collect(&:name).include?("Fandom")
-          work_params[:Fandom] = $2
+          work_params[:fandom] = $2
         else
           tags << "fandom:#{$2}"
         end
@@ -290,7 +291,7 @@ class StoryParser
       if story.match(/fiction rated:\s*(.*?)<\/a>/i)
         rating = convert_rating($1)
         if TagCategory.official.collect(&:name).include?("Rating")
-          work_params[:Rating] = rating
+          work_params[:rating] = rating
         else
           tags << "rating:#{rating}"
         end

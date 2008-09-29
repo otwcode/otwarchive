@@ -119,10 +119,10 @@ class StoryParserTest < ActiveSupport::TestCase
       end
     end
 
-    context "given other tricky urls" do
+    context "given a variety of urls for valid stories" do
       setup do
         @urls = []
-        @urls << "http://www.innergeekdom.net/Twice/12-01"
+        @urls << "http://www.intimations.org/fanfic/davidcook/Madrigals%20and%20Misadventures.html"
         @urls << "http://remix.illuminatedtext.com/dbfiction.php?fiction_id=441"
         @urls << "http://web.archive.org/web/20040310174832/http://witchqueen.diary-x.com/journal.cgi?entry=20040108b"
       end

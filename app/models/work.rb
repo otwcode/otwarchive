@@ -462,23 +462,12 @@ class Work < ActiveRecord::Base
 
   # create dynamic methods based on the tag categories
   def self.initialize_tag_category_methods
-    begin
-      TagCategory.official_tag_categories.each do |c|
-        define_method(c.name){tag_string(c)}
-        define_method(c.name+'=') do |tag_name| 
-          self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({c.name.to_sym => tag_name}) : tag_with(c.name.to_sym => tag_name)
-        end
-      end 
-    rescue
-      define_method('ambiguous'){tag_string('ambiguous')}
-      define_method('ambiguous=') do |tag_name| 
-        self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({:ambiguous => tag_name}) : tag_with(:ambiguous => tag_name)      
-      end    
-      define_method('default'){tag_string('default')}
-      define_method('default=') do |tag_name| 
-        self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({:default => tag_name}) : tag_with(:default => tag_name)     
-      end    
-    end
+    TagCategory.official_tag_categories.each do |c|
+      define_method(c.name){tag_string(c)}
+      define_method(c.name+'=') do |tag_name| 
+        self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({c.name.to_sym => tag_name}) : tag_with(c.name.to_sym => tag_name)
+      end
+    end 
   end
   
   # Set the value of word_count to reflect the length of the chapter content
@@ -500,12 +489,16 @@ class Work < ActiveRecord::Base
   def tag_after_create
     unless self.tags_to_tag_with.blank?
       if self.tags_to_tag_with[:warning].blank?
-        tag_with(:warning => Tag.default_warning)
+        #tag_with(:warning => Tag.default_warning_tag.name)
+        self.tags_to_tag_with.merge!({:warning => Tag.default_warning_tag.name})
+      end
+      if self.tags_to_tag_with[:rating].blank?
+        self.tags_to_tag_with.merge!({:rating => Tag.default_rating_tag.name})
+        #tag_with(:rating => Tag.default_rating_tag.name)
       end
       self.tags_to_tag_with.each_pair do |category, tag|
         tag_with(category => tag)
       end
-      self.tags_to_tag_with = {:warning => Tag.default_warning}
     end
   end
   
