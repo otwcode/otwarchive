@@ -76,19 +76,27 @@ module WorksHelper
     @tags_by_category ||= Tag.on_works([work]).group_by(&:tag_category_id).to_hash
   end
   
+  def get_title_string(tags, category_name = "")
+    if tags && tags.size > 0
+      tags.collect(&:name).join(", ")
+    else
+      category_name.blank? ? "" : "No".t + " " + category_name
+    end
+  end
+  
   def get_symbols_for(work)
     tags_by_category = get_tags_by_category(work)
 
     warning_class = get_warnings_class(tags_by_category[TagCategory.warning_tag_category.id])
-    warning_string = tags_by_category[TagCategory.warning_tag_category.id].collect(&:name).join(", ")
+    warning_string = get_title_string(tags_by_category[TagCategory.warning_tag_category.id])
     
     rating = tags_by_category[TagCategory.rating_tag_category.id].blank? ? nil : tags_by_category[TagCategory.rating_tag_category.id].first
     rating_class = get_ratings_class(rating)
-    rating_string = rating.nil? ? "No Rating".t : rating.name    
+    rating_string = get_title_string(tags_by_category[TagCategory.rating_tag_category.id], "rating".t)
 
     category = tags_by_category[TagCategory.category_tag_category.id].blank? ? nil : tags_by_category[TagCategory.category_tag_category.id].first
     category_class = get_category_class(category)
-    category_string = category.nil? ? "No Category".t : category.name
+    category_string = get_title_string(tags_by_category[TagCategory.category_tag_category.id], "category".t)
     
     iswip_class = get_complete_class(work)
     iswip_string = work.is_wip ? "Work in Progress".t : "Complete Work".t
