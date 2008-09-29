@@ -1,18 +1,6 @@
-require 'digest/sha1'
-
-
-def get_salt(login)
-  salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{login}--")  
-end
-
-def encrypt_password(salt, password)
-  crypted_password = encrypt(password, salt)
-  return [crypted_password]
-end
-
-def encrypt(password, salt)
-  Digest::SHA1.hexdigest("--#{salt}--#{password}--")
-end
+#!/usr/bin/env script/runner
+# usage:
+# RAILS_ENV=production script/create_admin.rb
 
 print "Enter admin email: "
 email = gets.chomp
@@ -23,16 +11,10 @@ login = gets.chomp
 print "Enter admin password: "
 password = gets.chomp
 
-print "Enter salt: "
-salt = gets.chomp
+a=Admin.new(:email => email, :login => login, :password => password, :password_confirmation => password)
 
-if salt.empty?
-  salt = get_salt(login)
+if a.save
+  print "Admin created\n"
+else
+  y a.errors.full_messages
 end
-
-crypted_password = encrypt_password(salt, password)
-
-@values = [ Time.now.to_s, Time.now.to_s, email, login, crypted_password, salt ]
-
-print "INSERT INTO admins (created_at, updated_at, email, login, crypted_password, salt) "
-print 'VALUES ("' + @values.join('", "') + '");'
