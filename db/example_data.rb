@@ -102,7 +102,7 @@ module FixtureReplacement
   end
  
   attributes_for :tag do |a|
-    a.tag_category = TagCategory.default_tag_category
+    a.tag_category = TagCategory::DEFAULT
     a.name = random_phrase[1...42]
   end
   
@@ -134,9 +134,9 @@ module FixtureReplacement
 
   attributes_for :work do |a|
     user = create_user
-    fandom_tag = create_tag(:tag_category => TagCategory.fandom_tag_category)
-    rating_tag = Tag.default_rating_tag
-    warning_tag = Tag.default_warning_tag    
+    fandom_tag = create_tag(:tag_category => TagCategory::FANDOM)
+    rating_tag = Tag::DEFAULT_RATING_TAG
+    warning_tag = Tag::DEFAULT_WARNING_TAG    
 
     a.title = random_phrase
     a.authors = [user.default_pseud]

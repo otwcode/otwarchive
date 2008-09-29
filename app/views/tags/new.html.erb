@@ -25,7 +25,7 @@
   <h3><%=h 'Please be careful!'.t %></h3>
   <p>
     <%=h "Once you've created a tag you can never change its name, nor can you delete it (although it can be banned. and if it is not banned, and it is not being used to tag anything, or is itself being tagged, it may be purged).".t %>
-    <%=h 'Once you have selected a category, you will not be able to change it to anything other than'.t %> <%= link_to TagCategory.ambiguous_tag_category.display_name, tag_category_path(TagCategory.ambiguous_tag_category) %> <%=h 'or'.t %> <%= link_to TagCategory.default_tag_category.display_name, tag_category_path(TagCategory.default_tag_category) %>.
+    <%=h 'Once you have selected a category, you will not be able to change it to anything other than'.t %> <%= link_to TagCategory::AMBIGUOUS.display_name, tag_category_path(TagCategory::AMBIGUOUS) %> <%=h 'or'.t %> <%= link_to TagCategory::DEFAULT.display_name, tag_category_path(TagCategory::DEFAULT) %>.
   </p>
   
   <p class="submit"><%= f.submit %></p>

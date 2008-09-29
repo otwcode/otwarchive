@@ -23,9 +23,9 @@ class TagCategoriesController < ApplicationController
       render :action => 'unsorted'
     else
       @tag_category = TagCategory.find(params[:id], :include => 'tags')
-      if @tag_category == TagCategory.ambiguous_tag_category
+      if @tag_category == TagCategory::AMBIGUOUS
        render :action => 'ambiguous'
-      elsif @tag_category == TagCategory.default_tag_category
+      elsif @tag_category == TagCategory::DEFAULT
        render :action => 'default'
       end
     end
@@ -111,7 +111,7 @@ class TagCategoriesController < ApplicationController
   def add_relationship
     @tag = Tag.find(params[:id])
     @tag_category = TagCategory.find(params[:category])
-    if @tag_category == TagCategory.ambiguous_tag_category
+    if @tag_category == TagCategory::AMBIGUOUS
       @tag_relationship = TagRelationship.disambiguate
       Tagging.create(:tag => @tag, :taggable => Tag.find(params[:taggable]), :tag_relationship => @tag_relationship)
     else

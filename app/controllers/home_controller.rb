@@ -18,10 +18,10 @@ class HomeController < ApplicationController
       @random_user = Work.posted[rand(@work_count)].pseuds.first.user
     end
     @works_today = Work.posted.count(:all, :conditions => (['created_at > ?', 1.day.ago]))
-    fandom_category = TagCategory.find_or_create_by_name("Fandom")
-    @fandom_count = fandom_category.tags.count(:all, :conditions => {:canonical => true})
+    
+    @fandom_count = TagCategory::FANDOM.tags.count(:all, :conditions => {:canonical => true})
     @latest_work = Work.posted.find(:first, :conditions => {:restricted => false}, :order => "updated_at DESC")
-    @latest_fandom = fandom_category.tags.find(:first, :conditions => {:name => @latest_work.Fandom}) if @latest_work
+    @latest_fandom = @latest_work.tags.canonical.by_category(TagCategory::FANDOM)
     render :action => "index", :layout => "home"
   end
   

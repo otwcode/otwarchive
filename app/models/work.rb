@@ -462,13 +462,16 @@ class Work < ActiveRecord::Base
 
   # create dynamic methods based on the tag categories
   def self.initialize_tag_category_methods
-    TagCategory.official_tag_categories.each do |c|
+		categories = TagCategory::OFFICIAL
+    categories.each do |c|
       define_method(c.name){tag_string(c)}
       define_method(c.name+'=') do |tag_name| 
         self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({c.name.to_sym => tag_name}) : tag_with(c.name.to_sym => tag_name)
       end
     end 
   end
+	
+	initialize_tag_category_methods
   
   # Set the value of word_count to reflect the length of the chapter content
   def set_word_count

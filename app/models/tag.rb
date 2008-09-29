@@ -49,72 +49,40 @@ class Tag < ActiveRecord::Base
     }
   }
 
-  @@default_warning_tag = nil
-  @@no_warning_tag = nil
-
-  @@default_rating_tag = nil
-  @@explicit_rating_tag = nil
-  @@mature_rating_tag = nil
-  @@teen_rating_tag = nil
-  @@general_rating_tag = nil
-
-  @@het_category_tag = nil
-  @@slash_category_tag = nil
-  @@femslash_category_tag = nil
-  @@gen_category_tag = nil
-  @@multi_category_tag = nil
-  @@other_category_tag = nil
-
-  def self.default_warning_tag; @@default_warning_tag || @@default_warning_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.DEFAULT_WARNING_TAG_NAME, TagCategory.warning_tag_category); end
-  def self.no_warning_tag; @@no_warning_tag || @@no_warning_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.NO_WARNING_TAG_NAME, TagCategory.warning_tag_category); end
-
-  def self.default_rating_tag; @@default_rating_tag || @@default_rating_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.DEFAULT_RATING_TAG_NAME, TagCategory.rating_tag_category); end
-  def self.explicit_rating_tag; @@explicit_rating_tag || @@explicit_rating_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.EXPLICIT_RATING_TAG_NAME, TagCategory.rating_tag_category); end
-  def self.mature_rating_tag; @@mature_rating_tag || @@mature_rating_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.MATURE_RATING_TAG_NAME, TagCategory.rating_tag_category); end
-  def self.teen_rating_tag; @@teen_rating_tag || @@teen_rating_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.TEEN_RATING_TAG_NAME, TagCategory.rating_tag_category); end
-  def self.general_rating_tag; @@general_rating_tag || @@general_rating_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.GENERAL_RATING_TAG_NAME, TagCategory.rating_tag_category); end
-
-  def self.het_category_tag; @@het_category_tag || @@het_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.HET_CATEGORY_TAG_NAME, TagCategory.category_tag_category); end
-  def self.slash_category_tag; @@slash_category_tag || @@slash_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.SLASH_CATEGORY_TAG_NAME, TagCategory.category_tag_category); end
-  def self.femslash_category_tag; @@femslash_category_tag || @@femslash_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.FEMSLASH_CATEGORY_TAG_NAME, TagCategory.category_tag_category); end
-  def self.gen_category_tag; @@gen_category_tag || @@gen_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.GEN_CATEGORY_TAG_NAME, TagCategory.category_tag_category); end
-  def self.multi_category_tag; @@multi_category_tag || @@multi_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.MULTI_CATEGORY_TAG_NAME, TagCategory.category_tag_category); end
-  def self.other_category_tag; @@other_category_tag || @@other_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.OTHER_CATEGORY_TAG_NAME, TagCategory.category_tag_category); end
-
-  def self.initialize_tags
-    @@default_warning_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.DEFAULT_WARNING_TAG_NAME, TagCategory.warning_tag_category)
-    @@no_warning_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.NO_WARNING_TAG_NAME, TagCategory.warning_tag_category)
-
-    @@default_rating_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.DEFAULT_RATING_TAG_NAME, TagCategory.rating_tag_category)
-    @@explicit_rating_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.EXPLICIT_RATING_TAG_NAME, TagCategory.rating_tag_category)
-    @@mature_rating_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.MATURE_RATING_TAG_NAME, TagCategory.rating_tag_category)
-    @@teen_rating_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.TEEN_RATING_TAG_NAME, TagCategory.rating_tag_category)
-    @@general_rating_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.GENERAL_RATING_TAG_NAME, TagCategory.rating_tag_category)
-
-    @@het_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.HET_CATEGORY_TAG_NAME, TagCategory.category_tag_category)
-    @@slash_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.SLASH_CATEGORY_TAG_NAME, TagCategory.category_tag_category)
-    @@femslash_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.FEMSLASH_CATEGORY_TAG_NAME, TagCategory.category_tag_category)
-    @@gen_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.GEN_CATEGORY_TAG_NAME, TagCategory.category_tag_category)
-    @@multi_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.MULTI_CATEGORY_TAG_NAME, TagCategory.category_tag_category)
-    @@other_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.OTHER_CATEGORY_TAG_NAME, TagCategory.category_tag_category)
+  def self.find_or_create_canonical_tag(tagname, category)
+    find_by_name(tagname) || self.create({:name => tagname, :tag_category_id => category.id, :canonical => true})
   end
+	
+	DEFAULT_WARNING_TAG = Tag.find_or_create_canonical_tag(ArchiveConfig.DEFAULT_WARNING_TAG_NAME, TagCategory::WARNING)
+	NO_WARNING_TAG = Tag.find_or_create_canonical_tag(ArchiveConfig.NO_WARNING_TAG_NAME, TagCategory::WARNING)
+	DEFAULT_RATING_TAG = Tag.find_or_create_canonical_tag(ArchiveConfig.DEFAULT_RATING_TAG_NAME, TagCategory::RATING)
+	EXPLICIT_RATING_TAG = Tag.find_or_create_canonical_tag(ArchiveConfig.EXPLICIT_RATING_TAG_NAME, TagCategory::RATING)
+	MATURE_RATING_TAG = Tag.find_or_create_canonical_tag(ArchiveConfig.MATURE_RATING_TAG_NAME, TagCategory::RATING)
+	TEEN_RATING_TAG = Tag.find_or_create_canonical_tag(ArchiveConfig.TEEN_RATING_TAG_NAME, TagCategory::RATING)
+	GENERAL_RATING_TAG = Tag.find_or_create_canonical_tag(ArchiveConfig.GENERAL_RATING_TAG_NAME, TagCategory::RATING)
+	HET_CATEGORY_TAG = Tag.find_or_create_canonical_tag(ArchiveConfig.HET_CATEGORY_TAG_NAME, TagCategory::CATEGORY)
+	SLASH_CATEGORY_TAG = Tag.find_or_create_canonical_tag(ArchiveConfig.SLASH_CATEGORY_TAG_NAME, TagCategory::CATEGORY)
+	FEMSLASH_CATEGORY_TAG = Tag.find_or_create_canonical_tag(ArchiveConfig.FEMSLASH_CATEGORY_TAG_NAME, TagCategory::CATEGORY)
+	GEN_CATEGORY_TAG = Tag.find_or_create_canonical_tag(ArchiveConfig.GEN_CATEGORY_TAG_NAME, TagCategory::CATEGORY)
+	MULTI_CATEGORY_TAG = Tag.find_or_create_canonical_tag(ArchiveConfig.MULTI_CATEGORY_TAG_NAME, TagCategory::CATEGORY)
+	OTHER_CATEGORY_TAG = Tag.find_or_create_canonical_tag(ArchiveConfig.OTHER_CATEGORY_TAG_NAME, TagCategory::CATEGORY)
   
+	OFFICIAL_TAGS = [DEFAULT_WARNING_TAG, NO_WARNING_TAG, DEFAULT_RATING_TAG, EXPLICIT_RATING_TAG, 
+		MATURE_RATING_TAG, TEEN_RATING_TAG, GENERAL_RATING_TAG,	HET_CATEGORY_TAG, SLASH_CATEGORY_TAG, 
+		FEMSLASH_CATEGORY_TAG, GEN_CATEGORY_TAG, MULTI_CATEGORY_TAG, OTHER_CATEGORY_TAG] 
+	
   def is_in_relationship_with?(other_tag, relationship_kind)
     return (Tag.from_relationship(self, relationship_kind).count > 0)
   end
 
-  def self.find_or_create_canonical_tag(tagname, category)
-    find_by_name(tagname) || self.create({:name => tagname, :tag_category_id => category.id, :canonical => true})
-  end
-
   # the default warning(s) put on a new work
   def Tag.default_warning
-   [self.default_warning_tag]
+   DEFAULT_WARNING_TAG
   end
   #default rating
   def Tag.default_rating
-    [self.default_rating_tag]
-  end
+    DEFAULT_RATING_TAG
+	end
   
   def before_validation
     self.name = name.strip.squeeze(" ") if self.name

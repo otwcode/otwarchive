@@ -11,8 +11,8 @@
 	  </h3>
 	  
 	  <h4>
-	    <%- unless @tags_by_category[TagCategory.fandom_tag_category.id].nil? -%>
-  	  <%- @tags_by_category[TagCategory.fandom_tag_category.id].each do |fandom| -%>
+	    <%- unless @tags_by_category[TagCategory::FANDOM.id].nil? -%>
+  	  <%- @tags_by_category[TagCategory::FANDOM.id].each do |fandom| -%>
   	  <%= link_to_tag fandom -%>
   	  <%- end -%>
   	  <%- end -%>
