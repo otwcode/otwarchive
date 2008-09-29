@@ -489,12 +489,10 @@ class Work < ActiveRecord::Base
   def tag_after_create
     unless self.tags_to_tag_with.blank?
       if self.tags_to_tag_with[:warning].blank?
-        #tag_with(:warning => Tag.default_warning_tag.name)
         self.tags_to_tag_with.merge!({:warning => Tag.default_warning_tag.name})
       end
       if self.tags_to_tag_with[:rating].blank?
         self.tags_to_tag_with.merge!({:rating => Tag.default_rating_tag.name})
-        #tag_with(:rating => Tag.default_rating_tag.name)
       end
       self.tags_to_tag_with.each_pair do |category, tag|
         tag_with(category => tag)

@@ -392,6 +392,12 @@ class WorksController < ApplicationController
       else
         begin
           @work = storyparser.download_and_parse_story(url)
+        rescue Timeout::Error
+          flash.now[:error] = "Sorry, but we timed out trying to get that URL.".t
+        rescue
+          flash.now[:error] = "Sorry, but we couldn't find a story at that URL. You can still copy-and-paste the contents into our standard form, though!".t
+        end
+        begin
           @chapter = @work.chapters.first
           @work.pseuds << current_user.default_pseud
           @chapter.pseuds << current_user.default_pseud
@@ -403,10 +409,10 @@ class WorksController < ApplicationController
           else
             render :action => :new and return
           end
-        rescue Timeout::Error
-          flash.now[:error] = "Sorry, but we timed out trying to get that URL.".t
         rescue
-          flash.now[:error] = "Sorry, but we couldn't find a story at that URL. You can still copy-and-paste the contents into our standard form, though!".t
+          flash.now[:error] = "We managed to partially download the work, but there are problems 
+            preventing us from saving it as a draft. Please look over the results very carefully!".t
+          render :action => :new and return
         end
       end
       @use_upload_form = true

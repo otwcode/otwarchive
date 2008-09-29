@@ -213,7 +213,7 @@ class StoryParser
       tags = ['yuletide']
       if storytext.match(/Fandom: <(.*)>(.*)<\/a>/i)
         fandom_tag = $2
-        if TagCategory.official.collect(&:name).include?("Fandom")
+        if is_official_category?("fandom")
           work_params[:fandom] = fandom_tag
         else
           tags << "fandom:#{fandom_tag}"
@@ -254,7 +254,7 @@ class StoryParser
       
         work_params[:summary] = summary
         rating = convert_rating(rating)
-        if TagCategory.official.collect(&:name).include?("Rating")
+        if is_official_category?("rating")
           work_params[:rating] = rating
         else
           tags << "rating:#{rating}"
@@ -282,7 +282,7 @@ class StoryParser
       pagetitle = (@doc/"title").inner_html
       if pagetitle && pagetitle.match(/(.*), a (.*) fanfic - FanFiction\.Net/)
         work_params[:title] = $1
-        if TagCategory.official.collect(&:name).include?("Fandom")
+        if is_official_category?("fandom")
           work_params[:fandom] = $2
         else
           tags << "fandom:#{$2}"
@@ -290,7 +290,7 @@ class StoryParser
       end
       if story.match(/fiction rated:\s*(.*?)<\/a>/i)
         rating = convert_rating($1)
-        if TagCategory.official.collect(&:name).include?("Rating")
+        if is_official_category?("rating")
           work_params[:rating] = rating
         else
           tags << "rating:#{rating}"
@@ -311,11 +311,20 @@ class StoryParser
     # Find any cases of the given pieces of meta in the given text 
     # and return a hash
     def scan_text_for_meta(text)
+      # break up the text with some extra newlines to make matching more likely 
+      # and strip out some tags
+      text.gsub!(/<br/, "\n<br")
+      text.gsub!(/<p/, "\n<p")
+      text.gsub!(/<\/?span(.*?)?>/, '')
+      text.gsub!(/<\/?div(.*?)?>/, '')
+
       meta = {}
       metapatterns = META_PATTERNS
       # add in all the official tags
-      TagCategory.official.each do |c|
+      is_tag = {}
+      TagCategory.official_tag_categories.each do |c|
         metapatterns.merge!({c.name.to_sym => c.display_name.singularize})
+        is_tag[c.name.to_sym] = true
       end
       metapatterns.each do |metaname, pattern|
         # what this does is look for pattern: (whatever) 
@@ -329,6 +338,7 @@ class StoryParser
             value = eval("convert_#{metaname.downcase}(value)")
           rescue NameError
           end
+          value = sanitize_fully(value) if is_tag[metaname]
           meta[metaname] = value
         end        
       end      
@@ -361,13 +371,16 @@ class StoryParser
       return sanitize_whitelist(cleanup_and_format(storytext))
     end
     
-    # convert space-separated tags to comma-separated
-    def convert_default(tags)
+    def is_official_category?(string)
+      TagCategory.official_tag_categories.collect(&:name).include?(string.downcase)
+    end
+    
+    # works conservatively -- doesn't split on
+    # spaces and truncates instead. 
+    def clean_tags(tags)
+      tags = sanitize_fully(tags)
       if tags.match(/,/)
-        # already comma-separated, yay
         tagslist = tags.split(/,/)
-      elsif tags.match(/\s/)
-        tagslist = tags.split(/\s+/)
       else
         tagslist = [tags]
       end
@@ -380,6 +393,14 @@ class StoryParser
         newlist << tag
       end
       return newlist.join(',')
+    end
+
+    # convert space-separated tags to comma-separated
+    def convert_default(tags)
+      if !tags.match(/,/) && tags.match(/\s/)
+        tags = tags.split(/\s+/).join(',')
+      end
+      return clean_tags(tags)
     end
 
     # Convert the common ratings into whatever ratings we're
