@@ -10,7 +10,7 @@
 	    
       <dd>
         <ul id="work_<%= work.id %>_category_<%= category.id %>">
-        <%- if category == WARNING_TAG_CATEGORY && hide_warnings?(work) -%>        
+        <%- if category == TagCategory.warning_tag_category && hide_warnings?(work) -%>        
           <li><%= show_warnings_link(work, category) %></li> 
         <%- else -%>
           <%- tags.each do |tag| -%>

@@ -30,6 +30,14 @@ class Tag < ActiveRecord::Base
     }
   }
   
+  named_scope :from_relationship, lambda {|tag, relationship_kind|
+    {
+      :select => "DISTINCT tags.*",
+      :joins => "INNER JOIN tag_relationships ON tags.id = tag_relationships.tag_id",
+      :conditions => ['tag_relationships.tag_id = ? AND tag_relationships.tag_relationship_kind_id = ?', tag.id, relationship_kind.id]      
+    }
+  }
+  
   TAGGING_JOIN = "INNER JOIN taggings on tags.id = taggings.tag_id
                   INNER JOIN works ON (works.id = taggings.taggable_id AND taggings.taggable_type = 'Work')"
 
@@ -41,17 +49,71 @@ class Tag < ActiveRecord::Base
     }
   }
 
+  @@default_warning_tag = nil
+  @@no_warning_tag = nil
+
+  @@default_rating_tag = nil
+  @@explicit_rating_tag = nil
+  @@mature_rating_tag = nil
+  @@teen_rating_tag = nil
+  @@general_rating_tag = nil
+
+  @@het_category_tag = nil
+  @@slash_category_tag = nil
+  @@femslash_category_tag = nil
+  @@gen_category_tag = nil
+  @@multi_category_tag = nil
+  @@other_category_tag = nil
+
+  def self.default_warning_tag; @@default_warning_tag || @@default_warning_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.DEFAULT_WARNING_TAG_NAME, TagCategory.warning_tag_category); end
+  def self.no_warning_tag; @@no_warning_tag || @@no_warning_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.NO_WARNING_TAG_NAME, TagCategory.warning_tag_category); end
+
+  def self.default_rating_tag; @@default_rating_tag || @@default_rating_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.DEFAULT_RATING_TAG_NAME, TagCategory.rating_tag_category); end
+  def self.explicit_rating_tag; @@explicit_rating_tag || @@explicit_rating_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.EXPLICIT_RATING_TAG_NAME, TagCategory.rating_tag_category); end
+  def self.mature_rating_tag; @@mature_rating_tag || @@mature_rating_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.MATURE_RATING_TAG_NAME, TagCategory.rating_tag_category); end
+  def self.teen_rating_tag; @@teen_rating_tag || @@teen_rating_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.TEEN_RATING_TAG_NAME, TagCategory.rating_tag_category); end
+  def self.general_rating_tag; @@general_rating_tag || @@general_rating_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.GENERAL_RATING_TAG_NAME, TagCategory.rating_tag_category); end
+
+  def self.het_category_tag; @@het_category_tag || @@het_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.HET_CATEGORY_TAG_NAME, TagCategory.category_tag_category); end
+  def self.slash_category_tag; @@slash_category_tag || @@slash_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.SLASH_CATEGORY_TAG_NAME, TagCategory.category_tag_category); end
+  def self.femslash_category_tag; @@femslash_category_tag || @@femslash_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.FEMSLASH_CATEGORY_TAG_NAME, TagCategory.category_tag_category); end
+  def self.gen_category_tag; @@gen_category_tag || @@gen_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.GEN_CATEGORY_TAG_NAME, TagCategory.category_tag_category); end
+  def self.multi_category_tag; @@multi_category_tag || @@multi_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.MULTI_CATEGORY_TAG_NAME, TagCategory.category_tag_category); end
+  def self.other_category_tag; @@other_category_tag || @@other_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.OTHER_CATEGORY_TAG_NAME, TagCategory.category_tag_category); end
+
+  def self.initialize_tags
+    @@default_warning_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.DEFAULT_WARNING_TAG_NAME, TagCategory.warning_tag_category)
+    @@no_warning_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.NO_WARNING_TAG_NAME, TagCategory.warning_tag_category)
+
+    @@default_rating_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.DEFAULT_RATING_TAG_NAME, TagCategory.rating_tag_category)
+    @@explicit_rating_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.EXPLICIT_RATING_TAG_NAME, TagCategory.rating_tag_category)
+    @@mature_rating_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.MATURE_RATING_TAG_NAME, TagCategory.rating_tag_category)
+    @@teen_rating_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.TEEN_RATING_TAG_NAME, TagCategory.rating_tag_category)
+    @@general_rating_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.GENERAL_RATING_TAG_NAME, TagCategory.rating_tag_category)
+
+    @@het_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.HET_CATEGORY_TAG_NAME, TagCategory.category_tag_category)
+    @@slash_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.SLASH_CATEGORY_TAG_NAME, TagCategory.category_tag_category)
+    @@femslash_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.FEMSLASH_CATEGORY_TAG_NAME, TagCategory.category_tag_category)
+    @@gen_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.GEN_CATEGORY_TAG_NAME, TagCategory.category_tag_category)
+    @@multi_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.MULTI_CATEGORY_TAG_NAME, TagCategory.category_tag_category)
+    @@other_category_tag = Tag.find_or_create_canonical_tag(ArchiveConfig.OTHER_CATEGORY_TAG_NAME, TagCategory.category_tag_category)
+  end
+  
+  def is_in_relationship_with?(other_tag, relationship_kind)
+    return (Tag.from_relationship(self, relationship_kind).count > 0)
+  end
+
   def self.find_or_create_canonical_tag(tagname, category)
     find_by_name(tagname) || self.create({:name => tagname, :tag_category_id => category.id, :canonical => true})
   end
 
   # the default warning(s) put on a new work
   def Tag.default_warning
-   [ArchiveConfig.DEFAULT_WARNING_TAG]
+   [self.default_warning_tag]
   end
   #default rating
   def Tag.default_rating
-    [ArchiveConfig.DEFAULT_RATING_TAG]
+    [self.default_rating_tag]
   end
   
   def before_validation
@@ -84,15 +146,8 @@ class Tag < ActiveRecord::Base
   
   # Gets the work count for this tag and its synonyms
   def visible_work_count(current_user=:false)
-    ids = ([self] + self.synonyms).compact.collect(&:id).join(',')
-    conditions = "taggings.tag_id IN (#{ids})"
-    if current_user.is_a?(User)
-      pseud_ids = current_user.pseuds.collect(&:id).join(',')
-      conditions += " AND (works.hidden_by_admin = 0 OR works.hidden_by_admin IS NULL OR pseuds.id IN (#{pseud_ids}))"
-    elsif current_user != "admin"
-      conditions += " AND restricted = 0"
-    end
-    Work.posted.count(:all, :include => [:pseuds, {:taggings => :tag}], :conditions => conditions)
+    tags = [self] + self.synonyms
+    Work.visible.with_any_tags(tags).count
   end
   
   def valid
@@ -114,8 +169,8 @@ class Tag < ActiveRecord::Base
     if options.blank?
       (self.tags + self.related_tags).uniq
     else  
-      condition_list = "(tags.banned = 0 OR tags.banned IS NULL) AND (tag_relationships.tag_id = :id OR tag_relationships.related_tag_id = :id)"
-      condition_hash = {:id => self.id}   
+      condition_list = "(tags.banned = :false) AND (tag_relationships.tag_id = :id OR tag_relationships.related_tag_id = :id)"
+      condition_hash = {:false => false, :id => self.id}   
       if options[:kind].is_a?(TagRelationshipKind)
         condition_list += " AND tag_relationships.tag_relationship_kind_id = :kind_id"
         condition_hash[:kind_id] = options[:kind].id

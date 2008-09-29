@@ -2,7 +2,7 @@ class TagRelationshipKind < ActiveRecord::Base
   has_many :tag_relationships
    
   validates_numericality_of :distance, :only_integer => true, :greater_than_or_equal_to => 0, :less_than_or_equal_to => 3
-
+  
   # required disambiguate relationship, if it doesn't exist, create it.
   def self.disambiguation
     find_by_name('disambiguation') || TagRelationshipKind.create({ :name => 'disambiguation'.t, :verb_phrase => "might refer to".t, :reciprocal => true, :distance => 0 })

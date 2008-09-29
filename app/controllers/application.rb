@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
   # Determines which categories are visible on works throughout the site
   before_filter :set_tag_categories
   def set_tag_categories
-    @tag_categories = OFFICIAL_TAG_CATEGORIES || TagCategory.official
+    @tag_categories = TagCategory.official_tag_categories
   end
 
   #### -- GLOBALIZATION -- ####

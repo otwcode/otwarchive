@@ -11,8 +11,8 @@ module TaggingExtensions
       category = TagCategory.find_by_name(category) if category.is_a?(String)
       return false unless category.is_a?(TagCategory)
       tags = []
-      if category == TagCategory.default  # ambiguous tags get retrieved into the default category
-         tags << taggings.find_by_category(TagCategory.ambiguous).collect(&:valid_tag)
+      if category == TagCategory.default_tag_category  # ambiguous tags get retrieved into the default category
+         tags << taggings.find_by_category(TagCategory.ambiguous_tag_category).collect(&:valid_tag)
       end
       tags << taggings.find_by_category(category).collect(&:valid_tag)
     end

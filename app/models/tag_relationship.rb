@@ -6,7 +6,7 @@ class TagRelationship < ActiveRecord::Base
   validates_uniqueness_of :tag_relationship_kind_id, :scope => [:tag_id, :related_tag_id]
   
   after_create :reassign_synonyms
-  
+
   # Finds the existing relationships between tags in one category and tags in another
   def self.tagged_by_category(category1, category2)
     TagRelationship.find(:all, :include => [:tag, :related_tag], :conditions => ['tags.tag_category_id = ? AND related_tags_tag_relationships.tag_category_id = ?', category1.id, category2.id])

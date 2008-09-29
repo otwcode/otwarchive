@@ -68,17 +68,21 @@ module WorksHelper
     @work.new_record? ? Tag.default_warning.collect : @work.tags.by_category(category).valid.collect(&:name)
   end
   
+  def get_tags_by_category(work)
+    @tags_by_category ||= Tag.on_works([work]).group_by(&:tag_category_id).to_hash
+  end
+  
   def get_symbols_for(work)
-    @tags_by_category = Tag.on_works([work]).group_by(&:tag_category_id).to_hash
+    tags_by_category = get_tags_by_category(work)
 
-    warning_class = get_warnings_class(@tags_by_category[WARNING_TAG_CATEGORY.id])
-    warning_string = @tags_by_category[WARNING_TAG_CATEGORY.id].collect(&:name).join(", ")
+    warning_class = get_warnings_class(tags_by_category[TagCategory.warning_tag_category.id])
+    warning_string = tags_by_category[TagCategory.warning_tag_category.id].collect(&:name).join(", ")
     
-    rating = @tags_by_category[RATING_TAG_CATEGORY.id].blank? ? nil : @tags_by_category[RATING_TAG_CATEGORY.id].first
+    rating = tags_by_category[TagCategory.rating_tag_category.id].blank? ? nil : tags_by_category[TagCategory.rating_tag_category.id].first
     rating_class = get_ratings_class(rating)
     rating_string = rating.nil? ? "No Rating".t : rating.name    
 
-    category = @tags_by_category[CATEGORY_TAG_CATEGORY.id].blank? ? nil : @tags_by_category[CATEGORY_TAG_CATEGORY.id].first
+    category = tags_by_category[TagCategory.category_tag_category.id].blank? ? nil : tags_by_category[TagCategory.category_tag_category.id].first
     category_class = get_category_class(category)
     category_string = category.nil? ? "No Category".t : category.name
     
@@ -98,7 +102,7 @@ module WorksHelper
   
   def get_warnings_class(warning_tags)
     # check for warnings
-    if warning_tags && warning_tags.include?(NO_WARNING_TAG)
+    if warning_tags && warning_tags.include?(Tag.no_warning_tag)
       "warning-no"
     else
       "warning-yes"
@@ -107,13 +111,13 @@ module WorksHelper
     
   def get_ratings_class(rating_tag)
     case rating_tag
-    when EXPLICIT_RATING_TAG
+    when Tag.explicit_rating_tag
       "rating-explicit"
-    when MATURE_RATING_TAG
+    when Tag.mature_rating_tag
       "rating-mature"
-    when TEEN_RATING_TAG
+    when Tag.teen_rating_tag
       "rating-teen"
-    when GENERAL_RATING_TAG
+    when Tag.general_rating_tag
       "rating-general-audience"
     else
       "rating-notrated"
@@ -122,17 +126,17 @@ module WorksHelper
 
   def get_category_class(category_tag)
     case category_tag
-    when GEN_CATEGORY_TAG
+    when Tag.gen_category_tag
       "category-gen"
-    when SLASH_CATEGORY_TAG
+    when Tag.slash_category_tag
       "category-slash"
-    when HET_CATEGORY_TAG
+    when Tag.het_category_tag
       "category-het"
-    when FEMSLASH_CATEGORY_TAG
+    when Tag.femslash_category_tag
       "category-femslash"
-    when MULTI_CATEGORY_TAG
+    when Tag.multi_category_tag
       "category-multi"
-    when OTHER_CATEGORY_TAG
+    when Tag.other_category_tag
       "category-other"
     else
       "category-none"
@@ -149,19 +153,49 @@ module WorksHelper
 
 
   def cast_tags_for(work)
-    []
+    tags_by_category = get_tags_by_category(work)
+    
+    # we combine pairing and character tags up to the limit
+    begin
+      pairings = tags_by_category[TagCategory.pairing_tag_category] || []
+    rescue
+      pairings = []
+    end
+
+    begin
+      characters = tags_by_category[TagCategory.character_tag_category] || []
+    rescue
+      characters = []
+    end
+
+    return [] if pairings.empty? && characters.empty? 
+    
+    relationship = TagRelationshipKind.find_by_name('child')
+    if relationship 
+      pairings.each do |pairing|
+        characters.reject!{|c| is_in_relationship_with?(pairing, relationship)}
+      end
+    end
+    
+    cast = pairings + characters
+    if cast.size > ArchiveConfig.TAGS_PER_LINE
+      cast = cast[0..(ArchiveConfig.TAGS_PER_LINE-1)]
+    end
+    return cast
   end
   
   def freeform_tags_for(work)
-    []
+    tags_by_category = get_tags_by_category(work)
+    
+    warnings = tags_by_category[TagCategory.warning_tag_category] || []
+    freeform = tags_by_category[TagCategory.default_tag_category] || []
+
+    tags = warnings + freeform
+    if tags.size > ArchiveConfig.TAGS_PER_LINE
+      tags = tags[0..(ArchiveConfig.TAGS_PER_LINE-1)]
+    end
+    return tags
   end
-
-
-
-
-
-
-
 
 
   

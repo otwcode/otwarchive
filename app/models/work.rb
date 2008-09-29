@@ -461,22 +461,24 @@ class Work < ActiveRecord::Base
   end
 
   # create dynamic methods based on the tag categories
-  begin
-    OFFICIAL_TAG_CATEGORIES.each do |c|
-      define_method(c.name){tag_string(c)}
-      define_method(c.name+'=') do |tag_name| 
-        self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({c.name.to_sym => tag_name}) : tag_with(c.name.to_sym => tag_name)
-      end
-    end 
-  rescue
-    define_method('ambiguous'){tag_string('ambiguous')}
-    define_method('ambiguous=') do |tag_name| 
-      self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({:ambiguous => tag_name}) : tag_with(:ambiguous => tag_name)      
-    end    
-    define_method('default'){tag_string('default')}
-    define_method('default=') do |tag_name| 
-      self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({:default => tag_name}) : tag_with(:default => tag_name)     
-    end    
+  def self.initialize_tag_category_methods
+    begin
+      TagCategory.official_tag_categories.each do |c|
+        define_method(c.name){tag_string(c)}
+        define_method(c.name+'=') do |tag_name| 
+          self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({c.name.to_sym => tag_name}) : tag_with(c.name.to_sym => tag_name)
+        end
+      end 
+    rescue
+      define_method('ambiguous'){tag_string('ambiguous')}
+      define_method('ambiguous=') do |tag_name| 
+        self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({:ambiguous => tag_name}) : tag_with(:ambiguous => tag_name)      
+      end    
+      define_method('default'){tag_string('default')}
+      define_method('default=') do |tag_name| 
+        self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({:default => tag_name}) : tag_with(:default => tag_name)     
+      end    
+    end
   end
   
   # Set the value of word_count to reflect the length of the chapter content

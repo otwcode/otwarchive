@@ -2,7 +2,6 @@
 <ul class="work">
 	<li class="heading">
 	  <%= get_symbols_for(work) -%>
-
 	  <h3>
 	    <%= link_to sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small)), work %>
   		<%= "by".t -%>
@@ -12,8 +11,7 @@
 	  </h3>
 	  
 	  <h4>
-  	  <%- logger.info "\n\n\n\n\n\n\nHERE!" + FANDOM_TAG_CATEGORY.to_yaml +  @tags_by_category.to_yaml + @tags_by_category[FANDOM_TAG_CATEGORY.id].to_yaml -%>
-  	  <%- @tags_by_category[FANDOM_TAG_CATEGORY.id].each do |fandom| -%>
+  	  <%- @tags_by_category[TagCategory.fandom_tag_category.id].each do |fandom| -%>
   	  <%= link_to_tag fandom -%>
   	  <%- end -%>
 	  </h4>
@@ -40,9 +38,11 @@
 			</dd>
 		</dl>
 	</li>
+
 	<li class="summary">
-	<%= sanitize_limit_and_format_for_display work.summary %>
+	  <%= sanitize_limit_and_format_for_display work.summary %>
 	</li>
+
 	<li class="stats">
 		<dl>
 		<dt><%=h 'Words'.t + ': ' %></dt> 
@@ -59,8 +59,10 @@
 		<%- end -%>
 		</dl>
 	</li>
+
 	<%- if is_author_of?(work) -%>
 	<li class="navigation"><%= link_to 'Edit'.t, edit_work_path(work) -%></li>
 	<%- end -%>
+
 </ul>
 </li>

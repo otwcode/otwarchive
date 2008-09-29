@@ -58,6 +58,7 @@ CONTENT_MAX: 500000
 ITEMS_PER_PAGE: 50 
 NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD: 5
 COMMENT_THREAD_MAX_DEPTH: 2
+TAGS_PER_LINE: 12
 
 # some tag and tag category names 
 DEFAULT_CATEGORY_NAME: 'default'
@@ -83,6 +84,10 @@ SLASH_CATEGORY_TAG_NAME: 'Slash'
 FEMSLASH_CATEGORY_TAG_NAME: 'Femslash'
 MULTI_CATEGORY_TAG_NAME: 'Multi'
 OTHER_CATEGORY_TAG_NAME: 'Other'
+
+PAIRING_CATEGORY_NAME: 'Pairing'
+
+CHARACTER_CATEGORY_NAME: 'Character'
 
 # This is used to determine how many recent items
 # to cache for recent lookups -- eg if we want to 

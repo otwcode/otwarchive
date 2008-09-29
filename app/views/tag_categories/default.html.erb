@@ -7,7 +7,7 @@
 </div>
 <%= drop_receiving_element(@tag_category.display_name, 
    :url => { :action => 'change_tag', :tag => {:tag_category_id => @tag_category.id}},
-   :confirm => "WARNING! Changes category irreversibly (except to #{TagCategory.ambiguous.display_name}). Are you sure you want to do this?"
+   :confirm => "WARNING! Changes category irreversibly (except to #{TagCategory.ambiguous_tag_category.display_name}). Are you sure you want to do this?"
    )%>
 
 <p><strong><%= @tag_category.display_name %> <%=h 'Tags:'.t %></strong>
@@ -17,7 +17,7 @@
   <% end %> 
 </div>
 
-<% (TagCategory.official(:include => 'tags') - [TagCategory.default]).each do |category| -%>
+<% (TagCategory.official(:include => 'tags') - [TagCategory.default_tag_category]).each do |category| -%>
   <p><strong><%= category.display_name %> <%=h 'Tags:'.t %></strong>
   <% category.tags.each do |tag| -%>
     <%= render :partial => 'draggable', :locals => { :tag => tag }%>

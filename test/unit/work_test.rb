@@ -263,34 +263,6 @@ class WorkTest < ActiveSupport::TestCase
       assert @ordered_works[9] = @works[0]
     end
   end
-
-      
-  def test_search_and_filter
-    @work = create_work
-    
-    # 
-    # @works, @filters, error = Work.search_and_filter(
-    #    "sort_column" => sort_column,
-    #    "sort_direction" => params[:sort_direction],
-    #    "user_id" => params[:user_id],
-    #    "tag_id" => tag_id,
-    #    "pseuds" =>@pseuds,
-    #    "query" => @query ,
-    #    "selected_tags" => @selected_tags
-    #   )    
-  end
-  
-  def test_tagged
-    work = create_work
-    tag = create_tag
-    work.tags << tag
-    work.save
-    assert work.tags.include?(tag)
-
-    tagged_work = create_work
-    tagged_work.update_attribute('default', tag.name)
-    assert tagged_work.tags.include?(tag)
-  end
   
   def test_number_of_chapters
     work = create_work

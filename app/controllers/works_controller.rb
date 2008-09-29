@@ -58,7 +58,7 @@ class WorksController < ApplicationController
       @serial_works = @work.serial_works
       @tags_by_category = {}
       categories = TagCategory.exclusive
-      categories << WARNING_TAG_CATEGORY
+      categories << TagCategory.warning_tag_category
       categories.each {|category| @tags_by_category[category] = category.tags.valid.canonical} unless categories.blank?
   
       @chapter = @work.first_chapter
@@ -224,7 +224,7 @@ class WorksController < ApplicationController
         @series_next[series.id] = sw_next.work if sw_next
       end
     end
-    @tag_categories_limited = OFFICIAL_TAG_CATEGORIES - WARNING_TAG_CATEGORY
+    @tag_categories_limited = TagCategory.official_tag_categories - [TagCategory.warning_tag_category]
   end
   
   # GET /works/new

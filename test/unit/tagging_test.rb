@@ -24,12 +24,13 @@ class TaggingTest < ActiveSupport::TestCase
     work = create_work
     tagging = create_tagging(:taggable => work, :tag => tag)
     work.reload
-    assert_equal Array(tag), work.taggings.map(&:tag)
-    assert_equal [], work.tags.valid           # no category, not valid
+    assert work.taggings.map(&:tag).include?(tag)
+    assert !work.tags.valid.include?(tag)   # no category, not valid
+    
     tag = create_tag(:banned => false)
     tagging = create_tagging(:taggable => work, :tag => tag)
     work.reload
-    assert_equal Array(tag), work.tags.valid   # no category, valid
+    assert work.tags.valid.include?(tag)   # no category, valid
   end
   def test_tags_with_category
     category = create_tag_category
@@ -54,15 +55,15 @@ class TaggingTest < ActiveSupport::TestCase
     tag = create_tag(:name => 'a comes first')
     tagging = create_tagging(:taggable => work, :tag => tag) 
     work.reload
-    assert_equal tag.name, work.tag_string
+    assert work.tag_string.match(tag.name)
     tag2 = create_tag(:name => 'b comes second')
     tagging = create_tagging(:taggable => work, :tag => tag2) 
     work.reload
-    assert_equal "a comes first, b comes second", work.tag_string
+    assert work.tag_string.match("a comes first, b comes second")
     tag3 = create_tag(:name => 'an comes second')
     tagging = create_tagging(:taggable => work, :tag => tag3) 
     work.reload
-    assert_equal "a comes first, an comes second, b comes second", work.tag_string
+    assert work.tag_string.match("a comes first, an comes second, b comes second")
   end
   def test_tag_string_by_category
     work = create_work
@@ -81,13 +82,15 @@ class TaggingTest < ActiveSupport::TestCase
     # new tags
     work.tag_with(category.name.to_sym => "a new tag")
     work.reload
-    assert_equal 'a new tag', work.tag_string
+    assert work.tag_string.match('a new tag')
     assert_equal category, Tag.find_by_name('a new tag').tag_category
+
     # replace tags
     tag = create_tag(:tag_category => category)
     work.tag_with(category.name.to_sym => tag.name)
     work.reload
-    assert_equal Array(tag), work.tags.valid
+    assert work.tags.valid.include?(tag)
+
     # different category won't wipe out first
     category2 = create_tag_category
     tag2 = create_tag(:tag_category => category2)

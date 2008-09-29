@@ -32,12 +32,12 @@ class TagCategoryTest < ActiveSupport::TestCase
   end
   context "the ambiguous tag category" do
     should "exist" do
-      assert TagCategory.ambiguous
+      assert TagCategory.ambiguous_tag_category
     end
   end
   context "the default tag category" do
     should "exist" do
-      assert TagCategory.default
+      assert TagCategory.default_tag_category
     end
   end
 end

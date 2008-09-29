@@ -25,7 +25,7 @@
     <td><%= link_to 'edit'.t, edit_tag_category_path(tag_category) %></td>
     <%- if logged_in_as_admin? -%>
     <td>
-        <%= link_to "delete".t, tag_category, :confirm => "This will move all its tags into the unsorted category, are you sure?".t, :method => :delete %><% if tag_category == TagCategory.default || tag_category == TagCategory.ambiguous -%>*<% end -%>
+        <%= link_to "delete".t, tag_category, :confirm => "This will move all its tags into the unsorted category, are you sure?".t, :method => :delete %><% if tag_category == TagCategory.default_tag_category || tag_category == TagCategory.ambiguous_tag_category -%>*<% end -%>
     </td>
     <%- end -%>
     <td><%= link_to 'show tags'.t, tag_category_path(tag_category) %></td>

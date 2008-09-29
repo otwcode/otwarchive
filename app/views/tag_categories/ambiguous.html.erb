@@ -7,7 +7,7 @@
 </div>
 <%= drop_receiving_element(@tag_category.display_name, 
    :url => { :action => 'change_tag', :tag => {:tag_category_id => @tag_category.id}},
-   :confirm => "WARNING! Changes category irreversibly (except to #{TagCategory.default.display_name}). Are you sure you want to do this?"
+   :confirm => "WARNING! Changes category irreversibly (except to #{TagCategory.default_tag_category.display_name}). Are you sure you want to do this?"
    )%>
 
 <p><strong><%= @tag_category.display_name %> Tags:</strong>

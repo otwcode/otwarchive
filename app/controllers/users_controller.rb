@@ -18,7 +18,7 @@ class UsersController < ApplicationController
   
   def index
     @users = User.alphabetical.paginate(:page => params[:page])
-    @categories = OFFICIAL_TAG_CATEGORIES - [WARNING_TAG_CATEGORY, RATING_TAG_CATEGORY, DEFAULT_TAG_CATEGORY]
+    @categories = TagCategory.official_tag_categories - [TagCategory.warning_tag_category, TagCategory.rating_tag_category, TagCategory.default_tag_category]
     logger.info "categories: " + @categories.to_yaml
   end 
 
