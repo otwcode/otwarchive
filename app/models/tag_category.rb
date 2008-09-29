@@ -20,27 +20,27 @@ class TagCategory < ActiveRecord::Base
   @@ambiguous_tag_category = nil
   @@official_tag_categories = []
 
-  def self.official_tag_categories; @@official_tag_categories || self.official ; end
-  def self.warning_tag_category; @@warning_tag_category || TagCategory.find_or_create_official_category(ArchiveConfig.WARNING_CATEGORY_NAME, :required => true); end
-  def self.rating_tag_category; @@rating_tag_category || TagCategory.find_or_create_official_category(ArchiveConfig.RATING_CATEGORY_NAME, :required => true, :exclusive => true); end
-  def self.fandom_tag_category; @@fandom_tag_category || TagCategory.find_or_create_official_category(ArchiveConfig.FANDOM_CATEGORY_NAME, :required => true); end
-  def self.category_tag_category; @@category_tag_category || TagCategory.find_or_create_official_category(ArchiveConfig.CATEGORY_CATEGORY_NAME, :required => false, :exclusive => true); end
-  def self.pairing_tag_category; @@pairing_tag_category || TagCategory.find_or_create_official_category(ArchiveConfig.PAIRING_CATEGORY_NAME); end
-  def self.character_tag_category; @@character_tag_category || TagCategory.find_or_create_official_category(ArchiveConfig.CHARACTER_CATEGORY_NAME); end
-  def self.default_tag_category; @@default_tag_category || TagCategory.find_or_create_official_category(ArchiveConfig.DEFAULT_CATEGORY_NAME, :display_name => 'Tags'.t); end
-  def self.ambiguous_tag_category; @@ambiguous_tag_category || TagCategory.find_or_create_official_category(ArchiveConfig.AMBIGUOUS_CATEGORY_NAME, :display_name => 'Ambiguous'.t); end
+  def self.official_tag_categories; @@official_tag_categories.empty? ? @@official_tag_categories = self.official : @@official_tag_categories ; end
+  def self.warning_tag_category; @@warning_tag_category || @@warning_tag_category = TagCategory.find_or_create_official_category(ArchiveConfig.WARNING_CATEGORY_NAME, :required => true); end
+  def self.rating_tag_category; @@rating_tag_category || @@rating_tag_category = TagCategory.find_or_create_official_category(ArchiveConfig.RATING_CATEGORY_NAME, :required => true, :exclusive => true); end
+  def self.fandom_tag_category; @@fandom_tag_category || @@fandom_tag_category = TagCategory.find_or_create_official_category(ArchiveConfig.FANDOM_CATEGORY_NAME, :required => true); end
+  def self.category_tag_category; @@category_tag_category || @@category_tag_category = TagCategory.find_or_create_official_category(ArchiveConfig.CATEGORY_CATEGORY_NAME, :required => false, :exclusive => true); end
+  def self.pairing_tag_category; @@pairing_tag_category || @@pairing_tag_category = TagCategory.find_or_create_official_category(ArchiveConfig.PAIRING_CATEGORY_NAME); end
+  def self.character_tag_category; @@character_tag_category || @@character_tag_category = TagCategory.find_or_create_official_category(ArchiveConfig.CHARACTER_CATEGORY_NAME); end
+  def self.default_tag_category; @@default_tag_category || @@default_tag_category = TagCategory.find_or_create_official_category(ArchiveConfig.DEFAULT_CATEGORY_NAME, :display_name => 'Tags'.t); end
+  def self.ambiguous_tag_category; @@ambiguous_tag_category || @@ambiguous_tag_category = TagCategory.find_or_create_official_category(ArchiveConfig.AMBIGUOUS_CATEGORY_NAME, :display_name => 'Ambiguous'.t); end
 
   def self.initialize_tag_categories
-    @@warning_tag_category = TagCategory.find_or_create_official_category(ArchiveConfig.WARNING_CATEGORY_NAME, :required => true)
-    @@rating_tag_category = TagCategory.find_or_create_official_category(ArchiveConfig.RATING_CATEGORY_NAME, :required => true, :exclusive => true)
-    @@fandom_tag_category = TagCategory.find_or_create_official_category(ArchiveConfig.FANDOM_CATEGORY_NAME, :required => true)
-    @@category_tag_category = TagCategory.find_or_create_official_category(ArchiveConfig.CATEGORY_CATEGORY_NAME, :required => false, :exclusive => true)
-    @@pairing_tag_category = TagCategory.find_or_create_official_category(ArchiveConfig.PAIRING_CATEGORY_NAME)
-    @@character_tag_category = TagCategory.find_or_create_official_category(ArchiveConfig.CHARACTER_CATEGORY_NAME)
-    @@default_tag_category = TagCategory.find_or_create_official_category(ArchiveConfig.DEFAULT_CATEGORY_NAME, :display_name => 'Tags'.t)
-    @@ambiguous_tag_category = TagCategory.find_or_create_official_category(ArchiveConfig.AMBIGUOUS_CATEGORY_NAME, :display_name => 'Ambiguous'.t)
+    @@warning_tag_category = self.find_or_create_official_category(ArchiveConfig.WARNING_CATEGORY_NAME, :required => true)
+    @@rating_tag_category = self.find_or_create_official_category(ArchiveConfig.RATING_CATEGORY_NAME, :required => true, :exclusive => true)
+    @@fandom_tag_category = self.find_or_create_official_category(ArchiveConfig.FANDOM_CATEGORY_NAME, :required => true)
+    @@category_tag_category = self.find_or_create_official_category(ArchiveConfig.CATEGORY_CATEGORY_NAME, :required => false, :exclusive => true)
+    @@pairing_tag_category = self.find_or_create_official_category(ArchiveConfig.PAIRING_CATEGORY_NAME)
+    @@character_tag_category = self.find_or_create_official_category(ArchiveConfig.CHARACTER_CATEGORY_NAME)
+    @@default_tag_category = self.find_or_create_official_category(ArchiveConfig.DEFAULT_CATEGORY_NAME, :display_name => 'Tags'.t)
+    @@ambiguous_tag_category = self.find_or_create_official_category(ArchiveConfig.AMBIGUOUS_CATEGORY_NAME, :display_name => 'Ambiguous'.t)
 
-    @@official_tag_categories = TagCategory.official
+    @@official_tag_categories = self.official
   end
 
   def remove_me_from_my_tags

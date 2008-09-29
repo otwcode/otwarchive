@@ -69,6 +69,10 @@ module WorksHelper
   end
   
   def get_tags_by_category(work)
+    if !@tags_by_category_work || @tags_by_category_work != work
+      @tags_by_category_work = work
+      @tags_by_category = nil
+    end
     @tags_by_category ||= Tag.on_works([work]).group_by(&:tag_category_id).to_hash
   end
   
@@ -151,23 +155,12 @@ module WorksHelper
     end
   end
 
-
   def cast_tags_for(work)
     tags_by_category = get_tags_by_category(work)
     
     # we combine pairing and character tags up to the limit
-    begin
-      pairings = tags_by_category[TagCategory.pairing_tag_category] || []
-    rescue
-      pairings = []
-    end
-
-    begin
-      characters = tags_by_category[TagCategory.character_tag_category] || []
-    rescue
-      characters = []
-    end
-
+    characters = tags_by_category[TagCategory.character_tag_category.id] || []
+    pairings = tags_by_category[TagCategory.pairing_tag_category.id] || []
     return [] if pairings.empty? && characters.empty? 
     
     relationship = TagRelationshipKind.find_by_name('child')
@@ -181,14 +174,15 @@ module WorksHelper
     if cast.size > ArchiveConfig.TAGS_PER_LINE
       cast = cast[0..(ArchiveConfig.TAGS_PER_LINE-1)]
     end
+
     return cast
   end
   
   def freeform_tags_for(work)
     tags_by_category = get_tags_by_category(work)
     
-    warnings = tags_by_category[TagCategory.warning_tag_category] || []
-    freeform = tags_by_category[TagCategory.default_tag_category] || []
+    warnings = tags_by_category[TagCategory.warning_tag_category.id] || []
+    freeform = tags_by_category[TagCategory.default_tag_category.id] || []
 
     tags = warnings + freeform
     if tags.size > ArchiveConfig.TAGS_PER_LINE
@@ -197,6 +191,4 @@ module WorksHelper
     return tags
   end
 
-
-  
 end

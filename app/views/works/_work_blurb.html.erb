@@ -18,26 +18,35 @@
 
 	  <p class="update"><%= time_ago_in_words(work.updated_at) %></p>
 	</li>
+	
+	<%- cast_tags = cast_tags_for(work); freeform_tags = freeform_tags_for(work) -%>
+	<%- unless ((cast_tags.size + freeform_tags.size) < 1) -%>
 	<li>
 		<dl class="tags">
+		  <%- unless cast_tags.size < 1 -%>
 			<dt><%=h 'Cast'.t + ': ' %></dt>
 			<dd>
 				<ul>
-				  <%- cast_tags_for(work).each do |tag| -%>
+				  <%- cast_tags.each do |tag| -%>
 					  <li><%= link_to_tag(tag) -%></li>
 					<%- end -%>
 				</ul>
 			</dd>
+			<%- end -%>
+			
+			<%- unless freeform_tags.size < 1 -%>
 			<dt><%=h 'Tags'.t + ': ' %></dt>
 			<dd>
 				<ul>
-				  <%- freeform_tags_for(work).each do |tag| -%>
+				  <%- freeform_tags.each do |tag| -%>
 					<li><%= link_to_tag(tag) -%></li>
 					<%- end -%>
 				</ul>
 			</dd>
+			<%- end -%>
 		</dl>
 	</li>
+	<%- end -%>
 
 	<li class="summary">
 	  <%= sanitize_limit_and_format_for_display work.summary %>
