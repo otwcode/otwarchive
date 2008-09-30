@@ -3,19 +3,24 @@ module HtmlFormatter
   include SanitizeParams
 
   # clean up the break tags and convert them into newlines
+  # before saving
+  def cleanup_break_tags_before_adding(text)
+    text.gsub!(/<br\s*\/?>/i, "\n")    
+  end
+  
+  # clean up the break tags after they have been added for display
   def cleanup_break_tags(text)
-    text.gsub!(/<br>/, "<br />")
-    while text.gsub!(/<br\s*\/>\s*<br\s*\/><br\s*\/>/, "<br /><br />")
+    text.gsub!(/<br\s*\/?>/i, "<br />")
+    while text.gsub!(/<br \/><br \/><br \/>/im, "<br /><br />")
       # keep going
     end
-    text.gsub!(/<br\s*\/>/i, "<br />\n")
     
     return text
   end
 
   # clean up tags
   def cleanup_and_format(text)
-    text = cleanup_paragraph_tags(close_tags(strip_comments(text)))
+    text = cleanup_paragraph_tags(cleanup_break_tags_before_adding(close_tags(strip_comments(text))))
     return text
   end
   
@@ -36,12 +41,16 @@ module HtmlFormatter
   def cleanup_paragraph_tags(text)
     # Now we want to replace any cases where these have been doubled -- ie, 
     # where a new paragraph tag is opened before an old one is closed
-    text.gsub!(/<p>\s*<p>/, "<p>")
-    text.gsub!(/<\/p>\s*<\/p>/, "</p>")
-    text.gsub!(/<br\s*\/>\s*<p>/, "<p>")
+    text.gsub!(/<p>\s*<p>/im, "<p>")
+    text.gsub!(/<\/p>\s*<\/p>/im, "</p>")
+    while text.gsub!(/<br\s*\/>\s*<p>/im, "<p>")
+    end
+
+    while text.gsub!(/<p>\s*<br\s*\/>/im, "<p>")
+    end
     
     # and where there are empty paragraphs
-    text.gsub!(/<p>\s*<\/p>/, "")
+    text.gsub!(/<p>\s*<\/p>/im, "")
     
     # also get rid of blank paragraphs inserted by tinymce
     text.gsub!(/<p>&nbsp;<\/p>/, "")
