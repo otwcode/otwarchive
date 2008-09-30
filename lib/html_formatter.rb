@@ -5,7 +5,8 @@ module HtmlFormatter
   # clean up the break tags and convert them into newlines
   # before saving
   def cleanup_break_tags_before_adding(text)
-    text.gsub!(/<br\s*\/?>/i, "\n")    
+    text.gsub!(/<br\s*?\/?>/i, "\n")
+    return text
   end
   
   # clean up the break tags after they have been added for display
