@@ -77,7 +77,7 @@ Femslash:
 	
 Chooses_Not_To_Warn:
   tag_category: Warning
-  name: Chooses Not To Warn
+  name: Choose Not To Warn
   canonical: true
   banned: false
   adult: false

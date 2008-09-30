@@ -47,5 +47,5 @@ class TagCategory < ActiveRecord::Base
   DEFAULT = TagCategory.find_or_create_official_category(ArchiveConfig.DEFAULT_CATEGORY_NAME, {:display_name => 'Tags'.t})
   AMBIGUOUS = TagCategory.find_or_create_official_category(ArchiveConfig.AMBIGUOUS_CATEGORY_NAME, {:display_name => 'Ambiguous'.t})
 	CATEGORIES = [WARNING, RATING, FANDOM, CATEGORY, PAIRING, CHARACTER, DEFAULT, AMBIGUOUS]
-	OFFICIAL = CATEGORIES - [AMBIGUOUS]
+	OFFICIAL = self.official - [AMBIGUOUS]
 end

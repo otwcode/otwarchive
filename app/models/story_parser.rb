@@ -322,7 +322,7 @@ class StoryParser
       metapatterns = META_PATTERNS
       # add in all the official tags
       is_tag = {}
-      TagCategory.official_tag_categories.each do |c|
+      TagCategory::OFFICIAL.each do |c|
         metapatterns.merge!({c.name.to_sym => c.display_name.singularize})
         is_tag[c.name.to_sym] = true
       end
@@ -372,7 +372,7 @@ class StoryParser
     end
     
     def is_official_category?(string)
-      TagCategory.official_tag_categories.collect(&:name).include?(string.downcase)
+      TagCategory::OFFICIAL.collect(&:name).include?(string.downcase)
     end
     
     # works conservatively -- doesn't split on
