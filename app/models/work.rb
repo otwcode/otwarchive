@@ -138,6 +138,22 @@ class Work < ActiveRecord::Base
     }
   }
 
+  named_scope :with_all_tag_ids, lambda {|tag_ids_to_find|
+    {
+      :select => "DISTINCT works.*",
+      :joins => TAGGING_JOIN + " " + OWNERSHIP_JOIN,
+      :conditions => ["tags.id in (?)", tag_ids_to_find],
+      :group => "works.id HAVING count(works.id) = #{tag_ids_to_find.size}"
+    }
+  }
+
+  named_scope :with_any_tag_ids, lambda {|tag_ids_to_find|
+    {
+      :select => "DISTINCT works.*",
+      :joins => TAGGING_JOIN + " " + OWNERSHIP_JOIN,
+      :conditions => ["tags.id in (?)", tag_ids_to_find],
+    }
+  }
 
   named_scope :visible, lambda {
     {
@@ -151,47 +167,17 @@ class Work < ActiveRecord::Base
     )
   }
 
-  # # Squirrel-based class methods
-  # def self.visible_with_any_tags(tags_to_find, user = User.current_user)
-  #   self.visible.with_any_tags(tags_to_find)
-  # end
-  # 
-  # def self.visible_with_all_tags(tags_to_find, user = User.current_user)
-  #   self.visible.with_all_tags(tags_to_find)
-  # end
-  # 
-  # # This is a squirrel-based class method which can be chained with named
-  # # scopes, although it MUST GO BEFORE THEM. 
-  # def self.visible(user = User.current_user)
-  #   scoped do
-  #     posted == 1
-  #     
-  #     if user && user.kind_of?(Admin)
-  #     elsif user && user != :false
-  #       any do
-  #         hidden_by_admin == 0 
-  #         hidden_by_admin.nil?
-  #         pseuds.user_id == user.id
-  #       end
-  #     else
-  #       any do
-  #         hidden_by_admin == 0 
-  #         hidden_by_admin.nil?
-  #       end
-  #       any do
-  #         restricted == 0
-  #         restricted.nil?
-  #       end
-  #     end
-  #   end
-  # end
-        
-  # def self.owned_by(user = User.current_user)
-  #   scoped do
-  #     pseuds.user_id == user.id
-  #   end
-  # end
-  
+  named_scope :ids_only, :select => "DISTINCT works.id"
+
+  named_scope :tags_with_count, lambda {|*args|
+    {
+      :select => "tag_categories.id as category_id, tags.id as tag_id, tags.name as tag_name, count(distinct works.id) as count",
+      :joins => TAGGING_JOIN + " " + OWNERSHIP_JOIN + " INNER JOIN tag_categories ON tags.tag_category_id = tag_categories.id",
+      :group => "tags.name",
+      :order => "tags.tag_category_id, tags.name ASC"
+    }.merge(args.first.size > 0 ? {:conditions => ["works.id in (?)", args.first]} : {})
+  }
+
   named_scope :owned_by, lambda {|user|
     {
       :select => "DISTINCT works.*",
@@ -557,13 +543,85 @@ class Work < ActiveRecord::Base
     return Work.search(options[:query], :where => where_clause, :order => order_clause,
                                 :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => options[:page])
   end
+
+  def self.find_with_options(options = {})
+    command = ''
+    visible = '.visible'
+    tags = '.with_all_tag_ids(options[:selected_tags])'
+    written = '.written_by_conditions(options[:selected_pseuds])'
+    owned = '.owned_by_conditions(options[:user])'
+    sort_and_paginate = '.ordered(options[:sort_column], options[:sort_direction]).paginate(options[:page_args])'
+    
+    @works = []
+    @pseuds = []
+    @filters = []
+    
+    if !options[:selected_pseuds].empty? && !options[:selected_tags].empty?
+      # We have selected pseuds and selected tags
+      command << written + visible + tags
+      @pseuds = options[:selected_pseuds]     
+    elsif !options[:selected_pseuds].empty?
+      # We only have selected pseuds but no selected tags
+      command << written + visible
+      @pseuds = options[:selected_pseuds]                    
+    elsif !options[:user].nil? && !options[:selected_tags].empty?
+      # filtered results on a user's works page
+      # no pseuds but a specific user, and selected tags
+      command << owned + visible + tags
+      @pseuds = options[:user].pseuds.on_works(@works)
+    elsif !options[:user].nil?
+      # a user's default works page
+      command << owned + visible
+      @pseuds = options[:user].pseuds
+    elsif !options[:selected_tags].empty?
+      # no user but selected tags
+      command << visible + tags
+    else
+      # all visible works
+      command << visible
+      @pseuds = @works.collect(&:pseuds).flatten.uniq.compact
+    end
+    
+    @works = eval("Work#{command + sort_and_paginate}")
+    unless @works.empty?
+      ids = eval("Work.ids_only#{command}").collect(&:id)
+      @filters = build_filters_hash(Work.tags_with_count(ids))
+      @pseuds = Pseud.on_work_ids(ids) if @pseuds.empty?
+    end
+    
+    return @works, @filters, @pseuds
+  end
+
+  def self.build_filters_hash(filters_array)
+    # this takes an array from tags_with_count and turns it into a hash of hashes indexed 
+    # by tag_category id 
+    filters_hash = {}
+    filters_array.each do |filter|
+      begin
+        count = filter.count
+      rescue
+        count = 0
+      end
+      tmphash = {:name => filter.tag_name, :id => filter.tag_id.to_s, :count => count}
+      key = filter.category_id.to_s
+      if filters_hash[key]
+        filters_hash[key] << tmphash
+      else
+        filters_hash[key] = [tmphash]
+      end
+    end
+    return filters_hash
+  end
   
-  def self.filter(works_to_filter, tags_to_filter_on)
-    works_to_filter.reject {|w| (w.tags & tags_to_filter_on).empty? }
+  def self.filter(works_to_filter, tag_ids_to_filter_on)
+    works_to_filter.reject {|w| (tag_ids_to_filter_on & w.tags.collect(&:id)) != tag_ids_to_filter_on }
   end  
     
-  def self.get_filters(works_to_filter)
-    available_tags = Tag.on_works(works_to_filter).by_popularity.group_by(&:tag_category).to_hash
+  def self.get_filters_and_pseuds(works_to_filter)
+    ids = works_to_filter.collect(&:id)
+    @filters = build_filters_hash(Work.tags_with_count(ids))
+    @pseuds = Pseud.on_work_ids(ids)
+    return @filters, @pseuds
   end
   
   def self.get_pseuds(works_to_filter)

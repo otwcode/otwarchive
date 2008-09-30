@@ -29,6 +29,14 @@ class Pseud < ActiveRecord::Base
     }
   }
   
+  named_scope :on_work_ids, lambda {|owned_work_ids|
+    {
+      :select => "DISTINCT pseuds.*",
+      :joins => OWNERSHIP_JOIN,
+      :conditions => ['works.id in (?)', owned_work_ids]
+    }
+  }
+  
   named_scope :for_user, lambda {|user|
     { :conditions => ['pseuds.user_id = ?', user.id] }
   }

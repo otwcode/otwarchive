@@ -103,18 +103,22 @@ class WorksController < ApplicationController
 	   
   # GET /works
   def index
+    # what we're getting for the view
+    @works = []
+    @filters = []
+    @pseuds = []
+
+    # default values for our inputs
     @query = nil
     @user = nil
-    @sort_column = params[:sort_column] || 'updated_at'
-    @sort_direction = params["sort_direction_for_#{@sort_column}".to_sym] || 'DESC'
-    @works = []
     @selected_tags = []
     @selected_pseuds = []
-    @filters = []
+    @sort_column = params[:sort_column] || 'updated_at'
+    @sort_direction = params["sort_direction_for_#{@sort_column}".to_sym] || 'DESC'
     
     # if the user is filtering with tags, let's see what they're giving us    
     unless params[:selected_tags].blank?
-      @selected_tags = Tag.with_names(params[:selected_tags])
+      @selected_tags = params[:selected_tags]
     end
 
     # if we have a query, we are searching with sphinx, which will
@@ -129,18 +133,23 @@ class WorksController < ApplicationController
       end
       
       # filter the results
-      unless @selected_tags.empty?
+      unless @works.empty? || @selected_tags.empty?
         @works = Work.filter(@works, @selected_tags)
+      end
+      unless @works.empty?
+        @filters, @pseuds = Work.get_filters_and_pseuds(@works)      
       end
     else
       # we're browsing instead
       # if we're browsing by a particular fandom or tag, just add that
       # fandom/tag to the selected_tags list.
       unless params[:fandom_id].blank? 
-        @selected_tags << Tag.find(params[:fandom_id])
+        @fandom = Tag.find(params[:fandom_id])
+        @selected_tags << params[:fandom_id]
       end      
       unless params[:tag_id].blank?
-        @selected_tags << Tag.find(params[:tag_id])
+        @tag = Tag.find(params[:tag_id])
+        @selected_tags << params[:tag_id]
       end
       
       # if we're browsing by a particular user get works by that user      
@@ -154,32 +163,20 @@ class WorksController < ApplicationController
 
       # Now let's build the query
       page_args = {:page => params[:page], :per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE)}
-      
-      if !@selected_pseuds.empty? && !@selected_tags.empty?
-        # We have selected pseuds and selected tags
-        @works = Work.written_by_conditions(@selected_pseuds).visible.with_all_tags(@selected_tags).ordered(@sort_column, @sort_direction).paginate(page_args)
-      elsif !@selected_pseuds.empty?
-        # We only have selected pseuds
-        @works = Work.written_by_conditions(@selected_pseuds).visible.ordered(@sort_column, @sort_direction).paginate(page_args)
-      elsif !@user.nil? && !@selected_tags.empty?
-        # no pseuds but a specific user, and selected tags
-        @works = Work.owned_by_conditions(@user).visible.with_all_tags(@selected_tags).ordered(@sort_column, @sort_direction).paginate(page_args)
-      elsif !@user.nil?
-        # no tags but a user
-        @works = Work.owned_by_conditions(@user).visible.ordered(@sort_column, @sort_direction).paginate(page_args)
-      elsif !@selected_tags.empty?
-        # no user but selected tags
-        @works = Work.visible.with_all_tags(@selected_tags).ordered(@sort_column, @sort_direction).paginate(page_args)
-      else
-        # all visible works
-        @works = Work.visible.ordered(@sort_column, @sort_direction).paginate(page_args)
-      end
+      @works, @filters, @pseuds = Work.find_with_options(:user => @user, :selected_tags => @selected_tags, 
+                                                    :selected_pseuds => @selected_pseuds, 
+                                                    :sort_column => @sort_column, :sort_direction => @sort_direction,
+                                                    :page_args => page_args)              
     end
 
     # we now have @works found
-    # get the available tags to filter these results on
-    @filters = Work.get_filters(@works)
-    @pseuds = @works.collect(&:pseuds).flatten.uniq.compact
+    
+    if @works.empty? && !@selected_tags.empty?
+      # build filters so we can go back
+      filters_array = Tag.find(@selected_tags, :select => "tags.tag_category_id as category_id, tags.id as tag_id, tags.name as tag_name")
+      @filters = Work.build_filters_hash(filters_array)
+    end
+    
   end
   
   def drafts
