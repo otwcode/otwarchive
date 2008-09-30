@@ -56,6 +56,11 @@ class User < ActiveRecord::Base
   end
   
   named_scope :alphabetical, :order => :login
+  named_scope :starting_with, lambda {|letter|
+    {
+      :conditions => ['SUBSTR(login,1,1) = ?', letter]
+    }
+  }
   named_scope :valid, :conditions => {:banned => false, :suspended => false}
 
   validates_format_of :login, :message => 'Your user name must begin and end with a letter or number; it may also contain underscores but no other characters.'.t,
@@ -84,6 +89,8 @@ class User < ActiveRecord::Base
   def to_param
     login
   end
+
+  ALPHABET = User.find(:all, :select => :login).collect {|user| user.login[0,1].upcase}.uniq.sort
   
   def check_account_creation_status
     self.errors.add(:base, "Account creation is currently disabled.".t) unless ArchiveConfig.ACCOUNT_CREATION_ENABLED

@@ -17,9 +17,14 @@ class UsersController < ApplicationController
   end
   
   def index
-    @users = User.alphabetical.paginate(:page => params[:page])
+    if params[:letter] && params[:letter].is_a?(String)
+      letter = params[:letter][0,1]
+    else
+      letter = User::ALPHABET[0]
+    end
+      
+    @users = User.alphabetical.starting_with(letter)
     @categories = TagCategory::OFFICIAL - [TagCategory::WARNING, TagCategory::RATING, TagCategory::DEFAULT]
-    logger.info "categories: " + @categories.to_yaml
   end 
 
   # GET /users/1

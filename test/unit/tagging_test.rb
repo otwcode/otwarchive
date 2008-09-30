@@ -59,11 +59,11 @@ class TaggingTest < ActiveSupport::TestCase
     tag2 = create_tag(:name => 'b comes second')
     tagging = create_tagging(:taggable => work, :tag => tag2) 
     work.reload
-    assert work.tag_string.match("a comes first, b comes second")
+    assert work.tag_string.match(/a comes first.*b comes second/)
     tag3 = create_tag(:name => 'an comes second')
     tagging = create_tagging(:taggable => work, :tag => tag3) 
     work.reload
-    assert work.tag_string.match("a comes first, an comes second, b comes second")
+    assert work.tag_string.match(/a comes first.*an comes second.*b comes second/)
   end
   def test_tag_string_by_category
     work = create_work

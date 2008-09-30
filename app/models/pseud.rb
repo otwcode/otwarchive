@@ -45,6 +45,8 @@ class Pseud < ActiveRecord::Base
     {:conditions => ['pseuds.name in (?)', pseud_names]}
   }
 
+  named_scope :alphabetical, :order => :name
+
   #  before_destroy :move_creations_to_default
   #TODO - add this
   #after_save :check_for_inconsistencies
