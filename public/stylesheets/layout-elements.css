@@ -104,25 +104,21 @@ li.work ul.work {position: relative; margin: 0 13.5em 0.5625em auto;padding-righ
 
 ul.work {position:relative; border-bottom:1px solid #ddd; }
 ul.work ul li{ display:inline;}
-li.heading {position:relative;}
-.work ul.required-tags {width:75px; height:50px;float:left;margin: 0 0.3775em 0.3775em 0;}
+li.heading {position:relative;border:1px solid #fffef9;}
+.work ul.required-tags {width:75px; height:50px;float:left;}
 .work ul.required-tags li img {width:25px; height:25px;}
 .work ul.required-tags li {padding:0;margin:0; width:25px; height:25px;}
+.work h3 {margin-right:3em;}
+.work h3, .work h3 a, .work h3 img {color:#900; vertical-align:bottom;}
 
-.work h3 {margin:0.3775em 0 0 0; color:#900;}
-.work h3 a {color:#900;}
-.work h3 img {vertical-align:bottom;}
-.work h4 {margin-bottom:-1.2525em;}
-
-.work p.update {font-size:0.875em; text-align:right;}
-.work li.tags {margin: auto 1.5em;}
-.work .tags dt{font-weight:bold; margin:1.2525em auto auto}
-.work .tags dd {font-size:0.875em; margin:auto auto auto 2.25em; }
-.work li.summary {margin:0.5625em auto; padding:0 2.25em}
+.work p.update {font-size:0.875em; text-align:right; top:-0.875em; right:0; position:absolute; }
+.work .tags dt{font-weight:bold;}
+.work .tags dd {font-size:0.875em; margin:-1.375em auto auto 5.5em;}
+.work li.summary {margin:0.5625em auto; }
 .work li.stats dl {text-align:right;}
 .work li.stats dt, .work li.stats dd {display:inline; font-size:0.875em}
 .work li.stats dl dd {margin:0 0.375em 0 0;}
-.work li.navigation {margin:-1em auto; border-color:#ddd;}
+.work li.navigation {bottom:-0.75em;position:absolute; border-color:#ddd;}
 
 /*series listing */
 #user-series ul	{ text-indent:2em; margin:1.125em auto; padding:0 1em;}
@@ -139,28 +135,25 @@ dl#series-meta { margin:0 auto 1.5em auto; font-size:0.875em; border-bottom:1px 
 .media-index li.even { width: 40%; float: right; margin: 0 0 0 0.5625em; }
 
 /* PEOPLE-INDEX */
-
-.user div { position:relative; padding:0.125em; margin:0 0 0.875em 0; border:1px solid #ddd;}
-.user h3 { background:#ddd; font-size: 1.5em; line-height: 0.75; margin: -.25em -.25em .75em -.25em; padding:.25em .125em .125em .25em; }
-.user h3 a {text-decoration:none;}
-.user h3 a:visited {color:#222;}
+.user div { position: relative; margin: 0 0 0.5625em auto;padding-right:0.3775em; border-bottom:1px solid #ddd;}
+.user h3,.user h3 a { color:#900;display:inline; }
 .user img {top:0; right:0; position:absolute}
-.user ul.pseuds {background:#bbb; color:#fffef9; margin: -1.125em -.25em 0 -.25em; padding:.25em .125em .125em .25em;}
-.user .pseuds a {color:#fffef9; text-decoration:none;}
 .user ul li {display:inline;}
-.user ul.tags {font-size:0.75em; text-align:center; }
+.user ul.tags:before {content:" ( ";}
+.user ul.tags:after {content:" ) ";}
 
 /*BOOKMARKS-INDEX BOOKMARKS */
 .bookmark p, .bookmark ul {text-align:justify; margin:0.325em 1.5em; padding:0.125em;}
-dl.bookmark { background: #fffef9; position: relative; margin: 0 auto 1em auto; border: 1px solid #bbb; }
-.bookmark dt { background:#ddd; margin: -.125em -2px 0 -2px; padding: 0.125em; }
-.bookmark dt a { font: 400 1em/1.5; }
-.bookmark dd {padding:0.125em}
-.bookmark dd ul {padding:0; margin:0 1.5em;}
-.bookmark h4 {margin:0; font: 400 0.875em/1 Fertigo, Cambria, Constantia, Palatino, Georgia, sans-serif;}
-.bookmark dd.date { background: #bbb; color:#fffef9; min-height:1em; }
-.bookmark dd.tags {padding:0.125em;}
-.bookmark .tags li { line-height: 1.75; display:inline; padding-right: 0.5625em; }
+dl.bookmark { background: #fffef9; position: relative; margin: 0 0 0.5625em auto; padding-right:0.3775em; border-bottom:1px solid #ddd;}
+.bookmark ul {margin:0;}
+.bookmark dt {font-size: 1.125em; line-height: 1; margin: .5625em 0; font-weight:bold;}
+.bookmark dt a { color:#900; }
+.bookmark dd.date { font-size:0.875em; text-align:right; top:-0.875em; right:0; position:absolute; }
+
+.bookmark h4 {font:600 0.875em/1.286 Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif;}
+.bookmark dd.notes p,.bookmark .tags ul {font-size:0.875em;}
+.bookmark .tags li {display:inline; padding-right: 0.5625em; }
+.bookmark .navigation li {border-color:#ddd;}
 .bookmark dd .navigation {text-align:right; padding:0; margin:0; border-bottom:0;}
 
 /*TAGS-INDEX */

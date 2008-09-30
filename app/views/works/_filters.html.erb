@@ -4,8 +4,8 @@
  		<dl class="story-filters">
 			<%- unless (@pseuds.size < 1 || (@user && @pseuds.size < 2)) -%>
         <dt onclick='toggleFilters("filter-pseuds")'>
-          <span id="filter-pseuds_closed" style="display: none;"><%= image_tag 'arrow-right.gif' -%></span>
-          <span id="filter-pseuds_open"><%= image_tag 'arrow-down.gif' -%></span>              
+          <span id="filter-pseuds_closed" style="display: none;"><%= image_tag 'arrow-right.gif', :alt => "" -%></span>
+          <span id="filter-pseuds_open"><%= image_tag 'arrow-down.gif', :alt => "" -%></span>              
           Author
         </dt>
         <dd id="filter-pseuds" class="filter-tags">
@@ -25,8 +25,8 @@
 			  <%- TagCategory::OFFICIAL.each do |tag_category| -%>
 				  <%- unless @filters[tag_category.id.to_s].blank? -%>
           <dt onclick='toggleFilters("tag_category_<%= tag_category.id %>");'>
-            <span id="tag_category_<%= tag_category.id %>_closed" style="display: none;"><%= image_tag 'arrow-right.gif' -%></span>
-            <span id="tag_category_<%= tag_category.id %>_open"><%= image_tag 'arrow-down.gif' -%></span>              
+            <span id="tag_category_<%= tag_category.id %>_closed" style="display: none;"><%= image_tag 'arrow-right.gif', :alt => "" -%></span>
+            <span id="tag_category_<%= tag_category.id %>_open"><%= image_tag 'arrow-down.gif', :alt => ""-%></span>              
             <%= tag_category.display_name %> 
           </dt>
           <dd id="tag_category_<%= tag_category.id %>" class="filter-tags">

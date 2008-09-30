@@ -43,7 +43,7 @@ set story styles
 /* STORY META DATA */
 dl.story-meta { background:#ddd; padding:0.25em; position:relative;}
 .story-meta dt { width:9em; font-weight:600;}
-.story-meta dd { margin:-2.625em 0 0 11em; }
+.story-meta dd { margin:-2.625em 0 -0.5625em 11em; }
 .story-meta ul { text-indent:0; padding:0; }
 .story-meta ul li {display:inline; list-style-type:none; }
 

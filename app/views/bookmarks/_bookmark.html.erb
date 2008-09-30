@@ -35,7 +35,7 @@
     <h4><%=h "Bookmarker's notes:".t -%></h4>
     <% end -%>
     <%=sanitize_limit_and_format_for_display bookmark.notes %>
-    <p><% if !is_author_of?(bookmark) && bookmark.user %>- <%= link_to bookmark.user.login, bookmark.user %></p><% end -%>
+    <% if !is_author_of?(bookmark) && bookmark.user %><p>- <%= link_to bookmark.user.login, bookmark.user %></p><% end -%>
   </dd>
   <%- else -%>
   <% if !is_author_of?(bookmark) && bookmark.user -%>
