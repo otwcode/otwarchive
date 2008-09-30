@@ -65,7 +65,9 @@ class Work < ActiveRecord::Base
     indexes pseuds.name, :as => 'pseud_name', :sortable => true
 
     # attributes
+    has :id, :as => :work_ids
     has created_at, updated_at, word_count 
+    has tags(:id), :as => :tag_ids
 
     # properties
     set_property :delta => true
@@ -521,7 +523,7 @@ class Work < ActiveRecord::Base
     else
       where_clause = VISIBLE_TO_ALL_CONDITIONS
     end
-  
+
     # sphinx ordering must be done on attributes
     order_clause = ""    
     case options[:sort_column]
@@ -540,8 +542,15 @@ class Work < ActiveRecord::Base
       order_clause += (options[sort_dir_sym] == "DESC" ? "DESC" : "ASC")
     end
     
-    return Work.search(options[:query], :where => where_clause, :order => order_clause,
-                                :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => options[:page])
+    conditions_clause = {}
+    if options[:selected_tags]
+      ids = Work.ids_only.with_all_tag_ids(options[:selected_tags]).collect(&:id)
+      conditions_clause = {:work_ids => ids}
+    end
+      
+    Work.search(options[:query], :where => where_clause, :order => order_clause, 
+                :conditions => conditions_clause,
+                :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => options[:page])
   end
 
   def self.find_with_options(options = {})
@@ -613,10 +622,6 @@ class Work < ActiveRecord::Base
     return filters_hash
   end
   
-  def self.filter(works_to_filter, tag_ids_to_filter_on)
-    works_to_filter.reject {|w| (tag_ids_to_filter_on & w.tags.collect(&:id)) != tag_ids_to_filter_on }
-  end  
-    
   def self.get_filters_and_pseuds(works_to_filter)
     ids = works_to_filter.collect(&:id)
     @filters = build_filters_hash(Work.tags_with_count(ids))

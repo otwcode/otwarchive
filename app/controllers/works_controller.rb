@@ -133,9 +133,9 @@ class WorksController < ApplicationController
       end
       
       # filter the results
-      unless @works.empty? || @selected_tags.empty?
-        @works = Work.filter(@works, @selected_tags)
-      end
+      #unless @works.empty? || @selected_tags.empty?
+      #  @works = Work.filter(@works, @selected_tags)
+      #end
       unless @works.empty?
         @filters, @pseuds = Work.get_filters_and_pseuds(@works)      
       end
