@@ -46,7 +46,14 @@ class User < ActiveRecord::Base
   has_many :bookmark_tags, :through => :bookmarks, :source => :tags
   
   has_many :inbox_comments
-  has_many :feedback_comments, :through => :inbox_comments, :conditions => {:is_deleted => false}
+  has_many :feedback_comments, :through => :inbox_comments, :conditions => {:is_deleted => false, :approved => true}, :order => 'created_at DESC'
+  
+  def read_comments
+    feedback_comments.find(:all, :conditions => {:is_read => true}).uniq.compact
+  end
+  def unread_comments
+    feedback_comments.find(:all, :conditions => {:is_read => false}).uniq.compact
+  end
   
   named_scope :alphabetical, :order => :login
   named_scope :valid, :conditions => {:banned => false, :suspended => false}

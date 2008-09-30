@@ -9,7 +9,7 @@
   <li><%= print_bookmarks_link(@user) %></li>
   <li><%= link_to_help "coming-soon", prefix + "Communities".t %></li>
   <% if @user == current_user %>    
-  <li><%= link_to_unless_current "My Inbox (".t + @user.feedback_comments.count.to_s + ")", user_inbox_path(@user) %></li>
+  <li><%= link_to_unless_current "My Inbox (".t + @user.unread_comments.size.to_s + ")", user_inbox_path(@user) %></li>
   <li><%= link_to_unless_current "My Reading History".t, user_readings_path(@user) %></li>
   <li><%= link_to_help "coming-soon", "My Subscriptions".t %></li>
   <li><%= link_to_unless_current "My Preferences".t, user_preferences_path(@user) %></li>

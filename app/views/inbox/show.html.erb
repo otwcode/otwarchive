@@ -1,6 +1,36 @@
-<h1><%=h 'Your Inbox'.t %> (<%= @inbox.length %>)</h1>
-<%- for comment in @inbox -%>
-  <p><%=h 'In response to'.t %> <%= commentable_description_link(comment) %>:</p>
-  <%= render :partial => 'comments/single_comment', :object => comment, :locals => {:controller_name => "inbox"} %>
-  <hr />
+<h2><%=h 'My Inbox'.t %> (<%= @unread.length %> <%= "unread".t%>)</h2>
+<%- unless @unread.blank? && @read.blank? -%>
+  <%- form_tag "/#{@locale}/users/#{@user.login}/inbox", :method => :put do -%>
+    <%- unless @unread.blank? -%>
+      <h3><%= "Unread comments".t %></h3>
+      <%- for comment in @unread -%>
+        <!-- START of single comment -->
+          <div class="comment unread" id="comment_<%= comment.id -%>">
+            <%= check_box_tag "comments[#{comment.id}]", "checked" %>
+            <%= commentable_owner_link(comment) %> <%=h 'to'.t %> <%= commentable_description_link(comment) %> 
+            <%= distance_of_time_in_words_to_now(comment.created_at) %> <%= "ago".t %>
+            <%= sanitize_and_format_for_display comment.content %>
+          </div>
+        <!-- END of single comment -->
+      <%- end -%>
+    <%- end -%>
+    <%- unless @read.blank? -%>
+      <h3><%= "Read comments".t %></h3>
+      <%- for comment in @read -%>
+        <!-- START of single comment -->
+          <div class="comment read" id="comment_<%= comment.id -%>">
+            <%= check_box_tag "comments[#{comment.id}]", "checked" %>
+            <%= commentable_owner_link(comment) %> <%=h 'to'.t %> <%= commentable_description_link(comment) %> 
+            <%= distance_of_time_in_words_to_now(comment.created_at) %> <%= "ago".t %>
+          </div>
+        <!-- END of single comment -->
+      <%- end -%>
+    <%- end -%>
+    <%= "Mark checked as:".t %> 
+    <%= submit_tag 'read'.t %>
+    <%= submit_tag 'unread'.t %>
+    <%= submit_tag 'spam'.t %>
+    <%= submit_tag 'delete comments from story'.t, :confirm => "Are you sure?".t %>
+    <!-- comming soon <%= submit_tag 'mass reply'.t %> -->
+  <%- end -%>
 <%- end -%>

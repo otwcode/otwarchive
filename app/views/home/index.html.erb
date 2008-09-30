@@ -46,7 +46,7 @@
 	<h4><%= link_to 'Fandoms'.t, :controller => 'media', :action => 'index' %></h4>
 	<ul class="meters">
 		<li><span><%= @fandom_count -%></span> <%=h ' ' + 'fandoms to date'.t %></li>
-		<%- if @latest_fandom -%>
+		<%- unless @latest_fandom.blank? -%>
 			<li><%=h 'Latest updated'.t + ': '%> <span><%= link_to @latest_fandom.name, @latest_fandom -%></span></li>
 		<%- end -%>
 	</ul>
