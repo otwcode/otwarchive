@@ -8,7 +8,6 @@
   	</ul>
 	<p><%= image_tag("icon_placeholder.png", :size => "50x50", :alt => "(Icon!)") %></p>
 	<ul class="tags">
-	  <%- logger.info "categories: " + @categories.to_yaml -%>
     <%- user.most_popular_tags(:category => @categories, :limit => 5).each do |tag| -%>
       <li><%= link_to tag.name, works_path(:user_id => user.login, :selected_tags => [tag.id]), :class => 'tag' %></li>
     <%- end -%>
