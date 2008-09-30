@@ -50,7 +50,7 @@ class Tag < ActiveRecord::Base
   }
 
   def self.find_or_create_canonical_tag(tagname, category)
-    find_by_name(tagname) || self.create({:name => tagname, :tag_category_id => category.id, :canonical => true})
+    category.tags.find_by_name(tagname) || self.create({:name => tagname, :tag_category_id => category.id, :canonical => true})
   end
 	
 	DEFAULT_WARNING_TAG = Tag.find_or_create_canonical_tag(ArchiveConfig.DEFAULT_WARNING_TAG_NAME, TagCategory::WARNING)
@@ -67,7 +67,7 @@ class Tag < ActiveRecord::Base
 	MULTI_CATEGORY_TAG = Tag.find_or_create_canonical_tag(ArchiveConfig.MULTI_CATEGORY_TAG_NAME, TagCategory::CATEGORY)
 	OTHER_CATEGORY_TAG = Tag.find_or_create_canonical_tag(ArchiveConfig.OTHER_CATEGORY_TAG_NAME, TagCategory::CATEGORY)
   
-	OFFICIAL_TAGS = [DEFAULT_WARNING_TAG, NO_WARNING_TAG, DEFAULT_RATING_TAG, EXPLICIT_RATING_TAG, 
+	PREDEFINED_TAGS = [DEFAULT_WARNING_TAG, NO_WARNING_TAG, DEFAULT_RATING_TAG, EXPLICIT_RATING_TAG, 
 		MATURE_RATING_TAG, TEEN_RATING_TAG, GENERAL_RATING_TAG,	HET_CATEGORY_TAG, SLASH_CATEGORY_TAG, 
 		FEMSLASH_CATEGORY_TAG, GEN_CATEGORY_TAG, MULTI_CATEGORY_TAG, OTHER_CATEGORY_TAG] 
 	
