@@ -90,7 +90,14 @@ class User < ActiveRecord::Base
     login
   end
 
-  ALPHABET = User.find(:all, :select => :login).collect {|user| user.login[0,1].upcase}.uniq.sort
+	begin
+	 ActiveRecord::Base.connection
+   ALPHABET = User.find(:all, :select => :login).collect {|user| user.login[0,1].upcase}.uniq.sort
+  rescue
+    puts "no database yet, not initializing user login alphabet"
+    ALPHABET = ['A']
+  end
+
   
   def check_account_creation_status
     self.errors.add(:base, "Account creation is currently disabled.".t) unless ArchiveConfig.ACCOUNT_CREATION_ENABLED
