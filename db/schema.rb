@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080927191115) do
+ActiveRecord::Schema.define(:version => 20080929233315) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(:version => 20080927191115) do
     t.boolean  "approved",                       :default => false, :null => false
     t.boolean  "hidden_by_admin",                :default => false, :null => false
     t.string   "user_agent"
+    t.boolean  "is_read",                        :default => false, :null => false
   end
 
   create_table "communities", :force => true do |t|

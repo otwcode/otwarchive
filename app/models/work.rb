@@ -471,7 +471,12 @@ class Work < ActiveRecord::Base
     end 
   end
 	
-	initialize_tag_category_methods
+	begin
+	 ActiveRecord::Base.connection
+   initialize_tag_category_methods
+  rescue
+    puts "no database yet, not initializing tag category methods"
+  end
   
   # Set the value of word_count to reflect the length of the chapter content
   def set_word_count
