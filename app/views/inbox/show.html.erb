@@ -1,4 +1,5 @@
 <h2><%=h 'My Inbox'.t %> (<%= @unread.length %> <%= "unread".t%>)</h2>
+<%= flash_div :comment_error, :comment_notice -%>
 <%- unless @unread.blank? && @read.blank? -%>
   <%- form_tag "/#{@locale}/users/#{@user.login}/inbox", :method => :put do -%>
     <%- unless @unread.blank? -%>
@@ -9,7 +10,9 @@
             <%= check_box_tag "comments[#{comment.id}]", "checked" %>
             <%= commentable_owner_link(comment) %> <%=h 'to'.t %> <%= commentable_description_link(comment) %> 
             <%= distance_of_time_in_words_to_now(comment.created_at) %> <%= "ago".t %>
+            <div id="add_comment_reply_link_<%= comment.id -%>"><%= add_comment_reply_link comment -%></div>
             <%= sanitize_and_format_for_display comment.content %>
+            <div id="add_comment_reply_placeholder_<%= comment.id -%>" style="display: none;"></div>
           </div>
         <!-- END of single comment -->
       <%- end -%>

@@ -109,7 +109,13 @@ class CommentsController < ApplicationController
         if @comment.approved?
           flash[:comment_notice] = 'Comment created!'.t
           respond_to do |format|
-            format.html { redirect_to_comment(@comment) }
+            format.html do 
+              if request.env['HTTP_REFERER'] =~ /inbox/
+                redirect_to user_inbox_path(current_user)
+              else
+                redirect_to_comment(@comment)
+              end
+            end
           end 
         else
           flash[:comment_notice] = 'Comment was marked as spam by Akismet.'.t
