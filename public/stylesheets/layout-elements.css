@@ -1,6 +1,6 @@
 ul#skiplinks	{ margin-left:-999em; position:absolute; }
 ul.navigation, dl.navigation { background: #fffef9; border-bottom: 1px solid #999; text-align:right;margin: 0 0 0.875em 0; text-transform:capitalize;}
-ul.navigation li, .navigation dd { background: #fffef9; display: inline; padding: 0 0.5625em; border:1px solid #999; border-bottom:0; text-indent:0;}
+ul.navigation li, .navigation dd, li.navigation { background: #fffef9; display: inline; padding: 0 0.5625em; border:1px solid #999; border-bottom:0; text-indent:0;}
 .navigation dt { font-weight:600; display:inline; padding:0 0.5625em; }
 .navigation a:active { background:#900; color:#fffef9; }
 
@@ -99,66 +99,30 @@ dl#user-data dt {font-weight: 900; width: 9em; float:left; clear:left; margin:0.
 /* WORKS-INDEX */
 /*story filters rules are in forms.css */
 /*works blurb : shows on works, reading history, series, should be spoofed on bookmarks and users-show*/
-li.work ul.work {position: relative; margin: 0 13.5em 0.5625em auto;}
+li.work ul.work {position: relative; margin: 0 13.5em 0.5625em auto;padding-right:0.3775em;}
 #user-page li.work ul, #main.series-index  li.work ul, #series-story-list li.work ul{ margin-right: 0; }
 
-ul.work {position:relative; border-bottom:1px solid #ddd; padding-bottom:1.5625em}
+ul.work {position:relative; border-bottom:1px solid #ddd; }
 ul.work ul li{ display:inline;}
 li.heading {position:relative;}
-.work ul.required-tags {width:4em;float:left}
-.work ul.required-tags li {display:block; float:left;}
-.work span {padding:0;margin:0;}
-/*will use the old image replacement switch for icons for now , just run though and declare them all: li.warnings span {background:url() top left no-repeat; height:25px; width:25px} etc etc*/
-/*
-li.warning-yes span {background:url(../images/warning-yes.png) top left no-repeat; height:25px; width:25px}
-li.warning-no span {background:url(../images/warning-no.png) top left no-repeat; height:25px; width:25px}
+.work ul.required-tags {width:75px; height:50px;float:left;margin: 0 0.3775em 0.3775em 0;}
+.work ul.required-tags li img {width:25px; height:25px;}
+.work ul.required-tags li {padding:0;margin:0; width:25px; height:25px;}
 
-li.rating-explicit span {background:url(../images/rating-explicit.png) top left no-repeat; height:25px; width:25px}
-li.rating-mature span {background:url(../images/rating-mature.png) top left no-repeat; height:25px; width:25px}
-li.rating-teen span {background:url(../images/rating-teen.png) top left no-repeat; height:25px; width:25px}
-li.rating-general-audience span {background:url(../images/rating-general-audience.png) top left no-repeat; height:25px; width:25px}
-li.rating-notrated span {background:url(../images/rating-notrated.png) top left no-repeat; height:25px; width:25px}
-
-li.category-none span {background:url(../images/category-none.png) top left no-repeat; height:25px; width:25px}
-li.category-gen span {background:url(../images/category-gen.png) top left no-repeat; height:25px; width:25px}
-li.category-het span {background:url(../images/category-het.png) top left no-repeat; height:25px; width:25px}
-li.category-slash span {background:url(../images/category-slash.png) top left no-repeat; height:25px; width:25px}
-li.category-femslash span {background:url(../images/category-femslash.png) top left no-repeat; height:25px; width:25px}
-li.category-other span {background:url(../images/category-other.png) top left no-repeat; height:25px; width:25px}
-
-li.complete-yes span {background:url(../images/complete-yes.png) top left no-repeat; height:25px; width:25px}
-li.complete-no span {background:url(../images/complete-no.png) top left no-repeat; height:25px; width:25px}
-*/
-li.warning-yes img {height:25px; width:25px}
-li.warning-no img {height:25px; width:25px}
-
-li.rating-explicit img {height:25px; width:25px}
-li.rating-mature img {height:25px; width:25px}
-li.rating-teen img {height:25px; width:25px}
-li.rating-general-audience img {height:25px; width:25px}
-li.rating-notrated img {height:25px; width:25px}
-
-li.category-none img {height:25px; width:25px}
-li.category-gen img {height:25px; width:25px}
-li.category-het img {height:25px; width:25px}
-li.category-slash img {height:25px; width:25px}
-li.category-femslash img {height:25px; width:25px}
-li.category-other img {height:25px; width:25px}
-
-li.complete-yes img {height:25px; width:25px}
-li.complete-no img {height:25px; width:25px}
-
-.work h3 {margin:0.3775em 0 0 2em; color:#900;}
+.work h3 {margin:0.3775em 0 0 0; color:#900;}
 .work h3 a {color:#900;}
-.work h4 {margin-left:2.25em;}
-.work p.update {font-size:0.875em;position:absolute; top:0; right:0}
-.work .tags dt{font-weight:bold; margin:1.2525em 0 0 0}
-.work .tags dd {font-size:0.875em; margin:-1em 0 0 2.25em; }
-.work li.summary {margin:0.5625em 1em;}
+.work h3 img {vertical-align:bottom;}
+.work h4 {margin-bottom:-1.2525em;}
+
+.work p.update {font-size:0.875em; text-align:right;}
+.work li.tags {margin: auto 1.5em;}
+.work .tags dt{font-weight:bold; margin:1.2525em auto auto}
+.work .tags dd {font-size:0.875em; margin:auto auto auto 2.25em; }
+.work li.summary {margin:0.5625em auto; padding:0 2.25em}
 .work li.stats dl {text-align:right;}
 .work li.stats dt, .work li.stats dd {display:inline; font-size:0.875em}
 .work li.stats dl dd {margin:0 0.375em 0 0;}
-
+.work li.navigation {margin:-1em auto; border-color:#ddd;}
 
 /*series listing */
 #user-series ul	{ text-indent:2em; margin:1.125em auto; padding:0 1em;}
