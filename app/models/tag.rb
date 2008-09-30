@@ -77,11 +77,11 @@ class Tag < ActiveRecord::Base
 
   # the default warning(s) put on a new work
   def Tag.default_warning
-   DEFAULT_WARNING_TAG
+   DEFAULT_WARNING_TAG.name
   end
   #default rating
   def Tag.default_rating
-    DEFAULT_RATING_TAG
+    DEFAULT_RATING_TAG.name
 	end
   
   def before_validation
