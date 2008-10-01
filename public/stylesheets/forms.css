@@ -49,6 +49,8 @@ form p.openid	{ margin-top:6em; }
 #story-form input, #story-form select, #story-form textarea {width:99%; margin:auto}
 #story-form fieldset { background:#fffef9; font-size:0.875em; margin: 0.5625em 0; padding:0.375em 1.5em; border:1px solid #bbb; }
 #story-form fieldset fieldset { line-height:1.5; margin: 0 0 0.5625em 0; }
+
+#story-form #chapter-ordering input.number-field { width:5em! important;}
 #story-form fieldset.story-meta {background:#ddd; }
 #story-form .story-meta dt{ float:left; clear:left; width:9em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
 #story-form .story-meta dd{ float: left; margin:0; padding:0; width:60%}
