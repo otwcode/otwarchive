@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
 
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user
-  attr_accessible :suspended, :banned, :translator, :tag_wrangler
+  attr_accessible :suspended, :banned, :translator, :tag_wrangler, :recently_reset
   
   # Acts_as_authentable plugin
   acts_as_authentable

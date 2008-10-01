@@ -595,7 +595,7 @@ class Work < ActiveRecord::Base
     unless @works.empty?
       ids = eval("Work.ids_only#{command}").collect(&:id)
       @filters = build_filters_hash(Work.tags_with_count(ids))
-      @pseuds = Pseud.on_work_ids(ids) if @pseuds.empty?
+      @pseuds = Pseud.on_work_ids(ids).find(:all, :order => :name) if @pseuds.empty?
     end
     
     return @works, @filters, @pseuds
@@ -611,12 +611,14 @@ class Work < ActiveRecord::Base
       rescue
         count = 0
       end
-      tmphash = {:name => filter.tag_name, :id => filter.tag_id.to_s, :count => count}
-      key = filter.category_id.to_s
-      if filters_hash[key]
-        filters_hash[key] << tmphash
-      else
-        filters_hash[key] = [tmphash]
+      if count.to_i > 1
+        tmphash = {:name => filter.tag_name, :id => filter.tag_id.to_s, :count => count}
+        key = filter.category_id.to_s
+        if filters_hash[key]
+          filters_hash[key] << tmphash
+        else
+          filters_hash[key] = [tmphash]
+        end
       end
     end
     return filters_hash
@@ -625,7 +627,7 @@ class Work < ActiveRecord::Base
   def self.get_filters_and_pseuds(works_to_filter)
     ids = works_to_filter.collect(&:id)
     @filters = build_filters_hash(Work.tags_with_count(ids))
-    @pseuds = Pseud.on_work_ids(ids)
+    @pseuds = Pseud.on_work_ids(ids).find(:all, :order => :name)
     return @filters, @pseuds
   end
   

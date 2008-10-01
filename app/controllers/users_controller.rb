@@ -108,17 +108,18 @@ class UsersController < ApplicationController
         @user.profile = Profile.new(params[:profile_attributes])
         @user.profile.save!
       end
-      @user.recently_reset = nil if params[:change_password]
-      if !params[:user][:password].blank? && !@user.authenticated?(params[:user][:password], @user.salt) && !@user.authenticated?(params[:check][:password_check], @user.salt)
+      if @user.recently_reset? && params[:change_password]
+        successful_update 
+      elsif !params[:user][:password].blank? && !@user.authenticated?(params[:user][:password], @user.salt) && !@user.authenticated?(params[:check][:password_check], @user.salt)
         flash[:error] = "Your old password was incorrect".t
         unsuccessful_update
-      end
-      if params[:user][:identity_url] != @user.identity_url && !params[:user][:identity_url].blank?
+      elsif params[:user][:identity_url] != @user.identity_url && !params[:user][:identity_url].blank?
         open_id_authentication(params[:user][:identity_url])
       else
         successful_update
       end      
    rescue
+      flash[:error] = "Your update failed; please try again.".t
       render :action => "edit"
    end
   end
@@ -212,6 +213,7 @@ class UsersController < ApplicationController
  
   protected
     def successful_update
+      params[:user][:recently_reset] = false
       @user.update_attributes!(params[:user]) 
       flash[:notice] = 'Your profile has been successfully updated.'.t
       redirect_to(user_profile_path(@user)) 
