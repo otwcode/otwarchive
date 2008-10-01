@@ -101,4 +101,14 @@ class ChapterTest < ActiveSupport::TestCase
     
   end
 
+  def test_no_leading_spaces_in_title
+    title = "should have no leading space"
+    title_with_space = ' ' + title
+    chapter = create_chapter(:title => title_with_space)
+    assert_equal title, chapter.title
+    assert chapter.valid?
+  end
+
 end
+
+  

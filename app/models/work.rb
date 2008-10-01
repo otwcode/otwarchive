@@ -44,11 +44,13 @@ class Work < ActiveRecord::Base
   attr_accessor :new_tags
   attr_accessor :tags_to_tag_with
 
-  before_save :validate_authors, :set_language
-  before_save :set_word_count
+  before_save :validate_authors, :clean_and_validate_title
+  before_save :set_word_count, :set_language
   before_save :post_first_chapter
+
   after_save :save_creatorships, :save_associated
   after_create :tag_after_create 
+
   before_update :validate_tags
 
   # Index for Thinking Sphinx
@@ -355,6 +357,17 @@ class Work < ActiveRecord::Base
       return false
     elsif !self.invalid_pseuds.blank?
       errors.add_to_base("These pseuds are invalid: ".t + self.invalid_pseuds.inspect) 
+    end
+  end
+  
+  # Makes sure the title has no leading spaces
+  def clean_and_validate_title
+    unless self.title.blank?
+      self.title = self.title.gsub(/^\s*/, '')
+      if self.title.length < ArchiveConfig.TITLE_MIN
+        errors.add_to_base("Title must be at least %d characters long without leading spaces."/ArchiveConfig.TITLE_MIN)
+        return false
+      end
     end
   end
   

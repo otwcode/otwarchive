@@ -71,7 +71,7 @@
 		</dl>
 	</li>
 
-	<%- if is_author_of?(work) -%>
+	<%- if is_author_of?(work) && controller.controller_name != 'series' -%>
 	<li class="navigation"><%= link_to 'Edit'.t, edit_work_path(work) -%></li>
 	<%- end -%>
 

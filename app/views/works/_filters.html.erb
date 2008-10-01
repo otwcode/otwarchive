@@ -13,8 +13,8 @@
             <%- for pseud in @pseuds -%>
               <%- if pseud.works.count > 0 -%>
                 <li>
-                  <%= check_box_tag 'selected_pseuds[]', pseud.id, @selected_pseuds.include?(pseud) %>
-                  <%= label_tag "selected_pseuds[#{pseud.name}]", pseud.name %>  
+                  <%= check_box_tag 'selected_pseuds[]', pseud.id, @selected_pseuds.include?(pseud), :id => "selected_pseuds_#{pseud.id}" %>
+                  <%= label_tag "selected_pseuds_#{pseud.id}", pseud.name %>  
                 </li>
               <%- end -%>
             <%- end -%> 
@@ -33,8 +33,8 @@
             <ul>              
               <%- @filters[tag_category.id.to_s].each do |tag_info| -%>
                 <li>
-                  <%= check_box_tag "selected_tags[]", tag_info[:id], @selected_tags.include?(tag_info[:id]) -%>
-                  <%= label_tag "selected_tags[#{tag_info[:id]}]", "#{tag_info[:name]} (#{tag_info[:count]})" %>  
+                  <%= check_box_tag "selected_tags[]", tag_info[:id], @selected_tags.include?(tag_info[:id]), :id => "selected_tags_#{tag_info[:id]}" -%>
+                  <%= label_tag "selected_tags_#{tag_info[:id]}", "#{tag_info[:name]} (#{tag_info[:count]})" %>  
                 </li>
               <%- end -%> 
            </ul>

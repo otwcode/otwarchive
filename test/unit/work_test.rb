@@ -317,4 +317,13 @@ class WorkTest < ActiveSupport::TestCase
     work.expected_number_of_chapters = nil
     assert_equal "?", work.wip_length  
   end
+  
+  def test_no_leading_spaces_in_title
+    title = "should have no leading space"
+    title_with_space = ' ' + title
+    work = create_work(:title => title_with_space)
+    assert_equal title, work.title
+    assert work.valid?
+  end
+
 end

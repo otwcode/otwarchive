@@ -27,11 +27,18 @@ class Chapter < ActiveRecord::Base
   attr_accessor :wip_length_placeholder, :position_placeholder
 
   before_validation_on_create :set_position
-  before_save :validate_authors
+  before_save :validate_authors, :clean_title
   before_save :set_word_count
   after_save :save_creatorships
   
   named_scope :in_order, {:order => :position}
+
+  # strip leading spaces from title
+  def clean_title
+    unless self.title.blank?
+      self.title = self.title.gsub(/^\s*/, '')
+    end
+  end
 
   # Set the position if this isn't the first chapter
   def current_position
