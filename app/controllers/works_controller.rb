@@ -397,7 +397,7 @@ class WorksController < ApplicationController
           @chapter = @work.chapters.first
           @work.pseuds << current_user.default_pseud
           @chapter.pseuds << current_user.default_pseud
-          if @chapter.save && @work.save
+          if (work_saved = @work.save) && @chapter.save
             flash[:notice] = "Work successfully uploaded!".t + "<br />" +
               "(You will want to check the results over carefully before posting, though, 
                 because the poor computer can only figure out so much.)".t
