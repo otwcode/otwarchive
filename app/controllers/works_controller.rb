@@ -292,7 +292,6 @@ class WorksController < ApplicationController
       render :action => :edit and return
     end
 
-    @work.attributes = params[:work]    
     # Need to update @pseuds and @selected_pseuds values so we don't lose new co-authors if the form needs to be rendered again
     @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
     to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 

@@ -282,12 +282,12 @@ class Work < ActiveRecord::Base
   # Virtual attribute for series
   def series_attributes=(attributes)
     new_series = Series.find(attributes[:id]) unless attributes[:id].blank?
-    self.series << new_series unless new_series.blank? || self.series.include?(new_series)
+    self.series << new_series unless (new_series.blank? || self.series.include?(new_series))
     unless attributes[:title].blank?
-       new_series = Series.new
-       new_series.title = attributes[:title]
-       new_series.save
-       self.series << new_series
+      new_series = Series.new
+      new_series.title = attributes[:title]
+      new_series.save
+      self.series << new_series
     end
   end 
   
