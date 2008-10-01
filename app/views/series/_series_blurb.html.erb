@@ -1,6 +1,12 @@
-<li class="story" id="series_<%=h series.id %>_blurb">
-	<ul>
-		<li class="story-title-line">
+<li class="work series" id="series_<%=h series.id %>_blurb">
+	<ul class="work">
+		<li class="heading">
+			<ul class="required-tags">
+			<li><img src="../images/category-none.png" alt="" title="dummy icons for layout purpose" /></li>
+			<li><img src="../images/category-none.png" alt="" title="dummy icons for layout purpose" /></li>
+			<li><img src="../images/category-none.png" alt="" title="dummy icons for layout purpose" /></li>
+			<li><img src="../images/category-none.png" alt="" title="dummy icons for layout purpose" /></li>
+			</ul>
 			<h3 title="Series Title">
 				<% if series.hidden_by_admin %>
 				<%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)") %>
@@ -9,26 +15,30 @@
 				<%=h 'by'.t %>
 				<%= print_pseud_list(series.pseuds) -%>
 			</h3>
-		</li>
-		<li class="story-date">
-			<ul>
-				<li><%= "Posted: ".t %><%=h series.created_at.localize("%d %B %Y") %></li>
-				<li><%= "Updated: ".t %><%=h series.updated_at.localize("%d %B %Y") %></li>
-			</ul>
-		</li>
-		<li class="story-tags">
+		<h4>&nbsp;<!--fandom will go here--></h4>
+		<p class="update"><%= time_ago_in_words(series.updated_at) %></p>
+		<li>
+			<dl class="tags">
+			<dt><%=h 'Tags'.t + ': ' %></dt>
+			<dd>
 			<ul>
 				<% series.works.collect(&:tags).flatten.compact.uniq.each do |tag| %>
 				<li><%= link_to tag.name, tag_path(tag) %></li>
 				<% end %>
 			</ul>
+			</dd>
+			</dl>
 		</li>
-		<li class="story-desc">
+		<li class="summary">
 			<%= sanitize_and_format_for_display series.summary %>
-			<ul>
-				<li><%=h 'Stories:'.t %> <%=h series.serial_works.count %></li>
-				<li><%=h 'Words:'.t %> <%=h number_with_delimiter(series.works.collect(&:word_count).sum) %></li>
-			</ul>
+		</li>
+		<li class="stats">
+			<dl>
+			<dt><%=h 'Words'.t + ': ' %></dt> 
+				<dd><%= '%s'/number_with_delimiter(series.works.collect(&:word_count).sum) %></dd>
+			<dt><%=h 'Stories'.t + ': ' %></dt> 
+				<dd><%=h series.serial_works.count %></dd>
+			</dl>
 		</li>
 	</ul>
 </li>
