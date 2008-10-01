@@ -100,7 +100,7 @@ dl#user-data dt {font-weight: 900; width: 9em; float:left; clear:left; margin:0.
 /*story filters rules are in forms.css */
 /*works blurb : shows on works, reading history, series, should be spoofed on bookmarks and users-show*/
 li.work ul.work {position: relative; margin: 0 13.5em 0.5625em auto;padding-right:0.3775em;}
-#user-page li.work ul, #main.series-index  li.work ul, #series-story-list li.work ul{ margin-right: 0; }
+#user-page li.work ul.work, #main.series-index  li.work ul.work, #series-story-list li.work ul.work{ margin-right: 0; }
 
 ul.work {position:relative; border-bottom:1px solid #ddd; }
 ul.work ul li{ display:inline;}
@@ -108,7 +108,7 @@ li.heading {position:relative;border:1px solid #fffef9;}
 .work ul.required-tags {width:75px; height:50px;float:left;}
 .work ul.required-tags li img {width:25px; height:25px;}
 .work ul.required-tags li {padding:0;margin:0; width:25px; height:25px;}
-.work h3 {margin-right:3em;}
+.work h3 {margin-right:4.5em;}
 .work h3, .work h3 a, .work h3 img {color:#900; vertical-align:bottom;}
 
 .work p.update {font-size:0.875em; text-align:right; top:-0.875em; right:0; position:absolute; }
@@ -143,18 +143,7 @@ dl#series-meta { margin:0 auto 1.5em auto; font-size:0.875em; border-bottom:1px 
 .user ul.tags:after {content:" ) ";}
 
 /*BOOKMARKS-INDEX BOOKMARKS */
-.bookmark p, .bookmark ul {text-align:justify; margin:0.325em 1.5em; padding:0.125em;}
-dl.bookmark { background: #fffef9; position: relative; margin: 0 0 0.5625em auto; padding-right:0.3775em; border-bottom:1px solid #ddd;}
-.bookmark ul {margin:0;}
-.bookmark dt {font-size: 1.125em; line-height: 1; margin: .5625em 0; font-weight:bold;}
-.bookmark dt a { color:#900; }
-.bookmark dd.date { font-size:0.875em; text-align:right; top:-0.875em; right:0; position:absolute; }
-
-.bookmark h4 {font:600 0.875em/1.286 Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif;}
-.bookmark dd.notes p,.bookmark .tags ul {font-size:0.875em;}
-.bookmark .tags li {display:inline; padding-right: 0.5625em; }
-.bookmark .navigation li {border-color:#ddd;}
-.bookmark dd .navigation {text-align:right; padding:0; margin:0; border-bottom:0;}
+.bookmark p.attribution {text-align:right;}
 
 /*TAGS-INDEX */
 .tags-index ul { text-align: center; margin: 2em auto; }

@@ -1,6 +1,13 @@
 <!-- This partial requires local variable 'bookmark' -->
-<dl class="bookmark">
-  <dt>
+<ul class="work bookmark">
+  <li class="heading">
+	<ul class="required-tags">
+	<li><img src="../images/bookmark-placeholder.png" alt="" title="dummy icons for layout purpose"/></li>
+	<li><img src="../images/category-none.png" alt="" /></li>
+	<li><img src="../images/category-none.png" alt="" /></li>
+	<li><img src="../images/category-none.png" alt="" /></li>
+	</ul>
+	<h3>
   	<% if bookmark.bookmarkable.nil? -%>
 		(<%= 'Oh noes, this work has been deleted.'.t -%>)
     <% elsif bookmark.bookmarkable_type == "ExternalWork" %>
@@ -15,65 +22,36 @@
     <% end %>
 	
     <% if bookmark.private %><%= image_tag("lockblack.png", :size => "15x15", :alt => "(Private)".t) %><% end %>
-</dt>
-	<dd class="date">
-	</dd>
-	<!--placeholder markup for wireframe elements:
-	# Date added - show date bookmark was created
-	# Bookmarked by - tells you who bookmarked this URL - links to their profile page
-	<dd class="bookmarked by">
-	</dd>
-	-->
-	<%- unless bookmark.bookmarkable.nil? -%>
-	   <dd class="summary"> <%=sanitize_limit_and_format_for_display bookmark.bookmarkable.summary %></dd>
-	<%- end -%>
-  <%- unless bookmark.notes.blank? -%>
-  <dd class="notes">
-    <% if is_author_of?(bookmark) %>
-    <h4><%=h "Your notes:".t -%></h4>
-    <% else -%>
-    <h4><%=h "Bookmarker's notes:".t -%></h4>
-    <% end -%>
-    <%=sanitize_limit_and_format_for_display bookmark.notes %>
-    <% if !is_author_of?(bookmark) && bookmark.user %><p>- <%= link_to bookmark.user.login, bookmark.user %></p><% end -%>
-  </dd>
-  <%- else -%>
-  <% if !is_author_of?(bookmark) && bookmark.user -%>
-  <dd>
-    <%=h "Bookmarked by:".t %> <%= link_to bookmark.user.login, bookmark.user %>
-  </dd>
-  <% end -%>
-  <%- end -%>
-  <%- unless bookmark.tag_string.blank? -%>
-  <dd class="tags">
-    <% if is_author_of?(bookmark) %>
-    <h4><%=h "Your tags:".t -%></h4>
-    <% else -%>
-    <h4><%=h "Bookmarker's tags:".t %></h4>
-	<% end -%>
-    <ul>
+</h3>
+<h4>&nbsp;</h4>
+	<p class="update"><%= time_ago_in_words(bookmark.updated_at) %></p>
+  </li>
+<%- unless bookmark.tag_string.blank? -%>
+  <li>
+   <dl class="tags">
+	<dt><%=h "Tags:".t -%></dt>
+    <dd>
+    	<ul>
 	<% bookmark.tags.each do |tag| -%>
-    <li><%= link_to(tag.name, tag_path(tag), :class => 'tag') %></li>
+    		<li><%= link_to(tag.name, tag_path(tag), :class => 'tag') %></li>
     <% end -%>
-	</ul>
+		</ul>
   </dd>
-  <% end %>
-<% if is_author_of?(bookmark) %>
-  <dd>
-    <ul class="navigation">
-		<li><%= link_to "Edit".t, edit_bookmark_path(bookmark) %></li>
-		<li><%= link_to "Delete".t, bookmark, :confirm => 'Are you sure?'.t, :method => :delete %></li>
+	</dl>
+  </li>
+  <%- end -%>
+<%- unless bookmark.notes.blank? -%>
+  <li class="notes">
+    <%=sanitize_limit_and_format_for_display bookmark.notes %>
+	<p class="attribution">- <%= link_to bookmark.user.login, bookmark.user %></p>
+  </li>
+  <%- end -%>
+  <%- if is_author_of?(bookmark) -%>
+  <li class="navigation">
+    <ul>
+		<li class="navigation"><%= link_to "Edit".t, edit_bookmark_path(bookmark) %></li>
+		<li class="navigation"><%= link_to "Delete".t, bookmark, :confirm => 'Are you sure?'.t, :method => :delete %></li>
 	</ul>
-	<!-- placeholder markup for wireframe element #10:
-	Save - allows you to 'steal' someone else's bookmark and save it to your personal collection (loads 'add from work' dialogue with all fields pre-populated except Notes and Tags which you add yourself) 
-	<ul class="navigation">
-		if is_author_of?(bookmark) 
-		<li>link_to "Edit".t</li>
-		<li>link_to "Delete"</li>
-		else 
-		<li>link_to "Save"</li>
-	</ul>
-	-->
-  </dd>
-  <% end %>
-</dl> 
+ <% end -%>
+</li> 
+</ul>
