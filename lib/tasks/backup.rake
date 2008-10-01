@@ -97,6 +97,15 @@ namespace :db do
           puts "new start: " if @debug
           y start if @debug
         end # while
+        # dump unowned records
+        cpath = @now + table + '/null/'
+        FileUtils.mkdir_p(cpath, :mode => 0777)
+        args = Array.new(@db_args)
+        args << "--execute=SELECT * FROM #{table} WHERE #{field} is NULL INTO OUTFILE '#{cpath}#{table}.txt'"
+        args << @database
+        puts "mysql with: " if @debug
+        y args if @debug
+        system(@mysql, *args)
       end # each @skip_table
     end # if @skip_tables
 
