@@ -105,6 +105,9 @@ FIELDS_ALLOWING_HTML: %w(content summary notes about_me comment)
 AKISMET_KEY: '6833ee7298cf'
 AKISMET_NAME: 'http://transformativeworks.org'
 
+DEFENSIO_KEY: '521476c0edf3ac96eab7e297f6fb92c8'
+DEFENSIO_NAME: 'http://archiveofourown.org'
+
 DEFAULT_LOCALE: 'en'
 BASE_LANGUAGE: 'en-US'    # must be one of the following
 SUPPORTED_LOCALES: { en: en-US,

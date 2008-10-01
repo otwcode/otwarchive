@@ -16,12 +16,12 @@ The flash divs are intended for use to show error messages
 .flash { margin:0.5625em auto; padding:1em; }
 .flash_icon	{ float:left; width:50px; padding:0 0.5625em 0 0; border:0; }
 
-.notice	{ background:#d1e1ef; border:1px solid #c2d2df;}
+.notice, .comment_notice { background:#d1e1ef; border:1px solid #c2d2df;}
 
-.warning	{ background:#edefd1; border:1px solid #dfdfc2;}
+.warning, .comment_warning	{ background:#edefd1; border:1px solid #dfdfc2;}
 .story-meta .warning,#story-meta .warning	{ background:transparent !important; border:0 !important;}
 
-.error	{ background:#efd1d1; font-weight:bold; line-height:2; padding:.375em; border:1px solid #900;}
+.error, .comment_error { background:#efd1d1; font-weight:bold; line-height:2; padding:.375em; border:1px solid #900;}
 .error ul	{ font-weight:100; width:90%; margin:auto; }
 .error ul li	{list-style-type:disc;}
 span.error {border:0;}
