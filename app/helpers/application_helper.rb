@@ -37,19 +37,7 @@ module ApplicationHelper
 		end
 		link_to_unless_current "<span>" + text + "</span>", link
   end
-  
-  # Can be used to check ownership of items
-  def is_author_of?(item) 
-    return false unless logged_in?
-    if item.class == Work || item.class == Chapter || item.class == Series
-      item.pseuds & current_user.pseuds != []
-    elsif item.class == Bookmark
-      current_user == item.user
-    else
-      current_user.pseuds.include?(item.pseud)
-    end
-  end
-  
+    
   def byline(creation)
     pseuds = ((creation.authors ||= []) + (creation.pseuds ||= [])).uniq 
     pseuds.collect { |pseud|

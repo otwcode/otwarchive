@@ -126,14 +126,14 @@ module CommentsHelper
         commentable_id = eval(":#{commentable.class.to_s.downcase}_id")
         submit_to_remote(
           'cancel', "Cancel".t, 
-          :url => { :controller => :comments, :action => :cancel_comment, commentable_id => (commentable.id)}, 
+          :url => { :controller => :comments, :action => :cancel_comment, commentable_id => (commentable.id)}, :method => :get, 
           :href => url_for(:overwrite_params => {:add_comment => nil}, :anchor => "comments") )
       end
     else
       # canceling an edit
       submit_to_remote(
         'cancel', "Cancel".t, 
-        :url => { :controller => :comments, :action => :cancel_comment_edit, :id => (comment.id)}, 
+        :url => { :controller => :comments, :action => :cancel_comment_edit, :id => (comment.id)}, :method => :get, 
         :href => url_for(:overwrite_params => {:edit_comment_id => nil}, :anchor => "comments") )
     end
   end  
