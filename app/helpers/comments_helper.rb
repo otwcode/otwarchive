@@ -119,7 +119,7 @@ module CommentsHelper
         # canceling a reply to a comment
         submit_to_remote( 
           'cancel', "Cancel".t, 
-           :url => {:controller => :comments, :action => :cancel_comment_reply, :comment_id => commentable.id}, 
+           :url => {:controller => :comments, :action => :cancel_comment_reply, :comment_id => commentable.id}, :method => :get, 
            :href => url_for(:overwrite_params => {:add_comment_reply_id => nil}) )
       else
         # canceling a reply to a different commentable thingy
