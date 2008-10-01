@@ -57,7 +57,7 @@ CONTENT_MAX: 500000
 # number of items in various displays
 ITEMS_PER_PAGE: 50 
 NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD: 5
-COMMENT_THREAD_MAX_DEPTH: 2
+COMMENT_THREAD_MAX_DEPTH: 5
 TAGS_PER_LINE: 12
 
 # some tag and tag category names 
