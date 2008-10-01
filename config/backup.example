@@ -35,3 +35,7 @@ password:
 #  chapters: 
 #    field: work_id
 #    number: 100
+
+
+# use diffs instead of hard links
+#diffs: true

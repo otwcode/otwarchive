@@ -6,7 +6,7 @@ def backtick(cmd,*args)
 end
 
 def setup
-  @debug = false
+  @debug = ENV['DEBUG']
   @config = YAML.load_file(config_file = RAILS_ROOT + '/config/backup.yml')
   y @config if @debug
   @database = @config["database"]
@@ -23,6 +23,7 @@ def setup
   end
   @skip_tables = @config["split"] if @config["split"]
   @purge_tables = @config["days"] if @config["days"] 
+  @diffs = @config["diffs"] if @config["diffs"]
   @now = @path + '/latest/' 
   @previous = @path + '/older/' 
   @last = (DateTime.now - 1.hour ).to_s(:db).gsub(" ", '-') 
@@ -110,52 +111,77 @@ namespace :db do
     end # if @skip_tables
 
     # recover disk space
-    Find.find(@now) do |path|
-      if FileTest.file?(path)
-        new = path
-        old = path.gsub(@now, @last_path)
-        patch = old + ".patch"
-        if File.exists?(old)
-          `diff -Naur #{new} #{old} > #{patch}` unless FileUtils.identical?(old, new)
-          FileUtils.rm(old) 
+    # default is to do hard_link
+    if @diffs
+      Find.find(@now) do |path|
+        if FileTest.file?(path)
+          new = path
+          old = path.gsub(@now, @last_path)
+          patch = old + ".patch"
+          if File.exists?(old)
+            `diff -Naur #{new} #{old} > #{patch}` unless FileUtils.identical?(old, new)
+            FileUtils.rm(old) 
+          end
         end
-      end
+      end #find
+      # remove empty directories
+      cmd = "find #{@previous} -depth -type d -empty -exec rmdir {} \\;"
+      puts cmd if @debug
+      puts "#{cmd} failed" unless system(cmd)
+    else # hard_link
+      Find.find(@now) do |path|
+        if FileTest.file?(path)
+          new = path
+          old = path.gsub(@now, @last_path)
+          if File.exists?(old)
+            if FileUtils.identical?(old, new)
+              puts "hardlinking #{old} and #{new}" if @debug
+              FileUtils.ln(old, new, :force => true)
+            end
+          end
+        end
+      end #find
     end # recover
-    # remove empty directories
-    cmd = "find #{@previous} -depth -type d -empty -exec rmdir {} \\;"
-    puts cmd if @debug
-    puts "#{cmd} failed" unless system(cmd)
   end #backup
   
   desc 'prepare for restore, DATE=yyyy-mm-dd-hh:mm:ss, default latest.'
   task :restore do
     setup
-    rpath = @path + 'restore' + '/'
-    FileUtils.rm_rf rpath
-    puts "getting full backup from latest" if @debug
-    FileUtils.cp_r @now, rpath
-    last = ENV['DATE'] || DateTime.now.to_s
-    date = DateTime.parse(last)
-    if File.exists?(@previous)
-      Dir.new(@previous).each do |backup|
-        begin
-          backup_time = DateTime.parse(backup)
-          if date <= backup_time 
-            puts "patching from #{backup}" if @debug
-            Find.find(@previous + backup) do |path|
-              if FileTest.file?(path)
-                patch = path
-                file = path.gsub(@previous + backup.to_s, rpath).gsub('.patch', '')
-                cmd = "patch -s -p0 #{file} #{patch}"
-                puts cmd if @debug
-                puts "#{cmd} failed" unless system(cmd)
+    if @diffs
+      rpath = @path + 'restore' + '/'
+      FileUtils.rm_rf rpath
+      puts "getting full backup from latest" if @debug
+      FileUtils.cp_r @now, rpath
+      last = ENV['DATE'] || DateTime.now.to_s
+      date = DateTime.parse(last)
+      if File.exists?(@previous)
+        Dir.new(@previous).each do |backup|
+          begin
+            backup_time = DateTime.parse(backup)
+            if date <= backup_time 
+              puts "patching from #{backup}" if @debug
+              Find.find(@previous + backup) do |path|
+                if FileTest.file?(path)
+                  patch = path
+                  file = path.gsub(@previous + backup.to_s, rpath).gsub('.patch', '')
+                  cmd = "patch -s -p0 #{file} #{patch}"
+                  puts cmd if @debug
+                  puts "#{cmd} failed" unless system(cmd)
+                end
               end
-            end
-          end 
-        rescue
+            end 
+          rescue
+          end
         end
       end
+    else # hard links
+      if ENV['DATE']
+        rpath = @path + 'older/' + ENV['DATE'] + '/'
+      else
+        rpath = @path + 'latest/'
+      end
     end
+
     puts "restore (assuming empty database) using:"
     puts "$ mysqladmin -uroot -p create #{@database}"
     puts "$ cat #{rpath}*.sql | mysql -uroot -p #{@database}"
