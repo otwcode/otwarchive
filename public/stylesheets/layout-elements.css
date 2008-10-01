@@ -123,7 +123,7 @@ li.heading {position:relative;border:1px solid #fffef9;}
 /*series listing */
 #user-series ul	{ text-indent:2em; margin:1.125em auto; padding:0 1em;}
 #user-series ul li	{ list-style-type:disc}
-dl#series-meta { margin:0 auto 1.5em auto; font-size:0.875em; border-bottom:1px solid;}
+dl#series-meta { margin:0 auto 1.5em auto; font-size:0.875em; background:#ddd; padding:0.25em;}
 ul#series-story-list li.work ul.work li ul li {display:inline;}
 
 /* INBOX-SHOW */

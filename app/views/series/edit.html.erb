@@ -1,5 +1,9 @@
 <h1><%=h 'Editing series'.t %></h1>
-<p><%= link_to 'Delete series'.t, @series, :confirm => 'Are you sure?'.t, :method => :delete %></p>
+<ul class="navigation">
+<li><%= link_to 'Delete series'.t, @series, :confirm => 'Are you sure?'.t, :method => :delete %></li>
+<li><%= link_to 'Show'.t, @series %></li>
+<li><%= link_to 'Back'.t, series_path %></li>
+</ul>
 
 <% form_for(@series) do |f| %>
   <%= f.error_messages %>
@@ -17,6 +21,7 @@
 <% end %>
 
 <ul class="navigation">
+<li><%= link_to 'Delete series'.t, @series, :confirm => 'Are you sure?'.t, :method => :delete %></li>
 <li><%= link_to 'Show'.t, @series %></li>
 <li><%= link_to 'Back'.t, series_path %></li>
 </ul>
