@@ -95,11 +95,10 @@
 
   	<!-- Privacy dropdown (storyprivacy) -->
   	<dt class="story-restricted">
-      <%= f.label :restricted, h("Only make my story visible to registered users").t %>
+      <%= f.label :restricted, h("Only make my story visible to registered users").t %> <%= link_to_help "registered-users" -%>
     </dt>
     <dd class="story-restricted">
       <%= f.check_box :restricted %>
-      <%= link_to_help "registered-users" -%>
     </dd>
 
     <dt class="story-is_serial">
@@ -118,10 +117,9 @@
         <legend><%= 'Manage Series'.t -%></legend>
         <dl>
           <% fields_for "work[series_attributes]" do |s| %>
-            <dt><%= s.label 'series_id', h('Choose one of your existing series:').t %></dt>
+            <dt><%= s.label 'series_id', h('Choose one of your existing series:').t %>  <%= link_to_help "choosing-series" -%></dt>
             <dd>
-  			      <%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>
-              <%= link_to_help "choosing-series" -%>
+			<%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>	  
             </dd>
             <dt><%= s.label :title, h("Or add a new one:").t %></dt>
             <dd><%= s.text_field :title, :class => "storyinputfield" %></dd>

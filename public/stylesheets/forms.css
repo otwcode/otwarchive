@@ -48,7 +48,7 @@ form p.openid	{ margin-top:6em; }
 #story-form legend {position:static; margin:0; padding:0.375em; background:#fffef9; border:1px solid #bbb;}
 #story-form input, #story-form select, #story-form textarea {width:99%; margin:auto}
 #story-form fieldset { background:#fffef9; font-size:0.875em; margin: 0.5625em 0; padding:0.375em 1.5em; border:1px solid #bbb; }
-#story-form fieldset fieldset { line-height:1.5; margin: 0 0 0.5625em 0; }
+#story-form fieldset fieldset { line-height:1.5; margin: 0 auto 0.5625em auto; }
 
 #story-form #chapter-ordering input.number-field { width:5em! important;}
 #story-form fieldset.story-meta {background:#ddd; }
@@ -66,6 +66,7 @@ fieldset#associations { font-size:0.875em;}
 dt.story-parent, dd.story-parent {float:none; width:99%; margin:auto}
 dd#co-authors { margin:0 auto 0.875em auto; padding:0.375em; border:1px solid #bbb;}
 input#work_parent_url {margin:0.375em auto 0.875em auto;}
+dd#seriesmanage {clear:both; float:none;}
 #seriesmanage dt, dt.story-restricted, dt.story-is_wip, dt.story-is_serial	{ width: 50%;}
 #seriesmanage dd, dd.story-restricted, dd.story-is_wip, dd.story-is_serial	{ clear:right; margin:0; }
 p.rtf-html-switch {margin:0; padding:0 0.875em 0; text-align:right; }
