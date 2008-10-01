@@ -62,7 +62,7 @@
 			<dd><%= work.number_of_posted_chapters %>/<%= work.wip_length %></dd>
 		<%- if work.count_visible_comments > 0 -%>
 		<dt><%=h 'Comments'.t + ': '%></dt> 
-			<dd><%= link_to '%d'.t/work.count_all_comments, work_path(:id => work.id, :anchor => "comments", :show_comments => true) -%></dd>
+			<dd><%= link_to '%d'.t/work.count_visible_comments, work_path(:id => work.id, :anchor => "comments", :show_comments => true) -%></dd>
 		<%- end -%>
 		<%- if work.count_visible_bookmarks(current_user) > 0 -%>
 		<dt><%=h 'Bookmarks'.t + ': '%></dt> 
