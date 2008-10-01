@@ -8,12 +8,12 @@ class CommentObserver < ActiveRecord::Observer
     users = []
     
     # notify the commenter
-    if comment.comment_owner
+    if comment.comment_owner && notify_user_of_own_comments?(comment.comment_owner)
       users << comment.comment_owner
     end
-    if notify_user_by_email?(comment.comment_owner)
+    if notify_user_by_email?(comment.comment_owner) && notify_user_of_own_comments?(comment.comment_owner)
       UserMailer.deliver_comment_sent_notification(comment)
-    end    
+    end
     
     if comment.reply_comment?
       # send notification to the owner of the original comment if not
@@ -41,11 +41,13 @@ class CommentObserver < ActiveRecord::Observer
     end
     
     users.each do |user|
-      if notify_user_by_email?(user)
-        UserMailer.deliver_comment_notification(user, comment)
-      end
-      if notify_user_by_inbox?(user)
-        add_feedback_to_inbox(user, comment)
+      unless user == comment.comment_owner && !notify_user_of_own_comments?(user)
+        if notify_user_by_email?(user)
+          UserMailer.deliver_comment_notification(user, comment)
+        end
+        if notify_user_by_inbox?(user)
+          add_feedback_to_inbox(user, comment)
+        end
       end
     end
   end
@@ -69,6 +71,11 @@ class CommentObserver < ActiveRecord::Observer
     def notify_user_by_inbox?(user)
       user.nil? ? false :
         !(user == User.orphan_account || user.preference.comment_inbox_off?)       
+    end
+    
+    def notify_user_of_own_comments?(user)
+      user.nil? ? false :
+        !(user == User.orphan_account || user.preference.comment_copy_to_self_off?)       
     end
 
 end
