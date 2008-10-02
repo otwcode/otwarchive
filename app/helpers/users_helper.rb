@@ -36,7 +36,7 @@ module UsersHelper
   # Prints link to works page with user-appropriate number of works
   # (The total should reflect the number of works the user can actually see.)
   def print_works_link(user)
-    total = Work.owned_by(user).visible.count
+    total = user.visible_work_count
     prefix = (@user == current_user) ? "My ".t : ""
     link_to_unless_current prefix + "Works".t + " (" + total.to_s + ")", user_works_path(@user)
   end
@@ -44,7 +44,7 @@ module UsersHelper
   # Prints link to series page with user-appropriate number of series
   # There's no option to restrict the visibility of a series right now, but there probably will be in the future
   def print_series_link(user)
-    total = @user.series.count(:all)
+    total = @user.series.count
     prefix = (@user == current_user) ? "My ".t : ""
     link_to_unless_current prefix + "Series".t + " (#{total})", user_series_index_path(@user)
   end

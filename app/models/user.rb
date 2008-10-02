@@ -170,6 +170,11 @@ class User < ActiveRecord::Base
     end
   end
   
+  # Gets the number of works by this user that the current user can see
+  def visible_work_count
+    Work.owned_by(self).visible.count(:distinct => true, :select => 'works.id')    
+  end
+  
   # Gets the user account for authored objects if orphaning is enabled
   def self.orphan_account
     User.fetch_orphan_account if ArchiveConfig.ORPHANING_ALLOWED
