@@ -107,6 +107,11 @@ class ChapterTest < ActiveSupport::TestCase
     chapter = create_chapter(:title => title_with_space)
     assert_equal title, chapter.title
     assert chapter.valid?
+        
+    title = "    "
+    chapter.title = title
+    assert chapter.valid?
+    assert chapter.title.blank?
   end
 
 end

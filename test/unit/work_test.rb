@@ -324,6 +324,10 @@ class WorkTest < ActiveSupport::TestCase
     work = create_work(:title => title_with_space)
     assert_equal title, work.title
     assert work.valid?
+    
+    title = "    "
+    work.title = title
+    assert !work.valid?
   end
 
 end
