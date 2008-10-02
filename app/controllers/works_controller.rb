@@ -115,6 +115,10 @@ class WorksController < ApplicationController
     @selected_pseuds = []
     @sort_column = params[:sort_column] || 'updated_at'
     @sort_direction = params["sort_direction_for_#{@sort_column}".to_sym] || 'DESC'
+
+    unless params[:selected_pseuds].blank?
+      @selected_pseuds = Pseud.find(params[:selected_pseuds])
+    end
     
     # if the user is filtering with tags, let's see what they're giving us    
     unless params[:selected_tags].blank?
@@ -132,10 +136,6 @@ class WorksController < ApplicationController
         redirect_to :action => :index and return
       end
       
-      # filter the results
-      #unless @works.empty? || @selected_tags.empty?
-      #  @works = Work.filter(@works, @selected_tags)
-      #end
       unless @works.empty?
         @filters, @pseuds = Work.get_filters_and_pseuds(@works)      
       end
@@ -157,10 +157,6 @@ class WorksController < ApplicationController
         @user = User.find_by_login(params[:user_id])
       end
 
-      unless params[:selected_pseuds].blank?
-        @selected_pseuds = Pseud.find(params[:selected_pseuds])
-      end
-
       # Now let's build the query
       page_args = {:page => params[:page], :per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE)}
       @works, @filters, @pseuds = Work.find_with_options(:user => @user, :selected_tags => @selected_tags, 
@@ -173,10 +169,15 @@ class WorksController < ApplicationController
     
     if @works.empty? && !@selected_tags.empty?
       # build filters so we can go back
+      flash.now[:notice] = "We couldn't find any results using all those filters, sorry! You can unselect some and filter again to get more matches.".t 
       filters_array = Tag.find(@selected_tags, :select => "tags.tag_category_id as category_id, tags.id as tag_id, tags.name as tag_name")
       @filters = Work.build_filters_hash(filters_array)
     end
-    
+
+    # clean out the filters 
+    @filters.keys.each do |category|
+      @filters[category].reject! {|filter| (!@selected_tags.include?(filter[:id]) && (filter[:count].to_i < 2))}
+    end
   end
   
   def drafts

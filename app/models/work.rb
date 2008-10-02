@@ -223,6 +223,12 @@ class Work < ActiveRecord::Base
     }
   }
 
+  named_scope :written_by_id_conditions, lambda {|pseud_ids|
+    {
+      :conditions => ['pseuds.id IN (?)', pseud_ids]
+    }
+  }
+
   # returns an array, must come last
   # TODO: if you know how to turn this into a named_scope, please do!
   # find all the works that do not have a tag in the given category (i.e. no fandom, no characters etc.)
@@ -568,12 +574,22 @@ class Work < ActiveRecord::Base
     end
     
     conditions_clause = {}
-    if options[:selected_tags]
-      ids = Work.ids_only.visible.with_all_tag_ids(options[:selected_tags]).collect(&:id)
+    command = 'Work.ids_only'
+    visible = '.visible'
+    tags = '.with_all_tag_ids(options[:selected_tags])'
+    written = '.written_by_id_conditions(options[:selected_pseuds])'
+    
+    if options[:selected_tags] && options[:selected_pseuds]
+      command += written + visible + tags
+    elsif options[:selected_tags]
+      command += visible + tags
+    elsif options[:selected_pseuds]
+      command += written + visible
     else
-      ids = Work.ids_only.visible.collect(&:id)
+      command += visible
     end
-    conditions_clause = {:work_ids => ids}
+    ids = eval("#{command}").collect(&:id)
+    conditions_clause = ids.empty? ? {:work_ids => '-1'}  : {:work_ids => ids}
     
     search_options = {:conditions => conditions_clause, 
                       :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), 
@@ -642,14 +658,12 @@ class Work < ActiveRecord::Base
       rescue
         count = 0
       end
-      if count.to_i > 1
-        tmphash = {:name => filter.tag_name, :id => filter.tag_id.to_s, :count => count}
-        key = filter.category_id.to_s
-        if filters_hash[key]
-          filters_hash[key] << tmphash
-        else
-          filters_hash[key] = [tmphash]
-        end
+      tmphash = {:name => filter.tag_name, :id => filter.tag_id.to_s, :count => count}
+      key = filter.category_id.to_s
+      if filters_hash[key]
+        filters_hash[key] << tmphash
+      else
+        filters_hash[key] = [tmphash]
       end
     end
     return filters_hash
