@@ -69,11 +69,11 @@ class Work < ActiveRecord::Base
     # associations
     indexes chapters.content, :as => 'chapter_content' 
     indexes tags.name, :as => 'tag_name'
-    indexes pseuds.name, :as => 'pseud_name', :sortable => true
+    indexes pseuds.name, :as => 'pseud_name'
 
     # attributes
     has :id, :as => :work_ids
-    has created_at, updated_at, word_count 
+    has created_at, updated_at, word_count     
     has tags(:id), :as => :tag_ids
     has TITLE_TO_SORT_ON_CASE, :as => :title_for_sort, :type => :string
 
@@ -98,7 +98,7 @@ class Work < ActiveRecord::Base
                     
   VISIBLE_TO_ALL_CONDITIONS = {:posted => true, :restricted => false, :hidden_by_admin => false}
       
-  VISIBLE_TO_USER_CONDITIONS = {:posted => true, :restricted => false, :hidden_by_admin => false}
+  VISIBLE_TO_USER_CONDITIONS = {:posted => true, :hidden_by_admin => false}
   
   VISIBLE_TO_ADMIN_CONDITIONS = {:posted => true}
   
@@ -541,13 +541,13 @@ class Work < ActiveRecord::Base
   
   def self.search_with_sphinx(options)
     # visibility
-    if User.current_user && User.current_user.kind_of?(Admin)
-      where_clause = VISIBLE_TO_ADMIN_CONDITIONS
-    elsif User.current_user && User.current_user != :false
-      where_clause = VISIBLE_TO_USER_CONDITIONS
-    else
-      where_clause = VISIBLE_TO_ALL_CONDITIONS
-    end
+    # if User.current_user && User.current_user.kind_of?(Admin)
+    #   visible_clause = VISIBLE_TO_ADMIN_CONDITIONS
+    # elsif User.current_user && User.current_user != :false
+    #   visible_clause = VISIBLE_TO_USER_CONDITIONS
+    # else
+    #   visible_clause = VISIBLE_TO_ALL_CONDITIONS
+    # end
 
     # sphinx ordering must be done on attributes
     order_clause = ""    
@@ -569,11 +569,13 @@ class Work < ActiveRecord::Base
     
     conditions_clause = {}
     if options[:selected_tags]
-      ids = Work.ids_only.with_all_tag_ids(options[:selected_tags]).collect(&:id)
-      conditions_clause = {:work_ids => ids}
+      ids = Work.ids_only.visible.with_all_tag_ids(options[:selected_tags]).collect(&:id)
+    else
+      ids = Work.ids_only.visible.collect(&:id)
     end
+    conditions_clause = {:work_ids => ids}
     
-    Work.search(options[:query], :where => where_clause, :order => order_clause, 
+    Work.search(options[:query], :order => order_clause, 
                 :conditions => conditions_clause,
                 :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => options[:page])
   end
