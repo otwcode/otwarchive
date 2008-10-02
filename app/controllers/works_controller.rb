@@ -105,7 +105,7 @@ class WorksController < ApplicationController
   def index
     # what we're getting for the view
     @works = []
-    @filters = []
+    @filters = {}
     @pseuds = []
 
     # default values for our inputs
@@ -175,8 +175,10 @@ class WorksController < ApplicationController
     end
 
     # clean out the filters 
-    @filters.keys.each do |category|
-      @filters[category].reject! {|filter| (!@selected_tags.include?(filter[:id]) && (filter[:count].to_i < 2))}
+    if @filters && !@filters.empty?
+      @filters.keys.each do |category|
+        @filters[category].reject! {|filter| (!@selected_tags.include?(filter[:id]) && (filter[:count].to_i < 2))}
+      end
     end
   end
   
