@@ -558,13 +558,13 @@ class Work < ActiveRecord::Base
       order_clause = "pseud_name "
     when "word count" 
       order_clause = "word_count "
-    else
+    when "date"
       order_clause = "updated_at "
     end
     
     if !order_clause.blank?
       sort_dir_sym = "sort_direction_for_#{options[:sort_column]}".to_sym
-      order_clause += (options[sort_dir_sym] == "DESC" ? "DESC" : "ASC")
+      order_clause += (options[sort_dir_sym] == "ASC" ? "ASC" : "DESC")
     end
     
     conditions_clause = {}
@@ -575,9 +575,12 @@ class Work < ActiveRecord::Base
     end
     conditions_clause = {:work_ids => ids}
     
-    Work.search(options[:query], :order => order_clause, 
-                :conditions => conditions_clause,
-                :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => options[:page])
+    search_options = {:conditions => conditions_clause, 
+                      :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), 
+                      :page => options[:page]}
+    search_options.merge!({:order => order_clause}) if !order_clause.blank?
+    
+    Work.search(options[:query], search_options) 
   end
 
   def self.find_with_options(options = {})

@@ -4,9 +4,12 @@
 
   <dl class="navigation">
     <dt>Sort by</dt> 
-    <dd><%= sort_link 'Title', :title -%></dd>
-    <dd><%= sort_link 'Date', :date -%></dd>
-    <dd><%= sort_link 'Word Count', :word_count -%></dd>
+    <%- unless @query.blank? -%>
+    <dd><%= sort_link 'Relevance'.t %></dd>
+    <%- end -%>
+    <dd><%= sort_link 'Title'.t, :title -%></dd>
+    <dd><%= sort_link 'Date'.t, :date -%></dd>
+    <dd><%= sort_link 'Word Count'.t, :word_count -%></dd>
   </dl>
 
   <%= render :partial => 'filters' %>
