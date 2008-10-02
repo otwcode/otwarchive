@@ -53,6 +53,11 @@ class Work < ActiveRecord::Base
 
   before_update :validate_tags
 
+  TITLE_TO_SORT_ON_CASE = "case when substring_index(lower(works.title), ' ', 1) in ('a', 'an', 'the') 
+                           then lower(concat(substring(works.title, instr(works.title, ' ') + 1), ', ', substring_index(works.title, ' ', 1) )) 
+                           else lower(works.title) end"
+
+
   # Index for Thinking Sphinx
   define_index do
 
@@ -70,6 +75,7 @@ class Work < ActiveRecord::Base
     has :id, :as => :work_ids
     has created_at, updated_at, word_count 
     has tags(:id), :as => :tag_ids
+    has TITLE_TO_SORT_ON_CASE, :as => :title_for_sort, :type => :string
 
     # properties
     set_property :delta => true
@@ -95,8 +101,14 @@ class Work < ActiveRecord::Base
   VISIBLE_TO_USER_CONDITIONS = {:posted => true, :restricted => false, :hidden_by_admin => false}
   
   VISIBLE_TO_ADMIN_CONDITIONS = {:posted => true}
-
+  
   public
+
+  named_scope :ordered_by_title, lambda{ |sort_direction|
+    {
+      :order => TITLE_TO_SORT_ON_CASE + " " + "#{(sort_direction.upcase == 'DESC' ? 'DESC' : 'ASC')}"
+    }
+  }
   
   named_scope :ordered, lambda {|sort_field, sort_direction|
     {
@@ -541,7 +553,7 @@ class Work < ActiveRecord::Base
     order_clause = ""    
     case options[:sort_column]
     when "title"
-      order_clause = "title "
+      order_clause = "title_for_sort "
     when "author"
       order_clause = "pseud_name "
     when "word count" 
@@ -560,7 +572,7 @@ class Work < ActiveRecord::Base
       ids = Work.ids_only.with_all_tag_ids(options[:selected_tags]).collect(&:id)
       conditions_clause = {:work_ids => ids}
     end
-      
+    
     Work.search(options[:query], :where => where_clause, :order => order_clause, 
                 :conditions => conditions_clause,
                 :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => options[:page])
@@ -572,7 +584,8 @@ class Work < ActiveRecord::Base
     tags = '.with_all_tag_ids(options[:selected_tags])'
     written = '.written_by_conditions(options[:selected_pseuds])'
     owned = '.owned_by_conditions(options[:user])'
-    sort_and_paginate = '.ordered(options[:sort_column], options[:sort_direction]).paginate(options[:page_args])'
+    sort = options[:sort_column] == 'title' ? '.ordered_by_title(options[:sort_direction])' : '.ordered(options[:sort_column], options[:sort_direction])'
+    sort_and_paginate = sort + '.paginate(options[:page_args])'
     
     @works = []
     @pseuds = []
