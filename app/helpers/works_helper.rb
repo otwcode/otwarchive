@@ -105,9 +105,9 @@ module WorksHelper
     %w(rating category warning iswip).each do |w|
       css_class = eval("#{w}_class")
       title_string = eval("#{w}_string")
-      symbol_block << "<li class=#{css_class}><span><span title=\"#{title_string}\">"
-      symbol_block << image_tag( "#{css_class}.png", :alt => title_string, :title => title_string)
-      symbol_block << "</span></span></li>\n"
+      symbol_block << "<li class=#{css_class}>"
+      symbol_block << link_to_help('symbols-key', link = image_tag( "#{css_class}.png", :alt => title_string, :title => title_string))
+      symbol_block << "</li>\n"
     end
     symbol_block << "</ul>\n"
   end

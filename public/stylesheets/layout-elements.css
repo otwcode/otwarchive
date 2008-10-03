@@ -169,3 +169,14 @@ ul#tag-wrangler-footer { text-align: center; border-top: 1px dotted}
 * styling duplicates the story-views.css and is incorporated there*/
 #tos {margin: 1.5em; padding: 0 2.25em;}
 #tos .toc li {list-style-type: upper-roman !important; }
+
+/*SYMBOLS KEY 
+*this really ought to go somewhere else but it's here for now 02-10-08 */
+dl#symbols-key {background:#fffef9 }
+dl#symbols-key dt {width:100px;}
+dl#symbols-key h3 {margin:0;}
+dl#symbols-key dd {margin: -55px auto auto 100px;}
+#symbols-key dl {border:1px solid #ddd; padding:0.15em;margin-bottom:1.2525em;}
+#symbols-key dl dt img {height:25px ; width:25px ;}
+#symbols-key dl dt{ width: 25px; }
+#symbols-key dl dd {margin: -1.2525em auto auto 35px}
