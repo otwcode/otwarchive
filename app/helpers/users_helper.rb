@@ -51,7 +51,7 @@ module UsersHelper
   
   def print_drafts_link(user)
     total = @user.unposted_works.size
-    link_to_unless_current "My Drafts".t + "(#{total})", drafts_user_works_path(@user)
+    link_to_unless_current "My Drafts".t + " (#{total})", drafts_user_works_path(@user)
   end
   
   def user_invitations(user)
