@@ -53,6 +53,8 @@ em, cite, i	{ font-style: oblique; }
 cite em, em cite, cite i, i cite, i em, em i, em em, i i, cite cite	{ font-style: normal; }
 em cite, i cite	{ text-decoration: underline; }
 abbr, acronym	{ font-variant: small-caps; cursor: help; }
+del, strike {text-decoration:strikethrough;}
+ins {text-decoration: underline;}
 
 /* TABLES AND LISTS */
 table	{ margin:auto; padding: 0.375em; }
