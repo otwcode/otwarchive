@@ -9,10 +9,10 @@ class ChapterTest < ActiveSupport::TestCase
     end
     should_belong_to :work
     should_require_attributes :content
-    should_ensure_length_in_range :content, (1..500000), :short_message => "can't be blank"
-    should_ensure_length_in_range :title, (0..ArchiveConfig.TITLE_MAX)
-    should_ensure_length_in_range :summary, (0..ArchiveConfig.SUMMARY_MAX)
-    should_ensure_length_in_range :notes, (0..ArchiveConfig.NOTES_MAX)
+    should_ensure_length_in_range :content, (1..500000), :short_message => "can't be blank", :long_message => /cannot be more/
+    should_ensure_length_in_range :title, (0..ArchiveConfig.TITLE_MAX), :long_message => /must be less/
+    should_ensure_length_in_range :summary, (0..ArchiveConfig.SUMMARY_MAX), :long_message => /must be less/
+    should_ensure_length_in_range :notes, (0..ArchiveConfig.NOTES_MAX), :long_message => /must be less/
 
     should "not able to remove the only author" do
         @chapter1.pseuds -= @work.pseuds

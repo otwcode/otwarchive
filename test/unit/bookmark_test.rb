@@ -8,7 +8,7 @@ class BookmarkTest < ActiveSupport::TestCase
     should_belong_to :bookmarkable
     should_belong_to :user
     should_have_many :taggings
-    should_ensure_length_in_range :notes, (0..2500)
+    should_ensure_length_in_range :notes, (0..2500), :long_message => /must be less/
   end
   context "A public bookmark on a posted work" do
     setup do

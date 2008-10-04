@@ -10,10 +10,10 @@ class AdminTest < ActiveSupport::TestCase
     should_require_attributes :email, :message => "Please enter an email address"
     should_require_attributes :password, :message => "Please enter a password"
     should_require_attributes :password_confirmation, :message => /again/
-    should_ensure_length_in_range :password, (6..40)
-    should_ensure_length_in_range :login, (3..40)
-    should_ensure_length_in_range :email, (3..100)
+    should_ensure_length_in_range :password, (6..40), :short_message => /too short/, :long_message => /too long/
+    should_ensure_length_in_range :login, (3..40), :short_message => /too short/, :long_message => /too long/
+    should_ensure_length_in_range :email, (3..100), :short_message => /too short/, :long_message => /too long/
     should_require_unique_attributes :email, :message => /Sorry/
-    should_require_unique_attributes :login
+    should_require_unique_attributes :login, :message => /already taken/
   end
 end
