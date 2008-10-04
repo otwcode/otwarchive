@@ -40,7 +40,7 @@ class Work < ActiveRecord::Base
   attr_accessor :authors
   attr_accessor :invalid_pseuds
   attr_accessor :ambiguous_pseuds
-  attr_accessor :new_parent
+  attr_accessor :new_parent, :url_for_parent
   attr_accessor :new_tags
   attr_accessor :tags_to_tag_with
 
@@ -343,10 +343,11 @@ class Work < ActiveRecord::Base
   
   # Virtual attribute for parent work, via related_works
   def parent_url
-    self.new_parent
+    self.url_for_parent
   end
   
   def parent_url=(url)
+    self.url_for_parent = url
     unless url.blank?
       if url.include?(ArchiveConfig.APP_URL)
         id = url.match(/works\/\d+/).to_a.first
