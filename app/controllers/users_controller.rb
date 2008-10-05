@@ -64,12 +64,14 @@ class UsersController < ApplicationController
       redirect_to '/'
     else
       @user = User.new(params[:user]) 
-      begin @user.save
+      unless @user.identity_url.blank?
+        # normalize OpenID url before validating
+        @user.identity_url = OpenIdAuthentication.normalize_url(@user.identity_url)
+      end
+      if @user.save
         flash[:notice] = 'during testing you can activate via <a href=' + activate_path(@user.activation_code) + '>your activation url</a>.' if ENV['RAILS_ENV'] == 'development'
-  
         render :partial => "confirmation", :layout => "application"
-      rescue
-        flash[:error] = "Duplicate OpenID URL.".t
+      else
         render :action => "new"
       end
     end

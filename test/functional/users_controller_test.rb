@@ -12,6 +12,36 @@ class UsersControllerTest < ActionController::TestCase
       should_not_set_the_flash
       should_respond_with :success
     end
+    context "on POST to :create without age_over13" do
+      setup do
+        @login = String.random
+        password = String.random
+        put :create, :locale => 'en', :user=>{"age_over_13" => "0",
+                                              "terms_of_service" => "1",
+                                              "login" => @login,
+                                              "identity_url"=>"",
+                                              "email" => "random_email",
+                                              "password" => password,
+                                              "password_confirmation" => password}
+      end
+      should_render_template :new
+      #should_set_the_flash_to /you have to be over 13/i
+    end
+    context "on POST to :create without terms_of_service" do
+      setup do
+        @login = String.random
+        password = String.random
+        put :create, :locale => 'en', :user=>{"age_over_13" => "1",
+                                              "terms_of_service" => "0",
+                                              "login" => @login,
+                                              "identity_url"=>"",
+                                              "email" => "random_email",
+                                              "password" => password,
+                                              "password_confirmation" => password}
+      end
+      should_render_template :new
+      #should_set_the_flash_to /you need to accept the Terms of Service/
+    end
     context "on POST to :create with password" do
       setup do
         @login = String.random
@@ -50,6 +80,51 @@ class UsersControllerTest < ActionController::TestCase
         assert User.find_by_login(@login)
       end
     end
+    context "on POST to :create with open id that was previously used" do
+      setup do
+        password = String.random
+        identity_url = random_url
+        put :create, :locale => 'en', :user=>{"age_over_13" => "1",
+                                              "terms_of_service" => "1",
+                                              "login" => String.random,
+                                              "identity_url"=> identity_url,
+                                              "email" => random_email,
+                                              "password" => "",
+                                              "password_confirmation" => ""}
+        put :create, :locale => 'en', :user=>{"age_over_13" => "1",
+                                              "terms_of_service" => "1",
+                                              "login" => String.random,
+                                              "identity_url"=> identity_url,
+                                              "email" => random_email,
+                                              "password" => "",
+                                              "password_confirmation" => ""}
+      end
+      #should_set_the_flash_to /Duplicate OpenID URL/
+      should_render_template :new                                      
+    end
+    context "on POST to :create with open id url that is semantically equivalent to one already used" do
+      setup do
+        url = random_url
+        put :create, :locale => 'en', :user=>{"age_over_13" => "1",
+                                              "terms_of_service" => "1",
+                                              "login" => String.random,
+                                              "identity_url"=> url + '/',
+                                              "email" => random_email,
+                                              "password" => "",
+                                              "password_confirmation" => ""}
+        put :create, :locale => 'en', :user=>{"age_over_13" => "1",
+                                              "terms_of_service" => "1",
+                                              "login" => String.random,
+                                              "identity_url"=> url + '/',
+                                              "email" => random_email,
+                                              "password" => "",
+                                              "password_confirmation" => ""}
+      end
+      #should_set_the_flash_to /Duplicate OpenID URL/
+      should_render_template :new
+    end
+
+      
     context "on POST to :edit self" do
       setup do
         assert @user = create_user
