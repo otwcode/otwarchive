@@ -188,13 +188,15 @@ LiveValidation.prototype = {
   },
     
   /**
-   * sets the focused flag to false when field loses focus 
+   * sets the focused flag to false when field loses focus  and triggers TinyMCE to save content into field
    */
   doOnBlur: function(){
-    this.focused = false;
+	tinyMCE.triggerSave();
+	this.focused = false;
     this.validate();
   },
-    
+  
+   
   /**
    * sets the focused flag to true when field gains focus and removes old message and field class 
    */
@@ -448,8 +450,10 @@ LiveValidationForm.prototype = {
     // need to capture onsubmit in this way rather than Event.observe because Rails helpers add events inline
 	// and must ensure that the validation is run before any previous submit events 
 	//(hence not using Event.observe, as inline events appear to be captured before prototype events)
+	// tinyMCE save needs to be triggered here so live validation recognises content in the rich text editor
 	this.oldOnSubmit = this.element.onsubmit || function(){};
 	this.element.onsubmit = function(e){
+		tinyMCE.triggerSave(this.fields);
 	  var ret = (LiveValidation.massValidate(this.fields)) ? this.oldOnSubmit.call(this.element, e) !== false : false;
 	  if (!ret) Event.stop(e)
     }.bindAsEventListener(this);
