@@ -47,10 +47,11 @@
   </li>
   <%- end -%>
   <%- if is_author_of?(bookmark) -%>
-  <li class="navigation">
-    <ul>
-		<li class="navigation"><%= link_to "Edit".t, edit_bookmark_path(bookmark) %></li>
-		<li class="navigation"><%= link_to "Delete".t, bookmark, :confirm => 'Are you sure?'.t, :method => :delete %></li>
+  <li>
+  	<!-- Temporarily changed classes to make 'edit' link show up, needs front-end attention, 09-10-08 -->
+    <ul class="navigation bookmark">
+		<li><%= link_to "Edit".t, edit_bookmark_path(bookmark) %></li>
+		<li><%= link_to "Delete".t, bookmark, :confirm => 'Are you sure?'.t, :method => :delete %></li>
 	</ul>
  <% end -%>
 </li> 

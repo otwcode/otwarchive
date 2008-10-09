@@ -145,6 +145,8 @@ ul#series-story-list li.work ul.work li ul li {display:inline;}
 
 /*BOOKMARKS-INDEX BOOKMARKS */
 .bookmark p.attribution {text-align:right;}
+/*Temporary fix to make edit link show up on bookmarks, 09-10-08 (Cal)*/
+.bookmark ul.navigation {text-align:left;}
 
 /*TAGS-INDEX */
 .tags-index ul { text-align: center; margin: 2em auto; }
