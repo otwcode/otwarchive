@@ -1,18 +1,21 @@
 <h2><%=h 'My Inbox'.t %> (<%= @unread.length %> <%= "unread".t%>)</h2>
+
 <%= flash_div :comment_error, :comment_notice -%>
+
 <%- unless @unread.blank? && @read.blank? -%>
-  <%- form_tag "/#{@locale}/users/#{@user.login}/inbox", :method => :put do -%>
+  <%- form_tag user_inbox_path(@user), :method => :put, :id => 'inbox-form' do -%>
     <%- unless @unread.blank? -%>
       <h3><%= "Unread comments".t %></h3>
       <%- for comment in @unread -%>
         <!-- START of single comment -->
           <div class="comment unread" id="comment_<%= comment.id -%>">
-            <%= check_box_tag "comments[#{comment.id}]", "checked" %>
-            <%= commentable_owner_link(comment) %> <%=h 'to'.t %> <%= commentable_description_link(comment) %> 
-            <%= distance_of_time_in_words_to_now(comment.created_at) %> <%= "ago".t %>
-            <div id="add_comment_reply_link_<%= comment.id -%>"><%= add_comment_reply_link comment -%></div>
+            <p>
+              <%= check_box_tag "comments[#{comment.id}]", "checked" %>
+              <%= commentable_owner_link(comment) %> <%=h 'to'.t %> <%= commentable_description_link(comment) %> 
+              <%= distance_of_time_in_words_to_now(comment.created_at) %>
+            </p>
             <%= sanitize_and_format_for_display comment.content %>
-            <div id="add_comment_reply_placeholder_<%= comment.id -%>" style="display: none;"></div>
+            <div id="add_comment_reply_link_<%= comment.id -%>"><%= inbox_reply_link(comment) %></div>
           </div>
         <!-- END of single comment -->
       <%- end -%>
@@ -22,9 +25,15 @@
       <%- for comment in @read -%>
         <!-- START of single comment -->
           <div class="comment read" id="comment_<%= comment.id -%>">
-            <%= check_box_tag "comments[#{comment.id}]", "checked" %>
-            <%= commentable_owner_link(comment) %> <%=h 'to'.t %> <%= commentable_description_link(comment) %> 
-            <%= distance_of_time_in_words_to_now(comment.created_at) %> <%= "ago".t %>
+            <p>
+              <%= check_box_tag "comments[#{comment.id}]", "checked" %>
+              <%= commentable_owner_link(comment) %> <%=h 'to'.t %> <%= commentable_description_link(comment) %> 
+              <%= distance_of_time_in_words_to_now(comment.created_at) %>
+            </p>
+            <div id="full_read_comment_<%= comment.id -%>" style="display:none;">
+              <%= sanitize_and_format_for_display comment.content %>
+              <div id="add_comment_reply_link_<%= comment.id -%>"><%= inbox_reply_link(comment) %></div>
+            </div>
           </div>
         <!-- END of single comment -->
       <%- end -%>
@@ -34,6 +43,6 @@
     <%= submit_tag 'unread'.t %>
     <%= submit_tag 'spam'.t %>
     <%= submit_tag 'delete comments from story'.t, :confirm => "Are you sure?".t %>
-    <!-- comming soon <%= submit_tag 'mass reply'.t %> -->
+    <!-- coming soon <%= submit_tag 'mass reply'.t %> -->
   <%- end -%>
 <%- end -%>

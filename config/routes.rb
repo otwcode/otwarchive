@@ -38,7 +38,7 @@ ActionController::Routing::Routes.draw do |map|
     user.resources :pseuds, :has_many => :works
     user.resources :preferences
     user.resource :profile, :controller => 'profile'
-    user.resource :inbox, :controller => 'inbox'
+    user.resource :inbox, :controller => 'inbox', :collection => {:reply => :get, :cancel_reply => :get}
     user.resources :bookmarks
     user.resources :works, :collection => {:drafts => :get}
     user.resources :series, :member => {:manage => :get}, :has_many => :serial_works

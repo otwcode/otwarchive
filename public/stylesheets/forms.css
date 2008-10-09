@@ -107,6 +107,10 @@ form.story-filters	{ background:#ddd; font-size:0.875em; width:12.25em; float:ri
 /*COMMENTS */
 #comment_form_div dt	{ width:6em; }
 textarea#comment_content	{ width:32em !important; height:11em !important}
-#comment_form_div p.submit		{ width:32em}
+#comment_form_div p.submit		{ width:32em}     
+
+/* INBOX */
+.inbox-show form p { clear: right; }
+#inbox-form .comment { margin-bottom: 2em;}
 
 /* GLOBALIZE (in footer) you can find this in globalize.css*/

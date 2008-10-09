@@ -10,6 +10,11 @@ class InboxController < ApplicationController
     @unread = @user.unread_comments
     @read = @user.read_comments
   end
+  
+  def reply
+    @commentable = Comment.find(params[:comment_id]) 
+    @comment = Comment.new
+  end
 
   def update
     @selected_comment_ids = params[:comments].keys if params[:comments]
