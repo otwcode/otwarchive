@@ -8,24 +8,31 @@ form dd { float: left; }
 
 
 /* SIGN IN BOX */
-#signin		{ float:right;width:16.25em; }
-#signin dl	{ float:left; }
+#signin		{ float:right; }
+#signin dl	{ float:left;}
 #signin dt	{ font-size:0.625em; width:4.875em; margin:0.25em 0 0.125em; padding:0.25em 0 0 .125em;}
 #signin p.footnote	{ font-size:0.5625em; float:left; clear:left; margin:0 0.5625em 0 4.875em; padding:0.125em 0 0 .125em;}
 #signin input#remember_me	{ margin:0.125em 0.125em 0.125em 0; vertical-align:middle; }
-#signin p.submit	{ width:5em; float:right; margin:-3.5em 0 0 0; font-size:0.625em; }
 #signin img.openid	{ vertical-align:top; }
 #signin dd { position:relative; }
 #signin dd a img { position:absolute; right:-0.875em; top:0 }
 
 /* sign in box when present in #header #login-block */
-#login-block #signin { width:121%; }
+#login-block #signin { width:255px;}
 #login-block #signin { font-family:Candara,Corbel,Arial,Tahoma,sans-serif; }
 #login-block #signin a img { right:-1.75em;}
-#login-block #signin p.submit	{ text-align:left; width:7.5em; margin:-3.5em 0 0 0; }
+#login-block #signin p.submit	{ text-align:left; margin:-3.5em 0 0 0; }
+#header input { background:#fff; border:1px groove; }
+#header input textarea {width: 125px;}
+#header input.button, #header .submit input{ width:50px;}
+#header p.submit input {float:right; margin-top:-3.6em;}
+#header input:hover{background:#ddd;}
 
 /* SEARCH */
-#search p { font-size: 0.75em; float: left; clear: both; padding: 0; margin: 0; }
+#search {float:right;}
+#search p { font-size: 0.75em; float: left; clear: both; padding: 0; margin: 0; position:relative;}
+#search input.button {margin-left:5px;}
+
 /*ADMIN */
 admin_session-new dt { width:6em; }
 /*REPORT ABUSE */
@@ -44,40 +51,40 @@ form p.openid	{ margin-top:6em; }
 #main.users-new form dt {width:100%; float:none;}
 
 /* POST WORK */
-/*story-meta  and story-show rules in story-views.css */
-#story-form legend {position:static; margin:0; padding:0.375em; background:#fffef9; border:1px solid #bbb;}
-#story-form input, #story-form select, #story-form textarea {width:99%; margin:auto}
-#story-form fieldset { background:#fffef9; font-size:0.875em; margin: 0.5625em 0; padding:0.375em 1.5em; border:1px solid #bbb; }
-#story-form fieldset fieldset { line-height:1.5; margin: 0 auto 0.5625em auto; }
+/*work-meta  and work-show rules in work-views.css */
+#work-form legend {position:static; margin:0; padding:0.375em; background:#fffef9; border:1px solid #bbb;}
+#work-form input, #work-formselect, #work-formtextarea {width:99%; margin:auto}
+#work-form fieldset { background:#fffef9; font-size:0.875em; margin: 0.5625em 0; padding:0.375em 1.5em; border:1px solid #bbb; }
+#work-form fieldset fieldset { line-height:1.5; margin: 0 auto 0.5625em auto; }
 
-#story-form #chapter-ordering input.number-field { width:5em! important;}
-#story-form fieldset.story-meta {background:#ddd; }
-#story-form .story-meta dt{ float:left; clear:left; width:9em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
-#story-form .story-meta dd{ float: left; margin:0; padding:0; width:60%}
+#work-form #chapter-ordering input.number-field { width:5em! important;}
+#work-form fieldset.work-meta {background:#ddd; }
+#work-form .work-meta dt{ float:left; clear:left; width:9em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
+#work-form .work-meta dd{ float: left; margin:0; padding:0; width:60%}
 
-#story-preface textarea {height:10em;}
-#story-form #story-preface dt {float:none;}
-#story-form #story-preface dd { margin-bottom:0.5625em;float:none;}
+#work-preface textarea {height:10em;}
+#work-form #preface dt {float:none;}
+#work-form #preface dd { margin-bottom:0.5625em;float:none;}
 
-dd.story-title input, input#chapter_title { width:80%; }
-#story-form #story-preface { border:0; }
+dd.work-title input, input#chapter_title { width:80%; }
+#work-form #preface { border:0; }
 
 fieldset#associations { font-size:0.875em;}
-dt.story-parent, dd.story-parent {float:none; width:99%; margin:auto}
+dt.work-parent, dd.work-parent {float:none; width:99%; margin:auto}
 dd#co-authors { margin:0 auto 0.875em auto; padding:0.375em; border:1px solid #bbb;}
 input#work_parent_url {margin:0.375em auto 0.875em auto;}
 dd#seriesmanage {clear:both; float:none;}
-#seriesmanage dt, dt.story-restricted, dt.story-is_wip, dt.story-is_serial	{ width: 50%;}
-#seriesmanage dd, dd.story-restricted, dd.story-is_wip, dd.story-is_serial	{ clear:right; margin:0; }
+#seriesmanage dt, dt.work-restricted, dt.work-is_wip, dt.work-is_serial	{ width: 50%;}
+#seriesmanage dd, dd.work-restricted, dd.work-is_wip, dd.work-is_serial	{ clear:right; margin:0; }
 p.rtf-html-switch {margin:0; padding:0 0.875em 0; text-align:right; }
 .rtf-html-switch span {background:#f0f0ee; padding:0.5625em 0.5625em 0 0.5625em; border:1px solid #ddd;}
-#story-form textarea#content { height:31.25em;  margin:-0.625em auto auto;}
+#work-form textarea#content { height:31.25em;  margin:-0.625em auto auto;}
 
-#story-form p.submit input { font-size:1em; width: 4.75em; text-align:center}
+#work-form p.submit input { font-size:1em; width: 4.75em; text-align:center}
 
 /*EDIT CHAPTERS */ 
 #main.chapters-edit dt {width:100%;float:none;}
-#main.chapters-new #story-form p input {width:auto}
+#main.chapters-new #work-formp input {width:auto}
 #main.chapters-new.chapter_title input { width:80%; }
 #main.chapters-new dt, #main.chapters-new dd {clear:both; width:100%;}
 #main.chapters-new dd textarea {width:99%;margin:auto;}
@@ -97,12 +104,12 @@ form.edit_preference ul { margin:0.5625em auto; padding:1.5em 0; }
 form#new_pseud {position:absolute;}
 
 /*WORKS-INDEX -filters*/
-form.story-filters	{ background:#ddd; font-size:0.875em; width:12.25em; float:right;  padding:0.75em 0.5625em;}
-.story-filters dt	{ font-weight: 600; text-transform: capitalize; margin:0.5625em auto 0; padding:0; border-bottom:1px solid #fffef9; }
-.story-filters dd {padding:0;}
-.story-filters dt:hover	{ color:#fffef9; background:#777; } 
-.story-filters span {font-size: 0.75em; font-weight: 500;}
-.story-filters p.submit {font-size:0.75em;}
+form.work-filters	{ background:#ddd; font-size:0.875em; width:12.25em; float:right;  padding:0.75em 0.5625em;}
+.filters dt	{ font-weight: 600; text-transform: capitalize; margin:0.5625em auto 0; padding:0; border-bottom:1px solid #fffef9; }
+.filters dd {padding:0;}
+.filters dt:hover	{ color:#fffef9; background:#777; } 
+.filters span {font-size: 0.75em; font-weight: 500;}
+.filters p.submit {font-size:0.75em;}
 
 /*COMMENTS */
 #comment_form_div dt	{ width:6em; }

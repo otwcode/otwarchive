@@ -65,7 +65,7 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 /*HOME PAGE (front page) currently living in home.css */
 
 /* USER HOME: USERS SHOW*/
-#main.users-show ul.story-list { margin: auto; }
+#main.users-show ul.work-list { margin: auto; }
 .user-module h2 { background: #222; color: #fffef9; margin: 2.25em auto 0 ; padding: 0.125em; border-bottom: 4px double #fffef9;}
 
 #user-header { position: relative; }
@@ -82,25 +82,25 @@ dl#user-data dt {font-weight: 900; width: 9em; float:left; clear:left; margin:0.
 #user-data dd	{ clear:right; margin:0 0 0 9em; padding: 0.25em 0 0.125em 0; border-bottom:1px solid #ddd; }
 #user-profile ul.navigation { text-align:right; }
 
-/* DASHBOARD: READING HISTORY */
-#main.readings-index li.story ul { margin: 0.875em auto  !important;}
-#main.readings-index li.story { font-size:smaller;}
-#main.readings-index li.story-desc p { font-size:1em;}
+/* DASHBOARD: READING HIwork */
+#main.readings-index li.work ul { margin: 0.875em auto  !important;}
+#main.readings-index li.work { font-size:smaller;}
+#main.readings-index li.work-desc p { font-size:1em;}
 
 /* DASHBOARD: PREFERENCES */
 /* preferences form rules are in forms.css */
 /*PSEUDS*/
 #main.pseuds-index table ul.navigation { border-bottom:0; }
-#main.pseuds-new.sidebar ul.navigation, #main.pseuds-show.sidebar ul.navigation {margin-top: 13.75em;}
+#main.pseuds-new.sidebar ul.navigation, #main.pseuds-show.sidebar ul.navigation { margin-top: 13.75em;}
 #main.pseuds-show.sidebar dl { position:absolute; }
 #main.pseuds-show.sidebar dt { font-weight:600; float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
 #main.pseuds-show.sidebar dd { float: left; }
 
 /* WORKS-INDEX */
-/*story filters rules are in forms.css */
-/*works blurb : shows on works, reading history, series, should be spoofed on bookmarks and users-show*/
+/*work filters rules are in forms.css */
+/*works blurb : shows on works, reading hiwork, series, should be spoofed on bookmarks and users-show*/
 li.work ul.work {position: relative; margin: 0 13.5em 0.5625em auto;padding-right:0.3775em;}
-#user-page li.work ul.work, #main.series-index  li.work ul.work, #series-story-list li.work ul.work{ margin-right: 0; }
+#user-page li.work ul.work, #main.series-index  li.work ul.work, #series-work-list li.work ul.work{ margin-right: 0; }
 
 ul.work {position:relative; border-bottom:1px solid #ddd; }
 ul.work ul li{ display:inline;}
@@ -109,7 +109,7 @@ li.heading {position:relative;border:1px solid #fffef9;}
 .work ul.required-tags li img {width:25px; height:25px;}
 .work ul.required-tags li {padding:0;margin:0; width:25px; height:25px;}
 .work h3 {margin-right:4.5em;}
-.work h3, .work h3 a, .work h3 img {color:#900; vertical-align:bottom;}
+.work h3, .work h3 a:link, .work h3 img {color:#900; vertical-align:bottom;}
 
 .work p.update {font-size:0.875em; text-align:right; top:-0.875em; right:0; position:absolute; }
 .work .tags dt{font-weight:bold;}
@@ -124,7 +124,7 @@ li.heading {position:relative;border:1px solid #fffef9;}
 #user-series ul	{ text-indent:2em; margin:1.125em auto; padding:0 1em;}
 #user-series ul li	{ list-style-type:disc}
 dl#series-meta { margin:0 auto 1.5em auto; font-size:0.875em; background:#ddd; padding:0.25em;}
-ul#series-story-list li.work ul.work li ul li {display:inline;}
+ul#series-work-list li.work ul.work li ul li {display:inline;}
 
 /* INBOX-SHOW */
 .sidebar .comment { clear:none;}
@@ -168,7 +168,7 @@ ul#tag-wrangler-footer { text-align: center; border-top: 1px dotted}
 #tag-wrangler-footer li { display: inline; padding: 0 0.5625em 0 0}
 
 /*ToS and any other long text pages.
-* styling duplicates the story-views.css and is incorporated there*/
+* styling duplicates the work-views.css and is incorporated there*/
 #tos {margin: 1.5em; padding: 0 2.25em;}
 #tos .toc li {list-style-type: upper-roman !important; }
 

@@ -1,14 +1,14 @@
 <%- unless @filters.blank? && (@pseuds.size < 1 || (@user && @pseuds.size < 2)) -%>
-<%- form_tag(works_path, :class => 'story-filters', :method => :get) do -%>
+<%- form_tag(works_path, :class => 'work-filters', :method => :get) do -%>
   <%- field_set_tag 'Filter these results: '.t do -%>
- 		<dl class="story-filters">
+ 		<dl class="filters">
 			<%- unless (@pseuds.size < 1 || (@user && @pseuds.size < 2)) -%>
         <dt onclick='toggleFilters("filter-pseuds")'>
           <span id="filter-pseuds_closed" style="display: none;"><%= image_tag 'arrow-right.gif', :alt => "" -%></span>
           <span id="filter-pseuds_open"><%= image_tag 'arrow-down.gif', :alt => "" -%></span>              
           Author
         </dt>
-        <dd id="filter-pseuds" class="filter-tags">
+        <dd id="filter-pseuds" class="tags">
           <ul>
             <%- for pseud in @pseuds -%>
               <%- if pseud.works.count > 0 -%>
@@ -29,7 +29,7 @@
             <span id="tag_category_<%= tag_category.id %>_open"><%= image_tag 'arrow-down.gif', :alt => ""-%></span>              
             <%= tag_category.display_name %> 
           </dt>
-          <dd id="tag_category_<%= tag_category.id %>" class="filter-tags">
+          <dd id="tag_category_<%= tag_category.id %>" class="tags">
             <ul>              
               <%- @filters[tag_category.id.to_s].each do |tag_info| -%>
                 <li>

@@ -1,6 +1,6 @@
 <h1><%=h 'Orphaned Stories'.t %></h1>
 
-<ul class="story-list">
+<ul class="work-list">
   <% for work in @works %>
 	<%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
   <% end %>

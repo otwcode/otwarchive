@@ -37,26 +37,26 @@
     <%- end -%>
   </div>
 
-  <div id="story-preface">
-	<h2 class="story-title">
+  <div id="preface">
+	<h2 class="title">
     <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)".t) %><% end %>
     <% if @work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)".t) %><% end %>
     <%=sanitize_title_for_display @work.title %>
 	<!--sup sub ins del code q abbr acronym br dfn cite-->
   </h2>
-  <h3 class="story-author">
+  <h3 class="byline">
    <%= byline(@work) -%>
   </h3>
   
   <%- unless @work.summary.blank? -%>
-  <blockquote class="story-summary">
+  <blockquote class="summary">
     <h3>Summary: </h3>
     <%=sanitize_and_format_for_display @work.summary %>
   </blockquote>
   <%- end -%>
   
   <%- unless @work.notes.blank? -%>
-  <blockquote class="story-notes">
+  <blockquote class="notes">
     <h3>Notes: </h3>
     <%=sanitize_and_format_for_display @work.notes %>
   </blockquote>

@@ -1,5 +1,5 @@
 <!-- This partial requires local variable 'chapter' -->
-<div class="story-show">
+<div class="work-show">
 <div class="chapter-title">	
 		<h3>
 		<%= chapter_link(chapter) %>
@@ -29,14 +29,14 @@
 <!-- we want to hide this information by default if javascript is available -->
 <%- if @work.number_of_posted_chapters > 1 -%>
   <%- unless chapter.summary.blank? -%>
-  <blockquote class="story-summary">
+  <blockquote class="summary">
   	<h3><%=h 'Summary:'.t %></h3>
 	  <%=sanitize_and_format_for_display chapter.summary -%>
   </blockquote>
   <%- end -%>
   
   <%- unless chapter.notes.blank? -%>
-  <blockquote class="story-notes">
+  <blockquote class="notes">
     <h3><%=h 'Notes:'.t %></h3>
 	  <%=sanitize_and_format_for_display chapter.notes -%>
   </blockquote>

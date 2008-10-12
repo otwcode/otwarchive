@@ -41,7 +41,7 @@ module ApplicationHelper
   def byline(creation)
     pseuds = ((creation.authors ||= []) + (creation.pseuds ||= [])).uniq 
     pseuds.collect { |pseud|
-      link_to pseud.name, user_path(pseud.user), :class => "login story-author"
+      link_to pseud.name, user_path(pseud.user), :class => "login author"
     }.join(', ')
   end
 

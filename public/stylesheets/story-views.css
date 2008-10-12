@@ -1,58 +1,58 @@
-/* STORY VIEWS: shows on works (text) -chapter, series, post-new & preview-edit (excluding forms rules), tos and faq*/
+/* work VIEWS: shows on works (text) -chapter, series, post-new & preview-edit (excluding forms rules), tos and faq*/
 /*
-set story styles
+set work styles
 */
-.story-show { font-family:Candara, Corbel, Geneva, Verdana, Helvetica, Arial, sans-serif; padding:1.5em 3.5em;}
-.story-show a, .story-show a:link { color:#111; text-decoration:none; border-bottom:1px dotted #777; padding-right:0.125em}
-.story-show .navigation a, .story-show .navigation a:link {border:0;text-decoration:underline;}
-.story-show a:hover { border-bottom:0}
-.story-show a:visited { text-decoration:underline}
+.work-show { font-family:Candara, Corbel, Geneva, Verdana, Helvetica, Arial, sans-serif; padding:1.5em 3.5em;}
+.work-show a, .work-show a:link { color:#111; text-decoration:none; border-bottom:1px dotted #777; padding-right:0.125em}
+.work-show .navigation a, .work-show .navigation a:link {border:0;text-decoration:underline;}
+.work-show a:hover { border-bottom:0}
+.work-show a:visited { text-decoration:underline}
 
-.story-show dl	{ font-size:1em; margin:1.5em 0; border-bottom:0.25em double #777; }
-.story-show dt	{ font-weight:bold; }
-.story-show dd	{ line-height:1.5; font-size:0.875em; text-indent:3em; margin-top:1.25em; margin-bottom:1.25em; }
-.story-show dd p	{ text-indent:0; margin:0; padding:0; }
-.story-show ul	{ text-indent:2em; margin:1.125em auto; padding:0 1em; }
-.story-show ul li	{ list-style-type:disc; margin:0.75em 0;}
-.story-show ol	{ text-indent:1.5em; margin:1.125em auto; padding:0 1.5em; }
-.story-show ol li	{ list-style-type:decimal; margin:0.75em 0;}
-.story-show ol li ol li	{ list-style-type: lower-alpha;}
-.story-show ol li ol li ol li	{ list-style-type: lower-roman;}
-.story-show li	{ font-weight:normal; }
-#ibox_content dl.story-show ul li { list-style-type: none !important; margin:0; text-indent:0;}
-#ibox_content dl.story-show dt {list-style-type:disc;}
+.work-show dl	{ font-size:1em; margin:1.5em 0; border-bottom:0.25em double #777; }
+.work-show dt	{ font-weight:bold; }
+.work-show dd	{ line-height:1.5; font-size:0.875em; text-indent:3em; margin-top:1.25em; margin-bottom:1.25em; }
+.work-show dd p	{ text-indent:0; margin:0; padding:0; }
+.work-show ul	{ text-indent:2em; margin:1.125em auto; padding:0 1em; }
+.work-show ul li	{ list-style-type:disc; margin:0.75em 0;}
+.work-show ol	{ text-indent:1.5em; margin:1.125em auto; padding:0 1.5em; }
+.work-show ol li	{ list-style-type:decimal; margin:0.75em 0;}
+.work-show ol li ol li	{ list-style-type: lower-alpha;}
+.work-show ol li ol li ol li	{ list-style-type: lower-roman;}
+.work-show li	{ font-weight:normal; }
+#ibox_content dl.work-show ul li { list-style-type: none !important; margin:0; text-indent:0;}
+#ibox_content dl.work-show dt {list-style-type:disc;}
 
 /*headings */
-.story-show h1	{ font-family:Cambria, Constantia, Palatino, Georgia, serif; text-align:center; }
-.story-show h2	{ color:#333; font-variant:normal; text-align:left; text-transform:none; margin:1.5em 0;}
-.story-show h3	{ background:#333; color:#fffef9; font-weight:100; padding: 0.125em; border-bottom:0.25em double #fffef9; }
-.story-show h4	{ font-variant:small-caps; font-size:1.25em;}
-.story-show h5	{ font-weight:600; font-size: 1em;}
-.story-show h6	{ font-size: 0.875em; border-bottom:1px solid; }
-.story-show h3 a, .story-show h3 a:link, .story-show h3 a:visited {color:#fffef9; border-bottom:0} 
+.work-show h1	{ font-family:Cambria, Constantia, Palatino, Georgia, serif; text-align:center; }
+.work-show h2	{ color:#333; font-variant:normal; text-align:left; text-transform:none; margin:1.5em 0;}
+.work-show h3	{ background:#333; color:#fffef9; font-weight:100; padding: 0.125em; border-bottom:0.25em double #fffef9; }
+.work-show h4	{ font-variant:small-caps; font-size:1.25em;}
+.work-show h5	{ font-weight:600; font-size: 1em;}
+.work-show h6	{ font-size: 0.875em; border-bottom:1px solid; }
+.work-show h3 a, .work-show h3 a:link, .work-show h3 a:visited {color:#fffef9; border-bottom:0} 
 
 /*quotes and stresses*/
-.story-show blockquote	{ font-size:1em; margin:auto auto auto 1.5em; padding:0.75em; border-left:2px solid #999; }
-.story-show blockquote blockquote	{ padding:0.25em; border:0; }
-.story-show hr	{ width:33%; margin:0.875em auto 1.2525em auto; border:1px solid; }
+.work-show blockquote	{ font-size:1em; margin:auto auto auto 1.5em; padding:0.75em; border-left:2px solid #999; }
+.work-show blockquote blockquote	{ padding:0.25em; border:0; }
+.work-show hr	{ width:33%; margin:0.875em auto 1.2525em auto; border:1px solid; }
 
 .dropcap	{ font:3em Georgia, serif; }
 .flashback	{ font-style:italic; }
 .caps	{ font-variant:small-caps}
 
-/* STORY META DATA */
-dl.story-meta { background:#ddd; padding:0.25em; position:relative;}
-.story-meta dt { width:9em; font-weight:600;}
-.story-meta dd { margin:-2.625em 0 -0.5625em 11em; }
-.story-meta ul { text-indent:0; padding:0; }
-.story-meta ul li {display:inline; list-style-type:none; }
+/* work META DATA */
+dl.work-meta { background:#eee; padding:0.25em; position:relative;margin-top:0; border:1px solid #ddd;;}
+.work-meta dt { width:9em; font-weight:100;}
+.work-meta dd { margin:-2.625em 0 -0.5625em 11em; }
+.work-meta ul { text-indent:0; padding:0; }
+.work-meta ul li {display:inline; list-style-type:none; font-size:110%;}
 
-/*STORY PREFACE - TITLE AND NOTES */
-#story-preface	{ margin-bottom:1.5em; border-bottom:3px double; }
-blockquote.story-summary, blockquote.story-notes	{ border:0;}
-blockquote.story-summary h3, blockquote.story-notes h3 {color:#222; background:transparent; border-bottom:1px solid;}
-#story-preface h2	{ font:800 2.25em Cambria, Constantia, Palatino, Georgia, sans-serif; margin:1.5em auto 0}
-h3.story-author {background:transparent; border:0;}
+/*WORK PREFACE - TITLE AND NOTES */
+#preface	{ margin-bottom:1.5em; border-bottom:3px double; }
+#preface blockquote.summary, #preface blockquote.notes	{ border:0;}
+#preface blockquote.summary h3, #preface blockquote.notes h3 {color:#222; background:transparent; border-bottom:1px solid;}
+#preface h2	{ font:800 2.25em Cambria, Constantia, Palatino, Georgia, sans-serif; margin:1.5em auto 0}
+h3.byline {background:transparent; border:0;}
 
 /* SERIES */
 #series-and-view-data	{ clear:both}
@@ -61,22 +61,22 @@ dl#series-meta	{ position:relative; }
 #series-meta dd	{ clear:right; }
 #series-meta dd p, .series-show ul	{ clear:both; }
 .series-show ul li	{ display:inline; padding-right:0.5625em}
-.series-show ul#series-story-list li	{ display:block; padding:0; }
+.series-show ul#series-work-list li	{ display:block; padding:0; }
 
 /* Temporary bookmark content */
 #dynamic-bookmark	{ background:#fffef9; position:fixed; height:18.75em; width:31.25em; bottom:2em; right:2em; z-index:42; padding:1em 2em;  border:2px solid; }
 #bookmark_notes	{ width:28.125em; height:6.25em; }
 #close-popup	{ position:absolute; top:0.375em; right:0.625em; }
 .chapter-position-list	{ list-style-type:none; padding:0.625em; }
-.story-edit-meta, .story-edit-notes	{ width:80%; }
+.work-edit-meta, .work-edit-notes	{ width:80%; }
 
-/*STORY PAGE LAYOUT ELEMENTS*/
+/*work PAGE LAYOUT ELEMENTS*/
 #main.works-show ul#navigation	{ margin:0.75em 0; text-align:right}
 .works-show #navigation li	{ display:inline; }
 .works-show #navigation li.go-back	{ display:block; float:left; padding:0 0.25em 0 0; }
-ul.story-list li.story-tags	{ display:inline; }
-.story-show h2, .story-edit-title	{ font-weight:700; font-size:1.5em; text-align:center; }
-.story-show .story-author	{ text-align:center;}
-.story-show .story-author a, .story-show .story-author a:link, .story-show .story-author a:visited {color: #333; border-bottom:0} 
+ul.work-list li.tags	{ display:inline; }
+.work-show h2, .work-edit-title	{ font-weight:700; font-size:1.5em; text-align:center; }
+.work-show .byline	{ text-align:center;}
+.work-show .byline a, .work-show .byline a:link, .work-show .byline a:visited {color: #333; border-bottom:0} 
 
 

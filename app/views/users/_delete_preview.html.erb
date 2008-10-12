@@ -2,6 +2,8 @@
 
 <% form_tag(@user, :method => 'delete') do -%>
 <% unless @user.coauthors.blank? %>
+<fieldset>
+	<legend><%= 'Works You Made With Others'.t %></legend>
 <p>
     <%= "You have %d work(s) co-authored with the following users:".t/@coauthored_works.size %>&nbsp;<%= print_coauthors(@user) %>
 </p>
@@ -20,8 +22,11 @@
     <%= radio_button_tag 'coauthor', 'remove' %>
     <%= label_tag 'coauthor_remove', 'Remove me completely as co-author'.t %>
 </p>
+</fieldset>
 <% end -%>
 <% unless @sole_authored_works.blank? -%>
+<fieldset>
+	<legend><%= 'Works You Made By Yourself'.t %></legend>
 <p>
     <%= "You have %d work(s)".t/@sole_authored_works.size %>&nbsp;<%=h "under the following pseuds:".t %>&nbsp;<%= print_pseuds(@user) %>
 </p>
@@ -40,8 +45,11 @@
     <%= radio_button_tag 'sole_author', "delete" %>
     <%= label_tag 'sole_author_delete', 'Delete works'.t %>
 </p>
+</fieldset>
 <% end -%>
+<fieldset>
 <p class="submit cancel">
 		<%= submit_tag "Save".t, :confirm => "Are you sure? This can't be undone!".t %> <%= submit_tag 'Cancel'.t, :name => 'cancel_button', :class => 'cancel' %>
 </p>
+</fieldset>
 <%- end %>

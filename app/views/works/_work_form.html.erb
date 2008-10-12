@@ -21,18 +21,18 @@
   <%= render :partial => 'works/upload_work_form' -%>   
 </div>
 
-<div id="story-form" class="story-form" <%= @use_upload_form ? 'style="display: none;"' : '' -%>>
+<div id="story-form" class="work-form" <%= @use_upload_form ? 'style="display: none;"' : '' -%>>
 <%- form_for(@work, :html => {:name => "storyForm"}) do |f| -%> 
   <p class="notice required"><%=h '* Required information'.t %></p>
   <%= render :partial => 'work_tags_form' -%>
   <fieldset>
     <legend><%= 'Story Preface'.t -%></legend>
-    <dl id="story-preface">
-      <dt class="story-title">
+    <dl id="preface">
+      <dt class="work-title">
         <%= f.label :title, h("Add Title*".t), :class => "required" %>
 		<%= link_to_help "story-title" -%>
       </dt>
-      <dd class="story-title">
+      <dd class="work-title">
         <%= f.text_field :title, :class => "storyinputfield" %>
         <%= live_validation_for_field('work_title', 
 						:maximum_length => ArchiveConfig.TITLE_MAX, :minimum_length => ArchiveConfig.TITLE_MIN, 
@@ -40,19 +40,19 @@
 				-%>
       </dd>
       
-		   <dt class="story-author" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
+		   <dt class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
 	        <%= label :pseud, :id, h("Select author/pseudonym(s)").t %>
 	      </dt>
-	      <dd class="story-author" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
+	      <dd class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
 	     	  <select name="work[author_attributes][ids][]" multiple="multiple">
 	          <%= options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds) %>
 	        </select>	 
 	      </dd>
-	      <dd class="story-author" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
+	      <dd class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
 	        <%= link_to h('Create pseud?').t, new_user_pseud_path(current_user) %>
 	      </dd>
       
-      <dt class="story-author">
+      <dt class="byline">
         <%= link_to_function(h('Add co-authors?').t, "Element.toggle('co-authors')") %>          
       </dt>
 
@@ -63,19 +63,19 @@
                 :tokens => ',', :min_chars => 2, :skip_style => true } %>            
       </dd>
       
-      <dt class="story-summary">
+      <dt class="summary">
         <%= f.label :summary, "Summary (max %d letters)"/ArchiveConfig.SUMMARY_MAX %>
       </dt>
-      <dd class="story-summary">
+      <dd class="summary">
         <%= f.text_area :summary, :class => "summary-field" %>
         <%= live_validation_for_field('work_summary', :presence => false,
 						:maximum_length => ArchiveConfig.SUMMARY_MAX) -%>
       </dd>
 
-      <dt class="story-notes">
+      <dt class="notes">
         <%= f.label :notes, "Notes (max %d letters)"/ArchiveConfig.NOTES_MAX %>
       </dt>
-      <dd class="story-notes">
+      <dd class="notes">
         <%= f.text_area :notes, :class => "notes-field" %>
         <%= live_validation_for_field('work_notes', :presence => false,
 						:maximum_length => ArchiveConfig.NOTES_MAX) -%>
@@ -86,25 +86,25 @@
 <fieldset id="associations">
 <legend><%= 'Associations'.t -%></legend>
   <dl>
-		<dt class="story-parent">
+		<dt class="work-parent">
       <%= f.label :parent_url, h("If your story is a remix or was inspired by another story in the archive, copy and paste that story's url below:").t %>
     </dt>
-    <dd class="story-parent">
+    <dd class="work-parent">
       <%= f.text_field :parent_url, :live => true %>
     </dd>
 
   	<!-- Privacy dropdown (storyprivacy) -->
-  	<dt class="story-restricted">
+  	<dt class="work-restricted">
       <%= f.label :restricted, h("Only make my story visible to registered users").t %> <%= link_to_help "registered-users" -%>
     </dt>
-    <dd class="story-restricted">
+    <dd class="work-restricted">
       <%= f.check_box :restricted %>
     </dd>
 
-    <dt class="story-is_serial">
+    <dt class="work-is_serial">
       <%= f.label :storyseriescheck, h("Is this part of a series?").t %> 
     </dt>
- 	  <dd class="story-is_serial">
+ 	  <dd class="work-is_serial">
      	<input type="checkbox" id="storyseriescheck" name="storyseriescheck"  onclick="showWorkSeriesOptions()" 
        <%- unless @work.series.blank? -%>checked="checked"<%- end -%>/>
     </dd>
@@ -144,10 +144,10 @@
   <% fields_for_associated('work', @work.chapters.first) do |c| %>
     <!-- Chaptered checkbox (work_is_wip) -->
     <!-- Checking this box causes the expected number of chapters box to appear; unchecking it causes it to disappear. -->
-    <dt class="story-is_wip">
+    <dt class="work-is_wip">
       <%= f.label :isWip, h("Does this work have multiple chapters?").t %>
     </dt>
-    <dd class="story-is_wip">
+    <dd class="work-is_wip">
       <input type="checkbox" name="isWip"  
        onclick="showChapteredStoryOptions()" <%- if @work.chaptered? -%>checked="checked"<%- end -%>/>
     </dd>        
@@ -185,7 +185,7 @@
   <%- end -%> <!-- end of fields_for_associated -->
 
   <fieldset>
-    <legend><%= 'Post Story'.t -%></legend>
+    <legend><%= 'Post Work'.t -%></legend>
     <p class="submit">
       <%= submit_tag 'Preview'.t, :name => 'preview_button' %>
       <input value="<%= 'Reset'.t -%>" type="reset" />
