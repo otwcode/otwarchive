@@ -11,7 +11,7 @@ ul.navigation li, .navigation dd, li.navigation { background: #fffef9; display: 
 #header h1 a:hover { color:#900;}
 #header a { font-weight: 600; text-decoration: none; }
 
-#login-block { background: #900 url(../images/header-red.png) top left repeat-x; color: #fffef9; font-size: 0.75em; text-align: left; width: 20em; float: right; clear: both; }
+#login-block { background: #900 url(../images/header-red.png) top left repeat-x; color: #fffef9; font-size: 0.75em; text-align: left; width: 17.375em; float: right; clear: both; }
 #login-block a:link, #login-block a:visited { color: #fffef9; }
 #login-block a:hover {color:#900;}
 #login-block ul { padding-right: 0.25em; }

@@ -53,7 +53,7 @@ form p.openid	{ margin-top:6em; }
 /* POST WORK */
 /*work-meta  and work-show rules in work-views.css */
 #work-form legend {position:static; margin:0; padding:0.375em; background:#fffef9; border:1px solid #bbb;}
-#work-form input, #work-formselect, #work-formtextarea {width:99%; margin:auto}
+#work-form input, #work-form select, #work-form textarea {width:99%; margin:auto}
 #work-form fieldset { background:#fffef9; font-size:0.875em; margin: 0.5625em 0; padding:0.375em 1.5em; border:1px solid #bbb; }
 #work-form fieldset fieldset { line-height:1.5; margin: 0 auto 0.5625em auto; }
 
@@ -70,11 +70,13 @@ dd.work-title input, input#chapter_title { width:80%; }
 #work-form #preface { border:0; }
 
 fieldset#associations { font-size:0.875em;}
+#managePublicationDate select {width:auto;}
+dd#managePublicationDate {clear:both;}
 dt.work-parent, dd.work-parent {float:none; width:99%; margin:auto}
 dd#co-authors { margin:0 auto 0.875em auto; padding:0.375em; border:1px solid #bbb;}
 input#work_parent_url {margin:0.375em auto 0.875em auto;}
 dd#seriesmanage {clear:both; float:none;}
-#seriesmanage dt, dt.work-restricted, dt.work-is_wip, dt.work-is_serial	{ width: 50%;}
+#seriesmanage dt, dt.work-restricted, dt.work-is_wip, dt.work-is_serial	, dt.work-is-backdated{ width: 50%;}
 #seriesmanage dd, dd.work-restricted, dd.work-is_wip, dd.work-is_serial	{ clear:right; margin:0; }
 p.rtf-html-switch {margin:0; padding:0 0.875em 0; text-align:right; }
 .rtf-html-switch span {background:#f0f0ee; padding:0.5625em 0.5625em 0 0.5625em; border:1px solid #ddd;}
@@ -84,7 +86,7 @@ p.rtf-html-switch {margin:0; padding:0 0.875em 0; text-align:right; }
 
 /*EDIT CHAPTERS */ 
 #main.chapters-edit dt {width:100%;float:none;}
-#main.chapters-new #work-formp input {width:auto}
+#main.chapters-new #work-form p input {width:auto}
 #main.chapters-new.chapter_title input { width:80%; }
 #main.chapters-new dt, #main.chapters-new dd {clear:both; width:100%;}
 #main.chapters-new dd textarea {width:99%;margin:auto;}

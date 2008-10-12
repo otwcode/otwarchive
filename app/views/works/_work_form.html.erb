@@ -21,7 +21,7 @@
   <%= render :partial => 'works/upload_work_form' -%>   
 </div>
 
-<div id="story-form" class="work-form" <%= @use_upload_form ? 'style="display: none;"' : '' -%>>
+<div id="work-form" class="work-form" <%= @use_upload_form ? 'style="display: none;"' : '' -%>>
 <%- form_for(@work, :html => {:name => "storyForm"}) do |f| -%> 
   <p class="notice required"><%=h '* Required information'.t %></p>
   <%= render :partial => 'work_tags_form' -%>
@@ -95,29 +95,11 @@
 
   	<!-- Privacy dropdown (storyprivacy) -->
   	<dt class="work-restricted">
-      <%= f.label :restricted, h("Only make my story visible to registered users").t %> <%= link_to_help "registered-users" -%>
+      <%= f.label :restricted, h("Only show your work to registered users").t %> <%= link_to_help "registered-users" -%>
     </dt>
     <dd class="work-restricted">
       <%= f.check_box :restricted %>
     </dd>
-		
-		<!-- User-facing dates -->
-		<dt>
-			<%= f.label :published_at, "Published date: if you are posting an older work, you can set a different date here" %>
-		</dt>
-		<dd>
-			<%= f.datetime_select "published_at", :start_year => Time.now.year, :end_year => 1950, :default => Time.now, :order => [:month, :day, :year] %>
-		</dd>
-		
-		<!-- Revised_at currently only shows on edit form, :show_revised set in controller -->
-		<%- if params[:show_revised] == true %>
-		<dt>
-			<%= f.label :revised_at, "Revised date: You can set the date on which this work was revised here" %>
-		</dt>
-		<dd>
-			<%= f.datetime_select "revised_at", :start_year => Time.now.year, :end_year => 1950, :default => Time.now, :order => [:month, :day, :year] %>
-		</dd>
-		<%- end %>
 
     <dt class="work-is_serial">
       <%= f.label :storyseriescheck, h("Is this part of a series?").t %> 
@@ -175,6 +157,26 @@
       <%=h 'Title:'.t %> <%= c.text_field :title %>
     </p>
     </dd> 
+	<!-- User-facing dates -->
+	<dt class="work-is-backdated">
+		<%= f.label :published_at, "Set a different publication date".t %>
+	</dt>
+	<dd>
+	<input type="checkbox" id="publicationdatecheck" checked="checked" />
+	</dd>
+	<dd id="managePublicationDate" name="managePublicationDate">
+		<%= f.datetime_select "published_at", :start_year => Time.now.year, :end_year => 1950, :default => Time.now, :order => [:day, :month, :year] %>
+	</dd>
+	
+	<!-- Revised_at currently only shows on edit form, :show_revised set in controller -->
+	<%- if params[:show_revised] == true %>
+	<dt onclick="showRevisionDateOptions()">
+		<%= f.label :revised_at, "Set a different revision date".t %>
+	</dt>
+	<dd id="manageRevisionDate" name="manageRevisionDate">
+		<%= f.datetime_select "revised_at", :start_year => Time.now.year, :end_year => 1950, :default => Time.now, :order => [:day, :month, :year] %>
+	</dd>
+	<%- end %>
 	</dl>         
 </fieldset>
 
