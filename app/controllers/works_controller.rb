@@ -239,6 +239,7 @@ class WorksController < ApplicationController
   # POST /works
   def create
     begin
+      @work.update_revised_at(@work.published_at)
       raise unless @work.errors.empty?
       if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
         @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
@@ -269,6 +270,7 @@ class WorksController < ApplicationController
   
   # GET /works/1/edit
   def edit
+    params[:show_revised] = true
     if params["remove"] == "me"
       pseuds_with_author_removed = @work.pseuds - current_user.pseuds
       if pseuds_with_author_removed.empty? 

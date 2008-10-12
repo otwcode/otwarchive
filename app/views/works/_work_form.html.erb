@@ -100,6 +100,24 @@
     <dd class="work-restricted">
       <%= f.check_box :restricted %>
     </dd>
+		
+		<!-- User-facing dates -->
+		<dt>
+			<%= f.label :published_at, "Published date: if you are posting an older work, you can set a different date here" %>
+		</dt>
+		<dd>
+			<%= f.datetime_select "published_at", :start_year => Time.now.year, :end_year => 1950, :default => Time.now, :order => [:month, :day, :year] %>
+		</dd>
+		
+		<!-- Revised_at currently only shows on edit form, :show_revised set in controller -->
+		<%- if params[:show_revised] == true %>
+		<dt>
+			<%= f.label :revised_at, "Revised date: You can set the date on which this work was revised here" %>
+		</dt>
+		<dd>
+			<%= f.datetime_select "revised_at", :start_year => Time.now.year, :end_year => 1950, :default => Time.now, :order => [:month, :day, :year] %>
+		</dd>
+		<%- end %>
 
     <dt class="work-is_serial">
       <%= f.label :storyseriescheck, h("Is this part of a series?").t %> 

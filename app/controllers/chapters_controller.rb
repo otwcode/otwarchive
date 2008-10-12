@@ -154,6 +154,7 @@ class ChaptersController < ApplicationController
     else  
       if @chapter.save && @work.save
         @work.update_major_version
+        @work.update_revised_at(@chapter.created_at)
 				@chapter.move_to(@chapter.position_placeholder) if @chapter.position_placeholder
         flash[:notice] = "This is a preview of what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting.".t
         redirect_to [:preview, @work, @chapter]

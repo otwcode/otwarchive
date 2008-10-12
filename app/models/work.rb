@@ -686,5 +686,9 @@ class Work < ActiveRecord::Base
   def <=>(another_work)
     title.strip.downcase <=> another_work.strip.downcase
   end
+  
+  def update_revised_at(datetime)
+    self.update_attribute(:revised_at, datetime)
+  end
     
 end
