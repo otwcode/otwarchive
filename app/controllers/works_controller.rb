@@ -113,7 +113,7 @@ class WorksController < ApplicationController
     @user = nil
     @selected_tags = []
     @selected_pseuds = []
-    @sort_column = params[:sort_column] || 'updated_at'
+    @sort_column = params[:sort_column] || 'revised_at'
     @sort_direction = params["sort_direction_for_#{@sort_column}".to_sym] || 'DESC'
 
     unless params[:selected_pseuds].blank?
@@ -270,6 +270,7 @@ class WorksController < ApplicationController
   
   # GET /works/1/edit
   def edit
+    @work.update_revised_at(@work.published_at)
     if params["remove"] == "me"
       pseuds_with_author_removed = @work.pseuds - current_user.pseuds
       if pseuds_with_author_removed.empty? 
@@ -292,6 +293,7 @@ class WorksController < ApplicationController
   
   # PUT /works/1
   def update
+    @work.update_revised_at(@work.published_at)
     unless @work.errors.empty?      
       render :action => :edit and return
     end

@@ -18,7 +18,7 @@
   	  <%- end -%>
 	  </h4>
 
-	  <p class="update"><%= time_ago_in_words(work.updated_at) %></p>
+	  <p class="update"><%= set_format_for_date(work.revised_at) %></p>
 	</li>
 	
 	<%- cast_tags = cast_tags_for(work); freeform_tags = freeform_tags_for(work) -%>

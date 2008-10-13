@@ -34,6 +34,7 @@ class Work < ActiveRecord::Base
   #temporary validation to let people know they can't enter external urls yet
   validates_format_of :parent_url, :with => Regexp.new(ArchiveConfig.APP_URL, true), 
     :allow_blank => true, :message => "can only be in the archive for now - we're working on expanding that!".t
+     
   
   # Virtual attribute to use as a placeholder for pseuds before the work has been saved
   # Can't write to work.pseuds until the work has an id
@@ -44,7 +45,7 @@ class Work < ActiveRecord::Base
   attr_accessor :new_tags
   attr_accessor :tags_to_tag_with
 
-  before_save :validate_authors, :clean_and_validate_title
+  before_save :validate_authors, :clean_and_validate_title, :validate_published_at
   before_save :set_word_count, :set_language
   before_save :post_first_chapter
 
@@ -112,7 +113,7 @@ class Work < ActiveRecord::Base
   
   named_scope :ordered, lambda {|sort_field, sort_direction|
     {
-      :order => "works.#{(Work.column_names.include?(sort_field) ? sort_field : 'updated_at')}" + 
+      :order => "works.#{(Work.column_names.include?(sort_field) ? sort_field : 'revised_at')}" + 
                 " " +
                 "#{(sort_direction.upcase == 'DESC' ? 'DESC' : 'ASC')}"
     }
@@ -121,7 +122,7 @@ class Work < ActiveRecord::Base
     {:limit => limit.kind_of?(Fixnum) ? limit : 5}
   }
 
-  named_scope :recent, :order => 'works.created_at DESC', :limit => 5
+  named_scope :recent, :order => 'works.revised_at DESC', :limit => 5
   named_scope :posted, :conditions => {:posted => true}
   named_scope :unposted, :conditions => {:posted => false}
   named_scope :restricted , :conditions => {:restricted => true}
@@ -566,7 +567,7 @@ class Work < ActiveRecord::Base
     when "word count" 
       order_clause = "word_count "
     when "date"
-      order_clause = "updated_at "
+      order_clause = "revised_at "
     end
     
     if !order_clause.blank?
@@ -689,6 +690,13 @@ class Work < ActiveRecord::Base
   
   def update_revised_at(datetime)
     self.update_attribute(:revised_at, datetime)
+  end
+  
+  def validate_published_at
+    to = Date.today
+    if self.published_at > to
+      errors.add_to_base("Publication date can't be in the future.".t)
+    end
   end
     
 end

@@ -198,5 +198,14 @@ module WorksHelper
     end
     return tags
   end
+  
+  # Use time_ago_in_words if less than a month ago, otherwise display date
+  def set_format_for_date(date)
+    if date > 30.days.ago
+      time_ago_in_words(date)
+    else
+      date.to_date.to_formatted_s(:rfc822)
+    end
+  end
 
 end

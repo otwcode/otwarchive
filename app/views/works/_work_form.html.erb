@@ -165,7 +165,7 @@
 	<input type="checkbox" id="publicationdatecheck" <%- if @work.published_at != @work.created_at -%>checked="checked"<%- end -%> />
 	</dd>
 	<dd id="managePublicationDate" name="managePublicationDate">
-		<%= f.date_select "published_at", :start_year => Time.now.year, :end_year => 1950, :default => Time.now, :order => [:day, :month, :year] %>
+		<%= f.date_select "published_at", :start_year => Date.today.year, :end_year => 1950, :default => Date.today, :order => [:day, :month, :year] %>
 	</dd>
 	</dl>         
 </fieldset>
