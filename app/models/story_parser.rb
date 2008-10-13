@@ -5,9 +5,10 @@
 class StoryParser
   require 'timeout'
   require 'hpricot'
+  require 'open-uri'
   include HtmlFormatter
   
-  META_PATTERNS = {:title => 'Title', :notes => 'Note', :summary => 'Summary', :default => "Tag"}
+  META_PATTERNS = {:title => 'Title', :notes => 'Note', :summary => 'Summary', :default => "Tag", :published_at => 'Date|Posted|Posted on|Posted at'}
 
   # These lists will stop with the first one it matches, so put more-specific matches
   # towards the front of the list. 
@@ -158,15 +159,20 @@ class StoryParser
     # rules. 
     def parse_story_from_unknown(story)
       work_params = {:chapter_attributes => {}}
+      storyhead = (@doc/"head").inner_html
       storytext = (@doc/"body").inner_html
-      if storytext.empty?
+      if storytext.blank?
         storytext = (@doc/"html").inner_html
       end
-      if storytext.empty?
+      if storytext.blank?
         # just grab everything
         storytext = story
       end
-      meta = scan_text_for_meta(storytext)
+      meta = {}
+      unless storyhead.blank?
+        meta.merge!(scan_text_for_meta(storyhead))
+      end
+      meta.merge!(scan_text_for_meta(storytext))
       work_params[:title] = (@doc/"title").inner_html    
       work_params[:chapter_attributes][:content] = clean_storytext(storytext)
       work_params = work_params.merge!(meta)
@@ -330,10 +336,10 @@ class StoryParser
         # what this does is look for pattern: (whatever) 
         # and then sets meta[:metaname] = whatever
         # eg, if it finds Author: Blah The Great it will set meta[:author] = Blah The Great
-        metapattern = Regexp.new("#{pattern}\s*:\s*(.*)", Regexp::IGNORECASE)
-        metapattern_plural = Regexp.new("#{pattern.pluralize}\s*:\s*(.*)", Regexp::IGNORECASE)
+        metapattern = Regexp.new("(#{pattern})\s*:\s*(.*)", Regexp::IGNORECASE)
+        metapattern_plural = Regexp.new("(#{pattern.pluralize})\s*:\s*(.*)", Regexp::IGNORECASE)
         if text.match(metapattern) || text.match(metapattern_plural)
-          value = $1
+          value = $2
           begin
             value = eval("convert_#{metaname.downcase}(value)")
           rescue NameError
@@ -356,7 +362,15 @@ class StoryParser
         end
       }
     end     
-  
+
+    
+    def get_last_modified(location)
+      Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
+        resp = open(location)
+        resp.last_modified
+      }
+    end
+
     def get_source_if_known(known_sources, location)
       known_sources.each do |source|
         pattern = Regexp.new(eval("SOURCE_#{source.upcase}"), Regexp::IGNORECASE)
@@ -419,4 +433,9 @@ class StoryParser
         ArchiveConfig.DEFAULT_RATING_TAG_NAME
       end
     end
+    
+    def convert_published_at(date)
+      Time.parse(date)
+    end
+    
 end

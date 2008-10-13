@@ -126,12 +126,17 @@ class StoryParserTest < ActiveSupport::TestCase
   def test_storyinfo
     @storyparser = StoryParser.new      
     # "successfully parse a url with a storyinfo block in html comments with fandom" 
-    @url = "http://www.intimations.org/fanfic/davidcook/Madrigals%20and%20Misadventures.html"
-    @work = @storyparser.download_and_parse_story(@url)
-    assert !@work.chapters.first.content.blank?
-    assert !@work.title.blank?
-    assert !@work.summary.blank?
-    assert @work.tags_to_tag_with[:fandom].match(/David Cook RPF/)
+    @urls = []
+    @urls << "http://www.intimations.org/fanfic/davidcook/Madrigals%20and%20Misadventures.html"
+    @urls << "http://www.intimations.org/fanfic/master_and_commander/five_things-listening.html"
+    @urls.each do |url|
+      @work = @storyparser.download_and_parse_story(url)
+      puts "\nTesting #{url}"
+      assert !@work.chapters.first.content.blank?
+      assert !@work.title.blank?
+      assert !@work.summary.blank?
+      assert @work.tags_to_tag_with[:fandom].match(/(David Cook RPF|Master \& Commander)/)
+    end
   end
 
   def test_previous_failures
@@ -139,11 +144,20 @@ class StoryParserTest < ActiveSupport::TestCase
     @urls = []
     @urls << "http://remix.illuminatedtext.com/dbfiction.php?fiction_id=441"
     @urls << "http://web.archive.org/web/20040310174832/http://witchqueen.diary-x.com/journal.cgi?entry=20040108b"
+    @urls << "http://rivkat.com/spn/three.html"
     @urls.each do |url|
       @work = @storyparser.download_and_parse_story(url)
       assert !@work.chapters.first.content.blank?
+      assert @work.chapters.first.content.length > 500
       assert !@work.title.blank?
     end
+  end
+  
+  def test_date
+    @storyparser = StoryParser.new      
+    @url = "http://www.intimations.org/fanfic/master_and_commander/five_things-listening.html"
+    @work = @storyparser.download_and_parse_story(@url)
+    assert @work.published_at == Time.parse('2003-12-11')
   end
 
 end

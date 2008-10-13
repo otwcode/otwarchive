@@ -40,6 +40,10 @@ module HtmlFormatter
 
   # cleans up doubled paragraph/newline tags
   def cleanup_paragraph_tags(text)
+    # make sure there are paragraphs inside blockquotes
+    text.gsub!(/<blockquote>/, '<blockquote><p>')
+    text.gsub!(/<\/blockquote>/, '</p></blockquote>')
+    
     # Now we want to replace any cases where these have been doubled -- ie, 
     # where a new paragraph tag is opened before an old one is closed
     text.gsub!(/<p>\s*<p>/im, "<p>")

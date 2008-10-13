@@ -270,7 +270,6 @@ class WorksController < ApplicationController
   
   # GET /works/1/edit
   def edit
-    params[:show_revised] = true
     if params["remove"] == "me"
       pseuds_with_author_removed = @work.pseuds - current_user.pseuds
       if pseuds_with_author_removed.empty? 

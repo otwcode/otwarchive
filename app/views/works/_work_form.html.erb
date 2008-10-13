@@ -5,13 +5,13 @@
 
 <li id="upload-link" <%= @use_upload_form ? 'style="display: none;"' : '' -%> >
   <%= link_to_function(h('Upload from an existing URL?').t,
-  "Element.toggle('upload-work-form'); Element.toggle('story-form'); Element.toggle('upload-link'); 
+  "Element.toggle('upload-work-form'); Element.toggle('work-form'); Element.toggle('upload-link'); 
    Element.toggle('form-link'); Element.toggle('restore-link')",
   :href => url_for(:controller => :works, :action => :new, :upload_work => true)) -%>
 </li>
 <li id="form-link"  <%= @use_upload_form ? '' : 'style="display: none;"' -%> >
   <%= link_to_function(h('Return to standard form').t, 
-  "Element.toggle('upload-work-form'); Element.toggle('story-form'); Element.toggle('upload-link'); 
+  "Element.toggle('upload-work-form'); Element.toggle('work-form'); Element.toggle('upload-link'); 
   Element.toggle('form-link'); Element.toggle('restore-link')",
   :href => url_for(:controller => :works, :action => :new, :upload_work => false)) -%>
 </li>
@@ -162,21 +162,11 @@
 		<%= f.label :published_at, "Set a different publication date".t %>
 	</dt>
 	<dd>
-	<input type="checkbox" id="publicationdatecheck" checked="checked" />
+	<input type="checkbox" id="publicationdatecheck" <%- if @work.published_at != @work.created_at -%>checked="checked"<%- end -%> />
 	</dd>
 	<dd id="managePublicationDate" name="managePublicationDate">
-		<%= f.datetime_select "published_at", :start_year => Time.now.year, :end_year => 1950, :default => Time.now, :order => [:day, :month, :year] %>
+		<%= f.date_select "published_at", :start_year => Time.now.year, :end_year => 1950, :default => Time.now, :order => [:day, :month, :year] %>
 	</dd>
-	
-	<!-- Revised_at currently only shows on edit form, :show_revised set in controller -->
-	<%- if params[:show_revised] == true %>
-	<dt onclick="showRevisionDateOptions()">
-		<%= f.label :revised_at, "Set a different revision date".t %>
-	</dt>
-	<dd id="manageRevisionDate" name="manageRevisionDate">
-		<%= f.datetime_select "revised_at", :start_year => Time.now.year, :end_year => 1950, :default => Time.now, :order => [:day, :month, :year] %>
-	</dd>
-	<%- end %>
 	</dl>         
 </fieldset>
 
