@@ -122,7 +122,8 @@ class CommentsController < ApplicationController
             end
           end 
         else
-          flash[:comment_notice] = 'Comment was marked as spam by Akismet.'.t
+          # this shouldn't come up any more
+          flash[:comment_notice] = 'Sorry, but this comment looks like spam to us.'.t
           redirect_to :back
         end
       else

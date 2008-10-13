@@ -28,7 +28,7 @@
 				<%- elsif logged_in_as_admin? -%>
           <li><%= render :partial => 'admin/admin_options', :locals => {:item => single_comment} %></li>
 				<%- end -%>
-				<%- if single_comment.pseud.nil? and logged_in? -%>
+				<%- if single_comment.pseud.nil? and is_author_of?(single_comment.ultimate_parent) -%>
 					<li id="tag_comment_as_spam_link_<%= single_comment.id -%>"><%= tag_comment_as_spam_link single_comment -%></li>
 				<%- end -%>
 			</ul>
