@@ -29,6 +29,7 @@ module HtmlFormatter
     text = add_paragraph_tags_for_display(sanitize_whitelist(text, options))
   end
   
+  # This is future-planning - titles are currently stripped of all html in order to make sort and search simpler, so there should be no tags in titles which need sanitize in the view. 
   def sanitize_title_for_display(text, options = {:okTags => %w(a href, b, br, p, i, em, strong, strike, u, ins, q, del, cite, blockquote, pre, code, small, sup, sub)})
     sanitize_whitelist(text, options)
   end
