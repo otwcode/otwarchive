@@ -737,7 +737,12 @@ class Work < ActiveRecord::Base
   end
   
   def update_revised_at(datetime)
-    self.update_attribute(:revised_at, datetime)
+    if datetime.to_date == Date.today
+      value = Time.now
+    else
+      value = datetime
+    end
+    self.update_attribute(:revised_at, value)
   end
   
   def validate_published_at
