@@ -14,10 +14,11 @@ class PreferencesController < ApplicationController
 
   def update
     @user = User.find_by_login(params[:user_id])
+    @preference = @user.preference
     @user.preference.attributes = params[:preference]
     if @user.preference.save
       flash[:notice] = 'Your preferences were successfully updated.'.t
-      redirect_to(user_profile_path(@user)) 
+      redirect_to user_preferences_path(@user) 
     else
       render :action => :index
     end

@@ -225,6 +225,17 @@ class WorksController < ApplicationController
       end
     end
     @tag_categories_limited = TagCategory::OFFICIAL - [TagCategory::WARNING]
+    
+    @page_title = ""
+    if logged_in? && !current_user.preference.work_title_format.blank?
+      @page_title = current_user.preference.work_title_format
+      @page_title.gsub!(/FANDOM/, @work.fandom)
+      @page_title.gsub!(/AUTHOR/, @work.pseuds.collect(&:name).join(','))
+      @page_title.gsub!(/TITLE/, @work.title)
+    else 
+      @page_title = @work.title + " - " + @work.pseuds.collect(&:name).join(',') + " - " + @work.fandom
+    end
+    @page_title += " [#{ArchiveConfig.APP_NAME}]"
   end
   
   # GET /works/new

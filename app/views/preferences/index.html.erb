@@ -17,7 +17,9 @@
     <li><%= f.check_box :comment_emails_off %> <%= f.label :comment_emails_off, "Turn off comment-notification emails".t  %></li>
     <li><%= f.check_box :comment_inbox_off %> <%= f.label :comment_inbox_off, "Turn off comment-notification messages to your Inbox".t  %></li>
     <li><%= f.check_box :comment_copy_to_self_off %> <%= f.label :comment_copy_to_self_off, "Turn off copies of your own comments".t  %></li>
-  </ul>		 
+    <li>-----------</li>
+    <li><%= f.label :work_title_format, "Format page titles for works".t  %>: <%= f.text_field :work_title_format %> <%= link_to_help "work_title_format" -%></li>
+  </ul>
 
   <p class="submit">
     <%= f.submit "Update".t %>
