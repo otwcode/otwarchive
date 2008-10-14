@@ -131,7 +131,6 @@ class StoryParserTest < ActiveSupport::TestCase
     @urls << "http://www.intimations.org/fanfic/master_and_commander/five_things-listening.html"
     @urls.each do |url|
       @work = @storyparser.download_and_parse_story(url)
-      puts "\nTesting #{url}"
       assert !@work.chapters.first.content.blank?
       assert !@work.title.blank?
       assert !@work.summary.blank?

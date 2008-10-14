@@ -54,9 +54,41 @@ class Work < ActiveRecord::Base
 
   before_update :validate_tags
 
-  TITLE_TO_SORT_ON_CASE = "case when substring_index(lower(works.title), ' ', 1) in ('a', 'an', 'the') 
-                           then lower(concat(substring(works.title, instr(works.title, ' ') + 1), ', ', substring_index(works.title, ' ', 1) )) 
-                           else lower(works.title) end"
+  AUTHOR_TO_SORT_ON ="trim(leading '/' from 
+                        trim(leading '.' from 
+                          trim(leading '\\\'' from
+                            trim(leading '\\\"' from
+                              trim(leading '!' from
+                                trim(leading '?' from
+                                  trim(leading '=' from
+                                    trim(leading '-' from
+                                      trim(leading '+' from
+                                        lower(pseuds.name)
+                                      )
+                                    )
+                                  )
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )"
+
+
+  TITLE_TO_SORT_ON_CASE ="case
+                          when substring_index(lower(works.title), ' ', 1) in ('a', 'an', 'the') 
+                          then lower(concat(substring(works.title, instr(works.title, ' ') + 1), ', ', substring_index(works.title, ' ', 1) ))                           
+                          else 
+                            trim(leading '/' from 
+                              trim(leading '.' from 
+                                trim(leading '\\\'' from
+                                  trim(leading '\\\"' from
+                                    lower(works.title)
+                                  )
+                                )
+                              )
+                            ) 
+                          end"
 
 
   # Index for Thinking Sphinx
@@ -74,9 +106,10 @@ class Work < ActiveRecord::Base
 
     # attributes
     has :id, :as => :work_ids
-    has created_at, updated_at, word_count     
+    has word_count, revised_at
     has tags(:id), :as => :tag_ids
     has TITLE_TO_SORT_ON_CASE, :as => :title_for_sort, :type => :string
+    has AUTHOR_TO_SORT_ON, :as => :author_for_sort, :type => :string
 
     # properties
     set_property :delta => true
@@ -104,6 +137,13 @@ class Work < ActiveRecord::Base
   VISIBLE_TO_ADMIN_CONDITIONS = {:posted => true}
   
   public
+
+  named_scope :ordered_by_author, lambda{|sort_direction|
+    {
+      :joins => OWNERSHIP_JOIN + " " + TAGGING_JOIN,
+      :order => AUTHOR_TO_SORT_ON + " " + "#{(sort_direction.upcase == 'DESC' ? 'DESC' : 'ASC')}"
+    }    
+  }
 
   named_scope :ordered_by_title, lambda{ |sort_direction|
     {
@@ -143,7 +183,7 @@ class Work < ActiveRecord::Base
       :select => "DISTINCT works.*",
       :joins => TAGGING_JOIN + " " + OWNERSHIP_JOIN,
       :conditions => ["tags.id in (?)", tags_to_find.collect(&:id)],
-      :group => "works.id HAVING count(works.id) = #{tags_to_find.size}"
+      :group => "works.id HAVING count(DISTINCT tags.id) = #{tags_to_find.size}"
     }
   }
 
@@ -160,7 +200,7 @@ class Work < ActiveRecord::Base
       :select => "DISTINCT works.*",
       :joins => TAGGING_JOIN + " " + OWNERSHIP_JOIN,
       :conditions => ["tags.id in (?)", tag_ids_to_find],
-      :group => "works.id HAVING count(works.id) = #{tag_ids_to_find.size}"
+      :group => "works.id HAVING count(DISTINCT tags.id) = #{tag_ids_to_find.size}"
     }
   }
 
@@ -563,8 +603,8 @@ class Work < ActiveRecord::Base
     when "title"
       order_clause = "title_for_sort "
     when "author"
-      order_clause = "pseud_name "
-    when "word count" 
+      order_clause = "author_for_sort "
+    when "word_count" 
       order_clause = "word_count "
     when "date"
       order_clause = "revised_at "
@@ -597,6 +637,8 @@ class Work < ActiveRecord::Base
                       :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), 
                       :page => options[:page]}
     search_options.merge!({:order => order_clause}) if !order_clause.blank?
+
+    logger.info "\n\n\n\n*+*+*+*+ search_options: " + search_options.to_yaml
     
     Work.search(options[:query], search_options) 
   end
@@ -607,7 +649,17 @@ class Work < ActiveRecord::Base
     tags = '.with_all_tag_ids(options[:selected_tags])'
     written = '.written_by_conditions(options[:selected_pseuds])'
     owned = '.owned_by_conditions(options[:user])'
-    sort = options[:sort_column] == 'title' ? '.ordered_by_title(options[:sort_direction])' : '.ordered(options[:sort_column], options[:sort_direction])'
+    sort = case options[:sort_column]
+            when 'date'
+              then '.ordered("revised_at", options[:sort_direction])'
+            when 'author'
+              then '.ordered_by_author(options[:sort_direction])'
+            when 'title'
+              then '.ordered_by_title(options[:sort_direction])'
+            else
+              '.ordered(options[:sort_column], options[:sort_direction])'
+    end
+
     sort_and_paginate = sort + '.paginate(options[:page_args])'
     
     @works = []
@@ -637,14 +689,12 @@ class Work < ActiveRecord::Base
     else
       # all visible works
       command << visible
-      @pseuds = @works.collect(&:pseuds).flatten.uniq.compact
     end
     
     @works = eval("Work#{command + sort_and_paginate}")
     unless @works.empty?
       ids = eval("Work.ids_only#{command}").collect(&:id)
       @filters = build_filters_hash(Work.tags_with_count(ids))
-      @pseuds = Pseud.on_work_ids(ids).find(:all, :order => :name) if @pseuds.empty?
     end
     
     return @works, @filters, @pseuds
@@ -671,17 +721,15 @@ class Work < ActiveRecord::Base
     return filters_hash
   end
   
-  def self.get_filters_and_pseuds(works_to_filter)
+  def self.get_filters(works_to_filter)
     ids = works_to_filter.collect(&:id)
     @filters = build_filters_hash(Work.tags_with_count(ids))
-    @pseuds = Pseud.on_work_ids(ids).find(:all, :order => :name)
-    return @filters, @pseuds
+    return @filters
   end
   
   def self.get_pseuds(works_to_filter)
     available_pseuds = Pseud.on_works(works_to_filter).by_popularity.group_by(&:tag_category).to_hash
   end
-    
     
   # sort works by title
   def <=>(another_work)

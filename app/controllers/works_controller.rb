@@ -137,7 +137,7 @@ class WorksController < ApplicationController
       end
       
       unless @works.empty?
-        @filters, @pseuds = Work.get_filters_and_pseuds(@works)      
+        @filters = Work.get_filters(@works)      
       end
     else
       # we're browsing instead

@@ -7,6 +7,7 @@
     <%- unless @query.blank? -%>
     <dd><%= sort_link 'Relevance'.t %></dd>
     <%- end -%>
+    <dd><%= sort_link 'Author'.t, :author -%></dd>
     <dd><%= sort_link 'Title'.t, :title -%></dd>
     <dd><%= sort_link 'Date'.t, :date -%></dd>
     <dd><%= sort_link 'Word Count'.t, :word_count -%></dd>

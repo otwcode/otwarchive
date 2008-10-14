@@ -54,7 +54,7 @@ module TaggingExtensions
     add.each {|t| Tagging.create(:tag => t, :taggable => self) }
     remove.each {|t| self.taggings.find_by_tag(t).each(&:destroy)}
     tag_array
-  end
+  end 
 
   # for use on objects which care about categories (currently works)
   # tag_with(:default => 'a, few, tags', :fandom => 'stargate atlantis', :rating => 'adult')
@@ -66,15 +66,14 @@ module TaggingExtensions
       category = TagCategory.find_by_name(category.to_s)
       return false unless category
       # create the new tags
-      if tag_string.blank?
-        tag_array = []
-      else
+      tag_array = []
+      unless tag_string.blank?
         if tag_string.is_a?(Array)
           tag_names = tag_string
         else
           tag_names = tag_string.split(ArchiveConfig.DELIMITER)
         end
-        new_tags = tag_names.collect do |tag_name|
+        tag_array = tag_names.collect do |tag_name|
           tag_name.gsub!(/^\s*/, "")
           tag_name.gsub!(/\s*$/, "")
           tag = category.tags.find_or_create_by_name(tag_name)
@@ -86,9 +85,9 @@ module TaggingExtensions
           end
           tag
         end
-        tag_array = new_tags.flatten.compact        
+        tag_array = tag_array.flatten.compact.uniq        
       end
-      new_tags << tag_array
+
       # add and remove tags to make the taggable's tags equal to the new tag_array
       current = tags.by_category(category)
       add = tag_array - current
@@ -96,7 +95,6 @@ module TaggingExtensions
       add.each {|t| Tagging.create(:tag => t, :taggable => self) }
       remove.each {|t| self.taggings.find_by_tag(t).each(&:destroy)}
     end
-    self.new_tags = new_tags.flatten
   end
   
 end

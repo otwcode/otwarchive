@@ -58,7 +58,7 @@ function toggleFilters(id, blind_duration) {
 
 // Collapses filter list if Javascript is enabled
 function hideFilters() {
-	var filters = $$('dd.filter-tags');
+	var filters = $$('dd.tags');
 	filters.each(function(filter) {
 		var tags = filter.select('input');
 		var selected = false;
