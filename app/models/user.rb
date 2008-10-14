@@ -34,6 +34,8 @@ class User < ActiveRecord::Base
   before_create :check_account_creation_status 
   before_create :create_default_associateds
   
+  before_update :validate_date_of_birth
+  
   has_many :readings, :dependent => :destroy 
   can_create_bookmarks
   
@@ -243,6 +245,17 @@ class User < ActiveRecord::Base
     end
     return @coauthored_works  
   end
+  
+  # Checks date of birth when user updates profile
+  # Has to be called before_update (above) not before_save so new users can be created
+  def validate_date_of_birth
+    unless self.profile.date_of_birth.blank?
+      if self.profile.date_of_birth > 13.years.ago.to_date  
+        errors.add_to_base("You must be over 13.".t)
+        return false
+      end
+    end
+  end  
   
   ### BETA INVITATIONS ###
 
