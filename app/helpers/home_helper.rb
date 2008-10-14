@@ -4,7 +4,7 @@ module HomeHelper
     string.gsub!(/<\/?p>/, "\n\n")
     string = strip_tags(string)
     string.gsub!(/^[ \t]*/, "")
-    while !string.gsub!(/\n\n\n/, "\n\n").nil?
+    while !string.gsub!(/\n\s*\n\s*\n/, "\n\n").nil?
       # keep going
     end
     return string
