@@ -46,12 +46,12 @@
 </fieldset>       
 <fieldset>
 <legend><%= 'Chapter Notes'.t %></legend>
-    <dl>      
-      <dt><%= f.label :summary, "Chapter summary (max %d letters)".t/ArchiveConfig.SUMMARY_MAX %></dt>
-      <dd><%= f.text_area :summary, :live => true %></dd>
+    <dl id="preface">      
+      <dt class="summary"><%= f.label :summary, "Chapter summary (max %d letters)".t/ArchiveConfig.SUMMARY_MAX %></dt>
+      <dd class="summary"><%= f.text_area :summary, :live => true %></dd>
 
-      <dt><%= f.label :notes, "Chapter notes (max %d letters)".t/ArchiveConfig.NOTES_MAX %></dt>
-      <dd><%= f.text_area :notes, :live => true %></dd>
+      <dt class="notes"><%= f.label :notes, "Chapter notes (max %d letters)".t/ArchiveConfig.NOTES_MAX %></dt>
+      <dd class="notes"><%= f.text_area :notes, :live => true %></dd>
     </dl>
 </fieldset>
 <fieldset>
@@ -67,14 +67,14 @@
   				:maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN, 
   				:tooLongMessage => 'We salute your ambition! But sadly the content must be less than %d letters long. (Maybe you want to create a multi-chaptered work?)'/ArchiveConfig.CONTENT_MAX,
   				:tooShortMessage => 'Brevity is the soul of wit, but your content does have to be at least %d letters long.'/ArchiveConfig.CONTENT_MIN,
-  			  :failureMessage => 'You did want to post a story here, right?'.t)
+  			  :failureMessage => 'You need to post some story content here.'.t)
   		-%>
 	</p>
 </fieldset>
 <fieldset>
 <legend><%= 'Post Chapter'.t %></legend>
     <p class="submit">
-      <%= submit_tag h('Preview').t, :name => 'preview_button' %>
+      <%= submit_tag 'Preview'.t, :name => 'preview_button' %>
       <input value="<%= 'Reset'.t -%>" type="reset" />
       <%= submit_tag 'Cancel'.t, :name => 'cancel_button' %>
     </p>
