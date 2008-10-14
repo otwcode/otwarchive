@@ -32,7 +32,7 @@ class WorksController < ApplicationController
     redirect_to new_session_path(:restricted => true)
     false
   end
-
+  
   # Sets values for @work, @chapter, @coauthor_results, @pseuds, and @selected_pseuds
   # and @tags[category]
   def set_instance_variables
@@ -43,7 +43,8 @@ class WorksController < ApplicationController
     begin    
       if params[:id] # edit, update, preview, post, manage_chapters
         @work = Work.find(params[:id])
-        if params[:work]  # editing, don't lose our changes
+        @previous_published_at = @work.published_at
+        if params[:work]  # editing, save our changes
           @work.attributes = params[:work]
         end
       elsif params[:work]
@@ -250,7 +251,6 @@ class WorksController < ApplicationController
   # POST /works
   def create
     begin
-      @work.update_revised_at(@work.published_at)
       raise unless @work.errors.empty?
       if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
         @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
@@ -262,14 +262,14 @@ class WorksController < ApplicationController
         flash[:notice] = "New work posting canceled.".t
         current_user.cleanup_unposted_works
         redirect_to current_user    
-      else  
+      else
         saved = @work.save
-        unless saved && @work.has_required_tags?
+        unless saved && @work.has_required_tags? && @work.set_revised_at(@work.published_at)
           unless @work.has_required_tags?
             @work.errors.add(:base, "Required tags are missing.".t)          
           end
           render :action => :new 
-        else
+        else        
           flash[:notice] = 'Work was successfully created.'.t
           redirect_to preview_work_path(@work)
         end
@@ -281,7 +281,6 @@ class WorksController < ApplicationController
   
   # GET /works/1/edit
   def edit
-    @work.update_revised_at(@work.published_at)
     if params["remove"] == "me"
       pseuds_with_author_removed = @work.pseuds - current_user.pseuds
       if pseuds_with_author_removed.empty? 
@@ -304,7 +303,6 @@ class WorksController < ApplicationController
   
   # PUT /works/1
   def update
-    @work.update_revised_at(@work.published_at)
     unless @work.errors.empty?      
       render :action => :edit and return
     end
@@ -334,6 +332,11 @@ class WorksController < ApplicationController
       @chapter.save || saved = false
       @work.has_required_tags? || saved = false
       if saved 
+        # If the user has changed the published_at date, update the revised_at date. 
+        if defined?(@previous_published_at) && @previous_published_at != @work.published_at
+          @work.set_revised_at(@work.published_at)
+        end  
+
         @work.posted = true 
         saved = @work.save
         @work.update_minor_version

@@ -1,4 +1,9 @@
 class Work < ActiveRecord::Base  
+
+  ########################################################################
+  # ASSOCIATIONS
+  ########################################################################
+  
   has_many :chapters, :dependent => :destroy
   validates_associated :chapters
 
@@ -14,8 +19,27 @@ class Work < ActiveRecord::Base
   has_many :tags, :through => :taggings
   include TaggingExtensions
 
-  # VALIDATION
-  
+  acts_as_commentable
+
+  belongs_to :language, :foreign_key => 'language_id', :class_name => '::Globalize::Language'
+
+  ########################################################################
+  # VIRTUAL ATTRIBUTES
+  ########################################################################
+
+  # Virtual attribute to use as a placeholder for pseuds before the work has been saved
+  # Can't write to work.pseuds until the work has an id
+  attr_accessor :authors
+  attr_accessor :invalid_pseuds
+  attr_accessor :ambiguous_pseuds
+  attr_accessor :new_parent, :url_for_parent
+  attr_accessor :new_tags
+  attr_accessor :tags_to_tag_with
+
+
+  ########################################################################
+  # VALIDATION  
+  ########################################################################
   validates_presence_of :title
   validates_length_of :title, 
     :minimum => ArchiveConfig.TITLE_MIN, :too_short=> "must be at least %d letters long."/ArchiveConfig.TITLE_MIN
@@ -34,25 +58,415 @@ class Work < ActiveRecord::Base
   #temporary validation to let people know they can't enter external urls yet
   validates_format_of :parent_url, :with => Regexp.new(ArchiveConfig.APP_URL, true), 
     :allow_blank => true, :message => "can only be in the archive for now - we're working on expanding that!".t
-     
-  
-  # Virtual attribute to use as a placeholder for pseuds before the work has been saved
-  # Can't write to work.pseuds until the work has an id
-  attr_accessor :authors
-  attr_accessor :invalid_pseuds
-  attr_accessor :ambiguous_pseuds
-  attr_accessor :new_parent, :url_for_parent
-  attr_accessor :new_tags
-  attr_accessor :tags_to_tag_with
+    
+  # Checks that work has at least one author
+  def validate_authors
+    if self.authors.blank? && self.pseuds.empty?
+      errors.add_to_base("Work must have at least one author.".t)
+      return false
+    elsif !self.invalid_pseuds.blank?
+      errors.add_to_base("These pseuds are invalid: ".t + self.invalid_pseuds.inspect) 
+    end
+  end
 
+  # Makes sure the title has no leading spaces
+  def clean_and_validate_title
+    unless self.title.blank?
+      self.title = self.title.gsub(/^\s*/, '')
+      if self.title.length < ArchiveConfig.TITLE_MIN
+        errors.add_to_base("Title must be at least %d characters long without leading spaces."/ArchiveConfig.TITLE_MIN)
+        return false
+      end
+    end
+  end
+
+  def validate_published_at
+    to = Date.today
+    if self.published_at > to
+      errors.add_to_base("Publication date can't be in the future.".t)
+    end
+  end
+    
+  # rephrases the "chapters is invalid" message
+  def after_validation
+    if self.errors.on(:chapters)
+      self.errors.add(:base, "Please enter your story in the text field below.".t)
+      self.errors.delete(:chapters)
+    end
+  end
+
+
+
+  ########################################################################
+  # HOOKS
+  # These are methods that run before/after saves and updates to ensure
+  # consistency and that associated variables are updated.
+  ########################################################################  
   before_save :validate_authors, :clean_and_validate_title, :validate_published_at
-  before_save :set_word_count, :set_language
-  before_save :post_first_chapter
+  
+  before_save :set_word_count, :set_language, :post_first_chapter
 
-  after_save :save_creatorships, :save_associated
+  after_save :save_creatorships, :save_chapters, :save_parents
+  
   after_create :tag_after_create 
 
   before_update :validate_tags
+
+
+
+  ########################################################################
+  # AUTHORSHIP
+  ########################################################################
+
+  
+  # Virtual attribute for pseuds
+  def author_attributes=(attributes)
+    self.authors ||= []
+    attributes[:ids].each { |id| self.authors << Pseud.find(id) }
+    attributes[:ambiguous_pseuds].each { |id| self.authors << Pseud.find(id) } if attributes[:ambiguous_pseuds]
+    if attributes[:byline]
+      results = Pseud.parse_bylines(attributes[:byline])
+      self.authors << results[:pseuds]
+      self.invalid_pseuds = results[:invalid_pseuds]
+      self.ambiguous_pseuds = results[:ambiguous_pseuds] 
+    end
+    self.authors.flatten!
+    self.authors.uniq! 
+  end
+
+  # Save creatorships after the work is saved
+  def save_creatorships
+    if self.authors
+      Creatorship.add_authors(self, self.authors)
+      Creatorship.add_authors(self.chapters.first, self.authors)
+      self.series.each {|series| Creatorship.add_authors(series, self.authors)} unless self.series.empty?
+    end
+  end
+  
+
+  ########################################################################
+  # VISIBILITY
+  ########################################################################
+  
+  def visible(current_user=User.current_user)
+    if current_user == :false || !current_user
+      return self if self.posted unless self.restricted || self.hidden_by_admin
+    elsif self.posted && !self.hidden_by_admin
+      return self
+    elsif self.hidden_by_admin?
+      return self if current_user.kind_of?(Admin) || current_user.is_author_of?(self)       
+    end
+  end
+
+  def visible?(user=User.current_user)
+    self.visible(user) == self
+  end
+
+  ########################################################################
+  # LANGUAGE
+  ########################################################################
+
+
+  # Associating works with languages.  
+  def set_language(lang = nil)
+    if lang.nil?
+      return if self.language
+      if Locale.active && Locale.active.language
+        self.language = Locale.active.language
+      end
+    else
+      self.language = lang
+    end
+  end
+  
+  
+
+  ########################################################################
+  # VERSIONS & REVISION DATES
+  ########################################################################
+
+  # provide an interface to increment major version number
+  # resets minor_version to 0
+  def update_major_version
+    self.update_attributes({:major_version => self.major_version+1, :minor_version => 0})
+  end
+
+  # provide an interface to increment minor version number
+  def update_minor_version
+    self.update_attribute(:minor_version, self.minor_version+1)
+  end
+
+  def set_revised_at(datetime=self.published_at)
+    if datetime.to_date == Date.today
+      value = Time.now
+    else
+      value = datetime
+    end
+    self.update_attribute(:revised_at, value)
+  end
+
+
+  ########################################################################
+  # SERIES
+  ########################################################################
+  
+  # Virtual attribute for series
+  def series_attributes=(attributes)
+    new_series = Series.find(attributes[:id]) unless attributes[:id].blank?
+    self.series << new_series unless (new_series.blank? || self.series.include?(new_series))
+    unless attributes[:title].blank?
+      new_series = Series.new
+      new_series.title = attributes[:title]
+      new_series.save
+      self.series << new_series
+    end
+  end 
+
+
+
+  ########################################################################
+  # CHAPTERS
+  ########################################################################
+
+  # Save chapter data when the work is updated
+  def save_chapters
+    chapters.first.save(false)
+  end
+  
+  # If the work is posted, the first chapter should be posted too
+  def post_first_chapter
+    if self.posted? && !self.first_chapter.posted?
+       chapter = self.first_chapter
+       chapter.posted = true
+       chapter.save(false)
+    end
+  end
+
+  # Virtual attribute for first chapter
+  def chapter_attributes=(attributes)
+    self.new_record? ? self.chapters.build(attributes) : self.chapters.first.attributes = attributes
+    self.chapters.first.posted = self.posted
+  end
+  
+  # Virtual attribute for # of chapters
+  def wip_length
+    self.expected_number_of_chapters.nil? ? "?" : self.expected_number_of_chapters
+  end
+  
+  def wip_length=(number)
+    number = number.to_i
+    self.expected_number_of_chapters = (number != 0 && number >= self.number_of_chapters) ? number : nil
+  end
+  
+  # Get the total number of chapters for a work
+  def number_of_chapters
+     Chapter.maximum(:position, :conditions => {:work_id => self.id}) || 0
+  end 
+  
+  # Get the total number of posted chapters for a work
+  def number_of_posted_chapters
+     Chapter.maximum(:position, :conditions => {:work_id => self.id, :posted => true}) || 0
+  end
+  
+  # Gets the current first chapter
+  def first_chapter
+    self.chapters.find(:first, :order => 'position ASC') || self.chapters.first
+  end  
+  
+  # Gets the current last chapter
+  def last_chapter
+    self.chapters.find(:first, :order => 'position DESC')
+  end
+
+  # Change the position of multiple chapters when one is deleted
+  def adjust_chapters(position)
+    Chapter.update_all("position = (position - 1)", ["work_id = (?) AND position > (?)", self.id, position])
+  end
+  
+  # Reorders chapters based on form data
+	# Removes changed chapters from array, sorts them in order of position, re-inserts them into the array and uses the array index values to determine the new positions
+  def reorder_chapters(positions)
+    chapters = self.chapters.find(:all, :conditions => {:posted=>true}, :order => 'position')
+    changed = {}
+    positions.collect!(&:to_i).each_with_index do |new_position, old_position|
+    	if new_position != 0 && new_position <= self.number_of_posted_chapters && !changed.has_key?(new_position)
+    		changed.merge!({new_position => chapters[old_position]})
+    	end
+    end
+    chapters -= changed.values
+    changed.sort.each {|pair| pair.first > chapters.length ? chapters << pair.last : chapters.insert(pair.first-1, pair.last)}
+    chapters.each_with_index {|chapter, index| chapter.update_attribute(:position, index + 1)}
+  end
+
+  # Returns true if a work has or will have more than one chapter
+  def chaptered?
+    self.expected_number_of_chapters != 1  
+  end
+  
+  # Returns true if a work has more than one chapter
+  def multipart?
+    self.number_of_chapters > 1  
+  end 
+  
+  # Returns true if a work is not yet complete
+  def is_wip
+    self.expected_number_of_chapters.nil? || self.expected_number_of_chapters != self.number_of_chapters
+  end
+  
+  # Returns true if a work is complete
+  def is_complete
+    return !self.is_wip
+  end
+
+
+
+  ################################################################################
+  # TAGGING
+  # Works are taggable objects.
+  ################################################################################
+
+  # create dynamic methods based on the tag categories
+  def self.initialize_tag_category_methods
+		categories = TagCategory::OFFICIAL
+    categories.each do |c|
+      define_method(c.name){tag_string(c)}
+      define_method(c.name+'=') do |tag_name| 
+        self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({c.name.to_sym => tag_name}) : tag_with(c.name.to_sym => tag_name)
+      end
+    end 
+  end
+	
+	begin
+	 ActiveRecord::Base.connection
+   initialize_tag_category_methods
+  rescue
+    puts "no database yet, not initializing tag category methods"
+  end
+  
+  # Set the value of word_count to reflect the length of the chapter content
+  def set_word_count
+    self.word_count = self.chapters.collect(&:word_count).compact.sum
+  end
+  
+  # Check to see that a work is tagged appropriately
+  def has_required_tags?
+    my_tag_categories = (self.tags_to_tag_with ? self.tags_to_tag_with.keys : []) + self.tags.collect(&:tag_category)    
+    TagCategory.required - my_tag_categories == []
+  end
+  
+  def validate_tags
+    errors.add_to_base("Work must have required tags.".t) unless self.has_required_tags?      
+    self.has_required_tags? 
+  end
+  
+  def tag_after_create
+    unless self.tags_to_tag_with.blank?
+      if self.tags_to_tag_with[:warning].blank?
+        self.tags_to_tag_with.merge!({:warning => Tag::DEFAULT_WARNING_TAG.name})
+      end
+      if self.tags_to_tag_with[:rating].blank?
+        self.tags_to_tag_with.merge!({:rating => Tag::DEFAULT_RATING_TAG.name})
+      end
+      self.tags_to_tag_with.each_pair do |category, tag|
+        tag_with(category => tag)
+      end
+    end
+  end
+  
+  def adult_content?
+    tags.find(:first, :conditions => {:adult => true})
+  end
+
+
+
+  ################################################################################
+  # COMMENTING & BOOKMARKS
+  # We don't actually have comments on works currently but on chapters. 
+  # Comment support -- work acts as a commentable object even though really we
+  # override to consolidate the comments on all the chapters.
+  ################################################################################
+  
+  # Gets all comments for all chapters in the work
+  def find_all_comments
+    self.chapters.collect { |c| c.find_all_comments }.flatten
+  end
+  
+  # Returns number of comments
+  # Hidden and deleted comments are referenced in the view because of the threading system - we don't necessarily need to 
+  # hide their existence from other users
+  def count_all_comments
+    self.chapters.collect { |c| c.count_all_comments }.sum
+  end
+  
+  # returns the top-level comments for all chapters in the work
+  def comments
+    self.chapters.collect { |c| c.comments }.flatten
+  end
+
+  # Returns the number of visible bookmarks
+  def count_visible_bookmarks(current_user=:false)
+    self.bookmarks.select {|b| b.visible(current_user) }.length
+  end
+
+
+
+
+  ########################################################################
+  # RELATED WORKS
+  # These are for inspirations/remixes/etc
+  ########################################################################
+  
+  # Works this work belongs to through related_works
+  def parents
+    RelatedWork.find(:all, :conditions => {:work_id => self.id}, :include => :parent).collect(&:parent)
+  end
+  
+  # Works that belong to this work through related_works
+  def children
+    RelatedWork.find(:all, :conditions => {:parent_id => self.id}, :include => :work).collect(&:work) 
+  end
+  
+  # Works that belongs to this work and which have been approved for linking back
+  def approved_children
+    RelatedWork.find(:all, :conditions => {:parent_id => self.id, :reciprocal => true}, :include => :work).collect(&:work)
+  end
+  
+  # Virtual attribute for parent work, via related_works
+  def parent_url
+    self.url_for_parent
+  end
+  
+  def parent_url=(url)
+    self.url_for_parent = url
+    unless url.blank?
+      if url.include?(ArchiveConfig.APP_URL)
+        id = url.match(/works\/\d+/).to_a.first
+        id = id.split("/").last unless id.nil?
+        self.new_parent = Work.find(id)
+      else
+        #TODO: handle related works that are not in the archive
+      end
+    end
+  end 
+
+  # Save relationship to parent work if applicable
+  def save_parents
+    if self.new_parent 
+      relationship = self.new_parent.related_works.build :work_id => self.id
+      relationship.save(false)
+    end
+  end
+  
+
+
+  #################################################################################
+  #
+  # SEARCH & FIND 
+  # In this section we define various named scopes that can be chained together
+  # to do finds in the database, as well as settings for the ThinkingSphinx
+  # plugin that connects us to the Sphinx search engine. 
+  #
+  #################################################################################
 
   AUTHOR_TO_SORT_ON ="trim(leading '/' from 
                         trim(leading '.' from 
@@ -279,313 +693,6 @@ class Work < ActiveRecord::Base
       find(:all).collect {|w| w if (w.tags & tags).empty? }.compact.uniq
     end  
   end
-
-  def visible(current_user=User.current_user)
-    if current_user == :false || !current_user
-      return self if self.posted unless self.restricted || self.hidden_by_admin
-    elsif self.posted && !self.hidden_by_admin
-      return self
-    elsif self.hidden_by_admin?
-      return self if current_user.kind_of?(Admin) || current_user.is_author_of?(self)       
-    end
-  end
-
-  # Associating works with languages.  
-  belongs_to :language, :foreign_key => 'language_id', :class_name => '::Globalize::Language'
-   
-  def set_language
-    return if self.language
-    if Locale.active && Locale.active.language
-      self.language = Locale.active.language
-    end
-  end
-
-  # Comment support -- work acts as a commentable object even though really we
-  # override to consolidate the comments on all the chapters.
-  
-  acts_as_commentable
-  # Gets all comments for all chapters in the work
-  def find_all_comments
-    self.chapters.collect { |c| c.find_all_comments }.flatten
-  end
-  
-  # Returns number of comments
-  # Hidden and deleted comments are referenced in the view because of the threading system - we don't necessarily need to 
-  # hide their existence from other users
-  def count_all_comments
-    self.chapters.collect { |c| c.count_all_comments }.sum
-  end
-  
-  # returns the top-level comments for all chapters in the work
-  def comments
-    self.chapters.collect { |c| c.comments }.flatten
-  end
-
-  # Returns the number of visible bookmarks
-  def count_visible_bookmarks(current_user=:false)
-    self.bookmarks.select {|b| b.visible(current_user) }.length
-  end
-
-  # rephrases the "chapters is invalid" message
-  def after_validation
-    if self.errors.on(:chapters)
-      self.errors.add(:base, "Please enter your story in the text field below.".t)
-      self.errors.delete(:chapters)
-    end
-  end
-
-  # Virtual attribute for first chapter
-  def chapter_attributes=(attributes)
-    self.new_record? ? self.chapters.build(attributes) : self.chapters.first.attributes = attributes
-    self.chapters.first.posted = self.posted
-  end
-  
-  # Virtual attribute for series
-  def series_attributes=(attributes)
-    new_series = Series.find(attributes[:id]) unless attributes[:id].blank?
-    self.series << new_series unless (new_series.blank? || self.series.include?(new_series))
-    unless attributes[:title].blank?
-      new_series = Series.new
-      new_series.title = attributes[:title]
-      new_series.save
-      self.series << new_series
-    end
-  end 
-  
-  # Virtual attribute for pseuds
-  def author_attributes=(attributes)
-    self.authors ||= []
-    attributes[:ids].each { |id| self.authors << Pseud.find(id) }
-    attributes[:ambiguous_pseuds].each { |id| self.authors << Pseud.find(id) } if attributes[:ambiguous_pseuds]
-    if attributes[:byline]
-      results = Pseud.parse_bylines(attributes[:byline])
-      self.authors << results[:pseuds]
-      self.invalid_pseuds = results[:invalid_pseuds]
-      self.ambiguous_pseuds = results[:ambiguous_pseuds] 
-    end
-    self.authors.flatten!
-    self.authors.uniq! 
-  end
-  
-  # Works this work belongs to through related_works
-  def parents
-    RelatedWork.find(:all, :conditions => {:work_id => self.id}, :include => :parent).collect(&:parent)
-  end
-  
-  # Works that belong to this work through related_works
-  def children
-    RelatedWork.find(:all, :conditions => {:parent_id => self.id}, :include => :work).collect(&:work) 
-  end
-  
-  # Works that belongs to this work and which have been approved for linking back
-  def approved_children
-    RelatedWork.find(:all, :conditions => {:parent_id => self.id, :reciprocal => true}, :include => :work).collect(&:work)
-  end
-  
-  # Virtual attribute for parent work, via related_works
-  def parent_url
-    self.url_for_parent
-  end
-  
-  def parent_url=(url)
-    self.url_for_parent = url
-    unless url.blank?
-      if url.include?(ArchiveConfig.APP_URL)
-        id = url.match(/works\/\d+/).to_a.first
-        id = id.split("/").last unless id.nil?
-        self.new_parent = Work.find(id)
-      else
-        #TODO: handle related works that are not in the archive
-      end
-    end
-  end 
-  
-  # Virtual attribute for # of chapters
-  def wip_length
-    self.expected_number_of_chapters.nil? ? "?" : self.expected_number_of_chapters
-  end
-  
-  def wip_length=(number)
-    number = number.to_i
-    self.expected_number_of_chapters = (number != 0 && number >= self.number_of_chapters) ? number : nil
-  end
-  
-  # Checks that work has at least one author
-  def validate_authors
-    if self.authors.blank? && self.pseuds.empty?
-      errors.add_to_base("Work must have at least one author.".t)
-      return false
-    elsif !self.invalid_pseuds.blank?
-      errors.add_to_base("These pseuds are invalid: ".t + self.invalid_pseuds.inspect) 
-    end
-  end
-  
-  # Makes sure the title has no leading spaces
-  def clean_and_validate_title
-    unless self.title.blank?
-      self.title = self.title.gsub(/^\s*/, '')
-      if self.title.length < ArchiveConfig.TITLE_MIN
-        errors.add_to_base("Title must be at least %d characters long without leading spaces."/ArchiveConfig.TITLE_MIN)
-        return false
-      end
-    end
-  end
-  
-  # Save creatorships after the work is saved
-  def save_creatorships
-    if self.authors
-      Creatorship.add_authors(self, self.authors)
-      Creatorship.add_authors(self.chapters.first, self.authors)
-      self.series.each {|series| Creatorship.add_authors(series, self.authors)} unless self.series.empty?
-    end
-  end
-  
-  # Save chapter data when the work is updated
-  # Save relationship to parent work if applicable
-  def save_associated
-    chapters.first.save(false)
-    if self.new_parent 
-      relationship = self.new_parent.related_works.build :work_id => self.id
-      relationship.save(false)
-    end
-  end
-  
-  # Get the total number of chapters for a work
-  def number_of_chapters
-     Chapter.maximum(:position, :conditions => {:work_id => self.id}) || 0
-  end 
-  
-  # Get the total number of posted chapters for a work
-  def number_of_posted_chapters
-     Chapter.maximum(:position, :conditions => {:work_id => self.id, :posted => true}) || 0
-  end
-  
-  # Gets the current first chapter
-  def first_chapter
-    self.chapters.find(:first, :order => 'position ASC') || self.chapters.first
-  end  
-  
-  # Gets the current last chapter
-  def last_chapter
-    self.chapters.find(:first, :order => 'position DESC')
-  end
-
-  # Change the position of multiple chapters when one is deleted
-  def adjust_chapters(position)
-    Chapter.update_all("position = (position - 1)", ["work_id = (?) AND position > (?)", self.id, position])
-  end
-  
-  # Reorders chapters based on form data
-	# Removes changed chapters from array, sorts them in order of position, re-inserts them into the array and uses the array index values to determine the new positions
-  def reorder_chapters(positions)
-    chapters = self.chapters.find(:all, :conditions => {:posted=>true}, :order => 'position')
-    changed = {}
-    positions.collect!(&:to_i).each_with_index do |new_position, old_position|
-    	if new_position != 0 && new_position <= self.number_of_posted_chapters && !changed.has_key?(new_position)
-    		changed.merge!({new_position => chapters[old_position]})
-    	end
-    end
-    chapters -= changed.values
-    changed.sort.each {|pair| pair.first > chapters.length ? chapters << pair.last : chapters.insert(pair.first-1, pair.last)}
-    chapters.each_with_index {|chapter, index| chapter.update_attribute(:position, index + 1)}
-  end
-
-  # provide an interface to increment major version number
-  # resets minor_version to 0
-  def update_major_version
-    self.update_attributes({:major_version => self.major_version+1, :minor_version => 0})
-  end
-
-  # provide an interface to increment minor version number
-  def update_minor_version
-    self.update_attribute(:minor_version, self.minor_version+1)
-  end
-  
-  # Returns true if a work has or will have more than one chapter
-  def chaptered?
-    self.expected_number_of_chapters != 1  
-  end
-  
-  # Returns true if a work has more than one chapter
-  def multipart?
-    self.number_of_chapters > 1  
-  end 
-  
-  # Returns true if a work is not yet complete
-  def is_wip
-    self.expected_number_of_chapters.nil? || self.expected_number_of_chapters != self.number_of_chapters
-  end
-  
-  # Returns true if a work is complete
-  def is_complete
-    return !self.is_wip
-  end
-
-  # create dynamic methods based on the tag categories
-  def self.initialize_tag_category_methods
-		categories = TagCategory::OFFICIAL
-    categories.each do |c|
-      define_method(c.name){tag_string(c)}
-      define_method(c.name+'=') do |tag_name| 
-        self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({c.name.to_sym => tag_name}) : tag_with(c.name.to_sym => tag_name)
-      end
-    end 
-  end
-	
-	begin
-	 ActiveRecord::Base.connection
-   initialize_tag_category_methods
-  rescue
-    puts "no database yet, not initializing tag category methods"
-  end
-  
-  # Set the value of word_count to reflect the length of the chapter content
-  def set_word_count
-    self.word_count = self.chapters.collect(&:word_count).compact.sum
-  end
-  
-  # Check to see that a work is tagged appropriately
-  def has_required_tags?
-    my_tag_categories = (self.tags_to_tag_with ? self.tags_to_tag_with.keys : []) + self.tags.collect(&:tag_category)    
-    TagCategory.required - my_tag_categories == []
-  end
-  
-  def validate_tags
-    errors.add_to_base("Work must have required tags.".t) unless self.has_required_tags?      
-    self.has_required_tags? 
-  end
-  
-  def tag_after_create
-    unless self.tags_to_tag_with.blank?
-      if self.tags_to_tag_with[:warning].blank?
-        self.tags_to_tag_with.merge!({:warning => Tag::DEFAULT_WARNING_TAG.name})
-      end
-      if self.tags_to_tag_with[:rating].blank?
-        self.tags_to_tag_with.merge!({:rating => Tag::DEFAULT_RATING_TAG.name})
-      end
-      self.tags_to_tag_with.each_pair do |category, tag|
-        tag_with(category => tag)
-      end
-    end
-  end
-  
-  # If the work is posted, the first chapter should be posted too
-  def post_first_chapter
-    if self.posted? && !self.first_chapter.posted?
-       chapter = self.first_chapter
-       chapter.posted = true
-       chapter.save(false)
-    end
-  end
-
-  def adult_content?
-    tags.find(:first, :conditions => {:adult => true})
-  end
-
-  # this doesn't work right >:(
-  def self.all_cached
-    Rails.cache.fetch('Works.all') { all_with_tags }    
-  end
   
   def self.search_with_sphinx(options)
     # visibility
@@ -735,21 +842,11 @@ class Work < ActiveRecord::Base
   def <=>(another_work)
     title.strip.downcase <=> another_work.strip.downcase
   end
-  
-  def update_revised_at(datetime)
-    if datetime.to_date == Date.today
-      value = Time.now
-    else
-      value = datetime
-    end
-    self.update_attribute(:revised_at, value)
+
+  # this doesn't work right >:(
+  def self.all_cached
+    Rails.cache.fetch('Works.all') { all_with_tags }    
   end
-  
-  def validate_published_at
-    to = Date.today
-    if self.published_at > to
-      errors.add_to_base("Publication date can't be in the future.".t)
-    end
-  end
-    
+
+
 end
