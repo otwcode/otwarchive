@@ -85,6 +85,7 @@ class Work < ActiveRecord::Base
     to = Date.today
     if self.published_at > to
       errors.add_to_base("Publication date can't be in the future.".t)
+      return false
     end
   end
     
