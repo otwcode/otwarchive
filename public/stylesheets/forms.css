@@ -1,5 +1,5 @@
 /* GLOBAL */
-legend	{ margin-left:-999em; position:absolute; }
+form fieldset legend	{ margin-left:-999em !important; position:absolute !important; }
 form p.submit { text-align:right; }
 form p { line-height:2; clear:both;}
 form dl { position:relative; }
@@ -34,7 +34,7 @@ form dd { float: left; }
 #search input.button {margin-left:5px;}
 
 /*ADMIN */
-admin_session-new dt { width:6em; }
+.admin_session-new dt { width:6em; }
 /*REPORT ABUSE */
 #main.abuse_reports-new dt { width:100%; float:none; }
 
@@ -63,11 +63,11 @@ form p.openid	{ margin-top:6em; }
 #work-form .work-meta dd{ float: left; margin:0; padding:0; width:60%}
 
 #work-preface textarea {height:10em;}
-#work-form #preface dt {float:none;}
-#work-form #preface dd { margin-bottom:0.5625em;float:none;}
+#work-form .preface dt {float:none;}
+#work-form .preface dd { margin-bottom:0.5625em;float:none;}
 
 dd.work-title input, input#chapter_title { width:80%; }
-#work-form #preface { border:0; }
+#work-form .preface { border:0; }
 
 fieldset#associations { font-size:0.875em;}
 #managePublicationDate select {width:auto;}
@@ -76,7 +76,7 @@ dt.work-parent, dd.work-parent {float:none; width:99%; margin:auto}
 dd#co-authors { margin:0 auto 0.875em auto; padding:0.375em; border:1px solid #bbb;}
 input#work_parent_url {margin:0.375em auto 0.875em auto;}
 dd#seriesmanage {clear:both; float:none;}
-#seriesmanage dt, dt.work-restricted, dt.work-is_wip, dt.work-is_serial	, dt.work-is-backdated{ width: 50%;}
+#seriesmanage dt, dt.work-restricted, dt.work-is_wip, dt.work-is_serial, dt.work-is-backdated{ width: 50%;}
 #seriesmanage dd, dd.work-restricted, dd.work-is_wip, dd.work-is_serial	{ clear:right; margin:0; }
 p.rtf-html-switch {margin:0; padding:0 0.875em 0; text-align:right; }
 .rtf-html-switch span {background:#f0f0ee; padding:0.5625em 0.5625em 0 0.5625em; border:1px solid #ddd;}
@@ -92,8 +92,8 @@ p.rtf-html-switch {margin:0; padding:0 0.875em 0; text-align:right; }
 #main.chapters-new dd textarea {width:99%;margin:auto;}
 
 /*EDIT PREFERENCES */
-form.edit_preference ul { margin:0.5625em auto; padding:1.5em 0; }
-.edit_preference li { margin:0.5625em 0;}
+form.edit_preference ul { margin:0.562625em auto 1.12525em auto; padding:0.562625em 0; border-bottom:1px dashed;}
+.edit_preference li { margin:0.562625em 0;}
 
 /*EDIT PROFILE*/
 #main.users-edit form { position:absolute; }

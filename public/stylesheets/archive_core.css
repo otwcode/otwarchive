@@ -8,7 +8,7 @@ table, caption, tbody, tfoot, thead, tr, th, td
 /************************************************end of uneditable rules */
 
 /* GLOBAL RULES. 
-See internal wiki "Em scale" to grok the font sizing and measures. body p set to 14px.
+See internal wiki "Em scale" to grok the font sizing and measures. #main p set to 14px.
 Colours:
 red:	#900 (otw brand red)
 white:	#fffef9 (off-white)
@@ -23,17 +23,23 @@ body	{ background: #fffef9; color: #222; font: 100%/1.125 Candara, Corbel, Genev
 
 a, a:link	{ color: #222; }
 a:hover	{ color: #999; }
-a:focus { background:#900; color:#fffef9}
+a:active, a:focus { background:#900; color:#fffef9}
 a:visited	{ color: #777; }
 a img	{ border: 0; }
 a.tag	{ color: #111; text-decoration:none; padding: 0 0.125em; border-bottom:1px dotted; }
 a.tag:hover	{ background: #900 !important; color: #fffef9 !important; }
 
+/*EM SCALE */
 #main p	{ font-size: 0.875em; line-height: 1.286; margin: 0.643em 0; }
-#main li {font-size: 0.875em; line-height: 1.286; margin: 0.643em 0;}
-#main li li {font-size:1em;}
-
-#chapters p {padding-bottom: 0.5em;}
+#main li, #main dd {font-size: 0.875em; line-height: 1.286; margin: 0.643em 0;}
+/*sizing up and down through multiple nested lists; hold on to your hats, I've tried to cover as many nestings as I can think of */
+#main dl dd dl dd p, #main dl dd dl dd, #main dd dl dd p, #main dd dl dd dl dd p
+{ font-size:1.142857em; }
+#main li li, #main li li li, #main li p, #main li dd, #main li dd p, #main dd p, #main dd li, #main dd li p, 
+#main dd dl dd dl dd p, #main dd dl dd dl dd ul li, #main dd dl dd dl dd ul li p 
+{ font-size:1em; }
+#main dl dd dl dd p
+{font-size: 0.875em;}
 
 h1, h2, h3, h4, h5, h6	{ font-family: Fertigo, Cambria, Constantia, Palatino, Georgia, sans-serif; font-weight: 400;}
 h1	{ font-size: 2.25em; line-height: 0.5; margin: 1.125em 0 0.875em; }
@@ -43,7 +49,7 @@ h4	{ font-size: 1em; line-height: 1.125; margin:0.5625em 0; }
 h5	{ font-size: 0.75em; line-height: 1.5; margin: .375em 0; }
 h6	{ font-size: 0.625em; line-height: 1.8; margin: .3125em 0; }
 
-hr	{ margin: 0.75em auto; border-bottom: 3px double; }
+hr	{ margin: 0.75em auto; border:0; border-bottom: 3px double; }
 hr.clear, .clearboth	{ clear: both; height: 0; border: 0; }
 
 blockquote, pre	{ font: 100 1em/1.125 Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; margin: 1.5em; }
@@ -53,7 +59,7 @@ em, cite, i	{ font-style: oblique; }
 cite em, em cite, cite i, i cite, i em, em i, em em, i i, cite cite	{ font-style: normal; }
 em cite, i cite	{ text-decoration: underline; }
 abbr, acronym	{ font-variant: small-caps; cursor: help; }
-del, strike {text-decoration:strikethrough;}
+del, strike {text-decoration:line-through;}
 ins {text-decoration: underline;}
 
 /* TABLES AND LISTS */

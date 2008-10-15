@@ -8,8 +8,11 @@ set work styles
 .work-show a:hover { border-bottom:0}
 .work-show a:visited { text-decoration:underline}
 
+#chapters p {padding-bottom: 0.5em;}
+
 .work-show dl	{ font-size:1em; margin:1.5em 0; border-bottom:0.25em double #777; }
-.work-show dt	{ font-weight:bold; }
+.work-show dl dl {width:90%; margin:auto;}
+.work-show dt	{ font-weight:bold; text-indent:0;}
 .work-show dd	{ line-height:1.5; font-size:0.875em; text-indent:3em; margin-top:1.25em; margin-bottom:1.25em; }
 .work-show dd p	{ text-indent:0; margin:0; padding:0; }
 .work-show ul	{ text-indent:2em; margin:1.125em auto; padding:0 1em; }
@@ -19,10 +22,11 @@ set work styles
 .work-show ol li ol li	{ list-style-type: lower-alpha;}
 .work-show ol li ol li ol li	{ list-style-type: lower-roman;}
 .work-show li	{ font-weight:normal; }
+
 #ibox_content dl.work-show ul li { list-style-type: none !important; margin:0; text-indent:0;}
 #ibox_content dl.work-show dt {list-style-type:disc;}
 
-/*headings */
+/* headings */
 .work-show h1	{ font-family:Cambria, Constantia, Palatino, Georgia, serif; text-align:center; }
 .work-show h2	{ color:#333; font-variant:normal; text-align:left; text-transform:none; margin:1.5em 0;}
 .work-show h3	{ background:#333; color:#fffef9; font-weight:100; padding: 0.125em; border-bottom:0.25em double #fffef9; }
@@ -31,7 +35,7 @@ set work styles
 .work-show h6	{ font-size: 0.875em; border-bottom:1px solid; }
 .work-show h3 a, .work-show h3 a:link, .work-show h3 a:visited {color:#fffef9; border-bottom:0} 
 
-/*quotes and stresses*/
+/* quotes and stresses */
 .work-show blockquote	{ font-size:1em; margin:auto auto auto 1.5em; padding:0.75em; border-left:2px solid #999; }
 .work-show blockquote blockquote	{ padding:0.25em; border:0; }
 .work-show hr	{ width:33%; margin:0.875em auto 1.2525em auto; border:1px solid; }
@@ -40,19 +44,21 @@ set work styles
 .flashback	{ font-style:italic; }
 .caps	{ font-variant:small-caps}
 
-/* work META DATA */
+/* WORK META DATA */
 dl.work-meta { background:#eee; padding:0.25em; position:relative;margin-top:0; border:1px solid #ddd;;}
 .work-meta dt { width:9em; font-weight:100;}
-.work-meta dd { margin:-2.625em 0 -0.5625em 11em; }
-.work-meta ul { text-indent:0; padding:0; }
-.work-meta ul li {display:inline; list-style-type:none; font-size:110%;}
+.work-meta ul { margin:-1.9675em 0 .75em 13em; text-indent:0; padding:0;}
+.work-meta dd ul li {display:inline; }
 
 /*WORK PREFACE - TITLE AND NOTES */
-#preface	{ margin-bottom:1.5em; border-bottom:3px double; }
-#preface blockquote.summary, #preface blockquote.notes	{ border:0;}
-#preface blockquote.summary h3, #preface blockquote.notes h3 {color:#222; background:transparent; border-bottom:1px solid;}
-#preface h2	{ font:800 2.25em Cambria, Constantia, Palatino, Georgia, sans-serif; margin:1.5em auto 0}
-h3.byline {background:transparent; border:0;}
+.preface	{ margin-bottom:1.5em; border-bottom:3px double; }
+.preface h2	{ font:800 2.25em Cambria, Constantia, Palatino, Georgia, sans-serif; margin:1.5em auto 0}
+.preface h3 {color:#333; background:transparent; border:0;}
+.preface .title { font-weight:700; font-size:1.5em; text-align:center; }
+.preface .byline	{ text-align:center;}
+.preface a, .preface a:link, .preface a:visited {color: #333 !important; border-bottom:0} 
+.preface blockquote.summary, .preface blockquote.notes	{ border:0;}
+.preface blockquote.summary h3, .preface blockquote.notes h3 {color:#222; background:transparent; border-bottom:1px solid;}
 
 /* SERIES */
 #series-and-view-data	{ clear:both}
@@ -69,14 +75,13 @@ dl#series-meta	{ position:relative; }
 #close-popup	{ position:absolute; top:0.375em; right:0.625em; }
 .chapter-position-list	{ list-style-type:none; padding:0.625em; }
 .work-edit-meta, .work-edit-notes	{ width:80%; }
+.work-edit-title	{ font-weight:700; font-size:1.5em; text-align:center; }
 
 /*work PAGE LAYOUT ELEMENTS*/
 #main.works-show ul#navigation	{ margin:0.75em 0; text-align:right}
-.works-show #navigation li	{ display:inline; }
 .works-show #navigation li.go-back	{ display:block; float:left; padding:0 0.25em 0 0; }
 ul.work-list li.tags	{ display:inline; }
-.work-show h2, .work-edit-title	{ font-weight:700; font-size:1.5em; text-align:center; }
-.work-show .byline	{ text-align:center;}
-.work-show .byline a, .work-show .byline a:link, .work-show .byline a:visited {color: #333; border-bottom:0} 
+
+
 
 

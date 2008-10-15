@@ -1,14 +1,15 @@
-<%= stylesheet_link_tag 'archive_core', :media => 'screen' %>
-<%= stylesheet_link_tag 'layout-elements', :media => 'screen' %>
+<%= stylesheet_link_tag 'archive_core', :media => 'all' %>
+<%= stylesheet_link_tag 'layout-elements', :media => 'all' %>
 <%= stylesheet_link_tag 'home', :media => 'screen' %>
 <%= stylesheet_link_tag 'forms', :media => 'screen' %>
-<%= stylesheet_link_tag 'story-views', :media => 'screen' %>
+<%= stylesheet_link_tag 'story-views', :media => 'all' %>
 <%= stylesheet_link_tag 'comments', :media => 'screen' %>
 <%= stylesheet_link_tag 'globalize', :media => 'screen' %>
 <%= stylesheet_link_tag 'live_validation', :media => 'screen' %>
 <%= stylesheet_link_tag 'auto_complete', :media => 'screen' %>
 <%= stylesheet_link_tag 'tags', :media => 'screen' %>
 <%= stylesheet_link_tag 'system-messages', :media => 'screen' %>
+<%= stylesheet_link_tag 'aural', :media => 'screenreader' %>
 <%= stylesheet_link_tag 'print', :media => 'print' %>
 
 <%= logged_in_as_admin? ? (stylesheet_link_tag 'admin', :media => 'screen') : "" %>

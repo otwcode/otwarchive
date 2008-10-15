@@ -42,9 +42,10 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 
 #main.sidebar { margin: 0 1em 1em 12em; }
 #main.sidebar h1 {margin-top: 0;}
+
 /*MAIN CONTENT */
 #main { position: relative; margin: 1.5em auto; padding: 0 3.5em; }
-.pagination { text-align: center; padding: 0.25em; margin:1.5em auto;}
+.pagination { text-align: center; padding: 0.25em; margin:1.5em auto; }
 
 /* FOOTER */
 #footer { color: #999; font-size: 0.75em; text-align: center; clear: both; margin: 1.5em 0; padding: 1em; border-top: 1px solid #999; }
@@ -82,7 +83,7 @@ dl#user-data dt {font-weight: 900; width: 9em; float:left; clear:left; margin:0.
 #user-data dd	{ clear:right; margin:0 0 0 9em; padding: 0.25em 0 0.125em 0; border-bottom:1px solid #ddd; }
 #user-profile ul.navigation { text-align:right; }
 
-/* DASHBOARD: READING HIwork */
+/* DASHBOARD: READING HISTORY */
 #main.readings-index li.work ul { margin: 0.875em auto  !important;}
 #main.readings-index li.work { font-size:smaller;}
 #main.readings-index li.work-desc p { font-size:1em;}
@@ -103,7 +104,7 @@ li.work ul.work {position: relative; margin: 0 13.5em 0.5625em auto;padding-righ
 #user-page li.work ul.work, #main.series-index  li.work ul.work, #series-work-list li.work ul.work{ margin-right: 0; }
 
 ul.work {position:relative; border-bottom:1px solid #ddd; }
-ul.work ul li{ display:inline;}
+ul.work ul li, .work dd ul li{ display:inline;}
 li.heading {position:relative;border:1px solid #fffef9;}
 .work ul.required-tags {width:75px; height:50px;float:left;}
 .work ul.required-tags li img {width:25px; height:25px;}
@@ -112,9 +113,10 @@ li.heading {position:relative;border:1px solid #fffef9;}
 .work h3, .work h3 a:link, .work h3 img {color:#900; vertical-align:bottom;}
 
 .work p.update {font-size:0.875em; text-align:right; top:-0.875em; right:0; position:absolute; }
-.work .tags dt{font-weight:bold;}
-.work .tags dd {font-size:0.875em; margin:-1.375em auto auto 5.5em;}
-.work li.summary {margin:0.5625em auto; }
+.work .tags dl {position:relative;}
+.work .tags dt{font-weight:bold; float:left; clear:left; width:5em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
+.work .tags dd {float: left; padding:0; margin:0 !important;}
+.work li.summary {margin:0.5625em auto; clear:left;}
 .work li.stats dl {text-align:right;}
 .work li.stats dt, .work li.stats dd {display:inline; font-size:0.875em}
 .work li.stats dl dd {margin:0 0.375em 0 0;}
@@ -130,6 +132,7 @@ ul#series-work-list li.work ul.work li ul li {display:inline;}
 .sidebar .comment { clear:none;}
 
 /*MEDIA-INDEX (FANDOMS)*/
+.media-index h3 a{color:#900;}
 .media-index li.category { padding: 1em; min-height: 15em; }
 #main.media-index ol, #main.fandoms-index ol, #main.fandoms-show ol { list-style-type: decimal; }
 .media-index li.odd { width: 40%; float: left; margin: 0 0.5625em 0 0; }
@@ -171,6 +174,9 @@ ul#tag-wrangler-footer { text-align: center; border-top: 1px dotted}
 * styling duplicates the work-views.css and is incorporated there*/
 #tos {margin: 1.5em; padding: 0 2.25em;}
 #tos .toc li {list-style-type: upper-roman !important; }
+.home-tos_faq #contents {width: 60%; margin:auto; padding:1em;}
+.home-tos_faq #contents h2 {text-align:center;}
+.home-tos_faq #contents ul li {border-bottom:1px solid #ddd;}
 
 /*SYMBOLS KEY 
 *this really ought to go somewhere else but it's here for now 02-10-08 */

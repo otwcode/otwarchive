@@ -46,7 +46,7 @@
 </fieldset>       
 <fieldset>
 <legend><%= 'Chapter Notes'.t %></legend>
-    <dl id="preface">      
+    <dl class="preface">      
       <dt class="summary"><%= f.label :summary, "Chapter summary (max %d letters)".t/ArchiveConfig.SUMMARY_MAX %></dt>
       <dd class="summary"><%= f.text_area :summary, :live => true %></dd>
 

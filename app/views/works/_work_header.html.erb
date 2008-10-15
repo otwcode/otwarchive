@@ -37,13 +37,12 @@
     <%- end -%>
   </div>
 
-  <div id="preface">
+  <div class="preface">
 	<h2 class="title">
     <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)".t) %><% end %>
     <% if @work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)".t) %><% end %>
     <%=sanitize_title_for_display @work.title %>
-	<!--sup sub ins del code q abbr acronym br dfn cite-->
-  </h2>
+	</h2>
   <h3 class="byline">
    <%= byline(@work) -%>
   </h3>

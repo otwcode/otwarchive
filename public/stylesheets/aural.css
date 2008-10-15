@@ -1,0 +1,53 @@
+a.tag {
+speak: no-punctuation
+}
+em {
+voice-stress: moderate;
+}
+strong, .warning {
+voice-stress: strong;
+}
+cite {
+voice-rate: 90%;
+}
+acronym {
+speak: spell-out;
+}
+abbr {
+content: attr(title);
+}
+code, kbd, tt {
+voice-rate: 90%;
+}
+
+.work-show {
+speak-numeral: continuous;
+}
+
+.work-show work-meta {
+voice-rate: 110%;
+}
+
+.work-show h1, .work-show h2.chapter-title {
+voice-rate: 90%;
+}
+
+.work-show dt {
+voice-balance: leftwards;
+}
+.work-show dd {
+voice-balance: rightwards;
+}
+
+.navigation {
+voice-stress: moderate;
+speak: no-punctuation;
+}
+
+/*SAY-INSTEAD DRAFTS 
+
+[recs] say-instead: "wrecks";
+acronym[ToS] say-instead: "toss"; */
+
+
+
