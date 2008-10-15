@@ -2,7 +2,7 @@
 
 <!-- put in all the information uploaded in hidden fields -->
 <select name="work[author_attributes][ids][]" multiple="multiple" style="display : none;">
-<%= options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds) %>  
+<%= options_from_collection_for_select(@allpseuds, :id, :name, @selected_pseuds) %>  
 </select>
 <%= form.hidden_field :title, :value => "#{@work.title}" %>
 <%= form.hidden_field :summary, :value => "#{@work.summary}" %>

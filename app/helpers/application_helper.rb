@@ -39,7 +39,7 @@ module ApplicationHelper
   end
     
   def byline(creation)
-    pseuds = ((creation.authors ||= []) + (creation.pseuds ||= [])).uniq 
+    pseuds = creation.authors.blank? ? (creation.pseuds ||= []) : (creation.authors ||= [])
     pseuds.collect { |pseud|
       link_to pseud.name, user_path(pseud.user), :class => "login author"
     }.join(', ')

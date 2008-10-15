@@ -75,9 +75,7 @@ class WorksController < ApplicationController
       stupid_garbage_variable = @work.to_yaml
       
       unless current_user == :false
-        @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
-        to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 
-        @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
+        load_pseuds
         @series = current_user.series.uniq 
       end
     rescue
@@ -308,9 +306,7 @@ class WorksController < ApplicationController
     end
 
     # Need to update @pseuds and @selected_pseuds values so we don't lose new co-authors if the form needs to be rendered again
-    @pseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
-    to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 
-    @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
+    load_pseuds
 
     if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank? 
       @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
@@ -440,6 +436,14 @@ class WorksController < ApplicationController
   end
       
   protected
+
+    def load_pseuds
+        @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
+        @pseuds = current_user.pseuds
+        @coauthors = @allpseuds.select{ |p| p.user.id != current_user.id}
+        to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 
+        @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
+    end
 
     # create a reading object when showing a work, but only if the user has reading 
     # history enabled and is not the author of the work

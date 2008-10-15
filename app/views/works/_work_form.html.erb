@@ -48,10 +48,20 @@
 	          <%= options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds) %>
 	        </select>	 
 	      </dd>
+        <select name="work[author_attributes][coauthors][]" multiple="multiple" style="display : none;">
+          <%= options_from_collection_for_select(@coauthors, :id, :name, @selected_pseuds) %>  
+        </select>
 	      <dd class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
 	        <%= link_to h('Create pseud?').t, new_user_pseud_path(current_user) %>
 	      </dd>
-      
+        <% if @coauthors.size > 0 %>
+       <%= "Current Co-authors: ".t %>
+          <ul>
+          <% for author in @coauthors %>
+            <li><%= h author.name %></li>
+          <% end %>
+          </ul>
+    <% end %>
       <dt class="byline">
         <%= link_to_function(h('Add co-authors?').t, "Element.toggle('co-authors')") %>          
       </dt>

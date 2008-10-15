@@ -30,6 +30,7 @@ class Work < ActiveRecord::Base
   # Virtual attribute to use as a placeholder for pseuds before the work has been saved
   # Can't write to work.pseuds until the work has an id
   attr_accessor :authors
+  attr_accessor :toremove
   attr_accessor :invalid_pseuds
   attr_accessor :ambiguous_pseuds
   attr_accessor :new_parent, :url_for_parent
@@ -122,7 +123,12 @@ class Work < ActiveRecord::Base
   # Virtual attribute for pseuds
   def author_attributes=(attributes)
     self.authors ||= []
-    attributes[:ids].each { |id| self.authors << Pseud.find(id) }
+    new = []
+    attributes[:ids].each { |id| new << Pseud.find(id) }
+    attributes[:coauthors].each {|id| new << Pseud.find(id) } unless attributes[:coauthors].blank?
+    toremove = self.pseuds - new
+    new.each{|p| self.authors << p}
+    self.toremove = toremove
     attributes[:ambiguous_pseuds].each { |id| self.authors << Pseud.find(id) } if attributes[:ambiguous_pseuds]
     if attributes[:byline]
       results = Pseud.parse_bylines(attributes[:byline])
@@ -133,6 +139,7 @@ class Work < ActiveRecord::Base
     self.authors.flatten!
     self.authors.uniq! 
   end
+  
 
   # Save creatorships after the work is saved
   def save_creatorships
@@ -140,6 +147,11 @@ class Work < ActiveRecord::Base
       Creatorship.add_authors(self, self.authors)
       Creatorship.add_authors(self.chapters.first, self.authors)
       self.series.each {|series| Creatorship.add_authors(series, self.authors)} unless self.series.empty?
+    end
+    if self.toremove
+      Creatorship.remove_authors(self, self.toremove)
+      Creatorship.remove_authors(self.chapters.first, self.toremove)
+      self.series.each {|series| Creatorship.remove_authors(series, self.authors)} unless self.series.empty?
     end
   end
   
@@ -410,12 +422,17 @@ class Work < ActiveRecord::Base
 
 
 
-
   ########################################################################
   # RELATED WORKS
   # These are for inspirations/remixes/etc
   ########################################################################
+  # Virtual attribute for first chapter
+  def chapter_attributes=(attributes)
+    self.new_record? ? self.chapters.build(attributes) : self.chapters.first.attributes = attributes
+    self.chapters.first.posted = self.posted
+  end
   
+
   # Works this work belongs to through related_works
   def parents
     RelatedWork.find(:all, :conditions => {:work_id => self.id}, :include => :parent).collect(&:parent)
@@ -448,7 +465,9 @@ class Work < ActiveRecord::Base
       end
     end
   end 
-
+  
+  
+  
   # Save relationship to parent work if applicable
   def save_parents
     if self.new_parent 

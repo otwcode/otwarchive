@@ -7,6 +7,9 @@ class Creatorship < ActiveRecord::Base
     pseuds.each { |p| p.add_creations([creation]) } if pseuds
   end 
   
+  def self.remove_authors(creation, pseuds)
+    pseuds.each {|p| p.remove_creation([creation])} if pseuds
+  end
   # Change authorship of work(s) from a particular pseud to the orphan account
   def self.orphan(pseuds, works, default=true)
     for pseud in pseuds
