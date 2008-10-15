@@ -1,5 +1,6 @@
 class AddPublishedAtAndRevisedAtToWorks < ActiveRecord::Migration
   def self.up
+    ThinkingSphinx.deltas_enabled=false
     add_column :works, :published_at, :datetime
     add_column :works, :revised_at, :datetime
     Work.reset_column_information
@@ -9,6 +10,7 @@ class AddPublishedAtAndRevisedAtToWorks < ActiveRecord::Migration
       work.revised_at = chapter_date
       work.save
     end
+    ThinkingSphinx.deltas_enabled=true
   end
 
   def self.down
