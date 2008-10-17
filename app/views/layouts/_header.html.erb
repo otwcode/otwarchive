@@ -1,6 +1,6 @@
 <!-- BEGIN header -->
 <div id="header">
-  <h1><%= link_to ArchiveConfig.APP_NAME.t, :controller => 'home', :action => 'index' %>
+  <h1><%= link_to ArchiveConfig.APP_NAME.t, root_path %>
   	<span><%= ArchiveConfig.APPNAME -%>
      <% unless ArchiveConfig.REVISION.blank? %>(<span>rev. <%= ArchiveConfig.REVISION %></span>)<% end %></span>
   </h1>

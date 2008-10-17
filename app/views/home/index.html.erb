@@ -16,7 +16,7 @@
 <!-- END BETA CAVEATS! --> 
 
 <div id="signin">  
-  <%- if logged_in? -%>
+  <%- if logged_in? || logged_in_as_admin? -%>
     <%= render :partial => 'session/greeting' -%>
   <%- else -%>
     <%= render :partial => 'session/login' -%>
