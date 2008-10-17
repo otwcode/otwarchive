@@ -10,7 +10,7 @@ class UsersController < ApplicationController
   end
   
   def check_account_creation_status
-    unless ArchiveConfig.ACCOUNT_CREATION_ENABLED || Invitation.find_by_token(params[:user][:invitation_token]) 
+    unless ArchiveConfig.ACCOUNT_CREATION_ENABLED || Invitation.find_by_token(params[:invitation_token]) 
       flash[:error] = "Account creation is suspended at the moment. Please check back with us later.".t
       redirect_to login_path 
     end

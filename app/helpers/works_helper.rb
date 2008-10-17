@@ -201,6 +201,7 @@ module WorksHelper
   
   # Use time_ago_in_words if less than a month ago, otherwise display date
   def set_format_for_date(date)
+    return "" unless date.is_a? Date
     if date > 30.days.ago
       time_ago_in_words(date)
     else
