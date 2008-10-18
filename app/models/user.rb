@@ -31,7 +31,6 @@ class User < ActiveRecord::Base
   has_one :preference, :dependent => :destroy
   validates_associated :preference
   
-  before_create :check_account_creation_status 
   before_create :create_default_associateds
   
   before_update :validate_date_of_birth
@@ -100,12 +99,6 @@ class User < ActiveRecord::Base
     ALPHABET = ['A']
   end
 
-  
-  def check_account_creation_status
-    self.errors.add(:base, "Account creation is currently disabled.".t) unless ArchiveConfig.ACCOUNT_CREATION_ENABLED
-    ArchiveConfig.ACCOUNT_CREATION_ENABLED
-  end
-                         
   def create_default_associateds
     self.pseuds << Pseud.new(:name => self.login, :description => "Default pseud".t, :is_default => :true)  
     self.profile = Profile.new
