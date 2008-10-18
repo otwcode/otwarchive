@@ -82,7 +82,7 @@ class Work < ActiveRecord::Base
   end
 
   def validate_published_at
-    to = Date.today
+    to = DateTime.now
     if self.published_at > to
       errors.add_to_base("Publication date can't be in the future.".t)
       return false
