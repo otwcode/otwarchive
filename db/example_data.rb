@@ -100,6 +100,18 @@ module FixtureReplacement
   attributes_for :role do |a|
     a.name = random_phrase[1...40]
   end
+  
+  attributes_for :series do |a|
+    a.title = random_phrase
+    a.summary = random_phrase
+    a.notes = random_phrase
+  end
+  
+  attributes_for :serial_work do |a|
+    a.series = create_series
+    a.pseud = create_pseud
+    a.position = 1
+  end
  
   attributes_for :tag do |a|
     a.tag_category = TagCategory::DEFAULT

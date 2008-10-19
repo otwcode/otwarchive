@@ -1,8 +1,19 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class SeriesTest < ActiveSupport::TestCase
-  # Replace this with your real tests.
-  def test_truth
-    assert true
+
+  context "a series" do
+    setup do
+      @series = create_series       
+    end
+    should_have_many :serial_works, :works, :bookmarks
+    should_require_attributes :title
+    should_ensure_length_in_range :title, ArchiveConfig.TITLE_MIN..ArchiveConfig.TITLE_MAX, :short_message => /must be at least/, :long_message => /must be less/
+    should_ensure_length_in_range :summary, 0..ArchiveConfig.SUMMARY_MAX, :long_message => /must be less/
+    should_ensure_length_in_range :notes, 0..ArchiveConfig.NOTES_MAX, :long_message => /must be less/
+
   end
+
+  
+
 end
