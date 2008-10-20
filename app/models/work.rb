@@ -124,12 +124,13 @@ class Work < ActiveRecord::Base
   # Virtual attribute for pseuds
   def author_attributes=(attributes)
     self.authors ||= []
-    new = []
-    attributes[:ids].each { |id| new << Pseud.find(id) }
-    attributes[:coauthors].each {|id| new << Pseud.find(id) } unless attributes[:coauthors].blank?
-    toremove = self.pseuds - new
-    new.each{|p| self.authors << p}
-    self.toremove = toremove
+    wanted_ids = attributes[:ids]
+    wanted_ids.each { |id| self.authors << Pseud.find(id) }
+    # if current user has selected different pseuds
+    current_user=User.current_user
+    if current_user.is_a? User
+      self.toremove = current_user.pseuds - wanted_ids.collect {|id| Pseud.find(id)}
+    end
     attributes[:ambiguous_pseuds].each { |id| self.authors << Pseud.find(id) } if attributes[:ambiguous_pseuds]
     if attributes[:byline]
       results = Pseud.parse_bylines(attributes[:byline])
@@ -152,7 +153,7 @@ class Work < ActiveRecord::Base
     if self.toremove
       Creatorship.remove_authors(self, self.toremove)
       Creatorship.remove_authors(self.chapters.first, self.toremove)
-      self.series.each {|series| Creatorship.remove_authors(series, self.authors)} unless self.series.empty?
+      self.series.each {|series| Creatorship.remove_authors(series, self.toremove)} unless self.series.empty?
     end
   end
   

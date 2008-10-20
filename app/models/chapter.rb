@@ -22,6 +22,7 @@ class Chapter < ActiveRecord::Base
   # Virtual attribute to use as a placeholder for pseuds before the chapter has been saved
   # Can't write to chapter.pseuds until the chapter has an id
   attr_accessor :authors
+  attr_accessor :toremove
   attr_accessor :invalid_pseuds
   attr_accessor :ambiguous_pseuds
   attr_accessor :wip_length_placeholder, :position_placeholder
@@ -93,7 +94,13 @@ class Chapter < ActiveRecord::Base
   # Virtual attribute for pseuds
   def author_attributes=(attributes)
     self.authors ||= []
-    attributes[:ids].each { |id| self.authors << Pseud.find(id) }
+    wanted_ids = attributes[:ids]
+    wanted_ids.each { |id| self.authors << Pseud.find(id) }
+    # if current user has selected different pseuds
+    current_user=User.current_user
+    if current_user.is_a? User
+      self.toremove = current_user.pseuds - wanted_ids.collect {|id| Pseud.find(id)}
+    end
     attributes[:ambiguous_pseuds].each { |id| self.authors << Pseud.find(id) } if attributes[:ambiguous_pseuds]
     if attributes[:byline]
       results = Pseud.parse_bylines(attributes[:byline])
@@ -125,6 +132,10 @@ class Chapter < ActiveRecord::Base
     if self.authors
       Creatorship.add_authors(self, self.authors)
       Creatorship.add_authors(self.work, self.authors)       
+    end
+    if self.toremove
+      Creatorship.remove_authors(self, self.toremove)
+      Creatorship.remove_authors(self.work, self.toremove)
     end
   end
   
