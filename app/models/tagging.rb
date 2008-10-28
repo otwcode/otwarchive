@@ -4,7 +4,7 @@ class Tagging < ActiveRecord::Base
   
   validates_presence_of :tag, :taggable
   before_create :check_for_synonyms
-  after_destroy :delete_unused_tags
+  before_destroy :delete_unused_tags
 
   def valid_tag
     return tag if tag && !tag.banned?
@@ -36,7 +36,7 @@ class Tagging < ActiveRecord::Base
   
   # Gets rid of tags that aren't being used and have no relationships and no other reason for living
   def delete_unused_tags
-    unless tag.taggings.count > 0 || Tag::PREDEFINED_TAGS.include?(tag) || tag.tags.count > 0 || tag.related_tags.count > 0
+    unless tag.taggings.count > 1 || Tag::PREDEFINED_TAGS.include?(tag) || tag.tags.count > 0 || tag.related_tags.count > 0
       tag.destroy 
     end
   end

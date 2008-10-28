@@ -5,7 +5,7 @@ class Tag < ActiveRecord::Base
   has_many :tags, :through => :related_relationships
   has_many :related_tags, :through => :tag_relationships
 
-  has_many :taggings, :dependent => :destroy
+  has_many :taggings
   has_many :works, :through => :taggings, :source => :taggable, :source_type => 'Work'
   has_many :bookmarks, :through => :taggings, :source => :taggable, :source_type => 'Bookmark'
   include TaggingExtensions

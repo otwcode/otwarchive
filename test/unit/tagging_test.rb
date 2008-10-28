@@ -17,6 +17,23 @@ class TaggingTest < ActiveSupport::TestCase
     should "be able to find_by_tag" do
       assert Tagging.find_by_tag(@tag1).include?(@tagging)
     end
+    context "when it's destroyed" do
+      setup do
+        @tagging.destroy
+      end
+      should "delete the tag" do
+        assert_raises(ActiveRecord::RecordNotFound) { @tag1.reload } 
+      end
+    end
+    context "when it's destroyed" do
+      setup do
+        create_tagging(:tag => @tag1)
+        @tagging.destroy
+      end
+      should "not delete the tag if the tag has another tagging" do
+        assert @tag1.reload
+      end
+    end
   end
 
   def test_tags
