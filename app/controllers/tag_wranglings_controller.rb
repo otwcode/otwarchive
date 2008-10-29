@@ -4,26 +4,17 @@ class TagWranglingsController < ApplicationController
   before_filter :check_user_status
   
   def index
-    if params[:category1] && params[:category2]
-      @category1 = TagCategory.find_by_name(params[:category1])
-      @category2 = TagCategory.find_by_name(params[:category2]) 
-    end
+    @category1 = TagCategory.find_by_name(params[:category1])
+    @category2 = TagCategory.find_by_name(params[:category2])
+    # TODO fancier relationships than just child
+    @tag_relationship_kind = TagRelationshipKind.child
     if @category1 && @category2
-      if @category2.name =~ /Character/
-        currently_tagged = []
-      else
-        existing_relationships = TagRelationship.tagged_by_category(@category1, @category2)
-        currently_tagged = existing_relationships.blank? ? [] : existing_relationships.collect(&:tag)
-      end
+      current_relationships = TagRelationship.tagged_by_category(@category1, @category2)
+      currently_tagged = current_relationships.blank? ? [] : current_relationships.collect(&:tag)
       @potential_tags = @category1.tags.valid.find(:all, :order => :name) - currently_tagged
-      @potential_related_tags = @category2.tags.valid.find(:all, :order => :name)
-      @tag_relationship_kind = TagRelationshipKind.child
-    else
-      @current_tag_relationships = TagRelationship.all
-      @tag_relationship = TagRelationship.new
-      @tag_categories = TagCategory.find(:all, :order => :name)
-      @relationships = TagRelationshipKind.find(:all, :order => :name)  
+      @potential_related_tags = @category2.tags.canonical.valid.find(:all, :order => :name)
     end
+    @tag = Tag.find(params[:tag]) if params[:tag]
     respond_to do |format|
       format.html 
       format.js

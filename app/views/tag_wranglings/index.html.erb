@@ -2,20 +2,29 @@
 
 <div id="error"></div>
 
-<ul>
-  <li><%= link_to_remote 'Sort fandoms by media', :url => {:action => :index, :category1 => 'Fandom', :category2 => 'Media'}, :method => :get %></li>
-  <li><%= link_to_remote 'Sort characters by fandom', :url => {:action => :index, :category1 => 'Character', :category2 => 'Fandom'}, :method => :get %></li>
-  <li><%= link_to_remote 'Sort pairings by fandom', :url => {:action => :index, :category1 => 'Pairing', :category2 => 'Fandom'}, :method => :get %></li>
-  <li><%= link_to_remote 'Sort pairings by character', :url => {:action => :index, :category1 => 'Pairing', :category2 => 'Character'}, :method => :get %></li>
-  <li><%= link_to_remote 'Sort all tags', :url => {:action => :index}, :method => :get %></li>
-</ul>
-
-<div id="tag-relationship-form"> 
+<div>
+Assign 
+  <%= link_to_remote 'fandoms to a media', :url => {:action => :index, :category1 => 'Fandom', :category2 => 'Media'}, :method => :get %>
+  |
+  <%= link_to_remote 'characters to a fandom', :url => {:action => :index, :category1 => 'Character', :category2 => 'Fandom'}, :method => :get %>
+  |
+  <%= link_to_remote 'characters to a pairing', :url => {:action => :index, :category1 => 'Character', :category2 => 'Pairing'}, :method => :get %>
+  | 
+  <%= link_to_remote 'free tags to a free tag', :url => {:action => :index, :category1 => 'default', :category2 => 'default'}, :method => :get %>
 </div>
 
-<div id="current-tag-relationships">
-  <ul id="relationship-list">
-  </ul> 
+<div id="tag-relationship-form">
+</div>
+
+<div>
+  <p><strong>
+  Manage selected tag individually
+  </strong>
+  <br>
+  (Click on a tag to select it for editing)
+  </p>
+  <div id="individual-tag-edit">
+  </div>
 </div>
 
 <%= tag_wrangler_footer %> 
