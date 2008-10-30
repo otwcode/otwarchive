@@ -6,14 +6,20 @@ class TagWranglingsController < ApplicationController
   def index
     @category1 = TagCategory.find_by_name(params[:category1])
     @category2 = TagCategory.find_by_name(params[:category2])
-    # TODO fancier relationships than just child
-    @tag_relationship_kind = TagRelationshipKind.child
+    if params[:tag_relationship_kind_id]
+      @tag_relationship_kind = TagRelationshipKind.find(params[:tag_relationship_kind_id])
+    else
+      @tag_relationship_kind = TagRelationshipKind.child
+    end
     if @category1 && @category2
       current_relationships = TagRelationship.tagged_by_category(@category1, @category2)
       currently_tagged = current_relationships.blank? ? [] : current_relationships.collect(&:tag)
       @potential_tags = @category1.tags.valid.find(:all, :order => :name) - currently_tagged
       @potential_related_tags = @category2.tags.canonical.valid.find(:all, :order => :name)
     end
+    @customize = true if params[:customize]
+    @tag_categories = TagCategory.find(:all, :order => "name")
+    @relationships = TagRelationshipKind.find(:all, :order => "name")
     @tag = Tag.find(params[:tag]) if params[:tag]
     respond_to do |format|
       format.html 

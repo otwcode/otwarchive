@@ -1,0 +1,8 @@
+<% if @customize %>
+  <% form_remote_tag :url => tag_wranglings_path, :method => :get do -%>
+    <%= select_tag :category1, options_from_collection_for_select(@tag_categories, :name, :name), {:prompt => 'First Tag Category'} %> 
+    <%= select_tag :tag_relationship_kind_id, options_from_collection_for_select(@relationships, :id, :verb_phrase), {:prompt => 'Relationship'} %>
+    <%= select_tag :category2, options_from_collection_for_select(@tag_categories, :name, :name), {:prompt => 'Second Tag Category'} %>
+    <%= submit_tag 'Customize', :name => nil %>
+  <% end -%>
+<% end -%>

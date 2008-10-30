@@ -1,2 +1,3 @@
+page.replace_html 'customized-form', :partial => 'tag_wranglings/customized'
 page.replace_html 'tag-relationship-form', :partial => 'tag_wranglings/sort_by_category'
-page.replace_html 'individual-tag-edit', :partial => 'tags/form'
+page.replace_html 'individual-tag-edit', :partial => 'tags/form' 

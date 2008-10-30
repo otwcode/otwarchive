@@ -9,22 +9,16 @@ Assign
   <%= link_to_remote 'characters to a fandom', :url => {:action => :index, :category1 => 'Character', :category2 => 'Fandom'}, :method => :get %>
   |
   <%= link_to_remote 'characters to a pairing', :url => {:action => :index, :category1 => 'Character', :category2 => 'Pairing'}, :method => :get %>
-  | 
-  <%= link_to_remote 'free tags to a free tag', :url => {:action => :index, :category1 => 'default', :category2 => 'default'}, :method => :get %>
+  |
+  <%= link_to_remote 'custom assignment', :url => {:action => :index, :customize => true}, :method => :get %>
+</div>
+
+<div id="customized-form">
+  <%= render :partial  => 'tag_wranglings/customized' %>
 </div>
 
 <div id="tag-relationship-form">
-</div>
-
-<div>
-  <p><strong>
-  Manage selected tag individually
-  </strong>
-  <br>
-  (Click on a tag to select it for editing)
-  </p>
-  <div id="individual-tag-edit">
-  </div>
+  <%= render :partial  => 'tag_wranglings/sort_by_category' %>
 </div>
 
 <%= tag_wrangler_footer %> 
