@@ -13,7 +13,7 @@ class HomeController < ApplicationController
   # home page itself
   def index
     @user_count = User.count
-    @work_count = Work.visible.count
+    @work_count = Work.visible.size
     unless @work_count.zero?
       @random_work = Work.visible.find(:first, :offset => rand(@work_count))
       unless @random_work.nil?
