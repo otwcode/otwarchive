@@ -4,12 +4,11 @@ class WorksController < ApplicationController
   cache_sweeper :work_sweeper, :only => [:create, :update, :destroy]
     
   # only registered users and NOT admin should be able to create new works
-  before_filter :users_only, :only => [ :new, :create ]
+  before_filter :users_only, :only => [ :new, :create, :upload_work, :drafts, :post, :preview ]
   # only authors of a work should be able to edit it
-  before_filter :is_author, :only => [ :edit, :update, :destroy ]
+  before_filter :is_author, :only => [ :edit, :update, :destroy, :post, :preview ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :post, :show, :upload_work ]
   before_filter :update_or_create_reading, :only => [ :show ]
-  before_filter :check_adult_status, :only => [:show]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview, :post]
   
   # For the auto-complete field in the works form
@@ -58,9 +57,8 @@ class WorksController < ApplicationController
       @chapters = @work.chapters.in_order
       @serial_works = @work.serial_works
       @tags_by_category = {}
-      categories = TagCategory::OFFICIAL
-      #categories << TagCategory.warning_tag_category
-      categories.each {|category| @tags_by_category[category] = category.tags.valid.canonical} unless categories.blank?
+      categories = Tag::TYPES - ["Media"]
+      categories.each {|type| @tags_by_category[type] = type.constantize.canonical}
   
       @chapter = @work.first_chapter
       if params[:work] && params[:work][:chapter_attributes]
@@ -91,15 +89,6 @@ class WorksController < ApplicationController
     end
   end
   
-  # Users must explicitly okay viewing of adult content
-  def check_adult_status
-    if params[:view_adult]
-      session[:adult] = true
-    elsif @work && @work.adult_content? &&  !see_adult? 
-      render :partial => "adult", :layout => "application"
-    end  
-  end
-	   
   # GET /works
   def index
     # what we're getting for the view
@@ -169,7 +158,7 @@ class WorksController < ApplicationController
     if @works.empty? && !@selected_tags.empty?
       # build filters so we can go back
       flash.now[:notice] = "We couldn't find any results using all those filters, sorry! You can unselect some and filter again to get more matches.".t 
-      filters_array = Tag.find(@selected_tags, :select => "tags.tag_category_id as category_id, tags.id as tag_id, tags.name as tag_name")
+      filters_array = Tag.find(@selected_tags, :select => "tags.type as tag_type, tags.id as tag_id, tags.name as tag_name")
       @filters = Work.build_filters_hash(filters_array)
     end
 
@@ -191,6 +180,7 @@ class WorksController < ApplicationController
         flash[:error] = "You can only see your own drafts, sorry!".t
         redirect_to current_user
       else
+        current_user.cleanup_unposted_works
         @works = @user.unposted_works.paginate(:page => params[:page])
       end
     end
@@ -212,6 +202,12 @@ class WorksController < ApplicationController
         redirect_to works_path and return
       end
     end
+    # Users must explicitly okay viewing of adult content
+    if params[:view_adult]
+      session[:adult] = true
+    elsif @work.rating.adult? && !see_adult? 
+      render :partial => "adult", :layout => "application"
+    end	   
     unless @work.series.blank?
       @series_previous = {}
       @series_next = {}
@@ -223,22 +219,23 @@ class WorksController < ApplicationController
         @series_next[series.id] = sw_next.work if sw_next
       end
     end
-    @tag_categories_limited = TagCategory::OFFICIAL - [TagCategory::WARNING]
+    @tag_categories_limited = Tag::TYPES - ["Media", "Warning"]
     
     @page_title = ""
     if logged_in? && !current_user.preference.work_title_format.blank?
       @page_title = current_user.preference.work_title_format
-      @page_title.gsub!(/FANDOM/, @work.fandom)
+      @page_title.gsub!(/FANDOM/, @work.fandom_string)
       @page_title.gsub!(/AUTHOR/, @work.pseuds.collect(&:name).join(','))
       @page_title.gsub!(/TITLE/, @work.title)
     else 
-      @page_title = @work.title + " - " + @work.pseuds.collect(&:name).join(',') + " - " + @work.fandom
+      @page_title = @work.title + " - " + @work.pseuds.collect(&:name).join(',') + " - " + @work.fandom_string
     end
     @page_title += " [#{ArchiveConfig.APP_NAME}]"
   end
   
   # GET /works/new
   def new
+    current_user.cleanup_unposted_works
     if params[:load_unposted] && current_user.unposted_work
       @work = current_user.unposted_work
     elsif params[:upload_work]
@@ -258,7 +255,6 @@ class WorksController < ApplicationController
         render :action => :new
       elsif params[:cancel_button]
         flash[:notice] = "New work posting canceled.".t
-        current_user.cleanup_unposted_works
         redirect_to current_user    
       else
         saved = @work.save
@@ -312,7 +308,8 @@ class WorksController < ApplicationController
       @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
     elsif params[:preview_button]
       @preview_mode = true
-      @chapters = [@chapter]
+      @chapters = @work.chapters.in_order
+      @chapter = @chapters.first
       if @work.has_required_tags?
         render :action => "preview"
       else

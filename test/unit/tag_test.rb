@@ -1,24 +1,24 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class TagTest < ActiveSupport::TestCase
+  setup do
+    create_tag
+  end
+
   context "a Tag" do
-    setup do
-      @name = "all lower-case/words"
-      @tag = create_tag(:name => @name)
-    end
-    should_belong_to :tag_category
-    should_have_many :taggings
-    should_ensure_length_in_range :name, (1..42), :short_message => /blank/, :long_message => /too long/
+    should_have_many :taggings, :works, :bookmarks, :tags
     should_require_attributes :name
-    should_allow_values_for :adult, true, false
+    should_ensure_length_in_range :name, (1..ArchiveConfig.TAG_MAX), :long_message => /too long/, :short_message => /blank/
     should_allow_values_for :name, '"./?~!@#$%^&()_-+=', "1234567890", "spaces are not tag separators"
-    should_not_allow_values_for :name, "commas, aren't allowed", :message => /commas/
-    should_not_allow_values_for :name, "asterisks* aren't allowed", :message => /asterisk/
-    should_not_allow_values_for :name, "angle brackets < aren't allowed", :message => /angle/
-    should_not_allow_values_for :name, "angle brackets > aren't allowed", :message => /angle/
-    should "invert valid and banned" do
-      assert_equal @tag.valid?, !@tag.banned?
-    end
+    should_not_allow_values_for :name, "commas, aren't allowed", :message => /can only/
+    should_not_allow_values_for :name, "asterisks* aren't allowed", :message => /can only/
+    should_not_allow_values_for :name, "angle brackets < aren't allowed", :message => /can only/
+    should_not_allow_values_for :name, "angle brackets > aren't allowed", :message => /can only/
+
+    should_allow_values_for :adult, true, false
+    should_allow_values_for :banned, true, false
+    should_allow_values_for :canonical, true, false
+    
     context "with whitespace" do
       setup do
         @tag = create_tag(:name => "   whitespace'll   (be    stripped)    ")
@@ -27,65 +27,57 @@ class TagTest < ActiveSupport::TestCase
         assert_equal "whitespace'll (be stripped)", @tag.name
       end
     end
-    context "which is made canonical" do
-      setup do
-        @tag.update_attribute(:canonical, true)
-      end
-      should_eventually "get prettified" do
-        assert_equal "All Lower-Case/Words", @tag.name      
-      end
-      should "revert if un-canonicalized" do
-        @tag.update_attribute(:canonical, false)
-        @tag.reload
-        assert_equal @name, @tag.name
-      end
+  end
+
+  context "a canonical tag" do
+    setup do
+      @tag = create_tag(:canonical => false, :type => 'Freeform')
+      @tag2 = create_tag(:canonical => false, :type => 'Freeform')
+      @tag3 = create_tag(:canonical => false, :type => 'Fandom')
+      @canonical = create_tag(:canonical => true, :type => 'Freeform')
+      @tag.synonym=@canonical
+      @tag2.synonym=@canonical
+      @tag3.synonym=@canonical
     end
-    context "of a posted work" do
-      setup do
-        @work = create_work
-        @work.update_attribute(:posted, true)
-        tagging = create_tagging(:taggable => @work, :tag => @tag)  
-        @tag.reload
-      end
-      should "show the work" do
-        assert @tag.visible('Works').include?(@work)
-      end
-      context "which is restricted" do
-        setup do
-          @work.update_attribute(:restricted, true)
-        end
-        should "not show the work by default" do
-          assert !@tag.visible('Works').include?(@work)
-        end
-        should "show the work to a user" do
-          assert @tag.visible('Works', create_user).include?(@work)
-        end
-      end
+    should "should be able to have many noncanonical tags as synonyms" do
+      assert_equal Tag.find(@canonical.id), Tag.find(@tag.id).synonym
+      assert_equal Tag.find(@canonical.id), Tag.find(@tag2.id).synonym
+      assert @canonical.synonyms.include?(Tag.find(@tag.id))
+      assert @canonical.synonyms.include?(Tag.find(@tag2.id))
     end
-    context "of a bookmark on a posted work" do
-      setup do
-        @work = create_work
-        @work.update_attribute(:posted, true)
-        @bookmark = create_bookmark(:bookmarkable => @work)
-        tagging = create_tagging(:taggable => @bookmark, :tag => @tag)  
-      end
-      should "show the bookmark" do
-        assert @tag.bookmarks.visible.include?(@bookmark)
-      end
-      context "which is private" do
-        setup do
-          @bookmark.update_attribute(:private, true)
-        end
-        should "not show the bookmark by default" do
-          assert !@tag.visible('Bookmarks').include?(@bookmark)
-        end
-        should "not show the bookmark to other users" do
-          assert !@tag.visible('Bookmarks', create_user).include?(@bookmark)
-        end
-        should "show the bookmark to its owner" do
-          assert @tag.visible('Bookmarks', @bookmark.user).include?(@bookmark)
-        end
-      end
+    should "be able to have tags of a different type as a synonym" do
+      assert_equal Tag.find(@canonical.id), Tag.find(@tag3.id).synonym
+      assert Tag.find(@canonical.id).synonyms.include?(Tag.find(@tag3.id))
     end
   end
+  context "a non-canonical tag" do
+    setup do
+      @tag = create_tag(:canonical => false, :type => 'Freeform')
+      @tag2 = create_tag(:canonical => false, :type => 'Freeform')
+      @work = create_work
+      @work.tags << @tag
+      @canonical = create_tag(:canonical => true, :type => 'Freeform')
+   end
+    should "should not be able to be a synonym" do
+      @tag2.synonym=@tag
+      @tag2.reload
+      assert_nil @tag2.synonym
+    end
+    should "reassign its work" do
+      @tag.synonym=@canonical
+      @work.reload
+      assert_equal [Tag.find(@canonical.id)], @work.freeforms
+    end
+  end
+  
+  context "tags by_category" do
+    should "find tags in a single category" do
+      assert_match "Explicit", Tag.by_category("Rating").map(&:name).join
+    end
+    should "find tags in multiple categories" do
+      assert_match "Explicit", Tag.by_category("Rating", "Warning").map(&:name).join
+      assert_match "Violence", Tag.by_category(["Rating", "Warning"]).map(&:name).join
+    end
+  end
+  
 end

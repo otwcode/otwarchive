@@ -7,10 +7,10 @@ class TagsController < ApplicationController
   # GET /tags.xml
   def index
     if params[:search]
-      category = TagCategory.find(params[:tag_category_id])
+      category = TagCategory.find(params[:type])
       @tags = Tag.by_category([category]).find(:all, :conditions => [ 'LOWER(name) LIKE ?', '%' + params[:search].strip + '%' ], :limit => 10)
     else
-      @tags = Tag.by_category([TagCategory::DEFAULT]).ordered_by_name.valid
+      @tags = Tag.by_category("Freeform").ordered_by_name.valid
     end
 
     respond_to do |format|
@@ -20,10 +20,9 @@ class TagsController < ApplicationController
   end
   
   def show_hidden
-    unless params[:work_id].blank? || params[:category_id].blank?
+    unless params[:work_id].blank?
       @display_work = Work.find(params[:work_id])
-      @display_category = TagCategory.find(params[:category_id])
-      @display_tags = @display_work.tags.by_category(@display_category)
+      @display_tags = @display_work.warnings
     end
     respond_to do |format|
       format.js
@@ -34,14 +33,13 @@ class TagsController < ApplicationController
   # GET /tags/1.xml
   def show
     @tag = Tag.find(params[:id])
-    unless @tag.valid
+    if @tag.banned?
   	  flash[:error] = 'This page is unavailable.'.t
       redirect_to tags_path and return
     end
-    @tags = @tag.synonyms + [@tag]
-    @works = Work.visible.with_any_tags(@tags).paginate(:page => params[:page])
+    @tags = @tag.synonyms
+    @works = Work.visible.with_any_tags(@tags + [@tag]).paginate(:page => params[:page])
     @bookmarks = @tag.bookmarks.visible + @tags.collect {|tag| tag.bookmarks.visible}.flatten
-    @ambiguous = @tag.disambiguation   
 
     @bookmarks.uniq!
     respond_to do |format|
@@ -62,15 +60,22 @@ class TagsController < ApplicationController
   # POST /tags
   # POST /tags.xml
   def create
+    type = params[:tag][:type] if params[:tag]
+    if type    
+      @tag = type.constantize.new(params[:tag])
+    else
+      flash[:notice] = "Please provide a category.".t
     @tag = Tag.new(params[:tag])
-    if Tag.find(:first, :conditions => {:name => @tag.name, :tag_category_id => @tag.tag_category_id})
+      render :action => "new" and return
+    end
+    if Tag.find(:first, :conditions => {:name => @tag.name, :type => @tag.type})
       flash[:notice] = "A tag by that name already exists in that category.".t
-      redirect_to tag_categories_path
+      redirect_to tag_wranglings_path    
     else
       respond_to do |format|
         if @tag.save
           flash[:notice] = 'Tag was successfully created.'.t
-          format.html { redirect_to tag_categories_path }
+          format.html { redirect_to tag_wranglings_path }
         else
           format.html { render :action => "new" }
         end
@@ -86,10 +91,10 @@ class TagsController < ApplicationController
     @tag = Tag.find(params[:id])
     if @tag.update_attributes(params[:tag])
       flash[:notice] = 'Tag was successfully updated.'.t
-      redirect_to tag_categories_path
+      redirect_to tag_wranglings_path
     else
       flash[:error] = "Tag failed to save."
-      render :action => :edit        
+      format.html { render :action => "edit" }
     end
   end
 

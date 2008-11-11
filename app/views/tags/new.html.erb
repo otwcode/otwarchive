@@ -17,17 +17,11 @@
     <dd><%=h 'This tag indicates adult content; any work tagged with this will trigger the "do you agree to see this" page'.t %></dd>
 
     <dt><%=h 'Category'.t %></dt>
-    <%- TagCategory.ordered(:all).each do |category| -%>
-    <dd><%= f.radio_button("tag_category_id", category.id) %><%= f.label :tag_category_id, category.display_name %></dd>
+    <%- Tag::TYPES.each do |type| -%>
+    <dd><%= f.radio_button("type", type) %><%= f.label :type, type.constantize::NAME %></dd>
     <%- end -%>    
   </dl>
-  
-  <h3><%=h 'Please be careful!'.t %></h3>
-  <p>
-    <%=h "Once you've created a tag you can never change its name, nor can you delete it (although it can be banned. and if it is not banned, and it is not being used to tag anything, or is itself being tagged, it may be purged).".t %>
-    <%=h 'Once you have selected a category, you will not be able to change it to anything other than'.t %> <%= link_to TagCategory::AMBIGUOUS.display_name, tag_category_path(TagCategory::AMBIGUOUS) %> <%=h 'or'.t %> <%= link_to TagCategory::DEFAULT.display_name, tag_category_path(TagCategory::DEFAULT) %>.
-  </p>
-  
+    
   <p class="submit"><%= f.submit %></p>
 <%- end -%>
 

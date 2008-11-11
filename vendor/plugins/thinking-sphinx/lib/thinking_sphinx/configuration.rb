@@ -174,7 +174,6 @@ searchd
         rescue NameError
           next
         rescue
-          puts "Thinking Sphinx could not find a valid class for #{model_name}. If this is follows a database reset it may not have been created yet. Ignoring for now."
         end
       end
     end

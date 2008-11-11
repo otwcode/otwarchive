@@ -1,9 +1,0 @@
-unless @new_tag_relationships.blank?
-  for id in @tag_ids
-    if @category2 && @category2.name =~ /Character/ 
-      page["tag[#{id}]"].checked = false
-    else
-      page.replace 'tag_' + id, ''
-    end
-  end
-end

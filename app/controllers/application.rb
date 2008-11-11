@@ -21,12 +21,6 @@ class ApplicationController < ActionController::Base
     @current_user = current_user
   end
   
-  # Determines which categories are visible on works throughout the site
-  before_filter :set_tag_categories
-  def set_tag_categories
-    @tag_categories = TagCategory::OFFICIAL
-  end
-
   #### -- GLOBALIZATION -- ####
   #layout 'application'
    

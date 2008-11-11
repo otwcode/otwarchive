@@ -3,7 +3,7 @@ module FixtureReplacement
   #### models 
   ## Note1: attributes are what it takes to *create* an object, not what's stored 
   ## in the database - this is different from regular fixtures)
-  ## Note2: fixtures must be valid to use _create. To test for errors, use _new
+  ## Note2: fixtures must be valid to use create_. To test for errors, use new_
   
   attributes_for :language do |a|
     a.id = 1819
@@ -114,23 +114,49 @@ module FixtureReplacement
   end
  
   attributes_for :tag do |a|
-    a.tag_category = TagCategory::DEFAULT
+    a.name = random_phrase[1...42]
+    a.type = Tag::TYPES[rand(8)]
+  end
+  
+  attributes_for :rating do |a|
     a.name = random_phrase[1...42]
   end
   
+  attributes_for :warning do |a|
+    a.name = random_phrase[1...42]
+  end
+  
+  attributes_for :category do |a|
+    a.name = random_phrase[1...42]
+  end
+    
+  attributes_for :media do |a|
+    a.name = random_phrase[1...42]
+  end
+
+  attributes_for :fandom do |a|
+    a.name = random_phrase[1...42]
+  end
+
+  attributes_for :pairing do |a|
+    a.name = random_phrase[1...42]
+  end
+  
+  attributes_for :character do |a|
+    a.name = random_phrase[1...42]
+  end
+
+  attributes_for :genre do |a|
+    a.name = random_phrase[1...42]
+  end
+
+  attributes_for :freeform do |a|
+    a.name = random_phrase[1...42]
+  end
+
   attributes_for :tagging do |a|
     a.tag = default_tag
     a.taggable = default_work
-  end
-
-  attributes_for :tag_category do |a|
-    a.name = random_phrase
-  end
-  
-  attributes_for :tag_relationship do |a|
-    a.name = random_word
-    a.verb_phrase = random_phrase.downcase
-    a.distance = rand(4)
   end
 
   attributes_for :user do |a|
@@ -146,14 +172,14 @@ module FixtureReplacement
 
   attributes_for :work do |a|
     user = create_user
-    fandom_tag = create_tag(:tag_category => TagCategory::FANDOM)
-    rating_tag = Tag::DEFAULT_RATING_TAG
-    warning_tag = Tag::DEFAULT_WARNING_TAG    
 
     a.title = random_phrase
     a.authors = [user.default_pseud]
     a.chapters = [new_chapter(:authors => [user.default_pseud])]
-    a.tags = [fandom_tag, rating_tag, warning_tag]
+    a.fandom_string = create_fandom.name
+    a.rating_string = Rating::TEEN.name
+    a.warning_string = Warning::NONE.name
+    a.category_string = Category::GEN.name
     a.published_at = DateTime.now
     a.revised_at = DateTime.now
   end

@@ -1,20 +1,20 @@
 
 <dl class="work-meta">
 	<%- work_tags = work.tags -%>
-  <%- @tag_categories.each do |category| -%>
-		<%- tags = work_tags.select{|tag| tag.tag_category_id == category.id} -%>
+  <%- Tag::TYPES.each do |type| -%>
+		<%- tags = work_tags.select{|tag| tag.type == type} -%>
     <%- unless tags.blank? -%>
-      <dt class="<%= category.display_name.downcase -%>">
-        <%= category.display_name %>:
+      <dt class="<%= type.downcase -%>">
+        <%= type.constantize::NAME %>:
       </dt>
 	    
       <dd>
-        <ul id="work_<%= work.id %>_category_<%= category.id %>">
-        <%- if category == TagCategory::WARNING && hide_warnings?(work) -%>        
-          <li><%= show_warnings_link(work, category) %></li> 
+        <ul id="work_<%= work.id %>_category_<%= type.downcase %>">
+        <%- if type == "Warning" && hide_warnings?(work) -%>        
+          <li><%= show_warnings_link(work) %></li> 
         <%- else -%>
           <%- tags.each do |tag| -%>
-          <li class="<%= category.display_name.downcase -%>">
+          <li class="<%= type.downcase -%>">
             <%= link_to_tag(tag) %> 
           </li>
           <%- end -%>

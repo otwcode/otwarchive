@@ -22,16 +22,16 @@
         </dd>			
 			<%- end -%>
 			<%- unless @filters.blank? -%>
-			  <%- TagCategory::OFFICIAL.each do |tag_category| -%>
-				  <%- unless @filters[tag_category.id.to_s].blank? -%>
-          <dt onclick='toggleFilters("tag_category_<%= tag_category.id %>");'>
-            <span id="tag_category_<%= tag_category.id %>_closed" style="display: none;"><%= image_tag 'arrow-right.gif', :alt => "" -%></span>
-            <span id="tag_category_<%= tag_category.id %>_open"><%= image_tag 'arrow-down.gif', :alt => ""-%></span>              
-            <%= tag_category.display_name %> 
+			  <%- Tag::TYPES.each do |type| -%>
+				  <%- unless @filters[type].blank? -%>
+          <dt onclick='toggleFilters("tag_category_<%= type %>");'>
+            <span id="tag_category_<%= type %>_closed" style="display: none;"><%= image_tag 'arrow-right.gif', :alt => "" -%></span>
+            <span id="tag_category_<%= type %>_open"><%= image_tag 'arrow-down.gif', :alt => ""-%></span>              
+            <%= type.constantize::NAME %> 
           </dt>
-          <dd id="tag_category_<%= tag_category.id %>" class="tags">
+          <dd id="tag_category_<%= type %>" class="tags">
             <ul>              
-              <%- @filters[tag_category.id.to_s].each do |tag_info| -%>
+              <%- @filters[type].each do |tag_info| -%>
                 <li>
                   <%= check_box_tag "selected_tags[]", tag_info[:id], @selected_tags.include?(tag_info[:id]), :id => "selected_tags_#{tag_info[:id]}" -%>
                   <%= label_tag "selected_tags_#{tag_info[:id]}", "#{tag_info[:name]} (#{tag_info[:count]})" %>  

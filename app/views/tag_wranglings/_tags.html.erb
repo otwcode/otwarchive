@@ -1,0 +1,22 @@
+<% if @tags %>
+  <p>Click on a <%= @klass::NAME %> to wrangle it. 
+  <table>
+    <%- @tags.in_groups_of(3) do |group| %>
+      <tr>
+        <% group.each do |tag| %>
+          <% if tag %>
+            <td>
+              <%= link_to_remote tag.name, 
+                  :url => { :tag_id => tag.id }, 
+                  :method => :get%>
+            </td>
+          <% end %>
+        <% end %>
+      </tr>
+    <%- end -%>
+  </table>
+  <p>Recent works with these tags (for reference):</p>
+  <% @works.each do |work| %>
+    <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
+  <% end %>
+<%- end -%>

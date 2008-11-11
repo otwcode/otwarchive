@@ -42,6 +42,9 @@ class WorkTest < ActiveSupport::TestCase
         should "be visible to a user" do
           assert @work.visible(create_user)
         end
+      should "not be visible en group" do
+        assert !Work.visible.include?(@work)
+      end
       end
       
       context "which is hidden by an admin" do
@@ -71,145 +74,58 @@ class WorkTest < ActiveSupport::TestCase
         assert @work.find_all_comments.include?(@comment)
       end
     end
-
-    context "with a non-adult tag" do
-      setup do
-        @tagna = create_tag(:adult => false)
-        @work.update_attribute('default', @tagna.name)
-      end
-      should "not be marked adult" do
-        assert !@work.adult_content?
-      end
-
-      context "and an adult tag" do
-        setup do
-          @taga = create_tag(:adult => true)
-          @work.update_attribute('default', @taga.name + ', ' + @tagna.name)
-        end
-        should "be marked adult" do
-          assert @work.adult_content?
-        end
-      end
-      
-    end
-
   end
 
-  context "a work with a tag and a work without a tag" do
+  context "three works with tag count 0, 1 , 2" do
     setup do
-      @tagged_work = create_work
       @untagged_work = create_work
-      @tag = create_tag
-      @tagged_work.tags << @tag
-      @tagged_work.save
+      @tagged_work = create_work
+      @tag = create_freeform
+      @tagged_work.freeforms = [@tag]
+      @tag2 = create_freeform
+      @two_tagged = create_work
+      @two_tagged.freeforms = [@tag, @tag2]
     end
-    should "be returned/not returned by with_any_tags, respectively" do
-      assert Work.with_any_tags([@tag]).include?(@tagged_work)
-      assert !Work.with_any_tags([@tag]).include?(@untagged_work)
-    end
-    should "not/should be returned by no_tags, respectively" do
-      works_without_tags = Work.no_tags(@tag.tag_category)
-      assert !works_without_tags.include?(@tagged_work)
-      assert works_without_tags.include?(@untagged_work)
-    end
-
-    context "and a work with two tags" do
-      setup do
-        @two_tagged = create_work
-        @tag2 = create_tag
-        @two_tagged.tags << @tag
-        @two_tagged.tags << @tag2
-        @two_tagged.save
-      end
-
-      context "retrieved by with_all_tags" do
-        setup do
-          @all_retrieved = Work.with_all_tags([@tag, @tag2])
-        end
-        should "only include the work with both tags" do
-          assert @all_retrieved.include?(@two_tagged)
-          assert !@all_retrieved.include?(@tagged_work)
-          assert !@all_retrieved.include?(@untagged_work)
-        end
-      end
-
-      context "retrieved by with_any_tags" do
-        setup do
-          @all_retrieved = Work.with_any_tags([@tag, @tag2])
-        end
-        should "include both tagged works" do
-          assert @all_retrieved.include?(@two_tagged)
-          assert @all_retrieved.include?(@tagged_work)
-          assert !@all_retrieved.include?(@untagged_work)
-        end
-      end
-    end
-      
-    context "retrieved by with_any_tags" do
-      setup do
-        @retrieved_work = Work.with_any_tags([@tag]).first
-      end
-      should "be equal to the original work" do
-        assert @retrieved_work == @tagged_work
-      end
-      should "return true for having that tag" do
-        assert @retrieved_work.tags.include?(@tag)
-      end
-    end
-
-    context "that are posted and not restricted/hidden" do
-      setup do
-        @tagged_work.update_attribute('posted', true)
-        @untagged_work.update_attribute('posted', true)
-      end
-      should "be returned/not returned by visible.with_any_tags" do
-        assert Work.visible.with_any_tags([@tag]).include?(@tagged_work)
-        assert !Work.visible.with_any_tags([@tag]).include?(@untagged_work)
-      end
-    end    
+    should "only include both works with tags when retrieved with the shared tag id" do
+      assert_equal [@tagged_work, @two_tagged], Work.with_all_tag_ids([@tag.id])
+    end      
+    should "only include the work with both tags when retrieved with both tag ids" do
+      assert_equal [@two_tagged], Work.with_all_tag_ids([@tag.id, @tag2.id])
+    end      
   end
 
   context "two works owned by different users" do
     setup do
-      @work1 = create_work
-      @work2 = create_work
+      user1 = create_user
+      user2 = create_user
+      @work1 = create_work(:authors => [user1.default_pseud])
+      @work2 = create_work(:authors => [user2.default_pseud])
     end
     should "only be returned by owned_by on their own owner" do
-      owned1 = Work.owned_by(@work1.pseuds.first.user)
-      owned2 = Work.owned_by(@work2.pseuds.first.user)
-      assert owned1.include?(@work1)
-      assert !owned1.include?(@work2)
-      assert owned2.include?(@work2)
-      assert !owned2.include?(@work1)
+      user1 = @work1.pseuds.first.user
+      user2 = @work2.pseuds.first.user
+      assert_not_equal user1, user2
+      assert_equal [@work1], Work.owned_by(user1)
+      assert_equal [@work2], Work.owned_by(user2)
     end
     context "with a tag" do
       setup do
-        @tag = create_tag
-        @work1.tags << @tag
-        @work2.tags << @tag
-        @work1.save
-        @work2.save
+        @tag = create_freeform
+        @work1.freeforms = [@tag]
+        @work2.freeforms = [@tag]
       end
-      should "be returned by with_any_tags and owned_by chained" do
-        owned_with_tag = Work.owned_by_conditions(@work1.pseuds.first.user).with_any_tags([@tag])
-        assert owned_with_tag.include?(@work1)
-        assert !owned_with_tag.include?(@work2)
-        owned_with_tag = Work.owned_by_conditions(@work2.pseuds.first.user).with_any_tags([@tag])
-        assert owned_with_tag.include?(@work2)
-        assert !owned_with_tag.include?(@work1)
+      should "be returned by with_all_tag_ids and owned_by chained" do
+        assert_equal [@work1], Work.with_all_tag_ids([@tag.id]).owned_by(@work1.pseuds.first.user)
       end
-      context "and having been posted" do
+      should "not be returned by with_all_tag_ids and owned_by and visible chained" do
+        assert_equal [], Work.visible.owned_by(@work1.pseuds.first.user).with_all_tag_ids([@tag.id])
+      end
+      context "and visible" do
         setup do
           @work1.update_attribute("posted", true)
-          @work2.update_attribute("posted", true)
         end
         should "be returned by owned_by chained with visible and with tags" do
-          owned_visible_tagged = Work.owned_by_conditions(@work1.pseuds.first.user).visible.with_any_tags([@tag])
-          assert owned_visible_tagged.include?(@work1)
-          assert !owned_visible_tagged.include?(@work2)
-          owned_visible_tagged = Work.visible.owned_by_conditions(@work1.pseuds.first.user).with_any_tags([@tag])
-          assert owned_visible_tagged.include?(@work1)
-          assert !owned_visible_tagged.include?(@work2)
+          assert_equal [@work1], Work.visible.owned_by(@work1.pseuds.first.user).with_all_tag_ids([@tag.id])
         end
       end
     end
@@ -218,7 +134,7 @@ class WorkTest < ActiveSupport::TestCase
   context "multiple works with tags" do
     setup do
       @works = []
-      @tag = create_tag
+      @tag = create_freeform
       title = 9
 
       10.times do 
@@ -228,7 +144,7 @@ class WorkTest < ActiveSupport::TestCase
 
       @works.each do |w|
         w.update_attribute('posted', true)
-        w.update_attribute('default', @tag.name)
+        w.freeforms = [@tag]
       end
 
     end
@@ -245,8 +161,8 @@ class WorkTest < ActiveSupport::TestCase
       assert @ordered_works[9] = @works[9]
     end
       
-    should "be returned in the right order when retrived with with_any_tags" do
-      @ordered_works = Work.with_any_tags([@tag]).ordered('title', 'ASC')
+    should "be returned in the right order when retrived with with_all_tag_ids" do
+      @ordered_works = Work.with_all_tag_ids([@tag.id]).ordered('title', 'ASC')
       assert @ordered_works[0] = @works[9]
       assert @ordered_works[9] = @works[0]
     end
@@ -257,8 +173,8 @@ class WorkTest < ActiveSupport::TestCase
       assert @ordered_works[9] = @works[0]
     end
       
-    should "be returned in the right order when retrived with visible_with_any_tags" do
-      @ordered_works = Work.visible.with_any_tags([@tag]).ordered('title', 'ASC')
+    should "be returned in the right order when retrived with visible and with_all_tag_ids" do
+      @ordered_works = Work.visible.with_all_tag_ids([@tag.id]).ordered('title', 'ASC')
       assert @ordered_works[0] = @works[9]
       assert @ordered_works[9] = @works[0]
     end

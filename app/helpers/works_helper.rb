@@ -34,9 +34,9 @@ module WorksHelper
   end
   
   # Link to show warnings if they're currently hidden
-  def show_warnings_link(work, category)
+  def show_warnings_link(work)
     link_to_remote "Show warnings".t, 
-      :url => {:controller => 'tags', :action => 'show_hidden', :work_id => work.id, :category_id => category.id}, 
+      :url => {:controller => 'tags', :action => 'show_hidden', :work_id => work.id }, 
       :method => :get
   end
     
@@ -64,8 +64,8 @@ module WorksHelper
   end
 
   # select the default warnings if this is a new work
-  def warning_selected(work, category)
-    @work.new_record? ? Tag.default_warning : @work.tags.by_category(category).valid.collect(&:name)
+  def warning_selected(work)
+    @work.new_record? ? Warning::DEFAULT : @work.tags.by_category("Warning").valid.collect(&:name)
   end
   
   def get_tags_by_category(work)
@@ -73,7 +73,7 @@ module WorksHelper
       @tags_by_category_work = work
       @tags_by_category = nil
     end
-    @tags_by_category ||= Tag.on_works([work]).group_by(&:tag_category_id).to_hash
+    @tags_by_category ||= Tag.on_works([work]).group_by(&:type).to_hash
   end
   
   def get_title_string(tags, category_name = "")
@@ -87,16 +87,16 @@ module WorksHelper
   def get_symbols_for(work)
     tags_by_category = get_tags_by_category(work)
 
-    warning_class = get_warnings_class(tags_by_category[TagCategory::WARNING.id])
-    warning_string = get_title_string(tags_by_category[TagCategory::WARNING.id])
+    warning_class = get_warnings_class(tags_by_category["Warning"])
+    warning_string = get_title_string(tags_by_category["Warning"])
     
-    rating = tags_by_category[TagCategory::RATING.id].blank? ? nil : tags_by_category[TagCategory::RATING.id].first
+    rating = tags_by_category["Rating"].blank? ? nil : tags_by_category["Rating"].first
     rating_class = get_ratings_class(rating)
-    rating_string = get_title_string(tags_by_category[TagCategory::RATING.id], "rating".t)
+    rating_string = get_title_string(tags_by_category["Rating"], "rating".t)
 
-    category = tags_by_category[TagCategory::CATEGORY.id].blank? ? nil : tags_by_category[TagCategory::CATEGORY.id].first
+    category = tags_by_category["Category"].blank? ? nil : tags_by_category["Category"].first
     category_class = get_category_class(category)
-    category_string = get_title_string(tags_by_category[TagCategory::CATEGORY.id], "category".t)
+    category_string = get_title_string(tags_by_category["Category"], "category".t)
     
     iswip_class = get_complete_class(work)
     iswip_string = work.is_wip ? "Work in Progress".t : "Complete Work".t
@@ -114,7 +114,7 @@ module WorksHelper
   
   def get_warnings_class(warning_tags)
     # check for warnings
-    if warning_tags && warning_tags.include?(Tag::NO_WARNING_TAG)
+    if warning_tags == [Warning::NONE]
       "warning-no"
     else
       "warning-yes"
@@ -123,13 +123,13 @@ module WorksHelper
     
   def get_ratings_class(rating_tag)
     case rating_tag
-    when Tag::EXPLICIT_RATING_TAG
+    when Rating::EXPLICIT
       "rating-explicit"
-    when Tag::MATURE_RATING_TAG
+    when Rating::MATURE
       "rating-mature"
-    when Tag::TEEN_RATING_TAG
+    when Rating::TEEN
       "rating-teen"
-    when Tag::GENERAL_RATING_TAG
+    when Rating::GENERAL
       "rating-general-audience"
     else
       "rating-notrated"
@@ -138,17 +138,17 @@ module WorksHelper
 
   def get_category_class(category_tag)
     case category_tag
-    when Tag::GEN_CATEGORY_TAG
+    when Category::GEN
       "category-gen"
-    when Tag::SLASH_CATEGORY_TAG
+    when Category::SLASH
       "category-slash"
-    when Tag::HET_CATEGORY_TAG
+    when Category::HET
       "category-het"
-    when Tag::FEMSLASH_CATEGORY_TAG
+    when Category::FEMSLASH
       "category-femslash"
-    when Tag::MULTI_CATEGORY_TAG
+    when Category::MULTI
       "category-multi"
-    when Tag::OTHER_CATEGORY_TAG
+    when Category::OTHER
       "category-other"
     else
       "category-none"
@@ -167,18 +167,13 @@ module WorksHelper
     tags_by_category = get_tags_by_category(work)
     
     # we combine pairing and character tags up to the limit
-    characters = tags_by_category[TagCategory::CHARACTER.id] || []
-    pairings = tags_by_category[TagCategory::PAIRING.id] || []
+    characters = tags_by_category["Character"] || []
+    pairings = tags_by_category["Pairing"] || []
     return [] if pairings.empty? && characters.empty? 
     
-    relationship = TagRelationshipKind.find_by_name('child')
-    if relationship 
-      pairings.each do |pairing|
-        characters.reject!{|c| c.is_in_relationship_with?(pairing, relationship)}
-      end
-    end
+    pairing_characters = pairings.collect{|p| p.characters}.flatten.uniq.compact
     
-    cast = pairings + characters
+    cast = pairings + characters - pairing_characters
     if cast.size > ArchiveConfig.TAGS_PER_LINE
       cast = cast[0..(ArchiveConfig.TAGS_PER_LINE-1)]
     end
@@ -189,8 +184,8 @@ module WorksHelper
   def freeform_tags_for(work)
     tags_by_category = get_tags_by_category(work)
     
-    warnings = tags_by_category[TagCategory::WARNING.id] || []
-    freeform = tags_by_category[TagCategory::DEFAULT.id] || []
+    warnings = tags_by_category["Warning"] || []
+    freeform = tags_by_category["Freeform"] || []
 
     tags = warnings + freeform
     if tags.size > ArchiveConfig.TAGS_PER_LINE

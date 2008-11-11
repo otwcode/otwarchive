@@ -1,24 +1,21 @@
-<h1>Manage Tag Relationships</h1>
+<h1>Manage Tags</h1>
 
 <div id="error"></div>
 
-<div>
-Assign 
-  <%= link_to_remote 'fandoms to a media', :url => {:action => :index, :category1 => 'Fandom', :category2 => 'Media'}, :method => :get %>
-  |
-  <%= link_to_remote 'characters to a fandom', :url => {:action => :index, :category1 => 'Character', :category2 => 'Fandom'}, :method => :get %>
-  |
-  <%= link_to_remote 'characters to a pairing', :url => {:action => :index, :category1 => 'Character', :category2 => 'Pairing'}, :method => :get %>
-  |
-  <%= link_to_remote 'custom assignment', :url => {:action => :index, :customize => true}, :method => :get %>
+<div id="fandoms">
+  <%= render :partial => 'tag_wranglings/fandoms' %>
 </div>
 
-<div id="customized-form">
-  <%= render :partial  => 'tag_wranglings/customized' %>
+<div id="fandom-edit">
+  <%= render :partial  => 'tag_wranglings/fandom' %>
 </div>
 
-<div id="tag-relationship-form">
-  <%= render :partial  => 'tag_wranglings/sort_by_category' %>
+<div id="tags-edit">
+  <%= render :partial  => 'tag_wranglings/tags' %>
+</div>
+
+<div id="tag-edit">
+  <%= render :partial  => 'tag_wranglings/tag' %>
 </div>
 
 <%= tag_wrangler_footer %> 

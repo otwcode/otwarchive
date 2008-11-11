@@ -104,6 +104,7 @@ Rails::Initializer.run do |config|
   config.gem 'mislav-will_paginate', :version => '~> 2.3.4', :lib => 'will_paginate', :source => 'http://gems.github.com'
   config.gem 'hpricot'
   config.gem 'thoughtbot-shoulda', :lib => 'shoulda/rails', :source => "http://gems.github.com"
+  config.gem 'andand'
 
   # Override the sanitize defaults to allow some extra formatting attributes. 
   config.action_view.sanitized_allowed_attributes = 'align'
@@ -120,6 +121,11 @@ end
 
 ActionController::AbstractRequest.relative_url_root = ArchiveConfig.PRODUCTION_URL_ROOT if ArchiveConfig.PRODUCTION_URL_ROOT && ENV['RAILS_ENV'] == 'production'
 
-require 'tagging_extensions'
+class ActiveRecord::Base
+    include FindRandom
+end
 
-
+Work.initialize_tag_methods rescue "didn't set up tag methods"
+Work.initialize_tag_equal_methods rescue "didn't set up tag equal methods"
+Work.initialize_string_methods rescue "didn't set up tag string methods"
+Work.initialize_string_equal_methods rescue "didn't set up tag string equal methods"

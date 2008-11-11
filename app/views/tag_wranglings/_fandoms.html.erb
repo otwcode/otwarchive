@@ -1,0 +1,37 @@
+<% if @by_fandom %>
+  <p>Click on a <%= Fandom::NAME %> to wrangle it. 
+  <p>Click on the number next to the category name to wrangle the unwrangled tags in that category.
+  <p>* fandom is not canonical
+  <p>! fandom does not belong to a media</p>
+  <table>
+    <%- @by_fandom.in_groups_of(3) do |group| %>
+      <tr>
+        <% group.each do |pair| %>
+          <% if pair %>
+            <% fandom = pair[0] %>
+            <td>
+              <p>
+              <% if fandom %>
+                <% unless fandom.canonical? %>*<% end %>
+                <% unless fandom.media_id %>!<% end %>
+                <%= link_to_remote fandom.name, :url => { :fandom_id => fandom.id }, :method => :get %>
+              <% else %>
+                No associated fandom
+              <% end %>
+              :</p>
+              <p>
+              <% pair[1].each do |type, tags| %>
+                <%= type.constantize::NAME %>:
+                <%= link_to_remote  "(" + tags.size.to_s + ")", 
+                                 :url => { :tag_ids => tags },
+                                 :method => :get %>
+                <br>
+              <% end %>
+              </p>
+            </td>
+          <% end %>
+        <% end %>
+      </tr>
+    <%- end -%>
+  </table>
+<%- end -%>

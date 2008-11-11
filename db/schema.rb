@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081012185902) do
+ActiveRecord::Schema.define(:version => 20081102050355) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -208,6 +208,7 @@ ActiveRecord::Schema.define(:version => 20081012185902) do
     t.boolean  "hide_warnings",                          :default => false, :null => false
     t.boolean  "comment_inbox_off",                      :default => false
     t.boolean  "comment_copy_to_self_off",               :default => true,  :null => false
+    t.string   "work_title_format",                      :default => "TITLE - AUTHOR - FANDOM"
   end
 
   create_table "profiles", :force => true do |t|
@@ -325,6 +326,11 @@ ActiveRecord::Schema.define(:version => 20081012185902) do
     t.datetime "updated_at"
     t.integer  "taggings_count",  :limit => 11, :default => 0
     t.boolean  "adult",                         :default => false
+    t.string   "type"
+    t.integer  "canonical_id",    :limit => 11
+    t.integer  "media_id",        :limit => 11
+    t.integer  "fandom_id",       :limit => 11
+    t.integer  "genre_id",        :limit => 11
   end
 
   add_index "tags", ["name", "tag_category_id"], :name => "index_tags_on_name_and_category", :unique => true

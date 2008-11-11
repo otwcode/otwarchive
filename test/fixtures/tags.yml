@@ -1,251 +1,128 @@
-General_Audiences:
-  tag_category: Rating
-  name: General Audiences
-  canonical: true
-  banned: false
-  adult: false
-
-Teen_and_Up:
-  tag_category: Rating
-  name: Teen and Up Audiences
-  canonical: true
-  banned: false
-  adult: false
-
-Explicit:
-  tag_category: Rating
-  name: Explicit
-  canonical: true
-  banned: false
-  adult: true
-	
-Mature:
-  tag_category: Rating
-  name: Mature
-  canonical: true
-  banned: false
-  adult: true
-
-Not_Rated:
-  tag_category: Rating
-  name: Not Rated
-  canonical: true
-  banned: false
-  adult: true
-
-Gen:
-  tag_category: Category
-  name: Gen
-  canonical: true
-  banned: false
-  adult: false
-
-Het:
-  tag_category: Category
-  name: Het
-  canonical: true
-  banned: false
-  adult: false
-	
-Slash:
-  tag_category: Category
-  name: Slash
-  canonical: true
-  banned: false
-  adult: false
-	
-Other:
-  tag_category: Category
-  name: Other
-  canonical: true
-  banned: false
-  adult: false
-
-Multi:
-  tag_category: Category
-  name: Multi
-  canonical: true
-  banned: false
-  adult: false
-
-Femslash:
-  tag_category: Category
-  name: Femslash
-  canonical: true
-  banned: false
-  adult: false
-	
-Chooses_Not_To_Warn:
-  tag_category: Warning
-  name: Choose Not To Warn
-  canonical: true
-  banned: false
-  adult: false
-	
-No_Warnings_Apply:
-  tag_category: Warning
-  name: None Of These Warnings Apply
-  canonical: true
-  banned: false
-  adult: false
-	
-Extreme_Violence:
-  tag_category: Warning
-  name: extreme violence
-  canonical: true
-  banned: false
-  adult: false
-	
-Major_Character_Death:
-  tag_category: Warning
-  name: major character death
-  canonical: true
-  banned: false
-  adult: false
-	
-Rape:
-  tag_category: Warning
-  name: rape
-  canonical: true
-  banned: false
-  adult: false
-	
-Underage:
-  tag_category: Warning
-  name: underage
-  canonical: true
-  banned: false
-  adult: false
-	
 TV_Shows:
-  tag_category: Media
+  type: Media
   name: TV Shows
   canonical: true
   banned: false
   adult: false
 	
 Movies:
-  tag_category: Media
+  type: Media
   name: Movies
   canonical: true
   banned: false
   adult: false
 	
 Books:
-  tag_category: Media
+  type: Media
   name: Books
   canonical: true
   banned: false
   adult: false
 	
-Comics & Manga:
-  tag_category: Media
+Comics_and_Manga:
+  type: Media
   name: Comics & Manga
   canonical: true
   banned: false
   adult: false
 	
-Cartoons & Anime:
-  tag_category: Media
+Cartoons_and_Anime:
+  type: Media
   name: Cartoons & Anime
   canonical: true
   banned: false
   adult: false
 	
-Music & Bands:
-  tag_category: Media
+Music_and_Bands:
+  type: Media
   name: Music & Bands
   canonical: true
   banned: false
   adult: false
 	
 Real_People_Celebrities:
-  tag_category: Media
+  type: Media
   name: Real People & Celebrities
   canonical: true
   banned: false
   adult: false
 	
 Other_Media:
-  tag_category: Media
+  type: Media
   name: Other Media
   canonical: true
   banned: false
   adult: false
 	
 Supernatural:
-  tag_category: Fandom
+  type: Fandom
   name: Supernatural
   canonical: true
 	
 Stargate_Atlantis:
-  tag_category: Fandom
+  type: Fandom
   name: Stargate Atlantis
   canonical: true
 
 SGA:
-  tag_category: Fandom
+  type: Fandom
   name: SGA
   canonical: false
 	
 Harry_Potter:
-  tag_category: Fandom
+  type: Fandom
   name: Harry Potter
   canonical: true
 	
 Iron_Man:
-  tag_category: Fandom
+  type: Fandom
   name: Iron Man (2008)
   canonical: true
 
 Doctor_Who:
-  tag_category: Fandom
+  type: Fandom
   name: Doctor Who
   canonical: true
 	
 Torchwood:
-  tag_category: Fandom
+  type: Fandom
   name: Torchwood
   canonical: true
 	
 American_Idol:
-  tag_category: Fandom
+  type: Fandom
   name: American Idol
   canonical: true
 	
 Stargate_SG1:
-  tag_category: Fandom
+  type: Fandom
   name: Stargate SG-1
   canonical: true
 	
 Sam_Winchester:
-  tag_category: Character
+  type: Character
   name: Sam Winchester
   canonical: true
 	
 Dean_Winchester:
-  tag_category: Character
+  type: Character
   name: Dean Winchester
   canonical: true
 	
 Dean_Winchester_Sam_Winchester:
-  tag_category: Pairing
+  type: Pairing
   name: Dean Winchester/Sam Winchester
   canonical: true
 	
 Sam_Carter:
-  tag_category: Character
+  type: Character
   name: Sam Carter
   canonical: true
 	
-Sam:
-  tag_category: Ambiguous
-  name: Sam
-  
 angsty:
-  tag_category: Default
+  type: Freeform
   name: angsty
   
 fluff:
-  tag_category: Default
+  type: Freeform
   name: fluff

@@ -1,14 +1,20 @@
 # Parse stories from other websites and uploaded files, looking for metadata to harvest
 # and put into the archive. 
 # 
-# This class depends heavily on the official tag categories of the archive. 
 class StoryParser
   require 'timeout'
   require 'hpricot'
   require 'open-uri'
   include HtmlFormatter
   
-  META_PATTERNS = {:title => 'Title', :notes => 'Note', :summary => 'Summary', :default => "Tag", :published_at => 'Date|Posted|Posted on|Posted at'}
+  META_PATTERNS = {:title => 'Title', 
+                   :notes => 'Note', 
+                   :summary => 'Summary', 
+                   :freeform_string => "Tag", 
+                   :fandom_string => "Fandom",
+                   :rating_string => "Rating",
+                   :pairing_string => "Pairing",
+                   :published_at => 'Date|Posted|Posted on|Posted at'}
 
   # These lists will stop with the first one it matches, so put more-specific matches
   # towards the front of the list. 
@@ -219,11 +225,7 @@ class StoryParser
       tags = ['yuletide']
       if storytext.match(/Fandom: <(.*)>(.*)<\/a>/i)
         fandom_tag = $2
-        if is_official_category?("fandom")
-          work_params[:fandom] = fandom_tag
-        else
-          tags << "fandom:#{fandom_tag}"
-        end
+        work_params[:fandom_string] = fandom_tag
       end
 
       if storytext.match(/Written for: (.*) in the (.*) challenge/i)
@@ -260,16 +262,12 @@ class StoryParser
       
         work_params[:summary] = summary
         rating = convert_rating(rating)
-        if is_official_category?("rating")
-          work_params[:rating] = rating
-        else
-          tags << "rating:#{rating}"
-        end
-      rescue Timeout::Error
+        work_params[:rating_string] = rating
+      rescue
         # couldn't get the summary data, oh well, keep going
       end
       
-      work_params[:default] = tags.join(ArchiveConfig.DELIMITER)
+      work_params[:freeform_string] = tags.join(ArchiveConfig.DELIMITER)
       
       return work_params
     end
@@ -288,19 +286,11 @@ class StoryParser
       pagetitle = (@doc/"title").inner_html
       if pagetitle && pagetitle.match(/(.*), a (.*) fanfic - FanFiction\.Net/)
         work_params[:title] = $1
-        if is_official_category?("fandom")
-          work_params[:fandom] = $2
-        else
-          tags << "fandom:#{$2}"
-        end
+        work_params[:fandom_string] = $2
       end
       if story.match(/fiction rated:\s*(.*?)<\/a>/i)
         rating = convert_rating($1)
-        if is_official_category?("rating")
-          work_params[:rating] = rating
-        else
-          tags << "rating:#{rating}"
-        end
+        work_params[:rating_string] = rating
       end
       
       if story.match(/fiction rated.*?<\/a> - .*? - (.*?)\/(.*?) -/i)
@@ -308,7 +298,7 @@ class StoryParser
         tags << $2 unless $1 == $2 
       end
       
-      work_params[:default] = tags.join(ArchiveConfig.DELIMITER)
+      work_params[:freeform_string] = tags.join(ArchiveConfig.DELIMITER)
       work_params[:chapter_attributes][:content] = storytext    
       
       return work_params
@@ -326,11 +316,9 @@ class StoryParser
 
       meta = {}
       metapatterns = META_PATTERNS
-      # add in all the official tags
       is_tag = {}
-      TagCategory::OFFICIAL.each do |c|
-        metapatterns.merge!({c.name.to_sym => c.display_name.singularize})
-        is_tag[c.name.to_sym] = true
+      ["fandom_string", "pairing_string", "freeform_string", "rating_string"].each do |c|
+        is_tag[c.to_sym] = true
       end
       metapatterns.each do |metaname, pattern|
         # what this does is look for pattern: (whatever) 
@@ -383,10 +371,6 @@ class StoryParser
   
     def clean_storytext(storytext)
       return sanitize_whitelist(cleanup_and_format(storytext))
-    end
-    
-    def is_official_category?(string)
-      TagCategory::OFFICIAL.collect(&:name).include?(string.downcase)
     end
     
     # works conservatively -- doesn't split on

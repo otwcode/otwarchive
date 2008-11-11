@@ -1,0 +1,34 @@
+<%- if @tag %>
+  <%- remote_form_for :tag, @tag, :url => { :tag_id => tag.id } do |f| -%>
+      <p>If this tag is canonical, rename it if necessary<p>
+      <p>If this fandom is <strong>not</strong> canonical, choose it's canonical synonym<p>
+    <dl>  
+      <dt><%= f.label :name, 'Name'.t %></dt> 
+      <dd><%= f.text_field :name %></dd>
+
+      <%= f.collection_select :canonical_id, @canonical, :id, :name, {:prompt => 'Choose a Synonym'} %>
+
+      <dt><%= f.check_box("banned") %><%= f.label :banned, 'Banned'.t %></dt>
+      <dd><%=h 'This tag will not show up anywhere'.t %></dd>
+
+      <dt><%= f.check_box("canonical") %><%= f.label :canonical, 'Canonical'.t %></dt>
+      <dd><%=h 'This is the official name for a fandom/pairing/character/etc.'.t %></dd>
+
+<%- if @tag.is_a? Rating %>
+      <dt><%= f.check_box("adult") %><%= f.label :adult, 'Adult'.t %></dt>    
+      <dd><%=h 'This tag indicates adult content; any work tagged with this will trigger the "do you agree to see this" page'.t %></dd>
+<% end %>
+      <dt><%=h 'Category'.t %></dt>
+      <%- (Tag::TYPES + ["Legacy"]).each do |type| -%>
+      <dd><%= f.radio_button(:type, type.constantize::NAME) %><%= f.label :type, type.constantize::NAME %></dd>
+      <%- end -%>    
+    </dl>
+  
+    <p><%= f.submit %></p>
+  <%- end -%>
+  <p>Recent works this tag (for reference):</p>
+  <% @works.each do |work| %>
+    <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
+  <% end %>
+
+<%- end -%>

@@ -24,7 +24,7 @@ class UsersController < ApplicationController
     end
       
     @users = User.alphabetical.starting_with(letter)
-    @categories = TagCategory::OFFICIAL - [TagCategory::WARNING, TagCategory::RATING, TagCategory::DEFAULT]
+    @categories = ["Fandom", "Pairing", "Character", "Genre", "Freeform"]
   end 
 
   # GET /users/1

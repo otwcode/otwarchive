@@ -50,7 +50,7 @@ class ChaptersController < ApplicationController
   def check_adult_status
     if params[:view_adult]
       session[:adult] = true
-    elsif @work.adult_content? &&  !see_adult? 
+    elsif @work.rating.adult? &&  !see_adult? 
       render :partial => "works/adult", :layout => "application"
     end  
   end

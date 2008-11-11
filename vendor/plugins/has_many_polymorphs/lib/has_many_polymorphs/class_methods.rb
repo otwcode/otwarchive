@@ -367,7 +367,6 @@ Be aware, however, that <tt>NULL != 'Spot'</tt> returns <tt>false</tt> due to SQ
                 aliases["#{table}.#{field}"] = "t#{t_index}_r#{f_index}"
               end
             rescue
-              puts "has_many_polymorphs could not find a valid class for #{plural.inspect}. If this is following a database reset it may not have been created yet. Ignoring for now although it could indicate a problem with the database."
             end
           end
         end

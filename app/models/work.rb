@@ -17,7 +17,6 @@ class Work < ActiveRecord::Base
 
   has_many :taggings, :as => :taggable, :dependent => :destroy
   has_many :tags, :through => :taggings
-  include TaggingExtensions
 
   acts_as_commentable
 
@@ -34,10 +33,10 @@ class Work < ActiveRecord::Base
   attr_accessor :invalid_pseuds
   attr_accessor :ambiguous_pseuds
   attr_accessor :new_parent, :url_for_parent
-  attr_accessor :new_tags
-  attr_accessor :tags_to_tag_with
-
-
+  
+  attr_accessor :tags_to_add
+  attr_accessor :tags_to_remove
+  
   ########################################################################
   # VALIDATION  
   ########################################################################
@@ -83,6 +82,7 @@ class Work < ActiveRecord::Base
 
   def validate_published_at
     to = DateTime.now
+    return false unless self.published_at
     if self.published_at > to
       errors.add_to_base("Publication date can't be in the future.".t)
       return false
@@ -110,8 +110,8 @@ class Work < ActiveRecord::Base
 
   after_save :save_creatorships, :save_chapters, :save_parents
   
-  after_create :tag_after_create 
-
+  after_create :add_and_remove_tags
+  
   before_update :validate_tags
 
 
@@ -298,14 +298,14 @@ class Work < ActiveRecord::Base
   end
   
   # Reorders chapters based on form data
-	# Removes changed chapters from array, sorts them in order of position, re-inserts them into the array and uses the array index values to determine the new positions
+  # Removes changed chapters from array, sorts them in order of position, re-inserts them into the array and uses the array index values to determine the new positions
   def reorder_chapters(positions)
     chapters = self.chapters.find(:all, :conditions => {:posted=>true}, :order => 'position')
     changed = {}
     positions.collect!(&:to_i).each_with_index do |new_position, old_position|
-    	if new_position != 0 && new_position <= self.number_of_posted_chapters && !changed.has_key?(new_position)
-    		changed.merge!({new_position => chapters[old_position]})
-    	end
+      if new_position != 0 && new_position <= self.number_of_posted_chapters && !changed.has_key?(new_position)
+        changed.merge!({new_position => chapters[old_position]})
+      end
     end
     chapters -= changed.values
     changed.sort.each {|pair| pair.first > chapters.length ? chapters << pair.last : chapters.insert(pair.first-1, pair.last)}
@@ -332,40 +332,138 @@ class Work < ActiveRecord::Base
     return !self.is_wip
   end
 
-
+  # Set the value of word_count to reflect the length of the chapter content
+  def set_word_count
+    self.word_count = self.chapters.collect(&:word_count).compact.sum
+  end
 
   ################################################################################
   # TAGGING
   # Works are taggable objects.
   ################################################################################
 
-  # create dynamic methods based on the tag categories
-  def self.initialize_tag_category_methods
-		categories = TagCategory::OFFICIAL
-    categories.each do |c|
-      define_method(c.name){tag_string(c)}
-      define_method(c.name+'=') do |tag_name| 
-        self.new_record? ? (self.tags_to_tag_with ||= {}).merge!({c.name.to_sym => tag_name}) : tag_with(c.name.to_sym => tag_name)
+  def add_tag(tag)
+    self.tags << tag unless self.tags.include?(tag)
+  end
+  
+  def remove_tag(tag)
+    tagging = Tagging.find_by_tag_id_and_taggable_id(tag.id, self.id)
+    tagging.destroy if tagging
+  end
+  
+  def replace_tags(type, new_tags=[])
+    new_tags.each do |tag|
+      return false unless tag.is_a?(type.constantize)    # not the right kind of tag
+      return false if tag.new_record?                    # can't create an association if not saved
+    end
+    old_tags = self.tags.find_all_by_type(type)
+    self.tags_to_add ? self.tags_to_add += (new_tags - old_tags) : self.tags_to_add = (new_tags - old_tags)
+    self.tags_to_remove ? self.tags_to_remove += (old_tags - new_tags) : self.tags_to_remove = (old_tags - new_tags)
+    self.add_and_remove_tags unless self.new_record?
+  end
+  
+  def add_and_remove_tags
+    self.tags_to_add.compact.each {|t| self.add_tag(t) } if self.tags_to_add
+    self.tags_to_remove.compact.each {|t| self.remove_tag(t) } if self.tags_to_remove
+  end
+  
+  # type methods
+  # return a single tag for types which can only take one tag
+  # return an array for the rest
+  def self.initialize_tag_methods
+    Tag::TYPES.each do |type|
+      begin
+        type.constantize::SINGULAR
+        define_method(type.downcase) { self.tags.find_by_type(type) }
+      rescue NameError  # uninitialized constant, must be plural
+        define_method(type.downcase.pluralize) { self.tags.find_all_by_type(type) }        
+      end
+    end
+  end
+  
+  def cast
+    pairings = self.pairings
+    pairing_characters = pairings.map(&:characters).flatten.uniq if pairings
+    characters = []
+    self.characters.each do |char|
+       characters << char unless pairing_characters.include?(char)
+    end
+    pairings + characters
+  end
+    
+  # type type= methods
+  # set a singular tag for those which can only take one tag
+  # set an array of tags for the others
+  def self.initialize_tag_equal_methods
+    Tag::TYPES.each do |type|
+      begin
+        type.constantize::SINGULAR
+        define_method(type.downcase + '=') do |tag|
+          self.replace_tags(type, [tag])
+        end
+      rescue NameError  # uninitialized constant, must be plural
+        define_method(type.downcase.pluralize + '=') do |tags| 
+          self.replace_tags(type, tags)
+        end
+      end
+    end
+  end
+  
+  # string methods
+  def self.initialize_string_methods
+    Tag::TYPES.each do |type|
+      define_method(type.downcase + "_string") { self.tags.find_all_by_type(type).map(&:name).join(ArchiveConfig.DELIMITER) }
+      end
+    end 
+
+  def cast_string
+    pairings = self.pairings
+    pairing_characters = pairings.map(&:characters).flatten.uniq if pairings
+    characters = []
+    self.characters.each do |char|
+       characters << char unless pairing_characters.include?(char)
+    end
+    (pairings + characters).map(&:name).join(ArchiveConfig.DELIMITER)
+  end
+    
+  def warning_strings
+    warnings.map(&:name)
+  end
+  
+  # _string= methods
+  def self.initialize_string_equal_methods
+    Tag::TYPES.each do |type|
+      begin
+        type.constantize::SINGULAR
+        define_method(type.downcase + '_string=') do |tag_string|
+          tag = type.constantize.find_or_create_by_name_and_type(tag_string, type)
+          self.replace_tags(type, [tag])
+        end
+      rescue
+        define_method(type.downcase + '_string=') do |tag_string| 
+          tags = []
+          tag_string.split(ArchiveConfig.DELIMITER).each do |string|
+            tags << type.constantize.find_or_create_by_name(string)
+          end
+          self.replace_tags(type, tags)
+        end
       end
     end 
   end
-	
-	begin
-	 ActiveRecord::Base.connection
-   initialize_tag_category_methods
-  rescue
-    puts "no database yet, not initializing tag category methods"
-  end
   
-  # Set the value of word_count to reflect the length of the chapter content
-  def set_word_count
-    self.word_count = self.chapters.collect(&:word_count).compact.sum
+  def warning_strings=(array=[])
+    array.each do |name|
+       tags << Warning.find_or_create_by_name(name)
+    end
   end
   
   # Check to see that a work is tagged appropriately
   def has_required_tags?
-    my_tag_categories = (self.tags_to_tag_with ? self.tags_to_tag_with.keys : []) + self.tags.collect(&:tag_category)    
-    TagCategory.required - my_tag_categories == []
+     return false if self.fandoms.blank? && self.fandom_string.blank?
+     return false if self.warnings.blank? && self.warning_string.blank? && self.warning_strings.blank?
+     return false if self.rating.blank? && self.rating_string.blank?
+     return false if self.category.blank? && self.category_string.blank?
+     return true
   end
   
   def validate_tags
@@ -373,26 +471,7 @@ class Work < ActiveRecord::Base
     self.has_required_tags? 
   end
   
-  def tag_after_create
-    unless self.tags_to_tag_with.blank?
-      if self.tags_to_tag_with[:warning].blank?
-        self.tags_to_tag_with.merge!({:warning => Tag::DEFAULT_WARNING_TAG.name})
-      end
-      if self.tags_to_tag_with[:rating].blank?
-        self.tags_to_tag_with.merge!({:rating => Tag::DEFAULT_RATING_TAG.name})
-      end
-      self.tags_to_tag_with.each_pair do |category, tag|
-        tag_with(category => tag)
-      end
-    end
-  end
   
-  def adult_content?
-    tags.find(:first, :conditions => {:adult => true})
-  end
-
-
-
   ################################################################################
   # COMMENTING & BOOKMARKS
   # We don't actually have comments on works currently but on chapters. 
@@ -428,12 +507,6 @@ class Work < ActiveRecord::Base
   # RELATED WORKS
   # These are for inspirations/remixes/etc
   ########################################################################
-  # Virtual attribute for first chapter
-  def chapter_attributes=(attributes)
-    self.new_record? ? self.chapters.build(attributes) : self.chapters.first.attributes = attributes
-    self.chapters.first.posted = self.posted
-  end
-  
 
   # Works this work belongs to through related_works
   def parents
@@ -532,7 +605,7 @@ class Work < ActiveRecord::Base
     # fields
     indexes summary
     indexes notes
-		indexes title, :sortable => true
+    indexes title, :sortable => true
 
     # associations
     indexes chapters.content, :as => 'chapter_content' 
@@ -663,10 +736,10 @@ class Work < ActiveRecord::Base
 
   named_scope :tags_with_count, lambda {|*args|
     {
-      :select => "tag_categories.id as category_id, tags.id as tag_id, tags.name as tag_name, count(distinct works.id) as count",
-      :joins => TAGGING_JOIN + " " + OWNERSHIP_JOIN + " INNER JOIN tag_categories ON tags.tag_category_id = tag_categories.id",
+      :select => "tags.type as tag_type, tags.id as tag_id, tags.name as tag_name, count(distinct works.id) as count",
+      :joins => TAGGING_JOIN + " " + OWNERSHIP_JOIN,
       :group => "tags.name",
-      :order => "tags.tag_category_id, tags.name ASC"
+      :order => "tags.type, tags.name ASC"
     }.merge(args.first.size > 0 ? {:conditions => ["works.id in (?)", args.first]} : {})
   }
 
@@ -830,7 +903,7 @@ class Work < ActiveRecord::Base
 
   def self.build_filters_hash(filters_array)
     # this takes an array from tags_with_count and turns it into a hash of hashes indexed 
-    # by tag_category id 
+    # by tag.type
     filters_hash = {}
     filters_array.each do |filter|
       begin
@@ -839,7 +912,7 @@ class Work < ActiveRecord::Base
         count = 0
       end
       tmphash = {:name => filter.tag_name, :id => filter.tag_id.to_s, :count => count}
-      key = filter.category_id.to_s
+      key = filter.tag_type
       if filters_hash[key]
         filters_hash[key] << tmphash
       else
@@ -863,11 +936,5 @@ class Work < ActiveRecord::Base
   def <=>(another_work)
     title.strip.downcase <=> another_work.strip.downcase
   end
-
-  # this doesn't work right >:(
-  def self.all_cached
-    Rails.cache.fetch('Works.all') { all_with_tags }    
-  end
-
 
 end

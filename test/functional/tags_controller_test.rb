@@ -17,10 +17,8 @@ class TagsControllerTest < ActionController::TestCase
     should_respond_with :success
     should_assign_to :tag
     should_render_template :show
-    should_assign_to :tags
     should_assign_to :works
     should_assign_to :bookmarks
-    should_assign_to :ambiguous
   end
   
   context "when logged out, should not be able to access new tags page" do
@@ -61,17 +59,33 @@ class TagsControllerTest < ActionController::TestCase
       should_assign_to :tag
     end
 
-    context "on POST with :create" do
+    context "on POST with :create freeform" do
       # TODO restricted to tag_wrangler
       setup do
         @name = random_phrase[1...ArchiveConfig.TAG_MAX]
-        put :create, :locale => 'en', :tag => {"name" => @name}
+        @type = "Freeform"
+        put :create, :locale => 'en', :tag => {"name" => @name, "type" => @type}
       end
-      should_redirect_to 'tag_categories_path'
+      should_redirect_to 'tag_wranglings_path'
       should_set_the_flash_to /successfully created/
       should_assign_to :tag
       should "create the tag" do
-        assert Tag.find_by_name(@name)
+        assert Freeform.find_by_name(@name)
+      end
+    end
+  
+    context "on POST with :create fandom" do
+      # TODO restricted to tag_wrangler
+      setup do
+        @name = random_phrase[1...ArchiveConfig.TAG_MAX]
+        @type = "Fandom"
+        put :create, :locale => 'en', :tag => {"name" => @name, "type" => @type}
+      end
+      should_redirect_to 'tag_wranglings_path'
+      should_set_the_flash_to /successfully created/
+      should_assign_to :tag
+      should "create the tag" do
+        assert Fandom.find_by_name(@name)
       end
     end
   
@@ -82,7 +96,7 @@ class TagsControllerTest < ActionController::TestCase
       end
       should_render_template "new"
       should_render_a_form
-      should_not_set_the_flash
+      should_set_the_flash_to /Please provide a category/
       should_assign_to :tag
     end
   end
@@ -90,10 +104,10 @@ class TagsControllerTest < ActionController::TestCase
 
   context "a tag which tags a work" do
     setup do
-      @tag = create_tag
+      @tag = create_freeform
       @work = create_work
       @work.update_attribute(:posted, true)
-      tagging = create_tagging(:taggable => @work, :tag => @tag)  
+      @work.freeforms = [@tag]  
     end
     context "on GET with :show" do
       setup do

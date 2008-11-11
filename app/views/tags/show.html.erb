@@ -28,13 +28,6 @@
   <% end %>
 <% end %>
 
-<% unless @ambiguous.size == 0 %>
-  <h3><%=h 'Possibly Related Tags'.t %></h3>
-  <% @ambiguous.each do |tag| %>
-    <%= link_to tag.name, tag_path(tag) %>
-  <% end %>
-<% end %>
-  
 <ul class="navigation">
 <li><%= link_to 'All tags'.t, tags_path %></li>
 </ul>

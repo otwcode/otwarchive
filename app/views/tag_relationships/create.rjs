@@ -1,1 +1,0 @@
-page.replace_html 'tag-relationship-form', :partial => 'tag_relationships/form'

@@ -50,10 +50,10 @@ class ChaptersControllerTest < ActionController::TestCase
     work = create_work(:chapters => [chapter], :authors => user.pseuds)
     get :edit, :locale => 'en', :work_id => work.id, :id => chapter.id
     assert_response :success
-    assert_equal assigns(:work), work
-    assert_equal assigns(:chapter), chapter
-    assert_equal assigns(:pseuds), work.pseuds
-    assert_equal assigns(:selected_pseuds), user.pseuds.collect{|p| p.id}
+    assert_equal work, assigns(:work)
+    assert_equal chapter, assigns(:chapter)
+    assert_equal work.pseuds, assigns(:pseuds)
+    assert_equal user.pseuds.collect{|p| p.id}, assigns(:selected_pseuds)
   end
   # Test index  GET  /:locale/chapters  (named path: chapters)
   # Test index  GET  /:locale/works/:work_id/chapters  (named path: work_chapters)
@@ -69,13 +69,13 @@ class ChaptersControllerTest < ActionController::TestCase
     work.update_attribute("posted", true)
     get :index, :locale => 'en', :work_id => work.id
     assert_response :success
-    assert_equal assigns(:work), work
-    assert_equal assigns(:chapters), [chapter]
+    assert_equal work, assigns(:work)
+    assert_equal [chapter], assigns(:chapters)
     new_chapter = create_chapter(:work => work, :posted=> true, :authors => work.pseuds)
     get :index, :locale => 'en', :work_id => work.id
     assert_response :success
-    assert_equal assigns(:work), work
-    assert_equal assigns(:chapters), [chapter, new_chapter]
+    assert_equal work, assigns(:work)
+    assert_equal [chapter, new_chapter], assigns(:chapters)
   end
   # Test new  GET  /:locale/chapters/new  (named path: new_chapter)
   # Test new  GET  /:locale/works/:work_id/chapters/new  (named path: new_work_chapter)
@@ -100,7 +100,7 @@ class ChaptersControllerTest < ActionController::TestCase
     work = create_work(:chapters => [chapter])
     work.pseuds << user.pseuds
     get :new, :locale => 'en', :work_id => work.id
-    assert_equal assigns(:work), work
+    assert_equal work, assigns(:work)
     assert_response :success
   end
   # Test post  POST  /:locale/chapters/:id/post  (named path: post_chapter)
@@ -126,8 +126,8 @@ class ChaptersControllerTest < ActionController::TestCase
     work = create_work(:chapters => [chapter])
     get :preview, :locale => 'en', :work_id => work.id, :id => chapter.id
     assert_response :success
-    assert_equal assigns(:work), work
-    assert_equal assigns(:chapter), chapter
+    assert_equal work, assigns(:work)
+    assert_equal chapter, assigns(:chapter)
   end
   # Test show  GET  /:locale/chapters/:id  (named path: chapter)
   # Test show  GET  /:locale/works/:work_id/chapters/:id  (named path: work_chapter)
@@ -137,9 +137,9 @@ class ChaptersControllerTest < ActionController::TestCase
     work.update_attribute('posted', true)
     get :show, :locale => 'en', :work_id => work.id, :id => chapter.id
     assert_response :success
-    assert_equal assigns(:work), work
-    assert_equal assigns(:chapter), chapter
-    assert_equal assigns(:comments), chapter.comments
+    assert_equal work, assigns(:work)
+    assert_equal chapter, assigns(:chapter)
+    assert_equal chapter.comments, assigns(:comments)
   end
   # Test update  PUT  /:locale/chapters/:id
   # Test update  PUT  /:locale/works/:work_id/chapters/:id

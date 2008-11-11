@@ -1,4 +1,5 @@
-# WARNING: NEVER EDIT config.yml
+# WARNING: NEVER EDIT config.yml to run the app
+# (unless you are changing the underlying code)
 # Instead, copy any sections you want to change to local.yml and edit them there.
 #
 
@@ -60,13 +61,20 @@ NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD: 5
 COMMENT_THREAD_MAX_DEPTH: 5
 TAGS_PER_LINE: 12
 
-# some tag and tag category names 
+# LEGACY - will be removed after beta has been migrated and the migrations reset
 DEFAULT_CATEGORY_NAME: 'default'
 AMBIGUOUS_CATEGORY_NAME: 'ambiguous'
 
+
+# Tag kinds and default tags
 WARNING_CATEGORY_NAME: 'Warning'
-NO_WARNING_TAG_NAME: 'None Of These Warnings Apply'
 DEFAULT_WARNING_TAG_NAME: 'Choose Not To Warn'
+NO_WARNING_TAG_NAME: 'None Of These Warnings Apply'
+SOME_WARNING_TAG_NAME: 'Choose Not To Warn For Some Content'
+VIOLENCE_WARNING_TAG_NAME: 'Extreme Violence'
+DEATHFIC_WARNING_TAG_NAME: 'Major Character Death'
+NONCON_WARNING_TAG_NAME: 'Rape/Non-Con'
+CHAN_WARNING_TAG_NAME: 'Underage'
 
 RATING_CATEGORY_NAME: 'Rating'
 DEFAULT_RATING_TAG_NAME: 'Not Rated'
@@ -74,6 +82,8 @@ EXPLICIT_RATING_TAG_NAME: 'Explicit'
 MATURE_RATING_TAG_NAME: 'Mature'
 TEEN_RATING_TAG_NAME: 'Teen And Up Audiences'
 GENERAL_RATING_TAG_NAME: 'General Audiences'
+
+MEDIA_CATEGORY_NAME: 'Media'
 
 FANDOM_CATEGORY_NAME: 'Fandom'
 
@@ -88,6 +98,10 @@ OTHER_CATEGORY_TAG_NAME: 'Other'
 PAIRING_CATEGORY_NAME: 'Pairing'
 
 CHARACTER_CATEGORY_NAME: 'Character'
+
+GENRE_CATEGORY_NAME: 'Genre'
+
+FREE_CATEGORY_NAME: 'Tag'
 
 # This is used to determine how many recent items
 # to cache for recent lookups -- eg if we want to 

@@ -4,35 +4,35 @@ class TagWranglingsController < ApplicationController
   before_filter :check_user_status
   
   def index
-    @category1 = TagCategory.find_by_name(params[:category1])
-    @category2 = TagCategory.find_by_name(params[:category2])
-    if params[:tag_relationship_kind_id]
-      @tag_relationship_kind = TagRelationshipKind.find(params[:tag_relationship_kind_id])
-    else
-      @tag_relationship_kind = TagRelationshipKind.child
+    @fandom = Fandom.find(params[:fandom_id]) if params[:fandom_id]
+    if @fandom
+      @works = @fandom.works.recent
     end
-    if @category1 && @category2
-      current_relationships = TagRelationship.tagged_by_category(@category1, @category2)
-      currently_tagged = current_relationships.blank? ? [] : current_relationships.collect(&:tag)
-      @potential_tags = @category1.tags.valid.find(:all, :order => :name) - currently_tagged
-      @potential_related_tags = @category2.tags.canonical.valid.find(:all, :order => :name)
+    @tag = Tag.find(params[:tag_id]) if params[:tag_id]
+    if @tag
+      @works = @tag.works.recent
+      @canonical = @tag.class.canonical || []
     end
-    @customize = true if params[:customize]
-    @tag_categories = TagCategory.find(:all, :order => "name")
-    @relationships = TagRelationshipKind.find(:all, :order => "name")
-    @tag = Tag.find(params[:tag]) if params[:tag]
+    @tags = Tag.find_all_by_id(params[:tag_ids]) if params[:tag_ids]
+    if @tags
+      @klass = @tags.first.class
+      @works = Work.with_any_tags(@tags).recent
+    end
+    if @fandom.blank? && @tags.blank? && @tag.blank?
+      @by_fandom = []
+      invalid_fandoms = Fandom.all - Fandom.valid
+      no_fandom = Tag.unwrangled.by_fandom(invalid_fandoms) + Tag.unwrangled.find_all_by_fandom_id(nil) 
+      @by_fandom << [nil, no_fandom.group_by(&:type)]
+      Fandom.valid.sort.each do |fandom|
+        unwrangled = Tag.unwrangled.by_fandom(fandom)
+        @by_fandom << [fandom, unwrangled.group_by(&:type)] unless unwrangled.blank?
+      end
+    end
     respond_to do |format|
       format.html 
       format.js
     end
+    
   end
   
-  def dynamic_relationships
-    @tags = TagCategory.find(params[:tag1]).tags if params[:tag1]
-    @relationship = TagRelationshipKind.find(params[:relationship]) if params[:relationship] 
-    @related_tags = TagCategory.find(params[:tag2]).tags if params[:tag2]
-    respond_to do |format| 
-      format.js
-    end
-  end
 end

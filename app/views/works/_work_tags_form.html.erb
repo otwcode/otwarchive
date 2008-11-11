@@ -1,28 +1,58 @@
 <!-- Autocomplete fields need to be refactored and moved to a helper, but I'd like to make them completely functional first. -->
 <fieldset class="work-meta">
-  <legend><%= "Story Tags (comma separated)".t -%><%= link_to_help "tagging-help" -%></legend>
-    <% TagCategory::OFFICIAL.each do |category| %>
-      <dt class="<%= category.display_name.downcase + (category.required ? ' required' : '') -%>">
-        <label for=""><%= category.display_name.t -%></label>
-      </dt>
-      <dd class="<%= category.display_name.downcase + (category.required ? ' required' : '') -%>">
-        <%- if category.exclusive && category.required -%>
-          <%= collection_select(:work, category.name.to_sym, @tags_by_category[category], :name, :name) -%>		
-        <%- elsif category.exclusive -%>
-          <%= collection_select(:work, category.name.to_sym, @tags_by_category[category], :name, :name, {:prompt => true}) -%>          
-        <%- elsif category == TagCategory::WARNING -%>
-          <select id="work_<%= category.name %>" name="work[<%= category.name %>][]" multiple="multiple">
-	          <%= options_from_collection_for_select(@tags_by_category[category], :name, :name, warning_selected(@work, category) ) -%>
-	        </select>
-        <%- else -%>
-					<input type="text" name="work[<%= category.name %>]" id="work_<%= category.name %>" value="<%= @work.tags.by_category(category).collect(&:name).join(', ') %>" />
-          <div class="auto_complete" id="work_<%= category.name %>_auto_complete" ></div>
-          <%= javascript_tag("new Autocompleter.Local('work_#{category.name}', 'work_#{category.name}_auto_complete', #{category.tags.valid.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
-        <%- end -%>
-        <%- if category.required -%>
-          <%= live_validation_for_field('work_' + category.name) -%>
-        <%- end -%>
-      </dd>
-    <%- end -%>    
+  <p><%= "Story Tags (comma separated)".t -%><%= link_to_help "tagging-help" -%></p>
+  <dl>
+    <dt class="rating required">
+      <label for=""><%= Rating::NAME.t -%>*</label>
+    </dt>
+    <dd class="rating required">
+      <%= collection_select(:work, :rating_string, Rating.canonical, :name, :name) -%>		
+    </dd>
+    <dt class="warning required">
+      <label for=""><%= Warning::NAME.t -%>*</label>
+    </dt>
+    <dd class="warning required">
+      <select id="work_warning" name="work[warning_strings][]" multiple="multiple">
+        <%= options_from_collection_for_select(@tags_by_category["Warning"], :name, :name, warning_selected(@work) ) -%>
+      </select>
+    </dd>
+    <dt class="category required">
+      <label for=""><%= Category::NAME.t -%>*</label>
+    </dt>
+    <dd class="category required">
+      <%= collection_select(:work, :category_string, Category.canonical, :name, :name, {:prompt => true}) -%>		
+    </dd>
+    <dt class="fandom required">
+      <label for=""><%= Fandom::NAME.pluralize.t -%>*</label>
+    </dt>
+    <dd class="fandom required">
+      <input type="text" name="work[fandom_string]" id="work_fandom" value="<%= @work.fandom_string %>" />
+      <div class="auto_complete" id="work_fandom_auto_complete" ></div>
+      <%= javascript_tag("new Autocompleter.Local('work_fandom', 'work_fandom_auto_complete', Fandom.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
+    </dd>
+    <dt class="pairing">
+      <label for=""><%= Pairing::NAME.pluralize.t -%></label>
+    </dt>
+    <dd class="pairing">
+      <input type="text" name="work[pairing_string]" id="work_pairing" value="<%= @work.pairing_string %>"/>
+      <div class="auto_complete" id="work_pairing %>_auto_complete" ></div>
+      <%= javascript_tag("new Autocompleter.Local('work_pairing', 'work_pairing_auto_complete', Pairing.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
+    </dd>
+    <dt class="character">
+      <label for=""><%= Character::NAME.pluralize.t -%></label>
+    </dt>
+    <dd class="character">
+      <input type="text" name="work[character_string]" id="work_character" value="<%= @work.character_string %>" />
+      <div class="auto_complete" id="work_character %>_auto_complete" ></div>
+      <%= javascript_tag("new Autocompleter.Local('work_character', 'work_character_auto_complete', Character.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
+    </dd>
+    <dt class="freeform">
+      <label for=""><%= Freeform::NAME.pluralize.t -%></label>
+    </dt>
+    <dd class="freeform">
+      <input type="text" name="work[freeform_string]" id="work_freeform" value="<%= @work.freeform_string %>" />
+      <div class="auto_complete" id="work_freeform %>_auto_complete" ></div>
+      <%= javascript_tag("new Autocompleter.Local('work_freeform', 'work_freeform_auto_complete', Freeform.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
+    </dd>
   </dl>
 </fieldset>

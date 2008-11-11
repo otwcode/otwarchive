@@ -5,40 +5,20 @@ class Tagging < ActiveRecord::Base
   validates_presence_of :tag, :taggable
   before_create :check_for_synonyms
   before_destroy :delete_unused_tags
+  after_create :update_fandom
 
-  def valid_tag
-    return tag if tag && !tag.banned?
-  end
-  
-  def self.tagees(options = {})
-    with_scope :find => options do
-      find(:all).collect(&:taggable).compact
-    end
-  end
-  
-  def self.find_by_category(category, options = {})
-    with_scope :find => options do
-      find(:all, :include => :tag, :conditions => ["tags.tag_category_id = ?", category.id])
-    end
-  end
-
-  def self.find_by_tag(tag, options = {})
-    with_scope :find => options do
-      find(:all, :include => :tag, :conditions => ["tags.id = ?", tag.id])
-    end
-  end
-  
   # Tag with canonical synonym instead, if it exists
   def check_for_synonyms
-    synonym = self.tag.canonical_synonym
+    synonym = self.tag.synonym
     self.tag = synonym if synonym
   end 
   
-  # Gets rid of tags that aren't being used and have no relationships and no other reason for living
+  # Gets rid of unwrangled tags that aren't tagging anything else
   def delete_unused_tags
-    unless tag.taggings.count > 1 || Tag::PREDEFINED_TAGS.include?(tag) || tag.tags.count > 0 || tag.related_tags.count > 0
-      tag.destroy 
-    end
+    tag.destroy if (tag.unwrangled? && tag.taggings == [self])
   end
 
+  def update_fandom
+    tag.update_fandom if tag.unwrangled?
+  end
 end

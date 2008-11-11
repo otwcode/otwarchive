@@ -4,12 +4,12 @@
   <li id="medium_<%= medium.id %>" class="category <%= cycle :odd, :even %>">
     <h3><%= link_to medium.name, medium_path(medium) %></h3>
     <ol>
-      <%- for fandom in @fandom_listing[medium] -%>
-      <li><%= print_fandom_works_link(fandom) %></li>
+      <%- @fandom_listing[medium][:fandoms].each do |pair| -%>
+      <li><%= link_to pair[0].name + " (" + pair[1].to_s + ")", tag_path(pair[0]) %></li>
       <%- end -%>
     </ol>
     
-    <%- if medium.tags.valid.count > 5 -%>
+    <%- if @fandom_listing[medium][:more] -%>
     <p><%= link_to "All " + medium.name + "...", medium_path(medium) %></p>
     <%- end -%>
   </li>

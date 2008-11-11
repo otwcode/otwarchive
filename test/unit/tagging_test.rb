@@ -1,123 +1,86 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-# the tests here are for the tagging model, and the tagging_extensions library
-
 class TaggingTest < ActiveSupport::TestCase
+  setup do
+    create_work
+  end
+
+  # before_destroy :delete_unused_tags
   context "a tagging" do
     setup do
-      @tag_category = create_tag_category
-      @tag1 = create_tag(:tag_category => @tag_category)
-      @tagging = create_tagging(:tag => @tag1)
+      @work = Work.first || create_work
+      @tag = create_freeform
+      @tagging = Tagging.create(:tag => Freeform.find(@tag.id), :taggable => Work.first)
     end
     should_belong_to :tag, :taggable
     should_require_attributes :tag, :taggable
-    should "be able to find_by_category" do
-      assert Tagging.find_by_category(@tag_category).include?(@tagging)
+    should "delete its singleton, unwrangled tag on exit" do
+      @tagging.destroy
+      assert_raises(ActiveRecord::RecordNotFound) { @tag.reload } 
     end
-    should "be able to find_by_tag" do
-      assert Tagging.find_by_tag(@tag1).include?(@tagging)
+    should "not delete its tag if the tag has another tagging" do
+      @work2 = create_work
+      @work2.freeforms = [@tag]
+      @tagging.destroy
+      assert @tag.reload
     end
-    context "when it's destroyed" do
-      setup do
-        @tagging.destroy
-      end
-      should "delete the tag" do
-        assert_raises(ActiveRecord::RecordNotFound) { @tag1.reload } 
-      end
+    should "not delete its tag if the tag has been wrangled (is canonical)" do
+      @tag.update_attribute(:canonical, true)
+      @tagging.reload
+      @tagging.destroy
+      assert @tag.reload
     end
-    context "when it's destroyed" do
-      setup do
-        create_tagging(:tag => @tag1)
-        @tagging.destroy
-      end
-      should "not delete the tag if the tag has another tagging" do
-        assert @tag1.reload
-      end
+    should "not delete its tag if the tag has been wrangled (is banned)" do
+      @tag.update_attribute(:banned, true)
+      @tagging.reload
+      @tagging.destroy
+      assert @tag.reload
+    end
+    should "not delete its tag if the tag has been wrangled (has a synonym)" do
+      # can't test this, as a tagging with a tag with a synonym should never exist
     end
   end
 
-  def test_tags
-    tag = create_tag(:banned => true)
-    work = create_work
-    tagging = create_tagging(:taggable => work, :tag => tag)
-    work.reload
-    assert work.taggings.map(&:tag).include?(tag)
-    assert !work.tags.valid.include?(tag)   # no category, not valid
-    
-    tag = create_tag(:banned => false)
-    tagging = create_tagging(:taggable => work, :tag => tag)
-    work.reload
-    assert work.tags.valid.include?(tag)   # no category, valid
+  # before_create :check_for_synonyms
+  context "a tagging using a tag without synonyms" do
+    setup do
+      @tag = create_tag
+      @tagging = create_tagging(:tag => @tag, :taggable => Work.first)
+    end
+    should "use the original tag" do
+      assert_equal @tag, @tagging.tag
+    end
   end
-  def test_tags_with_category
-    category = create_tag_category
-    tag = create_tag(:tag_category => category)
-    work = create_work
-    tagging = create_tagging(:taggable => work, :tag => tag)  
-    work.reload
-    assert_equal Array(tag), work.tags.by_category(category).valid  # category, valid
-    bad_tag = create_tag(:banned => true)
-    tagging = create_tagging(:taggable => work, :tag => bad_tag)    
-    assert_equal Array(tag), work.tags.by_category(category).valid  # category, not valid
+  context "a tagging using a tag with a synonym" do
+    setup do
+      @tag = create_tag
+      @canonical = create_tag(:canonical => true, :type => @tag.type)
+      assert @tag.synonym = @canonical
+      @tagging = Tagging.create(:tag => Tag.find(@tag.id), :taggable => Work.first)
+    end
+    should "use the synonym tag" do
+      assert_equal Tag.find(@canonical), Tagging.find(@tagging.id).tag
+    end
   end
-  def test_tags_with_bad_category
-    work = create_work
-    tag = create_tag
-    tagging = create_tagging(:taggable => work, :tag => tag)   
-    assert work.tags
-    #assert !work.tags.by_category('bad category name')
+  
+  context "a new pairing tag added to a work" do
+    setup do
+      @work = create_work
+      @work.pairing_string = "first/second"
+    end
+    should "get the fandom of the work" do
+      assert_equal @work.fandoms, [Pairing.find_by_name("first/second").fandom]
+    end
   end
-  def test_tag_string
-    work = create_work
-    tag = create_tag(:name => 'a comes first')
-    tagging = create_tagging(:taggable => work, :tag => tag) 
-    work.reload
-    assert work.tag_string.match(tag.name)
-    tag2 = create_tag(:name => 'b comes second')
-    tagging = create_tagging(:taggable => work, :tag => tag2) 
-    work.reload
-    assert work.tag_string.match(/a comes first.*b comes second/)
-    tag3 = create_tag(:name => 'an comes second')
-    tagging = create_tagging(:taggable => work, :tag => tag3) 
-    work.reload
-    assert work.tag_string.match(/a comes first.*an comes second.*b comes second/)
-  end
-  def test_tag_string_by_category
-    work = create_work
-    category1 = create_tag_category
-    tag1 = create_tag(:tag_category => category1)
-    category2 = create_tag_category
-    tag2 = create_tag(:tag_category => category2)
-    tagging = create_tagging(:taggable => work, :tag => tag1) 
-    tagging = create_tagging(:taggable => work, :tag => tag2) 
-    assert_not_equal work.tag_string(category1), work.tag_string(category2)
-    assert_equal tag1.name, work.tag_string(category1)
-  end
-  def test_tag_with
-    work = create_work
-    category = create_tag_category
-    # new tags
-    work.tag_with(category.name.to_sym => "a new tag")
-    work.reload
-    assert work.tag_string.match('a new tag')
-    assert_equal category, Tag.find_by_name('a new tag').tag_category
 
-    # replace tags
-    tag = create_tag(:tag_category => category)
-    work.tag_with(category.name.to_sym => tag.name)
-    work.reload
-    assert work.tags.valid.include?(tag)
+  context "a new character tag added to a work" do
+    setup do
+      @work = create_work
+      @work.character_string = "new guy"
+    end
+    should "get the fandom of the work" do
+      assert_equal @work.fandoms, [Character.find_by_name("new guy").fandom]
+    end
+  end
 
-    # different category won't wipe out first
-    category2 = create_tag_category
-    tag2 = create_tag(:tag_category => category2)
-    work.tag_with(category2.name.to_sym => tag2.name)
-    assert_equal Array(tag), work.tags.by_category(category).valid
-    assert_equal Array(tag2), work.tags.by_category(category2).valid
-  end
-  def test_tag_with_fails
-    # category must exist
-    work = create_work
-    assert !work.tag_with(:not_a_category => random_phrase)
-  end
 end
