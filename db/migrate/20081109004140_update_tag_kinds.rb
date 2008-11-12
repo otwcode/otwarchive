@@ -54,9 +54,17 @@ class UpdateTagKinds < ActiveRecord::Migration
       tag.update_attribute(:type, "Category")
     end if category
     puts "Updating freeform tags"
-    category = TagCategory.find_by_name(ArchiveConfig.DEFAULT_CATEGORY_NAME)
-    category.tags.each do |tag|
+    Legacy.all.each do |tag|
       tag.update_attribute(:type, "Freeform")
+      if tag.canonical
+        genre_tag = Genre.find_or_create_by_name(tag.name, :canonical => true)
+        tag.add_genre(genre_tag)
+        tag.update_attribute(:canonical, false)
+        tag.synonyms.each do |t|
+          t.update_attribute(:canonical_id, false)
+          t.update_attribute(:genre_id, genre_tag.id)
+        end
+      end
       first_work = tag.works.first
       fandom = first_work.fandoms.first if first_work
       tag.update_attribute(:fandom_id, fandom.id) if fandom

@@ -71,20 +71,32 @@ class FandomTest < ActiveSupport::TestCase
      end
   end
 
-  context "tags by_fandom_ids" do
+  context "tags by_fandom" do
     setup do
       @fandom = create_fandom
       @freeform = create_freeform(:fandom_id => @fandom.id)
       @character = create_character(:fandom_id => @fandom.id)
       @fandom2 = create_fandom
       @freeform2 = create_freeform(:fandom_id => @fandom2.id)
-      @freeform3 = create_freeform
+      @freeform3 = create_freeform(:fandom_id => nil)
     end
     should "find tags in a single fandom" do
       assert_equal [@freeform, @character], Tag.by_fandom(@fandom)
     end
+    should "count tags in a single fandom" do
+      assert_equal 2, Tag.count_by_fandom(@fandom)
+    end
     should "find tags in multiple fandoms" do
       assert_equal [@freeform, @freeform2], Freeform.by_fandom(@fandom, @fandom2)
+    end
+    should "count tags in multiple fandoms" do
+      assert_equal 3, Tag.count_by_fandom(@fandom, @fandom2)
+    end
+    should "find tags in no fandoms" do
+      assert_equal [@freeform3], Freeform.by_fandom(nil)
+    end
+    should "count tags in no fandoms" do
+      assert_equal 1, Freeform.count_by_fandom(nil)
     end
   end
 

@@ -19,8 +19,6 @@ class Tag < ActiveRecord::Base
     self.name = name.strip.squeeze(" ") if self.name
   end
 
-  named_scope :by_fandom, lambda { |*args| {:conditions => ["fandom_id IN (?)", args.flatten.map(&:id)] }}
-
   named_scope :valid, {:conditions => {:banned => false}}
   named_scope :banned, {:conditions => {:banned => true}}
   named_scope :canonical, {:conditions => {:canonical => true}}
@@ -28,7 +26,6 @@ class Tag < ActiveRecord::Base
   named_scope :ordered_by_name, {:order => 'name ASC'}
   named_scope :unwrangled, {:conditions => {:banned => false, :canonical => false, :canonical_id => nil}}  
   named_scope :by_category, lambda { |*args| {:conditions => ["type IN (?)", args.flatten] }}  
-  
   
   named_scope :on_works, lambda {|tagged_works|
     {
@@ -39,10 +36,32 @@ class Tag < ActiveRecord::Base
     }
   }
   
+  named_scope :by_fandom, lambda { |*fandoms|
+      if fandoms.compact.blank?
+        {:conditions => ["fandom_id IS NULL"] }
+      else 
+        { :conditions => ["fandom_id IN (?)", fandoms.flatten.map(&:id)] }
+      end
+  }
+
+  def self.count_by_fandom(*fandoms)
+    if fandoms.compact.blank?
+      self.count(:conditions => ["fandom_id IS NULL"])
+    else
+      self.count(:conditions => ["fandom_id IN (?)", fandoms.flatten.map(&:id)] )
+    end
+  end
+  
   def self.setup_canonical(name)
     tag = self.find_or_create_by_name(name)
     tag.update_attribute(:canonical, true)
     tag
+  end
+  
+  def self.for_tag_cloud
+    freeforms = Freeform.valid.find(:all, :conditions => ["genre_id IS NULL"])
+    genres = Genre.valid
+    return (freeforms + genres).sort
   end
   
   def unwrangled?
@@ -55,16 +74,20 @@ class Tag < ActiveRecord::Base
     name.downcase <=> another_tag.name.downcase
   end
   
+  # find all the tags that point to a canonical tag
   def synonyms
     Tag.find_all_by_canonical_id(self.id)
   end
 
+  # find the canonical tag that a tag points to
   def synonym
     Tag.find(self.canonical_id) if self.canonical_id
   end
   
-  def synonym= (tag)
+  # set a tag to redirect to a canonical tag
+  def synonym=(tag)
     return false unless tag.canonical?
+    return false unless tag[:type] == self[:type]
     self.update_attribute(:canonical_id, tag.id) 
     self.reassign_to_canonical
   end
@@ -78,8 +101,20 @@ class Tag < ActiveRecord::Base
     end
   end
 
+  # freeform tags aren't typically synonyms
+  # instead they get added to genres.
+  def add_genre(tag)
+    return false unless tag.is_a?(Genre)
+    return false unless tag.canonical?
+    self.update_attribute(:genre_id, tag.id) 
+    for work in self.works
+      work.tags << tag
+    end
+  end
+
   def update_fandom
-    return if self.fandom
+    return if self.is_a? Fandom
+    return if self.fandom_id
     fandom = self.works.first.fandoms.first rescue nil
     self.update_attribute(:fandom_id, fandom.id) if fandom
   end

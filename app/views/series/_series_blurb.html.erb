@@ -23,7 +23,7 @@
 			<dd>
 			<ul>
 				<% series.works.collect(&:tags).flatten.compact.uniq.each do |tag| %>
-				<li><%= link_to tag.name, tag_path(tag) %></li>
+				<li><%= link_to tag.name, tag_works_path(tag) %></li>
 				<% end %>
 			</ul>
 			</dd>

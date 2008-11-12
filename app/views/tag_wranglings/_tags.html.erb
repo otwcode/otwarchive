@@ -1,22 +1,38 @@
-<% if @tags %>
-  <p>Click on a <%= @klass::NAME %> to wrangle it. 
-  <table>
-    <%- @tags.in_groups_of(3) do |group| %>
-      <tr>
-        <% group.each do |tag| %>
-          <% if tag %>
-            <td>
-              <%= link_to_remote tag.name, 
-                  :url => { :tag_id => tag.id }, 
-                  :method => :get%>
-            </td>
+<% if @unwrangled %>
+  <h2>Bulk Wrangle Tags</h2>
+  <p>Select the checkbox next to the tag to do bulk assignment on the tags.</p>
+  <p>Click on a tag to wrangle it individually. 
+  <%= form_tag tag_wranglings_path %>
+  <% synonyms = false %>
+  <% @unwrangled.each do |type, tags| %>
+    <h3><%= type %> Tags</h3>
+    <% unless type.constantize.canonical.by_fandom(@fandom).blank? %>
+      <% synonyms = true %>
+      <% if type == "Freeform" %>
+        <%= select_tag type, "<option value=''>Select Canonical #{Genre::NAME}</option>" + 
+          options_from_collection_for_select(Genre.canonical.by_fandom(@fandom), :id, :name, :select => "") %>
+      <% else %>
+        <%= select_tag type, "<option value=''>Select Canonical #{type.constantize::NAME}</option>" + 
+          options_from_collection_for_select(type.constantize.canonical.by_fandom(@fandom), :id, :name, :select => "") %>
+      <% end %>
+    <% end %>
+    <table>
+      <%- tags.in_groups_of(4) do |group| %>
+        <tr>
+          <% group.each do |tag| %>
+            <% if tag %>
+              <td>
+                <%= check_box_tag "tag[" + tag.id.to_s + "]" %>
+                <%= link_to tag.name, edit_tag_path(tag), {:target => "_blank"} %>
+              </td>
+            <% end %>
           <% end %>
-        <% end %>
-      </tr>
-    <%- end -%>
-  </table>
-  <p>Recent works with these tags (for reference):</p>
-  <% @works.each do |work| %>
-    <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
+        </tr>
+      <%- end -%>
+    </table>
   <% end %>
+  <%= submit_tag "Mark all Canonical"%>  
+  <%= submit_tag "Mark all Banned" %>  
+  <%= submit_tag "Remove from Fandom" %>  
+  <%= submit_tag "Mark all as Synonyms of the chosen tags"  if synonyms  %>  
 <%- end -%>

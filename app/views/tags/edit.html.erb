@@ -1,7 +1,53 @@
-<h1><%=h 'Edit tag'.t %></h1>
+<h1><%= 'Edit tag ' .t %><%= link_to @tag.name, tag_works_path(@tag) %></h1>
 
 <%= error_messages_for :tag %>
 
-<%= render :partial => 'form', :locals => {:tag => @tag} %>
+<%- form_for :tag, @tag, :url => { :action => "update"}, :html => { :method => :put } do |f| -%>
+  <dl>
+    <dt><%= f.label :name, 'Name'.t %></dt> 
+    <dd><%= f.text_field :name %></dd>
+    
+    <% unless @tag.is_a? Freeform %>
+      <dt><%= f.label :canonical_id, 'Canonical Synonym'.t %></dt>
+      <dd><%= f.collection_select :canonical_id, @tag.class.canonical.sort, :id, :name,  {:prompt => true} %></dd>
+    <% end %>
+    
+    <% if @tag.is_a? Freeform %>
+      <dt><%= f.label :genre_id, Genre::NAME %></dt>
+      <dd><%= f.collection_select :genre_id, Genre.canonical.sort, :id, :name,  {:prompt => true} %></dd>
+    <% end %>
+
+    <% if @tag.is_a? Fandom %>
+      <dt><%= f.label :media_id, Media::NAME %></dt>
+      <dd><%= f.collection_select :media_id, Media.canonical.sort, :id, :name,  {:prompt => true} %></dd>
+    <% end %>
+
+    <% if @tag.is_a?(Pairing||Character||Genre||Freeform) %>
+      <dt><%= f.label :fandom_id, Fandom::NAME %></dt>
+      <dd><%= f.collection_select :fandom_id, Fandom.canonical.sort, :id, :name,  {:prompt => true} %></dd>
+    <% end %>
+
+    <dt><%= f.check_box("banned") %><%= f.label :banned, 'Banned'.t %></dt>
+    <dd><%=h 'This tag will not show up anywhere'.t %></dd>
+
+    <% if !@tag.is_a?(Freeform) && !@tag.banned %>
+      <dt><%= f.check_box("canonical") %><%= f.label :canonical, 'Canonical'.t %></dt>
+      <dd><%=h 'This tag will show up in lists and menus'.t %></dd>
+    <% end %>
+
+    <% if @tag.is_a? Rating %>
+      <dt><%= f.check_box("adult") %><%= f.label :adult, 'Adult'.t %></dt>    
+      <dd><%=h 'This tag indicates adult content.'%></dd>
+    <% end %>
+
+    <dt><%=h 'Category'.t %></dt>
+    <%- Tag::TYPES.each do |type| -%>
+    <dd><%= f.radio_button(:type, type) %><%= f.label :type, type %></dd>
+    <%- end -%>    
+  </dl>
+  
+  <p><%= f.submit %></p>
+
+<%- end -%>
 
 <%= tag_wrangler_footer %>

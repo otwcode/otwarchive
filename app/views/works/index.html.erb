@@ -1,5 +1,7 @@
 <h2><%= search_header @works, @query %></h2>
-
+<%- if @tag && current_user.is_a?(User) && current_user.is_tag_wrangler? -%>
+  <span><%= link_to 'Edit Tag '.t + @tag.name, edit_tag_path(@tag) %></span>
+<%- end -%>
 <% paginated_section @works, {:previous_label => '&laquo; Previous'.t, :next_label => 'Next &raquo;'.t} do %>
 
   <dl class="navigation">

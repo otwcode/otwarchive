@@ -31,13 +31,14 @@ class TagTest < ActiveSupport::TestCase
 
   context "a canonical tag" do
     setup do
-      @tag = create_tag(:canonical => false, :type => 'Freeform')
-      @tag2 = create_tag(:canonical => false, :type => 'Freeform')
-      @tag3 = create_tag(:canonical => false, :type => 'Fandom')
-      @canonical = create_tag(:canonical => true, :type => 'Freeform')
+      @tag = create_tag(:canonical => false, :type => 'Pairing')
+      @tag2 = create_tag(:canonical => false, :type => 'Pairing')
+      @tag3 = create_tag(:canonical => false, :type => 'Character')
+      @canonical = create_tag(:canonical => true, :type => 'Pairing')
       @tag.synonym=@canonical
       @tag2.synonym=@canonical
       @tag3.synonym=@canonical
+      @tag3.reload
     end
     should "should be able to have many noncanonical tags as synonyms" do
       assert_equal Tag.find(@canonical.id), Tag.find(@tag.id).synonym
@@ -45,18 +46,18 @@ class TagTest < ActiveSupport::TestCase
       assert @canonical.synonyms.include?(Tag.find(@tag.id))
       assert @canonical.synonyms.include?(Tag.find(@tag2.id))
     end
-    should "be able to have tags of a different type as a synonym" do
-      assert_equal Tag.find(@canonical.id), Tag.find(@tag3.id).synonym
-      assert Tag.find(@canonical.id).synonyms.include?(Tag.find(@tag3.id))
+    should "be not able to have tags of a different type as a synonym" do
+      assert_nil @tag3.synonym
+      assert !Tag.find(@canonical.id).synonyms.include?(Tag.find(@tag3.id))
     end
   end
   context "a non-canonical tag" do
     setup do
-      @tag = create_tag(:canonical => false, :type => 'Freeform')
-      @tag2 = create_tag(:canonical => false, :type => 'Freeform')
+      @tag = create_tag(:canonical => false, :type => 'Pairing')
+      @tag2 = create_tag(:canonical => false, :type => 'Pairing')
       @work = create_work
       @work.tags << @tag
-      @canonical = create_tag(:canonical => true, :type => 'Freeform')
+      @canonical = create_tag(:canonical => true, :type => 'Pairing')
    end
     should "should not be able to be a synonym" do
       @tag2.synonym=@tag
@@ -66,7 +67,7 @@ class TagTest < ActiveSupport::TestCase
     should "reassign its work" do
       @tag.synonym=@canonical
       @work.reload
-      assert_equal [Tag.find(@canonical.id)], @work.freeforms
+      assert_equal [Tag.find(@canonical.id)], @work.pairings
     end
   end
   
@@ -77,6 +78,28 @@ class TagTest < ActiveSupport::TestCase
     should "find tags in multiple categories" do
       assert_match "Explicit", Tag.by_category("Rating", "Warning").map(&:name).join
       assert_match "Violence", Tag.by_category(["Rating", "Warning"]).map(&:name).join
+    end
+  end
+  
+  context "tags for tag cloud" do
+    setup do
+      @tag = create_freeform
+      @tag2 = create_freeform
+      @tag3 = create_genre(:canonical => true)
+      @tag2.add_genre(@tag3)
+      @tag4 = create_character
+    end
+    should "include freeforms without a genre" do
+       assert Tag.for_tag_cloud.include?(@tag)
+    end
+    should "not include freeforms with a genre" do
+       assert !Tag.for_tag_cloud.include?(@tag2)
+    end
+    should "include genre tags" do
+       assert Tag.for_tag_cloud.include?(@tag3)
+    end
+    should "not include other kinds of tags" do
+       assert !Tag.for_tag_cloud.include?(@tag4)
     end
   end
   

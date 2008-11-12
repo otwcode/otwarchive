@@ -913,10 +913,12 @@ class Work < ActiveRecord::Base
       end
       tmphash = {:name => filter.tag_name, :id => filter.tag_id.to_s, :count => count}
       key = filter.tag_type
-      if filters_hash[key]
-        filters_hash[key] << tmphash
-      else
-        filters_hash[key] = [tmphash]
+      unless key == "Freeform"
+        if filters_hash[key]
+          filters_hash[key] << tmphash
+        else
+          filters_hash[key] = [tmphash]
+        end
       end
     end
     return filters_hash

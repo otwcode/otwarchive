@@ -1,16 +1,17 @@
 <%- if @fandom %>
-  <p><strong>Wrangle a Fandom tag</strong></p>
-  <div>
-    <%- remote_form_for :tag, @fandom, :url => { :fandom_id => fandom.id } do |f| -%>
-      <p>If this fandom is canonical, rename it if necessary and chose a media<p>
-      <p>If this fandom is <strong>not</strong> canonical, rename it to the canonical name and don't chose a media<p>
-      <%= f.label :name, 'Name'.t %><%= f.text_field :name %>
-      <%= f.collection_select :media_id, Media.canonical, :id, :name, {:prompt => 'Choose a Medium'} %>
-      <p><%= f.submit %></p>
-    <%- end -%>
-  </div>
-  <p>Recent works in this fandom (for reference):</p>
-  <% @works.each do |work| %>
-    <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
+  <h2>Wrangle the "<%= link_to @fandom.name, edit_tag_path(@fandom), {:target => "_blank"} %>" Fandom tag</h2>
+  <%= form_tag tag_wranglings_path -%>
+  <%= hidden_field_tag :fandom_id, @fandom.id %>
+  <% if fandom.canonical && fandom.media.blank? %>
+    <p>Chose the media this fandom belongs to<p>
+    <%= select_tag :media_id, "<option value=''>Select a Media</option>" + options_from_collection_for_select(Media.canonical, :id, :name) %>
+    <%= submit_tag "Update Fandom" %>
+  <% elsif !fandom.canonical %>
+    <p>If this fandom should be canonical, rename it (optional) and chose a media<p>
+    <p>If this fandom is not canonical, chose a canonical fandom</p>
+    New name:<%= text_field_tag :name, @fandom.name %>
+    <%= select_tag :media_id, "<option value=''>Select a Media</option>" + options_from_collection_for_select(Media.canonical, :id, :name) %>
+    <%= select_tag :canonical_fandom, "<option value=''>Select Canonical</option>" + options_from_collection_for_select(Fandom.canonical.sort, :id, :name) %>
+    <%= submit_tag "Update Fandom" %>
   <% end %>
 <%- end -%>

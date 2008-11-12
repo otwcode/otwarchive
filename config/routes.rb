@@ -1,12 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :invitations, :path_prefix => ':locale'
   
-  map.resources :media, :has_many => :fandoms, :path_prefix => ':locale'
-  
-  map.resources :fandoms, :path_prefix => ':locale' do |fandom|
-    fandom.resources :works
-    fandom.resources :bookmarks
-  end
+  map.resources :media, :path_prefix => ':locale'
   
   map.feedbacks '/feedback/', :controller => 'feedbacks', :action => 'create', :path_prefix => ':locale', :conditions => { :method => :post }
   map.new_feedback_report '/feedback/', :controller => 'feedbacks', :action => 'new', :path_prefix => ':locale'

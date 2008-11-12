@@ -33,7 +33,7 @@
     <dd>
     	<ul>
 	<% bookmark.tags.each do |tag| -%>
-    		<li><%= link_to(tag.name, tag_path(tag), :class => 'tag') %></li>
+    		<li><%= link_to(tag.name, tag_bookmarks_path(tag), :class => 'tag') %></li>
     <% end -%>
 		</ul>
   </dd>

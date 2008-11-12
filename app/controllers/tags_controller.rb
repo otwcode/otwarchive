@@ -7,10 +7,10 @@ class TagsController < ApplicationController
   # GET /tags.xml
   def index
     if params[:search]
-      category = TagCategory.find(params[:type])
-      @tags = Tag.by_category([category]).find(:all, :conditions => [ 'LOWER(name) LIKE ?', '%' + params[:search].strip + '%' ], :limit => 10)
+      category = params[:type].constantize if params[:type]
+      @tags = Tag.by_category(category).find(:all, :conditions => [ 'LOWER(name) LIKE ?', '%' + params[:search].strip + '%' ], :limit => 10)
     else
-      @tags = Tag.by_category("Freeform").ordered_by_name.valid
+      @tags = Tag.for_tag_cloud
     end
 
     respond_to do |format|
@@ -27,24 +27,6 @@ class TagsController < ApplicationController
     respond_to do |format|
       format.js
     end
-  end
-
-  # GET /tags/1
-  # GET /tags/1.xml
-  def show
-    @tag = Tag.find(params[:id])
-    if @tag.banned?
-  	  flash[:error] = 'This page is unavailable.'.t
-      redirect_to tags_path and return
-    end
-    @tags = @tag.synonyms
-    @works = Work.visible.with_any_tags(@tags + [@tag]).paginate(:page => params[:page])
-    @bookmarks = @tag.bookmarks.visible + @tags.collect {|tag| tag.bookmarks.visible}.flatten
-
-    @bookmarks.uniq!
-    respond_to do |format|
-      format.html # show.html.erb
-    end   
   end
 
   # GET /tags/new
@@ -64,19 +46,21 @@ class TagsController < ApplicationController
     if type    
       @tag = type.constantize.new(params[:tag])
     else
-      flash[:notice] = "Please provide a category.".t
-    @tag = Tag.new(params[:tag])
+      flash[:error] = "Please provide a category.".t
+      @tag = Tag.new(params[:tag])
       render :action => "new" and return
     end
-    if Tag.find(:first, :conditions => {:name => @tag.name, :type => @tag.type})
-      flash[:notice] = "A tag by that name already exists in that category.".t
-      redirect_to tag_wranglings_path    
+    old_tag = Tag.find(:first, :conditions => {:name => @tag.name, :type => @tag.type})
+    if old_tag
+      flash[:notice] = "A tag by that name already exists in that category. It is displayed here for editing".t
+      redirect_to edit_tag_path(old_tag)  
     else
       respond_to do |format|
         if @tag.save
           flash[:notice] = 'Tag was successfully created.'.t
-          format.html { redirect_to tag_wranglings_path }
+          format.html { redirect_to edit_tag_path(@tag) }
         else
+          flash[:notice] = y @tag.errors
           format.html { render :action => "new" }
         end
       end
@@ -91,7 +75,7 @@ class TagsController < ApplicationController
     @tag = Tag.find(params[:id])
     if @tag.update_attributes(params[:tag])
       flash[:notice] = 'Tag was successfully updated.'.t
-      redirect_to tag_wranglings_path
+      redirect_to tag_works_path(@tag)
     else
       flash[:error] = "Tag failed to save."
       format.html { render :action => "edit" }

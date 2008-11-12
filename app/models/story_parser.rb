@@ -341,11 +341,15 @@ class StoryParser
 
     def download_with_timeout(location)
       Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
-        response = Net::HTTP.get_response(URI.parse(location))
-        case response
-        when Net::HTTPSuccess
-          response.body
-        else 
+        begin
+          response = Net::HTTP.get_response(URI.parse(location))
+          case response
+          when Net::HTTPSuccess
+            response.body
+          else 
+           nil
+          end
+        rescue Errno::ECONNREFUSED
           nil
         end
       }

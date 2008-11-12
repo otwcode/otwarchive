@@ -47,7 +47,7 @@
 	<ul class="meters">
 		<li><span><%= @fandom_count -%></span> <%=h ' ' + 'fandoms to date'.t %></li>
 		<%- unless @latest_fandom.blank? -%>
-			<li><%=h 'Latest updated'.t + ': '%> <span><%= link_to @latest_fandom.name, @latest_fandom -%></span></li>
+			<li><%=h 'Latest updated'.t + ': '%> <span><%= link_to @latest_fandom.name, tag_works_path(@latest_fandom) -%></span></li>
 		<%- end -%>
 	</ul>
 </div>

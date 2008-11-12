@@ -1,37 +1,31 @@
 <% if @by_fandom %>
-  <p>Click on a <%= Fandom::NAME %> to wrangle it. 
-  <p>Click on the number next to the category name to wrangle the unwrangled tags in that category.
-  <p>* fandom is not canonical
-  <p>! fandom does not belong to a media</p>
-  <table>
-    <%- @by_fandom.in_groups_of(3) do |group| %>
-      <tr>
-        <% group.each do |pair| %>
-          <% if pair %>
-            <% fandom = pair[0] %>
-            <td>
-              <p>
-              <% if fandom %>
-                <% unless fandom.canonical? %>*<% end %>
-                <% unless fandom.media_id %>!<% end %>
-                <%= link_to_remote fandom.name, :url => { :fandom_id => fandom.id }, :method => :get %>
-              <% else %>
-                No associated fandom
-              <% end %>
-              :</p>
-              <p>
-              <% pair[1].each do |type, tags| %>
-                <%= type.constantize::NAME %>:
-                <%= link_to_remote  "(" + tags.size.to_s + ")", 
-                                 :url => { :tag_ids => tags },
-                                 :method => :get %>
-                <br>
-              <% end %>
-              </p>
-            </td>
+  <h2>Bulk Wrangle Fandoms</h2>
+  <p>Click on a <%= Fandom::NAME %> to wrangle it and its unwrangled tags.
+  <p>Select the checkboxes next to the fandom to assign them to the selected media and mark them canonical.</p>
+  <%= form_tag tag_wranglings_path %>
+    <%= select_tag "media", "<option value="">No Media</option>" + 
+        options_from_collection_for_select(Media.canonical, :id, :name), :select => "" %>
+    <p>! fandom does not belong to a media, * fandom is not canonical</p>
+    <table>
+      <%- @by_fandom.in_groups_of(4) do |group| %>
+        <tr>
+          <% group.each do |pair| %>
+            <% if pair %>
+              <td>
+                <%- fandom = pair[0] -%>
+                <%- if fandom.is_a? Fandom -%>
+                  <%= check_box_tag "tag[" + fandom.id.to_s + "]" %>
+                  <%- unless fandom.canonical? -%>*<%- end -%>
+                  <%- unless fandom.media_id -%>!<%- end -%>
+                  <%= link_to fandom.name, {:fandom_id => fandom.id}, {:target => "_blank"} -%>&nbsp;(<%= pair[1].to_s %>)
+                <%- else -%>                  
+                  <%= link_to "No associated fandom", {:no_fandom => true}, {:target => "_blank"} -%>&nbsp;(<%= pair[1].to_s %>)
+                <%- end -%>               
+              </td>
+            <% end %>
           <% end %>
-        <% end %>
-      </tr>
-    <%- end -%>
-  </table>
+        </tr>
+      <%- end -%>
+    </table>
+  <%= submit_tag "Assign to Media" %>  
 <%- end -%>

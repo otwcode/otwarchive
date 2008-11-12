@@ -1,4 +1,0 @@
-page.replace_html 'fandoms', :partial => 'tag_wranglings/fandoms'
-page.replace_html 'fandom-edit', :partial => 'tag_wranglings/fandom' 
-page.replace_html 'tags-edit', :partial => 'tag_wranglings/tags' 
-page.replace_html 'tag-edit', :partial => 'tag_wranglings/tag' 

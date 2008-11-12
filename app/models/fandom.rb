@@ -28,5 +28,9 @@ class Fandom < Tag
     freeforms.each {|t| t.update_attribute(:fandom_id, synonym.id)}
   end
   
+  def media
+    Media.find_by_id(self.media_id)
+  end
+  
 end
 

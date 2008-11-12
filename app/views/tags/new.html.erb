@@ -2,27 +2,23 @@
 
 <%= error_messages_for :tag %>
 
-<%- form_for(@tag) do |f| -%>
-  <dl>  
-    <dt><%= f.label :name, 'Name'.t %></dt> 
-    <dd><%= f.text_field("name") %></dd>
+<p>Only attributes that apply to all tags are available. Once you have saved the tag, the attributes that are particular for that tag category will be available for editing</p>
 
+<%- form_for @tag do |f| -%>
+  <dl>
+    <dt><%= f.label :name, 'Name'.t %></dt> 
+    <dd><%= f.text_field :name %></dd>
+    
     <dt><%= f.check_box("banned") %><%= f.label :banned, 'Banned'.t %></dt>
     <dd><%=h 'This tag will not show up anywhere'.t %></dd>
 
-    <dt><%= f.check_box("canonical") %><%= f.label :canonical, 'Canonical'.t %></dt>
-    <dd><%=h 'This is the official name for a fandom/pairing/character/etc.'.t %></dd>
-
-    <dt><%= f.check_box("adult") %><%= f.label :adult, 'Adult'.t %></dt>    
-    <dd><%=h 'This tag indicates adult content; any work tagged with this will trigger the "do you agree to see this" page'.t %></dd>
-
     <dt><%=h 'Category'.t %></dt>
     <%- Tag::TYPES.each do |type| -%>
-    <dd><%= f.radio_button("type", type) %><%= f.label :type, type.constantize::NAME %></dd>
+    <dd><%= f.radio_button("type", type) %><%= f.label :type, type %></dd>
     <%- end -%>    
   </dl>
-    
-  <p class="submit"><%= f.submit %></p>
+  
+  <p><%= f.submit %></p>
 <%- end -%>
 
 <%= tag_wrangler_footer %>
