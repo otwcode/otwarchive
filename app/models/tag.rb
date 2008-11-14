@@ -63,15 +63,35 @@ class Tag < ActiveRecord::Base
   end
   
   def self.for_tag_cloud
-    freeforms = Freeform.valid.find(:all, :conditions => ["genre_id IS NULL"])
+    freeforms = Freeform.valid.find(:all, :conditions => ["genre_id IS NULL AND taggings_count > 1"])
     genres = Genre.valid
-    return (freeforms + genres).sort
+    tags = freeforms + genres
+    tags.each do |t|
+      tags.delete(t) unless t.visible_works_count > 0
+    end
+    tags.sort
   end
   
   def unwrangled?
     return false if (self.banned || self.canonical || self.canonical_id)
     return true
   end
+
+  def visible_works_count
+    if User.current_user && User.current_user.kind_of?(Admin)
+      conditions = {:posted => true}
+    elsif User.current_user.is_a? User
+      conditions = ['works.posted = ? AND (works.hidden_by_admin = ? OR users.id = ?)', true, false, User.current_user.id]
+    else
+      conditions = {:posted => true, :restricted => false, :hidden_by_admin => false}
+    end
+    self.works.count(:all,
+        :conditions => conditions,
+        :joins => "INNER JOIN creatorships ON (creatorships.creation_id = works.id AND creatorships.creation_type = 'Work')
+                   INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
+                   INNER JOIN users ON pseuds.user_id = users.id" )
+  end
+
 
   # sort tags by name
   def <=>(another_tag)

@@ -81,6 +81,51 @@ class TagTest < ActiveSupport::TestCase
     end
   end
   
+  context "tags without a work" do
+    setup { @tag = create_freeform }
+    should "not be included in the cloud" do
+       assert !Tag.for_tag_cloud.include?(@tag)
+    end
+  end
+  context "tags with only one work" do
+    setup do
+      @tag = create_freeform
+      @work = create_work
+      @work.update_attribute(:posted, true)
+      @work.tags << @tag
+    end
+    should "not be included in the cloud" do
+       assert !Tag.for_tag_cloud.include?(@tag)
+    end
+  end
+  context "tags with two works" do
+    setup do
+      @tag = create_freeform
+      @work = create_work
+      @work.update_attribute(:posted, true)
+      @work2 = create_work
+      @work2.update_attribute(:posted, true)
+      @work.tags << @tag
+      @work2.tags << @tag
+    end
+    should "be included in the cloud" do
+       assert Tag.for_tag_cloud.include?(@tag)
+    end
+  end
+  context "tags with two works, which are not visible" do
+    setup do
+      @tag = create_freeform
+      @work = create_work(:restricted => true)
+      @work.update_attribute(:posted, true)
+      @work2 = create_work(:restricted => true)
+      @work2.update_attribute(:posted, true)
+      @work.tags << @tag
+      @work2.tags << @tag
+    end
+    should "not be included in the cloud" do
+       assert !Tag.for_tag_cloud.include?(@tag)
+    end
+  end
   context "tags for tag cloud" do
     setup do
       @tag = create_freeform
@@ -88,6 +133,16 @@ class TagTest < ActiveSupport::TestCase
       @tag3 = create_genre(:canonical => true)
       @tag2.add_to_genre(@tag3)
       @tag4 = create_character
+      @work1=create_work
+      @work1.update_attribute(:posted, true)
+      @work2=create_work
+      @work2.update_attribute(:posted, true)
+      @work1.tags << @tag
+      @work1.tags << @tag2
+      @work1.tags << @tag4
+      @work2.tags << @tag
+      @work2.tags << @tag2
+      @work2.tags << @tag4
     end
     should "include freeforms without a genre" do
        assert Tag.for_tag_cloud.include?(@tag)

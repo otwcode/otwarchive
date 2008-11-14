@@ -1,7 +1,9 @@
 <h1><%= link_to 'Fandoms', media_path %> > <%=h @medium_name %></h1>
 <ul>
   <%- for fandom in @fandoms -%>
+  <%- if fandom.visible_works_count > 0 -%>
     <li><%= link_to fandom.name + " (" + fandom.visible_works_count.to_s + ")", tag_works_path(fandom) %></li>
+  <%- end -%>
   <%- end -%>
 </ul>
 
