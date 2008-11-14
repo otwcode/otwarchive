@@ -6,12 +6,6 @@ class InvitationTest < ActiveSupport::TestCase
       @invitation = create_invitation(:recipient_email => random_email)
     end
     should_require_attributes :recipient_email
-    should "not have an existing user as a recipient" do
-      @user = create_user
-      @invitation.recipient_email = @user.email
-      assert !@invitation.valid?
-      assert @invitation.errors.on("recipient_email")
-    end
     should "have a generated token after it's created" do
       assert @invitation.token
     end
@@ -35,5 +29,27 @@ class InvitationTest < ActiveSupport::TestCase
         assert !@invitation.valid?
       end
     end
+    
+    context "after use" do
+      setup do
+        @user = create_user
+        @user.invitation = @invitation
+        @user.save
+      end
+      should "be used up" do
+        assert @invitation.used?
+      end
+    end
   end
+
+  context "an invitation created for an existing user" do
+    should "not be valid" do      
+      @user = create_user
+      @invitation = new_invitation(:recipient_email => @user.email)
+      assert !@invitation.valid?
+      assert @invitation.errors.on("recipient_email")
+    end
+  end
+  
+
 end

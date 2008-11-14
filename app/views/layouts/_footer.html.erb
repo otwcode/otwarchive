@@ -7,10 +7,10 @@
   	&#8212; <%= link_to 'Report Abuse' .t, new_abuse_report_path %>
   	&#8212; <%= link_to 'Send Feedback'.t, url_for(:controller => :feedback) -%>
   	
-  	<%- if logged_in? && current_user.is_tag_wrangler? -%>
+  	<%- if (logged_in? && current_user.is_tag_wrangler?) || logged_in_as_admin? -%>
   	  &#8212; <%= link_to 'Tag Wrangling' .t, tag_wranglings_path -%>
   	<%- end -%>
-  	<%- if logged_in? && current_user.is_translator? -%>
+  	<%- if (logged_in? && current_user.is_translator?) || logged_in_as_admin? -%>
   	  &#8212; <%= link_to 'Translation Interface' .t, url_for(:controller => :translation) -%>
   	<%- end -%>
 </p>

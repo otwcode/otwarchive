@@ -5,7 +5,7 @@ class Invitation < ActiveRecord::Base
   has_one :recipient, :class_name => 'User'
 
   validates_presence_of :recipient_email
-  validate :recipient_is_not_registered
+  validate :recipient_is_not_registered, :on => :create
   validate :sender_has_invitations, :if => :sender
 
   before_create :generate_token
@@ -14,7 +14,10 @@ class Invitation < ActiveRecord::Base
   private
 
   def recipient_is_not_registered
-    errors.add :recipient_email, 'is already registered' if User.find_by_email(recipient_email)
+    if User.find_by_email(recipient_email)
+      errors.add :recipient_email, 'is already registered' 
+      return false
+    end
   end
 
   def sender_has_invitations

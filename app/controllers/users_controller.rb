@@ -10,9 +10,15 @@ class UsersController < ApplicationController
   end
   
   def check_account_creation_status
-    unless ArchiveConfig.ACCOUNT_CREATION_ENABLED || Invitation.find_by_token(params[:invitation_token]) 
+    @invitation = Invitation.find_by_token(params[:invitation_token])
+    unless ArchiveConfig.ACCOUNT_CREATION_ENABLED || @invitation
       flash[:error] = "Account creation is suspended at the moment. Please check back with us later.".t
       redirect_to login_path 
+    else
+      if @invitation && @invitation.used?
+        flash[:error] = "This invitation has already been used to create an account, sorry!".t
+        redirect_to login_path
+      end
     end
   end
   
@@ -67,6 +73,9 @@ class UsersController < ApplicationController
       unless @user.identity_url.blank?
         # normalize OpenID url before validating
         @user.identity_url = OpenIdAuthentication.normalize_url(@user.identity_url)
+      end
+      if @invitation
+        @user.invitation = @invitation
       end
       if @user.save
         flash[:notice] = 'during testing you can activate via <a href=' + activate_path(@user.activation_code) + '>your activation url</a>.' if ENV['RAILS_ENV'] == 'development'

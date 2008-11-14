@@ -20,6 +20,7 @@ class User < ActiveRecord::Base
   has_many :sent_invitations, :class_name => 'Invitation', :foreign_key => 'sender_id'
   belongs_to :invitation
   before_create :set_invitation_limit
+  before_save :mark_invitation_used
   attr_accessible :invitation_token
   
   has_many :pseuds, :dependent => :destroy
@@ -260,6 +261,13 @@ class User < ActiveRecord::Base
     self.invitation = Invitation.find_by_token(token)
   end
 
+  def mark_invitation_used
+    if invitation
+      invitation.used = true
+      invitation.save
+    end
+  end
+  
   private
 
   def set_invitation_limit
