@@ -52,7 +52,7 @@
     <dd class="freeform">
       <input type="text" name="work[freeform_string]" id="work_freeform" value="<%= @work.freeform_string %>" />
       <div class="auto_complete" id="work_freeform %>_auto_complete" ></div>
-      <%= javascript_tag("new Autocompleter.Local('work_freeform', 'work_freeform_auto_complete', Freeform.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
+      <%= javascript_tag("new Autocompleter.Local('work_freeform', 'work_freeform_auto_complete', Genre.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
     </dd>
   </dl>
 </fieldset>

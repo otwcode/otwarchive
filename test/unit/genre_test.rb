@@ -8,15 +8,28 @@ class GenreTest < ActiveSupport::TestCase
     should "have a display name" do
       assert_equal "Genre", Genre::NAME
     end
-  end  
-
-  context "a work with a new genre tag" do
-    setup do
-      @work = create_work
-      @work.genre_string = "a new genre tag"
+    context "which gets a freeform tag" do
+      setup do
+        @genre = create_genre
+        @freeform = create_freeform(:name => "a freeform tag")
+        @freeform.add_to_genre(@genre)
+      end
+      should "make the genre canonical" do
+        assert @genre.canonical
+      end
     end
-    should "get the fandom of the work" do
-      assert_equal @work.fandoms, [Genre.find_by_name("a new genre tag").fandom]
+  end
+
+  context "a work with a freeform tag that belongs to a genre" do
+    setup do
+      @freeform = create_freeform(:name => "a freeform tag")
+      @genre = create_genre
+      @freeform.add_to_genre(@genre)
+      @work = create_work
+      @work.freeform_string = "a freeform tag"
+    end
+    should "get the genre of the freeform" do
+      assert_equal [@genre],  @work.genres
     end
   end
 

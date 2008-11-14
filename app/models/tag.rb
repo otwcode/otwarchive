@@ -2,7 +2,7 @@ class Tag < ActiveRecord::Base
 
   TYPES = ['Rating', 'Warning', 'Category', 'Media', 'Fandom', 'Pairing', 'Character', 'Genre', 'Freeform']
 
-  has_many :taggings
+  has_many :taggings, :as => :tagger
   has_many :works, :through => :taggings, :source => :taggable, :source_type => 'Work'
   has_many :bookmarks, :through => :taggings, :source => :taggable, :source_type => 'Bookmark'
   has_many :tags, :through => :taggings, :source => :taggable, :source_type => 'Tag'
@@ -14,7 +14,7 @@ class Tag < ActiveRecord::Base
   validates_format_of :name, 
                       :with => /\A[-a-zA-Z0-9 \/?.!''"":;\|\]\[}{=~!@#\$%^&()_+]+\z/, 
                       :message => "can only be made up of letters, numbers, spaces and basic punctuation, but not commas, asterisks or angle brackets.".t
-  
+
   def before_validation
     self.name = name.strip.squeeze(" ") if self.name
   end
@@ -30,7 +30,7 @@ class Tag < ActiveRecord::Base
   named_scope :on_works, lambda {|tagged_works|
     {
       :select => "DISTINCT tags.*",
-      :joins => "INNER JOIN taggings on tags.id = taggings.tag_id
+      :joins => "INNER JOIN taggings on tags.id = taggings.tagger_id
                   INNER JOIN works ON (works.id = taggings.taggable_id AND taggings.taggable_type = 'Work')",
       :conditions => ['works.id in (?)', tagged_works.collect(&:id)]
     }
@@ -43,7 +43,11 @@ class Tag < ActiveRecord::Base
         { :conditions => ["fandom_id IN (?)", fandoms.flatten.map(&:id)] }
       end
   }
-
+  
+  def self.string
+    all.map(&:name).join(ArchiveConfig.DELIMITER)
+  end
+  
   def self.count_by_fandom(*fandoms)
     if fandoms.compact.blank?
       self.count(:conditions => ["fandom_id IS NULL"])
@@ -94,21 +98,10 @@ class Tag < ActiveRecord::Base
 
   # reassign the tags's works and children to its canonical synonym
   def reassign_to_canonical
-    return false unless self.synonym
+    return false unless self.synonym.is_a?(self.class)
     for work in self.works
-      work.tags << self.synonym
-      work.remove_tag(self)
-    end
-  end
-
-  # freeform tags aren't typically synonyms
-  # instead they get added to genres.
-  def add_genre(tag)
-    return false unless tag.is_a?(Genre)
-    return false unless tag.canonical?
-    self.update_attribute(:genre_id, tag.id) 
-    for work in self.works
-      work.tags << tag
+      work.tags.delete(self)
+      work.tags << self.synonym unless work.tags.include?(self.synonym)
     end
   end
 
@@ -121,6 +114,15 @@ class Tag < ActiveRecord::Base
 
   def fandom
     Fandom.find(self.fandom_id) if fandom_id
+  end
+  
+  
+  def update_canonical
+    if self.is_a?(Freeform) && self.canonical
+      genre_tag = Genre.create_from_freeform(self)
+    elsif self.canonical_id
+      self.reassign_to_canonical
+    end
   end
 
 end

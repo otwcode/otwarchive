@@ -50,17 +50,17 @@ class TagsController < ApplicationController
       @tag = Tag.new(params[:tag])
       render :action => "new" and return
     end
-    old_tag = Tag.find(:first, :conditions => {:name => @tag.name, :type => @tag.type})
+    old_tag = Tag.find(:first, :conditions => {:name => @tag.name, :type => @tag[:type]})
     if old_tag
       flash[:notice] = "A tag by that name already exists in that category. It is displayed here for editing".t
       redirect_to edit_tag_path(old_tag)  
     else
       respond_to do |format|
         if @tag.save
+          @tag.update_canonical
           flash[:notice] = 'Tag was successfully created.'.t
           format.html { redirect_to edit_tag_path(@tag) }
         else
-          flash[:notice] = y @tag.errors
           format.html { render :action => "new" }
         end
       end
@@ -73,7 +73,19 @@ class TagsController < ApplicationController
   
   def update
     @tag = Tag.find(params[:id])
-    if @tag.update_attributes(params[:tag])
+    @tag.attributes = params[:tag]
+    if @tag.name_changed?
+      old_tag = Tag.find(:first, :conditions => {:name => @tag.name, :type => @tag[:type]})
+      if old_tag
+        flash[:notice] = "A tag by that name already existed in this category. This tag has been made a synonym".t
+        @tag.canonical_id = old_tag.id
+        @tag.canonical = false
+      else
+        @tag.canonical = true 
+      end
+    end
+    if @tag.save
+      @tag.update_canonical
       flash[:notice] = 'Tag was successfully updated.'.t
       redirect_to tag_works_path(@tag)
     else

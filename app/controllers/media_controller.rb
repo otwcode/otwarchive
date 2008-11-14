@@ -1,21 +1,17 @@
 class MediaController < ApplicationController
   
   def index
-    @media = Media.all(:order => 'taggings_count DESC')
-    @fandom_listing = {}
-    @media.each do |medium|
-      fandoms = medium.fandoms.find(:all, :limit => 6, :order => 'taggings_count DESC')
-      fandom_hash = {
-        :fandoms => fandoms[0...5].collect{|fandom| 
-                        [fandom, fandom.visible_works.size]},
-        :more => fandoms[5].blank? ? false : true
-                 }
-      @fandom_listing[medium] = fandom_hash
-    end
+    @fandom_listing = Fandom.canonical.group_by(&:media).sort_by{|array| array[1].size}.reverse
   end
   
   def show
-    @medium = Media.find(params[:id])
-    @fandoms = @medium.fandoms.canonical.find(:all, :order => :name).paginate(:page => params[:page])
+    if params[:id] == "0"
+      @medium_name = "Uncategorized Fandoms".t
+      @fandoms = Fandom.canonical.find(:all, :order => :name, :conditions => {:media_id => nil}).paginate(:page => params[:page])
+    else
+      medium = Media.find(params[:id])
+      @medium_name = medium.name
+      @fandoms = medium.fandoms.canonical.find(:all, :order => :name).paginate(:page => params[:page])
+    end
   end
 end

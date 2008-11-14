@@ -1,8 +1,8 @@
 class Bookmark < ActiveRecord::Base
   belongs_to :bookmarkable, :polymorphic => true
   belongs_to :user
-  has_many :taggings, :as => :taggable, :dependent => :destroy
-  has_many :tags, :through => :taggings
+  has_many :taggings, :as => :taggable
+  has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
 
   validates_length_of :notes, 
     :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than %d letters long."/ArchiveConfig.NOTES_MAX #/comment here just to fix aptana coloring
@@ -57,32 +57,18 @@ class Bookmark < ActiveRecord::Base
       self.bookmarkable.errors.full_messages.each { |msg| errors.add_to_base(msg) }
     end
   end
-
-  ################################################################################
-  # TAGGING
-  # Bookmarks are taggable objects. They don't care about type, however.
-  ################################################################################
-  def remove_tag(tag)
-    tagging = Tagging.find_by_tag_id_and_taggable_id(tag.id, self.id)
-    tagging.destroy if tagging
-  end
-  def replace_tags(new_tags=[])
-    return false if self.new_record?                    # can't create an association if not saved
-    new_tags.each do |tag|
-      return false unless tag.is_a?(Tag)                # not a tag
-      return false if tag.new_record?                    # can't create an association if not saved
-    end  
-    # if haven't returned, all the tags are okay
-    old_tags = self.tags.find_all_by_type(type)
-    (new_tags - old_tags).each {|t| self.tags << t}
-    (old_tags - new_tags).each {|t| self.remove_tag(t) }
-  end
-
+  
   def tag_string
-    self.tags.valid.map(&:name).sort.join(ArchiveConfig.DELIMITER)
+    tags.map(&:name).join(ArchiveConfig.DELIMITER)
   end
   
   def tag_string=(tag_string)
-     self.replace_tags(tag_string.split(ArchiveConfig.DELIMITER).each {|string| Tag.find_or_create_by_name(string)})
+    tags = []
+    tag_string.split(ArchiveConfig.DELIMITER).each do |string|
+      string
+      tags << Tag.find_or_create_by_name(string.strip.squeeze(" "))
+    end
+    return tags
   end
+
 end

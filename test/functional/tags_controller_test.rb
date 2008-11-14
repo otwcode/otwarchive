@@ -52,13 +52,20 @@ class TagsControllerTest < ActionController::TestCase
       setup do
         @name = random_phrase[1...ArchiveConfig.TAG_MAX]
         @type = "Freeform"
-        put :create, :locale => 'en', :tag => {"name" => @name, "type" => @type}
+        put :create, :locale => 'en', :tag => {"name" => @name, "type" => @type, "canonical" => true}
       end
       should_redirect_to 'edit_tag_path(Tag.find_by_name(@name))'
       should_set_the_flash_to /successfully created/
       should_assign_to :tag
       should "create the tag" do
         assert Freeform.find_by_name(@name)
+      end
+      should "create a genre tag" do
+        assert Genre.find_by_name(@name)
+        assert Genre.find_by_name(@name).canonical
+      end
+      should "associate with the genre tag" do
+        assert_equal Genre.find_by_name(@name).id, Freeform.find_by_name(@name).genre_id
       end
     end
   

@@ -1,68 +1,92 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
-basic_chapter:
-  id: 1
-  content: looooong text for first chapter
-  position: 1
-  work_id: 1
-  posted: true
-  word_count: 5
-  title: First Chapter Title
-  summary: Summary of first chapter
-  notes: Notes on first chapter
-
-basic_chapter2:
-  id: 2
-  content: exciting second chapter content woo
-  position: 2
-  work_id: 1
-  posted: true
-  word_count: 5
+--- 
+chapter_00002: 
+  updated_at: 2008-11-13 15:52:15 -08:00
   title: Second Chapter Title
-  summary: Summary of second chapter
+  word_count: 5
   notes: Notes on second chapter
-
-basic_chapter3:
+  id: 2
+  summary: Summary of second chapter
+  content: exciting second chapter content woo
+  work_id: 1
+  posted: true
+  position: 2
+  hidden_by_admin: false
+  created_at: 2008-11-13 15:52:15 -08:00
+chapter_00003: 
+  updated_at: 2008-11-13 15:52:15 -08:00
+  title: Only Chapter Title
+  word_count: 11
+  notes: Notes on one and only chapter
   id: 3
+  summary: Summary of one and only chapter
   content: this is the content of the one and only chapter yay
-  position: 1
   work_id: 2
   posted: true
-  word_count: 11
-  title: Only Chapter Title
-  summary: Summary of one and only chapter
-  notes: Notes on one and only chapter
-
-basic_chapter4:
-  id: 4
-  content: this is the content of the one and only chapter yay woo
   position: 1
+  hidden_by_admin: false
+  created_at: 2008-11-13 15:52:15 -08:00
+chapter_00004: 
+  updated_at: 2008-11-13 15:52:15 -08:00
+  title: Only Chapter Title
+  word_count: 12
+  notes: Notes on one and only chapter
+  id: 4
+  summary: Summary of one and only chapter
+  content: this is the content of the one and only chapter yay woo
   work_id: 3
   posted: true
-  word_count: 12
-  title: Only Chapter Title
-  summary: Summary of one and only chapter
-  notes: Notes on one and only chapter
-
-basic_chapter5:
-  id: 5
-  content: this is the content of the one and only chapter yay woo foo
   position: 1
+  hidden_by_admin: false
+  created_at: 2008-11-13 15:52:15 -08:00
+chapter_00005: 
+  updated_at: 2008-11-13 15:52:15 -08:00
+  title: Only Chapter Title
+  word_count: 13
+  notes: Notes on one and only chapter
+  id: 5
+  summary: Summary of one and only chapter
+  content: this is the content of the one and only chapter yay woo foo
   work_id: 4
   posted: true
-  word_count: 13
-  title: Only Chapter Title
-  summary: Summary of one and only chapter
-  notes: Notes on one and only chapter
-
-basic_chapter6:
-  id: 6
-  content: this is the content of the one and only chapter yay woo foo bar
   position: 1
+  hidden_by_admin: false
+  created_at: 2008-11-13 15:52:15 -08:00
+chapter_00006: 
+  updated_at: 2008-11-13 15:52:15 -08:00
+  title: Only Chapter Title
+  word_count: 14
+  notes: Notes on one and only chapter
+  id: 6
+  summary: Summary of one and only chapter
+  content: this is the content of the one and only chapter yay woo foo bar
   work_id: 5
   posted: true
-  word_count: 14
-  title: Only Chapter Title
-  summary: Summary of one and only chapter
-  notes: Notes on one and only chapter
-
+  position: 1
+  hidden_by_admin: false
+  created_at: 2008-11-13 15:52:15 -08:00
+chapter_00007: 
+  updated_at: 2008-11-13 16:07:11 -08:00
+  title: ""
+  word_count: 4
+  notes: 
+  id: 7
+  summary: 
+  content: This story is unposted
+  work_id: 6
+  posted: false
+  position: 1
+  hidden_by_admin: false
+  created_at: 2008-11-13 16:07:11 -08:00
+chapter_00001: 
+  updated_at: 2008-11-13 15:52:15 -08:00
+  title: First Chapter Title
+  word_count: 5
+  notes: Notes on first chapter
+  id: 1
+  summary: Summary of first chapter
+  content: looooong text for first chapter
+  work_id: 1
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2008-11-13 15:52:15 -08:00

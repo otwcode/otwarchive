@@ -34,38 +34,38 @@ class FandomTest < ActiveSupport::TestCase
      end
      should "not count the work if it isn't visible" do
        assert_nil @work.visible
-       assert_equal 0, @fandom.visible_works.size
+       assert_equal 0, @fandom.visible_works_count
      end
      context "for a posted work" do
        setup { @work.update_attribute(:posted, true) }
        should "count the work if it is visible" do     
          assert @work.visible
-         assert_equal 1, @fandom.visible_works.size
+         assert_equal 1, @fandom.visible_works_count
        end
        context "for a restricted work" do
          setup { @work.update_attribute(:restricted, true) }
          should "count the work if logged in" do
            User.current_user = create_user
-           assert_equal 1, @fandom.visible_works.size
+           assert_equal 1, @fandom.visible_works_count
          end
          should "not count the work if not logged in" do
            User.current_user = :false
-           assert_equal 0, @fandom.visible_works.size
+           assert_equal 0, @fandom.visible_works_count
          end
          should "count the work if an admin" do
            User.current_user = create_admin
-           assert_equal 1, @fandom.visible_works.size
+           assert_equal 1, @fandom.visible_works_count
          end
        end
        context "for a hidden_by_admin work" do
          setup { @work.update_attribute(:hidden_by_admin, true) }
          should "not count the work if logged in" do
            User.current_user = create_user
-           assert_equal 0, @fandom.visible_works.size
+           assert_equal 0, @fandom.visible_works_count
          end
          should "count the work if an admin" do
            User.current_user = create_admin
-           assert_equal 1, @fandom.visible_works.size
+           assert_equal 1, @fandom.visible_works_count
          end
        end
      end

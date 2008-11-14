@@ -57,7 +57,7 @@ class WorksController < ApplicationController
       @chapters = @work.chapters.in_order
       @serial_works = @work.serial_works
       @tags_by_category = {}
-      categories = Tag::TYPES - ["Media"]
+      categories = Tag::TYPES - ["Media", "Genre"]
       categories.each {|type| @tags_by_category[type] = type.constantize.canonical}
   
       @chapter = @work.first_chapter
@@ -129,15 +129,11 @@ class WorksController < ApplicationController
       end
     else
       # we're browsing instead
-      # if we're browsing by a particular fandom or tag, just add that
-      # fandom/tag to the selected_tags list.
-      unless params[:fandom_id].blank? 
-        @fandom = Tag.find(params[:fandom_id])
-        @selected_tags << params[:fandom_id]
-      end      
+      # if we're browsing by a particular tag, just add that
+      # tag to the selected_tags list.
       unless params[:tag_id].blank?
         @tag = Tag.find(params[:tag_id])
-        @selected_tags << params[:tag_id]
+        @selected_tags << params[:tag_id] unless @selected_tags.include?(params[:tag_id])
       end
       
       # if we're browsing by a particular user get works by that user      
@@ -205,7 +201,7 @@ class WorksController < ApplicationController
     # Users must explicitly okay viewing of adult content
     if params[:view_adult]
       session[:adult] = true
-    elsif @work.rating.adult? && !see_adult? 
+    elsif (!@work.rating || @work.rating.adult?) && !see_adult? 
       render :partial => "adult", :layout => "application"
     end	   
     unless @work.series.blank?
@@ -224,7 +220,7 @@ class WorksController < ApplicationController
     @page_title = ""
     if logged_in? && !current_user.preference.work_title_format.blank?
       @page_title = current_user.preference.work_title_format
-      @page_title.gsub!(/FANDOM/, @work.fandom_string)
+      @page_title.gsub!(/FANDOM/, @work.fandoms.string)
       @page_title.gsub!(/AUTHOR/, @work.pseuds.collect(&:name).join(','))
       @page_title.gsub!(/TITLE/, @work.title)
     else 

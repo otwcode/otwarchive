@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 class PairingTest < ActiveSupport::TestCase
 
   context "a pairing Tag" do
-    should_have_many :taggings, :works, :bookmarks, :tags
+    should_have_many :taggings, :works, :bookmarks, :tags, :characters
     should_require_attributes :name
     should "have a display name" do
       assert_equal "Pairing", Pairing::NAME

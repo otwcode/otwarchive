@@ -2,16 +2,17 @@
   <h2>Wrangle the "<%= link_to @fandom.name, edit_tag_path(@fandom), {:target => "_blank"} %>" Fandom tag</h2>
   <%= form_tag tag_wranglings_path -%>
   <%= hidden_field_tag :fandom_id, @fandom.id %>
-  <% if fandom.canonical && fandom.media.blank? %>
+  <% if @fandom.canonical && @fandom.media.blank? %>
     <p>Chose the media this fandom belongs to<p>
     <%= select_tag :media_id, "<option value=''>Select a Media</option>" + options_from_collection_for_select(Media.canonical, :id, :name) %>
     <%= submit_tag "Update Fandom" %>
-  <% elsif !fandom.canonical %>
+  <% elsif !@fandom.canonical %>
     <p>If this fandom should be canonical, rename it (optional) and chose a media<p>
-    <p>If this fandom is not canonical, chose a canonical fandom</p>
+    <p>If this fandom is not canonical, chose a canonical fandom as its synonym</p>
+    <p>Note: if you change the name to a tag that already exists, that tag will be made canonical and this one will be a synonym</p>
     New name:<%= text_field_tag :name, @fandom.name %>
-    <%= select_tag :media_id, "<option value=''>Select a Media</option>" + options_from_collection_for_select(Media.canonical, :id, :name) %>
-    <%= select_tag :canonical_fandom, "<option value=''>Select Canonical</option>" + options_from_collection_for_select(Fandom.canonical.sort, :id, :name) %>
+    <%= select_tag :media_id, "<option value=''>Select a Media</option>" + options_from_collection_for_select(Media.canonical, :id, :name, @fandom.media.andand.name) %>
+    <%= select_tag :canonical_id, "<option value=''>Select Canonical</option>" + options_from_collection_for_select(Fandom.canonical.sort, :id, :name, @fandom.synonym.andand.id) %>
     <%= submit_tag "Update Fandom" %>
   <% end %>
 <%- end -%>

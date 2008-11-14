@@ -1,5 +1,9 @@
-
-basic_series:
-  id: 1
+--- 
+series_00001: 
+  updated_at: 2008-11-13 15:52:15 -08:00
   title: Test Series
+  notes: 
+  id: 1
   summary: Awesome test series
+  hidden_by_admin: false
+  created_at: 2008-11-13 15:52:15 -08:00

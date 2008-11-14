@@ -10,10 +10,10 @@ class TaggingTest < ActiveSupport::TestCase
     setup do
       @work = Work.first || create_work
       @tag = create_freeform
-      @tagging = Tagging.create(:tag => Freeform.find(@tag.id), :taggable => Work.first)
+      @tagging = Tagging.create(:tagger => Freeform.find(@tag.id), :taggable => Work.first)
     end
-    should_belong_to :tag, :taggable
-    should_require_attributes :tag, :taggable
+    should_belong_to :tagger, :taggable
+    should_require_attributes :tagger, :taggable
     should "delete its singleton, unwrangled tag on exit" do
       @tagging.destroy
       assert_raises(ActiveRecord::RecordNotFound) { @tag.reload } 
@@ -45,10 +45,10 @@ class TaggingTest < ActiveSupport::TestCase
   context "a tagging using a tag without synonyms" do
     setup do
       @tag = create_tag
-      @tagging = create_tagging(:tag => @tag, :taggable => Work.first)
+      @tagging = create_tagging(:tagger => @tag, :taggable => Work.first)
     end
     should "use the original tag" do
-      assert_equal @tag, @tagging.tag
+      assert_equal @tag, @tagging.tagger
     end
   end
   context "a tagging using a tag with a synonym" do
@@ -56,10 +56,10 @@ class TaggingTest < ActiveSupport::TestCase
       @tag = create_tag
       @canonical = create_tag(:canonical => true, :type => @tag.type)
       assert @tag.synonym = @canonical
-      @tagging = Tagging.create(:tag => Tag.find(@tag.id), :taggable => Work.first)
+      @tagging = Tagging.create(:tagger => Tag.find(@tag.id), :taggable => Work.first)
     end
     should "use the synonym tag" do
-      assert_equal Tag.find(@canonical), Tagging.find(@tagging.id).tag
+      assert_equal Tag.find(@canonical), Tagging.find(@tagging.id).tagger
     end
   end
   

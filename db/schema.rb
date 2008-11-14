@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081102050355) do
+ActiveRecord::Schema.define(:version => 20081114043420) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -54,6 +54,8 @@ ActiveRecord::Schema.define(:version => 20081102050355) do
     t.integer  "word_count",      :limit => 11
     t.boolean  "hidden_by_admin",                       :default => false, :null => false
   end
+
+  add_index "chapters", ["work_id"], :name => "works_chapter_index"
 
   create_table "comments", :force => true do |t|
     t.integer  "pseud_id",         :limit => 11
@@ -202,12 +204,12 @@ ActiveRecord::Schema.define(:version => 20081102050355) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "date_of_birth_visible",                  :default => false
-    t.boolean  "edit_emails_off",                        :default => false, :null => false
-    t.boolean  "comment_emails_off",                     :default => false, :null => false
+    t.boolean  "edit_emails_off",                        :default => false,                     :null => false
+    t.boolean  "comment_emails_off",                     :default => false,                     :null => false
     t.boolean  "adult",                                  :default => false
-    t.boolean  "hide_warnings",                          :default => false, :null => false
+    t.boolean  "hide_warnings",                          :default => false,                     :null => false
     t.boolean  "comment_inbox_off",                      :default => false
-    t.boolean  "comment_copy_to_self_off",               :default => true,  :null => false
+    t.boolean  "comment_copy_to_self_off",               :default => true,                      :null => false
     t.string   "work_title_format",                      :default => "TITLE - AUTHOR - FANDOM"
   end
 
@@ -308,14 +310,15 @@ ActiveRecord::Schema.define(:version => 20081102050355) do
   end
 
   create_table "taggings", :force => true do |t|
-    t.integer  "tag_id",        :limit => 11,                 :null => false
+    t.integer  "tagger_id",     :limit => 11,                 :null => false
+    t.string   "tagger_type",                 :default => "", :null => false
     t.integer  "taggable_id",   :limit => 11,                 :null => false
     t.string   "taggable_type",               :default => "", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "taggings", ["tag_id", "taggable_id", "taggable_type"], :name => "index_taggings_on_tag_id_and_taggable_id_and_taggable_type", :unique => true
+  add_index "taggings", ["tagger_id", "tagger_type", "taggable_id", "taggable_type"], :name => "index_taggings_polymorphic", :unique => true
 
   create_table "tags", :force => true do |t|
     t.string   "name",                          :default => "",    :null => false

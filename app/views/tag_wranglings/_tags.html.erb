@@ -6,14 +6,18 @@
   <% synonyms = false %>
   <% @unwrangled.each do |type, tags| %>
     <h3><%= type %> Tags</h3>
-    <% unless type.constantize.canonical.by_fandom(@fandom).blank? %>
+    <% unless type.constantize.canonical.by_fandom(@fandom).sort.blank? %>
       <% synonyms = true %>
+      <%- if type == "Pairing" %>
+      <p>Note: Marking a pairing canonical marks all of its characters canonical as well</p>
+      <%- end %>
       <% if type == "Freeform" %>
+        <p>Note: Marking a freeform tag canonical creates a canonical genre tag</p>
         <%= select_tag type, "<option value=''>Select Canonical #{Genre::NAME}</option>" + 
-          options_from_collection_for_select(Genre.canonical.by_fandom(@fandom), :id, :name, :select => "") %>
+          options_from_collection_for_select( (Genre.canonical.by_fandom(@fandom) + Genre.canonical.by_fandom(nil)).sort, :id, :name, :select => "") %>
       <% else %>
         <%= select_tag type, "<option value=''>Select Canonical #{type.constantize::NAME}</option>" + 
-          options_from_collection_for_select(type.constantize.canonical.by_fandom(@fandom), :id, :name, :select => "") %>
+          options_from_collection_for_select( (type.constantize.canonical.by_fandom(@fandom) + type.constantize.canonical.by_fandom(nil) ).sort, :id, :name, :select => "") %>
       <% end %>
     <% end %>
     <table>

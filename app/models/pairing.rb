@@ -1,21 +1,28 @@
 class Pairing < Tag
 
   NAME = ArchiveConfig.PAIRING_CATEGORY_NAME
-
+  
   after_save :update_characters
   after_create :update_fandom
 
-  def update_characters
-     name.split('/').each do |character_name|
-       character = Character.find_or_create_by_name(character_name)
-       character.update_attribute(:canonical, true) if canonical 
-       character.pairings << self unless character.pairings.include? self
-     end 
-  end
+  has_many :taggings, :as => :taggable
+  has_many :characters, :as => :taggable, :through => :taggings, :source => :tagger, :source_type => 'Character'
 
-  # assumes the only tags on a pairing are character tags
-  # if this changes will need a further filter
-  def characters
-    Tagging.find_all_by_taggable_id_and_taggable_type(self.id, 'Tag').map(&:tag)
+  def update_characters
+    characters = name.split('/')
+
+    characters.each do |character_name|
+      character = Character.find_or_create_by_name(character_name.strip.squeeze(" "))
+      if self.canonical? 
+        character.update_attribute(:canonical, true)
+        if self.fandom
+          character.update_attribute(:fandom_id, self.fandom_id) if self.fandom.canonical?
+        end
+      end
+      self.characters << character unless self.characters.include?(character)
+    end if characters.size > 1
+
+    return self.characters
   end
+  
 end

@@ -2,8 +2,8 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class CharacterTest < ActiveSupport::TestCase
 
-  context "a media Tag" do
-    should_have_many :taggings, :works, :bookmarks, :tags, :pairings
+  context "a character Tag" do
+    should_have_many :taggings, :works, :bookmarks, :tags
     should_require_attributes :name
     should "have a display name" do
       assert_equal "Character", Character::NAME

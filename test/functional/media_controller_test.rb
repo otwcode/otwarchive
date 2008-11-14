@@ -1,49 +1,30 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class MediaControllerTest < ActionController::TestCase
-  context "a database with a restricted and an unrestricted work" do
+
+  context "a media with non-canonical fandoms" do
     setup do
-      @media = create_media
-      @fandom = create_fandom(:media_id => @media.id)
-      @work1 = create_work(:fandom_string => @fandom.name)
-      @work1.update_attribute(:posted, true)
-      @work2 = create_work(:restricted => true, :fandom_string => @fandom.name)
-      @work2.update_attribute(:posted, true)
+      @media = create_media(:canonical => true)
+      @fandom1 = create_fandom(:media_id => @media.id)
+      get :index, :locale => 'en'
     end
-    context "if you are not logged in" do
+    should_render_template :index
+    should_assign_to :fandom_listing, :equal => []
+    context "a database and canonical fandoms" do
       setup do
-        get :index, :locale => 'en'
+        @fandom2 = create_fandom(:media_id => @media.id, :canonical => true)
       end
-      should_render_template :index
-      should_assign_to :media
-      should "show one work" do
-        assert_equal [[@fandom, 1]], assigns["fandom_listing"][@media][:fandoms]
-      end
-      should "not have a more link" do
-        assert_equal false, assigns["fandom_listing"][@media][:more]
-      end
-    end
-    context "when logged in" do
-      setup do
-        @user = create_user
-        @request.session[:user] = @user 
-        get :index, :locale => 'en'
-      end
-      should_render_template :index
-      should_assign_to :media, :equal => [@media]
-      should "show two works" do
-        assert_equal [[@fandom, 2]], assigns["fandom_listing"][@media][:fandoms]
-      end
-    end
-    context "and five more fandoms" do
-      setup do
-        for i in 0...5 do 
-          fandom = create_fandom(:media_id => @media.id)
+      should_assign_to :fandom_listing, :equal => [[@media, [@fandom2]]]
+      context "and five more fandoms" do
+        setup do
+          for i in 0...5 do 
+            fandom = create_fandom(:media_id => @media.id, :canonical => true)
+          end
+          get :index, :locale => 'en'
         end
-        get :index, :locale => 'en'
-      end
-      should "have a more link" do
-        assert_equal true, assigns["fandom_listing"][@media][:more]
+        should "have a more link" do
+          assert_tag :tag => 'a', :content => /All .*\.\.\./
+        end
       end      
     end
   end

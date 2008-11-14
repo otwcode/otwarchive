@@ -86,7 +86,7 @@ class TagTest < ActiveSupport::TestCase
       @tag = create_freeform
       @tag2 = create_freeform
       @tag3 = create_genre(:canonical => true)
-      @tag2.add_genre(@tag3)
+      @tag2.add_to_genre(@tag3)
       @tag4 = create_character
     end
     should "include freeforms without a genre" do

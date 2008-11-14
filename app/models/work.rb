@@ -15,8 +15,16 @@ class Work < ActiveRecord::Base
   has_bookmarks
   has_many :user_tags, :through => :bookmarks, :source => :tags
 
-  has_many :taggings, :as => :taggable, :dependent => :destroy
-  has_many :tags, :through => :taggings
+  has_many :taggings, :as => :taggable
+  has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
+  has_many :ratings, :through => :taggings, :source => :tagger, :source_type => 'Rating'
+  has_many :categories, :through => :taggings, :source => :tagger, :source_type => 'Category'
+  has_many :warnings, :through => :taggings, :source => :tagger, :source_type => 'Warning'
+  has_many :fandoms, :through => :taggings, :source => :tagger, :source_type => 'Fandom'
+  has_many :pairings, :through => :taggings, :source => :tagger, :source_type => 'Pairing'
+  has_many :characters, :through => :taggings, :source => :tagger, :source_type => 'Character'
+  has_many :genres, :through => :taggings, :source => :tagger, :source_type => 'Genre'
+  has_many :freeforms, :through => :taggings, :source => :tagger, :source_type => 'Freeform'
 
   acts_as_commentable
 
@@ -33,9 +41,6 @@ class Work < ActiveRecord::Base
   attr_accessor :invalid_pseuds
   attr_accessor :ambiguous_pseuds
   attr_accessor :new_parent, :url_for_parent
-  
-  attr_accessor :tags_to_add
-  attr_accessor :tags_to_remove
   
   ########################################################################
   # VALIDATION  
@@ -109,8 +114,6 @@ class Work < ActiveRecord::Base
   before_save :set_word_count, :set_language, :post_first_chapter
 
   after_save :save_creatorships, :save_chapters, :save_parents
-  
-  after_create :add_and_remove_tags
   
   before_update :validate_tags
 
@@ -337,133 +340,131 @@ class Work < ActiveRecord::Base
     self.word_count = self.chapters.collect(&:word_count).compact.sum
   end
 
-  ################################################################################
+  #######################################################################
   # TAGGING
   # Works are taggable objects.
-  ################################################################################
-
-  def add_tag(tag)
-    self.tags << tag unless self.tags.include?(tag)
+  #######################################################################
+  
+  # singular methods
+  def rating
+    self.ratings.first
+  end
+  def category
+    self.categories.first
+  end
+  def canonical_fandom
+    self.fandoms.canonical.first
   end
   
-  def remove_tag(tag)
-    tagging = Tagging.find_by_tag_id_and_taggable_id(tag.id, self.id)
-    tagging.destroy if tagging
+  def rating=(tag)
+    self.ratings=[tag]
   end
-  
-  def replace_tags(type, new_tags=[])
-    new_tags.each do |tag|
-      return false unless tag.is_a?(type.constantize)    # not the right kind of tag
-      return false if tag.new_record?                    # can't create an association if not saved
-    end
-    old_tags = self.tags.find_all_by_type(type)
-    self.tags_to_add ? self.tags_to_add += (new_tags - old_tags) : self.tags_to_add = (new_tags - old_tags)
-    self.tags_to_remove ? self.tags_to_remove += (old_tags - new_tags) : self.tags_to_remove = (old_tags - new_tags)
-    self.add_and_remove_tags unless self.new_record?
-  end
-  
-  def add_and_remove_tags
-    self.tags_to_add.compact.each {|t| self.add_tag(t) } if self.tags_to_add
-    self.tags_to_remove.compact.each {|t| self.remove_tag(t) } if self.tags_to_remove
-  end
-  
-  # type methods
-  # return a single tag for types which can only take one tag
-  # return an array for the rest
-  def self.initialize_tag_methods
-    Tag::TYPES.each do |type|
-      begin
-        type.constantize::SINGULAR
-        define_method(type.downcase) { self.tags.find_by_type(type) }
-      rescue NameError  # uninitialized constant, must be plural
-        define_method(type.downcase.pluralize) { self.tags.find_all_by_type(type) }        
-      end
-    end
-  end
-  
-  def cast
-    pairings = self.pairings
-    pairing_characters = pairings.map(&:characters).flatten.uniq if pairings
-    characters = []
-    self.characters.each do |char|
-       characters << char unless pairing_characters.include?(char)
-    end
-    pairings + characters
-  end
-    
-  # type type= methods
-  # set a singular tag for those which can only take one tag
-  # set an array of tags for the others
-  def self.initialize_tag_equal_methods
-    Tag::TYPES.each do |type|
-      begin
-        type.constantize::SINGULAR
-        define_method(type.downcase + '=') do |tag|
-          self.replace_tags(type, [tag])
-        end
-      rescue NameError  # uninitialized constant, must be plural
-        define_method(type.downcase.pluralize + '=') do |tags| 
-          self.replace_tags(type, tags)
-        end
-      end
-    end
+  def category=(tag)
+    self.categories=[tag]
   end
   
   # string methods
-  def self.initialize_string_methods
-    Tag::TYPES.each do |type|
-      define_method(type.downcase + "_string") { self.tags.find_all_by_type(type).map(&:name).join(ArchiveConfig.DELIMITER) }
-      end
-    end 
-
-  def cast_string
-    pairings = self.pairings
-    pairing_characters = pairings.map(&:characters).flatten.uniq if pairings
-    characters = []
-    self.characters.each do |char|
-       characters << char unless pairing_characters.include?(char)
-    end
-    (pairings + characters).map(&:name).join(ArchiveConfig.DELIMITER)
+  # (didn't use define_method, despite the redundancy, because it doesn't cache in development)
+  def rating_string
+    self.ratings.string
   end
-    
+  def category_string
+    self.categories.string
+  end
+  def warning_string
+    self.warnings.string
+  end
   def warning_strings
-    warnings.map(&:name)
+    self.warnings.map(&:name)
   end
-  
+  def media_string
+    self.medias.string
+  end
+  def fandom_string
+    self.fandoms.string
+  end
+  def pairing_string
+    self.pairings.string
+  end
+  def character_string
+    self.characters.string
+  end
+  def freeform_string
+    self.freeforms.string
+  end
+
   # _string= methods
-  def self.initialize_string_equal_methods
-    Tag::TYPES.each do |type|
-      begin
-        type.constantize::SINGULAR
-        define_method(type.downcase + '_string=') do |tag_string|
-          tag = type.constantize.find_or_create_by_name_and_type(tag_string, type)
-          self.replace_tags(type, [tag])
-        end
-      rescue
-        define_method(type.downcase + '_string=') do |tag_string| 
-          tags = []
-          tag_string.split(ArchiveConfig.DELIMITER).each do |string|
-            tags << type.constantize.find_or_create_by_name(string)
-          end
-          self.replace_tags(type, tags)
-        end
-      end
-    end 
+  def rating_string=(tag_string)
+    self.rating = Rating.find_or_create_by_name(tag_string.strip.squeeze(" "))
+  end
+  def category_string=(tag_string)
+    self.category = Category.find_or_create_by_name(tag_string.strip.squeeze(" "))
   end
   
-  def warning_strings=(array=[])
-    array.each do |name|
-       tags << Warning.find_or_create_by_name(name)
+  def warning_string=(tag_string)
+    tags = []
+    tag_string.split(ArchiveConfig.DELIMITER).each do |string|
+      tags << Warning.find_or_create_by_name(string.strip.squeeze(" "))
     end
+    self.warnings = tags
   end
-  
+
+  def warning_strings=(array)
+    tags = []
+    array.each do |string|
+      tags << Warning.find_or_create_by_name(string.strip.squeeze(" "))
+    end
+    self.warnings = tags
+  end
+
+  def media_string=(tag_string)
+    tags = []
+    tag_string.split(ArchiveConfig.DELIMITER).each do |string|
+      tags << Media.find_or_create_by_name(string.strip.squeeze(" "))
+    end
+    self.medias = tags
+  end
+
+  def fandom_string=(tag_string)
+    tags = []
+    tag_string.split(ArchiveConfig.DELIMITER).each do |string|
+      tags << Fandom.find_or_create_by_name(string.strip.squeeze(" "))
+    end
+    self.fandoms = tags
+  end
+
+  def pairing_string=(tag_string)
+    tags = []
+    tag_string.split(ArchiveConfig.DELIMITER).each do |string|
+      tags << Pairing.find_or_create_by_name(string.strip.squeeze(" "))
+    end
+    self.pairings = tags
+  end
+
+  def character_string=(tag_string)
+    tags = []
+    tag_string.split(ArchiveConfig.DELIMITER).each do |string|
+      tags << Character.find_or_create_by_name(string.strip.squeeze(" "))
+    end
+    self.characters = tags
+  end
+
+  def freeform_string=(tag_string)
+    tags = []
+    tag_string.split(ArchiveConfig.DELIMITER).each do |string|
+      tags << Freeform.find_or_create_by_name(string.strip.squeeze(" "))
+    end
+    self.freeforms = tags
+  end
+
+
   # Check to see that a work is tagged appropriately
   def has_required_tags?
-     return false if self.fandoms.blank? && self.fandom_string.blank?
-     return false if self.warnings.blank? && self.warning_string.blank? && self.warning_strings.blank?
-     return false if self.rating.blank? && self.rating_string.blank?
-     return false if self.category.blank? && self.category_string.blank?
-     return true
+    return false if self.fandoms.blank?
+    return false if self.warnings.blank?
+    return false if self.rating.blank?
+    return false if self.category.blank?
+    return true
   end
   
   def validate_tags
@@ -635,7 +636,7 @@ class Work < ActiveRecord::Base
                     INNER JOIN users ON pseuds.user_id = users.id"
                     
   TAGGING_JOIN = "INNER JOIN taggings ON (works.id = taggings.taggable_id AND taggings.taggable_type = 'Work') 
-                  INNER JOIN tags ON taggings.tag_id = tags.id"
+                  INNER JOIN tags ON taggings.tagger_id = tags.id"
                     
                     
   VISIBLE_TO_ALL_CONDITIONS = {:posted => true, :restricted => false, :hidden_by_admin => false}

@@ -1,7 +1,6 @@
 class Rating < Tag
 
   NAME = ArchiveConfig.RATING_CATEGORY_NAME
-  SINGULAR = true
 
   def self.setup_canonical(name, adult=false)
     tag = super(name)

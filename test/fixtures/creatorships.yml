@@ -1,58 +1,99 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-#
-
-# A work and a chapter owned by default_pseud, where the chapter belongs to the work. 
-basic_creatorship:
+--- 
+creatorship_853139228: 
+  updated_at: 2008-11-13 15:52:15 -08:00
+  pseud_id: 1
+  creation_type: Chapter
+  id: 853139228
   creation_id: 1
-  creation_type: Work
+  created_at: 2008-11-13 15:52:15 -08:00
+creatorship_853139229: 
+  updated_at: 2008-11-13 15:52:15 -08:00
   pseud_id: 1
-
-basic_creatorship2:
-  creation_id: 1 
+  creation_type: Series
+  id: 853139229
+  creation_id: 1
+  created_at: 2008-11-13 15:52:15 -08:00
+creatorship_853139230: 
+  updated_at: 2008-11-13 15:52:15 -08:00
+  pseud_id: 4
   creation_type: Chapter
-  pseud_id: 1
-
-basic_creatorship3:
-  creation_id: 2 
-  creation_type: Chapter
-  pseud_id: 1
-
-basic_creatorship4:
-  creation_id: 2
+  id: 853139230
+  creation_id: 6
+  created_at: 2008-11-13 15:52:15 -08:00
+creatorship_853139232: 
+  updated_at: 2008-11-13 15:52:15 -08:00
+  pseud_id: 4
   creation_type: Work
-  pseud_id: 5
-
-basic_creatorship5:
-  creation_id: 3 
-  creation_type: Chapter
-  pseud_id: 5
-
-basic_creatorship6:
-  creation_id: 3
-  creation_type: Work
-  pseud_id: 2
-
-basic_creatorship7:
-  creation_id: 4 
-  creation_type: Chapter
-  pseud_id: 2
-
-basic_creatorship8:
-  creation_id: 4
-  creation_type: Work
-  pseud_id: 3
-
-basic_creatorship9:
-  creation_id: 5 
-  creation_type: Chapter
-  pseud_id: 3
-
-basic_creatorship10:
+  id: 853139232
   creation_id: 5
+  created_at: 2008-11-13 15:52:15 -08:00
+creatorship_45594507: 
+  updated_at: 2008-11-13 15:52:15 -08:00
+  pseud_id: 3
   creation_type: Work
-  pseud_id: 4
-
-basic_creatorship11:
-  creation_id: 6 
+  id: 45594507
+  creation_id: 4
+  created_at: 2008-11-13 15:52:15 -08:00
+creatorship_853139233: 
+  updated_at: 2008-11-13 15:52:15 -08:00
+  pseud_id: 3
   creation_type: Chapter
-  pseud_id: 4
+  id: 853139233
+  creation_id: 5
+  created_at: 2008-11-13 15:52:15 -08:00
+creatorship_853139234: 
+  updated_at: 2008-11-13 15:52:15 -08:00
+  pseud_id: 2
+  creation_type: Chapter
+  id: 853139234
+  creation_id: 4
+  created_at: 2008-11-13 15:52:15 -08:00
+creatorship_45594508: 
+  updated_at: 2008-11-13 15:52:15 -08:00
+  pseud_id: 2
+  creation_type: Work
+  id: 45594508
+  creation_id: 3
+  created_at: 2008-11-13 15:52:15 -08:00
+creatorship_45594509: 
+  updated_at: 2008-11-13 15:52:15 -08:00
+  pseud_id: 5
+  creation_type: Chapter
+  id: 45594509
+  creation_id: 3
+  created_at: 2008-11-13 15:52:15 -08:00
+creatorship_853139235: 
+  updated_at: 2008-11-13 16:07:12 -08:00
+  pseud_id: 1
+  creation_type: Work
+  id: 853139235
+  creation_id: 6
+  created_at: 2008-11-13 16:07:12 -08:00
+creatorship_853139236: 
+  updated_at: 2008-11-13 16:07:12 -08:00
+  pseud_id: 1
+  creation_type: Chapter
+  id: 853139236
+  creation_id: 7
+  created_at: 2008-11-13 16:07:12 -08:00
+creatorship_853139225: 
+  updated_at: 2008-11-13 15:52:15 -08:00
+  pseud_id: 5
+  creation_type: Work
+  id: 853139225
+  creation_id: 2
+  created_at: 2008-11-13 15:52:15 -08:00
+creatorship_853139226: 
+  updated_at: 2008-11-13 15:52:15 -08:00
+  pseud_id: 1
+  creation_type: Chapter
+  id: 853139226
+  creation_id: 2
+  created_at: 2008-11-13 15:52:15 -08:00
+creatorship_853139227: 
+  updated_at: 2008-11-13 15:52:15 -08:00
+  pseud_id: 1
+  creation_type: Work
+  id: 853139227
+  creation_id: 1
+  created_at: 2008-11-13 15:52:15 -08:00

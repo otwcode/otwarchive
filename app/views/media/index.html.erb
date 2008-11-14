@@ -1,16 +1,24 @@
 <h1>Fandoms</h1>
 <ol>
-<%- for medium in @media -%>
-  <li id="medium_<%= medium.id %>" class="category <%= cycle :odd, :even %>">
-    <h3><%= link_to medium.name, medium_path(medium) %></h3>
+<%- @fandom_listing.each do |pair| -%>
+  <% if pair[0] %>
+    <li id="medium_<%= pair[0].id %>" class="category <%= cycle :odd, :even %>">
+      <h3><%= link_to pair[0].name, medium_path(pair[0]) %></h3>
+  <% else %>
+    <li id="medium_none" class="category <%= cycle :odd, :even %>">
+      <h3><%= link_to "Uncategorized Fandoms".t, medium_path(:id => 0) %></h3>
+  <% end %>
     <ol>
-      <%- @fandom_listing[medium][:fandoms].each do |pair| -%>
-      <li><%= link_to pair[0].name + " (" + pair[1].to_s + ")", tag_works_path(pair[0]) %></li>
+    <% 5.times do |i| %>
+    <% fandom = pair[1].sort_by(&:visible_works_count).reverse[i] %>
+    <% if fandom %>
+      <li><%= link_to fandom.name + " (" + fandom.visible_works_count.to_s + ")", tag_works_path(fandom) %></li>
+      <%- end -%>
       <%- end -%>
     </ol>
     
-    <%- if @fandom_listing[medium][:more] -%>
-    <p><%= link_to "All " + medium.name + "...", medium_path(medium) %></p>
+    <%- if pair[0] && (pair[1].size > 5 )-%>
+    <p><%= link_to "All " + pair[0].name + "...", medium_path(pair[0]) %></p>
     <%- end -%>
   </li>
 <%- end -%>

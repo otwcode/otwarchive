@@ -1,7 +1,6 @@
 class Category < Tag
 
   NAME = ArchiveConfig.CATEGORY_CATEGORY_NAME
-  SINGULAR = true
 
   HET = self.setup_canonical(ArchiveConfig.HET_CATEGORY_TAG_NAME)
   SLASH = self.setup_canonical(ArchiveConfig.SLASH_CATEGORY_TAG_NAME)

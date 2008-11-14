@@ -1,96 +1,401 @@
-work1rating: 
-  tag: General_Audiences
-  taggable_id: 1
+--- 
+tagging_790330458: 
+  tagger_id: 54
+  updated_at: 2008-11-13 16:28:02 -08:00
+  id: 790330458
+  taggable_type: Tag
+  taggable_id: 51
+  tagger_type: Tag
+  created_at: 2008-11-13 16:28:02 -08:00
+tagging_790330447: 
+  tagger_id: 57
+  updated_at: 2008-11-13 16:07:10 -08:00
+  id: 790330447
+  taggable_type: Tag
+  taggable_id: 56
+  tagger_type: Tag
+  created_at: 2008-11-13 16:07:10 -08:00
+tagging_790262775: 
+  tagger_id: 44
+  updated_at: 2008-11-13 15:52:15 -08:00
+  id: 790262775
   taggable_type: Work
-  
-work1warning:
-  tag: Chooses_Not_To_Warn
-  taggable_id: 1
+  taggable_id: 4
+  tagger_type: Tag
+  created_at: 2008-11-13 15:52:15 -08:00
+tagging_790330436: 
+  tagger_id: 50
+  updated_at: 2008-11-13 16:02:36 -08:00
+  id: 790330436
+  taggable_type: Tag
+  taggable_id: 48
+  tagger_type: Tag
+  created_at: 2008-11-13 16:02:36 -08:00
+tagging_790330415: 
+  tagger_id: 3
+  updated_at: 2008-11-13 15:52:15 -08:00
+  id: 790330415
   taggable_type: Work
-  
-work1fandom:
-  tag: Supernatural
   taggable_id: 1
+  tagger_type: Tag
+  created_at: 2008-11-13 15:52:15 -08:00
+tagging_790330426: 
+  tagger_id: 23
+  updated_at: 2008-11-13 15:55:10 -08:00
+  id: 790330426
   taggable_type: Work
-  
-work1genre:
-  tag: Gen
-  taggable_id: 1
-  taggable_type: Work
-  
-work2rating: 
-  tag: General_Audiences
   taggable_id: 2
+  tagger_type: Tag
+  created_at: 2008-11-13 15:55:10 -08:00
+tagging_790330448: 
+  tagger_id: 13
+  updated_at: 2008-11-13 16:07:11 -08:00
+  id: 790330448
   taggable_type: Work
-
-work2warning:
-  tag: Chooses_Not_To_Warn
+  taggable_id: 6
+  tagger_type: Tag
+  created_at: 2008-11-13 16:07:11 -08:00
+tagging_790330459: 
+  tagger_id: 54
+  updated_at: 2008-11-13 16:30:54 -08:00
+  id: 790330459
+  taggable_type: Tag
+  taggable_id: 56
+  tagger_type: Tag
+  created_at: 2008-11-13 16:30:54 -08:00
+tagging_790330460: 
+  tagger_id: 60
+  updated_at: 2008-11-13 16:30:54 -08:00
+  id: 790330460
+  taggable_type: Tag
+  taggable_id: 56
+  tagger_type: Tag
+  created_at: 2008-11-13 16:30:54 -08:00
+tagging_790330449: 
+  tagger_id: 1
+  updated_at: 2008-11-13 16:07:11 -08:00
+  id: 790330449
+  taggable_type: Work
+  taggable_id: 6
+  tagger_type: Tag
+  created_at: 2008-11-13 16:07:11 -08:00
+tagging_790330438: 
+  tagger_id: 42
+  updated_at: 2008-11-13 16:04:45 -08:00
+  id: 790330438
+  taggable_type: Work
   taggable_id: 2
+  tagger_type: Tag
+  created_at: 2008-11-13 16:04:45 -08:00
+tagging_790330427: 
+  tagger_id: 46
+  updated_at: 2008-11-13 15:56:04 -08:00
+  id: 790330427
   taggable_type: Work
-
-work2fandom:
-  tag: Stargate_Atlantis
+  taggable_id: 1
+  tagger_type: Tag
+  created_at: 2008-11-13 15:56:04 -08:00
+tagging_304300604: 
+  tagger_id: 7
+  updated_at: 2008-11-13 15:52:15 -08:00
+  id: 304300604
+  taggable_type: Work
+  taggable_id: 1
+  tagger_type: Tag
+  created_at: 2008-11-13 15:52:15 -08:00
+tagging_304300605: 
+  tagger_id: 44
+  updated_at: 2008-11-13 15:52:15 -08:00
+  id: 304300605
+  taggable_type: Work
+  taggable_id: 5
+  tagger_type: Tag
+  created_at: 2008-11-13 15:52:15 -08:00
+tagging_790330417: 
+  tagger_id: 13
+  updated_at: 2008-11-13 15:52:15 -08:00
+  id: 790330417
+  taggable_type: Work
+  taggable_id: 5
+  tagger_type: Tag
+  created_at: 2008-11-13 15:52:15 -08:00
+tagging_790330428: 
+  tagger_id: 14
+  updated_at: 2008-11-13 15:56:04 -08:00
+  id: 790330428
+  taggable_type: Work
+  taggable_id: 1
+  tagger_type: Tag
+  created_at: 2008-11-13 15:56:04 -08:00
+tagging_790330439: 
+  tagger_id: 49
+  updated_at: 2008-11-13 16:04:45 -08:00
+  id: 790330439
+  taggable_type: Tag
+  taggable_id: 51
+  tagger_type: Tag
+  created_at: 2008-11-13 16:04:45 -08:00
+tagging_790330450: 
+  tagger_id: 23
+  updated_at: 2008-11-13 16:07:11 -08:00
+  id: 790330450
+  taggable_type: Work
+  taggable_id: 6
+  tagger_type: Tag
+  created_at: 2008-11-13 16:07:11 -08:00
+tagging_790330461: 
+  tagger_id: 12
+  updated_at: 2008-11-13 18:57:04 -08:00
+  id: 790330461
+  taggable_type: Work
   taggable_id: 2
+  tagger_type: Tag
+  created_at: 2008-11-13 18:57:04 -08:00
+tagging_790330462: 
+  tagger_id: 63
+  updated_at: 2008-11-13 18:58:41 -08:00
+  id: 790330462
+  taggable_type: Tag
+  taggable_id: 62
+  tagger_type: Tag
+  created_at: 2008-11-13 18:58:41 -08:00
+tagging_790330440: 
+  tagger_id: 52
+  updated_at: 2008-11-13 16:04:45 -08:00
+  id: 790330440
+  taggable_type: Tag
+  taggable_id: 51
+  tagger_type: Tag
+  created_at: 2008-11-13 16:04:45 -08:00
+tagging_790330429: 
+  tagger_id: 46
+  updated_at: 2008-11-13 15:57:44 -08:00
+  id: 790330429
   taggable_type: Work
-
-work3rating: 
-  tag: Explicit
   taggable_id: 3
+  tagger_type: Tag
+  created_at: 2008-11-13 15:57:44 -08:00
+tagging_790330418: 
+  tagger_id: 7
+  updated_at: 2008-11-13 15:52:15 -08:00
+  id: 790330418
   taggable_type: Work
-
-work3warning:
-  tag: Rape
+  taggable_id: 4
+  tagger_type: Tag
+  created_at: 2008-11-13 15:52:15 -08:00
+tagging_304300606: 
+  tagger_id: 20
+  updated_at: 2008-11-13 15:52:15 -08:00
+  id: 304300606
+  taggable_type: Work
+  taggable_id: 5
+  tagger_type: Tag
+  created_at: 2008-11-13 15:52:15 -08:00
+tagging_790330452: 
+  tagger_id: 56
+  updated_at: 2008-11-13 16:07:11 -08:00
+  id: 790330452
+  taggable_type: Work
+  taggable_id: 6
+  tagger_type: Tag
+  created_at: 2008-11-13 16:07:11 -08:00
+tagging_790330419: 
+  tagger_id: 23
+  updated_at: 2008-11-13 15:52:15 -08:00
+  id: 790330419
+  taggable_type: Work
+  taggable_id: 5
+  tagger_type: Tag
+  created_at: 2008-11-13 15:52:15 -08:00
+tagging_790330430: 
+  tagger_id: 18
+  updated_at: 2008-11-13 15:57:44 -08:00
+  id: 790330430
+  taggable_type: Work
   taggable_id: 3
+  tagger_type: Tag
+  created_at: 2008-11-13 15:57:44 -08:00
+tagging_790330431: 
+  tagger_id: 41
+  updated_at: 2008-11-13 15:57:44 -08:00
+  id: 790330431
   taggable_type: Work
-
-work3fandom:
-  tag: Stargate_Atlantis
   taggable_id: 3
+  tagger_type: Tag
+  created_at: 2008-11-13 15:57:44 -08:00
+tagging_790330442: 
+  tagger_id: 54
+  updated_at: 2008-11-13 16:05:59 -08:00
+  id: 790330442
+  taggable_type: Tag
+  taggable_id: 53
+  tagger_type: Tag
+  created_at: 2008-11-13 16:05:59 -08:00
+tagging_790330453: 
+  tagger_id: 16
+  updated_at: 2008-11-13 16:09:10 -08:00
+  id: 790330453
+  taggable_type: Tag
+  taggable_id: 48
+  tagger_type: Tag
+  created_at: 2008-11-13 16:09:10 -08:00
+tagging_790330464: 
+  tagger_id: 6
+  updated_at: 2008-11-13 18:58:41 -08:00
+  id: 790330464
   taggable_type: Work
-
-work3genre:
-  tag: Slash
   taggable_id: 3
+  tagger_type: Tag
+  created_at: 2008-11-13 18:58:41 -08:00
+tagging_790330465: 
+  tagger_id: 65
+  updated_at: 2008-11-13 19:02:47 -08:00
+  id: 790330465
+  taggable_type: Tag
+  taggable_id: 64
+  tagger_type: Tag
+  created_at: 2008-11-13 19:02:47 -08:00
+tagging_790330454: 
+  tagger_id: 5
+  updated_at: 2008-11-13 16:09:10 -08:00
+  id: 790330454
+  taggable_type: Tag
+  taggable_id: 48
+  tagger_type: Tag
+  created_at: 2008-11-13 16:09:10 -08:00
+tagging_790330443: 
+  tagger_id: 55
+  updated_at: 2008-11-13 16:05:59 -08:00
+  id: 790330443
+  taggable_type: Tag
+  taggable_id: 53
+  tagger_type: Tag
+  created_at: 2008-11-13 16:05:59 -08:00
+tagging_790330421: 
+  tagger_id: 16
+  updated_at: 2008-11-13 15:52:15 -08:00
+  id: 790330421
+  taggable_type: Tag
+  taggable_id: 11
+  tagger_type: Tag
+  created_at: 2008-11-13 15:52:15 -08:00
+tagging_790330432: 
+  tagger_id: 47
+  updated_at: 2008-11-13 15:59:04 -08:00
+  id: 790330432
   taggable_type: Work
-
-work4rating: 
-  tag: Not_Rated
   taggable_id: 4
+  tagger_type: Tag
+  created_at: 2008-11-13 15:59:04 -08:00
+tagging_790330433: 
+  tagger_id: 13
+  updated_at: 2008-11-13 15:59:04 -08:00
+  id: 790330433
   taggable_type: Work
-
-work4warning:
-  tag: Chooses_Not_To_Warn
   taggable_id: 4
+  tagger_type: Tag
+  created_at: 2008-11-13 15:59:04 -08:00
+tagging_790330422: 
+  tagger_id: 5
+  updated_at: 2008-11-13 15:52:15 -08:00
+  id: 790330422
+  taggable_type: Tag
+  taggable_id: 11
+  tagger_type: Tag
+  created_at: 2008-11-13 15:52:15 -08:00
+tagging_790330444: 
+  tagger_id: 53
+  updated_at: 2008-11-13 16:05:59 -08:00
+  id: 790330444
   taggable_type: Work
-
-work4fandom:
-  tag: Supernatural
+  taggable_id: 2
+  tagger_type: Tag
+  created_at: 2008-11-13 16:05:59 -08:00
+tagging_790330455: 
+  tagger_id: 11
+  updated_at: 2008-11-13 16:21:19 -08:00
+  id: 790330455
+  taggable_type: Work
+  taggable_id: 1
+  tagger_type: Tag
+  created_at: 2008-11-13 16:21:19 -08:00
+tagging_790330466: 
+  tagger_id: 66
+  updated_at: 2008-11-13 19:02:47 -08:00
+  id: 790330466
+  taggable_type: Tag
+  taggable_id: 64
+  tagger_type: Tag
+  created_at: 2008-11-13 19:02:47 -08:00
+tagging_790330467: 
+  tagger_id: 64
+  updated_at: 2008-11-13 19:03:53 -08:00
+  id: 790330467
+  taggable_type: Work
+  taggable_id: 3
+  tagger_type: Tag
+  created_at: 2008-11-13 19:03:53 -08:00
+tagging_790330456: 
+  tagger_id: 58
+  updated_at: 2008-11-13 16:27:38 -08:00
+  id: 790330456
+  taggable_type: Tag
+  taggable_id: 51
+  tagger_type: Tag
+  created_at: 2008-11-13 16:27:38 -08:00
+tagging_790330445: 
+  tagger_id: 14
+  updated_at: 2008-11-13 16:06:00 -08:00
+  id: 790330445
+  taggable_type: Work
+  taggable_id: 2
+  tagger_type: Tag
+  created_at: 2008-11-13 16:06:00 -08:00
+tagging_790330423: 
+  tagger_id: 44
+  updated_at: 2008-11-13 15:52:15 -08:00
+  id: 790330423
+  taggable_type: Work
+  taggable_id: 1
+  tagger_type: Tag
+  created_at: 2008-11-13 15:52:15 -08:00
+tagging_790330434: 
+  tagger_id: 36
+  updated_at: 2008-11-13 16:00:29 -08:00
+  id: 790330434
+  taggable_type: Work
+  taggable_id: 5
+  tagger_type: Tag
+  created_at: 2008-11-13 16:00:29 -08:00
+tagging_790330435: 
+  tagger_id: 49
+  updated_at: 2008-11-13 16:02:36 -08:00
+  id: 790330435
+  taggable_type: Tag
+  taggable_id: 48
+  tagger_type: Tag
+  created_at: 2008-11-13 16:02:36 -08:00
+tagging_304300601: 
+  tagger_id: 4
+  updated_at: 2008-11-13 15:52:15 -08:00
+  id: 304300601
+  taggable_type: Work
   taggable_id: 4
-  taggable_type: Work
-
-work4default:
-  tag: fluff
-  taggable_id: 4
-  taggable_type: Work
-
-work5rating: 
-  tag: Not_Rated
-  taggable_id: 5
-  taggable_type: Work
-
-work5warning:
-  tag: No_Warnings_Apply
-  taggable_id: 5
-  taggable_type: Work
-
-work5fandom:
-  tag: Supernatural
-  taggable_id: 5
-  taggable_type: Work
-
-work5default:
-  tag: angsty
-  taggable_id: 5
-  taggable_type: Work
-
-
+  tagger_type: Tag
+  created_at: 2008-11-13 15:52:15 -08:00
+tagging_790330446: 
+  tagger_id: 49
+  updated_at: 2008-11-13 16:07:10 -08:00
+  id: 790330446
+  taggable_type: Tag
+  taggable_id: 56
+  tagger_type: Tag
+  created_at: 2008-11-13 16:07:10 -08:00
+tagging_790330457: 
+  tagger_id: 59
+  updated_at: 2008-11-13 16:27:38 -08:00
+  id: 790330457
+  taggable_type: Tag
+  taggable_id: 51
+  tagger_type: Tag
+  created_at: 2008-11-13 16:27:38 -08:00

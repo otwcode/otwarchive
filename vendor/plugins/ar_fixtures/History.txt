@@ -1,0 +1,16 @@
+== 0.0.4 / 2007-06-24
+
+* Converted to a gem
+
+== 0.0.3 / June 4, 2006
+
+* Clarified rake task descriptions to show where data is being dumped.
+
+== 0.0.2 / May 20, 2006
+
+* Added to_skeleton for writing fieldnames only. [Gunther Schmidl]
+* Added initial tests, thanks to Scott Barron's acts_as_state_machine
+
+== 0.0.1 / Jan 12 2006
+
+* Added code to handle single table inheritance. May need to be modified for non-standard use of STI.

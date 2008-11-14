@@ -15,7 +15,7 @@ class Pseud < ActiveRecord::Base
     :with => /[a-zA-Z0-9]/
     
   
-  TAGGING_JOIN = "INNER JOIN taggings on tags.id = taggings.tag_id
+  TAGGING_JOIN = "INNER JOIN taggings on tags.id = taggings.tagger_id
                   INNER JOIN works ON (works.id = taggings.taggable_id AND taggings.taggable_type = 'Work')"
 
   OWNERSHIP_JOIN = "INNER JOIN creatorships ON pseuds.id = creatorships.pseud_id

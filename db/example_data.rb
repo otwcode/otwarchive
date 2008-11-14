@@ -155,7 +155,7 @@ module FixtureReplacement
   end
 
   attributes_for :tagging do |a|
-    a.tag = default_tag
+    a.tagger = default_tag
     a.taggable = default_work
   end
 

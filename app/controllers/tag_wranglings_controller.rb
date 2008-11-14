@@ -6,8 +6,8 @@ class TagWranglingsController < ApplicationController
   def index    
     if params[:no_fandom]
       @fandom = nil
-      tags_on_invalid = Tag.unwrangled.by_fandom(Fandom.all - Fandom.valid)
-      tags_on_no_fandom = Tag.unwrangled.find_all_by_fandom_id(nil)
+      tags_on_invalid = Tag.unwrangled.by_fandom(Fandom.banned)
+      tags_on_no_fandom = Tag.unwrangled.by_fandom(nil)
       @unwrangled = [tags_on_invalid + tags_on_no_fandom].flatten.uniq.compact.group_by(&:type)      
     elsif params[:fandom_id]
       @fandom = Fandom.find(params[:fandom_id]) 
@@ -15,12 +15,11 @@ class TagWranglingsController < ApplicationController
       @unwrangled = Tag.unwrangled.by_fandom(@fandom).group_by(&:type)
     else
       @by_fandom = []
-      invalid_fandoms = Tag.unwrangled.count_by_fandom(Fandom.all - Fandom.valid)
-      no_fandom = Tag.unwrangled.count_by_fandom(nil)
-      @by_fandom << [:no_fandom, invalid_fandoms + no_fandom]
-      Fandom.valid.sort.each do |fandom|
-        unwrangled = Tag.unwrangled.count_by_fandom(fandom)
-        @by_fandom << [fandom, unwrangled] unless unwrangled == 0
+      count = Tag.unwrangled.count_by_fandom(Fandom.banned) + Tag.unwrangled.count_by_fandom(nil)
+      @by_fandom << [:no_fandom, count] unless count == 0
+      Fandom.valid.sort_by{|f| f.visible_works_count}.reverse.each do |fandom|
+        count = Tag.unwrangled.count_by_fandom(fandom)
+        @by_fandom << [fandom, count] if ( count > 0 || fandom.unwrangled? )
       end
     end
     respond_to do |format|
@@ -29,6 +28,7 @@ class TagWranglingsController < ApplicationController
     end
   end
 
+  # note, this is "create a wrangling", it may or may not create tags
   def create
     if params[:fandom_id]
       fandom_id = params[:fandom_id]
@@ -43,8 +43,15 @@ class TagWranglingsController < ApplicationController
         when "Update Fandom"
           fandom = Fandom.find(params[:fandom_id])
           if params[:media_id]
-            fandom.update_attribute(:media_id, params[:media_id])
-            fandom.update_attribute(:name, params[:name])
+            old_tag = Fandom.find_by_name(fandom.name)
+            if old_tag
+              fandom.update_attribute(:canonical_id, old_tag.id)
+              old_tag.update_attribute(:canonical, true)
+            else
+              fandom.update_attribute(:media_id, params[:media_id])
+              fandom.update_attribute(:name, params[:name])
+              fandom.update_attribute(:canonical, true)
+            end
           else
             fandom.synonym = Fandom.find(params[:canonical_fandom])
           end
@@ -53,7 +60,7 @@ class TagWranglingsController < ApplicationController
             tag = Tag.find(id)
             if tag.is_a? Freeform
               genre = Genre.find_or_create_by_name(tag.name, :canonical => true)
-              tag.add_genre(genre)
+              tag.add_to_genre(genre)
             else
               tag.update_attribute(:canonical, true)
             end

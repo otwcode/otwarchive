@@ -1,5 +1,6 @@
-<% if @by_fandom %>
+<% unless @by_fandom.blank? %>
   <h2>Bulk Wrangle Fandoms</h2>
+  <p>(Fandoms are sorted by popularity)</p>
   <p>Click on a <%= Fandom::NAME %> to wrangle it and its unwrangled tags.
   <p>Select the checkboxes next to the fandom to assign them to the selected media and mark them canonical.</p>
   <%= form_tag tag_wranglings_path %>

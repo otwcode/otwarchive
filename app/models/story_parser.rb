@@ -149,7 +149,7 @@ class StoryParser
     # used to parse either entire story or chapter
     def parse_common(story, location = nil)
       work_params = { :title => "UPLOADED WORK", :chapter_attributes => {:content => ""} }
-      @doc = Hpricot(story)
+      @doc = Hpricot(story) rescue ""
 
       if !location.nil?
         source = get_source_if_known(KNOWN_STORY_PARSERS, location)

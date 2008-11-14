@@ -1,8 +1,15 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-tag_wrangler:
-  id: 1
+--- 
+role_00001: 
   name: tag_wrangler
-
-translator:
-  id: 2
+  updated_at: 2008-11-13 15:52:15 -08:00
+  authorizable_type: 
+  id: 1
+  authorizable_id: 
+  created_at: 2008-11-13 15:52:15 -08:00
+role_00002: 
   name: translator
+  updated_at: 2008-11-13 15:52:15 -08:00
+  authorizable_type: 
+  id: 2
+  authorizable_id: 
+  created_at: 2008-11-13 15:52:15 -08:00

@@ -86,11 +86,16 @@ class StoryParserTest < ActiveSupport::TestCase
     assert_equal "Birth Pains", @work.title
     puts "Deferred: yuletide search down"
 #    assert !@work.summary.blank?
-    assert_match /yuletide/, @work.tags_to_add.map(&:name).join
-    assert_match "recipient:verity", @work.tags_to_add.map(&:name).join
+    @work.category = Category::GEN
+    @work.warnings = [Warning::NONE]
+    @work.authors = [create_pseud]
+    @work.published_at = DateTime.now
+    @work.save
+    assert_match /yuletide/, @work.freeforms.string
+    assert_match "recipient:verity", @work.freeforms.string
     puts "Deferred: yuletide search down"
 #    assert !@work.rating_string.blank?
-    assert_match /The 10th Kingdom/, @work.tags_to_add.map(&:name).join
+    assert_match /The 10th Kingdom/, @work.fandoms.string
   end
  
   def test_yuletide_old
@@ -108,13 +113,13 @@ class StoryParserTest < ActiveSupport::TestCase
     
     @url = "http://www.fanfiction.net/s/2180161/1/Hot_Springs"     
     @work = @storyparser.download_and_parse_story(@url)
+    assert_match /After many months/, @work.chapters.first.content
+    assert_equal "Hot Springs", @work.title
     @work.category = Category::GEN
-    @work.category = Warning::NONE
+    @work.warnings = [Warning::NONE]
     @work.authors = [create_pseud]
     @work.published_at = DateTime.now
     @work.save
-    assert_match /After many months/, @work.chapters.first.content
-    assert_equal "Hot Springs", @work.title
     assert_equal "Naruto", @work.fandom_string
     assert_equal Rating::TEEN, @work.rating
   end
@@ -136,7 +141,12 @@ class StoryParserTest < ActiveSupport::TestCase
     assert_match /It was really cool/, work.chapters.first.content
     assert_match /Madrigals/, work.title
     assert_match /Wherein there is magic/, work.summary
-    assert_match /David Cook RPF/, work.tags_to_add.map(&:name).join
+    work.category = Category::GEN
+    work.warnings = [Warning::NONE]
+    work.authors = [create_pseud]
+    work.published_at = DateTime.now
+    work.save
+    assert_match /David Cook RPF/, work.fandoms.string
   end
 
   def test_previous_failures

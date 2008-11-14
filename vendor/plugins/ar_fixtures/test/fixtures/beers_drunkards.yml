@@ -1,0 +1,8 @@
+one:
+  beer_id: 1
+  drunkard_id: 1
+  
+two:
+  beer_id: 2
+  drunkard_id: 1
+

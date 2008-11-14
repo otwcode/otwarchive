@@ -124,8 +124,3 @@ ActionController::AbstractRequest.relative_url_root = ArchiveConfig.PRODUCTION_U
 class ActiveRecord::Base
     include FindRandom
 end
-
-Work.initialize_tag_methods rescue "didn't set up tag methods"
-Work.initialize_tag_equal_methods rescue "didn't set up tag equal methods"
-Work.initialize_string_methods rescue "didn't set up tag string methods"
-Work.initialize_string_equal_methods rescue "didn't set up tag string equal methods"
