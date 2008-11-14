@@ -14,9 +14,11 @@
           <li><%= show_warnings_link(work) %></li> 
         <%- else -%>
           <%- tags.each do |tag| -%>
-          <li class="<%= type.downcase -%>">
-            <%= link_to_tag(tag) %> 
-          </li>
+            <%- unless tag.banned %>
+              <li class="<%= type.downcase -%>">
+                <%= link_to_tag(tag) %> 
+              </li>
+             <%- end %>
           <%- end -%>
         <%- end -%>
         </ul>
