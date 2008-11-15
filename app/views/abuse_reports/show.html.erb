@@ -1,0 +1,11 @@
+<h1>Abuse Report <%= @abuse_report.id -%></h1>
+
+<table id="abuse_report_table">
+<caption>Detailed abuse report</caption>
+<tr><th scope="row">From</th><td><%= @abuse_report.email.blank? ? '(' + 'Anonymous'.t + ')' : mail_to(@abuse_report.email) -%></td></tr>
+<tr><th scope="row">Regarding</th><td><%= link_to @abuse_report.url -%></td></tr>
+<tr><th scope="row">Reported</th><td><%= time_ago_in_words @abuse_report.created_at -%></td></tr>
+<tr><td colspan="2"><%= sanitize_and_format_for_display @abuse_report.comment -%></td></tr>
+</table>
+
+<%= link_to 'All abuse reports'.t, abuse_reports_path -%>

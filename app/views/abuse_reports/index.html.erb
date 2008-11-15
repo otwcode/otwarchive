@@ -1,0 +1,21 @@
+<h1>All Abuse Reports:</h1>
+
+<table id="abuse_reports_table">
+<caption>Listing all the abuse reports made on the archive.</caption>
+<tr>
+	<th scope="col">ID</th>
+	<th scope="col">From</th>
+	<th scope="col">Referring To</th>
+	<th scope="col">Reported</th>
+	<th scope="col">Show</th>
+</tr>
+	<%- for abuse_report in @abuse_reports -%>
+	<tr id="abuse_report_<%= abuse_report.id %>">
+    <%= render :partial => 'abuse_report', :locals => {:abuse_report => abuse_report} %>
+  </tr>
+  <%- end -%>
+</table>
+
+<div class="pagination">
+	  <%= will_paginate @abuse_reports, :prev_label =>  "&laquo; Previous".t,:next_label => "Next &raquo;".t %>
+</div>

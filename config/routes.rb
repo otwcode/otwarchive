@@ -18,8 +18,7 @@ ActionController::Routing::Routes.draw do |map|
   map.tos '/tos', :controller => 'home', :action => 'tos', :path_prefix => ':locale'
   map.tos_faq '/tos_faq', :controller => 'home', :action => 'tos_faq', :path_prefix => ':locale'
 
-  map.abuse_reports '/abuse/', :controller => 'abuse_reports', :action => 'create', :path_prefix => ':locale', :conditions => { :method => :post }
-  map.new_abuse_report '/abuse/', :controller => 'abuse_reports', :action => 'new', :path_prefix => ':locale'
+  map.resources :abuse_reports, :path_prefix => ':locale'
   
   map.resources :passwords, :path_prefix => ':locale'
   

@@ -1,5 +1,13 @@
 class AbuseReportsController < ApplicationController
 
+  before_filter :admin_only, :except => [:new, :create]
+  
+  def access_denied
+    flash[:error] = "I'm sorry, only an admin can look at that area.".t
+    redirect_to '/'
+    false
+  end
+
   # GET /abuse_reports/new
   # GET /abuse_reports/new.xml
   def new
@@ -10,10 +18,6 @@ class AbuseReportsController < ApplicationController
     else
       @abuse_report.email = ""
     end
-
-    respond_to do |format|
-      format.html # new.html.erb
-    end
   end
 
   # POST /abuse_reports
@@ -21,16 +25,21 @@ class AbuseReportsController < ApplicationController
   def create
     @abuse_report = AbuseReport.new(params[:abuse_report])
 
-    respond_to do |format|
-      if @abuse_report.save
-        AdminMailer.deliver_abuse_report(@abuse_report.email, @abuse_report.url, @abuse_report.comment)
-
-        flash[:notice] = 'The Abuse Report was sent to the abuse team email alias.'.t
-        format.html { redirect_to '' }
-      else
-        format.html { render :action => "new" }
-      end
+    if @abuse_report.save
+      AdminMailer.deliver_abuse_report(@abuse_report.email, @abuse_report.url, @abuse_report.comment)
+      flash[:notice] = 'The Abuse Report was sent to the abuse team email alias.'.t
+      redirect_to ''
+    else
+      render :action => 'new'
     end
+  end
+
+  def index
+    @abuse_reports = AbuseReport.paginate(:page => params[:page])
+  end
+  
+  def show
+    @abuse_report = AbuseReport.find(params[:id])
   end
 
 end
