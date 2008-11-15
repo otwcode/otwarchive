@@ -20,19 +20,33 @@ margin: 0.25em 0 2em 0;
 padding-left: 1.5em;
 }
 
-.home #signin { font-size:0.625em; text-align:right;}
-.home #signin form { background: url(../images/login-gradient2.png) bottom left repeat-x #eee; margin:-1.5em -0.25em 1em;padding:0.25em; border:1px groove #777}
-.home input { background:url(../images/ccc-fff.png) top left repeat-x #fff; border:1px groove #222; }
-.home input:hover { background:#ddd; }
+.home #signin {
+font-size: 0.625em;
+text-align: right;
+}
+.home #signin form {
+background: url(../images/fff-ccc.png) bottom left repeat-x #fff;
+margin: -1.5em -0.25em 1em;
+padding: 0.25em;
+border: 1px groove #777
+}
+.home input {
+background: url(../images/ccc-fff.png) top left repeat-x #fff;
+border: 1px groove #222;
+}
+.home input:hover {
+background: #ddd;
+}
 
 
 .home hr.clear {
-	border:0; border-bottom:2px solid #777;
+border: 0;
+border-bottom: 2px solid #777;
 }
 
 .home .wrapper {
 background: url(../images/box.jpg) bottom left no-repeat;
-padding:0 0 2.75em 2.25em;
+padding: 0 0 2.75em 2.25em;
 width: 24%;
 float: left;
 margin: 2% 2% 0 2%;
@@ -68,7 +82,8 @@ font-size: larger;
 .home h5 {
 text-align: right;
 font: 100 2.25em "Gill Sans", Georgia,Verdana, sans-serif;
-padding:0 1em}
+padding: 0 1em
+}
 
 h5#signup {
 clear: left;
@@ -97,5 +112,5 @@ text-indent: 3em;
 #closed-sign img {
 clear: left;
 display: block;
-margin: auto 
+margin: auto
 }
