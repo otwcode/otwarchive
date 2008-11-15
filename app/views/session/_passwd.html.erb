@@ -1,21 +1,23 @@
 	<p>
-		<%= label_tag 'login', 'User name:'.t  %><br />
+		<%= label_tag 'login', 'User name:'.t  %>
 		<%= text_field_tag 'login', '' %>
 	</p>
 	<p>
-		<%= label_tag 'password', 'Password:'.t  %><br />
+		<%= label_tag 'password', 'Password:'.t  %>
 		<%= password_field_tag 'password', '' %>
 	</p>
+	<p>
+	<%= check_box_tag('remember_me', '1', false) %>
+	<%= label_tag 'remember_me', 'Remember me'.t  %>
+	</p>
 	<p class="submit">
-		<%= check_box_tag('remember_me', '1', false) %>
-  		<%= label_tag 'remember_me', 'Remember me'.t  %> 
 		<%= submit_tag 'Login'.t, :class => 'submit' %>
 	</p>
 	<p class="footnote">
 		<%= link_to 'forgot password?'.t, new_password_path %>
 	</p>
 	<% if ArchiveConfig.USE_OPENID %>
-	<p>
+	<p class="openid">
 		<%= image_tag("openid.png", :alt => ''.t) %> <%= link_to_remote('Login with OpenID'.t, {:url => { :action => 'openid' }}, :href => url_for(:action => 'new', :use_openid => true ) )%>
 	</p>
 <%- end -%>

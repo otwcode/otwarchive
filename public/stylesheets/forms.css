@@ -5,32 +5,33 @@ form p { line-height:2; clear:both;}
 form dl { position:relative; }
 form dt { float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
 form dd { float: left; }
-
+form .submit input {background:url(../images/ccc-fff.png) top left repeat-x #fff; border:1px groove #222;}
 
 /* SIGN IN BOX */
-#signin		{ float:right; }
-#signin dl	{ float:left;}
-#signin dt	{ font-size:0.625em; width:4.875em; margin:0.25em 0 0.125em; padding:0.25em 0 0 .125em;}
-#signin p.footnote	{ font-size:0.5625em; float:left; clear:left; margin:0 0.5625em 0 4.875em; padding:0.125em 0 0 .125em;}
+#signin p { display:inline;}
+#signin p.footnote	{ font-size:0.5625em;  padding:0.125em 0 0 .125em;}
 #signin input#remember_me	{ margin:0.125em 0.125em 0.125em 0; vertical-align:middle; }
-#signin img.openid	{ vertical-align:top; }
-#signin dd { position:relative; }
-#signin dd a img { position:absolute; right:-0.875em; top:0 }
+img#openid	{ margin-left:-20px; vertical-align:middle; }
 
 /* sign in box when present in #header #login-block */
-#login-block #signin { width:255px;}
-#login-block #signin { font-family:Candara,Corbel,Arial,Tahoma,sans-serif; }
-#login-block #signin a img { right:-1.75em;}
-#login-block #signin p.submit	{ text-align:left; margin:-3.5em 0 0 0; }
-#header input { background:#fff; border:1px groove; }
-#header input textarea {width: 125px;}
-#header input.button, #header .submit input{ width:50px;}
-#header p.submit input {float:right; margin-top:-3.6em;}
-#header input:hover{background:#ddd;}
+#header #signin { font-size:0.625em; text-align:right;}
+#header #signin form { background: url(../images/header-red.png) bottom left repeat-x #777; margin:-1.5em -0.25em 1em;padding:0.25em; border:1px groove #500000}
+#header input { background:url(../images/ccc-fff.png) top left repeat-x #fff; border:1px groove; }
+#header input:hover { background:#ddd; }
+
+/*SESSIONS (front front pages - login, create, etc)*/
+.session form {padding-top:1.5em;margin-bottom:1.5em; padding-bottom:1.5em; border-bottom:1px solid; }
+.session form p, .session input#login, .session input#password, .session input#openid_url {float:none; display:block !important;margin:0 0 0.875em 0; width:24em;}
+.session input#openid_url, .session form img {display:inline;}
+.session form p.submit {margin:-2em auto 0 auto !important;}
+.session form .footnote	{ font-size:.875em !important;}
+.session form p.openid {margin-top:2em !important;}
+
+#main.users-new form dt {width:100%; float:none;}
 
 /* SEARCH */
-#search {float:right;}
-#search p { font-size: 0.75em; float: left; clear: both; padding: 0; margin: 0; position:relative;}
+#search {float:right;clear:right;}
+#search p { font-size: 0.75em; float: left; clear: both; padding: 0 0.25em; margin: 0; position:relative;}
 #search input.button {margin-left:5px;}
 
 /*ADMIN */
@@ -38,17 +39,6 @@ form dd { float: left; }
 /*REPORT ABUSE */
 #main.abuse_reports-new dt { width:100%; float:none; }
 
-/*SESSIONS (front front pages - login, create, etc)*/
-.session img#openid	{ margin-left:-20px; vertical-align:middle; }
-.session form	{ margin-bottom:1.5em; padding-bottom:1.5em; border-bottom:1px solid; }
-.session input#login	{ float:none; }
-.session input#login, .session input#password, .session input#openid_url	{ width:24em; }
-.session form input.submit	{ font-size:1.125em; margin:0 0 0 9em; }
-
-form .footnote	{ font-size:0.75em; }
-form p.openid	{ margin-top:6em; }
-
-#main.users-new form dt {width:100%; float:none;}
 
 /* POST WORK */
 /*work-meta  and work-show rules in work-views.css */

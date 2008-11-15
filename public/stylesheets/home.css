@@ -1,30 +1,36 @@
 #main.home {
 padding: 0;
 }
-#main.home h1 {
+.home h1 {
 font-family: "Gill Sans", Georgia,Verdana, sans-serif;
 text-align: left;
 margin: 0.75em 0 0.125em 0;
 padding-left: .5em;
 border: 0;
 }
-#main.home h1 a {
+.home h1 a {
 text-decoration: none;
 }
-#main.home h1 span {
+.home h1 span {
 font-size: 0.5625em;
 }
-#main.home h2 {
+.home h2 {
 font: 100 0.75em "Gill Sans", Georgia, Verdana, sans-serif;
 margin: 0.25em 0 2em 0;
 padding-left: 1.5em;
 }
 
-#main.home hr.clear {
-border-bottom: 1px solid #777;
+.home #signin { font-size:0.625em; text-align:right;}
+.home #signin form { background: url(../images/login-gradient2.png) bottom left repeat-x #eee; margin:-1.5em -0.25em 1em;padding:0.25em; border:1px groove #777}
+.home input { background:url(../images/ccc-fff.png) top left repeat-x #fff; border:1px groove #222; }
+.home input:hover { background:#ddd; }
+
+
+.home hr.clear {
+	border:0; border-bottom:2px solid #777;
 }
 
-#main.home .wrapper {
+.home .wrapper {
 background: url(../images/box.jpg) bottom left no-repeat;
 padding:0 0 2.75em 2.25em;
 width: 24%;
@@ -33,33 +39,33 @@ margin: 2% 2% 0 2%;
 min-width: 9em;
 }
 
-#main.home .wrapper h3, #main.home h4 {
+.home .wrapper h3, .home h4 {
 color: #900;
 font: oblique 100 1.25em "Gill Sans", Georgia,Verdana, sans-serif;
 text-align: center;
 margin: 0
 }
 
-#main.home h4 {
+.home h4 {
 color: #222;
 border-bottom: 1px solid #777;
 }
 
-#main.home .wrapper h4 a {
+.home .wrapper h4 a {
 color: #222;
 font: 600 2.25em "Gill Sans", Georgia,Verdana, sans-serif;
 text-decoration: none;
 text-transform: lowercase;
 }
-#main.home .wrapper ul {
+.home .wrapper ul {
 margin: 1em 0 0 0;
 }
-#main.home .wrapper ul span {
+.home .wrapper ul span {
 font-weight: 900;
 font-size: larger;
 }
 
-#main.home h5 {
+.home h5 {
 text-align: right;
 font: 100 2.25em "Gill Sans", Georgia,Verdana, sans-serif;
 padding:0 1em}
@@ -88,9 +94,8 @@ text-align: center
 #quotebox p.attribution {
 text-indent: 3em;
 }
-
-#main.home img {
+#closed-sign img {
 clear: left;
 display: block;
-margin: auto;
+margin: auto 
 }

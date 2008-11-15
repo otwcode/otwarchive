@@ -23,7 +23,7 @@ body	{ background: #fffef9; color: #222; font: 100%/1.125 Candara, Corbel, Genev
 
 a, a:link	{ color: #222; }
 a:hover	{ color: #999; }
-a:active, a:focus { background:#900; color:#fffef9}
+a:active, a:focus { text-decoration:overline underline;}
 a:visited	{ color: #777; }
 a img	{ border: 0; }
 a.tag	{ color: #111; text-decoration:none; padding: 0 0.125em; border-bottom:1px dotted; }

@@ -5,19 +5,21 @@ ul.navigation li, .navigation dd, li.navigation { background: #fffef9; display: 
 .navigation a:active { background:#900; color:#fffef9; }
 
 /* HEADER (MASTHEAD BLOCK) */
-#header  {  background: #900 url(../images/header-red.png) top left repeat-x; font-family: Fertigo, Cambria, Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; margin: 0 0 2.5em 0; position: relative; }
-#header h1 { color: #fffef9; font-size: 1.5em; float: left; margin: 1em 0 -2em 1em; }
+#header  {  background: #900 url(../images/header-red.png) top left repeat-x; font-family: Fertigo, Cambria, Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; margin: 0 0 2.5em 0; position: relative; padding: 0.25em 0 0;}
+#header h1 { color: #fffef9; font-size: 1.5em; float: left; margin:0 0.75em;}
 #header h1 a, #header h1 a:visited {color:#fffef9;}
 #header h1 a:hover { color:#900;}
 #header a { font-weight: 600; text-decoration: none; }
 
-#login-block { background: #900 url(../images/header-red.png) top left repeat-x; color: #fffef9; font-size: 0.75em; text-align: left; width: 17.375em; float: right; clear: both; }
-#login-block a:link, #login-block a:visited { color: #fffef9; }
-#login-block a:hover {color:#900;}
-#login-block ul { padding-right: 0.25em; }
+#header #login-block { color: #fffef9; font-size: 0.75em; text-align: right;}
+#header #login-block a, #header #login-block a:link, #header #login-block a:visited { color: #fffef9; }
+#header #login-block a:hover { color:#900;}
+#header #login-block ul { padding-right: 0.25em; }
+#header #login-block #signin p.submit	{ text-align:left; }
 
+ul#greeting, ul#login { text-align:left; width:17.75em; float:right;clear:right;}
 #greeting li { font-weight: 100; }
-#greeting.logged-out { margin-top: 1em; }
+#greeting.logged-out { margin-top: 1em; width:inherit;float:none; text-align:right;}
 
 #login li { display: inline; }
 
@@ -113,10 +115,9 @@ li.heading {position:relative;border:1px solid #fffef9;}
 .work h3, .work h3 a:link, .work h3 img {color:#900; vertical-align:bottom;}
 
 .work p.update {font-size:0.875em; text-align:right; top:-0.875em; right:0; position:absolute; }
-.work .tags dl {position:relative;}
-.work .tags dt{font-weight:bold; float:left; clear:left; width:5em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
-.work .tags dd {float: left; padding:0; margin:0 !important;}
-.work li.summary {margin:0.5625em auto; clear:left;}
+.work .tags dt{font-weight:bold; width:5em; margin: 2.25em 0 0 ; padding:0.25em 0.5625em 0.25em 0; }
+.work .tags ul{margin:-2.25em 0 .75em 5.5em; text-indent:0; padding:0;}
+.work li.summary {margin:0.5625em auto;}
 .work li.stats dl {text-align:right;}
 .work li.stats dt, .work li.stats dd {display:inline; font-size:0.875em}
 .work li.stats dl dd {margin:0 0.375em 0 0;}
@@ -148,6 +149,7 @@ ul#series-work-list li.work ul.work li ul li {display:inline;}
 
 /*BOOKMARKS-INDEX BOOKMARKS */
 .bookmark p.attribution {text-align:right;}
+.bookmarks-index li.bookmark {clear:left}
 /*Temporary fix to make edit link show up on bookmarks, 09-10-08 (Cal)*/
 .bookmark ul.navigation {text-align:left;}
 

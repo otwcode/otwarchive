@@ -14,7 +14,6 @@
   </div> 
 </noscript>
 <!-- END BETA CAVEATS! --> 
-
 <div id="signin">  
   <%- if logged_in? || logged_in_as_admin? -%>
     <%= render :partial => 'session/greeting' -%>
@@ -22,15 +21,11 @@
     <%= render :partial => 'session/login' -%>
   <%- end -%>
 </div>
-
 <h1><span><%= ArchiveConfig.APP_NAME.t -%>
   <% unless ArchiveConfig.REVISION.blank? %>(rev. <%= ArchiveConfig.REVISION %>)<% end %></span>
 </h1>
-
 <h2>A project of the <a href="http://transformativeworks.org">Organization For Transformative Works</a></h2>
-
 <hr class="clear" />
-
 <div class="wrapper">
 	<h3>Share your fan works</h3>
 	<h4><%= link_to 'People'.t, :controller => 'users', :action => 'index' %></h4>
@@ -61,7 +56,7 @@
 		<%- end -%>
 	</ul>
 </div>
-<p><%= link_to image_tag('closed.jpg', :alt => "Hey, we're in closed beta right now, but please come in and browse!"), works_path -%></p>
+<p id="closed-sign"><%= link_to image_tag('closed.jpg', :alt => "Hey, we're in closed beta right now, but please come in and browse!"), works_path -%></p>
 <!--<h5 id="signup"></h5>-->
 <blockquote id="quotebox">
 	<p>"I want us to own the goddamn servers!"

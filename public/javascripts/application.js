@@ -4,7 +4,8 @@
 //things to do when the page loads
 document.observe("dom:loaded", function () {
 	hideFormFields(); 
-	hideFilters(); 
+	hideFilters();
+    hideLogin(); 
 	initSelect('languages_menu');
 });
 
@@ -64,5 +65,29 @@ function hideFilters() {
 		var selected = false;
 		tags.each(function(tag) {if (tag.checked) selected=true});
 		if (selected != true) {toggleFilters(filter.id, 0);}
+	});	
+}
+
+// Toggles login block
+function toggleLogin(id, blind_duration) {
+	blind_duration = (blind_duration == null ? 0.2 : blind_duration = 0.2)
+  var signin = document.getElementById(id);
+	var signin_open = document.getElementById(id + "_open")
+	var signin_closed = document.getElementById(id + "_closed")
+	if (signin != null) {
+		Effect.toggle(signin, 'blind', {duration: blind_duration});
+		Effect.toggle(signin_open, 'appear', {duration: 0})
+		Effect.toggle(signin_closed, 'appear', {duration: 0})
+	}
+}
+
+// Rolls up Login if Javascript is enabled
+function hideLogin() {
+	var signin = $$('#signin');
+	signin.each(function(signin) {
+		var tags = signin.select('input');
+		var selected = false;
+		tags.each(function(tag) {if (tag.checked) selected=true});
+		if (selected != true) {toggleLogin(signin.id, 0);}
 	});	
 }

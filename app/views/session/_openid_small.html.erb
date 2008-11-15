@@ -1,9 +1,7 @@
-<dl>
-	<dt><%= image_tag("openid.png", :alt => ''.t, :class => 'openid') %></dt>
-	<dd>
-		<%= text_field_tag "openid_url", '' %>
-  </dd>
-</dl>	
+<p>
+	<%= image_tag("openid.png", :alt => ''.t, :class => 'openid') %>
+	<%= text_field_tag "openid_url", '' %>
+</p>	
 <p class="footnote">
 	<%= check_box_tag('remember_me', '1', false) %>
 	<%= label_tag 'remember_me', 'Remember me'.t %>&nbsp;|

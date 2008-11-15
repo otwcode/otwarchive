@@ -1,22 +1,22 @@
 <!-- BEGIN header -->
 <div id="header">
-  <h1><%= link_to ArchiveConfig.APP_NAME.t, root_path %>
-  	<span><%= ArchiveConfig.APPNAME -%>
-     <% unless ArchiveConfig.REVISION.blank? %>(<span>rev. <%= ArchiveConfig.REVISION %></span>)<% end %></span>
-  </h1>
-  
-  <div id="login-block">
+     <div id="login-block">
     <%- if logged_in? || logged_in_as_admin? -%>
       <%= render :partial => 'session/greeting' -%>
     <% else -%>
       <ul id="greeting" class="logged-out">
         <li>
-          <%= render :partial => 'session/login' -%>
-        </li>
+		<%= render :partial => 'session/login' -%>
+        <a onclick='toggleLogin("signin")'>Log in</a>
+		</li>
       </ul>
     <% end -%>
     <%= render :partial => 'works/search_box' %>
   </div>
+<h1><%= link_to ArchiveConfig.APP_NAME.t, root_path %>
+  	<span><%= ArchiveConfig.APPNAME -%>
+     <% unless ArchiveConfig.REVISION.blank? %>(<span>rev. <%= ArchiveConfig.REVISION %></span>)<% end %></span>
+  </h1>
   
   <ul id="main-navigation">
 		<li>
