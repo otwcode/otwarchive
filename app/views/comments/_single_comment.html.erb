@@ -7,7 +7,7 @@
                  :locals => {:comment => single_comment, :commentable => single_comment.commentable, :button_name => 'Update'.t} -%>	  
 	<%- else -%>
 		<%- if single_comment.is_deleted -%>
-		  <p>(<%=sanitize_and_format_for_display 'previous comment by %s deleted'/get_pseud_or_mailaddress(single_comment) -%>)</p>
+		  <p>(<%=sanitize_whitelist 'previous comment by %s deleted'.t / get_pseud_or_mailaddress(single_comment) -%>)</p>
 		<%- elsif single_comment.hidden_by_admin? && !logged_in_as_admin? -%>
 		 <p>(<%=h "This comment is under review by an admin and is currently unavailable.".t -%>)</p>
 		<%- else -%>
