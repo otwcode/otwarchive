@@ -5,7 +5,6 @@
 document.observe("dom:loaded", function () {
 	hideFormFields(); 
 	hideFilters();
-    hideLogin(); 
 	initSelect('languages_menu');
 });
 
@@ -46,8 +45,9 @@ function hideFormFields() {
 
 // Toggles items in filter list
 function toggleFilters(id, blind_duration) {
+    
 	blind_duration = (blind_duration == null ? 0.2 : blind_duration = 0.2)
-  var filter = document.getElementById(id);
+    var filter = document.getElementById(id);
 	var filter_open = document.getElementById(id + "_open")
 	var filter_closed = document.getElementById(id + "_closed")
 	if (filter != null) {
@@ -70,14 +70,14 @@ function hideFilters() {
 
 // Toggles login block
 function toggleLogin(id, blind_duration) {
-	blind_duration = (blind_duration == null ? 0.2 : blind_duration = 0.2)
-  var signin = document.getElementById(id);
+	blind_duration = (blind_duration == null ? 0.2 : blind_duration)
+    var signin = document.getElementById(id);
 	var signin_open = document.getElementById(id + "_open")
 	var signin_closed = document.getElementById(id + "_closed")
 	if (signin != null) {
 		Effect.toggle(signin, 'blind', {duration: blind_duration});
-		Effect.toggle(signin_open, 'appear', {duration: 0})
-		Effect.toggle(signin_closed, 'appear', {duration: 0})
+		Effect.toggle(signin_open, 'appear', {duration: 0.0})
+		Effect.toggle(signin_closed, 'appear', {duration: 0.0})
 	}
 }
 
@@ -88,6 +88,6 @@ function hideLogin() {
 		var tags = signin.select('input');
 		var selected = false;
 		tags.each(function(tag) {if (tag.checked) selected=true});
-		if (selected != true) {toggleLogin(signin.id, 0);}
+		if (selected != true) {toggleLogin(signin.id, 0.0);}
 	});	
 }

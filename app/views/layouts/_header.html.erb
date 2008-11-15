@@ -6,9 +6,10 @@
     <% else -%>
       <ul id="greeting" class="logged-out">
         <li>
-		<%= render :partial => 'session/login' -%>
-        <a onclick='toggleLogin("signin")'>Log in</a>
-		</li>
+  		    <%= render :partial => 'session/login' -%>
+          <a id='signin_closed' onclick='toggleLogin("signin")' style='display:none;'>Sign in</a>
+          <a id='signin_open' onclick='toggleLogin("signin")'>Cancel</a>
+		    </li>
       </ul>
     <% end -%>
     <%= render :partial => 'works/search_box' %>
