@@ -40,7 +40,7 @@
 				-%>
       </dd>
       
-		   <dt class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
+		  <dt class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
 	        <%= label :pseud, :id, h("Select author/pseudonym(s)").t %>
 	      </dt>
 	      <dd class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
@@ -51,9 +51,7 @@
         <select name="work[author_attributes][coauthors][]" multiple="multiple" style="display : none;">
           <%= options_from_collection_for_select(@coauthors, :id, :name, @selected_pseuds) %>  
         </select>
-	      <dd class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
-	        <%= link_to h('Create pseud?').t, new_user_pseud_path(current_user) %>
-	      </dd>
+
         <% if @coauthors.size > 0 %>
        <%= "Current Co-authors: ".t %>
           <ul>

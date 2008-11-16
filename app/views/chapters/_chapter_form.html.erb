@@ -29,9 +29,6 @@
         </select>         
       </dd>
       
-   		<%- if @pseuds.size > 1 -%>
-      <dd><%= link_to 'Create new pseud?'.t, new_user_pseud_path(current_user) %></dd>
-	  <%- end -%>
 	  <dt><%= link_to_function(h('Add co-authors?').t, "Element.toggle('co-authors')") %></dt>
 	  <dd id="co-authors">
 		<dl>
@@ -57,7 +54,7 @@
 <fieldset>
 	<legend><%= 'Chapter Text'.t -%></legend>
    	<p>
-	    <%= c.label :content, h("Chapter, in plain text with limited HTML*").t, :class => "required" %><%= link_to_help "html-help" -%>
+	    <%= f.label :content, h("Chapter, in plain text with limited HTML*").t, :class => "required" %><%= link_to_help "html-help" -%>
 	  </p>
 	<p class="rtf-html-switch">
 		<% use_tinymce -%>
