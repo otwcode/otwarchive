@@ -56,7 +56,10 @@
 </fieldset>
 <fieldset>
 	<legend><%= 'Chapter Text'.t -%></legend>
-   	<p class="rtf-html-switch">
+   	<p>
+	    <%= c.label :content, h("Chapter, in plain text with limited HTML*").t, :class => "required" %><%= link_to_help "html-help" -%>
+	  </p>
+	<p class="rtf-html-switch">
 		<% use_tinymce -%>
 	    <span><a href="javascript:addEditor('content');"><%=h 'Rich text'.t %></a></span>
 	    <span><a href="javascript:removeEditor('content');">HTML</a></span>
