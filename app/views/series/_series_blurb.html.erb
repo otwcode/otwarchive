@@ -8,15 +8,17 @@
 			<li><img src="/images/category-none.png" alt="" title="dummy icons for layout purpose" /></li>
 			</ul>
 			<h3 title="Series Title">
-				<% if series.hidden_by_admin %>
-				<%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)") %>
-				<% end %>
 				<%= link_to sanitize_title_for_display(series.title), series %>
 				<%=h 'by'.t %>
 				<%= print_pseud_list(series.pseuds) -%>
+				<% if series.hidden_by_admin %>
+				<%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)") %>
+				<% end %>
 			</h3>
+			
 		<h4>&nbsp;<!--fandom will go here--></h4>
 		<p class="update"><%= time_ago_in_words(series.updated_at) %></p>
+		</li>
 		<li>
 			<dl class="tags">
 			<dt><%=h 'Tags'.t + ': ' %></dt>

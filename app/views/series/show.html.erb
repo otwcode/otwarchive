@@ -1,5 +1,5 @@
 <h1><%=h @series.title %></h1>
-<dl id="series-meta">
+<dl class="work-meta series-meta">
 	<dt><%=h 'Series begun:'.t %></dt>
 		<dd><%=h @series.created_at.localize("%d %B %Y") %></dd>
   	<dt><%=h 'Works included:'.t %></dt>
@@ -31,14 +31,10 @@
 
 <ul class="story-list" id="series-story-list">
   <%- for serial in @serial_works -%>
-  <li>
-    <ul>
-    <%- if serial.work.visible(current_user) -%>
+	<%- if serial.work.visible(current_user) -%>
       <%= render :partial => 'works/work_blurb', :locals => {:work => serial.work} %>
     <%- else -%>
       <li>(<%= "This work is temporarily unavailable.".t %>)</li>
     <%- end -%>
-    </ul>
-  </li>
   <%- end -%>
 </ul>

@@ -44,6 +44,7 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 
 #main.sidebar { margin: 0 1em 1em 12em; }
 #main.sidebar h1 {margin-top: 0;}
+#main.sidebar .own {background:#fffef9 !important; border:1px dotted #ccc;}
 
 /*MAIN CONTENT */
 #main { position: relative; margin: 1.5em auto; padding: 0 3.5em; }
@@ -70,8 +71,7 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 /* USER HOME: USERS SHOW*/
 #main.users-show ul.work-list { margin: auto; }
 .user-module h2 { background: #222; color: #fffef9; margin: 2.25em auto 0 ; padding: 0.125em; border-bottom: 4px double #fffef9;}
-
-#user-header { position: relative; }
+#user-header { position: relative; margin-bottom:4em;}
 #user-header img { top: 0; left: 0; position: absolute; margin: 0 0 0.5625em 0; }
 #user-header h1 { text-align: right; margin: 0 0 0 100px; /*sized in pixels because the icon it is avoiding has a fixed pixel value*/}
 #user-header h1 a {text-decoration:none; text-transform:lowercase}
@@ -101,27 +101,33 @@ dl#user-data dt {font-weight: 900; width: 9em; float:left; clear:left; margin:0.
 
 /* WORKS-INDEX */
 /*work filters rules are in forms.css */
-/*works blurb : shows on works, reading hiwork, series, should be spoofed on bookmarks and users-show*/
+/*works blurb : shows on works, reading history, series, should be spoofed on bookmarks and users-show*/
 li.work ul.work {position: relative; margin: 0 13.5em 0.5625em auto;padding-right:0.3775em;}
-#user-page li.work ul.work, #main.series-index  li.work ul.work, #series-work-list li.work ul.work{ margin-right: 0; }
-
+#user-page li.work ul.work, .series-show li.work ul.work, .series-index li.work ul.work, #series-work-list li.work ul.work, .works-drafts li.work ul.work { margin-right: 0; }
 ul.work {position:relative; border-bottom:1px solid #ddd; }
+ul.own { border:1px dotted #ccc;background:#eee;}
 ul.work ul li, .work dd ul li{ display:inline;}
-li.heading {position:relative;border:1px solid #fffef9;}
+
+li.heading {position:relative; }
 .work ul.required-tags {width:75px; height:50px;float:left;}
 .work ul.required-tags li img {width:25px; height:25px;}
 .work ul.required-tags li {padding:0;margin:0; width:25px; height:25px;}
+
 .work h3 {margin-right:4.5em;}
 .work h3, .work h3 a:link, .work h3 img {color:#900; vertical-align:bottom;}
 
 .work p.update {font-size:0.875em; text-align:right; top:-0.875em; right:0; position:absolute; }
-.work .tags dt{font-weight:bold; width:5em; margin: 2.25em 0 0 ; padding:0.25em 0.5625em 0.25em 0; }
+.work dl.tags {padding-top:0.5625em;}
+.work .tags dt{font-weight:bold; width:5em; padding:0.25em 0.5625em 0.25em 0; }
 .work .tags ul{margin:-2.25em 0 .75em 5.5em; text-indent:0; padding:0;}
 .work li.summary {margin:0.5625em auto;}
 .work li.stats dl {text-align:right;}
 .work li.stats dt, .work li.stats dd {display:inline; font-size:0.875em}
 .work li.stats dl dd {margin:0 0.375em 0 0;}
-.work li.navigation {bottom:-0.75em;position:absolute; border-color:#ddd;}
+
+.work .navigation a{background:url(../images/ccc-fff.png) top left repeat-x #fff; border:none; border:1px solid #ccc; padding:0.25em;}
+.work .navigation, .work .navigation li {border:0; background:transparent;}
+.work ul.navigation {margin: 0 0 -0.75em 0;}
 
 /*series listing */
 #user-series ul	{ text-indent:2em; margin:1.125em auto; padding:0 1em;}
@@ -148,8 +154,10 @@ ul#series-work-list li.work ul.work li ul li {display:inline;}
 .user ul.tags:after {content:" ) ";}
 
 /*BOOKMARKS-INDEX BOOKMARKS */
-.bookmark p.attribution {text-align:right;}
+ul.bookmark {margin-top: 0.875em;}
+.bookmark p.byline {text-align:right;}
 .bookmarks-index li.bookmark {clear:left}
+
 /*Temporary fix to make edit link show up on bookmarks, 09-10-08 (Cal)*/
 .bookmark ul.navigation {text-align:left;}
 

@@ -9,12 +9,12 @@ form .submit input {background:url(../images/ccc-fff.png) top left repeat-x #fff
 
 /* SIGN IN BOX */
 #signin p { display:inline;}
-#signin p.footnote	{ font-size:0.5625em;  padding:0.125em 0 0 .125em;}
+#signin p.footnote	{ font-size:smaller;  padding:0.125em 0 0 .125em;}
 #signin input#remember_me	{ margin:0.125em 0.125em 0.125em 0; vertical-align:middle; }
 img#openid	{ margin-left:-20px; vertical-align:middle; }
 
 /* sign in box when present in #header #login-block */
-#header #signin { font-size:0.625em; text-align:right;}
+#header #signin { text-align:right;}
 #header #signin form { background: url(../images/header-red.png) bottom left repeat-x #777; margin:-1.5em -0.25em 1em;padding:0.25em; border:1px groove #500000}
 #header input { background:url(../images/ccc-fff.png) top left repeat-x #fff; border:1px groove; }
 #header input:hover { background:#ddd; }

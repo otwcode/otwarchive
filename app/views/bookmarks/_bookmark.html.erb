@@ -1,5 +1,5 @@
 <!-- This partial requires local variable 'bookmark' -->
-<ul class="work bookmark">
+<ul class="work bookmark <%- if is_author_of?(bookmark) -%>own<%- end -%>">
   <li class="heading">
 	<ul class="required-tags">
 	<li><%= image_tag 'bookmark-placeholder.png', :alt => '', :title => "dummy icons for layout purpose" -%></li>
@@ -43,7 +43,7 @@
 <%- unless bookmark.notes.blank? -%>
   <li class="notes">
     <%=sanitize_limit_and_format_for_display bookmark.notes %>
-	<p class="attribution">- <%= link_to bookmark.user.login, bookmark.user %></p>
+	<p class="byline">- <%= link_to bookmark.user.login, bookmark.user %></p>
   </li>
   <%- end -%>
   <%- if is_author_of?(bookmark) -%>
