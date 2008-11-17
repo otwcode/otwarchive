@@ -10,12 +10,19 @@
   	<%- if (logged_in? && current_user.is_tag_wrangler?) || logged_in_as_admin? -%>
   	  &#8212; <%= link_to 'Tag Wrangling' .t, tag_wranglings_path -%>
   	<%- end -%>
-  	<%- if (logged_in? && current_user.is_translator?) || logged_in_as_admin? -%>
-  	  &#8212; <%= link_to 'Translation Interface' .t, url_for(:controller => :translation) -%>
+  	<%- if ((logged_in? && current_user.is_translator?) || logged_in_as_admin?) -%>
+  	  &#8212;
+  	  <%- if Locale.base? -%>
+  	    Set Locale To Translate
+  	  <%- else -%>
+	      <%= link_to 'Translate This Page' .t, translate_path(:controller_to_translate => controller.controller_name, :action_to_translate => controller.action_name) -%>
+	    <%- end -%>
   	<%- end -%>
 </p>
 </div>
-<!-- END footer --><% if ENV["RAILS_ENV"]=="development" %>
+
+<!-- END footer -->
+<% if ENV["RAILS_ENV"]=="development" %>
 <div id="debug">
   <h1>Development Notice</h1>
   <p>

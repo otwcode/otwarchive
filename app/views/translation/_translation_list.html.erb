@@ -1,24 +1,24 @@
-<h1 class="language"><%=h "Please choose language for translation.".t %></h1>
-<p>
-	<%=h "Strings which have not yet been translated are marked with asterisks.".t %>
-	<span class="globalize_bug"><%=h "Use this sparingly".t %></span>: <%= link_to "Get strings to translate".t, :action => "get_translatable_strings" %>
-</p>
-<p>
-	<%= button_to button_name, :action => button_action %>
-</p>
-
-<% if Locale.language -%>
-<h1 class="language"><%= "Language: " .t + Locale.language.native_name %></h1>
-<% end -%>
-<% if !Locale.base? -%>
-<dl id="translation_form">
+<% if Locale.base? -%>
+  <p>
+    You're currently browsing in the base language of this archive. You should go back to the page 
+    you want to translate and set your language from the pull-down menu to the language you want to 
+    translate into. 
+  </p>
+<% else -%>
+  <% if Locale.language -%>
+    <h3 class="language"><%= "Currently translating into: " .t + Locale.language.native_name %></h3>
+  <% end -%>
+  <p>
+  	<%=h "Strings which have not yet been translated are marked with asterisks.".t %>
+  </p>
+  <dl id="translation_form">
     <dt class="header">
         <%= 'Base Language'.t -%>
     </dt>
     <dd class="header">
         <%= 'Translation'.t %>
     </dd>
-    <% @view_translations.each do |tr| -%>
+    <% @translations.each do |tr| -%>
     <dt>
     	<% unless tr.text -%>
 		  ***
@@ -36,6 +36,3 @@
 </dl>
 <% end -%>
 
-<div class="pagination">
-	  <%= will_paginate @view_translations, :prev_label =>  "&laquo; Previous".t,:next_label => "Next &raquo;".t %>
-</div>

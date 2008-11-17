@@ -17,6 +17,8 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'home/:action', :controller => "home", :path_prefix => ':locale'  
   map.tos '/tos', :controller => 'home', :action => 'tos', :path_prefix => ':locale'
   map.tos_faq '/tos_faq', :controller => 'home', :action => 'tos_faq', :path_prefix => ':locale'
+  
+  map.translate '/translate/:controller_to_translate/:action_to_translate', :controller => 'translation', :action => 'translate', :path_prefix => ':locale'
 
   map.resources :abuse_reports, :path_prefix => ':locale'
   
