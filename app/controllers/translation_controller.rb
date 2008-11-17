@@ -54,24 +54,18 @@ class TranslationController < ApplicationController
     @translations = ViewTranslation.find(:all, 
                                          :conditions => [ 'language_id = ? AND tr_key in (?)', Locale.language.id, @strs ])
                                          
-    @translations.sort! do |a,b| 
-      if a.text.nil? != b.text.nil?
-        return a.text.nil? ? 1 : -1
-      else 
-        if @strs.index(a.tr_key) && @strs.index(b.tr_key)
-          return  @strs.index(a.tr_key) <=> @strs.index(b.tr_key)
-        else
-          if @strs.index(a.tr_key)
-            return 1
-          elsif @strs.index(b.tr_key)
-            return -1
-          else
-            return 0
-          end
-        end
-      end
-    end
+    @translations.sort! { |a,b| sort_translations(a, b) } 
                                          
+  end
+
+  def sort_translations(a, b)
+    if a.text.blank? != b.text.blank?
+      return a.text.blank? ? -1 : 1
+    elsif @strs.index(a.tr_key) && @strs.index(b.tr_key)
+      return  @strs.index(a.tr_key) <=> @strs.index(b.tr_key)
+    else
+      return a.tr_key <=> b.tr_key
+    end    
   end
   
   # Find all the view partials invoked within this file
