@@ -43,7 +43,7 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 /* POST WORK */
 /*work-meta  and work-show rules in work-views.css */
 #work-form legend {position:static; margin:0; padding:0.375em; background:#fffef9; border:1px solid #bbb;}
-.works-preview legend {color:#fff;}
+.works-preview legend, .works-update legend {color:#fff;}
 #work-form input, #work-form select, #work-form textarea {width:99%; margin:auto}
 #work-form fieldset { background:#fffef9; font-size:0.875em; margin: 0.5625em 0; padding:0.375em 1.5em; border:1px solid #bbb; }
 #work-form fieldset fieldset { line-height:1.5; margin: 0 auto 0.5625em auto; }

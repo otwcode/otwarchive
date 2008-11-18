@@ -11,7 +11,7 @@
   <%= render :partial => 'hidden_fields', :locals => {:form => f} -%>
 
   <fieldset>
-    <legend><%= "Post Story".t -%></legend>
+    <legend><%= "Post Work".t -%></legend>
     <p class="submit">
   	<% if @work.posted? %>
   		<%= submit_tag 'Update', :name => 'update_button' %>
