@@ -9,11 +9,12 @@ class TranslationController < ApplicationController
   end
 
   def set_translation_text
+    @url_to_translate = params[:url_to_translate]
     translation = ViewTranslation.find(params[:id])
     unless translation
       flash[:error] = "We couldn't find the string you were trying to translate."
     else
-      Locale.set_translation(translation.tr_key, params[:translation])
+      Locale.set_translation(translation.tr_key, params["translation_#{translation.id}"])
     end
     redirect_to :back
   end
@@ -21,7 +22,7 @@ class TranslationController < ApplicationController
   def translate
     @controller_to_translate = params[:controller_to_translate]
     @action_to_translate = params[:action_to_translate]
-    @url_to_translate = request.env['HTTP_REFERER']
+    @url_to_translate = params[:url_to_translate] || request.env['HTTP_REFERER']
     
     @strs = []
     
@@ -41,8 +42,8 @@ class TranslationController < ApplicationController
       @strs += action_text.scan(get_translateable_string_regexp)
     end
 
-    # squash everything down, get rid of the nils, and any duplication
-    @strs = @strs.flatten.compact.uniq
+    # squash everything down, get rid of the nils/blanks, and any duplication
+    @strs = @strs.flatten.compact.uniq.reject {|s| s.blank?}
 
     # make sure there is a ViewTranslation object for each string in this language
     # by forcibly translating them right now even if they aren't appearing in this
@@ -52,16 +53,14 @@ class TranslationController < ApplicationController
     end
     
     @translations = ViewTranslation.find(:all, 
-                                         :conditions => [ 'language_id = ? AND tr_key in (?)', Locale.language.id, @strs ])
+                                         :conditions => [ 'language_id = ? AND pluralization_index = 1 AND tr_key in (?)', Locale.language.id, @strs ])
                                          
     @translations.sort! { |a,b| sort_translations(a, b) } 
                                          
   end
 
   def sort_translations(a, b)
-    if a.text.blank? != b.text.blank?
-      return a.text.blank? ? -1 : 1
-    elsif @strs.index(a.tr_key) && @strs.index(b.tr_key)
+    if @strs.index(a.tr_key) && @strs.index(b.tr_key)
       return  @strs.index(a.tr_key) <=> @strs.index(b.tr_key)
     else
       return a.tr_key <=> b.tr_key
