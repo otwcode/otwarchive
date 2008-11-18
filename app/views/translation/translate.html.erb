@@ -2,4 +2,41 @@
 
 <h3>Translating <%= link_to "#{@controller_to_translate} &raquo; #{@action_to_translate}", @url_to_translate -%></h3>
 
-<%= render :partial => 'translation_list' %>
+<% if Locale.base? -%>
+  <p>
+    You're currently browsing in the base language of this archive. You should go back to the page 
+    you want to translate and set your language from the pull-down menu to the language you want to 
+    translate into. 
+  </p>
+<% else -%>
+  <% if Locale.language -%>
+    <h3 class="language"><%= "Currently translating into: " .t + Locale.language.native_name %></h3>
+  <% end -%>
+  <p>
+  	<%= "Strings are listed approximately in the order they appear in the page to translate.".t %>
+  	<%= "Strings which have not yet been translated are marked with asterisks.".t %>
+  </p>
+  <dl id="translation_form">
+    <dt class="header">
+        <%= 'Base Language'.t -%>
+    </dt>
+    <dd class="header">
+        <%= 'Translation'.t %>
+    </dd>
+    <% @translations.each do |tr| -%>
+    <dt>
+    	<% unless tr.text -%>
+		  ***
+		  <% end -%>
+      <%= tr.tr_key -%>
+      <%=h tr.text ? "(" + "Current translation".t + ": #{tr.text})" : "" -%>
+    </dt>
+    <dd id="tr_<%= tr.id %>">        
+        <%- form_tag ( :action => :set_translation_text, :id => tr.id ) do %>
+        <%= text_area_tag "translation_#{tr.id}", tr.text || tr.tr_key, :cols => 35, :rows => rows_for_words(tr.text || tr.tr_key) %>
+        <%= submit_tag( "translate".t ) %>
+        <% end -%>
+    </dd>
+    <% end -%>
+</dl>
+<% end -%>
