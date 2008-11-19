@@ -27,7 +27,7 @@
 <h2>A project of the <a href="http://transformativeworks.org">Organization For Transformative Works</a></h2>
 <hr class="clear" />
 <div class="wrapper">
-	<h3>Share your fan works</h3>
+	<h3><%=h "Share your fan works".t -%></h3>
 	<h4><%= link_to 'People'.t, :controller => 'users', :action => 'index' %></h4>
 	<ul class="meters">
 		<li><span><%= @user_count %></span> <%=h ' ' + 'users to date'.t %></li>
@@ -37,7 +37,7 @@
 	</ul>
 </div>
 <div class="wrapper">
-	<h3>Discover new favorites</h3>
+	<h3><%=h 'Discover new favorites'.t %></h3>
 	<h4><%= link_to 'Fandoms'.t, :controller => 'media', :action => 'index' %></h4>
 	<ul class="meters">
 		<li><span><%= @fandom_count -%></span> <%=h ' ' + 'fandoms to date'.t %></li>
@@ -47,7 +47,7 @@
 	</ul>
 </div>
 <div class="wrapper">
-	<h3>Explore the possibilities</h3>
+	<h3><%=h "Explore the possibilities".t -%></h3>
 	<h4><%= link_to 'Works'.t, :controller => 'works', :action => 'index' %></h4>
 	<ul class="meters">
 		<li><span><%= @work_count %></span> <%=h ' ' + 'works to date'.t %></li>

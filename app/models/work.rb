@@ -511,17 +511,17 @@ class Work < ActiveRecord::Base
 
   # Works this work belongs to through related_works
   def parents
-    RelatedWork.find(:all, :conditions => {:work_id => self.id}, :include => :parent).collect(&:parent)
+    RelatedWork.find(:all, :conditions => {:work_id => self.id}, :include => :parent).collect(&:parent).uniq
   end
   
   # Works that belong to this work through related_works
   def children
-    RelatedWork.find(:all, :conditions => {:parent_id => self.id}, :include => :work).collect(&:work) 
+    RelatedWork.find(:all, :conditions => {:parent_id => self.id}, :include => :work).collect(&:work).uniq 
   end
   
   # Works that belongs to this work and which have been approved for linking back
   def approved_children
-    RelatedWork.find(:all, :conditions => {:parent_id => self.id, :reciprocal => true}, :include => :work).collect(&:work)
+    RelatedWork.find(:all, :conditions => {:parent_id => self.id, :reciprocal => true}, :include => :work).collect(&:work).uniq
   end
   
   # Virtual attribute for parent work, via related_works

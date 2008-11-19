@@ -36,7 +36,7 @@
         <%= f.text_field :title, :class => "storyinputfield" %>
         <%= live_validation_for_field('work_title', 
 						:maximum_length => ArchiveConfig.TITLE_MAX, :minimum_length => ArchiveConfig.TITLE_MIN, 
-					  :failureMessage => 'We need a title! (At least %d letters long, please.)'/ArchiveConfig.TITLE_MIN)
+					  :failureMessage => 'We need a title! (At least %d letters long, please.)'.t/ArchiveConfig.TITLE_MIN)
 				-%>
       </dd>
       

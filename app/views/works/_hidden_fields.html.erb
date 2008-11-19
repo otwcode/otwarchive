@@ -11,6 +11,7 @@
   <%= c.hidden_field :content, :value => "#{@chapter.content}" %>
 <%- end -%>
 <%= form.hidden_field :expected_number_of_chapters, :value => "#{@work.expected_number_of_chapters}" %>
+<%= form.hidden_field :parent_url, :value => "#{@work.parent_url}" %>
 <%= form.hidden_field :restricted, :value => "#{@work.restricted}" %>
 <%= form.hidden_field :published_at, :value => "#{@work.published_at}" %>
 <%= form.hidden_field :revised_at, :value => "#{@work.revised_at}" %>

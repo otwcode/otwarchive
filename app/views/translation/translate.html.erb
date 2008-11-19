@@ -1,7 +1,7 @@
-<h1>Translation Interface</h1>
+<h1><%=h "Translation Interface".t -%></h1>
 
 <h3>Translating <%= link_to "#{@controller_to_translate} &raquo; #{@action_to_translate}", @url_to_translate -%></h3>
-
+<%= javascript_include_tag 'translation_status' %>
 <% if Locale.base? -%>
   <p>
     You're currently browsing in the base language of this archive. You should go back to the page 
@@ -10,7 +10,7 @@
   </p>
 <% else -%>
   <% if Locale.language -%>
-    <h3 class="language"><%= "Currently translating into: " .t + Locale.language.native_name %></h3>
+    <h3 class="language"><%= "Currently translating into: ".t + Locale.language.native_name %></h3>
   <% end -%>
   <p>
   	<%= "Strings are listed approximately in the order they appear in the page to translate.".t %>
@@ -24,15 +24,20 @@
         <%= 'Translation'.t %>
     </dd>
     <% @translations.each do |tr| -%>
-    <dt>
+	<dt>
+	  <div id="show_<%= tr.id.to_s %>">
     	<% unless tr.text -%>
 		  ***
-		  <% end -%>
+		<% end -%>
       <%= tr.tr_key -%>
-      <%=h tr.text ? "(" + "Current translation".t + ": #{tr.text})" : "" -%>
+      <%=h tr.text ? "(" + "Current translation".t + ": #{tr.text})" : "" -%>	  	
+	  </div>
     </dt>
     <dd id="tr_<%= tr.id %>">        
-        <%- form_tag ( :action => :set_translation_text, :id => tr.id ) do %>
+        <%- form_remote_tag :url => { :action => :set_translation_text, :id => tr.id },
+			:update => "show_#{tr.id}",
+			:loading => "tr_status('show_#{tr.id}')",
+			:complete => visual_effect(:highlight, "show_#{tr.id}") do %>
         <%= text_area_tag "translation_#{tr.id}", tr.text || tr.tr_key, :cols => 35, :rows => rows_for_words(tr.text || tr.tr_key) %>
         <%= submit_tag( "translate".t ) %>
         <% end -%>

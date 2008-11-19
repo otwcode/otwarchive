@@ -5,7 +5,7 @@ ul.navigation li, .navigation dd, li.navigation { background: #fffef9; display: 
 .navigation a:active { background:#900; color:#fffef9; }
 
 /* HEADER (MASTHEAD BLOCK) */
-#header  {  background: #900 url(../images/header-red.png) top left repeat-x; font-family: Fertigo, Cambria, Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; margin: 0 0 2.5em 0; position: relative; padding: 0.25em 0 0;}
+#header  {  background:#900 url(/images/header-red.png) top left repeat-x; font-family: Fertigo, Cambria, Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; margin: 0 0 2.5em 0; position: relative; padding: 0.25em 0 0;}
 #header h1 { color: #fffef9; font-size: 1.5em; float: left; margin:0 0.75em;}
 #header h1 a, #header h1 a:visited {color:#fffef9;}
 #header h1 a:hover { color:#900;}
@@ -32,7 +32,7 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 #main-navigation span { background: #111; color: #fffef9; font-weight: 100; float: left; display: block; padding: 0.5625em; border: 1px solid #111; border-bottom: 0; }
 #main-navigation a span { background: #fffef9; color: #111; border: 1px solid #111; border-bottom: 0; }
 
-#header hr.clear { background: url(../images/headergradient.png) top left repeat-x #fffef9; height: 20px; border-top: 6px solid #111; }
+#header hr.clear { background: url(/images/headergradient.png) top left repeat-x #fffef9; height: 20px; border-top: 6px solid #111; }
 /* END HEADER*/
 
 /*DASHBOARD SIDEBAR */
@@ -106,7 +106,7 @@ li.work ul.work {position: relative; margin: 0 13.5em 0.5625em auto;padding-righ
 #user-page li.work ul.work, .series-show li.work ul.work, .series-index li.work ul.work, #series-work-list li.work ul.work, .works-drafts li.work ul.work { margin-right: 0; }
 ul.work {position:relative; border-bottom:1px solid #ddd; }
 ul.own { border:1px dotted #ccc;background:#eee;}
-ul.work ul li, .work dd ul li{ display:inline;}
+ul.work ul li, .work dd ul li { display:inline;}
 
 li.heading {position:relative; }
 .work ul.required-tags {width:75px; height:50px;float:left;}
@@ -118,14 +118,14 @@ li.heading {position:relative; }
 
 .work p.update {font-size:0.875em; text-align:right; top:-0.875em; right:0; position:absolute; }
 .work dl.tags {padding-top:0.5625em;}
-.work .tags dt{font-weight:bold; width:5em; padding:0.25em 0.5625em 0.25em 0; }
-.work .tags ul{margin:-2.25em 0 .75em 5.5em; text-indent:0; padding:0;}
+.work .tags dt {font-weight:bold; width:5em; padding:0.25em 0.5625em 0.25em 0; }
+.work .tags ul {margin:-2.25em 0 .75em 5.5em; text-indent:0; padding:0;}
 .work li.summary {margin:0.5625em auto;}
 .work li.stats dl {text-align:right;}
 .work li.stats dt, .work li.stats dd {display:inline; font-size:0.875em}
 .work li.stats dl dd {margin:0 0.375em 0 0;}
 
-.work .navigation a{background:url(../images/ccc-fff.png) top left repeat-x #fff; border:none; border:1px solid #ccc; padding:0.25em;}
+.work .navigation a {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:none; border:1px solid #ccc; padding:0.25em;}
 .work .navigation, .work .navigation li {border:0; background:transparent;}
 .work ul.navigation {margin: 0 0 -0.75em 0;}
 
@@ -139,7 +139,7 @@ ul#series-work-list li.work ul.work li ul li {display:inline;}
 .sidebar .comment { clear:none;}
 
 /*MEDIA-INDEX (FANDOMS)*/
-.media-index h3 a{color:#900;}
+.media-index h3 a {color:#900;}
 .media-index li.category { padding: 1em; min-height: 15em; }
 #main.media-index ol, #main.fandoms-index ol, #main.fandoms-show ol { list-style-type: decimal; }
 .media-index li.odd { width: 40%; float: left; margin: 0 0.5625em 0 0; }

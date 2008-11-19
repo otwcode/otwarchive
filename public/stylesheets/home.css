@@ -24,13 +24,13 @@ padding-left: 1.5em;
 text-align: right;
 }
 .home #signin form {
-background: url(../images/fff-ccc.png) bottom left repeat-x #fff;
+background: url(/images/fff-ccc.png) bottom left repeat-x #fff;
 margin: -1.5em -0.25em 1em;
 padding: 0.25em;
 border: 1px groove #777
 }
 .home input {
-background: url(../images/ccc-fff.png) top left repeat-x #fff;
+background: url(/images/ccc-fff.png) top left repeat-x #fff;
 border: 1px groove #222;
 }
 .home input:hover {
@@ -44,7 +44,7 @@ border-bottom: 2px solid #777;
 }
 
 .home .wrapper {
-background: url(../images/box.jpg) bottom left no-repeat;
+background: url(/images/box.jpg) bottom left no-repeat;
 padding: 0 0 2.75em 2.25em;
 width: 24%;
 float: left;
@@ -91,7 +91,7 @@ color: #fff;
 text-align: center;
 width: 9em;
 border: 3px groove #333;
-background: url(../images/header-red.png) bottom right repeat-x #900;
+background: url(/images/header-red.png) bottom right repeat-x #900;
 padding: 0.625em
 }
 

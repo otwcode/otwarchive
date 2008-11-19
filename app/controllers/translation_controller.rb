@@ -16,7 +16,19 @@ class TranslationController < ApplicationController
     else
       Locale.set_translation(translation.tr_key, params["translation_#{translation.id}"])
     end
-    redirect_to :back
+    @tr_pair = {:tr_key => translation.tr_key, :tr_text => params["translation_#{translation.id}"]}
+    if request.xml_http_request?
+       render :action => 'show_tr', :layout => false
+    else
+       redirect_to :back
+    end
+  end
+  
+  def set_translation_texts
+    @url_to_translate = params[:url_to_translate]
+    translation = ViewTranslation.find(params[:id])
+    Locale.set_translation(translation.tr_key, params["translation_#{translation.id}"])
+    redirect_to :back  
   end
   
   def translate
@@ -49,14 +61,12 @@ class TranslationController < ApplicationController
     # by forcibly translating them right now even if they aren't appearing in this
     # particular page.
     @strs.each do |str|
-      str.translate
+        str.translate
     end
     
     @translations = ViewTranslation.find(:all, 
                                          :conditions => [ 'language_id = ? AND pluralization_index = 1 AND tr_key in (?)', Locale.language.id, @strs ])
-                                         
-    @translations.sort! { |a,b| sort_translations(a, b) } 
-                                         
+    @translations.sort! { |a,b| sort_translations(a, b) }
   end
 
   def sort_translations(a, b)
