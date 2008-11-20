@@ -29,7 +29,7 @@
 <%= render :partial => 'admin/admin_options', :locals => {:item => @series} %>
 <%- end -%>
 
-<ul class="story-list" id="series-story-list">
+<ul class="work-list" id="series-work-list">
   <%- for serial in @serial_works -%>
 	<%- if serial.work.visible(current_user) -%>
       <%= render :partial => 'works/work_blurb', :locals => {:work => serial.work} %>

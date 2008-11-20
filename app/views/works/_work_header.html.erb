@@ -28,7 +28,7 @@
 			  <li><%= next_and_previous_links(@work, @chapter) -%></li>
 			</ul>
       <%- else -%>
-		  <ul clas="navigation">
+		  <ul class="navigation">
 		    <li><%= link_to "View chapter by chapter".t, 
                  url_for({:controller => :chapters, :action => :show, :work_id => @work, :id => @chapters.first}) -%>
 			  </li>

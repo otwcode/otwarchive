@@ -1,6 +1,6 @@
 <h1><%=h "View All Series".t %></h1>
 
-<ul class="story-list">
+<ul class="work-list">
   <% for series in @series %>
 	<%= render :partial => 'series/series_blurb', :locals => {:series => series} %>
   <% end %>
