@@ -180,20 +180,13 @@ a.cloud8 { font-size: 2.25em; font-weight: 800; color: #900; }
 ul#tag-wrangler-footer { text-align: center; border-top: 1px dotted}
 #tag-wrangler-footer li { display: inline; padding: 0 0.5625em 0 0}
 
-/*TRANSLATIONS */
+/*TRANSLATIONS 
+* the translation form styling is in forms.css*/
 #main.translation-translate {margin-bottom:2.5em;}
 dl.translations {position:relative; margin: 1.5em auto; padding: 1.5em 0 2.5em; border-top:1px solid;}
 .translations dt { padding:0.25em; margin:-0.25em; clear: both;}
-.translations form {position:relative;}
-.translations textarea { border:1px groove #aaa; float:left; width:69%;}
-.translations form input {background:url(../images/fff-ccc.png) bottom left repeat-x #fff; border:1px groove #aaa; float:right; width:29%; padding:0.625em; margin-top:0.1em;}
-.translations form input:hover { border:1px groove #666;}
-.translations form input:active { background:url(../images/ccc-fff.png) top left repeat-x #fff; border:1px groove #aaa;}
-.translations textarea:hover,.translations textarea:active { background:#d1e1ef;}
-.translation string {}
 .translated { font-style: italic; background:#d1e1ef;}
 .untranslated { font-weight: 600;}
-
 
 /*ToS and any other long text pages.
 * styling duplicates the work-views.css and is incorporated there*/
