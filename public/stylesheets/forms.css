@@ -39,7 +39,11 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 /*REPORT ABUSE */
 #main.abuse_reports-new dt { width:100%; float:none; }
 
-
+/*TRANSLATION */
+dl.translation {margin:auto; width:95%; border:1px solid #ddd; border-top:0;border-bottom:0;}
+.translation dt {background: #fff; border-top:1px solid #ddd; }
+.translation dd {background:#fff;border-bottom:1px solid #ddd; text-indent: 20%; }
+.translation dd form {margin:-1.9675em 0 .75em 13em; text-indent:0; padding:0;}
 /* POST WORK */
 /*work-meta  and work-show rules in work-views.css */
 #work-form legend {position:static; margin:0; padding:0.375em; background:#fffef9; border:1px solid #bbb;}

@@ -1,6 +1,6 @@
 <h1><%=h "Translation Interface".t -%></h1>
 
-<h3>Translating <%= link_to "#{@controller_to_translate} &raquo; #{@action_to_translate}", @url_to_translate -%></h3>
+<h2>Translating <%= link_to "#{@controller_to_translate} &raquo; #{@action_to_translate}", @url_to_translate -%></h2>
 <%= javascript_include_tag 'translation_status' %>
 <% if Locale.base? -%>
   <p>
@@ -13,25 +13,13 @@
     <h3 class="language"><%= "Currently translating into: ".t + Locale.language.native_name %></h3>
   <% end -%>
   <p>
-  	<%= "Strings are listed approximately in the order they appear in the page to translate.".t %>
-  	<%= "Strings which have not yet been translated are marked with asterisks.".t %>
+  	<%= "Strings are listed approximately in the order they appear in the page.".t %>
   </p>
-  <dl id="translation_form">
-    <dt class="header">
-        <%= 'Base Language'.t -%>
-    </dt>
-    <dd class="header">
-        <%= 'Translation'.t %>
-    </dd>
+  <dl class="translations">
     <% @translations.each do |tr| -%>
-	<dt>
-	  <div id="show_<%= tr.id.to_s %>">
-    	<% unless tr.text -%>
-		  ***
-		<% end -%>
+	<dt id="show_<%= tr.id.to_s %>" class="string<%-unless tr.text -%> untranslated<%-end -%>">
       <%= tr.tr_key -%>
-      <%=h tr.text ? "(" + "Current translation".t + ": #{tr.text})" : "" -%>	  	
-	  </div>
+      <span class="string translated"><%=h tr.text ? "(" + "Current translation".t + ": #{tr.text})" : "" -%></span>	  	
     </dt>
     <dd id="tr_<%= tr.id %>">        
         <%- form_remote_tag :url => { :action => :set_translation_text, :id => tr.id },

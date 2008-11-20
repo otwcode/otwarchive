@@ -21,7 +21,7 @@ plus system messages in system-messages.css (red, yellow, green, blue)
 
 body	{ background: #fffef9; color: #222; font: 100%/1.125 Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; }
 
-a, a:link	{ color: #222; }
+a, a:link	{ color: #111; }
 a:hover	{ color: #999; }
 a:active, a:focus { text-decoration:overline underline;}
 a:visited	{ color: #777; }
