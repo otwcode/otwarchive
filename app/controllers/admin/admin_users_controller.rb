@@ -3,7 +3,12 @@ class Admin::AdminUsersController < ApplicationController
   before_filter :admin_only
 
   def index
-    @users = User.alphabetical.paginate(:page => params[:page])
+    if params[:letter] && params[:letter].is_a?(String)
+      letter = params[:letter][0,1]
+    else
+      letter = User::ALPHABET[0]
+    end
+    @users = User.alphabetical.starting_with(letter)
   end 
 
   # GET admin/users/1
@@ -27,8 +32,9 @@ class Admin::AdminUsersController < ApplicationController
     @user = User.find_by_login(params[:user][:login])
     @user.attributes = params[:user]
     if @user.save(false)
-      flash[:notice] = 'User was successfully updated.'
-      redirect_to(admin_users_url) 
+      flash[:notice] = 'User was successfully updated.'.t
+      #redirect_to admin_users_url, :letter => @crt_letter # not working! loses the letter no matter what
+      redirect_to :action => "index", :letter => params[:letter]
     else
       render :action => "edit"
     end

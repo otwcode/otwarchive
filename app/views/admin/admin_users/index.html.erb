@@ -1,5 +1,7 @@
 <h1>All Users:</h1>
 
+<%= alpha_paginated_section -%>
+
 <table id="admin_users_table">
 <caption>List of all current users in the archive</caption>
 <tr>
@@ -11,13 +13,11 @@
 	<th scope="col">Banned</th>
 	<th scope="col">Update</th>
 </tr>
-	<%- for user in @users -%>
+	<%- @users.each do |user| -%>
 	<tr id="user_<%= user.id %>">
     <%= render :partial => 'user_form', :locals => {:user => user} %>
   </tr> 
 <%- end -%>
 </table>
 
-<div class="pagination">
-	  <%= will_paginate @users, :prev_label =>  "&laquo; Previous".t,:next_label => "Next &raquo;".t %>
-</div>
+<%= alpha_paginated_section -%>

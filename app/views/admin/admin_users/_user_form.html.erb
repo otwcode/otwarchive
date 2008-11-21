@@ -1,6 +1,6 @@
 <!--titled instead of labelled as per WCAG 2.0. do not revert.-->
 
-<%- form_for :user, user, :url => {:controller => "admin/admin_users", :action => "update"} do |f| -%> 
+<%- form_for :user, user, :url => {:controller => "admin/admin_users", :action => "update", :letter => params[:letter]} do |f| -%> 
 <th scope="row"><%=h user.login %><%= f.hidden_field :login %></th>
 <td><%= f.text_field :email, :title => "Email" %></td>
 <td><%= f.check_box :translator, :title => "Translator" %></td>
