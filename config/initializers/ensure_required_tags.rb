@@ -14,9 +14,6 @@ end
 begin
   tag = Warning.new(:name => "unused")
   raise unless tag[:type]  # haven't migrated to STI yet
-rescue
-  puts "no STI"
-else
   create_canonical(ArchiveConfig.WARNING_DEFAULT_TAG_NAME, Warning)
   create_canonical(ArchiveConfig.WARNING_NONE_TAG_NAME, Warning)
   create_canonical(ArchiveConfig.WARNING_SOME_TAG_NAME, Warning)
@@ -37,4 +34,6 @@ else
   create_canonical(ArchiveConfig.CATEGORY_OTHER_TAG_NAME, Category)
   create_canonical(ArchiveConfig.MEDIA_NO_TAG_NAME, Media)
   create_canonical(ArchiveConfig.FANDOM_NO_TAG_NAME, Fandom)
+rescue
+  puts "no STI"
 end
