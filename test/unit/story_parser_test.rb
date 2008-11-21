@@ -86,8 +86,8 @@ class StoryParserTest < ActiveSupport::TestCase
     assert_equal "Birth Pains", @work.title
     puts "Deferred: yuletide search down"
 #    assert !@work.summary.blank?
-    @work.category = Category::GEN
-    @work.warnings = [Warning::NONE]
+    @work.category_string = ArchiveConfig.CATEGORY_OTHER_TAG_NAME
+    @work.warning_string = ArchiveConfig.WARNING_NONE_TAG_NAME
     @work.authors = [create_pseud]
     @work.published_at = DateTime.now
     @work.save
@@ -115,13 +115,13 @@ class StoryParserTest < ActiveSupport::TestCase
     @work = @storyparser.download_and_parse_story(@url)
     assert_match /After many months/, @work.chapters.first.content
     assert_equal "Hot Springs", @work.title
-    @work.category = Category::GEN
-    @work.warnings = [Warning::NONE]
+    @work.category_string = ArchiveConfig.CATEGORY_OTHER_TAG_NAME
+    @work.warning_string = ArchiveConfig.WARNING_NONE_TAG_NAME
     @work.authors = [create_pseud]
     @work.published_at = DateTime.now
     @work.save
     assert_equal "Naruto", @work.fandom_string
-    assert_equal Rating::TEEN, @work.rating
+    assert_equal Rating.find_by_name(ArchiveConfig.RATING_TEEN_TAG_NAME), @work.ratings.first
   end
 
   #multi-chaptered work -- not yet working
@@ -141,8 +141,8 @@ class StoryParserTest < ActiveSupport::TestCase
     assert_match /It was really cool/, work.chapters.first.content
     assert_match /Madrigals/, work.title
     assert_match /Wherein there is magic/, work.summary
-    work.category = Category::GEN
-    work.warnings = [Warning::NONE]
+    work.category_string = Category.first.name
+    work.warning_string = Warning.first.name
     work.authors = [create_pseud]
     work.published_at = DateTime.now
     work.save

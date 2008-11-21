@@ -22,10 +22,11 @@ class WorkTest < ActiveSupport::TestCase
 
     context "which has been posted" do
       setup do
+        @work.add_default_tags
         @work.update_attribute("posted", true)
       end
       should "be visible" do
-        assert @work.visible
+        assert @work.visible?
       end
       should "be visible en group" do
         assert Work.visible.include?(@work)
@@ -76,15 +77,15 @@ class WorkTest < ActiveSupport::TestCase
     end
   end
 
-  context "three works with tag count 0, 1 , 2" do
+  context "three works with common tags count 0, 1 , 2" do
     setup do
       @untagged_work = create_work
       @tagged_work = create_work
-      @tag = create_freeform
-      @tagged_work.freeforms = [@tag]
-      @tag2 = create_freeform
+      @tag = create_freeform(:canonical => true)
+      @tagged_work.freeform_string = @tag.name
+      @tag2 = create_freeform(:canonical => true)
       @two_tagged = create_work
-      @two_tagged.freeforms = [@tag, @tag2]
+      @two_tagged.freeform_string = @tag.name + ", " + @tag2.name
     end
     should "only include both works with tags when retrieved with the shared tag id" do
       assert_equal [@tagged_work, @two_tagged], Work.with_all_tag_ids([@tag.id])
@@ -100,6 +101,8 @@ class WorkTest < ActiveSupport::TestCase
       user2 = create_user
       @work1 = create_work(:authors => [user1.default_pseud])
       @work2 = create_work(:authors => [user2.default_pseud])
+      @work1.add_default_tags
+      @work2.add_default_tags
     end
     should "only be returned by owned_by on their own owner" do
       user1 = @work1.pseuds.first.user
@@ -108,11 +111,11 @@ class WorkTest < ActiveSupport::TestCase
       assert_equal [@work1], Work.owned_by(user1)
       assert_equal [@work2], Work.owned_by(user2)
     end
-    context "with a tag" do
+    context "with a common tag" do
       setup do
-        @tag = create_freeform
-        @work1.freeforms = [@tag]
-        @work2.freeforms = [@tag]
+        @tag = create_freeform(:canonical => true)
+        @work1.freeform_string = @tag.name
+        @work2.freeform_string = @tag.name
       end
       should "be returned by with_all_tag_ids and owned_by chained" do
         assert_equal [@work1], Work.with_all_tag_ids([@tag.id]).owned_by(@work1.pseuds.first.user)
@@ -144,7 +147,7 @@ class WorkTest < ActiveSupport::TestCase
 
       @works.each do |w|
         w.update_attribute('posted', true)
-        w.freeforms = [@tag]
+        w.freeform_string = @tag.name
       end
 
     end
@@ -202,6 +205,7 @@ class WorkTest < ActiveSupport::TestCase
   end
   def test_wip
     work = create_work
+    work.add_default_tags
     # default is complete one-shot
     assert work.is_complete
     assert !work.is_wip

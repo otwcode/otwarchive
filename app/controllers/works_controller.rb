@@ -57,7 +57,7 @@ class WorksController < ApplicationController
       @chapters = @work.chapters.in_order
       @serial_works = @work.serial_works
       @tags_by_category = {}
-      categories = Tag::TYPES - ["Media", "Genre"]
+      categories = Tag::VISIBLE
       categories.each {|type| @tags_by_category[type] = type.constantize.canonical}
   
       @chapter = @work.first_chapter
@@ -133,7 +133,8 @@ class WorksController < ApplicationController
       # tag to the selected_tags list.
       unless params[:tag_id].blank?
         @tag = Tag.find(params[:tag_id])
-        @selected_tags << params[:tag_id] unless @selected_tags.include?(params[:tag_id])
+        @tag = @tag.merger if @tag.merger
+        @selected_tags << @tag.id.to_s unless @selected_tags.include?(@tag.id.to_s)
       end
       
       # if we're browsing by a particular user get works by that user      
@@ -201,7 +202,7 @@ class WorksController < ApplicationController
     # Users must explicitly okay viewing of adult content
     if params[:view_adult]
       session[:adult] = true
-    elsif (!@work.rating || @work.rating.adult?) && !see_adult? 
+    elsif @work.adult? && !see_adult? 
       render :partial => "adult", :layout => "application"
     end	   
     unless @work.series.blank?
@@ -215,7 +216,7 @@ class WorksController < ApplicationController
         @series_next[series.id] = sw_next.work if sw_next
       end
     end
-    @tag_categories_limited = Tag::TYPES - ["Media", "Warning"]
+    @tag_categories_limited = Tag::VISIBLE - ["Media"]
     
     @page_title = ""
     if logged_in? && !current_user.preference.work_title_format.blank?
@@ -299,6 +300,7 @@ class WorksController < ApplicationController
 
     # Need to update @pseuds and @selected_pseuds values so we don't lose new co-authors if the form needs to be rendered again
     load_pseuds
+    @series = current_user.series.uniq 
 
     if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank? 
       @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
@@ -441,6 +443,7 @@ class WorksController < ApplicationController
     # create a reading object when showing a work, but only if the user has reading 
     # history enabled and is not the author of the work
     def update_or_create_reading
+      return unless @work
       if logged_in? && current_user.preference.history_enabled
         unless current_user.is_author_of?(@work)
           reading = Reading.find_or_initialize_by_work_id_and_user_id(@work.id, current_user.id)

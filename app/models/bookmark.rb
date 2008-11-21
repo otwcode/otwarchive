@@ -66,7 +66,7 @@ class Bookmark < ActiveRecord::Base
     tags = []
     tag_string.split(ArchiveConfig.DELIMITER).each do |string|
       string
-      tags << Tag.find_or_create_by_name(string.strip.squeeze(" "))
+      tags << Tag.find_or_create_by_name(string)
     end
     return tags
   end

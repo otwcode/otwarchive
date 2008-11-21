@@ -13,6 +13,7 @@ class BookmarkTest < ActiveSupport::TestCase
   context "A public bookmark on a posted work" do
     setup do
       @bookmark = create_bookmark(:private => false)
+      @bookmark.bookmarkable.add_default_tags
       @bookmark.bookmarkable.update_attribute(:posted, true)
     end
     should "be visible" do

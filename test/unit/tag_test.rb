@@ -6,7 +6,10 @@ class TagTest < ActiveSupport::TestCase
   end
 
   context "a Tag" do
-    should_have_many :taggings, :works, :bookmarks, :tags
+    should_have_many :common_tags, :taggings
+    should_have_many :works, :bookmarks, :external_works
+    should_have_many :parents, :ambiguities, :filtered_works
+    should_belong_to :merger, :fandom, :media
     should_require_attributes :name
     should_ensure_length_in_range :name, (1..ArchiveConfig.TAG_MAX), :long_message => /too long/, :short_message => /blank/
     should_allow_values_for :name, '"./?~!@#$%^&()_-+=', "1234567890", "spaces are not tag separators"
@@ -16,8 +19,8 @@ class TagTest < ActiveSupport::TestCase
     should_not_allow_values_for :name, "angle brackets > aren't allowed", :message => /can only/
 
     should_allow_values_for :adult, true, false
-    should_allow_values_for :banned, true, false
     should_allow_values_for :canonical, true, false
+    should_allow_values_for :wrangled, true, false
     
     context "with whitespace" do
       setup do
@@ -29,55 +32,29 @@ class TagTest < ActiveSupport::TestCase
     end
   end
 
-  context "a canonical tag" do
+  context "a tag and its mergers" do
     setup do
-      @tag = create_tag(:canonical => false, :type => 'Pairing')
-      @tag2 = create_tag(:canonical => false, :type => 'Pairing')
-      @tag3 = create_tag(:canonical => false, :type => 'Character')
-      @canonical = create_tag(:canonical => true, :type => 'Pairing')
-      @tag.synonym=@canonical
-      @tag2.synonym=@canonical
-      @tag3.synonym=@canonical
-      @tag3.reload
+      @tag = create_pairing(:canonical => true)
+      @pairing1 = create_pairing
+      @pairing2 = create_pairing
+      @character = create_character
+      @pairing1.wrangle_merger(@tag)
+      @pairing2.wrangle_merger(@tag)
+      @tag.reload
     end
-    should "should be able to have many noncanonical tags as synonyms" do
-      assert_equal Tag.find(@canonical.id), Tag.find(@tag.id).synonym
-      assert_equal Tag.find(@canonical.id), Tag.find(@tag2.id).synonym
-      assert @canonical.synonyms.include?(Tag.find(@tag.id))
-      assert @canonical.synonyms.include?(Tag.find(@tag2.id))
+    should "have a many to one relationship" do
+      assert_equal @tag, @pairing1.merger
+      assert_equal @tag, @pairing2.merger
+      assert_equal [@pairing1, @pairing2], @tag.mergers
     end
-    should "be not able to have tags of a different type as a synonym" do
-      assert_nil @tag3.synonym
-      assert !Tag.find(@canonical.id).synonyms.include?(Tag.find(@tag3.id))
+    should "be not able to be created from different types" do
+      assert_nil @character.wrangle_merger(@tag)
+      @tag.reload
+      assert_equal [@pairing1, @pairing2], @tag.mergers
     end
-  end
-  context "a non-canonical tag" do
-    setup do
-      @tag = create_tag(:canonical => false, :type => 'Pairing')
-      @tag2 = create_tag(:canonical => false, :type => 'Pairing')
-      @work = create_work
-      @work.tags << @tag
-      @canonical = create_tag(:canonical => true, :type => 'Pairing')
-   end
-    should "should not be able to be a synonym" do
-      @tag2.synonym=@tag
-      @tag2.reload
-      assert_nil @tag2.synonym
-    end
-    should "reassign its work" do
-      @tag.synonym=@canonical
-      @work.reload
-      assert_equal [Tag.find(@canonical.id)], @work.pairings
-    end
-  end
-  
-  context "tags by_category" do
-    should "find tags in a single category" do
-      assert_match "Explicit", Tag.by_category("Rating").map(&:name).join
-    end
-    should "find tags in multiple categories" do
-      assert_match "Explicit", Tag.by_category("Rating", "Warning").map(&:name).join
-      assert_match "Violence", Tag.by_category(["Rating", "Warning"]).map(&:name).join
+    should "be canonical" do
+      assert_nil @pairing1.wrangle_merger(@pairing2)
+      assert_nil @tag.wrangle_merger(@pairing2)
     end
   end
   
@@ -87,40 +64,23 @@ class TagTest < ActiveSupport::TestCase
        assert !Tag.for_tag_cloud.include?(@tag)
     end
   end
-  context "tags with only one work" do
+  context "tags with a work" do
     setup do
-      @tag = create_freeform
+      @tag = create_freeform(:canonical => true)
       @work = create_work
       @work.update_attribute(:posted, true)
       @work.tags << @tag
-    end
-    should "not be included in the cloud" do
-       assert !Tag.for_tag_cloud.include?(@tag)
-    end
-  end
-  context "tags with two works" do
-    setup do
-      @tag = create_freeform
-      @work = create_work
-      @work.update_attribute(:posted, true)
-      @work2 = create_work
-      @work2.update_attribute(:posted, true)
-      @work.tags << @tag
-      @work2.tags << @tag
     end
     should "be included in the cloud" do
        assert Tag.for_tag_cloud.include?(@tag)
     end
   end
-  context "tags with two works, which are not visible" do
+  context "tags with a work which is not visible" do
     setup do
       @tag = create_freeform
       @work = create_work(:restricted => true)
       @work.update_attribute(:posted, true)
-      @work2 = create_work(:restricted => true)
-      @work2.update_attribute(:posted, true)
       @work.tags << @tag
-      @work2.tags << @tag
     end
     should "not be included in the cloud" do
        assert !Tag.for_tag_cloud.include?(@tag)
@@ -128,33 +88,35 @@ class TagTest < ActiveSupport::TestCase
   end
   context "tags for tag cloud" do
     setup do
-      @tag = create_freeform
+      @tag1 = create_freeform
       @tag2 = create_freeform
-      @tag3 = create_genre(:canonical => true)
-      @tag2.add_to_genre(@tag3)
-      @tag4 = create_character
+      @tag3 = create_freeform(:canonical => true)
+      @tag4 = create_freeform
+      @tag5 = create_character
+      @tag1.wrangle_parent(@tag3)
+      @tag2.wrangle_merger(@tag3)
       @work1=create_work
       @work1.update_attribute(:posted, true)
       @work2=create_work
       @work2.update_attribute(:posted, true)
-      @work1.tags << @tag
-      @work1.tags << @tag2
-      @work1.tags << @tag4
-      @work2.tags << @tag
-      @work2.tags << @tag2
-      @work2.tags << @tag4
+      @work1.freeform_string = [@tag1, @tag2, @tag4].map(&:name).join(", ")
+      @work2.freeform_string = [@tag1, @tag3].map(&:name).join(", ")
+      @work2.character_string = @tag5.name
     end
-    should "include freeforms without a genre" do
-       assert Tag.for_tag_cloud.include?(@tag)
+    should "not include freeforms that have parents" do
+       assert !Tag.for_tag_cloud.include?(@tag1)
     end
-    should "not include freeforms with a genre" do
+    should "not include freeforms that have been merged" do
        assert !Tag.for_tag_cloud.include?(@tag2)
     end
-    should "include genre tags" do
+    should "include parent tags even if they do not appear on works" do
        assert Tag.for_tag_cloud.include?(@tag3)
     end
+    should_eventually "include non-wrangled freeforms" do
+       assert Tag.for_tag_cloud.include?(@tag4)
+    end
     should "not include other kinds of tags" do
-       assert !Tag.for_tag_cloud.include?(@tag4)
+       assert !Tag.for_tag_cloud.include?(@tag5)
     end
   end
   

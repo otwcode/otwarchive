@@ -115,11 +115,12 @@ module FixtureReplacement
  
   attributes_for :tag do |a|
     a.name = random_phrase[1...42]
-    a.type = Tag::TYPES[rand(8)]
+    a.type = Tag::TYPES[rand(5)+3]
   end
   
   attributes_for :rating do |a|
     a.name = random_phrase[1...42]
+    a.adult = false
   end
   
   attributes_for :warning do |a|
@@ -146,10 +147,6 @@ module FixtureReplacement
     a.name = random_phrase[1...42]
   end
 
-  attributes_for :genre do |a|
-    a.name = random_phrase[1...42]
-  end
-
   attributes_for :freeform do |a|
     a.name = random_phrase[1...42]
   end
@@ -157,6 +154,11 @@ module FixtureReplacement
   attributes_for :tagging do |a|
     a.tagger = default_tag
     a.taggable = default_work
+  end
+
+  attributes_for :common_tag do |a|
+    a.common_id = default_tag.id
+    a.filterable = default_work
   end
 
   attributes_for :user do |a|
@@ -176,10 +178,6 @@ module FixtureReplacement
     a.title = random_phrase
     a.authors = [user.default_pseud]
     a.chapters = [new_chapter(:authors => [user.default_pseud])]
-    a.fandom_string = create_fandom.name
-    a.rating_string = Rating::TEEN.name
-    a.warning_string = Warning::NONE.name
-    a.category_string = Category::GEN.name
     a.published_at = DateTime.now
     a.revised_at = DateTime.now
   end

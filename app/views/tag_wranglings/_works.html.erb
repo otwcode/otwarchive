@@ -1,6 +1,0 @@
-<% if @works %>
-  <h2>Selection of recent works with these tags (for reference):</h2>
-  <% @works.each do |work| %>
-    <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
-  <% end %>
-<%- end -%>

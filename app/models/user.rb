@@ -196,9 +196,18 @@ class User < ActiveRecord::Base
     is_tag_wrangler == "1" ? self.is_tag_wrangler : self.is_not_tag_wrangler
   end
   
-  # Options can include :category and :limit
+  # Options can include :categories and :limit
   def most_popular_tags(options = {})
-    all_tags = options[:category].blank? ? self.tags + self.bookmark_tags : self.tags.by_category(options[:category]) + self.bookmark_tags.by_category(options[:category])
+    all_tags = []
+    if options[:categories].blank?
+      all_tags = self.tags + self.bookmark_tags
+    else
+      type_tags = []
+      options[:categories].each do |type_name|
+        type_tags << type_name.constantize.all
+      end
+      all_tags = [self.tags + self.bookmark_tags].flatten & type_tags.flatten
+    end
     tags_with_count = {}
     all_tags.uniq.each do |tag|
       tags_with_count[tag] = all_tags.find_all{|t| t == tag}.size

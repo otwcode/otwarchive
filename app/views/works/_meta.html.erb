@@ -1,7 +1,6 @@
-
 <dl class="work-meta">
 	<%- work_tags = work.tags -%>
-  <%- Tag::TYPES.each do |type| -%>
+  <%- Tag::VISIBLE.each do |type| -%>
 		<%- tags = work_tags.select{|tag| tag.type == type} -%>
     <%- unless tags.blank? -%>
       <dt class="<%= type.downcase -%>">
@@ -14,11 +13,9 @@
           <li><%= show_warnings_link(work) %></li> 
         <%- else -%>
           <%- tags.each do |tag| -%>
-            <%- unless tag.banned %>
-              <li class="<%= type.downcase -%>">
-                <%= link_to_tag(tag) %> 
-              </li>
-             <%- end %>
+            <li class="<%= type.downcase -%>">
+              <%= link_to_tag(tag, true) %> 
+            </li>
           <%- end -%>
         <%- end -%>
         </ul>

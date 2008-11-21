@@ -33,6 +33,7 @@ class BookmarksControllerTest < ActionController::TestCase
   context "when showing a bookmark" do
     setup do
       @bookmark = create_bookmark
+      @bookmark.bookmarkable.add_default_tags
       @bookmark.bookmarkable.update_attribute(:posted, true)
       get :show, :locale => 'en', :id => @bookmark.id
     end
@@ -45,6 +46,7 @@ class BookmarksControllerTest < ActionController::TestCase
     setup do
       @user = create_user
       @bookmark = create_bookmark(:user => @user, :private => true)
+      @bookmark.bookmarkable.add_default_tags
       @bookmark.bookmarkable.update_attribute(:posted, true)
       @request.session[:user] = @user 
       get :show, :locale => 'en', :id => @bookmark.id
@@ -57,6 +59,7 @@ class BookmarksControllerTest < ActionController::TestCase
       @user = create_user
       @request.session[:user] = @user 
       @bookmark = create_bookmark(:private => true)
+      @bookmark.bookmarkable.add_default_tags
       @bookmark.bookmarkable.update_attribute(:posted, true)
       @request.session[:user] = @user 
       get :show, :locale => 'en', :id => @bookmark.id

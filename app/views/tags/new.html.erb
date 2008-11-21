@@ -1,24 +1,29 @@
-<h1><%=h 'New tag'.t %></h1>
+<h2><%=h 'New tag'.t %></h2>
 
 <%= error_messages_for :tag %>
 
-<p>Only attributes that apply to all tags are available. Once you have saved the tag, the attributes that are particular for that tag category will be available for editing</p>
+<p><%= "Once you have created the tag, the attributes that are particular for that tag category will be available for editing".t %></p>
 
-<%- form_for @tag do |f| -%>
+<%- form_for :tag, @tag, :url => { :action => "create" }  do |f| -%>
   <dl>
     <dt><%= f.label :name, 'Name'.t %></dt> 
     <dd><%= f.text_field :name %></dd>
     
-    <dt><%= f.check_box("banned") %><%= f.label :banned, 'Banned'.t %></dt>
-    <dd><%=h 'This tag will not show up anywhere'.t %></dd>
-
     <dt><%=h 'Category'.t %></dt>
-    <%- Tag::TYPES.each do |type| -%>
-    <dd><%= f.radio_button("type", type) %><%= f.label :type, type %></dd>
-    <%- end -%>    
+    <dd>
+      <%- if logged_in_as_admin? -%>
+        <%- types = Tag::TYPES  -%>
+      <%- else -%>
+        <%- types = Tag::USER_DEFINED + ['Ambiguity'] -%>
+      <%- end -%>
+      <%- types.each do |type| -%>
+        <%= f.radio_button("type", type) %><%= f.label :type, type %><br/>
+      <%- end -%>    
+    </dd>
   </dl>
   
-  <p><%= f.submit %></p>
+<p class="submit">
+<%= f.submit %></p>
 <%- end -%>
 
 <%= tag_wrangler_footer %>

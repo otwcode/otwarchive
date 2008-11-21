@@ -22,7 +22,7 @@
         </dd>			
 			<%- end -%>
 			<%- unless @filters.blank? -%>
-			  <%- Tag::TYPES.each do |type| -%>
+			  <%- Tag::FILTERS.each do |type| -%>
 				  <%- unless @filters[type].blank? -%>
           <dt onclick='toggleFilters("tag_category_<%= type %>");'>
             <span id="tag_category_<%= type %>_closed" style="display: none;"><%= image_tag 'arrow-right.gif', :alt => "" -%></span>
@@ -44,6 +44,7 @@
       <%- end -%>
 		</dl>
 		<p>
+  		<%= hidden_field_tag("tag_id", @tag.id) if @tag %>
   		<%= hidden_field_tag("query", @query) if @query %>
   		<%= hidden_field_tag("fandom_id", @fandom.id) if @fandom %>
   		<%= hidden_field_tag("user_id", @user.login) if @user %>

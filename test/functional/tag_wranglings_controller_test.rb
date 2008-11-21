@@ -15,8 +15,8 @@ class TagWranglingsControllerTest < ActionController::TestCase
       @request.session[:user] = @user
       get :index, :locale => 'en'
     end
-    should_redirect_to "{:controller => :works, :action => 'index'}"
-    should_set_the_flash_to /tag wranglers only/      
+    should_redirect_to 'user_path(@user)'
+    should_set_the_flash_to /permission/      
   end
   
   context "when logged in as a tag_wrangler" do

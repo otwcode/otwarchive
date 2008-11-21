@@ -11,7 +11,6 @@ ActionController::Routing::Routes.draw do |map|
     tag.resources :works
     tag.resources :bookmarks	
 	end
-  map.resources :taggings, :path_prefix => ':locale'
 
   map.root :controller => 'home', :action => 'index', :locale => 'en'  
   map.connect 'home/:action', :controller => "home", :path_prefix => ':locale'  

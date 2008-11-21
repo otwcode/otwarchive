@@ -3,7 +3,8 @@ require File.dirname(__FILE__) + '/../test_helper'
 class CommentTest < ActiveSupport::TestCase
   context "A comment" do
     setup do
-      @comment = create_comment
+      user = create_user
+      @comment = create_comment(:pseud_id => user.default_pseud.id)
     end
     should_belong_to :pseud
     should_belong_to :commentable
@@ -61,7 +62,7 @@ class CommentTest < ActiveSupport::TestCase
     assert Comment.find(comment.id).all_children.include?(child)
     # TODO more tests for depth and add_child under different circumstances
   end  
-  def test_destroy_or_mark_deleted
+  def test_mark_deleted
     # a comment with a child gets marked is_deleted
     comment = new_comment
     comment.set_and_save
@@ -72,11 +73,13 @@ class CommentTest < ActiveSupport::TestCase
     comment.destroy_or_mark_deleted
     assert comment = Comment.find(comment.id)
     assert comment.is_deleted
-    
+  end
+  def test_destroy
     # another comment with no children gets destroyed
+    comment = new_comment
     another_comment = new_comment
     another_comment.set_and_save    
-    another_comment = Comment.find(another_comment.id)
+    another_comment.reload
     another_comment.destroy_or_mark_deleted
     assert_raises(ActiveRecord::RecordNotFound) { Comment.find(another_comment.id) }
   end

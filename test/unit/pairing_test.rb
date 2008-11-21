@@ -3,10 +3,8 @@ require File.dirname(__FILE__) + '/../test_helper'
 class PairingTest < ActiveSupport::TestCase
 
   context "a pairing Tag" do
-    should_have_many :taggings, :works, :bookmarks, :tags, :characters
-    should_require_attributes :name
     should "have a display name" do
-      assert_equal "Pairing", Pairing::NAME
+      assert_equal ArchiveConfig.PAIRING_CATEGORY_NAME, Pairing::NAME
     end
   end
     
@@ -14,27 +12,22 @@ class PairingTest < ActiveSupport::TestCase
     setup do
       @pairing = Pairing.create(:name => "first/second")
     end
-    should "have access to its characters" do
-      assert @pairing.characters.include?(Character.find_by_name("first"))
-      assert @pairing.characters.include?(Character.find_by_name("second"))
+    should "have create its characters" do
+      assert Character.find_by_name("first")
+      assert Character.find_by_name("second")
     end
-    context "which is made canonical" do
-      setup do
-        @pairing.update_attribute(:canonical, true)
-      end
-      should "update its characters to be canonical" do
-        assert Character.find_by_name("first").canonical?
-        assert Character.find_by_name("second").canonical?
-      end
+    should "not get get its characters as parents" do
+      assert !@pairing.parents.include?(Character.find_by_name("first"))
     end
   end
 
-  context "a new canonical pairing tag" do
+  context "a pairing tag with a canonical character" do
     setup do
-      @pairing = Pairing.create(:name => "alpha/beta", :canonical => true)
+      @character1 = Character.create(:name => "alpha", :canonical => true)
+      @pairing = Pairing.create(:name => "alpha/beta")
     end
-    should "have canonical characters" do
-      assert_equal [true, true], @pairing.characters.map(&:canonical)
+    should "get get its characters as parents" do
+      assert @pairing.parents.include?(@character1)
     end
   end
 
@@ -43,18 +36,8 @@ class PairingTest < ActiveSupport::TestCase
       @pairing = Pairing.create(:name => "first/second/third")
     end
     should "have three characters" do
-      assert_equal 3, @pairing.characters.size
+      assert_equal 3, Character.count
     end
   end
 
-  context "a work with a new pairing" do
-    setup do
-      @work = create_work
-      @work.pairing_string = "firstly/secondly"
-    end
-    should "get the fandom of the work" do
-      assert_equal @work.fandoms, [Pairing.find_by_name("firstly/secondly").fandom]
-    end
-  end
-  
 end

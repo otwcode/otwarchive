@@ -132,14 +132,16 @@ module ThinkingSphinx
         ['sphinx_deleted'],
         {self.id => 1}
       ) if self.in_core_index?
-      
-      client.update(
-        "#{self.class.indexes.first.name}_delta",
-        ['sphinx_deleted'],
-        {self.id => 1}
-      ) if ThinkingSphinx.deltas_enabled? &&
-        self.class.indexes.any? { |index| index.delta? } &&
-        self.delta?
+      begin
+        client.update(
+          "#{self.class.indexes.first.name}_delta",
+          ['sphinx_deleted'],
+          {self.id => 1}
+        ) if ThinkingSphinx.deltas_enabled? &&
+          self.class.indexes.any? { |index| index.delta? } &&
+          self.delta?
+       rescue
+       end
     end
   end
 end

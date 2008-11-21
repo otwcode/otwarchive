@@ -46,10 +46,10 @@ class WorksCreateControllerTest < ActionController::TestCase
         form.work.wip_length="17"
         form.work.series_attributes.title="a new series"
         form.work.restricted="1"
-        form.work.rating_string="Explicit"
+        form.work.rating_string=ArchiveConfig.RATING_EXPLICIT_TAG_NAME
         form.work.warning_strings=
             ["Extreme Violence", "Major Character Death", "Underage"]
-        form.work.category_string="Multi"
+        form.work.category_string=ArchiveConfig.CATEGORY_MULTI_TAG_NAME
         form.work.fandom_string="Harry Potter, xover"
         form.work.pairing_string=
           "character3/everyone, character4/character6/character5"
@@ -74,9 +74,9 @@ class WorksCreateControllerTest < ActionController::TestCase
         # belongs to user
         assert_equal @work, User.find(@user.id).works.first
         # tags
-        assert_equal Rating::EXPLICIT, @work.rating
+        assert_equal Rating.find_by_name(ArchiveConfig.RATING_EXPLICIT_TAG_NAME), @work.ratings.first
         assert_equal "Extreme Violence, Major Character Death, Underage" , @work.warning_string
-        assert_equal Category::MULTI, @work.category
+        assert_equal Category.find_by_name(ArchiveConfig.CATEGORY_MULTI_TAG_NAME), @work.categories.first
         assert_equal ["Harry Potter", "xover"], @work.fandoms.map(&:name)
         assert @work.pairings.include?(Pairing.find_by_name("character3/everyone"))
         assert_equal Character.find_by_name("character1"), @work.characters.first

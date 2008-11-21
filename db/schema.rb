@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081114164535) do
+ActiveRecord::Schema.define(:version => 20081115041645) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -76,6 +76,14 @@ ActiveRecord::Schema.define(:version => 20081114164535) do
     t.boolean  "hidden_by_admin",                :default => false, :null => false
     t.string   "user_agent"
     t.boolean  "is_read",                        :default => false, :null => false
+  end
+
+  create_table "common_tags", :force => true do |t|
+    t.integer  "common_id",       :limit => 11, :null => false
+    t.integer  "filterable_id",   :limit => 11, :null => false
+    t.string   "filterable_type",               :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "communities", :force => true do |t|
@@ -311,12 +319,12 @@ ActiveRecord::Schema.define(:version => 20081114164535) do
   end
 
   create_table "taggings", :force => true do |t|
-    t.integer  "tagger_id",     :limit => 11,                 :null => false
-    t.string   "tagger_type",                 :default => "", :null => false
+    t.integer  "tagger_id",     :limit => 11
     t.integer  "taggable_id",   :limit => 11,                 :null => false
     t.string   "taggable_type",               :default => "", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "tagger_type"
   end
 
   add_index "taggings", ["tagger_id", "tagger_type", "taggable_id", "taggable_type"], :name => "index_taggings_polymorphic", :unique => true
@@ -324,20 +332,19 @@ ActiveRecord::Schema.define(:version => 20081114164535) do
   create_table "tags", :force => true do |t|
     t.string   "name",                          :default => "",    :null => false
     t.boolean  "canonical",                     :default => false, :null => false
-    t.boolean  "banned",                        :default => false, :null => false
     t.integer  "tag_category_id", :limit => 11
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "taggings_count",  :limit => 11, :default => 0
     t.boolean  "adult",                         :default => false
     t.string   "type"
-    t.integer  "canonical_id",    :limit => 11
     t.integer  "media_id",        :limit => 11
     t.integer  "fandom_id",       :limit => 11
-    t.integer  "genre_id",        :limit => 11
+    t.integer  "merger_id",       :limit => 11
+    t.boolean  "wrangled",                      :default => false, :null => false
   end
 
-  add_index "tags", ["name", "tag_category_id"], :name => "index_tags_on_name_and_category", :unique => true
+  add_index "tags", ["name"], :name => "index_tags_on_name", :unique => true
 
   create_table "users", :force => true do |t|
     t.datetime "created_at"

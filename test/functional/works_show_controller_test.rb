@@ -5,7 +5,9 @@ class WorksShowControllerTest < ActionController::TestCase
 
   context "a non-adult work" do
     setup do
-      @work = create_work(:rating_string => Rating::GENERAL.name, :authors => [create_user.default_pseud])
+      @work = create_work(:authors => [create_user.default_pseud])
+      @work.add_default_tags
+      @work.rating_string = ArchiveConfig.RATING_GENERAL_TAG_NAME
     end
     context "that isn't posted" do
       context "when not logged in" do
@@ -101,7 +103,9 @@ class WorksShowControllerTest < ActionController::TestCase
   end
   context "an adult work" do
     setup do
-      @work = create_work(:rating_string => Rating::EXPLICIT.name, :authors => [create_user.default_pseud])
+      @work = create_work(:authors => [create_user.default_pseud])
+      @work.add_default_tags
+      @work.rating_string = ArchiveConfig.RATING_EXPLICIT_TAG_NAME
     end
     context "that isn't posted" do
       context "when not logged in" do

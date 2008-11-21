@@ -12,13 +12,13 @@ class MediaControllerTest < ActionController::TestCase
     should_assign_to :fandom_listing, :equal => []
     context "a database and canonical fandoms" do
       setup do
-        @fandom2 = create_fandom(:media_id => @media.id, :canonical => true)
+        @fandom2 = create_fandom(:canonical => true, :media_id => @media.id)
       end
       should_assign_to :fandom_listing, :equal => [[@media, [@fandom2]]]
       context "and five more fandoms" do
         setup do
           for i in 0...5 do 
-            fandom = create_fandom(:media_id => @media.id, :canonical => true)
+            fandom = create_fandom(:canonical => true, :media_id => @media.id)
           end
           get :index, :locale => 'en'
         end

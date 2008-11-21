@@ -65,7 +65,7 @@ module WorksHelper
 
   # select the default warnings if this is a new work
   def warning_selected(work)
-    @work.new_record? ? Warning::DEFAULT : @work.tags.by_category("Warning").valid.collect(&:name)
+    @work.new_record? ? Warning.find_by_name(ArchiveConfig.WARNING_DEFAULT_TAG_NAME) : @work.warning_strings
   end
   
   def get_tags_by_category(work)
@@ -73,7 +73,7 @@ module WorksHelper
       @tags_by_category_work = work
       @tags_by_category = nil
     end
-    @tags_by_category ||= Tag.on_works([work]).group_by(&:type).to_hash
+    @tags_by_category ||= work.tags.group_by(&:type)
   end
   
   def get_title_string(tags, category_name = "")
@@ -113,23 +113,25 @@ module WorksHelper
   end
   
   def get_warnings_class(warning_tags)
-    # check for warnings
-    if warning_tags == [Warning::NONE]
-      "warning-no"
-    else
-      "warning-yes"
+    return "warning-yes" unless warning_tags
+    none = true
+    warning_tags.map(&:name).each do |name|
+      none = false if name != ArchiveConfig.WARNING_NONE_TAG_NAME
     end
+    return "warning-no" if none
+    "warning-yes"
   end
     
   def get_ratings_class(rating_tag)
-    case rating_tag
-    when Rating::EXPLICIT
+    return "rating-notrate" unless rating_tag
+    case rating_tag.name
+    when ArchiveConfig.RATING_EXPLICIT_TAG_NAME
       "rating-explicit"
-    when Rating::MATURE
+    when ArchiveConfig.RATING_MATURE_TAG_NAME
       "rating-mature"
-    when Rating::TEEN
+    when ArchiveConfig.RATING_TEEN_TAG_NAME
       "rating-teen"
-    when Rating::GENERAL
+    when ArchiveConfig.RATING_GENERAL_TAG_NAME
       "rating-general-audience"
     else
       "rating-notrated"
@@ -137,18 +139,19 @@ module WorksHelper
   end
 
   def get_category_class(category_tag)
-    case category_tag
-    when Category::GEN
+    return "category-none" unless category_tag
+    case category_tag.name
+    when ArchiveConfig.CATEGORY_GEN_TAG_NAME
       "category-gen"
-    when Category::SLASH
+    when ArchiveConfig.CATEGORY_SLASH_TAG_NAME
       "category-slash"
-    when Category::HET
+    when ArchiveConfig.CATEGORY_HET_TAG_NAME
       "category-het"
-    when Category::FEMSLASH
+    when ArchiveConfig.CATEGORY_FEMSLASH_TAG_NAME
       "category-femslash"
-    when Category::MULTI
+    when ArchiveConfig.CATEGORY_MULTI_TAG_NAME
       "category-multi"
-    when Category::OTHER
+    when ArchiveConfig.CATEGORY_OTHER_TAG_NAME
       "category-other"
     else
       "category-none"
@@ -171,7 +174,7 @@ module WorksHelper
     pairings = tags_by_category["Pairing"] || []
     return [] if pairings.empty? && characters.empty? 
     
-    pairing_characters = pairings.collect{|p| p.characters}.flatten.uniq.compact
+    pairing_characters = pairings.collect{|p| p.children}.flatten.uniq.compact
     
     cast = pairings + characters - pairing_characters
     if cast.size > ArchiveConfig.TAGS_PER_LINE
@@ -186,8 +189,9 @@ module WorksHelper
     
     warnings = tags_by_category["Warning"] || []
     freeform = tags_by_category["Freeform"] || []
+    ambiguous = tags_by_category["Ambiguous"] || []
 
-    tags = warnings + freeform
+    tags = warnings + freeform + ambiguous
     if tags.size > ArchiveConfig.TAGS_PER_LINE
       tags = tags[0..(ArchiveConfig.TAGS_PER_LINE-1)]
     end

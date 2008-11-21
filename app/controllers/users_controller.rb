@@ -30,7 +30,6 @@ class UsersController < ApplicationController
     end
       
     @users = User.alphabetical.starting_with(letter)
-    @categories = ["Fandom", "Pairing", "Character", "Genre", "Freeform"]
   end 
 
   # GET /users/1

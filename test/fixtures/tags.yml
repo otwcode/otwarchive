@@ -1,946 +1,785 @@
 --- 
-tag_00066: 
-  name: Severus Snape
+tag_1063753748: 
+  name: John
+  merger_id: 
   media_id: 
-  fandom_id: 6
-  updated_at: 2008-11-13 19:03:01 -08:00
+  fandom_id: 
+  updated_at: 2008-11-21 01:58:59 -08:00
   tag_category_id: 
-  genre_id: 
-  canonical: true
-  taggings_count: 1
+  canonical: false
+  taggings_count: 0
   type: Character
   adult: false
-  id: 66
-  banned: false
-  created_at: 2008-11-13 19:02:47 -08:00
-  canonical_id: 
-tag_00055: 
-  name: John Sheppard
-  media_id: 
-  fandom_id: 12
-  updated_at: 2008-11-13 16:19:58 -08:00
-  tag_category_id: 
-  genre_id: 
-  canonical: true
-  taggings_count: 1
-  type: Character
-  adult: false
-  id: 55
-  banned: false
-  created_at: 2008-11-13 16:05:59 -08:00
-  canonical_id: 
-tag_00022: 
-  name: Torchwood
-  media_id: 39
-  fandom_id: 9
-  updated_at: 2008-11-13 16:44:35 -08:00
+  wrangled: true
+  id: 1063753748
+  created_at: 2008-11-21 01:48:52 -08:00
+tag_986046160: 
+  name: Harry Potter
+  merger_id: 
+  media_id: 441672848
+  fandom_id: 
+  updated_at: 2008-11-08 19:26:02 -08:00
   tag_category_id: 63971739
-  genre_id: 
   canonical: true
   taggings_count: 0
   type: Fandom
   adult: false
-  id: 22
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00011: 
-  name: Dean Winchester/Sam Winchester
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 490509104
-  genre_id: 
-  canonical: true
-  taggings_count: 1
-  type: Pairing
-  adult: false
-  id: 11
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00033: 
-  name: Choose Not To Warn For Some Content
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 
-  genre_id: 
-  canonical: true
-  taggings_count: 0
-  type: Warning
-  adult: false
-  id: 33
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00044: 
-  name: Supernatural
-  media_id: 39
-  fandom_id: 
-  updated_at: 2008-11-13 16:44:35 -08:00
-  tag_category_id: 63971739
-  genre_id: 
-  canonical: true
-  taggings_count: 0
-  type: Fandom
-  adult: false
-  id: 44
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00045: 
-  name: American Idol
-  media_id: 19
-  fandom_id: 
-  updated_at: 2008-11-13 18:54:46 -08:00
-  tag_category_id: 63971739
-  genre_id: 
-  canonical: true
-  taggings_count: 0
-  type: Fandom
-  adult: false
-  id: 45
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00034: 
-  name: General Audiences
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 553661720
-  genre_id: 
-  canonical: true
-  taggings_count: 0
-  type: Rating
-  adult: false
-  id: 34
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00012: 
-  name: Stargate Atlantis
-  media_id: 39
-  fandom_id: 
-  updated_at: 2008-11-13 18:41:25 -08:00
-  tag_category_id: 63971739
-  genre_id: 
-  canonical: true
-  taggings_count: 2
-  type: Fandom
-  adult: false
-  id: 12
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 12
-tag_00001: 
-  name: F/F
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 
-  genre_id: 
-  canonical: true
-  taggings_count: 1
-  type: Category
-  adult: false
-  id: 1
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00023: 
-  name: None Of These Warnings Apply
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 499134864
-  genre_id: 
-  canonical: true
-  taggings_count: 2
-  type: Warning
-  adult: false
-  id: 23
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00056: 
-  name: Samantha Carter/Teyla Emmagan
-  media_id: 
-  fandom_id: 12
-  updated_at: 2008-11-13 16:30:54 -08:00
-  tag_category_id: 
-  genre_id: 
-  canonical: true
-  taggings_count: 1
-  type: Pairing
-  adult: false
-  id: 56
-  banned: false
-  created_at: 2008-11-13 16:07:10 -08:00
-  canonical_id: 
-tag_00057: 
-  name: Teyla
-  media_id: 
-  fandom_id: 12
-  updated_at: 2008-11-13 18:42:26 -08:00
-  tag_category_id: 
-  genre_id: 
-  canonical: false
-  taggings_count: 1
-  type: Character
-  adult: false
-  id: 57
-  banned: false
-  created_at: 2008-11-13 16:07:10 -08:00
-  canonical_id: 60
-tag_00024: 
-  name: Other Media
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 87582722
-  genre_id: 
-  canonical: true
-  taggings_count: 0
-  type: Media
-  adult: false
-  id: 24
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00002: 
-  name: Femslash
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 410592302
-  genre_id: 
-  canonical: true
-  taggings_count: 0
-  type: Category
-  adult: false
-  id: 2
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00013: 
-  name: Not Rated
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 553661720
-  genre_id: 
-  canonical: true
-  taggings_count: 2
-  type: Rating
-  adult: true
-  id: 13
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00035: 
-  name: major character death
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 499134864
-  genre_id: 
-  canonical: true
-  taggings_count: 0
-  type: Warning
-  adult: false
-  id: 35
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00046: 
-  name: M/M
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 
-  genre_id: 
-  canonical: true
-  taggings_count: 2
-  type: Category
-  adult: false
-  id: 46
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00047: 
-  name: Gen
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 15:54:01 -08:00
-  tag_category_id: 
-  genre_id: 
-  canonical: true
-  taggings_count: 1
-  type: Category
-  adult: false
-  id: 47
-  banned: false
-  created_at: 2008-11-13 15:54:01 -08:00
-  canonical_id: 
-tag_00036: 
-  name: Multi
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 410592302
-  genre_id: 
-  canonical: true
-  taggings_count: 1
-  type: Category
-  adult: false
-  id: 36
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00014: 
-  name: Explicit
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 553661720
-  genre_id: 
-  canonical: true
-  taggings_count: 2
-  type: Rating
-  adult: true
-  id: 14
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00025: 
-  name: extreme violence
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 499134864
-  genre_id: 
-  canonical: true
-  taggings_count: 0
-  type: Warning
-  adult: false
-  id: 25
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00058: 
-  name: Samantha Carther
-  media_id: 
-  fandom_id: 30
-  updated_at: 2008-11-13 16:27:38 -08:00
-  tag_category_id: 
-  genre_id: 
-  canonical: true
-  taggings_count: 1
-  type: Character
-  adult: false
-  id: 58
-  banned: false
-  created_at: 2008-11-13 16:27:38 -08:00
-  canonical_id: 
-tag_00059: 
-  name: Jack O'Neill
-  media_id: 
-  fandom_id: 30
-  updated_at: 2008-11-13 16:27:38 -08:00
-  tag_category_id: 
-  genre_id: 
-  canonical: true
-  taggings_count: 1
-  type: Character
-  adult: false
-  id: 59
-  banned: false
-  created_at: 2008-11-13 16:27:38 -08:00
-  canonical_id: 
-tag_00026: 
-  name: Teen and Up Audiences
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 553661720
-  genre_id: 
-  canonical: true
-  taggings_count: 0
-  type: Rating
-  adult: false
-  id: 26
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00004: 
-  name: fluff
-  media_id: 
-  fandom_id: 3
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 178752192
-  genre_id: 
-  canonical: false
-  taggings_count: 0
-  type: Freeform
-  adult: false
-  id: 4
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00015: 
-  name: Movies
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 87582722
-  genre_id: 
-  canonical: true
-  taggings_count: 0
-  type: Media
-  adult: false
-  id: 15
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00037: 
-  name: Comics & Manga
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 87582722
-  genre_id: 
-  canonical: true
-  taggings_count: 0
-  type: Media
-  adult: false
-  id: 37
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00048: 
-  name: Sam/Dean
-  media_id: 
-  fandom_id: 44
-  updated_at: 2008-11-13 16:09:32 -08:00
-  tag_category_id: 
-  genre_id: 
-  canonical: false
-  taggings_count: 1
-  type: Pairing
-  adult: false
-  id: 48
-  banned: false
-  created_at: 2008-11-13 16:02:36 -08:00
-  canonical_id: 11
-tag_00049: 
-  name: Sam
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 18:43:09 -08:00
-  tag_category_id: 
-  genre_id: 
-  canonical: false
-  taggings_count: 3
-  type: Character
-  adult: false
-  id: 49
-  banned: true
-  created_at: 2008-11-13 16:02:36 -08:00
-  canonical_id: 
-tag_00038: 
-  name: Slash
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 410592302
-  genre_id: 
-  canonical: true
-  taggings_count: 0
-  type: Category
-  adult: false
-  id: 38
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00016: 
-  name: Sam Winchester
-  media_id: 
-  fandom_id: 3
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 51064457
-  genre_id: 
-  canonical: true
-  taggings_count: 2
-  type: Character
-  adult: false
-  id: 16
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00005: 
+  wrangled: true
+  id: 986046160
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_26796919: 
   name: Dean Winchester
+  merger_id: 
   media_id: 
-  fandom_id: 3
-  updated_at: 2008-11-13 15:52:15 -08:00
+  fandom_id: 741440589
+  updated_at: 2008-11-21 01:59:52 -08:00
   tag_category_id: 51064457
-  genre_id: 
   canonical: true
-  taggings_count: 2
+  taggings_count: 0
   type: Character
   adult: false
-  id: 5
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00027: 
-  name: Het
+  wrangled: true
+  id: 26796919
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_362175678: 
+  name: fluff
+  merger_id: 
   media_id: 
   fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 410592302
-  genre_id: 
+  updated_at: 2008-11-21 00:34:57 -08:00
+  tag_category_id: 178752192
+  canonical: true
+  taggings_count: 0
+  type: Freeform
+  adult: false
+  wrangled: true
+  id: 362175678
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_1063753737: 
+  name: F/F
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 00:14:51 -08:00
+  tag_category_id: 
   canonical: true
   taggings_count: 0
   type: Category
   adult: false
-  id: 27
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00060: 
-  name: Teyla Emmagan
+  wrangled: true
+  id: 1063753737
+  created_at: 2008-11-21 00:14:51 -08:00
+tag_1063753750: 
+  name: John Sheppard/Rodney McKay
+  merger_id: 
   media_id: 
-  fandom_id: 12
-  updated_at: 2008-11-13 16:30:54 -08:00
+  fandom_id: 
+  updated_at: 2008-11-21 01:58:32 -08:00
   tag_category_id: 
-  genre_id: 
-  canonical: true
-  taggings_count: 1
-  type: Character
-  adult: false
-  id: 60
-  banned: false
-  created_at: 2008-11-13 16:30:54 -08:00
-  canonical_id: 
-tag_00061: 
-  name: Bandom
-  media_id: 40
-  fandom_id: 
-  updated_at: 2008-11-13 18:46:01 -08:00
-  tag_category_id: 
-  genre_id: 
-  canonical: true
-  taggings_count: 0
-  type: Fandom
-  adult: false
-  id: 61
-  banned: false
-  created_at: 2008-11-13 18:45:35 -08:00
-  canonical_id: 
-tag_00028: 
-  name: Cartoons & Anime
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 87582722
-  genre_id: 
-  canonical: true
-  taggings_count: 0
-  type: Media
-  adult: false
-  id: 28
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00006: 
-  name: Harry Potter
-  media_id: 10
-  fandom_id: 
-  updated_at: 2008-11-13 17:50:28 -08:00
-  tag_category_id: 63971739
-  genre_id: 
-  canonical: true
-  taggings_count: 1
-  type: Fandom
-  adult: false
-  id: 6
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00017: 
-  name: Iron Man (2008)
-  media_id: 15
-  fandom_id: 
-  updated_at: 2008-11-13 18:54:59 -08:00
-  tag_category_id: 63971739
-  genre_id: 
-  canonical: true
-  taggings_count: 0
-  type: Fandom
-  adult: false
-  id: 17
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00039: 
-  name: TV Shows
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 87582722
-  genre_id: 
-  canonical: true
-  taggings_count: 0
-  type: Media
-  adult: false
-  id: 39
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00050: 
-  name: Dean
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 18:43:09 -08:00
-  tag_category_id: 
-  genre_id: 
-  canonical: false
-  taggings_count: 1
-  type: Character
-  adult: false
-  id: 50
-  banned: true
-  created_at: 2008-11-13 16:02:36 -08:00
-  canonical_id: 
-tag_00051: 
-  name: Samantha Carter/Jack O'Neill
-  media_id: 
-  fandom_id: 30
-  updated_at: 2008-11-13 16:28:02 -08:00
-  tag_category_id: 
-  genre_id: 
   canonical: true
   taggings_count: 1
   type: Pairing
   adult: false
-  id: 51
-  banned: false
-  created_at: 2008-11-13 16:04:45 -08:00
-  canonical_id: 
-tag_00040: 
-  name: Music & Bands
+  wrangled: true
+  id: 1063753750
+  created_at: 2008-11-21 01:50:08 -08:00
+tag_1063753738: 
+  name: No Media
+  merger_id: 
   media_id: 
   fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 87582722
-  genre_id: 
+  updated_at: 2008-11-21 00:14:52 -08:00
+  tag_category_id: 
   canonical: true
   taggings_count: 0
   type: Media
   adult: false
-  id: 40
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00018: 
-  name: Mature
+  wrangled: true
+  id: 1063753738
+  created_at: 2008-11-21 00:14:52 -08:00
+tag_545584597: 
+  name: Dean Winchester/Sam Winchester
+  merger_id: 
   media_id: 
   fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 553661720
-  genre_id: 
+  updated_at: 2008-11-08 19:26:02 -08:00
+  tag_category_id: 490509104
   canonical: true
-  taggings_count: 1
+  taggings_count: 0
+  type: Pairing
+  adult: false
+  wrangled: false
+  id: 545584597
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_177887685: 
+  name: Doctor Who
+  merger_id: 
+  media_id: 1019428968
+  fandom_id: 
+  updated_at: 2008-11-08 19:26:02 -08:00
+  tag_category_id: 63971739
+  canonical: true
+  taggings_count: 0
+  type: Fandom
+  adult: false
+  wrangled: true
+  id: 177887685
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_441672848: 
+  name: Books
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-08 19:26:02 -08:00
+  tag_category_id: 87582722
+  canonical: true
+  taggings_count: 0
+  type: Media
+  adult: false
+  wrangled: false
+  id: 441672848
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_552317390: 
+  name: Sam Carter
+  merger_id: 
+  media_id: 
+  fandom_id: 130714128
+  updated_at: 2008-11-08 19:26:02 -08:00
+  tag_category_id: 51064457
+  canonical: true
+  taggings_count: 0
+  type: Character
+  adult: false
+  wrangled: false
+  id: 552317390
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_1039617938: 
+  name: Choose Not To Warn
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 00:14:51 -08:00
+  tag_category_id: 499134864
+  canonical: true
+  taggings_count: 0
+  type: Warning
+  adult: false
+  wrangled: true
+  id: 1039617938
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_1063753749: 
+  name: Rodney
+  merger_id: 1063753752
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 02:01:30 -08:00
+  tag_category_id: 
+  canonical: false
+  taggings_count: 0
+  type: Character
+  adult: false
+  wrangled: true
+  id: 1063753749
+  created_at: 2008-11-21 01:48:52 -08:00
+tag_1063753740: 
+  name: angst
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 00:35:47 -08:00
+  tag_category_id: 
+  canonical: true
+  taggings_count: 0
+  type: Freeform
+  adult: false
+  wrangled: true
+  id: 1063753740
+  created_at: 2008-11-21 00:35:38 -08:00
+tag_1019428968: 
+  name: Movies
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-08 19:26:02 -08:00
+  tag_category_id: 87582722
+  canonical: true
+  taggings_count: 0
+  type: Media
+  adult: false
+  wrangled: false
+  id: 1019428968
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_112726825: 
+  name: Explicit
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 00:14:51 -08:00
+  tag_category_id: 553661720
+  canonical: true
+  taggings_count: 0
   type: Rating
   adult: true
-  id: 18
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00007: 
-  name: Choose Not To Warn
+  wrangled: true
+  id: 112726825
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_402275454: 
+  name: Not Rated
+  merger_id: 
   media_id: 
   fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 499134864
-  genre_id: 
+  updated_at: 2008-11-21 00:14:51 -08:00
+  tag_category_id: 553661720
   canonical: true
   taggings_count: 0
-  type: Warning
-  adult: false
-  id: 7
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00029: 
-  name: underage
-  media_id: 
+  type: Rating
+  adult: true
+  wrangled: true
+  id: 402275454
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_951091623: 
+  name: Stargate Atlantis
+  merger_id: 
+  media_id: 791950904
   fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 499134864
-  genre_id: 
-  canonical: true
-  taggings_count: 0
-  type: Warning
-  adult: false
-  id: 29
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00062: 
-  name: snarry
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 19:03:53 -08:00
-  tag_category_id: 
-  genre_id: 
-  canonical: false
-  taggings_count: 1
-  type: Pairing
-  adult: false
-  id: 62
-  banned: false
-  created_at: 2008-11-13 18:58:41 -08:00
-  canonical_id: 64
-tag_00030: 
-  name: Stargate SG-1
-  media_id: 39
-  fandom_id: 
-  updated_at: 2008-11-13 16:44:35 -08:00
+  updated_at: 2008-11-08 19:26:02 -08:00
   tag_category_id: 63971739
-  genre_id: 
   canonical: true
   taggings_count: 0
   type: Fandom
   adult: false
-  id: 30
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00008: 
-  name: Sam Carter
+  wrangled: true
+  id: 951091623
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_1063753739: 
+  name: No Fandom
+  merger_id: 
   media_id: 
-  fandom_id: 30
-  updated_at: 2008-11-13 15:52:15 -08:00
+  fandom_id: 
+  updated_at: 2008-11-21 00:14:52 -08:00
+  tag_category_id: 
+  canonical: true
+  taggings_count: 0
+  type: Fandom
+  adult: false
+  wrangled: true
+  id: 1063753739
+  created_at: 2008-11-21 00:14:52 -08:00
+tag_1063753751: 
+  name: John Sheppard
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 01:58:32 -08:00
+  tag_category_id: 
+  canonical: true
+  taggings_count: 0
+  type: Character
+  adult: false
+  wrangled: true
+  id: 1063753751
+  created_at: 2008-11-21 01:50:08 -08:00
+tag_885489802: 
+  name: Mature
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 00:14:51 -08:00
+  tag_category_id: 553661720
+  canonical: true
+  taggings_count: 0
+  type: Rating
+  adult: true
+  wrangled: true
+  id: 885489802
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_385776504: 
+  name: Iron Man (2008)
+  merger_id: 
+  media_id: 1019428968
+  fandom_id: 
+  updated_at: 2008-11-08 19:26:02 -08:00
+  tag_category_id: 63971739
+  canonical: true
+  taggings_count: 0
+  type: Fandom
+  adult: false
+  wrangled: true
+  id: 385776504
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_221905380: 
+  name: Sam Winchester
+  merger_id: 
+  media_id: 
+  fandom_id: 741440589
+  updated_at: 2008-11-21 01:59:52 -08:00
   tag_category_id: 51064457
-  genre_id: 
   canonical: true
   taggings_count: 0
   type: Character
   adult: false
-  id: 8
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00019: 
-  name: Real People & Celebrities
+  wrangled: true
+  id: 221905380
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_1063753752: 
+  name: Rodney McKay
+  merger_id: 
   media_id: 
   fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 87582722
-  genre_id: 
+  updated_at: 2008-11-21 01:58:33 -08:00
+  tag_category_id: 
   canonical: true
   taggings_count: 0
-  type: Media
-  adult: false
-  id: 19
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00041: 
-  name: Rape/Non-Con
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 
-  genre_id: 
-  canonical: true
-  taggings_count: 1
-  type: Warning
-  adult: false
-  id: 41
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00052: 
-  name: Jack
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-13 18:43:09 -08:00
-  tag_category_id: 
-  genre_id: 
-  canonical: false
-  taggings_count: 1
   type: Character
   adult: false
-  id: 52
-  banned: true
-  created_at: 2008-11-13 16:04:45 -08:00
-  canonical_id: 
-tag_00064: 
-  name: Harry Potter/Severus Snape
-  media_id: 
-  fandom_id: 6
-  updated_at: 2008-11-13 19:03:01 -08:00
-  tag_category_id: 
-  genre_id: 
-  canonical: true
-  taggings_count: 1
-  type: Pairing
-  adult: false
-  id: 64
-  banned: false
-  created_at: 2008-11-13 19:02:47 -08:00
-  canonical_id: 
-tag_00053: 
-  name: Samantha Carter/John Sheppard
-  media_id: 
-  fandom_id: 12
-  updated_at: 2008-11-13 16:19:58 -08:00
-  tag_category_id: 
-  genre_id: 
-  canonical: true
-  taggings_count: 1
-  type: Pairing
-  adult: false
-  id: 53
-  banned: false
-  created_at: 2008-11-13 16:05:59 -08:00
-  canonical_id: 
-tag_00042: 
-  name: F/M
-  media_id: 
+  wrangled: true
+  id: 1063753752
+  created_at: 2008-11-21 01:50:08 -08:00
+tag_569823665: 
+  name: Torchwood
+  merger_id: 
+  media_id: 791950904
   fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 
-  genre_id: 
+  updated_at: 2008-11-08 19:26:02 -08:00
+  tag_category_id: 63971739
   canonical: true
-  taggings_count: 1
-  type: Category
+  taggings_count: 0
+  type: Fandom
   adult: false
-  id: 42
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00020: 
+  wrangled: true
+  id: 569823665
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_66216446: 
   name: angsty
+  merger_id: 
   media_id: 
-  fandom_id: 3
-  updated_at: 2008-11-13 15:52:15 -08:00
+  fandom_id: 
+  updated_at: 2008-11-08 19:26:02 -08:00
   tag_category_id: 178752192
-  genre_id: 
   canonical: false
   taggings_count: 0
   type: Freeform
   adult: false
-  id: 20
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00009: 
-  name: Doctor Who
-  media_id: 39
-  fandom_id: 
-  updated_at: 2008-11-13 16:44:35 -08:00
-  tag_category_id: 63971739
-  genre_id: 
-  canonical: true
-  taggings_count: 0
-  type: Fandom
-  adult: false
-  id: 9
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00031: 
-  name: SGA
-  media_id: 
-  fandom_id: 12
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 63971739
-  genre_id: 
-  canonical: false
-  taggings_count: 0
-  type: Fandom
-  adult: false
-  id: 31
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 12
-tag_00032: 
-  name: Other
+  wrangled: false
+  id: 66216446
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_751871740: 
+  name: None Of These Warnings Apply
+  merger_id: 
   media_id: 
   fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 410592302
-  genre_id: 
+  updated_at: 2008-11-21 00:14:51 -08:00
+  tag_category_id: 499134864
   canonical: true
   taggings_count: 1
-  type: Category
+  type: Warning
   adult: false
-  id: 32
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00010: 
-  name: Books
+  wrangled: true
+  id: 751871740
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_899944269: 
+  name: Real People & Celebrities
+  merger_id: 
   media_id: 
   fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
+  updated_at: 2008-11-08 19:26:02 -08:00
   tag_category_id: 87582722
-  genre_id: 
   canonical: true
   taggings_count: 0
   type: Media
   adult: false
-  id: 10
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00021: 
-  name: rape
+  wrangled: false
+  id: 899944269
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_1063753741: 
+  name: Extreme Violence
+  merger_id: 
   media_id: 
   fandom_id: 
-  updated_at: 2008-11-13 15:52:15 -08:00
-  tag_category_id: 499134864
-  genre_id: 
+  updated_at: 2008-11-21 01:45:41 -08:00
+  tag_category_id: 
   canonical: true
   taggings_count: 0
   type: Warning
   adult: false
-  id: 21
-  banned: false
-  created_at: 2008-11-13 15:52:15 -08:00
-  canonical_id: 
-tag_00054: 
-  name: Samantha Carter
+  wrangled: true
+  id: 1063753741
+  created_at: 2008-11-21 01:45:41 -08:00
+tag_1063753742: 
+  name: Major Character Death
+  merger_id: 
   media_id: 
-  fandom_id: 30
-  updated_at: 2008-11-13 16:35:48 -08:00
+  fandom_id: 
+  updated_at: 2008-11-21 01:45:41 -08:00
   tag_category_id: 
-  genre_id: 
   canonical: true
-  taggings_count: 3
-  type: Character
+  taggings_count: 1
+  type: Warning
   adult: false
-  id: 54
-  banned: false
-  created_at: 2008-11-13 16:05:59 -08:00
-  canonical_id: 
-tag_00065: 
-  name: Harry Potter
+  wrangled: true
+  id: 1063753742
+  created_at: 2008-11-21 01:45:41 -08:00
+tag_788108366: 
+  name: Other Media
+  merger_id: 
   media_id: 
-  fandom_id: 6
-  updated_at: 2008-11-13 19:03:01 -08:00
-  tag_category_id: 
-  genre_id: 
+  fandom_id: 
+  updated_at: 2008-11-08 19:26:02 -08:00
+  tag_category_id: 87582722
   canonical: true
+  taggings_count: 0
+  type: Media
+  adult: false
+  wrangled: false
+  id: 788108366
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_344412843: 
+  name: Teen and Up Audiences
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 00:14:51 -08:00
+  tag_category_id: 553661720
+  canonical: true
+  taggings_count: 0
+  type: Rating
+  adult: false
+  wrangled: true
+  id: 344412843
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_1063753753: 
+  name: Sam Winchester/Dean Winchester
+  merger_id: 545584597
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 01:59:52 -08:00
+  tag_category_id: 
+  canonical: false
+  taggings_count: 1
+  type: Pairing
+  adult: false
+  wrangled: true
+  id: 1063753753
+  created_at: 2008-11-21 01:52:36 -08:00
+tag_1063753754: 
+  name: Dean - Character
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 02:04:20 -08:00
+  tag_category_id: 
+  canonical: false
   taggings_count: 1
   type: Character
   adult: false
-  id: 65
-  banned: false
-  created_at: 2008-11-13 19:02:47 -08:00
-  canonical_id: 
+  wrangled: false
+  id: 1063753754
+  created_at: 2008-11-21 02:04:20 -08:00
+tag_1063753732: 
+  name: Other
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 00:14:52 -08:00
+  tag_category_id: 410592302
+  canonical: true
+  taggings_count: 0
+  type: Category
+  adult: false
+  wrangled: true
+  id: 1063753732
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_711936337: 
+  name: SGA
+  merger_id: 951091623
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 00:34:01 -08:00
+  tag_category_id: 63971739
+  canonical: false
+  taggings_count: 0
+  type: Fandom
+  adult: false
+  wrangled: true
+  id: 711936337
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_130714128: 
+  name: Stargate SG-1
+  merger_id: 
+  media_id: 791950904
+  fandom_id: 
+  updated_at: 2008-11-08 19:26:02 -08:00
+  tag_category_id: 63971739
+  canonical: true
+  taggings_count: 0
+  type: Fandom
+  adult: false
+  wrangled: true
+  id: 130714128
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_299389994: 
+  name: Cartoons & Anime
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-08 19:26:02 -08:00
+  tag_category_id: 87582722
+  canonical: true
+  taggings_count: 0
+  type: Media
+  adult: false
+  wrangled: false
+  id: 299389994
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_1063753743: 
+  name: Underage
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 01:45:41 -08:00
+  tag_category_id: 
+  canonical: true
+  taggings_count: 0
+  type: Warning
+  adult: false
+  wrangled: true
+  id: 1063753743
+  created_at: 2008-11-21 01:45:41 -08:00
+tag_1063753744: 
+  name: Sam/Dean
+  merger_id: 545584597
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 02:00:17 -08:00
+  tag_category_id: 
+  canonical: false
+  taggings_count: 1
+  type: Pairing
+  adult: false
+  wrangled: true
+  id: 1063753744
+  created_at: 2008-11-21 01:48:03 -08:00
+tag_1063753733: 
+  name: Choose Not To Warn For Some Content
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 00:14:51 -08:00
+  tag_category_id: 
+  canonical: true
+  taggings_count: 0
+  type: Warning
+  adult: false
+  wrangled: true
+  id: 1063753733
+  created_at: 2008-11-21 00:14:51 -08:00
+tag_1063753734: 
+  name: Rape/Non-Con
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 00:14:51 -08:00
+  tag_category_id: 
+  canonical: true
+  taggings_count: 0
+  type: Warning
+  adult: false
+  wrangled: true
+  id: 1063753734
+  created_at: 2008-11-21 00:14:51 -08:00
+tag_946152233: 
+  name: Music & Bands
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-08 19:26:02 -08:00
+  tag_category_id: 87582722
+  canonical: true
+  taggings_count: 0
+  type: Media
+  adult: false
+  wrangled: false
+  id: 946152233
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_426547448: 
+  name: Multi
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 00:14:52 -08:00
+  tag_category_id: 410592302
+  canonical: true
+  taggings_count: 0
+  type: Category
+  adult: false
+  wrangled: true
+  id: 426547448
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_260181321: 
+  name: Comics & Manga
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-08 19:26:02 -08:00
+  tag_category_id: 87582722
+  canonical: true
+  taggings_count: 0
+  type: Media
+  adult: false
+  wrangled: false
+  id: 260181321
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_791950904: 
+  name: TV Shows
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-08 19:26:02 -08:00
+  tag_category_id: 87582722
+  canonical: true
+  taggings_count: 0
+  type: Media
+  adult: false
+  wrangled: false
+  id: 791950904
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_992891255: 
+  name: General Audiences
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 00:14:51 -08:00
+  tag_category_id: 553661720
+  canonical: true
+  taggings_count: 1
+  type: Rating
+  adult: false
+  wrangled: true
+  id: 992891255
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_1063753745: 
+  name: Sam - Character
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 02:00:17 -08:00
+  tag_category_id: 
+  canonical: false
+  taggings_count: 1
+  type: Character
+  adult: false
+  wrangled: true
+  id: 1063753745
+  created_at: 2008-11-21 01:48:03 -08:00
+tag_1063753746: 
+  name: Dean
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 02:02:32 -08:00
+  tag_category_id: 
+  canonical: false
+  taggings_count: 1
+  type: Ambiguity
+  adult: false
+  wrangled: true
+  id: 1063753746
+  created_at: 2008-11-21 01:48:03 -08:00
+tag_611729728: 
+  name: Gen
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 00:14:51 -08:00
+  tag_category_id: 410592302
+  canonical: true
+  taggings_count: 1
+  type: Category
+  adult: false
+  wrangled: true
+  id: 611729728
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_713695255: 
+  name: Sam
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 00:59:44 -08:00
+  tag_category_id: 353966007
+  canonical: false
+  taggings_count: 0
+  type: Ambiguity
+  adult: false
+  wrangled: true
+  id: 713695255
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_1063753735: 
+  name: F/M
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 00:14:51 -08:00
+  tag_category_id: 
+  canonical: true
+  taggings_count: 0
+  type: Category
+  adult: false
+  wrangled: true
+  id: 1063753735
+  created_at: 2008-11-21 00:14:51 -08:00
+tag_1063753736: 
+  name: M/M
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 00:14:51 -08:00
+  tag_category_id: 
+  canonical: true
+  taggings_count: 3
+  type: Category
+  adult: false
+  wrangled: true
+  id: 1063753736
+  created_at: 2008-11-21 00:14:51 -08:00
+tag_741440589: 
+  name: Supernatural
+  merger_id: 
+  media_id: 791950904
+  fandom_id: 
+  updated_at: 2008-11-08 19:26:02 -08:00
+  tag_category_id: 63971739
+  canonical: true
+  taggings_count: 0
+  type: Fandom
+  adult: false
+  wrangled: true
+  id: 741440589
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_211186876: 
+  name: American Idol
+  merger_id: 
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-08 19:26:02 -08:00
+  tag_category_id: 63971739
+  canonical: true
+  taggings_count: 0
+  type: Fandom
+  adult: false
+  wrangled: false
+  id: 211186876
+  created_at: 2008-11-08 19:26:02 -08:00
+tag_1063753747: 
+  name: John/Rodney
+  merger_id: 1063753750
+  media_id: 
+  fandom_id: 
+  updated_at: 2008-11-21 01:58:59 -08:00
+  tag_category_id: 
+  canonical: false
+  taggings_count: 1
+  type: Pairing
+  adult: false
+  wrangled: true
+  id: 1063753747
+  created_at: 2008-11-21 01:48:52 -08:00

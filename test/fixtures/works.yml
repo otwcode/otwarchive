@@ -1,7 +1,7 @@
 --- 
 work_00005: 
   major_version: 1
-  updated_at: 2008-11-13 15:52:16 -08:00
+  updated_at: 2008-11-08 19:26:02 -08:00
   title: FifthWork
   expected_number_of_chapters: 1
   delta: false
@@ -16,94 +16,76 @@ work_00005:
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2008-11-13 15:52:16 -08:00
-work_00006: 
-  major_version: 1
-  updated_at: 2008-11-13 16:07:12 -08:00
-  title: Unposted Work
-  expected_number_of_chapters: 
-  delta: true
-  word_count: 4
-  notes: ""
-  id: 6
-  summary: ""
-  revised_at: 2008-11-13 16:07:12 -08:00
-  language_id: 1819
-  minor_version: 0
-  published_at: 2008-11-13 00:00:00 -08:00
-  restricted: false
-  posted: false
-  hidden_by_admin: false
-  created_at: 2008-11-13 16:07:11 -08:00
+  created_at: 2008-11-08 19:26:02 -08:00
 work_00001: 
   major_version: 2
-  updated_at: 2008-11-13 16:02:54 -08:00
+  updated_at: 2008-11-08 19:26:02 -08:00
   title: Work With Two Chapters
   expected_number_of_chapters: 2
-  delta: true
+  delta: false
   word_count: 10
   notes: Notes on test work
   id: 1
   summary: Summary of test work
-  revised_at: 2008-11-13 15:56:11 -08:00
-  language_id: 1819
-  minor_version: 3
-  published_at: 2008-11-13 00:00:00 -08:00
+  revised_at: 
+  language_id: 
+  minor_version: 1
+  published_at: 
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2008-11-13 15:52:16 -08:00
+  created_at: 2008-11-08 19:26:02 -08:00
 work_00002: 
   major_version: 1
-  updated_at: 2008-11-13 18:57:12 -08:00
+  updated_at: 2008-11-08 19:26:02 -08:00
   title: Work With One Chapter Only
   expected_number_of_chapters: 1
-  delta: true
+  delta: false
   word_count: 11
   notes: Notes on test work with only one chapter
   id: 2
   summary: Summary of test work with only one chapter
-  revised_at: 2008-11-13 15:55:17 -08:00
-  language_id: 1819
-  minor_version: 5
-  published_at: 2008-11-13 00:00:00 -08:00
+  revised_at: 
+  language_id: 
+  minor_version: 1
+  published_at: 
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2008-11-13 15:52:16 -08:00
+  created_at: 2008-11-08 19:26:02 -08:00
 work_00003: 
   major_version: 1
-  updated_at: 2008-11-13 18:58:50 -08:00
+  updated_at: 2008-11-08 19:26:02 -08:00
   title: ThirdWork
   expected_number_of_chapters: 1
-  delta: true
+  delta: false
   word_count: 12
   notes: Notes on test work with only one chapter
   id: 3
   summary: Summary of test work with only one chapter
-  revised_at: 2008-11-13 15:57:55 -08:00
-  language_id: 1819
-  minor_version: 3
-  published_at: 2008-11-13 00:00:00 -08:00
+  revised_at: 
+  language_id: 
+  minor_version: 1
+  published_at: 
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2008-11-13 15:52:16 -08:00
+  created_at: 2008-11-08 19:26:02 -08:00
 work_00004: 
   major_version: 1
-  updated_at: 2008-11-13 15:59:13 -08:00
+  updated_at: 2008-11-08 19:26:02 -08:00
   title: FourthWork
   expected_number_of_chapters: 1
-  delta: true
+  delta: false
   word_count: 13
   notes: Notes on test work with only one chapter
   id: 4
   summary: Summary of test work with only one chapter
-  revised_at: 2008-11-13 15:59:13 -08:00
-  language_id: 1819
-  minor_version: 2
-  published_at: 2008-11-13 00:00:00 -08:00
+  revised_at: 
+  language_id: 
+  minor_version: 1
+  published_at: 
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2008-11-13 15:52:16 -08:00
+  created_at: 2008-11-08 19:26:02 -08:00

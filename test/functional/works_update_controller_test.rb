@@ -7,6 +7,7 @@ class WorksUpdateControllerTest < ActionController::TestCase
   context "if you are not logged in" do
     setup do
       @work = create_work
+      @work.add_default_tags
       put :update, :locale => 'en', :id => @work.id
     end
     should_redirect_to 'work_path(@work)'
@@ -23,6 +24,7 @@ class WorksUpdateControllerTest < ActionController::TestCase
       setup do
         new_user = create_user
         @work = create_work(:authors => [new_user.default_pseud])
+        @work.add_default_tags
         put :update, :locale => 'en', :id => @work.id
       end
       should_redirect_to 'work_path(@work)'
@@ -32,6 +34,7 @@ class WorksUpdateControllerTest < ActionController::TestCase
     context "when working with your own work" do
       setup do
         @work = create_work(:authors => [@user.default_pseud])
+        @work.add_default_tags
         put :update, :locale => 'en', :id => @work.id, :work => {:title => "new title"}
       end
       should_redirect_to 'work_path(@work)'

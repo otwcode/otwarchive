@@ -19,9 +19,13 @@ module TagsHelper
   end
 	
 	# Adds a consistent class name to tags
-	def link_to_tag(tag, options = {})
+	def link_to_tag(tag, classless = false, options = {})
 	  options = {:class => "tag"}.merge(options)
-		link_to tag.name, tag_works_path(tag), options  
+	  if classless
+		  link_to tag.classless_name, tag_path(tag), options  
+	  else
+		  link_to tag.name, tag_path(tag), options  
+	  end
 	end
   
 end

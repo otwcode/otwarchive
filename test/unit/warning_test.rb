@@ -3,15 +3,11 @@ require File.dirname(__FILE__) + '/../test_helper'
 class WarningTest < ActiveSupport::TestCase
 
   context "a warning Tag" do
-    should_have_many :taggings, :works, :bookmarks, :tags
-    should_require_attributes :name
     should "have a display name" do
-      assert_equal "Warning", Warning::NAME
+      assert_equal ArchiveConfig.WARNING_CATEGORY_NAME, Warning::NAME
     end
     should "have a required tags" do
-      assert_equal 'None Of These Warnings Apply', Warning::NONE.name
-      assert_equal 'Choose Not To Warn', Warning::DEFAULT.name
-      assert_equal 'Extreme Violence', Warning::VIOLENCE.name
+      assert_equal [ArchiveConfig.WARNING_DEFAULT_TAG_NAME,  ArchiveConfig.WARNING_NONE_TAG_NAME,  ArchiveConfig.WARNING_SOME_TAG_NAME,  ArchiveConfig.WARNING_VIOLENCE_TAG_NAME,  ArchiveConfig.WARNING_DEATH_TAG_NAME,  ArchiveConfig.WARNING_NONCON_TAG_NAME,  ArchiveConfig.WARNING_CHAN_TAG_NAME].sort, Warning.all.map(&:name).sort
     end
   end
     

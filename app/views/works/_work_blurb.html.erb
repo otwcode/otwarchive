@@ -14,7 +14,7 @@
 	  <h4>
 	    <%- unless @tags_by_category["Fandom"].nil? -%>
     	  <%- @tags_by_category["Fandom"].each do |fandom| -%>
-  	  <%= link_to_tag fandom unless fandom.banned -%>
+  	  <%= link_to_tag(fandom, true) -%>
   	  <%- end -%>
   	  <%- end -%>
 		&nbsp;
@@ -32,7 +32,7 @@
 			<dd>
 				<ul>
 				  <%- cast_tags.each do |tag| -%>
-					  <li><%= link_to_tag(tag) unless tag.banned -%></li>
+					  <li><%= link_to_tag(tag, true) -%></li>
 					<%- end -%>
 				</ul>
 			</dd>
@@ -43,7 +43,7 @@
 			<dd>
 				<ul>
 				  <%- freeform_tags.each do |tag| -%>
-					<li><%= link_to_tag(tag) unless tag.banned -%></li>
+					<li><%= link_to_tag(tag, true) -%></li>
 					<%- end -%>
 				</ul>
 			</dd>

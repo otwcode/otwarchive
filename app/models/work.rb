@@ -15,16 +15,20 @@ class Work < ActiveRecord::Base
   has_bookmarks
   has_many :user_tags, :through => :bookmarks, :source => :tags
 
+  has_many :common_tags, :as => :filterable
+  has_many :commons, :through => :common_tags
+
   has_many :taggings, :as => :taggable
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
+
   has_many :ratings, :through => :taggings, :source => :tagger, :source_type => 'Rating'
   has_many :categories, :through => :taggings, :source => :tagger, :source_type => 'Category'
   has_many :warnings, :through => :taggings, :source => :tagger, :source_type => 'Warning'
   has_many :fandoms, :through => :taggings, :source => :tagger, :source_type => 'Fandom'
   has_many :pairings, :through => :taggings, :source => :tagger, :source_type => 'Pairing'
   has_many :characters, :through => :taggings, :source => :tagger, :source_type => 'Character'
-  has_many :genres, :through => :taggings, :source => :tagger, :source_type => 'Genre'
   has_many :freeforms, :through => :taggings, :source => :tagger, :source_type => 'Freeform'
+  has_many :ambiguities, :through => :taggings, :source => :tagger, :source_type => 'Ambiguity'
 
   acts_as_commentable
 
@@ -77,7 +81,7 @@ class Work < ActiveRecord::Base
   # Makes sure the title has no leading spaces
   def clean_and_validate_title
     unless self.title.blank?
-      self.title = self.title.gsub(/^\s*/, '')
+      self.title = self.title.strip
       if self.title.length < ArchiveConfig.TITLE_MIN
         errors.add_to_base("Title must be at least %d characters long without leading spaces."/ArchiveConfig.TITLE_MIN)
         return false
@@ -344,25 +348,7 @@ class Work < ActiveRecord::Base
   # TAGGING
   # Works are taggable objects.
   #######################################################################
-  
-  # singular methods
-  def rating
-    self.ratings.first
-  end
-  def category
-    self.categories.first
-  end
-  def canonical_fandom
-    self.fandoms.canonical.first
-  end
-  
-  def rating=(tag)
-    self.ratings=[tag]
-  end
-  def category=(tag)
-    self.categories=[tag]
-  end
-  
+
   # string methods
   # (didn't use define_method, despite the redundancy, because it doesn't cache in development)
   def rating_string
@@ -390,71 +376,91 @@ class Work < ActiveRecord::Base
     self.characters.string
   end
   def freeform_string
-    self.freeforms.string
+    (self.freeforms + self.ambiguities).map(&:name).join(ArchiveConfig.DELIMITER)
   end
 
   # _string= methods
+  # always use string= methods to set tags
+  # << and = don't trigger callbacks to update common_tags
+  # see rails bug http://dev.rubyonrails.org/ticket/7743
   def rating_string=(tag_string)
-    self.rating = Rating.find_or_create_by_name(tag_string.strip.squeeze(" "))
+    self.ratings = [Rating.find_or_create_by_name(tag_string)]
+    self.update_common_tags
   end
+
   def category_string=(tag_string)
-    self.category = Category.find_or_create_by_name(tag_string.strip.squeeze(" "))
+    self.categories = [Category.find_or_create_by_name(tag_string)]
+    self.update_common_tags
   end
   
   def warning_string=(tag_string)
     tags = []
     tag_string.split(ArchiveConfig.DELIMITER).each do |string|
-      tags << Warning.find_or_create_by_name(string.strip.squeeze(" "))
+      tags << Warning.find_or_create_by_name(string)
     end
-    self.warnings = tags
+    self.warnings = tags 
+    self.update_common_tags
   end
 
   def warning_strings=(array)
     tags = []
     array.each do |string|
-      tags << Warning.find_or_create_by_name(string.strip.squeeze(" "))
+      tags << Warning.find_or_create_by_name(string)
     end
     self.warnings = tags
+    self.update_common_tags
   end
 
   def media_string=(tag_string)
     tags = []
     tag_string.split(ArchiveConfig.DELIMITER).each do |string|
-      tags << Media.find_or_create_by_name(string.strip.squeeze(" "))
+      tags << Media.find_or_create_by_name(string)
     end
     self.medias = tags
+    self.update_common_tags
   end
 
   def fandom_string=(tag_string)
     tags = []
     tag_string.split(ArchiveConfig.DELIMITER).each do |string|
-      tags << Fandom.find_or_create_by_name(string.strip.squeeze(" "))
+      tags << Fandom.find_or_create_by_name(string)
     end
     self.fandoms = tags
+    self.update_common_tags
   end
 
   def pairing_string=(tag_string)
     tags = []
     tag_string.split(ArchiveConfig.DELIMITER).each do |string|
-      tags << Pairing.find_or_create_by_name(string.strip.squeeze(" "))
+      tags << Pairing.find_or_create_by_name(string)
     end
     self.pairings = tags
+    self.update_common_tags
   end
 
   def character_string=(tag_string)
     tags = []
     tag_string.split(ArchiveConfig.DELIMITER).each do |string|
-      tags << Character.find_or_create_by_name(string.strip.squeeze(" "))
+      tags << Character.find_or_create_by_name(string)
     end
     self.characters = tags
+    self.update_common_tags
   end
 
   def freeform_string=(tag_string)
     tags = []
     tag_string.split(ArchiveConfig.DELIMITER).each do |string|
-      tags << Freeform.find_or_create_by_name(string.strip.squeeze(" "))
+      tags << Freeform.find_or_create_by_name(string)
     end
     self.freeforms = tags
+    self.update_common_tags
+  end
+  
+  # a work can only have one rating, so using first will work
+  def adult?
+    # should always have a rating, if it doesn't err conservatively
+    return true if self.ratings.blank?  
+    self.ratings.first.adult?
   end
 
 
@@ -462,8 +468,8 @@ class Work < ActiveRecord::Base
   def has_required_tags?
     return false if self.fandoms.blank?
     return false if self.warnings.blank?
-    return false if self.rating.blank?
-    return false if self.category.blank?
+    return false if self.ratings.blank?
+    return false if self.categories.blank?
     return true
   end
   
@@ -472,7 +478,27 @@ class Work < ActiveRecord::Base
     self.has_required_tags? 
   end
   
+  def update_common_tags
+    new_tags = []
+    # work.tags is empty at this point?!?!?
+    Tagging.find_all_by_taggable_id_and_taggable_type(self.id, 'work').each do |tagging|
+      new_tags << tagging.tagger.common_tags_to_add rescue nil
+    end
+    new_tags = new_tags.flatten.uniq.compact
+    old_tags = self.commons
+    self.commons.delete(old_tags - new_tags)
+    self.commons << (new_tags - old_tags)
+    commons
+  end
   
+  # for testing
+  def add_default_tags
+    self.fandom_string = "Test Fandom"
+    self.rating_string = ArchiveConfig.RATING_TEEN_TAG_NAME
+    self.warning_string = ArchiveConfig.WARNING_NONE_TAG_NAME
+    self.category_string = ArchiveConfig.CATEGORY_GEN_TAG_NAME
+    self.save
+  end
   ################################################################################
   # COMMENTING & BOOKMARKS
   # We don't actually have comments on works currently but on chapters. 
@@ -635,8 +661,8 @@ class Work < ActiveRecord::Base
                     INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
                     INNER JOIN users ON pseuds.user_id = users.id"
                     
-  TAGGING_JOIN = "INNER JOIN taggings ON (works.id = taggings.taggable_id AND taggings.taggable_type = 'Work') 
-                  INNER JOIN tags ON taggings.tagger_id = tags.id"
+  COMMON_TAG_JOIN = "INNER JOIN common_tags ON (works.id = common_tags.filterable_id AND common_tags.filterable_type = 'Work') 
+                  INNER JOIN tags ON common_tags.common_id = tags.id"
                     
                     
   VISIBLE_TO_ALL_CONDITIONS = {:posted => true, :restricted => false, :hidden_by_admin => false}
@@ -649,7 +675,7 @@ class Work < ActiveRecord::Base
 
   named_scope :ordered_by_author, lambda{|sort_direction|
     {
-      :joins => OWNERSHIP_JOIN + " " + TAGGING_JOIN,
+      :joins => OWNERSHIP_JOIN + " " + COMMON_TAG_JOIN,
       :order => AUTHOR_TO_SORT_ON + " " + "#{(sort_direction.upcase == 'DESC' ? 'DESC' : 'ASC')}"
     }    
   }
@@ -690,7 +716,7 @@ class Work < ActiveRecord::Base
   named_scope :with_all_tags, lambda {|tags_to_find|
     {
       :select => "DISTINCT works.*",
-      :joins => TAGGING_JOIN + " " + OWNERSHIP_JOIN,
+      :joins => COMMON_TAG_JOIN + " " + OWNERSHIP_JOIN,
       :conditions => ["tags.id in (?)", tags_to_find.collect(&:id)],
       :group => "works.id HAVING count(DISTINCT tags.id) = #{tags_to_find.size}"
     }
@@ -699,7 +725,7 @@ class Work < ActiveRecord::Base
   named_scope :with_any_tags, lambda {|tags_to_find|
     {
       :select => "DISTINCT works.*",
-      :joins => TAGGING_JOIN + " " + OWNERSHIP_JOIN,
+      :joins => COMMON_TAG_JOIN + " " + OWNERSHIP_JOIN,
       :conditions => ["tags.id in (?)", tags_to_find.collect(&:id)],
     }
   }
@@ -707,7 +733,7 @@ class Work < ActiveRecord::Base
   named_scope :with_all_tag_ids, lambda {|tag_ids_to_find|
     {
       :select => "DISTINCT works.*",
-      :joins => TAGGING_JOIN + " " + OWNERSHIP_JOIN,
+      :joins => COMMON_TAG_JOIN + " " + OWNERSHIP_JOIN,
       :conditions => ["tags.id in (?)", tag_ids_to_find],
       :group => "works.id HAVING count(DISTINCT tags.id) = #{tag_ids_to_find.size}"
     }
@@ -716,7 +742,7 @@ class Work < ActiveRecord::Base
   named_scope :with_any_tag_ids, lambda {|tag_ids_to_find|
     {
       :select => "DISTINCT works.*",
-      :joins => TAGGING_JOIN + " " + OWNERSHIP_JOIN,
+      :joins => COMMON_TAG_JOIN + " " + OWNERSHIP_JOIN,
       :conditions => ["tags.id in (?)", tag_ids_to_find],
     }
   }
@@ -724,7 +750,7 @@ class Work < ActiveRecord::Base
   named_scope :visible, lambda {
     {
       :select => "DISTINCT works.*",
-      :joins => TAGGING_JOIN + " " + OWNERSHIP_JOIN
+      :joins => COMMON_TAG_JOIN + " " + OWNERSHIP_JOIN
     }.merge( (User.current_user && User.current_user.kind_of?(Admin)) ?
       { :conditions => {:posted => true} } :
       ( (User.current_user && User.current_user != :false) ?
@@ -738,7 +764,7 @@ class Work < ActiveRecord::Base
   named_scope :tags_with_count, lambda {|*args|
     {
       :select => "tags.type as tag_type, tags.id as tag_id, tags.name as tag_name, count(distinct works.id) as count",
-      :joins => TAGGING_JOIN + " " + OWNERSHIP_JOIN,
+      :joins => COMMON_TAG_JOIN + " " + OWNERSHIP_JOIN,
       :group => "tags.name",
       :order => "tags.type, tags.name ASC"
     }.merge(args.first.size > 0 ? {:conditions => ["works.id in (?)", args.first]} : {})
@@ -790,14 +816,6 @@ class Work < ActiveRecord::Base
   end
   
   def self.search_with_sphinx(options)
-    # visibility
-    # if User.current_user && User.current_user.kind_of?(Admin)
-    #   visible_clause = VISIBLE_TO_ADMIN_CONDITIONS
-    # elsif User.current_user && User.current_user != :false
-    #   visible_clause = VISIBLE_TO_USER_CONDITIONS
-    # else
-    #   visible_clause = VISIBLE_TO_ALL_CONDITIONS
-    # end
 
     # sphinx ordering must be done on attributes
     order_clause = ""    
@@ -914,17 +932,17 @@ class Work < ActiveRecord::Base
       end
       tmphash = {:name => filter.tag_name, :id => filter.tag_id.to_s, :count => count}
       key = filter.tag_type
-      unless key == "Freeform"
-        if filters_hash[key]
-          filters_hash[key] << tmphash
-        else
-          filters_hash[key] = [tmphash]
-        end
+      if filters_hash[key]
+        filters_hash[key] << tmphash
+      else
+        filters_hash[key] = [tmphash]
       end
     end
     return filters_hash
   end
   
+  # this is the method which is called from the works controller
+  # after a sphinx search retrieved the works
   def self.get_filters(works_to_filter)
     ids = works_to_filter.collect(&:id)
     @filters = build_filters_hash(Work.tags_with_count(ids))

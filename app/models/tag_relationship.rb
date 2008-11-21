@@ -8,4 +8,7 @@ class TagRelationship < ActiveRecord::Base
   def self.synonyms
     self.find_all_by_tag_relationship_kind_id(TagRelationshipKind.synonym.id)
   end
+  def self.children
+    self.find_all_by_tag_relationship_kind_id(TagRelationshipKind.child.id)
+  end
 end

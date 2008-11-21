@@ -11,6 +11,7 @@ class ChaptersControllerTest < ActionController::TestCase
     @request.session[:user] = user    
     chapter = new_chapter
     work = create_work(:chapters => [chapter], :authors => user.pseuds)
+    work.add_default_tags
     work.reload
     assert_difference('Chapter.count') do
       post :create, :locale => 'en', :work_id => work.id, 
@@ -23,6 +24,7 @@ class ChaptersControllerTest < ActionController::TestCase
   def test_destroy_work_chapter_fail
     chapter = new_chapter
     work = create_work(:chapters => [chapter])
+    work.add_default_tags
     delete :destroy, :locale => 'en', :work_id => work.id, :id => chapter.id
     assert flash.has_key?(:error)
     assert_redirected_to edit_work_url(assigns(:work))
@@ -34,6 +36,7 @@ class ChaptersControllerTest < ActionController::TestCase
     chapter1 = new_chapter(:authors => [pseud])
     chapter2 = new_chapter(:authors => [pseud])
     work = create_work(:chapters => [chapter1, chapter2], :authors => [pseud])
+    work.add_default_tags
     work.update_attribute(:posted, true)
     assert_difference('Chapter.count', -1) do
       delete :destroy, :locale => 'en', :work_id => work.id, :id => chapter1.id
@@ -48,6 +51,7 @@ class ChaptersControllerTest < ActionController::TestCase
     @request.session[:user] = user
     chapter = new_chapter(:authors => user.pseuds)
     work = create_work(:chapters => [chapter], :authors => user.pseuds)
+    work.add_default_tags
     get :edit, :locale => 'en', :work_id => work.id, :id => chapter.id
     assert_response :success
     assert_equal work, assigns(:work)
@@ -60,12 +64,14 @@ class ChaptersControllerTest < ActionController::TestCase
   def test_work_chapters_path_fail
     chapter = new_chapter
     work = create_work(:chapters => [chapter])
+    work.add_default_tags
     get :index, :locale => 'en', :work_id => work.id
     assert_redirected_to '/'
   end
   def test_work_chapters_path
     chapter = new_chapter
     work = create_work(:chapters => [chapter])
+    work.add_default_tags
     work.update_attribute("posted", true)
     get :index, :locale => 'en', :work_id => work.id
     assert_response :success
@@ -82,6 +88,7 @@ class ChaptersControllerTest < ActionController::TestCase
   def test_new_work_chapter_fails
     chapter = new_chapter
     work = create_work(:chapters => [chapter])
+    work.add_default_tags
     get :new, :locale => 'en', :work_id => work.id
     assert_redirected_to new_session_path
   end
@@ -90,6 +97,7 @@ class ChaptersControllerTest < ActionController::TestCase
     @request.session[:admin] = admin
     chapter = new_chapter
     work = create_work(:chapters => [chapter])
+    work.add_default_tags
     get :new, :locale => 'en', :work_id => work.id
     assert_redirected_to new_session_path
   end
@@ -98,6 +106,7 @@ class ChaptersControllerTest < ActionController::TestCase
     @request.session[:user] = user    
     chapter = new_chapter
     work = create_work(:chapters => [chapter])
+    work.add_default_tags
     work.pseuds << user.pseuds
     get :new, :locale => 'en', :work_id => work.id
     assert_equal work, assigns(:work)
@@ -111,6 +120,7 @@ class ChaptersControllerTest < ActionController::TestCase
     @request.session[:user] = user  
     chapter = new_chapter
     work = create_work(:chapters => [chapter])
+    work.add_default_tags
     post :post, :locale => 'en', :work_id => work.id, :id => chapter.id  
     assert Chapter.find(chapter.id).posted
     assert_redirected_to work_path(assigns(:work))
@@ -124,6 +134,7 @@ class ChaptersControllerTest < ActionController::TestCase
     @request.session[:user] = user
     chapter = new_chapter
     work = create_work(:chapters => [chapter])
+    work.add_default_tags
     get :preview, :locale => 'en', :work_id => work.id, :id => chapter.id
     assert_response :success
     assert_equal work, assigns(:work)
@@ -134,6 +145,7 @@ class ChaptersControllerTest < ActionController::TestCase
   def test_work_chapter_path
     chapter = new_chapter
     work = create_work(:chapters => [chapter])
+    work.add_default_tags
     work.update_attribute('posted', true)
     get :show, :locale => 'en', :work_id => work.id, :id => chapter.id
     assert_response :success
@@ -148,6 +160,7 @@ class ChaptersControllerTest < ActionController::TestCase
     @request.session[:user] = user
     chapter = new_chapter
     work = create_work(:chapters => [chapter], :authors => [user.default_pseud])
+    work.add_default_tags
     new_content = random_chapter
     assert_not_equal Chapter.find(chapter.id).content, new_content
     put :update, :locale => 'en', :work_id => work.id, :id => chapter.id, :chapter => { :content => new_content}, :pseud => { :id => chapter.pseuds.collect { |p| p.id }}

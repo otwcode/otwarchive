@@ -2,6 +2,6 @@ class Character < Tag
 
   NAME = ArchiveConfig.CHARACTER_CATEGORY_NAME
 
-  after_create :update_fandom
-
+  before_save :add_fandom_to_parents
+  
 end

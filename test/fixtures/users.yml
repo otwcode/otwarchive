@@ -1,7 +1,7 @@
 --- 
 user_00004: 
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  updated_at: 2008-11-13 15:52:16 -08:00
+  updated_at: 2008-11-08 19:26:02 -08:00
   activated_at: 
   recently_reset: false
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1
@@ -16,28 +16,10 @@ user_00004:
   login: testuser4
   invitation_limit: 1
   email: user4@example.com
-  created_at: 2008-11-13 15:52:16 -08:00
-user_00005: 
-  salt: 94e260982f8b65702c105967b51075ff147faf42
-  updated_at: 2008-11-13 15:56:51 -08:00
-  activated_at: 2008-11-13 15:56:51 -08:00
-  recently_reset: false
-  crypted_password: d18e8390f85356e275c616a96eacbdfbfee5f101
-  remember_token_expires_at: 
-  activation_code: 
-  suspended: false
-  invitation_id: 
-  id: 5
-  remember_token: 
-  identity_url: 
-  banned: false
-  login: orphan_account
-  invitation_limit: 1
-  email: 
-  created_at: 2008-11-13 15:56:51 -08:00
+  created_at: 2008-11-08 19:26:02 -08:00
 user_00001: 
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  updated_at: 2008-11-13 15:52:16 -08:00
+  updated_at: 2008-11-08 19:26:02 -08:00
   activated_at: 
   recently_reset: false
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1
@@ -52,10 +34,10 @@ user_00001:
   login: testuser
   invitation_limit: 1
   email: user1@example.com
-  created_at: 2008-11-13 15:52:16 -08:00
+  created_at: 2008-11-08 19:26:02 -08:00
 user_00002: 
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  updated_at: 2008-11-13 15:52:16 -08:00
+  updated_at: 2008-11-08 19:26:02 -08:00
   activated_at: 
   recently_reset: false
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1
@@ -70,10 +52,10 @@ user_00002:
   login: testuser2
   invitation_limit: 1
   email: user2@example.com
-  created_at: 2008-11-13 15:52:16 -08:00
+  created_at: 2008-11-08 19:26:02 -08:00
 user_00003: 
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  updated_at: 2008-11-13 15:52:16 -08:00
+  updated_at: 2008-11-08 19:26:02 -08:00
   activated_at: 
   recently_reset: false
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1
@@ -88,4 +70,4 @@ user_00003:
   login: testuser3
   invitation_limit: 1
   email: user3@example.com
-  created_at: 2008-11-13 15:52:16 -08:00
+  created_at: 2008-11-08 19:26:02 -08:00

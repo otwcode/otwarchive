@@ -2,20 +2,34 @@
 
 <div id="error"></div>
 
-<div id="fandoms">
-  <%= render :partial => 'fandoms' %>
-</div>
+<%- unless @media.blank? %>
+  <h2>Wrangle by <%= Media::NAME %></h2>
+  <dl>
+  <%- @media.each do |media| %>
+    <dt><%= link_to media.name, edit_tag_path(media) -%></dt>
+  <%- end -%>
+  </dl>
+<%- end -%>
 
-<div id="fandom-edit">
-  <%= render :partial  => 'fandom' %>
-</div>
 
-<div id="tags-edit">
-  <%= render :partial  => 'tags' %>
-</div>
-
-<div id="works-reference">
-  <%= render :partial  => 'works' %>
-</div>
+<%- unless @unwrangled_fandoms.blank? %>
+  <h2>Bulk Wrangle Fandoms</h2>
+  <p>Select the checkboxes next to the fandoms to assign them to the selected media. Note: assigning to a media makes the fandom canonical. Click on its name instead to wrangle it individually</p>
+  <%- form_tag tag_wranglings_path do -%>
+    <dl>
+    <dt><label for="media_id">Select Media</label></dt>
+    <dd>
+      <%= select_tag "media_id", "<option value=''>Select #{Media::NAME}</option>" + options_from_collection_for_select(Media.canonical.sort, :id, :name), :select => "" %>
+    </dd>
+    <%- @unwrangled_fandoms.each do |fandom| %>
+      <dt>
+        <%= link_to fandom.name, edit_tag_path(fandom) -%>
+        <%= check_box_tag "fandom_ids[" + fandom.id.to_s + "]" %>
+      </dt>
+    <%- end -%>
+    </dl>
+    <p class = "submit"><%= submit_tag "Assign to Media" %></p>
+  <%- end -%>
+<%- end -%>
 
 <%= tag_wrangler_footer %> 

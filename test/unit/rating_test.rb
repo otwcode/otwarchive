@@ -3,20 +3,27 @@ require File.dirname(__FILE__) + '/../test_helper'
 class RatingTest < ActiveSupport::TestCase
 
   context "a rating Tag" do
-    should_have_many :taggings, :works, :bookmarks, :tags
-    should_require_attributes :name
     should "have a display name" do
-      assert_equal "Rating", Rating::NAME
+      assert_equal ArchiveConfig.RATING_CATEGORY_NAME, Rating::NAME
     end
     should "have a required tags" do
-      assert_equal ['Not Rated', 'Explicit', 'Mature', 'Teen And Up Audiences', 'General Audiences'].sort, Rating.all.map(&:name).sort
+      assert_equal [ArchiveConfig.RATING_DEFAULT_TAG_NAME,  ArchiveConfig.RATING_EXPLICIT_TAG_NAME,  ArchiveConfig.RATING_MATURE_TAG_NAME,  ArchiveConfig.RATING_TEEN_TAG_NAME,  ArchiveConfig.RATING_GENERAL_TAG_NAME].sort, Rating.all.map(&:name).sort
     end
     should "have adult tags" do
-      assert Rating::DEFAULT.adult?
-      assert Rating::EXPLICIT.adult?
-      assert Rating::MATURE.adult?
-      assert !Rating::TEEN.adult?
-      assert !Rating::GENERAL.adult?
+      assert Rating.find_by_name(ArchiveConfig.RATING_DEFAULT_TAG_NAME).adult?
+      assert Rating.find_by_name(ArchiveConfig.RATING_EXPLICIT_TAG_NAME).adult?
+      assert Rating.find_by_name(ArchiveConfig.RATING_MATURE_TAG_NAME).adult?
+      assert !Rating.find_by_name(ArchiveConfig.RATING_TEEN_TAG_NAME).adult?
+      assert !Rating.find_by_name(ArchiveConfig.RATING_GENERAL_TAG_NAME).adult?
+    end
+    context "on a work" do
+      setup {@work = create_work }
+      should "determine the work's adult content" do
+        @work.rating_string = ArchiveConfig.RATING_EXPLICIT_TAG_NAME
+        assert @work.adult?
+        @work.rating_string = ArchiveConfig.RATING_GENERAL_TAG_NAME
+        assert !@work.adult?
+      end
     end
   end
     
