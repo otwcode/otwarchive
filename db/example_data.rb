@@ -50,11 +50,10 @@ module FixtureReplacement
   # note: to get threading, you must use
   # comment = new_comment && comment.set_and_save
   # and it doesn't update the parent, so be sure to re-retrieve it
-  # note2: to create a pseud comment, be sure to set email & name blank
+  # note2: to create an anonymous comment, be sure to set pseud blank
   attributes_for :comment do |a|
     a.content = random_paragraph
-    a.name = random_phrase
-    a.email = random_email
+    a.pseud = default_pseud
     a.commentable_type = 'Chapter'
     a.commentable_id = create_work.chapters.first.id
   end

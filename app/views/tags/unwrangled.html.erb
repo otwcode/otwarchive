@@ -1,0 +1,27 @@
+<h2>
+  <%= 'Bulk edit Unwrangled ' + (params[:only] || "Freeform") + ' Tags without a fandom' %>:
+</h2>
+
+<% if @unwrangled.blank? %>
+  No unwrangled tags of that type
+<% else %>
+  <%- form_for :tag, @tag, :url => { :action => "update"}, :html => { :method => :put } do |f| -%>
+  <%= hidden_field_tag :only, params[:only] %>
+    <dl>
+      <dt>Unwrangled Tags:</dt>
+      <%- @unwrangled.each do |tag| -%>
+        <dd>
+          <%= check_box_tag "tag_ids[" + tag.id.to_s + "]" %>
+          <%= link_to tag.name, edit_tag_path(tag) %>
+        </dd>
+      <%- end -%>
+      <dt>Possible Fandoms</dt>
+      <dd><%= select_tag :new_fandom_id, "<option value=''>Select Fandom</option>" + options_from_collection_for_select( Fandom.canonical.sort, :id, :name, "") %></dd>
+    </dl>
+    <p class="submit">
+      <%= submit_tag "Mark Canonical"%> 
+      <%= submit_tag "Mark Ambiguous"%> 
+      <%= submit_tag "Add to Fandom" %> 
+    </p>  
+  <% end %>
+<% end %>

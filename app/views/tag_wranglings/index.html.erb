@@ -1,9 +1,9 @@
-<h1>Manage Tags</h1>
+<h2>Manage Tags</h2>
 
 <div id="error"></div>
 
 <%- unless @media.blank? %>
-  <h2>Wrangle by <%= Media::NAME %></h2>
+  <h3>Wrangle by <%= Media::NAME %>:</h3>
   <dl>
   <%- @media.each do |media| %>
     <dt><%= link_to media.name, edit_tag_path(media) -%></dt>
@@ -11,9 +11,27 @@
   </dl>
 <%- end -%>
 
+  <h3>Bulk Wrangle <%= ArchiveConfig.FANDOM_NO_TAG_NAME %>:</h3>
+  <%= link_to "Characters", 
+      edit_tag_path(Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME), 
+      :only => 'Character' )-%>
+  <%= link_to "Pairings", 
+      edit_tag_path(Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME), 
+      :only => 'Pairing' )-%>
+  <%= link_to "Freeform", 
+      edit_tag_path(Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME), 
+      :only => 'Freeform' )-%>
+  <%= link_to "Ambiguous", 
+      edit_tag_path(Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME), 
+      :only => 'Ambiguous' )-%>
+  <% if logged_in_as_admin? %>
+    <%= link_to "Banned", 
+      edit_tag_path(Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME), 
+      :only => 'Banned' )-%>
+  <% end %>
 
 <%- unless @unwrangled_fandoms.blank? %>
-  <h2>Bulk Wrangle Fandoms</h2>
+  <h3>Bulk Wrangle Fandoms:</h3>
   <p>Select the checkboxes next to the fandoms to assign them to the selected media. Note: assigning to a media makes the fandom canonical. Click on its name instead to wrangle it individually</p>
   <%- form_tag tag_wranglings_path do -%>
     <dl>

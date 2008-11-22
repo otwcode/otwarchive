@@ -59,14 +59,19 @@ class Bookmark < ActiveRecord::Base
   end
   
   def tag_string
-    tags.map(&:name).join(ArchiveConfig.DELIMITER)
+    tags.string
   end
   
   def tag_string=(tag_string)
     tags = []
     tag_string.split(ArchiveConfig.DELIMITER).each do |string|
-      string
-      tags << Tag.find_or_create_by_name(string)
+      string.squish!
+      tag = Tag.find_by_name(string)
+      if tag
+        tags << tag
+      else
+        tags << Freeform.create(:name => string)
+      end
     end
     return tags
   end

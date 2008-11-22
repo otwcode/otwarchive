@@ -1,8 +1,13 @@
 def create_canonical(name, type, adult=false)
-  tag = (type.find_by_name(name) || type.find_by_name(name + " - " + type.to_s) )
+  tag = type.find_by_name(name)
   unless tag
-    tag = type.create(:name=> name)
-    tag = type.create(:name=> name + " - " + type.to_s) if tag.new_record?
+    begin
+      tag = type.create!(:name=> name)
+    rescue
+      old_tag = Tag.find_by_name(name)
+      old_tag.update_attribute(:name, old_tag.name + " - " + old_tag[:type])
+      tag = type.create(:name => name)
+    end
   end
   tag.update_attribute(:canonical,true)
   tag.update_attribute(:wrangled,true)
@@ -14,6 +19,10 @@ end
 begin
   tag = Warning.new(:name => "unused")
   raise unless tag[:type]  # haven't migrated to STI yet
+  raise unless !tag.wrangled? # haven't run with new migrations
+rescue
+  puts "no STI"
+else
   create_canonical(ArchiveConfig.WARNING_DEFAULT_TAG_NAME, Warning)
   create_canonical(ArchiveConfig.WARNING_NONE_TAG_NAME, Warning)
   create_canonical(ArchiveConfig.WARNING_SOME_TAG_NAME, Warning)
@@ -34,6 +43,4 @@ begin
   create_canonical(ArchiveConfig.CATEGORY_OTHER_TAG_NAME, Category)
   create_canonical(ArchiveConfig.MEDIA_NO_TAG_NAME, Media)
   create_canonical(ArchiveConfig.FANDOM_NO_TAG_NAME, Fandom)
-rescue
-  puts "no STI"
 end

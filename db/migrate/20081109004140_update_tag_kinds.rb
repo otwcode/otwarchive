@@ -1,5 +1,7 @@
 class UpdateTagKinds < ActiveRecord::Migration
   def self.up
+    puts "Deleting unused tags"
+    Tag.find_all_by_taggings_count(0).map(&:destroy)
 
     puts "Updating media"
     tags = TagCategory.find_by_name("Media").andand.tags
@@ -95,6 +97,7 @@ class UpdateTagKinds < ActiveRecord::Migration
       puts "." if work.id.modulo(100) == 0
       work.update_common_tags
     end
+    
   end
 
   def self.down

@@ -45,6 +45,7 @@ class Work < ActiveRecord::Base
   attr_accessor :invalid_pseuds
   attr_accessor :ambiguous_pseuds
   attr_accessor :new_parent, :url_for_parent
+  attr_accessor :ambiguous_tags
   
   ########################################################################
   # VALIDATION  
@@ -121,7 +122,7 @@ class Work < ActiveRecord::Base
   
   before_update :validate_tags
 
-
+  before_save :update_ambiguous_tags
 
   ########################################################################
   # AUTHORSHIP
@@ -376,7 +377,10 @@ class Work < ActiveRecord::Base
     self.characters.string
   end
   def freeform_string
-    (self.freeforms + self.ambiguities).map(&:name).join(ArchiveConfig.DELIMITER)
+    self.freeforms.string
+  end
+  def ambiguity_string
+    self.ambiguities.string
   end
 
   # _string= methods
@@ -385,12 +389,10 @@ class Work < ActiveRecord::Base
   # see rails bug http://dev.rubyonrails.org/ticket/7743
   def rating_string=(tag_string)
     self.ratings = [Rating.find_or_create_by_name(tag_string)]
-    self.update_common_tags
   end
 
   def category_string=(tag_string)
     self.categories = [Category.find_or_create_by_name(tag_string)]
-    self.update_common_tags
   end
   
   def warning_string=(tag_string)
@@ -399,7 +401,6 @@ class Work < ActiveRecord::Base
       tags << Warning.find_or_create_by_name(string)
     end
     self.warnings = tags 
-    self.update_common_tags
   end
 
   def warning_strings=(array)
@@ -408,7 +409,6 @@ class Work < ActiveRecord::Base
       tags << Warning.find_or_create_by_name(string)
     end
     self.warnings = tags
-    self.update_common_tags
   end
 
   def media_string=(tag_string)
@@ -417,7 +417,6 @@ class Work < ActiveRecord::Base
       tags << Media.find_or_create_by_name(string)
     end
     self.medias = tags
-    self.update_common_tags
   end
 
   def fandom_string=(tag_string)
@@ -425,8 +424,9 @@ class Work < ActiveRecord::Base
     tag_string.split(ArchiveConfig.DELIMITER).each do |string|
       tags << Fandom.find_or_create_by_name(string)
     end
-    self.fandoms = tags
-    self.update_common_tags
+    ambiguities = tags.select(&:ambiguous)
+    self.add_to_ambiguity(ambiguities)
+    self.fandoms = tags - ambiguities
   end
 
   def pairing_string=(tag_string)
@@ -434,8 +434,9 @@ class Work < ActiveRecord::Base
     tag_string.split(ArchiveConfig.DELIMITER).each do |string|
       tags << Pairing.find_or_create_by_name(string)
     end
-    self.pairings = tags
-    self.update_common_tags
+    ambiguities = tags.select(&:ambiguous)
+    self.add_to_ambiguity(ambiguities)
+    self.pairings = tags - ambiguities
   end
 
   def character_string=(tag_string)
@@ -443,8 +444,9 @@ class Work < ActiveRecord::Base
     tag_string.split(ArchiveConfig.DELIMITER).each do |string|
       tags << Character.find_or_create_by_name(string)
     end
-    self.characters = tags
-    self.update_common_tags
+    ambiguities = tags.select(&:ambiguous)
+    self.add_to_ambiguity(ambiguities)
+    self.characters = tags - ambiguities
   end
 
   def freeform_string=(tag_string)
@@ -452,10 +454,26 @@ class Work < ActiveRecord::Base
     tag_string.split(ArchiveConfig.DELIMITER).each do |string|
       tags << Freeform.find_or_create_by_name(string)
     end
-    self.freeforms = tags
-    self.update_common_tags
+    ambiguities = tags.select(&:ambiguous)
+    self.add_to_ambiguity(ambiguities)
+    self.freeforms = tags - ambiguities
   end
   
+  def ambiguity_string=(tag_string)
+    tags = []
+    tag_string.split(ArchiveConfig.DELIMITER).each do |string|
+      tags << Ambiguity.find_or_create_by_name(string)
+    end
+    self.add_to_ambiguity(tags)
+  end
+
+  def add_to_ambiguity(tags)
+    if self.ambiguous_tags
+      self.ambiguous_tags << tags
+    else
+      self.ambiguous_tags = tags
+    end
+  end
   # a work can only have one rating, so using first will work
   def adult?
     # should always have a rating, if it doesn't err conservatively
@@ -491,6 +509,10 @@ class Work < ActiveRecord::Base
     commons
   end
   
+  def update_ambiguous_tags
+    self.ambiguities = ambiguous_tags.flatten.uniq.compact if ambiguous_tags
+    self.update_common_tags
+  end
   # for testing
   def add_default_tags
     self.fandom_string = "Test Fandom"

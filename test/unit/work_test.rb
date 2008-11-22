@@ -83,11 +83,13 @@ class WorkTest < ActiveSupport::TestCase
       @tagged_work = create_work
       @tag = create_freeform(:canonical => true)
       @tagged_work.freeform_string = @tag.name
+      @tagged_work.save
       @tag2 = create_freeform(:canonical => true)
       @two_tagged = create_work
       @two_tagged.freeform_string = @tag.name + ", " + @tag2.name
+      @two_tagged.save
     end
-    should "only include both works with tags when retrieved with the shared tag id" do
+    should "only include works with tags when retrieved with the shared tag id" do
       assert_equal [@tagged_work, @two_tagged], Work.with_all_tag_ids([@tag.id])
     end      
     should "only include the work with both tags when retrieved with both tag ids" do
@@ -115,7 +117,9 @@ class WorkTest < ActiveSupport::TestCase
       setup do
         @tag = create_freeform(:canonical => true)
         @work1.freeform_string = @tag.name
+        @work1.save
         @work2.freeform_string = @tag.name
+        @work1.save
       end
       should "be returned by with_all_tag_ids and owned_by chained" do
         assert_equal [@work1], Work.with_all_tag_ids([@tag.id]).owned_by(@work1.pseuds.first.user)

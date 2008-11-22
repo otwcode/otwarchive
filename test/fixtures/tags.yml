@@ -351,16 +351,16 @@ tag_569823665:
   created_at: 2008-11-08 19:26:02 -08:00
 tag_66216446: 
   name: angsty
-  merger_id: 
+  merger_id: 1063753740
   media_id: 
   fandom_id: 
-  updated_at: 2008-11-08 19:26:02 -08:00
+  updated_at: 2008-11-21 23:09:26 -08:00
   tag_category_id: 178752192
   canonical: false
-  taggings_count: 0
+  taggings_count: 1
   type: Freeform
   adult: false
-  wrangled: false
+  wrangled: true
   id: 66216446
   created_at: 2008-11-08 19:26:02 -08:00
 tag_751871740: 
@@ -466,13 +466,13 @@ tag_1063753754:
   merger_id: 
   media_id: 
   fandom_id: 
-  updated_at: 2008-11-21 02:04:20 -08:00
+  updated_at: 2008-11-21 22:59:40 -08:00
   tag_category_id: 
   canonical: false
   taggings_count: 1
-  type: Character
+  type: Ambiguity
   adult: false
-  wrangled: false
+  wrangled: true
   id: 1063753754
   created_at: 2008-11-21 02:04:20 -08:00
 tag_1063753732: 
@@ -679,7 +679,7 @@ tag_1063753746:
   updated_at: 2008-11-21 02:02:32 -08:00
   tag_category_id: 
   canonical: false
-  taggings_count: 1
+  taggings_count: 2
   type: Ambiguity
   adult: false
   wrangled: true
@@ -707,7 +707,7 @@ tag_713695255:
   updated_at: 2008-11-21 00:59:44 -08:00
   tag_category_id: 353966007
   canonical: false
-  taggings_count: 0
+  taggings_count: 1
   type: Ambiguity
   adult: false
   wrangled: true
@@ -758,15 +758,15 @@ tag_741440589:
 tag_211186876: 
   name: American Idol
   merger_id: 
-  media_id: 
+  media_id: 899944269
   fandom_id: 
-  updated_at: 2008-11-08 19:26:02 -08:00
+  updated_at: 2008-11-21 22:55:13 -08:00
   tag_category_id: 63971739
   canonical: true
   taggings_count: 0
   type: Fandom
   adult: false
-  wrangled: false
+  wrangled: true
   id: 211186876
   created_at: 2008-11-08 19:26:02 -08:00
 tag_1063753747: 

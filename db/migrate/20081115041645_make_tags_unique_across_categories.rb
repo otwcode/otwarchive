@@ -6,10 +6,12 @@ class MakeTagsUniqueAcrossCategories < ActiveRecord::Migration
     by_name.each do |name, tags|
       if tags.size > 1
         tags.each do |tag|
+          # remove tags that aren't being used
           if tag.taggings_count==0
             tags.delete(tag)
             tag.destroy 
           end
+          # move bookmark tags to freeform
           unless tag.tag_category_id
             new_tag = Freeform.find_by_name(tag.name)
             if new_tag
@@ -22,10 +24,15 @@ class MakeTagsUniqueAcrossCategories < ActiveRecord::Migration
           end
         end
         if tags.size > 1
-          tags.each do |tag|
-            tag.update_attribute(:name, tag.name + " - " + tag[:type])
+          # tag of first type gets to keep its name 
+          # because it might be an official tag
+          first = true
+          Tag::TYPES.each do |type|
+            tags.each do |tag|
+              tag.update_attribute(:name, tag.name + " - " + tag[:type]) unless first
+              first = false
+            end
           end
-          Ambiguity.create!(:name => name)
         end
       end
     end

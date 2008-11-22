@@ -22,10 +22,13 @@ module TagsHelper
 	def link_to_tag(tag, classless = false, options = {})
 	  options = {:class => "tag"}.merge(options)
 	  if classless
-		  link_to tag.classless_name, tag_path(tag), options  
+		  link_to tag.name, tag_path(tag), options  
 	  else
 		  link_to tag.name, tag_path(tag), options  
 	  end
 	end
   
+  def can_wrangle?
+    logged_in_as_admin? || ( current_user.is_a?(User) && current_user.is_tag_wrangler? )
+  end
 end

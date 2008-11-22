@@ -9,7 +9,7 @@
 	<p><%= image_tag("icon_placeholder.png", :size => "50x50", :alt => "(Icon!)") %></p>
 	<ul class="tags">
     <%- user.most_popular_tags(:categories => Tag::USER_DEFINED, :limit => 5).each do |tag| -%>
-      <li><%= link_to tag.classless_name, works_path(:user_id => user.login, :selected_tags => [tag.id]), :class => 'tag' %></li>
+      <li><%= link_to tag.name, works_path(:user_id => user.login, :selected_tags => [tag.id]), :class => 'tag' %></li>
     <%- end -%>
 	</ul>
   </div>

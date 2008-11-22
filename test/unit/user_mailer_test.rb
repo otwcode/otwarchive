@@ -38,9 +38,9 @@ class UserMailerTest < ActionMailer::TestCase
   def test_comment_reply_notification
     email1 = "test@foo.com"
     email2 = "test@bar.com"
-    comment1 = create_comment(:email => email1)
+    comment1 = create_comment(:email => email1, :pseud=>nil, :name=>'Test Foo')
     comment2 = create_comment(:commentable_id => comment1.id, :commentable_type => 'Comment', 
-                              :email => email2)
+                              :email => email2, :name => 'Test Bar')
     mail = UserMailer.create_comment_reply_notification(comment1, comment2)
     assert_match 'Reply to your comment on ', mail.subject
     assert_match comment2.content, mail.body
@@ -48,7 +48,7 @@ class UserMailerTest < ActionMailer::TestCase
   end
   def test_comment_sent_notification
     email = "test@foo.com"
-    comment = create_comment(:email => email)
+    comment = create_comment(:email => email, :pseud=>nil, :name=>'Test Foo')
     mail = UserMailer.create_comment_sent_notification(comment)
     assert_match 'Comment you sent on ', mail.subject
     assert_match comment.content, mail.body

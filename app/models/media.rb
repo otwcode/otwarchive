@@ -4,9 +4,12 @@ class Media < Tag
 
   has_many :fandoms
 
-  def wrangle_merger(tag)
-    super
-    fandoms.each {|t| t.wrangle_merger(tag)}
+  def wrangle_merger(tag, update_works=true)
+    super(tag, update_works)
+    fandoms.each {|t| t.update_attribute(:media_id, tag.id)}
   end
 
+  def children
+    (super + fandoms).uniq.compact.sort
+  end
 end

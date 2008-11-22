@@ -1,18 +1,18 @@
 --- 
-tagging_312493864: 
-  tagger_id: 714102448
-  updated_at: 2008-11-08 19:26:02 -08:00
-  id: 312493864
-  taggable_type: Work
-  taggable_id: 3
-  tagger_type: Tag
-  created_at: 2008-11-08 19:26:02 -08:00
 tagging_138691404: 
   tagger_id: 1039617938
   updated_at: 2008-11-08 19:26:02 -08:00
   id: 138691404
   taggable_type: Work
   taggable_id: 2
+  tagger_type: Tag
+  created_at: 2008-11-08 19:26:02 -08:00
+tagging_312493864: 
+  tagger_id: 714102448
+  updated_at: 2008-11-08 19:26:02 -08:00
+  id: 312493864
+  taggable_type: Work
+  taggable_id: 3
   tagger_type: Tag
   created_at: 2008-11-08 19:26:02 -08:00
 tagging_1031805717: 
@@ -31,6 +31,22 @@ tagging_1067724875:
   taggable_id: 3
   tagger_type: Tag
   created_at: 2008-11-21 01:50:08 -08:00
+tagging_1067724886: 
+  tagger_id: 713695255
+  updated_at: 2008-11-21 23:49:39 -08:00
+  id: 1067724886
+  taggable_type: Work
+  taggable_id: 5
+  tagger_type: Tag
+  created_at: 2008-11-21 23:49:39 -08:00
+tagging_1067724887: 
+  tagger_id: 1063753746
+  updated_at: 2008-11-21 23:49:40 -08:00
+  id: 1067724887
+  taggable_type: Work
+  taggable_id: 5
+  tagger_type: Tag
+  created_at: 2008-11-21 23:49:40 -08:00
 tagging_1067724876: 
   tagger_id: 751871740
   updated_at: 2008-11-21 01:50:24 -08:00
@@ -87,14 +103,6 @@ tagging_1067724878:
   taggable_id: 4
   tagger_type: Tag
   created_at: 2008-11-21 01:52:37 -08:00
-tagging_576038302: 
-  tagger_id: 66216446
-  updated_at: 2008-11-08 19:26:02 -08:00
-  id: 576038302
-  taggable_type: Work
-  taggable_id: 5
-  tagger_type: Tag
-  created_at: 2008-11-08 19:26:02 -08:00
 tagging_664025557: 
   tagger_id: 951091623
   updated_at: 2008-11-08 19:26:02 -08:00
@@ -159,22 +167,6 @@ tagging_35934741:
   taggable_id: 4
   tagger_type: Tag
   created_at: 2008-11-08 19:26:02 -08:00
-tagging_1067724881: 
-  tagger_id: 1063753745
-  updated_at: 2008-11-21 01:54:14 -08:00
-  id: 1067724881
-  taggable_type: Work
-  taggable_id: 5
-  tagger_type: Tag
-  created_at: 2008-11-21 01:54:14 -08:00
-tagging_1067724882: 
-  tagger_id: 1063753746
-  updated_at: 2008-11-21 01:54:14 -08:00
-  id: 1067724882
-  taggable_type: Work
-  taggable_id: 5
-  tagger_type: Tag
-  created_at: 2008-11-21 01:54:14 -08:00
 tagging_1067724871: 
   tagger_id: 1063753736
   updated_at: 2008-11-21 01:47:14 -08:00
@@ -207,14 +199,6 @@ tagging_1067724883:
   taggable_id: 5
   tagger_type: Tag
   created_at: 2008-11-21 01:54:15 -08:00
-tagging_1067724884: 
-  tagger_id: 1063753754
-  updated_at: 2008-11-21 02:04:20 -08:00
-  id: 1067724884
-  taggable_type: Work
-  taggable_id: 5
-  tagger_type: Tag
-  created_at: 2008-11-21 02:04:20 -08:00
 tagging_795295258: 
   tagger_id: 1039617938
   updated_at: 2008-11-08 19:26:02 -08:00
@@ -231,6 +215,14 @@ tagging_1067724873:
   taggable_id: 2
   tagger_type: Tag
   created_at: 2008-11-21 01:48:52 -08:00
+tagging_1067724885: 
+  tagger_id: 66216446
+  updated_at: 2008-11-21 23:45:15 -08:00
+  id: 1067724885
+  taggable_type: Work
+  taggable_id: 5
+  tagger_type: Tag
+  created_at: 2008-11-21 23:45:15 -08:00
 tagging_1067724874: 
   tagger_id: 1063753736
   updated_at: 2008-11-21 01:50:08 -08:00

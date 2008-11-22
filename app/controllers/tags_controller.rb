@@ -69,66 +69,61 @@ class TagsController < ApplicationController
   
   def edit
     @tag = Tag.find(params[:id])
-    @merge_possibilites = @tag.class.canonical.sort
-    if @tag.merger
-      render :action => "edit_merger" and return
-    end
-    if @tag.is_a?(Ambiguity)
-      render :action => "edit_ambiguous" and return
+    if @tag == Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
+      if params[:only]
+        if params[:only] == 'Banned'
+          if logged_in_as_admin? 
+            @unwrangled = Banned.all.sort
+          else
+            flash[:error] = "You have to be an admin"
+            redirect :back and return
+          end
+        elsif params[:only] == 'Ambiguous'
+            @unwrangled = Ambiguity.all.sort
+        else
+          @unwrangled = params[:only].constantize.unwrangled.no_fandom.sort
+        end
+      else
+        @unwrangled = Freeform.unwrangled.no_fandom.sort
+      end
+      render :action => "unwrangled" and return
+    elsif @tag.is_a?(Fandom)
+      @unwrangled = @tag.children.select(&:unwrangled).group_by(&:type)
     end
     @fandoms = Fandom.canonical.sort if @tag.class_name =~ /Character|Pairing|Freeform/
-    @media = Media.canonical.sort if @tag.class_name =~ /Media/
-    if @tag.canonical?
-      @possible_children = @tag.possible_children(@tag.fandom)
-      render :action => "edit_canonical" and return
-    end
-    render :action => "edit_unwrangled" and return
+    @medias = Media.canonical.sort if @tag.class_name =~ /Media/
+    @possible_children = @tag.possible_children
   end
   
   def update
     @tag = Tag.find(params[:id])
+    if params[:tag_ids]
+      tag_ids = params[:tag_ids].keys
+    end
     commit = params[:commit]
     case commit
-    when "Add Disambiguator"
+    when "Remove Disambiguators"
+      tag_ids.each do |id|
+        tag = Tag.find_by_id(id)
+        tag.ambiguities.delete(@tag)
+      end
+    when "Remove Parents and/or Children"
+      tag_ids.each do |id|
+        tag = Tag.find_by_id(id)
+        @tag.parents.delete(tag) if @tag.parents.include?(tag)
+        tag.parents.delete(@tag) if tag.parents.include?(@tag)       
+        tag.update_attribute(:media_id, nil) if @tag.is_a?(Media)
+        tag.update_attribute(:fandom_id, nil) if @tag.is_a?(Fandom)
+      end
+    when "Add Disambiguators"
       tag = Tag.find_by_id(params[:tag_id])
       tag.ambiguities << @tag
-    when "Remove Disambiguator"
-      tag_ids = params[:tag_ids]
-      if tag_ids.blank?
-        flash[:error] = "Please select some fandoms and a media"
-      else
-        tag_ids.each do |id|
-          tag = Tag.find_by_id(id)
-          tag.ambiguities.delete(@tag)
-        end
+    when "Add Children"
+      tag_ids.each do |id|
+        tag = Tag.find_by_id(id)
+        tag.wrangle_parent(@tag)
       end
-    when "Move Children to New Media"
-      tag_ids = params[:tag_ids]
-      media = Media.find_by_id(params[:media_id])
-      if !media || tag_ids.blank?
-        flash[:error] = "Please select some fandoms and a media"
-      else
-        tag_ids.each do |id| 
-          fandom = Fandom.find_by_id(id)
-          fandom.update_attribute(:media_id, media.id)
-          fandom.update_attribute(:canonical, true)
-          fandom.update_attribute(:wrangled, true)
-        end
-      end
-    when "Move Children to New Fandom"
-      tag_ids = params[:tag_ids]
-      fandom = Fandom.find_by_id(params[:fandom_id])
-      if !fandom || tag_ids.blank?
-        flash[:error] = "Please select some tags and a fandom"
-      else
-        tag_ids.each do |id| 
-          tag = Tag.find_by_id(id)
-          tag.update_attribute(:fandom_id, fandom.id)
-          tag.update_attribute(:wrangled, false)
-        end
-      end
-    when "Mark Unwrangled Canonical"
-      tag_ids = params[:tag_ids]
+    when "Mark Canonical"
       tag_ids.each do |id|
         tag = Tag.find_by_id(id)
         tag.wrangle_canonical
@@ -139,57 +134,68 @@ class TagsController < ApplicationController
         end
         tag.update_attribute(:wrangled, true)
       end
-    when "Mark Unwrangled Ambiguous"
-      tag_ids = params[:tag_ids]
-      parent = Tag.find_by_id(params[:parent_id])
-      if !parent || tag_ids.blank?
-        flash[:error] = "Please select some tags and a parent"
+    when "Mark Ambiguous"
+      tag_ids.each do |id|
+        tag = Tag.find_by_id(id)
+        tag.wrangle_ambiguous
+      end
+    when "Move Remove from Fandom"
+      tag_ids.each do |id| 
+        tag = Tag.find_by_id(id)
+        tag.update_attribute(:fandom_id, nil)
+      end
+    when "Add to Fandom"
+      fandom = Fandom.find_by_id(params[:new_fandom_id])
+      if tag_ids.blank? || !fandom
+        flash[:error] = "Please select some tags and a fandom"
+        render :action => :edit and return
       else
         tag_ids.each do |id|
-          tag = Tag.find_by_id(id)
-          tag.wrangle_parent(parent)
+          tag = Tag.find(id)
+          tag.update_attribute(:fandom_id, fandom.id)
         end
       end
-    when "Remove Parents and/or Children"
-      tag_ids = params[:tag_ids]
-      tag_ids.each do |id|
-        tag = Tag.find_by_id(id)
-        @tag.parents.delete(tag) if @tag.parents.include?(tag)
-        tag.parents.delete(@tag) if tag.parents.include?(@tag)
-      end
-    when "Add Children"
-      tag_ids = params[:tag_ids]
-      tag_ids.each do |id|
-        tag = Tag.find_by_id(id)
-        tag.wrangle_parent(@tag)
-      end
+      redirect_to edit_tag_path(@tag, :only => params[:only]) and return
     when "Update Tag"
       if params[:tag][:name]
         if @tag.name != params[:tag][:name]
           old_tag = Tag.find_by_name(params[:tag][:name])
           if old_tag
             flash[:notice] = "The tag name has already been taken. Consider merging instead.".t
-            render edit_tag_path(@tag) and return
+            render :action => :edit and return
           else
             @tag.update_attribute(:name, @tag.name)
           end
         end
       end
+      @tag.update_attribute(:adult, params[:tag][:adult]) if params[:tag][:adult]
+      if params[:ambiguous] == "1"
+        @tag.wrangle_ambiguous
+      end
       if params[:tag][:canonical] == "1"
-        @tag.wrangle_canonical
-        @tag.update_attribute(:adult, params[:tag][:adult]) if params[:tag][:adult]
-      else
-        merger = Tag.find_by_id(params[:merger_id])
-        @tag.wrangle_merger(merger) if merger    
-        @tag.wrangle_not_canonical
-        if params[:ambiguous] == "1"
-          @tag.wrangle_ambiguous 
-          redirect_to edit_tag_path(Ambiguity.find(@tag.id)) and return
-        end
+        @tag.wrangle_canonical unless @tag.canonical?
+      end
+      if params[:tag][:canonical] == "0"
+        @tag.wrangle_not_canonical if @tag.canonical?
+      end
+      merger = Tag.find_by_id(params[:merger_id])
+      if merger
+        @tag.wrangle_merger(merger) unless @tag.merger == merger
+      end
+      media = Media.find_by_id(params[:media_id])
+      if media
+        @tag.update_attribute(:media_id, media.id) unless @tag.media == media
+      end
+      fandom = Fandom.find_by_id(params[:fandom_id])
+      if fandom
+        @tag.update_attribute(:fandom_id, fandom.id) unless @tag.fandom == fandom
+      end
+      if params[:type] && logged_in_as_admin?
+        @tag.update_attribute(:type, params[:type]) unless @tag.is_a?(params[:type].constantize)
       end
       @tag.update_attribute(:wrangled, true)
     end #case
     flash[:notice] = 'Tag was successfully updated.'.t
-    redirect_to edit_tag_path(@tag.reload)
+    redirect_to edit_tag_path(Tag.find(@tag.id))
   end
 end

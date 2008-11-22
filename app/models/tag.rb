@@ -6,16 +6,15 @@ class Tag < ActiveRecord::Base
   TYPES = ['Rating', 'Warning', 'Category', 'Media', 'Fandom', 'Pairing', 'Character', 'Freeform', 'Ambiguity', 'Banned' ]
   
   # these tags can be filtered on
-  FILTERS = TYPES - ['Ambiguity', 'Banned']
+  FILTERS = TYPES - ['Ambiguity', 'Banned', 'Media']
   
   # these tags show up on works
   VISIBLE = TYPES - ['Media', 'Banned']
 
   # these tags can be created by users
   USER_DEFINED = ['Fandom', 'Pairing', 'Character', 'Freeform']
-
-  # these tags can be parents
-  PARENTS = USER_DEFINED + ['Media']
+  
+  ADMIN_ONLY = ['Rating', 'Warning', 'Category', 'Media', 'Banned']
 
   has_many :mergers, :foreign_key => 'merger_id', :class_name => 'Tag'
   belongs_to :merger, :class_name => 'Tag'
@@ -52,6 +51,7 @@ class Tag < ActiveRecord::Base
   named_scope :by_name, {:order => 'name ASC'}
   
   named_scope :by_fandom, lambda{|fandom| {:conditions => {:fandom_id => fandom.id}}}
+  named_scope :no_fandom, lambda{|fandom| {:conditions => {:fandom_id => nil}}}
 
   # Class methods
   
@@ -59,27 +59,19 @@ class Tag < ActiveRecord::Base
     all.map(&:name).join(ArchiveConfig.DELIMITER)
   end
     
-  def self.find_or_create_by_name(string)
+  def self.find_or_create_by_name(string, update_works=true)
     return if !string.is_a?(String) || string.blank?
     string.squish!
     type_name = self.name
     tag = Tag.find_by_name_and_type(string, type_name)
     return tag if tag
-    classed_tag = find_by_name(string + " - " + self.name)
-    return classed_tag if classed_tag
     begin
       tag = self.create!(:name => string)
-    rescue ActiveRecord::RecordInvalid # duplicate name in another category
-      new_tag = self.create(:name => string + " - " + self.name) # create classed_tag
-      # make sure classless tag is ambiguous
-      while tag = Tag.find_by_name(string)
-        return new_tag if tag.is_a?(Ambiguity) #it was, i can stop
-        # change the original one to have the category attached 
-        tag.update_attribute(:name, string + " - " + tag.class.name)
-      end
-      # and create a new Ambiguity tag for the classless name
-      Ambiguity.create!(:name => string)
-      return new_tag
+      return tag
+    rescue # duplicate name in another category
+      old_tag = Tag.find_by_name(string)
+      old_tag.wrangle_ambiguous(update_works)
+      return old_tag
     end
   end
   
@@ -96,13 +88,6 @@ class Tag < ActiveRecord::Base
   end
   
   # Instance methods that are common to all subclasses (may be overridden in the subclass)
-  
-  # name without suffix for display when already categorized
-  def classless_name
-    regexp = Regexp.new(" - " + self.class.name)
-    return name unless self.name.match(regexp)
-    return name.sub(regexp, "")
-  end
   
   # sort tags by name
   def <=>(another_tag)
@@ -124,7 +109,7 @@ class Tag < ActiveRecord::Base
     
   def wrangle_ambiguous(update_works=true)
     self.update_attribute(:type, "Ambiguity")
-    self.common_tags.clear if update_works
+    self.common_tags.clear
     self.update_common_tags if update_works
   end
     
@@ -154,42 +139,21 @@ class Tag < ActiveRecord::Base
   end
 
   def children
-    tags = []
-    tags << CommonTag.find_all_by_filterable_id(self.id).map(&:common).uniq.compact.sort
-    tags << Fandom.find_all_by_media_id(self.id) if self.is_a?(Media)
-    tags << Tag.find_all_by_fandom_id(self.id) if self.is_a?(Fandom)
-    tags.flatten.uniq.compact
-  end
-
-  def can_be_parent?
-    PARENTS.include?(self.class.name)
+    CommonTag.find_all_by_filterable_id_and_filterable_type(self.id, 'Tag').map(&:common).uniq.compact.sort
   end
 
   def wrangle_parent(parent, update_works=true)
-    return unless parent.is_a?(Tag)
-    return unless parent.can_be_parent? && parent.canonical?
+    return unless parent.is_a?(Tag) && parent.canonical?
     self.parents << parent rescue nil
     self.update_common_tags if update_works
   end
 
-  # just parents and grandparents for now. 
-  # eventually should traverse the entire branch
-  def ancestors
-    ancestors = []
-    parents = self.parents
-    ancestors << parents
-    parents.each do |p|
-      ancestors << p.parents
-    end
-    ancestors.flatten.uniq.compact
-  end
-  
   # return an array of all the common_tags which tagging with self should add
   def common_tags_to_add
     common_tags = []
     common_tags << self.merger
     common_tags << self if self.canonical
-    common_tags << self.ancestors
+    common_tags << self.parents
     common_tags.flatten.uniq.compact
   end
 
@@ -234,14 +198,14 @@ class Tag < ActiveRecord::Base
     visible_works_count + visible_bookmarks_count + visible_external_works_count
   end
   
-  def possible_children(fandom)
+  def possible_children
     type = self[:type]
     return unless type
-    fandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME) unless fandom.is_a?(Fandom)
-    fandoms = Fandom.unwrangled if type.match /Media|Fandom/
-    characters = (Character.unwrangled + Character.by_fandom(fandom)).sort if type.match /Fandom|Character/
-    pairings = (Pairing.unwrangled + Pairing.by_fandom(fandom)).sort if type.match /Fandom|Character|Pairing/
-    freeforms = (Freeform.unwrangled + Freeform.by_fandom(fandom)).sort if type.match /Fandom|Character|Pairing|Freeform/
+    fandom = (self.fandom || Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME))
+    fandoms = Fandom.all.sort if type.match /Media|Fandom/
+    characters = (Character.no_fandom + Character.by_fandom(fandom)).sort if type.match /Fandom|Character/
+    pairings = (Pairing.no_fandom + Pairing.by_fandom(fandom)).sort if type.match /Fandom|Character|Pairing/
+    freeforms = (Freeform.no_fandom + Freeform.by_fandom(fandom)).sort if type.match /Fandom|Character|Pairing|Freeform/
     hash = {}
     hash['Fandom'] = fandoms - self.children unless fandoms.blank?
     hash['Character'] = characters - self.children unless characters.blank?
@@ -257,5 +221,13 @@ class Tag < ActiveRecord::Base
   
   def class_name
     self.class.name
+  end
+  
+  def ambiguous
+    return self if self.is_a?(Ambiguity)
+  end
+  
+  def unwrangled
+    return self unless self.wrangled?
   end
 end

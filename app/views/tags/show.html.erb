@@ -1,17 +1,15 @@
 <h2>
   <%= @tag.name %>
 </h2>
-
 <%= error_messages_for :tag %>
-
-<%- if logged_in_as_admin? || current_user.is_a?(User) && current_user.is_tag_wrangler? -%>
+<%- if can_wrangle? -%>
   <p><%= link_to 'Edit '.t + @tag.name, edit_tag_path(@tag) %></p>
 <%- end -%>
 
 <p><%= "This tag belongs to the".t %> <%= @tag.class::NAME %> <%= "Category".t %>.</p>
 
 <%- if @tag.canonical -%>
-  <p>This tag is a common tag. You can use this tag to
+  <p>This is a common tag. You can use this tag to
     <%= link_to 'filter works'.t ,     
         tag_works_path(@tag) %>.
   </p>
@@ -22,10 +20,24 @@
 <%- end -%>
 
 
-<%- unless @tag.parents.blank? -%>
+<%- unless @tag.ambiguities.blank? -%>
+  <p>Tags which disambiguate here:</p>
+  <%- @tag.ambiguities.each do |ambiguous| %>
+    <%= link_to_tag ambiguous %>
+  <%- end -%>
+<%- end -%>
+
+<% if @tag.is_a?(Fandom) %>
   <p>Parent tags (more general):</p>
-  <%- @tag.parents.uniq.compact.sort.each do |parent| %>
+  <%- (@tag.parents + [@tag.media]).uniq.compact.sort.each do |parent| %>
     <%= link_to_tag parent %>
+  <%- end -%>
+<% else %>
+  <%- unless @tag.parents.blank? -%>
+    <p>Parent tags (more general):</p>
+    <%- @tag.parents.sort.each do |parent| %>
+      <%= link_to_tag parent %>
+    <%- end -%>
   <%- end -%>
 <%- end -%>
 
@@ -42,7 +54,11 @@
 <%- end -%>
 
 <%- unless @tag.children.blank? -%>
-  <p>Child tags (more specific):</p>
+  <% if @tag.is_a?(Ambiguity) %>
+    <p>Disambiguators:</p>
+  <% else %>
+    <p>Child tags (more specific):</p>
+  <% end %>
   <%- @tag.children.uniq.compact.sort.group_by(&:type).each do |type, tags| %>
     <p><%= type.constantize::NAME.pluralize %>:</p>
     <% tags.each do |child| %>
@@ -52,7 +68,11 @@
 <%- end -%>
 
 <%- if @works -%>
-  <p>This tag has not been marked common and can't be filtered on (yet).<p>
+  <% if @tag.is_a?(Ambiguity) %>
+    <p>This tag is ambiguous and can not be filtered on.<p>
+  <% else %>
+    <p>This tag has not been marked common and can't be filtered on (yet).<p>
+  <% end %>
   <p>Works which have used it as a tag:</p>
   <% paginated_section @works, {:previous_label => '&laquo; Previous'.t, :next_label => 'Next &raquo;'.t} do %>
     <ul class="work-list">

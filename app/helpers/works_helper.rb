@@ -189,7 +189,7 @@ module WorksHelper
     
     warnings = tags_by_category["Warning"] || []
     freeform = tags_by_category["Freeform"] || []
-    ambiguous = tags_by_category["Ambiguous"] || []
+    ambiguous = tags_by_category["Ambiguity"] || []
 
     tags = warnings + freeform + ambiguous
     if tags.size > ArchiveConfig.TAGS_PER_LINE

@@ -1,0 +1,59 @@
+    <%- unless @tag.parents.blank? %>
+      <dt><%= 'These tags are parents of this tag'.t %></dt>
+      <%-  @tag.parents.sort.group_by(&:type).each do |type, tags| -%>
+        <dt><%= type.pluralize %>:</dt>
+        <%- tags.each do |tag| -%>
+          <dd>
+            <%= check_box_tag "tag_ids[" + tag.id.to_s + "]" %>
+            <%= link_to tag.name, edit_tag_path(tag) %>
+          </dd>
+        <%- end -%>
+      <%- end -%>
+    <%- end -%>      
+    <% unless @tag.children.blank? %>
+      <% if @tag.is_a?(Ambiguity) %>
+        <dt><%= 'These tags are disambiguities of this tag'.t -%></dt>
+      <% else %>
+        <dt><%= 'These tags are children of this tag'.t -%></dt>
+      <% end %>
+      <%-  @tag.children.group_by(&:type).each do |type, tags| -%>
+        <dt><%= type.pluralize %>:</dt>
+        <%- tags.each do |tag| -%>
+          <dd>
+            <%= check_box_tag "tag_ids[" + tag.id.to_s + "]" %>
+            <%= link_to tag.name, edit_tag_path(tag) %>
+          </dd>
+        <%- end -%>
+      <%- end -%>
+    <%- end -%>
+    <p class="submit">
+      <% if @tag.is_a?(Ambiguity) && !@tag.children.blank? %>
+        <%= submit_tag "Remove Disambiguators"%> 
+      <% elsif !@tag.parents.blank? || !@tag.children.blank? %>
+        <%= submit_tag "Remove Parents and/or Children"  %>  
+      <% end %>
+    </p>
+
+  <% unless @possible_children.blank? %>
+    <% if @tag.is_a?(Ambiguity) %>
+      <dt><%= 'These tags are can be marked as disambiguations of this tag'.t -%></dt>
+    <% else %>
+      <dt><%= 'These tags can be marked as children of this tag'.t -%></dt>
+    <% end %>
+    <%-  @possible_children.each_pair do |type, tags| -%>
+      <dt><%= type.pluralize %>:</dt>
+      <%- tags.each do |tag| -%>
+        <dd>
+          <%= check_box_tag "tag_ids[" + tag.id.to_s + "]" %>
+          <%= link_to tag.name, edit_tag_path(tag) %>
+        </dd>
+      <%- end -%>
+    <%- end -%>
+    <p class="submit">
+      <% if @tag.is_a?(Ambiguity) %>
+        <%= submit_tag "Add Disambiguators"%> 
+      <% else %>
+        <%= submit_tag "Add Children"%> 
+      <% end %>
+    </p>
+  <%- end -%>

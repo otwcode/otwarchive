@@ -216,7 +216,7 @@ class WorksController < ApplicationController
         @series_next[series.id] = sw_next.work if sw_next
       end
     end
-    @tag_categories_limited = Tag::VISIBLE - ["Media"]
+    @tag_categories_limited = Tag::VISIBLE - ["Warning"]
     
     @page_title = ""
     if logged_in? && !current_user.preference.work_title_format.blank?

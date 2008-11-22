@@ -1,0 +1,108 @@
+<h2>
+  <%= 'Edit ' .t + @tag.class::NAME %>:
+  <%= link_to @tag.name, tag_path(@tag) %>
+</h2>
+
+<%= error_messages_for :tag %>
+
+<%- unless logged_in_as_admin? -%>
+  <p>Note: actions which are restricted to admins are not offered</p>
+<%- end -%>
+
+<%- form_for :tag, @tag, :url => { :action => "update"}, :html => { :method => :put } do |f| -%>
+  <dl>
+
+    <%- if logged_in_as_admin? -%>
+      <dt><%= f.label :name, 'Name'.t %>:</dt> 
+      <dd><%= f.text_field :name %></dd>
+      <dt></dt>
+      <dd><%=h "Changing the name should be done with extreme caution.".t %></dd>
+      <dt></dt>
+      <dd><%=h "Be aware that one person's typo is another person's freedom of expression.".t %></dd>
+      <dt></dt>
+      <dd><%=h "Official tag names cannot be changed from this interface, as they will only regenerate.".t %></dd>
+    <% end %>
+
+    <%- if logged_in_as_admin? && @tag.is_a?(Rating)-%>
+      <dt><%= f.check_box("adult") %><%= f.label :adult, 'Adult'.t %>?</dt> 
+      <dd><%=h 'This tag indicates adult content.'%></dd>
+    <%- end %>
+      
+    <% unless @tag == Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME) %>
+      <%- if Tag::USER_DEFINED.include?(@tag.class.name) -%>
+        <dt><%= f.check_box("canonical") %><%= f.label :canonical, 'Common'.t %>?</dt>
+        <% if @tag.canonical? %>
+          <dd><%=h 'Uncheck this and choose a Merger if it should not be filterable'.t %></dd>
+        <%- else -%>
+          <dd><%=h 'Check this if it should be filterable'.t %></dd>
+        <%- end -%>
+      <%- end -%>
+  
+      <% if @tag.merger %>
+        <dt>Merged into:</dt>
+        <dd><%= link_to_tag @tag.merger %></dd>
+        <dt><%= 'Change Merger'.t %>:</dt>
+      <% else %>
+        <dt><%= 'Merge into'.t %>:</dt>
+      <% end %>
+      <dd><%= select_tag :merger_id, "<option value=''>Select Merger</option>" + options_from_collection_for_select( @tag.class.canonical.sort, :id, :name, @tag.merger_id || "") %></dd>
+  
+      <%- if logged_in_as_admin? -%>
+        <dt><%=h 'Category'.t %></dt>
+        <%- Tag::TYPES.each do |type| -%>
+          <dd><%= f.radio_button(:type, type) %><%= f.label :type, type %></dd>
+        <%- end -%>    
+        <dt></dt>
+        <dd><%=h "Changing the category may have unexpected repercussions.".t %></dd>
+      <% elsif !@tag.is_a?(Ambiguity) %>
+        <dt><%= check_box_tag "ambiguous" %><%= f.label :ambiguous, 'Ambiguous'.t %>?</dt>
+        <dd><%=h 'Check this to mark the tag ambiguous'.t %></dd>      
+      <%- end -%>
+      
+      <%- if @tag.is_a?(Fandom) %>
+        <% if @tag.media -%>
+          <dt>Media:</dt>
+          <dd><%= link_to_tag @tag.media %></dd>
+          <dt><%= 'Reassign to media'.t %>:</dt>
+        <% else %>
+          <dt><%= 'Assign to media'.t %>:</dt>
+        <% end %>
+        <dd><%= select_tag :media_id, "<option value=''>Select Media</option>" + options_from_collection_for_select( Media.canonical.sort, :id, :name, @tag.media ? @tag.media.id : "") %></dd>
+     <%- end -%>
+  
+     <%- if Tag::USER_DEFINED.include?(@tag.class.name) %>
+        <% if @tag.fandom -%>
+          <dt>Fandom:</dt>
+          <dd><%= link_to_tag @tag.fandom %></dd>
+          <dt><%= 'Reassign to fandom'.t %>:</dt>
+        <% else %>
+          <dt><%= 'Assign to fandom'.t %>:</dt>
+        <% end %>
+        <dd><%= select_tag :fandom_id, "<option value=''>Select Fandom</option>" + options_from_collection_for_select( Fandom.canonical.sort, :id, :name, @tag.fandom ? @tag.fandom.id : "" )%></dd>
+     <%- end -%>
+   <% end %>
+   <p class="submit">
+     <%= submit_tag "Update Tag" %>  
+   </p>
+  
+  <%= render :partial => "relatives" %>
+
+  <% unless @unwrangled.blank? %>
+    <dt>Unwrangled tags:</dt>
+    <%- @unwrangled.each_pair do |type, tags| -%>
+      <dt><%= type.pluralize %>:</dt>
+      <%- tags.each do |tag| -%>
+        <dd>
+          <%= check_box_tag "tag_ids[" + tag.id.to_s + "]" %>
+          <%= link_to tag.name, edit_tag_path(tag) %>
+        </dd>
+      <%- end -%>
+    <% end %>
+    <p class="submit">
+      <%= submit_tag "Mark Canonical"%> 
+      <%= submit_tag "Mark Ambiguous"%> 
+      <%= submit_tag "Remove from Fandom" %> 
+    </p>
+  <% end %>    
+
+<% end %>
