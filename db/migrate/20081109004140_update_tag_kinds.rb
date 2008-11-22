@@ -1,8 +1,5 @@
 class UpdateTagKinds < ActiveRecord::Migration
   def self.up
-    puts "Deleting unused tags"
-    Tag.find_all_by_taggings_count(0).map(&:destroy)
-
     puts "Updating media"
     tags = TagCategory.find_by_name("Media").andand.tags
     unless tags.blank?
@@ -76,6 +73,9 @@ class UpdateTagKinds < ActiveRecord::Migration
       tag_ids = tags.map(&:id).join(",")
       execute "UPDATE tags SET type=\"Freeform\" WHERE id IN (#{tag_ids});"
     end
+    puts "Deleting unused freeform tags"
+    Freeform.find_all_by_taggings_count(0).map(&:destroy)
+
     
     puts "Updating mergers (previously synonyms)"
     # unfortunately, in the legacy database some synonyms went one way, 

@@ -4,13 +4,9 @@ class MakeTagsUniqueAcrossCategories < ActiveRecord::Migration
     Tag.reset_column_information
     by_name = Tag.all.group_by{|t| t.name.downcase}
     by_name.each do |name, tags|
+      tags = tags.compact.uniq
       if tags.size > 1
         tags.each do |tag|
-          # remove tags that aren't being used
-          if tag.taggings_count==0
-            tags.delete(tag)
-            tag.destroy 
-          end
           # move bookmark tags to freeform
           unless tag.tag_category_id
             new_tag = Freeform.find_by_name(tag.name)
@@ -30,6 +26,7 @@ class MakeTagsUniqueAcrossCategories < ActiveRecord::Migration
           Tag::TYPES.each do |type|
             tags.each do |tag|
               tag.update_attribute(:name, tag.name + " - " + tag[:type]) unless first
+              tags.delete(tag)
               first = false
             end
           end
