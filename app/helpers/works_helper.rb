@@ -174,7 +174,7 @@ module WorksHelper
     pairings = tags_by_category["Pairing"] || []
     return [] if pairings.empty? && characters.empty? 
     
-    pairing_characters = pairings.collect{|p| p.children}.flatten.uniq.compact
+    pairing_characters = pairings.collect{|p| p.parents}.flatten.uniq.compact
     
     cast = pairings + characters - pairing_characters
     if cast.size > ArchiveConfig.TAGS_PER_LINE
