@@ -89,9 +89,9 @@
 
   <% unless @unwrangled.blank? %>
     <dt>Unwrangled tags:</dt>
-    <%- @unwrangled.each_pair do |type, tags| -%>
+    <%- @unwrangled.keys.each do |type| -%>
       <dt><%= type.pluralize %>:</dt>
-      <%- tags.each do |tag| -%>
+      <%- @unwrangled[type].each do |tag| -%>
         <dd>
           <%= check_box_tag "tag_ids[" + tag.id.to_s + "]" %>
           <%= link_to tag.name, edit_tag_path(tag) %>
