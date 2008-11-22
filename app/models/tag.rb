@@ -70,7 +70,7 @@ class Tag < ActiveRecord::Base
       return tag
     rescue # duplicate name in another category
       old_tag = Tag.find_by_name(string)
-      old_tag.wrangle_ambiguous(update_works)
+      old_tag.wrangle_ambiguous(update_works) if old_tag
       return old_tag
     end
   end
