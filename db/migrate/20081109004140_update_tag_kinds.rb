@@ -89,7 +89,7 @@ class UpdateTagKinds < ActiveRecord::Migration
         mergers << array[0] if array[1] == canonical_tag
         mergers << array[1] if array[0] == canonical_tag
       end
-      mergers.each { |tag| tag.wrangle_merger(canonical_tag, false) unless tag.canonical? }
+      mergers.uniq.compact.each { |tag| tag.wrangle_merger(canonical_tag, false) unless tag.canonical? }
     end
        
     puts "Updating common tags"
