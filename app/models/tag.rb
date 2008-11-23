@@ -58,6 +58,10 @@ class Tag < ActiveRecord::Base
   def self.string
     all.map(&:name).join(ArchiveConfig.DELIMITER)
   end
+
+  def to_param
+    name
+  end
     
   def self.find_or_create_by_name(string, update_works=true)
     return if !string.is_a?(String) || string.blank?

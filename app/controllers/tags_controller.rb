@@ -18,7 +18,7 @@ class TagsController < ApplicationController
   end
   
   def show
-    @tag = Tag.find(params[:id])
+    @tag = Tag.find_by_name(params[:id])
     if !@tag.canonical && !@tag.merger
       if current_user.is_a?User
         @works = @tag.works.visible_to_user.paginate(:page => params[:page])
@@ -68,7 +68,7 @@ class TagsController < ApplicationController
   end 
   
   def edit
-    @tag = Tag.find(params[:id])
+    @tag = Tag.find_by_name(params[:id])
     if @tag == Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
       if params[:only]
         if params[:only] == 'Banned'
@@ -96,7 +96,7 @@ class TagsController < ApplicationController
   end
   
   def update
-    @tag = Tag.find(params[:id])
+    @tag = Tag.find_by_name(params[:id])
     if params[:tag_ids]
       tag_ids = params[:tag_ids].keys
     end
