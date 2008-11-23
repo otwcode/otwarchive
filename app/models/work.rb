@@ -364,9 +364,6 @@ class Work < ActiveRecord::Base
   def warning_strings
     self.warnings.map(&:name)
   end
-  def media_string
-    self.medias.string
-  end
   def fandom_string
     self.fandoms.string
   end
@@ -388,83 +385,88 @@ class Work < ActiveRecord::Base
   # << and = don't trigger callbacks to update common_tags
   # see rails bug http://dev.rubyonrails.org/ticket/7743
   def rating_string=(tag_string)
-    self.ratings = [Rating.find_or_create_by_name(tag_string)]
+    tag = Rating.find_or_create_by_name(tag_string)
+    self.ratings = [tag] if tag.is_a?(Rating)
   end
 
   def category_string=(tag_string)
-    self.categories = [Category.find_or_create_by_name(tag_string)]
+    tag = Category.find_or_create_by_name(tag_string)
+    self.categories = [tag] if tag.is_a?(Category)
   end
   
   def warning_string=(tag_string)
     tags = []
     tag_string.split(ArchiveConfig.DELIMITER).each do |string|
-      tags << Warning.find_or_create_by_name(string)
+      tag = Warning.find_or_create_by_name(string)
+      tags << tag if tag.is_a?(Warning)
     end
-    self.warnings = tags 
+    self.warnings = tags
   end
 
   def warning_strings=(array)
     tags = []
     array.each do |string|
-      tags << Warning.find_or_create_by_name(string)
+      tag = Warning.find_or_create_by_name(string)
+      tags << tag if tag.is_a?(Warning)
     end
     self.warnings = tags
   end
 
-  def media_string=(tag_string)
-    tags = []
-    tag_string.split(ArchiveConfig.DELIMITER).each do |string|
-      tags << Media.find_or_create_by_name(string)
-    end
-    self.medias = tags
-  end
-
   def fandom_string=(tag_string)
     tags = []
+    ambiguities = []
     tag_string.split(ArchiveConfig.DELIMITER).each do |string|
-      tags << Fandom.find_or_create_by_name(string)
+      tag = Fandom.find_or_create_by_name(string)
+      tags << tag if tag.is_a?(Fandom)
+      ambiguities << tag if tag.is_a?(Ambiguity)
     end
-    ambiguities = tags.select(&:ambiguous)
     self.add_to_ambiguity(ambiguities)
-    self.fandoms = tags - ambiguities
+    self.fandoms = tags
   end
 
   def pairing_string=(tag_string)
     tags = []
+    ambiguities = []
     tag_string.split(ArchiveConfig.DELIMITER).each do |string|
-      tags << Pairing.find_or_create_by_name(string)
+      tag = Pairing.find_or_create_by_name(string)
+      tags << tag if tag.is_a?(Pairing)
+      ambiguities << tag if tag.is_a?(Ambiguity)
     end
-    ambiguities = tags.select(&:ambiguous)
     self.add_to_ambiguity(ambiguities)
-    self.pairings = tags - ambiguities
+    self.pairings = tags
   end
 
   def character_string=(tag_string)
     tags = []
+    ambiguities = []
     tag_string.split(ArchiveConfig.DELIMITER).each do |string|
-      tags << Character.find_or_create_by_name(string)
+      tag = Character.find_or_create_by_name(string)
+      tags << tag if tag.is_a?(Character)
+      ambiguities << tag if tag.is_a?(Ambiguity)
     end
-    ambiguities = tags.select(&:ambiguous)
     self.add_to_ambiguity(ambiguities)
-    self.characters = tags - ambiguities
+    self.characters = tags
   end
 
   def freeform_string=(tag_string)
     tags = []
+    ambiguities = []
     tag_string.split(ArchiveConfig.DELIMITER).each do |string|
-      tags << Freeform.find_or_create_by_name(string)
+      tag =  Freeform.find_or_create_by_name(string)
+      tags << tag if tag.is_a?(Freeform)
+      ambiguities << tag if tag.is_a?(Ambiguity)
     end
-    ambiguities = tags.select(&:ambiguous)
     self.add_to_ambiguity(ambiguities)
-    self.freeforms = tags - ambiguities
+    self.freeforms = tags.compact - ambiguities
   end
   
   def ambiguity_string=(tag_string)
     tags = []
     tag_string.split(ArchiveConfig.DELIMITER).each do |string|
-      tags << Ambiguity.find_or_create_by_name(string)
+      tag = Ambiguity.find_or_create_by_name(string)
+      tags << tag if tag.is_a?(Ambiguity)
     end
-    self.add_to_ambiguity(tags)
+    self.add_to_ambiguity(tags.compact)
   end
 
   def add_to_ambiguity(tags)
@@ -474,6 +476,7 @@ class Work < ActiveRecord::Base
       self.ambiguous_tags = tags
     end
   end
+  
   # a work can only have one rating, so using first will work
   def adult?
     # should always have a rating, if it doesn't err conservatively

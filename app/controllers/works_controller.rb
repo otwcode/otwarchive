@@ -7,7 +7,7 @@ class WorksController < ApplicationController
   before_filter :users_only, :only => [ :new, :create, :upload_work, :drafts, :post, :preview ]
   # only authors of a work should be able to edit it
   before_filter :is_author, :only => [ :edit, :update, :destroy, :post, :preview ]
-  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :post, :show, :upload_work ]
+  before_filter :set_instance_variables, :only => [ :new, :edit, :update, :manage_chapters, :preview, :post, :show, :upload_work ]
   before_filter :update_or_create_reading, :only => [ :show ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview, :post]
   
@@ -242,31 +242,30 @@ class WorksController < ApplicationController
 
   # POST /works
   def create
-    begin
-      raise unless @work.errors.empty?
-      if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
-        @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
-      elsif params[:edit_button]
-        render :action => :new
-      elsif params[:cancel_coauthor_button]
-        render :action => :new
-      elsif params[:cancel_button]
-        flash[:notice] = "New work posting canceled.".t
-        redirect_to current_user    
-      else
-        saved = @work.save
-        unless saved && @work.has_required_tags? && @work.set_revised_at(@work.published_at)
-          unless @work.has_required_tags?
-            @work.errors.add(:base, "Required tags are missing.".t)          
-          end
-          render :action => :new 
-        else        
-          flash[:notice] = 'Work was successfully created.'.t
-          redirect_to preview_work_path(@work)
-        end
-      end
-    rescue
+    params[:work][:author_attributes][:byline] = params[:pseud][:byline] if params[:pseud]
+    @work = Work.new(params[:work])  
+    load_pseuds
+    @series = current_user.series.uniq 
+    if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
+      @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
+    elsif params[:edit_button]
       render :action => :new
+    elsif params[:cancel_coauthor_button]
+      render :action => :new
+    elsif params[:cancel_button]
+      flash[:notice] = "New work posting canceled.".t
+      redirect_to current_user    
+    else
+      saved = @work.save
+      unless saved && @work.has_required_tags? && @work.set_revised_at(@work.published_at)
+        unless @work.has_required_tags?
+          @work.errors.add(:base, "Required tags are missing.".t)          
+        end
+        render :action => :new 
+      else        
+        flash[:notice] = 'Work was successfully created.'.t
+        redirect_to preview_work_path(@work)
+      end
     end
   end
   

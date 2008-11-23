@@ -66,17 +66,16 @@ class Tag < ActiveRecord::Base
   def self.find_or_create_by_name(string, update_works=true)
     return if !string.is_a?(String) || string.blank?
     string.squish!
-    type_name = self.name
-    tag = Tag.find_by_name_and_type(string, type_name)
+    # try to find the tag
+    tag = self.find_by_name(string)
     return tag if tag
-    begin
-      tag = self.create!(:name => string)
-      return tag
-    rescue # duplicate name in another category
-      old_tag = Tag.find_by_name(string)
-      old_tag.wrangle_ambiguous(update_works) if old_tag
-      return old_tag
-    end
+    # try to create the tag
+    tag = self.create(:name => string)
+    return tag if tag.valid?
+    # see if you can find a tag with the same name and make it ambiguous
+    old_tag = Tag.find_by_name(string)    
+    old_tag.wrangle_ambiguous(update_works) if old_tag
+    return old_tag if old_tag
   end
   
   # FIXME make more efficient
