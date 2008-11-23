@@ -8,11 +8,12 @@ class PairingTest < ActiveSupport::TestCase
     end
   end
     
-  context "a new pairing tag" do
+  context "a new pairing tag with character wrangling" do
     setup do
       @pairing = Pairing.create(:name => "first/second")
+      @pairing.wrangle_characters
     end
-    should "have create its characters" do
+    should "create its characters" do
       assert Character.find_by_name("first")
       assert Character.find_by_name("second")
     end
@@ -21,19 +22,21 @@ class PairingTest < ActiveSupport::TestCase
     end
   end
 
-  context "a pairing tag with a canonical character" do
+  context "a pairing tag with a canonical character with character wrangling" do
     setup do
       @character1 = Character.create(:name => "alpha", :canonical => true)
       @pairing = Pairing.create(:name => "alpha/beta")
+      @pairing.wrangle_characters
     end
     should "get get its characters as parents" do
       assert @pairing.parents.include?(@character1)
     end
   end
 
-  context "a new threesome pairing tag" do
+  context "a new threesome pairing tag with character wrangling" do
     setup do
       @pairing = Pairing.create(:name => "first/second/third")
+      @pairing.wrangle_characters
     end
     should "have three characters" do
       assert_equal 3, Character.count

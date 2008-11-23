@@ -15,8 +15,8 @@ class Work < ActiveRecord::Base
   has_bookmarks
   has_many :user_tags, :through => :bookmarks, :source => :tags
 
-  has_many :common_tags, :as => :filterable
-  has_many :commons, :through => :common_tags
+  has_many :common_taggings, :as => :filterable
+  has_many :common_tags, :through => :common_taggings
 
   has_many :taggings, :as => :taggable
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
@@ -506,10 +506,10 @@ class Work < ActiveRecord::Base
       new_tags << tagging.tagger.common_tags_to_add rescue nil
     end
     new_tags = new_tags.flatten.uniq.compact
-    old_tags = self.commons
-    self.commons.delete(old_tags - new_tags)
-    self.commons << (new_tags - old_tags)
-    commons
+    old_tags = self.common_tags
+    self.common_tags.delete(old_tags - new_tags)
+    self.common_tags << (new_tags - old_tags)
+    self.common_tags
   end
   
   def update_ambiguous_tags
@@ -686,8 +686,8 @@ class Work < ActiveRecord::Base
                     INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
                     INNER JOIN users ON pseuds.user_id = users.id"
                     
-  COMMON_TAG_JOIN = "INNER JOIN common_tags ON (works.id = common_tags.filterable_id AND common_tags.filterable_type = 'Work') 
-                  INNER JOIN tags ON common_tags.common_id = tags.id"
+  COMMON_TAG_JOIN = "INNER JOIN common_taggings ON (works.id = common_taggings.filterable_id AND common_taggings.filterable_type = 'Work') 
+                  INNER JOIN tags ON common_taggings.common_tag_id = tags.id"
                     
                     
   VISIBLE_TO_ALL_CONDITIONS = {:posted => true, :restricted => false, :hidden_by_admin => false}

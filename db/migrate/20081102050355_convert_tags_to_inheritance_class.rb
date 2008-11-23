@@ -13,15 +13,15 @@ class ConvertTagsToInheritanceClass < ActiveRecord::Migration
     execute "UPDATE tags SET type='Legacy';"
     execute "UPDATE taggings SET tagger_type=\"Tag\";"
     remove_column :tags, :banned
-    create_table :common_tags do |t|
-      t.integer  :common_id, :filterable_id, :null => false
+    create_table :common_taggings do |t|
+      t.integer  :common_tag_id, :filterable_id, :null => false
       t.string  :filterable_type, :null => false
       t.timestamps
     end
   end
 
   def self.down
-    drop_table :common_tags
+    drop_table :common_taggings
     add_column :tags, :banned, :boolean, :default => false, :null => false
     remove_index :taggings, :name => :index_taggings_polymorphic
     add_index :taggings, [:tag_id, :taggable_id, :taggable_type], :name => :index_taggings_on_tag_id_and_taggable_id_and_taggable_type, :unique => true

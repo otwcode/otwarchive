@@ -44,7 +44,7 @@
       <%- end -%>
 		</dl>
 		<p>
-  		<%= hidden_field_tag("tag_id", @tag.id) if @tag %>
+  		<%= hidden_field_tag("tag_id", @tag.name) if @tag %>
   		<%= hidden_field_tag("query", @query) if @query %>
   		<%= hidden_field_tag("fandom_id", @fandom.id) if @fandom %>
   		<%= hidden_field_tag("user_id", @user.login) if @user %>

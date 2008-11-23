@@ -9,7 +9,7 @@
   <p>Note: actions which are restricted to admins are not offered</p>
 <%- end -%>
 
-<%- form_for :tag, @tag, :url => { :action => "update"}, :html => { :method => :put } do |f| -%>
+<%- form_for :tag, @tag, :url => { :action => "update", :id => @tag.name}, :html => { :method => :put } do |f| -%>
   <dl>
 
     <%- if logged_in_as_admin? -%>

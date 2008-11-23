@@ -78,15 +78,15 @@ ActiveRecord::Schema.define(:version => 20081122025525) do
     t.boolean  "is_read",                        :default => false, :null => false
   end
 
-  create_table "common_tags", :force => true do |t|
-    t.integer  "common_id",       :limit => 11, :null => false
+  create_table "common_taggings", :force => true do |t|
+    t.integer  "common_tag_id",       :limit => 11, :null => false
     t.integer  "filterable_id",   :limit => 11, :null => false
     t.string   "filterable_type",               :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "common_tags", ["common_id", "filterable_type", "filterable_id"], :name => "index_common_tags", :unique => true
+  add_index "common_taggings", ["common_tag_id", "filterable_type", "filterable_id"], :name => "index_common_tags", :unique => true
 
   create_table "communities", :force => true do |t|
     t.string   "name"

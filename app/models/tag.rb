@@ -21,10 +21,10 @@ class Tag < ActiveRecord::Base
   belongs_to :fandom
   belongs_to :media
 
-  has_many :common_tags, :foreign_key => 'common_id'
-  has_many :parents, :through => :common_tags, :source => :filterable, :source_type => 'Tag'
-  has_many :ambiguities, :through => :common_tags, :source => :filterable, :source_type => 'Ambiguity'
-  has_many :filtered_works, :through => :common_tags, :source => :filterable, :source_type => 'Work'
+  has_many :common_taggings, :foreign_key => 'common_tag_id'
+  has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag'
+  has_many :ambiguities, :through => :common_taggings, :source => :filterable, :source_type => 'Ambiguity'
+  has_many :filtered_works, :through => :common_taggings, :source => :filterable, :source_type => 'Work'
   
   has_many :taggings, :as => :tagger  
   has_many :works, :through => :taggings, :source => :taggable, :source_type => 'Work'
@@ -106,13 +106,13 @@ class Tag < ActiveRecord::Base
   
   def wrangle_banned(update_works=true)
     self.update_attribute(:type, "Banned")
-    self.common_tags.clear
+    self.common_taggings.clear
     self.update_common_tags if update_works
   end
     
   def wrangle_ambiguous(update_works=true)
     self.update_attribute(:type, "Ambiguity")
-    self.common_tags.clear
+    self.common_taggings.clear
     self.update_common_tags if update_works
   end
     
@@ -124,7 +124,7 @@ class Tag < ActiveRecord::Base
   
   def wrangle_not_canonical(update_works=true)
     self.update_attribute(:canonical, false)
-    self.common_tags.clear if update_works
+    self.common_taggings.clear if update_works
     self.update_common_tags if update_works
   end
   
@@ -142,7 +142,7 @@ class Tag < ActiveRecord::Base
   end
 
   def children
-    CommonTag.find_all_by_filterable_id_and_filterable_type(self.id, 'Tag').map(&:common).uniq.compact.sort
+    CommonTagging.find_all_by_filterable_id_and_filterable_type(self.id, 'Tag').map(&:common_tag).uniq.compact.sort
   end
 
   def wrangle_parent(parent, update_works=true)

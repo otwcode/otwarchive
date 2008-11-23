@@ -39,11 +39,6 @@ class UpdateTagKinds < ActiveRecord::Migration
     unless tags.blank?
       tag_ids = tags.map(&:id).join(",")
       execute "UPDATE tags SET type=\"Pairing\" WHERE id IN (#{tag_ids});"
-      puts "Updating pairing children"
-      tags.each do |tag|
-        pairing = Pairing.find(tag.id)
-        pairing.wrangle_characters(false)
-      end
     end
     
     puts "Updating ratings"

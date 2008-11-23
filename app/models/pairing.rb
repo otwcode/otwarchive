@@ -3,8 +3,10 @@ class Pairing < Tag
   NAME = ArchiveConfig.PAIRING_CATEGORY_NAME
 
   before_save :add_fandom_to_parents
-  
-  after_save :wrangle_characters
+ 
+  # creates too many ambiguous character tags
+  # I've left the method in case we want to call it specifically
+#  after_save :wrangle_characters
 
   def wrangle_characters(update_works=true)
     names = name.split('/')

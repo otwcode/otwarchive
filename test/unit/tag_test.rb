@@ -6,7 +6,7 @@ class TagTest < ActiveSupport::TestCase
   end
 
   context "a Tag" do
-    should_have_many :common_tags, :taggings
+    should_have_many :common_taggings, :taggings
     should_have_many :works, :bookmarks, :external_works
     should_have_many :parents, :ambiguities, :filtered_works
     should_belong_to :merger, :fandom, :media

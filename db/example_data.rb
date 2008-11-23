@@ -155,7 +155,7 @@ module FixtureReplacement
     a.taggable = default_work
   end
 
-  attributes_for :common_tag do |a|
+  attributes_for :common_tagging do |a|
     a.common_id = default_tag.id
     a.filterable = default_work
   end

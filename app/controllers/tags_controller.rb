@@ -151,7 +151,7 @@ class TagsController < ApplicationController
         render :action => :edit and return
       else
         tag_ids.each do |id|
-          tag = Tag.find(id)
+          tag = Tag.find_by_id(id)
           tag.update_attribute(:fandom_id, fandom.id)
         end
       end
@@ -196,6 +196,6 @@ class TagsController < ApplicationController
       @tag.update_attribute(:wrangled, true)
     end #case
     flash[:notice] = 'Tag was successfully updated.'.t
-    redirect_to edit_tag_path(Tag.find(@tag.id))
+    redirect_to edit_tag_path(Tag.find_by_name(@tag.name))
   end
 end

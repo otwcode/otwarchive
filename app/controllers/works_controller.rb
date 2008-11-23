@@ -132,7 +132,7 @@ class WorksController < ApplicationController
       # if we're browsing by a particular tag, just add that
       # tag to the selected_tags list.
       unless params[:tag_id].blank?
-        @tag = Tag.find(params[:tag_id])
+        @tag = Tag.find_by_name(params[:tag_id])
         @tag = @tag.merger if @tag.merger
         @selected_tags << @tag.id.to_s unless @selected_tags.include?(@tag.id.to_s)
       end
