@@ -10,15 +10,14 @@ class UsersController < ApplicationController
   end
   
   def check_account_creation_status
+    return true if ArchiveConfig.ACCOUNT_CREATION_ENABLED 
     @invitation = Invitation.find_by_token(params[:invitation_token])
-    unless ArchiveConfig.ACCOUNT_CREATION_ENABLED || @invitation
+    if !@invitation
       flash[:error] = "Account creation is suspended at the moment. Please check back with us later.".t
       redirect_to login_path 
-    else
-      if @invitation && @invitation.used?
-        flash[:error] = "This invitation has already been used to create an account, sorry!".t
-        redirect_to login_path
-      end
+    elsif @invitation.used?
+      flash[:error] = "This invitation has already been used to create an account, sorry!".t
+      redirect_to login_path
     end
   end
   
@@ -65,8 +64,8 @@ class UsersController < ApplicationController
   # POST /users.xml
   def create
 	  @hide_dashboard = true
-    if params["cancel-create-account"] == "Cancel"
-      redirect_to '/'
+    if params[:cancel_create_account] == "Cancel"
+      redirect_to root_path
     else
       @user = User.new(params[:user]) 
       unless @user.identity_url.blank?

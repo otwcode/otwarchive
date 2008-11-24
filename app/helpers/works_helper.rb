@@ -73,7 +73,7 @@ module WorksHelper
       @tags_by_category_work = work
       @tags_by_category = nil
     end
-    @tags_by_category ||= work.tags.group_by(&:type)
+    @tags_by_category ||= work.tags.sort.group_by(&:type)
   end
   
   def get_title_string(tags, category_name = "")

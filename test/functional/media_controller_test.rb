@@ -25,6 +25,10 @@ class MediaControllerTest < ActionController::TestCase
         should "have a more link" do
           assert_tag :tag => 'a', :content => /All .*\.\.\./
         end
+        context "when listed" do
+          setup { get :show, :locale => 'en', :id => @media.name }
+          should_assign_to :fandoms, :equal => 'Fandom.find(:all, :media_id => @media.id)'
+        end
       end      
     end
   end
