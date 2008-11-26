@@ -9,7 +9,7 @@ a, a:link, a:visited {
 	text-decoration:underline;
 }
 
-#header, .footer, #dashboard-sidebar, img, #skiplinks, .navigation {
+#header, #footer, #dashboard-sidebar, img, #skiplinks, .navigation {
     display: none;
 }
 
