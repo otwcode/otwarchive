@@ -5,7 +5,10 @@ class Pseud < ActiveRecord::Base
 
   
   belongs_to :user
-  has_many_polymorphs :creations, :from => [:works, :chapters, :series], :through => :creatorships   
+  has_many :creatorships
+  has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work'
+  has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter'
+  has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series'
   validates_presence_of :name
   validates_length_of :name, :within => NAME_LENGTH_MIN..NAME_LENGTH_MAX, :too_short => "That name is too short (minimum is %d characters)".t,
         :too_long => "That name is too long (maximum is %d characters)".t
@@ -47,10 +50,6 @@ class Pseud < ActiveRecord::Base
 
   named_scope :alphabetical, :order => :name
 
-  #  before_destroy :move_creations_to_default
-  #TODO - add this
-  #after_save :check_for_inconsistencies
-  
   # For use with the work and chapter forms
   def user_name
      self.user.login
@@ -85,21 +84,15 @@ class Pseud < ActiveRecord::Base
     {:pseuds => valid_pseuds, :ambiguous_pseuds => ambiguous_pseuds, :invalid_pseuds => failures}  
   end
   
-  #add a group of creations to this pseud
-  def add_creations(new_creations)
-    self.creations << new_creations             
+  def creations
+    self.works + self.chapters + self.series
   end
-  
-  def remove_creation(creation)
-    creations.delete(creation)
+
+  def replace_me_with_default
+    self.creations.each {|creation| change_ownership(creation, self.user.default_pseud) }
+    self.destroy
   end
-    
-  #moves the creations of the current pseud to the default
-  #for some reason, is not actually moving creations before destroying it
-  def move_creations_to_default
-    user.default_pseud.add_creations creations
-  end
-  
+
   # Change the ownership of a creation from one pseud to another
   def change_ownership(creation, pseud)
     creation.pseuds.delete(self)
@@ -117,5 +110,5 @@ class Pseud < ActiveRecord::Base
       Comment.update_all("pseud_id = #{pseud.id}", "pseud_id = '#{self.id}' AND id IN (#{comment_ids})") unless comment_ids.blank?
     end
   end
-  
+    
 end

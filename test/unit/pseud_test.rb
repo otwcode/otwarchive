@@ -1,25 +1,21 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class PseudTest < ActiveSupport::TestCase
-  # Test validations
-  def test_presence_of_name
-    pseud = new_pseud(:name => '')
-    assert !pseud.save
-    pseud.name = random_phrase
-    assert pseud.save
+  context "A Pseud" do
+    should_belong_to :user
+    should_have_many :creatorships, :works, :chapters, :series
+    should_require_attributes :name
+    should_ensure_length_in_range :name, (1..40), :short_message => /too short/, :long_message => /too long/
+    should_allow_values_for :name, "Good pseud", "good_pseud"
+    should_not_allow_values_for :name, "bad!pseud", :message => /Pseuds can contain/
   end
-  # Test associations
-  def test_belongs_to_user
+  def test_add_creations_to_default
     user = create_user
-    pseud = create_pseud(:user => user)
-    assert_equal user, pseud.user
+    new_pseud = create_pseud(:user => user)
+    chapter = new_chapter(:authors => [new_pseud])
+    work = create_work(:authors => [new_pseud], :chapters => [chapter])
+    assert_equal [new_pseud], work.pseuds
+    new_pseud.replace_me_with_default
+    assert_equal [user.default_pseud], work.reload.pseuds
   end
-   # TODO has_many_polymorphs :creations,   has_many :comments
-  # Test acts_as
-   #TODO   acts_as_commentable
-  # Test methods
-    # TODO test_user_name
-    # TODO test_add_creations
-    # TODO test_remove_creation
-    # TODO test_move_creations_to_default
 end

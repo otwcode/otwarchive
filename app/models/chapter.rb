@@ -1,6 +1,9 @@
 class Chapter < ActiveRecord::Base
   include HtmlFormatter
 
+  has_many :creatorships, :as => :creation
+  has_many :pseuds, :through => :creatorships
+
   belongs_to :work
 
   acts_as_commentable
@@ -130,12 +133,12 @@ class Chapter < ActiveRecord::Base
   # Save creatorships after the chapter is saved
   def save_creatorships
     if self.authors
-      Creatorship.add_authors(self, self.authors)
-      Creatorship.add_authors(self.work, self.authors)       
+      self.pseuds << self.authors rescue nil
+      self.work.pseuds << self.authors rescue nil
     end
     if self.toremove
-      Creatorship.remove_authors(self, self.toremove)
-      Creatorship.remove_authors(self.work, self.toremove)
+      self.pseuds.delete(self.toremove)
+      self.work.pseuds.delete(self.toremove)
     end
   end
   

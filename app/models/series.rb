@@ -2,6 +2,8 @@ class Series < ActiveRecord::Base
   has_many :serial_works, :dependent => :destroy
   has_many :works, :through => :serial_works
   has_bookmarks
+  has_many :creatorships, :as => :creation
+  has_many :pseuds, :through => :creatorships
   
   validates_presence_of :title
   validates_length_of :title, 

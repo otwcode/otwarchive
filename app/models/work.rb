@@ -4,6 +4,9 @@ class Work < ActiveRecord::Base
   # ASSOCIATIONS
   ########################################################################
   
+  has_many :creatorships, :as => :creation
+  has_many :pseuds, :through => :creatorships
+  
   has_many :chapters, :dependent => :destroy
   validates_associated :chapters
 
@@ -151,17 +154,17 @@ class Work < ActiveRecord::Base
   end
   
 
-  # Save creatorships after the work is saved
+  # Save creatorships (add the virtual authors to the real pseuds) after the work is saved
   def save_creatorships
     if self.authors
-      Creatorship.add_authors(self, self.authors)
-      Creatorship.add_authors(self.chapters.first, self.authors)
-      self.series.each {|series| Creatorship.add_authors(series, self.authors)} unless self.series.empty?
+      self.pseuds << self.authors rescue nil
+      self.chapters.first.pseuds << self.authors rescue nil
+      self.series.each {|series| series.pseuds << self.authors rescue nil}
     end
     if self.toremove
-      Creatorship.remove_authors(self, self.toremove)
-      Creatorship.remove_authors(self.chapters.first, self.toremove)
-      self.series.each {|series| Creatorship.remove_authors(series, self.toremove)} unless self.series.empty?
+      self.pseuds.delete(self.toremove)
+      self.chapters.first.pseuds.delete(self.toremove)
+      self.series.each {|series| series.pseuds.delete(self.toremove)} unless self.series.empty?
     end
   end
   
