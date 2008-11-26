@@ -80,7 +80,7 @@ p.rtf-html-switch {margin:0; padding:0 0.875em 0; text-align:right; }
 .rtf-html-switch span {background:#f0f0ee; padding:0.5625em 0.5625em 0 0.5625em; border:1px solid #ddd;}
 #work-form textarea#content { height:31.25em;  margin:-0.625em auto auto;}
 
-#work-form p.submit input { font-size:1em; width: 4.75em; text-align:center}
+#work-form p.submit input { font-size:1em; width: inherit; text-align:center}
 
 /*EDIT CHAPTERS */ 
 #main.chapters-edit dt {width:100%;float:none;}

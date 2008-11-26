@@ -1,7 +1,4 @@
-<h2>
-  <%= 'Edit ' .t + @tag.class::NAME %>:
-  <%= link_to @tag.name, tag_path(@tag) %>
-</h2>
+<h2><%= 'Edit ' .t + @tag.class::NAME %>: <%= link_to @tag.name, tag_path(@tag) %> </h2>
 
 <%= error_messages_for :tag %>
 

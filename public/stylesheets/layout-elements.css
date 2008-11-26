@@ -51,8 +51,8 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 .pagination { text-align: center; padding: 0.25em; margin:1.5em auto; }
 
 /* FOOTER */
-#footer { color: #999; font-size: 0.75em; text-align: center; clear: both; margin: 1.5em 0; padding: 1em; border-top: 1px solid #999; }
-#footer a:link { border-bottom: 1px dotted; }
+.footer { color: #999; font-size: 0.75em; text-align: center; clear: both; margin: 1.5em 0; padding: 1em; border-top: 1px solid #999; }
+.footer a:link { border-bottom: 1px dotted; }
 
 /*PAGE BY PAGE STYLING: NEW SESSION HOME HOME SUBPAGES FANDOMS PEOPLE GROUPS RECS TAGS*/
 
@@ -177,8 +177,9 @@ a.cloud7 { font-size: 1.875em; font-weight: 700; color: #860202; }
 a.cloud8 { font-size: 2.25em; font-weight: 800; color: #900; }
 
 /*TAG WRANGLING */
-ul#tag-wrangler-footer { text-align: center; border-top: 1px dotted}
-#tag-wrangler-footer li { display: inline; padding: 0 0.5625em 0 0}
+ul.wrangle { margin:1.125em auto; padding:0 1em; }
+ul.wrangle li { list-style:disc;}
+ul.tag-wrangling li { color:#222; display:inline; font-size: 1.125em !important; padding: 0 0.25em;}
 
 /*TRANSLATIONS 
 * the translation form styling is in forms.css*/
