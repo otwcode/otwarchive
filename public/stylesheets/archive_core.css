@@ -19,7 +19,7 @@ plus system messages in system-messages.css (red, yellow, green, blue)
 
 @font-face	{ font-family: "Fertigo"; src: url(Fertigo.otf); }
 
-body	{ background: #fffef9; color: #222; font: 100%/1.125 Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; }
+body	{ background: #fffef9; color: #222; font: 100%/1.125 Candara, Corbel, 'Lucida Grande', Verdana, Helvetica, Arial, sans-serif; }
 
 a, a:link	{ color: #111; }
 a:hover	{ color: #999; }
@@ -54,6 +54,7 @@ hr.clear, .clearboth	{ clear: both; height: 0; border: 0; }
 
 blockquote, pre	{ font: 100 1em/1.125 Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; margin: 1.5em; }
 kbd, tt, code	{ font: normal 0.75em consolas, courier, monospace; margin: auto; padding: 0.25em; }
+pre { white-space: pre; }
 strong, b, .important	{ font-weight: 900; }
 em, cite, i	{ font-style: oblique; }
 cite em, em cite, cite i, i cite, i em, em i, em em, i i, cite cite	{ font-style: normal; }

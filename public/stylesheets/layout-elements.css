@@ -51,8 +51,8 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 .pagination { text-align: center; padding: 0.25em; margin:1.5em auto; }
 
 /* FOOTER */
-#footer { color: #999; font-size: 0.75em; text-align: center; clear: both; margin: 1.5em 0; padding: 1em; border-top: 1px solid #999; }
-#footer a:link { border-bottom: 1px dotted; }
+.footer { color: #999; font-size: 0.75em; text-align: center; clear: both; margin: 1.5em 0; padding: 1em; border-top: 1px solid #999; }
+.footer a:link { border-bottom: 1px dotted; }
 
 /*PAGE BY PAGE STYLING: NEW SESSION HOME HOME SUBPAGES FANDOMS PEOPLE GROUPS RECS TAGS*/
 

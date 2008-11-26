@@ -23,6 +23,7 @@ padding-left: 1.5em;
 .home #signin {
 text-align: right;
 }
+.home #greeting, .home #login {width:inherit}
 .home #signin form {
 background: url(/images/fff-ccc.png) bottom left repeat-x #fff;
 margin: -1.5em -0.25em 1em;
