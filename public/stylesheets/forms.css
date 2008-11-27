@@ -103,6 +103,9 @@ form.edit_preference ul { margin:0.562625em auto 1.12525em auto; padding:0.56262
 /* NEW PSEUD */
 form#new_pseud {position:absolute;}
 
+/* EDIT PSEUD (Enigel Nov 25 08) */
+form.edit_pseud {position:absolute;}
+
 /*WORKS-INDEX -filters*/
 form.work-filters	{ background:#ddd; font-size:0.875em; width:12.25em; float:right;  padding:0.75em 0.5625em;}
 .filters dt	{ font-weight: 600; text-transform: capitalize; margin:0.5625em auto 0; padding:0; border-bottom:1px solid #fffef9; }
