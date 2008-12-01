@@ -1,7 +1,7 @@
 <!-- footer for work -->
  	<%- unless @work.parents.blank? -%>
  	<div id="parents">
- 	  <p>Inspired by:<p>
+ 	  <p><%=h "Inspired by:".t -%><p>
  	  <ul>
  	  <%- for parent in @work.parents -%>
  	    <li><%= link_to parent.title, parent %></li>

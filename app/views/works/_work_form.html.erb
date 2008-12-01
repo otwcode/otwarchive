@@ -72,7 +72,7 @@
       </dd>
       
       <dt class="summary">
-        <%= f.label :summary, "Summary (max %d letters)"/ArchiveConfig.SUMMARY_MAX %>
+        <%= f.label :summary, "Summary (max %d letters)".t/ArchiveConfig.SUMMARY_MAX %>
       </dt>
       <dd class="summary">
         <%= f.text_area :summary, :class => "summary-field" %>
@@ -81,7 +81,7 @@
       </dd>
 
       <dt class="notes">
-        <%= f.label :notes, "Notes (max %d letters)"/ArchiveConfig.NOTES_MAX %>
+        <%= f.label :notes, "Notes (max %d letters)".t/ArchiveConfig.NOTES_MAX %>
       </dt>
       <dd class="notes">
         <%= f.text_area :notes, :class => "notes-field" %>
@@ -94,11 +94,11 @@
 <fieldset id="associations">
 <legend><%= 'Associations'.t -%></legend>
   <dl>
-		<dt class="work-parent">
+	<dt class="work-parent">
       <%= f.label :parent_url, h("If your story is a remix or was inspired by another story in the archive, copy and paste that story's url below:").t %>
     </dt>
     <dd class="work-parent">
-      <%= f.text_field :parent_url, :live => true %>
+      <%= f.text_field :parent_url, :value => @work.url_for_parent, :live => true %>
     </dd>
 
   	<!-- Privacy dropdown (storyprivacy) -->
@@ -112,7 +112,7 @@
     <dt class="work-is_serial">
       <%= f.label :storyseriescheck, h("Is this part of a series?").t %> 
     </dt>
- 	  <dd class="work-is_serial">
+ 	<dd class="work-is_serial">
      	<input type="checkbox" id="storyseriescheck" name="storyseriescheck"  onclick="showWorkSeriesOptions()" 
        <%- unless @work.series.blank? -%>checked="checked"<%- end -%>/>
     </dd>
@@ -127,7 +127,7 @@
           <% fields_for "work[series_attributes]" do |s| %>
             <dt><%= s.label 'series_id', h('Choose one of your existing series:').t %>  <%= link_to_help "choosing-series" -%></dt>
             <dd>
-			<%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>	  
+				<%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>	  
             </dd>
             <dt><%= s.label :title, h("Or add a new one:").t %></dt>
             <dd><%= s.text_field :title, :class => "storyinputfield" %></dd>
@@ -138,10 +138,10 @@
         	  <%- for serial in @serial_works -%>
         	    <dd>
         	      <ul class="navigation">
-  				        <li><%= link_to serial.series.title, serial.series %></li> 
+  				    <li><%= link_to serial.series.title, serial.series %></li> 
         	      	<li><%= link_to 'Remove'.t, serial, :confirm => 'Are you sure?'.t, :method => :delete %></li> 
         	      	<li><%= link_to 'Delete'.t, serial.series, :confirm => 'Are you sure?'.t, :method => :delete %></li>
-  			        </ul>
+  			      </ul>
         	    </dd>
       	    <%- end -%>
       	  <%- end -%>          
