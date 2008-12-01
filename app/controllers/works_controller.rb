@@ -263,7 +263,7 @@ class WorksController < ApplicationController
         end
         render :action => :new 
       else        
-        flash[:notice] = 'Work was successfully created.'.t
+        flash[:notice] = 'Draft was successfully created.'.t
         redirect_to preview_work_path(@work)
       end
     end
