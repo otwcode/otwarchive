@@ -44,6 +44,6 @@ class RelatedWorksController < ApplicationController
   # DELETE /related_works/1.xml
   def destroy
     @related_work.destroy
-    redirect_to(current_user)
+    redirect_to :back
   end
 end

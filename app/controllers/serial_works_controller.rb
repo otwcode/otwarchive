@@ -11,6 +11,6 @@ class SerialWorksController < ApplicationController
   # DELETE /related_works/1.xml
   def destroy
     @serial_work.destroy
-    redirect_to(@serial_work.series)
+    redirect_to :back
   end
 end
