@@ -141,7 +141,7 @@ class WorksController < ApplicationController
       unless params[:user_id].blank?
         @user = User.find_by_login(params[:user_id])
       end
-
+      
       # Now let's build the query
       page_args = {:page => params[:page], :per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE)}
       @works, @filters, @pseuds = Work.find_with_options(:user => @user, :selected_tags => @selected_tags, 
@@ -354,24 +354,7 @@ class WorksController < ApplicationController
   def preview
     @preview_mode = true
   end
-  
-  # POST /works/1/post
-  def post
-    if params[:cancel_button]
-      cancel_posting_and_redirect
-    elsif params[:edit_button]
-      redirect_to edit_work_path(@work)
-    else
-      @work.posted = true
-      if @work.save 
-        flash[:notice] = 'Work has been posted!'.t
-        redirect_to(@work)
-      else
-        render :action => "preview"
-      end
-    end
-  end
-  
+    
   # DELETE /works/1
   def destroy
     @work = Work.find(params[:id])

@@ -596,11 +596,9 @@ class Work < ActiveRecord::Base
     end
   end 
   
-  
-  
   # Save relationship to parent work if applicable
   def save_parents
-    if self.new_parent 
+    if self.new_parent and !(self.parents.include?(self.new_parent))
       relationship = self.new_parent.related_works.build :work_id => self.id
       relationship.save(false)
     end
