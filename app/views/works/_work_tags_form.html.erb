@@ -3,13 +3,13 @@
   <p><%= "Story Tags (comma separated)".t -%><%= link_to_help "tagging-help" -%></p>
   <dl>
     <dt class="rating required">
-      <label for=""><%= Rating::NAME.t -%>*</label>
+      <label for=""><%= Rating::NAME.t -%>*<%= link_to_help "rating-help" -%></label>
     </dt>
     <dd class="rating required">
       <%= collection_select(:work, :rating_string, Rating.canonical, :name, :name) -%>		
     </dd>
     <dt class="warning required">
-      <label for=""><%= Warning::NAME.t -%>*</label>
+      <label for=""><%= Warning::NAME.t -%>*<%= link_to_help "warning-help" -%></label>
     </dt>
     <dd class="warning required">
       <select id="work_warning" name="work[warning_strings][]" multiple="multiple">
@@ -30,6 +30,7 @@
       <div class="auto_complete" id="work_fandom_auto_complete" ></div>
       <%= javascript_tag("new Autocompleter.Local('work_fandom', 'work_fandom_auto_complete', Fandom.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
     </dd>
+	<dd class="fandom delay_notice">If this is the first story for a fandom, it may not show up in the fandoms page for a day or two</dd>
     <dt class="pairing">
       <label for=""><%= Pairing::NAME.pluralize.t -%></label>
     </dt>

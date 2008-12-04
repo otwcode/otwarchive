@@ -10,6 +10,8 @@
 </dl>
 	
 <ul class="navigation">
-	<li><%= link_to 'Edit'.t, [:edit, @user, @pseud] %></li>
+	<% if @user == current_user -%>
+		<li><%= link_to 'Edit'.t, [:edit, @user, @pseud] %></li>
+	<% end -%>
 	<li><%= link_to 'Back'.t, user_pseuds_path(@user) %></li>
 </ul>
