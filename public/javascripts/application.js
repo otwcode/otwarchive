@@ -29,6 +29,26 @@ function showWorkSeriesOptions() {
 	Element.toggle('seriesmanage');
 }
 
+function showOptions(idToCheck, idToShow) {
+    var checkbox = document.getElementById(idToCheck);
+    var areaToShow = document.getElementById(idToShow);
+    if (checkbox.checked) {
+        Element.toggle(idToShow)
+    }
+}
+
+function selectAllCheckboxes(basefield, count, checked) {
+    var checkbox;
+    for (i=1; i<=count; i++) {
+        checkbox = document.getElementById(basefield + '_' + i);
+        if (checked == 'invert') {
+            checkbox.checked = !checkbox.checked
+        } else {
+            checkbox.checked = checked
+        }
+    }
+}
+
 // Hides expandable form field options if Javascript is enabled
 function hideFormFields() {
 	var coAuthors = document.getElementById('co-authors');

@@ -6,6 +6,9 @@
   <%= link_to_unless_current "<span>" + "users".t + "</span>", admin_users_path %>
 </li>
 <li>
+  <%= link_to_unless_current "<span>" + "notices".t + "</span>", notify_admin_users_path %>
+</li>
+<li>
   <%= link_to_unless_current "<span>" + "invitations".t + "</span>", new_admin_invitation_path %>
 </li>
 <li>

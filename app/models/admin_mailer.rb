@@ -18,11 +18,20 @@ class AdminMailer < ActionMailer::Base
     @body = {:comment => feedback.comment}
   end
   
+  def archive_notification(admin, users, subject, message)
+    setup_email
+    @subject += "Archive Notification Sent"
+    @body[:admin] = admin
+    @body[:subject] = subject
+    @body[:message] = message
+    @body[:users] = users.map(&:login).join(", ")
+  end
+  
   protected
     def setup_email()
       @recipients  = ArchiveConfig.WEBMASTER_ADDRESS
       @from        = ArchiveConfig.RETURN_ADDRESS
-      @subject     = "#{ArchiveConfig.APP_NAME}" + " - " + "Admin ".t
+      @subject     = "#{ArchiveConfig.APP_NAME}" + " - " + "Admin "
       @sent_on     = Time.now
       @content_type = "text/html"
     end

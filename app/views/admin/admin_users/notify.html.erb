@@ -1,0 +1,40 @@
+<h1>Send Notification To Users</h1>
+
+<%- form_tag send_notification_admin_users_path, :method => :post do -%>
+
+  <dl>
+    <dt><%= label_tag "subject", "Subject".t -%></dt>
+    <dd><%= text_field_tag "subject" -%></dd>
+  
+    <dt><%= label_tag "content", "Message".t -%></dt>
+    <dd><%= text_area_tag "content" -%></dd>
+
+    <dt><%= 'Select Users To Notify'.t -%></dt>
+    <dd>
+      <table id="admin_users_table">
+      <caption>Select users to notify</caption>
+      <tr>
+      	<th scope="col">Username</th>
+      	<th scope="col">Select</th>
+      </tr>
+
+      <tr>
+        <td colspan="2">
+          <input type="checkbox" onclick="selectAllCheckboxes('user_ids', <%= @users.size -%>, this.checked);">
+          <%= label_tag "select_all", "Select All/None".t -%>
+        </td>
+      </tr>
+      
+    	<%- @users.each do |user| -%>
+      	<tr id="user_<%= user.id %>">
+          <td><%= label_tag "user_ids_#{user.id}", user.login -%></td>
+          <td><%= check_box_tag "user_ids[]", user.id, false, :id => "user_ids_#{user.id}", :class => "user_id" -%></td>
+        </tr> 
+      <%- end -%>
+      </table>
+    </dd>
+  </dl>
+
+  <p class="submit"><%= submit_tag "Send Notification" -%></p>
+<%- end -%>
+

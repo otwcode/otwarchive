@@ -1,0 +1,12 @@
+<h3><%=h "The following archive notice has been sent:" -%></h3>
+
+<p>Subject: <%= @subject -%></p>
+<p>To users: <%= @users -%></p>
+
+<%= sanitize_and_format_for_display @message %>
+
+<p>Sent at: <%= Time.now.strftime(common_timestring) -%></p>
+<p>Sent by: <%= @admin -%></p>
+
+<p>&nbsp;</p>
+

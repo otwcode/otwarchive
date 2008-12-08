@@ -90,7 +90,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.namespace :admin, :path_prefix => ':locale/admin' do |admin|
     admin.resources :user_creations, :member => { :hide => :get }
-    admin.resources :users, :controller => 'admin_users'
+    admin.resources :users, :controller => 'admin_users', :collection => {:notify => :get, :send_notification => :post}
     admin.resources :invitations, :controller => 'admin_invitations'
     admin.resource :session, :controller => 'admin_session'
   end

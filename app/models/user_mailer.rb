@@ -12,6 +12,13 @@ class UserMailer < ActionMailer::Base
     invitation.update_attribute(:sent_at, Time.now)
   end
 
+  def archive_notification(admin, user, subject, message)
+    setup_email(user)
+    @subject = "[#{ArchiveConfig.APP_NAME}] Admin Message #{subject}"
+    @body[:message] = message
+    @body[:admin] = admin
+  end
+
   def signup_notification(user)
      setup_email(user)
      @subject    += 'Please activate your new account'.t 

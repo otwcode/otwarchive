@@ -64,6 +64,16 @@ class User < ActiveRecord::Base
     }
   }
   named_scope :valid, :conditions => {:banned => false, :suspended => false}
+  named_scope :with_logins, lambda {|logins|
+    {
+     :conditions => ['login in (?)', logins] 
+    }
+  }
+  named_scope :with_ids, lambda {|ids|
+    {
+     :conditions => ['id in (?)', ids] 
+    }
+  }
 
   validates_format_of :login, :message => 'Your user name must begin and end with a letter or number; it may also contain underscores but no other characters.'.t,
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/

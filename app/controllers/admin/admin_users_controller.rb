@@ -20,10 +20,6 @@ class Admin::AdminUsersController < ApplicationController
   # GET admin/users/1/edit
   def edit
     @user = User.find_by_login(params[:id])
-    respond_to do |format|
-      format.html
-      format.js
-    end
   end
 
   # PUT admin/users/1
@@ -46,6 +42,45 @@ class Admin::AdminUsersController < ApplicationController
     @user = User.find_by_login(params[:id])
     @user.destroy
     redirect_to(admin_users_url) 
+  end
+  
+  def notify
+    @users = User.alphabetical
+  end
+  
+  def send_notification
+    if params[:user_ids]
+      @users = User.with_ids(params[:user_ids])
+    end
+
+    if @users.blank?
+      flash[:error] = "Who did you want to notify?"
+      redirect_to :action => :notify and return
+    end
+    
+    unless params[:subject]
+      flash[:error] = "Please enter a subject."
+      redirect_to :action => :notify and return
+    else
+      @subject = params[:subject]
+    end
+    
+    # We need to use content because otherwise html will be stripped
+    unless params[:content]
+      flash[:error] = "What message did you want to send?"
+      redirect_to :action => :notify and return
+    else
+      @message = params[:content]
+    end
+    
+    @users.each do |user|
+      UserMailer.deliver_archive_notification(current_admin.login, user, @subject, @message)
+    end
+    
+    AdminMailer.deliver_archive_notification(current_admin.login, @users, @subject, @message)
+    
+    flash[:notice] = "Notification sent to #{@users.size} user(s)."
+    redirect_to :action => :notify
   end
 
 end  
