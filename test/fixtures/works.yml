@@ -1,91 +1,255 @@
 --- 
-work_00005: 
-  major_version: 1
-  updated_at: 2008-11-08 19:26:02 -08:00
-  title: FifthWork
-  expected_number_of_chapters: 1
-  delta: false
-  word_count: 14
-  notes: Notes on test work with only one chapter
-  id: 5
-  summary: Summary of test work with only one chapter
-  revised_at: 
-  language_id: 
-  minor_version: 1
-  published_at: 
-  restricted: false
-  posted: true
-  hidden_by_admin: false
-  created_at: 2008-11-08 19:26:02 -08:00
-work_00001: 
-  major_version: 2
-  updated_at: 2008-11-08 19:26:02 -08:00
-  title: Work With Two Chapters
-  expected_number_of_chapters: 2
-  delta: false
-  word_count: 10
-  notes: Notes on test work
-  id: 1
-  summary: Summary of test work
-  revised_at: 
-  language_id: 
-  minor_version: 1
-  published_at: 
-  restricted: false
-  posted: true
-  hidden_by_admin: false
-  created_at: 2008-11-08 19:26:02 -08:00
-work_00002: 
-  major_version: 1
-  updated_at: 2008-11-08 19:26:02 -08:00
-  title: Work With One Chapter Only
-  expected_number_of_chapters: 1
-  delta: false
-  word_count: 11
-  notes: Notes on test work with only one chapter
-  id: 2
-  summary: Summary of test work with only one chapter
-  revised_at: 
-  language_id: 
-  minor_version: 1
-  published_at: 
-  restricted: false
-  posted: true
-  hidden_by_admin: false
-  created_at: 2008-11-08 19:26:02 -08:00
-work_00003: 
-  major_version: 1
-  updated_at: 2008-11-08 19:26:02 -08:00
+works_014: 
+  major_version: "1"
+  updated_at: 2008-12-07 22:54:42
+  delta: "1"
+  title: Sodom and Gomorrah
+  expected_number_of_chapters: "1"
+  word_count: "398"
+  notes: "Not the Bible version. No offence intended. "
+  id: "14"
+  revised_at: 1950-12-07 00:00:00
+  summary: "A cautionary tale: wherein the Lord is pissed, Lot is righteous, and I do some smiting. "
+  language_id: "1819"
+  minor_version: "1"
+  published_at: 1950-12-07 00:00:00
+  restricted: "0"
+  posted: "1"
+  hidden_by_admin: "0"
+  created_at: 2008-12-07 22:52:14
+works_003: 
+  major_version: "1"
+  updated_at: 2008-11-09 03:26:02
+  delta: "0"
   title: ThirdWork
-  expected_number_of_chapters: 1
-  delta: false
-  word_count: 12
+  expected_number_of_chapters: "1"
+  word_count: "12"
   notes: Notes on test work with only one chapter
-  id: 3
-  summary: Summary of test work with only one chapter
+  id: "3"
   revised_at: 
+  summary: Summary of test work with only one chapter
   language_id: 
-  minor_version: 1
+  minor_version: "1"
   published_at: 
-  restricted: false
-  posted: true
-  hidden_by_admin: false
-  created_at: 2008-11-08 19:26:02 -08:00
-work_00004: 
-  major_version: 1
-  updated_at: 2008-11-08 19:26:02 -08:00
+  restricted: "0"
+  posted: "1"
+  hidden_by_admin: "0"
+  created_at: 2008-11-09 03:26:02
+works_004: 
+  major_version: "1"
+  updated_at: 2008-11-09 03:26:02
+  delta: "0"
   title: FourthWork
-  expected_number_of_chapters: 1
-  delta: false
-  word_count: 13
+  expected_number_of_chapters: "1"
+  word_count: "13"
   notes: Notes on test work with only one chapter
-  id: 4
-  summary: Summary of test work with only one chapter
+  id: "4"
   revised_at: 
+  summary: Summary of test work with only one chapter
   language_id: 
-  minor_version: 1
+  minor_version: "1"
   published_at: 
-  restricted: false
-  posted: true
-  hidden_by_admin: false
-  created_at: 2008-11-08 19:26:02 -08:00
+  restricted: "0"
+  posted: "1"
+  hidden_by_admin: "0"
+  created_at: 2008-11-09 03:26:02
+works_005: 
+  major_version: "1"
+  updated_at: 2008-11-09 03:26:02
+  delta: "0"
+  title: FifthWork
+  expected_number_of_chapters: "1"
+  word_count: "14"
+  notes: Notes on test work with only one chapter
+  id: "5"
+  revised_at: 
+  summary: Summary of test work with only one chapter
+  language_id: 
+  minor_version: "1"
+  published_at: 
+  restricted: "0"
+  posted: "1"
+  hidden_by_admin: "0"
+  created_at: 2008-11-09 03:26:02
+works_006: 
+  major_version: "1"
+  updated_at: 2008-12-05 15:59:29
+  delta: "1"
+  title: How I Got Kicked Out of MIT
+  expected_number_of_chapters: "1"
+  word_count: "73"
+  notes: ""
+  id: "6"
+  revised_at: 2008-12-05 15:59:15
+  summary: The true story of how I was too hot for MIT to handle.
+  language_id: "1819"
+  minor_version: "1"
+  published_at: 2008-12-05 00:00:00
+  restricted: "0"
+  posted: "1"
+  hidden_by_admin: "0"
+  created_at: 2008-12-05 15:59:14
+works_007: 
+  major_version: "2"
+  updated_at: 2008-12-07 00:41:45
+  delta: "1"
+  title: Day Ten, Tale Ten
+  expected_number_of_chapters: "1"
+  word_count: "4593"
+  notes: ""
+  id: "7"
+  revised_at: 2008-12-07 00:32:20
+  summary: |
+    The Marquis of Saluzzo, overborne by the entreaties of his vassals, consents to take a wife, but, being minded to please himself in the choice of her, takes a husbandman's daughter. He has two children by her, both of whom he makes her believe that he has put to death. Afterward, feigning to be tired of her, and to have taken another wife, he turns her out of doors in her shift, and brings his daughter into the house in guise of his bride; but, finding her patient under it all, he brings her home again, and shews her her children, now grown up, and honours her, and causes her to be honoured, as Marchioness.
+
+  language_id: "1819"
+  minor_version: "5"
+  published_at: 2008-12-07 00:00:00
+  restricted: "0"
+  posted: "1"
+  hidden_by_admin: "0"
+  created_at: 2008-12-07 00:28:54
+works_008: 
+  major_version: "1"
+  updated_at: 2008-12-07 00:52:08
+  delta: "1"
+  title: Day Five, Tale Four
+  expected_number_of_chapters: "1"
+  word_count: "2034"
+  notes: ""
+  id: "8"
+  revised_at: 2008-12-07 00:52:02
+  summary: Ricciardo Manardi is found by Messer Lizio da Valbona with his daughter, whom he marries, and remains at peace with her father.
+  language_id: "1819"
+  minor_version: "1"
+  published_at: 2008-12-07 00:00:00
+  restricted: "0"
+  posted: "1"
+  hidden_by_admin: "0"
+  created_at: 2008-12-07 00:52:02
+works_009: 
+  major_version: "1"
+  updated_at: 2008-12-07 00:56:53
+  delta: "1"
+  title: The Clerk's Tale
+  expected_number_of_chapters: "1"
+  word_count: "1534"
+  notes: ""
+  id: "9"
+  revised_at: 2008-12-07 00:55:59
+  summary: The tale of Griselda, a young woman whose husband tests her loyalty in a series of bizarre torments that recall the Biblical book of Job.
+  language_id: "1819"
+  minor_version: "2"
+  published_at: 2008-12-07 00:00:00
+  restricted: "0"
+  posted: "1"
+  hidden_by_admin: "0"
+  created_at: 2008-12-07 00:55:58
+works_010: 
+  major_version: "1"
+  updated_at: 2008-12-07 01:20:39
+  delta: "1"
+  title: For your life
+  expected_number_of_chapters: "1"
+  word_count: "429"
+  notes: ""
+  id: "10"
+  revised_at: 2008-12-07 01:19:50
+  summary: <em>'Exclusive, one-off reunion concert,' Sam says smugly. 'Chance of a lifetime.'</em>
+  language_id: "1819"
+  minor_version: "1"
+  published_at: 2008-12-07 00:00:00
+  restricted: "0"
+  posted: "1"
+  hidden_by_admin: "0"
+  created_at: 2008-12-07 01:19:49
+works_011: 
+  major_version: "1"
+  updated_at: 2008-12-07 01:24:07
+  delta: "1"
+  title: Keep dancing
+  expected_number_of_chapters: "1"
+  word_count: "97"
+  notes: "Written as a Christmas gift for Oxoniensis, 2007. Set at some unspecified time after canon, in the happy world in my head where Dean and Rory live happily ever after. "
+  id: "11"
+  revised_at: 2008-12-07 01:24:00
+  summary: "The Dance Marathon is a Stars Hollow tradition. "
+  language_id: "1819"
+  minor_version: "1"
+  published_at: 2008-12-07 00:00:00
+  restricted: "0"
+  posted: "1"
+  hidden_by_admin: "0"
+  created_at: 2008-12-07 01:24:00
+works_012: 
+  major_version: "1"
+  updated_at: 2008-12-07 01:26:48
+  delta: "1"
+  title: Paying attention
+  expected_number_of_chapters: "1"
+  word_count: "262"
+  notes: Written for technosage's <a href="http://technosage.livejournal.com/224268.html">porn-paragraph-a-thon</a> on Livejournal, December 2007, to the prompt 'Jared/Jensen; dom/sub'.
+  id: "12"
+  revised_at: 2008-12-07 01:26:41
+  summary: <em>He likes it when Jensen pays attention.</em>
+  language_id: "1819"
+  minor_version: "1"
+  published_at: 2008-12-07 00:00:00
+  restricted: "0"
+  posted: "1"
+  hidden_by_admin: "0"
+  created_at: 2008-12-07 01:26:41
+works_001: 
+  major_version: "2"
+  updated_at: 2008-11-09 03:26:02
+  delta: "0"
+  title: Work With Two Chapters
+  expected_number_of_chapters: "2"
+  word_count: "10"
+  notes: Notes on test work
+  id: "1"
+  revised_at: 
+  summary: Summary of test work
+  language_id: 
+  minor_version: "1"
+  published_at: 
+  restricted: "0"
+  posted: "1"
+  hidden_by_admin: "0"
+  created_at: 2008-11-09 03:26:02
+works_013: 
+  major_version: "1"
+  updated_at: 2008-12-07 01:34:46
+  delta: "1"
+  title: I knew I should have argued
+  expected_number_of_chapters: "1"
+  word_count: "74"
+  notes: "I expected to be kind of helpless after dying, but it turns out it's not as peaceful as it's made out to be. So, I figured I'd write some stuff down. "
+  id: "13"
+  revised_at: 2008-12-07 01:34:39
+  summary: After the fact, I realise what a big mistake I made.
+  language_id: "1819"
+  minor_version: "1"
+  published_at: 2008-12-07 00:00:00
+  restricted: "0"
+  posted: "1"
+  hidden_by_admin: "0"
+  created_at: 2008-12-07 01:34:39
+works_002: 
+  major_version: "1"
+  updated_at: 2008-11-09 03:26:02
+  delta: "0"
+  title: Work With One Chapter Only
+  expected_number_of_chapters: "1"
+  word_count: "11"
+  notes: Notes on test work with only one chapter
+  id: "2"
+  revised_at: 
+  summary: Summary of test work with only one chapter
+  language_id: 
+  minor_version: "1"
+  published_at: 
+  restricted: "0"
+  posted: "1"
+  hidden_by_admin: "0"
+  created_at: 2008-11-09 03:26:02

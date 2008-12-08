@@ -1,785 +1,1513 @@
 --- 
-tag_1063753748: 
-  name: John
+tags_104: 
   merger_id: 
+  fandom_id: "741440589"
   media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 01:58:59 -08:00
+  name: Lot
+  updated_at: 2008-12-07 23:03:56
   tag_category_id: 
-  canonical: false
-  taggings_count: 0
+  canonical: "0"
+  taggings_count: "1"
   type: Character
-  adult: false
-  wrangled: true
-  id: 1063753748
-  created_at: 2008-11-21 01:48:52 -08:00
-tag_986046160: 
-  name: Harry Potter
+  adult: "0"
+  wrangled: "0"
+  id: "1063753802"
+  created_at: 2008-12-07 22:52:13
+tags_090: 
   merger_id: 
-  media_id: 441672848
   fandom_id: 
-  updated_at: 2008-11-08 19:26:02 -08:00
-  tag_category_id: 63971739
-  canonical: true
-  taggings_count: 0
-  type: Fandom
-  adult: false
-  wrangled: true
-  id: 986046160
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_26796919: 
-  name: Dean Winchester
-  merger_id: 
   media_id: 
-  fandom_id: 741440589
-  updated_at: 2008-11-21 01:59:52 -08:00
-  tag_category_id: 51064457
-  canonical: true
-  taggings_count: 0
-  type: Character
-  adult: false
-  wrangled: true
-  id: 26796919
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_362175678: 
-  name: fluff
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 00:34:57 -08:00
-  tag_category_id: 178752192
-  canonical: true
-  taggings_count: 0
+  name: smiting
+  updated_at: 2008-12-07 22:52:11
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
   type: Freeform
-  adult: false
-  wrangled: true
-  id: 362175678
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_1063753737: 
-  name: F/F
+  adult: "0"
+  wrangled: "0"
+  id: "1063753788"
+  created_at: 2008-12-07 22:52:11
+tags_089: 
   merger_id: 
-  media_id: 
   fandom_id: 
-  updated_at: 2008-11-21 00:14:51 -08:00
+  media_id: 
+  name: IDEK
+  updated_at: 2008-12-07 01:35:54
   tag_category_id: 
-  canonical: true
-  taggings_count: 0
-  type: Category
-  adult: false
-  wrangled: true
-  id: 1063753737
-  created_at: 2008-11-21 00:14:51 -08:00
-tag_1063753750: 
-  name: John Sheppard/Rodney McKay
+  canonical: "0"
+  taggings_count: "0"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753787"
+  created_at: 2008-12-07 01:35:54
+tags_068: 
   merger_id: 
-  media_id: 
   fandom_id: 
-  updated_at: 2008-11-21 01:58:32 -08:00
+  media_id: 
+  name: wincest
+  updated_at: 2008-12-07 01:19:49
   tag_category_id: 
-  canonical: true
-  taggings_count: 1
-  type: Pairing
-  adult: false
-  wrangled: true
-  id: 1063753750
-  created_at: 2008-11-21 01:50:08 -08:00
-tag_1063753738: 
-  name: No Media
+  canonical: "0"
+  taggings_count: "1"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753766"
+  created_at: 2008-12-07 01:19:49
+tags_005: 
   merger_id: 
-  media_id: 
   fandom_id: 
-  updated_at: 2008-11-21 00:14:52 -08:00
-  tag_category_id: 
-  canonical: true
-  taggings_count: 0
-  type: Media
-  adult: false
-  wrangled: true
-  id: 1063753738
-  created_at: 2008-11-21 00:14:52 -08:00
-tag_545584597: 
-  name: Dean Winchester/Sam Winchester
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-08 19:26:02 -08:00
-  tag_category_id: 490509104
-  canonical: true
-  taggings_count: 0
-  type: Pairing
-  adult: false
-  wrangled: false
-  id: 545584597
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_177887685: 
+  media_id: "1019428968"
   name: Doctor Who
-  merger_id: 
-  media_id: 1019428968
-  fandom_id: 
-  updated_at: 2008-11-08 19:26:02 -08:00
-  tag_category_id: 63971739
-  canonical: true
-  taggings_count: 0
+  updated_at: 2008-11-09 03:26:02
+  tag_category_id: "63971739"
+  canonical: "1"
+  taggings_count: "0"
   type: Fandom
-  adult: false
-  wrangled: true
-  id: 177887685
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_441672848: 
-  name: Books
+  adult: "0"
+  wrangled: "1"
+  id: "177887685"
+  created_at: 2008-11-09 03:26:02
+tags_026: 
   merger_id: 
-  media_id: 
   fandom_id: 
-  updated_at: 2008-11-08 19:26:02 -08:00
-  tag_category_id: 87582722
-  canonical: true
-  taggings_count: 0
-  type: Media
-  adult: false
-  wrangled: false
-  id: 441672848
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_552317390: 
-  name: Sam Carter
-  merger_id: 
   media_id: 
-  fandom_id: 130714128
-  updated_at: 2008-11-08 19:26:02 -08:00
-  tag_category_id: 51064457
-  canonical: true
-  taggings_count: 0
-  type: Character
-  adult: false
-  wrangled: false
-  id: 552317390
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_1039617938: 
-  name: Choose Not To Warn
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 00:14:51 -08:00
-  tag_category_id: 499134864
-  canonical: true
-  taggings_count: 0
-  type: Warning
-  adult: false
-  wrangled: true
-  id: 1039617938
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_1063753749: 
-  name: Rodney
-  merger_id: 1063753752
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 02:01:30 -08:00
-  tag_category_id: 
-  canonical: false
-  taggings_count: 0
-  type: Character
-  adult: false
-  wrangled: true
-  id: 1063753749
-  created_at: 2008-11-21 01:48:52 -08:00
-tag_1063753740: 
-  name: angst
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 00:35:47 -08:00
-  tag_category_id: 
-  canonical: true
-  taggings_count: 0
-  type: Freeform
-  adult: false
-  wrangled: true
-  id: 1063753740
-  created_at: 2008-11-21 00:35:38 -08:00
-tag_1019428968: 
-  name: Movies
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-08 19:26:02 -08:00
-  tag_category_id: 87582722
-  canonical: true
-  taggings_count: 0
-  type: Media
-  adult: false
-  wrangled: false
-  id: 1019428968
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_112726825: 
-  name: Explicit
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 00:14:51 -08:00
-  tag_category_id: 553661720
-  canonical: true
-  taggings_count: 0
-  type: Rating
-  adult: true
-  wrangled: true
-  id: 112726825
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_402275454: 
-  name: Not Rated
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 00:14:51 -08:00
-  tag_category_id: 553661720
-  canonical: true
-  taggings_count: 0
-  type: Rating
-  adult: true
-  wrangled: true
-  id: 402275454
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_951091623: 
-  name: Stargate Atlantis
-  merger_id: 
-  media_id: 791950904
-  fandom_id: 
-  updated_at: 2008-11-08 19:26:02 -08:00
-  tag_category_id: 63971739
-  canonical: true
-  taggings_count: 0
-  type: Fandom
-  adult: false
-  wrangled: true
-  id: 951091623
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_1063753739: 
-  name: No Fandom
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 00:14:52 -08:00
-  tag_category_id: 
-  canonical: true
-  taggings_count: 0
-  type: Fandom
-  adult: false
-  wrangled: true
-  id: 1063753739
-  created_at: 2008-11-21 00:14:52 -08:00
-tag_1063753751: 
-  name: John Sheppard
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 01:58:32 -08:00
-  tag_category_id: 
-  canonical: true
-  taggings_count: 0
-  type: Character
-  adult: false
-  wrangled: true
-  id: 1063753751
-  created_at: 2008-11-21 01:50:08 -08:00
-tag_885489802: 
   name: Mature
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 00:14:51 -08:00
-  tag_category_id: 553661720
-  canonical: true
-  taggings_count: 0
+  updated_at: 2008-11-21 08:14:51
+  tag_category_id: "553661720"
+  canonical: "1"
+  taggings_count: "0"
   type: Rating
-  adult: true
-  wrangled: true
-  id: 885489802
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_385776504: 
-  name: Iron Man (2008)
+  adult: "1"
+  wrangled: "1"
+  id: "885489802"
+  created_at: 2008-11-09 03:26:02
+tags_047: 
   merger_id: 
-  media_id: 1019428968
   fandom_id: 
-  updated_at: 2008-11-08 19:26:02 -08:00
-  tag_category_id: 63971739
-  canonical: true
-  taggings_count: 0
-  type: Fandom
-  adult: false
-  wrangled: true
-  id: 385776504
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_221905380: 
-  name: Sam Winchester
-  merger_id: 
   media_id: 
-  fandom_id: 741440589
-  updated_at: 2008-11-21 01:59:52 -08:00
-  tag_category_id: 51064457
-  canonical: true
-  taggings_count: 0
-  type: Character
-  adult: false
-  wrangled: true
-  id: 221905380
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_1063753752: 
-  name: Rodney McKay
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 01:58:33 -08:00
-  tag_category_id: 
-  canonical: true
-  taggings_count: 0
-  type: Character
-  adult: false
-  wrangled: true
-  id: 1063753752
-  created_at: 2008-11-21 01:50:08 -08:00
-tag_569823665: 
-  name: Torchwood
-  merger_id: 
-  media_id: 791950904
-  fandom_id: 
-  updated_at: 2008-11-08 19:26:02 -08:00
-  tag_category_id: 63971739
-  canonical: true
-  taggings_count: 0
-  type: Fandom
-  adult: false
-  wrangled: true
-  id: 569823665
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_66216446: 
-  name: angsty
-  merger_id: 1063753740
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 23:09:26 -08:00
-  tag_category_id: 178752192
-  canonical: false
-  taggings_count: 1
-  type: Freeform
-  adult: false
-  wrangled: true
-  id: 66216446
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_751871740: 
-  name: None Of These Warnings Apply
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 00:14:51 -08:00
-  tag_category_id: 499134864
-  canonical: true
-  taggings_count: 1
-  type: Warning
-  adult: false
-  wrangled: true
-  id: 751871740
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_899944269: 
-  name: Real People & Celebrities
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-08 19:26:02 -08:00
-  tag_category_id: 87582722
-  canonical: true
-  taggings_count: 0
-  type: Media
-  adult: false
-  wrangled: false
-  id: 899944269
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_1063753741: 
-  name: Extreme Violence
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 01:45:41 -08:00
-  tag_category_id: 
-  canonical: true
-  taggings_count: 0
-  type: Warning
-  adult: false
-  wrangled: true
-  id: 1063753741
-  created_at: 2008-11-21 01:45:41 -08:00
-tag_1063753742: 
-  name: Major Character Death
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 01:45:41 -08:00
-  tag_category_id: 
-  canonical: true
-  taggings_count: 1
-  type: Warning
-  adult: false
-  wrangled: true
-  id: 1063753742
-  created_at: 2008-11-21 01:45:41 -08:00
-tag_788108366: 
-  name: Other Media
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-08 19:26:02 -08:00
-  tag_category_id: 87582722
-  canonical: true
-  taggings_count: 0
-  type: Media
-  adult: false
-  wrangled: false
-  id: 788108366
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_344412843: 
-  name: Teen and Up Audiences
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 00:14:51 -08:00
-  tag_category_id: 553661720
-  canonical: true
-  taggings_count: 0
-  type: Rating
-  adult: false
-  wrangled: true
-  id: 344412843
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_1063753753: 
-  name: Sam Winchester/Dean Winchester
-  merger_id: 545584597
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 01:59:52 -08:00
-  tag_category_id: 
-  canonical: false
-  taggings_count: 1
-  type: Pairing
-  adult: false
-  wrangled: true
-  id: 1063753753
-  created_at: 2008-11-21 01:52:36 -08:00
-tag_1063753754: 
-  name: Dean - Character
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 22:59:40 -08:00
-  tag_category_id: 
-  canonical: false
-  taggings_count: 1
-  type: Ambiguity
-  adult: false
-  wrangled: true
-  id: 1063753754
-  created_at: 2008-11-21 02:04:20 -08:00
-tag_1063753732: 
-  name: Other
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 00:14:52 -08:00
-  tag_category_id: 410592302
-  canonical: true
-  taggings_count: 0
-  type: Category
-  adult: false
-  wrangled: true
-  id: 1063753732
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_711936337: 
-  name: SGA
-  merger_id: 951091623
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 00:34:01 -08:00
-  tag_category_id: 63971739
-  canonical: false
-  taggings_count: 0
-  type: Fandom
-  adult: false
-  wrangled: true
-  id: 711936337
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_130714128: 
-  name: Stargate SG-1
-  merger_id: 
-  media_id: 791950904
-  fandom_id: 
-  updated_at: 2008-11-08 19:26:02 -08:00
-  tag_category_id: 63971739
-  canonical: true
-  taggings_count: 0
-  type: Fandom
-  adult: false
-  wrangled: true
-  id: 130714128
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_299389994: 
-  name: Cartoons & Anime
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-08 19:26:02 -08:00
-  tag_category_id: 87582722
-  canonical: true
-  taggings_count: 0
-  type: Media
-  adult: false
-  wrangled: false
-  id: 299389994
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_1063753743: 
-  name: Underage
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 01:45:41 -08:00
-  tag_category_id: 
-  canonical: true
-  taggings_count: 0
-  type: Warning
-  adult: false
-  wrangled: true
-  id: 1063753743
-  created_at: 2008-11-21 01:45:41 -08:00
-tag_1063753744: 
-  name: Sam/Dean
-  merger_id: 545584597
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 02:00:17 -08:00
-  tag_category_id: 
-  canonical: false
-  taggings_count: 1
-  type: Pairing
-  adult: false
-  wrangled: true
-  id: 1063753744
-  created_at: 2008-11-21 01:48:03 -08:00
-tag_1063753733: 
-  name: Choose Not To Warn For Some Content
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 00:14:51 -08:00
-  tag_category_id: 
-  canonical: true
-  taggings_count: 0
-  type: Warning
-  adult: false
-  wrangled: true
-  id: 1063753733
-  created_at: 2008-11-21 00:14:51 -08:00
-tag_1063753734: 
-  name: Rape/Non-Con
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 00:14:51 -08:00
-  tag_category_id: 
-  canonical: true
-  taggings_count: 0
-  type: Warning
-  adult: false
-  wrangled: true
-  id: 1063753734
-  created_at: 2008-11-21 00:14:51 -08:00
-tag_946152233: 
-  name: Music & Bands
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-08 19:26:02 -08:00
-  tag_category_id: 87582722
-  canonical: true
-  taggings_count: 0
-  type: Media
-  adult: false
-  wrangled: false
-  id: 946152233
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_426547448: 
-  name: Multi
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 00:14:52 -08:00
-  tag_category_id: 410592302
-  canonical: true
-  taggings_count: 0
-  type: Category
-  adult: false
-  wrangled: true
-  id: 426547448
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_260181321: 
-  name: Comics & Manga
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-08 19:26:02 -08:00
-  tag_category_id: 87582722
-  canonical: true
-  taggings_count: 0
-  type: Media
-  adult: false
-  wrangled: false
-  id: 260181321
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_791950904: 
-  name: TV Shows
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-08 19:26:02 -08:00
-  tag_category_id: 87582722
-  canonical: true
-  taggings_count: 0
-  type: Media
-  adult: false
-  wrangled: false
-  id: 791950904
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_992891255: 
-  name: General Audiences
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 00:14:51 -08:00
-  tag_category_id: 553661720
-  canonical: true
-  taggings_count: 1
-  type: Rating
-  adult: false
-  wrangled: true
-  id: 992891255
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_1063753745: 
   name: Sam - Character
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 02:00:17 -08:00
+  updated_at: 2008-11-21 10:00:17
   tag_category_id: 
-  canonical: false
-  taggings_count: 1
+  canonical: "0"
+  taggings_count: "1"
   type: Character
-  adult: false
-  wrangled: true
-  id: 1063753745
-  created_at: 2008-11-21 01:48:03 -08:00
-tag_1063753746: 
-  name: Dean
+  adult: "0"
+  wrangled: "1"
+  id: "1063753745"
+  created_at: 2008-11-21 09:48:03
+tags_105: 
   merger_id: 
+  fandom_id: "1063753801"
   media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 02:02:32 -08:00
+  name: Lot's Wife
+  updated_at: 2008-12-07 23:05:45
   tag_category_id: 
-  canonical: false
-  taggings_count: 2
-  type: Ambiguity
-  adult: false
-  wrangled: true
-  id: 1063753746
-  created_at: 2008-11-21 01:48:03 -08:00
-tag_611729728: 
-  name: Gen
+  canonical: "0"
+  taggings_count: "1"
+  type: Character
+  adult: "0"
+  wrangled: "0"
+  id: "1063753803"
+  created_at: 2008-12-07 22:52:13
+tags_091: 
   merger_id: 
-  media_id: 
   fandom_id: 
-  updated_at: 2008-11-21 00:14:51 -08:00
-  tag_category_id: 410592302
-  canonical: true
-  taggings_count: 1
-  type: Category
-  adult: false
-  wrangled: true
-  id: 611729728
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_713695255: 
-  name: Sam
-  merger_id: 
   media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 00:59:44 -08:00
-  tag_category_id: 353966007
-  canonical: false
-  taggings_count: 1
-  type: Ambiguity
-  adult: false
-  wrangled: true
-  id: 713695255
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_1063753735: 
-  name: F/M
-  merger_id: 
-  media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 00:14:51 -08:00
+  name: the Lord's wrath
+  updated_at: 2008-12-07 22:52:11
   tag_category_id: 
-  canonical: true
-  taggings_count: 0
-  type: Category
-  adult: false
-  wrangled: true
-  id: 1063753735
-  created_at: 2008-11-21 00:14:51 -08:00
-tag_1063753736: 
-  name: M/M
+  canonical: "0"
+  taggings_count: "1"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753789"
+  created_at: 2008-12-07 22:52:11
+tags_070: 
   merger_id: 
+  fandom_id: 
   media_id: 
-  fandom_id: 
-  updated_at: 2008-11-21 00:14:51 -08:00
+  name: schmoop
+  updated_at: 2008-12-07 01:19:49
   tag_category_id: 
-  canonical: true
-  taggings_count: 3
-  type: Category
-  adult: false
-  wrangled: true
-  id: 1063753736
-  created_at: 2008-11-21 00:14:51 -08:00
-tag_741440589: 
-  name: Supernatural
+  canonical: "0"
+  taggings_count: "2"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753768"
+  created_at: 2008-12-07 01:19:49
+tags_069: 
   merger_id: 
-  media_id: 791950904
   fandom_id: 
-  updated_at: 2008-11-08 19:26:02 -08:00
-  tag_category_id: 63971739
-  canonical: true
-  taggings_count: 0
-  type: Fandom
-  adult: false
-  wrangled: true
-  id: 741440589
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_211186876: 
+  media_id: 
+  name: Ficlet
+  updated_at: 2008-12-07 01:19:49
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "2"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753767"
+  created_at: 2008-12-07 01:19:49
+tags_006: 
+  merger_id: 
+  fandom_id: 
+  media_id: "899944269"
   name: American Idol
-  merger_id: 
-  media_id: 899944269
-  fandom_id: 
-  updated_at: 2008-11-21 22:55:13 -08:00
-  tag_category_id: 63971739
-  canonical: true
-  taggings_count: 0
+  updated_at: 2008-11-22 06:55:13
+  tag_category_id: "63971739"
+  canonical: "1"
+  taggings_count: "0"
   type: Fandom
-  adult: false
-  wrangled: true
-  id: 211186876
-  created_at: 2008-11-08 19:26:02 -08:00
-tag_1063753747: 
-  name: John/Rodney
-  merger_id: 1063753750
-  media_id: 
+  adult: "0"
+  wrangled: "1"
+  id: "211186876"
+  created_at: 2008-11-09 03:26:02
+tags_027: 
+  merger_id: 
   fandom_id: 
-  updated_at: 2008-11-21 01:58:59 -08:00
+  media_id: 
+  name: Real People & Celebrities
+  updated_at: 2008-11-09 03:26:02
+  tag_category_id: "87582722"
+  canonical: "1"
+  taggings_count: "0"
+  type: Media
+  adult: "0"
+  wrangled: "0"
+  id: "899944269"
+  created_at: 2008-11-09 03:26:02
+tags_048: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Dean
+  updated_at: 2008-11-21 10:02:32
   tag_category_id: 
-  canonical: false
-  taggings_count: 1
+  canonical: "0"
+  taggings_count: "2"
+  type: Ambiguity
+  adult: "0"
+  wrangled: "1"
+  id: "1063753746"
+  created_at: 2008-11-21 09:48:03
+tags_106: 
+  merger_id: 
+  fandom_id: "1063753801"
+  media_id: 
+  name: Lot's Daughters
+  updated_at: 2008-12-07 23:05:45
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Character
+  adult: "0"
+  wrangled: "0"
+  id: "1063753804"
+  created_at: 2008-12-07 22:52:13
+tags_092: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: show some respect
+  updated_at: 2008-12-07 22:52:11
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753790"
+  created_at: 2008-12-07 22:52:11
+tags_071: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: deal!fic
+  updated_at: 2008-12-07 01:19:49
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753769"
+  created_at: 2008-12-07 01:19:49
+tags_007: 
+  merger_id: 
+  fandom_id: "741440589"
+  media_id: 
+  name: Sam Winchester
+  updated_at: 2008-11-21 09:59:52
+  tag_category_id: "51064457"
+  canonical: "1"
+  taggings_count: "2"
+  type: Character
+  adult: "0"
+  wrangled: "1"
+  id: "221905380"
+  created_at: 2008-11-09 03:26:02
+tags_028: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Music & Bands
+  updated_at: 2008-11-09 03:26:02
+  tag_category_id: "87582722"
+  canonical: "1"
+  taggings_count: "0"
+  type: Media
+  adult: "0"
+  wrangled: "0"
+  id: "946152233"
+  created_at: 2008-11-09 03:26:02
+tags_050: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: John
+  updated_at: 2008-11-21 09:58:59
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "0"
+  type: Character
+  adult: "0"
+  wrangled: "1"
+  id: "1063753748"
+  created_at: 2008-11-21 09:48:52
+tags_049: 
+  merger_id: "1063753750"
+  fandom_id: 
+  media_id: 
+  name: John/Rodney
+  updated_at: 2008-11-21 09:58:59
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
   type: Pairing
-  adult: false
-  wrangled: true
-  id: 1063753747
-  created_at: 2008-11-21 01:48:52 -08:00
+  adult: "0"
+  wrangled: "1"
+  id: "1063753747"
+  created_at: 2008-11-21 09:48:52
+tags_107: 
+  merger_id: 
+  fandom_id: "1063753801"
+  media_id: 
+  name: People of Sodom
+  updated_at: 2008-12-07 23:05:53
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Character
+  adult: "0"
+  wrangled: "0"
+  id: "1063753805"
+  created_at: 2008-12-07 22:52:13
+tags_093: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: getting righteous on your ass
+  updated_at: 2008-12-07 22:52:11
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753791"
+  created_at: 2008-12-07 22:52:11
+tags_072: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Future fic
+  updated_at: 2008-12-07 01:23:59
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753770"
+  created_at: 2008-12-07 01:23:59
+tags_029: 
+  merger_id: 
+  fandom_id: 
+  media_id: "791950904"
+  name: Stargate Atlantis
+  updated_at: 2008-11-09 03:26:02
+  tag_category_id: "63971739"
+  canonical: "1"
+  taggings_count: "0"
+  type: Fandom
+  adult: "0"
+  wrangled: "1"
+  id: "951091623"
+  created_at: 2008-11-09 03:26:02
+tags_051: 
+  merger_id: "1063753752"
+  fandom_id: 
+  media_id: 
+  name: Rodney
+  updated_at: 2008-11-21 10:01:30
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "0"
+  type: Character
+  adult: "0"
+  wrangled: "1"
+  id: "1063753749"
+  created_at: 2008-11-21 09:48:52
+tags_008: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Comics & Manga
+  updated_at: 2008-11-09 03:26:02
+  tag_category_id: "87582722"
+  canonical: "1"
+  taggings_count: "0"
+  type: Media
+  adult: "0"
+  wrangled: "0"
+  id: "260181321"
+  created_at: 2008-11-09 03:26:02
+tags_030: 
+  merger_id: 
+  fandom_id: 
+  media_id: "441672848"
+  name: Harry Potter
+  updated_at: 2008-11-09 03:26:02
+  tag_category_id: "63971739"
+  canonical: "1"
+  taggings_count: "0"
+  type: Fandom
+  adult: "0"
+  wrangled: "1"
+  id: "986046160"
+  created_at: 2008-11-09 03:26:02
+tags_108: 
+  merger_id: 
+  fandom_id: "1063753801"
+  media_id: 
+  name: People of Gomorrah
+  updated_at: 2008-12-07 23:05:53
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Character
+  adult: "0"
+  wrangled: "0"
+  id: "1063753806"
+  created_at: 2008-12-07 22:52:13
+tags_094: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: offer up your daughters
+  updated_at: 2008-12-07 22:52:12
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753792"
+  created_at: 2008-12-07 22:52:12
+tags_073: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: drabble
+  updated_at: 2008-12-07 01:23:59
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753771"
+  created_at: 2008-12-07 01:23:59
+tags_010: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Teen and Up Audiences
+  updated_at: 2008-11-21 08:14:51
+  tag_category_id: "553661720"
+  canonical: "1"
+  taggings_count: "2"
+  type: Rating
+  adult: "0"
+  wrangled: "1"
+  id: "344412843"
+  created_at: 2008-11-09 03:26:02
+tags_009: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Cartoons & Anime
+  updated_at: 2008-11-09 03:26:02
+  tag_category_id: "87582722"
+  canonical: "1"
+  taggings_count: "0"
+  type: Media
+  adult: "0"
+  wrangled: "0"
+  id: "299389994"
+  created_at: 2008-11-09 03:26:02
+tags_031: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: General Audiences
+  updated_at: 2008-11-21 08:14:51
+  tag_category_id: "553661720"
+  canonical: "1"
+  taggings_count: "4"
+  type: Rating
+  adult: "0"
+  wrangled: "1"
+  id: "992891255"
+  created_at: 2008-11-09 03:26:02
+tags_052: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: John Sheppard/Rodney McKay
+  updated_at: 2008-11-21 09:58:32
+  tag_category_id: 
+  canonical: "1"
+  taggings_count: "1"
+  type: Pairing
+  adult: "0"
+  wrangled: "1"
+  id: "1063753750"
+  created_at: 2008-11-21 09:50:08
+tags_095: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: pillars of salt
+  updated_at: 2008-12-07 22:52:12
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753793"
+  created_at: 2008-12-07 22:52:12
+tags_074: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: post-series
+  updated_at: 2008-12-07 01:23:59
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753772"
+  created_at: 2008-12-07 01:23:59
+tags_011: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: fluff
+  updated_at: 2008-11-21 08:34:57
+  tag_category_id: "178752192"
+  canonical: "1"
+  taggings_count: "0"
+  type: Freeform
+  adult: "0"
+  wrangled: "1"
+  id: "362175678"
+  created_at: 2008-11-09 03:26:02
+tags_032: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Movies
+  updated_at: 2008-11-09 03:26:02
+  tag_category_id: "87582722"
+  canonical: "1"
+  taggings_count: "0"
+  type: Media
+  adult: "0"
+  wrangled: "0"
+  id: "1019428968"
+  created_at: 2008-11-09 03:26:02
+tags_053: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: John Sheppard
+  updated_at: 2008-11-21 09:58:32
+  tag_category_id: 
+  canonical: "1"
+  taggings_count: "0"
+  type: Character
+  adult: "0"
+  wrangled: "1"
+  id: "1063753751"
+  created_at: 2008-11-21 09:50:08
+tags_096: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: don't look back
+  updated_at: 2008-12-07 22:52:12
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753794"
+  created_at: 2008-12-07 22:52:12
+tags_075: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Dean Forester/Rory Gilmore
+  updated_at: 2008-12-07 23:06:26
+  tag_category_id: 
+  canonical: "1"
+  taggings_count: "1"
+  type: Pairing
+  adult: "0"
+  wrangled: "1"
+  id: "1063753773"
+  created_at: 2008-12-07 01:24:00
+tags_012: 
+  merger_id: 
+  fandom_id: 
+  media_id: "1019428968"
+  name: Iron Man (2008)
+  updated_at: 2008-11-09 03:26:02
+  tag_category_id: "63971739"
+  canonical: "1"
+  taggings_count: "0"
+  type: Fandom
+  adult: "0"
+  wrangled: "1"
+  id: "385776504"
+  created_at: 2008-11-09 03:26:02
+tags_033: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Choose Not To Warn
+  updated_at: 2008-11-21 08:14:51
+  tag_category_id: "499134864"
+  canonical: "1"
+  taggings_count: "0"
+  type: Warning
+  adult: "0"
+  wrangled: "1"
+  id: "1039617938"
+  created_at: 2008-11-09 03:26:02
+tags_054: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Rodney McKay
+  updated_at: 2008-11-21 09:58:33
+  tag_category_id: 
+  canonical: "1"
+  taggings_count: "0"
+  type: Character
+  adult: "0"
+  wrangled: "1"
+  id: "1063753752"
+  created_at: 2008-11-21 09:50:08
+tags_097: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: incest
+  updated_at: 2008-12-07 22:52:12
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753795"
+  created_at: 2008-12-07 22:52:12
+tags_076: 
+  merger_id: 
+  fandom_id: 
+  media_id: "791950904"
+  name: Gilmore Girls
+  updated_at: 2008-12-07 23:03:15
+  tag_category_id: 
+  canonical: "1"
+  taggings_count: "1"
+  type: Fandom
+  adult: "0"
+  wrangled: "1"
+  id: "1063753774"
+  created_at: 2008-12-07 01:24:00
+tags_013: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Not Rated
+  updated_at: 2008-11-21 08:14:51
+  tag_category_id: "553661720"
+  canonical: "1"
+  taggings_count: "0"
+  type: Rating
+  adult: "1"
+  wrangled: "1"
+  id: "402275454"
+  created_at: 2008-11-09 03:26:02
+tags_034: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Other
+  updated_at: 2008-11-21 08:14:52
+  tag_category_id: "410592302"
+  canonical: "1"
+  taggings_count: "0"
+  type: Category
+  adult: "0"
+  wrangled: "1"
+  id: "1063753732"
+  created_at: 2008-11-09 03:26:02
+tags_055: 
+  merger_id: "545584597"
+  fandom_id: 
+  media_id: 
+  name: Sam Winchester/Dean Winchester
+  updated_at: 2008-11-21 09:59:52
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Pairing
+  adult: "0"
+  wrangled: "1"
+  id: "1063753753"
+  created_at: 2008-11-21 09:52:36
+tags_098: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: mud monkeys
+  updated_at: 2008-12-07 22:52:12
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753796"
+  created_at: 2008-12-07 22:52:12
+tags_077: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Rory Gilmore
+  updated_at: 2008-12-07 23:04:07
+  tag_category_id: 
+  canonical: "1"
+  taggings_count: "1"
+  type: Character
+  adult: "0"
+  wrangled: "1"
+  id: "1063753775"
+  created_at: 2008-12-07 01:24:00
+tags_014: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Multi
+  updated_at: 2008-11-21 08:14:52
+  tag_category_id: "410592302"
+  canonical: "1"
+  taggings_count: "2"
+  type: Category
+  adult: "0"
+  wrangled: "1"
+  id: "426547448"
+  created_at: 2008-11-09 03:26:02
+tags_035: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Choose Not To Warn For Some Content
+  updated_at: 2008-11-21 08:14:51
+  tag_category_id: 
+  canonical: "1"
+  taggings_count: "0"
+  type: Warning
+  adult: "0"
+  wrangled: "1"
+  id: "1063753733"
+  created_at: 2008-11-21 08:14:51
+tags_056: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Dean - Character
+  updated_at: 2008-11-22 06:59:40
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Ambiguity
+  adult: "0"
+  wrangled: "1"
+  id: "1063753754"
+  created_at: 2008-11-21 10:04:20
+tags_099: 
+  merger_id: 
+  fandom_id: "1063753801"
+  media_id: 
+  name: Lot/Lot's Wife
+  updated_at: 2008-12-07 23:07:10
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Pairing
+  adult: "0"
+  wrangled: "0"
+  id: "1063753797"
+  created_at: 2008-12-07 22:52:12
+tags_078: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Dean Forester
+  updated_at: 2008-12-07 23:04:06
+  tag_category_id: 
+  canonical: "1"
+  taggings_count: "1"
+  type: Character
+  adult: "0"
+  wrangled: "1"
+  id: "1063753776"
+  created_at: 2008-12-07 01:24:00
+tags_015: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Books
+  updated_at: 2008-11-09 03:26:02
+  tag_category_id: "87582722"
+  canonical: "1"
+  taggings_count: "0"
+  type: Media
+  adult: "0"
+  wrangled: "0"
+  id: "441672848"
+  created_at: 2008-11-09 03:26:02
+tags_036: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Rape/Non-Con
+  updated_at: 2008-11-21 08:14:51
+  tag_category_id: 
+  canonical: "1"
+  taggings_count: "1"
+  type: Warning
+  adult: "0"
+  wrangled: "1"
+  id: "1063753734"
+  created_at: 2008-11-21 08:14:51
+tags_057: 
+  merger_id: 
+  fandom_id: "741440589"
+  media_id: 
+  name: Ash/Everyone
+  updated_at: 2008-12-07 23:06:19
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Pairing
+  adult: "0"
+  wrangled: "0"
+  id: "1063753755"
+  created_at: 2008-12-05 15:59:13
+tags_080: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Dom/Sub
+  updated_at: 2008-12-07 01:26:40
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753778"
+  created_at: 2008-12-07 01:26:40
+tags_079: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: J-squared
+  updated_at: 2008-12-07 01:26:40
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753777"
+  created_at: 2008-12-07 01:26:40
+tags_016: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Dean Winchester/Sam Winchester
+  updated_at: 2008-12-07 23:04:51
+  tag_category_id: "490509104"
+  canonical: "1"
+  taggings_count: "1"
+  type: Pairing
+  adult: "0"
+  wrangled: "1"
+  id: "545584597"
+  created_at: 2008-11-09 03:26:02
+tags_037: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: F/M
+  updated_at: 2008-11-21 08:14:51
+  tag_category_id: 
+  canonical: "1"
+  taggings_count: "4"
+  type: Category
+  adult: "0"
+  wrangled: "1"
+  id: "1063753735"
+  created_at: 2008-11-21 08:14:51
+tags_058: 
+  merger_id: 
+  fandom_id: "741440589"
+  media_id: 
+  name: Ash
+  updated_at: 2008-12-07 23:03:56
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Character
+  adult: "0"
+  wrangled: "0"
+  id: "1063753756"
+  created_at: 2008-12-05 15:59:13
+tags_081: 
+  merger_id: 
+  fandom_id: "1063753780"
+  media_id: 
+  name: Jared Padalecki/Jensen Ackles
+  updated_at: 2008-12-07 23:07:01
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Pairing
+  adult: "0"
+  wrangled: "0"
+  id: "1063753779"
+  created_at: 2008-12-07 01:26:40
+tags_017: 
+  merger_id: 
+  fandom_id: "130714128"
+  media_id: 
+  name: Sam Carter
+  updated_at: 2008-11-09 03:26:02
+  tag_category_id: "51064457"
+  canonical: "1"
+  taggings_count: "0"
+  type: Character
+  adult: "0"
+  wrangled: "0"
+  id: "552317390"
+  created_at: 2008-11-09 03:26:02
+tags_038: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: M/M
+  updated_at: 2008-11-21 08:14:51
+  tag_category_id: 
+  canonical: "1"
+  taggings_count: "5"
+  type: Category
+  adult: "0"
+  wrangled: "1"
+  id: "1063753736"
+  created_at: 2008-11-21 08:14:51
+tags_060: 
+  merger_id: 
+  fandom_id: 
+  media_id: "441672848"
+  name: Medieval romance
+  updated_at: 2008-12-07 23:02:59
+  tag_category_id: 
+  canonical: "1"
+  taggings_count: "3"
+  type: Fandom
+  adult: "0"
+  wrangled: "1"
+  id: "1063753758"
+  created_at: 2008-12-07 00:28:52
+tags_059: 
+  merger_id: 
+  fandom_id: "1063753758"
+  media_id: 
+  name: Gualtieri/Griselda
+  updated_at: 2008-12-07 23:06:54
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Pairing
+  adult: "0"
+  wrangled: "0"
+  id: "1063753757"
+  created_at: 2008-12-07 00:28:52
+tags_082: 
+  merger_id: 
+  fandom_id: 
+  media_id: "899944269"
+  name: Supernatural RPF
+  updated_at: 2008-12-07 23:03:22
+  tag_category_id: 
+  canonical: "1"
+  taggings_count: "1"
+  type: Fandom
+  adult: "0"
+  wrangled: "1"
+  id: "1063753780"
+  created_at: 2008-12-07 01:26:40
+tags_018: 
+  merger_id: 
+  fandom_id: 
+  media_id: "791950904"
+  name: Torchwood
+  updated_at: 2008-11-09 03:26:02
+  tag_category_id: "63971739"
+  canonical: "1"
+  taggings_count: "0"
+  type: Fandom
+  adult: "0"
+  wrangled: "1"
+  id: "569823665"
+  created_at: 2008-11-09 03:26:02
+tags_040: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: No Media
+  updated_at: 2008-11-21 08:14:52
+  tag_category_id: 
+  canonical: "1"
+  taggings_count: "0"
+  type: Media
+  adult: "0"
+  wrangled: "1"
+  id: "1063753738"
+  created_at: 2008-11-21 08:14:52
+tags_039: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: F/F
+  updated_at: 2008-11-21 08:14:51
+  tag_category_id: 
+  canonical: "1"
+  taggings_count: "0"
+  type: Category
+  adult: "0"
+  wrangled: "1"
+  id: "1063753737"
+  created_at: 2008-11-21 08:14:51
+tags_061: 
+  merger_id: 
+  fandom_id: "1063753758"
+  media_id: 
+  name: Saladin
+  updated_at: 2008-12-07 23:06:01
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Character
+  adult: "0"
+  wrangled: "0"
+  id: "1063753759"
+  created_at: 2008-12-07 00:33:22
+tags_083: 
+  merger_id: 
+  fandom_id: "1063753780"
+  media_id: 
+  name: Jared Padalecki
+  updated_at: 2008-12-07 23:05:30
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Character
+  adult: "0"
+  wrangled: "0"
+  id: "1063753781"
+  created_at: 2008-12-07 01:26:40
+tags_062: 
+  merger_id: 
+  fandom_id: "1063753758"
+  media_id: 
+  name: Messer Torello
+  updated_at: 2008-12-07 23:06:02
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Character
+  adult: "0"
+  wrangled: "0"
+  id: "1063753760"
+  created_at: 2008-12-07 00:33:22
+tags_020: 
+  merger_id: "951091623"
+  fandom_id: 
+  media_id: 
+  name: SGA
+  updated_at: 2008-11-21 08:34:01
+  tag_category_id: "63971739"
+  canonical: "0"
+  taggings_count: "0"
+  type: Fandom
+  adult: "0"
+  wrangled: "1"
+  id: "711936337"
+  created_at: 2008-11-09 03:26:02
+tags_019: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Gen
+  updated_at: 2008-11-21 08:14:51
+  tag_category_id: "410592302"
+  canonical: "1"
+  taggings_count: "2"
+  type: Category
+  adult: "0"
+  wrangled: "1"
+  id: "611729728"
+  created_at: 2008-11-09 03:26:02
+tags_041: 
+  merger_id: 
+  fandom_id: "1063753739"
+  media_id: 
+  name: No Fandom
+  updated_at: 2008-12-07 23:04:06
+  tag_category_id: 
+  canonical: "1"
+  taggings_count: "0"
+  type: Fandom
+  adult: "0"
+  wrangled: "1"
+  id: "1063753739"
+  created_at: 2008-11-21 08:14:52
+tags_084: 
+  merger_id: 
+  fandom_id: "1063753780"
+  media_id: 
+  name: Jensen Ackles
+  updated_at: 2008-12-07 23:05:30
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Character
+  adult: "0"
+  wrangled: "0"
+  id: "1063753782"
+  created_at: 2008-12-07 01:26:41
+tags_021: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Sam
+  updated_at: 2008-11-21 08:59:44
+  tag_category_id: "353966007"
+  canonical: "0"
+  taggings_count: "1"
+  type: Ambiguity
+  adult: "0"
+  wrangled: "1"
+  id: "713695255"
+  created_at: 2008-11-09 03:26:02
+tags_042: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: angst
+  updated_at: 2008-11-21 08:35:47
+  tag_category_id: 
+  canonical: "1"
+  taggings_count: "0"
+  type: Freeform
+  adult: "0"
+  wrangled: "1"
+  id: "1063753740"
+  created_at: 2008-11-21 08:35:38
+tags_063: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: smut
+  updated_at: 2008-12-07 00:52:01
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753761"
+  created_at: 2008-12-07 00:52:01
+tags_100: 
+  merger_id: 
+  fandom_id: "1063753801"
+  media_id: 
+  name: Lot/Lot's Daughters
+  updated_at: 2008-12-07 23:07:10
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Pairing
+  adult: "0"
+  wrangled: "0"
+  id: "1063753798"
+  created_at: 2008-12-07 22:52:12
+tags_085: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: sad
+  updated_at: 2008-12-07 01:34:38
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753783"
+  created_at: 2008-12-07 01:34:38
+tags_001: 
+  merger_id: 
+  fandom_id: "741440589"
+  media_id: 
+  name: Dean Winchester
+  updated_at: 2008-11-21 09:59:52
+  tag_category_id: "51064457"
+  canonical: "1"
+  taggings_count: "2"
+  type: Character
+  adult: "0"
+  wrangled: "1"
+  id: "26796919"
+  created_at: 2008-11-09 03:26:02
+tags_022: 
+  merger_id: 
+  fandom_id: 
+  media_id: "791950904"
+  name: Supernatural
+  updated_at: 2008-11-09 03:26:02
+  tag_category_id: "63971739"
+  canonical: "1"
+  taggings_count: "3"
+  type: Fandom
+  adult: "0"
+  wrangled: "1"
+  id: "741440589"
+  created_at: 2008-11-09 03:26:02
+tags_043: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Extreme Violence
+  updated_at: 2008-11-21 09:45:41
+  tag_category_id: 
+  canonical: "1"
+  taggings_count: "1"
+  type: Warning
+  adult: "0"
+  wrangled: "1"
+  id: "1063753741"
+  created_at: 2008-11-21 09:45:41
+tags_064: 
+  merger_id: 
+  fandom_id: "1063753758"
+  media_id: 
+  name: Ricciardo Manardi/Caterina Lizio
+  updated_at: 2008-12-07 23:06:54
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Pairing
+  adult: "0"
+  wrangled: "0"
+  id: "1063753762"
+  created_at: 2008-12-07 00:52:02
+tags_101: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: OFC/OMC
+  updated_at: 2008-12-07 22:52:12
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Pairing
+  adult: "0"
+  wrangled: "0"
+  id: "1063753799"
+  created_at: 2008-12-07 22:52:12
+tags_086: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Jessica Moore/Sam Winchester
+  updated_at: 2008-12-07 23:04:52
+  tag_category_id: 
+  canonical: "1"
+  taggings_count: "1"
+  type: Pairing
+  adult: "0"
+  wrangled: "1"
+  id: "1063753784"
+  created_at: 2008-12-07 01:34:38
+tags_002: 
+  merger_id: "1063753740"
+  fandom_id: 
+  media_id: 
+  name: angsty
+  updated_at: 2008-11-22 07:09:26
+  tag_category_id: "178752192"
+  canonical: "0"
+  taggings_count: "1"
+  type: Freeform
+  adult: "0"
+  wrangled: "1"
+  id: "66216446"
+  created_at: 2008-11-09 03:26:02
+tags_023: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: None Of These Warnings Apply
+  updated_at: 2008-11-21 08:14:51
+  tag_category_id: "499134864"
+  canonical: "1"
+  taggings_count: "8"
+  type: Warning
+  adult: "0"
+  wrangled: "1"
+  id: "751871740"
+  created_at: 2008-11-09 03:26:02
+tags_044: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Major Character Death
+  updated_at: 2008-11-21 09:45:41
+  tag_category_id: 
+  canonical: "1"
+  taggings_count: "3"
+  type: Warning
+  adult: "0"
+  wrangled: "1"
+  id: "1063753742"
+  created_at: 2008-11-21 09:45:41
+tags_065: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: dark
+  updated_at: 2008-12-07 00:55:58
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753763"
+  created_at: 2008-12-07 00:55:58
+tags_102: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: OMC/OMC
+  updated_at: 2008-12-07 22:52:12
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Pairing
+  adult: "0"
+  wrangled: "0"
+  id: "1063753800"
+  created_at: 2008-12-07 22:52:12
+tags_087: 
+  merger_id: 
+  fandom_id: "741440589"
+  media_id: 
+  name: Jessica Moore
+  updated_at: 2008-12-07 23:05:37
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Character
+  adult: "0"
+  wrangled: "0"
+  id: "1063753785"
+  created_at: 2008-12-07 01:34:39
+tags_003: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Explicit
+  updated_at: 2008-11-21 08:14:51
+  tag_category_id: "553661720"
+  canonical: "1"
+  taggings_count: "5"
+  type: Rating
+  adult: "1"
+  wrangled: "1"
+  id: "112726825"
+  created_at: 2008-11-09 03:26:02
+tags_024: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Other Media
+  updated_at: 2008-11-09 03:26:02
+  tag_category_id: "87582722"
+  canonical: "1"
+  taggings_count: "0"
+  type: Media
+  adult: "0"
+  wrangled: "0"
+  id: "788108366"
+  created_at: 2008-11-09 03:26:02
+tags_045: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: Underage
+  updated_at: 2008-11-21 09:45:41
+  tag_category_id: 
+  canonical: "1"
+  taggings_count: "0"
+  type: Warning
+  adult: "0"
+  wrangled: "1"
+  id: "1063753743"
+  created_at: 2008-11-21 09:45:41
+tags_066: 
+  merger_id: 
+  fandom_id: "1063753758"
+  media_id: 
+  name: Griselda/Walter
+  updated_at: 2008-12-07 23:06:54
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Pairing
+  adult: "0"
+  wrangled: "0"
+  id: "1063753764"
+  created_at: 2008-12-07 00:55:58
+tags_103: 
+  merger_id: 
+  fandom_id: 
+  media_id: "441672848"
+  name: Bible
+  updated_at: 2008-12-07 23:02:59
+  tag_category_id: 
+  canonical: "1"
+  taggings_count: "1"
+  type: Fandom
+  adult: "0"
+  wrangled: "1"
+  id: "1063753801"
+  created_at: 2008-12-07 22:52:12
+tags_088: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: weird
+  updated_at: 2008-12-07 01:35:54
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "0"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753786"
+  created_at: 2008-12-07 01:35:54
+tags_067: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: don't even think about it Jo
+  updated_at: 2008-12-07 01:11:11
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "0"
+  type: Freeform
+  adult: "0"
+  wrangled: "0"
+  id: "1063753765"
+  created_at: 2008-12-07 01:11:11
+tags_004: 
+  merger_id: 
+  fandom_id: 
+  media_id: "791950904"
+  name: Stargate SG-1
+  updated_at: 2008-11-09 03:26:02
+  tag_category_id: "63971739"
+  canonical: "1"
+  taggings_count: "0"
+  type: Fandom
+  adult: "0"
+  wrangled: "1"
+  id: "130714128"
+  created_at: 2008-11-09 03:26:02
+tags_025: 
+  merger_id: 
+  fandom_id: 
+  media_id: 
+  name: TV Shows
+  updated_at: 2008-11-09 03:26:02
+  tag_category_id: "87582722"
+  canonical: "1"
+  taggings_count: "0"
+  type: Media
+  adult: "0"
+  wrangled: "0"
+  id: "791950904"
+  created_at: 2008-11-09 03:26:02
+tags_046: 
+  merger_id: "545584597"
+  fandom_id: 
+  media_id: 
+  name: Sam/Dean
+  updated_at: 2008-11-21 10:00:17
+  tag_category_id: 
+  canonical: "0"
+  taggings_count: "1"
+  type: Pairing
+  adult: "0"
+  wrangled: "1"
+  id: "1063753744"
+  created_at: 2008-11-21 09:48:03

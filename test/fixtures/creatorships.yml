@@ -1,85 +1,225 @@
 --- 
-creatorship_596033134: 
-  updated_at: 2008-11-08 19:26:01 -08:00
-  pseud_id: 5
-  creation_type: Work
-  id: 596033134
-  creation_id: 2
-  created_at: 2008-11-08 19:26:01 -08:00
-creatorship_596033135: 
-  updated_at: 2008-11-08 19:26:01 -08:00
-  pseud_id: 1
+creatorships_026: 
+  updated_at: 2008-12-07 01:24:00
+  pseud_id: "13"
   creation_type: Chapter
-  id: 596033135
-  creation_id: 2
-  created_at: 2008-11-08 19:26:01 -08:00
-creatorship_287167792: 
-  updated_at: 2008-11-08 19:26:01 -08:00
-  pseud_id: 1
+  creation_id: "13"
+  id: "596033151"
+  created_at: 2008-12-07 01:24:00
+creatorships_015: 
+  updated_at: 2008-12-07 00:28:58
+  pseud_id: "8"
   creation_type: Work
-  id: 287167792
-  creation_id: 1
-  created_at: 2008-11-08 19:26:01 -08:00
-creatorship_596033136: 
-  updated_at: 2008-11-08 19:26:01 -08:00
-  pseud_id: 1
+  creation_id: "7"
+  id: "596033140"
+  created_at: 2008-12-07 00:28:58
+creatorships_004: 
+  updated_at: 2008-11-09 03:26:01
+  pseud_id: "3"
   creation_type: Chapter
-  id: 596033136
-  creation_id: 1
-  created_at: 2008-11-08 19:26:01 -08:00
-creatorship_596033137: 
-  updated_at: 2008-11-21 00:11:27 -08:00
-  pseud_id: 1
+  creation_id: "5"
+  id: "596033128"
+  created_at: 2008-11-09 03:26:01
+creatorships_027: 
+  updated_at: 2008-12-07 01:26:41
+  pseud_id: "13"
+  creation_type: Work
+  creation_id: "12"
+  id: "596033152"
+  created_at: 2008-12-07 01:26:41
+creatorships_016: 
+  updated_at: 2008-12-07 00:28:58
+  pseud_id: "8"
+  creation_type: Chapter
+  creation_id: "8"
+  id: "596033141"
+  created_at: 2008-12-07 00:28:58
+creatorships_005: 
+  updated_at: 2008-11-09 03:26:01
+  pseud_id: "3"
+  creation_type: Work
+  creation_id: "4"
+  id: "596033129"
+  created_at: 2008-11-09 03:26:01
+creatorships_028: 
+  updated_at: 2008-12-07 01:26:41
+  pseud_id: "13"
+  creation_type: Chapter
+  creation_id: "14"
+  id: "596033153"
+  created_at: 2008-12-07 01:26:41
+creatorships_017: 
+  updated_at: 2008-12-07 00:32:20
+  pseud_id: "8"
+  creation_type: Chapter
+  creation_id: "9"
+  id: "596033142"
+  created_at: 2008-12-07 00:32:20
+creatorships_006: 
+  updated_at: 2008-11-09 03:26:01
+  pseud_id: "2"
+  creation_type: Chapter
+  creation_id: "4"
+  id: "596033130"
+  created_at: 2008-11-09 03:26:01
+creatorships_030: 
+  updated_at: 2008-12-07 01:34:39
+  pseud_id: "14"
+  creation_type: Chapter
+  creation_id: "15"
+  id: "596033155"
+  created_at: 2008-12-07 01:34:39
+creatorships_029: 
+  updated_at: 2008-12-07 01:34:39
+  pseud_id: "14"
+  creation_type: Work
+  creation_id: "13"
+  id: "596033154"
+  created_at: 2008-12-07 01:34:39
+creatorships_018: 
+  updated_at: 2008-12-07 00:39:40
+  pseud_id: "8"
   creation_type: Series
-  id: 596033137
-  creation_id: 1
-  created_at: 2008-11-21 00:11:27 -08:00
-creatorship_479792490: 
-  updated_at: 2008-11-08 19:26:01 -08:00
-  pseud_id: 4
-  creation_type: Chapter
-  id: 479792490
-  creation_id: 6
-  created_at: 2008-11-08 19:26:01 -08:00
-creatorship_479792491: 
-  updated_at: 2008-11-08 19:26:01 -08:00
-  pseud_id: 4
+  creation_id: "2"
+  id: "596033143"
+  created_at: 2008-12-07 00:39:40
+creatorships_007: 
+  updated_at: 2008-11-09 03:26:01
+  pseud_id: "2"
   creation_type: Work
-  id: 479792491
-  creation_id: 5
-  created_at: 2008-11-08 19:26:01 -08:00
-creatorship_596033128: 
-  updated_at: 2008-11-08 19:26:01 -08:00
-  pseud_id: 3
-  creation_type: Chapter
-  id: 596033128
-  creation_id: 5
-  created_at: 2008-11-08 19:26:01 -08:00
-creatorship_596033130: 
-  updated_at: 2008-11-08 19:26:01 -08:00
-  pseud_id: 2
-  creation_type: Chapter
-  id: 596033130
-  creation_id: 4
-  created_at: 2008-11-08 19:26:01 -08:00
-creatorship_596033129: 
-  updated_at: 2008-11-08 19:26:01 -08:00
-  pseud_id: 3
+  creation_id: "3"
+  id: "596033132"
+  created_at: 2008-11-09 03:26:01
+creatorships_031: 
+  updated_at: 2008-12-07 22:52:15
+  pseud_id: "15"
   creation_type: Work
-  id: 596033129
-  creation_id: 4
-  created_at: 2008-11-08 19:26:01 -08:00
-creatorship_596033132: 
-  updated_at: 2008-11-08 19:26:01 -08:00
-  pseud_id: 2
-  creation_type: Work
-  id: 596033132
-  creation_id: 3
-  created_at: 2008-11-08 19:26:01 -08:00
-creatorship_596033133: 
-  updated_at: 2008-11-08 19:26:01 -08:00
-  pseud_id: 5
+  creation_id: "14"
+  id: "596033156"
+  created_at: 2008-12-07 22:52:15
+creatorships_020: 
+  updated_at: 2008-12-07 00:52:02
+  pseud_id: "8"
   creation_type: Chapter
-  id: 596033133
-  creation_id: 3
-  created_at: 2008-11-08 19:26:01 -08:00
+  creation_id: "10"
+  id: "596033145"
+  created_at: 2008-12-07 00:52:02
+creatorships_019: 
+  updated_at: 2008-12-07 00:52:02
+  pseud_id: "8"
+  creation_type: Work
+  creation_id: "8"
+  id: "596033144"
+  created_at: 2008-12-07 00:52:02
+creatorships_008: 
+  updated_at: 2008-11-09 03:26:01
+  pseud_id: "5"
+  creation_type: Chapter
+  creation_id: "3"
+  id: "596033133"
+  created_at: 2008-11-09 03:26:01
+creatorships_032: 
+  updated_at: 2008-12-07 22:52:15
+  pseud_id: "15"
+  creation_type: Chapter
+  creation_id: "16"
+  id: "596033157"
+  created_at: 2008-12-07 22:52:15
+creatorships_021: 
+  updated_at: 2008-12-07 00:55:58
+  pseud_id: "9"
+  creation_type: Work
+  creation_id: "9"
+  id: "596033146"
+  created_at: 2008-12-07 00:55:58
+creatorships_010: 
+  updated_at: 2008-11-09 03:26:01
+  pseud_id: "1"
+  creation_type: Chapter
+  creation_id: "2"
+  id: "596033135"
+  created_at: 2008-11-09 03:26:01
+creatorships_009: 
+  updated_at: 2008-11-09 03:26:01
+  pseud_id: "5"
+  creation_type: Work
+  creation_id: "2"
+  id: "596033134"
+  created_at: 2008-11-09 03:26:01
+creatorships_022: 
+  updated_at: 2008-12-07 00:55:58
+  pseud_id: "9"
+  creation_type: Chapter
+  creation_id: "11"
+  id: "596033147"
+  created_at: 2008-12-07 00:55:58
+creatorships_011: 
+  updated_at: 2008-11-09 03:26:01
+  pseud_id: "1"
+  creation_type: Chapter
+  creation_id: "1"
+  id: "596033136"
+  created_at: 2008-11-09 03:26:01
+creatorships_023: 
+  updated_at: 2008-12-07 01:19:50
+  pseud_id: "13"
+  creation_type: Work
+  creation_id: "10"
+  id: "596033148"
+  created_at: 2008-12-07 01:19:50
+creatorships_012: 
+  updated_at: 2008-11-21 08:11:27
+  pseud_id: "1"
+  creation_type: Series
+  creation_id: "1"
+  id: "596033137"
+  created_at: 2008-11-21 08:11:27
+creatorships_001: 
+  updated_at: 2008-11-09 03:26:01
+  pseud_id: "1"
+  creation_type: Work
+  creation_id: "1"
+  id: "287167792"
+  created_at: 2008-11-09 03:26:01
+creatorships_024: 
+  updated_at: 2008-12-07 01:19:50
+  pseud_id: "13"
+  creation_type: Chapter
+  creation_id: "12"
+  id: "596033149"
+  created_at: 2008-12-07 01:19:50
+creatorships_013: 
+  updated_at: 2008-12-05 15:59:14
+  pseud_id: "7"
+  creation_type: Work
+  creation_id: "6"
+  id: "596033138"
+  created_at: 2008-12-05 15:59:14
+creatorships_002: 
+  updated_at: 2008-11-09 03:26:01
+  pseud_id: "4"
+  creation_type: Chapter
+  creation_id: "6"
+  id: "479792490"
+  created_at: 2008-11-09 03:26:01
+creatorships_025: 
+  updated_at: 2008-12-07 01:24:00
+  pseud_id: "13"
+  creation_type: Work
+  creation_id: "11"
+  id: "596033150"
+  created_at: 2008-12-07 01:24:00
+creatorships_014: 
+  updated_at: 2008-12-05 15:59:14
+  pseud_id: "7"
+  creation_type: Chapter
+  creation_id: "7"
+  id: "596033139"
+  created_at: 2008-12-05 15:59:14
+creatorships_003: 
+  updated_at: 2008-11-09 03:26:01
+  pseud_id: "4"
+  creation_type: Work
+  creation_id: "5"
+  id: "479792491"
+  created_at: 2008-11-09 03:26:01

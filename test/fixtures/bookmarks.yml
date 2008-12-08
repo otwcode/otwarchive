@@ -1,0 +1,21 @@
+--- 
+bookmarks_001: 
+  updated_at: 2008-12-07 01:11:11
+  bookmarkable_type: Work
+  private: "0"
+  bookmarkable_id: "8"
+  notes: "Girls always get what they want. "
+  id: "1"
+  user_id: "11"
+  hidden_by_admin: "0"
+  created_at: 2008-12-07 01:11:11
+bookmarks_002: 
+  updated_at: 2008-12-07 01:35:54
+  bookmarkable_type: Work
+  private: "0"
+  bookmarkable_id: "12"
+  notes: I'm not sure why, but I'm slightly weirded out by this. The characters seem familiar somehow...
+  id: "2"
+  user_id: "13"
+  hidden_by_admin: "0"
+  created_at: 2008-12-07 01:35:54

@@ -1,11 +1,21 @@
 --- 
-join_00000: 
+roles_users_001: 
   updated_at: 
   role_id: "1"
   user_id: "1"
   created_at: 
-join_00001: 
+roles_users_002: 
   updated_at: 
   role_id: "2"
   user_id: "1"
   created_at: 
+roles_users_003: 
+  updated_at: 2008-11-09 03:26:02
+  role_id: "2"
+  user_id: "7"
+  created_at: 2008-11-09 03:26:02
+roles_users_004: 
+  updated_at: 2008-11-09 03:26:02
+  role_id: "1"
+  user_id: "7"
+  created_at: 2008-11-09 03:26:02

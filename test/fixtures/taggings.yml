@@ -1,241 +1,945 @@
 --- 
-tagging_138691404: 
-  tagger_id: 1039617938
-  updated_at: 2008-11-08 19:26:02 -08:00
-  id: 138691404
+taggings_041: 
+  tagger_id: "751871740"
+  updated_at: 2008-12-07 00:29:23
+  id: "1067724899"
   taggable_type: Work
-  taggable_id: 2
+  taggable_id: "7"
   tagger_type: Tag
-  created_at: 2008-11-08 19:26:02 -08:00
-tagging_312493864: 
-  tagger_id: 714102448
-  updated_at: 2008-11-08 19:26:02 -08:00
-  id: 312493864
+  created_at: 2008-12-07 00:29:23
+taggings_013: 
+  tagger_id: "112726825"
+  updated_at: 2008-11-09 03:26:02
+  id: "770153773"
   taggable_type: Work
-  taggable_id: 3
+  taggable_id: "3"
   tagger_type: Tag
-  created_at: 2008-11-08 19:26:02 -08:00
-tagging_1031805717: 
-  tagger_id: 362175678
-  updated_at: 2008-11-08 19:26:02 -08:00
-  id: 1031805717
+  created_at: 2008-11-09 03:26:02
+taggings_070: 
+  tagger_id: "1063753775"
+  updated_at: 2008-12-07 01:24:00
+  id: "1067724930"
   taggable_type: Work
-  taggable_id: 4
+  taggable_id: "11"
   tagger_type: Tag
-  created_at: 2008-11-08 19:26:02 -08:00
-tagging_1067724875: 
-  tagger_id: 1063753750
-  updated_at: 2008-11-21 01:50:08 -08:00
-  id: 1067724875
+  created_at: 2008-12-07 01:24:00
+taggings_042: 
+  tagger_id: "112726825"
+  updated_at: 2008-12-07 00:52:02
+  id: "1067724902"
   taggable_type: Work
-  taggable_id: 3
+  taggable_id: "8"
   tagger_type: Tag
-  created_at: 2008-11-21 01:50:08 -08:00
-tagging_1067724886: 
-  tagger_id: 713695255
-  updated_at: 2008-11-21 23:49:39 -08:00
-  id: 1067724886
+  created_at: 2008-12-07 00:52:02
+taggings_014: 
+  tagger_id: "1039617938"
+  updated_at: 2008-11-09 03:26:02
+  id: "795295258"
   taggable_type: Work
-  taggable_id: 5
+  taggable_id: "4"
   tagger_type: Tag
-  created_at: 2008-11-21 23:49:39 -08:00
-tagging_1067724887: 
-  tagger_id: 1063753746
-  updated_at: 2008-11-21 23:49:40 -08:00
-  id: 1067724887
+  created_at: 2008-11-09 03:26:02
+taggings_071: 
+  tagger_id: "1063753776"
+  updated_at: 2008-12-07 01:24:00
+  id: "1067724931"
   taggable_type: Work
-  taggable_id: 5
+  taggable_id: "11"
   tagger_type: Tag
-  created_at: 2008-11-21 23:49:40 -08:00
-tagging_1067724876: 
-  tagger_id: 751871740
-  updated_at: 2008-11-21 01:50:24 -08:00
-  id: 1067724876
+  created_at: 2008-12-07 01:24:00
+taggings_043: 
+  tagger_id: "1063753735"
+  updated_at: 2008-12-07 00:52:02
+  id: "1067724903"
   taggable_type: Work
-  taggable_id: 3
+  taggable_id: "8"
   tagger_type: Tag
-  created_at: 2008-11-21 01:50:24 -08:00
-tagging_759696416: 
-  tagger_id: 951091623
-  updated_at: 2008-11-08 19:26:02 -08:00
-  id: 759696416
+  created_at: 2008-12-07 00:52:02
+taggings_015: 
+  tagger_id: "362175678"
+  updated_at: 2008-11-09 03:26:02
+  id: "1031805717"
   taggable_type: Work
-  taggable_id: 3
+  taggable_id: "4"
   tagger_type: Tag
-  created_at: 2008-11-08 19:26:02 -08:00
-tagging_678331033: 
-  tagger_id: 404615116
-  updated_at: 2008-11-08 19:26:02 -08:00
-  id: 678331033
+  created_at: 2008-11-09 03:26:02
+taggings_072: 
+  tagger_id: "1063753770"
+  updated_at: 2008-12-07 01:24:00
+  id: "1067724932"
   taggable_type: Work
-  taggable_id: 3
+  taggable_id: "11"
   tagger_type: Tag
-  created_at: 2008-11-08 19:26:02 -08:00
-tagging_400948225: 
-  tagger_id: 1039617938
-  updated_at: 2008-11-08 19:26:02 -08:00
-  id: 400948225
+  created_at: 2008-12-07 01:24:00
+taggings_044: 
+  tagger_id: "751871740"
+  updated_at: 2008-12-07 00:52:02
+  id: "1067724904"
   taggable_type: Work
-  taggable_id: 1
+  taggable_id: "8"
   tagger_type: Tag
-  created_at: 2008-11-08 19:26:02 -08:00
-tagging_687826934: 
-  tagger_id: 741440589
-  updated_at: 2008-11-08 19:26:02 -08:00
-  id: 687826934
+  created_at: 2008-12-07 00:52:02
+taggings_016: 
+  tagger_id: "611729728"
+  updated_at: 2008-11-09 03:26:02
+  id: "1067724870"
   taggable_type: Work
-  taggable_id: 5
+  taggable_id: "1"
   tagger_type: Tag
-  created_at: 2008-11-08 19:26:02 -08:00
-tagging_1067724877: 
-  tagger_id: 1063753736
-  updated_at: 2008-11-21 01:52:36 -08:00
-  id: 1067724877
+  created_at: 2008-11-09 03:26:02
+taggings_073: 
+  tagger_id: "1063753771"
+  updated_at: 2008-12-07 01:24:00
+  id: "1067724933"
   taggable_type: Work
-  taggable_id: 4
+  taggable_id: "11"
   tagger_type: Tag
-  created_at: 2008-11-21 01:52:36 -08:00
-tagging_1067724878: 
-  tagger_id: 1063753753
-  updated_at: 2008-11-21 01:52:37 -08:00
-  id: 1067724878
+  created_at: 2008-12-07 01:24:00
+taggings_045: 
+  tagger_id: "1063753758"
+  updated_at: 2008-12-07 00:52:02
+  id: "1067724905"
   taggable_type: Work
-  taggable_id: 4
+  taggable_id: "8"
   tagger_type: Tag
-  created_at: 2008-11-21 01:52:37 -08:00
-tagging_664025557: 
-  tagger_id: 951091623
-  updated_at: 2008-11-08 19:26:02 -08:00
-  id: 664025557
+  created_at: 2008-12-07 00:52:02
+taggings_100: 
+  tagger_id: "1063753801"
+  updated_at: 2008-12-07 22:52:14
+  id: "1067724960"
   taggable_type: Work
-  taggable_id: 2
+  taggable_id: "14"
   tagger_type: Tag
-  created_at: 2008-11-08 19:26:02 -08:00
-tagging_770153773: 
-  tagger_id: 112726825
-  updated_at: 2008-11-08 19:26:02 -08:00
-  id: 770153773
+  created_at: 2008-12-07 22:52:14
+taggings_017: 
+  tagger_id: "1063753736"
+  updated_at: 2008-11-21 09:47:14
+  id: "1067724871"
   taggable_type: Work
-  taggable_id: 3
+  taggable_id: "2"
   tagger_type: Tag
-  created_at: 2008-11-08 19:26:02 -08:00
-tagging_46392098: 
-  tagger_id: 992891255
-  updated_at: 2008-11-08 19:26:02 -08:00
-  id: 46392098
+  created_at: 2008-11-21 09:47:14
+taggings_046: 
+  tagger_id: "1063753762"
+  updated_at: 2008-12-07 00:52:02
+  id: "1067724906"
   taggable_type: Work
-  taggable_id: 2
+  taggable_id: "8"
   tagger_type: Tag
-  created_at: 2008-11-08 19:26:02 -08:00
-tagging_1067724879: 
-  tagger_id: 611729728
-  updated_at: 2008-11-21 01:54:14 -08:00
-  id: 1067724879
+  created_at: 2008-12-07 00:52:02
+taggings_101: 
+  tagger_id: "1063753797"
+  updated_at: 2008-12-07 22:52:14
+  id: "1067724961"
   taggable_type: Work
-  taggable_id: 5
+  taggable_id: "14"
   tagger_type: Tag
-  created_at: 2008-11-21 01:54:14 -08:00
-tagging_1067724880: 
-  tagger_id: 992891255
-  updated_at: 2008-11-21 01:54:14 -08:00
-  id: 1067724880
+  created_at: 2008-12-07 22:52:14
+taggings_018: 
+  tagger_id: "1063753744"
+  updated_at: 2008-11-21 09:48:03
+  id: "1067724872"
   taggable_type: Work
-  taggable_id: 5
+  taggable_id: "1"
   tagger_type: Tag
-  created_at: 2008-11-21 01:54:14 -08:00
-tagging_59736118: 
-  tagger_id: 741440589
-  updated_at: 2008-11-08 19:26:02 -08:00
-  id: 59736118
+  created_at: 2008-11-21 09:48:03
+taggings_074: 
+  tagger_id: "1063753768"
+  updated_at: 2008-12-07 01:24:00
+  id: "1067724934"
   taggable_type: Work
-  taggable_id: 1
+  taggable_id: "11"
   tagger_type: Tag
-  created_at: 2008-11-08 19:26:02 -08:00
-tagging_1067724870: 
-  tagger_id: 611729728
-  updated_at: 2008-11-08 19:26:02 -08:00
-  id: 1067724870
+  created_at: 2008-12-07 01:24:00
+taggings_047: 
+  tagger_id: "1063753761"
+  updated_at: 2008-12-07 00:52:02
+  id: "1067724907"
   taggable_type: Work
-  taggable_id: 1
+  taggable_id: "8"
   tagger_type: Tag
-  created_at: 2008-11-08 19:26:02 -08:00
-tagging_35934741: 
-  tagger_id: 741440589
-  updated_at: 2008-11-08 19:26:02 -08:00
-  id: 35934741
+  created_at: 2008-12-07 00:52:02
+taggings_102: 
+  tagger_id: "1063753798"
+  updated_at: 2008-12-07 22:52:14
+  id: "1067724962"
   taggable_type: Work
-  taggable_id: 4
+  taggable_id: "14"
   tagger_type: Tag
-  created_at: 2008-11-08 19:26:02 -08:00
-tagging_1067724871: 
-  tagger_id: 1063753736
-  updated_at: 2008-11-21 01:47:14 -08:00
-  id: 1067724871
+  created_at: 2008-12-07 22:52:14
+taggings_019: 
+  tagger_id: "1063753747"
+  updated_at: 2008-11-21 09:48:52
+  id: "1067724873"
   taggable_type: Work
-  taggable_id: 2
+  taggable_id: "2"
   tagger_type: Tag
-  created_at: 2008-11-21 01:47:14 -08:00
-tagging_1067724872: 
-  tagger_id: 1063753744
-  updated_at: 2008-11-21 01:48:03 -08:00
-  id: 1067724872
+  created_at: 2008-11-21 09:48:52
+taggings_075: 
+  tagger_id: "1063753772"
+  updated_at: 2008-12-07 01:24:00
+  id: "1067724935"
   taggable_type: Work
-  taggable_id: 1
+  taggable_id: "11"
   tagger_type: Tag
-  created_at: 2008-11-21 01:48:03 -08:00
-tagging_543151849: 
-  tagger_id: 992891255
-  updated_at: 2008-11-08 19:26:02 -08:00
-  id: 543151849
+  created_at: 2008-12-07 01:24:00
+taggings_048: 
+  tagger_id: "344412843"
+  updated_at: 2008-12-07 00:55:58
+  id: "1067724908"
   taggable_type: Work
-  taggable_id: 1
+  taggable_id: "9"
   tagger_type: Tag
-  created_at: 2008-11-08 19:26:02 -08:00
-tagging_1067724883: 
-  tagger_id: 1063753742
-  updated_at: 2008-11-21 01:54:15 -08:00
-  id: 1067724883
+  created_at: 2008-12-07 00:55:58
+taggings_103: 
+  tagger_id: "1063753799"
+  updated_at: 2008-12-07 22:52:14
+  id: "1067724963"
   taggable_type: Work
-  taggable_id: 5
+  taggable_id: "14"
   tagger_type: Tag
-  created_at: 2008-11-21 01:54:15 -08:00
-tagging_795295258: 
-  tagger_id: 1039617938
-  updated_at: 2008-11-08 19:26:02 -08:00
-  id: 795295258
+  created_at: 2008-12-07 22:52:14
+taggings_076: 
+  tagger_id: "112726825"
+  updated_at: 2008-12-07 01:26:41
+  id: "1067724936"
   taggable_type: Work
-  taggable_id: 4
+  taggable_id: "12"
   tagger_type: Tag
-  created_at: 2008-11-08 19:26:02 -08:00
-tagging_1067724873: 
-  tagger_id: 1063753747
-  updated_at: 2008-11-21 01:48:52 -08:00
-  id: 1067724873
+  created_at: 2008-12-07 01:26:41
+taggings_049: 
+  tagger_id: "1063753735"
+  updated_at: 2008-12-07 00:55:58
+  id: "1067724909"
   taggable_type: Work
-  taggable_id: 2
+  taggable_id: "9"
   tagger_type: Tag
-  created_at: 2008-11-21 01:48:52 -08:00
-tagging_1067724885: 
-  tagger_id: 66216446
-  updated_at: 2008-11-21 23:45:15 -08:00
-  id: 1067724885
+  created_at: 2008-12-07 00:55:58
+taggings_104: 
+  tagger_id: "1063753800"
+  updated_at: 2008-12-07 22:52:14
+  id: "1067724964"
   taggable_type: Work
-  taggable_id: 5
+  taggable_id: "14"
   tagger_type: Tag
-  created_at: 2008-11-21 23:45:15 -08:00
-tagging_1067724874: 
-  tagger_id: 1063753736
-  updated_at: 2008-11-21 01:50:08 -08:00
-  id: 1067724874
+  created_at: 2008-12-07 22:52:14
+taggings_077: 
+  tagger_id: "1063753736"
+  updated_at: 2008-12-07 01:26:41
+  id: "1067724937"
   taggable_type: Work
-  taggable_id: 3
+  taggable_id: "12"
   tagger_type: Tag
-  created_at: 2008-11-21 01:50:08 -08:00
-tagging_653568201: 
-  tagger_id: 402275454
-  updated_at: 2008-11-08 19:26:02 -08:00
-  id: 653568201
+  created_at: 2008-12-07 01:26:41
+taggings_105: 
+  tagger_id: "1063753802"
+  updated_at: 2008-12-07 22:52:14
+  id: "1067724965"
   taggable_type: Work
-  taggable_id: 4
+  taggable_id: "14"
   tagger_type: Tag
-  created_at: 2008-11-08 19:26:02 -08:00
+  created_at: 2008-12-07 22:52:14
+taggings_078: 
+  tagger_id: "751871740"
+  updated_at: 2008-12-07 01:26:41
+  id: "1067724938"
+  taggable_type: Work
+  taggable_id: "12"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:26:41
+taggings_106: 
+  tagger_id: "1063753803"
+  updated_at: 2008-12-07 22:52:14
+  id: "1067724966"
+  taggable_type: Work
+  taggable_id: "14"
+  tagger_type: Tag
+  created_at: 2008-12-07 22:52:14
+taggings_020: 
+  tagger_id: "1063753736"
+  updated_at: 2008-11-21 09:50:08
+  id: "1067724874"
+  taggable_type: Work
+  taggable_id: "3"
+  tagger_type: Tag
+  created_at: 2008-11-21 09:50:08
+taggings_079: 
+  tagger_id: "1063753780"
+  updated_at: 2008-12-07 01:26:41
+  id: "1067724939"
+  taggable_type: Work
+  taggable_id: "12"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:26:41
+taggings_107: 
+  tagger_id: "1063753804"
+  updated_at: 2008-12-07 22:52:14
+  id: "1067724967"
+  taggable_type: Work
+  taggable_id: "14"
+  tagger_type: Tag
+  created_at: 2008-12-07 22:52:14
+taggings_021: 
+  tagger_id: "1063753750"
+  updated_at: 2008-11-21 09:50:08
+  id: "1067724875"
+  taggable_type: Work
+  taggable_id: "3"
+  tagger_type: Tag
+  created_at: 2008-11-21 09:50:08
+taggings_108: 
+  tagger_id: "1063753805"
+  updated_at: 2008-12-07 22:52:14
+  id: "1067724968"
+  taggable_type: Work
+  taggable_id: "14"
+  tagger_type: Tag
+  created_at: 2008-12-07 22:52:14
+taggings_050: 
+  tagger_id: "751871740"
+  updated_at: 2008-12-07 00:55:58
+  id: "1067724910"
+  taggable_type: Work
+  taggable_id: "9"
+  tagger_type: Tag
+  created_at: 2008-12-07 00:55:58
+taggings_022: 
+  tagger_id: "751871740"
+  updated_at: 2008-11-21 09:50:24
+  id: "1067724876"
+  taggable_type: Work
+  taggable_id: "3"
+  tagger_type: Tag
+  created_at: 2008-11-21 09:50:24
+taggings_051: 
+  tagger_id: "1063753758"
+  updated_at: 2008-12-07 00:55:58
+  id: "1067724911"
+  taggable_type: Work
+  taggable_id: "9"
+  tagger_type: Tag
+  created_at: 2008-12-07 00:55:58
+taggings_023: 
+  tagger_id: "1063753736"
+  updated_at: 2008-11-21 09:52:36
+  id: "1067724877"
+  taggable_type: Work
+  taggable_id: "4"
+  tagger_type: Tag
+  created_at: 2008-11-21 09:52:36
+taggings_109: 
+  tagger_id: "1063753806"
+  updated_at: 2008-12-07 22:52:14
+  id: "1067724969"
+  taggable_type: Work
+  taggable_id: "14"
+  tagger_type: Tag
+  created_at: 2008-12-07 22:52:14
+taggings_052: 
+  tagger_id: "1063753764"
+  updated_at: 2008-12-07 00:55:58
+  id: "1067724912"
+  taggable_type: Work
+  taggable_id: "9"
+  tagger_type: Tag
+  created_at: 2008-12-07 00:55:58
+taggings_024: 
+  tagger_id: "1063753753"
+  updated_at: 2008-11-21 09:52:37
+  id: "1067724878"
+  taggable_type: Work
+  taggable_id: "4"
+  tagger_type: Tag
+  created_at: 2008-11-21 09:52:37
+taggings_080: 
+  tagger_id: "1063753779"
+  updated_at: 2008-12-07 01:26:41
+  id: "1067724940"
+  taggable_type: Work
+  taggable_id: "12"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:26:41
+taggings_025: 
+  tagger_id: "611729728"
+  updated_at: 2008-11-21 09:54:14
+  id: "1067724879"
+  taggable_type: Work
+  taggable_id: "5"
+  tagger_type: Tag
+  created_at: 2008-11-21 09:54:14
+taggings_081: 
+  tagger_id: "1063753781"
+  updated_at: 2008-12-07 01:26:41
+  id: "1067724941"
+  taggable_type: Work
+  taggable_id: "12"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:26:41
+taggings_053: 
+  tagger_id: "1063753763"
+  updated_at: 2008-12-07 00:55:58
+  id: "1067724913"
+  taggable_type: Work
+  taggable_id: "9"
+  tagger_type: Tag
+  created_at: 2008-12-07 00:55:58
+taggings_026: 
+  tagger_id: "992891255"
+  updated_at: 2008-11-21 09:54:14
+  id: "1067724880"
+  taggable_type: Work
+  taggable_id: "5"
+  tagger_type: Tag
+  created_at: 2008-11-21 09:54:14
+taggings_082: 
+  tagger_id: "1063753782"
+  updated_at: 2008-12-07 01:26:41
+  id: "1067724942"
+  taggable_type: Work
+  taggable_id: "12"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:26:41
+taggings_054: 
+  tagger_id: "992891255"
+  updated_at: 2008-12-07 01:19:49
+  id: "1067724914"
+  taggable_type: Work
+  taggable_id: "10"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:19:49
+taggings_027: 
+  tagger_id: "1063753742"
+  updated_at: 2008-11-21 09:54:15
+  id: "1067724883"
+  taggable_type: Work
+  taggable_id: "5"
+  tagger_type: Tag
+  created_at: 2008-11-21 09:54:15
+taggings_083: 
+  tagger_id: "1063753767"
+  updated_at: 2008-12-07 01:26:41
+  id: "1067724943"
+  taggable_type: Work
+  taggable_id: "12"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:26:41
+taggings_055: 
+  tagger_id: "1063753736"
+  updated_at: 2008-12-07 01:19:49
+  id: "1067724915"
+  taggable_type: Work
+  taggable_id: "10"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:19:49
+taggings_110: 
+  tagger_id: "1063753788"
+  updated_at: 2008-12-07 22:52:14
+  id: "1067724970"
+  taggable_type: Work
+  taggable_id: "14"
+  tagger_type: Tag
+  created_at: 2008-12-07 22:52:14
+taggings_028: 
+  tagger_id: "66216446"
+  updated_at: 2008-11-22 07:45:15
+  id: "1067724885"
+  taggable_type: Work
+  taggable_id: "5"
+  tagger_type: Tag
+  created_at: 2008-11-22 07:45:15
+taggings_084: 
+  tagger_id: "1063753777"
+  updated_at: 2008-12-07 01:26:41
+  id: "1067724944"
+  taggable_type: Work
+  taggable_id: "12"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:26:41
+taggings_056: 
+  tagger_id: "751871740"
+  updated_at: 2008-12-07 01:19:49
+  id: "1067724916"
+  taggable_type: Work
+  taggable_id: "10"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:19:49
+taggings_111: 
+  tagger_id: "1063753789"
+  updated_at: 2008-12-07 22:52:14
+  id: "1067724971"
+  taggable_type: Work
+  taggable_id: "14"
+  tagger_type: Tag
+  created_at: 2008-12-07 22:52:14
+taggings_029: 
+  tagger_id: "713695255"
+  updated_at: 2008-11-22 07:49:39
+  id: "1067724886"
+  taggable_type: Work
+  taggable_id: "5"
+  tagger_type: Tag
+  created_at: 2008-11-22 07:49:39
+taggings_085: 
+  tagger_id: "1063753778"
+  updated_at: 2008-12-07 01:26:41
+  id: "1067724945"
+  taggable_type: Work
+  taggable_id: "12"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:26:41
+taggings_057: 
+  tagger_id: "741440589"
+  updated_at: 2008-12-07 01:19:49
+  id: "1067724917"
+  taggable_type: Work
+  taggable_id: "10"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:19:49
+taggings_112: 
+  tagger_id: "1063753790"
+  updated_at: 2008-12-07 22:52:14
+  id: "1067724972"
+  taggable_type: Work
+  taggable_id: "14"
+  tagger_type: Tag
+  created_at: 2008-12-07 22:52:14
+taggings_086: 
+  tagger_id: "992891255"
+  updated_at: 2008-12-07 01:34:39
+  id: "1067724946"
+  taggable_type: Work
+  taggable_id: "13"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:34:39
+taggings_058: 
+  tagger_id: "545584597"
+  updated_at: 2008-12-07 01:19:49
+  id: "1067724918"
+  taggable_type: Work
+  taggable_id: "10"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:19:49
+taggings_113: 
+  tagger_id: "1063753791"
+  updated_at: 2008-12-07 22:52:14
+  id: "1067724973"
+  taggable_type: Work
+  taggable_id: "14"
+  tagger_type: Tag
+  created_at: 2008-12-07 22:52:14
+taggings_087: 
+  tagger_id: "611729728"
+  updated_at: 2008-12-07 01:34:39
+  id: "1067724947"
+  taggable_type: Work
+  taggable_id: "13"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:34:39
+taggings_059: 
+  tagger_id: "221905380"
+  updated_at: 2008-12-07 01:19:49
+  id: "1067724919"
+  taggable_type: Work
+  taggable_id: "10"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:19:49
+taggings_114: 
+  tagger_id: "1063753792"
+  updated_at: 2008-12-07 22:52:14
+  id: "1067724974"
+  taggable_type: Work
+  taggable_id: "14"
+  tagger_type: Tag
+  created_at: 2008-12-07 22:52:14
+taggings_115: 
+  tagger_id: "1063753793"
+  updated_at: 2008-12-07 22:52:14
+  id: "1067724975"
+  taggable_type: Work
+  taggable_id: "14"
+  tagger_type: Tag
+  created_at: 2008-12-07 22:52:14
+taggings_088: 
+  tagger_id: "1063753742"
+  updated_at: 2008-12-07 01:34:39
+  id: "1067724948"
+  taggable_type: Work
+  taggable_id: "13"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:34:39
+taggings_001: 
+  tagger_id: "741440589"
+  updated_at: 2008-11-09 03:26:02
+  id: "35934741"
+  taggable_type: Work
+  taggable_id: "4"
+  tagger_type: Tag
+  created_at: 2008-11-09 03:26:02
+taggings_116: 
+  tagger_id: "1063753794"
+  updated_at: 2008-12-07 22:52:14
+  id: "1067724976"
+  taggable_type: Work
+  taggable_id: "14"
+  tagger_type: Tag
+  created_at: 2008-12-07 22:52:14
+taggings_030: 
+  tagger_id: "1063753746"
+  updated_at: 2008-11-22 07:49:40
+  id: "1067724887"
+  taggable_type: Work
+  taggable_id: "5"
+  tagger_type: Tag
+  created_at: 2008-11-22 07:49:40
+taggings_089: 
+  tagger_id: "741440589"
+  updated_at: 2008-12-07 01:34:39
+  id: "1067724949"
+  taggable_type: Work
+  taggable_id: "13"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:34:39
+taggings_002: 
+  tagger_id: "992891255"
+  updated_at: 2008-11-09 03:26:02
+  id: "46392098"
+  taggable_type: Work
+  taggable_id: "2"
+  tagger_type: Tag
+  created_at: 2008-11-09 03:26:02
+taggings_117: 
+  tagger_id: "1063753795"
+  updated_at: 2008-12-07 22:52:15
+  id: "1067724977"
+  taggable_type: Work
+  taggable_id: "14"
+  tagger_type: Tag
+  created_at: 2008-12-07 22:52:15
+taggings_031: 
+  tagger_id: "112726825"
+  updated_at: 2008-12-05 15:59:14
+  id: "1067724888"
+  taggable_type: Work
+  taggable_id: "6"
+  tagger_type: Tag
+  created_at: 2008-12-05 15:59:14
+taggings_003: 
+  tagger_id: "741440589"
+  updated_at: 2008-11-09 03:26:02
+  id: "59736118"
+  taggable_type: Work
+  taggable_id: "1"
+  tagger_type: Tag
+  created_at: 2008-11-09 03:26:02
+taggings_118: 
+  tagger_id: "1063753796"
+  updated_at: 2008-12-07 22:52:15
+  id: "1067724978"
+  taggable_type: Work
+  taggable_id: "14"
+  tagger_type: Tag
+  created_at: 2008-12-07 22:52:15
+taggings_004: 
+  tagger_id: "1039617938"
+  updated_at: 2008-11-09 03:26:02
+  id: "138691404"
+  taggable_type: Work
+  taggable_id: "2"
+  tagger_type: Tag
+  created_at: 2008-11-09 03:26:02
+taggings_060: 
+  tagger_id: "26796919"
+  updated_at: 2008-12-07 01:19:49
+  id: "1067724920"
+  taggable_type: Work
+  taggable_id: "10"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:19:49
+taggings_032: 
+  tagger_id: "426547448"
+  updated_at: 2008-12-05 15:59:14
+  id: "1067724889"
+  taggable_type: Work
+  taggable_id: "6"
+  tagger_type: Tag
+  created_at: 2008-12-05 15:59:14
+taggings_005: 
+  tagger_id: "714102448"
+  updated_at: 2008-11-09 03:26:02
+  id: "312493864"
+  taggable_type: Work
+  taggable_id: "3"
+  tagger_type: Tag
+  created_at: 2008-11-09 03:26:02
+taggings_061: 
+  tagger_id: "1063753766"
+  updated_at: 2008-12-07 01:19:49
+  id: "1067724921"
+  taggable_type: Work
+  taggable_id: "10"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:19:49
+taggings_033: 
+  tagger_id: "751871740"
+  updated_at: 2008-12-05 15:59:14
+  id: "1067724890"
+  taggable_type: Work
+  taggable_id: "6"
+  tagger_type: Tag
+  created_at: 2008-12-05 15:59:14
+taggings_006: 
+  tagger_id: "1039617938"
+  updated_at: 2008-11-09 03:26:02
+  id: "400948225"
+  taggable_type: Work
+  taggable_id: "1"
+  tagger_type: Tag
+  created_at: 2008-11-09 03:26:02
+taggings_090: 
+  tagger_id: "1063753784"
+  updated_at: 2008-12-07 01:34:39
+  id: "1067724950"
+  taggable_type: Work
+  taggable_id: "13"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:34:39
+taggings_062: 
+  tagger_id: "1063753767"
+  updated_at: 2008-12-07 01:19:49
+  id: "1067724922"
+  taggable_type: Work
+  taggable_id: "10"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:19:49
+taggings_034: 
+  tagger_id: "741440589"
+  updated_at: 2008-12-05 15:59:14
+  id: "1067724891"
+  taggable_type: Work
+  taggable_id: "6"
+  tagger_type: Tag
+  created_at: 2008-12-05 15:59:14
+taggings_007: 
+  tagger_id: "992891255"
+  updated_at: 2008-11-09 03:26:02
+  id: "543151849"
+  taggable_type: Work
+  taggable_id: "1"
+  tagger_type: Tag
+  created_at: 2008-11-09 03:26:02
+taggings_091: 
+  tagger_id: "1063753785"
+  updated_at: 2008-12-07 01:34:39
+  id: "1067724951"
+  taggable_type: Work
+  taggable_id: "13"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:34:39
+taggings_063: 
+  tagger_id: "1063753768"
+  updated_at: 2008-12-07 01:19:49
+  id: "1067724923"
+  taggable_type: Work
+  taggable_id: "10"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:19:49
+taggings_035: 
+  tagger_id: "1063753755"
+  updated_at: 2008-12-05 15:59:14
+  id: "1067724892"
+  taggable_type: Work
+  taggable_id: "6"
+  tagger_type: Tag
+  created_at: 2008-12-05 15:59:14
+taggings_008: 
+  tagger_id: "402275454"
+  updated_at: 2008-11-09 03:26:02
+  id: "653568201"
+  taggable_type: Work
+  taggable_id: "4"
+  tagger_type: Tag
+  created_at: 2008-11-09 03:26:02
+taggings_092: 
+  tagger_id: "221905380"
+  updated_at: 2008-12-07 01:34:39
+  id: "1067724952"
+  taggable_type: Work
+  taggable_id: "13"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:34:39
+taggings_064: 
+  tagger_id: "1063753769"
+  updated_at: 2008-12-07 01:19:49
+  id: "1067724924"
+  taggable_type: Work
+  taggable_id: "10"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:19:49
+taggings_036: 
+  tagger_id: "1063753756"
+  updated_at: 2008-12-05 15:59:14
+  id: "1067724893"
+  taggable_type: Work
+  taggable_id: "6"
+  tagger_type: Tag
+  created_at: 2008-12-05 15:59:14
+taggings_009: 
+  tagger_id: "951091623"
+  updated_at: 2008-11-09 03:26:02
+  id: "664025557"
+  taggable_type: Work
+  taggable_id: "2"
+  tagger_type: Tag
+  created_at: 2008-11-09 03:26:02
+taggings_093: 
+  tagger_id: "26796919"
+  updated_at: 2008-12-07 01:34:39
+  id: "1067724953"
+  taggable_type: Work
+  taggable_id: "13"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:34:39
+taggings_065: 
+  tagger_id: "992891255"
+  updated_at: 2008-12-07 01:24:00
+  id: "1067724925"
+  taggable_type: Work
+  taggable_id: "11"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:24:00
+taggings_037: 
+  tagger_id: "1063753735"
+  updated_at: 2008-12-07 00:28:58
+  id: "1067724895"
+  taggable_type: Work
+  taggable_id: "7"
+  tagger_type: Tag
+  created_at: 2008-12-07 00:28:58
+taggings_094: 
+  tagger_id: "1063753783"
+  updated_at: 2008-12-07 01:34:39
+  id: "1067724954"
+  taggable_type: Work
+  taggable_id: "13"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:34:39
+taggings_066: 
+  tagger_id: "1063753735"
+  updated_at: 2008-12-07 01:24:00
+  id: "1067724926"
+  taggable_type: Work
+  taggable_id: "11"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:24:00
+taggings_038: 
+  tagger_id: "1063753758"
+  updated_at: 2008-12-07 00:28:58
+  id: "1067724896"
+  taggable_type: Work
+  taggable_id: "7"
+  tagger_type: Tag
+  created_at: 2008-12-07 00:28:58
+taggings_067: 
+  tagger_id: "751871740"
+  updated_at: 2008-12-07 01:24:00
+  id: "1067724927"
+  taggable_type: Work
+  taggable_id: "11"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:24:00
+taggings_039: 
+  tagger_id: "1063753757"
+  updated_at: 2008-12-07 00:28:58
+  id: "1067724897"
+  taggable_type: Work
+  taggable_id: "7"
+  tagger_type: Tag
+  created_at: 2008-12-07 00:28:58
+taggings_095: 
+  tagger_id: "112726825"
+  updated_at: 2008-12-07 22:52:14
+  id: "1067724955"
+  taggable_type: Work
+  taggable_id: "14"
+  tagger_type: Tag
+  created_at: 2008-12-07 22:52:14
+taggings_068: 
+  tagger_id: "1063753774"
+  updated_at: 2008-12-07 01:24:00
+  id: "1067724928"
+  taggable_type: Work
+  taggable_id: "11"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:24:00
+taggings_096: 
+  tagger_id: "426547448"
+  updated_at: 2008-12-07 22:52:14
+  id: "1067724956"
+  taggable_type: Work
+  taggable_id: "14"
+  tagger_type: Tag
+  created_at: 2008-12-07 22:52:14
+taggings_010: 
+  tagger_id: "404615116"
+  updated_at: 2008-11-09 03:26:02
+  id: "678331033"
+  taggable_type: Work
+  taggable_id: "3"
+  tagger_type: Tag
+  created_at: 2008-11-09 03:26:02
+taggings_069: 
+  tagger_id: "1063753773"
+  updated_at: 2008-12-07 01:24:00
+  id: "1067724929"
+  taggable_type: Work
+  taggable_id: "11"
+  tagger_type: Tag
+  created_at: 2008-12-07 01:24:00
+taggings_097: 
+  tagger_id: "1063753734"
+  updated_at: 2008-12-07 22:52:14
+  id: "1067724957"
+  taggable_type: Work
+  taggable_id: "14"
+  tagger_type: Tag
+  created_at: 2008-12-07 22:52:14
+taggings_098: 
+  tagger_id: "1063753741"
+  updated_at: 2008-12-07 22:52:14
+  id: "1067724958"
+  taggable_type: Work
+  taggable_id: "14"
+  tagger_type: Tag
+  created_at: 2008-12-07 22:52:14
+taggings_011: 
+  tagger_id: "741440589"
+  updated_at: 2008-11-09 03:26:02
+  id: "687826934"
+  taggable_type: Work
+  taggable_id: "5"
+  tagger_type: Tag
+  created_at: 2008-11-09 03:26:02
+taggings_040: 
+  tagger_id: "112726825"
+  updated_at: 2008-12-07 00:29:23
+  id: "1067724898"
+  taggable_type: Work
+  taggable_id: "7"
+  tagger_type: Tag
+  created_at: 2008-12-07 00:29:23
+taggings_099: 
+  tagger_id: "1063753742"
+  updated_at: 2008-12-07 22:52:14
+  id: "1067724959"
+  taggable_type: Work
+  taggable_id: "14"
+  tagger_type: Tag
+  created_at: 2008-12-07 22:52:14
+taggings_012: 
+  tagger_id: "951091623"
+  updated_at: 2008-11-09 03:26:02
+  id: "759696416"
+  taggable_type: Work
+  taggable_id: "3"
+  tagger_type: Tag
+  created_at: 2008-11-09 03:26:02
