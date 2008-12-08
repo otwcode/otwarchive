@@ -8,16 +8,16 @@
       <% for chapter in @chapters %>
         <%= link_to h(chapter.position), [:edit, @work, chapter] %> 
       <% end %> 
-   </li>
-<li>
+	</li>
+	<li>
       <%= link_to "Manage chapters".t, manage_work_chapters_path(@work) %>
   	</li>
   <%- end -%>
-	<li>
     <% unless (@work.pseuds - current_user.pseuds).empty? %>
+	<li>
        <%= link_to "Remove me as author".t, { :action => "edit", :remove => "me"}, :confirm => 'This will remove you from all chapters as well. Are you sure?'.t %>
-    <% end %>
 	</li>
+    <% end %>
 	<li>
     <%= link_to "Orphan work".t, {:controller => 'orphans', :action => 'new', :work_id => @work.id} %>
 	</li>

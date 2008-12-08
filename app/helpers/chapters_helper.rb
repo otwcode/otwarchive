@@ -15,7 +15,7 @@ module ChaptersHelper
     end
   end 
 
-  # returns next/previous links as appropriate with the given chapter as the starting point
+  # returns ARRAY of next/previous links as appropriate with the given chapter as the starting point
   def next_and_previous_links(work, chapter)
     number_of_chapters = work.chapters.in_order.size 
     chapter_position = work.chapters.in_order.index(chapter)
@@ -29,8 +29,12 @@ module ChaptersHelper
                 "Next Chapter".t : 
                 link_to_chapter("Next Chapter".t, work, chapter_position+1))
     links << link_to_chapter("Last Chapter".t, work, number_of_chapters-1)
+  end
 
-    links.join(" | ")
+  # returns LIST ITEMS with next/previous links as appropriate with the given chapter as the starting point
+  def next_and_previous_links_listitems(work, chapter)
+    links = next_and_previous_links(work, chapter)
+    links.collect {|link| "<li>" + link + "</li>"}
   end
   
   def link_to_chapter(string, work, chapter_position)

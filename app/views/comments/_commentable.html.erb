@@ -4,12 +4,14 @@
 	<%= flash_div :comment_error, :comment_notice -%>
 	<ul class="navigation">
 		
-		<%- if commentable.class == Chapter || CanHasBookmarks > commentable.class -%>
+		<%- if logged_in? && (commentable.class == Chapter || CanHasBookmarks > commentable.class) -%>
 			<li id="add_bookmark_link"><%= bookmark_link(commentable) %></li>			
 		<%- end -%>
-		<li id="show_comments_link">
-			<%= show_hide_comments_link(commentable) -%>
-		</li>
+		<% if commentable.count_visible_comments > 0 -%>
+			<li id="show_comments_link">
+				<%= show_hide_comments_link(commentable) -%>
+			</li>
+		<% end -%>
 		<li id="add_comment_link">
 			<%= add_cancel_comment_link(commentable) -%>
 		</li>

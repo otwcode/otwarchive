@@ -1,7 +1,7 @@
 <!-- Requires locals 'work' and 'chapter' -->
 <ul class="navigation">
   <%- if work.number_of_posted_chapters > 1 -%>
-    <li><%= next_and_previous_links(work, chapter) -%></li>
+    <%= next_and_previous_links_listitems(work, chapter) -%>
     <li><%= link_to 'View entire work'.t, work_path(work) %></li> 
   <%- end -%>
   
