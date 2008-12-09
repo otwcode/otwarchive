@@ -190,8 +190,9 @@ class TagsController < ApplicationController
       if fandom
         @tag.update_attribute(:fandom_id, fandom.id) unless @tag.fandom == fandom
       end
-      if params[:type] && logged_in_as_admin?
-        @tag.update_attribute(:type, params[:type]) unless @tag.is_a?(params[:type].constantize)
+      type = params[:tag][:type] if params[:tag]
+      if type && logged_in_as_admin?
+        @tag.update_attribute(:type, type) unless @tag.is_a?(type.constantize)
       end
       @tag.update_attribute(:wrangled, true)
     end #case
