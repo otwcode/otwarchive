@@ -23,7 +23,7 @@ body	{ background: #fffef9; color: #222; font: 100%/1.125 Candara, Corbel, 'Luci
 
 a, a:link	{ color: #111; }
 a:hover	{ color: #999; }
-a:active, a:focus { text-decoration:overline underline;}
+a:active, a:focus { text-decoration:overline underline; border:1px dotted;}
 a:visited	{ color: #777; }
 a img	{ border: 0; }
 a.tag	{ color: #111; text-decoration:none; padding: 0 0.125em; border-bottom:1px dotted; }
@@ -42,7 +42,7 @@ a.tag:hover	{ background: #900 !important; color: #fffef9 !important; }
 {font-size: 0.875em;}
 
 h1, h2, h3, h4, h5, h6	{ font-family: Fertigo, Cambria, Constantia, Palatino, Georgia, sans-serif; font-weight: 400;}
-h1	{ font-size: 2.25em; line-height: 0.5; margin: 1.125em 0 0.875em; }
+h1	{ font-size: 2.25em; line-height: 1; margin: 1.125em 0 0.875em; }
 h2	{ font-size: 1.5em; line-height: 1; margin: .75em 0; }
 h3	{ font-size: 1.125em; line-height: 1; margin: .5625em 0; }
 h4	{ font-size: 1em; line-height: 1.125; margin:0.5625em 0; }

@@ -3,10 +3,10 @@
 <%- @fandom_listing.each do |pair| -%>
   <% if pair[0] %>
     <li id="medium_<%= pair[0].id %>" class="category <%= cycle :odd, :even %>">
-      <h3><%= link_to pair[0].name, medium_path(pair[0]) %></h3>
+      <h2><%= link_to pair[0].name, medium_path(pair[0]) %></h2>
   <% else %>
     <li id="medium_none" class="category <%= cycle :odd, :even %>">
-      <h3><%= link_to "Uncategorized Fandoms".t, medium_path(:id => 0) %></h3>
+      <h2><%= link_to "Uncategorized Fandoms".t, medium_path(:id => 0) %></h2>
   <% end %>
     <ol>
     <% 5.times do |i| %>

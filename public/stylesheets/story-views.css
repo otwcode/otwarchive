@@ -16,7 +16,8 @@ set work styles
 .work-show dd		{ line-height:1.5; font-size:0.875em; text-indent:3em; margin-top:1.25em; margin-bottom:1.25em; }
 .work-show dd p		{ text-indent:0; margin:0; padding:0; }
 .work-show ul		{ margin:1.125em auto; padding:0 1em; }
-.work-show ul li	{ list-style-type:disc; margin:0.75em 0 0.75em -1.75em !important;}
+.work-show ul li	{ list-style-type:disc; margin:0.75em 0 0.75em -1.75em;}
+.work-show .navigation ul li { margin:0.25em;}
 .work-show ol		{ margin:1.125em auto; padding:0 1.5em; }
 .work-show ol li	{ list-style-type:decimal; margin:0.75em 0 0.75em -1.75em !important;}
 .work-show ol li ol li	{ list-style-type: lower-alpha;}
@@ -75,8 +76,10 @@ dl.series-meta dd { margin:-1.286em 0 1em 12em !important; text-indent:0; paddin
 .work-edit-title	{ font-weight:700; font-size:1.5em; text-align:center; }
 
 /*WORK PAGE LAYOUT ELEMENTS*/
-#main.works-show ul#navigation	{ margin:0.75em 0; text-align:right}
-.works-show #navigation li.go-back	{ display:block; float:left; padding:0 0.25em 0 0; }
+/*I don't know what these rules refer to
+* #main.works-show ul#navigation	{ margin:0.75em 0; text-align:right}
+* .works-show #navigation li.go-back	{ display:block; float:left; padding:0 0.25em 0 0; }
+*/
 ul.work-list li.tags	{ display:inline; }
 
 

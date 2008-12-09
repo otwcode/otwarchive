@@ -8,7 +8,9 @@
 <% end %> 
 <!-- END bookmark link -->
 
-<%= render :partial => 'bookmarks/bookmarks' %>
+<ul class="work-list bookmark">
+	<%= render :partial => 'bookmarks/bookmarks' %>
+</ul>
 
 <div class="pagination">
 	  <%= will_paginate @bookmarks, :prev_label =>  "&laquo; Previous".t,:next_label => "Next &raquo;".t %>

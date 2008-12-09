@@ -143,7 +143,7 @@ ul#series-work-list li.work ul.work li ul li {display:inline;}
 .sidebar .comment { clear:none;}
 
 /*MEDIA-INDEX (FANDOMS)*/
-.media-index h3 a {color:#900;}
+.media-index h2 a {color:#900;}
 .media-index li.category { padding: 1em; min-height: 15em; }
 #main.media-index ol, #main.fandoms-index ol, #main.fandoms-show ol { list-style-type: decimal; }
 .media-index li.odd { width: 40%; float: left; margin: 0 0.5625em 0 0; }

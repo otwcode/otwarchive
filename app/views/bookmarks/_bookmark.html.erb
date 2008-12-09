@@ -1,5 +1,7 @@
 <!-- This partial requires local variable 'bookmark' -->
-<ul class="work bookmark <%- if is_author_of?(bookmark) -%>own<%- end -%>">
+
+<li class="work bookmark <%- if is_author_of?(bookmark) -%>own<%- end -%>">
+<ul>
   <li class="heading">
 	<ul class="required-tags">
 	<li><%= image_tag 'bookmark-placeholder.png', :alt => '', :title => "dummy icons for layout purpose" -%></li>
@@ -56,3 +58,4 @@
  <% end -%>
 </li> 
 </ul>
+</li>
