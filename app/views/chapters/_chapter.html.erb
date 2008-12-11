@@ -4,9 +4,9 @@
   <%- if is_author_of?(@work) -%>
    <ul class="navigation chapter-control">
 	<% unless chapter.posted? -%>
-		<li><%= link_to 'post'.t, [:post, @work, chapter], :method => :post -%> </li>
-    <%- end -%>	
-    	<li><%= link_to 'edit'.t, [:edit, @work, chapter] -%></li>
+		<li><%= link_to 'post'.t, [:post, @work, chapter], :method => :post -%></li>
+  <%- end -%>	
+    <li><%= link_to 'edit'.t, [:edit, @work, chapter] -%></li>
     <%- if @work.chapters.count > 1 -%>
  		<li><%= link_to 'delete'.t, [@work, chapter], :confirm => 'Are you sure?'.t, :method => :delete %></li>
     <%- end -%>
@@ -25,7 +25,7 @@
   <%- end -%>
  
 <!-- we want to hide this information by default if javascript is available -->
-<%- if @work.number_of_posted_chapters > 1 -%>
+<%- if (@work.number_of_posted_chapters > 1) || @work.chaptered? -%>
   <%- unless chapter.summary.blank? -%>
   <blockquote class="summary">
   	<h3><%=h 'Summary:'.t %></h3>

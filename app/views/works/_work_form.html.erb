@@ -162,7 +162,14 @@
     <dd id="number-of-chapters">
     <p>
       <%=h 'Chapter 1 of'.t %> <%= f.text_field :wip_length, :class => "number-field" %> 
-      <%=h 'Title:'.t %> <%= c.text_field :title %>
+      <%=h 'Title:'.t %>
+      <%=
+      if @chapter != nil
+	    	c.text_field :title, :value => @chapter.title 
+			else
+				c.text_field :title 
+			end
+			%>
     </p>
     </dd> 
 	<!-- User-facing dates -->
@@ -191,7 +198,13 @@
     <span><a href="javascript:removeEditor('content');">HTML</a></span>
   </p>      
   <p>
-		<%= c.text_area :content, :class => "mce-editor", :id => "content" %>
+		<%= 
+		if @chapter != nil
+			c.text_area :content, :value => @chapter.content, :class => "mce-editor", :id => "content"
+		else
+			c.text_area :content, :class => "mce-editor", :id => "content"
+		end
+		%>
     <%= live_validation_for_field('content', 
 				:maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN, 
 				:tooLongMessage => 'We salute your ambition! But sadly the content must be less than %d letters long. (Maybe you want to create a multi-chaptered work?)'/ArchiveConfig.CONTENT_MAX,

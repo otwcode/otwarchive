@@ -9,6 +9,7 @@
 <%= form.hidden_field :notes, :value => "#{@work.notes}" %>
 <% fields_for_associated('work', @chapter) do |c| %>
   <%= c.hidden_field :content, :value => "#{@chapter.content}" %>
+  <%= c.hidden_field :title, :value => "#{@chapter.title}" %>
 <%- end -%>
 <%= form.hidden_field :expected_number_of_chapters, :value => "#{@work.expected_number_of_chapters}" %>
 <%= form.hidden_field :parent_url, :value => "#{@work.url_for_parent}" %>

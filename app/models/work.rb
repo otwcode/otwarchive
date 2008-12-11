@@ -255,7 +255,7 @@ class Work < ActiveRecord::Base
 
   # Save chapter data when the work is updated
   def save_chapters
-    chapters.first.save(false)
+    self.chapters.first.save(false)
   end
   
   # If the work is posted, the first chapter should be posted too
@@ -311,7 +311,7 @@ class Work < ActiveRecord::Base
   # Reorders chapters based on form data
   # Removes changed chapters from array, sorts them in order of position, re-inserts them into the array and uses the array index values to determine the new positions
   def reorder_chapters(positions)
-    chapters = self.chapters.find(:all, :conditions => {:posted=>true}, :order => 'position')
+    chapters = self.chapters.find(:all, :conditions => {:posted => true}, :order => 'position')
     changed = {}
     positions.collect!(&:to_i).each_with_index do |new_position, old_position|
       if new_position != 0 && new_position <= self.number_of_posted_chapters && !changed.has_key?(new_position)

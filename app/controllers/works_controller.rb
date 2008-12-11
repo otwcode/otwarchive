@@ -47,8 +47,7 @@ class WorksController < ApplicationController
           @work.attributes = params[:work]
         end
       elsif params[:work]
-         @work = Work.new(params[:work])    
-        
+         @work = Work.new(params[:work])            
       else # new
           @work = Work.new
           @work.chapters.build
@@ -59,19 +58,13 @@ class WorksController < ApplicationController
       @tags_by_category = {}
       categories = Tag::VISIBLE
       categories.each {|type| @tags_by_category[type] = type.constantize.canonical}
-  
-      @chapter = @work.first_chapter
+      
+      @chapter = @chapters.first      
       if params[:work] && params[:work][:chapter_attributes]
         @chapter.content = params[:work][:chapter_attributes][:content]
+        @chapter.title = params[:work][:chapter_attributes][:title]
       end
-      
-      # This is a horrifying kludge for which there is no excuse except that
-      # it makes the chapter attribute change actually get loaded for NO REASON
-      # I can understand! -- Naomi 9/9/08
-      # This only works if it is to_yaml (to_s does NOT) which suggests something is happening
-      # during the yaml dump. More investigation needed. D: 
-      stupid_garbage_variable = @work.to_yaml
-      
+
       unless current_user == :false
         load_pseuds
         @series = current_user.series.uniq 
@@ -140,6 +133,9 @@ class WorksController < ApplicationController
       # if we're browsing by a particular user get works by that user      
       unless params[:user_id].blank?
         @user = User.find_by_login(params[:user_id])
+        if params[:pseud] and !params[:pseud].blank?
+          @author = @user.pseuds.find(params[:pseud])
+        end
       end
       
       # Now let's build the query
@@ -178,7 +174,12 @@ class WorksController < ApplicationController
         redirect_to current_user
       else
         current_user.cleanup_unposted_works
-        @works = @user.unposted_works.paginate(:page => params[:page])
+        if params[:pseud]
+          @author = @user.pseuds.find(params[:pseud])
+          @works = @author.unposted_works.paginate(:page => params[:page])
+        else
+          @works = @user.unposted_works.paginate(:page => params[:page])
+        end
       end
     end
   end 
@@ -259,7 +260,7 @@ class WorksController < ApplicationController
       saved = @work.save
       unless saved && @work.has_required_tags? && @work.set_revised_at(@work.published_at)
         unless @work.has_required_tags?
-          @work.errors.add(:base, "Required tags are missing.".t)          
+          @work.errors.add(:base, "Creating: Required tags are missing.".t)          
         end
         render :action => :new 
       else        
@@ -300,17 +301,23 @@ class WorksController < ApplicationController
     # Need to update @pseuds and @selected_pseuds values so we don't lose new co-authors if the form needs to be rendered again
     load_pseuds
     @series = current_user.series.uniq 
-
+    
     if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank? 
       @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
     elsif params[:preview_button]
       @preview_mode = true
       @chapters = @work.chapters.in_order
-      @chapter = @chapters.first
+      if !@chapter
+        @chapter = @chapters.first
+      end
+      if params[:work] && params[:work][:chapter_attributes]
+        @chapter.content = params[:work][:chapter_attributes][:content]
+        @chapter.title = params[:work][:chapter_attributes][:title]
+      end
       if @work.has_required_tags?
         render :action => "preview"
       else
-        @work.errors.add_to_base("Please add all required tags.")
+        @work.errors.add_to_base("Updating: Please add all required tags.")
         render :action => :edit
       end
     elsif params[:cancel_button]
@@ -343,7 +350,7 @@ class WorksController < ApplicationController
           @chapter.errors.each {|err| @work.errors.add(:base, err)}
         end
         unless @work.has_required_tags?
-          @work.errors.add(:base, "Required tags are missing.".t)          
+          @work.errors.add(:base, "Updating: Required tags are missing.".t)          
         end
         render :action => :edit
       end
