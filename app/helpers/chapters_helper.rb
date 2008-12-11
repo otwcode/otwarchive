@@ -34,7 +34,7 @@ module ChaptersHelper
   # returns LIST ITEMS with next/previous links as appropriate with the given chapter as the starting point
   def next_and_previous_links_listitems(work, chapter)
     links = next_and_previous_links(work, chapter)
-    links.collect {|link| "<li>" + link + "</li>"}
+    links.collect {|link| "<li>" + link + "</li>\n"}
   end
   
   def link_to_chapter(string, work, chapter_position)

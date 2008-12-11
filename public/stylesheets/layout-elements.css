@@ -46,6 +46,9 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 #main.sidebar h1 {margin-top: 0;}
 #main.sidebar .own {background:#fffef9 !important; border:1px dotted #ccc;}
 
+/* garrish addition by Enigel Dec 5 08 */
+#dashboard-sidebar ul.pseud_selector_sidebar { background-color:#ffeeee; border:#990000 solid thin;}
+
 /*MAIN CONTENT */
 #main { position: relative; margin: 1.5em auto; padding: 0 3.5em; }
 .pagination { text-align: center; padding: 0.25em; margin:1.5em auto; }
@@ -109,13 +112,16 @@ dl#user-data dt {font-weight: 900; width: 9em; float:left; clear:left; margin:0.
 li.work ul.work {position: relative; margin: 0 13.5em 0.5625em auto;padding-right:0.3775em;}
 #user-page li.work ul.work, .series-show li.work ul.work, .series-index li.work ul.work, #series-work-list li.work ul.work, .works-drafts li.work ul.work { margin-right: 0; }
 ul.work {position:relative; border-bottom:1px solid #ddd; }
-ul.own { border:1px dotted #ccc;background:#eee;}
+/* replaced ul.own with .own because bookmarks are inside ul Enigel Dec 10 08 */
+.own { border:1px dotted #ccc;background:#eee;}
 ul.work ul li, .work dd ul li { display:inline;}
 
 li.heading {position:relative; }
 .work ul.required-tags {width:75px; height:50px;float:left;}
 .work ul.required-tags li img {width:25px; height:25px;}
 .work ul.required-tags li {padding:0;margin:0; width:25px; height:25px;}
+/* added Enigel Dec 10 08 for required tags everywhere with less regard to tag nestedness */
+.heading .required-tags li { display:inline;}
 
 .work h3 {margin-right:4.5em;}
 .work h3, .work h3 a:link, .work h3 img {color:#900; vertical-align:bottom;}
@@ -154,13 +160,17 @@ ul#series-work-list li.work ul.work li ul li {display:inline;}
 .user h3,.user h3 a { color:#900;display:inline; }
 .user img {top:0; right:0; position:absolute}
 .user ul li {display:inline;}
-.user ul.tags:before {content:" ( ";}
-.user ul.tags:after {content:" ) ";}
+/*
+.user ul.tags:before {content:" { ";}
+.user ul.tags:after {content:" } ";}
+*/
 
 /*BOOKMARKS-INDEX BOOKMARKS */
 ul.bookmark {margin-top: 0.875em;}
 .bookmark p.byline {text-align:right;}
-.bookmarks-index li.bookmark {clear:left}
+/* Enigel Dec 10 08 this line seemed to be doing nothing good but was doing wrong
+.bookmarks-index li.bookmark { clear:left}
+*/
 
 /*Temporary fix to make edit link show up on bookmarks, 09-10-08 (Cal)*/
 .bookmark ul.navigation {text-align:left;}

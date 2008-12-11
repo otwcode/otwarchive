@@ -4,10 +4,10 @@
 <ul>
   <li class="heading">
 	<ul class="required-tags">
-	<li><%= image_tag 'bookmark-placeholder.png', :alt => '', :title => "dummy icons for layout purpose" -%></li>
-	<li><%= image_tag 'category-none.png', :alt => '' -%></li>
-	<li><%= image_tag 'category-none.png', :alt => '' -%></li>
-	<li><%= image_tag 'category-none.png', :alt => '' -%></li>
+	  <li><%= image_tag 'bookmark-placeholder.png', :alt => '', :title => "dummy icons for layout purpose" -%></li>
+	  <li><%= image_tag 'category-none.png', :alt => '' -%></li>
+	  <li><%= image_tag 'category-none.png', :alt => '' -%></li>
+	  <li><%= image_tag 'category-none.png', :alt => '' -%></li>
 	</ul>
 	<h3>
   	<% if bookmark.bookmarkable.nil? -%>
@@ -24,21 +24,21 @@
     <% end %>
 	
     <% if bookmark.private %><%= image_tag("lockblack.png", :size => "15x15", :alt => "(Private)".t) %><% end %>
-</h3>
-<h4>&nbsp;</h4>
+  </h3>
+  <h4>&nbsp;</h4>
 	<p class="update"><%= time_ago_in_words(bookmark.updated_at) %></p>
   </li>
 <%- unless bookmark.tag_string.blank? -%>
   <li>
-   <dl class="tags">
-	<dt><%=h "Tags:".t -%></dt>
+  <dl class="tags">
+    <dt><%=h "Tags:".t -%></dt>
     <dd>
     	<ul>
 	<% bookmark.tags.each do |tag| -%>
-    		<li><%= link_to(tag.name, tag_bookmarks_path(tag), :class => 'tag') %></li>
-    <% end -%>
-		</ul>
-  </dd>
+      <li><%= link_to(tag.name, tag_bookmarks_path(tag), :class => 'tag') %></li>
+  <% end -%>
+      </ul>
+    </dd>
 	</dl>
   </li>
   <%- end -%>
@@ -46,7 +46,7 @@
     <%- unless bookmark.notes.blank? -%>
       <%=sanitize_limit_and_format_for_display bookmark.notes %>
 	  <%- end -%>
-	<p class="byline">- <%= link_to bookmark.user.login, bookmark.user %></p>
+	  <p class="byline">- <%= link_to bookmark.user.login, bookmark.user %></p>
   </li>
   <%- if is_author_of?(bookmark) -%>
   <li>
@@ -54,8 +54,8 @@
     <ul class="navigation">
 		<li><%= link_to "Edit".t, edit_bookmark_path(bookmark) %></li>
 		<li><%= link_to "Delete".t, bookmark, :confirm => 'Are you sure?'.t, :method => :delete %></li>
-	</ul>
+    </ul>
  <% end -%>
-</li> 
+  </li> 
 </ul>
 </li>

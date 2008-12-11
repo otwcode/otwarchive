@@ -25,6 +25,8 @@ module BookmarksHelper
         link_to_remote text, {:url => fallback, :method => :get}, :href => fallback
       else
         # eventually we want to add the option here to remove the existing bookmark
+        # Enigel Dec 10 08 - adding an edit link for now
+        link_to "Edit bookmark".t, edit_bookmark_path(existing)
       end
     end
   end
