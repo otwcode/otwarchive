@@ -34,7 +34,7 @@ class Admin::AdminUsersController < ApplicationController
       flash[:notice] = 'User was successfully updated.'.t
       redirect_to :action => "index", :letter => params[:letter]
     else
-      flash[:notice] = 'There was an error updating user '.t + params[:user][:login]
+      flash[:error] = 'There was an error updating user '.t + params[:user][:login]
       redirect_to :action => "index", :letter => params[:letter]
     end
   end

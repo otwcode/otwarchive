@@ -1,7 +1,7 @@
 <div id="user-profile">
   <%= render :partial => 'users/header', :locals => {:user => @user} %>
 
-  <h3><%=h "About ".t %><%=h @user.login %></h3>
+  <h3><%=h "About ".t %><%=h ( (@author && params[:pseud]) ? @author.name : @user.login) %></h3>
 
   <p><%= "Member since: ".t %><%= @user.created_at.localize("%B %Y") %></p>
 
@@ -35,9 +35,9 @@
   
   <%- if logged_in? && current_user == @user -%>
   <ul class="navigation">
-    <li><%= link_to "Edit Profile".t, edit_user_path(@user) %></li>
+    <li><%= link_to "Edit My Profile".t, edit_user_path(@user) %></li>
     <li><%= link_to "Set My Preferences".t, user_preferences_path(@user) %></li>
-		<li><%= link_to "Delete Account".t, @user, :confirm => h('This will permanently delete your account and cannot be undone. Are you sure?').t, :method => :delete %></li>
+		<li><%= link_to "Delete My Account".t, @user, :confirm => h('This will permanently delete your account and cannot be undone. Are you sure?').t, :method => :delete %></li>
   </ul>
   <%- end -%>
 </div>
