@@ -20,6 +20,9 @@ class Admin::AdminUsersController < ApplicationController
   # GET admin/users/1/edit
   def edit
     @user = User.find_by_login(params[:id])
+    unless @user
+      redirect_to :action => "index", :letter => params[:letter]
+    end
   end
 
   # PUT admin/users/1
@@ -29,10 +32,10 @@ class Admin::AdminUsersController < ApplicationController
     @user.attributes = params[:user]
     if @user.save(false)
       flash[:notice] = 'User was successfully updated.'.t
-      #redirect_to admin_users_url, :letter => @crt_letter # not working! loses the letter no matter what
       redirect_to :action => "index", :letter => params[:letter]
     else
-      render :action => "edit"
+      flash[:notice] = 'There was an error updating user '.t + params[:user][:login]
+      redirect_to :action => "index", :letter => params[:letter]
     end
   end
 
