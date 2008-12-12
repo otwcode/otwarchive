@@ -50,6 +50,12 @@ class Pseud < ActiveRecord::Base
 
   named_scope :alphabetical, :order => :name
 
+  # Enigel Dec 12 08: added sort method
+  # sorting by pseud name or by login name in case of equality
+  def <=>(other)
+    (self.name <=> other.name) == 0 ? (self.user_name <=> other.user_name) : (self.name <=> other.name)
+  end
+
   # For use with the work and chapter forms
   def user_name
      self.user.login
