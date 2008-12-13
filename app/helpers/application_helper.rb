@@ -38,10 +38,14 @@ module ApplicationHelper
 		link_to_unless_current "<span>" + text + "</span>", link
   end
     
+  # modified by Enigel Dec 13 08 to use pseud byline rather than just pseud name
+  # in order to disambiguate in the case of identical pseuds
   def byline(creation)
-    pseuds = creation.authors.blank? ? (creation.pseuds ||= []) : (creation.authors ||= [])
-    pseuds.collect { |pseud|
-      link_to pseud.name, user_path(pseud.user), :class => "login author"
+    pseuds = []
+    pseuds << creation.authors if creation.authors
+    pseuds << creation.pseuds if creation.pseuds
+    pseuds.flatten.uniq.collect { |pseud|
+      link_to pseud.byline, user_path(pseud.user, :pseud => pseud.id), :class => "login author"
     }.join(', ')
   end
 

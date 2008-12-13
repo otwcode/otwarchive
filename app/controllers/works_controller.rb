@@ -36,8 +36,12 @@ class WorksController < ApplicationController
   # and @tags[category]
   def set_instance_variables
     if params[:pseud] && params[:pseud][:byline] && params[:work][:author_attributes]
-      params[:work][:author_attributes][:byline] = params[:pseud][:byline]
+      #params[:work][:author_attributes][:byline] = params[:pseud][:byline]
+      params[:work][:author_attributes][:ids] << (Pseud.find_by_name(params[:pseud][:byline]).id) rescue nil
       params[:pseud][:byline] = ""
+    end
+    if params[:work] && params[:work][:author_attributes] && params[:work][:author_attributes][:coauthors]
+      params[:work][:author_attributes][:ids].concat(params[:work][:author_attributes][:coauthors]).uniq!
     end
     begin    
       if params[:id] # edit, update, preview, post, manage_chapters
@@ -314,6 +318,9 @@ class WorksController < ApplicationController
         @chapter.content = params[:work][:chapter_attributes][:content]
         @chapter.title = params[:work][:chapter_attributes][:title]
       end
+      
+      #flash[:notice] = "DEBUG: in UPDATE preview:  " + "all: " + @allpseuds.flatten.collect {|ap| ap.id}.inspect + " selected: " + @selected_pseuds.inspect + " co-authors: " + @coauthors.flatten.collect {|ap| ap.id}.inspect + " pseuds: " + @pseuds.flatten.collect {|ap| ap.id}.inspect + "  @work.authors: " + @work.authors.collect {|au| au.id}.inspect + "  @work.pseuds: " + @work.pseuds.collect {|ps| ps.id}.inspect
+      
       if @work.has_required_tags?
         render :action => "preview"
       else
@@ -323,6 +330,9 @@ class WorksController < ApplicationController
     elsif params[:cancel_button]
       cancel_posting_and_redirect
     elsif params[:edit_button]
+    
+      #flash[:notice] = "DEBUG: in UPDATE edit:  " + "all: " + @allpseuds.flatten.collect {|ap| ap.id}.inspect + " selected: " + @selected_pseuds.inspect + " co-authors: " + @coauthors.flatten.collect {|ap| ap.id}.inspect + " pseuds: " + @pseuds.flatten.collect {|ap| ap.id}.inspect + "  @work.authors: " + @work.authors.collect {|au| au.id}.inspect + "  @work.pseuds: " + @work.pseuds.collect {|ps| ps.id}.inspect
+      
       render :partial => 'work_form', :layout => 'application'
     else
       saved = true
@@ -333,8 +343,10 @@ class WorksController < ApplicationController
         if defined?(@previous_published_at) && @previous_published_at != @work.published_at
           @work.set_revised_at(@work.published_at)
         end  
-
-        @work.posted = true 
+        @work.posted = true
+        
+        #bleep = "BEFORE SAVE: author attr: " + params[:work][:author_attributes][:ids].collect {|a| a}.inspect + "  @work.authors: " + @work.authors.collect {|au| au.id}.inspect + "  @work.pseuds: " + @work.pseuds.collect {|ps| ps.id}.inspect
+        
         saved = @work.save
         @work.update_minor_version
       end
@@ -344,6 +356,10 @@ class WorksController < ApplicationController
         elsif params[:update_button]
           flash[:notice] = 'Work was successfully updated.'.t
         end
+        
+        #bleep += "  AFTER SAVE: author attr: " + params[:work][:author_attributes][:ids].collect {|a| a}.inspect + "  @work.authors: " + @work.authors.collect {|au| au.id}.inspect + "  @work.pseuds: " + @work.pseuds.collect {|ps| ps.id}.inspect
+        #flash[:notice] = "DEBUG: in UPDATE save:  " + bleep
+        
         redirect_to(@work)
       else
         unless @chapter.valid?
@@ -444,13 +460,18 @@ class WorksController < ApplicationController
     end
 
     def cancel_posting_and_redirect
-      flash[:notice] = "<p>" + "This work was not posted.".t + "</p><p>" + 
-        "It will be saved here in your drafts for one week, then cleaned up.".t + "</p>"
-      begin
-        current_user.cleanup_unposted_works
-      rescue ThinkingSphinx::ConnectionError
+      if @work and @work.posted
+        flash[:notice] = "<p>" + "The work was not updated.".t + "</p>"
+        redirect_to user_works_path(current_user)    
+      else
+        flash[:notice] = "<p>" + "This work was not posted.".t + "</p><p>" + 
+          "It will be saved here in your drafts for one week, then cleaned up.".t + "</p>"
+        begin
+          current_user.cleanup_unposted_works
+        rescue ThinkingSphinx::ConnectionError
+        end
+        redirect_to drafts_user_works_path(current_user)    
       end
-      redirect_to drafts_user_works_path(current_user)    
     end
 
 end

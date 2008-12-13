@@ -138,7 +138,7 @@ class Work < ActiveRecord::Base
     wanted_ids = attributes[:ids]
     wanted_ids.each { |id| self.authors << Pseud.find(id) }
     # if current user has selected different pseuds
-    current_user=User.current_user
+    current_user = User.current_user
     if current_user.is_a? User
       self.toremove = current_user.pseuds - wanted_ids.collect {|id| Pseud.find(id)}
     end
