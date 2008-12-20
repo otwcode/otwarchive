@@ -19,12 +19,13 @@ class CommentObserver < ActiveRecord::Observer
       # send notification to the owner of the original comment if not
       # the commenter
       parent_comment = comment.commentable
-      parent_comment_owner = parent_comment.comment_owner
-      if parent_comment_owner != comment.comment_owner
-        if notify_user_by_email?(parent_comment_owner)
+      parent_comment_owner = parent_comment.comment_owner # will be nil if not a user      
+      if (!parent_comment_owner && parent_comment.comment_owner_email && parent_comment.comment_owner_name) || 
+          (parent_comment_owner && (parent_comment_owner != comment.comment_owner)) 
+        if !parent_comment_owner || notify_user_by_email?(parent_comment_owner)
           UserMailer.deliver_comment_reply_notification(parent_comment, comment)
         end
-        if notify_user_by_inbox?(parent_comment_owner)
+        if parent_comment_owner && notify_user_by_inbox?(parent_comment_owner)
           add_feedback_to_inbox(parent_comment_owner, comment)
         end
         if parent_comment_owner              
