@@ -1,0 +1,13 @@
+<div id="error"></div>
+
+Bulk manage
+  <%= Tag::TYPES.collect {|category| link_to_unless_current category, edit_tag_wrangling_path(category)}.join(" | ")%>
+
+Assign
+  <%= link_to_unless_current "fandom tags to media", fandom_to_media_tag_wranglings_path %>
+  |
+  <%= link_to_unless_current "character tags to fandom", character_to_fandom_tag_wranglings_path %>
+  |
+  <%= link_to_unless_current "pairing tags to fandom", pairing_to_fandom_tag_wranglings_path %>
+  |
+  <%= link_to_unless_current "character tags to pairing", character_to_pairing_tag_wranglings_path %>

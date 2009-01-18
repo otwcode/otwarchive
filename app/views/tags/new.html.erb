@@ -6,9 +6,12 @@
 
 <%- form_for :tag, @tag, :url => { :action => "create" }  do |f| -%>
   <dl>
-    <dt><%= f.label :name, 'Name'.t %></dt> 
+    <dt><%= f.label :name, 'Name'.t %></dt>
     <dd><%= f.text_field :name %></dd>
-    
+
+    <dt><%= f.label :canonical, 'Canonical'.t %></dt>
+    <dd><%= f.check_box :canonical %></dd>
+
     <dt><%=h 'Category'.t %></dt>
     <dd>
       <%- if logged_in_as_admin? -%>
@@ -18,10 +21,10 @@
       <%- end -%>
       <%- types.each do |type| -%>
         <%= f.radio_button("type", type) %><%= f.label :type, type %><br/>
-      <%- end -%>    
+      <%- end -%>
     </dd>
   </dl>
-  
+
 <p class="submit">
 <%= f.submit %></p>
 <%- end -%>

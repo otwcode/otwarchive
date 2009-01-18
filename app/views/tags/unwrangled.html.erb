@@ -19,9 +19,9 @@
       <dd><%= select_tag :new_fandom_id, "<option value=''>Select Fandom</option>" + options_from_collection_for_select( Fandom.canonical.sort, :id, :name, "") %></dd>
     </dl>
     <p class="submit">
-      <%= submit_tag "Mark Canonical"%> 
-      <%= submit_tag "Mark Ambiguous"%> 
-      <%= submit_tag "Add to Fandom" %> 
-    </p>  
+      <%= submit_tag "Mark as Canonical"%>
+      <%= submit_tag "Mark as Ambiguity"%>
+      <%= submit_tag "Add to Fandom" %>
+    </p>
   <% end %>
 <% end %>

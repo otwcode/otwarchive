@@ -1,108 +1,109 @@
 <h2>
-  <%= 'Edit ' .t + @tag.class::NAME %>:
-  <%= link_to @tag.name, tag_path(@tag) %>
+  <%= 'Edit Tag' .t %>
 </h2>
 
 <%= error_messages_for :tag %>
 
-<%- unless logged_in_as_admin? -%>
-  <p>Note: actions which are restricted to admins are not offered</p>
-<%- end -%>
-
+<dl>
 <%- form_for :tag, @tag, :url => { :action => "update", :id => @tag.name}, :html => { :method => :put } do |f| -%>
-  <dl>
 
-    <%- if logged_in_as_admin? -%>
-      <dt><%= f.label :name, 'Name'.t %>:</dt> 
-      <dd><%= f.text_field :name %></dd>
-      <dt></dt>
-      <dd><%=h "Changing the name should be done with extreme caution.".t %></dd>
-      <dt></dt>
-      <dd><%=h "Be aware that one person's typo is another person's freedom of expression.".t %></dd>
-      <dt></dt>
-      <dd><%=h "Official tag names cannot be changed from this interface, as they will only regenerate.".t %></dd>
-    <% end %>
+    <dt><%= f.label :name, 'Name'.t %></dt>
+    <dd><%= f.text_field :name, :disabled => !logged_in_as_admin? %></dd>
 
-    <%- if logged_in_as_admin? && @tag.is_a?(Rating)-%>
-      <dt><%= f.check_box("adult") %><%= f.label :adult, 'Adult'.t %>?</dt> 
-      <dd><%=h 'This tag indicates adult content.'%></dd>
+    <dt><%= f.label :type, 'Category'.t %></dt>
+    <%- (Tag::TYPES - [@tag.class.name, "Ambiguity"]).each do |type| -%>
+      <dd>
+        <%= f.radio_button(:type, type, {:disabled => !logged_in_as_admin?}) %>
+        <%= f.label :type, type %>&nbsp;</dd>
+    <%- end -%>
+    <%- [@tag.class.name, "Ambiguity"].uniq.each do |type| -%>
+      <dd>
+        <%= f.radio_button(:type, type, {:disabled => !( logged_in_as_admin? || Tag::USER_DEFINED.include?(@tag.class.name) )}) %>
+        <%= f.label :type, type %>&nbsp;</dd>
+    <%- end -%>
+
+    <dt></dt>
+    <dd>
+      <%= f.check_box("canonical", :disabled => !(logged_in_as_admin? || Tag::USER_DEFINED.include?(@tag.class.name) )) %>
+      <%= f.label :canonical, 'Canonical'.t %></dd>
+    <dd>&nbsp;<%= "This is the official name for the ".t + @tag.class.name %></dd>
+
+    <%- if @tag.is_a?(Rating)-%>
+      <dt></dt>
+      <dd><%= f.check_box("adult", :disabled => !logged_in_as_admin? )%><%= f.label :adult, 'Adult'.t %></dd>
+      <dd>&nbsp;<%=h 'This tag indicates adult content.'%></dd>
     <%- end %>
-      
-    <% unless @tag == Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME) %>
-      <%- if Tag::USER_DEFINED.include?(@tag.class.name) -%>
-        <dt><%= f.check_box("canonical") %><%= f.label :canonical, 'Common'.t %>?</dt>
-        <% if @tag.canonical? %>
-          <dd><%=h 'Uncheck this and choose a Merger if it should not be filterable'.t %></dd>
-        <%- else -%>
-          <dd><%=h 'Check this if it should be filterable'.t %></dd>
-        <%- end -%>
-      <%- end -%>
-  
-      <% if @tag.merger %>
-        <dt>Merged into:</dt>
-        <dd><%= link_to_tag @tag.merger %></dd>
-        <dt><%= 'Change Merger'.t %>:</dt>
-      <% else %>
-        <dt><%= 'Merge into'.t %>:</dt>
-      <% end %>
-      <dd><%= select_tag :merger_id, "<option value=''>Select Merger</option>" + options_from_collection_for_select( @tag.class.canonical.sort, :id, :name, @tag.merger_id || "") %></dd>
-  
-      <%- if logged_in_as_admin? -%>
-        <dt><%=h 'Category'.t %></dt>
-        <%- Tag::TYPES.each do |type| -%>
-          <dd><%= f.radio_button(:type, type) %><%= f.label :type, type %></dd>
-        <%- end -%>    
+
+    <%- if Tag::USER_DEFINED.include?(@tag.class.name) %>
+      <%- if @tag.canonical? %>
+        <dt><%= f.label :type, 'Character(s)'.t %></dt>
+        <dd>Add Character</dd>
         <dt></dt>
-        <dd><%=h "Changing the category may have unexpected repercussions.".t %></dd>
-      <% elsif !@tag.is_a?(Ambiguity) %>
-        <dt><%= check_box_tag "ambiguous" %><%= f.label :ambiguous, 'Ambiguous'.t %>?</dt>
-        <dd><%=h 'Check this to mark the tag ambiguous'.t %></dd>      
-      <%- end -%>
-      
-      <%- if @tag.is_a?(Fandom) %>
-        <% if @tag.media -%>
-          <dt>Media:</dt>
-          <dd><%= link_to_tag @tag.media %></dd>
-          <dt><%= 'Reassign to media'.t %>:</dt>
-        <% else %>
-          <dt><%= 'Assign to media'.t %>:</dt>
-        <% end %>
-        <dd><%= select_tag :media_id, "<option value=''>Select Media</option>" + options_from_collection_for_select( Media.canonical.sort, :id, :name, @tag.media ? @tag.media.id : "") %></dd>
-     <%- end -%>
-  
-     <%- if Tag::USER_DEFINED.include?(@tag.class.name) %>
-        <% if @tag.fandom -%>
-          <dt>Fandom:</dt>
-          <dd><%= link_to_tag @tag.fandom %></dd>
-          <dt><%= 'Reassign to fandom'.t %>:</dt>
-        <% else %>
-          <dt><%= 'Assign to fandom'.t %>:</dt>
-        <% end %>
-        <dd><%= select_tag :fandom_id, "<option value=''>Select Fandom</option>" + options_from_collection_for_select( Fandom.canonical.sort, :id, :name, @tag.fandom ? @tag.fandom.id : "" )%></dd>
-     <%- end -%>
-   <% end %>
-   <p class="submit">
-     <%= submit_tag "Update Tag" %>  
-   </p>
-  
-  <%= render :partial => "relatives" %>
-
-  <% unless @unwrangled.blank? %>
-    <dt>Unwrangled tags:</dt>
-    <%- @unwrangled.keys.each do |type| -%>
-      <dt><%= type.pluralize %>:</dt>
-      <%- @unwrangled[type].each do |tag| -%>
-        <dd>
-          <%= check_box_tag "tag_ids[" + tag.id.to_s + "]" %>
-          <%= link_to tag.name, edit_tag_path(tag) %>
-        </dd>
-      <%- end -%>
+        <dd><%= select("character", 'character_id', (Character.canonical - @tag.family).collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
+        <% @tag.characters.each do |tag| %>
+          <dt></dt>
+          <dd><%= check_box_tag("characters[]", tag.name, true) %><%= f.label :character, link_to_edit_tag(tag) %></dd>
+        <%- end %>
+        <dt><%= f.label :type, 'Pairings(s)'.t %></dt>
+        <dd>Add Pairing</dd>
+        <dt></dt>
+        <dd><%= select("pairing", 'pairing_id', (Pairing.canonical - @tag.family).collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
+        <% @tag.pairings.each do |tag| %>
+          <dt></dt>
+          <dd><%= check_box_tag("pairings[]", tag.name, true) %><%= f.label :pairing, link_to_edit_tag(tag) %></dd>
+        <%- end %>
+        <dt><%= f.label :type, 'Fandom(s)'.t %></dt>
+        <dd>Add Fandom</dd>
+        <dt></dt>
+        <dd><%= select("fandom", 'fandom_id', (Fandom.canonical - @tag.family).collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
+        <% @tag.fandoms.each do |tag| %>
+          <dt></dt>
+          <dd><%= check_box_tag("fandoms[]", tag.name, true) %><%= f.label :fandom, link_to_edit_tag(tag) %></dd>
+        <%- end %>
+        <dt><%= f.label :type, 'Media'.t %></dt>
+        <dd>Add Media</dd>
+        <dt></dt>
+        <dd><%= select("media", 'media_id', (Media.canonical - @tag.family).collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
+        <% @tag.medias.each do |tag| %>
+          <dt></dt>
+          <dd><%= check_box_tag("medias[]", tag.name, true) %><%= f.label :media, link_to_edit_tag(tag) %></dd>
+        <%- end %>
+        <dt><%= f.label :type, 'Freeforms'.t %></dt>
+        <dd>Add Freeform</dd>
+        <dt></dt>
+        <dd><%= select("freeform", 'freeform_id', (Freeform.canonical - @tag.family).collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
+        <% @tag.freeforms.each do |tag| %>
+          <dt></dt>
+          <dd><%= check_box_tag("freeforms[]", tag.name, true) %><%= f.label :freeform, link_to_edit_tag(tag) %></dd>
+        <%- end %>
+        <dt><%= f.label :type, 'Synonyms'.t %></dt>
+        <dd>Add Synonym</dd>
+        <dt></dt>
+        <dd><%= select("synonym", 'synonym_id', (@tag.class.nonsynonymous - @tag.mergers).collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
+        <% @tag.mergers.each do |tag| %>
+          <dt></dt>
+          <dd><%= check_box_tag("synonyms[]", tag.name, true) %><%= f.label :synonym, link_to_edit_tag(tag) %></dd>
+        <%- end %>
+      <%- else %>
+        <dt><%= f.label :type, 'Synonym of'.t %></dt>
+        <% if @tag.merger.is_a? Tag %>
+          <dd><%= check_box_tag("keep_synonym", @tag.merger.name, true) %><%= f.label :keep_synonym, link_to_edit_tag(@tag.merger) %></dd>
+          <dt></dt>
+          <dd>Replace Synonym</dd>
+          <dt></dt>
+          <dd><%= f.select('merger_id', @tag.class.canonical.collect {|p| [ p.name, p.id ]}) %></dd>
+        <%- else %>
+          <dd>Add Synonym</dd>
+          <dt></dt>
+          <dd><%= f.select('merger_id', @tag.class.canonical.collect {|p| [ p.name, p.id ]}, { :include_blank => true, :selected => nil }) %></dd>
+        <%- end %>
+      <%- end %>
     <% end %>
-    <p class="submit">
-      <%= submit_tag "Mark Canonical"%> 
-      <%= submit_tag "Mark Ambiguous"%> 
-      <%= submit_tag "Remove from Fandom" %> 
-    </p>
-  <% end %>    
 
+    <p class="submit">
+      <%= submit_tag "Save changes" %>
+    </p>
 <% end %>
+</dl>
+
+<%= tag_wrangler_footer %>

@@ -1,0 +1,50 @@
+<%= tag_wrangler_header %>
+
+<h2>TagWrangler: Set Adult, Banned and Canonical Flags for <%= @category.name %> tags</h2>
+<%- form_tag tag_wranglings_path do -%>
+<dl>
+  <%= hidden_field_tag(:id, @category.name) %>
+  <%- if @fandoms %>
+    <dt>Filter by Fandom:</dt>
+    <dd><%= select("fandom", 'fandom_id', @fandoms.collect {|p| [ p.name, p.id ] }, { :include_blank => true, :selected => (@fandom.id if @fandom)}) %></dd>
+    <p class = "submit"><%= submit_tag "Refresh" %></p>
+  <%- end -%>
+  <dt>Tag</dt>
+  <%- if @fandom %>
+    <dd>Remove from Fandom</dd>
+  <%- else -%>
+    <dd>Add to Fandom</dd>
+  <% end %>
+  <dd>Banned</dd>
+  <%- if @category == Rating %>
+    <dd>Adult</dd>
+  <% end %>
+  <dd>Canonical</dd>
+  <dd>Synonym</dd>
+  <%- @tags.each do |tag| %>
+    <dt><%= label :tag, link_to_edit_tag(tag) %></dt>
+    <%- if @fandom %>
+      <dd><%= check_box_tag("remove_from_fandom[]", tag.id, false) %></dd>
+    <%- else -%>
+      <dd><%= check_box_tag("add_to_fandom[]", tag.id, false) %></dd>
+    <% end %>
+    <dd><%= check_box_tag("banned[]", tag.id, tag.banned, {:disabled => !logged_in_as_admin?}) %></dd>
+    <%- if @category == Rating %>
+      <dd><%= check_box_tag("adult[]", tag.id, tag.adult) %></dd>
+    <% end %>
+    <dd><%= check_box_tag("canonical[]", tag.id, tag.canonical) %></dd>
+    <% unless tag.canonical %>
+      <dd>
+        <%- if @fandom -%>
+          <%= select("merger", tag.id, (tag.class.by_fandom(@fandom).canonical - [tag]).collect {|p| [ p.name, p.id ] }, { :include_blank => true, :selected => tag.merger.andand.id}) %>
+        <%- else -%>
+           <%= select("merger", tag.id, (tag.class.no_fandom.canonical - [tag]).collect {|p| [ p.name, p.id ] }, { :include_blank => true, :selected => tag.merger.andand.id}) %>
+        <%- end -%>
+      </dd>
+    <%- end -%>
+  <%- end -%>
+  <p class = "submit"><%= submit_tag "Update all tags" %></p>
+</dl>
+<%- end -%>
+
+<%= tag_wrangler_footer %>

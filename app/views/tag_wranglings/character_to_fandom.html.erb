@@ -1,0 +1,20 @@
+<h2>Manage Tag Relationships</h2>
+
+<%= tag_wrangler_header %>
+
+<dl>
+  <%- form_tag tag_wranglings_path do -%>
+    <dt>Assign character to: </dt>
+    <dd><%= select("fandom", 'fandom_id', @fandoms.collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
+    <dt></dt>
+    <%- @characters.each do |tag| %>
+      <dd><%= check_box_tag("tags[]", tag.name, false) %><%= label :tag, link_to_edit_tag(tag) %></dd>
+    <%- end -%>
+
+    <dt><%= check_box_tag("canonical", true) %><%= label :canonical, "Mark the selected tags canonical" %></dt>
+    <p class = "submit"><%= submit_tag "Assign to Fandom" %></p>
+    <%= "(Click on a tag to select it for individual editing)".t %>
+  <%- end -%>
+</dl>
+
+<%= tag_wrangler_footer %>
