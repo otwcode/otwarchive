@@ -51,7 +51,7 @@ class Tag < ActiveRecord::Base
   named_scope :by_name, {:order => 'name ASC'}
 
   named_scope :by_fandom, lambda{|fandom| {:conditions => {:fandom_id => fandom.id}}}
-  named_scope :no_fandom, lambda{|fandom| {:conditions => {:fandom_id => nil}}}
+  named_scope :no_fandom, :conditions => {:fandom_id => nil}
 
   # Class methods
 
@@ -216,17 +216,6 @@ class Tag < ActiveRecord::Base
     end
   end
 
-  def add_pairing(pairing_id)
-    return unless Tag::USER_DEFINED.include?(self.class.name)
-    pairing = Pairing.find_by_id(pairing_id)
-    return false unless pairing.is_a? Pairing
-    if self.is_a? Freeform
-      self.wrangle_parent(pairing)
-    else
-      pairing.wrangle_parent(self)
-    end
-  end
-
   def add_synonym(synonym_id)
     return unless Tag::USER_DEFINED.include?(self.class.name)
     tag = Tag.find_by_id(synonym_id)
@@ -253,20 +242,6 @@ class Tag < ActiveRecord::Base
     end
     add.each do |character_name|
       self.add_character(Character.find_by_name(character_name))
-    end
-  end
-
-  def update_pairings(new=[])
-    current = self.pairings.map(&:name)
-    current = [] unless current
-    new = [] unless new
-    remove = current - new
-    add = new - current
-    remove.each do |pairing_name|
-      Pairing.find_by_name(pairing_name).remove_from_family(self)
-    end
-    add.each do |pairing_name|
-      self.add_pairing(Pairing.find_by_name(pairing_name))
     end
   end
 
@@ -380,16 +355,21 @@ class Tag < ActiveRecord::Base
   def possible_children
     type = self[:type]
     return unless type
-    fandom = (self.fandom || Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME))
-    fandoms = Fandom.all.sort if type.match /Media|Fandom/
-    characters = (Character.no_fandom + Character.by_fandom(fandom)).sort if type.match /Fandom|Character/
-    pairings = (Pairing.no_fandom + Pairing.by_fandom(fandom)).sort if type.match /Fandom|Character|Pairing/
-    freeforms = (Freeform.no_fandom + Freeform.by_fandom(fandom)).sort if type.match /Fandom|Character|Pairing|Freeform/
+    fandoms = Fandom.all if type.match /Media|Fandom/
+    characters = Character.no_fandom if type.match /Fandom|Character/
+    pairings = Pairing.no_fandom if type.match /Fandom|Character|Pairing/
+    freeforms = Freeform.no_fandom if type.match /Fandom|Character|Pairing|Freeform/
+    fandom = self.fandom
+    if fandom.is_a? Fandom
+      characters = characters + Character.by_fandom(fandom) if type.match /Fandom|Character/
+      pairings = pairings + Pairing.by_fandom(fandom) if type.match /Fandom|Character|Pairing/
+      freeforms = freeforms + Freeform.by_fandom(fandom) if type.match /Fandom|Character|Pairing|Freeform/
+    end
     hash = {}
-    hash['Fandom'] = fandoms - self.children unless fandoms.blank?
-    hash['Character'] = characters - self.children unless characters.blank?
-    hash['Pairing'] = pairings - self.children unless pairings.blank?
-    hash['Freeform'] = freeforms - self.children unless freeforms.blank?
+    hash['Fandom'] = fandoms.sort - self.children unless fandoms.blank?
+    hash['Character'] = characters.sort - self.children unless characters.blank?
+    hash['Pairing'] = pairings.sort - self.children unless pairings.blank?
+    hash['Freeform'] = freeforms.sort - self.children unless freeforms.blank?
     return hash unless hash.blank?
   end
 

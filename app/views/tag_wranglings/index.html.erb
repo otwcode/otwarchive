@@ -1,6 +1,15 @@
-<h2>Manage Tag Relationships</h2>
+<h2>Tag Wrangling</h2>
 
-<%= tag_wrangler_header %>
-
+<dl>
+<dt>Mass Flag tags by Category</dt>
+<% for category in Tag::TYPES %>
+  <dd><%= link_to_unless_current category, edit_tag_wrangling_path(category) %> (<%= category.constantize.unwrangled.count %>)</dd>
+<% end %>
+<dt>Mass Assign canonical tags</dt>
+<dd><%= link_to_unless_current "fandom tags to media", fandom_to_media_tag_wranglings_path %> (<%= Fandom.canonical.no_media.count %>)</dd>
+<dd><%= link_to_unless_current "character tags to fandom", character_to_fandom_tag_wranglings_path %> (<%= Character.canonical.no_fandom.count %>)</dd>
+<dd><%= link_to_unless_current "pairing tags to fandom", pairing_to_fandom_tag_wranglings_path %> (<%= Pairing.canonical.no_fandom.count %>)</dd>
+<dd><%= link_to_unless_current "character tags to pairing", character_to_pairing_tag_wranglings_path %> (<%= Pairing.canonical.no_characters.count %>)</dd>
+</dl>
 
 <%= tag_wrangler_footer %>

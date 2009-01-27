@@ -70,11 +70,7 @@ class TagsController < ApplicationController
 
   def edit
     @tag = Tag.find_by_name(params[:id])
-    if @tag.blank?
-      flash[:error] = "Tag not found"
-      redirect_to root_path and return
-    end
-    if @tag == Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
+    if @tag.blank? # no fandom
       if params[:only]
         if params[:only] == 'Banned'
           if logged_in_as_admin?

@@ -7,26 +7,43 @@ class TagWranglingsController < ApplicationController
   end
 
   def index
+    @unwrangled = Tag.unwrangled
   end
 
   def fandom_to_media
     @medias = Media.canonical
-    @fandoms = Fandom.unwrangled
+    @fandoms = Fandom.canonical.no_media
+    if @fandoms.blank?
+      flash[:warning] = "No media left to assign"
+      redirect_to tag_wranglings_path and return
+    end
   end
 
   def character_to_fandom
     @fandoms = Fandom.canonical
-    @characters = Character.unwrangled
+    @characters = Character.canonical.no_fandom
+    if @characters.blank?
+      flash[:warning] = "No characters left to assign"
+      redirect_to tag_wranglings_path and return
+    end
   end
 
   def pairing_to_fandom
     @fandoms = Fandom.canonical
-    @pairings = Pairing.unwrangled
+    @pairings = Pairing.canonical.no_fandom
+    if @pairings.blank?
+      flash[:warning] = "No pairings left to assign"
+      redirect_to tag_wranglings_path and return
+    end
   end
 
   def character_to_pairing
-    @pairings = Pairing.canonical
-    @characters = Character.unwrangled
+    @pairings = Pairing.canonical.no_characters
+    @characters = Character.canonical
+    if @pairings.blank?
+      flash[:warning] = "No pairings left which need assignment"
+      redirect_to tag_wranglings_path and return
+    end
   end
 
   def create
@@ -69,7 +86,7 @@ class TagWranglingsController < ApplicationController
           tag.update_attribute(:wrangled, true)
         end
       end
-      redirect_to fandom_to_media_tag_wranglings_path
+      redirect_to character_to_pairing_tag_wranglings_path
     elsif commit == "Refresh"
       setup_edit_vars
       if !logged_in_as_admin? && !Tag::USER_DEFINED.include?(@category.name)

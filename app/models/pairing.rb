@@ -2,9 +2,11 @@ class Pairing < Tag
 
   NAME = ArchiveConfig.PAIRING_CATEGORY_NAME
 
+  named_scope :no_characters, :conditions => {:has_characters => false}
+
   before_save :add_fandom_to_parents
 
-  # creates too many ambiguous character tags
+  # wrangle_characters creates too many ambiguous character tags
   # I've left the method in case we want to call it specifically
 #  after_save :wrangle_characters
 

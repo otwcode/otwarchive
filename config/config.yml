@@ -38,8 +38,8 @@ SMTP_SERVER: localhost
 SMTP_PORT: 25
 SMTP_DOMAIN: localhost
 # if required for email authentication
-#SMTP_USER: 
-#SMTP_PASSWORD: 
+#SMTP_USER:
+#SMTP_PASSWORD:
 #SMTP_AUTHENTICATION: # :plain, :login or :cram_md5
 
 ACCOUNT_CREATION_ENABLED: true
@@ -56,7 +56,7 @@ CONTENT_MIN: 10
 CONTENT_MAX: 500000
 
 # number of items in various displays
-ITEMS_PER_PAGE: 50 
+ITEMS_PER_PAGE: 50
 NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD: 5
 COMMENT_THREAD_MAX_DEPTH: 5
 TAGS_PER_LINE: 12
@@ -94,7 +94,6 @@ CATEGORY_OTHER_TAG_NAME: 'Other'
 MEDIA_CATEGORY_NAME: 'Media'
 MEDIA_NO_TAG_NAME: 'No Media'
 FANDOM_CATEGORY_NAME: 'Fandom'
-FANDOM_NO_TAG_NAME: 'No Fandom'
 PAIRING_CATEGORY_NAME: 'Pairing'
 CHARACTER_CATEGORY_NAME: 'Character'
 FREEFORM_CATEGORY_NAME: 'Tag'
@@ -103,14 +102,14 @@ BANNED_CATEGORY_NAME: 'Banned'
 AMBIGUOUS_CATEGORY_NAME: 'Ambiguous'
 
 # This is used to determine how many recent items
-# to cache for recent lookups -- eg if we want to 
+# to cache for recent lookups -- eg if we want to
 # provide a "ten most recent" items to browse.
 # used in CacheFinds module -- include CacheFinds in a model
 # and the methods Model.recent and Model.last(#) will be
 # enabled, cached on production/test environments.
 MAX_RECENT: 20
 
-# Only the following fields are allowed to have HTML. In all others, 
+# Only the following fields are allowed to have HTML. In all others,
 # all HTML tags will be stripped.
 FIELDS_ALLOWING_HTML: %w(content summary notes about_me comment)
 
@@ -143,8 +142,8 @@ USE_OPENID: true
 # Allow orphaninig
 ORPHANING_ALLOWED: true
 
-# Help directory, must be in the public folder. 
-# Create subfolders for each supported language 
+# Help directory, must be in the public folder.
+# Create subfolders for each supported language
 # (eg, /help/fr/ contains the French versions of the help)
 HELP_DIRECTORY: '/help'
 

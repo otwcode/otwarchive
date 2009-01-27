@@ -1,5 +1,3 @@
-<%= tag_wrangler_header %>
-
 <h2>TagWrangler: Set Adult, Banned and Canonical Flags for <%= @category.name %> tags</h2>
 <%- form_tag tag_wranglings_path do -%>
 <dl>
@@ -10,11 +8,6 @@
     <p class = "submit"><%= submit_tag "Refresh" %></p>
   <%- end -%>
   <dt>Tag</dt>
-  <%- if @fandom %>
-    <dd>Remove from Fandom</dd>
-  <%- else -%>
-    <dd>Add to Fandom</dd>
-  <% end %>
   <dd>Banned</dd>
   <%- if @category == Rating %>
     <dd>Adult</dd>
@@ -23,11 +16,6 @@
   <dd>Synonym</dd>
   <%- @tags.each do |tag| %>
     <dt><%= label :tag, link_to_edit_tag(tag) %></dt>
-    <%- if @fandom %>
-      <dd><%= check_box_tag("remove_from_fandom[]", tag.id, false) %></dd>
-    <%- else -%>
-      <dd><%= check_box_tag("add_to_fandom[]", tag.id, false) %></dd>
-    <% end %>
     <dd><%= check_box_tag("banned[]", tag.id, tag.banned, {:disabled => !logged_in_as_admin?}) %></dd>
     <%- if @category == Rating %>
       <dd><%= check_box_tag("adult[]", tag.id, tag.adult) %></dd>
