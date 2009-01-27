@@ -20,8 +20,7 @@ class TagTest < ActiveSupport::TestCase
 
     should_allow_values_for :adult, true, false
     should_allow_values_for :canonical, true, false
-    should_allow_values_for :wrangled, true, false
-    
+
     context "with whitespace" do
       setup do
         @tag = create_tag(:name => "   whitespace'll   (be    stripped)    ")
@@ -57,7 +56,7 @@ class TagTest < ActiveSupport::TestCase
       assert_nil @tag.wrangle_merger(@pairing2)
     end
   end
-  
+
   context "tags without a work" do
     setup { @tag = create_freeform }
     should "not be included in the cloud" do
@@ -119,5 +118,5 @@ class TagTest < ActiveSupport::TestCase
        assert !Tag.for_tag_cloud.include?(@tag5)
     end
   end
-  
+
 end

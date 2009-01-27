@@ -10,7 +10,6 @@ tags_104:
   taggings_count: "1"
   type: Character
   adult: "0"
-  wrangled: "0"
   id: "1063753802"
   created_at: 2008-12-07 22:52:13
 tags_090:
@@ -24,7 +23,6 @@ tags_090:
   taggings_count: "1"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753788"
   created_at: 2008-12-07 22:52:11
 tags_089:
@@ -38,7 +36,6 @@ tags_089:
   taggings_count: "0"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753787"
   created_at: 2008-12-07 01:35:54
 tags_068:
@@ -52,7 +49,6 @@ tags_068:
   taggings_count: "1"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753766"
   created_at: 2008-12-07 01:19:49
 tags_005:
@@ -66,7 +62,6 @@ tags_005:
   taggings_count: "0"
   type: Fandom
   adult: "0"
-  wrangled: "1"
   id: "177887685"
   created_at: 2008-11-09 03:26:02
 tags_026:
@@ -80,7 +75,6 @@ tags_026:
   taggings_count: "0"
   type: Rating
   adult: "1"
-  wrangled: "1"
   id: "885489802"
   created_at: 2008-11-09 03:26:02
 tags_047:
@@ -94,7 +88,6 @@ tags_047:
   taggings_count: "1"
   type: Character
   adult: "0"
-  wrangled: "1"
   id: "1063753745"
   created_at: 2008-11-21 09:48:03
 tags_105:
@@ -108,7 +101,6 @@ tags_105:
   taggings_count: "1"
   type: Character
   adult: "0"
-  wrangled: "0"
   id: "1063753803"
   created_at: 2008-12-07 22:52:13
 tags_091:
@@ -122,7 +114,6 @@ tags_091:
   taggings_count: "1"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753789"
   created_at: 2008-12-07 22:52:11
 tags_070:
@@ -136,7 +127,6 @@ tags_070:
   taggings_count: "2"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753768"
   created_at: 2008-12-07 01:19:49
 tags_069:
@@ -150,7 +140,6 @@ tags_069:
   taggings_count: "2"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753767"
   created_at: 2008-12-07 01:19:49
 tags_006:
@@ -164,7 +153,6 @@ tags_006:
   taggings_count: "0"
   type: Fandom
   adult: "0"
-  wrangled: "1"
   id: "211186876"
   created_at: 2008-11-09 03:26:02
 tags_027:
@@ -178,7 +166,6 @@ tags_027:
   taggings_count: "0"
   type: Media
   adult: "0"
-  wrangled: "0"
   id: "899944269"
   created_at: 2008-11-09 03:26:02
 tags_048:
@@ -192,7 +179,6 @@ tags_048:
   taggings_count: "2"
   type: Ambiguity
   adult: "0"
-  wrangled: "1"
   id: "1063753746"
   created_at: 2008-11-21 09:48:03
 tags_106:
@@ -206,7 +192,6 @@ tags_106:
   taggings_count: "1"
   type: Character
   adult: "0"
-  wrangled: "0"
   id: "1063753804"
   created_at: 2008-12-07 22:52:13
 tags_092:
@@ -220,7 +205,6 @@ tags_092:
   taggings_count: "1"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753790"
   created_at: 2008-12-07 22:52:11
 tags_071:
@@ -234,7 +218,6 @@ tags_071:
   taggings_count: "1"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753769"
   created_at: 2008-12-07 01:19:49
 tags_007:
@@ -248,7 +231,6 @@ tags_007:
   taggings_count: "2"
   type: Character
   adult: "0"
-  wrangled: "1"
   id: "221905380"
   created_at: 2008-11-09 03:26:02
 tags_028:
@@ -262,7 +244,6 @@ tags_028:
   taggings_count: "0"
   type: Media
   adult: "0"
-  wrangled: "0"
   id: "946152233"
   created_at: 2008-11-09 03:26:02
 tags_050:
@@ -276,7 +257,6 @@ tags_050:
   taggings_count: "0"
   type: Character
   adult: "0"
-  wrangled: "1"
   id: "1063753748"
   created_at: 2008-11-21 09:48:52
 tags_049:
@@ -290,7 +270,6 @@ tags_049:
   taggings_count: "1"
   type: Pairing
   adult: "0"
-  wrangled: "1"
   id: "1063753747"
   created_at: 2008-11-21 09:48:52
 tags_107:
@@ -304,7 +283,6 @@ tags_107:
   taggings_count: "1"
   type: Character
   adult: "0"
-  wrangled: "0"
   id: "1063753805"
   created_at: 2008-12-07 22:52:13
 tags_093:
@@ -318,7 +296,6 @@ tags_093:
   taggings_count: "1"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753791"
   created_at: 2008-12-07 22:52:11
 tags_072:
@@ -332,7 +309,6 @@ tags_072:
   taggings_count: "1"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753770"
   created_at: 2008-12-07 01:23:59
 tags_029:
@@ -346,7 +322,6 @@ tags_029:
   taggings_count: "0"
   type: Fandom
   adult: "0"
-  wrangled: "1"
   id: "951091623"
   created_at: 2008-11-09 03:26:02
 tags_051:
@@ -360,7 +335,6 @@ tags_051:
   taggings_count: "0"
   type: Character
   adult: "0"
-  wrangled: "1"
   id: "1063753749"
   created_at: 2008-11-21 09:48:52
 tags_008:
@@ -374,7 +348,6 @@ tags_008:
   taggings_count: "0"
   type: Media
   adult: "0"
-  wrangled: "0"
   id: "260181321"
   created_at: 2008-11-09 03:26:02
 tags_030:
@@ -388,7 +361,6 @@ tags_030:
   taggings_count: "0"
   type: Fandom
   adult: "0"
-  wrangled: "1"
   id: "986046160"
   created_at: 2008-11-09 03:26:02
 tags_108:
@@ -402,7 +374,6 @@ tags_108:
   taggings_count: "1"
   type: Character
   adult: "0"
-  wrangled: "0"
   id: "1063753806"
   created_at: 2008-12-07 22:52:13
 tags_094:
@@ -416,7 +387,6 @@ tags_094:
   taggings_count: "1"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753792"
   created_at: 2008-12-07 22:52:12
 tags_073:
@@ -430,7 +400,6 @@ tags_073:
   taggings_count: "1"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753771"
   created_at: 2008-12-07 01:23:59
 tags_010:
@@ -444,7 +413,6 @@ tags_010:
   taggings_count: "2"
   type: Rating
   adult: "0"
-  wrangled: "1"
   id: "344412843"
   created_at: 2008-11-09 03:26:02
 tags_009:
@@ -458,7 +426,6 @@ tags_009:
   taggings_count: "0"
   type: Media
   adult: "0"
-  wrangled: "0"
   id: "299389994"
   created_at: 2008-11-09 03:26:02
 tags_031:
@@ -472,7 +439,6 @@ tags_031:
   taggings_count: "4"
   type: Rating
   adult: "0"
-  wrangled: "1"
   id: "992891255"
   created_at: 2008-11-09 03:26:02
 tags_052:
@@ -486,7 +452,6 @@ tags_052:
   taggings_count: "1"
   type: Pairing
   adult: "0"
-  wrangled: "1"
   id: "1063753750"
   created_at: 2008-11-21 09:50:08
 tags_095:
@@ -500,7 +465,6 @@ tags_095:
   taggings_count: "1"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753793"
   created_at: 2008-12-07 22:52:12
 tags_074:
@@ -514,7 +478,6 @@ tags_074:
   taggings_count: "1"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753772"
   created_at: 2008-12-07 01:23:59
 tags_011:
@@ -528,7 +491,6 @@ tags_011:
   taggings_count: "0"
   type: Freeform
   adult: "0"
-  wrangled: "1"
   id: "362175678"
   created_at: 2008-11-09 03:26:02
 tags_032:
@@ -542,7 +504,6 @@ tags_032:
   taggings_count: "0"
   type: Media
   adult: "0"
-  wrangled: "0"
   id: "1019428968"
   created_at: 2008-11-09 03:26:02
 tags_053:
@@ -556,7 +517,6 @@ tags_053:
   taggings_count: "0"
   type: Character
   adult: "0"
-  wrangled: "1"
   id: "1063753751"
   created_at: 2008-11-21 09:50:08
 tags_096:
@@ -570,7 +530,6 @@ tags_096:
   taggings_count: "1"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753794"
   created_at: 2008-12-07 22:52:12
 tags_075:
@@ -584,7 +543,6 @@ tags_075:
   taggings_count: "1"
   type: Pairing
   adult: "0"
-  wrangled: "1"
   id: "1063753773"
   created_at: 2008-12-07 01:24:00
 tags_012:
@@ -598,7 +556,6 @@ tags_012:
   taggings_count: "0"
   type: Fandom
   adult: "0"
-  wrangled: "1"
   id: "385776504"
   created_at: 2008-11-09 03:26:02
 tags_033:
@@ -612,7 +569,6 @@ tags_033:
   taggings_count: "0"
   type: Warning
   adult: "0"
-  wrangled: "1"
   id: "1039617938"
   created_at: 2008-11-09 03:26:02
 tags_054:
@@ -626,7 +582,6 @@ tags_054:
   taggings_count: "0"
   type: Character
   adult: "0"
-  wrangled: "1"
   id: "1063753752"
   created_at: 2008-11-21 09:50:08
 tags_097:
@@ -640,7 +595,6 @@ tags_097:
   taggings_count: "1"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753795"
   created_at: 2008-12-07 22:52:12
 tags_076:
@@ -654,7 +608,6 @@ tags_076:
   taggings_count: "1"
   type: Fandom
   adult: "0"
-  wrangled: "1"
   id: "1063753774"
   created_at: 2008-12-07 01:24:00
 tags_013:
@@ -668,7 +621,6 @@ tags_013:
   taggings_count: "0"
   type: Rating
   adult: "1"
-  wrangled: "1"
   id: "402275454"
   created_at: 2008-11-09 03:26:02
 tags_034:
@@ -682,7 +634,6 @@ tags_034:
   taggings_count: "0"
   type: Category
   adult: "0"
-  wrangled: "1"
   id: "1063753732"
   created_at: 2008-11-09 03:26:02
 tags_055:
@@ -696,7 +647,6 @@ tags_055:
   taggings_count: "1"
   type: Pairing
   adult: "0"
-  wrangled: "1"
   id: "1063753753"
   created_at: 2008-11-21 09:52:36
 tags_098:
@@ -710,7 +660,6 @@ tags_098:
   taggings_count: "1"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753796"
   created_at: 2008-12-07 22:52:12
 tags_077:
@@ -724,7 +673,6 @@ tags_077:
   taggings_count: "1"
   type: Character
   adult: "0"
-  wrangled: "1"
   id: "1063753775"
   created_at: 2008-12-07 01:24:00
 tags_014:
@@ -738,7 +686,6 @@ tags_014:
   taggings_count: "2"
   type: Category
   adult: "0"
-  wrangled: "1"
   id: "426547448"
   created_at: 2008-11-09 03:26:02
 tags_035:
@@ -752,7 +699,6 @@ tags_035:
   taggings_count: "0"
   type: Warning
   adult: "0"
-  wrangled: "1"
   id: "1063753733"
   created_at: 2008-11-21 08:14:51
 tags_056:
@@ -766,7 +712,6 @@ tags_056:
   taggings_count: "1"
   type: Ambiguity
   adult: "0"
-  wrangled: "1"
   id: "1063753754"
   created_at: 2008-11-21 10:04:20
 tags_099:
@@ -780,7 +725,6 @@ tags_099:
   taggings_count: "1"
   type: Pairing
   adult: "0"
-  wrangled: "0"
   id: "1063753797"
   created_at: 2008-12-07 22:52:12
 tags_078:
@@ -794,7 +738,6 @@ tags_078:
   taggings_count: "1"
   type: Character
   adult: "0"
-  wrangled: "1"
   id: "1063753776"
   created_at: 2008-12-07 01:24:00
 tags_015:
@@ -808,7 +751,6 @@ tags_015:
   taggings_count: "0"
   type: Media
   adult: "0"
-  wrangled: "0"
   id: "441672848"
   created_at: 2008-11-09 03:26:02
 tags_036:
@@ -822,7 +764,6 @@ tags_036:
   taggings_count: "1"
   type: Warning
   adult: "0"
-  wrangled: "1"
   id: "1063753734"
   created_at: 2008-11-21 08:14:51
 tags_057:
@@ -836,7 +777,6 @@ tags_057:
   taggings_count: "1"
   type: Pairing
   adult: "0"
-  wrangled: "0"
   id: "1063753755"
   created_at: 2008-12-05 15:59:13
 tags_080:
@@ -850,7 +790,6 @@ tags_080:
   taggings_count: "1"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753778"
   created_at: 2008-12-07 01:26:40
 tags_079:
@@ -864,7 +803,6 @@ tags_079:
   taggings_count: "1"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753777"
   created_at: 2008-12-07 01:26:40
 tags_016:
@@ -878,7 +816,6 @@ tags_016:
   taggings_count: "1"
   type: Pairing
   adult: "0"
-  wrangled: "1"
   id: "545584597"
   created_at: 2008-11-09 03:26:02
 tags_037:
@@ -892,7 +829,6 @@ tags_037:
   taggings_count: "4"
   type: Category
   adult: "0"
-  wrangled: "1"
   id: "1063753735"
   created_at: 2008-11-21 08:14:51
 tags_058:
@@ -906,7 +842,6 @@ tags_058:
   taggings_count: "1"
   type: Character
   adult: "0"
-  wrangled: "0"
   id: "1063753756"
   created_at: 2008-12-05 15:59:13
 tags_081:
@@ -920,7 +855,6 @@ tags_081:
   taggings_count: "1"
   type: Pairing
   adult: "0"
-  wrangled: "0"
   id: "1063753779"
   created_at: 2008-12-07 01:26:40
 tags_017:
@@ -934,7 +868,6 @@ tags_017:
   taggings_count: "0"
   type: Character
   adult: "0"
-  wrangled: "0"
   id: "552317390"
   created_at: 2008-11-09 03:26:02
 tags_038:
@@ -948,7 +881,6 @@ tags_038:
   taggings_count: "5"
   type: Category
   adult: "0"
-  wrangled: "1"
   id: "1063753736"
   created_at: 2008-11-21 08:14:51
 tags_060:
@@ -962,7 +894,6 @@ tags_060:
   taggings_count: "3"
   type: Fandom
   adult: "0"
-  wrangled: "1"
   id: "1063753758"
   created_at: 2008-12-07 00:28:52
 tags_059:
@@ -976,7 +907,6 @@ tags_059:
   taggings_count: "1"
   type: Pairing
   adult: "0"
-  wrangled: "0"
   id: "1063753757"
   created_at: 2008-12-07 00:28:52
 tags_082:
@@ -990,7 +920,6 @@ tags_082:
   taggings_count: "1"
   type: Fandom
   adult: "0"
-  wrangled: "1"
   id: "1063753780"
   created_at: 2008-12-07 01:26:40
 tags_018:
@@ -1004,7 +933,6 @@ tags_018:
   taggings_count: "0"
   type: Fandom
   adult: "0"
-  wrangled: "1"
   id: "569823665"
   created_at: 2008-11-09 03:26:02
 tags_040:
@@ -1018,7 +946,6 @@ tags_040:
   taggings_count: "0"
   type: Media
   adult: "0"
-  wrangled: "1"
   id: "1063753738"
   created_at: 2008-11-21 08:14:52
 tags_039:
@@ -1032,7 +959,6 @@ tags_039:
   taggings_count: "0"
   type: Category
   adult: "0"
-  wrangled: "1"
   id: "1063753737"
   created_at: 2008-11-21 08:14:51
 tags_061:
@@ -1046,7 +972,6 @@ tags_061:
   taggings_count: "1"
   type: Character
   adult: "0"
-  wrangled: "0"
   id: "1063753759"
   created_at: 2008-12-07 00:33:22
 tags_083:
@@ -1060,7 +985,6 @@ tags_083:
   taggings_count: "1"
   type: Character
   adult: "0"
-  wrangled: "0"
   id: "1063753781"
   created_at: 2008-12-07 01:26:40
 tags_062:
@@ -1074,7 +998,6 @@ tags_062:
   taggings_count: "1"
   type: Character
   adult: "0"
-  wrangled: "0"
   id: "1063753760"
   created_at: 2008-12-07 00:33:22
 tags_020:
@@ -1088,7 +1011,6 @@ tags_020:
   taggings_count: "0"
   type: Fandom
   adult: "0"
-  wrangled: "1"
   id: "711936337"
   created_at: 2008-11-09 03:26:02
 tags_019:
@@ -1102,7 +1024,6 @@ tags_019:
   taggings_count: "2"
   type: Category
   adult: "0"
-  wrangled: "1"
   id: "611729728"
   created_at: 2008-11-09 03:26:02
 tags_084:
@@ -1116,7 +1037,6 @@ tags_084:
   taggings_count: "1"
   type: Character
   adult: "0"
-  wrangled: "0"
   id: "1063753782"
   created_at: 2008-12-07 01:26:41
 tags_021:
@@ -1130,7 +1050,6 @@ tags_021:
   taggings_count: "1"
   type: Ambiguity
   adult: "0"
-  wrangled: "1"
   id: "713695255"
   created_at: 2008-11-09 03:26:02
 tags_042:
@@ -1144,7 +1063,6 @@ tags_042:
   taggings_count: "0"
   type: Freeform
   adult: "0"
-  wrangled: "1"
   id: "1063753740"
   created_at: 2008-11-21 08:35:38
 tags_063:
@@ -1158,7 +1076,6 @@ tags_063:
   taggings_count: "1"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753761"
   created_at: 2008-12-07 00:52:01
 tags_100:
@@ -1172,7 +1089,6 @@ tags_100:
   taggings_count: "1"
   type: Pairing
   adult: "0"
-  wrangled: "0"
   id: "1063753798"
   created_at: 2008-12-07 22:52:12
 tags_085:
@@ -1186,7 +1102,6 @@ tags_085:
   taggings_count: "1"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753783"
   created_at: 2008-12-07 01:34:38
 tags_001:
@@ -1200,7 +1115,6 @@ tags_001:
   taggings_count: "2"
   type: Character
   adult: "0"
-  wrangled: "1"
   id: "26796919"
   created_at: 2008-11-09 03:26:02
 tags_022:
@@ -1214,7 +1128,6 @@ tags_022:
   taggings_count: "3"
   type: Fandom
   adult: "0"
-  wrangled: "1"
   id: "741440589"
   created_at: 2008-11-09 03:26:02
 tags_043:
@@ -1228,7 +1141,6 @@ tags_043:
   taggings_count: "1"
   type: Warning
   adult: "0"
-  wrangled: "1"
   id: "1063753741"
   created_at: 2008-11-21 09:45:41
 tags_064:
@@ -1242,7 +1154,6 @@ tags_064:
   taggings_count: "1"
   type: Pairing
   adult: "0"
-  wrangled: "0"
   id: "1063753762"
   created_at: 2008-12-07 00:52:02
 tags_101:
@@ -1256,7 +1167,6 @@ tags_101:
   taggings_count: "1"
   type: Pairing
   adult: "0"
-  wrangled: "0"
   id: "1063753799"
   created_at: 2008-12-07 22:52:12
 tags_086:
@@ -1270,7 +1180,6 @@ tags_086:
   taggings_count: "1"
   type: Pairing
   adult: "0"
-  wrangled: "1"
   id: "1063753784"
   created_at: 2008-12-07 01:34:38
 tags_002:
@@ -1284,7 +1193,6 @@ tags_002:
   taggings_count: "1"
   type: Freeform
   adult: "0"
-  wrangled: "1"
   id: "66216446"
   created_at: 2008-11-09 03:26:02
 tags_023:
@@ -1298,7 +1206,6 @@ tags_023:
   taggings_count: "8"
   type: Warning
   adult: "0"
-  wrangled: "1"
   id: "751871740"
   created_at: 2008-11-09 03:26:02
 tags_044:
@@ -1312,7 +1219,6 @@ tags_044:
   taggings_count: "3"
   type: Warning
   adult: "0"
-  wrangled: "1"
   id: "1063753742"
   created_at: 2008-11-21 09:45:41
 tags_065:
@@ -1326,7 +1232,6 @@ tags_065:
   taggings_count: "1"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753763"
   created_at: 2008-12-07 00:55:58
 tags_102:
@@ -1340,7 +1245,6 @@ tags_102:
   taggings_count: "1"
   type: Pairing
   adult: "0"
-  wrangled: "0"
   id: "1063753800"
   created_at: 2008-12-07 22:52:12
 tags_087:
@@ -1354,7 +1258,6 @@ tags_087:
   taggings_count: "1"
   type: Character
   adult: "0"
-  wrangled: "0"
   id: "1063753785"
   created_at: 2008-12-07 01:34:39
 tags_003:
@@ -1368,7 +1271,6 @@ tags_003:
   taggings_count: "5"
   type: Rating
   adult: "1"
-  wrangled: "1"
   id: "112726825"
   created_at: 2008-11-09 03:26:02
 tags_024:
@@ -1382,7 +1284,6 @@ tags_024:
   taggings_count: "0"
   type: Media
   adult: "0"
-  wrangled: "0"
   id: "788108366"
   created_at: 2008-11-09 03:26:02
 tags_045:
@@ -1396,7 +1297,6 @@ tags_045:
   taggings_count: "0"
   type: Warning
   adult: "0"
-  wrangled: "1"
   id: "1063753743"
   created_at: 2008-11-21 09:45:41
 tags_066:
@@ -1410,7 +1310,6 @@ tags_066:
   taggings_count: "1"
   type: Pairing
   adult: "0"
-  wrangled: "0"
   id: "1063753764"
   created_at: 2008-12-07 00:55:58
 tags_103:
@@ -1424,7 +1323,6 @@ tags_103:
   taggings_count: "1"
   type: Fandom
   adult: "0"
-  wrangled: "1"
   id: "1063753801"
   created_at: 2008-12-07 22:52:12
 tags_088:
@@ -1438,7 +1336,6 @@ tags_088:
   taggings_count: "0"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753786"
   created_at: 2008-12-07 01:35:54
 tags_067:
@@ -1452,7 +1349,6 @@ tags_067:
   taggings_count: "0"
   type: Freeform
   adult: "0"
-  wrangled: "0"
   id: "1063753765"
   created_at: 2008-12-07 01:11:11
 tags_004:
@@ -1466,7 +1362,6 @@ tags_004:
   taggings_count: "0"
   type: Fandom
   adult: "0"
-  wrangled: "1"
   id: "130714128"
   created_at: 2008-11-09 03:26:02
 tags_025:
@@ -1480,7 +1375,6 @@ tags_025:
   taggings_count: "0"
   type: Media
   adult: "0"
-  wrangled: "0"
   id: "791950904"
   created_at: 2008-11-09 03:26:02
 tags_046:
@@ -1494,6 +1388,5 @@ tags_046:
   taggings_count: "1"
   type: Pairing
   adult: "0"
-  wrangled: "1"
   id: "1063753744"
   created_at: 2008-11-21 09:48:03

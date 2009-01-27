@@ -18,7 +18,6 @@ class Pairing < Tag
         if character
           character.update_attribute(:fandom_id, self.fandom_id) unless character.fandom
           character.wrangle_canonical(update_works) if self.canonical
-          character.update_attribute(:wrangled, true) if self.wrangled
           self.wrangle_parent(character, update_works)
         end
       end

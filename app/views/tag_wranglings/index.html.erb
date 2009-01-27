@@ -1,15 +1,25 @@
 <h2>Tag Wrangling</h2>
 
 <dl>
-<dt>Mass Flag tags by Category</dt>
-<% for category in Tag::TYPES %>
-  <dd><%= link_to_unless_current category, edit_tag_wrangling_path(category) %> (<%= category.constantize.unwrangled.count %>)</dd>
+<dt>Mass wrangle tags by Category</dt>
+<% if logged_in_as_admin? %>
+  <% for category in Tag::TYPES do %>
+    <dd><%= link_to_unless_current category, edit_tag_wrangling_path(category) %> (<%= category.constantize.unwrangled.count %> unwrangled)</dd>
+  <% end %>
+<% else %>
+  <% for category in Tag::USER_DEFINED do %>
+    <dd><%= link_to_unless_current category, edit_tag_wrangling_path(category) %> (<%= category.constantize.unwrangled.count %> unwrangled)</dd>
+  <% end %>
 <% end %>
 <dt>Mass Assign canonical tags</dt>
-<dd><%= link_to_unless_current "fandom tags to media", fandom_to_media_tag_wranglings_path %> (<%= Fandom.canonical.no_media.count %>)</dd>
-<dd><%= link_to_unless_current "character tags to fandom", character_to_fandom_tag_wranglings_path %> (<%= Character.canonical.no_fandom.count %>)</dd>
-<dd><%= link_to_unless_current "pairing tags to fandom", pairing_to_fandom_tag_wranglings_path %> (<%= Pairing.canonical.no_fandom.count %>)</dd>
-<dd><%= link_to_unless_current "character tags to pairing", character_to_pairing_tag_wranglings_path %> (<%= Pairing.canonical.no_characters.count %>)</dd>
+<dd><%= link_to_unless_current "fandom tags to media", fandom_to_media_tag_wranglings_path %> (<%= Fandom.canonical.no_media.count %> medialess)</dd>
+<dd><%= link_to_unless_current "character tags to fandom", character_to_fandom_tag_wranglings_path %> (<%= Character.canonical.no_fandom.count %> fandomless)</dd>
+<dd><%= link_to_unless_current "pairing tags to fandom", pairing_to_fandom_tag_wranglings_path %> (<%= Pairing.canonical.no_fandom.count %> fandomless)</dd>
+<dd><%= link_to_unless_current "character tags to pairing", character_to_pairing_tag_wranglings_path %> (<%= Pairing.canonical.no_characters.count %> characterless)</dd>
 </dl>
+<dt>Mass view tags by Category</dt>
+<% for category in Tag::TYPES do %>
+  <dd><%= link_to_unless_current category, tag_wrangling_path(category) %> (<%= category.constantize.count %>)</dd>
+<% end %>
 
 <%= tag_wrangler_footer %>

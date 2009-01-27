@@ -11,6 +11,15 @@ class Fandom < Tag
     Tag.find_all_by_fandom_id(self.id).each {|t| t.update_attribute(:fandom_id, tag.id)}
   end
 
+  def name_plus_size(category, unwrangled_only)
+    if unwrangled_only
+      count = category.unwrangled.by_fandom(self).count
+    else
+      count = category.by_fandom(self).count
+    end
+    self.name + " (" + count.to_s + ")"
+  end
+
   def children
     ( Tag.find_all_by_fandom_id(self.id) + super ).uniq.compact.sort
   end

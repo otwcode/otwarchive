@@ -70,30 +70,6 @@ class TagsController < ApplicationController
 
   def edit
     @tag = Tag.find_by_name(params[:id])
-    if @tag.blank? # no fandom
-      if params[:only]
-        if params[:only] == 'Banned'
-          if logged_in_as_admin?
-            @unwrangled = Banned.all.sort
-          else
-            flash[:error] = "You have to be an admin"
-            redirect :back and return
-          end
-        elsif params[:only] == 'Ambiguity'
-            @unwrangled = Ambiguity.all.sort
-        else
-          @unwrangled = params[:only].constantize.unwrangled.no_fandom.sort
-        end
-      else
-        @unwrangled = Freeform.unwrangled.no_fandom.sort
-      end
-      render :action => "unwrangled" and return
-    elsif @tag.is_a?(Fandom)
-      @unwrangled = @tag.children.select(&:unwrangled).group_by(&:type)
-    end
-    @fandoms = Fandom.canonical.sort if @tag.class_name =~ /Character|Pairing|Freeform/
-    @medias = Media.canonical.sort if @tag.class_name =~ /Media/
-    @possible_children = @tag.possible_children
   end
 
   def update

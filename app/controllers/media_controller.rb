@@ -1,9 +1,9 @@
 class MediaController < ApplicationController
-  
+
   def index
-    @fandom_listing = Fandom.canonical.group_by(&:media).sort_by{|array| array[1].size}.reverse
+    @fandom_listing = Fandom.canonical.group_by(&:media).sort_by{|array| array[1].size}.reverse + [[nil,Fandom.canonical.no_media]]
   end
-  
+
   def show
     if params[:id] == "0"
       @medium_name = "Uncategorized Fandoms".t

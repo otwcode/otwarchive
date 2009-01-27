@@ -8,5 +8,6 @@ class AddCharactersBoolean < ActiveRecord::Migration
   end
 
   def self.down
+    remove_column :tags, :has_characters
   end
 end

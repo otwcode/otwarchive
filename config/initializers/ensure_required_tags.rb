@@ -10,7 +10,6 @@ def create_canonical(name, type, adult=false)
     end
   end
   tag.update_attribute(:canonical,true)
-  tag.update_attribute(:wrangled,true)
   tag.update_attribute(:adult, adult)
   raise "how did this happen?" unless tag.canonical?
   return tag
@@ -19,7 +18,7 @@ end
 begin
   tag = Warning.new(:name => "unused")
   raise unless tag[:type]  # haven't migrated to STI yet
-  raise unless !tag.wrangled? # haven't run with new migrations
+  raise unless tag.unwrangled # haven't run with new migrations
 rescue
   puts "no STI"
 else

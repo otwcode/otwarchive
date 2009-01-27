@@ -1,10 +1,16 @@
-<h2>TagWrangler: Set Adult, Banned and Canonical Flags for <%= @category.name %> tags</h2>
+<h2>TagWrangler: Set Adult, Banned, Canonical and Synonym Flags for unwrangled <%= @category.name %> tags
+  <%- if @fandom %>
+    in Fandom <%= @fandom.name %>
+  <%- elsif @fandoms %>
+    without a Fandom
+  <%-end -%>
+</h2>
 <%- form_tag tag_wranglings_path do -%>
 <dl>
   <%= hidden_field_tag(:id, @category.name) %>
   <%- if @fandoms %>
-    <dt>Filter by Fandom:</dt>
-    <dd><%= select("fandom", 'fandom_id', @fandoms.collect {|p| [ p.name, p.id ] }, { :include_blank => true, :selected => (@fandom.id if @fandom)}) %></dd>
+    <dt>Change Fandom:</dt>
+    <dd><%= select("fandom", 'fandom_id', @fandoms.collect {|f| [ f.name_plus_size(@category, true), f.id ] }, { :include_blank => true, :selected => (@fandom.id if @fandom)}) %></dd>
     <p class = "submit"><%= submit_tag "Refresh" %></p>
   <%- end -%>
   <dt>Tag</dt>

@@ -44,7 +44,7 @@ class Tag < ActiveRecord::Base
 
   named_scope :canonical, {:conditions => {:canonical => true}, :order => 'name ASC'}
   named_scope :nonsynonymous, {:conditions => {:merger_id => nil, :canonical => false}, :order => 'name ASC'}
-  named_scope :unwrangled, {:conditions => {:wrangled => false}, :order => 'name ASC'}
+  named_scope :unwrangled, {:conditions => {:canonical => false, :merger_id => nil}, :order => 'name ASC'}
   named_scope :visible, {:conditions => ['type in (?)', VISIBLE], :order => 'name ASC' }
 
   named_scope :by_popularity, {:order => 'taggings_count DESC'}
@@ -378,6 +378,14 @@ class Tag < ActiveRecord::Base
     return true
   end
 
+  def guess_fandom
+    return if self.fandom
+    works_by_fandom = self.works.group_by(&:fandoms).sort_by{|array| array[1].size}.reverse.first
+    fandom = works_by_fandom[0].first if works_by_fandom
+    self.update_attribute(:fandom_id, fandom.id) if fandom
+    self
+  end
+
   def class_name
     self.class.name
   end
@@ -387,6 +395,6 @@ class Tag < ActiveRecord::Base
   end
 
   def unwrangled
-    return self unless self.wrangled?
+    return self unless (self.canonical || self.merger || ['Ambiguity', 'Banned'].include?(self.class) )
   end
 end
