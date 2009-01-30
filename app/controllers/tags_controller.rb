@@ -32,10 +32,18 @@ class TagsController < ApplicationController
     unless params[:work_id].blank?
       @display_work = Work.find(params[:work_id])
       @display_tags = @display_work.warnings
+      @display_category = @display_tags.first.type.name.downcase  # Enigel Dec 13 08 quick 'n dirty fix
     end
-    respond_to do |format|
-      format.js
+    if request.xml_http_request?
+      respond_to do |format|
+        format.js
+      end
+    else
+      # This is just a quick fix to avoid script barf if JavaScript is disabled
+      flash[:error] = "Sorry, you need to have JavaScript enabled for this.".t
+      redirect_to :back
     end
+
   end
 
   # GET /tags/new

@@ -1,2 +1,2 @@
 tag_list = @display_tags.map{|tag| "<li>" + link_to_tag(tag) + "</li>"}
-page.replace_html "work_#{@display_work.id}_category_#{@display_category.id}", tag_list
+page.replace_html "work_#{@display_work.id}_category_#{@display_category}", tag_list

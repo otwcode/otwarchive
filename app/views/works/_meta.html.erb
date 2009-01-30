@@ -1,7 +1,7 @@
 <dl class="work-meta">
-	<%- work_tags = work.tags -%>
+  <%- work_tags = work.tags -%>
   <%- Tag::VISIBLE.each do |type| -%>
-		<%- tags = work_tags.select{|tag| tag.type == type} -%>
+    <%- tags = work_tags.select{|tag| tag.type == type} -%>
     <%- unless tags.blank? -%>
       <dt class="<%= type.downcase -%>">
         <%= type.constantize::NAME %>:
