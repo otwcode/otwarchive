@@ -4,7 +4,10 @@
     This feature is in the early stages of development and may not work well 
     (or at all!) on many existing works. 
   </p>
-  <% form_tag url_for(:controller => :works, :action => :upload_work) do %>
+ 	<p id="">Allowed HTML:<br />
+    <code>a href, b, blockquote, br, cite, code, del, dd, dt, dl, div, em, h1, h2, h3, h4, h5, h6, i, ins, li, ol, pre, q, small, span, strike, strong, sub, sup, ul</code>
+  </p>
+<% form_tag url_for(:controller => :works, :action => :upload_work) do %>
     <p>
       <%= label_tag "work_url", h("URL for existing work: ".t) -%>
       <%= text_field_tag "work_url" -%>
