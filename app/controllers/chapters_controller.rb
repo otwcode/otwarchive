@@ -174,6 +174,7 @@ class ChaptersController < ApplicationController
     if !@chapter.invalid_pseuds.blank? || !@chapter.ambiguous_pseuds.blank?
       @chapter.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
     elsif params[:preview_button]
+      @preview_mode = true # Enigel Jan 31
       render :partial => 'preview_edit', :layout => 'application'
     elsif params[:cancel_button]
       # Not quite working yet - should send the user back to wherever they were before they hit edit
@@ -209,6 +210,7 @@ class ChaptersController < ApplicationController
   
   # GET /chapters/1/preview
   def preview
+    @preview_mode = true #Enigel Jan 31
   end
   
   # POST /chapters/1/post
