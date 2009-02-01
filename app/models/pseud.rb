@@ -53,7 +53,7 @@ class Pseud < ActiveRecord::Base
   # Enigel Dec 12 08: added sort method
   # sorting by pseud name or by login name in case of equality
   def <=>(other)
-    (self.name <=> other.name) == 0 ? (self.user_name <=> other.user_name) : (self.name <=> other.name)
+    (self.name.downcase <=> other.name.downcase) == 0 ? (self.user_name.downcase <=> other.user_name.downcase) : (self.name.downcase <=> other.name.downcase)
   end
 
   # For use with the work and chapter forms
