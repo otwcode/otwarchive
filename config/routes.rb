@@ -6,7 +6,7 @@ ActionController::Routing::Routes.draw do |map|
   map.feedbacks '/feedback/', :controller => 'feedbacks', :action => 'create', :path_prefix => ':locale', :conditions => { :method => :post }
   map.new_feedback_report '/feedback/', :controller => 'feedbacks', :action => 'new', :path_prefix => ':locale'
 
-  map.resources :tag_wranglings, :path_prefix => ':locale', :collection => {:fandom_to_media => :get, :character_to_fandom => :get, :pairing_to_fandom => :get, :character_to_pairing => :get}
+  map.resources :tag_wranglings, :path_prefix => ':locale', :member => {:assign => :get}
 
   map.resources :tags, :collection => {:show_hidden => :get}, :path_prefix => ':locale' do |tag|
     tag.resources :works

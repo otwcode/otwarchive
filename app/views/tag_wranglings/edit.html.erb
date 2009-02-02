@@ -1,44 +1,64 @@
-<h2>TagWrangler: Set Adult, Banned, Canonical and Synonym Flags for unwrangled <%= @category.name %> tags
+<h2>Wrangle <%= @category %> tags
+<% if @tags %>
   <%- if @fandom %>
-    in Fandom <%= @fandom.name %>
-  <%- elsif @fandoms %>
-    without a Fandom
-  <%-end -%>
-</h2>
-<%- form_tag tag_wranglings_path do -%>
-<dl>
-  <%= hidden_field_tag(:id, @category.name) %>
-  <%- if @fandoms %>
-    <dt>Change Fandom:</dt>
-    <dd><%= select("fandom", 'fandom_id', @fandoms.collect {|f| [ f.name_plus_size(@category, true), f.id ] }, { :include_blank => true, :selected => (@fandom.id if @fandom)}) %></dd>
-    <p class = "submit"><%= submit_tag "Refresh" %></p>
+      in <%= @fandom.name %></h2>
+  <%- elsif @media %>
+      in <%= @media.name %></h2>
+  <%- else -%>
+    </h2>
   <%- end -%>
-  <dt>Tag</dt>
-  <dd>Banned</dd>
-  <%- if @category == Rating %>
-    <dd>Adult</dd>
-  <% end %>
-  <dd>Canonical</dd>
-  <dd>Synonym</dd>
-  <%- @tags.each do |tag| %>
-    <dt><%= label :tag, link_to_edit_tag(tag) %></dt>
-    <dd><%= check_box_tag("banned[]", tag.id, tag.banned, {:disabled => !logged_in_as_admin?}) %></dd>
+    <%- form_tag tag_wranglings_path do -%>
+    <%= hidden_field_tag(:id, @category) %>
+    <dl>
+    <dt>Tag</dt>
+    <dt>Count</dt>
+    <dd>Banned</dd>
     <%- if @category == Rating %>
-      <dd><%= check_box_tag("adult[]", tag.id, tag.adult) %></dd>
+      <dd>Adult</dd>
     <% end %>
-    <dd><%= check_box_tag("canonical[]", tag.id, tag.canonical) %></dd>
-    <% unless tag.canonical %>
-      <dd>
-        <%- if @fandom -%>
-          <%= select("merger", tag.id, (tag.class.by_fandom(@fandom).canonical - [tag]).collect {|p| [ p.name, p.id ] }, { :include_blank => true, :selected => tag.merger.andand.id}) %>
-        <%- else -%>
-           <%= select("merger", tag.id, (tag.class.no_fandom.canonical - [tag]).collect {|p| [ p.name, p.id ] }, { :include_blank => true, :selected => tag.merger.andand.id}) %>
-        <%- end -%>
-      </dd>
+    <dd>Canonical</dd>
+    <dd>Synonym</dd>
+    <%- @tags.each do |tag| %>
+      <dt><%= label :tag, link_to_edit_tag(tag) %></dt>
+      <dd><%= tag.taggings_count %></dd>
+      <dd><%= check_box_tag("banned[]", tag.id, tag.banned, {:disabled => !logged_in_as_admin?}) %></dd>
+      <%- if @category == Rating %>
+        <dd><%= check_box_tag("adult[]", tag.id, tag.adult) %></dd>
+      <% end %>
+      <dd><%= check_box_tag("canonical[]", tag.id, tag.canonical) %></dd>
+      <% unless tag.canonical %>
+        <dd>
+          <%- if @fandom -%>
+            <%= hidden_field_tag("fandom[fandom_id]", @fandom.id) %>
+            <%= select("merger", tag.id, (tag.class.by_fandom(@fandom).canonical - [tag]).collect {|p| [ p.name, p.id ] }, { :include_blank => true, :selected => tag.merger.andand.id}) %>
+          <%- elsif @media -%>
+            <%= hidden_field_tag("media[media_id]", @media.id) %>
+            <%= select("merger", tag.id, (tag.class.by_media(@media).canonical - [tag]).collect {|p| [ p.name, p.id ] }, { :include_blank => true, :selected => tag.merger.andand.id}) %>
+          <%- else -%>
+             <%= select("merger", tag.id, (tag.class.no_parent.canonical - [tag]).collect {|p| [ p.name, p.id ] }, { :include_blank => true, :selected => tag.merger.andand.id}) %>
+          <%- end -%>
+        </dd>
+      <%- end -%>
     <%- end -%>
+    <p class = "submit"><%= submit_tag "Update all tags" %></p>
+  </dl>
   <%- end -%>
-  <p class = "submit"><%= submit_tag "Update all tags" %></p>
-</dl>
-<%- end -%>
+<%- elsif @fandoms %>
+    </h2>
+  <%- form_tag tag_wranglings_path do -%>
+  <%= hidden_field_tag(:id, @category) %>
+  <dt>Select Fandom:</dt>
+  <dd><%= select("fandom", 'fandom_id', @fandoms.collect {|f| [ f.name, f.id ] }) %></dd>
+    <p class = "submit"><%= submit_tag "Wrangle" %></p>
+  <%- end -%>
+<%- elsif @medias %>
+    </h2>
+  <%- form_tag tag_wranglings_path do -%>
+  <%= hidden_field_tag(:id, @category) %>
+  <dt>Select Media:</dt>
+  <dd><%= select("media", 'media_id', @medias.collect {|f| [ f.name, f.id ] }) %></dd>
+    <p class = "submit"><%= submit_tag "Wrangle" %></p>
+  <%- end -%>
+<%-end -%>
 
 <%= tag_wrangler_footer %>

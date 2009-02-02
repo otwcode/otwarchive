@@ -1,7 +1,7 @@
 class MediaController < ApplicationController
 
   def index
-    @fandom_listing = Fandom.canonical.group_by(&:media).sort_by{|array| array[1].size}.reverse + [[nil,Fandom.canonical.no_media]]
+    @fandom_listing = Fandom.canonical.group_by(&:media).sort_by{|array| array[1].size}.reverse + [[nil,Fandom.canonical.no_parent]]
   end
 
   def show

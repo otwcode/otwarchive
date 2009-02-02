@@ -1,14 +1,14 @@
-<h2>Manage Tag Relationships</h2>
+<h2>Mass Tag Assignment</h2>
 
 <dl>
   <%- form_tag tag_wranglings_path do -%>
-    <dt>Assign fandom to: </dt>
-    <dd><%= select("media", 'media_id', @medias.collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
+    <dt>Assign to:</dt>
+    <dd><%= select("parent", 'parent_id', @possible_parents.collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
     <dt></dt>
-    <%- @fandoms.each do |tag| %>
+    <%- @category.constantize.no_parent.each do |tag| %>
       <dd><%= check_box_tag("tags[]", tag.name, false) %><%= label :tag, link_to_edit_tag(tag) %></dd>
     <%- end -%>
-  <p class = "submit"><%= submit_tag "Assign to Media" %></p>
+  <p class = "submit"><%= submit_tag "Assign" %></p>
   <%= "(Click on a tag to select it for individual editing)".t %>
   <%- end -%>
 </dl>

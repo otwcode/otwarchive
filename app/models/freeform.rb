@@ -4,6 +4,10 @@ class Freeform < Tag
 
   before_save :add_fandom_to_parents
 
+  def add_parent(fandom_id)
+    add_fandom(fandom_id)
+  end
+
   def add_pairing(pairing_id)
     pairing = Pairing.find_by_id(pairing_id)
     return false unless pairing.is_a? Pairing

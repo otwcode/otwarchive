@@ -3,21 +3,16 @@ class Fandom < Tag
   NAME = ArchiveConfig.FANDOM_CATEGORY_NAME
 
   named_scope :by_media, lambda{|media| {:conditions => {:media_id => media.id}}}
-  named_scope :no_media, :conditions => {:media_id => nil}
+  named_scope :no_parent, :conditions => {:media_id => nil}
 
+
+  def add_parent(media_id)
+    add_media(media_id)
+  end
 
   def wrangle_merger(tag, update_works=true)
     super(tag, update_works)
     Tag.find_all_by_fandom_id(self.id).each {|t| t.update_attribute(:fandom_id, tag.id)}
-  end
-
-  def name_plus_size(category, unwrangled_only)
-    if unwrangled_only
-      count = category.unwrangled.by_fandom(self).count
-    else
-      count = category.by_fandom(self).count
-    end
-    self.name + " (" + count.to_s + ")"
   end
 
   def children

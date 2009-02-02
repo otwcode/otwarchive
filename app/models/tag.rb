@@ -7,7 +7,7 @@ class Tag < ActiveRecord::Base
   TYPES = ['Rating', 'Warning', 'Category', 'Media', 'Fandom', 'Pairing', 'Character', 'Freeform', 'Ambiguity', 'Banned' ]
 
   # these tags can be filtered on
-  FILTERS = TYPES - ['Ambiguity', 'Banned', 'Media']
+  FILTERS = TYPES - ['Banned', 'Media']
 
   # these tags show up on works
   VISIBLE = TYPES - ['Media', 'Banned']
@@ -51,7 +51,7 @@ class Tag < ActiveRecord::Base
   named_scope :by_name, {:order => 'name ASC'}
 
   named_scope :by_fandom, lambda{|fandom| {:conditions => {:fandom_id => fandom.id}}}
-  named_scope :no_fandom, :conditions => {:fandom_id => nil}
+  named_scope :no_parent, :conditions => {:fandom_id => nil}
 
   # Class methods
 
@@ -188,6 +188,7 @@ class Tag < ActiveRecord::Base
     return unless Tag::USER_DEFINED.include?(self.class.name)
     media = Media.find_by_id(media_id)
     return false unless media.is_a? Media
+    self.update_attribute(:media_id, media_id)
     self.wrangle_parent(media)
   end
 
@@ -195,6 +196,7 @@ class Tag < ActiveRecord::Base
     return unless Tag::USER_DEFINED.include?(self.class.name)
     fandom = Fandom.find_by_id(fandom_id)
     return false unless fandom.is_a? Fandom
+    self.update_attribute(:fandom_id, fandom_id)
     self.wrangle_parent(fandom)
   end
 
@@ -356,9 +358,9 @@ class Tag < ActiveRecord::Base
     type = self[:type]
     return unless type
     fandoms = Fandom.all if type.match /Media|Fandom/
-    characters = Character.no_fandom if type.match /Fandom|Character/
-    pairings = Pairing.no_fandom if type.match /Fandom|Character|Pairing/
-    freeforms = Freeform.no_fandom if type.match /Fandom|Character|Pairing|Freeform/
+    characters = Character.no_parent if type.match /Fandom|Character/
+    pairings = Pairing.no_parent if type.match /Fandom|Character|Pairing/
+    freeforms = Freeform.no_parent if type.match /Fandom|Character|Pairing|Freeform/
     fandom = self.fandom
     if fandom.is_a? Fandom
       characters = characters + Character.by_fandom(fandom) if type.match /Fandom|Character/
