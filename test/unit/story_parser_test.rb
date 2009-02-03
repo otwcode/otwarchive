@@ -4,7 +4,7 @@ class StoryParserTest < ActiveSupport::TestCase
 
   context "a storyparser" do
     setup do
-      @storyparser = StoryParser.new      
+      @storyparser = StoryParser.new
     end
 
     context "given a plaintext story" do
@@ -13,8 +13,8 @@ class StoryParserTest < ActiveSupport::TestCase
       end
       should "create a new unposted work with the text as its content" do
         @work = @storyparser.parse_story(@text)
-        assert !@work.posted 
-        assert @work.chapters.first.content == @text        
+        assert !@work.posted
+        assert @work.chapters.first.content == @text
       end
       context "with the title and summary in the text" do
         setup do
@@ -30,7 +30,7 @@ class StoryParserTest < ActiveSupport::TestCase
         end
       end
     end
-    
+
     context "given an HTML story" do
       setup do
         @content = random_chapter
@@ -43,7 +43,7 @@ class StoryParserTest < ActiveSupport::TestCase
         assert @work.title == @title
       end
     end
-    
+
     context "given a url for a chapter" do
       setup do
         @url = "http://www.yuletidetreasure.org/archive/40/birthpains.html"
@@ -54,38 +54,37 @@ class StoryParserTest < ActiveSupport::TestCase
         assert !@chapter.title.blank?
         assert !@chapter.summary.blank?
       end
-    end 
+    end
 
   end
-  
+
   def test_livejournal_1
-    storyparser = StoryParser.new      
+    storyparser = StoryParser.new
     url = 'http://se-parsons.livejournal.com/895277.html'
     work = storyparser.download_and_parse_story(url)
     assert_match /Dean started sweating/, work.chapters.first.content
     assert_match /de la mer/, work.title
   end
-  
+
   # adult content
   def test_livejournal_adult
     puts "Deferred: lj adult content warning"
-#     storyparser = StoryParser.new      
+#     storyparser = StoryParser.new
 #     url = 'http://x-strangeangels.livejournal.com/42435.html'
 #     work = storyparser.download_and_parse_story(url)
 #     assert_match /Dean finds her kneeling/, work.chapters.first.content
 #     assert_match /I dream of a circle/, work.title
   end
-  
+
   # Test parsing of stories from yuletidetreasure.org
   def test_yuletide_1
-    @storyparser = StoryParser.new      
+    @storyparser = StoryParser.new
 
     url = "http://www.yuletidetreasure.org/archive/40/birthpains.html"
     @work = @storyparser.download_and_parse_story(url)
     assert !@work.chapters.first.content.blank?
     assert_equal "Birth Pains", @work.title
-    puts "Deferred: yuletide search down"
-#    assert !@work.summary.blank?
+    assert !@work.summary.blank?
     @work.category_string = ArchiveConfig.CATEGORY_OTHER_TAG_NAME
     @work.warning_string = ArchiveConfig.WARNING_NONE_TAG_NAME
     @work.authors = [create_pseud]
@@ -93,25 +92,23 @@ class StoryParserTest < ActiveSupport::TestCase
     @work.save
     assert_match /yuletide/, @work.freeforms.string
     assert_match "recipient:verity", @work.freeforms.string
-    puts "Deferred: yuletide search down"
-#    assert !@work.rating_string.blank?
+    assert !@work.rating_string.blank?
     assert_match /The 10th Kingdom/, @work.fandoms.string
   end
- 
+
   def test_yuletide_old
-    # ancient url that doesn't work?
-    puts "Deferred: parsing very old yuletide stories"
-    # @url = "http://www.yuletidetreasure.org/archive/0/acertain.html"
-    # @work = @storyparser.download_and_parse_story(@url)
-    # assert !@work.chapters.first.content.blank?
-    # assert !@work.title.blank?
+    @storyparser = StoryParser.new
+    @url = "http://www.yuletidetreasure.org/archive/0/acertain.html"
+    @work = @storyparser.download_and_parse_story(@url)
+    assert !@work.chapters.first.content.blank?
+    assert !@work.title.blank?
   end
 
   # single-chaptered work
   def test_ffnet
-    @storyparser = StoryParser.new      
-    
-    @url = "http://www.fanfiction.net/s/2180161/1/Hot_Springs"     
+    @storyparser = StoryParser.new
+
+    @url = "http://www.fanfiction.net/s/2180161/1/Hot_Springs"
     @work = @storyparser.download_and_parse_story(@url)
     assert_match /After many months/, @work.chapters.first.content
     assert_equal "Hot Springs", @work.title
@@ -124,18 +121,20 @@ class StoryParserTest < ActiveSupport::TestCase
     assert_equal Rating.find_by_name(ArchiveConfig.RATING_TEEN_TAG_NAME), @work.ratings.first
   end
 
-  #multi-chaptered work -- not yet working
+  #multi-chaptered work
   def test_ffnet_chapters
     puts "Deferred: parsing multi-chaptered ffnet stories"
-    # @url = "http://www.fanfiction.net/s/4545794/1/The_Memory_Remains"
-    # @work = @storyparser.download_and_parse_story(@url)
-    # assert !@work.chapters.first.content.blank?
-    # assert !@work.title.blank?        
+    @storyparser = StoryParser.new
+    @url = "http://www.fanfiction.net/s/4545794/1/The_Memory_Remains"
+    @work = @storyparser.download_and_parse_story(@url)
+    assert !@work.chapters.first.content.blank?
+    assert !@work.title.blank?
+    # put rest of chapters here
   end
-  
-  # "successfully parse a url with a storyinfo block in html comments with fandom" 
+
+  # "successfully parse a url with a storyinfo block in html comments with fandom"
   def test_storyinfo
-    storyparser = StoryParser.new      
+    storyparser = StoryParser.new
     url = "http://www.intimations.org/fanfic/davidcook/Madrigals%20and%20Misadventures.html"
     work = storyparser.download_and_parse_story(url)
     assert_match /It was really cool/, work.chapters.first.content
@@ -149,22 +148,35 @@ class StoryParserTest < ActiveSupport::TestCase
     assert_match /David Cook RPF/, work.fandoms.string
   end
 
-  def test_previous_failures
-    @storyparser = StoryParser.new      
-    @urls = []
-    @urls << "http://remix.illuminatedtext.com/dbfiction.php?fiction_id=441"
-    @urls << "http://web.archive.org/web/20040310174832/http://witchqueen.diary-x.com/journal.cgi?entry=20040108b"
-    @urls << "http://rivkat.com/spn/three.html"
-    @urls.each do |url|
-      @work = @storyparser.download_and_parse_story(url)
-      assert !@work.chapters.first.content.blank?
-      assert @work.chapters.first.content.length > 500
-      assert !@work.title.blank?
-    end
+  def test_remix
+    @storyparser = StoryParser.new
+    url = "http://remix.illuminatedtext.com/dbfiction.php?fiction_id=441"
+    @work = @storyparser.download_and_parse_story(url)
+    assert !@work.chapters.first.content.blank?
+    assert @work.chapters.first.content.length > 500
+    assert !@work.title.blank?
   end
-  
+
+  def test_archive_org
+    @storyparser = StoryParser.new
+    url = "http://web.archive.org/web/20040310174832/http://witchqueen.diary-x.com/journal.cgi?entry=20040108b"
+    @work = @storyparser.download_and_parse_story(url)
+    assert !@work.chapters.first.content.blank?
+    assert @work.chapters.first.content.length > 500
+    assert !@work.title.blank?
+  end
+
+  def test_rivkat
+    @storyparser = StoryParser.new
+    url = "http://rivkat.com/spn/three.html"
+    @work = @storyparser.download_and_parse_story(url)
+    assert !@work.chapters.first.content.blank?
+    assert @work.chapters.first.content.length > 500
+    assert !@work.title.blank?
+  end
+
   def test_date
-    @storyparser = StoryParser.new      
+    @storyparser = StoryParser.new
     @url = "http://www.intimations.org/fanfic/master_and_commander/five_things-listening.html"
     @work = @storyparser.download_and_parse_story(@url)
     assert @work.published_at == Time.parse('2003-12-11')
