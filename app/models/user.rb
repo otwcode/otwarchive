@@ -282,8 +282,7 @@ class User < ActiveRecord::Base
 
   def mark_invitation_used
     if invitation
-      invitation.used = true
-      invitation.save
+      invitation.update_attribute(:used, true)
     end
   end
   
