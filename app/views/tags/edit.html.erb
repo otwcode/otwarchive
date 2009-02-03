@@ -10,6 +10,9 @@
     <dt><%= f.label :name, 'Name'.t %></dt>
     <dd><%= f.text_field :name, :disabled => !logged_in_as_admin? %></dd>
 
+    <dt>Works (count):</dt>
+    <dd><%= link_to @tag.taggings_count, tag_path(@tag) %>
+
     <dt><%= f.label :type, 'Category'.t %></dt>
     <%- (Tag::TYPES - [@tag.class.name, "Ambiguity"]).each do |type| -%>
       <dd>
