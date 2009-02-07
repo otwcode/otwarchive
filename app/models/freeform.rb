@@ -8,26 +8,6 @@ class Freeform < Tag
     add_fandom(fandom_id)
   end
 
-  def add_pairing(pairing_id)
-    pairing = Pairing.find_by_id(pairing_id)
-    return false unless pairing.is_a? Pairing
-    self.wrangle_parent(pairing)
-  end
-
-  def update_pairings(new=[])
-    current = self.pairings.map(&:name)
-    current = [] unless current
-    new = [] unless new
-    remove = current - new
-    add = new - current
-    remove.each do |pairing_name|
-      Pairing.find_by_name(pairing_name).remove_from_family(self)
-    end
-    add.each do |pairing_name|
-      self.add_pairing(Pairing.find_by_name(pairing_name))
-    end
-  end
-
   def characters
     parents.select {|t| t.is_a? Character}.sort
   end

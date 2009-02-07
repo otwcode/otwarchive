@@ -207,6 +207,17 @@ class Tag < ActiveRecord::Base
     freeform.wrangle_parent(self)
   end
 
+  def add_pairing(pairing_id)
+    return unless Tag::USER_DEFINED.include?(self.class.name)
+    pairing = Pairing.find_by_id(pairing_id)
+    return false unless pairing.is_a? Pairing
+    if self.is_a?(Freeform)
+      self.wrangle_parent(pairing)
+    else
+      pairing.wrangle_parent(self)
+    end
+  end
+
   def add_character(character_id)
     return unless Tag::USER_DEFINED.include?(self.class.name)
     character = Character.find_by_id(character_id)
@@ -244,6 +255,20 @@ class Tag < ActiveRecord::Base
     end
     add.each do |character_name|
       self.add_character(Character.find_by_name(character_name))
+    end
+  end
+
+  def update_pairings(new=[])
+    current = self.pairings.map(&:name)
+    current = [] unless current
+    new = [] unless new
+    remove = current - new
+    add = new - current
+    remove.each do |pairing_name|
+      Pairing.find_by_name(pairing_name).remove_from_family(self)
+    end
+    add.each do |pairing_name|
+      self.add_pairing(Pairing.find_by_name(pairing_name))
     end
   end
 

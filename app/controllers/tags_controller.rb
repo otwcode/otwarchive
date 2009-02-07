@@ -110,6 +110,6 @@ class TagsController < ApplicationController
     @tag.add_media(params[:media][:media_id]) if params[:media]
     @tag.add_synonym(params[:synonym][:synonym_id]) if params[:synonym]
     flash[:notice] = 'Tag was updated.'.t
-    redirect_to edit_tag_path(Tag.find_by_name(@tag.name))
+    redirect_to edit_tag_path(@tag.name)
   end
 end
