@@ -78,6 +78,10 @@ class TagsController < ApplicationController
 
   def edit
     @tag = Tag.find_by_name(params[:id])
+    if @tag.blank?
+      flash[:error] = "Tag not found"
+      redirect_to tag_wranglings_path and return
+    end
   end
 
   def update

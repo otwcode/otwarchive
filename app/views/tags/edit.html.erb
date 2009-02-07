@@ -39,46 +39,55 @@
 
     <%- if Tag::USER_DEFINED.include?(@tag.class.name) %>
       <%- if @tag.canonical? %>
-        <dt><%= f.label :type, 'Character(s)'.t %></dt>
-        <dd>Add Character</dd>
-        <dt></dt>
-        <dd><%= select("character", 'character_id', (Character.canonical - @tag.family).collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
-        <% @tag.characters.each do |tag| %>
+        <% if @tag.is_a?(Fandom) || @tag.is_a?(Pairing) %>
+          <dt><%= f.label :type, 'Character(s)'.t %></dt>
+          <dd>Add Character</dd>
           <dt></dt>
-          <dd><%= check_box_tag("characters[]", tag.name, true) %><%= f.label :character, link_to_edit_tag(tag) %></dd>
+          <dd><%= select("character", 'character_id', (Character.canonical - @tag.family).collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
+          <% @tag.characters.each do |tag| %>
+            <dt></dt>
+            <dd><%= check_box_tag("characters[]", tag.name, true) %><%= f.label :character, link_to_edit_tag(tag) %></dd>
+          <%- end %>
         <%- end %>
-        <dt><%= f.label :type, 'Pairings(s)'.t %></dt>
-        <dd>Add Pairing</dd>
-        <dt></dt>
-        <dd><%= select("pairing", 'pairing_id', (Pairing.canonical - @tag.family).collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
-        <% @tag.pairings.each do |tag| %>
+        <% if @tag.is_a?(Fandom) || @tag.is_a?(Character) %>
+          <dt><%= f.label :type, 'Pairings(s)'.t %></dt>
+          <dd>Add Pairing</dd>
           <dt></dt>
-          <dd><%= check_box_tag("pairings[]", tag.name, true) %><%= f.label :pairing, link_to_edit_tag(tag) %></dd>
+          <dd><%= select("pairing", 'pairing_id', (Pairing.canonical - @tag.family).collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
+          <% @tag.pairings.each do |tag| %>
+            <dt></dt>
+            <dd><%= check_box_tag("pairings[]", tag.name, true) %><%= f.label :pairing, link_to_edit_tag(tag) %></dd>
+          <%- end %>
         <%- end %>
-        <dt><%= f.label :type, 'Fandom(s)'.t %></dt>
-        <dd>Add Fandom</dd>
-        <dt></dt>
-        <dd><%= select("fandom", 'fandom_id', (Fandom.canonical - @tag.family).collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
-        <% @tag.fandoms.each do |tag| %>
+        <% if @tag.is_a?(Fandom) %>
+          <dt><%= f.label :type, 'Media'.t %></dt>
+          <dd>Add Media</dd>
           <dt></dt>
-          <dd><%= check_box_tag("fandoms[]", tag.name, true) %><%= f.label :fandom, link_to_edit_tag(tag) %></dd>
-        <%- end %>
-        <dt><%= f.label :type, 'Media'.t %></dt>
-        <dd>Add Media</dd>
-        <dt></dt>
-        <dd><%= select("media", 'media_id', (Media.canonical - @tag.family).collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
-        <% @tag.medias.each do |tag| %>
+          <dd><%= select("media", 'media_id', (Media.canonical - @tag.family).collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
+          <% @tag.medias.each do |tag| %>
+            <dt></dt>
+            <dd><%= check_box_tag("medias[]", tag.name, true) %><%= f.label :media, link_to_edit_tag(tag) %></dd>
+          <%- end %>
+        <%- else -%>
+          <dt><%= f.label :type, 'Fandom(s)'.t %></dt>
+          <dd>Add Fandom</dd>
           <dt></dt>
-          <dd><%= check_box_tag("medias[]", tag.name, true) %><%= f.label :media, link_to_edit_tag(tag) %></dd>
-        <%- end %>
-        <dt><%= f.label :type, 'Freeforms'.t %></dt>
-        <dd>Add Freeform</dd>
-        <dt></dt>
-        <dd><%= select("freeform", 'freeform_id', (Freeform.canonical - @tag.family).collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
-        <% @tag.freeforms.each do |tag| %>
+          <dd><%= select("fandom", 'fandom_id', (Fandom.canonical - @tag.family).collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
+          <% @tag.fandoms.each do |tag| %>
+            <dt></dt>
+            <dd><%= check_box_tag("fandoms[]", tag.name, true) %><%= f.label :fandom, link_to_edit_tag(tag) %></dd>
+          <%- end -%>
+        <%- end -%>
+        <%- unless true %>
+          <dt><%= f.label :type, 'Freeforms'.t %></dt>
+          <dd>Add Freeform</dd>
           <dt></dt>
-          <dd><%= check_box_tag("freeforms[]", tag.name, true) %><%= f.label :freeform, link_to_edit_tag(tag) %></dd>
-        <%- end %>
+          <dd><%= select("freeform", 'freeform_id', (Freeform.canonical - @tag.family).collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
+          <% @tag.freeforms.each do |tag| %>
+            <dt></dt>
+            <dd><%= check_box_tag("freeforms[]", tag.name, true) %><%= f.label :freeform, link_to_edit_tag(tag) %></dd>
+          <%- end %>
+        <%- end -%>
         <dt><%= f.label :type, 'Synonyms'.t %></dt>
         <dd>Add Synonym</dd>
         <dt></dt>

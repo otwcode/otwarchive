@@ -1,23 +1,23 @@
 # Parse stories from other websites and uploaded files, looking for metadata to harvest
-# and put into the archive. 
-# 
+# and put into the archive.
+#
 class StoryParser
   require 'timeout'
   require 'hpricot'
   require 'open-uri'
   include HtmlFormatter
-  
-  META_PATTERNS = {:title => 'Title', 
-                   :notes => 'Note', 
-                   :summary => 'Summary', 
-                   :freeform_string => "Tag", 
+
+  META_PATTERNS = {:title => 'Title',
+                   :notes => 'Note',
+                   :summary => 'Summary',
+                   :freeform_string => "Tag",
                    :fandom_string => "Fandom",
                    :rating_string => "Rating",
                    :pairing_string => "Pairing",
                    :published_at => 'Date|Posted|Posted on|Posted at'}
 
   # These lists will stop with the first one it matches, so put more-specific matches
-  # towards the front of the list. 
+  # towards the front of the list.
 
   # places for which we have a custom parse_story_from_[source] method
   # for getting information out of the downloaded text
@@ -30,25 +30,25 @@ class StoryParser
   # places for which we have a download_chaptered_from
   # to get a set of chapters all together
   CHAPTERED_STORY_LOCATIONS = %w(ffnet)
-  
+
   # regular expressions to match against the URLS
   SOURCE_LJ = '(live|dead|insane)?journal(fen)?\.com'
   SOURCE_YULETIDE = 'yuletidetreasure\.org'
   SOURCE_FFNET = 'fanfiction\.net'
-  
+
   # time out if we can't download fast enough
   STORY_DOWNLOAD_TIMEOUT = 60
   MAX_CHAPTER_COUNT = 200
 
-  # Downloads a story and passes it on to the parser. 
-  # If the URL of the story is from a site for which we have special rules 
+  # Downloads a story and passes it on to the parser.
+  # If the URL of the story is from a site for which we have special rules
   # (eg, downloading from a livejournal clone, you want to use ?format=light
   # to get a nice and consistent post format), it will pre-process the url
-  # according to the rules for that site. 
+  # according to the rules for that site.
   def download_and_parse_story(location)
     source = get_source_if_known(CHAPTERED_STORY_LOCATIONS, location)
     if source.nil?
-      story = download_text(location)    
+      story = download_text(location)
       return parse_story(story, location)
     else
       return download_and_parse_chaptered_story(source, location)
@@ -60,7 +60,7 @@ class StoryParser
     return parse_chapter(story, location)
   end
 
-  # Parses the text of a story, optionally from a given location. 
+  # Parses the text of a story, optionally from a given location.
   def parse_story(story, location = nil)
     work_params = parse_common(story, location)
     work_params = sanitize_params(work_params)
@@ -77,15 +77,15 @@ class StoryParser
   end
 
   # Everything below here is protected and should not be touched by outside
-  # code -- please use the above functions to parse stories. 
+  # code -- please use the above functions to parse stories.
 
   protected
-  
+
     def download_and_parse_chaptered_story(source, location)
       work_params = { :title => "UPLOADED WORK", :chapter_attributes => {} }
       chapter_contents = eval("download_chaptered_from_#{source.downcase}(location)")
       @work = nil
-      chapter_contents.each do |content|        
+      chapter_contents.each do |content|
         @doc = Hpricot(content)
         chapter_params = eval("parse_story_from_#{source.downcase}(content)")
         if @work.nil?
@@ -104,7 +104,7 @@ class StoryParser
       @chapter.update_attributes(chapter_params)
       return @chapter
     end
-    
+
     def download_text(location)
       story = ""
       source = get_source_if_known(KNOWN_STORY_LOCATIONS, location)
@@ -113,9 +113,9 @@ class StoryParser
       else
         story = eval("download_from_#{source.downcase}(location)")
       end
-      return story      
+      return story
     end
-  
+
     # canonicalize the url for downloading from lj or clones
     def download_from_lj(location)
       url = location
@@ -123,13 +123,13 @@ class StoryParser
       url += "?format=light" # go to light format
       return download_with_timeout(url)
     end
-    
+
     # grab all the chapters of the story from ff.net
     def download_chaptered_from_ffnet(location)
       @chapter_contents = []
       if location.match(/^(.*fanfiction\.net\/s\/[0-9]+\/)([0-9]+)(\/.*)$/i)
         urlstart = $1
-        urlend = $3       
+        urlend = $3
         chapnum = 1
         Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
           loop do
@@ -143,7 +143,7 @@ class StoryParser
           end
         }
       end
-      return @chapter_contents      
+      return @chapter_contents
     end
 
     # used to parse either entire story or chapter
@@ -157,16 +157,16 @@ class StoryParser
           params = eval("parse_story_from_#{source.downcase}(story)")
           return work_params.merge!(params)
         end
-      end    
+      end
       return work_params.merge!(parse_story_from_unknown(story))
     end
 
     # our fallback: parse a story from an unknown source, so we have no special
-    # rules. 
+    # rules.
     def parse_story_from_unknown(story)
       work_params = {:chapter_attributes => {}}
-      storyhead = (@doc/"head").inner_html
-      storytext = (@doc/"body").inner_html
+      storyhead = (@doc/"head").inner_html unless (@doc/"head").blank?
+      storytext = (@doc/"body").inner_html unless (@doc/"body").blank?
       if storytext.blank?
         storytext = (@doc/"html").inner_html
       end
@@ -179,49 +179,49 @@ class StoryParser
         meta.merge!(scan_text_for_meta(storyhead))
       end
       meta.merge!(scan_text_for_meta(storytext))
-      work_params[:title] = (@doc/"title").inner_html    
+      work_params[:title] = (@doc/"title").inner_html
       work_params[:chapter_attributes][:content] = clean_storytext(storytext)
       work_params = work_params.merge!(meta)
-      
+
       return work_params
     end
-  
+
     def parse_story_from_lj(story)
       work_params = {:chapter_attributes => {}}
-      
-      # in LJ "light" format, the story contents are in the first div 
+
+      # in LJ "light" format, the story contents are in the first div
       # inside the body.
       body = (@doc/"body")
       content_divs = (body/"div")
       storytext = !content_divs[0].nil? ? content_divs[0].inner_html : body.inner_html
-  
+
       # cleanup the text
       # storytext.gsub!(/<br\s*\/?>/i, "\n") # replace the breaks with newlines
       storytext = clean_storytext(storytext)
-      
+
       work_params[:chapter_attributes][:content] = storytext
       work_params[:title] = (@doc/"title").inner_html # default
       work_params.merge!(scan_text_for_meta(storytext))
-      
+
       return work_params
     end
-  
-    def parse_story_from_yuletide(story)    
+
+    def parse_story_from_yuletide(story)
       work_params = {:chapter_attributes => {}}
       storytext = (@doc/"/html/body/p/table/tr/td[2]/table/tr/td[2]").inner_html
       if storytext.empty?
         storytext = (@doc/"body").inner_html
       end
       storytext = clean_storytext(storytext)
-  
+
       # fix the relative links
       storytext.gsub!(/<a href="\//, '<a href="http://yuletidetreasure.org/')
-      
+
       work_params.merge!(scan_text_for_meta(storytext))
       work_params[:chapter_attributes][:content] = storytext
       work_params[:title] = (@doc/"title").inner_html
       work_params[:notes] = (@doc/"/html/body/p/table/tr/td[2]/table/tr/td[2]/center/p").inner_html
-      
+
       tags = ['yuletide']
       if storytext.match(/Fandom: <(.*)>(.*)<\/a>/i)
         fandom_tag = $2
@@ -244,7 +244,7 @@ class StoryParser
         search_title = work_params[:title].gsub(/[^\w]/, ' ').gsub(/\s+/, '+')
         search_author = author.nil? ? "" : author.gsub(/[^\w]/, ' ').gsub(/\s+/, '+')
         search_recip = recip.nil? ? "" : recip.gsub(/[^\w]/, ' ').gsub(/\s+/, '+')
-        search_url = "http://www.yuletidetreasure.org/cgi-bin/search.cgi?" + 
+        search_url = "http://www.yuletidetreasure.org/cgi-bin/search.cgi?" +
                       "Recipient=#{search_recip}&Title=#{search_title}&Author=#{search_author}&NumToList=0"
         search_res = download_with_timeout(search_url)
         search_doc = Hpricot(search_res)
@@ -259,29 +259,29 @@ class StoryParser
             break
           end
         end
-      
+
         work_params[:summary] = summary
         rating = convert_rating(rating)
         work_params[:rating_string] = rating
       rescue
         # couldn't get the summary data, oh well, keep going
       end
-      
+
       work_params[:freeform_string] = tags.join(ArchiveConfig.DELIMITER)
-      
+
       return work_params
     end
 
     def parse_story_from_ffnet(story)
-      work_params = {:chapter_attributes => {}}      
+      work_params = {:chapter_attributes => {}}
       storytext = clean_storytext((@doc/"#storytext").inner_html)
 
       work_params[:notes] = ((@doc/"#storytext")/"p").first.inner_html
-      
+
       # put in some blank lines to make it readable in the textarea
-      # the processing will strip out the extras 
+      # the processing will strip out the extras
       storytext.gsub!(/<\/p><p>/, "</p>\n\n<p>")
-      
+
       tags = []
       pagetitle = (@doc/"title").inner_html
       if pagetitle && pagetitle.match(/(.*), a (.*) fanfic - FanFiction\.Net/)
@@ -292,22 +292,22 @@ class StoryParser
         rating = convert_rating($1)
         work_params[:rating_string] = rating
       end
-      
+
       if story.match(/fiction rated.*?<\/a> - .*? - (.*?)\/(.*?) -/i)
         tags << $1
-        tags << $2 unless $1 == $2 
+        tags << $2 unless $1 == $2
       end
-      
+
       work_params[:freeform_string] = tags.join(ArchiveConfig.DELIMITER)
-      work_params[:chapter_attributes][:content] = storytext    
-      
+      work_params[:chapter_attributes][:content] = storytext
+
       return work_params
     end
 
-    # Find any cases of the given pieces of meta in the given text 
+    # Find any cases of the given pieces of meta in the given text
     # and return a hash
     def scan_text_for_meta(text)
-      # break up the text with some extra newlines to make matching more likely 
+      # break up the text with some extra newlines to make matching more likely
       # and strip out some tags
       text.gsub!(/<br/, "\n<br")
       text.gsub!(/<p/, "\n<p")
@@ -321,7 +321,7 @@ class StoryParser
         is_tag[c.to_sym] = true
       end
       metapatterns.each do |metaname, pattern|
-        # what this does is look for pattern: (whatever) 
+        # what this does is look for pattern: (whatever)
         # and then sets meta[:metaname] = whatever
         # eg, if it finds Author: Blah The Great it will set meta[:author] = Blah The Great
         metapattern = Regexp.new("(#{pattern})\s*:\s*(.*)", Regexp::IGNORECASE)
@@ -334,8 +334,8 @@ class StoryParser
           end
           value = sanitize_fully(value) if is_tag[metaname]
           meta[metaname] = value
-        end        
-      end      
+        end
+      end
       return meta
     end
 
@@ -346,16 +346,16 @@ class StoryParser
           case response
           when Net::HTTPSuccess
             response.body
-          else 
+          else
            nil
           end
         rescue Errno::ECONNREFUSED
           nil
         end
       }
-    end     
+    end
 
-    
+
     def get_last_modified(location)
       Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
         resp = open(location)
@@ -371,14 +371,14 @@ class StoryParser
         end
       end
       nil
-    end      
-  
+    end
+
     def clean_storytext(storytext)
       return sanitize_whitelist(cleanup_and_format(storytext))
     end
-    
+
     # works conservatively -- doesn't split on
-    # spaces and truncates instead. 
+    # spaces and truncates instead.
     def clean_tags(tags)
       tags = sanitize_fully(tags)
       if tags.match(/,/)
@@ -421,9 +421,9 @@ class StoryParser
         ArchiveConfig.RATING_DEFAULT_TAG_NAME
       end
     end
-    
+
     def convert_published_at(date)
       Time.parse(date)
     end
-    
+
 end
