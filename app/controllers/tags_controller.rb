@@ -19,6 +19,10 @@ class TagsController < ApplicationController
 
   def show
     @tag = Tag.find_by_name(params[:id])
+    if @tag.is_a?(Banned) && !logged_in_as_admin?
+        flash[:error] = "Please log in as admin"
+        redirect_to tag_wranglings_path and return
+    end
     if !@tag.canonical && !@tag.merger
       if current_user.is_a?User
         @works = @tag.works.visible_to_user.paginate(:page => params[:page])
@@ -78,6 +82,10 @@ class TagsController < ApplicationController
 
   def edit
     @tag = Tag.find_by_name(params[:id])
+    if @tag.is_a?(Banned) && !logged_in_as_admin?
+        flash[:error] = "Please log in as admin"
+        redirect_to tag_wranglings_path and return
+    end
     if @tag.blank?
       flash[:error] = "Tag not found"
       redirect_to tag_wranglings_path and return
