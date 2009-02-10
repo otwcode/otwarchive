@@ -34,6 +34,8 @@
           <%- elsif @media -%>
             <%= hidden_field_tag("media[media_id]", @media.id) %>
             <%= select("merger", tag.id, (tag.class.by_media(@media).canonical - [tag]).collect {|p| [ p.name, p.id ] }, { :include_blank => true, :selected => tag.merger.andand.id}) %>
+          <%- elsif @ambiguity -%>
+             <%= select("merger", tag.id, (tag.class.canonical - [tag]).collect {|p| [ p.name, p.id ] }, { :include_blank => true, :selected => tag.merger.andand.id}) %>
           <%- else -%>
              <%= select("merger", tag.id, (tag.class.no_parent.canonical - [tag]).collect {|p| [ p.name, p.id ] }, { :include_blank => true, :selected => tag.merger.andand.id}) %>
           <%- end -%>

@@ -105,6 +105,9 @@ protected
           flash[:error] = "No tags found"
         end
       end
+    elsif @category == "Ambiguity"
+      @ambiguity = true
+      @tags = @category.constantize.by_name
     elsif Tag::USER_DEFINED.include? @category
       @fandoms = Fandom.canonical.by_name
       if params[:fandom] && !params[:fandom][:fandom_id].blank?

@@ -17,7 +17,7 @@
       <%- if logged_in_as_admin? -%>
         <%- types = Tag::TYPES  -%>
       <%- else -%>
-        <%- types = Tag::USER_DEFINED + ['Ambiguity'] -%>
+        <%- types = Tag::USER_DEFINED -%>
       <%- end -%>
       <%- types.each do |type| -%>
         <%= f.radio_button("type", type) %><%= f.label :type, type %><br/>

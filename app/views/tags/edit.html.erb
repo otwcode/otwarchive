@@ -27,7 +27,7 @@
 
     <dt></dt>
     <dd>
-      <%= f.check_box("canonical", :disabled => !(logged_in_as_admin? || (Tag::USER_DEFINED + ["Ambiguity"]).include?(@tag.class.name) )) %>
+      <%= f.check_box("canonical", :disabled => !(logged_in_as_admin? || Tag::USER_DEFINED.include?(@tag.class.name) )) %>
       <%= f.label :canonical, 'Canonical'.t %></dd>
     <dd>&nbsp;<%= "This is the official name for the ".t + @tag.class.name %></dd>
 
@@ -68,7 +68,7 @@
             <dt></dt>
             <dd><%= check_box_tag("medias[]", tag.name, true) %><%= f.label :media, link_to_edit_tag(tag) %></dd>
           <%- end %>
-        <%- else -%>
+        <%- elsif !@tag.is_a?(Ambiguity) -%>
           <dt><%= f.label :type, 'Fandom(s)'.t %></dt>
           <dd>Add Fandom</dd>
           <dt></dt>
@@ -78,7 +78,7 @@
             <dd><%= check_box_tag("fandoms[]", tag.name, true) %><%= f.label :fandom, link_to_edit_tag(tag) %></dd>
           <%- end -%>
         <%- end -%>
-        <%- unless true %>
+        <%- if false # not associating freeforms with other tags for now %>
           <dt><%= f.label :type, 'Freeforms'.t %></dt>
           <dd>Add Freeform</dd>
           <dt></dt>
@@ -96,6 +96,16 @@
           <dt></dt>
           <dd><%= check_box_tag("synonyms[]", tag.name, true) %><%= f.label :synonym, link_to_edit_tag(tag) %></dd>
         <%- end %>
+      <%- if @tag.is_a?(Ambiguity) %>
+        <dt><%= f.label :type, 'Disambiguators'.t %>:</dt>
+        <dd>Add Disambiguator</dd>
+        <dt></dt>
+        <dd><%= select("disambiguator", 'disambiguator_id', (@tag.find_similar - @tag.disambiguators - [@tag]).collect {|p| [ description(p), p.id ] }, { :include_blank => true }) %></dd>
+        <% @tag.disambiguators.each do |tag| %>
+          <dt></dt>
+          <dd><%= check_box_tag("disambiguators[]", tag.name, true) %><%= f.label :disambiguator, link_to_edit_tag(tag) %></dd>
+        <%- end %>
+      <%- end %>
       <%- else %>
         <dt><%= f.label :type, 'Synonym of'.t %>:</dt>
         <% if @tag.merger.is_a? Tag %>
@@ -109,16 +119,6 @@
       <%- end %>
     <% end %>
 
-    <%- if @tag.is_a?(Ambiguity) %>
-      <dt><%= f.label :type, 'Disambiguators'.t %>:</dt>
-      <dd>Add Disambiguator</dd>
-      <dt></dt>
-      <dd><%= select("disambiguator", 'disambiguator_id', (@tag.find_similar - @tag.disambiguators - [@tag]).collect {|p| [ description(p), p.id ] }, { :include_blank => true }) %></dd>
-      <% @tag.disambiguators.each do |tag| %>
-        <dt></dt>
-        <dd><%= check_box_tag("disambiguators[]", tag.name, true) %><%= f.label :disambiguator, link_to_edit_tag(tag) %></dd>
-      <%- end %>
-    <%- end %>
 
     <p class="submit">
       <%= submit_tag "Save changes" %>

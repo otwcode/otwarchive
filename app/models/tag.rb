@@ -12,8 +12,8 @@ class Tag < ActiveRecord::Base
   # these tags show up on works
   VISIBLE = TYPES - ['Media', 'Banned']
 
-  # these tags can be created by users
-  USER_DEFINED = ['Fandom', 'Pairing', 'Character', 'Freeform']
+  # these are tags which have been created by users
+  USER_DEFINED = ['Fandom', 'Pairing', 'Character', 'Freeform', 'Ambiguity']
 
   has_many :mergers, :foreign_key => 'merger_id', :class_name => 'Tag'
   belongs_to :merger, :class_name => 'Tag'
