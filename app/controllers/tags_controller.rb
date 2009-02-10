@@ -76,8 +76,13 @@ class TagsController < ApplicationController
       render :action => "new" and return
     end
     if @tag.valid?
+      if @tag.name != params[:tag][:name] # capitalization different
+        @tag.update_attribute(:name, params[:tag][:name])  # use the new capitalization
+        flash[:notice] = 'Tag was successfully modified.'.t
+      else
+        flash[:notice] = 'Tag was successfully created.'.t
+      end
       @tag.update_attribute(:canonical, params[:tag][:canonical])
-      flash[:notice] = 'Tag was successfully created.'.t
       redirect_to edit_tag_path(@tag)
     else
       render :action => "new" and return
