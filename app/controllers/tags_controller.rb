@@ -110,6 +110,11 @@ class TagsController < ApplicationController
     else
       @tag.update_attribute("merger_id", params[:tag][:merger_id]) if params[:tag][:merger_id]
     end
+    if !params[:new_synonym].blank?
+      @new_tag = Tag.find_or_create_by_name_and_type(params[:new_synonym], @tag.type)
+      @tag.update_attribute("merger_id", @new_tag.id)
+      @new_tag.update_attribute("canonical", true)
+    end
     @tag.update_freeforms(params[:freeforms])
     @tag.update_characters(params[:characters])
     @tag.update_pairings(params[:pairings])

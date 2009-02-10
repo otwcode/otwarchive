@@ -97,17 +97,14 @@
           <dd><%= check_box_tag("synonyms[]", tag.name, true) %><%= f.label :synonym, link_to_edit_tag(tag) %></dd>
         <%- end %>
       <%- else %>
-        <dt><%= f.label :type, 'Synonym of'.t %></dt>
+        <dt><%= f.label :type, 'Synonym of'.t %>:</dt>
         <% if @tag.merger.is_a? Tag %>
           <dd><%= check_box_tag("keep_synonym", @tag.merger.name, true) %><%= f.label :keep_synonym, link_to_edit_tag(@tag.merger) %></dd>
           <dt></dt>
-          <dd>Replace Synonym</dd>
-          <dt></dt>
-          <dd><%= f.select('merger_id', @tag.class.canonical.collect {|p| [ p.name, p.id ]}) %></dd>
         <%- else %>
-          <dd>Add Synonym</dd>
-          <dt></dt>
           <dd><%= f.select('merger_id', @tag.class.canonical.collect {|p| [ p.name, p.id ]}, { :include_blank => true, :selected => nil }) %></dd>
+          <dt><%= label :new_synonym, 'Create new canonical tag and add this one as synonym'.t %>:</dt>
+          <dd><%= text_field_tag :new_synonym %></dd>
         <%- end %>
       <%- end %>
     <% end %>
