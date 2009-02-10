@@ -117,6 +117,7 @@ class TagsController < ApplicationController
       else
         @tag.update_attribute("merger_id", @new_tag.id)
         @new_tag.update_attribute("canonical", true)
+        @new_tag.update_common_tags
       end
     end
     @tag.update_freeforms(params[:freeforms])
@@ -132,6 +133,7 @@ class TagsController < ApplicationController
     @tag.add_media(params[:media][:media_id]) if params[:media]
     @tag.add_synonym(params[:synonym][:synonym_id]) if params[:synonym]
     @tag.add_disambiguator(params[:disambiguator][:disambiguator_id]) if params[:disambiguator]
+    @tag.update_common_tags
     flash[:notice] = 'Tag was updated.'.t
     redirect_to edit_tag_path(@tag.name)
   end

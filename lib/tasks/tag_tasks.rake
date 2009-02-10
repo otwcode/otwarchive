@@ -1,4 +1,12 @@
 namespace :Tag do
+  desc "Reset common taggings - slow"
+  task(:reset_common => :environment) do
+    Work.find(:all).each do |w|
+      print "." if w.id.modulo(100) == 0; STDOUT.flush
+      w.update_common_tags
+    end
+    puts "Common tags reset."
+  end
   desc "Reset tag count"
   task(:reset_count => :environment) do
     Tag.find(:all).each do |t|
