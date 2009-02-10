@@ -42,6 +42,17 @@ class TagWranglingsController < ApplicationController
           Tag.find_by_id(id).wrangle_canonical
         end
       end
+      if params[:banned]
+        if !logged_in_as_admin?
+          flash[:error] = "Please log in as admin"
+          redirect_to tag_wranglings_path and return
+        else
+          to_ban = params[:banned].map(&:to_i)
+          to_ban.each do |id|
+            Tag.find_by_id(id).update_attribute(:type, "Banned")
+          end
+        end
+      end
       if params[:merger]
         params[:merger].each do |key, value|
           unless value.blank?

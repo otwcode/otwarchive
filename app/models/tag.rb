@@ -93,7 +93,7 @@ class Tag < ActiveRecord::Base
   # Instance methods that are common to all subclasses (may be overridden in the subclass)
 
   def banned
-    return true if self.class == 'Banned'
+    return true if self.class == Banned
   end
 
   # sort tags by name
