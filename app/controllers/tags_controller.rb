@@ -19,6 +19,10 @@ class TagsController < ApplicationController
 
   def show
     @tag = Tag.find_by_name(params[:id])
+    unless @tag.is_a? Tag
+        flash[:error] = "Tag not found"
+        redirect_to tag_wranglings_path and return
+    end
     if @tag.is_a?(Banned) && !logged_in_as_admin?
         flash[:error] = "Please log in as admin"
         redirect_to tag_wranglings_path and return
@@ -117,6 +121,8 @@ class TagsController < ApplicationController
       else
         @tag.update_attribute("merger_id", @new_tag.id)
         @new_tag.update_attribute("canonical", true)
+        @new_tag.add_fandom(@tag.fandom) if @tag.fandom_id
+        @new_tag.add_media(@tag.media) if @tag.media_id
         @new_tag.update_common_tags
       end
     end
