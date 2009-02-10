@@ -27,7 +27,7 @@
 
     <dt></dt>
     <dd>
-      <%= f.check_box("canonical", :disabled => !(logged_in_as_admin? || Tag::USER_DEFINED.include?(@tag.class.name) )) %>
+      <%= f.check_box("canonical", :disabled => !(logged_in_as_admin? || (Tag::USER_DEFINED + ["Ambiguity"]).include?(@tag.class.name) )) %>
       <%= f.label :canonical, 'Canonical'.t %></dd>
     <dd>&nbsp;<%= "This is the official name for the ".t + @tag.class.name %></dd>
 
@@ -108,6 +108,17 @@
         <%- end %>
       <%- end %>
     <% end %>
+
+    <%- if @tag.is_a?(Ambiguity) %>
+      <dt><%= f.label :type, 'Disambiguators'.t %>:</dt>
+      <dd>Add Disambiguator</dd>
+      <dt></dt>
+      <dd><%= select("disambiguator", 'disambiguator_id', (@tag.find_similar - @tag.disambiguators - [@tag]).collect {|p| [ description(p), p.id ] }, { :include_blank => true }) %></dd>
+      <% @tag.disambiguators.each do |tag| %>
+        <dt></dt>
+        <dd><%= check_box_tag("disambiguators[]", tag.name, true) %><%= f.label :disambiguator, link_to_edit_tag(tag) %></dd>
+      <%- end %>
+    <%- end %>
 
     <p class="submit">
       <%= submit_tag "Save changes" %>

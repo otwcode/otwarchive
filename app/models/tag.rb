@@ -424,4 +424,9 @@ class Tag < ActiveRecord::Base
   def unwrangled
     return self unless (self.canonical || self.merger || ['Ambiguity', 'Banned'].include?(self.class) )
   end
+
+  def find_similar
+    Tag.find(:all, :conditions => ["name like ? and canonical = ?", "%" + self.name + "%", true])
+  end
+
 end

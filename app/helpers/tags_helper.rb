@@ -1,4 +1,9 @@
 module TagsHelper
+
+  def description(tag)
+    tag.name + " (" + tag.type + ")"
+  end
+
   def tag_cloud(tags, classes)
     max, min = 0, 0
     tags.each { |t|
