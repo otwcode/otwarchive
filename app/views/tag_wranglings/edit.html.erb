@@ -12,7 +12,9 @@
     <dl>
     <dt>Tag</dt>
     <dt>Count</dt>
-    <dd>Banned</dd>
+    <%- if logged_in_as_admin? %>
+      <dd>Banned</dd>
+    <%- end -%>
     <%- if @category == Rating %>
       <dd>Adult</dd>
     <% end %>
@@ -21,7 +23,9 @@
     <%- @tags.each do |tag| %>
       <dt><%= label :tag, link_to_edit_tag(tag) %></dt>
       <dd><%= tag.taggings_count %></dd>
-      <dd><%= check_box_tag("banned[]", tag.id, tag.banned, {:disabled => !logged_in_as_admin?}) %></dd>
+      <%- if logged_in_as_admin? %>
+        <dd><%= check_box_tag("banned[]", tag.id, tag.banned) %></dd>
+      <%- end -%>
       <%- if @category == Rating %>
         <dd><%= check_box_tag("adult[]", tag.id, tag.adult) %></dd>
       <% end %>
