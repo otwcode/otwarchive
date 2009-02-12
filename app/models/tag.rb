@@ -63,7 +63,7 @@ class Tag < ActiveRecord::Base
     name
   end
 
-  def self.find_or_create_by_name(string, update_works=true)
+  def self.find_or_create_by_name(string)
     return if !string.is_a?(String) || string.blank?
     string.squish!
     # try to find the tag
@@ -72,10 +72,15 @@ class Tag < ActiveRecord::Base
     # try to create the tag
     tag = self.create(:name => string)
     return tag if tag.valid?
-    # see if you can find a tag with the same name and make it ambiguous
+    # it wasn't valid, which probably means it already exists in another category
     old_tag = Tag.find_by_name(string)
-    old_tag.wrangle_ambiguous(update_works) if old_tag
-    return old_tag if old_tag
+    if old_tag # so create this one with the category appended
+      new_tag = self.find_or_create_by_name(string + " - " + self.to_s)
+      return new_tag if new_tag
+    else
+      # should never get here
+      return false
+    end
   end
 
   # FIXME make more efficient

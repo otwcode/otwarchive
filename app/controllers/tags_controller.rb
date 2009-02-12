@@ -76,7 +76,7 @@ class TagsController < ApplicationController
       render :action => "new" and return
     end
     if @tag.valid?
-      if @tag.name != params[:tag][:name] # capitalization different
+      if @tag.name.downcase == params[:tag][:name].downcase # capitalization different
         @tag.update_attribute(:name, params[:tag][:name])  # use the new capitalization
         flash[:notice] = 'Tag was successfully modified.'.t
       else
@@ -120,7 +120,7 @@ class TagsController < ApplicationController
       @tag.update_attribute("merger_id", params[:tag][:merger_id]) if params[:tag][:merger_id]
     end
     if !params[:new_synonym].blank?
-      @new_tag = Tag.find_or_create_by_name_and_type(params[:new_synonym], @tag.type)
+      @new_tag = @tag.type.constantize.find_or_create_by_name(params[:new_synonym])
       if @new_tag == @tag  # name same except for capitalization
         @tag.update_attribute(:name, params[:new_synonym])
       else
