@@ -76,7 +76,7 @@ class TagsController < ApplicationController
       render :action => "new" and return
     end
     if @tag.valid?
-      if @tag.name.downcase == params[:tag][:name].downcase # capitalization different
+      if (@tag.name != params[:tag][:name]) && (@tag.name.downcase == params[:tag][:name].downcase) # only capitalization different
         @tag.update_attribute(:name, params[:tag][:name])  # use the new capitalization
         flash[:notice] = 'Tag was successfully modified.'.t
       else
