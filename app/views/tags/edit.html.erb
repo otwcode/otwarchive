@@ -115,7 +115,7 @@
           <dd><%= f.select('merger_id', @tag.class.canonical.collect {|p| [ p.name, p.id ]}, { :include_blank => true, :selected => nil }) %></dd>
           <dt><%= label :new_synonym, 'Rename'.t %>*:</dt>
           <dd><%= text_field_tag :new_synonym %></dd>
-          <dd>*You can use this space to either change the capitalization of the tag, or create a new canonical tag to which this tag will be added to as a synonym</dd>
+          <dd>*This text box will do one of two things: 1. correct the capitalization of the current tag. 2. Create a canonical tag, to which the current tag is then made a synonym. </dd>
         <%- end %>
       <%- end %>
     <% end %>

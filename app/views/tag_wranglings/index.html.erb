@@ -2,7 +2,7 @@
 
 <dl>
 <dt>Mass Assign to Fandom (or Media)</dt>
-<% for category in Tag::USER_DEFINED do %>
+<% for category in (Tag::USER_DEFINED - ["Ambiguity"]) do %>
   <dd>
     <%= link_to_unless_current category, assign_tag_wrangling_path(category) %> (
       <%= category.constantize.no_parent.count %>)

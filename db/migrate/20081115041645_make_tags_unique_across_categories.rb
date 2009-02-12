@@ -2,6 +2,8 @@ class MakeTagsUniqueAcrossCategories < ActiveRecord::Migration
 
   def self.up
     Tag.reset_column_information
+    # give media tags a fake high tagging count
+    Media.all.each { |m| Tag.update_counters m.id, :taggings_count => 10000 }
     by_name = Tag.all.group_by{|t| t.name.downcase}
     by_name.each do |name, tags|
       tags = tags.compact.uniq
@@ -20,20 +22,21 @@ class MakeTagsUniqueAcrossCategories < ActiveRecord::Migration
           end
         end
         if tags.size > 1
-          # tag of first type gets to keep its name 
-          # because it might be an official tag
-          first = true
-          Tag::TYPES.each do |type|
-            tags.each do |tag|
-              tag.update_attribute(:name, tag.name + " - " + tag[:type]) unless first
-              tags.delete(tag)
-              first = false
+          # have the tag with the most works keep its name. in a tie, chose the earliest
+          ordered_tags = tags.sort_by { |t| [ (10000 - t.taggings_count), t.id ] }
+          second = false
+          ordered_tags.each do |tag|
+            if second
+              tag.update_attribute(:name, tag.name + " - " + tag[:type])
+            else
+              second = true
             end
+            puts tag.name
           end
         end
       end
     end
- 
+
     add_index :tags, ["name"], :name=> "index_tags_on_name", :unique => true
     remove_index :tags, :name => "index_tags_on_name_and_category", :unique => true
   end
