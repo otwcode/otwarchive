@@ -110,26 +110,22 @@ class TagsController < ApplicationController
     @tag.update_attribute(:name, params[:tag][:name]) if (params[:tag][:name] && logged_in_as_admin?)
     @tag.update_type(params[:tag][:type], logged_in_as_admin?) if params[:tag][:type]
     @tag.update_attribute("canonical", params[:tag][:canonical]) if params[:tag][:canonical]
-    if @tag.merger_id
-      unless params[:keep_synonym]
-        @tag.update_attribute("merger_id", "")
-      else
-        @tag.update_attribute("merger_id", params[:tag][:merger_id]) if params[:tag][:merger_id]
+    if @tag.merger_id && params[:keep_synonym].blank?
+      @tag.update_attribute("merger_id", "")
+    elsif !params[:new_synonym].blank?
+      merger = @tag.type.constantize.find_or_create_by_name(params[:new_synonym])
+      if merger == @tag # find on new synonym returned the same tag => only capitalization different
+        @tag.update_attribute(:name, params[:new_synonym]) # use the new capitalization
+      else # new (or possibly old) tag should be canonical
+        merger.add_fandom(@tag.fandom.id) if @tag.fandom
+        merger.add_media(@tag.media.id) if @tag.media
+        merger.wrangle_canonical
       end
     else
-      @tag.update_attribute("merger_id", params[:tag][:merger_id]) if params[:tag][:merger_id]
+      merger = Tag.find(params[:tag][:merger_id]) if params[:tag][:merger_id]
     end
-    if !params[:new_synonym].blank?
-      @new_tag = @tag.type.constantize.find_or_create_by_name(params[:new_synonym])
-      if @new_tag == @tag  # name same except for capitalization
-        @tag.update_attribute(:name, params[:new_synonym])
-      else
-        @tag.update_attribute("merger_id", @new_tag.id)
-        @new_tag.update_attribute("canonical", true)
-        @new_tag.add_fandom(@tag.fandom) if @tag.fandom_id
-        @new_tag.add_media(@tag.media) if @tag.media_id
-        @new_tag.update_common_tags
-      end
+    if merger.is_a? Tag
+      @tag.wrangle_merger(merger)
     end
     @tag.update_freeforms(params[:freeforms])
     @tag.update_characters(params[:characters])

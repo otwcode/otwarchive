@@ -5,7 +5,7 @@
     <dt>Assign to:</dt>
     <dd><%= select("parent", 'parent_id', @possible_parents.collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
     <dt></dt>
-    <%- @category.constantize.no_parent.each do |tag| %>
+    <%- @tags.each do |tag| %>
       <dd><%= check_box_tag("tags[]", tag.name, false) %><%= label :tag, link_to_edit_tag(tag) %></dd>
     <%- end -%>
   <p class = "submit"><%= submit_tag "Assign" %></p>

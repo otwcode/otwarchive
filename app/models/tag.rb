@@ -137,16 +137,18 @@ class Tag < ActiveRecord::Base
     self.update_common_tags if update_works
   end
 
-  def wrangle_merger(tag, update_works=true)
-    return unless tag.canonical? && tag.is_a?(self.class)
-    self.update_attribute(:merger_id, tag.id)
+  def wrangle_merger(merger, update_works=true)
+    return unless merger.canonical? && merger.is_a?(self.class)
+    self.update_attribute(:merger_id, merger.id)
     self.update_attribute(:canonical, false)
     self.parents.clear
     self.children.each do |child|
       child.parents.delete(self)
-      child.wrangle_parent(tag, update_works)
+      child.wrangle_parent(merger, update_works)
     end
     self.children.clear
+    self.add_fandom(merger.fandom_id)
+    self.add_media(merger.media_id)
     self.update_common_tags if update_works
   end
 

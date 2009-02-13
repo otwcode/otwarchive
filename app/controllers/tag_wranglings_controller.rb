@@ -93,6 +93,7 @@ class TagWranglingsController < ApplicationController
       flash[:error] = "Sorry, you can't mass assign that"
       redirect_to tag_wranglings_path
     end
+    @tags = @category.constantize.no_parent.by_name
   end
 
   def edit
