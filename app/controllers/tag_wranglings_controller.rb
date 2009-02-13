@@ -113,21 +113,30 @@ protected
       if params[:media] && !params[:media][:media_id].blank?
         @media = Media.find_by_id(params[:media][:media_id])
         @tags = @category.constantize.by_media(@media).by_name
+        if @tags.blank?
+          flash.now[:warning] = "No tags found"
+        end
       end
     elsif @category == "Ambiguity"
       @ambiguity = true
       @tags = @category.constantize.by_name
+      if @tags.blank?
+        flash.now[:warning] = "No tags found"
+      end
     elsif Tag::USER_DEFINED.include? @category
       @fandoms = Fandom.canonical.by_name
       if params[:fandom] && !params[:fandom][:fandom_id].blank?
         @fandom = Fandom.find_by_id(params[:fandom][:fandom_id])
         @tags = @category.constantize.by_fandom(@fandom).by_name
+        if @tags.blank?
+          flash.now[:warning] = "No tags found"
+        end
       end
     else
       @tags = @category.constantize.by_name
-    end
-    if @tags.blank?
-      flash.now[:error] = "No tags found"
+      if @tags.blank?
+        flash.now[:warning] = "No tags found"
+      end
     end
   end
 end
