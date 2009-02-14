@@ -25,4 +25,12 @@ namespace :Tag do
     ThinkingSphinx.deltas_enabled=true
     puts "Tag parents reset."
   end
+  desc "Delete unused tags"
+  task(:delete_unused => :environment) do
+    Tag.all.each do |t|
+      if t.taggings.length == 0 && !t.merger_id && t.children.length == 0
+        t.destroy
+      end
+    end
+  end
 end

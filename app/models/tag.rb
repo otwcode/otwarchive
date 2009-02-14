@@ -83,16 +83,8 @@ class Tag < ActiveRecord::Base
     end
   end
 
-  # FIXME make more efficient
   def self.for_tag_cloud
-    tags = Freeform.canonical.all
-    tag_cloud = tags.dup
-    tags.each do |t|
-      tag_cloud.delete(t) if t.merger
-      tag_cloud.delete(t) if t.parents.size > 0
-      tag_cloud.delete(t) if t.visible_works_count == 0 && !t.mergers
-    end
-    tag_cloud.sort
+    Freeform.find(:all, :conditions => {:fandom_id => Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME).id, :merger_id => nil}).sort
   end
 
   # Instance methods that are common to all subclasses (may be overridden in the subclass)

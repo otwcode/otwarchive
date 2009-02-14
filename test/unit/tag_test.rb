@@ -57,21 +57,28 @@ class TagTest < ActiveSupport::TestCase
     end
   end
 
-  context "tags without a work" do
+  context "tags without a fandom" do
     setup { @tag = create_freeform }
     should "not be included in the cloud" do
        assert !Tag.for_tag_cloud.include?(@tag)
     end
   end
-  context "tags with a work" do
+  context "tags with a fandom" do
     setup do
-      @tag = create_freeform(:canonical => true)
-      @work = create_work
-      @work.update_attribute(:posted, true)
-      @work.tags << @tag
+      @tag = create_freeform
+      @tag.add_fandom(Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME).id)
     end
     should "be included in the cloud" do
        assert Tag.for_tag_cloud.include?(@tag)
+    end
+    context "which have been merged" do
+      setup do
+        merger = create_freeform(:canonical => true)
+        @tag.wrangle_merger(merger)
+      end
+      should "not be included in the cloud" do
+        assert !Tag.for_tag_cloud.include?(@tag)
+      end
     end
   end
   context "tags with a work which is not visible" do
@@ -81,41 +88,17 @@ class TagTest < ActiveSupport::TestCase
       @work.update_attribute(:posted, true)
       @work.tags << @tag
     end
-    should "not be included in the cloud" do
+    should_eventually "not be included in the cloud" do
        assert !Tag.for_tag_cloud.include?(@tag)
     end
   end
   context "tags for tag cloud" do
     setup do
-      @tag1 = create_freeform
-      @tag2 = create_freeform
-      @tag3 = create_freeform(:canonical => true)
-      @tag4 = create_freeform
-      @tag5 = create_character
-      @tag1.wrangle_parent(@tag3)
-      @tag2.wrangle_merger(@tag3)
-      @work1=create_work
-      @work1.update_attribute(:posted, true)
-      @work2=create_work
-      @work2.update_attribute(:posted, true)
-      @work1.freeform_string = [@tag1, @tag2, @tag4].map(&:name).join(", ")
-      @work2.freeform_string = [@tag1, @tag3].map(&:name).join(", ")
-      @work2.character_string = @tag5.name
-    end
-    should "not include freeforms that have parents" do
-       assert !Tag.for_tag_cloud.include?(@tag1)
-    end
-    should "not include freeforms that have been merged" do
-       assert !Tag.for_tag_cloud.include?(@tag2)
-    end
-    should "include parent tags even if they do not appear on works" do
-       assert Tag.for_tag_cloud.include?(@tag3)
-    end
-    should_eventually "include non-wrangled freeforms" do
-       assert Tag.for_tag_cloud.include?(@tag4)
+      @tag = create_character
+      @tag.add_fandom(Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME).id)
     end
     should "not include other kinds of tags" do
-       assert !Tag.for_tag_cloud.include?(@tag5)
+       assert !Tag.for_tag_cloud.include?(@tag)
     end
   end
 
