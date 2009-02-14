@@ -1,8 +1,8 @@
 <ul class="navigation">
-	<li><%= link_to 'Home'.t, tag_wranglings_path %></li>
-	<% for category in (Tag::USER_DEFINED - ["Ambiguity"]) do %>
-	<li><%= link_to_unless_current category, assign_tag_wrangling_path(category) %>( <%= category.constantize.no_parent.count %>)</li>
-	<%- end -%>
+  <li><%= link_to 'Home'.t, tag_wranglings_path %></li>
+  <% for category in (Tag::USER_DEFINED - ["Ambiguity"]) do %>
+  <li><%= link_to_unless_current category, assign_tag_wrangling_path(category) %> (<%= category.constantize.no_parent.count %>)</li>
+  <%- end -%>
 </ul>
 
 <%- form_tag tag_wranglings_path do -%>
@@ -10,19 +10,20 @@
 <h2><%= label :parent, 'parent_id', h("Mass Assign Tags to:".t) %> <%= select("parent", 'parent_id', @possible_parents.collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></h2>
 
 <p><%= "(Click on a tag to select it for individual editing)".t %></p>
- <% @local_alphabet.each do |letter| %>
-	<div class="category">
-	<h3><%=h letter -%></h3>
+
+<% @local_alphabet.each do |letter| %>
+  <div class="category">
+    <h3><%=h letter -%></h3>
     <ul>
       <%- @tags.starting_with(letter).each do |tag| %>
-        <li><%= check_box_tag("tags[]", tag.name, false) %><%= label :tag, link_to_edit_tag(tag) %></li>
+        <li><%= check_box_tag("tags[]", tag.name, false, :id => "tag_#{tag.id}") %><%= label :tag, tag.id, link_to_edit_tag(tag) %></li>
       <%- end -%>
-      </ul>
-	</div>
-    <%- end -%>
+    </ul>
+  </div>
+<%- end -%>
     
-  <p class = "submit"><%= submit_tag "Assign" %></p>
+<p class="submit"><%= submit_tag "Assign" %></p>
 
-  <%- end -%>
+<%- end -%>
 
 <%= tag_wrangler_footer %>
