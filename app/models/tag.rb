@@ -291,6 +291,10 @@ class Tag < ActiveRecord::Base
     add.each do |fandom_name|
       self.add_fandom(Fandom.find_by_name(fandom_name))
     end
+    if self.fandoms.blank?
+      self.add_fandom(Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME))
+    end
+    fandoms
   end
 
   def update_medias(new=[])
@@ -305,6 +309,10 @@ class Tag < ActiveRecord::Base
     add.each do |media_name|
       self.add_media(Media.find_by_name(media_name))
     end
+    if self.medias.blank?
+      self.add_media(Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME))
+    end
+    medias
   end
 
   def update_freeforms(new=[])

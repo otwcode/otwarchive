@@ -63,7 +63,7 @@
           <dt><%= f.label :type, 'Media'.t %></dt>
           <dd>Add Media</dd>
           <dt></dt>
-          <dd><%= select("media", 'media_id', (Media.canonical - @tag.family).collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
+          <dd><%= select("media", 'media_name', (Media.canonical - @tag.family).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %></dd>
           <% @tag.medias.each do |tag| %>
             <dt></dt>
             <dd><%= check_box_tag("medias[]", tag.name, true) %><%= f.label :media, link_to_edit_tag(tag) %></dd>
@@ -72,7 +72,7 @@
           <dt><%= f.label :type, 'Fandom(s)'.t %></dt>
           <dd>Add Fandom</dd>
           <dt></dt>
-          <dd><%= select("fandom", 'fandom_id', (Fandom.canonical - @tag.family).collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
+          <dd><%= select("fandom", 'fandom_name', (Fandom.canonical - @tag.family).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %></dd>
           <% @tag.fandoms.each do |tag| %>
             <dt></dt>
             <dd><%= check_box_tag("fandoms[]", tag.name, true) %><%= f.label :fandom, link_to_edit_tag(tag) %></dd>

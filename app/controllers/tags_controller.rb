@@ -110,6 +110,16 @@ class TagsController < ApplicationController
     @tag.update_attribute(:name, params[:tag][:name]) if (params[:tag][:name] && logged_in_as_admin?)
     @tag.update_type(params[:tag][:type], logged_in_as_admin?) if params[:tag][:type]
     @tag.update_attribute("canonical", params[:tag][:canonical]) if params[:tag][:canonical]
+
+    fandoms = []
+    fandoms << params[:fandom][:fandom_name] if params[:fandom]
+    fandoms << params[:fandoms]
+    @tag.update_fandoms(fandoms.compact)
+    medias = []
+    medias << params[:media][:media_name] if params[:media]
+    medias << params[:media]
+    @tag.update_medias(medias.compact)
+
     if @tag.merger_id && params[:keep_synonym].blank?
       @tag.update_attribute("merger_id", "")
     elsif !params[:new_synonym].blank?
@@ -117,12 +127,12 @@ class TagsController < ApplicationController
       if merger == @tag # find on new synonym returned the same tag => only capitalization different
         @tag.update_attribute(:name, params[:new_synonym]) # use the new capitalization
       else # new (or possibly old) tag should be canonical
-        merger.add_fandom(@tag.fandom.id) if @tag.fandom
-        merger.add_media(@tag.media.id) if @tag.media
+        merger.update_fandoms(@tag.fandoms + merger.fandoms)
+        merger.update_medias(@tag.medias + merger.medias)
         merger.wrangle_canonical
       end
     else
-      merger = Tag.find(params[:tag][:merger_id]) if params[:tag][:merger_id]
+      merger = Tag.find_by_id(params[:tag][:merger_id]) if params[:tag][:merger_id]
     end
     if merger.is_a? Tag
       @tag.wrangle_merger(merger)
@@ -130,14 +140,10 @@ class TagsController < ApplicationController
     @tag.update_freeforms(params[:freeforms])
     @tag.update_characters(params[:characters])
     @tag.update_pairings(params[:pairings])
-    @tag.update_fandoms(params[:fandoms])
-    @tag.update_medias(params[:medias])
     @tag.update_disambiguators(params[:disambiguators]) if params[:disambiguators]
     @tag.add_freeform(params[:freeform][:freeform_id]) if params[:freeform]
     @tag.add_character(params[:character][:character_id]) if params[:character]
     @tag.add_pairing(params[:pairing][:pairing_id]) if params[:pairing]
-    @tag.add_fandom(params[:fandom][:fandom_id]) if params[:fandom]
-    @tag.add_media(params[:media][:media_id]) if params[:media]
     @tag.add_synonym(params[:synonym][:synonym_id]) if params[:synonym]
     @tag.add_disambiguator(params[:disambiguator][:disambiguator_id]) if params[:disambiguator]
     @tag.update_common_tags
