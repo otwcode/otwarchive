@@ -1,14 +1,20 @@
+/*NAVIGATION ELEMENTS*/
 ul#skiplinks	{ margin-left:-999em; position:absolute; }
 ul.navigation, dl.navigation { background: #fffef9; border-bottom: 1px solid #999; text-align:right;margin: 0 0 0.875em 0; text-transform:capitalize;}
-ul.navigation li, .navigation dd, li.navigation { background: #fffef9; display: inline; padding: 0 0.5625em; border:1px solid #999; border-bottom:0; text-indent:0;}
+ul.navigation li, .navigation dd, li.navigation { background: #fffef9; display: inline; padding: 0 0.5625em; border:1px solid #999; border-bottom:0; text-indent:0; font-weight:900;}
 .navigation dt { font-weight:600; display:inline; padding:0 0.5625em; }
+.navigation a {font-weight: 100;}
 .navigation a:active { background:#900; color:#fffef9; }
+td.navigation {background:#777;}
+td.navigation ul {background:transparent; text-align:left;}
+td.navigation li {padding:0.375em;}
+
 
 /* HEADER (MASTHEAD BLOCK) */
 #header  {  background:#900 url(/images/header-red.png) top left repeat-x; font-family: Fertigo, Cambria, Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; margin: 0 0 2.5em 0; position: relative; padding: 0.25em 0 0;}
 #header h1 { color: #fffef9; font-size: 1.5em; float: left; margin:0 0.75em;}
 #header h1 a, #header h1 a:visited {color:#fffef9;}
-#header h1 a:hover { color:#900;}
+#header h1 a:hover { color:#000;}
 #header a { font-weight: 600; text-decoration: none; }
 
 #header #login-block { color: #fffef9; font-size: 0.75em; text-align: right;}
@@ -191,8 +197,10 @@ a.cloud7 { font-size: 1.875em; font-weight: 700; color: #860202; }
 a.cloud8 { font-size: 2.25em; font-weight: 800; color: #900; }
 
 /*TAG WRANGLING */
-ul#tag-wrangler-footer { text-align: center; border-top: 1px dotted}
-#tag-wrangler-footer li { display: inline; padding: 0 0.5625em 0 0}
+.tag_wranglings-assign .category h3 {width: 5em; font-size:2.5em; }
+.tag_wranglings-assign .category ul {margin-left:5em;}
+.tag_wranglings-assign .category ul li {display:inline; text-transform:capitalize;}
+ul#tag-wrangler-footer { clear:both; margin-top:2.5em;}
 
 /*TRANSLATIONS 
 * the translation form styling is in forms.css*/

@@ -3,7 +3,7 @@
  
   <%- unless @works.blank? -%>
   <div class="user-module" id="user-works">
-    <h2><%=h 'Recent stories'.t %></h2>
+    <h2><%=h 'Recent works'.t %></h2>
     <ul class="story-list">
       <%- for work in @works -%>
     	  <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>

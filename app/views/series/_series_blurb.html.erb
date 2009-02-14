@@ -38,7 +38,7 @@
 			<dl>
 			<dt><%=h 'Words'.t + ': ' %></dt> 
 				<dd><%= '%s'/number_with_delimiter(series.works.collect(&:word_count).sum) %></dd>
-			<dt><%=h 'Stories'.t + ': ' %></dt> 
+			<dt><%=h 'Works'.t + ': ' %></dt> 
 				<dd><%=h series.serial_works.count %></dd>
 			</dl>
 		</li>

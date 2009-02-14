@@ -1,6 +1,4 @@
-<h2>
-  <%= @tag.name %>
-</h2>
+<h2><%= @tag.name %></h2>
 <%= error_messages_for :tag %>
 <%- if can_wrangle? -%>
   <p><%= link_to 'Edit '.t + @tag.name, edit_tag_path(@tag) %></p>

@@ -17,11 +17,11 @@
     <th scope="row"><%=h pseud.name %></th>
     <td><%=h pseud.description %></td>
     <td><%=h pseud.is_default %></td>
-    <td><ul class="navigation">
+    <td class="navigation"><ul class="navigation">
 	<li><%= link_to 'Show'.t, [@user, pseud] %></li>
 	<% if current_user == @user -%>
 		<li><%= link_to 'Edit'.t, [:edit, @user, pseud] -%></li>
-     	<li><%= link_to 'Orphan Stories'.t, {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} -%>
+     	<li><%= link_to 'Orphan Works'.t, {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} -%>
 		 <% unless @user.login == pseud.name || pseud.is_default -%></li>
  		 <li><%= link_to 'Destroy'.t, [@user, pseud], :confirm => 'Are you sure?'.t, :method => :delete %></li>
 		 <% end -%>
@@ -31,4 +31,7 @@
   </tr>
 <% end %>
 </table>
+<ul class="navigation">
+<li><%= link_to 'New pseud'.t, new_user_pseud_path(@user) %></li>
+</ul>
 

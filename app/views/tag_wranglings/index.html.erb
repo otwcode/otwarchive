@@ -1,17 +1,19 @@
 <h2>Tag Wrangling</h2>
 
-<dl>
-<dt>Mass Assign to Fandom (or Media)</dt>
+<h3>Mass Assign to Fandom (or Media)</h3>
+<ul>
 <% for category in (Tag::USER_DEFINED - ["Ambiguity"]) do %>
-  <dd>
+  <li>
     <%= link_to_unless_current category, assign_tag_wrangling_path(category) %> (
       <%= category.constantize.no_parent.count %>)
-  </dd>
+  </li>
 <%- end -%>
-</dl>
-<dt>Mass wrangle tags by Category</dt>
-  <% for category in Tag::TYPES do %>
-  <dd><%= link_to_unless_current category, edit_tag_wrangling_path(category) %></dd>
+</ul>
+<h3>Mass wrangle tags by Category</h3>
+<ul>
+<% for category in Tag::TYPES do %>
+  <li><%= link_to_unless_current category, edit_tag_wrangling_path(category) %></li>
 <% end %>
+</ul>
 
 <%= tag_wrangler_footer %>

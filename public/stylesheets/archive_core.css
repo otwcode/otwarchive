@@ -17,7 +17,12 @@ greys:	#ddd, #ccc, #bbb, #999, #777, #333 (borders, backgrounds, reverse text)
 plus system messages in system-messages.css (red, yellow, green, blue)
 */
 
-@font-face	{ font-family: "Fertigo"; src: url(Fertigo.otf); }
+/* Fertigo by Jos Buivenga (exljbris) -> www.exljbris.nl */
+@font-face {
+	  font-family: "Fertigo";
+	  src: url(Fertigo.otf)
+	  	  format("opentype");
+}
 
 body	{ background: #fffef9; color: #222; font: 100%/1.125 Candara, Corbel, 'Lucida Grande', Verdana, Helvetica, Arial, sans-serif; }
 
@@ -70,4 +75,4 @@ caption, th, td	{ text-align: left; }
 th	{ background:#777; color:#fff; font-weight: 100; padding: 0.25em;}
 td th	{ padding-right: 3em; }
 td	{ padding:0.375em; border:1px solid #ddd;}
-td .navigation { background:#ddd;}
+

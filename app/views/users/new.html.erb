@@ -1,5 +1,5 @@
 		<h2><%=h "Create Account" .t %></h2>
-		<p class="message"><%=h "Please select a user name. You will be allowed to post stories under multiple pseudonyms, but you will only have one user name, which is hard for us to change - please choose wisely!".t %>
+		<p class="message"><%=h "Please select a user name. You will be allowed to post work under multiple pseudonyms, but you will only have one user name, which is hard for us to change - please choose wisely!".t %>
 		</p>
 		<%= error_messages_for :user, :id => "errorExplanationNone", :header_tag => "p", :header_message => "Oops, there's some problems with the stuff you told us.".t, :message => nil  %>
 		<% form_for @user do |f| -%>
