@@ -107,7 +107,20 @@ class TagsController < ApplicationController
       flash[:error] = "Tag not found"
       redirect_to root_path and return
     end
-    @tag.update_attribute(:name, params[:tag][:name]) if (params[:tag][:name] && logged_in_as_admin?)
+    if (params[:tag][:name] && logged_in_as_admin?)
+      merger = @tag.type.constantize.find_by_name(params[:tag][:name])
+      ambiguity = Tag.find_by_name(params[:tag][:name])
+      if merger && (merger != @tag) # new name already exists as a separate tag in this category, merge them
+        merger.update_fandoms(@tag.fandoms + merger.fandoms)
+        merger.update_medias(@tag.medias + merger.medias)
+        merger.wrangle_canonical
+        @tag.wrangle_merger(merger)
+      elsif ambiguity && (ambiguity != @tag) # new name already exists, but in different category
+        flash[:error] = "Name already used in a different category"
+      else
+        @tag.update_attribute(:name, params[:tag][:name])
+      end
+    end
     @tag.update_type(params[:tag][:type], logged_in_as_admin?) if params[:tag][:type]
     @tag.update_attribute("canonical", params[:tag][:canonical]) if params[:tag][:canonical]
 

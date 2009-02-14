@@ -107,13 +107,13 @@ class Tag < ActiveRecord::Base
 
   def wrangle_banned(update_works=true)
     self.update_attribute(:type, "Banned")
-    self.common_taggings.clear
+    self.common_taggings.each {|t| t.destroy }
     self.update_common_tags if update_works
   end
 
   def wrangle_ambiguous(update_works=true)
     self.update_attribute(:type, "Ambiguity")
-    self.common_taggings.clear
+    self.common_taggings.each {|t| t.destroy }
     self.update_common_tags if update_works
   end
 
@@ -125,7 +125,7 @@ class Tag < ActiveRecord::Base
 
   def wrangle_not_canonical(update_works=true)
     self.update_attribute(:canonical, false)
-    self.common_taggings.clear if update_works
+    self.common_taggings.each {|t| t.destroy }
     self.update_common_tags if update_works
   end
 
@@ -133,12 +133,11 @@ class Tag < ActiveRecord::Base
     return unless merger.canonical? && merger.is_a?(self.class)
     self.update_attribute(:merger_id, merger.id)
     self.update_attribute(:canonical, false)
-    self.parents.clear
     self.children.each do |child|
       child.parents.delete(self)
       child.wrangle_parent(merger, update_works)
     end
-    self.children.clear
+    self.common_taggings.each {|t| t.destroy }
     self.add_fandom(merger.fandom_id)
     self.add_media(merger.media_id)
     self.update_common_tags if update_works
