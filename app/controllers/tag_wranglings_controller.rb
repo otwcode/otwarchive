@@ -94,6 +94,7 @@ class TagWranglingsController < ApplicationController
       redirect_to tag_wranglings_path
     end
     @tags = @category.constantize.no_parent.by_name
+    @local_alphabet = @tags.collect {|tag| tag.name[0,1].downcase}.uniq.sort # enigel Feb 09
   end
 
   def edit

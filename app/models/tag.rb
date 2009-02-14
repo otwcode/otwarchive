@@ -52,6 +52,13 @@ class Tag < ActiveRecord::Base
 
   named_scope :by_fandom, lambda{|fandom| {:conditions => {:fandom_id => fandom.id}}}
   named_scope :no_parent, :conditions => {:fandom_id => nil}
+  
+  # enigel Feb 09
+  named_scope :starting_with, lambda {|letter|
+    {
+      :conditions => ['SUBSTR(name,1,1) = ?', letter]
+    }
+  }  
 
   # Class methods
 

@@ -4,10 +4,17 @@
   <%- form_tag tag_wranglings_path do -%>
     <dt>Assign to:</dt>
     <dd><%= select("parent", 'parent_id', @possible_parents.collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></dd>
-    <dt></dt>
-    <%- @tags.each do |tag| %>
-      <dd><%= check_box_tag("tags[]", tag.name, false) %><%= label :tag, link_to_edit_tag(tag) %></dd>
+    <br />
+    <% @local_alphabet.each do |letter| %>
+    
+    <dt><%=h letter -%></dt>
+    
+      <%- @tags.starting_with(letter).each do |tag| %>
+        <dd><%= check_box_tag("tags[]", tag.name, false) %><%= label :tag, link_to_edit_tag(tag) %></dd>
+      <%- end -%>
+      
     <%- end -%>
+    
   <p class = "submit"><%= submit_tag "Assign" %></p>
   <%= "(Click on a tag to select it for individual editing)".t %>
   <%- end -%>
