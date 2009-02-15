@@ -130,7 +130,7 @@ class TagsController < ApplicationController
     @tag.update_fandoms(fandoms.compact)
     medias = []
     medias << params[:media][:media_name] if params[:media]
-    medias << params[:media]
+    medias << params[:medias]
     @tag.update_medias(medias.compact)
 
     if @tag.merger_id && params[:keep_synonym].blank?
