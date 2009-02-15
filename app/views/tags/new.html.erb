@@ -20,7 +20,7 @@
         <%- types = Tag::USER_DEFINED -%>
       <%- end -%>
       <%- types.each do |type| -%>
-        <%= f.radio_button("type", type) %><%= f.label :type, type %><br/>
+        <%= f.radio_button("type", type) %><%= f.label("type_#{type.downcase}", type) %><br/>
       <%- end -%>
     </dd>
   </dl>
