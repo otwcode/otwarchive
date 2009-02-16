@@ -1,35 +1,74 @@
+<ul class="navigation">
+  <li><%= link_to 'Home'.t, tag_wranglings_path %></li>
+  <% for categ in Tag::TYPES do %>
+  <li><%= link_to_unless_current categ, edit_tag_wrangling_path(categ) %></li>
+  <%- end -%>
+</ul>
+
 <h2>Wrangle <%= @category %> tags
 <% if !@tags.blank? %>
   <%- if @fandom %>
-      in <%= @fandom.name %></h2>
+      in <%= @fandom.name %>
   <%- elsif @media %>
-      in <%= @media.name %></h2>
-  <%- else -%>
-    </h2>
+      in <%= @media.name %>
   <%- end -%>
-    <%- form_tag tag_wranglings_path do -%>
+<%- end -%>
+</h2>
+
+<%- if @fandoms %>
+  <%- form_tag tag_wranglings_path do -%>
     <%= hidden_field_tag(:id, @category) %>
-    <dl>
-    <dt>Tag</dt>
-    <dt>Count</dt>
-    <%- if logged_in_as_admin? %>
-      <dd>Banned</dd>
+    <dt>Select Fandom:</dt>
+    <dd><%= select("fandom", 'fandom_id', @fandoms.collect {|f| [ f.name, f.id ] }) %></dd>
+    <p class="submit"><%= submit_tag "Wrangle" %></p>
+  <%- end -%>
+<%- elsif @medias %>
+  <%- form_tag tag_wranglings_path do -%>
+    <%= hidden_field_tag(:id, @category) %>
+    <dt>Select Media:</dt>
+    <dd><%= select("media", 'media_id', @medias.collect {|f| [ f.name, f.id ] }) %></dd>
+    <p class="submit"><%= submit_tag "Wrangle" %></p>
+  <%- end -%>
+<%- end -%>
+
+<% if !@tags.blank? %>
+
+<hr />
+
+  <%- form_tag tag_wranglings_path do -%>
+    <%= hidden_field_tag(:id, @category) %>
+    <%- if @fandom -%>
+      <%= hidden_field_tag("fandom[fandom_id]", @fandom.id) %>
+    <%- elsif @media -%>
+      <%= hidden_field_tag("media[media_id]", @media.id) %>
     <%- end -%>
-    <%- if @category == Rating %>
-      <dd>Adult</dd>
-    <% end %>
-    <dd>Canonical</dd>
-    <dd>Synonym</dd>
+    
+    <div class="">
+      <dl>
+        <dt>Tag</dt>
+        <dd>Count</dd>
+      <%- if logged_in_as_admin? %>
+        <dd>Banned</dd>
+      <%- end -%>
+      <%- if @category == Rating::NAME %>
+        <dd>Adult</dd>
+      <%- end -%>
+        <dd>Canonical</dd>
+        <dd>Synonym</dd>
+      </dl>
+    </div>
+ 
     <%- @tags.each do |tag| %>
-      <dt><%= label :tag, link_to_edit_tag(tag) %></dt>
+    <dl>
+      <dt><%= label :tag, tag.id, link_to_edit_tag(tag) %></dt>
       <dd><%= tag.taggings_count %></dd>
       <%- if logged_in_as_admin? %>
-        <dd><%= check_box_tag("banned[]", tag.id, tag.banned) %></dd>
+        <dd><%= check_box_tag("banned[]", tag.id, tag.banned, :id => "banned_#{tag.id}") %></dd>
       <%- end -%>
-      <%- if @category == Rating %>
-        <dd><%= check_box_tag("adult[]", tag.id, tag.adult) %></dd>
+      <%- if @category == Rating::NAME %>
+        <dd><%= check_box_tag("adult[]", tag.id, tag.adult, :id => "adult_#{tag.id}") %></dd>
       <% end %>
-      <dd><%= check_box_tag("canonical[]", tag.id, tag.canonical) %></dd>
+      <dd><%= check_box_tag("canonical[]", tag.id, tag.canonical, :id => "tag_#{tag.id}") %></dd>
       <% unless tag.canonical %>
         <dd>
           <%- if @fandom -%>
@@ -45,30 +84,19 @@
           <%- end -%>
         </dd>
       <%- end -%>
+    </dl>
     <%- end -%>
-    <%- if logged_in_as_admin? && @category == 'Banned' %>
+    <!-- end tags each do -->
+    
+    <%- if logged_in_as_admin? && @category == Banned::NAME %>
       <p>Note, you cannot mass wrangle tags from this page, as you must individually wrangle which category it should be moved into when unbanned</p>
     <%- elsif !@tags.blank? -%>
-      <p class = "submit"><%= submit_tag "Update all tags" %></p>
+      <p class="submit"><%= submit_tag "Update all tags" %></p>
     <%- end -%>
-  </dl>
+    
   <%- end -%>
-<%- elsif @fandoms %>
-    </h2>
-  <%- form_tag tag_wranglings_path do -%>
-  <%= hidden_field_tag(:id, @category) %>
-  <dt>Select Fandom:</dt>
-  <dd><%= select("fandom", 'fandom_id', @fandoms.collect {|f| [ f.name, f.id ] }) %></dd>
-    <p class = "submit"><%= submit_tag "Wrangle" %></p>
-  <%- end -%>
-<%- elsif @medias %>
-    </h2>
-  <%- form_tag tag_wranglings_path do -%>
-  <%= hidden_field_tag(:id, @category) %>
-  <dt>Select Media:</dt>
-  <dd><%= select("media", 'media_id', @medias.collect {|f| [ f.name, f.id ] }) %></dd>
-    <p class = "submit"><%= submit_tag "Wrangle" %></p>
-  <%- end -%>
-<%-end -%>
+  <!-- end form_tag -->
+  
+<%- end -%>
 
 <%= tag_wrangler_footer %>
