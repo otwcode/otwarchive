@@ -19,8 +19,8 @@ namespace :Tag do
   task(:reset_parents => :environment) do
     ThinkingSphinx.deltas_enabled=false
     Tag.find(:all).each do |t|
-      t.add_fandom(t.fandom.id) if t.fandom
-      t.add_media(t.media.id) if t.media
+      t.add_fandom(t.fandom) if t.fandom
+      t.add_media(t.media) if t.media
     end
     ThinkingSphinx.deltas_enabled=true
     puts "Tag parents reset."

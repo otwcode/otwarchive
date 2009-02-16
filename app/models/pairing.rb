@@ -4,12 +4,6 @@ class Pairing < Tag
 
   named_scope :no_characters, :conditions => {:has_characters => false}
 
-  before_save :add_fandom_to_parents
-
-  def add_parent(fandom_id)
-    add_fandom(fandom_id)
-  end
-
   # wrangle_characters creates too many ambiguous character tags
   # I've left the method in case we want to call it specifically
 #  after_save :wrangle_characters

@@ -52,13 +52,13 @@ class Tag < ActiveRecord::Base
 
   named_scope :by_fandom, lambda{|fandom| {:conditions => {:fandom_id => fandom.id}}}
   named_scope :no_parent, :conditions => {:fandom_id => nil}
-  
+
   # enigel Feb 09
   named_scope :starting_with, lambda {|letter|
     {
       :conditions => ['SUBSTR(name,1,1) = ?', letter]
     }
-  }  
+  }
 
   # Class methods
 
@@ -145,8 +145,8 @@ class Tag < ActiveRecord::Base
       child.wrangle_parent(merger, update_works)
     end
     self.common_taggings.each {|t| t.destroy }
-    self.add_fandom(merger.fandom_id)
-    self.add_media(merger.media_id)
+    self.add_fandom(merger.fandom)
+    self.add_media(merger.media)
     self.update_common_tags if update_works
   end
 
@@ -189,43 +189,55 @@ class Tag < ActiveRecord::Base
   #  Pairing    Pairing       Child
   #  Freeform   Pairing       Parent
 
-  def add_media(media_id)
-    return unless Tag::USER_DEFINED.include?(self.class.name)
-    media = Media.find_by_id(media_id)
+  def add_parent_by_id(parent_id)
+    if self.is_a?(Fandom)
+      add_media(Media.find_by_id(parent_id))
+    elsif Tag::USER_DEFINED.include?(self[:type])
+      add_fandom(Fandom.find_by_id(parent_id))
+    end
+  end
+
+  def add_disambiguator(tag)
+    return unless self[:type] == 'Ambiguity'
+    return false unless tag.is_a? Tag
+    tag.ambiguities << self
+  end
+
+  def add_media(media)
+    return unless Tag::USER_DEFINED.include?(self[:type])
     return false unless media.is_a? Media
-    self.update_attribute(:media_id, media_id)
+    self.update_attribute(:media_id, media.id)
     self.wrangle_parent(media)
   end
 
-  def add_fandom(fandom_id)
-    return unless Tag::USER_DEFINED.include?(self.class.name)
-    fandom = Fandom.find_by_id(fandom_id)
+  def add_fandom(fandom)
+    return unless Tag::USER_DEFINED.include?(self[:type])
     return false unless fandom.is_a? Fandom
-    self.update_attribute(:fandom_id, fandom_id)
+    self.update_attribute(:fandom_id, fandom.id)
     self.wrangle_parent(fandom)
   end
 
-  def add_freeform(freeform_id)
-    return unless Tag::USER_DEFINED.include?(self.class.name)
-    freeform = Freeform.find_by_id(freeform_id)
+  def add_freeform(freeform)
+    return unless Tag::USER_DEFINED.include?(self[:type])
     return false unless freeform.is_a? Freeform
     freeform.wrangle_parent(self)
   end
 
-  def add_pairing(pairing_id)
-    return unless Tag::USER_DEFINED.include?(self.class.name)
-    pairing = Pairing.find_by_id(pairing_id)
+  def add_pairing(pairing)
+    return unless Tag::USER_DEFINED.include?(self[:type])
     return false unless pairing.is_a? Pairing
     if self.is_a?(Freeform)
       self.wrangle_parent(pairing)
     else
       pairing.wrangle_parent(self)
     end
+    if self.is_a?(Character)
+      pairing.update_attribute(:has_characters, true)
+    end
   end
 
-  def add_character(character_id)
-    return unless Tag::USER_DEFINED.include?(self.class.name)
-    character = Character.find_by_id(character_id)
+  def add_character(character)
+    return unless Tag::USER_DEFINED.include?(self[:type])
     return false unless character.is_a? Character
     if self.is_a?(Fandom) || self.is_a?(Character)
       character.wrangle_parent(self)
@@ -234,11 +246,9 @@ class Tag < ActiveRecord::Base
     end
   end
 
-  def add_synonym(synonym_id)
-    return unless Tag::USER_DEFINED.include?(self.class.name)
-    tag = Tag.find_by_id(synonym_id)
-    return false unless tag.is_a? Tag
-    tag.wrangle_merger(self)
+  def add_synonym(synonym)
+    return false unless synonym.is_a? Tag
+    synonym.wrangle_merger(self)
   end
 
   def update_type(type, admin=false)
@@ -249,7 +259,24 @@ class Tag < ActiveRecord::Base
     end
   end
 
+  def update_disambiguators(new=[])
+    return unless self[:type] == 'Ambiguity'
+    current = self.disambiguators.map(&:name)
+    current = [] unless current
+    new = [] unless new
+    remove = current - new
+    add = new - current
+    remove.each do |disambiguator_name|
+      Tag.find_by_name(disambiguator_name).remove_from_family(self)
+    end
+    add.each do |disambiguator_name|
+      self.add_disambiguator(Tag.find_by_name(disambiguator_name))
+    end
+    disambiguators
+  end
+
   def update_characters(new=[])
+    return unless Tag::USER_DEFINED.include?(self[:type])
     current = self.characters.map(&:name)
     current = [] unless current
     new = [] unless new
@@ -261,23 +288,30 @@ class Tag < ActiveRecord::Base
     add.each do |character_name|
       self.add_character(Character.find_by_name(character_name))
     end
+    characters
   end
 
   def update_pairings(new=[])
+    return unless Tag::USER_DEFINED.include?(self[:type])
     current = self.pairings.map(&:name)
     current = [] unless current
     new = [] unless new
     remove = current - new
     add = new - current
     remove.each do |pairing_name|
-      Pairing.find_by_name(pairing_name).remove_from_family(self)
+      pairing = Pairing.find_by_name(pairing_name)
+      pairing.remove_from_family(self)
+      pairing.reload
+      pairing.update_attribute(:has_characters, false) unless pairing.characters
     end
     add.each do |pairing_name|
       self.add_pairing(Pairing.find_by_name(pairing_name))
     end
+    pairings
   end
 
   def update_fandoms(new=[])
+    return unless Tag::USER_DEFINED.include?(self[:type])
     current = self.fandoms.map(&:name)
     current = [] unless current
     new = [] unless new
@@ -296,6 +330,7 @@ class Tag < ActiveRecord::Base
   end
 
   def update_medias(new=[])
+    return unless Tag::USER_DEFINED.include?(self[:type])
     current = self.medias.map(&:name)
     current = [] unless current
     new = [] unless new
@@ -314,6 +349,7 @@ class Tag < ActiveRecord::Base
   end
 
   def update_freeforms(new=[])
+    return unless Tag::USER_DEFINED.include?(self[:type])
     current = self.freeforms.map(&:name)
     current = [] unless current
     new = [] unless new
@@ -325,6 +361,7 @@ class Tag < ActiveRecord::Base
     add.each do |freeform_name|
       self.add_freeform(Freeform.find_by_name(freeform_name))
     end
+    freeforms
   end
 
   def update_synonyms(new=[])
@@ -339,6 +376,7 @@ class Tag < ActiveRecord::Base
     add.each do |tag_name|
       self.add_synonym(Tag.find_by_name(tag_name))
     end
+    mergers
   end
 
   # return an array of all the common_tags which tagging with self should add
@@ -413,11 +451,6 @@ class Tag < ActiveRecord::Base
     return hash unless hash.blank?
   end
 
-  def add_fandom_to_parents
-    self.parents << self.fandom rescue nil
-    return true
-  end
-
   def guess_fandom
     return if self.fandom
     works_by_fandom = self.works.group_by(&:fandoms).sort_by{|array| array[1].size}.reverse.first
@@ -427,7 +460,7 @@ class Tag < ActiveRecord::Base
   end
 
   def class_name
-    self.class.name
+    self[:type]
   end
 
   def ambiguous

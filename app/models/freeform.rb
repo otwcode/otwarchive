@@ -2,12 +2,6 @@ class Freeform < Tag
 
   NAME = ArchiveConfig.FREEFORM_CATEGORY_NAME
 
-  before_save :add_fandom_to_parents
-
-  def add_parent(fandom_id)
-    add_fandom(fandom_id)
-  end
-
   def characters
     parents.select {|t| t.is_a? Character}.sort
   end

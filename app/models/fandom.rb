@@ -5,11 +5,6 @@ class Fandom < Tag
   named_scope :by_media, lambda{|media| {:conditions => {:media_id => media.id}}}
   named_scope :no_parent, :conditions => {:media_id => nil}
 
-
-  def add_parent(media_id)
-    add_media(media_id)
-  end
-
   def wrangle_merger(tag, update_works=true)
     super(tag, update_works)
     Tag.find_all_by_fandom_id(self.id).each {|t| t.update_attribute(:fandom_id, tag.id)}

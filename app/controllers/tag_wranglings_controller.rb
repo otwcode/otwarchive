@@ -17,7 +17,7 @@ class TagWranglingsController < ApplicationController
       else
         tags = params[:tags].collect {|t| Tag.find_by_name(t)}
         tags.each do |tag|
-          tag.add_parent(params[:parent][:parent_id])
+          tag.add_parent_by_id(params[:parent][:parent_id])
         end
       end
       redirect_to :back

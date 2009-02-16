@@ -42,5 +42,5 @@ else
   create_canonical(ArchiveConfig.CATEGORY_OTHER_TAG_NAME, Category)
   nomedia = create_canonical(ArchiveConfig.MEDIA_NO_TAG_NAME, Media)
   nofandom = create_canonical(ArchiveConfig.FANDOM_NO_TAG_NAME, Fandom)
-  nofandom.add_parent(nomedia.id)
+  nofandom.add_media(nomedia)
 end

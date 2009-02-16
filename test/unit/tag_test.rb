@@ -66,7 +66,7 @@ class TagTest < ActiveSupport::TestCase
   context "tags with a fandom" do
     setup do
       @tag = create_freeform
-      @tag.add_fandom(Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME).id)
+      @tag.add_fandom(Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME))
     end
     should "be included in the cloud" do
        assert Tag.for_tag_cloud.include?(@tag)
@@ -95,7 +95,7 @@ class TagTest < ActiveSupport::TestCase
   context "tags for tag cloud" do
     setup do
       @tag = create_character
-      @tag.add_fandom(Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME).id)
+      @tag.add_fandom(Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME))
     end
     should "not include other kinds of tags" do
        assert !Tag.for_tag_cloud.include?(@tag)
