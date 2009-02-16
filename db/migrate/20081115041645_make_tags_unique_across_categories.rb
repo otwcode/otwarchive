@@ -31,7 +31,6 @@ class MakeTagsUniqueAcrossCategories < ActiveRecord::Migration
             else
               second = true
             end
-            puts tag.name
           end
         end
       end

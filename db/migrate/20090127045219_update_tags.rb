@@ -7,8 +7,8 @@ class UpdateTags < ActiveRecord::Migration
       puts "." if t.id.modulo(100) == 0
       Tag.update_counters t.id, :taggings_count => -t.taggings_count
       Tag.update_counters t.id, :taggings_count => t.taggings.length
-      t.add_fandom(t.fandom.id) if t.fandom
-      t.add_media(t.media.id) if t.media
+      t.add_fandom(t.fandom) if t.fandom
+      t.add_media(t.media) if t.media
       if t.taggings.length == 0 && !t.merger_id && t.children.length == 0
         t.destroy
       end
