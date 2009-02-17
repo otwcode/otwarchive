@@ -31,74 +31,163 @@ class TagTest < ActiveSupport::TestCase
     end
   end
 
-  context "a tag and its mergers" do
+
+  context "tags on find_or_create_by_name" do
     setup do
-      @tag = create_pairing(:canonical => true)
-      @pairing1 = create_pairing
-      @pairing2 = create_pairing
-      @character = create_character
-      @pairing1.wrangle_merger(@tag)
-      @pairing2.wrangle_merger(@tag)
-      @tag.reload
+      @string = "This tag should not yet exist"
+      @tag = Character.find_or_create_by_name(@string)
+      assert @tag2 = Fandom.find_or_create_by_name(@string)
     end
-    should "have a many to one relationship" do
-      assert_equal @tag, @pairing1.merger
-      assert_equal @tag, @pairing2.merger
-      assert_equal [@pairing1, @pairing2], @tag.mergers
+    should "be created" do
+      assert @tag.is_a?(Character)
     end
-    should "be not able to be created from different types" do
-      assert_nil @character.wrangle_merger(@tag)
-      @tag.reload
-      assert_equal [@pairing1, @pairing2], @tag.mergers
+    should "be found if it's the same class" do
+      assert_equal @tag, Character.find_or_create_by_name(@tag.name)
     end
-    should "be canonical" do
-      assert_nil @pairing1.wrangle_merger(@pairing2)
-      assert_nil @tag.wrangle_merger(@pairing2)
+    should "be created with suffix if they're a different class" do
+      assert_not_equal @tag, @tag2
+      assert_equal @string + " - Fandom", @tag2.name
     end
   end
 
-  context "tags without a fandom" do
-    setup { @tag = create_freeform }
-    should "not be included in the cloud" do
-       assert !Tag.for_tag_cloud.include?(@tag)
+  context "tags with different capitalization" do
+    setup do
+      @tag1 = Tag.find_or_create_by_name("A tag")
+      @tag2 = Tag.find_or_create_by_name("b tag")
+      @tag3 = Tag.find_or_create_by_name("C tag")
+    end
+    should "sort case insensitive" do
+      assert_equal [@tag1, @tag2, @tag3], [@tag3, @tag1, @tag2].sort
     end
   end
-  context "tags with a fandom" do
+
+  context "a regular tag" do
     setup do
       @tag = create_freeform
-      @tag.add_fandom(Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME))
-    end
-    should "be included in the cloud" do
-       assert Tag.for_tag_cloud.include?(@tag)
-    end
-    context "which have been merged" do
-      setup do
-        merger = create_freeform(:canonical => true)
-        @tag.wrangle_merger(merger)
-      end
-      should "not be included in the cloud" do
-        assert !Tag.for_tag_cloud.include?(@tag)
-      end
-    end
-  end
-  context "tags with a work which is not visible" do
-    setup do
-      @tag = create_freeform
-      @work = create_work(:restricted => true)
+      @child = create_freeform
+      @work = create_work
+      @work.tags << [Fandom.first, Warning.first, Category.first, Rating.first]
       @work.update_attribute(:posted, true)
-      @work.tags << @tag
+      @work.freeform_string = @tag.name
+      @work.reload
     end
-    should_eventually "not be included in the cloud" do
-       assert !Tag.for_tag_cloud.include?(@tag)
+    should "not originally be included in common taggings" do
+      assert !@work.common_tags.include?(@tag)
+    end
+    context "and another tag with a fandom" do
+      setup do
+        @tag2 = create_freeform
+        @fandom = create_fandom(:canonical => true)
+        @tag2.add_fandom(@fandom)
+        @tag.wrangle_merger(@tag2)
+        @tag.wrangle_parent(@tag2)
+      end
+      should "not merge if not canonical" do
+        assert_not_equal @tag.merger, @tag2
+      end
+      should "not be a parent if not canonical" do
+        assert !@tag.parents.include?(@tag2)
+      end
+      context "which is canonical and merged" do
+        setup do
+          @tag2.wrangle_canonical
+          @tag.wrangle_merger(@tag2)
+        end
+        should "be merged" do
+          assert_equal @tag.merger, @tag2
+        end
+        should "get the merger's fandom" do
+          assert @tag.fandoms.include?(@fandom)
+        end
+        should "have the merger in the tag's work's common tags" do
+          assert @work.common_tags.include?(@tag2)
+        end
+        should "have the merger's fandom in the tag's work's common tags" do
+          assert @work.common_tags.include?(@fandom)
+        end
+        should "be listed in the merger's family" do
+          assert @tag2.family.include?(@tag)
+        end
+        should "have the merger in its family" do
+          assert @tag.family.include?(@tag2)
+        end
+      end
+      context "which is canonical and made a parent" do
+        setup do
+          @tag2.wrangle_canonical
+          @tag.wrangle_parent(@tag2)
+        end
+        should "be a parent" do
+          assert @tag.parents.include?(@tag2)
+        end
+        should "get the parent's fandom" do
+          assert @tag.fandoms.include?(@fandom)
+        end
+        should "have the parent in the tag's work's common tags" do
+          assert @work.common_tags.include?(@tag2)
+        end
+        should "have the parent's fandom in the tag's work's common tags" do
+          assert @work.common_tags.include?(@fandom)
+        end
+        should "be listed in the parents children" do
+          assert @tag2.children.include?(@tag)
+        end
+        should "be listed in the parents family" do
+          assert @tag2.family.include?(@tag)
+        end
+        should "have the parent in its family" do
+          assert @tag.family.include?(@tag2)
+        end
+      end
+    end
+    context "and another tag of a different category" do
+      setup do
+        @tag2 = create_pairing
+        @tag2.wrangle_canonical
+        @tag.wrangle_merger(@tag2)
+      end
+      should "not be merged" do
+        assert_not_equal @tag2.merger, @tag
+      end
+    end
+    context "when made canonical" do
+      setup do
+        @tag.wrangle_canonical
+      end
+      should "be added to common taggings" do
+        assert @work.common_tags.include?(@tag)
+      end
+      context "when made non-canonical" do
+        setup do
+          @tag.wrangle_not_canonical
+        end
+        should "be removed from common taggings" do
+          assert !@work.common_tags.include?(@tag)
+        end
+      end
     end
   end
-  context "tags for tag cloud" do
+
+  context "a wrangled tag" do
     setup do
       @tag = create_character
-      @tag.add_fandom(Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME))
+      @merger = create_character(:canonical => true)
+      @fandom = create_fandom(:canonical => true)
+      @character = create_character(:canonical => true)
+      @tag.wrangle_merger(@merger)
+      @tag.add_fandom(@fandom)
     end
-    should "not include other kinds of tags" do
-       assert !Tag.for_tag_cloud.include?(@tag)
+    should "have parents in common_tags" do
+      assert @tag.common_tags_to_add.include?(@fandom)
+    end
+    should "have merger in common_tags" do
+      assert @tag.common_tags_to_add.include?(@merger)
+    end
+    should "have self in common_tags if canonical" do
+      assert @character.common_tags_to_add.include?(@character)
+    end
+    should "not have self in common_tags if not canonical" do
+      assert !@tag.common_tags_to_add.include?(@tag)
     end
   end
 

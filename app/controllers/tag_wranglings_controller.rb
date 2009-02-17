@@ -20,12 +20,12 @@ class TagWranglingsController < ApplicationController
           tag.add_parent_by_id(params[:parent][:parent_id])
         end
       end
-      redirect_to :back
+      redirect_to :back and return
     elsif commit == "Wrangle"
       @category = params[:id]
       if !logged_in_as_admin? && !Tag::USER_DEFINED.include?(@category)
         flash[:error] = "Please log in as admin"
-        redirect_to tag_wranglings_path and return
+        redirect_to :back and return
       end
       setup_edit_vars
       render :action => "edit"
@@ -45,7 +45,7 @@ class TagWranglingsController < ApplicationController
       if params[:banned]
         if !logged_in_as_admin?
           flash[:error] = "Please log in as admin"
-          redirect_to tag_wranglings_path and return
+          redirect_to :back and return
         else
           to_ban = params[:banned].map(&:to_i)
           to_ban.each do |id|
@@ -79,7 +79,7 @@ class TagWranglingsController < ApplicationController
       render :action => "edit"
     else
       flash[:error] = "Please choose something"
-      redirect_to tag_wranglings_path
+      redirect_to :back and return
     end
   end
 
@@ -91,7 +91,7 @@ class TagWranglingsController < ApplicationController
       @possible_parents = Fandom.canonical.by_name
     else
       flash[:error] = "Sorry, you can't mass assign that"
-      redirect_to tag_wranglings_path
+      redirect_to :back and return
     end
     @tags = @category.constantize.no_parent.by_name
     @local_alphabet = @tags.collect {|tag| tag.name[0,1].downcase}.uniq.sort # enigel Feb 09
@@ -101,7 +101,7 @@ class TagWranglingsController < ApplicationController
     @category = params[:id]
     if !logged_in_as_admin? && !Tag::USER_DEFINED.include?(@category)
       flash[:error] = "Please log in as admin"
-      redirect_to tag_wranglings_path and return
+      redirect_to :back and return
     end
     setup_edit_vars
   end

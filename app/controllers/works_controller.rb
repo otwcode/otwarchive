@@ -131,6 +131,7 @@ class WorksController < ApplicationController
       unless params[:tag_id].blank?
         @tag = Tag.find_by_name(params[:tag_id])
         @tag = @tag.merger if @tag.merger
+        redirect_to tag_path(@tag) and return unless @tag.canonical
         @selected_tags << @tag.id.to_s unless @selected_tags.include?(@tag.id.to_s)
       end
       

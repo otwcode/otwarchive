@@ -83,8 +83,7 @@
           </dd>
         <%- end -%>
 
-        <%- if false # not associating freeforms with other tags for now 
-        %>
+        <%- if @tag.is_a?(Fandom) %>
           <dt><%= f.label :type, 'Freeforms'.t %></dt>
           <dd>Add Freeform:&nbsp;<%= select("freeform", 'freeform_name', (Freeform.canonical - @tag.family).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %><br />
             <ul class="tag-edit-items">
@@ -95,14 +94,6 @@
           </dd>
         <%- end -%>
 
-        <dt><%= f.label :type, 'Synonyms'.t %></dt>
-        <dd>Add Synonym:&nbsp;<%= select("synonym", 'synonym_name', (@tag.class.nonsynonymous - @tag.mergers).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %><br />
-          <ul class="tag-edit-items">
-          <% @tag.mergers.each do |tag| %>
-            <li><%= check_box_tag("synonyms[]", tag.name, true, :id => "tag_synonym_#{tag.id}") %><%= f.label "synonym_#{tag.id}", link_to_edit_tag(tag) %></li>
-          <%- end %>
-          </ul>
-        </dd>
         <%- if @tag.is_a?(Ambiguity) %>
           <dt><%= f.label :type, 'Disambiguators'.t %>:</dt>
           <dd>Add Disambiguator:&nbsp;<%= select("disambiguator", 'disambiguator_name', (@tag.find_similar - @tag.disambiguators - [@tag]).collect {|p| [ description(p), p.name ] }, { :include_blank => true }) %><br />
@@ -114,18 +105,24 @@
           </dd>
         <%- end %>
 
-      <%- else # not canonical 
-      %> 
-        <dt><%= f.label :type, 'Synonym of'.t %>:</dt>
-        <% if @tag.merger.is_a? Tag %>
-          <dd><%= check_box_tag("keep_synonym", @tag.merger.name, true, :id => "tag_keep_synonym") %><%= f.label :keep_synonym, link_to_edit_tag(@tag.merger) %></dd>
-        <%- else %>
-          <dd><%= f.select('merger_id', @tag.class.canonical.collect {|p| [ p.name, p.id ]}, { :include_blank => true, :selected => nil }) %></dd>
-          <dt><%= label :new_synonym, 'Rename'.t %>*:</dt>
-          <dd><%= text_field_tag :new_synonym %><br />
-          *This text box will do one of two things: 1. correct the capitalization of the current tag. 2. Create a canonical tag, to which the current tag is then made a synonym. </dd>
-        <%- end %>
       <%- end %>
+      <dt><%= f.label :type, 'Synonym of'.t %></dt>
+      <% if @tag.merger.is_a? Tag %>
+        <dd><%= check_box_tag("keep_synonym", @tag.merger.name, true, :id => "tag_keep_synonym") %><%= f.label :keep_synonym, link_to_edit_tag(@tag.merger) %></dd>
+      <%- else %>
+        <dd><%= f.select('merger_id', (@tag.class.canonical - [@tag]).collect {|p| [ p.name, p.id ]}, { :include_blank => true, :selected => nil }) %></dd>
+        <dt><%= label :new_synonym, 'Rename'.t %>*:</dt>
+        <dd><%= text_field_tag :new_synonym %><br />
+        *This text box will do one of two things: 1. correct the capitalization of the current tag. OR 2. Create a canonical tag, to which the current tag is then made a synonym. </dd>
+      <%- end %>
+      <dt><%= f.label :type, 'Synonyms'.t %></dt>
+      <dd>Add Synonym:&nbsp;<%= select("synonym", 'synonym_name', (@tag.class.nonsynonymous - @tag.family).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %><br />
+        <ul class="tag-edit-items">
+        <% @tag.mergers.each do |tag| %>
+          <li><%= check_box_tag("synonyms[]", tag.name, true, :id => "tag_synonym_#{tag.id}") %><%= f.label "synonym_#{tag.id}", link_to_edit_tag(tag) %></li>
+        <%- end %>
+        </ul>
+      </dd>
 
     <% end %>
 </dl>

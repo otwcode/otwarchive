@@ -5,15 +5,6 @@ class Fandom < Tag
   named_scope :by_media, lambda{|media| {:conditions => {:media_id => media.id}}}
   named_scope :no_parent, :conditions => {:media_id => nil}
 
-  def wrangle_merger(tag, update_works=true)
-    super(tag, update_works)
-    Tag.find_all_by_fandom_id(self.id).each {|t| t.update_attribute(:fandom_id, tag.id)}
-  end
-
-  def children
-    ( Tag.find_all_by_fandom_id(self.id) + super ).uniq.compact.sort
-  end
-
   def characters
     children.select {|t| t.is_a? Character}.sort
   end

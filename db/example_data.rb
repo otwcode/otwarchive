@@ -1,23 +1,23 @@
 module FixtureReplacement
 
-  #### models 
-  ## Note1: attributes are what it takes to *create* an object, not what's stored 
+  #### models
+  ## Note1: attributes are what it takes to *create* an object, not what's stored
   ## in the database - this is different from regular fixtures)
   ## Note2: fixtures must be valid to use create_. To test for errors, use new_
-  
+
   attributes_for :language do |a|
     a.id = 1819
     a.iso_639_1 = 'en'
-    a.english_name = 'English'    
+    a.english_name = 'English'
   end
-  
+
   attributes_for :country do |a|
     a.id = 223
     a.code = 'US'
     a.english_name = 'United States of America'
   end
-  
-  attributes_for :abuse_report do |a|    
+
+  attributes_for :abuse_report do |a|
     a.email = random_email
     a.url = random_url(ArchiveConfig.APP_URL)
     a.comment = random_paragraph
@@ -25,7 +25,7 @@ module FixtureReplacement
 
   attributes_for :admin do |a|
     password = random_password
-    
+
     a.login = String.random
     a.email = random_email
     a.password = password
@@ -37,11 +37,11 @@ module FixtureReplacement
     a.user = default_user
     a.bookmarkable = default_work
   end
-  
+
   # to create (save) a new chapter you have to have a work first
   # FIXME: authors are only added by default for the first chapter
   # chapter1=new_chapter
-  # w=create_work(:chapters => [chapter1]) 
+  # w=create_work(:chapters => [chapter1])
   # chapter2 = create_chapter(:work => work, :authors = work.pseuds)
   attributes_for :chapter do |a|
     a.content = random_chapter
@@ -63,18 +63,18 @@ module FixtureReplacement
     a.creation_type = :work
     a.creation = default_work
   end
-  
+
   attributes_for :external_work do |a|
     a.url = random_url(random_domain(false),"")
     a.author = random_phrase
     a.title = random_phrase
   end
-  
-  attributes_for :feedback do |a|    
+
+  attributes_for :feedback do |a|
     a.comment = random_paragraph
   end
-  
-  attributes_for :invitation do |a|    
+
+  attributes_for :invitation do |a|
     a.recipient_email = random_email
   end
 
@@ -99,37 +99,37 @@ module FixtureReplacement
   attributes_for :role do |a|
     a.name = random_phrase[1...40]
   end
-  
+
   attributes_for :series do |a|
     a.title = random_phrase
     a.summary = random_phrase
     a.notes = random_phrase
   end
-  
+
   attributes_for :serial_work do |a|
     a.series = create_series
     a.pseud = create_pseud
     a.position = 1
   end
- 
+
   attributes_for :tag do |a|
     a.name = random_phrase[1...42]
     a.type = Tag::TYPES[rand(5)+3]
   end
-  
+
   attributes_for :rating do |a|
     a.name = random_phrase[1...42]
     a.adult = false
   end
-  
+
   attributes_for :warning do |a|
     a.name = random_phrase[1...42]
   end
-  
+
   attributes_for :category do |a|
     a.name = random_phrase[1...42]
   end
-    
+
   attributes_for :media do |a|
     a.name = random_phrase[1...42]
   end
@@ -141,12 +141,20 @@ module FixtureReplacement
   attributes_for :pairing do |a|
     a.name = random_phrase[1...42]
   end
-  
+
   attributes_for :character do |a|
     a.name = random_phrase[1...42]
   end
 
   attributes_for :freeform do |a|
+    a.name = random_phrase[1...42]
+  end
+
+  attributes_for :ambiguity do |a|
+    a.name = random_phrase[1...42]
+  end
+
+  attributes_for :banned do |a|
     a.name = random_phrase[1...42]
   end
 
@@ -185,19 +193,19 @@ module FixtureReplacement
   def random_word
     Faker::Lorem.words(1).to_s
   end
- 
+
   def random_phrase(count=nil)  # 2-4 words
     count = count ? count : rand(3)+2
     phrase=random_word.capitalize + ' '
     (1..rand(3)).each {|i| phrase << random_word + " "}
     phrase << random_word
   end
-  
+
   def random_sentence(count=nil)  # 3-12 words
     count = count ? count : rand(10)+3
     Faker::Lorem.sentence(count)
   end
-  
+
   def random_paragraph(count=nil)  # 2-10 sentences
     count = count ? count : rand(9)+2
     Faker::Lorem.paragraph(count)
@@ -218,15 +226,15 @@ module FixtureReplacement
   def random_password   # strong?
     random_word + Faker::Address.zip_code + random_word.capitalize
   end
-  
+
   def random_email(fake=false)
     Faker::Internet.user_name + '@' + random_domain(fake)
   end
-  
+
   def random_url(host=nil,path=nil)
     host = host ? host : 'http://www.' + random_domain
     path = path ? path : random_phrase[1...10].gsub(/ /, '/')
     return host + '/' + path
   end
-  
+
 end

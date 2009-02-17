@@ -96,10 +96,6 @@ class Tag < ActiveRecord::Base
 
   # Instance methods that are common to all subclasses (may be overridden in the subclass)
 
-  def banned
-    return true if self.class == Banned
-  end
-
   # sort tags by name
   def <=>(another_tag)
     name.downcase <=> another_tag.name.downcase
@@ -112,39 +108,19 @@ class Tag < ActiveRecord::Base
     end
   end
 
-  def wrangle_banned(update_works=true)
-    self.update_attribute(:type, "Banned")
-    self.common_taggings.each {|t| t.destroy }
-    self.update_common_tags if update_works
-  end
-
-  def wrangle_ambiguous(update_works=true)
-    self.update_attribute(:type, "Ambiguity")
-    self.common_taggings.each {|t| t.destroy }
-    self.update_common_tags if update_works
-  end
-
   def wrangle_canonical(update_works=true)
     self.update_attribute(:canonical, true)
-    self.update_attribute(:merger_id, nil)
     self.update_common_tags if update_works
   end
 
   def wrangle_not_canonical(update_works=true)
     self.update_attribute(:canonical, false)
-    self.common_taggings.each {|t| t.destroy }
     self.update_common_tags if update_works
   end
 
   def wrangle_merger(merger, update_works=true)
     return unless merger.canonical? && merger.is_a?(self.class)
     self.update_attribute(:merger_id, merger.id)
-    self.update_attribute(:canonical, false)
-    self.children.each do |child|
-      child.parents.delete(self)
-      child.wrangle_parent(merger, update_works)
-    end
-    self.common_taggings.each {|t| t.destroy }
     self.add_fandom(merger.fandom)
     self.add_media(merger.media)
     self.update_common_tags if update_works
@@ -153,6 +129,8 @@ class Tag < ActiveRecord::Base
   def wrangle_parent(parent, update_works=true)
     return unless parent.is_a?(Tag) && parent.canonical?
     self.parents << parent rescue nil
+    self.add_fandom(parent.fandom)
+    self.add_media(parent.media)
     self.update_common_tags if update_works
   end
 
@@ -163,17 +141,7 @@ class Tag < ActiveRecord::Base
 
   # parents children and self
   def family
-    [self] + self.children + self.parents
-  end
-
-  def remove_from_family(tag)
-    if self.parents.include?(tag)
-      self.parents.delete(tag)
-    elsif tag.parents.include?(self)
-      tag.parents.delete(self)
-    else
-      return false
-    end
+    [self] + self.children + self.parents + self.mergers + [self.merger]
   end
 
   # Tag       Tag_to_add    Relationship
@@ -198,16 +166,36 @@ class Tag < ActiveRecord::Base
   end
 
   def add_disambiguator(tag)
-    return unless self[:type] == 'Ambiguity'
+    return unless self.is_a?(Ambiguity)
     return false unless tag.is_a? Tag
     tag.ambiguities << self
   end
+  def remove_disambiguator(tag)
+    return unless self.is_a?(Ambiguity)
+    return false unless tag.is_a? Tag
+    tag.ambiguities.delete(self)
+  end
 
   def add_media(media)
-    return unless Tag::USER_DEFINED.include?(self[:type])
+    return unless self.is_a?(Fandom)
     return false unless media.is_a? Media
     self.update_attribute(:media_id, media.id)
     self.wrangle_parent(media)
+    nomedia = Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)
+    if media != nomedia
+      self.remove_media(nomedia) if self.medias.include?(nomedia)
+    end
+  end
+  def remove_media(media)
+    return unless self.is_a?(Fandom)
+    return false unless media.is_a? Media
+    remaining = self.medias - [media]
+    self.parents.delete(media)
+    if self.media == media
+      new_media = remaining.first
+      new_media = Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME) unless new_media
+      self.add_media(new_media)
+    end
   end
 
   def add_fandom(fandom)
@@ -215,12 +203,33 @@ class Tag < ActiveRecord::Base
     return false unless fandom.is_a? Fandom
     self.update_attribute(:fandom_id, fandom.id)
     self.wrangle_parent(fandom)
+    nofandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
+    if fandom != nofandom
+      self.remove_fandom(nofandom) if self.fandoms.include?(nofandom)
+    end
+  end
+
+  def remove_fandom(fandom)
+    return unless Tag::USER_DEFINED.include?(self[:type])
+    return false unless fandom.is_a? Fandom
+    remaining = self.fandoms - [fandom]
+    self.parents.delete(fandom)
+    if self.fandom == fandom
+      new_fandom = remaining.first
+      new_fandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME) unless new_fandom
+      self.add_fandom(new_fandom)
+    end
   end
 
   def add_freeform(freeform)
     return unless Tag::USER_DEFINED.include?(self[:type])
     return false unless freeform.is_a? Freeform
     freeform.wrangle_parent(self)
+  end
+  def remove_freeform(freeform)
+    return unless Tag::USER_DEFINED.include?(self[:type])
+    return false unless freeform.is_a? Freeform
+    freeform.parents.delete(self)
   end
 
   def add_pairing(pairing)
@@ -235,6 +244,18 @@ class Tag < ActiveRecord::Base
       pairing.update_attribute(:has_characters, true)
     end
   end
+  def remove_pairing(pairing)
+    return unless Tag::USER_DEFINED.include?(self[:type])
+    return false unless pairing.is_a? Pairing
+    if self.is_a?(Freeform)
+      self.parents.delete(pairing)
+    else
+      pairing.parents.delete(self)
+    end
+    if self.is_a?(Character)
+      pairing.update_attribute(:has_characters, false) if pairing.characters.blank?
+    end
+  end
 
   def add_character(character)
     return unless Tag::USER_DEFINED.include?(self[:type])
@@ -244,11 +265,30 @@ class Tag < ActiveRecord::Base
     else
       self.wrangle_parent(character)
     end
+    if self.is_a?(Pairing)
+      self.update_attribute(:has_characters, true)
+    end
+  end
+  def remove_character(character)
+    return unless Tag::USER_DEFINED.include?(self[:type])
+    return false unless character.is_a? Character
+    if self.is_a?(Fandom) || self.is_a?(Character)
+      character.parents.delete(self)
+    else
+      self.parents.delete(character)
+    end
+    if self.is_a?(Pairing)
+      self.update_attribute(:has_characters, false) if self.characters.blank?
+    end
   end
 
   def add_synonym(synonym)
-    return false unless synonym.is_a? Tag
+    return false unless synonym.is_a?(self.class)
     synonym.wrangle_merger(self)
+  end
+  def remove_synonym(synonym)
+    return false unless synonym.is_a?(self.class)
+    self.mergers.delete(synonym)
   end
 
   def update_type(type, admin=false)
@@ -267,7 +307,7 @@ class Tag < ActiveRecord::Base
     remove = current - new
     add = new - current
     remove.each do |disambiguator_name|
-      Tag.find_by_name(disambiguator_name).remove_from_family(self)
+      self.remove_disambiguator(Tag.find_by_name(disambiguator_name))
     end
     add.each do |disambiguator_name|
       self.add_disambiguator(Tag.find_by_name(disambiguator_name))
@@ -283,7 +323,7 @@ class Tag < ActiveRecord::Base
     remove = current - new
     add = new - current
     remove.each do |character_name|
-      Character.find_by_name(character_name).remove_from_family(self)
+      self.remove_character(Character.find_by_name(character_name))
     end
     add.each do |character_name|
       self.add_character(Character.find_by_name(character_name))
@@ -299,10 +339,7 @@ class Tag < ActiveRecord::Base
     remove = current - new
     add = new - current
     remove.each do |pairing_name|
-      pairing = Pairing.find_by_name(pairing_name)
-      pairing.remove_from_family(self)
-      pairing.reload
-      pairing.update_attribute(:has_characters, false) unless pairing.characters
+      self.remove_pairing(Pairing.find_by_name(pairing_name))
     end
     add.each do |pairing_name|
       self.add_pairing(Pairing.find_by_name(pairing_name))
@@ -318,13 +355,10 @@ class Tag < ActiveRecord::Base
     remove = current - new
     add = new - current
     remove.each do |fandom_name|
-      Fandom.find_by_name(fandom_name).remove_from_family(self)
+      self.remove_fandom(Fandom.find_by_name(fandom_name))
     end
     add.each do |fandom_name|
       self.add_fandom(Fandom.find_by_name(fandom_name))
-    end
-    if self.fandoms.blank?
-      self.add_fandom(Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME))
     end
     fandoms
   end
@@ -337,13 +371,10 @@ class Tag < ActiveRecord::Base
     remove = current - new
     add = new - current
     remove.each do |media_name|
-      Media.find_by_name(media_name).remove_from_family(self)
+      self.remove_media(Media.find_by_name(media_name))
     end
     add.each do |media_name|
       self.add_media(Media.find_by_name(media_name))
-    end
-    if self.medias.blank?
-      self.add_media(Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME))
     end
     medias
   end
@@ -356,7 +387,7 @@ class Tag < ActiveRecord::Base
     remove = current - new
     add = new - current
     remove.each do |freeform_name|
-      Freeform.find_by_name(freeform_name).remove_from_family(self)
+      self.remove_freeform(Freeform.find_by_name(freeform_name))
     end
     add.each do |freeform_name|
       self.add_freeform(Freeform.find_by_name(freeform_name))
@@ -371,7 +402,7 @@ class Tag < ActiveRecord::Base
     remove = current - new
     add = new - current
     remove.each do |tag_name|
-      self.mergers.delete(Tag.find_by_name(tag_name))
+      self.remove_synonym(Tag.find_by_name(tag_name))
     end
     add.each do |tag_name|
       self.add_synonym(Tag.find_by_name(tag_name))
@@ -430,37 +461,8 @@ class Tag < ActiveRecord::Base
     visible_works_count + visible_bookmarks_count + visible_external_works_count
   end
 
-  def possible_children
-    type = self[:type]
-    return unless type
-    fandoms = Fandom.all if type.match /Media|Fandom/
-    characters = Character.no_parent if type.match /Fandom|Character/
-    pairings = Pairing.no_parent if type.match /Fandom|Character|Pairing/
-    freeforms = Freeform.no_parent if type.match /Fandom|Character|Pairing|Freeform/
-    fandom = self.fandom
-    if fandom.is_a? Fandom
-      characters = characters + Character.by_fandom(fandom) if type.match /Fandom|Character/
-      pairings = pairings + Pairing.by_fandom(fandom) if type.match /Fandom|Character|Pairing/
-      freeforms = freeforms + Freeform.by_fandom(fandom) if type.match /Fandom|Character|Pairing|Freeform/
-    end
-    hash = {}
-    hash['Fandom'] = fandoms.sort - self.children unless fandoms.blank?
-    hash['Character'] = characters.sort - self.children unless characters.blank?
-    hash['Pairing'] = pairings.sort - self.children unless pairings.blank?
-    hash['Freeform'] = freeforms.sort - self.children unless freeforms.blank?
-    return hash unless hash.blank?
-  end
-
-  def guess_fandom
-    return if self.fandom
-    works_by_fandom = self.works.group_by(&:fandoms).sort_by{|array| array[1].size}.reverse.first
-    fandom = works_by_fandom[0].first if works_by_fandom
-    self.update_attribute(:fandom_id, fandom.id) if fandom
-    self
-  end
-
-  def class_name
-    self[:type]
+  def banned
+    return self if self.is_a?(Banned)
   end
 
   def ambiguous
