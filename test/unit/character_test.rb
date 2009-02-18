@@ -86,25 +86,26 @@ class CharacterTest < ActiveSupport::TestCase
     context "which uses fandom update on names" do
       setup do
         @fandom = create_fandom(:canonical => true)
-        @character.update_fandoms([@fandom.name])
+        @fandom2 = create_fandom(:canonical => true)
+        @character.update_fandoms([@fandom.name, @fandom2.name])
         @character.reload
       end
       should "have fandoms" do
-        assert_equal [@fandom], @character.fandoms
-      end
-      context "removing fandoms" do
-        setup do
-          @character.update_fandoms([""])
-          @character.reload
-        end
-        should "have 'No Fandom' as fandom" do
-          assert_equal Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME), @character.fandom
-        end
-        should "have 'No Fandom' as fandoms" do
-          assert_equal [Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)], @character.fandoms
-        end
+        assert_equal [@fandom, @fandom2].sort, @character.fandoms.sort
       end
     end
+    context "with no fandoms" do
+    	setup do
+	      @character.update_fandoms([""])
+	      @character.reload
+	    end
+			should "have 'No Fandom' as fandom" do
+				assert_equal Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME), @character.fandom
+			end
+			should "have 'No Fandom' as fandoms" do
+				assert_equal [Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)], @character.fandoms
+			end
+	  end
   end
 
 end

@@ -360,6 +360,10 @@ class Tag < ActiveRecord::Base
     add.each do |fandom_name|
       self.add_fandom(Fandom.find_by_name(fandom_name))
     end
+    if self.fandoms == []
+      new_fandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME) unless new_fandom
+      self.add_fandom(new_fandom)
+    end
     fandoms
   end
 
@@ -375,6 +379,10 @@ class Tag < ActiveRecord::Base
     end
     add.each do |media_name|
       self.add_media(Media.find_by_name(media_name))
+    end
+    if self.medias == []
+      new_media = Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME) unless new_media
+      self.add_media(new_media)
     end
     medias
   end

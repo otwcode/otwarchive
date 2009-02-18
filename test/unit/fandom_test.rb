@@ -144,6 +144,15 @@ class FandomTest < ActiveSupport::TestCase
         end
       end
     end
+    context "with no media" do
+      setup do
+        @fandom.update_medias([""])
+        @fandom.reload
+      end
+      should "have 'No Media' as media" do
+        assert_equal Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), @fandom.media
+      end
+    end
   end
 
 end

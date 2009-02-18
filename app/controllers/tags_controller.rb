@@ -128,11 +128,11 @@ class TagsController < ApplicationController
     fandoms = []
     fandoms << params[:fandom][:fandom_name] if params[:fandom]
     fandoms << params[:fandoms] if params[:fandoms]
-    @tag.update_fandoms(fandoms.flatten.compact) if !fandoms.blank?
+    @tag.update_fandoms(fandoms.flatten.compact)
     medias = []
     medias << params[:media][:media_name] if params[:media]
     medias << params[:medias] if params[:medias]
-    @tag.update_medias(medias.flatten.compact) if !medias.blank?
+    @tag.update_medias(medias.flatten.compact)
     freeforms = []
     freeforms << params[:freeform][:freeform_name] if params[:freeform]
     freeforms << params[:freeforms] if params[:freeforms]
