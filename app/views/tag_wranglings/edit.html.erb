@@ -36,41 +36,43 @@
 <hr />
 
   <%- form_tag tag_wranglings_path do -%>
-    <%= hidden_field_tag(:id, @category) %>
+    <p><%= hidden_field_tag(:id, @category) %></p>
     <%- if @fandom -%>
-      <%= hidden_field_tag("fandom[fandom_id]", @fandom.id) %>
+      <p><%= hidden_field_tag("fandom[fandom_id]", @fandom.id) %></p>
     <%- elsif @media -%>
-      <%= hidden_field_tag("media[media_id]", @media.id) %>
+      <p><%= hidden_field_tag("media[media_id]", @media.id) %></p>
     <%- end -%>
     
-    <div class="">
-      <dl>
-        <dt>Tag</dt>
-        <dd>Count</dd>
+    <table>
+	<caption><!--a short summary of this table's function and content here pls!--></caption>
+	<thead>
+	<tr>
+        <th scope="col">Tag</th>
+        <th scope="col">Count</th>
       <%- if logged_in_as_admin? %>
-        <dd>Banned</dd>
+        <th scope="col">Banned</th>
       <%- end -%>
       <%- if @category == Rating::NAME %>
-        <dd>Adult</dd>
+        <th scope="col">Adult</th>
       <%- end -%>
-        <dd>Canonical</dd>
-        <dd>Synonym</dd>
-      </dl>
-    </div>
- 
+        <th scope="col">Canonical</th>
+        <th scope="col">Synonym</th>
+      </tr>
+	</thead>
+ <tbody>
     <%- @tags.each do |tag| %>
-    <dl>
-      <dt><%= label :tag, tag.id, link_to_edit_tag(tag) %></dt>
-      <dd><%= tag.taggings_count %></dd>
+    <tr>
+      <td><%= label :tag, tag.id, link_to_edit_tag(tag) %></td>
+      <td><%= tag.taggings_count %></td>
       <%- if logged_in_as_admin? %>
-        <dd><%= check_box_tag("banned[]", tag.id, tag.banned, :id => "banned_#{tag.id}") %></dd>
+        <td><%= check_box_tag("banned[]", tag.id, tag.banned, :id => "banned_#{tag.id}") %></td>
       <%- end -%>
       <%- if @category == Rating::NAME %>
-        <dd><%= check_box_tag("adult[]", tag.id, tag.adult, :id => "adult_#{tag.id}") %></dd>
+        <td><%= check_box_tag("adult[]", tag.id, tag.adult, :id => "adult_#{tag.id}") %></td>
       <% end %>
-      <dd><%= check_box_tag("canonical[]", tag.id, tag.canonical, :id => "tag_#{tag.id}") %></dd>
+      <td><%= check_box_tag("canonical[]", tag.id, tag.canonical, :id => "tag_#{tag.id}") %></td>
       <% unless tag.canonical %>
-        <dd>
+        <td>
           <%- if @fandom -%>
             <%= hidden_field_tag("fandom[fandom_id]", @fandom.id) %>
             <%= select("merger", tag.id, (tag.class.by_fandom(@fandom).canonical - [tag]).collect {|p| [ p.name, p.id ] }, { :include_blank => true, :selected => tag.merger.andand.id}) %>
@@ -82,14 +84,15 @@
           <%- else -%>
              <%= select("merger", tag.id, (tag.class.no_parent.canonical - [tag]).collect {|p| [ p.name, p.id ] }, { :include_blank => true, :selected => tag.merger.andand.id}) %>
           <%- end -%>
-        </dd>
+        </td>
       <%- end -%>
-    </dl>
+    </tr>
     <%- end -%>
     <!-- end tags each do -->
-    
+    </tbody>
+</table>
     <%- if logged_in_as_admin? && @category == Banned::NAME %>
-      <p>Note, you cannot mass wrangle tags from this page, as you must individually wrangle which category it should be moved into when unbanned</p>
+      <p class="message">Note, you cannot mass wrangle tags from this page, as you must individually wrangle which category it should be moved into when unbanned</p>
     <%- elsif !@tags.blank? -%>
       <p class="submit"><%= submit_tag "Update all tags" %></p>
     <%- end -%>

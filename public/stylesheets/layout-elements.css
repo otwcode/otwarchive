@@ -197,9 +197,9 @@ a.cloud7 { font-size: 1.875em; font-weight: 700; color: #860202; }
 a.cloud8 { font-size: 2.25em; font-weight: 800; color: #900; }
 
 /*TAG WRANGLING */
-.tag_wranglings-assign .category h3 {width: 5em; font-size:2.5em; }
+.tag_wranglings-assign .category h3 { font-size:2.5em; }
 .tag_wranglings-assign .category ul {margin-left:5em;}
-.tag_wranglings-assign .category ul li {display:inline; text-transform:capitalize;}
+.tag_wranglings-assign .category ul li {display:inline; }
 ul#tag-wrangler-footer { clear:both; margin-top:2.5em;}
 
 /*TRANSLATIONS 
