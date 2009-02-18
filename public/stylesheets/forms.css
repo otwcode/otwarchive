@@ -123,4 +123,7 @@ textarea#comment_content	{ width:32em !important; height:11em !important}
 .inbox-show form p { clear: right; }
 #inbox-form .comment { margin-bottom: 2em;}
 
+/*TAG WRANGLINGS*/
+form#wrangle-select-fandom p, form#wrangle-select-media p{ display:inline; margin-right:0.5625em;}
+
 /* GLOBALIZE (in footer) you can find this in globalize.css*/

@@ -5,7 +5,7 @@
   <%- end -%>
 </ul>
 
-<h2>Wrangle <%= @category %> tags
+<h2>Wrangle <%= @category %> Tags
 <% if !@tags.blank? %>
   <%- if @fandom %>
       in <%= @fandom.name %>
@@ -16,17 +16,15 @@
 </h2>
 
 <%- if @fandoms %>
-  <%- form_tag tag_wranglings_path do -%>
-    <%= hidden_field_tag(:id, @category) %>
-    <dt>Select Fandom:</dt>
-    <dd><%= select("fandom", 'fandom_id', @fandoms.collect {|f| [ f.name, f.id ] }) %></dd>
+  <%- form_tag tag_wranglings_path, :id => 'wrangle-select-fandom' do -%>
+    <p><%= hidden_field_tag(:id, @category) %>
+    <p>Select Fandom: <%= select("fandom", 'fandom_id', @fandoms.collect {|f| [ f.name, f.id ] }) %></p>
     <p class="submit"><%= submit_tag "Wrangle" %></p>
   <%- end -%>
 <%- elsif @medias %>
-  <%- form_tag tag_wranglings_path do -%>
-    <%= hidden_field_tag(:id, @category) %>
-    <dt>Select Media:</dt>
-    <dd><%= select("media", 'media_id', @medias.collect {|f| [ f.name, f.id ] }) %></dd>
+  <%- form_tag tag_wranglings_path, :id => 'wrangle-select-media' do -%>
+    <p><%= hidden_field_tag(:id, @category) %></p>
+    <p>Select Media: <%= select("media", 'media_id', @medias.collect {|f| [ f.name, f.id ] }) %></p>
     <p class="submit"><%= submit_tag "Wrangle" %></p>
   <%- end -%>
 <%- end -%>
