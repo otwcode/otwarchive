@@ -5,8 +5,10 @@
 <%= error_messages_for :tag %>
 <%- form_for :tag, @tag, :url => { :action => "update", :id => @tag.name}, :html => { :method => :put } do |f| -%>
 
-<dl id="edit-tag">
-    <dt><%= f.label :name, 'Name'.t %></dt>
+<table id="edit-tag">
+ <caption><!--quick outline of table's structure content and purpose here pls-->
+
+   <dt><%= f.label :name, 'Name'.t %></dt>
     <dd><%= f.text_field :name, :disabled => (!logged_in_as_admin? || ['Rating', 'Warning', 'Category'].include?(@tag[:type])) %></dd>
 
     <dt>Works (count)</dt>
