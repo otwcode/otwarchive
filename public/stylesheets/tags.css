@@ -2,7 +2,6 @@
 .droppable { color: red;} 
 
 /* TAG WRANGLING */	
-
 #tags-to-sort {
 	margin-top: 20px;
 	height: 10em;
@@ -10,4 +9,22 @@
 	overflow: scroll;
 }
 
+/* TAG EDIT PAGE */
 
+ul.tag-edit-items li {
+  display: inline;
+  white-space: nowrap;
+}
+
+ul.tag-edit-items {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+#edit-tag dt {
+  width: 20%;
+}
+
+#edit-tag dd {
+  width: 75%;
+}
