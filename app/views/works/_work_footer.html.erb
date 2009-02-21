@@ -15,7 +15,7 @@
  	
  	<%- unless @work.approved_children.blank? -%>
  	<div id="children">
- 	  <p>Works inspired by this one:<p>
+ 	  <p><%=h "Works inspired by this one:".t -%><p>
  	  <ul>
  	  <%- for child in @work.approved_children -%>
  	    <li><%= link_to child.title, child %></li>

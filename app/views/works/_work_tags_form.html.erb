@@ -3,13 +3,13 @@
   <p><%= "Story Tags (comma separated)".t -%><%= link_to_help "tagging-help" -%></p>
   <dl>
     <dt class="rating required">
-      <label for=""><%= Rating::NAME.t -%>*<%= link_to_help "rating-help" -%></label>
+      <label for="work_rating_string"><%= Rating::NAME.t -%>*<%= link_to_help "rating-help" -%></label>
     </dt>
     <dd class="rating required">
       <%= collection_select(:work, :rating_string, Rating.canonical, :name, :name) -%>		
     </dd>
     <dt class="warning required">
-      <label for=""><%= Warning::NAME.t -%>*<%= link_to_help "warning-help" -%></label>
+      <label for="work_warning"><%= Warning::NAME.t -%>*<%= link_to_help "warning-help" -%></label>
     </dt>
     <dd class="warning required">
       <select id="work_warning" name="work[warning_strings][]" multiple="multiple">
@@ -17,13 +17,13 @@
       </select>
     </dd>
     <dt class="category required">
-      <label for=""><%= Category::NAME.t -%>*</label>
+      <label for="work_category_string"><%= Category::NAME.t -%>*</label>
     </dt>
     <dd class="category required">
       <%= collection_select(:work, :category_string, Category.canonical, :name, :name, {:prompt => true}) -%>		
     </dd>
     <dt class="fandom required">
-      <label for=""><%= Fandom::NAME.pluralize.t -%>*</label>
+      <label for="work_fandom"><%= Fandom::NAME.pluralize.t -%>*</label>
     </dt>
     <dd class="fandom required">
       <input type="text" name="work[fandom_string]" id="work_fandom" value="<%= @work.fandom_string %>" />
@@ -32,7 +32,7 @@
     </dd>
 	<dd class="fandom delay_notice">If this is the first story for a fandom, it may not show up in the fandoms page for a day or two</dd>
     <dt class="pairing">
-      <label for=""><%= Pairing::NAME.pluralize.t -%></label>
+      <label for="work_pairing"><%= Pairing::NAME.pluralize.t -%></label>
     </dt>
     <dd class="pairing">
       <input type="text" name="work[pairing_string]" id="work_pairing" value="<%= @work.pairing_string %>"/>
@@ -40,7 +40,7 @@
       <%= javascript_tag("new Autocompleter.Local('work_pairing', 'work_pairing_auto_complete', Pairing.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
     </dd>
     <dt class="character">
-      <label for=""><%= Character::NAME.pluralize.t -%></label>
+      <label for="work_character"><%= Character::NAME.pluralize.t -%></label>
     </dt>
     <dd class="character">
       <input type="text" name="work[character_string]" id="work_character" value="<%= @work.character_string %>" />
@@ -48,7 +48,7 @@
       <%= javascript_tag("new Autocompleter.Local('work_character', 'work_character_auto_complete', Character.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
     </dd>
     <dt class="freeform">
-      <label for=""><%= Freeform::NAME.pluralize.t -%></label>
+      <label for="work_freeform"><%= Freeform::NAME.pluralize.t -%></label>
     </dt>
     <dd class="freeform">
       <input type="text" name="work[freeform_string]" id="work_freeform" value="<%= @work.freeform_string %>" />

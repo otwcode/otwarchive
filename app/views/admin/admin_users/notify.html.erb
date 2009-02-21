@@ -1,4 +1,4 @@
-<h1>Send Notification To Users</h1>
+<h1><%=h "Send Notification To Users"/t -%></h1>
 
 <%- form_tag send_notification_admin_users_path, :method => :post do -%>
 
@@ -12,10 +12,10 @@
     <dt><%= 'Select Users To Notify'.t -%></dt>
     <dd>
       <table id="admin_users_table">
-      <caption>Select users to notify</caption>
+      <caption><%=h "Select users to notify".t -%></caption>
       <tr>
-      	<th scope="col">Username</th>
-      	<th scope="col">Select</th>
+      	<th scope="col"><%=h "Username".t -%></th>
+      	<th scope="col"><%=h "Select".t -%></th>
       </tr>
 
       <tr>
@@ -35,6 +35,6 @@
     </dd>
   </dl>
 
-  <p class="submit"><%= submit_tag "Send Notification" -%></p>
+  <p class="submit"><%= submit_tag "Send Notification".t -%></p>
 <%- end -%>
 

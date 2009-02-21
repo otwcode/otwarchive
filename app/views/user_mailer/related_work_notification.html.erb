@@ -1,5 +1,5 @@
-Your story "<%= @related_work.parent.title %>" was listed as the inspiration of "<%= @related_work.work.title %>"
- by <%= @related_work.work.pseuds.collect(&:name).join(", ") %>
+<p><%=h "Your work".t -%> <cite><%= @related_work.parent.title %></cite> <%=h "was listed as the inspiration of".t -%> <cite><%= @related_work.work.title %></cite>
+ <%=h "by".t -%> <%= @related_work.work.pseuds.collect(&:name).join(", ") %></p>
 
 <!--go here violates WCAG 1.0 6.1. this needs rewording-->
-To link back to "<%= @related_work.work.title %>" from your story, please go <a href="<%= @url %>">here</a>. 
+<p><%=h "To link back to".t -%> <cite><%= @related_work.work.title %></cite> <%=h "from your work, please go".t -%> <a href="<%= @url %>">here</a>.</p>

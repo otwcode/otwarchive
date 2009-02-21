@@ -1,13 +1,13 @@
-<h1>All Abuse Reports:</h1>
+<h1><%=h "All Abuse Reports:".t -%></h1>
 
 <table id="abuse_reports_table">
-<caption>Listing all the abuse reports made on the archive.</caption>
+<caption><%=h "Listing all the abuse reports made on the archive.".t -%></caption>
 <tr>
-	<th scope="col">ID</th>
-	<th scope="col">From</th>
-	<th scope="col">Referring To</th>
-	<th scope="col">Reported</th>
-	<th scope="col">Show</th>
+	<th scope="col"><%=h "ID".t -%></th>
+	<th scope="col"><%=h "From".t -%></th>
+	<th scope="col"><%=h "Referring To".t -%></th>
+	<th scope="col"><%=h "Reported".t -%></th>
+	<th scope="col"><%=h "Show".t -%></th>
 </tr>
 	<%- for abuse_report in @abuse_reports -%>
 	<tr id="abuse_report_<%= abuse_report.id %>">

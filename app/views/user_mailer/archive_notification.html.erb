@@ -1,10 +1,10 @@
-<p>Dear Archive Users!</p>
+<p><%=h "Dear Archive Users!".t -%></p>
 
 <%= sanitize_and_format_for_display @message -%>
 
-<p>Sent at: <%= Time.now.strftime(common_timestring) -%></p>
+<p><%=h "Sent at:".t -%> <%= Time.now.strftime(common_timestring) -%></p>
 
-<p>Sent by: <%= @admin -%></p>
+<p><%=h "Sent by:".t -%> <%= @admin -%></p>
 
-<p>&nbsp;</p>
+
 

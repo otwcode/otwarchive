@@ -3,7 +3,7 @@
 		<p><img class="icon" src="/images/icon_placeholder.png" alt="icon placeholder"></p>
 	<%- end -%>
 	
-	<h3>Posted on <%= link_to_comment_ultimate_parent(single_comment) %>
+	<h3><%=h "Posted on".t -%> <%= link_to_comment_ultimate_parent(single_comment) %>
 	by <%= get_pseud_or_mailaddress(single_comment) %></h3>
 	
 	<%=sanitize_and_format_for_display single_comment.content %>

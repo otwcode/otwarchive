@@ -5,4 +5,4 @@
 <td><%= "Suspended" if user.suspended %></td>
 <td><%= "Banned" if user.banned %></td>
 <td><%= link_to_remote "Edit".t, {:url => edit_admin_user_path(user), :method => :get}, :href => edit_admin_user_path(user) %>
-<td>Delete</td> 
+<td><%=h "Delete".t -%></td> 

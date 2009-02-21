@@ -153,10 +153,10 @@
     <!-- Chaptered checkbox (work_is_wip) -->
     <!-- Checking this box causes the expected number of chapters box to appear; unchecking it causes it to disappear. -->
     <dt class="work-is_wip">
-      <%= f.label :isWip, h("Does this work have multiple chapters?").t %>
+      <%= f.label :iswip, h("Does this work have multiple chapters?").t %>
     </dt>
     <dd class="work-is_wip">
-      <input type="checkbox" name="isWip"  
+      <input type="checkbox" id="iswip" name="isWip"  
        onclick="showChapteredStoryOptions()" <%- if @work.chaptered? -%>checked="checked"<%- end -%>/>
     </dd>        
     <dd id="number-of-chapters">
@@ -179,7 +179,7 @@
 	<dd>
 	<input type="checkbox" id="publicationdatecheck" <%- if @work.published_at != @work.created_at -%>checked="checked"<%- end -%> />
 	</dd>
-	<dd id="managePublicationDate" name="managePublicationDate">
+	<dd id="managePublicationDate">
 		<%= f.date_select "published_at", :start_year => Date.today.year, :end_year => 1950, :default => Date.today, :order => [:day, :month, :year] %>
 	</dd>
 	</dl>         
@@ -191,7 +191,7 @@
   <p>
     <%= c.label :content, h("Story, in plain text with limited HTML*").t, :class => "required" %><%= link_to_help "html-help" -%>
   </p>
-	<p id=""><code>a href, b, blockquote, br, center, cite, code, del, dd, dt, dl, div, em, h1, h2, h3, h4, h5, h6, i, ins, li, ol, pre, q, small, span, strike, strong, sub, sup, ul</code></p>
+	<p><code>a href, b, blockquote, br, center, cite, code, del, dd, dt, dl, div, em, h1, h2, h3, h4, h5, h6, i, ins, li, ol, pre, q, small, span, strike, strong, sub, sup, ul</code></p>
   <p class="rtf-html-switch">
 	  <% use_tinymce -%>
     <span><a href="javascript:addEditor('content');"><%=h 'Rich text'.t %></a></span>

@@ -1,17 +1,17 @@
-<h1>All Users:</h1>
+<h1><%=h "All Users:".t -%></h1>
 
 <%= alpha_paginated_section -%>
 
 <table id="admin_users_table">
-<caption>List of all current users in the archive</caption>
+<caption><%=h "List of all current users in the archive".t -%></caption>
 <tr>
-	<th scope="col">Username</th>
-	<th scope="col">Email</th>
-	<th scope="col">Translator</th>
-	<th scope="col">Tag Wrangler</th>
-	<th scope="col">Suspended</th>
-	<th scope="col">Banned</th>
-	<th scope="col">Update</th>
+	<th scope="col"><%=h "Username".t -%></th>
+	<th scope="col"><%=h "Email".t -%></th>
+	<th scope="col"><%=h "Translator".t -%></th>
+	<th scope="col"><%=h "Tag Wrangler".t -%></th>
+	<th scope="col"><%=h "Suspended".t -%></th>
+	<th scope="col"><%=h "Banned".t -%></th>
+	<th scope="col"><%=h "Update".t -%></th>
 </tr>
 	<%- @users.each do |user| -%>
 	<tr id="user_<%= user.id %>">
