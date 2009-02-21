@@ -1,6 +1,7 @@
 class UpdateTags < ActiveRecord::Migration
   def self.up
     remove_column :tags, :wrangled
+    Tag.reset_column_information
     ThinkingSphinx.deltas_enabled=false
     puts "resetting tag count and parents. deleting unused tags"
     Tag.all.each do |t|
@@ -17,6 +18,10 @@ class UpdateTags < ActiveRecord::Migration
     Work.all.each do |work|
       puts "." if work.id.modulo(100) == 0
       work.update_common_tags
+    end
+    puts "Updating pairing character field"
+    Pairing.all.each do |pairing|
+      pairing.update_attribute(:has_characters, true) unless pairing.characters.blank?
     end
 
     ThinkingSphinx.deltas_enabled=true
