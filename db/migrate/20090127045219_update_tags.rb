@@ -1,6 +1,6 @@
 class UpdateTags < ActiveRecord::Migration
   def self.up
-    remove_column :tags, :wrangled
+#    remove_column :tags, :wrangled #remove later. it's not hurting anything.
     Tag.reset_column_information
     ThinkingSphinx.deltas_enabled=false
     puts "resetting tag count and parents. deleting unused tags"
