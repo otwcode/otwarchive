@@ -9,8 +9,10 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :tag_wranglings, :path_prefix => ':locale', :member => {:assign => :get}
 
   map.resources :tags, :collection => {:show_hidden => :get}, :path_prefix => ':locale', :requirements => { :id => %r([^/;,?]+) } do |tag|
-    tag.resources :works
-    tag.resources :bookmarks
+    tag.with_options :requirements => { :tag_id => %r([^/;,?]+) } do |tag_requirements|
+        tag_requirements.resources :works
+        tag_requirements.resources :bookmarks
+    end
 	end
 
   map.root :controller => 'home', :action => 'index', :locale => 'en'
