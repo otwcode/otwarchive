@@ -78,7 +78,7 @@ class Tag < ActiveRecord::Base
     return tag if tag
     # try to create the tag
     tag = self.create(:name => string) rescue nil
-    return tag if tag.valid?
+    return tag if tag.andand.valid?
     # it wasn't valid, which probably means it already exists in another category
     old_tag = Tag.find_by_name(string)
     if old_tag # so create this one with the category appended
