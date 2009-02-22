@@ -7,8 +7,8 @@
 
 <% for admin in @admins %>
   <tr>
-    <td><%= link_to h('Show').t, admin %></td>
-    <td><%= link_to h('Destroy').t, admin, :confirm => h('Are you sure?').t, :method => :delete %></td>
+    <td><%= link_to 'Show'.t, admin %></td>
+    <td><%= link_to 'Destroy'.t, admin, :confirm => 'Are you sure?'.t, :method => :delete %></td>
   </tr>
 <% end %>
 </table>

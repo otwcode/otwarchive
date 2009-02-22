@@ -2,10 +2,10 @@
 
 <%- form_for :user, user, :url => {:controller => "admin/admin_users", :action => "update", :letter => params[:letter]} do |f| -%> 
 <th scope="row"><%=h user.login %><%= f.hidden_field :login %></th>
-<td><%= f.text_field :email, :title => "Email" %></td>
-<td><%= f.check_box :translator, :title => "Translator" %></td>
-<td><%= f.check_box :tag_wrangler, :title => "Tag Wrangler" %></td>
-<td><%= f.check_box :suspended, :title => "Suspended" %></td>
-<td><%= f.check_box :banned, :title => "Banned" %></td>
-<td><%= f.submit "Update" %></td>
+<td><%= f.text_field :email, :title => "Email".t %></td>
+<td><%= f.check_box :translator, :title => "Translator".t %></td>
+<td><%= f.check_box :tag_wrangler, :title => "Tag Wrangler".t %></td>
+<td><%= f.check_box :suspended, :title => "Suspended".t %></td>
+<td><%= f.check_box :banned, :title => "Banned".t %></td>
+<td><%= f.submit "Update".t %></td>
 <%- end -%>

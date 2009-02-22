@@ -1,11 +1,11 @@
-<p>Here's some user feedback on the archive!</p>
+<p><%=h "Here's some user feedback on the archive!".t %></p>
 
 <%= ArchiveConfig.REVISION.blank? ? "" : "<p>Archive revision: (rev.#{ArchiveConfig.REVISION})</p>" -%>
 
-<p>Feedback:</p>
+<p><%=h "Feedback:".t %></p>
 
 <%= sanitize_and_format_for_display @comment %>
 
-<p>Sent at: <%= Time.now.strftime(common_timestring) -%></p>
+<p><%=h "Sent at:".t %>&nbsp;<%= Time.now.strftime(common_timestring) -%></p>
 
 

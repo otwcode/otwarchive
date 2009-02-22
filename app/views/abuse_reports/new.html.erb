@@ -9,12 +9,12 @@
       <%=h "this will be filled in for you".t %></p>
     </dd>
   	
-	  <dt><%= f.label :comment, "Describe the problem in as much detail as possible:" .t %></dt>
+	  <dt><%= f.label :comment, "Describe the problem in as much detail as possible:".t %></dt>
     <dd><%= f.text_area :comment, :cols => 60 %></dd>
     	
 	  <dt><%= f.label :email, "Your email (optional):".t %></dt>
     <dd><%= f.text_field :email, :size => 60 %>
-		  <p class="footnote">Leave this blank to file an anonymous report.</p>
+		  <p class="footnote"><%=h "Leave this blank to file an anonymous report.".t %></p>
 		</dd>
 			
  	  <dt><%=h "Submit your message to the abuse team:".t %></dt>

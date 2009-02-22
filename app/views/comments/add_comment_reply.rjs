@@ -4,6 +4,6 @@ page.replace_html "add_comment_reply_link_#{@commentable.id}", cancel_comment_re
 # render the form into the spot for it on the page
 page.replace_html "add_comment_reply_placeholder_#{@commentable.id}", 
   :partial => 'comments/comment_form', 
-  :locals => {:comment => @comment, :commentable => @commentable, :button_name => "Add Comment"}
+  :locals => {:comment => @comment, :commentable => @commentable, :button_name => "Add Comment".t}
   
 page.visual_effect :blind_down, "add_comment_reply_placeholder_#{@commentable.id}"

@@ -49,7 +49,7 @@
 			<!-- if not, we will render the comment form if this is the comment we are replying to. -->
 			<%- if params[:add_comment_reply_id] && params[:add_comment_reply_id] == single_comment.id.to_s -%>
 			  <%= render :partial => 'comments/comment_form', 
-						 :locals => {:comment => Comment.new, :commentable => single_comment, :button_name => "Add Comment"} -%>
+						 :locals => {:comment => Comment.new, :commentable => single_comment, :button_name => "Add Comment".t} -%>
 			<%- end -%>
 		<%- end -%>
 	<%- end -%>

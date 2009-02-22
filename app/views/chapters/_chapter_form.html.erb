@@ -3,14 +3,14 @@
 <fieldset id="chapter-ordering">
 	<legend><%= 'Naming and Ordering'.t %></legend>
 	<p>
-		<%= f.label :title, h('Chapter title').t %>
+		<%= f.label :title, 'Chapter title'.t %>
 		<%= f.text_field :title, :class => "storyinputfield", :live => true %>
       	<%= link_to_help "story-title" -%>
     </p>
 	<p>
-    	<%=f.label :current_position, h('Chapter number').t %> 
+    	<%=f.label :current_position, 'Chapter number'.t %> 
 		<%= f.text_field :current_position, :class => "number-field" %> 
-		<%=f.label :wip_length, h('of').t, :title => 'of total chapters'.t %> 
+		<%=f.label :wip_length, 'of'.t, :title => 'of total chapters'.t %> 
 		<%= f.text_field :wip_length, :class => "number-field" %> 
   	</p>
 </fieldset>
@@ -22,14 +22,14 @@
 	<%- end -%>	
     <legend><%= 'Associations'.t -%></legend>
 	<dl>
-      <dt><%= label :pseud, :id, h('Select author/pseudonym(s)').t %></dt>
+      <dt><%= label :pseud, :id, 'Select author/pseudonym(s)'.t %></dt>
       <dd>
         <select name="chapter[author_attributes][ids][]" multiple="multiple">
           <%= options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds) %>
         </select>         
       </dd>
       
-	  <dt><%= link_to_function(h('Add co-authors?').t, "Element.toggle('co-authors')") %></dt>
+	  <dt><%= link_to_function('Add co-authors?'.t, "Element.toggle('co-authors')") %></dt>
 	  <dd id="co-authors">
 		<dl>
 			<dt><%= f.label :storycoauthor, "Enter co-author name(s):".t %></dt>
@@ -54,20 +54,20 @@
 <fieldset>
 	<legend><%= 'Chapter Text'.t -%></legend>
    	<p>
-	    <%= f.label :content, h("Chapter, in plain text with limited HTML*").t, :class => "required" %><%= link_to_help "html-help" -%>
+	    <%= f.label :content, "Chapter, in plain text with limited HTML*".t, :class => "required" %><%= link_to_help "html-help" -%>
 	  </p>
 		<p id=""><code>a href, b, blockquote, br, center, cite, code, del, dd, dt, dl, div, em, h1, h2, h3, h4, h5, h6, i, ins, li, ol, pre, q, small, span, strike, strong, sub, sup, ul</code></p>
 <p class="rtf-html-switch">
 		<% use_tinymce -%>
 	    <span><a href="javascript:addEditor('content');"><%=h 'Rich text'.t %></a></span>
-	    <span><a href="javascript:removeEditor('content');">HTML</a></span>
+	    <span><a href="javascript:removeEditor('content');"><%=h 'HTML'.t %></a></span>
 	</p>
 	<p>
 		<%= f.text_area :content, :class => "mce-editor", :id => "content" %>
       	<%= live_validation_for_field('content', 
   				:maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN, 
-  				:tooLongMessage => 'We salute your ambition! But sadly the content must be less than %d letters long. (Maybe you want to create a multi-chaptered work?)'/ArchiveConfig.CONTENT_MAX,
-  				:tooShortMessage => 'Brevity is the soul of wit, but your content does have to be at least %d letters long.'/ArchiveConfig.CONTENT_MIN,
+  				:tooLongMessage => 'We salute your ambition! But sadly the content must be less than %d letters long. (Maybe you want to create a multi-chaptered work?)'.t/ArchiveConfig.CONTENT_MAX,
+  				:tooShortMessage => 'Brevity is the soul of wit, but your content does have to be at least %d letters long.'.t/ArchiveConfig.CONTENT_MIN,
   			  :failureMessage => 'You need to post some story content here.'.t)
   		-%>
 	</p>

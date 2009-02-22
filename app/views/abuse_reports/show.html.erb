@@ -1,7 +1,7 @@
 <h1><%=h "Abuse Report".t -%> <%= @abuse_report.id -%></h1>
 
 <table id="abuse_report_table">
-<caption><%=h "Detailed abuse report<".t -%>/caption>
+<caption><%=h "Detailed abuse report".t -%></caption>
 <tr><th scope="row"><%=h "From".t -%></th><td><%= @abuse_report.email.blank? ? '(' + 'Anonymous'.t + ')' : mail_to(@abuse_report.email) -%></td></tr>
 <tr><th scope="row"><%=h "Regarding".t -%></th><td><%= link_to @abuse_report.url -%></td></tr>
 <tr><th scope="row"><%=h "Reported".t -%></th><td><%= time_ago_in_words @abuse_report.created_at -%></td></tr>
