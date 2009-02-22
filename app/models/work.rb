@@ -160,7 +160,7 @@ class Work < ActiveRecord::Base
       new = self.authors - self.pseuds
       self.pseuds << new rescue nil
       self.chapters.first.pseuds << new rescue nil
-      self.series.each {|series| series.pseuds << new rescue nil}
+      self.series.each {|series| series.pseuds << (self.authors - series.pseuds) rescue nil}
     end
     if self.toremove
       self.pseuds.delete(self.toremove)
