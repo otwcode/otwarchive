@@ -36,7 +36,7 @@ class TagTest < ActiveSupport::TestCase
     setup do
       @string = "This tag should not yet exist"
       @tag = Character.find_or_create_by_name(@string)
-      @tag2 = Fandom.find_or_create_by_name(@string)
+      assert @tag2 = Fandom.find_or_create_by_name(@string)
     end
     should "be created" do
       assert @tag.is_a?(Character)
@@ -44,8 +44,9 @@ class TagTest < ActiveSupport::TestCase
     should "be found if it's the same class" do
       assert_equal @tag, Character.find_or_create_by_name(@tag.name)
     end
-    should "be created invalid if it's a different class" do
-      assert !@tag2.save
+    should "be created with suffix if they're a different class" do
+      assert_not_equal @tag, @tag2
+      assert_equal @string + " - Fandom", @tag2.name
     end
   end
 

@@ -78,7 +78,16 @@ class Tag < ActiveRecord::Base
     return tag if tag
     # try to create the tag
     tag = self.create(:name => string) rescue nil
-    return tag
+    return tag if tag.valid?
+    # it wasn't valid, which probably means it already exists in another category
+    old_tag = Tag.find_by_name(string)
+    if old_tag # so create this one with the category appended
+      new_tag = self.find_or_create_by_name(string + " - " + self.to_s)
+      return new_tag if new_tag
+    else
+      # other tag validation errors - wasn't saved
+      return tag
+    end
   end
 
   def self.for_tag_cloud
