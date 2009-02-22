@@ -6,7 +6,7 @@
  	  <%- for parent in @work.parents -%>
  	    <li><%= link_to parent.title, parent %></li>
  	    <%- if is_author_of?(@work) -%>
-    		<%= link_to h('Remove relationship').t, {:controller => :related_works, :action => :destroy, :parent_id => parent.id, :work_id => @work.id},  :confirm => h('Are you sure?').t, :method => :delete %>
+    		<%= link_to 'Remove relationship'.t, {:controller => :related_works, :action => :destroy, :parent_id => parent.id, :work_id => @work.id},  :confirm => 'Are you sure?'.t, :method => :delete %>
     	<%- end -%>
  	  <%- end -%>
  	  </ul>
@@ -20,7 +20,7 @@
  	  <%- for child in @work.approved_children -%>
  	    <li><%= link_to child.title, child %></li>
  	    <%- if is_author_of?(@work) -%>
-    		<%= link_to h('Remove link').t, {:controller => :related_works, :action => :update, :parent_id => @work.id, :work_id => child.id}, :method => :put %>
+    		<%= link_to 'Remove link'.t, {:controller => :related_works, :action => :update, :parent_id => @work.id, :work_id => child.id}, :method => :put %>
     	<%- end -%>
  	  <%- end -%>
  	  </ul>

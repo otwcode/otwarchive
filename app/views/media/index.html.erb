@@ -1,4 +1,4 @@
-<h1>Fandoms</h1>
+<h1><%=h 'Fandoms'.t %></h1>
 <ol>
 <%- @fandom_listing.each do |pair| -%>
   <% if pair[0] %>
@@ -18,7 +18,7 @@
     </ol>
 
     <%- if pair[0] && (pair[1].size > 5 )-%>
-    <p><%= link_to "All " + pair[0].name + "...", medium_path(pair[0]) %></p>
+    <p><%= link_to "All".t + ' ' + pair[0].name + "...", medium_path(pair[0]) %></p>
     <%- end -%>
   </li>
 <%- end -%>

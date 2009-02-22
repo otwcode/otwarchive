@@ -5,7 +5,7 @@
   <%- end -%>
 </ul>
 
-<h2>Wrangle <%= @category %> Tags
+<h2><%=h 'Wrangle'.t %> <%= @category %> <%=h 'Tags'.t %>
 <% if !@tags.blank? %>
   <%- if @fandom %>
       in <%= @fandom.name %>
@@ -18,14 +18,14 @@
 <%- if @fandoms %>
   <%- form_tag tag_wranglings_path, :id => 'wrangle-select-fandom' do -%>
     <p><%= hidden_field_tag(:id, @category) %>
-    <p>Select Fandom: <%= select("fandom", 'fandom_id', @fandoms.collect {|f| [ f.name, f.id ] }, {:selected => @fandom ? @fandom.id : nil}) %></p>
-    <p class="submit"><%= submit_tag "Wrangle" %></p>
+    <p><%=h 'Select Fandom:'.t %> <%= select("fandom", 'fandom_id', @fandoms.collect {|f| [ f.name, f.id ] }, {:selected => @fandom ? @fandom.id : nil}) %></p>
+    <p class="submit"><%= submit_tag "Wrangle".t %></p>
   <%- end -%>
 <%- elsif @medias %>
   <%- form_tag tag_wranglings_path, :id => 'wrangle-select-media' do -%>
     <p><%= hidden_field_tag(:id, @category) %></p>
-    <p>Select Media: <%= select("media", 'media_id', @medias.collect {|f| [ f.name, f.id ] }, {:selected => @media ? @media.id : nil}) %></p>
-    <p class="submit"><%= submit_tag "Wrangle" %></p>
+    <p><%=h 'Select Media:'.t %> <%= select("media", 'media_id', @medias.collect {|f| [ f.name, f.id ] }, {:selected => @media ? @media.id : nil}) %></p>
+    <p class="submit"><%= submit_tag "Wrangle".t %></p>
   <%- end -%>
 <%- end -%>
 
@@ -42,19 +42,19 @@
     <%- end -%>
     
     <table>
-	<caption>Tags to be wrangled</caption>
+	<caption><%=h 'Tags to be wrangled'.t %></caption>
 	<thead>
 	<tr>
-        <th scope="col">Tag</th>
-        <th scope="col">Count</th>
+        <th scope="col"><%=h 'Tag'.t %></th>
+        <th scope="col"><%=h 'Count'.t %></th>
       <%- if logged_in_as_admin? %>
-        <th scope="col">Banned</th>
+        <th scope="col"><%=h 'Banned'.t %></th>
       <%- end -%>
       <%- if @category == Rating::NAME %>
-        <th scope="col">Adult</th>
+        <th scope="col"><%=h 'Adult'.t %></th>
       <%- end -%>
-        <th scope="col">Canonical</th>
-        <th scope="col">Synonym</th>
+        <th scope="col"><%=h 'Canonical'.t %></th>
+        <th scope="col"><%=h 'Synonym'.t %></th>
       </tr>
 	</thead>
  <tbody>
@@ -88,9 +88,9 @@
     </tbody>
 </table>
     <%- if logged_in_as_admin? && @category == Banned::NAME %>
-      <p class="message">Note, you cannot mass wrangle tags from this page, as you must individually wrangle which category it should be moved into when unbanned</p>
+      <p class="message"><%=h "Note, you cannot mass wrangle tags from this page, as you must individually wrangle which category it should be moved into when unbanned".t %></p>
     <%- elsif !@tags.blank? -%>
-      <p class="submit"><%= submit_tag "Update all tags" %></p>
+      <p class="submit"><%= submit_tag "Update all tags".t %></p>
     <%- end -%>
     
   <%- end -%>

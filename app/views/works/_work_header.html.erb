@@ -49,14 +49,14 @@
   
   <%- unless @work.summary.blank? -%>
   <blockquote class="summary">
-    <h3>Summary: </h3>
+    <h3><%=h 'Summary:'.t %></h3>
     <%=sanitize_and_format_for_display @work.summary %>
   </blockquote>
   <%- end -%>
   
   <%- unless @work.notes.blank? -%>
   <blockquote class="notes">
-    <h3>Notes: </h3>
+    <h3><%=h 'Notes:'.t %></h3>
     <%=sanitize_and_format_for_display @work.notes %>
   </blockquote>
   <%- end -%>

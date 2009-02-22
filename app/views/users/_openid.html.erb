@@ -1,9 +1,9 @@
 <!-- OpenID field -->	
 	<p>
-		<%= f.label :identity_url, h("OpenID URL:").t  %><br />
+		<%= f.label :identity_url, "OpenID URL:".t  %><br />
 		<%= image_tag("openid.png", :alt => ' ', :class => 'openid') %> <%= f.text_field :identity_url %>
 		<%= live_validation_for_field('user_identity_url', 
-				 :failureMessage => 'Please enter a valid OpenID, or sign up using a password.')
+				 :failureMessage => 'Please enter a valid OpenID, or sign up using a password.'.t)
 				-%>
 	</p>
 

@@ -1,4 +1,4 @@
-<h1><%= link_to 'Fandoms', media_path %> > <%=h @medium_name %></h1>
+<h1><%= link_to 'Fandoms'.t, media_path %> > <%=h @medium_name %></h1>
 <ul>
   <%- for fandom in @fandoms -%>
   <%- if fandom.visible_works_count > 0 -%>

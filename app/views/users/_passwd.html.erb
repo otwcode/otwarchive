@@ -1,15 +1,15 @@
 <!-- Password with link to strong password info (still needs to be added) -->
-	  <dt><%= f.label :password, h("And your password?").t %> <%=h "(Make it a".t %>&nbsp;<a href="http://passwordstrength.net" ><%=h "strong".t %></a>&nbsp;<%=h "one! It needs to be at least 6 characters long.)".t %></dt>	
+	  <dt><%= f.label :password, "And your password?".t %> <%=h "(Make it a".t %>&nbsp;<a href="http://passwordstrength.net" ><%=h "strong".t %></a>&nbsp;<%=h "one! It needs to be at least 6 characters long.)".t %></dt>	
 <dd><%= f.password_field :password  %>
 				        <%= live_validation_for_field('user_password', 
 						:maximum_length => User::PASSWORD_LENGTH_MAX, :minimum_length => User::PASSWORD_LENGTH_MIN, 
-					  :failureMessage => 'Please enter a password! (At least %d letters long, please.)'/User::PASSWORD_LENGTH_MIN)
+					  :failureMessage => 'Please enter a password! (At least %d letters long, please.)'.t/User::PASSWORD_LENGTH_MIN)
 				-%></dd>
 
 <!-- Confirm password -->
-<dt><%= f.label :password_confirmation, h("Enter it again so we're sure we've got it?").t %></dt>
+<dt><%= f.label :password_confirmation, "Enter it again so we're sure we've got it?".t %></dt>
 <dd><%= f.password_field :password_confirmation %>
 <%= live_validation_for_field('user_password_confirmation', 
 						:maximum_length => User::PASSWORD_LENGTH_MAX, :minimum_length => User::PASSWORD_LENGTH_MIN, 
-					  :failureMessage => 'Please enter the same password as above.')
+					  :failureMessage => 'Please enter the same password as above.'.t)
 				-%></dd>

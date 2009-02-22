@@ -1,4 +1,4 @@
-		<h2><%=h "Create Account" .t %></h2>
+		<h2><%=h "Create Account".t %></h2>
 		<p class="message"><%=h "Please select a user name. You will be allowed to post work under multiple pseudonyms, but you will only have one user name, which is hard for us to change - please choose wisely!".t %>
 		</p>
 		<%= error_messages_for :user, :id => "errorExplanationNone", :header_tag => "p", :header_message => "Oops, there's some problems with the stuff you told us.".t, :message => nil  %>
@@ -6,11 +6,11 @@
 		  <p><%= hidden_field_tag :invitation_token, params[:invitation_token] %></p>
 <!-- Create login -->
 			<p>
-				<%= f.label :login, h("What would you like as your user name?").t %><br />
+				<%= f.label :login, "What would you like as your user name?".t %><br />
 				<%= f.text_field :login, :class => "user_login" %>
 				        <%= live_validation_for_field('user_login', 
 						:maximum_length => User::LOGIN_LENGTH_MAX, :minimum_length => User::LOGIN_LENGTH_MIN, 
-					  :failureMessage => 'You need a login name! (At least %d letters long, please.)'/User::LOGIN_LENGTH_MIN)
+					  :failureMessage => 'You need a login name! (At least %d letters long, please.)'.t/User::LOGIN_LENGTH_MIN)
 				-%>
 			</p>
     
@@ -31,7 +31,7 @@
 			<div id="link_to_passwd" style="display: none;">
 					<%- end -%>
 <!-- Moving the links into a helper didn't work as f wasn't being found :( -->
-					<%= link_to_function(h("Sign up using a password").t, :href => url_for(:action => 'new', :use_openid => false), :class => 'footnote') do |page|
+					<%= link_to_function("Sign up using a password".t, :href => url_for(:action => 'new', :use_openid => false), :class => 'footnote') do |page|
 						page.replace_html "switch_fields", :partial => 'passwd', :locals => {:f => f}
 						page[:link_to_passwd].hide
 						page[:link_to_openid].show
@@ -41,8 +41,8 @@
 <!-- !params[:use_openid] ensures this is hidden on the openid version of the page for non-JS users -->
 					<%- if !params[:use_openid] -%>
 					<%- if ArchiveConfig.USE_OPENID -%>
-						<%= image_tag("openid.png", :alt => h('OpenID logo').t) %>
-						<%= link_to_function(h("Sign up using OpenID").t, :href => url_for(:action => 'new', :use_openid => true), :class => 'footnote') do |page|
+						<%= image_tag("openid.png", :alt => 'OpenID logo'.t) %>
+						<%= link_to_function("Sign up using OpenID".t, :href => url_for(:action => 'new', :use_openid => true), :class => 'footnote') do |page|
 							page.replace_html "switch_fields", :partial => 'openid', :locals => {:f => f}
 							page[:link_to_openid].hide
 							page[:link_to_passwd].show
@@ -51,11 +51,11 @@
 					<%- end -%>
 				</div>
 <!-- Email address -->
-				<p><%= f.label :email, h("What email address would you like us to use? (This has to be valid - we'll be sending a confirmation email before you can activate your account.)").t  %><br />
+				<p><%= f.label :email, "What email address would you like us to use? (This has to be valid - we'll be sending a confirmation email before you can activate your account.)".t %><br />
 				<%= f.text_field :email %>
 				<%= live_validation_for_field('user_email', 
 						:maximum_length => User::EMAIL_LENGTH_MAX, :minimum_length => User::EMAIL_LENGTH_MIN, 
-					  :failureMessage => 'You need to enter a valid email address!')
+					  :failureMessage => 'You need to enter a valid email address!'.t)
 				-%>
 				</p>
 <!-- Age Check -->
@@ -63,7 +63,7 @@
 					<%=h 'You need to be over 13 years old to become a registered member of the archive.'.t %>
 					<%=h "(Sorry to our younger readers! You'll be more than welcome when the time comes.)".t %><br />
 					<%= f.check_box :age_over_13 %>
-					<%= f.label :age_over_13, h("Yes, I am over 13.").t  %>
+					<%= f.label :age_over_13, "Yes, I am over 13.".t  %>
 				</p>
 <!-- Terms of Service -->
 				<p>
@@ -77,12 +77,12 @@
 <!-- If this box is not checked, needs a modal dialog box: "You must agree to the Terms of Service in order to create an account.", with OK as the only choice. -->
 				<p>
 					<%= f.check_box :terms_of_service -%>
-					<%= f.label :terms_of_service, h("Yes, I have read the Terms of Service and agree to them.").t,  :class => 'important' %>
+					<%= f.label :terms_of_service, "Yes, I have read the Terms of Service and agree to them.".t,  :class => 'important' %>
 				</p>
 <!-- Buttons for "Cancel" and "Create Account" -->
 <!-- "Create Account" needs to submit form information and send out an email to the user with confirmation information; the confirmation info should send the user back to accountconfirm.html -->
 				<p class="submit">
 					<input type="submit" name="cancel_create_account" value="Cancel" />
-					<%= submit_tag 'Create Account' .t %>
+					<%= submit_tag 'Create Account'.t %>
 				</p>
 			<% end -%>

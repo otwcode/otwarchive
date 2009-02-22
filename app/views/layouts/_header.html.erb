@@ -7,8 +7,8 @@
       <ul id="greeting" class="logged-out">
         <li>
   		    <%= render :partial => 'session/login' -%>
-          <a id='signin_closed' onclick='toggleLogin("signin")' style='display:none;'>Sign in</a>
-          <a id='signin_open' onclick='toggleLogin("signin")'>Cancel</a>
+          <a id='signin_closed' onclick='toggleLogin("signin")' style='display:none;'><%=h 'Sign in'.t %></a>
+          <a id='signin_open' onclick='toggleLogin("signin")'><%=h 'Cancel'.t %></a>
 		    </li>
       </ul>
     <% end -%>

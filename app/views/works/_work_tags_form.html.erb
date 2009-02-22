@@ -30,7 +30,7 @@
       <div class="auto_complete" id="work_fandom_auto_complete" ></div>
       <%= javascript_tag("new Autocompleter.Local('work_fandom', 'work_fandom_auto_complete', Fandom.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
     </dd>
-	<dd class="fandom delay_notice">If this is the first story for a fandom, it may not show up in the fandoms page for a day or two</dd>
+	<dd class="fandom delay_notice"><%=h "If this is the first story for a fandom, it may not show up in the fandoms page for a day or two".t %></dd>
     <dt class="pairing">
       <label for="work_pairing"><%= Pairing::NAME.pluralize.t -%></label>
     </dt>

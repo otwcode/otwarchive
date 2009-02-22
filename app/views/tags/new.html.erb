@@ -2,7 +2,7 @@
 
 <%= error_messages_for :tag %>
 
-<p><%= "Once you have created the tag, the attributes that are particular for that tag category will be available for editing".t %></p>
+<p><%=h "Once you have created the tag, the attributes that are particular for that tag category will be available for editing".t %></p>
 
 <%- form_for :tag, @tag, :url => { :action => "create" }  do |f| -%>
   <dl>

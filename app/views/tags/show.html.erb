@@ -1,38 +1,38 @@
 <h2><%= @tag.name %></h2>
 <%= error_messages_for :tag %>
 <%- if can_wrangle? -%>
-  <p><%= link_to 'Edit '.t + @tag.name, edit_tag_path(@tag) %></p>
+  <p><%= link_to 'Edit'.t + ' ' + @tag.name, edit_tag_path(@tag) %></p>
 <%- end -%>
 
-<p><%= "This tag belongs to the".t %> <%= @tag.class::NAME %> <%= "Category".t %>.</p>
+<p><%=h "This tag belongs to the".t %> <%= @tag.class::NAME %> <%=h "Category".t %>.</p>
 
 <%- if @tag.canonical -%>
-  <p>This is a common tag. You can use this tag to
+  <p><%=h 'This is a common tag. You can use this tag to'.t %> 
     <%= link_to 'filter works'.t ,     
         tag_works_path(@tag) %>.
   </p>
 <%- end -%>
 
 <%- if @tag.is_a?(Rating) && @tag.adult -%>
-  <p><%=h 'This tag indicates adult content.'%></p>
+  <p><%=h 'This tag indicates adult content.'.t %></p>
 <%- end -%>
 
 
 <%- unless @tag.ambiguities.blank? -%>
-  <p>Tags which disambiguate here:</p>
+  <p><%=h 'Tags which disambiguate here:'.t %></p>
   <%- @tag.ambiguities.each do |ambiguous| %>
     <%= link_to_tag ambiguous %>
   <%- end -%>
 <%- end -%>
 
 <% if @tag.is_a?(Fandom) %>
-  <p>Parent tags (more general):</p>
+  <p><%=h 'Parent tags (more general):'.t %></p>
   <%- (@tag.parents + [@tag.media]).uniq.compact.sort.each do |parent| %>
     <%= link_to_tag parent %>
   <%- end -%>
 <% else %>
   <%- unless @tag.parents.blank? -%>
-    <p>Parent tags (more general):</p>
+    <p><%=h 'Parent tags (more general):'.t %></p>
     <%- @tag.parents.sort.each do |parent| %>
       <%= link_to_tag parent %>
     <%- end -%>
@@ -40,12 +40,12 @@
 <%- end -%>
 
 <%- if @tag.merger -%>
-  <p>This tag has been merged into <%= link_to_tag @tag.merger %> for filtering.</p>
-  <p>Works tagged with this tag will show up in <%= link_to @tag.merger.name + "'s", tag_works_path(@tag.merger) %> filter.
+  <p><%=h 'This tag has been merged into'.t %> <%= link_to_tag @tag.merger %> <%=h 'for filtering.'.t %></p>
+  <p><%=h 'Works tagged with this tag will show up in'.t %> <%= link_to @tag.merger.name + "'s".t, tag_works_path(@tag.merger) %> <%=h 'filter.'.t %>
 <%- end -%>
 
 <%- unless @tag.mergers.blank? -%>
-  <p>Tags with the same meaning:</p>
+  <p><%=h 'Tags with the same meaning:'.t %></p>
   <%- @tag.mergers.each do |merger| %>
     <%= link_to_tag merger %>
   <%- end -%>
@@ -53,9 +53,9 @@
 
 <%- unless @tag.children.blank? -%>
   <% if @tag.is_a?(Ambiguity) %>
-    <p>Disambiguators:</p>
+    <p><%=h 'Disambiguators:'.t %></p>
   <% else %>
-    <p>Child tags (more specific):</p>
+    <p><%=h 'Child tags (more specific):'.t %></p>
   <% end %>
   <%- @tag.children.uniq.compact.sort.group_by(&:type).each do |type, tags| %>
     <p><%= type.pluralize %>:</p>
@@ -67,11 +67,11 @@
 
 <%- if @works -%>
   <% if @tag.is_a?(Ambiguity) %>
-    <p>This tag is ambiguous and can not be filtered on.<p>
+    <p><%=h 'This tag is ambiguous and can not be filtered on.'.t %><p>
   <% else %>
-    <p>This tag has not been marked common and can't be filtered on (yet).<p>
+    <p><%=h "This tag has not been marked common and can't be filtered on (yet).".t %><p>
   <% end %>
-  <p>Works which have used it as a tag:</p>
+  <p><%=h 'Works which have used it as a tag:'.t %></p>
   <% paginated_section @works, {:previous_label => '&laquo; Previous'.t, :next_label => 'Next &raquo;'.t} do %>
     <ul class="work-list">
       <%- for work in @works -%>

@@ -24,7 +24,7 @@
 <h1><span><%= ArchiveConfig.APP_NAME.t -%>
   <% unless ArchiveConfig.REVISION.blank? %>(rev. <%= ArchiveConfig.REVISION %>)<% end %></span>
 </h1>
-<h2>A project of the <a href="http://transformativeworks.org">Organization For Transformative Works</a></h2>
+<h2><%=h 'A project of the'.t %> <a href="http://transformativeworks.org"><%=h 'Organization For Transformative Works'.t %></a></h2>
 <hr class="clear" />
 <div class="wrapper">
 	<h3><%=h "Share your fan works".t -%></h3>
@@ -56,7 +56,7 @@
 		<%- end -%>
 	</ul>
 </div>
-<p id="closed-sign"><%= link_to image_tag('closed.jpg', :alt => "Hey, we're in closed beta right now, but please come in and browse!"), works_path -%></p>
+<p id="closed-sign"><%= link_to image_tag('closed.jpg', :alt => "Hey, we're in closed beta right now, but please come in and browse!".t), works_path -%></p>
 <!--<h5 id="signup"></h5>-->
 <blockquote id="quotebox">
 	<p>"I want us to own the goddamn servers!"

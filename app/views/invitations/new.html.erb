@@ -1,11 +1,11 @@
-<h1>Invite a Friend</h1>
+<h1><%=h 'Invite a Friend'.t %></h1>
 
-<p><%= ('You have ' + user_invitations(current_user) + ' remaining.').t %></p>
+<p><%= 'You have'.t + ' ' + user_invitations(current_user) + ' ' + 'remaining.'.t %></p>
 
 <% form_for @invitation do |f| %>
   <dl>
-    <dt><%= f.label :recipient_email, "Friend's email address" %></dt>
+    <dt><%= f.label :recipient_email, "Friend's email address".t %></dt>
     <dd><%= f.text_field :recipient_email %></dd>
   </dl>
-  <p><%= f.submit "Invite!" %></p>
+  <p><%= f.submit "Invite!".t %></p>
 <% end %>

@@ -1,5 +1,5 @@
 <h2>
-  <%= 'Edit Tag' .t %>
+  <%= 'Edit Tag'.t %>
 </h2>
 
 <%= error_messages_for :tag %>
@@ -9,7 +9,7 @@
     <dt><%= f.label :name, 'Name'.t %></dt>
     <dd><%= f.text_field :name, :disabled => (!logged_in_as_admin? || ['Rating', 'Warning', 'Category'].include?(@tag[:type])) %></dd>
 
-    <dt>Works (count)</dt>
+    <dt><%=h 'Works (count)'.t %></dt>
     <dd><%= link_to @tag.taggings_count, tag_path(@tag) %></dd>
 
     <dt><%= f.label :type, 'Category'.t %></dt>
@@ -41,7 +41,7 @@
 
       <% if @tag.is_a?(Fandom) %>
         <dt><%= f.label :type, 'Media'.t %></dt>
-        <dd>Add Media:&nbsp;<%= select("media", 'media_name', (Media.canonical - @tag.family).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %><br />
+        <dd><%=h 'Add Media:'.t %>&nbsp;<%= select("media", 'media_name', (Media.canonical - @tag.family).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %><br />
         <%- unless @tag.medias.blank? -%>
           <ul class="tag-edit-items">
           <% @tag.medias.each do |tag| %>
@@ -52,7 +52,7 @@
         </dd>
       <%- elsif !@tag.is_a?(Ambiguity) -%>
         <dt><%= f.label :type, 'Fandom(s)'.t %></dt>
-        <dd>Add Fandom:&nbsp;<%= select("fandom", 'fandom_name', (Fandom.canonical - @tag.family).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %><br />
+        <dd><%=h 'Add Fandom:'.t %>&nbsp;<%= select("fandom", 'fandom_name', (Fandom.canonical - @tag.family).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %><br />
         <%- unless @tag.fandoms.blank? -%>
           <ul class="tag-edit-items">
           <% @tag.fandoms.each do |tag| %>
@@ -67,7 +67,7 @@
 
         <% if @tag.is_a?(Fandom) || @tag.is_a?(Pairing) %>
           <dt><%= f.label :type, 'Character(s)'.t %></dt>
-          <dd>Add Character:&nbsp;<%= select("character", 'character_name', (Character.canonical - @tag.family).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %><br />
+          <dd><%=h 'Add Character:'.t %>&nbsp;<%= select("character", 'character_name', (Character.canonical - @tag.family).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %><br />
           <%- unless @tag.characters.blank? -%>
           <ul class="tag-edit-items">
           <% @tag.characters.each do |tag| %>
@@ -80,7 +80,7 @@
 
         <% if @tag.is_a?(Fandom) || @tag.is_a?(Character) %>
           <dt><%= f.label :type, 'Pairings(s)'.t %></dt>
-          <dd>Add Pairing:&nbsp;<%= select("pairing", 'pairing_name', (Pairing.canonical - @tag.family).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %><br />
+          <dd><%=h 'Add Pairing:'.t %>&nbsp;<%= select("pairing", 'pairing_name', (Pairing.canonical - @tag.family).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %><br />
           <%- unless @tag.pairings.blank? -%>
             <ul class="tag-edit-items">
             <% @tag.pairings.each do |tag| %>
@@ -93,7 +93,7 @@
 
         <%- if @tag.is_a?(Fandom) %>
           <dt><%= f.label :type, 'Freeforms'.t %></dt>
-          <dd>Add Freeform:&nbsp;<%= select("freeform", 'freeform_name', (Freeform.canonical - @tag.family).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %><br />
+          <dd><%=h 'Add Freeform:'.t %>&nbsp;<%= select("freeform", 'freeform_name', (Freeform.canonical - @tag.family).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %><br />
           <%- unless @tag.freeforms.blank? -%>
             <ul class="tag-edit-items">
             <% @tag.freeforms.each do |tag| %>
@@ -106,7 +106,7 @@
 
         <%- if @tag.is_a?(Ambiguity) %>
           <dt><%= f.label :type, 'Disambiguators'.t %>:</dt>
-          <dd>Add Disambiguator:&nbsp;<%= select("disambiguator", 'disambiguator_name', (@tag.find_similar - @tag.disambiguators - [@tag]).collect {|p| [ description(p), p.name ] }, { :include_blank => true }) %><br />
+          <dd><%=h 'Add Disambiguator:'.t %>&nbsp;<%= select("disambiguator", 'disambiguator_name', (@tag.find_similar - @tag.disambiguators - [@tag]).collect {|p| [ description(p), p.name ] }, { :include_blank => true }) %><br />
           <%- unless @tag.disambiguators.blank? -%>
             <ul class="tag-edit-items">
             <% @tag.disambiguators.each do |tag| %>
@@ -118,7 +118,7 @@
         <%- end %>
 
         <dt><%= f.label :type, 'Synonyms'.t %></dt>
-        <dd>Add Synonym:&nbsp;<%= select("synonym", 'synonym_name', (@tag.class.nonsynonymous - @tag.family).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %><br />
+        <dd><%=h 'Add Synonym:'.t %>&nbsp;<%= select("synonym", 'synonym_name', (@tag.class.nonsynonymous - @tag.family).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %><br />
         <%- unless @tag.mergers.blank? -%>
           <ul class="tag-edit-items">
           <% @tag.mergers.each do |tag| %>
@@ -135,7 +135,7 @@
           <dd><%= f.select('merger_id', (@tag.class.canonical - [@tag]).collect {|p| [ p.name, p.id ]}, { :include_blank => true, :selected => nil }) %></dd>
           <dt><%= label :new_synonym, 'Rename'.t %>*:</dt>
           <dd><%= text_field_tag :new_synonym %><br />
-          *This text box will do one of two things: 1. correct the capitalization of the current tag. OR 2. Create a canonical tag, to which the current tag is then made a synonym. </dd>
+          <%=h '*This text box will do one of two things:'.t %> <%=h '1. correct the capitalization of the current tag.'.t %> <%=h 'OR 2. Create a canonical tag, to which the current tag is then made a synonym.'.t %></dd>
         <%- end %>
       <%- end %>
       </dd>
@@ -143,7 +143,7 @@
     <% end %>
   </dl>
   <p class="submit">
-  <%= submit_tag "Save changes" %>
+  <%= submit_tag "Save changes".t %>
   </p>
 <%- end -%>
 

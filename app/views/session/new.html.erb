@@ -2,8 +2,8 @@
 <%- if @restricted -%>
   <h3><%=h "Sorry!".t %></h3>
   <p>
-    <%=h "This story is only available to registered users of the Archive. ".t %>
-    <%=h "If you already have an Archive of Our Own account, sign in now. ".t %>
+    <%=h "This story is only available to registered users of the Archive.".t %> 
+    <%=h "If you already have an Archive of Our Own account, sign in now.".t %> 
     <%=h "Or join us for free - it's easy.".t %>
   </p>
 <%- else -%>
@@ -29,5 +29,5 @@
 
 <%- if ArchiveConfig.ACCOUNT_CREATION_ENABLED -%>
 <!-- Create account link -->
-<p><%= "New tester?" .t %> <%= link_to 'Create an account now.' .t, new_user_path %></p>
+<p><%= "New tester?".t %> <%= link_to 'Create an account now.'.t, new_user_path %></p>
 <%- end -%>

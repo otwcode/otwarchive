@@ -1,11 +1,11 @@
   <dl id="passwd">
-	  <dt><%= f.label :password, "Change Password" .t %></dt>
+	  <dt><%= f.label :password, "Change Password".t %></dt>
 	  <dd><%= f.password_field :password %></dd>
 		  
-    <dt><%= f.label :password_confirmation, "Confirm New Password" .t %></dt>
+    <dt><%= f.label :password_confirmation, "Confirm New Password".t %></dt>
 	  <dd><%= f.password_field :password_confirmation %></dd>
 		<% fields_for :check do |check| %>
-			<dt><%= check.label :password_check, h("Please enter your old password").t %></dt>
+			<dt><%= check.label :password_check, "Please enter your old password".t %></dt>
 			<dd><%= check.password_field :password_check%></dd>
  		<% end %>
   </dl>

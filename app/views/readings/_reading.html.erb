@@ -1,6 +1,6 @@
 <p>
 <% if reading.work.nil? %>
-  <span>(deleted work, last read <%=h reading.updated_at -%>)</span>
+  <span>(<%=h 'deleted work, last read'.t %> <%=h reading.updated_at -%>)</span>
 <% else %>
   <%= render :partial => 'works/work_blurb', :locals => {:work => reading.work} %>
   <strong><%=h 'Last read:'.t %> </strong><%=h reading.updated_at.localize("%d %B %Y") %> 

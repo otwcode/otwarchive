@@ -1,19 +1,18 @@
 <h1><%=h "Translation Interface".t -%></h1>
 
-<h2>Translating <%= link_to "#{@controller_to_translate} &raquo; #{@action_to_translate}", @url_to_translate -%></h2>
+<h2><%=h 'Translating'.t %> <%= link_to "#{@controller_to_translate} &raquo; #{@action_to_translate}", @url_to_translate -%></h2>
 <%= javascript_include_tag 'translation_status' %>
 <% if Locale.base? -%>
   <p>
-    You're currently browsing in the base language of this archive. You should go back to the page 
-    you want to translate and set your language from the pull-down menu to the language you want to 
-    translate into. 
+    <%=h "You're currently browsing in the base language of this archive.".t %> 
+		<%=h "You should go back to the page you want to translate and set your language from the pull-down menu to the language you want to translate into.".t %>
   </p>
 <% else -%>
   <% if Locale.language -%>
-    <h3 class="language"><%= "Currently translating into: ".t + Locale.language.native_name %></h3>
+    <h3 class="language"><%= "Currently translating into:".t + ' ' + Locale.language.native_name %></h3>
   <% end -%>
   <p>
-  	<%= "Strings are listed approximately in the order they appear in the page.".t %>
+  	<%=h "Strings are listed approximately in the order they appear in the page.".t %>
   </p>
   <dl class="translations">
     <% @translations.each do |tr| -%>

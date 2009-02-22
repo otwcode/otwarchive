@@ -7,8 +7,8 @@
 	    <%= link_to sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small)), work %>
   		<%= "by".t -%>
       <%= byline(work) -%>
-  		<%- if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)") -%><%- end -%>
-      <%- if work.hidden_by_admin -%><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)") %><%- end -%>
+  		<%- if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)".t) -%><%- end -%>
+      <%- if work.hidden_by_admin -%><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)".t) %><%- end -%>
   </h3>
 	  
 	  <h4>

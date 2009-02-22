@@ -4,7 +4,7 @@
 
 <% form_for(@user) do |f| %>  
   <dl>
-	  <dt><%= f.label :email, "Change Email" .t %></dt>
+	  <dt><%= f.label :email, "Change Email".t %></dt>
 		<dd><%= f.text_field :email %></dd>
   </dl>
 	
@@ -24,7 +24,7 @@
 			  <%- else -%>
 					<div id="link_to_passwd" style="display: none;">
 				<%- end -%>
-					<%= link_to_function(h("Add or Change a Password").t, :href => url_for(:action => 'edit', :use_openid => false), :class => 'footnote') do |page|
+					<%= link_to_function("Add or Change a Password".t, :href => url_for(:action => 'edit', :use_openid => false), :class => 'footnote') do |page|
 						page.replace_html "switch_fields", :partial => 'profile_passwd', :locals => {:f => f}
 						page[:link_to_passwd].hide
 						page[:link_to_openid].show
@@ -35,7 +35,7 @@
 					<%- if !params[:use_openid] -%>
 					<%- if ArchiveConfig.USE_OPENID -%>
 						<%= image_tag("openid.png", :alt => ' ') %>
-						<%= link_to_function(h("Add or Change an OpenID URL").t, :href => url_for(:action => 'edit', :use_openid => true), :class => 'footnote') do |page|
+						<%= link_to_function("Add or Change an OpenID URL".t, :href => url_for(:action => 'edit', :use_openid => true), :class => 'footnote') do |page|
 							page.replace_html "switch_fields", :partial => 'profile_openid', :locals => {:f => f}
 							page[:link_to_openid].hide
 							page[:link_to_passwd].show
