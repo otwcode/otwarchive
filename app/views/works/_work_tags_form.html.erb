@@ -36,7 +36,7 @@
     </dt>
     <dd class="pairing">
       <input type="text" name="work[pairing_string]" id="work_pairing" value="<%= @work.pairing_string %>"/>
-      <div class="auto_complete" id="work_pairing %>_auto_complete" ></div>
+      <div class="auto_complete" id="work_pairing_auto_complete" ></div>
       <%= javascript_tag("new Autocompleter.Local('work_pairing', 'work_pairing_auto_complete', Pairing.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
     </dd>
     <dt class="character">
@@ -44,7 +44,7 @@
     </dt>
     <dd class="character">
       <input type="text" name="work[character_string]" id="work_character" value="<%= @work.character_string %>" />
-      <div class="auto_complete" id="work_character %>_auto_complete" ></div>
+      <div class="auto_complete" id="work_character_auto_complete" ></div>
       <%= javascript_tag("new Autocompleter.Local('work_character', 'work_character_auto_complete', Character.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
     </dd>
     <dt class="freeform">
@@ -52,7 +52,7 @@
     </dt>
     <dd class="freeform">
       <input type="text" name="work[freeform_string]" id="work_freeform" value="<%= @work.freeform_string %>" />
-      <div class="auto_complete" id="work_freeform %>_auto_complete" ></div>
+      <div class="auto_complete" id="work_freeform_auto_complete" ></div>
       <%= javascript_tag("new Autocompleter.Local('work_freeform', 'work_freeform_auto_complete', Common.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
     </dd>
   </dl>
