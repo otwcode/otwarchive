@@ -77,17 +77,8 @@ class Tag < ActiveRecord::Base
     tag = self.find_by_name(string)
     return tag if tag
     # try to create the tag
-    tag = self.create(:name => string)
-    return tag if tag.valid?
-    # it wasn't valid, which probably means it already exists in another category
-    old_tag = Tag.find_by_name(string)
-    if old_tag # so create this one with the category appended
-      new_tag = self.find_or_create_by_name(string + " - " + self.to_s)
-      return new_tag if new_tag
-    else
-      # other tag validation errors - wasn't saved
-      return tag
-    end
+    tag = self.create(:name => string) rescue nil
+    return tag
   end
 
   def self.for_tag_cloud
@@ -123,6 +114,8 @@ class Tag < ActiveRecord::Base
     self.update_attribute(:merger_id, merger.id)
     self.mergers.each do |synonym|
       synonym.wrangle_merger(merger)
+      synonym.add_fandom(self.fandom)
+      synonym.add_media(self.media)
     end
     self.add_fandom(merger.fandom)
     self.add_media(merger.media)
