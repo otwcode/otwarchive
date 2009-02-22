@@ -157,9 +157,10 @@ class Work < ActiveRecord::Base
   # Save creatorships (add the virtual authors to the real pseuds) after the work is saved
   def save_creatorships
     if self.authors
-      self.pseuds << self.authors rescue nil
-      self.chapters.first.pseuds << self.authors rescue nil
-      self.series.each {|series| series.pseuds << self.authors rescue nil}
+      new = self.authors - self.pseuds
+      self.pseuds << new rescue nil
+      self.chapters.first.pseuds << new rescue nil
+      self.series.each {|series| series.pseuds << new rescue nil}
     end
     if self.toremove
       self.pseuds.delete(self.toremove)

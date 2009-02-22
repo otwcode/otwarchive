@@ -133,8 +133,9 @@ class Chapter < ActiveRecord::Base
   # Save creatorships after the chapter is saved
   def save_creatorships
     if self.authors
-      self.pseuds << self.authors rescue nil
-      self.work.pseuds << self.authors rescue nil
+      new = self.authors - self.pseuds
+      self.pseuds << new rescue nil
+      self.work.pseuds << new rescue nil
     end
     if self.toremove
       self.pseuds.delete(self.toremove)
