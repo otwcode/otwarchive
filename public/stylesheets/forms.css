@@ -61,7 +61,7 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 #work-form .work-meta dd{ float: left; margin:0; padding:0; width:60%}
 
 #work-preface textarea {height:10em;}
-#work-form .preface dt {float:none;}
+#work-form .preface dt {float:none; width:auto; text-align: left}
 #work-form .preface dd { margin-bottom:0.5625em;float:none;}
 
 dd.work-title input, input#chapter_title { width:80%; }
