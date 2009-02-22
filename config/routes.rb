@@ -8,7 +8,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :tag_wranglings, :path_prefix => ':locale', :member => {:assign => :get}
 
-  map.resources :tags, :collection => {:show_hidden => :get}, :path_prefix => ':locale' do |tag|
+  map.resources :tags, :collection => {:show_hidden => :get}, :path_prefix => ':locale', :requirements => { :id => %r([^/;,?]+) } do |tag|
     tag.resources :works
     tag.resources :bookmarks
 	end
