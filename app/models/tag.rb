@@ -85,8 +85,8 @@ class Tag < ActiveRecord::Base
       new_tag = self.find_or_create_by_name(string + " - " + self.to_s)
       return new_tag if new_tag
     else
-      # should never get here
-      return false
+      # other tag validation errors - wasn't saved
+      return tag
     end
   end
 
@@ -121,6 +121,9 @@ class Tag < ActiveRecord::Base
   def wrangle_merger(merger, update_works=true)
     return unless merger.canonical? && merger.is_a?(self.class)
     self.update_attribute(:merger_id, merger.id)
+    self.mergers.each do |synonym|
+      synonym.wrangle_merger(merger)
+    end
     self.add_fandom(merger.fandom)
     self.add_media(merger.media)
     self.update_common_tags if update_works
