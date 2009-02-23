@@ -90,14 +90,22 @@ class TagTest < ActiveSupport::TestCase
       end
       context "which is canonical and merged" do
         setup do
+          @fandom2 = create_fandom(:canonical => true)
+          @tag.add_fandom(@fandom2)
+          assert_equal @tag.fandom_id, @fandom2.id
           @tag2.wrangle_canonical
           @tag.wrangle_merger(@tag2)
+          @tag2.reload
+          @tag.reload
         end
         should "be merged" do
           assert_equal @tag.merger, @tag2
         end
         should "get the merger's fandom" do
           assert @tag.fandoms.include?(@fandom)
+        end
+        should "get the merger's fandom_id" do
+          assert_equal @tag2.fandom_id, @tag.fandom_id
         end
         should "have the merger in the tag's work's common tags" do
           assert @work.common_tags.include?(@tag2)

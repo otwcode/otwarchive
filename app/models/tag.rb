@@ -121,13 +121,15 @@ class Tag < ActiveRecord::Base
   def wrangle_merger(merger, update_works=true)
     return unless merger.canonical? && merger.is_a?(self.class)
     self.update_attribute(:merger_id, merger.id)
+    self.parents << merger.parents rescue nil
+    merger.parents << self.parents rescue nil
+    self.update_attribute(:fandom_id, merger.fandom_id)
+    self.update_attribute(:media_id, merger.media_id)
+    self.ensure_correct_fandom_id
+    self.ensure_correct_media_id
     self.mergers.each do |synonym|
       synonym.wrangle_merger(merger)
-      synonym.add_fandom(self.fandom)
-      synonym.add_media(self.media)
     end
-    self.add_fandom(merger.fandom)
-    self.add_media(merger.media)
     self.update_common_tags if update_works
   end
 
@@ -146,7 +148,7 @@ class Tag < ActiveRecord::Base
 
   # parents children and self
   def family
-    [self] + self.children + self.parents + self.mergers + [self.merger]
+    ([self] + self.children + self.parents + self.mergers + [self.merger]).compact
   end
 
   # Tag       Tag_to_add    Relationship
