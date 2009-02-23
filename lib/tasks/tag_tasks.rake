@@ -32,7 +32,7 @@ namespace :Tag do
   desc "Delete unused tags"
   task(:delete_unused => :environment) do
     Tag.all.each do |t|
-      if t.taggings.length == 0 && !t.merger_id && t.children.length == 0
+      if t.taggings.length == 0 && !t.merger_id && t.mergers.empty? && t.children.length == 0
         t.destroy
       end
     end
