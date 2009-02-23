@@ -10,7 +10,7 @@
 			<h3 title="Series Title">
 				<%= link_to sanitize_title_for_display(series.title), series %>
 				<%=h 'by'.t %>
-				<%= print_pseud_list(series.pseuds) -%>
+				<%= byline(series) -%>
 				<% if series.hidden_by_admin %>
 				<%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)".t) %>
 				<% end %>

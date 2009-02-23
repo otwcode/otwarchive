@@ -40,11 +40,12 @@ module ApplicationHelper
     
   # modified by Enigel Dec 13 08 to use pseud byline rather than just pseud name
   # in order to disambiguate in the case of identical pseuds
+  # and on Feb 24 09 to sort alphabetically for great justice
   def byline(creation)
     pseuds = []
     pseuds << creation.authors if creation.authors
     pseuds << creation.pseuds if creation.pseuds
-    pseuds.flatten.uniq.collect { |pseud|
+    pseuds.flatten.uniq.sort.collect { |pseud|
       link_to pseud.byline, user_path(pseud.user, :pseud => pseud.id), :class => "login author"
     }.join(', ')
   end

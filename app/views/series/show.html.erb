@@ -1,19 +1,19 @@
 <h1><%=h @series.title %></h1>
 <dl class="work-meta series-meta">
-	<dt><%=h 'Series begun:'.t %></dt>
-		<dd><%=h @series.created_at.localize("%d %B %Y") %></dd>
-  	<dt><%=h 'Works included:'.t %></dt>
+  <dt><%=h 'Series begun:'.t %></dt>
+    <dd><%=h @series.created_at.localize("%d %B %Y") %></dd>
+  <dt><%=h 'Works included:'.t %></dt>
  		<dd><%= @serial_works.length %></dd>
-  	<dt><%=h 'Authors:'.t %></dt>
+  <dt><%=h 'Authors:'.t %></dt>
  		<dd><%= byline(@series) %></dd>
-		<%- unless @series.summary.blank? -%>
-			<dt><%=h 'Description:'.t %></dt>
+	<%- unless @series.summary.blank? -%>
+		<dt><%=h 'Description:'.t %></dt>
 			<dd><%= @series.summary %></dd>
-			<%- end -%>
-		<%- unless @series.notes.blank? -%>
-				<dt><%=h 'Description:'.t %></dt>
-				<dd><%= @series.notes %></dd>
-			<%- end -%>
+	<%- end -%>
+	<%- unless @series.notes.blank? -%>
+		<dt><%=h 'Notes:'.t %></dt>
+			<dd><%= @series.notes %></dd>
+	<%- end -%>
 </dl>
 
 <%- if is_author_of?(@series) -%>
@@ -31,7 +31,7 @@
 
 <ul class="work-list" id="series-work-list">
   <%- for serial in @serial_works -%>
-	<%- if serial.work.visible(current_user) -%>
+    <%- if serial.work.visible(current_user) -%>
       <%= render :partial => 'works/work_blurb', :locals => {:work => serial.work} %>
     <%- else -%>
       <li>(<%= "This work is temporarily unavailable.".t %>)</li>
