@@ -214,6 +214,11 @@ class Tag < ActiveRecord::Base
         end
       end
     end
+
+    # now that we know we have a good fandom_id, propagate it to our mergers
+    self.mergers.each do |merger|
+      merger.update_attribute(:fandom_id, self.fandom_id)
+    end
   end
 
   # a fandom tag which has been wrangled should have a media_id
