@@ -18,6 +18,8 @@ class SeriesController < ApplicationController
     can_view_hidden = is_admin? || (current_user.is_a?(User) && current_user.is_author_of?(@series))
 	  access_denied if (@series.hidden_by_admin? && !can_view_hidden)
   end
+
+  
   
   # GET /series
   # GET /series.xml
@@ -52,6 +54,10 @@ class SeriesController < ApplicationController
   # GET /series/1/edit
   def edit
     @series = Series.find(params[:id])
+    @pseuds = current_user.pseuds
+    @coauthors = @series.pseuds.select{ |p| p.user.id != current_user.id}
+    to_select = @series.pseuds.blank? ? [current_user.default_pseud] : @series.pseuds
+    @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
   end
   
   # GET /series/1/manage
@@ -81,7 +87,12 @@ class SeriesController < ApplicationController
   # PUT /series/1.xml
   def update
     @series = Series.find(params[:id])
-    
+    if params[:pseud] && params[:pseud][:byline] && params[:series][:author_attributes]
+      new_author = Pseud.find_by_name(params[:pseud][:byline]).id
+      params[:series][:author_attributes][:ids] << new_author rescue nil
+      params[:pseud][:byline] = ""
+      
+    end
     if params[:sortable_series_list]
       params[:sortable_series_list].each_with_index do |id, position|
         SerialWork.update(id, :position => position + 1)

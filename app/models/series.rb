@@ -20,8 +20,12 @@ class Series < ActiveRecord::Base
     :allow_blank => true, 
     :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than %d letters long.".t/ArchiveConfig.NOTES_MAX
 
+  after_save :save_creatorships
+
+  attr_accessor :authors
+  attr_accessor :toremove
   # return list of pseuds on this series
-  def authors
+  def allpseuds
     works.collect(&:pseuds).flatten.compact.uniq
   end
   
@@ -49,4 +53,36 @@ class Series < ActiveRecord::Base
     serials.each_with_index {|serial, index| serial.update_attribute(:position, index + 1)}
   end
 
+  # Virtual attribute for pseuds
+  def author_attributes=(attributes)
+    self.authors ||= []
+    wanted_ids = attributes[:ids]
+    wanted_ids.each { |id| self.authors << Pseud.find(id) }
+    # if current user has selected different pseuds
+    current_user = User.current_user
+    if current_user.is_a? User
+      self.toremove = current_user.pseuds - wanted_ids.collect {|id| Pseud.find(id)}
+    end
+    attributes[:ambiguous_pseuds].each { |id| self.authors << Pseud.find(id) } if attributes[:ambiguous_pseuds]
+    if attributes[:byline]
+      results = Pseud.parse_bylines(attributes[:byline])
+      self.authors << results[:pseuds]
+      self.invalid_pseuds = results[:invalid_pseuds]
+      self.ambiguous_pseuds = results[:ambiguous_pseuds] 
+    end
+    self.authors.flatten!
+    self.authors.uniq!
+  end
+  
+
+  # Save creatorships (add the virtual authors to the real pseuds) after the series is saved
+  def save_creatorships
+    if self.authors
+      new = self.authors - self.pseuds
+      self.pseuds << new rescue nil
+    end
+    if self.toremove
+      self.pseuds.delete(self.toremove)
+    end
+  end
 end

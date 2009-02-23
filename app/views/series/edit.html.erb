@@ -9,7 +9,8 @@
   <%= f.error_messages %>
 <dl>
 	<dt><%= f.label :title, "Series Title".t %></dt>
-	<dd><%= f.text_field :title %></dd>
+	<dd><%= f.text_field :title %></dd><br />
+  <%= render :partial => 'pseuds/byline', :locals => {:form => f, :type => 'series'} -%>
 	<dt><%= f.label :summary, "Series Description".t %><dt>
 	<dd><%= f.text_area :summary %> </dd>
 	<dt><%= f.label :notes, "Series Notes".t %><dt>

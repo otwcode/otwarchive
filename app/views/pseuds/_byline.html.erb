@@ -1,1 +1,34 @@
-<%= byline(creation) -%>
+<!-- Co-Author stuff -->
+
+<dt class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
+	  <%= label :pseud, :id, h("Select author/pseudonym(s)").t %>
+	</dt>
+	<dd class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
+	  <%= '<select name="' + h(type) +'[author_attributes][ids][]" multiple="multiple">' %>
+	    <%= options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds) %>
+	  </select>	 
+	</dd>
+        <%= '<select name="' + h(type) + '[author_attributes][coauthors][]" multiple="multiple" style="display : none;">' %>
+          <%= options_from_collection_for_select(@coauthors, :id, :name, @selected_pseuds) %>  
+        </select>
+
+        <% if @coauthors.size > 0 %>
+<dt class="byline"><%= "Current Co-authors: ".t %></dt>
+<dd class="byline">
+          <ul>
+            <% for author in @coauthors %>
+              <li><%= h author.name %></li>
+            <% end %>
+          </ul>
+    <% end %>
+</dd>
+<dt class="byline">
+    <%= link_to_function(h('Add co-authors?').t, "Element.toggle('co-authors')") %>          
+</dt>
+
+<dd id="co-authors">
+    <%= form.label :storycoauthor, 'Enter co-author name(s):'.t %>
+   	<%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
+        { :url => {:controller => 'pseuds', :action => 'choose_coauthors'}, :method => :get, :param_name => 'search', 
+            :tokens => ',', :min_chars => 2, :skip_style => true } %>            
+</dd>

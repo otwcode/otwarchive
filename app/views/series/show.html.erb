@@ -5,7 +5,7 @@
   	<dt><%=h 'Works included:'.t %></dt>
  		<dd><%= @serial_works.length %></dd>
   	<dt><%=h 'Authors:'.t %></dt>
- 		<dd><%= print_pseud_list(@series.pseuds) %></dd>
+ 		<dd><%= byline(@series) %></dd>
 		<%- unless @series.summary.blank? -%>
 			<dt><%=h 'Description:'.t %></dt>
 			<dd><%= @series.summary %></dd>

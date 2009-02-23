@@ -39,37 +39,8 @@
 				      :failureMessage => 'We need a title! (At least %d letters long, please.)'.t/ArchiveConfig.TITLE_MIN)
 				-%>
       </dd>
-      
-	<dt class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
-	  <%= label :pseud, :id, "Select author/pseudonym(s)".t %>
-	</dt>
-	<dd class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
-	  <select name="work[author_attributes][ids][]" multiple="multiple">
-	    <%= options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds) %>
-	  </select>	 
-	</dd>
-        <select name="work[author_attributes][coauthors][]" multiple="multiple" style="display : none;">
-          <%= options_from_collection_for_select(@coauthors, :id, :name, @selected_pseuds) %>  
-        </select>
-
-        <% if @coauthors.size > 0 %>
-       <%= "Current Co-authors: ".t  %>
-          <ul>
-          <% for author in @coauthors %>
-            <li><%= h author.name %></li>
-          <% end %>
-          </ul>
-    <% end %>
-      <dt class="byline">
-        <%= link_to_function('Add co-authors?'.t, "Element.toggle('co-authors')") %>          
-      </dt>
-
-      <dd id="co-authors">
-     	    <%= f.label :storycoauthor, 'Enter co-author name(s):'.t %>
-         	<%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
-              { :url => {:controller => 'pseuds', :action => 'choose_coauthors'}, :method => :get, :param_name => 'search', 
-                :tokens => ',', :min_chars => 2, :skip_style => true } %>            
-      </dd>
+      <!-- Add coauthors-->
+      <%= render :partial => 'pseuds/byline', :locals =>{:form => f, :type => 'work'} %>
       
       <dt class="summary">
         <%= f.label :summary, "Summary (max %d letters)".t/ArchiveConfig.SUMMARY_MAX %>
