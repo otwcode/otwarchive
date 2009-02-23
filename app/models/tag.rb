@@ -133,9 +133,9 @@ class Tag < ActiveRecord::Base
 
   def wrangle_parent(parent, update_works=true)
     return unless parent.is_a?(Tag) && parent.canonical?
-    self.parents << parent rescue nil
-    self.add_fandom(parent.fandom)
-    self.add_media(parent.media)
+    self.parents << parent unless self.parents.include?(parent)
+    self.add_fandom(parent.fandom) unless self.fandom == parent.fandom
+    self.add_media(parent.media) unless self.media == parent.media
     self.update_common_tags if update_works
   end
 
@@ -162,6 +162,111 @@ class Tag < ActiveRecord::Base
   #  Pairing    Pairing       Child
   #  Freeform   Pairing       Parent
 
+  # a pairing character or freeform tag which has been wrangled
+  # should have a fandom_id so it no longer shows up on the mass
+  # assign page. This should only be "No Fandom" if it has no others.
+  def ensure_correct_fandom_id
+    # only pairing character and freeform tags must have fandoms
+    return unless ['Pairing', 'Character', 'Freeform'].include?(self[:type])
+
+    # get the nofandom tag
+    nofandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
+
+    # get the first fandom of the current tag which is not nofandom
+    fandom = (self.fandoms - [nofandom]).first
+
+    # if we have a fandom, we don't need "No Fandom" as a fandom
+    if fandom && self.fandoms.include?(nofandom)
+      self.remove_fandom(nofandom)
+    end
+
+    # make sure the tag has a fandom id
+    if !self.fandom_id # we don't have a fandom id
+      if !fandom # and we don't have a fandom
+        # we don't have anything, but we're being wrangled, so add "No Fandom"
+        self.update_attribute(:fandom_id, nofandom.id)
+        self.parents << nofandom unless self.parents.include?(nofandom)
+      else # we do have a fandom
+        # use the one for our first fandom
+        self.update_attribute(:fandom_id, fandom.id)
+      end
+    end
+
+    # make sure the fandom_id is only for "No Fandom" if we don't have any other fandoms
+    if self.fandom_id == nofandom.id
+      if fandom
+        self.update_attribute(:fandom_id, fandom.id)
+      else
+        # ensure No Fandom is actually one of its fandoms
+        self.parents << nofandom unless self.parents.include?(nofandom)
+      end
+    end
+
+    # if the fandom id isn't for our first fandom or nofandom, verify that it's a real fandom
+    if !(self.fandom_id == nofandom.id || (fandom && self.fandom_id == fandom.id))
+      listed_fandom = Fandom.find_by_id(self.fandom_id)
+      # it's not a real fandom or it's been removed
+      if !listed_fandom.is_a?(Fandom) || !self.fandoms.include?(listed_fandom)
+        if fandom
+          self.update_attribute(:fandom_id, fandom.id)
+        else
+          self.update_attribute(:fandom_id, nofandom.id)
+        end
+      end
+    end
+  end
+
+  # a fandom tag which has been wrangled should have a media_id
+  # so it no longer shows up on the mass assign page. If it doesn't,
+  # give it the "No Media" media
+  # If it has any media besides "no Media" make sure "No Media" is removed
+  def ensure_correct_media_id
+    # only fandoms tags must have medias
+    return unless self[:type] == 'Fandom'
+
+    # get the nomedia tag
+    nomedia = Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)
+
+    # get the first media of the current tag which is not nomedia
+    media = (self.medias - [nomedia]).first
+
+    # if we have a media, we don't need "No Media" as a media
+    if media && self.medias.include?(nomedia)
+      self.remove_media(nomedia)
+    end
+
+    # make sure the tag has a media id
+    if !self.media_id # we don't have a media id
+      if !media # and we don't have a media
+        # we don't have anything, but we're being wrangled, so add "No Media"
+        self.update_attribute(:media_id, nomedia.id)
+        self.parents << nomedia unless self.parents.include?(nomedia)
+      else # we do have a media
+        # use the one for our first media
+        self.update_attribute(:media_id, media.id)
+      end
+    end
+
+    # make sure the media_id is only for "No Media" if we don't have any other medias
+    if self.media_id == nomedia.id && media
+      self.update_attribute(:media_id, media.id)
+    end
+
+    # if the media id isn't for our first media or nomedia, verify that it's a real media
+    if !(self.media_id == nomedia.id || (media && self.media_id == media.id))
+      listed_media = Media.find(self.media_id)
+      # it's not a real media or it's been removed
+      if !listed_media.is_a?(Media) || !self.medias.include?(listed_media)
+        if media
+          self.update_attribute(:media_id, media.id)
+        else
+          self.update_attribute(:media_id, nomedia.id)
+        end
+      end
+    end
+
+  end
+
   def add_parent_by_id(parent_id)
     if self.is_a?(Fandom)
       add_media(Media.find_by_id(parent_id))
@@ -173,7 +278,7 @@ class Tag < ActiveRecord::Base
   def add_disambiguator(tag)
     return unless self.is_a?(Ambiguity)
     return false unless tag.is_a? Tag
-    tag.ambiguities << self
+    tag.ambiguities << self unless tag.ambiguities.include?(self)
   end
   def remove_disambiguator(tag)
     return unless self.is_a?(Ambiguity)
@@ -184,46 +289,28 @@ class Tag < ActiveRecord::Base
   def add_media(media)
     return unless self.is_a?(Fandom)
     return false unless media.is_a? Media
-    self.update_attribute(:media_id, media.id)
     self.wrangle_parent(media)
-    nomedia = Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)
-    if media != nomedia
-      self.remove_media(nomedia) if self.medias.include?(nomedia)
-    end
+    self.ensure_correct_media_id
   end
   def remove_media(media)
     return unless self.is_a?(Fandom)
     return false unless media.is_a? Media
-    remaining = self.medias - [media]
     self.parents.delete(media)
-    if self.media == media
-      new_media = remaining.first
-      new_media = Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME) unless new_media
-      self.add_media(new_media)
-    end
+    self.ensure_correct_media_id
   end
 
   def add_fandom(fandom)
     return unless Tag::USER_DEFINED.include?(self[:type])
     return false unless fandom.is_a? Fandom
-    self.update_attribute(:fandom_id, fandom.id)
     self.wrangle_parent(fandom)
-    nofandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
-    if fandom != nofandom
-      self.remove_fandom(nofandom) if self.fandoms.include?(nofandom)
-    end
+    self.ensure_correct_fandom_id
   end
 
   def remove_fandom(fandom)
     return unless Tag::USER_DEFINED.include?(self[:type])
     return false unless fandom.is_a? Fandom
-    remaining = self.fandoms - [fandom]
     self.parents.delete(fandom)
-    if self.fandom == fandom
-      new_fandom = remaining.first
-      new_fandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME) unless new_fandom
-      self.add_fandom(new_fandom)
-    end
+    self.ensure_correct_fandom_id
   end
 
   def add_freeform(freeform)
@@ -365,15 +452,12 @@ class Tag < ActiveRecord::Base
     add.each do |fandom_name|
       self.add_fandom(Fandom.find_by_name(fandom_name))
     end
-    if self.fandoms == []
-      new_fandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME) unless new_fandom
-      self.add_fandom(new_fandom)
-    end
+    self.ensure_correct_fandom_id
     fandoms
   end
 
   def update_medias(new=[])
-    return unless Tag::USER_DEFINED.include?(self[:type])
+    return unless self[:type] == 'Fandom'
     current = self.medias.map(&:name)
     current = [] unless current
     new = [] unless new
@@ -385,10 +469,7 @@ class Tag < ActiveRecord::Base
     add.each do |media_name|
       self.add_media(Media.find_by_name(media_name))
     end
-    if self.medias == []
-      new_media = Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME) unless new_media
-      self.add_media(new_media)
-    end
+    self.ensure_correct_media_id
     medias
   end
 
