@@ -8,6 +8,14 @@ class Pairing < Tag
     parents.select {|t| t.is_a? Character}.sort
   end
 
+  def all_characters
+    all = self.characters
+    if self.merger
+      all << self.merger.characters
+    end
+    all.flatten.compact
+  end
+
   def pairings
     (parents + children).select {|t| t.is_a? Pairing}.sort
   end
