@@ -26,7 +26,7 @@ class Series < ActiveRecord::Base
   attr_accessor :toremove
   # return list of pseuds on this series
   def allpseuds
-    works.collect(&:pseuds).flatten.compact.uniq
+    works.collect(&:pseuds).flatten.compact.uniq.sort
   end
   
   # return list of users on this series

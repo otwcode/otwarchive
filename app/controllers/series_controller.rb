@@ -26,7 +26,12 @@ class SeriesController < ApplicationController
   def index
     if params[:user_id]
       @user = User.find_by_login(params[:user_id])
-      @series = @user.series.find(:all, :order => 'series.created_at DESC').paginate(:page => params[:page])
+      if params[:pseud]
+        @author = @user.pseuds.find(params[:pseud])
+        @series = @author.series.find(:all, :order => 'series.created_at DESC').paginate(:page => params[:page])
+      else
+        @series = @user.series.find(:all, :order => 'series.created_at DESC').paginate(:page => params[:page])
+      end
     else
       @series = Series.find(:all, :order => 'series.created_at DESC').paginate(:page => params[:page])
     end
@@ -87,12 +92,20 @@ class SeriesController < ApplicationController
   # PUT /series/1.xml
   def update
     @series = Series.find(params[:id])
-    if params[:pseud] && params[:pseud][:byline] && params[:series][:author_attributes]
-      new_author = Pseud.find_by_name(params[:pseud][:byline]).id
-      params[:series][:author_attributes][:ids] << new_author rescue nil
-      params[:pseud][:byline] = ""
-      
+    
+    unless params[:series][:author_attributes][:ids]
+      flash[:error] = "Sorry, you cannot remove yourself entirely as an author of a series right now.".t
+      redirect_to edit_series_path(@series) and return
     end
+    
+    if params[:pseud] && params[:pseud][:byline] && params[:pseud][:byline] != "" && params[:series][:author_attributes]
+      valid_pseuds = Pseud.parse_bylines(params[:pseud][:byline])[:pseuds] # an array
+      valid_pseuds.each do |valid_pseud|
+        params[:series][:author_attributes][:ids] << valid_pseud.id rescue nil
+      end
+      params[:pseud][:byline] = ""
+    end
+    
     if params[:sortable_series_list]
       params[:sortable_series_list].each_with_index do |id, position|
         SerialWork.update(id, :position => position + 1)

@@ -35,9 +35,26 @@ class WorksController < ApplicationController
   # Sets values for @work, @chapter, @coauthor_results, @pseuds, and @selected_pseuds
   # and @tags[category]
   def set_instance_variables
-    if params[:pseud] && params[:pseud][:byline] && params[:work][:author_attributes]
-      #params[:work][:author_attributes][:byline] = params[:pseud][:byline]
-      params[:work][:author_attributes][:ids] << (Pseud.find_by_name(params[:pseud][:byline]).id) rescue nil
+    if params[:pseud] && params[:pseud][:byline] && params[:pseud][:byline] != ""
+      # must parse byline first, there could be several pseuds there, some of them with [login] attached
+      valid_pseuds = (Pseud.parse_bylines(params[:pseud][:byline])[:pseuds]).uniq # an array
+    end
+    
+    # TODO: what happens when we don't have author_attributes[:ids]? temporary fix
+    # (this can happen if a user with multiple pseuds decides to unselect *all* of them)
+    if params[:work] && params[:work][:author_attributes] && !params[:work][:author_attributes][:ids]
+      flash.now[:notice] = "Sorry, you cannot remove yourself entirely as an author of the work!<br /><br />Please use Remove Me As Author or consider orphaning your work instead if you do not wish to be associated with it anymore.".t
+      params[:work][:author_attributes][:ids] = [current_user.default_pseud]
+    end
+    if params[:work] && !params[:work][:author_attributes]
+      flash.now[:notice] = "Sorry, you cannot remove yourself entirely as an author of the work!<br /><br />Please use Remove Me As Author or consider orphaning your work instead if you do not wish to be associated with it anymore.".t
+      params[:work][:author_attributes] = {:ids => [current_user.default_pseud]}
+    end
+    
+    if valid_pseuds && params[:work][:author_attributes]
+      valid_pseuds.each do |valid_pseud|
+        params[:work][:author_attributes][:ids] << valid_pseud.id rescue nil
+      end
       params[:pseud][:byline] = ""
     end
     if params[:work] && params[:work][:author_attributes] && params[:work][:author_attributes][:coauthors]
