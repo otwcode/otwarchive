@@ -13,7 +13,7 @@ class TagWranglingsController < ApplicationController
     commit = params[:commit]
     if commit == "Assign"
       if params[:parent][:parent_id].blank? || params[:tags].blank?
-        flash[:error] = "Please select some tags and a parent"
+        flash[:error] = "Please select some tags and a parent".t
       else
         tags = params[:tags].collect {|t| Tag.find_by_name(t)}
         tags.each do |tag|
@@ -24,7 +24,7 @@ class TagWranglingsController < ApplicationController
     elsif commit == "Wrangle"
       @category = params[:id]
       if !logged_in_as_admin? && !Tag::USER_DEFINED.include?(@category)
-        flash[:error] = "Please log in as admin"
+        flash[:error] = "Please log in as admin".t
         redirect_to :back and return
       end
       setup_edit_vars
@@ -44,7 +44,7 @@ class TagWranglingsController < ApplicationController
       end
       if params[:banned]
         if !logged_in_as_admin?
-          flash[:error] = "Please log in as admin"
+          flash[:error] = "Please log in as admin".t
           redirect_to :back and return
         else
           to_ban = params[:banned].map(&:to_i)
@@ -66,7 +66,7 @@ class TagWranglingsController < ApplicationController
             Tag.find_by_id(id).update_attribute(:fandom_id, @fandom.id)
           end
         else
-          flash[:error] = "Please choose a fandom"
+          flash[:error] = "Please choose a fandom".t
         end
       end
       if !params[:remove_from_fandom].blank?
@@ -78,7 +78,7 @@ class TagWranglingsController < ApplicationController
       setup_edit_vars
       render :action => "edit"
     else
-      flash[:error] = "Please choose something"
+      flash[:error] = "Please choose something".t
       redirect_to :back and return
     end
   end
@@ -90,7 +90,7 @@ class TagWranglingsController < ApplicationController
     elsif Tag::USER_DEFINED.include?(@category)
       @possible_parents = Fandom.canonical.by_name
     else
-      flash[:error] = "Sorry, you can't mass assign that"
+      flash[:error] = "Sorry, you can't mass assign that".t
       redirect_to :back and return
     end
     @tags = @category.constantize.no_parent.by_name
@@ -100,7 +100,7 @@ class TagWranglingsController < ApplicationController
   def edit
     @category = params[:id]
     if !logged_in_as_admin? && !Tag::USER_DEFINED.include?(@category)
-      flash[:error] = "Please log in as admin"
+      flash[:error] = "Please log in as admin".t
       redirect_to :back and return
     end
     setup_edit_vars
@@ -115,14 +115,14 @@ protected
         @media = Media.find_by_id(params[:media][:media_id])
         @tags = @category.constantize.by_media(@media).by_name
         if @tags.blank?
-          flash.now[:warning] = "No tags found"
+          flash.now[:warning] = "No tags found".t
         end
       end
     elsif @category == "Ambiguity"
       @ambiguity = true
       @tags = @category.constantize.by_name
       if @tags.blank?
-        flash.now[:warning] = "No tags found"
+        flash.now[:warning] = "No tags found".t
       end
     elsif Tag::USER_DEFINED.include? @category
       @fandoms = Fandom.canonical.by_name
@@ -130,13 +130,13 @@ protected
         @fandom = Fandom.find_by_id(params[:fandom][:fandom_id])
         @tags = @category.constantize.by_fandom(@fandom).by_name
         if @tags.blank?
-          flash.now[:warning] = "No tags found"
+          flash.now[:warning] = "No tags found".t
         end
       end
     else
       @tags = @category.constantize.by_name
       if @tags.blank?
-        flash.now[:warning] = "No tags found"
+        flash.now[:warning] = "No tags found".t
       end
     end
   end

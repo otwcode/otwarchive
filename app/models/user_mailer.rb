@@ -38,7 +38,7 @@ class UserMailer < ActionMailer::Base
    # Sends email to an owner of the top-level commentable when a new comment is created
    def comment_notification(user, comment)
      setup_email(user)
-     @subject += "New comment on %s"/comment.ultimate_parent.commentable_name
+     @subject += "New comment on %s".t/comment.ultimate_parent.commentable_name
      @body[:commentable] = comment.ultimate_parent     
      @body[:comment] = comment
    end
@@ -47,14 +47,14 @@ class UserMailer < ActionMailer::Base
    # This may be a non-user of the archive
    def comment_reply_notification(old_comment, new_comment)
      setup_comment_email(old_comment)
-     @subject += "Reply to your comment on %s"/old_comment.ultimate_parent.commentable_name     
+     @subject += "Reply to your comment on %s".t/old_comment.ultimate_parent.commentable_name     
      @body[:comment] = new_comment
    end
    
    # Sends email to the poster of a comment 
    def comment_sent_notification(comment)
      setup_comment_email(comment)
-     @subject += "Comment you sent on %s"/comment.ultimate_parent.commentable_name
+     @subject += "Comment you sent on %s".t/comment.ultimate_parent.commentable_name
      @body[:comment] = comment
    end
    

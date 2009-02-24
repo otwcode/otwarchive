@@ -55,10 +55,10 @@ class Work < ActiveRecord::Base
   ########################################################################
   validates_presence_of :title
   validates_length_of :title, 
-    :minimum => ArchiveConfig.TITLE_MIN, :too_short=> "must be at least %d letters long."/ArchiveConfig.TITLE_MIN
+    :minimum => ArchiveConfig.TITLE_MIN, :too_short=> "must be at least %d letters long.".t/ArchiveConfig.TITLE_MIN
 
   validates_length_of :title, 
-    :maximum => ArchiveConfig.TITLE_MAX, :too_long=> "must be less than %d letters long."/ArchiveConfig.TITLE_MAX
+    :maximum => ArchiveConfig.TITLE_MAX, :too_long=> "must be less than %d letters long.".t/ArchiveConfig.TITLE_MAX
     
   validates_length_of :summary, 
     :allow_blank => true, 
@@ -87,7 +87,7 @@ class Work < ActiveRecord::Base
     unless self.title.blank?
       self.title = self.title.strip
       if self.title.length < ArchiveConfig.TITLE_MIN
-        errors.add_to_base("Title must be at least %d characters long without leading spaces."/ArchiveConfig.TITLE_MIN)
+        errors.add_to_base("Title must be at least %d characters long without leading spaces.".t/ArchiveConfig.TITLE_MIN)
         return false
       end
     end

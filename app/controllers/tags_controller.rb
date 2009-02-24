@@ -20,11 +20,11 @@ class TagsController < ApplicationController
   def show
     @tag = Tag.find_by_name(params[:id])
     unless @tag.is_a? Tag
-        flash[:error] = "Tag not found"
+        flash[:error] = "Tag not found".t
         redirect_to tag_wranglings_path and return
     end
     if @tag.is_a?(Banned) && !logged_in_as_admin?
-        flash[:error] = "Please log in as admin"
+        flash[:error] = "Please log in as admin".t
         redirect_to tag_wranglings_path and return
     end
     if !@tag.canonical && !@tag.merger
@@ -92,11 +92,11 @@ class TagsController < ApplicationController
   def edit
     @tag = Tag.find_by_name(params[:id])
     if @tag.is_a?(Banned) && !logged_in_as_admin?
-        flash[:error] = "Please log in as admin"
+        flash[:error] = "Please log in as admin".t
         redirect_to tag_wranglings_path and return
     end
     if @tag.blank?
-      flash[:error] = "Tag not found"
+      flash[:error] = "Tag not found".t
       redirect_to tag_wranglings_path and return
     end
   end
@@ -104,20 +104,20 @@ class TagsController < ApplicationController
   def update
     @tag = Tag.find_by_name(params[:id])
     if @tag.blank?
-      flash[:error] = "Tag not found"
+      flash[:error] = "Tag not found".t
       redirect_to root_path and return
     end
     old_common_tag_ids = @tag.common_tags_to_add.map(&:id).sort
 
     if (params[:tag][:name] && logged_in_as_admin?)
       if ['Rating', 'Warning', 'Category'].include?(@tag[:type])
-        flash[:error] = "Name can't be changed from this interface."
+        flash[:error] = "Name can't be changed from this interface.".t
       else
         begin
           @tag.update_attribute(:name, params[:tag][:name])
         rescue
           @tag = Tag.find_by_name(params[:id]) # reset name
-          flash[:error] = "Name already taken."
+          flash[:error] = "Name already taken.".t
         end
       end
     end

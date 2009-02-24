@@ -80,7 +80,7 @@ class UsersController < ApplicationController
         @user.invitation = @invitation
       end
       if @user.save
-        flash[:notice] = 'during testing you can activate via <a href=' + activate_path(@user.activation_code) + '>your activation url</a>.' if ENV['RAILS_ENV'] == 'development'
+        flash[:notice] = 'during testing you can activate via'.t + ' <a href=' + activate_path(@user.activation_code) + '>' + 'your activation url'.t + '</a>.' if ENV['RAILS_ENV'] == 'development'
         render :partial => "confirmation", :layout => "application"
       else
         render :action => "new"

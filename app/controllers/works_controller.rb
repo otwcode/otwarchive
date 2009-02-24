@@ -342,7 +342,7 @@ class WorksController < ApplicationController
       if @work.has_required_tags?
         render :action => "preview"
       else
-        @work.errors.add_to_base("Updating: Please add all required tags.")
+        @work.errors.add_to_base("Updating: Please add all required tags.".t)
         render :action => :edit
       end
     elsif params[:cancel_button]
@@ -418,7 +418,7 @@ class WorksController < ApplicationController
     elsif params[:work_url]
       url = params[:work_url].to_s
       if url.empty? 
-        flash.now[:error] = "Did you want to enter a URL?"
+        flash.now[:error] = "Did you want to enter a URL?".t
       else
         begin
           @work = storyparser.download_and_parse_story(url)

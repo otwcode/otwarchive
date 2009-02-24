@@ -3,10 +3,10 @@ class ExternalWork < ActiveRecord::Base
 
   validates_presence_of :title
   validates_length_of :title, 
-    :minimum => ArchiveConfig.TITLE_MIN, :too_short=> "must be at least %d letters long."/ArchiveConfig.TITLE_MIN
+    :minimum => ArchiveConfig.TITLE_MIN, :too_short=> "must be at least %d letters long.".t/ArchiveConfig.TITLE_MIN
 
   validates_length_of :title, 
-    :maximum => ArchiveConfig.TITLE_MAX, :too_long=> "must be less than %d letters long."/ArchiveConfig.TITLE_MAX
+    :maximum => ArchiveConfig.TITLE_MAX, :too_long=> "must be less than %d letters long.".t/ArchiveConfig.TITLE_MAX
     
   validates_length_of :summary, 
     :allow_blank => true, 

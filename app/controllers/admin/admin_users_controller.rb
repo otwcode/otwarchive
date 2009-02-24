@@ -57,12 +57,12 @@ class Admin::AdminUsersController < ApplicationController
     end
 
     if @users.blank?
-      flash[:error] = "Who did you want to notify?"
+      flash[:error] = "Who did you want to notify?".t
       redirect_to :action => :notify and return
     end
     
     unless params[:subject]
-      flash[:error] = "Please enter a subject."
+      flash[:error] = "Please enter a subject.".t
       redirect_to :action => :notify and return
     else
       @subject = params[:subject]
@@ -70,7 +70,7 @@ class Admin::AdminUsersController < ApplicationController
     
     # We need to use content because otherwise html will be stripped
     unless params[:content]
-      flash[:error] = "What message did you want to send?"
+      flash[:error] = "What message did you want to send?".t
       redirect_to :action => :notify and return
     else
       @message = params[:content]
@@ -82,7 +82,7 @@ class Admin::AdminUsersController < ApplicationController
     
     AdminMailer.deliver_archive_notification(current_admin.login, @users, @subject, @message)
     
-    flash[:notice] = "Notification sent to #{@users.size} user(s)."
+    flash[:notice] = "Notification sent to #{@users.size} user(s).".t
     redirect_to :action => :notify
   end
 

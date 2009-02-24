@@ -12,7 +12,7 @@ class TranslationController < ApplicationController
     @url_to_translate = params[:url_to_translate]
     translation = ViewTranslation.find(params[:id])
     unless translation
-      flash[:error] = "We couldn't find the string you were trying to translate."
+      flash[:error] = "We couldn't find the string you were trying to translate.".t
     else
       Locale.set_translation(translation.tr_key, params["translation_#{translation.id}"])
     end
