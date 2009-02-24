@@ -10,6 +10,10 @@ class UsersController < ApplicationController
   end
   
   def check_account_creation_status
+    if is_registered_user?
+      flash[:error] = "You are already logged in!".t
+      redirect_to root_path
+    end
     return true if ArchiveConfig.ACCOUNT_CREATION_ENABLED 
     @invitation = Invitation.find_by_token(params[:invitation_token])
     if !@invitation
