@@ -102,7 +102,7 @@ class TagsController < ApplicationController
   end
 
   def update
-    @tag = Tag.find_by_name(params[:id])
+    @tag = Tag.find_by_name(params[:id].gsub(/%2F/, '/'))
     if @tag.blank?
       flash[:error] = "Tag not found".t
       redirect_to root_path and return

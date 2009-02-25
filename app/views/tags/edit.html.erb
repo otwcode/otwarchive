@@ -3,7 +3,7 @@
 </h2>
 
 <%= error_messages_for :tag %>
-<%- form_for :tag, @tag, :url => { :action => "update", :id => @tag.name}, :html => { :method => :put } do |f| -%>
+<%- form_for :tag, @tag, :url => { :action => "update", :id => @tag.name.gsub(/\//, "%2F")}, :html => { :method => :put } do |f| -%>
 
   <dl id="edit-tag">
     <dt><%= f.label :name, 'Name'.t %></dt>
