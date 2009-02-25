@@ -46,12 +46,22 @@ module CommentsHelper
   def show_comments_link(commentable)
     if commentable.count_visible_comments > 0
       commentable_id = eval(":#{commentable.class.to_s.downcase}_id")
-      link_to_remote(
-          "Read Comments".t,
-          {:url => { :controller => :comments, :action => :show_comments, commentable_id => (commentable.id)}, :method => :get}, 
-          :href => url_for(:overwrite_params => {:show_comments => true}, :anchor => "comments") ) +
-      '&nbsp;' + '(%d comments)'/commentable.count_visible_comments
-      # this comment is here just to fix aptana code coloring after the / 
+      #Added if/else to get singular agreement for one comment
+        if commentable.count_visible_comments == 1
+          link_to_remote(
+              "Read Comments".t,
+              {:url => { :controller => :comments, :action => :show_comments, commentable_id => (commentable.id)}, :method => :get}, 
+              :href => url_for(:overwrite_params => {:show_comments => true}, :anchor => "comments") ) +
+          '&nbsp;' + '(%d comment)'/commentable.count_visible_comments
+        # this comment is here just to fix aptana code coloring after the / 
+        else
+          link_to_remote(
+              "Read Comments".t,
+              {:url => { :controller => :comments, :action => :show_comments, commentable_id => (commentable.id)}, :method => :get}, 
+              :href => url_for(:overwrite_params => {:show_comments => true}, :anchor => "comments") ) +
+          '&nbsp;' + '(%d comments)'/commentable.count_visible_comments
+        # this comment is here just to fix aptana code coloring after the / 
+      end
     end
   end
     
