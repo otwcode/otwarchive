@@ -45,7 +45,7 @@ module ApplicationHelper
   def byline(creation)
     pseuds = []
     pseuds << creation.authors if creation.authors
-    pseuds << creation.pseuds if creation.pseuds && !(@preview_mode && creation.authors)
+    pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.empty?)
     pseuds.flatten.uniq.sort.collect { |pseud|
       link_to pseud.byline, user_path(pseud.user, :pseud => pseud.id), :class => "login author"
     }.join(', ')

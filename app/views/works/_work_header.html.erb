@@ -3,8 +3,8 @@
   <% if is_author_of?(@work) -%>
     <ul class="navigation">
       <li><%= link_to "Add Chapter".t, new_work_chapter_path(@work) %></li>
-      <li><%= link_to 'Edit'.t, edit_work_path(@work) %></li>
-      <li><%= link_to 'Delete'.t, @work, :confirm => 'Are you sure?'.t, :method => :delete -%></li>
+      <li><%= link_to "Edit".t, edit_work_path(@work) %></li>
+      <li><%= link_to "Delete".t, @work, :confirm => "Are you sure?".t, :method => :delete -%></li>
     </ul>
   <% end -%>
 <%- end -%>
@@ -22,17 +22,17 @@
     
     <%- if @work.number_of_posted_chapters > 1 -%>
       <%- if @chapters.length == 1 -%> 
-      <!-- we're reading chapter-by-chapter -->
-			<ul class="navigation">
-			  <li><%= link_to "View entire work".t, @work -%></li>
-			  <%= next_and_previous_links_listitems(@work, @chapter) -%>
-			</ul>
+        <!-- we're reading chapter-by-chapter -->
+        <ul class="navigation">
+          <li><%= link_to "View entire work".t, @work -%></li>
+          <%= next_and_previous_links_listitems(@work, @chapter) -%>
+        </ul>
       <%- else -%>
-		<ul class="navigation">
-		    <li><%= link_to "View chapter by chapter".t, 
+        <ul class="navigation">
+          <li><%= link_to "View chapter by chapter".t, 
                  url_for({:controller => :chapters, :action => :show, :work_id => @work, :id => @chapters.first}) -%>
-			</li>
-		</ul>
+          </li>
+        </ul>
       <%- end -%>
     <%- end -%>
   </div>
@@ -49,14 +49,14 @@
   
   <%- unless @work.summary.blank? -%>
   <blockquote class="summary">
-    <h3><%=h 'Summary:'.t %></h3>
+    <h3><%=h "Summary:".t %></h3>
     <%=sanitize_and_format_for_display @work.summary %>
   </blockquote>
   <%- end -%>
   
   <%- unless @work.notes.blank? -%>
   <blockquote class="notes">
-    <h3><%=h 'Notes:'.t %></h3>
+    <h3><%=h "Notes:".t %></h3>
     <%=sanitize_and_format_for_display @work.notes %>
   </blockquote>
   <%- end -%>
