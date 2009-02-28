@@ -8,7 +8,7 @@
   </p>
 <% form_tag url_for(:controller => :works, :action => :upload_work) do %>
     <p>
-      <%= label_tag "work_url", "URL for existing work: ".t -%>
+      <%= label_tag "work_url", "URL for existing work:".t -%> 
       <%= text_field_tag "work_url" -%>
       <%= submit_tag 'Load Story From URL'.t -%>
     </p>

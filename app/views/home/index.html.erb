@@ -1,15 +1,14 @@
 <!-- BEGIN BETA CAVEATS! -->
 <%- unless request.user_agent =~ /Firefox/i -%>
-  <%= javascript_tag "alert('Sorry! The current beta version of the site has been optimized for Firefox and may not display properly in your browser just yet.')" -%>
+  <%= javascript_tag "alert('Sorry! The current beta version of the site has been optimized for Firefox and may not display properly in your browser just yet.'.t)" -%>
 <%- end -%>
 
 <noscript>
   <div id="javascript-warning">
     <p>
-      While we've done our best to make this site accessible without javascript, 
-      it will work better and look prettier with it enabled. 
-      Please consider turning it on! Also, be aware that the current beta version of the 
-      site has been optimized for Firefox and may not display properly in other browsers just yet. 
+      <%=h "While we've done our best to make this site accessible without javascript, it will work better and look prettier with it enabled.".t %> 
+      <%=h "Please consider turning it on!".t %> 
+			<%=h "Also, be aware that the current beta version of the site has been optimized for Firefox and may not display properly in other browsers just yet.".t %>
     </p>
   </div> 
 </noscript>
@@ -22,7 +21,7 @@
   <%- end -%>
 </div>
 <h1><span><%= ArchiveConfig.APP_NAME.t -%>
-  <% unless ArchiveConfig.REVISION.blank? %>(rev. <%= ArchiveConfig.REVISION %>)<% end %></span>
+  <% unless ArchiveConfig.REVISION.blank? %>(<%=h 'rev.'.t %> <%= ArchiveConfig.REVISION %>)<% end %></span>
 </h1>
 <h2><%=h 'A project of the'.t %> <a href="http://transformativeworks.org"><%=h 'Organization For Transformative Works'.t %></a></h2>
 <hr class="clear" />
