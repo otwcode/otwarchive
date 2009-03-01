@@ -153,9 +153,8 @@ class CommentsController < ApplicationController
     @comment = Comment.find(params[:id])    
     parent = @comment.ultimate_parent
     parent_comment = @comment.reply_comment? ? @comment.commentable : nil
-
-    @comment.destroy_or_mark_deleted
-    if !@comment.frozen? && !@comment.is_deleted?
+    
+    if !@comment.destroy_or_mark_deleted
       # something went wrong?
       flash[:comment_error] = "We couldn't delete that comment.".t
       redirect_to_comment(@comment)
