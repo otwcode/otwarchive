@@ -235,8 +235,8 @@ class WorksController < ApplicationController
         serial = series.serial_works.find(:first, :conditions => {:work_id => @work.id})
         sw_previous = series.serial_works.find(:first, :conditions => {:position => (serial.position - 1)})
         sw_next = series.serial_works.find(:first, :conditions => {:position => (serial.position + 1)})
-        @series_previous[series.id] = sw_previous.work if sw_previous
-        @series_next[series.id] = sw_next.work if sw_next
+        @series_previous[series.id] = sw_previous.work if sw_previous && sw_previous.work.visible
+        @series_next[series.id] = sw_next.work if sw_next && sw_next.work.visible
       end
     end
     @tag_categories_limited = Tag::VISIBLE - ["Warning"]

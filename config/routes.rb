@@ -79,7 +79,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :related_works, :path_prefix => ':locale'
   map.resources :serial_works, :path_prefix => ':locale'
 
-  map.resources :series, :path_prefix => ':locale', :member => {:manage => :get}, :has_many => :serial_works
+  map.resources :series, :path_prefix => ':locale', :member => {:manage => :get, :update_positions => :post}, :has_many => :serial_works
 
   map.open_id_complete 'session', :controller => "session", :action => "create", :requirements => { :method => :get }, :path_prefix => ':locale'
 

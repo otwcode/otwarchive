@@ -1,9 +1,9 @@
 <div id="manage-series">
-  <% form_tag(url_for(:controller => :series, :action => 'update'), :method => :put) do %>
+  <% form_tag url_for(:action => 'update_positions') do %>
   <ul id="sortable_series_list">
     <% for serial in @serial_works %>
       <li id="serial_<%= serial.id %>" class='series-position-list'>
-        <%= text_field_tag 'series[serials][]', nil, :size => 3, :maxlength => 3, :class => 'serial-position-field' -%>
+        <%= text_field_tag 'serial_works[]', nil, :size => 3, :maxlength => 3, :class => 'serial-position-field' -%>
         <span id='position-for-<%= serial.id %>'><%= serial.position %></span>. 
         <%=h serial.work.title %>
       </li>
@@ -13,4 +13,4 @@
   <% end %>
 </div>
 
-<%= sortable_element('sortable_series_list', :url => {:action => :update}, :method => :put) %>
+<%= sortable_element('sortable_series_list', :url => {:action => :update_positions}) %>

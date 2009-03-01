@@ -68,7 +68,7 @@ class SeriesController < ApplicationController
   # GET /series/1/manage
   def manage
     @series = Series.find(params[:id])
-    @serial_works = @series.serial_works.find(:all, :order => :position)
+    @serial_works = @series.serial_works.find(:all, :include => [:work], :order => :position, :conditions => ['works.posted = ?', true])    
   end
 
   # POST /series
@@ -105,22 +105,29 @@ class SeriesController < ApplicationController
       end
       params[:pseud][:byline] = ""
     end
-    
-    if params[:sortable_series_list]
+
+    respond_to do |format|
+      if @series.update_attributes(params[:series])
+        flash[:notice] = 'Series was successfully updated.'.t
+        format.html { redirect_to(@series) }
+        format.xml  { head :ok }
+      else
+        format.html { render :action => "edit" }
+        format.xml  { render :xml => @series.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+  
+  def update_positions
+    if params[:serial_works]
+      @series = Series.find(params[:id])
+      @series.reorder_works(params[:serial_works]) 
+      flash[:notice] = 'Series order has been successfully updated.'.t
+      redirect_to(@series)
+    else
       params[:sortable_series_list].each_with_index do |id, position|
         SerialWork.update(id, :position => position + 1)
         (@serial_works ||= []) << SerialWork.find(id)
-      end
-    else
-      respond_to do |format|
-        if @series.update_attributes(params[:series])
-          flash[:notice] = 'Series was successfully updated.'.t
-          format.html { redirect_to(@series) }
-          format.xml  { head :ok }
-        else
-          format.html { render :action => "edit" }
-          format.xml  { render :xml => @series.errors, :status => :unprocessable_entity }
-        end
       end
     end
   end
