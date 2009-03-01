@@ -28,7 +28,7 @@
     <dd class="fandom required">
       <input type="text" name="work[fandom_string]" id="work_fandom" value="<%= @work.fandom_string %>" />
       <div class="auto_complete" id="work_fandom_auto_complete" ></div>
-      <%= javascript_tag("new Autocompleter.Local('work_fandom', 'work_fandom_auto_complete', Fandom.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
+      <%= javascript_tag("new Autocompleter.Local('work_fandom', 'work_fandom_auto_complete', #{Fandom.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
     </dd>
 	<dd class="fandom delay_notice"><%=h "If this is the first story for a fandom, it may not show up in the fandoms page for a day or two".t %></dd>
     <dt class="pairing">
@@ -37,7 +37,7 @@
     <dd class="pairing">
       <input type="text" name="work[pairing_string]" id="work_pairing" value="<%= @work.pairing_string %>"/>
       <div class="auto_complete" id="work_pairing_auto_complete" ></div>
-      <%= javascript_tag("new Autocompleter.Local('work_pairing', 'work_pairing_auto_complete', Pairing.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
+      <%= javascript_tag("new Autocompleter.Local('work_pairing', 'work_pairing_auto_complete', #{Pairing.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
     </dd>
     <dt class="character">
       <label for="work_character"><%= Character::NAME.pluralize.t -%></label>
@@ -45,7 +45,7 @@
     <dd class="character">
       <input type="text" name="work[character_string]" id="work_character" value="<%= @work.character_string %>" />
       <div class="auto_complete" id="work_character_auto_complete" ></div>
-      <%= javascript_tag("new Autocompleter.Local('work_character', 'work_character_auto_complete', Character.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
+      <%= javascript_tag("new Autocompleter.Local('work_character', 'work_character_auto_complete', #{Character.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
     </dd>
     <dt class="freeform">
       <label for="work_freeform"><%= Freeform::NAME.pluralize.t -%></label>
@@ -53,7 +53,7 @@
     <dd class="freeform">
       <input type="text" name="work[freeform_string]" id="work_freeform" value="<%= @work.freeform_string %>" />
       <div class="auto_complete" id="work_freeform_auto_complete" ></div>
-      <%= javascript_tag("new Autocompleter.Local('work_freeform', 'work_freeform_auto_complete', Common.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
+      <%= javascript_tag("new Autocompleter.Local('work_freeform', 'work_freeform_auto_complete', #{Freeform.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
     </dd>
   </dl>
 </fieldset>

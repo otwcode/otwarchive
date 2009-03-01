@@ -131,6 +131,15 @@ module CommentMethods
           child.save
         }
       end
-    end  
+    end
+    
+    # Adjusts left and right threading counts when a comment is deleted
+    # otherwise, children_count is wrong
+    def before_destroy
+      Comment.transaction {
+        Comment.update_all("threaded_left = (threaded_left - 2)", ["thread = (?) AND threaded_left > (?)", self.thread, self.threaded_left])
+        Comment.update_all("threaded_right = (threaded_right - 2)",  ["thread = (?) AND threaded_right > (?)", self.thread, self.threaded_right])
+      }
+    end     
   end
 end
