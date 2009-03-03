@@ -455,6 +455,13 @@ LiveValidationForm.prototype = {
 	this.element.onsubmit = function(e){
 		tinyMCE.triggerSave(this.fields);
 	  var ret = (LiveValidation.massValidate(this.fields)) ? this.oldOnSubmit.call(this.element, e) !== false : false;
+	   
+	  // don't freeze the form if the user has clicked on the 'cancel' button
+	  // -elz, 3/2/09
+	  var buttonClicked = document.activeElement || this.explicitOriginalTarget;  
+	  var eventElementName = Element.readAttribute(buttonClicked, 'name');  
+  	  if (eventElementName == 'cancel_button') ret = true;
+  
 	  if (!ret) Event.stop(e)
     }.bindAsEventListener(this);
   },
