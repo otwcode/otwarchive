@@ -1,6 +1,6 @@
-# replace the "Read Comments" link with "Hide Comments" 
+# replace the "Cancel Comment" link with "Add Comment" 
 page.replace_html "add_comment_link", add_comment_link(@commentable) 
 
-# get rid of the comments
+# get rid of the comment form
 page.visual_effect :blind_up, "add_comment_placeholder"
-page.delay(1) {page.replace_html "add_comment_placeholder", "" }
+page.delay(1) { page.replace_html "add_comment_placeholder", "" }

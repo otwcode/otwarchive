@@ -1,50 +1,44 @@
 <!-- Gets embedded anywhere we need to list comments on a top-level commentable. We need the local variable "commentable" here. -->
 <a name="comments"></a>
 <div id="feedback">
-	<%= flash_div :comment_error, :comment_notice -%>
-	<ul class="navigation">
-		
-		<%- if logged_in? && (commentable.class == Chapter || CanHasBookmarks > commentable.class) -%>
-			<li id="add_bookmark_link"><%= bookmark_link(commentable) %></li>			
-		<%- end -%>
-		<% if commentable.count_visible_comments > 0 -%>
-			<li id="show_comments_link">
-				<%= show_hide_comments_link(commentable) -%>
-			</li>
-		<% end -%>
-		<li id="add_comment_link">
-			<%= add_cancel_comment_link(commentable) -%>
-		</li>
-		
-	</ul>
+  <%= flash_div :comment_error, :comment_notice -%>
+  <ul class="navigation">
 
-	<!-- if we have javascript, here is where the bookmark window will pop up -->
-	<div id="dynamic-bookmark" style="display:none;">	
-	</div>
+    <%- if logged_in? && (commentable.class == Chapter || CanHasBookmarks > commentable.class) -%>
+      <li id="add_bookmark_link"><%= bookmark_link(commentable) %></li>			
+    <%- end -%>
+    <% if commentable.count_visible_comments > 0 -%>
+      <li id="show_comments_link"><%= show_hide_comments_link(commentable) -%></li>
+    <%- end -%>
+    <li id="add_comment_link"><%= add_cancel_comment_link(commentable) -%></li>
 
-	<!-- If we have javascript, here is where the Add Comment window will appear. 
-		 If not, and we have params telling us to comment on this object, we will 
-	     manually display the comment window. --> 
-	<div id="add_comment_placeholder" style="display:none;">
-	</div>
+  </ul>
 
-	<%- if params[:add_comment] -%>
-	<div id="add_comment">
-	  <%= render :partial => 'comments/comment_form', :locals => {:comment => Comment.new, :commentable => commentable, :button_name => 'Add Comment'.t}%> 		
-	</div>
-	<%- end -%>	
+  <!-- if we have javascript, here is where the bookmark window will pop up -->
+  <div id="dynamic-bookmark" style="display:none;">	
+  </div>
 
-	<!-- If we have javascript, here is where the comments will be spiffily inserted -->
-	<!-- If not, and show_comments is true, here is where the comments will be rendered -->
-	<%- if params[:show_comments] -%>
+  <!-- If we have javascript, here is where the Add Comment window will appear. -->
+  <!-- If not, and we have params telling us to comment on this object, we will manually display the comment window. --> 
+  <%- if params[:add_comment] -%>
+    <div id="add_comment_placeholder">
+      <div id="add_comment">
+        <%= render :partial => 'comments/comment_form', :locals => {:comment => Comment.new, :commentable => commentable, :button_name => 'Add Comment'.t}%> 		
+      </div>
+  <%- else -%>
+    <div id="add_comment_placeholder" style="display:none;">
+  <%- end -%>	
+    </div>
+
+  <!-- If we have javascript, here is where the comments will be spiffily inserted -->
+  <!-- If not, and show_comments is true, here is where the comments will be rendered -->
+  <%- if params[:show_comments] -%>
     <div id="comments_placeholder">
-		<%= render :partial => 'comments/comment_thread', :locals => { :comments => commentable.comments, :depth => 0 }%>
-	<%- else -%>
+      <%= render :partial => 'comments/comment_thread', :locals => { :comments => commentable.comments, :depth => 0 }%>
+  <%- else -%>
     <div id="comments_placeholder" style="display: none;">
- 	<%- end -%>
-	</div>
+  <%- end -%>
+    </div>
 
-
-	
 </div>
 <!-- END comments -->

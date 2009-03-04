@@ -8,7 +8,7 @@
 	  <dl>
 		<%- if logged_in? -%>
 	    <dt><%=h "Name: ".t -%></dt>
-		<dd>
+      <dd>
 	      <% if current_user.pseuds.count > 1 %>
 	        <%= f.collection_select :pseud_id, current_user.pseuds, :id, :name %>
 	      <% else %>
@@ -18,21 +18,21 @@
 	    </dd>
 	  <% else %>  
 	    <dt><%= f.label :name, "Name: ".t %></dt>
-		<dd><%= f.text_field :name, :live => true -%></dd>
-		
+      <dd><%= f.text_field :name, :live => true -%></dd>
+      
 	    <dt><%= f.label :email, "Email: ".t %></dt>
 		  <dd><%= f.text_field :email, :live => true -%></dd>
 	    <dd><%= f.hidden_field :ip_address, :value => "#{request.remote_addr}" -%></dd>     
 	  <% end %>
 	       
-	  <dt><%= f.label :content, "Comment: ".t %></dt>
-	  <dd><%= f.text_area :content, :live => true %></dd>	    
-	  <dd>
-	    <input type="hidden" id="controller_name" name="controller_name" value="<%= @controller_name ||= @controller.controller_name %>" />
-	  </dd>  
-	</dl>
-	    <p class="submit"><%= f.submit button_name %>
-		<%= cancel_comment_button(comment, commentable) -%>
+      <dt><%= f.label :content, "Comment: ".t %></dt>
+      <dd><%= f.text_area :content, :live => true %></dd>	    
+      <dd>
+        <input type="hidden" id="controller_name" name="controller_name" value="<%= @controller_name ||= @controller.controller_name %>" />
+      </dd>  
+    </dl>
+	  <p class="submit"><%= f.submit button_name %>
+      <%= cancel_comment_button(comment, commentable) -%>
 	  </p>
   <% end -%>
 </div> 
