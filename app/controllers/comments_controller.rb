@@ -166,7 +166,6 @@ class CommentsController < ApplicationController
     parent_comment = @comment.reply_comment? ? @comment.commentable : nil
     
     if !@comment.destroy_or_mark_deleted
-    #if Comment.exists?(@comment.id) && !@comment.is_deleted?
       # something went wrong?
       flash[:comment_error] = "We couldn't delete that comment.".t
       redirect_to_comment(@comment)
@@ -229,7 +228,7 @@ class CommentsController < ApplicationController
 
     if request.xml_http_request?
       @commentable = Comment.find(params[:id])    
-    elsif !(request.xml_http_request?)
+    else
       # again with the being pretty nice
       options = {:show_comments => true}
       options[:locale] = params[:locale] ? params[:locale] : ArchiveConfig.DEFAULT_LOCALE
@@ -240,7 +239,7 @@ class CommentsController < ApplicationController
         options[:add_comment_reply_id] = params[:id]
         redirect_to_comment(@commentable, options)
       else
-        options[:id] = @commentable.id # work, chapter or stuff
+        options[:id] = @commentable.id # work, chapter or other stuff that is not a comment
         options[:add_comment_reply_id] = params[:id]
         redirect_to_all_comments(@commentable, options)
       end
@@ -258,7 +257,7 @@ class CommentsController < ApplicationController
   def cancel_comment_reply
     if request.xml_http_request?
       @commentable = Comment.find(params[:id])    
-    elsif !(request.xml_http_request?)
+    else
       options[:show_comments] = params[:show_comments] if params[:show_comments]
       redirect_to_comment(@commentable)
     end    
