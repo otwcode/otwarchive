@@ -61,7 +61,7 @@ class Admin::AdminUsersController < ApplicationController
       redirect_to :action => :notify and return
     end
     
-    unless params[:subject]
+    unless params[:subject] && !params[:subject].blank?
       flash[:error] = "Please enter a subject.".t
       redirect_to :action => :notify and return
     else
@@ -69,7 +69,7 @@ class Admin::AdminUsersController < ApplicationController
     end
     
     # We need to use content because otherwise html will be stripped
-    unless params[:content]
+    unless params[:content] && !params[:content].blank?
       flash[:error] = "What message did you want to send?".t
       redirect_to :action => :notify and return
     else

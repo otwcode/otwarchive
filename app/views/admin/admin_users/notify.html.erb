@@ -20,7 +20,7 @@
 
       <tr>
         <td colspan="2">
-          <input type="checkbox" onclick="selectAllCheckboxes('user_ids', <%= @users.size -%>, this.checked);">
+          <input type="checkbox" id="select_all" onclick="selectAllCheckboxes('user_ids', <%= @users.size -%>, this.checked);">
           <%= label_tag "select_all", "Select All/None".t -%>
         </td>
       </tr>
