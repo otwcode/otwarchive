@@ -6,7 +6,7 @@ class WorksIndexControllerTest < ActionController::TestCase
 
   context "a database with a restricted and an unrestricted work" do
     setup do
-      @work1 = create_work
+      @work1 = create_work(:revised_at => 1.minute.ago)
       @work1.add_default_tags
       @work1.update_attribute(:posted, true)
       @work2 = create_work(:restricted => true)
@@ -27,7 +27,7 @@ class WorksIndexControllerTest < ActionController::TestCase
         get :index, :locale => 'en'
       end
       should_render_template :index
-      should_assign_to(:works) {[@work1, @work2]}
+      should_assign_to(:works) {[@work2, @work1]}
     end
   end
 
