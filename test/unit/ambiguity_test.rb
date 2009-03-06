@@ -14,7 +14,7 @@ class AmbiguityTest < ActiveSupport::TestCase
         @tag.add_disambiguator(@fandom)
       end
       should "be able to have disambiguators in different categories" do
-        assert_equal [@character, @fandom].sort, @tag.disambiguators.sort
+        assert_same_elements [@character, @fandom], @tag.disambiguators
       end
       context "with a disambiguator removed" do
         setup do
@@ -31,7 +31,7 @@ class AmbiguityTest < ActiveSupport::TestCase
         @tag.reload
       end
       should "be able to have disambiguators in different categories" do
-        assert_equal [@character, @fandom].sort, @tag.disambiguators.sort
+        assert_same_elements [@character, @fandom], @tag.disambiguators
       end
       context "with a disambiguator removed" do
         setup do

@@ -8,12 +8,12 @@ class WorksNewControllerTest < ActionController::TestCase
       setup do
         get :new, :locale => 'en'
       end
-      should_redirect_to 'new_session_url(:restricted => true)'
-    end    
+      should_redirect_to("restricted new session") {new_session_url(:restricted => true)}
+    end
     context "when logged in" do
       setup do
         @user = create_user
-        @request.session[:user] = @user 
+        @request.session[:user] = @user
       end
       context "basic new" do
         setup { get :new, :locale => 'en' }
@@ -27,7 +27,7 @@ class WorksNewControllerTest < ActionController::TestCase
       end
       context "new with unposted" do
         setup do
-          @work = create_work(:authors => [@user.default_pseud])          
+          @work = create_work(:authors => [@user.default_pseud])
           get :new, :locale => 'en'
         end
         should "have unposted link" do
@@ -36,7 +36,7 @@ class WorksNewControllerTest < ActionController::TestCase
       end
       context "new with old unposted" do
         setup do
-          @work = create_work(:authors => [@user.default_pseud], :created_at => 2.weeks.ago)          
+          @work = create_work(:authors => [@user.default_pseud], :created_at => 2.weeks.ago)
           get :new, :locale => 'en'
         end
         should "not have unposted link" do
@@ -49,15 +49,15 @@ class WorksNewControllerTest < ActionController::TestCase
           get :new, :locale => 'en', :load_unposted => true
         end
         should_render_template :new
-        should_assign_to :work, :equals => '@work'
+        should_assign_to(:work) {@work}
       end
       context "upload work" do
         setup do
           get :new, :locale => 'en', :upload_work => true
         end
         should_render_template :new
-        should_assign_to :use_upload_form, :equals => 'true'
+        should_assign_to(:use_upload_form) {true}
       end
-    end  
+    end
   end
 end

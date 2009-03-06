@@ -7,8 +7,8 @@ class CategoryTest < ActiveSupport::TestCase
       assert_equal ArchiveConfig.CATEGORY_CATEGORY_NAME, Category::NAME
     end
     should "have a required tags" do
-      assert_equal [ArchiveConfig.CATEGORY_GEN_TAG_NAME,  ArchiveConfig.CATEGORY_HET_TAG_NAME,  ArchiveConfig.CATEGORY_SLASH_TAG_NAME,  ArchiveConfig.CATEGORY_FEMSLASH_TAG_NAME,  ArchiveConfig.CATEGORY_MULTI_TAG_NAME,  ArchiveConfig.CATEGORY_OTHER_TAG_NAME].sort, Category.all.map(&:name).sort
+      assert_same_elements [ArchiveConfig.CATEGORY_GEN_TAG_NAME,  ArchiveConfig.CATEGORY_HET_TAG_NAME,  ArchiveConfig.CATEGORY_SLASH_TAG_NAME,  ArchiveConfig.CATEGORY_FEMSLASH_TAG_NAME,  ArchiveConfig.CATEGORY_MULTI_TAG_NAME,  ArchiveConfig.CATEGORY_OTHER_TAG_NAME], Category.all.map(&:name)
     end
   end
-    
+
 end

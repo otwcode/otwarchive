@@ -16,18 +16,18 @@ class BookmarksControllerTest < ActionController::TestCase
       @bookmark = create_bookmark(:user => @user)
       get :index, :locale => 'en', :user_id => @user.login
     end
-    
+
     should_assign_to :user
   end
 
   context "when indexing my own bookmarks" do
     setup do
       @user = create_user
-      @request.session[:user] = @user 
+      @request.session[:user] = @user
       @bookmark = create_bookmark(:user => @user)
       get :index, :locale => 'en', :user_id => @user.login
     end
-    
+
   end
 
   context "when showing a bookmark" do
@@ -48,25 +48,25 @@ class BookmarksControllerTest < ActionController::TestCase
       @bookmark = create_bookmark(:user => @user, :private => true)
       @bookmark.bookmarkable.add_default_tags
       @bookmark.bookmarkable.update_attribute(:posted, true)
-      @request.session[:user] = @user 
+      @request.session[:user] = @user
       get :show, :locale => 'en', :id => @bookmark.id
-    end    
+    end
     should_respond_with :success
   end
-  
+
   context "when showing a private bookmark, not my own" do
     setup do
       @user = create_user
-      @request.session[:user] = @user 
+      @request.session[:user] = @user
       @bookmark = create_bookmark(:private => true)
       @bookmark.bookmarkable.add_default_tags
       @bookmark.bookmarkable.update_attribute(:posted, true)
-      @request.session[:user] = @user 
+      @request.session[:user] = @user
       get :show, :locale => 'en', :id => @bookmark.id
     end
     should "have error" do
       assert flash.has_key?(:error)
-    end    
-    should_redirect_to 'user_path(@user)'
+    end
+    should_redirect_to("the user's path") {user_path(@user)}
   end
 end

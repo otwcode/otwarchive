@@ -20,7 +20,7 @@ class BookmarkTest < ActiveSupport::TestCase
       assert @bookmark.visible
     end
     should "be visible en group" do
-      assert Bookmark.visible.include?(@bookmark)
+      assert_contains(Bookmark.visible, @bookmark)
     end
     context "which is restricted" do
       setup do
@@ -68,10 +68,10 @@ class BookmarkTest < ActiveSupport::TestCase
       end
       should "not be visible to a random user" do
         assert !@bookmark.visible(create_user)
-      end      
+      end
     end
   end
-  
+
   context "A private bookmark on a posted work" do
     setup do
       @bookmark = create_bookmark(:private => true)

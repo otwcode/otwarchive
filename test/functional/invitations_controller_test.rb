@@ -5,10 +5,10 @@ class InvitationsControllerTest < ActionController::TestCase
     setup do
       get :new, :locale => 'en'
     end
-    should_redirect_to "{:controller => :session, :action => 'new'}" 
-    should_set_the_flash_to /logged in/      
+    should_redirect_to("new session path") {new_session_path}
+    should_set_the_flash_to /logged in/
   end
-  
+
   context "when logged in with an invitation limit of zero" do
     setup do
       @user = new_user
@@ -17,10 +17,10 @@ class InvitationsControllerTest < ActionController::TestCase
       @request.session[:user] = @user
       get :new, :locale => 'en'
     end
-    should_redirect_to "{:controller => :users, :action => 'show', :id => @user}"
-    should_set_the_flash_to /Sorry/      
+    should_redirect_to("the user's path") {user_path(@user)}
+    should_set_the_flash_to /Sorry/
   end
-  
+
   context "when logged in with an invitation limit greater than zero" do
     setup do
       @user = new_user
@@ -43,8 +43,8 @@ class InvitationsControllerTest < ActionController::TestCase
       should "create the invitation" do
         assert Invitation.find_by_recipient_email(@email)
       end
-      should_redirect_to "{:controller => :users, :action => 'show', :id => @user}"
+      should_redirect_to("the user's path") {user_path(@user)}
     end
-        
+
   end
 end

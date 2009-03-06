@@ -13,7 +13,7 @@ class TaggingTest < ActiveSupport::TestCase
       @tagging = Tagging.create(:tagger => Freeform.find(@tag.id), :taggable => Work.first)
     end
     should_belong_to :tagger, :taggable
-    should_require_attributes :tagger, :taggable
+    should_validate_presence_of :tagger, :taggable
     should "delete its singleton, unwrangled tag on exit" do
       @tagging.destroy
       assert_raises(ActiveRecord::RecordNotFound) { @tag.reload }

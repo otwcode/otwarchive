@@ -12,16 +12,16 @@ class WorksShowControllerTest < ActionController::TestCase
     context "that isn't posted" do
       context "when not logged in" do
         setup { get :show, :locale => 'en', :id => @work.id }
-        should_redirect_to 'new_session_url'
+        should_redirect_to('new session path') {new_session_path}
       end
       context "when logged in" do
         setup do
           @user = create_user
-          @request.session[:user] = @user 
+          @request.session[:user] = @user
           get :show, :locale => 'en', :id => @work.id
         end
         should_set_the_flash_to /unavailable/
-        should_redirect_to "works_path"
+        should_redirect_to("the works path"){works_path}
         context "and it's your work" do
           setup do
             @work.pseuds << @user.default_pseud
@@ -34,16 +34,16 @@ class WorksShowControllerTest < ActionController::TestCase
         setup {@work.update_attribute("restricted", true) }
         context "when not logged in" do
           setup { get :show, :locale => 'en', :id => @work.id }
-          should_redirect_to 'new_session_url'
+          should_redirect_to('new session path') {new_session_path}
         end
         context "when logged in" do
           setup do
             @user = create_user
-            @request.session[:user] = @user 
+            @request.session[:user] = @user
             get :show, :locale => 'en', :id => @work.id
           end
           should_set_the_flash_to /unavailable/
-          should_redirect_to "works_path"
+          should_redirect_to("the works path"){works_path}
           context "and it's your work" do
             setup do
               @work.pseuds << @user.default_pseud
@@ -64,7 +64,7 @@ class WorksShowControllerTest < ActionController::TestCase
       context "when logged in" do
         setup do
           @user = create_user
-          @request.session[:user] = @user 
+          @request.session[:user] = @user
           get :show, :locale => 'en', :id => @work.id
         end
         should_render_template :show
@@ -81,12 +81,12 @@ class WorksShowControllerTest < ActionController::TestCase
         setup {@work.update_attribute("restricted", true) }
         context "when not logged in" do
           setup { get :show, :locale => 'en', :id => @work.id }
-          should_redirect_to 'new_session_url'
+          should_redirect_to('new session path') {new_session_path}
         end
         context "when logged in" do
           setup do
             @user = create_user
-            @request.session[:user] = @user 
+            @request.session[:user] = @user
             get :show, :locale => 'en', :id => @work.id
           end
           should_render_template :show
@@ -110,26 +110,26 @@ class WorksShowControllerTest < ActionController::TestCase
     context "that isn't posted" do
       context "when not logged in" do
         setup { get :show, :locale => 'en', :id => @work.id }
-        should_redirect_to 'new_session_url'
+        should_redirect_to('new session path') {new_session_path}
       end
       context "when logged in" do
         setup do
           @user = create_user
-          @request.session[:user] = @user 
+          @request.session[:user] = @user
         end
         context "no preference set" do
           setup { get :show, :locale => 'en', :id => @work.id }
           should_set_the_flash_to /unavailable/
-          should_redirect_to "works_path"
+          should_redirect_to("the works path"){works_path}
         end
         context "and you have set your preferences" do
           setup do
             @user.preference.update_attribute(:adult, true)
-            @request.session[:user] = @user 
+            @request.session[:user] = @user
             get :show, :locale => 'en', :id => @work.id
           end
           should_set_the_flash_to /unavailable/
-          should_redirect_to "works_path"
+          should_redirect_to("the works path"){works_path}
         end
         context "and it's your work" do
           setup do
@@ -143,16 +143,16 @@ class WorksShowControllerTest < ActionController::TestCase
         setup {@work.update_attribute("restricted", true) }
         context "when not logged in" do
           setup { get :show, :locale => 'en', :id => @work.id }
-          should_redirect_to 'new_session_url'
+          should_redirect_to('new session path') {new_session_path}
         end
         context "when logged in" do
           setup do
             @user = create_user
-            @request.session[:user] = @user 
+            @request.session[:user] = @user
             get :show, :locale => 'en', :id => @work.id
           end
           should_set_the_flash_to /unavailable/
-          should_redirect_to "works_path"
+          should_redirect_to("the works path"){works_path}
           context "and it's your work" do
             setup do
               @work.pseuds << @user.default_pseud
@@ -173,7 +173,7 @@ class WorksShowControllerTest < ActionController::TestCase
       context "when logged in" do
         setup do
           @user = create_user
-          @request.session[:user] = @user 
+          @request.session[:user] = @user
           get :show, :locale => 'en', :id => @work.id
         end
         should_render_template '_adult'
@@ -181,7 +181,7 @@ class WorksShowControllerTest < ActionController::TestCase
         context "and you have set your preferences" do
           setup do
             @user.preference.update_attribute(:adult, true)
-            @request.session[:user] = @user 
+            @request.session[:user] = @user
             get :show, :locale => 'en', :id => @work.id
           end
           #should_render_template :show
@@ -201,12 +201,12 @@ class WorksShowControllerTest < ActionController::TestCase
         setup {@work.update_attribute("restricted", true) }
         context "when not logged in" do
           setup { get :show, :locale => 'en', :id => @work.id }
-          should_redirect_to 'new_session_url'
+          should_redirect_to('new session path') {new_session_path}
         end
         context "when logged in" do
           setup do
             @user = create_user
-            @request.session[:user] = @user 
+            @request.session[:user] = @user
             get :show, :locale => 'en', :id => @work.id
           end
           should_render_template '_adult'

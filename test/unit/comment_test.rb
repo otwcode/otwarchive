@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/../test_helper'
-  
+
 class CommentTest < ActiveSupport::TestCase
   context "A comment" do
     setup do
@@ -9,15 +9,15 @@ class CommentTest < ActiveSupport::TestCase
     should_belong_to :pseud
     should_belong_to :commentable
     should_have_many :users
-    should_require_attributes :content
-  
+    should_validate_presence_of :content
+
     # acts_as_commentable: CommentableEntity methods find_all_comments & count_all_comments
     context "with its own comment" do
       setup do
         @comment2 = create_comment(:commentable => @comment)
       end
       should "find that comment" do
-        assert @comment.find_all_comments.include?(@comment2)
+        assert_contains(@comment.find_all_comments, @comment2)
       end
       should "count that comment" do
         assert_equal 1, @comment.count_all_comments
@@ -59,16 +59,16 @@ class CommentTest < ActiveSupport::TestCase
     child.set_and_save
     assert_equal 1, child.depth
     assert_equal comment.thread, child.thread
-    assert Comment.find(comment.id).all_children.include?(child)
+    assert_contains(Comment.find(comment.id).all_children, child)
     # TODO more tests for depth and add_child under different circumstances
-  end  
+  end
   def test_mark_deleted
     # a comment with a child gets marked is_deleted
     comment = new_comment
     comment.set_and_save
     # give it a child
     child = new_comment(:commentable_type => 'Comment', :commentable_id => comment.id)
-    child.set_and_save  
+    child.set_and_save
     comment = Comment.find(comment.id)
     comment.destroy_or_mark_deleted
     assert comment = Comment.find(comment.id)
@@ -78,12 +78,12 @@ class CommentTest < ActiveSupport::TestCase
     # another comment with no children gets destroyed
     comment = new_comment
     another_comment = new_comment
-    another_comment.set_and_save    
+    another_comment.set_and_save
     another_comment.reload
     another_comment.destroy_or_mark_deleted
     assert_raises(ActiveRecord::RecordNotFound) { Comment.find(another_comment.id) }
   end
-    
+
   def test_full_set
     # Returns all sub-comments plus the comment itself
     comment = new_comment
@@ -91,7 +91,7 @@ class CommentTest < ActiveSupport::TestCase
     comment = Comment.find(comment.id)
     assert_equal [comment], comment.full_set
     child = new_comment(:commentable_type=>'Comment', :commentable_id=> comment.id)
-    child.set_and_save    
+    child.set_and_save
     comment = Comment.find(comment.id)
     assert_equal [comment, child], comment.full_set
   end
@@ -103,16 +103,16 @@ class CommentTest < ActiveSupport::TestCase
     comment = new_comment(:pseud_id => create_pseud)
     assert !comment.approved
     assert comment.check_for_spam  # should always return true
-    assert comment.approved 
+    assert comment.approved
     # TODO - test for actual spam
   end
-  
+
   # Test methods
   # FIXME didn't create tests for akismet_attributes, because they could/should be private
   def test_mark_as_spam
     comment = create_comment
     assert comment.mark_as_spam!
-    assert !comment.approved    
+    assert !comment.approved
     # TODO - what happens if a signed comment is marked as spam? can it even be done?
   end
   def test_mark_as_ham

@@ -8,7 +8,7 @@ class FandomTest < ActiveSupport::TestCase
       @media = create_media(:canonical => true)
       @fandom.add_parent_by_id(@media.id)
     end
-    should_require_attributes :name
+    should_validate_presence_of :name
     should "have a display name" do
       assert_equal ArchiveConfig.FANDOM_CATEGORY_NAME, Fandom::NAME
     end
@@ -21,7 +21,7 @@ class FandomTest < ActiveSupport::TestCase
         @fandom.add_media(@media2)
       end
       should "have both medias" do
-        assert_equal [@media, @media2].sort, @fandom.medias.sort
+        assert_same_elements [@media, @media2], @fandom.medias
       end
       context "with one media removed" do
         setup do
@@ -61,14 +61,14 @@ class FandomTest < ActiveSupport::TestCase
           @fandom.add_freeform(@freeform)
         end
         should "have the freeform as a child" do
-          assert @fandom.children.include?(@freeform)
+          assert_contains(@fandom.children, @freeform)
         end
         context "and later removed" do
           setup do
             @fandom.remove_freeform(@freeform)
           end
           should "not have the freeform in its children" do
-            assert !@fandom.children.include?(@freeform)
+            assert_does_not_contain(@fandom.children, @freeform)
           end
         end
       end
@@ -78,14 +78,14 @@ class FandomTest < ActiveSupport::TestCase
           @fandom.update_freeforms([@freeform.name])
         end
         should "have the freeform as a child" do
-          assert @fandom.children.include?(@freeform)
+          assert_contains(@fandom.children, @freeform)
         end
         context "and later removed" do
           setup do
             @fandom.update_freeforms([""])
           end
           should "not have the freeform in its children" do
-            assert !@fandom.children.include?(@freeform)
+            assert_does_not_contain(@fandom.children, @freeform)
           end
         end
       end
@@ -95,14 +95,14 @@ class FandomTest < ActiveSupport::TestCase
           @fandom.add_pairing(@pairing)
         end
         should "have the pairing as a child" do
-          assert @fandom.children.include?(@pairing)
+          assert_contains(@fandom.children, @pairing)
         end
         context "and later removed" do
           setup do
             @fandom.remove_pairing(@pairing)
           end
           should "not have the pairing in its children" do
-            assert !@fandom.children.include?(@pairing)
+            assert_does_not_contain(@fandom.children, @pairing)
           end
         end
       end
@@ -131,7 +131,7 @@ class FandomTest < ActiveSupport::TestCase
           @fandom.reload
         end
         should "have both as medias" do
-          assert_equal [@media, @media2].sort, @fandom.medias.sort
+          assert_same_elements [@media, @media2], @fandom.medias
         end
       end
       context "removing media" do

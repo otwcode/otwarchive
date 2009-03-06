@@ -87,7 +87,7 @@ class UsersControllerTest < ActionController::TestCase
 
       assert form.submit
     end
-    should_redirect_to 'root_path'
+    should_redirect_to('the root path') { root_path }
     should "not create the user" do
       assert_nil User.find_by_login(@login)
     end
@@ -124,13 +124,13 @@ class UsersControllerTest < ActionController::TestCase
         form.user.email = random_email
         form.user.identity_url = @url
         form.cancel_create_account=nil
-  
+
         assert form.submit
       end
       should "have duplicate message" do
          assert_tag :div, :content => /already being used/, :attributes => { :id => 'errorExplanationNone' }
       end
-      should_render_template :new 
+      should_render_template :new
     end
     context "that is semantically equivalent to one previously used" do
       setup do
@@ -143,29 +143,29 @@ class UsersControllerTest < ActionController::TestCase
         form.user.email = random_email + '/'
         form.user.identity_url = @url
         form.cancel_create_account=nil
-  
+
         assert form.submit
       end
       should "have duplicate message" do
          assert_tag :div, :content => /already being used/, :attributes => { :id => 'errorExplanationNone' }
       end
-      should_render_template :new 
+      should_render_template :new
     end
   end
 
-    
+
   context "on POST to :edit someone else" do
     setup do
       assert @user = create_user
       assert @second_user = create_user
       @request.session[:user] = @second_user
       get :edit, :locale => 'en', :id => @user.login
-    end      
-    should "not display a form" do
-       assert_select "form", false           
     end
-    should_redirect_to 'user_url(@second_user)'
-    should_set_the_flash_to /have permission/      
+    should "not display a form" do
+       assert_select "form", false
+    end
+    should_redirect_to("the second user's path") {user_path(@second_user)}
+    should_set_the_flash_to /have permission/
   end
   context "on PUT to :update someone else" do
     setup do
@@ -176,20 +176,20 @@ class UsersControllerTest < ActionController::TestCase
       assert @second_user = create_user
       @request.session[:user] = @second_user
       put :update, :locale => 'en', :id => @user.login, :user => {"email" => @new_email}
-    end      
+    end
     should "not make the change" do
       assert_not_equal @new_email, @user.email
     end
-    should_redirect_to 'user_url(@second_user)'
-    should_set_the_flash_to /have permission/      
+    should_redirect_to("the second user's path") {user_path(@second_user)}
+    should_set_the_flash_to /have permission/
   end
 
   context "on POST to :edit self" do
     setup do
       assert @user = create_user
-      assert @request.session[:user] = @user 
+      assert @request.session[:user] = @user
       get :edit, :locale => 'en', :id => @user.login
-    end      
+    end
     should_assign_to :user
     should "assign assign @user to user" do
       assert_equal @user, assigns(:user)
@@ -200,17 +200,17 @@ class UsersControllerTest < ActionController::TestCase
     should_respond_with :success
   end
   # put to update self tests in profile_controller_test
-  
+
   context "on DELETE of self" do
     setup do
       assert @user = create_user
-      assert @request.session[:user] = @user 
+      assert @request.session[:user] = @user
       delete :destroy, :locale => 'en', :id => @user.login
     end
     should "destroy the record" do
       assert_raises(ActiveRecord::RecordNotFound) { @user.reload }
     end
-    should_redirect_to 'delete_confirmation_path'
+    should_redirect_to("the delete confirmation") {delete_confirmation_path}
   end
   context "on DELETE of someone else" do
     setup do
@@ -222,8 +222,8 @@ class UsersControllerTest < ActionController::TestCase
     should "not destroy the record" do
       assert @user.reload
     end
-    should_redirect_to 'user_url(@second_user)'
-    should_set_the_flash_to /have permission/      
+    should_redirect_to("the second user's path") {user_path(@second_user)}
+    should_set_the_flash_to /have permission/
   end
   context "on GET to :index" do
     setup do

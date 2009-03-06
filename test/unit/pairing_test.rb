@@ -20,14 +20,14 @@ class PairingTest < ActiveSupport::TestCase
           @pairing.update_characters([@character.name, @character2.name])
         end
         should "have both characters as a parents" do
-          assert_equal [@character, @character2].sort, @pairing.parents.sort
+          assert_same_elements [@character, @character2], @pairing.parents
         end
         context "removing one" do
           setup do
             @pairing.update_characters([@character.name])
           end
-          should "have on character as parent" do
-            assert_equal [@character].sort, @pairing.parents
+          should "have only one character as parent" do
+            assert_equal [@character], @pairing.parents
           end
           should "mark the pairing as having characters" do
             assert @pairing.has_characters
@@ -51,7 +51,7 @@ class PairingTest < ActiveSupport::TestCase
           @pairing.add_character(@character)
         end
         should "have the character as a parent" do
-          assert @pairing.parents.include?(@character)
+          assert_contains(@pairing.parents, @character)
         end
         should "mark the pairing as having characters" do
           assert @pairing.has_characters
@@ -61,7 +61,7 @@ class PairingTest < ActiveSupport::TestCase
             @pairing.remove_character(@character)
           end
           should "not have the character as a parent" do
-            assert !@pairing.parents.include?(@character)
+            assert_does_not_contain(@pairing.parents, @character)
           end
           should "mark the pairing as not having characters" do
             assert !@pairing.has_characters
@@ -73,7 +73,7 @@ class PairingTest < ActiveSupport::TestCase
             @pairing.add_character(@character2)
           end
           should "have both characters as a parents" do
-            assert_equal [@character, @character2].sort, @pairing.parents.sort
+            assert_same_elements [@character, @character2], @pairing.parents
           end
           should "mark the pairing as having characters" do
             assert @pairing.has_characters
@@ -83,8 +83,8 @@ class PairingTest < ActiveSupport::TestCase
               @pairing.remove_character(@character)
             end
             should "still have the second character as a parent" do
-              assert !@pairing.parents.include?(@character)
-              assert @pairing.parents.include?(@character2)
+              assert_does_not_contain(@pairing.parents, @character)
+              assert_contains(@pairing.parents, @character2)
             end
             should "still mark the pairing as having characters" do
               assert @pairing.has_characters

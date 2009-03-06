@@ -5,6 +5,6 @@ class FeedbackTest < ActiveSupport::TestCase
     setup do
       assert @feedback = create_feedback
     end
-    should_require_attributes :comment
+    should_validate_presence_of :comment
   end
 end

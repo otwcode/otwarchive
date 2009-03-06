@@ -1,9 +1,18 @@
 class TagWranglingsController < ApplicationController
 
   before_filter :check_user_status
-  before_filter :login_required
-  def authorized?
-    logged_in_as_admin? || permit?("tag_wrangler")
+  before_filter :check_tag_wrangler_status
+
+  def check_tag_wrangler_status
+    return true if logged_in_as_admin? || permit?("tag_wrangler")
+    if logged_in?
+      flash[:error] = 'You have to be a tag wrangler to access this page'.t
+      redirect_to current_user and return
+    else
+      store_location
+      flash[:error] = 'Please log in.'.t
+      redirect_to new_session_path and return
+    end
   end
 
   def index

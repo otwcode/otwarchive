@@ -8,22 +8,22 @@ class WorksPreviewControllerTest < ActionController::TestCase
       @work = create_work
       get :preview, :locale => 'en', :id => @work.id
     end
-    should_redirect_to 'new_session_url(:restricted => true)'
+    should_redirect_to("restricted new session") {new_session_url(:restricted => true)}
   end
-  
+
   context "when logged in" do
     setup do
       @user = create_user
       @user.activate
-      @request.session[:user] = @user 
+      @request.session[:user] = @user
     end
     context "someone else's work" do
       setup do
         @work = create_work(:authors => [create_user.default_pseud])
         get :preview, :locale => 'en', :id => @work.id
       end
-      should_redirect_to 'work_path(@work)'
-      should_set_the_flash_to /permission/      
+      should_redirect_to("the work's path") {work_path(@work)}
+      should_set_the_flash_to /permission/
     end
     context "your own work" do
       setup do
@@ -31,7 +31,7 @@ class WorksPreviewControllerTest < ActionController::TestCase
         get :preview, :locale => 'en', :id => @work.id
       end
       should_respond_with :success
-      should_assign_to :work, :equals => '@work'
+      should_assign_to(:work) {@work}
       should_render_template :preview
     end
   end

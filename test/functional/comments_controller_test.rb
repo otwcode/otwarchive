@@ -22,19 +22,19 @@ class CommentsControllerTest < ActionController::TestCase
     @child1.set_and_save
     @work.reload
   end
-  
+
   # Test approve  PUT  /:locale/comments/:id/approve  (named path: approve_comment)
   # Test create  POST  /:locale/chapters/:chapter_id/comments
   def test_create_chapter_comment
     create_comments
     # FIXME Called id for nil comments_controller.rb:64
 #    assert_difference('Comment.count') do
-#      post :create, :locale => 'en', 
-#                    :chapter_id => @chapter1.id, 
-#                    :comment => { :content => 'foo', 
-#                                  :name => 'Someone', 
+#      post :create, :locale => 'en',
+#                    :chapter_id => @chapter1.id,
+#                    :comment => { :content => 'foo',
+#                                  :name => 'Someone',
 #                                  :email => 'someone@someplace.org' }
-#    end    
+#    end
 #    assert_redirected_to work_path(:locale => 'en', :id => @work.id)
   end
   # Test create  POST  /:locale/comments
@@ -60,23 +60,23 @@ class CommentsControllerTest < ActionController::TestCase
   def test_create_comment_comment
     create_comments
     assert_difference('Comment.count') do
-      post :create, :locale => 'en', 
-                    :comment_id => @comment1.id, 
+      post :create, :locale => 'en',
+                    :comment_id => @comment1.id,
                     :comment => { :content => 'foo', :name => 'Someone', :email => 'newcommenter@someplace.org' }
     end
-    @comment = Comment.find_by_email('newcommenter@someplace.org')    
-    assert_redirected_to work_path(:locale => ArchiveConfig.DEFAULT_LOCALE, :id => @work.id, 
+    @comment = Comment.find_by_email('newcommenter@someplace.org')
+    assert_redirected_to work_path(:locale => ArchiveConfig.DEFAULT_LOCALE, :id => @work.id,
                                    :show_comments => true, :anchor => "comment_#{@comment.id}")
   end
   # Test create  POST  /:locale/works/:work_id/chapters/:chapter_id/comments
   def test_create_work_chapter_comment
     create_comments
     assert_difference('Comment.count') do
-      @request.session[:user] = @user      
-      post :create, :locale => 'en', 
-                    :work_id => @work.id, 
+      @request.session[:user] = @user
+      post :create, :locale => 'en',
+                    :work_id => @work.id,
                     :chapter_id => @chapter1.id,
-                    :comment => {"pseud_id"=>@pseud.id, 
+                    :comment => {"pseud_id"=>@pseud.id,
                                  "content"=>"new chapter"}
     end
     # TODO check redirect
@@ -177,7 +177,7 @@ class CommentsControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:comments)
     assert_tag :tag => 'p', :content => 'first comment'
-    assert_no_tag :tag => 'p', :content => 'second comment'    
+    assert_no_tag :tag => 'p', :content => 'second comment'
   end
   # Test new  GET  /:locale/chapters/:chapter_id/comments/new  (named path: new_chapter_comment)
   def test_new_chapter_comment_path
@@ -189,7 +189,7 @@ class CommentsControllerTest < ActionController::TestCase
   # Test new  GET  /:locale/comments/:comment_id/comments/new  (named path: new_comment_comment)
   # Test new  GET  /:locale/comments/new  (named path: new_comment)
   def test_new_comment_fail
-    # Trying to create a new comment with nothing to comment on should result in an 
+    # Trying to create a new comment with nothing to comment on should result in an
     # error and being redirected back to the previous page
     @request.env['HTTP_REFERER'] = 'http://www.google.com/'
     get :new, :locale => 'en'
@@ -232,13 +232,13 @@ class CommentsControllerTest < ActionController::TestCase
   def test_update_chapter_comment
     create_comments
     @request.session[:user] = @user
-    put :update, :locale => 'en', 
-                 :chapter_id => @chapter1.id, 
-                 :id => @comment2.id, 
-                 :pseud_id => @pseud.id, 
+    put :update, :locale => 'en',
+                 :chapter_id => @chapter1.id,
+                 :id => @comment2.id,
+                 :pseud_id => @pseud.id,
                  :comment => { :content => 'more content' }
     @comment2.reload
-    assert_equal 'more content', @comment2.content  
+    assert_equal 'more content', @comment2.content
   end
   # Test update  PUT  /:locale/comments/:comment_id/comments/:id
   # Test update  PUT  /:locale/comments/:id
@@ -253,10 +253,10 @@ class CommentsControllerTest < ActionController::TestCase
   def test_update_work_chapter_comment
     create_comments
     @request.session[:user] = @user
-    put :update, :locale => 'en', 
-                 :work_id => @work.id, 
-                 :chapter_id => @chapter1.id, 
-                 :id => @comment2.id, 
+    put :update, :locale => 'en',
+                 :work_id => @work.id,
+                 :chapter_id => @chapter1.id,
+                 :id => @comment2.id,
                  :comment => { :content => 'new content' }
     @comment2.reload
     assert_equal 'new content', @comment2.content
@@ -266,10 +266,10 @@ class CommentsControllerTest < ActionController::TestCase
     create_comments
     @request.env['HTTP_REFERER'] = 'http://www.google.com/'
     @request.session[:user] = @user
-    put :update, :locale => 'en', 
-                 :work_id => @work.id, 
-                 :chapter_id => @chapter1.id, 
-                 :id => @comment1.id, 
+    put :update, :locale => 'en',
+                 :work_id => @work.id,
+                 :chapter_id => @chapter1.id,
+                 :id => @comment1.id,
                  :comment => { :content => 'new content' }
     assert_redirected_to 'http://www.google.com/'
   end

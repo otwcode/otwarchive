@@ -8,7 +8,7 @@ class ChapterTest < ActiveSupport::TestCase
       @work = create_work(:chapters => [@chapter1], :authors => [@pseud1])
     end
     should_belong_to :work
-    should_require_attributes :content
+    should_validate_presence_of :content
     should_ensure_length_in_range :content, (1..500000), :short_message => "can't be blank", :long_message => /cannot be more/
     should_ensure_length_in_range :title, (0..ArchiveConfig.TITLE_MAX), :long_message => /must be less/
     should_ensure_length_in_range :summary, (0..ArchiveConfig.SUMMARY_MAX), :long_message => /must be less/
@@ -30,7 +30,7 @@ class ChapterTest < ActiveSupport::TestCase
         assert @chapter1.is_only_chapter?
       end
     end
-    
+
     context "which is not the first" do
       should_eventually "get the works authors if not otherwise specified" do
         @chapter2 = create_chapter(:work => @work)
@@ -49,7 +49,7 @@ class ChapterTest < ActiveSupport::TestCase
       should "know it is not the only chapter" do
         assert !@chapter1.is_only_chapter?
       end
-      should "set the new chapter to position 2" do        
+      should "set the new chapter to position 2" do
         assert_equal 2, @chapter2.position
       end
       should "be able to change its position" do
@@ -73,7 +73,7 @@ class ChapterTest < ActiveSupport::TestCase
           assert_equal Array(@pseud2), @chapter1.pseuds
         end
         should "not remove the original author from the work" do
-          assert @chapter1.work.pseuds.include?(@pseud1)
+          assert_contains(@chapter1.work.pseuds, @pseud1)
         end
       end
       should "be able to remove the new author" do
@@ -92,13 +92,13 @@ class ChapterTest < ActiveSupport::TestCase
         @comment = create_comment(:commentable => @chapter1)
       end
       should "find that comment" do
-        assert @chapter1.find_all_comments.include?(@comment)
+        assert_contains(@chapter1.find_all_comments, @comment)
       end
       should "count that comment" do
         assert_equal 1, @chapter1.count_all_comments
       end
     end
-    
+
   end
 
   def test_no_leading_spaces_in_title
@@ -107,7 +107,7 @@ class ChapterTest < ActiveSupport::TestCase
     chapter = create_chapter(:title => title_with_space)
     assert_equal title, chapter.title
     assert chapter.valid?
-        
+
     title = "    "
     chapter.title = title
     assert chapter.valid?
@@ -116,4 +116,4 @@ class ChapterTest < ActiveSupport::TestCase
 
 end
 
-  
+

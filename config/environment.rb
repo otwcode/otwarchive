@@ -103,7 +103,7 @@ Rails::Initializer.run do |config|
   config.gem 'chronic'
   config.gem 'mislav-will_paginate', :version => '~> 2.3.4', :lib => 'will_paginate', :source => 'http://gems.github.com'
   config.gem 'hpricot'
-  config.gem 'thoughtbot-shoulda', :lib => 'shoulda/rails', :source => "http://gems.github.com"
+  config.gem 'thoughtbot-shoulda', :lib => 'shoulda/rails', :source => "http://gems.github.com", :version => '~> 2.10.0'
   config.gem 'andand'
 
   # Override the sanitize defaults to allow some extra formatting attributes. 

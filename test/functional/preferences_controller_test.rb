@@ -1,45 +1,45 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class PreferencesControllerTest < ActionController::TestCase  
+class PreferencesControllerTest < ActionController::TestCase
   context "someone else" do
     setup do
       assert @user = create_user
       assert @second_user = create_user
       @request.session[:user] = @second_user
-    end     
+    end
     context "on POST to :edit " do
       setup { get :index, :locale => 'en', :user_id => @user.login }
       should "not display a form" do
-         assert_select "form", false           
+         assert_select "form", false
       end
-      should_redirect_to 'user_url(@second_user)'
-      should_set_the_flash_to /have permission/      
+      should_redirect_to("the second user's path") {user_path(@second_user)}
+      should_set_the_flash_to /have permission/
     end
     context "on PUT to :update" do
       setup do
         put :update, :locale => 'en', :user_id => @user.login, :user => { :preference => { :history_enabled => '0' } }
-      end      
+      end
       should "not make the change" do
         assert @user.preference.history_enabled
       end
-      should_redirect_to 'user_url(@second_user)'
-      should_set_the_flash_to /have permission/      
+      should_redirect_to("the second user's path") {user_path(@second_user)}
+      should_set_the_flash_to /have permission/
     end
   end
 
   context "yourself" do
     setup do
       assert @user = create_user
-      assert @request.session[:user] = @user 
+      assert @request.session[:user] = @user
       get :index, :locale => 'en', :user_id => @user.login
-    end      
+    end
     context "on edit" do
       should_respond_with :success
       should_render_template :index
       should_render_a_form
       should_not_set_the_flash
-      should_assign_to :user, :equals => '@user'
-      should_assign_to :preference, :equals => '@user.preference'
+      should_assign_to(:user) {@user}
+      should_assign_to(:preference) {@user.preference}
     end
     context "on update" do
       setup do

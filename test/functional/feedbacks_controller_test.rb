@@ -28,7 +28,7 @@ class FeedbacksControllerTest < ActionController::TestCase
         put :create, :locale => 'en', :feedback => {:comment=>"a comment"}
       end
       should_set_the_flash_to /thanks/
-      should_redirect_to '"/"'
+      should_redirect_to('the root path') { root_path }
     end
 
   end

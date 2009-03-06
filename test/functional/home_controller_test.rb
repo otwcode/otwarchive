@@ -4,25 +4,29 @@ class HomeControllerTest < ActionController::TestCase
   context "a database with a restricted and an unrestricted work" do
     setup do
       @work1 = create_work
+      @work1.add_default_tags
+      @work1.update_attribute(:posted, true)
       @work2 = create_work(:restricted => true)
+      @work2.add_default_tags
+      @work2.update_attribute(:posted, true)
     end
     context "if you are not logged in" do
       setup do
         get :index, :locale => 'en'
       end
-      should_assign_to :work_count, :equal => 1
+      should_assign_to(:work_count) {1}
     end
     context "when logged in" do
       setup do
         @user = create_user
-        @request.session[:user] = @user 
+        @request.session[:user] = @user
         get :index, :locale => 'en'
       end
-      should_assign_to :work_count, :equal => 2
+      should_assign_to(:work_count) {2}
     end
   end
 
-  # manual testing runthrough of Home Page  
+  # manual testing runthrough of Home Page
   context "a Get" do
     setup do
       get :index, :locale => 'en'

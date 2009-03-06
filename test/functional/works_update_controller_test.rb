@@ -10,14 +10,14 @@ class WorksUpdateControllerTest < ActionController::TestCase
       @work.add_default_tags
       put :update, :locale => 'en', :id => @work.id
     end
-    should_redirect_to 'work_path(@work)'
-    should_set_the_flash_to /have permission/      
+    should_redirect_to("the work's path") {work_path(@work)}
+    should_set_the_flash_to /have permission/
   end
-  
+
   context "when logged in" do
     setup do
       @user = create_user
-      @request.session[:user] = @user 
+      @request.session[:user] = @user
     end
 
     context "when working with someone else's work" do
@@ -27,8 +27,8 @@ class WorksUpdateControllerTest < ActionController::TestCase
         @work.add_default_tags
         put :update, :locale => 'en', :id => @work.id
       end
-      should_redirect_to 'work_path(@work)'
-      should_set_the_flash_to /have permission/      
+      should_redirect_to("the work's path") {work_path(@work)}
+      should_set_the_flash_to /have permission/
     end
 
     context "when working with your own work" do
@@ -37,12 +37,12 @@ class WorksUpdateControllerTest < ActionController::TestCase
         @work.add_default_tags
         put :update, :locale => 'en', :id => @work.id, :work => {:title => "new title"}
       end
-      should_redirect_to 'work_path(@work)'
+      should_redirect_to("the work's path") {work_path(@work)}
       should "update title" do
         assert_equal "new title", Work.find(@work.id).title
       end
     end
   end
 
-    
+
 end

@@ -8,7 +8,7 @@ class WorksDraftsControllerTest < ActionController::TestCase
     setup {@user = create_user}
     context "when not logged in" do
        setup { get :drafts, :locale => 'en', :user_id => @user.login }
-       should_redirect_to 'new_session_path(:restricted => true)'      
+       should_redirect_to("restricted new session") {new_session_url(:restricted => true)}
     end
     context "when not your drafts" do
       setup do
@@ -17,7 +17,7 @@ class WorksDraftsControllerTest < ActionController::TestCase
         get :drafts, :locale => 'en', :user_id => @user.login
       end
       should_set_the_flash_to /your own drafts/
-      should_redirect_to 'user_path(@another_user)'      
+      should_redirect_to("another user's path") {user_path(@another_user)}
     end
     context "when you have none" do
       setup do
@@ -25,7 +25,7 @@ class WorksDraftsControllerTest < ActionController::TestCase
         get :drafts, :locale => 'en', :user_id => @user.login
       end
       should_render_template 'drafts'
-      should_assign_to :works, :equal => '[]'
+      should_assign_to(:works) {[]}
     end
     context "when you have one" do
       setup do
@@ -34,7 +34,7 @@ class WorksDraftsControllerTest < ActionController::TestCase
         get :drafts, :locale => 'en', :user_id => @user.login
       end
       should_render_template 'drafts'
-      should_assign_to :works, :equal => '[@work]'
+      should_assign_to(:works) {[@work]}
     end
     context "when you have an old one" do
       setup do
@@ -43,8 +43,8 @@ class WorksDraftsControllerTest < ActionController::TestCase
         get :drafts, :locale => 'en', :user_id => @user.login
       end
       should_render_template 'drafts'
-      should_assign_to :works, :equal => '[]'
+      should_assign_to(:works) {[]}
     end
   end
-  
+
 end

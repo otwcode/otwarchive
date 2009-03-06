@@ -4,7 +4,7 @@ class PseudTest < ActiveSupport::TestCase
   context "A Pseud" do
     should_belong_to :user
     should_have_many :creatorships, :works, :chapters, :series
-    should_require_attributes :name
+    should_validate_presence_of :name
     should_ensure_length_in_range :name, (1..40), :short_message => /too short/, :long_message => /too long/
     should_allow_values_for :name, "Good pseud", "good_pseud"
     should_not_allow_values_for :name, "bad!pseud", :message => /Pseuds can contain/

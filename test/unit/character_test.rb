@@ -20,7 +20,7 @@ class CharacterTest < ActiveSupport::TestCase
         @character.add_fandom(@fandom2)
       end
       should "have both fandoms" do
-        assert_equal [@fandom, @fandom2].sort, @character.fandoms.sort
+        assert_same_elements [@fandom, @fandom2], @character.fandoms
       end
       context "with one fandom removed" do
         setup do
@@ -60,7 +60,7 @@ class CharacterTest < ActiveSupport::TestCase
           @character.add_pairing(@pairing)
         end
         should "have the pairing as a child" do
-          assert @character.children.include?(@pairing)
+          assert_contains(@character.children, @pairing)
         end
         should "mark the pairing as having characters" do
           assert @pairing.has_characters
@@ -70,7 +70,7 @@ class CharacterTest < ActiveSupport::TestCase
             @character.remove_pairing(@pairing)
           end
           should "not have the pairing as a child" do
-            assert !@character.children.include?(@pairing)
+            assert_does_not_contain(@character.children, @pairing)
           end
           should "mark the pairing as not having characters" do
             assert !@pairing.has_characters
@@ -91,7 +91,7 @@ class CharacterTest < ActiveSupport::TestCase
         @character.reload
       end
       should "have fandoms" do
-        assert_equal [@fandom, @fandom2].sort, @character.fandoms.sort
+        assert_same_elements [@fandom, @fandom2], @character.fandoms
       end
     end
     context "with no fandoms" do

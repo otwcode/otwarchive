@@ -13,20 +13,20 @@ class TagsControllerTest < ActionController::TestCase
     setup do
       get :new, :locale => 'en'
     end
-    should_redirect_to "{:controller => :session, :action => 'new'}"
-    should_set_the_flash_to /log in/  
+    should_redirect_to('new session path') {new_session_path}
+    should_set_the_flash_to /log in/
   end
-  
+
   context "when logged in as a non-tag-wrangler, should not be able to access new tags page" do
     setup do
       @user = create_user
       @request.session[:user] = @user
       get :new, :locale => 'en'
     end
-    should_redirect_to "user_path(@user)"
-    should_set_the_flash_to /permission/  
+    should_redirect_to("the user's path") {user_path(@user)}
+    should_set_the_flash_to /access/
   end
-  
+
   context "when logged in as a tag wrangler" do
     setup do
       @user = create_user
@@ -34,7 +34,6 @@ class TagsControllerTest < ActionController::TestCase
       @request.session[:user] = @user
     end
     context "on GET with :new" do
-      # TODO restricted to tag_wrangler
       setup do
         @user = create_user
         @user.is_tag_wrangler
@@ -54,14 +53,14 @@ class TagsControllerTest < ActionController::TestCase
         @type = "Freeform"
         put :create, :locale => 'en', :tag => {"name" => @name, "type" => @type}
       end
-      should_redirect_to 'edit_tag_path(Tag.find_by_name(@name))'
+      should_redirect_to("edit tag path") { edit_tag_path(Tag.find_by_name(@name))}
       should_set_the_flash_to /successfully created/
       should_assign_to :tag
       should "create the tag" do
         assert Freeform.find_by_name(@name)
       end
     end
-  
+
     context "on POST with :create with error" do
       # TODO restricted to tag_wrangler
       setup do

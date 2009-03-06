@@ -14,14 +14,14 @@ class FreeformTest < ActiveSupport::TestCase
       @tag.add_fandom(Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME))
     end
     should "not include other kinds of tags" do
-       assert !Tag.for_tag_cloud.include?(@tag)
+       assert_does_not_contain(Tag.for_tag_cloud, @tag)
     end
   end
 
   context "tags without a fandom" do
     setup { @tag = create_freeform }
     should "not be included in the cloud" do
-       assert !Tag.for_tag_cloud.include?(@tag)
+       assert_does_not_contain(Tag.for_tag_cloud, @tag)
     end
   end
   context "tags with a fandom" do
@@ -30,7 +30,7 @@ class FreeformTest < ActiveSupport::TestCase
       @tag.add_fandom(Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME))
     end
     should "be included in the cloud" do
-       assert Tag.for_tag_cloud.include?(@tag)
+       assert_contains(Tag.for_tag_cloud, @tag)
     end
     context "which have been merged" do
       setup do
@@ -38,7 +38,7 @@ class FreeformTest < ActiveSupport::TestCase
         @tag.wrangle_merger(merger)
       end
       should "not be included in the cloud" do
-        assert !Tag.for_tag_cloud.include?(@tag)
+        assert_does_not_contain(Tag.for_tag_cloud, @tag)
       end
     end
   end
@@ -50,7 +50,7 @@ class FreeformTest < ActiveSupport::TestCase
       @work.tags << @tag
     end
     should_eventually "not be included in the cloud" do
-       assert !Tag.for_tag_cloud.include?(@tag)
+       assert_does_not_contain(Tag.for_tag_cloud, @tag)
     end
   end
   context "a canonical freeform" do

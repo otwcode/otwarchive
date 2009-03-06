@@ -20,7 +20,7 @@ class AbuseReportsControllerTest < ActionController::TestCase
     context "when logged in" do
       setup do
         @user = create_user
-        @request.session[:user] = @user 
+        @request.session[:user] = @user
         get :new, :locale => 'en'
       end
 
@@ -48,11 +48,11 @@ class AbuseReportsControllerTest < ActionController::TestCase
     context "on success" do
       setup do
         put :create, :locale => 'en', :abuse_report =>
-          {"url"=>ArchiveConfig.APP_URL, 
+          {"url"=>ArchiveConfig.APP_URL,
            "comment"=>"a comment",
            "email"=>"user@google.com"}
       end
-      should_redirect_to '"/"'
+      should_redirect_to('the root path') { '/' }
     end
 
   end

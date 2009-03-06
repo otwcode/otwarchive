@@ -5,9 +5,9 @@ class WorksCreateControllerTest < ActionController::TestCase
 
   context "when not logged in" do
     setup { post :create, :locale => 'en' }
-    should_redirect_to 'new_session_url(:restricted => true)'
+    should_redirect_to("restricted new session") {new_session_url(:restricted => true)}
   end
-  
+
   context "when logged in" do
     setup do
       @user = create_user
@@ -27,7 +27,7 @@ class WorksCreateControllerTest < ActionController::TestCase
         form.submit
       end
       should_set_the_flash_to /canceled/
-      should_redirect_to 'user_path(@user)'
+      should_redirect_to("the users's path") {user_path(@user)}
     end
     context "creating a valid work" do
       setup do
@@ -78,7 +78,7 @@ class WorksCreateControllerTest < ActionController::TestCase
         assert_equal "Graphic Depictions Of Violence, Major Character Death, Underage" , @work.warning_string
         assert_equal Category.find_by_name(ArchiveConfig.CATEGORY_MULTI_TAG_NAME), @work.categories.first
         assert_equal ["Harry Potter", "xover"], @work.fandoms.map(&:name)
-        assert @work.pairings.include?(Pairing.find_by_name("character3/everyone"))
+        assert_contains(@work.pairings, Pairing.find_by_name("character3/everyone"))
         assert_equal Character.find_by_name("character1"), @work.characters.first
         assert_equal ["free tag", "another free tag"], Freeform.all.map(&:name)
         # restricted

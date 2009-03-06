@@ -7,7 +7,7 @@ class WorkTest < ActiveSupport::TestCase
       assert @work = create_work
     end
     should_have_many :chapters, :serial_works, :series, :related_works, :bookmarks, :taggings, :pseuds
-    should_require_attributes :title
+    should_validate_presence_of :title
     should_ensure_length_in_range :title, ArchiveConfig.TITLE_MIN..ArchiveConfig.TITLE_MAX, :short_message => /must be at least/, :long_message => /must be less/
     should_ensure_length_in_range :notes, 0..ArchiveConfig.NOTES_MAX, :long_message => /must be less/
     should_ensure_length_in_range :summary, 0..ArchiveConfig.SUMMARY_MAX, :long_message => /must be less/
@@ -29,7 +29,7 @@ class WorkTest < ActiveSupport::TestCase
         assert @work.visible?
       end
       should "be visible en group" do
-        assert Work.visible.include?(@work)
+        assert_contains(Work.visible, @work)
       end
 
       context "which is restricted" do
@@ -44,10 +44,10 @@ class WorkTest < ActiveSupport::TestCase
           assert @work.visible(create_user)
         end
       should "not be visible en group" do
-        assert !Work.visible.include?(@work)
+        assert_does_not_contain(Work.visible, @work)
       end
       end
-      
+
       context "which is hidden by an admin" do
         setup do
           @work.update_attribute("hidden_by_admin", true)
@@ -72,7 +72,7 @@ class WorkTest < ActiveSupport::TestCase
         @comment = create_comment(:commentable => @work.chapters.first)
       end
       should "find that comment" do
-        assert @work.find_all_comments.include?(@comment)
+        assert_contains(@work.find_all_comments, @comment)
       end
     end
   end
@@ -91,10 +91,10 @@ class WorkTest < ActiveSupport::TestCase
     end
     should "only include works with tags when retrieved with the shared tag id" do
       assert_equal [@tagged_work, @two_tagged], Work.with_all_tag_ids([@tag.id])
-    end      
+    end
     should "only include the work with both tags when retrieved with both tag ids" do
       assert_equal [@two_tagged], Work.with_all_tag_ids([@tag.id, @tag2.id])
-    end      
+    end
   end
 
   context "two works owned by different users" do
@@ -136,7 +136,7 @@ class WorkTest < ActiveSupport::TestCase
         end
       end
     end
-  end 
+  end
 
   context "multiple works with tags" do
     setup do
@@ -144,7 +144,7 @@ class WorkTest < ActiveSupport::TestCase
       @tag = create_freeform
       title = 9
 
-      10.times do 
+      10.times do
         @works << create_work(:title => (title.to_s + title.to_s + title.to_s))
         title = title - 1
       end
@@ -155,19 +155,19 @@ class WorkTest < ActiveSupport::TestCase
       end
 
     end
-    
+
     should "be returned in reverse order by title" do
       @ordered_works = Work.ordered('title', 'ASC')
       assert @ordered_works[0] = @works[9]
       assert @ordered_works[9] = @works[0]
     end
-    
+
     should "be returned in same order by date created" do
       @ordered_works = Work.ordered('created_at', 'ASC')
       assert @ordered_works[0] = @works[0]
       assert @ordered_works[9] = @works[9]
     end
-      
+
     should "be returned in the right order when retrived with with_all_tag_ids" do
       @ordered_works = Work.with_all_tag_ids([@tag.id]).ordered('title', 'ASC')
       assert @ordered_works[0] = @works[9]
@@ -179,14 +179,14 @@ class WorkTest < ActiveSupport::TestCase
       assert @ordered_works[0] = @works[9]
       assert @ordered_works[9] = @works[0]
     end
-      
+
     should "be returned in the right order when retrived with visible and with_all_tag_ids" do
       @ordered_works = Work.visible.with_all_tag_ids([@tag.id]).ordered('title', 'ASC')
       assert @ordered_works[0] = @works[9]
       assert @ordered_works[9] = @works[0]
     end
   end
-  
+
   def test_number_of_chapters
     work = create_work
     assert 1, work.number_of_chapters
@@ -198,7 +198,7 @@ class WorkTest < ActiveSupport::TestCase
     chapter2.destroy
     assert 2, work.number_of_chapters
     assert 2, chapter3.position
-  end 
+  end
   def test_chaptered
     work = create_work(:expected_number_of_chapters => 1)
     assert !work.chaptered?
@@ -234,21 +234,21 @@ class WorkTest < ActiveSupport::TestCase
     assert work.is_wip
     assert !work.is_complete
     assert_equal nil, work.expected_number_of_chapters
-  end 
-  def test_wip_length 
+  end
+  def test_wip_length
     work = create_work(:expected_number_of_chapters => 1)
     assert_equal 1, work.wip_length
     work.expected_number_of_chapters = nil
-    assert_equal "?", work.wip_length  
+    assert_equal "?", work.wip_length
   end
-  
+
   def test_no_leading_spaces_in_title
     title = "should have no leading space"
     title_with_space = ' ' + title
     work = create_work(:title => title_with_space)
     assert_equal title, work.title
     assert work.valid?
-    
+
     title = "    "
     work.title = title
     assert !work.valid?

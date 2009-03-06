@@ -6,7 +6,7 @@ class RoleTest < Test::Unit::TestCase
     user = create_user
     role = create_role
     assert role.users << user
-    assert user.roles.include?(role)
+    assert_contains(user.roles, role)
   end
   # TODO belongs_to :authorizable
 end
