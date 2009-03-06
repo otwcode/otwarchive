@@ -18,7 +18,9 @@
     </ol>
 
     <%- if pair[0] && (pair[1].size > 5 )-%>
-    <p><%= link_to "All".t + ' ' + pair[0].name + "...", medium_path(pair[0]) %></p>
+      <p><%= link_to "All".t + ' ' + pair[0].name + "...", medium_path(pair[0]) %></p>
+    <%- elsif pair[1].size > 5 -%>
+      <p><%= link_to "All ".t + "Uncategorized Fandoms".t + "...", medium_path(pair[0]) %></p>
     <%- end -%>
   </li>
 <%- end -%>
