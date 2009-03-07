@@ -357,8 +357,9 @@ class WorksController < ApplicationController
       @chapter.save || saved = false
       @work.has_required_tags? || saved = false
       if saved 
-        # If the user has changed the published_at date, update the revised_at date. 
-        if defined?(@previous_published_at) && @previous_published_at != @work.published_at
+        # If the work is being posted for the first time, or 
+        # the user has changed the published_at date, update the revised_at date. 
+        if params[:post_button] || defined?(@previous_published_at) && @previous_published_at != @work.published_at
           @work.set_revised_at(@work.published_at)
         end  
         @work.posted = true
