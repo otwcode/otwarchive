@@ -57,7 +57,7 @@ module ValidationHelper
 
   # puts the standard wrapper around the code and declares the LiveValidation object
   def live_validation_wrapper(id, validation_code)
-    valid = "<script>\n"
+    valid = "<script type=\"text/javascript\">\n"
     valid += "var #{live_validation_varname(id)} = new LiveValidation('#{id}', { wait: 500 });\n"
     valid += validation_code
     valid += "</script>\n"

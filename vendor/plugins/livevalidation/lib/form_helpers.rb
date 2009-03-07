@@ -47,7 +47,7 @@ module ActionView
       end
       
       def script_tags(js_code = '')
-         ( js_code.blank? ? '' : "<script>#{js_code}</script>" )
+         ( js_code.blank? ? '' : "<script type=\"text/javascript\">#{js_code}</script>" )
       end
     end
   end
