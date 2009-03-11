@@ -65,8 +65,8 @@ class CommentsControllerTest < ActionController::TestCase
                     :comment => { :content => 'foo', :name => 'Someone', :email => 'newcommenter@someplace.org' }
     end
     @comment = Comment.find_by_email('newcommenter@someplace.org')
-    assert_redirected_to work_path(:locale => ArchiveConfig.DEFAULT_LOCALE, :id => @work.id,
-                                   :show_comments => true, :anchor => "comment#{@comment.id}")
+    assert_redirected_to :controller => :works, :action => :show, :locale => ArchiveConfig.DEFAULT_LOCALE, :id => @work.id,
+                                   :show_comments => true, :anchor => "comment#{@comment.id}"
   end
   # Test create  POST  /:locale/works/:work_id/chapters/:chapter_id/comments
   def test_create_work_chapter_comment
