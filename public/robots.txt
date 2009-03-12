@@ -3,3 +3,35 @@
 # To ban all spiders from the entire site uncomment the next two lines:
 # User-Agent: *
 # Disallow: /
+
+User-agent:	*
+Disallow:	/cs/
+Disallow:	/de/
+Disallow:	/es/
+Disallow:	/fi/
+Disallow:	/fr/
+Disallow:	/id/
+Disallow:	/it/
+Disallow:	/ja/
+Disallow:	/nl/
+Disallow:	/pt/
+Disallow:	/ru/
+Disallow:	/zh/
+Disallow:	/en/works?sort  # /en/works/? if you really want to disallow any works page with a query (like ?page=12)
+Disallow:	/en/works?selected_tags # linked from the People pages
+
+User-agent:	Googlebot
+Disallow:	/cs/
+Disallow:	/de/
+Disallow:	/es/
+Disallow:	/fi/
+Disallow:	/fr/
+Disallow:	/id/
+Disallow:	/it/
+Disallow:	/ja/
+Disallow:	/nl/
+Disallow:	/pt/
+Disallow:	/ru/
+Disallow:	/zh/
+Disallow:	/en/works?*sort # Googlebot is smart and knows pattern matching
+Disallow:	/en/works?selected_tags # linked from the People pages
