@@ -4,12 +4,12 @@ class WorksController < ApplicationController
   cache_sweeper :work_sweeper, :only => [:create, :update, :destroy]
     
   # only registered users and NOT admin should be able to create new works
-  before_filter :users_only, :only => [ :new, :create, :upload_work, :drafts, :post, :preview ]
+  before_filter :users_only, :only => [ :new, :create, :upload_work, :drafts, :preview ]
   # only authors of a work should be able to edit it
-  before_filter :is_author, :only => [ :edit, :update, :destroy, :post, :preview ]
-  before_filter :set_instance_variables, :only => [ :new, :edit, :update, :manage_chapters, :preview, :post, :show, :upload_work ]
+  before_filter :is_author, :only => [ :edit, :update, :destroy, :preview ]
+  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :upload_work ]
   before_filter :update_or_create_reading, :only => [ :show ]
-  before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview, :post]
+  before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview]
   
   # For the auto-complete field in the works form
   def auto_complete_for_pseud_byline
@@ -35,12 +35,8 @@ class WorksController < ApplicationController
   # Sets values for @work, @chapter, @coauthor_results, @pseuds, and @selected_pseuds
   # and @tags[category]
   def set_instance_variables
-    if params[:pseud] && params[:pseud][:byline] && params[:pseud][:byline] != ""
-      # must parse byline first, there could be several pseuds there, some of them with [login] attached
-      valid_pseuds = (Pseud.parse_bylines(params[:pseud][:byline])[:pseuds]).uniq # an array
-    end
-    
-    # TODO: what happens when we don't have author_attributes[:ids]? temporary fix
+
+    # if we don't have author_attributes[:ids], which shouldn't be allowed to happen
     # (this can happen if a user with multiple pseuds decides to unselect *all* of them)
     if params[:work] && params[:work][:author_attributes] && !params[:work][:author_attributes][:ids]
       flash.now[:notice] = "Sorry, you cannot remove yourself entirely as an author of the work!<br /><br />Please use Remove Me As Author or consider orphaning your work instead if you do not wish to be associated with it anymore.".t
@@ -51,36 +47,38 @@ class WorksController < ApplicationController
       params[:work][:author_attributes] = {:ids => [current_user.default_pseud]}
     end
     
-    if valid_pseuds && params[:work][:author_attributes]
-      valid_pseuds.each do |valid_pseud|
-        params[:work][:author_attributes][:ids] << valid_pseud.id rescue nil
-      end
+    # stuff new bylines into author attributes to be parsed by the work model
+    if params[:work] && params[:pseud] && params[:pseud][:byline] && params[:pseud][:byline] != ""
+      params[:work][:author_attributes][:byline] = params[:pseud][:byline]
       params[:pseud][:byline] = ""
     end
+    
+    # stuff co-authors into author attributes too so we won't lose them
     if params[:work] && params[:work][:author_attributes] && params[:work][:author_attributes][:coauthors]
       params[:work][:author_attributes][:ids].concat(params[:work][:author_attributes][:coauthors]).uniq!
     end
+
     begin    
-      if params[:id] # edit, update, preview, post, manage_chapters
+      if params[:id] # edit, update, preview, manage_chapters
         @work = Work.find(params[:id])
         @previous_published_at = @work.published_at
         if params[:work]  # editing, save our changes
           @work.attributes = params[:work]
         end
-      elsif params[:work]
-         @work = Work.new(params[:work])            
+      elsif params[:work] # create
+         @work = Work.new(params[:work])
       else # new
           @work = Work.new
           @work.chapters.build
       end
 
-      @chapters = @work.chapters.in_order
       @serial_works = @work.serial_works
       @tags_by_category = {}
       categories = Tag::VISIBLE
       categories.each {|type| @tags_by_category[type] = type.constantize.canonical}
       
-      @chapter = @chapters.first      
+      @chapters = (@work.chapters.in_order != []) ? @work.chapters.in_order : @work.chapters
+      @chapter = @chapters.first
       if params[:work] && params[:work][:chapter_attributes]
         @chapter.content = params[:work][:chapter_attributes][:content]
         @chapter.title = params[:work][:chapter_attributes][:title]
@@ -265,20 +263,17 @@ class WorksController < ApplicationController
 
   # POST /works
   def create
-    params[:work][:author_attributes][:byline] = params[:pseud][:byline] if params[:pseud]
-    @work = Work.new(params[:work])  
     load_pseuds
-    @series = current_user.series.uniq 
+    @series = current_user.series.uniq
+
     if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
       @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
     elsif params[:edit_button]
       render :action => :new
-    elsif params[:cancel_coauthor_button]
-      render :action => :new
     elsif params[:cancel_button]
       flash[:notice] = "New work posting canceled.".t
       redirect_to current_user    
-    else
+    else # now also treating the cancel_coauthor_button case, bc it should function like a preview, really
       saved = @work.save
       unless saved && @work.has_required_tags? && @work.set_revised_at(@work.published_at)
         unless @work.has_required_tags?
@@ -326,9 +321,9 @@ class WorksController < ApplicationController
     
     if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank? 
       @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
-    elsif params[:preview_button]
+    elsif params[:preview_button] || params[:cancel_coauthor_button]
       @preview_mode = true
-      @chapters = @work.chapters.in_order
+      @chapters = (@work.chapters.in_order != []) ? @work.chapters.in_order : @work.chapters
       if !@chapter
         @chapter = @chapters.first
       end

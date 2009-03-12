@@ -7,6 +7,14 @@
 <select name="work[author_attributes][coauthors][]" multiple="multiple" style="display:none;">
 <%= options_from_collection_for_select(@coauthors, :id, :name, @selected_pseuds) %>  
 </select>
+<%= form.hidden_field :rating_string, :value => "#{@work.rating_string}" %>
+<%= form.hidden_field :warning_string, :value => "#{@work.warning_string}" %>
+<%= form.hidden_field :category_string, :value => "#{@work.category_string}" %>
+<%= form.hidden_field :fandom_string, :value => "#{@work.fandom_string}" %>
+<%= form.hidden_field :pairing_string, :value => "#{@work.pairing_string}" %>
+<%= form.hidden_field :character_string, :value => "#{@work.character_string}" %>
+<%= form.hidden_field :freeform_string, :value => "#{@work.freeform_string}" %>
+
 <%= form.hidden_field :title, :value => "#{@work.title}" %>
 <%= form.hidden_field :summary, :value => "#{@work.summary}" %>
 <%= form.hidden_field :notes, :value => "#{@work.notes}" %>
