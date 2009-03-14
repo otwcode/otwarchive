@@ -50,7 +50,7 @@ class TagsController < ApplicationController
     unless params[:work_id].blank?
       @display_work = Work.find(params[:work_id])
       @display_tags = @display_work.warnings
-      @display_category = @display_tags.first.type.downcase  # Enigel Dec 13 08 quick 'n dirty fix
+      @display_category = @display_tags.first.class.name.downcase  # Enigel Dec 13 08 quick 'n dirty fix
     end
     if request.xml_http_request?
       respond_to do |format|
@@ -167,7 +167,7 @@ class TagsController < ApplicationController
     if @tag.merger_id && params[:keep_synonym].blank?
       @tag.update_attribute("merger_id", "")
     elsif !params[:new_synonym].blank?
-      merger = @tag.type.constantize.find_or_create_by_name(params[:new_synonym])
+      merger = @tag.class.find_or_create_by_name(params[:new_synonym])
       if merger.id == @tag.id # find on new synonym returned the same tag => only capitalization different
         @tag.update_attribute(:name, params[:new_synonym]) # use the new capitalization
       else # new (or possibly old) tag should be canonical

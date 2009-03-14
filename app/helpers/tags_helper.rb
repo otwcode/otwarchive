@@ -1,7 +1,7 @@
 module TagsHelper
 
   def description(tag)
-    tag.name + " (" + tag.type + ")"
+    tag.name + " (" + tag.class.name + ")"
   end
 
   def tag_cloud(tags, classes)
