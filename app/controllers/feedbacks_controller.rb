@@ -22,8 +22,8 @@ class FeedbacksController < ApplicationController
     respond_to do |format|
       if @feedback.save
         AdminMailer.deliver_feedback(@feedback)
-        flash[:notice] = 'Your feedback was sent to the archive team - thanks for your input!'.t
-        format.html { redirect_to '' }
+        flash[:notice] = t('notices.feedbacks.successfully_sent', :default => 'Your feedback was sent to the archive team - thanks for your input!')
+       format.html { redirect_to '' }
       else
         format.html { render :action => "new" }
       end

@@ -21,24 +21,24 @@ class UserMailer < ActionMailer::Base
 
   def signup_notification(user)
      setup_email(user)
-     @subject    += 'Please activate your new account'.t 
+     @subject    += 'Please activate your new account' 
      @body[:url] += "/activate/#{user.activation_code}"  
   end
    
    def activation(user)
      setup_email(user)
-     @subject += 'Your account has been activated.'.t
-   end 
+     @subject += 'Your account has been activated.'
+  end 
    
    def reset_password(user)
      setup_email(user)
-     @subject    += 'Password reset'.t
-   end
+     @subject    += 'Password reset'
+  end
    
    # Sends email to an owner of the top-level commentable when a new comment is created
    def comment_notification(user, comment)
      setup_email(user)
-     @subject += "New comment on %s".t/comment.ultimate_parent.commentable_name
+     @subject += "New comment on " + comment.ultimate_parent.commentable_name
      @body[:commentable] = comment.ultimate_parent     
      @body[:comment] = comment
    end
@@ -47,44 +47,44 @@ class UserMailer < ActionMailer::Base
    # This may be a non-user of the archive
    def comment_reply_notification(old_comment, new_comment)
      setup_comment_email(old_comment)
-     @subject += "Reply to your comment on %s".t/old_comment.ultimate_parent.commentable_name     
+     @subject += "Reply to your comment on " + old_comment.ultimate_parent.commentable_name     
      @body[:comment] = new_comment
    end
    
    # Sends email to the poster of a comment 
    def comment_sent_notification(comment)
      setup_comment_email(comment)
-     @subject += "Comment you sent on %s".t/comment.ultimate_parent.commentable_name
+     @subject += "Comment you sent on " + comment.ultimate_parent.commentable_name
      @body[:comment] = comment
    end
    
    # Sends email when a user is added as a co-author
    def coauthor_notification(user, work)
      setup_email(user)
-     @subject    += "Co-Author Notification".t
-     @body[:work] = work
+     @subject    += "Co-Author Notification"
+    @body[:work] = work
    end 
    
    # Sends emails to authors whose stories were listed as the inspiration of another work
    def related_work_notification(user, related_work)
      setup_email(user)
-     @subject    += "Related work notification".t
-     @body[:related_work] = related_work
+     @subject    += "Related work notification"
+    @body[:related_work] = related_work
      @body[:url] += "/en/related_works/#{related_work.id}"     
    end
    
    # Sends email to authors when a work is edited
    def edit_work_notification(user, work)
      setup_email(user)
-     @subject    += "Your story has been updated".t
-     @body[:work] = work
+     @subject    += "Your story has been updated"
+    @body[:work] = work
    end
    
    # Sends email to authors when a creation is deleted
    def delete_work_notification(user, work)
      setup_email(user)
-     @subject    += "Your story has been deleted".t
-     @body[:work] = work
+     @subject    += "Your story has been deleted"
+    @body[:work] = work
    end
 
    protected

@@ -1,11 +1,11 @@
 <ul class="navigation">
-  <li><%= link_to 'Home'.t, tag_wranglings_path %></li>
+  <li><%= link_to 'Home', tag_wranglings_path %></li>
   <% for categ in Tag::TYPES do %>
   <li><%= link_to_unless_current categ, edit_tag_wrangling_path(categ) %></li>
   <%- end -%>
 </ul>
 
-<h2><%=h 'Wrangle'.t %> <%= @category %> <%=h 'Tags'.t %>
+<h2><%=h 'Wrangle' %> <%= @category %> <%=h 'Tags' %>
 <% if !@tags.blank? %>
   <%- if @fandom %>
       in <%= @fandom.name %>
@@ -18,14 +18,14 @@
 <%- if @fandoms %>
   <%- form_tag tag_wranglings_path, :id => 'wrangle-select-fandom' do -%>
     <p><%= hidden_field_tag(:id, @category) %>
-    <p><%=h 'Select Fandom:'.t %> <%= select("fandom", 'fandom_id', @fandoms.collect {|f| [ f.name, f.id ] }, {:selected => @fandom ? @fandom.id : nil}) %></p>
-    <p class="submit"><%= submit_tag "Wrangle".t %></p>
+    <p><%=h 'Select Fandom:' %> <%= select("fandom", 'fandom_id', @fandoms.collect {|f| [ f.name, f.id ] }, {:selected => @fandom ? @fandom.id : nil}) %></p>
+    <p class="submit"><%= submit_tag "Wrangle" %></p>
   <%- end -%>
 <%- elsif @medias %>
   <%- form_tag tag_wranglings_path, :id => 'wrangle-select-media' do -%>
     <p><%= hidden_field_tag(:id, @category) %></p>
-    <p><%=h 'Select Media:'.t %> <%= select("media", 'media_id', @medias.collect {|f| [ f.name, f.id ] }, {:selected => @media ? @media.id : nil}) %></p>
-    <p class="submit"><%= submit_tag "Wrangle".t %></p>
+    <p><%=h 'Select Media:' %> <%= select("media", 'media_id', @medias.collect {|f| [ f.name, f.id ] }, {:selected => @media ? @media.id : nil}) %></p>
+    <p class="submit"><%= submit_tag "Wrangle" %></p>
   <%- end -%>
 <%- end -%>
 
@@ -42,19 +42,19 @@
     <%- end -%>
     
     <table>
-	<caption><%=h 'Tags to be wrangled'.t %></caption>
+	<caption><%=h 'Tags to be wrangled' %></caption>
 	<thead>
 	<tr>
-        <th scope="col"><%=h 'Tag'.t %></th>
-        <th scope="col"><%=h 'Count'.t %></th>
+        <th scope="col"><%=h 'Tag' %></th>
+        <th scope="col"><%=h 'Count' %></th>
       <%- if logged_in_as_admin? %>
-        <th scope="col"><%=h 'Banned'.t %></th>
+        <th scope="col"><%=h 'Banned' %></th>
       <%- end -%>
       <%- if @category == Rating::NAME %>
-        <th scope="col"><%=h 'Adult'.t %></th>
+        <th scope="col"><%=h 'Adult' %></th>
       <%- end -%>
-        <th scope="col"><%=h 'Canonical'.t %></th>
-        <th scope="col"><%=h 'Synonym'.t %></th>
+        <th scope="col"><%=h 'Canonical' %></th>
+        <th scope="col"><%=h 'Synonym' %></th>
       </tr>
 	</thead>
  <tbody>
@@ -88,9 +88,9 @@
     </tbody>
 </table>
     <%- if logged_in_as_admin? && @category == Banned::NAME %>
-      <p class="message"><%=h "Note, you cannot mass wrangle tags from this page, as you must individually wrangle which category it should be moved into when unbanned".t %></p>
+      <p class="message"><%=h "Note, you cannot mass wrangle tags from this page, as you must individually wrangle which category it should be moved into when unbanned" %></p>
     <%- elsif !@tags.blank? -%>
-      <p class="submit"><%= submit_tag "Update all tags".t %></p>
+      <p class="submit"><%= submit_tag "Update all tags" %></p>
     <%- end -%>
     
   <%- end -%>

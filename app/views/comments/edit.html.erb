@@ -1,10 +1,10 @@
-<h1><%=h 'Editing comment'.t %></h1>
+<h1><%=h t('comments.edit.editing', :default => 'Editing comment') %></h1>
 
 <%= error_messages_for :comment %>
 
-<%= render :partial => 'comments/comment_form', :locals => {:comment => @comment, :commentable => @comment.commentable, :button_name => 'Update'.t}%>
+<%= render :partial => 'comments/comment_form', :locals => {:comment => @comment, :commentable => @comment.commentable, :button_name => t('forms.update', :default => "Update")}%>
 
 <ul class="navigation">
-	<li><%= link_to 'Show'.t, @comment %></li>
-	<li><%= link_to 'Back'.t, @comment.commentable %></li>
+	<li><%= link_to t('links.show', :default => 'Show'), @comment %></li>
+	<li><%= link_to t('links.back', :default => 'Back'), @comment.commentable %></li>
 </ul>

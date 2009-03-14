@@ -3,7 +3,7 @@
   <head>
     <meta name="generator" content="HTML Tidy, see www.w3.org" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title><%=h ArchiveConfig.APP_NAME .t %> 
+	<title><%=h ArchiveConfig.APP_NAME  %> 
 		<% unless ArchiveConfig.REVISION.blank? -%>(rev. <%= ArchiveConfig.REVISION %>)<% end %>&gt;&gt;<%= controller.controller_name %>
         <%= controller.action_name %>
     </title>
@@ -13,7 +13,7 @@
   </head>
 
   <body onload="hideFormFields(); initSelect('languages_menu')" >
-  <ul id="skiplinks"><li><a href="#main"><%=h 'Main Content'.t %></a></li><li><a href="#signup"><%=h 'Sign Up'.t %></a></li></ul>
+  <ul id="skiplinks"><li><a href="#main"><%=h t('layout.home.main_content', :default => 'Main Content') %></a></li><li><a href="#signup"><%=h t('layout.home.sign_up', :default => 'Sign Up') %></a></li></ul>
 	
   <!-- BEGIN main -->
 	  <div id="main" class="home">

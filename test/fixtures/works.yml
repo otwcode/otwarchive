@@ -10,7 +10,7 @@ works_014:
   id: "14"
   revised_at: 1950-12-07 00:00:00
   summary: "A cautionary tale: wherein the Lord is pissed, Lot is righteous, and I do some smiting. "
-  language_id: "1819"
+  language_id: "1"
   minor_version: "1"
   published_at: 1950-12-07 00:00:00
   restricted: "0"
@@ -82,7 +82,7 @@ works_006:
   id: "6"
   revised_at: 2008-12-05 15:59:15
   summary: The true story of how I was too hot for MIT to handle.
-  language_id: "1819"
+  language_id: "1"
   minor_version: "1"
   published_at: 2008-12-05 00:00:00
   restricted: "0"
@@ -100,9 +100,8 @@ works_007:
   id: "7"
   revised_at: 2008-12-07 00:32:20
   summary: |
-    The Marquis of Saluzzo, overborne by the entreaties of his vassals, consents to take a wife, but, being minded to please himself in the choice of her, takes a husbandman's daughter. He has two children by her, both of whom he makes her believe that he has put to death. Afterward, feigning to be tired of her, and to have taken another wife, he turns her out of doors in her shift, and brings his daughter into the house in guise of his bride; but, finding her patient under it all, he brings her home again, and shews her her children, now grown up, and honours her, and causes her to be honoured, as Marchioness.
-
-  language_id: "1819"
+    The Marquis of Saluzzo, overborne by the entreaties of his vassals, consents to take a wife, but, being minded to please himself in the choice of her, takes a husbandman's daughter. He has two children by her, both of whom he makes her believe that he has put to death. Afterward, feigning to be tired of her, and to have taken another wife, he turns her out of doors in her shift, and brings his daughter into the house in guise of his bride; but, finding her patient under it all, he brings her home again, and shews her her children, now grown up, and honours her, and causes her to be honoured, as Marchioness.
+  language_id: "1"
   minor_version: "5"
   published_at: 2008-12-07 00:00:00
   restricted: "0"
@@ -120,7 +119,7 @@ works_008:
   id: "8"
   revised_at: 2008-12-07 00:52:02
   summary: Ricciardo Manardi is found by Messer Lizio da Valbona with his daughter, whom he marries, and remains at peace with her father.
-  language_id: "1819"
+  language_id: "1"
   minor_version: "1"
   published_at: 2008-12-07 00:00:00
   restricted: "0"
@@ -138,7 +137,7 @@ works_009:
   id: "9"
   revised_at: 2008-12-07 00:55:59
   summary: The tale of Griselda, a young woman whose husband tests her loyalty in a series of bizarre torments that recall the Biblical book of Job.
-  language_id: "1819"
+  language_id: "1"
   minor_version: "2"
   published_at: 2008-12-07 00:00:00
   restricted: "0"
@@ -156,7 +155,7 @@ works_010:
   id: "10"
   revised_at: 2008-12-07 01:19:50
   summary: <em>'Exclusive, one-off reunion concert,' Sam says smugly. 'Chance of a lifetime.'</em>
-  language_id: "1819"
+  language_id: "1"
   minor_version: "1"
   published_at: 2008-12-07 00:00:00
   restricted: "0"
@@ -174,7 +173,7 @@ works_011:
   id: "11"
   revised_at: 2008-12-07 01:24:00
   summary: "The Dance Marathon is a Stars Hollow tradition. "
-  language_id: "1819"
+  language_id: "1"
   minor_version: "1"
   published_at: 2008-12-07 00:00:00
   restricted: "0"
@@ -192,7 +191,7 @@ works_012:
   id: "12"
   revised_at: 2008-12-07 01:26:41
   summary: <em>He likes it when Jensen pays attention.</em>
-  language_id: "1819"
+  language_id: "1"
   minor_version: "1"
   published_at: 2008-12-07 00:00:00
   restricted: "0"
@@ -228,7 +227,7 @@ works_013:
   id: "13"
   revised_at: 2008-12-07 01:34:39
   summary: After the fact, I realise what a big mistake I made.
-  language_id: "1819"
+  language_id: "1"
   minor_version: "1"
   published_at: 2008-12-07 00:00:00
   restricted: "0"
@@ -246,7 +245,7 @@ works_002:
   id: "2"
   revised_at: 
   summary: Summary of test work with only one chapter
-  language_id: 
+  language_id: "1" 
   minor_version: "1"
   published_at: 
   restricted: "0"

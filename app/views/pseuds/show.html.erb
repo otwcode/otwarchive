@@ -1,17 +1,17 @@
 <dl>
-	<dt><%=h 'User:'.t %></dt>
+	<dt><%=h 'User:' %></dt>
   	<dd><%=h @pseud.user.login %></dd>
-	<dt><%=h 'Name:'.t %></dt>
+	<dt><%=h 'Name:' %></dt>
   	<dd><%=h @pseud.name %></dd>
-	<dt><%=h 'Description:'.t %></dt>
+	<dt><%=h 'Description:' %></dt>
   	<dd><%=h @pseud.description %></dd>
-	<dt><%=h 'Is default:'.t %></dt>
+	<dt><%=h 'Is default:' %></dt>
   	<dd><%=h @pseud.is_default %></dd>
 </dl>
 	
 <ul class="navigation">
 	<% if @user == current_user -%>
-		<li><%= link_to 'Edit'.t, [:edit, @user, @pseud] %></li>
+		<li><%= link_to 'Edit', [:edit, @user, @pseud] %></li>
 	<% end -%>
-	<li><%= link_to 'Back'.t, user_pseuds_path(@user) %></li>
+	<li><%= link_to 'Back', user_pseuds_path(@user) %></li>
 </ul>

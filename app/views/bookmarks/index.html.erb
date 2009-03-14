@@ -1,9 +1,9 @@
-<h1><%=h 'Listing bookmarks'.t %></h1>
+<h1><%=h t('bookmarks.index.listing', :default => 'Listing bookmarks') %></h1>
 
 <!-- BEGIN bookmark link -->
 <% if @user && current_user && current_user == @user %>
 <ul class="navigation">
-<li><%= link_to "Add a new bookmark".t, new_external_work_path %></li>
+<li><%= link_to t('bookmarks.index.add_new', :default => "Add a new bookmark"), new_external_work_path %></li>
 </ul>
 <% end %> 
 <!-- END bookmark link -->
@@ -13,5 +13,5 @@
 </ul>
 
 <div class="pagination">
-	  <%= will_paginate @bookmarks, :prev_label =>  "&laquo; Previous".t,:next_label => "Next &raquo;".t %>
+	  <%= will_paginate @bookmarks, :prev_label =>  "&laquo; " + t('pagination.previous', :default => "Previous"), :next_label => t('pagination.next', :default => "Next") + " &raquo;" %>
 </div>

@@ -1,18 +1,18 @@
-<h2><%=h 'New tag'.t %></h2>
+<h2><%=h 'New tag' %></h2>
 
 <%= error_messages_for :tag %>
 
-<p><%=h "Once you have created the tag, the attributes that are particular for that tag category will be available for editing".t %></p>
+<p><%=h "Once you have created the tag, the attributes that are particular for that tag category will be available for editing" %></p>
 
 <%- form_for :tag, @tag, :url => { :action => "create" }  do |f| -%>
   <dl>
-    <dt><%= f.label :name, 'Name'.t %></dt>
+    <dt><%= f.label :name, 'Name' %></dt>
     <dd><%= f.text_field :name %></dd>
 
-    <dt><%= f.label :canonical, 'Canonical'.t %></dt>
+    <dt><%= f.label :canonical, 'Canonical' %></dt>
     <dd><%= f.check_box :canonical %></dd>
 
-    <dt><%=h 'Category'.t %></dt>
+    <dt><%=h 'Category' %></dt>
     <dd>
       <%- if logged_in_as_admin? -%>
         <%- types = Tag::TYPES  -%>

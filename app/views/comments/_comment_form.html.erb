@@ -7,7 +7,7 @@
 	<%- form_for [commentable, comment] do |f| -%>
 	  <dl>
 		<%- if logged_in? -%>
-	    <dt><%=h "Name: ".t -%></dt>
+	    <dt><%=h t('comments.new.form_name', :default => "Name: ") -%></dt>
       <dd>
 	      <% if current_user.pseuds.count > 1 %>
 	        <%= f.collection_select :pseud_id, current_user.pseuds, :id, :name %>
@@ -17,15 +17,15 @@
 	      <% end %>
 	    </dd>
 	  <% else %>  
-	    <dt><%= f.label :name, "Name: ".t %></dt>
+	    <dt><%= f.label :name, t('comments.new.form_name', :default => "Name: ") %></dt>
       <dd><%= f.text_field :name, :live => true -%></dd>
       
-	    <dt><%= f.label :email, "Email: ".t %></dt>
+	    <dt><%= f.label :email, t('comments.new.form_email', :default => "Email: ") %></dt>
 		  <dd><%= f.text_field :email, :live => true -%></dd>
 	    <dd><%= f.hidden_field :ip_address, :value => "#{request.remote_addr}" -%></dd>     
 	  <% end %>
 	       
-      <dt><%= f.label :content, "Comment: ".t %></dt>
+      <dt><%= f.label :content, t('comments.new.form_comment', :default => "Comment: ") %></dt>
       <dd><%= f.text_area :content, :live => true %></dd>	    
       <dd>
         <input type="hidden" id="controller_name" name="controller_name" value="<%= @controller_name ||= @controller.controller_name %>" />

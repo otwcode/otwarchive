@@ -1,9 +1,0 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-first_simple:
-  id: 1
-  name: first
-  name_es: primer
-  name_he: זהו השם הראשון
-  description: This is a description of the first simple
-  description_es: Esta es una descripcion del primer simple
-  description_he: זהו התיאור הראשון

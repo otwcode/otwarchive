@@ -1,5 +1,5 @@
-<h3><%=h "Are you sure you want to delete this comment?".t %></h3>
+<h3><%=h t('comments.delete.are_you_sure', :default => "Are you sure you want to delete this comment?") %></h3>
 
-(<%= link_to 'Yes, delete!'.t, comment, :method => :delete %>)
+(<%= link_to t('comments.delete.yes', :default => 'Yes, delete!'), comment, :method => :delete %>)
 
 <%= cancel_delete_comment_link(comment) %>

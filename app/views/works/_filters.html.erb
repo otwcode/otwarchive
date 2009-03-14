@@ -1,6 +1,6 @@
 <%- unless @filters.blank? && (@pseuds.size < 1 || (@user && @pseuds.size < 2)) -%>
 <%- form_tag(works_path, :class => 'work-filters', :method => :get) do -%>
-  <%- field_set_tag 'Filter these results: '.t do -%>
+  <%- field_set_tag 'Filter these results: ' do -%>
  		<dl class="filters">
 			<%- unless (@pseuds.size < 1 || (@user && @pseuds.size < 2)) -%>
         <dt onclick='toggleFilters("filter-pseuds")'>
@@ -49,7 +49,7 @@
   		<%= hidden_field_tag("fandom_id", @fandom.id) if @fandom %>
   		<%= hidden_field_tag("user_id", @user.login) if @user %>
 		</p>
-		<p class="submit"><%= submit_tag "Filter Works".t %></p>
+		<p class="submit"><%= submit_tag "Filter Works" %></p>
   <%- end -%>
   <%- end -%>
 <%- end -%>

@@ -15,20 +15,20 @@ module TranslationHelper
 
     case distance_in_minutes
     when 0..1
-      return (distance_in_minutes==0) ? 'less than 1 minute'.t : '1 minute'.t unless include_seconds
+      return (distance_in_minutes==0) ? 'less than 1 minute' : '1 minute' unless include_seconds
       case distance_in_seconds
-      when 0..5 then "less than %d seconds".t / 5
-      when 6..10 then "less than %d seconds".t / 10
-      when 11..20 then "less than %d seconds".t / 20
-      when 21..40 then "half a minute".t
-      when 41..59 then "less than a minute".t
-      else "1 minute".t
+      when 0..5 then "less than 5 seconds"
+      when 6..10 then "less than 10 seconds"
+      when 11..20 then "less than 20 seconds"
+      when 21..40 then "half a minute"
+      when 41..59 then "less than a minute"
+      else "1 minute"
       end
-    when 2..45 then "%d minutes".t / distance_in_minutes
-    when 46..90 then "1 hour".t
-    when 90..1440 then "%d hours".t / (distance_in_minutes.to_f / 60.0).round
-    when 1441..2880 then "1 day".t
-    else "%d days".t / (distance_in_minutes / 1440).round
+    when 2..45 then "#{distance_in_minutes} minutes"
+    when 46..90 then "1 hour"
+    when 90..1440 then "#{(distance_in_minutes.to_f / 60.0).round} hours" 
+    when 1441..2880 then "1 day"
+    else "#{(distance_in_minutes / 1440).round} days"
     end
   end
 
@@ -42,20 +42,20 @@ def time_ago_in_words(from_time, include_seconds = false)
 
     case distance_in_minutes
     when 0..1
-      return (distance_in_minutes==0) ? 'less than 1 minute ago'.t : '1 minute ago'.t unless include_seconds
+      return (distance_in_minutes==0) ? 'less than 1 minute ago' : '1 minute ago' unless include_seconds
       case distance_in_seconds
-      when 0..5 then "less than %d seconds ago".t / 5
-      when 6..10 then "less than %d seconds ago".t / 10
-      when 11..20 then "less than %d seconds ago".t / 20
-      when 21..40 then "half a minute ago".t
-      when 41..59 then "less than a minute ago".t
-      else "1 minute ago".t
+      when 0..5 then "less than 5 seconds ago"
+      when 6..10 then "less than 10 seconds ago"
+      when 11..20 then "less than 20 seconds ago"
+      when 21..40 then "half a minute ago"
+      when 41..59 then "less than a minute ago"
+      else "1 minute ago"
       end
-    when 2..45 then "%d minutes ago".t / distance_in_minutes
-    when 46..90 then "1 hour ago".t
-    when 90..1440 then "%d hours ago".t / (distance_in_minutes.to_f / 60.0).round
-    when 1441..2880 then "1 day ago".t
-    else "%d days ago".t / (distance_in_minutes / 1440).round
+    when 2..45 then "#{distance_in_minutes} minutes ago" 
+    when 46..90 then "1 hour ago"
+    when 90..1440 then "#{(distance_in_minutes.to_f / 60.0).round} hours ago"
+    when 1441..2880 then "1 day ago"
+    else "#{(distance_in_minutes / 1440).round} days ago"
     end
   end
 

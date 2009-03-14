@@ -11,16 +11,16 @@ class UsersController < ApplicationController
   
   def check_account_creation_status
     if is_registered_user?
-      flash[:error] = "You are already logged in!".t
+      flash[:error] = t('errors.users.already_logged_in', :default => "You are already logged in!")
       redirect_to root_path
     end
     return true if ArchiveConfig.ACCOUNT_CREATION_ENABLED 
     @invitation = Invitation.find_by_token(params[:invitation_token])
     if !@invitation
-      flash[:error] = "Account creation is suspended at the moment. Please check back with us later.".t
+      flash[:error] = t('errors.users.creation_suspended', :default => "Account creation is suspended at the moment. Please check back with us later.")
       redirect_to login_path 
     elsif @invitation.used?
-      flash[:error] = "This invitation has already been used to create an account, sorry!".t
+      flash[:error] = t('errors.users.invitation_used', :default => "This invitation has already been used to create an account, sorry!")
       redirect_to login_path
     end
   end
@@ -39,16 +39,21 @@ class UsersController < ApplicationController
   # GET /users/1.xml
   def show
     @user = User.find_by_login(params[:id])
-    if params[:open_id_complete] then
-      begin
-        open_id_authentication(params[:open_id_complete])
-      rescue
-        render :action => "edit"
+    if @user
+      if params[:open_id_complete] then
+        begin
+          open_id_authentication(params[:open_id_complete])
+        rescue
+          render :action => "edit"
+        end
       end
+      @works = Work.owned_by_conditions(@user).visible.ordered('revised_at', 'DESC').limited(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+      @series = @user.series.find(:all, :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'series.updated_at DESC')
+      @bookmarks = @user.bookmarks.visible(:limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'bookmarks.updated_at DESC')  
+    else
+      flash[:error] = t('errors.users.not_found', :default => "Sorry, there's no user by that name.")
+      redirect_to '/'  
     end
-    @works = Work.owned_by_conditions(@user).visible.ordered('revised_at', 'DESC').limited(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
-    @series = @user.series.find(:all, :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'series.updated_at DESC')
-    @bookmarks = @user.bookmarks.visible(:limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'bookmarks.updated_at DESC')  
   end
   
   # GET /users/new
@@ -68,7 +73,7 @@ class UsersController < ApplicationController
   # POST /users.xml
   def create
 	  @hide_dashboard = true
-    if params[:cancel_create_account] == "Cancel"
+    if params[:cancel_create_account]
       redirect_to root_path
     else
       @user = User.new(params[:user]) 
@@ -80,7 +85,8 @@ class UsersController < ApplicationController
         @user.invitation = @invitation
       end
       if @user.save
-        flash[:notice] = 'during testing you can activate via'.t + ' <a href=' + activate_path(@user.activation_code) + '>' + 'your activation url'.t + '</a>.' if ENV['RAILS_ENV'] == 'development'
+        flash[:notice] = t('notices.users.development_activation', :default => "During testing you can activate via <a href='{{activation_url}}'>your activation url</a>.",
+                            :activation_url => activate_path(@user.activation_code)) if ENV['RAILS_ENV'] == 'development'
         render :partial => "confirmation", :layout => "application"
       else
         render :action => "new"
@@ -90,18 +96,18 @@ class UsersController < ApplicationController
   
   def activate
     if params[:id].blank?
-      flash[:error] = "Your activation key is missing.".t
-      redirect_to ''
+      flash[:error] = t('errors.users.activation_key_missing', :default => "Your activation key is missing.")
+     redirect_to ''
     else
       @user = User.find_by_activation_code(params[:id])
       if @user
         @user.activate
         self.current_user = @user
-        flash[:notice] = "Signup complete! This is your public profile.".t
-        redirect_to(@user)
+        flash[:notice] = t('notices.users.signup_complete', :default => "Signup complete! This is your public profile.")
+       redirect_to(@user)
       else
-        flash[:error] = "Your activation key is invalid. Perhaps it has expired.".t
-        redirect_to '' 
+        flash[:error] = t('errors.users.activation_key_invalid', :default => "Your activation key is invalid. Perhaps it has expired.")
+       redirect_to '' 
       end
     end
   end
@@ -124,15 +130,15 @@ class UsersController < ApplicationController
       if @user.recently_reset? && params[:change_password]
         successful_update 
       elsif !params[:user][:password].blank? && !@user.authenticated?(params[:user][:password], @user.salt) && !@user.authenticated?(params[:check][:password_check], @user.salt)
-        flash[:error] = "Your old password was incorrect".t
-        unsuccessful_update
+        flash[:error] = t('errors.users.old_password_incorrect', :default => "Your old password was incorrect")
+       unsuccessful_update
       elsif params[:user][:identity_url] != @user.identity_url && !params[:user][:identity_url].blank?
         open_id_authentication(params[:user][:identity_url])
       else
         successful_update
       end      
    rescue
-      flash[:error] = "Your update failed; please try again.".t
+      flash[:error] = t('errors.users.update_failed', :default => "Your update failed; please try again.")
       render :action => "edit"
    end
   end
@@ -148,8 +154,8 @@ class UsersController < ApplicationController
         @user.wipeout_unposted_works
       end
       @user.destroy
-      flash[:notice] = 'You have successfully deleted your account.'.t
-      redirect_to(delete_confirmation_path)
+      flash[:notice] = t('notices.users.successfully_deleted', :default => 'You have successfully deleted your account.')
+     redirect_to(delete_confirmation_path)
     elsif params[:coauthor].blank? && params[:sole_author].blank?
       @sole_authored_works = @user.sole_authored_works
       @coauthored_works = @user.coauthored_works
@@ -158,8 +164,8 @@ class UsersController < ApplicationController
       @sole_authored_works = @user.sole_authored_works
       @coauthored_works = @user.coauthored_works
       if params[:cancel_button]
-        flash[:notice] = "Account deletion canceled.".t
-        redirect_to user_profile_path(@user)
+        flash[:notice] = t('notices.users.deletion_canceled', :default => "Account deletion canceled.")
+       redirect_to user_profile_path(@user)
       else
         # Orphans co-authored works, keeps the user's pseud on the orphan account
         if params[:coauthor] == 'keep_pseud'
@@ -210,10 +216,10 @@ class UsersController < ApplicationController
             @user.wipeout_unposted_works
           end
           @user.destroy
-          flash[:notice] = 'You have successfully deleted your account.'.t
+          flash[:notice] = t('notices.users.successfully_deleted', :default => 'You have successfully deleted your account.')
           redirect_to(delete_confirmation_path)
         else
-          flash[:error] = "Sorry, something went wrong! Please try again.".t
+          flash[:error] = t('errors.users.deletion_failed', :default => "Sorry, something went wrong! Please try again.")
           redirect_to(@user)      
         end
       end
@@ -228,8 +234,8 @@ class UsersController < ApplicationController
     def successful_update
       params[:user][:recently_reset] = false
       @user.update_attributes!(params[:user]) 
-      flash[:notice] = 'Your profile has been successfully updated.'.t
-      redirect_to(user_profile_path(@user)) 
+      flash[:notice] = t('notices.users.profile_updated', :default => 'Your profile has been successfully updated.')
+     redirect_to(user_profile_path(@user)) 
     end
     
     def unsuccessful_update
@@ -240,8 +246,8 @@ class UsersController < ApplicationController
       authenticate_with_open_id(openid_url) do |result, identity_url, registration|
         if result.successful?
           @user.update_attribute(:identity_url, identity_url) 
-          flash[:notice] = 'Your profile has been successfully updated.'.t
-          redirect_to(user_profile_path(@user)) 
+          flash[:notice] = t('notices.users.profile_updated', :default => 'Your profile has been successfully updated.')
+         redirect_to(user_profile_path(@user)) 
         else
           flash[:error] = result.message
           raise

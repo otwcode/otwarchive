@@ -7,7 +7,7 @@ class SeriesController < ApplicationController
   def is_author
     @series = Series.find(params[:id])
     unless current_user.is_a?(User) && current_user.is_author_of?(@series)
-      flash[:error] = "Sorry, but you don't have permission to make edits.".t
+      flash[:error] = t('errors.no_permission_to_edit', :default => "Sorry, but you don't have permission to make edits.")
       redirect_to(@series)     
     end
   end
@@ -18,8 +18,6 @@ class SeriesController < ApplicationController
     can_view_hidden = is_admin? || (current_user.is_a?(User) && current_user.is_author_of?(@series))
 	  access_denied if (@series.hidden_by_admin? && !can_view_hidden)
   end
-
-  
   
   # GET /series
   # GET /series.xml
@@ -35,7 +33,6 @@ class SeriesController < ApplicationController
     else
       @series = Series.find(:all, :order => 'series.created_at DESC').paginate(:page => params[:page])
     end
-
   end
 
   # GET /series/1
@@ -49,11 +46,6 @@ class SeriesController < ApplicationController
   # GET /series/new.xml
   def new
     @series = Series.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @series }
-    end
   end
 
   # GET /series/1/edit
@@ -75,16 +67,11 @@ class SeriesController < ApplicationController
   # POST /series.xml
   def create
     @series = Series.new(params[:series])
-
-    respond_to do |format|
-      if @series.save
-        flash[:notice] = 'Series was successfully created.'.t
-        format.html { redirect_to(@series) }
-        format.xml  { render :xml => @series, :status => :created, :location => @series }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @series.errors, :status => :unprocessable_entity }
-      end
+    if @series.save
+      flash[:notice] = t('notices.series.successfully_created', :default => 'Series was successfully created.')
+      redirect_to(@series)
+    else
+      render :action => "new"
     end
   end
 
@@ -94,7 +81,7 @@ class SeriesController < ApplicationController
     @series = Series.find(params[:id])
     
     unless params[:series][:author_attributes][:ids]
-      flash[:error] = "Sorry, you cannot remove yourself entirely as an author of a series right now.".t
+      flash[:error] = t('errors.series.author_removal_failed', :default => "Sorry, you cannot remove yourself entirely as an author of a series right now.")
       redirect_to edit_series_path(@series) and return
     end
     
@@ -106,15 +93,11 @@ class SeriesController < ApplicationController
       params[:pseud][:byline] = ""
     end
 
-    respond_to do |format|
-      if @series.update_attributes(params[:series])
-        flash[:notice] = 'Series was successfully updated.'.t
-        format.html { redirect_to(@series) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @series.errors, :status => :unprocessable_entity }
-      end
+    if @series.update_attributes(params[:series])
+      flash[:notice] = t('notices.series.successfully_updated', :default => 'Series was successfully updated.')
+      redirect_to(@series)
+    else
+      render :action => "edit"
     end
   end
   
@@ -122,7 +105,7 @@ class SeriesController < ApplicationController
     if params[:serial_works]
       @series = Series.find(params[:id])
       @series.reorder_works(params[:serial_works]) 
-      flash[:notice] = 'Series order has been successfully updated.'.t
+      flash[:notice] = t('notices.series.order_updated', :default => 'Series order has been successfully updated.')
       redirect_to(@series)
     else
       params[:sortable_series_list].each_with_index do |id, position|
@@ -136,11 +119,12 @@ class SeriesController < ApplicationController
   # DELETE /series/1.xml
   def destroy
     @series = Series.find(params[:id])
-    @series.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(current_user) }
-      format.xml  { head :ok }
+    if @series.destroy
+      flash[:notice] = t('notices.series.successfully_deleted', :default => 'Series was successfully deleted.')
+      redirect_to(current_user)
+    else
+      flash[:error] = t('errors.series.delete_failed', :default => "Sorry, we couldn't delete the series. Please try again.")
+      redirect_to(@series)
     end
   end
 end

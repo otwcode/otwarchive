@@ -1,16 +1,16 @@
 <h2><%= search_header @works, @query %></h2>
 
-<% paginated_section @works, {:previous_label => '&laquo; Previous'.t, :next_label => 'Next &raquo;'.t} do %>
+<% paginated_section @works, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
 
   <dl class="navigation">
-    <dt><%=h "Sort by".t -%></dt> 
+    <dt><%=h "Sort by" -%></dt> 
     <%- unless @query.blank? -%>
-    <dd><%= sort_link 'Relevance'.t %></dd>
+    <dd><%= sort_link 'Relevance' %></dd>
     <%- end -%>
-    <dd><%= sort_link 'Author'.t, :author -%></dd>
-    <dd><%= sort_link 'Title'.t, :title -%></dd>
-    <dd><%= sort_link 'Date'.t, :date -%></dd>
-    <dd><%= sort_link 'Word Count'.t, :word_count -%></dd>
+    <dd><%= sort_link 'Author', :author -%></dd>
+    <dd><%= sort_link 'Title', :title -%></dd>
+    <dd><%= sort_link 'Date', :date -%></dd>
+    <dd><%= sort_link 'Word Count', :word_count -%></dd>
   </dl>
 
   <%= render :partial => 'filters' %>

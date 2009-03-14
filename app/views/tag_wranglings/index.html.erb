@@ -1,6 +1,6 @@
-<h2><%=h 'Tag Wrangling'.t %></h2>
+<h2><%=h 'Tag Wrangling' %></h2>
 
-<h3><%=h 'Mass Assign to Fandom (or Media)'.t %></h3>
+<h3><%=h 'Mass Assign to Fandom (or Media)' %></h3>
 <ul>
 <% for category in (Tag::USER_DEFINED - ["Ambiguity"]) do %>
   <li>
@@ -9,7 +9,7 @@
   </li>
 <%- end -%>
 </ul>
-<h3><%=h 'Mass wrangle tags by Category'.t %></h3>
+<h3><%=h 'Mass wrangle tags by Category' %></h3>
 <ul>
 <% for category in Tag::TYPES do %>
   <li><%= link_to_unless_current category, edit_tag_wrangling_path(category) %></li>

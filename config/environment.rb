@@ -23,7 +23,7 @@ STORE_LOCATION_METHOD = :store_location
 # ENV['RAILS_ENV'] ||= 'production'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-RAILS_GEM_VERSION = '2.1.0' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '2.2.2' unless defined? RAILS_GEM_VERSION
 
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
@@ -105,6 +105,7 @@ Rails::Initializer.run do |config|
   config.gem 'hpricot'
   config.gem 'thoughtbot-shoulda', :lib => 'shoulda/rails', :source => "http://gems.github.com", :version => '~> 2.10.0'
   config.gem 'andand'
+  #config.gem 'relevance-tarantula', :source => "http://gems.github.com", :lib => 'relevance/tarantula'
 
   # Override the sanitize defaults to allow some extra formatting attributes. 
   config.action_view.sanitized_allowed_attributes = 'align'

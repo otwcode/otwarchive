@@ -15,26 +15,26 @@ module AuthentableEntity
       attr_accessor :password
       
       # all users
-      validates_presence_of     :login,    :message => 'Please enter a user name'.t
-      validates_presence_of     :email,    :message => 'Please enter an email address'.t
-      validates_uniqueness_of   :login,    :message => 'Sorry, that name is already taken. Try again, please!'.t
-      validates_uniqueness_of   :email,    :message => 'Sorry, that email address is already being used.'.t 
-      validates_length_of       :login,    :within => LOGIN_LENGTH_MIN..LOGIN_LENGTH_MAX, :too_short => "Your user name is too short (minimum is %d characters)".t,
-        :too_long => "Your user name is too long (maximum is %d characters)".t
-      validates_length_of       :email,    :within => EMAIL_LENGTH_MIN..EMAIL_LENGTH_MAX, :too_short => "Your email address is too short (minimum is %d characters)".t,
-        :too_long => "Your email address is too long (maximum is %d characters)".t
+      validates_presence_of     :login,    :message => 'Please enter a user name'
+      validates_presence_of     :email,    :message => 'Please enter an email address'
+      validates_uniqueness_of   :login,    :message => 'Sorry, that name is already taken. Try again, please!'
+      validates_uniqueness_of   :email,    :message => 'Sorry, that email address is already being used.' 
+      validates_length_of       :login,    :within => LOGIN_LENGTH_MIN..LOGIN_LENGTH_MAX, :too_short => "Your user name is too short (minimum is #{LOGIN_LENGTH_MIN} characters)",
+        :too_long => "Your user name is too long (maximum is #{LOGIN_LENGTH_MAX} characters)"
+      validates_length_of       :email,    :within => EMAIL_LENGTH_MIN..EMAIL_LENGTH_MAX, :too_short => "Your email address is too short (minimum is #{EMAIL_LENGTH_MIN} characters)",
+        :too_long => "Your email address is too long (maximum is #{EMAIL_LENGTH_MAX} characters)"
       
       # users with passwords
-      validates_presence_of     :password,              :if => :setting_password?, :message => "Please enter a password".t
-      validates_presence_of     :password_confirmation, :if => :setting_password?, :message => "Please enter your password again".t
-      validates_length_of       :password,              :if => :setting_password?, :within => PASSWORD_LENGTH_MIN..PASSWORD_LENGTH_MAX, :too_short => "Your password is too short (minimum is %d characters)".t,
-                       :too_long => "Your password is too long (maximum is %d characters)".t
-      validates_confirmation_of :password,              :if => :setting_password?, :message => "Your passwords don't match; please re-enter!".t
+      validates_presence_of     :password,              :if => :setting_password?, :message => "Please enter a password"
+      validates_presence_of     :password_confirmation, :if => :setting_password?, :message => "Please enter your password again"
+      validates_length_of       :password,              :if => :setting_password?, :within => PASSWORD_LENGTH_MIN..PASSWORD_LENGTH_MAX, :too_short => "Your password is too short (minimum is #{PASSWORD_LENGTH_MIN} characters)",
+                       :too_long => "Your password is too long (maximum is #{PASSWORD_LENGTH_MAX} characters)"
+      validates_confirmation_of :password,              :if => :setting_password?, :message => "Your passwords don't match; please re-enter!"
       before_save :encrypt_password,                    :if => :setting_password?
 
       # users with open id
-      validates_presence_of     :identity_url, :if => :setting_identity_url?, :message => "Please enter an OpenID".t
-      validates_uniqueness_of   :identity_url, :if => :setting_identity_url?, :message => "Sorry, that OpenID is already being used".t
+      validates_presence_of     :identity_url, :if => :setting_identity_url?, :message => "Please enter an OpenID"
+      validates_uniqueness_of   :identity_url, :if => :setting_identity_url?, :message => "Sorry, that OpenID is already being used"
       before_save :validate_identity_url,      :if => :setting_identity_url?
       
       # Prevents users from submitting crafted forms that bypasses activation.

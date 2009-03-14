@@ -1,9 +1,9 @@
-<p><%=h User.current_user.login %> <%=h 'listed you as a co-author of the following story:'.t %></p>
+<p><%=h User.current_user.login %> <%=h 'listed you as a co-author of the following story:' %></p>
 
 <p><a href="#"><%=h @work.title %></a></p>
 
 <!--click here violates WCAG 1.0 6.1. this needs rewording-->
-<p><a href="#"><%=h 'Click here'.t %></a> <%=h "if you've been added in error or don't want to be listed as an author.".t %></p>
+<p><a href="#"><%=h 'Click here' %></a> <%=h "if you've been added in error or don't want to be listed as an author." %></p>
 
 
 

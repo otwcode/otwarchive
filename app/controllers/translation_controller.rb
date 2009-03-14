@@ -1,6 +1,6 @@
 require 'strscan'
 class TranslationController < ApplicationController
-  permit "translator", :permission_denied_message => "Sorry, the page you tried to access is for authorized translators only.".t
+  permit "translator", :permission_denied_message => "Sorry, the page you tried to access is for authorized translators only."
   before_filter :check_user_status
     
   def translation_text
@@ -12,7 +12,7 @@ class TranslationController < ApplicationController
     @url_to_translate = params[:url_to_translate]
     translation = ViewTranslation.find(params[:id])
     unless translation
-      flash[:error] = "We couldn't find the string you were trying to translate.".t
+      flash[:error] = "We couldn't find the string you were trying to translate."
     else
       Locale.set_translation(translation.tr_key, params["translation_#{translation.id}"])
     end

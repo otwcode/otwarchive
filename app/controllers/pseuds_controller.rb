@@ -15,7 +15,7 @@ class PseudsController < ApplicationController
 
   #displays error if someone tries to modify another user's pseuds
   def is_user_true
-    is_user? || [redirect_to(:action => "index"), flash[:error] = "Sorry, but you don't have permission to make edits.".t ]
+    is_user? || [redirect_to(:action => "index"), flash[:error] = t('errors.no_permission_to_edit', :default => "Sorry, but you don't have permission to make edits.") ]
   end
 
   # GET /pseuds
@@ -67,8 +67,8 @@ class PseudsController < ApplicationController
       @user.pseuds << @pseud
       default = @user.default_pseud
       if @pseud.save
-        flash[:notice] = 'Pseud was successfully created.'.t
-        if @pseud.is_default
+        flash[:notice] = t('notices.pseuds.successfully_created', :default => 'Pseud was successfully created.')
+       if @pseud.is_default
           # if setting this one as default, unset the attribute of the current default pseud
           default.update_attribute(:is_default, false)
         end
@@ -78,8 +78,8 @@ class PseudsController < ApplicationController
       end
     else
       # user tried to add pseud he already has
-      flash[:error] = 'You already have a pseud with that name.'.t
-      @pseud.name = '' if @user.default_pseud.name == @pseud.name
+      flash[:error] = t('errors.pseuds.duplicate_pseud', :default => 'You already have a pseud with that name.')
+     @pseud.name = '' if @user.default_pseud.name == @pseud.name
       render :action => "new"
     end
   end
@@ -95,8 +95,8 @@ class PseudsController < ApplicationController
         # if setting this one as default, unset the attribute of the current active pseud
         default.update_attribute(:is_default, false)
       end   
-      flash[:notice] = 'Pseud was successfully updated.'.t
-      redirect_to([@user, @pseud]) 
+      flash[:notice] = t('notices.pseuds.successfully_updated', :default => 'Pseud was successfully updated.')
+     redirect_to([@user, @pseud]) 
     else
       render :action => "edit"
     end
@@ -107,13 +107,13 @@ class PseudsController < ApplicationController
   def destroy
     @pseud = @user.pseuds.find(params[:id])
     if @pseud.is_default
-      flash[:error] = "You cannot delete your default pseudonym, sorry!".t
-    elsif @pseud.name == @user.login
-      flash[:error] = "You cannot delete the pseud matching your user name, sorry!".t
-    else
+      flash[:error] = t('errors.pseuds.delete_default', :default => "You cannot delete your default pseudonym, sorry!")
+   elsif @pseud.name == @user.login
+      flash[:error] = t('errors.pseuds.delete_user_name', :default => "You cannot delete the pseud matching your user name, sorry!")
+   else
       @pseud.replace_me_with_default
-      flash[:notice] = "Pseud destroyed".t
-    end
+      flash[:notice] = t('notices.pseuds.successfully_deleted', :default => "Pseud destroyed")
+   end
     
     redirect_to(user_pseuds_url(@user)) 
   end

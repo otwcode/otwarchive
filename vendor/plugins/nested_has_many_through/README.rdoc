@@ -1,3 +1,5 @@
+http://plugins.ardes.com > nested_has_many_through
+
 = nested_has_many_through
 
 A fantastic patch/plugin has been floating around for a while:
@@ -37,6 +39,17 @@ Here's the original description:
   tables to be constructed, without having to resort to find_by_sql (which isn't
   a suitable solution if you need to do eager loading through :include as well).
 
+== Contributors
+
+* Matt Westcott
+* terceiro
+* shoe
+* mhoroschun
+* Ian White (http://github.com/ianwhite)
+* Claudio (http://github.com/masterkain)
+
+Get in touch if you should be on this list
+
 == Show me the money!
 
 Here's some models from the specs:
@@ -73,7 +86,7 @@ The first two has_manys of Author are plain vanilla, the last four are what this
 
 == What does it run on?
 
-Currently it's running on edge, 2.0-stable and 2.0.2
+Currently it's running on 2.0, 2.1, and 2.2 stable branches
 
 If you want to run the CI suite, then check out garlic_example.rb (The CI suite
 is being cooked with garlic - git://github.com/ianwhite/garlic)

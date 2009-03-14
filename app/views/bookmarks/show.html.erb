@@ -5,5 +5,5 @@
 <%- end -%>
 
 <ul class="navigation">
-<li><%= link_to 'Back'.t, user_bookmarks_path(@bookmark.user) %></li>
+<li><%= link_to t('links.back', :default => 'Back'), user_bookmarks_path(@bookmark.user) %></li>
 </ul>

@@ -1,13 +1,13 @@
 <%- if @commentable.nil? -%>
 	<!-- the most recent comments -->
-	<h2><%= 'Viewing the last %d comments posted in the archive'.t/@comments.size -%></h2>
+	<h2><%= t('comments.index.viewing_last', :default => "Viewing the last {{count}} comments posted in the archive", :count => @comments.size) -%></h2>
 	<%- for comment in @comments -%>
 		<%- if comment.approved or logged_in? -%>
 		  <%= render :partial => 'comments/single_comment_abbreviated', :locals => {:single_comment => comment} -%>
 		<%- end -%>
 	<%- end -%>
 <%- else -%>
-	<h2><%=h 'Viewing Comments on'.t %> <%= link_to sanitize_title_for_display(@commentable.title, :tags => %w(em i b strong strike small)), @commentable %></h2>  
+	<h2><%=h t('comments.index.viewing_comments_on', :default => 'Viewing Comments on') %> <%= link_to sanitize_title_for_display(@commentable.title, :tags => %w(em i b strong strike small)), @commentable %></h2>  
 	<%= render :partial => 'comments/comment_thread', :locals => { :comments => @comments, :depth => 0 } %>
 <%- end -%>
 

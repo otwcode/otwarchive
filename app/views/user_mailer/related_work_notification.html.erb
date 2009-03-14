@@ -1,5 +1,5 @@
-<p><%=h "Your work".t -%> <cite><%= @related_work.parent.title %></cite> <%=h "was listed as the inspiration of".t -%> <cite><%= @related_work.work.title %></cite>
- <%=h "by".t -%> <%= @related_work.work.pseuds.collect(&:name).join(", ") %></p>
+<p><%=h "Your work" -%> <cite><%= @related_work.parent.title %></cite> <%=h "was listed as the inspiration of" -%> <cite><%= @related_work.work.title %></cite>
+ <%=h "by" -%> <%= @related_work.work.pseuds.collect(&:name).join(", ") %></p>
 
 <!--go here violates WCAG 1.0 6.1. this needs rewording-->
-<p><%=h "To link back to".t -%> <cite><%= @related_work.work.title %></cite> <%=h "from your work, please go".t -%> <a href="<%= @url %>">here</a>.</p>
+<p><%=h "To link back to" -%> <cite><%= @related_work.work.title %></cite> <%=h "from your work, please go" -%> <a href="<%= @url %>">here</a>.</p>

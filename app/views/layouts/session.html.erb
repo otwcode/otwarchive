@@ -4,7 +4,7 @@
 		<meta name="generator" content="HTML Tidy, see www.w3.org" />
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>
-			<%=h ArchiveConfig.APP_NAME .t %>
+			<%=h ArchiveConfig.APP_NAME  %>
 			<% unless ArchiveConfig.REVISION.blank? -%>(rev.
 			<%= ArchiveConfig.REVISION %>)
 			<% end %>&gt;&gt;
@@ -17,8 +17,8 @@
     <!-- BEGIN main -->
 		<div id="main" class="<%= controller.controller_name + '-' + controller.action_name -%> session">
 			<%= flash_div :error, :warning, :notice %>
-			<h1><%= link_to ArchiveConfig.APP_NAME .t, :controller => 'home', :action => 'index' %></h1>
-			<h2><%=h "A project of the".t %> <a href="http://transformativeworks.org"><%=h "Organization For Transformative Works".t %></a></h2>
+			<h1><%= link_to ArchiveConfig.APP_NAME , :controller => 'home', :action => 'index' %></h1>
+			<h2><%=h t('layout.session.project_of_otw', :default => "A project of the") %> <a href="http://transformativeworks.org"><%=h "Organization For Transformative Works" %></a></h2>
 			<p id="logo">
 				<%= image_tag(ArchiveConfig.LOGO, :alt => ArchiveConfig.ALT_LOGO) -%>
 			</p>

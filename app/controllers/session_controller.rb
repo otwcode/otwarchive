@@ -24,8 +24,8 @@ class SessionController < ApplicationController
     self.current_user.forget_me if logged_in?
     cookies.delete :auth_token
     reset_session
-    flash[:notice] = "You have been logged out.".t
-    # During testing, logout redirects to the feedback page.
+    flash[:notice] = t('notices.session.logged_out', :default => "You have been logged out.")
+   # During testing, logout redirects to the feedback page.
     # Code commented out below would be default when out of testing. 
     ##   redirect_back_or_default('/')
     redirect_to :controller => "feedbacks", :action => "new"
@@ -57,8 +57,8 @@ class SessionController < ApplicationController
           self.current_user = @user
           successful_login
         else
-          failed_login "We couldn't find that url in our database. Please try again.".t
-        end
+          failed_login t('errors.session.open_id_failure', :default => "We couldn't find that url in our database. Please try again.")
+       end
       else
         failed_login result.message
       end
@@ -72,18 +72,18 @@ class SessionController < ApplicationController
     else
       if user = User.find_by_login(login)
         if user.activated_at 
-          message = "The password you entered doesn't match our records. Please try again or click the 'forgot password' link below.".t
-        else
-          message = "You'll need to activate your account before you can log in. Please check your email or contact an admin.".t
-        end
+          message = t('errors.session.wrong_password', :default => "The password you entered doesn't match our records. Please try again or click the 'forgot password' link below.")
+       else
+          message = t('errors.session.not_activated', :default => "You'll need to activate your account before you can log in. Please check your email or contact an admin.")
+       end
       else 
-        message = "We couldn't find that name in our database. Please try again.".t
-      end
+        message = t('errors.session.wrong_name', :default => "We couldn't find that name in our database. Please try again.")
+     end
       failed_login(message)
     end
   end
   
-  def failed_login(message = "Sorry, something went wrong! Please try again.".t)
+  def failed_login(message = t('errors.session.failed_login', :default => "Sorry, something went wrong! Please try again."))
     flash.now[:error] = message
     render :action => 'new'
   end
@@ -96,6 +96,6 @@ class SessionController < ApplicationController
     self.current_user.recently_reset? ? 
         (redirect_to :controller => 'users', :action => 'after_reset', :id => self.current_user.login) : 
         redirect_back_or_default(current_user)
-    flash[:notice] = "Logged in successfully".t
-  end
+    flash[:notice] = t('notices.logged_in', :default => "Logged in successfully")
+ end
 end

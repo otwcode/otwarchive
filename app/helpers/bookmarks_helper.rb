@@ -9,11 +9,11 @@ module BookmarksHelper
       
       if bookmarkable.class == Work
         fallback = new_work_bookmark_path(bookmarkable)
-        text = 'Bookmark this story'.t
-      elsif bookmarkable.class == ExternalWork
+        text = 'Bookmark this story'
+     elsif bookmarkable.class == ExternalWork
         fallback = bookmarks_path # more options if necessary
-        text = 'Add a new bookmark'.t
-      end
+        text = 'Add a new bookmark'
+     end
 
       # Check to see if we already have a bookmark to this object
       existing = Bookmark.find(:first, 
@@ -26,7 +26,7 @@ module BookmarksHelper
       else
         # eventually we want to add the option here to remove the existing bookmark
         # Enigel Dec 10 08 - adding an edit link for now
-        link_to "Edit bookmark".t, edit_bookmark_path(existing)
+        link_to "Edit bookmark", edit_bookmark_path(existing)
       end
     end
   end

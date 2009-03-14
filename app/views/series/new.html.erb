@@ -1,13 +1,13 @@
-<h1><%=h 'New series'.t %></h1>
+<h1><%=h 'New series' %></h1>
 
 <% form_for(@series) do |f| %>
   <%= f.error_messages %>
 
   <p class="submit">
-    <%= f.submit "Create".t %>
+    <%= f.submit "Create" %>
   </p>
 <% end %>
 
 <ul class="navigation">
-<li><%= link_to 'Back'.t, series_path %></li>
+<li><%= link_to 'Back', series_path %></li>
 </ul>

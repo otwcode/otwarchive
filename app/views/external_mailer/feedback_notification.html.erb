@@ -1,7 +1,7 @@
-<%=h @comment.name || @comment.pseud.name %> <%=h 'replied to your comment:'.t %>
+<%=h @comment.name || @comment.pseud.name %> <%=h t('external_mailer.feedback.replied_to', :default => 'replied to your comment:') %>
 
 <p><%=h @comment.content %></p>
 
-<p><%=h 'Posted at:'.t %> <%= @comment.created_at %></p>
+<p><%=h t('external_mailer.feedback.posted_at', :default => 'Posted at:') %> <%= @comment.created_at %></p>
 
-<%=h 'View all feedback'.t %> (will be a link)
+<%=h t('external_mailer.feedback.view_all', :default => 'View all feedback') %> (will be a link)

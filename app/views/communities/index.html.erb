@@ -1,11 +1,11 @@
-<h1><%=h 'Listing communities'.t %></h1>
+<h1><%=h 'Listing communities' %></h1>
 
 <table>
   <caption><!--A summary of the table contents and purpose here please--></caption>
 <tr>
-    <th scope="col"><%=h 'Name'.t %></th>
-    <th scope="col"><%=h 'Description'.t %></th>
-    <th scope="col"><%=h 'Open membership'.t %></th>
+    <th scope="col"><%=h 'Name' %></th>
+    <th scope="col"><%=h 'Description' %></th>
+    <th scope="col"><%=h 'Open membership' %></th>
   </tr>
 
 <% for community in @communities %>
@@ -13,18 +13,18 @@
     <th scope="row"><%=h community.name %></td>
     <td><%=h community.description %></td>
     <td><%=h community.open_membership %></td>
-    <td><%= link_to 'Show'.t, community %></td>
-    <td><%= link_to 'Edit'.t, edit_community_path(community) %></td>
-    <td><%= link_to 'Destroy'.t, community, :confirm => 'Are you sure?'.t, :method => :delete %></td>
+    <td><%= link_to 'Show', community %></td>
+    <td><%= link_to 'Edit', edit_community_path(community) %></td>
+    <td><%= link_to 'Destroy', community, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>
 
 <ul class="navigation">
-<li><%= link_to 'New community'.t, new_community_path %></li>
+<li><%= link_to 'New community', new_community_path %></li>
 </ul>
 
 <div class="pagination">
-	  <%= will_paginate @communities, :prev_label =>  "&laquo; Previous".t,:next_label => "Next &raquo;".t %>
+	  <%= will_paginate @communities, :prev_label =>  "&laquo; Previous",:next_label => "Next &raquo;" %>
 </div>
 

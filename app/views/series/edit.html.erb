@@ -1,28 +1,28 @@
-<h1><%=h 'Editing series'.t %></h1>
+<h1><%=h 'Editing series' %></h1>
 <ul class="navigation">
-<li><%= link_to 'Delete series'.t, @series, :confirm => 'Are you sure?'.t, :method => :delete %></li>
-<li><%= link_to 'Show'.t, @series %></li>
-<li><%= link_to 'Back'.t, series_path %></li>
+<li><%= link_to 'Delete series', @series, :confirm => 'Are you sure?', :method => :delete %></li>
+<li><%= link_to 'Show', @series %></li>
+<li><%= link_to 'Back', series_path %></li>
 </ul>
 
 <% form_for(@series) do |f| %>
   <%= f.error_messages %>
 <dl>
-	<dt><%= f.label :title, "Series Title".t %></dt>
+	<dt><%= f.label :title, "Series Title" %></dt>
 	<dd><%= f.text_field :title %></dd><br />
   <%= render :partial => 'pseuds/byline', :locals => {:form => f, :type => 'series'} -%>
-	<dt><%= f.label :summary, "Series Description".t %><dt>
+	<dt><%= f.label :summary, "Series Description" %><dt>
 	<dd><%= f.text_area :summary %> </dd>
-	<dt><%= f.label :notes, "Series Notes".t %><dt>
+	<dt><%= f.label :notes, "Series Notes" %><dt>
 	<dd><%= f.text_area :notes %></dd>    
 </dl>
 <p class="submit">
-	<%= f.submit "Update".t %>
+	<%= f.submit "Update" %>
 </p>
 <% end %>
 
 <ul class="navigation">
-<li><%= link_to 'Delete series'.t, @series, :confirm => 'Are you sure?'.t, :method => :delete %></li>
-<li><%= link_to 'Show'.t, @series %></li>
-<li><%= link_to 'Back'.t, series_path %></li>
+<li><%= link_to 'Delete series', @series, :confirm => 'Are you sure?', :method => :delete %></li>
+<li><%= link_to 'Show', @series %></li>
+<li><%= link_to 'Back', series_path %></li>
 </ul>

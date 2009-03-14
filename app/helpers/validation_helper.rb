@@ -35,8 +35,8 @@ module ValidationHelper
         end
       end
       options[:object_name] ||= params.first
-      options[:header_message] = "We couldn't save this %s, sorry!"/options[:object_name].to_s.gsub('_', ' ').t unless options.include?(:header_message)
-      options[:message] ||= 'Here are the problems we found:'.t unless options.include?(:message)
+      options[:header_message] = "We couldn't save this " + options[:object_name].to_s.gsub('_', ' ') + ", sorry!" unless options.include?(:header_message)
+      options[:message] ||= 'Here are the problems we found:' unless options.include?(:message)
       error_messages = objects.sum {|obj| obj.errors.full_messages.map {|msg| content_tag(:li, msg) } }.join
       
       contents = ''
@@ -85,20 +85,20 @@ module ValidationHelper
   #        :maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN, 
   #        :tooLongMessage => 'We salute your ambition! But sadly the content must be less than %d letters long. (Maybe you want to create a multi-chaptered work?)'/ArchiveConfig.CONTENT_MAX,
   #        :tooShortMessage => 'Brevity is the soul of wit, but your content does have to be at least %d letters long.'/ArchiveConfig.CONTENT_MIN,
-  #        :failureMessage => 'You did want to post a story here, right?'.t)
+  #        :failureMessage => 'You did want to post a story here, right?')
   #    -%>
   # 
   # Add more default values here! There are many more live validation options, see the code in
   # the javascripts folder for details. 
   def live_validation_for_field(id, options = {})
     defaults = {:presence => true,
-                :failureMessage => 'Must be present.'.t,
+                :failureMessage => 'Must be present.',
                 :validMessage => ''}                
     if options[:maximum_length]
-      defaults.merge!(:tooLongMessage => 'Must be less than %d letters long.'/options[:maximum_length]) #/
+      defaults.merge!(:tooLongMessage => 'Must be less than ' + options[:maximum_length].to_s + ' letters long.') #/
     end
     if options[:minimum_length]
-      defaults.merge!(:tooShortMessage => 'Must be at least %d letters long.'/options[:minimum_length]) #/
+      defaults.merge!(:tooShortMessage => 'Must be at least ' + options[:minimum_length].to_s + ' letters long.') #/
     end
 
     options = defaults.merge(options)

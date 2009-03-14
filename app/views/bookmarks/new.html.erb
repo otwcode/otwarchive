@@ -1,9 +1,9 @@
-<h1><%=h 'New bookmark'.t %></h1>
+<h1><%=h t('bookmarks.new.new_bookmark', :default => 'New bookmark') %></h1>
 
 <%= error_messages_for :bookmark %>
 
 <%= render :partial => 'bookmark_form' %>
 
 <ul class="navigation">
-<li><%= link_to 'Back'.t, bookmarks_path %></li>
+<li><%= link_to t('links.back', :default => 'Back'), bookmarks_path %></li>
 </ul>

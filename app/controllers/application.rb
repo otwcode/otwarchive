@@ -21,34 +21,33 @@ class ApplicationController < ActionController::Base
     @current_user = current_user
   end
   
-  #### -- GLOBALIZATION -- ####
-  #layout 'application'
-   
-  before_filter :set_locale  
-  # Determines the user's language of choice
-  def set_locale
-    default_locale = ArchiveConfig.DEFAULT_LOCALE
-    request_language = request.env['HTTP_ACCEPT_LANGUAGE']
-    request_language = request_language.nil? ? nil : 
-      request_language[/[^,;]+/]
-    @locale = params[:locale] || session[:locale] ||
-              request_language || default_locale
-    begin
-      unless ArchiveConfig.SUPPORTED_LOCALES[@locale]
-        flash[:warning] = "We don't currently support your locale, sorry, so 
-            we're falling back to the default locale (#{LANGUAGE_NAMES[default_locale]}). Please contact our 
-            volunteers committee if you'd be willing to help out as a translator!"
-        redirect_to url_for(:overwrite_params => {:locale => default_locale})
-      end
-      session[:locale] = @locale
-      Locale.set ArchiveConfig.SUPPORTED_LOCALES[@locale]      
-      # prepend the user's locale to their view path
-      prepend_view_path File.join(File.dirname(__FILE__), '..', "views/localized/#{@locale}")
-    rescue
-      Locale.set ArchiveConfig.SUPPORTED_LOCALES[default_locale]
-    end  
-  end 
-  #### -- GLOBALIZATION -- ####
+  ### GLOBALIZATION ###
+
+  before_filter :load_locales
+  before_filter :set_preferred_language
+
+  I18n.record_missing_keys = true # if you want to record missing translations
+
+  protected
+
+  def load_locales
+    @loaded_locales ||= Locale.find(:all, :order => :iso)
+  end
+
+  # Sets the locale
+  def set_preferred_language
+    # Loading the current locale
+    if session[:locale] && @loaded_locales.detect { |loc| loc.short == session[:locale]}
+      set_locale session[:locale].to_sym
+    else
+      set_locale Locale.find_main_cached.short.to_sym
+    end
+    @current_locale = Locale.find_by_short(I18n.locale.to_s)  
+  end
+  
+  ### -- END GLOBALIZATION -- ###
+  
+  public
 
   #### -- AUTHORIZATION -- ####
   def is_registered_user?
@@ -71,10 +70,10 @@ class ApplicationController < ActionController::Base
   def check_user_status
     if current_user.is_a?(User) && (current_user.suspended? || current_user.banned?)
       if current_user.suspended? 
-        flash[:error] = "Your account has been suspended. You may not add or edit content until your suspension has been resolved. Please contact us for more information.".t
-      else
-        flash[:error] = "Your account has been banned. You are not permitted to add or edit archive content. Please contact us for more information.".t
-      end
+        flash[:error] = t('errors.suspension_notice', :default => "Your account has been suspended. You may not add or edit content until your suspension has been resolved. Please contact us for more information.")
+     else
+        flash[:error] = t('errors.ban_notice', :default => "Your account has been banned. You are not permitted to add or edit archive content. Please contact us for more information.")
+     end
       redirect_to current_user
     end
   end

@@ -6,11 +6,11 @@ class TagsController < ApplicationController
   def check_tag_wrangler_status
     return true if logged_in_as_admin? || permit?("tag_wrangler")
     if logged_in?
-      flash[:error] = 'You have to be a tag wrangler to access this page'.t
+      flash[:error] = t('errors.tag_wranglers_only', :default => 'You have to be a tag wrangler to access this page')
       redirect_to current_user and return
     else
       store_location
-      flash[:error] = 'Please log in.'.t
+      flash[:error] = t('errors.please_log_in', :default => 'Please log in.')
       redirect_to new_session_path and return
     end
   end
@@ -28,20 +28,21 @@ class TagsController < ApplicationController
 
   def show
     @tag = Tag.find_by_name(params[:id])
-    unless @tag.is_a? Tag
-        flash[:error] = "Tag not found".t
+    if @tag.is_a? Tag
+      if @tag.is_a?(Banned) && !logged_in_as_admin?
+        flash[:error] = t('errors.log_in_as_admin', :default => "Please log in as admin")
         redirect_to tag_wranglings_path and return
-    end
-    if @tag.is_a?(Banned) && !logged_in_as_admin?
-        flash[:error] = "Please log in as admin".t
-        redirect_to tag_wranglings_path and return
-    end
-    if !@tag.canonical && !@tag.merger
-      if current_user.is_a?User
-        @works = @tag.works.visible_to_user.paginate(:page => params[:page])
-      else
-        @works = @tag.works.visible_to_all.paginate(:page => params[:page])
       end
+      if !@tag.canonical && !@tag.merger
+        if current_user.is_a?User
+          @works = @tag.works.visible_to_user.paginate(:page => params[:page])
+        else
+          @works = @tag.works.visible_to_all.paginate(:page => params[:page])
+        end
+      end
+    else
+      flash[:error] = t('errors.tags.not_found', :default => "Tag not found")
+      redirect_to '/'
     end
   end
 
@@ -57,7 +58,7 @@ class TagsController < ApplicationController
       end
     else
       # This is just a quick fix to avoid script barf if JavaScript is disabled
-      flash[:error] = "Sorry, you need to have JavaScript enabled for this.".t
+      flash[:error] = t('errors.need_javascript', :default => "Sorry, you need to have JavaScript enabled for this.")
       redirect_to :back
     end
 
@@ -80,17 +81,17 @@ class TagsController < ApplicationController
     if type
       @tag = type.constantize.find_or_create_by_name(params[:tag][:name])
     else
-      flash[:error] = "Please provide a category.".t
+      flash[:error] = t('errors.tags.please_provide_category', :default => "Please provide a category.")
       @tag = Tag.new(:name => params[:tag][:name])
       render :action => "new" and return
     end
     if @tag.andand.valid?
       if (@tag.name != params[:tag][:name]) && (@tag.name.downcase == params[:tag][:name].downcase) # only capitalization different
         @tag.update_attribute(:name, params[:tag][:name])  # use the new capitalization
-        flash[:notice] = 'Tag was successfully modified.'.t
-      else
-        flash[:notice] = 'Tag was successfully created.'.t
-      end
+        flash[:notice] = t('notices.tags.successfully_modified', :default => 'Tag was successfully modified.')
+     else
+        flash[:notice] = t('notices.tags.successfully_created', :default => 'Tag was successfully created.')
+     end
       @tag.update_attribute(:canonical, params[:tag][:canonical])
       redirect_to edit_tag_path(@tag)
     else
@@ -101,33 +102,33 @@ class TagsController < ApplicationController
   def edit
     @tag = Tag.find_by_name(params[:id])
     if @tag.is_a?(Banned) && !logged_in_as_admin?
-        flash[:error] = "Please log in as admin".t
-        redirect_to tag_wranglings_path and return
+        flash[:error] = t('errors.log_in_as_admin', :default => "Please log in as admin")
+       redirect_to tag_wranglings_path and return
     end
     if @tag.blank?
-      flash[:error] = "Tag not found".t
-      redirect_to tag_wranglings_path and return
+      flash[:error] = t('errors.tags.not_found', :default => "Tag not found")
+     redirect_to tag_wranglings_path and return
     end
   end
 
   def update
     @tag = Tag.find_by_name(params[:id].gsub(/%2F/, '/'))
     if @tag.blank?
-      flash[:error] = "Tag not found".t
-      redirect_to root_path and return
+      flash[:error] = t('errors.tags.not_found', :default => "Tag not found")
+     redirect_to root_path and return
     end
     old_common_tag_ids = @tag.common_tags_to_add.map(&:id).sort
 
     if (params[:tag][:name] && logged_in_as_admin?)
       if ['Rating', 'Warning', 'Category'].include?(@tag[:type])
-        flash[:error] = "Name can't be changed from this interface.".t
-      else
+        flash[:error] = t('errors.tags.name_change', :default => "Name can't be changed from this interface.")
+     else
         begin
           @tag.update_attribute(:name, params[:tag][:name])
         rescue
           @tag = Tag.find_by_name(params[:id]) # reset name
-          flash[:error] = "Name already taken.".t
-        end
+          flash[:error] = t('errors.tags.name_taken', :default => "Name already taken.")
+       end
       end
     end
     @tag.update_type(params[:tag][:type], logged_in_as_admin?) if params[:tag][:type]
@@ -188,7 +189,7 @@ class TagsController < ApplicationController
     new_common_tag_ids = @tag.common_tags_to_add.map(&:id).sort
     @tag.update_common_tags unless old_common_tag_ids == new_common_tag_ids
 
-    flash[:notice] = 'Tag was updated.'.t
+    flash[:notice] = t('notices.tags.successfully_updated', :default => 'Tag was updated.')
     redirect_to edit_tag_path(@tag.name)
   end
 end

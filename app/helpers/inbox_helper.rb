@@ -16,7 +16,7 @@ module InboxHelper
   #TODO: change to a proper ajax link
   def inbox_reply_link(comment)
     "(" + 
-    link_to("Reply".t, comment) +
+    link_to("Reply", comment) +
      ")"
   end
   

@@ -29,10 +29,10 @@ module ApplicationHelper
   # Used in navigation link list in header
   def home_link
     if logged_in? 
-			text = "my home".t
+			text = "my home"
 			link = user_path(current_user) 
 		else
-			text = "home".t
+			text = "home"
 			link = root_path
 		end
 		link_to_unless_current "<span>" + text + "</span>", link
@@ -54,9 +54,9 @@ module ApplicationHelper
   # Currently, help files are static. We may eventually want to make these dynamic? 
   def link_to_help(help_entry, link = '<span class="symbol question"><span>?</span></span>')
     help_file = ""
-    if Locale.active && Locale.active.language
-      help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{Locale.active.language.code}/#{help_entry}.html"
-    end
+    #if Locale.active && Locale.active.language
+    #  help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{Locale.active.language.code}/#{help_entry}.html"
+    #end
     
     unless !help_file.blank? && File.exists?("#{RAILS_ROOT}/public/#{help_file}")
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
@@ -100,20 +100,10 @@ module ApplicationHelper
   end
   
   # Create a nicer language menu than the Click-To-Globalize default
-  def languages_menu
-    
+  def languages_menu    
     result = "<form action=\"" + url_for(:action => 'set', :controller => 'locale') + "\">\n" 
-    result << "<div><select id='accessible_menu' name='url' >\n"
-    # We'll sort the languages by their keyname rather than have all the non-arabic-character-set
-    # ones end up at the end of the list.
-    LANGUAGE_NAMES.sort {|a, b| a.first.to_s <=> b.first.to_s }.each do |locale, langname|
-      langname = langname.titleize;   
-      if Locale.active && Locale.active.language && locale == Locale.active.language.code
-        result << "<option value=\"#{url_for :overwrite_params => {:locale => locale}}\" selected=\"selected\">#{langname} (#{locale})</option>\n"
-      else
-        result << "<option value=\"#{url_for :overwrite_params => {:locale => locale}}\">#{langname} (#{locale})</option>\n"
-      end
-    end
+    result << "<div><select id='accessible_menu' name='locale' >\n"
+    result << options_from_collection_for_select(@loaded_locales, :short, :name, @current_locale.short)
     result << "</select></div>"
     result << "<noscript><p><input type=\"submit\" name=\"commit\" value=\"Go\" /></p></noscript>"
     result << "</form>"

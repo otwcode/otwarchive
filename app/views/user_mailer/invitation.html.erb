@@ -1,8 +1,8 @@
 <%- if @user_name.blank? -%>
-<p><%=h "You've been invited to join our beta!".t -%></p>
+<p><%=h "You've been invited to join our beta!" -%></p>
 <%- else -%>
-<p><%= @user_name %> <%=h "has invited you to join our beta!".t -%></p>
+<p><%= @user_name %> <%=h "has invited you to join our beta!" -%></p>
 <%- end -%>
 
-<p><%=h "You can sign up at the following address:".t -%>
+<p><%=h "You can sign up at the following address:" -%>
 <%= link_to @signup_url, @signup_url %></p>

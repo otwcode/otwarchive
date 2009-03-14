@@ -6,7 +6,7 @@
 	  <%- if defined?(@page_title) -%>
 	    <%= @page_title -%>
 	  <%- else -%>
-  	  <%=h ArchiveConfig.APP_NAME .t %> 
+  	  <%=h ArchiveConfig.APP_NAME  %> 
   	  <% unless ArchiveConfig.REVISION.blank? -%>(rev. <%= ArchiveConfig.REVISION %>)<% end %>
   	  &raquo;
   	  <%= controller.controller_name %>
@@ -23,7 +23,7 @@
   </head>
 
   <body onload="hideLogin();">
-  <ul id="skiplinks"><li><a href="#main"><%=h 'Main Content'.t %></a></li></ul>
+  <ul id="skiplinks"><li><a href="#main"><%=h t('layout.application.main_content', :default => 'Main Content') %></a></li></ul>
 	<%= render :partial => 'layouts/header' %>
   
 	  <!-- BEGIN sidebar -->

@@ -1,17 +1,17 @@
-<h1><%=h "All Users:".t -%></h1>
+<h1><%=h t('admin.users.index.all_users', :default => "All Users:") -%></h1>
 
 <%= alpha_paginated_section -%>
 
 <table id="admin_users_table">
-<caption><%=h "List of all current users in the archive".t -%></caption>
+<caption><%=h t('admin.users.index.list', :default => "List of all current users in the archive") -%></caption>
 <tr>
-	<th scope="col"><%=h "Username".t -%></th>
-	<th scope="col"><%=h "Email".t -%></th>
-	<th scope="col"><%=h "Translator".t -%></th>
-	<th scope="col"><%=h "Tag Wrangler".t -%></th>
-	<th scope="col"><%=h "Suspended".t -%></th>
-	<th scope="col"><%=h "Banned".t -%></th>
-	<th scope="col"><%=h "Update".t -%></th>
+	<th scope="col"><%=h t('admin.users.username', :default => "Username") -%></th>
+	<th scope="col"><%=h t('admin.users.email', :default => "Email") -%></th>
+	<th scope="col"><%=h t('admin.users.translator', :default => "Translator") -%></th>
+	<th scope="col"><%=h t('admin.users.tag_wrangler', :default => "Tag Wrangler") -%></th>
+	<th scope="col"><%=h t('admin.users.suspended', :default => "Suspended") -%></th>
+	<th scope="col"><%=h t('admin.users.banned', :default => "Banned") -%></th>
+	<th scope="col"><%=h t('admin.users.update', :default => "Update") -%></th>
 </tr>
 	<%- @users.each do |user| -%>
 	<tr id="user_<%= user.id %>">

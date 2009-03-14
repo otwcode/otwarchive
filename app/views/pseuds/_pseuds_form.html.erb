@@ -1,13 +1,13 @@
 
 <% form_for([@user, @pseud]) do |f| %>
-<p><%= f.label :name, 'Name'.t %>
+<p><%= f.label :name, 'Name' %>
 	<% if @pseud.name && @user.login == @pseud.name -%>
-		<strong class="warning"><%=h @pseud.name -%></strong> (<%=h "cannot change your fallback pseud".t -%>)
+		<strong class="warning"><%=h @pseud.name -%></strong> (<%=h "cannot change your fallback pseud" -%>)
 	<% else -%>
     	<%= f.text_field :name %>
 	<% end -%>
-	<%= f.check_box :is_default %> <%= f.label :is_default, 'Is default'.t %></p>
- <p><%= f.label :description, 'Description'.t %><br />
+	<%= f.check_box :is_default %> <%= f.label :is_default, 'Is default' %></p>
+ <p><%= f.label :description, 'Description' %><br />
     <%= f.text_area :description, :rows => 4, :cols => 60 -%></p>
 
  <p class="submit">

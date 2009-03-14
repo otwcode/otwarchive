@@ -7,10 +7,8 @@
       
       <%- if comment.comments && comment.comments.size > 0 -%>
         <!-- cut off the recursion when we get too deep, but not if there's just one last measly comment left -->
-        <!-- TO DO: children_count should only count visible and existing comments -->
-        <!-- because deleted comments leave zombies in place -->
         <%- if depth >= ArchiveConfig.COMMENT_THREAD_MAX_DEPTH && comment.children_count > 1 -%>
-          <div class="comment"><p>(<%=h "%d more comments in this thread".t/comment.children_count -%>)</p></div>
+          <div class="comment"><p>(<%=h t('comments.index.thread_more_comments', :default => "{{count}} more comments in this thread", :count => comment.children_count) -%>)</p></div>
         <%- else -%>
           <%= render :partial => 'comments/comment_thread', :locals => {:comments => comment.comments, :depth => depth+1 } -%>
         <%- end -%>

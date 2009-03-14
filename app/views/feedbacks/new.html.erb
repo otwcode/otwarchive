@@ -2,35 +2,35 @@
 
 <% form_for(@feedback) do |f| %>
 	<p class="message">
-		<%=h "Thanks for your time testing the archive! We really appreciate the help.".t %>
+		<%=h t('feedbacks.new.thanks', :default => "Thanks for your time testing the archive! We really appreciate the help.") %>
   	</p>	
  	<p class="message">
-		<%= f.label :comment, "If you have any additional feedback about the archive - comments, concerns, haikus - you can leave them here.".t %>
-		<%=h "We promise to read it all!".t %>
+		<%= f.label :comment, t('feedbacks.new.leave_feedback', :default => "If you have any additional feedback about the archive - comments, concerns, haikus - you can leave them here.") %>
+		<%=h t('feedbacks.new.promise', :default => "We promise to read it all!") %>
 	</p>
 		
 	<p class="message">
-	  <strong><%= "PLEASE NOTE!".t -%></strong>
-	  <%=h "The archive is currently only supporting Firefox.".t %> 
+	  <strong><%= t('feedbacks.new.please_note', :default => "PLEASE NOTE!") -%></strong>
+	  <%=h t('feedbacks.new.thanks', :default => "The archive is currently only supporting Firefox.") %> 
     <a href="http://www.spreadfirefox.com/node&id=0&t=306"><img border="0" alt="Download Firefox" title="Download Firefox"
        src="http://sfx-images.mozilla.org/affiliates/Buttons/firefox3/110x32_get_ffx.png"/></a>	
   </p>
   <p class="message">     
-	  <%=h "It is quite broken on Internet Explorer, and may be more or less broken on other browsers.".t %> 
-		<%=h "Sorry about that -- putting in all the super-annoying tweaks for cross-browser compatibility will be one of the last steps we do,".t %>&nbsp;
-		<%=h "because otherwise lots of time gets wasted along the way while we're making lots of changes to the interface.".t %>
+	  <%=h t('feedbacks.new.broken1', :default => "It is quite broken on Internet Explorer, and may be more or less broken on other browsers.") %> 
+		<%=h t('feedbacks.new.broken2', :default => "Sorry about that -- putting in all the super-annoying tweaks for cross-browser compatibility will be one of the last steps we do,") %>&nbsp;
+		<%=h t('feedbacks.new.broken3', :default => "because otherwise lots of time gets wasted along the way while we're making lots of changes to the interface.") %>
 	</p>
 	<p class="message">
-	  <%=h "So for now, if you're seeing a visual bug (stuff like menus in the wrong places, stuff not laid out right, font sizes wonky, etc), please only report it if you've found it in Firefox.".t %>
+	  <%=h t('feedbacks.new.for_now', :default => "So for now, if you're seeing a visual bug (stuff like menus in the wrong places, stuff not laid out right, font sizes wonky, etc), please only report it if you've found it in Firefox.") %>
 	</p>
 	<p>
     <%= f.text_area :comment, :cols => 60 %>
 	</p>
 	 <p class="message">
-	 <%= f.label :email, "Your email (optional):".t %></p>
+	 <%= f.label :email, "Your email (optional):" %></p>
     <p><%= f.text_field :email, :size => 60 %>	</p>
 	<p class="submit">
-    	<%= f.submit "Send feedback".t %>
+    	<%= f.submit t('feedbacks.new.send', :default => "Send feedback") %>
   	</p>
 <% end %>
 

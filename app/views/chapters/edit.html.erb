@@ -1,10 +1,10 @@
-<h1><%=h 'Edit Chapter'.t %></h1>
+<h1><%=h t('chapters.edit.edit_chapter', :default => 'Edit Chapter') %></h1>
 
 <%= error_messages_for :chapter %>
 
-<%= render :partial => 'chapter_form', :locals => { :chapter => @chapter, :button_text => "Update".t } %>
+<%= render :partial => 'chapter_form', :locals => { :chapter => @chapter, :button_text => "Update" } %>
 
 <ul class="navigation">
-	<li><%= link_to 'Show'.t, [@work, @chapter] %></li> 
-	<li><%= link_to 'Back'.t, work_chapters_path %></li>
+	<li><%= link_to t('links.show', :default => 'Show'), [@work, @chapter] %></li> 
+	<li><%= link_to t('links.back', :default => 'Back'), work_chapters_path %></li>
 </ul>

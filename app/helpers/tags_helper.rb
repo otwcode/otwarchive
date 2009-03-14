@@ -31,9 +31,9 @@ module TagsHelper
 	def link_to_tag(tag, classless = false, options = {})
 	  options = {:class => "tag"}.merge(options)
 	  if classless
-		  link_to tag.name, tag_path(tag), options
+		  link_to tag.name, {:controller => :tags, :action => :show, :id => tag.name}, options
 	  else
-		  link_to tag.name, tag_path(tag), options
+		  link_to tag.name, {:controller => :tags, :action => :show, :id => tag.name}, options
 	  end
 	end
 

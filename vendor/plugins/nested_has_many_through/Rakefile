@@ -6,11 +6,9 @@ require 'spec/rake/spectask'
 require 'spec/rake/verify_rcov'
 require 'rake/rdoctask'
 
-plugin_name = File.basename(File.dirname(__FILE__))
+plugin_name = 'nested_has_many_through'
 
 task :default => :spec
-
-task :cruise => "garlic:all"
 
 desc "Run the specs for #{plugin_name}"
 Spec::Rake::SpecTask.new(:spec) do |t|
@@ -69,13 +67,11 @@ namespace :doc do
   task :all => ["spec:doc:html", "spec:doc", "spec:rcov", "doc"]
 end
 
-# load up garlic if it's here
-if File.directory?(File.join(File.dirname(__FILE__), 'garlic'))
-  require File.join(File.dirname(__FILE__), 'garlic/lib/garlic_tasks')
-  require File.join(File.dirname(__FILE__), 'garlic')
-end
-
-desc "clone the garlic repo (for running ci tasks)"
-task :get_garlic do
-  sh "git clone git://github.com/ianwhite/garlic.git garlic"
+task :cruise do
+  # run the garlic task, capture the output, if succesful make the docs and copy them to ardes
+  sh "garlic all"
+  `garlic run > .garlic/report.txt`
+  `scp -i ~/.ssh/ardes .garlic/report.txt ardes@ardes.com:~/subdomains/plugins/httpdocs/doc/#{plugin_name}_garlic_report.txt`
+  `cd .garlic/*/vendor/plugins/#{plugin_name}; rake doc:all; scp -i ~/.ssh/ardes -r doc ardes@ardes.com:~/subdomains/plugins/httpdocs/doc/#{plugin_name}`
+  puts "The build is GOOD"
 end

@@ -7,14 +7,14 @@
       <ul id="greeting" class="logged-out">
         <li>
   		    <%= render :partial => 'session/login' -%>
-          <a id='signin_closed' onclick='toggleLogin("signin")' style='display:none;'><%=h 'Sign in'.t %></a>
-          <a id='signin_open' onclick='toggleLogin("signin")'><%=h 'Cancel'.t %></a>
+          <a id='signin_closed' onclick='toggleLogin("signin")' style='display:none;'><%=h t('layout.header.sign_in', :default => 'Sign in') %></a>
+          <a id='signin_open' onclick='toggleLogin("signin")'><%=h t('links.cancel', :default => 'Cancel') %></a>
 		    </li>
       </ul>
     <% end -%>
     <%= render :partial => 'works/search_box' %>
   </div>
-<h1><%= link_to ArchiveConfig.APP_NAME.t, root_path %>
+<h1><%= link_to ArchiveConfig.APP_NAME, root_path %>
   	<span><%= ArchiveConfig.APPNAME -%>
      <% unless ArchiveConfig.REVISION.blank? %>(<span>rev. <%= ArchiveConfig.REVISION %></span>)<% end %></span>
   </h1>
@@ -24,22 +24,22 @@
       <%= home_link %>
     </li>
 	  <li>
-      <%= link_to_unless_current "<span>" + "works".t + "</span>", works_path %>
+      <%= link_to_unless_current "<span>" + t('layout.header.works', :default => "works") + "</span>", works_path %>
     </li>
     <li>
-      <%= link_to_unless_current "<span>" + "fandoms".t + "</span>", media_path %>
+      <%= link_to_unless_current "<span>" + t('layout.header.fandoms', :default => "fandoms") + "</span>", media_path %>
     </li>
     <li>
-      <%= link_to_unless_current "<span>" + "people".t + "</span>", users_path %>
+      <%= link_to_unless_current "<span>" + t('layout.header.people', :default => "people") + "</span>", users_path %>
     </li>
     <li>
-      <%= link_to_help "coming-soon", "<span>" + "communities".t + "</span>" %>
+      <%= link_to_help "coming-soon", "<span>" + t('layout.header.communities', :default => "communities") + "</span>" %>
     </li>
     <li>
-      <%= link_to_unless_current "<span>" + "recs".t + "</span>", bookmarks_path %>
+      <%= link_to_unless_current "<span>" + t('layout.header.recs', :default => "recs") + "</span>", bookmarks_path %>
     </li>
     <li>
-      <%= link_to_unless_current "<span>" + "tags".t + "</span>", tags_path %>
+      <%= link_to_unless_current "<span>" + t('layout.header.tags', :default => "tags") + "</span>", tags_path %>
     </li>
     
     <%- if logged_in_as_admin? -%>

@@ -1,12 +1,12 @@
-<h1><%=h 'Orphan Story'.t %></h1>
+<h1><%=h t('orphans.new.orphan_work_orphan_story', :default => 'Orphan Story') %></h1>
 
-<p><%=h 'Are you sure you want to'.t %> <strong><%=h 'permanently'.t %></strong> <%=h 'remove all identifying data from your story'.t %> 
-"<%=h work.title %>"<%=h ", its chapters, associated series and any feedback replies you may have left on it?".t %></p>
+<p><%=h t('orphans.new.orphan_work_are_you_sure', :default => 'Are you sure you want to <strong>permanently</strong> remove all 
+identifying data from your story "{{title}}", its chapters, associated series and any feedback replies you may have left on it?", :title => work.title) %></p>
 
 <%- form_tag orphans_path do -%>
   
   <%= render :partial => 'orphans/choose_pseud' %>
   
   <p><%= hidden_field_tag 'work_id', work.id %></p>
-  <p class="submit"><%= submit_tag "Yes, I'm sure".t %></p>
+  <p class="submit"><%= submit_tag t('orphans.new.orphan_work_yes', :default => "Yes, I'm sure") %></p>
 <%- end -%>

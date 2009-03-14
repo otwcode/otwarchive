@@ -5,7 +5,7 @@ class InvitationsControllerTest < ActionController::TestCase
     setup do
       get :new, :locale => 'en'
     end
-    should_redirect_to("new session path") {new_session_path}
+    should_redirect_to("login path") {login_path}
     should_set_the_flash_to /logged in/
   end
 

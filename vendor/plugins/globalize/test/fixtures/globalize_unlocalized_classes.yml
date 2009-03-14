@@ -1,9 +1,0 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-first_unlocalized_object:
-  id: 1
-  code: cat1
-  name: Wellington
-another_unlocalized_object:
-  id: 2
-  code: cat2
-  name: Seymour

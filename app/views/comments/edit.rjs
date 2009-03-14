@@ -7,7 +7,7 @@ page.visual_effect :blind_up, comment_field_id
 
 # Draw the comment form in its place
 page.delay(1) {page.replace_html comment_field_id, :partial => 'comments/comment_form', 
-                  :locals => {:comment => @comment, :commentable => @comment.commentable, :button_name => 'Update'.t}}
+                  :locals => {:comment => @comment, :commentable => @comment.commentable, :button_name => t('forms.update', :default => 'Update')}}
                   
 # Roll down the comment form
 page.delay(1.5) {page.visual_effect :blind_down, comment_field_id }

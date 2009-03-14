@@ -1,9 +1,8 @@
 <p>
-<%=h "Posted".t -%> <%= @comment.created_at.localize(common_timestring) -%><br />
-<%=h "View all comments on".t -%> <%= link_to @commentable.commentable_name, 
+<%=h "Posted" -%> <%= @comment.created_at -%><br />
+<%=h "View all comments on" -%> <%= link_to @commentable.commentable_name, 
                                 ArchiveConfig.APP_URL + 
                                 url_for(:controller => @commentable.class.to_s.downcase.pluralize, 
                                         :action => :show, :id => @commentable, 
-                                        :locale => (Locale.active? && Locale.active.language ? Locale.active.language.code : ArchiveConfig.DEFAULT_LOCALE),
                                         :show_comments => true, :anchor => :comments) -%>
 </p>

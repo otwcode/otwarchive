@@ -23,7 +23,7 @@
   <%- if params[:add_comment] -%>
     <div id="add_comment_placeholder">
       <div id="add_comment">
-        <%= render :partial => 'comments/comment_form', :locals => {:comment => Comment.new, :commentable => commentable, :button_name => 'Add Comment'.t}%> 		
+        <%= render :partial => 'comments/comment_form', :locals => {:comment => Comment.new, :commentable => commentable, :button_name => t('forms.add_comment', :default => "Add Comment")}%> 		
       </div>
   <%- else -%>
     <div id="add_comment_placeholder" style="display:none;">

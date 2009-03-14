@@ -1,11 +1,11 @@
-<h2><%=h "Unposted Drafts".t -%></h2>
+<h2><%=h "Unposted Drafts" -%></h2>
 
 <p>
-  <strong><%=h 'Please note'.t -%></strong>: 
-	<%=h "Unposted drafts are only saved for a week from the day they were first created.".t -%>
+  <strong><%=h 'Please note' -%></strong>: 
+	<%=h "Unposted drafts are only saved for a week from the day they were first created." -%>
 </p>
 
-<% paginated_section @works, {:prev_label => '&laquo; Previous'.t, :next_label => 'Next &raquo;'.t} do %>
+<% paginated_section @works, {:prev_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
 
   <ul class="story-list">
     <%- for work in @works -%>

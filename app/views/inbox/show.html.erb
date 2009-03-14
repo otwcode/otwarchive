@@ -1,17 +1,17 @@
-<h2><%=h 'My Inbox'.t %> (<%= @unread.length %> <%= "unread".t%>)</h2>
+<h2><%=h t('inbox.show.my_inbox', :default => 'My Inbox') %> (<%= t('inbox.show.unread_count', :default => "{{count}} unread", :count => @unread.length) %>)</h2>
 
 <%= flash_div :comment_error, :comment_notice -%>
 
 <%- unless @unread.blank? && @read.blank? -%>
   <%- form_tag user_inbox_path(@user), :method => :put, :id => 'inbox-form' do -%>
     <%- unless @unread.blank? -%>
-      <h3><%= "Unread comments".t %></h3>
+      <h3><%= t('inbox.show.unread_comments', :default => "Unread comments") %></h3>
       <%- for comment in @unread -%>
         <!-- START of single comment -->
           <div class="comment unread" id="comment_<%= comment.id -%>">
             <p>
               <%= check_box_tag "comments[#{comment.id}]", "checked" %>
-              <%= commentable_owner_link(comment) %> <%=h 'to'.t %> <%= commentable_description_link(comment) %> 
+              <%= commentable_owner_link(comment) %> <%=h 'to' %> <%= commentable_description_link(comment) %> 
               <%= distance_of_time_in_words_to_now(comment.created_at) %>
             </p>
             <%= sanitize_and_format_for_display comment.content %>
@@ -21,13 +21,13 @@
       <%- end -%>
     <%- end -%>
     <%- unless @read.blank? -%>
-      <h3><%= "Read comments".t %></h3>
+      <h3><%= t('inbox.show.read_comments', :default => "Read comments") %></h3>
       <%- for comment in @read -%>
         <!-- START of single comment -->
           <div class="comment read" id="comment_<%= comment.id -%>">
             <p>
               <%= check_box_tag "comments[#{comment.id}]", "checked" %>
-              <%= commentable_owner_link(comment) %> <%=h 'to'.t %> <%= commentable_description_link(comment) %> 
+              <%= commentable_owner_link(comment) %> <%=h 'to' %> <%= commentable_description_link(comment) %> 
               <%= distance_of_time_in_words_to_now(comment.created_at) %>
             </p>
             <div id="full_read_comment_<%= comment.id -%>" style="display:none;">
@@ -38,11 +38,11 @@
         <!-- END of single comment -->
       <%- end -%>
     <%- end -%>
-    <%= "Mark checked as:".t %> 
-    <%= submit_tag 'read'.t %>
-    <%= submit_tag 'unread'.t %>
-    <%= submit_tag 'spam'.t %>
-    <%= submit_tag 'delete comments from story'.t, :confirm => "Are you sure?".t %>
-    <!-- coming soon <%= submit_tag 'mass reply'.t %> -->
+    <%= "Mark checked as:" %> 
+    <%= submit_tag t('inbox.show.read', :default => 'read') %>
+    <%= submit_tag t('inbox.show.unread', :default => 'unread') %>
+    <%= submit_tag t('inbox.show.spam', :default => 'spam') %>
+    <%= submit_tag t('inbox.show.delete_from', :default => 'delete comments from story', :confirm => t('links.are_you_sure', :default => 'Are you sure?')) %>
+    <!-- coming soon <%= submit_tag t('inbox.show.mass_reply', :default => 'mass reply') %> -->
   <%- end -%>
 <%- end -%>

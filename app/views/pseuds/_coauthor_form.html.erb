@@ -1,12 +1,12 @@
 <!-- expects a local variable "form" -->
 <%- unless creation.invalid_pseuds.blank? -%> 
-  <h4><%=h 'These pseuds are invalid:'.t %> </h4>
+  <h4><%=h 'These pseuds are invalid:' %> </h4>
   <ul>
   <%- for name in creation.invalid_pseuds -%>
     <li><%= name %></li>
   <%- end -%>
   </ul>
-  <p><%= form.label :pseud, 'Try again:'.t %></p>
+  <p><%= form.label :pseud, 'Try again:' %></p>
   <p><%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
       { :url => {:controller => 'pseuds', :action => 'choose_coauthors'}, :method => :get, :param_name => 'search', 
         :tokens => ',', :min_chars => 2, :skip_style => true } %></p>
@@ -17,7 +17,7 @@
    
 <!--please assign a label to the dropdown menu! I can't quite grok it-->
 
- <p><%=h "There's more than one user with the pseud".t %> "<%=h name %>". <%=h "Please choose the one you want:".t %></p>
+ <p><%=h "There's more than one user with the pseud" %> "<%=h name %>". <%=h "Please choose the one you want:" %></p>
     <select name="<%= creation.class.to_s.downcase %>[author_attributes][ambiguous_pseuds][]">
       <%= options_from_collection_for_select(pseuds, :id, :user_name) %>
     </select>  

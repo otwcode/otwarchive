@@ -1,17 +1,17 @@
-<% prefix = @user == current_user ? "My ".t : "" %>
+<% prefix = @user == current_user ? "My " : "" %>
 <ul>
-  <li><%= link_to_unless_current prefix + "Dashboard".t, @user %></li>
+  <li><%= link_to_unless_current prefix + "Dashboard", @user %></li>
   <li><%= print_works_link(@user) %></li>
   <%- if @user == current_user -%>
     <li><%= print_drafts_link(@user) -%></li>
   <%- end -%>
   <li><%= print_series_link(@user) %></li>
   <li><%= print_bookmarks_link(@user) %></li>
-  <li><%= link_to_help "coming-soon", prefix + "Communities".t %></li>
+  <li><%= link_to_help "coming-soon", prefix + "Communities" %></li>
   <% if @user == current_user %>    
-  <li><%= link_to_unless_current "My Inbox (".t + @user.unread_comments.size.to_s + ")", user_inbox_path(@user) %></li>
-  <li><%= link_to_unless_current "My Reading History".t, user_readings_path(@user) %></li>
-  <li><%= link_to_help "coming-soon", "My Subscriptions".t %></li>
-  <li><%= link_to_unless_current "My Preferences".t, user_preferences_path(@user) %></li>
+  <li><%= link_to_unless_current "My Inbox (" + @user.unread_comments.size.to_s + ")", user_inbox_path(@user) %></li>
+  <li><%= link_to_unless_current "My Reading History", user_readings_path(@user) %></li>
+  <li><%= link_to_help "coming-soon", "My Subscriptions" %></li>
+  <li><%= link_to_unless_current "My Preferences", user_preferences_path(@user) %></li>
   <% end %>
 </ul>

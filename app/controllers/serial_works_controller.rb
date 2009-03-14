@@ -4,7 +4,10 @@ class SerialWorksController < ApplicationController
   
   def author_only
     @serial_work = SerialWork.find(params[:id])
-    (logged_in? && !(current_user.pseuds & @serial_work.work.pseuds).empty?) || [ redirect_to(works_url), flash[:error] = 'Sorry, but you don\'t have permission to make edits.'.t ]  
+    unless logged_in? && !(current_user.pseuds & @serial_work.work.pseuds).empty?
+      flash[:error] = t('errors.no_permission_to_edit', :default => "Sorry, but you don't have permission to make edits.")
+      redirect_to(works_url) 
+    end  
   end
 
   # DELETE /related_works/1

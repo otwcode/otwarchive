@@ -1,0 +1,79 @@
+English:
+  id: "1"
+  name: English
+  iso: en-US
+  short: en
+  main: "1"
+  updated_at: 2009-03-05 18:06:07
+French:
+  name: Français
+  iso: fr-FR
+  short: fr
+  main: "0"
+  updated_at: 2009-03-05 18:06:07
+Spanish:
+  name: Español 
+  iso: es-ES
+  short: es
+  main: "0"
+  updated_at: 2009-03-05 18:06:07
+German:
+  name: Deutsch
+  iso: de-DE
+  short: de
+  main: "0"
+  updated_at: 2009-03-05 18:06:07
+Italian:
+  name: Italiano
+  iso: it-IT
+  short: it
+  main: "0"
+  updated_at: 2009-03-05 18:06:07
+Japanese:
+  name: 日本語
+  iso: ja-JP
+  short: ja
+  main: "0"
+  updated_at: 2009-03-05 18:06:07
+Czech:
+  name: Čeština
+  iso: cs-CZ
+  short: cs
+  main: "0"
+  updated_at: 2009-03-05 18:06:07
+Russian:    
+  name: Pyccĸий  
+  iso: ru-RU
+  short: ru
+  main: "0"
+  updated_at: 2009-03-05 18:06:07
+Suomi:
+  name: Suomi
+  iso: fi-FI
+  short: fi
+  main: "0"
+  updated_at: 2009-03-05 18:06:07
+Bahasa Indonesia:
+  name: Bahasa Indonesia
+  iso: id-ID
+  short: id
+  main: "0"
+  updated_at: 2009-03-05 18:06:07
+Nederlands:
+  name: Nederlands
+  iso: nl-NL
+  short: nl
+  main: "0"
+  updated_at: 2009-03-05 18:06:07
+Português:
+  name: Português
+  iso: pt-BR
+  short: pt
+  main: "0"
+  updated_at: 2009-03-05 18:06:07 
+>中文:
+  name: >中文
+  iso: zh-CHS
+  short: zh
+  main: "0"
+  updated_at: 2009-03-05 18:06:07

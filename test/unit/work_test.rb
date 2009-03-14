@@ -11,7 +11,7 @@ class WorkTest < ActiveSupport::TestCase
     should_ensure_length_in_range :title, ArchiveConfig.TITLE_MIN..ArchiveConfig.TITLE_MAX, :short_message => /must be at least/, :long_message => /must be less/
     should_ensure_length_in_range :notes, 0..ArchiveConfig.NOTES_MAX, :long_message => /must be less/
     should_ensure_length_in_range :summary, 0..ArchiveConfig.SUMMARY_MAX, :long_message => /must be less/
-    should_belong_to :language
+    should_belong_to :locale
     should "have an author" do
       work = new_work(:authors => [])
       assert !work.save
@@ -125,14 +125,14 @@ class WorkTest < ActiveSupport::TestCase
         assert_equal [@work1], Work.with_all_tag_ids([@tag.id]).owned_by(@work1.pseuds.first.user)
       end
       should "not be returned by with_all_tag_ids and owned_by and visible chained" do
-        assert_equal [], Work.visible.owned_by(@work1.pseuds.first.user).with_all_tag_ids([@tag.id])
+        assert_equal [], Work.visible(skip_ownership = true).owned_by(@work1.pseuds.first.user).with_all_tag_ids([@tag.id])
       end
       context "and visible" do
         setup do
           @work1.update_attribute("posted", true)
         end
         should "be returned by owned_by chained with visible and with tags" do
-          assert_equal [@work1], Work.visible.owned_by(@work1.pseuds.first.user).with_all_tag_ids([@tag.id])
+          assert_equal [@work1], Work.visible(skip_ownership = true).owned_by(@work1.pseuds.first.user).with_all_tag_ids([@tag.id])
         end
       end
     end

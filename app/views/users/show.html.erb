@@ -3,7 +3,7 @@
  
   <%- unless @works.blank? -%>
   <div class="user-module" id="user-works">
-    <h2><%=h 'Recent works'.t %></h2>
+    <h2><%=h 'Recent works' %></h2>
     <ul class="story-list">
       <%- for work in @works -%>
     	  <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
@@ -14,7 +14,7 @@
   
   <%- unless @series.blank? -%>
   <div class="user-module" id="user-series">
-    <h2><%=h 'Recent series'.t %></h2>
+    <h2><%=h 'Recent series' %></h2>
     <ul>
       <%- for series in @series -%>
         <li><%= link_to series.title, series %></li>
@@ -25,7 +25,7 @@
   
   <%- unless @bookmarks.blank? -%>
   <div class="user-module" id="user-bookmarks">
-    <h2><%=h 'Recent bookmarks'.t %></h2>
+    <h2><%=h 'Recent bookmarks' %></h2>
     <%- for bookmark in @bookmarks -%>
       <%= render :partial => 'bookmarks/bookmark', :locals => {:bookmark => bookmark} %>
     <%- end -%>

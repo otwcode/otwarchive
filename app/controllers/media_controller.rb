@@ -6,7 +6,7 @@ class MediaController < ApplicationController
 
   def show
     if params[:id] == "0"
-      @medium_name = "Uncategorized Fandoms".t
+      @medium_name = "Uncategorized Fandoms"
       @fandoms = Fandom.no_parent.by_name.paginate(:page => params[:page])
     else
       medium = Media.find_by_name(params[:id])

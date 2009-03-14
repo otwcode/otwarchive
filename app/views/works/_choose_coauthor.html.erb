@@ -1,4 +1,4 @@
-<p class="message"><%=h 'Please verify the names of your co-authors'.t %></p>
+<p class="message"><%=h 'Please verify the names of your co-authors' %></p>
 
 <%- form_for(@work) do |f| -%>
   
@@ -7,8 +7,8 @@
   <%= render :partial => 'hidden_fields', :locals => {:form => f} -%>
 
   <p class="submit">
-    <%= submit_tag 'Preview'.t, :name => 'preview_button' %>
-    <%= submit_tag 'Cancel'.t, :name => 'cancel_coauthor_button' %> 
+    <%= submit_tag 'Preview', :name => 'preview_button' %>
+    <%= submit_tag 'Cancel', :name => 'cancel_coauthor_button' %> 
   </p>
 
 <% end %>

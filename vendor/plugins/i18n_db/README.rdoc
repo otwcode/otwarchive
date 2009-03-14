@@ -1,0 +1,19 @@
+=Database-driven namespaced translations for Rails
+
+This is a Rails-2.2+ i18n plugin written with a specific set of features in mind:
+
+* Only strings (with macro substitutions) are translated. E.g. everything that one would write directly in the view templates for a monolingual site, plus error messages etc.
+* Fallback to the primary language when a translation is missing.
+* Missing translations are tracked in the database.
+* Namespaces.
+* <em>No support for model translations (like product names) at this stage. Feel free to add!</em>
+* <em>No support for pluralization initially.</em>
+* Memcached for speed.
+
+Each translated string can also be seen as an ActiveRecord instance, enabling easier construction of a web interface for translators (see i18n_db_admin[http://github.com/yar/i18n_db_admin]). Deeply nested namespaces are supported and encouraged; otherwise, as we all know, the collection of translated phrases would turn into unmaintainable mess very quickly.
+
+After loading, the translated strings are cached with standard Rails mechanisms and the default Simple Internationalization backend takes over and displays them.
+
+Based on the code of globalize[http://github.com/yannlugrin/globalize] (for Rails 2.0) and i18n_yaml[http://github.com/iain/i18n_yaml].
+
+Please see i18n_db_admin[http://github.com/yar/i18n_db_admin] for usage example.

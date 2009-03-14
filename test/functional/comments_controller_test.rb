@@ -41,7 +41,7 @@ class CommentsControllerTest < ActionController::TestCase
   def test_create_comment_fail
     @request.env['HTTP_REFERER'] = 'http://www.google.com/'
     assert_no_difference('Comment.count') do
-      post :create, :locale => 'en', :comment => { :content => 'foo', :name => 'Someone', :email => 'someone@someplace.org' }
+      post :create, :comment => { :content => 'foo', :name => 'Someone', :email => 'someone@someplace.org' }
     end
     assert !flash[:error].blank?
     assert_response :redirect
@@ -51,7 +51,7 @@ class CommentsControllerTest < ActionController::TestCase
     user = create_user
     @request.session[:user] = user
     assert_no_difference('Comment.count') do
-      post :create, :locale => 'en', :comment => { :content => 'foo' }
+      post :create, :comment => { :content => 'foo' }
     end
     assert !flash[:error].blank?
     assert_response :redirect
@@ -60,21 +60,18 @@ class CommentsControllerTest < ActionController::TestCase
   def test_create_comment_comment
     create_comments
     assert_difference('Comment.count') do
-      post :create, :locale => 'en',
-                    :comment_id => @comment1.id,
+      post :create, :comment_id => @comment1.id,
                     :comment => { :content => 'foo', :name => 'Someone', :email => 'newcommenter@someplace.org' }
     end
     @comment = Comment.find_by_email('newcommenter@someplace.org')
-    assert_redirected_to :controller => :works, :action => :show, :locale => ArchiveConfig.DEFAULT_LOCALE, :id => @work.id,
-                                   :show_comments => true, :anchor => "comment#{@comment.id}"
+    assert_redirected_to work_path(:id => @work.id, :show_comments => true, :anchor => "comment#{@comment.id}")
   end
   # Test create  POST  /:locale/works/:work_id/chapters/:chapter_id/comments
   def test_create_work_chapter_comment
     create_comments
     assert_difference('Comment.count') do
       @request.session[:user] = @user
-      post :create, :locale => 'en',
-                    :work_id => @work.id,
+      post :create, :work_id => @work.id,
                     :chapter_id => @chapter1.id,
                     :comment => {"pseud_id"=>@pseud.id,
                                  "content"=>"new chapter"}
@@ -90,7 +87,7 @@ class CommentsControllerTest < ActionController::TestCase
     create_comments
     @request.session[:user] = @user
     assert_no_difference('Comment.count') do
-      delete :destroy, :locale => 'en', :id => @comment1.id
+      delete :destroy, :id => @comment1.id
     end
     @comment1.reload
     assert @comment1.is_deleted?
@@ -99,7 +96,7 @@ class CommentsControllerTest < ActionController::TestCase
     create_comments
     @request.session[:user] = @user
     assert_difference('Comment.count', -1) do
-      delete :destroy, :locale => 'en', :id => @comment2.id
+      delete :destroy, :id => @comment2.id
     end
     assert_raises(ActiveRecord::RecordNotFound) { @comment2.reload }
   end
@@ -107,7 +104,7 @@ class CommentsControllerTest < ActionController::TestCase
   def test_delete_work_chapter_comment
     create_comments
     @request.session[:user] = @user
-    delete :destroy, :locale => 'en', :work_id => @work.id, :chapter_id => @chapter1.id, :id => @comment1.id
+    delete :destroy, :work_id => @work.id, :chapter_id => @chapter1.id, :id => @comment1.id
     @comment1.reload
     assert @comment1.is_deleted?
   end
@@ -115,7 +112,7 @@ class CommentsControllerTest < ActionController::TestCase
   def test_edit_chapter_comment_path
     create_comments
     @request.session[:user] = @user
-    get :edit, :locale => 'en', :chapter_id => @chapter1.id, :id => @comment2.id
+    get :edit, :chapter_id => @chapter1.id, :id => @comment2.id
     assert_response :success
   end
   # Test edit  GET  /:locale/comments/:comment_id/comments/:id/edit  (named path: edit_comment_comment)
@@ -123,28 +120,28 @@ class CommentsControllerTest < ActionController::TestCase
   def test_edit_comment
     create_comments
     @request.session[:user] = @user
-    get :edit, :locale => 'en', :id => @comment2.id
+    get :edit, :id => @comment2.id
     assert_response :success
   end
   # Test edit  GET  /:locale/works/:work_id/chapters/:chapter_id/comments/:id/edit  (named path: edit_work_chapter_comment)
   def test_edit_work_chapter_comment_path
     create_comments
     @request.session[:user] = @user
-    get :edit, :locale => 'en', :work_id => @work.id, :chapter_id => @chapter1.id, :id => @comment2.id
+    get :edit, :work_id => @work.id, :chapter_id => @chapter1.id, :id => @comment2.id
     assert_response :success
     assert_not_nil assigns(:commentable)
   end
   # Test index  GET  /:locale/chapters/:chapter_id/comments  (named path: chapter_comments)
   def test_chapter_comments_path1
     create_comments
-    get :index, :locale => 'en', :chapter_id => @chapter2.id
+    get :index, :chapter_id => @chapter2.id
     assert_response :success
     assert_no_tag :tag => 'p', :content => 'first comment'
     assert_tag :tag => 'p', :content => 'second comment'
   end
   def test_chapter_comments_path2
     create_comments
-    get :index, :locale => 'en', :chapter_id => @chapter1.id
+    get :index, :chapter_id => @chapter1.id
     assert_response :success
     assert_tag :tag => 'p', :content => 'first comment'
     assert_no_tag :tag => 'p', :content => 'second comment'
@@ -153,7 +150,7 @@ class CommentsControllerTest < ActionController::TestCase
   def test_comments_path
     create_comments
     # FIXME You have a nil object
-    get :index, :locale => 'en'
+    get :index
     assert_response :success
     assert_tag :tag => 'p', :content => @comment1.content
     assert_tag  :tag => 'p', :content => @comment2.content
@@ -163,7 +160,7 @@ class CommentsControllerTest < ActionController::TestCase
   def test_comment_comments_path
     # FIXME ignoring attempt to close body with div
     create_comments
-    get :index, :locale => 'en', :comment_id => @comment1.id
+    get :index, :comment_id => @comment1.id
     assert_response :success
     assert_not_nil assigns(:comments)
     assert_no_tag :tag => 'p', :content => @comment1.content
@@ -173,7 +170,7 @@ class CommentsControllerTest < ActionController::TestCase
   # Test index  GET  /:locale/works/:work_id/chapters/:chapter_id/comments  (named path: work_chapter_comments)
   def test_work_chapter_comments_path
     create_comments
-    get :index, :locale => 'en', :work_id => @work.id, :chapter_id => @chapter1.id
+    get :index, :work_id => @work.id, :chapter_id => @chapter1.id
     assert_response :success
     assert_not_nil assigns(:comments)
     assert_tag :tag => 'p', :content => 'first comment'
@@ -182,7 +179,7 @@ class CommentsControllerTest < ActionController::TestCase
   # Test new  GET  /:locale/chapters/:chapter_id/comments/new  (named path: new_chapter_comment)
   def test_new_chapter_comment_path
     create_comments
-    get :new, :locale => 'en', :chapter_id => @chapter1.id
+    get :new, :chapter_id => @chapter1.id
     assert_response :success
     assert_not_nil assigns(:commentable)
   end
@@ -192,14 +189,14 @@ class CommentsControllerTest < ActionController::TestCase
     # Trying to create a new comment with nothing to comment on should result in an
     # error and being redirected back to the previous page
     @request.env['HTTP_REFERER'] = 'http://www.google.com/'
-    get :new, :locale => 'en'
+    get :new
     assert_response :redirect
     assert !flash[:error].blank?
   end
   # Test new  GET  /:locale/works/:work_id/chapters/:chapter_id/comments/new  (named path: new_work_chapter_comment)
   def test_new_work_chapter_comment_path
     create_comments
-    get :new, :locale => 'en', :work_id => @work.id, :chapter_id => @chapter1.id
+    get :new, :work_id => @work.id, :chapter_id => @chapter1.id
     assert_response :success
     assert_not_nil assigns(:commentable)
   end
@@ -207,7 +204,7 @@ class CommentsControllerTest < ActionController::TestCase
   # Test show  GET  /:locale/chapters/:chapter_id/comments/:id  (named path: chapter_comment)
   def test_chapter_comment_path
     create_comments
-    get :show, :locale => 'en', :chapter_id => @chapter1.id, :id => @comment1.id
+    get :show, :chapter_id => @chapter1.id, :id => @comment1.id
     assert_tag :tag => 'p', :content => 'first comment'
     assert_tag :tag => 'p', :content => 'first child'
     assert_no_tag :tag => 'p', :content => 'second comment'
@@ -216,7 +213,7 @@ class CommentsControllerTest < ActionController::TestCase
   # Test show  GET  /:locale/comments/:id  (named path: comment)
   def test_comment_path
     create_comments
-    get :show, :locale => 'en', :id => @comment1.id
+    get :show, :id => @comment1.id
     assert_response :success
     assert_tag :tag => 'p', :content => @comment1.content
     assert_no_tag :tag => 'p', :content => @comment2.content
@@ -224,7 +221,7 @@ class CommentsControllerTest < ActionController::TestCase
   # Test show  GET  /:locale/works/:work_id/chapters/:chapter_id/comments/:id  (named path: work_chapter_comment)
   def test_work_chapter_comment_path
     create_comments
-    get :show, :locale => 'en', :work_id => @work.id, :chapter_id => @chapter1.id, :id => @comment1.id
+    get :show, :work_id => @work.id, :chapter_id => @chapter1.id, :id => @comment1.id
     assert_response :success
     assert_tag :tag => 'p', :content => 'first comment'
   end
@@ -232,8 +229,7 @@ class CommentsControllerTest < ActionController::TestCase
   def test_update_chapter_comment
     create_comments
     @request.session[:user] = @user
-    put :update, :locale => 'en',
-                 :chapter_id => @chapter1.id,
+    put :update, :chapter_id => @chapter1.id,
                  :id => @comment2.id,
                  :pseud_id => @pseud.id,
                  :comment => { :content => 'more content' }
@@ -245,7 +241,7 @@ class CommentsControllerTest < ActionController::TestCase
   def test_update_comment_comment
     create_comments
     @request.session[:user] = @user
-    put :update, :locale => 'en', :id => @child1.id, :comment => { :content => 'new content' }
+    put :update, :id => @child1.id, :comment => { :content => 'new content' }
     @child1.reload
     assert_equal 'new content', @child1.content
   end
@@ -253,8 +249,7 @@ class CommentsControllerTest < ActionController::TestCase
   def test_update_work_chapter_comment
     create_comments
     @request.session[:user] = @user
-    put :update, :locale => 'en',
-                 :work_id => @work.id,
+    put :update, :work_id => @work.id,
                  :chapter_id => @chapter1.id,
                  :id => @comment2.id,
                  :comment => { :content => 'new content' }
@@ -266,8 +261,7 @@ class CommentsControllerTest < ActionController::TestCase
     create_comments
     @request.env['HTTP_REFERER'] = 'http://www.google.com/'
     @request.session[:user] = @user
-    put :update, :locale => 'en',
-                 :work_id => @work.id,
+    put :update, :work_id => @work.id,
                  :chapter_id => @chapter1.id,
                  :id => @comment1.id,
                  :comment => { :content => 'new content' }

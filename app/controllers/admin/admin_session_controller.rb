@@ -11,17 +11,17 @@ class Admin::AdminSessionController < ApplicationController
     self.current_admin = Admin.authenticate(params[:login], params[:password])
     if logged_in_as_admin?
       redirect_to admin_users_path
-      flash[:notice] = "Logged in successfully".t
-    else
-      flash[:notice] = "Authentication failed.".t
-      render :action => 'new'
+      flash[:notice] = t('notices.session.logged_in', :default => "Logged in successfully")
+   else
+      flash[:notice] = t('notices.session.authentication_failed', :default => "Authentication failed.")
+     render :action => 'new'
       end
   end
 
   def destroy
     cookies.delete :auth_token
     reset_session
-    flash[:notice] = "You have been logged out.".t
-    redirect_to admin_login_path
+    flash[:notice] = t('notices.session.logged_out', :default => "You have been logged out.")
+   redirect_to admin_login_path
   end
 end

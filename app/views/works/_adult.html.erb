@@ -1,13 +1,13 @@
 <p class="message warning">
-<%=h 'This work potentially has adult content. If you proceed you have agreed that you are willing to see such content.'.t %>
+<%=h 'This work potentially has adult content. If you proceed you have agreed that you are willing to see such content.' %>
 </p>
 
 <ul class="navigation">
-<li><%= link_to "Proceed".t, {:controller => :works, :action => :show, :id => @work, :view_adult => true}  %></li>
-<li><%= link_to "Go Back".t, :back %></li>
+<li><%= link_to "Proceed", {:controller => :works, :action => :show, :id => @work, :view_adult => true}  %></li>
+<li><%= link_to "Go Back", :back %></li>
 </ul>
 
 <p class="message footnote">
 <%=h 'If you accept cookies from our site and you click "Proceed", you will not be asked again during this session 
-(that is, until you close your browser). If you are logged in you can'.t %>&nbsp;<% if logged_in? %><%= link_to 'set your preferences'.t, user_preferences_path(current_user) %><%- else -%><%=h 'set your preferences'.t %><%- end -%> <%=h 'so that you are never asked.'.t %>
+(that is, until you close your browser). If you are logged in you can' %>&nbsp;<% if logged_in? %><%= link_to 'set your preferences', user_preferences_path(current_user) %><%- else -%><%=h 'set your preferences' %><%- end -%> <%=h 'so that you are never asked.' %>
 </p>

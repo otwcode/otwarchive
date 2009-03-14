@@ -1,9 +1,9 @@
-<h1><%=h 'Editing pseud'.t %></h1>
+<h1><%=h 'Editing pseud' %></h1>
 
 <%= error_messages_for :pseud %>
-<%= render :partial => 'pseuds_form', :locals => { :button_text => "Update".t } %>
+<%= render :partial => 'pseuds_form', :locals => { :button_text => "Update" } %>
 
 <ul class="navigation">
-	<li><%= link_to 'Show'.t, [@user, @pseud] %></li>
-	<li><%= link_to 'Back'.t, user_pseuds_path(@user) %></li>
+	<li><%= link_to 'Show', [@user, @pseud] %></li>
+	<li><%= link_to 'Back', user_pseuds_path(@user) %></li>
 </ul>

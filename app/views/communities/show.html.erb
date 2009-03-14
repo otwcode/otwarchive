@@ -1,20 +1,20 @@
 <!-- should this be a definition list? dl dt dd-->
 <p>
-  <strong><%=h 'Name:'.t %></strong>
+  <strong><%=h 'Name:' %></strong>
   <%=h @community.name %>
 </p>
 
 <p>
-  <strong><%=h 'Description:'.t %></strong>
+  <strong><%=h 'Description:' %></strong>
   <%=h @community.description %>
 </p>
 
 <p>
-  <strong><%=h 'Open membership:'.t %></strong>
+  <strong><%=h 'Open membership:' %></strong>
   <%=h @community.open_membership %>
 </p>
 
 <ul class="navigation">
-	<li><%= link_to 'Edit'.t, edit_community_path(@community) %></li>
-	<li><%= link_to 'Back'.t, communities_path %></li>
+	<li><%= link_to 'Edit', edit_community_path(@community) %></li>
+	<li><%= link_to 'Back', communities_path %></li>
 </ul>

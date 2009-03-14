@@ -1,4 +1,4 @@
-<h1><%= link_to 'Fandoms'.t, media_path %> > <%=h @medium_name %></h1>
+<h1><%= link_to t('media.show.fandoms', :default => 'Fandoms'), media_path %> > <%=h @medium_name %></h1>
 <ul>
   <%- for fandom in @fandoms -%>
   <%- if fandom.visible_works_count > 0 -%>
@@ -8,5 +8,5 @@
 </ul>
 
 <div class="pagination">
-	<%= will_paginate @fandoms, :prev_label =>  "&laquo; Previous".t,:next_label => "Next &raquo;".t %>
+	<%= will_paginate @fandoms, :prev_label =>  "&laquo; " + t('pagination.previous', :default => "Previous"), :next_label => t('pagination.next', :default => "Next") + " &raquo;" %>
 </div>

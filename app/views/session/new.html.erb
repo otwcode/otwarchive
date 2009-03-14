@@ -1,18 +1,18 @@
 <!-- loginform floated right -->
 <%- if @restricted -%>
-  <h3><%=h "Sorry!".t %></h3>
+  <h3><%=h "Sorry!" %></h3>
   <p>
-    <%=h "This story is only available to registered users of the Archive.".t %> 
-    <%=h "If you already have an Archive of Our Own account, sign in now.".t %> 
-    <%=h "Or join us for free - it's easy.".t %>
+    <%=h "This story is only available to registered users of the Archive." %> 
+    <%=h "If you already have an Archive of Our Own account, sign in now." %> 
+    <%=h "Or join us for free - it's easy." %>
   </p>
 <%- else -%>
-  <h3><%=h "Login".t %></h3>
+  <h3><%=h "Login" %></h3>
   <p>
-    <strong><%=h "Reminder:".t %></strong>
-    <span><%=h "This site is in early beta. Things may break or crash without notice. Please".t %></span>
-    <a href="http://code.google.com/p/otwarchive/issues/entry"><%=h "report".t %></a>
-    <span><%=h "any pesky bugs and give us your feedback!".t %></span>
+    <strong><%=h "Reminder:" %></strong>
+    <span><%=h "This site is in early beta. Things may break or crash without notice. Please" %></span>
+    <a href="http://code.google.com/p/otwarchive/issues/entry"><%=h "report" %></a>
+    <span><%=h "any pesky bugs and give us your feedback!" %></span>
   </p>
 <%- end -%>
 
@@ -29,5 +29,5 @@
 
 <%- if ArchiveConfig.ACCOUNT_CREATION_ENABLED -%>
 <!-- Create account link -->
-<p><%= "New tester?".t %> <%= link_to 'Create an account now.'.t, new_user_path %></p>
+<p><%= "New tester?" %> <%= link_to 'Create an account now.', new_user_path %></p>
 <%- end -%>

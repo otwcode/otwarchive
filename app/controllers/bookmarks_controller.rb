@@ -7,8 +7,8 @@ class BookmarksController < ApplicationController
   def is_author
     @bookmark = Bookmark.find(params[:id])
     unless current_user.is_a?(User) && current_user.is_author_of?(@bookmark)
-      flash[:error] = "Sorry, but you don't have permission to make edits.".t
-      redirect_to(@bookmark)     
+      flash[:error] = t('errors.no_permission_to_edit', :default => "Sorry, but you don't have permission to make edits.")
+     redirect_to(@bookmark)     
     end
   end
   
@@ -56,8 +56,8 @@ class BookmarksController < ApplicationController
         store_location 
         redirect_to new_session_path and return        
       elsif @bookmark.user != current_user
-  	    flash[:error] = 'This page is unavailable.'.t
-        redirect_to user_path(current_user) and return
+  	    flash[:error] = t('errors.bookmarks.not_visible', :default => 'This page is unavailable.')
+       redirect_to user_path(current_user) and return
       end
     end
   end
@@ -86,8 +86,8 @@ class BookmarksController < ApplicationController
     @bookmark.set_external(params[:fetched][:value].to_i) unless params[:fetched].blank? || params[:fetched][:value].blank?
     begin
       if @bookmark.save && @bookmark.tag_string=params[:tag_string]
-        flash[:notice] = 'Bookmark was successfully created.'.t
-        redirect_to(@bookmark) 
+        flash[:notice] = t('notices.bookmarks.successfully_created', :default => 'Bookmark was successfully created.')
+       redirect_to(@bookmark) 
       else
         raise
       end
@@ -103,8 +103,8 @@ class BookmarksController < ApplicationController
     @bookmark = Bookmark.find(params[:id])
     begin
       if @bookmark.update_attributes(params[:bookmark]) && @bookmark.tag_string=params[:tag_string]
-        flash[:notice] = 'Bookmark was successfully updated.'.t
-        redirect_to(@bookmark) 
+        flash[:notice] = t('notices.bookmarks.successfully_updated', :default => 'Bookmark was successfully updated.')
+       redirect_to(@bookmark) 
       else
         raise
       end
@@ -119,7 +119,7 @@ class BookmarksController < ApplicationController
   def destroy
     @bookmark = Bookmark.find(params[:id])
     @bookmark.destroy
-    flash[:notice] = 'Bookmark was successfully deleted.'.t
-    redirect_to user_bookmarks_path(current_user)
+    flash[:notice] = t('notices.bookmarks.successfully_deleted', :default => 'Bookmark was successfully deleted.')
+   redirect_to user_bookmarks_path(current_user)
   end
 end

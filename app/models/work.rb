@@ -35,7 +35,7 @@ class Work < ActiveRecord::Base
 
   acts_as_commentable
 
-  belongs_to :language, :foreign_key => 'language_id', :class_name => '::Globalize::Language'
+  belongs_to :locale, :foreign_key => 'language_id', :class_name => 'Locale'
 
   ########################################################################
   # VIRTUAL ATTRIBUTES
@@ -55,30 +55,30 @@ class Work < ActiveRecord::Base
   ########################################################################
   validates_presence_of :title
   validates_length_of :title, 
-    :minimum => ArchiveConfig.TITLE_MIN, :too_short=> "must be at least %d letters long.".t/ArchiveConfig.TITLE_MIN
+    :minimum => ArchiveConfig.TITLE_MIN, :too_short=> "must be at least " + ArchiveConfig.TITLE_MIN.to_s + " letters long."
 
   validates_length_of :title, 
-    :maximum => ArchiveConfig.TITLE_MAX, :too_long=> "must be less than %d letters long.".t/ArchiveConfig.TITLE_MAX
+    :maximum => ArchiveConfig.TITLE_MAX, :too_long=> "must be less than " + ArchiveConfig.TITLE_MAX.to_s + " letters long."
     
   validates_length_of :summary, 
     :allow_blank => true, 
-    :maximum => ArchiveConfig.SUMMARY_MAX, :too_long => "must be less than %d letters long.".t/ArchiveConfig.SUMMARY_MAX
+    :maximum => ArchiveConfig.SUMMARY_MAX, :too_long => "must be less than " + ArchiveConfig.SUMMARY_MAX.to_s + " letters long."
     
   validates_length_of :notes, 
     :allow_blank => true, 
-    :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than %d letters long.".t/ArchiveConfig.NOTES_MAX
+    :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than " + ArchiveConfig.NOTES_MAX.to_s + " letters long."
   
   #temporary validation to let people know they can't enter external urls yet
   validates_format_of :parent_url, :with => Regexp.new(ArchiveConfig.APP_URL, true), 
-    :allow_blank => true, :message => "can only be in the archive for now - we're working on expanding that!".t
-    
+    :allow_blank => true, :message => "can only be in the archive for now - we're working on expanding that!"
+   
   # Checks that work has at least one author
   def validate_authors
     if self.authors.blank? && self.pseuds.empty?
-      errors.add_to_base("Work must have at least one author.".t)
+      errors.add_to_base("Work must have at least one author.")
       return false
     elsif !self.invalid_pseuds.blank?
-      errors.add_to_base("These pseuds are invalid: ".t + self.invalid_pseuds.inspect) 
+      errors.add_to_base("These pseuds are invalid: " + self.invalid_pseuds.inspect) 
     end
   end
 
@@ -87,7 +87,7 @@ class Work < ActiveRecord::Base
     unless self.title.blank?
       self.title = self.title.strip
       if self.title.length < ArchiveConfig.TITLE_MIN
-        errors.add_to_base("Title must be at least %d characters long without leading spaces.".t/ArchiveConfig.TITLE_MIN)
+        errors.add_to_base("Title must be at least " + ArchiveConfig.TITLE_MIN.to_s + " characters long without leading spaces.")
         return false
       end
     end
@@ -97,7 +97,7 @@ class Work < ActiveRecord::Base
     to = DateTime.now
     return false unless self.published_at
     if self.published_at > to
-      errors.add_to_base("Publication date can't be in the future.".t)
+      errors.add_to_base("Publication date can't be in the future.")
       return false
     end
   end
@@ -105,7 +105,7 @@ class Work < ActiveRecord::Base
   # rephrases the "chapters is invalid" message
   def after_validation
     if self.errors.on(:chapters)
-      self.errors.add(:base, "Please enter your story in the text field below.".t)
+      self.errors.add(:base, "Please enter your story in the text field below.")
       self.errors.delete(:chapters)
     end
   end
@@ -196,12 +196,13 @@ class Work < ActiveRecord::Base
   # Associating works with languages.  
   def set_language(lang = nil)
     if lang.nil?
-      return if self.language
-      if Locale.active && Locale.active.language
-        self.language = Locale.active.language
-      end
+      return if self.locale
+      self.locale = Locale.find_main_cached
+      # Setting all works to the default language until there's a better framework in place
+      # for language preferences - elz, 3/7/09
+      # self.locale = Locale.find_by_short(I18n.locale.to_s)
     else
-      self.language = lang
+      self.locale = lang
     end
   end
   
@@ -499,7 +500,7 @@ class Work < ActiveRecord::Base
   end
   
   def validate_tags
-    errors.add_to_base("Work must have required tags.".t) unless self.has_required_tags?      
+    errors.add_to_base("Work must have required tags.") unless self.has_required_tags?      
     self.has_required_tags? 
   end
   
@@ -702,7 +703,7 @@ class Work < ActiveRecord::Base
 
   named_scope :ordered_by_author, lambda{|sort_direction|
     {
-      :joins => OWNERSHIP_JOIN + " " + COMMON_TAG_JOIN,
+      #:joins => OWNERSHIP_JOIN + " " + COMMON_TAG_JOIN,
       :order => AUTHOR_TO_SORT_ON + " " + "#{(sort_direction.upcase == 'DESC' ? 'DESC' : 'ASC')}"
     }    
   }
@@ -743,7 +744,7 @@ class Work < ActiveRecord::Base
   named_scope :with_all_tags, lambda {|tags_to_find|
     {
       :select => "DISTINCT works.*",
-      :joins => COMMON_TAG_JOIN + " " + OWNERSHIP_JOIN,
+      :joins => COMMON_TAG_JOIN,
       :conditions => ["tags.id in (?)", tags_to_find.collect(&:id)],
       :group => "works.id HAVING count(DISTINCT tags.id) = #{tags_to_find.size}"
     }
@@ -752,7 +753,7 @@ class Work < ActiveRecord::Base
   named_scope :with_any_tags, lambda {|tags_to_find|
     {
       :select => "DISTINCT works.*",
-      :joins => COMMON_TAG_JOIN + " " + OWNERSHIP_JOIN,
+      :joins => COMMON_TAG_JOIN,
       :conditions => ["tags.id in (?)", tags_to_find.collect(&:id)],
     }
   }
@@ -760,7 +761,7 @@ class Work < ActiveRecord::Base
   named_scope :with_all_tag_ids, lambda {|tag_ids_to_find|
     {
       :select => "DISTINCT works.*",
-      :joins => COMMON_TAG_JOIN + " " + OWNERSHIP_JOIN,
+      :joins => COMMON_TAG_JOIN,
       :conditions => ["tags.id in (?)", tag_ids_to_find],
       :group => "works.id HAVING count(DISTINCT tags.id) = #{tag_ids_to_find.size}"
     }
@@ -769,21 +770,22 @@ class Work < ActiveRecord::Base
   named_scope :with_any_tag_ids, lambda {|tag_ids_to_find|
     {
       :select => "DISTINCT works.*",
-      :joins => COMMON_TAG_JOIN + " " + OWNERSHIP_JOIN,
+      :joins => COMMON_TAG_JOIN,
       :conditions => ["tags.id in (?)", tag_ids_to_find],
     }
   }
-
-  named_scope :visible, lambda {
+  
+  # Skip the ownership join if you're combining it with owned_by, or the two joins will conflict
+  named_scope :visible, lambda { |*skip_ownership| 
     {
-      :select => "DISTINCT works.*",
-      :joins => COMMON_TAG_JOIN + " " + OWNERSHIP_JOIN
+     :select => "DISTINCT works.*",
+     :joins => (skip_ownership.empty? ? OWNERSHIP_JOIN : '')
     }.merge( (User.current_user && User.current_user.kind_of?(Admin)) ?
       { :conditions => {:posted => true} } :
       ( (User.current_user && User.current_user != :false) ?
         {:conditions => ['works.posted = ? AND (works.hidden_by_admin = ? OR users.id = ?)', true, false, User.current_user.id] } :
         {:conditions => VISIBLE_TO_ALL_CONDITIONS })    
-    )
+      )
   }
 
   named_scope :ids_only, :select => "DISTINCT works.id"
@@ -791,7 +793,7 @@ class Work < ActiveRecord::Base
   named_scope :tags_with_count, lambda {|*args|
     {
       :select => "tags.type as tag_type, tags.id as tag_id, tags.name as tag_name, count(distinct works.id) as count",
-      :joins => COMMON_TAG_JOIN + " " + OWNERSHIP_JOIN,
+      :joins => COMMON_TAG_JOIN,
       :group => "tags.name",
       :order => "tags.type, tags.name ASC"
     }.merge(args.first.size > 0 ? {:conditions => ["works.id in (?)", args.first]} : {})
@@ -806,7 +808,8 @@ class Work < ActiveRecord::Base
   }
 
   named_scope :owned_by_conditions, lambda {|user|
-    {
+    {  
+      :joins => OWNERSHIP_JOIN,
       :conditions => ['users.id = ?', user.id]
     }
   }
@@ -821,13 +824,15 @@ class Work < ActiveRecord::Base
   }
 
   named_scope :written_by_conditions, lambda {|pseuds|
-    {
+    { 
+      :joins => OWNERSHIP_JOIN,
       :conditions => ['pseuds.id IN (?)', pseuds.collect(&:id)]
     }
   }
 
   named_scope :written_by_id_conditions, lambda {|pseud_ids|
-    {
+    { 
+      :joins => OWNERSHIP_JOIN,
       :conditions => ['pseuds.id IN (?)', pseud_ids]
     }
   }
@@ -865,15 +870,16 @@ class Work < ActiveRecord::Base
     conditions_clause = {}
     command = 'Work.ids_only'
     visible = '.visible'
+    visible_without_owners = '.visible(skip_owners = true)'
     tags = '.with_all_tag_ids(options[:selected_tags])'
     written = '.written_by_id_conditions(options[:selected_pseuds])'
     
     if options[:selected_tags] && options[:selected_pseuds]
-      command += written + visible + tags
+      command += written + visible_without_owners + tags
     elsif options[:selected_tags]
       command += visible + tags
     elsif options[:selected_pseuds]
-      command += written + visible
+      command += written + visible_without_owners
     else
       command += visible
     end
@@ -893,6 +899,7 @@ class Work < ActiveRecord::Base
   def self.find_with_options(options = {})
     command = ''
     visible = '.visible'
+    visible_without_owners = '.visible(skip_owners = true)'
     tags = '.with_all_tag_ids(options[:selected_tags])'
     written = '.written_by_conditions(options[:selected_pseuds])'
     owned = '.owned_by_conditions(options[:user])'
@@ -915,20 +922,20 @@ class Work < ActiveRecord::Base
     
     if !options[:selected_pseuds].empty? && !options[:selected_tags].empty?
       # We have selected pseuds and selected tags
-      command << written + visible + tags
+      command << written + visible_without_owners + tags
       @pseuds = options[:selected_pseuds]     
     elsif !options[:selected_pseuds].empty?
       # We only have selected pseuds but no selected tags
-      command << written + visible
+      command << written + visible_without_owners
       @pseuds = options[:selected_pseuds]                    
     elsif !options[:user].nil? && !options[:selected_tags].empty?
       # filtered results on a user's works page
       # no pseuds but a specific user, and selected tags
-      command << owned + visible + tags
+      command << owned + visible_without_owners + tags
       @pseuds = options[:user].pseuds.on_works(@works)
     elsif !options[:user].nil?
       # a user's default works page
-      command << owned + visible
+      command << owned + visible_without_owners
       @pseuds = options[:user].pseuds
     elsif !options[:selected_tags].empty?
       # no user but selected tags

@@ -38,12 +38,14 @@ class WorksController < ApplicationController
 
     # if we don't have author_attributes[:ids], which shouldn't be allowed to happen
     # (this can happen if a user with multiple pseuds decides to unselect *all* of them)
+    sorry = "Sorry, you cannot remove yourself entirely as an author of the work!<br />
+             <br />Please use Remove Me As Author or consider orphaning your work instead if you do not wish to be associated with it anymore."
     if params[:work] && params[:work][:author_attributes] && !params[:work][:author_attributes][:ids]
-      flash.now[:notice] = "Sorry, you cannot remove yourself entirely as an author of the work!<br /><br />Please use Remove Me As Author or consider orphaning your work instead if you do not wish to be associated with it anymore.".t
+      flash.now[:notice] = t('notices.works.needs_author', :default => sorry)
       params[:work][:author_attributes][:ids] = [current_user.default_pseud]
     end
     if params[:work] && !params[:work][:author_attributes]
-      flash.now[:notice] = "Sorry, you cannot remove yourself entirely as an author of the work!<br /><br />Please use Remove Me As Author or consider orphaning your work instead if you do not wish to be associated with it anymore.".t
+      flash.now[:notice] = t('notices.works.needs_author', :default => sorry)
       params[:work][:author_attributes] = {:ids => [current_user.default_pseud]}
     end
     
@@ -96,8 +98,8 @@ class WorksController < ApplicationController
   def is_author
     @work = Work.find(params[:id])
     unless current_user.is_a?(User) && current_user.is_author_of?(@work)
-      flash[:error] = 'Sorry, but you don\'t have permission to make edits.'.t
-      redirect_to(@work)     
+      flash[:error] = t('errors.no_permission_to_edit', :default => 'Sorry, but you don\'t have permission to make edits.')
+     redirect_to(@work)     
     end
   end
   
@@ -117,7 +119,11 @@ class WorksController < ApplicationController
     @sort_direction = params["sort_direction_for_#{@sort_column}".to_sym] || 'DESC'
 
     unless params[:selected_pseuds].blank?
-      @selected_pseuds = Pseud.find(params[:selected_pseuds])
+      begin
+        @selected_pseuds = Pseud.find(params[:selected_pseuds])
+      rescue
+        flash[:error] = t('errors.works.pseuds_not_found', :default => "Sorry, we couldn't find one or more of the authors you selected. Please try again.")
+      end
     end
     
     # if the user is filtering with tags, let's see what they're giving us    
@@ -132,8 +138,8 @@ class WorksController < ApplicationController
       begin
         @works = Work.search_with_sphinx(params)
       rescue ThinkingSphinx::ConnectionError
-        flash[:error] = "The search engine seems to be down at the moment, sorry!".t
-        redirect_to :action => :index and return
+        flash[:error] = t('errors.search_engine_down', :default => "The search engine seems to be down at the moment, sorry!")
+       redirect_to :action => :index and return
       end
       
       unless @works.empty?
@@ -145,16 +151,28 @@ class WorksController < ApplicationController
       # tag to the selected_tags list.
       unless params[:tag_id].blank?
         @tag = Tag.find_by_name(params[:tag_id])
-        @tag = @tag.merger if @tag.merger
-        redirect_to tag_path(@tag) and return unless @tag.canonical
-        @selected_tags << @tag.id.to_s unless @selected_tags.include?(@tag.id.to_s)
+        if @tag
+          @tag = @tag.merger if @tag.merger
+          redirect_to tag_path(@tag) and return unless @tag.canonical
+          @selected_tags << @tag.id.to_s unless @selected_tags.include?(@tag.id.to_s)
+        else
+          flash[:error] = t('errors.works.tag_not_found', :default => "Sorry, there's no tag by that name in our system.")
+          redirect_to works_path
+          return
+        end
       end
       
       # if we're browsing by a particular user get works by that user      
       unless params[:user_id].blank?
         @user = User.find_by_login(params[:user_id])
-        if params[:pseud] and !params[:pseud].blank?
-          @author = @user.pseuds.find(params[:pseud])
+        if @user
+          if params[:pseud] and !params[:pseud].blank?
+            @author = @user.pseuds.find(params[:pseud])
+          end
+        else
+          flash[:error] = t('errors.works.user_not_found', :default => "Sorry, there's no user by that name in our system.")
+          redirect_to works_path
+          return
         end
       end
       
@@ -169,10 +187,14 @@ class WorksController < ApplicationController
     # we now have @works found
     
     if @works.empty? && !@selected_tags.empty?
-      # build filters so we can go back
-      flash.now[:notice] = "We couldn't find any results using all those filters, sorry! You can unselect some and filter again to get more matches.".t 
-      filters_array = Tag.find(@selected_tags, :select => "tags.type as tag_type, tags.id as tag_id, tags.name as tag_name")
-      @filters = Work.build_filters_hash(filters_array)
+      begin
+        # build filters so we can go back
+        flash.now[:notice] = t('notices.works.results_not_found', :default => "We couldn't find any results using all those filters, sorry! You can unselect some and filter again to get more matches.") 
+        filters_array = Tag.find(@selected_tags, :select => "tags.type as tag_type, tags.id as tag_id, tags.name as tag_name")
+        @filters = Work.build_filters_hash(filters_array)
+      rescue
+        # do we need more than the regular flash notice?
+      end
     end
 
     # clean out the filters 
@@ -185,13 +207,13 @@ class WorksController < ApplicationController
   
   def drafts
     unless params[:user_id]
-      flash[:error] = "Whose drafts did you want to look at?".t
-      redirect_to :controller => :users, :action => :index
+      flash[:error] = t('errors.works.whose_drafts', :default => "Whose drafts did you want to look at?")
+     redirect_to :controller => :users, :action => :index
     else
       @user = User.find_by_login(params[:user_id])
       unless current_user == @user
-        flash[:error] = "You can only see your own drafts, sorry!".t
-        redirect_to current_user
+        flash[:error] = t('errors.works.not_your_drafts', :default => "You can only see your own drafts, sorry!")
+       redirect_to current_user
       else
         current_user.cleanup_unposted_works
         if params[:pseud]
@@ -208,7 +230,7 @@ class WorksController < ApplicationController
   # GET /works/1.xml
   def show
     unless @work
-  	  flash[:error] = 'This page is unavailable.'.t
+  	  flash[:error] = t('errors.works.work_not_found', :default => "Sorry, we couldn't find the story you were looking for.")
       redirect_to works_path and return
     end
     unless @work.visible || is_admin?
@@ -216,8 +238,8 @@ class WorksController < ApplicationController
         store_location 
         redirect_to new_session_path and return        
       elsif !current_user.is_author_of?(@work)
-  	    flash[:error] = 'This page is unavailable.'.t
-        redirect_to works_path and return
+  	    flash[:error] = 'This page is unavailable.'
+       redirect_to works_path and return
       end
     end
     # Users must explicitly okay viewing of adult content
@@ -271,17 +293,17 @@ class WorksController < ApplicationController
     elsif params[:edit_button]
       render :action => :new
     elsif params[:cancel_button]
-      flash[:notice] = "New work posting canceled.".t
+      flash[:notice] = t('notices.works.posting_canceled', :default => "New work posting canceled.")
       redirect_to current_user    
     else # now also treating the cancel_coauthor_button case, bc it should function like a preview, really
       saved = @work.save
       unless saved && @work.has_required_tags? && @work.set_revised_at(@work.published_at)
         unless @work.has_required_tags?
-          @work.errors.add(:base, "Creating: Required tags are missing.".t)          
+          @work.errors.add(:base, "Creating: Required tags are missing.")          
         end
         render :action => :new 
       else        
-        flash[:notice] = 'Draft was successfully created.'.t
+        flash[:notice] = t('notices.works.draft_created', :default => 'Draft was successfully created.')
         redirect_to preview_work_path(@work)
       end
     end
@@ -303,7 +325,7 @@ class WorksController < ApplicationController
           end
           c.save
         end
-        flash[:notice] = "You have been removed as an author from the work".t
+        flash[:notice] = t('errors.works.pseuds_not_found', :default => "You have been removed as an author from the work")
         redirect_to current_user
       end
     end
@@ -337,7 +359,7 @@ class WorksController < ApplicationController
       if @work.has_required_tags?
         render :action => "preview"
       else
-        @work.errors.add_to_base("Updating: Please add all required tags.".t)
+        @work.errors.add_to_base("Updating: Please add all required tags.")
         render :action => :edit
       end
     elsif params[:cancel_button]
@@ -366,10 +388,10 @@ class WorksController < ApplicationController
       end
       if saved
         if params[:post_button]
-          flash[:notice] = 'Work was successfully posted.'.t
-        elsif params[:update_button]
-          flash[:notice] = 'Work was successfully updated.'.t
-        end
+          flash[:notice] = t('notices.works.successfully_posted', :default => 'Work was successfully posted.')
+       elsif params[:update_button]
+          flash[:notice] = t('notices.works.successfully_updated', :default => 'Work was successfully updated.')
+       end
         
         #bleep += "  AFTER SAVE: author attr: " + params[:work][:author_attributes][:ids].collect {|a| a}.inspect + "  @work.authors: " + @work.authors.collect {|au| au.id}.inspect + "  @work.pseuds: " + @work.pseuds.collect {|ps| ps.id}.inspect
         #flash[:notice] = "DEBUG: in UPDATE save:  " + bleep
@@ -380,7 +402,7 @@ class WorksController < ApplicationController
           @chapter.errors.each {|err| @work.errors.add(:base, err)}
         end
         unless @work.has_required_tags?
-          @work.errors.add(:base, "Updating: Required tags are missing.".t)          
+          @work.errors.add(:base, "Updating: Required tags are missing.")          
         end
         render :action => :edit
       end
@@ -398,8 +420,8 @@ class WorksController < ApplicationController
     begin
       @work.destroy
     rescue
-      flash[:error] = "We couldn't delete that right now, sorry! Please try again later.".t
-    end
+      flash[:error] = t('errors.works.deletion_failed', :default => "We couldn't delete that right now, sorry! Please try again later.")
+   end
     redirect_to(user_works_url(current_user))
   end
 
@@ -414,31 +436,30 @@ class WorksController < ApplicationController
     elsif params[:work_url]
       url = params[:work_url].to_s
       if url.empty? 
-        flash.now[:error] = "Did you want to enter a URL?".t
-      else
+        flash.now[:error] = t('errors.works.enter_an_url', :default => "Did you want to enter a URL?")
+     else
         begin
           @work = storyparser.download_and_parse_story(url)
         rescue Timeout::Error
-          flash.now[:error] = "Sorry, but we timed out trying to get that URL.".t
-        rescue
-          flash.now[:error] = "Sorry, but we couldn't find a story at that URL. You can still copy-and-paste the contents into our standard form, though!".t
-        end
+          flash.now[:error] = t('errors.works.timed_out', :default => "Sorry, but we timed out trying to get that URL.")
+       rescue
+          flash.now[:error] = t('errors.works.upload_failed', :default => "Sorry, but we couldn't find a story at that URL. You can still copy-and-paste the contents into our standard form, though!")
+       end
         begin
           @chapter = @work.chapters.first
           @work.pseuds << current_user.default_pseud
           @chapter.pseuds << current_user.default_pseud
           if (work_saved = @work.save) && @chapter.save
-            flash[:notice] = "Work successfully uploaded!".t + "<br />" +
-              "(You will want to check the results over carefully before posting, though, 
-                because the poor computer can only figure out so much.)".t
-            redirect_to edit_work_path(@work) and return
+            flash[:notice] = t('notices.works.successfully_uploaded', :default => "Work successfully uploaded!<br />
+              (You will want to check the results over carefully before posting, though, because the poor computer can only figure out so much.)")
+           redirect_to edit_work_path(@work) and return
           else
             render :action => :new and return
           end
         rescue
-          flash.now[:error] = "We managed to partially download the work, but there are problems 
-            preventing us from saving it as a draft. Please look over the results very carefully!".t
-          render :action => :new and return
+          flash.now[:error] = t('notices.works.partially_downloaded', :default => "We managed to partially download the work, but there are problems 
+            preventing us from saving it as a draft. Please look over the results very carefully!")
+         render :action => :new and return
         end
       end
       @use_upload_form = true
@@ -475,11 +496,11 @@ class WorksController < ApplicationController
 
     def cancel_posting_and_redirect
       if @work and @work.posted
-        flash[:notice] = "<p>" + "The work was not updated.".t + "</p>"
+        flash[:notice] = t('notices.works.not_updated', :default => "<p>The work was not updated.</p>")
         redirect_to user_works_path(current_user)    
       else
-        flash[:notice] = "<p>" + "This work was not posted.".t + "</p><p>" + 
-          "It will be saved here in your drafts for one week, then cleaned up.".t + "</p>"
+        flash[:notice] = t('notices.works.not_posted', :default => "<p>This work was not posted.</p>
+        <p>It will be saved here in your drafts for one week, then cleaned up.</p>")
         begin
           current_user.cleanup_unposted_works
         rescue ThinkingSphinx::ConnectionError

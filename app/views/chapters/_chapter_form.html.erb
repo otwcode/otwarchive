@@ -1,18 +1,18 @@
 <div id="work-form">
 <% form_for([@work, chapter], :html => {:name => "storyForm"}) do |f| %>
 <fieldset id="chapter-ordering">
-	<legend><%= 'Naming and Ordering'.t %></legend>
+	<legend><%= t('chapters.new.form_naming', :default => 'Naming and Ordering') %></legend>
 	<p>
-		<%= f.label :title, 'Chapter title'.t %>
+		<%= f.label :title, t('chapters.new.form_title', :default => 'Chapter title') %>
 		<%= f.text_field :title, :class => "storyinputfield", :live => true %>
-      	<%= link_to_help "story-title" -%>
-    </p>
+    <%= link_to_help "story-title" -%>
+  </p>
 	<p>
-    	<%=f.label :current_position, 'Chapter number'.t %> 
+    <%=f.label :current_position, t('chapters.new.form_position', :default => 'Chapter number') %> 
 		<%= f.text_field :current_position, :class => "number-field" %> 
-		<%=f.label :wip_length, 'of'.t, :title => 'of total chapters'.t %> 
+		<%=f.label :wip_length, t('chapters.new.form_x_of_x', :default => 'of'), :title => t('chapters.new.form_of_total', :default => 'of total chapters') %> 
 		<%= f.text_field :wip_length, :class => "number-field" %> 
-  	</p>
+  </p>
 </fieldset>
 	<!-- Author dropdown (pseud_id) -->
 <%- if @pseuds.size > 1 -%>
@@ -20,19 +20,19 @@
   	<%- else -%>
 <fieldset id="associations" style="display:none;">
 	<%- end -%>	
-    <legend><%= 'Associations'.t -%></legend>
+    <legend><%= t('chapters.new.form_associations', :default => 'Associations') -%></legend>
 	<dl>
-      <dt><%= label :pseud, :id, 'Select author/pseudonym(s)'.t %></dt>
+      <dt><%= label :pseud, :id, t('chapters.new.form_select_author', :default => 'Select author/pseudonym(s)') %></dt>
       <dd>
         <select name="chapter[author_attributes][ids][]" multiple="multiple">
           <%= options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds) %>
         </select>         
       </dd>
       
-	  <dt><%= link_to_function('Add co-authors?'.t, "Element.toggle('co-authors')") %></dt>
+	  <dt><%= link_to_function(t('chapters.new.form_add_coauthors', :default => 'Add co-authors?'), "Element.toggle('co-authors')") %></dt>
 	  <dd id="co-authors">
 		<dl>
-			<dt><%= f.label :storycoauthor, "Enter co-author name(s):".t %></dt>
+			<dt><%= f.label :storycoauthor, t('chapters.new.form_coauthor_names', :default => "Enter co-author name(s):") %></dt>
 			<dd><%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
 		             			  { :url => {:controller => 'pseuds', :action => 'choose_coauthors'}, :method => :get, :param_name => 'search', 
 		                			:tokens => ',', :min_chars => 2, :skip_style => true } %>
@@ -42,41 +42,41 @@
 	</dl>
 </fieldset>       
 <fieldset>
-<legend><%= 'Chapter Notes'.t %></legend>
+<legend><%= t('chapters.new.form_summary_and_notes', :default => 'Chapter Notes') %></legend>
     <dl class="preface">      
-      <dt class="summary"><%= f.label :summary, "Chapter summary (max %d letters)".t/ArchiveConfig.SUMMARY_MAX %></dt>
+      <dt class="summary"><%= f.label :summary, t('chapters.new.form_summary', :default => "Chapter summary (max {{max}} letters)", :max => ArchiveConfig.SUMMARY_MAX.to_s) %></dt>
       <dd class="summary"><%= f.text_area :summary, :live => true %></dd>
 
-      <dt class="notes"><%= f.label :notes, "Chapter notes (max %d letters)".t/ArchiveConfig.NOTES_MAX %></dt>
+      <dt class="notes"><%= f.label :notes, t('chapters.new.form_notes', :default => "Chapter notes (max {{max}} letters)", :max => ArchiveConfig.NOTES_MAX.to_s) %></dt>
       <dd class="notes"><%= f.text_area :notes, :live => true %></dd>
     </dl>
 </fieldset>
 <fieldset>
-	<legend><%= 'Chapter Text'.t -%></legend>
+	<legend><%= t('chapters.new.form_chapter_text', :default => 'Chapter Text') -%></legend>
    	<p>
-	    <%= f.label :content, "Chapter, in plain text with limited HTML*".t, :class => "required" %><%= link_to_help "html-help" -%>
+	    <%= f.label :content, t('chapters.new.form_content', :default => "Chapter, in plain text with limited HTML*"), :class => "required" %><%= link_to_help "html-help" -%>
 	  </p>
 		<p id=""><code>a href, b, blockquote, br, center, cite, code, del, dd, dt, dl, div, em, h1, h2, h3, h4, h5, h6, i, ins, li, ol, pre, q, small, span, strike, strong, sub, sup, ul</code></p>
 <p class="rtf-html-switch">
 		<% use_tinymce -%>
-	    <span><a href="javascript:addEditor('content');"><%=h 'Rich text'.t %></a></span>
-	    <span><a href="javascript:removeEditor('content');"><%=h 'HTML'.t %></a></span>
+	    <span><a href="javascript:addEditor('content');"><%=h 'Rich text' %></a></span>
+	    <span><a href="javascript:removeEditor('content');"><%=h 'HTML' %></a></span>
 	</p>
 	<p>
 		<%= f.text_area :content, :class => "mce-editor", :id => "content" %>
       	<%= live_validation_for_field('content', 
   				:maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN, 
-  				:tooLongMessage => 'We salute your ambition! But sadly the content must be less than %d letters long. (Maybe you want to create a multi-chaptered work?)'.t/ArchiveConfig.CONTENT_MAX,
-  				:tooShortMessage => 'Brevity is the soul of wit, but your content does have to be at least %d letters long.'.t/ArchiveConfig.CONTENT_MIN,
-  			  :failureMessage => 'You need to post some story content here.'.t)
+  				:tooLongMessage => t('validations.content.too_long', :default => 'We salute your ambition! But sadly the content must be less than {{max}} letters long. (Maybe you want to create a multi-chaptered work?)', :max => ArchiveConfig.CONTENT_MAX.to_s),
+  				:tooShortMessage => t('validations.content.too_short', :default => 'Brevity is the soul of wit, but your content does have to be at least {{min}} letters long.', :min => ArchiveConfig.CONTENT_MIN.to_s),
+  			  :failureMessage => t('validations.content.failure', :default => 'You need to post some story content here.'))
   		-%>
 	</p>
 </fieldset>
 <fieldset>
-<legend><%= 'Post Chapter'.t %></legend>
+<legend><%= t('chapters.new.form_post', :default => 'Post Chapter') %></legend>
     <p class="submit">
-      <%= submit_tag 'Preview'.t, :name => 'preview_button' %>
-      <%= submit_tag 'Cancel'.t, :name => 'cancel_button' %>
+      <%= submit_tag t('forms.preview', :default => 'Preview'), :name => 'preview_button' %>
+      <%= submit_tag t('forms.cancel', :default => 'Cancel'), :name => 'cancel_button' %>
     </p>
 </fieldset>
 <% end %>

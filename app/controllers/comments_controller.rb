@@ -21,20 +21,20 @@ class CommentsController < ApplicationController
   def check_permission_to_edit
     @comment = Comment.find(params[:id])
     unless @comment && logged_in? && current_user.is_a?(User) && current_user.is_author_of?(@comment)
-      flash[:error] = "Sorry, but you don't have permission to make edits.".t
-      redirect_to :back and return
+      flash[:error] = t('errors.comments.permission_to_edit', :default => "Sorry, but you don't have permission to make edits.")
+     redirect_to :back and return
     end
     unless @comment && @comment.count_all_comments == 0
-      flash[:error] = 'Comments with replies cannot be edited'.t
-      redirect_to :back and return
+      flash[:error] = t('errors.comments.edits_disabled', :default => 'Comments with replies cannot be edited')
+     redirect_to :back and return
     end  
   end
 
   def check_permission_to_delete
     @comment = Comment.find(params[:id])
     unless (@comment && logged_in? && (current_user.is_author_of?(@comment) || current_user.is_author_of?(@comment.ultimate_parent)))
-      flash[:error] = "Sorry, but you don't have permission to delete this comment.".t
-      redirect_to :back and return
+      flash[:error] = t('errors.comments.permission_to_delete', :default => "Sorry, but you don't have permission to delete this comment.")
+     redirect_to :back and return
     end
   end
     
@@ -84,8 +84,8 @@ class CommentsController < ApplicationController
   # GET /comments/new
   def new
     if @commentable.nil?
-      flash[:error] = "What did you want to comment on?".t
-      redirect_to :back
+      flash[:error] = t('errors.comments.no_commentable', :default => "What did you want to comment on?")
+     redirect_to :back rescue redirect_to '/'
     else
       @comment = Comment.new
       @controller_name = params[:controller_name] if params[:controller_name]
@@ -102,8 +102,8 @@ class CommentsController < ApplicationController
   # POST /comments.xml
   def create
     if @commentable.nil?
-      flash[:error] = "What did you want to comment on?".t
-      redirect_to :back
+      flash[:error] = t('errors.comments.no_commentable', :default => "What did you want to comment on?")
+     redirect_to :back rescue redirect_to '/'
     else
       @comment = Comment.new(params[:comment])
       @comment.user_agent = request.env['HTTP_USER_AGENT']
@@ -112,7 +112,7 @@ class CommentsController < ApplicationController
 
       # First, try saving the comment
       unless @comment.valid?
-        flash[:comment_error] = "There was a problem saving your comment:".t 
+        flash[:comment_error] = t('errors.comments.problem_saving', :default => "There was a problem saving your comment:") 
         msg = @comment.errors.full_messages.map {|msg| "<li>#{msg}</li>"}.join
         unless msg.blank?
           flash[:comment_error] += "<ul>#{msg}</ul>"
@@ -122,8 +122,8 @@ class CommentsController < ApplicationController
       
       if @comment.set_and_save
         if @comment.approved?
-          flash[:comment_notice] = 'Comment created!'.t
-          respond_to do |format|
+          flash[:comment_notice] = t('notices.comments.comment_created', :default => 'Comment created!')
+         respond_to do |format|
             format.html do 
               if request.env['HTTP_REFERER'] =~ /inbox/
                 redirect_to user_inbox_path(current_user)
@@ -134,12 +134,12 @@ class CommentsController < ApplicationController
           end 
         else
           # this shouldn't come up any more
-          flash[:comment_notice] = 'Sorry, but this comment looks like spam to us.'.t
-          redirect_to :back
+          flash[:comment_notice] = t('errors.comments.spam', :default => 'Sorry, but this comment looks like spam to us.')
+         redirect_to :back
         end
       else
-        flash[:comment_error] = "There was a problem saving your comment.".t
-        redirect_to :back
+        flash[:comment_error] = t('errors.comments.problem_saving', :default => "There was a problem saving your comment.")
+       redirect_to :back
       end
     end
   end
@@ -149,8 +149,8 @@ class CommentsController < ApplicationController
   def update
     @comment = Comment.find(params[:id])    
     if @comment.update_attributes(params[:comment])
-      flash[:comment_notice] = 'Comment was successfully updated.'.t
-      respond_to do |format|
+      flash[:comment_notice] = t('notices.comments.successfully_updated', :default => 'Comment was successfully updated.')
+     respond_to do |format|
         format.html { redirect_to_comment(@comment) }
       end
     else
@@ -167,11 +167,11 @@ class CommentsController < ApplicationController
     
     if !@comment.destroy_or_mark_deleted
       # something went wrong?
-      flash[:comment_error] = "We couldn't delete that comment.".t
-      redirect_to_comment(@comment)
+      flash[:comment_error] = t('errors.comments.problem_deleting', :default => "We couldn't delete that comment.")
+     redirect_to_comment(@comment)
     elsif parent_comment
-      flash[:comment_notice] = "Comment deleted.".t
-      redirect_to_comment(parent_comment)
+      flash[:comment_notice] = t('notices.comments.successfully_deleted', :default => "Comment deleted.")
+     redirect_to_comment(parent_comment)
     else
       redirect_to_all_comments(parent, {:show_comments => true})
     end
@@ -231,7 +231,7 @@ class CommentsController < ApplicationController
     else
       # again with the being pretty nice
       options = {:show_comments => true}
-      options[:locale] = params[:locale] ? params[:locale] : ArchiveConfig.DEFAULT_LOCALE
+      #options[:locale] = params[:locale] ? params[:locale] : ArchiveConfig.DEFAULT_LOCALE
       options[:controller] = @commentable.class.to_s.downcase.pluralize
       options[:anchor] = "comment#{params[:id]}"
       if @thread_view
@@ -304,7 +304,6 @@ class CommentsController < ApplicationController
                            :id => comment.commentable.id,
                            :anchor => "comment#{comment.id}"}
         # display the comment's direct parent (and its associated thread)
-        default_options[:locale] = params[:locale] ? params[:locale] : ArchiveConfig.DEFAULT_LOCALE
         redirect_to(url_for(default_options.merge(options)))
       else
         redirect_to_all_comments(comment.ultimate_parent, options.merge({:show_comments => true, :anchor => "comment#{comment.id}"}))
@@ -313,10 +312,9 @@ class CommentsController < ApplicationController
 
     def redirect_to_all_comments(commentable, options = {})
       default_options = {:anchor => "comments"}
-      default_options[:locale] = params[:locale] ? params[:locale] : ArchiveConfig.DEFAULT_LOCALE
+      #default_options[:locale] = params[:locale] ? params[:locale] : ArchiveConfig.DEFAULT_LOCALE
       options = default_options.merge(options)
       redirect_to :controller => commentable.class.to_s.downcase.pluralize,
-                  :locale => default_options[:locale],
                   :action => :show,
                   :id => commentable.id,
                   :show_comments => options[:show_comments],

@@ -1,4 +1,4 @@
-<h1><%=h 'New related_work'.t %></h1>
+<h1><%=h 'New related_work' %></h1>
 
 <% form_for(@related_work) do |f| %>
   <%= f.error_messages %>
@@ -11,10 +11,10 @@
     		<dd><%= f.check_box :reciprocal %></dd>
 	</dl>
 	<p class="submit">
-    <%= f.submit "Create".t %>
+    <%= f.submit "Create" %>
 	</p>
 <% end %>
 
 <ul class="navigation">
-<li><%= link_to 'Back'.t, related_works_path %></li>
+<li><%= link_to 'Back', related_works_path %></li>
 </ul>

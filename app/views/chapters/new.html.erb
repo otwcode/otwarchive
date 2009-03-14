@@ -1,8 +1,8 @@
 <%= error_messages_for :chapter %>
 
-<h2><%=h 'Add chapter'.t %></h2>
-<p class="required"><%=h '* Required field'.t %></p>
+<h2><%=h t('chapters.new.add_chapter', :default => 'Add chapter') %></h2>
+<p class="required"><%=h t('chapters.new.required', :default => '* Required field') %></p>
 <h3><%=h @work.title %></h3>
 
-<%= render :partial => 'chapter_form', :locals => { :chapter => @chapter, :button_text => "Create".t } %>
+<%= render :partial => 'chapter_form', :locals => { :chapter => @chapter, :button_text => t('forms.create', :default => "Create") } %>
 

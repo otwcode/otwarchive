@@ -1,15 +1,15 @@
 <!-- OpenID field -->
 	<p>
-		<%= label_tag 'openid_url', 'Log in with OpenID:'.t %>	<br />
-		<%= image_tag("openid.png", :alt => ''.t, :class => 'openid') %> <%= text_field_tag "openid_url", '' %>
+		<%= label_tag 'openid_url', 'Log in with OpenID:' %>	<br />
+		<%= image_tag("openid.png", :alt => '', :class => 'openid') %> <%= text_field_tag "openid_url", '' %>
 	</p>
 	<p>
 		<%= check_box_tag('remember_me', '1', false) %>
-		<%= label_tag 'remember_me', 'Remember me'.t %>
+		<%= label_tag 'remember_me', 'Remember me' %>
 	</p>
 	<p class="submit">
-		<%= submit_tag 'Log in'.t, :class => 'submit' %>
+		<%= submit_tag 'Log in', :class => 'submit' %>
 	</p>
 	<p class="footnote openid">
-		<%= link_to_remote 'Return to standard login'.t , {:url => {:action => 'passwd'}}, :href => url_for( :action => 'new', :use_openid => false ) %>
+		<%= link_to_remote 'Return to standard login' , {:url => {:action => 'passwd'}}, :href => url_for( :action => 'new', :use_openid => false ) %>
 	</p>

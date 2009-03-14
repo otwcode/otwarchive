@@ -9,10 +9,10 @@
 			</ul>
 			<h3 title="Series Title">
 				<%= link_to sanitize_title_for_display(series.title), series %>
-				<%=h 'by'.t %>
+				<%=h 'by' %>
 				<%= byline(series) -%>
 				<% if series.hidden_by_admin %>
-				<%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)".t) %>
+				<%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)") %>
 				<% end %>
 			</h3>
 			
@@ -21,11 +21,11 @@
 		</li>
 		<li>
 			<dl class="tags">
-			<dt><%=h 'Tags'.t + ': ' %></dt>
+			<dt><%=h 'Tags' + ': ' %></dt>
 			<dd>
 			<ul>
 				<% series.works.collect(&:tags).flatten.compact.uniq.each do |tag| %>
-				<li><%= link_to tag.name, tag_works_path(tag) %></li>
+				<li><%= link_to_tag(tag, true) -%></li>
 				<% end %>
 			</ul>
 			</dd>
@@ -36,9 +36,9 @@
 		</li>
 		<li class="stats">
 			<dl>
-			<dt><%=h 'Words'.t + ': ' %></dt> 
-				<dd><%= '%s'/number_with_delimiter(series.works.collect(&:word_count).sum) %></dd>
-			<dt><%=h 'Works'.t + ': ' %></dt> 
+			<dt><%=h 'Words' + ': ' %></dt> 
+				<dd><%= number_with_delimiter(series.works.collect(&:word_count).sum) %></dd>
+			<dt><%=h 'Works' + ': ' %></dt> 
 				<dd><%=h series.serial_works.count %></dd>
 			</dl>
 		</li>

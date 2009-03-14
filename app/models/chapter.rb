@@ -10,17 +10,17 @@ class Chapter < ActiveRecord::Base
 
   validates_length_of :title, 
     :allow_blank => true, 
-    :maximum => ArchiveConfig.TITLE_MAX, :too_long=> "must be less than %d letters long.".t/ArchiveConfig.TITLE_MAX
+    :maximum => ArchiveConfig.TITLE_MAX, :too_long=> "must be less than " + ArchiveConfig.TITLE_MAX.to_s + " letters long."
     
-  validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, :too_long => "must be less than %d letters long.".t/ArchiveConfig.SUMMARY_MAX
-  validates_length_of :notes, :allow_blank => true, :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than %d letters long.".t/ArchiveConfig.NOTES_MAX
+  validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, :too_long => "must be less than " + ArchiveConfig.SUMMARY_MAX.to_s + " letters long."
+  validates_length_of :notes, :allow_blank => true, :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than " + ArchiveConfig.NOTES_MAX.to_s + " letters long."
 
   validates_presence_of :content
   validates_length_of :content, 
-    :minimum => ArchiveConfig.CONTENT_MIN, :too_short => "must be at least %d letters long.".t/ArchiveConfig.CONTENT_MIN
+    :minimum => ArchiveConfig.CONTENT_MIN, :too_short => "must be at least " + ArchiveConfig.CONTENT_MIN.to_s + " letters long."
 
   validates_length_of :content, 
-    :maximum => ArchiveConfig.CONTENT_MAX, :too_long => "cannot be more than %d characters long.".t/ArchiveConfig.CONTENT_MAX
+    :maximum => ArchiveConfig.CONTENT_MAX, :too_long => "cannot be more than " + ArchiveConfig.CONTENT_MAX.to_s + " characters long."
   
   # Virtual attribute to use as a placeholder for pseuds before the chapter has been saved
   # Can't write to chapter.pseuds until the chapter has an id
@@ -120,7 +120,7 @@ class Chapter < ActiveRecord::Base
   def validate_authors
     return if self.new_record? && self.position == 1
     if self.authors.blank? && self.pseuds.empty?
-      errors.add_to_base("Chapter must have at least one author.".t)
+      errors.add_to_base("Chapter must have at least one author.")
       return false
     end
   end

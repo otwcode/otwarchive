@@ -1,10 +1,10 @@
-<h1><%=h 'Editing bookmark'.t %></h1>
+<h1><%=h t('bookmarks.edit.editing', :default => 'Editing bookmark') %></h1>
 
 <%= error_messages_for :bookmark %>
 
-<%= render :partial => 'bookmark_form', :locals => {:button_name => 'Update'.t, :action => 'update'} %>
+<%= render :partial => 'bookmark_form', :locals => {:button_name => t('forms.update', :default => 'Update'), :action => 'update'} %>
 
 <ul class="navigation">
-<li><%= link_to 'Show'.t, @bookmark %></li>
-<li><%= link_to 'Back'.t, bookmarks_path %></li>
+<li><%= link_to t('bookmarks.edit.show_link', :default => 'Show'), @bookmark %></li>
+<li><%= link_to t('links.back', :default => 'Back'), bookmarks_path %></li>
 </ul>

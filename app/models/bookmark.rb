@@ -5,7 +5,7 @@ class Bookmark < ActiveRecord::Base
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
 
   validates_length_of :notes, 
-    :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than %d letters long.".t/ArchiveConfig.NOTES_MAX #/comment here just to fix aptana coloring
+    :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than " + ArchiveConfig.NOTES_MAX.to_s + " letters long."
     
   def self.visible(options = {})
     current_user=User.current_user

@@ -1,61 +1,63 @@
 <!-- This partial requires local variable 'bookmark' -->
 
 <li class="work bookmark <%- if is_author_of?(bookmark) -%>own<%- end -%>">
-<ul>
-  <li class="heading">
-	<ul class="required-tags">
-	  <li><%= image_tag 'bookmark-placeholder.png', :alt => '', :title => "dummy icons for layout purpose" -%></li>
-	  <li><%= image_tag 'category-none.png', :alt => '' -%></li>
-	  <li><%= image_tag 'category-none.png', :alt => '' -%></li>
-	  <li><%= image_tag 'category-none.png', :alt => '' -%></li>
-	</ul>
-	<h3>
-  	<% if bookmark.bookmarkable.nil? -%>
-		(<%= 'Oh noes, this work has been deleted.'.t -%>)
-    <% elsif bookmark.bookmarkable_type == "ExternalWork" %>
-	    <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable.url %>
-		<%=h 'by'.t %>
-		<%= bookmark.bookmarkable.author %>
-    <% else %>
-	    <% if bookmark.bookmarkable.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)".t) %><% end %>
-	    <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable %>
-		<%=h 'by'.t %>
-		<%= byline(bookmark.bookmarkable) %>
-    <% end %>
+  <ul>
+    <li class="heading">
+    	<ul class="required-tags">
+    	  <li><%= image_tag 'bookmark-placeholder.png', :alt => '', :title => "dummy icons for layout purpose" -%></li>
+    	  <li><%= image_tag 'category-none.png', :alt => '' -%></li>
+    	  <li><%= image_tag 'category-none.png', :alt => '' -%></li>
+    	  <li><%= image_tag 'category-none.png', :alt => '' -%></li>
+    	</ul>
+    	<h3>
+      	<% if bookmark.bookmarkable.nil? -%>
+    		  (<%= t('bookmarks.index.bookmark_oh_noes', :default => 'Oh noes, this work has been deleted.') -%>)
+        <% elsif bookmark.bookmarkable_type == "ExternalWork" %>
+    	    <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable.url %>
+    		  <%=h t('bookmarks.index.bookmark_by', :default => 'by') %>
+    		  <%= bookmark.bookmarkable.author %>
+        <% else %>
+    	    <% if bookmark.bookmarkable.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => t('bookmarks.index.bookmark_restricted', :default => "(Restricted)")) %><% end %>
+    	    <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable %>
+    		  <%=h t('bookmarks.index.bookmark_by', :default => 'by') %>
+    		  <%= byline(bookmark.bookmarkable) %>
+        <% end %>
 	
-    <% if bookmark.private %><%= image_tag("lockblack.png", :size => "15x15", :alt => "(Private)".t) %><% end %>
-  </h3>
-  <h4>&nbsp;</h4>
-	<p class="update"><%= time_ago_in_words(bookmark.updated_at) %></p>
-  </li>
-<%- unless bookmark.tag_string.blank? -%>
-  <li>
-  <dl class="tags">
-    <dt><%=h "Tags:".t -%></dt>
-    <dd>
-    	<ul>
-	<% bookmark.tags.each do |tag| -%>
-      <li><%= link_to(tag.name, tag_bookmarks_path(tag), :class => 'tag') %></li>
-  <% end -%>
+        <% if bookmark.private %>
+          <%= image_tag("lockblack.png", :size => "15x15", :alt => t('bookmarks.index.bookmark_private', :default => "(Private)")) %>
+        <% end %>
+      </h3>
+      <h4>&nbsp;</h4>
+  	  <p class="update"><%= time_ago_in_words(bookmark.updated_at) %></p>
+    </li>
+    <%- unless bookmark.tag_string.blank? -%>
+    <li>
+      <dl class="tags">
+        <dt><%=h t('bookmarks.index.bookmark_tags', :default => "Tags:") -%></dt>
+        <dd>
+      	  <ul>
+  	        <% bookmark.tags.each do |tag| -%>
+              <li><%= link_to(tag.name, tag_bookmarks_path(tag), :class => 'tag') %></li>
+            <% end -%>
+          </ul>
+        </dd>
+  	  </dl>
+    </li>
+    <%- end -%>
+    <li class="notes">
+      <%- unless bookmark.notes.blank? -%>
+        <%=sanitize_limit_and_format_for_display bookmark.notes %>
+  	  <%- end -%>
+  	  <p class="byline">- <%= link_to bookmark.user.login, bookmark.user %></p>
+    </li>
+    <%- if is_author_of?(bookmark) -%>
+    <li>
+    	<!-- Temporarily changed classes to make 'edit' link show up, needs front-end attention, 09-10-08 -->
+      <ul class="navigation">
+  		  <li><%= link_to t('links.edit', :default => "Edit"), edit_bookmark_path(bookmark) %></li>
+  		  <li><%= link_to t('links.delete', :default => "Delete"), bookmark, :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
       </ul>
-    </dd>
-	</dl>
-  </li>
-  <%- end -%>
-  <li class="notes">
-    <%- unless bookmark.notes.blank? -%>
-      <%=sanitize_limit_and_format_for_display bookmark.notes %>
-	  <%- end -%>
-	  <p class="byline">- <%= link_to bookmark.user.login, bookmark.user %></p>
-  </li>
-  <%- if is_author_of?(bookmark) -%>
-  <li>
-  	<!-- Temporarily changed classes to make 'edit' link show up, needs front-end attention, 09-10-08 -->
-    <ul class="navigation">
-		<li><%= link_to "Edit".t, edit_bookmark_path(bookmark) %></li>
-		<li><%= link_to "Delete".t, bookmark, :confirm => 'Are you sure?'.t, :method => :delete %></li>
-    </ul>
- <% end -%>
-  </li> 
-</ul>
+    </li>
+    <% end -%> 
+  </ul>
 </li>

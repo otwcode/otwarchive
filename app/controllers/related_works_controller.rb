@@ -9,7 +9,10 @@ class RelatedWorksController < ApplicationController
     else
       @related_work = RelatedWork.find(params[:id])
     end
-    (logged_in? && !(current_user.pseuds & @related_work.parent.pseuds).empty?) || [ redirect_to(works_url), flash[:error] = 'Sorry, but you don\'t have permission to make edits.'.t ]  
+    unless logged_in? && !(current_user.pseuds & @related_work.parent.pseuds).empty? 
+      flash[:error] = t('errors.no_permission_to_edit', :default => "Sorry, but you don't have permission to make edits.")
+      redirect_to(works_url)
+    end  
   end
   
   def child_author_only
@@ -18,7 +21,10 @@ class RelatedWorksController < ApplicationController
     else
       @related_work = RelatedWork.find(params[:id])
     end
-    (logged_in? && !(current_user.pseuds & @related_work.work.pseuds).empty?) || [ redirect_to(works_url), flash[:error] = 'Sorry, but you don\'t have permission to make edits.'.t ]  
+    unless logged_in? && !(current_user.pseuds & @related_work.work.pseuds).empty?
+      flash[:error] = t('errors.no_permission_to_edit', :default => "Sorry, but you don't have permission to make edits.")
+      redirect_to(works_url)
+    end  
   end
 
   # GET /related_works/1
@@ -31,11 +37,12 @@ class RelatedWorksController < ApplicationController
   def update
     @related_work.reciprocal = !@related_work.reciprocal?
     if @related_work.update_attribute(:reciprocal, @related_work.reciprocal)
-      status = @related_work.reciprocal? ? "approved" : "removed"
-      flash[:notice] = "Link was successfully #{status}.".t
+      notice = @related_work.reciprocal? ?  t('notices.related_works.link_approved', :default => "Link was successfully approved") : 
+                                            t('notices.related_works.link_removed', :default => "Link was successfully removed")
+      flash[:notice] = notice
       redirect_to(@related_work.parent) 
     else
-      flash[:notice] = 'Please try again.'.t
+      flash[:error] = t('errors.related_works.failed_update', :default => 'Sorry, something went wrong. Please try again.')
       redirect_to(@related_work)
     end
   end

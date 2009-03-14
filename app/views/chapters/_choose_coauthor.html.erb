@@ -1,4 +1,4 @@
-<p><%=h 'Please verify the names of your co-authors'.t %></p>
+<p><%=h t('chapters.coauthor.verify', :default => 'Please verify the names of your co-authors') %></p>
 
 <%- form_for([@work, @chapter]) do |f| -%>
   
@@ -14,8 +14,8 @@
   <%= f.hidden_field :content, :value => "#{@chapter.content}" %></p>
   
   <p class="submit">
-    <%= submit_tag 'Preview'.t, :name => 'preview_button' %>
-    <%= submit_tag 'Cancel'.t, :name => 'cancel_button' %> 
+    <%= submit_tag t('forms.preview', :default => 'Preview'), :name => 'preview_button' %>
+    <%= submit_tag t('forms.cancel', :default => 'Cancel'), :name => 'cancel_button' %> 
   </p>
 
 

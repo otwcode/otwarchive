@@ -16,10 +16,10 @@ module AlphabetHelper
     # if there is no "previous" page, don't link
     unless active_letter_index == 0
       block << '<span class="prev_page">'
-      block << link_to_letter(previous_letter, '&laquo; ' + 'Previous'.t)
+      block << link_to_letter(previous_letter, '&laquo; ' + 'Previous')
       block << '</span>'
     else
-      block << '<span class="disabled prev_page">&laquo; ' + 'Previous'.t + '</span>'
+      block << '<span class="disabled prev_page">&laquo; ' + 'Previous' + '</span>'
     end
 
     # Link all the letters
@@ -33,10 +33,10 @@ module AlphabetHelper
 
     unless active_letter_index == (alphabet.size-1)
       block << ' <span class="next_page">'
-      block << link_to_letter(next_letter, 'Next'.t + ' &raquo;')
+      block << link_to_letter(next_letter, 'Next' + ' &raquo;')
       block << '</span>'
     else
-      block << ' <span class="disabled prev_page">' + 'Next'.t + ' &raquo;' + '</span>'
+      block << ' <span class="disabled prev_page">' + 'Next' + ' &raquo;' + '</span>'
     end
 
     block << "</div>"

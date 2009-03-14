@@ -8,7 +8,7 @@ module CommentsHelper
       when 'Pseud' then
         link_to sanitize(ultimate.name), ultimate
       else
-        link_to 'Something Interesting'.t, ultimate
+        link_to 'Something Interesting', ultimate
     end
   end
 
@@ -50,17 +50,17 @@ module CommentsHelper
       #Added if/else to get singular agreement for one comment
       if commentable.count_visible_comments == 1
         link_to_remote(
-            "Read Comments".t,
+            "Read Comments",
             {:url => { :controller => :comments, :action => :show_comments, commentable_id => (commentable.id)}, :method => :get}, 
             {:href => fallback_url_for_top_level(commentable, {:show_comments => true})} ) +
-        '&nbsp;' + '(%d comment)'.t/commentable.count_visible_comments
+        '&nbsp;' + '(' + commentable.count_visible_comments.to_s + ' comment)'
         # this comment is here just to fix aptana code coloring after the / 
       else
         link_to_remote(
-            "Read Comments".t,
+            "Read Comments",
             {:url => { :controller => :comments, :action => :show_comments, commentable_id => (commentable.id)}, :method => :get}, 
             {:href => fallback_url_for_top_level(commentable, {:show_comments => true})} ) +
-        '&nbsp;' + '(%d comments)'.t/commentable.count_visible_comments
+        '&nbsp;' + '(' + commentable.count_visible_comments.to_s + ' comments)'
         # this comment is here just to fix aptana code coloring after the / 
       end
     end
@@ -68,7 +68,7 @@ module CommentsHelper
     
   def hide_comments_link(commentable) 
     commentable_id = eval(":#{commentable.class.to_s.downcase}_id")
-    link_to_remote("Hide Comments".t, 
+    link_to_remote("Hide Comments", 
       {:url => { :controller => :comments, :action => :hide_comments, commentable_id => (commentable.id)}, :method => :get },     
       {:href => fallback_url_for_top_level(commentable, {:show_comments => nil})} )
   end
@@ -86,7 +86,7 @@ module CommentsHelper
   def add_comment_link(commentable)
     commentable_id = eval(":#{commentable.class.to_s.downcase}_id")
     link_to_remote(
-      "Add Comment".t,
+      "Add Comment",
         {:url => { :controller => :comments, :action => :add_comment, commentable_id => (commentable.id)}, :method => :get}, 
         {:href => fallback_url_for_top_level(commentable, {:add_comment => true, :add_comment_reply_id => nil})} )
   end
@@ -94,7 +94,7 @@ module CommentsHelper
   def cancel_comment_link(commentable)
     commentable_id = eval(":#{commentable.class.to_s.downcase}_id")
     link_to_remote(
-      "Cancel Comment".t,
+      "Cancel Comment",
         {:url => { :controller => :comments, :action => :cancel_comment, commentable_id => (commentable.id)}, :method => :get}, 
         {:href => fallback_url_for_top_level(commentable, {:add_comment => nil})} )
   end
@@ -114,7 +114,7 @@ end
     commentable_id = eval(":#{comment.ultimate_parent.class.to_s.downcase}_id")
     "(" + 
     link_to_remote( 
-      "Reply".t, 
+      "Reply", 
       {:url => {:controller => :comments, :action => :add_comment_reply, :id => comment.id, :comment_id => params[:comment_id], commentable_id => (comment.ultimate_parent.id)}, :method => :get}, 
       {:href => fallback_url_for_comment(comment, 
                 {:add_comment => nil, :edit_comment_id => nil, :delete_comment_id => nil, :add_comment_reply_id => comment.id})} ) +
@@ -126,7 +126,7 @@ end
     commentable_id = eval(":#{comment.ultimate_parent.class.to_s.downcase}_id")
     "(" + 
     link_to_remote( 
-      "Cancel".t, 
+      "Cancel", 
       {:url => {:controller => :comments, :action => :cancel_comment_reply, :id => comment.id, :comment_id => params[:comment_id], commentable_id => (comment.ultimate_parent.id)}, :method => :get}, 
       {:href => fallback_url_for_comment(comment, {:add_comment_reply_id => nil})} ) +
      ")"
@@ -141,21 +141,21 @@ end
         # canceling a reply to a comment
         commentable_id = eval(":#{comment.ultimate_parent.class.to_s.downcase}_id")
         submit_to_remote( 
-          'cancel', "Cancel".t, 
+          'cancel', "Cancel", 
            :url => {:controller => :comments, :action => :cancel_comment_reply, :id => commentable.id, :comment_id => params[:comment_id], commentable_id => (commentable.ultimate_parent.id)}, :method => :get, 
            :href => fallback_url_for_comment(commentable, {:add_comment_reply_id => nil}) )
       else
         # canceling a reply to a different commentable thingy
         commentable_id = eval(":#{commentable.class.to_s.downcase}_id")
         submit_to_remote(
-          'cancel', "Cancel".t, 
+          'cancel', "Cancel", 
           :url => { :controller => :comments, :action => :cancel_comment, commentable_id => (commentable.id)}, :method => :get, 
           :href => fallback_url_for_top_level(commentable, {:add_comment => nil}) )
       end
     else
       # canceling an edit
       submit_to_remote(
-        'cancel', "Cancel".t, 
+        'cancel', "Cancel", 
         :url => { :controller => :comments, :action => :cancel_comment_edit, :id => (comment.id), :comment_id => params[:comment_id]}, :method => :get, 
         :href => fallback_url_for_comment(comment, {:edit_comment_id => nil}))
     end
@@ -164,7 +164,7 @@ end
   # return html link to edit comment
   def edit_comment_link(comment)
       "(" +
-      link_to_remote("Edit".t, 
+      link_to_remote("Edit", 
         {:url => {:controller => :comments, :action => :edit, :id => comment, :comment_id => params[:comment_id]}, :method => :get}, 
         {:href => fallback_url_for_comment(comment, 
                 {:add_comment => nil, :add_comment_reply_id => nil, :delete_comment_id => nil, :edit_comment_id => comment.id})} ) +
@@ -183,7 +183,7 @@ end
   def delete_comment_link(comment)
     "(" +
     link_to_remote( 
-      "Delete".t, 
+      "Delete", 
       {:url => {:controller => :comments, :action => :delete_comment, :id => comment, :comment_id => params[:comment_id]}, :method => :get}, 
       {:href => fallback_url_for_comment(comment, 
                 {:add_comment => nil, :add_comment_reply_id => nil, :edit_comment_id => nil, :delete_comment_id => comment.id})} ) +
@@ -194,7 +194,7 @@ end
   def cancel_delete_comment_link(comment)
     "(" + 
     link_to_remote( 
-      "Cancel".t, 
+      "Cancel", 
       {:url => {:controller => :comments, :action => :cancel_comment_delete, :id => comment, :comment_id => params[:comment_id]}, :method => :get}, 
       {:href => fallback_url_for_comment(comment, 
                 {:delete_comment_id => nil})} ) +
@@ -205,9 +205,9 @@ end
   def tag_comment_as_spam_link(comment)
     
     if comment.approved
-      "(" + link_to('Spam'.t, reject_comment_path(comment), :method => :put) + ")"
+      "(" + link_to('Spam', reject_comment_path(comment), :method => :put) + ")"
     else
-      "(" + link_to('Not Spam'.t, approve_comment_path(comment), :method => :put)  + ")"
+      "(" + link_to('Not Spam', approve_comment_path(comment), :method => :put)  + ")"
     end
   end
 
@@ -216,7 +216,7 @@ end
   def fallback_url_for_top_level(commentable, options = {})
     
     default_options = {:anchor => "comments"}
-    default_options[:locale] = params[:locale] ? params[:locale] : ArchiveConfig.DEFAULT_LOCALE
+    #default_options[:locale] = params[:locale] ? params[:locale] : ArchiveConfig.DEFAULT_LOCALE
     default_options[:controller] = commentable.class.to_s.downcase.pluralize
     default_options[:action] = "show"
     default_options[:id] = commentable.id
@@ -229,7 +229,7 @@ end
   
   def fallback_url_for_comment(comment, options = {})
     default_options = {:anchor => "comment#{comment.id}"}
-    default_options[:locale] = params[:locale] ? params[:locale] : ArchiveConfig.DEFAULT_LOCALE
+    #default_options[:locale] = params[:locale] ? params[:locale] : ArchiveConfig.DEFAULT_LOCALE
     default_options[:action] = "show"
     default_options[:show_comments] = true
     

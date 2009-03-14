@@ -1,8 +1,8 @@
 <th scope="row"><%=h user.login %></th>
-<td><%=h user.email, :title => "Email".t %>%></td>
-<td><%= "Translator".t if user.translator %></td>
-<td><%= "Tag Wrangler".t if user.tag_wrangler %></td>
-<td><%= "Suspended".t if user.suspended %></td>
-<td><%= "Banned".t if user.banned %></td>
-<td><%= link_to_remote "Edit".t, {:url => edit_admin_user_path(user), :method => :get}, :href => edit_admin_user_path(user) %>
-<td><%=h "Delete".t -%></td> 
+<td><%=h user.email, :title => t('admin.users.email', :default => "Email") %>%></td>
+<td><%= t('admin.users.translator', :default => "Translator") if user.translator %></td>
+<td><%= t('admin.users.tag_wrangler', :default => "Tag Wrangler") if user.tag_wrangler %></td>
+<td><%= t('admin.users.suspended', :default => "Suspended") if user.suspended %></td>
+<td><%= t('admin.users.banned', :default => "Banned") if user.banned %></td>
+<td><%= link_to_remote t('links.edit', :default => "Edit"), {:url => edit_admin_user_path(user), :method => :get}, :href => edit_admin_user_path(user) %>
+<td><%=h t('links.delete', :default => "Delete") -%></td> 

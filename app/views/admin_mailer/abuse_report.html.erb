@@ -1,5 +1,5 @@
-<h3><%=h "The following abuse report has been made:".t %></h3>
-<p><%=h "Email of the person who reported the abuse, if given".t %>: <%= mail_to(@email, @email) %></p> 
-<p><%=h "URL of the page the abuse is on".t %>: <%= link_to(@url, @url) %></p>
-<p><%=h "Description of the abuse".t %>:</p>
+<h3><%=h t('admin.mailer.abuse_report.intro', :default => "The following abuse report has been made:") %></h3>
+<p><%=h t('admin.mailer.abuse_report.email', :default => "Email of the person who reported the abuse, if given") %>: <%= mail_to(@email, @email) %></p> 
+<p><%=h t('admin.mailer.abuse_report.url', :default => "URL of the page the abuse is on") %>: <%= link_to(@url, @url) %></p>
+<p><%=h t('admin.mailer.abuse_report.description', :default => "Description of the abuse") %>:</p>
 <%=h @comment %>

@@ -2,22 +2,15 @@
 <div class="footer">
   <div id="globalize"><%= languages_menu %></div>
   <p><a href="http://creativecommons.org/licenses/GPL/2.0/" title="View License">GPL/CC</a>
-  	<%=h 'by the'.t %> <a href="http://transformativeworks.org/" title="The Organization for Transformative Works">OTW</a>
-  	&#8212; <%= link_to "Terms of Service".t, tos_path -%>
-  	&#8212; <%= link_to 'Report Abuse'.t, new_abuse_report_path %>
-  	&#8212; <%= link_to 'Send Feedback'.t, url_for(:controller => :feedback) -%>
+  	<%=h t('layout.footer.by_the_otw', :default => 'by the') %> <a href="http://transformativeworks.org/" title="The Organization for Transformative Works">OTW</a>
+  	&#8212; <%= link_to "Terms of Service", tos_path -%>
+  	&#8212; <%= link_to 'Report Abuse', new_abuse_report_path %>
+  	&#8212; <%= link_to 'Send Feedback', url_for(:controller => :feedback) -%>
   	
   	<%- if (logged_in? && current_user.is_tag_wrangler?) || logged_in_as_admin? -%>
-  	  &#8212; <%= link_to 'Tag Wrangling'.t, tag_wranglings_path -%>
+  	  &#8212; <%= link_to 'Tag Wrangling', tag_wranglings_path -%>
   	<%- end -%>
-  	<%- if ((logged_in? && current_user.is_translator?) || logged_in_as_admin?) -%>
-  	  &#8212;
-  	  <%- if Locale.base? -%>
-  	    <%=h 'Set Locale To Translate'.t %>
-  	  <%- else -%>
-	      <%= link_to 'Translate This Page'.t, translate_path(:controller_to_translate => controller.controller_name, :action_to_translate => controller.action_name) -%>
-	    <%- end -%>
-  	<%- end -%>
+
 </p>
 </div>
 

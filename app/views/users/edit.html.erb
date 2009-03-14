@@ -1,10 +1,10 @@
-<h1><%=h 'Edit My Profile'.t %></h1>
+<h1><%=h 'Edit My Profile' %></h1>
 
 <%= error_messages_for :user %>
 
 <% form_for(@user) do |f| %>  
   <dl>
-	  <dt><%= f.label :email, "Change Email".t %></dt>
+	  <dt><%= f.label :email, "Change Email" %></dt>
 		<dd><%= f.text_field :email %></dd>
   </dl>
 	
@@ -24,7 +24,7 @@
 			  <%- else -%>
 					<div id="link_to_passwd" style="display: none;">
 				<%- end -%>
-					<%= link_to_function("Add or Change a Password".t, :href => url_for(:action => 'edit', :use_openid => false), :class => 'footnote') do |page|
+					<%= link_to_function("Add or Change a Password", :href => url_for(:action => 'edit', :use_openid => false), :class => 'footnote') do |page|
 						page.replace_html "switch_fields", :partial => 'profile_passwd', :locals => {:f => f}
 						page[:link_to_passwd].hide
 						page[:link_to_openid].show
@@ -35,7 +35,7 @@
 					<%- if !params[:use_openid] -%>
 					<%- if ArchiveConfig.USE_OPENID -%>
 						<%= image_tag("openid.png", :alt => ' ') %>
-						<%= link_to_function("Add or Change an OpenID URL".t, :href => url_for(:action => 'edit', :use_openid => true), :class => 'footnote') do |page|
+						<%= link_to_function("Add or Change an OpenID URL", :href => url_for(:action => 'edit', :use_openid => true), :class => 'footnote') do |page|
 							page.replace_html "switch_fields", :partial => 'profile_openid', :locals => {:f => f}
 							page[:link_to_openid].hide
 							page[:link_to_passwd].show
@@ -46,20 +46,20 @@
   
   <% fields_for :profile_attributes,  @user.profile do |p| %>
   <dl>
-	  <dt><%= p.label :title, "Title".t %></dt>
+	  <dt><%= p.label :title, "Title" %></dt>
     <dd><%= p.text_field :title %></dd>
-    <dt><%= p.label :location, "Location".t %></dt>
+    <dt><%= p.label :location, "Location" %></dt>
     <dd><%= p.text_field :location %></dd>
-    <dt><%= p.label :date_of_birth, "Date of Birth".t %></dt>
+    <dt><%= p.label :date_of_birth, "Date of Birth" %></dt>
     <dd><%= p.date_select :date_of_birth, :start_year => 13.years.ago.year, :end_year => 90.years.ago.year, :include_blank => true, :order => [:day, :month, :year] %></dd>
-    <dt><%= p.label :about_me, "About Me".t %></dt>
+    <dt><%= p.label :about_me, "About Me" %></dt>
     <dd><%= p.text_area :about_me %></dd>
 	</dl>
   <% end %>
 	
 	
   <p class="submit">
-    <%= f.submit "Update".t %>
+    <%= f.submit "Update" %>
   </p>
 <% end %>
 <hr class="clear" />

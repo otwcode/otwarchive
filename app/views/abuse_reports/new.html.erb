@@ -1,23 +1,22 @@
 <%= error_messages_for :abuse_report %>
 
-<h1><%=h "Report Abuse".t %></h1>
+<h1><%=h t('abuse_reports.new.report_abuse', :default => 'Report Abuse') %></h1>
 <% form_for(@abuse_report) do |f| %>
   <dl>
-  	<dt><%= f.label :url, "Link to the page you are reporting:".t %></dt>
+  	<dt><%= f.label :url, t('abuse_reports.new.link', :default => "Link to the page you are reporting:") %></dt>
   	<dd><%= f.text_field :url, :size => 60 %>
-		  <p class="footnote"><%=h "If you came here from the abuse link at the bottom of the page,".t %>
-      <%=h "this will be filled in for you".t %></p>
+		  <p class="footnote"><%=h t('abuse_reports.new.pre_filled', :default => "If you came here from the abuse link at the bottom of the page, this will be filled in for you") %></p>
     </dd>
   	
-	  <dt><%= f.label :comment, "Describe the problem in as much detail as possible:".t %></dt>
+	  <dt><%= f.label :comment, t('abuse_reports.new.describe_problem', :default => "Describe the problem in as much detail as possible:") %></dt>
     <dd><%= f.text_area :comment, :cols => 60 %></dd>
     	
-	  <dt><%= f.label :email, "Your email (optional):".t %></dt>
+	  <dt><%= f.label :email, t('abuse_reports.new.your_email', :default => "Your email (optional):") %></dt>
     <dd><%= f.text_field :email, :size => 60 %>
-		  <p class="footnote"><%=h "Leave this blank to file an anonymous report.".t %></p>
+		  <p class="footnote"><%=h t('abuse_reports.new.anonymous_report', :default => "Leave this blank to file an anonymous report.") %></p>
 		</dd>
 			
- 	  <dt><%=h "Submit your message to the abuse team:".t %></dt>
-	  <dd class="submit"><%= f.submit "Submit".t %></dd>
+ 	  <dt><%=h t('abuse_reports.new.submit_message', :default => "Submit your message to the abuse team:") %></dt>
+	  <dd class="submit"><%= f.submit t('forms.submit', :default => "Submit") %></dd>
 	</dl>
 <% end %>

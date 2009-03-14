@@ -1,14 +1,14 @@
-<h1><%=h "Forgot your password?".t %></h1>
-<p><%=h "Never fear - if you've forgotten your password, we can send you a  link to reset it.".t %></p>
-<p><%=h "Please tell us the user name or email address you used when you signed up for your Archive account.".t %></p>
+<h1><%=h t('passwords.new.forgot_your_password', :default => "Forgot your password?") %></h1>
+<p><%=h t('passwords.new.never_fear', :default => "Never fear - if you've forgotten your password, we can send you a  link to reset it.") %></p>
+<p><%=h t('passwords.new.please_tell_us', :default => "Please tell us the user name or email address you used when you signed up for your Archive account.") %></p>
 
 <%- form_tag passwords_path do -%>
   <p>
-  	<%= label_tag 'login', 'Email address'.t + ' <strong>' + 'or'.t + '</strong> ' + 'user name:'.t -%>
+  	<%= label_tag 'login', t('passwords.new.email_or_name', :default => "Email address <strong>or</strong> user name:") -%>
 	<%= flash_field(:login) -%>	
   	<%= text_field_tag 'login', '' -%> 
   	</p>
-    <p class="submit"><%= submit_tag 'Reset password'.t %>
+    <p class="submit"><%= submit_tag t('passwords.new.reset_password', :default => 'Reset password') %>
   </p>
 
 <%- end -%>

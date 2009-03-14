@@ -10,11 +10,11 @@ class Pseud < ActiveRecord::Base
   has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter'
   has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series'
   validates_presence_of :name
-  validates_length_of :name, :within => NAME_LENGTH_MIN..NAME_LENGTH_MAX, :too_short => "That name is too short (minimum is %d characters)".t,
-        :too_long => "That name is too long (maximum is %d characters)".t
-  validates_format_of :name, :message => 'Pseuds can contain letters, numbers, spaces, underscores, and dashes.'.t,
+  validates_length_of :name, :within => NAME_LENGTH_MIN..NAME_LENGTH_MAX, :too_short => "That name is too short (minimum is %d characters)",
+        :too_long => "That name is too long (maximum is %d characters)"
+ validates_format_of :name, :message => 'Pseuds can contain letters, numbers, spaces, underscores, and dashes.',
     :with => /\A[\w -]*\Z/    
-  validates_format_of :name, :message => 'Pseuds must contain at least one letter or number.'.t,
+  validates_format_of :name, :message => 'Pseuds must contain at least one letter or number.',
     :with => /[a-zA-Z0-9]/
     
   

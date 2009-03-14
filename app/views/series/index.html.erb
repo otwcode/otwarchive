@@ -1,4 +1,4 @@
-<h1><%=h "View All Series".t %></h1>
+<h1><%=h "View All Series" %></h1>
 
 <ul class="work-list">
   <% for series in @series %>
@@ -7,5 +7,5 @@
 </ul>
 
 <div class="pagination">
-	  <%= will_paginate @series, :prev_label =>  "&laquo; Previous".t,:next_label => "Next &raquo;".t %>
+	  <%= will_paginate @series, :prev_label =>  "&laquo; Previous",:next_label => "Next &raquo;" %>
 </div>

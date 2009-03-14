@@ -4,5 +4,5 @@ class Feedback < ActiveRecord::Base
   # This is just the name of the text field in the Feedback
   # class which holds the user's comments. 
   validates_presence_of :comment
-  validates_email_veracity_of :email, :message => 'address appears to be invalid. Please use a different address or leave blank.'.t, :allow_blank => true
+  validates_email_veracity_of :email, :message => 'address appears to be invalid. Please use a different address or leave blank.', :allow_blank => true
 end

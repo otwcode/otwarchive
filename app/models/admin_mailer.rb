@@ -4,7 +4,7 @@ class AdminMailer < ActionMailer::Base
   def abuse_report(email,url,comment)
      setup_email
      @recipients = ArchiveConfig.ABUSE_ADDRESS
-     @subject += "Abuse Report".t
+     @subject += "Abuse Report"
      @body = {:email => email, :url => url, :comment => comment}
   end
   
@@ -14,13 +14,13 @@ class AdminMailer < ActionMailer::Base
       @from = feedback.email
     end
     @recipients = ArchiveConfig.FEEDBACK_ADDRESS
-    @subject += "Feedback".t
+    @subject += "Feedback"
     @body = {:comment => feedback.comment}
   end
   
   def archive_notification(admin, users, subject, message)
     setup_email
-    @subject += "Archive Notification Sent".t
+    @subject += "Archive Notification Sent"
     @body[:admin] = admin
     @body[:subject] = subject
     @body[:message] = message
@@ -31,7 +31,7 @@ class AdminMailer < ActionMailer::Base
     def setup_email()
       @recipients  = ArchiveConfig.WEBMASTER_ADDRESS
       @from        = ArchiveConfig.RETURN_ADDRESS
-      @subject     = "#{ArchiveConfig.APP_NAME}" + " - " + "Admin ".t
+      @subject     = "#{ArchiveConfig.APP_NAME}" + " - " + "Admin "
       @sent_on     = Time.now
       @content_type = "text/html"
     end
