@@ -216,7 +216,6 @@ end
   def fallback_url_for_top_level(commentable, options = {})
     
     default_options = {:anchor => "comments"}
-    #default_options[:locale] = params[:locale] ? params[:locale] : ArchiveConfig.DEFAULT_LOCALE
     default_options[:controller] = commentable.class.to_s.downcase.pluralize
     default_options[:action] = "show"
     default_options[:id] = commentable.id
@@ -229,7 +228,6 @@ end
   
   def fallback_url_for_comment(comment, options = {})
     default_options = {:anchor => "comment#{comment.id}"}
-    #default_options[:locale] = params[:locale] ? params[:locale] : ArchiveConfig.DEFAULT_LOCALE
     default_options[:action] = "show"
     default_options[:show_comments] = true
     

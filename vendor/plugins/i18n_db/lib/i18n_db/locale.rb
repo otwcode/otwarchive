@@ -2,6 +2,7 @@ class Locale < ActiveRecord::Base
   has_many :translations
   validates_presence_of :iso
   validates_presence_of :short
+  validates_presence_of :name
   
   # Returns a floating point number between 0.0 and 1.0, reflecting the fraction of the translations that
   # are up to date in this locale (i.e. that exist and are not older than the corresponding string for 

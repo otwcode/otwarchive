@@ -54,7 +54,7 @@ class Translation < ActiveRecord::Base
   #Find all namespaces used in translations
   def self.find_all_namespaces
     sql = <<-SQL
-SELECT distinct(namespace) FROM i18n_db_translations order by namespace
+SELECT distinct(namespace) FROM translations order by namespace
 SQL
     self.connection.select_values(sql).compact
   end

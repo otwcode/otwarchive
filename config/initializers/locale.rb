@@ -1,10 +1,6 @@
 begin
   ActiveRecord::Base.connection  # if we have no database fall through to rescue
-  begin
-    Locale.set_base_locale(ArchiveConfig.BASE_LANGUAGE)
-  rescue
-     puts "Run rake db:migrate to set up the locale table!"
-  end
+  Locale.set_base_locale(:short => ArchiveConfig.DEFAULT_LOCALE_SHORT, :iso => ArchiveConfig.DEFAULT_LOCALE_ISO, :name => ArchiveConfig.DEFAULT_LOCALE_NAME)
 rescue
   Locale.set_base_locale(:short => "en", :iso => "en-US", :name => "English")
 end

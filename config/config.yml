@@ -121,25 +121,9 @@ AKISMET_NAME: 'http://transformativeworks.org'
 DEFENSIO_KEY: '521476c0edf3ac96eab7e297f6fb92c8'
 DEFENSIO_NAME: 'http://archiveofourown.org'
 
-DEFAULT_LOCALE: 'en'
-BASE_LANGUAGE: {
- short: en,
- iso: en-US,
- name: English    
-}
-SUPPORTED_LOCALES: { en: en-US,
- it: it-IT,
- fr: fr-FR,
- de: de-DE,
- ja: ja-JP,
- es: es-ES,
- cs: cs-CZ,
- zh: zh-CHS,
- ru: ru-RU,
- pt: pt-BR,
- nl: nl-NL,
- id: id-ID,
- fi: fi-FI }
+DEFAULT_LOCALE_SHORT: 'en'
+DEFAULT_LOCALE_ISO: 'en-US'
+DEFAULT_LOCALE_NAME: 'English'
 
 #Allow OpenID Authentication
 USE_OPENID: true
