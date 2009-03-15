@@ -1,5 +1,7 @@
 class Translation < ActiveRecord::Base
   belongs_to :locale
+  belongs_to :translator, :class_name => 'User', :foreign_key => 'translator_id'
+  belongs_to :beta, :class_name => 'User', :foreign_key => 'beta_id'
   
   def validate
     unless locale.main?

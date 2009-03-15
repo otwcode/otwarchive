@@ -45,9 +45,11 @@ class User < ActiveRecord::Base
   has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter', :uniq => true
   has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series', :uniq => true
   
-  # NOT WORKING as of upgrade to Rails 2.3.0
   has_many :tags, :through => :works
   has_many :bookmark_tags, :through => :bookmarks, :source => :tags
+
+  has_many :translations, :foreign_key => 'translator_id' 
+  has_many :translations_to_beta, :class_name => 'Translation', :foreign_key => 'beta_id' 
   
   has_many :inbox_comments
   has_many :feedback_comments, :through => :inbox_comments, :conditions => {:is_deleted => false, :approved => true}, :order => 'created_at DESC'

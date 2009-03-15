@@ -25,6 +25,17 @@ module I18n
           else
             Translation.add_default_to_db(locale, key, options) if Locale.find_main_cached.short == locale.to_s && options[:saved_default]
           end
+        else
+          if Locale.find_main_cached.short == locale.to_s && options[:saved_default] && entry != options[:saved_default]
+            entry = options[:saved_default]
+            n = key.split('.')
+            tr_key = n.last
+            namespace = (n - [n.last]).join('.')
+            translation = Locale.find_main_cached.translations.find(:first, :conditions => {:tr_key => tr_key, :namespace => namespace})
+            translation.text = options[:saved_default]
+            translation.updated = true
+            translation.save
+          end
         end
         entry = pluralize(locale, entry, count)
         entry = interpolate(locale, entry, values)

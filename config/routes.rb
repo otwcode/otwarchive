@@ -25,8 +25,8 @@ ActionController::Routing::Routes.draw do |map|
   map.tos_faq '/tos_faq', :controller => 'home', :action => 'tos_faq' 
   
   # Commented out until we get a new system in place
-  #map.translate '/translate/:controller_to_translate/:action_to_translate', :controller => 'translation', :action => 'translate'
-  #map.resources :translations, :member => { :update_in_place => :post }
+  #map.resources :translations, :member => { :update_in_place => :post}
+  #map.resources :translators, :has_many => :translations
 
   map.resources :abuse_reports 
 
