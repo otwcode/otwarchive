@@ -1,9 +1,13 @@
 <div id="user-header">
-	<h1><%= link_to_unless_current user.login, user %></h1>
+	<%-	display_name = @author ? @author.name : @user.login	-%>
+	<h1><%= @author ? link_to_unless_current(display_name, user_pseud_path(user, @author)) : link_to_unless_current(display_name, user) %></h1>
 	<h2><%= image_tag("icon_placeholder.png", :size => "100x100", :alt => "(Icon!)") %></h2>
 
   <ul class="navigation">
-    <li><%= link_to_unless_current "profile", user_profile_path(user) %></li>
+    <li><%= link_to_unless_current("profile", user_profile_path(user)) %></li>
+    <%- if @user == current_user -%>
+      <li><%= link_to 'Post New', new_work_path -%></li>
+    <%- end -%>  
     <li><%= link_to_help "coming-soon", "bookmark" %></li>
     <li><%= link_to_help "coming-soon", "subscribe" %></li>
     <%- if @user == current_user && @user.invitation_limit > 0 -%>
