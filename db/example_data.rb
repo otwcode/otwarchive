@@ -108,49 +108,49 @@ module FixtureReplacement
   end
 
   attributes_for :tag do |a|
-    a.name = random_phrase[1...42]
+    a.name = random_tag_name
     a.type = Tag::TYPES[rand(5)+3]
   end
 
   attributes_for :rating do |a|
-    a.name = random_phrase[1...42]
+    a.name = random_tag_name
     a.adult = false
   end
 
   attributes_for :warning do |a|
-    a.name = random_phrase[1...42]
+    a.name = random_tag_name
   end
 
   attributes_for :category do |a|
-    a.name = random_phrase[1...42]
+    a.name = random_tag_name
   end
 
   attributes_for :media do |a|
-    a.name = random_phrase[1...42]
+    a.name = random_tag_name
   end
 
   attributes_for :fandom do |a|
-    a.name = random_phrase[1...42]
+    a.name = random_tag_name
   end
 
   attributes_for :pairing do |a|
-    a.name = random_phrase[1...42]
+    a.name = random_tag_name[0...21] + '/' + random_tag_name[0...20]
   end
 
   attributes_for :character do |a|
-    a.name = random_phrase[1...42]
+    a.name = random_tag_name
   end
 
   attributes_for :freeform do |a|
-    a.name = random_phrase[1...42]
+    a.name = random_tag_name
   end
 
   attributes_for :ambiguity do |a|
-    a.name = random_phrase[1...42]
+    a.name = random_tag_name
   end
 
   attributes_for :banned do |a|
-    a.name = random_phrase[1...42]
+    a.name = random_tag_name
   end
 
   attributes_for :tagging do |a|
@@ -187,6 +187,12 @@ module FixtureReplacement
   ##### some random generators
   def random_word
     Faker::Lorem.words(1).to_s
+  end
+
+  def random_tag_name
+    name = random_phrase[1...42]
+    name = random_tag_name if Tag.find_by_name(name)
+    return name
   end
 
   def random_phrase(count=nil)  # 2-4 words

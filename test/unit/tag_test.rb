@@ -1,10 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class TagTest < ActiveSupport::TestCase
-  setup do
-    create_tag
-  end
-
   context "a Tag" do
     should_have_many :common_taggings, :taggings
     should_have_many :works, :bookmarks, :external_works
@@ -23,10 +19,11 @@ class TagTest < ActiveSupport::TestCase
 
     context "with whitespace" do
       setup do
-        @tag = create_tag(:name => "   whitespace'll   (be    stripped)    ")
+        @name = random_tag_name
+        @tag = create_tag(:name => "   " + @name + "    a    " )
       end
       should "be stripped" do
-        assert_equal "whitespace'll (be stripped)", @tag.name
+        assert_equal @name + " a", @tag.name
       end
     end
   end
