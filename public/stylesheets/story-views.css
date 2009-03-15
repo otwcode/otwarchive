@@ -57,7 +57,7 @@ dl.work-meta { background:#eee; padding:0.25em; position:relative;margin-top:0; 
 .preface h3 {color:#333; background:transparent; border:0;}
 .preface .title { font-weight:700; font-size:1.5em; text-align:center; }
 .preface .byline	{ text-align:center;}
-.preface a, .preface a:link, .preface a:visited {color: #333 !important; border-bottom:0} 
+.preface a, .preface a:link, .preface a:visited {color: #333 !important;} 
 .preface blockquote.summary, .preface blockquote.notes	{ border:0;}
 .preface blockquote.summary h3, .preface blockquote.notes h3 {color:#222; background:transparent; border-bottom:1px solid;}
 
