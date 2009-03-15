@@ -9,5 +9,16 @@ require 'rake/rdoctask'
 
 require 'tasks/rails'
 
-require 'shoulda/tasks'
-load File.join(RAILS_ROOT, Dir["vendor/gems/relevance-tarantula-*/tasks/*.rake"])
+begin
+  require 'shoulda/tasks'
+rescue Exception
+  puts "shoulda gem not installed yet"
+end
+
+begin
+  load File.join(RAILS_ROOT, Dir["vendor/gems/relevance-tarantula-*/tasks/*.rake"])
+rescue Exception
+  puts "after installing the tarantula gem, do the following to run its rake tests:"
+  puts " cd vendor/gems"
+  puts " gem unpack relevance-tarantula"
+end

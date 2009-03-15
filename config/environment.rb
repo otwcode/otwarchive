@@ -105,7 +105,8 @@ Rails::Initializer.run do |config|
   config.gem 'hpricot'
   config.gem 'thoughtbot-shoulda', :lib => 'shoulda/rails', :source => "http://gems.github.com", :version => '~> 2.10.0'
   config.gem 'andand'
-  #config.gem 'relevance-tarantula', :source => "http://gems.github.com", :lib => 'relevance/tarantula'
+  config.gem 'htmlentities'
+  config.gem 'relevance-tarantula', :source => "http://gems.github.com", :lib => 'relevance/tarantula'
 
   # Override the sanitize defaults to allow some extra formatting attributes. 
   config.action_view.sanitized_allowed_attributes = 'align'
