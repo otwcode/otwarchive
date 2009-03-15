@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link rel="stylesheet" href="../stylesheets/tarantula.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+	<title>Detail</title>
+</head>
+<body>
+  <div id="container">
+    <div id="header">
+      <h1>Tarantula by Relevance</h1>
+      <h2>Eight legs, two fangs ... and an attitude</h2>
+      <p>Tarantula is an open source tool for testing Rails web 
+      applications. Tarantula is developed by <a href="http://thinkrelevance.com">Relevance, Inc.</a>
+      and lives at <a href="http://github.com/relevance/tarantula">http://github.com/relevance/tarantula</a>.</p>
+      <hr/>
+    </div>
+    <div id="page">
+      <ul class="tabs">
+        <li><a href="../index.html">&laquo; Back</a></li>
+        <!-- TODO dynamically hide/show body/log sections based on selected "tab" - dynamically assign the "active" class to the selected tab -->
+        <li><a href="#fragment-1" class="active">Body</a></li>
+        <li><a href="#fragment-2" class="active">Log</a></li>
+      </ul>
+
+      <div id="report">
+        <h3>Detail of <%= short_description %> <em>Generated on <%= Time.now %></em></h3>
+        <p><b>Resource</b> <a href="<%= full_url %>"><%= full_url %></a></p>
+        <p><b>Response</b> <span class="r<%= code.first %>"><%= code %></span></p>
+        <p><b>Referrer</b> <%= referrer || "" %></p>
+
+        <table class="output">
+        <tbody>
+          <tr>                
+            <th colspan="2">#&nbsp;&nbsp;Data</th>           
+          </tr>
+          <% if data %>
+            <%= wrap_in_line_number_table_row(data) %>
+          <% else %>
+            <tr>
+              <td colspan="2">No Data</td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>                            
+
+        <table class="output" id="fragment-1">
+          <tbody>
+          <tr>
+            <th colspan="2">#&nbsp;&nbsp;Body</th>           
+          </tr>
+          <% if body %>
+            <%= wrap_in_line_number_table_row(body) %>
+          <% else %>
+            <tr>
+              <td colspan="2">No Body</td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>                             
+
+        <table class="output" id="fragment-2">
+          <tbody>
+            <tr>
+              <th colspan="2">#&nbsp;&nbsp;Log</th>           
+            </tr>
+            <% if log %>
+              <%= wrap_in_line_number_table_row(log) {|line| wrap_stack_trace_line(line)} %>
+            <% else %>
+              <tr>
+                <td colspan="2">No Log</td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>                            
+      </div>
+    </div>
+  </div>
+</body>
+</html>

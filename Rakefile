@@ -10,4 +10,4 @@ require 'rake/rdoctask'
 require 'tasks/rails'
 
 require 'shoulda/tasks'
-#load File.join(RAILS_ROOT, Dir["vendor/gems/relevance-tarantula-*/tasks/*.rake"])
+load File.join(RAILS_ROOT, Dir["vendor/gems/relevance-tarantula-*/tasks/*.rake"])

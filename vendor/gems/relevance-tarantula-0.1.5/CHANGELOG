@@ -1,0 +1,13 @@
+v0.0.8.1
+* Fix numerous installation and initial setup issues
+* Enhance rake tasks to support use of Tarantula in a continuous integration environment
+** Use "rake tarantula:test" to run headless with build-friendly exit codes
+** Use "rake tarantula:report" to open the Tarantula report in your browser
+* Update README
+** Provide better installation and setup documentation
+** Include example of adding a custom attack handler
+* Simplify design to address concerns about hard-to-read fonts
+
+v0.0.5 Make sure we don't include Relevance::Tarantula into Object - will cause issues Rails dependencies and is a bad idea in general; update Rakefile for dev dependencies; another small clean up tasks
+
+v0.0.1 Tarantula becomes a gem. (Aaron Bedra)

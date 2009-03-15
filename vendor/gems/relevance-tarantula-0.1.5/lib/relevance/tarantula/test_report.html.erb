@@ -1,0 +1,32 @@
+<div id="<%= test_name %>">
+  <% %w{failures successes}.each do |result_type| %>
+    <table class="list tablesorter" cellspacing="0">
+      <caption><%= send(result_type).size %> <%= result_type.capitalize %></caption>
+      <thead>
+        <tr>
+          <th class="sort asc"><span>URL</span><span class="sort">&nbsp;</span></th>
+          <th><span>Action</span><span class="sort">&nbsp;</span></th>
+          <th><span>Response</span><span class="sort">&nbsp;</span></th>
+          <th class="left"><span>Description</span><span class="sort">&nbsp;</span></th>
+          <th><span>Referrer</span><span class="sort">&nbsp;</span></th>
+        </tr>
+      </thead>
+      <tfoot>
+         <tr><td colspan="5">&nbsp;</td></tr>
+      </tfoot>
+      
+      <tbody>
+        <% send(result_type).sort{|x,y| y.code.to_s <=> x.code.to_s}.each_with_index do |result,i| %>
+          <tr class="<%= (i%2 == 0) ? 'even' : 'odd' %>">
+            <td class="left"><a href="<%= "#{test_name}/#{result.file_name}" %>"><%= result.url.ellipsize(30) %></a></td>
+            <td class="method"><%= result.method.to_s.upcase %></td> <!-- TODO Clean up demeter violation -->
+            <td><span class="<%= class_for_code(result.code) %>"><%= result.code %></span></td>
+            <td class="left"><%= result.description %></td>
+            <td class="left"><%= result.referrer.ellipsize(30) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>       
+    <br/>
+  <% end %>
+</div>

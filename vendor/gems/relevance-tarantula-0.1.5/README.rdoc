@@ -1,0 +1,145 @@
+= Tarantula
+
+== DESCRIPTION
+
+Tarantula is a big fuzzy spider. It crawls your Rails application, fuzzing data to see what breaks.
+
+== Usage
+
+=== Installation
+
+The latest and greatest version is always available on GitHub. (See the rakefile for dependencies, or
+just let Rubygems handle it.)
+
+    gem install relevance-tarantula --source http://gems.github.com
+
+You can also grab it from RubyForge, where we will push stable releases but may not be as bleeding edge
+as the GitHub gem.
+
+    gem install tarantula
+
+=== Project Setup
+
+To set up Tarantula into your application, add the following line into either config/environment.rb or
+config/environments/test.rb (preferred). This assumes that you have Rails 2.1 or higher installed.
+
+    config.gem 'relevance-tarantula', :source => "http://gems.github.com", :lib => 'relevance/tarantula'
+
+Since Rails doesn't (yet) support automatically loading rake tasks that live inside gems, you will need
+to update your Rakefile to load Tarantula's rake tasks. The simplest approach is to start by vendoring 
+Tarantula into your Rails app.
+
+    mkdir -p vendor/gems
+    cd vendor/gems
+    gem unpack relevance-tarantula
+
+You can then add the following line into your Rakefile, which will allow your application to discover 
+Tarantula's rake tasks.
+
+  load File.join(RAILS_ROOT, Dir["vendor/gems/relevance-tarantula-*/tasks/*.rake"])
+
+=== Crawling Your App
+
+Use the included rake task to create a Rails integration test that will allow Tarantula to crawl your
+app.
+
+   #!sh
+   rake tarantula:setup
+
+Take a moment to familiarize yourself with the generated test. If parts of your application require
+login, update the test to make sure Tarantula can access those parts of your app.
+
+   require "relevance/tarantula"
+   
+   class TarantulaTest < ActionController::IntegrationTest
+     # Load enough test data to ensure that there's a link to every page in your
+     # application. Doing so allows Tarantula to follow those links and crawl 
+     # every page.  For many applications, you can load a decent data set by
+     # loading all fixtures.
+     fixtures :all
+   
+     def test_tarantula
+       # If your application requires users to log in before accessing certain 
+       # pages, uncomment the lines below and update them to allow this test to
+       # log in to your application.  Doing so allows Tarantula to crawl the 
+       # pages that are only accessible to logged-in users.
+       # 
+       #   post '/session', :login => 'quentin', :password => 'monkey'
+       #   follow_redirect!
+       
+       tarantula_crawl(self)
+     end
+   end
+
+If you want to set custom options, you can get access to the crawler and set properties before running
+it. For example, this would turn on HTMLTidy.
+
+   def test_tarantula
+     post '/session', :login => 'kilgore', :password => 'trout'
+     assert_response :redirect
+     assert_redirected_to '/'
+     follow_redirect!
+
+     t = tarantula_crawler(self)
+     t.handlers << Relevance::Tarantula::TidyHandler.new
+     t.crawl '/'
+   end
+
+Now it's time to turn Tarantula loose on your app. Assuming your project is at /work/project/:
+
+   #!sh
+   cd /work/project
+   rake tarantula:test
+
+== Verbose Mode
+
+If you run the test using the steps shown above, Tarantula will produce a report in tmp/tarantula. You
+can also set VERBOSE=true to see more detail as the test runs.
+
+For more options, please see the test suite.
+
+== Allowed Errors
+
+If, for example, a 404 is an appropriate response for some URLs, you can tell Tarantula to allow 404s
+for URLs matching a given regex:
+
+     t = tarantula_crawler(self)
+     t.allow_404_for %r{/users/\d+/}
+
+== Custom Attack Handlers
+
+You can specify the attack strings that Tarantula throws at your application.
+
+    def test_tarantula
+      t = tarantula_crawler(self)
+
+      Relevance::Tarantula::AttackFormSubmission.attacks << { 
+        :name => :xss,
+        :input => "<script>gotcha!</script>",
+        :output => "<script>gotcha!</script>",
+      }
+
+      Relevance::Tarantula::AttackFormSubmission.attacks << { 
+        :name => :sql_injection,
+        :input => "a'; DROP TABLE posts;",
+      }
+
+      t.handlers << Relevance::Tarantula::AttackHandler.new
+      t.fuzzers << Relevance::Tarantula::AttackFormSubmission
+      t.times_to_crawl = 2
+      t.crawl "/posts"
+    end
+
+This example adds custom attacks for both SQL injection and XSS. It also tells Tarantula to crawl the
+app 2 times. This is important for XSS attacks because the results won't appear until the second time
+Tarantula performs the crawl.
+
+== Bugs/Requests
+
+Please submit your bug reports, patches, or feature requests at Lighthouse:
+
+http://relevance.lighthouseapp.com/projects/17868-tarantula/overview
+
+== License
+
+Tarantula is released under the MIT license.
