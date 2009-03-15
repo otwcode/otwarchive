@@ -231,7 +231,6 @@ class CommentsController < ApplicationController
     else
       # again with the being pretty nice
       options = {:show_comments => true}
-      #options[:locale] = params[:locale] ? params[:locale] : ArchiveConfig.DEFAULT_LOCALE
       options[:controller] = @commentable.class.to_s.downcase.pluralize
       options[:anchor] = "comment#{params[:id]}"
       if @thread_view
@@ -312,7 +311,6 @@ class CommentsController < ApplicationController
 
     def redirect_to_all_comments(commentable, options = {})
       default_options = {:anchor => "comments"}
-      #default_options[:locale] = params[:locale] ? params[:locale] : ArchiveConfig.DEFAULT_LOCALE
       options = default_options.merge(options)
       redirect_to :controller => commentable.class.to_s.downcase.pluralize,
                   :action => :show,

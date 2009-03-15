@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class CommentObserverTest < Test::Unit::TestCase
+class CommentObserverTest < ActiveSupport::TestCase
   context "A comment on a Work" do
     setup do
       @work = create_work
