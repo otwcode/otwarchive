@@ -6,6 +6,6 @@ module PseudsHelper
   end
   
   def print_pseud_selector(pseuds)
-    pseuds.sort.collect {|pseud| "<li>" + link_to_unless_current(pseud.name, user_pseud_path(pseud.user, pseud.id)) + "</li>"}.join("")
+    pseuds.sort.collect {|pseud| "<li>" + link_to_unless_current(pseud.name, [pseud.user, pseud]) + "</li>"}.join("")
   end
 end
