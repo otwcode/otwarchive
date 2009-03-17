@@ -23,13 +23,12 @@ module I18n
           if entry.nil?
             raise(I18n::MissingTranslationData.new(locale, key, options))
           else
-            #Translation.add_default_to_db(locale, key, options) if Locale.find_main_cached.short == locale.to_s && options[:saved_default]
+            Translation.add_default_to_db(locale, key, options) if Locale.find_main_cached.short == locale.to_s && options[:saved_default]
           end
         else
-          if Locale.find_main_cached.short == locale.to_s && options[:saved_default] && entry != options[:saved_default]
-            if false
+          if Locale.find_main_cached.short == locale.to_s && options[:saved_default].is_a?(String) && entry != options[:saved_default]
             entry = options[:saved_default]
-            #if key.is_a?(String)
+            if key.is_a?(String)
               n = key.split('.')
               tr_key = n.last
               namespace = (n - [n.last]).join('.')

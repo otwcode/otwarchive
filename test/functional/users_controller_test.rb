@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 class UsersControllerTest < ActionController::TestCase
   context "on Get to :new" do
     setup do
-      get :new, :locale => 'en'
+      get :new
     end
     should_assign_to :user
     should_render_template :new
@@ -13,7 +13,7 @@ class UsersControllerTest < ActionController::TestCase
   end
   context "on POST to :create invalid" do
     setup do
-      get :new, :locale => 'en'
+      get :new
       form = select_form "new_user"
 
       form.user.age_over_13.uncheck
@@ -50,7 +50,7 @@ class UsersControllerTest < ActionController::TestCase
     setup do
       @login = String.random
       password = String.random
-      get :new, :locale => 'en'
+      get :new
       form = select_form "new_user"
 
       form.user.age_over_13.check
@@ -73,7 +73,7 @@ class UsersControllerTest < ActionController::TestCase
     setup do
       @login = String.random
       password = String.random
-      get :new, :locale => 'en'
+      get :new
       form = select_form "new_user"
 
       form.user.age_over_13.check
@@ -96,7 +96,7 @@ class UsersControllerTest < ActionController::TestCase
     setup do
       @login = String.random
       @url = random_url
-      get :new, :locale => 'en', :use_openid => true
+      get :new, :use_openid => true
       form = select_form "new_user"
 
       form.user.age_over_13.check
@@ -115,7 +115,7 @@ class UsersControllerTest < ActionController::TestCase
     end
     context "that was previously used" do
       setup do
-        get :new, :locale => 'en', :use_openid => true
+        get :new, :use_openid => true
         form = select_form "new_user"
 
         form.user.age_over_13.check
@@ -134,7 +134,7 @@ class UsersControllerTest < ActionController::TestCase
     end
     context "that is semantically equivalent to one previously used" do
       setup do
-        get :new, :locale => 'en', :use_openid => true
+        get :new, :use_openid => true
         form = select_form "new_user"
 
         form.user.age_over_13.check
@@ -159,7 +159,7 @@ class UsersControllerTest < ActionController::TestCase
       assert @user = create_user
       assert @second_user = create_user
       @request.session[:user] = @second_user
-      get :edit, :locale => 'en', :id => @user.login
+      get :edit, :id => @user.login
     end
     should "not display a form" do
        assert_select "form", false
@@ -175,7 +175,7 @@ class UsersControllerTest < ActionController::TestCase
       assert @user.profile = @profile
       assert @second_user = create_user
       @request.session[:user] = @second_user
-      put :update, :locale => 'en', :id => @user.login, :user => {"email" => @new_email}
+      put :update, :id => @user.login, :user => {"email" => @new_email}
     end
     should "not make the change" do
       assert_not_equal @new_email, @user.email
@@ -188,7 +188,7 @@ class UsersControllerTest < ActionController::TestCase
     setup do
       assert @user = create_user
       assert @request.session[:user] = @user
-      get :edit, :locale => 'en', :id => @user.login
+      get :edit, :id => @user.login
     end
     should_assign_to :user
     should "assign assign @user to user" do
@@ -205,7 +205,7 @@ class UsersControllerTest < ActionController::TestCase
     setup do
       assert @user = create_user
       assert @request.session[:user] = @user
-      delete :destroy, :locale => 'en', :id => @user.login
+      delete :destroy, :id => @user.login
     end
     should "destroy the record" do
       assert_raises(ActiveRecord::RecordNotFound) { @user.reload }
@@ -217,7 +217,7 @@ class UsersControllerTest < ActionController::TestCase
       assert @user = create_user
       assert @second_user = create_user
       @request.session[:user] = @second_user
-      delete :destroy, :locale => 'en', :id => @user.login
+      delete :destroy, :id => @user.login
     end
     should "not destroy the record" do
       assert @user.reload
@@ -228,9 +228,10 @@ class UsersControllerTest < ActionController::TestCase
   context "on GET to :index" do
     setup do
       assert @user = create_user
-      get :index, :locale => 'en'
+      get :index
     end
-    should_assign_to :users
+    #should_assign_to :users
+    should_assign_to :authors
     should_not_set_the_flash
     should_render_template :index
     should_respond_with :success
@@ -238,7 +239,7 @@ class UsersControllerTest < ActionController::TestCase
   context "on GET to :show" do
     setup do
       assert @user = create_user
-      get :show, :locale => 'en', :id => @user.login
+      get :show, :id => @user.login
     end
     should_assign_to :user
     should_not_set_the_flash

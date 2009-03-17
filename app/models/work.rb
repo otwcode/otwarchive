@@ -999,10 +999,6 @@ class Work < ActiveRecord::Base
     @filters = build_filters_hash(Work.tags_with_count(ids))
     return @filters
   end
-  
-  def self.get_pseuds(works_to_filter)
-    available_pseuds = Pseud.on_works(works_to_filter).by_popularity.group_by(&:tag_category).to_hash
-  end
     
   # sort works by title
   def <=>(another_work)

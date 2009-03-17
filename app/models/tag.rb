@@ -49,16 +49,21 @@ class Tag < ActiveRecord::Base
 
   named_scope :by_popularity, {:order => 'taggings_count DESC'}
   named_scope :by_name, {:order => 'name ASC'}
-
+  
   named_scope :by_fandom, lambda{|fandom| {:conditions => {:fandom_id => fandom.id}}}
   named_scope :no_parent, :conditions => {:fandom_id => nil}
-
-  # enigel Feb 09
-  named_scope :starting_with, lambda {|letter|
-    {
-      :conditions => ['SUBSTR(name,1,1) = ?', letter]
+  
+  named_scope :by_pseud, lambda {|pseud|
+    { 
+      :joins => [{:works => :pseuds}],
+      :conditions => {:pseuds => {:id => pseud.id}}
     }
   }
+  
+  named_scope :by_type, lambda {|*types| {:conditions => (types.first.blank? ? {} : {:type => types.first})}}
+
+  # enigel Feb 09
+  named_scope :starting_with, lambda {|letter| {:conditions => ['SUBSTR(name,1,1) = ?', letter]}}
 
   # Class methods
 

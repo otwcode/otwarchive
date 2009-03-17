@@ -12,7 +12,7 @@ class HomeControllerTest < ActionController::TestCase
     end
     context "if you are not logged in" do
       setup do
-        get :index, :locale => 'en'
+        get :index
       end
       should_assign_to(:work_count) {1}
     end

@@ -2,7 +2,6 @@ class Pseud < ActiveRecord::Base
 
   NAME_LENGTH_MIN = 1
   NAME_LENGTH_MAX = 40
-
   
   belongs_to :user
   has_many :creatorships
@@ -10,63 +9,25 @@ class Pseud < ActiveRecord::Base
   has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter'
   has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series'
   validates_presence_of :name
-  validates_length_of :name, :within => NAME_LENGTH_MIN..NAME_LENGTH_MAX, :too_short => "That name is too short (minimum is %d characters)",
-        :too_long => "That name is too long (maximum is %d characters)"
- validates_format_of :name, :message => 'Pseuds can contain letters, numbers, spaces, underscores, and dashes.',
+  validates_length_of :name, :within => NAME_LENGTH_MIN..NAME_LENGTH_MAX, 
+                      :too_short => "That name is too short (minimum is %d characters)",
+                      :too_long => "That name is too long (maximum is %d characters)"
+  validates_format_of :name, :message => 'Pseuds can contain letters, numbers, spaces, underscores, and dashes.',
     :with => /\A[\w -]*\Z/    
   validates_format_of :name, :message => 'Pseuds must contain at least one letter or number.',
     :with => /[a-zA-Z0-9]/
-    
-  
-  TAGGING_JOIN = "INNER JOIN taggings on tags.id = taggings.tagger_id
-                  INNER JOIN works ON (works.id = taggings.taggable_id AND taggings.taggable_type = 'Work')"
-                  
-  TAGGING_JOIN_PSEUD = "INNER JOIN taggings on tags.id = taggings.tagger_id
-                  INNER JOIN works ON (works.id = taggings.taggable_id AND taggings.taggable_type = 'Work')
-                  INNER JOIN creatorships ON (creatorships.creation_id = works.id AND creatorships.creation_type = 'Work')"  
-
-  OWNERSHIP_JOIN = "INNER JOIN creatorships ON pseuds.id = creatorships.pseud_id
-                    INNER JOIN works ON (creatorships.creation_id = works.id AND creatorships.creation_type = 'Work')"
-                    
-  named_scope :tags_by_pseud, lambda {|pseud|
-    {
-      :select => " tags.*",
-      :from => "tags",
-      :joins => TAGGING_JOIN_PSEUD,
-      :conditions => ['creatorships.pseud_id = ?', pseud.id] 
-    }
-  }
 
   named_scope :on_works, lambda {|owned_works|
     {
       :select => "DISTINCT pseuds.*",
-      :joins => OWNERSHIP_JOIN,
-      :conditions => ['works.id in (?)', owned_works.collect(&:id)]
+      :joins => :works,
+      :conditions => {:works => {:id => owned_works.collect(&:id)}}
     }
-  }
-  
-  named_scope :on_work_ids, lambda {|owned_work_ids|
-    {
-      :select => "DISTINCT pseuds.*",
-      :joins => OWNERSHIP_JOIN,
-      :conditions => ['works.id in (?)', owned_work_ids]
-    }
-  }
-  
-  named_scope :for_user, lambda {|user|
-    { :conditions => ['pseuds.user_id = ?', user.id] }
-  }
-  
-  named_scope :with_names, lambda {|pseud_names|
-    {:conditions => ['pseuds.name in (?)', pseud_names]}
   }
 
   named_scope :alphabetical, :order => :name
-  named_scope :starting_with, lambda {|letter|
-    {
-      :conditions => ['SUBSTR(name,1,1) = ?', letter]
-    }
-  }
+  named_scope :starting_with, lambda {|letter| {:conditions => ['SUBSTR(name,1,1) = ?', letter]}}
+  
   begin
    ActiveRecord::Base.connection
    ALPHABET = Pseud.find(:all, :select => :name).collect {|pseud| pseud.name[0,1].upcase}.uniq.sort
@@ -89,27 +50,20 @@ class Pseud < ActiveRecord::Base
   # Options can include :categories and :limit
   # Enigel: this is aped from the similar method in the User model
   # I fear it produces some incorrect results
+  
+  # Gets all the canonical tags used by a given pseud (limited to certain 
+  # types if type options are provided), then sorts them according to 
+  # the number of times this pseud has used them, then returns an array
+  # of [tag, count] arrays, limited by size if a limit is provided 
   def most_popular_tags(options = {})
-    all_tags = []
-    (Pseud.tags_by_pseud(self)).each do |tag|
-      all_tags <<= tag if tag.canonical? ## self.tags + self.bookmark_tags
-      # if tag not canonical it can't be filtered on and we get 0 (zero) works
-    end
-    all_tags.flatten!
-    if !options[:categories].blank?
-      type_tags = []
-      options[:categories].each do |type_name|
-        type_tags << type_name.constantize.all
+    if all_tags = Tag.by_pseud(self).by_type(options[:categories]).canonical
+      tags_with_count = {}
+      all_tags.uniq.each do |tag|
+        tags_with_count[tag] = all_tags.find_all{|t| t == tag}.size
       end
-      type_tags_names = type_tags.flatten.collect {|tag| tag.name}
-      all_tags = all_tags.select {|tag| type_tags_names.include? tag.name} ##[self.tags + self.bookmark_tags].flatten & type_tags.flatten
+      all_tags = tags_with_count.to_a.sort {|x,y| y.last <=> x.last }
+      options[:limit].blank? ? all_tags : all_tags[0..(options[:limit]-1)]
     end
-    tags_with_count = {}
-    all_tags.uniq.each do |tag|
-      tags_with_count[tag] = all_tags.find_all{|t| t == tag}.size
-    end
-    all_tags = tags_with_count.to_a.sort {|x,y| y.last <=> x.last }
-    popular_tags_with_count = options[:limit].blank? ? all_tags : all_tags[0..(options[:limit]-1)]
   end
 
   # Produces a byline that indicates the user's name if pseud is not unique
