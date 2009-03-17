@@ -20,9 +20,22 @@ class Pseud < ActiveRecord::Base
   
   TAGGING_JOIN = "INNER JOIN taggings on tags.id = taggings.tagger_id
                   INNER JOIN works ON (works.id = taggings.taggable_id AND taggings.taggable_type = 'Work')"
+                  
+  TAGGING_JOIN_PSEUD = "INNER JOIN taggings on tags.id = taggings.tagger_id
+                  INNER JOIN works ON (works.id = taggings.taggable_id AND taggings.taggable_type = 'Work')
+                  INNER JOIN creatorships ON (creatorships.creation_id = works.id AND creatorships.creation_type = 'Work')"  
 
   OWNERSHIP_JOIN = "INNER JOIN creatorships ON pseuds.id = creatorships.pseud_id
                     INNER JOIN works ON (creatorships.creation_id = works.id AND creatorships.creation_type = 'Work')"
+                    
+  named_scope :tags_by_pseud, lambda {|pseud|
+    {
+      :select => " tags.*",
+      :from => "tags",
+      :joins => TAGGING_JOIN_PSEUD,
+      :conditions => ['creatorships.pseud_id = ?', pseud.id] 
+    }
+  }
 
   named_scope :on_works, lambda {|owned_works|
     {
@@ -49,21 +62,63 @@ class Pseud < ActiveRecord::Base
   }
 
   named_scope :alphabetical, :order => :name
+  named_scope :starting_with, lambda {|letter|
+    {
+      :conditions => ['SUBSTR(name,1,1) = ?', letter]
+    }
+  }
+  begin
+   ActiveRecord::Base.connection
+   ALPHABET = Pseud.find(:all, :select => :name).collect {|pseud| pseud.name[0,1].upcase}.uniq.sort
+  rescue
+    puts "no database yet, not initializing pseud alphabet"
+    ALPHABET = ['A']
+  end
 
   # Enigel Dec 12 08: added sort method
   # sorting by pseud name or by login name in case of equality
   def <=>(other)
     (self.name.downcase <=> other.name.downcase) == 0 ? (self.user_name.downcase <=> other.user_name.downcase) : (self.name.downcase <=> other.name.downcase)
   end
-
+  
   # For use with the work and chapter forms
   def user_name
      self.user.login
   end
   
+  # Options can include :categories and :limit
+  # Enigel: this is aped from the similar method in the User model
+  # I fear it produces some incorrect results
+  def most_popular_tags(options = {})
+    all_tags = []
+    (Pseud.tags_by_pseud(self)).each do |tag|
+      all_tags <<= tag if tag.canonical? ## self.tags + self.bookmark_tags
+      # if tag not canonical it can't be filtered on and we get 0 (zero) works
+    end
+    all_tags.flatten!
+    if !options[:categories].blank?
+      type_tags = []
+      options[:categories].each do |type_name|
+        type_tags << type_name.constantize.all
+      end
+      type_tags_names = type_tags.flatten.collect {|tag| tag.name}
+      all_tags = all_tags.select {|tag| type_tags_names.include? tag.name} ##[self.tags + self.bookmark_tags].flatten & type_tags.flatten
+    end
+    tags_with_count = {}
+    all_tags.uniq.each do |tag|
+      tags_with_count[tag] = all_tags.find_all{|t| t == tag}.size
+    end
+    all_tags = tags_with_count.to_a.sort {|x,y| y.last <=> x.last }
+    popular_tags_with_count = options[:limit].blank? ? all_tags : all_tags[0..(options[:limit]-1)]
+  end
+
   # Produces a byline that indicates the user's name if pseud is not unique
   def byline
     Pseud.count(:conditions => {:name => name}) > 1 ? name + " [" + user_name + "]" : name
+  end
+  
+  def unposted_works
+    @unposted_works = self.works.find(:all, :conditions => {:posted => false}, :order => 'works.created_at DESC')
   end
   
   # Takes a comma-separated list of bylines

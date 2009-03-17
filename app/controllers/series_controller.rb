@@ -24,8 +24,8 @@ class SeriesController < ApplicationController
   def index
     if params[:user_id]
       @user = User.find_by_login(params[:user_id])
-      if params[:pseud]
-        @author = @user.pseuds.find(params[:pseud])
+      if params[:pseud_id]
+        @author = @user.pseuds.find(params[:pseud_id])
         @series = @author.series.find(:all, :order => 'series.created_at DESC').paginate(:page => params[:page])
       else
         @series = @user.series.find(:all, :order => 'series.created_at DESC').paginate(:page => params[:page])

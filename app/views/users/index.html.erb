@@ -1,11 +1,13 @@
-<h1><%=h 'All Users:' %></h1>
+<%= alpha_paginated_section Pseud::ALPHABET -%>
 
-<%= alpha_paginated_section -%>
+<h2><%= authors_header @authors -%> <%= "in" -%> '<%= (params[:letter] && params[:letter].is_a?(String)) ? params[:letter] : Pseud::ALPHABET[0] -%>'</h2>
 
+<% paginated_section @authors, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
  <ul>
-  <%- @users.each do |user| -%>
-    <%= render :partial => 'user_blurb', :locals => {:user => user} -%>
+  <%- @authors.each do |author| -%>
+    <%= render :partial => 'author_blurb', :locals => {:author => author} -%>
   <%- end -%>  
 </ul>
+<% end %>
 
-<%= alpha_paginated_section -%>
+<%= alpha_paginated_section Pseud::ALPHABET -%>

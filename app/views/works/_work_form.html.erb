@@ -37,8 +37,9 @@
         <%= live_validation_for_field('work_title', 
 				      :maximum_length => ArchiveConfig.TITLE_MAX, :minimum_length => ArchiveConfig.TITLE_MIN, 
 				      :failureMessage => 'We need a title! (At least ' + ArchiveConfig.TITLE_MIN.to_s + 'letters long, please.)')
-				-%>
+        -%>
       </dd>
+      
       <!-- Add coauthors-->
       <%= render :partial => 'pseuds/byline', :locals =>{:form => f, :type => 'work'} %>
       
@@ -47,8 +48,7 @@
       </dt>
       <dd class="summary">
         <%= f.text_area :summary, :class => "summary-field" %>
-        <%= live_validation_for_field('work_summary', :presence => false,
-						:maximum_length => ArchiveConfig.SUMMARY_MAX) -%>
+        <%= live_validation_for_field('work_summary', :presence => false, :maximum_length => ArchiveConfig.SUMMARY_MAX) -%>
       </dd>
 
       <dt class="notes">
@@ -56,40 +56,41 @@
       </dt>
       <dd class="notes">
         <%= f.text_area :notes, :class => "notes-field" %>
-        <%= live_validation_for_field('work_notes', :presence => false,
-						:maximum_length => ArchiveConfig.NOTES_MAX) -%>
+        <%= live_validation_for_field('work_notes', :presence => false, :maximum_length => ArchiveConfig.NOTES_MAX) -%>
       </dd>
-</dl>
-</fieldset>
+    </dl>
+  </fieldset>
 
 <fieldset id="associations">
-<legend><%=h 'Associations' -%></legend>
+  <legend><%=h 'Associations' -%></legend>
+
   <dl>
-	<dt class="work-parent">
+    <!-- Inspiration / remix -->
+    <dt class="work-parent">
       <%= f.label :parent_url, "If your story is a remix or was inspired by another story in the archive, copy and paste that story's url below:" %>
     </dt>
     <dd class="work-parent">
       <%= f.text_field :parent_url, :value => @work.url_for_parent, :live => true %>
     </dd>
 
-  	<!-- Privacy dropdown (storyprivacy) -->
-  	<dt class="work-restricted">
+    <!-- Privacy dropdown (storyprivacy) -->
+    <dt class="work-restricted">
       <%= f.label :restricted, "Only show your work to registered users" %> <%= link_to_help "registered-users" -%>
     </dt>
     <dd class="work-restricted">
       <%= f.check_box :restricted %>
     </dd>
 
+    <!-- Series checkbox (storyseriescheck) -->
+    <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear. -->
     <dt class="work-is_serial">
       <%= f.label :storyseriescheck, "Is this part of a series?" %> 
     </dt>
- 	<dd class="work-is_serial">
-     	<input type="checkbox" id="storyseriescheck" name="storyseriescheck"  onclick="showWorkSeriesOptions()" 
+    <dd class="work-is_serial">
+       <input type="checkbox" id="storyseriescheck" name="storyseriescheck"  onclick="showWorkSeriesOptions()" 
        <%- unless @work.series.blank? -%>checked="checked"<%- end -%>/>
     </dd>
     
-    <!-- Series checkbox (storyseriescheck) -->
-    <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear. -->
     <!-- Toggles on with series checkbox -->
     <dd id="seriesmanage">
       <fieldset>
@@ -98,26 +99,26 @@
           <% fields_for "work[series_attributes]" do |s| %>
             <dt><%= s.label 'series_id', 'Choose one of your existing series:' %>  <%= link_to_help "choosing-series" -%></dt>
             <dd>
-				<%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>	  
+              <%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>	  
             </dd>
             <dt><%= s.label :title, "Or add a new one:" %></dt>
             <dd><%= s.text_field :title, :class => "storyinputfield" %></dd>
       	  <%- end -%>
         	
-        	<%- unless @serial_works.blank? -%>
-        	  <dt><%= 'Current Series' -%></dt>
-        	  <%- for serial in @serial_works -%>
-        	    <dd>
-        	      <ul class="navigation">
-  				    <li><%= link_to serial.series.title, serial.series %></li> 
-        	      	<li><%= link_to 'Remove', serial, :confirm => 'Are you sure?', :method => :delete %></li> 
-        	      	<li><%= link_to 'Delete', serial.series, :confirm => 'Are you sure?', :method => :delete %></li>
-  			      </ul>
-        	    </dd>
-      	    <%- end -%>
+          <%- unless @serial_works.blank? -%>
+            <dt><%= 'Current Series' -%></dt>
+            <%- for serial in @serial_works -%>
+              <dd>
+                <ul class="navigation">
+                  <li><%= link_to serial.series.title, serial.series %></li> 
+                  <li><%= link_to 'Remove', serial, :confirm => 'Are you sure?', :method => :delete %></li>
+                  <li><%= link_to 'Delete', serial.series, :confirm => 'Are you sure?', :method => :delete %></li>
+                </ul>
+              </dd>
+            <%- end -%>
       	  <%- end -%>          
         </dl>
-       </fieldset> 
+      </fieldset> 
     </dd>
     
   <% fields_for_associated('work', @work.chapters.first) do |c| %>
@@ -136,24 +137,27 @@
       <%=h 'Title:' %>
       <%=
       if @chapter != nil
-	    	c.text_field :title, :value => @chapter.title 
-			else
-				c.text_field :title 
-			end
-			%>
+        c.text_field :title, :value => @chapter.title
+      else
+        c.text_field :title
+      end
+      %>
     </p>
-    </dd> 
-	<!-- User-facing dates -->
-	<dt class="work-is-backdated">
-		<%= f.label :published_at, "Set a different publication date" %>
-	</dt>
-	<dd>
-	<input type="checkbox" id="publicationdatecheck" <%- if @work.published_at != @work.created_at -%>checked="checked"<%- end -%> />
-	</dd>
-	<dd id="managePublicationDate">
-		<%= f.date_select "published_at", :start_year => Date.today.year, :end_year => 1950, :default => Date.today, :order => [:day, :month, :year] %>
-	</dd>
-	</dl>         
+    </dd>
+    
+    <!-- User-facing dates -->
+    <dt class="work-is-backdated">
+      <%= f.label :published_at, "Set a different publication date" %>
+    </dt>
+    <dd>
+      <input type="checkbox" id="publicationdatecheck" <%- if @work.published_at != @work.created_at -%>checked="checked"<%- end -%> />
+    </dd>
+    <dd id="managePublicationDate">
+      <%= f.date_select "published_at", :start_year => Date.today.year, :end_year => 1950, :default => Date.today, :order => [:day, :month, :year] %>
+    </dd>
+    
+  </dl>         
+
 </fieldset>
 
 <!-- Story text field (chapter_attributes_content) -->
@@ -162,26 +166,26 @@
   <p>
     <%= c.label :content, "Story, in plain text with limited HTML*", :class => "required" %><%= link_to_help "html-help" -%>
   </p>
-	<p><code>a href, b, blockquote, br, center, cite, code, del, dd, dt, dl, div, em, h1, h2, h3, h4, h5, h6, i, ins, li, ol, pre, q, small, span, strike, strong, sub, sup, ul</code></p>
+  <p><code>a href, b, blockquote, br, center, cite, code, del, dd, dt, dl, div, em, h1, h2, h3, h4, h5, h6, i, ins, li, ol, pre, q, small, span, strike, strong, sub, sup, ul</code></p>
   <p class="rtf-html-switch">
-	  <% use_tinymce -%>
+    <% use_tinymce -%>
     <span><a href="javascript:addEditor('content');"><%=h 'Rich text' %></a></span>
     <span><a href="javascript:removeEditor('content');">HTML</a></span>
   </p>      
   <p>
-		<%= 
-		if @chapter != nil
-			c.text_area :content, :value => @chapter.content, :class => "mce-editor", :id => "content"
-		else
-			c.text_area :content, :class => "mce-editor", :id => "content"
-		end
-		%>
-    <%= live_validation_for_field('content', 
-				:maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN, 
-				:tooLongMessage => 'We salute your ambition! But sadly the content must be less than ' + ArchiveConfig.CONTENT_MAX.to_s + ' letters long. (Maybe you want to create a multi-chaptered work?)',
-				:tooShortMessage => 'Brevity is the soul of wit, but your content does have to be at least ' + ArchiveConfig.CONTENT_MIN.to_s + ' letters long.',
-			  :failureMessage => 'You did want to post a story here, right?')
-		-%>
+  <%= 
+    if @chapter != nil
+      c.text_area :content, :value => @chapter.content, :class => "mce-editor", :id => "content"
+    else
+      c.text_area :content, :class => "mce-editor", :id => "content"
+    end
+  %>
+  <%= live_validation_for_field('content', 
+      :maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN, 
+      :tooLongMessage => 'We salute your ambition! But sadly the content must be less than ' + ArchiveConfig.CONTENT_MAX.to_s + ' letters long. (Maybe you want to create a multi-chaptered work?)',
+      :tooShortMessage => 'Brevity is the soul of wit, but your content does have to be at least ' + ArchiveConfig.CONTENT_MIN.to_s + ' letters long.',
+      :failureMessage => 'You did want to post a story here, right?')
+  -%>
   </p>      
 </fieldset>
 

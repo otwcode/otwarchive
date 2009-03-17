@@ -1,11 +1,18 @@
 <% prefix = @user == current_user ? "My " : "" %>
+
+<%=
+# Pseud Selector: ugleh, ugleh display by Enigel Dec 5 08
+if @user.pseuds.size > 1
+	"<ul class='pseud_selector_sidebar'>" + print_pseud_selector(@user.pseuds) + "</ul>"
+end
+%>
 <ul>
   <li><%= link_to_unless_current prefix + "Dashboard", @user %></li>
-  <li><%= print_works_link(@user) %></li>
+  <li><%= @author ? print_pseud_works_link(@author) : print_works_link(@user) %></li>
   <%- if @user == current_user -%>
     <li><%= print_drafts_link(@user) -%></li>
   <%- end -%>
-  <li><%= print_series_link(@user) %></li>
+  <li><%= @author ? print_pseud_series_link(@author) : print_series_link(@user) %></li>
   <li><%= print_bookmarks_link(@user) %></li>
   <li><%= link_to_help "coming-soon", prefix + "Communities" %></li>
   <% if @user == current_user %>    

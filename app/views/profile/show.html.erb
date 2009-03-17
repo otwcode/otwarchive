@@ -1,7 +1,7 @@
 <div id="user-profile">
   <%= render :partial => 'users/header', :locals => {:user => @user} %>
 
-  <h3><%=h t('profile.show.about', :default => "About {{name}}", :name => ((@author && params[:pseud]) ? @author.name : @user.login)) %></h3>
+  <h3><%=h t('profile.show.about', :default => "About {{name}}", :name => @user.login) %></h3>
 
   <p><%= t('profile.show.member_since', :default => "Member since: {{date}}", :date => @user.created_at) %></p>
 
@@ -12,12 +12,12 @@
   <p><%=h @user.profile.title %></p>
 
   <dl id="user-data">
-    <dt class="pseuds"><%= t('profile.show.my_pseuds', :default => "My pseuds:") %></dt>
-      <dd class="pseuds"><%= print_pseuds(@user) %></dd>
+    <dt class="pseuds"><%= link_to t('profile.show.my_pseuds', :default => "My pseuds:"), user_pseuds_path(@user) %></dt>
+      <dd class="pseuds"><%= print_pseud_list(@user.pseuds) %></dd>
     <%- if @user.profile.location? -%>
     <dt class="location"><%=h t('profile.show.location', :default => "I live in:") %></dt>
       <dd><%=h @user.profile.location -%></dd>
-      <%- end -%>
+    <%- end -%>
     <%- if @user.preference.date_of_birth_visible -%>
     <dt class="birthday"><%=h t('profile.show.birthday', :default => "My birthday:") %></dt>
       <dd class="birthday"><%=h @user.profile.date_of_birth -%></dd> 

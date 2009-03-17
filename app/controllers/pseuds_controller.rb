@@ -27,7 +27,14 @@ class PseudsController < ApplicationController
   # GET /pseuds/1
   # GET /pseuds/1.xml
   def show
-    @pseud = @user.pseuds.find(params[:id])
+    @author = @pseud = @user.pseuds.find(params[:id])
+    unless @pseud
+      flash[:error] = "Sorry, could not find this pseud."
+      redirect_to :action => :index
+    end
+    @works = Work.written_by_conditions([@author]).visible.ordered('revised_at', 'DESC').limited(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+    @series = @author.series.find(:all, :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'series.updated_at DESC')
+    @bookmarks = @user.bookmarks.visible(:limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'bookmarks.updated_at DESC')  
   end
   
   # For use with work/chapter forms

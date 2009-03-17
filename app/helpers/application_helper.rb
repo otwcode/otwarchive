@@ -47,7 +47,7 @@ module ApplicationHelper
     pseuds << creation.authors if creation.authors
     pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.empty?)
     pseuds.flatten.uniq.sort.collect { |pseud|
-      link_to pseud.byline, user_path(pseud.user, :pseud => pseud.id), :class => "login author"
+      link_to pseud.byline, user_pseud_path(pseud.user, pseud.id), :class => "login author"
     }.join(', ')
   end
 
@@ -135,5 +135,8 @@ module ApplicationHelper
     end
   end  
 
+  def params_without(name)
+    params.reject{|k,v| k == name}
+  end
 
 end # end of ApplicationHelper

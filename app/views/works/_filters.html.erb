@@ -2,7 +2,7 @@
 <%- form_tag(works_path, :class => 'work-filters', :method => :get) do -%>
   <%- field_set_tag 'Filter these results: ' do -%>
  		<dl class="filters">
-			<%- unless (@pseuds.size < 1 || (@user && @pseuds.size < 2)) -%>
+			<%- unless (@pseuds.size < 1 || (@user && @pseuds.size < 2 && !@author)) -%>
         <dt onclick='toggleFilters("filter-pseuds")'>
           <span id="filter-pseuds_closed" style="display: none;"><%= image_tag 'arrow-right.gif', :alt => "" -%></span>
           <span id="filter-pseuds_open"><%= image_tag 'arrow-down.gif', :alt => "" -%></span>              
@@ -47,6 +47,7 @@
   		<%= hidden_field_tag("tag_id", @tag.name) if @tag %>
   		<%= hidden_field_tag("query", @query) if @query %>
   		<%= hidden_field_tag("fandom_id", @fandom.id) if @fandom %>
+      <%= hidden_field_tag("pseud_id", @author.id) if @author %>
   		<%= hidden_field_tag("user_id", @user.login) if @user %>
 		</p>
 		<p class="submit"><%= submit_tag "Filter Works" %></p>

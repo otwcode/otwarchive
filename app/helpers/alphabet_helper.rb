@@ -1,7 +1,7 @@
 module AlphabetHelper
   
   def link_to_letter(letter, text = "")
-    link_to_unless_current(text.blank? ? letter : text, url_for(:overwrite_params => {:letter => letter}))
+    link_to_unless_current(text.blank? ? letter : text, url_for(:overwrite_params => {:letter => letter, :page => 1}))
   end
   
   def alpha_paginated_section(alphabet = User::ALPHABET)
@@ -41,6 +41,5 @@ module AlphabetHelper
 
     block << "</div>"
   end
-
   
 end

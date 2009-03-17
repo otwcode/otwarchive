@@ -106,9 +106,9 @@ class User < ActiveRecord::Base
     login
   end
 
-	begin
-	 ActiveRecord::Base.connection
-   ALPHABET = User.find(:all, :select => :login).collect {|user| user.login[0,1].upcase}.uniq.sort
+  begin
+    ActiveRecord::Base.connection
+    ALPHABET = User.find(:all, :select => :login).collect {|user| user.login[0,1].upcase}.uniq.sort
   rescue
     puts "no database yet, not initializing user login alphabet"
     ALPHABET = ['A']

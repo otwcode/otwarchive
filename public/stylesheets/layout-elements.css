@@ -104,14 +104,14 @@ dl#user-data dt {font-weight: 900; width: 9em; float:left; clear:left; margin:0.
 /*PSEUDS*/
 #main.pseuds-index table ul.navigation { border-bottom:0; }
 #main.pseuds-new.sidebar ul.navigation, #main.pseuds-edit.sidebar ul.navigation { margin-top: 13.75em;}
-/* Enigel Nov 25 08 */
+/* Enigel Mar 12 09: pseuds show is changing entirely */
+/*
 #main.pseuds-show.sidebar ul.navigation { margin-top: 13.75em;}
 #main.pseuds-show.sidebar { position:absolute; margin-top:2em;}
 #main.pseuds-show.sidebar dl { }
-/* end Enigel additions and edits */
 #main.pseuds-show.sidebar dt { font-weight:600; float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
 #main.pseuds-show.sidebar dd { float:left; }
-
+*/
 /* WORKS-INDEX */
 /*work filters rules are in forms.css */
 /*works blurb : shows on works, reading history, series, should be spoofed on bookmarks and users-show*/

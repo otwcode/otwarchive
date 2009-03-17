@@ -29,10 +29,10 @@ class UsersController < ApplicationController
     if params[:letter] && params[:letter].is_a?(String)
       letter = params[:letter][0,1]
     else
-      letter = User::ALPHABET[0]
+      letter = Pseud::ALPHABET[0]
     end
-      
-    @users = User.alphabetical.starting_with(letter)
+
+    @authors = Pseud.alphabetical.starting_with(letter).paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
   end 
 
   # GET /users/1
@@ -61,7 +61,7 @@ class UsersController < ApplicationController
   def new
     @user = User.new(:invitation_token => params[:invitation_token])
     @user.email = @user.invitation.recipient_email if @user.invitation
-		@hide_dashboard = true
+    @hide_dashboard = true
   end
   
   # GET /users/1/edit
@@ -72,7 +72,7 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.xml
   def create
-	  @hide_dashboard = true
+    @hide_dashboard = true
     if params[:cancel_create_account]
       redirect_to root_path
     else

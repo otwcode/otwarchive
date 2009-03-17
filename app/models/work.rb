@@ -123,6 +123,8 @@ class Work < ActiveRecord::Base
 
   after_save :save_creatorships, :save_chapters, :save_parents
   
+  # before_save :validate_tags # Enigel's feeble attempt
+  
   before_update :validate_tags
 
   before_save :update_ambiguous_tags
@@ -896,6 +898,7 @@ class Work < ActiveRecord::Base
     Work.search(options[:query], search_options) 
   end
 
+  # TODO: fix me for User- and Pseud-specific pages
   def self.find_with_options(options = {})
     command = ''
     visible = '.visible'
@@ -920,19 +923,26 @@ class Work < ActiveRecord::Base
     @pseuds = []
     @filters = []
     
-    if !options[:selected_pseuds].empty? && !options[:selected_tags].empty?
-      # We have selected pseuds and selected tags
+    # 1. individual user
+    # 1.1 individual pseud
+    # 1.1.1 and tags
+    # 1.2 and tags
+    # 2. tags
+    # 3. all
+    
+    if !options[:user].nil? && !options[:selected_pseuds].empty? && !options[:selected_tags].empty?
+      # We have an indiv. user, selected pseuds and selected tags
       command << written + visible_without_owners + tags
       @pseuds = options[:selected_pseuds]     
-    elsif !options[:selected_pseuds].empty?
-      # We only have selected pseuds but no selected tags
+    elsif !options[:user].nil? && !options[:selected_pseuds].empty?
+      # We have an indiv. user, selected pseuds but no selected tags
       command << written + visible_without_owners
       @pseuds = options[:selected_pseuds]                    
     elsif !options[:user].nil? && !options[:selected_tags].empty?
       # filtered results on a user's works page
       # no pseuds but a specific user, and selected tags
       command << owned + visible_without_owners + tags
-      @pseuds = options[:user].pseuds.on_works(@works)
+      #@pseuds = options[:user].pseuds.on_works(@works) # except @works is empty at this point!
     elsif !options[:user].nil?
       # a user's default works page
       command << owned + visible_without_owners
@@ -946,6 +956,13 @@ class Work < ActiveRecord::Base
     end
     
     @works = eval("Work#{command + sort_and_paginate}")
+    # what I'm trying to achieve here (long term)
+    # is to add the co-authors of the displayed works to the available list of pseuds to filter on
+    if !options[:user].nil? && !options[:selected_pseuds].empty?
+      @pseuds << options[:user].pseuds.on_works(@works) # Pseud.on_works(@works) # er, kinda borky
+      @pseuds.flatten!.uniq!
+    end
+    
     unless @works.empty?
       ids = eval("Work.ids_only#{command}").collect(&:id)
       @filters = build_filters_hash(Work.tags_with_count(ids))

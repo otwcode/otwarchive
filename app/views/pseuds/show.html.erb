@@ -1,17 +1,11 @@
-<dl>
-	<dt><%=h 'User:' %></dt>
-  	<dd><%=h @pseud.user.login %></dd>
-	<dt><%=h 'Name:' %></dt>
-  	<dd><%=h @pseud.name %></dd>
-	<dt><%=h 'Description:' %></dt>
-  	<dd><%=h @pseud.description %></dd>
-	<dt><%=h 'Is default:' %></dt>
-  	<dd><%=h @pseud.is_default %></dd>
-</dl>
-	
+<div id="user-page">
+  <%= render :partial => "users/header", :locals => {:user => @user} %>
+  <%= render :partial => "users/contents" %>
+</div>
+
 <ul class="navigation">
-	<% if @user == current_user -%>
-		<li><%= link_to 'Edit', [:edit, @user, @pseud] %></li>
-	<% end -%>
-	<li><%= link_to 'Back', user_pseuds_path(@user) %></li>
+  <% if @user == current_user -%>
+    <li><%= link_to 'Edit', [:edit, @user, @pseud] %></li>
+  <% end -%>
+  <li><%= link_to 'Back', user_pseuds_path(@user) %></li>
 </ul>

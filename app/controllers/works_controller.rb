@@ -166,8 +166,10 @@ class WorksController < ApplicationController
       unless params[:user_id].blank?
         @user = User.find_by_login(params[:user_id])
         if @user
-          if params[:pseud] and !params[:pseud].blank?
-            @author = @user.pseuds.find(params[:pseud])
+          unless params[:pseud_id].blank?
+            @author = @user.pseuds.find(params[:pseud_id])
+            @pseud = Pseud.find(params[:pseud_id])
+            @selected_pseuds << @pseud unless @selected_pseuds.include?(@pseud)
           end
         else
           flash[:error] = t('errors.works.user_not_found', :default => "Sorry, there's no user by that name in our system.")
@@ -178,7 +180,7 @@ class WorksController < ApplicationController
       
       # Now let's build the query
       page_args = {:page => params[:page], :per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE)}
-      @works, @filters, @pseuds = Work.find_with_options(:user => @user, :selected_tags => @selected_tags, 
+      @works, @filters, @pseuds = Work.find_with_options(:user => @user, :author => @author, :selected_tags => @selected_tags, 
                                                     :selected_pseuds => @selected_pseuds, 
                                                     :sort_column => @sort_column, :sort_direction => @sort_direction,
                                                     :page_args => page_args)              

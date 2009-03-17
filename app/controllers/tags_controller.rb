@@ -50,7 +50,7 @@ class TagsController < ApplicationController
     unless params[:work_id].blank?
       @display_work = Work.find(params[:work_id])
       @display_tags = @display_work.warnings
-      @display_category = @display_tags.first.class.name.downcase  # Enigel Dec 13 08 quick 'n dirty fix
+      @display_category = @display_tags.first.class.name.downcase
     end
     if request.xml_http_request?
       respond_to do |format|
