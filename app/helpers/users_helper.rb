@@ -32,6 +32,12 @@ module UsersHelper
     prefix = (@user == current_user) ? "My " : ""
     link_to_unless_current prefix + "Bookmarks" + " (" + total.to_s + ")", user_bookmarks_path(@user)
   end
+	
+	def print_pseud_bookmarks_link(pseud)
+    total = logged_in_as_admin? ? pseud.bookmarks.count : pseud.bookmarks.visible.size
+    prefix = (@user == current_user) ? "My " : ""
+    link_to_unless_current prefix + "Bookmarks" + " (" + total.to_s + ")", user_pseud_bookmarks_path(@user, pseud)
+  end
   
   # Prints link to works page with user-appropriate number of works
   # (The total should reflect the number of works the user can actually see.)

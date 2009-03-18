@@ -39,7 +39,7 @@ class PseudsController < ApplicationController
       end
       @works = Work.written_by_conditions([@author]).visible.ordered('revised_at', 'DESC').limited(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
       @series = @author.series.find(:all, :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'series.updated_at DESC')
-      @bookmarks = @user.bookmarks.visible(:limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'bookmarks.updated_at DESC')  
+      @bookmarks = @author.bookmarks.visible(:limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'bookmarks.updated_at DESC')  
     else
       @pseuds = Pseud.find_all_by_name(params[:id])
       if @pseuds.size == 0

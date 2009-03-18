@@ -6,6 +6,7 @@ module PseudsHelper
   end
   
   def print_pseud_selector(pseuds)
+    pseuds -= [@pseud] if @pseud && @pseud.new_record?
     pseuds.sort.collect {|pseud| "<li>" + link_to_unless_current(pseud.name, [pseud.user, pseud]) + "</li>"}.join("")
   end
 end
