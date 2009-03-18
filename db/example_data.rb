@@ -29,7 +29,7 @@ module FixtureReplacement
 
   attributes_for :bookmark do |a|
     a.notes = random_phrase
-    a.user = default_user
+    a.pseud = default_pseud
     a.bookmarkable = default_work
   end
 

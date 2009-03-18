@@ -6,7 +6,7 @@ class BookmarkTest < ActiveSupport::TestCase
       @bookmark = create_bookmark
     end
     should_belong_to :bookmarkable
-    should_belong_to :user
+    should_belong_to :pseud
     should_have_many :taggings
     should_ensure_length_in_range :notes, (0..2500), :long_message => /must be less/
   end
@@ -61,7 +61,7 @@ class BookmarkTest < ActiveSupport::TestCase
         @work_to_destroy.destroy
       end
       should "be visible to the bookmark's creator" do
-        assert @bookmark.visible(@bookmark.user)
+        assert @bookmark.visible(@bookmark.pseud.user)
       end
       should "not be visible by default" do
         assert !@bookmark.visible
@@ -84,7 +84,7 @@ class BookmarkTest < ActiveSupport::TestCase
       assert !@bookmark.visible(create_user)
     end
     should "be visible to it's owner" do
-      assert @bookmark.visible(@bookmark.user)
+      assert @bookmark.visible(@bookmark.pseud.user)
     end
   end
 end

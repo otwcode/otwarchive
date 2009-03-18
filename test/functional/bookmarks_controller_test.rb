@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 class BookmarksControllerTest < ActionController::TestCase
   context "when indexing all bookmarks" do
     setup do
-      get :index, :locale => 'en'
+      get :index
     end
     should_respond_with :success
     should_render_template :index
@@ -13,8 +13,9 @@ class BookmarksControllerTest < ActionController::TestCase
   context "when indexing a user's bookmarks" do
     setup do
       @user = create_user
-      @bookmark = create_bookmark(:user => @user)
-      get :index, :locale => 'en', :user_id => @user.login
+      @pseud = @user.default_pseud
+      @bookmark = create_bookmark(:pseud => @pseud)
+      get :index, :user_id => @user.login
     end
 
     should_assign_to :user
@@ -23,9 +24,10 @@ class BookmarksControllerTest < ActionController::TestCase
   context "when indexing my own bookmarks" do
     setup do
       @user = create_user
+      @pseud = @user.default_pseud
       @request.session[:user] = @user
-      @bookmark = create_bookmark(:user => @user)
-      get :index, :locale => 'en', :user_id => @user.login
+      @bookmark = create_bookmark(:pseud => @pseud)
+      get :index, :user_id => @user.login
     end
 
   end
@@ -35,7 +37,7 @@ class BookmarksControllerTest < ActionController::TestCase
       @bookmark = create_bookmark
       @bookmark.bookmarkable.add_default_tags
       @bookmark.bookmarkable.update_attribute(:posted, true)
-      get :show, :locale => 'en', :id => @bookmark.id
+      get :show, :id => @bookmark.id
     end
     should_respond_with :success
     should_render_template :show
@@ -45,11 +47,12 @@ class BookmarksControllerTest < ActionController::TestCase
   context "when showing my own bookmark" do
     setup do
       @user = create_user
-      @bookmark = create_bookmark(:user => @user, :private => true)
+      @pseud = @user.default_pseud
+      @bookmark = create_bookmark(:pseud => @pseud, :private => true)
       @bookmark.bookmarkable.add_default_tags
       @bookmark.bookmarkable.update_attribute(:posted, true)
       @request.session[:user] = @user
-      get :show, :locale => 'en', :id => @bookmark.id
+      get :show, :id => @bookmark.id
     end
     should_respond_with :success
   end
@@ -57,12 +60,13 @@ class BookmarksControllerTest < ActionController::TestCase
   context "when showing a private bookmark, not my own" do
     setup do
       @user = create_user
+      @pseud = @user.default_pseud
       @request.session[:user] = @user
       @bookmark = create_bookmark(:private => true)
       @bookmark.bookmarkable.add_default_tags
       @bookmark.bookmarkable.update_attribute(:posted, true)
       @request.session[:user] = @user
-      get :show, :locale => 'en', :id => @bookmark.id
+      get :show, :id => @bookmark.id
     end
     should "have error" do
       assert flash.has_key?(:error)

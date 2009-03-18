@@ -16,12 +16,8 @@ class BookmarksController < ApplicationController
   def load_bookmarkable
     if params[:work_id]
       @bookmarkable = Work.find(params[:work_id])
-    end    
-    if params[:external_work_id]
+    elsif params[:external_work_id]
       @bookmarkable = ExternalWork.find(params[:external_work_id])
-    end    
-    if params[:user_id]
-      @user = User.find_by_login(params[:user_id]) 
     end
   end  
   
@@ -30,16 +26,21 @@ class BookmarksController < ApplicationController
   # GET    /:locale/works/:work_id/bookmarks 
   # GET    /:locale/external_works/:external_work_id/bookmarks
   def index
-    if @user 
-      @bookmarks = is_admin? ? @user.bookmarks.find(:all, :conditions => {:private => false}, :order => "bookmarks.created_at DESC").paginate(:page => params[:page]) : 
-                               @user.bookmarks.visible(:order => "bookmarks.created_at DESC").paginate(:page => params[:page]) 
-    elsif @bookmarkable.nil? 
-      @bookmarks = is_admin? ? Bookmark.find(:all, :conditions => {:private => false}, :order => "bookmarks.created_at DESC").paginate(:page => params[:page]) : 
-                               Bookmark.visible(:order => "bookmarks.created_at DESC").paginate(:page => params[:page]) 
-    else 
-      @bookmarks = is_admin? ? @bookmarkable.bookmarks.find(:all, :conditions => {:private => false}, :order => "bookmarks.created_at DESC").paginate(:page => params[:page]) :
-                               @bookmarkable.bookmarks.visible(:order => "bookmarks.created_at DESC").paginate(:page => params[:page])
+    if params[:user_id]
+      @user = User.find_by_login(params[:user_id])
+      owner = @user
     end
+    if params[:pseud_id] && @user
+      @pseud = @user.pseuds.find_by_name(params[:pseud_id])
+      owner = @pseud
+    elsif params[:tag_id]
+      owner = Tag.find_by_name(params[:tag_id])
+    else
+      owner = @bookmarkable
+    end
+    search_by = owner ? "owner.bookmarks" : "Bookmark" 
+    @bookmarks = is_admin? ? eval(search_by).find(:all, :conditions => {:private => false}, :order => "bookmarks.created_at DESC").paginate(:page => params[:page]) : 
+                             eval(search_by).visible(:order => "bookmarks.created_at DESC").paginate(:page => params[:page])
     if @bookmarkable
       access_denied unless is_admin? || @bookmarkable.visible
     end
@@ -55,7 +56,7 @@ class BookmarksController < ApplicationController
       if !current_user.is_a?(User)
         store_location 
         redirect_to new_session_path and return        
-      elsif @bookmark.user != current_user
+      elsif @bookmark.pseud.user != current_user
   	    flash[:error] = t('errors.bookmarks.not_visible', :default => 'This page is unavailable.')
        redirect_to user_path(current_user) and return
       end

@@ -53,7 +53,7 @@ class Admin::AdminUsersController < ApplicationController
   
   def send_notification
     if params[:user_ids]
-      @users = User.with_ids(params[:user_ids])
+      @users = User.find(params[:user_ids])
     end
 
     if @users.blank?

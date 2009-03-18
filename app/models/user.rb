@@ -37,8 +37,7 @@ class User < ActiveRecord::Base
   before_update :validate_date_of_birth
   
   has_many :readings, :dependent => :destroy 
-  can_create_bookmarks
-  
+  has_many :bookmarks, :through => :pseuds 
   has_many :comments, :through => :pseuds
   has_many :creatorships, :through => :pseuds  
   has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work', :uniq => true
@@ -62,22 +61,8 @@ class User < ActiveRecord::Base
   end
   
   named_scope :alphabetical, :order => :login
-  named_scope :starting_with, lambda {|letter|
-    {
-      :conditions => ['SUBSTR(login,1,1) = ?', letter]
-    }
-  }
+  named_scope :starting_with, lambda {|letter| {:conditions => ['SUBSTR(login,1,1) = ?', letter]}}
   named_scope :valid, :conditions => {:banned => false, :suspended => false}
-  named_scope :with_logins, lambda {|logins|
-    {
-     :conditions => ['login in (?)', logins] 
-    }
-  }
-  named_scope :with_ids, lambda {|ids|
-    {
-     :conditions => ['id in (?)', ids] 
-    }
-  }
 
   validates_format_of :login, :message => 'Your user name must begin and end with a letter or number; it may also contain underscores but no other characters.',
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/

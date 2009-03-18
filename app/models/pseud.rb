@@ -4,6 +4,7 @@ class Pseud < ActiveRecord::Base
   NAME_LENGTH_MAX = 40
   
   belongs_to :user
+  has_many :bookmarks
   has_many :creatorships
   has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work'
   has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter'

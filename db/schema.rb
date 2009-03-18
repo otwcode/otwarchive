@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090313212917) do
+ActiveRecord::Schema.define(:version => 20090318004340) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -32,14 +32,12 @@ ActiveRecord::Schema.define(:version => 20090313212917) do
     t.datetime "created_at",                                         :null => false
     t.string   "bookmarkable_type", :limit => 15, :default => "",    :null => false
     t.integer  "bookmarkable_id",   :limit => 8,                     :null => false
-    t.integer  "user_id",           :limit => 8,                     :null => false
     t.text     "notes"
     t.boolean  "private",                         :default => false
     t.datetime "updated_at"
     t.boolean  "hidden_by_admin",                 :default => false, :null => false
+    t.integer  "pseud_id",                                           :null => false
   end
-
-  add_index "bookmarks", ["user_id"], :name => "fk_bookmarks_user"
 
   create_table "chapters", :force => true do |t|
     t.text     "content",         :limit => 2147483647,                    :null => false
@@ -388,6 +386,10 @@ ActiveRecord::Schema.define(:version => 20090313212917) do
     t.string   "namespace"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "updated",       :default => false, :null => false
+    t.boolean  "betaed",        :default => false, :null => false
+    t.integer  "translator_id"
+    t.integer  "beta_id"
   end
 
   add_index "translations", ["tr_key", "locale_id", "updated_at"], :name => "index_translations_on_tr_key_and_locale_id_and_updated_at"

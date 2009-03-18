@@ -10,17 +10,19 @@ module BookmarksHelper
       if bookmarkable.class == Work
         fallback = new_work_bookmark_path(bookmarkable)
         text = 'Bookmark this story'
-     elsif bookmarkable.class == ExternalWork
+      elsif bookmarkable.class == ExternalWork
         fallback = bookmarks_path # more options if necessary
         text = 'Add a new bookmark'
-     end
-
+      end
+      
+      # NOTE: the 'existing' check can't work the same way when bookmarks are owned by pseud
       # Check to see if we already have a bookmark to this object
-      existing = Bookmark.find(:first, 
-                               :conditions => ["user_id = ? AND 
-                                               bookmarkable_type = ? AND 
-                                               bookmarkable_id = ?", 
-                                               current_user.id, bookmarkable.class.name.to_s, bookmarkable.id])
+      #existing = Bookmark.find(:first, 
+      #                         :conditions => ["user_id = ? AND 
+      #                                         bookmarkable_type = ? AND 
+      #                                         bookmarkable_id = ?", 
+      #                                         current_user.id, bookmarkable.class.name.to_s, bookmarkable.id])
+      existing = nil
       if existing.nil?                                         
         link_to_remote text, {:url => fallback, :method => :get}, :href => fallback
       else

@@ -6,6 +6,17 @@
 
 <% form_for([bookmarkable, @bookmark], :url => {:controller => 'bookmarks', :action => (action ||= 'create')}) do |f| %>
 <dl>
+
+  <dt><%=h t('bookmarks.new.form_pseud', :default => "Pseud: ") -%></dt>
+  <dd>
+    <% if current_user.pseuds.count > 1 %>
+      <%= f.collection_select :pseud_id, current_user.pseuds, :id, :name %>
+    <% else %>
+    <%= current_user.default_pseud.name -%>
+      <%= f.hidden_field :pseud_id, :value => "#{current_user.default_pseud.id}" %>
+    <% end %>
+  </dd>
+
 	<% if bookmarkable.class == ExternalWork && bookmarkable.new_record? %>
 	<% fields_for 'bookmark[external]', bookmarkable do |ew| %>
 	<dt><%= ew.label :url, t('bookmarks.new.form_url', :default => "URL: ") %></dt>
@@ -30,7 +41,6 @@
 		<dd><%= text_field_tag 'tag_string', @tag_string %></dd>
 </dl>
 <p> <%= f.check_box :private %> <%= f.label :private, t('bookmarks.new.form_private', :default => "Private bookmark?") %> </p>
-<p><%= f.hidden_field :user_id, :value => current_user.id %>
 <%= f.hidden_field :bookmarkable_id, :value => bookmarkable.id %>
 <%= f.hidden_field :bookmarkable_type, :value => bookmarkable.class.to_s %></p>
 <p class="submit"><%= f.submit(button_name ||= t('forms.create', :default => "Create")) %></p>
