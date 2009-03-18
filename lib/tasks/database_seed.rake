@@ -8,5 +8,5 @@ namespace :db do
   end
   
   desc "Reset and then seed the development database with test data from the fixtures"
-  task :seed => [:environment, :development_environment_only, :reset, 'fixtures:load', 'globalize:reset'] 
+  task :seed => [:environment, :development_environment_only, :reset, 'fixtures:load'] 
 end

@@ -341,7 +341,7 @@ tags_008:
   merger_id:
   fandom_id:
   media_id:
-  name: Comics & Manga
+  name: Cartoons & Comics
   updated_at: 2008-11-09 03:26:02
   tag_category_id: "87582722"
   canonical: "1"
@@ -419,7 +419,7 @@ tags_009:
   merger_id:
   fandom_id:
   media_id:
-  name: Cartoons & Anime
+  name: Anime & Manga
   updated_at: 2008-11-09 03:26:02
   tag_category_id: "87582722"
   canonical: "1"
