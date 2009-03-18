@@ -5,6 +5,12 @@ module I18n
       # the information passed to MissingTranslationData handler, preventing it 
       # from trying a fallback locale correctly
       def translate(locale, key, options = {})
+        begin
+          Locale.new #just make sure there's a db table for locales
+        rescue
+          puts "Locale table doesn't exist"
+          return
+        end
         raise InvalidLocale.new(locale) if locale.nil?
         return key.map { |k| translate(locale, k, options) } if key.is_a? Array
         
