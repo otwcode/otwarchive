@@ -3,8 +3,3 @@
 <%= error_messages_for :chapter %>
 
 <%= render :partial => 'chapter_form', :locals => { :chapter => @chapter, :button_text => "Update" } %>
-
-<ul class="navigation">
-	<li><%= link_to t('links.show', :default => 'Show'), [@work, @chapter] %></li> 
-	<li><%= link_to t('links.back', :default => 'Back'), work_chapters_path %></li>
-</ul>

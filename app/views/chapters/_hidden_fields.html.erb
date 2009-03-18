@@ -1,0 +1,17 @@
+<!-- expects a local variable "form" -->
+
+<!-- put in all the information uploaded in hidden fields -->
+<select name="chapter[author_attributes][ids][]" multiple="multiple" style="display:none;">
+<%= options_from_collection_for_select(@allpseuds, :id, :name, @selected_pseuds) %>  
+</select>
+<select name="chapter[author_attributes][coauthors][]" multiple="multiple" style="display:none;">
+<%= options_from_collection_for_select(@coauthors, :id, :name, @selected_pseuds) %>  
+</select>
+
+<%= form.hidden_field :title, :value => "#{@chapter.title}" %>
+<%= form.hidden_field :summary, :value => "#{@chapter.summary}" %>
+<%= form.hidden_field :notes, :value => "#{@chapter.notes}" %>
+<%= form.hidden_field :content, :value => "#{@chapter.content}" %>
+
+<%= form.hidden_field :wip_length, :value => "#{@chapter.wip_length_placeholder}" %>
+<%= form.hidden_field :current_position, :value => "#{@chapter.position_placeholder}" %></p>

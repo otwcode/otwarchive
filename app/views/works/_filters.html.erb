@@ -13,8 +13,8 @@
             <%- for pseud in @pseuds.sort -%>
               <%- if pseud.works.count > 0 -%>
                 <li>
-                  <%= check_box_tag 'selected_pseuds[]', pseud.id, @selected_pseuds.include?(pseud), :id => "selected_pseuds_#{pseud.id}" %>
-                  <%= label_tag "selected_pseuds_#{pseud.id}", pseud.name %>  
+                  <%= check_box_tag 'selected_pseuds[]', pseud.id, @selected_pseuds.include?(pseud.id), :id => "selected_pseuds_#{pseud.id}" %>
+                  <%= label_tag "selected_pseuds_#{pseud.id}", pseud.byline %>  
                 </li>
               <%- end -%>
             <%- end -%> 
@@ -47,7 +47,7 @@
   		<%= hidden_field_tag("tag_id", @tag.name) if @tag %>
   		<%= hidden_field_tag("query", @query) if @query %>
   		<%= hidden_field_tag("fandom_id", @fandom.id) if @fandom %>
-      <%= hidden_field_tag("pseud_id", @author.id) if @author %>
+      <%= hidden_field_tag("pseud_id", @author.name) if @author %>
   		<%= hidden_field_tag("user_id", @user.login) if @user %>
 		</p>
 		<p class="submit"><%= submit_tag "Filter Works" %></p>

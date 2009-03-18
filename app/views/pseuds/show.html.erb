@@ -7,5 +7,5 @@
   <% if @user == current_user -%>
     <li><%= link_to 'Edit', [:edit, @user, @pseud] %></li>
   <% end -%>
-  <li><%= link_to 'Back', user_pseuds_path(@user) %></li>
+  <li><%= link_to 'Back to Pseuds', user_pseuds_path(@user) %></li>
 </ul>

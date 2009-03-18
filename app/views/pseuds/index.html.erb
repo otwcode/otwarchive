@@ -25,7 +25,7 @@
           <li><%= link_to 'Edit', [:edit, @user, pseud] -%></li>
           <li><%= link_to 'Orphan Works', {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} -%>
           <% unless @user.login == pseud.name || pseud.is_default -%></li>
-            <li><%= link_to 'Destroy', [@user, pseud], :confirm => 'Are you sure?', :method => :delete %></li>
+            <li><%= link_to 'Delete', [@user, pseud], :confirm => 'Are you sure?', :method => :delete %></li>
           <% end -%>
         <% end -%>
       </ul>

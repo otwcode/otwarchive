@@ -118,9 +118,10 @@ class WorksController < ApplicationController
     @sort_column = params[:sort_column] || 'revised_at'
     @sort_direction = params["sort_direction_for_#{@sort_column}".to_sym] || 'DESC'
 
+    # numerical ids for now
     unless params[:selected_pseuds].blank?
       begin
-        @selected_pseuds = Pseud.find(params[:selected_pseuds])
+        @selected_pseuds = Pseud.find(params[:selected_pseuds]).collect(&:id).uniq
       rescue
         flash[:error] = t('errors.works.pseuds_not_found', :default => "Sorry, we couldn't find one or more of the authors you selected. Please try again.")
       end
@@ -167,9 +168,10 @@ class WorksController < ApplicationController
         @user = User.find_by_login(params[:user_id])
         if @user
           unless params[:pseud_id].blank?
-            @author = @user.pseuds.find(params[:pseud_id])
-            @pseud = Pseud.find(params[:pseud_id])
-            @selected_pseuds << @pseud unless @selected_pseuds.include?(@pseud)
+            @author = @user.pseuds.find_by_name(params[:pseud_id])
+            if @author
+              @selected_pseuds << @author.id unless @selected_pseuds.include?(@author.id)
+            end
           end
         else
           flash[:error] = t('errors.works.user_not_found', :default => "Sorry, there's no user by that name in our system.")
@@ -218,8 +220,8 @@ class WorksController < ApplicationController
        redirect_to current_user
       else
         current_user.cleanup_unposted_works
-        if params[:pseud]
-          @author = @user.pseuds.find(params[:pseud])
+        if params[:pseud_id]
+          @author = @user.pseuds.find_by_name(params[:pseud_id])
           @works = @author.unposted_works.paginate(:page => params[:page])
         else
           @works = @user.unposted_works.paginate(:page => params[:page])

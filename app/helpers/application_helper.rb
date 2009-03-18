@@ -47,7 +47,7 @@ module ApplicationHelper
     pseuds << creation.authors if creation.authors
     pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.empty?)
     pseuds.flatten.uniq.sort.collect { |pseud|
-      link_to pseud.byline, user_pseud_path(pseud.user, pseud.id), :class => "login author"
+      link_to pseud.byline, [pseud.user, pseud], :class => "login author"
     }.join(', ')
   end
 

@@ -44,7 +44,7 @@ module UsersHelper
   def print_pseud_works_link(pseud)
     total = Work.written_by_conditions([pseud]).visible.count(:distinct => true, :select => 'works.id')
     prefix = (@user == current_user) ? "My " : ""
-    link_to_unless_current prefix + "Works" + " (" + total.to_s + ")", user_pseud_works_path(@user, pseud.id)
+    link_to_unless_current prefix + "Works" + " (" + total.to_s + ")", user_pseud_works_path(@user, pseud)
   end
 
   # Prints link to series page with user-appropriate number of series
@@ -58,7 +58,7 @@ module UsersHelper
   def print_pseud_series_link(pseud)
     total = pseud.series.count
     prefix = (@user == current_user) ? "My " : ""
-    link_to_unless_current prefix + "Series" + " (#{total})", user_pseud_series_index_path(@user, pseud.id)
+    link_to_unless_current prefix + "Series" + " (#{total})", user_pseud_series_index_path(@user, pseud)
   end
 
   def print_drafts_link(user)

@@ -24,7 +24,7 @@
     <%- end -%>
   </h3>
 <!-- only display byline if different from the main byline -->
-  <%- if chapter.pseuds != @work.pseuds -%>
+  <%- if (chapter.pseuds != @work.pseuds) || @preview_mode -%>
     <h4 class="byline"><%=h t('chapters.index.chapter_chapter_by', :default => 'Chapter by') %> <%= byline(chapter) -%></h4>
   <%- end -%>
  

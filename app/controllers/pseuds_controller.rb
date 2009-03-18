@@ -21,20 +21,38 @@ class PseudsController < ApplicationController
   # GET /pseuds
   # GET /pseuds.xml
   def index
-    @pseuds = @user.pseuds.find(:all)
+    if @user
+      @pseuds = @user.pseuds.find(:all)
+    else
+      redirect_to users_path
+    end
   end
   
   # GET /pseuds/1
   # GET /pseuds/1.xml
   def show
-    @author = @pseud = @user.pseuds.find(params[:id])
-    unless @pseud
-      flash[:error] = "Sorry, could not find this pseud."
-      redirect_to :action => :index
+    if @user
+      @author = @user.pseuds.find_by_name(params[:id])
+      unless @author
+        flash[:error] = "Sorry, could not find this pseud."
+        redirect_to :action => :index and return
+      end
+      @works = Work.written_by_conditions([@author]).visible.ordered('revised_at', 'DESC').limited(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+      @series = @author.series.find(:all, :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'series.updated_at DESC')
+      @bookmarks = @user.bookmarks.visible(:limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'bookmarks.updated_at DESC')  
+    else
+      @pseuds = Pseud.find_all_by_name(params[:id])
+      if @pseuds.size == 0
+        flash[:error] = "Sorry, could not find this pseud."
+        redirect_to users_path and return
+      elsif @pseuds.size == 1
+        redirect_to [@pseuds[0].user, @pseuds[0]] and return
+      else
+        flash[:notice] = "There's more than one user with this pseud."
+        redirect_to users_path and return
+        # TODO: present the user with a drop-down with all authors who have that pseud
+      end
     end
-    @works = Work.written_by_conditions([@author]).visible.ordered('revised_at', 'DESC').limited(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
-    @series = @author.series.find(:all, :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'series.updated_at DESC')
-    @bookmarks = @user.bookmarks.visible(:limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'bookmarks.updated_at DESC')  
   end
   
   # For use with work/chapter forms
@@ -63,7 +81,7 @@ class PseudsController < ApplicationController
   
   # GET /pseuds/1/edit
   def edit
-    @pseud = @user.pseuds.find(params[:id])
+    @pseud = @user.pseuds.find_by_name(params[:id])
   end
   
   # POST /pseuds
@@ -94,7 +112,7 @@ class PseudsController < ApplicationController
   # PUT /pseuds/1
   # PUT /pseuds/1.xml
   def update
-    @pseud = @user.pseuds.find(params[:id])
+    @pseud = @user.pseuds.find_by_name(params[:id])
     default = @user.default_pseud
     if @pseud.update_attributes(params[:pseud])
       # if setting this one as default, unset the attribute of the current default pseud
@@ -112,14 +130,14 @@ class PseudsController < ApplicationController
   # DELETE /pseuds/1
   # DELETE /pseuds/1.xml
   def destroy
-    @pseud = @user.pseuds.find(params[:id])
+    @pseud = @user.pseuds.find_by_name(params[:id])
     if @pseud.is_default
       flash[:error] = t('errors.pseuds.delete_default', :default => "You cannot delete your default pseudonym, sorry!")
    elsif @pseud.name == @user.login
       flash[:error] = t('errors.pseuds.delete_user_name', :default => "You cannot delete the pseud matching your user name, sorry!")
    else
       @pseud.replace_me_with_default
-      flash[:notice] = t('notices.pseuds.successfully_deleted', :default => "Pseud destroyed")
+      flash[:notice] = t('notices.pseuds.successfully_deleted', :default => "The pseud was successfully deleted.")
    end
     
     redirect_to(user_pseuds_url(@user)) 

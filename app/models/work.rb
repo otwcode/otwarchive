@@ -898,13 +898,13 @@ class Work < ActiveRecord::Base
     Work.search(options[:query], search_options) 
   end
 
-  # TODO: fix me for User- and Pseud-specific pages
+  # FIXME: nested scopes aren't really working on User- and Pseud-specific filtering
   def self.find_with_options(options = {})
     command = ''
     visible = '.visible'
     visible_without_owners = '.visible(skip_owners = true)'
     tags = '.with_all_tag_ids(options[:selected_tags])'
-    written = '.written_by_conditions(options[:selected_pseuds])'
+    written = '.written_by_id_conditions(options[:selected_pseuds])'
     owned = '.owned_by_conditions(options[:user])'
     sort = case options[:sort_column]
             when 'date'
@@ -932,17 +932,14 @@ class Work < ActiveRecord::Base
     
     if !options[:user].nil? && !options[:selected_pseuds].empty? && !options[:selected_tags].empty?
       # We have an indiv. user, selected pseuds and selected tags
-      command << written + visible_without_owners + tags
-      @pseuds = options[:selected_pseuds]     
+      command << owned + written + visible_without_owners + tags
     elsif !options[:user].nil? && !options[:selected_pseuds].empty?
       # We have an indiv. user, selected pseuds but no selected tags
-      command << written + visible_without_owners
-      @pseuds = options[:selected_pseuds]                    
+      command << owned + written + visible_without_owners
     elsif !options[:user].nil? && !options[:selected_tags].empty?
       # filtered results on a user's works page
       # no pseuds but a specific user, and selected tags
       command << owned + visible_without_owners + tags
-      #@pseuds = options[:user].pseuds.on_works(@works) # except @works is empty at this point!
     elsif !options[:user].nil?
       # a user's default works page
       command << owned + visible_without_owners
@@ -956,10 +953,10 @@ class Work < ActiveRecord::Base
     end
     
     @works = eval("Work#{command + sort_and_paginate}")
-    # what I'm trying to achieve here (long term)
+    # what I'm trying to achieve here
     # is to add the co-authors of the displayed works to the available list of pseuds to filter on
-    if !options[:user].nil? && !options[:selected_pseuds].empty?
-      @pseuds << options[:user].pseuds.on_works(@works) # Pseud.on_works(@works) # er, kinda borky
+    if !options[:user].nil?
+      @pseuds << Pseud.on_works(@works) # options[:user].pseuds.on_works(@works)
       @pseuds.flatten!.uniq!
     end
     

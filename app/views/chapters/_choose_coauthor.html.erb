@@ -2,21 +2,13 @@
 
 <%- form_for([@work, @chapter]) do |f| -%>
   
-  <%= render :partial => 'pseuds/coauthor_form', :locals => {:creation => @chapter} %>
+  <%= render :partial => 'pseuds/coauthor_form', :locals => {:creation => @chapter, :form => f} %>
    
-  <p><select name="chapter[author_attributes][ids][]" multiple="multiple" style="display : none;">
-    <%= options_from_collection_for_select(@chapter.authors, :id, :name, @chapter.authors.collect {|pseud| pseud.id.to_i }) %>
-  </select> </p>
-  
-  <p><%= f.hidden_field :title, :value => "#{@chapter.title}" %>
-  <%= f.hidden_field :summary, :value => "#{@chapter.summary}" %>
-  <%= f.hidden_field :notes, :value => "#{@chapter.notes}" %>
-  <%= f.hidden_field :content, :value => "#{@chapter.content}" %></p>
-  
+  <%= render :partial => 'hidden_fields', :locals => {:form => f} -%>
+    
   <p class="submit">
     <%= submit_tag t('forms.preview', :default => 'Preview'), :name => 'preview_button' %>
-    <%= submit_tag t('forms.cancel', :default => 'Cancel'), :name => 'cancel_button' %> 
+    <%= submit_tag t('forms.cancel', :default => 'Cancel'), :name => 'cancel_coauthor_button' %> 
   </p>
-
 
 <% end %>

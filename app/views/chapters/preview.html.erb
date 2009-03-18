@@ -1,6 +1,7 @@
 <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } -%>
 
 <% form_for :chapter, [@work, @chapter], :url => {:action => :post} do |f| %>
+  <%= render :partial => 'hidden_fields', :locals => {:form => f} -%>
   <p class="submit">
     <%= submit_tag t('forms.post', :default => 'Post'), :name => 'post_button' %>
     <%= submit_tag t('forms.edit', :default => 'Edit'), :name => 'edit_button' %>

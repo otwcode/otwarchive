@@ -47,14 +47,16 @@ class Pseud < ActiveRecord::Base
      self.user.login
   end
   
-  # Options can include :categories and :limit
-  # Enigel: this is aped from the similar method in the User model
-  # I fear it produces some incorrect results
+  def to_param
+    name
+  end
   
+  # Options can include :categories and :limit
   # Gets all the canonical tags used by a given pseud (limited to certain 
   # types if type options are provided), then sorts them according to 
   # the number of times this pseud has used them, then returns an array
   # of [tag, count] arrays, limited by size if a limit is provided 
+  # FIXME: it's also counting tags on works that aren't visible to the current user (drafts, restricted works)
   def most_popular_tags(options = {})
     if all_tags = Tag.by_pseud(self).by_type(options[:categories]).canonical
       tags_with_count = {}

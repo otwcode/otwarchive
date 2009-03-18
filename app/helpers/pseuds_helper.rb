@@ -2,7 +2,7 @@ module PseudsHelper
   
   # Prints array of pseuds with links to user pages
   def print_pseud_list(pseuds)
-    pseuds.collect {|pseud| link_to_unless_current(pseud.name, user_pseud_path(pseud.user, pseud.id))}.join(", ")
+    pseuds.collect {|pseud| link_to_unless_current(pseud.name, [pseud.user, pseud])}.join(", ")
   end
   
   def print_pseud_selector(pseuds)
