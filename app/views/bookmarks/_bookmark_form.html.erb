@@ -38,7 +38,11 @@
 	<dt><%= f.label :notes, t('bookmarks.new.form_your_notes', :default => "Your Notes") %></dt>
 		<dd><%= f.text_area :notes %></dd>
 	<dt><%= f.label :tag_string, t('bookmarks.new.form_your_tags', :default => "Your Tags") %></dt>
-		<dd><%= text_field_tag 'tag_string', @tag_string %></dd>
+	<dd>
+    <%= text_field_tag 'tag_string', @tag_string %>
+    <div class="auto_complete" id="tag_string_auto_complete" ></div>
+    <%= javascript_tag("new Autocompleter.Local('tag_string', 'tag_string_auto_complete', #{Tag.all(:order => :name).map(&:name).to_json}, {tokens: ','});") %>
+	</dd>
 </dl>
 <p> <%= f.check_box :private %> <%= f.label :private, t('bookmarks.new.form_private', :default => "Private bookmark?") %> </p>
 <%= f.hidden_field :bookmarkable_id, :value => bookmarkable.id %>

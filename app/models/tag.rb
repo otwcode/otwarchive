@@ -34,7 +34,7 @@ class Tag < ActiveRecord::Base
   validates_uniqueness_of :name
   validates_length_of :name, :maximum => ArchiveConfig.TAG_MAX,
                              :message => "is too long -- try using less than #{ArchiveConfig.TAG_MAX} characters or using commas to separate your tags."
- validates_format_of :name,
+  validates_format_of :name,
                       :with => /\A[-a-zA-Z0-9 \/?.!''"":;\|\]\[}{=~!@#\$%^&()_+]+\z/,
                       :message => "can only be made up of letters, numbers, spaces and basic punctuation, but not commas, asterisks or angle brackets."
 
@@ -551,7 +551,7 @@ class Tag < ActiveRecord::Base
     if User.current_user && User.current_user.kind_of?(Admin)
       conditions = {:private => false}
     elsif User.current_user.is_a? User
-      conditions = ['bookmarks.private = ? AND (bookmarks.hidden_by_admin = ? OR bookmarks.user_id = ?)', true, false, User.current_user.id]
+      conditions = ['bookmarks.private = ? AND (bookmarks.hidden_by_admin = ? OR bookmarks.pseud_id = ?)', true, false, User.current_user.pseuds.collect(&:id)]
     else
       conditions = {:private => false, :hidden_by_admin => false}
     end
