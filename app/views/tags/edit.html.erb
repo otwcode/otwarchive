@@ -10,7 +10,7 @@
     <dd><%= f.text_field :name, :disabled => (!logged_in_as_admin? || ['Rating', 'Warning', 'Category'].include?(@tag[:type])) %></dd>
 
     <dt><%=h 'Works (count)' %></dt>
-    <dd><%= link_to @tag.taggings_count, tag_path(@tag) %></dd>
+    <dd><%= link_to @tag.taggings_count, {:action => 'show'} %></dd>
 
     <dt><%= f.label :type, 'Category' %></dt>
     <dd>

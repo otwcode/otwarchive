@@ -1,8 +1,8 @@
-class WorksController < ApplicationController 
-  include HtmlFormatter  
-  
+class WorksController < ApplicationController
+  include HtmlFormatter
+
   cache_sweeper :work_sweeper, :only => [:create, :update, :destroy]
-    
+
   # only registered users and NOT admin should be able to create new works
   before_filter :users_only, :only => [ :new, :create, :upload_work, :drafts, :preview ]
   # only authors of a work should be able to edit it
@@ -10,7 +10,7 @@ class WorksController < ApplicationController
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :upload_work ]
   before_filter :update_or_create_reading, :only => [ :show ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview]
-  
+
   # For the auto-complete field in the works form
   def auto_complete_for_pseud_byline
     byline = request.raw_post.to_s.strip
@@ -25,13 +25,13 @@ class WorksController < ApplicationController
     @pseuds = Pseud.find(:all, :include => :user, :conditions => conditions, :limit => 10)
     render :inline => "<%= auto_complete_result(@pseuds, 'byline')%>"
   end
-  
+
   def access_denied
-    store_location 
+    store_location
     redirect_to new_session_path(:restricted => true)
     false
   end
-  
+
   # Sets values for @work, @chapter, @coauthor_results, @pseuds, and @selected_pseuds
   # and @tags[category]
   def set_instance_variables
@@ -48,19 +48,19 @@ class WorksController < ApplicationController
       flash.now[:notice] = t('notices.works.needs_author', :default => sorry)
       params[:work][:author_attributes] = {:ids => [current_user.default_pseud]}
     end
-    
+
     # stuff new bylines into author attributes to be parsed by the work model
     if params[:work] && params[:pseud] && params[:pseud][:byline] && params[:pseud][:byline] != ""
       params[:work][:author_attributes][:byline] = params[:pseud][:byline]
       params[:pseud][:byline] = ""
     end
-    
+
     # stuff co-authors into author attributes too so we won't lose them
     if params[:work] && params[:work][:author_attributes] && params[:work][:author_attributes][:coauthors]
       params[:work][:author_attributes][:ids].concat(params[:work][:author_attributes][:coauthors]).uniq!
     end
 
-    begin    
+    begin
       if params[:id] # edit, update, preview, manage_chapters
         @work = Work.find(params[:id])
         @previous_published_at = @work.published_at
@@ -75,10 +75,7 @@ class WorksController < ApplicationController
       end
 
       @serial_works = @work.serial_works
-      @tags_by_category = {}
-      categories = Tag::VISIBLE
-      categories.each {|type| @tags_by_category[type] = type.constantize.canonical}
-      
+
       @chapters = (@work.chapters.in_order != []) ? @work.chapters.in_order : @work.chapters
       @chapter = @chapters.first
       if params[:work] && params[:work][:chapter_attributes]
@@ -88,21 +85,21 @@ class WorksController < ApplicationController
 
       unless current_user == :false
         load_pseuds
-        @series = current_user.series.uniq 
+        @series = current_user.series.uniq
       end
     rescue
     end
   end
-  
+
   # Only authors of the work should be able to edit it
   def is_author
     @work = Work.find(params[:id])
     unless current_user.is_a?(User) && current_user.is_author_of?(@work)
       flash[:error] = t('errors.no_permission_to_edit', :default => 'Sorry, but you don\'t have permission to make edits.')
-     redirect_to(@work)     
+     redirect_to(@work)
     end
   end
-  
+
   # GET /works
   def index
     # what we're getting for the view
@@ -126,8 +123,8 @@ class WorksController < ApplicationController
         flash[:error] = t('errors.works.pseuds_not_found', :default => "Sorry, we couldn't find one or more of the authors you selected. Please try again.")
       end
     end
-    
-    # if the user is filtering with tags, let's see what they're giving us    
+
+    # if the user is filtering with tags, let's see what they're giving us
     unless params[:selected_tags].blank?
       @selected_tags = params[:selected_tags]
     end
@@ -142,9 +139,9 @@ class WorksController < ApplicationController
         flash[:error] = t('errors.search_engine_down', :default => "The search engine seems to be down at the moment, sorry!")
        redirect_to :action => :index and return
       end
-      
+
       unless @works.empty?
-        @filters = Work.get_filters(@works)      
+        @filters = Work.get_filters(@works)
       end
     else
       # we're browsing instead
@@ -162,8 +159,8 @@ class WorksController < ApplicationController
           return
         end
       end
-      
-      # if we're browsing by a particular user get works by that user      
+
+      # if we're browsing by a particular user get works by that user
       unless params[:user_id].blank?
         @user = User.find_by_login(params[:user_id])
         if @user
@@ -179,21 +176,21 @@ class WorksController < ApplicationController
           return
         end
       end
-      
+
       # Now let's build the query
       page_args = {:page => params[:page], :per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE)}
-      @works, @filters, @pseuds = Work.find_with_options(:user => @user, :author => @author, :selected_tags => @selected_tags, 
-                                                    :selected_pseuds => @selected_pseuds, 
+      @works, @filters, @pseuds = Work.find_with_options(:user => @user, :author => @author, :selected_tags => @selected_tags,
+                                                    :selected_pseuds => @selected_pseuds,
                                                     :sort_column => @sort_column, :sort_direction => @sort_direction,
-                                                    :page_args => page_args)              
+                                                    :page_args => page_args)
     end
 
     # we now have @works found
-    
+
     if @works.empty? && !@selected_tags.empty?
       begin
         # build filters so we can go back
-        flash.now[:notice] = t('notices.works.results_not_found', :default => "We couldn't find any results using all those filters, sorry! You can unselect some and filter again to get more matches.") 
+        flash.now[:notice] = t('notices.works.results_not_found', :default => "We couldn't find any results using all those filters, sorry! You can unselect some and filter again to get more matches.")
         filters_array = Tag.find(@selected_tags, :select => "tags.type as tag_type, tags.id as tag_id, tags.name as tag_name")
         @filters = Work.build_filters_hash(filters_array)
       rescue
@@ -201,14 +198,14 @@ class WorksController < ApplicationController
       end
     end
 
-    # clean out the filters 
+    # clean out the filters
     if @filters && !@filters.empty?
       @filters.keys.each do |category|
         @filters[category].reject! {|filter| (!@selected_tags.include?(filter[:id]) && (filter[:count].to_i < 2))}
       end
     end
   end
-  
+
   def drafts
     unless params[:user_id]
       flash[:error] = t('errors.works.whose_drafts', :default => "Whose drafts did you want to look at?")
@@ -228,8 +225,8 @@ class WorksController < ApplicationController
         end
       end
     end
-  end 
-  
+  end
+
   # GET /works/1
   # GET /works/1.xml
   def show
@@ -239,8 +236,8 @@ class WorksController < ApplicationController
     end
     unless @work.visible || is_admin?
       if !current_user.is_a?(User)
-        store_location 
-        redirect_to new_session_path and return        
+        store_location
+        redirect_to new_session_path and return
       elsif !current_user.is_author_of?(@work)
   	    flash[:error] = 'This page is unavailable.'
        redirect_to works_path and return
@@ -249,9 +246,9 @@ class WorksController < ApplicationController
     # Users must explicitly okay viewing of adult content
     if params[:view_adult]
       session[:adult] = true
-    elsif @work.adult? && !see_adult? 
+    elsif @work.adult? && !see_adult?
       render :partial => "adult", :layout => "application"
-    end	   
+    end
     unless @work.series.blank?
       @series_previous = {}
       @series_next = {}
@@ -264,19 +261,19 @@ class WorksController < ApplicationController
       end
     end
     @tag_categories_limited = Tag::VISIBLE - ["Warning"]
-    
+
     @page_title = ""
     if logged_in? && !current_user.preference.work_title_format.blank?
       @page_title = current_user.preference.work_title_format
       @page_title.gsub!(/FANDOM/, @work.fandoms.string)
       @page_title.gsub!(/AUTHOR/, @work.pseuds.collect(&:name).join(','))
       @page_title.gsub!(/TITLE/, @work.title)
-    else 
+    else
       @page_title = @work.title + " - " + @work.pseuds.collect(&:name).join(',') + " - " + @work.fandom_string
     end
     @page_title += " [#{ArchiveConfig.APP_NAME}]"
   end
-  
+
   # GET /works/new
   def new
     current_user.cleanup_unposted_works
@@ -298,31 +295,31 @@ class WorksController < ApplicationController
       render :action => :new
     elsif params[:cancel_button]
       flash[:notice] = t('notices.works.posting_canceled', :default => "New work posting canceled.")
-      redirect_to current_user    
+      redirect_to current_user
     else # now also treating the cancel_coauthor_button case, bc it should function like a preview, really
       saved = @work.save
       unless saved && @work.has_required_tags? && @work.set_revised_at(@work.published_at)
         unless @work.has_required_tags?
-          @work.errors.add(:base, "Creating: Required tags are missing.")          
+          @work.errors.add(:base, "Creating: Required tags are missing.")
         end
-        render :action => :new 
-      else        
+        render :action => :new
+      else
         flash[:notice] = t('notices.works.draft_created', :default => 'Draft was successfully created.')
         redirect_to preview_work_path(@work)
       end
     end
   end
-  
+
   # GET /works/1/edit
   def edit
     if params["remove"] == "me"
       pseuds_with_author_removed = @work.pseuds - current_user.pseuds
-      if pseuds_with_author_removed.empty? 
-        redirect_to :controller => 'orphans', :action => 'new', :work_id => @work.id    
+      if pseuds_with_author_removed.empty?
+        redirect_to :controller => 'orphans', :action => 'new', :work_id => @work.id
       else
         @work.pseuds = pseuds_with_author_removed
         @work.save
-        @work.chapters.each do |c| 
+        @work.chapters.each do |c|
           c.pseuds = c.pseuds - current_user.pseuds
           if c.pseuds.empty?
             c.pseuds = @work.pseuds
@@ -334,18 +331,18 @@ class WorksController < ApplicationController
       end
     end
   end
-  
+
   # PUT /works/1
   def update
-    unless @work.errors.empty?      
+    unless @work.errors.empty?
       render :action => :edit and return
     end
 
     # Need to update @pseuds and @selected_pseuds values so we don't lose new co-authors if the form needs to be rendered again
     load_pseuds
-    @series = current_user.series.uniq 
-    
-    if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank? 
+    @series = current_user.series.uniq
+
+    if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
       @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       @preview_mode = true
@@ -357,9 +354,9 @@ class WorksController < ApplicationController
         @chapter.content = params[:work][:chapter_attributes][:content]
         @chapter.title = params[:work][:chapter_attributes][:title]
       end
-      
+
       #flash[:notice] = "DEBUG: in UPDATE preview:  " + "all: " + @allpseuds.flatten.collect {|ap| ap.id}.inspect + " selected: " + @selected_pseuds.inspect + " co-authors: " + @coauthors.flatten.collect {|ap| ap.id}.inspect + " pseuds: " + @pseuds.flatten.collect {|ap| ap.id}.inspect + "  @work.authors: " + @work.authors.collect {|au| au.id}.inspect + "  @work.pseuds: " + @work.pseuds.collect {|ps| ps.id}.inspect
-      
+
       if @work.has_required_tags?
         render :action => "preview"
       else
@@ -369,24 +366,24 @@ class WorksController < ApplicationController
     elsif params[:cancel_button]
       cancel_posting_and_redirect
     elsif params[:edit_button]
-    
+
       #flash[:notice] = "DEBUG: in UPDATE edit:  " + "all: " + @allpseuds.flatten.collect {|ap| ap.id}.inspect + " selected: " + @selected_pseuds.inspect + " co-authors: " + @coauthors.flatten.collect {|ap| ap.id}.inspect + " pseuds: " + @pseuds.flatten.collect {|ap| ap.id}.inspect + "  @work.authors: " + @work.authors.collect {|au| au.id}.inspect + "  @work.pseuds: " + @work.pseuds.collect {|ps| ps.id}.inspect
-      
+
       render :partial => 'work_form', :layout => 'application'
     else
       saved = true
       @chapter.save || saved = false
       @work.has_required_tags? || saved = false
-      if saved 
-        # If the work is being posted for the first time, or 
-        # the user has changed the published_at date, update the revised_at date. 
+      if saved
+        # If the work is being posted for the first time, or
+        # the user has changed the published_at date, update the revised_at date.
         if params[:post_button] || defined?(@previous_published_at) && @previous_published_at != @work.published_at
           @work.set_revised_at(@work.published_at)
-        end  
+        end
         @work.posted = true
-        
+
         #bleep = "BEFORE SAVE: author attr: " + params[:work][:author_attributes][:ids].collect {|a| a}.inspect + "  @work.authors: " + @work.authors.collect {|au| au.id}.inspect + "  @work.pseuds: " + @work.pseuds.collect {|ps| ps.id}.inspect
-        
+
         saved = @work.save
         @work.update_minor_version
       end
@@ -396,28 +393,28 @@ class WorksController < ApplicationController
        elsif params[:update_button]
           flash[:notice] = t('notices.works.successfully_updated', :default => 'Work was successfully updated.')
        end
-        
+
         #bleep += "  AFTER SAVE: author attr: " + params[:work][:author_attributes][:ids].collect {|a| a}.inspect + "  @work.authors: " + @work.authors.collect {|au| au.id}.inspect + "  @work.pseuds: " + @work.pseuds.collect {|ps| ps.id}.inspect
         #flash[:notice] = "DEBUG: in UPDATE save:  " + bleep
-        
+
         redirect_to(@work)
       else
         unless @chapter.valid?
           @chapter.errors.each {|err| @work.errors.add(:base, err)}
         end
         unless @work.has_required_tags?
-          @work.errors.add(:base, "Updating: Required tags are missing.")          
+          @work.errors.add(:base, "Updating: Required tags are missing.")
         end
         render :action => :edit
       end
-    end 
+    end
   end
- 
+
   # GET /works/1/preview
   def preview
     @preview_mode = true
   end
-    
+
   # DELETE /works/1
   def destroy
     @work = Work.find(params[:id])
@@ -433,13 +430,13 @@ class WorksController < ApplicationController
   def upload_work
     storyparser = StoryParser.new
     # Do stuff with params[:uploaded_file]
-    # parse the existing work 
+    # parse the existing work
     if params[:uploaded_work]
       @work = storyparser.parse_story(params[:uploaded_work])
       render :action => "new"
     elsif params[:work_url]
       url = params[:work_url].to_s
-      if url.empty? 
+      if url.empty?
         flash.now[:error] = t('errors.works.enter_an_url', :default => "Did you want to enter a URL?")
      else
         begin
@@ -461,7 +458,7 @@ class WorksController < ApplicationController
             render :action => :new and return
           end
         rescue
-          flash.now[:error] = t('notices.works.partially_downloaded', :default => "We managed to partially download the work, but there are problems 
+          flash.now[:error] = t('notices.works.partially_downloaded', :default => "We managed to partially download the work, but there are problems
             preventing us from saving it as a draft. Please look over the results very carefully!")
          render :action => :new and return
         end
@@ -473,18 +470,18 @@ class WorksController < ApplicationController
       render :action => :new
     end
   end
-      
+
   protected
 
     def load_pseuds
         @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
         @pseuds = current_user.pseuds
         @coauthors = @allpseuds.select{ |p| p.user.id != current_user.id}
-        to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors 
+        to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors
         @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
     end
 
-    # create a reading object when showing a work, but only if the user has reading 
+    # create a reading object when showing a work, but only if the user has reading
     # history enabled and is not the author of the work
     def update_or_create_reading
       return unless @work
@@ -501,7 +498,7 @@ class WorksController < ApplicationController
     def cancel_posting_and_redirect
       if @work and @work.posted
         flash[:notice] = t('notices.works.not_updated', :default => "<p>The work was not updated.</p>")
-        redirect_to user_works_path(current_user)    
+        redirect_to user_works_path(current_user)
       else
         flash[:notice] = t('notices.works.not_posted', :default => "<p>This work was not posted.</p>
         <p>It will be saved here in your drafts for one week, then cleaned up.</p>")
@@ -509,7 +506,7 @@ class WorksController < ApplicationController
           current_user.cleanup_unposted_works
         rescue ThinkingSphinx::ConnectionError
         end
-        redirect_to drafts_user_works_path(current_user)    
+        redirect_to drafts_user_works_path(current_user)
       end
     end
 

@@ -190,6 +190,6 @@ class TagsController < ApplicationController
     @tag.update_common_tags unless old_common_tag_ids == new_common_tag_ids
 
     flash[:notice] = t('notices.tags.successfully_updated', :default => 'Tag was updated.')
-    redirect_to edit_tag_path(@tag.name)
+    redirect_to :action => :edit
   end
 end

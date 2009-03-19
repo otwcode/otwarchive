@@ -187,6 +187,48 @@ class WorkTest < ActiveSupport::TestCase
     end
   end
 
+  context "a work with a cast" do
+    setup do
+      @work = create_work
+      @work.add_default_tags
+      @pairing = create_pairing(:canonical => true)
+      @character = create_character(:canonical => true)
+      @work.pairing_string=@pairing.name
+      @work.character_string=@character.name
+    end
+    should "have both in cast list" do
+      assert_equal [@pairing, @character], @work.cast_tags
+    end
+    context "where the character is wrangled" do
+      setup do
+        @character.add_pairing(@pairing)
+      end
+      should "only have the pairing in cast list" do
+        assert_equal [@pairing], @work.cast_tags
+      end
+    end
+    context "where the character is wrangled but not to the pairing" do
+      setup do
+        @new_pairing = create_pairing(:canonical => true)
+        @character.add_pairing(@new_pairing)
+      end
+      should "have both in cast list" do
+        assert_equal [@pairing, @character], @work.cast_tags
+      end
+    end
+    context "where the character is wrangled but to the pairing's merger" do
+      setup do
+        @new_pairing = create_pairing(:canonical => true)
+        @pairing.wrangle_merger(@new_pairing)
+        @character.add_pairing(@new_pairing)
+        @work.reload
+      end
+      should "only have the pairing in cast list" do
+        assert_equal [@pairing], @work.cast_tags
+      end
+    end
+  end
+
   def test_number_of_chapters
     work = create_work
     assert 1, work.number_of_chapters

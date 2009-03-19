@@ -68,14 +68,6 @@ module WorksHelper
     @work.new_record? ? Warning.find_by_name(ArchiveConfig.WARNING_DEFAULT_TAG_NAME) : @work.warning_strings
   end
 
-  def get_tags_by_category(work)
-    if !@tags_by_category_work || @tags_by_category_work != work
-      @tags_by_category_work = work
-      @tags_by_category = nil
-    end
-    @tags_by_category ||= work.tags.sort.group_by(&:type)
-  end
-
   def get_title_string(tags, category_name = "")
     if tags && tags.size > 0
       tags.collect(&:name).join(", ")
@@ -85,18 +77,16 @@ module WorksHelper
   end
 
   def get_symbols_for(work)
-    tags_by_category = get_tags_by_category(work)
+    warning_class = get_warnings_class(work.warnings)
+    warning_string = get_title_string(work.warnings)
 
-    warning_class = get_warnings_class(tags_by_category["Warning"])
-    warning_string = get_title_string(tags_by_category["Warning"])
-
-    rating = tags_by_category["Rating"].blank? ? nil : tags_by_category["Rating"].first
+    rating = work.ratings.blank? ? nil : work.ratings.first
     rating_class = get_ratings_class(rating)
-    rating_string = get_title_string(tags_by_category["Rating"], "rating")
+    rating_string = get_title_string(work.ratings, "rating")
 
-    category = tags_by_category["Category"].blank? ? nil : tags_by_category["Category"].first
+    category = work.categories.blank? ? nil : work.categories.first
     category_class = get_category_class(category)
-    category_string = get_title_string(tags_by_category["Category"], "category")
+    category_string = get_title_string(work.categories, "category")
 
     iswip_class = get_complete_class(work)
     iswip_string = work.is_wip ? "Work in Progress" : "Complete Work"
@@ -164,38 +154,6 @@ module WorksHelper
     else
       "complete-yes"
     end
-  end
-
-  def cast_tags_for(work)
-    tags_by_category = get_tags_by_category(work)
-
-    # we combine pairing and character tags up to the limit
-    characters = tags_by_category["Character"] || []
-    pairings = tags_by_category["Pairing"] || []
-    return [] if pairings.empty? && characters.empty?
-
-    pairing_characters = pairings.collect{|p| p.all_characters}.flatten.uniq.compact
-
-    cast = pairings + characters - pairing_characters
-    if cast.size > ArchiveConfig.TAGS_PER_LINE
-      cast = cast[0..(ArchiveConfig.TAGS_PER_LINE-1)]
-    end
-
-    return cast
-  end
-
-  def freeform_tags_for(work)
-    tags_by_category = get_tags_by_category(work)
-
-    warnings = tags_by_category["Warning"] || []
-    freeform = tags_by_category["Freeform"] || []
-    ambiguous = tags_by_category["Ambiguity"] || []
-
-    tags = warnings + freeform + ambiguous
-    if tags.size > ArchiveConfig.TAGS_PER_LINE
-      tags = tags[0..(ArchiveConfig.TAGS_PER_LINE-1)]
-    end
-    return tags
   end
 
   # Use time_ago_in_words if less than a month ago, otherwise display date

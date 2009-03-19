@@ -10,10 +10,10 @@
   		<%- if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)") -%><%- end -%>
       <%- if work.hidden_by_admin -%><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)") %><%- end -%>
   </h3>
-	  
+
 	  <h4>
-	    <%- unless @tags_by_category["Fandom"].nil? -%>
-    	  <%- @tags_by_category["Fandom"].each do |fandom| -%>
+	    <%- unless work.fandoms.nil? -%>
+    	  <%- work.fandoms.sort.each do |fandom| -%>
   	  <%= link_to_tag(fandom, true) -%>
   	  <%- end -%>
   	  <%- end -%>
@@ -22,8 +22,8 @@
 
 	  <p class="update"><%= set_format_for_date(work.revised_at) %></p>
 	</li>
-	
-	<%- cast_tags = cast_tags_for(work); freeform_tags = freeform_tags_for(work) -%>
+
+	<%- cast_tags = work.cast_tags; freeform_tags = work.freeform_tags -%>
 	<%- unless ((cast_tags.size + freeform_tags.size) < 1) -%>
 	<li>
 		<dl class="tags">
@@ -37,7 +37,7 @@
 				</ul>
 			</dd>
 			<%- end -%>
-			
+
 			<%- unless freeform_tags.size < 1 -%>
 			<dt><%=h 'Tags' + ': ' %></dt>
 			<dd>
@@ -58,16 +58,16 @@
 
 	<li class="stats">
 		<dl>
-		<dt><%=h 'Words' + ': ' %></dt> 
+		<dt><%=h 'Words' + ': ' %></dt>
 			<dd><%= number_with_delimiter(work.word_count) %></dd>
-		<dt><%=h 'Chapters' + ': ' %></dt> 
+		<dt><%=h 'Chapters' + ': ' %></dt>
 			<dd><%= work.number_of_posted_chapters %>/<%= work.wip_length %></dd>
 		<%- if work.count_visible_comments > 0 -%>
-		<dt><%=h 'Comments' + ': '%></dt> 
+		<dt><%=h 'Comments' + ': '%></dt>
 			<dd><%= link_to work.count_visible_comments, work_path(:id => work.id, :anchor => "comments", :show_comments => true) -%></dd>
 		<%- end -%>
 		<%- if work.count_visible_bookmarks(current_user) > 0 -%>
-		<dt><%=h 'Bookmarks' + ': '%></dt> 
+		<dt><%=h 'Bookmarks' + ': '%></dt>
 			<dd><%= link_to work.count_visible_bookmarks(current_user), work_bookmarks_path(:work_id => work.id) -%></dd>
 		<%- end -%>
 		</dl>
