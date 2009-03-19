@@ -13,7 +13,9 @@ class Pairing < Tag
     if self.merger
       all << self.merger.characters
     end
-    all.flatten.compact
+    all_with_synonyms = all.flatten.uniq.compact
+    all_with_synonyms << all_with_synonyms.collect{|c| c.mergers}
+    all_with_synonyms.flatten.uniq.compact
   end
 
   def pairings

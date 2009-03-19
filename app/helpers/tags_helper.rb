@@ -38,12 +38,15 @@ module TagsHelper
 	end
 
 	# Adds a consistent class name to tags
+  # edit_tag_path is behaving badly since around the Rails 2.2.2 upgrade
 	def link_to_edit_tag(tag, classless = false, options = {})
 	  options = {:class => "tag"}.merge(options)
 	  if classless
-		  link_to tag.name, edit_tag_path(tag), options
+		  #link_to tag.name, edit_tag_path(tag), options 
+      link_to tag.name, {:controller => :tags, :action => :edit, :id => tag.name}, options
 	  else
-		  link_to tag.name, edit_tag_path(tag), options
+		  #link_to tag.name, edit_tag_path(tag), options
+      link_to tag.name, {:controller => :tags, :action => :edit, :id => tag.name}, options
 	  end
 	end
 

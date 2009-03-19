@@ -89,11 +89,11 @@ class TagsController < ApplicationController
       if (@tag.name != params[:tag][:name]) && (@tag.name.downcase == params[:tag][:name].downcase) # only capitalization different
         @tag.update_attribute(:name, params[:tag][:name])  # use the new capitalization
         flash[:notice] = t('notices.tags.successfully_modified', :default => 'Tag was successfully modified.')
-     else
+      else
         flash[:notice] = t('notices.tags.successfully_created', :default => 'Tag was successfully created.')
-     end
+      end
       @tag.update_attribute(:canonical, params[:tag][:canonical])
-      redirect_to edit_tag_path(@tag)
+      redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag.name)
     else
       render :action => "new" and return
     end
@@ -102,12 +102,12 @@ class TagsController < ApplicationController
   def edit
     @tag = Tag.find_by_name(params[:id])
     if @tag.is_a?(Banned) && !logged_in_as_admin?
-        flash[:error] = t('errors.log_in_as_admin', :default => "Please log in as admin")
-       redirect_to tag_wranglings_path and return
+      flash[:error] = t('errors.log_in_as_admin', :default => "Please log in as admin")
+      redirect_to tag_wranglings_path and return
     end
     if @tag.blank?
       flash[:error] = t('errors.tags.not_found', :default => "Tag not found")
-     redirect_to tag_wranglings_path and return
+      redirect_to tag_wranglings_path and return
     end
   end
 
@@ -115,7 +115,7 @@ class TagsController < ApplicationController
     @tag = Tag.find_by_name(params[:id].gsub(/%2F/, '/'))
     if @tag.blank?
       flash[:error] = t('errors.tags.not_found', :default => "Tag not found")
-     redirect_to root_path and return
+      redirect_to tag_wranglings_path and return
     end
     old_common_tag_ids = @tag.common_tags_to_add.map(&:id).sort
 
@@ -190,6 +190,6 @@ class TagsController < ApplicationController
     @tag.update_common_tags unless old_common_tag_ids == new_common_tag_ids
 
     flash[:notice] = t('notices.tags.successfully_updated', :default => 'Tag was updated.')
-    redirect_to :action => :edit
+    redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag.name)
   end
 end
