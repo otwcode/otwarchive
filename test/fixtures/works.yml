@@ -1,254 +1,759 @@
 --- 
-works_014: 
-  major_version: "1"
-  updated_at: 2008-12-07 22:54:42
-  delta: "1"
-  title: Sodom and Gomorrah
-  expected_number_of_chapters: "1"
-  word_count: "398"
-  notes: "Not the Bible version. No offence intended. "
-  id: "14"
-  revised_at: 1950-12-07 00:00:00
-  summary: "A cautionary tale: wherein the Lord is pissed, Lot is righteous, and I do some smiting. "
-  language_id: "1"
-  minor_version: "1"
-  published_at: 1950-12-07 00:00:00
-  restricted: "0"
-  posted: "1"
-  hidden_by_admin: "0"
-  created_at: 2008-12-07 22:52:14
-works_003: 
-  major_version: "1"
-  updated_at: 2008-11-09 03:26:02
-  delta: "0"
-  title: ThirdWork
-  expected_number_of_chapters: "1"
-  word_count: "12"
-  notes: Notes on test work with only one chapter
-  id: "3"
-  revised_at: 
-  summary: Summary of test work with only one chapter
-  language_id: 
-  minor_version: "1"
-  published_at: 
-  restricted: "0"
-  posted: "1"
-  hidden_by_admin: "0"
-  created_at: 2008-11-09 03:26:02
-works_004: 
-  major_version: "1"
-  updated_at: 2008-11-09 03:26:02
-  delta: "0"
-  title: FourthWork
-  expected_number_of_chapters: "1"
-  word_count: "13"
-  notes: Notes on test work with only one chapter
-  id: "4"
-  revised_at: 
-  summary: Summary of test work with only one chapter
-  language_id: 
-  minor_version: "1"
-  published_at: 
-  restricted: "0"
-  posted: "1"
-  hidden_by_admin: "0"
-  created_at: 2008-11-09 03:26:02
-works_005: 
-  major_version: "1"
-  updated_at: 2008-11-09 03:26:02
-  delta: "0"
+work_00050: 
+  major_version: 1
+  updated_at: 2009-03-21 01:20:29 +02:00
+  title: dark and angsty interlude
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 5
+  notes: you don't have to read it to "get" the rest of the series.
+  id: 50
+  summary: ""
+  revised_at: 2009-03-21 01:20:29 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2009-03-21 00:00:00 +02:00
+  restricted: true
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-21 01:20:17 +02:00
+work_00038: 
+  major_version: 1
+  updated_at: 2009-03-12 02:50:35 +02:00
+  title: jambo
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 4
+  notes: ""
+  id: 38
+  summary: ""
+  revised_at: 2009-03-12 02:50:34 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2009-03-12 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-12 02:50:20 +02:00
+work_00016: 
+  major_version: 1
+  updated_at: 2009-02-24 10:46:36 +02:00
+  title: ttttttttttt
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 1
+  notes: ""
+  id: 16
+  summary: ""
+  revised_at: 2009-02-24 08:34:22 +02:00
+  language_id: 1
+  minor_version: 13
+  published_at: 2009-02-24 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-02-24 08:34:22 +02:00
+work_00005: 
+  major_version: 1
+  updated_at: 2008-11-09 03:26:02 +02:00
   title: FifthWork
-  expected_number_of_chapters: "1"
-  word_count: "14"
+  expected_number_of_chapters: 1
+  delta: false
+  word_count: 14
   notes: Notes on test work with only one chapter
-  id: "5"
-  revised_at: 
+  id: 5
   summary: Summary of test work with only one chapter
-  language_id: 
-  minor_version: "1"
+  revised_at: 
+  language_id: 1
+  minor_version: 1
   published_at: 
-  restricted: "0"
-  posted: "1"
-  hidden_by_admin: "0"
-  created_at: 2008-11-09 03:26:02
-works_006: 
-  major_version: "1"
-  updated_at: 2008-12-05 15:59:29
-  delta: "1"
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2008-11-09 03:26:02 +02:00
+work_00049: 
+  major_version: 1
+  updated_at: 2009-03-21 01:33:40 +02:00
+  title: Happy-happy joy-joy!
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 9
+  notes: ""
+  id: 49
+  summary: ""
+  revised_at: 2009-03-21 01:33:39 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2009-03-21 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-21 01:17:43 +02:00
+work_00040: 
+  major_version: 1
+  updated_at: 2009-03-12 04:48:41 +02:00
+  title: scuff
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 3
+  notes: ""
+  id: 40
+  summary: ""
+  revised_at: 2009-03-12 04:48:40 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2009-03-12 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-12 03:43:37 +02:00
+work_00006: 
+  major_version: 1
+  updated_at: 2008-12-05 15:59:29 +02:00
   title: How I Got Kicked Out of MIT
-  expected_number_of_chapters: "1"
-  word_count: "73"
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 73
   notes: ""
-  id: "6"
-  revised_at: 2008-12-05 15:59:15
+  id: 6
   summary: The true story of how I was too hot for MIT to handle.
-  language_id: "1"
-  minor_version: "1"
-  published_at: 2008-12-05 00:00:00
-  restricted: "0"
-  posted: "1"
-  hidden_by_admin: "0"
-  created_at: 2008-12-05 15:59:14
-works_007: 
-  major_version: "2"
-  updated_at: 2008-12-07 00:41:45
-  delta: "1"
-  title: Day Ten, Tale Ten
-  expected_number_of_chapters: "1"
-  word_count: "4593"
+  revised_at: 2008-12-05 15:59:15 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2008-12-05 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2008-12-05 15:59:14 +02:00
+work_00017: 
+  major_version: 1
+  updated_at: 2009-02-24 10:59:49 +02:00
+  title: grrrrrrrr
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 3
   notes: ""
-  id: "7"
-  revised_at: 2008-12-07 00:32:20
+  id: 17
+  summary: ""
+  revised_at: 2009-02-24 10:47:23 +02:00
+  language_id: 1
+  minor_version: 3
+  published_at: 2009-02-24 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-02-24 10:47:22 +02:00
+work_00039: 
+  major_version: 1
+  updated_at: 2009-03-12 02:57:27 +02:00
+  title: twins
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 13
+  notes: ""
+  id: 39
+  summary: ""
+  revised_at: 2009-03-12 02:57:27 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2009-03-12 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-12 02:56:30 +02:00
+work_00051: 
+  major_version: 1
+  updated_at: 2009-03-21 01:22:58 +02:00
+  title: Yay threesome!
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 14
+  notes: ""
+  id: 51
+  summary: ""
+  revised_at: 2009-03-21 01:22:57 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2009-03-21 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-21 01:22:23 +02:00
+work_00052: 
+  major_version: 1
+  updated_at: 2009-03-21 01:24:17 +02:00
+  title: angst bunny
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 8
+  notes: ""
+  id: 52
+  summary: ""
+  revised_at: 2009-03-21 01:24:17 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2009-03-21 00:00:00 +02:00
+  restricted: true
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-21 01:24:08 +02:00
+work_00030: 
+  major_version: 1
+  updated_at: 2009-03-12 00:05:31 +02:00
+  title: bab
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 1
+  notes: ""
+  id: 30
+  summary: ""
+  revised_at: 2009-03-11 23:54:49 +02:00
+  language_id: 1
+  minor_version: 4
+  published_at: 2009-03-11 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-11 23:51:22 +02:00
+work_00007: 
+  major_version: 2
+  updated_at: 2008-12-07 00:41:45 +02:00
+  title: Day Ten, Tale Ten
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 4593
+  notes: ""
+  id: 7
   summary: |
     The Marquis of Saluzzo, overborne by the entreaties of his vassals, consents to take a wife, but, being minded to please himself in the choice of her, takes a husbandman's daughter. He has two children by her, both of whom he makes her believe that he has put to death. Afterward, feigning to be tired of her, and to have taken another wife, he turns her out of doors in her shift, and brings his daughter into the house in guise of his bride; but, finding her patient under it all, he brings her home again, and shews her her children, now grown up, and honours her, and causes her to be honoured, as Marchioness.
-  language_id: "1"
-  minor_version: "5"
-  published_at: 2008-12-07 00:00:00
-  restricted: "0"
-  posted: "1"
-  hidden_by_admin: "0"
-  created_at: 2008-12-07 00:28:54
-works_008: 
-  major_version: "1"
-  updated_at: 2008-12-07 00:52:08
-  delta: "1"
+
+  revised_at: 2008-12-07 00:32:20 +02:00
+  language_id: 1
+  minor_version: 5
+  published_at: 2008-12-07 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2008-12-07 00:28:54 +02:00
+work_00029: 
+  major_version: 1
+  updated_at: 2009-03-10 02:28:25 +02:00
+  title: chum
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 2
+  notes: ""
+  id: 29
+  summary: ""
+  revised_at: 2009-03-10 02:24:31 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2009-03-10 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-10 02:24:30 +02:00
+work_00041: 
+  major_version: 1
+  updated_at: 2009-03-12 04:55:48 +02:00
+  title: muu
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 1
+  notes: ""
+  id: 41
+  summary: ""
+  revised_at: 2009-03-12 04:55:48 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2009-03-12 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-12 04:51:07 +02:00
+work_00019: 
+  major_version: 1
+  updated_at: 2009-03-09 17:47:17 +02:00
+  title: title
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 2
+  notes: ""
+  id: 19
+  summary: ""
+  revised_at: 2009-03-09 17:47:16 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2009-03-09 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-09 17:43:33 +02:00
+work_00008: 
+  major_version: 1
+  updated_at: 2008-12-07 00:52:08 +02:00
   title: Day Five, Tale Four
-  expected_number_of_chapters: "1"
-  word_count: "2034"
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 2034
   notes: ""
-  id: "8"
-  revised_at: 2008-12-07 00:52:02
+  id: 8
   summary: Ricciardo Manardi is found by Messer Lizio da Valbona with his daughter, whom he marries, and remains at peace with her father.
-  language_id: "1"
-  minor_version: "1"
-  published_at: 2008-12-07 00:00:00
-  restricted: "0"
-  posted: "1"
-  hidden_by_admin: "0"
-  created_at: 2008-12-07 00:52:02
-works_009: 
-  major_version: "1"
-  updated_at: 2008-12-07 00:56:53
-  delta: "1"
+  revised_at: 2008-12-07 00:52:02 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2008-12-07 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2008-12-07 00:52:02 +02:00
+work_00042: 
+  major_version: 1
+  updated_at: 2009-03-18 06:08:46 +02:00
+  title: lam
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 1
+  notes: ""
+  id: 42
+  summary: ""
+  revised_at: 2009-03-18 06:08:45 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2009-03-18 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-18 06:08:12 +02:00
+work_00009: 
+  major_version: 1
+  updated_at: 2008-12-07 00:56:53 +02:00
   title: The Clerk's Tale
-  expected_number_of_chapters: "1"
-  word_count: "1534"
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 1534
   notes: ""
-  id: "9"
-  revised_at: 2008-12-07 00:55:59
+  id: 9
   summary: The tale of Griselda, a young woman whose husband tests her loyalty in a series of bizarre torments that recall the Biblical book of Job.
-  language_id: "1"
-  minor_version: "2"
-  published_at: 2008-12-07 00:00:00
-  restricted: "0"
-  posted: "1"
-  hidden_by_admin: "0"
-  created_at: 2008-12-07 00:55:58
-works_010: 
-  major_version: "1"
-  updated_at: 2008-12-07 01:20:39
-  delta: "1"
-  title: For your life
-  expected_number_of_chapters: "1"
-  word_count: "429"
+  revised_at: 2008-12-07 00:55:59 +02:00
+  language_id: 1
+  minor_version: 2
+  published_at: 2008-12-07 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2008-12-07 00:55:58 +02:00
+work_00020: 
+  major_version: 1
+  updated_at: 2009-03-09 18:32:19 +02:00
+  title: baaah
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 4
   notes: ""
-  id: "10"
-  revised_at: 2008-12-07 01:19:50
+  id: 20
+  summary: ""
+  revised_at: 2009-03-09 18:32:18 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2009-03-09 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-09 18:31:18 +02:00
+work_00010: 
+  major_version: 1
+  updated_at: 2008-12-07 01:20:39 +02:00
+  title: For your life
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 429
+  notes: ""
+  id: 10
   summary: <em>'Exclusive, one-off reunion concert,' Sam says smugly. 'Chance of a lifetime.'</em>
-  language_id: "1"
-  minor_version: "1"
-  published_at: 2008-12-07 00:00:00
-  restricted: "0"
-  posted: "1"
-  hidden_by_admin: "0"
-  created_at: 2008-12-07 01:19:49
-works_011: 
-  major_version: "1"
-  updated_at: 2008-12-07 01:24:07
-  delta: "1"
+  revised_at: 2008-12-07 01:19:50 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2008-12-07 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2008-12-07 01:19:49 +02:00
+work_00032: 
+  major_version: 1
+  updated_at: 2009-03-12 00:23:57 +02:00
+  title: tiiii
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 19
+  notes: ""
+  id: 32
+  summary: ""
+  revised_at: 2009-03-12 00:23:56 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2009-03-12 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-12 00:22:29 +02:00
+work_00043: 
+  major_version: 1
+  updated_at: 2009-03-20 21:57:44 +02:00
+  title: kings
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 18
+  notes: Inspired by <a href="http://example.com/LOLIantoes.gif" title="nonexistent image to demonstrate linking CSS style">this image</a>.
+  id: 43
+  summary: Inspired by <a href="http://example.com/LOLIantoes.gif" title="nonexistent image to demonstrate linking CSS style">this image</a>.
+  revised_at: 2009-03-18 06:10:19 +02:00
+  language_id: 1
+  minor_version: 4
+  published_at: 2009-03-18 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-18 06:09:43 +02:00
+work_00044: 
+  major_version: 1
+  updated_at: 2009-03-19 03:02:51 +02:00
+  title: haaaaam
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 9
+  notes: ""
+  id: 44
+  summary: ""
+  revised_at: 2009-03-19 03:02:50 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2009-03-19 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-19 03:02:12 +02:00
+work_00033: 
+  major_version: 1
+  updated_at: 2009-03-12 00:26:07 +02:00
+  title: yyipee
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 16
+  notes: ""
+  id: 33
+  summary: ""
+  revised_at: 2009-03-12 00:26:06 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2009-03-12 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-12 00:25:58 +02:00
+work_00011: 
+  major_version: 1
+  updated_at: 2008-12-07 01:24:07 +02:00
   title: Keep dancing
-  expected_number_of_chapters: "1"
-  word_count: "97"
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 97
   notes: "Written as a Christmas gift for Oxoniensis, 2007. Set at some unspecified time after canon, in the happy world in my head where Dean and Rory live happily ever after. "
-  id: "11"
-  revised_at: 2008-12-07 01:24:00
+  id: 11
   summary: "The Dance Marathon is a Stars Hollow tradition. "
-  language_id: "1"
-  minor_version: "1"
-  published_at: 2008-12-07 00:00:00
-  restricted: "0"
-  posted: "1"
-  hidden_by_admin: "0"
-  created_at: 2008-12-07 01:24:00
-works_012: 
-  major_version: "1"
-  updated_at: 2008-12-07 01:26:48
-  delta: "1"
+  revised_at: 2008-12-07 01:24:00 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2008-12-07 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2008-12-07 01:24:00 +02:00
+work_00012: 
+  major_version: 1
+  updated_at: 2008-12-07 01:26:48 +02:00
   title: Paying attention
-  expected_number_of_chapters: "1"
-  word_count: "262"
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 262
   notes: Written for technosage's <a href="http://technosage.livejournal.com/224268.html">porn-paragraph-a-thon</a> on Livejournal, December 2007, to the prompt 'Jared/Jensen; dom/sub'.
-  id: "12"
-  revised_at: 2008-12-07 01:26:41
+  id: 12
   summary: <em>He likes it when Jensen pays attention.</em>
-  language_id: "1"
-  minor_version: "1"
-  published_at: 2008-12-07 00:00:00
-  restricted: "0"
-  posted: "1"
-  hidden_by_admin: "0"
-  created_at: 2008-12-07 01:26:41
-works_001: 
-  major_version: "2"
-  updated_at: 2008-11-09 03:26:02
-  delta: "0"
+  revised_at: 2008-12-07 01:26:41 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2008-12-07 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2008-12-07 01:26:41 +02:00
+work_00001: 
+  major_version: 2
+  updated_at: 2009-02-24 05:32:00 +02:00
   title: Work With Two Chapters
-  expected_number_of_chapters: "2"
-  word_count: "10"
-  notes: Notes on test work
-  id: "1"
-  revised_at: 
-  summary: Summary of test work
-  language_id: 
-  minor_version: "1"
-  published_at: 
-  restricted: "0"
-  posted: "1"
-  hidden_by_admin: "0"
-  created_at: 2008-11-09 03:26:02
-works_013: 
-  major_version: "1"
-  updated_at: 2008-12-07 01:34:46
-  delta: "1"
-  title: I knew I should have argued
-  expected_number_of_chapters: "1"
-  word_count: "74"
-  notes: "I expected to be kind of helpless after dying, but it turns out it's not as peaceful as it's made out to be. So, I figured I'd write some stuff down. "
-  id: "13"
-  revised_at: 2008-12-07 01:34:39
-  summary: After the fact, I realise what a big mistake I made.
-  language_id: "1"
-  minor_version: "1"
-  published_at: 2008-12-07 00:00:00
-  restricted: "0"
-  posted: "1"
-  hidden_by_admin: "0"
-  created_at: 2008-12-07 01:34:39
-works_002: 
-  major_version: "1"
-  updated_at: 2008-11-09 03:26:02
-  delta: "0"
+  expected_number_of_chapters: 2
+  delta: true
+  word_count: 10
+  notes: ""
+  id: 1
+  summary: ""
+  revised_at: 2009-02-24 05:09:52 +02:00
+  language_id: 1
+  minor_version: 4
+  published_at: 2009-02-24 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2008-11-09 03:26:02 +02:00
+work_00034: 
+  major_version: 1
+  updated_at: 2009-03-12 00:31:05 +02:00
+  title: aaaaliens
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 27
+  notes: ""
+  id: 34
+  summary: ""
+  revised_at: 2009-03-12 00:31:04 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2009-03-12 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-12 00:30:12 +02:00
+work_00045: 
+  major_version: 1
+  updated_at: 2009-03-20 03:24:40 +02:00
+  title: faaaaaaaaaah
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 1
+  notes: ""
+  id: 45
+  summary: ""
+  revised_at: 2009-03-20 03:24:40 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2009-03-20 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-20 03:24:26 +02:00
+work_00046: 
+  major_version: 1
+  updated_at: 2009-03-21 01:42:56 +02:00
+  title: what the frak?!
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 12
+  notes: ""
+  id: 46
+  summary: ""
+  revised_at: 2009-03-20 03:28:46 +02:00
+  language_id: 1
+  minor_version: 2
+  published_at: 2009-03-20 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-20 03:28:02 +02:00
+work_00035: 
+  major_version: 6
+  updated_at: 2009-03-18 06:06:51 +02:00
+  title: ppppp
+  expected_number_of_chapters: 6
+  delta: true
+  word_count: 59
+  notes: ""
+  id: 35
+  summary: ""
+  revised_at: 2009-03-18 06:06:51 +02:00
+  language_id: 1
+  minor_version: 0
+  published_at: 2009-03-12 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-12 01:22:55 +02:00
+work_00002: 
+  major_version: 1
+  updated_at: 2008-11-09 03:26:02 +02:00
   title: Work With One Chapter Only
-  expected_number_of_chapters: "1"
-  word_count: "11"
+  expected_number_of_chapters: 1
+  delta: false
+  word_count: 11
   notes: Notes on test work with only one chapter
-  id: "2"
-  revised_at: 
+  id: 2
   summary: Summary of test work with only one chapter
-  language_id: "1" 
-  minor_version: "1"
+  revised_at: 
+  language_id: 1
+  minor_version: 1
   published_at: 
-  restricted: "0"
-  posted: "1"
-  hidden_by_admin: "0"
-  created_at: 2008-11-09 03:26:02
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2008-11-09 03:26:02 +02:00
+work_00013: 
+  major_version: 1
+  updated_at: 2008-12-07 01:34:46 +02:00
+  title: I knew I should have argued
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 74
+  notes: "I expected to be kind of helpless after dying, but it turns out it's not as peaceful as it's made out to be. So, I figured I'd write some stuff down. "
+  id: 13
+  summary: After the fact, I realise what a big mistake I made.
+  revised_at: 2008-12-07 01:34:39 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2008-12-07 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2008-12-07 01:34:39 +02:00
+work_00025: 
+  major_version: 1
+  updated_at: 2009-03-09 23:55:42 +02:00
+  title: tbbh
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 3
+  notes: ""
+  id: 25
+  summary: ""
+  revised_at: 2009-03-09 23:55:41 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2009-03-09 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-09 23:54:33 +02:00
+work_00014: 
+  major_version: 1
+  updated_at: 2008-12-07 22:54:42 +02:00
+  title: Sodom and Gomorrah
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 398
+  notes: "Not the Bible version. No offence intended. "
+  id: 14
+  summary: "A cautionary tale: wherein the Lord is pissed, Lot is righteous, and I do some smiting. "
+  revised_at: 2009-02-24 07:19:36 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2009-02-24 07:19:36 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2008-12-07 22:52:14 +02:00
+work_00003: 
+  major_version: 1
+  updated_at: 2009-02-24 07:19:37 +02:00
+  title: ThirdWork
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 12
+  notes: Notes on test work with only one chapter
+  id: 3
+  summary: Summary of test work with only one chapter
+  revised_at: 2009-02-24 07:19:36 +02:00
+  language_id: 1
+  minor_version: 2
+  published_at: 2009-02-24 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2008-11-09 03:26:02 +02:00
+work_00036: 
+  major_version: 1
+  updated_at: 2009-03-12 02:30:27 +02:00
+  title: chhhhhhhh
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 5
+  notes: ""
+  id: 36
+  summary: ""
+  revised_at: 2009-03-12 02:30:26 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2009-03-12 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-12 02:28:57 +02:00
+work_00047: 
+  major_version: 1
+  updated_at: 2009-03-21 01:12:55 +02:00
+  title: When Harry met Snivelly
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 5
+  notes: ""
+  id: 47
+  summary: <a href="http://example.com">a link for styling</a>
+  revised_at: 2009-03-21 01:12:10 +02:00
+  language_id: 1
+  minor_version: 2
+  published_at: 2009-03-21 00:00:00 +02:00
+  restricted: true
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-21 01:11:56 +02:00
+work_00048: 
+  major_version: 1
+  updated_at: 2009-03-21 01:14:26 +02:00
+  title: What Happened Next
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 7
+  notes: ""
+  id: 48
+  summary: ""
+  revised_at: 2009-03-21 01:14:26 +02:00
+  language_id: 1
+  minor_version: 1
+  published_at: 2009-03-21 00:00:00 +02:00
+  restricted: true
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-03-21 01:14:14 +02:00
+work_00004: 
+  major_version: 1
+  updated_at: 2008-11-09 03:26:02 +02:00
+  title: FourthWork
+  expected_number_of_chapters: 1
+  delta: false
+  word_count: 13
+  notes: Notes on test work with only one chapter
+  id: 4
+  summary: Summary of test work with only one chapter
+  revised_at: 
+  language_id: 1
+  minor_version: 1
+  published_at: 
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2008-11-09 03:26:02 +02:00
+work_00015: 
+  major_version: 1
+  updated_at: 2009-03-06 01:23:23 +02:00
+  title: ofc
+  expected_number_of_chapters: 1
+  delta: true
+  word_count: 12
+  notes: ""
+  id: 15
+  summary: ""
+  revised_at: 2009-02-22 06:25:24 +02:00
+  language_id: 1
+  minor_version: 3
+  published_at: 2009-02-22 00:00:00 +02:00
+  restricted: false
+  posted: true
+  hidden_by_admin: false
+  created_at: 2009-02-22 06:25:24 +02:00

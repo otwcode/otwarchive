@@ -984,11 +984,15 @@ class Work < ActiveRecord::Base
     end
 
     @works = eval("Work#{command + sort_and_paginate}")
-    # what I'm trying to achieve here
-    # is to add the co-authors of the displayed works to the available list of pseuds to filter on
+    # what I'm trying to achieve here is to add the co-authors
+    # of the displayed works to the available list of pseuds to /filter on/
+    # however, the much commented two lines below cause a major frak-up:
+    # all /co-author pseuds/ on the visible works are *moved as belonging to the user*!
     if !options[:user].nil?
-      @pseuds << Pseud.on_works(@works) # options[:user].pseuds.on_works(@works)
-      @pseuds.flatten!.uniq!
+      ### @pseuds << Pseud.on_works(@works)
+      ### @pseuds = @pseuds.flatten.uniq
+      @pseuds << options[:user].pseuds.on_works(@works)
+      @pseuds.flatten!
     end
 
     unless @works.empty?
