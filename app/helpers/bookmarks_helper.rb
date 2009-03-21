@@ -33,4 +33,9 @@ module BookmarksHelper
     end
   end
   
+  # tag_bookmarks_path was behaving badly for tags with slashes
+  def link_to_tag_bookmarks(tag)
+    {:controller => 'bookmarks', :action => 'index', :tag_id => tag}
+  end
+  
 end
