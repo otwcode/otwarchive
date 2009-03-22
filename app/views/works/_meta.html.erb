@@ -4,7 +4,7 @@
     <%- tags = work_tags.select{|tag| tag.type == type} -%>
     <%- unless tags.blank? -%>
       <dt class="<%= type.downcase -%>">
-        <%= type.constantize::NAME %>:
+        <%= tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize %>:
       </dt>
 	    
       <dd>

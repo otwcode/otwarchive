@@ -36,6 +36,7 @@
   <%- if logged_in? && current_user == @user -%>
   <ul class="navigation">
     <li><%= link_to t('profile.show.edit_profile', :default => "Edit My Profile"), edit_user_path(@user) %></li>
+    <li><%= link_to t('profile.show.manage_pseuds', :default => "Manage My Pseuds"), user_pseuds_path(@user) %></li>
     <li><%= link_to t('profile.show.set_preferences', :default => "Set My Preferences"), user_preferences_path(@user) %></li>
 		<li><%= link_to t('profile.show.delete_account', :default => "Delete My Account"), @user, :confirm => t('profile.show.deletion_warning', :default => 'This will permanently delete your account and cannot be undone. Are you sure?'), :method => :delete %></li>
   </ul>
