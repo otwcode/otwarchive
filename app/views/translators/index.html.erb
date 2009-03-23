@@ -1,0 +1,39 @@
+<h2>
+<%- if @language -%>
+  <%= t('translators.index.translators_for_language', :default => 'Translators for {{language}}', :language => @language.name) %>
+<%- else -%>  
+  <%= t('translators.index.translators', :default => 'Translators') %>
+<%- end -%>
+</h2>
+
+<%- if current_user.is_translation_admin? -%>
+  <p><%= link_to t('translators.index.link_to_new', :default => 'Add new translators'), '/' %></p>
+<%- end -%>
+
+<table id="translators_table">
+  <caption><%=h t('translators.index.list', :default => "List of active translators") -%></caption>
+  <tr>
+  	<th scope="col"><%=h t('translators.index.name', :default => "Name") -%></th>
+  	<th scope="col"><%=h t('translators.index.email', :default => "Email") -%></th>
+  	<%- if @language.blank? -%>
+  	<th scope="col"><%=h t('translators.index.language', :default => "Language") -%></th>
+  	<%- end -%>
+  </tr>
+  
+  <%- for translator in @translators -%>
+    <%- if @language -%>
+    <tr>
+      <td><%= link_to translator.login, language_translator_path(@language.short, translator) %></td>
+      <td><%= translator.email %></td>    
+    </tr>
+    <%- else -%>
+      <%- for language in translator.is_translator_for_what -%>
+      <tr>
+        <td><%= link_to translator.login, language_translator_path(language.short, translator) %></td>
+        <td><%= translator.email %></td>
+        <td><%= link_to language.name, language_path(language.short) %></td>    
+      </tr>
+      <%- end -%> 
+    <%- end -%>
+  <%- end -%>
+</table>

@@ -1,0 +1,56 @@
+<h1>Listing translations: <%= @main_locale.short %> => <%= @locale.short %></h1>
+<div style="text-align: left;">
+  Colour code: <span class="miss">Missing translations</span>
+  <span class="susp">Translations identical to English phrases</span>
+  <span class="old">Obsolete translations</span>
+  &nbsp;&nbsp;Click any translation to edit.<br />
+  Words inside {{...}} or &lt;a href="..."&gt; have special meaning, please keep them as they are.
+<table style="text-align: left;">
+  <tr>
+    <th width="200">Key</th>
+    <th>Text</th>
+  </tr>
+  <% tr_num = 0 %>
+  <% @groups.each_with_index do |(namespace, translations), gr_num| %>
+    <tr>
+      <td colspan="2" class="ns"<% unless gr_num==0 %> style="height: 60px;"<% end %>>
+        <strong><%= namespace || "none" %></strong>
+      </td>
+    </tr>
+    <% for translation in translations %>
+      <% loc_translation = translation.counterpart_in(@locale) %>
+      <%
+        if loc_translation.text.blank?
+          css_class = "miss"
+        elsif (loc_translation.text == translation.text) && !@locale.main?
+          css_class = "susp"
+        elsif (!loc_translation.updated_at && translation.updated_at) || (translation.updated_at && (loc_translation.updated_at < translation.updated_at))
+          css_class = "old"
+        else
+          css_class = nil
+        end
+      %>
+      <tr>
+        <td class="key">:<%=h translation.tr_key %></td>
+        <td class="transl<%= " #{css_class}" if css_class %>">
+          <% unless @locale.main? %>
+            <div class="main"><%=h translation.text %></div>
+          <% end %>
+          <div id="errors_for_ed<%= tr_num %>"></div>
+          <div class="tr_ed" id="<%= "ed#{tr_num}" %>"><%=h loc_translation.text %></div>
+          <script type="text/javascript">
+            new Ajax.InPlaceEditorWithEmptyText('ed<%= tr_num %>', '<%= update_in_place_translation_path(translation) %>', {callback:function(form) { return Form.serialize(form);}, cols:80, rows:4, htmlResponse:false, ajaxOptions:{method:'post'}});
+          </script>          
+          <%#= in_place_editor "ed#{tr_num}", :url => set_translation_path(translation), :rows => 4, :cols => 80 %>
+          <% tr_num+=1 %>
+        </td>
+      </tr>
+    <% end %>
+  <% end %>
+</table>
+<br />
+</div>
+<script type="text/javascript"><!--
+// init_transl_ui();
+//-->
+</script>

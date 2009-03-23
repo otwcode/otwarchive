@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def load_locales
-    @loaded_locales ||= Locale.find(:all, :order => :iso)
+    @loaded_locales ||= Language.find(:all, :order => :iso).select {|language| language if language.has_translators? || language.main? }
   end
 
   # Sets the locale

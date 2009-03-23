@@ -1,0 +1,21 @@
+<h2><%= @language.name %></h2>
+
+<ul>
+  <li><%= link_to t('languages.show.translator_count', :default => "{{count}} translators", :count => @language.has_translators.size), language_translators_path(@language) %></li>
+  <li><%= link_to t('languages.show.volunteer', :default => 'volunteer!'), new_feedback_report_path %></li>
+</ul>
+
+<%- unless @language.id == @current_locale.id || !@language.has_translators? -%>
+<div id="set_language_link"><%= link_to t('languages.show.switch_language', :default => "Browse in this language"), set_languages_path(:language_id => @language.short) %></div>
+<%- end -%>
+
+<p><%= link_to t('languages.show.work_count', :default => "{{count}} works", :count => @language.work_count), language_works_path(@language) %> in <%= @language.fandom_count %> fandoms</p>
+
+<%- unless @works.blank? -%>
+  <h3>Most recent works:</h3>
+  <ul class="story-list">
+    <%- for work in @works -%>
+  	  <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
+    <%- end -%>
+  </ul>
+<%- end -%>

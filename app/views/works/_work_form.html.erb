@@ -156,6 +156,15 @@
       <%= f.date_select "published_at", :start_year => Date.today.year, :end_year => 1950, :default => Date.today, :order => [:day, :month, :year] %>
     </dd>
     
+    <dt class="work-language">
+      <%= f.label :language_id, "Choose a language" %>
+    </dt>
+    <dd>
+      <select id='work_language_id' name='work[language_id]' >
+        <%= options_from_collection_for_select(Language.all(:order => :iso), :id, :name, @work.language_id || @current_locale.id) %>
+      </select>
+    </dd>
+    
   </dl>         
 
 </fieldset>

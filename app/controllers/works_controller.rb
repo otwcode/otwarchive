@@ -176,11 +176,14 @@ class WorksController < ApplicationController
           return
         end
       end
+      
+      @language_id = params[:language_id] ? Language.find_by_short(params[:language_id]) : nil
 
       # Now let's build the query
       page_args = {:page => params[:page], :per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE)}
       @works, @filters, @pseuds = Work.find_with_options(:user => @user, :author => @author, :selected_tags => @selected_tags,
                                                     :selected_pseuds => @selected_pseuds,
+                                                    :language_id => @language_id,
                                                     :sort_column => @sort_column, :sort_direction => @sort_direction,
                                                     :page_args => page_args)
     end

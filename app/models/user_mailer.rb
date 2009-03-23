@@ -70,7 +70,7 @@ class UserMailer < ActionMailer::Base
      setup_email(user)
      @subject    += "Related work notification"
     @body[:related_work] = related_work
-     @body[:url] += "/en/related_works/#{related_work.id}"     
+     @body[:url] += "/related_works/#{related_work.id}"     
    end
    
    # Sends email to authors when a work is edited

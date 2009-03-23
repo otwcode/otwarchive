@@ -45,7 +45,7 @@ module ApplicationHelper
   def byline(creation)
     pseuds = []
     pseuds << creation.authors if creation.authors
-    pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.empty?)
+    pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
     pseuds.flatten.uniq.sort.collect { |pseud|
       link_to pseud.byline, [pseud.user, pseud], :class => "login author"
     }.join(', ')
@@ -101,8 +101,8 @@ module ApplicationHelper
   
   # Create a nicer language menu than the Click-To-Globalize default
   def languages_menu    
-    result = "<form action=\"" + url_for(:action => 'set', :controller => 'locale') + "\">\n" 
-    result << "<div><select id='accessible_menu' name='locale' >\n"
+    result = "<form action=\"" + url_for(:action => 'set', :controller => 'languages') + "\">\n" 
+    result << "<div><select id='accessible_menu' name='language_id' >\n"
     result << options_from_collection_for_select(@loaded_locales, :short, :name, @current_locale.short)
     result << "</select></div>"
     result << "<noscript><p><input type=\"submit\" name=\"commit\" value=\"Go\" /></p></noscript>"

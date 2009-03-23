@@ -1,5 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
-      
+
   map.resources :invitations 
 
   map.resources :media 
@@ -16,15 +16,11 @@ ActionController::Routing::Routes.draw do |map|
     end
 	end
 
-  map.root :controller => 'home', :action => 'index', :locale => 'en'
+  map.root :controller => 'home', :action => 'index'
   map.connect 'home/:action', :controller => "home" 
   map.tos '/tos', :controller => 'home', :action => 'tos' 
   map.tos_faq '/tos_faq', :controller => 'home', :action => 'tos_faq' 
   
-  # Commented out until we get a new system in place
-  #map.resources :translations, :member => { :update_in_place => :post}
-  #map.resources :translators, :has_many => :translations
-
   map.resources :abuse_reports 
 
   map.resources :passwords 
@@ -69,6 +65,18 @@ ActionController::Routing::Routes.draw do |map|
                     :cancel_comment_delete => :get}
 
   map.resources :bookmarks 
+  
+  # should stay below the main works mapping
+  map.resources :languages, :collection => {:set => :get} do |language|
+    language.resources :works
+    language.resources :translations, :member => { :update_in_place => :post}
+    language.resources :translators do |translator|
+      translator.resources :translations, :member => { :update_in_place => :post}
+    end
+  end
+  
+  map.resources :translations, :member => { :update_in_place => :post}
+  map.resources :translators
 
   map.resources :orphans, :collection => {:about => :get} 
 
@@ -90,7 +98,6 @@ ActionController::Routing::Routes.draw do |map|
   map.admin_login '/admin/login', :controller => 'admin/admin_session', :action => 'new' 
   map.admin_logout '/admin/logout', :controller => 'admin/admin_session', :action => 'destroy' 
 
-
   map.namespace :admin, :path_prefix => 'admin' do |admin|
     admin.resources :user_creations, :member => { :hide => :get }
     admin.resources :users, :controller => 'admin_users', :collection => {:notify => :get, :send_notification => :post}
@@ -101,7 +108,7 @@ ActionController::Routing::Routes.draw do |map|
   map.activate '/activate/:id', :controller => 'users', :action => 'activate'
   
   # to preserve links with locales in the route
-  map.with_locale '/en/:controller/:id', :controller => :controller, :action => 'show', :id => :id
+  map.with_locale '/en/works/:id', :controller => 'works', :action => 'show', :id => :id
   
   # The priority is based upon order of creation: first created -> highest priority.
 

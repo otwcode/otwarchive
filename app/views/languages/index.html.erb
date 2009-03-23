@@ -1,0 +1,26 @@
+<h2><%= t('languages.index.supported_languages', :default => 'The archive supports the following languages:') %></h2>
+
+<p>
+<%- if current_user.is_translation_admin? -%>
+  <%= link_to t('languages.index.link_to_new', :default => 'Add a new one'), new_language_path %>
+<%- else -%>
+  <%= link_to t('languages.index.suggest_language', :default => 'Suggest a new one!'), new_feedback_report_path %>
+<%- end -%>
+</p>
+
+<table id="languages_table">
+  <caption><%=h t('languages.index.list', :default => "List of all current languages in the archive") -%></caption>
+  <tr>
+  	<th scope="col"><%=h t('languages.index.name', :default => "Name") -%></th>
+  	<th scope="col"><%=h t('languages.index.work_count', :default => "Works") -%></th>
+  	<th scope="col"><%=h t('languages.index.translator_count', :default => "Translators") -%></th>
+  </tr>
+  
+  <%- for language in @languages -%>
+  <tr>
+    <td><%= link_to language.name, language %></td>
+    <td><%= link_to language.works.count, language_works_path(language) %></td>
+    <td><%= link_to language.has_translators.size, language_translators_path(language) %></td>
+  </tr>
+  <%- end -%>
+</table>

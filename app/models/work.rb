@@ -34,8 +34,8 @@ class Work < ActiveRecord::Base
   has_many :ambiguities, :through => :taggings, :source => :tagger, :source_type => 'Ambiguity'
 
   acts_as_commentable
-
-  belongs_to :locale, :foreign_key => 'language_id', :class_name => 'Locale'
+  
+  belongs_to :language
 
   ########################################################################
   # VIRTUAL ATTRIBUTES
@@ -119,7 +119,7 @@ class Work < ActiveRecord::Base
   ########################################################################
   before_save :validate_authors, :clean_and_validate_title, :validate_published_at
 
-  before_save :set_word_count, :set_language, :post_first_chapter
+  before_save :set_word_count, :post_first_chapter
 
   after_save :save_creatorships, :save_chapters, :save_parents
 
@@ -189,25 +189,6 @@ class Work < ActiveRecord::Base
   def visible?(user=User.current_user)
     self.visible(user) == self
   end
-
-  ########################################################################
-  # LANGUAGE
-  ########################################################################
-
-
-  # Associating works with languages.
-  def set_language(lang = nil)
-    if lang.nil?
-      return if self.locale
-      self.locale = Locale.find_main_cached
-      # Setting all works to the default language until there's a better framework in place
-      # for language preferences - elz, 3/7/09
-      # self.locale = Locale.find_by_short(I18n.locale.to_s)
-    else
-      self.locale = lang
-    end
-  end
-
 
 
   ########################################################################
@@ -869,6 +850,10 @@ class Work < ActiveRecord::Base
       :conditions => ['pseuds.id IN (?)', pseud_ids]
     }
   }
+  
+  # shouldn't really use a named scope for this, but I'm afraid to try
+  # to change the way work filtering works
+  named_scope :by_language, lambda {|lang_id| {:conditions => ['language_id = ?', lang_id]}}
 
   # returns an array, must come last
   # TODO: if you know how to turn this into a named_scope, please do!
@@ -978,6 +963,8 @@ class Work < ActiveRecord::Base
     elsif !options[:selected_tags].empty?
       # no user but selected tags
       command << visible + tags
+    elsif !options[:language_id].blank?
+      command << visible + '.by_language(options[:language_id])'
     else
       # all visible works
       command << visible
