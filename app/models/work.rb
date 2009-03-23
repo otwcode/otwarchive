@@ -6,6 +6,7 @@ class Work < ActiveRecord::Base
 
   has_many :creatorships, :as => :creation
   has_many :pseuds, :through => :creatorships
+	has_many :users, :through => :pseuds, :uniq => true
 
   has_many :chapters, :dependent => :destroy
   validates_associated :chapters
@@ -119,16 +120,15 @@ class Work < ActiveRecord::Base
   ########################################################################
   before_save :validate_authors, :clean_and_validate_title, :validate_published_at
 
-  before_save :set_word_count, :post_first_chapter, :save_series_data
+  before_save :set_word_count, :post_first_chapter
 
-  after_save :save_creatorships, :save_chapters, :save_parents, :save_series_data
-
-  after_update :save_series_data
+  after_save :save_creatorships, :save_chapters, :save_parents
   
   # before_save :validate_tags # Enigel's feeble attempt
 
-  before_update :validate_tags, :save_series_data
-
+  before_update :validate_tags
+	after_update :save_series_data
+	
   before_save :update_ambiguous_tags
 
   ########################################################################
@@ -235,16 +235,11 @@ class Work < ActiveRecord::Base
     self.save_series_data
   end
 
+	# Make sure the series restriction level is in line with its works
   def save_series_data
-    unless self.series.blank?
-      self.series.each do |s|
-        is_restricted = true
-        s.works.each do |w|
-          is_restricted = false if (w.posted && !w.restricted)
-        end
-        s.update_attribute(:restricted, is_restricted)
-      end
-    end
+	  unless self.series.blank?
+      self.series.each {|s| s.adjust_restricted }
+		end
   end
 
   ########################################################################

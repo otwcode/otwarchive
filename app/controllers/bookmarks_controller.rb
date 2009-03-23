@@ -34,9 +34,9 @@ class BookmarksController < ApplicationController
       @pseud = @user.pseuds.find_by_name(params[:pseud_id])
       owner = @pseud
     elsif params[:tag_id]
-      owner = Tag.find_by_name(params[:tag_id])
+      owner ||= Tag.find_by_name(params[:tag_id])
     else
-      owner = @bookmarkable
+      owner ||= @bookmarkable
     end
     search_by = owner ? "owner.bookmarks" : "Bookmark" 
     @bookmarks = is_admin? ? eval(search_by).find(:all, :conditions => {:private => false}, :order => "bookmarks.created_at DESC").paginate(:page => params[:page]) : 

@@ -11,8 +11,11 @@
 				<%= link_to sanitize_title_for_display(series.title), series %>
 				<%=h 'by' %>
 				<%= byline(series) -%>
+				<%- if series.restricted %>
+					<%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)") -%>
+				<%- end -%>
 				<% if series.hidden_by_admin %>
-				<%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)") %>
+					<%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)") %>
 				<% end %>
 			</h3>
 			

@@ -4,6 +4,7 @@ class Series < ActiveRecord::Base
   has_bookmarks
   has_many :creatorships, :as => :creation
   has_many :pseuds, :through => :creatorships
+	has_many :users, :through => :pseuds, :uniq => true
   
   validates_presence_of :title
   validates_length_of :title, 
@@ -43,6 +44,14 @@ class Series < ActiveRecord::Base
   def visible?(user=User.current_user)
     self.visible(user) == self
   end
+	
+	# if the series includes an unrestricted work, restricted should be false
+	# if the series includes no unrestricted works, restricted should be true
+	def adjust_restricted
+		unless self.restricted == !self.works.collect(&:restricted).include?(false)
+		  self.toggle!(:restricted)
+		end
+	end
   
   # return list of pseuds on this series
   def allpseuds
@@ -92,8 +101,7 @@ class Series < ActiveRecord::Base
     end
     self.authors.flatten!
     self.authors.uniq!
-  end
-  
+  end 
 
   # Save creatorships (add the virtual authors to the real pseuds) after the series is saved
   def save_creatorships

@@ -1,4 +1,9 @@
-<h1><%=h @series.title %></h1>
+<h1>
+	<%=h @series.title %>
+	<%- if @series.restricted %>
+		<%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)") -%>
+	<%- end -%>
+</h1>
 <dl class="work-meta series-meta">
   <dt><%=h 'Series begun:' %></dt>
     <dd><%=h @series.created_at %></dd>
