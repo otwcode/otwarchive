@@ -11,12 +11,12 @@ class SeriesController < ApplicationController
       redirect_to(@series)     
     end
   end
-  
+    
   # Hidden series should only be visible to admins and authors
   def check_permission_to_view
     @series = Series.find(params[:id])
     can_view_hidden = is_admin? || (current_user.is_a?(User) && current_user.is_author_of?(@series))
-	  access_denied if (@series.hidden_by_admin? && !can_view_hidden)
+    access_denied if (@series.hidden_by_admin? && !can_view_hidden)
   end
   
   # GET /series
@@ -26,20 +26,26 @@ class SeriesController < ApplicationController
       @user = User.find_by_login(params[:user_id])
       if params[:pseud_id]
         @author = @user.pseuds.find_by_name(params[:pseud_id])
-        @series = @author.series.find(:all, :order => 'series.created_at DESC').paginate(:page => params[:page])
+        @series = @author.series.select{|s| s.visible?(current_user)}
       else
-        @series = @user.series.find(:all, :order => 'series.created_at DESC').paginate(:page => params[:page])
+        @series = @user.series.select{|s| s.visible?(current_user)}
       end
     else
-      @series = Series.find(:all, :order => 'series.created_at DESC').paginate(:page => params[:page])
+      @series = Series.find(:all, :order => 'series.created_at DESC').select{|s| s.visible?(current_user)}
     end
+    @series = @series.paginate(:page => params[:page])
   end
 
   # GET /series/1
   # GET /series/1.xml
   def show
     @series = Series.find(params[:id])
-    @serial_works = @series.serial_works.find(:all, :include => :work, :conditions => ['works.posted = ?', true], :order => :position) 
+    if !@series.visible?(current_user)
+      flash[:error] = t('errors.no_permission_to_view', :default => "Sorry, this page is unavailable.")
+      redirect_to url_for(:action => 'index')
+    else
+      @serial_works = @series.serial_works.find(:all, :include => :work, :conditions => ['works.posted = ?', true], :order => :position).select{|sw| sw.work.visible(current_user)}
+    end
   end
 
   # GET /series/new

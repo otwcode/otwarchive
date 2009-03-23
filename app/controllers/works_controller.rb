@@ -240,7 +240,7 @@ class WorksController < ApplicationController
         redirect_to new_session_path and return
       elsif !current_user.is_author_of?(@work)
   	    flash[:error] = 'This page is unavailable.'
-       redirect_to works_path and return
+        redirect_to works_path and return
       end
     end
     # Users must explicitly okay viewing of adult content
@@ -249,17 +249,7 @@ class WorksController < ApplicationController
     elsif @work.adult? && !see_adult?
       render :partial => "adult", :layout => "application"
     end
-    unless @work.series.blank?
-      @series_previous = {}
-      @series_next = {}
-      for series in @work.series
-        serial = series.serial_works.find(:first, :conditions => {:work_id => @work.id})
-        sw_previous = series.serial_works.find(:first, :conditions => {:position => (serial.position - 1)})
-        sw_next = series.serial_works.find(:first, :conditions => {:position => (serial.position + 1)})
-        @series_previous[series.id] = sw_previous.work if sw_previous && sw_previous.work.visible
-        @series_next[series.id] = sw_next.work if sw_next && sw_next.work.visible
-      end
-    end
+
     @tag_categories_limited = Tag::VISIBLE - ["Warning"]
 
     @page_title = ""

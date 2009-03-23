@@ -24,6 +24,22 @@ class Series < ActiveRecord::Base
 
   attr_accessor :authors
   attr_accessor :toremove
+ 
+  # visibility aped from the work model
+  def visible(current_user=User.current_user)
+    if current_user == :false || !current_user || !current_user.is_a?(User)
+      return self unless self.restricted || self.hidden_by_admin
+    elsif (!self.hidden_by_admin && !self.works.empty?) || (self.works.empty? && current_user.is_author_of?(self))
+      return self
+    elsif self.hidden_by_admin?
+      return self if current_user.kind_of?(Admin) || current_user.is_author_of?(self)
+    end
+  end
+
+  def visible?(user=User.current_user)
+    self.visible(user) == self
+  end
+  
   # return list of pseuds on this series
   def allpseuds
     works.collect(&:pseuds).flatten.compact.uniq.sort

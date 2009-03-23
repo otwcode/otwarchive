@@ -54,15 +54,14 @@ module UsersHelper
   end
 
   # Prints link to series page with user-appropriate number of series
-  # There's no option to restrict the visibility of a series right now, but there probably will be in the future
   def print_series_link(user)
-    total = @user.series.count
+    total = @series ? @series.size : user.series.select{|s| s.visible?(current_user)}.size
     prefix = (@user == current_user) ? "My " : ""
     link_to_unless_current prefix + "Series" + " (#{total})", user_series_index_path(@user)
   end
   
   def print_pseud_series_link(pseud)
-    total = pseud.series.count
+    total = @series ? @series.size : pseud.series.select{|s| s.visible?(current_user)}.size
     prefix = (@user == current_user) ? "My " : ""
     link_to_unless_current prefix + "Series" + " (#{total})", user_pseud_series_index_path(@user, pseud)
   end
