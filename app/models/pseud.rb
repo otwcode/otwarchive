@@ -51,6 +51,11 @@ class Pseud < ActiveRecord::Base
   def to_param
     name
   end
+
+  # Gets the number of works by this user that the current user can see
+  def visible_works_count
+    self.works.select{|w| w.visible?(User.current_user)}.uniq.size
+  end
   
   # Options can include :categories and :limit
   # Gets all the canonical tags used by a given pseud (limited to certain 

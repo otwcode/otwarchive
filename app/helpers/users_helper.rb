@@ -48,7 +48,7 @@ module UsersHelper
   end
   
   def print_pseud_works_link(pseud)
-    total = Work.written_by_conditions([pseud]).visible.count(:distinct => true, :select => 'works.id')
+    total = pseud.visible_works_count
     prefix = (@user == current_user) ? "My " : ""
     link_to_unless_current prefix + "Works" + " (" + total.to_s + ")", user_pseud_works_path(@user, pseud)
   end
