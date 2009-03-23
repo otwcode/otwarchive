@@ -25,6 +25,17 @@ class WorkObserver < ActiveRecord::Observer
 					end
 	      end
 	    end
+      
+      unless work.series.blank?
+        work.series.each do |s|
+          is_restricted = true
+          s.works.each do |w|
+            is_restricted = false if ((w.id != work.id) && w.posted && !w.restricted)
+          end
+          s.update_attribute(:restricted, is_restricted)
+        end
+      end
+      
 		end
   end
   

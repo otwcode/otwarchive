@@ -1,6 +1,6 @@
 class AddRestrictedToSeries < ActiveRecord::Migration
   def self.up
-    add_column :series, :restricted, :boolean, :default => false, :null => false
+    add_column :series, :restricted, :boolean, :default => true, :null => false
     Series.reset_column_information
     Series.all.each do |series|
       restr = true

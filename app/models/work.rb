@@ -119,13 +119,15 @@ class Work < ActiveRecord::Base
   ########################################################################
   before_save :validate_authors, :clean_and_validate_title, :validate_published_at
 
-  before_save :set_word_count, :post_first_chapter
+  before_save :set_word_count, :post_first_chapter, :save_series_data
 
-  after_save :save_creatorships, :save_chapters, :save_parents
+  after_save :save_creatorships, :save_chapters, :save_parents, :save_series_data
 
+  after_update :save_series_data
+  
   # before_save :validate_tags # Enigel's feeble attempt
 
-  before_update :validate_tags
+  before_update :validate_tags, :save_series_data
 
   before_save :update_ambiguous_tags
 
@@ -230,9 +232,20 @@ class Work < ActiveRecord::Base
       new_series.save
       self.series << new_series
     end
+    self.save_series_data
   end
 
-
+  def save_series_data
+    unless self.series.blank?
+      self.series.each do |s|
+        is_restricted = true
+        s.works.each do |w|
+          is_restricted = false if (w.posted && !w.restricted)
+        end
+        s.update_attribute(:restricted, is_restricted)
+      end
+    end
+  end
 
   ########################################################################
   # CHAPTERS

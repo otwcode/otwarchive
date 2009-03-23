@@ -25,11 +25,15 @@ class Series < ActiveRecord::Base
   attr_accessor :authors
   attr_accessor :toremove
  
+  def posted_works
+    self.works.select{|w| w.posted}
+  end
+  
   # visibility aped from the work model
   def visible(current_user=User.current_user)
     if current_user == :false || !current_user || !current_user.is_a?(User)
       return self unless self.restricted || self.hidden_by_admin
-    elsif (!self.hidden_by_admin && !self.works.empty?) || (self.works.empty? && current_user.is_author_of?(self))
+    elsif (!self.hidden_by_admin && !self.posted_works.empty?) || (self.works.empty? && current_user.is_author_of?(self))
       return self
     elsif self.hidden_by_admin?
       return self if current_user.kind_of?(Admin) || current_user.is_author_of?(self)
