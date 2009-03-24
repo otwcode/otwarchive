@@ -70,13 +70,18 @@ class WorksController < ApplicationController
       elsif params[:work] # create
          @work = Work.new(params[:work])
       else # new
+        current_user.cleanup_unposted_works
+        if params[:load_unposted] && current_user.unposted_work
+          @work = current_user.unposted_work
+        else
           @work = Work.new
           @work.chapters.build
+        end
       end
 
       @serial_works = @work.serial_works
 
-      @chapters = (@work.chapters.in_order != []) ? @work.chapters.in_order : @work.chapters
+      @chapters = @work.chapters.in_order.blank? ? @work.chapters : @work.chapters.in_order
       @chapter = @chapters.first
       if params[:work] && params[:work][:chapter_attributes]
         @chapter.content = params[:work][:chapter_attributes][:content]
@@ -269,10 +274,7 @@ class WorksController < ApplicationController
 
   # GET /works/new
   def new
-    current_user.cleanup_unposted_works
-    if params[:load_unposted] && current_user.unposted_work
-      @work = current_user.unposted_work
-    elsif params[:upload_work]
+    if params[:upload_work]
       @use_upload_form = true
     end
   end
