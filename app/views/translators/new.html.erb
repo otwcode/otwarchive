@@ -1,3 +1,26 @@
 <h2><%= t('translators.new.add_new_translator', :default => 'Add new translators:') %></h2>
 
+<%- form_tag url_for({:controller => :translators, :action => 'create', :method => :post}) do -%>
+
+<table>
+  <tr>
+    <th><%= t('translators.new.email', :default => 'Email Address') %></th>
+    <th><%= t('translators.new.language', :default => 'Language') %></th>
+  </tr>
+  <%- 5.times do |i| -%>
+    <tr>
+      <td><%= text_field_tag "translators[#{i}][email]" %></td>
+      <td>
+        <select id='translators_<%= i %>_language_id' name='translators[<%= i %>][language_id]' >
+          <%= options_from_collection_for_select(@languages, :id, :name, @language_id) %>
+        </select>
+      </td>
+    </tr>
+  <%- end -%>
+  <tr><td><%= submit_tag t('forms.submit', :default => "Submit") %></td></tr>
+</table>  
+
+<%- end -%>
+
+
 
