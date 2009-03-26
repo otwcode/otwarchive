@@ -22,7 +22,7 @@ class TranslatorsController < ApplicationController
   end
   
   def create
-    params[:translators].each do |attributes|
+    params[:translators].each_value do |attributes|
       unless attributes[:email].blank?
         language = Language.find(attributes[:language_id])
         user = User.find_by_email(attributes[:email])
