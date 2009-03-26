@@ -1,7 +1,7 @@
 <h2><%= t('languages.index.supported_languages', :default => 'The archive supports the following languages:') %></h2>
 
 <p>
-<%- if current_user.is_translation_admin? -%>
+<%- if current_user && current_user.is_translation_admin? -%>
   <%= link_to t('languages.index.link_to_new', :default => 'Add a new one'), new_language_path %>
 <%- else -%>
   <%= link_to t('languages.index.suggest_language', :default => 'Suggest a new one!'), new_feedback_report_path %>
