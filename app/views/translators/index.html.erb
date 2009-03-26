@@ -6,7 +6,7 @@
 <%- end -%>
 </h2>
 
-<%- if current_user && current_user.is_translation_admin? -%>
+<%- if current_user.is_a?(User) && current_user.is_translation_admin? -%>
 <p><%= link_to t('translators.index.link_to_new', :default => 'Add new translators'), 
         (@language ? new_language_translator_path(@language) : new_translator_path) %></p>
 <%- end -%>
