@@ -13,15 +13,18 @@ class UsersController < ApplicationController
     if is_registered_user?
       flash[:error] = t('errors.users.already_logged_in', :default => "You are already logged in!")
       redirect_to root_path
+      return
     end
     return true if ArchiveConfig.ACCOUNT_CREATION_ENABLED 
     @invitation = Invitation.find_by_token(params[:invitation_token])
     if !@invitation
       flash[:error] = t('errors.users.creation_suspended', :default => "Account creation is suspended at the moment. Please check back with us later.")
-      redirect_to login_path 
+      redirect_to login_path
+      return 
     elsif @invitation.used?
       flash[:error] = t('errors.users.invitation_used', :default => "This invitation has already been used to create an account, sorry!")
       redirect_to login_path
+      return
     end
   end
   
