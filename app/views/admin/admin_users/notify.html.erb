@@ -1,27 +1,27 @@
-<h1><%=h t('admin.notify.send_notification', :default => "Send Notification To Users") -%></h1>
+<h1><%=h t('send_notification', :default => "Send Notification To Users") -%></h1>
 
 <%- form_tag send_notification_admin_users_path, :method => :post do -%>
 
   <dl>
-    <dt><%= label_tag "subject", t('admin.notify.subject', :default => "Subject") -%></dt>
+    <dt><%= label_tag "subject", t('subject', :default => "Subject") -%></dt>
     <dd><%= text_field_tag "subject" -%></dd>
   
-    <dt><%= label_tag "content", t('admin.notify.message', :default => "Message") -%></dt>
+    <dt><%= label_tag "content", t('message', :default => "Message") -%></dt>
     <dd><%= text_area_tag "content" -%></dd>
 
-    <dt><%= t('admin.notify.select_users', :default => 'Select Users To Notify') -%></dt>
+    <dt><%= t('select_users', :default => 'Select Users To Notify') -%></dt>
     <dd>
       <table id="admin_users_table">
-      <caption><%=h t('admin.notify.select_users', :default => 'Select Users To Notify') -%></caption>
+      <caption><%=h t('select_users', :default => 'Select Users To Notify') -%></caption>
       <tr>
-      	<th scope="col"><%=h t('admin.notify.username', :default => "Username") -%></th>
-      	<th scope="col"><%=h t('admin.notify.select', :default => "Select") -%></th>
+      	<th scope="col"><%=h t('username', :default => "Username") -%></th>
+      	<th scope="col"><%=h t('select', :default => "Select") -%></th>
       </tr>
 
       <tr>
         <td colspan="2">
           <input type="checkbox" id="select_all" onclick="selectAllCheckboxes('user_ids', <%= @users.size -%>, this.checked);">
-          <%= label_tag "select_all", t('admin.notify.select_all_none', :default => "Select All/None") -%>
+          <%= label_tag "select_all", t('select_all_none', :default => "Select All/None") -%>
         </td>
       </tr>
       
@@ -35,6 +35,6 @@
     </dd>
   </dl>
 
-  <p class="submit"><%= submit_tag t('admin.notify.submit', :default => "Send Notification") -%></p>
+  <p class="submit"><%= submit_tag t('submit', :default => "Send Notification") -%></p>
 <%- end -%>
 

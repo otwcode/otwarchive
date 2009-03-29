@@ -37,12 +37,12 @@ class RelatedWorksController < ApplicationController
   def update
     @related_work.reciprocal = !@related_work.reciprocal?
     if @related_work.update_attribute(:reciprocal, @related_work.reciprocal)
-      notice = @related_work.reciprocal? ?  t('notices.related_works.link_approved', :default => "Link was successfully approved") : 
-                                            t('notices.related_works.link_removed', :default => "Link was successfully removed")
+      notice = @related_work.reciprocal? ?  t('link_approved', :default => "Link was successfully approved") : 
+                                            t('link_removed', :default => "Link was successfully removed")
       flash[:notice] = notice
       redirect_to(@related_work.parent) 
     else
-      flash[:error] = t('errors.related_works.failed_update', :default => 'Sorry, something went wrong. Please try again.')
+      flash[:error] = t('failed_update', :default => 'Sorry, something went wrong. Please try again.')
       redirect_to(@related_work)
     end
   end

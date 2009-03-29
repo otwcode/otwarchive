@@ -1,0 +1,16 @@
+# Spanish version (pardon the bad translations)
+es:
+  # Global strings
+  global:
+    sub:
+      key: "Hola i18n Mundo"
+  
+  # Controller
+  blog_posts:
+    # shared strings
+    bio: "Hola!"
+    
+    # typical actions
+    index: 
+      # Purposely has the intro but *not* "title" key
+      intro: "Bienvenidos a el blog de {{owner}}"

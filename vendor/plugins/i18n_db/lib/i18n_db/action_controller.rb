@@ -31,7 +31,7 @@ module I18nDb
       loc_obj = nil
       
       updated_at = Rails.cache.fetch("locale_versions/#{locale}") do
-        loc_obj = Locale.find_by_short(locale)
+        loc_obj = Locale.find_by_iso(locale)
         timestamp = loc_obj.updated_at if loc_obj
         timestamp ||= 0
       end

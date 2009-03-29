@@ -22,7 +22,7 @@ class TagWranglingsController < ApplicationController
     commit = params[:commit]
     if commit == "Assign"
       if params[:parent][:parent_id].blank? || params[:tags].blank?
-        flash[:error] = t('errors.tag_wranglings.select_tags', :default => "Please select some tags and a parent")
+        flash[:error] = t('select_tags', :default => "Please select some tags and a parent")
      else
         tags = params[:tags].collect {|t| Tag.find_by_name(t)}
         tags.each do |tag|
@@ -75,7 +75,7 @@ class TagWranglingsController < ApplicationController
             Tag.find_by_id(id).update_attribute(:fandom_id, @fandom.id)
           end
         else
-          flash[:error] = t('errors.tag_wranglings.choose_fandom', :default => "Please choose a fandom")
+          flash[:error] = t('choose_fandom', :default => "Please choose a fandom")
        end
       end
       if !params[:remove_from_fandom].blank?
@@ -87,7 +87,7 @@ class TagWranglingsController < ApplicationController
       setup_edit_vars
       render :action => "edit"
     else
-      flash[:error] = t('errors.tag_wranglings.choose_something', :default => "Please choose something")
+      flash[:error] = t('choose_something', :default => "Please choose something")
      redirect_to :back and return
     end
   end
@@ -99,7 +99,7 @@ class TagWranglingsController < ApplicationController
     elsif Tag::USER_DEFINED.include?(@category)
       @possible_parents = Fandom.canonical.by_name
     else
-      flash[:error] = t('errors.tag_wranglings.mass_assign', :default => "Sorry, you can't mass assign that")
+      flash[:error] = t('mass_assign', :default => "Sorry, you can't mass assign that")
      redirect_to :back and return
     end
     @tags = @category.constantize.no_parent.by_name
@@ -124,14 +124,14 @@ protected
         @media = Media.find_by_id(params[:media][:media_id])
         @tags = @category.constantize.by_media(@media).by_name
         if @tags.blank?
-          flash.now[:warning] = t('errors.tag_wranglings.no_tags_found', :default => "No tags found")
+          flash.now[:warning] = t('no_tags_found', :default => "No tags found")
        end
       end
     elsif @category == "Ambiguity"
       @ambiguity = true
       @tags = @category.constantize.by_name
       if @tags.blank?
-        flash.now[:warning] = t('errors.tag_wranglings.no_tags_found', :default => "No tags found")
+        flash.now[:warning] = t('no_tags_found', :default => "No tags found")
      end
     elsif Tag::USER_DEFINED.include? @category
       @fandoms = Fandom.canonical.by_name
@@ -139,13 +139,13 @@ protected
         @fandom = Fandom.find_by_id(params[:fandom][:fandom_id])
         @tags = @category.constantize.by_fandom(@fandom).by_name
         if @tags.blank?
-          flash.now[:warning] = t('errors.tag_wranglings.no_tags_found', :default => "No tags found")
+          flash.now[:warning] = t('no_tags_found', :default => "No tags found")
        end
       end
     else
       @tags = @category.constantize.by_name
       if @tags.blank?
-        flash.now[:warning] = t('errors.tag_wranglings.no_tags_found', :default => "No tags found")
+        flash.now[:warning] = t('no_tags_found', :default => "No tags found")
      end
     end
   end

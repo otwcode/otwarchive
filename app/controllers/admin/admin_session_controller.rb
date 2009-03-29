@@ -11,9 +11,9 @@ class Admin::AdminSessionController < ApplicationController
     self.current_admin = Admin.authenticate(params[:login], params[:password])
     if logged_in_as_admin?
       redirect_to admin_users_path
-      flash[:notice] = t('notices.session.logged_in', :default => "Logged in successfully")
+      flash[:notice] = t('logged_in', :default => "Logged in successfully")
    else
-      flash[:notice] = t('notices.session.authentication_failed', :default => "Authentication failed.")
+      flash[:notice] = t('authentication_failed', :default => "Authentication failed.")
      render :action => 'new'
       end
   end
@@ -21,7 +21,7 @@ class Admin::AdminSessionController < ApplicationController
   def destroy
     cookies.delete :auth_token
     reset_session
-    flash[:notice] = t('notices.session.logged_out', :default => "You have been logged out.")
+    flash[:notice] = t('logged_out', :default => "You have been logged out.")
    redirect_to admin_login_path
   end
 end

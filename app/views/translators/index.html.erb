@@ -1,6 +1,6 @@
 <h2>
-<%- if @language -%>
-  <%= t('translators.index.translators_for_language', :default => 'Translators for {{language}}', :language => @language.name) %>
+<%- if @locale -%>
+  <%= t('translators.index.translators_for_locale', :default => 'Translators for {{locale}}', :locale => @locale.name) %>
 <%- else -%>  
   <%= t('translators.index.translators', :default => 'Translators') %>
 <%- end -%>
@@ -8,7 +8,7 @@
 
 <%- if current_user.is_a?(User) && current_user.is_translation_admin? -%>
 <p><%= link_to t('translators.index.link_to_new', :default => 'Add new translators'), 
-        (@language ? new_language_translator_path(@language) : new_translator_path) %></p>
+        (@locale ? new_locale_translator_path(@locale) : new_translator_path) %></p>
 <%- end -%>
 
 <table id="translators_table">
@@ -16,23 +16,23 @@
   <tr>
   	<th scope="col"><%=h t('translators.index.name', :default => "Name") -%></th>
   	<th scope="col"><%=h t('translators.index.email', :default => "Email") -%></th>
-  	<%- if @language.blank? -%>
-  	<th scope="col"><%=h t('translators.index.language', :default => "Language") -%></th>
+  	<%- if @locale.blank? -%>
+  	<th scope="col"><%=h t('translators.index.locale', :default => "Locale") -%></th>
   	<%- end -%>
   </tr>
   
   <%- for translator in @translators -%>
-    <%- if @language -%>
+    <%- if @locale -%>
     <tr>
-      <td><%= link_to translator.login, language_translator_path(@language.short, translator) %></td>
+      <td><%= link_to translator.login, locale_translator_path(@locale.short, translator) %></td>
       <td><%= translator.email %></td>    
     </tr>
     <%- else -%>
-      <%- for language in translator.is_translator_for_what -%>
+      <%- for locale in translator.is_translator_for_what -%>
       <tr>
-        <td><%= link_to translator.login, language_translator_path(language.short, translator) %></td>
+        <td><%= link_to translator.login, locale_translator_path(locale.iso, translator) %></td>
         <td><%= translator.email %></td>
-        <td><%= link_to language.name, language_path(language.short) %></td>    
+        <td><%= link_to locale.name, locale_path(locale.iso) %></td>    
       </tr>
       <%- end -%> 
     <%- end -%>

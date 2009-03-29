@@ -5,7 +5,7 @@ module I18nDb
     
     def translations_from_db(locale = I18n.locale.to_s)
       translations = {}
-      if locale_obj = Locale.find_by_short(locale)
+      if locale_obj = Locale.find_by_iso(locale)
         locale_obj.translations.find(:all).each do |tr|
           pos = translations
           unless tr.namespace.blank?
@@ -31,11 +31,11 @@ module I18nDb
     def write_missing_and_try_default_locale(exception, locale, key, options={})
       write_missing(exception, locale, key, options)
       main_locale = Locale.find_main_cached
-      if !main_locale || (locale == Locale.find_main_cached.short) # main locale can be missing, say, in tests
+      if !main_locale || (locale == Locale.find_main_cached.iso) # main locale can be missing, say, in tests
         default_exception_handler(exception, locale, key, options)
       else
         default = options.delete(:saved_default)
-        return translate(key, options.merge(:locale => Locale.find_main_cached.short, :default => default))
+        return translate(key, options.merge(:locale => Locale.find_main_cached.iso, :default => default))
       end
     end
 
@@ -54,7 +54,7 @@ module I18nDb
 
           # We cache the already detected misses to avoid SQL requests
           unless Rails.cache.exist?("locales_missing/#{locale}/#{full_str_key}")
-            if (locale_obj = Locale.find_by_short(locale.to_s)) && key.to_s != ""
+            if (locale_obj = Locale.find_by_iso(locale.to_s)) && key.to_s != ""
               locale_obj.translations.find_or_create_by_tr_key_and_namespace(key.to_s, scope)
             end
             Rails.cache.write("locales_missing/#{locale}/#{full_str_key}", true)

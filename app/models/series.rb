@@ -8,18 +8,22 @@ class Series < ActiveRecord::Base
   
   validates_presence_of :title
   validates_length_of :title, 
-    :minimum => ArchiveConfig.TITLE_MIN, :too_short=> "must be at least " + ArchiveConfig.TITLE_MIN.to_s + " letters long."
+    :minimum => ArchiveConfig.TITLE_MIN, 
+    :too_short=> t('title_too_short', :default => "must be at least {{min}} letters long.", :min => ArchiveConfig.TITLE_MIN)
 
   validates_length_of :title, 
-    :maximum => ArchiveConfig.TITLE_MAX, :too_long=> "must be less than " + ArchiveConfig.TITLE_MAX.to_s + " letters long."
+    :maximum => ArchiveConfig.TITLE_MAX, 
+    :too_long=> t('title_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.TITLE_MAX)
     
   validates_length_of :summary, 
     :allow_blank => true, 
-    :maximum => ArchiveConfig.SUMMARY_MAX, :too_long => "must be less than " + ArchiveConfig.SUMMARY_MAX.to_s + " letters long."
+    :maximum => ArchiveConfig.SUMMARY_MAX, 
+    :too_long => t('summary_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.SUMMARY_MAX)
     
   validates_length_of :notes, 
     :allow_blank => true, 
-    :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than " + ArchiveConfig.NOTES_MAX.to_s + " letters long."
+    :maximum => ArchiveConfig.NOTES_MAX, 
+    :too_long => t('notes_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.NOTES_MAX)
 
   after_save :save_creatorships
 

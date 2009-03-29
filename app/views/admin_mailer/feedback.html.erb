@@ -1,11 +1,11 @@
-<p><%=h t('admin.mailer.feedback.heres_some_feedback', :default => "Here's some user feedback on the archive!") %></p>
+<p><%=h t('heres_some_feedback', :default => "Here's some user feedback on the archive!") %></p>
 
-<%= ArchiveConfig.REVISION.blank? ? "" : "<p>" + t('admin.mailer.feedback.revision', :default => "Archive revision: (rev. {{revision}})", :revision => ArchiveConfig.REVISION) + "</p>" -%>
+<%= ArchiveConfig.REVISION.blank? ? "" : "<p>" + t('revision', :default => "Archive revision: (rev. {{revision}})", :revision => ArchiveConfig.REVISION) + "</p>" -%>
 
-<p><%=h t('admin.mailer.feedback.feedback', :default => "Feedback:") %></p>
+<p><%=h t('feedback', :default => "Feedback:") %></p>
 
 <%= sanitize_and_format_for_display @comment %>
 
-<p><%=h t('admin.mailer.feedback.sent_at', :default => "Sent at:") %>&nbsp;<%= Time.now.strftime(common_timestring) -%></p>
+<p><%=h t('sent_at', :default => "Sent at:") %>&nbsp;<%= Time.now.strftime(common_timestring) -%></p>
 
 

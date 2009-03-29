@@ -15,7 +15,7 @@ class PseudsController < ApplicationController
 
   #displays error if someone tries to modify another user's pseuds
   def is_user_true
-    is_user? || [redirect_to(:action => "index"), flash[:error] = t('errors.no_permission_to_edit', :default => "Sorry, but you don't have permission to make edits.") ]
+    is_user? || [redirect_to(:action => "index"), flash[:error] = t('no_permission_to_edit', :default => "Sorry, but you don't have permission to make edits.") ]
   end
 
   # GET /pseuds
@@ -34,7 +34,7 @@ class PseudsController < ApplicationController
     if @user
       @author = @user.pseuds.find_by_name(params[:id])
       unless @author
-        flash[:error] = "Sorry, could not find this pseud."
+        flash[:error] = t('pseud_not_found', :default => "Sorry, could not find this pseud.")
         redirect_to :action => :index and return
       end
       @works = Work.written_by_conditions([@author]).visible.ordered('revised_at', 'DESC').limited(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
@@ -43,12 +43,12 @@ class PseudsController < ApplicationController
     else
       @pseuds = Pseud.find_all_by_name(params[:id])
       if @pseuds.size == 0
-        flash[:error] = "Sorry, could not find this pseud."
+        flash[:error] = t('pseud_not_found', :default => "Sorry, could not find this pseud.")
         redirect_to users_path and return
       elsif @pseuds.size == 1
         redirect_to [@pseuds[0].user, @pseuds[0]] and return
       else
-        flash[:notice] = "There's more than one user with this pseud."
+        flash[:notice] = t('ambiguous_pseud', :default => "There's more than one user with this pseud.")
         redirect_to users_path and return
         # TODO: present the user with a drop-down with all authors who have that pseud
       end
@@ -92,7 +92,7 @@ class PseudsController < ApplicationController
       @user.pseuds << @pseud
       default = @user.default_pseud
       if @pseud.save
-        flash[:notice] = t('notices.pseuds.successfully_created', :default => 'Pseud was successfully created.')
+        flash[:notice] = t('successfully_created', :default => 'Pseud was successfully created.')
        if @pseud.is_default
           # if setting this one as default, unset the attribute of the current default pseud
           default.update_attribute(:is_default, false)
@@ -103,7 +103,7 @@ class PseudsController < ApplicationController
       end
     else
       # user tried to add pseud he already has
-      flash[:error] = t('errors.pseuds.duplicate_pseud', :default => 'You already have a pseud with that name.')
+      flash[:error] = t('duplicate_pseud', :default => 'You already have a pseud with that name.')
      @pseud.name = '' if @user.default_pseud.name == @pseud.name
       render :action => "new"
     end
@@ -120,7 +120,7 @@ class PseudsController < ApplicationController
         # if setting this one as default, unset the attribute of the current active pseud
         default.update_attribute(:is_default, false)
       end   
-      flash[:notice] = t('notices.pseuds.successfully_updated', :default => 'Pseud was successfully updated.')
+      flash[:notice] = t('successfully_updated', :default => 'Pseud was successfully updated.')
      redirect_to([@user, @pseud]) 
     else
       render :action => "edit"
@@ -132,12 +132,12 @@ class PseudsController < ApplicationController
   def destroy
     @pseud = @user.pseuds.find_by_name(params[:id])
     if @pseud.is_default
-      flash[:error] = t('errors.pseuds.delete_default', :default => "You cannot delete your default pseudonym, sorry!")
+      flash[:error] = t('delete_default', :default => "You cannot delete your default pseudonym, sorry!")
    elsif @pseud.name == @user.login
-      flash[:error] = t('errors.pseuds.delete_user_name', :default => "You cannot delete the pseud matching your user name, sorry!")
+      flash[:error] = t('delete_user_name', :default => "You cannot delete the pseud matching your user name, sorry!")
    else
       @pseud.replace_me_with_default
-      flash[:notice] = t('notices.pseuds.successfully_deleted', :default => "The pseud was successfully deleted.")
+      flash[:notice] = t('successfully_deleted', :default => "The pseud was successfully deleted.")
    end
     
     redirect_to(user_pseuds_url(@user)) 

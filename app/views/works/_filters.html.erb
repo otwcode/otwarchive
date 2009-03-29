@@ -1,12 +1,12 @@
 <%- unless @filters.blank? && (@pseuds.size < 1 || (@user && @pseuds.size < 2)) -%>
 <%- form_tag(works_path, :class => 'work-filters', :method => :get) do -%>
-  <%- field_set_tag 'Filter these results: ' do -%>
+  <%- field_set_tag t('filter_these', :default => 'Filter these results: ') do -%>
  		<dl class="filters">
 			<%- unless (@pseuds.size < 1 || (@user && @pseuds.size < 2 && !@author)) -%>
         <dt onclick='toggleFilters("filter-pseuds")'>
           <span id="filter-pseuds_closed" style="display: none;"><%= image_tag 'arrow-right.gif', :alt => "" -%></span>
           <span id="filter-pseuds_open"><%= image_tag 'arrow-down.gif', :alt => "" -%></span>              
-          Pseud
+          <%= t('filter_pseuds', :default => 'Pseud') %>
         </dt>
         <dd id="filter-pseuds" class="tags">
           <ul>
@@ -50,7 +50,7 @@
       <%= hidden_field_tag("pseud_id", @author.name) if @author %>
   		<%= hidden_field_tag("user_id", @user.login) if @user %>
 		</p>
-		<p class="submit"><%= submit_tag "Filter Works" %></p>
+		<p class="submit"><%= submit_tag t('filter_works', :default => 'Filter Works') %></p>
   <%- end -%>
   <%- end -%>
 <%- end -%>

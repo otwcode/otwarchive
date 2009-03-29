@@ -5,12 +5,17 @@ module FixtureReplacement
   ## in the database - this is different from regular fixtures)
   ## Note2: fixtures must be valid to use create_. To test for errors, use new_
 
-  attributes_for :locale do |a|
-    a.short = 'en'
-    a.iso = 'en-US'
-    a.name = 'English'
-    a.main = true
-  end
+#  attributes_for :language do |a|
+#    a.short = String.random[1..3]
+#    a.name = String.random
+#  end
+
+#  attributes_for :locale do |a|
+#    a.iso = String.random
+#    a.name = String.random
+#    a.main = true
+#    a.language = create_language
+#  end
 
   attributes_for :abuse_report do |a|
     a.email = random_email

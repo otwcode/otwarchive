@@ -10,12 +10,15 @@ class Pseud < ActiveRecord::Base
   has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter'
   has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series'
   validates_presence_of :name
-  validates_length_of :name, :within => NAME_LENGTH_MIN..NAME_LENGTH_MAX, 
-                      :too_short => "That name is too short (minimum is %d characters)",
-                      :too_long => "That name is too long (maximum is %d characters)"
-  validates_format_of :name, :message => 'Pseuds can contain letters, numbers, spaces, underscores, and dashes.',
+  validates_length_of :name, 
+    :within => NAME_LENGTH_MIN..NAME_LENGTH_MAX, 
+    :too_short => t('name_too_short', :default => "That name is too short (minimum is {{min}} characters)", :min => NAME_LENGTH_MIN),
+    :too_long => t('name_too_long', :default => "That name is too long (maximum is {{max}} characters)", :max => NAME_LENGTH_MAX)
+  validates_format_of :name, 
+    :message => t('name_invalid_characters', :default => 'Pseuds can contain letters, numbers, spaces, underscores, and dashes.'),
     :with => /\A[\w -]*\Z/    
-  validates_format_of :name, :message => 'Pseuds must contain at least one letter or number.',
+  validates_format_of :name, 
+    :message => t('name_no_letters_or_numbers', :default => 'Pseuds must contain at least one letter or number.'),
     :with => /[a-zA-Z0-9]/
 
   named_scope :on_works, lambda {|owned_works|

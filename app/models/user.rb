@@ -64,10 +64,12 @@ class User < ActiveRecord::Base
   named_scope :starting_with, lambda {|letter| {:conditions => ['SUBSTR(login,1,1) = ?', letter]}}
   named_scope :valid, :conditions => {:banned => false, :suspended => false}
 
-  validates_format_of :login, :message => 'Your user name must begin and end with a letter or number; it may also contain underscores but no other characters.',
+  validates_format_of :login, 
+    :message => t('login_invalid', :default => 'Your user name must begin and end with a letter or number; it may also contain underscores but no other characters.'),
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
 
-  validates_email_veracity_of :email, :message => 'This does not seem to be a valid email address.'
+  validates_email_veracity_of :email, 
+    :message => t('email_invalid', :default => 'This does not seem to be a valid email address.')
  # validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create
   # validates_format_of :password, :with => /(?=.*\d)(?=.*([a-z]|[A-Z]))/, :message => 'must have at least one digit and one alphabet character.'
 
@@ -79,12 +81,12 @@ class User < ActiveRecord::Base
   
   validates_inclusion_of :terms_of_service,
                          :in => %w{ 1 },
-                         :message => 'Sorry, you need to accept the Terms of Service in order to sign up.',
+                         :message => t('must_accept_tos', :default => 'Sorry, you need to accept the Terms of Service in order to sign up.'),
                          :if => :first_save?
                          
   validates_inclusion_of  :age_over_13,
                           :in => %w{ 1 },
-                          :message => 'Sorry, you have to be over 13!',
+                          :message => t('must_be_over_13', :default => 'Sorry, you have to be over 13!'),
                           :if => :first_save?
                           
   def to_param

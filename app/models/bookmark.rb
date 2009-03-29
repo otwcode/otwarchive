@@ -5,7 +5,7 @@ class Bookmark < ActiveRecord::Base
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
 
   validates_length_of :notes, 
-    :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than " + ArchiveConfig.NOTES_MAX.to_s + " letters long."
+    :maximum => ArchiveConfig.NOTES_MAX, :too_long => t('notes_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.NOTES_MAX)
     
   def self.visible(options = {})
     current_user=User.current_user

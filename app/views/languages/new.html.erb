@@ -1,17 +1,14 @@
 <%= error_messages_for :language %>
 
-<h2><%= t('languages.new.add_new_language', :default => 'Add a new language:') %></h2>
+<h2><%= t('add_new_language', :default => 'Add a new language:') %></h2>
 
 <% form_for(@language) do |f| %>
   <dl>
-    <dt><%= f.label :name, t('languages.new.name', :default => "Name:") %></dt>
+    <dt><%= f.label :name, t('name', :default => "Name:") %></dt>
     <dd><%= f.text_field :name %></dd>
     
-    <dt><%= f.label :short, t('languages.new.short', :default => "Abbreviation:") %></dt>
+    <dt><%= f.label :short, t('short', :default => "Abbreviation:") %></dt>
     <dd><%= f.text_field :short %></dd>
-    
-    <dt><%= f.label :iso, t('languages.new.iso', :default => "Iso:") %></dt>
-    <dd><%= f.text_field :iso %></dd>
   </dl>
   <p><%= f.submit t('forms.submit', :default => "Submit") %></p>
 <% end %>

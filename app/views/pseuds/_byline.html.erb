@@ -1,7 +1,7 @@
 <!-- Co-Author stuff -->
 
 <dt class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
-  <%= label :pseud, :id, h("Select author/pseudonym(s)") %>
+  <%= label :pseud, :id, t('byline_select_author', :default => "Select author/pseudonym(s)") %>
 </dt>
 	<dd class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
 	  <%= '<select name="' + h(type) +'[author_attributes][ids][]" multiple="multiple">' %>
@@ -14,7 +14,7 @@
 </select>
 
 <% if @coauthors.size > 0 %>
-  <dt class="byline"><%=h "Current Co-authors:" %> </dt>
+  <dt class="byline"><%= t('current_coauthors', :default => "Current Co-authors:") %> </dt>
     <dd class="byline">
       <ul>
         <% for author in @coauthors %>
@@ -25,7 +25,7 @@
 <% end %>
 
 <dt class="byline">
-  <%= link_to_function(h('Add co-authors?'), "Element.toggle('co-authors')") %>          
+  <%= link_to_function(t('add_coauthors', :default => 'Add co-authors?'), "Element.toggle('co-authors')") %>          
 </dt>
   <dd id="co-authors">
     <%= form.label :storycoauthor, h('Enter co-author name(s):') %>

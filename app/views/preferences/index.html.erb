@@ -1,8 +1,8 @@
-<h1><%=h t('preferences.index.update_preferences', :default => 'Update My Preferences') %></h1>
+<h1><%=h t('update_preferences', :default => 'Update My Preferences') %></h1>
 <ul class="navigation">
-	<li><%= link_to t('preferences.index.edit_profile', :default => "edit my profile"), edit_user_path(@user) %></li>
-	<li><%= link_to t('preferences.index.manage_pseuds', :default => 'manage my pseuds'), user_pseuds_path(@user) %></li>
-	<li><%= link_to t('preferences.index.orphan_works', :default => 'orphan my works'), new_orphan_path %></li>
+	<li><%= link_to t('edit_profile', :default => "edit my profile"), edit_user_path(@user) %></li>
+	<li><%= link_to t('manage_pseuds', :default => 'manage my pseuds'), user_pseuds_path(@user) %></li>
+	<li><%= link_to t('orphan_works', :default => 'orphan my works'), new_orphan_path %></li>
 </ul>
 
 <%= error_messages_for :preference %>
@@ -11,52 +11,52 @@
 		<ul>
     	<li>
     	  <%= f.check_box :history_enabled %> 
-    	  <%= f.label :history_enabled, t('preferences.index.enable_history', :default => "Enable History") %>
+    	  <%= f.label :history_enabled, t('enable_history', :default => "Enable History") %>
     	</li>
    		
    		<li>
    		  <%= f.check_box :email_visible %> 
-   		  <%= f.label :email_visible, t('preferences.index.display_email', :default => "Display Email Address") %>
+   		  <%= f.label :email_visible, t('display_email', :default => "Display Email Address") %>
    		</li>
     	
     	<li>
       	<%= f.check_box :date_of_birth_visible %> 
-      	<%= f.label :date_of_birth_visible, t('preferences.index.display_birthday', :default => "Display Date of Birth") %>
+      	<%= f.label :date_of_birth_visible, t('display_birthday', :default => "Display Date of Birth") %>
     	</li>
     	
     	<li>
       	<%= f.check_box :adult %> 
-      	<%= f.label :adult, t('preferences.index.show_adult_content', :default => "Show me adult content without prompting") %>
+      	<%= f.label :adult, t('show_adult_content', :default => "Show me adult content without prompting") %>
     	</li>
 			
 			<li>
   			<%= f.check_box :hide_warnings %> 
-  			<%= f.label :hide_warnings, t('preferences.index.hide_warnings', :default => "Hide warnings by default (you will still have the option of revealing them)")  %>
+  			<%= f.label :hide_warnings, t('hide_warnings', :default => "Hide warnings by default (you will still have the option of revealing them)")  %>
 			</li>
     	
     	<li>
       	<%= f.check_box :comment_emails_off %> 
-      	<%= f.label :comment_emails_off, t('preferences.index.comment_notifications_email', :default => "Turn off comment-notification emails")  %>
+      	<%= f.label :comment_emails_off, t('comment_notifications_email', :default => "Turn off comment-notification emails")  %>
     	</li>
     	
     	<li>
       	<%= f.check_box :comment_inbox_off %> 
-      	<%= f.label :comment_inbox_off, t('preferences.index.comment_notifications_inbox', :default => "Turn off comment-notification messages to your Inbox")  %>
+      	<%= f.label :comment_inbox_off, t('comment_notifications_inbox', :default => "Turn off comment-notification messages to your Inbox")  %>
     	</li>
     	
     	<li>
       	<%= f.check_box :comment_copy_to_self_off %> 
-      	<%= f.label :comment_copy_to_self_off, t('preferences.index.own_comments', :default => "Turn off copies of your own comments")  %>
+      	<%= f.label :comment_copy_to_self_off, t('own_comments', :default => "Turn off copies of your own comments")  %>
     	</li>  	
   	</ul>
 		<p>
-			<%= f.label :work_title_format, t('preferences.index.format_titles', :default => "Format the titles on your works")  %>: 
+			<%= f.label :work_title_format, t('format_titles', :default => "Format the titles on your works")  %>: 
 			<%= f.text_field :work_title_format %> 
 			<%= link_to_help "work_title_format" -%>
 		</p>
-  		<p class="submit">
-    		<%= f.submit t('forms.update', :default => "Update") %>
-  		</p>
+  	<p class="submit">
+    	<%= f.submit t('forms.update', :default => "Update") %>
+  	</p>
 <%- end -%>
 <hr class="clear" />
 

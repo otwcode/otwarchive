@@ -1,8 +1,14 @@
 class Locale < ActiveRecord::Base
+  belongs_to :language
   has_many :translations
   validates_presence_of :iso
-  validates_presence_of :short
+  validates_uniqueness_of :iso
   validates_presence_of :name
+  acts_as_authorizable # so that each locale can have authorized translators
+  
+  def to_param
+    iso
+  end  
   
   # Returns a floating point number between 0.0 and 1.0, reflecting the fraction of the translations that
   # are up to date in this locale (i.e. that exist and are not older than the corresponding string for 
@@ -27,9 +33,10 @@ class Locale < ActiveRecord::Base
     @@find_main_cached ||= find_by_main(1)
   end
   
-  # Ensure that there's at least one language in the database
-  def self.set_base_locale(locale={:short => "en", :iso => "en-US", :name => "English"})
-    find_main_cached || Locale.find_by_short_and_iso(locale[:short].to_s, locale[:iso].to_s) || Locale.create(:short => locale[:short].to_s, :iso => locale[:iso].to_s, :name => locale[:name].to_s, :main => 1)
+  # Ensure that there's at least one locale in the database
+  def self.set_base_locale(locale={:iso => "en-US", :name => "English"})
+    language = Language.find_by_short(ArchiveConfig.DEFAULT_LANGUAGE_SHORT)
+    find_main_cached || Locale.find_by_iso(locale[:iso].to_s) || language.locales.create(:iso => locale[:iso].to_s, :name => locale[:name].to_s, :main => 1)
   end
         
   # Sets up a hash with keys like "app.pages.membership/n_months_free" and values being

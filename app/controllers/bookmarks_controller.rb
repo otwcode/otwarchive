@@ -57,7 +57,7 @@ class BookmarksController < ApplicationController
         store_location 
         redirect_to new_session_path and return        
       elsif @bookmark.pseud.user != current_user
-  	    flash[:error] = t('errors.bookmarks.not_visible', :default => 'This page is unavailable.')
+  	    flash[:error] = t('not_visible', :default => 'This page is unavailable.')
        redirect_to user_path(current_user) and return
       end
     end
@@ -87,7 +87,7 @@ class BookmarksController < ApplicationController
     @bookmark.set_external(params[:fetched][:value].to_i) unless params[:fetched].blank? || params[:fetched][:value].blank?
     begin
       if @bookmark.save && @bookmark.tag_string=params[:tag_string]
-        flash[:notice] = t('notices.bookmarks.successfully_created', :default => 'Bookmark was successfully created.')
+        flash[:notice] = t('successfully_created', :default => 'Bookmark was successfully created.')
        redirect_to(@bookmark) 
       else
         raise
@@ -104,7 +104,7 @@ class BookmarksController < ApplicationController
     @bookmark = Bookmark.find(params[:id])
     begin
       if @bookmark.update_attributes(params[:bookmark]) && @bookmark.tag_string=params[:tag_string]
-        flash[:notice] = t('notices.bookmarks.successfully_updated', :default => 'Bookmark was successfully updated.')
+        flash[:notice] = t('successfully_updated', :default => 'Bookmark was successfully updated.')
        redirect_to(@bookmark) 
       else
         raise
@@ -120,7 +120,7 @@ class BookmarksController < ApplicationController
   def destroy
     @bookmark = Bookmark.find(params[:id])
     @bookmark.destroy
-    flash[:notice] = t('notices.bookmarks.successfully_deleted', :default => 'Bookmark was successfully deleted.')
+    flash[:notice] = t('successfully_deleted', :default => 'Bookmark was successfully deleted.')
    redirect_to user_bookmarks_path(current_user)
   end
 end

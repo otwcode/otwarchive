@@ -32,7 +32,7 @@ class OrphansController < ApplicationController
     end
     use_default = params[:use_default] == "true"
     if !pseuds.blank? && !works.blank? && Creatorship.orphan(pseuds, works, use_default)
-      flash[:notice] = t('notices.orphans.success', :default => 'Orphaning was successful.')
+      flash[:notice] = t('success', :default => 'Orphaning was successful.')
      redirect_to(current_user)
     else
       render :action => :new 

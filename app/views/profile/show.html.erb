@@ -1,44 +1,44 @@
 <div id="user-profile">
   <%= render :partial => 'users/header', :locals => {:user => @user} %>
 
-  <h3><%=h t('profile.show.about', :default => "About {{name}}", :name => @user.login) %></h3>
+  <h3><%=h t('about', :default => "About {{name}}", :name => @user.login) %></h3>
 
-  <p><%= t('profile.show.member_since', :default => "Member since: {{date}}", :date => @user.created_at) %></p>
+  <p><%= t('member_since', :default => "Member since: {{date}}", :date => @user.created_at) %></p>
 
   <%- if @user.is_beta_tester? -%>
-    <p><%= t('profile.show.beta_tester', :default => "Beta tester") %></p>
+    <p><%= t('beta_tester', :default => "Beta tester") %></p>
   <%- end -%>
   
   <p><%=h @user.profile.title %></p>
 
   <dl id="user-data">
-    <dt class="pseuds"><%= link_to t('profile.show.my_pseuds', :default => "My pseuds:"), user_pseuds_path(@user) %></dt>
+    <dt class="pseuds"><%= link_to t('my_pseuds', :default => "My pseuds:"), user_pseuds_path(@user) %></dt>
       <dd class="pseuds"><%= print_pseud_list(@user.pseuds) %></dd>
     <%- if @user.profile.location? -%>
-    <dt class="location"><%=h t('profile.show.location', :default => "I live in:") %></dt>
+    <dt class="location"><%=h t('location', :default => "I live in:") %></dt>
       <dd><%=h @user.profile.location -%></dd>
     <%- end -%>
     <%- if @user.preference.date_of_birth_visible -%>
-    <dt class="birthday"><%=h t('profile.show.birthday', :default => "My birthday:") %></dt>
+    <dt class="birthday"><%=h t('birthday', :default => "My birthday:") %></dt>
       <dd class="birthday"><%=h @user.profile.date_of_birth -%></dd> 
     <%- end -%>
     <%- if @user.preference.email_visible -%>
-    <dt class="email"><%=h t('profile.show.email', :default => "My email address:") %></dt>
+    <dt class="email"><%=h t('email', :default => "My email address:") %></dt>
       <dd class="email"><%= mail_to @user.email, nil, :encode => "hex" %></dd>
     <%- end -%>
   </dl>
 
   <div id="user-bio">
-    <h3><%=h t('profile.show.about_me', :default => "About me:") %></h3>
+    <h3><%=h t('about_me', :default => "About me:") %></h3>
     <%=sanitize_and_format_for_display @user.profile.about_me -%>
   </div>
   
   <%- if logged_in? && current_user == @user -%>
   <ul class="navigation">
-    <li><%= link_to t('profile.show.edit_profile', :default => "Edit My Profile"), edit_user_path(@user) %></li>
-    <li><%= link_to t('profile.show.manage_pseuds', :default => "Manage My Pseuds"), user_pseuds_path(@user) %></li>
-    <li><%= link_to t('profile.show.set_preferences', :default => "Set My Preferences"), user_preferences_path(@user) %></li>
-		<li><%= link_to t('profile.show.delete_account', :default => "Delete My Account"), @user, :confirm => t('profile.show.deletion_warning', :default => 'This will permanently delete your account and cannot be undone. Are you sure?'), :method => :delete %></li>
+    <li><%= link_to t('edit_profile', :default => "Edit My Profile"), edit_user_path(@user) %></li>
+    <li><%= link_to t('manage_pseuds', :default => "Manage My Pseuds"), user_pseuds_path(@user) %></li>
+    <li><%= link_to t('set_preferences', :default => "Set My Preferences"), user_preferences_path(@user) %></li>
+		<li><%= link_to t('delete_account', :default => "Delete My Account"), @user, :confirm => t('deletion_warning', :default => 'This will permanently delete your account and cannot be undone. Are you sure?'), :method => :delete %></li>
   </ul>
   <%- end -%>
 </div>

@@ -3,14 +3,14 @@
 <% paginated_section @works, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
 
   <dl class="navigation">
-    <dt><%=h "Sort by" -%></dt> 
+    <dt><%= t('sort_by', :default => 'Sort by') -%></dt> 
     <%- unless @query.blank? -%>
-    <dd><%= sort_link 'Relevance' %></dd>
+    <dd><%= sort_link t('sort.relevance', :default => 'Relevance') %></dd>
     <%- end -%>
-    <dd><%= sort_link 'Author', :author -%></dd>
-    <dd><%= sort_link 'Title', :title -%></dd>
-    <dd><%= sort_link 'Date', :date -%></dd>
-    <dd><%= sort_link 'Word Count', :word_count -%></dd>
+    <dd><%= sort_link t('sort.author', :default => 'Author'), :author -%></dd>
+    <dd><%= sort_link t('sort.title', :default => 'Title'), :title -%></dd>
+    <dd><%= sort_link t('sort.date', :default => 'Date'), :date -%></dd>
+    <dd><%= sort_link t('sort.word_count', :default => 'Word Count'), :word_count -%></dd>
   </dl>
 
   <%= render :partial => 'filters' %>

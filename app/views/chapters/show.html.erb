@@ -4,7 +4,7 @@
 
   <div id="chapters">
     <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } -%>
-	<%= render :partial => 'chapters/chapter_control', :locals => {:work => @work, :chapter => @chapter } -%>
+	  <%= render :partial => 'chapters/chapter_control', :locals => {:work => @work, :chapter => @chapter } -%>
   </div>
 
   <%= render :partial => 'works/work_footer' -%>

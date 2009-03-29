@@ -31,15 +31,15 @@ class Admin::AdminUsersController < ApplicationController
     @user = User.find_by_login(params[:user][:login])
     @user.attributes = params[:user]
     if @user.save(false)
-      flash[:notice] = t('notices.admin_users.successfully_updated', :default => 'User was successfully updated.')
+      flash[:notice] = t('successfully_updated', :default => 'User was successfully updated.')
      redirect_to :action => "index", :letter => params[:letter]
     else
-      flash[:error] = t('errors.admin_users.error_updating', :default => 'There was an error updating user {{name}}', :name => params[:user][:login])
+      flash[:error] = t('error_updating', :default => 'There was an error updating user {{name}}', :name => params[:user][:login])
       redirect_to :action => "index", :letter => params[:letter]
     end
   end
 
-  # DELETE admin/users/1
+  # DELETE admin/users/1                                                                                                             notices.admin_users.
   # DELETE admin/users/1.xml
   def destroy
     @user = User.find_by_login(params[:id])
@@ -57,12 +57,12 @@ class Admin::AdminUsersController < ApplicationController
     end
 
     if @users.blank?
-      flash[:error] = t('errors.admin_notifications.no_user', :default => "Who did you want to notify?")
+      flash[:error] = t('no_user', :default => "Who did you want to notify?")
      redirect_to :action => :notify and return
     end
     
     unless params[:subject] && !params[:subject].blank?
-      flash[:error] = t('errors.admin_notifications.no_subject', :default => "Please enter a subject.")
+      flash[:error] = t('no_subject', :default => "Please enter a subject.")
      redirect_to :action => :notify and return
     else
       @subject = params[:subject]
@@ -70,7 +70,7 @@ class Admin::AdminUsersController < ApplicationController
     
     # We need to use content because otherwise html will be stripped
     unless params[:content] && !params[:content].blank?
-      flash[:error] = t('errors.admin_notifications.no_message', :default => "What message did you want to send?")
+      flash[:error] = t('no_message', :default => "What message did you want to send?")
      redirect_to :action => :notify and return
     else
       @message = params[:content]
@@ -82,7 +82,7 @@ class Admin::AdminUsersController < ApplicationController
     
     AdminMailer.deliver_archive_notification(current_admin.login, @users, @subject, @message)
     
-    flash[:notice] = t('notices.admin_notifications.sent', :default => "Notification sent to {{count}} user(s).", :count => @users.size)
+    flash[:notice] = t('sent', :default => "Notification sent to {{count}} user(s).", :count => @users.size)
    redirect_to :action => :notify
   end
 

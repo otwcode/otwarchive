@@ -1,0 +1,14 @@
+<h1><%= t('remove_link', :default => 'Remove Link') %></h1>
+
+<p><%= t('removal_description', :default => 'Would you like to remove the link from your work {{link_to_your_work}} to {{link_to_their_work}} by {{link_to_author}}?',  
+          :link_to_your_work => link_to(related_work.parent.title, related_work.parent),
+          :link_to_their_work => link_to(related_work.work.title, related_work.work),
+          :link_to_author => print_pseud_list(related_work.work.pseuds)) %></p>
+
+<p><%= t('can_undo', :default => '(You can come back to this page if you change your mind.)') %></p> 
+
+<% form_for(related_work) do |f| %>
+  <p class="submit">
+    <%= f.submit t('unlink_me', :default => "Remove link") %>
+  </p>
+<% end %>

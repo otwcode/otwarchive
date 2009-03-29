@@ -67,10 +67,13 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :bookmarks 
   
   # should stay below the main works mapping
-  map.resources :languages, :collection => {:set => :get} do |language|
+  map.resources :languages do |language|
     language.resources :works
-    language.resources :translations, :member => { :update_in_place => :post}
-    language.resources :translators do |translator|
+  end
+  
+  map.resources :locales, :collection => {:set => :get} do |locale|
+    locale.resources :translations, :member => { :update_in_place => :post}
+    locale.resources :translators do |translator|
       translator.resources :translations, :member => { :update_in_place => :post}
     end
   end

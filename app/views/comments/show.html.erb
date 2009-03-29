@@ -1,5 +1,5 @@
 <%= flash_div :comment_error, :comment_notice -%>
 
-<h2><%=h t('comments.show.comment_on', :default => "Comment on") %>  <%= link_to_comment_ultimate_parent(@comment) %></h2>
+<h2><%=h t('comment_on', :default => "Comment on") %>  <%= link_to_comment_ultimate_parent(@comment) %></h2>
 
 <%= render :partial => 'comments/comment_thread', :locals => { :comments => @comments, :depth => 0 } %>

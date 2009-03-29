@@ -15,7 +15,7 @@ module I18n
         return key.map { |k| translate(locale, k, options) } if key.is_a? Array
         
         if options[:default]
-          options[:saved_default] = options[:default]
+          saved_default = options[:default]
         end
 
         reserved = :scope, :default
@@ -28,21 +28,8 @@ module I18n
           entry = default(locale, default, options)
           if entry.nil?
             raise(I18n::MissingTranslationData.new(locale, key, options))
-          else
-            Translation.add_default_to_db(locale, key, options) if Locale.find_main_cached.short == locale.to_s && options[:saved_default]
-          end
-        else
-          if Locale.find_main_cached.short == locale.to_s && options[:saved_default].is_a?(String) && entry != options[:saved_default]
-            entry = options[:saved_default]
-            if key.is_a?(String)
-              n = key.split('.')
-              tr_key = n.last
-              namespace = (n - [n.last]).join('.')
-              translation = Locale.find_main_cached.translations.find(:first, :conditions => {:tr_key => tr_key, :namespace => namespace})
-              translation.text = options[:saved_default]
-              translation.updated = true
-              translation.save
-            end
+          elsif Locale.find_main_cached.iso == locale.to_s && saved_default 
+            Translation.add_default_to_db(locale, key, saved_default, options[:scope]) 
           end
         end
         entry = pluralize(locale, entry, count)

@@ -3,7 +3,7 @@ class AbuseReportsController < ApplicationController
   before_filter :admin_only, :except => [:new, :create]
   
   def access_denied
-    flash[:error] = t('errors.admin_only', :default => "I'm sorry, only an admin can look at that area.")
+    flash[:error] = t('admin_only', :default => "I'm sorry, only an admin can look at that area.")
    redirect_to '/'
     false
   end
@@ -27,7 +27,7 @@ class AbuseReportsController < ApplicationController
 
     if @abuse_report.save
       AdminMailer.deliver_abuse_report(@abuse_report.email, @abuse_report.url, @abuse_report.comment)
-      flash[:notice] = t('notices.abuse_report_sent', :default => 'The Abuse Report was sent to the abuse team email alias.')
+      flash[:notice] = t('abuse_report_sent', :default => 'The Abuse Report was sent to the abuse team email alias.')
      redirect_to ''
     else
       render :action => 'new'

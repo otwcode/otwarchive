@@ -2,4 +2,4 @@
 
 <%= error_messages_for :chapter %>
 
-<%= render :partial => 'chapter_form', :locals => { :chapter => @chapter, :button_text => "Update" } %>
+<%= render :partial => 'chapter_form', :locals => { :chapter => @chapter, :button_text => t('forms.update', :default => "Update") } %>

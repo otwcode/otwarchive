@@ -1,14 +1,14 @@
-<h1><%=h t('admins.index.listing', :default => "Listing admins") %></h1>
+<h1><%=h t('listing', :default => "Listing admins") %></h1>
 
 <table>
-<caption><%=h t('admins.index.a_list_of', :default => "A list of all the administrator accounts in the archive.") -%></caption>
+<caption><%=h t('a_list_of', :default => "A list of all the administrator accounts in the archive.") -%></caption>
   <tr>
   </tr>
 
 <% for admin in @admins %>
   <tr>
-    <td><%= link_to t('admins.index.show_link', :default => 'Show'), admin %></td>
-    <td><%= link_to t('admins.index.destroy_link', :default => 'Destroy'), admin, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= link_to t('show_link', :default => 'Show'), admin %></td>
+    <td><%= link_to t('destroy_link', :default => 'Destroy'), admin, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>

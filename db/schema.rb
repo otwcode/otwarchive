@@ -1,4 +1,4 @@
-# This file is auto-generated from the current state of the database. Instead of editing this file,
+# This file is auto-generated from the current state of the database. Instead of editing this file, 
 # please use the migrations feature of Active Record to incrementally modify your database, and
 # then regenerate this schema definition.
 #
@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090318004340) do
+ActiveRecord::Schema.define(:version => 20090329002541) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -79,7 +79,7 @@ ActiveRecord::Schema.define(:version => 20090318004340) do
   create_table "common_taggings", :force => true do |t|
     t.integer  "common_tag_id",   :limit => 8, :null => false
     t.integer  "filterable_id",   :limit => 8, :null => false
-    t.string   "filterable_type", :limit => 50, :null => false
+    t.string   "filterable_type",              :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -96,7 +96,7 @@ ActiveRecord::Schema.define(:version => 20090318004340) do
 
   create_table "creatorships", :force => true do |t|
     t.integer  "creation_id",   :limit => 8
-    t.string   "creation_type", :limit => 100
+    t.string   "creation_type"
     t.integer  "pseud_id",      :limit => 8
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -122,80 +122,6 @@ ActiveRecord::Schema.define(:version => 20090318004340) do
     t.string   "email"
   end
 
-  create_table "globalize_countries", :force => true do |t|
-    t.string "code",                   :limit => 2
-    t.string "english_name"
-    t.string "date_format"
-    t.string "currency_format"
-    t.string "currency_code",          :limit => 3
-    t.string "thousands_sep",          :limit => 2
-    t.string "decimal_sep",            :limit => 2
-    t.string "currency_decimal_sep",   :limit => 2
-    t.string "number_grouping_scheme"
-  end
-
-  add_index "globalize_countries", ["code"], :name => "index_globalize_countries_on_code"
-
-  create_table "globalize_languages", :force => true do |t|
-    t.string  "iso_639_1",             :limit => 2
-    t.string  "iso_639_2",             :limit => 3
-    t.string  "iso_639_3",             :limit => 3
-    t.string  "rfc_3066"
-    t.string  "english_name"
-    t.string  "english_name_locale"
-    t.string  "english_name_modifier"
-    t.string  "native_name"
-    t.string  "native_name_locale"
-    t.string  "native_name_modifier"
-    t.boolean "macro_language"
-    t.string  "direction"
-    t.string  "pluralization"
-    t.string  "scope",                 :limit => 1
-  end
-
-  add_index "globalize_languages", ["iso_639_1"], :name => "index_globalize_languages_on_iso_639_1"
-  add_index "globalize_languages", ["iso_639_2"], :name => "index_globalize_languages_on_iso_639_2"
-  add_index "globalize_languages", ["iso_639_3"], :name => "index_globalize_languages_on_iso_639_3"
-  add_index "globalize_languages", ["rfc_3066"], :name => "index_globalize_languages_on_rfc_3066"
-
-  create_table "globalize_translations", :force => true do |t|
-    t.string  "type"
-    t.string  "tr_key"
-    t.string  "table_name"
-    t.integer "item_id",             :limit => 8
-    t.string  "facet"
-    t.boolean "built_in"
-    t.integer "language_id",         :limit => 8
-    t.integer "pluralization_index", :limit => 8
-    t.text    "text"
-    t.string  "namespace"
-  end
-
-  add_index "globalize_translations", ["table_name", "item_id", "language_id"], :name => "globalize_translations_table_name_and_item_and_language"
-  add_index "globalize_translations", ["tr_key", "language_id"], :name => "index_globalize_translations_on_tr_key_and_language_id"
-
-  create_table "i18n_db_locales", :force => true do |t|
-    t.string   "iso"
-    t.string   "short"
-    t.string   "name"
-    t.boolean  "main"
-    t.datetime "updated_at"
-  end
-
-  add_index "i18n_db_locales", ["iso"], :name => "index_i18n_db_locales_on_iso"
-  add_index "i18n_db_locales", ["short"], :name => "index_i18n_db_locales_on_short"
-
-  create_table "i18n_db_translations", :force => true do |t|
-    t.string   "tr_key"
-    t.integer  "locale_id"
-    t.text     "text"
-    t.string   "namespace"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "i18n_db_translations", ["tr_key", "locale_id"], :name => "index_i18n_db_translations_on_tr_key_and_locale_id"
-
   create_table "inbox_comments", :force => true do |t|
     t.integer  "user_id",             :limit => 8
     t.integer  "feedback_comment_id", :limit => 8
@@ -213,16 +139,20 @@ ActiveRecord::Schema.define(:version => 20090318004340) do
     t.boolean  "used",                         :default => false, :null => false
   end
 
+  create_table "languages", :force => true do |t|
+    t.string "short", :limit => 4
+    t.string "name"
+  end
+
   create_table "locales", :force => true do |t|
     t.string   "iso"
-    t.string   "short"
     t.string   "name"
     t.boolean  "main"
     t.datetime "updated_at"
+    t.integer  "language_id", :null => false
   end
 
   add_index "locales", ["iso"], :name => "index_locales_on_iso"
-  add_index "locales", ["short"], :name => "index_locales_on_short"
 
   create_table "open_id_authentication_associations", :force => true do |t|
     t.integer "issued",     :limit => 8
@@ -322,10 +252,11 @@ ActiveRecord::Schema.define(:version => 20090318004340) do
     t.text     "summary"
     t.text     "notes"
     t.boolean  "hidden_by_admin", :default => false, :null => false
+    t.boolean  "restricted",      :default => false, :null => false
   end
 
   create_table "tag_categories", :force => true do |t|
-    t.string   "name",   :limit => 100, :default => "",    :null => false
+    t.string   "name",         :default => "",    :null => false
     t.boolean  "required",     :default => false, :null => false
     t.boolean  "official",     :default => false, :null => false
     t.boolean  "exclusive",    :default => false, :null => false
@@ -354,16 +285,16 @@ ActiveRecord::Schema.define(:version => 20090318004340) do
   create_table "taggings", :force => true do |t|
     t.integer  "tagger_id",     :limit => 8
     t.integer  "taggable_id",   :limit => 8,                 :null => false
-    t.string   "taggable_type", :limit => 100, :default => "", :null => false
+    t.string   "taggable_type",              :default => "", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "tagger_type", :limit => 100
+    t.string   "tagger_type"
   end
 
   add_index "taggings", ["tagger_id", "tagger_type", "taggable_id", "taggable_type"], :name => "index_taggings_polymorphic", :unique => true
 
   create_table "tags", :force => true do |t|
-    t.string   "name", :limit => 100,  :default => "",    :null => false
+    t.string   "name",                         :default => "",    :null => false
     t.boolean  "canonical",                    :default => false, :null => false
     t.integer  "tag_category_id", :limit => 8
     t.datetime "created_at"
@@ -406,7 +337,7 @@ ActiveRecord::Schema.define(:version => 20090318004340) do
     t.datetime "activated_at"
     t.string   "crypted_password"
     t.string   "salt"
-    t.string   "identity_url", :limit => 191
+    t.string   "identity_url"
     t.boolean  "recently_reset",                         :default => false, :null => false
     t.boolean  "suspended",                              :default => false, :null => false
     t.boolean  "banned",                                 :default => false, :null => false

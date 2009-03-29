@@ -41,7 +41,7 @@ class TagsController < ApplicationController
         end
       end
     else
-      flash[:error] = t('errors.tags.not_found', :default => "Tag not found")
+      flash[:error] = t('not_found', :default => "Tag not found")
       redirect_to '/'
     end
   end
@@ -58,7 +58,7 @@ class TagsController < ApplicationController
       end
     else
       # This is just a quick fix to avoid script barf if JavaScript is disabled
-      flash[:error] = t('errors.need_javascript', :default => "Sorry, you need to have JavaScript enabled for this.")
+      flash[:error] = t('need_javascript', :default => "Sorry, you need to have JavaScript enabled for this.")
       redirect_to :back
     end
 
@@ -81,16 +81,16 @@ class TagsController < ApplicationController
     if type
       @tag = type.constantize.find_or_create_by_name(params[:tag][:name])
     else
-      flash[:error] = t('errors.tags.please_provide_category', :default => "Please provide a category.")
+      flash[:error] = t('please_provide_category', :default => "Please provide a category.")
       @tag = Tag.new(:name => params[:tag][:name])
       render :action => "new" and return
     end
     if @tag.andand.valid?
       if (@tag.name != params[:tag][:name]) && (@tag.name.downcase == params[:tag][:name].downcase) # only capitalization different
         @tag.update_attribute(:name, params[:tag][:name])  # use the new capitalization
-        flash[:notice] = t('notices.tags.successfully_modified', :default => 'Tag was successfully modified.')
+        flash[:notice] = t('successfully_modified', :default => 'Tag was successfully modified.')
       else
-        flash[:notice] = t('notices.tags.successfully_created', :default => 'Tag was successfully created.')
+        flash[:notice] = t('successfully_created', :default => 'Tag was successfully created.')
       end
       @tag.update_attribute(:canonical, params[:tag][:canonical])
       redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag.name)
@@ -106,7 +106,7 @@ class TagsController < ApplicationController
       redirect_to tag_wranglings_path and return
     end
     if @tag.blank?
-      flash[:error] = t('errors.tags.not_found', :default => "Tag not found")
+      flash[:error] = t('not_found', :default => "Tag not found")
       redirect_to tag_wranglings_path and return
     end
   end
@@ -114,20 +114,20 @@ class TagsController < ApplicationController
   def update
     @tag = Tag.find_by_name(params[:id].gsub(/%2F/, '/'))
     if @tag.blank?
-      flash[:error] = t('errors.tags.not_found', :default => "Tag not found")
+      flash[:error] = t('not_found', :default => "Tag not found")
       redirect_to tag_wranglings_path and return
     end
     old_common_tag_ids = @tag.common_tags_to_add.map(&:id).sort
 
     if (params[:tag][:name] && logged_in_as_admin?)
       if ['Rating', 'Warning', 'Category'].include?(@tag[:type])
-        flash[:error] = t('errors.tags.name_change', :default => "Name can't be changed from this interface.")
+        flash[:error] = t('name_change', :default => "Name can't be changed from this interface.")
      else
         begin
           @tag.update_attribute(:name, params[:tag][:name])
         rescue
           @tag = Tag.find_by_name(params[:id]) # reset name
-          flash[:error] = t('errors.tags.name_taken', :default => "Name already taken.")
+          flash[:error] = t('name_taken', :default => "Name already taken.")
        end
       end
     end
@@ -189,7 +189,7 @@ class TagsController < ApplicationController
     new_common_tag_ids = @tag.common_tags_to_add.map(&:id).sort
     @tag.update_common_tags unless old_common_tag_ids == new_common_tag_ids
 
-    flash[:notice] = t('notices.tags.successfully_updated', :default => 'Tag was updated.')
+    flash[:notice] = t('successfully_updated', :default => 'Tag was updated.')
     redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag.name)
   end
 end

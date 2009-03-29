@@ -24,25 +24,25 @@ class ApplicationController < ActionController::Base
   ### GLOBALIZATION ###
 
   before_filter :load_locales
-  before_filter :set_preferred_language
+  before_filter :set_preferred_locale
 
   I18n.record_missing_keys = true # if you want to record missing translations
 
   protected
 
   def load_locales
-    @loaded_locales ||= Language.find(:all, :order => :iso).select {|language| language if language.has_translators? || language.main? }
+    @loaded_locales ||= Locale.find(:all, :order => :iso)
   end
 
   # Sets the locale
-  def set_preferred_language
+  def set_preferred_locale
     # Loading the current locale
-    if session[:locale] && @loaded_locales.detect { |loc| loc.short == session[:locale]}
+    if session[:locale] && @loaded_locales.detect { |loc| loc.iso == session[:locale]}
       set_locale session[:locale].to_sym
     else
-      set_locale Locale.find_main_cached.short.to_sym
+      set_locale Locale.find_main_cached.iso.to_sym
     end
-    @current_locale = Locale.find_by_short(I18n.locale.to_s)  
+    @current_locale = Locale.find_by_iso(I18n.locale.to_s)  
   end
   
   ### -- END GLOBALIZATION -- ###
@@ -70,9 +70,9 @@ class ApplicationController < ActionController::Base
   def check_user_status
     if current_user.is_a?(User) && (current_user.suspended? || current_user.banned?)
       if current_user.suspended? 
-        flash[:error] = t('errors.suspension_notice', :default => "Your account has been suspended. You may not add or edit content until your suspension has been resolved. Please contact us for more information.")
+        flash[:error] = t('suspension_notice', :default => "Your account has been suspended. You may not add or edit content until your suspension has been resolved. Please contact us for more information.")
      else
-        flash[:error] = t('errors.ban_notice', :default => "Your account has been banned. You are not permitted to add or edit archive content. Please contact us for more information.")
+        flash[:error] = t('ban_notice', :default => "Your account has been banned. You are not permitted to add or edit archive content. Please contact us for more information.")
      end
       redirect_to current_user
     end

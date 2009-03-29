@@ -6,7 +6,7 @@
 <noscript>
   <div id="javascript-warning">
     <p>
-      <%=h t('home.index.js_disabled', :default => "While we've done our best to make this site accessible without javascript, it will work better and look prettier with it enabled. 
+      <%=h t('js_disabled', :default => "While we've done our best to make this site accessible without javascript, it will work better and look prettier with it enabled. 
       Please consider turning it on! Also, be aware that the current beta version of the site has been optimized for Firefox and may not display properly in other browsers just yet.") %>
     </p>
   </div> 
@@ -20,46 +20,46 @@
   <%- end -%>
 </div>
 <h1><span><%= ArchiveConfig.APP_NAME -%>
-  <% unless ArchiveConfig.REVISION.blank? %>(<%=h t('home.index.revision', :default => 'rev. {{rev_number}}', :rev_number => ArchiveConfig.REVISION) %>)<% end %></span>
+  <% unless ArchiveConfig.REVISION.blank? %>(<%=h t('revision', :default => 'rev. {{rev_number}}', :rev_number => ArchiveConfig.REVISION) %>)<% end %></span>
 </h1>
-<h2><%= t('home.index.otw_link', :default => 'A project of the {{otw}}', :otw => '<a href="http://transformativeworks.org">Organization For Transformative Works</a>') %></h2>
+<h2><%= t('otw_link', :default => "A project of the {{otw}}", :otw => '<a href="http://transformativeworks.org">Organization For Transformative Works</a>') %></h2>
 <hr class="clear" />
 <div class="wrapper">
-	<h3><%= t 'home.index.share_fanworks', :default => 'Share your fan works' -%></h3>
-	<h4><%= link_to t('home.index.people', :default => 'People'), :controller => 'users', :action => 'index' %></h4>
+	<h3><%= t 'share_fanworks', :default => 'Share your fan works' %></h3>
+	<h4><%= link_to t('people', :default => 'People'), :controller => 'users', :action => 'index' %></h4>
 	<ul class="meters">
-		<li><span><%= @user_count %></span><%= ' ' + t('home.index.user_count', :default => 'users to date') %></li>
+		<li><span><%= @user_count %></span><%= ' ' + t('user_count', :default => 'users to date') %></li>
 		<%- if @random_user -%>
-			<li><%= t('home.index.random_user', :default => 'Try a new author') + ': ' %> <span><%= link_to @random_user.login, @random_user -%></span></li>
+			<li><%= t('random_user', :default => 'Try a new author') + ': ' %> <span><%= link_to @random_user.login, @random_user -%></span></li>
 		<%- end -%>
 	</ul>
 </div>
 <div class="wrapper">
-	<h3><%= t 'home.index.discover_favorites', :default => 'Discover new favorites' %></h3>
-	<h4><%= link_to t('home.index.fandoms', :default => 'Fandoms'), :controller => 'media', :action => 'index' %></h4>
+	<h3><%= t 'discover_favorites', :default => 'Discover new favorites' %></h3>
+	<h4><%= link_to t('fandoms', :default => 'Fandoms'), :controller => 'media', :action => 'index' %></h4>
 	<ul class="meters">
-		<li><span><%= @fandom_count -%></span> <%= ' ' + t('home.index.fandom_count', :default => 'fandoms to date') %></li>
+		<li><span><%= @fandom_count -%></span> <%= ' ' + t('fandom_count', :default => 'fandoms to date') %></li>
 		<%- unless @latest_fandom.blank? -%>
-			<li><%=h t('home.index.latest_updated', :default => 'Latest updated') + ': '%> <span><%= link_to @latest_fandom.name, tag_works_path(@latest_fandom) -%></span></li>
+			<li><%=h t('latest_updated', :default => 'Latest updated') + ': '%> <span><%= link_to @latest_fandom.name, tag_works_path(@latest_fandom) -%></span></li>
 		<%- end -%>
 	</ul>
 </div>
 <div class="wrapper">
-	<h3><%=h t('home.index.explore_possibilities', :default => "Explore the possibilities") -%></h3>
-	<h4><%= link_to t('home.index.works', :default => 'Works'), :controller => 'works', :action => 'index' %></h4>
+	<h3><%=h t('explore_possibilities', :default => "Explore the possibilities") -%></h3>
+	<h4><%= link_to t('works', :default => 'Works'), :controller => 'works', :action => 'index' %></h4>
 	<ul class="meters">
-		<li><span><%= @work_count %></span><%= ' ' + t('home.index.work_count', :default => "works to date") %></li>
+		<li><span><%= @work_count %></span><%= ' ' + t('work_count', :default => "works to date") %></li>
 		<%- if @latest_work -%>
-			<li><%=h t('home.index.latest_work', :default => 'Latest work') + ': '%> <span><%= link_to @latest_work.title, @latest_work -%></span></li>
+			<li><%=h t('latest_work', :default => 'Latest work') + ': '%> <span><%= link_to @latest_work.title, @latest_work -%></span></li>
 		<%- end -%>
 	</ul>
 </div>
-<p id="closed-sign"><%= link_to image_tag('closed.jpg', :alt => t('home.index.beta_notice', :default => "Hey, we're in closed beta right now, but please come in and browse!")), works_path -%></p>
+<p id="closed-sign"><%= link_to image_tag('closed.jpg', :alt => t('beta_notice', :default => "Hey, we're in closed beta right now, but please come in and browse!")), works_path -%></p>
 <!--<h5 id="signup"></h5>-->
 <blockquote id="quotebox">
-	<p><%= t 'home.index.goddamn_servers', :default => "I want us to own the goddamn servers!" %></p>
+	<p><%= t 'goddamn_servers', :default => "I want us to own the goddamn servers!" %></p>
 	<p class="attribution">~ Speranza</p>
 </blockquote>
 
-<h5><%= link_to t('home.index.browse', :default => 'Browse'), works_path %></h5>
+<h5><%= link_to t('browse', :default => 'Browse'), works_path %></h5>
 

@@ -11,20 +11,20 @@
     	</ul>
     	<h3>
       	<% if bookmark.bookmarkable.nil? -%>
-    		  (<%= t('bookmarks.index.bookmark_oh_noes', :default => 'Oh noes, this work has been deleted.') -%>)
+    		  (<%= t('bookmark_oh_noes', :default => 'Oh noes, this work has been deleted.') -%>)
         <% elsif bookmark.bookmarkable_type == "ExternalWork" %>
     	    <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable.url %>
-    		  <%=h t('bookmarks.index.bookmark_by', :default => 'by') %>
+    		  <%=h t('bookmark_by', :default => 'by') %>
     		  <%= bookmark.bookmarkable.author %>
         <% else %>
-    	    <% if bookmark.bookmarkable.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => t('bookmarks.index.bookmark_restricted', :default => "(Restricted)")) %><% end %>
+    	    <% if bookmark.bookmarkable.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => t('bookmark_restricted', :default => "(Restricted)")) %><% end %>
     	    <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable %>
-    		  <%=h t('bookmarks.index.bookmark_by', :default => 'by') %>
+    		  <%=h t('bookmark_by', :default => 'by') %>
     		  <%= byline(bookmark.bookmarkable) %>
         <% end %>
 	
         <% if bookmark.private %>
-          <%= image_tag("lockblack.png", :size => "15x15", :alt => t('bookmarks.index.bookmark_private', :default => "(Private)")) %>
+          <%= image_tag("lockblack.png", :size => "15x15", :alt => t('bookmark_private', :default => "(Private)")) %>
         <% end %>
       </h3>
       <h4>&nbsp;</h4>
@@ -33,7 +33,7 @@
     <%- unless bookmark.tag_string.blank? -%>
     <li>
       <dl class="tags">
-        <dt><%=h t('bookmarks.index.bookmark_tags', :default => "Tags:") -%></dt>
+        <dt><%=h t('bookmark_tags', :default => "Tags:") -%></dt>
         <dd>
       	  <ul>
   	        <% bookmark.tags.each do |tag| -%>

@@ -1,9 +1,17 @@
-class Language < Locale 
-  has_many :works  
-  acts_as_authorizable # so that each language can have authorized translators
+class Language < ActiveRecord::Base 
+  validates_presence_of :short
+  validates_uniqueness_of :short
+  validates_presence_of :name
+  
+  has_many :works
+  has_many :locales
   
   def to_param
     short
+  end
+  
+  def self.default
+    self.find_or_create_by_short_and_name(:short => ArchiveConfig.DEFAULT_LANGUAGE_SHORT, :name => ArchiveConfig.DEFAULT_LANGUAGE_NAME)
   end
   
   def work_count

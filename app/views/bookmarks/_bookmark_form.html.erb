@@ -1,13 +1,13 @@
 <% bookmarkable ||= @bookmarkable %>
 <% @bookmark ||= Bookmark.new %>
 <% if @bookmark.new_record? && bookmarkable.class != ExternalWork %>
-  <p><%=h t('bookmarks.new.form_add_new', :default => 'Add a new bookmark for "{{title}}"', :title => bookmarkable.title) %></p>
+  <p><%=h t('form_add_new', :default => 'Add a new bookmark for "{{title}}"', :title => bookmarkable.title) %></p>
 <% end %>
 
 <% form_for([bookmarkable, @bookmark], :url => {:controller => 'bookmarks', :action => (action ||= 'create')}) do |f| %>
 <dl>
 
-  <dt><%=h t('bookmarks.new.form_pseud', :default => "Pseud: ") -%></dt>
+  <dt><%=h t('form_pseud', :default => "Pseud: ") -%></dt>
   <dd>
     <% if current_user.pseuds.count > 1 %>
       <%= f.collection_select :pseud_id, current_user.pseuds, :id, :name %>
@@ -19,32 +19,32 @@
 
 	<% if bookmarkable.class == ExternalWork && bookmarkable.new_record? %>
 	<% fields_for 'bookmark[external]', bookmarkable do |ew| %>
-	<dt><%= ew.label :url, t('bookmarks.new.form_url', :default => "URL: ") %></dt>
+	<dt><%= ew.label :url, t('form_url', :default => "URL: ") %></dt>
 	<dd>
 		<%= ew.text_field :url %>
 		<%= observe_field 'bookmark_external_url', :url => {:controller => 'external_works', :action => 'fetch'}, :with => 'external_url', :on => 'blur' %>
 		<%= hidden_field 'fetched', :value => '' %>
 	</dd>
-	<dt><%= ew.label :author, t('bookmarks.new.form_author', :default => "Author: ") %></dt>
+	<dt><%= ew.label :author, t('form_author', :default => "Author: ") %></dt>
 		<dd> <%= ew.text_field :author %></dd>
-	<dt><%= ew.label :title, t('bookmarks.new.form_title', :default => "Title: ") %></dt>
+	<dt><%= ew.label :title, t('form_title', :default => "Title: ") %></dt>
 		<dd> <%= ew.text_field :title %> </dd>
 	<dt>
-	<%= ew.label :summary, t('bookmarks.new.form_authors_summary', :default => "Author's Summary") %>
-	<%=h t('bookmarks.new.form_please_paste', :default => "(please copy and paste from original work)") %></dt>
+	<%= ew.label :summary, t('form_authors_summary', :default => "Author's Summary") %>
+	<%=h t('form_please_paste', :default => "(please copy and paste from original work)") %></dt>
 		<dd> <%= ew.text_area :summary %> </dd>
 	<% end %>
 	<% end %>
-	<dt><%= f.label :notes, t('bookmarks.new.form_your_notes', :default => "Your Notes") %></dt>
+	<dt><%= f.label :notes, t('form_your_notes', :default => "Your Notes") %></dt>
 		<dd><%= f.text_area :notes %></dd>
-	<dt><%= f.label :tag_string, t('bookmarks.new.form_your_tags', :default => "Your Tags") %></dt>
+	<dt><%= f.label :tag_string, t('form_your_tags', :default => "Your Tags") %></dt>
 	<dd>
     <%= text_field_tag 'tag_string', @tag_string %>
     <div class="auto_complete" id="tag_string_auto_complete" ></div>
     <%= javascript_tag("new Autocompleter.Local('tag_string', 'tag_string_auto_complete', #{Tag.all(:order => :name).map(&:name).to_json}, {tokens: ','});") %>
 	</dd>
 </dl>
-<p> <%= f.check_box :private %> <%= f.label :private, t('bookmarks.new.form_private', :default => "Private bookmark?") %> </p>
+<p> <%= f.check_box :private %> <%= f.label :private, t('form_private', :default => "Private bookmark?") %> </p>
 <%= f.hidden_field :bookmarkable_id, :value => bookmarkable.id %>
 <%= f.hidden_field :bookmarkable_type, :value => bookmarkable.class.to_s %></p>
 <p class="submit"><%= f.submit(button_name ||= t('forms.create', :default => "Create")) %></p>

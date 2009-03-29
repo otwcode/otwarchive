@@ -1,0 +1,56 @@
+en:
+  # Global strings
+  global:
+    sub:
+      key: "Hello i18n World"
+
+  # Controller
+  blog_posts:
+    # shared strings
+    bio: "Hello!"
+    subscribe_feed: "Subscribe to my feed!"
+    
+    # typical actions
+    index: 
+      title: "My Blog Posts"
+      intro: "Welcome to the blog of {{owner}}"
+    # specific post
+    show:
+      title: "Catz Are Cute"
+      body: "My cat {{name}} is the most awesome"
+      category: "catz, lolz"
+    # archives action - key used from a view helper
+    archives:
+      title: "My Blog Archives"
+    # footer partial (non-shared)
+    footer:
+      copyright: "Copyright 2009"
+    
+    # Flash messages not specific to one action, but within a single controller
+    flash:
+      invalid_login: "Invalid login"
+    
+  # shared partials in the "shared" dir
+  shared:
+    header:
+      blog_name: "Ricky Rocks Rails"
+      
+  # Layouts
+  layouts:
+    blog_layout:
+      blog_title: "The Blog of Ricky"  
+  
+  #
+  # ActiveRecord models (note singular)
+  #
+  blog_post:
+    byline: "Written by {{author}}"
+    permalink: "Permalink to {{url}}"
+
+  #
+  # ActionMailers
+  #
+  blog_comment_mailer:
+    comment_notification:
+      subject: "New Comment Notification"
+      signoff: "Your Faithful Emailing Bot"

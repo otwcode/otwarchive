@@ -1,8 +1,8 @@
 <div id="manage-chapters">
 
-  <h4><%=h t('chapters.manage.delete_reorder', :default => "Delete/reorder chapters") %></h4>
+  <h4><%=h t('delete_reorder', :default => "Delete/reorder chapters") %></h4>
 
-  <p><%=h t('chapters.manage.drag', :default => "Drag chapters to change their order.") %><p>
+  <p><%=h t('drag', :default => "Drag chapters to change their order.") %><p>
 
   <% form_tag url_for(:action => 'update_positions') do %>
   <ul id="sortable_chapter_list">
@@ -13,21 +13,21 @@
         <% if chapter.title %>
           <%=h chapter.title %>    
         <% else %>
-          <%=h t('chapters.manage.alt_title', :default => "Chapter {{position}}", :position => chapter.position) %>    
+          <%=h t('alt_title', :default => "Chapter {{position}}", :position => chapter.position) %>    
         <% end %>
         <ul class='chapter-control navigation'>
-          <li><%= link_to t('chapters.manage.edit', :default => 'edit'), [:edit, @work, chapter] -%></li>
+          <li><%= link_to t('edit', :default => 'edit'), [:edit, @work, chapter] -%></li>
            <%- if @work.chapters.count > 1 -%>
-             <li><%= link_to t('chapters.manage.delete', :default => 'delete'), [@work, chapter], :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
+             <li><%= link_to t('delete', :default => 'delete'), [@work, chapter], :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
              <% if @work.pseuds.size > 1 && chapter.pseuds.size > 1 -%>
-               <li><%= link_to t('chapters.manage.remove_me', :default => "Remove me as author"), {:action => "edit", :id => chapter.id, :remove => "me"}, :confirm => t('chapters.manage.confirm_removal', :default => 'You will no longer be able to edit this chapter. Are you sure?') %></li>
+               <li><%= link_to t('remove_me', :default => "Remove me as author"), {:action => "edit", :id => chapter.id, :remove => "me"}, :confirm => t('confirm_removal', :default => 'You will no longer be able to edit this chapter. Are you sure?') %></li>
              <% end -%> 
           <%- end -%> )
       	</ul>
       </li>
     <% end %>    
   </ul>
-  <p class="submit"><%= submit_tag t('chapters.manage.update', :default => "Update Positions") %></p>
+  <p class="submit"><%= submit_tag t('update', :default => "Update Positions") %></p>
   <% end %>
 </div>
 

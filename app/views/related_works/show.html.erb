@@ -1,15 +1,5 @@
-<h1><%=h 'Approve Link' %></h1>
-
-<p><%=h 'Would you like to create a link from your work' %> <%= link_to @related_work.parent.title, @related_work.parent %> <%=h 'to' %> 
-<%= link_to @related_work.work.title, @related_work.work %> <%=h 'by' %> <%= print_pseud_list(@related_work.work.pseuds) %>?</p>
-
-<p>(<%=h 'Nothing will be linked directly from your works without your express approval.' %>)</p> 
-
-<% form_for(@related_work) do |f| %>
-  <p>
-    <%= f.check_box :reciprocal %> <%= f.label :reciprocal, "Yes, link me!" %>
-  </p>
-  <p class="submit">
-    <%= f.submit "Update" %>
-  </p>
-<% end %>
+<%- if @related_work.reciprocal? -%>
+  <%= render :partial => 'remove', :locals => { :related_work => @related_work } %>
+<%- else -%>
+  <%= render :partial => 'approve', :locals => { :related_work => @related_work } %>
+<%- end -%> 

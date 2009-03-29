@@ -2,10 +2,10 @@
 
 <%- form_for :user, user, :url => {:controller => "admin/admin_users", :action => "update", :letter => params[:letter]} do |f| -%> 
 <th scope="row"><%=h user.login %><%= f.hidden_field :login %></th>
-<td><%= f.text_field :email, :title => t('admin.users.email', :default => "Email") %></td>
-<td><%= f.check_box :translator, :title => t('admin.users.translator', :default => "Translator") %></td>
-<td><%= f.check_box :tag_wrangler, :title => t('admin.users.tag_wrangler', :default => "Tag Wrangler") %></td>
-<td><%= f.check_box :suspended, :title => t('admin.users.suspended', :default => "Suspended") %></td>
-<td><%= f.check_box :banned, :title => t('admin.users.banned', :default => "Banned") %></td>
+<td><%= f.text_field :email, :title => t('email', :default => "Email") %></td>
+<td><%= f.check_box :translator, :title => t('translator', :default => "Translator") %></td>
+<td><%= f.check_box :tag_wrangler, :title => t('tag_wrangler', :default => "Tag Wrangler") %></td>
+<td><%= f.check_box :suspended, :title => t('suspended', :default => "Suspended") %></td>
+<td><%= f.check_box :banned, :title => t('banned', :default => "Banned") %></td>
 <td><%= f.submit t('forms.update', :default => "Update") %></td>
 <%- end -%>

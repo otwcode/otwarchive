@@ -15,14 +15,14 @@ class Invitation < ActiveRecord::Base
 
   def recipient_is_not_registered
     if User.find_by_email(recipient_email)
-      errors.add :recipient_email, 'is already registered' 
+      errors.add :recipient_email, t('already_registered', :default => 'is already registered') 
       return false
     end
   end
 
   def sender_has_invitations
     unless sender.invitation_limit > 0
-      errors.add_to_base 'You have reached your limit of invitations to send.'
+      errors.add_to_base t('no_invites_left', :default => 'You have reached your limit of invitations to send.')
    end
   end
 

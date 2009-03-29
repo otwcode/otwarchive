@@ -56,30 +56,36 @@ class Work < ActiveRecord::Base
   ########################################################################
   validates_presence_of :title
   validates_length_of :title,
-    :minimum => ArchiveConfig.TITLE_MIN, :too_short=> "must be at least " + ArchiveConfig.TITLE_MIN.to_s + " letters long."
+    :minimum => ArchiveConfig.TITLE_MIN, 
+    :too_short=> t('title_too_short', :default => "must be at least {{min}} letters long.", :min => ArchiveConfig.TITLE_MIN)
 
   validates_length_of :title,
-    :maximum => ArchiveConfig.TITLE_MAX, :too_long=> "must be less than " + ArchiveConfig.TITLE_MAX.to_s + " letters long."
+    :maximum => ArchiveConfig.TITLE_MAX, 
+    :too_long=> t('title_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.TITLE_MAX)
 
   validates_length_of :summary,
     :allow_blank => true,
-    :maximum => ArchiveConfig.SUMMARY_MAX, :too_long => "must be less than " + ArchiveConfig.SUMMARY_MAX.to_s + " letters long."
+    :maximum => ArchiveConfig.SUMMARY_MAX, 
+    :too_long => t('summary_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.SUMMARY_MAX)
 
   validates_length_of :notes,
     :allow_blank => true,
-    :maximum => ArchiveConfig.NOTES_MAX, :too_long => "must be less than " + ArchiveConfig.NOTES_MAX.to_s + " letters long."
+    :maximum => ArchiveConfig.NOTES_MAX, 
+    :too_long => t('notes_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.NOTES_MAX)
 
   #temporary validation to let people know they can't enter external urls yet
-  validates_format_of :parent_url, :with => Regexp.new(ArchiveConfig.APP_URL, true),
-    :allow_blank => true, :message => "can only be in the archive for now - we're working on expanding that!"
+  validates_format_of :parent_url, 
+    :with => Regexp.new(ArchiveConfig.APP_URL, true),
+    :allow_blank => true, 
+    :message => t('parent_archive_only', :default => "can only be in the archive for now - we're working on expanding that!")
 
   # Checks that work has at least one author
   def validate_authors
     if self.authors.blank? && self.pseuds.empty?
-      errors.add_to_base("Work must have at least one author.")
+      errors.add_to_base(t('must_have_author', :default => "Work must have at least one author."))
       return false
     elsif !self.invalid_pseuds.blank?
-      errors.add_to_base("These pseuds are invalid: " + self.invalid_pseuds.inspect)
+      errors.add_to_base(t('invalid_pseuds', :default => "These pseuds are invalid: {{pseuds}}", :pseuds => self.invalid_pseuds.inspect))
     end
   end
 
@@ -88,7 +94,7 @@ class Work < ActiveRecord::Base
     unless self.title.blank?
       self.title = self.title.strip
       if self.title.length < ArchiveConfig.TITLE_MIN
-        errors.add_to_base("Title must be at least " + ArchiveConfig.TITLE_MIN.to_s + " characters long without leading spaces.")
+        errors.add_to_base(t('leading_spaces', :default => "Title must be at least {{min}} characters long without leading spaces.", :min => ArchiveConfig.TITLE_MIN))
         return false
       end
     end
@@ -98,7 +104,7 @@ class Work < ActiveRecord::Base
     to = DateTime.now
     return false unless self.published_at
     if self.published_at > to
-      errors.add_to_base("Publication date can't be in the future.")
+      errors.add_to_base(t('no_future_dating', :default => "Publication date can't be in the future."))
       return false
     end
   end
@@ -106,7 +112,7 @@ class Work < ActiveRecord::Base
   # rephrases the "chapters is invalid" message
   def after_validation
     if self.errors.on(:chapters)
-      self.errors.add(:base, "Please enter your story in the text field below.")
+      self.errors.add(:base, t('chapter_invalid', :default => "Please enter your story in the text field below."))
       self.errors.delete(:chapters)
     end
   end

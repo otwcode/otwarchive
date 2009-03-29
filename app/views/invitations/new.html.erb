@@ -1,11 +1,11 @@
-<h1><%=h t('invitations.new.invite_friend', :default => 'Invite a Friend') %></h1>
+<h1><%=h t('invite_friend', :default => 'Invite a Friend') %></h1>
 
-<p><%= t('invitations.new.remaining', :default => 'You have {{count}} remaining.', :count => user_invitations(current_user)) %></p>
+<p><%= t('remaining', :default => 'You have {{count}} remaining.', :count => user_invitations(current_user)) %></p>
 
 <% form_for @invitation do |f| %>
   <dl>
-    <dt><%= f.label :recipient_email, t('invitations.new.email', :default => "Friend's email address") %></dt>
+    <dt><%= f.label :recipient_email, t('email', :default => "Friend's email address") %></dt>
     <dd><%= f.text_field :recipient_email %></dd>
   </dl>
-  <p><%= f.submit t('invitations.new.invite', :default => "Invite!") %></p>
+  <p><%= f.submit t('invite', :default => "Invite!") %></p>
 <% end %>

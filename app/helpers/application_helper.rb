@@ -99,11 +99,11 @@ module ApplicationHelper
     end
   end
   
-  # Create a nicer language menu than the Click-To-Globalize default
-  def languages_menu    
-    result = "<form action=\"" + url_for(:action => 'set', :controller => 'languages') + "\">\n" 
-    result << "<div><select id='accessible_menu' name='language_id' >\n"
-    result << options_from_collection_for_select(@loaded_locales, :short, :name, @current_locale.short)
+  # For setting the current locale
+  def locales_menu    
+    result = "<form action=\"" + url_for(:action => 'set', :controller => 'locales') + "\">\n" 
+    result << "<div><select id='accessible_menu' name='locale_id' >\n"
+    result << options_from_collection_for_select(@loaded_locales, :iso, :name, @current_locale.iso)
     result << "</select></div>"
     result << "<noscript><p><input type=\"submit\" name=\"commit\" value=\"Go\" /></p></noscript>"
     result << "</form>"

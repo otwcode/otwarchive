@@ -5,14 +5,14 @@
 <table>
   <tr>
     <th><%= t('translators.new.email', :default => 'Email Address') %></th>
-    <th><%= t('translators.new.language', :default => 'Language') %></th>
+    <th><%= t('translators.new.locale', :default => 'Locale') %></th>
   </tr>
   <%- 5.times do |i| -%>
     <tr>
       <td><%= text_field_tag "translators[#{i}][email]" %></td>
       <td>
-        <select id='translators_<%= i %>_language_id' name='translators[<%= i %>][language_id]' >
-          <%= options_from_collection_for_select(@languages, :id, :name, @language_id) %>
+        <select id='translators_<%= i %>_locale_id' name='translators[<%= i %>][locale_id]' >
+          <%= options_from_collection_for_select(@locales, :id, :name, @locale_id) %>
         </select>
       </td>
     </tr>

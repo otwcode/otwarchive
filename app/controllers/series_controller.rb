@@ -41,7 +41,7 @@ class SeriesController < ApplicationController
   def show
     @series = Series.find(params[:id])
     if !@series.visible?(current_user)
-      flash[:error] = t('errors.no_permission_to_view', :default => "Sorry, this page is unavailable.")
+      flash[:error] = t('no_permission_to_view', :default => "Sorry, this page is unavailable.")
       redirect_to url_for(:action => 'index')
     else
       @serial_works = @series.serial_works.find(:all, :include => :work, :conditions => ['works.posted = ?', true], :order => :position).select{|sw| sw.work.visible(current_user)}
@@ -74,7 +74,7 @@ class SeriesController < ApplicationController
   def create
     @series = Series.new(params[:series])
     if @series.save
-      flash[:notice] = t('notices.series.successfully_created', :default => 'Series was successfully created.')
+      flash[:notice] = t('successfully_created', :default => 'Series was successfully created.')
       redirect_to(@series)
     else
       render :action => "new"
@@ -87,7 +87,7 @@ class SeriesController < ApplicationController
     @series = Series.find(params[:id])
     
     unless params[:series][:author_attributes][:ids]
-      flash[:error] = t('errors.series.author_removal_failed', :default => "Sorry, you cannot remove yourself entirely as an author of a series right now.")
+      flash[:error] = t('author_removal_failed', :default => "Sorry, you cannot remove yourself entirely as an author of a series right now.")
       redirect_to edit_series_path(@series) and return
     end
     
@@ -100,7 +100,7 @@ class SeriesController < ApplicationController
     end
 
     if @series.update_attributes(params[:series])
-      flash[:notice] = t('notices.series.successfully_updated', :default => 'Series was successfully updated.')
+      flash[:notice] = t('successfully_updated', :default => 'Series was successfully updated.')
       redirect_to(@series)
     else
       render :action => "edit"
@@ -111,7 +111,7 @@ class SeriesController < ApplicationController
     if params[:serial_works]
       @series = Series.find(params[:id])
       @series.reorder_works(params[:serial_works]) 
-      flash[:notice] = t('notices.series.order_updated', :default => 'Series order has been successfully updated.')
+      flash[:notice] = t('order_updated', :default => 'Series order has been successfully updated.')
       redirect_to(@series)
     else
       params[:sortable_series_list].each_with_index do |id, position|
@@ -126,10 +126,10 @@ class SeriesController < ApplicationController
   def destroy
     @series = Series.find(params[:id])
     if @series.destroy
-      flash[:notice] = t('notices.series.successfully_deleted', :default => 'Series was successfully deleted.')
+      flash[:notice] = t('successfully_deleted', :default => 'Series was successfully deleted.')
       redirect_to(current_user)
     else
-      flash[:error] = t('errors.series.delete_failed', :default => "Sorry, we couldn't delete the series. Please try again.")
+      flash[:error] = t('delete_failed', :default => "Sorry, we couldn't delete the series. Please try again.")
       redirect_to(@series)
     end
   end

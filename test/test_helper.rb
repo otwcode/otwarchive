@@ -34,6 +34,11 @@ class Test::Unit::TestCase
   # Note: You'll currently still have to declare fixtures explicitly in integration tests
   # -- they do not yet inherit this setting
   #fixtures :all
+  
+  # For the Translator plugin - if you don't disable strict mode, it causes an error
+  # every time it comes across a missing translation, which includes months, dates, etc.
+  # in English, so that's kind of a pain in the neck --elz
+  ScopeTranslator::Translator.strict_mode(false)
 
   # Add more helper methods to be used by all tests here...
   

@@ -1,15 +1,15 @@
 <p>
 <% if reading.work.nil? %>
-  <span>(<%=h 'deleted work, last read' %> <%=h reading.updated_at -%>)</span>
+  <span><%= t('deleted_work', :default => '(deleted work, last read {{date}})', :date => reading.updated_at) -%></span>
 <% else %>
   <%= render :partial => 'works/work_blurb', :locals => {:work => reading.work} %>
-  <strong><%=h 'Last read:' %> </strong><%=h reading.updated_at %> 
+  <%= t('last_read', :default => '<strong>Last read:</strong> {{date}}', :date => reading.updated_at) %> 
   <% if reading.major_version_read < reading.work.major_version -%>
-    (<%=h 'New version available.' -%>)
+    <%= t('new_version_available', :default => '(New version available.)') %>
   <% elsif reading.minor_version_read != reading.work.minor_version -%>
-    (<%=h 'Minor edits made since then.' -%>)
+    <%= t('minor_edits', :default => '(Minor edits made since then.)') %>
   <% else -%>
-    (<%=h 'Most recent version.' -%>)
+    <%= t('most_recent_version', :default => '(Most recent version.)') %>
   <% end -%>	
 <% end %>
 </p>

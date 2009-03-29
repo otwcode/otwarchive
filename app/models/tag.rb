@@ -32,11 +32,12 @@ class Tag < ActiveRecord::Base
 
   validates_presence_of :name
   validates_uniqueness_of :name
-  validates_length_of :name, :maximum => ArchiveConfig.TAG_MAX,
-                             :message => "is too long -- try using less than #{ArchiveConfig.TAG_MAX} characters or using commas to separate your tags."
+  validates_length_of :name, 
+    :maximum => ArchiveConfig.TAG_MAX,
+    :message => "is too long -- try using less than #{ArchiveConfig.TAG_MAX} characters or using commas to separate your tags."
   validates_format_of :name,
-                      :with => /\A[-a-zA-Z0-9 \/?.!''"":;\|\]\[}{=~!@#\$%^&()_+]+\z/,
-                      :message => "can only be made up of letters, numbers, spaces and basic punctuation, but not commas, asterisks or angle brackets."
+    :with => /\A[-a-zA-Z0-9 \/?.!''"":;\|\]\[}{=~!@#\$%^&()_+]+\z/,
+    :message => "can only be made up of letters, numbers, spaces and basic punctuation, but not commas, asterisks or angle brackets."
 
   def before_validation
     self.name = name.squish if self.name

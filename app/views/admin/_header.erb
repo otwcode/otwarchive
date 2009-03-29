@@ -3,14 +3,14 @@
   <span>&mdash;</span>
 </li>
 <li>
-  <%= link_to_unless_current "<span>" + t('admin.header.users', :default => "users") + "</span>", admin_users_path %>
+  <%= link_to_unless_current "<span>" + t('admin_header_users', :default => "users") + "</span>", admin_users_path %>
 </li>
 <li>
-  <%= link_to_unless_current "<span>" + t('admin.header.notices', :default => "notices") + "</span>", notify_admin_users_path %>
+  <%= link_to_unless_current "<span>" + t('admin_header_notices', :default => "notices") + "</span>", notify_admin_users_path %>
 </li>
 <li>
-  <%= link_to_unless_current "<span>" + t('admin.header.invitations', :default => "invitations") + "</span>", new_admin_invitation_path %>
+  <%= link_to_unless_current "<span>" + t('admin_header_invitations', :default => "invitations") + "</span>", new_admin_invitation_path %>
 </li>
 <li>
-  <%= link_to_unless_current "<span>" + t('admin.header.abuse_reports', :default => "abuse reports") + "</span>", abuse_reports_path %>
+  <%= link_to_unless_current "<span>" + t('admin_header_abuse_reports', :default => "abuse reports") + "</span>", abuse_reports_path %>
 </li>

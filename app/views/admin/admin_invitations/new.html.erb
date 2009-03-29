@@ -1,9 +1,9 @@
-<h1><%= t('admin.invitations.invite_user', :default => "Invite a User") %></h1>
+<h1><%= t('invite_user', :default => "Invite a User") %></h1>
 
 <% form_for :invitation, @invitation, :url => { :controller => 'admin/admin_invitations', :action => :create } do |f| %>
     <dl>
-      <dt><%= f.label :recipient_email, t('admin.invitations.email_address', :default => "Email address") %></dt>
+      <dt><%= f.label :recipient_email, t('email_address', :default => "Email address") %></dt>
       <dd><%= f.text_field :recipient_email %></dd>
     </dl>
-    <p><%= f.submit t('admin.invitations.submit', :default => "Invite!") %></p>
+    <p><%= f.submit t('submit', :default => "Invite!") %></p>
 <% end %>

@@ -4,15 +4,15 @@
   <%- if is_author_of?(@work) -%>
     <ul class="navigation chapter-control">
       <% unless chapter.posted? -%>
-        <li><%= link_to t('chapters.index.chapter_post', :default => 'post'), [:post, @work, chapter], :method => :post -%></li>
+        <li><%= link_to t('chapter_post', :default => 'post'), [:post, @work, chapter], :method => :post -%></li>
       <%- end -%>
       <%- if @preview_mode and @preview_mode == true -%>
-        <li><%= link_to t('chapters.index.chapter_revert', :default => 'revert to saved'), [:edit, @work, chapter] -%></li>
+        <li><%= link_to t('chapter_revert', :default => 'revert to saved'), [:edit, @work, chapter] -%></li>
       <%- else -%>
-        <li><%= link_to t('chapters.index.chapter_edit', :default => 'edit'), [:edit, @work, chapter] -%></li>
+        <li><%= link_to t('chapter_edit', :default => 'edit'), [:edit, @work, chapter] -%></li>
       <%- end -%>
       <%- if @work.chapters.count > 1 -%>
-        <li><%= link_to t('chapters.index.chapter_delete', :default => 'delete'), [@work, chapter], :confirm => 'Are you sure?', :method => :delete %></li>
+        <li><%= link_to t('chapter_delete', :default => 'delete'), [@work, chapter], :confirm => 'Are you sure?', :method => :delete %></li>
       <%- end -%>
     </ul>	
   <%- end -%>
@@ -25,21 +25,21 @@
   </h3>
 <!-- only display byline if different from the main byline -->
   <%- if (chapter.pseuds != @work.pseuds) || @preview_mode -%>
-    <h4 class="byline"><%=h t('chapters.index.chapter_chapter_by', :default => 'Chapter by') %> <%= byline(chapter) -%></h4>
+    <h4 class="byline"><%=h t('chapter_chapter_by', :default => 'Chapter by') %> <%= byline(chapter) -%></h4>
   <%- end -%>
  
 <!-- we want to hide this information by default if javascript is available -->
 <%- if (@work.number_of_posted_chapters > 1) || @work.chaptered? -%>
   <%- unless chapter.summary.blank? -%>
   <blockquote class="summary">
-    <h3><%=h t('chapters.index.chapter_summary', :default => 'Summary:') %></h3>
+    <h3><%=h t('chapter_summary', :default => 'Summary:') %></h3>
     <%=sanitize_and_format_for_display chapter.summary -%>
   </blockquote>
   <%- end -%>
   
   <%- unless chapter.notes.blank? -%>
   <blockquote class="notes">
-    <h3><%=h t('chapters.index.chapter_notes', :default => 'Notes:') %></h3>
+    <h3><%=h t('chapter_notes', :default => 'Notes:') %></h3>
     <%=sanitize_and_format_for_display chapter.notes -%>
   </blockquote>
   <%- end -%>

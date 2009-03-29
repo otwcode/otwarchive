@@ -1,13 +1,13 @@
-<h1><%=h t('abuse_reports.index.about', :default => "All Abuse Reports:") -%></h1>
+<h1><%=h t('about', :default => "All Abuse Reports:") -%></h1>
 
 <table id="abuse_reports_table">
-<caption><%=h t('abuse_reports.index.listing', :default => "Listing all the abuse reports made on the archive.") -%></caption>
+<caption><%=h t('listing', :default => "Listing all the abuse reports made on the archive.") -%></caption>
 <tr>
-	<th scope="col"><%=h t('abuse_reports.index.id', :default => "ID") -%></th>
-	<th scope="col"><%=h t('abuse_reports.index.from', :default => "From") -%></th>
-	<th scope="col"><%=h t('abuse_reports.index.referring_to', :default => "Referring To") -%></th>
-	<th scope="col"><%=h t('abuse_reports.index.reported', :default => "Reported") -%></th>
-	<th scope="col"><%=h t('abuse_reports.index.show', :default => "Show") -%></th>
+	<th scope="col"><%=h t('id', :default => "ID") -%></th>
+	<th scope="col"><%=h t('from', :default => "From") -%></th>
+	<th scope="col"><%=h t('referring_to', :default => "Referring To") -%></th>
+	<th scope="col"><%=h t('reported', :default => "Reported") -%></th>
+	<th scope="col"><%=h t('show', :default => "Show") -%></th>
 </tr>
 	<%- for abuse_report in @abuse_reports -%>
 	<tr id="abuse_report_<%= abuse_report.id %>">

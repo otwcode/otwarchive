@@ -1,12 +1,12 @@
 <!-- footer for work -->
  	<%- unless @work.parents.blank? -%>
  	<div id="parents">
- 	  <p><%=h "Inspired by:" -%></p>
+ 	  <p><%= t('inspired_by', :default => 'Inspired by:') -%></p>
  	  <ul>
  	  <%- for parent in @work.parents -%>
  	    <li><%= link_to parent.title, parent %></li>
  	    <%- if is_author_of?(@work) -%>
-    		<%= link_to 'Remove relationship', {:controller => :related_works, :action => :destroy, :parent_id => parent.id, :work_id => @work.id},  :confirm => 'Are you sure?', :method => :delete %>
+    		<%= link_to t('remove_relationship', :default => 'Remove relationship'), {:controller => :related_works, :action => :destroy, :parent_id => parent.id, :work_id => @work.id},  :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %>
     	<%- end -%>
  	  <%- end -%>
  	  </ul>
@@ -15,12 +15,12 @@
  	
  	<%- unless @work.approved_children.blank? -%>
  	<div id="children">
- 	  <p><%=h "Works inspired by this one:" -%></p>
+ 	  <p><%=h t('inspired_by_this', :default => 'Works inspired by this one:') -%></p>
  	  <ul>
  	  <%- for child in @work.approved_children -%>
  	    <li><%= link_to child.title, child %></li>
  	    <%- if is_author_of?(@work) -%>
-    		<%= link_to 'Remove link', {:controller => :related_works, :action => :update, :parent_id => @work.id, :work_id => child.id}, :method => :put %>
+    		<%= link_to t('remove_link', :default => 'Remove link'), {:controller => :related_works, :action => :update, :parent_id => @work.id, :work_id => child.id}, :method => :put %>
     	<%- end -%>
  	  <%- end -%>
  	  </ul>

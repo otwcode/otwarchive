@@ -1,7 +1,7 @@
 <!--titled instead of labelled as per WCAG 2.0. do not revert.-->
 
 <th scope="row"><%=h abuse_report.id %></th>
-<td><%= abuse_report.email.blank? ? t('abuse_reports.index.anonymous', :default => '(Anonymous)') : mail_to(abuse_report.email) -%></td>
+<td><%= abuse_report.email.blank? ? t('anonymous', :default => '(Anonymous)') : mail_to(abuse_report.email) -%></td>
 <td><%= link_to abuse_report.url -%></td>
 <td><%= time_ago_in_words abuse_report.created_at -%></td>
-<td><%= link_to t('abuse_reports.index.detail', :default => 'Detail'), abuse_report_path(abuse_report) -%></td>
+<td><%= link_to t('detail', :default => 'Detail'), abuse_report_path(abuse_report) -%></td>

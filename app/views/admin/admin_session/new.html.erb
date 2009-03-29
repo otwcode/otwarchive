@@ -1,11 +1,11 @@
-<h1><%= t('admin.session.log_in', :default => "Log in as Admin") %></h1>
+<h1><%= t('log_in', :default => "Log in as Admin") %></h1>
 
 <%- form_tag(:controller => 'admin/admin_session', :action => :create) do -%>
 	<dl>
-		<dt><%= label_tag :login, t('admin.session.name', :default => "Admin user name") %></dt>
+		<dt><%= label_tag :login, t('name', :default => "Admin user name") %></dt>
   			<dd><%= text_field_tag 'login' %></dd>
-		<dt><%= label_tag :password, t('admin.session.password', :default => "Admin password") %></dt>
+		<dt><%= label_tag :password, t('password', :default => "Admin password") %></dt>
   			<dd><%= password_field_tag 'password' %></dd>
 	</dl>
-  	<p class="submit"><%= submit_tag t('admin.session.submit', :default => 'Log in') %></p>
+  	<p class="submit"><%= submit_tag t('submit', :default => 'Log in') %></p>
 <%- end -%>

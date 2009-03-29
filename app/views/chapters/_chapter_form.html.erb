@@ -2,37 +2,37 @@
 <% form_for([@work, chapter], :html => {:name => "storyForm"}) do |f| %>
 
 <fieldset id="chapter-ordering">
-	<legend><%= t('chapters.new.form_naming', :default => 'Naming and Ordering') %></legend>
+	<legend><%= t('form_naming', :default => 'Naming and Ordering') %></legend>
 	<p>
-		<%= f.label :title, t('chapters.new.form_title', :default => 'Chapter title') %>
+		<%= f.label :title, t('form_title', :default => 'Chapter title') %>
 		<%= f.text_field :title, :class => "storyinputfield", :live => true %>
     <%= link_to_help "story-title" -%>
   </p>
 	<p>
-    <%= f.label :current_position, t('chapters.new.form_position', :default => 'Chapter number') %> 
+    <%= f.label :current_position, t('form_position', :default => 'Chapter number') %> 
 		<%= f.text_field :current_position, :class => "number-field" %> 
-		<%= f.label :wip_length, t('chapters.new.form_x_of_x', :default => 'of'), :title => t('chapters.new.form_of_total', :default => 'of total chapters') %> 
+		<%= f.label :wip_length, t('form_x_of_x', :default => 'of'), :title => t('form_of_total', :default => 'of total chapters') %> 
 		<%= f.text_field :wip_length, :class => "number-field" %> 
   </p>
 </fieldset>
 
 <fieldset>
-<legend><%= t('chapters.new.form_summary_and_notes', :default => 'Chapter Preface') %></legend>
+<legend><%= t('form_summary_and_notes', :default => 'Chapter Preface') %></legend>
     <dl class="preface">      
 
       <%= render :partial => 'pseuds/byline', :locals =>{:form => f, :type => 'chapter'} %>
 
-      <dt class="summary"><%= f.label :summary, t('chapters.new.form_summary', :default => "Chapter summary (max {{max}} letters)", :max => ArchiveConfig.SUMMARY_MAX.to_s) %></dt>
+      <dt class="summary"><%= f.label :summary, t('form_summary', :default => "Chapter summary (max {{max}} letters)", :max => ArchiveConfig.SUMMARY_MAX.to_s) %></dt>
       <dd class="summary"><%= f.text_area :summary, :live => true %></dd>
-      <dt class="notes"><%= f.label :notes, t('chapters.new.form_notes', :default => "Chapter notes (max {{max}} letters)", :max => ArchiveConfig.NOTES_MAX.to_s) %></dt>
+      <dt class="notes"><%= f.label :notes, t('form_notes', :default => "Chapter notes (max {{max}} letters)", :max => ArchiveConfig.NOTES_MAX.to_s) %></dt>
       <dd class="notes"><%= f.text_area :notes, :live => true %></dd>
     </dl>
 </fieldset>
 
 <fieldset>
-	<legend><%= t('chapters.new.form_chapter_text', :default => 'Chapter Text') -%></legend>
+	<legend><%= t('form_chapter_text', :default => 'Chapter Text') -%></legend>
  	<p>
-    <%= f.label :content, t('chapters.new.form_content', :default => "Chapter, in plain text with limited HTML*"), :class => "required" %><%= link_to_help "html-help" -%>
+    <%= f.label :content, t('form_content', :default => "Chapter, in plain text with limited HTML*"), :class => "required" %><%= link_to_help "html-help" -%>
   </p>
 	<p id=""><code>a href, b, blockquote, br, center, cite, code, del, dd, dt, dl, div, em, h1, h2, h3, h4, h5, h6, i, ins, li, ol, pre, q, small, span, strike, strong, sub, sup, ul</code></p>
   <p class="rtf-html-switch">
@@ -52,7 +52,7 @@
 </fieldset>
 
 <fieldset>
-<legend><%= t('chapters.new.form_post', :default => 'Post Chapter') %></legend>
+<legend><%= t('form_post', :default => 'Post Chapter') %></legend>
     <p class="submit">
       <%= submit_tag t('forms.preview', :default => 'Preview'), :name => 'preview_button' %>
       <%= submit_tag t('forms.cancel', :default => 'Cancel'), :name => 'cancel_button' %>

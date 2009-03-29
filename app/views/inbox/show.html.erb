@@ -1,11 +1,11 @@
-<h2><%=h t('inbox.show.my_inbox', :default => 'My Inbox') %> (<%= t('inbox.show.unread_count', :default => "{{count}} unread", :count => @unread.length) %>)</h2>
+<h2><%=h t('my_inbox', :default => 'My Inbox') %> (<%= t('unread_count', :default => "{{count}} unread", :count => @unread.length) %>)</h2>
 
 <%= flash_div :comment_error, :comment_notice -%>
 
 <%- unless @unread.blank? && @read.blank? -%>
   <%- form_tag user_inbox_path(@user), :method => :put, :id => 'inbox-form' do -%>
     <%- unless @unread.blank? -%>
-      <h3><%= t('inbox.show.unread_comments', :default => "Unread comments") %></h3>
+      <h3><%= t('unread_comments', :default => "Unread comments") %></h3>
       <%- for comment in @unread -%>
         <!-- START of single comment -->
           <div class="comment unread" id="comment_<%= comment.id -%>">
@@ -21,7 +21,7 @@
       <%- end -%>
     <%- end -%>
     <%- unless @read.blank? -%>
-      <h3><%= t('inbox.show.read_comments', :default => "Read comments") %></h3>
+      <h3><%= t('read_comments', :default => "Read comments") %></h3>
       <%- for comment in @read -%>
         <!-- START of single comment -->
           <div class="comment read" id="comment_<%= comment.id -%>">
@@ -39,10 +39,10 @@
       <%- end -%>
     <%- end -%>
     <%= "Mark checked as:" %> 
-    <%= submit_tag t('inbox.show.read', :default => 'read') %>
-    <%= submit_tag t('inbox.show.unread', :default => 'unread') %>
-    <%= submit_tag t('inbox.show.spam', :default => 'spam') %>
-    <%= submit_tag t('inbox.show.delete_from', :default => 'delete comments from story', :confirm => t('links.are_you_sure', :default => 'Are you sure?')) %>
-    <!-- coming soon <%= submit_tag t('inbox.show.mass_reply', :default => 'mass reply') %> -->
+    <%= submit_tag t('read', :default => 'read') %>
+    <%= submit_tag t('unread', :default => 'unread') %>
+    <%= submit_tag t('spam', :default => 'spam') %>
+    <%= submit_tag t('delete_from', :default => 'delete comments from story', :confirm => t('links.are_you_sure', :default => 'Are you sure?')) %>
+    <!-- coming soon <%= submit_tag t('mass_reply', :default => 'mass reply') %> -->
   <%- end -%>
 <%- end -%>

@@ -19,14 +19,14 @@ class InboxController < ApplicationController
   def update
     @selected_comment_ids = params[:comments].keys if params[:comments]
     if @selected_comment_ids.blank?
-      flash[:warning] = t('errors.inbox.please_select', :default => "Please select something first")
+      flash[:warning] = t('please_select', :default => "Please select something first")
    else
       if params[:commit] == "delete comments from story"
         @selected_comment_ids.each {|c| 
         @comment = Comment.find(c)
         if current_user.is_author_of?(@comment) || current_user.is_author_of?(@comment.ultimate_parent)
           @comment.destroy_or_mark_deleted
-        else flash[:error] = t('errors.inbox.permission_to_delete', :default => "Sorry, you don't have permission to delete some of those comments")
+        else flash[:error] = t('permission_to_delete', :default => "Sorry, you don't have permission to delete some of those comments")
        end }
       elsif params[:commit] == "read"
         @selected_comment_ids.each {|c| Comment.find(c).update_attribute(:is_read, true) }
@@ -37,7 +37,7 @@ class InboxController < ApplicationController
         @comment = Comment.find(c)
         if current_user.is_author_of?(@comment) || current_user.is_author_of?(@comment.ultimate_parent)      
         @comment.mark_as_spam!
-        else flash[:error] = t('errors.inbox.permission_spam', :default => "Sorry, you don't have permission to mark some of those comments as spam")
+        else flash[:error] = t('permission_spam', :default => "Sorry, you don't have permission to mark some of those comments as spam")
        end }
       end
     end
