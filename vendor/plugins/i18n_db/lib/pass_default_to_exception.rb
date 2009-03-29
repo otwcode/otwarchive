@@ -6,9 +6,9 @@ module I18n
       # from trying a fallback locale correctly
       def translate(locale, key, options = {})
         begin
-          Locale.new #just make sure there's a db table for locales
+          default_locale = Locale.find_main_cached #make sure there's a db table for locales
         rescue
-          puts "Locale table doesn't exist"
+          options[:default] || ""
           return
         end
         raise InvalidLocale.new(locale) if locale.nil?
@@ -28,7 +28,7 @@ module I18n
           entry = default(locale, default, options)
           if entry.nil?
             raise(I18n::MissingTranslationData.new(locale, key, options))
-          elsif Locale.find_main_cached.iso == locale.to_s && saved_default 
+          elsif default_locale.iso == locale.to_s && saved_default 
             Translation.add_default_to_db(locale, key, saved_default, options[:scope]) 
           end
         end
