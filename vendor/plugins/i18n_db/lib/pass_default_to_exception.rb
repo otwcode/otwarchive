@@ -5,12 +5,6 @@ module I18n
       # the information passed to MissingTranslationData handler, preventing it 
       # from trying a fallback locale correctly
       def translate(locale, key, options = {})
-        begin
-          default_locale = Locale.find_main_cached #make sure there's a db table for locales
-        rescue
-          options[:default] || ""
-          return
-        end
         raise InvalidLocale.new(locale) if locale.nil?
         return key.map { |k| translate(locale, k, options) } if key.is_a? Array
         
@@ -28,7 +22,7 @@ module I18n
           entry = default(locale, default, options)
           if entry.nil?
             raise(I18n::MissingTranslationData.new(locale, key, options))
-          elsif default_locale.iso == locale.to_s && saved_default 
+          elsif Locale.find_main_cached.iso == locale.to_s && saved_default 
             Translation.add_default_to_db(locale, key, saved_default, options[:scope]) 
           end
         end

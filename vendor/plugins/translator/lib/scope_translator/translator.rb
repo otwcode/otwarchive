@@ -323,7 +323,12 @@ module ActiveRecord #:nodoc:
     # Add a +translate+ (or +t+) method to ActiveRecord that is context-aware of what model is being invoked. 
     # Initial scoping of [:model_name] where model name is like 'blog_post' (singular - *not* the table name) 
     def translate(key, options={})
-      ScopeTranslator::Translator.translate_with_scope([self.class.name.underscore], key, options)
+      begin
+        ActiveRecord::Base.connection
+        ScopeTranslator::Translator.translate_with_scope([self.class.name.underscore], key, options)
+      rescue 
+        options[:default] || '' 
+      end
     end
 
     alias :t :translate  
@@ -332,7 +337,12 @@ module ActiveRecord #:nodoc:
     class << Base
   
       def translate(key, options={}) #:nodoc:
-        ScopeTranslator::Translator.translate_with_scope([self.name.underscore], key, options)
+        begin
+          ActiveRecord::Base.connection
+          ScopeTranslator::Translator.translate_with_scope([self.name.underscore], key, options)
+        rescue 
+          options[:default] || '' 
+        end
       end
   
       alias :t :translate
