@@ -60,14 +60,14 @@
 		<dl>
 		<dt><%=h t('words', :default => 'Words') + ': ' %></dt>
 			<dd><%= number_with_delimiter(work.word_count) %></dd>
-		<dt><%=h t('chapters', :default => 'Chapters') + ': ' %></dt>
+		<dt><%=h t('work_chapters', :default => 'Chapters') + ': ' %></dt>
 			<dd><%= work.number_of_posted_chapters %>/<%= work.wip_length %></dd>
 		<%- if work.count_visible_comments > 0 -%>
-		<dt><%=h t('comments', :default => 'Comments') + ': '%></dt>
+		<dt><%=h t('work_comments', :default => 'Comments') + ': '%></dt>
 			<dd><%= link_to work.count_visible_comments, work_path(:id => work.id, :anchor => "comments", :show_comments => true) -%></dd>
 		<%- end -%>
 		<%- if work.count_visible_bookmarks(current_user) > 0 -%>
-		<dt><%=h t('bookmarks', :default => 'Bookmarks') + ': '%></dt>
+		<dt><%=h t('work_bookmarks', :default => 'Bookmarks') + ': '%></dt>
 			<dd><%= link_to work.count_visible_bookmarks(current_user), work_bookmarks_path(:work_id => work.id) -%></dd>
 		<%- end -%>
 		</dl>
