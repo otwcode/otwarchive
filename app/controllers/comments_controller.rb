@@ -257,8 +257,9 @@ class CommentsController < ApplicationController
     if request.xml_http_request?
       @commentable = Comment.find(params[:id])    
     else
+      options = {}
       options[:show_comments] = params[:show_comments] if params[:show_comments]
-      redirect_to_comment(@commentable)
+      redirect_to_all_comments(@commentable, options)
     end    
   end
   

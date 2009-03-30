@@ -5,33 +5,9 @@
 # Disallow: /
 
 User-agent:	*
-Disallow:	/cs/
-Disallow:	/de/
-Disallow:	/es/
-Disallow:	/fi/
-Disallow:	/fr/
-Disallow:	/id/
-Disallow:	/it/
-Disallow:	/ja/
-Disallow:	/nl/
-Disallow:	/pt/
-Disallow:	/ru/
-Disallow:	/zh/
-Disallow:	/en/works?sort  # /en/works/? if you really want to disallow any works page with a query (like ?page=12)
-Disallow:	/en/works?selected_tags # linked from the People pages
+Disallow:	/works? # cruel but efficient
 
 User-agent:	Googlebot
-Disallow:	/cs/
-Disallow:	/de/
-Disallow:	/es/
-Disallow:	/fi/
-Disallow:	/fr/
-Disallow:	/id/
-Disallow:	/it/
-Disallow:	/ja/
-Disallow:	/nl/
-Disallow:	/pt/
-Disallow:	/ru/
-Disallow:	/zh/
-Disallow:	/en/works?*sort # Googlebot is smart and knows pattern matching
-Disallow:	/en/works?selected_tags # linked from the People pages
+Disallow:	/works?*query # Googlebot is smart and knows pattern matching
+Disallow:	/works?*sort
+Disallow:	/works?selected_tags
