@@ -284,7 +284,7 @@ class StoryParser
 
       tags = []
       pagetitle = (@doc/"title").inner_html
-      if pagetitle && pagetitle.match(/(.*), a (.*) fanfic - FanFiction\.Net/)
+      if pagetitle && pagetitle.match(/(.*), an? (.*) fanfic - FanFiction\.Net/)
         work_params[:title] = $1
         work_params[:fandom_string] = $2
       end

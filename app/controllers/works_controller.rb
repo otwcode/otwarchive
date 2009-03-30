@@ -181,7 +181,7 @@ class WorksController < ApplicationController
           return
         end
       end
-      
+
       @language_id = params[:language_id] ? Language.find_by_short(params[:language_id]) : nil
 
       # Now let's build the query
@@ -315,7 +315,7 @@ class WorksController < ApplicationController
         @work.pseuds = pseuds_with_author_removed
         @work.save
         @work.chapters.each do |c|
-          c.pseuds = c.pseuds - current_user.pseuds
+          c.pseuds = (c.pseuds - current_user.pseuds).uniq
           if c.pseuds.empty?
             c.pseuds = @work.pseuds
           end
@@ -473,7 +473,7 @@ class WorksController < ApplicationController
         @pseuds = current_user.pseuds
         @coauthors = @allpseuds.select{ |p| p.user.id != current_user.id}
         to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors
-        @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
+        @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }.uniq
     end
 
     # create a reading object when showing a work, but only if the user has reading

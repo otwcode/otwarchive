@@ -145,7 +145,7 @@ class StoryParserTest < ActiveSupport::TestCase
     work.authors = [create_pseud]
     work.published_at = DateTime.now
     work.save
-    assert_match /David Cook RPF/, work.fandoms.string
+    assert_match /Idol RPF/, work.fandoms.string
   end
 
   def test_remix
