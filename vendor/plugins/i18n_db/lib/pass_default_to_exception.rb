@@ -6,6 +6,11 @@ module I18n
       # from trying a fallback locale correctly
       def translate(locale, key, options = {})
         raise InvalidLocale.new(locale) if locale.nil?
+        
+        if entry = Translation.catch_special_cases(key.to_s, locale)
+          return entry
+        end
+        
         return key.map { |k| translate(locale, k, options) } if key.is_a? Array
         
         if options[:default]
@@ -29,7 +34,7 @@ module I18n
         entry = pluralize(locale, entry, count)
         entry = interpolate(locale, entry, values)
         entry
-      end
+      end  
     end
   end
 end

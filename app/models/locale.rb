@@ -8,6 +8,10 @@ class Locale < ActiveRecord::Base
   
   def to_param
     iso
+  end
+  
+  def self.default
+    Language.default.locales.find_or_create_by_iso_and_name(:iso => ArchiveConfig.DEFAULT_LOCALE_ISO, :name => ArchiveConfig.DEFAULT_LOCALE_NAME)
   end  
   
   # Returns a floating point number between 0.0 and 1.0, reflecting the fraction of the translations that
@@ -34,7 +38,7 @@ class Locale < ActiveRecord::Base
   end
   
   # Ensure that there's at least one locale in the database
-  def self.set_base_locale(locale={:iso => "en-US", :name => "English"})
+  def self.set_base_locale(locale={:iso => "en", :name => "English"})
     language = Language.find_by_short(ArchiveConfig.DEFAULT_LANGUAGE_SHORT)
     find_main_cached || Locale.find_by_iso(locale[:iso].to_s) || language.locales.create(:iso => locale[:iso].to_s, :name => locale[:name].to_s, :main => 1)
   end

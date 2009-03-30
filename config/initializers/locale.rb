@@ -7,7 +7,7 @@ rescue
   # that didn't work, try using hard coded information
   begin
     language = Language.find_or_create_by_short_and_name(:short => 'en', :name => 'English')
-    Locale.set_base_locale(:iso => "en-US", :name => "English (US)", :language_id => language.id)
+    Locale.set_base_locale(:iso => "en", :name => "English (US)", :language_id => language.id)
   rescue
     # that didn't work, give up
     puts "language/locale not set"

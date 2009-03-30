@@ -3,7 +3,7 @@
 
   <h3><%=h t('about', :default => "About {{name}}", :name => @user.login) %></h3>
 
-  <p><%= t('member_since', :default => "Member since: {{date}}", :date => @user.created_at) %></p>
+  <p><%= t('member_since', :default => "Member since: {{date}}", :date => l(@user.created_at.to_date)) %></p>
 
   <%- if @user.is_beta_tester? -%>
     <p><%= t('beta_tester', :default => "Beta tester") %></p>
@@ -20,7 +20,7 @@
     <%- end -%>
     <%- if @user.preference.date_of_birth_visible -%>
     <dt class="birthday"><%=h t('birthday', :default => "My birthday:") %></dt>
-      <dd class="birthday"><%=h @user.profile.date_of_birth -%></dd> 
+      <dd class="birthday"><%=l @user.profile.date_of_birth -%></dd> 
     <%- end -%>
     <%- if @user.preference.email_visible -%>
     <dt class="email"><%=h t('email', :default => "My email address:") %></dt>

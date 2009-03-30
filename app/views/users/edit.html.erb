@@ -51,7 +51,7 @@
     <dt><%= p.label :location, "Location" %></dt>
     <dd><%= p.text_field :location %></dd>
     <dt><%= p.label :date_of_birth, "Date of Birth" %></dt>
-    <dd><%= p.date_select :date_of_birth, :start_year => 13.years.ago.year, :end_year => 90.years.ago.year, :include_blank => true, :order => [:day, :month, :year], :use_month_names => %w(January February March April May June July August September October November December) %></dd>
+    <dd><%= p.date_select :date_of_birth, :start_year => 13.years.ago.year, :end_year => 90.years.ago.year, :include_blank => true %></dd>
     <dt><%= p.label :about_me, "About Me" %></dt>
     <dd><%= p.text_area :about_me %></dd>
 	</dl>

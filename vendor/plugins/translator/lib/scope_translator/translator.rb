@@ -90,7 +90,8 @@ module ScopeTranslator
       # Remove any default value when searching with scope
       scoped_options.delete(:default)
   
-      str = nil # the string being looked for
+      # Returns an array in special cases or nil
+      str = Translation.catch_special_cases(key, options[:locale])
         
       # Loop through each scope until a string is found.
       # Example: starts with scope of [:blog_posts :show] then tries scope [:blog_posts] then 

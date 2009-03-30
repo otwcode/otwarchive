@@ -83,6 +83,69 @@ SQL
   
   def self.simple_localization_escaping_to_rails(str)
     str.gsub(/:(\w[\w\d_]*)/, '{{\\1}}')
+  end 
+  
+  #### OTW CUSTOMIZATIONS ###
+  
+  # Rails expects an array of strings
+  ARRAY_KEYS = ['date.day_names', 'date.abbr_day_names']								
+  # Rails expects an array of strings that starts with nil								
+  ARRAY_KEYS_WITH_NIL = ['date.month_names', 'date.abbr_month_names']
+  # Rails expects an array of symbols								
+  ARRAY_OF_SYMBOL_KEYS = ['date.order']
+  # Rails expects a hash of format options
+  FORMAT_HASHES = ['date.formats', 'time.formats']
+  # Gets called during the localize method
+  TIME_AM_PM = ['time.am', 'time.pm']
+  # Group them together to make it easy to see if we need to convert the database string to an array
+  SPECIAL_CASES = ARRAY_KEYS + ARRAY_KEYS_WITH_NIL + ARRAY_OF_SYMBOL_KEYS + FORMAT_HASHES + TIME_AM_PM
+  
+  LOCALIZE_DEFAULTS = {
+    "date.formats" => {:default => "%Y-%m-%d", :short => "%b %d", :long => "%B %d, %Y"},
+    "date.day_names" => ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    "date.abbr_day_names" => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    "date.month_names" => [nil, 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    "date.abbr_month_names" => [nil, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    "date.order" => [:year, :month, :day],
+    "time.formats" => {:default => "%a, %d %b %Y %H:%M:%S %z", :short => "%d %b %H:%M", :long => "%B %d, %Y %H:%M"}, 
+    "time.am" => "am",
+    "time.pm" => "pm"
+  }
+  
+  # Rails requires arrays and hashes of data to localize dates and times. Since we're using the database
+  # to store our translations, we need to manipulate things a bit to make it work, and also add some fallbacks.
+  def self.catch_special_cases(key, locale)
+    special_case = LOCALIZE_DEFAULTS[key]
+    if SPECIAL_CASES.include?(key)
+      locale = Locale.find_by_iso(locale.to_s) || Locale.default
+      # TODO: the line below is a hack, but if I take it out, all the localized dates and times show up as 'default'.
+      # There's nothing significant about 'time' as a namespace - it just indicates that there's localization data
+      # in the database for that locale --elz
+      return special_case unless locale.translations.find_by_namespace('time')
+      if FORMAT_HASHES.include?(key) && (translations = locale.translations.find_all_by_namespace(key))
+        special_case = {}
+        translations.each {|t| special_case[t.tr_key.to_sym] = t.text}
+        return special_case
+      else      
+        keys = key.split('.')
+        tr_key = keys.pop.to_s
+        namespace = keys.join('.')      
+        if translation = locale.translations.find_by_tr_key_and_namespace(tr_key, namespace)
+          text = translation.text
+          special_case = case  
+            when ARRAY_KEYS.include?(key)
+              text.split(', ')
+            when ARRAY_KEYS_WITH_NIL.include?(key)
+              [nil] + text.split(', ')  
+            when ARRAY_OF_SYMBOL_KEYS.include?(key)
+              text.split(', ').collect {|new_key| new_key.to_sym }           
+            else
+              text            
+          end
+        end
+      end
+    end
+    special_case
   end
 
   # When a new key is added to the app, and a default value is given, this method

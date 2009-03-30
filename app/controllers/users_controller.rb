@@ -82,7 +82,7 @@ class UsersController < ApplicationController
       @user = User.new(params[:user]) 
       unless @user.identity_url.blank?
         # normalize OpenID url before validating
-        @user.identity_url = OpenIdAuthentication.normalize_url(@user.identity_url)
+        @user.identity_url = OpenIdAuthentication.normalize_identifier(@user.identity_url)
       end
       if @invitation
         @user.invitation = @invitation

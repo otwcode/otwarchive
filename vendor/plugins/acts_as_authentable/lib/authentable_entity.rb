@@ -104,7 +104,7 @@ module AuthentableEntity
     end
   
     def validate_identity_url
-      self.identity_url = OpenIdAuthentication.normalize_url(self.identity_url)
+      self.identity_url = OpenIdAuthentication.normalize_identifier(self.identity_url)
     end
     
 end
