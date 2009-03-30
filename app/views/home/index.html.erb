@@ -26,7 +26,7 @@
 <hr class="clear" />
 <div class="wrapper">
 	<h3><%= t 'share_fanworks', :default => 'Share your fan works' %></h3>
-	<h4><%= link_to t('people', :default => 'People'), :controller => 'users', :action => 'index' %></h4>
+	<h4><%= link_to t('home_people', :default => 'People'), :controller => 'users', :action => 'index' %></h4>
 	<ul class="meters">
 		<li><span><%= @user_count %></span><%= ' ' + t('user_count', :default => 'users to date') %></li>
 		<%- if @random_user -%>
@@ -36,7 +36,7 @@
 </div>
 <div class="wrapper">
 	<h3><%= t 'discover_favorites', :default => 'Discover new favorites' %></h3>
-	<h4><%= link_to t('fandoms', :default => 'Fandoms'), :controller => 'media', :action => 'index' %></h4>
+	<h4><%= link_to t('home_fandoms', :default => 'Fandoms'), :controller => 'media', :action => 'index' %></h4>
 	<ul class="meters">
 		<li><span><%= @fandom_count -%></span> <%= ' ' + t('fandom_count', :default => 'fandoms to date') %></li>
 		<%- unless @latest_fandom.blank? -%>
@@ -46,7 +46,7 @@
 </div>
 <div class="wrapper">
 	<h3><%=h t('explore_possibilities', :default => "Explore the possibilities") -%></h3>
-	<h4><%= link_to t('works', :default => 'Works'), :controller => 'works', :action => 'index' %></h4>
+	<h4><%= link_to t('home_works', :default => 'Works'), :controller => 'works', :action => 'index' %></h4>
 	<ul class="meters">
 		<li><span><%= @work_count %></span><%= ' ' + t('work_count', :default => "works to date") %></li>
 		<%- if @latest_work -%>
