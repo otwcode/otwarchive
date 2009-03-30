@@ -132,18 +132,26 @@ class UsersController < ApplicationController
       end
       if @user.recently_reset? && params[:change_password]
         successful_update 
-      elsif !params[:user][:password].blank? && !@user.authenticated?(params[:user][:password], @user.salt) && !@user.authenticated?(params[:check][:password_check], @user.salt)
+      elsif params[:user] && !params[:user][:password].blank? && !@user.authenticated?(params[:user][:password], @user.salt) && !@user.authenticated?(params[:check][:password_check], @user.salt)
         flash[:error] = t('old_password_incorrect', :default => "Your old password was incorrect")
-       unsuccessful_update
-      elsif params[:user][:identity_url] != @user.identity_url && !params[:user][:identity_url].blank?
+        unsuccessful_update
+      elsif params[:user] && params[:user][:identity_url] != @user.identity_url && !params[:user][:identity_url].blank?
         open_id_authentication(params[:user][:identity_url])
+      elsif params['openid.mode']
+        if @user.update_attribute(:identity_url, params['openid.identity'])
+          flash[:notice] = t('profile_updated', :default => 'Your profile has been successfully updated.')
+          redirect_to(user_profile_path(@user))
+        else
+          flash[:error] = "Your OpenID failed to save. Please try again."
+          render :edit
+        end
       else
         successful_update
       end      
-   rescue
+    rescue
       flash[:error] = t('update_failed', :default => "Your update failed; please try again.")
       render :action => "edit"
-   end
+    end
   end
   
   # DELETE /users/1
@@ -238,7 +246,7 @@ class UsersController < ApplicationController
       params[:user][:recently_reset] = false
       @user.update_attributes!(params[:user]) 
       flash[:notice] = t('profile_updated', :default => 'Your profile has been successfully updated.')
-     redirect_to(user_profile_path(@user)) 
+      redirect_to(user_profile_path(@user)) 
     end
     
     def unsuccessful_update
@@ -250,7 +258,7 @@ class UsersController < ApplicationController
         if result.successful?
           @user.update_attribute(:identity_url, identity_url) 
           flash[:notice] = t('profile_updated', :default => 'Your profile has been successfully updated.')
-         redirect_to(user_profile_path(@user)) 
+          redirect_to(user_profile_path(@user)) 
         else
           flash[:error] = result.message
           raise

@@ -100,6 +100,8 @@ module AuthentableEntity
       return false if self.new_record? && !self.password.blank? && !self.password_confirmation.blank?
       return true if self.new_record? && !self.identity_url.blank?
       return true if self.changed.include?("identity_url")
+      # you should be able to get rid of your openid if you have a password
+      return false if self.identity_url.blank? && !self.crypted_password.blank?
       return false
     end
   
