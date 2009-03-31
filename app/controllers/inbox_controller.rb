@@ -30,6 +30,8 @@ class InboxController < ApplicationController
         @selected_inbox_comment_ids.each {|inbox_comment| InboxComment.find(inbox_comment).update_attribute(:read, true) }
       elsif params[:commit] == "unread"
         @selected_inbox_comment_ids.each {|inbox_comment| InboxComment.find(inbox_comment).update_attribute(:read, false) }
+      elsif params[:commit] == "delete from inbox"
+        @selected_inbox_comment_ids.each {|inbox_comment| InboxComment.find(inbox_comment).destroy }
       end
     end
     redirect_to user_inbox_path(@user)
