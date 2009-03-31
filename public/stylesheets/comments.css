@@ -32,3 +32,15 @@ h4.datestamp {
 .thread .even {
     background: #eee;
 }   
+
+.inbox-show table {
+		width: 80%;
+}
+
+.inbox-show .read {
+		background: #eee;
+}
+
+.inbox-show .read .navigation {
+	  background: #eee;
+}

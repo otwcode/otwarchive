@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090329002541) do
+ActiveRecord::Schema.define(:version => 20090331012516) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -73,7 +73,6 @@ ActiveRecord::Schema.define(:version => 20090329002541) do
     t.string   "user_agent"
     t.boolean  "approved",                      :default => false, :null => false
     t.boolean  "hidden_by_admin",               :default => false, :null => false
-    t.boolean  "is_read",                       :default => false, :null => false
   end
 
   create_table "common_taggings", :force => true do |t|
@@ -127,6 +126,8 @@ ActiveRecord::Schema.define(:version => 20090329002541) do
     t.integer  "feedback_comment_id", :limit => 8
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "read",                             :default => false, :null => false
+    t.boolean  "replied_to",                       :default => false, :null => false
   end
 
   create_table "invitations", :force => true do |t|

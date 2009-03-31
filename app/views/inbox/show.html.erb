@@ -1,48 +1,99 @@
-<h2><%=h t('my_inbox', :default => 'My Inbox') %> (<%= t('unread_count', :default => "{{count}} unread", :count => @unread.length) %>)</h2>
+<h2><%=h t('my_inbox', :default => 'My Inbox') %> (<%= t('unread_count', :default => "{{count}} unread", :count => @unread) %>)</h2>
 
 <%= flash_div :comment_error, :comment_notice -%>
 
-<%- unless @unread.blank? && @read.blank? -%>
+<%- unless @inbox_comments.blank? -%>
+
+  <%- form_tag(user_inbox_path(@user), :class => 'work-filters', :method => :get) do -%>
+    <%- field_set_tag do -%>
+   		<dl class="filters">
+   		  <dt><%= 'Filter by read' %></dt>
+   		  <dd>
+   		    <%= radio_button_tag 'filter_read', 'all', (@select_read != 'true' && @select_read != 'false') %>
+   		    <%= label_tag 'filter_read_all', 'Show all' %>
+   		  </dd>
+   		  <dd>
+   		    <%= radio_button_tag 'filter_read', 'false', @select_read == 'false' %>
+   		    <%= label_tag 'filter_read_false', 'Show unread' %>
+   		  </dd>
+   		  <dd>
+   		    <%= radio_button_tag 'filter_read', 'true', @select_read == 'true' %>
+   		    <%= label_tag 'filter_read_true', 'Show read' %>
+   		  </dd>
+ 		  
+   		  <dt><%= 'Filter by replied to' %></dt>
+   		  <dd>
+   		    <%= radio_button_tag 'filter_replied_to', 'all', (@select_replied_to != 'true' && @select_replied_to != 'false') %>
+   		    <%= label_tag 'filter_replied_to_all', 'Show all' %>
+   		  </dd>
+   		  <dd>
+   		    <%= radio_button_tag 'filter_replied_to', 'false', @select_replied_to == 'false' %>
+   		    <%= label_tag 'filter_replied_to_false', 'Show without replies' %>
+   		  </dd>
+   		  <dd>
+   		    <%= radio_button_tag 'filter_replied_to', 'true', @select_replied_to == 'true' %>
+   		    <%= label_tag 'filter_replied_to_true', 'Show replied to' %>
+   		  </dd>
+ 		  
+   		  <dt><%= 'Sort by date' %></dt>
+   		  <dd>
+   		    <%= radio_button_tag 'sort_by_date', 'DESC', @select_date != 'ASC' %>
+   		    <%= label_tag 'sort_by_date_DESC', 'Newest first' %>
+   		  </dd>
+   		  <dd>
+   		    <%= radio_button_tag 'sort_by_date', 'ASC', @select_date == 'ASC' %>
+   		    <%= label_tag 'sort_by_date_ASC', 'Oldest first' %>
+   		  </dd> 		  
+   		</dl>
+   	<%- end -%>
+   	<p class="submit"><%= submit_tag t('filter_inbox', :default => 'Filter Inbox') %></p>
+  <%- end -%> 
+
   <%- form_tag user_inbox_path(@user), :method => :put, :id => 'inbox-form' do -%>
-    <%- unless @unread.blank? -%>
-      <h3><%= t('unread_comments', :default => "Unread comments") %></h3>
-      <%- for comment in @unread -%>
-        <!-- START of single comment -->
-          <div class="comment unread" id="comment_<%= comment.id -%>">
-            <p>
-              <%= check_box_tag "comments[#{comment.id}]", "checked" %>
-              <%= commentable_owner_link(comment) %> <%=h 'to' %> <%= commentable_description_link(comment) %> 
-              <%= distance_of_time_in_words_to_now(comment.created_at) %>
-            </p>
-            <%= sanitize_and_format_for_display comment.content %>
-            <div id="add_comment_reply_link_<%= comment.id -%>"><%= inbox_reply_link(comment) %></div>
-          </div>
-        <!-- END of single comment -->
-      <%- end -%>
+    <p>
+      <%= "Mark checked as:" %> 
+      <%= submit_tag t('read', :default => 'read') %>
+      <%= submit_tag t('unread', :default => 'unread') %>
+    </p>
+
+    <table>
+      <tr>
+        <th id="inbox_select_option">
+          <input id="check_all" name="check_all" type="checkbox" onclick="Form.getInputs('inbox-form', 'checkbox').each(function(box){box.checked = $('check_all').checked})" />
+        </th>
+        <th><%= 'Comments' %></th>
+      </tr>
+    <%- for inbox_comment in @inbox_comments -%>
+      <!-- START of single comment -->
+      <tr class="<%= inbox_comment.read? ? 'read' : 'unread' %>">
+        <td><%= check_box_tag "inbox_comments[#{inbox_comment.id}]", "checked" %></td>
+        <td>
+          <p>
+            <%= commentable_owner_link(inbox_comment.feedback_comment) %> <%= 'to' %> <%= commentable_description_link(inbox_comment.feedback_comment) %> 
+            <%= distance_of_time_in_words_to_now(inbox_comment.created_at) %>
+          </p>
+          <p><%= sanitize_and_format_for_display inbox_comment.feedback_comment.content %></p>
+          <ul class="navigation">
+            <li>
+              <%= image_tag("replied_to.png", :size => "15x15", :alt => "Replied To") if inbox_comment.replied_to? %>
+              <%= link_to 'Reply', inbox_comment.feedback_comment %>
+            </li>
+            <%- if @user.is_author_of?(inbox_comment.feedback_comment.ultimate_parent) -%>
+            <li><%= 'Spam' %></li>
+            <li><%= 'Delete from story' %></li>
+            <%- end -%>
+          </ul>
+        </td>
+      </tr>
+      <!-- END of single comment -->
     <%- end -%>
-    <%- unless @read.blank? -%>
-      <h3><%= t('read_comments', :default => "Read comments") %></h3>
-      <%- for comment in @read -%>
-        <!-- START of single comment -->
-          <div class="comment read" id="comment_<%= comment.id -%>">
-            <p>
-              <%= check_box_tag "comments[#{comment.id}]", "checked" %>
-              <%= commentable_owner_link(comment) %> <%=h 'to' %> <%= commentable_description_link(comment) %> 
-              <%= distance_of_time_in_words_to_now(comment.created_at) %>
-            </p>
-            <div id="full_read_comment_<%= comment.id -%>" style="display:none;">
-              <%= sanitize_and_format_for_display comment.content %>
-              <div id="add_comment_reply_link_<%= comment.id -%>"><%= inbox_reply_link(comment) %></div>
-            </div>
-          </div>
-        <!-- END of single comment -->
-      <%- end -%>
-    <%- end -%>
-    <%= "Mark checked as:" %> 
-    <%= submit_tag t('read', :default => 'read') %>
-    <%= submit_tag t('unread', :default => 'unread') %>
-    <%= submit_tag t('spam', :default => 'spam') %>
-    <%= submit_tag t('delete_from', :default => 'delete comments from story', :confirm => t('links.are_you_sure', :default => 'Are you sure?')) %>
+    </table>
+
+    <p>
+      <%= "Mark checked as:" %> 
+      <%= submit_tag t('read', :default => 'read') %>
+      <%= submit_tag t('unread', :default => 'unread') %>
+    </p>
     <!-- coming soon <%= submit_tag t('mass_reply', :default => 'mass reply') %> -->
   <%- end -%>
 <%- end -%>

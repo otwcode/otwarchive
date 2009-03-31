@@ -4,11 +4,16 @@ class InboxController < ApplicationController
   def is_owner
     @user = User.find_by_login(params[:user_id])
     @user == current_user || access_denied
+    @hide_dashboard = true
   end
   
-  def show
-    @unread = @user.unread_comments
-    @read = @user.read_comments
+  def show 
+    @unread = @user.inbox_comments.count(:conditions => {:read => false})   
+    order = 'created_at ' + (params[:sort_by_date] || 'DESC')     
+    read = (params[:filter_read].blank? || params[:filter_read] == 'all') ? [true, false] : params[:filter_read] == 'true'
+    replied_to = (params[:filter_replied_to].blank? || params[:filter_replied_to] == 'all') ? [true, false] : params[:filter_replied_to] == 'true'
+    @inbox_comments = @user.inbox_comments.all(:order => order, :conditions => {:read => read, :replied_to => replied_to}, :include => [:feedback_comment => :pseud])
+    @select_read, @select_replied_to, @select_date = params[:filter_read], params[:filter_replied_to], params[:sort_by_date]
   end
   
   def reply
@@ -17,28 +22,14 @@ class InboxController < ApplicationController
   end
 
   def update
-    @selected_comment_ids = params[:comments].keys if params[:comments]
-    if @selected_comment_ids.blank?
+    @selected_inbox_comment_ids = params[:inbox_comments].keys if params[:inbox_comments]
+    if @selected_inbox_comment_ids.blank?
       flash[:warning] = t('please_select', :default => "Please select something first")
-   else
-      if params[:commit] == "delete comments from story"
-        @selected_comment_ids.each {|c| 
-        @comment = Comment.find(c)
-        if current_user.is_author_of?(@comment) || current_user.is_author_of?(@comment.ultimate_parent)
-          @comment.destroy_or_mark_deleted
-        else flash[:error] = t('permission_to_delete', :default => "Sorry, you don't have permission to delete some of those comments")
-       end }
-      elsif params[:commit] == "read"
-        @selected_comment_ids.each {|c| Comment.find(c).update_attribute(:is_read, true) }
+    else
+      if params[:commit] == "read"
+        @selected_inbox_comment_ids.each {|inbox_comment| InboxComment.find(inbox_comment).update_attribute(:read, true) }
       elsif params[:commit] == "unread"
-        @selected_comment_ids.each {|c| Comment.find(c).update_attribute(:is_read, false) }
-      elsif params[:commit] == "spam"
-        @selected_comment_ids.each {|c| 
-        @comment = Comment.find(c)
-        if current_user.is_author_of?(@comment) || current_user.is_author_of?(@comment.ultimate_parent)      
-        @comment.mark_as_spam!
-        else flash[:error] = t('permission_spam', :default => "Sorry, you don't have permission to mark some of those comments as spam")
-       end }
+        @selected_inbox_comment_ids.each {|inbox_comment| InboxComment.find(inbox_comment).update_attribute(:read, false) }
       end
     end
     redirect_to user_inbox_path(@user)

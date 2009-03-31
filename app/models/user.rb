@@ -53,11 +53,14 @@ class User < ActiveRecord::Base
   has_many :inbox_comments
   has_many :feedback_comments, :through => :inbox_comments, :conditions => {:is_deleted => false, :approved => true}, :order => 'created_at DESC'
   
-  def read_comments
-    feedback_comments.find(:all, :conditions => {:is_read => true}).uniq.compact
+  def read_inbox_comments
+    inbox_comments.find(:all, :conditions => {:read => true})
   end
-  def unread_comments
-    feedback_comments.find(:all, :conditions => {:is_read => false}).uniq.compact
+  def unread_inbox_comments
+    inbox_comments.find(:all, :conditions => {:read => false})
+  end
+  def unread_inbox_comments_count
+    inbox_comments.count(:all, :conditions => {:read => false})
   end
   
   named_scope :alphabetical, :order => :login

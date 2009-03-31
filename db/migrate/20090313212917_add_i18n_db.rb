@@ -21,10 +21,12 @@ class AddI18nDb < ActiveRecord::Migration
     add_index :locales, :iso
     add_index :locales, :short
     
-    Locale.set_base_locale
-    Work.update_all(["language_id = (?)", Locale.find_main_cached.id])
+    #Locale.set_base_locale
+    #Work.update_all(["language_id = (?)", Locale.find_main_cached.id])
   end
 
   def self.down
+    drop_table :translations
+    drop_table :locales
   end
 end
