@@ -43,6 +43,14 @@ class UserMailer < ActionMailer::Base
      @body[:comment] = comment
    end
 
+   # Sends email to an owner of the top-level commentable when a comment is edited
+   def edited_comment_notification(user, comment)
+     setup_email(user)
+     @subject += "Edited comment on " + comment.ultimate_parent.commentable_name
+     @body[:commentable] = comment.ultimate_parent     
+     @body[:comment] = comment
+   end
+
    # Sends email to comment creator when a reply is posted to their comment
    # This may be a non-user of the archive
    def comment_reply_notification(old_comment, new_comment)
@@ -51,6 +59,14 @@ class UserMailer < ActionMailer::Base
      @body[:comment] = new_comment
    end
    
+   # Sends email to comment creator when a reply to their comment is edited
+   # This may be a non-user of the archive
+   def edited_comment_reply_notification(old_comment, edited_comment)
+     setup_comment_email(old_comment)
+     @subject += "Edited reply to your comment on " + old_comment.ultimate_parent.commentable_name     
+     @body[:comment] = edited_comment
+   end
+
    # Sends email to the poster of a comment 
    def comment_sent_notification(comment)
      setup_comment_email(comment)
