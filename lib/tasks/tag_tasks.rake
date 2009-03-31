@@ -1,11 +1,13 @@
 namespace :Tag do
   desc "Reset common taggings - slow"
   task(:reset_common => :environment) do
+    ThinkingSphinx.deltas_enabled=false
     Work.find(:all).each do |w|
       print "." if w.id.modulo(100) == 0; STDOUT.flush
       w.update_common_tags
     end
     puts "Common tags reset."
+    ThinkingSphinx.deltas_enabled=true
   end
   desc "Reset tag count"
   task(:reset_count => :environment) do
@@ -29,12 +31,24 @@ namespace :Tag do
     ThinkingSphinx.deltas_enabled=true
     puts "Tag parents reset."
   end
+  desc "Update pairing has_characters"
+  task(:update_has_characters => :environment) do
+    Pairing.all.each do |pairing|
+      pairing.update_attribute(:has_characters, true) unless pairing.characters.blank?
+    end
+  end
   desc "Delete unused tags"
   task(:delete_unused => :environment) do
+    deleted_names = []
     Tag.all.each do |t|
       if t.taggings.length == 0 && !t.merger_id && t.mergers.empty? && !t.canonical && t.common_taggings.length == 0
+        deleted_names << t.name
         t.destroy
       end
+    end
+    unless deleted_names.blank?
+      puts "The following unused tags were deleted:"
+      puts deleted_names.join(", ")
     end
   end
 end

@@ -4,9 +4,10 @@ class SplitLocalesAndLanguages < ActiveRecord::Migration
       t.string :short, :limit => 4
       t.string :name
     end
+    # defer removal of columns
+    #remove_column :short
+    remove_column :locales
     add_column :locales, :language_id, :integer, :null => false
-    remove_column :locales, :short
-    Work.update_all(["language_id = (?)", Language.default.id])
   end
 
   def self.down
