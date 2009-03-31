@@ -93,25 +93,29 @@ namespace :After do
 #   end
   desc "update all works with default language"
   task(:after_20090329002541_split_locales_and_languages => :environment) do
-    Work.update_all(["language_id = (?)", Language.default.id])
+    Work.update_all(["language_id = (?)", Language.default.id]) if Language.default
   end
   desc "move bookmarks to pseuds"
   task(:after_20090318004340_move_bookmarks_to_pseuds => :environment) do
-    Bookmark.all.each do |bookmark|
-      if !bookmark.user_id.blank? && bookmark.pseud_id.blank?
-        user = User.find(bookmark.user_id)
-        bookmark.update_attribute(:pseud_id, user.default_pseud.id)
+    if Bookmark.respond_to?(:user_id)
+      Bookmark.all.each do |bookmark|
+        if !bookmark.user_id.blank? && bookmark.pseud_id.blank?
+          user = User.find(bookmark.user_id)
+          bookmark.update_attribute(:pseud_id, user.default_pseud.id)
+        end
       end
     end
   end
   desc "update restricted series"
   task(:after_20090322182529_add_restricted_to_series => :environment) do
-    Series.all.each do |series|
-      restr = true
-      series.works.each do |w|
-        restr = restr && w.restricted
+    if Series.respond_to?(:restricted)
+      Series.all.each do |series|
+        restr = true
+        series.works.each do |w|
+          restr = restr && w.restricted
+        end
+        series.update_attribute(:restricted, restr)
       end
-      series.update_attribute(:restricted, restr)
     end
   end
 end

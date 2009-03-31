@@ -1,13 +1,12 @@
---- 
-comment_00006: 
+---
+comment_00006:
   threaded_left: 5
-  name: 
+  name:
   commentable_type: Comment
   updated_at: 2009-03-02 22:18:04 +02:00
   pseud_id: 3
   thread: 2
   depth: 4
-  is_read: false
   id: 6
   commentable_id: 5
   approved: true
@@ -15,19 +14,18 @@ comment_00006:
   content: level fooour (4)
   is_deleted: false
   threaded_right: 30
-  ip_address: 
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-02-27 20:05:43 +02:00
-comment_00017: 
+comment_00017:
   threaded_left: 9
-  name: 
+  name:
   commentable_type: Comment
   updated_at: 2009-03-02 22:24:35 +02:00
   pseud_id: 3
   thread: 2
   depth: 8
-  is_read: false
   id: 17
   commentable_id: 9
   approved: true
@@ -35,19 +33,18 @@ comment_00017:
   content: wheeeeeeee!! (8 behaves as expected. hm.)
   is_deleted: false
   threaded_right: 12
-  ip_address: 
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-02-28 04:01:20 +02:00
-comment_00018: 
+comment_00018:
   threaded_left: 26
-  name: 
+  name:
   commentable_type: Comment
   updated_at: 2009-03-02 22:11:28 +02:00
   pseud_id: 3
   thread: 2
   depth: 5
-  is_read: false
   id: 18
   commentable_id: 6
   approved: true
@@ -55,19 +52,18 @@ comment_00018:
   content: blah!
   is_deleted: false
   threaded_right: 27
-  ip_address: 
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-03-02 22:11:28 +02:00
-comment_00007: 
+comment_00007:
   threaded_left: 6
-  name: 
+  name:
   commentable_type: Comment
   updated_at: 2009-02-28 01:30:36 +02:00
   pseud_id: 3
   thread: 2
   depth: 5
-  is_read: false
   id: 7
   commentable_id: 6
   approved: true
@@ -75,19 +71,18 @@ comment_00007:
   content: level 5 arrives!
   is_deleted: false
   threaded_right: 21
-  ip_address: 
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-02-27 20:05:57 +02:00
-comment_00008: 
+comment_00008:
   threaded_left: 7
-  name: 
+  name:
   commentable_type: Comment
   updated_at: 2009-02-28 03:08:46 +02:00
   pseud_id: 3
   thread: 2
   depth: 6
-  is_read: false
   id: 8
   commentable_id: 7
   approved: true
@@ -95,42 +90,40 @@ comment_00008:
   content: 6 is here! (and it got a separate thread).
   is_deleted: false
   threaded_right: 16
-  ip_address: 
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-02-27 20:06:33 +02:00
-comment_00019: 
+comment_00019:
   threaded_left: 28
-  name: 
+  name:
   commentable_type: Comment
   updated_at: 2009-03-02 22:18:26 +02:00
   pseud_id: 3
   thread: 2
   depth: 5
-  is_read: false
   id: 19
   commentable_id: 6
   approved: true
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   content: |-
     whee
-    
+
     now take a fcking bath
   is_deleted: false
   threaded_right: 29
-  ip_address: 
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-03-02 22:18:04 +02:00
-comment_00020: 
+comment_00020:
   threaded_left: 35
-  name: 
+  name:
   commentable_type: Comment
   updated_at: 2009-03-02 22:19:09 +02:00
   pseud_id: 3
   thread: 2
   depth: 4
-  is_read: false
   id: 20
   commentable_id: 15
   approved: true
@@ -138,125 +131,119 @@ comment_00020:
   content: avocado! :D
   is_deleted: false
   threaded_right: 36
-  ip_address: 
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-03-02 22:19:09 +02:00
-comment_00009: 
+comment_00009:
   threaded_left: 8
-  name: 
+  name:
   commentable_type: Comment
   updated_at: 2009-02-28 04:01:20 +02:00
   pseud_id: 3
   thread: 2
   depth: 7
-  is_read: false
   id: 9
   commentable_id: 8
   approved: true
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   content: |-
     alas, replying to 6 didn't reload the original thread, but went instead straight to 6.
-    
+
     (this is 7, by the way, the missing Cylon. :( )
   is_deleted: false
   threaded_right: 13
-  ip_address: 
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-02-27 20:08:01 +02:00
-comment_00010: 
-  threaded_left: 
-  name: 
+comment_00010:
+  threaded_left:
+  name:
   commentable_type: Chapter
   updated_at: 2009-02-28 01:24:22 +02:00
   pseud_id: 3
   thread: 3
   depth: 0
-  is_read: false
   id: 10
   commentable_id: 19
   approved: true
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   content: yet another tlc
   is_deleted: false
-  threaded_right: 
-  ip_address: 
+  threaded_right:
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-02-28 01:24:22 +02:00
-comment_00021: 
-  threaded_left: 
-  name: 
+comment_00021:
+  threaded_left:
+  name:
   commentable_type: Chapter
   updated_at: 2009-03-02 22:20:26 +02:00
   pseud_id: 3
   thread: 4
   depth: 0
-  is_read: false
   id: 21
   commentable_id: 19
   approved: true
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   content: Rodney?
   is_deleted: false
-  threaded_right: 
-  ip_address: 
+  threaded_right:
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-03-02 22:20:26 +02:00
-comment_00022: 
-  threaded_left: 
-  name: 
+comment_00022:
+  threaded_left:
+  name:
   commentable_type: Chapter
   updated_at: 2009-03-02 22:20:52 +02:00
   pseud_id: 3
   thread: 5
   depth: 0
-  is_read: false
   id: 22
   commentable_id: 19
   approved: true
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   content: John!
   is_deleted: false
-  threaded_right: 
-  ip_address: 
+  threaded_right:
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-03-02 22:20:52 +02:00
-comment_00011: 
+comment_00011:
   threaded_left: 32
-  name: 
+  name:
   commentable_type: Comment
   updated_at: 2009-03-02 22:23:37 +02:00
   pseud_id: 3
   thread: 2
   depth: 3
-  is_read: false
   id: 11
   commentable_id: 4
   approved: true
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   content: |-
     trivial case rly
-    
+
     ETA: norly?
   is_deleted: false
   threaded_right: 33
-  ip_address: 
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-02-28 01:25:15 +02:00
-comment_00012: 
+comment_00012:
   threaded_left: 17
-  name: 
+  name:
   commentable_type: Comment
   updated_at: 2009-02-28 16:33:01 +02:00
   pseud_id: 3
   thread: 2
   depth: 6
-  is_read: false
   id: 12
   commentable_id: 7
   approved: true
@@ -264,39 +251,37 @@ comment_00012:
   content: "non-trivial: I'm going to be a level 6 comment :*"
   is_deleted: false
   threaded_right: 18
-  ip_address: 
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-02-28 01:26:09 +02:00
-comment_00001: 
-  threaded_left: 
-  name: 
+comment_00001:
+  threaded_left:
+  name:
   commentable_type: Chapter
   updated_at: 2008-12-07 01:22:00 +02:00
   pseud_id: 13
   thread: 1
   depth: 0
-  is_read: false
   id: 1
   commentable_id: 11
   approved: true
   user_agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.4) Gecko/2008102920 Firefox/3.0.4 (.NET CLR 3.5.30729)
   content: "Cheerful. I liked Boccaccio's version better. "
   is_deleted: false
-  threaded_right: 
-  ip_address: 
+  threaded_right:
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2008-12-07 01:22:00 +02:00
-comment_00023: 
+comment_00023:
   threaded_left: 23
-  name: 
+  name:
   commentable_type: Comment
   updated_at: 2009-03-02 22:22:55 +02:00
   pseud_id: 3
   thread: 2
   depth: 6
-  is_read: false
   id: 23
   commentable_id: 16
   approved: true
@@ -304,19 +289,18 @@ comment_00023:
   content: gah (I am a Six, but a marginal one)
   is_deleted: false
   threaded_right: 24
-  ip_address: 
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-03-02 22:21:50 +02:00
-comment_00024: 
+comment_00024:
   threaded_left: 10
-  name: 
+  name:
   commentable_type: Comment
   updated_at: 2009-03-02 22:24:35 +02:00
   pseud_id: 3
   thread: 2
   depth: 9
-  is_read: false
   id: 24
   commentable_id: 17
   approved: true
@@ -324,19 +308,18 @@ comment_00024:
   content: 9?
   is_deleted: false
   threaded_right: 11
-  ip_address: 
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-03-02 22:24:35 +02:00
-comment_00002: 
+comment_00002:
   threaded_left: 1
-  name: 
+  name:
   commentable_type: Chapter
   updated_at: 2009-02-27 18:58:27 +02:00
   pseud_id: 3
   thread: 2
   depth: 0
-  is_read: false
   id: 2
   commentable_id: 19
   approved: true
@@ -344,19 +327,18 @@ comment_00002:
   content: 0 level comment.
   is_deleted: false
   threaded_right: 40
-  ip_address: 
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-02-27 18:51:22 +02:00
-comment_00013: 
+comment_00013:
   threaded_left: 19
-  name: 
+  name:
   commentable_type: Comment
   updated_at: 2009-02-28 16:29:08 +02:00
   pseud_id: 3
   thread: 2
   depth: 6
-  is_read: false
   id: 13
   commentable_id: 7
   approved: true
@@ -364,42 +346,40 @@ comment_00013:
   content: bah, humbug (6) (Sonia Six? :D)
   is_deleted: false
   threaded_right: 20
-  ip_address: 
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-02-28 01:30:36 +02:00
-comment_00014: 
+comment_00014:
   threaded_left: 14
-  name: 
+  name:
   commentable_type: Comment
   updated_at: 2009-03-02 11:52:11 +02:00
   pseud_id: 3
   thread: 2
   depth: 7
-  is_read: false
   id: 14
   commentable_id: 8
   approved: true
   user_agent: Opera/9.60 (Windows NT 6.0; U; en) Presto/2.1.1
   content: |-
     oooooh breakthrough! (7b)
-    
+
     I want to break freeee!
   is_deleted: false
   threaded_right: 15
-  ip_address: 
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-02-28 03:08:46 +02:00
-comment_00003: 
+comment_00003:
   threaded_left: 2
-  name: 
+  name:
   commentable_type: Comment
   updated_at: 2009-02-27 18:58:47 +02:00
   pseud_id: 3
   thread: 2
   depth: 1
-  is_read: false
   id: 3
   commentable_id: 2
   approved: true
@@ -407,59 +387,56 @@ comment_00003:
   content: 1 level
   is_deleted: false
   threaded_right: 39
-  ip_address: 
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-02-27 18:58:28 +02:00
-comment_00025: 
-  threaded_left: 
-  name: 
+comment_00025:
+  threaded_left:
+  name:
   commentable_type: Chapter
   updated_at: 2009-03-15 00:17:57 +02:00
   pseud_id: 1
   thread: 6
   depth: 0
-  is_read: true
   id: 25
   commentable_id: 19
   approved: true
   user_agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.8.1.20) Gecko/20081217 Firefox/2.0.0.20 (.NET CLR 3.5.30729)
   content: are you still working?
   is_deleted: false
-  threaded_right: 
-  ip_address: 
+  threaded_right:
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-03-14 20:00:27 +02:00
-comment_00026: 
-  threaded_left: 
+comment_00026:
+  threaded_left:
   name: Random Dent
   commentable_type: Chapter
   updated_at: 2009-03-21 01:53:38 +02:00
-  pseud_id: 
+  pseud_id:
   thread: 7
   depth: 0
-  is_read: false
   id: 26
   commentable_id: 58
   approved: true
   user_agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.8.1.20) Gecko/20081217 Firefox/2.0.0.20 (.NET CLR 3.5.30729)
   content: I can't seem to be able to access the next story in the series, what's with that? :(
   is_deleted: false
-  threaded_right: 
+  threaded_right:
   ip_address: 127.0.0.1
   hidden_by_admin: false
   email: random@example.com
   created_at: 2009-03-21 01:53:38 +02:00
-comment_00004: 
+comment_00004:
   threaded_left: 3
-  name: 
+  name:
   commentable_type: Comment
   updated_at: 2009-02-28 03:21:42 +02:00
   pseud_id: 3
   thread: 2
   depth: 2
-  is_read: false
   id: 4
   commentable_id: 3
   approved: true
@@ -467,19 +444,18 @@ comment_00004:
   content: level 2
   is_deleted: false
   threaded_right: 38
-  ip_address: 
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-02-27 18:58:47 +02:00
-comment_00015: 
+comment_00015:
   threaded_left: 34
-  name: 
+  name:
   commentable_type: Comment
   updated_at: 2009-03-02 22:19:09 +02:00
   pseud_id: 3
   thread: 2
   depth: 3
-  is_read: false
   id: 15
   commentable_id: 4
   approved: true
@@ -487,19 +463,18 @@ comment_00015:
   content: guacamole?
   is_deleted: false
   threaded_right: 37
-  ip_address: 
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-02-28 03:21:42 +02:00
-comment_00016: 
+comment_00016:
   threaded_left: 22
-  name: 
+  name:
   commentable_type: Comment
   updated_at: 2009-03-02 22:21:50 +02:00
   pseud_id: 3
   thread: 2
   depth: 5
-  is_read: false
   id: 16
   commentable_id: 6
   approved: true
@@ -507,19 +482,18 @@ comment_00016:
   content: ngngng! (heh)
   is_deleted: false
   threaded_right: 25
-  ip_address: 
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-02-28 04:00:10 +02:00
-comment_00005: 
+comment_00005:
   threaded_left: 4
-  name: 
+  name:
   commentable_type: Comment
   updated_at: 2009-02-27 20:05:43 +02:00
   pseud_id: 3
   thread: 2
   depth: 3
-  is_read: false
   id: 5
   commentable_id: 4
   approved: true
@@ -527,7 +501,7 @@ comment_00005:
   content: level 3 lalala
   is_deleted: false
   threaded_right: 31
-  ip_address: 
+  ip_address:
   hidden_by_admin: false
-  email: 
+  email:
   created_at: 2009-02-27 20:05:22 +02:00
