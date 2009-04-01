@@ -1,3 +1,6 @@
-<%= @exception.class %> occurred in <%= @controller.controller_name %>#<%= @controller.action_name %>:
+A <%= @exception.class %> occurred in <%= @controller.controller_name %>#<%= @controller.action_name %>:
+
+  <%= @exception.message %>
+  <%= @backtrace.first %>
 
 <%= @sections.map { |section| render_section(section) }.join %>

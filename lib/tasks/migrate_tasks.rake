@@ -97,9 +97,9 @@ namespace :After do
   end
   desc "move bookmarks to pseuds"
   task(:after_20090318004340_move_bookmarks_to_pseuds => :environment) do
-    if Bookmark.respond_to?(:user_id)
+    if Bookmark.first.respond_to?(:user_id)
       Bookmark.all.each do |bookmark|
-        if !bookmark.user_id.blank? && bookmark.pseud_id.blank?
+        if !bookmark.user_id.blank? && bookmark.pseud_id == 0
           user = User.find(bookmark.user_id)
           bookmark.update_attribute(:pseud_id, user.default_pseud.id)
         end
@@ -108,7 +108,7 @@ namespace :After do
   end
   desc "update restricted series"
   task(:after_20090322182529_add_restricted_to_series => :environment) do
-    if Series.respond_to?(:restricted)
+    if Series.first.respond_to?(:restricted)
       Series.all.each do |series|
         restr = true
         series.works.each do |w|

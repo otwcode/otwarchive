@@ -67,12 +67,12 @@ module ExceptionNotifierHelper
   end
   
   def filter_sensitive_post_data_parameters(parameters)
-    exclude_raw_post_parameters? ? @controller.send!(:filter_parameters, parameters) : parameters
+    exclude_raw_post_parameters? ? @controller.__send__(:filter_parameters, parameters) : parameters
   end
   
   def filter_sensitive_post_data_from_env(env_key, env_value)
     return env_value unless exclude_raw_post_parameters?
     return PARAM_FILTER_REPLACEMENT if (env_key =~ /RAW_POST_DATA/i)
-    return @controller.send!(:filter_parameters, {env_key => env_value}).values[0]
+    return @controller.__send__(:filter_parameters, {env_key => env_value}).values[0]
   end
 end
