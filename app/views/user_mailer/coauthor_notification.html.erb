@@ -1,9 +1,12 @@
 <p><%=h User.current_user.login %> <%=h 'listed you as a co-author of the following story:' %></p>
 
-<p><a href="#"><%=h @work.title %></a></p>
+<p><%= link_to(@work.title, @work_link) %></p>
 
 <!--click here violates WCAG 1.0 6.1. this needs rewording-->
-<p><a href="#"><%=h 'Click here' %></a> <%=h "if you've been added in error or don't want to be listed as an author." %></p>
+<!--is this better? (linking the whole text)-->
+<p>
+<%= link_to("Click here if you've been added in error or don't want to be listed as an author.", @url) %>
+</p>
 
 
 
