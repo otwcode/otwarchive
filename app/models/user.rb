@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
   has_many :translations, :foreign_key => 'translator_id' 
   has_many :translations_to_beta, :class_name => 'Translation', :foreign_key => 'beta_id' 
   
-  has_many :inbox_comments
+  has_many :inbox_comments, :dependent => :destroy
   has_many :feedback_comments, :through => :inbox_comments, :conditions => {:is_deleted => false, :approved => true}, :order => 'created_at DESC'
   
   def read_inbox_comments

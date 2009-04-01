@@ -3,6 +3,7 @@ class Comment < ActiveRecord::Base
            
   belongs_to :pseud         
   belongs_to :commentable, :polymorphic => true
+  has_many :inbox_comments, :foreign_key => 'feedback_comment_id', :dependent => :destroy
   has_many :users, :through => :inbox_comments
  
   validates_presence_of :name, :email, :unless => :pseud_id
