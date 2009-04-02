@@ -1,0 +1,9 @@
+<%- unless @related_works.blank? -%>
+  <%- @related_works.each do |related_work| -%>
+    <%- if related_work.reciprocal? -%>
+      <%= render :partial => 'remove', :locals => { :related_work => related_work } %>
+    <%- else -%>
+      <%= render :partial => 'approve', :locals => { :related_work => related_work } %>
+    <%- end -%> 
+  <%- end -%>
+<%- end -%>

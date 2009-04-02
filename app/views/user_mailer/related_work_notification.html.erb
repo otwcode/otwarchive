@@ -2,4 +2,6 @@
  <%=h "by" -%> <%= @related_work.work.pseuds.collect(&:name).join(", ") %></p>
 
 <!--go here violates WCAG 1.0 6.1. this needs rewording-->
-<p><%=h "To link back to" -%> <cite><%= @related_work.work.title %></cite> <%=h "from your work, please go" -%> <a href="<%= @url %>">here</a>.</p>
+<!-- is this better? -->
+<p><%= link_to("Approve relationship and link back to this work from your work", @url) -%></p>
+<p><%= "(You can come back to this page if you change your mind.)" %></p> 

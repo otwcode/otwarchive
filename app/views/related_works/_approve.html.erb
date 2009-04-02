@@ -3,9 +3,10 @@
 <p><%= t('approval_description', :default => 'Would you like to create a link from your work {{link_to_your_work}} to {{link_to_their_work}} by {{link_to_author}}?',  
           :link_to_your_work => link_to(related_work.parent.title, related_work.parent),
           :link_to_their_work => link_to(related_work.work.title, related_work.work),
-          :link_to_author => print_pseud_list(related_work.work.pseuds)) %></p>
+          :link_to_author => byline(related_work.work)) %></p>
 
 <p><%= t('express_approval', :default => '(Nothing will be linked directly from your works without your express approval.)') %></p> 
+<p><%= t('can_undo', :default => '(You can come back to this page if you change your mind.)') %></p> 
 
 <% form_for(related_work) do |f| %>
   <p class="submit">

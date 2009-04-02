@@ -27,6 +27,15 @@ class RelatedWorksController < ApplicationController
     end  
   end
 
+  def index
+    unless logged_in?
+      flash[:error] = t('errors.no_permission_to_edit', :default => "Sorry, but you don't have permission to make edits.")
+      redirect_to(works_url)
+    end
+    my_works = current_user.works.collect(&:id)
+    @related_works = my_works.collect{|mw| RelatedWork.find(:all, :conditions => {:parent_id => mw})}.flatten.uniq
+  end
+  
   # GET /related_works/1
   # GET /related_works/1.xml
   def show

@@ -80,7 +80,7 @@ class UserMailer < ActionMailer::Base
     @subject    += "Co-Author Notification"
     @body[:work] = work
     @body[:work_link] = @body[:url] + "/works/#{work.id}"
-    @body[:url] += "/works/#{work.id}/edit?remove=me"
+    @body[:url] += "/works/#{work.id}/edit"
   end 
    
   # Sends emails to authors whose stories were listed as the inspiration of another work
