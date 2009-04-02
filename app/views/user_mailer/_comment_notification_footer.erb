@@ -1,8 +1,11 @@
 <p>
 <%=h "Posted" -%> <%= @comment.created_at -%><br />
+<%- unless @comment.edited_at.blank? -%>
+<%=h "Last edited" -%> <%= @comment.edited_at -%><br />
+<%- end -%>
 <%=h "View all comments on" -%> <%= link_to @commentable.commentable_name, 
                                 ArchiveConfig.APP_URL + 
                                 url_for(:controller => @commentable.class.to_s.downcase.pluralize, 
-                                        :action => :show, :id => @commentable, 
-                                        :show_comments => true, :anchor => :comments) -%>
+                                :action => :show, :id => @commentable, 
+                                :show_comments => true, :anchor => :comments) -%>
 </p>

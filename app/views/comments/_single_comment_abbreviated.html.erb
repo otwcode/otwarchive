@@ -9,4 +9,7 @@
 	<%=sanitize_and_format_for_display single_comment.content %>
 	
 	<h4 class="datestamp"><%=h t('single_comment_abbr_posted', :default => 'Posted {{date}}', :date => single_comment.created_at) %></h4>
-</div>
+  <%- unless single_comment.edited_at.blank? -%>
+    <h4 class="datestamp"><%=h t('single_comment_edited', :default => "Last Edited {{date}}", :date => l(single_comment.edited_at)) %></h4>
+  <%- end -%>
+  </div>

@@ -147,10 +147,11 @@ class CommentsController < ApplicationController
   # PUT /comments/1
   # PUT /comments/1.xml
   def update
-    @comment = Comment.find(params[:id])    
+    @comment = Comment.find(params[:id])
+    params[:comment][:edited_at] = Time.current
     if @comment.update_attributes(params[:comment])
       flash[:comment_notice] = t('successfully_updated', :default => 'Comment was successfully updated.')
-     respond_to do |format|
+      respond_to do |format|
         format.html { redirect_to_comment(@comment) }
       end
     else
