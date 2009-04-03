@@ -8,22 +8,10 @@ class InboxController < ApplicationController
   end
   
   def show 
-    @unread = @user.inbox_comments.count(:conditions => {:read => false})   
-    order = 'created_at ' + (params[:sort_by_date] || 'DESC')
-    read = case params[:filter_read]
-      when 'true' then true
-      when 'false' then false
-      else [true, false]
-    end
-    replied_to = case params[:filter_replied_to]
-      when 'true' then true
-      when 'false' then false
-      else [true, false]
-    end
-    @inbox_comments = @user.inbox_comments.all(:order => order, 
-                                               :conditions => {:read => read, :replied_to => replied_to}, 
-                                               :include => [:feedback_comment => :pseud])
-    @select_read, @select_replied_to, @select_date = params[:filter_read], params[:filter_replied_to], params[:sort_by_date]
+    @unread = @user.inbox_comments.count(:conditions => {:read => false})
+    filters = params[:filters] || {}   
+    @inbox_comments = @user.inbox_comments.find_by_filters(filters)
+    @select_read, @select_replied_to, @select_date = filters[:read], filters[:replied_to], filters[:date]
   end
   
   def reply

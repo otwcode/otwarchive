@@ -882,16 +882,12 @@ class Work < ActiveRecord::Base
   def self.search_with_sphinx(options)
 
     # sphinx ordering must be done on attributes
-    order_clause = ""
-    case options[:sort_column]
-    when "title"
-      order_clause = "title_for_sort "
-    when "author"
-      order_clause = "author_for_sort "
-    when "word_count"
-      order_clause = "word_count "
-    when "date"
-      order_clause = "revised_at "
+    order_clause = case options[:sort_column]
+      when "title" then "title_for_sort "
+      when "author" then "author_for_sort "
+      when "word_count" then "word_count "
+      when "date" then "revised_at "
+      else ""
     end
 
     if !order_clause.blank?

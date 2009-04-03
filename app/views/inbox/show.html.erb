@@ -59,40 +59,40 @@
  		<dl class="filters">
  		  <dt><%= 'Filter by read' %></dt>
  		  <dd>
- 		    <%= radio_button_tag 'filter_read', 'all', (@select_read != 'true' && @select_read != 'false') %>
- 		    <%= label_tag 'filter_read_all', 'Show all' %>
+ 		    <%= radio_button_tag 'filters[read]', 'all', (@select_read != 'true' && @select_read != 'false') %>
+ 		    <%= label_tag 'filters_read_all', 'Show all' %>
  		  </dd>
  		  <dd>
- 		    <%= radio_button_tag 'filter_read', 'false', @select_read == 'false' %>
- 		    <%= label_tag 'filter_read_false', 'Show unread' %>
+ 		    <%= radio_button_tag 'filters[read]', 'false', @select_read == 'false' %>
+ 		    <%= label_tag 'filters_read_false', 'Show unread' %>
  		  </dd>
  		  <dd>
- 		    <%= radio_button_tag 'filter_read', 'true', @select_read == 'true' %>
- 		    <%= label_tag 'filter_read_true', 'Show read' %>
+ 		    <%= radio_button_tag 'filters[read]', 'true', @select_read == 'true' %>
+ 		    <%= label_tag 'filters_read_true', 'Show read' %>
  		  </dd>
 	  
  		  <dt><%= 'Filter by replied to' %></dt>
  		  <dd>
- 		    <%= radio_button_tag 'filter_replied_to', 'all', (@select_replied_to != 'true' && @select_replied_to != 'false') %>
- 		    <%= label_tag 'filter_replied_to_all', 'Show all' %>
+ 		    <%= radio_button_tag 'filters[replied_to]', 'all', (@select_replied_to != 'true' && @select_replied_to != 'false') %>
+ 		    <%= label_tag 'filters_replied_to_all', 'Show all' %>
  		  </dd>
  		  <dd>
- 		    <%= radio_button_tag 'filter_replied_to', 'false', @select_replied_to == 'false' %>
- 		    <%= label_tag 'filter_replied_to_false', 'Show without replies' %>
+ 		    <%= radio_button_tag 'filters[replied_to]', 'false', @select_replied_to == 'false' %>
+ 		    <%= label_tag 'filters_replied_to_false', 'Show without replies' %>
  		  </dd>
  		  <dd>
- 		    <%= radio_button_tag 'filter_replied_to', 'true', @select_replied_to == 'true' %>
- 		    <%= label_tag 'filter_replied_to_true', 'Show replied to' %>
+ 		    <%= radio_button_tag 'filters[replied_to]', 'true', @select_replied_to == 'true' %>
+ 		    <%= label_tag 'filters_replied_to_true', 'Show replied to' %>
  		  </dd>
 	  
  		  <dt><%= 'Sort by date' %></dt>
  		  <dd>
- 		    <%= radio_button_tag 'sort_by_date', 'DESC', @select_date != 'ASC' %>
- 		    <%= label_tag 'sort_by_date_DESC', 'Newest first' %>
+ 		    <%= radio_button_tag 'filters[date]', 'DESC', @select_date != 'ASC' %>
+ 		    <%= label_tag 'filters_date_DESC', 'Newest first' %>
  		  </dd>
  		  <dd>
- 		    <%= radio_button_tag 'sort_by_date', 'ASC', @select_date == 'ASC' %>
- 		    <%= label_tag 'sort_by_date_ASC', 'Oldest first' %>
+ 		    <%= radio_button_tag 'filters[date]', 'ASC', @select_date == 'ASC' %>
+ 		    <%= label_tag 'filters_date_ASC', 'Oldest first' %>
  		  </dd> 		  
  		</dl>
  	<%- end -%>
