@@ -33,8 +33,19 @@ h4.datestamp {
     background: #eee;
 }   
 
+/* VERY TEMPORARY NON-IDEAL STYLING! Please fix at will! 
+Just meant to give people a vague general sense of the page --elz*/
+
+#inbox-form {
+	float:left;
+	clear: both;
+	width: 70%;
+}
+
 .inbox-show table {
-		width: 80%;
+		margin: 0;
+		padding: 0;
+		width: 100%;
 }
 
 .inbox-show .read {
