@@ -5,7 +5,7 @@ class WorksCreateControllerTest < ActionController::TestCase
 
   context "when not logged in" do
     setup { post :create, :locale => 'en' }
-    should_redirect_to("restricted new session") {new_session_url(:restricted => true)}
+    should_redirect_to("new session") {new_session_url}
   end
 
   context "when logged in" do

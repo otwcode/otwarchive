@@ -5,37 +5,23 @@ class CommentsController < ApplicationController
                                               :cancel_comment_reply, :cancel_comment_edit,
                                               :delete_comment, :cancel_comment_delete ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :destroy]
-  before_filter :check_permission_to_view, :only => [:show]
+  before_filter :load_comment, :only => [:show, :edit, :update, :delete_comment, :destroy]
+  before_filter :check_visibility, :only => [:show]
+  before_filter :check_ownership, :only => [:edit, :update, :delete_comment, :destroy]
   before_filter :check_permission_to_edit, :only => [:edit, :update ]
-  before_filter :check_permission_to_delete, :only => [:delete_comment, :destroy]
-  
-  # Make sure hidden comments aren't publically visible
-  def check_permission_to_view
+
+  def load_comment
     @comment = Comment.find(params[:id])
-    if @comment.hidden_by_admin?
-      access_denied if !logged_in_as_admin? || !(logged_in? && current_user.is_author_of?(@comment))
-    end
+    @check_ownership_of = @comment
+    @check_visibility_of = @comment
   end
   
   # Comments cannot be edited after they've been replied to
   def check_permission_to_edit
-    @comment = Comment.find(params[:id])
-    unless @comment && logged_in? && current_user.is_a?(User) && current_user.is_author_of?(@comment)
-      flash[:error] = t('errors.permission_to_edit', :default => "Sorry, but you don't have permission to make edits.")
-     redirect_to :back and return
-    end
     unless @comment && @comment.count_all_comments == 0
       flash[:error] = t('edits_disabled', :default => 'Comments with replies cannot be edited')
-     redirect_to :back and return
+      redirect_to :back and return
     end  
-  end
-
-  def check_permission_to_delete
-    @comment = Comment.find(params[:id])
-    unless (@comment && logged_in? && (current_user.is_author_of?(@comment) || current_user.is_author_of?(@comment.ultimate_parent)))
-      flash[:error] = t('permission_to_delete', :default => "Sorry, but you don't have permission to delete this comment.")
-     redirect_to :back and return
-    end
   end
     
   # Get the thing the user is trying to comment on
@@ -74,7 +60,6 @@ class CommentsController < ApplicationController
   # GET /comments/1
   # GET /comments/1.xml
   def show
-    @comment = Comment.find(params[:id])
     @comments = [@comment]
     @thread_view = true
     @thread_root = @comment
@@ -94,7 +79,6 @@ class CommentsController < ApplicationController
   
   # GET /comments/1/edit
   def edit
-    @comment = Comment.find(params[:id])
     #@commentable = @comment.commentable # trust me, it's better commented
   end
   
@@ -147,7 +131,6 @@ class CommentsController < ApplicationController
   # PUT /comments/1
   # PUT /comments/1.xml
   def update
-    @comment = Comment.find(params[:id])
     params[:comment][:edited_at] = Time.current
     if @comment.update_attributes(params[:comment])
       flash[:comment_notice] = t('successfully_updated', :default => 'Comment was successfully updated.')
@@ -162,7 +145,6 @@ class CommentsController < ApplicationController
   # DELETE /comments/1
   # DELETE /comments/1.xml
   def destroy
-    @comment = Comment.find(params[:id])    
     parent = @comment.ultimate_parent
     parent_comment = @comment.reply_comment? ? @comment.commentable : nil
     
@@ -274,8 +256,6 @@ class CommentsController < ApplicationController
   
   # ATTENTION: added load_commentable before this
   def delete_comment
-    @comment = Comment.find(params[:id])
-    
     if !(request.xml_http_request?)
       options = {}
       options[:show_comments] = params[:show_comments] if params[:show_comments]
@@ -296,33 +276,32 @@ class CommentsController < ApplicationController
   end
 
   protected 
-    # redirect to a particular comment in a thread, going into the thread
-    # if necessary to display it
-    def redirect_to_comment(comment, options = {})
-      if comment.depth > ArchiveConfig.COMMENT_THREAD_MAX_DEPTH
-        default_options = {:controller => comment.commentable.class.to_s.downcase.pluralize, 
-                           :action => :show,
-                           :id => comment.commentable.id,
-                           :anchor => "comment#{comment.id}"}
-        # display the comment's direct parent (and its associated thread)
-        redirect_to(url_for(default_options.merge(options)))
-      else
-        redirect_to_all_comments(comment.ultimate_parent, options.merge({:show_comments => true, :anchor => "comment#{comment.id}"}))
-      end
-    end
 
-    def redirect_to_all_comments(commentable, options = {})
-      default_options = {:anchor => "comments"}
-      options = default_options.merge(options)
-      redirect_to :controller => commentable.class.to_s.downcase.pluralize,
-                  :action => :show,
-                  :id => commentable.id,
-                  :show_comments => options[:show_comments],
-                  :add_comment => options[:add_comment],
-                  :add_comment_reply_id => options[:add_comment_reply_id],
-                  :delete_comment_id => options[:delete_comment_id],
-                  :anchor => options[:anchor]
+  # redirect to a particular comment in a thread, going into the thread
+  # if necessary to display it
+  def redirect_to_comment(comment, options = {})
+    if comment.depth > ArchiveConfig.COMMENT_THREAD_MAX_DEPTH
+      default_options = {:controller => comment.commentable.class.to_s.downcase.pluralize, 
+                         :action => :show,
+                         :id => comment.commentable.id,
+                         :anchor => "comment#{comment.id}"}
+      # display the comment's direct parent (and its associated thread)
+      redirect_to(url_for(default_options.merge(options)))
+    else
+      redirect_to_all_comments(comment.ultimate_parent, options.merge({:show_comments => true, :anchor => "comment#{comment.id}"}))
     end
-          
-    
+  end
+
+  def redirect_to_all_comments(commentable, options = {})
+    default_options = {:anchor => "comments"}
+    options = default_options.merge(options)
+    redirect_to :controller => commentable.class.to_s.downcase.pluralize,
+                :action => :show,
+                :id => commentable.id,
+                :show_comments => options[:show_comments],
+                :add_comment => options[:add_comment],
+                :add_comment_reply_id => options[:add_comment_reply_id],
+                :delete_comment_id => options[:delete_comment_id],
+                :anchor => options[:anchor]
+  end
 end

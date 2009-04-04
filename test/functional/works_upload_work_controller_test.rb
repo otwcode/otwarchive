@@ -9,7 +9,7 @@ class WorksUploadWorkControllerTest < ActionController::TestCase
       @work = create_work
       post :upload_work, :locale => 'en'
     end
-    should_redirect_to("restricted new session") {new_session_url(:restricted => true)}
+    should_redirect_to("new session") {new_session_url}
   end
 
   context "when logged in" do

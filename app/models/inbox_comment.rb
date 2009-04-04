@@ -21,4 +21,10 @@ class InboxComment < ActiveRecord::Base
       :conditions => {:read => read, :replied_to => replied_to},
       :include => [:feedback_comment => :pseud] }
   }
+  
+  # Gets the number of unread comments
+  def self.count_unread
+    self.count(:conditions => {:read => false})
+  end
+
 end

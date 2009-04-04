@@ -1,21 +1,12 @@
 class PseudsController < ApplicationController
   
   before_filter :load_user
-  before_filter :is_user_true, :only => [:create, :edit, :destroy, :new, :update]
+  before_filter :check_ownership, :only => [:create, :edit, :destroy, :new, :update]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
 
   def load_user
     @user = User.find_by_login(params[:user_id])
-  end
-
-  # returns true if the current user is the user who owns the pseud(s)  
-  def is_user?
-    @user == current_user
-  end
-
-  #displays error if someone tries to modify another user's pseuds
-  def is_user_true
-    is_user? || [redirect_to(:action => "index"), flash[:error] = t('no_permission_to_edit', :default => "Sorry, but you don't have permission to make edits.") ]
+    @check_ownership_of = @user
   end
 
   # GET /pseuds

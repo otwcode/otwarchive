@@ -1,12 +1,6 @@
 class AbuseReportsController < ApplicationController
 
   before_filter :admin_only, :except => [:new, :create]
-  
-  def access_denied
-    flash[:error] = t('admin_only', :default => "I'm sorry, only an admin can look at that area.")
-   redirect_to '/'
-    false
-  end
 
   # GET /abuse_reports/new
   # GET /abuse_reports/new.xml

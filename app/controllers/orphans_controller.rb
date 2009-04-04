@@ -18,7 +18,6 @@ class OrphansController < ApplicationController
   end
   
   def create
-    pseuds = current_user.pseuds
     if params[:work_id]
       work = Work.find(params[:work_id])
       pseuds = (current_user.pseuds & work.pseuds)
@@ -33,7 +32,7 @@ class OrphansController < ApplicationController
     use_default = params[:use_default] == "true"
     if !pseuds.blank? && !works.blank? && Creatorship.orphan(pseuds, works, use_default)
       flash[:notice] = t('success', :default => 'Orphaning was successful.')
-     redirect_to(current_user)
+      redirect_to(current_user)
     else
       render :action => :new 
     end 

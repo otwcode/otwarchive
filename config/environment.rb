@@ -12,8 +12,8 @@ AUTHORIZATION_MIXIN = "object roles"
 #
 # This can be set to a hash or to an explicit path like '/login'
 #
-LOGIN_REQUIRED_REDIRECTION = { :controller => '/session', :action => 'new' }
-PERMISSION_DENIED_REDIRECTION = { :controller => :works, :action => 'index' }
+#LOGIN_REQUIRED_REDIRECTION = { :controller => '/session', :action => 'new' }
+#PERMISSION_DENIED_REDIRECTION = { :controller => :works, :action => 'index' }
 
 # The method your auth scheme uses to store the location to redirect back to
 STORE_LOCATION_METHOD = :store_location

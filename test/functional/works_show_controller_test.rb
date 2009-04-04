@@ -20,8 +20,8 @@ class WorksShowControllerTest < ActionController::TestCase
           @request.session[:user] = @user
           get :show, :locale => 'en', :id => @work.id
         end
-        should_set_the_flash_to /unavailable/
-        should_redirect_to("the works path"){works_path}
+        should_set_the_flash_to /permission/
+        should_redirect_to("the current user's path"){@user}
         context "and it's your work" do
           setup do
             @work.pseuds << @user.default_pseud
@@ -34,7 +34,7 @@ class WorksShowControllerTest < ActionController::TestCase
         setup {@work.update_attribute("restricted", true) }
         context "when not logged in" do
           setup { get :show, :locale => 'en', :id => @work.id }
-          should_redirect_to('new session path') {new_session_path}
+          should_redirect_to('restricted new session path') {new_session_path(:restricted => true)}
         end
         context "when logged in" do
           setup do
@@ -42,8 +42,8 @@ class WorksShowControllerTest < ActionController::TestCase
             @request.session[:user] = @user
             get :show, :locale => 'en', :id => @work.id
           end
-          should_set_the_flash_to /unavailable/
-          should_redirect_to("the works path"){works_path}
+          should_set_the_flash_to /permission/
+          should_redirect_to("the current user's path"){@user}
           context "and it's your work" do
             setup do
               @work.pseuds << @user.default_pseud
@@ -81,7 +81,7 @@ class WorksShowControllerTest < ActionController::TestCase
         setup {@work.update_attribute("restricted", true) }
         context "when not logged in" do
           setup { get :show, :locale => 'en', :id => @work.id }
-          should_redirect_to('new session path') {new_session_path}
+          should_redirect_to('restricted new session path') {new_session_path(:restricted => true)}
         end
         context "when logged in" do
           setup do
@@ -119,8 +119,8 @@ class WorksShowControllerTest < ActionController::TestCase
         end
         context "no preference set" do
           setup { get :show, :locale => 'en', :id => @work.id }
-          should_set_the_flash_to /unavailable/
-          should_redirect_to("the works path"){works_path}
+          should_set_the_flash_to /permission/
+          should_redirect_to("the current user's path"){@user}
         end
         context "and you have set your preferences" do
           setup do
@@ -128,8 +128,8 @@ class WorksShowControllerTest < ActionController::TestCase
             @request.session[:user] = @user
             get :show, :locale => 'en', :id => @work.id
           end
-          should_set_the_flash_to /unavailable/
-          should_redirect_to("the works path"){works_path}
+          should_set_the_flash_to /permission/
+          should_redirect_to("the current user's path"){@user}
         end
         context "and it's your work" do
           setup do
@@ -143,7 +143,7 @@ class WorksShowControllerTest < ActionController::TestCase
         setup {@work.update_attribute("restricted", true) }
         context "when not logged in" do
           setup { get :show, :locale => 'en', :id => @work.id }
-          should_redirect_to('new session path') {new_session_path}
+          should_redirect_to('restricted new session path') {new_session_path(:restricted => true)}
         end
         context "when logged in" do
           setup do
@@ -151,8 +151,8 @@ class WorksShowControllerTest < ActionController::TestCase
             @request.session[:user] = @user
             get :show, :locale => 'en', :id => @work.id
           end
-          should_set_the_flash_to /unavailable/
-          should_redirect_to("the works path"){works_path}
+          should_set_the_flash_to /permission/
+          should_redirect_to("the current user's path"){@user}
           context "and it's your work" do
             setup do
               @work.pseuds << @user.default_pseud
@@ -201,7 +201,7 @@ class WorksShowControllerTest < ActionController::TestCase
         setup {@work.update_attribute("restricted", true) }
         context "when not logged in" do
           setup { get :show, :locale => 'en', :id => @work.id }
-          should_redirect_to('new session path') {new_session_path}
+          should_redirect_to('restricted new session path') {new_session_path(:restricted => true)}
         end
         context "when logged in" do
           setup do

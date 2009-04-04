@@ -73,16 +73,18 @@ module UserAuthentication
     # behavior in case the user is not authorized
     # to access the requested action.  For example, a popup window might
     # simply close itself.
-    def access_denied
+    def access_denied(options ={})
       respond_to do |accepts|
         accepts.html do
           store_location
           if logged_in?
+            destination = options[:redirect].blank? ? user_path(current_user) : options[:redirect]
             flash[:error] = "Sorry, you don't have permission to access the page you were trying to reach." 
-            redirect_to user_path(current_user)
+            redirect_to destination
           else
+            destination = options[:redirect].blank? ? {:controller => 'session', :action => 'new'} : options[:redirect]
             flash[:error] = "Sorry, you don't have permission to access the page you were trying to reach. Please log in." 
-            redirect_to :controller => 'session', :action => 'new'            
+            redirect_to destination            
           end
         end
         accepts.xml do

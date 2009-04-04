@@ -1,13 +1,13 @@
 ActionController::Routing::Routes.draw do |map|
 
-  map.resources :invitations 
+  map.resources :invitations, :only => [:new, :create] 
 
-  map.resources :media 
+  map.resources :media, :only => [:index, :show] 
 
   map.feedbacks '/feedback/', :controller => 'feedbacks', :action => 'create' , :conditions => { :method => :post }
   map.new_feedback_report '/feedback/', :controller => 'feedbacks', :action => 'new' 
 
-  map.resources :tag_wranglings , :member => {:assign => :get}
+  map.resources :tag_wranglings , :member => {:assign => :get}, :only => [:index, :create, :edit]
 
   map.resources :tags, :collection => {:show_hidden => :get} , :requirements => { :id => %r([^/;,?]+) } do |tag|
     tag.with_options :requirements => { :tag_id => %r([^/;,?]+) } do |tag_requirements|
@@ -21,22 +21,22 @@ ActionController::Routing::Routes.draw do |map|
   map.tos '/tos', :controller => 'home', :action => 'tos' 
   map.tos_faq '/tos_faq', :controller => 'home', :action => 'tos_faq' 
   
-  map.resources :abuse_reports 
+  map.resources :abuse_reports, :except => [:edit, :update, :destroy] 
 
-  map.resources :passwords 
+  map.resources :passwords, :only => [:new, :create] 
 
-  map.resources :admins 
+  map.resources :admins, :only => [:index, :show] 
 
   map.signup '/signup/:invitation_token', :controller => 'users', :action => 'new' 
   map.resources :users  do |user|
     user.resources :pseuds, :has_many => [:works, :series, :bookmarks]
-    user.resources :preferences
-    user.resource :profile, :controller => 'profile'
-    user.resource :inbox, :controller => 'inbox', :collection => {:reply => :get, :cancel_reply => :get}
+    user.resources :preferences, :only => [:index, :update]
+    user.resource :profile, :controller => 'profile', :only => :show
+    user.resource :inbox, :controller => 'inbox', :collection => {:reply => :get, :cancel_reply => :get}, :only => [:show, :update]
     user.resources :bookmarks
     user.resources :works, :collection => {:drafts => :get}
     user.resources :series, :member => {:manage => :get}, :has_many => :serial_works
-    user.resources :readings
+    user.resources :readings, :only => [:index, :destroy]
     user.resources :comments, :member => { :approve => :put, :reject => :put }
   end
 
@@ -81,16 +81,16 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :translations, :member => { :update_in_place => :post}
   map.resources :translators
 
-  map.resources :orphans, :collection => {:about => :get} 
+  map.resources :orphans, :collection => {:about => :get}, :only => [:index, :new, :create] 
 
-  map.resources :external_works, :has_many => :bookmarks 
+  map.resources :external_works, :has_many => :bookmarks, :only => :new 
 
   map.resources :communities 
 
-  map.resources :related_works 
-  map.resources :serial_works 
+  map.resources :related_works, :except => [:new, :edit, :create] 
+  map.resources :serial_works, :only => :destroy 
 
-  map.resources :series , :member => {:manage => :get, :update_positions => :post}, :has_many => :serial_works
+  map.resources :series , :member => {:manage => :get, :update_positions => :post}
 
   map.open_id_complete 'session', :controller => "session", :action => "create", :requirements => { :method => :get } 
 
@@ -102,10 +102,10 @@ ActionController::Routing::Routes.draw do |map|
   map.admin_logout '/admin/logout', :controller => 'admin/admin_session', :action => 'destroy' 
 
   map.namespace :admin, :path_prefix => 'admin' do |admin|
-    admin.resources :user_creations, :member => { :hide => :get }
-    admin.resources :users, :controller => 'admin_users', :collection => {:notify => :get, :send_notification => :post}
-    admin.resources :invitations, :controller => 'admin_invitations'
-    admin.resource :session, :controller => 'admin_session'
+    admin.resources :user_creations, :only => :destroy, :member => { :hide => :get }
+    admin.resources :users, :controller => 'admin_users', :collection => {:notify => :get, :send_notification => :post}, :except => [:new, :create]
+    admin.resources :invitations, :controller => 'admin_invitations', :only => [:index, :new, :create]
+    admin.resource :session, :controller => 'admin_session', :only => [:new, :create, :destroy]
   end
 
   map.activate '/activate/:id', :controller => 'users', :action => 'activate'

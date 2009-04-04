@@ -20,7 +20,22 @@ module AdminAuthentication
 
     # Filter method - keeps users out of admin areas
     def admin_only
-      logged_in_as_admin? || access_denied
+      logged_in_as_admin? || admin_only_access_denied
+    end
+    
+    def admin_only_access_denied
+      respond_to do |accepts|
+        accepts.html do
+          flash[:error] = "I'm sorry, only an admin can look at that area." 
+          redirect_to new_admin_session_path
+        end
+        accepts.xml do
+          headers["Status"]           = "Unauthorized"
+          headers["WWW-Authenticate"] = %(Basic realm="Web Password")
+          render :text => "Could't authenticate you", :status => '401 Unauthorized'
+        end
+      end
+      false
     end
     
     # Filter method - prevents users from logging in with more than one kind of account at once

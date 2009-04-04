@@ -1,13 +1,11 @@
 class SerialWorksController < ApplicationController
   
-  before_filter :author_only
-  
-  def author_only
+  before_filter :load_serial_work
+  before_filter :check_ownership
+    
+  def load_serial_work
     @serial_work = SerialWork.find(params[:id])
-    unless logged_in? && !(current_user.pseuds & @serial_work.work.pseuds).empty?
-      flash[:error] = t('errors.no_permission_to_edit', :default => "Sorry, but you don't have permission to make edits.")
-      redirect_to(works_url) 
-    end  
+    @check_ownership_of = @serial_work
   end
 
   # DELETE /related_works/1

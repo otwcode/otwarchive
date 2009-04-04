@@ -1,12 +1,12 @@
 class UsersController < ApplicationController
   before_filter :check_user_status, :only => [:edit, :update]
-  before_filter :is_owner, :only => [:edit, :update, :destroy]
+  before_filter :load_user, :only => [:show, :edit, :update, :destroy, :after_reset]
+  before_filter :check_ownership, :only => [:edit, :update, :destroy]
   before_filter :check_account_creation_status, :only => [:new, :create]
   
-  # Ensure that the current user is authorized to make changes
-  def is_owner
+  def load_user
     @user = User.find_by_login(params[:id])
-    @user == current_user || access_denied
+    @check_ownership_of = @user
   end
   
   def check_account_creation_status
@@ -41,7 +41,6 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.xml
   def show
-    @user = User.find_by_login(params[:id])
     if @user
       if params[:open_id_complete] then
         begin
@@ -69,7 +68,6 @@ class UsersController < ApplicationController
   
   # GET /users/1/edit
   def edit
-    @user = User.find_by_login(params[:id])
   end
   
   # POST /users
@@ -116,13 +114,11 @@ class UsersController < ApplicationController
   end
   
   def after_reset
-    @user = User.find_by_login(params[:id])  
   end
   
   # PUT /users/1
   # PUT /users/1.xml
   def update
-    @user = User.find_by_login(params[:id])
     begin 
       if @user.profile
         @user.profile.update_attributes! params[:profile_attributes]
@@ -158,7 +154,6 @@ class UsersController < ApplicationController
   # DELETE /users/1.xml
   def destroy
     @hide_dashboard = true
-    @user = User.find_by_login(params[:id])
     @works = @user.works.find(:all, :conditions => {:posted => true})
     if @works.blank?
       if @user.unposted_works

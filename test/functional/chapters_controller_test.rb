@@ -27,19 +27,20 @@ class ChaptersControllerTest < ActionController::TestCase
     work.add_default_tags
     delete :destroy, :locale => 'en', :work_id => work.id, :id => chapter.id
     assert flash.has_key?(:error)
-    assert_redirected_to edit_work_url(assigns(:work))
+    assert_redirected_to work_url(assigns(:work))
     assert_equal Work.find(work.id).number_of_chapters, 1
   end
   def test_destroy_work_chapter
-    # FIXME - this should fail - no session means anyone can do it...
-    pseud = create_pseud
+    user = create_user
+    @request.session[:user] = user
+    pseud = user.pseuds.first
     chapter1 = new_chapter(:authors => [pseud])
     chapter2 = new_chapter(:authors => [pseud])
     work = create_work(:chapters => [chapter1, chapter2], :authors => [pseud])
     work.add_default_tags
     work.update_attribute(:posted, true)
     assert_difference('Chapter.count', -1) do
-      delete :destroy, :locale => 'en', :work_id => work.id, :id => chapter1.id
+      delete :destroy, :work_id => work.id, :id => chapter1.id
     end
     assert_redirected_to edit_work_url(assigns(:work))
     assert_equal Work.find(work.id).number_of_chapters, 1
@@ -66,7 +67,7 @@ class ChaptersControllerTest < ActionController::TestCase
     work = create_work(:chapters => [chapter])
     work.add_default_tags
     get :index, :locale => 'en', :work_id => work.id
-    assert_redirected_to '/'
+    assert_redirected_to new_session_path
   end
   def test_work_chapters_path
     chapter = new_chapter

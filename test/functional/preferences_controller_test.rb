@@ -12,7 +12,7 @@ class PreferencesControllerTest < ActionController::TestCase
       should "not display a form" do
          assert_select "form", false
       end
-      should_redirect_to("the second user's path") {user_path(@second_user)}
+      should_redirect_to("the first user's path") {user_path(@user)}
       should_set_the_flash_to /have permission/
     end
     context "on PUT to :update" do
@@ -22,7 +22,7 @@ class PreferencesControllerTest < ActionController::TestCase
       should "not make the change" do
         assert @user.preference.history_enabled
       end
-      should_redirect_to("the second user's path") {user_path(@second_user)}
+      should_redirect_to("the first user's path") {user_path(@user)}
       should_set_the_flash_to /have permission/
     end
   end

@@ -5,31 +5,17 @@ class WorksController < ApplicationController
 
   # only registered users and NOT admin should be able to create new works
   before_filter :users_only, :only => [ :new, :create, :upload_work, :drafts, :preview ]
-  # only authors of a work should be able to edit it
-  before_filter :is_author, :only => [ :edit, :update, :destroy, :preview ]
+  before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview]
+  before_filter :load_work, :only => [ :show, :edit, :update, :destroy, :preview ]
+  before_filter :check_ownership, :only => [ :edit, :update, :destroy, :preview ]
+  before_filter :check_visibility, :only => [ :show ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :upload_work ]
   before_filter :update_or_create_reading, :only => [ :show ]
-  before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview]
-
-  # For the auto-complete field in the works form
-  def auto_complete_for_pseud_byline
-    byline = request.raw_post.to_s.strip
-    if byline.include? "["
-      split = byline.split('[', 2)
-      pseud_name = split.first.strip
-      user_login = split.last.strip.chop
-      conditions = [ 'LOWER(users.login) LIKE ? AND LOWER(name) LIKE ?','%' + user_login + '%',  '%' + pseud_name + '%' ]
-    else
-      conditions = [ 'LOWER(name) LIKE ?', '%' + byline + '%' ]
-    end
-    @pseuds = Pseud.find(:all, :include => :user, :conditions => conditions, :limit => 10)
-    render :inline => "<%= auto_complete_result(@pseuds, 'byline')%>"
-  end
-
-  def access_denied
-    store_location
-    redirect_to new_session_path(:restricted => true)
-    false
+  
+  def load_work
+    @work = Work.find(params[:id])
+    @check_ownership_of = @work
+    @check_visibility_of = @work  
   end
 
   # Sets values for @work, @chapter, @coauthor_results, @pseuds, and @selected_pseuds
@@ -62,7 +48,7 @@ class WorksController < ApplicationController
 
     begin
       if params[:id] # edit, update, preview, manage_chapters
-        @work = Work.find(params[:id])
+        @work ||= Work.find(params[:id])
         @previous_published_at = @work.published_at
         if params[:work]  # editing, save our changes
           @work.attributes = params[:work]
@@ -93,15 +79,6 @@ class WorksController < ApplicationController
         @series = current_user.series.uniq
       end
     rescue
-    end
-  end
-
-  # Only authors of the work should be able to edit it
-  def is_author
-    @work = Work.find(params[:id])
-    unless current_user.is_a?(User) && current_user.is_author_of?(@work)
-      flash[:error] = t('errors.no_permission_to_edit', :default => 'Sorry, but you don\'t have permission to make edits.')
-     redirect_to(@work)
     end
   end
 
@@ -217,12 +194,12 @@ class WorksController < ApplicationController
   def drafts
     unless params[:user_id]
       flash[:error] = t('whose_drafts', :default => "Whose drafts did you want to look at?")
-     redirect_to :controller => :users, :action => :index
+      redirect_to :controller => :users, :action => :index
     else
       @user = User.find_by_login(params[:user_id])
       unless current_user == @user
         flash[:error] = t('not_your_drafts', :default => "You can only see your own drafts, sorry!")
-       redirect_to current_user
+        redirect_to current_user
       else
         current_user.cleanup_unposted_works
         if params[:pseud_id]
@@ -241,15 +218,6 @@ class WorksController < ApplicationController
     unless @work
   	  flash[:error] = t('work_not_found', :default => "Sorry, we couldn't find the story you were looking for.")
       redirect_to works_path and return
-    end
-    unless @work.visible || is_admin?
-      if !current_user.is_a?(User)
-        store_location
-        redirect_to new_session_path and return
-      elsif !current_user.is_author_of?(@work)
-  	    flash[:error] = 'This page is unavailable.'
-        redirect_to works_path and return
-      end
     end
     # Users must explicitly okay viewing of adult content
     if params[:view_adult]
@@ -468,41 +436,41 @@ class WorksController < ApplicationController
 
   protected
 
-    def load_pseuds
-        @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
-        @pseuds = current_user.pseuds
-        @coauthors = @allpseuds.select{ |p| p.user.id != current_user.id}
-        to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors
-        @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }.uniq
-    end
+  def load_pseuds
+      @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
+      @pseuds = current_user.pseuds
+      @coauthors = @allpseuds.select{ |p| p.user.id != current_user.id}
+      to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors
+      @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }.uniq
+  end
 
-    # create a reading object when showing a work, but only if the user has reading
-    # history enabled and is not the author of the work
-    def update_or_create_reading
-      return unless @work
-      if logged_in? && current_user.preference.history_enabled
-        unless current_user.is_author_of?(@work)
-          reading = Reading.find_or_initialize_by_work_id_and_user_id(@work.id, current_user.id)
-          reading.major_version_read, reading.minor_version_read = @work.major_version, @work.minor_version
-          reading.save
-        end
-      end
-      true
-    end
-
-    def cancel_posting_and_redirect
-      if @work and @work.posted
-        flash[:notice] = t('not_updated', :default => "<p>The work was not updated.</p>")
-        redirect_to user_works_path(current_user)
-      else
-        flash[:notice] = t('not_posted', :default => "<p>This work was not posted.</p>
-        <p>It will be saved here in your drafts for one week, then cleaned up.</p>")
-        begin
-          current_user.cleanup_unposted_works
-        rescue ThinkingSphinx::ConnectionError
-        end
-        redirect_to drafts_user_works_path(current_user)
+  # create a reading object when showing a work, but only if the user has reading
+  # history enabled and is not the author of the work
+  def update_or_create_reading
+    return unless @work
+    if logged_in? && current_user.preference.history_enabled
+      unless current_user.is_author_of?(@work)
+        reading = Reading.find_or_initialize_by_work_id_and_user_id(@work.id, current_user.id)
+        reading.major_version_read, reading.minor_version_read = @work.major_version, @work.minor_version
+        reading.save
       end
     end
+    true
+  end
+
+  def cancel_posting_and_redirect
+    if @work and @work.posted
+      flash[:notice] = t('not_updated', :default => "<p>The work was not updated.</p>")
+      redirect_to user_works_path(current_user)
+    else
+      flash[:notice] = t('not_posted', :default => "<p>This work was not posted.</p>
+      <p>It will be saved here in your drafts for one week, then cleaned up.</p>")
+      begin
+        current_user.cleanup_unposted_works
+      rescue ThinkingSphinx::ConnectionError
+      end
+      redirect_to drafts_user_works_path(current_user)
+    end
+  end
 
 end

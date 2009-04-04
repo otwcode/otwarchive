@@ -164,7 +164,7 @@ class UsersControllerTest < ActionController::TestCase
     should "not display a form" do
        assert_select "form", false
     end
-    should_redirect_to("the second user's path") {user_path(@second_user)}
+    should_redirect_to("the first user's path") {user_path(@user)}
     should_set_the_flash_to /have permission/
   end
   context "on PUT to :update someone else" do
@@ -180,7 +180,7 @@ class UsersControllerTest < ActionController::TestCase
     should "not make the change" do
       assert_not_equal @new_email, @user.email
     end
-    should_redirect_to("the second user's path") {user_path(@second_user)}
+    should_redirect_to("the first user's path") {user_path(@user)}
     should_set_the_flash_to /have permission/
   end
 
@@ -222,7 +222,7 @@ class UsersControllerTest < ActionController::TestCase
     should "not destroy the record" do
       assert @user.reload
     end
-    should_redirect_to("the second user's path") {user_path(@second_user)}
+    should_redirect_to("the first user's path") {user_path(@user)}
     should_set_the_flash_to /have permission/
   end
   context "on GET to :index" do

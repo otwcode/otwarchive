@@ -1,13 +1,6 @@
 class AdminsController < ApplicationController
   before_filter :admin_only
   
-  def access_denied
-    flash[:error] = t('admin_only', :default => "I'm sorry, only an admin can look at that area.")
-   store_location
-    redirect_to new_admin_session_path
-    false
-  end
-  
   # GET /admins
   # GET /admins.xml
   def index

@@ -1,16 +1,9 @@
 class BookmarksController < ApplicationController 
   before_filter :load_bookmarkable, :only => [ :index, :new, :create ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
-  before_filter :is_author, :only => [ :edit, :update, :destroy ]
-  
-  # Only the owner of the bookmark should be able to edit it
-  def is_author
-    @bookmark = Bookmark.find(params[:id])
-    unless current_user.is_a?(User) && current_user.is_author_of?(@bookmark)
-      flash[:error] = t('errors.no_permission_to_edit', :default => "Sorry, but you don't have permission to make edits.")
-     redirect_to(@bookmark)     
-    end
-  end
+  before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy ] 
+  before_filter :check_visibility, :only => [ :show ]
+  before_filter :check_ownership, :only => [ :edit, :update, :destroy ]
   
   # get the parent
   def load_bookmarkable
@@ -20,6 +13,13 @@ class BookmarksController < ApplicationController
       @bookmarkable = ExternalWork.find(params[:external_work_id])
     end
   end  
+
+  def load_bookmark
+    @bookmark = Bookmark.find(params[:id])
+    @check_ownership_of = @bookmark
+    @check_visibility_of = @bookmark
+  end
+
   
   # GET    /:locale/bookmarks
   # GET    /:locale/users/:user_id/bookmarks 
@@ -51,16 +51,6 @@ class BookmarksController < ApplicationController
   # GET    /:locale/works/:work_id/bookmark/:id
   # GET    /:locale/external_works/:external_work_id/bookmark/:id
   def show
-    @bookmark = Bookmark.find(params[:id])
-    unless @bookmark.visible || is_admin?
-      if !current_user.is_a?(User)
-        store_location 
-        redirect_to new_session_path and return        
-      elsif @bookmark.pseud.user != current_user
-  	    flash[:error] = t('not_visible', :default => 'This page is unavailable.')
-       redirect_to user_path(current_user) and return
-      end
-    end
   end
 
   # GET /bookmarks/new
@@ -75,7 +65,6 @@ class BookmarksController < ApplicationController
 
   # GET /bookmarks/1/edit
   def edit
-    @bookmark = Bookmark.find(params[:id])
     @bookmarkable = @bookmark.bookmarkable
     @tag_string = @bookmark.tag_string
   end
@@ -101,7 +90,6 @@ class BookmarksController < ApplicationController
   # PUT /bookmarks/1
   # PUT /bookmarks/1.xml
   def update
-    @bookmark = Bookmark.find(params[:id])
     begin
       if @bookmark.update_attributes(params[:bookmark]) && @bookmark.tag_string=params[:tag_string]
         flash[:notice] = t('successfully_updated', :default => 'Bookmark was successfully updated.')
@@ -118,7 +106,6 @@ class BookmarksController < ApplicationController
   # DELETE /bookmarks/1
   # DELETE /bookmarks/1.xml
   def destroy
-    @bookmark = Bookmark.find(params[:id])
     @bookmark.destroy
     flash[:notice] = t('successfully_deleted', :default => 'Bookmark was successfully deleted.')
    redirect_to user_bookmarks_path(current_user)

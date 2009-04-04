@@ -8,7 +8,7 @@ class WorksDraftsControllerTest < ActionController::TestCase
     setup {@user = create_user}
     context "when not logged in" do
        setup { get :drafts, :locale => 'en', :user_id => @user.login }
-       should_redirect_to("restricted new session") {new_session_url(:restricted => true)}
+       should_redirect_to("new session") {new_session_url}
     end
     context "when not your drafts" do
       setup do

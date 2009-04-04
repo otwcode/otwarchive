@@ -1,4 +1,4 @@
-<h2><%=h t('my_inbox', :default => 'My Inbox') %> (<%= t('inbox_count', :default => "{{total}} comments, {{unread}} unread", :total => @user.inbox_comments.count, :unread => @unread) %>)</h2>
+<h2><%=h t('my_inbox', :default => 'My Inbox') %> (<%= t('inbox_count', :default => "{{total}} comments, {{unread}} unread", :total => @inbox_total, :unread => @unread) %>)</h2>
 
 <%= flash_div :comment_error, :comment_notice -%>
 

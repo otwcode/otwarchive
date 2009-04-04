@@ -1,10 +1,11 @@
 class PreferencesController < ApplicationController
-  before_filter :is_owner
+  before_filter :load_user
+  before_filter :check_ownership
   
   # Ensure that the current user is authorized to view and change this information
-  def is_owner
+  def load_user
     @user = User.find_by_login(params[:user_id])
-    @user == current_user || access_denied
+    @check_ownership_of = @user
   end
   
   def index

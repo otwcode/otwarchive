@@ -1,14 +1,16 @@
 class InboxController < ApplicationController
-  before_filter :is_owner
+  before_filter :load_user
+  before_filter :check_ownership
   
-  def is_owner
+  def load_user
     @user = User.find_by_login(params[:user_id])
-    @user == current_user || access_denied
-    @hide_dashboard = true
+    @check_ownership_of = @user
   end
   
-  def show 
-    @unread = @user.inbox_comments.count(:conditions => {:read => false})
+  def show
+    @hide_dashboard = true 
+    @inbox_total = @user.inbox_comments.count
+    @unread = @user.inbox_comments.count_unread
     filters = params[:filters] || {}   
     @inbox_comments = @user.inbox_comments.find_by_filters(filters)
     @select_read, @select_replied_to, @select_date = filters[:read], filters[:replied_to], filters[:date]

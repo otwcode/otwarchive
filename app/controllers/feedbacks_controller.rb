@@ -15,10 +15,8 @@ class FeedbacksController < ApplicationController
     end
   end
   
-  
   def create
-    @feedback = Feedback.new(params[:feedback])
-    
+    @feedback = Feedback.new(params[:feedback])   
     respond_to do |format|
       if @feedback.save
         AdminMailer.deliver_feedback(@feedback)
@@ -29,7 +27,5 @@ class FeedbacksController < ApplicationController
       end
     end
   end
-  
  
-  
 end

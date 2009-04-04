@@ -1,22 +1,13 @@
 class SeriesController < ApplicationController 
-  before_filter :is_author, :only => [ :edit, :update, :destroy ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
-  before_filter :check_permission_to_view, :only => [:show]
+  before_filter :load_series, :only => [ :show, :edit, :update, :manage, :destroy ] 
+  before_filter :check_ownership, :only => [ :edit, :update, :manage, :destroy ] 
+  before_filter :check_visibility, :only => [:show]
   
-  # Only authors of the series should be able to edit it
-  def is_author
+  def load_series
     @series = Series.find(params[:id])
-    unless current_user.is_a?(User) && current_user.is_author_of?(@series)
-      flash[:error] = t('errors.no_permission_to_edit', :default => "Sorry, but you don't have permission to make edits.")
-      redirect_to(@series)     
-    end
-  end
-    
-  # Hidden series should only be visible to admins and authors
-  def check_permission_to_view
-    @series = Series.find(params[:id])
-    can_view_hidden = is_admin? || (current_user.is_a?(User) && current_user.is_author_of?(@series))
-    access_denied if (@series.hidden_by_admin? && !can_view_hidden)
+    @check_ownership_of = @series
+    @check_visibility_of = @series  
   end
   
   # GET /series
@@ -39,13 +30,7 @@ class SeriesController < ApplicationController
   # GET /series/1
   # GET /series/1.xml
   def show
-    @series = Series.find(params[:id])
-    if !@series.visible?(current_user)
-      flash[:error] = t('no_permission_to_view', :default => "Sorry, this page is unavailable.")
-      redirect_to url_for(:action => 'index')
-    else
-      @serial_works = @series.serial_works.find(:all, :include => :work, :conditions => ['works.posted = ?', true], :order => :position).select{|sw| sw.work.visible(current_user)}
-    end
+    @serial_works = @series.serial_works.find(:all, :include => :work, :conditions => ['works.posted = ?', true], :order => :position).select{|sw| sw.work.visible(current_user)}
   end
 
   # GET /series/new
@@ -56,7 +41,6 @@ class SeriesController < ApplicationController
 
   # GET /series/1/edit
   def edit
-    @series = Series.find(params[:id])
     @pseuds = current_user.pseuds
     @coauthors = @series.pseuds.select{ |p| p.user.id != current_user.id}
     to_select = @series.pseuds.blank? ? [current_user.default_pseud] : @series.pseuds
@@ -65,7 +49,6 @@ class SeriesController < ApplicationController
   
   # GET /series/1/manage
   def manage
-    @series = Series.find(params[:id])
     @serial_works = @series.serial_works.find(:all, :include => [:work], :order => :position, :conditions => ['works.posted = ?', true])    
   end
 
@@ -84,8 +67,6 @@ class SeriesController < ApplicationController
   # PUT /series/1
   # PUT /series/1.xml
   def update
-    @series = Series.find(params[:id])
-    
     unless params[:series][:author_attributes][:ids]
       flash[:error] = t('author_removal_failed', :default => "Sorry, you cannot remove yourself entirely as an author of a series right now.")
       redirect_to edit_series_path(@series) and return
@@ -124,7 +105,6 @@ class SeriesController < ApplicationController
   # DELETE /series/1
   # DELETE /series/1.xml
   def destroy
-    @series = Series.find(params[:id])
     if @series.destroy
       flash[:notice] = t('successfully_deleted', :default => 'Series was successfully deleted.')
       redirect_to(current_user)
