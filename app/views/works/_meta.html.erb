@@ -15,6 +15,9 @@
           <%- tags.each do |tag| -%>
             <li class="<%= type.downcase -%>">
               <%= link_to_tag(tag, true) %> 
+              <%- unless tag == tags.last -%>
+                <%= "," %>
+              <%- end -%>
             </li>
           <%- end -%>
         <%- end -%>

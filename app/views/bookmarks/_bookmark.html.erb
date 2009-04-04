@@ -38,6 +38,9 @@
       	  <ul>
   	        <% bookmark.tags.each do |tag| -%>
               <li><%= link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') %></li>
+                <%- unless tag == bookmark.tags.last -%>
+                <%= "," %>
+                <%- end -%>
             <% end -%>
           </ul>
         </dd>

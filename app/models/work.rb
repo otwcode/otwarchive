@@ -538,11 +538,20 @@ class Work < ActiveRecord::Base
   end
 
   def freeform_tags
-    warnings = self.warnings.sort || []
     freeform = self.freeforms.sort || []
     ambiguous = self.ambiguities.sort || []
 
-    tags = warnings + freeform + ambiguous
+    tags = freeform + ambiguous
+    if tags.size > ArchiveConfig.TAGS_PER_LINE
+      tags = tags[0..(ArchiveConfig.TAGS_PER_LINE-1)]
+    end
+    return tags
+  end
+  
+  def warning_tags
+    warnings = self.warnings.sort || []
+    
+    tags = warnings 
     if tags.size > ArchiveConfig.TAGS_PER_LINE
       tags = tags[0..(ArchiveConfig.TAGS_PER_LINE-1)]
     end

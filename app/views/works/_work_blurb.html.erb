@@ -23,17 +23,39 @@
 	  <p class="update"><%= set_format_for_date(work.revised_at) %></p>
 	</li>
 
-	<%- cast_tags = work.cast_tags; freeform_tags = work.freeform_tags -%>
-	<%- unless ((cast_tags.size + freeform_tags.size) < 1) -%>
-	<li>
+ 	<%- cast_tags = work.cast_tags; warning_tags = work.warning_tags; freeform_tags = work.freeform_tags -%>
+	<%- unless ((cast_tags.size + warning_tags.size + freeform_tags.size) < 1) -%>
+  	<li>
 		<dl class="tags">
 		  <%- unless cast_tags.size < 1 -%>
 			<dt><%= t('cast_tags', :default => 'Cast') + ': ' %></dt>
 			<dd>
-				<ul>
-				  <%- cast_tags.each do |tag| -%>
-					  <li><%= link_to_tag(tag, true) -%></li>
+				<ul id="work_<%= work.id %>_category_cast">
+				  <%- cast_tags.each do  |tag| -%>
+					  <li><%= link_to_tag(tag, true) -%>
+           <%- unless tag == cast_tags.last -%>
+              <%= "," -%>
+              	<%- end -%></li>
 					<%- end -%>
+				</ul>
+			</dd>
+			<%- end -%>
+      
+		  <%- unless warning_tags.size < 1 -%>
+			<dt><%=h 'Warnings' + ': ' %></dt>
+			<dd>
+				 <ul id="work_<%= work.id %>_category_warning">
+        <%- if hide_warnings?(work) -%>
+          <li><%= show_warnings_link(work) %></li> 
+        <%- else -%>
+          <%- warning_tags.each  do  |tag| -%>
+          
+            <li><%= link_to_tag(tag, true) -%>
+             <%- unless tag == warning_tags.last -%>
+              <%= "," -%>
+              	<%- end -%></li>
+          <%- end -%>
+        <%- end -%>
 				</ul>
 			</dd>
 			<%- end -%>
@@ -41,9 +63,12 @@
 			<%- unless freeform_tags.size < 1 -%>
 			<dt><%= t('work_tags', :default => 'Tags') + ': ' %></dt>
 			<dd>
-				<ul>
+				<ul id="work_<%= work.id %>_category_freeform">
 				  <%- freeform_tags.each do |tag| -%>
-					<li><%= link_to_tag(tag, true) -%></li>
+					<li><%= link_to_tag(tag, true) -%>
+           <%- unless tag == freeform_tags.last -%>
+              <%= "," -%>
+              	<%- end -%></li>
 					<%- end -%>
 				</ul>
 			</dd>
