@@ -156,7 +156,7 @@ class WorksController < ApplicationController
         @tag = Tag.find_by_name(params[:tag_id])
         if @tag
           @tag = @tag.merger if @tag.merger
-          redirect_to tag_path(@tag) and return unless @tag.canonical
+          redirect_to url_for({:controller => :tags, :action => :show, :id => @tag.name}) and return unless @tag.canonical
           @selected_tags << @tag.id.to_s unless @selected_tags.include?(@tag.id.to_s)
         else
           flash[:error] = t('tag_not_found', :default => "Sorry, there's no tag by that name in our system.")

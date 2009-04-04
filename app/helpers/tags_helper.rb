@@ -29,24 +29,42 @@ module TagsHelper
 
 	# Adds a consistent class name to tags
 	def link_to_tag(tag, classless = false, options = {})
-	  options = {:class => "tag"}.merge(options)
 	  if classless
 		  link_to tag.name, {:controller => :tags, :action => :show, :id => tag.name}, options
 	  else
+      options = {:class => "tag"}.merge(options)
 		  link_to tag.name, {:controller => :tags, :action => :show, :id => tag.name}, options
+	  end
+	end
+
+	def link_to_tag_with_text(tag, link_text, classless = false, options = {})
+	  if classless
+		  link_to link_text, {:controller => :tags, :action => :show, :id => tag.name}, options
+	  else
+      options = {:class => "tag"}.merge(options)
+		  link_to link_text, {:controller => :tags, :action => :show, :id => tag.name}, options
 	  end
 	end
 
 	# Adds a consistent class name to tags
   # edit_tag_path is behaving badly since around the Rails 2.2.2 upgrade
 	def link_to_edit_tag(tag, classless = false, options = {})
-	  options = {:class => "tag"}.merge(options)
 	  if classless
 		  #link_to tag.name, edit_tag_path(tag), options 
       link_to tag.name, {:controller => :tags, :action => :edit, :id => tag.name}, options
 	  else
-		  #link_to tag.name, edit_tag_path(tag), options
+      options = {:class => "tag"}.merge(options)
+      #link_to tag.name, edit_tag_path(tag), options
       link_to tag.name, {:controller => :tags, :action => :edit, :id => tag.name}, options
+	  end
+	end
+
+  def link_to_tag_works_with_text(tag, link_text, classless = false, options = {})
+	  if classless
+		  link_to link_text, {:controller => :works, :action => :index, :tag_id => tag.name}, options
+	  else
+      options = {:class => "tag"}.merge(options)
+		  link_to link_text, {:controller => :works, :action => :index, :tag_id => tag.name}, options
 	  end
 	end
 

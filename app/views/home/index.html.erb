@@ -40,7 +40,7 @@
 	<ul class="meters">
 		<li><span><%= @fandom_count -%></span> <%= ' ' + t('fandom_count', :default => 'fandoms to date') %></li>
 		<%- unless @latest_fandom.blank? -%>
-			<li><%=h t('latest_updated', :default => 'Latest updated') + ': '%> <span><%= link_to @latest_fandom.name, tag_works_path(@latest_fandom) -%></span></li>
+			<li><%=h t('latest_updated', :default => 'Latest updated') + ': '%> <span><%= link_to_tag_works_with_text(@latest_fandom, @latest_fandom.name) -%></span></li>
 		<%- end -%>
 	</ul>
 </div>
