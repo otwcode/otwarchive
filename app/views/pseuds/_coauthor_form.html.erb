@@ -17,7 +17,7 @@
    
     <!--please assign a label to the dropdown menu! I can't quite grok it-->
 
-    <p><%= t('ambiguous_pseud', :default => "There's more than one user with the pseud {{name}}. Please choose the one you want:", :name => name %></p>
+    <p><%= t('ambiguous_pseud', :default => "There's more than one user with the pseud {{name}}. Please choose the one you want:", :name => name) %></p>
     <select name="<%= creation.class.to_s.downcase %>[author_attributes][ambiguous_pseuds][]">
       <%= options_from_collection_for_select(pseuds, :id, :user_name) %>
     </select>  
