@@ -5,9 +5,35 @@
 # Disallow: /
 
 User-agent:	*
+Disallow:	/cs/
+Disallow:	/de/
+Disallow:	/es/
+Disallow:	/fi/
+Disallow:	/fr/
+Disallow:	/id/
+Disallow:	/it/
+Disallow:	/ja/
+Disallow:	/nl/
+Disallow:	/pt/
+Disallow:	/ru/
+Disallow:	/zh/
+Disallow:	/en/
 Disallow:	/works? # cruel but efficient
 
 User-agent:	Googlebot
+Disallow:	/cs/
+Disallow:	/de/
+Disallow:	/es/
+Disallow:	/fi/
+Disallow:	/fr/
+Disallow:	/id/
+Disallow:	/it/
+Disallow:	/ja/
+Disallow:	/nl/
+Disallow:	/pt/
+Disallow:	/ru/
+Disallow:	/zh/
+Disallow:	/en/
 Disallow:	/works?*query # Googlebot is smart and knows pattern matching
 Disallow:	/works?*sort
-Disallow:	/works?selected_tags
+Disallow:	/works?*selected_tags
