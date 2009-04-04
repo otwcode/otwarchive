@@ -17,7 +17,9 @@ end
   <li><%= link_to_help "coming-soon", prefix + "Communities" %></li>
   <% if @user == current_user %>    
   <li><%= link_to_unless_current "My Inbox (" + @user.unread_inbox_comments_count.to_s + ")", user_inbox_path(@user) %></li>
-  <li><%= link_to_unless_current "My Reading History", user_readings_path(@user) %></li>
+  <% if @user.preference.history_enabled? %>
+    <li><%= link_to_unless_current "My Reading History", user_readings_path(@user) %></li>
+  <% end %>
   <li><%= link_to_help "coming-soon", "My Subscriptions" %></li>
   <li><%= link_to_unless_current "My Preferences", user_preferences_path(@user) %></li>
   <% end %>
