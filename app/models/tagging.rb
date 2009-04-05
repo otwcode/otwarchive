@@ -7,6 +7,7 @@ class Tagging < ActiveRecord::Base
 
   # Gets rid of unwrangled tags that aren't tagging anything else
   def delete_unused_tags
+    return unless tagger
     tagger.destroy if (tagger.unwrangled && tagger.taggings == [self])
   end
 
