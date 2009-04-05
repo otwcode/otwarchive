@@ -35,7 +35,7 @@ class Work < ActiveRecord::Base
   has_many :ambiguities, :through => :taggings, :source => :tagger, :source_type => 'Ambiguity'
 
   acts_as_commentable
-  
+
   belongs_to :language
 
   ########################################################################
@@ -56,27 +56,27 @@ class Work < ActiveRecord::Base
   ########################################################################
   validates_presence_of :title
   validates_length_of :title,
-    :minimum => ArchiveConfig.TITLE_MIN, 
+    :minimum => ArchiveConfig.TITLE_MIN,
     :too_short=> t('title_too_short', :default => "must be at least {{min}} letters long.", :min => ArchiveConfig.TITLE_MIN)
 
   validates_length_of :title,
-    :maximum => ArchiveConfig.TITLE_MAX, 
+    :maximum => ArchiveConfig.TITLE_MAX,
     :too_long=> t('title_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.TITLE_MAX)
 
   validates_length_of :summary,
     :allow_blank => true,
-    :maximum => ArchiveConfig.SUMMARY_MAX, 
+    :maximum => ArchiveConfig.SUMMARY_MAX,
     :too_long => t('summary_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.SUMMARY_MAX)
 
   validates_length_of :notes,
     :allow_blank => true,
-    :maximum => ArchiveConfig.NOTES_MAX, 
+    :maximum => ArchiveConfig.NOTES_MAX,
     :too_long => t('notes_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.NOTES_MAX)
 
   #temporary validation to let people know they can't enter external urls yet
-  validates_format_of :parent_url, 
+  validates_format_of :parent_url,
     :with => Regexp.new(ArchiveConfig.APP_URL, true),
-    :allow_blank => true, 
+    :allow_blank => true,
     :message => t('parent_archive_only', :default => "can only be in the archive for now - we're working on expanding that!")
 
   # Checks that work has at least one author
@@ -129,12 +129,12 @@ class Work < ActiveRecord::Base
   before_save :set_word_count, :post_first_chapter
 
   after_save :save_creatorships, :save_chapters, :save_parents
-  
+
   # before_save :validate_tags # Enigel's feeble attempt
 
   before_update :validate_tags
 	after_update :save_series_data
-	
+
   before_save :update_ambiguous_tags
 
   ########################################################################
@@ -385,14 +385,19 @@ class Work < ActiveRecord::Base
   # _string= methods
   # always use string= methods to set tags
   # << and = don't trigger callbacks to update common_tags
+  # or call after_destroy on taggings
   # see rails bug http://dev.rubyonrails.org/ticket/7743
   def rating_string=(tag_string)
     tag = Rating.find_or_create_by_name(tag_string)
+    return if self.ratings == [tag]
+    Tagging.find_by_tag(self, self.ratings.first).destroy unless self.ratings.blank?
     self.ratings = [tag] if tag.is_a?(Rating)
   end
 
   def category_string=(tag_string)
     tag = Category.find_or_create_by_name(tag_string)
+    return if self.categories == [tag]
+    Tagging.find_by_tag(self, self.categories.first).destroy unless self.categories.blank?
     self.categories = [tag] if tag.is_a?(Category)
   end
 
@@ -402,6 +407,10 @@ class Work < ActiveRecord::Base
       tag = Warning.find_or_create_by_name(string)
       tags << tag if tag.is_a?(Warning)
     end
+    remove = self.warnings - tags
+    remove.each do |tag|
+      Tagging.find_by_tag(self, tag).destroy
+    end
     self.warnings = tags
   end
 
@@ -410,6 +419,10 @@ class Work < ActiveRecord::Base
     array.each do |string|
       tag = Warning.find_or_create_by_name(string)
       tags << tag if tag.is_a?(Warning)
+    end
+    remove = self.warnings - tags
+    remove.each do |tag|
+      Tagging.find_by_tag(self, tag).destroy
     end
     self.warnings = tags
   end
@@ -423,6 +436,10 @@ class Work < ActiveRecord::Base
       ambiguities << tag if tag.is_a?(Ambiguity)
     end
     self.add_to_ambiguity(ambiguities)
+    remove = self.fandoms - tags
+    remove.each do |tag|
+      Tagging.find_by_tag(self, tag).destroy
+    end
     self.fandoms = tags
   end
 
@@ -435,6 +452,10 @@ class Work < ActiveRecord::Base
       ambiguities << tag if tag.is_a?(Ambiguity)
     end
     self.add_to_ambiguity(ambiguities)
+    remove = self.pairings - tags
+    remove.each do |tag|
+      Tagging.find_by_tag(self, tag).destroy
+    end
     self.pairings = tags
   end
 
@@ -447,6 +468,10 @@ class Work < ActiveRecord::Base
       ambiguities << tag if tag.is_a?(Ambiguity)
     end
     self.add_to_ambiguity(ambiguities)
+    remove = self.characters - tags
+    remove.each do |tag|
+      Tagging.find_by_tag(self, tag).destroy
+    end
     self.characters = tags
   end
 
@@ -459,6 +484,10 @@ class Work < ActiveRecord::Base
       ambiguities << tag if tag.is_a?(Ambiguity)
     end
     self.add_to_ambiguity(ambiguities)
+    remove = self.freeforms - tags
+    remove.each do |tag|
+      Tagging.find_by_tag(self, tag).destroy
+    end
     self.freeforms = tags.compact - ambiguities
   end
 
@@ -515,7 +544,14 @@ class Work < ActiveRecord::Base
   end
 
   def update_ambiguous_tags
-    self.ambiguities = ambiguous_tags.flatten.uniq.compact if ambiguous_tags
+    new_ambiguities = ambiguous_tags.flatten.uniq.compact if ambiguous_tags
+    unless ambiguous_tags.blank?
+      old_ambiguities = self.ambiguities
+      (old_ambiguities - new_ambiguities).each do |tag|
+        Tagging.find_by_tag(self, tag).destroy
+      end
+    end
+    self.ambiguities = new_ambiguities if new_ambiguities
     self.update_common_tags
   end
 
@@ -547,11 +583,11 @@ class Work < ActiveRecord::Base
     end
     return tags
   end
-  
+
   def warning_tags
     warnings = self.warnings.sort || []
-    
-    tags = warnings 
+
+    tags = warnings
     if tags.size > ArchiveConfig.TAGS_PER_LINE
       tags = tags[0..(ArchiveConfig.TAGS_PER_LINE-1)]
     end
@@ -562,7 +598,7 @@ class Work < ActiveRecord::Base
   def add_default_tags
     self.fandom_string = "Test Fandom"
     self.rating_string = ArchiveConfig.RATING_TEEN_TAG_NAME
-    self.warning_string = ArchiveConfig.WARNING_NONE_TAG_NAME
+    self.warning_strings = [ArchiveConfig.WARNING_NONE_TAG_NAME]
     self.category_string = ArchiveConfig.CATEGORY_GEN_TAG_NAME
     self.save
   end
@@ -873,7 +909,7 @@ class Work < ActiveRecord::Base
       :conditions => ['pseuds.id IN (?)', pseud_ids]
     }
   }
-  
+
   # shouldn't really use a named scope for this, but I'm afraid to try
   # to change the way work filtering works
   named_scope :by_language, lambda {|lang_id| {:conditions => ['language_id = ?', lang_id]}}

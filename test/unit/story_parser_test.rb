@@ -86,7 +86,7 @@ class StoryParserTest < ActiveSupport::TestCase
     assert_equal "Birth Pains", @work.title
     assert !@work.summary.blank?
     @work.category_string = ArchiveConfig.CATEGORY_OTHER_TAG_NAME
-    @work.warning_string = ArchiveConfig.WARNING_NONE_TAG_NAME
+    @work.warning_strings = [ArchiveConfig.WARNING_NONE_TAG_NAME]
     @work.authors = [create_pseud]
     @work.published_at = DateTime.now
     @work.save
@@ -113,7 +113,7 @@ class StoryParserTest < ActiveSupport::TestCase
     assert_match /After many months/, @work.chapters.first.content
     assert_equal "Hot Springs", @work.title
     @work.category_string = ArchiveConfig.CATEGORY_OTHER_TAG_NAME
-    @work.warning_string = ArchiveConfig.WARNING_NONE_TAG_NAME
+    @work.warning_strings = [ArchiveConfig.WARNING_NONE_TAG_NAME]
     @work.authors = [create_pseud]
     @work.published_at = DateTime.now
     @work.save
@@ -141,7 +141,7 @@ class StoryParserTest < ActiveSupport::TestCase
     assert_match /Madrigals/, work.title
     assert_match /Wherein there is magic/, work.summary
     work.category_string = Category.first.name
-    work.warning_string = Warning.first.name
+    work.warning_strings = [Warning.first.name]
     work.authors = [create_pseud]
     work.published_at = DateTime.now
     work.save
