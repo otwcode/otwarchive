@@ -68,6 +68,13 @@ abbr, acronym	{ font-variant: small-caps; cursor: help; }
 del, strike {text-decoration:line-through;}
 ins {text-decoration: underline;}
 
+/* Enigel April 09, code issue 592 */
+big { font-size: 1.17em;}
+small { font-size: .83em;}
+sub, sup { font-size: .83em; line-height: 1;}
+sub { vertical-align: bottom;}
+sup { /*vertical-align: text-top;*/ vertical-align:top;}
+
 /* TABLES AND LISTS */
 table	{ margin:auto; padding: 0.375em; }
 caption	{ position: absolute; margin-left: -999em; }
