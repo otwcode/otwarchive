@@ -5,18 +5,25 @@
   <%- end -%>
 </ul>
 
+<%- form_tag assign_tag_wrangling_path(@category), :method => "get" do %>
+  <ul class="navigation_left">
+    <li><%= link_to("Most recent tags first", "?list=by_date") -%></li>
+    <li><%= link_to("Strictly alphabetical", "?list=by_name")  -%></li>
+    <li><%= label_tag(:date_tag_age, "Highlight tags created in the past ") + select_day(@tag_age ? @tag_age.to_i : 1, :field_name => "tag_age", :id => "tag_age") + " day(s) " + submit_tag("Go") %></li>
+  </ul>
+<%- end -%>
+
 <%- form_tag tag_wranglings_path do -%>
 
 <h2><%= label :parent, 'parent_id', h("Mass Assign Tags to:") %> <%= select("parent", 'parent_id', @possible_parents.collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></h2>
 
 <p><%= "(Click on a tag to select it for individual editing)" %></p>
-
 <% @local_alphabet.each do |letter| %>
   <div class="category">
     <h3><%=h letter -%></h3>
     <ul>
       <%- @tags.starting_with(letter).each do |tag| %>
-        <li><%= check_box_tag("tags[]", tag.name, false, :id => "tag_#{tag.id}") %><%= label :tag, tag.id, link_to_edit_tag(tag) %></li>
+        <li><%= check_box_tag("tags[]", tag.name, false, :id => "tag_#{tag.id}") %><%= label :tag, tag.id, link_to_edit_tag(tag), :class => (@tag_age && tag.created_at >= @tag_age.to_i.days.ago) ? "recent" : "" %></li>
       <%- end -%>
     </ul>
   </div>

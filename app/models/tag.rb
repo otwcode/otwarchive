@@ -50,6 +50,7 @@ class Tag < ActiveRecord::Base
 
   named_scope :by_popularity, {:order => 'taggings_count DESC'}
   named_scope :by_name, {:order => 'name ASC'}
+  named_scope :by_date, {:order => 'created_at DESC'}
   
   named_scope :by_fandom, lambda{|fandom| {:conditions => {:fandom_id => fandom.id}}}
   named_scope :no_parent, :conditions => {:fandom_id => nil}

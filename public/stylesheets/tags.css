@@ -9,6 +9,23 @@
 	overflow: scroll;
 }
 
+.recent {
+  font-weight:900;
+}
+
+ul.navigation_left {
+  border-bottom: 1px solid #999; 
+  text-align: left;
+}
+
+ul.navigation_left li, li.navigation_left {
+  display: inline; 
+  padding: 0.4em 0.5625em 0.2em 0.5625em;
+  border:1px solid #999;
+  border-bottom:0;
+  text-indent:0;
+}
+
 /* TAG EDIT PAGE */
 
 ul.tag-edit-items li {

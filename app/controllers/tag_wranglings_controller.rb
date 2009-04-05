@@ -76,11 +76,14 @@ class TagWranglingsController < ApplicationController
       render :action => "edit"
     else
       flash[:error] = t('choose_something', :default => "Please choose something")
-     redirect_to :back and return
+      redirect_to :back and return
     end
   end
 
   def assign
+    if (params[:commit] == "Go") && params[:date] && params[:date][:tag_age]
+      @tag_age = params[:date][:tag_age]
+    end
     @category = params[:id]
     if @category == "Fandom"
       @possible_parents = Media.canonical.by_name
@@ -90,7 +93,7 @@ class TagWranglingsController < ApplicationController
       flash[:error] = t('mass_assign', :default => "Sorry, you can't mass assign that")
      redirect_to :back and return
     end
-    @tags = @category.constantize.no_parent.by_name
+    @tags = params[:list] == "by_date" ? @category.constantize.no_parent.by_date : @category.constantize.no_parent.by_name
     @local_alphabet = @tags.collect {|tag| tag.name[0,1].downcase}.uniq.sort # enigel Feb 09
   end
 
