@@ -73,6 +73,11 @@ module FixtureReplacement
   attributes_for :feedback do |a|
     a.comment = random_paragraph
   end
+  
+  attributes_for :inbox_comment do |a|
+    a.user = default_user
+    a.feedback_comment = default_comment
+  end
 
   attributes_for :invitation do |a|
     a.recipient_email = random_email
