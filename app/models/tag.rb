@@ -32,7 +32,7 @@ class Tag < ActiveRecord::Base
 
   validates_presence_of :name
   validates_uniqueness_of :name
-  validates_length_of :name, 
+  validates_length_of :name,
     :maximum => ArchiveConfig.TAG_MAX,
     :message => "is too long -- try using less than #{ArchiveConfig.TAG_MAX} characters or using commas to separate your tags."
   validates_format_of :name,
@@ -51,17 +51,17 @@ class Tag < ActiveRecord::Base
   named_scope :by_popularity, {:order => 'taggings_count DESC'}
   named_scope :by_name, {:order => 'name ASC'}
   named_scope :by_date, {:order => 'created_at DESC'}
-  
+
   named_scope :by_fandom, lambda{|fandom| {:conditions => {:fandom_id => fandom.id}}}
   named_scope :no_parent, :conditions => {:fandom_id => nil}
-  
+
   named_scope :by_pseud, lambda {|pseud|
-    { 
+    {
       :joins => [{:works => :pseuds}],
       :conditions => {:pseuds => {:id => pseud.id}}
     }
   }
-  
+
   named_scope :by_type, lambda {|*types| {:conditions => (types.first.blank? ? {} : {:type => types.first})}}
 
   # enigel Feb 09
@@ -98,7 +98,7 @@ class Tag < ActiveRecord::Base
   end
 
   def self.for_tag_cloud
-    if fandom_no_tag_name = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME) 
+    if fandom_no_tag_name = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
       if freeform = Freeform.find(:all, :conditions => {:fandom_id => fandom_no_tag_name.id, :merger_id => nil})
         freeform.sort
       end
@@ -141,6 +141,11 @@ class Tag < ActiveRecord::Base
     self.mergers.each do |synonym|
       synonym.wrangle_merger(merger)
     end
+    self.update_common_tags if update_works
+  end
+
+  def remove_merger(update_works=true)
+    self.update_attribute(:merger_id, nil)
     self.update_common_tags if update_works
   end
 

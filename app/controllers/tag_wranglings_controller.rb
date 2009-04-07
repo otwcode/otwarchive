@@ -52,7 +52,9 @@ class TagWranglingsController < ApplicationController
       end
       if params[:merger]
         params[:merger].each do |key, value|
-          unless value.blank?
+          if value.blank?
+            Tag.find_by_id(key).remove_merger
+          else
             Tag.find_by_id(key).wrangle_merger(Tag.find_by_id(value))
           end
         end
