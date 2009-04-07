@@ -1,8 +1,8 @@
 class TagsController < ApplicationController
 
   before_filter :check_user_status, :except => [ :show, :index, :show_hidden ]
-  permit "tag_wrangler", 
-    :except => [ :show, :index, :show_hidden ], 
+  permit "tag_wrangler",
+    :except => [ :show, :index, :show_hidden ],
     :permission_denied_message => "Sorry, the page you tried to access is for authorized tag wranglers only."
 
   # GET /tags
@@ -155,7 +155,7 @@ class TagsController < ApplicationController
     @tag.update_disambiguators(disambiguators.flatten.compact) unless disambiguators.blank?
 
     if @tag.merger_id && params[:keep_synonym].blank?
-      @tag.update_attribute("merger_id", "")
+      @tag.remove_merger
     elsif !params[:new_synonym].blank?
       merger = @tag.class.find_or_create_by_name(params[:new_synonym])
       if merger.id == @tag.id # find on new synonym returned the same tag => only capitalization different
