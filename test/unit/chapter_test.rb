@@ -4,8 +4,8 @@ class ChapterTest < ActiveSupport::TestCase
   context "a Chapter" do
     setup do
       @pseud1 = create_pseud
-      @chapter1 = new_chapter
-      @work = create_work(:chapters => [@chapter1], :authors => [@pseud1])
+      @chapter1 = new_chapter(:posted => true)
+      @work = create_work(:chapters => [@chapter1], :authors => [@pseud1], :posted => true)
     end
     should_belong_to :work
     should_validate_presence_of :content
@@ -37,23 +37,23 @@ class ChapterTest < ActiveSupport::TestCase
         assert_equal @work.pseuds, @chapter2.pseuds
       end
       should "get an error if the authors are empty" do
-        @chapter2 = new_chapter(:work => @work, :authors => [])
+        @chapter2 = new_chapter(:work => @work, :authors => [], :position => 2)
         assert !@chapter2.save
       end
     end
 
     context "whose work gets a new chapter" do
       setup do
-        assert @chapter2 = create_chapter(:work => @work, :authors => @work.pseuds)
+        assert @chapter2 = create_chapter(:work => @work, :authors => @work.pseuds, :position => 2, :posted => true)
       end
-      should "know it is not the only chapter" do
+      should "know it is not the only chapter" do        
         assert !@chapter1.is_only_chapter?
       end
       should "set the new chapter to position 2" do
         assert_equal 2, @chapter2.position
       end
       should "be able to change its position" do
-        @chapter1.move_to 2
+        @chapter1.insert_at 2
         assert_equal 2, @chapter1.position
         @chapter2.reload
         assert_equal 1, @chapter2.position

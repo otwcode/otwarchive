@@ -46,7 +46,7 @@ class ChaptersController < ApplicationController
     elsif params[:chapter] # create
       @chapter = @work.chapters.build(params[:chapter])
     else # new
-      @chapter = @work.chapters.build
+      @chapter = @work.chapters.build(:position => @work.number_of_chapters + 1)
     end
 
     @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds + (@chapter.authors ||= []) + (@chapter.pseuds ||= [])).uniq    
@@ -132,9 +132,8 @@ class ChaptersController < ApplicationController
       if @chapter.save && @work.save
         @work.update_major_version
         @work.set_revised_at(@chapter.created_at)
-				@chapter.move_to(@chapter.position_placeholder) if @chapter.position_placeholder
         flash[:notice] = t('preview', :default => "This is a preview of what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting.")
-       redirect_to [:preview, @work, @chapter]
+        redirect_to [:preview, @work, @chapter]
       else
         render :action => :new 
       end
@@ -143,8 +142,7 @@ class ChaptersController < ApplicationController
   
   # PUT /work/:work_id/chapters/1
   # PUT /work/:work_id/chapters/1.xml
-  def update
-   
+  def update   
     @chapter.attributes = params[:chapter]
     @work.wip_length = params[:chapter][:wip_length]
     load_pseuds
@@ -162,8 +160,7 @@ class ChaptersController < ApplicationController
     else
       params[:chapter][:posted] = true if params[:post_button]
       if @chapter.update_attributes(params[:chapter]) && @work.save
-        @work.update_minor_version      
-        @chapter.move_to(@chapter.position_placeholder) if @chapter.position_placeholder
+        @work.update_minor_version
         flash[:notice] = t('successfully_updated', :default => 'Chapter was successfully updated.')
         redirect_to [@work, @chapter]
       else
@@ -175,7 +172,7 @@ class ChaptersController < ApplicationController
   def update_positions
     if params[:chapters]
       @work = Work.find(params[:work_id])
-      @work.reorder_chapters(params[:chapters]) 
+      @work.reorder(params[:chapters]) 
       flash[:notice] = t('order_updated', :default => 'Chapter orders have been successfully updated.')
       redirect_to(@work)
     else 
@@ -217,7 +214,6 @@ class ChaptersController < ApplicationController
       redirect_to(edit_work_url(@work))
     else
       if @chapter.destroy
-        @work.adjust_chapters(@chapter.position)
         @work.update_minor_version
         flash[:notice] = t('successfully_deleted', :default => "The chapter was successfully deleted.")
       else

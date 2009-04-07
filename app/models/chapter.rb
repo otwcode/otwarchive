@@ -1,10 +1,11 @@
 class Chapter < ActiveRecord::Base
   include HtmlFormatter
-
+  
   has_many :creatorships, :as => :creation
   has_many :pseuds, :through => :creatorships
 
   belongs_to :work
+  acts_as_list :scope => 'work_id = #{work_id} AND posted = 1'
 
   acts_as_commentable
 
@@ -29,14 +30,19 @@ class Chapter < ActiveRecord::Base
   attr_accessor :toremove
   attr_accessor :invalid_pseuds
   attr_accessor :ambiguous_pseuds
-  attr_accessor :wip_length_placeholder, :position_placeholder
+  attr_accessor :wip_length_placeholder
 
-  before_validation_on_create :set_position
   before_save :validate_authors, :clean_title
   before_save :set_word_count
   after_save :save_creatorships
   
   named_scope :in_order, {:order => :position}
+  named_scope :posted, :conditions => {:posted => true}
+  
+  # There seem to be chapters without works in the tests, hence the if self.work_id
+  def after_validation
+    self.insert_at(self.position) if self.work_id && self.position != self.work.chapters.size
+  end
 
   # strip leading spaces from title
   def clean_title
@@ -44,37 +50,10 @@ class Chapter < ActiveRecord::Base
       self.title = self.title.gsub(/^\s*/, '')
     end
   end
-
-  # Set the position if this isn't the first chapter
-  def current_position
-		if self.position_placeholder.nil?
-			self.work && self.new_record? ? (self.work.number_of_chapters ||= 0) + 1 : self.position
-		else
-			self.position_placeholder
-		end
-  end
   
-  def set_position
-    self.position = self.current_position
-  end
-	
-	# Get form value for position and store it in a placeholder if it's necessary to reorder multiple chapters
-	def current_position=(new_position)
-	  self.position_placeholder = new_position.to_i
-	end
-	
-	# Changes position of a chapter and adjusts other chapters where necessary
-	def move_to(new_position)
-	  if new_position.is_a?(Fixnum) && new_position > 0
-		  chapters = self.work.chapters.find(:all, :order => :position) - [self]
-		  chapters.insert((new_position - 1), self)
-		  chapters.each_with_index {|chapter, index| chapter.update_attribute(:position, index + 1) unless chapter.position == (index + 1)}
-	  end			
-	end
-
   # check if this chapter is the only chapter of its work
   def is_only_chapter?
-    self.work.chapters.length == 1
+    self.work.chapters.count == 1
   end
   
   # Virtual attribute for work wip_length
@@ -153,6 +132,11 @@ class Chapter < ActiveRecord::Base
   # Return the name to link comments to for this object
   def commentable_name
     self.work.title
+  end
+  
+  private
+  
+  def add_to_list_bottom    
   end
   
 end

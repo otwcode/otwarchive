@@ -284,7 +284,7 @@ class WorkTest < ActiveSupport::TestCase
     assert !work.is_complete
     assert_equal 2, work.expected_number_of_chapters
     # author creates the second chapter
-    create_chapter(:work => work, :authors => work.pseuds)
+    create_chapter(:work => work, :authors => work.pseuds, :position => 2)
     work.reload
     assert work.is_complete
     assert !work.is_wip

@@ -91,7 +91,7 @@ class SeriesController < ApplicationController
   def update_positions
     if params[:serial_works]
       @series = Series.find(params[:id])
-      @series.reorder_works(params[:serial_works]) 
+      @series.reorder(params[:serial_works])
       flash[:notice] = t('order_updated', :default => 'Series order has been successfully updated.')
       redirect_to(@series)
     else

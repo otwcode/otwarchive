@@ -2,7 +2,7 @@ module ChaptersHelper
   
   # Creates a link with the appropriate chapter number
   def chapter_link(chapter)
-    chapter_header = "Chapter " + (chapter.position_placeholder || chapter.current_position).to_s
+    chapter_header = "Chapter " + chapter.position.to_s
     link_to chapter_header, [chapter.work, chapter]
   end
   

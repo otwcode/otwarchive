@@ -281,6 +281,11 @@ class Work < ActiveRecord::Base
     number = number.to_i
     self.expected_number_of_chapters = (number != 0 && number >= self.number_of_chapters) ? number : nil
   end
+  
+  # Change the positions of the chapters in the work
+	def reorder(positions)
+	  SortableList.new(self.chapters.posted.in_order).reorder_list(positions)
+	end
 
   # Get the total number of chapters for a work
   def number_of_chapters
@@ -300,26 +305,6 @@ class Work < ActiveRecord::Base
   # Gets the current last chapter
   def last_chapter
     self.chapters.find(:first, :order => 'position DESC')
-  end
-
-  # Change the position of multiple chapters when one is deleted
-  def adjust_chapters(position)
-    Chapter.update_all("position = (position - 1)", ["work_id = (?) AND position > (?)", self.id, position])
-  end
-
-  # Reorders chapters based on form data
-  # Removes changed chapters from array, sorts them in order of position, re-inserts them into the array and uses the array index values to determine the new positions
-  def reorder_chapters(positions)
-    chapters = self.chapters.find(:all, :conditions => {:posted => true}, :order => 'position')
-    changed = {}
-    positions.collect!(&:to_i).each_with_index do |new_position, old_position|
-      if new_position != 0 && new_position <= self.number_of_posted_chapters && !changed.has_key?(new_position)
-        changed.merge!({new_position => chapters[old_position]})
-      end
-    end
-    chapters -= changed.values
-    changed.sort.each {|pair| pair.first > chapters.length ? chapters << pair.last : chapters.insert(pair.first-1, pair.last)}
-    chapters.each_with_index {|chapter, index| chapter.update_attribute(:position, index + 1)}
   end
 
   # Returns true if a work has or will have more than one chapter

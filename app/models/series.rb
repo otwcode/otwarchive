@@ -56,6 +56,11 @@ class Series < ActiveRecord::Base
 		  self.toggle!(:restricted)
 		end
 	end
+	
+	# Change the positions of the serial works in the series
+	def reorder(positions)
+	  SortableList.new(self.serial_works.in_order).reorder_list(positions)
+	end
   
   # return list of pseuds on this series
   def allpseuds
@@ -65,25 +70,6 @@ class Series < ActiveRecord::Base
   # return list of users on this series
   def owners
     self.authors.collect(&:user)
-  end
-
-  def serials=(positions)
-    self.reorder_works(positions)
-  end
-  
-  # Reorders serial_works in series based on form data
-	# Similar to reorder_chapters method in work.rb
-  def reorder_works(positions)
-    serials = self.serial_works.find(:all, :order => 'position')
-    changed = {}
-    positions.collect!(&:to_i).each_with_index do |new_position, old_position|
-    	if new_position != 0 && new_position <= self.serial_works.count && !changed.has_key?(new_position)
-    		changed.merge!({new_position => serials[old_position]})
-    	end
-    end
-    serials -= changed.values
-    changed.sort.each {|pair| pair.first > serials.length ? serials << pair.last : serials.insert(pair.first-1, pair.last)}
-    serials.each_with_index {|serial, index| serial.update_attribute(:position, index + 1)}
   end
 
   # Virtual attribute for pseuds

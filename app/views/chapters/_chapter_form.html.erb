@@ -9,8 +9,8 @@
     <%= link_to_help "story-title" -%>
   </p>
 	<p>
-    <%= f.label :current_position, t('form_position', :default => 'Chapter number') %> 
-		<%= f.text_field :current_position, :class => "number-field" %> 
+    <%= f.label :position, t('form_position', :default => 'Chapter number') %> 
+		<%= f.text_field :position, :class => "number-field" %> 
 		<%= f.label :wip_length, t('form_x_of_x', :default => 'of'), :title => t('form_of_total', :default => 'of total chapters') %> 
 		<%= f.text_field :wip_length, :class => "number-field" %> 
   </p>
