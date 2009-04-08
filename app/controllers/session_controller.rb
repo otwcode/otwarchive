@@ -53,9 +53,11 @@ class SessionController < ApplicationController
     authenticate_with_open_id(openid_url) do |result, identity_url, registration|
       if result.successful?
         @user = User.find_by_identity_url(identity_url)
-        if @user
+        if @user && @user.activated_at
           self.current_user = @user
           successful_login
+        elsif @user.activated_at.nil?
+          failed_login t('not_activated', :default => "You'll need to activate your account before you can log in. Please check your email or contact an admin.")          
         else
           failed_login t('open_id_failure', :default => "We couldn't find that url in our database. Please try again.")
        end

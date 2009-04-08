@@ -7,7 +7,7 @@ class PseudTest < ActiveSupport::TestCase
     should_validate_presence_of :name
     should_ensure_length_in_range :name, (1..40), :short_message => /too short/, :long_message => /too long/
     should_allow_values_for :name, "Good pseud", "good_pseud"
-    should_not_allow_values_for :name, "bad!pseud", :message => /Pseuds can contain/
+    should_not_allow_values_for :name, "bad!pseud", :message => /can contain/
     should_ensure_length_in_range :description, (0..500), :long_message => /must be less/
   end
   def test_add_creations_to_default
