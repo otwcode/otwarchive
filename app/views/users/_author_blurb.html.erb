@@ -1,6 +1,6 @@
 <li class="user">
   <div>
-    <h3><%= link_to(author.name, user_pseud_path(author.user, author)) -%> (<%= author.visible_works_count -%>) [<%= link_to(author.user_name, user_path(author.user)) -%>]</h3>
+    <h3><%= link_to(author.name, user_pseud_path(author.user, author)) -%> <%= authored_items(author) -%> [<%= link_to(author.user_name, user_path(author.user)) -%>]</h3>
 	<p><%= image_tag("icon_placeholder.png", :size => "50x50", :alt => "(Icon!)") %></p>
 	<ul class="tags">
     <%- author.most_popular_tags(:categories => Tag::USER_DEFINED, :limit => 5).each do |tag_w_count| -%>
