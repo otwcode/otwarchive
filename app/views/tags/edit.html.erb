@@ -7,7 +7,7 @@
 
   <dl id="edit-tag">
     <dt><%= f.label :name, 'Name' %></dt>
-    <dd><%= f.text_field :name, :disabled => (!logged_in_as_admin? || ['Rating', 'Warning', 'Category'].include?(@tag[:type])) %></dd>
+    <dd><%= f.text_field :name, :readonly => (!logged_in_as_admin? || ['Rating', 'Warning', 'Category'].include?(@tag[:type])), :size => ArchiveConfig.TAG_MAX %></dd>
 
     <dt><%=h 'Works (count)' %></dt>
     <dd><%= link_to_tag_with_text(@tag, @tag.taggings_count, true) %></dd>
@@ -134,7 +134,7 @@
         <%- else %>
           <dd><%= f.select('merger_id', (@tag.class.canonical - [@tag]).collect {|p| [ p.name, p.id ]}, { :include_blank => true, :selected => nil }) %></dd>
           <dt><%= label :new_synonym, 'Rename' %>*:</dt>
-          <dd><%= text_field_tag :new_synonym %><br />
+          <dd><%= text_field_tag :new_synonym, nil, :size => ArchiveConfig.TAG_MAX %><br />
           <%=h '*This text box will do one of two things:' %> <%=h '1. correct the capitalization of the current tag.' %> <%=h 'OR 2. Create a canonical tag, to which the current tag is then made a synonym.' %></dd>
         <%- end %>
       <%- end %>

@@ -126,4 +126,7 @@ textarea#comment_content	{ width:32em !important; height:11em !important}
 /*TAG WRANGLINGS*/
 form#wrangle-select-fandom p, form#wrangle-select-media p{ display:inline; margin-right:0.5625em;}
 
+/* TAGS */
+#edit-tag input[readonly] { background:#ededde; border:1px solid #dfdffd;}
+
 /* GLOBALIZE (in footer) you can find this in globalize.css*/
