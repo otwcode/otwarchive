@@ -61,7 +61,7 @@
     <%- @tags.each do |tag| %>
     <tr>
       <td><%= label :tag, tag.id, link_to_edit_tag(tag) %></td>
-      <td><%= tag.taggings_count %></td>
+      <td><%= tag.visible_works_count %></td>
       <%- if logged_in_as_admin? %>
         <td><%= check_box_tag("banned[]", tag.id, tag.banned, :id => "banned_#{tag.id}") %></td>
       <%- end -%>

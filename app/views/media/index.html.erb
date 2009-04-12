@@ -10,9 +10,9 @@
   <% end %>
     <ol>
     <% 5.times do |i| %>
-      <% fandom = pair[1].sort_by(&:visible_works_count).reverse[i] %>
-      <% if fandom && fandom.visible_works_count > 0 %>
-        <li><%= link_to_tag_works_with_text(fandom, fandom.name + " (" + fandom.visible_works_count.to_s + ")") %></li>
+      <% fandom = pair[1].sort_by(&:visible_synonyms_works_count).reverse[i] %>
+      <% if fandom && fandom.visible_synonyms_works_count > 0 %>
+        <li><%= link_to_tag_works_with_text(fandom, fandom.name + " (" + fandom.visible_synonyms_works_count.to_s + ")") %></li>
       <%- end -%>
     <%- end -%>
     </ol>

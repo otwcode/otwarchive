@@ -1,12 +1,8 @@
 <h1><%= link_to t('fandoms', :default => 'Fandoms'), media_path %> > <%=h @medium_name %></h1>
+<%= alpha_paginated_section @media_alphabet -%>
 <ul>
   <%- for fandom in @fandoms -%>
-    <%- if fandom.visible_works_count > 0 -%>
-      <li><%= link_to_tag_works_with_text(fandom, fandom.name + " (" + fandom.visible_works_count.to_s + ")") %></li>
-    <%- end -%>
+    <li><%= link_to_tag_works_with_text(fandom, fandom.name + " (" + fandom.visible_synonyms_works_count.to_s + ")") %></li>
   <%- end -%>
 </ul>
-
-<div class="pagination">
-	<%= will_paginate @fandoms, :prev_label =>  "&laquo; " + t('pagination.previous', :default => "Previous"), :next_label => t('pagination.next', :default => "Next") + " &raquo;" %>
-</div>
+<%= alpha_paginated_section @media_alphabet -%>

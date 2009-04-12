@@ -67,6 +67,16 @@ class Tag < ActiveRecord::Base
   # enigel Feb 09
   named_scope :starting_with, lambda {|letter| {:conditions => ['SUBSTR(name,1,1) = ?', letter]}}
 
+  named_scope :visible_to_user, lambda { |user_id|
+    {
+      :select => "DISTINCT works.*",
+      :joins => "INNER JOIN creatorships ON (creatorships.creation_id = works.id AND creatorships.creation_type = 'Work')
+                 INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
+                 INNER JOIN users ON pseuds.user_id = users.id",
+      :conditions => ['works.posted = ? AND (works.hidden_by_admin = ? OR users.id = ?)', true, false, user_id]
+    }
+  }
+  
   # Class methods
 
   def self.string
@@ -543,22 +553,32 @@ class Tag < ActiveRecord::Base
       self.works.count(:all,
           :conditions => {:posted => true})
     elsif User.current_user.is_a? User
-      self.works.count(:all,
-        :conditions => ['works.posted = ? AND (works.hidden_by_admin = ? OR users.id = ?)', true, false, User.current_user.id],
-        :joins => "INNER JOIN creatorships ON (creatorships.creation_id = works.id AND creatorships.creation_type = 'Work')
-                   INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-                   INNER JOIN users ON pseuds.user_id = users.id" )
+      self.works.visible_to_user(User.current_user.id).size
     else
       self.works.count(:all,
           :conditions => {:posted => true, :restricted => false, :hidden_by_admin => false})
     end
   end
 
+  def visible_synonyms_works_count
+    if self.canonical
+      total = self.visible_works_count
+      self.mergers.each do |merger|
+        total += merger.visible_works_count
+      end
+      return total
+    elsif self.merger
+      return self.merger.visible_synonyms_works_count
+    else
+      return self.visible_works_count
+    end
+  end
+  
   def visible_bookmarks_count
     if User.current_user && User.current_user.kind_of?(Admin)
       conditions = {:private => false}
     elsif User.current_user.is_a? User
-      conditions = ['bookmarks.private = ? AND (bookmarks.hidden_by_admin = ? OR bookmarks.pseud_id = ?)', true, false, User.current_user.pseuds.collect(&:id)]
+      conditions = ['bookmarks.private = ? AND bookmarks.hidden_by_admin = ? OR bookmarks.pseud_id in (?)', false, false, User.current_user.pseuds.collect(&:id)]
     else
       conditions = {:private => false, :hidden_by_admin => false}
     end

@@ -11,7 +11,13 @@ class MediaController < ApplicationController
     else
       medium = Media.find_by_name(params[:id])
       @medium_name = medium.name
-      @fandoms = medium.fandoms.canonical.by_name.paginate(:page => params[:page])
+      @media_alphabet = medium.fandoms.canonical.select{|f| f.visible_synonyms_works_count > 0}.collect {|fandom| fandom.name[0,1].upcase}.uniq.sort
+      if params[:letter] && params[:letter].is_a?(String)
+        letter = params[:letter][0,1]
+      else
+        letter = @media_alphabet[0]
+      end
+      @fandoms = medium.fandoms.canonical.starting_with(letter).select{|f| f.visible_synonyms_works_count > 0} #.paginate(:page => params[:page])
     end
   end
 end
