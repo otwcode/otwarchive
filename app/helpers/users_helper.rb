@@ -81,7 +81,7 @@ module UsersHelper
     if visible_bookmarks_count > 0
       items += (visible_bookmarks_count == 1) ? link_to(visible_bookmarks_count.to_s + " bookmark", user_pseud_bookmarks_path(pseud.user, pseud)) : link_to(visible_bookmarks_count.to_s + " bookmarks", user_pseud_bookmarks_path(pseud.user, pseud))
     end
-    return items == "" ? "" : "( " + items + " )"
+    return items
   end
   
 #  def print_pseud_drafts_link(pseud)
@@ -97,16 +97,16 @@ module UsersHelper
   def authors_header(collection)
     if collection.total_pages < 2
       case collection.size
-      when 0; "0 Authors"
-      when 1; "1 Author"
-      else; collection.total_entries.to_s + " Authors"
+      when 0; "0 People"
+      when 1; "1 Person"
+      else; collection.total_entries.to_s + " People"
       end
     else
       %{ %d - %d of %d }% [
         collection.offset + 1,
         collection.offset + collection.length,
         collection.total_entries
-      ] + "Authors"
+      ] + "People"
     end
   end
   

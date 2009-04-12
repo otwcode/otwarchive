@@ -1,8 +1,14 @@
 <li class="user">
   <div>
-    <h3><%= link_to(author.name, user_pseud_path(author.user, author)) -%> <%= authored_items(author) -%> [<%= link_to(author.user_name, user_path(author.user)) -%>]</h3>
-	<p><%= image_tag("icon_placeholder.png", :size => "50x50", :alt => "(Icon!)") %></p>
+    <p><%= image_tag("icon_placeholder.png", :size => "50x50", :alt => "(Icon!)") %></p>
+    <h3><%= link_to(author.name, user_pseud_path(author.user, author)) -%> 
+    <%- if (author.name != author.user_name || author.user.pseuds.size > 1) -%>
+      (<%= link_to(author.user_name, user_path(author.user)) -%>)
+    <%- end -%></h3>
+    <h4><%= authored_items(author) -%></h4>
+  <p><%= author.description -%></p>
 	<ul class="tags">
+    <span><%= "Most used tags: " -%></span>
     <%- author.most_popular_tags(:categories => Tag::USER_DEFINED, :limit => 5).each do |tag_w_count| -%>
       <li><%= link_to tag_w_count.first.name + " (" + tag_w_count.last.to_s + ")", user_pseud_works_path(author.user, author, :selected_tags => [tag_w_count.first.id]), :class => 'tag' %></li>
     <%- end -%>
