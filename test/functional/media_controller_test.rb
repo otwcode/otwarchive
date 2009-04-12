@@ -2,11 +2,14 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class MediaControllerTest < ActionController::TestCase
 
-  context "a media with canoncal and non-canonical fandoms" do
+  context "a media with canonical and non-canonical fandoms" do
     setup do
       @media = create_media(:canonical => true)
       @fandom1 = create_fandom(:media_id => @media.id)
       @fandom2 = create_fandom(:canonical => true, :media_id => @media.id)
+      @work = create_work(:posted => true)
+      @work.fandoms << @fandom1
+      @work.fandoms << @fandom2
     end
     context "on get" do
       setup {get :index, :locale => 'en'}
@@ -28,6 +31,7 @@ class MediaControllerTest < ActionController::TestCase
       setup do
         for i in 0...5 do
           fandom = create_fandom(:canonical => true, :media_id => @media.id)
+          @work.fandoms << fandom
         end
       end
       context "on get" do
@@ -36,13 +40,25 @@ class MediaControllerTest < ActionController::TestCase
           assert_tag :tag => 'a', :content => /All .*\.\.\./
         end
       end
-      context "on list" do
-        setup { get :show, :locale => 'en', :id => @media.name }
-        should_assign_to(:fandoms) {@media.fandoms.canonical.by_name}
-        should "list six fandoms" do
-          assert_equal 6, assigns(:fandoms).size
-        end
+    end
+    context "that start with the letter f" do
+      setup do
+        @media = create_media(:canonical => true)
+        @fandom1 = create_fandom(:canonical => true, :media_id => @media.id, :name => "Farscape")
+        @fandom2 = create_fandom(:canonical => true, :media_id => @media.id, :name => "Firefly") 
+        @work = create_work(:posted => true, :fandom_string => "Farscape")
+        @invisible_work = create_work(:fandom_string => "Firefly")
       end
+      context "on list" do
+        setup { get :show, :id => @media.name, :letter => 'F' }
+        should_assign_to :fandoms
+        should "include canonical fandoms with visible works" do
+          assert_contains(assigns(:fandoms), @fandom1)
+        end
+        should "not include fandoms without visible works" do
+          assert_does_not_contain(assigns(:fandoms), @fandom2)  
+        end
+      end    
     end
   end
 end
