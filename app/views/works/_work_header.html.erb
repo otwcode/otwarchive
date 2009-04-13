@@ -60,10 +60,5 @@
     <%=sanitize_and_format_for_display @work.notes %>
   </blockquote>
   <%- end -%>
-  
-  <% if @work.is_wip -%>
-  <p class="story-complete">
-    <%= wip_message(@work) %>
-  </p>
-  <% end -%></div>
+</div>
   

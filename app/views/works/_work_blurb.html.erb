@@ -86,7 +86,7 @@
 		<dt><%=h t('words', :default => 'Words') + ': ' %></dt>
 			<dd><%= number_with_delimiter(work.word_count) %></dd>
 		<dt><%=h t('work_chapters', :default => 'Chapters') + ': ' %></dt>
-			<dd><%= work.number_of_posted_chapters %>/<%= work.wip_length %></dd>
+			<dd><%= work.chapter_total_display %></dd>
 		<%- if work.count_visible_comments > 0 -%>
 		<dt><%=h t('work_comments', :default => 'Comments') + ': '%></dt>
 			<dd><%= link_to work.count_visible_comments, work_path(:id => work.id, :anchor => "comments", :show_comments => true) -%></dd>

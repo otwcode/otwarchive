@@ -15,7 +15,7 @@ class PseudsController < ApplicationController
     if @user
       @pseuds = @user.pseuds.find(:all)
     else
-      redirect_to users_path
+      redirect_to people_path
     end
   end
   
@@ -35,12 +35,12 @@ class PseudsController < ApplicationController
       @pseuds = Pseud.find_all_by_name(params[:id])
       if @pseuds.size == 0
         flash[:error] = t('pseud_not_found', :default => "Sorry, could not find this pseud.")
-        redirect_to users_path and return
+        redirect_to people_path and return
       elsif @pseuds.size == 1
         redirect_to [@pseuds[0].user, @pseuds[0]] and return
       else
         flash[:notice] = t('ambiguous_pseud', :default => "There's more than one user with this pseud.")
-        redirect_to users_path and return
+        redirect_to people_path and return
         # TODO: present the user with a drop-down with all authors who have that pseud
       end
     end

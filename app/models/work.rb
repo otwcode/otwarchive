@@ -326,6 +326,11 @@ class Work < ActiveRecord::Base
   def is_complete
     return !self.is_wip
   end
+  
+  # 1/1, 2/3, 5/?, etc.
+  def chapter_total_display
+    self.number_of_posted_chapters.to_s + '/' + self.wip_length.to_s
+  end
 
   # Set the value of word_count to reflect the length of the chapter content
   def set_word_count

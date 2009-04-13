@@ -8,13 +8,24 @@ module WorksHelper
   def name_attributes(creation, attribute_type)
    creation + "[" + attribute_type + "_attributes]"
   end
-
-  # Returns message re: number of posted chapters/number of expected chapters
-  def wip_message(work)
-    posted = work.number_of_posted_chapters
-    posted = 1 if posted == 0
-    "Please note this is a work in progress, with " + posted.to_s + " of " + work.wip_length.to_s + " chapters posted."
- end
+  
+  # List of date, chapter and length info for the work show page
+  def work_meta_list(work)
+    list = [['Published:', localize(work.published_at.to_date)], ['Words:', work.word_count], ['Chapters:', work.chapter_total_display]]
+    if work.chaptered?
+      prefix = work.is_wip ? "Updated:" : "Completed:"
+      list.insert(1, [prefix, localize(work.updated_at.to_date)])
+    end
+    '<dl>' + list.map {|l| '<dt>' + l.first + '</dt><dd>' + l.last.to_s + '</dd>'}.to_s + '</dl>'
+  end
+  
+  def work_top_links_list(work)
+    bookmark_link = logged_in? ? '<li>' + bookmark_link(work) + '</li>' : ''			
+    if work.count_visible_comments > 0
+      comments_link = '<li>' + link_to("Comments", work_path(work, :show_comments => true, :anchor => 'comments')) + '</li>'  
+    end
+    "<ul>" + bookmark_link + (comments_link ||= '') + "</ul>"    
+  end
 
 #  def view_all_chapters_link(work)
 #    #link_to_remote "View entire work", {:url => {:controller => :chapters, :action => :index, :work_id => work, :old_chapter => chapter.id}, :method => :get},

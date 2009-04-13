@@ -3,6 +3,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :invitations, :only => [:new, :create] 
 
   map.resources :media, :only => [:index, :show] 
+  
+  map.resources :people, :only => :index
 
   map.feedbacks '/feedback/', :controller => 'feedbacks', :action => 'create' , :conditions => { :method => :post }
   map.new_feedback_report '/feedback/', :controller => 'feedbacks', :action => 'new' 

@@ -45,6 +45,14 @@ set work styles
 .flashback	{ font-style:italic; }
 .caps	{ font-variant:small-caps}
 
+/* date and length info */
+.work-date-info {border-bottom: 1px solid black; font-size:.8em; padding:.5em; margin-bottom:2em;}
+.work-date-info dl {border:0; display:inline;}
+.work-date-info dt, .work-date-info dd {font-weight:normal; display:inline;}
+.work-date-info dd {padding:0 2em 0 1em;}
+.work-date-info ul {display:inline;}
+.work-date-info li {display:inline; margin-right:0; padding-left:2em;}
+
 /* WORK META DATA */
 dl.work-meta { background:#eee; padding:0.25em; position:relative;margin-top:0; border:1px solid #ddd;;}
 .work-meta dt { width:7em; font-weight:100;}

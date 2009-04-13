@@ -1,0 +1,31 @@
+<h1><%= "People" -%></h1>
+<ul class="navigation_left">
+  <li>
+  <%= link_to "All", people_path(:letter => params[:letter], 
+      :page => params[:page], :per_page => params[:per_page], :show => "all") -%>
+  </li>
+  
+  <li>
+  <%= link_to "Authors", people_path(:letter => params[:letter], 
+      :page => params[:page], :per_page => params[:per_page], :show => "authors") -%>
+  </li>
+  
+  <li>
+  <%= link_to "Reccers", people_path(:letter => params[:letter], 
+      :page => params[:page], :per_page => params[:per_page], :show => "reccers") -%>
+  </li>
+</ul>
+
+<%= alpha_paginated_section @pseuds_alphabet -%>
+
+<h2><%= authors_header @authors -%> <%= "in" -%> '<%= (params[:letter] && params[:letter].is_a?(String)) ? params[:letter] : @pseuds_alphabet[0] -%>'</h2>
+
+<% paginated_section @authors, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
+<ul>
+  <%- @authors.each do |author| -%>
+    <%= render :partial => 'author_blurb', :locals => {:author => author} -%>
+  <%- end -%>  
+</ul>
+<% end %>
+
+<%= alpha_paginated_section @pseuds_alphabet -%>

@@ -162,10 +162,11 @@ ul#series-work-list li.work ul.work li ul li {display:inline;}
 .media-index li.even { width: 40%; float: right; margin: 0 0 0 0.5625em; }
 
 /* PEOPLE-INDEX */
-.user div { position: relative; margin: 0 0 0.5625em auto;padding-right:0.3775em; border-bottom:1px solid #ddd;}
+.user div { position: relative; margin: 0 0 0.5625em auto;padding-right:0.3775em; border-bottom:1px solid #ddd; clear:both; overflow:auto;}
 .user h3,.user h3 a { color:#900;display:inline; }
-.user img {top:0; right:0; position:absolute}
-.user ul li {display:inline;}
+.user img {float:left; padding: 0 1em 1em 0; clear:both;}
+.user ul, .user li {display:inline;}
+.user .author-data {border:0; float:left; clear:right; width:70%;}
 /*
 .user ul.tags:before {content:" { ";}
 .user ul.tags:after {content:" } ";}
