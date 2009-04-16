@@ -116,7 +116,8 @@ Rails::Initializer.run do |config|
 
   # Override the sanitize defaults to allow some extra formatting attributes. 
   config.action_view.sanitized_allowed_attributes = 'align'
-  config.action_view.sanitized_allowed_tags = 'u', 'strike', 'center'
+  config.action_view.sanitized_allowed_tags = 'u', 'strike', 'center', 'dl', 'q', 'table', 'tr', 'td', 'th', 'tbody', 'thead', 'tfoot', 'col', 'colgroup', 'caption'
+
   
   # you can remove tags from sanitize here
   #config.after_initialize do
