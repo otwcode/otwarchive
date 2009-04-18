@@ -24,7 +24,7 @@ plus system messages in system-messages.css (red, yellow, green, blue)
 	  	  format("opentype");
 }
 
-body	{ background: #fffef9; color: #222; font: 100%/1.125 Candara, Corbel, 'Lucida Grande', Verdana, Helvetica, Arial, sans-serif; }
+body	{ background: #fffef9; color: #222; font: 100%/1.125 'Lucida Grande', Verdana, Helvetica, Arial, sans-serif; }
 
 a, a:link	{ color: #111; }
 a:hover	{ color: #999; }

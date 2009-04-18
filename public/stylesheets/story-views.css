@@ -2,7 +2,7 @@
 /*
 set work styles
 */
-.work-show { font-family:Candara, Corbel, Geneva, Verdana, Helvetica, Arial, sans-serif; padding:1.5em 3.5em 6em 3.5em;}
+.work-show { font-family:Geneva, Verdana, Helvetica, Arial, sans-serif; padding:1.5em 3.5em 6em 3.5em;}
 .work-show a, .work-show a:link { color:#111; text-decoration:none; border-bottom:1px dotted #777; padding-right:0.125em}
 .work-show .navigation a, .work-show .navigation a:link {border:0;text-decoration:underline;}
 .work-show a:hover { border-bottom:0}
