@@ -288,14 +288,14 @@ class StoryParser
         work_params[:title] = $1
         work_params[:fandom_string] = $2
       end
-      if story.match(/fiction rated:\s*(.*?)<\/a>/i)
+      if story.match(/rated:\s*<a.*?>\s*(.*?)<\/a>/i)
         rating = convert_rating($1)
         work_params[:rating_string] = rating
       end
 
-      if story.match(/fiction rated.*?<\/a> - .*? - (.*?)\/(.*?) -/i)
+      if story.match(/rated.*?<\/a> - .*? - (.*?)(\/(.*?))? -/i)
         tags << $1
-        tags << $2 unless $1 == $2
+        tags << $3 unless $1 == $3
       end
 
       work_params[:freeform_string] = tags.join(ArchiveConfig.DELIMITER)
