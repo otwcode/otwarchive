@@ -13,12 +13,22 @@ class TranslationsController < ApplicationController
   end
   
   def index
+    conditions = {}
+    locale = @main_locale
+    if params[:translator_id]
+      locale = @locale
+      translator_id = User.find_by_login(params[:translator_id])
+      if params[:show] == 'beta'
+        conditions[:beta_id] = translator_id
+      else
+        conditions[:translator_id] = translator_id
+      end
+    end
     if params[:namespace]
       @current_namespace = params[:namespace]
-      @translations = @main_locale.translations.find(:all, :order => "namespace, id", :conditions => {:namespace => params[:namespace]}).paginate(:page => params[:page])
-    else  
-      @translations = @main_locale.translations.find(:all, :order => "namespace, id").paginate(:page => params[:page])
-    end
+      conditions[:namespace] = params[:namespace]
+    end  
+    @translations = locale.translations.find(:all, :order => "namespace, id", :conditions => conditions).paginate(:page => params[:page])
     @translators = @locale.has_translators
     @namespaces = Translation.find(:all, :select => 'DISTINCT namespace', :order => :namespace).collect(&:namespace)   
   end
