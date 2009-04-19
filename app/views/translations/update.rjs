@@ -1,0 +1,3 @@
+translation_div = 'translation_' + @translation.id.to_s
+page.replace_html translation_div, :partial => 'translation', :locals => {:translation => @main_translation, :local_translation => @translation}
+page.visual_effect(:highlight, translation_div, :duration => 0.5)

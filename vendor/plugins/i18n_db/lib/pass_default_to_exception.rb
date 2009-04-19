@@ -1,6 +1,6 @@
-module I18n
+module I18nDB
   module Backend
-    class Simple
+    class DBBased < I18n::Backend::Simple
       # This one is needed because translate normally discards the default value from 
       # the information passed to MissingTranslationData handler, preventing it 
       # from trying a fallback locale correctly

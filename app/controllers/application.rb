@@ -25,7 +25,8 @@ class ApplicationController < ActionController::Base
 
   before_filter :load_locales
   before_filter :set_preferred_locale
-
+  
+  I18n.backend = I18nDB::Backend::DBBased.new 
   I18n.record_missing_keys = true # if you want to record missing translations
 
   protected

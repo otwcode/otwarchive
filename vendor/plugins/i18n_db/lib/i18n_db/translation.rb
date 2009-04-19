@@ -8,7 +8,7 @@ class Translation < ActiveRecord::Base
   def validate
     unless locale.main?
       main_tr = counterpart_in_main
-      if main_tr && main_tr.text
+      if main_tr && main_tr.text && self.text
         if main_tr.count_macros != count_macros
           errors.add("text", "did not preserve macro variables, e.g. {{to_be_kept}}. Please do not change or translate the macros.")
         end
@@ -41,7 +41,7 @@ class Translation < ActiveRecord::Base
 
 
   def counterpart_in(locale)
-    locale.translations.find(:first, :conditions => { :namespace => namespace, :tr_key => tr_key }) || locale.translations.build(:namespace => namespace, :tr_key => tr_key)
+    locale.translations.find_or_create_by_namespace_and_tr_key(:namespace => namespace, :tr_key => tr_key)
   end
   
   def counterpart_in_main
@@ -118,13 +118,16 @@ SQL
     special_case = LOCALIZE_DEFAULTS[key]
     if SPECIAL_CASES.include?(key)
       locale = Locale.find_by_iso(locale.to_s) || Locale.default
-      # TODO: the line below is a hack, but if I take it out, all the localized dates and times show up as 'default'.
-      # There's nothing significant about 'time' as a namespace - it just indicates that there's localization data
-      # in the database for that locale --elz
-      return special_case unless locale.translations.find_by_namespace('time')
-      if FORMAT_HASHES.include?(key) && (translations = locale.translations.find_all_by_namespace(key))
-        special_case = {}
-        translations.each {|t| special_case[t.tr_key.to_sym] = t.text}
+      if FORMAT_HASHES.include?(key) 
+        if (translations = locale.translations.find_all_by_namespace(key)) && translations.length == LOCALIZE_DEFAULTS[key].length
+          special_case = {}
+          translations.each do |t|
+            if t.text.blank?
+              t.update_attribute(:text, LOCALIZE_DEFAULTS[key][t.tr_key.to_sym])
+            end 
+            special_case[t.tr_key.to_sym] = t.text
+          end 
+        end        
         return special_case
       else      
         keys = key.split('.')
@@ -132,15 +135,20 @@ SQL
         namespace = keys.join('.')      
         if translation = locale.translations.find_by_tr_key_and_namespace(tr_key, namespace)
           text = translation.text
-          special_case = case  
-            when ARRAY_KEYS.include?(key)
-              text.split(', ')
-            when ARRAY_KEYS_WITH_NIL.include?(key)
-              [nil] + text.split(', ')  
-            when ARRAY_OF_SYMBOL_KEYS.include?(key)
-              text.split(', ').collect {|new_key| new_key.to_sym }           
-            else
-              text            
+          if text.blank?
+            translation.update_attribute(:text, LOCALIZE_DEFAULTS[key].compact.join(', '))
+            special_case = LOCALIZE_DEFAULTS[key]
+          else
+            special_case = case  
+              when ARRAY_KEYS.include?(key)
+                text.split(', ')
+              when ARRAY_KEYS_WITH_NIL.include?(key)
+                [nil] + text.split(', ')  
+              when ARRAY_OF_SYMBOL_KEYS.include?(key)
+                text.split(', ').collect {|new_key| new_key.to_sym }           
+              else
+                text            
+            end
           end
         end
       end

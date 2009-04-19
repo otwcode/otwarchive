@@ -1,11 +1,11 @@
-<h2><%= t('translators.new.add_new_translator', :default => 'Add new translators:') %></h2>
+<h2><%= t('add_new_translator', :default => 'Add new translators:') %></h2>
 
 <%- form_tag url_for({:controller => :translators, :action => 'create', :method => :post}) do -%>
 
 <table>
   <tr>
-    <th><%= t('translators.new.email', :default => 'Email Address') %></th>
-    <th><%= t('translators.new.locale', :default => 'Locale') %></th>
+    <th><%= t('translator_email', :default => 'Email Address') %></th>
+    <th><%= t('translator_locale', :default => 'Locale') %></th>
   </tr>
   <%- 5.times do |i| -%>
     <tr>

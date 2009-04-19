@@ -1,6 +1,6 @@
 <th scope="row"><%=h user.login %></th>
 <td><%=h user.email, :title => t('email', :default => "Email") %>%></td>
-<td><%= t('translator', :default => "Translator") if user.translator %></td>
+<td><%= t('translation_admin', :default => "Translation Admin") if user.is_translation_admin? %></td>
 <td><%= t('tag_wrangler', :default => "Tag Wrangler") if user.tag_wrangler %></td>
 <td><%= t('suspended', :default => "Suspended") if user.suspended %></td>
 <td><%= t('banned', :default => "Banned") if user.banned %></td>

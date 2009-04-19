@@ -1,6 +1,8 @@
 <%= stylesheet_link_tag 'archive_core', :media => 'all' %>
 <%= stylesheet_link_tag 'layout-elements', :media => 'all' %>
-<%= stylesheet_link_tag 'home', :media => 'screen' %>
+<%- if controller.controller_name == 'home' -%> 
+  <%= stylesheet_link_tag 'home', :media => 'screen' %>
+<%- end -%>
 <%= stylesheet_link_tag 'forms', :media => 'screen' %>
 <%= stylesheet_link_tag 'story-views', :media => 'all' %>
 <%= stylesheet_link_tag 'comments', :media => 'screen' %>
@@ -11,6 +13,9 @@
 <%= stylesheet_link_tag 'system-messages', :media => 'screen' %>
 <%= stylesheet_link_tag 'aural', :media => 'screenreader' %>
 <%= stylesheet_link_tag 'print', :media => 'print' %>
+<%- if controller.controller_name == 'translations' -%>
+  <%= stylesheet_link_tag 'translations', :media => 'screen' %>
+<%- end -%> 
 
 <%= logged_in_as_admin? ? (stylesheet_link_tag 'admin', :media => 'screen') : "" %>
 

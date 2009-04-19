@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
 
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user
-  attr_accessible :suspended, :banned, :translator, :tag_wrangler, :recently_reset
+  attr_accessible :suspended, :banned, :translation_admin, :tag_wrangler, :recently_reset
   
   # Acts_as_authentable plugin
   acts_as_authentable
@@ -180,14 +180,14 @@ class User < ActiveRecord::Base
     User.fetch_orphan_account if ArchiveConfig.ORPHANING_ALLOWED
   end
   
-  # Is this user an authorized translator?
-  def translator
-    self.is_translator?
+  # Is this user an authorized translation admin?
+  def translation_admin
+    self.is_translation_admin?
   end
   
   # Set translator role for this user
-  def translator=(is_translator)
-    is_translator == "1" ? self.is_translator : self.is_not_translator
+  def translation_admin=(is_translation_admin)
+    is_translation_admin == "1" ? self.is_translation_admin : self.is_not_translation_admin
   end
   
   # Is this user an authorized tag wrangler?

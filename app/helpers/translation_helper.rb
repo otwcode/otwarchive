@@ -1,5 +1,20 @@
 module TranslationHelper
   
+  # Returns the status of a localized translation with a class for css styling
+  def translation_status(main_translation, local_translation)
+    if local_translation.betaed? || !local_translation.text.blank?
+      if main_translation.updated_at > local_translation.updated_at
+        "<span class='updated'>Main translation has been updated</span>"
+      elsif local_translation.betaed
+        "<span class='betaed'>Betaed</span>"
+      else
+        "<span class='translated'>Translated</span>"
+      end
+    else
+      "<span class='not_translated'>Not translated</span>"
+    end    
+  end
+  
   def rows_for_words(string)
    words = (string).split(/\S+/).size
    words > 5 ? words/5 : 1

@@ -19,7 +19,7 @@ class TagTest < ActiveSupport::TestCase
 
     context "with whitespace" do
       setup do
-        @name = random_tag_name
+        @name = random_tag_name(30)
         @tag = create_tag(:name => "   " + @name + "    a    " )
       end
       should "be stripped" do

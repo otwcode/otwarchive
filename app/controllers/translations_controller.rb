@@ -1,17 +1,10 @@
 class TranslationsController < ApplicationController
 
   permit "translator", :permission_denied_message => "Sorry, the page you tried to access is for authorized translators only."
-  # this is copied from a demo app, and will be seriously overhauled!
-
   before_filter :find_locale
-  protect_from_forgery :only => []
-
-  # in_place_edit_for :translation, :text
   
   def find_locale
-    @locale = @current_locale #Locale.find(params[:locale_id])
-    ## Of course, you can authorize users to edit the translations as you wish, for example:
-    # raise "No access" unless @current_member.locales.find(:all).include? @locale
+    @locale = params[:locale_id] ? Locale.find_by_iso(params[:locale_id]) : @current_locale
     if @locale.main?
       @main_locale = @locale
     else
@@ -19,34 +12,15 @@ class TranslationsController < ApplicationController
     end
   end
   
-  def index    
-    @groups = @main_locale.translations.find(:all, :order => "namespace, id").group_by(&:namespace)
-  end
-  
-  def browse
-    @namespaces = Translation.find(:all, :select => 'DISTINCT namespace', :order => :namespace).collect(&:namespace)
-  end
-  
-  def update_in_place
-    @field_name = params[:editorId]
-    main_translation = @main_locale.translations.find params[:id]
-    @translation = main_translation.counterpart_in(@locale)
-    @translation.text = params[:value]
-    if @translation.text && @translation.save
-      if session[:unsaved]
-        session[:unsaved][@field_name] = nil
-      end
-      # render :text => translation.text.blank? ? '<span class="inplaceeditor-empty">click to edit…</span>' : ERB::Util.h(translation.text)
-    else
-      # since the save failed, we need to store the unsaved field 
-      # data into our session variable - notice we are using
-      # a hash within the session - just in case they start to 
-      # edit two different fields at once without saving, this 
-      # hash will keep track of what data goes with what field
-      session[:unsaved] ||= {}
-      session[:unsaved][@field_name] = params[:value]
+  def index
+    if params[:namespace]
+      @current_namespace = params[:namespace]
+      @translations = @main_locale.translations.find(:all, :order => "namespace, id", :conditions => {:namespace => params[:namespace]}).paginate(:page => params[:page])
+    else  
+      @translations = @main_locale.translations.find(:all, :order => "namespace, id").paginate(:page => params[:page])
     end
-    # falls through to RJS template
+    @translators = @locale.has_translators
+    @namespaces = Translation.find(:all, :select => 'DISTINCT namespace', :order => :namespace).collect(&:namespace)   
   end
 
   def show
@@ -67,7 +41,7 @@ class TranslationsController < ApplicationController
     respond_to do |format|
       if @translation.save
         flash[:notice] = 'Translation was successfully created.'
-        format.html { redirect_to(admin_translations_url) }
+        format.html { redirect_to :back }
       else
         format.html { render :action => "new" }
       end
@@ -76,11 +50,19 @@ class TranslationsController < ApplicationController
 
   def update
     @translation = Translation.find(params[:id])
+    @locale = Locale.find(@translation.locale_id)
+    @main_translation = @translation.counterpart_in_main
+    @translators = @locale.has_translators
+    # TODO: move to model
+    if current_user.id == @translation.beta_id && !@translation.text.blank?
+      params[:translation][:betaed] = true
+    end
 
     respond_to do |format|
       if @translation.update_attributes(params[:translation])
         flash[:notice] = 'Translation was successfully updated.'
-        format.html { redirect_to(admin_translation_url(@translation)) }
+        format.html { redirect_to :back }
+        format.js
       else
         format.html { render :action => "edit" }
       end
@@ -92,7 +74,7 @@ class TranslationsController < ApplicationController
     @translation.destroy
 
     respond_to do |format|
-      format.html { redirect_to(admin_translations_url) }
+      format.html { redirect_to translations_path }
     end
   end
 end

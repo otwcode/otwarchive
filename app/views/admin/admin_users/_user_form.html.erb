@@ -3,7 +3,7 @@
 <%- form_for :user, user, :url => {:controller => "admin/admin_users", :action => "update", :letter => params[:letter]} do |f| -%> 
 <th scope="row"><%=h user.login %><%= f.hidden_field :login %></th>
 <td><%= f.text_field :email, :title => t('email', :default => "Email") %></td>
-<td><%= f.check_box :translator, :title => t('translator', :default => "Translator") %></td>
+<td><%= f.check_box :translation_admin, :title => t('translation_admin', :default => "Translation Admin") %></td>
 <td><%= f.check_box :tag_wrangler, :title => t('tag_wrangler', :default => "Tag Wrangler") %></td>
 <td><%= f.check_box :suspended, :title => t('suspended', :default => "Suspended") %></td>
 <td><%= f.check_box :banned, :title => t('banned', :default => "Banned") %></td>

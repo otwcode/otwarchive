@@ -39,7 +39,7 @@ class Admin::AdminUsersController < ApplicationController
     end
   end
 
-  # DELETE admin/users/1                                                                                                             notices.admin_users.
+  # DELETE admin/users/1
   # DELETE admin/users/1.xml
   def destroy
     @user = User.find_by_login(params[:id])
