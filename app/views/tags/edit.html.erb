@@ -11,6 +11,8 @@
 
     <dt><%=h 'Works (count)' %></dt>
     <dd><%= link_to_tag_with_text(@tag, @tag.visible_works_count, true) %></dd>
+    <dt><%=h 'Bookmarks (count)' %></dt>
+    <dd><%= link_to_tag_with_text(@tag, @tag.visible_bookmarks_count, true) %></dd>
 
     <dt><%= f.label :type, 'Category' %></dt>
     <dd>

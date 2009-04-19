@@ -29,6 +29,7 @@ class TagsController < ApplicationController
         else
           @works = @tag.works.visible_to_all.paginate(:page => params[:page])
         end
+        @bookmarks = @tag.bookmarks.select{|b| b.visible}.paginate(:page => params[:page])
       end
     else
       flash[:error] = t('not_found', :default => "Tag not found")

@@ -8,7 +8,8 @@
 
 <%- if @tag.canonical -%>
   <p><%=h 'This is a common tag. You can use this tag to ' %> 
-    <%= link_to 'filter works', {:controller => :works, :action => :index, :tag_id => @tag} %>.
+    <%= link_to 'filter works', {:controller => :works, :action => :index, :tag_id => @tag} %> and to 
+    <%= link_to "filter bookmarks", {:controller => :bookmarks, :action => :index, :tag_id => @tag} %>.
   </p>
 <%- end -%>
 
@@ -41,6 +42,7 @@
 <%- if @tag.merger -%>
   <p><%=h 'This tag has been merged into' %> <%= link_to_tag @tag.merger %> <%=h 'for filtering.' %></p>
   <p><%=h 'Works tagged with this tag will show up in' %> <%= link_to @tag.merger.name + "'s", {:controller => :works, :action => :index, :tag_id => @tag.merger} %> <%=h 'filter.' %></p>
+  <p><%=h 'Bookmarks tagged with this tag will show up in' %> <%= link_to @tag.merger.name + "'s", {:controller => :bookmarks, :action => :index, :tag_id => @tag.merger} %> <%=h 'filter.' %></p>
 <%- end -%>
 
 <%- unless @tag.mergers.blank? -%>
@@ -65,17 +67,33 @@
 <%- end -%>
 
 <%- if @works -%>
+
   <% if @tag.is_a?(Ambiguity) %>
     <p><%=h 'This tag is ambiguous and can not be filtered on.' %></p>
   <% else %>
     <p><%=h "This tag has not been marked common and can't be filtered on (yet)." %></p>
   <% end %>
-  <p><%=h 'Works which have used it as a tag:' %></p>
-  <% paginated_section @works, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
-    <ul class="work-list">
-      <%- for work in @works -%>
-        <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
-      <%- end -%>
-    </ul>
+  
+  <% unless @works.blank? %>
+    <p><%=h 'Works which have used it as a tag:' %></p>
+    <% paginated_section @works, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
+      <ul class="work-list">
+        <%- for work in @works -%>
+          <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
+        <%- end -%>
+      </ul>
+    <% end %>
   <% end %>
+
+  <%- unless @bookmarks.blank? -%>
+    <p><%=h 'Bookmarks which have used it as a tag:' %></p>
+    <% paginated_section @bookmarks, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
+      <ul class="work-list">
+        <%- for bookmark in @bookmarks -%>
+          <%= render :partial => 'bookmarks/bookmark', :locals => {:bookmark => bookmark} %>
+        <%- end -%>
+      </ul>
+    <% end %>
+  <%- end -%>
+
 <%- end -%>
