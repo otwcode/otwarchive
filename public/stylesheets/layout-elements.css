@@ -106,16 +106,9 @@ dl#user-data dt {font-weight: 900; width: 9em; float:left; clear:left; margin:0.
 #main.pseuds-new.sidebar ul.navigation, #main.pseuds-edit.sidebar ul.navigation { margin-top: 13.75em;}
 /* Enigel Mar 12 09: pseuds show is changing entirely */
 /*
-#main.pseuds-show.sidebar ul.navigation { position:relative; /*margin-top: 13.75em;*/}
-#main.pseuds-show.sidebar { /*position:absolute; margin-top:2em;*/}
-#main.pseuds-show.sidebar dl { position:relative; }
-#pseuds-show { position: absolute; }
-
-#main.pseuds-index .navigation a {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:none; border:1px solid #ccc; padding:0.25em;}
-#main.pseuds-index .navigation li {border:0; background:transparent;}
-#main.pseuds-index ul.navigation {margin: 0 0 -0.75em 0;}
-
-
+#main.pseuds-show.sidebar ul.navigation { margin-top: 13.75em;}
+#main.pseuds-show.sidebar { position:absolute; margin-top:2em;}
+#main.pseuds-show.sidebar dl { }
 #main.pseuds-show.sidebar dt { font-weight:600; float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
 #main.pseuds-show.sidebar dd { float:left; }
 */
@@ -128,7 +121,7 @@ ul.work {position:relative; border-bottom:1px solid #ddd; }
 /* replaced ul.own with .own because bookmarks are inside ul Enigel Dec 10 08 */
 .own { border:1px dotted #ccc;background:#eee;}
 ul.work ul li, .work dd ul li { display:inline;}
-.work .navigation a {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:none; border:1px solid #ccc; padding:0.25em;}
+
 li.heading {position:relative; }
 .work ul.required-tags {width:75px; height:50px;float:left;}
 .work ul.required-tags li img {width:25px; height:25px;}
