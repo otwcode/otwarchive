@@ -5,34 +5,26 @@
 <li><%= link_to t('new_pseud', :default => 'New pseud'), new_user_pseud_path(@user) %></li>
 </ul>
 <% end -%>
-<table>
-<caption>Pseuds management</caption>
-  <tr>
-    <th scope="col"><%= t('name', :default => 'Name') %></th>
-    <th scope="col"><%= t('description', :default => 'Description') %></th>
-    <th scope="col"><%= t('is_default', :default => 'Is default') %></th>
-    <th>&nbsp;</th>
-  </tr>
-<% for pseud in @pseuds %>
-  <tr>
-    <th scope="row"><%= pseud.name %></th>
-    <td><%= pseud.description %></td>
-    <td><%= pseud.is_default %></td>
-    <td class="navigation">
-      <ul class="navigation">
-        <li><%= link_to t('show_link', :default => 'Show'), [@user, pseud] %></li>
-        <% if current_user == @user -%>
-          <li><%= link_to t('edit_link', :default => 'Edit'), [:edit, @user, pseud] -%></li>
-          <li><%= link_to t('orphan_link', :default => 'Orphan Works'), {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} -%>
-          <% unless @user.login == pseud.name || pseud.is_default -%></li>
-            <li><%= link_to t('delete_link', :default => 'Delete'), [@user, pseud], :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
-          <% end -%>
+<ul class="pseuds-list">
+  <% for pseud in @pseuds %>
+  <li>
+    <p class="pseud-name"><%=link_to pseud.name, [@user, pseud] %>
+<%- if pseud.is_default then %> (<%= t('default_pseud', :default => 'Default') %>) <% end %>
+    </p>
+    <p class="pseud-desc"><%= pseud.description %></p>
+      <% if current_user == @user -%>
+    <ul class="navigation">
+        <li><%= link_to t('edit_link', :default => 'Edit'), [:edit, @user, pseud] -%></li>
+        <li><%= link_to t('orphan_link', :default => 'Orphan Works'), {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} -%>
+        <% unless @user.login == pseud.name || pseud.is_default -%></li>
+          <li><%= link_to t('delete_link', :default => 'Delete'), [@user, pseud], :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
         <% end -%>
-      </ul>
-    </td>
-  </tr>
+    </ul>
+  <% end -%>
+  </li>
 <% end %>
-</table>
+</ul>
+
 <% if current_user == @user -%>
 <ul class="navigation">
 <li><%= link_to t('new_pseud', :default => 'New pseud'), new_user_pseud_path(@user) %></li>

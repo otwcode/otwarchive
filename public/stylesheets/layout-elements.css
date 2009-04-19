@@ -112,6 +112,11 @@ dl#user-data dt {font-weight: 900; width: 9em; float:left; clear:left; margin:0.
 #main.pseuds-show.sidebar dt { font-weight:600; float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
 #main.pseuds-show.sidebar dd { float:left; }
 */
+.pseuds-list li { border-bottom:1px dotted #CCCCCC; padding-bottom: 0.5em; margin-bottom: 1.5em !important}
+.pseuds-list .navigation a {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:none; border:1px solid #ccc; padding:0.25em;}
+.pseuds-list .navigation, .pseuds-list .navigation li {border:0; background:transparent;}
+.pseuds-list ul.navigation {margin: 1em 0 -0.75em 0; text-align: left}
+
 /* WORKS-INDEX */
 /*work filters rules are in forms.css */
 /*works blurb : shows on works, reading history, series, should be spoofed on bookmarks and users-show*/
