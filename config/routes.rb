@@ -74,13 +74,13 @@ ActionController::Routing::Routes.draw do |map|
   end
   
   map.resources :locales, :collection => {:set => :get} do |locale|
-    locale.resources :translations
+    locale.resources :translations, :collection => {:assign => :post}
     locale.resources :translators do |translator|
       translator.resources :translations
     end
   end
   
-  map.resources :translations
+  map.resources :translations, :collection => {:assign => :post}
   map.resources :translators, :has_many => :translations
 
   map.resources :orphans, :collection => {:about => :get}, :only => [:index, :new, :create] 

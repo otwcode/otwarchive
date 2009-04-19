@@ -17,20 +17,21 @@ class TranslationsController < ApplicationController
     locale = @main_locale
     if params[:translator_id]
       locale = @locale
-      translator_id = User.find_by_login(params[:translator_id])
+      @translator = User.find_by_login(params[:translator_id])
+      @path_for_filtering = translator_translations_path(@translator)
       if params[:show] == 'beta'
-        conditions[:beta_id] = translator_id
+        conditions[:beta_id] = @translator.id
       else
-        conditions[:translator_id] = translator_id
+        conditions[:translator_id] = @translator.id
       end
     end
     if params[:namespace]
       @current_namespace = params[:namespace]
       conditions[:namespace] = params[:namespace]
-    end  
+    end
     @translations = locale.translations.find(:all, :order => "namespace, id", :conditions => conditions).paginate(:page => params[:page])
     @translators = @locale.has_translators
-    @namespaces = Translation.find(:all, :select => 'DISTINCT namespace', :order => :namespace).collect(&:namespace)   
+    @namespaces = Translation.find(:all, :select => 'DISTINCT namespace', :order => :namespace).collect(&:namespace)
   end
 
   def show
@@ -77,6 +78,20 @@ class TranslationsController < ApplicationController
         format.html { render :action => "edit" }
       end
     end
+  end
+  
+  def assign
+    if params[:translator] && !params[:translator][:id].blank?
+      to_update = 'translator_id = ' + params[:translator][:id]
+    elsif params[:beta] && !params[:beta][:id].blank?
+      to_update = 'beta_id = ' + params[:beta][:id]
+    end
+    if @locale.translations.update_all(to_update, ['namespace = ?', params[:namespace]])
+      flash[:notice] = "Translations were assigned"
+    else
+      flash[:error] = "Translations could not be assigned. Please try again."
+    end
+    redirect_to translations_path
   end
 
   def destroy
