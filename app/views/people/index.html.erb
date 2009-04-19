@@ -1,19 +1,11 @@
 <h1><%= "People" -%></h1>
 <ul class="navigation_left">
-  <li>
-  <%= link_to "All", people_path(:letter => params[:letter], 
-      :page => params[:page], :per_page => params[:per_page], :show => "all") -%>
-  </li>
-  
-  <li>
-  <%= link_to "Authors", people_path(:letter => params[:letter], 
-      :page => params[:page], :per_page => params[:per_page], :show => "authors") -%>
-  </li>
-  
-  <li>
-  <%= link_to "Reccers", people_path(:letter => params[:letter], 
-      :page => params[:page], :per_page => params[:per_page], :show => "reccers") -%>
-  </li>
+  <li><%= link_to "All", people_path(:letter => params[:letter], 
+      :page => params[:page], :per_page => params[:per_page], :show => "all") -%></li>
+  <li><%= link_to "Authors", people_path(:letter => params[:letter], 
+      :page => params[:page], :per_page => params[:per_page], :show => "authors") -%></li>  
+  <li><%= link_to "Reccers", people_path(:letter => params[:letter], 
+      :page => params[:page], :per_page => params[:per_page], :show => "reccers") -%></li>
 </ul>
 
 <%= alpha_paginated_section @pseuds_alphabet -%>

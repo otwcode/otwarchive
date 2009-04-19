@@ -31,8 +31,7 @@
           <ul class="navigation">
             <li>
               <%= image_tag("replied_to.png", :size => "15x15", :alt => "Replied To") if inbox_comment.replied_to? %>
-              <%= inbox_reply_link(inbox_comment.feedback_comment) %>
-            </li>
+              <%= inbox_reply_link(inbox_comment.feedback_comment) %></li>
             <%- if @user.is_author_of?(inbox_comment.feedback_comment.ultimate_parent) -%>
             <li><%= 'Spam' %></li>
             <li><%= 'Delete from story' %></li>
