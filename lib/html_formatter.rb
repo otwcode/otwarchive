@@ -54,7 +54,13 @@ module HtmlFormatter
 
     while text.gsub!(/<p>\s*<br\s*\/>/im, "<p>")
     end
-    
+
+    #<pre> blocks shouldn't contain any linebreak markup
+    a = text.scan(/<pre>.*?<\/pre>/im) 
+    a.each do |pre|
+      text = text.sub(pre.to_s(), pre.to_s().gsub(/<(\/)?(br|p)(\s)?(\/)?>/, "")) 
+    end
+
     # and where there are empty paragraphs
     text.gsub!(/<p>\s*<\/p>/im, "")
     
