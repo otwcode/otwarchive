@@ -1,0 +1,28 @@
+<h1>Editing translation_note</h1>
+
+<% form_for(@translation_note) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :note %><br />
+    <%= f.text_area :note %>
+  </p>
+  <p>
+    <%= f.label :namespace %><br />
+    <%= f.text_field :namespace %>
+  </p>
+  <p>
+    <%= f.label :user %><br />
+    <%= f.text_field :user %>
+  </p>
+  <p>
+    <%= f.label :locale %><br />
+    <%= f.text_field :locale %>
+  </p>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @translation_note %> |
+<%= link_to 'Back', translation_notes_path %>

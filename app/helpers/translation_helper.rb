@@ -15,6 +15,13 @@ module TranslationHelper
     end    
   end
   
+  def namespace_notes(namespace)
+    note_count = @current_locale.translation_notes.count(:all, :conditions => {:namespace => namespace}).to_s
+    read_link = link_to('Read notes (' + note_count + ')', translation_notes_path(:namespace => namespace))
+    add_link = link_to('Add a note', new_translation_note_path(:namespace => namespace))
+    read_link + " | " + add_link
+  end
+  
   def rows_for_words(string)
    words = (string).split(/\S+/).size
    words > 5 ? words/5 : 1

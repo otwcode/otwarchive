@@ -13,7 +13,7 @@
 <%= stylesheet_link_tag 'system-messages', :media => 'screen' %>
 <%= stylesheet_link_tag 'aural', :media => 'screenreader' %>
 <%= stylesheet_link_tag 'print', :media => 'print' %>
-<%- if controller.controller_name == 'translations' -%>
+<%- if controller.controller_name == 'translations' || controller.controller_name == 'translation_notes' -%>
   <%= stylesheet_link_tag 'translations', :media => 'screen' %>
 <%- end -%> 
 

@@ -9,3 +9,6 @@
 .translations-index .not_translated {color:red;}
 .translations-index div.translation {margin:0 10% 0 10%; border-bottom: 1px solid black; padding: 2em 0 2em 0; overflow:auto;}
 .translation-admin-links a {color:#900;}
+
+.translation_notes-index .note-text {padding:1em;}
+.translation_notes-index .note {border-bottom:1px dashed black; padding-top:1em; width:80%;}

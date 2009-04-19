@@ -20,7 +20,7 @@
 <%- @translations.group_by(&:namespace).each do |namespace, translations| -%>
 
 <div class='namespace'>
-  <h2><%=h namespace %></h2>
+  <h2><%=h namespace %></h2> <span class='notes-links'><%= namespace_notes(namespace) %></span>
   <%- if current_user.is_translation_admin? -%>
     <%- form_tag(assign_translations_path(:namespace => namespace), :method => :post) do -%>
       <h3>Assign entire namespace</h3>

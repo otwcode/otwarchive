@@ -112,7 +112,7 @@ MAX_RECENT: 20
 
 # Only the following fields are allowed to have HTML. In all others,
 # all HTML tags will be stripped.
-FIELDS_ALLOWING_HTML: %w(content summary notes about_me comment)
+FIELDS_ALLOWING_HTML: %w(content summary notes about_me comment note)
 
 # variables for Askimet http://akismet.com/
 AKISMET_KEY: '6833ee7298cf'

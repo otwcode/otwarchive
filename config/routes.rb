@@ -78,10 +78,12 @@ ActionController::Routing::Routes.draw do |map|
     locale.resources :translators do |translator|
       translator.resources :translations
     end
+    locale.resources :translation_notes
   end
   
   map.resources :translations, :collection => {:assign => :post}
   map.resources :translators, :has_many => :translations
+  map.resources :translation_notes
 
   map.resources :orphans, :collection => {:about => :get}, :only => [:index, :new, :create] 
 
