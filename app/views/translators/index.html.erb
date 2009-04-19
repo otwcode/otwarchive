@@ -2,7 +2,7 @@
 <%- if @locale -%>
   <%= t('translators_for_locale', :default => 'Translators for {{current_locale}}', :current_locale => @locale.name) %>
 <%- else -%>  
-  <%= t('translators', :default => 'Translators') %>
+  <%= t('translators_header', :default => 'Translators') %>
 <%- end -%>
 </h2>
 
