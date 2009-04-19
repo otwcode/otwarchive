@@ -1,20 +1,15 @@
 <h1>Listing translation notes</h1>
 <%= link_to 'Back to translations', translations_path %> | <%= link_to 'Add a new note', new_translation_note_path(:namespace => @namespace) %>
 
-<% for translation_note in @translation_notes %>
+<%- for translation_note in @translation_notes -%>
 <div class='note'>
   <p>
     <%=h translation_note.user.login %>, <%= l(translation_note.created_at) %>
     <%- if current_user == translation_note.user -%>
       <span class='edit-links'><%= link_to '(destroy)', translation_note, :confirm => 'Are you sure?', :method => :delete %></span>
     <%- end -%>
-  </p>
-  
-  <div class='note-text'><%= translation_note.note %></div>
-  
-  <div>
-
-  </div>
+  </p> 
+  <div class='note-text'><%= sanitize_and_format_for_display translation_note.note %></div>
 </div>
-<% end %>
+<%- end -%>
 

@@ -53,7 +53,7 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 #main.sidebar .own {background:#fffef9 !important; border:1px dotted #ccc;}
 
 /* garrish addition by Enigel Dec 5 08 */
-#dashboard-sidebar ul.pseud_selector_sidebar { background-color:#ffeeee; border:#990000 solid thin;}
+#dashboard-sidebar ul.pseud_selector_sidebar { border-bottom:.25em double black;}
 
 /*MAIN CONTENT */
 #main { position: relative; margin: 1.5em auto; padding: 0 3.5em; }
