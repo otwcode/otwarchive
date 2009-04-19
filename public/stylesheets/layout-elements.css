@@ -134,8 +134,8 @@ li.heading {position:relative; }
 
 .work p.update {font-size:0.875em; text-align:right; top:-0.875em; right:0; position:absolute; }
 .work dl.tags {padding-top:0.5625em;}
-.work .tags dt {font-weight:bold; width:5em; padding:0.25em 0.5625em 0.25em 0; }
-.work .tags ul {margin:-2.25em 0 .75em 5.5em; text-indent:0; padding:0;}
+.work .tags dt {font-weight:bold; width:6em; padding:0.25em 0.5625em 0.25em 0; }
+.work .tags ul {margin:-2.25em 0 .75em 6em; text-indent:0; padding:0;}
 .work li.summary {margin:0.5625em auto; padding:0.25em 0.25em 0 0;}
 .work li.stats dl {text-align:right;}
 .work li.stats dt, .work li.stats dd {display:inline; font-size:0.875em}
