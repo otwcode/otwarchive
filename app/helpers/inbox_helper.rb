@@ -13,10 +13,13 @@ module InboxHelper
     end
   end
   
-  #TODO: change to a proper ajax link
   def inbox_reply_link(comment)
-    link_to_remote "Reply", {:url => reply_user_inbox_path(current_user, :comment_id => comment), :method => :get}, 
-      :href => fallback_url_for_comment(comment, {:add_comment_reply_id => comment.id})
+    if comment.depth > ArchiveConfig.COMMENT_THREAD_MAX_DEPTH
+      fallback_url = url_for(comment_path(comment, :add_comment_reply_id => comment.id, :anchor => 'comment' + comment.id.to_s))
+    else
+      fallback_url = fallback_url_for_comment(comment, {:add_comment_reply_id => comment.id})
+    end    
+    link_to_remote "Reply", {:url => reply_user_inbox_path(current_user, :comment_id => comment), :method => :get}, :href => fallback_url
   end
   
 end
