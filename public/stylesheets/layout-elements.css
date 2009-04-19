@@ -223,6 +223,8 @@ dl.translations {position:relative; margin: 1.5em auto; padding: 1.5em 0 2.5em; 
 .home-tos_faq #contents {width: 60%; margin:auto; padding:1em;}
 .home-tos_faq #contents h2 {text-align:center;}
 .home-tos_faq #contents ul li {border-bottom:1px solid #ddd;}
+/* added 19 Feb 09 - Cal */
+#main.orphans-about #contents li {list-style-type: disc !important; margin-left: 2em;}
 
 /*SYMBOLS KEY 
 *this really ought to go somewhere else but it's here for now 02-10-08 */

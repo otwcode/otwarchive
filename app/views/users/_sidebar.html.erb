@@ -13,8 +13,10 @@ end
     <li><%= print_drafts_link(@user) -%></li>
   <%- end -%>
   <li><%= @author ? print_pseud_series_link(@author) : print_series_link(@user) %></li>
-  <li><%= @author ? print_pseud_bookmarks_link(@author) : print_bookmarks_link(@user) %></li>
-  <li><%= link_to_help "coming-soon", prefix + "Communities" %></li>
+	<%- unless @user == User.orphan_account -%>
+    <li><%= @author ? print_pseud_bookmarks_link(@author) : print_bookmarks_link(@user) %></li>
+  <%- end -%>
+	<li><%= link_to_help "coming-soon", prefix + "Communities" %></li>
   <% if @user == current_user %>    
   <li><%= link_to_unless_current "My Inbox (" + @user.unread_inbox_comments_count.to_s + ")", user_inbox_path(@user) %></li>
   <% if @user.preference.history_enabled? %>

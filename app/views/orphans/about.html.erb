@@ -1,3 +1,48 @@
-<h1><%=h t('about_orphaning', :default => 'About Orphaning') %></h1>
-
-<p><%=h 'More about orphaning.' %></p>
+<div id="contents">
+  <h1><%=h t('about_orphaning', :default => 'About Orphaning') %></h1>
+  <p><strong><%=h t('permanent', :default => 'As orphaning is a permanent step, please be sure to read the following explanation in full before orphaning any of your works!') %></strong></p>
+  <h2><%=h t('what_is1', :default => 'What is orphaning?') %></h2>
+  <p><%=h t('what_is2', :default => 'Orphaning is an alternative to deleting a work that you no longer want to be associated with.') %>&nbsp;
+     <%=h t('what_is3', :default => 'It permanently detaches the work from your account and re-attaches it to the specially created orphan_account.') %>&nbsp;
+     <%= t('what_is4', :default => "Please note that this is <strong>permanent and irreversible</strong>; you are giving up control over the work, including the ability to edit or delete it.") %>
+  </p>
+  <p><%=h t('what_is5', :default => 'Orphaning is a way to remove your connection to your works without taking them away from fandom altogether.') %>&nbsp;
+     <%=h t('what_is6', :default => 'We hope this account will be used by people who wish (for whatever reasons) to retire from fandom but are willing to allow their works to remain in the Archive.') %>&nbsp;
+     <%=h t('what_is7', :default => 'Works orphaned in this way will be maintained by the Archive to be enjoyed by future fans; existing bookmarks and links will not break.') %>&nbsp;
+     <%=h t('what_is8', :default => 'This function means that users can continue to share their contributions to fandom while having their privacy respected.') %>
+  </p>
+  <h2><%=h t('removed1', :default => 'What information is removed when a work is orphaned?') %></h2>
+  <ul>
+    <li><%=h t('removed2', :default => 'Your name is removed from the author byline on the work and all its chapters') %></li>
+    <li><%=h t('removed3', :default => 'Your name is removed from any comments you have left on the work') %></li>
+  </ul>
+  <h2><%=h t('options1', :default => 'What options are available?') %></h2>
+  <p><%=h t('options2', :default => 'There are a number of orphaning options available. You can choose to:') %></p>
+  <ul>
+    <li><%=h t('options3', :default => 'Orphan a single work - from the edit page for the work') %></li>
+    <li><%=h t('options4', :default => "Orphan all your works - from the 'My Preferences' page") %></li>
+    <li><%=h t('options5', :default => "Orphan all works posted under a specific pseud - from the 'Manage My Pseuds' page") %></li>
+  </ul>
+  <p><%=h t('suboptions', :default => 'Once you have decided which work(s) you wish to orphan, you have two options:') %></p>
+  <ul>
+    <li><em><%=h t('default1', :default => 'Use the default orphan pseud') %></em>.&nbsp;
+    <%=h t('default2', :default => 'The work will be transferred to the orphan_account and the default orphan_account pseud.') %>&nbsp;
+    <%=h t('default3', :default => "The byline on the work will read 'orphan_account'.") %></li>
+    <li><em><%=h t('copy1', :default => 'Make a copy of my pseud under the orphan account') %></em>.&nbsp;
+    <%=h t('copy2', :default => 'The work will be transferred to the orphan_account, but a new pseud will be created with the same name as the pseud you used to author the work.') %>&nbsp;
+    <%=h t('copy3', :default => "As an example: if you authored the work using the pseud 'awesomefangirl', after orphaning the byline will read 'awesomefangirl [orphan_account]'.") %>&nbsp;
+    <%=h t('copy4', :default => 'While the pseud will no longer link back to your account, if you have a very distinctive pseud this option might still allow a reader to identify you as the author.') %></li>
+  </ul>
+  <h2><%=h t('orphan_coauthor1', :default => 'Can I orphan a work which I have co-authored with someone else?') %></h2>
+  <p><%=h t('orphan_coauthor2', :default => 'You have the choice of either removing yourself as a co-author, or orphaning your part of the work (with the same pseud options as above).') %>&nbsp;
+  <%=h t('orphan_coauthor3', :default => 'Your co-author will not be affected and will remain a co-author of the work.') %></p>
+  <h2><%=h t('orphan_serial1', :default => 'What happens if I want to orphan a single work in a series?') %></h2>
+  <p><%=h t('orphan_serial2', :default => 'You can orphan the work normally, and the byline will be changed to reflect the new author name.') %>&nbsp;
+  <%= t('orphan_serial3', :default => 'Please note that the work will <strong>not</strong> be removed from the series - if you want it to be removed, you should do this before orphaning the work.') %>&nbsp;
+  <%=h t('orphan_serial4', :default => 'If the work is kept as part of the series, the orphan_account will be listed as one of the authors of the series.') %>
+  </p>
+</div>
+<ul class="navigation">
+  <li><%= link_to t('links.back', :default => 'Back'), :back %></li>
+  <li><%= link_to t('view_orphans', :default => 'View Orphaned Works'), user_works_path(User.orphan_account) %></li>
+</ul>
