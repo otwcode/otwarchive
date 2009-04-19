@@ -43,8 +43,8 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 
 /*DASHBOARD SIDEBAR */
 #dashboard-sidebar { line-height:1.75; float: left; width: 10em; margin: 0 1em 3em 1.5em; border: 2px solid;}
-#dashboard-sidebar ul { text-indent:0.5625em; }
-#dashboard-sidebar li { font-weight: 600;}
+#dashboard-sidebar ul { font-size:0.9em; line-height:1.2em; padding: 0 0.5625em; }
+#dashboard-sidebar li { font-weight: 600; margin: 0.55em 0; }
 #dashboard-sidebar a { font-weight: normal; text-decoration: none; display: block;}
 #dashboard-sidebar a:hover { background: #900; color: #fffef9; }
 
