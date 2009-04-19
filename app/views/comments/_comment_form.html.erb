@@ -32,7 +32,9 @@
       </dd>  
     </dl>
 	  <p class="submit"><%= f.submit button_name %>
+	    <%- unless controller.controller_name == 'inbox' -%>
       <%= cancel_comment_button(comment, commentable) -%>
+      <%- end -%>
 	  </p>
   <% end -%>
 </div> 

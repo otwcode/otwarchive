@@ -15,7 +15,8 @@ module InboxHelper
   
   #TODO: change to a proper ajax link
   def inbox_reply_link(comment)
-    link_to("Reply", fallback_url_for_comment(comment, {:add_comment_reply_id => comment.id}))
+    link_to_remote "Reply", {:url => reply_user_inbox_path(current_user, :comment_id => comment), :method => :get}, 
+      :href => fallback_url_for_comment(comment, {:add_comment_reply_id => comment.id})
   end
   
 end

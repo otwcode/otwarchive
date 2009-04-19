@@ -55,3 +55,5 @@ Just meant to give people a vague general sense of the page --elz*/
 .inbox-show .read .navigation {
 	  background: #eee;
 }
+
+#reply-to-comment	{ background:#fffef9; position:fixed; height:18.75em; width:31.25em; bottom:2em; right:2em; z-index:42; padding:1em 2em;  border:2px solid; }
