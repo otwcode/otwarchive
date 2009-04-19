@@ -1,8 +1,14 @@
 <h1>Listing translations: <%= @main_locale.name %> to <%= @locale.name %></h1>
 
+<%- if current_user.is_translation_admin? -%>
+<div class='translation-admin-links'>
+<%= link_to 'Add a new language', new_language_path %> | <%= link_to 'Add a new locale', new_locale_path %> | <%= link_to 'Add new translators', new_translator_path %>
+</div>
+<%- end -%>
+
 <p>View translations assigned to me as: 
-    <%= link_to 'Translator', translator_translations_path(current_user) %> | 
-    <%= link_to 'Beta', translator_translations_path(current_user, :show => 'beta') %>
+  <%= link_to 'Translator', translator_translations_path(current_user) %> | 
+  <%= link_to 'Beta', translator_translations_path(current_user, :show => 'beta') %>
 </p>
 
 <%- form_tag(@path_for_filtering || translations_path, :method => :get) do -%>
