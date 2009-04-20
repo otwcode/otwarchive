@@ -698,7 +698,7 @@ class Work < ActiveRecord::Base
   def sorted_title
     sorted_title = self.title.downcase.gsub(/^["'\.\/]/, '')
     sorted_title = sorted_title.gsub(/^(an?) (.*)/, '\2, \1')
-    sorted_title.gsub(/^the (.*)/, '\1, the')
+    sorted_title = sorted_title.gsub(/^the (.*)/, '\1, the')
     sorted_title.gsub(/^(\d+)/) {|s| "%05d" % s}
   end
 
