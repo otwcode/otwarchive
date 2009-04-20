@@ -5,6 +5,8 @@ class Translation < ActiveRecord::Base
   validates_presence_of :namespace
   validates_presence_of :tr_key
   
+  before_save :update_status
+  
   def validate
     unless locale.main?
       main_tr = counterpart_in_main
@@ -16,6 +18,19 @@ class Translation < ActiveRecord::Base
           errors.add("text", "did not preserve html links, e.g. <a href=\"to_be_kept\">...</a>. Please do not change or translate the URLs.")
         end
       end
+    end
+  end
+  
+  def update_status
+    if self.beta_id == User.current_user.id && !self.text.blank?
+      self.betaed = true
+    elsif self.translator_id == User.current_user.id && !self.text.blank?
+      self.translated = true
+    end
+    if self.locale.main? && self.text_changed?
+      Translation.update_all('updated = 1', ['namespace = ? AND tr_key = ? AND text IS NOT NULL', self.namespace, self.tr_key])
+    elsif self.updated? && !self.text.blank?
+      self.update_attribute(:updated, false)
     end
   end
   

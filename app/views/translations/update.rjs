@@ -1,3 +1,7 @@
-translation_div = 'translation_' + @translation.id.to_s
-page.replace_html translation_div, :partial => 'translation', :locals => {:translation => @main_translation, :local_translation => @translation}
-page.visual_effect(:highlight, translation_div, :duration => 0.5)
+if @translation.errors.size > 0
+  page.replace_html "errors_for_#{@translation.id}", error_messages_for('translation')
+else
+  translation_div = 'translation_' + @translation.id.to_s
+  page.replace_html translation_div, :partial => 'translation', :locals => {:translation => @main_translation, :local_translation => @translation}
+  page.visual_effect(:highlight, translation_div, :duration => 0.5)
+end

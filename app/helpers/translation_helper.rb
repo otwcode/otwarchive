@@ -3,9 +3,9 @@ module TranslationHelper
   # Returns the status of a localized translation with a class for css styling
   def translation_status(main_translation, local_translation)
     if local_translation.betaed? || !local_translation.text.blank?
-      if main_translation.updated_at > local_translation.updated_at
+      if local_translation.updated?
         "<span class='updated'>Main translation has been updated</span>"
-      elsif local_translation.betaed
+      elsif local_translation.betaed?
         "<span class='betaed'>Betaed</span>"
       else
         "<span class='translated'>Translated</span>"

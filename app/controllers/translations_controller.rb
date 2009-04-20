@@ -25,13 +25,28 @@ class TranslationsController < ApplicationController
         conditions[:translator_id] = @translator.id
       end
     end
-    if params[:namespace]
+    if !params[:namespace].blank?
       @current_namespace = params[:namespace]
       conditions[:namespace] = params[:namespace]
     end
+    if !params[:status].blank?
+      locale = @locale
+      @current_status = params[:status]
+      if params[:status] == 'Not Translated'
+        conditions[:text] = nil
+      elsif params[:status] == 'Updated'
+        conditions[:updated] = true
+      elsif params[:status] == 'Betaed'
+        conditions[:betaed] = true
+      elsif params[:status] == 'Translated'
+        conditions[:translated] = true
+        conditions[:betaed] = false
+      end      
+    end
     @translations = locale.translations.find(:all, :order => "namespace, id", :conditions => conditions).paginate(:page => params[:page])
     @translators = @locale.has_translators
-    @namespaces = Translation.find(:all, :select => 'DISTINCT namespace', :order => :namespace).collect(&:namespace)
+    @namespaces = [''] + Translation.find(:all, :select => 'DISTINCT namespace', :order => :namespace).collect(&:namespace)
+    @status_list = ['', 'Not Translated', 'Translated', 'Betaed', 'Updated']
   end
 
   def show
@@ -76,6 +91,7 @@ class TranslationsController < ApplicationController
         format.js
       else
         format.html { render :action => "edit" }
+        format.js
       end
     end
   end
