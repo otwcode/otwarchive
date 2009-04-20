@@ -157,34 +157,23 @@ class WorkTest < ActiveSupport::TestCase
     end
 
     should "be returned in reverse order by title" do
-      @ordered_works = Work.ordered('title', 'ASC')
+      @ordered_works = Work.find_with_options({:sort_column => 'title', :sort_direction => 'ASC'})
       assert @ordered_works[0] = @works[9]
       assert @ordered_works[9] = @works[0]
     end
 
     should "be returned in same order by date created" do
-      @ordered_works = Work.ordered('created_at', 'ASC')
+      @ordered_works = Work.find_with_options({:sort_column => 'date', :sort_direction => 'ASC'})
       assert @ordered_works[0] = @works[0]
       assert @ordered_works[9] = @works[9]
     end
 
     should "be returned in the right order when retrived with with_all_tag_ids" do
-      @ordered_works = Work.with_all_tag_ids([@tag.id]).ordered('title', 'ASC')
+      @ordered_works = Work.find_with_options({:sort_column => 'title', :sort_direction => 'ASC', :selected_tags => [@tag.id]})
       assert @ordered_works[0] = @works[9]
       assert @ordered_works[9] = @works[0]
     end
 
-    should "be returned in the right order when retrived with visible" do
-      @ordered_works = Work.visible.ordered('title', 'ASC')
-      assert @ordered_works[0] = @works[9]
-      assert @ordered_works[9] = @works[0]
-    end
-
-    should "be returned in the right order when retrived with visible and with_all_tag_ids" do
-      @ordered_works = Work.visible.with_all_tag_ids([@tag.id]).ordered('title', 'ASC')
-      assert @ordered_works[0] = @works[9]
-      assert @ordered_works[9] = @works[0]
-    end
   end
 
   context "a work with a cast" do

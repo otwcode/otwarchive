@@ -81,11 +81,17 @@ class Work < ActiveRecord::Base
 
   # Checks that work has at least one author
   def validate_authors
-    if self.authors.blank? && self.pseuds.empty?
-      errors.add_to_base(t('must_have_author', :default => "Work must have at least one author."))
-      return false
+    if self.authors.blank?
+      if self.pseuds.blank?
+        errors.add_to_base(t('must_have_author', :default => "Work must have at least one author."))
+        return false
+      else
+        self.authors_to_sort_on = self.sorted_pseuds
+      end
     elsif !self.invalid_pseuds.blank?
       errors.add_to_base(t('invalid_pseuds', :default => "These pseuds are invalid: {{pseuds}}", :pseuds => self.invalid_pseuds.inspect))
+    else
+      self.authors_to_sort_on = self.sorted_authors
     end
   end
 
@@ -96,6 +102,8 @@ class Work < ActiveRecord::Base
       if self.title.length < ArchiveConfig.TITLE_MIN
         errors.add_to_base(t('leading_spaces', :default => "Title must be at least {{min}} characters long without leading spaces.", :min => ArchiveConfig.TITLE_MIN))
         return false
+      else
+        self.title_to_sort_on = self.sorted_title
       end
     end
   end
@@ -281,7 +289,7 @@ class Work < ActiveRecord::Base
     number = number.to_i
     self.expected_number_of_chapters = (number != 0 && number >= self.number_of_chapters) ? number : nil
   end
-  
+
   # Change the positions of the chapters in the work
 	def reorder(positions)
 	  SortableList.new(self.chapters.posted.in_order).reorder_list(positions)
@@ -326,7 +334,7 @@ class Work < ActiveRecord::Base
   def is_complete
     return !self.is_wip
   end
-  
+
   # 1/1, 2/3, 5/?, etc.
   def chapter_total_display
     self.number_of_posted_chapters.to_s + '/' + self.wip_length.to_s
@@ -679,43 +687,20 @@ class Work < ActiveRecord::Base
   # plugin that connects us to the Sphinx search engine.
   #
   #################################################################################
+  def sorted_authors
+    self.authors.map(&:name).join(",  ").downcase.gsub(/^[\+-=_\?!'"\.\/]/, '')
+  end
 
-  AUTHOR_TO_SORT_ON ="trim(leading '/' from
-                        trim(leading '.' from
-                          trim(leading '\\\'' from
-                            trim(leading '\\\"' from
-                              trim(leading '!' from
-                                trim(leading '?' from
-                                  trim(leading '=' from
-                                    trim(leading '-' from
-                                      trim(leading '+' from
-                                        lower(pseuds.name)
-                                      )
-                                    )
-                                  )
-                                )
-                              )
-                            )
-                          )
-                        )
-                      )"
+  def sorted_pseuds
+    self.pseuds.map(&:name).join(",  ").downcase.gsub(/^[\+-=_\?!'"\.\/]/, '')
+  end
 
-
-  TITLE_TO_SORT_ON_CASE ="case
-                          when substring_index(lower(works.title), ' ', 1) in ('a', 'an', 'the')
-                          then lower(concat(substring(works.title, instr(works.title, ' ') + 1), ', ', substring_index(works.title, ' ', 1) ))
-                          else
-                            trim(leading '/' from
-                              trim(leading '.' from
-                                trim(leading '\\\'' from
-                                  trim(leading '\\\"' from
-                                    lower(works.title)
-                                  )
-                                )
-                              )
-                            )
-                          end"
-
+  def sorted_title
+    sorted_title = self.title.downcase.gsub(/^["'\.\/]/, '')
+    sorted_title = sorted_title.gsub(/^(an?) (.*)/, '\2, \1')
+    sorted_title.gsub(/^the (.*)/, '\1, the')
+    sorted_title.gsub(/^(\d+)/) {|s| "%05d" % s}
+  end
 
   # Index for Thinking Sphinx
   define_index do
@@ -723,7 +708,8 @@ class Work < ActiveRecord::Base
     # fields
     indexes summary
     indexes notes
-    indexes title, :sortable => true
+    indexes authors_to_sort_on, :sortable => true
+    indexes title_to_sort_on, :sortable => true
 
     # associations
     indexes chapters.content, :as => 'chapter_content'
@@ -734,8 +720,6 @@ class Work < ActiveRecord::Base
     has :id, :as => :work_ids
     has word_count, revised_at
     has tags(:id), :as => :tag_ids
-    has TITLE_TO_SORT_ON_CASE, :as => :title_for_sort, :type => :string
-    has AUTHOR_TO_SORT_ON, :as => :author_for_sort, :type => :string
 
     # properties
     set_property :delta => true
@@ -764,26 +748,15 @@ class Work < ActiveRecord::Base
 
   public
 
-  named_scope :ordered_by_author, lambda{|sort_direction|
-    {
-      #:joins => OWNERSHIP_JOIN + " " + COMMON_TAG_JOIN,
-      :order => AUTHOR_TO_SORT_ON + " " + "#{(sort_direction.upcase == 'DESC' ? 'DESC' : 'ASC')}"
-    }
-  }
+  named_scope :ordered_by_author_desc, :order => "authors_to_sort_on DESC"
+  named_scope :ordered_by_author_asc, :order => "authors_to_sort_on ASC"
+  named_scope :ordered_by_title_desc, :order => "title_to_sort_on DESC"
+  named_scope :ordered_by_title_asc, :order => "title_to_sort_on ASC"
+  named_scope :ordered_by_word_count_desc, :order => "word_count DESC"
+  named_scope :ordered_by_word_count_asc, :order => "word_count ASC"
+  named_scope :ordered_by_date_desc, :order => "revised_at DESC"
+  named_scope :ordered_by_date_asc, :order => "revised_at ASC"
 
-  named_scope :ordered_by_title, lambda{ |sort_direction|
-    {
-      :order => TITLE_TO_SORT_ON_CASE + " " + "#{(sort_direction.upcase == 'DESC' ? 'DESC' : 'ASC')}"
-    }
-  }
-
-  named_scope :ordered, lambda {|sort_field, sort_direction|
-    {
-      :order => "works.#{(Work.column_names.include?(sort_field) ? sort_field : 'revised_at')}" +
-                " " +
-                "#{(sort_direction.upcase == 'DESC' ? 'DESC' : 'ASC')}"
-    }
-  }
   named_scope :limited, lambda {|limit|
     {:limit => limit.kind_of?(Fixnum) ? limit : 5}
   }
@@ -967,18 +940,9 @@ class Work < ActiveRecord::Base
     tags = '.with_all_tag_ids(options[:selected_tags])'
     written = '.written_by_id_conditions(options[:selected_pseuds])'
     owned = '.owned_by_conditions(options[:user])'
-    sort = case options[:sort_column]
-            when 'date'
-              then '.ordered("revised_at", options[:sort_direction])'
-            when 'author'
-              then '.ordered_by_author(options[:sort_direction])'
-            when 'title'
-              then '.ordered_by_title(options[:sort_direction])'
-            else
-              '.ordered(options[:sort_column], options[:sort_direction])'
-    end
-
-    sort_and_paginate = sort + '.paginate(options[:page_args])'
+    sort = '.ordered_by_' + options[:sort_column] + '_' + options[:sort_direction].downcase
+    page_args = {:page => options[:page] || 1, :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE)}
+    sort_and_paginate = sort + '.paginate(page_args)'
 
     @works = []
     @pseuds = []
@@ -1005,7 +969,7 @@ class Work < ActiveRecord::Base
       # a user's default works page
       command << owned + visible_without_owners
       @pseuds = options[:user].pseuds
-    elsif !options[:selected_tags].empty?
+    elsif !options[:selected_tags].blank?
       # no user but selected tags
       command << visible + tags
     elsif !options[:language_id].blank?

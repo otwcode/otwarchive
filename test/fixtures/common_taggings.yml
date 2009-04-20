@@ -1,2752 +1,2759 @@
 --- 
 common_tagging_02988: 
   filterable_type: Work
-  updated_at: 2009-03-20 22:02:54 +02:00
+  updated_at: 2009-03-20 13:02:54 -07:00
   common_tag_id: 441672848
   id: 2988
   filterable_id: 9
-  created_at: 2009-03-20 22:02:54 +02:00
+  created_at: 2009-03-20 13:02:54 -07:00
 common_tagging_03016: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:17:44 +02:00
+  updated_at: 2009-03-20 16:17:44 -07:00
   common_tag_id: 1063753899
   id: 3016
   filterable_id: 49
-  created_at: 2009-03-21 01:17:44 +02:00
+  created_at: 2009-03-20 16:17:44 -07:00
 common_tagging_00097: 
   filterable_type: Work
-  updated_at: 2008-11-21 10:00:17 +02:00
+  updated_at: 2008-11-21 00:00:17 -08:00
   common_tag_id: 545584597
   id: 97
   filterable_id: 1
-  created_at: 2008-11-21 10:00:17 +02:00
+  created_at: 2008-11-21 00:00:17 -08:00
 common_tagging_00178: 
   filterable_type: Work
-  updated_at: 2009-02-16 08:01:05 +02:00
+  updated_at: 2009-02-15 22:01:05 -08:00
   common_tag_id: 1063753780
   id: 178
   filterable_id: 12
-  created_at: 2009-02-16 08:01:05 +02:00
+  created_at: 2009-02-15 22:01:05 -08:00
 common_tagging_02989: 
   filterable_type: Tag
-  updated_at: 2009-03-20 22:03:10 +02:00
+  updated_at: 2009-03-20 13:03:10 -07:00
   common_tag_id: 1063753780
   id: 2989
   filterable_id: 899944269
-  created_at: 2009-03-20 22:03:10 +02:00
+  created_at: 2009-03-20 13:03:10 -07:00
 common_tagging_03017: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:20:18 +02:00
+  updated_at: 2009-03-20 16:20:18 -07:00
   common_tag_id: 885489802
   id: 3017
   filterable_id: 50
-  created_at: 2009-03-21 01:20:18 +02:00
+  created_at: 2009-03-20 16:20:18 -07:00
 common_tagging_00098: 
   filterable_type: Tag
-  updated_at: 2008-11-21 10:02:42 +02:00
+  updated_at: 2008-11-21 00:02:42 -08:00
   common_tag_id: 26796919
   id: 98
   filterable_id: 1063753746
-  created_at: 2008-11-21 10:02:42 +02:00
+  created_at: 2008-11-21 00:02:42 -08:00
 common_tagging_00179: 
   filterable_type: Work
-  updated_at: 2009-02-16 08:01:05 +02:00
+  updated_at: 2009-02-15 22:01:05 -08:00
   common_tag_id: 1063753808
   id: 179
   filterable_id: 12
-  created_at: 2009-02-16 08:01:05 +02:00
+  created_at: 2009-02-15 22:01:05 -08:00
 common_tagging_03018: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:20:18 +02:00
+  updated_at: 2009-03-20 16:20:18 -07:00
   common_tag_id: 1063753736
   id: 3018
   filterable_id: 50
-  created_at: 2009-03-21 01:20:18 +02:00
+  created_at: 2009-03-20 16:20:18 -07:00
 common_tagging_00099: 
   filterable_type: Work
-  updated_at: 2008-11-22 07:49:40 +02:00
+  updated_at: 2008-11-21 21:49:40 -08:00
   common_tag_id: 1063753740
   id: 99
   filterable_id: 5
-  created_at: 2008-11-22 07:49:40 +02:00
+  created_at: 2008-11-21 21:49:40 -08:00
 common_tagging_02800: 
   filterable_type: Work
-  updated_at: 2009-02-22 06:25:24 +02:00
+  updated_at: 2009-02-21 20:25:24 -08:00
   common_tag_id: 112726825
   id: 2800
   filterable_id: 15
-  created_at: 2009-02-22 06:25:24 +02:00
+  created_at: 2009-02-21 20:25:24 -08:00
 common_tagging_03019: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:20:18 +02:00
+  updated_at: 2009-03-20 16:20:18 -07:00
   common_tag_id: 1063753733
   id: 3019
   filterable_id: 50
-  created_at: 2009-03-21 01:20:18 +02:00
+  created_at: 2009-03-20 16:20:18 -07:00
 common_tagging_02801: 
   filterable_type: Work
-  updated_at: 2009-02-22 06:25:24 +02:00
+  updated_at: 2009-02-21 20:25:24 -08:00
   common_tag_id: 611729728
   id: 2801
   filterable_id: 15
-  created_at: 2009-02-22 06:25:24 +02:00
+  created_at: 2009-02-21 20:25:24 -08:00
 common_tagging_02802: 
   filterable_type: Work
-  updated_at: 2009-02-22 06:25:24 +02:00
+  updated_at: 2009-02-21 20:25:24 -08:00
   common_tag_id: 1039617938
   id: 2802
   filterable_id: 15
-  created_at: 2009-02-22 06:25:24 +02:00
+  created_at: 2009-02-21 20:25:24 -08:00
 common_tagging_02910: 
   filterable_type: Work
-  updated_at: 2009-03-12 04:55:48 +02:00
+  updated_at: 2009-03-11 19:55:48 -07:00
   common_tag_id: 611729728
   id: 2910
   filterable_id: 41
-  created_at: 2009-03-12 04:55:48 +02:00
+  created_at: 2009-03-11 19:55:48 -07:00
 common_tagging_00100: 
   filterable_type: Work
-  updated_at: 2008-12-05 15:59:15 +02:00
+  updated_at: 2008-12-05 05:59:15 -08:00
   common_tag_id: 112726825
   id: 100
   filterable_id: 6
-  created_at: 2008-12-05 15:59:15 +02:00
+  created_at: 2008-12-05 05:59:15 -08:00
 common_tagging_02803: 
   filterable_type: Tag
-  updated_at: 2009-02-22 06:26:17 +02:00
+  updated_at: 2009-02-21 20:26:17 -08:00
   common_tag_id: 1063753823
   id: 2803
   filterable_id: 1063753807
-  created_at: 2009-02-22 06:26:17 +02:00
+  created_at: 2009-02-21 20:26:17 -08:00
 common_tagging_00020: 
   filterable_type: Work
-  updated_at: 2008-11-21 08:11:28 +02:00
+  updated_at: 2008-11-20 22:11:28 -08:00
   common_tag_id: 1039617938
   id: 20
   filterable_id: 4
-  created_at: 2008-11-21 08:11:28 +02:00
+  created_at: 2008-11-20 22:11:28 -08:00
 common_tagging_00101: 
   filterable_type: Work
-  updated_at: 2008-12-05 15:59:15 +02:00
+  updated_at: 2008-12-05 05:59:15 -08:00
   common_tag_id: 426547448
   id: 101
   filterable_id: 6
-  created_at: 2008-12-05 15:59:15 +02:00
+  created_at: 2008-12-05 05:59:15 -08:00
 common_tagging_02804: 
   filterable_type: Work
-  updated_at: 2009-02-22 06:26:17 +02:00
+  updated_at: 2009-02-21 20:26:17 -08:00
   common_tag_id: 1063753823
   id: 2804
   filterable_id: 15
-  created_at: 2009-02-22 06:26:17 +02:00
+  created_at: 2009-02-21 20:26:17 -08:00
 common_tagging_02830: 
   filterable_type: Work
-  updated_at: 2009-03-09 18:32:19 +02:00
+  updated_at: 2009-03-09 09:32:19 -07:00
   common_tag_id: 992891255
   id: 2830
   filterable_id: 20
-  created_at: 2009-03-09 18:32:19 +02:00
+  created_at: 2009-03-09 09:32:19 -07:00
 common_tagging_02911: 
   filterable_type: Work
-  updated_at: 2009-03-12 04:55:48 +02:00
+  updated_at: 2009-03-11 19:55:48 -07:00
   common_tag_id: 992891255
   id: 2911
   filterable_id: 41
-  created_at: 2009-03-12 04:55:48 +02:00
+  created_at: 2009-03-11 19:55:48 -07:00
 common_tagging_00102: 
   filterable_type: Work
-  updated_at: 2008-12-05 15:59:15 +02:00
+  updated_at: 2008-12-05 05:59:15 -08:00
   common_tag_id: 751871740
   id: 102
   filterable_id: 6
-  created_at: 2008-12-05 15:59:15 +02:00
+  created_at: 2008-12-05 05:59:15 -08:00
 common_tagging_02805: 
   filterable_type: Work
-  updated_at: 2009-02-22 06:26:17 +02:00
+  updated_at: 2009-02-21 20:26:17 -08:00
   common_tag_id: 1063753807
   id: 2805
   filterable_id: 15
-  created_at: 2009-02-22 06:26:17 +02:00
+  created_at: 2009-02-21 20:26:17 -08:00
 common_tagging_02831: 
   filterable_type: Work
-  updated_at: 2009-03-09 18:32:19 +02:00
+  updated_at: 2009-03-09 09:32:19 -07:00
   common_tag_id: 1063753824
   id: 2831
   filterable_id: 20
-  created_at: 2009-03-09 18:32:19 +02:00
+  created_at: 2009-03-09 09:32:19 -07:00
 common_tagging_02912: 
   filterable_type: Work
-  updated_at: 2009-03-18 06:08:46 +02:00
+  updated_at: 2009-03-17 21:08:46 -07:00
   common_tag_id: 426547448
   id: 2912
   filterable_id: 42
-  created_at: 2009-03-18 06:08:46 +02:00
+  created_at: 2009-03-17 21:08:46 -07:00
 common_tagging_00103: 
   filterable_type: Work
-  updated_at: 2008-12-05 15:59:15 +02:00
+  updated_at: 2008-12-05 05:59:15 -08:00
   common_tag_id: 741440589
   id: 103
   filterable_id: 6
-  created_at: 2008-12-05 15:59:15 +02:00
+  created_at: 2008-12-05 05:59:15 -08:00
 common_tagging_02806: 
   filterable_type: Work
-  updated_at: 2009-02-24 08:34:22 +02:00
+  updated_at: 2009-02-23 22:34:22 -08:00
   common_tag_id: 992891255
   id: 2806
   filterable_id: 16
-  created_at: 2009-02-24 08:34:22 +02:00
+  created_at: 2009-02-23 22:34:22 -08:00
 common_tagging_00210: 
   filterable_type: Tag
-  updated_at: 2009-02-16 08:19:13 +02:00
+  updated_at: 2009-02-15 22:19:13 -08:00
   common_tag_id: 1063753814
   id: 210
   filterable_id: 951091623
-  created_at: 2009-02-16 08:19:13 +02:00
+  created_at: 2009-02-15 22:19:13 -08:00
 common_tagging_02832: 
   filterable_type: Work
-  updated_at: 2009-03-09 18:32:19 +02:00
+  updated_at: 2009-03-09 09:32:19 -07:00
   common_tag_id: 788108366
   id: 2832
   filterable_id: 20
-  created_at: 2009-03-09 18:32:19 +02:00
+  created_at: 2009-03-09 09:32:19 -07:00
 common_tagging_02913: 
   filterable_type: Work
-  updated_at: 2009-03-18 06:08:46 +02:00
+  updated_at: 2009-03-17 21:08:46 -07:00
   common_tag_id: 992891255
   id: 2913
   filterable_id: 42
-  created_at: 2009-03-18 06:08:46 +02:00
+  created_at: 2009-03-17 21:08:46 -07:00
 common_tagging_00023: 
   filterable_type: Work
-  updated_at: 2008-11-21 08:11:28 +02:00
+  updated_at: 2008-11-20 22:11:28 -08:00
   common_tag_id: 741440589
   id: 23
   filterable_id: 5
-  created_at: 2008-11-21 08:11:28 +02:00
+  created_at: 2008-11-20 22:11:28 -08:00
 common_tagging_00104: 
   filterable_type: Work
-  updated_at: 2008-12-05 15:59:15 +02:00
+  updated_at: 2008-12-05 05:59:15 -08:00
   common_tag_id: 791950904
   id: 104
   filterable_id: 6
-  created_at: 2008-12-05 15:59:15 +02:00
+  created_at: 2008-12-05 05:59:15 -08:00
 common_tagging_00130: 
   filterable_type: Work
-  updated_at: 2008-12-07 01:34:39 +02:00
+  updated_at: 2008-12-06 15:34:39 -08:00
   common_tag_id: 992891255
   id: 130
   filterable_id: 13
-  created_at: 2008-12-07 01:34:39 +02:00
+  created_at: 2008-12-06 15:34:39 -08:00
 common_tagging_02807: 
   filterable_type: Work
-  updated_at: 2009-02-24 08:34:22 +02:00
+  updated_at: 2009-02-23 22:34:22 -08:00
   common_tag_id: 1063753737
   id: 2807
   filterable_id: 16
-  created_at: 2009-02-24 08:34:22 +02:00
+  created_at: 2009-02-23 22:34:22 -08:00
 common_tagging_02833: 
   filterable_type: Work
-  updated_at: 2009-03-09 18:32:19 +02:00
+  updated_at: 2009-03-09 09:32:19 -07:00
   common_tag_id: 751871740
   id: 2833
   filterable_id: 20
-  created_at: 2009-03-09 18:32:19 +02:00
+  created_at: 2009-03-09 09:32:19 -07:00
 common_tagging_02914: 
   filterable_type: Work
-  updated_at: 2009-03-18 06:08:46 +02:00
+  updated_at: 2009-03-17 21:08:46 -07:00
   common_tag_id: 569823665
   id: 2914
   filterable_id: 42
-  created_at: 2009-03-18 06:08:46 +02:00
+  created_at: 2009-03-17 21:08:46 -07:00
 common_tagging_02940: 
   filterable_type: Work
-  updated_at: 2009-03-19 03:02:12 +02:00
+  updated_at: 2009-03-18 18:02:12 -07:00
   common_tag_id: 992891255
   id: 2940
   filterable_id: 44
-  created_at: 2009-03-19 03:02:12 +02:00
+  created_at: 2009-03-18 18:02:12 -07:00
 common_tagging_00024: 
   filterable_type: Work
-  updated_at: 2008-11-21 08:34:57 +02:00
+  updated_at: 2008-11-20 22:34:57 -08:00
   common_tag_id: 362175678
   id: 24
   filterable_id: 4
-  created_at: 2008-11-21 08:34:57 +02:00
+  created_at: 2008-11-20 22:34:57 -08:00
 common_tagging_00105: 
   filterable_type: Work
-  updated_at: 2008-12-07 00:29:34 +02:00
+  updated_at: 2008-12-06 14:29:34 -08:00
   common_tag_id: 1063753735
   id: 105
   filterable_id: 7
-  created_at: 2008-12-07 00:29:34 +02:00
+  created_at: 2008-12-06 14:29:34 -08:00
 common_tagging_00131: 
   filterable_type: Work
-  updated_at: 2008-12-07 01:34:39 +02:00
+  updated_at: 2008-12-06 15:34:39 -08:00
   common_tag_id: 611729728
   id: 131
   filterable_id: 13
-  created_at: 2008-12-07 01:34:39 +02:00
+  created_at: 2008-12-06 15:34:39 -08:00
 common_tagging_00212: 
   filterable_type: Work
-  updated_at: 2009-02-18 23:53:07 +02:00
+  updated_at: 2009-02-18 13:53:07 -08:00
   common_tag_id: 1063753801
   id: 212
   filterable_id: 14
-  created_at: 2009-02-18 23:53:07 +02:00
+  created_at: 2009-02-18 13:53:07 -08:00
 common_tagging_02834: 
   filterable_type: Work
-  updated_at: 2009-03-09 18:44:33 +02:00
+  updated_at: 2009-03-09 09:44:33 -07:00
   common_tag_id: 611729728
   id: 2834
   filterable_id: 21
-  created_at: 2009-03-09 18:44:33 +02:00
+  created_at: 2009-03-09 09:44:33 -07:00
 common_tagging_02915: 
   filterable_type: Work
-  updated_at: 2009-03-18 06:08:46 +02:00
+  updated_at: 2009-03-17 21:08:46 -07:00
   common_tag_id: 791950904
   id: 2915
   filterable_id: 42
-  created_at: 2009-03-18 06:08:46 +02:00
+  created_at: 2009-03-17 21:08:46 -07:00
 common_tagging_02941: 
   filterable_type: Work
-  updated_at: 2009-03-19 03:02:12 +02:00
+  updated_at: 2009-03-18 18:02:12 -07:00
   common_tag_id: 1063753737
   id: 2941
   filterable_id: 44
-  created_at: 2009-03-19 03:02:12 +02:00
+  created_at: 2009-03-18 18:02:12 -07:00
 common_tagging_00106: 
   filterable_type: Work
-  updated_at: 2008-12-07 00:29:34 +02:00
+  updated_at: 2008-12-06 14:29:34 -08:00
   common_tag_id: 112726825
   id: 106
   filterable_id: 7
-  created_at: 2008-12-07 00:29:34 +02:00
+  created_at: 2008-12-06 14:29:34 -08:00
 common_tagging_00132: 
   filterable_type: Work
-  updated_at: 2008-12-07 01:34:39 +02:00
+  updated_at: 2008-12-06 15:34:39 -08:00
   common_tag_id: 1063753742
   id: 132
   filterable_id: 13
-  created_at: 2008-12-07 01:34:39 +02:00
+  created_at: 2008-12-06 15:34:39 -08:00
 common_tagging_02808: 
   filterable_type: Work
-  updated_at: 2009-02-24 08:34:22 +02:00
+  updated_at: 2009-02-23 22:34:22 -08:00
   common_tag_id: 751871740
   id: 2808
   filterable_id: 16
-  created_at: 2009-02-24 08:34:22 +02:00
+  created_at: 2009-02-23 22:34:22 -08:00
 common_tagging_00213: 
   filterable_type: Work
-  updated_at: 2009-02-18 23:53:07 +02:00
+  updated_at: 2009-02-18 13:53:07 -08:00
   common_tag_id: 1063753802
   id: 213
   filterable_id: 14
-  created_at: 2009-02-18 23:53:07 +02:00
+  created_at: 2009-02-18 13:53:07 -08:00
 common_tagging_02835: 
   filterable_type: Work
-  updated_at: 2009-03-09 18:44:33 +02:00
+  updated_at: 2009-03-09 09:44:33 -07:00
   common_tag_id: 112726825
   id: 2835
   filterable_id: 21
-  created_at: 2009-03-09 18:44:33 +02:00
+  created_at: 2009-03-09 09:44:33 -07:00
 common_tagging_02916: 
   filterable_type: Work
-  updated_at: 2009-03-18 06:08:46 +02:00
+  updated_at: 2009-03-17 21:08:46 -07:00
   common_tag_id: 1063753743
   id: 2916
   filterable_id: 42
-  created_at: 2009-03-18 06:08:46 +02:00
+  created_at: 2009-03-17 21:08:46 -07:00
 common_tagging_02942: 
   filterable_type: Work
-  updated_at: 2009-03-19 03:02:12 +02:00
+  updated_at: 2009-03-18 18:02:12 -07:00
   common_tag_id: 751871740
   id: 2942
   filterable_id: 44
-  created_at: 2009-03-19 03:02:12 +02:00
+  created_at: 2009-03-18 18:02:12 -07:00
 common_tagging_00107: 
   filterable_type: Work
-  updated_at: 2008-12-07 00:29:34 +02:00
+  updated_at: 2008-12-06 14:29:34 -08:00
   common_tag_id: 751871740
   id: 107
   filterable_id: 7
-  created_at: 2008-12-07 00:29:34 +02:00
+  created_at: 2008-12-06 14:29:34 -08:00
 common_tagging_00133: 
   filterable_type: Work
-  updated_at: 2008-12-07 01:34:39 +02:00
+  updated_at: 2008-12-06 15:34:39 -08:00
   common_tag_id: 741440589
   id: 133
   filterable_id: 13
-  created_at: 2008-12-07 01:34:39 +02:00
+  created_at: 2008-12-06 15:34:39 -08:00
 common_tagging_02809: 
   filterable_type: Work
-  updated_at: 2009-02-24 10:47:23 +02:00
+  updated_at: 2009-02-24 00:47:23 -08:00
   common_tag_id: 112726825
   id: 2809
   filterable_id: 17
-  created_at: 2009-02-24 10:47:23 +02:00
+  created_at: 2009-02-24 00:47:23 -08:00
 common_tagging_02836: 
   filterable_type: Work
-  updated_at: 2009-03-09 18:44:33 +02:00
+  updated_at: 2009-03-09 09:44:33 -07:00
   common_tag_id: 1063753824
   id: 2836
   filterable_id: 21
-  created_at: 2009-03-09 18:44:33 +02:00
+  created_at: 2009-03-09 09:44:33 -07:00
 common_tagging_02917: 
   filterable_type: Work
-  updated_at: 2009-03-18 06:09:43 +02:00
+  updated_at: 2009-03-17 21:09:43 -07:00
   common_tag_id: 885489802
   id: 2917
   filterable_id: 43
-  created_at: 2009-03-18 06:09:43 +02:00
+  created_at: 2009-03-17 21:09:43 -07:00
 common_tagging_02943: 
   filterable_type: Work
-  updated_at: 2009-03-19 03:02:12 +02:00
+  updated_at: 2009-03-18 18:02:12 -07:00
   common_tag_id: 569823665
   id: 2943
   filterable_id: 44
-  created_at: 2009-03-19 03:02:12 +02:00
+  created_at: 2009-03-18 18:02:12 -07:00
 common_tagging_00053: 
   filterable_type: Work
-  updated_at: 2008-11-21 09:54:14 +02:00
+  updated_at: 2008-11-20 23:54:14 -08:00
   common_tag_id: 611729728
   id: 53
   filterable_id: 5
-  created_at: 2008-11-21 09:54:14 +02:00
+  created_at: 2008-11-20 23:54:14 -08:00
 common_tagging_00108: 
   filterable_type: Work
-  updated_at: 2008-12-07 00:52:02 +02:00
+  updated_at: 2008-12-06 14:52:02 -08:00
   common_tag_id: 112726825
   id: 108
   filterable_id: 8
-  created_at: 2008-12-07 00:52:02 +02:00
+  created_at: 2008-12-06 14:52:02 -08:00
 common_tagging_00134: 
   filterable_type: Work
-  updated_at: 2008-12-07 01:34:39 +02:00
+  updated_at: 2008-12-06 15:34:39 -08:00
   common_tag_id: 791950904
   id: 134
   filterable_id: 13
-  created_at: 2008-12-07 01:34:39 +02:00
+  created_at: 2008-12-06 15:34:39 -08:00
 common_tagging_00160: 
   filterable_type: Work
-  updated_at: 2008-12-07 23:06:26 +02:00
+  updated_at: 2008-12-07 13:06:26 -08:00
   common_tag_id: 1063753773
   id: 160
   filterable_id: 11
-  created_at: 2008-12-07 23:06:26 +02:00
+  created_at: 2008-12-07 13:06:26 -08:00
 common_tagging_02837: 
   filterable_type: Work
-  updated_at: 2009-03-09 18:44:33 +02:00
+  updated_at: 2009-03-09 09:44:33 -07:00
   common_tag_id: 788108366
   id: 2837
   filterable_id: 21
-  created_at: 2009-03-09 18:44:33 +02:00
+  created_at: 2009-03-09 09:44:33 -07:00
 common_tagging_02944: 
   filterable_type: Work
-  updated_at: 2009-03-19 03:02:12 +02:00
+  updated_at: 2009-03-18 18:02:12 -07:00
   common_tag_id: 791950904
   id: 2944
   filterable_id: 44
-  created_at: 2009-03-19 03:02:12 +02:00
+  created_at: 2009-03-18 18:02:12 -07:00
 common_tagging_02970: 
   filterable_type: Work
-  updated_at: 2009-03-20 03:28:02 +02:00
+  updated_at: 2009-03-19 18:28:02 -07:00
   common_tag_id: 112726825
   id: 2970
   filterable_id: 46
-  created_at: 2009-03-20 03:28:02 +02:00
+  created_at: 2009-03-19 18:28:02 -07:00
 common_tagging_00054: 
   filterable_type: Work
-  updated_at: 2008-11-21 09:54:14 +02:00
+  updated_at: 2008-11-20 23:54:14 -08:00
   common_tag_id: 992891255
   id: 54
   filterable_id: 5
-  created_at: 2008-11-21 09:54:14 +02:00
+  created_at: 2008-11-20 23:54:14 -08:00
 common_tagging_00109: 
   filterable_type: Work
-  updated_at: 2008-12-07 00:52:02 +02:00
+  updated_at: 2008-12-06 14:52:02 -08:00
   common_tag_id: 1063753735
   id: 109
   filterable_id: 8
-  created_at: 2008-12-07 00:52:02 +02:00
+  created_at: 2008-12-06 14:52:02 -08:00
 common_tagging_00135: 
   filterable_type: Work
-  updated_at: 2008-12-07 01:34:39 +02:00
+  updated_at: 2008-12-06 15:34:39 -08:00
   common_tag_id: 221905380
   id: 135
   filterable_id: 13
-  created_at: 2008-12-07 01:34:39 +02:00
+  created_at: 2008-12-06 15:34:39 -08:00
 common_tagging_00161: 
   filterable_type: Tag
-  updated_at: 2008-12-07 23:06:54 +02:00
+  updated_at: 2008-12-07 13:06:54 -08:00
   common_tag_id: 1063753757
   id: 161
   filterable_id: 1063753758
-  created_at: 2008-12-07 23:06:54 +02:00
+  created_at: 2008-12-07 13:06:54 -08:00
 common_tagging_02838: 
   filterable_type: Work
-  updated_at: 2009-03-09 18:44:33 +02:00
+  updated_at: 2009-03-09 09:44:33 -07:00
   common_tag_id: 751871740
   id: 2838
   filterable_id: 21
-  created_at: 2009-03-09 18:44:33 +02:00
+  created_at: 2009-03-09 09:44:33 -07:00
 common_tagging_02890: 
   filterable_type: Work
-  updated_at: 2009-03-12 02:30:27 +02:00
+  updated_at: 2009-03-11 17:30:27 -07:00
   common_tag_id: 1063753734
   id: 2890
   filterable_id: 36
-  created_at: 2009-03-12 02:30:27 +02:00
+  created_at: 2009-03-11 17:30:27 -07:00
 common_tagging_02918: 
   filterable_type: Work
-  updated_at: 2009-03-18 06:09:43 +02:00
+  updated_at: 2009-03-17 21:09:43 -07:00
   common_tag_id: 426547448
   id: 2918
   filterable_id: 43
-  created_at: 2009-03-18 06:09:43 +02:00
+  created_at: 2009-03-17 21:09:43 -07:00
 common_tagging_02945: 
   filterable_type: Tag
-  updated_at: 2009-03-19 03:05:08 +02:00
+  updated_at: 2009-03-18 18:05:08 -07:00
   common_tag_id: 1063753894
   id: 2945
   filterable_id: 569823665
-  created_at: 2009-03-19 03:05:08 +02:00
+  created_at: 2009-03-18 18:05:08 -07:00
 common_tagging_02971: 
   filterable_type: Work
-  updated_at: 2009-03-20 03:28:02 +02:00
+  updated_at: 2009-03-19 18:28:02 -07:00
   common_tag_id: 611729728
   id: 2971
   filterable_id: 46
-  created_at: 2009-03-20 03:28:02 +02:00
+  created_at: 2009-03-19 18:28:02 -07:00
 common_tagging_03000: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:11:56 +02:00
+  updated_at: 2009-03-20 16:11:56 -07:00
   common_tag_id: 1063753743
   id: 3000
   filterable_id: 47
-  created_at: 2009-03-21 01:11:56 +02:00
+  created_at: 2009-03-20 16:11:56 -07:00
 common_tagging_00055: 
   filterable_type: Work
-  updated_at: 2008-11-21 09:54:15 +02:00
+  updated_at: 2008-11-20 23:54:15 -08:00
   common_tag_id: 1063753742
   id: 55
   filterable_id: 5
-  created_at: 2008-11-21 09:54:15 +02:00
+  created_at: 2008-11-20 23:54:15 -08:00
 common_tagging_00081: 
   filterable_type: Work
-  updated_at: 2008-11-21 09:59:51 +02:00
+  updated_at: 2008-11-20 23:59:51 -08:00
   common_tag_id: 545584597
   id: 81
   filterable_id: 4
-  created_at: 2008-11-21 09:59:51 +02:00
+  created_at: 2008-11-20 23:59:51 -08:00
 common_tagging_00136: 
   filterable_type: Work
-  updated_at: 2008-12-07 01:34:39 +02:00
+  updated_at: 2008-12-06 15:34:39 -08:00
   common_tag_id: 713695255
   id: 136
   filterable_id: 13
-  created_at: 2008-12-07 01:34:39 +02:00
+  created_at: 2008-12-06 15:34:39 -08:00
 common_tagging_00162: 
   filterable_type: Tag
-  updated_at: 2008-12-07 23:06:54 +02:00
+  updated_at: 2008-12-07 13:06:54 -08:00
   common_tag_id: 1063753762
   id: 162
   filterable_id: 1063753758
-  created_at: 2008-12-07 23:06:54 +02:00
+  created_at: 2008-12-07 13:06:54 -08:00
 common_tagging_00217: 
   filterable_type: Tag
-  updated_at: 2009-02-18 23:53:49 +02:00
+  updated_at: 2009-02-18 13:53:49 -08:00
   common_tag_id: 1063753802
   id: 217
   filterable_id: 1063753801
-  created_at: 2009-02-18 23:53:49 +02:00
+  created_at: 2009-02-18 13:53:49 -08:00
 common_tagging_02839: 
   filterable_type: Work
-  updated_at: 2009-03-09 19:04:58 +02:00
+  updated_at: 2009-03-09 10:04:58 -07:00
   common_tag_id: 885489802
   id: 2839
   filterable_id: 22
-  created_at: 2009-03-09 19:04:58 +02:00
-common_tagging_02865: 
-  filterable_type: Work
-  updated_at: 2009-03-12 00:05:30 +02:00
-  common_tag_id: 344412843
-  id: 2865
-  filterable_id: 30
-  created_at: 2009-03-12 00:05:30 +02:00
+  created_at: 2009-03-09 10:04:58 -07:00
 common_tagging_02891: 
   filterable_type: Work
-  updated_at: 2009-03-12 02:30:27 +02:00
+  updated_at: 2009-03-11 17:30:27 -07:00
   common_tag_id: 1063753743
   id: 2891
   filterable_id: 36
-  created_at: 2009-03-12 02:30:27 +02:00
+  created_at: 2009-03-11 17:30:27 -07:00
 common_tagging_02919: 
   filterable_type: Work
-  updated_at: 2009-03-18 06:09:43 +02:00
+  updated_at: 2009-03-17 21:09:43 -07:00
   common_tag_id: 1063753733
   id: 2919
   filterable_id: 43
-  created_at: 2009-03-18 06:09:43 +02:00
+  created_at: 2009-03-17 21:09:43 -07:00
 common_tagging_02946: 
   filterable_type: Tag
-  updated_at: 2009-03-19 03:06:03 +02:00
+  updated_at: 2009-03-18 18:06:03 -07:00
   common_tag_id: 1063753895
   id: 2946
   filterable_id: 951091623
-  created_at: 2009-03-19 03:06:03 +02:00
+  created_at: 2009-03-18 18:06:03 -07:00
 common_tagging_02972: 
   filterable_type: Work
-  updated_at: 2009-03-20 03:28:02 +02:00
+  updated_at: 2009-03-19 18:28:02 -07:00
   common_tag_id: 1063753733
   id: 2972
   filterable_id: 46
-  created_at: 2009-03-20 03:28:02 +02:00
+  created_at: 2009-03-19 18:28:02 -07:00
 common_tagging_03001: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:11:56 +02:00
+  updated_at: 2009-03-20 16:11:56 -07:00
   common_tag_id: 986046160
   id: 3001
   filterable_id: 47
-  created_at: 2009-03-21 01:11:56 +02:00
+  created_at: 2009-03-20 16:11:56 -07:00
 common_tagging_00137: 
   filterable_type: Work
-  updated_at: 2008-12-07 01:34:39 +02:00
+  updated_at: 2008-12-06 15:34:39 -08:00
   common_tag_id: 26796919
   id: 137
   filterable_id: 13
-  created_at: 2008-12-07 01:34:39 +02:00
+  created_at: 2008-12-06 15:34:39 -08:00
 common_tagging_00163: 
   filterable_type: Tag
-  updated_at: 2008-12-07 23:06:54 +02:00
+  updated_at: 2008-12-07 13:06:54 -08:00
   common_tag_id: 1063753764
   id: 163
   filterable_id: 1063753758
-  created_at: 2008-12-07 23:06:54 +02:00
-common_tagging_02866: 
-  filterable_type: Work
-  updated_at: 2009-03-12 00:05:30 +02:00
-  common_tag_id: 751871740
-  id: 2866
-  filterable_id: 30
-  created_at: 2009-03-12 00:05:30 +02:00
+  created_at: 2008-12-07 13:06:54 -08:00
 common_tagging_02892: 
   filterable_type: Work
-  updated_at: 2009-03-12 02:50:20 +02:00
+  updated_at: 2009-03-11 17:50:20 -07:00
   common_tag_id: 992891255
   id: 2892
   filterable_id: 38
-  created_at: 2009-03-12 02:50:20 +02:00
+  created_at: 2009-03-11 17:50:20 -07:00
 common_tagging_02947: 
   filterable_type: Work
-  updated_at: 2009-03-19 03:06:53 +02:00
+  updated_at: 2009-03-18 18:06:53 -07:00
   common_tag_id: 1063753894
   id: 2947
   filterable_id: 44
-  created_at: 2009-03-19 03:06:53 +02:00
+  created_at: 2009-03-18 18:06:53 -07:00
 common_tagging_02973: 
   filterable_type: Work
-  updated_at: 2009-03-20 03:28:02 +02:00
+  updated_at: 2009-03-19 18:28:02 -07:00
   common_tag_id: 1063753824
   id: 2973
   filterable_id: 46
-  created_at: 2009-03-20 03:28:02 +02:00
+  created_at: 2009-03-19 18:28:02 -07:00
 common_tagging_03002: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:11:56 +02:00
+  updated_at: 2009-03-20 16:11:56 -07:00
   common_tag_id: 441672848
   id: 3002
   filterable_id: 47
-  created_at: 2009-03-21 01:11:56 +02:00
+  created_at: 2009-03-20 16:11:56 -07:00
 common_tagging_00138: 
   filterable_type: Work
-  updated_at: 2008-12-07 01:34:40 +02:00
+  updated_at: 2008-12-06 15:34:40 -08:00
   common_tag_id: 1063753746
   id: 138
   filterable_id: 13
-  created_at: 2008-12-07 01:34:40 +02:00
+  created_at: 2008-12-06 15:34:40 -08:00
 common_tagging_00190: 
   filterable_type: Tag
-  updated_at: 2009-02-16 08:09:20 +02:00
+  updated_at: 2009-02-15 22:09:20 -08:00
   common_tag_id: 1063753811
   id: 190
   filterable_id: 1063753738
-  created_at: 2009-02-16 08:09:20 +02:00
+  created_at: 2009-02-15 22:09:20 -08:00
 common_tagging_02867: 
   filterable_type: Work
-  updated_at: 2009-03-12 00:23:56 +02:00
+  updated_at: 2009-03-11 15:23:56 -07:00
   common_tag_id: 1063753741
   id: 2867
   filterable_id: 32
-  created_at: 2009-03-12 00:23:56 +02:00
+  created_at: 2009-03-11 15:23:56 -07:00
 common_tagging_02893: 
   filterable_type: Work
-  updated_at: 2009-03-12 02:50:20 +02:00
+  updated_at: 2009-03-11 17:50:20 -07:00
   common_tag_id: 611729728
   id: 2893
   filterable_id: 38
-  created_at: 2009-03-12 02:50:20 +02:00
+  created_at: 2009-03-11 17:50:20 -07:00
 common_tagging_02948: 
   filterable_type: Tag
-  updated_at: 2009-03-19 03:53:56 +02:00
+  updated_at: 2009-03-18 18:53:56 -07:00
   common_tag_id: 1063753840
   id: 2948
   filterable_id: 569823665
-  created_at: 2009-03-19 03:53:56 +02:00
+  created_at: 2009-03-18 18:53:56 -07:00
 common_tagging_02974: 
   filterable_type: Work
-  updated_at: 2009-03-20 03:28:02 +02:00
+  updated_at: 2009-03-19 18:28:02 -07:00
   common_tag_id: 788108366
   id: 2974
   filterable_id: 46
-  created_at: 2009-03-20 03:28:02 +02:00
+  created_at: 2009-03-19 18:28:02 -07:00
 common_tagging_03003: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:11:56 +02:00
+  updated_at: 2009-03-20 16:11:56 -07:00
   common_tag_id: 1063753905
   id: 3003
   filterable_id: 47
-  created_at: 2009-03-21 01:11:56 +02:00
+  created_at: 2009-03-20 16:11:56 -07:00
 common_tagging_00139: 
   filterable_type: Work
-  updated_at: 2008-12-07 22:52:16 +02:00
+  updated_at: 2008-12-07 12:52:16 -08:00
   common_tag_id: 112726825
   id: 139
   filterable_id: 14
-  created_at: 2008-12-07 22:52:16 +02:00
+  created_at: 2008-12-07 12:52:16 -08:00
 common_tagging_00165: 
   filterable_type: Tag
-  updated_at: 2008-12-07 23:07:10 +02:00
+  updated_at: 2008-12-07 13:07:10 -08:00
   common_tag_id: 1063753798
   id: 165
   filterable_id: 1063753801
-  created_at: 2008-12-07 23:07:10 +02:00
+  created_at: 2008-12-07 13:07:10 -08:00
 common_tagging_02868: 
   filterable_type: Work
-  updated_at: 2009-03-12 00:23:56 +02:00
+  updated_at: 2009-03-11 15:23:56 -07:00
   common_tag_id: 426547448
   id: 2868
   filterable_id: 32
-  created_at: 2009-03-12 00:23:56 +02:00
+  created_at: 2009-03-11 15:23:56 -07:00
 common_tagging_02894: 
   filterable_type: Work
-  updated_at: 2009-03-12 02:50:20 +02:00
+  updated_at: 2009-03-11 17:50:20 -07:00
   common_tag_id: 569823665
   id: 2894
   filterable_id: 38
-  created_at: 2009-03-12 02:50:20 +02:00
+  created_at: 2009-03-11 17:50:20 -07:00
 common_tagging_02949: 
   filterable_type: Work
-  updated_at: 2009-03-19 03:53:57 +02:00
+  updated_at: 2009-03-18 18:53:57 -07:00
   common_tag_id: 1063753889
   id: 2949
   filterable_id: 38
-  created_at: 2009-03-19 03:53:57 +02:00
+  created_at: 2009-03-18 18:53:57 -07:00
 common_tagging_02975: 
   filterable_type: Tag
-  updated_at: 2009-03-20 21:59:55 +02:00
+  updated_at: 2009-03-20 12:59:55 -07:00
   common_tag_id: 1063753801
   id: 2975
   filterable_id: 441672848
-  created_at: 2009-03-20 21:59:55 +02:00
+  created_at: 2009-03-20 12:59:55 -07:00
 common_tagging_03004: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:14:15 +02:00
+  updated_at: 2009-03-20 16:14:15 -07:00
   common_tag_id: 885489802
   id: 3004
   filterable_id: 48
-  created_at: 2009-03-21 01:14:15 +02:00
+  created_at: 2009-03-20 16:14:15 -07:00
 common_tagging_03030: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:24:08 +02:00
+  updated_at: 2009-03-20 16:24:08 -07:00
   common_tag_id: 992891255
   id: 3030
   filterable_id: 52
-  created_at: 2009-03-21 01:24:08 +02:00
+  created_at: 2009-03-20 16:24:08 -07:00
 common_tagging_00085: 
   filterable_type: Tag
-  updated_at: 2008-11-21 09:59:52 +02:00
+  updated_at: 2008-11-20 23:59:52 -08:00
   common_tag_id: 0
   id: 85
   filterable_id: 221905380
-  created_at: 2008-11-21 09:59:52 +02:00
+  created_at: 2008-11-20 23:59:52 -08:00
 common_tagging_00166: 
   filterable_type: Tag
-  updated_at: 2008-12-07 23:07:10 +02:00
+  updated_at: 2008-12-07 13:07:10 -08:00
   common_tag_id: 1063753797
   id: 166
   filterable_id: 1063753801
-  created_at: 2008-12-07 23:07:10 +02:00
+  created_at: 2008-12-07 13:07:10 -08:00
 common_tagging_00192: 
   filterable_type: Work
-  updated_at: 2009-02-16 08:09:21 +02:00
+  updated_at: 2009-02-15 22:09:21 -08:00
   common_tag_id: 1063753811
   id: 192
   filterable_id: 3
-  created_at: 2009-02-16 08:09:21 +02:00
+  created_at: 2009-02-15 22:09:21 -08:00
 common_tagging_02869: 
   filterable_type: Work
-  updated_at: 2009-03-12 00:23:56 +02:00
+  updated_at: 2009-03-11 15:23:56 -07:00
   common_tag_id: 885489802
   id: 2869
   filterable_id: 32
-  created_at: 2009-03-12 00:23:56 +02:00
+  created_at: 2009-03-11 15:23:56 -07:00
 common_tagging_02895: 
   filterable_type: Work
-  updated_at: 2009-03-12 02:50:20 +02:00
+  updated_at: 2009-03-11 17:50:20 -07:00
   common_tag_id: 791950904
   id: 2895
   filterable_id: 38
-  created_at: 2009-03-12 02:50:20 +02:00
+  created_at: 2009-03-11 17:50:20 -07:00
 common_tagging_02976: 
   filterable_type: Work
-  updated_at: 2009-03-20 21:59:55 +02:00
+  updated_at: 2009-03-20 12:59:55 -07:00
   common_tag_id: 441672848
   id: 2976
   filterable_id: 14
-  created_at: 2009-03-20 21:59:55 +02:00
+  created_at: 2009-03-20 12:59:55 -07:00
 common_tagging_03005: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:14:15 +02:00
+  updated_at: 2009-03-20 16:14:15 -07:00
   common_tag_id: 1063753736
   id: 3005
   filterable_id: 48
-  created_at: 2009-03-21 01:14:15 +02:00
+  created_at: 2009-03-20 16:14:15 -07:00
 common_tagging_03031: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:24:08 +02:00
+  updated_at: 2009-03-20 16:24:08 -07:00
   common_tag_id: 1063753736
   id: 3031
   filterable_id: 52
-  created_at: 2009-03-21 01:24:08 +02:00
+  created_at: 2009-03-20 16:24:08 -07:00
 common_tagging_00167: 
   filterable_type: Tag
-  updated_at: 2009-02-16 07:54:21 +02:00
+  updated_at: 2009-02-15 21:54:21 -08:00
   common_tag_id: 1063753807
   id: 167
   filterable_id: 1063753738
-  created_at: 2009-02-16 07:54:21 +02:00
+  created_at: 2009-02-15 21:54:21 -08:00
 common_tagging_02896: 
   filterable_type: Work
-  updated_at: 2009-03-12 02:56:30 +02:00
+  updated_at: 2009-03-11 17:56:30 -07:00
   common_tag_id: 885489802
   id: 2896
   filterable_id: 39
-  created_at: 2009-03-12 02:56:30 +02:00
+  created_at: 2009-03-11 17:56:30 -07:00
 common_tagging_02977: 
   filterable_type: Tag
-  updated_at: 2009-03-20 22:01:08 +02:00
+  updated_at: 2009-03-20 13:01:08 -07:00
   common_tag_id: 385776504
   id: 2977
   filterable_id: 1019428968
-  created_at: 2009-03-20 22:01:08 +02:00
+  created_at: 2009-03-20 13:01:08 -07:00
 common_tagging_03006: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:14:15 +02:00
+  updated_at: 2009-03-20 16:14:15 -07:00
   common_tag_id: 1063753743
   id: 3006
   filterable_id: 48
-  created_at: 2009-03-21 01:14:15 +02:00
+  created_at: 2009-03-20 16:14:15 -07:00
 common_tagging_03032: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:24:08 +02:00
+  updated_at: 2009-03-20 16:24:08 -07:00
   common_tag_id: 1063753742
   id: 3032
   filterable_id: 52
-  created_at: 2009-03-21 01:24:08 +02:00
+  created_at: 2009-03-20 16:24:08 -07:00
 common_tagging_00168: 
   filterable_type: Tag
-  updated_at: 2009-02-16 07:55:58 +02:00
+  updated_at: 2009-02-15 21:55:58 -08:00
   common_tag_id: 711936337
   id: 168
   filterable_id: 791950904
-  created_at: 2009-02-16 07:55:58 +02:00
+  created_at: 2009-02-15 21:55:58 -08:00
 common_tagging_02897: 
   filterable_type: Work
-  updated_at: 2009-03-12 02:56:30 +02:00
+  updated_at: 2009-03-11 17:56:30 -07:00
   common_tag_id: 1063753732
   id: 2897
   filterable_id: 39
-  created_at: 2009-03-12 02:56:30 +02:00
+  created_at: 2009-03-11 17:56:30 -07:00
 common_tagging_02978: 
   filterable_type: Tag
-  updated_at: 2009-03-20 22:01:33 +02:00
+  updated_at: 2009-03-20 13:01:33 -07:00
   common_tag_id: 1063753774
   id: 2978
   filterable_id: 791950904
-  created_at: 2009-03-20 22:01:33 +02:00
+  created_at: 2009-03-20 13:01:33 -07:00
 common_tagging_03033: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:24:08 +02:00
+  updated_at: 2009-03-20 16:24:08 -07:00
   common_tag_id: 951091623
   id: 3033
   filterable_id: 52
-  created_at: 2009-03-21 01:24:08 +02:00
+  created_at: 2009-03-20 16:24:08 -07:00
 common_tagging_00088: 
   filterable_type: Tag
-  updated_at: 2008-11-21 09:59:52 +02:00
+  updated_at: 2008-11-20 23:59:52 -08:00
   common_tag_id: 0
   id: 88
   filterable_id: 26796919
-  created_at: 2008-11-21 09:59:52 +02:00
+  created_at: 2008-11-20 23:59:52 -08:00
 common_tagging_00195: 
   filterable_type: Tag
-  updated_at: 2009-02-16 08:11:18 +02:00
+  updated_at: 2009-02-15 22:11:18 -08:00
   common_tag_id: 1063753747
   id: 195
   filterable_id: 951091623
-  created_at: 2009-02-16 08:11:18 +02:00
+  created_at: 2009-02-15 22:11:18 -08:00
 common_tagging_02979: 
   filterable_type: Work
-  updated_at: 2009-03-20 22:01:33 +02:00
+  updated_at: 2009-03-20 13:01:33 -07:00
   common_tag_id: 791950904
   id: 2979
   filterable_id: 11
-  created_at: 2009-03-20 22:01:33 +02:00
+  created_at: 2009-03-20 13:01:33 -07:00
 common_tagging_03007: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:14:15 +02:00
+  updated_at: 2009-03-20 16:14:15 -07:00
   common_tag_id: 986046160
   id: 3007
   filterable_id: 48
-  created_at: 2009-03-21 01:14:15 +02:00
+  created_at: 2009-03-20 16:14:15 -07:00
 common_tagging_03034: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:24:08 +02:00
+  updated_at: 2009-03-20 16:24:08 -07:00
   common_tag_id: 791950904
   id: 3034
   filterable_id: 52
-  created_at: 2009-03-21 01:24:08 +02:00
+  created_at: 2009-03-20 16:24:08 -07:00
 common_tagging_00196: 
   filterable_type: Work
-  updated_at: 2009-02-16 08:11:18 +02:00
+  updated_at: 2009-02-15 22:11:18 -08:00
   common_tag_id: 1063753811
   id: 196
   filterable_id: 2
-  created_at: 2009-02-16 08:11:18 +02:00
+  created_at: 2009-02-15 22:11:18 -08:00
 common_tagging_02899: 
   filterable_type: Work
-  updated_at: 2009-03-12 02:56:30 +02:00
+  updated_at: 2009-03-11 17:56:30 -07:00
   common_tag_id: 1063753733
   id: 2899
   filterable_id: 39
-  created_at: 2009-03-12 02:56:30 +02:00
+  created_at: 2009-03-11 17:56:30 -07:00
 common_tagging_03008: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:14:15 +02:00
+  updated_at: 2009-03-20 16:14:15 -07:00
   common_tag_id: 441672848
   id: 3008
   filterable_id: 48
-  created_at: 2009-03-21 01:14:15 +02:00
+  created_at: 2009-03-20 16:14:15 -07:00
 common_tagging_00197: 
   filterable_type: Tag
-  updated_at: 2009-02-16 08:11:18 +02:00
+  updated_at: 2009-02-15 22:11:18 -08:00
   common_tag_id: 1063753747
   id: 197
   filterable_id: 1063753738
-  created_at: 2009-02-16 08:11:18 +02:00
+  created_at: 2009-02-15 22:11:18 -08:00
 common_tagging_03009: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:14:15 +02:00
+  updated_at: 2009-03-20 16:14:15 -07:00
   common_tag_id: 1063753905
   id: 3009
   filterable_id: 48
-  created_at: 2009-03-21 01:14:15 +02:00
+  created_at: 2009-03-20 16:14:15 -07:00
+common_tagging_03035: 
+  filterable_type: Work
+  updated_at: 2009-04-19 15:40:32 -07:00
+  common_tag_id: 426547448
+  id: 3035
+  filterable_id: 30
+  created_at: 2009-04-19 15:40:32 -07:00
 common_tagging_00198: 
   filterable_type: Work
-  updated_at: 2009-02-16 08:11:18 +02:00
+  updated_at: 2009-02-15 22:11:18 -08:00
   common_tag_id: 1063753738
   id: 198
   filterable_id: 2
-  created_at: 2009-02-16 08:11:18 +02:00
+  created_at: 2009-02-15 22:11:18 -08:00
+common_tagging_03036: 
+  filterable_type: Work
+  updated_at: 2009-04-19 15:40:32 -07:00
+  common_tag_id: 112726825
+  id: 3036
+  filterable_id: 30
+  created_at: 2009-04-19 15:40:32 -07:00
 common_tagging_00199: 
   filterable_type: Tag
-  updated_at: 2009-02-16 08:11:18 +02:00
+  updated_at: 2009-02-15 22:11:18 -08:00
   common_tag_id: 1063753750
   id: 199
   filterable_id: 951091623
-  created_at: 2009-02-16 08:11:18 +02:00
+  created_at: 2009-02-15 22:11:18 -08:00
+common_tagging_03037: 
+  filterable_type: Work
+  updated_at: 2009-04-19 15:40:32 -07:00
+  common_tag_id: 1063753741
+  id: 3037
+  filterable_id: 30
+  created_at: 2009-04-19 15:40:32 -07:00
+common_tagging_03038: 
+  filterable_type: Work
+  updated_at: 2009-04-19 17:09:26 -07:00
+  common_tag_id: 751871740
+  id: 3038
+  filterable_id: 29
+  created_at: 2009-04-19 17:09:26 -07:00
 common_tagging_02820: 
   filterable_type: Work
-  updated_at: 2009-03-07 22:48:07 +02:00
+  updated_at: 2009-03-07 12:48:07 -08:00
   common_tag_id: 1063753735
   id: 2820
   filterable_id: 18
-  created_at: 2009-03-07 22:48:07 +02:00
+  created_at: 2009-03-07 12:48:07 -08:00
 common_tagging_00010: 
   filterable_type: Work
-  updated_at: 2008-11-21 08:11:28 +02:00
+  updated_at: 2008-11-20 22:11:28 -08:00
   common_tag_id: 611729728
   id: 10
   filterable_id: 1
-  created_at: 2008-11-21 08:11:28 +02:00
+  created_at: 2008-11-20 22:11:28 -08:00
 common_tagging_02821: 
   filterable_type: Work
-  updated_at: 2009-03-07 22:48:07 +02:00
+  updated_at: 2009-03-07 12:48:07 -08:00
   common_tag_id: 751871740
   id: 2821
   filterable_id: 18
-  created_at: 2009-03-07 22:48:07 +02:00
+  created_at: 2009-03-07 12:48:07 -08:00
 common_tagging_02902: 
   filterable_type: Work
-  updated_at: 2009-03-12 03:43:37 +02:00
+  updated_at: 2009-03-11 18:43:37 -07:00
   common_tag_id: 1063753741
   id: 2902
   filterable_id: 40
-  created_at: 2009-03-12 03:43:37 +02:00
+  created_at: 2009-03-11 18:43:37 -07:00
 common_tagging_00011: 
   filterable_type: Work
-  updated_at: 2008-11-21 08:11:28 +02:00
+  updated_at: 2008-11-20 22:11:28 -08:00
   common_tag_id: 992891255
   id: 11
   filterable_id: 2
-  created_at: 2008-11-21 08:11:28 +02:00
+  created_at: 2008-11-20 22:11:28 -08:00
 common_tagging_00200: 
   filterable_type: Tag
-  updated_at: 2009-02-16 08:11:18 +02:00
+  updated_at: 2009-02-15 22:11:18 -08:00
   common_tag_id: 1063753750
   id: 200
   filterable_id: 1063753738
-  created_at: 2009-02-16 08:11:18 +02:00
+  created_at: 2009-02-15 22:11:18 -08:00
 common_tagging_02822: 
   filterable_type: Work
-  updated_at: 2009-03-07 22:48:07 +02:00
+  updated_at: 2009-03-07 12:48:07 -08:00
   common_tag_id: 1063753824
   id: 2822
   filterable_id: 18
-  created_at: 2009-03-07 22:48:07 +02:00
+  created_at: 2009-03-07 12:48:07 -08:00
 common_tagging_02903: 
   filterable_type: Work
-  updated_at: 2009-03-12 03:43:37 +02:00
+  updated_at: 2009-03-11 18:43:37 -07:00
   common_tag_id: 569823665
   id: 2903
   filterable_id: 40
-  created_at: 2009-03-12 03:43:37 +02:00
+  created_at: 2009-03-11 18:43:37 -07:00
 common_tagging_01476: 
   filterable_type: Tag
-  updated_at: 2009-02-21 02:02:25 +02:00
+  updated_at: 2009-02-20 16:02:25 -08:00
   common_tag_id: 1063753810
   id: 1476
   filterable_id: 177887685
-  created_at: 2009-02-21 02:02:25 +02:00
+  created_at: 2009-02-20 16:02:25 -08:00
 common_tagging_00012: 
   filterable_type: Work
-  updated_at: 2008-11-21 08:11:28 +02:00
+  updated_at: 2008-11-20 22:11:28 -08:00
   common_tag_id: 1039617938
   id: 12
   filterable_id: 2
-  created_at: 2008-11-21 08:11:28 +02:00
+  created_at: 2008-11-20 22:11:28 -08:00
 common_tagging_00201: 
   filterable_type: Work
-  updated_at: 2009-02-16 08:11:18 +02:00
+  updated_at: 2009-02-15 22:11:18 -08:00
   common_tag_id: 1063753738
   id: 201
   filterable_id: 3
-  created_at: 2009-02-16 08:11:18 +02:00
+  created_at: 2009-02-15 22:11:18 -08:00
 common_tagging_02823: 
   filterable_type: Work
-  updated_at: 2009-03-07 22:48:07 +02:00
+  updated_at: 2009-03-07 12:48:07 -08:00
   common_tag_id: 788108366
   id: 2823
   filterable_id: 18
-  created_at: 2009-03-07 22:48:07 +02:00
+  created_at: 2009-03-07 12:48:07 -08:00
 common_tagging_02904: 
   filterable_type: Work
-  updated_at: 2009-03-12 03:43:37 +02:00
+  updated_at: 2009-03-11 18:43:37 -07:00
   common_tag_id: 791950904
   id: 2904
   filterable_id: 40
-  created_at: 2009-03-12 03:43:37 +02:00
+  created_at: 2009-03-11 18:43:37 -07:00
 common_tagging_02930: 
   filterable_type: Tag
-  updated_at: 2009-03-18 22:25:26 +02:00
+  updated_at: 2009-03-18 13:25:26 -07:00
   common_tag_id: 1063753889
   id: 2930
   filterable_id: 1063753891
-  created_at: 2009-03-18 22:25:26 +02:00
+  created_at: 2009-03-18 13:25:26 -07:00
 common_tagging_00013: 
   filterable_type: Work
-  updated_at: 2008-11-21 08:11:28 +02:00
+  updated_at: 2008-11-20 22:11:28 -08:00
   common_tag_id: 951091623
   id: 13
   filterable_id: 2
-  created_at: 2008-11-21 08:11:28 +02:00
+  created_at: 2008-11-20 22:11:28 -08:00
 common_tagging_00120: 
   filterable_type: Work
-  updated_at: 2008-12-07 01:19:50 +02:00
+  updated_at: 2008-12-06 15:19:50 -08:00
   common_tag_id: 26796919
   id: 120
   filterable_id: 10
-  created_at: 2008-12-07 01:19:50 +02:00
+  created_at: 2008-12-06 15:19:50 -08:00
 common_tagging_00202: 
   filterable_type: Tag
-  updated_at: 2009-02-16 08:14:02 +02:00
+  updated_at: 2009-02-15 22:14:02 -08:00
   common_tag_id: 1063753811
   id: 202
   filterable_id: 1063753752
-  created_at: 2009-02-16 08:14:02 +02:00
+  created_at: 2009-02-15 22:14:02 -08:00
 common_tagging_02824: 
   filterable_type: Work
-  updated_at: 2009-03-09 17:47:16 +02:00
+  updated_at: 2009-03-09 08:47:16 -07:00
   common_tag_id: 344412843
   id: 2824
   filterable_id: 19
-  created_at: 2009-03-09 17:47:16 +02:00
+  created_at: 2009-03-09 08:47:16 -07:00
 common_tagging_02850: 
   filterable_type: Work
-  updated_at: 2009-03-10 01:23:56 +02:00
+  updated_at: 2009-03-09 16:23:56 -07:00
   common_tag_id: 1063753824
   id: 2850
   filterable_id: 27
-  created_at: 2009-03-10 01:23:56 +02:00
+  created_at: 2009-03-09 16:23:56 -07:00
 common_tagging_02905: 
   filterable_type: Work
-  updated_at: 2009-03-12 04:48:40 +02:00
+  updated_at: 2009-03-11 19:48:40 -07:00
   common_tag_id: 1063753824
   id: 2905
   filterable_id: 40
-  created_at: 2009-03-12 04:48:40 +02:00
+  created_at: 2009-03-11 19:48:40 -07:00
 common_tagging_02931: 
   filterable_type: Work
-  updated_at: 2009-03-18 22:25:59 +02:00
+  updated_at: 2009-03-18 13:25:59 -07:00
   common_tag_id: 1063753891
   id: 2931
   filterable_id: 43
-  created_at: 2009-03-18 22:25:59 +02:00
+  created_at: 2009-03-18 13:25:59 -07:00
 common_tagging_00014: 
   filterable_type: Work
-  updated_at: 2008-11-21 08:11:28 +02:00
+  updated_at: 2008-11-20 22:11:28 -08:00
   common_tag_id: 714102448
   id: 14
   filterable_id: 3
-  created_at: 2008-11-21 08:11:28 +02:00
+  created_at: 2008-11-20 22:11:28 -08:00
 common_tagging_00040: 
   filterable_type: Work
-  updated_at: 2008-11-21 09:33:33 +02:00
+  updated_at: 2008-11-20 23:33:33 -08:00
   common_tag_id: 791950904
   id: 40
   filterable_id: 1
-  created_at: 2008-11-21 09:33:33 +02:00
+  created_at: 2008-11-20 23:33:33 -08:00
 common_tagging_00121: 
   filterable_type: Work
-  updated_at: 2008-12-07 01:19:50 +02:00
+  updated_at: 2008-12-06 15:19:50 -08:00
   common_tag_id: 221905380
   id: 121
   filterable_id: 10
-  created_at: 2008-12-07 01:19:50 +02:00
+  created_at: 2008-12-06 15:19:50 -08:00
 common_tagging_00203: 
   filterable_type: Tag
-  updated_at: 2009-02-16 08:14:17 +02:00
+  updated_at: 2009-02-15 22:14:17 -08:00
   common_tag_id: 1063753811
   id: 203
   filterable_id: 1063753751
-  created_at: 2009-02-16 08:14:17 +02:00
+  created_at: 2009-02-15 22:14:17 -08:00
 common_tagging_02825: 
   filterable_type: Work
-  updated_at: 2009-03-09 17:47:16 +02:00
+  updated_at: 2009-03-09 08:47:16 -07:00
   common_tag_id: 611729728
   id: 2825
   filterable_id: 19
-  created_at: 2009-03-09 17:47:16 +02:00
+  created_at: 2009-03-09 08:47:16 -07:00
 common_tagging_02851: 
   filterable_type: Work
-  updated_at: 2009-03-10 01:23:56 +02:00
+  updated_at: 2009-03-09 16:23:56 -07:00
   common_tag_id: 788108366
   id: 2851
   filterable_id: 27
-  created_at: 2009-03-10 01:23:56 +02:00
+  created_at: 2009-03-09 16:23:56 -07:00
 common_tagging_02906: 
   filterable_type: Work
-  updated_at: 2009-03-12 04:48:40 +02:00
+  updated_at: 2009-03-11 19:48:40 -07:00
   common_tag_id: 788108366
   id: 2906
   filterable_id: 40
-  created_at: 2009-03-12 04:48:40 +02:00
+  created_at: 2009-03-11 19:48:40 -07:00
 common_tagging_02932: 
   filterable_type: Tag
-  updated_at: 2009-03-18 23:01:36 +02:00
+  updated_at: 2009-03-18 14:01:36 -07:00
   common_tag_id: 1063753889
   id: 2932
   filterable_id: 1063753890
-  created_at: 2009-03-18 23:01:36 +02:00
+  created_at: 2009-03-18 14:01:36 -07:00
 common_tagging_00015: 
   filterable_type: Work
-  updated_at: 2008-11-21 08:11:28 +02:00
+  updated_at: 2008-11-20 22:11:28 -08:00
   common_tag_id: 404615116
   id: 15
   filterable_id: 3
-  created_at: 2008-11-21 08:11:28 +02:00
+  created_at: 2008-11-20 22:11:28 -08:00
 common_tagging_00041: 
   filterable_type: Work
-  updated_at: 2008-11-21 09:33:33 +02:00
+  updated_at: 2008-11-20 23:33:33 -08:00
   common_tag_id: 791950904
   id: 41
   filterable_id: 4
-  created_at: 2008-11-21 09:33:33 +02:00
+  created_at: 2008-11-20 23:33:33 -08:00
 common_tagging_00122: 
   filterable_type: Work
-  updated_at: 2008-12-07 01:19:50 +02:00
+  updated_at: 2008-12-06 15:19:50 -08:00
   common_tag_id: 713695255
   id: 122
   filterable_id: 10
-  created_at: 2008-12-07 01:19:50 +02:00
+  created_at: 2008-12-06 15:19:50 -08:00
 common_tagging_02826: 
   filterable_type: Work
-  updated_at: 2009-03-09 17:47:16 +02:00
+  updated_at: 2009-03-09 08:47:16 -07:00
   common_tag_id: 751871740
   id: 2826
   filterable_id: 19
-  created_at: 2009-03-09 17:47:16 +02:00
+  created_at: 2009-03-09 08:47:16 -07:00
 common_tagging_00230: 
   filterable_type: Tag
-  updated_at: 2009-02-20 22:16:54 +02:00
+  updated_at: 2009-02-20 12:16:54 -08:00
   common_tag_id: 1063753748
   id: 230
   filterable_id: 951091623
-  created_at: 2009-02-20 22:16:54 +02:00
+  created_at: 2009-02-20 12:16:54 -08:00
 common_tagging_02852: 
   filterable_type: Work
-  updated_at: 2009-03-10 02:24:31 +02:00
+  updated_at: 2009-03-09 17:24:31 -07:00
   common_tag_id: 885489802
   id: 2852
   filterable_id: 29
-  created_at: 2009-03-10 02:24:31 +02:00
+  created_at: 2009-03-09 17:24:31 -07:00
 common_tagging_02933: 
   filterable_type: Tag
-  updated_at: 2009-03-18 23:14:50 +02:00
+  updated_at: 2009-03-18 14:14:50 -07:00
   common_tag_id: 1063753870
   id: 2933
   filterable_id: 1063753824
-  created_at: 2009-03-18 23:14:50 +02:00
+  created_at: 2009-03-18 14:14:50 -07:00
 common_tagging_00016: 
   filterable_type: Work
-  updated_at: 2008-11-21 08:11:28 +02:00
+  updated_at: 2008-11-20 22:11:28 -08:00
   common_tag_id: 951091623
   id: 16
   filterable_id: 3
-  created_at: 2008-11-21 08:11:28 +02:00
+  created_at: 2008-11-20 22:11:28 -08:00
 common_tagging_00042: 
   filterable_type: Work
-  updated_at: 2008-11-21 09:33:33 +02:00
+  updated_at: 2008-11-20 23:33:33 -08:00
   common_tag_id: 791950904
   id: 42
   filterable_id: 5
-  created_at: 2008-11-21 09:33:33 +02:00
+  created_at: 2008-11-20 23:33:33 -08:00
 common_tagging_00123: 
   filterable_type: Work
-  updated_at: 2008-12-07 01:19:50 +02:00
+  updated_at: 2008-12-06 15:19:50 -08:00
   common_tag_id: 1063753746
   id: 123
   filterable_id: 10
-  created_at: 2008-12-07 01:19:50 +02:00
+  created_at: 2008-12-06 15:19:50 -08:00
 common_tagging_00204: 
   filterable_type: Tag
-  updated_at: 2009-02-16 08:14:51 +02:00
+  updated_at: 2009-02-15 22:14:51 -08:00
   common_tag_id: 1063753773
   id: 204
   filterable_id: 1063753774
-  created_at: 2009-02-16 08:14:51 +02:00
+  created_at: 2009-02-15 22:14:51 -08:00
 common_tagging_02827: 
   filterable_type: Work
-  updated_at: 2009-03-09 17:47:16 +02:00
+  updated_at: 2009-03-09 08:47:16 -07:00
   common_tag_id: 1063753824
   id: 2827
   filterable_id: 19
-  created_at: 2009-03-09 17:47:16 +02:00
+  created_at: 2009-03-09 08:47:16 -07:00
 common_tagging_00231: 
   filterable_type: Tag
-  updated_at: 2009-02-20 22:16:54 +02:00
+  updated_at: 2009-02-20 12:16:54 -08:00
   common_tag_id: 1063753749
   id: 231
   filterable_id: 951091623
-  created_at: 2009-02-20 22:16:54 +02:00
+  created_at: 2009-02-20 12:16:54 -08:00
 common_tagging_02853: 
   filterable_type: Work
-  updated_at: 2009-03-10 02:24:31 +02:00
+  updated_at: 2009-03-09 17:24:31 -07:00
   common_tag_id: 611729728
   id: 2853
   filterable_id: 29
-  created_at: 2009-03-10 02:24:31 +02:00
+  created_at: 2009-03-09 17:24:31 -07:00
 common_tagging_02907: 
   filterable_type: Work
-  updated_at: 2009-03-12 04:48:40 +02:00
+  updated_at: 2009-03-11 19:48:40 -07:00
   common_tag_id: 992891255
   id: 2907
   filterable_id: 40
-  created_at: 2009-03-12 04:48:40 +02:00
+  created_at: 2009-03-11 19:48:40 -07:00
 common_tagging_02934: 
   filterable_type: Work
-  updated_at: 2009-03-18 23:14:50 +02:00
+  updated_at: 2009-03-18 14:14:50 -07:00
   common_tag_id: 1063753824
   id: 2934
   filterable_id: 39
-  created_at: 2009-03-18 23:14:50 +02:00
+  created_at: 2009-03-18 14:14:50 -07:00
 common_tagging_02960: 
   filterable_type: Tag
-  updated_at: 2009-03-19 14:48:07 +02:00
+  updated_at: 2009-03-19 05:48:07 -07:00
   common_tag_id: 1063753900
   id: 2960
   filterable_id: 1063753752
-  created_at: 2009-03-19 14:48:07 +02:00
+  created_at: 2009-03-19 05:48:07 -07:00
 common_tagging_00017: 
   filterable_type: Work
-  updated_at: 2008-11-21 08:11:28 +02:00
+  updated_at: 2008-11-20 22:11:28 -08:00
   common_tag_id: 112726825
   id: 17
   filterable_id: 3
-  created_at: 2008-11-21 08:11:28 +02:00
+  created_at: 2008-11-20 22:11:28 -08:00
 common_tagging_00043: 
   filterable_type: Tag
-  updated_at: 2008-11-21 09:33:33 +02:00
+  updated_at: 2008-11-20 23:33:33 -08:00
   common_tag_id: 569823665
   id: 43
   filterable_id: 791950904
-  created_at: 2008-11-21 09:33:33 +02:00
+  created_at: 2008-11-20 23:33:33 -08:00
 common_tagging_00124: 
   filterable_type: Work
-  updated_at: 2008-12-07 01:24:00 +02:00
+  updated_at: 2008-12-06 15:24:00 -08:00
   common_tag_id: 992891255
   id: 124
   filterable_id: 11
-  created_at: 2008-12-07 01:24:00 +02:00
+  created_at: 2008-12-06 15:24:00 -08:00
 common_tagging_00150: 
   filterable_type: Tag
-  updated_at: 2008-12-07 23:05:30 +02:00
+  updated_at: 2008-12-07 13:05:30 -08:00
   common_tag_id: 1063753781
   id: 150
   filterable_id: 1063753780
-  created_at: 2008-12-07 23:05:30 +02:00
+  created_at: 2008-12-07 13:05:30 -08:00
 common_tagging_02880: 
   filterable_type: Work
-  updated_at: 2009-03-12 00:31:04 +02:00
+  updated_at: 2009-03-11 15:31:04 -07:00
   common_tag_id: 569823665
   id: 2880
   filterable_id: 34
-  created_at: 2009-03-12 00:31:04 +02:00
+  created_at: 2009-03-11 15:31:04 -07:00
 common_tagging_02908: 
   filterable_type: Work
-  updated_at: 2009-03-12 04:48:40 +02:00
+  updated_at: 2009-03-11 19:48:40 -07:00
   common_tag_id: 611729728
   id: 2908
   filterable_id: 40
-  created_at: 2009-03-12 04:48:40 +02:00
+  created_at: 2009-03-11 19:48:40 -07:00
 common_tagging_02935: 
   filterable_type: Tag
-  updated_at: 2009-03-18 23:14:50 +02:00
+  updated_at: 2009-03-18 14:14:50 -07:00
   common_tag_id: 1063753892
   id: 2935
   filterable_id: 1063753824
-  created_at: 2009-03-18 23:14:50 +02:00
+  created_at: 2009-03-18 14:14:50 -07:00
 common_tagging_02961: 
   filterable_type: Tag
-  updated_at: 2009-03-19 14:50:48 +02:00
+  updated_at: 2009-03-19 05:50:48 -07:00
   common_tag_id: 1063753901
   id: 2961
   filterable_id: 951091623
-  created_at: 2009-03-19 14:50:48 +02:00
+  created_at: 2009-03-19 05:50:48 -07:00
 common_tagging_00018: 
   filterable_type: Work
-  updated_at: 2008-11-21 08:11:28 +02:00
+  updated_at: 2008-11-20 22:11:28 -08:00
   common_tag_id: 741440589
   id: 18
   filterable_id: 4
-  created_at: 2008-11-21 08:11:28 +02:00
+  created_at: 2008-11-20 22:11:28 -08:00
 common_tagging_00044: 
   filterable_type: Work
-  updated_at: 2008-11-21 09:47:14 +02:00
+  updated_at: 2008-11-20 23:47:14 -08:00
   common_tag_id: 1063753736
   id: 44
   filterable_id: 2
-  created_at: 2008-11-21 09:47:14 +02:00
+  created_at: 2008-11-20 23:47:14 -08:00
 common_tagging_00125: 
   filterable_type: Work
-  updated_at: 2008-12-07 01:24:00 +02:00
+  updated_at: 2008-12-06 15:24:00 -08:00
   common_tag_id: 1063753735
   id: 125
   filterable_id: 11
-  created_at: 2008-12-07 01:24:00 +02:00
+  created_at: 2008-12-06 15:24:00 -08:00
 common_tagging_00151: 
   filterable_type: Tag
-  updated_at: 2008-12-07 23:05:30 +02:00
+  updated_at: 2008-12-07 13:05:30 -08:00
   common_tag_id: 1063753782
   id: 151
   filterable_id: 1063753780
-  created_at: 2008-12-07 23:05:30 +02:00
+  created_at: 2008-12-07 13:05:30 -08:00
 common_tagging_00206: 
   filterable_type: Tag
-  updated_at: 2009-02-16 08:17:18 +02:00
+  updated_at: 2009-02-15 22:17:18 -08:00
   common_tag_id: 1063753813
   id: 206
   filterable_id: 1063753738
-  created_at: 2009-02-16 08:17:18 +02:00
+  created_at: 2009-02-15 22:17:18 -08:00
 common_tagging_02828: 
   filterable_type: Work
-  updated_at: 2009-03-09 17:47:16 +02:00
+  updated_at: 2009-03-09 08:47:16 -07:00
   common_tag_id: 788108366
   id: 2828
   filterable_id: 19
-  created_at: 2009-03-09 17:47:16 +02:00
+  created_at: 2009-03-09 08:47:16 -07:00
 common_tagging_02881: 
   filterable_type: Work
-  updated_at: 2009-03-12 00:31:04 +02:00
+  updated_at: 2009-03-11 15:31:04 -07:00
   common_tag_id: 791950904
   id: 2881
   filterable_id: 34
-  created_at: 2009-03-12 00:31:04 +02:00
+  created_at: 2009-03-11 15:31:04 -07:00
 common_tagging_02909: 
   filterable_type: Work
-  updated_at: 2009-03-12 04:55:48 +02:00
+  updated_at: 2009-03-11 19:55:48 -07:00
   common_tag_id: 1063753741
   id: 2909
   filterable_id: 41
-  created_at: 2009-03-12 04:55:48 +02:00
+  created_at: 2009-03-11 19:55:48 -07:00
 common_tagging_02936: 
   filterable_type: Work
-  updated_at: 2009-03-18 23:14:51 +02:00
+  updated_at: 2009-03-18 14:14:51 -07:00
   common_tag_id: 1063753892
   id: 2936
   filterable_id: 39
-  created_at: 2009-03-18 23:14:51 +02:00
+  created_at: 2009-03-18 14:14:51 -07:00
 common_tagging_02962: 
   filterable_type: Tag
-  updated_at: 2009-03-19 14:51:59 +02:00
+  updated_at: 2009-03-19 05:51:59 -07:00
   common_tag_id: 1063753902
   id: 2962
   filterable_id: 951091623
-  created_at: 2009-03-19 14:51:59 +02:00
+  created_at: 2009-03-19 05:51:59 -07:00
 common_tagging_00019: 
   filterable_type: Work
-  updated_at: 2008-11-21 08:11:28 +02:00
+  updated_at: 2008-11-20 22:11:28 -08:00
   common_tag_id: 402275454
   id: 19
   filterable_id: 4
-  created_at: 2008-11-21 08:11:28 +02:00
+  created_at: 2008-11-20 22:11:28 -08:00
 common_tagging_00045: 
   filterable_type: Work
-  updated_at: 2008-11-21 09:50:08 +02:00
+  updated_at: 2008-11-20 23:50:08 -08:00
   common_tag_id: 1063753736
   id: 45
   filterable_id: 3
-  created_at: 2008-11-21 09:50:08 +02:00
+  created_at: 2008-11-20 23:50:08 -08:00
 common_tagging_00126: 
   filterable_type: Work
-  updated_at: 2008-12-07 01:24:00 +02:00
+  updated_at: 2008-12-06 15:24:00 -08:00
   common_tag_id: 751871740
   id: 126
   filterable_id: 11
-  created_at: 2008-12-07 01:24:00 +02:00
+  created_at: 2008-12-06 15:24:00 -08:00
 common_tagging_00152: 
   filterable_type: Tag
-  updated_at: 2008-12-07 23:05:37 +02:00
+  updated_at: 2008-12-07 13:05:37 -08:00
   common_tag_id: 1063753785
   id: 152
   filterable_id: 741440589
-  created_at: 2008-12-07 23:05:37 +02:00
+  created_at: 2008-12-07 13:05:37 -08:00
 common_tagging_00207: 
   filterable_type: Tag
-  updated_at: 2009-02-16 08:17:18 +02:00
+  updated_at: 2009-02-15 22:17:18 -08:00
   common_tag_id: 1063753812
   id: 207
   filterable_id: 1063753807
-  created_at: 2009-02-16 08:17:18 +02:00
+  created_at: 2009-02-15 22:17:18 -08:00
 common_tagging_02829: 
   filterable_type: Work
-  updated_at: 2009-03-09 18:32:19 +02:00
+  updated_at: 2009-03-09 09:32:19 -07:00
   common_tag_id: 1063753735
   id: 2829
   filterable_id: 20
-  created_at: 2009-03-09 18:32:19 +02:00
+  created_at: 2009-03-09 09:32:19 -07:00
 common_tagging_02882: 
   filterable_type: Work
-  updated_at: 2009-03-12 02:01:31 +02:00
+  updated_at: 2009-03-11 17:01:31 -07:00
   common_tag_id: 569823665
   id: 2882
   filterable_id: 35
-  created_at: 2009-03-12 02:01:31 +02:00
+  created_at: 2009-03-11 17:01:31 -07:00
 common_tagging_02937: 
   filterable_type: Tag
-  updated_at: 2009-03-18 23:15:21 +02:00
+  updated_at: 2009-03-18 14:15:21 -07:00
   common_tag_id: 1063753892
   id: 2937
   filterable_id: 1063753818
-  created_at: 2009-03-18 23:15:21 +02:00
+  created_at: 2009-03-18 14:15:21 -07:00
 common_tagging_02963: 
   filterable_type: Tag
-  updated_at: 2009-03-19 14:52:13 +02:00
+  updated_at: 2009-03-19 05:52:13 -07:00
   common_tag_id: 1063753902
   id: 2963
   filterable_id: 1063753751
-  created_at: 2009-03-19 14:52:13 +02:00
+  created_at: 2009-03-19 05:52:13 -07:00
 common_tagging_00046: 
   filterable_type: Work
-  updated_at: 2008-11-21 09:50:24 +02:00
+  updated_at: 2008-11-20 23:50:24 -08:00
   common_tag_id: 751871740
   id: 46
   filterable_id: 3
-  created_at: 2008-11-21 09:50:24 +02:00
+  created_at: 2008-11-20 23:50:24 -08:00
 common_tagging_00127: 
   filterable_type: Work
-  updated_at: 2008-12-07 01:26:41 +02:00
+  updated_at: 2008-12-06 15:26:41 -08:00
   common_tag_id: 112726825
   id: 127
   filterable_id: 12
-  created_at: 2008-12-07 01:26:41 +02:00
+  created_at: 2008-12-06 15:26:41 -08:00
 common_tagging_00153: 
   filterable_type: Tag
-  updated_at: 2008-12-07 23:05:45 +02:00
+  updated_at: 2008-12-07 13:05:45 -08:00
   common_tag_id: 1063753803
   id: 153
   filterable_id: 1063753801
-  created_at: 2008-12-07 23:05:45 +02:00
+  created_at: 2008-12-07 13:05:45 -08:00
 common_tagging_00208: 
   filterable_type: Tag
-  updated_at: 2009-02-16 08:17:18 +02:00
+  updated_at: 2009-02-15 22:17:18 -08:00
   common_tag_id: 1063753812
   id: 208
   filterable_id: 1063753738
-  created_at: 2009-02-16 08:17:18 +02:00
+  created_at: 2009-02-15 22:17:18 -08:00
 common_tagging_02856: 
   filterable_type: Work
-  updated_at: 2009-03-10 02:24:31 +02:00
+  updated_at: 2009-03-09 17:24:31 -07:00
   common_tag_id: 1063753824
   id: 2856
   filterable_id: 29
-  created_at: 2009-03-10 02:24:31 +02:00
+  created_at: 2009-03-09 17:24:31 -07:00
 common_tagging_02857: 
   filterable_type: Work
-  updated_at: 2009-03-10 02:24:31 +02:00
+  updated_at: 2009-03-09 17:24:31 -07:00
   common_tag_id: 788108366
   id: 2857
   filterable_id: 29
-  created_at: 2009-03-10 02:24:31 +02:00
-common_tagging_02883: 
-  filterable_type: Work
-  updated_at: 2009-03-12 02:01:31 +02:00
-  common_tag_id: 791950904
-  id: 2883
-  filterable_id: 35
-  created_at: 2009-03-12 02:01:31 +02:00
-common_tagging_02938: 
-  filterable_type: Tag
-  updated_at: 2009-03-19 00:41:29 +02:00
-  common_tag_id: 1063753893
-  id: 2938
-  filterable_id: 569823665
-  created_at: 2009-03-19 00:41:29 +02:00
-common_tagging_02964: 
-  filterable_type: Tag
-  updated_at: 2009-03-19 14:53:52 +02:00
-  common_tag_id: 1063753903
-  id: 2964
-  filterable_id: 951091623
-  created_at: 2009-03-19 14:53:52 +02:00
-common_tagging_02990: 
-  filterable_type: Work
-  updated_at: 2009-03-20 22:03:11 +02:00
-  common_tag_id: 899944269
-  id: 2990
-  filterable_id: 12
-  created_at: 2009-03-20 22:03:11 +02:00
+  created_at: 2009-03-09 17:24:31 -07:00
 common_tagging_00047: 
   filterable_type: Work
-  updated_at: 2008-11-21 09:52:36 +02:00
+  updated_at: 2008-11-20 23:52:36 -08:00
   common_tag_id: 1063753736
   id: 47
   filterable_id: 4
-  created_at: 2008-11-21 09:52:36 +02:00
+  created_at: 2008-11-20 23:52:36 -08:00
+common_tagging_02990: 
+  filterable_type: Work
+  updated_at: 2009-03-20 13:03:11 -07:00
+  common_tag_id: 899944269
+  id: 2990
+  filterable_id: 12
+  created_at: 2009-03-20 13:03:11 -07:00
+common_tagging_02883: 
+  filterable_type: Work
+  updated_at: 2009-03-11 17:01:31 -07:00
+  common_tag_id: 791950904
+  id: 2883
+  filterable_id: 35
+  created_at: 2009-03-11 17:01:31 -07:00
+common_tagging_02938: 
+  filterable_type: Tag
+  updated_at: 2009-03-18 15:41:29 -07:00
+  common_tag_id: 1063753893
+  id: 2938
+  filterable_id: 569823665
+  created_at: 2009-03-18 15:41:29 -07:00
+common_tagging_02964: 
+  filterable_type: Tag
+  updated_at: 2009-03-19 05:53:52 -07:00
+  common_tag_id: 1063753903
+  id: 2964
+  filterable_id: 951091623
+  created_at: 2009-03-19 05:53:52 -07:00
 common_tagging_00128: 
   filterable_type: Work
-  updated_at: 2008-12-07 01:26:41 +02:00
+  updated_at: 2008-12-06 15:26:41 -08:00
   common_tag_id: 1063753736
   id: 128
   filterable_id: 12
-  created_at: 2008-12-07 01:26:41 +02:00
+  created_at: 2008-12-06 15:26:41 -08:00
 common_tagging_00154: 
   filterable_type: Tag
-  updated_at: 2008-12-07 23:05:45 +02:00
+  updated_at: 2008-12-07 13:05:45 -08:00
   common_tag_id: 1063753804
   id: 154
   filterable_id: 1063753801
-  created_at: 2008-12-07 23:05:45 +02:00
+  created_at: 2008-12-07 13:05:45 -08:00
 common_tagging_02884: 
   filterable_type: Work
-  updated_at: 2009-03-12 02:01:31 +02:00
+  updated_at: 2009-03-11 17:01:31 -07:00
   common_tag_id: 1063753732
   id: 2884
   filterable_id: 35
-  created_at: 2009-03-12 02:01:31 +02:00
+  created_at: 2009-03-11 17:01:31 -07:00
 common_tagging_02991: 
   filterable_type: Tag
-  updated_at: 2009-03-20 22:06:11 +02:00
+  updated_at: 2009-03-20 13:06:11 -07:00
   common_tag_id: 1063753809
   id: 2991
   filterable_id: 1063753891
-  created_at: 2009-03-20 22:06:11 +02:00
+  created_at: 2009-03-20 13:06:11 -07:00
 common_tagging_02965: 
   filterable_type: Work
-  updated_at: 2009-03-20 03:24:26 +02:00
+  updated_at: 2009-03-19 18:24:26 -07:00
   common_tag_id: 885489802
   id: 2965
   filterable_id: 45
-  created_at: 2009-03-20 03:24:26 +02:00
+  created_at: 2009-03-19 18:24:26 -07:00
 common_tagging_02939: 
   filterable_type: Tag
-  updated_at: 2009-03-19 00:41:29 +02:00
+  updated_at: 2009-03-18 15:41:29 -07:00
   common_tag_id: 1063753893
   id: 2939
   filterable_id: 1063753890
-  created_at: 2009-03-19 00:41:29 +02:00
+  created_at: 2009-03-18 15:41:29 -07:00
 common_tagging_00129: 
   filterable_type: Work
-  updated_at: 2008-12-07 01:26:41 +02:00
+  updated_at: 2008-12-06 15:26:41 -08:00
   common_tag_id: 751871740
   id: 129
   filterable_id: 12
-  created_at: 2008-12-07 01:26:41 +02:00
+  created_at: 2008-12-06 15:26:41 -08:00
 common_tagging_00155: 
   filterable_type: Tag
-  updated_at: 2008-12-07 23:05:53 +02:00
+  updated_at: 2008-12-07 13:05:53 -08:00
   common_tag_id: 1063753805
   id: 155
   filterable_id: 1063753801
-  created_at: 2008-12-07 23:05:53 +02:00
+  created_at: 2008-12-07 13:05:53 -08:00
 common_tagging_03020: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:20:18 +02:00
+  updated_at: 2009-03-20 16:20:18 -07:00
   common_tag_id: 951091623
   id: 3020
   filterable_id: 50
-  created_at: 2009-03-21 01:20:18 +02:00
-common_tagging_02885: 
-  filterable_type: Work
-  updated_at: 2009-03-12 02:01:31 +02:00
-  common_tag_id: 112726825
-  id: 2885
-  filterable_id: 35
-  created_at: 2009-03-12 02:01:31 +02:00
-common_tagging_00156: 
-  filterable_type: Tag
-  updated_at: 2008-12-07 23:05:53 +02:00
-  common_tag_id: 1063753806
-  id: 156
-  filterable_id: 1063753801
-  created_at: 2008-12-07 23:05:53 +02:00
-common_tagging_02992: 
-  filterable_type: Tag
-  updated_at: 2009-03-20 22:06:11 +02:00
-  common_tag_id: 1063753809
-  id: 2992
-  filterable_id: 569823665
-  created_at: 2009-03-20 22:06:11 +02:00
-common_tagging_02966: 
-  filterable_type: Work
-  updated_at: 2009-03-20 03:24:26 +02:00
-  common_tag_id: 1063753735
-  id: 2966
-  filterable_id: 45
-  created_at: 2009-03-20 03:24:26 +02:00
+  created_at: 2009-03-20 16:20:18 -07:00
 common_tagging_00182: 
   filterable_type: Tag
-  updated_at: 2009-02-16 08:03:48 +02:00
+  updated_at: 2009-02-15 22:03:48 -08:00
   common_tag_id: 1063753779
   id: 182
   filterable_id: 1063753780
-  created_at: 2009-02-16 08:03:48 +02:00
-common_tagging_02859: 
-  filterable_type: Work
-  updated_at: 2009-03-11 23:54:50 +02:00
-  common_tag_id: 1063753736
-  id: 2859
-  filterable_id: 30
-  created_at: 2009-03-11 23:54:50 +02:00
-common_tagging_00183: 
+  created_at: 2009-02-15 22:03:48 -08:00
+common_tagging_00156: 
   filterable_type: Tag
-  updated_at: 2009-02-16 08:03:48 +02:00
-  common_tag_id: 1063753779
-  id: 183
-  filterable_id: 1063753738
-  created_at: 2009-02-16 08:03:48 +02:00
-common_tagging_00157: 
-  filterable_type: Tag
-  updated_at: 2008-12-07 23:06:01 +02:00
-  common_tag_id: 1063753759
-  id: 157
-  filterable_id: 1063753758
-  created_at: 2008-12-07 23:06:01 +02:00
-common_tagging_02967: 
+  updated_at: 2008-12-07 13:05:53 -08:00
+  common_tag_id: 1063753806
+  id: 156
+  filterable_id: 1063753801
+  created_at: 2008-12-07 13:05:53 -08:00
+common_tagging_02966: 
   filterable_type: Work
-  updated_at: 2009-03-20 03:24:26 +02:00
-  common_tag_id: 1063753741
-  id: 2967
+  updated_at: 2009-03-19 18:24:26 -07:00
+  common_tag_id: 1063753735
+  id: 2966
   filterable_id: 45
-  created_at: 2009-03-20 03:24:26 +02:00
-common_tagging_02993: 
+  created_at: 2009-03-19 18:24:26 -07:00
+common_tagging_02992: 
   filterable_type: Tag
-  updated_at: 2009-03-20 22:06:52 +02:00
-  common_tag_id: 1063753904
-  id: 2993
-  filterable_id: 1063753818
-  created_at: 2009-03-20 22:06:52 +02:00
+  updated_at: 2009-03-20 13:06:11 -07:00
+  common_tag_id: 1063753809
+  id: 2992
+  filterable_id: 569823665
+  created_at: 2009-03-20 13:06:11 -07:00
+common_tagging_02885: 
+  filterable_type: Work
+  updated_at: 2009-03-11 17:01:31 -07:00
+  common_tag_id: 112726825
+  id: 2885
+  filterable_id: 35
+  created_at: 2009-03-11 17:01:31 -07:00
 common_tagging_02886: 
   filterable_type: Work
-  updated_at: 2009-03-12 02:01:31 +02:00
+  updated_at: 2009-03-11 17:01:31 -07:00
   common_tag_id: 1063753741
   id: 2886
   filterable_id: 35
-  created_at: 2009-03-12 02:01:31 +02:00
+  created_at: 2009-03-11 17:01:31 -07:00
+common_tagging_02993: 
+  filterable_type: Tag
+  updated_at: 2009-03-20 13:06:52 -07:00
+  common_tag_id: 1063753904
+  id: 2993
+  filterable_id: 1063753818
+  created_at: 2009-03-20 13:06:52 -07:00
+common_tagging_02967: 
+  filterable_type: Work
+  updated_at: 2009-03-19 18:24:26 -07:00
+  common_tag_id: 1063753741
+  id: 2967
+  filterable_id: 45
+  created_at: 2009-03-19 18:24:26 -07:00
+common_tagging_00157: 
+  filterable_type: Tag
+  updated_at: 2008-12-07 13:06:01 -08:00
+  common_tag_id: 1063753759
+  id: 157
+  filterable_id: 1063753758
+  created_at: 2008-12-07 13:06:01 -08:00
+common_tagging_00183: 
+  filterable_type: Tag
+  updated_at: 2009-02-15 22:03:48 -08:00
+  common_tag_id: 1063753779
+  id: 183
+  filterable_id: 1063753738
+  created_at: 2009-02-15 22:03:48 -08:00
 common_tagging_03021: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:20:18 +02:00
+  updated_at: 2009-03-20 16:20:18 -07:00
   common_tag_id: 791950904
   id: 3021
   filterable_id: 50
-  created_at: 2009-03-21 01:20:18 +02:00
+  created_at: 2009-03-20 16:20:18 -07:00
 common_tagging_03022: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:20:18 +02:00
+  updated_at: 2009-03-20 16:20:18 -07:00
   common_tag_id: 1063753811
   id: 3022
   filterable_id: 50
-  created_at: 2009-03-21 01:20:18 +02:00
-common_tagging_02994: 
-  filterable_type: Tag
-  updated_at: 2009-03-20 22:06:52 +02:00
-  common_tag_id: 1063753809
-  id: 2994
-  filterable_id: 1063753904
-  created_at: 2009-03-20 22:06:52 +02:00
-common_tagging_00184: 
-  filterable_type: Work
-  updated_at: 2009-02-16 08:03:48 +02:00
-  common_tag_id: 1063753738
-  id: 184
-  filterable_id: 12
-  created_at: 2009-02-16 08:03:48 +02:00
-common_tagging_00158: 
-  filterable_type: Tag
-  updated_at: 2008-12-07 23:06:02 +02:00
-  common_tag_id: 1063753760
-  id: 158
-  filterable_id: 1063753758
-  created_at: 2008-12-07 23:06:02 +02:00
-common_tagging_02968: 
-  filterable_type: Work
-  updated_at: 2009-03-20 03:24:26 +02:00
-  common_tag_id: 569823665
-  id: 2968
-  filterable_id: 45
-  created_at: 2009-03-20 03:24:26 +02:00
+  created_at: 2009-03-20 16:20:18 -07:00
 common_tagging_02887: 
   filterable_type: Work
-  updated_at: 2009-03-12 02:01:31 +02:00
+  updated_at: 2009-03-11 17:01:31 -07:00
   common_tag_id: 1063753743
   id: 2887
   filterable_id: 35
-  created_at: 2009-03-12 02:01:31 +02:00
-common_tagging_00185: 
+  created_at: 2009-03-11 17:01:31 -07:00
+common_tagging_02994: 
   filterable_type: Tag
-  updated_at: 2009-02-16 08:05:31 +02:00
+  updated_at: 2009-03-20 13:06:52 -07:00
   common_tag_id: 1063753809
-  id: 185
-  filterable_id: 177887685
-  created_at: 2009-02-16 08:05:31 +02:00
-common_tagging_00159: 
-  filterable_type: Tag
-  updated_at: 2008-12-07 23:06:19 +02:00
-  common_tag_id: 1063753755
-  id: 159
-  filterable_id: 741440589
-  created_at: 2008-12-07 23:06:19 +02:00
-common_tagging_02969: 
+  id: 2994
+  filterable_id: 1063753904
+  created_at: 2009-03-20 13:06:52 -07:00
+common_tagging_02968: 
   filterable_type: Work
-  updated_at: 2009-03-20 03:24:26 +02:00
-  common_tag_id: 791950904
-  id: 2969
+  updated_at: 2009-03-19 18:24:26 -07:00
+  common_tag_id: 569823665
+  id: 2968
   filterable_id: 45
-  created_at: 2009-03-20 03:24:26 +02:00
+  created_at: 2009-03-19 18:24:26 -07:00
+common_tagging_00158: 
+  filterable_type: Tag
+  updated_at: 2008-12-07 13:06:02 -08:00
+  common_tag_id: 1063753760
+  id: 158
+  filterable_id: 1063753758
+  created_at: 2008-12-07 13:06:02 -08:00
+common_tagging_00184: 
+  filterable_type: Work
+  updated_at: 2009-02-15 22:03:48 -08:00
+  common_tag_id: 1063753738
+  id: 184
+  filterable_id: 12
+  created_at: 2009-02-15 22:03:48 -08:00
 common_tagging_02888: 
   filterable_type: Work
-  updated_at: 2009-03-12 02:30:27 +02:00
+  updated_at: 2009-03-11 17:30:27 -07:00
   common_tag_id: 1063753732
   id: 2888
   filterable_id: 36
-  created_at: 2009-03-12 02:30:27 +02:00
+  created_at: 2009-03-11 17:30:27 -07:00
+common_tagging_02969: 
+  filterable_type: Work
+  updated_at: 2009-03-19 18:24:26 -07:00
+  common_tag_id: 791950904
+  id: 2969
+  filterable_id: 45
+  created_at: 2009-03-19 18:24:26 -07:00
+common_tagging_00159: 
+  filterable_type: Tag
+  updated_at: 2008-12-07 13:06:19 -08:00
+  common_tag_id: 1063753755
+  id: 159
+  filterable_id: 741440589
+  created_at: 2008-12-07 13:06:19 -08:00
+common_tagging_00185: 
+  filterable_type: Tag
+  updated_at: 2009-02-15 22:05:31 -08:00
+  common_tag_id: 1063753809
+  id: 185
+  filterable_id: 177887685
+  created_at: 2009-02-15 22:05:31 -08:00
 common_tagging_02995: 
   filterable_type: Tag
-  updated_at: 2009-03-20 22:07:42 +02:00
+  updated_at: 2009-03-20 13:07:42 -07:00
   common_tag_id: 1063753891
   id: 2995
   filterable_id: 177887685
-  created_at: 2009-03-20 22:07:42 +02:00
+  created_at: 2009-03-20 13:07:42 -07:00
 common_tagging_03023: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:20:18 +02:00
+  updated_at: 2009-03-20 16:20:18 -07:00
   common_tag_id: 1063753899
   id: 3023
   filterable_id: 50
-  created_at: 2009-03-21 01:20:18 +02:00
+  created_at: 2009-03-20 16:20:18 -07:00
 common_tagging_03024: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:20:18 +02:00
+  updated_at: 2009-03-20 16:20:18 -07:00
   common_tag_id: 1063753740
   id: 3024
   filterable_id: 50
-  created_at: 2009-03-21 01:20:18 +02:00
+  created_at: 2009-03-20 16:20:18 -07:00
 common_tagging_02996: 
   filterable_type: Work
-  updated_at: 2009-03-20 22:07:43 +02:00
+  updated_at: 2009-03-20 13:07:43 -07:00
   common_tag_id: 177887685
   id: 2996
   filterable_id: 43
-  created_at: 2009-03-20 22:07:43 +02:00
+  created_at: 2009-03-20 13:07:43 -07:00
 common_tagging_02889: 
   filterable_type: Work
-  updated_at: 2009-03-12 02:30:27 +02:00
+  updated_at: 2009-03-11 17:30:27 -07:00
   common_tag_id: 344412843
   id: 2889
   filterable_id: 36
-  created_at: 2009-03-12 02:30:27 +02:00
+  created_at: 2009-03-11 17:30:27 -07:00
 common_tagging_02997: 
   filterable_type: Tag
-  updated_at: 2009-03-20 23:23:08 +02:00
+  updated_at: 2009-03-20 14:23:08 -07:00
   common_tag_id: 1063753905
   id: 2997
   filterable_id: 986046160
-  created_at: 2009-03-20 23:23:08 +02:00
+  created_at: 2009-03-20 14:23:08 -07:00
 common_tagging_03025: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:22:24 +02:00
+  updated_at: 2009-03-20 16:22:24 -07:00
   common_tag_id: 885489802
   id: 3025
   filterable_id: 51
-  created_at: 2009-03-21 01:22:24 +02:00
+  created_at: 2009-03-20 16:22:24 -07:00
 common_tagging_03026: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:22:24 +02:00
+  updated_at: 2009-03-20 16:22:24 -07:00
   common_tag_id: 1063753736
   id: 3026
   filterable_id: 51
-  created_at: 2009-03-21 01:22:24 +02:00
+  created_at: 2009-03-20 16:22:24 -07:00
 common_tagging_02998: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:11:56 +02:00
+  updated_at: 2009-03-20 16:11:56 -07:00
   common_tag_id: 112726825
   id: 2998
   filterable_id: 47
-  created_at: 2009-03-21 01:11:56 +02:00
-common_tagging_00189: 
-  filterable_type: Tag
-  updated_at: 2009-02-16 08:09:20 +02:00
-  common_tag_id: 1063753811
-  id: 189
-  filterable_id: 951091623
-  created_at: 2009-02-16 08:09:20 +02:00
+  created_at: 2009-03-20 16:11:56 -07:00
 common_tagging_01651: 
   filterable_type: Tag
-  updated_at: 2009-02-21 02:12:26 +02:00
+  updated_at: 2009-02-20 16:12:26 -08:00
   common_tag_id: 1063753818
   id: 1651
   filterable_id: 791950904
-  created_at: 2009-02-21 02:12:26 +02:00
+  created_at: 2009-02-20 16:12:26 -08:00
+common_tagging_00189: 
+  filterable_type: Tag
+  updated_at: 2009-02-15 22:09:20 -08:00
+  common_tag_id: 1063753811
+  id: 189
+  filterable_id: 951091623
+  created_at: 2009-02-15 22:09:20 -08:00
 common_tagging_02999: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:11:56 +02:00
+  updated_at: 2009-03-20 16:11:56 -07:00
   common_tag_id: 1063753736
   id: 2999
   filterable_id: 47
-  created_at: 2009-03-21 01:11:56 +02:00
+  created_at: 2009-03-20 16:11:56 -07:00
 common_tagging_03027: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:22:24 +02:00
+  updated_at: 2009-03-20 16:22:24 -07:00
   common_tag_id: 751871740
   id: 3027
   filterable_id: 51
-  created_at: 2009-03-21 01:22:24 +02:00
+  created_at: 2009-03-20 16:22:24 -07:00
 common_tagging_03028: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:22:24 +02:00
+  updated_at: 2009-03-20 16:22:24 -07:00
   common_tag_id: 951091623
   id: 3028
   filterable_id: 51
-  created_at: 2009-03-21 01:22:24 +02:00
-common_tagging_02810: 
-  filterable_type: Work
-  updated_at: 2009-02-24 10:47:23 +02:00
-  common_tag_id: 1063753735
-  id: 2810
-  filterable_id: 17
-  created_at: 2009-02-24 10:47:23 +02:00
+  created_at: 2009-03-20 16:22:24 -07:00
 common_tagging_01652: 
   filterable_type: Tag
-  updated_at: 2009-02-21 02:12:26 +02:00
+  updated_at: 2009-02-20 16:12:26 -08:00
   common_tag_id: 1063753813
   id: 1652
   filterable_id: 1063753818
-  created_at: 2009-02-21 02:12:26 +02:00
-common_tagging_02811: 
+  created_at: 2009-02-20 16:12:26 -08:00
+common_tagging_02810: 
   filterable_type: Work
-  updated_at: 2009-02-24 10:47:23 +02:00
-  common_tag_id: 1063753741
-  id: 2811
+  updated_at: 2009-02-24 00:47:23 -08:00
+  common_tag_id: 1063753735
+  id: 2810
   filterable_id: 17
-  created_at: 2009-02-24 10:47:23 +02:00
+  created_at: 2009-02-24 00:47:23 -08:00
 common_tagging_00001: 
   filterable_type: Tag
-  updated_at: 2008-11-21 08:11:27 +02:00
+  updated_at: 2008-11-20 22:11:27 -08:00
   common_tag_id: 26796919
   id: 1
   filterable_id: 741440589
-  created_at: 2008-11-21 08:11:27 +02:00
+  created_at: 2008-11-20 22:11:27 -08:00
+common_tagging_02811: 
+  filterable_type: Work
+  updated_at: 2009-02-24 00:47:23 -08:00
+  common_tag_id: 1063753741
+  id: 2811
+  filterable_id: 17
+  created_at: 2009-02-24 00:47:23 -08:00
 common_tagging_03029: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:22:24 +02:00
+  updated_at: 2009-03-20 16:22:24 -07:00
   common_tag_id: 791950904
   id: 3029
   filterable_id: 51
-  created_at: 2009-03-21 01:22:24 +02:00
+  created_at: 2009-03-20 16:22:24 -07:00
 common_tagging_02812: 
   filterable_type: Tag
-  updated_at: 2009-03-06 00:13:59 +02:00
+  updated_at: 2009-03-05 14:13:59 -08:00
   common_tag_id: 1063753824
   id: 2812
   filterable_id: 788108366
-  created_at: 2009-03-06 00:13:59 +02:00
-common_tagging_02920: 
-  filterable_type: Work
-  updated_at: 2009-03-18 06:09:43 +02:00
-  common_tag_id: 569823665
-  id: 2920
-  filterable_id: 43
-  created_at: 2009-03-18 06:09:43 +02:00
-common_tagging_01655: 
-  filterable_type: Tag
-  updated_at: 2009-02-21 02:12:45 +02:00
-  common_tag_id: 1063753809
-  id: 1655
-  filterable_id: 1063753818
-  created_at: 2009-02-21 02:12:45 +02:00
-common_tagging_00003: 
-  filterable_type: Tag
-  updated_at: 2008-11-21 08:11:27 +02:00
-  common_tag_id: 545584597
-  id: 3
-  filterable_id: 26796919
-  created_at: 2008-11-21 08:11:27 +02:00
-common_tagging_00110: 
-  filterable_type: Work
-  updated_at: 2008-12-07 00:52:02 +02:00
-  common_tag_id: 751871740
-  id: 110
-  filterable_id: 8
-  created_at: 2008-12-07 00:52:02 +02:00
+  created_at: 2009-03-05 14:13:59 -08:00
 common_tagging_02813: 
   filterable_type: Work
-  updated_at: 2009-03-06 00:13:59 +02:00
+  updated_at: 2009-03-05 14:13:59 -08:00
   common_tag_id: 1063753824
   id: 2813
   filterable_id: 15
-  created_at: 2009-03-06 00:13:59 +02:00
-common_tagging_02921: 
+  created_at: 2009-03-05 14:13:59 -08:00
+common_tagging_00110: 
   filterable_type: Work
-  updated_at: 2009-03-18 06:09:43 +02:00
-  common_tag_id: 791950904
-  id: 2921
+  updated_at: 2008-12-06 14:52:02 -08:00
+  common_tag_id: 751871740
+  id: 110
+  filterable_id: 8
+  created_at: 2008-12-06 14:52:02 -08:00
+common_tagging_00003: 
+  filterable_type: Tag
+  updated_at: 2008-11-20 22:11:27 -08:00
+  common_tag_id: 545584597
+  id: 3
+  filterable_id: 26796919
+  created_at: 2008-11-20 22:11:27 -08:00
+common_tagging_01655: 
+  filterable_type: Tag
+  updated_at: 2009-02-20 16:12:45 -08:00
+  common_tag_id: 1063753809
+  id: 1655
+  filterable_id: 1063753818
+  created_at: 2009-02-20 16:12:45 -08:00
+common_tagging_02920: 
+  filterable_type: Work
+  updated_at: 2009-03-17 21:09:43 -07:00
+  common_tag_id: 569823665
+  id: 2920
   filterable_id: 43
-  created_at: 2009-03-18 06:09:43 +02:00
-common_tagging_00111: 
-  filterable_type: Work
-  updated_at: 2008-12-07 00:55:59 +02:00
-  common_tag_id: 344412843
-  id: 111
-  filterable_id: 9
-  created_at: 2008-12-07 00:55:59 +02:00
-common_tagging_00030: 
-  filterable_type: Tag
-  updated_at: 2008-11-21 08:56:17 +02:00
-  common_tag_id: 552317390
-  id: 30
-  filterable_id: 951091623
-  created_at: 2008-11-21 08:56:17 +02:00
-common_tagging_00004: 
-  filterable_type: Tag
-  updated_at: 2008-11-21 08:11:27 +02:00
-  common_tag_id: 221905380
-  id: 4
-  filterable_id: 741440589
-  created_at: 2008-11-21 08:11:27 +02:00
-common_tagging_02814: 
-  filterable_type: Work
-  updated_at: 2009-03-06 00:13:59 +02:00
-  common_tag_id: 788108366
-  id: 2814
-  filterable_id: 15
-  created_at: 2009-03-06 00:13:59 +02:00
+  created_at: 2009-03-17 21:09:43 -07:00
 common_tagging_02840: 
   filterable_type: Work
-  updated_at: 2009-03-09 19:04:58 +02:00
+  updated_at: 2009-03-09 10:04:58 -07:00
   common_tag_id: 1063753736
   id: 2840
   filterable_id: 22
-  created_at: 2009-03-09 19:04:58 +02:00
-common_tagging_02841: 
+  created_at: 2009-03-09 10:04:58 -07:00
+common_tagging_02814: 
   filterable_type: Work
-  updated_at: 2009-03-09 19:04:58 +02:00
-  common_tag_id: 1063753743
-  id: 2841
-  filterable_id: 22
-  created_at: 2009-03-09 19:04:58 +02:00
-common_tagging_02815: 
-  filterable_type: Work
-  updated_at: 2009-03-06 00:14:00 +02:00
-  common_tag_id: 1063753824
-  id: 2815
-  filterable_id: 16
-  created_at: 2009-03-06 00:14:00 +02:00
-common_tagging_00031: 
+  updated_at: 2009-03-05 14:13:59 -08:00
+  common_tag_id: 788108366
+  id: 2814
+  filterable_id: 15
+  created_at: 2009-03-05 14:13:59 -08:00
+common_tagging_00004: 
   filterable_type: Tag
-  updated_at: 2008-11-21 09:16:27 +02:00
+  updated_at: 2008-11-20 22:11:27 -08:00
+  common_tag_id: 221905380
+  id: 4
+  filterable_id: 741440589
+  created_at: 2008-11-20 22:11:27 -08:00
+common_tagging_00030: 
+  filterable_type: Tag
+  updated_at: 2008-11-20 22:56:17 -08:00
   common_tag_id: 552317390
-  id: 31
-  filterable_id: 713695255
-  created_at: 2008-11-21 09:16:27 +02:00
-common_tagging_00112: 
+  id: 30
+  filterable_id: 951091623
+  created_at: 2008-11-20 22:56:17 -08:00
+common_tagging_00111: 
   filterable_type: Work
-  updated_at: 2008-12-07 00:55:59 +02:00
-  common_tag_id: 1063753735
-  id: 112
+  updated_at: 2008-12-06 14:55:59 -08:00
+  common_tag_id: 344412843
+  id: 111
   filterable_id: 9
-  created_at: 2008-12-07 00:55:59 +02:00
+  created_at: 2008-12-06 14:55:59 -08:00
+common_tagging_02921: 
+  filterable_type: Work
+  updated_at: 2009-03-17 21:09:43 -07:00
+  common_tag_id: 791950904
+  id: 2921
+  filterable_id: 43
+  created_at: 2009-03-17 21:09:43 -07:00
 common_tagging_02922: 
   filterable_type: Tag
-  updated_at: 2009-03-18 22:16:02 +02:00
+  updated_at: 2009-03-18 13:16:02 -07:00
   common_tag_id: 1063753886
   id: 2922
   filterable_id: 569823665
-  created_at: 2009-03-18 22:16:02 +02:00
-common_tagging_02842: 
+  created_at: 2009-03-18 13:16:02 -07:00
+common_tagging_00112: 
   filterable_type: Work
-  updated_at: 2009-03-09 23:55:41 +02:00
-  common_tag_id: 1063753736
-  id: 2842
-  filterable_id: 25
-  created_at: 2009-03-09 23:55:41 +02:00
-common_tagging_02816: 
-  filterable_type: Work
-  updated_at: 2009-03-06 00:14:00 +02:00
-  common_tag_id: 788108366
-  id: 2816
-  filterable_id: 16
-  created_at: 2009-03-06 00:14:00 +02:00
-common_tagging_00006: 
-  filterable_type: Tag
-  updated_at: 2008-11-21 08:11:27 +02:00
-  common_tag_id: 545584597
-  id: 6
-  filterable_id: 221905380
-  created_at: 2008-11-21 08:11:27 +02:00
-common_tagging_01658: 
-  filterable_type: Tag
-  updated_at: 2009-02-21 02:12:59 +02:00
-  common_tag_id: 1063753810
-  id: 1658
-  filterable_id: 1063753818
-  created_at: 2009-02-21 02:12:59 +02:00
-common_tagging_00113: 
-  filterable_type: Work
-  updated_at: 2008-12-07 00:55:59 +02:00
-  common_tag_id: 751871740
-  id: 113
+  updated_at: 2008-12-06 14:55:59 -08:00
+  common_tag_id: 1063753735
+  id: 112
   filterable_id: 9
-  created_at: 2008-12-07 00:55:59 +02:00
+  created_at: 2008-12-06 14:55:59 -08:00
+common_tagging_00031: 
+  filterable_type: Tag
+  updated_at: 2008-11-20 23:16:27 -08:00
+  common_tag_id: 552317390
+  id: 31
+  filterable_id: 713695255
+  created_at: 2008-11-20 23:16:27 -08:00
+common_tagging_02815: 
+  filterable_type: Work
+  updated_at: 2009-03-05 14:14:00 -08:00
+  common_tag_id: 1063753824
+  id: 2815
+  filterable_id: 16
+  created_at: 2009-03-05 14:14:00 -08:00
+common_tagging_02841: 
+  filterable_type: Work
+  updated_at: 2009-03-09 10:04:58 -07:00
+  common_tag_id: 1063753743
+  id: 2841
+  filterable_id: 22
+  created_at: 2009-03-09 10:04:58 -07:00
 common_tagging_02923: 
   filterable_type: Tag
-  updated_at: 2009-03-18 22:20:31 +02:00
+  updated_at: 2009-03-18 13:20:31 -07:00
   common_tag_id: 1063753888
   id: 2923
   filterable_id: 569823665
-  created_at: 2009-03-18 22:20:31 +02:00
+  created_at: 2009-03-18 13:20:31 -07:00
+common_tagging_00113: 
+  filterable_type: Work
+  updated_at: 2008-12-06 14:55:59 -08:00
+  common_tag_id: 751871740
+  id: 113
+  filterable_id: 9
+  created_at: 2008-12-06 14:55:59 -08:00
+common_tagging_01658: 
+  filterable_type: Tag
+  updated_at: 2009-02-20 16:12:59 -08:00
+  common_tag_id: 1063753810
+  id: 1658
+  filterable_id: 1063753818
+  created_at: 2009-02-20 16:12:59 -08:00
+common_tagging_00006: 
+  filterable_type: Tag
+  updated_at: 2008-11-20 22:11:27 -08:00
+  common_tag_id: 545584597
+  id: 6
+  filterable_id: 221905380
+  created_at: 2008-11-20 22:11:27 -08:00
+common_tagging_02816: 
+  filterable_type: Work
+  updated_at: 2009-03-05 14:14:00 -08:00
+  common_tag_id: 788108366
+  id: 2816
+  filterable_id: 16
+  created_at: 2009-03-05 14:14:00 -08:00
+common_tagging_02842: 
+  filterable_type: Work
+  updated_at: 2009-03-09 14:55:41 -07:00
+  common_tag_id: 1063753736
+  id: 2842
+  filterable_id: 25
+  created_at: 2009-03-09 14:55:41 -07:00
 common_tagging_02950: 
   filterable_type: Tag
-  updated_at: 2009-03-19 03:54:47 +02:00
+  updated_at: 2009-03-18 18:54:47 -07:00
   common_tag_id: 1063753842
   id: 2950
   filterable_id: 569823665
-  created_at: 2009-03-19 03:54:47 +02:00
-common_tagging_02924: 
-  filterable_type: Tag
-  updated_at: 2009-03-18 22:20:31 +02:00
-  common_tag_id: 1063753887
-  id: 2924
-  filterable_id: 569823665
-  created_at: 2009-03-18 22:20:31 +02:00
-common_tagging_02843: 
-  filterable_type: Work
-  updated_at: 2009-03-09 23:55:42 +02:00
-  common_tag_id: 112726825
-  id: 2843
-  filterable_id: 25
-  created_at: 2009-03-09 23:55:42 +02:00
-common_tagging_00140: 
-  filterable_type: Work
-  updated_at: 2008-12-07 22:52:16 +02:00
-  common_tag_id: 426547448
-  id: 140
-  filterable_id: 14
-  created_at: 2008-12-07 22:52:16 +02:00
-common_tagging_00114: 
-  filterable_type: Work
-  updated_at: 2008-12-07 01:19:50 +02:00
-  common_tag_id: 992891255
-  id: 114
-  filterable_id: 10
-  created_at: 2008-12-07 01:19:50 +02:00
-common_tagging_00033: 
-  filterable_type: Tag
-  updated_at: 2008-11-21 09:23:11 +02:00
-  common_tag_id: 221905380
-  id: 33
-  filterable_id: 713695255
-  created_at: 2008-11-21 09:23:11 +02:00
-common_tagging_02817: 
-  filterable_type: Work
-  updated_at: 2009-03-06 00:14:00 +02:00
-  common_tag_id: 1063753824
-  id: 2817
-  filterable_id: 17
-  created_at: 2009-03-06 00:14:00 +02:00
-common_tagging_00221: 
-  filterable_type: Tag
-  updated_at: 2009-02-18 23:58:21 +02:00
-  common_tag_id: 177887685
-  id: 221
-  filterable_id: 791950904
-  created_at: 2009-02-18 23:58:21 +02:00
+  created_at: 2009-03-18 18:54:47 -07:00
 common_tagging_00007: 
   filterable_type: Work
-  updated_at: 2008-11-21 08:11:27 +02:00
+  updated_at: 2008-11-20 22:11:27 -08:00
   common_tag_id: 741440589
   id: 7
   filterable_id: 1
-  created_at: 2008-11-21 08:11:27 +02:00
-common_tagging_02870: 
-  filterable_type: Work
-  updated_at: 2009-03-12 00:23:56 +02:00
-  common_tag_id: 569823665
-  id: 2870
-  filterable_id: 32
-  created_at: 2009-03-12 00:23:56 +02:00
-common_tagging_02844: 
-  filterable_type: Work
-  updated_at: 2009-03-09 23:55:42 +02:00
-  common_tag_id: 1063753824
-  id: 2844
-  filterable_id: 25
-  created_at: 2009-03-09 23:55:42 +02:00
-common_tagging_00115: 
-  filterable_type: Work
-  updated_at: 2008-12-07 01:19:50 +02:00
-  common_tag_id: 1063753736
-  id: 115
-  filterable_id: 10
-  created_at: 2008-12-07 01:19:50 +02:00
-common_tagging_00034: 
+  created_at: 2008-11-20 22:11:27 -08:00
+common_tagging_00221: 
   filterable_type: Tag
-  updated_at: 2008-11-21 09:24:16 +02:00
-  common_tag_id: 545584597
-  id: 34
-  filterable_id: 741440589
-  created_at: 2008-11-21 09:24:16 +02:00
-common_tagging_00141: 
+  updated_at: 2009-02-18 13:58:21 -08:00
+  common_tag_id: 177887685
+  id: 221
+  filterable_id: 791950904
+  created_at: 2009-02-18 13:58:21 -08:00
+common_tagging_02817: 
   filterable_type: Work
-  updated_at: 2008-12-07 22:52:16 +02:00
-  common_tag_id: 1063753734
-  id: 141
-  filterable_id: 14
-  created_at: 2008-12-07 22:52:16 +02:00
-common_tagging_02818: 
-  filterable_type: Work
-  updated_at: 2009-03-06 00:14:00 +02:00
-  common_tag_id: 788108366
-  id: 2818
+  updated_at: 2009-03-05 14:14:00 -08:00
+  common_tag_id: 1063753824
+  id: 2817
   filterable_id: 17
-  created_at: 2009-03-06 00:14:00 +02:00
+  created_at: 2009-03-05 14:14:00 -08:00
+common_tagging_00033: 
+  filterable_type: Tag
+  updated_at: 2008-11-20 23:23:11 -08:00
+  common_tag_id: 221905380
+  id: 33
+  filterable_id: 713695255
+  created_at: 2008-11-20 23:23:11 -08:00
+common_tagging_00114: 
+  filterable_type: Work
+  updated_at: 2008-12-06 15:19:50 -08:00
+  common_tag_id: 992891255
+  id: 114
+  filterable_id: 10
+  created_at: 2008-12-06 15:19:50 -08:00
+common_tagging_00140: 
+  filterable_type: Work
+  updated_at: 2008-12-07 12:52:16 -08:00
+  common_tag_id: 426547448
+  id: 140
+  filterable_id: 14
+  created_at: 2008-12-07 12:52:16 -08:00
+common_tagging_02843: 
+  filterable_type: Work
+  updated_at: 2009-03-09 14:55:42 -07:00
+  common_tag_id: 112726825
+  id: 2843
+  filterable_id: 25
+  created_at: 2009-03-09 14:55:42 -07:00
+common_tagging_02924: 
+  filterable_type: Tag
+  updated_at: 2009-03-18 13:20:31 -07:00
+  common_tag_id: 1063753887
+  id: 2924
+  filterable_id: 569823665
+  created_at: 2009-03-18 13:20:31 -07:00
 common_tagging_00008: 
   filterable_type: Work
-  updated_at: 2008-11-21 08:11:28 +02:00
+  updated_at: 2008-11-20 22:11:28 -08:00
   common_tag_id: 1039617938
   id: 8
   filterable_id: 1
-  created_at: 2008-11-21 08:11:28 +02:00
+  created_at: 2008-11-20 22:11:28 -08:00
+common_tagging_02818: 
+  filterable_type: Work
+  updated_at: 2009-03-05 14:14:00 -08:00
+  common_tag_id: 788108366
+  id: 2818
+  filterable_id: 17
+  created_at: 2009-03-05 14:14:00 -08:00
+common_tagging_00141: 
+  filterable_type: Work
+  updated_at: 2008-12-07 12:52:16 -08:00
+  common_tag_id: 1063753734
+  id: 141
+  filterable_id: 14
+  created_at: 2008-12-07 12:52:16 -08:00
+common_tagging_00034: 
+  filterable_type: Tag
+  updated_at: 2008-11-20 23:24:16 -08:00
+  common_tag_id: 545584597
+  id: 34
+  filterable_id: 741440589
+  created_at: 2008-11-20 23:24:16 -08:00
+common_tagging_00115: 
+  filterable_type: Work
+  updated_at: 2008-12-06 15:19:50 -08:00
+  common_tag_id: 1063753736
+  id: 115
+  filterable_id: 10
+  created_at: 2008-12-06 15:19:50 -08:00
+common_tagging_02844: 
+  filterable_type: Work
+  updated_at: 2009-03-09 14:55:42 -07:00
+  common_tag_id: 1063753824
+  id: 2844
+  filterable_id: 25
+  created_at: 2009-03-09 14:55:42 -07:00
+common_tagging_02870: 
+  filterable_type: Work
+  updated_at: 2009-03-11 15:23:56 -07:00
+  common_tag_id: 569823665
+  id: 2870
+  filterable_id: 32
+  created_at: 2009-03-11 15:23:56 -07:00
 common_tagging_02925: 
   filterable_type: Tag
-  updated_at: 2009-03-18 22:21:22 +02:00
+  updated_at: 2009-03-18 13:21:22 -07:00
   common_tag_id: 1063753890
   id: 2925
   filterable_id: 569823665
-  created_at: 2009-03-18 22:21:22 +02:00
+  created_at: 2009-03-18 13:21:22 -07:00
 common_tagging_02951: 
   filterable_type: Work
-  updated_at: 2009-03-19 03:54:48 +02:00
+  updated_at: 2009-03-18 18:54:48 -07:00
   common_tag_id: 1063753891
   id: 2951
   filterable_id: 38
-  created_at: 2009-03-19 03:54:48 +02:00
+  created_at: 2009-03-18 18:54:48 -07:00
 common_tagging_02952: 
   filterable_type: Tag
-  updated_at: 2009-03-19 03:55:30 +02:00
+  updated_at: 2009-03-18 18:55:30 -07:00
   common_tag_id: 1063753841
   id: 2952
   filterable_id: 569823665
-  created_at: 2009-03-19 03:55:30 +02:00
+  created_at: 2009-03-18 18:55:30 -07:00
 common_tagging_02926: 
   filterable_type: Work
-  updated_at: 2009-03-18 22:21:22 +02:00
+  updated_at: 2009-03-18 13:21:22 -07:00
   common_tag_id: 1063753890
   id: 2926
   filterable_id: 43
-  created_at: 2009-03-18 22:21:22 +02:00
-common_tagging_00035: 
-  filterable_type: Tag
-  updated_at: 2008-11-21 09:33:32 +02:00
-  common_tag_id: 130714128
-  id: 35
-  filterable_id: 791950904
-  created_at: 2008-11-21 09:33:32 +02:00
-common_tagging_02845: 
-  filterable_type: Work
-  updated_at: 2009-03-09 23:55:42 +02:00
-  common_tag_id: 788108366
-  id: 2845
-  filterable_id: 25
-  created_at: 2009-03-09 23:55:42 +02:00
-common_tagging_00116: 
-  filterable_type: Work
-  updated_at: 2008-12-07 01:19:50 +02:00
-  common_tag_id: 751871740
-  id: 116
-  filterable_id: 10
-  created_at: 2008-12-07 01:19:50 +02:00
-common_tagging_02871: 
-  filterable_type: Work
-  updated_at: 2009-03-12 00:23:56 +02:00
-  common_tag_id: 791950904
-  id: 2871
-  filterable_id: 32
-  created_at: 2009-03-12 00:23:56 +02:00
+  created_at: 2009-03-18 13:21:22 -07:00
 common_tagging_00009: 
   filterable_type: Work
-  updated_at: 2008-11-21 08:11:28 +02:00
+  updated_at: 2008-11-20 22:11:28 -08:00
   common_tag_id: 992891255
   id: 9
   filterable_id: 1
-  created_at: 2008-11-21 08:11:28 +02:00
-common_tagging_00036: 
-  filterable_type: Tag
-  updated_at: 2008-11-21 09:33:32 +02:00
-  common_tag_id: 951091623
-  id: 36
-  filterable_id: 791950904
-  created_at: 2008-11-21 09:33:32 +02:00
-common_tagging_02819: 
+  created_at: 2008-11-20 22:11:28 -08:00
+common_tagging_02871: 
   filterable_type: Work
-  updated_at: 2009-03-07 22:48:07 +02:00
-  common_tag_id: 992891255
-  id: 2819
-  filterable_id: 18
-  created_at: 2009-03-07 22:48:07 +02:00
-common_tagging_00143: 
+  updated_at: 2009-03-11 15:23:56 -07:00
+  common_tag_id: 791950904
+  id: 2871
+  filterable_id: 32
+  created_at: 2009-03-11 15:23:56 -07:00
+common_tagging_00116: 
   filterable_type: Work
-  updated_at: 2008-12-07 22:52:16 +02:00
-  common_tag_id: 1063753742
-  id: 143
-  filterable_id: 14
-  created_at: 2008-12-07 22:52:16 +02:00
-common_tagging_00117: 
-  filterable_type: Work
-  updated_at: 2008-12-07 01:19:50 +02:00
-  common_tag_id: 741440589
-  id: 117
+  updated_at: 2008-12-06 15:19:50 -08:00
+  common_tag_id: 751871740
+  id: 116
   filterable_id: 10
-  created_at: 2008-12-07 01:19:50 +02:00
-common_tagging_02846: 
+  created_at: 2008-12-06 15:19:50 -08:00
+common_tagging_02845: 
   filterable_type: Work
-  updated_at: 2009-03-09 23:55:42 +02:00
-  common_tag_id: 1063753733
-  id: 2846
+  updated_at: 2009-03-09 14:55:42 -07:00
+  common_tag_id: 788108366
+  id: 2845
   filterable_id: 25
-  created_at: 2009-03-09 23:55:42 +02:00
+  created_at: 2009-03-09 14:55:42 -07:00
+common_tagging_00035: 
+  filterable_type: Tag
+  updated_at: 2008-11-20 23:33:32 -08:00
+  common_tag_id: 130714128
+  id: 35
+  filterable_id: 791950904
+  created_at: 2008-11-20 23:33:32 -08:00
 common_tagging_02872: 
   filterable_type: Work
-  updated_at: 2009-03-12 00:25:59 +02:00
+  updated_at: 2009-03-11 15:25:59 -07:00
   common_tag_id: 344412843
   id: 2872
   filterable_id: 33
-  created_at: 2009-03-12 00:25:59 +02:00
+  created_at: 2009-03-11 15:25:59 -07:00
+common_tagging_02846: 
+  filterable_type: Work
+  updated_at: 2009-03-09 14:55:42 -07:00
+  common_tag_id: 1063753733
+  id: 2846
+  filterable_id: 25
+  created_at: 2009-03-09 14:55:42 -07:00
+common_tagging_00117: 
+  filterable_type: Work
+  updated_at: 2008-12-06 15:19:50 -08:00
+  common_tag_id: 741440589
+  id: 117
+  filterable_id: 10
+  created_at: 2008-12-06 15:19:50 -08:00
+common_tagging_00143: 
+  filterable_type: Work
+  updated_at: 2008-12-07 12:52:16 -08:00
+  common_tag_id: 1063753742
+  id: 143
+  filterable_id: 14
+  created_at: 2008-12-07 12:52:16 -08:00
+common_tagging_02819: 
+  filterable_type: Work
+  updated_at: 2009-03-07 12:48:07 -08:00
+  common_tag_id: 992891255
+  id: 2819
+  filterable_id: 18
+  created_at: 2009-03-07 12:48:07 -08:00
+common_tagging_00036: 
+  filterable_type: Tag
+  updated_at: 2008-11-20 23:33:32 -08:00
+  common_tag_id: 951091623
+  id: 36
+  filterable_id: 791950904
+  created_at: 2008-11-20 23:33:32 -08:00
 common_tagging_02927: 
   filterable_type: Tag
-  updated_at: 2009-03-18 22:22:09 +02:00
+  updated_at: 2009-03-18 13:22:09 -07:00
   common_tag_id: 1063753889
   id: 2927
   filterable_id: 569823665
-  created_at: 2009-03-18 22:22:09 +02:00
+  created_at: 2009-03-18 13:22:09 -07:00
 common_tagging_02953: 
   filterable_type: Work
-  updated_at: 2009-03-19 03:57:14 +02:00
+  updated_at: 2009-03-18 18:57:14 -07:00
   common_tag_id: 1063753890
   id: 2953
   filterable_id: 38
-  created_at: 2009-03-19 03:57:14 +02:00
+  created_at: 2009-03-18 18:57:14 -07:00
 common_tagging_02980: 
   filterable_type: Tag
-  updated_at: 2009-03-20 22:02:09 +02:00
+  updated_at: 2009-03-20 13:02:09 -07:00
   common_tag_id: 986046160
   id: 2980
   filterable_id: 441672848
-  created_at: 2009-03-20 22:02:09 +02:00
+  created_at: 2009-03-20 13:02:09 -07:00
 common_tagging_02954: 
   filterable_type: Tag
-  updated_at: 2009-03-19 14:24:20 +02:00
+  updated_at: 2009-03-19 05:24:20 -07:00
   common_tag_id: 1063753896
   id: 2954
   filterable_id: 951091623
-  created_at: 2009-03-19 14:24:20 +02:00
+  created_at: 2009-03-19 05:24:20 -07:00
 common_tagging_02928: 
   filterable_type: Work
-  updated_at: 2009-03-18 22:22:09 +02:00
+  updated_at: 2009-03-18 13:22:09 -07:00
   common_tag_id: 1063753889
   id: 2928
   filterable_id: 43
-  created_at: 2009-03-18 22:22:09 +02:00
-common_tagging_02873: 
-  filterable_type: Work
-  updated_at: 2009-03-12 00:25:59 +02:00
-  common_tag_id: 1063753732
-  id: 2873
-  filterable_id: 33
-  created_at: 2009-03-12 00:25:59 +02:00
-common_tagging_02847: 
-  filterable_type: Work
-  updated_at: 2009-03-10 01:23:56 +02:00
-  common_tag_id: 885489802
-  id: 2847
-  filterable_id: 27
-  created_at: 2009-03-10 01:23:56 +02:00
-common_tagging_00144: 
-  filterable_type: Tag
-  updated_at: 2008-12-07 23:03:56 +02:00
-  common_tag_id: 1063753756
-  id: 144
-  filterable_id: 741440589
-  created_at: 2008-12-07 23:03:56 +02:00
-common_tagging_00118: 
-  filterable_type: Work
-  updated_at: 2008-12-07 01:19:50 +02:00
-  common_tag_id: 791950904
-  id: 118
-  filterable_id: 10
-  created_at: 2008-12-07 01:19:50 +02:00
-common_tagging_00170: 
-  filterable_type: Work
-  updated_at: 2009-02-16 07:57:08 +02:00
-  common_tag_id: 1063753755
-  id: 170
-  filterable_id: 6
-  created_at: 2009-02-16 07:57:08 +02:00
-common_tagging_00225: 
-  filterable_type: Work
-  updated_at: 2009-02-19 01:53:39 +02:00
-  common_tag_id: 1063753815
-  id: 225
-  filterable_id: 14
-  created_at: 2009-02-19 01:53:39 +02:00
+  created_at: 2009-03-18 13:22:09 -07:00
 common_tagging_00037: 
   filterable_type: Work
-  updated_at: 2008-11-21 09:33:33 +02:00
+  updated_at: 2008-11-20 23:33:33 -08:00
   common_tag_id: 791950904
   id: 37
   filterable_id: 2
-  created_at: 2008-11-21 09:33:33 +02:00
-common_tagging_02874: 
+  created_at: 2008-11-20 23:33:33 -08:00
+common_tagging_00225: 
   filterable_type: Work
-  updated_at: 2009-03-12 00:25:59 +02:00
-  common_tag_id: 1063753743
-  id: 2874
-  filterable_id: 33
-  created_at: 2009-03-12 00:25:59 +02:00
-common_tagging_02848: 
+  updated_at: 2009-02-18 15:53:39 -08:00
+  common_tag_id: 1063753815
+  id: 225
+  filterable_id: 14
+  created_at: 2009-02-18 15:53:39 -08:00
+common_tagging_00170: 
   filterable_type: Work
-  updated_at: 2009-03-10 01:23:56 +02:00
-  common_tag_id: 611729728
-  id: 2848
-  filterable_id: 27
-  created_at: 2009-03-10 01:23:56 +02:00
-common_tagging_00119: 
+  updated_at: 2009-02-15 21:57:08 -08:00
+  common_tag_id: 1063753755
+  id: 170
+  filterable_id: 6
+  created_at: 2009-02-15 21:57:08 -08:00
+common_tagging_00118: 
   filterable_type: Work
-  updated_at: 2008-12-07 01:19:50 +02:00
-  common_tag_id: 545584597
-  id: 119
+  updated_at: 2008-12-06 15:19:50 -08:00
+  common_tag_id: 791950904
+  id: 118
   filterable_id: 10
-  created_at: 2008-12-07 01:19:50 +02:00
-common_tagging_00171: 
+  created_at: 2008-12-06 15:19:50 -08:00
+common_tagging_00144: 
   filterable_type: Tag
-  updated_at: 2009-02-16 07:57:09 +02:00
-  common_tag_id: 1063753744
-  id: 171
+  updated_at: 2008-12-07 13:03:56 -08:00
+  common_tag_id: 1063753756
+  id: 144
   filterable_id: 741440589
-  created_at: 2009-02-16 07:57:09 +02:00
-common_tagging_00226: 
-  filterable_type: Tag
-  updated_at: 2009-02-20 22:05:07 +02:00
-  common_tag_id: 1063753799
-  id: 226
-  filterable_id: 1063753807
-  created_at: 2009-02-20 22:05:07 +02:00
+  created_at: 2008-12-07 13:03:56 -08:00
+common_tagging_02847: 
+  filterable_type: Work
+  updated_at: 2009-03-09 16:23:56 -07:00
+  common_tag_id: 885489802
+  id: 2847
+  filterable_id: 27
+  created_at: 2009-03-09 16:23:56 -07:00
+common_tagging_02873: 
+  filterable_type: Work
+  updated_at: 2009-03-11 15:25:59 -07:00
+  common_tag_id: 1063753732
+  id: 2873
+  filterable_id: 33
+  created_at: 2009-03-11 15:25:59 -07:00
 common_tagging_00038: 
   filterable_type: Work
-  updated_at: 2008-11-21 09:33:33 +02:00
+  updated_at: 2008-11-20 23:33:33 -08:00
   common_tag_id: 791950904
   id: 38
   filterable_id: 3
-  created_at: 2008-11-21 09:33:33 +02:00
+  created_at: 2008-11-20 23:33:33 -08:00
+common_tagging_00226: 
+  filterable_type: Tag
+  updated_at: 2009-02-20 12:05:07 -08:00
+  common_tag_id: 1063753799
+  id: 226
+  filterable_id: 1063753807
+  created_at: 2009-02-20 12:05:07 -08:00
+common_tagging_00171: 
+  filterable_type: Tag
+  updated_at: 2009-02-15 21:57:09 -08:00
+  common_tag_id: 1063753744
+  id: 171
+  filterable_id: 741440589
+  created_at: 2009-02-15 21:57:09 -08:00
+common_tagging_00119: 
+  filterable_type: Work
+  updated_at: 2008-12-06 15:19:50 -08:00
+  common_tag_id: 545584597
+  id: 119
+  filterable_id: 10
+  created_at: 2008-12-06 15:19:50 -08:00
+common_tagging_02848: 
+  filterable_type: Work
+  updated_at: 2009-03-09 16:23:56 -07:00
+  common_tag_id: 611729728
+  id: 2848
+  filterable_id: 27
+  created_at: 2009-03-09 16:23:56 -07:00
+common_tagging_02874: 
+  filterable_type: Work
+  updated_at: 2009-03-11 15:25:59 -07:00
+  common_tag_id: 1063753743
+  id: 2874
+  filterable_id: 33
+  created_at: 2009-03-11 15:25:59 -07:00
 common_tagging_02955: 
   filterable_type: Tag
-  updated_at: 2009-03-19 14:31:29 +02:00
+  updated_at: 2009-03-19 05:31:29 -07:00
   common_tag_id: 1063753897
   id: 2955
   filterable_id: 951091623
-  created_at: 2009-03-19 14:31:29 +02:00
+  created_at: 2009-03-19 05:31:29 -07:00
 common_tagging_02981: 
   filterable_type: Tag
-  updated_at: 2009-03-20 22:02:27 +02:00
+  updated_at: 2009-03-20 13:02:27 -07:00
   common_tag_id: 211186876
   id: 2981
   filterable_id: 791950904
-  created_at: 2009-03-20 22:02:27 +02:00
+  created_at: 2009-03-20 13:02:27 -07:00
 common_tagging_03010: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:17:44 +02:00
+  updated_at: 2009-03-20 16:17:44 -07:00
   common_tag_id: 992891255
   id: 3010
   filterable_id: 49
-  created_at: 2009-03-21 01:17:44 +02:00
+  created_at: 2009-03-20 16:17:44 -07:00
 common_tagging_02982: 
   filterable_type: Tag
-  updated_at: 2009-03-20 22:02:53 +02:00
+  updated_at: 2009-03-20 13:02:53 -07:00
   common_tag_id: 1063753758
   id: 2982
   filterable_id: 441672848
-  created_at: 2009-03-20 22:02:53 +02:00
+  created_at: 2009-03-20 13:02:53 -07:00
 common_tagging_02956: 
   filterable_type: Tag
-  updated_at: 2009-03-19 14:37:53 +02:00
+  updated_at: 2009-03-19 05:37:53 -07:00
   common_tag_id: 1063753898
   id: 2956
   filterable_id: 951091623
-  created_at: 2009-03-19 14:37:53 +02:00
-common_tagging_00091: 
-  filterable_type: Tag
-  updated_at: 2008-11-21 09:59:52 +02:00
-  common_tag_id: 1063753753
-  id: 91
-  filterable_id: 221905380
-  created_at: 2008-11-21 09:59:52 +02:00
-common_tagging_02849: 
-  filterable_type: Work
-  updated_at: 2009-03-10 01:23:56 +02:00
-  common_tag_id: 1063753741
-  id: 2849
-  filterable_id: 27
-  created_at: 2009-03-10 01:23:56 +02:00
-common_tagging_00227: 
-  filterable_type: Work
-  updated_at: 2009-02-20 22:05:08 +02:00
-  common_tag_id: 1063753741
-  id: 227
-  filterable_id: 14
-  created_at: 2009-02-20 22:05:08 +02:00
-common_tagging_00146: 
-  filterable_type: Work
-  updated_at: 2008-12-07 23:04:06 +02:00
-  common_tag_id: 1063753774
-  id: 146
-  filterable_id: 11
-  created_at: 2008-12-07 23:04:06 +02:00
-common_tagging_00172: 
-  filterable_type: Tag
-  updated_at: 2009-02-16 07:57:30 +02:00
-  common_tag_id: 1063753784
-  id: 172
-  filterable_id: 741440589
-  created_at: 2009-02-16 07:57:30 +02:00
-common_tagging_02875: 
-  filterable_type: Work
-  updated_at: 2009-03-12 00:25:59 +02:00
-  common_tag_id: 569823665
-  id: 2875
-  filterable_id: 33
-  created_at: 2009-03-12 00:25:59 +02:00
+  created_at: 2009-03-19 05:37:53 -07:00
 common_tagging_00039: 
   filterable_type: Tag
-  updated_at: 2008-11-21 09:33:33 +02:00
+  updated_at: 2008-11-20 23:33:33 -08:00
   common_tag_id: 741440589
   id: 39
   filterable_id: 791950904
-  created_at: 2008-11-21 09:33:33 +02:00
+  created_at: 2008-11-20 23:33:33 -08:00
+common_tagging_02875: 
+  filterable_type: Work
+  updated_at: 2009-03-11 15:25:59 -07:00
+  common_tag_id: 569823665
+  id: 2875
+  filterable_id: 33
+  created_at: 2009-03-11 15:25:59 -07:00
+common_tagging_00172: 
+  filterable_type: Tag
+  updated_at: 2009-02-15 21:57:30 -08:00
+  common_tag_id: 1063753784
+  id: 172
+  filterable_id: 741440589
+  created_at: 2009-02-15 21:57:30 -08:00
+common_tagging_00146: 
+  filterable_type: Work
+  updated_at: 2008-12-07 13:04:06 -08:00
+  common_tag_id: 1063753774
+  id: 146
+  filterable_id: 11
+  created_at: 2008-12-07 13:04:06 -08:00
+common_tagging_00227: 
+  filterable_type: Work
+  updated_at: 2009-02-20 12:05:08 -08:00
+  common_tag_id: 1063753741
+  id: 227
+  filterable_id: 14
+  created_at: 2009-02-20 12:05:08 -08:00
+common_tagging_02849: 
+  filterable_type: Work
+  updated_at: 2009-03-09 16:23:56 -07:00
+  common_tag_id: 1063753741
+  id: 2849
+  filterable_id: 27
+  created_at: 2009-03-09 16:23:56 -07:00
+common_tagging_00091: 
+  filterable_type: Tag
+  updated_at: 2008-11-20 23:59:52 -08:00
+  common_tag_id: 1063753753
+  id: 91
+  filterable_id: 221905380
+  created_at: 2008-11-20 23:59:52 -08:00
 common_tagging_02929: 
   filterable_type: Tag
-  updated_at: 2009-03-18 22:25:26 +02:00
+  updated_at: 2009-03-18 13:25:26 -07:00
   common_tag_id: 1063753891
   id: 2929
   filterable_id: 569823665
-  created_at: 2009-03-18 22:25:26 +02:00
+  created_at: 2009-03-18 13:25:26 -07:00
 common_tagging_00066: 
   filterable_type: Tag
-  updated_at: 2008-11-21 09:56:56 +02:00
+  updated_at: 2008-11-20 23:56:56 -08:00
   common_tag_id: 1063753751
   id: 66
   filterable_id: 951091623
-  created_at: 2008-11-21 09:56:56 +02:00
-common_tagging_00228: 
-  filterable_type: Work
-  updated_at: 2009-02-20 22:05:08 +02:00
-  common_tag_id: 1063753807
-  id: 228
-  filterable_id: 14
-  created_at: 2009-02-20 22:05:08 +02:00
-common_tagging_00173: 
-  filterable_type: Tag
-  updated_at: 2009-02-16 07:57:47 +02:00
-  common_tag_id: 1063753784
-  id: 173
-  filterable_id: 221905380
-  created_at: 2009-02-16 07:57:47 +02:00
-common_tagging_00147: 
-  filterable_type: Work
-  updated_at: 2008-12-07 23:04:06 +02:00
-  common_tag_id: 1063753776
-  id: 147
-  filterable_id: 11
-  created_at: 2008-12-07 23:04:06 +02:00
+  created_at: 2008-11-20 23:56:56 -08:00
 common_tagging_02876: 
   filterable_type: Work
-  updated_at: 2009-03-12 00:25:59 +02:00
+  updated_at: 2009-03-11 15:25:59 -07:00
   common_tag_id: 791950904
   id: 2876
   filterable_id: 33
-  created_at: 2009-03-12 00:25:59 +02:00
+  created_at: 2009-03-11 15:25:59 -07:00
+common_tagging_00147: 
+  filterable_type: Work
+  updated_at: 2008-12-07 13:04:06 -08:00
+  common_tag_id: 1063753776
+  id: 147
+  filterable_id: 11
+  created_at: 2008-12-07 13:04:06 -08:00
+common_tagging_00173: 
+  filterable_type: Tag
+  updated_at: 2009-02-15 21:57:47 -08:00
+  common_tag_id: 1063753784
+  id: 173
+  filterable_id: 221905380
+  created_at: 2009-02-15 21:57:47 -08:00
+common_tagging_00228: 
+  filterable_type: Work
+  updated_at: 2009-02-20 12:05:08 -08:00
+  common_tag_id: 1063753807
+  id: 228
+  filterable_id: 14
+  created_at: 2009-02-20 12:05:08 -08:00
 common_tagging_00092: 
   filterable_type: Work
-  updated_at: 2008-11-21 09:59:52 +02:00
+  updated_at: 2008-11-20 23:59:52 -08:00
   common_tag_id: 221905380
   id: 92
   filterable_id: 4
-  created_at: 2008-11-21 09:59:52 +02:00
+  created_at: 2008-11-20 23:59:52 -08:00
 common_tagging_02957: 
   filterable_type: Tag
-  updated_at: 2009-03-19 14:42:04 +02:00
+  updated_at: 2009-03-19 05:42:04 -07:00
   common_tag_id: 1063753899
   id: 2957
   filterable_id: 951091623
-  created_at: 2009-03-19 14:42:04 +02:00
+  created_at: 2009-03-19 05:42:04 -07:00
 common_tagging_02983: 
   filterable_type: Work
-  updated_at: 2009-03-20 22:02:53 +02:00
+  updated_at: 2009-03-20 13:02:53 -07:00
   common_tag_id: 1063753758
   id: 2983
   filterable_id: 7
-  created_at: 2009-03-20 22:02:53 +02:00
+  created_at: 2009-03-20 13:02:53 -07:00
 common_tagging_03011: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:17:44 +02:00
+  updated_at: 2009-03-20 16:17:44 -07:00
   common_tag_id: 1063753736
   id: 3011
   filterable_id: 49
-  created_at: 2009-03-21 01:17:44 +02:00
+  created_at: 2009-03-20 16:17:44 -07:00
 common_tagging_03012: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:17:44 +02:00
+  updated_at: 2009-03-20 16:17:44 -07:00
   common_tag_id: 751871740
   id: 3012
   filterable_id: 49
-  created_at: 2009-03-21 01:17:44 +02:00
+  created_at: 2009-03-20 16:17:44 -07:00
 common_tagging_02984: 
   filterable_type: Work
-  updated_at: 2009-03-20 22:02:53 +02:00
+  updated_at: 2009-03-20 13:02:53 -07:00
   common_tag_id: 441672848
   id: 2984
   filterable_id: 7
-  created_at: 2009-03-20 22:02:53 +02:00
+  created_at: 2009-03-20 13:02:53 -07:00
 common_tagging_02958: 
   filterable_type: Tag
-  updated_at: 2009-03-19 14:44:50 +02:00
+  updated_at: 2009-03-19 05:44:50 -07:00
   common_tag_id: 1063753899
   id: 2958
   filterable_id: 1063753752
-  created_at: 2009-03-19 14:44:50 +02:00
+  created_at: 2009-03-19 05:44:50 -07:00
 common_tagging_02877: 
   filterable_type: Work
-  updated_at: 2009-03-12 00:31:04 +02:00
+  updated_at: 2009-03-11 15:31:04 -07:00
   common_tag_id: 1063753733
   id: 2877
   filterable_id: 34
-  created_at: 2009-03-12 00:31:04 +02:00
-common_tagging_00067: 
-  filterable_type: Tag
-  updated_at: 2008-11-21 09:56:56 +02:00
-  common_tag_id: 1063753752
-  id: 67
-  filterable_id: 951091623
-  created_at: 2008-11-21 09:56:56 +02:00
-common_tagging_00229: 
-  filterable_type: Tag
-  updated_at: 2009-02-20 22:05:08 +02:00
-  common_tag_id: 1063753800
-  id: 229
-  filterable_id: 1063753807
-  created_at: 2009-02-20 22:05:08 +02:00
-common_tagging_00148: 
-  filterable_type: Work
-  updated_at: 2008-12-07 23:04:07 +02:00
-  common_tag_id: 1063753775
-  id: 148
-  filterable_id: 11
-  created_at: 2008-12-07 23:04:07 +02:00
-common_tagging_00174: 
-  filterable_type: Tag
-  updated_at: 2009-02-16 07:59:56 +02:00
-  common_tag_id: 1063753753
-  id: 174
-  filterable_id: 741440589
-  created_at: 2009-02-16 07:59:56 +02:00
-common_tagging_02796: 
-  filterable_type: Tag
-  updated_at: 2009-02-22 02:40:43 +02:00
-  common_tag_id: 1063753819
-  id: 2796
-  filterable_id: 951091623
-  created_at: 2009-02-22 02:40:43 +02:00
+  created_at: 2009-03-11 15:31:04 -07:00
 common_tagging_00093: 
   filterable_type: Work
-  updated_at: 2008-11-21 09:59:52 +02:00
+  updated_at: 2008-11-20 23:59:52 -08:00
   common_tag_id: 0
   id: 93
   filterable_id: 4
-  created_at: 2008-11-21 09:59:52 +02:00
-common_tagging_00149: 
-  filterable_type: Work
-  updated_at: 2008-12-07 23:04:52 +02:00
-  common_tag_id: 1063753784
-  id: 149
-  filterable_id: 13
-  created_at: 2008-12-07 23:04:52 +02:00
-common_tagging_00175: 
+  created_at: 2008-11-20 23:59:52 -08:00
+common_tagging_02796: 
   filterable_type: Tag
-  updated_at: 2009-02-16 08:01:04 +02:00
-  common_tag_id: 1063753808
-  id: 175
-  filterable_id: 1063753780
-  created_at: 2009-02-16 08:01:04 +02:00
+  updated_at: 2009-02-21 16:40:43 -08:00
+  common_tag_id: 1063753819
+  id: 2796
+  filterable_id: 951091623
+  created_at: 2009-02-21 16:40:43 -08:00
+common_tagging_00174: 
+  filterable_type: Tag
+  updated_at: 2009-02-15 21:59:56 -08:00
+  common_tag_id: 1063753753
+  id: 174
+  filterable_id: 741440589
+  created_at: 2009-02-15 21:59:56 -08:00
+common_tagging_00148: 
+  filterable_type: Work
+  updated_at: 2008-12-07 13:04:07 -08:00
+  common_tag_id: 1063753775
+  id: 148
+  filterable_id: 11
+  created_at: 2008-12-07 13:04:07 -08:00
+common_tagging_00229: 
+  filterable_type: Tag
+  updated_at: 2009-02-20 12:05:08 -08:00
+  common_tag_id: 1063753800
+  id: 229
+  filterable_id: 1063753807
+  created_at: 2009-02-20 12:05:08 -08:00
+common_tagging_00067: 
+  filterable_type: Tag
+  updated_at: 2008-11-20 23:56:56 -08:00
+  common_tag_id: 1063753752
+  id: 67
+  filterable_id: 951091623
+  created_at: 2008-11-20 23:56:56 -08:00
 common_tagging_02797: 
   filterable_type: Tag
-  updated_at: 2009-02-22 04:28:48 +02:00
+  updated_at: 2009-02-21 18:28:48 -08:00
   common_tag_id: 1063753820
   id: 2797
   filterable_id: 951091623
-  created_at: 2009-02-22 04:28:48 +02:00
+  created_at: 2009-02-21 18:28:48 -08:00
+common_tagging_00175: 
+  filterable_type: Tag
+  updated_at: 2009-02-15 22:01:04 -08:00
+  common_tag_id: 1063753808
+  id: 175
+  filterable_id: 1063753780
+  created_at: 2009-02-15 22:01:04 -08:00
+common_tagging_00149: 
+  filterable_type: Work
+  updated_at: 2008-12-07 13:04:52 -08:00
+  common_tag_id: 1063753784
+  id: 149
+  filterable_id: 13
+  created_at: 2008-12-07 13:04:52 -08:00
 common_tagging_02878: 
   filterable_type: Work
-  updated_at: 2009-03-12 00:31:04 +02:00
+  updated_at: 2009-03-11 15:31:04 -07:00
   common_tag_id: 426547448
   id: 2878
   filterable_id: 34
-  created_at: 2009-03-12 00:31:04 +02:00
+  created_at: 2009-03-11 15:31:04 -07:00
 common_tagging_02959: 
   filterable_type: Tag
-  updated_at: 2009-03-19 14:47:53 +02:00
+  updated_at: 2009-03-19 05:47:53 -07:00
   common_tag_id: 1063753900
   id: 2959
   filterable_id: 951091623
-  created_at: 2009-03-19 14:47:53 +02:00
+  created_at: 2009-03-19 05:47:53 -07:00
 common_tagging_02985: 
   filterable_type: Work
-  updated_at: 2009-03-20 22:02:54 +02:00
+  updated_at: 2009-03-20 13:02:54 -07:00
   common_tag_id: 1063753758
   id: 2985
   filterable_id: 8
-  created_at: 2009-03-20 22:02:54 +02:00
+  created_at: 2009-03-20 13:02:54 -07:00
 common_tagging_03013: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:17:44 +02:00
+  updated_at: 2009-03-20 16:17:44 -07:00
   common_tag_id: 951091623
   id: 3013
   filterable_id: 49
-  created_at: 2009-03-21 01:17:44 +02:00
+  created_at: 2009-03-20 16:17:44 -07:00
 common_tagging_03014: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:17:44 +02:00
+  updated_at: 2009-03-20 16:17:44 -07:00
   common_tag_id: 791950904
   id: 3014
   filterable_id: 49
-  created_at: 2009-03-21 01:17:44 +02:00
+  created_at: 2009-03-20 16:17:44 -07:00
 common_tagging_02986: 
   filterable_type: Work
-  updated_at: 2009-03-20 22:02:54 +02:00
+  updated_at: 2009-03-20 13:02:54 -07:00
   common_tag_id: 441672848
   id: 2986
   filterable_id: 8
-  created_at: 2009-03-20 22:02:54 +02:00
+  created_at: 2009-03-20 13:02:54 -07:00
 common_tagging_02879: 
   filterable_type: Work
-  updated_at: 2009-03-12 00:31:04 +02:00
+  updated_at: 2009-03-11 15:31:04 -07:00
   common_tag_id: 402275454
   id: 2879
   filterable_id: 34
-  created_at: 2009-03-12 00:31:04 +02:00
-common_tagging_02798: 
-  filterable_type: Tag
-  updated_at: 2009-02-22 04:31:13 +02:00
-  common_tag_id: 1063753822
-  id: 2798
-  filterable_id: 791950904
-  created_at: 2009-02-22 04:31:13 +02:00
-common_tagging_00176: 
-  filterable_type: Tag
-  updated_at: 2009-02-16 08:01:04 +02:00
-  common_tag_id: 1063753808
-  id: 176
-  filterable_id: 1063753738
-  created_at: 2009-02-16 08:01:04 +02:00
+  created_at: 2009-03-11 15:31:04 -07:00
 common_tagging_00095: 
   filterable_type: Tag
-  updated_at: 2008-11-21 09:59:52 +02:00
+  updated_at: 2008-11-20 23:59:52 -08:00
   common_tag_id: 1063753753
   id: 95
   filterable_id: 26796919
-  created_at: 2008-11-21 09:59:52 +02:00
-common_tagging_02799: 
+  created_at: 2008-11-20 23:59:52 -08:00
+common_tagging_00176: 
   filterable_type: Tag
-  updated_at: 2009-02-22 04:31:24 +02:00
-  common_tag_id: 1063753821
-  id: 2799
-  filterable_id: 1063753822
-  created_at: 2009-02-22 04:31:24 +02:00
+  updated_at: 2009-02-15 22:01:04 -08:00
+  common_tag_id: 1063753808
+  id: 176
+  filterable_id: 1063753738
+  created_at: 2009-02-15 22:01:04 -08:00
+common_tagging_02798: 
+  filterable_type: Tag
+  updated_at: 2009-02-21 18:31:13 -08:00
+  common_tag_id: 1063753822
+  id: 2798
+  filterable_id: 791950904
+  created_at: 2009-02-21 18:31:13 -08:00
 common_tagging_00096: 
   filterable_type: Work
-  updated_at: 2008-11-21 09:59:52 +02:00
+  updated_at: 2008-11-20 23:59:52 -08:00
   common_tag_id: 26796919
   id: 96
   filterable_id: 4
-  created_at: 2008-11-21 09:59:52 +02:00
+  created_at: 2008-11-20 23:59:52 -08:00
+common_tagging_02799: 
+  filterable_type: Tag
+  updated_at: 2009-02-21 18:31:24 -08:00
+  common_tag_id: 1063753821
+  id: 2799
+  filterable_id: 1063753822
+  created_at: 2009-02-21 18:31:24 -08:00
 common_tagging_02987: 
   filterable_type: Work
-  updated_at: 2009-03-20 22:02:54 +02:00
+  updated_at: 2009-03-20 13:02:54 -07:00
   common_tag_id: 1063753758
   id: 2987
   filterable_id: 9
-  created_at: 2009-03-20 22:02:54 +02:00
+  created_at: 2009-03-20 13:02:54 -07:00
 common_tagging_03015: 
   filterable_type: Work
-  updated_at: 2009-03-21 01:17:44 +02:00
+  updated_at: 2009-03-20 16:17:44 -07:00
   common_tag_id: 1063753811
   id: 3015
   filterable_id: 49
-  created_at: 2009-03-21 01:17:44 +02:00
+  created_at: 2009-03-20 16:17:44 -07:00

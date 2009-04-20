@@ -1,5 +1,5 @@
 class PseudsController < ApplicationController
-  
+
   before_filter :load_user
   before_filter :check_ownership, :only => [:create, :edit, :destroy, :new, :update]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
@@ -18,7 +18,7 @@ class PseudsController < ApplicationController
       redirect_to people_path
     end
   end
-  
+
   # GET /pseuds/1
   # GET /pseuds/1.xml
   def show
@@ -28,9 +28,9 @@ class PseudsController < ApplicationController
         flash[:error] = t('pseud_not_found', :default => "Sorry, could not find this pseud.")
         redirect_to :action => :index and return
       end
-      @works = Work.written_by_conditions([@author]).visible.ordered('revised_at', 'DESC').limited(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+      @works = Work.written_by_conditions([@author]).visible.ordered_by_date_desc.limited(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
       @series = @author.series.find(:all, :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'series.updated_at DESC').select{|s| s.visible?(current_user)}
-      @bookmarks = @author.bookmarks.visible(:limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'bookmarks.updated_at DESC')  
+      @bookmarks = @author.bookmarks.visible(:limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'bookmarks.updated_at DESC')
     else
       @pseuds = Pseud.find_all_by_name(params[:id])
       if @pseuds.size == 0
@@ -45,7 +45,7 @@ class PseudsController < ApplicationController
       end
     end
   end
-  
+
   # For use with work/chapter forms
   def choose_coauthors
     byline = params[:search].strip
@@ -63,18 +63,18 @@ class PseudsController < ApplicationController
         format.js
       end
   end
-  
+
   # GET /pseuds/new
   # GET /pseuds/new.xml
   def new
     @pseud = @user.pseuds.build
   end
-  
+
   # GET /pseuds/1/edit
   def edit
     @pseud = @user.pseuds.find_by_name(params[:id])
   end
-  
+
   # POST /pseuds
   # POST /pseuds.xml
   def create
@@ -99,7 +99,7 @@ class PseudsController < ApplicationController
       render :action => "new"
     end
   end
-  
+
   # PUT /pseuds/1
   # PUT /pseuds/1.xml
   def update
@@ -110,14 +110,14 @@ class PseudsController < ApplicationController
       if @pseud.is_default and not(default == @pseud)
         # if setting this one as default, unset the attribute of the current active pseud
         default.update_attribute(:is_default, false)
-      end   
+      end
       flash[:notice] = t('successfully_updated', :default => 'Pseud was successfully updated.')
-     redirect_to([@user, @pseud]) 
+     redirect_to([@user, @pseud])
     else
       render :action => "edit"
     end
   end
-  
+
   # DELETE /pseuds/1
   # DELETE /pseuds/1.xml
   def destroy
@@ -130,7 +130,7 @@ class PseudsController < ApplicationController
       @pseud.replace_me_with_default
       flash[:notice] = t('successfully_deleted', :default => "The pseud was successfully deleted.")
    end
-    
-    redirect_to(user_pseuds_url(@user)) 
+
+    redirect_to(user_pseuds_url(@user))
   end
 end

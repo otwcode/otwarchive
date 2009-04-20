@@ -78,19 +78,19 @@ namespace :After do
 #       end
 #     end
 #   end
-#   desc "Fix revised_at and published_at dates on works"
-#   task(:after_20090307152243_fix_revised_at_dates => :environment) do
-#     ThinkingSphinx.deltas_enabled=false
-#     Work.find(:all, :conditions => {:published_at => nil}).each do |work|
-#       chapter_date = work.chapters.find(:last).created_at
-#       work.update_attribute(:published_at, work.created_at)
-#       work.update_attribute(:revised_at, chapter_date)
-#     end
-#     Work.find(:all, :conditions => {:revised_at => nil}).each do |w|
-#       w.update_attribute(:revised_at, w.published_at)
-#     end
-#     ThinkingSphinx.deltas_enabled=true
-#   end
+  desc "Fix revised_at and published_at dates on works"
+  task(:after_20090307152243_fix_revised_at_dates => :environment) do
+    ThinkingSphinx.deltas_enabled=false
+    Work.find(:all, :conditions => {:published_at => nil}).each do |work|
+      chapter_date = work.chapters.find(:last).created_at
+      work.update_attribute(:published_at, work.created_at)
+      work.update_attribute(:revised_at, chapter_date)
+    end
+    Work.find(:all, :conditions => {:revised_at => nil}).each do |w|
+      w.update_attribute(:revised_at, w.published_at)
+    end
+    ThinkingSphinx.deltas_enabled=true
+  end
   desc "update all works with default language"
   task(:after_20090329002541_split_locales_and_languages => :environment) do
     Work.update_all(["language_id = (?)", Language.default.id]) if Language.default
@@ -133,5 +133,18 @@ namespace :After do
         t.destroy
       end
     end
+  end
+  desc "update sort strings on works - SLOW - prints ids for works which didn't update"
+  task(:after_20090419184639_add_columns_to_work => :environment) do
+    ThinkingSphinx.deltas_enabled=false
+    category = Category.find_by_name("Other")
+    Work.all.each do |work|
+      work.categories=[category] if work.categories.blank?
+      ok1 = work.update_attribute(:title_to_sort_on, work.sorted_title)
+      ok2 = work.update_attribute(:authors_to_sort_on, work.sorted_pseuds)
+      puts "something went wrong with: " + work.id.to_s unless (ok1 && ok2 || !work.published_at)
+      puts "." if work.id.modulo(100) == 0
+    end
+    ThinkingSphinx.deltas_enabled=true
   end
 end

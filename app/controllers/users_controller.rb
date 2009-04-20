@@ -3,31 +3,31 @@ class UsersController < ApplicationController
   before_filter :load_user, :only => [:show, :edit, :update, :destroy, :after_reset]
   before_filter :check_ownership, :only => [:edit, :update, :destroy]
   before_filter :check_account_creation_status, :only => [:new, :create]
-  
+
   def load_user
     @user = User.find_by_login(params[:id])
     @check_ownership_of = @user
   end
-  
+
   def check_account_creation_status
     if is_registered_user?
       flash[:error] = t('already_logged_in', :default => "You are already logged in!")
       redirect_to root_path
       return
     end
-    return true if ArchiveConfig.ACCOUNT_CREATION_ENABLED 
+    return true if ArchiveConfig.ACCOUNT_CREATION_ENABLED
     @invitation = Invitation.find_by_token(params[:invitation_token])
     if !@invitation
       flash[:error] = t('creation_suspended', :default => "Account creation is suspended at the moment. Please check back with us later.")
       redirect_to login_path
-      return 
+      return
     elsif @invitation.used?
       flash[:error] = t('invitation_used', :default => "This invitation has already been used to create an account, sorry!")
       redirect_to login_path
       return
     end
   end
-  
+
   def index
     authored_items_scope = ""
     if params[:show] == "authors"
@@ -36,14 +36,14 @@ class UsersController < ApplicationController
       authored_items_scope = logged_in_as_admin? ? ".select{|a| a.bookmarks.count > 0}" : ".select{|a| a.bookmarks.visible.size > 0}"
     end
     @pseuds_alphabet = eval("Pseud.find(:all)#{authored_items_scope}").collect {|pseud| pseud.name[0,1].upcase}.uniq.sort
-    
+
     if params[:letter] && params[:letter].is_a?(String)
       letter = params[:letter][0,1]
     else
       letter = @pseuds_alphabet[0]
     end
     @authors = eval("Pseud.alphabetical.starting_with(letter)#{authored_items_scope}").paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
-  end 
+  end
 
   # GET /users/1
   # GET /users/1.xml
@@ -56,15 +56,15 @@ class UsersController < ApplicationController
           render :action => "edit"
         end
       end
-      @works = Work.owned_by_conditions(@user).visible.ordered('revised_at', 'DESC').limited(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+      @works = Work.owned_by_conditions(@user).visible.ordered_by_date_desc.limited(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
       @series = @user.series.find(:all, :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'series.updated_at DESC').select{|s| s.visible?(current_user)}
-      @bookmarks = @user.bookmarks.visible(:limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'bookmarks.updated_at DESC')  
+      @bookmarks = @user.bookmarks.visible(:limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :order => 'bookmarks.updated_at DESC')
     else
       flash[:error] = t('not_found', :default => "Sorry, there's no user by that name.")
-      redirect_to '/'  
+      redirect_to '/'
     end
   end
-  
+
   # GET /users/new
   # GET /users/new.xml
   def new
@@ -72,11 +72,11 @@ class UsersController < ApplicationController
     @user.email = @user.invitation.recipient_email if @user.invitation
     @hide_dashboard = true
   end
-  
+
   # GET /users/1/edit
   def edit
   end
-  
+
   # POST /users
   # POST /users.xml
   def create
@@ -84,7 +84,7 @@ class UsersController < ApplicationController
     if params[:cancel_create_account]
       redirect_to root_path
     else
-      @user = User.new(params[:user]) 
+      @user = User.new(params[:user])
       unless @user.identity_url.blank?
         # normalize OpenID url before validating
         @user.identity_url = OpenIdAuthentication.normalize_identifier(@user.identity_url)
@@ -101,7 +101,7 @@ class UsersController < ApplicationController
       end
     end
   end
-  
+
   def activate
     if params[:id].blank?
       flash[:error] = t('activation_key_missing', :default => "Your activation key is missing.")
@@ -115,18 +115,18 @@ class UsersController < ApplicationController
        redirect_to(@user)
       else
         flash[:error] = t('activation_key_invalid', :default => "Your activation key is invalid. Perhaps it has expired.")
-       redirect_to '' 
+       redirect_to ''
       end
     end
   end
-  
+
   def after_reset
   end
-  
+
   # PUT /users/1
   # PUT /users/1.xml
   def update
-    begin 
+    begin
       if @user.profile
         @user.profile.update_attributes! params[:profile_attributes]
       else
@@ -134,7 +134,7 @@ class UsersController < ApplicationController
         @user.profile.save!
       end
       if @user.recently_reset? && params[:change_password]
-        successful_update 
+        successful_update
       elsif params[:user] && !params[:user][:password].blank? && !@user.authenticated?(params[:user][:password], @user.salt) && !@user.authenticated?(params[:check][:password_check], @user.salt)
         flash[:error] = t('old_password_incorrect', :default => "Your old password was incorrect")
         unsuccessful_update
@@ -150,13 +150,13 @@ class UsersController < ApplicationController
         end
       else
         successful_update
-      end      
+      end
     rescue
       flash[:error] = t('update_failed', :default => "Your update failed; please try again.")
       render :action => "edit"
     end
   end
-  
+
   # DELETE /users/1
   # DELETE /users/1.xml
   def destroy
@@ -197,7 +197,7 @@ class UsersController < ApplicationController
             pseuds_with_author_removed = w.pseuds - @user.pseuds
             w.pseuds = pseuds_with_author_removed
             w.save
-            w.chapters.each do |c| 
+            w.chapters.each do |c|
               c.pseuds = c.pseuds - @user.pseuds
               if c.pseuds.empty?
                 c.pseuds = w.pseuds
@@ -205,18 +205,18 @@ class UsersController < ApplicationController
               c.save
             end
           end
-        end  
+        end
         # Orphans works where user is sole author, keeps their pseud on the orphan account
         if params[:sole_author] == 'keep_pseud'
           pseuds = @user.pseuds
           works = @sole_authored_works
-          use_default = params[:use_default] == "true"        
+          use_default = params[:use_default] == "true"
           Creatorship.orphan(pseuds, works, use_default)
           # Orphans works where user is sole author, uses the default orphan pseud
         elsif params[:sole_author] == 'orphan_pseud'
           pseuds = @user.pseuds
           works = @sole_authored_works
-          Creatorship.orphan(pseuds, works)        
+          Creatorship.orphan(pseuds, works)
           # Deletes works where user is sole author
         elsif params[:sole_author] == 'delete'
           @sole_authored_works.each do |s|
@@ -233,39 +233,39 @@ class UsersController < ApplicationController
           redirect_to(delete_confirmation_path)
         else
           flash[:error] = t('deletion_failed', :default => "Sorry, something went wrong! Please try again.")
-          redirect_to(@user)      
+          redirect_to(@user)
         end
       end
     end
   end
-  
+
   def delete_confirmation
   end
-  
- 
+
+
   protected
     def successful_update
       params[:user][:recently_reset] = false
-      @user.update_attributes!(params[:user]) 
+      @user.update_attributes!(params[:user])
       flash[:notice] = t('profile_updated', :default => 'Your profile has been successfully updated.')
-      redirect_to(user_profile_path(@user)) 
+      redirect_to(user_profile_path(@user))
     end
-    
+
     def unsuccessful_update
        raise
     end
-      
+
     def open_id_authentication(openid_url)
       authenticate_with_open_id(openid_url) do |result, identity_url, registration|
         if result.successful?
-          @user.update_attribute(:identity_url, identity_url) 
+          @user.update_attribute(:identity_url, identity_url)
           flash[:notice] = t('profile_updated', :default => 'Your profile has been successfully updated.')
-          redirect_to(user_profile_path(@user)) 
+          redirect_to(user_profile_path(@user))
         else
           flash[:error] = result.message
           raise
-        end 
+        end
       end
     end
-     
+
 end

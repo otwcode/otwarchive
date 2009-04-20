@@ -11,11 +11,11 @@ class WorksController < ApplicationController
   before_filter :check_visibility, :only => [ :show ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :upload_work ]
   before_filter :update_or_create_reading, :only => [ :show ]
-  
+
   def load_work
     @work = Work.find(params[:id])
     @check_ownership_of = @work
-    @check_visibility_of = @work  
+    @check_visibility_of = @work
   end
 
   # Sets values for @work, @chapter, @coauthor_results, @pseuds, and @selected_pseuds
@@ -94,7 +94,7 @@ class WorksController < ApplicationController
     @user = nil
     @selected_tags = []
     @selected_pseuds = []
-    @sort_column = params[:sort_column] || 'revised_at'
+    @sort_column = params[:sort_column] || 'date'
     @sort_direction = params["sort_direction_for_#{@sort_column}".to_sym] || 'DESC'
 
     # numerical ids for now
@@ -162,12 +162,11 @@ class WorksController < ApplicationController
       @language_id = params[:language_id] ? Language.find_by_short(params[:language_id]) : nil
 
       # Now let's build the query
-      page_args = {:page => params[:page], :per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE)}
       @works, @filters, @pseuds = Work.find_with_options(:user => @user, :author => @author, :selected_tags => @selected_tags,
                                                     :selected_pseuds => @selected_pseuds,
                                                     :language_id => @language_id,
                                                     :sort_column => @sort_column, :sort_direction => @sort_direction,
-                                                    :page_args => page_args)
+                                                    :page => params[:page], :per_page => params[:per_page])
     end
 
     # we now have @works found

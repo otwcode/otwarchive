@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090419175827) do
+ActiveRecord::Schema.define(:version => 20090419184639) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -77,9 +77,9 @@ ActiveRecord::Schema.define(:version => 20090419175827) do
   end
 
   create_table "common_taggings", :force => true do |t|
-    t.integer  "common_tag_id",   :limit => 8, :null => false
-    t.integer  "filterable_id",   :limit => 8, :null => false
-    t.string   "filterable_type",              :null => false
+    t.integer  "common_tag_id",   :limit => 8,  :null => false
+    t.integer  "filterable_id",   :limit => 8,  :null => false
+    t.string   "filterable_type", :limit => 50, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -96,7 +96,7 @@ ActiveRecord::Schema.define(:version => 20090419175827) do
 
   create_table "creatorships", :force => true do |t|
     t.integer  "creation_id",   :limit => 8
-    t.string   "creation_type"
+    t.string   "creation_type", :limit => 100
     t.integer  "pseud_id",      :limit => 8
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -258,10 +258,10 @@ ActiveRecord::Schema.define(:version => 20090419175827) do
   end
 
   create_table "tag_categories", :force => true do |t|
-    t.string   "name",         :default => "",    :null => false
-    t.boolean  "required",     :default => false, :null => false
-    t.boolean  "official",     :default => false, :null => false
-    t.boolean  "exclusive",    :default => false, :null => false
+    t.string   "name",         :limit => 100, :default => "",    :null => false
+    t.boolean  "required",                    :default => false, :null => false
+    t.boolean  "official",                    :default => false, :null => false
+    t.boolean  "exclusive",                   :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "display_name"
@@ -286,28 +286,28 @@ ActiveRecord::Schema.define(:version => 20090419175827) do
 
   create_table "taggings", :force => true do |t|
     t.integer  "tagger_id",     :limit => 8
-    t.integer  "taggable_id",   :limit => 8,                 :null => false
-    t.string   "taggable_type",              :default => "", :null => false
+    t.integer  "taggable_id",   :limit => 8,                   :null => false
+    t.string   "taggable_type", :limit => 100, :default => "", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "tagger_type"
+    t.string   "tagger_type",   :limit => 100
   end
 
   add_index "taggings", ["tagger_id", "tagger_type", "taggable_id", "taggable_type"], :name => "index_taggings_polymorphic", :unique => true
 
   create_table "tags", :force => true do |t|
-    t.string   "name",                         :default => "",    :null => false
-    t.boolean  "canonical",                    :default => false, :null => false
+    t.string   "name",            :limit => 100, :default => "",    :null => false
+    t.boolean  "canonical",                      :default => false, :null => false
     t.integer  "tag_category_id", :limit => 8
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "taggings_count",  :limit => 8, :default => 0
-    t.boolean  "adult",                        :default => false
+    t.integer  "taggings_count",  :limit => 8,   :default => 0
+    t.boolean  "adult",                          :default => false
     t.string   "type"
     t.integer  "media_id",        :limit => 8
     t.integer  "fandom_id",       :limit => 8
     t.integer  "merger_id",       :limit => 8
-    t.boolean  "has_characters",               :default => false, :null => false
+    t.boolean  "has_characters",                 :default => false, :null => false
   end
 
   add_index "tags", ["name"], :name => "index_tags_on_name", :unique => true
@@ -348,12 +348,12 @@ ActiveRecord::Schema.define(:version => 20090419175827) do
     t.datetime "activated_at"
     t.string   "crypted_password"
     t.string   "salt"
-    t.string   "identity_url"
-    t.boolean  "recently_reset",                         :default => false, :null => false
-    t.boolean  "suspended",                              :default => false, :null => false
-    t.boolean  "banned",                                 :default => false, :null => false
+    t.string   "identity_url",              :limit => 191
+    t.boolean  "recently_reset",                           :default => false, :null => false
+    t.boolean  "suspended",                                :default => false, :null => false
+    t.boolean  "banned",                                   :default => false, :null => false
     t.integer  "invitation_id",             :limit => 8
-    t.integer  "invitation_limit",          :limit => 8, :default => 1
+    t.integer  "invitation_limit",          :limit => 8,   :default => 1
   end
 
   add_index "users", ["identity_url"], :name => "index_users_on_identity_url", :unique => true
@@ -375,6 +375,8 @@ ActiveRecord::Schema.define(:version => 20090419175827) do
     t.boolean  "delta",                                    :default => false
     t.datetime "published_at"
     t.datetime "revised_at"
+    t.string   "authors_to_sort_on"
+    t.string   "title_to_sort_on"
   end
 
 end
