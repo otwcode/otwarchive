@@ -22,16 +22,16 @@ class Translation < ActiveRecord::Base
   end
 
   def update_status
+    if self.locale.main? && self.text_changed?
+      Translation.update_all('updated = 1', ['namespace = ? AND tr_key = ? AND text IS NOT NULL', self.namespace, self.tr_key])
+    elsif self.updated? && !self.text.blank?
+      self.update_attribute(:updated, false)
+    end
     return if User.current_user.blank? || User.current_user == :false
     if self.beta_id == User.current_user.id && !self.text.blank?
       self.betaed = true
     elsif self.translator_id == User.current_user.id && !self.text.blank?
       self.translated = true
-    end
-    if self.locale.main? && self.text_changed?
-      Translation.update_all('updated = 1', ['namespace = ? AND tr_key = ? AND text IS NOT NULL', self.namespace, self.tr_key])
-    elsif self.updated? && !self.text.blank?
-      self.update_attribute(:updated, false)
     end
   end
 

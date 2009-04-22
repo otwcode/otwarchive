@@ -1,3 +1,8 @@
+<div class="work-date-info">
+  <%= work_meta_list(@work) %>
+  <%= work_top_links_list(@work) %>
+</div>
+
 <!-- BEGIN navigation -->
 <%- unless @preview_mode -%>
   <% if is_author_of?(@work) -%>

@@ -4,10 +4,6 @@
 
 <!-- BEGIN work --> 
 <div class="work-show">
-  <div class="work-date-info">
-    <%= work_meta_list(@work) %>
-    <%= work_top_links_list(@work) %>
-  </div>
 	<%= render :partial => 'works/work_header' -%>
 	<%- if logged_in_as_admin? -%>
 	<%= render :partial => 'admin/admin_options', :locals => {:item => @work} %>
