@@ -34,6 +34,16 @@ Disallow:	/pt/
 Disallow:	/ru/
 Disallow:	/zh/
 Disallow:	/en/
-Disallow:	/works?*query # Googlebot is smart and knows pattern matching
-Disallow:	/works?*sort
-Disallow:	/works?*selected_tags
+# Googlebot is smart and knows pattern matching
+Disallow: /works/*?
+Disallow:	/*?*query=
+Disallow:	/*?*sort_
+Disallow:	/*?*selected_tags
+Disallow:	/*?*selected_pseuds
+Disallow: /*?*use_openid
+Disallow: /*?*view_adult
+Disallow: /*?*tag_id
+Disallow: /*?*pseud_id
+Disallow: /*?*user_id
+Disallow: /*?*pseud=
+Disallow: /people?*show=
