@@ -1,16 +1,40 @@
-body {
-    font: normal 13pt Constantia, Times, serif;
+html, body, #main, .work-show, .work-meta, .work-meta dd, .work-meta ul, .preface blockquote {
+    margin: auto;
+	padding: 0;
+	width: auto;
     color: black;
-    background: white;
-}
+    background: transparent;
+	border:none;
+	position:static;
+	}
+#main p, #main li, #main dd {
+	font: normal 11pt serif;
+	line-height:1;
+	margin:auto;
+	}
+.work-meta dd, .work-meta ul {
+	display:inline;
+	}
+#header, .footer, #dashboard-sidebar, img, #skiplinks, .navigation, .work-meta dt {
+    display: none;
+	}
 
+/*LINKS STYLING and CSS3 perks*/
 a, a:link, a:visited {
     color:black;
 	text-decoration:underline;
-}
-
-#header, .footer, #dashboard-sidebar, img, #skiplinks, .navigation {
-    display: none;
-}
+	}
+/*print urls after links*/
+.work-show a:link:after, a:visited:after {
+   content: " (" attr(href) ") ";
+   font-size: 90%;
+   }
+#chapters a[href^="/"]:after {
+  content: " (http://archiveofourown.org/en" attr(href) ") ";
+   }
+/*turns off url printing on meta tags*/
+.work-meta a:link:after, .work-meta a:visited:after {
+   content: " ";
+	}
 
 
