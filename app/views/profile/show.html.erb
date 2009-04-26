@@ -20,7 +20,7 @@
     <%- end -%>
     <%- if @user.preference.date_of_birth_visible -%>
     <dt class="birthday"><%=h t('birthday', :default => "My birthday:") %></dt>
-      <dd class="birthday"><%=l @user.profile.date_of_birth -%></dd> 
+      <dd class="birthday"><%=l(@user.profile.date_of_birth) unless @user.profile.date_of_birth.blank? -%></dd> 
     <%- end -%>
     <%- if @user.preference.email_visible -%>
     <dt class="email"><%=h t('email', :default => "My email address:") %></dt>
