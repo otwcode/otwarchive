@@ -11,7 +11,7 @@ class LanguagesController < ApplicationController
     
   def show
     @language = Language.find_by_short(params[:id])
-    @works = @language.works.visible.ordered('revised_at', 'DESC').limited(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+    @works = @language.works.recent.visible
   end
   
   def new

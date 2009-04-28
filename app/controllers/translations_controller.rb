@@ -1,8 +1,10 @@
 class TranslationsController < ApplicationController
+  before_filter :check_permission
+  def check_permission
+    permit?('translator') || permit?("translation_admin") || access_denied
+  end  
 
-  permit "translator", :permission_denied_message => "Sorry, the page you tried to access is for authorized translators only."
   before_filter :find_locale
-  
   def find_locale
     @locale = params[:locale_id] ? Locale.find_by_iso(params[:locale_id]) : @current_locale
     if @locale.main?

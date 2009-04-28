@@ -33,4 +33,19 @@ class TranslationsControllerTest < ActionController::TestCase
       should_assign_to :translations
     end
   end
+  
+  context "when logged in as a translation admin" do
+    setup do
+      @user = create_user
+      @user.is_translation_admin
+      @request.session[:user] = @user
+    end
+    context "when looking at translations" do
+      setup do
+        get :index, :locale => 'en'
+      end
+      should_render_template :index
+      should_assign_to :translations
+    end
+  end
 end
