@@ -1,9 +1,10 @@
 class TagsController < ApplicationController
-
   before_filter :check_user_status, :except => [ :show, :index, :show_hidden ]
-  permit "tag_wrangler",
-    :except => [ :show, :index, :show_hidden ],
-    :permission_denied_message => "Sorry, the page you tried to access is for authorized tag wranglers only."
+  before_filter :check_permission, :except => [ :show, :index, :show_hidden ]
+
+  def check_permission
+    logged_in_as_admin? || permit?("tag_wrangler") || access_denied
+  end
 
   # GET /tags
   # GET /tags.xml

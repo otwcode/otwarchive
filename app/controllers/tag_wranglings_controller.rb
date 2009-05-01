@@ -1,7 +1,10 @@
 class TagWranglingsController < ApplicationController
-
   before_filter :check_user_status
-  permit "tag_wrangler", :permission_denied_message => "Sorry, the page you tried to access is for authorized tag wranglers only."
+	before_filter :check_permission
+
+  def check_permission
+    logged_in_as_admin? || permit?("tag_wrangler") || access_denied
+  end
 
   def index
   end

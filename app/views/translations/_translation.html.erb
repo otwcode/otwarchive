@@ -7,7 +7,7 @@
 
     <dt><%= @locale.name %>: </dt>
     <dd>
-    <%- if current_user.id == local_translation.translator_id || current_user.id == local_translation.beta_id -%>
+    <%- if current_user.respond_to?(:id) && (current_user.id == local_translation.translator_id || current_user.id == local_translation.beta_id) -%>
       <%= f.text_area :text %>
     <%- else -%>
       <%=h local_translation.text || "(not translated yet)" %>
@@ -16,7 +16,7 @@
 
     <dt><%= "Translator" %>: </dt>
     <dd>
-    <%- if current_user.is_translation_admin? -%>
+    <%- if logged_in_as_admin? || current_user.is_translation_admin? -%>
       <%= f.collection_select :translator_id, @translators, :id, :login, :include_blank => true %>  
     <%- else -%>
       <%= local_translation.translator ? local_translation.translator.login : "(no translator assigned)" %>
@@ -25,7 +25,7 @@
 
     <dt><%= "Beta" %>: </dt>
     <dd>
-    <%- if current_user.is_translation_admin? -%>
+    <%- if logged_in_as_admin? || current_user.is_translation_admin? -%>
       <%= f.collection_select :beta_id, @translators, :id, :login, :include_blank => true %>  
     <%- else -%>
       <%= local_translation.beta ? local_translation.beta.login : "(no beta assigned)" %>
@@ -38,7 +38,7 @@
     <dt><%= "Status" %>: </dt>
     <dd><%= translation_status(translation, local_translation) %></dd>            
   </dl>
-  <%- if current_user.id == local_translation.translator_id || current_user.id == local_translation.beta_id || current_user.is_translation_admin? -%>
+  <%- if logged_in_as_admin? || current_user.id == local_translation.translator_id || current_user.id == local_translation.beta_id || current_user.is_translation_admin? -%>
   <p><%= f.submit %></p>
   <%- end -%>
 <%- end -%>

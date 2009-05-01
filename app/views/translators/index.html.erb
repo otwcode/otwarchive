@@ -28,7 +28,7 @@
       <td><%= translator.email %></td>    
     </tr>
     <%- else -%>
-      <%- for locale in translator.is_translator_for_what -%>
+      <%- for locale in translator.is_translator_for_what.compact -%>
       <tr>
         <td><%= link_to translator.login, locale_translator_path(locale.iso, translator) %></td>
         <td><%= translator.email %></td>

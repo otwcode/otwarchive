@@ -1,7 +1,8 @@
 class TranslationsController < ApplicationController
   before_filter :check_permission
+
   def check_permission
-    permit?('translator') || permit?("translation_admin") || access_denied
+    logged_in_as_admin? || permit?('translator') || permit?("translation_admin") || access_denied
   end  
 
   before_filter :find_locale
