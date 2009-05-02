@@ -78,73 +78,73 @@ namespace :After do
 #       end
 #     end
 #   end
-  desc "Fix revised_at and published_at dates on works"
-  task(:after_20090307152243_fix_revised_at_dates => :environment) do
-    ThinkingSphinx.deltas_enabled=false
-    Work.find(:all, :conditions => {:published_at => nil}).each do |work|
-      chapter_date = work.chapters.find(:last).created_at
-      work.update_attribute(:published_at, work.created_at)
-      work.update_attribute(:revised_at, chapter_date)
-    end
-    Work.find(:all, :conditions => {:revised_at => nil}).each do |w|
-      w.update_attribute(:revised_at, w.published_at)
-    end
-    ThinkingSphinx.deltas_enabled=true
-  end
-  desc "update all works with default language"
-  task(:after_20090329002541_split_locales_and_languages => :environment) do
-    Work.update_all(["language_id = (?)", Language.default.id]) if Language.default
-  end
-  desc "move bookmarks to pseuds"
-  task(:after_20090318004340_move_bookmarks_to_pseuds => :environment) do
-    if Bookmark.first.respond_to?(:user_id)
-      Bookmark.all.each do |bookmark|
-        if !bookmark.user_id.blank? && bookmark.pseud_id == 0
-          user = User.find(bookmark.user_id)
-          bookmark.update_attribute(:pseud_id, user.default_pseud.id)
-        end
-      end
-    end
-  end
-  desc "update restricted series"
-  task(:after_20090322182529_add_restricted_to_series => :environment) do
-    if Series.first.respond_to?(:restricted)
-      Series.all.each do |series|
-        restr = true
-        series.works.each do |w|
-          restr = restr && w.restricted
-        end
-        series.update_attribute(:restricted, restr)
-      end
-    end
-  end
-  desc "remove invalid inbox comments"
-  task(:revision_1207_clean_up_inbox => :environment) do
-    InboxComment.all.each do |i|
-      if i.feedback_comment.nil? || i.user.nil?
-        i.destroy
-      end
-    end
-  end
-  desc "remove invalid taggings"
-  task(:revision_1223_clean_up_taggings => :environment) do
-    Tagging.all.each do |t|
-      if t.taggable.nil? || t.tagger.nil?
-        t.destroy
-      end
-    end
-  end
-  desc "update sort strings on works - SLOW - prints ids for works which didn't update"
-  task(:after_20090419184639_add_columns_to_work => :environment) do
-    ThinkingSphinx.deltas_enabled=false
-    category = Category.find_by_name("Other")
-    Work.all.each do |work|
-      work.categories=[category] if work.categories.blank?
-      ok1 = work.update_attribute(:title_to_sort_on, work.sorted_title)
-      ok2 = work.update_attribute(:authors_to_sort_on, work.sorted_pseuds)
-      puts "something went wrong with: " + work.id.to_s unless (ok1 && ok2 || !work.published_at)
-      puts "." if work.id.modulo(100) == 0
-    end
-    ThinkingSphinx.deltas_enabled=true
-  end
+#   desc "Fix revised_at and published_at dates on works"
+#   task(:after_20090307152243_fix_revised_at_dates => :environment) do
+#     ThinkingSphinx.deltas_enabled=false
+#     Work.find(:all, :conditions => {:published_at => nil}).each do |work|
+#       chapter_date = work.chapters.find(:last).created_at
+#       work.update_attribute(:published_at, work.created_at)
+#       work.update_attribute(:revised_at, chapter_date)
+#     end
+#     Work.find(:all, :conditions => {:revised_at => nil}).each do |w|
+#       w.update_attribute(:revised_at, w.published_at)
+#     end
+#     ThinkingSphinx.deltas_enabled=true
+#   end
+#   desc "update all works with default language"
+#   task(:after_20090329002541_split_locales_and_languages => :environment) do
+#     Work.update_all(["language_id = (?)", Language.default.id]) if Language.default
+#   end
+#   desc "move bookmarks to pseuds"
+#   task(:after_20090318004340_move_bookmarks_to_pseuds => :environment) do
+#     if Bookmark.first.respond_to?(:user_id)
+#       Bookmark.all.each do |bookmark|
+#         if !bookmark.user_id.blank? && bookmark.pseud_id == 0
+#           user = User.find(bookmark.user_id)
+#           bookmark.update_attribute(:pseud_id, user.default_pseud.id)
+#         end
+#       end
+#     end
+#   end
+#   desc "update restricted series"
+#   task(:after_20090322182529_add_restricted_to_series => :environment) do
+#     if Series.first.respond_to?(:restricted)
+#       Series.all.each do |series|
+#         restr = true
+#         series.works.each do |w|
+#           restr = restr && w.restricted
+#         end
+#         series.update_attribute(:restricted, restr)
+#       end
+#     end
+#   end
+#   desc "remove invalid inbox comments"
+#   task(:revision_1207_clean_up_inbox => :environment) do
+#     InboxComment.all.each do |i|
+#       if i.feedback_comment.nil? || i.user.nil?
+#         i.destroy
+#       end
+#     end
+#   end
+#   desc "remove invalid taggings"
+#   task(:revision_1223_clean_up_taggings => :environment) do
+#     Tagging.all.each do |t|
+#       if t.taggable.nil? || t.tagger.nil?
+#         t.destroy
+#       end
+#     end
+#   end
+#   desc "update sort strings on works - SLOW - prints ids for works which didn't update"
+#   task(:after_20090419184639_add_columns_to_work => :environment) do
+#     ThinkingSphinx.deltas_enabled=false
+#     category = Category.find_by_name("Other")
+#     Work.all.each do |work|
+#       work.categories=[category] if work.categories.blank?
+#       ok1 = work.update_attribute(:title_to_sort_on, work.sorted_title)
+#       ok2 = work.update_attribute(:authors_to_sort_on, work.sorted_pseuds)
+#       puts "something went wrong with: " + work.id.to_s unless (ok1 && ok2 || !work.published_at)
+#       puts "." if work.id.modulo(100) == 0
+#     end
+#     ThinkingSphinx.deltas_enabled=true
+#   end
 end
