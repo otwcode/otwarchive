@@ -13,9 +13,8 @@
 
 	  <h4>
 	    <%- unless work.fandoms.nil? -%>
-    	  <%- work.fandoms.sort.each do |fandom| -%>
-  	  <%= link_to_tag(fandom, true) -%>
-  	  <%- end -%>
+
+      <%= work.fandoms.collect{|tag| link_to_tag(tag, true) }.join(', ') %>
   	  <%- end -%>
 		&nbsp;
 	  </h4>
@@ -31,12 +30,7 @@
 			<dt><%= t('cast_tags', :default => 'Cast') + ': ' %></dt>
 			<dd>
 				<ul id="work_<%= work.id %>_category_cast">
-				  <%- cast_tags.each do  |tag| -%>
-					  <li><%= link_to_tag(tag, true) -%>
-           <%- unless tag == cast_tags.last -%>
-              <%= "," -%>
-              	<%- end -%></li>
-					<%- end -%>
+				  <%= cast_tags.collect{|tag| '<li>' + link_to_tag(tag, true) + '</li>' }.join(', ') %>
 				</ul>
 			</dd>
 			<%- end -%>
@@ -48,13 +42,7 @@
         <%- if hide_warnings?(work) -%>
           <li><%= show_warnings_link(work) %></li> 
         <%- else -%>
-          <%- warning_tags.each  do  |tag| -%>
-          
-            <li><%= link_to_tag(tag, true) -%>
-             <%- unless tag == warning_tags.last -%>
-              <%= "," -%>
-              	<%- end -%></li>
-          <%- end -%>
+          <%= warning_tags.collect{|tag| '<li>' + link_to_tag(tag, true) + '</li>' }.join(', ') %>
         <%- end -%>
 				</ul>
 			</dd>
@@ -64,12 +52,7 @@
 			<dt><%= t('work_tags', :default => 'Tags') + ': ' %></dt>
 			<dd>
 				<ul id="work_<%= work.id %>_category_freeform">
-				  <%- freeform_tags.each do |tag| -%>
-					<li><%= link_to_tag(tag, true) -%>
-           <%- unless tag == freeform_tags.last -%>
-              <%= "," -%>
-              	<%- end -%></li>
-					<%- end -%>
+				  <%= freeform_tags.collect{|tag| '<li>' + link_to_tag(tag, true) + '</li>' }.join(', ') %>
 				</ul>
 			</dd>
 			<%- end -%>

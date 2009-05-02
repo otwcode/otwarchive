@@ -1,4 +1,4 @@
-<dl class="work-meta">
+﻿<dl class="work-meta">
   <%- work_tags = work.tags -%>
   <%- Tag::VISIBLE.each do |type| -%>
     <%- tags = work_tags.select{|tag| tag.type == type} -%>
@@ -11,15 +11,8 @@
         <ul id="work_<%= work.id %>_category_<%= type.downcase %>">
         <%- if type == "Warning" && hide_warnings?(work) -%>        
           <li><%= show_warnings_link(work) %></li> 
-        <%- else -%>
-          <%- tags.each do |tag| -%>
-            <li class="<%= type.downcase -%>">
-              <%= link_to_tag(tag, true) %> 
-              <%- unless tag == tags.last -%>
-                <%= "," %>
-              <%- end -%>
-            </li>
-          <%- end -%>
+        <%- else -%>                   
+         <%= tags.collect{|tag| "<li class=#{tag.type.downcase}>" + link_to_tag(tag, true) + '</li>' }.join(', ') %>
         <%- end -%>
         </ul>
       </dd>
