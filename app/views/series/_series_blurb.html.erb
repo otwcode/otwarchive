@@ -27,7 +27,7 @@
 			<dt><%=h 'Tags' + ': ' %></dt>
 			<dd>
 			<ul>
-				<% series.works.collect(&:tags).flatten.compact.uniq.each do |tag| %>
+				<% series.works.select{|work| work.visible(current_user)}.collect(&:tags).flatten.compact.uniq.each do |tag| %>
 				<li><%= link_to_tag(tag, true) -%></li>
 				<% end %>
 			</ul>
@@ -40,9 +40,9 @@
 		<li class="stats">
 			<dl>
 			<dt><%=h 'Words' + ': ' %></dt> 
-				<dd><%= number_with_delimiter(series.works.collect(&:word_count).sum) %></dd>
+				<dd><%= number_with_delimiter(series.works.select{|work| work.visible(current_user)}.collect(&:word_count).sum) %></dd>
 			<dt><%=h 'Works' + ': ' %></dt> 
-				<dd><%=h series.serial_works.count %></dd>
+				<dd><%=h series.serial_works.select{|sw| sw.work.visible(current_user)}.size %></dd>
 			</dl>
 		</li>
 	</ul>
