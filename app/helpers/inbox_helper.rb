@@ -9,7 +9,7 @@ module InboxHelper
     if comment.pseud.nil?
       return comment.name
     else
-      return link_to(comment.pseud.name, [comment.pseud.user, comment.pseud])
+      return link_to(comment.pseud.byline, [comment.pseud.user, comment.pseud])
     end
   end
   

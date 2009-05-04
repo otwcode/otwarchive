@@ -15,7 +15,7 @@ module CommentsHelper
   # return pseudname or email address for comment
   def get_pseud_or_mailaddress(comment)
     if comment.pseud_id
-      link_to comment.pseud.name, [comment.pseud.user, comment.pseud]
+      link_to comment.pseud.byline, [comment.pseud.user, comment.pseud]
     else
       comment.name
     end

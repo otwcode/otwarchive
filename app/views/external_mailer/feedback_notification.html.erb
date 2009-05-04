@@ -1,4 +1,4 @@
-<%=h @comment.name || @comment.pseud.name %> <%=h t('external_mailer.feedback.replied_to', :default => 'replied to your comment:') %>
+<%=h @comment.name || @comment.pseud.byline %> <%=h t('external_mailer.feedback.replied_to', :default => 'replied to your comment:') %>
 
 <p><%=h @comment.content %></p>
 

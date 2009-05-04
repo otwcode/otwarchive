@@ -51,7 +51,7 @@
       <%- unless bookmark.notes.blank? -%>
         <%=sanitize_limit_and_format_for_display bookmark.notes %>
   	  <%- end -%>
-  	  <p class="byline">- <%= link_to bookmark.pseud.name, [bookmark.pseud.user, bookmark.pseud] %></p>
+  	  <p class="byline">- <%= link_to bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud] %></p>
     </li>
     <%- if is_author_of?(bookmark) -%>
     <li>
