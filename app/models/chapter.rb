@@ -34,7 +34,6 @@ class Chapter < ActiveRecord::Base
 
   before_save :validate_authors, :clean_title
   before_save :set_word_count
-  after_save :save_creatorships
   
   named_scope :in_order, {:order => :position}
   named_scope :posted, :conditions => {:posted => true}
@@ -109,20 +108,7 @@ class Chapter < ActiveRecord::Base
   def set_word_count
     self.word_count = sanitize_fully(self.content).split.length
   end
-  
-  # Save creatorships after the chapter is saved
-  def save_creatorships
-    if self.authors
-      new = self.authors - self.pseuds
-      self.pseuds << new rescue nil
-      self.work.pseuds << new rescue nil
-    end
-    if self.toremove
-      self.pseuds.delete(self.toremove)
-      self.work.pseuds.delete(self.toremove)
-    end
-  end
-  
+    
   before_save = :format_content
   # Format and clean up (but don't sanitize here) the content
   def format_content

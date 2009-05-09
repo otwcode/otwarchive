@@ -19,7 +19,7 @@ class CommentsController < ApplicationController
   
   # Must be able to delete other people's comments on owned works, not just owned comments!
   def check_permission_to_delete
-    access_denied(:redirect => @check_ownership_of) unless current_user_owns?(@check_ownership_of) || (@check_ownership_of.is_a?(Comment) && current_user_owns?(@check_ownership_of.ultimate_parent))
+    access_denied(:redirect => @comment) unless current_user_owns?(@comment) || current_user_owns?(@comment.ultimate_parent))
   end
   
   # Comments cannot be edited after they've been replied to

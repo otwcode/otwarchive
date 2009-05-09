@@ -25,8 +25,6 @@ class Series < ActiveRecord::Base
     :maximum => ArchiveConfig.NOTES_MAX, 
     :too_long => t('notes_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.NOTES_MAX)
 
-  after_save :save_creatorships
-
   attr_accessor :authors
   attr_accessor :toremove
  
@@ -92,15 +90,4 @@ class Series < ActiveRecord::Base
     self.authors.flatten!
     self.authors.uniq!
   end 
-
-  # Save creatorships (add the virtual authors to the real pseuds) after the series is saved
-  def save_creatorships
-    if self.authors
-      new = self.authors - self.pseuds
-      self.pseuds << new rescue nil
-    end
-    if self.toremove
-      self.pseuds.delete(self.toremove)
-    end
-  end
 end

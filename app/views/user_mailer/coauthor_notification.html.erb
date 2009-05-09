@@ -1,9 +1,8 @@
 <p><%=h User.current_user.login %> <%=h 'listed you as a co-author of the following story:' %></p>
 
-<p><%= link_to(@work.title, @work_link) %></p>
+<p><%= link_to(@work.title, work_url(@work, :host => @host)) %></p>
 
-<!--click here violates WCAG 1.0 6.1. this needs rewording-->
-<!--is this better? (linking the whole text)-->
 <p>
-<%= link_to("Edit work to remove yourself as author if you've been added in error or don't want to be listed as an author.", @url) %>
+<%= link_to("Edit the work", edit_work_url(@work, :host => @host)) %>
+ to remove yourself as author if you've been added in error or don't want to be listed as an author.
 </p>

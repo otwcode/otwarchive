@@ -136,7 +136,7 @@ class Work < ActiveRecord::Base
 
   before_save :set_word_count, :post_first_chapter
 
-  after_save :save_creatorships, :save_chapters, :save_parents
+  after_save :save_chapters, :save_parents
 
   # before_save :validate_tags # Enigel's feeble attempt
 
@@ -169,22 +169,6 @@ class Work < ActiveRecord::Base
     end
     self.authors.flatten!
     self.authors.uniq!
-  end
-
-
-  # Save creatorships (add the virtual authors to the real pseuds) after the work is saved
-  def save_creatorships
-    if self.authors
-      new = self.authors - self.pseuds
-      self.pseuds << new rescue nil
-      self.chapters.first.pseuds << new rescue nil
-      self.series.each {|series| series.pseuds << (self.authors - series.pseuds) rescue nil}
-    end
-    if self.toremove
-      self.pseuds.delete(self.toremove)
-      self.chapters.first.pseuds.delete(self.toremove)
-      self.series.each {|series| series.pseuds.delete(self.toremove)} unless self.series.empty?
-    end
   end
 
 

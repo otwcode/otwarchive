@@ -12,7 +12,7 @@
         <%- if type == "Warning" && hide_warnings?(work) -%>        
           <li><%= show_warnings_link(work) %></li> 
         <%- else -%>                   
-         <%= tags.collect{|tag| "<li class=#{tag.type.downcase}>" + link_to_tag(tag, true) + '</li>' }.join(', ') %>
+          <%= tags.collect{|tag| "<li class=#{tag.type.downcase}>" + link_to_tag(tag) + '</li>' }.join(', ') %>
         <%- end -%>
         </ul>
       </dd>

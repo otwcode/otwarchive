@@ -1,7 +1,5 @@
 <p><%=h "Your work" -%> <cite><%= @related_work.parent.title %></cite> <%=h "was listed as the inspiration of" -%> <cite><%= @related_work.work.title %></cite>
  <%=h "by" -%> <%= @related_work.work.pseuds.collect(&:name).join(", ") %></p>
 
-<!--go here violates WCAG 1.0 6.1. this needs rewording-->
-<!-- is this better? -->
-<p><%= link_to("Approve relationship and link back to this work from your work", @url) -%></p>
+<p><%= link_to("Approve relationship and link back to this work from your work", related_work_url(@related_work, :host => @host)) -%></p>
 <p><%= "(You can come back to this page if you change your mind.)" %></p> 

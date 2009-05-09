@@ -28,7 +28,7 @@
 			<dd>
 			<ul>
 				<% series.works.select{|work| work.visible(current_user)}.collect(&:tags).flatten.compact.uniq.each do |tag| %>
-				<li><%= link_to_tag(tag, true) -%></li>
+				<li><%= link_to_tag(tag) -%></li>
 				<% end %>
 			</ul>
 			</dd>

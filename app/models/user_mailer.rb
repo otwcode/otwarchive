@@ -79,8 +79,6 @@ class UserMailer < ActionMailer::Base
     setup_email(user)
     @subject    += "Co-Author Notification"
     @body[:work] = work
-    @body[:work_link] = @body[:url] + "/works/#{work.id}"
-    @body[:url] += "/works/#{work.id}/edit"
   end 
    
   # Sends emails to authors whose stories were listed as the inspiration of another work
@@ -88,7 +86,6 @@ class UserMailer < ActionMailer::Base
     setup_email(user)
     @subject    += "Related work notification"
     @body[:related_work] = related_work
-    @body[:url] += "/related_works/#{related_work.id}"     
   end
    
   # Sends email to authors when a work is edited
@@ -125,6 +122,7 @@ class UserMailer < ActionMailer::Base
       @subject     = "[#{ArchiveConfig.APP_NAME}] "
       @sent_on     = Time.now
       @body[:url]  = ArchiveConfig.APP_URL
+      @body[:host] = ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
       @content_type = "text/html"
     end
      
