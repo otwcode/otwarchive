@@ -105,17 +105,17 @@ class UsersController < ApplicationController
   def activate
     if params[:id].blank?
       flash[:error] = t('activation_key_missing', :default => "Your activation key is missing.")
-     redirect_to ''
+      redirect_to ''
     else
       @user = User.find_by_activation_code(params[:id])
       if @user
         @user.activate
         self.current_user = @user
         flash[:notice] = t('signup_complete', :default => "Signup complete! This is your public profile.")
-       redirect_to(@user)
+        redirect_to(@user)
       else
         flash[:error] = t('activation_key_invalid', :default => "Your activation key is invalid. Perhaps it has expired.")
-       redirect_to ''
+        redirect_to ''
       end
     end
   end
