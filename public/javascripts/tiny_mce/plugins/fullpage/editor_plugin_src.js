@@ -1,5 +1,5 @@
 /**
- * $Id: editor_plugin_src.js 827 2008-04-29 15:02:42Z spocke $
+ * $Id: editor_plugin_src.js 1029 2009-02-24 22:32:21Z spocke $
  *
  * @author Moxiecode
  * @copyright Copyright © 2004-2008, Moxiecode Systems AB, All rights reserved.
@@ -51,21 +51,23 @@
 			if (attr && attr[1]) {
 				bdattr = attr[1].match(/\s*(\w+\s*=\s*".*?"|\w+\s*=\s*'.*?'|\w+\s*=\s*\w+|\w+)\s*/g);
 
-				for(i = 0, len = bdattr.length; i < len; i++) {
-					kv = bdattr[i].split('=');
-					k = kv[0].replace(/\s/,'');
-					v = kv[1];
+				if (bdattr) {
+					for(i = 0, len = bdattr.length; i < len; i++) {
+						kv = bdattr[i].split('=');
+						k = kv[0].replace(/\s/,'');
+						v = kv[1];
 
-					if (v) {
-						v = v.replace(/^\s+/,'').replace(/\s+$/,'');
-						t = v.match(/^["'](.*)["']$/);
+						if (v) {
+							v = v.replace(/^\s+/,'').replace(/\s+$/,'');
+							t = v.match(/^["'](.*)["']$/);
 
-						if (t)
-							v = t[1];
-					} else
-						v = k;
+							if (t)
+								v = t[1];
+						} else
+							v = k;
 
-					ed.dom.setAttrib(ed.getBody(), 'style', v);
+						ed.dom.setAttrib(ed.getBody(), 'style', v);
+					}
 				}
 			}
 		},
@@ -79,6 +81,9 @@
 
 		_setContent : function(ed, o) {
 			var t = this, sp, ep, c = o.content, v, st = '';
+
+			if (o.source_view && ed.getParam('fullpage_hide_in_source_view'))
+				return;
 
 			// Parse out head, body and footer
 			c = c.replace(/<(\/?)BODY/gi, '<$1body');
@@ -131,7 +136,8 @@
 		_getContent : function(ed, o) {
 			var t = this;
 
-			o.content = tinymce.trim(t.head) + '\n' + tinymce.trim(o.content) + '\n' + tinymce.trim(t.foot);
+			if (!o.source_view || !ed.getParam('fullpage_hide_in_source_view'))
+				o.content = tinymce.trim(t.head) + '\n' + tinymce.trim(o.content) + '\n' + tinymce.trim(t.foot);
 		}
 	});
 
