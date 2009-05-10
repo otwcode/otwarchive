@@ -22,7 +22,7 @@
              <% if @work.pseuds.size > 1 && chapter.pseuds.size > 1 -%>
                <li><%= link_to t('remove_me', :default => "Remove me as author"), {:action => "edit", :id => chapter.id, :remove => "me"}, :confirm => t('confirm_removal', :default => 'You will no longer be able to edit this chapter. Are you sure?') %></li>
              <% end -%> 
-          <%- end -%> )
+          <%- end -%>
       	</ul>
       </li>
     <% end %>    

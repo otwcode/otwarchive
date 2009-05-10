@@ -69,7 +69,7 @@ class Pseud < ActiveRecord::Base
   # types if type options are provided), then sorts them according to 
   # the number of times this pseud has used them, then returns an array
   # of [tag, count] arrays, limited by size if a limit is provided 
-  # FIXME: it's also counting tags on works that aren't visible to the current user (drafts, restricted works)
+  # FIXME: I'm also counting tags on works that aren't visible to the current user (drafts, restricted works)
   def most_popular_tags(options = {})
     if all_tags = Tag.by_pseud(self).by_type(options[:categories]).canonical
       tags_with_count = {}
@@ -83,7 +83,7 @@ class Pseud < ActiveRecord::Base
 
   # Produces a byline that indicates the user's name if pseud is not unique
   def byline
-    Pseud.count(:conditions => {:name => name}) > 1 ? name + " [" + user_name + "]" : name
+    (name != user_name) ? name + " (" + user_name + ")" : name
   end
   
   def unposted_works
