@@ -191,7 +191,7 @@ class ChaptersController < ApplicationController
   # POST /chapters/1/post
   def post
     if params[:cancel_button]
-      redirect_back_or_default('/') 
+      redirect_to @work 
     elsif params[:edit_button]
       redirect_to [:edit, @work, @chapter]
     else
