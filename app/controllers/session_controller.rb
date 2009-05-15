@@ -56,10 +56,12 @@ class SessionController < ApplicationController
         if @user && @user.activated_at
           self.current_user = @user
           successful_login
-        elsif @user.activated_at.nil?
+        elsif @user && @user.activated_at.nil?
           failed_login t('not_activated', :default => "You'll need to activate your account before you can log in. Please check your email or contact an admin.")          
         else
-          failed_login t('open_id_failure', :default => "We couldn't find that url in our database. Please try again.")
+          failed_login t('open_id_failure', :default => "We're sorry, but we couldn't find that OpenID in our database. 
+          Unfortunately, right now OpenID login is restricted to current archive users. 
+          If you don't have an account, we encourage you to get one when we enter open beta!")
        end
       else
         failed_login result.message
