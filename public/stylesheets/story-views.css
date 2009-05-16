@@ -9,6 +9,7 @@ set work styles
 .work-show a:visited { text-decoration:underline}
 
 #chapters p {padding-bottom: 0.5em;}
+.unposted-chapter, .unposted-chapter .navigation {background:#eee}
 
 .work-show dl		{ font-size:1em; margin:1.5em 0; border-bottom:0.25em double #777; }
 .work-show dl dl	{ width:90%; margin:auto;}

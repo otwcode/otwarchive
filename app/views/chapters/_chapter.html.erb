@@ -1,5 +1,5 @@
 <!-- This partial requires local variable 'chapter' -->
-<div class="work-show">
+<div class="work-show <%= 'unposted-chapter' unless chapter.posted? %>">
 <!-- chapter management -->  
   <%- if is_author_of?(@work) -%>
     <ul class="navigation chapter-control">

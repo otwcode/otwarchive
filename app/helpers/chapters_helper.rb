@@ -17,8 +17,13 @@ module ChaptersHelper
 
   # returns ARRAY of next/previous links as appropriate with the given chapter as the starting point
   def next_and_previous_links(work, chapter)
-    number_of_chapters = work.chapters.in_order.size 
-    chapter_position = work.chapters.in_order.index(chapter)
+    if logged_in? && current_user.is_author_of?(work)
+      number_of_chapters = work.chapters.in_order.size 
+      chapter_position = work.chapters.in_order.index(chapter)
+    else
+      number_of_chapters = work.chapters.posted.in_order.size 
+      chapter_position = work.chapters.posted.in_order.index(chapter)
+    end
     links = []
     
     links << link_to_chapter("First Chapter", work, 0)
