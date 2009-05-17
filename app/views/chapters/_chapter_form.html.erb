@@ -23,9 +23,9 @@
       <%= render :partial => 'pseuds/byline', :locals =>{:form => f, :type => 'chapter'} %>
 
       <dt class="summary"><%= f.label :summary, t('form_summary', :default => "Chapter summary (max {{max}} letters)", :max => ArchiveConfig.SUMMARY_MAX.to_s) %></dt>
-      <dd class="summary"><%= f.text_area :summary, :live => true %></dd>
+      <dd class="summary"><%= f.text_area :summary, :rows => 4, :cols => 60, :live => true %></dd>
       <dt class="notes"><%= f.label :notes, t('form_notes', :default => "Chapter notes (max {{max}} letters)", :max => ArchiveConfig.NOTES_MAX.to_s) %></dt>
-      <dd class="notes"><%= f.text_area :notes, :live => true %></dd>
+      <dd class="notes"><%= f.text_area :notes, :rows => 4, :cols => 60, :live => true %></dd>
     </dl>
 </fieldset>
 

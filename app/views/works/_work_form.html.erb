@@ -47,7 +47,7 @@
         <%= f.label :summary, "Summary (max " + ArchiveConfig.SUMMARY_MAX.to_s + " letters)" %>
       </dt>
       <dd class="summary">
-        <%= f.text_area :summary, :class => "summary-field" %>
+        <%= f.text_area :summary, :rows => 4, :cols => 60, :class => "summary-field" %>
         <%= live_validation_for_field('work_summary', :presence => false, :maximum_length => ArchiveConfig.SUMMARY_MAX) -%>
       </dd>
 
@@ -55,7 +55,7 @@
         <%= f.label :notes, "Notes (max " + ArchiveConfig.NOTES_MAX.to_s + " letters)" %>
       </dt>
       <dd class="notes">
-        <%= f.text_area :notes, :class => "notes-field" %>
+        <%= f.text_area :notes, :rows => 4, :cols => 60, :class => "notes-field" %>
         <%= live_validation_for_field('work_notes', :presence => false, :maximum_length => ArchiveConfig.NOTES_MAX) -%>
       </dd>
     </dl>
