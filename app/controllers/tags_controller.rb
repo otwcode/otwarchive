@@ -17,6 +17,11 @@ class TagsController < ApplicationController
     end
   end
 
+  # if user is Admin or Tag Wrangler, show them details about the tag
+  # if user is not logged in or a regular user, show them
+  #   1. the works, if the tag had been wrangled and we can redirect them to works using it or its canonical merger
+  #   2. the tag, the works and the bookmarks using it, if the tag is unwrangled (because we can't redirect them
+  #       to the works controller)
   def show
     @tag = Tag.find_by_name(params[:id])
     if @tag.is_a? Tag
@@ -24,13 +29,24 @@ class TagsController < ApplicationController
         flash[:error] = t('errors.log_in_as_admin', :default => "Please log in as admin")
         redirect_to tag_wranglings_path and return
       end
+      # if tag is NOT wrangled, prepare to show works and bookmarks that are using it
       if !@tag.canonical && !@tag.merger
-        if current_user.is_a?User
+        if logged_in? #current_user.is_a?User
           @works = @tag.works.visible_to_user.paginate(:page => params[:page])
+        elsif logged_in_as_admin?
+          @works= @tag.works.visible_to_owner.paginate(:page => params[:page])
         else
           @works = @tag.works.visible_to_all.paginate(:page => params[:page])
         end
         @bookmarks = @tag.bookmarks.select{|b| b.visible}.paginate(:page => params[:page])
+      end
+      # if regular user or anonymous (not logged in) visitor, AND the tag is wrangled, just give them the goodies
+      if !(logged_in? && current_user.is_tag_wrangler? || logged_in_as_admin?)
+        if @tag.canonical # show works with that tag
+          redirect_to url_for(:controller => :works, :action => :index, :tag_id => @tag) and return
+        elsif @tag.merger # show works with the canonical merger (synonym) of that tag
+          redirect_to url_for(:controller => :works, :action => :index, :tag_id => @tag.merger) and return
+        end
       end
     else
       flash[:error] = t('not_found', :default => "Tag not found")
