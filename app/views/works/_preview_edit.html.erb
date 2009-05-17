@@ -1,13 +1,15 @@
 <div id="previewpane">
   <div class="work-show">
     <%= render :partial => 'works/work_header' -%>
-  	<%=
-    	if @work.chaptered? || (@chapters.size > 1)
-				render :partial => 'chapters/chapter', :locals => {:chapter => @chapter}
-			else
-				sanitize_and_format_for_display(@chapter.content)
-			end
-		-%>
+    <div id="chapters">
+    <%=
+      if @work.chaptered? || (@chapters.size > 1)
+        render :partial => 'chapters/chapter', :locals => {:chapter => @chapter}
+      else
+        sanitize_and_format_for_display(@chapter.content)
+      end
+    -%>
+    </div>
   	<%= render :partial => 'works/work_footer' -%>
   </div>
 </div>

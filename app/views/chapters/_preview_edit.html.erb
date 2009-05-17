@@ -1,4 +1,6 @@
+<div id="chapters">
 <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } %>
+</div>
 
 <%- form_for([@work, @chapter]) do |f| -%>
 
@@ -14,4 +16,4 @@
     <%= submit_tag t('forms.cancel', :default => 'Cancel'), :name => 'cancel_button' %> 
   </p>
 
-<% end %>               
+<% end %>

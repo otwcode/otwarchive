@@ -1,4 +1,6 @@
+<div id="chapters">
 <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } -%>
+</div>
 
 <% form_for :chapter, [@work, @chapter], :url => {:action => :post} do |f| %>
   <%= render :partial => 'hidden_fields', :locals => {:form => f} -%>
