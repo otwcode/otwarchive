@@ -36,6 +36,9 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 
 /*ADMIN */
 .admin_session-new dt { width:6em; }
+.admin_users-notify dd {width:40%;}
+.admin_users-notify dd input {width:100%;}
+.admin_users-notify textarea {height:20em; width:100%;}
 /*REPORT ABUSE */
 #main.abuse_reports-new dt { width:100%; float:none; }
 

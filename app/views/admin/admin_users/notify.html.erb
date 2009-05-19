@@ -8,6 +8,12 @@
   
     <dt><%= label_tag "content", t('message', :default => "Message") -%></dt>
     <dd><%= text_area_tag "content" -%></dd>
+    
+    <dt></dt>
+    <dd>
+      <%= check_box_tag "notify_all" -%>
+      <%= label_tag "notify_all", t('notify_all', :default => 'Notify All Users') -%>
+    </dd>
 
     <dt><%= t('select_users', :default => 'Select Users To Notify') -%></dt>
     <dd>

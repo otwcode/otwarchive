@@ -52,18 +52,20 @@ class Admin::AdminUsersController < ApplicationController
   end
   
   def send_notification
-    if params[:user_ids]
+    if params[:notify_all] == "1"
+      @users = User.all
+    elsif params[:user_ids]
       @users = User.find(params[:user_ids])
     end
 
     if @users.blank?
       flash[:error] = t('no_user', :default => "Who did you want to notify?")
-     redirect_to :action => :notify and return
+      redirect_to :action => :notify and return
     end
     
     unless params[:subject] && !params[:subject].blank?
       flash[:error] = t('no_subject', :default => "Please enter a subject.")
-     redirect_to :action => :notify and return
+      redirect_to :action => :notify and return
     else
       @subject = params[:subject]
     end
@@ -71,7 +73,7 @@ class Admin::AdminUsersController < ApplicationController
     # We need to use content because otherwise html will be stripped
     unless params[:content] && !params[:content].blank?
       flash[:error] = t('no_message', :default => "What message did you want to send?")
-     redirect_to :action => :notify and return
+      redirect_to :action => :notify and return
     else
       @message = params[:content]
     end
