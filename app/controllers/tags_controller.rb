@@ -127,16 +127,16 @@ class TagsController < ApplicationController
     end
     old_common_tag_ids = @tag.common_tags_to_add.map(&:id).sort
 
-    if (params[:tag][:name] && logged_in_as_admin?)
+    if (params[:tag][:name] != @tag.name && logged_in_as_admin?)
       if ['Rating', 'Warning', 'Category'].include?(@tag[:type])
         flash[:error] = t('name_change', :default => "Name can't be changed from this interface.")
-     else
+      elsif params[:tag][:name] != @tag.name
         begin
           @tag.update_attribute(:name, params[:tag][:name])
         rescue
           @tag = Tag.find_by_name(params[:id]) # reset name
           flash[:error] = t('name_taken', :default => "Name already taken.")
-       end
+        end
       end
     end
     @tag.update_type(params[:tag][:type], logged_in_as_admin?) if params[:tag][:type]
