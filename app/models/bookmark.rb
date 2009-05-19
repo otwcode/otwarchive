@@ -3,7 +3,9 @@ class Bookmark < ActiveRecord::Base
   belongs_to :pseud
   has_many :taggings, :as => :taggable
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
-
+  
+  named_scope :public, :conditions => {:private => false}
+  
   validates_length_of :notes, 
     :maximum => ArchiveConfig.NOTES_MAX, :too_long => t('notes_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.NOTES_MAX)
     

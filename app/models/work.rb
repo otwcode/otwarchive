@@ -749,7 +749,7 @@ class Work < ActiveRecord::Base
   named_scope :posted, :conditions => {:posted => true}
   named_scope :unposted, :conditions => {:posted => false}
   named_scope :restricted , :conditions => {:restricted => true}
-  named_scope :unrestricted, :conditions => {:restricted => true}
+  named_scope :unrestricted, :conditions => {:restricted => false}
   named_scope :hidden, :conditions => {:hidden_by_admin => true}
   named_scope :unhidden, :conditions => {:hidden_by_admin => false}
   named_scope :visible_to_owner, :conditions => VISIBLE_TO_ADMIN_CONDITIONS

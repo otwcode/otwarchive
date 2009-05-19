@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
   # so other models can access it with "User.current_user"
   before_filter :set_current_user
   def set_current_user
-    User.current_user = current_user
+    User.current_user = logged_in_as_admin? ? current_admin : current_user
     @current_user = current_user
   end
   
@@ -103,11 +103,11 @@ class ApplicationController < ActionController::Base
   # Make sure the user is allowed to see a specific page
   # includes a special case for restricted works and series, since we want to encourage people to sign up to read them
   def check_visibility
-    if @check_visibility_of.respond_to?(:restricted) && @check_visibility_of.restricted && !logged_in?
+    if @check_visibility_of.respond_to?(:restricted) && @check_visibility_of.restricted && User.current_user == :false
       redirect_to new_session_path(:restricted => true)
     else
       is_hidden = @check_visibility_of.respond_to?(:visible) ? !@check_visibility_of.visible : @check_visibility_of.hidden_by_admin?
-      can_view_hidden = is_admin? || current_user_owns?(@check_visibility_of)
+      can_view_hidden = logged_in_as_admin? || current_user_owns?(@check_visibility_of)
       access_denied if (is_hidden && !can_view_hidden)
     end
   end
