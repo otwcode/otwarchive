@@ -764,8 +764,8 @@ class Work < ActiveRecord::Base
   named_scope :with_all_tags, lambda {|tags_to_find|
     {
       :select => "DISTINCT works.*",
-      :joins => COMMON_TAG_JOIN,
-      :conditions => ["tags.id in (?)", tags_to_find.collect(&:id)],
+      :joins => :tags,
+      :conditions => ["tags.id in (?) OR tags.merger_id in (?)", tags_to_find.collect(&:id), tags_to_find.collect(&:id)],
       :group => "works.id HAVING count(DISTINCT tags.id) = #{tags_to_find.size}"
     }
   }
@@ -773,16 +773,16 @@ class Work < ActiveRecord::Base
   named_scope :with_any_tags, lambda {|tags_to_find|
     {
       :select => "DISTINCT works.*",
-      :joins => COMMON_TAG_JOIN,
-      :conditions => ["tags.id in (?)", tags_to_find.collect(&:id)],
+      :joins => :tags,
+      :conditions => ["tags.id in (?) OR tags.merger_id in (?)", tags_to_find.collect(&:id), tags_to_find.collect(&:id)],
     }
   }
 
   named_scope :with_all_tag_ids, lambda {|tag_ids_to_find|
     {
       :select => "DISTINCT works.*",
-      :joins => COMMON_TAG_JOIN,
-      :conditions => ["tags.id in (?)", tag_ids_to_find],
+      :joins => :tags,
+      :conditions => ["tags.id in (?) OR tags.merger_id in (?)", tag_ids_to_find, tag_ids_to_find],
       :group => "works.id HAVING count(DISTINCT tags.id) = #{tag_ids_to_find.size}"
     }
   }
@@ -790,8 +790,8 @@ class Work < ActiveRecord::Base
   named_scope :with_any_tag_ids, lambda {|tag_ids_to_find|
     {
       :select => "DISTINCT works.*",
-      :joins => COMMON_TAG_JOIN,
-      :conditions => ["tags.id in (?)", tag_ids_to_find],
+      :joins => :tags,
+      :conditions => ["tags.id in (?) OR tags.merger_id in (?)", tag_ids_to_find, tag_ids_to_find],
     }
   }
 
@@ -813,7 +813,7 @@ class Work < ActiveRecord::Base
   named_scope :tags_with_count, lambda {|*args|
     {
       :select => "tags.type as tag_type, tags.id as tag_id, tags.name as tag_name, count(distinct works.id) as count",
-      :joins => COMMON_TAG_JOIN,
+      :joins => :tags,
       :group => "tags.name",
       :order => "tags.type, tags.name ASC"
     }.merge(args.first.size > 0 ? {:conditions => ["works.id in (?)", args.first]} : {})
@@ -977,7 +977,8 @@ class Work < ActiveRecord::Base
 
     unless @works.empty?
       ids = eval("Work.ids_only#{command}").collect(&:id)
-      @filters = build_filters_hash(Work.tags_with_count(ids))
+      #@filters = build_filters_hash(Work.tags_with_count(ids))
+      @filters = build_filters_new(Work.find(ids))
     end
 
     return @works, @filters, @pseuds
@@ -1002,6 +1003,24 @@ class Work < ActiveRecord::Base
       end
     end
     return filters_hash
+  end
+  
+  # Preserving older methods while we test this out
+  def self.build_filters_new(works)
+    filters = {}
+    tags = works.collect(&:tags).flatten
+    split = tags.partition {|t| t.canonical?}
+    canonicals = split.first
+    synonyms = split.last
+    tags = canonicals + Tag.find(synonyms.collect(&:merger_id).compact)
+    frequency = tags.collect(&:id).inject(Hash.new(0)) { |frequency, id| frequency[id] += 1; frequency }
+    tags.uniq.group_by(&:type).each do |tag_type, tag_group|
+      filters[tag_type] ||= []
+      tag_group.sort.each do |tag|
+        filters[tag_type] << {:name => tag.name, :id => tag.id.to_s, :count => frequency[tag.id]}
+      end
+    end
+    filters
   end
 
   # this is the method which is called from the works controller

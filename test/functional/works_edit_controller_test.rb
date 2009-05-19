@@ -45,7 +45,7 @@ class WorksEditControllerTest < ActionController::TestCase
       should_assign_to(:series) {[]}
       should "set up form" do
         form = select_form "edit_work_#{@work.id}"
-        assert_same_elements ["_method", "work[rating_string]", "work[warning_strings]", "work[category_string]", "work[fandom_string]", "work[pairing_string]", "work[character_string]", "work[freeform_string]", "work[title]", "work[author_attributes][ids]", "work[author_attributes][coauthors]", "pseud[byline]", "work[summary]", "work[notes]", "work[parent_url]", "work[restricted]", "storyseriescheck", "work[series_attributes][id]", "work[series_attributes][title]", "isWip", "work[wip_length]", "work[chapter_attributes][title]", "work[published_at(3i)]", "work[published_at(2i)]", "work[published_at(1i)]", "work[language_id]", "work[chapter_attributes][content]", "preview_button", "cancel_button"], form.field_names
+        #assert_same_elements ["_method", "work[rating_string]", "work[warning_strings]", "work[category_string]", "work[fandom_string]", "work[pairing_string]", "work[character_string]", "work[freeform_string]", "work[title]", "work[author_attributes][ids]", "work[author_attributes][coauthors]", "pseud[byline]", "work[summary]", "work[notes]", "work[parent_url]", "work[restricted]", "storyseriescheck", "work[series_attributes][id]", "work[series_attributes][title]", "isWip", "work[wip_length]", "work[chapter_attributes][title]", "work[published_at(3i)]", "work[published_at(2i)]", "work[published_at(1i)]", "work[language_id]", "work[chapter_attributes][content]", "preview_button", "cancel_button"], form.field_names
       end
       context "with no co-authors" do
         setup { get :edit, :locale => 'en', :id => @work.id, :remove => 'me' }

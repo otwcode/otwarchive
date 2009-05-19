@@ -123,7 +123,7 @@ class WorksController < ApplicationController
       end
 
       unless @works.empty?
-        @filters = Work.get_filters(@works)
+        @filters = Work.build_filters_new(@works)
       end
     else
       # we're browsing instead
@@ -437,11 +437,11 @@ class WorksController < ApplicationController
   protected
 
   def load_pseuds
-      @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
-      @pseuds = current_user.pseuds
-      @coauthors = @allpseuds.select{ |p| p.user.id != current_user.id}
-      to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors
-      @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }.uniq
+    @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds).uniq
+    @pseuds = current_user.pseuds
+    @coauthors = @allpseuds.select{ |p| p.user.id != current_user.id}
+    to_select = @work.authors.blank? ? @work.pseuds.blank? ? [current_user.default_pseud] : @work.pseuds : @work.authors
+    @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }.uniq
   end
 
   # create a reading object when showing a work, but only if the user has reading

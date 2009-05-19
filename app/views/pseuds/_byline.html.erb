@@ -9,9 +9,11 @@
 	  </select>	 
 	</dd>
 
+<%- unless @coauthors.blank? -%>
 <%= '<select name="' + h(type) + '[author_attributes][coauthors][]" multiple="multiple" style="display: none;">' %>
   <%= options_from_collection_for_select(@coauthors, :id, :name, @selected_pseuds) %>  
 </select>
+<%- end -%>
 
 <% if @coauthors.size > 0 %>
   <dt class="byline"><%= t('current_coauthors', :default => "Current Co-authors:") %> </dt>

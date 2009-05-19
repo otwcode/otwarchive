@@ -1,12 +1,17 @@
 <!-- expects a local variable "form" -->
 
 <!-- put in all the information uploaded in hidden fields -->
+<div>
 <select name="work[author_attributes][ids][]" multiple="multiple" style="display:none;">
 <%= options_from_collection_for_select(@allpseuds, :id, :name, @selected_pseuds) %>  
 </select>
+
+<%- unless @coauthors.blank? -%>
 <select name="work[author_attributes][coauthors][]" multiple="multiple" style="display:none;">
 <%= options_from_collection_for_select(@coauthors, :id, :name, @selected_pseuds) %>  
 </select>
+<%- end -%>
+
 <%= form.hidden_field :rating_string, :value => "#{@work.rating_string}" %>
 <%= form.hidden_field :warning_string, :value => "#{@work.warning_string}" %>
 <%= form.hidden_field :category_string, :value => "#{@work.category_string}" %>
@@ -28,3 +33,4 @@
 <%= form.hidden_field :published_at, :value => "#{@work.published_at}" %>
 <%= form.hidden_field :revised_at, :value => "#{@work.revised_at}" %>
 <%= form.hidden_field :language_id, :value => "#{@work.language_id}" %>
+</div>

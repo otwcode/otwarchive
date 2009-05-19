@@ -96,8 +96,8 @@ class Pseud < ActiveRecord::Base
     valid_pseuds, ambiguous_pseuds, failures = [], {}, []
     bylines = list.split ","
     for byline in bylines
-      if byline.include? "["
-        pseud_name, user_login = byline.split('[', 2)
+      if byline.include? "("
+        pseud_name, user_login = byline.split('(', 2)
         conditions = ['users.login = ? AND name = ?', user_login.strip.chop, pseud_name.strip]
       else
         conditions = {:name => byline.strip}
