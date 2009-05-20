@@ -1006,19 +1006,15 @@ class Work < ActiveRecord::Base
   end
   
   # Preserving older methods while we test this out
-  def self.build_filters_new(works)
+  def self.build_filters_new(works)  
     filters = {}
-    tags = works.collect(&:tags).flatten
-    split = tags.partition {|t| t.canonical?}
-    canonicals = split.first
-    synonyms = split.last
-    tags = canonicals + Tag.find(synonyms.collect(&:merger_id).compact)
+    ids = works.collect(&:id)
+    canonicals = Tag.find(:all, :joins => :works, :conditions => {:canonical => true, :works => {:id => ids}}, :order => :name)
+    synonyms = Tag.find(:all, :joins => [:works, :merger], :conditions => {:canonical => false, :works => {:id => ids}}, :order => :name)
+    tags = canonicals + synonyms.collect(&:merger).compact
     frequency = tags.collect(&:id).inject(Hash.new(0)) { |frequency, id| frequency[id] += 1; frequency }
-    tags.uniq.group_by(&:type).each do |tag_type, tag_group|
-      filters[tag_type] ||= []
-      tag_group.sort.each do |tag|
-        filters[tag_type] << {:name => tag.name, :id => tag.id.to_s, :count => frequency[tag.id]}
-      end
+    tags.uniq.sort.each do |tag|
+      (filters[tag.type] ||= []) << {:name => tag.name, :id => tag.id.to_s, :count => frequency[tag.id]}
     end
     filters
   end
