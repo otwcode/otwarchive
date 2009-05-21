@@ -1,6 +1,6 @@
 /*NAVIGATION ELEMENTS*/
 ul#skiplinks	{ margin-left:-999em; position:absolute; }
-ul.navigation, dl.navigation { background: #fffef9; border-bottom: 1px solid #999; text-align:right;margin: 0 0 0.875em 0; text-transform:capitalize;}
+ul.navigation, dl.navigation { background: #fffef9; border-bottom: 1px solid #999; text-align:right;margin: 0 0 0.875em 0;}
 ul.navigation li, .navigation dd, li.navigation { background: #fffef9; display: inline; padding: 0 0.5625em; border:1px solid #999; border-bottom:0; text-indent:0; font-weight:900;}
 .navigation dt { font-weight:600; display:inline; padding:0 0.5625em; }
 .navigation a {font-weight: 100;}

@@ -9,10 +9,10 @@ module BookmarksHelper
       
       if bookmarkable.class == Work
         fallback = new_work_bookmark_path(bookmarkable)
-        text = t('bookmark_this_story', :default => 'Bookmark this story')
+        text = t('bookmark_this_story', :default => 'Bookmark This Story')
       elsif bookmarkable.class == ExternalWork
         fallback = bookmarks_path # more options if necessary
-        text = t('add_new_bookmark', :default => 'Add a new bookmark')
+        text = t('add_new_bookmark', :default => 'Add A New Bookmark')
       end
       
       # NOTE: the 'existing' check can't work the same way when bookmarks are owned by pseud
@@ -28,7 +28,7 @@ module BookmarksHelper
       else
         # eventually we want to add the option here to remove the existing bookmark
         # Enigel Dec 10 08 - adding an edit link for now
-        link_to t('edit_bookmark', :default => "Edit bookmark"), edit_bookmark_path(existing)
+        link_to t('edit_bookmark', :default => "Edit Bookmark"), edit_bookmark_path(existing)
       end
     end
   end

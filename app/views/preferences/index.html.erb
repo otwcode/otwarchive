@@ -1,8 +1,8 @@
 <h1><%=h t('update_preferences', :default => 'Update My Preferences') %></h1>
 <ul class="navigation">
-	<li><%= link_to t('edit_profile', :default => "edit my profile"), edit_user_path(@user) %></li>
-	<li><%= link_to t('manage_pseuds', :default => 'manage my pseuds'), user_pseuds_path(@user) %></li>
-	<li><%= link_to t('orphan_works', :default => 'orphan my works'), new_orphan_path %></li>
+	<li><%= link_to t('edit_profile', :default => "Edit My Profile"), edit_user_path(@user) %></li>
+	<li><%= link_to t('manage_pseuds', :default => 'Manage My Pseuds'), user_pseuds_path(@user) %></li>
+	<li><%= link_to t('orphan_works', :default => 'Orphan My Works'), new_orphan_path %></li>
 </ul>
 
 <%= error_messages_for :preference %>

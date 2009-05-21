@@ -27,18 +27,6 @@ module WorksHelper
     "<ul>" + bookmark_link + (comments_link ||= '') + "</ul>"    
   end
 
-#  def view_all_chapters_link(work)
-#    #link_to_remote "View entire work", {:url => {:controller => :chapters, :action => :index, :work_id => work, :old_chapter => chapter.id}, :method => :get},
-#    #                                      {:href => work_path(work)}
-#    link_to "View entire work", work_path(work)
-#  end
-
-  def view_chapter_link(work, chapter)
-    #link_to_remote "View by chapters", {:url => {:controller => :chapters, :action => :show, :work_id => work, :id => work.first_chapter}, :method => :get},
-    #                                        {:href => url_for({:controller => :chapters, :action => :show, :work_id => work, :id => work.first_chapter})}
-    link_to "View by chapters", url_for({:controller => :chapters, :action => :show, :work_id => work, :id => chapter})
-  end
-
   # Determines whether or not to display warnings for a work
   def hide_warnings?(work)
     current_user.is_a?(User) && current_user.preference && current_user.preference.hide_warnings? && !current_user.is_author_of?(work)

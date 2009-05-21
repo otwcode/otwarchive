@@ -3,7 +3,7 @@
 <% paginated_section @works, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
 
   <dl class="navigation">
-    <dt><%= t('sort_by', :default => 'Sort by') -%></dt> 
+    <dt><%= t('sort_by', :default => 'Sort By') -%></dt> 
     <%- unless @query.blank? -%>
     <dd><%= sort_link t('sort.relevance', :default => 'Relevance') %></dd>
     <%- end -%>

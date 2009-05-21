@@ -16,11 +16,11 @@
           <%=h t('alt_title', :default => "Chapter {{position}}", :position => chapter.position) %>    
         <% end %>
         <ul class='chapter-control navigation'>
-          <li><%= link_to t('edit', :default => 'edit'), [:edit, @work, chapter] -%></li>
+          <li><%= link_to t('edit', :default => 'Edit'), [:edit, @work, chapter] -%></li>
            <%- if @work.chapters.count > 1 -%>
-             <li><%= link_to t('delete', :default => 'delete'), [@work, chapter], :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
+             <li><%= link_to t('delete', :default => 'Delete'), [@work, chapter], :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
              <% if @work.pseuds.size > 1 && chapter.pseuds.size > 1 -%>
-               <li><%= link_to t('remove_me', :default => "Remove me as author"), {:action => "edit", :id => chapter.id, :remove => "me"}, :confirm => t('confirm_removal', :default => 'You will no longer be able to edit this chapter. Are you sure?') %></li>
+               <li><%= link_to t('remove_me', :default => "Remove Me As Author"), {:action => "edit", :id => chapter.id, :remove => "me"}, :confirm => t('confirm_removal', :default => 'You will no longer be able to edit this chapter. Are you sure?') %></li>
              <% end -%> 
           <%- end -%>
       	</ul>

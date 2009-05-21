@@ -29,12 +29,12 @@
       <%- if @chapters.length == 1 -%> 
         <!-- we're reading chapter-by-chapter -->
         <ul class="navigation">
-          <li><%= link_to "View entire work", @work -%></li>
+          <li><%= link_to "View Entire Work", @work -%></li>
           <%= next_and_previous_links_listitems(@work, @chapter) -%>
         </ul>
       <%- else -%>
         <ul class="navigation">
-          <li><%= link_to "View chapter by chapter", 
+          <li><%= link_to "View Chapter By Chapter", 
                  url_for({:controller => :chapters, :action => :show, :work_id => @work, :id => @chapters.first}) -%>
           </li>
         </ul>

@@ -2,7 +2,7 @@
 <div id="admin-options">
   <ul class="navigation">
 	<% if item.hidden_by_admin? %>
-    <li><%= link_to t('options_make_visible', :default => 'Make visible'), {:controller=>"admin/user_creations", :action=>"hide", :id=>item, :creation_type => item.class, :hidden=>'false'} %></li>
+    <li><%= link_to t('options_make_visible', :default => 'Make Visible'), {:controller=>"admin/user_creations", :action=>"hide", :id=>item, :creation_type => item.class, :hidden=>'false'} %></li>
   <%- else -%>
     <li><%= link_to t('options_hide', :default => 'Hide'), {:controller=>"admin/user_creations", :action=>"hide", :id=>item, :creation_type => item.class, :hidden=>'true'} %></li> 
   <%- end -%>  

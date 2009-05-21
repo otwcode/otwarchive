@@ -1,16 +1,16 @@
 <ul class="navigation">
 <% if current_user.unposted_work && !params[:load_unposted] && !@use_upload_form -%>
-  <li id='restore-link'><%= link_to 'Try to restore from last unposted draft?', url_for(:action => :new, :load_unposted => true) -%></li>
+  <li id='restore-link'><%= link_to 'Try To Restore From Last Unposted Draft?', url_for(:action => :new, :load_unposted => true) -%></li>
 <%- end -%>
 
 <li id="upload-link" <%= @use_upload_form ? 'style="display: none;"' : '' -%> >
-  <%= link_to_function('Upload from an existing URL?',
+  <%= link_to_function('Upload From An Existing URL?',
   "Element.toggle('upload-work-form'); Element.toggle('work-form'); Element.toggle('upload-link'); 
    Element.toggle('form-link'); Element.toggle('restore-link')",
   :href => url_for(:controller => :works, :action => :new, :upload_work => true)) -%>
 </li>
 <li id="form-link"  <%= @use_upload_form ? '' : 'style="display: none;"' -%> >
-  <%= link_to_function('Return to standard form', 
+  <%= link_to_function('Return To Standard Form', 
   "Element.toggle('upload-work-form'); Element.toggle('work-form'); Element.toggle('upload-link'); 
   Element.toggle('form-link'); Element.toggle('restore-link')",
   :href => url_for(:controller => :works, :action => :new, :upload_work => false)) -%>
