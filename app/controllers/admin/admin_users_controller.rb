@@ -24,7 +24,7 @@ class Admin::AdminUsersController < ApplicationController
   def edit
     @user = User.find_by_login(params[:id])
     unless @user
-      redirect_to :action => "index", :letter => params[:letter]
+      redirect_to :action => "index", :pseud => params[:pseud], :role => params[:role]
     end
   end
 
@@ -51,7 +51,12 @@ class Admin::AdminUsersController < ApplicationController
   end
   
   def notify
-    @users = User.alphabetical
+    if params[:letter] && params[:letter].is_a?(String)
+      letter = params[:letter][0,1]
+    else
+      letter = User::ALPHABET[0]
+    end
+    @users = User.alphabetical.starting_with(letter)
   end
   
   def send_notification

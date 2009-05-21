@@ -16,3 +16,6 @@ content: url( "\2020" );
 color: #900;
 }
 
+#admin_users_table  th a:visited{ color: #ddd; }
+
+#admin_users_table  th a:hover { color: #066; }

@@ -83,3 +83,6 @@ th	{ background:#777; color:#fff; font-weight: 100; padding: 0.25em;}
 td th	{ padding-right: 3em; }
 td	{ padding:0.375em; border:1px solid #ddd;}
 
+th a, th a:link	{ color: #fff; }
+th a:visited	{ color: #ddd; }
+th a:hover	{ color: #900; }

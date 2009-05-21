@@ -31,7 +31,8 @@ class BookmarksController < ApplicationController
       owner = @user
     end
     if params[:pseud_id] && @user
-      @pseud = @user.pseuds.find_by_name(params[:pseud_id])
+      @author = @pseud = @user.pseuds.find_by_name(params[:pseud_id]) 
+      # @author is needed in the sidebar and I'm too lazy to redo the whole thing
       owner = @pseud
     elsif params[:tag_id]
       owner ||= Tag.find_by_name(params[:tag_id])

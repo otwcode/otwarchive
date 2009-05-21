@@ -5,7 +5,7 @@ form p { line-height:2; clear:both;}
 form dl { position:relative; }
 form dt { float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
 form dd { float: left; }
-form .submit input {background:url(../images/ccc-fff.png) top left repeat-x #fff; border:1px groove #222;}
+form .submit input {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px groove #222;}
 
 /* SIGN IN BOX */
 #signin p { display:inline;}
@@ -15,8 +15,8 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 
 /* sign in box when present in #header #login-block */
 #header #signin { text-align:right;}
-#header #signin form { background: url(../images/header-red.png) bottom left repeat-x #777; margin:-1.5em -0.25em 1em;padding:0.25em; border:1px groove #500000}
-#header input { background:url(../images/ccc-fff.png) top left repeat-x #fff; border:1px groove; }
+#header #signin form { background: url(/images/header-red.png) bottom left repeat-x #777; margin:-1.5em -0.25em 1em;padding:0.25em; border:1px groove #500000}
+#header input { background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px groove; }
 #header input:hover { background:#ddd; }
 
 /*SESSIONS (front front pages - login, create, etc)*/
