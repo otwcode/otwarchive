@@ -1,23 +1,37 @@
-<h1><%=h t('all_users', :default => "All Users:") -%></h1>
+<h1><%= t("Find users:", :default => "Find users:") -%></h1>
 
-<%= alpha_paginated_section -%>
-
-<table id="admin_users_table">
-<caption><%=h t('list', :default => "List of all current users in the archive") -%></caption>
-<tr>
-	<th scope="col"><%=h t('username', :default => "Username") -%></th>
-	<th scope="col"><%=h t('email', :default => "Email") -%></th>
-	<th scope="col"><%=h t('translation_admin', :default => "Translation Admin") -%></th>
-	<th scope="col"><%=h t('tag_wrangler', :default => "Tag Wrangler") -%></th>
-	<th scope="col"><%=h t('suspended', :default => "Suspended") -%></th>
-	<th scope="col"><%=h t('banned', :default => "Banned") -%></th>
-	<th scope="col"><%=h t('update', :default => "Update") -%></th>
-</tr>
-	<%- @users.each do |user| -%>
-	<tr id="user_<%= user.id %>">
-    <%= render :partial => 'user_form', :locals => {:user => user} %>
-  </tr> 
+<% form_tag url_for(:controller => "admin/admin_users", :action => "index"), :method => :get do -%>
+  <dl>
+    <dt><%= label_tag "pseud", t("user_find_pseud", :default => "Username or pseud") -%></dt>
+      <dd><%= text_field_tag "pseud", params[:pseud] -%></dd>
+    <dt><%= label_tag "role", t("user_find_role", :default => "Role") -%></dt>
+      <dd><%= select_tag "role", "<option id='0' name='regular' value='0'>Regular User</option>" + options_from_collection_for_select(Role.find(:all), "id", "name", params[:role] ? params[:role].to_i : nil) -%></dd>
+  </dl>
+  <p><%= submit_tag t("find_user_button", :default => "Find") -%></p>
 <%- end -%>
-</table>
 
-<%= alpha_paginated_section -%>
+<% if @users %>
+
+<h3><%= @users.size == 1 ? "1 user found" : @users.size == 0 ? "No users found" : @users.size.to_s + " users found" -%></h3>
+
+<%- if @users.size > 0 -%>
+  <table id="admin_users_table">
+  <caption><%=h t('list', :default => "List of users") -%></caption>
+  <tr>
+    <th scope="col"><%=h t('username', :default => "Username") -%></th>
+    <th scope="col"><%=h t('email', :default => "Email") -%></th>
+    <th scope="col"><%=h t('translation_admin', :default => "Translation Admin") -%></th>
+    <th scope="col"><%=h t('tag_wrangler', :default => "Tag Wrangler") -%></th>
+    <th scope="col"><%=h t('suspended', :default => "Suspended") -%></th>
+    <th scope="col"><%=h t('banned', :default => "Banned") -%></th>
+    <th scope="col"><%=h t('update', :default => "Update") -%></th>
+  </tr>
+    <%- @users.each do |user| -%>
+    <tr id="user_<%= user.id %>">
+      <%= render :partial => 'user_form', :locals => {:user => user} %>
+    </tr> 
+  <%- end -%>
+  </table>
+<%- end -%>
+
+<%- end -%>

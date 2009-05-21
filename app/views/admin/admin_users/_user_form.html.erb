@@ -1,7 +1,7 @@
 <!--titled instead of labelled as per WCAG 2.0. do not revert.-->
 
-<%- form_for :user, user, :url => {:controller => "admin/admin_users", :action => "update", :letter => params[:letter]} do |f| -%> 
-<th scope="row"><%=h user.login %><%= f.hidden_field :login %></th>
+<%- form_for :user, user, :url => {:controller => "admin/admin_users", :action => "update", :pseud => params[:pseud], :role => params[:role]} do |f| -%> 
+<th scope="row"><%= link_to user.login, user_path(user) %><%= f.hidden_field :login %></th>
 <td><%= f.text_field :email, :title => t('email', :default => "Email") %></td>
 <td><%= f.check_box :translation_admin, :title => t('translation_admin', :default => "Translation Admin") %></td>
 <td><%= f.check_box :tag_wrangler, :title => t('tag_wrangler', :default => "Tag Wrangler") %></td>

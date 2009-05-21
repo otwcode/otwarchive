@@ -3,12 +3,15 @@ class Admin::AdminUsersController < ApplicationController
   before_filter :admin_only
 
   def index
-    if params[:letter] && params[:letter].is_a?(String)
-      letter = params[:letter][0,1]
-    else
-      letter = User::ALPHABET[0]
+    if !params[:pseud].blank?
+      @users = Pseud.find(:all, :conditions => ['name LIKE ?', "%#{params[:pseud]}%"]).collect(&:user).uniq
+    elsif params[:role] == "0"
+      flash[:error] = "Please select at least one parameter for your search!"
+      redirect_to :back and return
     end
-    @users = User.alphabetical.starting_with(letter)
+    if params[:role] && params[:role] != "0"
+      @users = (@users || User.find(:all)).select{|u| u.roles.collect(&:id).include?(params[:role].to_i)}.uniq
+    end
   end 
 
   # GET admin/users/1
@@ -32,10 +35,10 @@ class Admin::AdminUsersController < ApplicationController
     @user.attributes = params[:user]
     if @user.save(false)
       flash[:notice] = t('successfully_updated', :default => 'User was successfully updated.')
-     redirect_to :action => "index", :letter => params[:letter]
+      redirect_to :action => "index", :pseud => params[:pseud], :role => params[:role]
     else
       flash[:error] = t('error_updating', :default => 'There was an error updating user {{name}}', :name => params[:user][:login])
-      redirect_to :action => "index", :letter => params[:letter]
+      redirect_to :action => "index", :pseud => params[:pseud], :role => params[:role]
     end
   end
 
