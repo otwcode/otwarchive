@@ -55,13 +55,13 @@ module UsersHelper
 
   # Prints link to series page with user-appropriate number of series
   def print_series_link(user)
-    total = @series ? @series.size : user.series.select{|s| s.visible?(current_user)}.size
+    total = user.series.select{|s| s.visible?(current_user)}.size
     prefix = (@user == current_user) ? "My " : ""
     link_to_unless_current prefix + "Series" + " (#{total})", user_series_index_path(@user)
   end
   
   def print_pseud_series_link(pseud)
-    total = @series ? @series.size : pseud.series.select{|s| s.visible?(current_user)}.size
+    total = pseud.series.select{|s| s.visible?(current_user)}.size
     prefix = (@user == current_user) ? "My " : ""
     link_to_unless_current prefix + "Series" + " (#{total})", user_pseud_series_index_path(@user, pseud)
   end
