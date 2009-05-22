@@ -19,7 +19,7 @@ class Bookmark < ActiveRecord::Base
   def visible(current_user=User.current_user)
     return self if current_user == self.pseud.user
     unless current_user == :false || !current_user
-      return self if current_user.is_admin?
+      return self if current_user.is_a?(Admin)
     end
     if !(self.private? || self.hidden_by_admin?)
       if self.bookmarkable.nil? 
