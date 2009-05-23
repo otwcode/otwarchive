@@ -14,7 +14,7 @@ module WorksHelper
     list = [['Published:', localize(work.published_at.to_date)], ['Words:', work.word_count], ['Chapters:', work.chapter_total_display]]
     if work.chaptered?
       prefix = work.is_wip ? "Updated:" : "Completed:"
-      list.insert(1, [prefix, localize(work.updated_at.to_date)])
+      list.insert(1, [prefix, localize(work.revised_at.to_date)])
     end
     '<dl>' + list.map {|l| '<dt>' + l.first + '</dt><dd>' + l.last.to_s + '</dd>'}.to_s + '</dl>'
   end
