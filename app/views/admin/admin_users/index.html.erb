@@ -5,7 +5,7 @@
     <dt><%= label_tag "pseud", t("user_find_pseud", :default => "Username or pseud") -%></dt>
       <dd><%= text_field_tag "pseud", params[:pseud] -%></dd>
     <dt><%= label_tag "role", t("user_find_role", :default => "Role") -%></dt>
-      <dd><%= select_tag "role", "<option id='0' name='regular' value='0'>Regular User</option>" + options_from_collection_for_select(Role.find(:all), "id", "name", params[:role] ? params[:role].to_i : nil) -%></dd>
+      <dd><%= select_tag "role", "<option id='0' name='regular' value='0'>Regular User</option>" + options_for_select(Role.all.map{|role| [role.name.humanize.titlecase, role.id]}, params[:role] ? params[:role].to_i : nil) -%></dd>
   </dl>
   <p><%= submit_tag t("find_user_button", :default => "Find") -%></p>
 <%- end -%>

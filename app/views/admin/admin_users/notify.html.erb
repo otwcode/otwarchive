@@ -10,8 +10,14 @@
     <dd><%= text_area_tag "content" -%></dd>
     
     <dt><%= label_tag "notify_all", t('notify_all', :default => 'Notify All Users') -%></dt>
-    <dd><%= check_box_tag "notify_all" -%></dd>
+    <dd><%= check_box_tag "notify_all[]", 0, nil, {:id => "notify_all"} -%></dd>
+    
+    <%- Role.find(:all).each do |role| -%>
+      <dt><%= label_tag "notify_all_#{role.name}", t("notify_all_#{role.name}", :default => "Notify All #{role.name.humanize.titlecase.pluralize}") -%></dt>
+      <dd><%= check_box_tag "notify_all[]", role.id, nil, {:id => "notify_all_#{role.name}"} -%></dd>
+    <%- end -%>
 
+    <p><%= t("or", :default => "Or") -%></p>
     <dt><%= t('select_users', :default => 'Select Users To Notify') -%></dt>
     <dd>
 

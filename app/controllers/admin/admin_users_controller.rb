@@ -60,8 +60,16 @@ class Admin::AdminUsersController < ApplicationController
   end
   
   def send_notification
-    if params[:notify_all] == "1"
-      @users = User.all
+    if !params[:notify_all].blank?
+      if params[:notify_all].include?("0")
+        @users = User.all
+      else
+        @users = []
+        params[:notify_all].each do |role|
+          @users += User.all.select{|u| u.roles.collect(&:id).include?(role.to_i)}
+        end
+        @users = @users.uniq
+      end
     elsif params[:user_ids]
       @users = User.find(params[:user_ids])
     end
@@ -93,7 +101,7 @@ class Admin::AdminUsersController < ApplicationController
     AdminMailer.deliver_archive_notification(current_admin.login, @users, @subject, @message)
     
     flash[:notice] = t('sent', :default => "Notification sent to {{count}} user(s).", :count => @users.size)
-   redirect_to :action => :notify
+    redirect_to :action => :notify
   end
 
 end  
