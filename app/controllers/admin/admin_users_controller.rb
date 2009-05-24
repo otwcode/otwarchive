@@ -10,7 +10,7 @@ class Admin::AdminUsersController < ApplicationController
       redirect_to :back and return
     end
     if params[:role] && params[:role] != "0"
-      @users = (@users || User.find(:all)).select{|u| u.roles.collect(&:id).include?(params[:role].to_i)}.uniq
+      @users = (@users || User.all).select{|u| u.roles.collect(&:name).include?(params[:role])}.uniq
     end
   end 
 
@@ -56,7 +56,7 @@ class Admin::AdminUsersController < ApplicationController
     else
       letter = User::ALPHABET[0]
     end
-    @users = User.alphabetical.starting_with(letter)
+    @all_users = User.alphabetical.starting_with(letter)
   end
   
   def send_notification
@@ -65,15 +65,15 @@ class Admin::AdminUsersController < ApplicationController
         @users = User.all
       else
         @users = []
-        params[:notify_all].each do |role|
-          @users += User.all.select{|u| u.roles.collect(&:id).include?(role.to_i)}
+        params[:notify_all].each do |role_name|
+          @users += User.all.select{|u| u.roles.collect(&:name).include?(role_name)}
         end
         @users = @users.uniq
       end
     elsif params[:user_ids]
       @users = User.find(params[:user_ids])
     end
-
+   
     if @users.blank?
       flash[:error] = t('no_user', :default => "Who did you want to notify?")
       redirect_to :action => :notify and return

@@ -12,12 +12,12 @@
     <dt><%= label_tag "notify_all", t('notify_all', :default => 'Notify All Users') -%></dt>
     <dd><%= check_box_tag "notify_all[]", 0, nil, {:id => "notify_all"} -%></dd>
     
-    <%- Role.find(:all).each do |role| -%>
-      <dt><%= label_tag "notify_all_#{role.name}", t("notify_all_#{role.name}", :default => "Notify All #{role.name.humanize.titlecase.pluralize}") -%></dt>
-      <dd><%= check_box_tag "notify_all[]", role.id, nil, {:id => "notify_all_#{role.name}"} -%></dd>
+    <%- Role.all.collect(&:name).uniq.each do |role_name| -%>
+      <dt><%= label_tag "notify_all_#{role_name}", t("notify_all_#{role_name}", :default => "Notify All #{role_name.humanize.titlecase.pluralize}") -%></dt>
+      <dd><%= check_box_tag "notify_all[]", role_name, nil, {:id => "notify_all_#{role_name}"} -%></dd>
     <%- end -%>
 
-    <p><%= t("or", :default => "Or") -%></p>
+    <p style="font-weight:bold;"><%= t("or", :default => "Or") -%></p>
     <dt><%= t('select_users', :default => 'Select Users To Notify') -%></dt>
     <dd>
 
@@ -32,12 +32,12 @@
 
       <tr>
         <td colspan="2">
-          <input type="checkbox" id="select_all" onclick="selectAllCheckboxes('user_ids', <%= @users.size -%>, this.checked);">
+          <input type="checkbox" id="select_all" onclick="selectAllCheckboxes('user_ids', <%= @all_users.size -%>, this.checked);">
           <%= label_tag "select_all", t('select_all_none', :default => "Select All/None") -%>
         </td>
       </tr>
       
-    	<%- @users.each do |user| -%>
+    	<%- @all_users.each do |user| -%>
       	<tr id="user_<%= user.id %>">
           <td><%= label_tag "user_ids_#{user.id}", user.login -%></td>
           <td><%= check_box_tag "user_ids[]", user.id, false, :id => "user_ids_#{user.id}", :class => "user_id" -%></td>
