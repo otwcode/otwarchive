@@ -60,7 +60,7 @@
 	<%- end -%>
 
 	<li class="summary">
-	  <%= sanitize_limit_and_format_for_display work.summary %>
+	  <%= sanitize_strip_images_and_format_for_display work.summary %>
 	</li>
 
 	<li class="stats">

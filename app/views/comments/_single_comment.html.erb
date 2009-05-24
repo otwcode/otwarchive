@@ -16,7 +16,7 @@
       <%- end -%>
       
       <h3><%= get_pseud_or_mailaddress(single_comment) %></h3>
-      <%=sanitize_and_format_for_display single_comment.content %>
+      <%=sanitize_limit_and_format_for_display single_comment.content %>
       <h4 class="datestamp">
         <%=h t('single_comment_posted', :default => "Posted {{date}}", :date => l(single_comment.created_at)) %>
       </h4>

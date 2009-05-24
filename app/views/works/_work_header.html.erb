@@ -55,7 +55,7 @@
   <%- unless @work.summary.blank? -%>
   <blockquote class="summary">
     <h3><%=h "Summary:" %></h3>
-    <%=sanitize_and_format_for_display @work.summary %>
+    <%=sanitize_limit_and_format_for_display @work.summary %>
   </blockquote>
   <%- end -%>
   
