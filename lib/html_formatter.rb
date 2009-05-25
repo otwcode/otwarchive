@@ -35,12 +35,12 @@ module HtmlFormatter
   end
  
   # A more limited display option for comments and summaries
-  def sanitize_limit_and_format_for_display(text, options = {:tags => %w(a href, b, br, p, i, em, strong, strike, u, ins, q, del, cite, blockquote, pre, code, small, sup, sub, big, img)})
+  def sanitize_limit_and_format_for_display(text, options = {:tags => %w(a href, b, big, blockquote, br, center, cite, code, del, em, i, img, ins, p, pre, q, small, strike, strong,  sub, sup, u)})
     text = add_paragraph_tags_for_display(sanitize_whitelist(text, options))
   end
   
     # A more limited display option which strips obtrusive tags for index views.
-  def sanitize_strip_images_and_format_for_display(text, options = {:tags => %w(a href, b, br, p, i, em, strong, strike, u, ins, q, del, cite, blockquote, pre, code, small, sup, sub, big)})
+  def sanitize_strip_images_and_format_for_display(text, options = {:tags => %w(a href, b, big, blockquote, br, center, cite, code, del, em, i, ins, p, pre, q, small, strike, strong,  sub, sup, u)})
     text = add_paragraph_tags_for_display(sanitize_whitelist(text, options))
   end
 
