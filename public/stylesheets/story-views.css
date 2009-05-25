@@ -39,11 +39,6 @@ set work styles
 .work-show h5	{ font-weight:600; font-size: 1em;}
 .work-show h6	{ font-size: 0.875em; border-bottom:1px solid; }
 .work-show h3 a, .work-show h3 a:link, .work-show h3 a:visited {color:#fffef9; border-bottom:0} 
-.work-show #chapters h1, .work-show #chapters h2, 
-.work-show #chapters h3, .work-show #chapters h4, 
-.work-show #chapters h5, .work-show #chapters h6 
-{ margin: 0; padding: 0; border: 0; outline: 0;	font-size: 100%; background: none; font-weight: normal}
-
 
 /* quotes and stresses */
 .work-show blockquote	{ font-size:1em; margin:auto auto auto 1.5em; padding:0.75em; border-left:2px solid #999; }
