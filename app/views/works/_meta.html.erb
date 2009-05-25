@@ -1,4 +1,5 @@
-﻿<dl class="work-meta">
+﻿<%- cache(:key => 'work_show_tags_' + work.id.to_s + '_' + work.revised_at.to_s) do -%>
+<dl class="work-meta">
   <%- work_tags = work.tags -%>
   <%- Tag::VISIBLE.each do |type| -%>
     <%- tags = work_tags.select{|tag| tag.type == type} -%>
@@ -19,3 +20,4 @@
     <%- end -%>
   <%- end -%>
 </dl>
+<%- end -%>

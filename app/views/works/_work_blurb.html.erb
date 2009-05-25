@@ -1,6 +1,7 @@
 <li class="work" id="work_<%=h work.id %>">
 
 <ul class="work <%- if is_author_of?(work) && controller.controller_name != 'series' -%>own<%- end -%>">
+  <%- cache(:key => 'work_' + work.id.to_s + '_' + work.updated_at.to_s) do -%>
 	<li class="heading">
 	  <%= get_symbols_for(work) -%>
 	  <h3>
@@ -67,6 +68,8 @@
 			<dd><%= number_with_delimiter(work.word_count) %></dd>
 		<dt><%=h t('work_chapters', :default => 'Chapters') + ': ' %></dt>
 			<dd><%= work.chapter_total_display %></dd>
+	 <%- end -%> 	
+			
 		<%- if work.count_visible_comments > 0 -%>
 		<dt><%=h t('work_comments', :default => 'Comments') + ': '%></dt>
 			<dd><%= link_to work.count_visible_comments, work_path(:id => work.id, :anchor => "comments", :show_comments => true) -%></dd>

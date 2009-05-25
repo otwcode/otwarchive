@@ -144,5 +144,5 @@ HELP_DIRECTORY: '/help'
 USE_DELTA_INDEXING: false
 
 # production caching
-PRODUCTION_CACHE: "memory"
-#PRODUCTION_CACHE: "memcache"
+#PRODUCTION_CACHE: "memory"
+PRODUCTION_CACHE: "memcache"
