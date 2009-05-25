@@ -3,13 +3,16 @@ class Admin::AdminUsersController < ApplicationController
   before_filter :admin_only
 
   def index
-    if !params[:pseud].blank?
-      @users = Pseud.find(:all, :conditions => ['name LIKE ?', "%#{params[:pseud]}%"]).collect(&:user).uniq
-    elsif params[:role] == "0"
+    if (params[:role].blank? || params[:role] == "0") && params[:pseud].blank? && params[:email].blank?
       flash[:error] = "Please select at least one parameter for your search!"
       redirect_to :back and return
+    elsif !params[:pseud].blank?
+      @users = Pseud.find(:all, :conditions => ['name LIKE ?', "%#{params[:pseud]}%"]).collect(&:user).uniq      
     end
-    if params[:role] && params[:role] != "0"
+    if !params[:email].blank?
+      @users = (@users || User.all).select{|u| u.email && u.email.include?(params[:email])}
+    end
+    if !params[:role].blank? && params[:role] != "0"
       @users = (@users || User.all).select{|u| u.roles.collect(&:name).include?(params[:role])}.uniq
     end
   end 
