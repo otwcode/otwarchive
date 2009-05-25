@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090420032457) do
+ActiveRecord::Schema.define(:version => 20090524195217) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -76,6 +76,8 @@ ActiveRecord::Schema.define(:version => 20090420032457) do
     t.datetime "edited_at"
   end
 
+  add_index "comments", ["commentable_id", "commentable_type"], :name => "index_comments_commentable"
+
   create_table "common_taggings", :force => true do |t|
     t.integer  "common_tag_id",   :limit => 8,   :null => false
     t.integer  "filterable_id",   :limit => 8,   :null => false
@@ -103,6 +105,8 @@ ActiveRecord::Schema.define(:version => 20090420032457) do
   end
 
   add_index "creatorships", ["creation_id", "creation_type", "pseud_id"], :name => "creation_id_creation_type_pseud_id", :unique => true
+  add_index "creatorships", ["creation_id", "creation_type"], :name => "index_creatorships_creation"
+  add_index "creatorships", ["pseud_id"], :name => "index_creatorships_pseud"
 
   create_table "external_works", :force => true do |t|
     t.string   "url",             :default => "",    :null => false
@@ -206,6 +210,8 @@ ActiveRecord::Schema.define(:version => 20090420032457) do
     t.datetime "updated_at"
   end
 
+  add_index "pseuds", ["user_id", "name"], :name => "index_pseuds_on_user_id_and_name"
+
   create_table "readings", :force => true do |t|
     t.integer  "major_version_read", :limit => 8
     t.integer  "minor_version_read", :limit => 8
@@ -257,33 +263,6 @@ ActiveRecord::Schema.define(:version => 20090420032457) do
     t.boolean  "restricted",      :default => false, :null => false
   end
 
-  create_table "tag_categories", :force => true do |t|
-    t.string   "name",         :limit => 100
-    t.boolean  "required",                    :default => false, :null => false
-    t.boolean  "official",                    :default => false, :null => false
-    t.boolean  "exclusive",                   :default => false, :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "display_name"
-  end
-
-  add_index "tag_categories", ["name"], :name => "index_tag_categories_on_name", :unique => true
-
-  create_table "tag_relationship_kinds", :force => true do |t|
-    t.string   "name",                     :default => "",    :null => false
-    t.string   "verb_phrase",              :default => "",    :null => false
-    t.boolean  "reciprocal",               :default => false, :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "distance",    :limit => 8,                    :null => false
-  end
-
-  create_table "tag_relationships", :force => true do |t|
-    t.integer "tag_id",                   :limit => 8
-    t.integer "related_tag_id",           :limit => 8
-    t.integer "tag_relationship_kind_id", :limit => 8
-  end
-
   create_table "taggings", :force => true do |t|
     t.integer  "tagger_id",     :limit => 8
     t.integer  "taggable_id",   :limit => 8,                   :null => false
@@ -293,21 +272,21 @@ ActiveRecord::Schema.define(:version => 20090420032457) do
     t.string   "tagger_type",   :limit => 100, :default => ""
   end
 
+  add_index "taggings", ["taggable_id", "taggable_type"], :name => "index_taggings_taggable"
   add_index "taggings", ["tagger_id", "tagger_type", "taggable_id", "taggable_type"], :name => "index_taggings_polymorphic", :unique => true
 
   create_table "tags", :force => true do |t|
-    t.string   "name",            :limit => 100, :default => ""
-    t.boolean  "canonical",                      :default => false, :null => false
-    t.integer  "tag_category_id", :limit => 8
+    t.string   "name",           :limit => 100, :default => ""
+    t.boolean  "canonical",                     :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "taggings_count",  :limit => 8,   :default => 0
-    t.boolean  "adult",                          :default => false
+    t.integer  "taggings_count", :limit => 8,   :default => 0
+    t.boolean  "adult",                         :default => false
     t.string   "type"
-    t.integer  "media_id",        :limit => 8
-    t.integer  "fandom_id",       :limit => 8
-    t.integer  "merger_id",       :limit => 8
-    t.boolean  "has_characters",                 :default => false, :null => false
+    t.integer  "media_id",       :limit => 8
+    t.integer  "fandom_id",      :limit => 8
+    t.integer  "merger_id",      :limit => 8
+    t.boolean  "has_characters",                :default => false, :null => false
   end
 
   add_index "tags", ["name"], :name => "index_tags_on_name", :unique => true
@@ -358,6 +337,7 @@ ActiveRecord::Schema.define(:version => 20090420032457) do
   end
 
   add_index "users", ["identity_url"], :name => "index_users_on_identity_url", :unique => true
+  add_index "users", ["login"], :name => "index_users_on_login"
 
   create_table "works", :force => true do |t|
     t.integer  "expected_number_of_chapters", :limit => 8, :default => 1

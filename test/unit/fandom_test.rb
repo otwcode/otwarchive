@@ -78,7 +78,7 @@ class FandomTest < ActiveSupport::TestCase
           @fandom.update_freeforms([@freeform.name])
         end
         should "have the freeform as a child" do
-          assert_contains(@fandom.children, @freeform)
+          assert_contains(@freeform.parents, @fandom)
         end
         context "and later removed" do
           setup do

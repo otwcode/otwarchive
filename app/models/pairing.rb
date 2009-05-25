@@ -5,7 +5,7 @@ class Pairing < Tag
   named_scope :no_characters, :conditions => {:has_characters => false}
 
   def characters
-    parents.select {|t| t.is_a? Character}.sort
+    parents.by_type('Character').by_name
   end
 
   def all_characters
@@ -23,15 +23,15 @@ class Pairing < Tag
   end
 
   def freeforms
-    children.select {|t| t.is_a? Freeform}.sort
+    children.by_type('Freeform').by_name
   end
 
   def fandoms
-    parents.select {|t| t.is_a? Fandom}.sort
+    parents.by_type('Fandom').by_name
   end
 
   def medias
-    parents.select {|t| t.is_a? Media}.sort
+    parents.by_type('Media').by_name
   end
 
 end

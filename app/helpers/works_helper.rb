@@ -76,16 +76,19 @@ module WorksHelper
   end
 
   def get_symbols_for(work)
-    warning_class = get_warnings_class(work.warnings)
-    warning_string = get_title_string(work.warnings)
-
-    rating = work.ratings.blank? ? nil : work.ratings.first
+    warnings = work.tags.select{|tag| tag.type == "Warning"}
+    warning_class = get_warnings_class(warnings)
+    warning_string = get_title_string(warnings)
+    
+    ratings = work.tags.select{|tag| tag.type == "Rating"}
+    rating = ratings.blank? ? nil : ratings.first
     rating_class = get_ratings_class(rating)
-    rating_string = get_title_string(work.ratings, "rating")
-
-    category = work.categories.blank? ? nil : work.categories.first
+    rating_string = get_title_string(ratings, "rating")
+    
+    categories = work.tags.select{|tag| tag.type == "Category"}
+    category = categories.blank? ? nil : categories.first
     category_class = get_category_class(category)
-    category_string = get_title_string(work.categories, "category")
+    category_string = get_title_string(categories, "category")
 
     iswip_class = get_complete_class(work)
     iswip_string = work.is_wip ? "Work in Progress" : "Complete Work"

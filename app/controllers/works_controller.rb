@@ -92,11 +92,12 @@ class WorksController < ApplicationController
     # default values for our inputs
     @query = nil
     @user = nil
+    @tag = nil
     @selected_tags = []
     @selected_pseuds = []
     @sort_column = params[:sort_column] || 'date'
     @sort_direction = params["sort_direction_for_#{@sort_column}".to_sym] || 'DESC'
-
+    
     # numerical ids for now
     unless params[:selected_pseuds].blank?
       begin
@@ -126,6 +127,7 @@ class WorksController < ApplicationController
         @filters = Work.build_filters_new(@works)
       end
     else
+      @most_recent_works = (params[:tag_id].blank? && params[:user_id].blank?)
       # we're browsing instead
       # if we're browsing by a particular tag, just add that
       # tag to the selected_tags list.
@@ -162,8 +164,8 @@ class WorksController < ApplicationController
       @language_id = params[:language_id] ? Language.find_by_short(params[:language_id]) : nil
 
       # Now let's build the query
-      @works, @filters, @pseuds = Work.find_with_options(:user => @user, :author => @author, :selected_tags => @selected_tags,
-                                                    :selected_pseuds => @selected_pseuds,
+      @works, @filters, @pseuds = Work.find_with_options(:user => @user, :author => @author, :selected_pseuds => @selected_pseuds,
+                                                    :tag => @tag, :selected_tags => @selected_tags,                                                                                   
                                                     :language_id => @language_id,
                                                     :sort_column => @sort_column, :sort_direction => @sort_direction,
                                                     :page => params[:page], :per_page => params[:per_page])
@@ -183,11 +185,11 @@ class WorksController < ApplicationController
     end
 
     # clean out the filters
-    if @filters && !@filters.empty?
-      @filters.keys.each do |category|
-        @filters[category].reject! {|filter| (!@selected_tags.include?(filter[:id]) && (filter[:count].to_i < 2))}
-      end
-    end
+    #if @filters && !@filters.empty?
+    #  @filters.keys.each do |category|
+    #    @filters[category].reject! {|filter| (!@selected_tags.include?(filter[:id]) && (filter[:count].to_i < 2))}
+    #  end
+    #end
   end
 
   def drafts

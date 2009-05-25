@@ -11,7 +11,7 @@ class LanguagesController < ApplicationController
     
   def show
     @language = Language.find_by_short(params[:id])
-    @works = @language.works.recent.visible
+    @works = @language.works.recent.visible.limited
   end
   
   def new

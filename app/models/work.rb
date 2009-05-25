@@ -332,7 +332,7 @@ class Work < ActiveRecord::Base
   #######################################################################
   # TAGGING
   # Works are taggable objects.
-  #######################################################################
+  ####################################################################### 
 
   # string methods
   # (didn't use define_method, despite the redundancy, because it doesn't cache in development)
@@ -539,13 +539,14 @@ class Work < ActiveRecord::Base
 
   def cast_tags
     # we combine pairing and character tags up to the limit
-    characters = self.characters.sort || []
-    pairings = self.pairings.sort || []
+    characters = self.tags.select{|tag| tag.type == "Character"}.sort || []
+    pairings = self.tags.select{|tag| tag.type == "Pairing"}.sort || []
     return [] if pairings.empty? && characters.empty?
-    canonical_pairings = pairings.collect{|p| p.merger}
+    canonical_pairings = Pairing.canonical.find(pairings.collect(&:merger_id).compact.uniq)
     all_pairings = (pairings + canonical_pairings).flatten.uniq.compact
 
-    pairing_characters = all_pairings.collect{|p| p.all_characters}.flatten.uniq.compact
+    #pairing_characters = all_pairings.collect{|p| p.all_characters}.flatten.uniq.compact
+    pairing_characters = Character.by_pairings(all_pairings)
 
     cast = pairings + characters - pairing_characters
     if cast.size > ArchiveConfig.TAGS_PER_LINE
@@ -556,8 +557,8 @@ class Work < ActiveRecord::Base
   end
 
   def freeform_tags
-    freeform = self.freeforms.sort || []
-    ambiguous = self.ambiguities.sort || []
+    freeform = self.tags.select{|tag| tag.type == "Freeform"}.sort || []
+    ambiguous = self.tags.select{|tag| tag.type == "Ambiguous"}.sort || []
 
     tags = freeform + ambiguous
     if tags.size > ArchiveConfig.TAGS_PER_LINE
@@ -567,13 +568,17 @@ class Work < ActiveRecord::Base
   end
 
   def warning_tags
-    warnings = self.warnings.sort || []
+    warnings = self.tags.select{|tag| tag.type == "Warning"}.sort || []
 
     tags = warnings
     if tags.size > ArchiveConfig.TAGS_PER_LINE
       tags = tags[0..(ArchiveConfig.TAGS_PER_LINE-1)]
     end
     return tags
+  end
+  
+  def fandom_tags
+    self.tags.select{|tag| tag.type == "Fandom"}.sort
   end
 
   # for testing
@@ -744,8 +749,9 @@ class Work < ActiveRecord::Base
   named_scope :limited, lambda {|limit|
     {:limit => limit.kind_of?(Fixnum) ? limit : 5}
   }
-
-  named_scope :recent, :order => 'works.revised_at DESC', :limit => 5
+  
+  named_scope :recent, lambda { |*args| {:conditions => ["revised_at > ?", (args.first || 4.weeks.ago)]} }
+  named_scope :within_date_range, lambda { |*args| {:conditions => ["revised_at BETWEEN ? AND ?", (args.first || 4.weeks.ago), (args.last || Time.now)]} }
   named_scope :posted, :conditions => {:posted => true}
   named_scope :unposted, :conditions => {:posted => false}
   named_scope :restricted , :conditions => {:restricted => true}
@@ -926,7 +932,9 @@ class Work < ActiveRecord::Base
     owned = '.owned_by_conditions(options[:user])'
     sort = '.ordered_by_' + options[:sort_column] + '_' + options[:sort_direction].downcase
     page_args = {:page => options[:page] || 1, :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE)}
+    paginate = '.paginate(page_args)'
     sort_and_paginate = sort + '.paginate(page_args)'
+    recent = '.recent'
 
     @works = []
     @pseuds = []
@@ -953,14 +961,17 @@ class Work < ActiveRecord::Base
       # a user's default works page
       command << owned + visible_without_owners
       @pseuds = options[:user].pseuds
+    elsif !options[:tag].blank?
+      # works for a specific tag  
+      command << visible + tags
     elsif !options[:selected_tags].blank?
       # no user but selected tags
-      command << visible + tags
+      command << visible + tags + recent
     elsif !options[:language_id].blank?
       command << visible + '.by_language(options[:language_id])'
     else
       # all visible works
-      command << visible
+      command << visible + recent
     end
 
     @works = eval("Work#{command + sort_and_paginate}")
@@ -974,13 +985,11 @@ class Work < ActiveRecord::Base
       @pseuds << options[:user].pseuds.on_works(@works)
       @pseuds.flatten!
     end
-
+    
     unless @works.empty?
-      ids = eval("Work.ids_only#{command}").collect(&:id)
-      #@filters = build_filters_hash(Work.tags_with_count(ids))
-      @filters = build_filters_new(Work.find(ids))
+      @filters = build_filters_new(@works)
     end
-
+     
     return @works, @filters, @pseuds
   end
 
@@ -1014,7 +1023,9 @@ class Work < ActiveRecord::Base
     tags = canonicals + synonyms.collect(&:merger).compact
     frequency = tags.collect(&:id).inject(Hash.new(0)) { |frequency, id| frequency[id] += 1; frequency }
     tags.uniq.sort.each do |tag|
-      (filters[tag.type] ||= []) << {:name => tag.name, :id => tag.id.to_s, :count => frequency[tag.id]}
+      unless frequency[tag.id] < 2
+        (filters[tag.type] ||= []) << {:name => tag.name, :id => tag.id.to_s, :count => frequency[tag.id]}
+      end
     end
     filters
   end
@@ -1022,9 +1033,7 @@ class Work < ActiveRecord::Base
   # this is the method which is called from the works controller
   # after a sphinx search retrieved the works
   def self.get_filters(works_to_filter)
-    ids = works_to_filter.collect(&:id)
-    @filters = build_filters_hash(Work.tags_with_count(ids))
-    return @filters
+    @filters = build_filters_new(works_to_filter)
   end
 
   # sort works by title

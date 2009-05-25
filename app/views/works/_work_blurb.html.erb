@@ -12,9 +12,7 @@
   </h3>
 
 	  <h4>
-	    <%- unless work.fandoms.nil? -%>
-      <%= work.fandoms.collect{|tag| link_to_tag(tag) }.join(', ') %>
-  	  <%- end -%>
+      <%= work.fandom_tags.collect{|tag| link_to_tag(tag) }.join(', ') %>
 		&nbsp;
 	  </h4>
 

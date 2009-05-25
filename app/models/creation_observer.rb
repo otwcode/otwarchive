@@ -18,13 +18,13 @@ class CreationObserver < ActiveRecord::Observer
   # Save creatorships after the creation is saved
   def save_creatorships(creation)
     if creation.authors
-      new = creation.authors - creation.pseuds
-      creation.pseuds << new rescue nil
+      new_authors = creation.authors - creation.pseuds
+      creation.pseuds << new_authors.uniq rescue nil
       if creation.is_a?(Chapter)
-        creation.work.pseuds << new rescue nil
+        creation.work.pseuds << (new_authors - creation.work.pseuds).uniq rescue nil
       elsif creation.is_a?(Work)
-        creation.chapters.first.pseuds << new rescue nil
-        creation.series.each {|series| series.pseuds << (creation.authors - series.pseuds) rescue nil}      
+        creation.chapters.first.pseuds << (new_authors - creation.chapters.first.pseuds).uniq rescue nil
+        creation.series.each {|series| series.pseuds << (creation.authors - series.pseuds).uniq rescue nil}      
       end
     end
     if creation.toremove

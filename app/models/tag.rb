@@ -21,6 +21,8 @@ class Tag < ActiveRecord::Base
   belongs_to :media
 
   has_many :common_taggings, :foreign_key => 'common_tag_id'
+  has_many :child_taggings, :class_name => 'CommonTagging', :as => :filterable
+  has_many :children, :through => :child_taggings, :source => :common_tag 
   has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag'
   has_many :ambiguities, :through => :common_taggings, :source => :filterable, :source_type => 'Ambiguity'
   has_many :filtered_works, :through => :common_taggings, :source => :filterable, :source_type => 'Work'
@@ -168,9 +170,9 @@ class Tag < ActiveRecord::Base
   end
 
   # all tags which have given tag as a parent
-  def children
-    CommonTagging.find_all_by_filterable_id_and_filterable_type(self.id, 'Tag').map(&:common_tag).uniq.compact.sort
-  end
+  #def children
+  #  CommonTagging.find_all_by_filterable_id_and_filterable_type(self.id, 'Tag').map(&:common_tag).uniq.compact.sort
+  #end
 
   # parents children and self
   def family
@@ -506,13 +508,11 @@ class Tag < ActiveRecord::Base
     medias
   end
 
-  def update_freeforms(new=[])
+  def update_freeforms(new_freeforms=[])
     return unless Tag::USER_DEFINED.include?(self[:type])
     current = self.freeforms.map(&:name)
-    current = [] unless current
-    new = [] unless new
-    remove = current - new
-    add = new - current
+    remove = current - new_freeforms
+    add = new_freeforms - current
     remove.each do |freeform_name|
       self.remove_freeform(Freeform.find_by_name(freeform_name))
     end

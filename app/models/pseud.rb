@@ -5,7 +5,7 @@ class Pseud < ActiveRecord::Base
   DESCRIPTION_MAX = 500
   
   belongs_to :user
-  has_many :bookmarks
+  has_many :bookmarks, :dependent => :destroy
   has_many :creatorships
   has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work'
   has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter'

@@ -1,3 +1,4 @@
+<%- if @most_recent_works -%><h1>Works updated in the last month</h1><%- end -%>
 <h2><%= search_header @works, @query %></h2>
 
 <% paginated_section @works, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>

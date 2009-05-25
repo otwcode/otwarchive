@@ -6,15 +6,15 @@ class Fandom < Tag
   named_scope :no_parent, :conditions => {:media_id => nil}
 
   def characters
-    children.select {|t| t.is_a? Character}.sort
+    children.by_type('Character').by_name
   end
 
   def pairings
-    children.select {|t| t.is_a? Pairing}.sort
+    children.by_type('Pairing').by_name
   end
 
   def freeforms
-    children.select {|t| t.is_a? Freeform}.sort
+    children.by_type('Freeform').by_name
   end
 
   def fandoms
@@ -22,7 +22,7 @@ class Fandom < Tag
   end
 
   def medias
-    parents.select {|t| t.is_a? Media}.sort
+    parents.by_type('Media').by_name
   end
 
 end
