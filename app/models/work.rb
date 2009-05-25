@@ -974,7 +974,7 @@ class Work < ActiveRecord::Base
       command << visible + recent
     end
 
-    @works = eval("Work#{command + sort_and_paginate}")
+    @works = eval("Work#{command + sort}")
     # what I'm trying to achieve here is to add the co-authors
     # of the displayed works to the available list of pseuds to /filter on/
     # however, the much commented two lines below cause a major frak-up:
@@ -990,7 +990,7 @@ class Work < ActiveRecord::Base
       @filters = build_filters_new(@works)
     end
      
-    return @works, @filters, @pseuds
+    return @works.paginate(page_args), @filters, @pseuds
   end
 
   def self.build_filters_hash(filters_array)
