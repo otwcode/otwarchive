@@ -3,19 +3,24 @@ class Admin::AdminUsersController < ApplicationController
   before_filter :admin_only
 
   def index
-    if (params[:role].blank? || params[:role] == "0") && params[:pseud].blank? && params[:email].blank?
-      flash[:error] = "Please select at least one parameter for your search!"
-      redirect_to :back and return
-    elsif !params[:pseud].blank?
-      @users = Pseud.find(:all, :conditions => ['name LIKE ?', "%#{params[:pseud]}%"]).collect(&:user).uniq      
+    if params[:role]
+      if params[:role] == "0" && params[:query].blank?
+        return flash[:error] = "Please enter a name or email address!"
+      elsif params[:role] == "0"
+        joins = :pseuds
+        conditions = ['pseuds.name LIKE ? OR email = ?', "%#{params[:query]}%", params[:query]]
+      else
+        if !params[:query].blank?
+          joins = [:pseuds, :roles]
+          conditions = ['(pseuds.name LIKE ? OR email = ?) AND roles.name = ?', "%#{params[:query]}%", params[:query], params[:role]]
+        else
+          joins = :roles 
+          conditions = ['roles.name = ?', params[:role]]
+        end
+      end
+      @users = User.find(:all, :select => 'DISTINCT users.*', :joins => joins, :conditions => conditions)
     end
-    if !params[:email].blank?
-      @users = (@users || User.all).select{|u| u.email && u.email.include?(params[:email])}
-    end
-    if !params[:role].blank? && params[:role] != "0"
-      @users = (@users || User.all).select{|u| u.roles.collect(&:name).include?(params[:role])}.uniq
-    end
-  end 
+  end
 
   # GET admin/users/1
   # GET admin/users/1.xml
