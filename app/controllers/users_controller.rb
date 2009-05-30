@@ -152,7 +152,7 @@ class UsersController < ApplicationController
         successful_update
       end
     rescue
-      flash[:error] = t('update_failed', :default => "Your update failed; please try again.")
+      #flash[:error] = t('update_failed', :default => "Your update failed; please try again.")
       render :action => "edit"
     end
   end
