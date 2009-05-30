@@ -94,7 +94,7 @@ class ProfileControllerTest < ActionController::TestCase
 
         assert form.submit
       end
-      should_set_the_flash_to /failed/
+      should_set_the_flash_to /incorrect/
       should_render_template :edit
     end
     context "with password mismatch" do
