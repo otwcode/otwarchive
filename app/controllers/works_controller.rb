@@ -118,13 +118,14 @@ class WorksController < ApplicationController
       @query = params[:query]
       begin
         @works = Work.search_with_sphinx(params)
+        @works_to_filter = Work.search_with_sphinx(params, filterable=true)
       rescue ThinkingSphinx::ConnectionError
         flash[:error] = t('errors.search_engine_down', :default => "The search engine seems to be down at the moment, sorry!")
-       redirect_to :action => :index and return
+        redirect_to :action => :index and return
       end
 
       unless @works.empty?
-        @filters = Work.build_filters_new(@works)
+        @filters = Work.build_filters_new(@works_to_filter)
       end
     else
       @most_recent_works = (params[:tag_id].blank? && params[:user_id].blank?)
@@ -183,13 +184,6 @@ class WorksController < ApplicationController
         # do we need more than the regular flash notice?
       end
     end
-
-    # clean out the filters
-    #if @filters && !@filters.empty?
-    #  @filters.keys.each do |category|
-    #    @filters[category].reject! {|filter| (!@selected_tags.include?(filter[:id]) && (filter[:count].to_i < 2))}
-    #  end
-    #end
   end
 
   def drafts

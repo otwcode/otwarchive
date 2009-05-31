@@ -877,7 +877,7 @@ class Work < ActiveRecord::Base
     end
   end
 
-  def self.search_with_sphinx(options)
+  def self.search_with_sphinx(options, filterable=false)
 
     # sphinx ordering must be done on attributes
     order_clause = case options[:sort_column]
@@ -918,6 +918,10 @@ class Work < ActiveRecord::Base
     search_options.merge!({:order => order_clause}) if !order_clause.blank?
 
     logger.info "\n\n\n\n*+*+*+*+ search_options: " + search_options.to_yaml
+    
+    if filterable
+      search_options[:per_page] = 1000
+    end
 
     Work.search(options[:query], search_options)
   end

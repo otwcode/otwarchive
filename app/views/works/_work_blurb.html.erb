@@ -1,7 +1,7 @@
 <li class="work" id="work_<%=h work.id %>">
 
 <ul class="work <%- if is_author_of?(work) && controller.controller_name != 'series' -%>own<%- end -%>">
-  <%- cache(:key => 'work_' + work.id.to_s + '_' + work.updated_at.to_s) do -%>
+  <%- cache(:key => work_blurb_cache_key(work)) do -%>
 	<li class="heading">
 	  <%= get_symbols_for(work) -%>
 	  <h3>
