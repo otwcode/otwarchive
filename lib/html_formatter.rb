@@ -30,17 +30,17 @@ module HtmlFormatter
   end
   
   # This is future-planning - titles are currently stripped of all html in order to make sort and search simpler, so there should be no tags in titles which need sanitize in the view. 
-  def sanitize_title_for_display(text, options = {:tags => %w(a href, b, br, p, i, em, strong, strike, u, ins, q, del, cite, blockquote, pre, code, small, sup, sub)})
+  def sanitize_title_for_display(text, options = {:tags => ['a href', 'b', 'br', 'p', 'i', 'em', 'strong', 'strike', 'u', 'ins', 'q', 'del', 'cite', 'blockquote', 'pre', 'code', 'small', 'sup', 'sub']})
     sanitize_whitelist(text, options)
   end
  
   # A more limited display option for comments and summaries
-  def sanitize_limit_and_format_for_display(text, options = {:tags => %w(a href, b, big, blockquote, br, center, cite, code, del, em, i, img, ins, p, pre, q, small, strike, strong,  sub, sup, u)})
+  def sanitize_limit_and_format_for_display(text, options = {:tags => ['a href', 'b', 'big', 'blockquote', 'br', 'center', 'cite', 'code', 'del', 'em', 'i', 'img', 'ins', 'p', 'pre', 'q', 'small', 'strike', 'strong',  'sub', 'sup', 'u']})
     text = add_paragraph_tags_for_display(sanitize_whitelist(text, options))
   end
   
     # A more limited display option which strips obtrusive tags for index views.
-  def sanitize_strip_images_and_format_for_display(text, options = {:tags => %w(a href, b, big, blockquote, br, center, cite, code, del, em, i, ins, p, pre, q, small, strike, strong,  sub, sup, u)})
+  def sanitize_strip_images_and_format_for_display(text, options = {:tags => ['a href', 'b', 'big', 'blockquote', 'br', 'center', 'cite', 'code', 'del', 'em', 'i', 'ins', 'p', 'pre', 'q', 'small', 'strike', 'strong', 'sub', 'sup', 'u']})
     text = add_paragraph_tags_for_display(sanitize_whitelist(text, options))
   end
 
