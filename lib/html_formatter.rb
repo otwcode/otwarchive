@@ -46,10 +46,6 @@ module HtmlFormatter
 
   # cleans up doubled paragraph/newline tags
   def cleanup_paragraph_tags(text)
-    # make sure there are paragraphs inside blockquotes
-    text.gsub!(/<blockquote>/, '<blockquote><p>')
-    text.gsub!(/<\/blockquote>/, '</p></blockquote>')
-    
     # Now we want to replace any cases where these have been doubled -- ie, 
     # where a new paragraph tag is opened before an old one is closed
     text.gsub!(/<p>\s*<p>/im, "<p>")
@@ -77,14 +73,65 @@ module HtmlFormatter
 
   # adds paragraphs and newlines, then gets rid of doubled ones
   def add_paragraph_tags_for_display(text)
-    # Here's the stuff basically stolen from simple_format
-    start_tag = "<p>"
-    text = text.to_s.dup
-    text.gsub!(/\r\n?/, "\n")                    # \r\n and \r -> \n
-    text.gsub!(/\n\n+/, "</p>\n\n#{start_tag}")  # 2+ newline  -> paragraph
-    text.gsub!(/([^\n]\n)(?=[^\n])/, '\1<br />') # 1 newline   -> br
-    text.insert 0, start_tag
-    text << "</p>"    
+    #The following are lists of tags according to their valid child elements
+    #These tags are block-level
+    block_tags_list = ['h1','h2','h3','h4','h5','h6','div','blockquote','ul','ol','dl','pre','table', 'center']
+    #Block inline container tags - These tags will have both text and block-level nodes
+    block_inl_cont_tags_list = ['li','dd','dt','td','th','a']
+    #These tags will only contain block-level nodes
+    block_cont_tags_list = ['div','blockquote']
+    #These tags can only contain inline nodes
+    inl_cont_tags_list = ['h1','h2','h3','h4','h5','h6','i','em','big','small','cite','b','strong','del','ins','caption','code']
+    #These tags act as containers and can't have <br> or <p> tags preceding
+    cont_tags_list = ['tbody','col','tr','caption']
+    #Matches the properties of an HTML tag (accounts for > inside properties)
+    tag_props = /((\s+\w+(\s*=\s*(?:".*?"|'.*?'|[^'">\s]+))?)+\s*|\s*)\/?/
+
+    #Create the strings to be used in the regexes
+    block_tags = block_tags_list.join("|")
+    block_inl_cont_tags = block_inl_cont_tags_list.join("|")
+    block_cont_tags = block_cont_tags_list.join("|")
+    inl_cont_tags = inl_cont_tags_list.join("|")
+    cont_tags = cont_tags_list.join("|")
+
+    #Make certain we have a container paragraph
+    text = "<p>" + text.to_s.dup + "</p>"
+
+    # Standardise our linebreak chars
+    text.gsub!(/\r\n?/, "\n")
+
+    #Create paragraphs around block-level tags (ie <h1></h1> goes to </p><h1></h1><p>)
+    text.gsub!(/<\/(#{block_tags}#{tag_props})>(\s|\n)?(?!<(#{block_tags}))/im, '</\1>\2'+"\n<p>") # Block tag not followed by another block tag...
+    text.gsub!(/<(#{block_tags}#{tag_props})>/im, '</p><\1>') #Close any previous paragraph tags
+    text.gsub!(/<\/(#{block_tags}#{tag_props})>(\s)?<\/p>/im, '</\1>') #Cleans up (won't be a </p> with a preceding block tag)
+
+    # make sure there are paragraphs inside blockquotes and divs
+    text.gsub!(/(<(#{block_cont_tags})#{tag_props}>)/, '\1<p>')
+    text.gsub!(/(<\/(#{block_cont_tags})>)/, '</p>\1')
+
+    #These tags can't contain paragraphs (doesn't cope with nested tags - not sure if this will be a problem)
+    elements = text.scan(/(<(#{inl_cont_tags})#{tag_props}>.*?<\/\2>)/imx) 
+    elements.each do |el|
+      text = text.sub(el[0].to_s(), el[0].to_s().gsub(/\n/, "\n<br />")) 
+    end
+
+    #Closes and reopens <p> tags for double lines (but not before a block level or container tag)
+    text.gsub!(/\n\s?\n(?!<\/?(#{block_tags}|#{block_inl_cont_tags}|#{cont_tags}))/, "</p>\n\n<p>")
+
+    #Add initial and closing paragraphs inside table cells and list items where necessary
+    elements = text.scan(/(<(#{block_inl_cont_tags})#{tag_props}>(.*?)<\/(#{block_inl_cont_tags})>)/im) 
+    elements.each do |el|
+      par = el[0].to_s().dup
+      contents = el[5].to_s().dup #Group 5 is the contents of the tag
+      if /<\/p>\n\n<p>/ =~ contents then
+        contents = "<p>" << contents << "</p>"
+      end
+      text = text.sub(par, par.sub(el[5].to_s(), contents)) 
+    end
+
+    #Adds linebreaks, but only where it's appropriate
+    text.gsub!(/(([^\n])\n)(?!<\/?(p|br|#{block_tags}|#{block_inl_cont_tags}|#{cont_tags}))(?![\n])/, '\2<br />'<<"\n") #Not putting them before block level elements
+    text.gsub!(/(<\/?(p|#{block_tags}|#{block_inl_cont_tags}|#{cont_tags})#{tag_props}>)<br \/>/, '\1') #clean out any linebreaks immediately after block level elements
 
     text = cleanup_paragraph_tags(text)
     
