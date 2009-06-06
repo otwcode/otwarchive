@@ -29,7 +29,8 @@ class Pseud < ActiveRecord::Base
     {
       :select => "DISTINCT pseuds.*",
       :joins => :works,
-      :conditions => {:works => {:id => owned_works.collect(&:id)}}
+      :conditions => {:works => {:id => owned_works.collect(&:id)}},
+      :order => :name
     }
   }
 

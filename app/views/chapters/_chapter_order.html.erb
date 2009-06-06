@@ -10,11 +10,7 @@
       <li id="chapter_<%= chapter.id %>" class='chapter-position-list'>
         <%= text_field_tag 'chapters[]', nil, :size => 3, :maxlength => 3, :class => 'chapter-position-field' -%>
         <span id='position-for-<%= chapter.id %>'><%= chapter.position %></span>. 
-        <% if chapter.title %>
-          <%=h chapter.title %>    
-        <% else %>
-          <%=h t('alt_title', :default => "Chapter {{position}}", :position => chapter.position) %>    
-        <% end %>
+        <%= chapter_title(chapter) %>
         <ul class='chapter-control navigation'>
           <li><%= link_to t('edit', :default => 'Edit'), [:edit, @work, chapter] -%></li>
            <%- if @work.chapters.count > 1 -%>

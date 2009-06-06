@@ -1,0 +1,6 @@
+<h3>
+  Chapter Index for 
+  <%= t('work_title_by_author', :default => "{{title}} by {{author}}", :title => link_to(sanitize_title_for_display(@work.title), @work), :author => byline(@work)) %>
+</h3>
+
+<%= render :partial => 'chapter_navigation', :locals => {:chapters => @chapters} %>

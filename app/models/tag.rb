@@ -19,13 +19,16 @@ class Tag < ActiveRecord::Base
   belongs_to :merger, :class_name => 'Tag'
   belongs_to :fandom
   belongs_to :media
+  
+  has_many :filter_taggings, :foreign_key => 'filter_id'
+  has_many :filtered_works, :through => :filter_taggings, :source => :filterable, :source_type => 'Work'
 
   has_many :common_taggings, :foreign_key => 'common_tag_id'
   has_many :child_taggings, :class_name => 'CommonTagging', :as => :filterable
   has_many :children, :through => :child_taggings, :source => :common_tag 
   has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag'
   has_many :ambiguities, :through => :common_taggings, :source => :filterable, :source_type => 'Ambiguity'
-  has_many :filtered_works, :through => :common_taggings, :source => :filterable, :source_type => 'Work'
+  #has_many :filtered_works, :through => :common_taggings, :source => :filterable, :source_type => 'Work'
 
   has_many :taggings, :as => :tagger
   has_many :works, :through => :taggings, :source => :taggable, :source_type => 'Work'
@@ -77,6 +80,16 @@ class Tag < ActiveRecord::Base
                  INNER JOIN users ON pseuds.user_id = users.id",
       :conditions => ['works.posted = ? AND (works.hidden_by_admin = ? OR users.id = ?)', true, false, user_id]
     }
+  }
+  
+  named_scope :filters_with_count, lambda { |work_ids|
+    {
+      :select => "tags.*, count(distinct works.id) as count",
+      :joins => :filtered_works,
+      :conditions => ['works.id IN (?)', work_ids],
+      :order => :name,
+      :group => :id
+    }     
   }
   
   # Class methods
@@ -612,6 +625,10 @@ class Tag < ActiveRecord::Base
 
   def find_similar
     Tag.find(:all, :conditions => ["name like ? and canonical = ?", "%" + self.name + "%", true])
+  end
+  
+  def synonyms
+    self.canonical? ? self.mergers : [self.merger] + self.merger.mergers - [self]
   end
 
 end

@@ -46,7 +46,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :works,
                 :collection => {:upload_work => :post},
-                :member => { :preview => :get, :post => :post } do |work|
+                :member => { :preview => :get, :post => :post, :navigate => :get } do |work|
       work.resources :chapters, :has_many => :comments,
                                 :collection => {:manage => :get,
                                                 :update_positions => :post},

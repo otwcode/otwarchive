@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090524201025) do
+ActiveRecord::Schema.define(:version => 20090604221238) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -125,6 +125,16 @@ ActiveRecord::Schema.define(:version => 20090524201025) do
     t.datetime "updated_at"
     t.string   "email"
   end
+
+  create_table "filter_taggings", :force => true do |t|
+    t.integer  "filter_id",       :limit => 8,   :null => false
+    t.integer  "filterable_id",   :limit => 8,   :null => false
+    t.string   "filterable_type", :limit => 100
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "filter_taggings", ["filterable_id", "filterable_type"], :name => "index_filter_taggings_filterable"
 
   create_table "inbox_comments", :force => true do |t|
     t.integer  "user_id",             :limit => 8

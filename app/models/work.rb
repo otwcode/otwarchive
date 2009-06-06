@@ -21,18 +21,29 @@ class Work < ActiveRecord::Base
 
   has_many :common_taggings, :as => :filterable
   has_many :common_tags, :through => :common_taggings
+  
+  has_many :filter_taggings, :as => :filterable
+  has_many :filters, :through => :filter_taggings
 
   has_many :taggings, :as => :taggable
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
 
-  has_many :ratings, :through => :taggings, :source => :tagger, :source_type => 'Rating'
-  has_many :categories, :through => :taggings, :source => :tagger, :source_type => 'Category'
-  has_many :warnings, :through => :taggings, :source => :tagger, :source_type => 'Warning'
-  has_many :fandoms, :through => :taggings, :source => :tagger, :source_type => 'Fandom'
-  has_many :pairings, :through => :taggings, :source => :tagger, :source_type => 'Pairing'
-  has_many :characters, :through => :taggings, :source => :tagger, :source_type => 'Character'
-  has_many :freeforms, :through => :taggings, :source => :tagger, :source_type => 'Freeform'
-  has_many :ambiguities, :through => :taggings, :source => :tagger, :source_type => 'Ambiguity'
+  has_many :ratings, :through => :taggings, :source => :tagger, :source_type => 'Rating', 
+    :after_add => :add_filter_tagging, :before_remove => :remove_filter_tagging
+  has_many :categories, :through => :taggings, :source => :tagger, :source_type => 'Category', 
+    :after_add => :add_filter_tagging, :before_remove => :remove_filter_tagging
+  has_many :warnings, :through => :taggings, :source => :tagger, :source_type => 'Warning', 
+    :after_add => :add_filter_tagging, :before_remove => :remove_filter_tagging
+  has_many :fandoms, :through => :taggings, :source => :tagger, :source_type => 'Fandom',
+    :after_add => :add_filter_tagging, :before_remove => :remove_filter_tagging
+  has_many :pairings, :through => :taggings, :source => :tagger, :source_type => 'Pairing',
+    :after_add => :add_filter_tagging, :before_remove => :remove_filter_tagging
+  has_many :characters, :through => :taggings, :source => :tagger, :source_type => 'Character',
+    :after_add => :add_filter_tagging, :before_remove => :remove_filter_tagging
+  has_many :freeforms, :through => :taggings, :source => :tagger, :source_type => 'Freeform',
+    :after_add => :add_filter_tagging, :before_remove => :remove_filter_tagging
+  has_many :ambiguities, :through => :taggings, :source => :tagger, :source_type => 'Ambiguity',
+    :after_add => :add_filter_tagging, :before_remove => :remove_filter_tagging
 
   acts_as_commentable
 
@@ -152,16 +163,15 @@ class Work < ActiveRecord::Base
 
   # Virtual attribute for pseuds
   def author_attributes=(attributes)
-    self.authors ||= []
-    wanted_ids = attributes[:ids]
-    wanted_ids.each { |id| self.authors << Pseud.find(id) }
+    selected_pseuds = Pseud.find(attributes[:ids])
+    (self.authors ||= []) << selected_pseuds
     # if current user has selected different pseuds
     current_user = User.current_user
     if current_user.is_a? User
-      self.toremove = current_user.pseuds - wanted_ids.collect {|id| Pseud.find(id)}
+      self.toremove = current_user.pseuds - selected_pseuds
     end
-    attributes[:ambiguous_pseuds].each { |id| self.authors << Pseud.find(id) } if attributes[:ambiguous_pseuds]
-    if attributes[:byline]
+    self.authors << Pseud.find(attributes[:ambiguous_pseuds]) if attributes[:ambiguous_pseuds]
+    if !attributes[:byline].blank?
       results = Pseud.parse_bylines(attributes[:byline])
       self.authors << results[:pseuds]
       self.invalid_pseuds = results[:invalid_pseuds]
@@ -589,6 +599,22 @@ class Work < ActiveRecord::Base
     self.category_string = ArchiveConfig.CATEGORY_GEN_TAG_NAME
     self.save
   end
+  
+  # Creates a filter_tagging relationship between the work and the tag or its canonical synonym
+  def add_filter_tagging(tag)
+    filter = tag.canonical? ? tag : tag.merger
+    self.filter_taggings.find_or_create_by_filter_id(filter.id)
+  end
+  
+  # Removes filter_tagging relationship unless the work is tagged with more than one synonymous tags
+  def remove_filter_tagging(tag)
+    filter = tag.canonical? ? tag : tag.merger
+    if (self.tags & tag.synonyms).empty?
+      filter_tagging = self.filter_taggings.find_by_filter_id(filter.id)
+      filter_tagging.destroy
+    end  
+  end
+  
   ################################################################################
   # COMMENTING & BOOKMARKS
   # We don't actually have comments on works currently but on chapters.
@@ -787,9 +813,9 @@ class Work < ActiveRecord::Base
   named_scope :with_all_tag_ids, lambda {|tag_ids_to_find|
     {
       :select => "DISTINCT works.*",
-      :joins => :tags,
-      :conditions => ["tags.id in (?) OR tags.merger_id in (?)", tag_ids_to_find, tag_ids_to_find],
-      :group => "works.id HAVING count(DISTINCT tags.id) = #{tag_ids_to_find.size}"
+      :joins => :filter_taggings,
+      :conditions => {:filter_taggings => {:filter_id => tag_ids_to_find}},
+      :group => "works.id HAVING count(DISTINCT filter_taggings.filter_id) = #{tag_ids_to_find.size}"
     }
   }
 
@@ -845,21 +871,24 @@ class Work < ActiveRecord::Base
       :select => "DISTINCT works.*",
       :joins => "INNER JOIN creatorships ON (creatorships.creation_id = works.id AND creatorships.creation_type = 'Work')
                  INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id",
-      :conditions => ['pseuds.id IN (?)', pseuds.collect(&:id)]
+      :conditions => ['pseuds.id IN (?)', pseuds.collect(&:id)],
+      :group => "works.id HAVING count(DISTINCT pseuds.id) = #{pseuds.size}"
     }
   }
 
   named_scope :written_by_conditions, lambda {|pseuds|
     {
       :joins => OWNERSHIP_JOIN,
-      :conditions => ['pseuds.id IN (?)', pseuds.collect(&:id)]
+      :conditions => ['pseuds.id IN (?)', pseuds.collect(&:id)],
+      :group => "works.id HAVING count(DISTINCT pseuds.id) = #{pseuds.size}"
     }
   }
 
   named_scope :written_by_id_conditions, lambda {|pseud_ids|
     {
       :joins => OWNERSHIP_JOIN,
-      :conditions => ['pseuds.id IN (?)', pseud_ids]
+      :conditions => ['pseuds.id IN (?)', pseud_ids],
+      :group => "works.id HAVING count(DISTINCT pseuds.id) = #{pseud_ids.size}"
     }
   }
 
@@ -926,7 +955,7 @@ class Work < ActiveRecord::Base
     Work.search(options[:query], search_options)
   end
 
-  # FIXME: nested scopes aren't really working on User- and Pseud-specific filtering
+  # Used for non-search work filtering
   def self.find_with_options(options = {})
     command = ''
     visible = '.visible'
@@ -943,6 +972,7 @@ class Work < ActiveRecord::Base
     @works = []
     @pseuds = []
     @filters = []
+    owned_works = nil
 
     # 1. individual user
     # 1.1 individual pseud
@@ -953,10 +983,12 @@ class Work < ActiveRecord::Base
 
     if !options[:user].nil? && !options[:selected_pseuds].empty? && !options[:selected_tags].empty?
       # We have an indiv. user, selected pseuds and selected tags
-      command << owned + written + visible_without_owners + tags
+      owned_works = Work.owned_by_conditions(options[:user])
+      command << written + visible_without_owners + tags
     elsif !options[:user].nil? && !options[:selected_pseuds].empty?
       # We have an indiv. user, selected pseuds but no selected tags
-      command << owned + written + visible_without_owners
+      owned_works = Work.owned_by_conditions(options[:user])
+      command << written + visible_without_owners
     elsif !options[:user].nil? && !options[:selected_tags].empty?
       # filtered results on a user's works page
       # no pseuds but a specific user, and selected tags
@@ -979,70 +1011,45 @@ class Work < ActiveRecord::Base
     end
 
     @works = eval("Work#{command + sort}")
-    # what I'm trying to achieve here is to add the co-authors
-    # of the displayed works to the available list of pseuds to /filter on/
-    # however, the much commented two lines below cause a major frak-up:
-    # all /co-author pseuds/ on the visible works are *moved as belonging to the user*!
+
+    # Adds the co-authors of the displayed works to the available list of pseuds to filter on
     if !options[:user].nil?
-      ### @pseuds << Pseud.on_works(@works)
-      ### @pseuds = @pseuds.flatten.uniq
-      @pseuds << options[:user].pseuds.on_works(@works)
-      @pseuds.flatten!
+      @pseuds = (@pseuds + Pseud.on_works(@works)).uniq
+    end
+    
+    # In order to filter by non-user coauthors, you need to split it up into two queries
+    # and then return the works that overlap (you could do this with a nested query, but
+    # it gets extremely complicated with the named scopes and all the other variables)
+    if owned_works
+      @works = @works & owned_works
     end
     
     unless @works.empty?
-      @filters = build_filters_new(@works)
+      @filters = build_filters(@works)
     end
      
-    return @works.paginate(page_args), @filters, @pseuds
-  end
-
-  def self.build_filters_hash(filters_array)
-    # this takes an array from tags_with_count and turns it into a hash of hashes indexed
-    # by tag.type
-    filters_hash = {}
-    filters_array.each do |filter|
-      begin
-        count = filter.count
-      rescue
-        count = 0
-      end
-      tmphash = {:name => filter.tag_name, :id => filter.tag_id.to_s, :count => count}
-      key = filter.tag_type
-      if filters_hash[key]
-        filters_hash[key] << tmphash
-      else
-        filters_hash[key] = [tmphash]
-      end
-    end
-    return filters_hash
+    return @works.paginate(page_args.merge(:total_entries => @works.size)), @filters, @pseuds
   end
   
-  # Preserving older methods while we test this out
-  def self.build_filters_new(works)  
+  # Takes an array of works, returns a hash (key = tag type) of arrays of hashes (of individual tag data)
+  # Ex. {'Fandom' => [{:name => 'Star Trek', :id => '3', :count => '50'}, ...], 'Character' => ...}
+  def self.build_filters(works)  
+    self.build_filters_from_tags(Tag.filters_with_count(works.collect(&:id)))
+  end
+  
+  def self.build_filters_from_tags(tags)
     filters = {}
-    ids = works.collect(&:id)
-    canonicals = Tag.find(:all, :joins => :works, :conditions => {:canonical => true, :works => {:id => ids}}, :order => :name)
-    synonyms = Tag.find(:all, :joins => [:works, :merger], :conditions => {:canonical => false, :works => {:id => ids}}, :order => :name)
-    tags = canonicals + synonyms.collect(&:merger).compact
-    frequency = tags.collect(&:id).inject(Hash.new(0)) { |frequency, id| frequency[id] += 1; frequency }
-    tags.uniq.sort.each do |tag|
-      unless frequency[tag.id] < 2
-        (filters[tag.type] ||= []) << {:name => tag.name, :id => tag.id.to_s, :count => frequency[tag.id]}
+    tags.each do |tag|
+      count = tag.respond_to?(:count) ? tag.count : "0"
+      unless count == '1'
+        (filters[tag.type] ||= []) << {:name => tag.name, :id => tag.id.to_s, :count => count}
       end
     end
-    filters
-  end
-
-  # this is the method which is called from the works controller
-  # after a sphinx search retrieved the works
-  def self.get_filters(works_to_filter)
-    @filters = build_filters_new(works_to_filter)
+    filters   
   end
 
   # sort works by title
   def <=>(another_work)
     title.strip.downcase <=> another_work.strip.downcase
   end
-
 end

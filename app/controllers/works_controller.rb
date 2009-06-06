@@ -6,10 +6,10 @@ class WorksController < ApplicationController
   # only registered users and NOT admin should be able to create new works
   before_filter :users_only, :only => [ :new, :create, :upload_work, :drafts, :preview ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview]
-  before_filter :load_work, :only => [ :show, :edit, :update, :destroy, :preview ]
+  before_filter :load_work, :only => [ :show, :navigate, :edit, :update, :destroy, :preview ]
   before_filter :check_ownership, :only => [ :edit, :update, :destroy, :preview ]
-  before_filter :check_visibility, :only => [ :show ]
-  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :upload_work ]
+  before_filter :check_visibility, :only => [ :show, :navigate ]
+  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :upload_work ]
   before_filter :update_or_create_reading, :only => [ :show ]
 
   def load_work
@@ -125,7 +125,7 @@ class WorksController < ApplicationController
       end
 
       unless @works.empty?
-        @filters = Work.build_filters_new(@works_to_filter)
+        @filters = Work.build_filters(@works_to_filter)
       end
     else
       @most_recent_works = (params[:tag_id].blank? && params[:user_id].blank?)
@@ -178,8 +178,7 @@ class WorksController < ApplicationController
       begin
         # build filters so we can go back
         flash.now[:notice] = t('results_not_found', :default => "We couldn't find any results using all those filters, sorry! You can unselect some and filter again to get more matches.")
-        filters_array = Tag.find(@selected_tags, :select => "tags.type as tag_type, tags.id as tag_id, tags.name as tag_name")
-        @filters = Work.build_filters_hash(filters_array)
+        @filters = Work.build_filters_from_tags(Tag.find(@selected_tags))
       rescue
         # do we need more than the regular flash notice?
       end
@@ -233,6 +232,10 @@ class WorksController < ApplicationController
       @page_title = @work.title + " - " + @work.pseuds.sort.collect(&:byline).join(', ') + " - " + @work.fandom_string
     end
     @page_title += " [#{ArchiveConfig.APP_NAME}]"
+  end
+  
+  def navigate
+    @chapters = @work.chapters.posted.in_order.blank? ? @work.chapters.posted : @work.chapters.posted.in_order   
   end
 
   # GET /works/new

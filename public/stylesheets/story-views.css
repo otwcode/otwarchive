@@ -94,6 +94,9 @@ dl.series-meta dd { margin:-1.286em 0 1em 12em !important; text-indent:0; paddin
 */
 ul.work-list li.tags	{ display:inline; }
 
+.works-navigate ol, .works-navigate li {list-style-type:decimal;}
+.works-navigate ol {padding-left:2em;}
+
 
 
 
