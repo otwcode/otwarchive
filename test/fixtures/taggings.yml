@@ -1,2545 +1,2625 @@
 --- 
 tagging_1067725179: 
   tagger_id: 1063753910
-  updated_at: 2009-03-20 16:11:56 -07:00
+  updated_at: 2009-03-20 23:11:56 +00:00
   id: 1067725179
   taggable_type: Work
   taggable_id: 47
   tagger_type: Tag
-  created_at: 2009-03-20 16:11:56 -07:00
+  created_at: 2009-03-20 23:11:56 +00:00
 tagging_1067724880: 
   tagger_id: 992891255
-  updated_at: 2008-11-20 23:54:14 -08:00
+  updated_at: 2008-11-21 07:54:14 +00:00
   id: 1067724880
   taggable_type: Work
   taggable_id: 5
   tagger_type: Tag
-  created_at: 2008-11-20 23:54:14 -08:00
+  created_at: 2008-11-21 07:54:14 +00:00
 tagging_1067724909: 
   tagger_id: 1063753735
-  updated_at: 2008-12-06 14:55:58 -08:00
+  updated_at: 2008-12-06 22:55:58 +00:00
   id: 1067724909
   taggable_type: Work
   taggable_id: 9
   tagger_type: Tag
-  created_at: 2008-12-06 14:55:58 -08:00
+  created_at: 2008-12-06 22:55:58 +00:00
 tagging_1067724935: 
   tagger_id: 1063753772
-  updated_at: 2008-12-06 15:24:00 -08:00
+  updated_at: 2008-12-06 23:24:00 +00:00
   id: 1067724935
   taggable_type: Work
   taggable_id: 11
   tagger_type: Tag
-  created_at: 2008-12-06 15:24:00 -08:00
+  created_at: 2008-12-06 23:24:00 +00:00
 tagging_1067724961: 
   tagger_id: 1063753797
-  updated_at: 2008-12-07 12:52:14 -08:00
+  updated_at: 2008-12-07 20:52:14 +00:00
   id: 1067724961
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:14 -08:00
+  created_at: 2008-12-07 20:52:14 +00:00
 tagging_1067725099: 
   tagger_id: 569823665
-  updated_at: 2009-03-11 17:34:06 -07:00
+  updated_at: 2009-03-12 00:34:06 +00:00
   id: 1067725099
   taggable_type: Work
   taggable_id: 37
   tagger_type: Tag
-  created_at: 2009-03-11 17:34:06 -07:00
+  created_at: 2009-03-12 00:34:06 +00:00
 tagging_1067724936: 
   tagger_id: 112726825
-  updated_at: 2008-12-06 15:26:41 -08:00
+  updated_at: 2008-12-06 23:26:41 +00:00
   id: 1067724936
   taggable_type: Work
   taggable_id: 12
   tagger_type: Tag
-  created_at: 2008-12-06 15:26:41 -08:00
+  created_at: 2008-12-06 23:26:41 +00:00
 tagging_1067724962: 
   tagger_id: 1063753798
-  updated_at: 2008-12-07 12:52:14 -08:00
+  updated_at: 2008-12-07 20:52:14 +00:00
   id: 1067724962
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:14 -08:00
+  created_at: 2008-12-07 20:52:14 +00:00
 tagging_1067724937: 
   tagger_id: 1063753736
-  updated_at: 2008-12-06 15:26:41 -08:00
+  updated_at: 2008-12-06 23:26:41 +00:00
   id: 1067724937
   taggable_type: Work
   taggable_id: 12
   tagger_type: Tag
-  created_at: 2008-12-06 15:26:41 -08:00
+  created_at: 2008-12-06 23:26:41 +00:00
 tagging_1067724963: 
   tagger_id: 1063753799
-  updated_at: 2008-12-07 12:52:14 -08:00
+  updated_at: 2008-12-07 20:52:14 +00:00
   id: 1067724963
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:14 -08:00
+  created_at: 2008-12-07 20:52:14 +00:00
 tagging_1067724883: 
   tagger_id: 1063753742
-  updated_at: 2008-11-20 23:54:15 -08:00
+  updated_at: 2008-11-21 07:54:15 +00:00
   id: 1067724883
   taggable_type: Work
   taggable_id: 5
   tagger_type: Tag
-  created_at: 2008-11-20 23:54:15 -08:00
+  created_at: 2008-11-21 07:54:15 +00:00
 tagging_1067724938: 
   tagger_id: 751871740
-  updated_at: 2008-12-06 15:26:41 -08:00
+  updated_at: 2008-12-06 23:26:41 +00:00
   id: 1067724938
   taggable_type: Work
   taggable_id: 12
   tagger_type: Tag
-  created_at: 2008-12-06 15:26:41 -08:00
+  created_at: 2008-12-06 23:26:41 +00:00
 tagging_1067724964: 
   tagger_id: 1063753800
-  updated_at: 2008-12-07 12:52:14 -08:00
+  updated_at: 2008-12-07 20:52:14 +00:00
   id: 1067724964
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:14 -08:00
+  created_at: 2008-12-07 20:52:14 +00:00
 tagging_1067724990: 
   tagger_id: 1063753741
-  updated_at: 2009-02-24 00:47:23 -08:00
+  updated_at: 2009-02-24 08:47:23 +00:00
   id: 1067724990
   taggable_type: Work
   taggable_id: 17
   tagger_type: Tag
-  created_at: 2009-02-24 00:47:23 -08:00
+  created_at: 2009-02-24 08:47:23 +00:00
 tagging_1067725020: 
   tagger_id: 1063753736
-  updated_at: 2009-03-09 14:55:11 -07:00
+  updated_at: 2009-03-09 21:55:11 +00:00
   id: 1067725020
   taggable_type: Work
   taggable_id: 25
   tagger_type: Tag
-  created_at: 2009-03-09 14:55:11 -07:00
+  created_at: 2009-03-09 21:55:11 +00:00
 tagging_1067725100: 
   tagger_id: 1039617938
-  updated_at: 2009-03-11 17:34:06 -07:00
+  updated_at: 2009-03-12 00:34:06 +00:00
   id: 1067725100
   taggable_type: Work
   taggable_id: 37
   tagger_type: Tag
-  created_at: 2009-03-11 17:34:06 -07:00
+  created_at: 2009-03-12 00:34:06 +00:00
 tagging_1067724939: 
   tagger_id: 1063753780
-  updated_at: 2008-12-06 15:26:41 -08:00
+  updated_at: 2008-12-06 23:26:41 +00:00
   id: 1067724939
   taggable_type: Work
   taggable_id: 12
   tagger_type: Tag
-  created_at: 2008-12-06 15:26:41 -08:00
+  created_at: 2008-12-06 23:26:41 +00:00
 tagging_1067724965: 
   tagger_id: 1063753802
-  updated_at: 2008-12-07 12:52:14 -08:00
+  updated_at: 2008-12-07 20:52:14 +00:00
   id: 1067724965
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:14 -08:00
+  created_at: 2008-12-07 20:52:14 +00:00
 tagging_1067724991: 
   tagger_id: 1063753824
-  updated_at: 2009-02-24 00:47:23 -08:00
+  updated_at: 2009-02-24 08:47:23 +00:00
   id: 1067724991
   taggable_type: Work
   taggable_id: 17
   tagger_type: Tag
-  created_at: 2009-02-24 00:47:23 -08:00
+  created_at: 2009-02-24 08:47:23 +00:00
 tagging_1067725021: 
   tagger_id: 112726825
-  updated_at: 2009-03-09 14:55:11 -07:00
+  updated_at: 2009-03-09 21:55:11 +00:00
   id: 1067725021
   taggable_type: Work
   taggable_id: 25
   tagger_type: Tag
-  created_at: 2009-03-09 14:55:11 -07:00
+  created_at: 2009-03-09 21:55:11 +00:00
 tagging_1067725101: 
   tagger_id: 1063753733
-  updated_at: 2009-03-11 17:34:06 -07:00
+  updated_at: 2009-03-12 00:34:06 +00:00
   id: 1067725101
   taggable_type: Work
   taggable_id: 37
   tagger_type: Tag
-  created_at: 2009-03-11 17:34:06 -07:00
+  created_at: 2009-03-12 00:34:06 +00:00
 tagging_1067724885: 
   tagger_id: 66216446
-  updated_at: 2008-11-21 21:45:15 -08:00
+  updated_at: 2008-11-22 05:45:15 +00:00
   id: 1067724885
   taggable_type: Work
   taggable_id: 5
   tagger_type: Tag
-  created_at: 2008-11-21 21:45:15 -08:00
+  created_at: 2008-11-22 05:45:15 +00:00
 tagging_1067724966: 
   tagger_id: 1063753803
-  updated_at: 2008-12-07 12:52:14 -08:00
+  updated_at: 2008-12-07 20:52:14 +00:00
   id: 1067724966
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:14 -08:00
+  created_at: 2008-12-07 20:52:14 +00:00
 tagging_1067724992: 
   tagger_id: 992891255
-  updated_at: 2009-03-07 12:48:06 -08:00
+  updated_at: 2009-03-07 20:48:06 +00:00
   id: 1067724992
   taggable_type: Work
   taggable_id: 18
   tagger_type: Tag
-  created_at: 2009-03-07 12:48:06 -08:00
+  created_at: 2009-03-07 20:48:06 +00:00
 tagging_1067725102: 
   tagger_id: 992891255
-  updated_at: 2009-03-11 17:50:20 -07:00
+  updated_at: 2009-03-12 00:50:20 +00:00
   id: 1067725102
   taggable_type: Work
   taggable_id: 38
   tagger_type: Tag
-  created_at: 2009-03-11 17:50:20 -07:00
+  created_at: 2009-03-12 00:50:20 +00:00
 tagging_1067724886: 
   tagger_id: 713695255
-  updated_at: 2008-11-21 21:49:39 -08:00
+  updated_at: 2008-11-22 05:49:39 +00:00
   id: 1067724886
   taggable_type: Work
   taggable_id: 5
   tagger_type: Tag
-  created_at: 2008-11-21 21:49:39 -08:00
+  created_at: 2008-11-22 05:49:39 +00:00
 tagging_1067724967: 
   tagger_id: 1063753804
-  updated_at: 2008-12-07 12:52:14 -08:00
+  updated_at: 2008-12-07 20:52:14 +00:00
   id: 1067724967
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:14 -08:00
+  created_at: 2008-12-07 20:52:14 +00:00
 tagging_1067724993: 
   tagger_id: 1063753735
-  updated_at: 2009-03-07 12:48:07 -08:00
+  updated_at: 2009-03-07 20:48:07 +00:00
   id: 1067724993
   taggable_type: Work
   taggable_id: 18
   tagger_type: Tag
-  created_at: 2009-03-07 12:48:07 -08:00
+  created_at: 2009-03-07 20:48:07 +00:00
 tagging_1067725022: 
   tagger_id: 1063753824
-  updated_at: 2009-03-09 14:55:11 -07:00
+  updated_at: 2009-03-09 21:55:11 +00:00
   id: 1067725022
   taggable_type: Work
   taggable_id: 25
   tagger_type: Tag
-  created_at: 2009-03-09 14:55:11 -07:00
+  created_at: 2009-03-09 21:55:11 +00:00
 tagging_1067725103: 
   tagger_id: 611729728
-  updated_at: 2009-03-11 17:50:20 -07:00
+  updated_at: 2009-03-12 00:50:20 +00:00
   id: 1067725103
   taggable_type: Work
   taggable_id: 38
   tagger_type: Tag
-  created_at: 2009-03-11 17:50:20 -07:00
+  created_at: 2009-03-12 00:50:20 +00:00
 tagging_1067725210: 
   tagger_id: 1063753915
-  updated_at: 2009-03-20 16:22:23 -07:00
+  updated_at: 2009-03-20 23:22:23 +00:00
   id: 1067725210
   taggable_type: Work
   taggable_id: 51
   tagger_type: Tag
-  created_at: 2009-03-20 16:22:23 -07:00
+  created_at: 2009-03-20 23:22:23 +00:00
 tagging_1067724887: 
   tagger_id: 1063753746
-  updated_at: 2008-11-21 21:49:40 -08:00
+  updated_at: 2008-11-22 05:49:40 +00:00
   id: 1067724887
   taggable_type: Work
   taggable_id: 5
   tagger_type: Tag
-  created_at: 2008-11-21 21:49:40 -08:00
+  created_at: 2008-11-22 05:49:40 +00:00
 tagging_1067724968: 
   tagger_id: 1063753805
-  updated_at: 2008-12-07 12:52:14 -08:00
+  updated_at: 2008-12-07 20:52:14 +00:00
   id: 1067724968
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:14 -08:00
+  created_at: 2008-12-07 20:52:14 +00:00
 tagging_1067724994: 
   tagger_id: 751871740
-  updated_at: 2009-03-07 12:48:07 -08:00
+  updated_at: 2009-03-07 20:48:07 +00:00
   id: 1067724994
   taggable_type: Work
   taggable_id: 18
   tagger_type: Tag
-  created_at: 2009-03-07 12:48:07 -08:00
+  created_at: 2009-03-07 20:48:07 +00:00
 tagging_1067725023: 
   tagger_id: 1063753733
-  updated_at: 2009-03-09 14:55:12 -07:00
+  updated_at: 2009-03-09 21:55:12 +00:00
   id: 1067725023
   taggable_type: Work
   taggable_id: 25
   tagger_type: Tag
-  created_at: 2009-03-09 14:55:12 -07:00
+  created_at: 2009-03-09 21:55:12 +00:00
 tagging_1067725104: 
   tagger_id: 1063753868
-  updated_at: 2009-03-11 17:50:20 -07:00
+  updated_at: 2009-03-12 00:50:20 +00:00
   id: 1067725104
   taggable_type: Work
   taggable_id: 38
   tagger_type: Tag
-  created_at: 2009-03-11 17:50:20 -07:00
+  created_at: 2009-03-12 00:50:20 +00:00
 tagging_1067725131: 
   tagger_id: 1063753880
-  updated_at: 2009-03-11 18:52:02 -07:00
+  updated_at: 2009-03-12 01:52:02 +00:00
   id: 1067725131
   taggable_type: Work
   taggable_id: 40
   tagger_type: Tag
-  created_at: 2009-03-11 18:52:02 -07:00
+  created_at: 2009-03-12 01:52:02 +00:00
 tagging_1067725211: 
   tagger_id: 992891255
-  updated_at: 2009-03-20 16:24:08 -07:00
+  updated_at: 2009-03-20 23:24:08 +00:00
   id: 1067725211
   taggable_type: Work
   taggable_id: 52
   tagger_type: Tag
-  created_at: 2009-03-20 16:24:08 -07:00
+  created_at: 2009-03-20 23:24:08 +00:00
 tagging_1067724888: 
   tagger_id: 112726825
-  updated_at: 2008-12-05 05:59:14 -08:00
+  updated_at: 2008-12-05 13:59:14 +00:00
   id: 1067724888
   taggable_type: Work
   taggable_id: 6
   tagger_type: Tag
-  created_at: 2008-12-05 05:59:14 -08:00
+  created_at: 2008-12-05 13:59:14 +00:00
 tagging_1067724969: 
   tagger_id: 1063753806
-  updated_at: 2008-12-07 12:52:14 -08:00
+  updated_at: 2008-12-07 20:52:14 +00:00
   id: 1067724969
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:14 -08:00
+  created_at: 2008-12-07 20:52:14 +00:00
 tagging_1067724995: 
   tagger_id: 1063753824
-  updated_at: 2009-03-07 12:48:07 -08:00
+  updated_at: 2009-03-07 20:48:07 +00:00
   id: 1067724995
   taggable_type: Work
   taggable_id: 18
   tagger_type: Tag
-  created_at: 2009-03-07 12:48:07 -08:00
+  created_at: 2009-03-07 20:48:07 +00:00
 tagging_1067725024: 
   tagger_id: 885489802
-  updated_at: 2009-03-09 16:22:34 -07:00
+  updated_at: 2009-03-09 23:22:34 +00:00
   id: 1067725024
   taggable_type: Work
   taggable_id: 27
   tagger_type: Tag
-  created_at: 2009-03-09 16:22:34 -07:00
+  created_at: 2009-03-09 23:22:34 +00:00
 tagging_1067725051: 
   tagger_id: 426547448
-  updated_at: 2009-03-11 15:06:49 -07:00
+  updated_at: 2009-03-11 22:06:49 +00:00
   id: 1067725051
   taggable_type: Work
   taggable_id: 30
   tagger_type: Tag
-  created_at: 2009-03-11 15:06:49 -07:00
+  created_at: 2009-03-11 22:06:49 +00:00
 tagging_1067725105: 
   tagger_id: 569823665
-  updated_at: 2009-03-11 17:50:20 -07:00
+  updated_at: 2009-03-12 00:50:20 +00:00
   id: 1067725105
   taggable_type: Work
   taggable_id: 38
   tagger_type: Tag
-  created_at: 2009-03-11 17:50:20 -07:00
+  created_at: 2009-03-12 00:50:20 +00:00
 tagging_1067725212: 
   tagger_id: 1063753736
-  updated_at: 2009-03-20 16:24:08 -07:00
+  updated_at: 2009-03-20 23:24:08 +00:00
   id: 1067725212
   taggable_type: Work
   taggable_id: 52
   tagger_type: Tag
-  created_at: 2009-03-20 16:24:08 -07:00
+  created_at: 2009-03-20 23:24:08 +00:00
 tagging_1067724889: 
   tagger_id: 426547448
-  updated_at: 2008-12-05 05:59:14 -08:00
+  updated_at: 2008-12-05 13:59:14 +00:00
   id: 1067724889
   taggable_type: Work
   taggable_id: 6
   tagger_type: Tag
-  created_at: 2008-12-05 05:59:14 -08:00
+  created_at: 2008-12-05 13:59:14 +00:00
 tagging_770153773: 
   tagger_id: 112726825
-  updated_at: 2008-11-08 17:26:02 -08:00
+  updated_at: 2008-11-09 01:26:02 +00:00
   id: 770153773
   taggable_type: Work
   taggable_id: 3
   tagger_type: Tag
-  created_at: 2008-11-08 17:26:02 -08:00
+  created_at: 2008-11-09 01:26:02 +00:00
 tagging_1067724996: 
   tagger_id: 1063753826
-  updated_at: 2009-03-07 12:48:07 -08:00
+  updated_at: 2009-03-07 20:48:07 +00:00
   id: 1067724996
   taggable_type: Work
   taggable_id: 18
   tagger_type: Tag
-  created_at: 2009-03-07 12:48:07 -08:00
+  created_at: 2009-03-07 20:48:07 +00:00
 tagging_1067725052: 
   tagger_id: 112726825
-  updated_at: 2009-03-11 15:06:49 -07:00
+  updated_at: 2009-03-11 22:06:49 +00:00
   id: 1067725052
   taggable_type: Work
   taggable_id: 30
   tagger_type: Tag
-  created_at: 2009-03-11 15:06:49 -07:00
+  created_at: 2009-03-11 22:06:49 +00:00
 tagging_1067725106: 
   tagger_id: 1063753840
-  updated_at: 2009-03-11 17:50:20 -07:00
+  updated_at: 2009-03-12 00:50:20 +00:00
   id: 1067725106
   taggable_type: Work
   taggable_id: 38
   tagger_type: Tag
-  created_at: 2009-03-11 17:50:20 -07:00
+  created_at: 2009-03-12 00:50:20 +00:00
 tagging_1067725213: 
   tagger_id: 1063753742
-  updated_at: 2009-03-20 16:24:08 -07:00
+  updated_at: 2009-03-20 23:24:08 +00:00
   id: 1067725213
   taggable_type: Work
   taggable_id: 52
   tagger_type: Tag
-  created_at: 2009-03-20 16:24:08 -07:00
+  created_at: 2009-03-20 23:24:08 +00:00
 tagging_1067724997: 
   tagger_id: 1063753827
-  updated_at: 2009-03-07 12:48:07 -08:00
+  updated_at: 2009-03-07 20:48:07 +00:00
   id: 1067724997
   taggable_type: Work
   taggable_id: 18
   tagger_type: Tag
-  created_at: 2009-03-07 12:48:07 -08:00
+  created_at: 2009-03-07 20:48:07 +00:00
 tagging_1067725025: 
   tagger_id: 611729728
-  updated_at: 2009-03-09 16:22:34 -07:00
+  updated_at: 2009-03-09 23:22:34 +00:00
   id: 1067725025
   taggable_type: Work
   taggable_id: 27
   tagger_type: Tag
-  created_at: 2009-03-09 16:22:34 -07:00
+  created_at: 2009-03-09 23:22:34 +00:00
 tagging_1067725053: 
   tagger_id: 1063753827
-  updated_at: 2009-03-11 15:06:49 -07:00
+  updated_at: 2009-03-11 22:06:49 +00:00
   id: 1067725053
   taggable_type: Work
   taggable_id: 30
   tagger_type: Tag
-  created_at: 2009-03-11 15:06:49 -07:00
+  created_at: 2009-03-11 22:06:49 +00:00
 tagging_1067725107: 
   tagger_id: 1063753841
-  updated_at: 2009-03-11 17:50:20 -07:00
+  updated_at: 2009-03-12 00:50:20 +00:00
   id: 1067725107
   taggable_type: Work
   taggable_id: 38
   tagger_type: Tag
-  created_at: 2009-03-11 17:50:20 -07:00
+  created_at: 2009-03-12 00:50:20 +00:00
 tagging_1067725133: 
   tagger_id: 1063753824
-  updated_at: 2009-03-11 18:52:02 -07:00
+  updated_at: 2009-03-12 01:52:02 +00:00
   id: 1067725133
   taggable_type: Work
   taggable_id: 40
   tagger_type: Tag
-  created_at: 2009-03-11 18:52:02 -07:00
+  created_at: 2009-03-12 01:52:02 +00:00
 tagging_1067725160: 
   tagger_id: 1063753737
-  updated_at: 2009-03-18 18:02:12 -07:00
+  updated_at: 2009-03-19 01:02:12 +00:00
   id: 1067725160
   taggable_type: Work
   taggable_id: 44
   tagger_type: Tag
-  created_at: 2009-03-18 18:02:12 -07:00
+  created_at: 2009-03-19 01:02:12 +00:00
 tagging_1067725214: 
   tagger_id: 951091623
-  updated_at: 2009-03-20 16:24:08 -07:00
+  updated_at: 2009-03-20 23:24:08 +00:00
   id: 1067725214
   taggable_type: Work
   taggable_id: 52
   tagger_type: Tag
-  created_at: 2009-03-20 16:24:08 -07:00
+  created_at: 2009-03-20 23:24:08 +00:00
 tagging_1067724998: 
   tagger_id: 1063753828
-  updated_at: 2009-03-07 12:48:07 -08:00
+  updated_at: 2009-03-07 20:48:07 +00:00
   id: 1067724998
   taggable_type: Work
   taggable_id: 18
   tagger_type: Tag
-  created_at: 2009-03-07 12:48:07 -08:00
+  created_at: 2009-03-07 20:48:07 +00:00
 tagging_1067725026: 
   tagger_id: 1063753741
-  updated_at: 2009-03-09 16:22:34 -07:00
+  updated_at: 2009-03-09 23:22:34 +00:00
   id: 1067725026
   taggable_type: Work
   taggable_id: 27
   tagger_type: Tag
-  created_at: 2009-03-09 16:22:34 -07:00
+  created_at: 2009-03-09 23:22:34 +00:00
 tagging_1067725108: 
   tagger_id: 1063753842
-  updated_at: 2009-03-11 17:50:20 -07:00
+  updated_at: 2009-03-12 00:50:20 +00:00
   id: 1067725108
   taggable_type: Work
   taggable_id: 38
   tagger_type: Tag
-  created_at: 2009-03-11 17:50:20 -07:00
+  created_at: 2009-03-12 00:50:20 +00:00
 tagging_1067725161: 
   tagger_id: 751871740
-  updated_at: 2009-03-18 18:02:12 -07:00
+  updated_at: 2009-03-19 01:02:12 +00:00
   id: 1067725161
   taggable_type: Work
   taggable_id: 44
   tagger_type: Tag
-  created_at: 2009-03-18 18:02:12 -07:00
+  created_at: 2009-03-19 01:02:12 +00:00
 tagging_1067725215: 
   tagger_id: 1063753917
-  updated_at: 2009-03-20 16:37:00 -07:00
+  updated_at: 2009-03-20 23:37:00 +00:00
   id: 1067725215
   taggable_type: Bookmark
   taggable_id: 3
   tagger_type: Tag
-  created_at: 2009-03-20 16:37:00 -07:00
+  created_at: 2009-03-20 23:37:00 +00:00
 tagging_312493864: 
   tagger_id: 714102448
-  updated_at: 2008-11-08 17:26:02 -08:00
+  updated_at: 2008-11-09 01:26:02 +00:00
   id: 312493864
   taggable_type: Work
   taggable_id: 3
   tagger_type: Tag
-  created_at: 2008-11-08 17:26:02 -08:00
+  created_at: 2008-11-09 01:26:02 +00:00
 tagging_1067724999: 
   tagger_id: 344412843
-  updated_at: 2009-03-09 08:43:33 -07:00
+  updated_at: 2009-03-09 15:43:33 +00:00
   id: 1067724999
   taggable_type: Work
   taggable_id: 19
   tagger_type: Tag
-  created_at: 2009-03-09 08:43:33 -07:00
+  created_at: 2009-03-09 15:43:33 +00:00
 tagging_1067725027: 
   tagger_id: 1063753824
-  updated_at: 2009-03-09 16:22:34 -07:00
+  updated_at: 2009-03-09 23:22:34 +00:00
   id: 1067725027
   taggable_type: Work
   taggable_id: 27
   tagger_type: Tag
-  created_at: 2009-03-09 16:22:34 -07:00
+  created_at: 2009-03-09 23:22:34 +00:00
 tagging_1067725054: 
   tagger_id: 1063753741
-  updated_at: 2009-03-11 15:06:49 -07:00
+  updated_at: 2009-03-11 22:06:49 +00:00
   id: 1067725054
   taggable_type: Work
   taggable_id: 30
   tagger_type: Tag
-  created_at: 2009-03-11 15:06:49 -07:00
+  created_at: 2009-03-11 22:06:49 +00:00
 tagging_1067725109: 
   tagger_id: 1063753867
-  updated_at: 2009-03-11 17:50:20 -07:00
+  updated_at: 2009-03-12 00:50:20 +00:00
   id: 1067725109
   taggable_type: Work
   taggable_id: 38
   tagger_type: Tag
-  created_at: 2009-03-11 17:50:20 -07:00
+  created_at: 2009-03-12 00:50:20 +00:00
 tagging_1067725162: 
   tagger_id: 569823665
-  updated_at: 2009-03-18 18:02:12 -07:00
+  updated_at: 2009-03-19 01:02:12 +00:00
   id: 1067725162
   taggable_type: Work
   taggable_id: 44
   tagger_type: Tag
-  created_at: 2009-03-18 18:02:12 -07:00
+  created_at: 2009-03-19 01:02:12 +00:00
 tagging_1067725216: 
   tagger_id: 1063753918
-  updated_at: 2009-03-20 16:38:19 -07:00
+  updated_at: 2009-03-20 23:38:19 +00:00
   id: 1067725216
   taggable_type: Bookmark
   taggable_id: 4
   tagger_type: Tag
-  created_at: 2009-03-20 16:38:19 -07:00
+  created_at: 2009-03-20 23:38:19 +00:00
 tagging_1067725136: 
   tagger_id: 1063753883
-  updated_at: 2009-03-11 19:02:51 -07:00
+  updated_at: 2009-03-12 02:02:51 +00:00
   id: 1067725136
   taggable_type: Work
   taggable_id: 40
   tagger_type: Tag
-  created_at: 2009-03-11 19:02:51 -07:00
+  created_at: 2009-03-12 02:02:51 +00:00
 tagging_1067725163: 
   tagger_id: 1063753894
-  updated_at: 2009-03-18 18:02:12 -07:00
+  updated_at: 2009-03-19 01:02:12 +00:00
   id: 1067725163
   taggable_type: Work
   taggable_id: 44
   tagger_type: Tag
-  created_at: 2009-03-18 18:02:12 -07:00
+  created_at: 2009-03-19 01:02:12 +00:00
 tagging_1067725217: 
   tagger_id: 1063753919
-  updated_at: 2009-03-20 16:39:06 -07:00
+  updated_at: 2009-03-20 23:39:06 +00:00
   id: 1067725217
   taggable_type: Bookmark
   taggable_id: 5
   tagger_type: Tag
-  created_at: 2009-03-20 16:39:06 -07:00
+  created_at: 2009-03-20 23:39:06 +00:00
 tagging_1067725055: 
   tagger_id: 1063753741
-  updated_at: 2009-03-11 15:18:40 -07:00
+  updated_at: 2009-03-11 22:18:40 +00:00
   id: 1067725055
   taggable_type: Work
   taggable_id: 31
   tagger_type: Tag
-  created_at: 2009-03-11 15:18:40 -07:00
+  created_at: 2009-03-11 22:18:40 +00:00
 tagging_1067725164: 
   tagger_id: 1063753891
-  updated_at: 2009-03-18 18:45:40 -07:00
+  updated_at: 2009-03-19 01:45:40 +00:00
   id: 1067725164
   taggable_type: Work
   taggable_id: 43
   tagger_type: Tag
-  created_at: 2009-03-18 18:45:40 -07:00
+  created_at: 2009-03-19 01:45:40 +00:00
 tagging_1067725190: 
   tagger_id: 1063753736
-  updated_at: 2009-03-20 16:17:43 -07:00
+  updated_at: 2009-03-20 23:17:43 +00:00
   id: 1067725190
   taggable_type: Work
   taggable_id: 49
   tagger_type: Tag
-  created_at: 2009-03-20 16:17:43 -07:00
+  created_at: 2009-03-20 23:17:43 +00:00
 tagging_1067725218: 
   tagger_id: 1063753915
-  updated_at: 2009-03-20 16:39:06 -07:00
+  updated_at: 2009-03-20 23:39:06 +00:00
   id: 1067725218
   taggable_type: Bookmark
   taggable_id: 5
   tagger_type: Tag
-  created_at: 2009-03-20 16:39:06 -07:00
+  created_at: 2009-03-20 23:39:06 +00:00
 tagging_1067725056: 
   tagger_id: 885489802
-  updated_at: 2009-03-11 15:20:35 -07:00
+  updated_at: 2009-03-11 22:20:35 +00:00
   id: 1067725056
   taggable_type: Work
   taggable_id: 31
   tagger_type: Tag
-  created_at: 2009-03-11 15:20:35 -07:00
+  created_at: 2009-03-11 22:20:35 +00:00
 tagging_1067725138: 
   tagger_id: 1063753884
-  updated_at: 2009-03-11 19:02:52 -07:00
+  updated_at: 2009-03-12 02:02:52 +00:00
   id: 1067725138
   taggable_type: Work
   taggable_id: 40
   tagger_type: Tag
-  created_at: 2009-03-11 19:02:52 -07:00
+  created_at: 2009-03-12 02:02:52 +00:00
 tagging_1067725191: 
   tagger_id: 751871740
-  updated_at: 2009-03-20 16:17:43 -07:00
+  updated_at: 2009-03-20 23:17:43 +00:00
   id: 1067725191
   taggable_type: Work
   taggable_id: 49
   tagger_type: Tag
-  created_at: 2009-03-20 16:17:43 -07:00
+  created_at: 2009-03-20 23:17:43 +00:00
 tagging_1067724920: 
   tagger_id: 26796919
-  updated_at: 2008-12-06 15:19:49 -08:00
+  updated_at: 2008-12-06 23:19:49 +00:00
   id: 1067724920
   taggable_type: Work
   taggable_id: 10
   tagger_type: Tag
-  created_at: 2008-12-06 15:19:49 -08:00
+  created_at: 2008-12-06 23:19:49 +00:00
 tagging_1067725057: 
   tagger_id: 569823665
-  updated_at: 2009-03-11 15:20:36 -07:00
+  updated_at: 2009-03-11 22:20:36 +00:00
   id: 1067725057
   taggable_type: Work
   taggable_id: 31
   tagger_type: Tag
-  created_at: 2009-03-11 15:20:36 -07:00
+  created_at: 2009-03-11 22:20:36 +00:00
 tagging_1067725084: 
   tagger_id: 1063753732
-  updated_at: 2009-03-11 17:00:00 -07:00
+  updated_at: 2009-03-12 00:00:00 +00:00
   id: 1067725084
   taggable_type: Work
   taggable_id: 35
   tagger_type: Tag
-  created_at: 2009-03-11 17:00:00 -07:00
+  created_at: 2009-03-12 00:00:00 +00:00
 tagging_1067725165: 
   tagger_id: 885489802
-  updated_at: 2009-03-19 18:24:26 -07:00
+  updated_at: 2009-03-20 01:24:26 +00:00
   id: 1067725165
   taggable_type: Work
   taggable_id: 45
   tagger_type: Tag
-  created_at: 2009-03-19 18:24:26 -07:00
+  created_at: 2009-03-20 01:24:26 +00:00
 tagging_1067725192: 
   tagger_id: 951091623
-  updated_at: 2009-03-20 16:17:43 -07:00
+  updated_at: 2009-03-20 23:17:43 +00:00
   id: 1067725192
   taggable_type: Work
   taggable_id: 49
   tagger_type: Tag
-  created_at: 2009-03-20 16:17:43 -07:00
+  created_at: 2009-03-20 23:17:43 +00:00
 tagging_1067724921: 
   tagger_id: 1063753766
-  updated_at: 2008-12-06 15:19:49 -08:00
+  updated_at: 2008-12-06 23:19:49 +00:00
   id: 1067724921
   taggable_type: Work
   taggable_id: 10
   tagger_type: Tag
-  created_at: 2008-12-06 15:19:49 -08:00
+  created_at: 2008-12-06 23:19:49 +00:00
 tagging_795295258: 
   tagger_id: 1039617938
-  updated_at: 2008-11-08 17:26:02 -08:00
+  updated_at: 2008-11-09 01:26:02 +00:00
   id: 795295258
   taggable_type: Work
   taggable_id: 4
   tagger_type: Tag
-  created_at: 2008-11-08 17:26:02 -08:00
+  created_at: 2008-11-09 01:26:02 +00:00
 tagging_1067725058: 
   tagger_id: 1063753732
-  updated_at: 2009-03-11 15:21:05 -07:00
+  updated_at: 2009-03-11 22:21:05 +00:00
   id: 1067725058
   taggable_type: Work
   taggable_id: 31
   tagger_type: Tag
-  created_at: 2009-03-11 15:21:05 -07:00
+  created_at: 2009-03-11 22:21:05 +00:00
 tagging_1067725085: 
   tagger_id: 112726825
-  updated_at: 2009-03-11 17:00:00 -07:00
+  updated_at: 2009-03-12 00:00:00 +00:00
   id: 1067725085
   taggable_type: Work
   taggable_id: 35
   tagger_type: Tag
-  created_at: 2009-03-11 17:00:00 -07:00
+  created_at: 2009-03-12 00:00:00 +00:00
 tagging_1067725139: 
   tagger_id: 992891255
-  updated_at: 2009-03-11 19:02:52 -07:00
+  updated_at: 2009-03-12 02:02:52 +00:00
   id: 1067725139
   taggable_type: Work
   taggable_id: 40
   tagger_type: Tag
-  created_at: 2009-03-11 19:02:52 -07:00
+  created_at: 2009-03-12 02:02:52 +00:00
 tagging_1067725166: 
   tagger_id: 1063753735
-  updated_at: 2009-03-19 18:24:26 -07:00
+  updated_at: 2009-03-20 01:24:26 +00:00
   id: 1067725166
   taggable_type: Work
   taggable_id: 45
   tagger_type: Tag
-  created_at: 2009-03-19 18:24:26 -07:00
+  created_at: 2009-03-20 01:24:26 +00:00
 tagging_1067725193: 
   tagger_id: 1063753896
-  updated_at: 2009-03-20 16:17:43 -07:00
+  updated_at: 2009-03-20 23:17:43 +00:00
   id: 1067725193
   taggable_type: Work
   taggable_id: 49
   tagger_type: Tag
-  created_at: 2009-03-20 16:17:43 -07:00
+  created_at: 2009-03-20 23:17:43 +00:00
 tagging_1067724922: 
   tagger_id: 1063753767
-  updated_at: 2008-12-06 15:19:49 -08:00
+  updated_at: 2008-12-06 23:19:49 +00:00
   id: 1067724922
   taggable_type: Work
   taggable_id: 10
   tagger_type: Tag
-  created_at: 2008-12-06 15:19:49 -08:00
+  created_at: 2008-12-06 23:19:49 +00:00
 tagging_1067725059: 
   tagger_id: 1063753741
-  updated_at: 2009-03-11 15:22:29 -07:00
+  updated_at: 2009-03-11 22:22:29 +00:00
   id: 1067725059
   taggable_type: Work
   taggable_id: 32
   tagger_type: Tag
-  created_at: 2009-03-11 15:22:29 -07:00
+  created_at: 2009-03-11 22:22:29 +00:00
 tagging_1067725086: 
   tagger_id: 1063753847
-  updated_at: 2009-03-11 17:00:00 -07:00
+  updated_at: 2009-03-12 00:00:00 +00:00
   id: 1067725086
   taggable_type: Work
   taggable_id: 35
   tagger_type: Tag
-  created_at: 2009-03-11 17:00:00 -07:00
+  created_at: 2009-03-12 00:00:00 +00:00
 tagging_1067725194: 
   tagger_id: 1063753897
-  updated_at: 2009-03-20 16:17:43 -07:00
+  updated_at: 2009-03-20 23:17:43 +00:00
   id: 1067725194
   taggable_type: Work
   taggable_id: 49
   tagger_type: Tag
-  created_at: 2009-03-20 16:17:43 -07:00
+  created_at: 2009-03-20 23:17:43 +00:00
 tagging_1067724923: 
   tagger_id: 1063753768
-  updated_at: 2008-12-06 15:19:49 -08:00
+  updated_at: 2008-12-06 23:19:49 +00:00
   id: 1067724923
   taggable_type: Work
   taggable_id: 10
   tagger_type: Tag
-  created_at: 2008-12-06 15:19:49 -08:00
+  created_at: 2008-12-06 23:19:49 +00:00
 tagging_1067725087: 
   tagger_id: 1063753741
-  updated_at: 2009-03-11 17:00:01 -07:00
+  updated_at: 2009-03-12 00:00:01 +00:00
   id: 1067725087
   taggable_type: Work
   taggable_id: 35
   tagger_type: Tag
-  created_at: 2009-03-11 17:00:01 -07:00
+  created_at: 2009-03-12 00:00:01 +00:00
 tagging_1067725167: 
   tagger_id: 1063753741
-  updated_at: 2009-03-19 18:24:26 -07:00
+  updated_at: 2009-03-20 01:24:26 +00:00
   id: 1067725167
   taggable_type: Work
   taggable_id: 45
   tagger_type: Tag
-  created_at: 2009-03-19 18:24:26 -07:00
+  created_at: 2009-03-20 01:24:26 +00:00
 tagging_1067725195: 
   tagger_id: 885489802
-  updated_at: 2009-03-20 16:20:17 -07:00
+  updated_at: 2009-03-20 23:20:17 +00:00
   id: 1067725195
   taggable_type: Work
   taggable_id: 50
   tagger_type: Tag
-  created_at: 2009-03-20 16:20:17 -07:00
+  created_at: 2009-03-20 23:20:17 +00:00
 tagging_1067724924: 
   tagger_id: 1063753769
-  updated_at: 2008-12-06 15:19:49 -08:00
+  updated_at: 2008-12-06 23:19:49 +00:00
   id: 1067724924
   taggable_type: Work
   taggable_id: 10
   tagger_type: Tag
-  created_at: 2008-12-06 15:19:49 -08:00
+  created_at: 2008-12-06 23:19:49 +00:00
 tagging_1067724950: 
   tagger_id: 1063753784
-  updated_at: 2008-12-06 15:34:39 -08:00
+  updated_at: 2008-12-06 23:34:39 +00:00
   id: 1067724950
   taggable_type: Work
   taggable_id: 13
   tagger_type: Tag
-  created_at: 2008-12-06 15:34:39 -08:00
+  created_at: 2008-12-06 23:34:39 +00:00
 tagging_1067725168: 
   tagger_id: 569823665
-  updated_at: 2009-03-19 18:24:26 -07:00
+  updated_at: 2009-03-20 01:24:26 +00:00
   id: 1067725168
   taggable_type: Work
   taggable_id: 45
   tagger_type: Tag
-  created_at: 2009-03-19 18:24:26 -07:00
+  created_at: 2009-03-20 01:24:26 +00:00
 tagging_1067724870: 
   tagger_id: 611729728
-  updated_at: 2008-11-08 17:26:02 -08:00
+  updated_at: 2008-11-09 01:26:02 +00:00
   id: 1067724870
   taggable_type: Work
   taggable_id: 1
   tagger_type: Tag
-  created_at: 2008-11-08 17:26:02 -08:00
+  created_at: 2008-11-09 01:26:02 +00:00
 tagging_1067724925: 
   tagger_id: 992891255
-  updated_at: 2008-12-06 15:24:00 -08:00
+  updated_at: 2008-12-06 23:24:00 +00:00
   id: 1067724925
   taggable_type: Work
   taggable_id: 11
   tagger_type: Tag
-  created_at: 2008-12-06 15:24:00 -08:00
+  created_at: 2008-12-06 23:24:00 +00:00
 tagging_1067724951: 
   tagger_id: 1063753785
-  updated_at: 2008-12-06 15:34:39 -08:00
+  updated_at: 2008-12-06 23:34:39 +00:00
   id: 1067724951
   taggable_type: Work
   taggable_id: 13
   tagger_type: Tag
-  created_at: 2008-12-06 15:34:39 -08:00
+  created_at: 2008-12-06 23:34:39 +00:00
 tagging_664025557: 
   tagger_id: 951091623
-  updated_at: 2008-11-08 17:26:02 -08:00
+  updated_at: 2008-11-09 01:26:02 +00:00
   id: 664025557
   taggable_type: Work
   taggable_id: 2
   tagger_type: Tag
-  created_at: 2008-11-08 17:26:02 -08:00
+  created_at: 2008-11-09 01:26:02 +00:00
 tagging_1067725088: 
   tagger_id: 1063753743
-  updated_at: 2009-03-11 17:00:01 -07:00
+  updated_at: 2009-03-12 00:00:01 +00:00
   id: 1067725088
   taggable_type: Work
   taggable_id: 35
   tagger_type: Tag
-  created_at: 2009-03-11 17:00:01 -07:00
+  created_at: 2009-03-12 00:00:01 +00:00
 tagging_1067725169: 
   tagger_id: 112726825
-  updated_at: 2009-03-19 18:28:02 -07:00
+  updated_at: 2009-03-20 01:28:02 +00:00
   id: 1067725169
   taggable_type: Work
   taggable_id: 46
   tagger_type: Tag
-  created_at: 2009-03-19 18:28:02 -07:00
+  created_at: 2009-03-20 01:28:02 +00:00
 tagging_1067725196: 
   tagger_id: 1063753736
-  updated_at: 2009-03-20 16:20:17 -07:00
+  updated_at: 2009-03-20 23:20:17 +00:00
   id: 1067725196
   taggable_type: Work
   taggable_id: 50
   tagger_type: Tag
-  created_at: 2009-03-20 16:20:17 -07:00
+  created_at: 2009-03-20 23:20:17 +00:00
 tagging_1067724871: 
   tagger_id: 1063753736
-  updated_at: 2008-11-20 23:47:14 -08:00
+  updated_at: 2008-11-21 07:47:14 +00:00
   id: 1067724871
   taggable_type: Work
   taggable_id: 2
   tagger_type: Tag
-  created_at: 2008-11-20 23:47:14 -08:00
+  created_at: 2008-11-21 07:47:14 +00:00
 tagging_1067724926: 
   tagger_id: 1063753735
-  updated_at: 2008-12-06 15:24:00 -08:00
+  updated_at: 2008-12-06 23:24:00 +00:00
   id: 1067724926
   taggable_type: Work
   taggable_id: 11
   tagger_type: Tag
-  created_at: 2008-12-06 15:24:00 -08:00
+  created_at: 2008-12-06 23:24:00 +00:00
 tagging_1067724952: 
   tagger_id: 221905380
-  updated_at: 2008-12-06 15:34:39 -08:00
+  updated_at: 2008-12-06 23:34:39 +00:00
   id: 1067724952
   taggable_type: Work
   taggable_id: 13
   tagger_type: Tag
-  created_at: 2008-12-06 15:34:39 -08:00
+  created_at: 2008-12-06 23:34:39 +00:00
 tagging_759696416: 
   tagger_id: 951091623
-  updated_at: 2008-11-08 17:26:02 -08:00
+  updated_at: 2008-11-09 01:26:02 +00:00
   id: 759696416
   taggable_type: Work
   taggable_id: 3
   tagger_type: Tag
-  created_at: 2008-11-08 17:26:02 -08:00
+  created_at: 2008-11-09 01:26:02 +00:00
 tagging_1067725089: 
   tagger_id: 1063753856
-  updated_at: 2009-03-11 17:29:31 -07:00
+  updated_at: 2009-03-12 00:29:31 +00:00
   id: 1067725089
   taggable_type: Work
   taggable_id: 36
   tagger_type: Tag
-  created_at: 2009-03-11 17:29:31 -07:00
+  created_at: 2009-03-12 00:29:31 +00:00
 tagging_1067725197: 
   tagger_id: 1063753733
-  updated_at: 2009-03-20 16:20:17 -07:00
+  updated_at: 2009-03-20 23:20:17 +00:00
   id: 1067725197
   taggable_type: Work
   taggable_id: 50
   tagger_type: Tag
-  created_at: 2009-03-20 16:20:17 -07:00
+  created_at: 2009-03-20 23:20:17 +00:00
 tagging_1067724872: 
   tagger_id: 1063753744
-  updated_at: 2008-11-20 23:48:03 -08:00
+  updated_at: 2008-11-21 07:48:03 +00:00
   id: 1067724872
   taggable_type: Work
   taggable_id: 1
   tagger_type: Tag
-  created_at: 2008-11-20 23:48:03 -08:00
+  created_at: 2008-11-21 07:48:03 +00:00
 tagging_400948225: 
   tagger_id: 1039617938
-  updated_at: 2008-11-08 17:26:02 -08:00
+  updated_at: 2008-11-09 01:26:02 +00:00
   id: 400948225
   taggable_type: Work
   taggable_id: 1
   tagger_type: Tag
-  created_at: 2008-11-08 17:26:02 -08:00
+  created_at: 2008-11-09 01:26:02 +00:00
 tagging_1067724927: 
   tagger_id: 751871740
-  updated_at: 2008-12-06 15:24:00 -08:00
+  updated_at: 2008-12-06 23:24:00 +00:00
   id: 1067724927
   taggable_type: Work
   taggable_id: 11
   tagger_type: Tag
-  created_at: 2008-12-06 15:24:00 -08:00
+  created_at: 2008-12-06 23:24:00 +00:00
 tagging_1067724953: 
   tagger_id: 26796919
-  updated_at: 2008-12-06 15:34:39 -08:00
+  updated_at: 2008-12-06 23:34:39 +00:00
   id: 1067724953
   taggable_type: Work
   taggable_id: 13
   tagger_type: Tag
-  created_at: 2008-12-06 15:34:39 -08:00
+  created_at: 2008-12-06 23:34:39 +00:00
 tagging_1067724873: 
   tagger_id: 1063753747
-  updated_at: 2008-11-20 23:48:52 -08:00
+  updated_at: 2008-11-21 07:48:52 +00:00
   id: 1067724873
   taggable_type: Work
   taggable_id: 2
   tagger_type: Tag
-  created_at: 2008-11-20 23:48:52 -08:00
+  created_at: 2008-11-21 07:48:52 +00:00
 tagging_1067724928: 
   tagger_id: 1063753774
-  updated_at: 2008-12-06 15:24:00 -08:00
+  updated_at: 2008-12-06 23:24:00 +00:00
   id: 1067724928
   taggable_type: Work
   taggable_id: 11
   tagger_type: Tag
-  created_at: 2008-12-06 15:24:00 -08:00
+  created_at: 2008-12-06 23:24:00 +00:00
 tagging_1067724954: 
   tagger_id: 1063753783
-  updated_at: 2008-12-06 15:34:39 -08:00
+  updated_at: 2008-12-06 23:34:39 +00:00
   id: 1067724954
   taggable_type: Work
   taggable_id: 13
   tagger_type: Tag
-  created_at: 2008-12-06 15:34:39 -08:00
+  created_at: 2008-12-06 23:34:39 +00:00
 tagging_1067724980: 
   tagger_id: 611729728
-  updated_at: 2009-02-21 20:25:24 -08:00
+  updated_at: 2009-02-22 04:25:24 +00:00
   id: 1067724980
   taggable_type: Work
   taggable_id: 15
   tagger_type: Tag
-  created_at: 2009-02-21 20:25:24 -08:00
+  created_at: 2009-02-22 04:25:24 +00:00
 tagging_1067725198: 
   tagger_id: 951091623
-  updated_at: 2009-03-20 16:20:17 -07:00
+  updated_at: 2009-03-20 23:20:17 +00:00
   id: 1067725198
   taggable_type: Work
   taggable_id: 50
   tagger_type: Tag
-  created_at: 2009-03-20 16:20:17 -07:00
+  created_at: 2009-03-20 23:20:17 +00:00
 tagging_1067724929: 
   tagger_id: 1063753773
-  updated_at: 2008-12-06 15:24:00 -08:00
+  updated_at: 2008-12-06 23:24:00 +00:00
   id: 1067724929
   taggable_type: Work
   taggable_id: 11
   tagger_type: Tag
-  created_at: 2008-12-06 15:24:00 -08:00
+  created_at: 2008-12-06 23:24:00 +00:00
 tagging_1067724955: 
   tagger_id: 112726825
-  updated_at: 2008-12-07 12:52:14 -08:00
+  updated_at: 2008-12-07 20:52:14 +00:00
   id: 1067724955
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:14 -08:00
+  created_at: 2008-12-07 20:52:14 +00:00
 tagging_1067724981: 
   tagger_id: 1039617938
-  updated_at: 2009-02-21 20:25:24 -08:00
+  updated_at: 2009-02-22 04:25:24 +00:00
   id: 1067724981
   taggable_type: Work
   taggable_id: 15
   tagger_type: Tag
-  created_at: 2009-02-21 20:25:24 -08:00
+  created_at: 2009-02-22 04:25:24 +00:00
 tagging_1067725010: 
   tagger_id: 751871740
-  updated_at: 2009-03-09 09:42:35 -07:00
+  updated_at: 2009-03-09 16:42:35 +00:00
   id: 1067725010
   taggable_type: Work
   taggable_id: 21
   tagger_type: Tag
-  created_at: 2009-03-09 09:42:35 -07:00
+  created_at: 2009-03-09 16:42:35 +00:00
 tagging_1067725199: 
   tagger_id: 1063753896
-  updated_at: 2009-03-20 16:20:17 -07:00
+  updated_at: 2009-03-20 23:20:17 +00:00
   id: 1067725199
   taggable_type: Work
   taggable_id: 50
   tagger_type: Tag
-  created_at: 2009-03-20 16:20:17 -07:00
+  created_at: 2009-03-20 23:20:17 +00:00
 tagging_138691404: 
   tagger_id: 1039617938
-  updated_at: 2008-11-08 17:26:02 -08:00
+  updated_at: 2008-11-09 01:26:02 +00:00
   id: 138691404
   taggable_type: Work
   taggable_id: 2
   tagger_type: Tag
-  created_at: 2008-11-08 17:26:02 -08:00
+  created_at: 2008-11-09 01:26:02 +00:00
 tagging_1067724874: 
   tagger_id: 1063753736
-  updated_at: 2008-11-20 23:50:08 -08:00
+  updated_at: 2008-11-21 07:50:08 +00:00
   id: 1067724874
   taggable_type: Work
   taggable_id: 3
   tagger_type: Tag
-  created_at: 2008-11-20 23:50:08 -08:00
+  created_at: 2008-11-21 07:50:08 +00:00
 tagging_687826934: 
   tagger_id: 741440589
-  updated_at: 2008-11-08 17:26:02 -08:00
+  updated_at: 2008-11-09 01:26:02 +00:00
   id: 687826934
   taggable_type: Work
   taggable_id: 5
   tagger_type: Tag
-  created_at: 2008-11-08 17:26:02 -08:00
+  created_at: 2008-11-09 01:26:02 +00:00
 tagging_1067724956: 
   tagger_id: 426547448
-  updated_at: 2008-12-07 12:52:14 -08:00
+  updated_at: 2008-12-07 20:52:14 +00:00
   id: 1067724956
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:14 -08:00
+  created_at: 2008-12-07 20:52:14 +00:00
 tagging_1067724982: 
   tagger_id: 1063753824
-  updated_at: 2009-02-21 20:25:24 -08:00
+  updated_at: 2009-02-22 04:25:24 +00:00
   id: 1067724982
   taggable_type: Work
   taggable_id: 15
   tagger_type: Tag
-  created_at: 2009-02-21 20:25:24 -08:00
+  created_at: 2009-02-22 04:25:24 +00:00
 tagging_653568201: 
   tagger_id: 402275454
-  updated_at: 2008-11-08 17:26:02 -08:00
+  updated_at: 2008-11-09 01:26:02 +00:00
   id: 653568201
   taggable_type: Work
   taggable_id: 4
   tagger_type: Tag
-  created_at: 2008-11-08 17:26:02 -08:00
+  created_at: 2008-11-09 01:26:02 +00:00
 tagging_1067724875: 
   tagger_id: 1063753750
-  updated_at: 2008-11-20 23:50:08 -08:00
+  updated_at: 2008-11-21 07:50:08 +00:00
   id: 1067724875
   taggable_type: Work
   taggable_id: 3
   tagger_type: Tag
-  created_at: 2008-11-20 23:50:08 -08:00
+  created_at: 2008-11-21 07:50:08 +00:00
 tagging_1067724957: 
   tagger_id: 1063753734
-  updated_at: 2008-12-07 12:52:14 -08:00
+  updated_at: 2008-12-07 20:52:14 +00:00
   id: 1067724957
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:14 -08:00
+  created_at: 2008-12-07 20:52:14 +00:00
 tagging_1067724983: 
   tagger_id: 1063753823
-  updated_at: 2009-02-21 20:25:24 -08:00
+  updated_at: 2009-02-22 04:25:24 +00:00
   id: 1067724983
   taggable_type: Work
   taggable_id: 15
   tagger_type: Tag
-  created_at: 2009-02-21 20:25:24 -08:00
+  created_at: 2009-02-22 04:25:24 +00:00
 tagging_1067725011: 
   tagger_id: 885489802
-  updated_at: 2009-03-09 10:04:57 -07:00
+  updated_at: 2009-03-09 17:04:57 +00:00
   id: 1067725011
   taggable_type: Work
   taggable_id: 22
   tagger_type: Tag
-  created_at: 2009-03-09 10:04:57 -07:00
+  created_at: 2009-03-09 17:04:57 +00:00
 tagging_1067724876: 
   tagger_id: 751871740
-  updated_at: 2008-11-20 23:50:24 -08:00
+  updated_at: 2008-11-21 07:50:24 +00:00
   id: 1067724876
   taggable_type: Work
   taggable_id: 3
   tagger_type: Tag
-  created_at: 2008-11-20 23:50:24 -08:00
+  created_at: 2008-11-21 07:50:24 +00:00
 tagging_1067724958: 
   tagger_id: 1063753741
-  updated_at: 2008-12-07 12:52:14 -08:00
+  updated_at: 2008-12-07 20:52:14 +00:00
   id: 1067724958
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:14 -08:00
+  created_at: 2008-12-07 20:52:14 +00:00
 tagging_1067724984: 
   tagger_id: 992891255
-  updated_at: 2009-02-23 22:34:22 -08:00
+  updated_at: 2009-02-24 06:34:22 +00:00
   id: 1067724984
   taggable_type: Work
   taggable_id: 16
   tagger_type: Tag
-  created_at: 2009-02-23 22:34:22 -08:00
+  created_at: 2009-02-24 06:34:22 +00:00
 tagging_1067725012: 
   tagger_id: 1063753736
-  updated_at: 2009-03-09 10:04:57 -07:00
+  updated_at: 2009-03-09 17:04:57 +00:00
   id: 1067725012
   taggable_type: Work
   taggable_id: 22
   tagger_type: Tag
-  created_at: 2009-03-09 10:04:57 -07:00
+  created_at: 2009-03-09 17:04:57 +00:00
 tagging_1067725200: 
   tagger_id: 1063753897
-  updated_at: 2009-03-20 16:20:17 -07:00
+  updated_at: 2009-03-20 23:20:17 +00:00
   id: 1067725200
   taggable_type: Work
   taggable_id: 50
   tagger_type: Tag
-  created_at: 2009-03-20 16:20:17 -07:00
+  created_at: 2009-03-20 23:20:17 +00:00
 tagging_1067724877: 
   tagger_id: 1063753736
-  updated_at: 2008-11-20 23:52:36 -08:00
+  updated_at: 2008-11-21 07:52:36 +00:00
   id: 1067724877
   taggable_type: Work
   taggable_id: 4
   tagger_type: Tag
-  created_at: 2008-11-20 23:52:36 -08:00
+  created_at: 2008-11-21 07:52:36 +00:00
 tagging_1067724959: 
   tagger_id: 1063753742
-  updated_at: 2008-12-07 12:52:14 -08:00
+  updated_at: 2008-12-07 20:52:14 +00:00
   id: 1067724959
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:14 -08:00
+  created_at: 2008-12-07 20:52:14 +00:00
 tagging_1067724985: 
   tagger_id: 1063753737
-  updated_at: 2009-02-23 22:34:22 -08:00
+  updated_at: 2009-02-24 06:34:22 +00:00
   id: 1067724985
   taggable_type: Work
   taggable_id: 16
   tagger_type: Tag
-  created_at: 2009-02-23 22:34:22 -08:00
+  created_at: 2009-02-24 06:34:22 +00:00
 tagging_1067725201: 
   tagger_id: 1063753914
-  updated_at: 2009-03-20 16:20:17 -07:00
+  updated_at: 2009-03-20 23:20:17 +00:00
   id: 1067725201
   taggable_type: Work
   taggable_id: 50
   tagger_type: Tag
-  created_at: 2009-03-20 16:20:17 -07:00
+  created_at: 2009-03-20 23:20:17 +00:00
 tagging_1067724878: 
   tagger_id: 1063753753
-  updated_at: 2008-11-20 23:52:37 -08:00
+  updated_at: 2008-11-21 07:52:37 +00:00
   id: 1067724878
   taggable_type: Work
   taggable_id: 4
   tagger_type: Tag
-  created_at: 2008-11-20 23:52:37 -08:00
+  created_at: 2008-11-21 07:52:37 +00:00
 tagging_1067724986: 
   tagger_id: 751871740
-  updated_at: 2009-02-23 22:34:22 -08:00
+  updated_at: 2009-02-24 06:34:22 +00:00
   id: 1067724986
   taggable_type: Work
   taggable_id: 16
   tagger_type: Tag
-  created_at: 2009-02-23 22:34:22 -08:00
+  created_at: 2009-02-24 06:34:22 +00:00
 tagging_1067725014: 
   tagger_id: 1063753829
-  updated_at: 2009-03-09 10:04:57 -07:00
+  updated_at: 2009-03-09 17:04:57 +00:00
   id: 1067725014
   taggable_type: Work
   taggable_id: 22
   tagger_type: Tag
-  created_at: 2009-03-09 10:04:57 -07:00
+  created_at: 2009-03-09 17:04:57 +00:00
 tagging_1067725121: 
   tagger_id: 1063753741
-  updated_at: 2009-03-11 18:43:37 -07:00
+  updated_at: 2009-03-12 01:43:37 +00:00
   id: 1067725121
   taggable_type: Work
   taggable_id: 40
   tagger_type: Tag
-  created_at: 2009-03-11 18:43:37 -07:00
+  created_at: 2009-03-12 01:43:37 +00:00
 tagging_1067725202: 
   tagger_id: 1063753913
-  updated_at: 2009-03-20 16:20:17 -07:00
+  updated_at: 2009-03-20 23:20:17 +00:00
   id: 1067725202
   taggable_type: Work
   taggable_id: 50
   tagger_type: Tag
-  created_at: 2009-03-20 16:20:17 -07:00
+  created_at: 2009-03-20 23:20:17 +00:00
 tagging_1067724879: 
   tagger_id: 611729728
-  updated_at: 2008-11-20 23:54:14 -08:00
+  updated_at: 2008-11-21 07:54:14 +00:00
   id: 1067724879
   taggable_type: Work
   taggable_id: 5
   tagger_type: Tag
-  created_at: 2008-11-20 23:54:14 -08:00
+  created_at: 2008-11-21 07:54:14 +00:00
 tagging_1067724987: 
   tagger_id: 1063753824
-  updated_at: 2009-02-23 22:34:22 -08:00
+  updated_at: 2009-02-24 06:34:22 +00:00
   id: 1067724987
   taggable_type: Work
   taggable_id: 16
   tagger_type: Tag
-  created_at: 2009-02-23 22:34:22 -08:00
+  created_at: 2009-02-24 06:34:22 +00:00
 tagging_1067725122: 
   tagger_id: 569823665
-  updated_at: 2009-03-11 18:43:37 -07:00
+  updated_at: 2009-03-12 01:43:37 +00:00
   id: 1067725122
   taggable_type: Work
   taggable_id: 40
   tagger_type: Tag
-  created_at: 2009-03-11 18:43:37 -07:00
+  created_at: 2009-03-12 01:43:37 +00:00
 tagging_1067725203: 
   tagger_id: 1063753740
-  updated_at: 2009-03-20 16:20:17 -07:00
+  updated_at: 2009-03-20 23:20:17 +00:00
   id: 1067725203
   taggable_type: Work
   taggable_id: 50
   tagger_type: Tag
-  created_at: 2009-03-20 16:20:17 -07:00
+  created_at: 2009-03-20 23:20:17 +00:00
+tagging_1067725230: 
+  tagger_id: 1063753737
+  updated_at: 2009-05-10 13:57:47 +01:00
+  id: 1067725230
+  taggable_type: Work
+  taggable_id: 54
+  tagger_type: Tag
+  created_at: 2009-05-10 13:57:47 +01:00
 tagging_1067725016: 
   tagger_id: 1063753741
-  updated_at: 2009-03-09 10:15:29 -07:00
+  updated_at: 2009-03-09 17:15:29 +00:00
   id: 1067725016
   taggable_type: Work
   taggable_id: 22
   tagger_type: Tag
-  created_at: 2009-03-09 10:15:29 -07:00
+  created_at: 2009-03-09 17:15:29 +00:00
 tagging_1067725043: 
   tagger_id: 1063753826
-  updated_at: 2009-03-11 14:56:06 -07:00
+  updated_at: 2009-03-11 21:56:06 +00:00
   id: 1067725043
   taggable_type: Work
   taggable_id: 30
   tagger_type: Tag
-  created_at: 2009-03-11 14:56:06 -07:00
+  created_at: 2009-03-11 21:56:06 +00:00
 tagging_1067725123: 
   tagger_id: 1063753877
-  updated_at: 2009-03-11 18:43:37 -07:00
+  updated_at: 2009-03-12 01:43:37 +00:00
   id: 1067725123
   taggable_type: Work
   taggable_id: 40
   tagger_type: Tag
-  created_at: 2009-03-11 18:43:37 -07:00
+  created_at: 2009-03-12 01:43:37 +00:00
 tagging_1067725150: 
   tagger_id: 569823665
-  updated_at: 2009-03-17 21:08:37 -07:00
+  updated_at: 2009-03-18 04:08:37 +00:00
   id: 1067725150
   taggable_type: Work
   taggable_id: 42
   tagger_type: Tag
-  created_at: 2009-03-17 21:08:37 -07:00
+  created_at: 2009-03-18 04:08:37 +00:00
 tagging_1067725204: 
   tagger_id: 1063753763
-  updated_at: 2009-03-20 16:20:17 -07:00
+  updated_at: 2009-03-20 23:20:17 +00:00
   id: 1067725204
   taggable_type: Work
   taggable_id: 50
   tagger_type: Tag
-  created_at: 2009-03-20 16:20:17 -07:00
+  created_at: 2009-03-20 23:20:17 +00:00
 tagging_1067724988: 
   tagger_id: 112726825
-  updated_at: 2009-02-24 00:47:23 -08:00
+  updated_at: 2009-02-24 08:47:23 +00:00
   id: 1067724988
   taggable_type: Work
   taggable_id: 17
   tagger_type: Tag
-  created_at: 2009-02-24 00:47:23 -08:00
+  created_at: 2009-02-24 08:47:23 +00:00
 tagging_1067725017: 
   tagger_id: 885489802
-  updated_at: 2009-03-09 10:20:58 -07:00
+  updated_at: 2009-03-09 17:20:58 +00:00
   id: 1067725017
   taggable_type: Work
   taggable_id: 23
   tagger_type: Tag
-  created_at: 2009-03-09 10:20:58 -07:00
+  created_at: 2009-03-09 17:20:58 +00:00
 tagging_1067725070: 
   tagger_id: 569823665
-  updated_at: 2009-03-11 15:31:00 -07:00
+  updated_at: 2009-03-11 22:31:00 +00:00
   id: 1067725070
   taggable_type: Work
   taggable_id: 34
   tagger_type: Tag
-  created_at: 2009-03-11 15:31:00 -07:00
+  created_at: 2009-03-11 22:31:00 +00:00
 tagging_1067725151: 
   tagger_id: 1063753743
-  updated_at: 2009-03-17 21:08:38 -07:00
+  updated_at: 2009-03-18 04:08:38 +00:00
   id: 1067725151
   taggable_type: Work
   taggable_id: 42
   tagger_type: Tag
-  created_at: 2009-03-17 21:08:38 -07:00
+  created_at: 2009-03-18 04:08:38 +00:00
 tagging_1067725205: 
   tagger_id: 885489802
-  updated_at: 2009-03-20 16:22:23 -07:00
+  updated_at: 2009-03-20 23:22:23 +00:00
   id: 1067725205
   taggable_type: Work
   taggable_id: 51
   tagger_type: Tag
-  created_at: 2009-03-20 16:22:23 -07:00
+  created_at: 2009-03-20 23:22:23 +00:00
+tagging_1067725231: 
+  tagger_id: 1039617938
+  updated_at: 2009-05-10 13:57:47 +01:00
+  id: 1067725231
+  taggable_type: Work
+  taggable_id: 54
+  tagger_type: Tag
+  created_at: 2009-05-10 13:57:47 +01:00
 tagging_1067724989: 
   tagger_id: 1063753735
-  updated_at: 2009-02-24 00:47:23 -08:00
+  updated_at: 2009-02-24 08:47:23 +00:00
   id: 1067724989
   taggable_type: Work
   taggable_id: 17
   tagger_type: Tag
-  created_at: 2009-02-24 00:47:23 -08:00
+  created_at: 2009-02-24 08:47:23 +00:00
+tagging_1067725232: 
+  tagger_id: 1063753774
+  updated_at: 2009-05-10 13:57:48 +01:00
+  id: 1067725232
+  taggable_type: Work
+  taggable_id: 54
+  tagger_type: Tag
+  created_at: 2009-05-10 13:57:48 +01:00
 tagging_1067725018: 
   tagger_id: 1063753736
-  updated_at: 2009-03-09 10:20:58 -07:00
+  updated_at: 2009-03-09 17:20:58 +00:00
   id: 1067725018
   taggable_type: Work
   taggable_id: 23
   tagger_type: Tag
-  created_at: 2009-03-09 10:20:58 -07:00
+  created_at: 2009-03-09 17:20:58 +00:00
 tagging_1067725125: 
   tagger_id: 1063753876
-  updated_at: 2009-03-11 18:43:37 -07:00
+  updated_at: 2009-03-12 01:43:37 +00:00
   id: 1067725125
   taggable_type: Work
   taggable_id: 40
   tagger_type: Tag
-  created_at: 2009-03-11 18:43:37 -07:00
+  created_at: 2009-03-12 01:43:37 +00:00
 tagging_1067725152: 
   tagger_id: 885489802
-  updated_at: 2009-03-17 21:09:43 -07:00
+  updated_at: 2009-03-18 04:09:43 +00:00
   id: 1067725152
   taggable_type: Work
   taggable_id: 43
   tagger_type: Tag
-  created_at: 2009-03-17 21:09:43 -07:00
+  created_at: 2009-03-18 04:09:43 +00:00
 tagging_1067725206: 
   tagger_id: 1063753736
-  updated_at: 2009-03-20 16:22:23 -07:00
+  updated_at: 2009-03-20 23:22:23 +00:00
   id: 1067725206
   taggable_type: Work
   taggable_id: 51
   tagger_type: Tag
-  created_at: 2009-03-20 16:22:23 -07:00
+  created_at: 2009-03-20 23:22:23 +00:00
 tagging_1067725019: 
   tagger_id: 1063753741
-  updated_at: 2009-03-09 10:20:58 -07:00
+  updated_at: 2009-03-09 17:20:58 +00:00
   id: 1067725019
   taggable_type: Work
   taggable_id: 23
   tagger_type: Tag
-  created_at: 2009-03-09 10:20:58 -07:00
+  created_at: 2009-03-09 17:20:58 +00:00
 tagging_1067725045: 
   tagger_id: 1063753832
-  updated_at: 2009-03-11 14:56:06 -07:00
+  updated_at: 2009-03-11 21:56:06 +00:00
   id: 1067725045
   taggable_type: Work
   taggable_id: 30
   tagger_type: Tag
-  created_at: 2009-03-11 14:56:06 -07:00
+  created_at: 2009-03-11 21:56:06 +00:00
 tagging_1067725072: 
   tagger_id: 1063753833
-  updated_at: 2009-03-11 16:55:09 -07:00
+  updated_at: 2009-03-11 23:55:09 +00:00
   id: 1067725072
   taggable_type: Work
   taggable_id: 35
   tagger_type: Tag
-  created_at: 2009-03-11 16:55:09 -07:00
+  created_at: 2009-03-11 23:55:09 +00:00
 tagging_1067725126: 
   tagger_id: 1063753879
-  updated_at: 2009-03-11 18:45:59 -07:00
+  updated_at: 2009-03-12 01:45:59 +00:00
   id: 1067725126
   taggable_type: Work
   taggable_id: 40
   tagger_type: Tag
-  created_at: 2009-03-11 18:45:59 -07:00
+  created_at: 2009-03-12 01:45:59 +00:00
 tagging_1067725153: 
   tagger_id: 426547448
-  updated_at: 2009-03-17 21:09:43 -07:00
+  updated_at: 2009-03-18 04:09:43 +00:00
   id: 1067725153
   taggable_type: Work
   taggable_id: 43
   tagger_type: Tag
-  created_at: 2009-03-17 21:09:43 -07:00
+  created_at: 2009-03-18 04:09:43 +00:00
 tagging_1067725207: 
   tagger_id: 751871740
-  updated_at: 2009-03-20 16:22:23 -07:00
+  updated_at: 2009-03-20 23:22:23 +00:00
   id: 1067725207
   taggable_type: Work
   taggable_id: 51
   tagger_type: Tag
-  created_at: 2009-03-20 16:22:23 -07:00
+  created_at: 2009-03-20 23:22:23 +00:00
 tagging_35934741: 
   tagger_id: 741440589
-  updated_at: 2008-11-08 17:26:02 -08:00
+  updated_at: 2008-11-09 01:26:02 +00:00
   id: 35934741
   taggable_type: Work
   taggable_id: 4
   tagger_type: Tag
-  created_at: 2008-11-08 17:26:02 -08:00
+  created_at: 2008-11-09 01:26:02 +00:00
 tagging_1031805717: 
   tagger_id: 362175678
-  updated_at: 2008-11-08 17:26:02 -08:00
+  updated_at: 2008-11-09 01:26:02 +00:00
   id: 1031805717
   taggable_type: Work
   taggable_id: 4
   tagger_type: Tag
-  created_at: 2008-11-08 17:26:02 -08:00
+  created_at: 2008-11-09 01:26:02 +00:00
 tagging_1067725180: 
   tagger_id: 1063753907
-  updated_at: 2009-03-20 16:11:56 -07:00
+  updated_at: 2009-03-20 23:11:56 +00:00
   id: 1067725180
   taggable_type: Work
   taggable_id: 47
   tagger_type: Tag
-  created_at: 2009-03-20 16:11:56 -07:00
+  created_at: 2009-03-20 23:11:56 +00:00
 tagging_1067725208: 
   tagger_id: 951091623
-  updated_at: 2009-03-20 16:22:23 -07:00
+  updated_at: 2009-03-20 23:22:23 +00:00
   id: 1067725208
   taggable_type: Work
   taggable_id: 51
   tagger_type: Tag
-  created_at: 2009-03-20 16:22:23 -07:00
+  created_at: 2009-03-20 23:22:23 +00:00
 tagging_1067725074: 
   tagger_id: 1063753834
-  updated_at: 2009-03-11 16:55:10 -07:00
+  updated_at: 2009-03-11 23:55:10 +00:00
   id: 1067725074
   taggable_type: Work
   taggable_id: 35
   tagger_type: Tag
-  created_at: 2009-03-11 16:55:10 -07:00
+  created_at: 2009-03-11 23:55:10 +00:00
 tagging_1067725154: 
   tagger_id: 1063753733
-  updated_at: 2009-03-17 21:09:43 -07:00
+  updated_at: 2009-03-18 04:09:43 +00:00
   id: 1067725154
   taggable_type: Work
   taggable_id: 43
   tagger_type: Tag
-  created_at: 2009-03-17 21:09:43 -07:00
+  created_at: 2009-03-18 04:09:43 +00:00
 tagging_1067725181: 
   tagger_id: 1063753908
-  updated_at: 2009-03-20 16:11:56 -07:00
+  updated_at: 2009-03-20 23:11:56 +00:00
   id: 1067725181
   taggable_type: Work
   taggable_id: 47
   tagger_type: Tag
-  created_at: 2009-03-20 16:11:56 -07:00
+  created_at: 2009-03-20 23:11:56 +00:00
 tagging_1067725209: 
   tagger_id: 1063753916
-  updated_at: 2009-03-20 16:22:23 -07:00
+  updated_at: 2009-03-20 23:22:23 +00:00
   id: 1067725209
   taggable_type: Work
   taggable_id: 51
   tagger_type: Tag
-  created_at: 2009-03-20 16:22:23 -07:00
+  created_at: 2009-03-20 23:22:23 +00:00
 tagging_1067724910: 
   tagger_id: 751871740
-  updated_at: 2008-12-06 14:55:58 -08:00
+  updated_at: 2008-12-06 22:55:58 +00:00
   id: 1067724910
   taggable_type: Work
   taggable_id: 9
   tagger_type: Tag
-  created_at: 2008-12-06 14:55:58 -08:00
+  created_at: 2008-12-06 22:55:58 +00:00
 tagging_1067725129: 
   tagger_id: 1063753881
-  updated_at: 2009-03-11 18:52:01 -07:00
+  updated_at: 2009-03-12 01:52:01 +00:00
   id: 1067725129
   taggable_type: Work
   taggable_id: 40
   tagger_type: Tag
-  created_at: 2009-03-11 18:52:01 -07:00
+  created_at: 2009-03-12 01:52:01 +00:00
 tagging_1067725155: 
   tagger_id: 569823665
-  updated_at: 2009-03-17 21:09:43 -07:00
+  updated_at: 2009-03-18 04:09:43 +00:00
   id: 1067725155
   taggable_type: Work
   taggable_id: 43
   tagger_type: Tag
-  created_at: 2009-03-17 21:09:43 -07:00
+  created_at: 2009-03-18 04:09:43 +00:00
 tagging_1067725182: 
   tagger_id: 885489802
-  updated_at: 2009-03-20 16:14:14 -07:00
+  updated_at: 2009-03-20 23:14:14 +00:00
   id: 1067725182
   taggable_type: Work
   taggable_id: 48
   tagger_type: Tag
-  created_at: 2009-03-20 16:14:14 -07:00
+  created_at: 2009-03-20 23:14:14 +00:00
 tagging_1067724911: 
   tagger_id: 1063753758
-  updated_at: 2008-12-06 14:55:58 -08:00
+  updated_at: 2008-12-06 22:55:58 +00:00
   id: 1067724911
   taggable_type: Work
   taggable_id: 9
   tagger_type: Tag
-  created_at: 2008-12-06 14:55:58 -08:00
+  created_at: 2008-12-06 22:55:58 +00:00
 tagging_46392098: 
   tagger_id: 992891255
-  updated_at: 2008-11-08 17:26:02 -08:00
+  updated_at: 2008-11-09 01:26:02 +00:00
   id: 46392098
   taggable_type: Work
   taggable_id: 2
   tagger_type: Tag
-  created_at: 2008-11-08 17:26:02 -08:00
+  created_at: 2008-11-09 01:26:02 +00:00
 tagging_1067725076: 
   tagger_id: 569823665
-  updated_at: 2009-03-11 16:55:10 -07:00
+  updated_at: 2009-03-11 23:55:10 +00:00
   id: 1067725076
   taggable_type: Work
   taggable_id: 35
   tagger_type: Tag
-  created_at: 2009-03-11 16:55:10 -07:00
+  created_at: 2009-03-11 23:55:10 +00:00
 tagging_1067725156: 
   tagger_id: 1063753886
-  updated_at: 2009-03-18 13:15:26 -07:00
+  updated_at: 2009-03-18 20:15:26 +00:00
   id: 1067725156
   taggable_type: Work
   taggable_id: 43
   tagger_type: Tag
-  created_at: 2009-03-18 13:15:26 -07:00
+  created_at: 2009-03-18 20:15:26 +00:00
 tagging_1067725183: 
   tagger_id: 1063753736
-  updated_at: 2009-03-20 16:14:14 -07:00
+  updated_at: 2009-03-20 23:14:14 +00:00
   id: 1067725183
   taggable_type: Work
   taggable_id: 48
   tagger_type: Tag
-  created_at: 2009-03-20 16:14:14 -07:00
+  created_at: 2009-03-20 23:14:14 +00:00
 tagging_1067724912: 
   tagger_id: 1063753764
-  updated_at: 2008-12-06 14:55:58 -08:00
+  updated_at: 2008-12-06 22:55:58 +00:00
   id: 1067724912
   taggable_type: Work
   taggable_id: 9
   tagger_type: Tag
-  created_at: 2008-12-06 14:55:58 -08:00
+  created_at: 2008-12-06 22:55:58 +00:00
 tagging_1067725157: 
   tagger_id: 1063753887
-  updated_at: 2009-03-18 13:15:26 -07:00
+  updated_at: 2009-03-18 20:15:26 +00:00
   id: 1067725157
   taggable_type: Work
   taggable_id: 43
   tagger_type: Tag
-  created_at: 2009-03-18 13:15:26 -07:00
+  created_at: 2009-03-18 20:15:26 +00:00
 tagging_1067725184: 
   tagger_id: 1063753743
-  updated_at: 2009-03-20 16:14:14 -07:00
+  updated_at: 2009-03-20 23:14:14 +00:00
   id: 1067725184
   taggable_type: Work
   taggable_id: 48
   tagger_type: Tag
-  created_at: 2009-03-20 16:14:14 -07:00
+  created_at: 2009-03-20 23:14:14 +00:00
 tagging_1067724913: 
   tagger_id: 1063753763
-  updated_at: 2008-12-06 14:55:58 -08:00
+  updated_at: 2008-12-06 22:55:58 +00:00
   id: 1067724913
   taggable_type: Work
   taggable_id: 9
   tagger_type: Tag
-  created_at: 2008-12-06 14:55:58 -08:00
+  created_at: 2008-12-06 22:55:58 +00:00
 tagging_1067725158: 
   tagger_id: 1063753888
-  updated_at: 2009-03-18 13:15:26 -07:00
+  updated_at: 2009-03-18 20:15:26 +00:00
   id: 1067725158
   taggable_type: Work
   taggable_id: 43
   tagger_type: Tag
-  created_at: 2009-03-18 13:15:26 -07:00
+  created_at: 2009-03-18 20:15:26 +00:00
 tagging_1067725185: 
   tagger_id: 986046160
-  updated_at: 2009-03-20 16:14:14 -07:00
+  updated_at: 2009-03-20 23:14:14 +00:00
   id: 1067725185
   taggable_type: Work
   taggable_id: 48
   tagger_type: Tag
-  created_at: 2009-03-20 16:14:14 -07:00
+  created_at: 2009-03-20 23:14:14 +00:00
 tagging_1067724914: 
   tagger_id: 992891255
-  updated_at: 2008-12-06 15:19:49 -08:00
+  updated_at: 2008-12-06 23:19:49 +00:00
   id: 1067724914
   taggable_type: Work
   taggable_id: 10
   tagger_type: Tag
-  created_at: 2008-12-06 15:19:49 -08:00
+  created_at: 2008-12-06 23:19:49 +00:00
 tagging_1067724940: 
   tagger_id: 1063753779
-  updated_at: 2008-12-06 15:26:41 -08:00
+  updated_at: 2008-12-06 23:26:41 +00:00
   id: 1067724940
   taggable_type: Work
   taggable_id: 12
   tagger_type: Tag
-  created_at: 2008-12-06 15:26:41 -08:00
+  created_at: 2008-12-06 23:26:41 +00:00
 tagging_1067725159: 
   tagger_id: 992891255
-  updated_at: 2009-03-18 18:02:12 -07:00
+  updated_at: 2009-03-19 01:02:12 +00:00
   id: 1067725159
   taggable_type: Work
   taggable_id: 44
   tagger_type: Tag
-  created_at: 2009-03-18 18:02:12 -07:00
+  created_at: 2009-03-19 01:02:12 +00:00
 tagging_1067725186: 
   tagger_id: 1063753911
-  updated_at: 2009-03-20 16:14:14 -07:00
+  updated_at: 2009-03-20 23:14:14 +00:00
   id: 1067725186
   taggable_type: Work
   taggable_id: 48
   tagger_type: Tag
-  created_at: 2009-03-20 16:14:14 -07:00
+  created_at: 2009-03-20 23:14:14 +00:00
 tagging_1067724915: 
   tagger_id: 1063753736
-  updated_at: 2008-12-06 15:19:49 -08:00
+  updated_at: 2008-12-06 23:19:49 +00:00
   id: 1067724915
   taggable_type: Work
   taggable_id: 10
   tagger_type: Tag
-  created_at: 2008-12-06 15:19:49 -08:00
+  created_at: 2008-12-06 23:19:49 +00:00
 tagging_1067724941: 
   tagger_id: 1063753781
-  updated_at: 2008-12-06 15:26:41 -08:00
+  updated_at: 2008-12-06 23:26:41 +00:00
   id: 1067724941
   taggable_type: Work
   taggable_id: 12
   tagger_type: Tag
-  created_at: 2008-12-06 15:26:41 -08:00
+  created_at: 2008-12-06 23:26:41 +00:00
 tagging_1067724916: 
   tagger_id: 751871740
-  updated_at: 2008-12-06 15:19:49 -08:00
+  updated_at: 2008-12-06 23:19:49 +00:00
   id: 1067724916
   taggable_type: Work
   taggable_id: 10
   tagger_type: Tag
-  created_at: 2008-12-06 15:19:49 -08:00
+  created_at: 2008-12-06 23:19:49 +00:00
 tagging_1067724942: 
   tagger_id: 1063753782
-  updated_at: 2008-12-06 15:26:41 -08:00
+  updated_at: 2008-12-06 23:26:41 +00:00
   id: 1067724942
   taggable_type: Work
   taggable_id: 12
   tagger_type: Tag
-  created_at: 2008-12-06 15:26:41 -08:00
+  created_at: 2008-12-06 23:26:41 +00:00
 tagging_1067725187: 
   tagger_id: 1063753905
-  updated_at: 2009-03-20 16:14:14 -07:00
+  updated_at: 2009-03-20 23:14:14 +00:00
   id: 1067725187
   taggable_type: Work
   taggable_id: 48
   tagger_type: Tag
-  created_at: 2009-03-20 16:14:14 -07:00
+  created_at: 2009-03-20 23:14:14 +00:00
 tagging_1067724917: 
   tagger_id: 741440589
-  updated_at: 2008-12-06 15:19:49 -08:00
+  updated_at: 2008-12-06 23:19:49 +00:00
   id: 1067724917
   taggable_type: Work
   taggable_id: 10
   tagger_type: Tag
-  created_at: 2008-12-06 15:19:49 -08:00
+  created_at: 2008-12-06 23:19:49 +00:00
 tagging_1067724943: 
   tagger_id: 1063753767
-  updated_at: 2008-12-06 15:26:41 -08:00
+  updated_at: 2008-12-06 23:26:41 +00:00
   id: 1067724943
   taggable_type: Work
   taggable_id: 12
   tagger_type: Tag
-  created_at: 2008-12-06 15:26:41 -08:00
+  created_at: 2008-12-06 23:26:41 +00:00
 tagging_1067725188: 
   tagger_id: 1063753912
-  updated_at: 2009-03-20 16:14:14 -07:00
+  updated_at: 2009-03-20 23:14:14 +00:00
   id: 1067725188
   taggable_type: Work
   taggable_id: 48
   tagger_type: Tag
-  created_at: 2009-03-20 16:14:14 -07:00
+  created_at: 2009-03-20 23:14:14 +00:00
 tagging_1067724918: 
   tagger_id: 545584597
-  updated_at: 2008-12-06 15:19:49 -08:00
+  updated_at: 2008-12-06 23:19:49 +00:00
   id: 1067724918
   taggable_type: Work
   taggable_id: 10
   tagger_type: Tag
-  created_at: 2008-12-06 15:19:49 -08:00
+  created_at: 2008-12-06 23:19:49 +00:00
 tagging_1067724944: 
   tagger_id: 1063753777
-  updated_at: 2008-12-06 15:26:41 -08:00
+  updated_at: 2008-12-06 23:26:41 +00:00
   id: 1067724944
   taggable_type: Work
   taggable_id: 12
   tagger_type: Tag
-  created_at: 2008-12-06 15:26:41 -08:00
+  created_at: 2008-12-06 23:26:41 +00:00
 tagging_1067724970: 
   tagger_id: 1063753788
-  updated_at: 2008-12-07 12:52:14 -08:00
+  updated_at: 2008-12-07 20:52:14 +00:00
   id: 1067724970
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:14 -08:00
-tagging_1067725189: 
-  tagger_id: 992891255
-  updated_at: 2009-03-20 16:17:43 -07:00
-  id: 1067725189
-  taggable_type: Work
-  taggable_id: 49
-  tagger_type: Tag
-  created_at: 2009-03-20 16:17:43 -07:00
-tagging_1067724890: 
-  tagger_id: 751871740
-  updated_at: 2008-12-05 05:59:14 -08:00
-  id: 1067724890
-  taggable_type: Work
-  taggable_id: 6
-  tagger_type: Tag
-  created_at: 2008-12-05 05:59:14 -08:00
-tagging_1067724919: 
-  tagger_id: 221905380
-  updated_at: 2008-12-06 15:19:49 -08:00
-  id: 1067724919
-  taggable_type: Work
-  taggable_id: 10
-  tagger_type: Tag
-  created_at: 2008-12-06 15:19:49 -08:00
+  created_at: 2008-12-07 20:52:14 +00:00
 tagging_1067724945: 
   tagger_id: 1063753778
-  updated_at: 2008-12-06 15:26:41 -08:00
+  updated_at: 2008-12-06 23:26:41 +00:00
   id: 1067724945
   taggable_type: Work
   taggable_id: 12
   tagger_type: Tag
-  created_at: 2008-12-06 15:26:41 -08:00
+  created_at: 2008-12-06 23:26:41 +00:00
+tagging_1067724919: 
+  tagger_id: 221905380
+  updated_at: 2008-12-06 23:19:49 +00:00
+  id: 1067724919
+  taggable_type: Work
+  taggable_id: 10
+  tagger_type: Tag
+  created_at: 2008-12-06 23:19:49 +00:00
+tagging_1067725189: 
+  tagger_id: 992891255
+  updated_at: 2009-03-20 23:17:43 +00:00
+  id: 1067725189
+  taggable_type: Work
+  taggable_id: 49
+  tagger_type: Tag
+  created_at: 2009-03-20 23:17:43 +00:00
+tagging_1067724890: 
+  tagger_id: 751871740
+  updated_at: 2008-12-05 13:59:14 +00:00
+  id: 1067724890
+  taggable_type: Work
+  taggable_id: 6
+  tagger_type: Tag
+  created_at: 2008-12-05 13:59:14 +00:00
 tagging_1067724971: 
   tagger_id: 1063753789
-  updated_at: 2008-12-07 12:52:14 -08:00
+  updated_at: 2008-12-07 20:52:14 +00:00
   id: 1067724971
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:14 -08:00
+  created_at: 2008-12-07 20:52:14 +00:00
 tagging_1067724972: 
   tagger_id: 1063753790
-  updated_at: 2008-12-07 12:52:14 -08:00
+  updated_at: 2008-12-07 20:52:14 +00:00
   id: 1067724972
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:14 -08:00
+  created_at: 2008-12-07 20:52:14 +00:00
 tagging_1067724946: 
   tagger_id: 992891255
-  updated_at: 2008-12-06 15:34:39 -08:00
+  updated_at: 2008-12-06 23:34:39 +00:00
   id: 1067724946
   taggable_type: Work
   taggable_id: 13
   tagger_type: Tag
-  created_at: 2008-12-06 15:34:39 -08:00
+  created_at: 2008-12-06 23:34:39 +00:00
 tagging_1067724891: 
   tagger_id: 741440589
-  updated_at: 2008-12-05 05:59:14 -08:00
+  updated_at: 2008-12-05 13:59:14 +00:00
   id: 1067724891
   taggable_type: Work
   taggable_id: 6
   tagger_type: Tag
-  created_at: 2008-12-05 05:59:14 -08:00
+  created_at: 2008-12-05 13:59:14 +00:00
 tagging_1067725000: 
   tagger_id: 611729728
-  updated_at: 2009-03-09 08:43:33 -07:00
+  updated_at: 2009-03-09 15:43:33 +00:00
   id: 1067725000
   taggable_type: Work
   taggable_id: 19
   tagger_type: Tag
-  created_at: 2009-03-09 08:43:33 -07:00
+  created_at: 2009-03-09 15:43:33 +00:00
 tagging_1067724973: 
   tagger_id: 1063753791
-  updated_at: 2008-12-07 12:52:14 -08:00
+  updated_at: 2008-12-07 20:52:14 +00:00
   id: 1067724973
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:14 -08:00
+  created_at: 2008-12-07 20:52:14 +00:00
 tagging_1067724947: 
   tagger_id: 611729728
-  updated_at: 2008-12-06 15:34:39 -08:00
+  updated_at: 2008-12-06 23:34:39 +00:00
   id: 1067724947
   taggable_type: Work
   taggable_id: 13
   tagger_type: Tag
-  created_at: 2008-12-06 15:34:39 -08:00
+  created_at: 2008-12-06 23:34:39 +00:00
 tagging_1067724892: 
   tagger_id: 1063753755
-  updated_at: 2008-12-05 05:59:14 -08:00
+  updated_at: 2008-12-05 13:59:14 +00:00
   id: 1067724892
   taggable_type: Work
   taggable_id: 6
   tagger_type: Tag
-  created_at: 2008-12-05 05:59:14 -08:00
+  created_at: 2008-12-05 13:59:14 +00:00
 tagging_1067725001: 
   tagger_id: 751871740
-  updated_at: 2009-03-09 08:43:33 -07:00
+  updated_at: 2009-03-09 15:43:33 +00:00
   id: 1067725001
   taggable_type: Work
   taggable_id: 19
   tagger_type: Tag
-  created_at: 2009-03-09 08:43:33 -07:00
+  created_at: 2009-03-09 15:43:33 +00:00
 tagging_1067724974: 
   tagger_id: 1063753792
-  updated_at: 2008-12-07 12:52:14 -08:00
+  updated_at: 2008-12-07 20:52:14 +00:00
   id: 1067724974
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:14 -08:00
+  created_at: 2008-12-07 20:52:14 +00:00
 tagging_1067724948: 
   tagger_id: 1063753742
-  updated_at: 2008-12-06 15:34:39 -08:00
+  updated_at: 2008-12-06 23:34:39 +00:00
   id: 1067724948
   taggable_type: Work
   taggable_id: 13
   tagger_type: Tag
-  created_at: 2008-12-06 15:34:39 -08:00
+  created_at: 2008-12-06 23:34:39 +00:00
 tagging_1067724893: 
   tagger_id: 1063753756
-  updated_at: 2008-12-05 05:59:14 -08:00
+  updated_at: 2008-12-05 13:59:14 +00:00
   id: 1067724893
   taggable_type: Work
   taggable_id: 6
   tagger_type: Tag
-  created_at: 2008-12-05 05:59:14 -08:00
+  created_at: 2008-12-05 13:59:14 +00:00
 tagging_1067725002: 
   tagger_id: 1063753824
-  updated_at: 2009-03-09 08:44:02 -07:00
+  updated_at: 2009-03-09 15:44:02 +00:00
   id: 1067725002
   taggable_type: Work
   taggable_id: 19
   tagger_type: Tag
-  created_at: 2009-03-09 08:44:02 -07:00
+  created_at: 2009-03-09 15:44:02 +00:00
 tagging_1067725003: 
   tagger_id: 1063753735
-  updated_at: 2009-03-09 09:32:00 -07:00
+  updated_at: 2009-03-09 16:32:00 +00:00
   id: 1067725003
   taggable_type: Work
   taggable_id: 20
   tagger_type: Tag
-  created_at: 2009-03-09 09:32:00 -07:00
+  created_at: 2009-03-09 16:32:00 +00:00
 tagging_1067724975: 
   tagger_id: 1063753793
-  updated_at: 2008-12-07 12:52:14 -08:00
+  updated_at: 2008-12-07 20:52:14 +00:00
   id: 1067724975
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:14 -08:00
+  created_at: 2008-12-07 20:52:14 +00:00
 tagging_1067724949: 
   tagger_id: 741440589
-  updated_at: 2008-12-06 15:34:39 -08:00
+  updated_at: 2008-12-06 23:34:39 +00:00
   id: 1067724949
   taggable_type: Work
   taggable_id: 13
   tagger_type: Tag
-  created_at: 2008-12-06 15:34:39 -08:00
+  created_at: 2008-12-06 23:34:39 +00:00
 tagging_1067725110: 
   tagger_id: 885489802
-  updated_at: 2009-03-11 17:56:30 -07:00
+  updated_at: 2009-03-12 00:56:30 +00:00
   id: 1067725110
   taggable_type: Work
   taggable_id: 39
   tagger_type: Tag
-  created_at: 2009-03-11 17:56:30 -07:00
+  created_at: 2009-03-12 00:56:30 +00:00
 tagging_1067725004: 
   tagger_id: 992891255
-  updated_at: 2009-03-09 09:32:00 -07:00
+  updated_at: 2009-03-09 16:32:00 +00:00
   id: 1067725004
   taggable_type: Work
   taggable_id: 20
   tagger_type: Tag
-  created_at: 2009-03-09 09:32:00 -07:00
+  created_at: 2009-03-09 16:32:00 +00:00
 tagging_1067724976: 
   tagger_id: 1063753794
-  updated_at: 2008-12-07 12:52:14 -08:00
+  updated_at: 2008-12-07 20:52:14 +00:00
   id: 1067724976
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:14 -08:00
+  created_at: 2008-12-07 20:52:14 +00:00
 tagging_1067724895: 
   tagger_id: 1063753735
-  updated_at: 2008-12-06 14:28:58 -08:00
+  updated_at: 2008-12-06 22:28:58 +00:00
   id: 1067724895
   taggable_type: Work
   taggable_id: 7
   tagger_type: Tag
-  created_at: 2008-12-06 14:28:58 -08:00
+  created_at: 2008-12-06 22:28:58 +00:00
 tagging_1067725111: 
   tagger_id: 1063753732
-  updated_at: 2009-03-11 17:56:30 -07:00
+  updated_at: 2009-03-12 00:56:30 +00:00
   id: 1067725111
   taggable_type: Work
   taggable_id: 39
   tagger_type: Tag
-  created_at: 2009-03-11 17:56:30 -07:00
+  created_at: 2009-03-12 00:56:30 +00:00
 tagging_1067725005: 
   tagger_id: 1063753824
-  updated_at: 2009-03-09 09:32:00 -07:00
+  updated_at: 2009-03-09 16:32:00 +00:00
   id: 1067725005
   taggable_type: Work
   taggable_id: 20
   tagger_type: Tag
-  created_at: 2009-03-09 09:32:00 -07:00
+  created_at: 2009-03-09 16:32:00 +00:00
 tagging_1067724977: 
   tagger_id: 1063753795
-  updated_at: 2008-12-07 12:52:15 -08:00
+  updated_at: 2008-12-07 20:52:15 +00:00
   id: 1067724977
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:15 -08:00
+  created_at: 2008-12-07 20:52:15 +00:00
 tagging_1067724896: 
   tagger_id: 1063753758
-  updated_at: 2008-12-06 14:28:58 -08:00
+  updated_at: 2008-12-06 22:28:58 +00:00
   id: 1067724896
   taggable_type: Work
   taggable_id: 7
   tagger_type: Tag
-  created_at: 2008-12-06 14:28:58 -08:00
+  created_at: 2008-12-06 22:28:58 +00:00
 tagging_1067725032: 
   tagger_id: 885489802
-  updated_at: 2009-03-09 17:24:30 -07:00
+  updated_at: 2009-03-10 00:24:30 +00:00
   id: 1067725032
   taggable_type: Work
   taggable_id: 29
   tagger_type: Tag
-  created_at: 2009-03-09 17:24:30 -07:00
+  created_at: 2009-03-10 00:24:30 +00:00
 tagging_1067725220: 
   tagger_id: 1063753920
-  updated_at: 2009-03-20 16:41:05 -07:00
+  updated_at: 2009-03-20 23:41:05 +00:00
   id: 1067725220
   taggable_type: Bookmark
   taggable_id: 6
   tagger_type: Tag
-  created_at: 2009-03-20 16:41:05 -07:00
+  created_at: 2009-03-20 23:41:05 +00:00
 tagging_1067725006: 
   tagger_id: 751871740
-  updated_at: 2009-03-09 09:32:00 -07:00
+  updated_at: 2009-03-09 16:32:00 +00:00
   id: 1067725006
   taggable_type: Work
   taggable_id: 20
   tagger_type: Tag
-  created_at: 2009-03-09 09:32:00 -07:00
+  created_at: 2009-03-09 16:32:00 +00:00
 tagging_1067724978: 
   tagger_id: 1063753796
-  updated_at: 2008-12-07 12:52:15 -08:00
+  updated_at: 2008-12-07 20:52:15 +00:00
   id: 1067724978
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:15 -08:00
+  created_at: 2008-12-07 20:52:15 +00:00
 tagging_1067724897: 
   tagger_id: 1063753757
-  updated_at: 2008-12-06 14:28:58 -08:00
+  updated_at: 2008-12-06 22:28:58 +00:00
   id: 1067724897
   taggable_type: Work
   taggable_id: 7
   tagger_type: Tag
-  created_at: 2008-12-06 14:28:58 -08:00
+  created_at: 2008-12-06 22:28:58 +00:00
 tagging_1067725113: 
   tagger_id: 1063753733
-  updated_at: 2009-03-11 17:56:30 -07:00
+  updated_at: 2009-03-12 00:56:30 +00:00
   id: 1067725113
   taggable_type: Work
   taggable_id: 39
   tagger_type: Tag
-  created_at: 2009-03-11 17:56:30 -07:00
+  created_at: 2009-03-12 00:56:30 +00:00
 tagging_1067725141: 
   tagger_id: 611729728
-  updated_at: 2009-03-11 19:48:29 -07:00
+  updated_at: 2009-03-12 02:48:29 +00:00
   id: 1067725141
   taggable_type: Work
   taggable_id: 40
   tagger_type: Tag
-  created_at: 2009-03-11 19:48:29 -07:00
+  created_at: 2009-03-12 02:48:29 +00:00
 tagging_1067725033: 
   tagger_id: 611729728
-  updated_at: 2009-03-09 17:24:30 -07:00
+  updated_at: 2009-03-10 00:24:30 +00:00
   id: 1067725033
   taggable_type: Work
   taggable_id: 29
   tagger_type: Tag
-  created_at: 2009-03-09 17:24:30 -07:00
+  created_at: 2009-03-10 00:24:30 +00:00
 tagging_1067725007: 
   tagger_id: 611729728
-  updated_at: 2009-03-09 09:42:34 -07:00
+  updated_at: 2009-03-09 16:42:34 +00:00
   id: 1067725007
   taggable_type: Work
   taggable_id: 21
   tagger_type: Tag
-  created_at: 2009-03-09 09:42:34 -07:00
+  created_at: 2009-03-09 16:42:34 +00:00
 tagging_1067724898: 
   tagger_id: 112726825
-  updated_at: 2008-12-06 14:29:23 -08:00
+  updated_at: 2008-12-06 22:29:23 +00:00
   id: 1067724898
   taggable_type: Work
   taggable_id: 7
   tagger_type: Tag
-  created_at: 2008-12-06 14:29:23 -08:00
+  created_at: 2008-12-06 22:29:23 +00:00
 tagging_1067724979: 
   tagger_id: 112726825
-  updated_at: 2009-02-21 20:25:24 -08:00
+  updated_at: 2009-02-22 04:25:24 +00:00
   id: 1067724979
   taggable_type: Work
   taggable_id: 15
   tagger_type: Tag
-  created_at: 2009-02-21 20:25:24 -08:00
+  created_at: 2009-02-22 04:25:24 +00:00
 tagging_1067725060: 
   tagger_id: 426547448
-  updated_at: 2009-03-11 15:23:50 -07:00
+  updated_at: 2009-03-11 22:23:50 +00:00
   id: 1067725060
   taggable_type: Work
   taggable_id: 32
   tagger_type: Tag
-  created_at: 2009-03-11 15:23:50 -07:00
+  created_at: 2009-03-11 22:23:50 +00:00
 tagging_1067725114: 
   tagger_id: 1063753871
-  updated_at: 2009-03-11 17:56:30 -07:00
+  updated_at: 2009-03-12 00:56:30 +00:00
   id: 1067725114
   taggable_type: Work
   taggable_id: 39
   tagger_type: Tag
-  created_at: 2009-03-11 17:56:30 -07:00
+  created_at: 2009-03-12 00:56:30 +00:00
 tagging_1067725221: 
   tagger_id: 751871740
-  updated_at: 2009-04-19 17:09:24 -07:00
+  updated_at: 2009-04-20 01:09:24 +01:00
   id: 1067725221
   taggable_type: Work
   taggable_id: 29
   tagger_type: Tag
-  created_at: 2009-04-19 17:09:24 -07:00
+  created_at: 2009-04-20 01:09:24 +01:00
 tagging_1067725222: 
   tagger_id: 1063753846
-  updated_at: 2009-04-19 17:09:58 -07:00
+  updated_at: 2009-04-20 01:09:58 +01:00
   id: 1067725222
   taggable_type: Work
   taggable_id: 38
   tagger_type: Tag
-  created_at: 2009-04-19 17:09:58 -07:00
+  created_at: 2009-04-20 01:09:58 +01:00
 tagging_1067725115: 
   tagger_id: 1063753870
-  updated_at: 2009-03-11 17:56:30 -07:00
+  updated_at: 2009-03-12 00:56:30 +00:00
   id: 1067725115
   taggable_type: Work
   taggable_id: 39
   tagger_type: Tag
-  created_at: 2009-03-11 17:56:30 -07:00
+  created_at: 2009-03-12 00:56:30 +00:00
 tagging_1067724899: 
   tagger_id: 751871740
-  updated_at: 2008-12-06 14:29:23 -08:00
+  updated_at: 2008-12-06 22:29:23 +00:00
   id: 1067724899
   taggable_type: Work
   taggable_id: 7
   tagger_type: Tag
-  created_at: 2008-12-06 14:29:23 -08:00
+  created_at: 2008-12-06 22:29:23 +00:00
 tagging_1067725008: 
   tagger_id: 112726825
-  updated_at: 2009-03-09 09:42:34 -07:00
+  updated_at: 2009-03-09 16:42:34 +00:00
   id: 1067725008
   taggable_type: Work
   taggable_id: 21
   tagger_type: Tag
-  created_at: 2009-03-09 09:42:34 -07:00
+  created_at: 2009-03-09 16:42:34 +00:00
 tagging_1067725061: 
   tagger_id: 885489802
-  updated_at: 2009-03-11 15:23:50 -07:00
+  updated_at: 2009-03-11 22:23:50 +00:00
   id: 1067725061
   taggable_type: Work
   taggable_id: 32
   tagger_type: Tag
-  created_at: 2009-03-11 15:23:50 -07:00
+  created_at: 2009-03-11 22:23:50 +00:00
 tagging_1067725116: 
   tagger_id: 1063753872
-  updated_at: 2009-03-11 17:56:30 -07:00
+  updated_at: 2009-03-12 00:56:30 +00:00
   id: 1067725116
   taggable_type: Work
   taggable_id: 39
   tagger_type: Tag
-  created_at: 2009-03-11 17:56:30 -07:00
+  created_at: 2009-03-12 00:56:30 +00:00
 tagging_1067725009: 
   tagger_id: 1063753824
-  updated_at: 2009-03-09 09:42:34 -07:00
+  updated_at: 2009-03-09 16:42:34 +00:00
   id: 1067725009
   taggable_type: Work
   taggable_id: 21
   tagger_type: Tag
-  created_at: 2009-03-09 09:42:34 -07:00
+  created_at: 2009-03-09 16:42:34 +00:00
 tagging_1067725062: 
   tagger_id: 569823665
-  updated_at: 2009-03-11 15:23:51 -07:00
+  updated_at: 2009-03-11 22:23:51 +00:00
   id: 1067725062
   taggable_type: Work
   taggable_id: 32
   tagger_type: Tag
-  created_at: 2009-03-11 15:23:51 -07:00
+  created_at: 2009-03-11 22:23:51 +00:00
+tagging_1067725223: 
+  tagger_id: 112726825
+  updated_at: 2009-05-10 13:20:06 +01:00
+  id: 1067725223
+  taggable_type: Work
+  taggable_id: 53
+  tagger_type: Tag
+  created_at: 2009-05-10 13:20:06 +01:00
+tagging_1067725224: 
+  tagger_id: 1063753735
+  updated_at: 2009-05-10 13:20:06 +01:00
+  id: 1067725224
+  taggable_type: Work
+  taggable_id: 53
+  tagger_type: Tag
+  created_at: 2009-05-10 13:20:06 +01:00
 tagging_1067725063: 
   tagger_id: 344412843
-  updated_at: 2009-03-11 15:25:59 -07:00
+  updated_at: 2009-03-11 22:25:59 +00:00
   id: 1067725063
   taggable_type: Work
   taggable_id: 33
   tagger_type: Tag
-  created_at: 2009-03-11 15:25:59 -07:00
+  created_at: 2009-03-11 22:25:59 +00:00
 tagging_1067725036: 
   tagger_id: 1063753824
-  updated_at: 2009-03-09 17:24:31 -07:00
+  updated_at: 2009-03-10 00:24:31 +00:00
   id: 1067725036
   taggable_type: Work
   taggable_id: 29
   tagger_type: Tag
-  created_at: 2009-03-09 17:24:31 -07:00
+  created_at: 2009-03-10 00:24:31 +00:00
 tagging_1067725117: 
   tagger_id: 1063753873
-  updated_at: 2009-03-11 17:56:30 -07:00
+  updated_at: 2009-03-12 00:56:30 +00:00
   id: 1067725117
   taggable_type: Work
   taggable_id: 39
   tagger_type: Tag
-  created_at: 2009-03-11 17:56:30 -07:00
+  created_at: 2009-03-12 00:56:30 +00:00
 tagging_1067725170: 
   tagger_id: 611729728
-  updated_at: 2009-03-19 18:28:02 -07:00
+  updated_at: 2009-03-20 01:28:02 +00:00
   id: 1067725170
   taggable_type: Work
   taggable_id: 46
   tagger_type: Tag
-  created_at: 2009-03-19 18:28:02 -07:00
+  created_at: 2009-03-20 01:28:02 +00:00
 tagging_1067725171: 
   tagger_id: 1063753733
-  updated_at: 2009-03-19 18:28:02 -07:00
+  updated_at: 2009-03-20 01:28:02 +00:00
   id: 1067725171
   taggable_type: Work
   taggable_id: 46
   tagger_type: Tag
-  created_at: 2009-03-19 18:28:02 -07:00
+  created_at: 2009-03-20 01:28:02 +00:00
 tagging_1067725118: 
   tagger_id: 1063753869
-  updated_at: 2009-03-11 17:56:30 -07:00
+  updated_at: 2009-03-12 00:56:30 +00:00
   id: 1067725118
   taggable_type: Work
   taggable_id: 39
   tagger_type: Tag
-  created_at: 2009-03-11 17:56:30 -07:00
+  created_at: 2009-03-12 00:56:30 +00:00
 tagging_1067725090: 
   tagger_id: 1063753732
-  updated_at: 2009-03-11 17:29:31 -07:00
+  updated_at: 2009-03-12 00:29:31 +00:00
   id: 1067725090
   taggable_type: Work
   taggable_id: 36
   tagger_type: Tag
-  created_at: 2009-03-11 17:29:31 -07:00
+  created_at: 2009-03-12 00:29:31 +00:00
 tagging_1067725064: 
   tagger_id: 1063753732
-  updated_at: 2009-03-11 15:25:59 -07:00
+  updated_at: 2009-03-11 22:25:59 +00:00
   id: 1067725064
   taggable_type: Work
   taggable_id: 33
   tagger_type: Tag
-  created_at: 2009-03-11 15:25:59 -07:00
+  created_at: 2009-03-11 22:25:59 +00:00
 tagging_1067725144: 
   tagger_id: 1063753741
-  updated_at: 2009-03-11 19:51:07 -07:00
+  updated_at: 2009-03-12 02:51:07 +00:00
   id: 1067725144
   taggable_type: Work
   taggable_id: 41
   tagger_type: Tag
-  created_at: 2009-03-11 19:51:07 -07:00
+  created_at: 2009-03-12 02:51:07 +00:00
+tagging_1067725225: 
+  tagger_id: 1063753733
+  updated_at: 2009-05-10 13:20:06 +01:00
+  id: 1067725225
+  taggable_type: Work
+  taggable_id: 53
+  tagger_type: Tag
+  created_at: 2009-05-10 13:20:06 +01:00
+tagging_1067725226: 
+  tagger_id: 741440589
+  updated_at: 2009-05-10 13:20:06 +01:00
+  id: 1067725226
+  taggable_type: Work
+  taggable_id: 53
+  tagger_type: Tag
+  created_at: 2009-05-10 13:20:06 +01:00
 tagging_1067725091: 
   tagger_id: 1063753857
-  updated_at: 2009-03-11 17:29:32 -07:00
+  updated_at: 2009-03-12 00:29:32 +00:00
   id: 1067725091
   taggable_type: Work
   taggable_id: 36
   tagger_type: Tag
-  created_at: 2009-03-11 17:29:32 -07:00
+  created_at: 2009-03-12 00:29:32 +00:00
 tagging_1067725065: 
   tagger_id: 1063753743
-  updated_at: 2009-03-11 15:25:59 -07:00
+  updated_at: 2009-03-11 22:25:59 +00:00
   id: 1067725065
   taggable_type: Work
   taggable_id: 33
   tagger_type: Tag
-  created_at: 2009-03-11 15:25:59 -07:00
+  created_at: 2009-03-11 22:25:59 +00:00
 tagging_1067725038: 
   tagger_id: 1063753831
-  updated_at: 2009-03-09 17:28:25 -07:00
+  updated_at: 2009-03-10 00:28:25 +00:00
   id: 1067725038
   taggable_type: Work
   taggable_id: 29
   tagger_type: Tag
-  created_at: 2009-03-09 17:28:25 -07:00
+  created_at: 2009-03-10 00:28:25 +00:00
 tagging_1067725145: 
   tagger_id: 611729728
-  updated_at: 2009-03-11 19:52:19 -07:00
+  updated_at: 2009-03-12 02:52:19 +00:00
   id: 1067725145
   taggable_type: Work
   taggable_id: 41
   tagger_type: Tag
-  created_at: 2009-03-11 19:52:19 -07:00
+  created_at: 2009-03-12 02:52:19 +00:00
 tagging_1067725172: 
   tagger_id: 1063753824
-  updated_at: 2009-03-19 18:28:02 -07:00
+  updated_at: 2009-03-20 01:28:02 +00:00
   id: 1067725172
   taggable_type: Work
   taggable_id: 46
   tagger_type: Tag
-  created_at: 2009-03-19 18:28:02 -07:00
+  created_at: 2009-03-20 01:28:02 +00:00
 tagging_1067725173: 
   tagger_id: 112726825
-  updated_at: 2009-03-20 16:11:56 -07:00
+  updated_at: 2009-03-20 23:11:56 +00:00
   id: 1067725173
   taggable_type: Work
   taggable_id: 47
   tagger_type: Tag
-  created_at: 2009-03-20 16:11:56 -07:00
+  created_at: 2009-03-20 23:11:56 +00:00
 tagging_1067724902: 
   tagger_id: 112726825
-  updated_at: 2008-12-06 14:52:02 -08:00
+  updated_at: 2008-12-06 22:52:02 +00:00
   id: 1067724902
   taggable_type: Work
   taggable_id: 8
   tagger_type: Tag
-  created_at: 2008-12-06 14:52:02 -08:00
+  created_at: 2008-12-06 22:52:02 +00:00
 tagging_1067725092: 
   tagger_id: 344412843
-  updated_at: 2009-03-11 17:29:32 -07:00
+  updated_at: 2009-03-12 00:29:32 +00:00
   id: 1067725092
   taggable_type: Work
   taggable_id: 36
   tagger_type: Tag
-  created_at: 2009-03-11 17:29:32 -07:00
+  created_at: 2009-03-12 00:29:32 +00:00
 tagging_1067725146: 
   tagger_id: 992891255
-  updated_at: 2009-03-11 19:52:20 -07:00
+  updated_at: 2009-03-12 02:52:20 +00:00
   id: 1067725146
   taggable_type: Work
   taggable_id: 41
   tagger_type: Tag
-  created_at: 2009-03-11 19:52:20 -07:00
+  created_at: 2009-03-12 02:52:20 +00:00
+tagging_1067725227: 
+  tagger_id: 545584597
+  updated_at: 2009-05-10 13:20:06 +01:00
+  id: 1067725227
+  taggable_type: Work
+  taggable_id: 53
+  tagger_type: Tag
+  created_at: 2009-05-10 13:20:06 +01:00
+tagging_1067725228: 
+  tagger_id: 1063753921
+  updated_at: 2009-05-10 13:20:06 +01:00
+  id: 1067725228
+  taggable_type: Work
+  taggable_id: 53
+  tagger_type: Tag
+  created_at: 2009-05-10 13:20:06 +01:00
 tagging_1067724903: 
   tagger_id: 1063753735
-  updated_at: 2008-12-06 14:52:02 -08:00
+  updated_at: 2008-12-06 22:52:02 +00:00
   id: 1067724903
   taggable_type: Work
   taggable_id: 8
   tagger_type: Tag
-  created_at: 2008-12-06 14:52:02 -08:00
+  created_at: 2008-12-06 22:52:02 +00:00
 tagging_1067725066: 
   tagger_id: 569823665
-  updated_at: 2009-03-11 15:25:59 -07:00
+  updated_at: 2009-03-11 22:25:59 +00:00
   id: 1067725066
   taggable_type: Work
   taggable_id: 33
   tagger_type: Tag
-  created_at: 2009-03-11 15:25:59 -07:00
+  created_at: 2009-03-11 22:25:59 +00:00
 tagging_1067725093: 
   tagger_id: 1063753858
-  updated_at: 2009-03-11 17:29:32 -07:00
+  updated_at: 2009-03-12 00:29:32 +00:00
   id: 1067725093
   taggable_type: Work
   taggable_id: 36
   tagger_type: Tag
-  created_at: 2009-03-11 17:29:32 -07:00
+  created_at: 2009-03-12 00:29:32 +00:00
 tagging_1067725147: 
   tagger_id: 1063753885
-  updated_at: 2009-03-11 19:53:33 -07:00
+  updated_at: 2009-03-12 02:53:33 +00:00
   id: 1067725147
   taggable_type: Work
   taggable_id: 41
   tagger_type: Tag
-  created_at: 2009-03-11 19:53:33 -07:00
+  created_at: 2009-03-12 02:53:33 +00:00
 tagging_1067725174: 
   tagger_id: 1063753736
-  updated_at: 2009-03-20 16:11:56 -07:00
+  updated_at: 2009-03-20 23:11:56 +00:00
   id: 1067725174
   taggable_type: Work
   taggable_id: 47
   tagger_type: Tag
-  created_at: 2009-03-20 16:11:56 -07:00
+  created_at: 2009-03-20 23:11:56 +00:00
 tagging_1067725175: 
   tagger_id: 1063753743
-  updated_at: 2009-03-20 16:11:56 -07:00
+  updated_at: 2009-03-20 23:11:56 +00:00
   id: 1067725175
   taggable_type: Work
   taggable_id: 47
   tagger_type: Tag
-  created_at: 2009-03-20 16:11:56 -07:00
+  created_at: 2009-03-20 23:11:56 +00:00
 tagging_1067724930: 
   tagger_id: 1063753775
-  updated_at: 2008-12-06 15:24:00 -08:00
+  updated_at: 2008-12-06 23:24:00 +00:00
   id: 1067724930
   taggable_type: Work
   taggable_id: 11
   tagger_type: Tag
-  created_at: 2008-12-06 15:24:00 -08:00
+  created_at: 2008-12-06 23:24:00 +00:00
 tagging_1067725067: 
   tagger_id: 1063753733
-  updated_at: 2009-03-11 15:30:12 -07:00
+  updated_at: 2009-03-11 22:30:12 +00:00
   id: 1067725067
   taggable_type: Work
   taggable_id: 34
   tagger_type: Tag
-  created_at: 2009-03-11 15:30:12 -07:00
+  created_at: 2009-03-11 22:30:12 +00:00
 tagging_1067725094: 
   tagger_id: 1063753859
-  updated_at: 2009-03-11 17:29:32 -07:00
+  updated_at: 2009-03-12 00:29:32 +00:00
   id: 1067725094
   taggable_type: Work
   taggable_id: 36
   tagger_type: Tag
-  created_at: 2009-03-11 17:29:32 -07:00
+  created_at: 2009-03-12 00:29:32 +00:00
 tagging_1067724904: 
   tagger_id: 751871740
-  updated_at: 2008-12-06 14:52:02 -08:00
+  updated_at: 2008-12-06 22:52:02 +00:00
   id: 1067724904
   taggable_type: Work
   taggable_id: 8
   tagger_type: Tag
-  created_at: 2008-12-06 14:52:02 -08:00
+  created_at: 2008-12-06 22:52:02 +00:00
 tagging_1067725148: 
   tagger_id: 426547448
-  updated_at: 2009-03-17 21:08:37 -07:00
+  updated_at: 2009-03-18 04:08:37 +00:00
   id: 1067725148
   taggable_type: Work
   taggable_id: 42
   tagger_type: Tag
-  created_at: 2009-03-17 21:08:37 -07:00
+  created_at: 2009-03-18 04:08:37 +00:00
+tagging_1067725229: 
+  tagger_id: 112726825
+  updated_at: 2009-05-10 13:57:47 +01:00
+  id: 1067725229
+  taggable_type: Work
+  taggable_id: 54
+  tagger_type: Tag
+  created_at: 2009-05-10 13:57:47 +01:00
 tagging_1067725149: 
   tagger_id: 992891255
-  updated_at: 2009-03-17 21:08:37 -07:00
+  updated_at: 2009-03-18 04:08:37 +00:00
   id: 1067725149
   taggable_type: Work
   taggable_id: 42
   tagger_type: Tag
-  created_at: 2009-03-17 21:08:37 -07:00
+  created_at: 2009-03-18 04:08:37 +00:00
 tagging_1067724931: 
   tagger_id: 1063753776
-  updated_at: 2008-12-06 15:24:00 -08:00
+  updated_at: 2008-12-06 23:24:00 +00:00
   id: 1067724931
   taggable_type: Work
   taggable_id: 11
   tagger_type: Tag
-  created_at: 2008-12-06 15:24:00 -08:00
+  created_at: 2008-12-06 23:24:00 +00:00
 tagging_1067724905: 
   tagger_id: 1063753758
-  updated_at: 2008-12-06 14:52:02 -08:00
+  updated_at: 2008-12-06 22:52:02 +00:00
   id: 1067724905
   taggable_type: Work
   taggable_id: 8
   tagger_type: Tag
-  created_at: 2008-12-06 14:52:02 -08:00
+  created_at: 2008-12-06 22:52:02 +00:00
 tagging_1067725068: 
   tagger_id: 426547448
-  updated_at: 2009-03-11 15:30:59 -07:00
+  updated_at: 2009-03-11 22:30:59 +00:00
   id: 1067725068
   taggable_type: Work
   taggable_id: 34
   tagger_type: Tag
-  created_at: 2009-03-11 15:30:59 -07:00
+  created_at: 2009-03-11 22:30:59 +00:00
 tagging_1067725095: 
   tagger_id: 1063753734
-  updated_at: 2009-03-11 17:29:32 -07:00
+  updated_at: 2009-03-12 00:29:32 +00:00
   id: 1067725095
   taggable_type: Work
   taggable_id: 36
   tagger_type: Tag
-  created_at: 2009-03-11 17:29:32 -07:00
+  created_at: 2009-03-12 00:29:32 +00:00
 tagging_543151849: 
   tagger_id: 992891255
-  updated_at: 2008-11-08 17:26:02 -08:00
+  updated_at: 2008-11-09 01:26:02 +00:00
   id: 543151849
   taggable_type: Work
   taggable_id: 1
   tagger_type: Tag
-  created_at: 2008-11-08 17:26:02 -08:00
+  created_at: 2008-11-09 01:26:02 +00:00
 tagging_1067724906: 
   tagger_id: 1063753762
-  updated_at: 2008-12-06 14:52:02 -08:00
+  updated_at: 2008-12-06 22:52:02 +00:00
   id: 1067724906
   taggable_type: Work
   taggable_id: 8
   tagger_type: Tag
-  created_at: 2008-12-06 14:52:02 -08:00
+  created_at: 2008-12-06 22:52:02 +00:00
 tagging_1067725096: 
   tagger_id: 1063753743
-  updated_at: 2009-03-11 17:29:32 -07:00
+  updated_at: 2009-03-12 00:29:32 +00:00
   id: 1067725096
   taggable_type: Work
   taggable_id: 36
   tagger_type: Tag
-  created_at: 2009-03-11 17:29:32 -07:00
+  created_at: 2009-03-12 00:29:32 +00:00
 tagging_1067725069: 
   tagger_id: 402275454
-  updated_at: 2009-03-11 15:30:59 -07:00
+  updated_at: 2009-03-11 22:30:59 +00:00
   id: 1067725069
   taggable_type: Work
   taggable_id: 34
   tagger_type: Tag
-  created_at: 2009-03-11 15:30:59 -07:00
+  created_at: 2009-03-11 22:30:59 +00:00
 tagging_1067724932: 
   tagger_id: 1063753770
-  updated_at: 2008-12-06 15:24:00 -08:00
+  updated_at: 2008-12-06 23:24:00 +00:00
   id: 1067724932
   taggable_type: Work
   taggable_id: 11
   tagger_type: Tag
-  created_at: 2008-12-06 15:24:00 -08:00
+  created_at: 2008-12-06 23:24:00 +00:00
 tagging_1067725176: 
   tagger_id: 986046160
-  updated_at: 2009-03-20 16:11:56 -07:00
+  updated_at: 2009-03-20 23:11:56 +00:00
   id: 1067725176
   taggable_type: Work
   taggable_id: 47
   tagger_type: Tag
-  created_at: 2009-03-20 16:11:56 -07:00
+  created_at: 2009-03-20 23:11:56 +00:00
 tagging_1067725177: 
   tagger_id: 1063753909
-  updated_at: 2009-03-20 16:11:56 -07:00
+  updated_at: 2009-03-20 23:11:56 +00:00
   id: 1067725177
   taggable_type: Work
   taggable_id: 47
   tagger_type: Tag
-  created_at: 2009-03-20 16:11:56 -07:00
+  created_at: 2009-03-20 23:11:56 +00:00
 tagging_1067724933: 
   tagger_id: 1063753771
-  updated_at: 2008-12-06 15:24:00 -08:00
+  updated_at: 2008-12-06 23:24:00 +00:00
   id: 1067724933
   taggable_type: Work
   taggable_id: 11
   tagger_type: Tag
-  created_at: 2008-12-06 15:24:00 -08:00
+  created_at: 2008-12-06 23:24:00 +00:00
 tagging_1067724907: 
   tagger_id: 1063753761
-  updated_at: 2008-12-06 14:52:02 -08:00
+  updated_at: 2008-12-06 22:52:02 +00:00
   id: 1067724907
   taggable_type: Work
   taggable_id: 8
   tagger_type: Tag
-  created_at: 2008-12-06 14:52:02 -08:00
+  created_at: 2008-12-06 22:52:02 +00:00
 tagging_1067725097: 
   tagger_id: 611729728
-  updated_at: 2009-03-11 17:34:06 -07:00
+  updated_at: 2009-03-12 00:34:06 +00:00
   id: 1067725097
   taggable_type: Work
   taggable_id: 37
   tagger_type: Tag
-  created_at: 2009-03-11 17:34:06 -07:00
+  created_at: 2009-03-12 00:34:06 +00:00
 tagging_678331033: 
   tagger_id: 404615116
-  updated_at: 2008-11-08 17:26:02 -08:00
+  updated_at: 2008-11-09 01:26:02 +00:00
   id: 678331033
   taggable_type: Work
   taggable_id: 3
   tagger_type: Tag
-  created_at: 2008-11-08 17:26:02 -08:00
+  created_at: 2008-11-09 01:26:02 +00:00
 tagging_1067724960: 
   tagger_id: 1063753801
-  updated_at: 2008-12-07 12:52:14 -08:00
+  updated_at: 2008-12-07 20:52:14 +00:00
   id: 1067724960
   taggable_type: Work
   taggable_id: 14
   tagger_type: Tag
-  created_at: 2008-12-07 12:52:14 -08:00
+  created_at: 2008-12-07 20:52:14 +00:00
 tagging_1067725098: 
   tagger_id: 992891255
-  updated_at: 2009-03-11 17:34:06 -07:00
+  updated_at: 2009-03-12 00:34:06 +00:00
   id: 1067725098
   taggable_type: Work
   taggable_id: 37
   tagger_type: Tag
-  created_at: 2009-03-11 17:34:06 -07:00
+  created_at: 2009-03-12 00:34:06 +00:00
 tagging_59736118: 
   tagger_id: 741440589
-  updated_at: 2008-11-08 17:26:02 -08:00
+  updated_at: 2008-11-09 01:26:02 +00:00
   id: 59736118
   taggable_type: Work
   taggable_id: 1
   tagger_type: Tag
-  created_at: 2008-11-08 17:26:02 -08:00
+  created_at: 2008-11-09 01:26:02 +00:00
 tagging_1067724908: 
   tagger_id: 344412843
-  updated_at: 2008-12-06 14:55:58 -08:00
+  updated_at: 2008-12-06 22:55:58 +00:00
   id: 1067724908
   taggable_type: Work
   taggable_id: 9
   tagger_type: Tag
-  created_at: 2008-12-06 14:55:58 -08:00
+  created_at: 2008-12-06 22:55:58 +00:00
 tagging_1067724934: 
   tagger_id: 1063753768
-  updated_at: 2008-12-06 15:24:00 -08:00
+  updated_at: 2008-12-06 23:24:00 +00:00
   id: 1067724934
   taggable_type: Work
   taggable_id: 11
   tagger_type: Tag
-  created_at: 2008-12-06 15:24:00 -08:00
+  created_at: 2008-12-06 23:24:00 +00:00
 tagging_1067725178: 
   tagger_id: 1063753905
-  updated_at: 2009-03-20 16:11:56 -07:00
+  updated_at: 2009-03-20 23:11:56 +00:00
   id: 1067725178
   taggable_type: Work
   taggable_id: 47
   tagger_type: Tag
-  created_at: 2009-03-20 16:11:56 -07:00
+  created_at: 2009-03-20 23:11:56 +00:00
