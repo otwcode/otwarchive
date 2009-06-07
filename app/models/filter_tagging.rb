@@ -10,9 +10,11 @@ class FilterTagging < ActiveRecord::Base
   # Build all filter taggings from current taggings data
   def self.build_from_taggings
     Tagging.find(:all, :conditions => {:taggable_type => 'Work'}).each do |tagging|
-      tag = tagging.tagger.canonical? ? tagging.tagger : tagging.tagger.andand.merger
-      unless tagging.taggable.nil? || tag.nil? 
-        tag.filter_taggings.create!(:filterable => tagging.taggable)
+      if tagging.tagger && tagging.taggable
+        tag = tagging.tagger.canonical? ? tagging.tagger : tagging.tagger.merger
+        unless tag.nil? 
+          tag.filter_taggings.create!(:filterable => tagging.taggable)
+        end
       end
     end 
   end
