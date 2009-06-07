@@ -603,13 +603,13 @@ class Work < ActiveRecord::Base
   # Creates a filter_tagging relationship between the work and the tag or its canonical synonym
   def add_filter_tagging(tag)
     filter = tag.canonical? ? tag : tag.merger
-    self.filter_taggings.find_or_create_by_filter_id(filter.id)
+    self.filter_taggings.find_or_create_by_filter_id(filter.id) if filter
   end
   
   # Removes filter_tagging relationship unless the work is tagged with more than one synonymous tags
   def remove_filter_tagging(tag)
     filter = tag.canonical? ? tag : tag.merger
-    if (self.tags & tag.synonyms).empty?
+    if filter && (self.tags & tag.synonyms).empty?
       filter_tagging = self.filter_taggings.find_by_filter_id(filter.id)
       filter_tagging.destroy
     end  

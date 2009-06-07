@@ -147,4 +147,9 @@ namespace :After do
 #     end
 #     ThinkingSphinx.deltas_enabled=true
 #   end
+  desc "add filter taggings - SLOW!"
+  task(:after_20090604221238_create_filter_taggings => :environment) do
+    FilterTagging.delete_all
+    FilterTagging.build_from_taggings
+  end
 end
