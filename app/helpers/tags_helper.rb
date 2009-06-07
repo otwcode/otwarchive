@@ -60,4 +60,13 @@ module TagsHelper
   def can_wrangle?
     logged_in_as_admin? || ( current_user.is_a?(User) && current_user.is_tag_wrangler? )
   end
+  
+  def taggable_list(tag, controller_class)
+    taggable_things = ["bookmarks", "works"]
+    list = []
+    taggable_things.each do |tt|
+      list << link_to(tt.titlecase, {:controller => tt, :action => :index, :tag_id => tag}) unless tt == controller_class
+    end
+    "<ul class=""taggable_strip""><li>" + t("see_also", :default => "See also: ") + "</li>" + list.map{|li| "<li>" + li + "</li>"}.to_s + "</ul>"
+  end
 end

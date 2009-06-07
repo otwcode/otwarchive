@@ -1,3 +1,5 @@
+<%= taggable_list(params[:tag_id], "works") if params[:tag_id] -%>
+
 <%- if @most_recent_works -%><h1>Works updated in the last month</h1><%- end -%>
 <h2><%= search_header @works, @query %></h2>
 

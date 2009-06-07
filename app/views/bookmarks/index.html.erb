@@ -1,3 +1,5 @@
+<%= taggable_list(params[:tag_id], "bookmarks") if params[:tag_id] -%>
+
 <h1><%=h t('listing', :default => 'Listing bookmarks') %></h1>
 
 <!-- BEGIN bookmark link -->
