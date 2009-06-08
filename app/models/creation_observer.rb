@@ -21,9 +21,10 @@ class CreationObserver < ActiveRecord::Observer
       new_authors = (creation.authors - creation.pseuds).uniq
       new_authors.each do |pseud|
         creation.pseuds << pseud
-        if creation.is_a?(Chapter)
+        if creation.is_a?(Chapter) && creation.work
           creation.work.pseuds << pseud unless creation.work.pseuds.include?(pseud)
-        elsif creation.is_a?(Work)
+        elsif creation.is_a?(Work) && creation.chapters.first
+          creation.chapters.first.pseuds << pseud unless creation.chapters.first.pseuds.include?(pseud)
           creation.series.each { |series| series.pseuds << pseud unless series.pseuds.include?(pseud) }      
         end
       end
