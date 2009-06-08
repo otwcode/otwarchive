@@ -191,6 +191,9 @@ class ChaptersController < ApplicationController
       redirect_to [:edit, @work, @chapter]
     else
       @chapter.posted = true
+      if !@work.posted
+        @work.update_attribute(:posted, true)
+      end
       if @chapter.save
         flash[:notice] = t('successfully_posted', :default => 'Chapter has been posted!')
        redirect_to(@work)

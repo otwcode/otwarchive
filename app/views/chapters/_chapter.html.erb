@@ -2,19 +2,21 @@
 <div class="work-show <%= 'unposted-chapter' unless chapter.posted? %>">
 <!-- chapter management -->  
   <%- if is_author_of?(@work) -%>
-    <ul class="navigation chapter-control">
-      <% unless chapter.posted? -%>
-        <li><%= link_to t('chapter_post', :default => 'Post'), [:post, @work, chapter], :method => :post -%></li>
-      <%- end -%>
-      <%- if @preview_mode and @preview_mode == true -%>
-        <li><%= link_to t('chapter_revert', :default => 'Revert To Saved'), [:edit, @work, chapter] -%></li>
-      <%- else -%>
-        <li><%= link_to t('chapter_edit', :default => 'Edit'), [:edit, @work, chapter] -%></li>
-      <%- end -%>
-      <%- if @work.chapters.count > 1 -%>
-        <li><%= link_to t('chapter_delete', :default => 'Delete'), [@work, chapter], :confirm => 'Are you sure?', :method => :delete %></li>
-      <%- end -%>
-    </ul>	
+    <%- unless chapter.position == 1 && !@work.posted %>
+      <ul class="navigation chapter-control">
+        <% unless chapter.posted? -%>
+          <li><%= link_to t('chapter_post', :default => 'Post Chapter'), [:post, @work, chapter], :method => :post -%></li>
+        <%- end -%>
+        <%- if @preview_mode and @preview_mode == true -%>
+          <li><%= link_to t('chapter_revert', :default => 'Revert To Saved'), [:edit, @work, chapter] -%></li>
+        <%- else -%>
+          <li><%= link_to t('chapter_edit', :default => 'Edit Chapter'), [:edit, @work, chapter] -%></li>
+        <%- end -%>
+        <%- if @work.chapters.count > 1 -%>
+          <li><%= link_to t('chapter_delete', :default => 'Delete Chapter'), [@work, chapter], :confirm => 'Are you sure?', :method => :delete %></li>
+        <%- end -%>
+      </ul>
+    <%- end -%>		
   <%- end -%>
 
 <div class="preface chapter">
