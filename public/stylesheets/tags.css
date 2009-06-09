@@ -45,3 +45,6 @@ ul.tag-edit-items {
 #edit-tag dd {
   width: 75%;
 }
+
+ul.taggable_strip {display:inline;}
+.taggable_strip li {display:inline; margin-right:0;}
