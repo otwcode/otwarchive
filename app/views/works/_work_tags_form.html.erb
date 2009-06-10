@@ -1,6 +1,6 @@
 <!-- Autocomplete fields need to be refactored and moved to a helper, but I'd like to make them completely functional first. -->
 <fieldset class="work-meta">
-  <p><%= "Story Tags (comma separated)" -%><%= link_to_help "tagging-help" -%></p>
+  <p><%= "Story Tags (comma separated, #{ArchiveConfig.TAG_MAX} characters per tag)" -%><%= link_to_help "tagging-help" -%></p>
   <dl>
     <dt class="rating required">
       <label for="work_rating_string"><%= Rating::NAME -%>*<%= link_to_help "rating-help" -%></label>

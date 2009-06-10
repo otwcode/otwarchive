@@ -38,6 +38,7 @@
 				      :maximum_length => ArchiveConfig.TITLE_MAX, :minimum_length => ArchiveConfig.TITLE_MIN, 
 				      :failureMessage => 'We need a title! (At least ' + ArchiveConfig.TITLE_MIN.to_s + 'letters long, please.)')
         -%>
+        <%= generate_countdown_html("work_title", ArchiveConfig.TITLE_MAX) -%>
       </dd>
       
       <!-- Add coauthors-->
@@ -49,6 +50,7 @@
       <dd class="summary">
         <%= f.text_area :summary, :rows => 4, :cols => 60, :class => "summary-field" %>
         <%= live_validation_for_field('work_summary', :presence => false, :maximum_length => ArchiveConfig.SUMMARY_MAX) -%>
+        <%= generate_countdown_html("work_summary", ArchiveConfig.SUMMARY_MAX) -%>
       </dd>
 
       <dt class="notes">
@@ -57,6 +59,7 @@
       <dd class="notes">
         <%= f.text_area :notes, :rows => 4, :cols => 60, :class => "notes-field" %>
         <%= live_validation_for_field('work_notes', :presence => false, :maximum_length => ArchiveConfig.NOTES_MAX) -%>
+        <%= generate_countdown_html("work_notes", ArchiveConfig.NOTES_MAX) -%>
       </dd>
     </dl>
   </fieldset>
@@ -195,6 +198,7 @@
       :tooShortMessage => 'Brevity is the soul of wit, but your content does have to be at least ' + ArchiveConfig.CONTENT_MIN.to_s + ' letters long.',
       :failureMessage => 'You did want to post a story here, right?')
   -%>
+  <%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX) -%>
   </p>      
 </fieldset>
 

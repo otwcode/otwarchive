@@ -6,10 +6,13 @@
 	<% else -%>
     	<%= f.text_field :name %>
 	<% end -%>
-	<%= f.check_box :is_default %> <%= f.label :is_default, 'Is default' %></p>
+	<%= f.check_box :is_default %> <%= f.label :is_default, 'Is default' %>
+  <%= generate_countdown_html("pseud_name", Pseud::NAME_LENGTH_MAX) if @pseud.name && @user.login != @pseud.name -%>
+</p>
  <p><%= f.label :description, 'Description' %><br />
-    <%= f.text_area :description, :rows => 4, :cols => 60 -%></p>
-
+    <%= f.text_area :description, :rows => 4, :cols => 60 -%>
+    <%= generate_countdown_html("pseud_description", Pseud::DESCRIPTION_MAX) -%>
+ </p>
  <p class="submit">
     <%= f.submit button_text %>
   </p>

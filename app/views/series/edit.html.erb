@@ -12,9 +12,15 @@
 	<dd><%= f.text_field :title %></dd><br />
   <%= render :partial => 'pseuds/byline', :locals => {:form => f, :type => 'series'} -%>
 	<dt><%= f.label :summary, "Series Description" %><dt>
-	<dd><%= f.text_area :summary %> </dd>
+	<dd>
+    <%= f.text_area :summary %>
+    <%= generate_countdown_html("series_summary", ArchiveConfig.SUMMARY_MAX) -%>
+  </dd>
 	<dt><%= f.label :notes, "Series Notes" %><dt>
-	<dd><%= f.text_area :notes %></dd>    
+	<dd>
+    <%= f.text_area :notes %>
+    <%= generate_countdown_html("series_notes", ArchiveConfig.NOTES_MAX) -%>
+</dd>
 </dl>
 <p class="submit">
 	<%= f.submit "Update" %>

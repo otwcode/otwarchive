@@ -139,4 +139,31 @@ module ApplicationHelper
     params.reject{|k,v| k == name}
   end
 
+  # character counter helpers
+  def countdown_field(field_id, update_id, max, options = {})
+    function = "$('#{update_id}').innerHTML = (#{max} - $F('#{field_id}').length);"
+    count_field_tag(field_id, function, options)
+  end
+  
+  def count_field(field_id, update_id, options = {})
+    function = "$('#{update_id}').innerHTML = $F('#{field_id}').length;"
+    count_field_tag(field_id, function, options)
+  end
+  
+  def count_field_tag(field_id, function, options = {})  
+    out = javascript_tag function
+    default_option = {:frequency => 0.25}
+    options = default_option.merge(options)
+    out += observe_field(field_id, options.merge(:function => function))
+    return out
+  end
+  
+  def generate_countdown_html(field_id, max) 
+    generated_html = "<div class=""character_counter"">"
+    generated_html += "<span id=""#{field_id}_counter"">?</span>"
+    generated_html += countdown_field(field_id, field_id + "_counter", max) + " " + t('characters_left', :default => 'characters left')
+    generated_html += "</div>"
+    return generated_html
+  end
+
 end # end of ApplicationHelper

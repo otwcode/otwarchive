@@ -7,6 +7,8 @@ form dt { float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em
 form dd { float: left; }
 form .submit input {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px groove #222;}
 
+.character_counter { text-align:right; font-size:smaller; color:#777; /*line-height:1;*/}
+
 /* SIGN IN BOX */
 #signin p { display:inline;}
 #signin p.footnote	{ font-size:smaller;  padding:0.125em 0 0 .125em;}

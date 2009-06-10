@@ -26,14 +26,18 @@
 	  <% end %>
 	       
       <dt><%= f.label :content, t('form_comment', :default => "Comment: ") %></dt>
-      <dd><%= f.text_area :content, :live => true %></dd>	    
+      <dd>
+        <%= f.text_area :content, :live => true %>
+        <%= generate_countdown_html("comment_content", ArchiveConfig.COMMENT_MAX) -%>
+      </dd>	    
       <dd>
         <input type="hidden" id="controller_name" name="controller_name" value="<%= @controller_name ||= @controller.controller_name %>" />
       </dd>  
     </dl>
-	  <p class="submit"><%= f.submit button_name %>
+	  <p class="submit">
+      <%= f.submit button_name %>
 	    <%- unless controller.controller_name == 'inbox' -%>
-      <%= cancel_comment_button(comment, commentable) -%>
+        <%= cancel_comment_button(comment, commentable) -%>
       <%- end -%>
 	  </p>
   <% end -%>
