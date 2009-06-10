@@ -17,6 +17,8 @@
       <dd><%= check_box_tag "notify_all[]", role_name, nil, {:id => "notify_all_#{role_name}"} -%></dd>
     <%- end -%>
 
+    <p class="submit"><%= submit_tag t('submit', :default => "Send Notification") -%></p>
+
     <p style="font-weight:bold;"><%= t("or", :default => "Or") -%></p>
     <dt><%= t('select_users', :default => 'Select Users To Notify') -%></dt>
     <dd>
