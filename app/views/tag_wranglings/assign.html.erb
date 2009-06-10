@@ -17,6 +17,8 @@
 
 <h2><%= label :parent, 'parent_id', h("Mass Assign Tags to:") %> <%= select("parent", 'parent_id', @possible_parents.collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></h2>
 
+<p class="submit"><%= submit_tag "Assign" %></p>
+
 <p><%= "(Click on a tag to select it for individual editing)" %></p>
 <% @local_alphabet.each do |letter| %>
   <div class="category">
