@@ -136,6 +136,70 @@ class Tag < ActiveRecord::Base
   def <=>(another_tag)
     name.downcase <=> another_tag.name.downcase
   end
+  
+  #### FILTERING ####
+  
+  before_save :update_filters_for_canonical_change
+  before_save :update_filters_for_merger_change
+  
+  # If a tag was not canonical but is now, it needs new filter_taggings
+  # If it was canonical but isn't anymore, we need to change or remove
+  # the filter_taggings as appropriate
+  def update_filters_for_canonical_change
+    if self.canonical_changed?
+      if self.canonical?
+        self.add_filter_taggings
+      elsif self.merger && self.merger.canonical?
+        self.filter_taggings.update_all(["filter_id = ?", self.merger_id])
+      else
+        self.remove_filter_taggings
+      end
+    end      
+  end
+  
+  # If a tag has a new merger, add to the filter_taggings for that merger
+  # If a tag has a new merger but had an old merger, add new filter_taggings
+  # and get rid of the old filter_taggings as appropriate 
+  def update_filters_for_merger_change
+    if self.merger_id_changed?
+      if self.merger && self.merger.canonical?
+        self.add_filter_taggings
+      end
+      old_merger = Tag.find_by_id(self.merger_id_was)
+      if old_merger && old_merger.canonical?
+        self.remove_filter_taggings(old_merger)
+      end
+    end    
+  end
+  
+  # Add filter taggings for a given tag
+  def add_filter_taggings
+    filter = self.canonical? ? self : self.merger
+    if filter
+      Work.with_any_tags([self, filter]).each do |work|
+        work.filter_taggings.find_or_create_by_filter_id(filter.id)
+      end
+    end
+  end
+  
+  # Remove filter taggings for a given tag
+  # If an old_filter value is given, remove filter_taggings from it with due regard
+  # for potential duplication (ie, works tagged with more than one synonymous tag)
+  def remove_filter_taggings(old_filter=nil)
+    if old_filter
+      potential_duplicate_filters = [old_filter] + old_filter.mergers - [self]
+      self.works.each do |work|
+        if (work.tags & potential_duplicate_filters).empty?
+          filter_tagging = work.filter_taggings.find_by_filter_id(old_filter.id)
+          filter_tagging.destroy if filter_tagging
+        end
+      end      
+    else
+      self.filter_taggings.destroy_all
+    end    
+  end
+  
+  #### END FILTERING ####
 
 
   def update_common_tags
