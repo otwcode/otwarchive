@@ -113,7 +113,9 @@ Rails::Initializer.run do |config|
   config.gem 'andand'
   config.gem 'htmlentities'
   config.gem 'relevance-tarantula', :source => "http://gems.github.com", :lib => 'relevance/tarantula'
+  config.gem 'javan-whenever', :lib => false, :source => 'http://gems.github.com'
 
+  
   # Override the sanitize defaults to allow some extra formatting attributes. 
   config.action_view.sanitized_allowed_attributes = 'align'
   config.action_view.sanitized_allowed_tags = 'u', 'strike', 'center', 'dl', 'q', 'table', 'tr', 'td', 'th', 'tbody', 'thead', 'tfoot', 'col', 'colgroup', 'caption'
