@@ -2,7 +2,7 @@
 <% form_for([@work, chapter], :html => {:name => "storyForm"}) do |f| %>
 
 <fieldset id="chapter-ordering">
-	<legend><%= t('form_naming', :default => 'Naming and Ordering') %></legend>
+	<legend><%= t('form_naming', :default => 'Naming, Ordering and Date') %></legend>
 	<p>
 		<%= f.label :title, t('form_title', :default => 'Chapter title') %>
 		<%= f.text_field :title, :class => "storyinputfield", :live => true %>
@@ -14,6 +14,11 @@
 		<%= f.label :wip_length, t('form_x_of_x', :default => 'of'), :title => t('form_of_total', :default => 'of total chapters') %> 
 		<%= f.text_field :wip_length, :class => "number-field" %> 
   </p>
+  <p id="managePublicationDate">
+  	<%= f.label :published_at, t('form_date', :default => 'Chapter publication date') %>
+	<%= f.date_select "published_at", :start_year => Date.today.year, :end_year => 1950, :default => default_date, :order => [:day, :month, :year] %>
+    <%= link_to_help "backdating-help" -%>
+  </p>  
 </fieldset>
 
 <fieldset>

@@ -17,6 +17,11 @@ function showChapteredStoryOptions() {
 	Element.toggle('number-of-chapters');
 }
 
+// Toggles the backdating options section of the work form
+function showBackdateOptions() {
+	Element.toggle('publicationdateoptions');
+}
+
 // Toggles the chaptered story section of the work form and resets the wip_length field
 function showWorkSeriesOptions() {
 	var checkbox = document.getElementById('storyseriescheck');
@@ -61,6 +66,10 @@ function hideFormFields() {
 	if (document.storyForm != null) var hasSeries = document.storyForm.storyseriescheck;
 	var seriesOptions = document.getElementById('seriesmanage');
 	if (hasSeries != null && seriesOptions != null && !hasSeries.checked) seriesOptions.style.display='none';
+	
+	if (document.storyForm != null) var isBackdated = document.storyForm.publicationdatecheck;
+	var backdateOptions = document.getElementById('publicationdateoptions');
+	if (isBackdated != null && backdateOptions != null && !isBackdated.checked) backdateOptions.style.display='none';	
 }
 
 // Toggles items in filter list

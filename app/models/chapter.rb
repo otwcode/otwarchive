@@ -34,6 +34,7 @@ class Chapter < ActiveRecord::Base
 
   before_save :validate_authors, :clean_title
   before_save :set_word_count
+  before_save :validate_published_at
   
   named_scope :in_order, {:order => :position}
   named_scope :posted, :conditions => {:posted => true}
@@ -105,6 +106,15 @@ class Chapter < ActiveRecord::Base
       return false
     end
   end
+  
+  # Checks the chapter published_at date isn't in the future
+  def validate_published_at
+    return false unless self.published_at
+    if self.published_at > Date.today
+      errors.add_to_base(t('no_future_dating', :default => "Publication date can't be in the future."))
+      return false
+    end
+  end  
   
   # Set the value of word_count to reflect the length of the chapter content
   def set_word_count

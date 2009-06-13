@@ -40,6 +40,7 @@ class ChaptersController < ApplicationController
     
     if params[:id] # edit, update, preview, post
       @chapter = @work.chapters.find(params[:id])
+      @previous_published_at = @chapter.published_at
       if params[:chapter]  # editing, save our changes
         @chapter.attributes = params[:chapter]
       end
@@ -126,7 +127,9 @@ class ChaptersController < ApplicationController
     else  # :preview or :cancel_coauthor_button
       if @chapter.save && @work.save
         @work.update_major_version
-        @work.set_revised_at(@chapter.created_at)
+        if @chapter.published_at > @work.revised_at.to_date || @chapter.published_at == Date.today
+          @work.set_revised_at(@chapter.published_at)
+        end  
         flash[:notice] = t('preview', :default => "This is a preview of what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting.")
         redirect_to [:preview, @work, @chapter]
       else
@@ -156,6 +159,13 @@ class ChaptersController < ApplicationController
       params[:chapter][:posted] = true if params[:post_button]
       if @chapter.update_attributes(params[:chapter]) && @work.save
         @work.update_minor_version
+        if defined?(@previous_published_at) && @previous_published_at != @chapter.published_at #if published_at has changed
+          if @chapter.published_at == Date.today # if today, set revised_at to this date
+            @work.set_revised_at(@chapter.published_at)
+          else # if p_at date not today, tell model to find most recent chapter date
+            @work.set_revised_at
+          end
+        end
         flash[:notice] = t('successfully_updated', :default => 'Chapter was successfully updated.')
         redirect_to [@work, @chapter]
       else
@@ -191,10 +201,10 @@ class ChaptersController < ApplicationController
       redirect_to [:edit, @work, @chapter]
     else
       @chapter.posted = true
-      if !@work.posted
-        @work.update_attribute(:posted, true)
-      end
       if @chapter.save
+        if !@work.posted
+          @work.update_attribute(:posted, true)
+        end
         flash[:notice] = t('successfully_posted', :default => 'Chapter has been posted!')
        redirect_to(@work)
       else

@@ -88,7 +88,6 @@ class StoryParserTest < ActiveSupport::TestCase
     @work.category_string = ArchiveConfig.CATEGORY_OTHER_TAG_NAME
     @work.warning_strings = [ArchiveConfig.WARNING_NONE_TAG_NAME]
     @work.authors = [create_pseud]
-    @work.published_at = DateTime.now
     @work.save
     assert_match /yuletide/, @work.freeforms.string
     assert_match "recipient:verity", @work.freeforms.string
@@ -115,7 +114,6 @@ class StoryParserTest < ActiveSupport::TestCase
     @work.category_string = ArchiveConfig.CATEGORY_OTHER_TAG_NAME
     @work.warning_strings = [ArchiveConfig.WARNING_NONE_TAG_NAME]
     @work.authors = [create_pseud]
-    @work.published_at = DateTime.now
     @work.save
     assert_equal "Naruto", @work.fandom_string
     assert_equal Rating.find_by_name(ArchiveConfig.RATING_TEEN_TAG_NAME), @work.ratings.first
@@ -143,7 +141,6 @@ class StoryParserTest < ActiveSupport::TestCase
     work.category_string = Category.first.name
     work.warning_strings = [Warning.first.name]
     work.authors = [create_pseud]
-    work.published_at = DateTime.now
     work.save
     assert_match /Idol RPF/, work.fandoms.string
   end

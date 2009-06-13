@@ -150,14 +150,35 @@
     
     <!-- User-facing dates -->
     <dt class="work-is-backdated">
-      <%= f.label :published_at, "Set a different publication date" %>
+      <%= c.label :published_at, "Set a different publication date" %> <%= link_to_help "backdating-help" -%>
     </dt>
     <dd>
-      <input type="checkbox" id="publicationdatecheck" <%- if @work.published_at != @work.created_at -%>checked="checked"<%- end -%> />
+      <input type="checkbox" id="publicationdatecheck" onclick="showBackdateOptions()" 
+	    <%- if @work.backdate -%>
+		checked="checked"
+        <%- elsif @chapter != nil && @chapter.posted
+          if @chapter.created_at.to_date != @chapter.published_at -%>checked="checked"
+		  <%- end 
+        end -%> />
     </dd>
+	<span id="publicationdateoptions">
     <dd id="managePublicationDate">
-      <%= f.date_select "published_at", :start_year => Date.today.year, :end_year => 1950, :default => Date.today, :order => [:day, :month, :year] %>
+      <%= 
+      if @chapter != nil
+        c.date_select("published_at", :start_year => Date.today.year, :end_year => 1950, :default => Date.today, :value => @chapter.published_at, :order => [:day, :month, :year]) 
+      else
+        c.date_select("published_at", :start_year => Date.today.year, :end_year => 1950, :default => Date.today, :order => [:day, :month, :year]) 
+      end
+	  %>   
+	</dd>
+	
+    <dt class="work-is-backdated">
+      <%= f.label :backdate, "Set this publication date for the entire work" %>
+    </dt>
+    <dd class="work-is-backdated">
+      <%= f.check_box :backdate %>
     </dd>
+	</span>
     
     <dt class="work-language">
       <%= f.label :language_id, "Choose a language" %>

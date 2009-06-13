@@ -49,7 +49,8 @@ class WorksController < ApplicationController
     begin
       if params[:id] # edit, update, preview, manage_chapters
         @work ||= Work.find(params[:id])
-        @previous_published_at = @work.published_at
+        @previous_published_at = @work.first_chapter.published_at
+        @previous_backdate_setting = @work.backdate
         if params[:work]  # editing, save our changes
           @work.attributes = params[:work]
         end
@@ -72,6 +73,11 @@ class WorksController < ApplicationController
       if params[:work] && params[:work][:chapter_attributes]
         @chapter.content = params[:work][:chapter_attributes][:content]
         @chapter.title = params[:work][:chapter_attributes][:title]
+        if params[:update_button]
+          @chapter.published_at = params[:work][:chapter_attributes][:published_at]
+        else  
+          @chapter.published_at = convert_date(params[:work][:chapter_attributes], :published_at)
+        end
       end
 
       unless current_user == :false
@@ -259,7 +265,7 @@ class WorksController < ApplicationController
       redirect_to current_user
     else # now also treating the cancel_coauthor_button case, bc it should function like a preview, really
       saved = @work.save
-      unless saved && @work.has_required_tags? && @work.set_revised_at(@work.published_at)
+      unless saved && @work.has_required_tags? && @work.set_revised_at(@chapter.published_at)
         unless @work.has_required_tags?
           @work.errors.add(:base, "Creating: Required tags are missing.")
         end
@@ -314,6 +320,7 @@ class WorksController < ApplicationController
       if params[:work] && params[:work][:chapter_attributes]
         @chapter.content = params[:work][:chapter_attributes][:content]
         @chapter.title = params[:work][:chapter_attributes][:title]
+        @chapter.published_at = convert_date(params[:work][:chapter_attributes], :published_at)
       end
 
       #flash[:notice] = "DEBUG: in UPDATE preview:  " + "all: " + @allpseuds.flatten.collect {|ap| ap.id}.inspect + " selected: " + @selected_pseuds.inspect + " co-authors: " + @coauthors.flatten.collect {|ap| ap.id}.inspect + " pseuds: " + @pseuds.flatten.collect {|ap| ap.id}.inspect + "  @work.authors: " + @work.authors.collect {|au| au.id}.inspect + "  @work.pseuds: " + @work.pseuds.collect {|ps| ps.id}.inspect
@@ -333,13 +340,37 @@ class WorksController < ApplicationController
       render :partial => 'work_form', :layout => 'application'
     else
       saved = true
+
       @chapter.save || saved = false
       @work.has_required_tags? || saved = false
       if saved
-        # If the work is being posted for the first time, or
-        # the user has changed the published_at date, update the revised_at date.
-        if params[:post_button] || defined?(@previous_published_at) && @previous_published_at != @work.published_at
-          @work.set_revised_at(@work.published_at)
+        # Setting the @work.revised_at datetime if appropriate
+        # if @chapter.published_at has been changed or work is being posted
+        if params[:post_button] || defined?(@previous_published_at) && @previous_published_at != @chapter.published_at
+          # if work has only one chapter - so we don't need to take any other chapter dates into account, 
+          # OR the date is set to today AND the backdating setting has not been changed
+          if @work.chapters == 1 || @chapter.published_at == Date.today && defined?(@previous_backdate_setting) && @previous_backdate_setting == @work.backdate
+            @work.set_revised_at(@chapter.published_at)
+          # work has more than one chapter and the published_at date for this chapter is not today
+          # so we can't tell if there is a later date than this one elsewhere, and need to grab all
+          # OR the date is today but the backdate setting has changed
+          else
+            # if backdate has been changed to positive
+            if defined?(@previous_backdate_setting) && @previous_backdate_setting == false && @work.backdate
+              @work.set_revised_at(@chapter.published_at) # set revised_at to the date on this form
+            # if backdate has been changed to negative 
+            # OR there is no change in the backdate setting but the date isn't today
+            else 
+              @work.set_revised_at
+            end
+          end
+        # elsif the date hasn't been changed, but the backdate setting has  
+        elsif defined?(@previous_backdate_setting) && @previous_backdate_setting != @work.backdate
+          if @previous_backdate_setting == false && @work.backdate  # if backdate has been changed to positive
+            @work.set_revised_at(@chapter.published_at) # set revised_at to the date on this form
+          else # if backdate has been changed to negative, grab most recent chapter date
+            @work.set_revised_at
+          end
         end
         @work.posted = true
 

@@ -1,899 +1,943 @@
 --- 
 work_00050: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:33 +01:00
+  updated_at: 2009-04-20 00:40:33 +02:00
   authors_to_sort_on: testuser2
   title: dark and angsty interlude
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: dark and angsty interlude
+  backdate: false
   word_count: 5
   notes: you don't have to read it to "get" the rest of the series.
   id: 50
   summary: ""
-  revised_at: 2009-03-20 23:20:29 +00:00
+  revised_at: 2009-03-21 00:20:29 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-20 22:00:00 +00:00
+  published_at: 2009-03-20 23:00:00 +01:00
   restricted: true
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-20 23:20:17 +00:00
+  created_at: 2009-03-21 00:20:17 +01:00
 work_00038: 
   major_version: 1
-  updated_at: 2009-04-20 01:10:00 +01:00
+  updated_at: 2009-04-20 02:10:00 +02:00
   authors_to_sort_on: some other fucking pseud
   title: jambo
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: jambo
+  backdate: false
   word_count: 4
   notes: ""
   id: 38
   summary: ""
-  revised_at: 2009-03-12 00:50:34 +00:00
+  revised_at: 2009-03-12 01:50:34 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-11 22:00:00 +00:00
+  published_at: 2009-03-11 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-12 00:50:20 +00:00
+  created_at: 2009-03-12 01:50:20 +01:00
 work_00016: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:32 +01:00
+  updated_at: 2009-04-20 00:40:32 +02:00
   authors_to_sort_on: testuser3,  testuser4
   title: ttttttttttt
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: ttttttttttt
+  backdate: false
   word_count: 1
   notes: ""
   id: 16
   summary: ""
-  revised_at: 2009-02-24 06:34:22 +00:00
+  revised_at: 2009-02-24 07:34:22 +01:00
   language_id: 1
   minor_version: 13
-  published_at: 2009-02-23 22:00:00 +00:00
+  published_at: 2009-02-23 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-02-24 06:34:22 +00:00
+  created_at: 2009-02-24 07:34:22 +01:00
 work_00005: 
   major_version: 1
-  updated_at: 2009-04-20 01:03:39 +01:00
+  updated_at: 2009-04-20 02:03:39 +02:00
   authors_to_sort_on: testuser4
   title: FifthWork
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: fifthwork
+  backdate: false
   word_count: 14
   notes: Notes on test work with only one chapter
   id: 5
   summary: Summary of test work with only one chapter
-  revised_at: 2008-11-09 01:26:01 +00:00
+  revised_at: 2008-11-09 02:26:01 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2008-11-09 01:26:02 +00:00
+  published_at: 2008-11-09 02:26:02 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2008-11-09 01:26:02 +00:00
+  created_at: 2008-11-09 02:26:02 +01:00
 work_00049: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:33 +01:00
+  updated_at: 2009-04-20 00:40:33 +02:00
   authors_to_sort_on: testuser2
   title: Happy-happy joy-joy!
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: happy-happy joy-joy!
+  backdate: false
   word_count: 9
   notes: ""
   id: 49
   summary: ""
-  revised_at: 2009-03-20 23:33:39 +00:00
+  revised_at: 2009-03-21 00:33:39 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-20 22:00:00 +00:00
+  published_at: 2009-03-20 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-20 23:17:43 +00:00
+  created_at: 2009-03-21 00:17:43 +01:00
 work_00040: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:33 +01:00
+  updated_at: 2009-04-20 00:40:33 +02:00
   authors_to_sort_on: some other fucking pseud
   title: scuff
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: scuff
+  backdate: false
   word_count: 3
   notes: ""
   id: 40
   summary: ""
-  revised_at: 2009-03-12 02:48:40 +00:00
+  revised_at: 2009-03-12 03:48:40 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-11 22:00:00 +00:00
+  published_at: 2009-03-11 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-12 01:43:37 +00:00
+  created_at: 2009-03-12 02:43:37 +01:00
 work_00006: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:30 +01:00
+  updated_at: 2009-04-20 00:40:30 +02:00
   authors_to_sort_on: ash
   title: How I Got Kicked Out of MIT
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: how i got kicked out of mit
+  backdate: false
   word_count: 73
   notes: ""
   id: 6
   summary: The true story of how I was too hot for MIT to handle.
-  revised_at: 2008-12-05 13:59:15 +00:00
+  revised_at: 2008-12-05 14:59:15 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2008-12-04 22:00:00 +00:00
+  published_at: 2008-12-04 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2008-12-05 13:59:14 +00:00
+  created_at: 2008-12-05 14:59:14 +01:00
 work_00017: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:32 +01:00
+  updated_at: 2009-04-20 00:40:32 +02:00
   authors_to_sort_on: testuser4,  non-default pseud
   title: grrrrrrrr
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: grrrrrrrr
+  backdate: false
   word_count: 3
   notes: ""
   id: 17
   summary: ""
-  revised_at: 2009-02-24 08:47:23 +00:00
+  revised_at: 2009-02-24 09:47:23 +01:00
   language_id: 1
   minor_version: 3
-  published_at: 2009-02-23 22:00:00 +00:00
+  published_at: 2009-02-23 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-02-24 08:47:22 +00:00
+  created_at: 2009-02-24 09:47:22 +01:00
 work_00039: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:33 +01:00
+  updated_at: 2009-04-20 00:40:33 +02:00
   authors_to_sort_on: some other fucking pseud
   title: twins
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: twins
+  backdate: false
   word_count: 13
   notes: ""
   id: 39
   summary: ""
-  revised_at: 2009-03-12 00:57:27 +00:00
+  revised_at: 2009-03-12 01:57:27 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-11 22:00:00 +00:00
+  published_at: 2009-03-11 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-12 00:56:30 +00:00
+  created_at: 2009-03-12 01:56:30 +01:00
 work_00051: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:33 +01:00
+  updated_at: 2009-04-20 00:40:33 +02:00
   authors_to_sort_on: testuser2
   title: Yay threesome!
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: yay threesome!
+  backdate: false
   word_count: 14
   notes: ""
   id: 51
   summary: ""
-  revised_at: 2009-03-20 23:22:57 +00:00
+  revised_at: 2009-03-21 00:22:57 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-20 22:00:00 +00:00
+  published_at: 2009-03-20 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-20 23:22:23 +00:00
+  created_at: 2009-03-21 00:22:23 +01:00
 work_00052: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:34 +01:00
+  updated_at: 2009-04-20 00:40:34 +02:00
   authors_to_sort_on: testuser2
   title: angst bunny
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: angst bunny
+  backdate: false
   word_count: 8
   notes: ""
   id: 52
   summary: ""
-  revised_at: 2009-03-20 23:24:17 +00:00
+  revised_at: 2009-03-21 00:24:17 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-20 22:00:00 +00:00
+  published_at: 2009-03-20 23:00:00 +01:00
   restricted: true
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-20 23:24:08 +00:00
+  created_at: 2009-03-21 00:24:08 +01:00
 work_00030: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:32 +01:00
+  updated_at: 2009-04-20 00:40:32 +02:00
   authors_to_sort_on: testuser2,  non-default pseud,  non-default pseud
   title: bab
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: bab
+  backdate: false
   word_count: 1
   notes: ""
   id: 30
   summary: ""
-  revised_at: 2009-03-11 21:54:49 +00:00
+  revised_at: 2009-03-11 22:54:49 +01:00
   language_id: 1
   minor_version: 4
-  published_at: 2009-03-10 22:00:00 +00:00
+  published_at: 2009-03-10 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-11 21:51:22 +00:00
+  created_at: 2009-03-11 22:51:22 +01:00
 work_00007: 
   major_version: 2
-  updated_at: 2009-04-19 23:40:31 +01:00
+  updated_at: 2009-04-20 00:40:31 +02:00
   authors_to_sort_on: boccaccio
   title: Day Ten, Tale Ten
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: day ten, tale ten
+  backdate: false
   word_count: 4593
   notes: ""
   id: 7
   summary: |
     The Marquis of Saluzzo, overborne by the entreaties of his vassals, consents to take a wife, but, being minded to please himself in the choice of her, takes a husbandman's daughter. He has two children by her, both of whom he makes her believe that he has put to death. Afterward, feigning to be tired of her, and to have taken another wife, he turns her out of doors in her shift, and brings his daughter into the house in guise of his bride; but, finding her patient under it all, he brings her home again, and shews her her children, now grown up, and honours her, and causes her to be honoured, as Marchioness.
 
-  revised_at: 2008-12-06 22:32:20 +00:00
+  revised_at: 2008-12-06 23:32:20 +01:00
   language_id: 1
   minor_version: 5
-  published_at: 2008-12-06 22:00:00 +00:00
+  published_at: 2008-12-06 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2008-12-06 22:28:54 +00:00
+  created_at: 2008-12-06 23:28:54 +01:00
 work_00029: 
   major_version: 1
-  updated_at: 2009-04-20 01:09:26 +01:00
+  updated_at: 2009-04-20 02:09:26 +02:00
   authors_to_sort_on: some other fucking pseud
   title: chum
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: chum
+  backdate: false
   word_count: 2
   notes: ""
   id: 29
   summary: ""
-  revised_at: 2009-03-10 00:24:31 +00:00
+  revised_at: 2009-03-10 01:24:31 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-09 22:00:00 +00:00
+  published_at: 2009-03-09 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-10 00:24:30 +00:00
+  created_at: 2009-03-10 01:24:30 +01:00
 work_00041: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:33 +01:00
+  updated_at: 2009-04-20 00:40:33 +02:00
   authors_to_sort_on: testuser
   title: muu
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: muu
+  backdate: false
   word_count: 1
   notes: ""
   id: 41
   summary: ""
-  revised_at: 2009-03-12 02:55:48 +00:00
+  revised_at: 2009-03-12 03:55:48 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-11 22:00:00 +00:00
+  published_at: 2009-03-11 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-12 02:51:07 +00:00
+  created_at: 2009-03-12 03:51:07 +01:00
 work_00019: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:32 +01:00
+  updated_at: 2009-04-20 00:40:32 +02:00
   authors_to_sort_on: testuser2,  some other fucking pseud
   title: title
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: title
+  backdate: false
   word_count: 2
   notes: ""
   id: 19
   summary: ""
-  revised_at: 2009-03-09 15:47:16 +00:00
+  revised_at: 2009-03-09 16:47:16 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-08 22:00:00 +00:00
+  published_at: 2009-03-08 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-09 15:43:33 +00:00
+  created_at: 2009-03-09 16:43:33 +01:00
 work_00008: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:31 +01:00
+  updated_at: 2009-04-20 00:40:31 +02:00
   authors_to_sort_on: boccaccio
   title: Day Five, Tale Four
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: day five, tale four
+  backdate: false
   word_count: 2034
   notes: ""
   id: 8
   summary: Ricciardo Manardi is found by Messer Lizio da Valbona with his daughter, whom he marries, and remains at peace with her father.
-  revised_at: 2008-12-06 22:52:02 +00:00
+  revised_at: 2008-12-06 23:52:02 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2008-12-06 22:00:00 +00:00
+  published_at: 2008-12-06 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2008-12-06 22:52:02 +00:00
+  created_at: 2008-12-06 23:52:02 +01:00
 work_00042: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:33 +01:00
+  updated_at: 2009-04-20 00:40:33 +02:00
   authors_to_sort_on: non-default pseud,  non-default pseud
   title: lam
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: lam
+  backdate: false
   word_count: 1
   notes: ""
   id: 42
   summary: ""
-  revised_at: 2009-03-18 04:08:45 +00:00
+  revised_at: 2009-03-18 05:08:45 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-17 22:00:00 +00:00
+  published_at: 2009-03-17 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-18 04:08:12 +00:00
+  created_at: 2009-03-18 05:08:12 +01:00
 work_00009: 
   major_version: 1
-  updated_at: 2009-04-20 01:15:47 +01:00
+  updated_at: 2009-04-20 02:15:47 +02:00
   authors_to_sort_on: chaucer
   title: The Clerk's Tale
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: clerk's tale, the
+  backdate: false
   word_count: 1534
   notes: ""
   id: 9
   summary: The tale of Griselda, a young woman whose husband tests her loyalty in a series of bizarre torments that recall the Biblical book of Job.
-  revised_at: 2008-12-06 22:55:59 +00:00
+  revised_at: 2008-12-06 23:55:59 +01:00
   language_id: 1
   minor_version: 2
-  published_at: 2008-12-06 22:00:00 +00:00
+  published_at: 2008-12-06 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2008-12-06 22:55:58 +00:00
+  created_at: 2008-12-06 23:55:58 +01:00
 work_00020: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:32 +01:00
+  updated_at: 2009-04-20 00:40:32 +02:00
   authors_to_sort_on: testuser,  non-default pseud
   title: baaah
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: baaah
+  backdate: false
   word_count: 4
   notes: ""
   id: 20
   summary: ""
-  revised_at: 2009-03-09 16:32:18 +00:00
+  revised_at: 2009-03-09 17:32:18 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-08 22:00:00 +00:00
+  published_at: 2009-03-08 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-09 16:31:18 +00:00
+  created_at: 2009-03-09 17:31:18 +01:00
 work_00053: 
   major_version: 2
-  updated_at: 2009-05-10 13:50:55 +01:00
+  updated_at: 2009-05-10 14:50:55 +02:00
   authors_to_sort_on: testuser
   title: Dreams are all guillotines, testing redux
   expected_number_of_chapters: 2
   delta: true
   title_to_sort_on: dreams are all guillotines, testing redux
+  backdate: false
   word_count: 1252
   notes: ""
   id: 53
   summary: ""
-  revised_at: 2009-05-10 13:50:55 +01:00
+  revised_at: 2009-05-10 14:50:55 +02:00
   language_id: 1
   minor_version: 0
-  published_at: 2009-05-10 00:00:00 +01:00
+  published_at: 2009-05-10 01:00:00 +02:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-05-10 13:20:06 +01:00
+  created_at: 2009-05-10 14:20:06 +02:00
 work_00054: 
   major_version: 1
-  updated_at: 2009-05-27 16:48:25 +01:00
+  updated_at: 2009-05-27 17:48:25 +02:00
   authors_to_sort_on: testuser
   title: Why we rely
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: why we rely
+  backdate: false
   word_count: 448
   notes: ""
   id: 54
   summary: |-
-    <ul><li>This</li>
-    <li>Is</li>
-    <li>An Ordered List</li>
-    </ul>
-    <center>Centered</center>
-    
-    <img src="http://l-userpic.livejournal.com/46262476/1255156">
-    
-    <ol><li>This</li>
-    <li>Is</li>
-    <li>An UnOrdered List</li>
-    </ol>
-    
-    <big>Big</big>
-    
+    <ul><li>This</li>
+    <li>Is</li>
+    <li>An Ordered List</li>
+    </ul>
+    <center>Centered</center>
+    
+    <img src="http://l-userpic.livejournal.com/46262476/1255156">
+    
+    <ol><li>This</li>
+    <li>Is</li>
+    <li>An UnOrdered List</li>
+    </ol>
+    
+    <big>Big</big>
+    
     <small>Small</small>
-  revised_at: 2009-05-10 13:58:05 +01:00
+  revised_at: 2009-05-10 14:58:05 +02:00
   language_id: 1
   minor_version: 4
-  published_at: 2009-05-10 00:00:00 +01:00
+  published_at: 2009-05-10 01:00:00 +02:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-05-10 13:57:47 +01:00
+  created_at: 2009-05-10 14:57:47 +02:00
 work_00010: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:31 +01:00
+  updated_at: 2009-04-20 00:40:31 +02:00
   authors_to_sort_on: zooey_glass
   title: For your life
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: for your life
+  backdate: false
   word_count: 429
   notes: ""
   id: 10
   summary: <em>'Exclusive, one-off reunion concert,' Sam says smugly. 'Chance of a lifetime.'</em>
-  revised_at: 2008-12-06 23:19:50 +00:00
+  revised_at: 2008-12-07 00:19:50 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2008-12-06 22:00:00 +00:00
+  published_at: 2008-12-06 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2008-12-06 23:19:49 +00:00
+  created_at: 2008-12-07 00:19:49 +01:00
 work_00032: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:32 +01:00
+  updated_at: 2009-04-20 00:40:32 +02:00
   authors_to_sort_on: some other fucking pseud
   title: tiiii
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: tiiii
+  backdate: false
   word_count: 19
   notes: ""
   id: 32
   summary: ""
-  revised_at: 2009-03-11 22:23:56 +00:00
+  revised_at: 2009-03-11 23:23:56 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-11 22:00:00 +00:00
+  published_at: 2009-03-11 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-11 22:22:29 +00:00
+  created_at: 2009-03-11 23:22:29 +01:00
 work_00043: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:33 +01:00
+  updated_at: 2009-04-20 00:40:33 +02:00
   authors_to_sort_on: non-default pseud,  non-default pseud
   title: kings
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: kings
+  backdate: false
   word_count: 18
   notes: Inspired by <a href="http://example.com/LOLIantoes.gif" title="nonexistent image to demonstrate linking CSS style">this image</a>.
   id: 43
   summary: Inspired by <a href="http://example.com/LOLIantoes.gif" title="nonexistent image to demonstrate linking CSS style">this image</a>.
-  revised_at: 2009-03-18 04:10:19 +00:00
+  revised_at: 2009-03-18 05:10:19 +01:00
   language_id: 1
   minor_version: 4
-  published_at: 2009-03-17 22:00:00 +00:00
+  published_at: 2009-03-17 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-18 04:09:43 +00:00
+  created_at: 2009-03-18 05:09:43 +01:00
 work_00044: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:33 +01:00
+  updated_at: 2009-04-20 00:40:33 +02:00
   authors_to_sort_on: testuser
   title: haaaaam
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: haaaaam
+  backdate: false
   word_count: 9
   notes: ""
   id: 44
   summary: ""
-  revised_at: 2009-03-19 01:02:50 +00:00
+  revised_at: 2009-03-19 02:02:50 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-18 22:00:00 +00:00
+  published_at: 2009-03-18 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-19 01:02:12 +00:00
+  created_at: 2009-03-19 02:02:12 +01:00
 work_00033: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:32 +01:00
+  updated_at: 2009-04-20 00:40:32 +02:00
   authors_to_sort_on: some other fucking pseud
   title: yyipee
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: yyipee
+  backdate: false
   word_count: 16
   notes: ""
   id: 33
   summary: ""
-  revised_at: 2009-03-11 22:26:06 +00:00
+  revised_at: 2009-03-11 23:26:06 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-11 22:00:00 +00:00
+  published_at: 2009-03-11 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-11 22:25:58 +00:00
+  created_at: 2009-03-11 23:25:58 +01:00
 work_00011: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:31 +01:00
+  updated_at: 2009-04-20 00:40:31 +02:00
   authors_to_sort_on: zooey_glass
   title: Keep dancing
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: keep dancing
+  backdate: false
   word_count: 97
   notes: "Written as a Christmas gift for Oxoniensis, 2007. Set at some unspecified time after canon, in the happy world in my head where Dean and Rory live happily ever after. "
   id: 11
   summary: "The Dance Marathon is a Stars Hollow tradition. "
-  revised_at: 2008-12-06 23:24:00 +00:00
+  revised_at: 2008-12-07 00:24:00 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2008-12-06 22:00:00 +00:00
+  published_at: 2008-12-06 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2008-12-06 23:24:00 +00:00
+  created_at: 2008-12-07 00:24:00 +01:00
 work_00012: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:31 +01:00
+  updated_at: 2009-04-20 00:40:31 +02:00
   authors_to_sort_on: zooey_glass
   title: Paying attention
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: paying attention
+  backdate: false
   word_count: 262
   notes: Written for technosage's <a href="http://technosage.livejournal.com/224268.html">porn-paragraph-a-thon</a> on Livejournal, December 2007, to the prompt 'Jared/Jensen; dom/sub'.
   id: 12
   summary: <em>He likes it when Jensen pays attention.</em>
-  revised_at: 2008-12-06 23:26:41 +00:00
+  revised_at: 2008-12-07 00:26:41 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2008-12-06 22:00:00 +00:00
+  published_at: 2008-12-06 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2008-12-06 23:26:41 +00:00
+  created_at: 2008-12-07 00:26:41 +01:00
 work_00001: 
   major_version: 2
-  updated_at: 2009-04-19 23:40:30 +01:00
+  updated_at: 2009-04-20 00:40:30 +02:00
   authors_to_sort_on: testuser,  testuser2
   title: Work With Two Chapters
   expected_number_of_chapters: 2
   delta: true
   title_to_sort_on: work with two chapters
+  backdate: false
   word_count: 10
   notes: ""
   id: 1
   summary: ""
-  revised_at: 2009-02-24 03:09:52 +00:00
+  revised_at: 2009-02-24 04:09:52 +01:00
   language_id: 1
   minor_version: 4
-  published_at: 2009-02-23 22:00:00 +00:00
+  published_at: 2009-02-23 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2008-11-09 01:26:02 +00:00
+  created_at: 2008-11-09 02:26:02 +01:00
 work_00034: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:32 +01:00
+  updated_at: 2009-04-20 00:40:32 +02:00
   authors_to_sort_on: some other fucking pseud
   title: aaaaliens
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: aaaaliens
+  backdate: false
   word_count: 27
   notes: ""
   id: 34
   summary: ""
-  revised_at: 2009-03-11 22:31:04 +00:00
+  revised_at: 2009-03-11 23:31:04 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-11 22:00:00 +00:00
+  published_at: 2009-03-11 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-11 22:30:12 +00:00
+  created_at: 2009-03-11 23:30:12 +01:00
 work_00045: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:33 +01:00
+  updated_at: 2009-04-20 00:40:33 +02:00
   authors_to_sort_on: testuser2
   title: faaaaaaaaaah
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: faaaaaaaaaah
+  backdate: false
   word_count: 1
   notes: ""
   id: 45
   summary: ""
-  revised_at: 2009-03-20 01:24:40 +00:00
+  revised_at: 2009-03-20 02:24:40 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-19 22:00:00 +00:00
+  published_at: 2009-03-19 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-20 01:24:26 +00:00
+  created_at: 2009-03-20 02:24:26 +01:00
 work_00046: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:33 +01:00
+  updated_at: 2009-04-20 00:40:33 +02:00
   authors_to_sort_on: testuser4
   title: what the frak?!
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: what the frak?!
+  backdate: false
   word_count: 12
   notes: ""
   id: 46
   summary: ""
-  revised_at: 2009-03-20 01:28:46 +00:00
+  revised_at: 2009-03-20 02:28:46 +01:00
   language_id: 1
   minor_version: 2
-  published_at: 2009-03-19 22:00:00 +00:00
+  published_at: 2009-03-19 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-20 01:28:02 +00:00
+  created_at: 2009-03-20 02:28:02 +01:00
 work_00035: 
   major_version: 6
-  updated_at: 2009-04-19 23:40:32 +01:00
+  updated_at: 2009-04-20 00:40:32 +02:00
   authors_to_sort_on: testuser2,  testuser4,  non-default pseud,  some other fucking pseud
   title: ppppp
   expected_number_of_chapters: 6
   delta: true
   title_to_sort_on: ppppp
+  backdate: false
   word_count: 59
   notes: ""
   id: 35
   summary: ""
-  revised_at: 2009-03-18 04:06:51 +00:00
+  revised_at: 2009-03-18 05:06:51 +01:00
   language_id: 1
   minor_version: 0
-  published_at: 2009-03-11 22:00:00 +00:00
+  published_at: 2009-03-11 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-11 23:22:55 +00:00
+  created_at: 2009-03-12 00:22:55 +01:00
 work_00002: 
   major_version: 1
-  updated_at: 2009-04-20 01:03:39 +01:00
+  updated_at: 2009-04-20 02:03:39 +02:00
   authors_to_sort_on: non-default pseud
   title: Work With One Chapter Only
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: work with one chapter only
+  backdate: false
   word_count: 11
   notes: Notes on test work with only one chapter
   id: 2
   summary: Summary of test work with only one chapter
-  revised_at: 2008-11-09 01:26:01 +00:00
+  revised_at: 2008-11-09 02:26:01 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2008-11-09 01:26:02 +00:00
+  published_at: 2008-11-09 02:26:02 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2008-11-09 01:26:02 +00:00
+  created_at: 2008-11-09 02:26:02 +01:00
 work_00013: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:31 +01:00
+  updated_at: 2009-04-20 00:40:31 +02:00
   authors_to_sort_on: jessica
   title: I knew I should have argued
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: i knew i should have argued
+  backdate: false
   word_count: 74
   notes: "I expected to be kind of helpless after dying, but it turns out it's not as peaceful as it's made out to be. So, I figured I'd write some stuff down. "
   id: 13
   summary: After the fact, I realise what a big mistake I made.
-  revised_at: 2008-12-06 23:34:39 +00:00
+  revised_at: 2008-12-07 00:34:39 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2008-12-06 22:00:00 +00:00
+  published_at: 2008-12-06 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2008-12-06 23:34:39 +00:00
+  created_at: 2008-12-07 00:34:39 +01:00
 work_00025: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:32 +01:00
+  updated_at: 2009-04-20 00:40:32 +02:00
   authors_to_sort_on: testuser2,  non-default pseud,  some other fucking pseud
   title: tbbh
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: tbbh
+  backdate: false
   word_count: 3
   notes: ""
   id: 25
   summary: ""
-  revised_at: 2009-03-09 21:55:41 +00:00
+  revised_at: 2009-03-09 22:55:41 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-08 22:00:00 +00:00
+  published_at: 2009-03-08 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-09 21:54:33 +00:00
+  created_at: 2009-03-09 22:54:33 +01:00
 work_00014: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:31 +01:00
+  updated_at: 2009-04-20 00:40:31 +02:00
   authors_to_sort_on: uriel
   title: Sodom and Gomorrah
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: sodom and gomorrah
+  backdate: false
   word_count: 398
   notes: "Not the Bible version. No offence intended. "
   id: 14
   summary: "A cautionary tale: wherein the Lord is pissed, Lot is righteous, and I do some smiting. "
-  revised_at: 2009-02-24 05:19:36 +00:00
+  revised_at: 2009-02-24 06:19:36 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-02-24 05:19:36 +00:00
+  published_at: 2009-02-24 06:19:36 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2008-12-07 20:52:14 +00:00
+  created_at: 2008-12-07 21:52:14 +01:00
 work_00003: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:30 +01:00
+  updated_at: 2009-04-20 00:40:30 +02:00
   authors_to_sort_on: testuser2
   title: ThirdWork
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: thirdwork
+  backdate: false
   word_count: 12
   notes: Notes on test work with only one chapter
   id: 3
   summary: Summary of test work with only one chapter
-  revised_at: 2009-02-24 05:19:36 +00:00
+  revised_at: 2009-02-24 06:19:36 +01:00
   language_id: 1
   minor_version: 2
-  published_at: 2009-02-23 22:00:00 +00:00
+  published_at: 2009-02-23 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2008-11-09 01:26:02 +00:00
+  created_at: 2008-11-09 02:26:02 +01:00
 work_00036: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:32 +01:00
+  updated_at: 2009-04-20 00:40:32 +02:00
   authors_to_sort_on: some other fucking pseud
   title: chhhhhhhh
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: chhhhhhhh
+  backdate: false
   word_count: 5
   notes: ""
   id: 36
   summary: ""
-  revised_at: 2009-03-12 00:30:26 +00:00
+  revised_at: 2009-03-12 01:30:26 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-11 22:00:00 +00:00
+  published_at: 2009-03-11 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-12 00:28:57 +00:00
+  created_at: 2009-03-12 01:28:57 +01:00
 work_00047: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:33 +01:00
+  updated_at: 2009-04-20 00:40:33 +02:00
   authors_to_sort_on: testuser3
   title: When Harry met Snivelly
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: when harry met snivelly
+  backdate: false
   word_count: 5
   notes: ""
   id: 47
   summary: <a href="http://example.com">a link for styling</a>
-  revised_at: 2009-03-20 23:12:10 +00:00
+  revised_at: 2009-03-21 00:12:10 +01:00
   language_id: 1
   minor_version: 2
-  published_at: 2009-03-20 22:00:00 +00:00
+  published_at: 2009-03-20 23:00:00 +01:00
   restricted: true
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-20 23:11:56 +00:00
+  created_at: 2009-03-21 00:11:56 +01:00
 work_00048: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:33 +01:00
+  updated_at: 2009-04-20 00:40:33 +02:00
   authors_to_sort_on: testuser3
   title: What Happened Next
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: what happened next
+  backdate: false
   word_count: 7
   notes: ""
   id: 48
   summary: ""
-  revised_at: 2009-03-20 23:14:26 +00:00
+  revised_at: 2009-03-21 00:14:26 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-20 22:00:00 +00:00
+  published_at: 2009-03-20 23:00:00 +01:00
   restricted: true
   posted: true
   hidden_by_admin: false
-  created_at: 2009-03-20 23:14:14 +00:00
+  created_at: 2009-03-21 00:14:14 +01:00
 work_00004: 
   major_version: 1
-  updated_at: 2009-04-20 01:03:39 +01:00
+  updated_at: 2009-04-20 02:03:39 +02:00
   authors_to_sort_on: testuser3
   title: FourthWork
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: fourthwork
+  backdate: false
   word_count: 13
   notes: Notes on test work with only one chapter
   id: 4
   summary: Summary of test work with only one chapter
-  revised_at: 2008-11-09 01:26:01 +00:00
+  revised_at: 2008-11-09 02:26:01 +01:00
   language_id: 1
   minor_version: 1
-  published_at: 2008-11-09 01:26:02 +00:00
+  published_at: 2008-11-09 02:26:02 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2008-11-09 01:26:02 +00:00
+  created_at: 2008-11-09 02:26:02 +01:00
 work_00015: 
   major_version: 1
-  updated_at: 2009-04-19 23:40:31 +01:00
+  updated_at: 2009-04-20 00:40:31 +02:00
   authors_to_sort_on: testuser,  testuser2,  testuser4,  non-default pseud,  some other fucking pseud
   title: ofc
   expected_number_of_chapters: 1
   delta: true
   title_to_sort_on: ofc
+  backdate: false
   word_count: 12
   notes: ""
   id: 15
   summary: ""
-  revised_at: 2009-02-22 04:25:24 +00:00
+  revised_at: 2009-02-22 05:25:24 +01:00
   language_id: 1
   minor_version: 3
-  published_at: 2009-02-21 22:00:00 +00:00
+  published_at: 2009-02-21 23:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
-  created_at: 2009-02-22 04:25:24 +00:00
+  created_at: 2009-02-22 05:25:24 +01:00

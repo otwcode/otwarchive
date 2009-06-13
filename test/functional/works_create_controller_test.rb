@@ -43,6 +43,10 @@ class WorksCreateControllerTest < ActionController::TestCase
         form.pseud.byline=@co_author_pseud.name
         form.work.chapter_attributes.title="first chapter"
         form.work.chapter_attributes.content="chapter content"
+        form.work.chapter_attributes["published_at(1i)"]="2005"
+        form.work.chapter_attributes["published_at(2i)"]="11"
+        form.work.chapter_attributes["published_at(3i)"]="7"
+        form.work.backdate=false
         form.work.wip_length="17"
         form.work.series_attributes.title="a new series"
         form.work.restricted="1"
@@ -59,9 +63,6 @@ class WorksCreateControllerTest < ActionController::TestCase
         form.work.summary="summary goes here"
         form.work.parent_url=
             ArchiveConfig.APP_URL + "/en/works/" + @related_work.id.to_s
-        form.work["published_at(1i)"]="2005"
-        form.work["published_at(2i)"]="11"
-        form.work["published_at(3i)"]="7"
         form.cancel_button=nil
         form.preview_button='Preview'
         form.submit
@@ -92,11 +93,10 @@ class WorksCreateControllerTest < ActionController::TestCase
         @chapter = @work.first_chapter
         assert_equal "chapter content", @chapter.content
         assert_equal "first chapter", @chapter.title
+        assert_equal "2005-11-07", @chapter.published_at.to_s
         # notes and summary
         assert_equal "notes go here", @work.notes
         assert_equal "summary goes here", @work.summary
-        # published
-        assert_equal "2005-11-07", @work.published_at.to_date.to_s
         # parent
         assert_equal [@related_work], @work.parents.uniq
         assert_equal [@work], @related_work.children.uniq

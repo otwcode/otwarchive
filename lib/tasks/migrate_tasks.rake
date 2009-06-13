@@ -156,4 +156,16 @@ namespace :After do
   task(:after_20090610010041_add_filter_counts => :environment) do
     FilterCount.set_all
   end
+  desc "change to chapter backdating - slow"
+  task(:after_20090613092005_change_backdating => :environment) do
+    ThinkingSphinx.deltas_enabled=false
+    Chapter.find(:all).each do |c|
+      if c.position == 1 && c.work_id && c.work.published_at
+        c.update_attribute(:published_at, c.work.published_at)
+      else
+        c.update_attribute(:published_at, c.created_at)
+      end
+    end
+    ThinkingSphinx.deltas_enabled=true
+  end   
 end

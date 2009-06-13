@@ -1,19 +1,20 @@
 --- 
 chapter_00046: 
-  updated_at: 2009-03-18 04:04:34 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: shite
   word_count: 1
   notes: ""
   id: 46
   summary: plop?
   content: blaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!
+  published_at: 2009-03-18
   work_id: 35
   posted: true
   position: 4
   hidden_by_admin: false
-  created_at: 2009-03-18 04:01:46 +00:00
+  created_at: 2009-03-18 05:01:46 +01:00
 chapter_00035: 
-  updated_at: 2009-03-11 22:26:07 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: ""
   word_count: 16
   notes: 
@@ -23,26 +24,28 @@ chapter_00035:
     will try Cancel on the choose co-author screen
     
     conclusion: it had eaten ALL my tags, period.
+  published_at: 2009-03-11
   work_id: 33
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-11 22:25:59 +00:00
+  created_at: 2009-03-11 23:25:59 +01:00
 chapter_00002: 
-  updated_at: 2008-11-09 01:26:01 +00:00
+  updated_at: 2009-06-13 11:38:25 +02:00
   title: Second Chapter Title
   word_count: 5
   notes: Notes on second chapter
   id: 2
   summary: Summary of second chapter
   content: exciting second chapter content woo
+  published_at: 2008-11-09
   work_id: 1
   posted: true
   position: 2
   hidden_by_admin: false
-  created_at: 2008-11-09 01:26:01 +00:00
+  created_at: 2008-11-09 02:26:01 +01:00
 chapter_00013: 
-  updated_at: 2008-12-06 23:24:06 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: ""
   word_count: 97
   notes: 
@@ -61,39 +64,42 @@ chapter_00013:
     
     After all, he's already outlasted everyone else. 
 
+  published_at: 2008-12-06
   work_id: 11
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2008-12-06 23:24:00 +00:00
+  created_at: 2008-12-07 00:24:00 +01:00
 chapter_00057: 
-  updated_at: 2009-03-20 23:20:29 +00:00
+  updated_at: 2009-06-13 11:38:27 +02:00
   title: ""
   word_count: 5
   notes: 
   id: 57
   summary: 
   content: angst angst rape anguish angssssssst
+  published_at: 2009-03-20
   work_id: 50
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-20 23:20:17 +00:00
+  created_at: 2009-03-21 00:20:17 +01:00
 chapter_00058: 
-  updated_at: 2009-03-20 23:22:57 +00:00
+  updated_at: 2009-06-13 11:38:27 +02:00
   title: ""
   word_count: 14
   notes: 
   id: 58
   summary: 
   content: wherein John and Ronon figure out that they can share! all is well again.
+  published_at: 2009-03-20
   work_id: 51
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-20 23:22:23 +00:00
+  created_at: 2009-03-21 00:22:23 +01:00
 chapter_00014: 
-  updated_at: 2008-12-06 23:26:47 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: ""
   word_count: 262
   notes: 
@@ -119,26 +125,28 @@ chapter_00014:
     
     He likes it when Jensen pays attention.
 
+  published_at: 2008-12-06
   work_id: 12
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2008-12-06 23:26:41 +00:00
+  created_at: 2008-12-07 00:26:41 +01:00
 chapter_00003: 
-  updated_at: 2008-11-09 01:26:01 +00:00
+  updated_at: 2009-06-13 11:38:25 +02:00
   title: Only Chapter Title
   word_count: 11
   notes: Notes on one and only chapter
   id: 3
   summary: Summary of one and only chapter
   content: this is the content of the one and only chapter yay
+  published_at: 2008-11-09
   work_id: 2
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2008-11-09 01:26:01 +00:00
+  created_at: 2008-11-09 02:26:01 +01:00
 chapter_00036: 
-  updated_at: 2009-03-11 22:31:05 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: ""
   word_count: 27
   notes: 
@@ -148,140 +156,146 @@ chapter_00036:
     will attempt cancel_coauthor_button again, after changing the elsif in the controller
     
     Conclusion: at least now it's behaving consistently, like Preview, and eating all tags except the Warning.
+  published_at: 2009-03-11
   work_id: 34
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-11 22:30:12 +00:00
+  created_at: 2009-03-11 23:30:12 +01:00
 chapter_00047: 
-  updated_at: 2009-03-18 04:06:04 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: bleah
   word_count: 1
   notes: ""
   id: 47
   summary: ""
   content: buruburuburu
+  published_at: 2009-03-18
   work_id: 35
   posted: true
   position: 5
   hidden_by_admin: false
-  created_at: 2009-03-18 04:05:17 +00:00
+  created_at: 2009-03-18 05:05:17 +01:00
 chapter_00060: 
-  updated_at: 2009-05-10 13:50:55 +01:00
+  updated_at: 2009-06-13 11:38:27 +02:00
   title: ""
   word_count: 1131
   notes: 
   id: 60
   summary: 
   content: |-
-    <p>The tree-house is a godsend.<br /> <br /> John's boys are good kids, but they're still <em>kids</em>, full of energy and liable to get into every which thing. It's a marvel John can keep them under control as well as he does; Dean with his itching desire to take apart any goddamned piece of machinery he sees, whole Sam trails around after him getting into everything and asking questions until it's enough to drive a man to drink. It wouldn't be so bad if he and John were just working in the yard - Dean at least is plenty old enough to learn his way around the innards of a car; pretty handy at it, too - but if the case they're working as anything John could do in front of the boys, he probably wouldn't be here.</p>
-    <p><br /> The first week they're happy enough exploring the yard, scoping out their territory. Dean sets to climbing every tree in the orchard, Sammy following doggedly behind him, red-faced and determined as he struggles to keep up. They tackle all the little fruit trees first, leaving the ash tree out on the west of the property till last. It's not the hardest tree to climb, but it's the biggest, been there longer than the house has. Dean shins up the trunk first and ties a rope to the lowest branch, but Sam ignores the help, kicking off his shoes so he can dig toes as well as fingers into the cracks in the bark. When he finally makes it he persuades Dean to carve both their initials into the bark, and they both sit there all afternoon, grinning out over the valley.</p>
-    <p align="center"><br /> Once they've cracked the ash tree, though, they're both back to poking around the yard, looking for mischief to get into. So when John leans back one evening and says, 'Used to build treehouses when I was a kid', Bobby seizes on it for the inspiration it is.</p>
-    <p align="right"><br /> "Built one or two myself. We had a great treehouse out on my granddaddy's old place, big enough me and both my brothers could fit it." He takes a long pull on his beer, pretending like he can't see the way Dean and Sammy have both pricked up their ears. "He had a big old ash tree, like that one out back."<br /> <br /></p>
-    <ul>
-    <li>John nods wisely, the corner of his mouth twitching as he says, "Yeah, that's the right kind of tree, sure enough."</li>
-    <li>Sam lets out a little squeak of excitement, and Bobby has to take another drink before he can compose himself enough to speak. "'Course, it was a mighty lot of work. Can't think kids nowadays would have the sticking power."</li>
-    <li>"<em>We</em> would, Uncle Bobby!" Sam bursts out. "We could build one, couldn't we, Dean?"</li>
-    </ul>
-    <p>&nbsp;</p>
-    <p>Dean shushes him, saying, "It's not our tree, Sam," but his face is just as shining and hopeful as his brother's.</p>
-    <ol>
-    <li>Bobby catches John's eye. "I got no objections."</li>
-    <li>Finally he relents. "If you really want to do this, you've gotta do it right, you hear? That means you too, Sammy. You mind what your brother tells you."</li>
-    </ol>
-    <p><br /> <br /> <strong>He fixes Dean with a stern look. "And you look after your brother. We don't need any broken necks."</strong><br /> <br /> <u>The two of them <em>yessir</em> and <em>nosir</em>, nodding fervently, and the second John dismisses them they burst out into the yard, already arguing about the best way to plan the project and whether or not it's dumb to give the tree-house windows.</u> Bobby remembers that the first time he built a tree-house, he dragged half the lumber he could find up the tree before stopping to figure out how it would all fit together, but Dean and Sam have the whole thing sketched out on paper before they even start looking for materials. And if the yard yields some surprisingly useful scraps - well, it just goes to show that planning pays off.<br /> <br /> <strike>Between keeping an eye on the boys and finding ways to keep them well-supplied with building materials, Bobby and John finish up the job they've been working on. The demon they've been after leaves them both bloody and exhausted</strike> before they manage to send it back to hell, but even so, it's only a couple of days before John's edgy and restless, hunting through newspapers and clipping out obituaries and disappearances.<br /> <br /> When he starts hunting through the maps,</p>
-    <p>looking for one of Ohio,</p>
-    <p>Bobby observes mildly,</p>
-    <p>"They've only just finished that tree-house."</p>
-    <p><br /> "I know," John says regretfully, but he doesn't stop comparing the scribbled notes he's made against the unfolded map.</p>
-    <p><br /> <br /></p>
-    <table>
-    <tbody>
-    <tr>
-    <td width="239">
-    <p><strong>Bobby watches   him thoughtfully, thinking about the pleased-proud look on Dean's face when   they pronounced the tree-house safe. "You can pick them up after the   job's done."</strong></p>
-    </td>
-    <td width="239">
-    <p><strong>John does pause   then, looks up slowly, like if he moves too quick Bobby'll take it back.   "You're a good man, Bobby."</strong></p>
-    </td>
-    <td width="239">
-    <p><strong>"Not   particularly." Bobby fishes in his pocket for his pack of cigarettes, a   habit he still hasn't gotten around to quitting. "Just mind you pick   them up before the school year starts."</strong></p>
-    </td>
-    </tr>
-    <tr>
-    <td width="239">
-    <p><strong>John leaves the   boys at the yard the next summer, too, but the one after that he calls and   says he's keeping them with him, holing up in a cabin in the woods somewhere   while he hunts down a possible Raksha. "The boys are old enough   now," he says. "Dean can handle a gun like you wouldn't believe."</strong></p>
-    </td>
-    <td width="239">
-    <p>Bobby says nothing, letting the   silence stretch out across the line.</p>
-    </td>
-    <td width="239">
-    <p>"Well, I guess we'll see you soon   enough," John says finally.</p>
-    </td>
-    </tr>
-    <tr>
-    <td width="239">
-    <p><strong>They don't come   by that summer, though, and by the next they're on the other side of the   country, and Bobby's busy with his own affairs. He sees them off and on over   the next few years, but always for one-off jobs, and they don't make it back   to his place. Figures that John's heard the message in Bobby's silences and   chosen to deal with it his own way.</strong></p>
-    </td>
-    <td width="239">
-    <p><br /> He's less surprised than he should be when the letters start to arrive. The   first two he just stashes in the bookcase and forgets about. When the third   one arrives, though - thick and heavy with promises - he picks up the phone.   He doesn't need the return address on that thick envelope - <em>Stanford University</em> - to tell him that   John doesn't need to know about the letters. Instead he says, "Got a job   I could use your help with," brushing aside John's surprise at the call.<br /> <br /></p>
-    </td>
-    <td width="239">
-    <p><br /> It's a shock when Bobby makes the rendezvous to find John standing there with   two young men. Not like he didn't know the boys were growing up, but there's   knowing and then there's seeing Dean standing shoulder-to-shoulder with John,   plotting out hunt strategies while Sammy towers over them both.<br /> <br /></p>
-    </td>
-    </tr>
-    </tbody>
-    </table>
-    <p><br /> <br /> <br /> <br /> <br /></p>
-    <p><br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /></p>
-    <p>&nbsp;</p>
+    <p>The tree-house is a godsend.<br /> <br /> John's boys are good kids, but they're still <em>kids</em>, full of energy and liable to get into every which thing. It's a marvel John can keep them under control as well as he does; Dean with his itching desire to take apart any goddamned piece of machinery he sees, whole Sam trails around after him getting into everything and asking questions until it's enough to drive a man to drink. It wouldn't be so bad if he and John were just working in the yard - Dean at least is plenty old enough to learn his way around the innards of a car; pretty handy at it, too - but if the case they're working as anything John could do in front of the boys, he probably wouldn't be here.</p>
+    <p><br /> The first week they're happy enough exploring the yard, scoping out their territory. Dean sets to climbing every tree in the orchard, Sammy following doggedly behind him, red-faced and determined as he struggles to keep up. They tackle all the little fruit trees first, leaving the ash tree out on the west of the property till last. It's not the hardest tree to climb, but it's the biggest, been there longer than the house has. Dean shins up the trunk first and ties a rope to the lowest branch, but Sam ignores the help, kicking off his shoes so he can dig toes as well as fingers into the cracks in the bark. When he finally makes it he persuades Dean to carve both their initials into the bark, and they both sit there all afternoon, grinning out over the valley.</p>
+    <p align="center"><br /> Once they've cracked the ash tree, though, they're both back to poking around the yard, looking for mischief to get into. So when John leans back one evening and says, 'Used to build treehouses when I was a kid', Bobby seizes on it for the inspiration it is.</p>
+    <p align="right"><br /> "Built one or two myself. We had a great treehouse out on my granddaddy's old place, big enough me and both my brothers could fit it." He takes a long pull on his beer, pretending like he can't see the way Dean and Sammy have both pricked up their ears. "He had a big old ash tree, like that one out back."<br /> <br /></p>
+    <ul>
+    <li>John nods wisely, the corner of his mouth twitching as he says, "Yeah, that's the right kind of tree, sure enough."</li>
+    <li>Sam lets out a little squeak of excitement, and Bobby has to take another drink before he can compose himself enough to speak. "'Course, it was a mighty lot of work. Can't think kids nowadays would have the sticking power."</li>
+    <li>"<em>We</em> would, Uncle Bobby!" Sam bursts out. "We could build one, couldn't we, Dean?"</li>
+    </ul>
+    <p>&nbsp;</p>
+    <p>Dean shushes him, saying, "It's not our tree, Sam," but his face is just as shining and hopeful as his brother's.</p>
+    <ol>
+    <li>Bobby catches John's eye. "I got no objections."</li>
+    <li>Finally he relents. "If you really want to do this, you've gotta do it right, you hear? That means you too, Sammy. You mind what your brother tells you."</li>
+    </ol>
+    <p><br /> <br /> <strong>He fixes Dean with a stern look. "And you look after your brother. We don't need any broken necks."</strong><br /> <br /> <u>The two of them <em>yessir</em> and <em>nosir</em>, nodding fervently, and the second John dismisses them they burst out into the yard, already arguing about the best way to plan the project and whether or not it's dumb to give the tree-house windows.</u> Bobby remembers that the first time he built a tree-house, he dragged half the lumber he could find up the tree before stopping to figure out how it would all fit together, but Dean and Sam have the whole thing sketched out on paper before they even start looking for materials. And if the yard yields some surprisingly useful scraps - well, it just goes to show that planning pays off.<br /> <br /> <strike>Between keeping an eye on the boys and finding ways to keep them well-supplied with building materials, Bobby and John finish up the job they've been working on. The demon they've been after leaves them both bloody and exhausted</strike> before they manage to send it back to hell, but even so, it's only a couple of days before John's edgy and restless, hunting through newspapers and clipping out obituaries and disappearances.<br /> <br /> When he starts hunting through the maps,</p>
+    <p>looking for one of Ohio,</p>
+    <p>Bobby observes mildly,</p>
+    <p>"They've only just finished that tree-house."</p>
+    <p><br /> "I know," John says regretfully, but he doesn't stop comparing the scribbled notes he's made against the unfolded map.</p>
     <p><br /> <br /></p>
+    <table>
+    <tbody>
+    <tr>
+    <td width="239">
+    <p><strong>Bobby watches   him thoughtfully, thinking about the pleased-proud look on Dean's face when   they pronounced the tree-house safe. "You can pick them up after the   job's done."</strong></p>
+    </td>
+    <td width="239">
+    <p><strong>John does pause   then, looks up slowly, like if he moves too quick Bobby'll take it back.   "You're a good man, Bobby."</strong></p>
+    </td>
+    <td width="239">
+    <p><strong>"Not   particularly." Bobby fishes in his pocket for his pack of cigarettes, a   habit he still hasn't gotten around to quitting. "Just mind you pick   them up before the school year starts."</strong></p>
+    </td>
+    </tr>
+    <tr>
+    <td width="239">
+    <p><strong>John leaves the   boys at the yard the next summer, too, but the one after that he calls and   says he's keeping them with him, holing up in a cabin in the woods somewhere   while he hunts down a possible Raksha. "The boys are old enough   now," he says. "Dean can handle a gun like you wouldn't believe."</strong></p>
+    </td>
+    <td width="239">
+    <p>Bobby says nothing, letting the   silence stretch out across the line.</p>
+    </td>
+    <td width="239">
+    <p>"Well, I guess we'll see you soon   enough," John says finally.</p>
+    </td>
+    </tr>
+    <tr>
+    <td width="239">
+    <p><strong>They don't come   by that summer, though, and by the next they're on the other side of the   country, and Bobby's busy with his own affairs. He sees them off and on over   the next few years, but always for one-off jobs, and they don't make it back   to his place. Figures that John's heard the message in Bobby's silences and   chosen to deal with it his own way.</strong></p>
+    </td>
+    <td width="239">
+    <p><br /> He's less surprised than he should be when the letters start to arrive. The   first two he just stashes in the bookcase and forgets about. When the third   one arrives, though - thick and heavy with promises - he picks up the phone.   He doesn't need the return address on that thick envelope - <em>Stanford University</em> - to tell him that   John doesn't need to know about the letters. Instead he says, "Got a job   I could use your help with," brushing aside John's surprise at the call.<br /> <br /></p>
+    </td>
+    <td width="239">
+    <p><br /> It's a shock when Bobby makes the rendezvous to find John standing there with   two young men. Not like he didn't know the boys were growing up, but there's   knowing and then there's seeing Dean standing shoulder-to-shoulder with John,   plotting out hunt strategies while Sammy towers over them both.<br /> <br /></p>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+    <p><br /> <br /> <br /> <br /> <br /></p>
+    <p><br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /></p>
+    <p>&nbsp;</p>
+    <p><br /> <br /></p>
+  published_at: 2009-05-10
   work_id: 53
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-05-10 13:20:06 +01:00
+  created_at: 2009-05-10 14:20:06 +02:00
 chapter_00048: 
-  updated_at: 2009-03-18 04:06:59 +00:00
+  updated_at: 2009-06-13 11:38:27 +02:00
   title: simple
   word_count: 1
   notes: ""
   id: 48
   summary: ""
   content: zoooooooooooooooooooooooooo
+  published_at: 2009-03-18
   work_id: 35
   posted: true
   position: 6
   hidden_by_admin: false
-  created_at: 2009-03-18 04:06:50 +00:00
+  created_at: 2009-03-18 05:06:50 +01:00
 chapter_00037: 
-  updated_at: 2009-03-18 03:24:30 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: fuckery!
   word_count: 15
   notes: blip
   id: 37
   summary: meeeep
   content: this doesn't look promising either but hey - if saved action edit in create controller
+  published_at: 2009-03-11
   work_id: 35
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-11 23:22:55 +00:00
+  created_at: 2009-03-12 00:22:55 +01:00
 chapter_00004: 
-  updated_at: 2008-11-09 01:26:01 +00:00
+  updated_at: 2009-06-13 11:38:25 +02:00
   title: Only Chapter Title
   word_count: 12
   notes: Notes on one and only chapter
   id: 4
   summary: Summary of one and only chapter
   content: this is the content of the one and only chapter yay woo
+  published_at: 2009-02-23
   work_id: 3
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2008-11-09 01:26:01 +00:00
+  created_at: 2008-11-09 02:26:01 +01:00
 chapter_00015: 
-  updated_at: 2008-12-06 23:34:46 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: ""
   word_count: 74
   notes: 
@@ -291,26 +305,28 @@ chapter_00015:
     <p>So, my name's Jessica Moore, and it you know anything about me at all you'll know I died. A few years ago now, actually, and I'm as surprised as anyone to find that apparently that doesn't preclude me walking and talking and all that.</p>
     <p>&nbsp;</p>
     <p>It apparently precludes me touching anyone else, though, which sucks. Particularly since that pretty much rules out continuing with the awesomely hot sex I was enjoying with Sam Winchester.</p>
+  published_at: 2008-12-06
   work_id: 13
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2008-12-06 23:34:39 +00:00
+  created_at: 2008-12-07 00:34:39 +01:00
 chapter_00059: 
-  updated_at: 2009-03-20 23:24:17 +00:00
+  updated_at: 2009-06-13 11:38:27 +02:00
   title: ""
   word_count: 8
   notes: 
   id: 59
   summary: 
   content: ack, sorry, I've had an angst bunny again!
+  published_at: 2009-03-20
   work_id: 52
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-20 23:24:08 +00:00
+  created_at: 2009-03-21 00:24:08 +01:00
 chapter_00050: 
-  updated_at: 2009-03-20 19:57:43 +00:00
+  updated_at: 2009-06-13 11:38:27 +02:00
   title: ""
   word_count: 18
   notes: 
@@ -322,26 +338,28 @@ chapter_00050:
     Haha, tricked you, thought it was going to be Jack/Ianto, eh? lolol
     
     Inspired by <a href="http://example.com/LOLIantoes.gif" title="nonexistent image to demonstrate linking CSS style">this image</a>.
+  published_at: 2009-03-17
   work_id: 43
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-18 04:09:43 +00:00
+  created_at: 2009-03-18 05:09:43 +01:00
 chapter_00027: 
-  updated_at: 2009-03-09 21:55:42 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: ""
   word_count: 3
   notes: 
   id: 27
   summary: 
   content: pahahhaaavjds nfr ambig
+  published_at: 2009-03-08
   work_id: 25
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-09 21:54:33 +00:00
+  created_at: 2009-03-09 22:54:33 +01:00
 chapter_00016: 
-  updated_at: 2008-12-07 20:54:42 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: ""
   word_count: 398
   notes: 
@@ -356,228 +374,241 @@ chapter_00016:
     Since Lot was a good sort, we got him and his people out of the city. Told them not to look back, too, because we were planning some pretty righteous smiting. Of course, there always has to be one who doesn't listen, and sure enough his wife had to turn back. Pillar of salted her: regrettable, but what can you do? People should follow instructions.\r\n\
     \r\n\
     So, we did some flattening of the city - fire, brimstone, the whole works. Some of the best fun I've had in eternity, I have to admit. Lot was well out of it, but those daughters of his took some fool notion to have a baby, and he was the only man around. So it goes. "
+  published_at: 2009-02-24
   work_id: 14
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2008-12-07 20:52:14 +00:00
+  created_at: 2008-12-07 21:52:14 +01:00
 chapter_00005: 
-  updated_at: 2008-11-09 01:26:01 +00:00
+  updated_at: 2009-06-13 11:38:25 +02:00
   title: Only Chapter Title
   word_count: 13
   notes: Notes on one and only chapter
   id: 5
   summary: Summary of one and only chapter
   content: this is the content of the one and only chapter yay woo foo
+  published_at: 2008-11-09
   work_id: 4
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2008-11-09 01:26:01 +00:00
+  created_at: 2008-11-09 02:26:01 +01:00
 chapter_00038: 
-  updated_at: 2009-03-12 00:30:27 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: ""
   word_count: 5
   notes: 
   id: 38
   summary: 
   content: seriously, what's wrong with validations?!
+  published_at: 2009-03-11
   work_id: 36
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-12 00:28:57 +00:00
+  created_at: 2009-03-12 01:28:57 +01:00
 chapter_00049: 
-  updated_at: 2009-03-18 04:08:46 +00:00
+  updated_at: 2009-06-13 11:38:27 +02:00
   title: ""
   word_count: 1
   notes: 
   id: 49
   summary: 
   content: tiribombaaaaaaaa
+  published_at: 2009-03-17
   work_id: 42
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-18 04:08:12 +00:00
+  created_at: 2009-03-18 05:08:12 +01:00
 chapter_00061: 
-  updated_at: 2009-05-10 13:51:11 +01:00
+  updated_at: 2009-06-13 11:38:27 +02:00
   title: ""
   word_count: 121
   notes: ""
   id: 61
   summary: ""
   content: |-
-    <p><strong>This is bold.</strong></p>
-    <p>&nbsp;</p>
-    <p><em>This is italic.</em></p>
-    <p>&nbsp;</p>
-    <p><u>This is underline.</u></p>
-    <p>&nbsp;</p>
-    <p><strike>This is strikethrough.</strike></p>
-    <p>&nbsp;</p>
-    <p><a href="http://lucy.chez-cal.net/header_deviate.png" title="Link to my LJ header.">This is a link.</a></p>
-    <p>&nbsp;</p>
-    <p><img src="http://lucy.chez-cal.net/header_deviate.png" height="350" alt="LJ header." align="middle" width="850" /></p>
-    <p>&nbsp;</p>
-    <blockquote>
-    <p>This is text in a blockquote</p>
-    <p>Blockquote blockquote blockquote</p>
-    <p>&nbsp;</p>
-    </blockquote>
-    <ul>
-    <li>Bullet</li>
-    <li>Bullter</li>
-    <li>Bullet</li>
-    </ul>
-    <ol>
-    <li>Number </li>
-    <li>Number</li>
-    <li>Number</li>
-    </ol>
-    <p align="center">Cneter</p>
-    <p align="right">Right</p>
-    <p align="right">&nbsp;</p>
-    <p align="justify">A block of fully jstifed text. "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
-    <p align="justify">&nbsp;</p>
-    <p align="justify">This</p>
-    <p align="justify">Is</p>
-    <p align="justify">A</p>
+    <p><strong>This is bold.</strong></p>
+    <p>&nbsp;</p>
+    <p><em>This is italic.</em></p>
+    <p>&nbsp;</p>
+    <p><u>This is underline.</u></p>
+    <p>&nbsp;</p>
+    <p><strike>This is strikethrough.</strike></p>
+    <p>&nbsp;</p>
+    <p><a href="http://lucy.chez-cal.net/header_deviate.png" title="Link to my LJ header.">This is a link.</a></p>
+    <p>&nbsp;</p>
+    <p><img src="http://lucy.chez-cal.net/header_deviate.png" height="350" alt="LJ header." align="middle" width="850" /></p>
+    <p>&nbsp;</p>
+    <blockquote>
+    <p>This is text in a blockquote</p>
+    <p>Blockquote blockquote blockquote</p>
+    <p>&nbsp;</p>
+    </blockquote>
+    <ul>
+    <li>Bullet</li>
+    <li>Bullter</li>
+    <li>Bullet</li>
+    </ul>
+    <ol>
+    <li>Number </li>
+    <li>Number</li>
+    <li>Number</li>
+    </ol>
+    <p align="center">Cneter</p>
+    <p align="right">Right</p>
+    <p align="right">&nbsp;</p>
+    <p align="justify">A block of fully jstifed text. "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
+    <p align="justify">&nbsp;</p>
+    <p align="justify">This</p>
+    <p align="justify">Is</p>
+    <p align="justify">A</p>
     <p align="justify">Poem</p>
+  published_at: 2009-05-10
   work_id: 53
   posted: true
   position: 2
   hidden_by_admin: false
-  created_at: 2009-05-10 13:50:52 +01:00
+  created_at: 2009-05-10 14:50:52 +02:00
 chapter_00062: 
-  updated_at: 2009-05-10 13:58:06 +01:00
+  updated_at: 2009-06-13 11:38:27 +02:00
   title: ""
   word_count: 448
   notes: 
   id: 62
   summary: 
   content: |-
-    Rory's already in bed when Dean comes up, sprawled on top of the covers with her nose in a book. She looks up when he settles on the edge of the bed, sticks her finger in the book to mark her place while she gives him a quick kiss, then goes back to reading.
-    
-    Dean rests his hand on Rory's thigh, sliding it up under fabric and savoring the warm smoothness of her skin. "Stealing my shorts again," he remarks, and she <i>hmms</i> in response, wriggling a little against the pressure of his hand without pausing in her reading. He pulls away and strips off his clothes, gyrating theatrically and flinging his pants across the room to try and make her look up. Rory keeps her eyes firmly on the book, but when he rips off his shorts and wiggles his hips right by her face, he's rewarded by the ghost of a smile.
-    
-    "There's a naked man in your room!" Dean raises his hands in mock horror. "Aren't you going to protect your maidenly honor?"
-    
-    "That ship has sailed," Rory says wryly. "But I may be moved to strong measures to protect my maidenly reading privileges." Her voice goes high and breathy on the last word as Dean licks a long stripe along her neck, though, and when he slides his hand between her legs she shifts them wider.
-    
-    Dean rubs his thumb along the crease where her thigh meets her ass, sliding lower and lower till he can feel the heat of her. He holds his hand there, heavy and unmoving, and says regretfully to the room, "Nothing I can do that can compete with a book."
-    
-    "It's sadly true," Rory says, but she's definitely smiling now, and she hasn't turned a page for at least two minutes.
-    
-    Dean nibbles gently at her ear and slides his hand a little further, just the tip of his thumb nudging her wetness. When she moans and shifts back into him Dean rolls closer, pressing his cock into the warmth of her leg. He kisses along her spine, grinning against her skin as her breath starts to come faster. He waits until she tenses, about to turn to kiss him, and pulls away.
-    
-    "Guess I'll just have to amuse myself," he says mournfully.
-    
-    Rory laughs and bats his hand away from his cock, little hands wrapping around him. Dean barely suppresses his moan when he feels her mouth join them.
-    
-    Half an hour later, they're both flushed and panting, lying sticky and boneless in a tumble of sheets.
-    
-    "Jesus Christ," Dean breathes. "Where do you learn these things?"
-    
+    Rory's already in bed when Dean comes up, sprawled on top of the covers with her nose in a book. She looks up when he settles on the edge of the bed, sticks her finger in the book to mark her place while she gives him a quick kiss, then goes back to reading.
+    
+    Dean rests his hand on Rory's thigh, sliding it up under fabric and savoring the warm smoothness of her skin. "Stealing my shorts again," he remarks, and she <i>hmms</i> in response, wriggling a little against the pressure of his hand without pausing in her reading. He pulls away and strips off his clothes, gyrating theatrically and flinging his pants across the room to try and make her look up. Rory keeps her eyes firmly on the book, but when he rips off his shorts and wiggles his hips right by her face, he's rewarded by the ghost of a smile.
+    
+    "There's a naked man in your room!" Dean raises his hands in mock horror. "Aren't you going to protect your maidenly honor?"
+    
+    "That ship has sailed," Rory says wryly. "But I may be moved to strong measures to protect my maidenly reading privileges." Her voice goes high and breathy on the last word as Dean licks a long stripe along her neck, though, and when he slides his hand between her legs she shifts them wider.
+    
+    Dean rubs his thumb along the crease where her thigh meets her ass, sliding lower and lower till he can feel the heat of her. He holds his hand there, heavy and unmoving, and says regretfully to the room, "Nothing I can do that can compete with a book."
+    
+    "It's sadly true," Rory says, but she's definitely smiling now, and she hasn't turned a page for at least two minutes.
+    
+    Dean nibbles gently at her ear and slides his hand a little further, just the tip of his thumb nudging her wetness. When she moans and shifts back into him Dean rolls closer, pressing his cock into the warmth of her leg. He kisses along her spine, grinning against her skin as her breath starts to come faster. He waits until she tenses, about to turn to kiss him, and pulls away.
+    
+    "Guess I'll just have to amuse myself," he says mournfully.
+    
+    Rory laughs and bats his hand away from his cock, little hands wrapping around him. Dean barely suppresses his moan when he feels her mouth join them.
+    
+    Half an hour later, they're both flushed and panting, lying sticky and boneless in a tumble of sheets.
+    
+    "Jesus Christ," Dean breathes. "Where do you learn these things?"
+    
     Rory smirks and kisses him. "I get them out of books."
+  published_at: 2009-05-10
   work_id: 54
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-05-10 13:57:47 +01:00
+  created_at: 2009-05-10 14:57:47 +02:00
 chapter_00040: 
-  updated_at: 2009-03-12 00:50:35 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: ""
   word_count: 4
   notes: 
   id: 40
   summary: 
   content: not ikea! like not!monkeys
+  published_at: 2009-03-11
   work_id: 38
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-12 00:50:20 +00:00
+  created_at: 2009-03-12 01:50:20 +01:00
 chapter_00006: 
-  updated_at: 2008-11-09 01:26:01 +00:00
+  updated_at: 2009-06-13 11:38:25 +02:00
   title: Only Chapter Title
   word_count: 14
   notes: Notes on one and only chapter
   id: 6
   summary: Summary of one and only chapter
   content: this is the content of the one and only chapter yay woo foo bar
+  published_at: 2008-11-09
   work_id: 5
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2008-11-09 01:26:01 +00:00
+  created_at: 2008-11-09 02:26:01 +01:00
 chapter_00017: 
-  updated_at: 2009-02-22 04:25:42 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: ""
   word_count: 12
   notes: 
   id: 17
   summary: 
   content: my ofc character is not a mary sue!! give her a chance!
+  published_at: 2009-02-21
   work_id: 15
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-02-22 04:25:24 +00:00
+  created_at: 2009-02-22 05:25:24 +01:00
 chapter_00051: 
-  updated_at: 2009-03-19 01:02:50 +00:00
+  updated_at: 2009-06-13 11:38:27 +02:00
   title: ""
   word_count: 9
   notes: 
   id: 51
   summary: 
   content: here be story of how I woke up late
+  published_at: 2009-03-18
   work_id: 44
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-19 01:02:12 +00:00
+  created_at: 2009-03-19 02:02:12 +01:00
 chapter_00052: 
-  updated_at: 2009-03-20 01:24:40 +00:00
+  updated_at: 2009-06-13 11:38:27 +02:00
   title: ""
   word_count: 1
   notes: 
   id: 52
   summary: 
   content: fraaaaaaaaaaaaaaaaaaak
+  published_at: 2009-03-19
   work_id: 45
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-20 01:24:26 +00:00
+  created_at: 2009-03-20 02:24:26 +01:00
 chapter_00018: 
-  updated_at: 2009-02-24 06:36:51 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: ""
   word_count: 1
   notes: 
   id: 18
   summary: 
   content: laaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  published_at: 2009-02-23
   work_id: 16
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-02-24 06:34:22 +00:00
+  created_at: 2009-02-24 07:34:22 +01:00
 chapter_00007: 
-  updated_at: 2008-12-05 13:59:29 +00:00
+  updated_at: 2009-06-13 11:38:25 +02:00
   title: ""
   word_count: 73
   notes: 
   id: 7
   summary: 
   content: "Well, the truth is, me and MIT were probably never meant to be. Not that I couldn't take the pace - hell, I could more than handle it. But that was the problem - when something's a cakewalk like that, I gotta make a little interest of my own. And seeing how everyone else was finding it a little more challenging, that didn't go down too well, with the faculty <i>or</i> the students. "
+  published_at: 2008-12-04
   work_id: 6
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2008-12-05 13:59:14 +00:00
+  created_at: 2008-12-05 14:59:14 +01:00
 chapter_00041: 
-  updated_at: 2009-03-12 00:57:27 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: ""
   word_count: 13
   notes: 
@@ -587,26 +618,28 @@ chapter_00041:
     there's no warning for fucking language, eh, why the fuck is that?!
     
     woo-fycking-hoo!
+  published_at: 2009-03-11
   work_id: 39
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-12 00:56:30 +00:00
+  created_at: 2009-03-12 01:56:30 +01:00
 chapter_00042: 
-  updated_at: 2009-03-12 02:48:40 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: ""
   word_count: 3
   notes: 
   id: 42
   summary: 
   content: okie-dokie broken vokie?
+  published_at: 2009-03-11
   work_id: 40
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-12 01:43:37 +00:00
+  created_at: 2009-03-12 02:43:37 +01:00
 chapter_00008: 
-  updated_at: 2008-12-06 22:34:25 +00:00
+  updated_at: 2009-06-13 11:38:25 +02:00
   title: Tale ten
   word_count: 4593
   notes: ""
@@ -660,78 +693,84 @@ chapter_00008:
     \r\n\
     \r\n\
     \r\n"
+  published_at: 2008-12-06
   work_id: 7
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2008-12-06 22:28:54 +00:00
+  created_at: 2008-12-06 23:28:54 +01:00
 chapter_00019: 
-  updated_at: 2009-02-24 08:55:04 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: ""
   word_count: 3
   notes: 
   id: 19
   summary: 
   content: gore! gruesomeness! rahrahrah!
+  published_at: 2009-02-23
   work_id: 17
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-02-24 08:47:22 +00:00
+  created_at: 2009-02-24 09:47:22 +01:00
 chapter_00031: 
-  updated_at: 2009-03-10 00:28:25 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: ""
   word_count: 2
   notes: 
   id: 31
   summary: 
   content: chumba wamba
+  published_at: 2009-03-09
   work_id: 29
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-10 00:24:30 +00:00
+  created_at: 2009-03-10 01:24:30 +01:00
 chapter_00053: 
-  updated_at: 2009-03-20 23:42:56 +00:00
+  updated_at: 2009-06-13 11:38:27 +02:00
   title: ""
   word_count: 12
   notes: 
   id: 53
   summary: 
   content: story of how I was so surprised I used a four-letter word!
+  published_at: 2009-03-19
   work_id: 46
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-20 01:28:02 +00:00
+  created_at: 2009-03-20 02:28:02 +01:00
 chapter_00054: 
-  updated_at: 2009-03-20 23:12:10 +00:00
+  updated_at: 2009-06-13 11:38:27 +02:00
   title: ""
   word_count: 5
   notes: 
   id: 54
   summary: 
   content: don't judge me, all right?
+  published_at: 2009-03-20
   work_id: 47
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-20 23:11:56 +00:00
+  created_at: 2009-03-21 00:11:56 +01:00
 chapter_00032: 
-  updated_at: 2009-03-11 21:54:50 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: ""
   word_count: 1
   notes: 
   id: 32
   summary: 
   content: tararararara
+  published_at: 2009-03-10
   work_id: 30
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-11 21:51:22 +00:00
+  created_at: 2009-03-11 22:51:22 +01:00
 chapter_00021: 
-  updated_at: 2009-03-09 15:47:17 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: ""
   word_count: 2
   notes: 
@@ -740,13 +779,14 @@ chapter_00021:
   content: |-
     baaaaaaaaaaaaaaaaaaaaaah
     tantanana
+  published_at: 2009-03-08
   work_id: 19
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-09 15:43:33 +00:00
+  created_at: 2009-03-09 16:43:33 +01:00
 chapter_00010: 
-  updated_at: 2008-12-06 22:52:08 +00:00
+  updated_at: 2009-06-13 11:38:25 +02:00
   title: ""
   word_count: 2034
   notes: 
@@ -762,26 +802,28 @@ chapter_00010:
     [Voice: filostrato]
     [015] On the morrow, it being now towards the close of May, the damsel began complaining to her mother that by reason of the excessive heat she had not been able to get any sleep during the night. [016] "Daughter," said the lady, "what heat was there? Nay, there was no heat at all."[017] "Had you said, 'to my thinking,' mother," rejoined Caterina, "you would perhaps have said sooth; but you should bethink you how much more heat girls have in them than ladies that are advanced in years."[018] "True, my daughter," returned the lady, "but I cannot order that it shall be hot and cold, as thou perchance wouldst like; we must take the weather as we find it, and as the seasons provide it: perchance to-night it will be cooler, and thou wilt sleep better."[019] "God grant it be so," said Caterina, "but 'tis not wonted for the nights to grow cooler as the summer comes on."[020] "What then," said the lady, "wouldst thou have me do?"[021] "With your leave and my father's," answered Caterina, "I should like to have a little bed made up on the terrace by his room and over his garden, where, hearing the nightingales sing, and being in a much cooler place, I should sleep much better than in your room."[022] Whereupon: "Daughter, be of good cheer," said the mother; "I will speak to thy father, and we will do as he shall decide."[023] So the lady told Messer Lizio what had passed between her and the damsel; but he, being old and perhaps for that reason a little morose, said: "What nightingale is this, to whose chant she would fain sleep? I will see to it that the cicalas shall yet lull her to sleep."[024] Which speech, coming to Caterina's ears, gave her such offence, that for anger, rather than by reason of the heat, she not only slept not herself that night, but suffered not her mother to sleep, keeping up a perpetual complaint of the great heat. [025] Wherefore her mother hied her in the morning to Messer Lizio, and said to him: "Sir, you hold your daughter none too dear; what difference can it make to you that she lie on the terrace? She has tossed about all night long by reason of the heat; and besides, can you wonder that she, girl that she is, loves to hear the nightingale sing? Young folk naturally affect their likes."[026] Whereto Messer Lizio made answer: "Go, make her a bed there to your liking, and set a curtain round it, and let her sleep there, and hear the nightingale sing to her heart's content."[027] Which the damsel no sooner learned, than she had a bed made there with intent to sleep there that same night; wherefore she watched until she saw Ricciardo, whom by a concerted sign she gave to understand what he was to do. [028] Messer Lizio, as soon as he had heard the damsel go to bed, locked a door that led from his room to the terrace, and went to sleep himself. [029] When all was quiet, Ricciardo with the help of a ladder got upon a wall, and standing thereon laid hold of certain toothings of another wall, and not without great exertion and risk, had he fallen, clambered up on to the terrace, where the damsel received him quietly with the heartiest of cheer. Many a kiss they exchanged; and then got them to bed, where well-nigh all night long they had solace and joyance of one another, and made the nightingale sing not a few times. [030] But, brief being the night and great their pleasure, towards dawn, albeit they wist it not, they fell asleep, Caterina's right arm encircling Ricciardo's neck, while with her left hand she held him by that part of his person which your modesty, my ladies, is most averse to name in the company of men. [031] So, peacefully they slept, and were still asleep when day broke and Messer Lizio rose; and calling to mind that his daughter slept on the terrace, softly opened the door, saying to himself: Let me see what sort of night's rest the nightingale has afforded our Caterina? [032] And having entered, he gently raised the curtain that screened the bed, and saw Ricciardo asleep with her and in her embrace as described, both being quite naked and uncovered; [033] and having taken note of Ricciardo, he went away, and hied him to his lady's room, and called her, saying: "Up, up, wife, come and see; for thy daughter has fancied the nightingale to such purpose that she has caught him, and holds him in her hand."[034] "How can this be?" said the lady. "[035] Come quickly, and thou shalt see," replied Messer Lizio. [036] So the lady huddled on her clothes, and silently followed Messer Lizio, and when they were come to the bed, and had raised the curtain, Madonna Giacomina saw plainly enough how her daughter had caught, and did hold the nightingale, whose song she had so longed to hear. [037] Whereat the lady, deeming that Ricciardo had played her a cruel trick, would have cried out and upbraided him; but Messer Lizio said to her: "Wife, as thou valuest my love, say not a word; for in good sooth, seeing that she has caught him, he shall be hers. [038] Ricciardo is a gentleman and wealthy; an alliance with him cannot but be to our advantage: if he would part from me on good terms, he must first marry her, so that the nightingale shall prove to have been put in his own cage and not in that of another."[039] Whereby the lady was reassured, seeing that her husband took the affair so quietly, and that her daughter had had a good night, and was rested, and had caught the nightingale. So she kept silence; [040] nor had they long to wait before Ricciardo awoke; and, seeing that 'twas broad day, deemed that 'twas as much as his life was worth, and aroused Caterina, saying: "Alas! my soul, what shall we do, now that day has come and surprised me here?"[041] Which question Messer Lizio answered by coming forward, and saying: "We shall do well."[042] At sight of him Ricciardo felt as if his heart were torn out of his body, and sate up in the bed, and said: "My lord, I cry you mercy for God's sake. I wot that my disloyalty and delinquency have merited death; wherefore deal with me even as it may seem best to you: however, I pray you, if so it may be, to spare my life, that I die not."[043] "Ricciardo," replied Messer Lizio, "the love I bore thee, and the faith I reposed in thee, merited a better return; but still, as so it is, and youth has seduced thee into such a transgression, redeem thy life, and preserve my honour, by making Caterina thy lawful spouse, that thine, as she has been for this past night, she may remain for the rest of her life. In this way thou mayst secure my peace and thy safety; otherwise commend thy soul to God."[044] Pending this colloquy, Caterina let go the nightingale, and having covered herself, began with many a tear to implore her father to forgive Ricciardo, and Ricciardo to do as Messer Lizio required, that thereby they might securely count upon a long continuance of such nights of delight. [045] But there needed not much supplication; for, what with remorse for the wrong done, and the wish to make amends, and the fear of death, and the desire to escape it, and above all ardent love, and the craving to possess the beloved one, Ricciardo lost no time in making frank avowal of his readiness to do as Messer Lizio would have him. [046] Wherefore Messer Lizio, having borrowed a ring from Madonna Giacomina, Ricciardo did there and then in their presence wed Caterina. [047] Which done, Messer Lizio and the lady took their leave, saying: "Now rest ye a while; for so perchance 'twere better for you than if ye rose."[048] And so they left the young folks, who forthwith embraced, and not having travelled more than six miles during the night, went two miles further before they rose, and so concluded their first day. [049] When they were risen, Ricciardo and Messer Lizio discussed the matter with more formality; and some days afterwards Ricciardo, as was meet, married the damsel anew in presence of their friends and kinsfolk, and brought her home with great pomp, and celebrated his nuptials with due dignity and splendour. And so for many a year thereafter he lived with her in peace and happiness, and snared the nightingales day and night to his heart's content.
 
+  published_at: 2008-12-06
   work_id: 8
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2008-12-06 22:52:02 +00:00
+  created_at: 2008-12-06 23:52:02 +01:00
 chapter_00043: 
-  updated_at: 2009-03-12 02:55:48 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: ""
   word_count: 1
   notes: 
   id: 43
   summary: 
   content: muuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu
+  published_at: 2009-03-11
   work_id: 41
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-12 02:51:07 +00:00
+  created_at: 2009-03-12 03:51:07 +01:00
 chapter_00044: 
-  updated_at: 2009-03-18 03:42:53 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: Dilemma!
   word_count: 40
   notes: tralala
@@ -793,13 +835,14 @@ chapter_00044:
     it looks like adding an author to the first chapter automatically adds it to the whole work, testing to see if this happens for the other chapters or not
     
     oh frak, so many errors!
+  published_at: 2009-03-18
   work_id: 35
   posted: true
   position: 2
   hidden_by_admin: false
-  created_at: 2009-03-18 00:35:15 +00:00
+  created_at: 2009-03-18 01:35:15 +01:00
 chapter_00011: 
-  updated_at: 2008-12-06 22:56:07 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: ""
   word_count: 1534
   notes: 
@@ -1009,52 +1052,56 @@ chapter_00011:
     And ech of hem dooth al his diligence\r\n\
     To doon unto the feeste reverence.\r\n\
     Explicit prima pars "
+  published_at: 2008-12-06
   work_id: 9
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2008-12-06 22:55:58 +00:00
+  created_at: 2008-12-06 23:55:58 +01:00
 chapter_00022: 
-  updated_at: 2009-03-09 16:32:19 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: ""
   word_count: 4
   notes: 
   id: 22
   summary: 
   content: bom bodrom bongo bong
+  published_at: 2009-03-08
   work_id: 20
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-09 16:31:18 +00:00
+  created_at: 2009-03-09 17:31:18 +01:00
 chapter_00055: 
-  updated_at: 2009-03-20 23:14:26 +00:00
+  updated_at: 2009-06-13 11:38:27 +02:00
   title: ""
   word_count: 7
   notes: 
   id: 55
   summary: 
   content: just don't go spreading the word, OK?
+  published_at: 2009-03-20
   work_id: 48
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-20 23:14:14 +00:00
+  created_at: 2009-03-21 00:14:14 +01:00
 chapter_00056: 
-  updated_at: 2009-03-20 23:33:40 +00:00
+  updated_at: 2009-06-13 11:38:27 +02:00
   title: ""
   word_count: 9
   notes: 
   id: 56
   summary: 
   content: John, Rodney and Ronon and the impossibility to choose.
+  published_at: 2009-03-20
   work_id: 49
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-20 23:17:43 +00:00
+  created_at: 2009-03-21 00:17:43 +01:00
 chapter_00012: 
-  updated_at: 2008-12-06 23:20:38 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: ""
   word_count: 429
   notes: 
@@ -1095,26 +1142,28 @@ chapter_00012:
     
     And maybe Sam could have gone with the crying thing after all, because Dean kisses him right there in the street, big Hollywood smacker, and maybe that even tops seeing Led Zeppelin play live. 
 
+  published_at: 2008-12-06
   work_id: 10
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2008-12-06 23:19:49 +00:00
+  created_at: 2008-12-07 00:19:49 +01:00
 chapter_00001: 
-  updated_at: 2008-11-09 01:26:01 +00:00
+  updated_at: 2009-06-13 11:38:25 +02:00
   title: First Chapter Title
   word_count: 5
   notes: Notes on first chapter
   id: 1
   summary: Summary of first chapter
   content: looooong text for first chapter
+  published_at: 2009-02-23
   work_id: 1
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2008-11-09 01:26:01 +00:00
+  created_at: 2008-11-09 02:26:01 +01:00
 chapter_00034: 
-  updated_at: 2009-03-11 22:23:56 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: ""
   word_count: 19
   notes: 
@@ -1124,21 +1173,23 @@ chapter_00034:
     will try Preview after the choose co-author screen
     
     Conclusion: it had eaten ALL my tags except for the Warning
+  published_at: 2009-03-11
   work_id: 32
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-11 22:22:29 +00:00
+  created_at: 2009-03-11 23:22:29 +01:00
 chapter_00045: 
-  updated_at: 2009-03-18 03:54:06 +00:00
+  updated_at: 2009-06-13 11:38:26 +02:00
   title: boomed chapter
   word_count: 1
   notes: ""
   id: 45
   summary: bleh
   content: tantannanana
+  published_at: 2009-03-18
   work_id: 35
   posted: true
   position: 3
   hidden_by_admin: false
-  created_at: 2009-03-18 03:46:59 +00:00
+  created_at: 2009-03-18 04:46:59 +01:00

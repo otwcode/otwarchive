@@ -26,11 +26,12 @@
 <% fields_for_associated('work', @chapter) do |c| %>
   <%= c.hidden_field :content, :value => "#{@chapter.content}" %>
   <%= c.hidden_field :title, :value => "#{@chapter.title}" %>
+  <%= c.hidden_field :published_at, :value => "#{@chapter.published_at}" %>
 <%- end -%>
+<%= form.hidden_field :backdate, :value => "#{@work.backdate}" %>
 <%= form.hidden_field :expected_number_of_chapters, :value => "#{@work.expected_number_of_chapters}" %>
 <%= form.hidden_field :parent_url, :value => "#{@work.url_for_parent}" %>
 <%= form.hidden_field :restricted, :value => "#{@work.restricted}" %>
-<%= form.hidden_field :published_at, :value => "#{@work.published_at}" %>
 <%= form.hidden_field :revised_at, :value => "#{@work.revised_at}" %>
 <%= form.hidden_field :language_id, :value => "#{@work.language_id}" %>
 </div>

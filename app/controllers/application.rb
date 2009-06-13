@@ -112,6 +112,13 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  private
+ # With thanks from here: http://blog.springenwerk.com/2008/05/set-date-attribute-from-dateselect.html
+  def convert_date(hash, date_symbol_or_string)
+    attribute = date_symbol_or_string.to_s
+    return Date.new(hash[attribute + '(1i)'].to_i, hash[attribute + '(2i)'].to_i, hash[attribute + '(3i)'].to_i)   
+  end
+  
   public
   
   #### -- AUTHORIZATION -- ####

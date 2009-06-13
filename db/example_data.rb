@@ -45,6 +45,7 @@ module FixtureReplacement
   # chapter2 = create_chapter(:work => work, :authors = work.pseuds)
   attributes_for :chapter do |a|
     a.content = random_chapter
+    a.published_at = Date.today  
   end
 
   # note: to get threading, you must use
@@ -190,7 +191,6 @@ module FixtureReplacement
     a.title = random_phrase
     a.authors = [user.default_pseud]
     a.chapters = [new_chapter(:authors => [user.default_pseud])]
-    a.published_at = DateTime.now
     a.revised_at = DateTime.now
   end
 

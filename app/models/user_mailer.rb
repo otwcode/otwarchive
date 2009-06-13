@@ -116,7 +116,7 @@ class UserMailer < ActionMailer::Base
     attachment_string += "<br/>Tags: " + work.tags.collect(&:name).join(", ") + "<br/>\n" unless work.tags.blank?
     attachment_string += "<br/>Summary: " + work.summary + "<br/>\n" unless work.summary.blank?
     attachment_string += "<br/>Notes: " + work.notes + "<br/>\n" unless work.notes.blank?
-    attachment_string += "<br/>Published at: " + work.published_at.to_s + "<br/>\n" unless work.published_at.blank?
+    attachment_string += "<br/>Published at: " + work.first_chapter.published_at.to_s + "<br/>\n" unless work.first_chapter.published_at.blank?
     attachment_string += "Revised at: " + work.revised_at.to_s + "<br/>\n" unless work.revised_at.blank?
 
     work.chapters.each do |chapter|

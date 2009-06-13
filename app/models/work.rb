@@ -120,12 +120,11 @@ class Work < ActiveRecord::Base
   end
 
   def validate_published_at
-    to = DateTime.now
-    return false unless self.published_at
-    if self.published_at > to
+    return false unless self.first_chapter.published_at
+    if self.first_chapter.published_at > Date.today
       errors.add_to_base(t('no_future_dating', :default => "Publication date can't be in the future."))
       return false
-    end
+    end 
   end
 
   # rephrases the "chapters is invalid" message
@@ -216,13 +215,21 @@ class Work < ActiveRecord::Base
     self.update_attribute(:minor_version, self.minor_version+1)
   end
 
-  def set_revised_at(datetime=self.published_at)
-    if datetime.to_date == Date.today
-      value = Time.now
-    else
-      value = datetime
+  def set_revised_at(date=nil)
+    if date # if we pass a date, we want to set it to that (or current datetime if it's today)
+      date == Date.today ? value = Time.now : value = date
+      self.update_attribute(:revised_at, value)
+    else # we want to find the most recent @chapter.published_at date
+      recent_date = self.chapters.maximum('published_at')
+      # if recent_date is today and revised_at is today, we don't want to update revised_at at all 
+      # because we'd overwrite with an inaccurate time; if revised_at is not already today, best we can
+      # do is update with current time
+      if recent_date == Date.today && self.revised_at.to_date == Date.today
+        self.update_attribute(:revised_at, recent_date)
+      elsif recent_date == Date.today && self.revised_at.to_date != Date.today
+        self.update_attribute(:revised_at, Time.now)
+      end 
     end
-    self.update_attribute(:revised_at, value)
   end
 
 
@@ -338,7 +345,7 @@ class Work < ActiveRecord::Base
   def set_word_count
     self.word_count = self.chapters.collect(&:word_count).compact.sum
   end
-
+  
   #######################################################################
   # TAGGING
   # Works are taggable objects.

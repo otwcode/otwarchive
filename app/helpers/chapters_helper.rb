@@ -51,4 +51,12 @@ module ChaptersHelper
                :id => work.chapters.in_order[chapter_position]})
   end
   
+  # Sets default published_at date on chapter form if @work.backdate_default is true
+  def default_date
+    if @work.backdate
+      @work.first_chapter.published_at
+    else
+      Date.today
+    end
+  end
 end
