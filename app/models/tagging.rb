@@ -4,6 +4,13 @@ class Tagging < ActiveRecord::Base
 
   validates_presence_of :tagger, :taggable
   before_destroy :delete_unused_tags
+  before_save :add_filter_taggings
+  
+  def add_filter_taggings
+    if self.tagger && self.taggable.is_a?(Work)
+      self.taggable.add_filter_tagging(self.tagger)
+    end    
+  end
 
   # Gets rid of unwrangled tags that aren't tagging anything else
   def delete_unused_tags

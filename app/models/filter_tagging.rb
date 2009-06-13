@@ -7,34 +7,6 @@ class FilterTagging < ActiveRecord::Base
   
   validates_presence_of :filter, :filterable
   
-  after_create :increment_filter_count
-  before_destroy :decrement_filter_count
-  
-  #TODO: reduce duplication
-  def increment_filter_count
-    if self.filterable.is_a?(Work) && self.filterable.posted? && !self.filterable.hidden_by_admin?
-      filter_count = FilterCount.find_or_create_by_filter_id(self.filter_id)
-      attributes = {:unhidden_works_count => filter_count.unhidden_works_count + 1}
-      unless self.filterable.restricted?
-        attributes[:public_works_count] = filter_count.public_works_count + 1
-      end
-      filter_count.update_attributes(attributes)
-    end
-  end
-  
-  def decrement_filter_count
-    if self.filterable.is_a?(Work) && self.filterable.posted? && !self.filterable.hidden_by_admin?
-      filter_count = self.filter.filter_count
-      if filter_count
-        attributes = {:unhidden_works_count => filter_count.unhidden_works_count - 1}
-        unless self.filterable.restricted?
-          attributes[:public_works_count] = filter_count.public_works_count - 1
-        end
-        filter_count.update_attributes(attributes)
-      end
-    end    
-  end
-  
   # Build all filter taggings from current taggings data
   def self.build_from_taggings
     Tagging.find(:all, :conditions => {:taggable_type => 'Work'}).each do |tagging|

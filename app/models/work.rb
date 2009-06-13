@@ -28,14 +28,22 @@ class Work < ActiveRecord::Base
   has_many :taggings, :as => :taggable
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
 
-  has_many :ratings, :through => :taggings, :source => :tagger, :source_type => 'Rating'
-  has_many :categories, :through => :taggings, :source => :tagger, :source_type => 'Category'
-  has_many :warnings, :through => :taggings, :source => :tagger, :source_type => 'Warning'
-  has_many :fandoms, :through => :taggings, :source => :tagger, :source_type => 'Fandom'
-  has_many :pairings, :through => :taggings, :source => :tagger, :source_type => 'Pairing'
-  has_many :characters, :through => :taggings, :source => :tagger, :source_type => 'Character'
-  has_many :freeforms, :through => :taggings, :source => :tagger, :source_type => 'Freeform'
-  has_many :ambiguities, :through => :taggings, :source => :tagger, :source_type => 'Ambiguity'
+  has_many :ratings, :through => :taggings, :source => :tagger, :source_type => 'Rating',
+    :before_remove => :remove_filter_tagging
+  has_many :categories, :through => :taggings, :source => :tagger, :source_type => 'Category',
+    :before_remove => :remove_filter_tagging
+  has_many :warnings, :through => :taggings, :source => :tagger, :source_type => 'Warning',
+    :before_remove => :remove_filter_tagging
+  has_many :fandoms, :through => :taggings, :source => :tagger, :source_type => 'Fandom',
+    :before_remove => :remove_filter_tagging
+  has_many :pairings, :through => :taggings, :source => :tagger, :source_type => 'Pairing',
+    :before_remove => :remove_filter_tagging
+  has_many :characters, :through => :taggings, :source => :tagger, :source_type => 'Character',
+    :before_remove => :remove_filter_tagging
+  has_many :freeforms, :through => :taggings, :source => :tagger, :source_type => 'Freeform',
+    :before_remove => :remove_filter_tagging
+  has_many :ambiguities, :through => :taggings, :source => :tagger, :source_type => 'Ambiguity',
+    :before_remove => :remove_filter_tagging  
 
   acts_as_commentable
 
@@ -606,53 +614,27 @@ class Work < ActiveRecord::Base
   # Creates a filter_tagging relationship between the work and the tag or its canonical synonym
   def add_filter_tagging(tag)
     filter = tag.canonical? ? tag : tag.merger
-    self.filter_taggings.find_or_create_by_filter_id(filter.id) if filter
+    if filter && !self.filters.include?(filter)
+      self.filters << filter 
+      filter.reset_filter_count
+    end
   end
   
   # Removes filter_tagging relationship unless the work is tagged with more than one synonymous tags
   def remove_filter_tagging(tag)
     filter = tag.canonical? ? tag : tag.merger
     if filter && (self.tags & tag.synonyms).empty?
-      filter_tagging = self.filter_taggings.find_by_filter_id(filter.id)
-      filter_tagging.destroy if filter_tagging
+      self.filters.delete(filter) if self.filters.include?(filter)
+      filter.reset_filter_count
     end  
   end
   
-  after_save :adjust_filter_counts
+  before_save :adjust_filter_counts
   def adjust_filter_counts
-    if self.posted_changed?
-      self.posted? ? self.increment_filter_counts : self.decrement_filter_counts
-    end
-    if self.hidden_by_admin_changed?
-      self.hidden_by_admin? ? self.decrement_filter_counts : self.increment_filter_counts
-    end    
-  end
-  
-  #TODO: reduce duplication
-  def increment_filter_counts
-    filters = self.tags.collect {|tag| tag.canonical? ? tag : tag.merger}.compact.uniq
-    filters.each do |filter|
-      filter_count = FilterCount.find_or_create_by_filter_id(filter.id)
-      attributes = {:unhidden_works_count => filter_count.unhidden_works_count + 1}
-      unless self.restricted?
-        attributes[:public_works_count] = filter_count.public_works_count + 1
-      end
-      filter_count.update_attributes(attributes)
-    end
-  end
-  
-  def decrement_filter_counts
-    filters = self.tags.collect {|tag| tag.canonical? ? tag : tag.merger}.compact.uniq
-    filters.each do |filter|
-      filter_count = filter.filter_count
-      if filter_count
-        attributes = {:unhidden_works_count => filter_count.unhidden_works_count - 1}
-        unless self.restricted?
-          attributes[:public_works_count] = filter_count.public_works_count - 1
-        end
-        filter_count.update_attributes(attributes)
-      end
-    end
+    if self.posted_changed? || self.hidden_by_admin_changed? || self.restricted_changed? 
+      filters = self.tags.collect {|tag| tag.canonical? ? tag : tag.merger}.compact.uniq
+      filters.each {|filter| filter.reset_filter_count}
+    end   
   end
   
   ################################################################################

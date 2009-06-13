@@ -13,6 +13,9 @@ class MediaControllerTest < ActionController::TestCase
     context "on get" do
       setup {get :index}
       should_render_template :index
+      should "produce an array of media tags" do
+        assert assigns(:media).include? @media
+      end
       should "only include the canonical fandom in the fandom_listing" do
         assert_contains assigns(:fandom_listing)[@media], @fandom2
       end
