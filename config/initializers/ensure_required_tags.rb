@@ -40,6 +40,7 @@ else
   create_canonical(ArchiveConfig.CATEGORY_GEN_TAG_NAME, Category)
   create_canonical(ArchiveConfig.CATEGORY_MULTI_TAG_NAME, Category)
   create_canonical(ArchiveConfig.CATEGORY_OTHER_TAG_NAME, Category)
+  create_canonical(ArchiveConfig.MEDIA_UNCATEGORIZED_NAME, Media)
   nomedia = create_canonical(ArchiveConfig.MEDIA_NO_TAG_NAME, Media)
   nofandom = create_canonical(ArchiveConfig.FANDOM_NO_TAG_NAME, Fandom)
 end

@@ -30,6 +30,11 @@ Given /^I create a user named "([^\"]*)" with password "([^\"]*)"$/ do |login, p
   user.activate
 end
 
+Given /^I create a user named "([^\"]*)" with email "([^\"]*)"$/ do |login, email|
+  user = Factory.create(:user, :login => login, :email => email)
+  user.activate
+end
+
 When /^I visit user page for "([^\"]*)"$/ do |login|
   user = User.find_by_login!(login)
   visit user_url(user)

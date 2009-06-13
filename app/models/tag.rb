@@ -22,6 +22,7 @@ class Tag < ActiveRecord::Base
   
   has_many :filter_taggings, :foreign_key => 'filter_id'
   has_many :filtered_works, :through => :filter_taggings, :source => :filterable, :source_type => 'Work'
+  has_one :filter_count, :foreign_key => 'filter_id'
 
   has_many :common_taggings, :foreign_key => 'common_tag_id'
   has_many :child_taggings, :class_name => 'CommonTagging', :as => :filterable
@@ -91,6 +92,26 @@ class Tag < ActiveRecord::Base
       :group => :id
     }     
   }
+  
+  named_scope :public_top, lambda { |count|
+    {
+      :select => "tags.*, filter_counts.public_works_count as count",
+      :joins => :filter_count,
+      :order => 'filter_counts.public_works_count DESC',
+      :conditions => 'filter_counts.public_works_count > 0',
+      :limit => count
+    }     
+  }
+  
+  named_scope :unhidden_top, lambda { |count|
+    {
+      :select => "tags.*, filter_counts.unhidden_works_count as count",
+      :joins => :filter_count,
+      :order => 'filter_counts.unhidden_works_count DESC',
+      :conditions => 'filter_counts.unhidden_works_count > 0',
+      :limit => count
+    }     
+  } 
   
   # Class methods
 
@@ -196,6 +217,15 @@ class Tag < ActiveRecord::Base
       end      
     else
       self.filter_taggings.destroy_all
+    end    
+  end
+  
+  def reset_filter_count
+    filter = self.canonical? ? self : self.merger
+    if filter
+      filter_count = filter.filter_count || filter.create_filter_count
+      filter_count.update_attributes({:public_works_count => filter.filtered_works.posted.unhidden.unrestricted.count, 
+                                      :unhidden_works_count => filter.filtered_works.posted.unhidden.count})
     end    
   end
   

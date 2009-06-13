@@ -22,28 +22,20 @@ class Work < ActiveRecord::Base
   has_many :common_taggings, :as => :filterable
   has_many :common_tags, :through => :common_taggings
   
-  has_many :filter_taggings, :as => :filterable
+  has_many :filter_taggings, :as => :filterable, :dependent => :destroy
   has_many :filters, :through => :filter_taggings
 
   has_many :taggings, :as => :taggable
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
 
-  has_many :ratings, :through => :taggings, :source => :tagger, :source_type => 'Rating', 
-    :after_add => :add_filter_tagging, :before_remove => :remove_filter_tagging
-  has_many :categories, :through => :taggings, :source => :tagger, :source_type => 'Category', 
-    :after_add => :add_filter_tagging, :before_remove => :remove_filter_tagging
-  has_many :warnings, :through => :taggings, :source => :tagger, :source_type => 'Warning', 
-    :after_add => :add_filter_tagging, :before_remove => :remove_filter_tagging
-  has_many :fandoms, :through => :taggings, :source => :tagger, :source_type => 'Fandom',
-    :after_add => :add_filter_tagging, :before_remove => :remove_filter_tagging
-  has_many :pairings, :through => :taggings, :source => :tagger, :source_type => 'Pairing',
-    :after_add => :add_filter_tagging, :before_remove => :remove_filter_tagging
-  has_many :characters, :through => :taggings, :source => :tagger, :source_type => 'Character',
-    :after_add => :add_filter_tagging, :before_remove => :remove_filter_tagging
-  has_many :freeforms, :through => :taggings, :source => :tagger, :source_type => 'Freeform',
-    :after_add => :add_filter_tagging, :before_remove => :remove_filter_tagging
-  has_many :ambiguities, :through => :taggings, :source => :tagger, :source_type => 'Ambiguity',
-    :after_add => :add_filter_tagging, :before_remove => :remove_filter_tagging
+  has_many :ratings, :through => :taggings, :source => :tagger, :source_type => 'Rating'
+  has_many :categories, :through => :taggings, :source => :tagger, :source_type => 'Category'
+  has_many :warnings, :through => :taggings, :source => :tagger, :source_type => 'Warning'
+  has_many :fandoms, :through => :taggings, :source => :tagger, :source_type => 'Fandom'
+  has_many :pairings, :through => :taggings, :source => :tagger, :source_type => 'Pairing'
+  has_many :characters, :through => :taggings, :source => :tagger, :source_type => 'Character'
+  has_many :freeforms, :through => :taggings, :source => :tagger, :source_type => 'Freeform'
+  has_many :ambiguities, :through => :taggings, :source => :tagger, :source_type => 'Ambiguity'
 
   acts_as_commentable
 
@@ -600,6 +592,17 @@ class Work < ActiveRecord::Base
     self.save
   end
   
+  before_save :check_filter_taggings
+  # Add and remove filter taggings as tags are added and removed
+  def check_filter_taggings
+    current_filters = self.tags.collect{|tag| tag.canonical? ? tag : tag.merger }.compact
+    current_filters.each {|filter| self.add_filter_tagging(filter)}
+    filters_to_remove = self.filters - current_filters
+    unless filters_to_remove.empty?
+      filters_to_remove.each {|filter| self.remove_filter_tagging(filter)}
+    end    
+  end
+  
   # Creates a filter_tagging relationship between the work and the tag or its canonical synonym
   def add_filter_tagging(tag)
     filter = tag.canonical? ? tag : tag.merger
@@ -611,8 +614,45 @@ class Work < ActiveRecord::Base
     filter = tag.canonical? ? tag : tag.merger
     if filter && (self.tags & tag.synonyms).empty?
       filter_tagging = self.filter_taggings.find_by_filter_id(filter.id)
-      filter_tagging.destroy
+      filter_tagging.destroy if filter_tagging
     end  
+  end
+  
+  after_save :adjust_filter_counts
+  def adjust_filter_counts
+    if self.posted_changed?
+      self.posted? ? self.increment_filter_counts : self.decrement_filter_counts
+    end
+    if self.hidden_by_admin_changed?
+      self.hidden_by_admin? ? self.decrement_filter_counts : self.increment_filter_counts
+    end    
+  end
+  
+  #TODO: reduce duplication
+  def increment_filter_counts
+    filters = self.tags.collect {|tag| tag.canonical? ? tag : tag.merger}.compact.uniq
+    filters.each do |filter|
+      filter_count = FilterCount.find_or_create_by_filter_id(filter.id)
+      attributes = {:unhidden_works_count => filter_count.unhidden_works_count + 1}
+      unless self.restricted?
+        attributes[:public_works_count] = filter_count.public_works_count + 1
+      end
+      filter_count.update_attributes(attributes)
+    end
+  end
+  
+  def decrement_filter_counts
+    filters = self.tags.collect {|tag| tag.canonical? ? tag : tag.merger}.compact.uniq
+    filters.each do |filter|
+      filter_count = filter.filter_count
+      if filter_count
+        attributes = {:unhidden_works_count => filter_count.unhidden_works_count - 1}
+        unless self.restricted?
+          attributes[:public_works_count] = filter_count.public_works_count - 1
+        end
+        filter_count.update_attributes(attributes)
+      end
+    end
   end
   
   ################################################################################

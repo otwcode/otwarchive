@@ -56,4 +56,8 @@ namespace :Tag do
     FilterTagging.delete_all
     FilterTagging.build_from_taggings
   end
+  desc "Reset filter counts"
+  task(:reset_filter_counts => :environment) do
+    FilterCount.set_all
+  end
 end

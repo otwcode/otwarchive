@@ -7,15 +7,14 @@ class MediaControllerTest < ActionController::TestCase
       @media = create_media(:canonical => true)
       @fandom1 = create_fandom(:media_id => @media.id)
       @fandom2 = create_fandom(:canonical => true, :media_id => @media.id)
-      @work = create_work(:posted => true)
-      @work.fandoms << @fandom1
-      @work.fandoms << @fandom2
+      fandom_string = [@fandom1.name, @fandom2.name].join(', ')
+      @work = create_work(:posted => true, :fandom_string => fandom_string)
     end
     context "on get" do
-      setup {get :index, :locale => 'en'}
+      setup {get :index}
       should_render_template :index
       should "only include the canonical fandom in the fandom_listing" do
-        assert_contains(assigns(:fandom_listing), [@media, [@fandom2]])
+        assert_contains assigns(:fandom_listing)[@media], @fandom2
       end
     end
     context "on list" do

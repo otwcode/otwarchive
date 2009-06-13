@@ -152,4 +152,8 @@ namespace :After do
     FilterTagging.delete_all
     FilterTagging.build_from_taggings
   end
+  desc "set filter counts - really, REALLY slow"
+  task(:after_20090610010041_add_filter_counts => :environment) do
+    FilterCount.set_all
+  end
 end
