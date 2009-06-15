@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090604221238) do
+ActiveRecord::Schema.define(:version => 20090613092005) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20090604221238) do
     t.text     "summary"
     t.integer  "word_count",      :limit => 8
     t.boolean  "hidden_by_admin",                       :default => false, :null => false
+    t.date     "published_at"
   end
 
   add_index "chapters", ["work_id"], :name => "works_chapter_index"
@@ -124,6 +125,14 @@ ActiveRecord::Schema.define(:version => 20090604221238) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "email"
+  end
+
+  create_table "filter_counts", :force => true do |t|
+    t.integer  "filter_id",            :limit => 8,                :null => false
+    t.integer  "public_works_count",   :limit => 8, :default => 0
+    t.integer  "unhidden_works_count", :limit => 8, :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "filter_taggings", :force => true do |t|
@@ -368,6 +377,7 @@ ActiveRecord::Schema.define(:version => 20090604221238) do
     t.datetime "revised_at"
     t.string   "authors_to_sort_on"
     t.string   "title_to_sort_on"
+    t.boolean  "backdate",                                 :default => false, :null => false
   end
 
 end
