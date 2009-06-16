@@ -109,8 +109,9 @@ class Chapter < ActiveRecord::Base
   
   # Checks the chapter published_at date isn't in the future
   def validate_published_at
-    return false unless self.published_at
-    if self.published_at > Date.today
+    if !self.published_at
+      self.published_at = Date.today
+    elsif self.published_at > Date.today
       errors.add_to_base(t('no_future_dating', :default => "Publication date can't be in the future."))
       return false
     end
