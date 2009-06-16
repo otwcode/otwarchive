@@ -9,7 +9,8 @@ class Tagging < ActiveRecord::Base
   def add_filter_taggings
     if self.tagger && self.taggable.is_a?(Work)
       self.taggable.add_filter_tagging(self.tagger)
-    end    
+    end
+    return true    
   end
 
   # Gets rid of unwrangled tags that aren't tagging anything else

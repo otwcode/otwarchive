@@ -61,6 +61,7 @@ class Work < ActiveRecord::Base
   attr_accessor :ambiguous_pseuds
   attr_accessor :new_parent, :url_for_parent
   attr_accessor :ambiguous_tags
+  attr_accessor :should_reset_filters
 
   ########################################################################
   # VALIDATION
@@ -120,8 +121,9 @@ class Work < ActiveRecord::Base
   end
 
   def validate_published_at
-    return false unless self.first_chapter.published_at
-    if self.first_chapter.published_at > Date.today
+    if !self.first_chapter.published_at
+      self.first_chapter.published_at = Date.today
+    elsif self.first_chapter.published_at > Date.today
       errors.add_to_base(t('no_future_dating', :default => "Publication date can't be in the future."))
       return false
     end 
@@ -607,7 +609,11 @@ class Work < ActiveRecord::Base
     self.save
   end
   
+  # FILTERING CALLBACKS
+  after_validation :check_filter_counts
   before_save :check_filter_taggings
+  after_save :adjust_filter_counts
+  
   # Add and remove filter taggings as tags are added and removed
   def check_filter_taggings
     current_filters = self.tags.collect{|tag| tag.canonical? ? tag : tag.merger }.compact
@@ -615,33 +621,45 @@ class Work < ActiveRecord::Base
     filters_to_remove = self.filters - current_filters
     unless filters_to_remove.empty?
       filters_to_remove.each {|filter| self.remove_filter_tagging(filter)}
-    end    
+    end
+    return true    
   end
   
   # Creates a filter_tagging relationship between the work and the tag or its canonical synonym
   def add_filter_tagging(tag)
     filter = tag.canonical? ? tag : tag.merger
     if filter && !self.filters.include?(filter)
-      self.filters << filter 
-      filter.reset_filter_count
+      self.filters << filter
+      filter.reset_filter_count 
     end
   end
   
   # Removes filter_tagging relationship unless the work is tagged with more than one synonymous tags
   def remove_filter_tagging(tag)
     filter = tag.canonical? ? tag : tag.merger
-    if filter && (self.tags & tag.synonyms).empty?
-      self.filters.delete(filter) if self.filters.include?(filter)
+    if filter && (self.tags & tag.synonyms).empty? && self.filters.include?(filter)
+      self.filters.delete(filter)
       filter.reset_filter_count
     end  
   end
+
+  # Determine if filter counts need to be reset after the work is saved
+  def check_filter_counts
+    self.should_reset_filters = (self.new_record? || self.visibility_changed?)
+    return true 
+  end
   
-  before_save :adjust_filter_counts
+  # Must be called before save  
+  def visibility_changed?
+    self.posted_changed? || self.restricted_changed? || self.hidden_by_admin_changed?
+  end 
+  
+  # Calls reset_filter_count on all the work's filters
   def adjust_filter_counts
-    if self.posted_changed? || self.hidden_by_admin_changed? || self.restricted_changed? 
-      filters = self.tags.collect {|tag| tag.canonical? ? tag : tag.merger}.compact.uniq
-      filters.each {|filter| filter.reset_filter_count}
-    end   
+    if self.should_reset_filters
+      self.filters.reload.each {|filter| filter.reset_filter_count }
+    end
+    return true    
   end
   
   ################################################################################

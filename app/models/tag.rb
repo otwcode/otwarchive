@@ -222,11 +222,16 @@ class Tag < ActiveRecord::Base
   
   def reset_filter_count
     filter = self.canonical? ? self : self.merger
-    if filter
-      filter_count = filter.filter_count || filter.create_filter_count
-      filter_count.update_attributes({:public_works_count => filter.filtered_works.posted.unhidden.unrestricted.count, 
-                                      :unhidden_works_count => filter.filtered_works.posted.unhidden.count})
-    end    
+    if filter && filter.reload
+      attributes = {:public_works_count => filter.filtered_works.posted.unhidden.unrestricted.count, 
+                    :unhidden_works_count => filter.filtered_works.posted.unhidden.count}
+      if filter.filter_count
+        filter.filter_count.update_attributes(attributes)        
+      else
+        filter.create_filter_count(attributes)
+      end
+      filter.filter_count.reload
+    end
   end
   
   #### END FILTERING ####

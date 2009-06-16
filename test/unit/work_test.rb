@@ -184,6 +184,7 @@ class WorkTest < ActiveSupport::TestCase
       @character = create_character(:canonical => true)
       @work.pairing_string=@pairing.name
       @work.character_string=@character.name
+      @work.reload
     end
     should "have both in cast list" do
       assert_equal [@pairing, @character], @work.cast_tags
