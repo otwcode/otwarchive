@@ -373,13 +373,16 @@ class Tag < ActiveRecord::Base
 
     # get the nomedia tag
     nomedia = Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)
+    uncategorized = Media.find_by_name(ArchiveConfig.MEDIA_UNCATEGORIZED_NAME)
 
     # get the first media of the current tag which is not nomedia
-    media = (self.medias - [nomedia]).first
+    media = (self.medias - [nomedia, uncategorized]).first
 
     # if we have a media, we don't need "No Media" as a media
     if media && self.medias.include?(nomedia)
       self.remove_media(nomedia)
+    elsif media && (self.media == uncategorized || self.media == nomedia)
+      self.update_attribute(:media_id, media.id)
     end
 
     # make sure the tag has a media id

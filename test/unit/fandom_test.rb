@@ -29,7 +29,7 @@ class FandomTest < ActiveSupport::TestCase
           @fandom.reload
         end
         should "still have the other as its media" do
-          assert_equal @media2, @fandom.media
+          assert_contains @fandom.medias, @media2
         end
         context "with both removed" do
           setup do
