@@ -47,13 +47,25 @@
   <% fields_for :profile_attributes,  @user.profile do |p| %>
   <dl>
 	  <dt><%= p.label :title, "Title" %></dt>
-    <dd><%= p.text_field :title %></dd>
+    <dd>
+      <%= p.text_field :title %>
+      <%= live_validation_for_field("profile_attributes_title", :presence => false, :maximum_length => Profile::PROFILE_TITLE_MAX) -%>      
+      <%= generate_countdown_html("profile_attributes_title", Profile::PROFILE_TITLE_MAX) -%>
+    </dd>
     <dt><%= p.label :location, "Location" %></dt>
-    <dd><%= p.text_field :location %></dd>
+    <dd>
+      <%= p.text_field :location %>
+      <%= live_validation_for_field("profile_attributes_location", :presence => false, :maximum_length => Profile::LOCATION_MAX) -%>
+      <%= generate_countdown_html("profile_attributes_location", Profile::LOCATION_MAX) -%>
+    </dd>
     <dt><%= p.label :date_of_birth, "Date of Birth" %></dt>
     <dd><%= p.date_select :date_of_birth, :start_year => 13.years.ago.year, :end_year => 90.years.ago.year, :include_blank => true %></dd>
     <dt><%= p.label :about_me, "About Me" %></dt>
-    <dd><%= p.text_area :about_me %></dd>
+    <dd>
+      <%= p.text_area :about_me %>
+      <%= live_validation_for_field("profile_attributes_about_me", :presence => false, :maximum_length => Profile::ABOUT_ME_MAX) -%>
+      <%= generate_countdown_html("profile_attributes_about_me", Profile::ABOUT_ME_MAX) -%>
+    </dd>
 	</dl>
   <% end %>
 	
