@@ -1,18 +1,19 @@
 <!-- loginform floated right -->
 <%- if @restricted -%>
-  <h3><%=h "Sorry!" %></h3>
+  <h3><%= t('sorry', :default => 'Sorry!') %></h3>
   <p>
-    <%=h "This story is only available to registered users of the Archive." %> 
-    <%=h "If you already have an Archive of Our Own account, sign in now." %> 
-    <%=h "Or join us for free - it's easy." %>
+    <%= t('restricted1', :default => 'This story is only available to registered users of the Archive.') %> 
+    <%= t('restricted2', :default => 'If you already have an Archive of Our Own account, sign in now.') %> 
+    <%- if ArchiveConfig.ACCOUNT_CREATION_ENABLED -%>
+	  <%= t('join_us', :default => "Or join us for free - it's easy.") %>
+	<%- end -%>  
   </p>
 <%- else -%>
-  <h3><%=h "Login" %></h3>
+  <h3><%= t('login_now', :default => 'Login') %></h3>
   <p>
-    <strong><%=h "Reminder:" %></strong>
-    <span><%=h "This site is in early beta. Things may break or crash without notice. Please" %></span>
-    <a href="http://code.google.com/p/otwarchive/issues/entry"><%=h "report" %></a>
-    <span><%=h "any pesky bugs and give us your feedback!" %></span>
+    <strong><%= t('reminder', :default => 'Reminder:') %></strong>
+    <%= t('beta_risks', :default => "This site is in early beta. Things may break or crash without notice. Please report any pesky bugs and ") %>
+    <%= link_to t('give_feedback', :default => 'give us your feedback'), feedbacks_path %><%= t('exclamation', :default => '!') %>
   </p>
 <%- end -%>
 
@@ -29,5 +30,5 @@
 
 <%- if ArchiveConfig.ACCOUNT_CREATION_ENABLED -%>
 <!-- Create account link -->
-<p><%= "New tester?" %> <%= link_to 'Create an account now.', new_user_path %></p>
+<p><%= t('new_tester', :default => 'New tester?') %> <%= link_to t('signup', :default => 'Create an account now.'), new_user_path %></p>
 <%- end -%>
