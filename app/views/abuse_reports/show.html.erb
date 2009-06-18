@@ -3,7 +3,7 @@
 <table id="abuse_report_table">
 <caption><%=h t('description', :default => "Detailed abuse report") -%></caption>
 <tr><th scope="row"><%=h t('from', :default => "From") -%></th><td><%= @abuse_report.email.blank? ? t('abuse_reports.anonymous', :default => '(Anonymous)') : mail_to(@abuse_report.email) -%></td></tr>
-<tr><th scope="row"><%=h t('regarding', :default => "Regarding") -%></th><td><%= link_to @abuse_report.url -%></td></tr>
+<tr><th scope="row"><%=h t('regarding', :default => "Regarding") -%></th><td><%= link_to @abuse_report.url, @abuse_report.url -%></td></tr>
 <tr><th scope="row"><%=h t('reported', :default => "Reported") -%></th><td><%= time_ago_in_words @abuse_report.created_at -%></td></tr>
 <tr><td colspan="2"><%= sanitize_and_format_for_display @abuse_report.comment -%></td></tr>
 </table>
