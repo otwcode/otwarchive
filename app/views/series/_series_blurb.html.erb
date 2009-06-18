@@ -12,10 +12,10 @@
 				<%=h 'by' %>
 				<%= byline(series) -%>
 				<%- if series.restricted %>
-					<%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)") -%>
+					<%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") -%>
 				<%- end -%>
 				<% if series.hidden_by_admin %>
-					<%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)") %>
+					<%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %>
 				<% end %>
 			</h3>
 			

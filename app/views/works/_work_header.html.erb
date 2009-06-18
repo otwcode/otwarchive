@@ -44,8 +44,8 @@
 
   <div class="preface">
 	<h2 class="title">
-    <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)") %><% end %>
-    <% if @work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)") %><% end %>
+    <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %><% end %>
+    <% if @work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><% end %>
     <%=sanitize_title_for_display @work.title %>
 	</h2>
   <h3 class="byline">
