@@ -7,7 +7,7 @@
   	&#8212; <%= link_to 'Report Abuse', new_abuse_report_path %>
   	&#8212; <%= link_to 'Send Feedback', url_for(:controller => :feedback) -%>
   	
-  	<%- if (logged_in? && current_user.is_tag_wrangler?) || logged_in_as_admin? -%>
+  	<%- if (logged_in_as_admin? || logged_in? && current_user.is_tag_wrangler?) -%>
   	  &#8212; <%= link_to 'Tag Wrangling', tag_wranglings_path -%>
   	<%- end -%>
 

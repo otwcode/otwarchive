@@ -167,5 +167,9 @@ namespace :After do
       end
     end
     ThinkingSphinx.deltas_enabled=true
-  end   
+  end
+  desc "give unwrangled fandoms the Uncategorized Fandoms media tag"
+  task(:revision_1353_uncategorized_fandoms => :environment) do
+    Tag.update_all(['media_id = ?', Media.uncategorized.id], 'media_id IS NULL')
+  end     
 end

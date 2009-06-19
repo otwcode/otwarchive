@@ -22,7 +22,7 @@ class SeriesController < ApplicationController
         @series = @user.series.select{|s| s.visible?(current_user)}
       end
     else
-      @series = Series.find(:all, :order => 'series.created_at DESC').select{|s| s.visible?(current_user)}
+      @series = Series.find(:all, :order => 'series.created_at DESC').select{|s| s.visible?(User.current_user)}
     end
     @series = @series.paginate(:page => params[:page])
   end
@@ -30,7 +30,7 @@ class SeriesController < ApplicationController
   # GET /series/1
   # GET /series/1.xml
   def show
-    @serial_works = @series.serial_works.find(:all, :include => :work, :conditions => ['works.posted = ?', true], :order => :position).select{|sw| sw.work.visible(current_user)}
+    @serial_works = @series.serial_works.find(:all, :include => :work, :conditions => ['works.posted = ?', true], :order => :position).select{|sw| sw.work.visible(User.current_user)}
   end
 
   # GET /series/new

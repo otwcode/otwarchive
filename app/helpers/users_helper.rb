@@ -2,7 +2,7 @@ module UsersHelper
   
   # Can be used to check ownership of items
   def is_author_of?(item) 
-    logged_in? ? current_user.is_author_of?(item) : false
+    current_user.is_a?(User) ? current_user.is_author_of?(item) : false
   end
   
   #print all works that belong to a given pseud
