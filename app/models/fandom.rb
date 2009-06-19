@@ -3,12 +3,12 @@ class Fandom < Tag
   NAME = ArchiveConfig.FANDOM_CATEGORY_NAME
 
   named_scope :by_media, lambda{|media| {:conditions => {:media_id => media.id}}}
-  named_scope :no_parent, :conditions => {:media_id => Media.find_by_name(ArchiveConfig.MEDIA_UNCATEGORIZED_NAME).id}
+  named_scope :no_parent, :conditions => {:media_id => Media.uncategorized.andand.id}
   
   before_save :add_media_for_uncategorized
   def add_media_for_uncategorized
     if ([self.media]  + self.medias).empty?
-      self.media = Media.find_by_name(ArchiveConfig.MEDIA_UNCATEGORIZED_NAME)
+      self.media = Media.uncategorized
     end    
   end
 
