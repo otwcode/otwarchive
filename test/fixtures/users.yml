@@ -1,7 +1,7 @@
 --- 
 user_00004: 
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  updated_at: 2008-11-09 02:26:02 +01:00
+  updated_at: 2008-11-09 01:26:02 +00:00
   activated_at: 
   recently_reset: false
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1
@@ -16,11 +16,11 @@ user_00004:
   login: testuser4
   invitation_limit: 1
   email: user4@example.com
-  created_at: 2008-11-09 02:26:02 +01:00
+  created_at: 2008-11-09 01:26:02 +00:00
 user_00005: 
   salt: 343452076355fe7bf635ee217a55e6e98acf8d41
-  updated_at: 2008-12-05 14:55:36 +01:00
-  activated_at: 2008-12-05 14:55:36 +01:00
+  updated_at: 2008-12-05 13:55:36 +00:00
+  activated_at: 2008-12-05 13:55:36 +00:00
   recently_reset: false
   crypted_password: 95bea0ced35478e90ae12f9e262a3b732393b039
   remember_token_expires_at: 
@@ -34,11 +34,11 @@ user_00005:
   login: Ash
   invitation_limit: 1
   email: ash@example.com
-  created_at: 2008-12-05 14:55:27 +01:00
+  created_at: 2008-12-05 13:55:27 +00:00
 user_00006: 
   salt: 97bf16bc68d47f5d5cccca85770c82f52c23e58d
-  updated_at: 2008-12-05 14:55:28 +01:00
-  activated_at: 2008-12-05 14:55:28 +01:00
+  updated_at: 2008-12-05 13:55:28 +00:00
+  activated_at: 2008-12-05 13:55:28 +00:00
   recently_reset: false
   crypted_password: aac83c66fc4d77924456e8f8a3d003555e3823f2
   remember_token_expires_at: 
@@ -52,14 +52,14 @@ user_00006:
   login: orphan_account
   invitation_limit: 1
   email: 
-  created_at: 2008-12-05 14:55:28 +01:00
+  created_at: 2008-12-05 13:55:28 +00:00
 user_00007: 
   salt: 2239939fc04c4d2a0d2b5ceedfc1727c3e527b63
-  updated_at: 2008-12-07 22:02:33 +01:00
-  activated_at: 2008-12-05 15:07:30 +01:00
+  updated_at: 2008-12-07 21:02:33 +00:00
+  activated_at: 2008-12-05 14:07:30 +00:00
   recently_reset: false
   crypted_password: 0c6769460328ab82af95dd6b2d31e7e353b9f9ed
-  remember_token_expires_at: 2008-12-21 22:02:33 +01:00
+  remember_token_expires_at: 2008-12-21 21:02:33 +00:00
   activation_code: 
   suspended: false
   invitation_id: 
@@ -70,11 +70,11 @@ user_00007:
   login: Boccaccio
   invitation_limit: 1
   email: boccaccio@example.org
-  created_at: 2008-12-05 15:07:24 +01:00
+  created_at: 2008-12-05 14:07:24 +00:00
 user_00008: 
   salt: 6e2ee018720464deaa10520d4b3f059710eb2b8d
-  updated_at: 2008-12-06 23:53:13 +01:00
-  activated_at: 2008-12-06 23:53:13 +01:00
+  updated_at: 2008-12-06 22:53:13 +00:00
+  activated_at: 2008-12-06 22:53:13 +00:00
   recently_reset: false
   crypted_password: f1c0fe050b41b4eadf88d5b3aeeb8745eab061ab
   remember_token_expires_at: 
@@ -88,11 +88,11 @@ user_00008:
   login: Chaucer
   invitation_limit: 1
   email: chaucer@example.com
-  created_at: 2008-12-06 23:53:08 +01:00
+  created_at: 2008-12-06 22:53:08 +00:00
 user_00010: 
   salt: efff6c5d4da98884f33dfe1b858163bf8b6832b3
-  updated_at: 2008-12-07 00:03:35 +01:00
-  activated_at: 2008-12-07 00:03:35 +01:00
+  updated_at: 2008-12-06 23:03:35 +00:00
+  activated_at: 2008-12-06 23:03:35 +00:00
   recently_reset: false
   crypted_password: bb8bbc22828c672359294455c2afbde00d0fcd3f
   remember_token_expires_at: 
@@ -106,11 +106,11 @@ user_00010:
   login: Sam
   invitation_limit: 1
   email: Sam@example.com
-  created_at: 2008-12-07 00:03:31 +01:00
+  created_at: 2008-12-06 23:03:31 +00:00
 user_00009: 
   salt: b09cbc4962f7a925a704704d687548e2040856d4
-  updated_at: 2008-12-06 23:58:48 +01:00
-  activated_at: 2008-12-06 23:58:48 +01:00
+  updated_at: 2008-12-06 22:58:48 +00:00
+  activated_at: 2008-12-06 22:58:48 +00:00
   recently_reset: false
   crypted_password: 78712719da26bee79356cb76916629f83bacff40
   remember_token_expires_at: 
@@ -124,11 +124,11 @@ user_00009:
   login: Dean
   invitation_limit: 1
   email: Dean@example.com
-  created_at: 2008-12-06 23:58:44 +01:00
+  created_at: 2008-12-06 22:58:44 +00:00
 user_00011: 
   salt: 21f8f1eb19a6dd5b649b451bb4386841506a387d
-  updated_at: 2008-12-07 00:05:33 +01:00
-  activated_at: 2008-12-07 00:05:33 +01:00
+  updated_at: 2008-12-06 23:05:33 +00:00
+  activated_at: 2008-12-06 23:05:33 +00:00
   recently_reset: false
   crypted_password: 9a10d9736e97bd0110486ab180e7f3c781cacc6f
   remember_token_expires_at: 
@@ -142,11 +142,11 @@ user_00011:
   login: Ellen
   invitation_limit: 1
   email: Ellen@example.com
-  created_at: 2008-12-07 00:05:24 +01:00
+  created_at: 2008-12-06 23:05:24 +00:00
 user_00012: 
   salt: c5e416e746f06c3c68b542ed3223d89ce9be52cf
-  updated_at: 2008-12-07 00:13:23 +01:00
-  activated_at: 2008-12-07 00:13:23 +01:00
+  updated_at: 2008-12-06 23:13:23 +00:00
+  activated_at: 2008-12-06 23:13:23 +00:00
   recently_reset: false
   crypted_password: 306f172efbaaafc2f9a604da962aa3265a689092
   remember_token_expires_at: 
@@ -160,32 +160,32 @@ user_00012:
   login: Zooey_Glass
   invitation_limit: 1
   email: zooey@example.com
-  created_at: 2008-12-07 00:13:19 +01:00
+  created_at: 2008-12-06 23:13:19 +00:00
 user_00001: 
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  updated_at: 2009-05-27 17:16:08 +02:00
+  updated_at: 2009-06-27 18:54:21 +01:00
   activated_at: 
   recently_reset: false
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1
-  remember_token_expires_at: 2009-06-10 16:16:04 +02:00
+  remember_token_expires_at: 2009-07-11 17:54:21 +01:00
   activation_code: 
   suspended: false
   invitation_id: 
   id: 1
-  remember_token: 056a712f7ba86f3529e0eab7e893a4bdef9ac8f4
+  remember_token: 58e205702610d797c1c651ff0a0d1aa0c99c1859
   identity_url: 
   banned: false
   login: testuser
   invitation_limit: 1
   email: user1@example.com
-  created_at: 2008-11-09 02:26:02 +01:00
+  created_at: 2008-11-09 01:26:02 +00:00
 user_00002: 
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  updated_at: 2009-05-10 18:36:15 +02:00
+  updated_at: 2009-05-10 17:36:15 +01:00
   activated_at: 
   recently_reset: false
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1
-  remember_token_expires_at: 2009-05-24 17:36:15 +02:00
+  remember_token_expires_at: 2009-05-24 16:36:15 +01:00
   activation_code: 
   suspended: false
   invitation_id: 
@@ -196,11 +196,11 @@ user_00002:
   login: testuser2
   invitation_limit: 1
   email: user2@example.com
-  created_at: 2008-11-09 02:26:02 +01:00
+  created_at: 2008-11-09 01:26:02 +00:00
 user_00013: 
   salt: 5860eac2a470dbee25aa5a4ba8a4e6b841c38c37
-  updated_at: 2008-12-07 00:29:46 +01:00
-  activated_at: 2008-12-07 00:29:46 +01:00
+  updated_at: 2008-12-06 23:29:46 +00:00
+  activated_at: 2008-12-06 23:29:46 +00:00
   recently_reset: false
   crypted_password: ad7cc5971ae177042772fa29aa6728bbf0b582c5
   remember_token_expires_at: 
@@ -214,11 +214,11 @@ user_00013:
   login: Jessica
   invitation_limit: 1
   email: Jessica@example.com
-  created_at: 2008-12-07 00:29:42 +01:00
+  created_at: 2008-12-06 23:29:42 +00:00
 user_00014: 
   salt: 9a5dd70dd81851f215947e1bd1ec3f37e2ecec6b
-  updated_at: 2008-12-07 20:55:01 +01:00
-  activated_at: 2008-12-07 20:55:01 +01:00
+  updated_at: 2008-12-07 19:55:01 +00:00
+  activated_at: 2008-12-07 19:55:01 +00:00
   recently_reset: false
   crypted_password: ea5ce5796d897bfec4a8572c2b3f980e8c4d0c1c
   remember_token_expires_at: 
@@ -232,10 +232,10 @@ user_00014:
   login: Uriel
   invitation_limit: 1
   email: Uriel@example.com
-  created_at: 2008-12-07 20:54:32 +01:00
+  created_at: 2008-12-07 19:54:32 +00:00
 user_00003: 
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  updated_at: 2009-03-02 21:16:34 +01:00
+  updated_at: 2009-03-02 20:16:34 +00:00
   activated_at: 
   recently_reset: false
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1
@@ -250,4 +250,4 @@ user_00003:
   login: testuser3
   invitation_limit: 1
   email: user3@example.com
-  created_at: 2008-11-09 02:26:02 +01:00
+  created_at: 2008-11-09 01:26:02 +00:00

@@ -1,51 +1,20 @@
 --- 
-chapter_00046: 
-  updated_at: 2009-06-13 11:38:26 +02:00
-  title: shite
-  word_count: 1
-  notes: ""
-  id: 46
-  summary: plop?
-  content: blaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!
-  published_at: 2009-03-18
-  work_id: 35
-  posted: true
-  position: 4
-  hidden_by_admin: false
-  created_at: 2009-03-18 05:01:46 +01:00
-chapter_00035: 
-  updated_at: 2009-06-13 11:38:26 +02:00
+chapter_00057: 
+  updated_at: 2009-06-19 12:12:17 +01:00
   title: ""
-  word_count: 16
+  word_count: 5
   notes: 
-  id: 35
+  id: 57
   summary: 
-  content: |-
-    will try Cancel on the choose co-author screen
-    
-    conclusion: it had eaten ALL my tags, period.
-  published_at: 2009-03-11
-  work_id: 33
+  content: angst angst rape anguish angssssssst
+  published_at: 2009-03-20
+  work_id: 50
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-11 23:25:59 +01:00
-chapter_00002: 
-  updated_at: 2009-06-13 11:38:25 +02:00
-  title: Second Chapter Title
-  word_count: 5
-  notes: Notes on second chapter
-  id: 2
-  summary: Summary of second chapter
-  content: exciting second chapter content woo
-  published_at: 2008-11-09
-  work_id: 1
-  posted: true
-  position: 2
-  hidden_by_admin: false
-  created_at: 2008-11-09 02:26:01 +01:00
+  created_at: 2009-03-20 23:20:17 +00:00
 chapter_00013: 
-  updated_at: 2009-06-13 11:38:26 +02:00
+  updated_at: 2009-06-19 12:12:15 +01:00
   title: ""
   word_count: 97
   notes: 
@@ -69,37 +38,99 @@ chapter_00013:
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2008-12-07 00:24:00 +01:00
-chapter_00057: 
-  updated_at: 2009-06-13 11:38:27 +02:00
-  title: ""
+  created_at: 2008-12-06 23:24:00 +00:00
+chapter_00002: 
+  updated_at: 2009-06-19 12:12:15 +01:00
+  title: Second Chapter Title
   word_count: 5
-  notes: 
-  id: 57
-  summary: 
-  content: angst angst rape anguish angssssssst
-  published_at: 2009-03-20
-  work_id: 50
+  notes: Notes on second chapter
+  id: 2
+  summary: Summary of second chapter
+  content: exciting second chapter content woo
+  published_at: 2008-11-09
+  work_id: 1
   posted: true
-  position: 1
+  position: 2
   hidden_by_admin: false
-  created_at: 2009-03-21 00:20:17 +01:00
-chapter_00058: 
-  updated_at: 2009-06-13 11:38:27 +02:00
+  created_at: 2008-11-09 01:26:01 +00:00
+chapter_00035: 
+  updated_at: 2009-06-19 12:12:16 +01:00
   title: ""
-  word_count: 14
+  word_count: 16
   notes: 
-  id: 58
+  id: 35
   summary: 
-  content: wherein John and Ronon figure out that they can share! all is well again.
-  published_at: 2009-03-20
-  work_id: 51
+  content: |-
+    will try Cancel on the choose co-author screen
+    
+    conclusion: it had eaten ALL my tags, period.
+  published_at: 2009-03-11
+  work_id: 33
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-21 00:22:23 +01:00
+  created_at: 2009-03-11 22:25:59 +00:00
+chapter_00046: 
+  updated_at: 2009-06-19 12:12:16 +01:00
+  title: shite
+  word_count: 1
+  notes: ""
+  id: 46
+  summary: plop?
+  content: blaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!
+  published_at: 2009-03-18
+  work_id: 35
+  posted: true
+  position: 4
+  hidden_by_admin: false
+  created_at: 2009-03-18 04:01:46 +00:00
+chapter_00047: 
+  updated_at: 2009-06-19 12:12:16 +01:00
+  title: bleah
+  word_count: 1
+  notes: ""
+  id: 47
+  summary: ""
+  content: buruburuburu
+  published_at: 2009-03-18
+  work_id: 35
+  posted: true
+  position: 5
+  hidden_by_admin: false
+  created_at: 2009-03-18 04:05:17 +00:00
+chapter_00036: 
+  updated_at: 2009-06-19 12:12:16 +01:00
+  title: ""
+  word_count: 27
+  notes: 
+  id: 36
+  summary: 
+  content: |-
+    will attempt cancel_coauthor_button again, after changing the elsif in the controller
+    
+    Conclusion: at least now it's behaving consistently, like Preview, and eating all tags except the Warning.
+  published_at: 2009-03-11
+  work_id: 34
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2009-03-11 22:30:12 +00:00
+chapter_00003: 
+  updated_at: 2009-06-19 12:12:15 +01:00
+  title: Only Chapter Title
+  word_count: 11
+  notes: Notes on one and only chapter
+  id: 3
+  summary: Summary of one and only chapter
+  content: this is the content of the one and only chapter yay
+  published_at: 2008-11-09
+  work_id: 2
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2008-11-09 01:26:01 +00:00
 chapter_00014: 
-  updated_at: 2009-06-13 11:38:26 +02:00
+  updated_at: 2009-06-19 12:12:15 +01:00
   title: ""
   word_count: 262
   notes: 
@@ -130,54 +161,96 @@ chapter_00014:
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2008-12-07 00:26:41 +01:00
-chapter_00003: 
-  updated_at: 2009-06-13 11:38:25 +02:00
-  title: Only Chapter Title
-  word_count: 11
-  notes: Notes on one and only chapter
-  id: 3
-  summary: Summary of one and only chapter
-  content: this is the content of the one and only chapter yay
-  published_at: 2008-11-09
-  work_id: 2
+  created_at: 2008-12-06 23:26:41 +00:00
+chapter_00058: 
+  updated_at: 2009-06-19 12:12:17 +01:00
+  title: ""
+  word_count: 14
+  notes: 
+  id: 58
+  summary: 
+  content: wherein John and Ronon figure out that they can share! all is well again.
+  published_at: 2009-03-20
+  work_id: 51
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2008-11-09 02:26:01 +01:00
-chapter_00036: 
-  updated_at: 2009-06-13 11:38:26 +02:00
+  created_at: 2009-03-20 23:22:23 +00:00
+chapter_00059: 
+  updated_at: 2009-06-19 12:12:17 +01:00
   title: ""
-  word_count: 27
+  word_count: 8
   notes: 
-  id: 36
+  id: 59
+  summary: 
+  content: ack, sorry, I've had an angst bunny again!
+  published_at: 2009-03-20
+  work_id: 52
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2009-03-20 23:24:08 +00:00
+chapter_00015: 
+  updated_at: 2009-06-19 12:12:15 +01:00
+  title: ""
+  word_count: 74
+  notes: 
+  id: 15
   summary: 
   content: |-
-    will attempt cancel_coauthor_button again, after changing the elsif in the controller
-    
-    Conclusion: at least now it's behaving consistently, like Preview, and eating all tags except the Warning.
-  published_at: 2009-03-11
-  work_id: 34
+    <p>So, my name's Jessica Moore, and it you know anything about me at all you'll know I died. A few years ago now, actually, and I'm as surprised as anyone to find that apparently that doesn't preclude me walking and talking and all that.</p>
+    <p>&nbsp;</p>
+    <p>It apparently precludes me touching anyone else, though, which sucks. Particularly since that pretty much rules out continuing with the awesomely hot sex I was enjoying with Sam Winchester.</p>
+  published_at: 2008-12-06
+  work_id: 13
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-11 23:30:12 +01:00
-chapter_00047: 
-  updated_at: 2009-06-13 11:38:26 +02:00
-  title: bleah
+  created_at: 2008-12-06 23:34:39 +00:00
+chapter_00004: 
+  updated_at: 2009-06-19 12:12:15 +01:00
+  title: Only Chapter Title
+  word_count: 12
+  notes: Notes on one and only chapter
+  id: 4
+  summary: Summary of one and only chapter
+  content: this is the content of the one and only chapter yay woo
+  published_at: 2009-02-23
+  work_id: 3
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2008-11-09 01:26:01 +00:00
+chapter_00037: 
+  updated_at: 2009-06-19 12:12:16 +01:00
+  title: fuckery!
+  word_count: 15
+  notes: blip
+  id: 37
+  summary: meeeep
+  content: this doesn't look promising either but hey - if saved action edit in create controller
+  published_at: 2009-03-11
+  work_id: 35
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2009-03-11 23:22:55 +00:00
+chapter_00048: 
+  updated_at: 2009-06-19 12:12:16 +01:00
+  title: simple
   word_count: 1
   notes: ""
-  id: 47
+  id: 48
   summary: ""
-  content: buruburuburu
+  content: zoooooooooooooooooooooooooo
   published_at: 2009-03-18
   work_id: 35
   posted: true
-  position: 5
+  position: 6
   hidden_by_admin: false
-  created_at: 2009-03-18 05:05:17 +01:00
+  created_at: 2009-03-18 04:06:50 +00:00
 chapter_00060: 
-  updated_at: 2009-06-13 11:38:27 +02:00
+  updated_at: 2009-06-19 12:12:17 +01:00
   title: ""
   word_count: 1131
   notes: 
@@ -251,179 +324,9 @@ chapter_00060:
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-05-10 14:20:06 +02:00
-chapter_00048: 
-  updated_at: 2009-06-13 11:38:27 +02:00
-  title: simple
-  word_count: 1
-  notes: ""
-  id: 48
-  summary: ""
-  content: zoooooooooooooooooooooooooo
-  published_at: 2009-03-18
-  work_id: 35
-  posted: true
-  position: 6
-  hidden_by_admin: false
-  created_at: 2009-03-18 05:06:50 +01:00
-chapter_00037: 
-  updated_at: 2009-06-13 11:38:26 +02:00
-  title: fuckery!
-  word_count: 15
-  notes: blip
-  id: 37
-  summary: meeeep
-  content: this doesn't look promising either but hey - if saved action edit in create controller
-  published_at: 2009-03-11
-  work_id: 35
-  posted: true
-  position: 1
-  hidden_by_admin: false
-  created_at: 2009-03-12 00:22:55 +01:00
-chapter_00004: 
-  updated_at: 2009-06-13 11:38:25 +02:00
-  title: Only Chapter Title
-  word_count: 12
-  notes: Notes on one and only chapter
-  id: 4
-  summary: Summary of one and only chapter
-  content: this is the content of the one and only chapter yay woo
-  published_at: 2009-02-23
-  work_id: 3
-  posted: true
-  position: 1
-  hidden_by_admin: false
-  created_at: 2008-11-09 02:26:01 +01:00
-chapter_00015: 
-  updated_at: 2009-06-13 11:38:26 +02:00
-  title: ""
-  word_count: 74
-  notes: 
-  id: 15
-  summary: 
-  content: |-
-    <p>So, my name's Jessica Moore, and it you know anything about me at all you'll know I died. A few years ago now, actually, and I'm as surprised as anyone to find that apparently that doesn't preclude me walking and talking and all that.</p>
-    <p>&nbsp;</p>
-    <p>It apparently precludes me touching anyone else, though, which sucks. Particularly since that pretty much rules out continuing with the awesomely hot sex I was enjoying with Sam Winchester.</p>
-  published_at: 2008-12-06
-  work_id: 13
-  posted: true
-  position: 1
-  hidden_by_admin: false
-  created_at: 2008-12-07 00:34:39 +01:00
-chapter_00059: 
-  updated_at: 2009-06-13 11:38:27 +02:00
-  title: ""
-  word_count: 8
-  notes: 
-  id: 59
-  summary: 
-  content: ack, sorry, I've had an angst bunny again!
-  published_at: 2009-03-20
-  work_id: 52
-  posted: true
-  position: 1
-  hidden_by_admin: false
-  created_at: 2009-03-21 00:24:08 +01:00
-chapter_00050: 
-  updated_at: 2009-06-13 11:38:27 +02:00
-  title: ""
-  word_count: 18
-  notes: 
-  id: 50
-  summary: 
-  content: |-
-    shepherd/benjamin OTP!!1
-    
-    Haha, tricked you, thought it was going to be Jack/Ianto, eh? lolol
-    
-    Inspired by <a href="http://example.com/LOLIantoes.gif" title="nonexistent image to demonstrate linking CSS style">this image</a>.
-  published_at: 2009-03-17
-  work_id: 43
-  posted: true
-  position: 1
-  hidden_by_admin: false
-  created_at: 2009-03-18 05:09:43 +01:00
-chapter_00027: 
-  updated_at: 2009-06-13 11:38:26 +02:00
-  title: ""
-  word_count: 3
-  notes: 
-  id: 27
-  summary: 
-  content: pahahhaaavjds nfr ambig
-  published_at: 2009-03-08
-  work_id: 25
-  posted: true
-  position: 1
-  hidden_by_admin: false
-  created_at: 2009-03-09 22:54:33 +01:00
-chapter_00016: 
-  updated_at: 2009-06-13 11:38:26 +02:00
-  title: ""
-  word_count: 398
-  notes: 
-  id: 16
-  summary: 
-  content: "Well, the Lord is pretty forgiving as a rule, but this was back in the old days, when he wasn't given to pussyfooting around, and things had gotten pretty corrupt in Sodom and Gomorrah - not to mention Admah, Zeboim, and Bela. The drinking, whoring and general depravity was bad enough, but what really set these guys apart was the way they trampled on their own. \r\n\
-    \r\n\
-    Anyway, finally things got to a bad enough pass that the Lord sent me down with some of the boys to take care of things. Of course, these mud monkeys never can accept these things, and when Abaraham got wind of it he begged the Lord to reconsider. Well, at the time the Lord was thinking up this other plan, about being made flesh and all that, so he says if Abraham could find more than a handful of righteous souls in one of these cities then he'd think again on the wholesale smiting. He could only find the one, though - this guy Lot - so that was off.\r\n\
-    \r\n\
-    To do Lot justice, he was okay. When me and the boys went down to give him fair warning, the degenerates in Sodom got pretty interested. We used to pick good looking vessels, back in the day (well, some of us still do, but these days I go for inspiring respect rather than a pretty face). So, they came baying at the doors, asking for a piece of us. Lot, though, he knew his duty, and he wasn't going to insult the Lord like that. He offered up his daughters instead, mind you. Mud monkeys, they make no sense to me. \r\n\
-    \r\n\
-    Since Lot was a good sort, we got him and his people out of the city. Told them not to look back, too, because we were planning some pretty righteous smiting. Of course, there always has to be one who doesn't listen, and sure enough his wife had to turn back. Pillar of salted her: regrettable, but what can you do? People should follow instructions.\r\n\
-    \r\n\
-    So, we did some flattening of the city - fire, brimstone, the whole works. Some of the best fun I've had in eternity, I have to admit. Lot was well out of it, but those daughters of his took some fool notion to have a baby, and he was the only man around. So it goes. "
-  published_at: 2009-02-24
-  work_id: 14
-  posted: true
-  position: 1
-  hidden_by_admin: false
-  created_at: 2008-12-07 21:52:14 +01:00
-chapter_00005: 
-  updated_at: 2009-06-13 11:38:25 +02:00
-  title: Only Chapter Title
-  word_count: 13
-  notes: Notes on one and only chapter
-  id: 5
-  summary: Summary of one and only chapter
-  content: this is the content of the one and only chapter yay woo foo
-  published_at: 2008-11-09
-  work_id: 4
-  posted: true
-  position: 1
-  hidden_by_admin: false
-  created_at: 2008-11-09 02:26:01 +01:00
-chapter_00038: 
-  updated_at: 2009-06-13 11:38:26 +02:00
-  title: ""
-  word_count: 5
-  notes: 
-  id: 38
-  summary: 
-  content: seriously, what's wrong with validations?!
-  published_at: 2009-03-11
-  work_id: 36
-  posted: true
-  position: 1
-  hidden_by_admin: false
-  created_at: 2009-03-12 01:28:57 +01:00
-chapter_00049: 
-  updated_at: 2009-06-13 11:38:27 +02:00
-  title: ""
-  word_count: 1
-  notes: 
-  id: 49
-  summary: 
-  content: tiribombaaaaaaaa
-  published_at: 2009-03-17
-  work_id: 42
-  posted: true
-  position: 1
-  hidden_by_admin: false
-  created_at: 2009-03-18 05:08:12 +01:00
+  created_at: 2009-05-10 13:20:06 +01:00
 chapter_00061: 
-  updated_at: 2009-06-13 11:38:27 +02:00
+  updated_at: 2009-06-19 12:12:17 +01:00
   title: ""
   word_count: 121
   notes: ""
@@ -471,9 +374,162 @@ chapter_00061:
   posted: true
   position: 2
   hidden_by_admin: false
-  created_at: 2009-05-10 14:50:52 +02:00
+  created_at: 2009-05-10 13:50:52 +01:00
+chapter_00049: 
+  updated_at: 2009-06-19 12:12:16 +01:00
+  title: ""
+  word_count: 1
+  notes: 
+  id: 49
+  summary: 
+  content: tiribombaaaaaaaa
+  published_at: 2009-03-17
+  work_id: 42
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2009-03-18 04:08:12 +00:00
+chapter_00038: 
+  updated_at: 2009-06-19 12:12:16 +01:00
+  title: ""
+  word_count: 5
+  notes: 
+  id: 38
+  summary: 
+  content: seriously, what's wrong with validations?!
+  published_at: 2009-03-11
+  work_id: 36
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2009-03-12 00:28:57 +00:00
+chapter_00005: 
+  updated_at: 2009-06-19 12:12:15 +01:00
+  title: Only Chapter Title
+  word_count: 13
+  notes: Notes on one and only chapter
+  id: 5
+  summary: Summary of one and only chapter
+  content: this is the content of the one and only chapter yay woo foo
+  published_at: 2008-11-09
+  work_id: 4
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2008-11-09 01:26:01 +00:00
+chapter_00016: 
+  updated_at: 2009-06-19 12:12:15 +01:00
+  title: ""
+  word_count: 398
+  notes: 
+  id: 16
+  summary: 
+  content: "Well, the Lord is pretty forgiving as a rule, but this was back in the old days, when he wasn't given to pussyfooting around, and things had gotten pretty corrupt in Sodom and Gomorrah - not to mention Admah, Zeboim, and Bela. The drinking, whoring and general depravity was bad enough, but what really set these guys apart was the way they trampled on their own. \r\n\
+    \r\n\
+    Anyway, finally things got to a bad enough pass that the Lord sent me down with some of the boys to take care of things. Of course, these mud monkeys never can accept these things, and when Abaraham got wind of it he begged the Lord to reconsider. Well, at the time the Lord was thinking up this other plan, about being made flesh and all that, so he says if Abraham could find more than a handful of righteous souls in one of these cities then he'd think again on the wholesale smiting. He could only find the one, though - this guy Lot - so that was off.\r\n\
+    \r\n\
+    To do Lot justice, he was okay. When me and the boys went down to give him fair warning, the degenerates in Sodom got pretty interested. We used to pick good looking vessels, back in the day (well, some of us still do, but these days I go for inspiring respect rather than a pretty face). So, they came baying at the doors, asking for a piece of us. Lot, though, he knew his duty, and he wasn't going to insult the Lord like that. He offered up his daughters instead, mind you. Mud monkeys, they make no sense to me. \r\n\
+    \r\n\
+    Since Lot was a good sort, we got him and his people out of the city. Told them not to look back, too, because we were planning some pretty righteous smiting. Of course, there always has to be one who doesn't listen, and sure enough his wife had to turn back. Pillar of salted her: regrettable, but what can you do? People should follow instructions.\r\n\
+    \r\n\
+    So, we did some flattening of the city - fire, brimstone, the whole works. Some of the best fun I've had in eternity, I have to admit. Lot was well out of it, but those daughters of his took some fool notion to have a baby, and he was the only man around. So it goes. "
+  published_at: 2009-02-24
+  work_id: 14
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2008-12-07 20:52:14 +00:00
+chapter_00027: 
+  updated_at: 2009-06-19 12:12:15 +01:00
+  title: ""
+  word_count: 3
+  notes: 
+  id: 27
+  summary: 
+  content: pahahhaaavjds nfr ambig
+  published_at: 2009-03-08
+  work_id: 25
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2009-03-09 21:54:33 +00:00
+chapter_00050: 
+  updated_at: 2009-06-19 12:12:16 +01:00
+  title: ""
+  word_count: 18
+  notes: 
+  id: 50
+  summary: 
+  content: |-
+    shepherd/benjamin OTP!!1
+    
+    Haha, tricked you, thought it was going to be Jack/Ianto, eh? lolol
+    
+    Inspired by <a href="http://example.com/LOLIantoes.gif" title="nonexistent image to demonstrate linking CSS style">this image</a>.
+  published_at: 2009-03-17
+  work_id: 43
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2009-03-18 04:09:43 +00:00
+chapter_00051: 
+  updated_at: 2009-06-19 12:12:16 +01:00
+  title: ""
+  word_count: 9
+  notes: 
+  id: 51
+  summary: 
+  content: here be story of how I woke up late
+  published_at: 2009-03-18
+  work_id: 44
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2009-03-19 01:02:12 +00:00
+chapter_00017: 
+  updated_at: 2009-06-19 12:12:15 +01:00
+  title: ""
+  word_count: 12
+  notes: 
+  id: 17
+  summary: 
+  content: my ofc character is not a mary sue!! give her a chance!
+  published_at: 2009-02-21
+  work_id: 15
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2009-02-22 04:25:24 +00:00
+chapter_00006: 
+  updated_at: 2009-06-19 12:12:15 +01:00
+  title: Only Chapter Title
+  word_count: 14
+  notes: Notes on one and only chapter
+  id: 6
+  summary: Summary of one and only chapter
+  content: this is the content of the one and only chapter yay woo foo bar
+  published_at: 2008-11-09
+  work_id: 5
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2008-11-09 01:26:01 +00:00
+chapter_00040: 
+  updated_at: 2009-06-19 12:12:16 +01:00
+  title: ""
+  word_count: 4
+  notes: 
+  id: 40
+  summary: 
+  content: not ikea! like not!monkeys
+  published_at: 2009-03-11
+  work_id: 38
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2009-03-12 00:50:20 +00:00
 chapter_00062: 
-  updated_at: 2009-06-13 11:38:27 +02:00
+  updated_at: 2009-06-19 12:12:17 +01:00
   title: ""
   word_count: 448
   notes: 
@@ -508,107 +564,23 @@ chapter_00062:
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-05-10 14:57:47 +02:00
-chapter_00040: 
-  updated_at: 2009-06-13 11:38:26 +02:00
+  created_at: 2009-05-10 13:57:47 +01:00
+chapter_00063: 
+  updated_at: 2009-06-07 17:24:44 +01:00
   title: ""
-  word_count: 4
+  word_count: 7
   notes: 
-  id: 40
+  id: 63
   summary: 
-  content: not ikea! like not!monkeys
-  published_at: 2009-03-11
-  work_id: 38
-  posted: true
+  content: May I still post a beautiful story?
+  published_at: 
+  work_id: 55
+  posted: false
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-12 01:50:20 +01:00
-chapter_00006: 
-  updated_at: 2009-06-13 11:38:25 +02:00
-  title: Only Chapter Title
-  word_count: 14
-  notes: Notes on one and only chapter
-  id: 6
-  summary: Summary of one and only chapter
-  content: this is the content of the one and only chapter yay woo foo bar
-  published_at: 2008-11-09
-  work_id: 5
-  posted: true
-  position: 1
-  hidden_by_admin: false
-  created_at: 2008-11-09 02:26:01 +01:00
-chapter_00017: 
-  updated_at: 2009-06-13 11:38:26 +02:00
-  title: ""
-  word_count: 12
-  notes: 
-  id: 17
-  summary: 
-  content: my ofc character is not a mary sue!! give her a chance!
-  published_at: 2009-02-21
-  work_id: 15
-  posted: true
-  position: 1
-  hidden_by_admin: false
-  created_at: 2009-02-22 05:25:24 +01:00
-chapter_00051: 
-  updated_at: 2009-06-13 11:38:27 +02:00
-  title: ""
-  word_count: 9
-  notes: 
-  id: 51
-  summary: 
-  content: here be story of how I woke up late
-  published_at: 2009-03-18
-  work_id: 44
-  posted: true
-  position: 1
-  hidden_by_admin: false
-  created_at: 2009-03-19 02:02:12 +01:00
-chapter_00052: 
-  updated_at: 2009-06-13 11:38:27 +02:00
-  title: ""
-  word_count: 1
-  notes: 
-  id: 52
-  summary: 
-  content: fraaaaaaaaaaaaaaaaaaak
-  published_at: 2009-03-19
-  work_id: 45
-  posted: true
-  position: 1
-  hidden_by_admin: false
-  created_at: 2009-03-20 02:24:26 +01:00
-chapter_00018: 
-  updated_at: 2009-06-13 11:38:26 +02:00
-  title: ""
-  word_count: 1
-  notes: 
-  id: 18
-  summary: 
-  content: laaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-  published_at: 2009-02-23
-  work_id: 16
-  posted: true
-  position: 1
-  hidden_by_admin: false
-  created_at: 2009-02-24 07:34:22 +01:00
-chapter_00007: 
-  updated_at: 2009-06-13 11:38:25 +02:00
-  title: ""
-  word_count: 73
-  notes: 
-  id: 7
-  summary: 
-  content: "Well, the truth is, me and MIT were probably never meant to be. Not that I couldn't take the pace - hell, I could more than handle it. But that was the problem - when something's a cakewalk like that, I gotta make a little interest of my own. And seeing how everyone else was finding it a little more challenging, that didn't go down too well, with the faculty <i>or</i> the students. "
-  published_at: 2008-12-04
-  work_id: 6
-  posted: true
-  position: 1
-  hidden_by_admin: false
-  created_at: 2008-12-05 14:59:14 +01:00
+  created_at: 2009-06-07 17:24:44 +01:00
 chapter_00041: 
-  updated_at: 2009-06-13 11:38:26 +02:00
+  updated_at: 2009-06-19 12:12:16 +01:00
   title: ""
   word_count: 13
   notes: 
@@ -623,23 +595,93 @@ chapter_00041:
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-12 01:56:30 +01:00
-chapter_00042: 
-  updated_at: 2009-06-13 11:38:26 +02:00
+  created_at: 2009-03-12 00:56:30 +00:00
+chapter_00007: 
+  updated_at: 2009-06-19 12:12:15 +01:00
   title: ""
-  word_count: 3
+  word_count: 73
   notes: 
-  id: 42
+  id: 7
   summary: 
-  content: okie-dokie broken vokie?
-  published_at: 2009-03-11
-  work_id: 40
+  content: "Well, the truth is, me and MIT were probably never meant to be. Not that I couldn't take the pace - hell, I could more than handle it. But that was the problem - when something's a cakewalk like that, I gotta make a little interest of my own. And seeing how everyone else was finding it a little more challenging, that didn't go down too well, with the faculty <i>or</i> the students. "
+  published_at: 2008-12-04
+  work_id: 6
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-12 02:43:37 +01:00
+  created_at: 2008-12-05 13:59:14 +00:00
+chapter_00018: 
+  updated_at: 2009-06-19 12:12:15 +01:00
+  title: ""
+  word_count: 1
+  notes: 
+  id: 18
+  summary: 
+  content: laaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  published_at: 2009-02-23
+  work_id: 16
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2009-02-24 06:34:22 +00:00
+chapter_00052: 
+  updated_at: 2009-06-19 12:12:16 +01:00
+  title: ""
+  word_count: 1
+  notes: 
+  id: 52
+  summary: 
+  content: fraaaaaaaaaaaaaaaaaaak
+  published_at: 2009-03-19
+  work_id: 45
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2009-03-20 01:24:26 +00:00
+chapter_00053: 
+  updated_at: 2009-06-19 12:12:16 +01:00
+  title: ""
+  word_count: 12
+  notes: 
+  id: 53
+  summary: 
+  content: story of how I was so surprised I used a four-letter word!
+  published_at: 2009-03-19
+  work_id: 46
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2009-03-20 01:28:02 +00:00
+chapter_00031: 
+  updated_at: 2009-06-19 12:12:15 +01:00
+  title: ""
+  word_count: 2
+  notes: 
+  id: 31
+  summary: 
+  content: chumba wamba
+  published_at: 2009-03-09
+  work_id: 29
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2009-03-10 00:24:30 +00:00
+chapter_00019: 
+  updated_at: 2009-06-19 12:12:15 +01:00
+  title: ""
+  word_count: 3
+  notes: 
+  id: 19
+  summary: 
+  content: gore! gruesomeness! rahrahrah!
+  published_at: 2009-02-23
+  work_id: 17
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2009-02-24 08:47:22 +00:00
 chapter_00008: 
-  updated_at: 2009-06-13 11:38:25 +02:00
+  updated_at: 2009-06-19 12:12:15 +01:00
   title: Tale ten
   word_count: 4593
   notes: ""
@@ -698,95 +740,37 @@ chapter_00008:
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2008-12-06 23:28:54 +01:00
-chapter_00019: 
-  updated_at: 2009-06-13 11:38:26 +02:00
+  created_at: 2008-12-06 22:28:54 +00:00
+chapter_00042: 
+  updated_at: 2009-06-19 12:12:16 +01:00
   title: ""
   word_count: 3
   notes: 
-  id: 19
+  id: 42
   summary: 
-  content: gore! gruesomeness! rahrahrah!
-  published_at: 2009-02-23
-  work_id: 17
+  content: okie-dokie broken vokie?
+  published_at: 2009-03-11
+  work_id: 40
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-02-24 09:47:22 +01:00
-chapter_00031: 
-  updated_at: 2009-06-13 11:38:26 +02:00
-  title: ""
-  word_count: 2
-  notes: 
-  id: 31
-  summary: 
-  content: chumba wamba
-  published_at: 2009-03-09
-  work_id: 29
-  posted: true
-  position: 1
-  hidden_by_admin: false
-  created_at: 2009-03-10 01:24:30 +01:00
-chapter_00053: 
-  updated_at: 2009-06-13 11:38:27 +02:00
-  title: ""
-  word_count: 12
-  notes: 
-  id: 53
-  summary: 
-  content: story of how I was so surprised I used a four-letter word!
-  published_at: 2009-03-19
-  work_id: 46
-  posted: true
-  position: 1
-  hidden_by_admin: false
-  created_at: 2009-03-20 02:28:02 +01:00
-chapter_00054: 
-  updated_at: 2009-06-13 11:38:27 +02:00
-  title: ""
-  word_count: 5
-  notes: 
-  id: 54
-  summary: 
-  content: don't judge me, all right?
-  published_at: 2009-03-20
-  work_id: 47
-  posted: true
-  position: 1
-  hidden_by_admin: false
-  created_at: 2009-03-21 00:11:56 +01:00
-chapter_00032: 
-  updated_at: 2009-06-13 11:38:26 +02:00
+  created_at: 2009-03-12 01:43:37 +00:00
+chapter_00043: 
+  updated_at: 2009-06-19 12:12:16 +01:00
   title: ""
   word_count: 1
   notes: 
-  id: 32
+  id: 43
   summary: 
-  content: tararararara
-  published_at: 2009-03-10
-  work_id: 30
+  content: muuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu
+  published_at: 2009-03-11
+  work_id: 41
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-11 22:51:22 +01:00
-chapter_00021: 
-  updated_at: 2009-06-13 11:38:26 +02:00
-  title: ""
-  word_count: 2
-  notes: 
-  id: 21
-  summary: 
-  content: |-
-    baaaaaaaaaaaaaaaaaaaaaah
-    tantanana
-  published_at: 2009-03-08
-  work_id: 19
-  posted: true
-  position: 1
-  hidden_by_admin: false
-  created_at: 2009-03-09 16:43:33 +01:00
+  created_at: 2009-03-12 02:51:07 +00:00
 chapter_00010: 
-  updated_at: 2009-06-13 11:38:25 +02:00
+  updated_at: 2009-06-19 12:12:15 +01:00
   title: ""
   word_count: 2034
   notes: 
@@ -807,42 +791,81 @@ chapter_00010:
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2008-12-06 23:52:02 +01:00
-chapter_00043: 
-  updated_at: 2009-06-13 11:38:26 +02:00
+  created_at: 2008-12-06 22:52:02 +00:00
+chapter_00021: 
+  updated_at: 2009-06-19 12:12:15 +01:00
   title: ""
-  word_count: 1
+  word_count: 2
   notes: 
-  id: 43
+  id: 21
   summary: 
-  content: muuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu
-  published_at: 2009-03-11
-  work_id: 41
+  content: |-
+    baaaaaaaaaaaaaaaaaaaaaah
+    tantanana
+  published_at: 2009-03-08
+  work_id: 19
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-12 03:51:07 +01:00
-chapter_00044: 
-  updated_at: 2009-06-13 11:38:26 +02:00
-  title: Dilemma!
-  word_count: 40
-  notes: tralala
-  id: 44
-  summary: lala
-  content: |-
-    huh, does this really still work?
-    
-    it looks like adding an author to the first chapter automatically adds it to the whole work, testing to see if this happens for the other chapters or not
-    
-    oh frak, so many errors!
-  published_at: 2009-03-18
-  work_id: 35
+  created_at: 2009-03-09 15:43:33 +00:00
+chapter_00032: 
+  updated_at: 2009-06-19 12:12:16 +01:00
+  title: ""
+  word_count: 1
+  notes: 
+  id: 32
+  summary: 
+  content: tararararara
+  published_at: 2009-03-10
+  work_id: 30
   posted: true
-  position: 2
+  position: 1
   hidden_by_admin: false
-  created_at: 2009-03-18 01:35:15 +01:00
+  created_at: 2009-03-11 21:51:22 +00:00
+chapter_00054: 
+  updated_at: 2009-06-19 12:12:16 +01:00
+  title: ""
+  word_count: 5
+  notes: 
+  id: 54
+  summary: 
+  content: don't judge me, all right?
+  published_at: 2009-03-20
+  work_id: 47
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2009-03-20 23:11:56 +00:00
+chapter_00055: 
+  updated_at: 2009-06-19 12:12:17 +01:00
+  title: ""
+  word_count: 7
+  notes: 
+  id: 55
+  summary: 
+  content: just don't go spreading the word, OK?
+  published_at: 2009-03-20
+  work_id: 48
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2009-03-20 23:14:14 +00:00
+chapter_00022: 
+  updated_at: 2009-06-19 12:12:15 +01:00
+  title: ""
+  word_count: 4
+  notes: 
+  id: 22
+  summary: 
+  content: bom bodrom bongo bong
+  published_at: 2009-03-08
+  work_id: 20
+  posted: true
+  position: 1
+  hidden_by_admin: false
+  created_at: 2009-03-09 16:31:18 +00:00
 chapter_00011: 
-  updated_at: 2009-06-13 11:38:26 +02:00
+  updated_at: 2009-06-19 12:12:15 +01:00
   title: ""
   word_count: 1534
   notes: 
@@ -1057,51 +1080,73 @@ chapter_00011:
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2008-12-06 23:55:58 +01:00
-chapter_00022: 
-  updated_at: 2009-06-13 11:38:26 +02:00
+  created_at: 2008-12-06 22:55:58 +00:00
+chapter_00044: 
+  updated_at: 2009-06-19 12:12:16 +01:00
+  title: Dilemma!
+  word_count: 40
+  notes: tralala
+  id: 44
+  summary: lala
+  content: |-
+    huh, does this really still work?
+    
+    it looks like adding an author to the first chapter automatically adds it to the whole work, testing to see if this happens for the other chapters or not
+    
+    oh frak, so many errors!
+  published_at: 2009-03-18
+  work_id: 35
+  posted: true
+  position: 2
+  hidden_by_admin: false
+  created_at: 2009-03-18 00:35:15 +00:00
+chapter_00045: 
+  updated_at: 2009-06-19 12:12:16 +01:00
+  title: boomed chapter
+  word_count: 1
+  notes: ""
+  id: 45
+  summary: bleh
+  content: tantannanana
+  published_at: 2009-03-18
+  work_id: 35
+  posted: true
+  position: 3
+  hidden_by_admin: false
+  created_at: 2009-03-18 03:46:59 +00:00
+chapter_00034: 
+  updated_at: 2009-06-19 12:12:16 +01:00
   title: ""
-  word_count: 4
+  word_count: 19
   notes: 
-  id: 22
+  id: 34
   summary: 
-  content: bom bodrom bongo bong
-  published_at: 2009-03-08
-  work_id: 20
+  content: |-
+    will try Preview after the choose co-author screen
+    
+    Conclusion: it had eaten ALL my tags except for the Warning
+  published_at: 2009-03-11
+  work_id: 32
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-09 17:31:18 +01:00
-chapter_00055: 
-  updated_at: 2009-06-13 11:38:27 +02:00
-  title: ""
-  word_count: 7
-  notes: 
-  id: 55
-  summary: 
-  content: just don't go spreading the word, OK?
-  published_at: 2009-03-20
-  work_id: 48
+  created_at: 2009-03-11 22:22:29 +00:00
+chapter_00001: 
+  updated_at: 2009-06-19 12:12:15 +01:00
+  title: First Chapter Title
+  word_count: 5
+  notes: Notes on first chapter
+  id: 1
+  summary: Summary of first chapter
+  content: looooong text for first chapter
+  published_at: 2009-02-23
+  work_id: 1
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-21 00:14:14 +01:00
-chapter_00056: 
-  updated_at: 2009-06-13 11:38:27 +02:00
-  title: ""
-  word_count: 9
-  notes: 
-  id: 56
-  summary: 
-  content: John, Rodney and Ronon and the impossibility to choose.
-  published_at: 2009-03-20
-  work_id: 49
-  posted: true
-  position: 1
-  hidden_by_admin: false
-  created_at: 2009-03-21 00:17:43 +01:00
+  created_at: 2008-11-09 01:26:01 +00:00
 chapter_00012: 
-  updated_at: 2009-06-13 11:38:26 +02:00
+  updated_at: 2009-06-19 12:12:15 +01:00
   title: ""
   word_count: 429
   notes: 
@@ -1147,49 +1192,18 @@ chapter_00012:
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2008-12-07 00:19:49 +01:00
-chapter_00001: 
-  updated_at: 2009-06-13 11:38:25 +02:00
-  title: First Chapter Title
-  word_count: 5
-  notes: Notes on first chapter
-  id: 1
-  summary: Summary of first chapter
-  content: looooong text for first chapter
-  published_at: 2009-02-23
-  work_id: 1
-  posted: true
-  position: 1
-  hidden_by_admin: false
-  created_at: 2008-11-09 02:26:01 +01:00
-chapter_00034: 
-  updated_at: 2009-06-13 11:38:26 +02:00
+  created_at: 2008-12-06 23:19:49 +00:00
+chapter_00056: 
+  updated_at: 2009-06-19 12:12:17 +01:00
   title: ""
-  word_count: 19
+  word_count: 9
   notes: 
-  id: 34
+  id: 56
   summary: 
-  content: |-
-    will try Preview after the choose co-author screen
-    
-    Conclusion: it had eaten ALL my tags except for the Warning
-  published_at: 2009-03-11
-  work_id: 32
+  content: John, Rodney and Ronon and the impossibility to choose.
+  published_at: 2009-03-20
+  work_id: 49
   posted: true
   position: 1
   hidden_by_admin: false
-  created_at: 2009-03-11 23:22:29 +01:00
-chapter_00045: 
-  updated_at: 2009-06-13 11:38:26 +02:00
-  title: boomed chapter
-  word_count: 1
-  notes: ""
-  id: 45
-  summary: bleh
-  content: tantannanana
-  published_at: 2009-03-18
-  work_id: 35
-  posted: true
-  position: 3
-  hidden_by_admin: false
-  created_at: 2009-03-18 04:46:59 +01:00
+  created_at: 2009-03-20 23:17:43 +00:00
