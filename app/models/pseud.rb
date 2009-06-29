@@ -22,7 +22,7 @@ class Pseud < ActiveRecord::Base
     :message => t('name_no_letters_or_numbers', :default => 'must contain at least one letter or number.'),
     :with => /[a-zA-Z0-9]/
   validates_length_of :description, :allow_blank => true, :maximum => DESCRIPTION_MAX, 
-    :too_long => t('description_too_long', :default => "must be less than {{max}} letters long.", :max => DESCRIPTION_MAX)
+    :too_long => t('description_too_long', :default => "must be less than {{max}} characters long.", :max => DESCRIPTION_MAX)
   
 
   named_scope :on_works, lambda {|owned_works|
