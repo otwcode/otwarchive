@@ -1,7 +1,6 @@
 <li class="work" id="work_<%=h work.id %>">
 
 <ul class="work <%- if is_author_of?(work) && controller.controller_name != 'series' -%>own<%- end -%>">
-  <%- cache(:key => work_blurb_cache_key(work)) do -%>
 	<li class="heading">
 	  <%= get_symbols_for(work) -%>
 	  <h3>
@@ -56,8 +55,7 @@
 			<%- end -%>
 		</dl>
 	</li>
-	<%- end -%>
-
+	
 	<li class="summary">
 	  <%= sanitize_strip_images_and_format_for_display work.summary %>
 	</li>

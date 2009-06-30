@@ -998,6 +998,7 @@ class Work < ActiveRecord::Base
     
     if filterable
       search_options[:per_page] = 1000
+      search_options[:page] = 1
     end
 
     Work.search(options[:query], search_options)
