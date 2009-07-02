@@ -227,9 +227,11 @@ class Work < ActiveRecord::Base
       # because we'd overwrite with an inaccurate time; if revised_at is not already today, best we can
       # do is update with current time
       if recent_date == Date.today && self.revised_at.to_date == Date.today
-        self.update_attribute(:revised_at, recent_date)
+        return self.revised_at
       elsif recent_date == Date.today && self.revised_at.to_date != Date.today
         self.update_attribute(:revised_at, Time.now)
+      else
+        self.update_attribute(:revised_at, recent_date)
       end 
     end
   end
