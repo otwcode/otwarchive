@@ -73,9 +73,9 @@ class WorksController < ApplicationController
       if params[:work] && params[:work][:chapter_attributes]
         @chapter.content = params[:work][:chapter_attributes][:content]
         @chapter.title = params[:work][:chapter_attributes][:title]
-        if params[:update_button]
+        if params[:update_button] || params[:post_button]# date is coming in in one piece
           @chapter.published_at = params[:work][:chapter_attributes][:published_at]
-        else  
+        else  # date is coming in in three pieces and we need to splice it together using convert_date (application.rb)
           @chapter.published_at = convert_date(params[:work][:chapter_attributes], :published_at)
         end
       end

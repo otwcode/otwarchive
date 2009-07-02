@@ -12,7 +12,7 @@ module WorksHelper
   # List of date, chapter and length info for the work show page
   def work_meta_list(work)
     # if we're previewing, grab the unsaved date, else take the saved first chapter date
-    published_date = @chapter ? @chapter.published_at : work.first_chapter.published_at
+    published_date = (@chapter && params[:preview_button]) ? @chapter.published_at : work.first_chapter.published_at
     list = [['Published:', localize(published_date)], ['Words:', work.word_count], ['Chapters:', work.chapter_total_display]]
     if work.chaptered?
       prefix = work.is_wip ? "Updated:" : "Completed:"
