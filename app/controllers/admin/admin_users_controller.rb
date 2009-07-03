@@ -32,7 +32,7 @@ class Admin::AdminUsersController < ApplicationController
   def edit
     @user = User.find_by_login(params[:id])
     unless @user
-      redirect_to :action => "index", :pseud => params[:pseud], :role => params[:role]
+      redirect_to :action => "index", :query => params[:query], :role => params[:role]
     end
   end
 
@@ -43,10 +43,10 @@ class Admin::AdminUsersController < ApplicationController
     @user.attributes = params[:user]
     if @user.save(false)
       flash[:notice] = t('successfully_updated', :default => 'User was successfully updated.')
-      redirect_to :action => "index", :pseud => params[:pseud], :role => params[:role]
+      redirect_to :action => "index", :query => params[:query], :role => params[:role]
     else
       flash[:error] = t('error_updating', :default => 'There was an error updating user {{name}}', :name => params[:user][:login])
-      redirect_to :action => "index", :pseud => params[:pseud], :role => params[:role]
+      redirect_to :action => "index", :query => params[:query], :role => params[:role]
     end
   end
 
