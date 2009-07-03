@@ -24,21 +24,20 @@ class FreeformTest < ActiveSupport::TestCase
        assert_does_not_contain(Tag.for_tag_cloud, @tag)
     end
   end
-  context "tags with a fandom" do
+  context "tags whose fandom is No Fandom" do
     setup do
       @tag = create_freeform
       @tag.add_fandom(Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME))
     end
-    should "be included in the cloud" do
-       assert_contains(Tag.for_tag_cloud, @tag)
+    should "not be included in the cloud unless they are canonical" do
+       assert_does_not_contain(Tag.for_tag_cloud, @tag)
     end
-    context "which have been merged" do
+    context "which have been made canonical" do
       setup do
-        merger = create_freeform(:canonical => true)
-        @tag.wrangle_merger(merger)
+        @tag.update_attribute(:canonical, true)
       end
-      should "not be included in the cloud" do
-        assert_does_not_contain(Tag.for_tag_cloud, @tag)
+      should "be included in the cloud" do
+        assert_contains(Tag.for_tag_cloud, @tag)
       end
     end
   end
