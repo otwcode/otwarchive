@@ -156,6 +156,10 @@ namespace :After do
   task(:after_20090610010041_add_filter_counts => :environment) do
     FilterCount.set_all
   end
+  desc "remove chapters without work ids"
+  task(:after_20090613092005_remove_invalid_chapters => :environment) do
+    Chapter.find(:all, :conditions => {:work_id => nil}).each {|c| c.destroy }
+  end
   desc "change to chapter backdating - slow"
   task(:after_20090613092005_change_backdating => :environment) do
     ThinkingSphinx.deltas_enabled=false
