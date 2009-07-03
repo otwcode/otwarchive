@@ -145,7 +145,7 @@ class Tag < ActiveRecord::Base
 
   def self.for_tag_cloud
     if fandom_no_tag_name = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
-      if freeform = Freeform.find(:all, :conditions => {:fandom_id => fandom_no_tag_name.id, :merger_id => nil})
+      if freeform = Freeform.find(:all, :conditions => {:fandom_id => fandom_no_tag_name.id, :canonical => true})
         freeform.sort
       end
     end
