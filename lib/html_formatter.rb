@@ -133,7 +133,7 @@ module HtmlFormatter
     text.gsub!(/(([^\n])\n)(?!<\/?(p|br|#{block_tags}|#{block_inl_cont_tags}|#{cont_tags}))(?![\n])/, '\2<br />'<<"\n") #Not putting them before block level elements
     text.gsub!(/(<\/?(p|#{block_tags}|#{block_inl_cont_tags}|#{cont_tags})#{tag_props}>)<br \/>/, '\1') #clean out any linebreaks immediately after block level elements
 
-    text = cleanup_paragraph_tags(text)
+    text = cleanup_and_format(text)
     
     return text
   end
