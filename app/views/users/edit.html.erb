@@ -60,7 +60,9 @@
     </dd>
     <dt><%= p.label :date_of_birth, "Date of Birth" %></dt>
     <dd><%= p.date_select :date_of_birth, :start_year => 13.years.ago.year, :end_year => 90.years.ago.year, :include_blank => true %></dd>
-    <dt><%= p.label :about_me, "About Me" %></dt>
+    <dt><p><%= p.label :about_me, "About Me" %></p>
+    <p><code>a href, b, big, blockquote, br, caption, center, cite, code, col, colgroup, del, dd, dt, dl, div, em, h1, h2, h3, h4, h5, h6, i, ins, li, ol, pre, q, small, span, strike, strong, sub, sup, table, tr, td, th, tbody, thead, tfoot, ul</code></p>
+    </dt>
     <dd>
       <%= p.text_area :about_me %>
       <%= live_validation_for_field("profile_attributes_about_me", :presence => false, :maximum_length => Profile::ABOUT_ME_MAX) -%>
