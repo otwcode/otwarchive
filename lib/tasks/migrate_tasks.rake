@@ -147,33 +147,33 @@ namespace :After do
 #     end
 #     ThinkingSphinx.deltas_enabled=true
 #   end
-  desc "add filter taggings - SLOW!"
-  task(:after_20090604221238_create_filter_taggings => :environment) do
-    FilterTagging.delete_all
-    FilterTagging.build_from_taggings
-  end
-  desc "set filter counts - really, REALLY slow"
-  task(:after_20090610010041_add_filter_counts => :environment) do
-    FilterCount.set_all
-  end
-  desc "remove chapters without work ids"
-  task(:after_20090613092005_remove_invalid_chapters => :environment) do
-    Chapter.find(:all, :conditions => {:work_id => nil}).each {|c| c.delete}
-  end
-  desc "change to chapter backdating - slow"
-  task(:after_20090613092005_change_backdating => :environment) do
-    ThinkingSphinx.deltas_enabled=false
-    Chapter.find(:all).each do |c|
-      if c.position == 1 && c.work_id && c.work.published_at
-        c.update_attribute(:published_at, c.work.published_at)
-      else
-        c.update_attribute(:published_at, c.created_at)
-      end
-    end
-    ThinkingSphinx.deltas_enabled=true
-  end
-  desc "give unwrangled fandoms the Uncategorized Fandoms media tag"
-  task(:revision_1353_uncategorized_fandoms => :environment) do
-    Tag.update_all(['media_id = ?', Media.uncategorized.id], 'media_id IS NULL')
-  end     
+# desc "add filter taggings - SLOW!"
+# task(:after_20090604221238_create_filter_taggings => :environment) do
+#   FilterTagging.delete_all
+#   FilterTagging.build_from_taggings
+# end
+# desc "set filter counts - really, REALLY slow"
+# task(:after_20090610010041_add_filter_counts => :environment) do
+#   FilterCount.set_all
+# end
+# desc "remove chapters without work ids"
+# task(:after_20090613092005_remove_invalid_chapters => :environment) do
+#   Chapter.find(:all, :conditions => {:work_id => nil}).each {|c| c.delete}
+# end
+# desc "change to chapter backdating - slow"
+# task(:after_20090613092005_change_backdating => :environment) do
+#   ThinkingSphinx.deltas_enabled=false
+#   Chapter.find(:all).each do |c|
+#     if c.position == 1 && c.work_id && c.work.published_at
+#       c.update_attribute(:published_at, c.work.published_at)
+#     else
+#       c.update_attribute(:published_at, c.created_at)
+#     end
+#   end
+#   ThinkingSphinx.deltas_enabled=true
+# end
+# desc "give unwrangled fandoms the Uncategorized Fandoms media tag"
+# task(:revision_1353_uncategorized_fandoms => :environment) do
+#   Tag.update_all(['media_id = ?', Media.uncategorized.id], 'media_id IS NULL')
+# end     
 end
