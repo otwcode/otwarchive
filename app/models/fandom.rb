@@ -7,8 +7,14 @@ class Fandom < Tag
   
   before_save :add_media_for_uncategorized
   def add_media_for_uncategorized
-    if ([self.media]  + self.medias).empty?
-      self.media = Media.uncategorized
+    if self.media_id.nil?
+      uncategorized = Media.uncategorized
+      other_media = self.medias - [uncategorized]
+      if !other_media.empty?
+        self.media = other_media.first
+      else
+        self.media = uncategorized
+      end
     end    
   end
 

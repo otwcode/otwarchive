@@ -7,6 +7,7 @@ class FandomTest < ActiveSupport::TestCase
       @fandom = create_fandom
       @media = create_media(:canonical => true)
       @fandom.add_parent_by_id(@media.id)
+      @fandom.reload
     end
     should_validate_presence_of :name
     should "have a display name" do
@@ -36,8 +37,8 @@ class FandomTest < ActiveSupport::TestCase
             @fandom.remove_media(@media2)
             @fandom.reload
           end
-          should "have 'No Media' as its media" do
-            assert_equal Media.find_by_name("No Media"), @fandom.media
+          should "have 'Uncategorized Fandoms' as its media" do
+            assert_equal Media.uncategorized, @fandom.media
           end
         end
       end
@@ -139,8 +140,8 @@ class FandomTest < ActiveSupport::TestCase
           @fandom.update_medias([""])
           @fandom.reload
         end
-        should "have 'No Media' as media" do
-          assert_equal Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), @fandom.media
+        should "have 'Uncategorized Fandoms' as media" do
+          assert_equal Media.uncategorized, @fandom.media
         end
       end
     end
@@ -149,8 +150,8 @@ class FandomTest < ActiveSupport::TestCase
         @fandom.update_medias([""])
         @fandom.reload
       end
-      should "have 'No Media' as media" do
-        assert_equal Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), @fandom.media
+      should "have 'Uncategorized Fandoms' as media" do
+        assert_equal Media.uncategorized, @fandom.media
       end
     end
   end

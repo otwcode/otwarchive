@@ -371,46 +371,39 @@ class Tag < ActiveRecord::Base
     # only fandoms tags must have medias
     return unless self[:type] == 'Fandom'
 
-    # get the nomedia tag
-    nomedia = Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)
-    uncategorized = Media.find_by_name(ArchiveConfig.MEDIA_UNCATEGORIZED_NAME)
+    uncategorized = Media.uncategorized
 
-    # get the first media of the current tag which is not nomedia
-    media = (self.medias - [nomedia, uncategorized]).first
+    # get the first media of the current tag which is not "Uncategorized Fandoms"
+    current_media = ([self.media] + self.medias).compact
+    media = (current_media - [uncategorized]).first
 
-    # if we have a media, we don't need "No Media" as a media
-    if media && self.medias.include?(nomedia)
-      self.remove_media(nomedia)
-    elsif media && (self.media == uncategorized || self.media == nomedia)
-      self.update_attribute(:media_id, media.id)
+    # if we have a media, we don't need "Uncategorized Fandoms" as a media
+    if media 
+      self.remove_media(uncategorized) if self.medias.include?(uncategorized)
+      self.update_attribute(:media_id, media.id) if self.media == uncategorized
     end
 
     # make sure the tag has a media id
     if !self.media_id # we don't have a media id
       if !media # and we don't have a media
-        # we don't have anything, but we're being wrangled, so add "No Media"
-        self.update_attribute(:media_id, nomedia.id)
-        self.parents << nomedia unless self.parents.include?(nomedia)
+        # we don't have anything, but we're being wrangled, so add "Uncategorized Fandoms"
+        self.update_attribute(:media_id, uncategorized.id)
+        self.parents << uncategorized unless self.parents.include?(uncategorized)
       else # we do have a media
         # use the one for our first media
         self.update_attribute(:media_id, media.id)
       end
     end
 
-    # make sure the media_id is only for "No Media" if we don't have any other medias
-    if self.media_id == nomedia.id && media
-      self.update_attribute(:media_id, media.id)
-    end
-
-    # if the media id isn't for our first media or nomedia, verify that it's a real media
-    if !(self.media_id == nomedia.id || (media && self.media_id == media.id))
+    # if the media id isn't for our first media or "Uncategorized Fandoms", verify that it's a real media
+    if !(self.media_id == uncategorized.id || (media && self.media_id == media.id))
       listed_media = Media.find(self.media_id)
       # it's not a real media or it's been removed
       if !listed_media.is_a?(Media) || !self.medias.include?(listed_media)
         if media
           self.update_attribute(:media_id, media.id)
         else
-          self.update_attribute(:media_id, nomedia.id)
+          self.update_attribute(:media_id, uncategorized.id)
         end
       end
     end
@@ -436,16 +429,26 @@ class Tag < ActiveRecord::Base
     tag.ambiguities.delete(self)
   end
 
-  def add_media(media)
+  def add_media(media_to_add)
     return unless self.is_a?(Fandom)
-    return false unless media.is_a? Media
-    self.wrangle_parent(media)
+    return false unless media_to_add.is_a? Media
+    self.wrangle_parent(media_to_add)
+    if self.media == Media.uncategorized || self.media.nil?
+      self.media = media_to_add
+      self.save  
+    end
     self.ensure_correct_media_id
   end
-  def remove_media(media)
+  def remove_media(media_to_remove)
     return unless self.is_a?(Fandom)
-    return false unless media.is_a? Media
-    self.parents.delete(media)
+    return false unless media_to_remove.is_a? Media
+    self.parents.delete(media_to_remove)
+    if self.media == media_to_remove
+      uncategorized = Media.uncategorized
+      other_media = self.medias - [uncategorized]
+      new_media = other_media.empty? ? uncategorized : other_media.first
+      self.update_attribute(:media_id, new_media.id)
+    end 
     self.ensure_correct_media_id
   end
 
@@ -606,13 +609,13 @@ class Tag < ActiveRecord::Base
     fandoms
   end
 
-  def update_medias(new=[])
+  def update_medias(new_medias=[])
     return unless self[:type] == 'Fandom'
     current = self.medias.map(&:name)
     current = [] unless current
-    new = [] unless new
-    remove = current - new
-    add = new - current
+    new_medias = [] unless new_medias
+    remove = current - new_medias
+    add = new_medias - current
     remove.each do |media_name|
       self.remove_media(Media.find_by_name(media_name))
     end
