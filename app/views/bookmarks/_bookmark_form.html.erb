@@ -35,10 +35,14 @@
 		<dd> <%= ew.text_area :summary %> </dd>
 	<% end %>
 	<% end %>
-	<dt><%= f.label :notes, t('form_your_notes', :default => "Your Notes") %></dt>
+	<dt><%= f.label :notes, t('form_your_notes', :default => "Your Notes") %>
+  
+  </dt>
 		<dd>
+    <code>a href, b, blockquote, br, center, cite, code,<br/> del, dd, dt, dl, div, em, h1, h2, h3, h4, h5,<br/> h6, i, ins, li, ol, pre, q, small, span,<br/> strike, strong, sub, sup, ul</code><br/>
       <%= f.text_area :notes %>
-      <%= generate_countdown_html("bookmark_notes", ArchiveConfig.NOTES_MAX) -%>
+      <%= generate_countdown_html("bookmark_notes", ArchiveConfig.NOTES_MAX) -%> 
+      
     </dd>
 	<dt><%= f.label :tag_string, t('form_your_tags', :default => "Your Tags") %></dt>
 	<dd>
