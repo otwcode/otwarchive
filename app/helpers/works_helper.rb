@@ -23,9 +23,7 @@ module WorksHelper
   
   def work_top_links_list(work)
     bookmark_link = logged_in? ? '<li>' + bookmark_link(work) + '</li>' : ''			
-    if work.count_visible_comments > 0
-      comments_link = '<li>' + link_to("Comments", work_path(work, :show_comments => true, :anchor => 'comments')) + '</li>'  
-    end
+    comments_link = '<li>' + link_to("Comment(s)", work_path(work, :show_comments => true, :anchor => 'comments')) + '</li>'  
     "<ul>" + bookmark_link + (comments_link ||= '') + "</ul>"    
   end
 

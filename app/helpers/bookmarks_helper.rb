@@ -9,7 +9,7 @@ module BookmarksHelper
       
       if bookmarkable.class == Work
         fallback = new_work_bookmark_path(bookmarkable)
-        text = t('bookmark_this_story', :default => 'Bookmark This Story')
+        text = t('bookmark', :default => 'Bookmark')
       elsif bookmarkable.class == ExternalWork
         fallback = bookmarks_path # more options if necessary
         text = t('add_new_bookmark', :default => 'Add A New Bookmark')
