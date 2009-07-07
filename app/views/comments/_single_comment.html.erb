@@ -12,7 +12,7 @@
       <p>(<%=h t('single_comment_admin_review', :default => "This comment is under review by an admin and is currently unavailable.") -%>)</p>
     <%- else -%>
       <%- unless single_comment.pseud.nil? -%>
-        <p><img class="icon" src="/images/icon_placeholder.png" alt="icon placeholder"></p>
+        <p><img class="icon" src="/images/icon_placeholder.png" alt="icon placeholder" /></p>
       <%- end -%>
       
       <h3><%= get_pseud_or_mailaddress(single_comment) %></h3>

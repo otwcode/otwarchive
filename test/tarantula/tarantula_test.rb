@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require "#{File.dirname(__FILE__)}/../test_helper"
 require "relevance/tarantula"
 
 class TarantulaTest < ActionController::IntegrationTest
@@ -6,7 +6,7 @@ class TarantulaTest < ActionController::IntegrationTest
   # application. Doing so allows Tarantula to follow those links and crawl 
   # every page.  For many applications, you can load a decent data set by
   # loading all fixtures.
-  #fixtures :all
+  fixtures :all
 
   def test_tarantula
     # If your application requires users to log in before accessing certain 
@@ -14,7 +14,7 @@ class TarantulaTest < ActionController::IntegrationTest
     # log in to your application.  Doing so allows Tarantula to crawl the 
     # pages that are only accessible to logged-in users.
     # 
-    #   post '/session', :login => 'username', :password => 'password'
+    #   post '/session', :login => 'quentin', :password => 'monkey'
     #   follow_redirect!
     
     tarantula_crawl(self)
