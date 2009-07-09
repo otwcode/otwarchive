@@ -235,6 +235,10 @@ class Work < ActiveRecord::Base
       end 
     end
   end
+  
+  def published_at
+    self.first_chapter.published_at
+  end
 
 
   ########################################################################

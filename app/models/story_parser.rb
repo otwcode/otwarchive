@@ -14,7 +14,8 @@ class StoryParser
                    :fandom_string => "Fandom",
                    :rating_string => "Rating",
                    :pairing_string => "Pairing",
-                   :published_at => 'Date|Posted|Posted on|Posted at'}
+                   #:published_at => 'Date|Posted|Posted on|Posted at'
+                   }
 
   # These lists will stop with the first one it matches, so put more-specific matches
   # towards the front of the list.
@@ -423,7 +424,7 @@ class StoryParser
     end
 
     def convert_published_at(date)
-      Time.parse(date)
+      Date.parse(date)
     end
 
 end

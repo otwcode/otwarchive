@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090613092005) do
+ActiveRecord::Schema.define(:version => 20090706214616) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -373,7 +373,6 @@ ActiveRecord::Schema.define(:version => 20090613092005) do
     t.integer  "word_count",                  :limit => 8
     t.boolean  "hidden_by_admin",                          :default => false, :null => false
     t.boolean  "delta",                                    :default => false
-    t.datetime "published_at"
     t.datetime "revised_at"
     t.string   "authors_to_sort_on"
     t.string   "title_to_sort_on"

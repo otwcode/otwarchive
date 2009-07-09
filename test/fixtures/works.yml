@@ -15,7 +15,6 @@ work_00049:
   revised_at: 2009-03-20 23:33:39 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-20 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -36,7 +35,6 @@ work_00005:
   revised_at: 2008-11-09 01:26:01 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2008-11-09 01:26:02 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -57,7 +55,6 @@ work_00016:
   revised_at: 2009-02-24 06:34:22 +00:00
   language_id: 1
   minor_version: 13
-  published_at: 2009-02-23 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -78,7 +75,6 @@ work_00038:
   revised_at: 2009-03-12 00:50:34 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-11 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -99,7 +95,6 @@ work_00050:
   revised_at: 2009-03-20 23:20:29 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-20 22:00:00 +00:00
   restricted: true
   posted: true
   hidden_by_admin: false
@@ -120,7 +115,6 @@ work_00051:
   revised_at: 2009-03-20 23:22:57 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-20 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -141,7 +135,6 @@ work_00039:
   revised_at: 2009-03-12 00:57:27 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-11 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -162,7 +155,6 @@ work_00017:
   revised_at: 2009-02-24 08:47:23 +00:00
   language_id: 1
   minor_version: 3
-  published_at: 2009-02-23 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -183,7 +175,6 @@ work_00006:
   revised_at: 2008-12-05 13:59:15 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2008-12-04 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -204,7 +195,6 @@ work_00040:
   revised_at: 2009-03-12 02:48:40 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-11 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -225,7 +215,6 @@ work_00041:
   revised_at: 2009-03-12 02:55:48 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-11 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -246,7 +235,6 @@ work_00029:
   revised_at: 2009-03-10 00:24:31 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-09 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -269,7 +257,6 @@ work_00007:
   revised_at: 2008-12-06 22:32:20 +00:00
   language_id: 1
   minor_version: 5
-  published_at: 2008-12-06 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -290,7 +277,6 @@ work_00030:
   revised_at: 2009-03-11 21:54:49 +00:00
   language_id: 1
   minor_version: 4
-  published_at: 2009-03-10 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -311,7 +297,6 @@ work_00052:
   revised_at: 2009-03-20 23:24:17 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-20 22:00:00 +00:00
   restricted: true
   posted: true
   hidden_by_admin: false
@@ -332,7 +317,6 @@ work_00008:
   revised_at: 2008-12-06 22:52:02 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2008-12-06 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -353,7 +337,6 @@ work_00019:
   revised_at: 2009-03-09 15:47:16 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-08 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -374,7 +357,6 @@ work_00053:
   revised_at: 2009-05-10 13:50:55 +01:00
   language_id: 1
   minor_version: 0
-  published_at: 2009-05-10 00:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -395,7 +377,6 @@ work_00020:
   revised_at: 2009-03-09 16:32:18 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-08 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -416,7 +397,6 @@ work_00009:
   revised_at: 2008-12-06 22:55:59 +00:00
   language_id: 1
   minor_version: 2
-  published_at: 2008-12-06 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -437,7 +417,6 @@ work_00042:
   revised_at: 2009-03-18 04:08:45 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-17 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -458,7 +437,6 @@ work_00043:
   revised_at: 2009-03-18 04:10:19 +00:00
   language_id: 1
   minor_version: 4
-  published_at: 2009-03-17 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -479,7 +457,6 @@ work_00032:
   revised_at: 2009-03-11 22:23:56 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-11 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -500,7 +477,6 @@ work_00010:
   revised_at: 2008-12-06 23:19:50 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2008-12-06 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -537,7 +513,6 @@ work_00054:
   revised_at: 2009-05-10 13:58:05 +01:00
   language_id: 1
   minor_version: 4
-  published_at: 2009-05-10 00:00:00 +01:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -558,7 +533,6 @@ work_00055:
   revised_at: 2009-06-07 17:24:45 +01:00
   language_id: 1
   minor_version: 0
-  published_at: 2009-06-07 00:00:00 +01:00
   restricted: false
   posted: false
   hidden_by_admin: false
@@ -579,7 +553,6 @@ work_00011:
   revised_at: 2008-12-06 23:24:00 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2008-12-06 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -600,7 +573,6 @@ work_00033:
   revised_at: 2009-03-11 22:26:06 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-11 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -621,7 +593,6 @@ work_00044:
   revised_at: 2009-03-19 01:02:50 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-18 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -642,7 +613,6 @@ work_00045:
   revised_at: 2009-03-20 01:24:40 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-19 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -663,7 +633,6 @@ work_00034:
   revised_at: 2009-03-11 22:31:04 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-11 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -684,7 +653,6 @@ work_00001:
   revised_at: 2009-02-24 03:09:52 +00:00
   language_id: 1
   minor_version: 4
-  published_at: 2009-02-23 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -705,7 +673,6 @@ work_00012:
   revised_at: 2008-12-06 23:26:41 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2008-12-06 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -726,7 +693,6 @@ work_00013:
   revised_at: 2008-12-06 23:34:39 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2008-12-06 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -747,7 +713,6 @@ work_00002:
   revised_at: 2008-11-09 01:26:01 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2008-11-09 01:26:02 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -768,7 +733,6 @@ work_00035:
   revised_at: 2009-03-18 04:06:51 +00:00
   language_id: 1
   minor_version: 0
-  published_at: 2009-03-11 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -789,7 +753,6 @@ work_00046:
   revised_at: 2009-03-20 01:28:46 +00:00
   language_id: 1
   minor_version: 2
-  published_at: 2009-03-19 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -810,7 +773,6 @@ work_00047:
   revised_at: 2009-03-20 23:12:10 +00:00
   language_id: 1
   minor_version: 2
-  published_at: 2009-03-20 22:00:00 +00:00
   restricted: true
   posted: true
   hidden_by_admin: false
@@ -831,7 +793,6 @@ work_00036:
   revised_at: 2009-03-12 00:30:26 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-11 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -852,7 +813,6 @@ work_00003:
   revised_at: 2009-02-24 05:19:36 +00:00
   language_id: 1
   minor_version: 2
-  published_at: 2009-02-23 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -873,7 +833,6 @@ work_00014:
   revised_at: 2009-02-24 05:19:36 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-02-24 05:19:36 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -894,7 +853,6 @@ work_00025:
   revised_at: 2009-03-09 21:55:41 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-08 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -915,7 +873,6 @@ work_00015:
   revised_at: 2009-02-22 04:25:24 +00:00
   language_id: 1
   minor_version: 3
-  published_at: 2009-02-21 22:00:00 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -936,7 +893,6 @@ work_00004:
   revised_at: 2008-11-09 01:26:01 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2008-11-09 01:26:02 +00:00
   restricted: false
   posted: true
   hidden_by_admin: false
@@ -957,7 +913,6 @@ work_00048:
   revised_at: 2009-03-20 23:14:26 +00:00
   language_id: 1
   minor_version: 1
-  published_at: 2009-03-20 22:00:00 +00:00
   restricted: true
   posted: true
   hidden_by_admin: false

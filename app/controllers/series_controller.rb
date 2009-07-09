@@ -17,12 +17,12 @@ class SeriesController < ApplicationController
       @user = User.find_by_login(params[:user_id])
       if params[:pseud_id]
         @author = @user.pseuds.find_by_name(params[:pseud_id])
-        @series = @author.series.select{|s| s.visible?(current_user)}
+        @series = @author.series.select{|s| s.visible?(current_user)}.sort_by(&:revised_at).reverse
       else
-        @series = @user.series.select{|s| s.visible?(current_user)}
+        @series = @user.series.select{|s| s.visible?(current_user)}.sort_by(&:revised_at).reverse
       end
     else
-      @series = Series.find(:all, :order => 'series.created_at DESC').select{|s| s.visible?(User.current_user)}
+      @series = Series.find(:all).select{|s| s.visible?(User.current_user)}.sort_by(&:revised_at).reverse
     end
     @series = @series.paginate(:page => params[:page])
   end
@@ -31,6 +31,17 @@ class SeriesController < ApplicationController
   # GET /series/1.xml
   def show
     @serial_works = @series.serial_works.find(:all, :include => :work, :conditions => ['works.posted = ?', true], :order => :position).select{|sw| sw.work.visible(User.current_user)}
+    # sets the page title with the data for the series
+    @page_title = ""
+    if logged_in? && !current_user.preference.work_title_format.blank?
+      @page_title = current_user.preference.work_title_format
+      @page_title.gsub!(/FANDOM/, @series.allfandoms.collect(&:name).join(', '))
+      @page_title.gsub!(/AUTHOR/, @series.allpseuds.collect(&:byline).join(', '))
+      @page_title.gsub!(/TITLE/, @series.title)
+    else
+      @page_title = @series.title + " - " + @series.allpseuds.collect(&:byline).join(', ') + " - " + @series.allfandoms.collect(&:name).join(', ')
+    end
+    @page_title += " [#{ArchiveConfig.APP_NAME}]"
   end
 
   # GET /series/new

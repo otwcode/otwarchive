@@ -89,5 +89,19 @@ class Series < ActiveRecord::Base
     end
     self.authors.flatten!
     self.authors.uniq!
-  end 
+  end
+  
+  # returns list of fandoms on this series
+  def allfandoms
+    works.collect(&:fandoms).flatten.compact.uniq.sort
+  end
+  
+  # Grabs the earliest published_at date of the visible works in the series
+  def published_at
+    self.works.visible.collect(&:published_at).uniq.sort.first
+  end
+  
+  def revised_at
+    self.works.visible.collect(&:revised_at).uniq.sort.last
+  end
 end
