@@ -47,7 +47,7 @@
         <%- unless warning_tags.size < 1 -%>
           <dt><%=h 'Warnings' + ': ' %></dt>
           <dd>
-            <ul id="bookmark_<%= bookmark.id %>_category_warning">
+            <ul id="work_<%= bookmark.bookmarkable.id %>_category_warning">
               <%- if hide_warnings?(bookmark.bookmarkable) -%>
                 <li><%= show_warnings_link(bookmark.bookmarkable) %></li>
               <%- else -%>
