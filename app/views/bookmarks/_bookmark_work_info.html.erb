@@ -1,0 +1,73 @@
+<li class="heading">
+  <!-- We don't yet have tags on external works, so can't show work icons -->
+  <%- if bookmark.bookmarkable.nil? || bookmark.bookmarkable_type == "ExternalWork" -%>
+    <ul class="required-tags">
+      <li><%= image_tag 'bookmark-placeholder.png', :alt => '', :title => "dummy icons for layout purpose" -%></li>
+      <li><%= image_tag 'category-none.png', :alt => '' -%></li>
+      <li><%= image_tag 'category-none.png', :alt => '' -%></li>
+      <li><%= image_tag 'category-none.png', :alt => '' -%></li>
+    </ul>
+  <%- else -%>
+    <%= get_symbols_for(bookmark.bookmarkable) -%>
+  <%- end -%>
+  <h3>
+    <%- if bookmark.bookmarkable.nil? -%>
+      (<%= t('bookmark_oh_noes', :default => 'Oh noes, this work has been deleted.') -%>)
+    <%- elsif bookmark.bookmarkable_type == "ExternalWork" -%>
+      <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable.url -%>
+      <%=h t('bookmark_by', :default => 'by') %>
+      <%= bookmark.bookmarkable.author -%>
+    <%- else -%>
+      <%- if bookmark.bookmarkable.restricted -%>
+        <%= image_tag("lockblue.png", :size => "15x15", :alt => t('bookmark_restricted', :default => "(Restricted)"), :title => "Restricted Work") %>
+      <%- end -%>
+      <%- if bookmark.bookmarkable.hidden_by_admin -%><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><%- end -%>
+      <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable %>
+      <%=h t('bookmark_by', :default => 'by') %>
+      <%= byline(bookmark.bookmarkable) %>
+    <%- end -%>
+  </h3>
+  <h4>
+    <%- unless bookmark.bookmarkable_type == "ExternalWork" %><%= bookmark.bookmarkable.fandom_tags.collect{|tag| link_to_tag(tag) }.join(', ') %><%- end -%>&nbsp;
+  </h4>
+</li>
+<%- unless bookmark.bookmarkable_type == "ExternalWork" %>
+  <%- cast_tags = bookmark.bookmarkable.cast_tags; warning_tags = bookmark.bookmarkable.warning_tags; freeform_tags = bookmark.bookmarkable.freeform_tags -%>
+  <%- unless ((cast_tags.size + warning_tags.size + freeform_tags.size) < 1) -%>
+    <li>
+      <dl class="tags">
+        <%- unless cast_tags.size < 1 -%>
+          <dt><%= t('cast_tags', :default => 'Cast') + ': ' %></dt>
+          <dd>
+            <ul id="bookmark_<%= bookmark.id %>_category_cast">
+              <%= cast_tags.collect{|tag| '<li>' + link_to_tag(tag) + '</li>' }.join(', ') %>
+            </ul>
+          </dd>
+        <%- end -%>
+        <%- unless warning_tags.size < 1 -%>
+          <dt><%=h 'Warnings' + ': ' %></dt>
+          <dd>
+            <ul id="bookmark_<%= bookmark.id %>_category_warning">
+              <%- if hide_warnings?(bookmark.bookmarkable) -%>
+                <li><%= show_warnings_link(bookmark.bookmarkable) %></li>
+              <%- else -%>
+                <%= warning_tags.collect{|tag| '<li>' + link_to_tag(tag) + '</li>' }.join(', ') %>
+              <%- end -%>
+            </ul>
+          </dd>
+        <%- end -%>
+        <%- unless freeform_tags.size < 1 -%>
+          <dt><%= t('work_tags', :default => "Author's Tags") + ': ' %></dt>
+          <dd>
+            <ul id="bookmark_<%= bookmark.id %>_category_freeform">
+              <%= freeform_tags.collect{|tag| '<li>' + link_to_tag(tag) + '</li>' }.join(', ') %>
+            </ul>
+          </dd>
+        <%- end -%>
+      </dl>
+    </li>
+  <%- end -%>
+<%- end -%>
+<li class="summary">
+  <%= sanitize_strip_images_and_format_for_display bookmark.bookmarkable.summary %>
+</li>

@@ -1,0 +1,28 @@
+<li class="notes">
+  <%- unless bookmark.notes.blank? -%>
+    <dl>
+      <dt><%=h t('bookmark notes', :default => "User's Notes:") -%></dt>
+      <dd><%=sanitize_limit_and_format_for_display bookmark.notes -%></dd>
+    </dl>
+  <%- end -%>
+  <p class="byline">
+    - <%= link_to bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud] -%>    
+    <%- if bookmark.private -%>
+      <%= image_tag("lockblack.png", :size => "15x15", :alt => t('bookmark_private', :default => "(Private)"), :title => "Private bookmark") %>
+    <%- end -%>
+  </p>
+</li>
+<%- unless bookmark.tag_string.blank? -%>
+  <li>
+    <dl>
+      <dt><%=h t('bookmark_tags', :default => "User's Tags:") -%></dt>
+      <dd>
+        <ul>
+          <%- bookmark.tags.each do |tag| -%>
+            <li><%= link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') -%></li><%- unless tag == bookmark.tags.last -%><%= "," -%><%- end -%>
+          <% end -%>
+        </ul>
+      </dd>
+    </dl>
+  </li>
+<%- end -%>

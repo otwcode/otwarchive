@@ -1,66 +1,25 @@
 <!-- This partial requires local variable 'bookmark' -->
-
 <li class="work bookmark <%- if is_author_of?(bookmark) -%>own<%- end -%>">
   <ul>
-    <li class="heading">
-    	<ul class="required-tags">
-    	  <li><%= image_tag 'bookmark-placeholder.png', :alt => '', :title => "dummy icons for layout purpose" -%></li>
-    	  <li><%= image_tag 'category-none.png', :alt => '' -%></li>
-    	  <li><%= image_tag 'category-none.png', :alt => '' -%></li>
-    	  <li><%= image_tag 'category-none.png', :alt => '' -%></li>
-    	</ul>
-    	<h3>
-      	<% if bookmark.bookmarkable.nil? -%>
-    		  (<%= t('bookmark_oh_noes', :default => 'Oh noes, this work has been deleted.') -%>)
-        <% elsif bookmark.bookmarkable_type == "ExternalWork" %>
-    	    <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable.url %>
-    		  <%=h t('bookmark_by', :default => 'by') %>
-    		  <%= bookmark.bookmarkable.author %>
-        <% else %>
-    	    <% if bookmark.bookmarkable.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => t('bookmark_restricted', :default => "(Restricted)"), :title => "Restricted Work") %><% end %>
-    	    <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable %>
-    		  <%=h t('bookmark_by', :default => 'by') %>
-    		  <%= byline(bookmark.bookmarkable) %>
-        <% end %>
-	
-        <% if bookmark.private %>
-          <%= image_tag("lockblack.png", :size => "15x15", :alt => t('bookmark_private', :default => "(Private)"), :title => "Private bookmark") %>
-        <% end %>
-      </h3>
-      <h4>&nbsp;</h4>
-  	  <p class="update"><%= time_ago_in_words(bookmark.updated_at) %></p>
-    </li>
-    <%- unless bookmark.tag_string.blank? -%>
-    <li>
-      <dl class="tags">
-        <dt><%=h t('bookmark_tags', :default => "Tags:") -%></dt>
-        <dd>
-      	  <ul>
-  	        <% bookmark.tags.each do |tag| -%>
-              <li><%= link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') %></li>
-                <%- unless tag == bookmark.tags.last -%>
-                <%= "," %>
-                <%- end -%>
-            <% end -%>
-          </ul>
-        </dd>
-  	  </dl>
-    </li>
+    <!-- Class should actually be "update" - temporary hack to get the date to appear until a front-end coder can position it properly -->  
+    <p class="byline">
+      <%= set_format_for_date(bookmark.updated_at) %>
+    </p>
+    <!-- Show work details unless we want to view bookmarker details only -->
+    <%- unless params[:user_view] -%>
+      <%= render :partial => 'bookmarks/bookmark_work_info', :locals => {:bookmark => bookmark} %>
     <%- end -%>
-    <li class="notes">
-      <%- unless bookmark.notes.blank? -%>
-        <%=sanitize_limit_and_format_for_display bookmark.notes %>
-  	  <%- end -%>
-  	  <p class="byline">- <%= link_to bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud] %></p>
-    </li>
-    <%- if is_author_of?(bookmark) -%>
+    <!-- Show user-entered info unless we want to view work details only -->
+    <%- unless params[:work_view] -%>
+      <%= render :partial => 'bookmarks/bookmark_user_info', :locals => {:bookmark => bookmark} %>
+    <%- end -%>
+  <%- if is_author_of?(bookmark) -%>
     <li>
-    	<!-- Temporarily changed classes to make 'edit' link show up, needs front-end attention, 09-10-08 -->
       <ul class="navigation">
-  		  <li><%= link_to t('links.edit', :default => "Edit"), edit_bookmark_path(bookmark) %></li>
-  		  <li><%= link_to t('links.delete', :default => "Delete"), bookmark, :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
+        <li><%= link_to t('links.edit', :default => "Edit"), edit_bookmark_path(bookmark) %></li>
+        <li><%= link_to t('links.delete', :default => "Delete"), bookmark, :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
       </ul>
     </li>
-    <% end -%> 
+  <%- end -%>
   </ul>
 </li>
