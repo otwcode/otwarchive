@@ -11,9 +11,14 @@
 <dd><%= @series.revised_at.to_date %></dd>
   <dt><%=h 'Works included:' %></dt>
  		<dd><%= @serial_works.length %></dd>
-  <dt><%=h 'Authors:' %></dt>
- 		<dd><%= byline(@series) %></dd>
-	<%- unless @series.summary.blank? -%>
+  <% if @series.pseuds.many?%>
+      <dt><%=h 'Authors:' %></dt>
+        <dd><%= byline(@series) %></dd>
+    <% else %>
+      <dt><%=h 'Author:' %></dt>
+        <dd><%= byline(@series) %></dd>
+  <% end %>
+  <%- unless @series.summary.blank? -%>
 		<dt><%=h 'Description:' %></dt>
 			<dd><%= @series.summary %></dd>
 	<%- end -%>
