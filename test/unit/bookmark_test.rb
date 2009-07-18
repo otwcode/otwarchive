@@ -9,6 +9,8 @@ class BookmarkTest < ActiveSupport::TestCase
     should_belong_to :pseud
     should_have_many :taggings
     should_ensure_length_in_range :notes, (0..2500), :long_message => /must be less/
+    should_have_named_scope :public, :conditions => {:private => false}
+
   end
   context "A public bookmark on a posted work" do
     setup do
@@ -31,6 +33,9 @@ class BookmarkTest < ActiveSupport::TestCase
       end
       should "be visible to a user" do
         assert @bookmark.visible(create_user)
+      end
+      should "be visible to an admin" do
+        assert @bookmark.visible(create_admin)
       end
     end
     context "on an external work" do
@@ -69,6 +74,29 @@ class BookmarkTest < ActiveSupport::TestCase
       should "not be visible to a random user" do
         assert !@bookmark.visible(create_user)
       end
+      should "be visible to an admin" do
+        assert @bookmark.visible(create_admin)
+      end
+    end
+    context "on a work hidden by an admin" do
+      setup do
+        @hidden_work = create_work
+        @bookmark.bookmarkable = @hidden_work
+        @bookmark.save
+        @hidden_work.hidden_by_admin
+      end
+      should "be visible to the bookmark's creator" do
+        assert @bookmark.visible(@bookmark.pseud.user)
+      end
+      should "be visible to an admin" do
+        assert @bookmark.visible(create_admin)
+      end
+      should "not be visible by default" do
+        assert !@bookmark.visible
+      end
+      should "not be visible to a random user" do
+        assert !@bookmark.visible(create_user)
+      end
     end
   end
 
@@ -83,8 +111,32 @@ class BookmarkTest < ActiveSupport::TestCase
     should "not be visible to a random user" do
       assert !@bookmark.visible(create_user)
     end
-    should "be visible to it's owner" do
+    should "not be visible to an admin" do
+      assert !@bookmark.visible(create_admin)
+    end
+    should "be visible to its owner" do
       assert @bookmark.visible(@bookmark.pseud.user)
     end
   end
+  
+  context "A bookmark hidden by an admin on a posted work" do
+    setup do
+      @bookmark = create_bookmark(:private => false, :hidden_by_admin => true)
+      @bookmark.bookmarkable.add_default_tags
+      @bookmark.bookmarkable.update_attribute(:posted, true)
+    end
+    should "not be visible by default" do
+      assert !@bookmark.visible
+    end
+    should "not be visible to a random user" do
+      assert !@bookmark.visible(create_user)
+    end
+    should "be visible to an admin" do
+      assert @bookmark.visible(create_admin)
+    end
+    should "be visible to its owner" do
+      assert @bookmark.visible(@bookmark.pseud.user)
+    end
+  end
+  
 end
