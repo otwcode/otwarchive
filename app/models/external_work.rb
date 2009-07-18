@@ -43,4 +43,9 @@ class ExternalWork < ActiveRecord::Base
       false
     end          
   end
+  
+  # Returns the number of visible bookmarks
+  def count_visible_bookmarks(current_user=:false)
+    self.bookmarks.select {|b| b.visible(current_user) }.length
+  end
 end

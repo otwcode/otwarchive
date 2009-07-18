@@ -1,0 +1,21 @@
+<li class="work" id="work_<%=h bookmarkable.id %>">
+  <ul class="work">
+    <li class="heading">
+  <!-- We don't yet have tags on external works, so can't show work icons -->
+    <ul class="required-tags">
+      <li><%= image_tag 'bookmark-placeholder.png', :alt => '', :title => "dummy icons for layout purpose" -%></li>
+      <li><%= image_tag 'category-none.png', :alt => '' -%></li>
+      <li><%= image_tag 'category-none.png', :alt => '' -%></li>
+      <li><%= image_tag 'category-none.png', :alt => '' -%></li>
+    </ul>
+      <h3>
+        <%= link_to bookmarkable.title, bookmarkable.url -%>
+        <%=h t('bookmark_by', :default => 'by') %>
+        <%= bookmarkable.author -%>
+      </h3>
+    </li>
+    <li class="summary">
+      <%= sanitize_strip_images_and_format_for_display bookmarkable.summary %>
+    </li>
+	</ul>
+</li>

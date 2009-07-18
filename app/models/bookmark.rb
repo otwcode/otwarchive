@@ -19,7 +19,8 @@ class Bookmark < ActiveRecord::Base
   def visible(current_user=User.current_user)
     return self if current_user == self.pseud.user
     unless current_user == :false || !current_user
-      return self if current_user.is_a?(Admin)
+      # Admins should not see private bookmarks
+      return self if current_user.is_a?(Admin) && self.private == false
     end
     if !(self.private? || self.hidden_by_admin?)
       if self.bookmarkable.nil? 
@@ -76,6 +77,5 @@ class Bookmark < ActiveRecord::Base
       end
     end
     return self.tags
-  end
-
+  end 
 end

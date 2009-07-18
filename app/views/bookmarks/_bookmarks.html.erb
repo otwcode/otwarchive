@@ -1,11 +1,16 @@
 <div id="bookmarks">
   <!-- If we're viewing all bookmarks on a work, we want to show the work blurb
        at the top, and the bookmarker info only (user_view) -->
-  <%- if params[:work_id]%>
+  <%- if params[:work_id] -%>
     <%= render :partial => 'works/work_blurb', :locals => {:work => @bookmarkable} %>
     <%- for bookmark in @bookmarks -%>
       <%= render :partial => 'bookmarks/bookmark', :locals => {:bookmark => bookmark, :params => {:user_view => true}} %>
-    <%- end -%>    
+    <%- end -%>
+  <%- elsif params[:external_work_id] -%>
+    <%= render :partial => 'bookmarks/external_work_blurb', :locals => {:bookmarkable => @bookmarkable} %>
+    <%- for bookmark in @bookmarks -%>
+      <%= render :partial => 'bookmarks/bookmark_user_info', :locals => {:bookmark => bookmark, :params => {:user_view => true}} %>
+    <%- end -%>        
   <%- else -%>
     <%- for bookmark in @bookmarks -%>
       <%= render :partial => 'bookmarks/bookmark', :locals => {:bookmark => bookmark} %>

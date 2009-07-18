@@ -38,4 +38,13 @@ module BookmarksHelper
     {:controller => 'bookmarks', :action => 'index', :tag_id => tag}
   end
   
+  def link_to_bookmarkable_bookmarks(bookmarkable)
+    if bookmarkable.class == ExternalWork
+      path = external_work_bookmarks_path(bookmarkable)
+    else
+      path = eval(bookmarkable.class.to_s.downcase + "_bookmarks_path(bookmarkable)")
+    end
+    link_to bookmarkable.count_visible_bookmarks(current_user), path
+  end
+  
 end

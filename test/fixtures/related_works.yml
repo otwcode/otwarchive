@@ -1,17 +1,17 @@
 --- 
 related_work_00001: 
-  updated_at: 2008-12-06 22:56:52 +00:00
+  updated_at: 2008-12-06 23:56:52 +01:00
   reciprocal: false
   parent_type: Work
   id: 1
   work_id: 9
   parent_id: 7
-  created_at: 2008-12-06 22:56:52 +00:00
+  created_at: 2008-12-06 23:56:52 +01:00
 related_work_00002: 
-  updated_at: 2009-03-20 19:57:44 +00:00
+  updated_at: 2009-03-20 20:57:44 +01:00
   reciprocal: false
   parent_type: Work
   id: 2
   work_id: 43
   parent_id: 4
-  created_at: 2009-03-20 19:57:44 +00:00
+  created_at: 2009-03-20 20:57:44 +01:00

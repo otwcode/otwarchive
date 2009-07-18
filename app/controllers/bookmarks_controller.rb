@@ -39,14 +39,27 @@ class BookmarksController < ApplicationController
     else
       owner ||= @bookmarkable
     end
-    search_by = owner ? "owner.bookmarks" : "Bookmark" 
-    @bookmarks = is_admin? ? eval(search_by).find(:all, :conditions => {:private => false}, :order => "bookmarks.created_at DESC").paginate(:page => params[:page]) : 
-                             eval(search_by).visible(:order => "bookmarks.created_at DESC").paginate(:page => params[:page])
+    # Do not want to aggregate bookmarks on these pages
+    if params[:pseud_id] || params[:user_id] || params[:work_id] || params[:external_work_id]
+      search_by = owner ? "owner.bookmarks" : "Bookmark" 
+      @bookmarks = eval(search_by).visible(:order => "bookmarks.created_at DESC").paginate(:page => params[:page])
+    else # Aggregate on main bookmarks page, tag page                          
+      @work_ids = Bookmark.visible(:conditions => {:bookmarkable_type => 'Work'}).collect(&:bookmarkable_id).uniq
+      @external_work_ids = Bookmark.visible(:conditions => {:bookmarkable_type => 'ExternalWork'}).collect(&:bookmarkable_id).uniq
+      @bookmarks = []
+      for work_id in @work_ids do
+        @bookmarks << Work.find(work_id).bookmarks.visible.last
+      end
+      for external_work_id in @external_work_ids do
+        @bookmarks << ExternalWork.find(external_work_id).bookmarks.visible.last
+      end
+      @bookmarks = @bookmarks.sort_by(&:created_at).reverse.paginate(:page => params[:page])
+    end
     if @bookmarkable
-      access_denied unless is_admin? || @bookmarkable.visible
+      access_denied unless is_admin? || @bookmarkable.class == ExternalWork || @bookmarkable.visible
     end
   end
-
+  
   # GET    /:locale/bookmark/:id
   # GET    /:locale/users/:user_id/bookmarks/:id
   # GET    /:locale/works/:work_id/bookmark/:id
