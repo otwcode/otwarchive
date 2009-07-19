@@ -8,7 +8,8 @@ class BookmarkTest < ActiveSupport::TestCase
     should_belong_to :bookmarkable
     should_belong_to :pseud
     should_have_many :taggings
-    should_ensure_length_in_range :notes, (0..2500), :long_message => /must be less/
+    should_have_many :tags, :through => :taggings
+    should_ensure_length_in_range :notes, (0..ArchiveConfig.NOTES_MAX), :long_message => /must be less/
     should_have_named_scope :public, :conditions => {:private => false}
 
   end
@@ -30,6 +31,9 @@ class BookmarkTest < ActiveSupport::TestCase
       end
       should "not be visible by default" do
         assert !@bookmark.visible
+      end
+      should "not be visible en group" do
+        assert_does_not_contain(Bookmark.visible, @bookmark)
       end
       should "be visible to a user" do
         assert @bookmark.visible(create_user)
@@ -127,6 +131,9 @@ class BookmarkTest < ActiveSupport::TestCase
     end
     should "not be visible by default" do
       assert !@bookmark.visible
+    end
+    should "not be visible en group" do
+      assert_does_not_contain(Bookmark.visible, @bookmark)
     end
     should "not be visible to a random user" do
       assert !@bookmark.visible(create_user)

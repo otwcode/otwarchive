@@ -1,6 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class BookmarksControllerTest < ActionController::TestCase
+# Index tests
   context "when indexing all bookmarks" do
     setup do
       get :index
@@ -51,6 +52,7 @@ class BookmarksControllerTest < ActionController::TestCase
     should_assign_to :bookmarks
   end  
 
+#Show tests
   context "when showing a bookmark" do
     setup do
       @bookmark = create_bookmark
@@ -154,6 +156,66 @@ class BookmarksControllerTest < ActionController::TestCase
     should "have error" do
       assert flash.has_key?(:error)
     end
-  end    
+  end 
+
+# Destroy tests  
+  context "try to destroy a bookmark" do
+    setup do
+      @user = create_user
+      @pseud = @user.default_pseud
+      @bookmark = create_bookmark(:pseud => @pseud)
+    end
+    context "when not logged in" do
+      setup {delete :destroy, :id => @bookmark.id}
+      should_redirect_to("the bookmark path") {bookmark_path(@bookmark)}
+      should_set_the_flash_to /have permission/
+    end
+    context "when not your bookmark" do
+      setup do
+        @another_user = create_user
+        @request.session[:user] = @another_user
+        delete :destroy, :id => @bookmark.id
+      end
+      should_set_the_flash_to /have permission/
+      should_redirect_to("the bookmark path") {bookmark_path(@bookmark)}
+    end
+    context "of your own" do
+      setup do
+        @request.session[:user] = @user
+        delete :destroy, :id => @bookmark.id
+      end
+      should_redirect_to("the user's bookmarks path") {user_bookmarks_path(@user)}
+      should "destroy the work" do
+        assert_raises(ActiveRecord::RecordNotFound) { @bookmark.reload }
+      end
+    end
+  end  
+
+# Edit tests 
+  context "when not logged in" do
+    setup do
+      @bookmark = create_bookmark
+      get :edit, :id => @bookmark.id
+    end
+      should_set_the_flash_to /have permission/
+      should_redirect_to("the bookmark path") {bookmark_path(@bookmark)}
+  end
+
+  context "when logged in" do
+    setup do
+      @user = create_user
+      @request.session[:user] = @user
+    end
+
+  context "when editing your own bookmark" do
+    setup do
+      @pseud = @user.default_pseud
+      @bookmark = create_bookmark(:pseud => @pseud)
+      get :edit, :id => @bookmark.id
+    end
+    should_respond_with :success
+    should_render_template :edit
+  end
+end
  
 end
