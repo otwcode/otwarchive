@@ -98,10 +98,10 @@ class Series < ActiveRecord::Base
   
   # Grabs the earliest published_at date of the visible works in the series
   def published_at
-    self.works.visible.collect(&:published_at).uniq.sort.first
+    self.works.visible.collect(&:published_at).compact.uniq.sort.first
   end
   
   def revised_at
-    self.works.visible.collect(&:revised_at).uniq.sort.last
+    self.works.visible.collect(&:revised_at).compact.uniq.sort.last
   end
 end

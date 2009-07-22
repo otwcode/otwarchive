@@ -223,6 +223,7 @@ class ChaptersController < ApplicationController
     else
       if @chapter.destroy
         @work.update_minor_version
+        @work.set_revised_at
         flash[:notice] = t('successfully_deleted', :default => "The chapter was successfully deleted.")
       else
         flash[:error] = t('delete_failed', :default => "Something went wrong. Please try again.")
