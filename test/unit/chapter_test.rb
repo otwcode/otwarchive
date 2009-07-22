@@ -18,6 +18,19 @@ class ChapterTest < ActiveSupport::TestCase
         @chapter1.pseuds -= @work.pseuds
         assert !@chapter1.save
     end
+    
+    should "not be able to have a published_at date in the future" do
+      @chapter1.published_at = random_future_date
+      assert !@chapter1.save
+    end
+    
+    context "without a published_at date" do
+      should "be set to today's date" do
+        @chapter1.published_at = nil
+        @chapter1.save
+        assert @chapter1.published_at == Date.today
+      end
+    end
 
     context "which is the first of a work" do
       should "be set to have the same authors as the work" do

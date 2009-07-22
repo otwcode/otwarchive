@@ -8,8 +8,10 @@ class CommentTest < ActiveSupport::TestCase
     end
     should_belong_to :pseud
     should_belong_to :commentable
-    should_have_many :users
+    should_have_many :users, :through => :inbox_comments
+    should_have_many :inbox_comments
     should_validate_presence_of :content
+    should_ensure_length_in_range :content, (0..ArchiveConfig.COMMENT_MAX), :long_message => /must be less/
 
     # acts_as_commentable: CommentableEntity methods find_all_comments & count_all_comments
     context "with its own comment" do
@@ -43,6 +45,9 @@ class CommentTest < ActiveSupport::TestCase
       work = create_work
       assert @comment = Comment.new(:email => random_email, :name => random_phrase, :commentable => work)
     end
+    should_validate_presence_of :email, :name, :content
+    should_not_allow_values_for :email, "abcd", :message => /invalid/
+    should_allow_values_for :email, "user@google.com"
     should "not have a pseud" do
       assert_equal nil, @comment.pseud_id
     end

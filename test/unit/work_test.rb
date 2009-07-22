@@ -16,7 +16,7 @@ class WorkTest < ActiveSupport::TestCase
       work = new_work(:authors => [])
       assert !work.save
       assert_contains work.errors.on(:base), /must have at least one author/
-    end
+      end
     should_eventually "have a valid author" do
     end
 
@@ -233,8 +233,57 @@ class WorkTest < ActiveSupport::TestCase
       should "delete the tag" do
         assert_raises(ActiveRecord::RecordNotFound) { @pairing.reload }
       end
+    end 
+  end
+  
+  #Dates
+  context "a work with one chapter" do
+    setup do
+      @chapter1 = new_chapter(:posted => true, :published_at => random_past_date)
+      @work = create_work(:chapters => [@chapter1], :posted => true)
+      @work.set_revised_at(@chapter1.published_at)
+    end
+    should "have the same revised_at date as the chapter date" do
+      assert @work.revised_at.to_date == @chapter1.published_at
+    end
+    should "have the same published_at date as the chapter date" do
+      assert @work.published_at == @chapter1.published_at
+    end
+    context "if a second chapter is added" do
+      setup do
+        @chapter2 = new_chapter(:posted => true, :published_at => random_past_date)
+        @work.chapters << @chapter2
+        if @chapter2.published_at > @work.revised_at.to_date
+          @work.set_revised_at(@chapter2.published_at)
+        end  
+      end
+      should "have the most recent chapter date as its revised_at date" do
+        if @chapter1.published_at > @chapter2.published_at
+          assert @work.revised_at.to_date == @chapter1.published_at
+        else
+          assert @work.revised_at.to_date == @chapter2.published_at
+        end
+      end
+      should "still have the first chapter date as its published_at date" do
+        assert @work.published_at == @chapter1.published_at
+      end
+      context "if a third chapter with today as its published_at date is added" do
+        setup do
+          @chapter3 = new_chapter(:posted => true, :published_at => Date.today)
+          @work.chapters << @chapter3
+          @work.set_revised_at(@chapter3.published_at)
+        end
+        should "have today's date as its revised_at date" do
+          assert @work.revised_at.to_date == Date.today
+        end
+        should "have a time as its revised_at value" do
+          assert @work.revised_at != Date.today.to_datetime
+        end
+      end
     end
   end
+
+
 
   def test_number_of_chapters
     work = create_work

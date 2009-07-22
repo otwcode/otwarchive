@@ -3,12 +3,13 @@ require File.dirname(__FILE__) + '/../test_helper'
 class PseudTest < ActiveSupport::TestCase
   context "A Pseud" do
     should_belong_to :user
-    should_have_many :creatorships, :works, :chapters, :series
+    should_have_many :creatorships, :works, :chapters, :series, :bookmarks
     should_validate_presence_of :name
-    should_ensure_length_in_range :name, (1..40), :short_message => /too short/, :long_message => /too long/
+    should_ensure_length_in_range :name, (Pseud::NAME_LENGTH_MIN..Pseud::NAME_LENGTH_MAX), :short_message => /too short/, :long_message => /too long/
     should_allow_values_for :name, "Good pseud", "good_pseud"
     should_not_allow_values_for :name, "bad!pseud", :message => /can contain/
-    should_ensure_length_in_range :description, (0..500), :long_message => /must be less/
+    should_not_allow_values_for :name, " ", :message => /must contain/
+    should_ensure_length_in_range :description, (0..Pseud::DESCRIPTION_MAX), :long_message => /must be less/
   end
   def test_add_creations_to_default
     user = create_user

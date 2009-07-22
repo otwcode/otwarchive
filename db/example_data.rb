@@ -247,5 +247,13 @@ module FixtureReplacement
     path = path ? path : random_phrase[1...10].gsub(/ /, '/')
     return host + '/' + path
   end
+  
+  def random_past_date
+    Date.civil((1990...2008).to_a.rand, (1..12).to_a.rand, (1..28).to_a.rand)
+  end
+  
+  def random_future_date
+    Date.civil((2010...2020).to_a.rand, (1..12).to_a.rand, (1..28).to_a.rand)
+  end
 
 end
