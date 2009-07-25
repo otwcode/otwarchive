@@ -75,7 +75,7 @@ dl.work-meta { background:#eee; padding:0.25em; position:relative;margin-top:0; 
 
 /* SERIES */
 dl.series-meta dd { margin:-1.286em 0 1em 12em !important; text-indent:0; padding:0;}
-#series-and-view-data	{ clear:both}
+.series-and-view-data	{ clear:both}
 .series-show ul li	{ display:inline; padding-right:0.5625em}
 .series-show ul#series-work-list li	{ display:block; padding:0; }
 

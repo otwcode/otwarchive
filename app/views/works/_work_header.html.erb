@@ -17,10 +17,9 @@
 
 <%= render :partial => 'works/meta', :locals => {:work => @work} %>
   
-  <div id="series-and-view-data">
+  <div class="series-and-view-data">
     <%- unless @work.series.blank? -%>
-      <ul id="work-series-data">
-        <!-- found in series helper -->
+      <ul class="work-series-data">
         <%= show_series_data(@work) %>
       </ul>
     <%- end -%> 

@@ -11,7 +11,9 @@
 	<div id="chapters">
 	<%= render :partial => 'chapters/chapters' -%>
 	</div>
-	
+  <%- unless @work.series.blank? -%>
+    <%= render :partial => 'works/series_links' -%>
+  <%- end -%>
 	<%= render :partial => 'works/work_footer' -%>
 </div>
 <!-- END work -->
