@@ -24,7 +24,8 @@ class Pseud < ActiveRecord::Base
   validates_length_of :description, :allow_blank => true, :maximum => DESCRIPTION_MAX, 
     :too_long => t('description_too_long', :default => "must be less than {{max}} characters long.", :max => DESCRIPTION_MAX)
   
-
+  after_update :check_default_pseud
+  
   named_scope :on_works, lambda {|owned_works|
     {
       :select => "DISTINCT pseuds.*",
@@ -139,6 +140,13 @@ class Pseud < ActiveRecord::Base
       end
       comment_ids = creation.find_all_comments.collect(&:id).join(",")
       Comment.update_all("pseud_id = #{pseud.id}", "pseud_id = '#{self.id}' AND id IN (#{comment_ids})") unless comment_ids.blank?
+    end
+  end
+  
+  def check_default_pseud
+    if !self.is_default? && self.user.pseuds.to_enum.find(&:is_default?) == nil
+      default_pseud = self.user.pseuds.select{|ps| ps.name.downcase == self.user_name.downcase}.first
+      default_pseud.update_attribute(:is_default, true)
     end
   end
     

@@ -6,7 +6,7 @@
 	<% else -%>
     	<%= f.text_field :name %>
 	<% end -%>
-	<%= f.check_box :is_default %> <%= f.label :is_default, 'Is default' %>
+	<%= f.check_box :is_default, {:disabled => (@pseud.name && @user.login == @pseud.name && @pseud.is_default?)} %> <%= f.label :is_default, 'Is default' %>
   <%= generate_countdown_html("pseud_name", Pseud::NAME_LENGTH_MAX) if @pseud.name && @user.login != @pseud.name -%>
 </p>
  <p><%= f.label :description, 'Description' %><br />
