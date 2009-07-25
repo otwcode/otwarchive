@@ -6,7 +6,13 @@
   
     <ol>
     <%- for fandom in @fandom_listing[medium] -%>
-      <li><%= link_to_tag_works_with_text(fandom, fandom.name + " (" + fandom.count + ")") %></li>
+      <li>
+        <%- if fandom.respond_to?(:count) -%>
+        <%= link_to_tag_works_with_text(fandom, fandom.name + " (" + fandom.count + ")") %>
+        <%- else -%>
+        <%= link_to_tag_works_with_text(fandom, fandom.name) %>        
+        <%- end -%>
+      </li>
     <%- end -%>
     </ol>
     
