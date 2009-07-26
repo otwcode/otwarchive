@@ -7,6 +7,7 @@
 		<%= f.label :title, t('form_title', :default => 'Chapter title') %>
 		<%= f.text_field :title, :class => "storyinputfield", :live => true %>
     <%= link_to_help "story-title" -%>
+    <%= generate_countdown_html("chapter_title", ArchiveConfig.TITLE_MAX) -%>
   </p>
 	<p>
     <%= f.label :position, t('form_position', :default => 'Chapter number') %> 
@@ -28,9 +29,15 @@
       <%= render :partial => 'pseuds/byline', :locals =>{:form => f, :type => 'chapter'} %>
 
       <dt class="summary"><%= f.label :summary, t('form_summary', :default => "Chapter summary (max {{max}} letters)", :max => ArchiveConfig.SUMMARY_MAX.to_s) %></dt>
-      <dd class="summary"><%= f.text_area :summary, :rows => 4, :cols => 60, :live => true %></dd>
+      <dd class="summary">
+        <%= f.text_area :summary, :rows => 4, :cols => 60, :live => true %>
+        <%= generate_countdown_html("chapter_summary", ArchiveConfig.SUMMARY_MAX) -%>
+      </dd>
       <dt class="notes"><%= f.label :notes, t('form_notes', :default => "Chapter notes (max {{max}} letters)", :max => ArchiveConfig.NOTES_MAX.to_s) %></dt>
-      <dd class="notes"><%= f.text_area :notes, :rows => 4, :cols => 60, :live => true %></dd>
+      <dd class="notes">
+        <%= f.text_area :notes, :rows => 4, :cols => 60, :live => true %>
+        <%= generate_countdown_html("chapter_notes", ArchiveConfig.NOTES_MAX) -%>
+      </dd>
     </dl>
 </fieldset>
 
@@ -53,6 +60,7 @@
   				:tooShortMessage => t('validations.content.too_short', :default => 'Brevity is the soul of wit, but your content does have to be at least {{min}} letters long.', :min => ArchiveConfig.CONTENT_MIN.to_s),
   			  :failureMessage => t('validations.content.failure', :default => 'You need to post some story content here.'))
   		-%>
+    <%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX) -%>
 	</p>
 </fieldset>
 
