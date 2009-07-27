@@ -8,9 +8,11 @@
   <dt><%=h 'Series begun:' %></dt>
     <dd><%=h @series.published_at %></dd>
 	<dt><%=h 'Series updated: ' %></dt>
-<dd><%= @series.revised_at.to_date %></dd>
+    <dd><%= @series.revised_at.to_date %></dd>
   <dt><%=h 'Works included:' %></dt>
  		<dd><%= @serial_works.length %></dd>
+  <dt><%=h 'Word count:' %></dt>
+ 		<dd><%= number_with_delimiter(@serial_works.collect{|sw| sw.work.word_count}.sum) %></dd>
   <% if @series.pseuds.many?%>
       <dt><%=h 'Authors:' %></dt>
         <dd><%= byline(@series) %></dd>
