@@ -28,11 +28,17 @@
 	<dt><%= ew.label :author, t('form_author', :default => "Author: ") %></dt>
 		<dd> <%= ew.text_field :author %></dd>
 	<dt><%= ew.label :title, t('form_title', :default => "Title: ") %></dt>
-		<dd> <%= ew.text_field :title %> </dd>
+		<dd>
+      <%= ew.text_field :title %>
+      <%= generate_countdown_html("bookmark_external_title", ArchiveConfig.TITLE_MAX) -%>      
+    </dd>
 	<dt>
 	<%= ew.label :summary, t('form_authors_summary', :default => "Author's Summary") %>
 	<%=h t('form_please_paste', :default => "(please copy and paste from original work)") %></dt>
-		<dd> <%= ew.text_area :summary %> </dd>
+		<dd>
+      <%= ew.text_area :summary %>
+      <%= generate_countdown_html("bookmark_external_summary", ArchiveConfig.SUMMARY_MAX) -%>      
+    </dd>
 	<% end %>
 	<% end %>
 	<dt><%= f.label :notes, t('form_your_notes', :default => "Your Notes") %>
