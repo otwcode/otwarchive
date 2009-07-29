@@ -127,8 +127,9 @@ ul.work {position:relative; border-bottom:1px solid #ddd; }
 .own { border:1px dotted #ccc;background:#eee;}
 ul.work ul li, .work dd ul li { display:inline;}
 
-li.heading {position:relative; }
-.work ul.required-tags {width:75px; height:50px;float:left;}
+li.heading {position: relative; min-height: 50px;}
+/*.work li { margin-top: 0 !important; margin-bottom: 0 !important;  }*/
+.work ul.required-tags {width:75px; height:55px;float:left;}
 .work ul.required-tags li img {width:25px; height:25px;}
 .work ul.required-tags li {padding:0;margin:0; width:25px; height:25px;}
 /* added Enigel Dec 10 08 for required tags everywhere with less regard to tag nestedness */
@@ -138,17 +139,13 @@ li.heading {position:relative; }
 .work h3, .work h3 a:link, .work h3 img {color:#900; vertical-align:bottom;}
 
 .work p.update {font-size:0.875em; text-align:right; top:-0.875em; right:0; position:absolute; }
-.work dl.tags {padding-top:0.5625em;}
+/*.work dl.tags {padding-top:0.375em;}*/
 .work .tags dt {font-weight:bold; width:6em; padding:0.25em 0.5625em 0.25em 0; }
 .work .tags ul {margin:-2.25em 0 .75em 6em; text-indent:0; padding:0;}
 .work li.summary {margin:0.5625em auto; padding:0.25em 0.25em 0 0;}
 .work li.stats dl {text-align:right;}
 .work li.stats dt, .work li.stats dd {display:inline; font-size:0.875em}
 .work li.stats dl dd {margin:0 0.375em 0 0;}
-
-.work .navigation a {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:none; border:1px solid #ccc; padding:0.25em;}
-.work .navigation, .work .navigation li {border:0; background:transparent;}
-.work ul.navigation {margin: 0 0 -0.75em 0;}
 
 /*series listing */
 #user-series ul	{ text-indent:2em; margin:1.125em auto; padding:0 1em;}
@@ -178,14 +175,19 @@ ul#series-work-list li.work ul.work li ul li {display:inline;}
 */
 
 /*BOOKMARKS-INDEX BOOKMARKS */
-ul.bookmark {margin-top: 0.875em;}
-.bookmark p.byline {text-align:right;}
-/* Enigel Dec 10 08 this line seemed to be doing nothing good but was doing wrong
-.bookmarks-index li.bookmark { clear:left}
-*/
+#bookmarks ul.bookmark {margin-top: 0.875em;}
+#bookmarks li.bookmark {margin-bottom: 1.25em !important; border-bottom: 1px solid #DDDDDD;}
+#bookmarks .bookmark p.byline {text-align:right;}
+#bookmarks .bookmark .user-info dl {padding-top:0;}
+#bookmarks .bookmark .user-tags li {padding:0;}
+#bookmarks .bookmark .user-info dt {font-weight:bold; width:7em; padding:0 0.5625em 0.25em 0; }
+#bookmarks .bookmark .user-info dd {margin:-1.55em 0 .75em 7em; text-indent:0; padding:0;}
 
-/*Temporary fix to make edit link show up on bookmarks, 09-10-08 (Cal)*/
-.bookmark ul.navigation {text-align:left;}
+#bookmarks .bookmark li.bookmark-heading {position: relative; min-height: 25px;}
+#bookmarks .work ul.bookmark-icons {width:75px; height:27px;float:left;}
+#bookmarks .work ul.bookmark-icons li img {width:25px; height:25px;}
+#bookmarks .work ul.bookmark-icons li { display:inline; padding:0;margin:0; width:25px; height:25px;}
+#bookmarks .bookmark ul.navigation {text-align:left;}
 
 /*TAGS-INDEX */
 .tags-index ul { text-align: center; margin: 2em auto; }
@@ -215,6 +217,11 @@ dl.translations {position:relative; margin: 1.5em auto; padding: 1.5em 0 2.5em; 
 .translations dt { padding:0.25em; margin:-0.25em; clear: both;}
 .translated { font-style: italic; background:#d1e1ef;}
 .untranslated { font-weight: 600;}
+
+/* BOOKMARKS AND WORKS EDIT BUTTONS */
+.work .navigation a, .bookmark .navigation a {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:none; border:1px solid #ccc; padding:0.25em;}
+.work .navigation, .work .navigation li, .bookmark .navigation, .bookmark .navigation li {border:0; background:transparent;}
+.work ul.navigation, .bookmark ul.navigation {margin: 0 0 -0.75em 0;}
 
 /*ToS and any other long text pages.
 * styling duplicates the work-views.css and is incorporated there*/

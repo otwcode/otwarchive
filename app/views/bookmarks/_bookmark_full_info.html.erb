@@ -1,0 +1,103 @@
+<ul>
+  <li class="heading bookmark-heading">
+    <!-- We don't yet have tags on external works, so can't show work icons -->
+    <ul class="bookmark-icons">
+      <li><%= image_tag 'bookmark-placeholder.png', :alt => '', :title => "dummy icons for layout purpose" -%></li>
+      <li><%= image_tag 'category-none.png', :alt => '' -%></li>
+    </ul>
+    <h3><%- if bookmark.bookmarkable.nil? -%>
+      (<%= t('bookmark_oh_noes', :default => 'Oh noes, this work has been deleted.') -%>)
+    <%- elsif bookmark.bookmarkable_type == "ExternalWork" -%>
+      <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable.url -%>
+      <%=h t('bookmark_by', :default => 'by') %>
+      <%= bookmark.bookmarkable.author -%>
+    <%- else -%>
+      <%- if bookmark.bookmarkable.restricted -%>
+        <%= image_tag("lockblue.png", :size => "15x15", :alt => t('bookmark_restricted', :default => "(Restricted)"), :title => "Restricted Work") %>
+      <%- end -%>
+      <%- if bookmark.bookmarkable.hidden_by_admin -%><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><%- end -%>
+      <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable %>
+      <%=h t('bookmark_by', :default => 'by') %>
+      <%= byline(bookmark.bookmarkable) %>
+    <%- end -%></h3>
+    <%- if false %>
+    <h4> <%=h t('bookmark_user_header', :default => 'Bookmarked by ') %><%= link_to bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud] -%>    
+    <%- if bookmark.private -%>
+      <%= image_tag("lockblack.png", :size => "15x15", :alt => t('bookmark_private', :default => "(Private)"), :title => "Private bookmark") %>
+    <%- end -%></h4>
+    <p class="update">
+      <%= set_format_for_date(bookmark.updated_at) %>
+    </p>
+    <%- end %>
+  </li>
+  <%- unless bookmark.bookmarkable_type == "ExternalWork"%>
+  <li class="heading">
+    <%- if not bookmark.bookmarkable.nil? -%>
+      <%= get_symbols_for(bookmark.bookmarkable) -%>
+    <%- end -%>
+    <h4>
+      <%- unless bookmark.bookmarkable_type == "ExternalWork" %>
+        <span class="bookmark-fandoms"><%= bookmark.bookmarkable.fandom_tags.collect{|tag| link_to_tag(tag) }.join(', ') %></span>
+        <%- author_tags = bookmark.bookmarkable.cast_tags + bookmark.bookmarkable.freeform_tags
+        unless author_tags.size < 1 -%>
+        | <span class="bookmark-author-tags"><%= t('bookmark_author_tags', :default => 'Tags') %>: <%= author_tags.collect{|tag| link_to_tag(tag) }.join(', ') %></span>
+      <%- end -%>
+        <%- unless bookmark.bookmarkable.warning_tags.size < 1 -%>
+        <dl style="margin-top: 0.5em">
+        <dt style="display:inline"><%=h 'Warnings' + ': ' %></dt>
+        <dd style="display:inline">
+          <ul style="display:inline" id="work_<%= bookmark.bookmarkable.id %>_category_warning">
+            <%- if hide_warnings?(bookmark.bookmarkable) -%>
+              <li><%= show_warnings_link(bookmark.bookmarkable) %></li>
+            <%- else -%>
+              <%= warning_tags.collect{|tag| '<li>' + link_to_tag(tag) + '</li>' }.join(', ') %>
+            <%- end -%>
+          </ul>
+        </dd>
+        </dl>
+        <%- end
+       end -%>
+    </h4>
+  </li>
+  <%- end %>
+      <%- unless bookmark.bookmarkable.summary.empty? %>
+      <li class="summary">
+        <%= sanitize_strip_images_and_format_for_display bookmark.bookmarkable.summary %>
+      </li>
+      <%- end %>
+</ul>
+    <hr style="margin-left: 75px; border: 0; background: #DDDDDD; height: 1px;">
+  <ul class="user-info">
+    <li class="user-notes">
+      <%- unless bookmark.notes.blank? -%>
+        <dl>
+          <dt><%=h t('bookmark notes', :default => "User's Notes:") -%></dt>
+          <dd><%=sanitize_limit_and_format_for_display bookmark.notes -%></dd>
+        </dl>
+      <%- end -%>
+    </li>
+    <%- unless bookmark.tag_string.blank? -%>
+      <li class="user-tags">
+        <dl>
+          <dt><%=h t('bookmark_tags', :default => "User's Tags:") -%></dt>
+          <dd>
+            <ul>
+              <%- bookmark.tags.each do |tag| -%>
+                <li><%= link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') -%><%- unless tag == bookmark.tags.last -%><%= "," -%><%- end -%></li>
+              <%- end -%>
+            </ul>
+          </dd>
+        </dl>
+      </li>
+    <%- end -%>
+    <li>  <p class="byline">
+      - <%= link_to bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud] -%>    
+      <%- if bookmark.private -%>
+        <%= image_tag("lockblack.png", :size => "15x15", :alt => t('bookmark_private', :default => "(Private)"), :title => "Private bookmark") %>
+      <%- end -%><br />
+      <%= set_format_for_date(bookmark.updated_at) %>
+    </p></li>
+  </ul>
+<%- if is_author_of?(bookmark) -%>
+ <%= render :partial => 'bookmarks/bookmark_owner_navi', :locals => {:bookmark => bookmark} %>
+<%- end -%>

@@ -1,25 +1,4 @@
 <!-- This partial requires local variable 'bookmark' -->
 <li class="work bookmark <%- if is_author_of?(bookmark) -%>own<%- end -%>">
-  <ul>
-    <!-- Class should actually be "update" - temporary hack to get the date to appear until a front-end coder can position it properly -->  
-    <p class="byline">
-      <%= set_format_for_date(bookmark.updated_at) %>
-    </p>
-    <!-- Show work details unless we want to view bookmarker details only -->
-    <%- unless params[:user_view] -%>
-      <%= render :partial => 'bookmarks/bookmark_work_info', :locals => {:bookmark => bookmark} %>
-    <%- end -%>
-    <!-- Show user-entered info unless we want to view work details only -->
-    <%- unless params[:work_view] -%>
-      <%= render :partial => 'bookmarks/bookmark_user_info', :locals => {:bookmark => bookmark} %>
-    <%- end -%>
-  <%- if is_author_of?(bookmark) -%>
-    <li>
-      <ul class="navigation">
-        <li><%= link_to t('links.edit', :default => "Edit"), edit_bookmark_path(bookmark) %></li>
-        <li><%= link_to t('links.delete', :default => "Delete"), bookmark, :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
-      </ul>
-    </li>
-  <%- end -%>
-  </ul>
+  <%= render :partial => 'bookmarks/bookmark_full_info', :locals => {:bookmark => bookmark} %>
 </li>

@@ -87,6 +87,14 @@ dl.series-meta dd { margin:-1.286em 0 1em 12em !important; text-indent:0; paddin
 .work-edit-meta, .work-edit-notes	{ width:80%; }
 .work-edit-title	{ font-weight:700; font-size:1.5em; text-align:center; }
 
+/* BOOKMARKS */
+.bookmark li.bookmark-heading { color: #000000; }
+.bookmark-fandoms { font-weight: 500; font-size: 1.1em; }
+.bookmark-author-tags { font-weight: 100; font-size: 0.90em; }
+/*.bookmark .work-info li.summary, .work-info li.work-tags { border: 1px solid black !important; font-size: 0.75em !important; background: red !important; }
+.bookmark .user-notes {  }
+.bookmark .user-tags {  }*/
+
 /*WORK PAGE LAYOUT ELEMENTS*/
 /*I don't know what these rules refer to
 * #main.works-show ul#navigation	{ margin:0.75em 0; text-align:right}

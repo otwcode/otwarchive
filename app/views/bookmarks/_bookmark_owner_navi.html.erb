@@ -1,0 +1,4 @@
+<ul class="navigation">
+   <li><%= link_to t('links.edit', :default => "Edit"), edit_bookmark_path(bookmark) %></li>
+   <li><%= link_to t('links.delete', :default => "Delete"), bookmark, :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
+</ul>
