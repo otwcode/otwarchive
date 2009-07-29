@@ -1,6 +1,10 @@
 <%= taggable_list(params[:tag_id], "bookmarks") if params[:tag_id] -%>
 
-<h1><%=h t('listing', :default => 'Listing bookmarks') %></h1>
+<%- if @most_recent_bookmarks -%>
+  <h1>Bookmarks saved in the last month</h1>
+<%- else -%>
+  <h1><%=h t('listing', :default => 'Listing bookmarks') %></h1>
+<%- end -%>
 
 <!-- BEGIN bookmark link -->
 <% if @user && current_user && current_user == @user %>
@@ -13,6 +17,9 @@
 <ul class="work-list bookmark" id="bookmarks">
 	<%= render :partial => 'bookmarks/bookmarks' %>
 </ul>
+
+<div id="dynamic-bookmark" style="display:none;">	
+</div>
 
 <div class="pagination">
 	  <%= will_paginate @bookmarks, :prev_label =>  "&laquo; " + t('pagination.previous', :default => "Previous"), :next_label => t('pagination.next', :default => "Next") + " &raquo;" %>

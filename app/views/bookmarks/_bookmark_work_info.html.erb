@@ -28,7 +28,7 @@
     <%- end -%>
   </h3>
   <h4>
-    <%- unless bookmark.bookmarkable_type == "ExternalWork" %><%= bookmark.bookmarkable.fandom_tags.collect{|tag| link_to_tag(tag) }.join(', ') %><%- end -%>&nbsp;
+    <%- unless bookmark.bookmarkable_type == "ExternalWork" %><%= bookmark.bookmarkable.fandom_tags.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') }.join(', ') %><%- end -%>&nbsp;
   </h4>
 </li>
 <%- unless bookmark.bookmarkable_type == "ExternalWork" %>
@@ -40,7 +40,7 @@
           <dt><%= t('cast_tags', :default => 'Cast') + ': ' %></dt>
           <dd>
             <ul id="bookmark_<%= bookmark.id %>_category_cast">
-              <%= cast_tags.collect{|tag| '<li>' + link_to_tag(tag) + '</li>' }.join(', ') %>
+              <%= cast_tags.collect{|tag| '<li>' + link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') + '</li>' }.join(', ') %>
             </ul>
           </dd>
         <%- end -%>
@@ -51,7 +51,7 @@
               <%- if hide_warnings?(bookmark.bookmarkable) -%>
                 <li><%= show_warnings_link(bookmark.bookmarkable) %></li>
               <%- else -%>
-                <%= warning_tags.collect{|tag| '<li>' + link_to_tag(tag) + '</li>' }.join(', ') %>
+                <%= warning_tags.collect{|tag| '<li>' + link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') + '</li>' }.join(', ') %>
               <%- end -%>
             </ul>
           </dd>
@@ -60,7 +60,7 @@
           <dt><%= t('work_tags', :default => "Author's Tags") + ': ' %></dt>
           <dd>
             <ul id="bookmark_<%= bookmark.id %>_category_freeform">
-              <%= freeform_tags.collect{|tag| '<li>' + link_to_tag(tag) + '</li>' }.join(', ') %>
+              <%= freeform_tags.collect{|tag| '<li>' + link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') + '</li>' }.join(', ') %>
             </ul>
           </dd>
         <%- end -%>
@@ -70,4 +70,12 @@
 <%- end -%>
 <li class="summary">
   <%= sanitize_strip_images_and_format_for_display bookmark.bookmarkable.summary %>
+</li>
+<li>
+  <%= link_to_bookmarkable_bookmarks(bookmark.bookmarkable) -%>
+</li> 
+<li>
+  <%- if logged_in? && !is_author_of?(bookmark) -%>
+    <%= bookmark_link(bookmark.bookmarkable, true)%>
+  <%- end -%>
 </li>

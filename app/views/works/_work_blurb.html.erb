@@ -72,9 +72,9 @@
 		<dt><%=h t('work_comments', :default => 'Comments') + ': '%></dt>
 			<dd><%= link_to work.count_visible_comments, work_path(:id => work.id, :anchor => "comments", :show_comments => true) -%></dd>
 		<%- end -%>
-		<%- if work.count_visible_bookmarks(current_user) > 0 -%>
+		<%- if Bookmark.count_visible_bookmarks(work) > 0 -%>
 		<dt><%=h t('work_bookmarks', :default => 'Bookmarks') + ': '%></dt>
-			<dd><%= link_to work.count_visible_bookmarks(current_user), work_bookmarks_path(:work_id => work.id) -%></dd>
+			<dd><%= link_to_bookmarkable_bookmarks(work) -%></dd>
 		<%- end -%>
 		</dl>
 	</li>

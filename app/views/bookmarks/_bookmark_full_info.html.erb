@@ -37,10 +37,10 @@
     <%- end -%>
     <h4>
       <%- unless bookmark.bookmarkable_type == "ExternalWork" %>
-        <span class="bookmark-fandoms"><%= bookmark.bookmarkable.fandom_tags.collect{|tag| link_to_tag(tag) }.join(', ') %></span>
+        <span class="bookmark-fandoms"><%= bookmark.bookmarkable.fandom_tags.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', ') %></span>
         <%- author_tags = bookmark.bookmarkable.cast_tags + bookmark.bookmarkable.freeform_tags
         unless author_tags.size < 1 -%>
-        | <span class="bookmark-author-tags"><%= t('bookmark_author_tags', :default => 'Tags') %>: <%= author_tags.collect{|tag| link_to_tag(tag) }.join(', ') %></span>
+        | <span class="bookmark-author-tags"><%= t('bookmark_author_tags', :default => 'Tags') %>: <%= author_tags.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', ') %></span>
       <%- end -%>
         <%- unless bookmark.bookmarkable.warning_tags.size < 1 -%>
         <dl style="margin-top: 0.5em">
@@ -50,7 +50,7 @@
             <%- if hide_warnings?(bookmark.bookmarkable) -%>
               <li><%= show_warnings_link(bookmark.bookmarkable) %></li>
             <%- else -%>
-              <%= warning_tags.collect{|tag| '<li>' + link_to_tag(tag) + '</li>' }.join(', ') %>
+              <%= bookmark.bookmarkable.warning_tags.collect{|tag| '<li>' + link_to(tag.name, link_to_tag_bookmarks(tag)) + '</li>' }.join(', ') %>
             <%- end -%>
           </ul>
         </dd>
@@ -65,6 +65,14 @@
         <%= sanitize_strip_images_and_format_for_display bookmark.bookmarkable.summary %>
       </li>
       <%- end %>
+  <li>
+    <%= link_to_bookmarkable_bookmarks(bookmark.bookmarkable) -%>
+  </li>
+  <li>
+    <%- if logged_in? && !is_author_of?(bookmark) && bookmark.bookmarkable_type != "ExternalWork" -%>
+      <%= bookmark_link(bookmark.bookmarkable, true)%>
+    <%- end -%>
+  </li>     
 </ul>
     <hr style="margin-left: 75px; border: 0; background: #DDDDDD; height: 1px;">
   <ul class="user-info">
@@ -91,7 +99,7 @@
       </li>
     <%- end -%>
     <li>  <p class="byline">
-      - <%= link_to bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud] -%>    
+      - <%= link_to bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud] -%>&nbsp;(<%= link_to bookmark.pseud.bookmarks.visible.size.to_s, user_pseud_bookmarks_path(bookmark.pseud.user, bookmark.pseud) -%>)    
       <%- if bookmark.private -%>
         <%= image_tag("lockblack.png", :size => "15x15", :alt => t('bookmark_private', :default => "(Private)"), :title => "Private bookmark") %>
       <%- end -%><br />

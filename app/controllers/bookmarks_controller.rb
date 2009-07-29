@@ -40,18 +40,30 @@ class BookmarksController < ApplicationController
       owner ||= @bookmarkable
     end
     # Do not want to aggregate bookmarks on these pages
-    if params[:pseud_id] || params[:user_id] || params[:work_id] || params[:external_work_id]
-      search_by = owner ? "owner.bookmarks" : "Bookmark" 
+    if params[:pseud_id] || params[:user_id] || params[:work_id] || params[:external_work_id] 
+      search_by = owner ? "owner.bookmarks" : "Bookmark"
       @bookmarks = eval(search_by).visible(:order => "bookmarks.created_at DESC").paginate(:page => params[:page])
-    else # Aggregate on main bookmarks page, tag page                          
-      @work_ids = Bookmark.visible(:conditions => {:bookmarkable_type => 'Work'}).collect(&:bookmarkable_id).uniq
-      @external_work_ids = Bookmark.visible(:conditions => {:bookmarkable_type => 'ExternalWork'}).collect(&:bookmarkable_id).uniq
-      @bookmarks = []
-      for work_id in @work_ids do
-        @bookmarks << Work.find(work_id).bookmarks.visible.last
+    else # Aggregate on main bookmarks page, tag page
+      if params[:tag_id] 
+        @most_recent_bookmarks = false
+        # Want to get not only bookmarks with tag, but also bookmarks on works with tag
+        @works_with_tag = owner.works.visible.collect(&:id)
+        @works_with_tagged_bookmarks = owner.bookmarks.visible(:conditions => {:bookmarkable_type => 'Work'}).collect(&:bookmarkable_id).uniq
+        work_ids = @works_with_tag | @works_with_tagged_bookmarks
+        external_work_ids = owner.bookmarks.visible(:conditions => {:bookmarkable_type => 'ExternalWork'}).collect(&:bookmarkable_id).uniq
+      else # Show only bookmarks from past month on main page
+        @most_recent_bookmarks = true
+        work_ids = Bookmark.recent.visible(:conditions => {:bookmarkable_type => 'Work'}).collect(&:bookmarkable_id).uniq
+        external_work_ids = Bookmark.recent.visible(:conditions => {:bookmarkable_type => 'ExternalWork'}).collect(&:bookmarkable_id).uniq         
       end
-      for external_work_id in @external_work_ids do
-        @bookmarks << ExternalWork.find(external_work_id).bookmarks.visible.last
+      # Still looking for a neater way to do this
+      @bookmarks = []
+      bookmarkable_types = ["Work", "ExternalWork"]
+      bookmarkable_types.each do |bt|
+        bt_ids = bt.foreign_key.pluralize
+        eval(bt_ids).each do |bt_id|
+          @bookmarks << eval(bt).find(bt_id).bookmarks.visible.last unless eval(bt).find(bt_id).bookmarks.visible.blank?
+        end
       end
       @bookmarks = @bookmarks.sort_by(&:created_at).reverse.paginate(:page => params[:page])
     end

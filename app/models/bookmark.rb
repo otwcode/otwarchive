@@ -5,6 +5,7 @@ class Bookmark < ActiveRecord::Base
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
   
   named_scope :public, :conditions => {:private => false}
+  named_scope :recent, lambda { |*args| {:conditions => ["bookmarks.created_at > ?", (args.first || 4.weeks.ago)]} }
   
   validates_length_of :notes, 
     :maximum => ArchiveConfig.NOTES_MAX, :too_long => t('notes_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.NOTES_MAX)
@@ -36,6 +37,11 @@ class Bookmark < ActiveRecord::Base
       end
     end
     return false
+  end
+  
+  # Returns the number of bookmarks on an item visible to the current user
+  def self.count_visible_bookmarks(bookmarkable, current_user=:false)
+    bookmarkable.bookmarks.visible.length
   end
 
   # Virtual attribute for external works

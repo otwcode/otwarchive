@@ -23,7 +23,7 @@
     <%- end -%>
     <li>
       <p class="byline">
-      - <%= link_to bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud] -%>    
+      - <%= link_to bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud] -%>&nbsp;(<%= link_to bookmark.pseud.bookmarks.visible.size.to_s, user_pseud_bookmarks_path(bookmark.pseud.user, bookmark.pseud) -%>)    
       <%- if bookmark.private -%>
         <%= image_tag("lockblack.png", :size => "15x15", :alt => t('bookmark_private', :default => "(Private)"), :title => "Private bookmark") %>
       <%- end -%><br />
