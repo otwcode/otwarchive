@@ -13,7 +13,7 @@ module BookmarksHelper
         blurb == true ? text = t('save_bookmark', :default => 'Save') : 
         text = t('bookmark', :default => 'Bookmark') 
       elsif bookmarkable.class == ExternalWork
-        fallback = bookmarks_path # more options if necessary
+        fallback = new_external_work_bookmark_path(bookmarkable)
         blurb == true ? text = t('save_bookmark', :default => 'Save') :
         text = t('add_new_bookmark', :default => 'Add A New Bookmark')
       end

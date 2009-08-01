@@ -17,5 +17,18 @@
     <li class="summary">
       <%= sanitize_strip_images_and_format_for_display bookmarkable.summary %>
     </li>
+    <%- if logged_in? -%>    
+      <li>
+        <%= bookmark_link(bookmarkable, true)%>
+      </li>
+    <%- end -%>       
+		<%- if Bookmark.count_visible_bookmarks(bookmarkable) > 0 -%>
+		  <li class="stats">
+		    <dl>
+          <dt><%=h t('work_bookmarks', :default => 'Bookmarks') + ': '%></dt>
+			    <dd><%= link_to_bookmarkable_bookmarks(bookmarkable) -%></dd>
+		    </dl>
+	    </li>
+    <%- end -%>     
 	</ul>
 </li>

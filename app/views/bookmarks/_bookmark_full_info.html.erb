@@ -68,11 +68,11 @@
   <li>
     <%= link_to_bookmarkable_bookmarks(bookmark.bookmarkable) -%>
   </li>
-  <li>
-    <%- if logged_in? && !is_author_of?(bookmark) && bookmark.bookmarkable_type != "ExternalWork" -%>
+  <%- if logged_in? && !is_author_of?(bookmark) -%>
+    <li>
       <%= bookmark_link(bookmark.bookmarkable, true)%>
-    <%- end -%>
-  </li>     
+    </li>
+  <%- end -%>    
 </ul>
     <hr style="margin-left: 75px; border: 0; background: #DDDDDD; height: 1px;">
   <ul class="user-info">
