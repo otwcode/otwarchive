@@ -47,23 +47,16 @@ class BookmarksController < ApplicationController
       if params[:tag_id] 
         @most_recent_bookmarks = false
         # Want to get not only bookmarks with tag, but also bookmarks on works with tag
-        @works_with_tag = owner.works.visible.collect(&:id)
-        @works_with_tagged_bookmarks = owner.bookmarks.visible(:conditions => {:bookmarkable_type => 'Work'}).collect(&:bookmarkable_id).uniq
-        work_ids = @works_with_tag | @works_with_tagged_bookmarks
-        external_work_ids = owner.bookmarks.visible(:conditions => {:bookmarkable_type => 'ExternalWork'}).collect(&:bookmarkable_id).uniq
+        @works_with_tag = owner.works.visible.collect{|w| ["Work", w.id]}
+        @bookmarks_with_tag = owner.bookmarks.visible.collect{|b| [b.bookmarkable_type, b.bookmarkable_id]}.uniq
+        @bookmarkables = @bookmarks_with_tag | @works_with_tag
       else # Show only bookmarks from past month on main page
         @most_recent_bookmarks = true
-        work_ids = Bookmark.recent.visible(:conditions => {:bookmarkable_type => 'Work'}).collect(&:bookmarkable_id).uniq
-        external_work_ids = Bookmark.recent.visible(:conditions => {:bookmarkable_type => 'ExternalWork'}).collect(&:bookmarkable_id).uniq         
+        @bookmarkables = Bookmark.recent.visible.collect{|b| [b.bookmarkable_type, b.bookmarkable_id]}.uniq
       end
-      # Still looking for a neater way to do this
       @bookmarks = []
-      bookmarkable_types = ["Work", "ExternalWork"]
-      bookmarkable_types.each do |bt|
-        bt_ids = bt.foreign_key.pluralize
-        eval(bt_ids).each do |bt_id|
-          @bookmarks << eval(bt).find(bt_id).bookmarks.visible.last unless eval(bt).find(bt_id).bookmarks.visible.blank?
-        end
+      @bookmarkables.each do |b|
+        @bookmarks << eval(b[0]).find(b[1]).bookmarks.visible.last unless eval(b[0]).find(b[1]).bookmarks.visible.blank?
       end
       @bookmarks = @bookmarks.sort_by(&:created_at).reverse.paginate(:page => params[:page])
     end
