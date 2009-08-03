@@ -5,6 +5,7 @@ class InvitationTest < ActiveSupport::TestCase
     setup do
       @invitation = create_invitation(:recipient_email => random_email)
     end
+    subject { @invitation }
     should_validate_presence_of :recipient_email
     should "have a generated token after it's created" do
       assert @invitation.token

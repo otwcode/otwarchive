@@ -61,11 +61,13 @@ class PseudsControllerTest < ActionController::TestCase
     assert_response :success
   end
   # Test update  PUT  /:locale/users/:user_id/pseuds/:id
+  # We don't allow you to change the name of the fallback pseud, so this tests a new pseud
   def test_update_pseud
     user = create_user
+    pseud = create_pseud(:user => user, :name => 'Non Fallback Pseud')
     @request.session[:user] = user
     put :update, :user_id => user.login, 
-                 :id => user.default_pseud.name, 
+                 :id => pseud.name, 
                  :pseud => { :name => 'Changed Pseud' }
     assert_redirected_to user_pseud_path(user, assigns(:pseud))
   end

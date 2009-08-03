@@ -5,13 +5,12 @@ class BookmarkTest < ActiveSupport::TestCase
     setup do
       @bookmark = create_bookmark
     end
+    subject { @bookmark }
     should_belong_to :bookmarkable
     should_belong_to :pseud
     should_have_many :taggings
     should_have_many :tags, :through => :taggings
     should_ensure_length_in_range :notes, (0..ArchiveConfig.NOTES_MAX), :long_message => /must be less/
-    should_have_named_scope :public, :conditions => {:private => false}
-
   end
   context "A public bookmark on a posted work" do
     setup do
@@ -19,6 +18,7 @@ class BookmarkTest < ActiveSupport::TestCase
       @bookmark.bookmarkable.add_default_tags
       @bookmark.bookmarkable.update_attribute(:posted, true)
     end
+    subject { @bookmark }
     should "be visible" do
       assert @bookmark.visible
     end
@@ -29,6 +29,7 @@ class BookmarkTest < ActiveSupport::TestCase
       setup do
         @bookmark.bookmarkable.update_attribute(:restricted, true)
       end
+      subject { @bookmark }
       should "not be visible by default" do
         assert !@bookmark.visible
       end
@@ -48,6 +49,7 @@ class BookmarkTest < ActiveSupport::TestCase
         @bookmark.bookmarkable = @external_work
         @bookmark.save
       end
+      subject { @bookmark }
       should "be visible" do
         assert @bookmark.visible
       end
@@ -58,6 +60,7 @@ class BookmarkTest < ActiveSupport::TestCase
         @bookmark.bookmarkable = @user
         @bookmark.save
       end
+      subject { @bookmark }
       should "be visible" do
         assert @bookmark.visible
       end
@@ -69,6 +72,7 @@ class BookmarkTest < ActiveSupport::TestCase
         @bookmark.save
         @work_to_destroy.destroy
       end
+      subject { @bookmark }
       should "be visible to the bookmark's creator" do
         assert @bookmark.visible(@bookmark.pseud.user)
       end
@@ -89,6 +93,7 @@ class BookmarkTest < ActiveSupport::TestCase
         @bookmark.save
         @hidden_work.hidden_by_admin
       end
+      subject { @bookmark }
       should "be visible to the bookmark's creator" do
         assert @bookmark.visible(@bookmark.pseud.user)
       end
@@ -109,6 +114,7 @@ class BookmarkTest < ActiveSupport::TestCase
       @bookmark = create_bookmark(:private => true)
       @bookmark.bookmarkable.update_attribute(:posted, true)
     end
+    subject { @bookmark }
     should "not be visible by default" do
       assert !@bookmark.visible
     end
@@ -129,6 +135,7 @@ class BookmarkTest < ActiveSupport::TestCase
       @bookmark.bookmarkable.add_default_tags
       @bookmark.bookmarkable.update_attribute(:posted, true)
     end
+    subject { @bookmark }
     should "not be visible by default" do
       assert !@bookmark.visible
     end

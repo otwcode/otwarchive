@@ -8,6 +8,7 @@ class InboxCommentTest < ActiveSupport::TestCase
       @comment = create_comment(:pseud_id => @user.default_pseud.id)
       @inbox_comment = create_inbox_comment(:user_id => @user.id, :feedback_comment_id => @comment.id)
     end
+    subject { @inbox_comment }
     should_belong_to :user
     should_belong_to :feedback_comment
     should_validate_presence_of :user_id

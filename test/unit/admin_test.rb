@@ -6,6 +6,7 @@ class AdminTest < ActiveSupport::TestCase
     setup do
       @admin = create_admin
     end
+    subject { @admin }
     should_validate_presence_of :login, :message => "Please enter a user name"
     should_validate_presence_of :email, :message => "Please enter an email address"
     should_validate_presence_of :password, :message => "Please enter a password"

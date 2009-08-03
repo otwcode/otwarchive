@@ -7,6 +7,7 @@ class ReadingTest < ActiveSupport::TestCase
     setup do
       @reading = create_reading
     end
+    subject { @reading }
     should_belong_to :user, :work
   end
 

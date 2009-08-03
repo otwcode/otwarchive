@@ -6,12 +6,14 @@ class ProfileTest < ActiveSupport::TestCase
     setup do
       @profile = create_profile
     end
+    subject { @profile }
     should_belong_to :user
     
     context "with a location" do
       setup do
         @profile.location = random_word
       end
+      subject { @profile }
       should_ensure_length_in_range :location, (0..Profile::LOCATION_MAX), :long_message => /must be less/
     end
     
@@ -19,6 +21,7 @@ class ProfileTest < ActiveSupport::TestCase
       setup do
         @profile.title = random_sentence
       end
+      subject { @profile }
       should_ensure_length_in_range :title, (0..Profile::PROFILE_TITLE_MAX), :long_message => /must be less/  
     end
     
@@ -26,6 +29,7 @@ class ProfileTest < ActiveSupport::TestCase
       setup do
         @profile.about_me = random_paragraph
       end
+      subject { @profile }
       should_ensure_length_in_range :about_me, (0..Profile::ABOUT_ME_MAX), :long_message => /must be less/  
     end
   end

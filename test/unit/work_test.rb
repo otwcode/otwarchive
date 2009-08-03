@@ -6,6 +6,7 @@ class WorkTest < ActiveSupport::TestCase
     setup do
       assert @work = create_work
     end
+    subject { @work }
     should_have_many :chapters, :serial_works, :series, :related_works, :bookmarks, :taggings, :pseuds
     should_validate_presence_of :title
     should_ensure_length_in_range :title, ArchiveConfig.TITLE_MIN..ArchiveConfig.TITLE_MAX, :short_message => /must be at least/, :long_message => /must be less/
@@ -25,6 +26,7 @@ class WorkTest < ActiveSupport::TestCase
         @work.add_default_tags
         @work.update_attribute("posted", true)
       end
+      subject { @work }
       should "be visible" do
         assert @work.visible?
       end
@@ -37,6 +39,7 @@ class WorkTest < ActiveSupport::TestCase
           @work.restricted = true
           @work.save
         end
+        subject { @work }
         should "not be visible by default" do
           assert !@work.visible
         end
@@ -71,6 +74,7 @@ class WorkTest < ActiveSupport::TestCase
       setup do
         @comment = create_comment(:commentable => @work.chapters.first)
       end
+      subject { @work }
       should "find that comment" do
         assert_contains(@work.find_all_comments, @comment)
       end
@@ -186,6 +190,7 @@ class WorkTest < ActiveSupport::TestCase
       @work.character_string=@character.name
       @work.reload
     end
+    subject { @work }
     should "have both in cast list" do
       assert_equal [@pairing, @character], @work.cast_tags
     end
@@ -193,6 +198,7 @@ class WorkTest < ActiveSupport::TestCase
       setup do
         @character.add_pairing(@pairing)
       end
+      subject { @work }
       should "only have the pairing in cast list" do
         assert_equal [@pairing], @work.cast_tags
       end
@@ -202,6 +208,7 @@ class WorkTest < ActiveSupport::TestCase
         @new_pairing = create_pairing(:canonical => true)
         @character.add_pairing(@new_pairing)
       end
+      subject { @work }
       should "have both in cast list" do
         assert_equal [@pairing, @character], @work.cast_tags
       end
@@ -213,6 +220,7 @@ class WorkTest < ActiveSupport::TestCase
         @character.add_pairing(@new_pairing)
         @work.reload
       end
+      subject { @work }
       should "only have the pairing in cast list" do
         assert_equal [@pairing], @work.cast_tags
       end
@@ -226,6 +234,7 @@ class WorkTest < ActiveSupport::TestCase
       @pairing = create_pairing
       @work.pairing_string=@pairing.name
     end
+    subject { @work }
     context "when the tag is removed" do
       setup do
         @work.pairing_string=""
@@ -243,6 +252,7 @@ class WorkTest < ActiveSupport::TestCase
       @work = create_work(:chapters => [@chapter1], :posted => true)
       @work.set_revised_at(@chapter1.published_at)
     end
+    subject { @work }
     should "have the same revised_at date as the chapter date" do
       assert @work.revised_at.to_date == @chapter1.published_at
     end
@@ -257,6 +267,7 @@ class WorkTest < ActiveSupport::TestCase
           @work.set_revised_at(@chapter2.published_at)
         end  
       end
+      subject { @work }
       should "have the most recent chapter date as its revised_at date" do
         if @chapter1.published_at > @chapter2.published_at
           assert @work.revised_at.to_date == @chapter1.published_at
@@ -273,6 +284,7 @@ class WorkTest < ActiveSupport::TestCase
           @work.chapters << @chapter3
           @work.set_revised_at(@chapter3.published_at)
         end
+        subject { @work }
         should "have today's date as its revised_at date" do
           assert @work.revised_at.to_date == Date.today
         end
