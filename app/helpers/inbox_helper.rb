@@ -5,13 +5,7 @@ module InboxHelper
     link_to name, work_comment_path(comment.ultimate_parent, comment)
   end
   
-  def commentable_owner_link(comment)
-    if comment.pseud.nil?
-      return comment.name
-    else
-      return link_to(comment.pseud.byline, [comment.pseud.user, comment.pseud])
-    end
-  end
+  # get_pseud_or_mailaddress can be found in comments_helper
   
   def inbox_reply_link(comment)
     if comment.depth > ArchiveConfig.COMMENT_THREAD_MAX_DEPTH

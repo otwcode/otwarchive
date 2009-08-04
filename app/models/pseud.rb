@@ -6,6 +6,7 @@ class Pseud < ActiveRecord::Base
   
   belongs_to :user
   has_many :bookmarks, :dependent => :destroy
+  has_many :comments  
   has_many :creatorships
   has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work'
   has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter'
@@ -122,6 +123,7 @@ class Pseud < ActiveRecord::Base
 
   def replace_me_with_default
     self.creations.each {|creation| change_ownership(creation, self.user.default_pseud) }
+    Comment.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}") unless self.comments.blank?   
     self.destroy
   end
 
