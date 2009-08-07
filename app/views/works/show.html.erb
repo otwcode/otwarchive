@@ -3,7 +3,7 @@
 <%- end -%>
 
 <!-- BEGIN work --> 
-<div class="work-show">
+<div class="work-show"><a name="top" />
 	<%= render :partial => 'works/work_header' -%>
 	<%- if logged_in_as_admin? -%>
 	<%= render :partial => 'admin/admin_options', :locals => {:item => @work} %>
@@ -15,6 +15,7 @@
     <%= render :partial => 'works/series_links' -%>
   <%- end -%>
 	<%= render :partial => 'works/work_footer' -%>
+  <div id="go_to_top_link"><%= link_to image_tag("arrow-up.gif") + "top", work_path(@work, :anchor => "top")%></div>
 </div>
 <!-- END work -->
 
