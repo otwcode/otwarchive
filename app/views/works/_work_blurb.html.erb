@@ -27,20 +27,20 @@
 			<dt><%= t('cast_tags', :default => 'Cast') + ': ' %></dt>
 			<dd>
 				<ul id="work_<%= work.id %>_category_cast">
-				  <%= cast_tags.collect{|tag| '<li>' + link_to_tag(tag) + '</li>' }.join(', ') %>
+				<li> <%= cast_tags.collect{|tag| link_to_tag(tag)  }.join(',</li><li> ') %></li>
 				</ul>
 			</dd>
 			<%- end -%>
       
-		  <%- unless warning_tags.size < 1 -%>
+  <%- unless warning_tags.size < 1 -%>
 			<dt><%=h 'Warnings' + ': ' %></dt>
 			<dd>
 				 <ul id="work_<%= work.id %>_category_warning">
-        <%- if hide_warnings?(work) -%>
-          <li><%= show_warnings_link(work) %></li> 
-        <%- else -%>
-          <%= warning_tags.collect{|tag| '<li>' + link_to_tag(tag) + '</li>' }.join(', ') %>
-        <%- end -%>
+          <%- if hide_warnings?(work) -%>
+            <li><%= show_warnings_link(work) %></li> 
+          <%- else -%>
+            <li><%= warning_tags.collect{|tag| link_to_tag(tag) }.join(', </li><li>') %>
+          <%- end -%>
 				</ul>
 			</dd>
 			<%- end -%>
@@ -48,8 +48,12 @@
 			<%- unless freeform_tags.size < 1 -%>
 			<dt><%= t('work_tags', :default => 'Tags') + ': ' %></dt>
 			<dd>
-				<ul id="work_<%= work.id %>_category_freeform">
-				  <%= freeform_tags.collect{|tag| '<li>' + link_to_tag(tag) + '</li>' }.join(', ') %>
+        <ul id="work_<%= work.id %>_category_freeform">
+        <%- if hide_freeform?(work) -%>
+          <li><%= show_freeforms_link(work) %></li>
+       <%- else -%>   
+				 <li><%= freeform_tags.collect{|tag| link_to_tag(tag) }.join(', </li><li>') %>
+           <%- end -%>
 				</ul>
 			</dd>
 			<%- end -%>

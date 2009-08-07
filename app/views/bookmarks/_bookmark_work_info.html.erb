@@ -51,7 +51,7 @@
               <%- if hide_warnings?(bookmark.bookmarkable) -%>
                 <li><%= show_warnings_link(bookmark.bookmarkable) %></li>
               <%- else -%>
-                <%= warning_tags.collect{|tag| '<li>' + link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') + '</li>' }.join(', ') %>
+              <li>  <%= warning_tags.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') }.join(', </li></li>') %>
               <%- end -%>
             </ul>
           </dd>
@@ -60,7 +60,9 @@
           <dt><%= t('work_tags', :default => "Author's Tags") + ': ' %></dt>
           <dd>
             <ul id="bookmark_<%= bookmark.id %>_category_freeform">
-              <%= freeform_tags.collect{|tag| '<li>' + link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') + '</li>' }.join(', ') %>
+            <%- if hide_freeform?(work) -%>
+          <li><%= show_freeforms_link(work) %></li>
+           <li>   <%= freeform_tags.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag')  }.join(', </li></li>') %>
             </ul>
           </dd>
         <%- end -%>

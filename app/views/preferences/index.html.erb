@@ -33,6 +33,11 @@
   			<%= f.check_box :hide_warnings %> 
   			<%= f.label :hide_warnings, t('hide_warnings', :default => "Hide warnings by default (you will still have the option of revealing them)")  %>
 			</li>
+      
+      			<li>
+  			<%= f.check_box :hide_freeform %> 
+  			<%= f.label :hide_freeform, t('hide_freeform', :default => "Hide freeform tags by default (you will still have the option of revealing them)")  %>
+			</li>
     	
     	<li>
       	<%= f.check_box :comment_emails_off %> 

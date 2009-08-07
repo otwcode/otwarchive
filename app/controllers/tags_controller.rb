@@ -55,10 +55,11 @@ class TagsController < ApplicationController
   end
 
   def show_hidden
-    unless params[:work_id].blank?
+      unless params[:work_id].blank?
       @display_work = Work.find(params[:work_id])
       @display_tags = @display_work.warnings
       @display_category = @display_tags.first.class.name.downcase
+    
     end
     if request.xml_http_request?
       respond_to do |format|
@@ -72,6 +73,26 @@ class TagsController < ApplicationController
 
   end
 
+  def show_hidden_freeforms
+    unless params[:work_id].blank?
+      @display_work = Work.find(params[:work_id])
+      @display_tags = @display_work.freeforms
+      @display_category = @display_tags.first.class.name.downcase
+    end
+    if request.xml_http_request?
+      respond_to do |format|
+        format.js
+      end
+    else
+      # This is just a quick fix to avoid script barf if JavaScript is disabled
+      flash[:error] = t('need_javascript', :default => "Sorry, you need to have JavaScript enabled for this.")
+      redirect_to :back
+    end
+
+  end  
+  
+  
+  
   # GET /tags/new
   # GET /tags/new.xml
   def new
