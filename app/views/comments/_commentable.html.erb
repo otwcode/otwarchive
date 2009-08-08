@@ -1,7 +1,6 @@
 <!-- Gets embedded anywhere we need to list comments on a top-level commentable. We need the local variable "commentable" here. -->
 <a name="comments"></a>
 <div id="feedback">
-  <%= flash_div :comment_error, :comment_notice -%>
   <ul class="navigation">
     <%- if logged_in? && (commentable.class == Chapter || CanHasBookmarks > commentable.class) -%>
       <li id="add_bookmark_link"><%= bookmark_link(commentable) %></li>			
@@ -16,7 +15,7 @@
   <!-- if we have javascript, here is where the bookmark window will pop up -->
   <div id="dynamic-bookmark" style="display:none;">	
   </div>
-
+  <%= flash_div :comment_error, :comment_notice -%>
   <!-- If we have javascript, here is where the Add Comment window will appear. -->
   <!-- If not, and we have params telling us to comment on this object, we will manually display the comment window. --> 
   <%- if params[:add_comment] -%>

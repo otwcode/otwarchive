@@ -106,5 +106,5 @@ ul.work-list li.tags	{ display:inline; }
 .works-navigate ol {padding-left:2em;}
 
 
-
-
+/*Link to top on works and chapters pages */
+#link-to-top a { font-size: 0.75em; border-bottom: none; text-decoration: underline; }
