@@ -44,14 +44,16 @@
 <fieldset>
 	<legend><%= t('form_chapter_text', :default => 'Chapter Text') -%></legend>
  	<p>
-    <%= f.label :content, t('form_content', :default => "Chapter, in plain text with limited HTML*"), :class => "required" %><%= link_to_help "html-help" -%>
-  </p>
-	<p id=""><code>a href, b, blockquote, br, center, cite, code, del, dd, dt, dl, div, em, h1, h2, h3, h4, h5, h6, i, ins, li, ol, pre, q, small, span, strike, strong, sub, sup, ul</code></p>
+    <%= f.label :content, t('form_content', :default => "Chapter text"), :class => "required" %></p>
+  <div id="toggleText" style="display: block">
+  <p>Plain text with limited html <%= link_to_help "html-help" -%><br/><code>a href, b, big, blockquote, br, caption, center, cite, code, col, colgroup, del, dd, dt, dl, div, em, h1, h2, h3, h4, h5, h6, i, ins, li, ol, pre, q, small, span, strike, strong, sub, sup, table, tr, td, th, tbody, thead, tfoot, ul</code></p>
+  </div>
+  <% use_tinymce -%>
   <p class="rtf-html-switch">
-		<% use_tinymce -%>
-	    <span><a href="javascript:addEditor('content');"><%=h 'Rich text' %></a></span>
-	    <span><a href="javascript:removeEditor('content');"><%=h 'HTML' %></a></span>
-	</p>
+    <span><a id="displayText" href="javascript:addEditor('content');javascript:toggle();"><%=h 'Rich text' %></a></span>
+    <span><a id="displayText" href="javascript:removeEditor('content');javascript:toggle();"><%=h 'HTML' %></a></span>
+  </p>
+  
 	<p>
 		<%= f.text_area :content, :class => "mce-editor", :id => "content" %>
       	<%= live_validation_for_field('content', 

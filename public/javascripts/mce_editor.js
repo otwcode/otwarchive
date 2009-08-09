@@ -23,17 +23,30 @@ tinyMCE.init({
 	theme_advanced_resizing : true
 
 });
-
+ 
+//Changes the labels and info at the top to Story Text section in _works_form and _chapter_form
+  
+  function toggle() {
+      var ele = document.getElementById("toggleText");
+      var text = document.getElementById("displayText");
+      if(ele.style.display == "block") {
+    		ele.style.display = "none";
+      text.innerHTML = "Rich text";
+      }
+      else {
+      ele.style.display = "block";
+      text.innerHTML = "Rich text";
+      }
+    }
+    
 //Allows the user to turn the rich text editor off and on. 
-
-function addEditor(id) {
-			tinyMCE.execCommand('mceAddControl', false, id)
-					
-}
-
-function removeEditor(id) {
+  function addEditor(id) {
+    tinyMCE.execCommand('mceAddControl', false, id)
+  }
+        
+  function removeEditor(id) {
 		tinyMCE.execCommand('mceRemoveControl', false,  id)
-}
+  }
 
 
 function convertWord (type, content) {
