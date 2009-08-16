@@ -34,6 +34,8 @@
     <li>
       <%= render :partial => 'bookmarks/bookmark_owner_navi', :locals => {:bookmark => bookmark} %>
     </li>
+  <%- elsif logged_in_as_admin? -%>
+    <%= render :partial => 'admin/admin_options', :locals => {:item => bookmark} %>
   <%- end -%>
   </ul>
 </li>

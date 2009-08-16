@@ -104,4 +104,6 @@
   </ul>
 <%- if is_author_of?(bookmark) -%>
  <%= render :partial => 'bookmarks/bookmark_owner_navi', :locals => {:bookmark => bookmark} %>
-<%- end -%>
+<%- elsif logged_in_as_admin? -%>
+  <%= render :partial => 'admin/admin_options', :locals => {:item => bookmark} %>
+<%- end -%> 
