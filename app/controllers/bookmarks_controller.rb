@@ -41,7 +41,7 @@ class BookmarksController < ApplicationController
     end
     # Do not want to aggregate bookmarks on these pages
     if params[:pseud_id] || params[:user_id] || params[:work_id] || params[:external_work_id] 
-      search_by = owner ? "owner.bookmarks" : "Bookmark"
+      search_by = params[:recs_only] ? "owner.bookmarks.recs" : "owner.bookmarks"
       @bookmarks = eval(search_by).visible(:order => "bookmarks.created_at DESC").paginate(:page => params[:page])
     else # Aggregate on main bookmarks page, tag page
       if params[:tag_id] 
@@ -55,8 +55,9 @@ class BookmarksController < ApplicationController
         @bookmarkables = Bookmark.recent.visible.collect{|b| [b.bookmarkable_type, b.bookmarkable_id]}.uniq
       end
       @bookmarks = []
+      search_by = params[:recs_only] ? "eval(b[0]).find(b[1]).bookmarks.recs.visible" : "eval(b[0]).find(b[1]).bookmarks.visible"
       @bookmarkables.each do |b|
-        @bookmarks << eval(b[0]).find(b[1]).bookmarks.visible.last unless eval(b[0]).find(b[1]).bookmarks.visible.blank?
+        @bookmarks << eval(search_by).last unless eval(search_by).blank?
       end
       @bookmarks = @bookmarks.sort_by(&:created_at).reverse.paginate(:page => params[:page])
     end

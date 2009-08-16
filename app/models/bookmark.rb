@@ -6,6 +6,7 @@ class Bookmark < ActiveRecord::Base
   
   named_scope :public, :conditions => {:private => false}
   named_scope :recent, lambda { |*args| {:conditions => ["bookmarks.created_at > ?", (args.first || 4.weeks.ago)]} }
+  named_scope :recs, :conditions => {:rec => true} #must come before visible in the chain
   
   validates_length_of :notes, 
     :maximum => ArchiveConfig.NOTES_MAX, :too_long => t('notes_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.NOTES_MAX)

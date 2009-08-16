@@ -1,9 +1,8 @@
 <ul>
   <li class="heading bookmark-heading">
-    <!-- We don't yet have tags on external works, so can't show work icons -->
     <ul class="bookmark-icons">
-      <li><%= image_tag 'bookmark-placeholder.png', :alt => '', :title => "dummy icons for layout purpose" -%></li>
       <li><%= image_tag 'category-none.png', :alt => '' -%></li>
+      <%= get_symbol_for_bookmark(bookmark) %>
     </ul>
     <h3><%- if bookmark.bookmarkable.nil? -%>
       (<%= t('bookmark_oh_noes', :default => 'Oh noes, this work has been deleted.') -%>)
@@ -99,10 +98,7 @@
       </li>
     <%- end -%>
     <li>  <p class="byline">
-      - <%= link_to bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud] -%>&nbsp;(<%= link_to bookmark.pseud.bookmarks.visible.size.to_s, user_pseud_bookmarks_path(bookmark.pseud.user, bookmark.pseud) -%>)    
-      <%- if bookmark.private -%>
-        <%= image_tag("lockblack.png", :size => "15x15", :alt => t('bookmark_private', :default => "(Private)"), :title => "Private bookmark") %>
-      <%- end -%><br />
+      - <%= link_to bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud] -%>&nbsp;(<%= link_to bookmark.pseud.bookmarks.visible.size.to_s, user_pseud_bookmarks_path(bookmark.pseud.user, bookmark.pseud) -%>)<br />    
       <%= set_format_for_date(bookmark.updated_at) %>
     </p></li>
   </ul>

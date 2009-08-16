@@ -175,19 +175,20 @@ ul#series-work-list li.work ul.work li ul li {display:inline;}
 */
 
 /*BOOKMARKS-INDEX BOOKMARKS */
-#bookmarks ul.bookmark {margin-top: 0.875em;}
-#bookmarks li.bookmark {margin-bottom: 1.25em !important; border-bottom: 1px solid #DDDDDD;}
-#bookmarks .bookmark p.byline {text-align:right;}
-#bookmarks .bookmark .user-info dl {padding-top:0;}
-#bookmarks .bookmark .user-tags li {padding:0;}
-#bookmarks .bookmark .user-info dt {font-weight:bold; width:7em; padding:0 0.5625em 0.25em 0; }
-#bookmarks .bookmark .user-info dd {margin:-1.55em 0 .75em 7em; text-indent:0; padding:0;}
+/* Taken out #bookmarks and .work as temp fix to keep symbols small - some pages don't have them (Cal) */
+ul.bookmark {margin-top: 0.875em;}
+li.bookmark {margin-bottom: 1.25em !important; border-bottom: 1px solid #DDDDDD;}
+.bookmark p.byline {text-align:right;}
+.bookmark .user-info dl {padding-top:0;}
+.bookmark .user-tags li {padding:0;}
+.bookmark .user-info dt {font-weight:bold; width:7em; padding:0 0.5625em 0.25em 0; }
+.bookmark .user-info dd {margin:-1.55em 0 .75em 7em; text-indent:0; padding:0;}
 
-#bookmarks .bookmark li.bookmark-heading {position: relative; min-height: 25px;}
-#bookmarks .work ul.bookmark-icons {width:75px; height:27px;float:left;}
-#bookmarks .work ul.bookmark-icons li img {width:25px; height:25px;}
-#bookmarks .work ul.bookmark-icons li { display:inline; padding:0;margin:0; width:25px; height:25px;}
-#bookmarks .bookmark ul.navigation {text-align:left;}
+.bookmark li.bookmark-heading {position: relative; min-height: 25px;}
+ul.bookmark-icons {width:75px; height:27px;float:left;}
+ul.bookmark-icons li img {width:25px; height:25px;}
+ul.bookmark-icons li { display:inline; padding:0;margin:0; width:25px; height:25px;}
+.bookmark ul.navigation {text-align:left;}
 
 /*TAGS-INDEX */
 .tags-index ul { text-align: center; margin: 2em auto; }
