@@ -95,7 +95,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :related_works, :except => [:new, :edit, :create] 
   map.resources :serial_works, :only => :destroy 
 
-  map.resources :series , :member => {:manage => :get, :update_positions => :post}
+  map.resources :series , :member => {:manage => :get, :update_positions => :post}, :has_many => :bookmarks
 
   map.open_id_complete 'session', :controller => "session", :action => "create", :requirements => { :method => :get } 
 

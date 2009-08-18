@@ -11,6 +11,8 @@ class BookmarksController < ApplicationController
       @bookmarkable = Work.find(params[:work_id])
     elsif params[:external_work_id]
       @bookmarkable = ExternalWork.find(params[:external_work_id])
+    elsif params[:series_id]
+      @bookmarkable = Series.find(params[:series_id])
     end
   end  
 
@@ -40,7 +42,7 @@ class BookmarksController < ApplicationController
       owner ||= @bookmarkable
     end
     # Do not want to aggregate bookmarks on these pages
-    if params[:pseud_id] || params[:user_id] || params[:work_id] || params[:external_work_id] 
+    if params[:pseud_id] || params[:user_id] || params[:work_id] || params[:external_work_id] || params[:series_id]
       search_by = params[:recs_only] ? "owner.bookmarks.recs" : "owner.bookmarks"
       @bookmarks = eval(search_by).visible(:order => "bookmarks.created_at DESC").paginate(:page => params[:page])
     else # Aggregate on main bookmarks page, tag page

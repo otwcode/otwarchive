@@ -16,6 +16,9 @@ module BookmarksHelper
         fallback = new_external_work_bookmark_path(bookmarkable)
         blurb == true ? text = t('save_bookmark', :default => 'Save') :
         text = t('add_new_bookmark', :default => 'Add A New Bookmark')
+      elsif bookmarkable.class == Series
+        fallback = new_series_bookmark_path(bookmarkable)
+        blurb == true ? text = t('save_bookmark', :default => 'Save') : text = t('bookmark', :default => 'Bookmark Series')
       end
       # Check to see if the user has an existing bookmark on this object. Note: on work page we eventually want to change this so an 
       # existing bookmark is opened for editing but a new bookmark can be created by selecting a different pseud on the form.

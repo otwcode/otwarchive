@@ -1,0 +1,10 @@
+<h3>
+  <%- if bookmark.bookmarkable.nil? -%>
+    (<%= t('bookmark_oh_noes', :default => 'Oh noes, this work has been deleted.') -%>)
+  <%- else -%>
+    <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable.url -%>
+    <%=h t('bookmark_by', :default => 'by') %>
+    <%= bookmark.bookmarkable.author -%>
+  <%- end -%>   
+</h3>
+</li>

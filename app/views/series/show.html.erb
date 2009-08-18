@@ -30,13 +30,17 @@
 	<%- end -%>
 </dl>
 
-<%- if is_author_of?(@series) -%>
-  <ul class="navigation">
+<ul class="navigation">
+  <li><%= bookmark_link(bookmarkable=@series, blurb=false) %></li>
+  <%- if is_author_of?(@series) -%>
     <li><%= link_to "Edit", edit_series_path(@series) %></li>
     <li><%= link_to 'Delete Series', @series, :confirm => 'Are you sure?', :method => :delete %></li>
     <li><%= link_to "Reorder Series", manage_series_path(@series) %></li>
-  </ul>
-<%- end -%>
+  <%- end -%>
+</ul>
+
+<div id="dynamic-bookmark" style="display:none;">	
+</div>
 
 <%- if logged_in_as_admin? -%>
 <!-- BEGIN admin options -->
@@ -48,3 +52,4 @@
     <%= render :partial => 'works/work_blurb', :locals => {:work => serial.work} %>
   <%- end -%>
 </ul>
+

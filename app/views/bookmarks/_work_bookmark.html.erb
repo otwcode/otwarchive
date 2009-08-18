@@ -1,0 +1,42 @@
+<h3>
+  <%- if bookmark.bookmarkable.nil? -%>
+    (<%= t('bookmark_oh_noes', :default => 'Oh noes, this work has been deleted.') -%>)
+  <%- else -%>
+    <%- if bookmark.bookmarkable.restricted -%>
+      <%= image_tag("lockblue.png", :size => "15x15", :alt => t('bookmark_restricted', :default => "(Restricted)"), :title => "Restricted Work") %>
+    <%- end -%>
+    <%- if bookmark.bookmarkable.hidden_by_admin -%>
+      <%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %>
+    <%- end -%>
+    <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable %>
+    <%=h t('bookmark_by', :default => 'by') %>
+    <%= byline(bookmark.bookmarkable) %>
+  <%- end -%>
+</h3>
+</li>
+<li class="heading">
+  <%- if not bookmark.bookmarkable.nil? -%>
+    <%= get_symbols_for(bookmark.bookmarkable) -%>
+  <%- end -%>
+  <h4>
+    <span class="bookmark-fandoms"><%= bookmark.bookmarkable.fandom_tags.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', ') %></span>
+    <%- author_tags = bookmark.bookmarkable.cast_tags + bookmark.bookmarkable.freeform_tags
+    unless author_tags.size < 1 -%>
+      | <span class="bookmark-author-tags"><%= t('bookmark_author_tags', :default => 'Tags') %>: <%= author_tags.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', ') %></span>
+    <%- end -%>
+    <%- unless bookmark.bookmarkable.warning_tags.size < 1 -%>
+      <dl style="margin-top: 0.5em">
+      <dt style="display:inline"><%=h 'Warnings' + ': ' %></dt>
+      <dd style="display:inline">
+        <ul style="display:inline" id="work_<%= bookmark.bookmarkable.id %>_category_warning">
+          <%- if hide_warnings?(bookmark.bookmarkable) -%>
+            <li><%= show_warnings_link(bookmark.bookmarkable) %></li>
+          <%- else -%>
+            <%= bookmark.bookmarkable.warning_tags.collect{|tag| '<li>' + link_to(tag.name, link_to_tag_bookmarks(tag)) + '</li>' }.join(', ') %>
+          <%- end -%>
+        </ul>
+      </dd>
+      </dl>
+    <%- end -%>
+  </h4>
+</li>

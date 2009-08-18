@@ -30,7 +30,7 @@ class Bookmark < ActiveRecord::Base
         # created the bookmark
         return self if pseud.user == current_user
       else
-        if self.bookmarkable_type == 'Work'
+        if self.bookmarkable_type == 'Work' || self.bookmarkable_type == 'Series'
           return self if self.bookmarkable.visible(current_user)
         else
           return self
