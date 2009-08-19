@@ -1,18 +1,23 @@
 class ExternalWork < ActiveRecord::Base
   has_bookmarks
 
+  AUTHOR_LENGTH_MAX = 500
+  
   validates_presence_of :title
   validates_length_of :title, :minimum => ArchiveConfig.TITLE_MIN, 
-    :too_short=> t('title_too_short', :default => "must be at least {{min}} letters long.", :min => ArchiveConfig.TITLE_MIN)
-
+    :too_short=> t('title_too_short', :default => "must be at least {{min}} characters long.", :min => ArchiveConfig.TITLE_MIN)
   validates_length_of :title, :maximum => ArchiveConfig.TITLE_MAX, 
-    :too_long=> t('title_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.TITLE_MAX)
+    :too_long=> t('title_too_long', :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.TITLE_MAX)
     
   validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, 
-    :too_long => t('summary_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    :too_long => t('summary_too_long', :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
       
   validates_presence_of :url
+  
   validates_presence_of :author
+  validates_length_of :author, :maximum => AUTHOR_LENGTH_MAX, 
+    :too_long=> t('author_too_long', :default => "must be less than {{max}} characters long.", :max => AUTHOR_LENGTH_MAX)
+
   after_update :save_associated
   
   # Standardizes format of urls so they're easier to validate and compare

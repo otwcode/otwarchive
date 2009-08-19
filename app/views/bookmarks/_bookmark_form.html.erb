@@ -26,7 +26,10 @@
 		<%= hidden_field 'fetched', :value => '' %>
 	</dd>
 	<dt><%= ew.label :author, t('form_author', :default => "Author: ") %></dt>
-		<dd> <%= ew.text_field :author %></dd>
+		<dd>
+      <%= ew.text_field :author %>
+      <%= generate_countdown_html("bookmark_external_author", ExternalWork::AUTHOR_LENGTH_MAX) -%>      
+    </dd>
 	<dt><%= ew.label :title, t('form_title', :default => "Title: ") %></dt>
 		<dd>
       <%= ew.text_field :title %>
