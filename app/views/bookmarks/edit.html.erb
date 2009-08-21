@@ -1,7 +1,10 @@
 <h1><%=h t('editing', :default => 'Editing bookmark') %></h1>
 
 <%= error_messages_for :bookmark %>
-
+<p><%= link_to_new_bookmarkable_bookmark(@bookmark.bookmarkable) %></p>
+<% if params[:existing] %>
+  <p><%= link_to_user_bookmarkable_bookmarks(@bookmark.bookmarkable) %></p>
+<%- end -%>
 <%= render :partial => 'bookmark_form', :locals => {:button_name => t('forms.update', :default => 'Update'), :action => 'update'} %>
 
 <ul class="navigation">

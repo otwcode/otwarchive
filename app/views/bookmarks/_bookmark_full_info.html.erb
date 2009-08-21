@@ -15,7 +15,7 @@
   <li>
     <%= link_to_bookmarkable_bookmarks(bookmark.bookmarkable) -%>
   </li>
-  <%- if logged_in? && !is_author_of?(bookmark) -%>
+  <%- if logged_in? -%>
     <li>
       <%= bookmark_link(bookmark.bookmarkable, true)%>
     </li>

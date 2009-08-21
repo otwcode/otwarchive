@@ -22,19 +22,41 @@ module BookmarksHelper
       end
       # Check to see if the user has an existing bookmark on this object. Note: on work page we eventually want to change this so an 
       # existing bookmark is opened for editing but a new bookmark can be created by selecting a different pseud on the form.
-      existing = Bookmark.find(:first, :conditions => ["bookmarkable_type = ? AND bookmarkable_id = ? AND pseud_id IN (?)", bookmarkable.class.name.to_s, bookmarkable.id, current_user.pseuds.collect(&:id)])
-      if existing.nil?                                         
+      @existing = Bookmark.find(:all, :conditions => ["bookmarkable_type = ? AND bookmarkable_id = ? AND pseud_id IN (?)", bookmarkable.class.name.to_s, bookmarkable.id, current_user.pseuds.collect(&:id)])
+      if @existing.blank?                                         
         link_to_remote text, {:url => fallback, :method => :get}, :href => fallback
       else
         # eventually we want to add the option here to remove the existing bookmark
         # Enigel Dec 10 08 - adding an edit link for now
         if blurb == true 
-          link_to t('saved_bookmark', :default => 'Saved'), bookmark_path(existing) 
-        else  
-          link_to t('edit_bookmark', :default => "Edit/Add Bookmark"), edit_bookmark_path(existing)
+          if @existing.many?
+            string = bookmarkable.class.to_s.underscore
+            path = string + "_bookmarks_path(bookmarkable, :existing => true)"
+            link_to t('saved_bookmarks', :default => 'Saved'), eval(path) 
+          else
+            link_to t('saved_bookmark', :default => 'Saved'), bookmark_path(@existing)
+          end
+        else 
+          if @existing.many?
+            link_to t('edit_bookmark', :default => "Edit/Add Bookmark"), edit_bookmark_path(@existing.last, :existing => true)
+          else
+            link_to t('edit_bookmark', :default => "Edit/Add Bookmark"), edit_bookmark_path(@existing.last, :existing => false)
+          end
         end      
       end
     end
+  end
+  
+  def link_to_new_bookmarkable_bookmark(bookmarkable)
+    string = bookmarkable.class.to_s.underscore
+    path = "new_" + string + "_bookmark_path(bookmarkable)"
+    link_to "Add a new bookmark for this item", eval(path)
+  end
+  
+  def link_to_user_bookmarkable_bookmarks(bookmarkable)
+    string = bookmarkable.class.to_s.underscore
+    path = string + "_bookmarks_path(bookmarkable, :existing => true)"
+    link_to "You have saved multiple bookmarks for this item", eval(path)
   end
   
   # tag_bookmarks_path was behaving badly for tags with slashes
