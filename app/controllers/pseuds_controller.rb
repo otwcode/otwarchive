@@ -121,14 +121,21 @@ class PseudsController < ApplicationController
   # DELETE /pseuds/1
   # DELETE /pseuds/1.xml
   def destroy
+    @hide_dashboard = true
     @pseud = @user.pseuds.find_by_name(params[:id])
     if @pseud.is_default
       flash[:error] = t('delete_default', :default => "You cannot delete your default pseudonym, sorry!")
    elsif @pseud.name == @user.login
       flash[:error] = t('delete_user_name', :default => "You cannot delete the pseud matching your user name, sorry!")
+   elsif params[:bookmarks_action] == 'transfer_bookmarks'
+     @pseud.change_bookmarks_ownership
+     @pseud.replace_me_with_default
+     flash[:notice] = t('successfully_deleted', :default => "The pseud was successfully deleted.")
+   elsif params[:bookmarks_action] == 'delete_bookmarks'
+     @pseud.replace_me_with_default
+     flash[:notice] = t('successfully_deleted', :default => "The pseud was successfully deleted.")
    else
-      @pseud.replace_me_with_default
-      flash[:notice] = t('successfully_deleted', :default => "The pseud was successfully deleted.")
+      render :partial => 'delete_preview', :layout => 'application' and return  
    end
 
     redirect_to(user_pseuds_url(@user))
