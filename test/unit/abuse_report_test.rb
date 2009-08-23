@@ -5,7 +5,6 @@ class AbuseReportTest < ActiveSupport::TestCase
     setup do
       assert @abuse_report = create_abuse_report
     end
-    subject { @abuse_report }
     should_validate_presence_of :comment
     
     should_not_allow_values_for :email, "abcd", "user@domain.badbadbad", :message => /invalid/

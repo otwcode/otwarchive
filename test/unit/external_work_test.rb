@@ -6,7 +6,6 @@ class ExternalWorkTest < ActiveSupport::TestCase
     setup do
       @external_work = create_external_work
     end
-    subject { @external_work }
     should_validate_presence_of :title
     should_validate_presence_of :author
     should_validate_presence_of :url
@@ -15,7 +14,6 @@ class ExternalWorkTest < ActiveSupport::TestCase
       setup do
       @external_work.summary = random_paragraph
       end
-      subject { @external_work }
       should_ensure_length_in_range :summary, (0..ArchiveConfig.SUMMARY_MAX), :long_message => /must be less/
     end
   end

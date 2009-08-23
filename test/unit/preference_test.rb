@@ -6,7 +6,6 @@ class PreferenceTest < ActiveSupport::TestCase
     setup do
       @preference = create_preference
     end
-    subject { @preference }
     should_belong_to :user
     should_not_allow_values_for :work_title_format, "ab!cd", :message => /contain/
     should_allow_values_for :work_title_format, "ab cd", "ab.cd", "ab_cd", "ab,cd", "ab-cd", "ab12"

@@ -131,7 +131,7 @@ class PseudsController < ApplicationController
      @pseud.change_bookmarks_ownership
      @pseud.replace_me_with_default
      flash[:notice] = t('successfully_deleted', :default => "The pseud was successfully deleted.")
-   elsif params[:bookmarks_action] == 'delete_bookmarks'
+   elsif params[:bookmarks_action] == 'delete_bookmarks' || @pseud.bookmarks.empty?
      @pseud.replace_me_with_default
      flash[:notice] = t('successfully_deleted', :default => "The pseud was successfully deleted.")
    else

@@ -6,7 +6,6 @@ class SeriesTest < ActiveSupport::TestCase
     setup do
       @series = create_series       
     end
-    subject { @series }
     should_have_many :serial_works, :works, :bookmarks
     should_validate_presence_of :title
     should_ensure_length_in_range :title, ArchiveConfig.TITLE_MIN..ArchiveConfig.TITLE_MAX, :short_message => /must be at least/, :long_message => /must be less/
