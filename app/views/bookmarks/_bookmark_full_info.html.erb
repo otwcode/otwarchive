@@ -19,7 +19,21 @@
     <li>
       <%= bookmark_link(bookmark.bookmarkable, true)%>
     </li>
-  <%- end -%>    
+  <%- end -%>
+  <%- if params[:tag_id] || @most_recent_bookmarks -%>
+    <li id="recent_link_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.bookmarkable_id}" -%>", style="display: none;">
+      <%- if @most_recent_bookmarks -%>
+        <%= link_to_remote "View most recent bookmarks", :url => {:controller => 'bookmarks', :action => 'fetch_recent', :id => bookmark.id, :params => {:fetch => true} },
+      :method => :get %>
+      <%- else -%>
+      <%- @tag = Tag.find_by_name(:tag_id) -%>
+      <%= link_to_remote "View most recent bookmarks", :url => {:controller => 'bookmarks', :action => 'fetch_recent', :id => bookmark.id, :params => {:fetch => true, :tag_id => params[:tag_id]} },
+      :method => :get %>
+      <%- end -%>
+    </li>
+    <!-- hides recent link if no JS available-->
+    <%= update_page_tag do |page| page.toggle "recent_link_#{bookmark.bookmarkable_type.underscore}_#{bookmark.bookmarkable_id}" end -%> 
+  <%- end -%>
 </ul>
     <hr style="margin-left: 75px; border: 0; background: #DDDDDD; height: 1px;">
   <ul class="user-info">
@@ -54,4 +68,4 @@
  <%= render :partial => 'bookmarks/bookmark_owner_navi', :locals => {:bookmark => bookmark} %>
 <%- elsif logged_in_as_admin? -%>
   <%= render :partial => 'admin/admin_options', :locals => {:item => bookmark} %>
-<%- end -%> 
+<% end %>   

@@ -14,7 +14,11 @@
     <%= render :partial => 'series/series_blurb', :locals => {:series => @bookmarkable } %>
     <%- for bookmark in @bookmarks -%>     
       <%= render :partial => 'bookmarks/bookmark_user_info', :locals => {:bookmark => bookmark, :params => {:user_view => true}} %>
-    <%- end -%>       
+    <%- end -%>
+  <%- elsif params[:show_recent] -%>
+     <%- for bookmark in @recent_bookmarks -%>
+       <%= render :partial => 'bookmarks/bookmark_user_info', :locals => {:bookmark => bookmark} %>         
+     <%- end -%>
   <%- else -%>
     <%- for bookmark in @bookmarks -%>
       <%= render :partial => 'bookmarks/bookmark', :locals => {:bookmark => bookmark} %>

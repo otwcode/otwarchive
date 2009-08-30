@@ -1,4 +1,7 @@
 <!-- This partial requires local variable 'bookmark' -->
-<li class="work bookmark <%- if is_author_of?(bookmark) -%>own<%- end -%>">
+<li id="bookmark_<%= "#{bookmark.id}" -%>", class="work bookmark <%- if is_author_of?(bookmark) -%>own<%- end -%>">
   <%= render :partial => 'bookmarks/bookmark_full_info', :locals => {:bookmark => bookmark} %>
+<br />
+<div id="recent_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.bookmarkable_id}" -%>">
+</div>
 </li>
