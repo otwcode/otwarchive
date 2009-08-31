@@ -176,20 +176,35 @@ ul#series-work-list li.work ul.work li ul li {display:inline;}
 */
 
 /*BOOKMARKS-INDEX BOOKMARKS */
-/* Taken out #bookmarks and .work as temp fix to keep symbols small - some pages don't have them (Cal) */
-ul.bookmark {margin-top: 0.875em;}
-li.bookmark {margin-bottom: 1.25em !important; border-bottom: 1px solid #DDDDDD;}
-.bookmark p.byline {text-align:right;}
-.bookmark .user-info dl {padding-top:0;}
-.bookmark .user-tags li {padding:0;}
-.bookmark .user-info dt {font-weight:bold; width:7em; padding:0 0.5625em 0.25em 0; }
-.bookmark .user-info dd {margin:-1.55em 0 .75em 7em; text-indent:0; padding:0;}
+#main ul.bookmark {margin-top: 0.875em;}
+#main li.bookmark {padding: 0 0.5em 0.5em 0.5em; margin-bottom: 1.25em !important; border: 1px solid #DDDDDD;}
+#main .bookmark p.byline {margin-left: 3em;}
+#main .bookmark .user-info dl {padding-top:0;}
+#main .bookmark .user-info dd ul li {padding:0 0 0.25em 0; margin:0;}
+#main .bookmark .user-info dd ul li p, #bookmarks .bookmark .user-info dd p {padding: 0; margin: 0;}
+#main .bookmark .user-info dt {font-weight:bold; width:7em; padding:0 0.5625em 0.25em 0; }
+#main .bookmark .user-info dd {margin:-1.55em 0 .75em 7em; text-indent:0; padding:0;}
 
-.bookmark li.bookmark-heading {position: relative; min-height: 25px;}
-ul.bookmark-icons {width:75px; height:27px;float:left;}
-ul.bookmark-icons li img {width:25px; height:25px;}
-ul.bookmark-icons li { display:inline; padding:0;margin:0; width:25px; height:25px;}
-.bookmark ul.navigation {text-align:left;}
+#main .bookmark div.bookmark-count { font-size:15px; height:25px; line-height:25px; margin-left:29px; margin-top:-29px; text-align:center; vertical-align:middle; width:25px; }
+
+#main .bookmark li.bookmark-heading {position: relative; min-height: 25px;}
+#main ul.bookmark-icons {width:75px; height:27px;float:left;}
+#main ul.bookmark-icons li img {width:25px; height:25px;}
+#main ul.bookmark-icons li { display:inline; padding:0;margin:0; width:25px; height:25px;}
+#main .bookmark ul.navigation {text-align:left; margin-bottom: -0.75em; padding-top: 0.5em;}
+#main .bookmark dd ul li {display: inline;}
+
+#main li.bookmark-options { text-align: right; font-size: 0.9em;    }
+#main .bookmark-options li { margin-left: 0.5em; display: inline; padding: 0 0.5625em; border:1px solid #DDDDDD; border-bottom:0; text-indent:0; }
+
+#main .bookmark ul.user-info { border: 1px dotted #DDDDDD; position: relative; padding-left: 0.5em; }
+#main .bookmark ul.recent-bookmarks li.bookmark { border: none;}
+#main ul.user-info ul.bookmark-icons {width: 35px; }
+#main .bookmark li.byline { color: #777777; font-weight: 700; }
+#main ul.user-info li.byline { min-height: 25px; }
+#main .bookmark li.byline-date { position: absolute; top: 0; right: 0; padding-right: 0.5em; } 
+
+#bookmarks ul.work {margin-right: 0;}
 
 /*TAGS-INDEX */
 .tags-index ul { text-align: center; margin: 2em auto; }
@@ -223,7 +238,7 @@ dl.translations {position:relative; margin: 1.5em auto; padding: 1.5em 0 2.5em; 
 /* BOOKMARKS AND WORKS EDIT BUTTONS */
 .work .navigation a, .bookmark .navigation a {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:none; border:1px solid #ccc; padding:0.25em;}
 .work .navigation, .work .navigation li, .bookmark .navigation, .bookmark .navigation li {border:0; background:transparent;}
-.work ul.navigation, .bookmark ul.navigation {margin: 0 0 -0.75em 0;}
+.work ul.navigation, .bookmark ul.navigation {margin: 0;}
 
 /*ToS and any other long text pages.
 * styling duplicates the work-views.css and is incorporated there*/

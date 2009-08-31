@@ -88,7 +88,7 @@ module WorksHelper
     end
   end
 
-  def get_symbols_for(work)
+  def get_symbols_for(work, symbols_only = false)
     warnings = work.tags.select{|tag| tag.type == "Warning"}
     warning_class = get_warnings_class(warnings)
     warning_string = get_title_string(warnings)
@@ -106,7 +106,8 @@ module WorksHelper
     iswip_class = get_complete_class(work)
     iswip_string = work.is_wip ? "Work in Progress" : "Complete Work"
 
-    symbol_block = "<ul class=\"required-tags\">\n"
+    symbol_block = ""
+    symbol_block << "<ul class=\"required-tags\">\n" if not symbols_only
     %w(rating category warning iswip).each do |w|
       css_class = eval("#{w}_class")
       title_string = eval("#{w}_string")
@@ -114,7 +115,8 @@ module WorksHelper
       symbol_block << link_to_help('symbols-key', link = image_tag( "#{css_class}.png", :alt => title_string, :title => title_string))
       symbol_block << "</li>\n"
     end
-    symbol_block << "</ul>\n"
+    symbol_block << "</ul>\n" if not symbols_only 
+    return symbol_block
   end
 
   def get_warnings_class(warning_tags)

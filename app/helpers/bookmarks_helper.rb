@@ -64,8 +64,11 @@ module BookmarksHelper
     {:controller => 'bookmarks', :action => 'index', :tag_id => tag}
   end
   
-  def link_to_bookmarkable_bookmarks(bookmarkable)
-    link_to Bookmark.count_visible_bookmarks(bookmarkable, current_user), eval(bookmarkable.class.to_s.underscore + "_bookmarks_path(bookmarkable)")
+  def link_to_bookmarkable_bookmarks(bookmarkable, link_text='')
+    if link_text.blank? 
+      link_text = Bookmark.count_visible_bookmarks(bookmarkable, current_user)
+    end
+    link_to link_text, eval(bookmarkable.class.to_s.underscore + "_bookmarks_path(bookmarkable)")
   end
   
   def get_symbol_for_bookmark(bookmark)

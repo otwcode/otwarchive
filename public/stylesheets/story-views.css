@@ -91,6 +91,7 @@ dl.series-meta dd { margin:-1.286em 0 1em 12em !important; text-indent:0; paddin
 .bookmark li.bookmark-heading { color: #000000; }
 .bookmark-fandoms { font-weight: 500; font-size: 1.1em; }
 .bookmark-author-tags { font-weight: 100; font-size: 0.90em; }
+.bookmark .byline-date {}
 /*.bookmark .work-info li.summary, .work-info li.work-tags { border: 1px solid black !important; font-size: 0.75em !important; background: red !important; }
 .bookmark .user-notes {  }
 .bookmark .user-tags {  }*/
@@ -100,7 +101,7 @@ dl.series-meta dd { margin:-1.286em 0 1em 12em !important; text-indent:0; paddin
 * #main.works-show ul#navigation	{ margin:0.75em 0; text-align:right}
 * .works-show #navigation li.go-back	{ display:block; float:left; padding:0 0.25em 0 0; }
 */
-ul.work-list li.tags	{ display:inline; }
+#main ul.work-list li.tags	{ display:inline; }
 
 .works-navigate ol, .works-navigate li {list-style-type:decimal;}
 .works-navigate ol {padding-left:2em;}

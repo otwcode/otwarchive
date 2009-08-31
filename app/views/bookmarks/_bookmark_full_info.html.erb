@@ -1,10 +1,11 @@
+<%- bookmark_count =  Bookmark.count_visible_bookmarks(bookmark.bookmarkable, current_user) -%>
 <ul>
   <li class="heading bookmark-heading">
     <ul class="bookmark-icons">
-      <li><%= image_tag 'category-none.png', :alt => '' -%></li>
       <%= get_symbol_for_bookmark(bookmark) %>
+      <li><%= image_tag 'category-none.png', :alt => '', :title => "" -%> <div class="bookmark-count" title="<%= bookmark_count %> Bookmarks">
+      <%=  (bookmark_count < 100) ? bookmark_count : '*' %> </div></li>
     </ul>
-
   <%= render :partial => "bookmarks/#{bookmark.bookmarkable.class.to_s.underscore}_bookmark", :locals => { :bookmark => bookmark } -%>   
     
   <%- unless bookmark.bookmarkable.summary.blank? %>
@@ -12,16 +13,19 @@
       <%= sanitize_strip_images_and_format_for_display bookmark.bookmarkable.summary %>
     </li>
   <%- end %>
-  <li>
-    <%= link_to_bookmarkable_bookmarks(bookmark.bookmarkable) -%>
+    <li class="bookmark-options">
+      <%- if bookmark_count > 1 -%>
+        <%= link_to_bookmarkable_bookmarks(bookmark.bookmarkable, t('bookmarks_total_plural', :default=>'Bookmarked {{count}} times', :count=>bookmark_count)) -%>
+      <%- else -%>
+        <%= link_to_bookmarkable_bookmarks(bookmark.bookmarkable, t('bookmarks_total_single', :default=>'Bookmarked {{count}} time', :count=>bookmark_count)) -%>
+      <%- end -%>
+    <%- if logged_in? && !is_author_of?(bookmark) -%>
+       | <%= bookmark_link(bookmark.bookmarkable, true)%>
+    <%- end -%>
   </li>
-  <%- if logged_in? -%>
-    <li>
-      <%= bookmark_link(bookmark.bookmarkable, true)%>
-    </li>
-  <%- end -%>
-  <%- if params[:tag_id] || @most_recent_bookmarks -%>
-    <li id="recent_link_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.bookmarkable_id}" -%>", style="display: none;">
+  <%- if bookmark_count > 1 -%>
+    <%- if params[:tag_id] || @most_recent_bookmarks -%>
+    <li id="recent_link_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.bookmarkable_id}" -%>" style="display: none;">
       <%- if @most_recent_bookmarks -%>
         <%= link_to_remote "View most recent bookmarks", :url => {:controller => 'bookmarks', :action => 'fetch_recent', :id => bookmark.id, :params => {:fetch => true} },
       :method => :get %>
@@ -33,39 +37,39 @@
     </li>
     <!-- hides recent link if no JS available-->
     <%= update_page_tag do |page| page.toggle "recent_link_#{bookmark.bookmarkable_type.underscore}_#{bookmark.bookmarkable_id}" end -%> 
+    <%- end -%>
   <%- end -%>
 </ul>
-    <hr style="margin-left: 75px; border: 0; background: #DDDDDD; height: 1px;">
-  <ul class="user-info">
+ <ul class="user-info<%- if is_author_of?(bookmark) -%> own<%- end -%>">
+  <li class="byline">
+    <%= t('bookmarked_by', :default=>'Bookmarked by {{user}}', :user=>link_to(bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud])) %>
+  </li>
+  <li class="byline-date"><span class="byline-date"><%= set_format_for_date(bookmark.updated_at) %></span></li>
+  <%- unless bookmark.notes.blank? -%>
     <li class="user-notes">
-      <%- unless bookmark.notes.blank? -%>
-        <dl>
-          <dt><%=h t('bookmark notes', :default => "User's Notes:") -%></dt>
-          <dd><%=sanitize_limit_and_format_for_display bookmark.notes -%></dd>
-        </dl>
-      <%- end -%>
+          <%=sanitize_limit_and_format_for_display bookmark.notes -%>
     </li>
-    <%- unless bookmark.tag_string.blank? -%>
-      <li class="user-tags">
-        <dl>
-          <dt><%=h t('bookmark_tags', :default => "User's Tags:") -%></dt>
-          <dd>
-            <ul>
-              <%- bookmark.tags.each do |tag| -%>
-                <li><%= link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') -%><%- unless tag == bookmark.tags.last -%><%= "," -%><%- end -%></li>
-              <%- end -%>
-            </ul>
-          </dd>
-        </dl>
-      </li>
-    <%- end -%>
-    <li>  <p class="byline">
-      - <%= link_to bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud] -%>&nbsp;(<%= link_to bookmark.pseud.bookmarks.visible.size.to_s, user_pseud_bookmarks_path(bookmark.pseud.user, bookmark.pseud) -%>)<br />    
-      <%= set_format_for_date(bookmark.updated_at) %>
-    </p></li>
-  </ul>
-<%- if is_author_of?(bookmark) -%>
- <%= render :partial => 'bookmarks/bookmark_owner_navi', :locals => {:bookmark => bookmark} %>
-<%- elsif logged_in_as_admin? -%>
-  <%= render :partial => 'admin/admin_options', :locals => {:item => bookmark} %>
-<% end %>   
+  <%- end -%>
+    
+  <%- unless bookmark.tag_string.blank? -%>
+    <li class="user-tags">
+      <dl>
+        <dt><%=h t('bookmark_tags', :default => "User's Tags:") -%></dt>
+        <dd>
+          <ul>
+            <%- bookmark.tags.each do |tag| -%>
+              <li><%= link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') -%><%- unless tag == bookmark.tags.last -%><%= "," -%><%- end -%></li>
+            <%- end -%>
+          </ul>
+        </dd>
+      </dl>
+    </li>
+  <%- end -%>
+  <li>
+  <%- if is_author_of?(bookmark) -%>
+    <%= render :partial => 'bookmarks/bookmark_owner_navi', :locals => {:bookmark => bookmark} %>
+  <%- elsif logged_in_as_admin? -%>
+   <%= render :partial => 'admin/admin_options', :locals => {:item => bookmark} %>
+  <%- end -%>
+  </li>
+</ul> 

@@ -1,10 +1,14 @@
 <!-- This partial requires local variable 'bookmark' -->
-<li class="bookmark <%- if is_author_of?(bookmark) -%>own<%- end -%>">
-  <ul class="user-info">
+<li>
+  <ul class="user-info<%- if is_author_of?(bookmark) -%> own<%- end -%>">
     <ul class="bookmark-icons">
-      <li><%= image_tag 'category-none.png', :alt => '' -%></li>
       <%= get_symbol_for_bookmark(bookmark) %>
     </ul>
+    <li class="byline">
+    <%= t('bookmarked_by', :default=>'Bookmarked by {{user}}', :user=>link_to(bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud])) %>
+    </li>
+    <li class="byline-date"><span class="byline-date"><%= set_format_for_date(bookmark.updated_at) %></span></li>
+
     <li class="user-notes">
       <%- unless bookmark.notes.blank? -%>
       <%=sanitize_limit_and_format_for_display bookmark.notes -%>
@@ -24,12 +28,6 @@
         </dl>
       </li>
     <%- end -%>
-    <li>
-      <p class="byline">
-      - <%= link_to bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud] -%>&nbsp;(<%= link_to bookmark.pseud.bookmarks.visible.size.to_s, user_pseud_bookmarks_path(bookmark.pseud.user, bookmark.pseud) -%>)<br />
-      <%= set_format_for_date(bookmark.updated_at) %>
-    </p>
-    </li>
   <%- if is_author_of?(bookmark) -%>
     <li>
       <%= render :partial => 'bookmarks/bookmark_owner_navi', :locals => {:bookmark => bookmark} %>
