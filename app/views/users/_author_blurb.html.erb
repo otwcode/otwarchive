@@ -6,7 +6,7 @@
       (<%= link_to(author.user_name, user_path(author.user)) -%>)
     <%- end -%></h3>
     <h4><%= authored_items(author) -%></h4>
-  <p><%= author.description -%></p>
+  <p><%= sanitize_description_for_display author.description -%></p>
 	<ul class="tags">
     <span><%= "Most used tags: " -%></span>
     <%- author.most_popular_tags(:categories => Tag::USER_DEFINED, :limit => 5).each do |tag_w_count| -%>
