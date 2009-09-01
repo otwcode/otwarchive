@@ -6,14 +6,16 @@
       <label for="work_rating_string"><%= Rating::NAME -%>*<%= link_to_help "rating-help" -%></label>
     </dt>
     <dd class="rating required">
-      <%= collection_select(:work, :rating_string, Rating.canonical, :name, :name) -%>		
+      <select id="work_rating_string" name="work[rating_string]">
+      <%= options_for_select([ArchiveConfig.RATING_DEFAULT_TAG_NAME, ArchiveConfig.RATING_GENERAL_TAG_NAME, ArchiveConfig.RATING_TEEN_TAG_NAME, ArchiveConfig.RATING_MATURE_TAG_NAME, ArchiveConfig.RATING_EXPLICIT_TAG_NAME], :selected => rating_selected(@work)) -%>		
+      </select>   
     </dd>
     <dt class="warning required">
       <label for="work_warning"><%= Warning::NAME -%>*<%= link_to_help "warning-help" -%></label>
     </dt>
     <dd class="warning required">
       <select id="work_warning" name="work[warning_strings][]" multiple="multiple">
-        <%= options_from_collection_for_select(Warning.canonical, :name, :name, warning_selected(@work) ) -%>
+        <%= options_for_select([ArchiveConfig.WARNING_DEFAULT_TAG_NAME, ArchiveConfig.WARNING_SOME_TAG_NAME, ArchiveConfig.WARNING_NONE_TAG_NAME, ArchiveConfig.WARNING_VIOLENCE_TAG_NAME, ArchiveConfig.WARNING_DEATH_TAG_NAME, ArchiveConfig.WARNING_NONCON_TAG_NAME, ArchiveConfig.WARNING_CHAN_TAG_NAME], warning_selected(@work) ) -%>
       </select>
     </dd>
     <dt class="category required">

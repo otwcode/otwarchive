@@ -77,7 +77,12 @@ module WorksHelper
 
   # select the default warnings if this is a new work
   def warning_selected(work)
-    @work.new_record? ? Warning.find_by_name(ArchiveConfig.WARNING_DEFAULT_TAG_NAME) : @work.warning_strings
+    @work.new_record? ? ArchiveConfig.WARNING_DEFAULT_TAG_NAME : @work.warning_strings
+  end
+  
+  # select default rating if this is a new work
+  def rating_selected(work)
+    @work.new_record? ? ArchiveConfig.RATING_DEFAULT_TAG_NAME : @work.rating_string
   end
 
   def get_title_string(tags, category_name = "")
