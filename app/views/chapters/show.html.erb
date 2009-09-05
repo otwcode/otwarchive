@@ -4,6 +4,14 @@
 
   <div id="chapters">
     <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } -%>
+    <%- if @work.endnotes && @chapter == @work.last_chapter -%>
+      <div class="preface">
+        <blockquote id="work_endnotes" class="notes">
+          <h3><%=h "Notes:" %></h3>
+          <%=sanitize_and_format_for_display @work.endnotes %>
+        </blockquote>
+      </div>    
+    <%- end -%>
 	  <!-- Series links -->
     <%- unless @preview_mode || @work.series.blank? || @chapter != @work.last_chapter-%>
       <%= render :partial => 'works/series_links' -%>

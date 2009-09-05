@@ -11,6 +11,14 @@
 	<div id="chapters">
 	<%= render :partial => 'chapters/chapters' -%>
 	</div>
+  <%- unless @work.endnotes.blank? -%>
+    <div class="preface">
+      <blockquote id="work_endnotes" class="notes">
+        <h3><%=h "Notes:" %></h3>
+        <%=sanitize_and_format_for_display @work.endnotes %>
+      </blockquote>
+    </div>
+  <%- end -%>
   <%- unless @work.series.blank? -%>
     <%= render :partial => 'works/series_links' -%>
   <%- end -%>

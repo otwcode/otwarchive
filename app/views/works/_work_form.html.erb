@@ -53,14 +53,45 @@
         <%= generate_countdown_html("work_summary", ArchiveConfig.SUMMARY_MAX) -%>
       </dd>
 
-      <dt class="notes">
-        <%= f.label :notes, "Notes (max " + ArchiveConfig.NOTES_MAX.to_s + " letters)" %>
+      <p>Add notes</p>
+      <dt>
+        <%= f.label :storynotescheck, "at the beginning" %> 
       </dt>
-      <dd class="notes">
-        <%= f.text_area :notes, :rows => 4, :cols => 60, :class => "notes-field" %>
-        <%= live_validation_for_field('work_notes', :presence => false, :maximum_length => ArchiveConfig.NOTES_MAX) -%>
-        <%= generate_countdown_html("work_notes", ArchiveConfig.NOTES_MAX) -%>
+      <dd>
+       <input type="checkbox" id="storynotescheck" name="storynotescheck"  onclick="showNotesOptions()" 
+       <%- unless @work.notes.blank? -%>checked="checked"<%- end -%>/>
       </dd>
+      
+      <dl id="worknotesoptions">
+        <dt class="notes">
+          <%= f.label :notes, "Notes (max " + ArchiveConfig.NOTES_MAX.to_s + " characters)" %>
+        </dt>
+        <dd class="notes">
+          <%= f.text_area :notes, :rows => 4, :cols => 60, :class => "notes-field" %>
+          <%= live_validation_for_field('work_notes', :presence => false, :maximum_length => ArchiveConfig.NOTES_MAX) -%>
+          <%= generate_countdown_html("work_notes", ArchiveConfig.NOTES_MAX) -%>
+        </dd>
+      </dl>
+
+      <dt>
+      <%= f.label :storyendnotescheck, "at the end" %> 
+      </dt>
+      <dd>
+       <input type="checkbox" id="storyendnotescheck" name="storyendnotescheck"  onclick="showEndnotesOptions()" 
+       <%- unless @work.endnotes.blank? -%>checked="checked"<%- end -%>/>
+      </dd>      
+      
+      <dl id="workendnotesoptions"
+        <dt class="notes">
+          <%= f.label :notes, "Notes (max " + ArchiveConfig.NOTES_MAX.to_s + " characters)" %>
+        </dt>
+        <dd class="notes">
+          <%= f.text_area :endnotes, :rows => 4, :cols => 60, :class => "notes-field" %>
+          <%= live_validation_for_field('work_endnotes', :presence => false, :maximum_length => ArchiveConfig.NOTES_MAX) -%>
+          <%= generate_countdown_html("work_endnotes", ArchiveConfig.NOTES_MAX) -%>
+        </dd>
+      </dl>
+      
     </dl>
   </fieldset>
 

@@ -28,16 +28,44 @@
 
       <%= render :partial => 'pseuds/byline', :locals =>{:form => f, :type => 'chapter'} %>
 
-      <dt class="summary"><%= f.label :summary, t('form_summary', :default => "Chapter summary (max {{max}} letters)", :max => ArchiveConfig.SUMMARY_MAX.to_s) %></dt>
+      <dt class="summary"><%= f.label :summary, t('form_summary', :default => "Chapter summary (max {{max}} characters)", :max => ArchiveConfig.SUMMARY_MAX.to_s) %></dt>
       <dd class="summary">
         <%= f.text_area :summary, :rows => 4, :cols => 60, :live => true %>
         <%= generate_countdown_html("chapter_summary", ArchiveConfig.SUMMARY_MAX) -%>
       </dd>
-      <dt class="notes"><%= f.label :notes, t('form_notes', :default => "Chapter notes (max {{max}} letters)", :max => ArchiveConfig.NOTES_MAX.to_s) %></dt>
-      <dd class="notes">
-        <%= f.text_area :notes, :rows => 4, :cols => 60, :live => true %>
-        <%= generate_countdown_html("chapter_notes", ArchiveConfig.NOTES_MAX) -%>
+
+    <p>Add notes</p>
+      <dt>
+        <%= f.label :storynotescheck, "at the beginning" %> 
+      </dt>
+      <dd>
+       <input type="checkbox" id="storynotescheck" name="storynotescheck"  onclick="showNotesOptions()" 
+       <%- unless chapter.notes.blank? -%>checked="checked"<%- end -%>/>
       </dd>
+      
+      <dl id="worknotesoptions">     
+        <dt class="notes"><%= f.label :notes, t('form_notes', :default => "Chapter notes (max {{max}} characters)", :max => ArchiveConfig.NOTES_MAX.to_s) %></dt>
+        <dd class="notes">
+          <%= f.text_area :notes, :rows => 4, :cols => 60, :live => true %>
+          <%= generate_countdown_html("chapter_notes", ArchiveConfig.NOTES_MAX) -%>
+        </dd>
+      </dl>
+        
+      <dt>
+       <%= f.label :storyendnotescheck, "at the end" %> 
+      </dt>
+      <dd>
+       <input type="checkbox" id="storyendnotescheck" name="storyendnotescheck"  onclick="showEndnotesOptions()" 
+       <%- unless chapter.endnotes.blank? -%>checked="checked"<%- end -%>/>
+      </dd>      
+      
+      <dl id="workendnotesoptions">  
+      <dt class="notes"><%= f.label :endnotes, t('form_notes', :default => "Chapter notes (max {{max}} characters)", :max => ArchiveConfig.NOTES_MAX.to_s) %></dt>
+      <dd class="notes">
+        <%= f.text_area :endnotes, :rows => 4, :cols => 60, :live => true %>
+        <%= generate_countdown_html("chapter_endnotes", ArchiveConfig.NOTES_MAX) -%>
+      </dd>
+      </dl>      
     </dl>
 </fieldset>
 

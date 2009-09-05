@@ -22,6 +22,16 @@ function showBackdateOptions() {
 	Element.toggle('publicationdateoptions');
 }
 
+// Toggles the notes section of the work form
+function showNotesOptions() {
+	Element.toggle('worknotesoptions');
+}
+
+// Toggles the endnotes section of the work form
+function showEndnotesOptions() {
+	Element.toggle('workendnotesoptions');
+}
+
 // Toggles the chaptered story section of the work form and resets the wip_length field
 function showWorkSeriesOptions() {
 	var checkbox = document.getElementById('storyseriescheck');
@@ -69,7 +79,15 @@ function hideFormFields() {
 	
 	if (document.storyForm != null) var isBackdated = document.storyForm.publicationdatecheck;
 	var backdateOptions = document.getElementById('publicationdateoptions');
-	if (isBackdated != null && backdateOptions != null && !isBackdated.checked) backdateOptions.style.display='none';	
+	if (isBackdated != null && backdateOptions != null && !isBackdated.checked) backdateOptions.style.display='none';
+  
+	if (document.storyForm != null) var hasNotes = document.storyForm.storynotescheck;
+	var notesOptions = document.getElementById('worknotesoptions');
+	if (hasNotes != null && notesOptions != null && !hasNotes.checked) notesOptions.style.display='none';
+  
+	if (document.storyForm != null) var hasEndnotes = document.storyForm.storyendnotescheck;
+	var endnotesOptions = document.getElementById('workendnotesoptions');
+	if (hasEndnotes != null && endnotesOptions != null && !hasEndnotes.checked) endnotesOptions.style.display='none';    	
 }
 
 // Toggles items in filter list
