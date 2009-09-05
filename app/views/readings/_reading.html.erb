@@ -3,13 +3,16 @@
   <span><%= t('deleted_work', :default => '(deleted work, last read {{date}})', :date => reading.updated_at) -%></span>
 <% else %>
   <%= render :partial => 'works/work_blurb', :locals => {:work => reading.work} %>
-  <%= t('last_read', :default => '<strong>Last read:</strong> {{date}}', :date => reading.updated_at) %> 
+  <%= t('last_read', :default => '<strong>Last read:</strong> {{date}}', :date => set_format_for_date(reading.updated_at)) %> 
   <% if reading.major_version_read < reading.work.major_version -%>
     <%= t('new_version_available', :default => '(New version available.)') %>
   <% elsif reading.minor_version_read != reading.work.minor_version -%>
     <%= t('minor_edits', :default => '(Minor edits made since then.)') %>
   <% else -%>
     <%= t('most_recent_version', :default => '(Most recent version.)') %>
-  <% end -%>	
+  <% end -%>	  
+  
+ 
+     
 <% end %>
 </p>

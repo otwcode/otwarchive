@@ -1,4 +1,8 @@
 <h1><%= t('history', :default => 'History') %></h1>
+
+
+<%= t('readings_options', :default => "You can disable your reading history in {{preferences_link}}.", :preferences_link => (link_to t('user_preferences', :default => "Preferences"), user_preferences_path(@user))) %>
+
 <% if logged_in? && !current_user.readings.empty? %>
   <ul>
     <%= render :partial => 'reading', :collection => @readings %>
