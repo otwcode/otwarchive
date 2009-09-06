@@ -5,8 +5,9 @@
     <dt><%= label_tag "query", t("user_find_query", :default => "Name or email") -%></dt>
       <dd><%= text_field_tag "query", params[:query] -%></dd>
     <dt><%= label_tag "role", t("user_find_role", :default => "Role") -%></dt>
-      <dd><%= select_tag "role", "<option id='0' name='regular' value='0'>Regular User</option>" + options_for_select(Role.all.collect(&:name).uniq.map{|role_name| [role_name.humanize.titlecase, role_name]}, params[:role] ? params[:role] : nil) -%></dd>
+      <dd><%= select_tag "role", "<option id='0' name='regular' value='0'>Regular User</option><option id='1' name='unvalidated' value='1'>Unvalidated</option>" + options_for_select(Role.all.collect(&:name).uniq.map{|role_name| [role_name.humanize.titlecase, role_name]}, params[:role] ? params[:role] : nil) -%></dd>
   </dl>
+  <p><%= t('search_by', :default => 'Search for a user by username, pseud or email, or search by role') -%></p>
   <p><%= submit_tag t("find_user_button", :default => "Find") -%></p>
 <%- end -%>
 
@@ -22,9 +23,8 @@
     <th scope="col"><%=h t('email', :default => "Email") -%></th>
     <th scope="col"><%=h t('translation_admin', :default => "Translation Admin") -%></th>
     <th scope="col"><%=h t('tag_wrangler', :default => "Tag Wrangler") -%></th>
-    <th scope="col"><%=h t('suspended', :default => "Suspended") -%></th>
-    <th scope="col"><%=h t('banned', :default => "Banned") -%></th>
     <th scope="col"><%=h t('update', :default => "Update") -%></th>
+    <th scope="col"><%=h t('details', :default => "Details") -%></th>
   </tr>
     <%- @users.each do |user| -%>
     <tr id="user_<%= user.id %>">

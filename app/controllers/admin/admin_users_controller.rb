@@ -9,6 +9,13 @@ class Admin::AdminUsersController < ApplicationController
       elsif params[:role] == "0"
         joins = :pseuds
         conditions = ['pseuds.name LIKE ? OR email = ?', "%#{params[:query]}%", params[:query]]
+      elsif params[:role] == "1"  
+        if !params[:query].blank?      
+          joins = :pseuds
+          conditions = [('(pseuds.name LIKE ? OR email = ?) AND activated_at IS NULL'), "%#{params[:query]}%", params[:query]]
+        else
+          conditions = ['activated_at IS NULL']
+        end
       else
         if !params[:query].blank?
           joins = [:pseuds, :roles]
@@ -25,6 +32,7 @@ class Admin::AdminUsersController < ApplicationController
   # GET admin/users/1
   # GET admin/users/1.xml
   def show
+    @hide_dashboard = true
     @user = User.find_by_login(params[:id])
   end
 
