@@ -50,26 +50,28 @@
    <%= byline(@work) -%>
   </h3>
   
-  <%- unless @work.summary.blank? -%>
-  <blockquote class="summary">
-    <h3><%=h "Summary:" %></h3>
-    <%=sanitize_limit_and_format_for_display @work.summary %>
-  </blockquote>
-  <%- end -%>
+  <%- if @chapter == @work.first_chapter -%>
+    <%- unless @work.summary.blank? -%>
+    <blockquote class="summary">
+      <h3><%=h "Summary:" %></h3>
+      <%=sanitize_limit_and_format_for_display @work.summary %>
+    </blockquote>
+    <%- end -%>
   
-  <%- unless @work.notes.blank? && @work.endnotes.blank? -%>
-  <%- current_page?(:controller => 'chapters', :action => 'show') ? linkpath = "chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes')" : linkpath = "work_path(@work, :anchor => 'work_endnotes')" %>
-  <blockquote class="notes">
-    <h3><%=h "Notes:" %></h3>
-    <%- if @work.notes.blank? -%>
-      <%= t('link_to_endnotes', :default => "See the end of the work for {{notes_link}}.", :notes_link => (link_to t('notes_link', :default => "notes"), eval(linkpath))) %>
-    <%- else -%>
-      <%=sanitize_and_format_for_display @work.notes -%>
-      <%- unless @work.endnotes.blank? -%>
-        <%= t('link_more_endnotes', :default => "See the end of the work for more {{notes_link}}.", :notes_link => (link_to t('notes_link', :default => "notes"), eval(linkpath))) %>
-      <%- end -%>
-    <%- end -%> 
-  </blockquote>
-  <%- end -%>
+    <%- unless @work.notes.blank? && @work.endnotes.blank? -%>
+      <%- current_page?(:controller => 'chapters', :action => 'show') ? linkpath = "chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes')" : linkpath = "work_path(@work, :anchor => 'work_endnotes')" %>
+      <blockquote class="notes">
+      <h3><%=h "Notes:" %></h3>
+      <%- if @work.notes.blank? -%>
+        <%= t('link_to_endnotes', :default => "See the end of the work for {{notes_link}}.", :notes_link => (link_to t('notes_link', :default => "notes"), eval(linkpath))) %>
+      <%- else -%>
+        <%=sanitize_and_format_for_display @work.notes -%>
+        <%- unless @work.endnotes.blank? -%>
+          <%= t('link_more_endnotes', :default => "See the end of the work for more {{notes_link}}.", :notes_link => (link_to t('notes_link', :default => "notes"), eval(linkpath))) %>
+        <%- end -%>
+      <%- end -%> 
+      </blockquote>
+    <%- end -%>
+  <%- end -%>  
 </div>
   
