@@ -16,6 +16,7 @@ class Pseud < ActiveRecord::Base
     :within => NAME_LENGTH_MIN..NAME_LENGTH_MAX, 
     :too_short => t('name_too_short', :default => "is too short (minimum is {{min}} characters)", :min => NAME_LENGTH_MIN),
     :too_long => t('name_too_long', :default => "is too long (maximum is {{max}} characters)", :max => NAME_LENGTH_MAX)
+  validates_uniqueness_of :name, :scope => :user_id, :case_sensitive => false  
   validates_format_of :name, 
     :message => t('name_invalid_characters', :default => 'can contain letters, numbers, spaces, underscores, and dashes.'),
     :with => /\A[\w -]*\Z/    
