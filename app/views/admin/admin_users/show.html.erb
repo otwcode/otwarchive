@@ -1,1 +1,5 @@
 <h1><%= t('user_name', :default => 'User: ') -%><%= @user.login %></h1>
+
+<%= button_to "Send Activation Email", {:action => 'send_activation', :id => @user}, :disabled => @user.active? -%>
+<br />
+<%= button_to "Activate User Account", {:action => 'activate', :id => @user}, :disabled => @user.active? -%>

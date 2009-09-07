@@ -120,5 +120,24 @@ class Admin::AdminUsersController < ApplicationController
     redirect_to :action => :notify
   end
 
+  def activate
+    @user = User.find_by_login(params[:id])
+    @user.activate
+    if @user.active?
+      flash[:notice] = t('activated', :default => "User Account Activated") 
+      redirect_to :action => :show
+    else
+      flash[:error] = t('activation_failed', :default => "Attempt to activate account failed.")
+      redirect_to :action => :show
+    end
+  end
+  
+  def send_activation
+    @user = User.find_by_login(params[:id])
+    UserMailer.deliver_signup_notification(@user)
+    flash[:notice] = t('activation_sent', :default => "Activation email sent")
+    redirect_to :action => :show
+  end
+
 end  
 
