@@ -1,6 +1,6 @@
 		<h2><%=h "Create Account" %></h2>
-		<p class="message"><%=h "Please select a user name. You will be allowed to post work under multiple pseudonyms, but you will only have one user name, which is hard for us to change - please choose wisely!" %>
-		</p>
+		<p class="message"><%=h "Please select a user name. You will be allowed to post works under multiple pseudonyms, but you will only have one user name, which is hard for us to change - choose wisely!" %>
+		<%= "User names will be displayed as entered. Please check you have entered your preferred spelling and capitalization before submitting this form." %></p>
 		<%= error_messages_for :user, :id => "errorExplanationNone", :header_tag => "p", :header_message => "Oops, there's some problems with the stuff you told us.", :message => nil  %>
 		<% form_for @user do |f| -%>
 		  <p><%= hidden_field_tag :invitation_token, params[:invitation_token] %></p>
