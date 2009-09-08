@@ -1,11 +1,13 @@
 <h1><%= link_to t('fandoms', :default => 'Fandoms'), media_path %> > <%=h @medium_name %></h1>
 <%= alpha_paginated_section @media_alphabet -%>
 <ul>
-  <%- for fandom in @fandoms -%>
-    <%- if fandom.respond_to?(:count) -%>
-      <li><%= link_to_tag_works_with_text(fandom, fandom.name + " (" + fandom.visible_synonyms_works_count.to_s + ")") %></li>
-    <%- else -%>
+  <%- if @medium_name == Media.uncategorized.name -%>
+    <%- for fandom in @fandoms -%>
       <li><%= link_to_tag_works_with_text(fandom, fandom.name) %></li>
+    <%- end -%>
+  <%- else -%>
+    <%- for fandom in @fandoms -%>
+      <li><%= link_to_tag_works_with_text(fandom, fandom.name + " (" + fandom.visible_synonyms_works_count.to_s + ")") %></li>
     <%- end -%>
   <%- end -%>
 </ul>
