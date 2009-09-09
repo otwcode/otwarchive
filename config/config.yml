@@ -147,3 +147,7 @@ USE_DELTA_INDEXING: false
 # production caching
 #PRODUCTION_CACHE: "memory"
 PRODUCTION_CACHE: "memcache"
+
+# this corresponds to the constant value SEARCHD_MAX_ATTR_VALUES in the Sphinx search engine in searchd.cpp
+# it represents a limit on how many items can be filtered on when searching 
+SPHINX_FILTER_SIZE_LIMIT: 4096

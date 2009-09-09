@@ -992,21 +992,23 @@ class Work < ActiveRecord::Base
       command += visible
     end
     ids = eval("#{command}").collect(&:id)
-    conditions_clause = ids.empty? ? {:work_ids => '-1'}  : {:work_ids => ids}
+    conditions_clause = ids.empty? || ids.length >= ArchiveConfig.SPHINX_FILTER_SIZE_LIMIT ? {:work_ids => '-1'}  : {:work_ids => ids}
 
     search_options = {:conditions => conditions_clause,
                       :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE),
                       :page => options[:page]}
     search_options.merge!({:order => order_clause}) if !order_clause.blank?
 
-    logger.info "\n\n\n\n*+*+*+*+ search_options: " + search_options.to_yaml
-    
     if filterable
       search_options[:per_page] = 1000
       search_options[:page] = 1
     end
 
-    Work.search(options[:query], search_options)
+    works = Work.search(options[:query], search_options)
+    if (ids.length  >= ArchiveConfig.SPHINX_FILTER_SIZE_LIMIT) 
+      works.delete_if {|work| !ids.include?(work.id)}
+    end
+    works
   end
 
   # Used for non-search work filtering
