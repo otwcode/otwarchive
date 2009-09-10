@@ -4,7 +4,7 @@ class WorkTest < ActiveSupport::TestCase
 
   context "a work" do
     setup do
-      assert @work = create_work
+      assert create_work
     end
     should_have_many :chapters, :serial_works, :series, :related_works, :bookmarks, :taggings, :pseuds
     should_validate_presence_of :title
@@ -22,6 +22,7 @@ class WorkTest < ActiveSupport::TestCase
 
     context "which has been posted" do
       setup do
+        @work = create_work
         @work.add_default_tags
         @work.update_attribute("posted", true)
       end
@@ -69,6 +70,7 @@ class WorkTest < ActiveSupport::TestCase
 
     context "with a comment on a chapter" do
       setup do
+        @work = create_work
         @comment = create_comment(:commentable => @work.chapters.first)
       end
       should "find that comment" do

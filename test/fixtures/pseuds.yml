@@ -122,7 +122,7 @@ pseud_00012:
 pseud_00001: 
   name: testuser
   updated_at: 2009-03-20 02:18:30 +01:00
-  is_default: false
+  is_default: true
   id: 1
   description: This is a default pseud for testuser.
   user_id: 1
