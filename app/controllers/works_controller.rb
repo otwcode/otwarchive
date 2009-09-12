@@ -334,9 +334,6 @@ class WorksController < ApplicationController
     elsif params[:cancel_button]
       cancel_posting_and_redirect
     elsif params[:edit_button]
-
-      #flash[:notice] = "DEBUG: in UPDATE edit:  " + "all: " + @allpseuds.flatten.collect {|ap| ap.id}.inspect + " selected: " + @selected_pseuds.inspect + " co-authors: " + @coauthors.flatten.collect {|ap| ap.id}.inspect + " pseuds: " + @pseuds.flatten.collect {|ap| ap.id}.inspect + "  @work.authors: " + @work.authors.collect {|au| au.id}.inspect + "  @work.pseuds: " + @work.pseuds.collect {|ps| ps.id}.inspect
-
       render :partial => 'work_form', :layout => 'application'
     else
       saved = true
@@ -420,47 +417,60 @@ class WorksController < ApplicationController
 
   # POST /works/upload_work
   def upload_work
-    storyparser = StoryParser.new
-    # Do stuff with params[:uploaded_file]
-    # parse the existing work
-    if params[:uploaded_work]
-      @work = storyparser.parse_story(params[:uploaded_work])
-      render :action => "new"
-    elsif params[:work_url]
-      url = params[:work_url].to_s
-      if url.empty?
-        flash.now[:error] = t('enter_an_url', :default => "Did you want to enter a URL?")
+    @use_upload_form = true
+
+    # check to make sure we have a url to work with
+    unless (url = params[:work_url]) && !url.blank?
+      flash.now[:error] = t('enter_an_url', :default => "Did you want to enter a URL?")      
+      render :action => :new and return
+    end
+    
+    # check to make sure no one has already imported the work
+    @work = Work.find_by_imported_from_url(url)
+    if @work      
+      if @work.users.include?(current_user)
+        flash.now[:error] = t('already_uploaded_by_you', :default => "You have already uploaded a work from that url. If you really want to replace it, first delete the previous draf.")
+        @work = Work.new
+        render :action => :new and return
       else
-        begin
-          @work = storyparser.download_and_parse_story(url)
-        rescue Timeout::Error
-          flash.now[:error] = t('timed_out', :default => "Sorry, but we timed out trying to get that URL.")
-        rescue
-          flash.now[:error] = t('upload_failed', :default => "Sorry, but we couldn't find a story at that URL. You can still copy-and-paste the contents into our standard form, though!")
-        end
-        
-        begin
-          @chapter = @work.chapters.first
-          @work.pseuds << current_user.default_pseud
-          @chapter.pseuds << current_user.default_pseud
-          if (work_saved = @work.save) && @chapter.save
-            flash[:notice] = t('successfully_uploaded', :default => "Work successfully uploaded!<br />
-              (You will want to check the results over carefully before posting, though, because the poor computer can only figure out so much.)")
-            redirect_to edit_work_path(@work) and return
-          else
-            render :action => :new and return
-          end
-        rescue
-          flash.now[:error] = t('partially_downloaded', :default => "We managed to partially download the work, but there are problems
-            preventing us from saving it as a draft. Please look over the results very carefully!")
-          render :action => :new and return
-        end
+        flash.now[:error] = t('already_uploaded_by_other', :default => "Another user has already uploaded a work from that url: {{work_link}}.", :work_link => link_to(@work.title, work_path(@work)))
+        render :action => :new and return
       end
-      @use_upload_form = true
-      render :action => :new
-    else
-      @use_upload_form = true
-      render :action => :new
+    end
+    
+    # try to download and get the work
+    storyparser = StoryParser.new
+    begin
+      @work = storyparser.download_and_parse_story(url)
+    rescue Timeout::Error
+      flash.now[:error] = t('timed_out', :default => "Sorry, but we timed out trying to get that URL. If the site seems to be down, you can try again later.")
+      render :action => :new and return
+    rescue
+      flash.now[:error] = t('upload_failed', :default => "Sorry, but we couldn't get a story at that URL. You can still copy-and-paste the contents into our standard form, though!")
+      render :action => :new and return
+    end
+
+    # at this point we have at least a partial work for the user to play with
+    @use_upload_form = false
+    begin 
+      @work.pseuds << current_user.default_pseud unless @work.pseuds.include?(current_user.default_pseud)
+      chapters_saved = 0
+      @work.chapters.each do |uploaded_chapter|
+        uploaded_chapter.pseuds << current_user.default_pseud unless uploaded_chapter.pseuds.include?(current_user.default_pseud)
+        chapters_saved += uploaded_chapter.save ? 1 : 0
+      end
+      
+      if @work.save && chapters_saved == @work.chapters.length
+        flash[:notice] = t('successfully_uploaded', :default => "Work successfully uploaded!<br />
+          (But please check the results over carefully before posting!)")
+        redirect_to edit_work_path(@work) and return
+      else
+        render :action => :new and return
+      end
+    rescue
+      flash.now[:error] = t('partially_downloaded', :default => "We managed to partially download the work, but there are problems
+        preventing us from saving it as a draft. Please look over the results very carefully!")
+      render :action => :new and return
     end
   end
 

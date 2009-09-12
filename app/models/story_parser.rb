@@ -4,6 +4,8 @@
 class StoryParser
   require 'timeout'
   require 'hpricot'
+  require 'nokogiri'
+  require 'mechanize'
   require 'open-uri'
   include HtmlFormatter
 
@@ -14,9 +16,12 @@ class StoryParser
                    :fandom_string => "Fandom",
                    :rating_string => "Rating",
                    :pairing_string => "Pairing",
-                   #:published_at => 'Date|Posted|Posted on|Posted at'
+                   :published_at => 'Date|Posted|Posted on|Posted at'
                    }
-
+  
+  # These attributes need to be moved from the work to the chapter                 
+  CHAPTER_ATTRIBUTES = [:published_at]
+  
   # These lists will stop with the first one it matches, so put more-specific matches
   # towards the front of the list.
 
@@ -65,8 +70,16 @@ class StoryParser
   def parse_story(story, location = nil)
     work_params = parse_common(story, location)
     work_params = sanitize_params(work_params)
-    @work = Work.new(work_params)
-    return @work
+    
+    # move any attributes from work to chapter if necessary
+    CHAPTER_ATTRIBUTES.each do |attrib|
+      if work_params[attrib]
+        work_params[:chapter_attributes][attrib] = work_params[attrib]
+        work_params.delete(attrib)
+      end
+    end
+    
+    return set_work_attributes(Work.new(work_params), location)
   end
 
   # Parses text but returns a chapter instead
@@ -80,28 +93,38 @@ class StoryParser
   # Everything below here is protected and should not be touched by outside
   # code -- please use the above functions to parse stories.
 
-  protected
+  # protected
+  
+    def set_work_attributes(work, location) 
+      work.imported_from_url = location
+      work.expected_number_of_chapters = work.chapters.length
+      return work
+    end
 
     def download_and_parse_chaptered_story(source, location)
       work_params = { :title => "UPLOADED WORK", :chapter_attributes => {} }
       chapter_contents = eval("download_chaptered_from_#{source.downcase}(location)")
-      @work = nil
+      work = nil
       chapter_contents.each do |content|
-        @doc = Hpricot(content)
+        #@doc = Hpricot(content)
+        @doc = Nokogiri.parse(content)
         chapter_params = eval("parse_story_from_#{source.downcase}(content)")
-        if @work.nil?
+        if work.nil?
           # create the new work
-          @work = Work.new(work_params.merge!(chapter_params))
+          work = Work.new(work_params.merge!(chapter_params))
         else
-          @work.chapters << get_chapter_from_work_params(chapter_params)
+          new_chapter = get_chapter_from_work_params(chapter_params)
+          new_chapter.position = work.chapters.length + 1
+          new_chapter.posted = true
+          work.chapters << new_chapter
         end
       end
-      return @work
+      return set_work_attributes(work, location)
     end
 
     def get_chapter_from_work_params(work_params)
       @chapter = Chapter.new({:content => work_params[:chapter_attributes][:content]})
-      chapter_params = work_params.delete_if {|name, param| !@chapter.attribute_names.include?(name)}
+      chapter_params = work_params.delete_if {|name, param| !@chapter.attribute_names.include?(name.to_s)}
       @chapter.update_attributes(chapter_params)
       return @chapter
     end
@@ -122,7 +145,20 @@ class StoryParser
       url = location
       url.gsub!(/\?(.*)$/, "") # strip off any existing params at the end
       url += "?format=light" # go to light format
-      return download_with_timeout(url)
+      text = download_with_timeout(url)
+      if text.match(/adult_check/)
+        Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
+          begin
+            agent = WWW::Mechanize.new
+            form = agent.get(url).forms.first
+            page = agent.submit(form, form.buttons.first) # submits the adult concepts form
+            text = page.body
+          rescue
+            text = ""
+          end
+        }      
+      end
+      return text
     end
 
     # grab all the chapters of the story from ff.net
@@ -150,7 +186,8 @@ class StoryParser
     # used to parse either entire story or chapter
     def parse_common(story, location = nil)
       work_params = { :title => "UPLOADED WORK", :chapter_attributes => {:content => ""} }
-      @doc = Hpricot(story) rescue ""
+      @doc = Nokogiri.parse(story) rescue ""
+      #@doc = Hpricot(story) rescue ""
 
       if !location.nil?
         source = get_source_if_known(KNOWN_STORY_PARSERS, location)
@@ -248,19 +285,9 @@ class StoryParser
         search_url = "http://www.yuletidetreasure.org/cgi-bin/search.cgi?" +
                       "Recipient=#{search_recip}&Title=#{search_title}&Author=#{search_author}&NumToList=0"
         search_res = download_with_timeout(search_url)
-        search_doc = Hpricot(search_res)
-        summary = ""
-        rating = ""
-        (search_doc/"dd").each do |dd|
-          if dd.attributes['class'] == 'summary'
-            summary = dd.inner_html
-            if summary.gsub!(/<span="rating">\(Rated\s*([\w\-]+)\)/i, '')
-              rating = $1
-            end
-            break
-          end
-        end
-
+        search_doc = Nokogiri.parse(search_res)
+        summary = search_doc.css('dd.summary') ? search_doc.css('dd.summary').first.content : ""
+        rating = summary.gsub!(/<span="rating">\(Rated\s*([\w\-]+)\)/i, '') ? $1 : ""
         work_params[:summary] = summary
         rating = convert_rating(rating)
         work_params[:rating_string] = rating
@@ -286,8 +313,17 @@ class StoryParser
       tags = []
       pagetitle = (@doc/"title").inner_html
       if pagetitle && pagetitle.match(/(.*), an? (.*) fanfic - FanFiction\.Net/)
-        work_params[:title] = $1
         work_params[:fandom_string] = $2
+        work_params[:title] = $1
+        if work_params[:title].match(/^(.*) Chapter ([0-9]+): (.*)$/)
+          if ($2 == "1")
+            # first chapter
+            work_params[:title] = $1
+            work_params[:chapter_attributes][:title] = $3
+          else
+            work_params[:title] = $3
+          end
+        end
       end
       if story.match(/rated:\s*<a.*?>\s*(.*?)<\/a>/i)
         rating = convert_rating($1)
@@ -355,7 +391,6 @@ class StoryParser
         end
       }
     end
-
 
     def get_last_modified(location)
       Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {

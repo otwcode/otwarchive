@@ -162,6 +162,38 @@ class Work < ActiveRecord::Base
 
   before_save :update_ambiguous_tags
 
+  # SECTION IN PROGRESS -- CONSIDERING MOVE OF WORK CODE INTO HERE
+
+  ########################################################################
+  # ERRORS
+  ########################################################################
+  # class Error < DuplicateError; end
+  # class Error < DraftSaveError; end
+  # class Error < PostingError; end
+  
+
+  ########################################################################
+  # IMPORTING
+  ########################################################################
+  # def self.import_from_url(url)
+  #   storyparser = StoryParser.new
+  #   if Work.find_by_imported_from_url(url)
+  #     raise DuplicateWorkError(t('already_imported', :default => "Work already imported from this url."))    
+  #   
+  #   work = storyparser.download_and_parse_story(url)
+  #   work.imported_from_url = url
+  #   work.expected_number_of_chapters = work.chapters.length
+  #   work.pseuds << current_user.default_pseud unless work.pseuds.include?(current_user.default_pseud)
+  #   chapters_saved = 0
+  #   work.chapters.each do |uploaded_chapter|
+  #     uploaded_chapter.pseuds << current_user.default_pseud unless uploaded_chapter.pseuds.include?(current_user.default_pseud)
+  #     uploaded_chapter.posted = true
+  #     chapters_saved += uploaded_chapter.save ? 1 : 0
+  #   end
+  #   
+  #   raise DraftSaveError unless work.save && chapters_saved == work.chapters.length   
+  # end
+  
   ########################################################################
   # AUTHORSHIP
   ########################################################################
@@ -231,9 +263,9 @@ class Work < ActiveRecord::Base
       # if recent_date is today and revised_at is today, we don't want to update revised_at at all 
       # because we'd overwrite with an inaccurate time; if revised_at is not already today, best we can
       # do is update with current time
-      if recent_date == Date.today && self.revised_at.to_date == Date.today
+      if recent_date == Date.today && self.revised_at && self.revised_at.to_date == Date.today
         return self.revised_at
-      elsif recent_date == Date.today && self.revised_at.to_date != Date.today
+      elsif recent_date == Date.today && self.revised_at && self.revised_at.to_date != Date.today
         self.update_attribute(:revised_at, Time.now)
       else
         self.update_attribute(:revised_at, recent_date)

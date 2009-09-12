@@ -114,6 +114,8 @@ Rails::Initializer.run do |config|
   config.gem 'htmlentities'
   config.gem 'relevance-tarantula', :source => "http://gems.github.com", :lib => 'relevance/tarantula'
   config.gem 'javan-whenever', :lib => false, :source => 'http://gems.github.com'
+  config.gem 'nokogiri'
+  config.gem 'mechanize'
 
   
   # Override the sanitize defaults to allow some extra formatting attributes. 

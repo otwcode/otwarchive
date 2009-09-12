@@ -44,18 +44,24 @@ class StoryParserTest < ActiveSupport::TestCase
       end
     end
 
-    context "given a url for a chapter" do
-      setup do
-        @url = "http://www.yuletidetreasure.org/archive/40/birthpains.html"
-      end
-      should_eventually "create a chapter" do
-        @chapter = @storyparser.download_and_parse_chapter(@url)
-        assert !@chapter.content.blank?
-        assert !@chapter.title.blank?
-        assert !@chapter.summary.blank?
-      end
-    end
+  end
 
+  def test_set_work_attributes
+    storyparser = StoryParser.new
+    url = 'http://se-parsons.livejournal.com/895277.html'
+    work = storyparser.download_and_parse_story(url)
+    assert_equal url, work.imported_from_url
+    assert_equal 1, work.expected_number_of_chapters    
+  end
+
+  def test_chapter_creation
+    storyparser = StoryParser.new
+    url = "http://www.yuletidetreasure.org/archive/40/birthpains.html"
+    chapter = storyparser.download_and_parse_chapter(url)
+    assert !chapter.content.blank?
+    assert !chapter.title.blank?
+    assert_equal "Birth Pains", chapter.title
+    assert !chapter.summary.blank?
   end
 
   def test_livejournal_1
@@ -68,12 +74,11 @@ class StoryParserTest < ActiveSupport::TestCase
 
   # adult content
   def test_livejournal_adult
-    puts "Deferred: lj adult content warning"
-#     storyparser = StoryParser.new
-#     url = 'http://x-strangeangels.livejournal.com/42435.html'
-#     work = storyparser.download_and_parse_story(url)
-#     assert_match /Dean finds her kneeling/, work.chapters.first.content
-#     assert_match /I dream of a circle/, work.title
+    storyparser = StoryParser.new
+    url = 'http://x-strangeangels.livejournal.com/42435.html'
+    work = storyparser.download_and_parse_story(url)
+    assert_match /Dean finds her kneeling/, work.chapters.first.content
+    assert_match /I dream of a circle/, work.title
   end
 
   # Test parsing of stories from yuletidetreasure.org
@@ -121,13 +126,41 @@ class StoryParserTest < ActiveSupport::TestCase
 
   #multi-chaptered work
   def test_ffnet_chapters
-    puts "Deferred: parsing multi-chaptered ffnet stories"
     @storyparser = StoryParser.new
     @url = "http://www.fanfiction.net/s/4545794/1/The_Memory_Remains"
     @work = @storyparser.download_and_parse_story(@url)
-    assert !@work.chapters.first.content.blank?
     assert !@work.title.blank?
+    assert_equal "The Memory Remains", @work.title    
+    assert !@work.chapters.first.content.blank?
+    
     # put rest of chapters here
+    assert @work.chapters.length == 6
+
+    assert_equal "Awaken and Act", @work.chapters[0].title
+    assert_equal 1, @work.chapters[0].position
+    assert_match /Naruto was cooped up in some odd prison with nine cells/, @work.chapters[0].content
+
+    assert_equal "Memories and the Mourning", @work.chapters[1].title
+    assert_equal 2, @work.chapters[1].position
+    assert_match /Kakashi scolded them once more/, @work.chapters[1].content
+
+    assert_equal "Hapiness and the Hyuga", @work.chapters[2].title
+    assert_equal 3, @work.chapters[2].position
+    assert_match /Tsunade told Naruto he could leave the hospital/, @work.chapters[2].content
+
+    assert_equal "Kool Aid", @work.chapters[3].title
+    assert_equal 4, @work.chapters[3].position
+    assert_match /Naruto screamed as the light crept into his room and woke him up/, @work.chapters[3].content
+
+    assert_equal "Sasuke", @work.chapters[4].title
+    assert_equal 5, @work.chapters[4].position
+    assert_match /Sakura had put the kool aid dye in Naruto/, @work.chapters[4].content
+
+    assert_equal "Given Up", @work.chapters[5].title
+    assert_equal 6, @work.chapters[5].position
+    assert_match /Sasuke jumped high into the air almost trying to land on Naruto/, @work.chapters[5].content
+    
+    assert_equal 6, @work.expected_number_of_chapters    
   end
 
   # "successfully parse a url with a storyinfo block in html comments with fandom"
@@ -172,11 +205,11 @@ class StoryParserTest < ActiveSupport::TestCase
     assert !@work.title.blank?
   end
 
-  #def test_date
-  #  @storyparser = StoryParser.new
-  #  @url = "http://www.intimations.org/fanfic/master_and_commander/five_things-listening.html"
-  #  @work = @storyparser.download_and_parse_story(@url)
-  #  assert @work.chapters.first.published_at == Date.parse('2003-12-11')
-  #end
+  def test_date
+    @storyparser = StoryParser.new
+    @url = "http://www.intimations.org/fanfic/master_and_commander/five_things-listening.html"
+    @work = @storyparser.download_and_parse_story(@url)
+    assert @work.chapters.first.published_at == Date.parse('2003-12-11')
+  end
 
 end
