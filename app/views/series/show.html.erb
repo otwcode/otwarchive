@@ -6,7 +6,7 @@
 </h1>
 <dl class="work-meta series-meta">
   <dt><%=h 'Series begun:' %></dt>
-    <dd><%=h @series.published_at %></dd>
+    <dd><%=h @series.published_at.to_date %></dd>
 	<dt><%=h 'Series updated: ' %></dt>
     <dd><%= @series.revised_at ? @series.revised_at.to_date : @series.published_at %></dd>
   <dt><%=h 'Works included:' %></dt>
