@@ -1033,7 +1033,7 @@ class Work < ActiveRecord::Base
     search_options.merge!({:order => order_clause}) if !order_clause.blank?
 
     if filterable
-      search_options[:per_page] = 1000
+      search_options[:per_page] = ArchiveConfig.SEARCH_RESULTS_MAX
       search_options[:page] = 1
     end
 

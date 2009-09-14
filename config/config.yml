@@ -60,6 +60,8 @@ ITEMS_PER_PAGE: 25
 NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD: 5
 COMMENT_THREAD_MAX_DEPTH: 5
 TAGS_PER_LINE: 12
+# edit @max_matches in vendor\plugins\thinking-sphinx\lib\riddle\client.rb (in initialize and reset) to match below value
+SEARCH_RESULTS_MAX: 1000
 
 # LEGACY - will be removed after beta has been migrated and the migrations reset
 DEFAULT_CATEGORY_NAME: 'default'
