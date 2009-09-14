@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090706214616) do
+ActiveRecord::Schema.define(:version => 20090913234257) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -37,7 +37,12 @@ ActiveRecord::Schema.define(:version => 20090706214616) do
     t.datetime "updated_at"
     t.boolean  "hidden_by_admin",                 :default => false, :null => false
     t.integer  "pseud_id",                                           :null => false
+    t.boolean  "rec",                             :default => false, :null => false
   end
+
+  add_index "bookmarks", ["bookmarkable_id", "bookmarkable_type", "pseud_id"], :name => "index_bookmarkable_pseud"
+  add_index "bookmarks", ["bookmarkable_id", "bookmarkable_type"], :name => "index_bookmarkable"
+  add_index "bookmarks", ["pseud_id"], :name => "index_bookmarks_on_pseud_id"
 
   create_table "chapters", :force => true do |t|
     t.text     "content",         :limit => 2147483647,                    :null => false
@@ -52,6 +57,7 @@ ActiveRecord::Schema.define(:version => 20090706214616) do
     t.integer  "word_count",      :limit => 8
     t.boolean  "hidden_by_admin",                       :default => false, :null => false
     t.date     "published_at"
+    t.text     "endnotes"
   end
 
   add_index "chapters", ["work_id"], :name => "works_chapter_index"
@@ -109,6 +115,31 @@ ActiveRecord::Schema.define(:version => 20090706214616) do
   add_index "creatorships", ["creation_id", "creation_type"], :name => "index_creatorships_creation"
   add_index "creatorships", ["pseud_id"], :name => "index_creatorships_pseud"
 
+  create_table "external_author_names", :force => true do |t|
+    t.integer  "external_author_id", :null => false
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "external_authors", :force => true do |t|
+    t.string   "email"
+    t.boolean  "is_claimed",    :default => false, :null => false
+    t.integer  "user_id"
+    t.boolean  "do_not_email",  :default => false, :null => false
+    t.boolean  "do_not_import", :default => false, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "external_creatorships", :force => true do |t|
+    t.integer  "creation_id"
+    t.string   "creation_type"
+    t.integer  "external_author_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "external_works", :force => true do |t|
     t.string   "url",             :default => "",    :null => false
     t.string   "author",          :default => "",    :null => false
@@ -155,13 +186,14 @@ ActiveRecord::Schema.define(:version => 20090706214616) do
   end
 
   create_table "invitations", :force => true do |t|
-    t.integer  "sender_id",       :limit => 8
+    t.integer  "sender_id",          :limit => 8
     t.string   "recipient_email"
     t.string   "token"
     t.datetime "sent_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "used",                         :default => false, :null => false
+    t.boolean  "used",                            :default => false, :null => false
+    t.integer  "external_author_id"
   end
 
   create_table "languages", :force => true do |t|
@@ -208,6 +240,7 @@ ActiveRecord::Schema.define(:version => 20090706214616) do
     t.boolean  "comment_inbox_off",                     :default => false
     t.boolean  "comment_copy_to_self_off",              :default => true,                      :null => false
     t.string   "work_title_format",                     :default => "TITLE - AUTHOR - FANDOM"
+    t.boolean  "hide_freeform",                         :default => false,                     :null => false
   end
 
   create_table "profiles", :force => true do |t|
@@ -377,6 +410,8 @@ ActiveRecord::Schema.define(:version => 20090706214616) do
     t.string   "authors_to_sort_on"
     t.string   "title_to_sort_on"
     t.boolean  "backdate",                                 :default => false, :null => false
+    t.text     "endnotes"
+    t.string   "imported_from_url"
   end
 
 end

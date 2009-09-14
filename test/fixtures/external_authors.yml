@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  email: MyString
+  is_claimed: false
+  user: 
+  do_not_email: false
+  do_not_import: false
+
+two:
+  email: MyString
+  is_claimed: false
+  user: 
+  do_not_email: false
+  do_not_import: false

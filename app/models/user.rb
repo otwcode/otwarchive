@@ -23,6 +23,8 @@ class User < ActiveRecord::Base
   before_save :mark_invitation_used
   attr_accessible :invitation_token
   
+  has_many :external_authors, :dependent => :destroy
+  
   has_many :pseuds, :dependent => :destroy
   validates_associated :pseuds
   

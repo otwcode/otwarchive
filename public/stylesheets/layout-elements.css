@@ -103,8 +103,8 @@ dl#user-data dt {font-weight: 900; width: 9em; float:left; clear:left; margin:0.
 /* DASHBOARD: PREFERENCES */
 /* preferences form rules are in forms.css */
 /*PSEUDS*/
-#main.pseuds-index table ul.navigation { border-bottom:0; }
-#main.pseuds-new.sidebar ul.navigation, #main.pseuds-edit.sidebar ul.navigation { margin-top: 13.75em;}
+#main.pseuds-index table ul.navigation, #main.external_authors-index table ul.navigation { border-bottom:0; }
+#main.pseuds-new.sidebar ul.navigation, #main.pseuds-edit.sidebar ul.navigation, #main.external_authors-new.sidebar ul.navigation { margin-top: 13.75em;}
 /* Enigel Mar 12 09: pseuds show is changing entirely */
 /*
 #main.pseuds-show.sidebar ul.navigation { margin-top: 13.75em;}
@@ -117,6 +117,11 @@ dl#user-data dt {font-weight: 900; width: 9em; float:left; clear:left; margin:0.
 .pseuds-list .navigation a {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:none; border:1px solid #ccc; padding:0.25em;}
 .pseuds-list .navigation, .pseuds-list .navigation li {border:0; background:transparent;}
 .pseuds-list ul.navigation {margin: 1em 0 -0.75em 0; text-align: left}
+
+.external_authors-list li { border-bottom:1px dotted #CCCCCC; padding-bottom: 0.5em; margin-bottom: 1.5em !important}
+.external_authors-list .navigation a {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:none; border:1px solid #ccc; padding:0.25em;}
+.external_authors-list .navigation, .external_authors-list .navigation li {border:0; background:transparent;}
+.external_authors-list ul.navigation {margin: 1em 0 -0.75em 0; text-align: left}
 
 /* WORKS-INDEX */
 /*work filters rules are in forms.css */

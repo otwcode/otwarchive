@@ -33,6 +33,7 @@ ActionController::Routing::Routes.draw do |map|
   map.signup '/signup/:invitation_token', :controller => 'users', :action => 'new' 
   map.resources :users  do |user|
     user.resources :pseuds, :has_many => [:works, :series, :bookmarks]
+    user.resources :external_authors, :has_many => [:external_author_names]
     user.resources :preferences, :only => [:index, :update]
     user.resource :profile, :controller => 'profile', :only => :show
     user.resource :inbox, :controller => 'inbox', :collection => {:reply => :get, :cancel_reply => :get}, :only => [:show, :update]

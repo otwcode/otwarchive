@@ -18,12 +18,6 @@
         <%= options_for_select([ArchiveConfig.WARNING_DEFAULT_TAG_NAME, ArchiveConfig.WARNING_SOME_TAG_NAME, ArchiveConfig.WARNING_NONE_TAG_NAME, ArchiveConfig.WARNING_VIOLENCE_TAG_NAME, ArchiveConfig.WARNING_DEATH_TAG_NAME, ArchiveConfig.WARNING_NONCON_TAG_NAME, ArchiveConfig.WARNING_CHAN_TAG_NAME], warning_selected(@work) ) -%>
       </select>
     </dd>
-    <dt class="category required">
-      <label for="work_category_string"><%= Category::NAME -%>*</label>
-    </dt>
-    <dd class="category required">
-      <%= collection_select(:work, :category_string, Category.canonical, :name, :name, {:prompt => true}) -%>		
-    </dd>
     <dt class="fandom required">
       <label for="work_fandom"><%= Fandom::NAME.pluralize -%>*</label>
     </dt>
@@ -33,6 +27,12 @@
       <%= javascript_tag("new Autocompleter.Local('work_fandom', 'work_fandom_auto_complete', #{Fandom.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
     </dd>
 	<dd class="fandom delay_notice"><%=h "If this is the first story for a fandom, it may not show up in the fandoms page for a day or two" %></dd>
+  <dt class="category">
+    <label for="work_category_string"><%= Category::NAME -%></label>
+  </dt>
+  <dd class="category">
+    <%= collection_select(:work, :category_string, Category.canonical, :name, :name, {:prompt => true}) -%>
+  </dd>
     <dt class="pairing">
       <label for="work_pairing"><%= Pairing::NAME.pluralize -%></label>
     </dt>

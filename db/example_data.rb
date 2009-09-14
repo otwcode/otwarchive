@@ -64,6 +64,12 @@ module FixtureReplacement
     a.creation_type = :work
     a.creation = default_work
   end
+  
+  attributes_for :external_author do |a|
+    a.email = random_email
+    a.user = default_user
+    a.do_not_email = false
+  end
 
   attributes_for :external_work do |a|
     a.url = random_url(random_domain(false),"")

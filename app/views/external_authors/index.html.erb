@@ -1,0 +1,52 @@
+
+
+<h1><%= t('external_authors_for', :default => "External author identities for {{user}}", :user => @user.login) -%></h1>
+
+<% if current_user == @user -%>
+  <p>
+    <%= t('external_authors_explanation', 
+    :default => "If you have used other email addresses (and pseudonyms) on other sites and would like to keep them associated with
+    your current account here, you can create a new identity for each email address you have used. (And 
+    if the owner of an archive where you previously kept your stories moves or backs up that archive into the AO<sup>3</sup>, 
+    you will automagically be given control over those stories if they have one of these email addresses attached.)") -%>
+  </p>
+
+  <ul class="navigation">
+    <li><%= link_to t('new_external_author', :default => 'New external author identity'), new_user_external_author_path(@user) %></li>
+  </ul>
+<% end -%>
+
+<ul class="external_authors-list">
+  <% @external_authors.each do |external_author| %>
+    <li>
+      <p class="external_author-email"><%=h external_author.email %></p>
+      <p class="external_author-names">
+        <%= external_author.external_author_names.collect(&:name).join(", ") -%>
+      </p>
+      <% if external_author.do_not_email -%>
+        <p><%= t('do_not_email', :default => "No notifications sent for stories from this address." ) -%></p>
+      <%- end -%>
+
+      <% if external_author.do_not_import -%>
+        <p><%= t('do_not_import', :default => "Archivists may not import stories from this address." ) -%></p>
+      <%- end -%>
+    
+      <% if current_user == @user -%>
+        <ul class="navigation">
+          <li><%= link_to t('edit_link', :default => 'Edit'), [:edit, @user, external_author] -%></li>
+          <li>
+            <%= link_to t('delete_link', :default => 'Delete'), [@user, external_author], 
+                          :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %>
+          </li>
+        </ul>
+      <% end -%>
+    </li>
+  <% end -%>
+</ul>
+      
+<% if current_user == @user -%>
+<ul class="navigation">
+  <li><%= link_to t('new_external_author', :default => 'New external author identity'), new_user_external_author_path(@user) %></li>
+</ul>
+<% end -%>
+

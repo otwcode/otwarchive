@@ -8,6 +8,9 @@ class Work < ActiveRecord::Base
   has_many :pseuds, :through => :creatorships
 	has_many :users, :through => :pseuds, :uniq => true
 
+  has_many :external_creatorships, :as => :creation
+  has_many :external_authors, :through => :external_creatorships
+
   has_many :chapters, :dependent => :destroy
   validates_associated :chapters
 
@@ -566,7 +569,6 @@ class Work < ActiveRecord::Base
     return false if self.fandoms.blank?
     return false if self.warnings.blank?
     return false if self.ratings.blank?
-    return false if self.categories.blank?
     return true
   end
 
@@ -649,7 +651,6 @@ class Work < ActiveRecord::Base
     self.fandom_string = "Test Fandom"
     self.rating_string = ArchiveConfig.RATING_TEEN_TAG_NAME
     self.warning_strings = [ArchiveConfig.WARNING_NONE_TAG_NAME]
-    self.category_string = ArchiveConfig.CATEGORY_GEN_TAG_NAME
     self.save
   end
   
