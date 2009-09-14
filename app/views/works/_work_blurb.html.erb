@@ -33,7 +33,7 @@
 			<%- end -%>
       
   <%- unless warning_tags.size < 1 -%>
-			<dt><%=h 'Warnings' + ': ' %></dt>
+			<dt><%= link_to("Warnings", tos_faq_path(:anchor => "tags")) %>:</dt>
 			<dd>
 				 <ul id="work_<%= work.id %>_category_warning">
           <%- if hide_warnings?(work) -%>

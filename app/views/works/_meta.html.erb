@@ -4,7 +4,11 @@
     <%- tags = work_tags.select{|tag| tag.type == type} -%>
     <%- unless tags.blank? -%>
       <dt class="<%= type.downcase -%>">
-        <%= tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize %>:
+        <%- if type == "Warning" -%>
+          <%= link_to( tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize, tos_faq_path(:anchor => "tags") ) %>:
+        <%- else -%>
+          <%= tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize %>:
+        <%- end -%>
       </dt>
 	    
       <dd>
