@@ -1,0 +1,33 @@
+<ul class="navigation">
+    <li><%= link_to_unless_current "AO3 News", admin_posts_path %></li>
+    <li><%= link_to_unless_current "Archive FAQ", archive_faqs_path %></li>
+    <li><%= link_to_unless_current "Known Issues", known_issues_path %></li>
+  </ul>
+<h1><%=h 'AO3 News (includes Release Notes)' %></h1>
+
+<table>
+	<tr>
+		<td>
+  		<%= link_to 'Create New AO3 News Post', new_admin_post_path %>
+		</td>
+	<tr>
+</table>		
+<table>
+	<tr>
+		<th>Title</th>
+		<th>Posted</th>
+		<th>Updated</th>
+	</tr>	
+  <% @admin_posts.each do |admin_post| %>
+	<tr>
+		<td><%= link_to sanitize_title_for_display(admin_post.title), admin_post %></td>
+		<td><%=h admin_post.created_at %></td>
+		<td><%=h admin_post.updated_at %></td>
+	    <td><%= link_to "Show", admin_post %></td>
+        <td><%= link_to "Edit", edit_admin_post_path(admin_post) %></td>
+        <td><%= link_to "Delete", admin_post, :confirm => 'Are you sure?', :method => :delete %></td>
+	</tr>
+  <% end %> 
+</table>		
+</div>
+<br />

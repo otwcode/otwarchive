@@ -1,0 +1,20 @@
+<h1><%=h 'AO3 News' %></h1>
+
+<div id="works-show">
+		<h2>
+			<%= sanitize_title_for_display @admin_post.title %>
+		</h2>
+			<h5>
+				<b>Published:</b> <%=h @admin_post.created_at %>  
+					<%- if logged_in_as_admin? -%>
+				    | <%= link_to 'Edit', edit_admin_post_path(@admin_post) %> 
+				<%- end -%>
+			</h5>
+	    <%=sanitize_and_format_for_display @admin_post.content %>
+<br />	
+<< <%= link_to 'Back to AO3 News Index', admin_posts_path %>
+<br />
+<!-- BEGIN comment section -->
+<%= render :partial => 'comments/commentable', :locals => {:commentable => @admin_post} %>
+<!-- END comment section -->
+</div>

@@ -1,0 +1,8 @@
+<ul class="navigation">
+    <li><%= link_to_unless_current "AO3 News", admin_posts_path %></li>
+    <li><%= link_to_unless_current "Archive FAQ", archive_faqs_path %></li>
+    <li><%= link_to_unless_current "Known Issues", known_issues_path %></li>
+  </ul>
+<h1><%= t("archive_faq", :default => "Edit Archive FAQ Post") -%></h1>
+
+<%= render :partial => 'archive_faq_form' %>

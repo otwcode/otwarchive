@@ -49,6 +49,8 @@ class CommentsController < ApplicationController
       @commentable = Work.find(params[:work_id])
     elsif params[:bookmark_id]
       @commentable = Bookmark.find(params[:bookmark_id])
+    elsif params[:admin_post_id]
+      @commentable = AdminPost.find(params[:admin_post_id])
     end
   end
 
@@ -221,7 +223,7 @@ class CommentsController < ApplicationController
     else
       # again with the being pretty nice
       options = {:show_comments => true}
-      options[:controller] = @commentable.class.to_s.downcase.pluralize
+      options[:controller] = @commentable.class.to_s.underscore.pluralize
       options[:anchor] = "comment#{params[:id]}"
       if @thread_view
         options[:id] = @thread_root
@@ -288,7 +290,7 @@ class CommentsController < ApplicationController
   # if necessary to display it
   def redirect_to_comment(comment, options = {})
     if comment.depth > ArchiveConfig.COMMENT_THREAD_MAX_DEPTH
-      default_options = {:controller => comment.commentable.class.to_s.downcase.pluralize, 
+      default_options = {:controller => comment.commentable.class.to_s.underscore.pluralize, 
                          :action => :show,
                          :id => comment.commentable.id,
                          :anchor => "comment#{comment.id}"}
@@ -302,7 +304,7 @@ class CommentsController < ApplicationController
   def redirect_to_all_comments(commentable, options = {})
     default_options = {:anchor => "comments"}
     options = default_options.merge(options)
-    redirect_to :controller => commentable.class.to_s.downcase.pluralize,
+    redirect_to :controller => commentable.class.to_s.underscore.pluralize,
                 :action => :show,
                 :id => commentable.id,
                 :show_comments => options[:show_comments],

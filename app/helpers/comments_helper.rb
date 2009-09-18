@@ -7,6 +7,8 @@ module CommentsHelper
         link_to sanitize(ultimate.title, :tags => %w(em i b strong strike small)), ultimate
       when 'Pseud' then
         link_to sanitize(ultimate.name), ultimate
+      when 'AdminPost' then 
+          link_to sanitize(ultimate.title, :tags => %w(em i b strong strike small)), ultimate
       else
         link_to 'Something Interesting', ultimate
     end
@@ -50,7 +52,7 @@ module CommentsHelper
   
   def show_comments_link(commentable)
     if commentable.count_visible_comments > 0
-      commentable_id = eval(":#{commentable.class.to_s.downcase}_id")
+      commentable_id = eval(":#{commentable.class.to_s.underscore}_id")
       #Added if/else to get singular agreement for one comment
       if commentable.count_visible_comments == 1
         link_to_remote(
@@ -71,7 +73,7 @@ module CommentsHelper
   end
     
   def hide_comments_link(commentable) 
-    commentable_id = eval(":#{commentable.class.to_s.downcase}_id")
+    commentable_id = eval(":#{commentable.class.to_s.underscore}_id")
     link_to_remote("Hide Comments", 
       {:url => { :controller => :comments, :action => :hide_comments, commentable_id => (commentable.id)}, :method => :get },     
       {:href => fallback_url_for_top_level(commentable, {:show_comments => nil})} )
@@ -88,7 +90,7 @@ module CommentsHelper
   
   # return html link to add new comment on a commentable object
   def add_comment_link(commentable)
-    commentable_id = eval(":#{commentable.class.to_s.downcase}_id")
+    commentable_id = eval(":#{commentable.class.to_s.underscore}_id")
     link_to_remote(
       "Add Comment",
         {:url => { :controller => :comments, :action => :add_comment, commentable_id => (commentable.id)}, :method => :get}, 
@@ -96,7 +98,7 @@ module CommentsHelper
   end
       
   def cancel_comment_link(commentable)
-    commentable_id = eval(":#{commentable.class.to_s.downcase}_id")
+    commentable_id = eval(":#{commentable.class.to_s.underscore}_id")
     link_to_remote(
       "Cancel Comment",
         {:url => { :controller => :comments, :action => :cancel_comment, commentable_id => (commentable.id)}, :method => :get}, 
@@ -115,7 +117,7 @@ end
   
   # return link to add new reply to a comment
   def add_comment_reply_link(comment)
-    commentable_id = eval(":#{comment.ultimate_parent.class.to_s.downcase}_id")
+    commentable_id = eval(":#{comment.ultimate_parent.class.to_s.underscore}_id")
     "(" + 
     link_to_remote( 
       "Reply", 
@@ -127,7 +129,7 @@ end
   
   # return link to cancel new reply to a comment
   def cancel_comment_reply_link(comment)
-    commentable_id = eval(":#{comment.ultimate_parent.class.to_s.downcase}_id")
+    commentable_id = eval(":#{comment.ultimate_parent.class.to_s.underscore}_id")
     "(" + 
     link_to_remote( 
       "Cancel", 
@@ -143,14 +145,14 @@ end
     if comment.new_record?
       if commentable.class == comment.class
         # canceling a reply to a comment
-        commentable_id = eval(":#{comment.ultimate_parent.class.to_s.downcase}_id")
+        commentable_id = eval(":#{comment.ultimate_parent.class.to_s.underscore}_id")
         submit_to_remote( 
           'cancel', "Cancel", 
            :url => {:controller => :comments, :action => :cancel_comment_reply, :id => commentable.id, :comment_id => params[:comment_id], commentable_id => (commentable.ultimate_parent.id)}, :method => :get, 
            :href => fallback_url_for_comment(commentable, {:add_comment_reply_id => nil}) )
       else
         # canceling a reply to a different commentable thingy
-        commentable_id = eval(":#{commentable.class.to_s.downcase}_id")
+        commentable_id = eval(":#{commentable.class.to_s.underscore}_id")
         submit_to_remote(
           'cancel', "Cancel", 
           :url => { :controller => :comments, :action => :cancel_comment, commentable_id => (commentable.id)}, :method => :get, 
@@ -220,7 +222,7 @@ end
   def fallback_url_for_top_level(commentable, options = {})
     
     default_options = {:anchor => "comments"}
-    default_options[:controller] = commentable.class.to_s.downcase.pluralize
+    default_options[:controller] = commentable.class.to_s.underscore.pluralize
     default_options[:action] = "show"
     default_options[:id] = commentable.id
     default_options[:add_comment] = params[:add_comment] if params[:add_comment]

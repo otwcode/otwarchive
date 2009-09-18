@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090913234257) do
+ActiveRecord::Schema.define(:version => 20090918112658) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -19,6 +19,14 @@ ActiveRecord::Schema.define(:version => 20090913234257) do
     t.datetime "updated_at"
   end
 
+  create_table "admin_posts", :force => true do |t|
+    t.integer  "admin_id"
+    t.string   "title"
+    t.text     "content"
+    t.datetime "updated_at"
+    t.datetime "created_at"
+  end
+
   create_table "admins", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -26,6 +34,14 @@ ActiveRecord::Schema.define(:version => 20090913234257) do
     t.string   "login"
     t.string   "crypted_password"
     t.string   "salt"
+  end
+
+  create_table "archive_faqs", :force => true do |t|
+    t.integer  "admin_id"
+    t.string   "title"
+    t.text     "content"
+    t.datetime "updated_at"
+    t.datetime "created_at"
   end
 
   create_table "bookmarks", :force => true do |t|
@@ -194,6 +210,14 @@ ActiveRecord::Schema.define(:version => 20090913234257) do
     t.datetime "updated_at"
     t.boolean  "used",                            :default => false, :null => false
     t.integer  "external_author_id"
+  end
+
+  create_table "known_issues", :force => true do |t|
+    t.integer  "admin_id"
+    t.string   "title"
+    t.text     "content"
+    t.datetime "updated_at"
+    t.datetime "created_at"
   end
 
   create_table "languages", :force => true do |t|

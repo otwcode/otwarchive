@@ -1,0 +1,31 @@
+<%- if logged_in_as_admin? -%>
+<%= render :partial => "admin_index" %>
+<%- else -%>
+<h1><%=h 'AO3 News' %></h1>
+<% @admin_posts.each do |admin_post| %>
+  <tr>
+ 	<div id="works-show">
+			<h2>
+				<%= link_to sanitize_title_for_display(admin_post.title), admin_post %>
+			</h2>
+				<h5>
+					<b>Published:</b> <%=h admin_post.created_at %>  
+						<%- if logged_in_as_admin? -%>
+					    | <%= link_to t('edit', :default => 'Edit Post'), edit_admin_post_path(@admin_post) %>
+						<%- end -%>
+				</h5>
+		    <%=sanitize_and_format_for_display admin_post.content %>
+			<!-- BEGIN comment section -->
+				<p class="update">
+				<%=h t('admin_post_comments', :default => 'Comments') + ': '%> 
+				<%= link_to admin_post.count_visible_comments, admin_post_path(:id => admin_post.id, :anchor => "comments", :show_comments => true) -%> | 
+				<%= link_to t('admin_post_comments_add', :default => 'Add Comment'), admin_post_path(:id => admin_post.id, :anchor => "comments", :add_comment => true) -%>
+
+				</p>	
+			<!-- END comment section -->
+		<br />	
+	</div>
+	
+  </tr>
+<%- end -%>
+<%- end -%>
