@@ -40,7 +40,7 @@ module HtmlFormatter
   end
   
   # Limited display option for the pseud description field. 
-  def sanitize_description_for_display(text, options = {:tags => ['a', 'em', 'strong']})
+  def sanitize_description_for_display(text, options = {:tags => ['a', 'em', 'strong', 'b', 'i']})
     sanitize_whitelist(text, options)
   end
   

@@ -1,6 +1,6 @@
 class TagsController < ApplicationController
-  before_filter :check_user_status, :except => [ :show, :index, :show_hidden ]
-  before_filter :check_permission, :except => [ :show, :index, :show_hidden ]
+  before_filter :check_user_status, :except => [ :show, :index, :show_hidden, :show_hidden_freeforms ]
+  before_filter :check_permission, :except => [ :show, :index, :show_hidden, :show_hidden_freeforms ]
 
   def check_permission
     logged_in_as_admin? || permit?("tag_wrangler") || access_denied
