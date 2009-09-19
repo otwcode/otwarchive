@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090918112658) do
+ActiveRecord::Schema.define(:version => 20090919125723) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -235,6 +235,19 @@ ActiveRecord::Schema.define(:version => 20090918112658) do
 
   add_index "locales", ["iso"], :name => "index_locales_on_iso"
 
+  create_table "log_items", :force => true do |t|
+    t.integer  "user_id",                 :null => false
+    t.integer  "admin_id"
+    t.integer  "role_id"
+    t.integer  "action",     :limit => 1
+    t.text     "note",                    :null => false
+    t.datetime "enddate"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "log_items", ["user_id"], :name => "index_log_items_on_user_id"
+
   create_table "open_id_authentication_associations", :force => true do |t|
     t.integer "issued",     :limit => 8
     t.integer "lifetime",   :limit => 8
@@ -410,6 +423,7 @@ ActiveRecord::Schema.define(:version => 20090918112658) do
     t.boolean  "banned",                                   :default => false, :null => false
     t.integer  "invitation_id",             :limit => 8
     t.integer  "invitation_limit",          :limit => 8,   :default => 1
+    t.datetime "suspended_until"
   end
 
   add_index "users", ["identity_url"], :name => "index_users_on_identity_url", :unique => true
