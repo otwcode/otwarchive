@@ -137,7 +137,7 @@ class StoryParser
       else
         story = eval("download_from_#{source.downcase}(location)")
       end
-      return story
+      return fix_quotes(story)
     end
 
     # canonicalize the url for downloading from lj or clones
@@ -203,10 +203,10 @@ class StoryParser
     # rules.
     def parse_story_from_unknown(story)
       work_params = {:chapter_attributes => {}}
-      storyhead = (@doc/"head").inner_html unless (@doc/"head").blank?
-      storytext = (@doc/"body").inner_html unless (@doc/"body").blank?
+      storyhead = @doc.css("head").inner_html if @doc.css("head")
+      storytext = @doc.css("body").inner_html if @doc.css("body")
       if storytext.blank?
-        storytext = (@doc/"html").inner_html
+        storytext = @doc.css("html").inner_html
       end
       if storytext.blank?
         # just grab everything
@@ -217,7 +217,7 @@ class StoryParser
         meta.merge!(scan_text_for_meta(storyhead))
       end
       meta.merge!(scan_text_for_meta(storytext))
-      work_params[:title] = (@doc/"title").inner_html
+      work_params[:title] = @doc.css("title").inner_html
       work_params[:chapter_attributes][:content] = clean_storytext(storytext)
       work_params = work_params.merge!(meta)
 
@@ -229,8 +229,8 @@ class StoryParser
 
       # in LJ "light" format, the story contents are in the first div
       # inside the body.
-      body = (@doc/"body")
-      content_divs = (body/"div")
+      body = @doc.css("body")
+      content_divs = body.css("div")
       storytext = !content_divs[0].nil? ? content_divs[0].inner_html : body.inner_html
 
       # cleanup the text
@@ -238,7 +238,7 @@ class StoryParser
       storytext = clean_storytext(storytext)
 
       work_params[:chapter_attributes][:content] = storytext
-      work_params[:title] = (@doc/"title").inner_html # default
+      work_params[:title] = @doc.css("title").inner_html # default
       work_params.merge!(scan_text_for_meta(storytext))
 
       return work_params
@@ -361,15 +361,16 @@ class StoryParser
         # what this does is look for pattern: (whatever)
         # and then sets meta[:metaname] = whatever
         # eg, if it finds Author: Blah The Great it will set meta[:author] = Blah The Great
+        # then it runs it through convert_<metaname> for cleanup if such a function is defined (eg convert_rating_string)
         metapattern = Regexp.new("(#{pattern})\s*:\s*(.*)", Regexp::IGNORECASE)
         metapattern_plural = Regexp.new("(#{pattern.pluralize})\s*:\s*(.*)", Regexp::IGNORECASE)
         if text.match(metapattern) || text.match(metapattern_plural)
           value = $2
+          value = sanitize_fully(value) if is_tag[metaname]
           begin
-            value = eval("convert_#{metaname.downcase}(value)")
+            value = eval("convert_#{metaname.to_s.downcase}(value)")
           rescue NameError
           end
-          value = sanitize_fully(value) if is_tag[metaname]
           meta[metaname] = value
         end
       end
@@ -444,18 +445,22 @@ class StoryParser
     # Convert the common ratings into whatever ratings we're
     # using on this archive.
     def convert_rating(rating)
-      case rating.downcase
-      when "nc-17", "nc17", "nc-18", "nc18", "x", "ma", "explicit"
+      rating = rating.downcase
+      if rating.match(/(nc-?1[78]|x|ma|explicit)/)
         ArchiveConfig.RATING_EXPLICIT_TAG_NAME
-      when "r", "m", 'mature'
+      elsif rating.match(/(r|m|mature)/)
         ArchiveConfig.RATING_MATURE_TAG_NAME
-      when "pg-13", "pg13", "pg-15", "pg15", "t", "teen", "teen and up"
+      elsif rating.match(/(pg-?1[35]|t|teen)/)
         ArchiveConfig.RATING_TEEN_TAG_NAME
-      when "pg", "g", "k+", "k", "general audiences"
+      elsif rating.match(/(pg|g|k+|k|general audiences)/)
         ArchiveConfig.RATING_GENERAL_TAG_NAME
       else
         ArchiveConfig.RATING_DEFAULT_TAG_NAME
       end
+    end
+
+    def convert_rating_string(rating)
+      return convert_rating(rating)
     end
 
     def convert_published_at(date)

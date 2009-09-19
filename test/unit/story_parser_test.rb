@@ -90,7 +90,6 @@ class StoryParserTest < ActiveSupport::TestCase
     assert !@work.chapters.first.content.blank?
     assert_equal "Birth Pains", @work.title
     assert !@work.summary.blank?
-    @work.category_string = ArchiveConfig.CATEGORY_OTHER_TAG_NAME
     @work.warning_strings = [ArchiveConfig.WARNING_NONE_TAG_NAME]
     @work.authors = [create_pseud]
     @work.save
@@ -116,7 +115,6 @@ class StoryParserTest < ActiveSupport::TestCase
     @work = @storyparser.download_and_parse_story(@url)
     assert_match /After many months/, @work.chapters.first.content
     assert_equal "Hot Springs", @work.title
-    @work.category_string = ArchiveConfig.CATEGORY_OTHER_TAG_NAME
     @work.warning_strings = [ArchiveConfig.WARNING_NONE_TAG_NAME]
     @work.authors = [create_pseud]
     @work.save
@@ -211,5 +209,86 @@ class StoryParserTest < ActiveSupport::TestCase
     @work = @storyparser.download_and_parse_story(@url)
     assert @work.chapters.first.published_at == Date.parse('2003-12-11')
   end
+  
+  def test_problematic_stories
+    @problems = [
+      {  :url => "http://home.teleport.com/~punkm/lipstick.html",
+        :title => "The Lipstick Mafia",
+        :content => "And that's how the lipstick mafia got me and Fraser in the shower."}, 
+      
+      {  :url => "http://web.archive.org/web/20040310174832/http://witchqueen.diary-x.com/journal.cgi?entry=20040108b",
+        :title => "Scenes from a Hat: JC is a Teenie",
+        :content => "The two men take off running."}, 
+      
+      {  :url => "http://remix.illuminatedtext.com/dbfiction.php?fiction_id=441",
+        :title => ".:Different Kinds of Magic (alla Clarke's Third):.",
+        :content => "When John hovered above Atlantis, high enough that people looked like ants but low enough that puddlejumpers looked like birds, magic was",
+        :fandom => "Stargate: Atlantis",
+        :rating => ArchiveConfig.RATING_GENERAL_TAG_NAME}, 
+      
+      {  :url => "http://rivkat.com/spn/three.html",
+        :title => "Three Answers",
+        :content => "\"I call first shower,\" Sam said, and then they were off and running towards"}, 
+      
+      {  :url => "http://rivkat.com/smallville/angel.html",
+        :title => "No Angel Came",
+        :content => "He knows that Clark will not be there when he wakes."}, 
+      
+      {  :url => "http://suberic.net/~jadelennox/spikesees.html",
+        :title => "The One Who Sees",
+        :content => "He will not see my pain."}, 
+      
+      {  :url => "http://cupidsbow.livejournal.com/147183.html",
+        :title => "fractures",
+        :content => "Zack whispers, his breath warm against her ear",
+        :fandom => "Battlestar Galactica 2003",
+        :rating => ArchiveConfig.RATING_TEEN_TAG_NAME}, 
+      
+      {  :url => "http://www.fanfiction.net/s/277511/1/Mindless_Fun",
+        :title => "Mindless Fun",
+        :content => "Neither of them said a word about the huge brown hand on John's thigh.",
+        :fandom => "Farscape",
+        :rating => ArchiveConfig.RATING_GENERAL_TAG_NAME}, 
+      
+      {  :url => "http://www.innergeekdom.net/Twice/12-01.htm",
+        :title => "Inanimate Fruit",
+        :content => "She shrugged, and kissed Meredith, softly with her lips closed and her hands at Meredith's waist.",
+        :fandom => "Grey's Anatomy",
+        :rating => ArchiveConfig.RATING_MATURE_TAG_NAME}, 
+
+      {  :url => "http://apreludetoanend.livejournal.com/100193.html",
+        :title => "Triptych",
+        :content => "\"I want to go to college,\" he says."}, 
+
+      {  :url => "http://x-strangeangels.livejournal.com/42435.html",
+        :title => "I dream of a circle",
+        :content => "Mundi tenebricosi.",
+        :rating => ArchiveConfig.RATING_MATURE_TAG_NAME}, 
+
+      {  :url => "http://se-parsons.livejournal.com/895277.html",
+        :title => "L'etoile de la mer",
+        :content => "When Dean slept, he dreamt of the ocean.",
+        :rating => ArchiveConfig.RATING_TEEN_TAG_NAME}, 
+
+      ]
+    storyparser = StoryParser.new
+    @problems.each do |entry|
+      begin
+        assert work = storyparser.download_and_parse_story(entry[:url])
+        assert !work.chapters.first.content.blank?
+        assert_match entry[:content], work.chapters.first.content
+        assert_match entry[:title], work.title
+        # put in default warning so we can save
+        work.warning_strings = [ArchiveConfig.WARNING_NONE_TAG_NAME]
+        work.authors = [create_pseud]
+        assert work.save
+        assert_match entry[:fandom], work.fandom_string if entry[:fandom]
+        assert_equal Rating.find_by_name(entry[:rating]), work.ratings.first if entry[:rating]
+      rescue Timeout::Error
+        puts "Timed out trying to get #{entry[:url]}"
+      end
+    end
+  end
+  
 
 end

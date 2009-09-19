@@ -17,6 +17,19 @@ module SanitizeParams
     return text
   end
   
+  # replace evil msword curly quotes
+  def fix_quotes(text)
+    text.gsub! "\342\200\230", "'"
+    text.gsub! "\342\200\231", "'"
+    text.gsub! "\221", "'"
+    text.gsub! "\222", "'"
+    text.gsub! "\342\200\234", '"'
+    text.gsub! "\342\200\235", '"'
+    text.gsub! "\223", '"'
+    text.gsub! "\224", '"'
+    return text
+  end
+  
   # strip all html 
   def sanitize_fully(text)
     get_full_sanitizer
@@ -41,7 +54,7 @@ module SanitizeParams
     hash.keys.each do |key|
       if hash[key].is_a? String
         if ArchiveConfig.FIELDS_ALLOWING_HTML.include?(key.to_s)
-          hash[key] = @white_list_sanitizer.sanitize(strip_comments(hash[key]))
+          hash[key] = @white_list_sanitizer.sanitize(fix_quotes(hash[key]))
         else
           hash[key] = @full_sanitizer.sanitize(hash[key])
         end
