@@ -1,9 +1,9 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 one:
-  external_author: 
+  external_author: 1
   name: MyString
 
 two:
-  external_author: 
+  external_author: 2
   name: MyString

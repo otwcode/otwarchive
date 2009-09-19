@@ -113,6 +113,7 @@ class UsersController < ApplicationController
       if @user
         @user.activate
         self.current_user = @user
+        @user.create_log_item( options = {:action => ArchiveConfig.ACTION_ACTIVATE})
         flash[:notice] = t('signup_complete', :default => "Signup complete! This is your public profile.")
         redirect_to(@user)
       else

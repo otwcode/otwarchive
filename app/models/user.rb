@@ -56,6 +56,9 @@ class User < ActiveRecord::Base
   has_many :inbox_comments, :dependent => :destroy
   has_many :feedback_comments, :through => :inbox_comments, :conditions => {:is_deleted => false, :approved => true}, :order => 'created_at DESC'
   
+  has_many :log_items, :dependent => :destroy
+  validates_associated :log_items
+  
   def read_inbox_comments
     inbox_comments.find(:all, :conditions => {:read => true})
   end
@@ -188,19 +191,45 @@ class User < ActiveRecord::Base
     self.is_translation_admin?
   end
   
-  # Set translator role for this user
+  # Set translator role for this user and log change
   def translation_admin=(is_translation_admin)
-    is_translation_admin == "1" ? self.is_translation_admin : self.is_not_translation_admin
+    if is_translation_admin == "1"
+      unless self.is_translation_admin?
+        self.is_translation_admin
+        self.create_log_item( options = {:action => ArchiveConfig.ACTION_ADD_ROLE, :role_id => Role.find_by_name('translation_admin').id, :note => 'Change made by Admin'})
+      end
+    else
+      if self.is_translation_admin?
+        self.is_not_translation_admin
+        self.create_log_item( options = {:action => ArchiveConfig.ACTION_REMOVE_ROLE, :role_id => Role.find_by_name('translation_admin').id, :note => 'Change made by Admin'})
+      end
+    end
   end
-  
+   
   # Is this user an authorized tag wrangler?
   def tag_wrangler
     self.is_tag_wrangler?
   end
   
-  # Set tag wrangler role for this user
+  # Set tag wrangler role for this user and log change
   def tag_wrangler=(is_tag_wrangler)
-    is_tag_wrangler == "1" ? self.is_tag_wrangler : self.is_not_tag_wrangler
+    if is_tag_wrangler == "1"
+      unless self.is_tag_wrangler?
+        self.is_tag_wrangler
+        self.create_log_item( options = {:action => ArchiveConfig.ACTION_ADD_ROLE, :role_id => Role.find_by_name('tag_wrangler').id, :note => 'Change made by Admin'})
+      end
+    else
+      if self.is_tag_wrangler?
+        self.is_not_tag_wrangler
+        self.create_log_item( options = {:action => ArchiveConfig.ACTION_REMOVE_ROLE, :role_id => Role.find_by_name('tag_wrangler').id, :note => 'Change made by Admin'})
+      end
+    end
+  end
+  
+  # Creates log item tracking changes to user
+  def create_log_item(options = {})
+    options.reverse_merge! :note => 'System Generated', :user_id => self.id
+    LogItem.create(options)
   end
   
   # Options can include :categories and :limit

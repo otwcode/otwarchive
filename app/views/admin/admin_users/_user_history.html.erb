@@ -1,0 +1,23 @@
+<h2><%= t('history', :default => 'User History') -%></h2>
+<table border="0">
+  <tr>
+    <th><%= t('log_date', :default => 'Date / Time') -%></th>
+    <th><%= t('log_action', :default => 'Action') -%></th>
+    <th><%= t('log_details', :default => 'Details') -%></th>
+  </tr>
+  <% unless @log_items.blank?
+     @log_items.each do |item| %>
+  <tr>
+    <td><%= item.created_at%></td>
+    <td><%=h log_item_action_name(item.action) %><%= item.role.name if item.role %><%= item.enddate if item.enddate %></td>
+    <td><%=h item.note %></td>
+  </tr>
+  <%- end -%>
+  <%- end -%>
+  <tr>
+    <td><%= @user.created_at %></td>
+    <td><%= t('log_created', :default => 'Account Created') %></td>
+    <td><%= t('log_system', :default => 'System Generated') %></td>
+  </tr>
+  
+</table>

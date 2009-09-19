@@ -54,6 +54,8 @@ COMMENT_MAX: 4300
 TAG_MAX: 42
 CONTENT_MIN: 10
 CONTENT_MAX: 500000
+LOGNOTE_MIN: 5
+LOGNOTE_MAX: 1250
 
 # number of items in various displays
 ITEMS_PER_PAGE: 25
@@ -153,3 +155,13 @@ PRODUCTION_CACHE: "memcache"
 # this corresponds to the constant value SEARCHD_MAX_ATTR_VALUES in the Sphinx search engine in searchd.cpp
 # it represents a limit on how many items can be filtered on when searching 
 SPHINX_FILTER_SIZE_LIMIT: 4096
+
+# These are the actions logged in the user history - the log_items table
+ACTION_ACTIVATE: 0
+ACTION_ADD_ROLE: 1
+ACTION_REMOVE_ROLE: 2
+ACTION_SUSPEND: 3
+ACTION_UNSUSPEND: 4
+ACTION_BAN: 5
+ACTION_WARN: 6
+

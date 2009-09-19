@@ -34,6 +34,10 @@ class Admin::AdminUsersController < ApplicationController
   def show
     @hide_dashboard = true
     @user = User.find_by_login(params[:id])
+    unless @user
+      redirect_to :action => "index", :query => params[:query], :role => params[:role]
+    end    
+    @log_items = @user.log_items.sort_by(&:created_at).reverse
   end
 
   # GET admin/users/1/edit
@@ -47,14 +51,87 @@ class Admin::AdminUsersController < ApplicationController
   # PUT admin/users/1
   # PUT admin/users/1.xml
   def update
-    @user = User.find_by_login(params[:user][:login])
-    @user.attributes = params[:user]
-    if @user.save(false)
-      flash[:notice] = t('successfully_updated', :default => 'User was successfully updated.')
-      redirect_to :action => "index", :query => params[:query], :role => params[:role]
-    else
-      flash[:error] = t('error_updating', :default => 'There was an error updating user {{name}}', :name => params[:user][:login])
-      redirect_to :action => "index", :query => params[:query], :role => params[:role]
+    if params[:user]
+      @user = User.find_by_login(params[:user][:login])
+      @user.attributes = params[:user]
+      if @user.save(false)
+        flash[:notice] = t('successfully_updated', :default => 'User was successfully updated.')
+        redirect_to :back
+      else
+        flash[:error] = t('error_updating', :default => 'There was an error updating user {{name}}', :name => params[:user][:login])
+        redirect_to :back
+      end
+    elsif params[:admin_action]
+      @user = User.find_by_login(params[:user_login])
+      @admin_note = params[:admin_note]
+      if @admin_note.blank?
+        flash[:error] = t('note_required', :default => "You must include notes in order to perform this action")
+        redirect_to :back
+      else
+        if params[:admin_action] == 'warn'
+          @user.create_log_item( options = {:action => ArchiveConfig.ACTION_WARN, :note => @admin_note, :admin_id => current_admin.id})
+          flash[:notice] = t('success_warned', :default => "Warning was recorded") 
+          redirect_to :back
+        elsif params[:admin_action] == 'suspend'
+          if params[:suspend_days].blank?
+            flash[:error] = t('error_date_required', :default => "Please enter the number of days for which the user should be suspended.")
+            redirect_to :back
+          else
+            @user.suspended = true
+            @suspension_days = params[:suspend_days].to_i
+            @user.suspended_until = @suspension_days.days.from_now
+            if @user.save && @user.suspended? && !@user.suspended_until.blank?
+              @user.create_log_item( options = {:action => ArchiveConfig.ACTION_SUSPEND, :note => @admin_note, :admin_id => current_admin.id, :enddate => @user.suspended_until})
+              flash[:notice] = t('success_suspended', :default => "User has been temporarily suspended") 
+              redirect_to :back
+            else
+              flash[:error] = t('error_suspended', :default => "User could not be suspended") 
+              redirect_to :back             
+            end
+          end
+        elsif params[:admin_action] == 'ban'
+          @user.banned = true
+          if @user.save && @user.banned?
+            @user.create_log_item( options = {:action => ArchiveConfig.ACTION_BAN, :note => @admin_note, :admin_id => current_admin.id})
+            flash[:notice] = t('success_banned', :default => "User has been permanently suspended") 
+            redirect_to :back  
+          else  
+            flash[:error] = t('error_banned', :default => "User could not be permanently suspended") 
+            redirect_to :back  
+          end
+        elsif params[:admin_action] == 'unsuspend'
+          if @user.suspended?
+            @user.suspended = false
+            @user.suspended_until = nil
+            if @user.save && !@user.suspended? && @user.suspended_until.blank?
+              @user.create_log_item( options = {:action => ArchiveConfig.ACTION_UNSUSPEND, :note => @admin_note, :admin_id => current_admin.id})
+              flash[:notice] = t('success_unsuspend', :default => "Suspension has been lifted") 
+              redirect_to :back
+            else
+              flash[:error] = t('error_unsuspend', :default => "Suspension could not be lifted") 
+              redirect_to :back
+            end
+          else
+            flash[:notice] = t('not_suspended', :default => "User had not been suspended") 
+            redirect_to :back
+          end
+        elsif params[:admin_action] == 'unban'
+          if @user.banned?
+            @user.banned = false
+            if @user.save && !@user.banned?
+              @user.create_log_item( options = {:action => ArchiveConfig.ACTION_UNSUSPEND, :note => @admin_note, :admin_id => current_admin.id})
+              flash[:notice] = t('success_unsuspend', :default => "Suspension has been lifted") 
+              redirect_to :back
+            else
+              flash[:error] = t('error_unsuspend', :default => "Suspension could not be lifted") 
+              redirect_to :back
+            end
+          else
+            flash[:notice] = t('not_banned', :default => "User had not been permanently suspended") 
+            redirect_to :back
+          end
+        end
+      end
     end
   end
 
@@ -124,6 +201,7 @@ class Admin::AdminUsersController < ApplicationController
     @user = User.find_by_login(params[:id])
     @user.activate
     if @user.active?
+      @user.create_log_item( options = {:action => ArchiveConfig.ACTION_ACTIVATE, :note => 'Manually Activated', :admin_id => current_admin.id})
       flash[:notice] = t('activated', :default => "User Account Activated") 
       redirect_to :action => :show
     else

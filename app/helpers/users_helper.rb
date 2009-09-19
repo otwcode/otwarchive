@@ -110,4 +110,22 @@ module UsersHelper
     end
   end
   
+  def log_item_action_name(action)
+    if action == ArchiveConfig.ACTION_ACTIVATE
+      t('log_validated', :default => 'Account Validated')
+    elsif action == ArchiveConfig.ACTION_ADD_ROLE
+      t('log_role_added', :default => 'Role Added: ')
+    elsif action == ArchiveConfig.ACTION_REMOVE_ROLE
+      t('log_role_removed', :default => 'Role Removed: ')
+    elsif action == ArchiveConfig.ACTION_SUSPEND
+      t('log_suspended', :default => 'Suspended until ')
+    elsif action == ArchiveConfig.ACTION_UNSUSPEND
+      t('log_lift_suspension', :default => 'Suspension Lifted')
+    elsif action == ArchiveConfig.ACTION_BAN
+      t('log_ban', :default => 'Suspended Permanently')
+    elsif action == ArchiveConfig.ACTION_WARN
+      t('log_warn', :default => 'Warned')
+    end
+  end
+  
 end

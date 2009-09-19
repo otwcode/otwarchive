@@ -100,6 +100,9 @@ module ValidationHelper
     if options[:minimum_length]
       defaults.merge!(:tooShortMessage => 'Must be at least ' + options[:minimum_length].to_s + ' letters long.') #/
     end
+    if options[:notANumberMessage]
+      defaults.merge!(:notANumberMessage => 'Please enter a number') #/
+    end
 
     options = defaults.merge(options)
     
@@ -117,6 +120,11 @@ module ValidationHelper
     if options[:minimum_length]
       validation_code += "#{live_validation_varname(id)}.add(Validate.Length, { \"minimum\":\"#{options[:minimum_length]}\", \n" 
       validation_code += "\"tooShortMessage\": \"#{options[:tooShortMessage]}\"}); \n"           
+    end
+    
+    if options[:numericality]
+      validation_code += "#{live_validation_varname(id)}.add(Validate.Numericality, { \"notANumberMessage\":\"#{options[:notANumberMessage]}\", \n"
+      validation_code += "\"validMessage\":\"#{options[:validMessage]}\"});\n"
     end
     
     return live_validation_wrapper(id, validation_code)
