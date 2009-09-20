@@ -30,7 +30,7 @@ class Bookmark < ActiveRecord::Base
         # created the bookmark
         return self if pseud.user == current_user
       else
-        if self.bookmarkable_type == 'Work' || self.bookmarkable_type == 'Series'
+        if self.bookmarkable_type == 'Work' || self.bookmarkable_type == 'Series' || self.bookmarkable_type == 'ExternalWork'
           return self if self.bookmarkable.visible(current_user)
         else
           return self
@@ -52,10 +52,12 @@ class Bookmark < ActiveRecord::Base
     end
   end  
   
-  # Use existing external work if relevant attributes are the same
+  # Use existing external work if relevant attributes and tags are the same
   def set_external(id)
     fetched = ExternalWork.find(id)
-    same = fetched.author == self.bookmarkable.author ? true : false
+    same = (fetched.author == self.bookmarkable.author && fetched.fandom_string == self.bookmarkable.fandom_string && 
+      fetched.rating_string == self.bookmarkable.rating_string && fetched.category_string == self.bookmarkable.category_string && 
+      fetched.pairing_string == self.bookmarkable.pairing_string && fetched.character_string == self.bookmarkable.character_string) ? true : false
     %w(title summary notes).each {|a| same = false unless self.bookmarkable[a.to_sym] == fetched[a.to_sym]}
     self.bookmarkable = fetched if same  
   end

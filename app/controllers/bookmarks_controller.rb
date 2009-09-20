@@ -24,8 +24,8 @@ class BookmarksController < ApplicationController
 
   
   # GET    /:locale/bookmarks
-  # GET    /:locale/users/:user_id/bookmarks 
-  # GET    /:locale/works/:work_id/bookmarks 
+  # GET    /:locale/users/:user_id/bookmarks
+  # GET    /:locale/works/:work_id/bookmarks
   # GET    /:locale/external_works/:external_work_id/bookmarks
   def index
     if params[:user_id]
@@ -33,7 +33,7 @@ class BookmarksController < ApplicationController
       owner = @user
     end
     if params[:pseud_id] && @user
-      @author = @pseud = @user.pseuds.find_by_name(params[:pseud_id]) 
+      @author = @pseud = @user.pseuds.find_by_name(params[:pseud_id])
       # @author is needed in the sidebar and I'm too lazy to redo the whole thing
       owner = @pseud
     elsif params[:tag_id]
@@ -54,12 +54,13 @@ class BookmarksController < ApplicationController
       end
       @bookmarks = eval(search_by).sort_by(&:created_at).reverse.paginate(:page => params[:page])
     else # Aggregate on main bookmarks page, tag page
-      if params[:tag_id] 
+      if params[:tag_id]
         @most_recent_bookmarks = false
         # Want to get not only bookmarks with tag, but also bookmarks on works with tag
         @works_with_tag = owner.works.visible.collect{|w| ["Work", w.id]}
+        @external_works_with_tag = owner.external_works.visible.collect{|ew| ["ExternalWork", ew.id]}
         @bookmarks_with_tag = owner.bookmarks.visible.collect{|b| [b.bookmarkable_type, b.bookmarkable_id]}.uniq
-        @bookmarkables = @bookmarks_with_tag | @works_with_tag
+        @bookmarkables = @bookmarks_with_tag | @works_with_tag | @external_works_with_tag
       else # Show only bookmarks from past month on main page
         @most_recent_bookmarks = true
         @bookmarkables = Bookmark.recent.visible.collect{|b| [b.bookmarkable_type, b.bookmarkable_id]}.uniq
@@ -67,12 +68,14 @@ class BookmarksController < ApplicationController
       @bookmarks = []
       search_by = params[:recs_only] ? "eval(b[0]).find(b[1]).bookmarks.recs.visible" : "eval(b[0]).find(b[1]).bookmarks.visible"
       @bookmarkables.each do |b|
-        @bookmarks << eval(search_by).last unless eval(search_by).blank?
+        if eval(b[0]).exists?(b[1])
+          @bookmarks << eval(search_by).last unless eval(search_by).blank?
+        end
       end
       @bookmarks = @bookmarks.sort_by(&:created_at).reverse.paginate(:page => params[:page])
     end
     if @bookmarkable
-      access_denied unless is_admin? || @bookmarkable.class == ExternalWork || @bookmarkable.visible
+      access_denied unless is_admin? || @bookmarkable.visible
     end
   end
   

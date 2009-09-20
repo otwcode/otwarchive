@@ -11,7 +11,13 @@ class Admin::UserCreationsController < ApplicationController
     flash[:notice] = creation.hidden_by_admin? ? 
                         t('item_hidden', :default => 'Item has been hidden.') : 
                         t('item_unhidden', :default => 'Item is no longer hidden.')
-   creation_class == Comment ? redirect_to(creation.ultimate_parent) : redirect_to(creation)    
+    if creation_class == Comment 
+      redirect_to(creation.ultimate_parent) 
+    elsif creation_class == ExternalWork
+      redirect_to :back
+    else
+     redirect_to(creation)
+    end
   end
   
   def destroy
@@ -19,7 +25,13 @@ class Admin::UserCreationsController < ApplicationController
     creation = creation_class.find(params[:id])
     creation.destroy
     flash[:notice] = t('item_deleted', :default => 'Item was successfully deleted.')
-   redirect_to works_path
+    if creation_class == Comment 
+      redirect_to(creation.ultimate_parent) 
+    elsif creation_class == ExternalWork
+      redirect_to bookmarks_path
+    else
+     redirect_to works_path
+    end
   end
   
 end

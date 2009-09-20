@@ -98,9 +98,14 @@ module WorksHelper
   end
 
   def get_symbols_for(work, symbols_only = false)
-    warnings = work.tags.select{|tag| tag.type == "Warning"}
-    warning_class = get_warnings_class(warnings)
-    warning_string = get_title_string(warnings)
+    unless work.class == ExternalWork
+      warnings = work.tags.select{|tag| tag.type == "Warning"}
+      warning_class = get_warnings_class(warnings)
+      warning_string = get_title_string(warnings)
+    else
+      warning_class = "external-work"
+      warning_string = "External Work"
+    end
     
     ratings = work.tags.select{|tag| tag.type == "Rating"}
     rating = ratings.blank? ? nil : ratings.first
@@ -113,7 +118,11 @@ module WorksHelper
     category_string = get_title_string(categories, "category")
 
     iswip_class = get_complete_class(work)
-    iswip_string = work.is_wip ? "Work in Progress" : "Complete Work"
+    if work.class == Work
+      iswip_string = work.is_wip ? "Work in Progress" : "Complete Work"
+    else
+      iswip_string = "External Work"
+    end
 
     symbol_block = ""
     symbol_block << "<ul class=\"required-tags\">\n" if not symbols_only
@@ -175,6 +184,7 @@ module WorksHelper
   end
 
   def get_complete_class(work)
+    return "category-none" if work.class == ExternalWork
     if work.is_wip
       "complete-no"
     else

@@ -4,4 +4,7 @@
 <br />
 <div id="recent_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.bookmarkable_id}" -%>">
 </div>
+<%- if logged_in_as_admin? && bookmark.bookmarkable.class == ExternalWork -%>
+  <%= render :partial => 'admin/admin_options', :locals => {:item => bookmark.bookmarkable} %>
+<%- end -%>
 </li>

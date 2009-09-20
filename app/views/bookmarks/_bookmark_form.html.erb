@@ -1,10 +1,10 @@
-<% bookmarkable ||= @bookmarkable %>
-<% @bookmark ||= Bookmark.new %>
-<% if @bookmark.new_record? && bookmarkable.class != ExternalWork %>
+<%- bookmarkable ||= @bookmarkable -%>
+<%- @bookmark ||= Bookmark.new -%>
+<%- if @bookmark.new_record? && bookmarkable.class != ExternalWork -%>
   <p><%=h t('form_add_new', :default => 'Add a new bookmark for "{{title}}"', :title => bookmarkable.title) %></p>
-<% end %>
+<%- end -%>
 
-<% form_for([bookmarkable, @bookmark], :url => {:controller => 'bookmarks', :action => (action ||= 'create')}) do |f| %>
+<%- form_for([bookmarkable, @bookmark], :url => {:controller => 'bookmarks', :action => (action ||= 'create')}) do |f| -%>
 <dl>
 
   <dt><%=h t('form_pseud', :default => "Pseud: ") -%></dt>
@@ -19,9 +19,9 @@
 
 	<% if bookmarkable.class == ExternalWork && bookmarkable.new_record? %>
 	<% fields_for 'bookmark[external]', bookmarkable do |ew| %>
-	<dt><%= ew.label :url, t('form_url', :default => "URL: ") %></dt>
+ 	<dt><%= ew.label :url, t('form_url', :default => "URL: ") %></dt>
 	<dd>
-		<%= ew.text_field :url %>
+		<%= ew.text_field :url%>
 		<%= observe_field 'bookmark_external_url', :url => {:controller => 'external_works', :action => 'fetch'}, :with => 'external_url', :on => 'blur' %>
 		<%= hidden_field 'fetched', :value => '' %>
 	</dd>
@@ -39,16 +39,57 @@
 	<%= ew.label :summary, t('form_authors_summary', :default => "Author's Summary") %>
 	<%=h t('form_please_paste', :default => "(please copy and paste from original work)") %></dt>
 		<dd>
-      <%= ew.text_area :summary %>
+      <%= ew.text_area :summary, :rows => 5, :class => "summary-field"%>
       <%= generate_countdown_html("bookmark_external_summary", ArchiveConfig.SUMMARY_MAX) -%>      
+    </dd> 
+  
+  <p><%= "Author's Tags (comma separated, #{ArchiveConfig.TAG_MAX} characters per tag). Please note that only fandom is required." -%><%= link_to_help "tagging-help" -%></p>
+  <dl>
+    <dt>
+      <%= ew.label :fandom_string, Fandom::NAME.pluralize -%>
+    </dt>
+    <dd>
+      <%= ew.text_field :fandom_string %>
+      <div class="auto_complete" id="bookmark_external_fandom_string_auto_complete" ></div>
+      <%= javascript_tag("new Autocompleter.Local('bookmark_external_fandom_string', 'bookmark_external_fandom_string_auto_complete', #{Fandom.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
     </dd>
+    <dt class="rating">
+      <%= ew.label :rating_string, Rating::NAME -%><%= link_to_help "rating-help" -%>
+    </dt>
+    <dd>
+      <%= ew.collection_select(:rating_string, Rating.canonical, :name, :name, {:selected => ArchiveConfig.RATING_DEFAULT_TAG_NAME}) -%>		
+    </dd>  
+    <dt>
+      <%= ew.label :category_string, Category::NAME -%><%= link_to_help "category-help" -%>
+    </dt>
+    <dd>
+      <%= ew.collection_select(:category_string, Category.canonical, :name, :name, {:include_blank => true}) -%>		
+    </dd>
+    <dt>
+      <%= ew.label :pairing_string, Pairing::NAME.pluralize -%>
+    </dt>
+    <dd>
+      <%= ew.text_field :pairing_string %>
+      <div class="auto_complete" id="bookmark_external_pairing_string_auto_complete" ></div>
+      <%= javascript_tag("new Autocompleter.Local('bookmark_external_pairing_string', 'bookmark_external_pairing_string_auto_complete', #{Pairing.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
+    </dd>
+    <dt>
+      <%= ew.label :character_string, Character::NAME.pluralize -%>
+    </dt>
+    <dd>
+      <%= ew.text_field :character_string %>
+      <div class="auto_complete" id="bookmark_external_character_string_auto_complete" ></div>
+      <%= javascript_tag("new Autocompleter.Local('bookmark_external_character_string', 'bookmark_external_character_string_auto_complete', #{Character.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
+    </dd>    
+  </dl>
+
 	<% end %>
-	<% end %>
+  <% end %>
 	<dt><%= f.label :notes, t('form_your_notes', :default => "Your Notes") %>
   
   </dt>
 		<dd>
-    <code>a href, b, blockquote, br, center, cite, code,<br/> del, dd, dt, dl, div, em, h1, h2, h3, h4, h5,<br/> h6, i, ins, li, ol, pre, q, small, span,<br/> strike, strong, sub, sup, ul</code><br/>
+    <code>a href, b, big, blockquote, br, center, cite,<br/>code, del, em, i, img, ins, p, pre, q, small, <br/> strike, strong, sub, sup, u</code><br/>
       <%= f.text_area :notes %>
       <%= generate_countdown_html("bookmark_notes", ArchiveConfig.NOTES_MAX) -%> 
       
@@ -63,6 +104,9 @@
     </div>
 	</dd>
 </dl>
+<%- if bookmarkable.class != ExternalWork -%>
+  <p><%= t('note_author', :default => "Please note that the author's summary and tags will be added automatically.") %>
+<%- end -%>
 <p> <%= f.check_box :private %> <%= f.label :private, t('form_private', :default => "Private bookmark?") %>&nbsp;&nbsp;&nbsp;<%= f.check_box :rec %> <%= f.label :rec, t('form_rec', :default => "Rec?") %></p>
 <%= f.hidden_field :bookmarkable_id, :value => bookmarkable.id %>
 <%= f.hidden_field :bookmarkable_type, :value => bookmarkable.class.to_s %>

@@ -2,9 +2,29 @@
   <%- if bookmark.bookmarkable.nil? -%>
     (<%= t('bookmark_oh_noes', :default => 'Oh noes, this work has been deleted.') -%>)
   <%- else -%>
+    <%- if bookmark.bookmarkable.hidden_by_admin -%>
+      <%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %>
+    <%- end -%>
     <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable.url -%>
     <%=h t('bookmark_by', :default => 'by') %>
     <%= bookmark.bookmarkable.author -%>
   <%- end -%>   
 </h3>
 </li>
+<%- unless bookmark.bookmarkable.tags.blank? %>
+  <li class="heading">
+    <%- if not bookmark.bookmarkable.nil? -%>
+      <%= get_symbols_for(bookmark.bookmarkable) -%>
+    <%- end -%>
+    <h4>
+      <%- unless bookmark.bookmarkable.fandom_tags.blank? -%>  
+        <span class="bookmark-fandoms"><%= bookmark.bookmarkable.fandom_tags.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', ') %></span>
+      <%- end -%>
+      <%- author_tags = bookmark.bookmarkable.cast_tags
+        unless author_tags.size < 1 -%>
+          | <span class="bookmark-author-tags"><%= t('bookmark_author_tags', :default => 'Tags') %>: <%= author_tags.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', ') %></span>
+        <%- end -%>
+      <p style="margin-top: 0.5em"><%= t('external_work_warning', :default => 'Please note: this work is not hosted on the Archive; the information here may be incomplete or inaccurate.') %></p>
+    </h4>
+  </li>
+<%- end -%>

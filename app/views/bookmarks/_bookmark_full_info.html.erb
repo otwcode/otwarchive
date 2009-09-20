@@ -1,11 +1,15 @@
-<%- bookmark_count =  Bookmark.count_visible_bookmarks(bookmark.bookmarkable, current_user) -%>
 <ul>
   <li class="heading bookmark-heading">
+    <%- if bookmark.bookmarkable.blank? %>
+      <%= "This item has been deleted, sorry!" %>
+    <%- else -%>
+    <%- bookmark_count = Bookmark.count_visible_bookmarks(bookmark.bookmarkable, current_user) -%>
     <ul class="bookmark-icons">
       <%= get_symbol_for_bookmark(bookmark) %>
       <li><%= image_tag 'category-none.png', :alt => '', :title => "" -%> <div class="bookmark-count" title="<%= bookmark_count %> Bookmarks">
       <%=  (bookmark_count < 100) ? bookmark_count : '*' %> </div></li>
     </ul>
+    
   <%= render :partial => "bookmarks/#{bookmark.bookmarkable.class.to_s.underscore}_bookmark", :locals => { :bookmark => bookmark } -%>   
     
   <%- unless bookmark.bookmarkable.summary.blank? %>
@@ -38,6 +42,7 @@
     <!-- hides recent link if no JS available-->
     <%= update_page_tag do |page| page.toggle "recent_link_#{bookmark.bookmarkable_type.underscore}_#{bookmark.bookmarkable_id}" end -%> 
     <%- end -%>
+  <%- end -%>
   <%- end -%>
 </ul>
  <ul class="user-info<%- if is_author_of?(bookmark) -%> own<%- end -%>">
