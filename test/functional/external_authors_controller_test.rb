@@ -53,7 +53,7 @@ class ExternalAuthorsControllerTest < ActionController::TestCase
   # We don't allow you to change the name of the fallback external_author, so this tests a new external_author
   def test_update_external_author
     user = create_user
-    external_author = create_external_author(:user => user, :email => 'afsfds@dasfdsfd.com')
+    external_author = create_external_author(:user => user, :email => 'afsfds@gmail.com')
     @request.session[:user] = user
     put :update, :user_id => user.login, 
                  :id => external_author.id, 
