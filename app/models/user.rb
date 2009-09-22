@@ -24,6 +24,7 @@ class User < ActiveRecord::Base
   attr_accessible :invitation_token
   
   has_many :external_authors, :dependent => :destroy
+  has_many :external_creatorships, :foreign_key => 'archivist_id'
   
   has_many :pseuds, :dependent => :destroy
   validates_associated :pseuds

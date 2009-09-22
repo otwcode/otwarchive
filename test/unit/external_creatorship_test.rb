@@ -1,8 +1,8 @@
 require 'test_helper'
 
 class ExternalCreatorshipTest < ActiveSupport::TestCase
-  # Replace this with your real tests.
-  test "the truth" do
-    assert true
+  context "An External Creatorship" do
+    should_belong_to :external_author, :creation
+    should_belong_to :archivist
   end
 end

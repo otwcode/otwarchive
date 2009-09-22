@@ -429,7 +429,7 @@ class WorksController < ApplicationController
     @work = Work.find_by_imported_from_url(url)
     if @work      
       if @work.users.include?(current_user)
-        flash.now[:error] = t('already_uploaded_by_you', :default => "You have already uploaded a work from that url. If you really want to replace it, first delete the previous draf.")
+        flash.now[:error] = t('already_uploaded_by_you', :default => "You have already uploaded a work from that url. If you really want to replace it, first delete the previous draft.")
         @work = Work.new
         render :action => :new and return
       else

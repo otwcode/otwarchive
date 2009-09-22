@@ -16,8 +16,9 @@ class WorkTest < ActiveSupport::TestCase
       work = new_work(:authors => [])
       assert !work.save
       assert_contains work.errors.on(:base), /must have at least one author/
-      end
-    should_eventually "have a valid author" do
+      author = create_user
+      work.pseuds << author.default_pseud
+      assert work.save
     end
 
     context "which has been posted" do
