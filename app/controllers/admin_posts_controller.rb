@@ -7,8 +7,9 @@ class AdminPostsController < ApplicationController
   # GET /admin_posts
   # GET /admin_posts.xml
   def index
-    @admin_posts = AdminPost.find(:all, :order => 'created_at DESC')
-    
+    @admin_posts = AdminPost.find(:all)
+    @admin_posts = AdminPost.paginate :page => params[:page], :per_page => 8, :order => 'updated_at DESC'
+  
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @admin_posts }

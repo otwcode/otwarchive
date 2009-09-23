@@ -1,6 +1,6 @@
 class ArchiveFaqsController < ApplicationController
   
-  before_filter :admin_only, :except => [:show]
+  before_filter :admin_only, :except => [:index]
   
   include HtmlFormatter
   

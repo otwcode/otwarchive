@@ -28,6 +28,10 @@
         <td><%= link_to "Delete", admin_post, :confirm => 'Are you sure?', :method => :delete %></td>
 	</tr>
   <% end %> 
-</table>		
+</table>
+		<div class="pagination">
+			  <%= will_paginate @admin_posts %>
+		</div>			
+		
 </div>
 <br />

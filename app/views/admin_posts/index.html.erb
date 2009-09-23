@@ -3,7 +3,7 @@
 <%- else -%>
 <h1><%=h 'AO3 News' %></h1>
 <% @admin_posts.each do |admin_post| %>
-  <tr>
+
  	<div id="works-show">
 			<h2>
 				<%= link_to sanitize_title_for_display(admin_post.title), admin_post %>
@@ -25,7 +25,10 @@
 			<!-- END comment section -->
 		<br />	
 	</div>
-	
-  </tr>
 <%- end -%>
+
+<div class="pagination">
+	  <%= will_paginate @admin_posts %>
+</div>
+
 <%- end -%>

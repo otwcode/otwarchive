@@ -1,30 +1,13 @@
-<ul class="navigation">
-    <li><%= link_to_unless_current "AO3 News", admin_posts_path %></li>
-    <li><%= link_to_unless_current "Archive FAQ", archive_faqs_path %></li>
-    <li><%= link_to_unless_current "Known Issues", known_issues_path %></li>
-  </ul>
-
+<%- if logged_in_as_admin? -%>
+<%= render :partial => "admin_index" %>
+<%- else -%>
 <h1><%= t("known_issues", :default => "Known Issues") -%></h1>
-<%- if @known_issues.empty? -%>
-<table>
-	<tr>
-		<td>
-  		<%= link_to 'Create New Known Issues Post', new_known_issue_path %>
-		</td>
-	<tr>
-</table>		
-<% end %>
-<% @known_issues.each do |known_issue| %>
-	<li class="navigation"><%= link_to "Show", known_issue %></li>
-    <li class="navigation"><%= link_to "Edit", edit_known_issue_path(known_issue) %></li>
-    <li class="navigation"><%= link_to "Delete", known_issue, :confirm => 'Are you sure?', :method => :delete %></li>
 <div id="tos" class="work-show">
- <h3><%= sanitize_and_format_for_display known_issue.title %></h3>
-    <h6>Updated at: <%=h known_issue.updated_at %></h6>
-
-    <%= sanitize_and_format_for_display known_issue.content %>
+	<% @known_issues.each do |known_issue| %>
+			<h6>
+				<b>Updated:</b> <%=h known_issue.updated_at %>  
+			</h6>
+	    <%=sanitize_and_format_for_display known_issue.content %>
+<% end %> 
 <% end %>
-
-</div>
-
 

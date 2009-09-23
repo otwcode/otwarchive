@@ -1,30 +1,12 @@
-<ul class="navigation">
-    <li><%= link_to_unless_current "AO3 News", admin_posts_path %></li>
-    <li><%= link_to_unless_current "Archive FAQ", archive_faqs_path %></li>
-    <li><%= link_to_unless_current "Known Issues", known_issues_path %></li>
-  </ul>
-
+<%- if logged_in_as_admin? -%>
+<%= render :partial => "admin_index" %>
+<%- else -%>
 <h1><%= t("archive_faq", :default => "Archive FAQ") -%></h1>
-
-<%- if @archive_faqs.empty? -%>
-<table>
-	<tr>
-		<td>
-  		<%= link_to 'Create New Archive FAQ', new_archive_faq_path %>
-		</td>
-	<tr>
-</table>		
-<% end %>
-
-<% @archive_faqs.each do |archive_faq| %>
-	<li class="navigation"><%= link_to "Show", archive_faq %></li>
-    <li class="navigation"><%= link_to "Edit", edit_archive_faq_path(archive_faq) %></li>
-    <li class="navigation"><%= link_to "Delete", archive_faq, :confirm => 'Are you sure?', :method => :delete %></li>
 <div id="tos" class="work-show">
-    <h6>Updated at: <%=h archive_faq.updated_at %></h6>
-
-    <%= sanitize_and_format_for_display archive_faq.content %>
-<% end %>  
-</div>
-	
-<br />
+	<% @archive_faqs.each do |archive_faq| %>
+			<h6>
+				<b>Updated:</b> <%=h archive_faq.updated_at %>  
+			</h6>
+	    <%=sanitize_and_format_for_display archive_faq.content %>
+<% end %> 
+<% end %>   
