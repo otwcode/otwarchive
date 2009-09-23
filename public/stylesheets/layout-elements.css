@@ -141,7 +141,7 @@ li.heading {position: relative; min-height: 50px;}
 /* added Enigel Dec 10 08 for required tags everywhere with less regard to tag nestedness */
 .heading .required-tags li { display:inline;}
 
-.work h3 {margin-right:4.5em;}
+.work h3 {margin-right:4.5em; margin-top:0em;}
 .work h3, .work h3 a:link, .work h3 img {color:#900; vertical-align:bottom;}
 
 .work p.update {font-size:0.875em; text-align:right; top:-0.875em; right:0; position:absolute; }
