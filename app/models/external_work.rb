@@ -71,6 +71,13 @@ class ExternalWork < ActiveRecord::Base
   ########################################################################
   # Adapted from work.rb
   
+  def self.visible(options = {})
+    current_user=User.current_user
+    with_scope :find => options do
+      find(:all).collect {|b| b if b.visible(current_user)}.compact
+    end
+  end
+  
   def visible(current_user=User.current_user)
     if current_user == :false || !current_user
       return self unless self.hidden_by_admin
@@ -84,7 +91,7 @@ class ExternalWork < ActiveRecord::Base
   def visible?(user=User.current_user)
     self.visible(user) == self
   end
-  
+   
   
   #######################################################################
   # TAGGING
