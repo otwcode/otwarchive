@@ -15,7 +15,8 @@ class AdminMailer < ActionMailer::Base
     end
     @recipients = ArchiveConfig.FEEDBACK_ADDRESS
     @subject += "Feedback"
-    @body = {:comment => feedback.comment}
+    @body[:summary] = feedback.summary
+    @body[:comment] = feedback.comment
   end
   
   def archive_notification(admin, users, subject, message)

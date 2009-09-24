@@ -85,6 +85,7 @@ module FixtureReplacement
   end
 
   attributes_for :feedback do |a|
+    a.summary = random_phrase
     a.comment = random_paragraph
   end
   

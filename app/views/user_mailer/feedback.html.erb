@@ -1,0 +1,10 @@
+<p><%=h t('feedback_copy', :default => "This is a copy of your message sent via the Support form") %></p>
+
+<p><%=h t('message', :default => "Message:") %></p>
+
+<%= sanitize_and_format_for_display @summary %>
+<%= sanitize_and_format_for_display @comment %>
+
+<p><%=h t('sent_at', :default => "Sent at:") %>&nbsp;<%= Time.now.strftime(common_timestring) -%></p>
+
+

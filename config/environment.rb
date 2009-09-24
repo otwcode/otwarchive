@@ -116,6 +116,7 @@ Rails::Initializer.run do |config|
   config.gem 'javan-whenever', :lib => false, :source => 'http://gems.github.com'
   config.gem 'nokogiri'
   config.gem 'mechanize'
+  config.gem 'rest-client', :lib => 'rest_client'
 
   
   # Override the sanitize defaults to allow some extra formatting attributes. 

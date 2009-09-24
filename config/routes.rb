@@ -12,8 +12,8 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :people, :only => :index
 
-  map.feedbacks '/feedback/', :controller => 'feedbacks', :action => 'create' , :conditions => { :method => :post }
-  map.new_feedback_report '/feedback/', :controller => 'feedbacks', :action => 'new' 
+  map.feedbacks '/support/', :controller => 'feedbacks', :action => 'create' , :conditions => { :method => :post }
+  map.new_feedback_report '/support/', :controller => 'feedbacks', :action => 'new' 
 
   map.resources :tag_wranglings , :member => {:assign => :get}, :only => [:index, :create, :edit]
 

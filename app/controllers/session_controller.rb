@@ -25,10 +25,11 @@ class SessionController < ApplicationController
     cookies.delete :auth_token
     reset_session
     flash[:notice] = t('logged_out', :default => "You have been logged out.")
-   # During testing, logout redirects to the feedback page.
-    # Code commented out below would be default when out of testing. 
-    ##   redirect_back_or_default('/')
-    redirect_to :controller => "feedbacks", :action => "new"
+    # During testing, logout redirected to the feedback page, using the commented out
+    # code below.
+    #redirect_to :controller => "feedbacks", :action => "new"
+    redirect_to :back
+    
   end
 
   # switches to the openid version of the login form

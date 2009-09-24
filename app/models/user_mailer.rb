@@ -110,6 +110,20 @@ class UserMailer < ActionMailer::Base
       p.attachment :content_type => "text/plain", :filename => work.title.gsub(/[*:?<>|\/\\\"]/,'') + ".html", :body => work_copy
     end
   end
+  
+  def feedback(feedback)
+    setup_email_without_name(feedback.email)
+    @subject += "Your message sent via the Support form"
+    @body[:summary] = feedback.summary
+    @body[:comment] = feedback.comment
+  end  
+
+  def abuse_report(report)
+     setup_email_without_name(report.email)
+     @recipients = report.email
+     @subject += "Your abuse report"
+     @body = {:url => report.url, :comment => report.comment}
+  end
 
   def generate_attachment_from_work(work)
     attachment_string =  "Title: " + work.title + "<br />" + "by " + work.pseuds.collect(&:name).join(", ") + "<br />\n"
@@ -143,6 +157,11 @@ class UserMailer < ActionMailer::Base
       setup_email_attributes
       @recipients = email
       @body[:name] = name
+    end
+    
+    def setup_email_without_name(email)
+      setup_email_attributes
+      @recipients = email     
     end
      
     def setup_email_attributes

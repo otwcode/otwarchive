@@ -4,6 +4,22 @@ class Feedback < ActiveRecord::Base
   # This is just the name of the text field in the Feedback
   # class which holds the user's comments. 
   validates_presence_of :comment
+  validates_presence_of :summary
   validates_email_veracity_of :email, :allow_blank => true, 
     :message => t('invalid_email', :default => 'address appears to be invalid. Please use a different address or leave blank.') 
+
+# Category ids for 16bugs
+ BUGS_ASSISTANCE = 11483
+ BUGS_BUG = 11482
+ BUGS_FEEDBACK = 11484
+ BUGS_MISC = 11481
+ BUGS_TAGS = 11485
+ 
+# Category names, used on form
+ BUGS_ASSISTANCE_NAME = 'Assistance Using the Archive'
+ BUGS_BUG_NAME = 'Bug Report'
+ BUGS_FEEDBACK_NAME = 'Feedback/Suggestions'
+ BUGS_MISC_NAME = 'General/Other'
+ BUGS_TAGS_NAME = 'Tags'
+
 end
