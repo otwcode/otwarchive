@@ -36,7 +36,7 @@
         <%= f.text_field :title, :class => "storyinputfield" %>
         <%= live_validation_for_field('work_title', 
 				      :maximum_length => ArchiveConfig.TITLE_MAX, :minimum_length => ArchiveConfig.TITLE_MIN, 
-				      :failureMessage => 'We need a title! (At least ' + ArchiveConfig.TITLE_MIN.to_s + 'letters long, please.)')
+				      :failureMessage => 'We need a title! (At least ' + ArchiveConfig.TITLE_MIN.to_s + 'characters long, please.)')
         -%>
         <%= generate_countdown_html("work_title", ArchiveConfig.TITLE_MAX) -%>
       </dd>
@@ -45,7 +45,7 @@
       <%= render :partial => 'pseuds/byline', :locals =>{:form => f, :type => 'work'} %>
       
       <dt class="summary">
-        <%= f.label :summary, "Summary (max " + ArchiveConfig.SUMMARY_MAX.to_s + " letters)" %>
+        <%= f.label :summary, "Summary (max " + ArchiveConfig.SUMMARY_MAX.to_s + " characters)" %>
       </dt>
       <dd class="summary">
         <%= f.text_area :summary, :rows => 4, :cols => 60, :class => "summary-field" %>
@@ -247,8 +247,8 @@
   %>
   <%= live_validation_for_field('content', 
       :maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN, 
-      :tooLongMessage => 'We salute your ambition! But sadly the content must be less than ' + ArchiveConfig.CONTENT_MAX.to_s + ' letters long. (Maybe you want to create a multi-chaptered work?)',
-      :tooShortMessage => 'Brevity is the soul of wit, but your content does have to be at least ' + ArchiveConfig.CONTENT_MIN.to_s + ' letters long.',
+      :tooLongMessage => 'We salute your ambition! But sadly the content must be less than ' + ArchiveConfig.CONTENT_MAX.to_s + ' characters long. (Maybe you want to create a multi-chaptered work?)',
+      :tooShortMessage => 'Brevity is the soul of wit, but your content does have to be at least ' + ArchiveConfig.CONTENT_MIN.to_s + ' characters long.',
       :failureMessage => 'You did want to post a story here, right?')
   -%>
   <%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX) -%>
