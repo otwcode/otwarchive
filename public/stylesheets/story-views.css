@@ -59,6 +59,7 @@ set work styles
 
 /* WORK META DATA */
 dl.work-meta { background:#eee; padding:0.25em; position:relative;margin-top:0; border:1px solid #ddd;;}
+div.work-meta { background:#eee; padding:0.25em; position:relative; margin: 0 0 1.5em; border:1px solid #ddd;}
 .work-meta dt { width:7em; font-weight:100;}
 .work-meta ul { margin:-1.9675em 0 .75em 13em; text-indent:0; padding:0;}
 .work-meta dd ul li {display:inline; margin:auto !important;}

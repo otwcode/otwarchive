@@ -37,6 +37,12 @@ a.tag:hover	{ background: #900 !important; color: #fffef9 !important; }
 /*EM SCALE */
 #main p	{ font-size: 0.875em; line-height: 1.286; margin: 0.643em 0; }
 #main li, #main dd {font-size: 0.875em; line-height: 1.286; margin: 0.643em 0;}
+.label {padding: 0 0.5625em 0 0; width: 10em; display: inline;}
+.item {display: inline; position: absolute; left: 7em;}
+.tags {float: none; position: relative;}
+.blurb {margin: 1em 0;}
+.blurb .label {font-weight: bold;}
+.meta {margin: 0.643em 0;}
 /*sizing up and down through multiple nested lists; hold on to your hats, I've tried to cover as many nestings as I can think of */
 #main dl dd dl dd p, #main dl dd dl dd, #main dd dl dd p, #main dd dl dd dl dd p
 { font-size:1.142857em; }
@@ -55,7 +61,7 @@ h5	{ font-size: 0.75em; line-height: 1.5; margin: .375em 0; }
 h6	{ font-size: 0.625em; line-height: 1.8; margin: .3125em 0; }
 
 hr	{ margin: 0.75em auto; border:0; border-bottom: 3px double; }
-hr.clear, .clearboth	{ clear: both; height: 0; border: 0; }
+hr.clear, .clearboth	{ clear: both; height: 0; border: 0; margin-bottom: 0; margin-top: 0;}
 
 blockquote, pre	{ font: 100 1em/1.125 Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; margin: 1.5em; }
 kbd, tt, code	{ font: normal 0.75em consolas, courier, monospace; margin: auto; padding: 0.25em; }

@@ -21,43 +21,40 @@
 
  	<%- cast_tags = work.cast_tags; warning_tags = work.warning_tags; freeform_tags = work.freeform_tags -%>
 	<%- unless ((cast_tags.size + warning_tags.size + freeform_tags.size) < 1) -%>
-  	<li>
-		<dl class="tags">
+  	<li class="tagslist">
+      
 		  <%- unless cast_tags.size < 1 -%>
-			<dt><%= t('cast_tags', :default => 'Cast') + ': ' %></dt>
-			<dd>
-				<ul id="work_<%= work.id %>_category_cast">
-				<li> <%= cast_tags.collect{|tag| link_to_tag(tag)  }.join(',</li><li> ') %></li>
-				</ul>
-			</dd>
+			<div class="blurb tags">
+      <span class="label"><%= t('cast_tags', :default => 'Cast') + ': ' %></span>
+			<span class="item"><%= cast_tags.collect{|tag| link_to_tag(tag)  }.join(', ') %></span>
+      </div>
 			<%- end -%>
       
   <%- unless warning_tags.size < 1 -%>
-			<dt><%= link_to("Warnings", tos_faq_path(:anchor => "tags")) %>:</dt>
-			<dd>
-				 <ul id="work_<%= work.id %>_category_warning">
+			<div class="blurb tags">
+      <span class="label"><%= link_to("Warnings", tos_faq_path(:anchor => "tags")) %>:</span>
+			<span class="item">
           <%- if hide_warnings?(work) -%>
-            <li><%= show_warnings_link(work) %></li> 
+            <%= show_warnings_link(work) %>
           <%- else -%>
-            <li><%= warning_tags.collect{|tag| link_to_tag(tag) }.join(', </li><li>') %>
+            <%= warning_tags.collect{|tag| link_to_tag(tag) }.join(', ') %>
           <%- end -%>
-				</ul>
-			</dd>
+			</span>
+      </div>
 			<%- end -%>
 
 			<%- unless freeform_tags.size < 1 -%>
-			<dt><%= t('work_tags', :default => 'Tags') + ': ' %></dt>
-			<dd>
-        <ul id="work_<%= work.id %>_category_freeform">
+			<div class="blurb tags">
+      <span class="label"><%= t('work_tags', :default => 'Tags') + ': ' %></span>
+			<span class="item">
         <%- if hide_freeform?(work) -%>
-          <li><%= show_freeforms_link(work) %></li>
+          <%= show_freeforms_link(work) %>
        <%- else -%>   
-				 <li><%= freeform_tags.collect{|tag| link_to_tag(tag) }.join(', </li><li>') %>
+				 <%= freeform_tags.collect{|tag| link_to_tag(tag) }.join(', ') %>
            <%- end -%>
-				</ul>
-			</dd>
+			</span>
+      </div>
 			<%- end -%>
-		</dl>
 	</li>
 	
 	<li class="summary">

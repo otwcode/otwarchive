@@ -1,30 +1,30 @@
-﻿<dl class="work-meta">
+﻿<div class="work-meta">
   <%- work_tags = work.tags -%>
   <%- Tag::VISIBLE.each do |type| -%>
     <%- tags = work_tags.select{|tag| tag.type == type} -%>
     <%- unless tags.blank? -%>
-      <dt class="<%= type.downcase -%>">
+    <div class="<%= type.downcase -%> meta tags">
+      <span class="label">
         <%- if type == "Warning" -%>
           <%= link_to( tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize, tos_faq_path(:anchor => "tags") ) %>:
         <%- else -%>
           <%= tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize %>:
         <%- end -%>
-      </dt>
+      </span>
 	    
-      <dd>
-        <ul id="work_<%= work.id %>_category_<%= type.downcase %>">
+      <span class="item">
         <%- if type == "Warning" && hide_warnings?(work) -%>        
-          <li><%= show_warnings_link(work) %></li> 
+          <%= show_warnings_link(work) %> 
           
           <%- else if type == "Freeform" && hide_freeform?(work) -%>
-          <li><%= show_freeforms_link(work) %></li> 
+          <%= show_freeforms_link(work) %> 
           
         <%- else -%>                   
-          <%= tags.collect{|tag| "<li class='#{tag.type.downcase}'>" + link_to_tag(tag) + '</li>' }.join(', ') %>
+          <%= tags.collect{|tag| "<span class='#{tag.type.downcase}'>" + link_to_tag(tag) + '</span>' }.join(', ') %>
         <%- end -%>
         <%- end -%>
-        </ul>
-      </dd>
+      </span>
+    </div>
     <%- end -%>
   <%- end -%>
-</dl>
+</div>
