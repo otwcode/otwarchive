@@ -7,14 +7,20 @@
         (<%= link_to(author.user_name, user_path(author.user)) -%>)
       <%- end -%>
       </h3>
-      <h4><%= authored_items(author) -%></h4>
-      <p><%= sanitize_description_for_display author.description -%></p>
-      <span><%= "Most used tags: " -%></span>
-  	  <ul class="tags">      
-        <%- author.most_popular_tags(:categories => Tag::USER_DEFINED, :limit => 5).each do |tag_w_count| -%>
-        <li><%= link_to_tag_with_count(author, tag_w_count) %></li>
-        <%- end -%>
-  	  </ul>
+      <%- unless authored_items(author).blank? -%>
+        <h4><%= authored_items(author) -%></h4>
+      <%- end -%>
+      <%- unless (sanitized_description = sanitize_description_for_display(author.description)).blank? -%>
+        <p><%= sanitized_description %></p>
+      <%- end -%>
+      <%- unless (most_popular = author.most_popular_tags(:categories => Tag::USER_DEFINED, :limit => 5)).blank? -%>
+        <span><%= "Most used tags: " -%></span>
+        <ul class="tags">      
+          <%- most_popular.each do |tag_w_count| -%>
+            <li><%= link_to_tag_with_count(author, tag_w_count) %></li>
+          <%- end -%>
+        </ul>
+      <%- end -%>
   	</div>
   </div>
 </li>
