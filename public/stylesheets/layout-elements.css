@@ -53,7 +53,7 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 #main.sidebar h1 {margin-top: 0;}
 #main.sidebar .own {background:#fffef9 !important; border:1px dotted #ccc;}
 
-/* garrish addition by Enigel Dec 5 08 */
+/* prettify please */
 #dashboard-sidebar ul.pseud_selector_sidebar { border-bottom:.25em double black;}
 
 /*MAIN CONTENT */
@@ -170,9 +170,9 @@ ul#series-work-list li.work ul.work li ul li {display:inline;}
 .media-index li.even { width: 40%; float: right; margin: 0 0 0 0.5625em; }
 
 /* PEOPLE-INDEX */
-.user div { position: relative; margin: 0 0 0.5625em auto;padding-right:0.3775em; border-bottom:1px solid #ddd; clear:both; overflow:auto;}
+.user div { position: relative; margin: 0 0 0.5625em auto;padding-right:0.3775em; border-bottom:1px solid #ddd; clear:both; overflow:auto; min-height: 94px;}
 .user h3,.user h3 a { color:#900;display:inline; }
-.user img {float:left; padding: 0 1em 1em 0; clear:both;}
+.user img {float:left; padding: 0 1em 0 0; clear:both;}
 .user ul, .user li {display:inline;}
 .user .author-data {border:0; float:left; clear:right; width:70%; overflow:visible}
 /*
