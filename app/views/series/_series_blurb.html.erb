@@ -26,27 +26,24 @@
 		</h4>
 		<p class="update"><%= set_format_for_date(series.revised_at) %></p>
 		</li>
-		<li>
+		<li class="tagslist">
 		  <%- author_tags = series.works.visible.collect{|w| [w.categories, w.ratings, w.cast_tags, w.freeform_tags]}.transpose.flatten.uniq
       unless author_tags.size < 1 -%>
-			  <dl class="tags">
-			    <dt><%=h 'Tags' + ': ' %></dt>
-			    <dd>
-			      <ul><%= author_tags.collect{|tag| link_to(tag.name, link_to_tag(tag)) }.join(', ') %>
-			      </ul>
-			    </dd>
-			  </dl>
+			  <div class="blurb tags">
+			    <span class="label"><%=h 'Tags' + ': ' %></span>
+			    <span class="item">
+			      <%= author_tags.collect{|tag| link_to(tag.name, link_to_tag(tag)) }.join(', ') %>
+			    </span>
+			  </div>
       <%- end -%>  
       <%- author_warnings = series.works.visible.collect(&:warning_tags).flatten.compact.uniq 
       unless author_warnings.size < 1 -%>
-        <dl class="tags">
-          <dt><%=h 'Warnings:' %></dt>
-          <dd>
-            <ul id="series_<%= series.id %>_category_warning">
+        <div class="blurb tags">
+          <span class="label"><%=h 'Warnings:' %></span>
+          <span class="item">
               <%= author_warnings.collect{|tag| link_to(tag.name, link_to_tag(tag))}.join(', ') %>
-            </ul>
-          </dd>
-      </dl>
+          </span>
+        </div>
     <%- end -%>
 		</li>
 		<li class="summary">

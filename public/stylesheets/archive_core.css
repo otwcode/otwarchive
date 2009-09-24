@@ -37,12 +37,14 @@ a.tag:hover	{ background: #900 !important; color: #fffef9 !important; }
 /*EM SCALE */
 #main p	{ font-size: 0.875em; line-height: 1.286; margin: 0.643em 0; }
 #main li, #main dd {font-size: 0.875em; line-height: 1.286; margin: 0.643em 0;}
-.label {padding: 0 0.5625em 0 0; width: 10em; display: inline;}
+.label {padding: 0 0.5625em 0 0; display: inline;}
 .item {display: inline; position: absolute; left: 7em;}
 .tags {float: none; position: relative;}
 .blurb {margin: 1em 0;}
 .blurb .label {font-weight: bold;}
+.blurb .item {left: 7em;}
 .meta {margin: 0.643em 0;}
+.meta .item {left: 12em;}
 /*sizing up and down through multiple nested lists; hold on to your hats, I've tried to cover as many nestings as I can think of */
 #main dl dd dl dd p, #main dl dd dl dd, #main dd dl dd p, #main dd dl dd dl dd p
 { font-size:1.142857em; }
