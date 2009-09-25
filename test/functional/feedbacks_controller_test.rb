@@ -25,9 +25,9 @@ class FeedbacksControllerTest < ActionController::TestCase
 
     context "on success" do
       setup do
-        put :create, :locale => 'en', :feedback => {:comment=>"a comment"}
+        put :create, :locale => 'en', :feedback => {:comment=>"a comment", :summary =>"a summary"}
       end
-      should_set_the_flash_to /thanks/
+      should_set_the_flash_to /thank you/
       should_redirect_to('the root path') { root_path }
     end
 

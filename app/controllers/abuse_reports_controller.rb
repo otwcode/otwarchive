@@ -35,14 +35,14 @@ class AbuseReportsController < ApplicationController
             UserMailer.deliver_abuse_report(@abuse_report)
           else
             flash[:error] = t('no_email', :default => "Sorry, we can only send you a copy of your abuse report if you enter a valid email address.")
-            format.html { redirect_to :action => "new", :url => params[:abuse_report][:url] }
+            format.html { render :action => "new" }
           end
         end
         flash[:notice] = t('successfully_sent', :default => 'Your abuse report was sent to the Abuse team.')
         format.html { redirect_to '' }
       else
         flash[:error] = t('failure_send', :default => 'Sorry, your abuse report could not be sent - please try again!')
-        format.html { redirect_to :action => "new", :url => params[:abuse_report][:url] }
+        format.html { render :action => "new" }
       end
     end
   end
