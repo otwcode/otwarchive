@@ -6,7 +6,8 @@ class AbuseReportsController < ApplicationController
   # GET /abuse_reports/new.xml
   def new
     @abuse_report = AbuseReport.new
-    @abuse_report.url = request.env["HTTP_REFERER"]
+    params[:url] ? @abuse_report.url = params[:url] : @abuse_report.url = request.env["HTTP_REFERER"]
+    #@abuse_report.url = request.env["HTTP_REFERER"]
     unless User.current_user == :false
       @abuse_report.email = User.current_user.email
     else
@@ -34,14 +35,14 @@ class AbuseReportsController < ApplicationController
             UserMailer.deliver_abuse_report(@abuse_report)
           else
             flash[:error] = t('no_email', :default => "Sorry, we can only send you a copy of your abuse report if you enter a valid email address.")
-            format.html { redirect_to :action => "new" }
+            format.html { redirect_to :action => "new", :url => params[:abuse_report][:url] }
           end
         end
         flash[:notice] = t('successfully_sent', :default => 'Your abuse report was sent to the Abuse team.')
         format.html { redirect_to '' }
       else
         flash[:error] = t('failure_send', :default => 'Sorry, your abuse report could not be sent - please try again!')
-        format.html { redirect_to :action => "new" }
+        format.html { redirect_to :action => "new", :url => params[:abuse_report][:url] }
       end
     end
   end

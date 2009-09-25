@@ -5,7 +5,9 @@
 <h3><%= t('contact_us', :default => "We love to hear from our users! If you'd like to ask for help, make a suggestion, or give us feedback, please use this form.") %></h3>
 
 
-<p class="message"><%= t('try_faq', :default => "If you're looking for help, you can find answers to many common questions in our FAQ section.")%> <%= t('try_known_issues', :default => "You may also like to check out our Known Issues to see if your problem is something we've already identified.") %> 
+<p class="message"><%= t('try_faq', :default => "If you're looking for help, you can find answers to many common questions in our {{faq_link}}.", :faq_link => (link_to t('faq_link', :default => "FAQ section"), archive_faqs_path))%> 
+<%= t('try_known_issues', :default => "You may also like to check out our {{known_issues_link}} to see if your problem is something we've already identified.", 
+:known_issues_link => (link_to t('known_issues_link', :default => "Known Issues"), known_issues_path)) %> 
   <%= t('submit_request', :default => "If you can't find what you're looking for, then please submit a support request here and we'll get back to you.") %></p>
 
 <p class="message"><%= t('still_beta', :default => "We're still in our beta phase, so there are still lots of improvements and new features planned. Please do use this form to let us know about your experience of using the site - good and bad.") %></p>
@@ -16,8 +18,8 @@
 
   <p class="message"><%= f.label :category, "Please select a category:"%></p>
   <p>
-    <%= f.select("category", { Feedback::BUGS_MISC_NAME => Feedback::BUGS_MISC, Feedback::BUGS_ASSISTANCE_NAME => Feedback::BUGS_ASSISTANCE, Feedback::BUGS_BUG_NAME => Feedback::BUGS_BUG, 
-      Feedback::BUGS_FEEDBACK_NAME => Feedback::BUGS_FEEDBACK, Feedback::BUGS_TAGS_NAME => Feedback::BUGS_TAGS }, :selected => Feedback::BUGS_MISC) -%>
+    <%= f.select("category", [ [Feedback::BUGS_ASSISTANCE_NAME, Feedback::BUGS_ASSISTANCE], [Feedback::BUGS_BUG_NAME, Feedback::BUGS_BUG], 
+    [Feedback::BUGS_FEEDBACK_NAME, Feedback::BUGS_FEEDBACK], [Feedback::BUGS_MISC_NAME, Feedback::BUGS_MISC], [Feedback::BUGS_TAGS_NAME, Feedback::BUGS_TAGS] ], :selected => Feedback::BUGS_MISC) -%>
   </p>
   
   <p class="message"><%= f.label :summary, "Brief summary (required):" %></p>
