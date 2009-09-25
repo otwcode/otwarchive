@@ -12,7 +12,7 @@
         <%- end -%>
       </span>
 	    
-      <span class="item">
+      <span class="item" id="work_<%= work.id %>_category_<%= type.downcase %>">
         <%- if type == "Warning" && hide_warnings?(work) -%>        
           <%= show_warnings_link(work) %> 
           

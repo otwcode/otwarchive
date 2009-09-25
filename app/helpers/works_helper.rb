@@ -43,14 +43,27 @@ module WorksHelper
       :url => {:controller => 'tags', :action => 'show_hidden', :work_id => work.id },
       :method => :get
   end
-
-    # Link to show warnings if they're currently hidden
+  
+  # Link to show warnings for a series if they're currently hidden
+  def show_warnings_series_link(series)
+    link_to_remote "Show warnings",
+      :url => {:controller => 'tags', :action => 'show_hidden_series', :series_id => series.id },
+      :method => :get
+  end
+  
+  # Link to show tags if they're currently hidden
   def show_freeforms_link(work)
     link_to_remote "Show tags",
       :url => {:controller => 'tags', :action => 'show_hidden_freeforms', :work_id => work.id },
       :method => :get
   end
-  
+
+  # Link to show tags for a series if they're currently hidden
+  def show_freeforms_series_link(series)
+    link_to_remote "Show tags",
+      :url => {:controller => 'tags', :action => 'show_hidden_freeforms_series', :series_id => series.id },
+      :method => :get
+  end
   
   # modified from mislav-will_paginate-2.3.2/lib/will_paginate/view_helpers.rb
   def search_header(collection, search_query)

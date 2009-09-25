@@ -32,7 +32,11 @@
 			  <div class="blurb tags">
 			    <span class="label"><%=h 'Tags' + ': ' %></span>
 			    <span class="item">
+          <%- if hide_freeform?(series) -%>
+            <%= show_freeforms_series_link(series) %>
+          <%- else -%>   
 			      <%= author_tags.collect{|tag| link_to(tag.name, link_to_tag(tag)) }.join(', ') %>
+          <%- end -%>
 			    </span>
 			  </div>
       <%- end -%>  
@@ -40,8 +44,12 @@
       unless author_warnings.size < 1 -%>
         <div class="blurb tags">
           <span class="label"><%=h 'Warnings:' %></span>
-          <span class="item">
+          <span class="item" id="series_<%= series.id %>_category_warning">
+            <%- if hide_warnings?(series) -%>
+              <%= show_warnings_series_link(series) %>
+            <%- else -%>
               <%= author_warnings.collect{|tag| link_to(tag.name, link_to_tag(tag))}.join(', ') %>
+            <%- end -%>
           </span>
         </div>
     <%- end -%>
