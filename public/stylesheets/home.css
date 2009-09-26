@@ -45,30 +45,56 @@ border-bottom: 2px solid #777;
 }
 
 .home .wrapper {
-background: url(/images/box.jpg) bottom left no-repeat;
-padding: 0 0 2.75em 2.25em;
-width: 24%;
-float: left;
+padding: 0 2em 1em 2em;
+width: 22%;
 margin: 2% 2% 0 2%;
 min-width: 9em;
+min-height: 7em;
+float: left;
 }
 
-.home .wrapper h3, .home h4 {
+.home .box {
+background: url(/images/box.jpg) bottom left no-repeat;
+padding: 0 2em 2em 2em;
+position: relative;
+left: 1em;
+min-height: 11.5em;}
+
+.home .bigwrapper {position: static;}
+
+.home .col1 {clear: left;}
+
+.home .lines {
+border-width: 1px 0px 1px; 
+border-color: #222; 
+border-style: solid; 
+margin-bottom: 1em; 
+margin-top: 0;
+text-align: left;}
+
+.home .wrapper h3, .home .wrapper .h3 a, .home #red a, .home #red a:visited  {
 color: #900;
 font: oblique 100 1.25em "Gill Sans", Georgia,Verdana, sans-serif;
 text-align: center;
-margin: 0
+margin: 0.3em 0 0.3em;
 }
 
-.home h4 {
-color: #222;
-border-bottom: 1px solid #777;
-}
-
-.home .wrapper h4 a {
-color: #222;
-font: 600 2.25em "Gill Sans", Georgia,Verdana, sans-serif;
+.home #red a, .home #red a:visited {
 text-decoration: none;
+}
+
+.home #red a:hover {
+text-decoration: underline;
+color: #222;
+}
+
+.home .wrapper h4 {
+color: #222;
+font: 600 2.25em "Gill Sans", Verdana, sans-serif;
+text-decoration: none;
+border-bottom: 1px solid #777;
+margin-bottom: 0.4em;
+text-align: center;
 }
 .home .wrapper ul {
 margin: 1em 0 0 0;

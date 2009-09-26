@@ -19,47 +19,55 @@
     <%= render :partial => 'session/login' -%>
   <%- end -%>
 </div>
+<div>
+  <%= render :partial => 'works/search_box' %>
+</div>
+
 <h1><span><%= ArchiveConfig.APP_NAME -%>
   <% unless ArchiveConfig.REVISION.blank? %>(<%=h t('revision', :default => 'rev. {{rev_number}}', :rev_number => ArchiveConfig.REVISION) %>)<% end %></span>
 </h1>
+
 <h2><%= t('otw_link', :default => "A project of the {{otw}}", :otw => '<a href="http://transformativeworks.org">Organization For Transformative Works</a>') %></h2>
 <hr class="clear" />
-<div class="wrapper">
-	<h3><%= t 'share_fanworks', :default => 'Share your fan works' %></h3>
-	<h4><%= link_to t('home_people', :default => 'people'), people_path %></h4>
+
+<div class="bigwrapper">
+
+<div class="wrapper box">
+	<h4>Accounts</h4>
+  <h3 id="red"><a href="session/new">Sign in</a></h3>
+  <h3 id="red"><a href="">Request an invite</a></h3>
+</div>
+
+<div class="wrapper" style="padding-top: 3em;">
+	<h3>The Archive of Our Own is a fan-created, fan-run, non-profit, noncommercial archive for transformative fanworks.</h3>
+</div>
+
+<div class="wrapper box">
+	<h4>Explore</h4>
 	<ul class="meters">
-		<li><span><%= @user_count %></span><%= ' ' + t('user_count', :default => 'users to date') %></li>
-		<%- if @random_user -%>
-			<li><%= t('random_user', :default => 'Try a new author') + ': ' %> <span><%= link_to @random_user.login, @random_user -%></span></li>
-		<%- end -%>
+		<li><span id="red"><%= link_to t('home_fandoms', :default => 'fandoms'), media_path %></span>: <span><%= @fandom_count -%></span><%= ' ' + t('work_count', :default => " to date") %></li>
+		<li><span id="red"><%= link_to t('home_works', :default => 'works'), works_path %></span>: <span><%= @work_count %></span><%= ' ' + t('work_count', :default => " to date") %></li>
+    <li><span id="red"><%= link_to t('home_people', :default => 'people'), people_path %></span>: <span><%= @user_count %></span><%= ' ' + t('work_count', :default => " to date") %></li>
 	</ul>
 </div>
-<div class="wrapper">
-	<h3><%= t 'discover_favorites', :default => 'Discover new favorites' %></h3>
-	<h4><%= link_to t('home_fandoms', :default => 'fandoms'), media_path %></h4>
-	<ul class="meters">
-		<li><span><%= @fandom_count -%></span> <%= ' ' + t('fandom_count', :default => 'fandoms to date') %></li>
-		<%- unless @latest_fandom.blank? -%>
-			<li><%=h t('latest_updated', :default => 'Latest updated') + ': '%> <span><%= link_to_tag_works_with_text(@latest_fandom, @latest_fandom.name) -%></span></li>
-		<%- end -%>
-	</ul>
+
+<div class="wrapper lines col1">
+  <h3>Updates</h3>
+  Incredibly important things that everyone should know: Open Beta is soon!
 </div>
-<div class="wrapper">
-	<h3><%=h t('explore_possibilities', :default => "Explore the possibilities") -%></h3>
-	<h4><%= link_to t('home_works', :default => 'works'), works_path %></h4>
-	<ul class="meters">
-		<li><span><%= @work_count %></span><%= ' ' + t('work_count', :default => "works to date") %></li>
-		<%- if @latest_work -%>
-			<li><%=h t('latest_work', :default => 'Latest work') + ': '%> <span><%= link_to @latest_work.title, @latest_work -%></span></li>
-		<%- end -%>
-	</ul>
+
+<div class="wrapper lines">
+  <h3>About</h3>
+  If you have questions or want to know more about the Archive check out the <%= link_to 'Archive FAQ', archive_faqs_path %>.
 </div>
-<p id="closed-sign"><%= link_to image_tag('closed.jpg', :alt => t('beta_notice', :default => "Hey, we're in closed beta right now, but please come in and browse!")), works_path -%></p>
+
+<div class="wrapper lines">
+  <h3>Read</h3>
+  <%- if @latest_work -%>
+    <%=h t('latest_work', :default => 'Latest work') + ': '%> <span><%= link_to @latest_work.title, @latest_work -%></span>
+  <%- end -%>
+</div>
+
+</div>
+
 <!--<h5 id="signup"></h5>-->
-<blockquote id="quotebox">
-	<p><%= t 'goddamn_servers', :default => "I want us to own the goddamn servers!" %></p>
-	<p class="attribution">~ Speranza</p>
-</blockquote>
-
-<h5><%= link_to t('browse', :default => 'Browse'), works_path %></h5>
-
