@@ -48,16 +48,15 @@ div.clear {margin-top: 2.3em; z-index: 2;}
 /*DASHBOARD SIDEBAR */
 #dashboard-sidebar { line-height:1.75; float: left; width: 10em; margin: 0 1em 3em 1.5em; border: 2px solid;}
 #dashboard-sidebar ul { font-size:0.9em; line-height:1.2em; padding: 0 0.5625em; }
-#dashboard-sidebar li { font-weight: 600; margin: 0.55em 0; }
+#dashboard-sidebar li, #dashboard-sidebar div { font-weight: 600; margin: 0.55em 0; }
 #dashboard-sidebar a { font-weight: normal; text-decoration: none; display: block;}
 #dashboard-sidebar a:hover { background: #900; color: #fffef9; }
+/* prettify please */
+#dashboard-sidebar .pseud_selector_sidebar {font-size:0.9em; line-height:1.2em; padding: 0 0.5625em; border-bottom:.25em double black;}
 
 #main.sidebar { margin: 0 1em 1em 12em; }
 #main.sidebar h1 {margin-top: 0;}
 #main.sidebar .own {background:#fffef9 !important; border:1px dotted #ccc;}
-
-/* prettify please */
-#dashboard-sidebar ul.pseud_selector_sidebar { border-bottom:.25em double black;}
 
 /*MAIN CONTENT */
 #main { position: relative; margin: 1.5em auto; padding: 0 3.5em; }

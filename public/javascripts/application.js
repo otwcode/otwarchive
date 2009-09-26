@@ -6,8 +6,18 @@ document.observe("dom:loaded", function () {
 	hideFormFields(); 
 	hideFilters();
 	initSelect('languages_menu');
+  hideExpandable();
 });
 
+// Shows expandable fields when clicked on
+function ShowExpandable() {
+document.getElementById('expandable').style.display = 'inline';
+}
+
+// Hides expandable fields if Javascript is enabled
+function hideExpandable() {
+document.getElementById('expandable').style.display = 'none';
+}
 
 // Toggles the chaptered story section of the work form and resets the wip_length field
 function showChapteredStoryOptions() {
