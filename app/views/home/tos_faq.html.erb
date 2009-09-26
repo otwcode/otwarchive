@@ -15,13 +15,13 @@
 			<a href="#content_faq">Content Policy and Abuse Procedures <acronym title="Frequently Asked Questions">FAQ</acronym></a>
 		</li>
 		<li>
-			<a href="#specialized_faq">Assorted Specialized Policies <acronym title="Frequently Asked Questions">FAQ</acronym></a> (Forthcoming.)
+			<a href="#specialized_faq">Assorted Specialized Policies <acronym title="Frequently Asked Questions">FAQ</acronym></a>
 		</li>
 	</ul>
 </div>
 
 <div id="faq" class="work-show">
-	<a name="general_faq"></a><h2>General Principles</h2>
+	<h2 id="general_faq">General Principles</h2>
   <dl>
 		<dt id="max_inclusiveness">Why does the archive have a goal of maximum inclusiveness?
 		</dt>
@@ -80,8 +80,8 @@
 		</dd>
 	</dl>
 			
-	<h2>Age Policy</h2>
-	<dl id="age_faq">
+	<h2 id="age_faq">Age Policy</h2>
+	<dl>
 		<dt id="under_13">Why are children under the age of 13 not permitted to have an account or upload Content?
 		</dt>
 		<dd>
@@ -90,8 +90,8 @@
 		</dd>
 	</dl>
 	
-	<h2>Privacy Policy</h2>
-	<dl id="privacy_faq">
+	<h2 id="privacy_faq">Privacy Policy</h2>
+	<dl>
 		<dt id="cookies">Why do you use cookies?
 		</dt>
 		<dd>
@@ -100,8 +100,8 @@
 		</dd>
 	</dl>
 	
-	<h2>Content Policies and Abuse Procedures</h2>
-	<dl id="content_faq">
+	<h2 id="content_faq">Content Policies and Abuse Procedures</h2>
+	<dl>
 	  <dt id="suspension">What sort of things would lead to permanent suspension?
 	  </dt>
 		<dd>
@@ -262,12 +262,15 @@
 		</dt>
 		<dd>
 			<dl>
-				<dt id="icon_use">Why are the rules for user icons more restrictive than the general archive rules?
-				</dt>
+				<dt id="icon_use">Why are the rules for user icons more restrictive than the general archive rules?</dt>
 				<dd>
 					<p>Right now, the design calls for user icons to appear on pages, such as user profiles, that are entirely unrated.  The design provides for only one user icon per pseudonym, rather than multiple icons, which means that whatever icon a user picks will be visible to any browser.  If there is substantial interest in changing the system, we may revise the archive so that a user may have multiple icons and/or may rate his or her profile just as a fanwork may be rated, in which case we will change the user icon policy.  The icon policy is <strong>not</strong> the general fanart policy.  We do anticipate eventually hosting fanart and treating it like textual fanworks, governed mainly by ratings and warnings rather than by content restrictions.
 					</p>
 				</dd>
+        <dt id="frontal_nudity">What does "depictions of frontal nudity" mean?</dt>
+        <dd>
+          <p>"Depictions of frontal nudity" here refers to all pictures, whether photographic or other media, of <a href="http://www.merriam-webster.com/dictionary/genitalia">genitalia</a>.</p>
+        </dd>
 			</dl>
 		</dd>
 
@@ -364,7 +367,7 @@
 				<dt id="teen_vs_mature">What's the difference between "teen and up" and "mature"?
 				</dt>
 				<dd>
-					<p>Likewise, this is almost entirely up to the creator's judgment.  In response to valid complaints about highly explicit content, the abuse team may redesignate a fanwork marked "general" or "teen and up" to "not rated," as explained in the abuse policy [link], but our policy is generally to defer to the creator's decision.
+					<p>Likewise, this is almost entirely up to the creator's judgment.  In response to valid complaints about highly explicit content, the abuse team may redesignate a fanwork marked "general" or "teen and up" to "not rated," as explained in the <%= link_to "abuse policy", tos_path(:anchor => "content") -%>, but our policy is generally to defer to the creator's decision.
 					</p>
 				</dd>
 				<dt id="not_rated">Suppose I'm searching for explicit fanworks.  How will "not rated"Fanworks be treated in my search?
@@ -475,7 +478,7 @@
 				<dt id="original_fiction">Can I archive original fiction?
 				</dt>
 				<dd>
-				  <p>No.  Although some users may want a place for all their creative work, our current vision of the Archive is of a place dedicated to fanworks in particular.  The archive was designed to serve the <a href="http://www.transformativeworks.org/about/">mission</a> of the Organization for Transformative Works (<acronym title="Organization for Transformative Works">OTW</acronym>), which was "established by fans to serve the interests of fans by providing access to and preserving the history of fanworks and fan culture in its myriad forms."
+				  <p>No.  Although some users may want a place for all their creative work, our current vision of the Archive is of a place dedicated to fanworks in particular.  The archive was designed to serve the <a href="http://transformativeworks.org/about/">mission</a> of the Organization for Transformative Works (<acronym title="Organization for Transformative Works">OTW</acronym>), which was "established by fans to serve the interests of fans by providing access to and preserving the history of fanworks and fan culture in its myriad forms."
 				  </p>
 			    <p>Because our long-term plans include hosting fanworks of all kinds, not just fan fiction, we concluded that it was better to draw a line between fanworks and non-fanworks and only host the former, in order to avoid becoming a general repository for all sorts of creative works.  There remains significant debate on this topic, however, and we intend to revisit it after the archive has been open for some time.  We welcome feedback from archive users at <a href="mailto:content@transformativeworks.org">Content Policy</a>.
 	        </p>
@@ -490,7 +493,7 @@
       	</dd>
 		  </dl>
 		</dd>
-		<dt id="tags and warnings">
+		<dt id="tags_and_warnings">
 		  <h3>Tags and Warnings</h3>
 		</dt>
 	  <dd>
@@ -562,4 +565,90 @@
       </dl>
     </dd>
   </dl>
+  
+  <h2 id="specialized_faq">Assorted Specialized Policies</h2>
+  <dl>
+    <dt id="collections"><h3>Collections</h3></dt>
+	  <dd>
+	    <dl>
+    		<dt id="collections_def">What do you mean by "collections"?</dt>
+    		<dd><p>Collections can be fic fests, exchanges, ficathons, or other types of creative challenges, as well as simple collections of fanworks chosen by the collection maintainer. Currently, the limited beta version of the archive software being tested now has a tab called "communities," where collections will be listed once that feature is active.</p>
+        </dd>
+        <dt>What's the point of having separate rules for collections/challenges?</dt>
+        <dd><p>The rules are basically the same as for everything else on the Archive. This just allows another way to group fanworks by areas of interest. There is one important special rule: if the collection maintainer says in the rules that submissions are final, then you can't withdraw your contribution from the collection, though you can always orphan it. We put this rule in place to allow gift exchanges. Ordinarily, removing a fanwork from the archive is sad, but it's up to you. But when you've added a fanwork as a gift, and possibly received a fanwork as a gift in return, we think it's fair to say that the other participants should continue to enjoy the benefit of your contribution. In those cases, orphaning allows you to sever your connection with the fanwork while not removing it from the collection. This policy was based on prior experience with the Yuletide Rare Fandoms gift exchange.</p></dd>
+        <dt>I think my fanwork would be perfect for a collection, but the maintainer won't add it to the collection!</dt>
+        <dd><p>Unless there's an independent violation of the Content Policy, we won't intervene in collection decisions, even if they are arbitrary, biased, or wrong. You may want to add tags to your fanwork that will be of interest to people who are fans of relevant collections.</p></dd>
+        <dt>How can I start a collection?</dt>
+        <dd><p>When the Archive adds this feature, we will add a link here!</p></dd>
+      </dl>
+    </dd>
+    
+    <dt id="next_of_kin"><h3>Fannish Next-of-Kin</h3></dt>
+	  <dd>
+	    <dl>
+        <dt>What does "fannish next-of-kin" mean?</dt>
+        <dd><p>The Archive allows you to choose someone to manage your fannish works if you die or are permanently incapacitated.</p></dd>
+        <dt>What does my fannish next-of-kin get to do?</dt>
+        <dd><p>We will transfer control of your archive account to your next-of-kin. After that, they can follow whatever guidelines you set for them. You might ask them to leave all of your fanworks alone but transfer control of any challenges you were running to people of your or their choice. You might ask them to orphan all of your fanworks and close your account.</p></dd>
+        <dt>How do I choose someone?</dt>
+        <dd><p>That's up to you. It should be someone reliable, someone you trust to make decisions about your fanworks.</p></dd>
+        <dt>What do I do once I've chosen someone?</dt>
+        <dd><p>Both you and your fannish next-of-kin need to send a message to otw-abuse@transformativeworks.org indicating that you want to have him/her as your fannish next-of-kin and that s/he agrees. You need to provide your Archive usernames for our records. When we receive matching requests, we will confirm that a fannish next-of-kin arrangement is in place.</p></dd>
+        <dt>If they're <em>my</em> next-of-kin, am I <em>theirs</em>?</dt>
+        <dd><p>The relationship can be reciprocal if you want, but it doesn't have to be. However, you can only have one person as your fannish next-of-kin at a time.</p></dd>
+        <dt>Why can't I have more than one fannish next-of-kin?</dt>
+        <dd><p>We want to know who has the final say. This arrangement exists precisely so that we don't have to mediate disputes over what you would have wanted.</p></dd>
+        <dt>What happens if my fannish next-of-kin also dies?</dt>
+        <dd><p>You would need to choose a new person. Your fannish next-of-kin can also designate someone else as their own fannish next-of-kin. If A designates B as a fannish next-of-kin, then dies, and B designates C as B's fannish next-of-kin, when B dies C can control all the accounts that B controlled, which at that point would include A's.</p></dd>
+        <dt>What if my fannish next-of-kin decides s/he's tired of being my fannish next-of-kin?</dt>
+        <dd>
+          <p>Either party can revoke a fannish next-of-kin agreement by sending a message to otw-abuse@transformativeworks.org. We will inform the other party that the agreement has been ended. Please include your username and the username of the other person involved in the agreement so we can find the right record.</p>
+          <p>When a fan is dead or incapacitated, the fannish next-of-kin will have control of the account and can make any decisions about it, including handing it off to someone else; the Archive cannot control whether or not anyone shares password information with anyone else. If the fannish next-of-kin lets us know that s/he wants to stop managing the account, we will permanently suspend the account, which means that all existing content will stay in place, but nothing may be changed or added.</p>
+        </dd>
+        <dt>What if I decide I don't like my fannish next-of-kin agreement?</dt>
+        <dd><p>Send an e-mail saying that you want to terminate the agreement. Please include your username and the username of the other person involved in the agreement so we can find the right record. The Abuse Committee will e-mail the parties involved in the agreement to let them know. Either party in an agreement can terminate it. You are free to choose a new fannish next-of-kin.</p></dd>
+        <dt>What if my fannish next-of-kin does something I wouldn't like?</dt>
+        <dd><p>Please choose someone you trust. It would be difficult or impossible for the Archive to enforce the exact terms of your agreement. All we will do is verify your status and transfer account control to the appropriate person.</p></dd>
+        <dt>How can my fannish next-of-kin get control of my fanworks?</dt>
+        <dd><p>A fannish next-of-kin can activate the agreement by sending a message to otw-abuse@transformativeworks.org that you are dead or permanently incapacitated. The Archive will send a message to the email address associated with your account. If we do not receive a response from that address within ten days, we will transfer control of your account to your fannish next-of-kin. The Archive will not do any independent investigation into whether you are dead or incapacitated.</p></dd>
+        <dt>Why won't the Archive check to see whether I am really dead or incapacitated?</dt>
+        <dd><p>We don't want to be in the position of collecting and possessing personal information of the kind that we'd need to confirm what your fannish next-of-kin says. It is your responsibility to choose someone you trust. If you want a custom arrangement, we suggest you make private arrangements with someone you trust to handle your passwords and accounts in the event of your death or incapacity.</p></dd>
+        <dt>What happens if I die before choosing someone?</dt>
+        <dd><p>Your account will remain just as you left it. No one will be able to delete, orphan, or modify your fanworks except in response to a ToS violation.</p></dd>
+        <dt>Why should I bother choosing someone?</dt>
+        <dd><p>It can be useful to have someone you trust as a fellow fan to make decisions about your account.</p></dd>
+        <dt>Help! Something went wrong: control of my account has been transfered, but I'm still hale and hearty!</dt>
+        <dd><p>If rumors of your death were greatly exaggerated, please contact otw-abuse@transformativeworks.org right away. Whether you've turned up after being lost in the Amazon for a decade or whether someone is just trying to pull a fast one, we'll do our best to get you your account back ASAP.</p></dd>
+      </dl>
+    </dd>
+    
+    <dt id="orphaning"><h3>Orphaning</h3></dt>
+	  <dd>
+	    <dl>
+    		<dt>You mention that an orphaning request might come from someone who doesn't have an active account. How could that happen?</dt>
+    		<dd><p>Someone whose account has been permanently suspended, or someone whose fanworks are archived in a collection that we are preserving through Open Doors, might submit an orphaning request. In that case, we'd attempt to verify their identity according to the procedures set forth in the Orphaning policy.</p></dd>
+      </dl>
+    </dd>
+    
+    <dt id="open_doors"><h3>Open Doors</h3></dt>
+	  <dd>
+      <dl>
+        <dt>See <a href="http://transformativeworks.org/faq/#opendoors">our Open Doors FAQ.</a></dt>
+      </dl>
+    </dd>
+
+    <dt id="tag_wrangling"><h3>Tag Wrangling</h3></dt>
+	  <dd>
+	    <dl>
+    		<dt>What is tag wrangling?</dt>
+    		<dd>
+          <p>User-provided tags may be subject to tag wrangling. Tag wrangling is the process of moderating the tags and in general try to tame them so the tags are more useful.</p>
+          <p>What we do is create organization among all those tags by creating 'Canonical' tags and then add synonym tags to the Canonical tag. This helps in the media listings, filters, searches, the tag cloud and possibly other areas, as the Canonical tag is used in preference to the synonyms.</p>
+          <p>By creating synonyms, when a canonical tag is filtered, it will bring up all fics using both the canonical term and the synonym term. By doing this, we give the authors the freedom to use what tags they choose, but still create order in the archive so that the tags are actually 'useful'.</p>
+          <p>Tag wrangling is about form, not content. Form includes disambiguation (where a fandom name is the same as a character name, for example: Doctor Who or Harry Potter) and similar issues such as spelling, capitalization, and typographical conventions (for example, we may wrangle tags so that a search for wing!fic also retrieves works tagged wingfic). Form does not include, for example, the difference between rape and nonconsensual sex. The Abuse team will handle disputes about tag wrangling. PLEASE NOTE: Tag Wrangling is an experimental feature. It is likely to have odd glitches. If you notice any, please report them using the feedback link at the bottom of every archive page.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+  
 </div>
