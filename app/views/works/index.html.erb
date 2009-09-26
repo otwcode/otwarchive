@@ -9,16 +9,16 @@
 
 <% paginated_section @works, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
 
-  <dl class="navigation">
-    <dt><%= t('sort_by', :default => 'Sort By') -%></dt> 
+  <div class="navigation">
+    <span class="navlabel"><%= t('sort_by', :default => 'Sort By') -%></span> 
     <%- unless @query.blank? -%>
-    <dd><%= sort_link t('sort.relevance', :default => 'Relevance') %></dd>
+    <span class="navitem"><%= sort_link t('sort.relevance', :default => 'Relevance') %></span>
     <%- end -%>
-    <dd><%= sort_link t('sort.author', :default => 'Author'), :author -%></dd>
-    <dd><%= sort_link t('sort.title', :default => 'Title'), :title -%></dd>
-    <dd><%= sort_link t('sort.date', :default => 'Date'), :date -%></dd>
-    <dd><%= sort_link t('sort.word_count', :default => 'Word Count'), :word_count -%></dd>
-  </dl>
+    <span class="navitem"><%= sort_link t('sort.author', :default => 'Author'), :author -%></span>
+    <span class="navitem"><%= sort_link t('sort.title', :default => 'Title'), :title -%></span>
+    <span class="navitem"><%= sort_link t('sort.date', :default => 'Date'), :date -%></span>
+    <span class="navitem"><%= sort_link t('sort.word_count', :default => 'Word Count'), :word_count -%></span>
+  </div>
 
   <%= render :partial => 'filters' %>
 

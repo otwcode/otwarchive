@@ -7,14 +7,14 @@
 <%- end -%>
 
 <% if @user && current_user && current_user == @user %>
-<ul class="navigation">
-  <li><%= link_to t('add_new', :default => "Add A New Bookmark"), new_external_work_path %></li>
-</ul>
+<div class="navigation">
+  <span class="navitem"><%= link_to t('add_new', :default => "Add A New Bookmark"), new_external_work_path %></span>
+</div>
 <% end %> 
 
-<ul class="navigation">
-  <li><%= toggle_recs_bookmarks %></li>
-</ul>
+<div class="navigation">
+  <span class="navitem"><%= toggle_recs_bookmarks %></span>
+</div>
 
 <ul class="work-list bookmark" id="bookmarks">
 	<%= render :partial => 'bookmarks/bookmarks' %>

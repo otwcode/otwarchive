@@ -7,9 +7,9 @@
 <% end %>
 
 <%- if is_author_of?(@work) -%>
-<ul class="navigation">
-  <li><%= link_to t('new_link', :default => 'New Chapter'), new_work_chapter_path(@work) %></li>
-</ul>
+<div class="navigation">
+  <span class="navitem"><%= link_to t('new_link', :default => 'New Chapter'), new_work_chapter_path(@work) %></span>
+</div>
 <%- end -%> 
 
 <!-- BEGIN comment section -->

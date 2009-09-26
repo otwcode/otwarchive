@@ -14,7 +14,7 @@
   <%=h @community.open_membership %>
 </p>
 
-<ul class="navigation">
-	<li><%= link_to 'Edit', edit_community_path(@community) %></li>
-	<li><%= link_to 'Back', communities_path %></li>
-</ul>
+<div class="navigation">
+	<span class="navitem"><%= link_to 'Edit', edit_community_path(@community) %></span>
+	<span class="navitem"><%= link_to 'Back', communities_path %></span>
+</div>

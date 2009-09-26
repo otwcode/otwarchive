@@ -1,8 +1,10 @@
 /*NAVIGATION ELEMENTS*/
 ul#skiplinks	{ margin-left:-999em; position:absolute; }
-ul.navigation, dl.navigation { background: #fffef9; border-bottom: 1px solid #999; text-align:right;margin: 0 0 0.875em 0;}
+ul.navigation, dl.navigation, div.navigation{ background: #fffef9; border-bottom: 1px solid #999; text-align:right; margin: 0 0 0.875em 0;}
 ul.navigation li, .navigation dd, li.navigation { background: #fffef9; display: inline; padding: 0 0.5625em; border:1px solid #999; border-bottom:0; text-indent:0; font-weight:900;}
-.navigation dt { font-weight:600; display:inline; padding:0 0.5625em; }
+div.navigation span {font-size: 0.875em; line-height: 1.286; padding: 0 0.5625em; margin: 0.643em 0; }
+.navitem {background: #fffef9; border:1px solid #999; border-bottom: 0;}
+.navigation dt, .navlabel { font-weight: 600; display: inline; padding: 0 0.5625em; border: 0;}
 .navigation a {font-weight: 100;}
 .navigation a:active { background:#900; color:#fffef9; }
 td.navigation {background:#777;}
@@ -85,8 +87,9 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 #user-header img { top: 0; left: 0; position: absolute; margin: 0 0 0.5625em 0; }
 #user-header h1 { text-align: right; margin: 0 0 0 100px; /*sized in pixels because the icon it is avoiding has a fixed pixel value*/}
 #user-header h1 a {text-decoration:none; text-transform:lowercase}
-#user-header ul.navigation { text-align:right;  margin: 0.5625em 0 0 100px;}
+#user-header .navigation { margin: 0.5625em 0 0 100px;}
 #user-header ul li { display: inline; padding: 0.25em; }
+#user-header .navitem {padding: 0.25em;}
 
 /* USER HOME: PROFILE */
 #main.profile-show h3 { background: #222; color: #fffef9; margin: 2.75em auto 0 ; padding: 0.125em; border-bottom: 4px double #fffef9; }

@@ -1,9 +1,9 @@
 <h1><%= t('pseuds_for', :default => "Pseuds for {{user}}", :user => @user.login) -%></h1>
 
 <% if current_user == @user -%>
-<ul class="navigation">
-<li><%= link_to t('new_pseud', :default => 'New Pseud'), new_user_pseud_path(@user) %></li>
-</ul>
+<div class="navigation">
+<span class="navitem"><%= link_to t('new_pseud', :default => 'New Pseud'), new_user_pseud_path(@user) %></span>
+</div>
 <% end -%>
 <ul class="pseuds-list">
   <% for pseud in @pseuds %>
