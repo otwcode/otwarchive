@@ -1,21 +1,21 @@
-<ul class="navigation">
+<div class="navigation" style="text-align: left;">
 <% if current_user.unposted_work && !params[:load_unposted] && !@use_upload_form -%>
-  <li id='restore-link'><%= link_to 'Try To Restore From Last Unposted Draft?', url_for(:action => :new, :load_unposted => true) -%></li>
+  <span class="navitem" id='restore-link'><%= link_to 'Try To Restore From Last Unposted Draft?', url_for(:action => :new, :load_unposted => true) -%></span>
 <%- end -%>
 
-<li id="upload-link" <%= @use_upload_form ? 'style="display: none;"' : '' -%> >
+<span class="navitem" id="upload-link" <%= @use_upload_form ? 'style="display: none;"' : '' -%> >
   <%= link_to_function('Upload From An Existing URL?',
   "Element.toggle('upload-work-form'); Element.toggle('work-form'); Element.toggle('upload-link'); 
    Element.toggle('form-link'); Element.toggle('restore-link')",
   :href => url_for(:controller => :works, :action => :new, :upload_work => true)) -%>
-</li>
-<li id="form-link"  <%= @use_upload_form ? '' : 'style="display: none;"' -%> >
+</span>
+<span class="navitem" id="form-link"  <%= @use_upload_form ? '' : 'style="display: none;"' -%> >
   <%= link_to_function('Return To Standard Form', 
   "Element.toggle('upload-work-form'); Element.toggle('work-form'); Element.toggle('upload-link'); 
   Element.toggle('form-link'); Element.toggle('restore-link')",
   :href => url_for(:controller => :works, :action => :new, :upload_work => false)) -%>
-</li>
-</ul>
+</span>
+</div>
 
 <div id="upload-work-form"  <%= @use_upload_form ? '' : 'style="display: none;"' -%> > 
   <%= render :partial => 'works/upload_work_form' -%>   
