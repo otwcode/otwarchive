@@ -80,7 +80,7 @@ div.work-meta { background:#eee; padding:0.25em; position:relative; margin: 0 0 
 .series-show ul#series-work-list li	{ display:block; padding:0; }
 
 /* Temporary bookmark content */
-#dynamic-bookmark	{ background:#fffef9; position:fixed; height:23em; width:36em; bottom:2em; right:2em; z-index:42; padding:1em 2em;  border:2px solid; }
+#dynamic-bookmark	{ background:#fffef9; position:fixed; height:24em; width:36em; bottom:2em; right:2em; z-index:42; padding:1em 2em;  border:2px solid; }
 #bookmark_notes	{ width:28.125em; height:6.25em; }
 #close-popup	{ position:absolute; top:0.375em; right:0.625em; }
 .chapter-position-list	{ list-style-type:none; padding:0.625em; }
