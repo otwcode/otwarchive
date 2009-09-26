@@ -11,12 +11,14 @@ document.observe("dom:loaded", function () {
 
 // Shows expandable fields when clicked on
 function ShowExpandable() {
-document.getElementById('expandable').style.display = 'inline';
+  var expandable = document.getElementById('expandable');
+  if (expandable != null) expandable.style.display = 'inline';
 }
 
 // Hides expandable fields if Javascript is enabled
 function hideExpandable() {
-document.getElementById('expandable').style.display = 'none';
+  var expandable = document.getElementById('expandable');
+  if (expandable != null) expandable.style.display = 'none';
 }
 
 // Toggles the chaptered story section of the work form and resets the wip_length field
