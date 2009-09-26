@@ -32,16 +32,6 @@ namespace :After do
 #       end
 #     end
 #   end
-#   desc "Fix Series pseuds"
-#   task(:after_20081026180141_fix_series_b => :environment) do
-#     Series.all.each do |s|
-#       unless s.works.empty?
-#         s.works.map(&:pseuds).flatten.each do |p|
-#           s.pseuds << p unless s.pseuds.include? p
-#         end
-#       end
-#     end
-#   end
 #   desc "Update used invitations"
 #   task(:after_20081114164535_add_used_to_invitations => :environment) do
 #     Invitation.find(:all).each do |invitation|
@@ -198,5 +188,17 @@ namespace :After do
     end
     ThinkingSphinx.deltas_enabled=true
   end
+  
+  # Need to run this again, there has been a bug which appears to have mysteriously been fixed
+   desc "Fix Series pseuds"
+   task(:after_r1501 => :environment) do
+     Series.all.each do |s|
+       unless s.works.empty?
+         s.works.map(&:pseuds).flatten.each do |p|
+           s.pseuds << p unless s.pseuds.include? p
+         end
+       end
+     end
+   end
   
 end
