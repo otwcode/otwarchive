@@ -1,16 +1,18 @@
 <!-- BEGIN footer -->
 <div class="footer">
   <div id="globalize"><%= locales_menu %></div>
-  <p><a href="http://creativecommons.org/licenses/GPL/2.0/" title="View License">GPL/CC</a>
-  	<%=h t('layout.footer.by_the_otw', :default => 'by the') %> <a href="http://transformativeworks.org/" title="The Organization for Transformative Works">OTW</a>
-  	&#8212; <%= link_to "Terms of Service", tos_path -%>
+  <p>
+  	<%= link_to "Terms of Service", tos_path -%>
+	&#8212; <%= link_to "Site Map", site_map_path %>
   	&#8212; <%= link_to 'Report Abuse', new_abuse_report_path %>
-  	&#8212; <%= link_to 'Send Feedback', new_feedback_report_path -%>
-  	
+  	&#8212; <%= link_to 'Support and Feedback', new_feedback_report_path -%>
+  	&#8212; <%= link_to 'Archive FAQ', archive_faqs_path %>
   	<%- if (logged_in_as_admin? || logged_in? && current_user.is_tag_wrangler?) -%>
   	  &#8212; <%= link_to 'Tag Wrangling', tag_wranglings_path -%>
   	<%- end -%>
-
+	&#8212;
+	<a href="http://creativecommons.org/licenses/GPL/2.0/" title="View License">GPL/CC</a>
+	  	<%=h t('layout.footer.by_the_otw', :default => 'by the') %> <a href="http://transformativeworks.org/" title="The Organization for Transformative Works">OTW</a>
 </p>
 </div>
 

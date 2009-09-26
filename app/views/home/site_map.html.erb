@@ -1,0 +1,55 @@
+<h1><%= t('site_map', :default => 'Site Map') %></h1>
+<div class="work-show">
+<h3>Explore</h3>
+	<ul>
+	  <li><%= link_to t('homepage', :default => "Homepage"), root_path %></li>
+	  <li><%= link_to t('people', :default => "People"), people_path %></li>
+	  <li><%= link_to t('fandoms', :default => "Fandoms"), media_path %></li>
+	  <li><%= link_to t('recent_works', :default => "Recent Works"), works_path %></li>
+	  <li><%= link_to t('freeform_tag_cloud', :default => "Freeform Tag Cloud"), tags_path %></li>
+	  <li>Collections - coming soon</li>
+	  <li>Challenges - coming soon</li>
+	</ul>
+<br />	
+<h3>About the Archive of Our Own</h3>
+	<ul>
+		<li><%= link_to t('terms_of_service', :default => "Terms of Service"), tos_path -%></li>
+		<li><%= link_to t('archive_faq', :default => "Archive FAQ"), archive_faqs_path -%></li>
+		<li><%= link_to t('ao3_news', :default => "AO3 News"), admin_posts_path -%></li>
+		<li><%= link_to t('known_issues', :default => "Known Issues"), known_issues_path %></li>
+	</ul>
+<br />	
+<%- if logged_in? -%>
+<h3>Account</h3>
+	<ul>
+		<li><%= link_to t('my_home', :default => "My Home"), user_path(current_user) %>
+		<li><%= link_to t('post_new', :default => "Post New"), new_work_path %></li>
+		<li><%= link_to t('my_works', :default => "My Works"), user_works_path(current_user) %></li>
+		<li><%= link_to t('my_drafts', :default => "My Drafts"), drafts_user_works_path(current_user) %></li>
+		<li><%= link_to t('my_series', :default => "My Series"), user_series_index_path(current_user) %></li>
+		<li><%= link_to t('my_bookmarks', :default => "My Bookmarks"), user_bookmarks_path(current_user) %></li>
+		<li>My Collections - coming soon</li>
+		<li>My Challenges - coming soon</li>
+		<li><%= link_to t('my_inbox', :default => "My Inbox"), user_inbox_path(current_user) %></li>
+		<% if current_user.preference.history_enabled? %>
+		<li><%= link_to t('my_reading_history', :default => "My Reading History"), user_readings_path(current_user) %></li>
+		<% end %>
+		<li>My Subscriptions - coming soon</li>
+		<li><%= link_to t('set_preferences', :default => "Set My Preferences"), user_preferences_path(current_user) %></li>
+	</ul>
+<br />		
+<h3>Profile</h3>
+	<ul>
+		<li><%= link_to t('my_profile', :default => "My Profile"), user_profile_path(current_user) %></li>
+	    <li><%= link_to t('manage_pseuds', :default => "Manage My Pseuds"), user_pseuds_path(current_user) %></li>
+	    <li><%= link_to t('delete_account', :default => "Delete My Account"), @user, :confirm => t('deletion_warning', :default => 'This will permanently delete your account and cannot be undone. Are you sure?'), :method => :delete %></li>
+	</ul>
+<%- end -%>
+<br />	
+<h3>Contact Us</h3>
+	<ul>
+		<li><%= link_to t('support_and_feedback', :default => "Support and Feedback"), new_feedback_report_path -%></li>
+		<li><%= link_to t('report_abuse', :default => "Report Abuse"), new_abuse_report_path %></li>
+	</ul>
+</div>
+	

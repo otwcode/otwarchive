@@ -28,7 +28,8 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => 'home', :action => 'index'
   map.connect 'home/:action', :controller => "home" 
   map.tos '/tos', :controller => 'home', :action => 'tos' 
-  map.tos_faq '/tos_faq', :controller => 'home', :action => 'tos_faq' 
+  map.tos_faq '/tos_faq', :controller => 'home', :action => 'tos_faq'
+  map.site_map '/site_map', :controller => 'home', :action => 'site_map' 
   
   map.resources :abuse_reports, :except => [:edit, :update, :destroy] 
 

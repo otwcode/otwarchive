@@ -9,6 +9,11 @@ class HomeController < ApplicationController
   def tos_faq 
     render :action => "tos_faq", :layout => "application"
   end
+  
+  # site map
+  def site_map 
+    render :action => "site_map", :layout => "application"
+  end
 
   # home page itself
   def index
