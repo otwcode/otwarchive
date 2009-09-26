@@ -5,8 +5,11 @@
     <ul class="story-list">
       <%- for work in @works -%>
     	  <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
-      <%- end -%>
+        <%- end -%>
     </ul>
+    <%- if @works.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD -%>
+      <%= @author ? print_pseud_works_link(@author) : print_works_link(@user) %>
+    <%- end -%>
   </div>
   <%- end -%>
   
@@ -17,7 +20,17 @@
       <%- for series in @series -%>
         <li><%= link_to series.title, series %></li>
       <%- end -%>
+      <%- if @author -%>
+        <%- if @author.series.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD -%>
+        <%= print_pseud_series_link(@author) %>
+        <%- end -%>
+      <%- else -%>
+        <%- if @user.series.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD -%>
+        <%= print_series_link(@user) %>
+        <%- end -%>
+      <%- end -%> 
     </ul>
+    
   </div>
   <%- end -%>
   
@@ -27,5 +40,16 @@
     <%- for bookmark in @bookmarks -%>
       <%= render :partial => 'bookmarks/bookmark', :locals => {:bookmark => bookmark} %>
     <%- end -%>
+    <%- unless @user == User.orphan_account -%>
+      <%- if @author -%>
+        <%- if @author.bookmarks.visible.size > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD -%>
+        <%= print_pseud_bookmarks_link(@author) %>
+        <%- end -%>
+      <%- else -%>
+        <%- if @user.bookmarks.visible.size > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD -%>
+        <%= print_bookmarks_link(@user) %>
+        <%- end -%>
+      <%- end -%> 
+  <%- end -%>
   </div>
   <%- end -%>
