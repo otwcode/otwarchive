@@ -18,8 +18,8 @@
 	    </dd>
 	  <% else %>  
     
-      <p class="instructions">All fields required. Your email address will not be published. Limited
-                  html is allowed.</p>
+      <p class="instructions"><%=t('comment_requirements', :default =>All fields required. Your email address will not be published. Limited
+                  html is allowed. %></p>
                   
 	    <dt><%= f.label :name, t('form_name', :default => "Name: ") %></dt>
       <dd><%= f.text_field :name, :live => true -%></dd>
