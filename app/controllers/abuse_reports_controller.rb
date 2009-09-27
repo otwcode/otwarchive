@@ -60,13 +60,13 @@ class AbuseReportsController < ApplicationController
  def build_post_info(report)
    post_info = ""
    post_info << "<bug>"
-   post_info << "<description>" + report.comment + "</description>" unless report.comment.blank? 
+   post_info << "<description><![CDATA[" + report.comment + "]]></description>" unless report.comment.blank? 
    post_info << "<project-id>4603</project-id>"
-   post_info << "<title>" + report.url + "</title>" unless report.url.blank?
-   post_info << "<category-id type='integer'>" + report.category + "</category-id>" unless report.category.blank?
+   post_info << "<title><![CDATA[" + report.url + "]]></title>" unless report.url.blank?
+   post_info << "<category-id type='integer'><![CDATA[" + report.category + "]]></category-id>" unless report.category.blank?
    post_info << "<custom-1397>1</custom-1397>" if report.email.blank?
-   post_info << "<custom-1409>" + report.email + "</custom-1409>" unless report.email.blank?
-   post_info << "<custom-1408>" + report.ip_address + "</custom-1408>" unless report.ip_address.blank?
+   post_info << "<custom-1409><![CDATA[" + report.email + "]]></custom-1409>" unless report.email.blank?
+   post_info << "<custom-1408><![CDATA[" + report.ip_address + "]]></custom-1408>" unless report.ip_address.blank?
    post_info << "</bug>"
    return post_info
  end  

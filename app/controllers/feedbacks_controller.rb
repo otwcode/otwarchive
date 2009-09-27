@@ -53,12 +53,12 @@ class FeedbacksController < ApplicationController
  def build_post_info(feedback)
    post_info = ""
    post_info << "<bug>"
-   post_info << "<description>" + feedback.comment + "</description>" unless feedback.comment.blank?
+   post_info << "<description><![CDATA[" + feedback.comment + "]]></description>" unless feedback.comment.blank?
    post_info << "<project-id>4911</project-id>"
-   post_info << "<title>" + feedback.summary + "</title>" unless feedback.summary.blank?
-   post_info << "<category-id type='integer'>" + feedback.category + "</category-id>" unless feedback.category.blank?
-   post_info << "<custom-1389>" + feedback.email + "</custom-1389>" unless feedback.email.blank?
-   post_info << "<custom-1407>" + feedback.user_agent + "</custom-1407>" unless feedback.user_agent.blank?
+   post_info << "<title><![CDATA[" + feedback.summary + "]]></title>" unless feedback.summary.blank?
+   post_info << "<category-id type='integer'><![CDATA[" + feedback.category + "]]></category-id>" unless feedback.category.blank?
+   post_info << "<custom-1389><![CDATA[" + feedback.email + "]]></custom-1389>" unless feedback.email.blank?
+   post_info << "<custom-1407><![CDATA[" + feedback.user_agent + "]]></custom-1407>" unless feedback.user_agent.blank?
    post_info << "</bug>"
    return post_info
  end
