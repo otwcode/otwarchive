@@ -8,24 +8,55 @@
   </div> 
 </noscript>
 <!-- END BETA CAVEATS! --> 
+<div class="home-header">
 <div id="signin">  
   <%- if logged_in? || logged_in_as_admin? -%>
-    <%= render :partial => 'session/greeting' -%>
+    <div class="greeting"><%= render :partial => 'session/greeting' -%></div>
   <%- else -%>
     <%= render :partial => 'session/login' -%>
   <%- end -%>
 </div>
-<div>
+<div class="searchbox">
   <%= render :partial => 'works/search_box' %>
 </div>
 
+<%= image_tag('logo.png', :alt =>
+ArchiveConfig.APP_NAME + ' logo', :class => 'logo', :height => '60', :width => '60') %>
+
 <h1><span><%= ArchiveConfig.APP_NAME -%>
-  <% unless ArchiveConfig.REVISION.blank? %>(<%=h t('revision', :default => 'rev. {{rev_number}}', :rev_number => ArchiveConfig.REVISION) %>)<% end %></span>
+  <% unless ArchiveConfig.REVISION.blank? %>(BETA <%=h t('revision', :default => 'rev. {{rev_number}}', :rev_number => ArchiveConfig.REVISION) %>)<% end %></span>
 </h1>
 
 <h2><%= t('otw_link', :default => "A project of the {{otw}}", :otw => '<a href="http://transformativeworks.org">Organization For Transformative Works</a>') %></h2>
+
+<ul id="main-navigation">
+	  <li>
+      <%= link_to_unless_current "<span>" + t('layout.header.works', :default => "works") + "</span>", works_path %>
+    </li>
+    <li>
+      <%= link_to_unless_current "<span>" + t('layout.header.fandoms', :default => "fandoms") + "</span>", media_path %>
+    </li>
+    <li>
+      <%= link_to_unless_current "<span>" + t('layout.header.people', :default => "people") + "</span>", people_path %>
+    </li>
+    <li>
+      <%= link_to_help "coming-soon", "<span>" + t('layout.header.communities', :default => "collections") + "</span>" %>
+    </li>
+    <li>
+      <%= link_to_unless_current "<span>" + t('layout.header.recs', :default => "bookmarks") + "</span>", bookmarks_path %>
+    </li>
+    <li>
+      <%= link_to_unless_current "<span>" + t('layout.header.tags', :default => "tags") + "</span>", tags_path %>
+    </li>
+    
+    <%- if logged_in_as_admin? -%>
+      <%= render :partial => 'admin/header' -%>
+    <%- end -%>
+  </ul>
+
 <hr class="clear" />
 
+</div>
 <div class="bigwrapper">
 
 <div class="wrapper box">
@@ -41,9 +72,9 @@
 <div class="wrapper box">
 	<h4>Explore</h4>
 	<ul class="meters">
-		<li><span id="red"><%= link_to t('home_fandoms', :default => 'fandoms'), media_path %></span>: <span><%= @fandom_count -%></span><%= ' ' + t('work_count', :default => " to date") %></li>
-		<li><span id="red"><%= link_to t('home_works', :default => 'works'), works_path %></span>: <span><%= @work_count %></span><%= ' ' + t('work_count', :default => " to date") %></li>
-    <li><span id="red"><%= link_to t('home_people', :default => 'people'), people_path %></span>: <span><%= @user_count %></span><%= ' ' + t('work_count', :default => " to date") %></li>
+		<li><span id="red"><%= link_to t('home_fandoms', :default => 'fandoms'), media_path %></span>: <span><%= @fandom_count -%></span><%= ' ' + t('todate_count', :default => " to date") %></li>
+		<li><span id="red"><%= link_to t('home_works', :default => 'works'), works_path %></span>: <span><%= @work_count %></span><%= ' ' + t('todate_count', :default => " to date") %></li>
+    <li><span id="red"><%= link_to t('home_people', :default => 'people'), people_path %></span>: <span><%= @user_count %></span><%= ' ' + t('todate_count', :default => " to date") %></li>
 	</ul>
 </div>
 

@@ -1,23 +1,23 @@
 #main.home {
 padding: 0;
 }
+.home .home-header {position: relative;}
 .home h1 {
-font-family: "Gill Sans", Georgia,Verdana, sans-serif;
-text-align: left;
+text-align: center;
 margin: 0.75em 0 0.125em 0;
-padding-left: .5em;
 border: 0;
+font-size:1.5em;
+font-family:Fertigo,Cambria,Constantia,Palatino,Georgia,sans-serif;
+font-weight:400;
 }
 .home h1 a {
 text-decoration: none;
 }
-.home h1 span {
-font-size: 0.5625em;
-}
+
 .home h2 {
 font: 100 0.75em "Gill Sans", Georgia, Verdana, sans-serif;
-margin: 0.25em 0 2em 0;
-padding-left: 1.5em;
+margin: 0.5em 0 0.5em 0;
+text-align: center;
 }
 
 .home #signin {
@@ -37,7 +37,14 @@ border: 1px groove #222;
 .home input:hover {
 background: #ddd;
 }
+.home .greeting {position: absolute; right: 0;}
 
+.home .searchbox {position: absolute; right: 0; top: 3.75em;}
+.home .logo  {position: absolute; left: 10px;}
+
+.home ul#main-navigation {left: 30%;}
+.home #main-navigation span {border-bottom: 1px; border-left: 0px; border-right: 0px; padding: 0.15em 1em;}
+.home #main-navigation li {margin-bottom: 0;}
 
 .home hr.clear {
 border: 0;
