@@ -37,10 +37,14 @@
     <%- author_warnings = bookmark.bookmarkable.works.visible.collect(&:warning_tags).flatten.compact.uniq 
     unless author_warnings.size < 1 -%>
       <dl style="margin-top: 0.5em">
-      <dt style="display:inline"><%=h 'Warnings' + ': ' %></dt>
+      <dt style="display:inline"><%= link_to("Warnings", tos_faq_path(:anchor => "tags")) %>:</dt>
       <dd style="display:inline">
-        <ul style="display:inline" id="work_<%= bookmark.bookmarkable.id %>_category_warning">
-          <%= author_warnings.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag))}.join(', ') %>
+        <ul style="display:inline" id="series_<%= bookmark.bookmarkable.id %>_category_warning">        
+          <%- if hide_warnings?(bookmark.bookmarkable) -%>
+            <li><%= show_warnings_link(bookmark.bookmarkable) %></li>
+          <%- else -%>
+            <%= author_warnings.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag))}.join(', ') %>
+          <%- end -%>        
         </ul>
       </dd>
       </dl>
