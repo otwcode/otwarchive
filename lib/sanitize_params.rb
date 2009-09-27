@@ -32,6 +32,7 @@ module SanitizeParams
   
   # strip all html 
   def sanitize_fully(text)
+    text.gsub!(/\xc2\x92/um, "")
     get_full_sanitizer
     @full_sanitizer.sanitize(text)
   end  
@@ -40,6 +41,7 @@ module SanitizeParams
   # if :tags => %w(list of tags) and :attributes => %w(list of attributes)
   # are passed as options, only those tags/attributes will be allowed. 
   def sanitize_whitelist(text, options = {})
+    text.gsub!(/\xc2\x92/um, "")
     get_white_list_sanitizer
     @white_list_sanitizer.sanitize(text, options)
   end
