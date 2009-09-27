@@ -92,7 +92,7 @@ form.edit_preference ul { margin:0.562625em auto 1.12525em auto; padding:0.56262
 .edit_preference li { margin:0.562625em 0;}
 
 /*EDIT PROFILE*/
-#main.users-edit form { position:absolute; }
+#main.users-edit form { float: left; }
 #main.users-edit dt	{ width:12em; }
 #main.users-edit textarea#profile_attributes_about_me { height:12em; }
 #main.users-edit hr.clear {margin-top:39em;}
@@ -105,7 +105,9 @@ form#new_pseud {position:absolute;}
 form.edit_pseud {position:absolute;}
 
 /*WORKS-INDEX -filters*/
-form.work-filters	{ background:#ddd; font-size:0.875em; width:12.25em; float:right;  padding:0.75em 0.5625em;}
+form.work-filters	{ background:#ddd; font-size:0.875em; width:12.25em; float:right;  padding:0.75em 0.5625em; max-width: 20%; }
+form.work-filters legend { position: relative !important;  margin-left: auto !important; }
+form.work-filters dt, form.work-filters dt { float: none; width: auto; }
 .filters dt	{ font-weight: 600; text-transform: capitalize; margin:0.5625em auto 0; padding:0; border-bottom:1px solid #fffef9; }
 .filters dd {padding:0;}
 .filters dt:hover	{ color:#fffef9; background:#777; } 
@@ -128,3 +130,7 @@ form#wrangle-select-fandom p, form#wrangle-select-media p{ display:inline; margi
 #edit-tag input[readonly] { background:#ededde; border:1px solid #dfdffd;}
 
 /* GLOBALIZE (in footer) you can find this in globalize.css*/
+
+/* BOOKMARKS */
+#bookmark-form dd { margin-top: 0; padding:0.25em 0.5625em 0.25em 0;}
+#bookmark-form fieldset { background:#fffef9; font-size:0.875em; margin: 0.5625em 0; padding:0.375em 1.5em; border:1px solid #bbb; clear:both; }

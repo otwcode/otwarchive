@@ -2,7 +2,7 @@
 /*
 set work styles
 */
-.work-show { font-family:Geneva, Verdana, Helvetica, Arial, sans-serif; padding:1.5em 3.5em 6em 3.5em;}
+.work-show { font-family:Geneva, Verdana, Helvetica, Arial, sans-serif; padding:1.5em 4% 6em 4%;}
 .work-show a, .work-show a:link { color:#111; text-decoration:none; border-bottom:1px dotted #777; padding-right:0.125em}
 .work-show .navigation a, .work-show .navigation a:link {border:0;text-decoration:underline;}
 .work-show a:hover { border-bottom:0}
@@ -80,7 +80,7 @@ div.work-meta { background:#eee; padding:0.25em; position:relative; margin: 0 0 
 .series-show ul#series-work-list li	{ display:block; padding:0; }
 
 /* Temporary bookmark content */
-#dynamic-bookmark	{ background:#fffef9; position:fixed; height:24em; width:36em; bottom:2em; right:2em; z-index:42; padding:1em 2em;  border:2px solid; }
+#dynamic-bookmark	{ background:#fffef9; position:fixed; height:26em; width:36em; bottom:2em; right:2em; z-index:42; padding:1em 2em;  border:2px solid; }
 #bookmark_notes	{ width:28.125em; height:6.25em; }
 #close-popup	{ position:absolute; top:0.375em; right:0.625em; }
 .chapter-position-list	{ list-style-type:none; padding:0.625em; }

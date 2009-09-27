@@ -1,13 +1,15 @@
 <%- bookmarkable ||= @bookmarkable -%>
 <%- @bookmark ||= Bookmark.new -%>
+<div id="bookmark-form">
 <%- if @bookmark.new_record? && bookmarkable.class != ExternalWork -%>
-  <p><%=h t('form_add_new', :default => 'Add a new bookmark for "{{title}}"', :title => bookmarkable.title) %></p>
+  <p><%=h t('bookmark_add_new', :default => 'Add a new bookmark for "{{title}}"', :title => bookmarkable.title) %></p>
+  <%- else -%>
+  <p><%=h t('bookmark_add_new_external', :default => 'Add a new bookmark for an external work') %></p>
 <%- end -%>
 
 <%- form_for([bookmarkable, @bookmark], :url => {:controller => 'bookmarks', :action => (action ||= 'create')}) do |f| -%>
 <dl>
-
-  <dt><%=h t('form_pseud', :default => "Pseud: ") -%></dt>
+  <dt><label><%=h t('form_pseud', :default => "Pseud: ") -%></label></dt>
   <dd>
     <% if current_user.pseuds.count > 1 %>
       <%= f.collection_select :pseud_id, current_user.pseuds, :id, :name %>
@@ -16,17 +18,20 @@
       <%= f.hidden_field :pseud_id, :value => "#{current_user.default_pseud.id}" %>
     <% end %>
   </dd>
-
-	<% if bookmarkable.class == ExternalWork && bookmarkable.new_record? %>
-	<% fields_for 'bookmark[external]', bookmarkable do |ew| %>
- 	<dt><%= ew.label :url, t('form_url', :default => "URL: ") %></dt>
-	<dd>
-		<%= ew.text_field :url%>
-		<%= observe_field 'bookmark_external_url', :url => {:controller => 'external_works', :action => 'fetch'}, :with => 'external_url', :on => 'blur' %>
-		<%= hidden_field 'fetched', :value => '' %>
-	</dd>
-	<dt><%= ew.label :author, t('form_author', :default => "Author: ") %></dt>
-		<dd>
+</dl>
+<% if bookmarkable.class == ExternalWork && bookmarkable.new_record? %>
+  <% fields_for 'bookmark[external]', bookmarkable do |ew| %>
+  <fieldset>
+    <legend>Work Preface</legend>
+  <dl>
+    <dt><%= ew.label :url, t('form_url', :default => "URL: ") %></dt>
+    <dd>
+	    <%= ew.text_field :url%>
+	    <%= observe_field 'bookmark_external_url', :url => {:controller => 'external_works', :action => 'fetch'}, :with => 'external_url', :on => 'blur' %>
+	    <%= hidden_field 'fetched', :value => '' %>
+    </dd>
+    <dt><%= ew.label :author, t('form_author', :default => "Author: ") %></dt>
+    <dd>
       <%= ew.text_field :author %>
       <%= generate_countdown_html("bookmark_external_author", ExternalWork::AUTHOR_LENGTH_MAX) -%>      
     </dd>
@@ -41,9 +46,12 @@
 		<dd>
       <%= ew.text_area :summary, :rows => 5, :class => "summary-field"%>
       <%= generate_countdown_html("bookmark_external_summary", ArchiveConfig.SUMMARY_MAX) -%>      
-    </dd> 
-  
-  <p><%= "Author's Tags (comma separated, #{ArchiveConfig.TAG_MAX} characters per tag). Please note that only fandom is required." -%><%= link_to_help "tagging-help" -%></p>
+    </dd>
+  </dl>
+  </fieldset>
+  <fieldset>
+    <legend>Work Tags</legend>
+    <p><%= "Author's Tags (comma separated, #{ArchiveConfig.TAG_MAX} characters per tag). Please note that only fandom is required." -%><%= link_to_help "tagging-help" -%></p>
   <dl>
     <dt>
       <%= ew.label :fandom_string, Fandom::NAME.pluralize -%>
@@ -82,13 +90,14 @@
       <%= javascript_tag("new Autocompleter.Local('bookmark_external_character_string', 'bookmark_external_character_string_auto_complete', #{Character.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
     </dd>    
   </dl>
-
-	<% end %>
+  </fieldset>
   <% end %>
-	<dt><%= f.label :notes, t('form_your_notes', :default => "Your Notes") %>
-  
-  </dt>
-		<dd style="max-width: 25em;">
+<% end %>
+<fieldset>
+  <legend>Bookmark Comments</legend>
+<dl>
+  <dt><%= f.label :notes, t('form_your_notes', :default => "Your Notes") %></dt>
+  <dd style="max-width: 25em;">
     <code>a href, b, big, blockquote, br, center, cite, code, del, em, i, img, ins, p, pre, q, small, strike, strong, sub, sup, u</code><br/>
       <%= f.text_area :notes %>
       <%= generate_countdown_html("bookmark_notes", ArchiveConfig.NOTES_MAX) -%> 
@@ -102,8 +111,9 @@
     <div class="character_counter">
       <%=h t("comma_separated", :default => "Comma separated, #{ArchiveConfig.TAG_MAX} characters per tag") %>
     </div>
-	</dd>
+  </dd>
 </dl>
+</fieldset>
 <%- if bookmarkable.class != ExternalWork -%>
   <p><%= t('note_author', :default => "Please note that the author's summary and tags will be added automatically.") %>
 <%- end -%>
@@ -112,3 +122,4 @@
 <%= f.hidden_field :bookmarkable_type, :value => bookmarkable.class.to_s %>
 <p class="submit"><%= f.submit(button_name ||= t('forms.create', :default => "Create")) %></p>
 <% end %>
+</div>
