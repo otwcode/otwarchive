@@ -1,13 +1,9 @@
 <!-- BEGIN BETA CAVEATS! -->
-<%- unless request.user_agent =~ /Firefox/i -%>
-  <%= javascript_tag "alert('Sorry! The current beta version of the site has been optimized for Firefox and may not display properly in your browser just yet.')" -%>
-<%- end -%>
-
 <noscript>
   <div id="javascript-warning">
     <p>
       <%=h t('js_disabled', :default => "While we've done our best to make this site accessible without javascript, it will work better and look prettier with it enabled. 
-      Please consider turning it on! Also, be aware that the current beta version of the site has been optimized for Firefox and may not display properly in other browsers just yet.") %>
+      Please consider turning it on!") %>
     </p>
   </div> 
 </noscript>
