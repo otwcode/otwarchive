@@ -1,7 +1,7 @@
 <li class="work" id="work_<%=h work.id %>">
 
-<ul class="work<%- if is_author_of?(work) && controller.controller_name != 'series' -%> own<%- end -%>" id="static">
-	<li class="heading" id="static">
+<ul class="work<%- if is_author_of?(work) && controller.controller_name != 'series' -%> own<%- end -%>">
+	<li class="heading">
 	  <%= get_symbols_for(work) -%>
 	  <h3>
 	    <%= link_to sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small)), work %>
@@ -16,7 +16,7 @@
 		&nbsp;
 	  </h4>
 
-	  <p class="update" id="date"><%= set_format_for_date(work.revised_at) %></p>
+	  <p class="update"><%= set_format_for_date(work.revised_at) %></p>
 	</li>
 
  	<%- cast_tags = work.cast_tags; warning_tags = work.warning_tags; freeform_tags = work.freeform_tags -%>

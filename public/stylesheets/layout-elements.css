@@ -83,8 +83,6 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 /* USER HOME: USERS SHOW*/
 #main.users-show ul.work-list { margin: auto; }
 .user-module h2 { background: #222; color: #fffef9; margin: 0.5em auto 0 ; padding: 0.125em; border-bottom: 4px double #fffef9;}
-.user-module #static {position: static;}
-.user-module #date {position: relative; float: right; top: -4em;}
 #user-header { position: relative; margin-bottom:4em;}
 #user-header img { top: 0; left: 0; position: absolute; margin: 0 0 0.5625em 0; }
 #user-header h1 { text-align: right; margin: 0 0 0 100px; /*sized in pixels because the icon it is avoiding has a fixed pixel value*/}
