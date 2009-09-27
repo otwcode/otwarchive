@@ -27,43 +27,6 @@ module WorksHelper
     "<ul>" + bookmark_link + (comments_link ||= '') + "</ul>"    
   end
 
-  # Determines whether or not to display warnings for a work
-  def hide_warnings?(work)
-    current_user.is_a?(User) && current_user.preference && current_user.preference.hide_warnings? && !current_user.is_author_of?(work)
-  end
-  
-  # Determines whether or not to display freeform tags for a work
-    def hide_freeform?(work)
-    current_user.is_a?(User) && current_user.preference && current_user.preference.hide_freeform? && !current_user.is_author_of?(work)
-  end
-
-  # Link to show warnings if they're currently hidden
-  def show_warnings_link(work)
-    link_to_remote "Show warnings",
-      :url => {:controller => 'tags', :action => 'show_hidden', :work_id => work.id },
-      :method => :get
-  end
-  
-  # Link to show warnings for a series if they're currently hidden
-  def show_warnings_series_link(series)
-    link_to_remote "Show warnings",
-      :url => {:controller => 'tags', :action => 'show_hidden_series', :series_id => series.id },
-      :method => :get
-  end
-  
-  # Link to show tags if they're currently hidden
-  def show_freeforms_link(work)
-    link_to_remote "Show tags",
-      :url => {:controller => 'tags', :action => 'show_hidden_freeforms', :work_id => work.id },
-      :method => :get
-  end
-
-  # Link to show tags for a series if they're currently hidden
-  def show_freeforms_series_link(series)
-    link_to_remote "Show tags",
-      :url => {:controller => 'tags', :action => 'show_hidden_freeforms_series', :series_id => series.id },
-      :method => :get
-  end
   
   # modified from mislav-will_paginate-2.3.2/lib/will_paginate/view_helpers.rb
   def search_header(collection, search_query)

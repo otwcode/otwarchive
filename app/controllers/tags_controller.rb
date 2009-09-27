@@ -55,11 +55,16 @@ class TagsController < ApplicationController
   end
 
   def show_hidden
-      unless params[:work_id].blank?
-      @display_work = Work.find(params[:work_id])
-      @display_tags = @display_work.warnings
+    unless params[:creation_id].blank? && params[:creation_type].blank?
+      # Tags aren't directly on series, so we need to handle them differently
+      if params[:creation_type] == 'Series'
+        @display_creation = Series.find(params[:creation_id])
+        @display_tags = @display_creation.works.visible.collect(&:warning_tags).flatten.compact.uniq
+      else
+        @display_creation = eval(params[:creation_type]).find(params[:creation_id])
+        @display_tags = @display_creation.warnings
+      end
       @display_category = @display_tags.first.class.name.downcase
-    
     end
     if request.xml_http_request?
       respond_to do |format|
@@ -70,13 +75,18 @@ class TagsController < ApplicationController
       flash[:error] = t('need_javascript', :default => "Sorry, you need to have JavaScript enabled for this.")
       redirect_to :back
     end
-
   end
 
   def show_hidden_freeforms
-    unless params[:work_id].blank?
-      @display_work = Work.find(params[:work_id])
-      @display_tags = @display_work.freeforms
+    unless params[:creation_id].blank? && params[:creation_type].blank?
+      # Tags aren't directly on series, so we need to handle them differently
+      if params[:creation_type] == 'Series'
+        @display_creation = Series.find(params[:creation_id])
+        @display_tags = @display_creation.works.visible.collect(&:warning_tags).flatten.compact.uniq
+      else
+        @display_creation = eval(params[:creation_type]).find(params[:creation_id])
+        @display_tags = @display_creation.freeforms
+      end
       @display_category = @display_tags.first.class.name.downcase
     end
     if request.xml_http_request?

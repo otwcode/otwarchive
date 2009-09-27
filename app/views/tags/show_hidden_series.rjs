@@ -1,2 +1,0 @@
-tag_list = author_warnings.collect{|tag| link_to_tag(tag)}
-page.replace_html "series_#{@display_series.id}_category_warning", tag_list.join(', ')

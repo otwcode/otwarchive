@@ -69,4 +69,29 @@ module TagsHelper
     end
     "<ul class=""taggable_strip""><li>" + t("see_also", :default => "See also: ") + "</li>" + list.map{|li| "<li>" + li + "</li>"}.to_s + "</ul>"
   end
+  
+  # Determines whether or not to display warnings for a creation
+  def hide_warnings?(creation)
+    current_user.is_a?(User) && current_user.preference && current_user.preference.hide_warnings? && !current_user.is_author_of?(creation)
+  end
+  
+  # Determines whether or not to display freeform tags for a creation
+    def hide_freeform?(creation)
+    current_user.is_a?(User) && current_user.preference && current_user.preference.hide_freeform? && !current_user.is_author_of?(creation)
+  end
+
+  # Link to show warnings if they're currently hidden
+  def show_warnings_link(creation)
+    link_to_remote "Show warnings",
+      :url => {:controller => 'tags', :action => 'show_hidden', :creation_type => creation.class.to_s, :creation_id => creation.id },
+      :method => :get
+  end
+  
+  # Link to show tags if they're currently hidden
+  def show_freeforms_link(creation)
+    link_to_remote "Show tags",
+      :url => {:controller => 'tags', :action => 'show_hidden_freeforms', :creation_type => creation.class.to_s, :creation_id => creation.id },
+      :method => :get
+  end  
+  
 end
