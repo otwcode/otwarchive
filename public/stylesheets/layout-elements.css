@@ -41,8 +41,8 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 #main-navigation a span { background: #fffef9; color: #111; border: 1px solid #111; border-bottom: 0; cursor: pointer;}
 
 
-#header hr.clear, div.clear { background: url(/images/headergradient.png) top left repeat-x #fffef9; height: 20px; border-top: 6px solid #111; }
-div.clear {margin-top: 2.3em; z-index: 2;}
+#header hr.clear, #header div.clear { background: url(/images/headergradient.png) top left repeat-x #fffef9; height: 20px; border-top: 6px solid #111; }
+#header div.clear {margin-top: 2.3em; z-index: 2;}
 /* END HEADER*/
 
 /*DASHBOARD SIDEBAR */
@@ -82,7 +82,9 @@ div.clear {margin-top: 2.3em; z-index: 2;}
 
 /* USER HOME: USERS SHOW*/
 #main.users-show ul.work-list { margin: auto; }
-.user-module h2 { background: #222; color: #fffef9; margin: 2.25em auto 0 ; padding: 0.125em; border-bottom: 4px double #fffef9;}
+.user-module h2 { background: #222; color: #fffef9; margin: 0.5em auto 0 ; padding: 0.125em; border-bottom: 4px double #fffef9;}
+.user-module #static {position: static;}
+.user-module #date {position: relative; float: right; top: -4em;}
 #user-header { position: relative; margin-bottom:4em;}
 #user-header img { top: 0; left: 0; position: absolute; margin: 0 0 0.5625em 0; }
 #user-header h1 { text-align: right; margin: 0 0 0 100px; /*sized in pixels because the icon it is avoiding has a fixed pixel value*/}

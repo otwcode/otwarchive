@@ -23,7 +23,7 @@ text-align: center;
 .home #signin {
 text-align: right;
 }
-.home #greeting, .home #login {width:inherit}
+.home #greeting, .home #login {width:inherit; text-align: right;}
 .home #signin form {
 background: url(/images/fff-ccc.png) bottom left repeat-x #fff;
 margin: -1.5em -0.25em 1em;
@@ -42,32 +42,37 @@ background: #ddd;
 .home .searchbox {position: absolute; right: 0; top: 3.75em;}
 .home .logo  {position: absolute; left: 10px;}
 
-.home ul#main-navigation {left: 30%;}
+.home ul#main-navigation {left: 30%; width: 60%; border-left: 0;}
 .home #main-navigation span {border-bottom: 1px; border-left: 0px; border-right: 0px; padding: 0.15em 1em;}
 .home #main-navigation li {margin-bottom: 0;}
+.home #main-navigation a {text-decoration: none;}
 
-.home hr.clear {
+.home .clear {
 border: 0;
 border-bottom: 2px solid #777;
+clear: both; 
+height: 0; 
+margin-bottom: 0; 
+margin-top: 0;
 }
 
 .home .wrapper {
 padding: 0 2em 1em 2em;
 width: 22%;
-margin: 2% 2% 0 2%;
+margin-right: 3em;
 min-width: 9em;
 min-height: 7em;
 float: left;
 }
 
 .home .box {
-background: url(/images/box.jpg) bottom left no-repeat;
+background: url(/images/box2.jpg) bottom left no-repeat;
 padding: 0 2em 2em 2em;
-position: relative;
-left: 1em;
-min-height: 11.5em;}
+min-height: 11.5em;
+margin-top: 1.5em;
+margin-bottom: 0;}
 
-.home .bigwrapper {position: static;}
+.home .bigwrapper {position: static; margin-left: 4em;}
 
 .home .col1 {clear: left;}
 
@@ -97,7 +102,9 @@ color: #222;
 
 .home .wrapper h4 {
 color: #222;
-font: 600 2.25em "Gill Sans", Verdana, sans-serif;
+font-weight: 600;
+font-size: 2.25em;
+font-family: Fertigo,Cambria,Constantia,Palatino,Georgia,sans-serif;
 text-decoration: none;
 border-bottom: 1px solid #777;
 margin-bottom: 0.4em;
