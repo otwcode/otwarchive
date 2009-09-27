@@ -82,6 +82,7 @@ module FixtureReplacement
     a.url = random_url(random_domain(false),"")
     a.author = random_phrase
     a.title = random_phrase
+    a.fandoms = [create_fandom]
   end
 
   attributes_for :feedback do |a|

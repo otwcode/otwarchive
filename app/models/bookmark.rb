@@ -62,10 +62,14 @@ class Bookmark < ActiveRecord::Base
     self.bookmarkable = fetched if same  
   end
   
+  before_save :validate
   # Adds customized error messages for External Work fields
   def validate
     return false if self.bookmarkable_type.blank?
-    if self.bookmarkable.class == ExternalWork && !self.bookmarkable.valid?
+    if self.bookmarkable.class == ExternalWork && (!self.bookmarkable.valid? || self.bookmarkable.fandoms.blank?)
+      if self.bookmarkable.fandoms.blank?
+        self.bookmarkable.errors.add_to_base("Fandom tag is required")
+      end
       self.bookmarkable.errors.full_messages.each { |msg| errors.add_to_base(msg) }
     end
   end
