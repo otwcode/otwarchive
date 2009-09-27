@@ -11,7 +11,9 @@
     <p class="pseud-name"><%=link_to pseud.name, [@user, pseud] %>
 <%- if pseud.is_default then %> (<%= t('default_pseud', :default => 'Default') %>) <% end %>
     </p>
-    <p class="pseud-desc"><%= sanitize_description_for_display pseud.description %></p>
+    <%- unless pseud.description.blank? -%>
+      <p class="pseud-desc"><%= sanitize_description_for_display pseud.description %></p>
+    <%- end -%>
       <% if current_user == @user -%>
     <ul class="navigation">
         <li><%= link_to t('edit_link', :default => 'Edit'), [:edit, @user, pseud] -%></li>

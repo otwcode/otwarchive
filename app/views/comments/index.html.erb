@@ -7,7 +7,7 @@
 		<%- end -%>
 	<%- end -%>
 <%- else -%>
-	<h2><%=h t('viewing_comments_on', :default => 'Viewing Comments on') %> <%= link_to sanitize_title_for_display(@commentable.title, :tags => %w(em i b strong strike small)), @commentable %></h2>  
+	<h2><%=h t('viewing_comments_on', :default => 'Viewing Comments on') %> <%- unless @commentable.title.blank? -%><%= link_to sanitize_title_for_display(@commentable.title, :tags => %w(em i b strong strike small)), @commentable %><%- end -%></h2>  
 	<%= render :partial => 'comments/comment_thread', :locals => { :comments => @comments, :depth => 0 } %>
 <%- end -%>
 
