@@ -99,9 +99,10 @@ dl#user-data dt {font-weight: 900; width: 9em; float:left; clear:left; margin:0.
 #user-profile ul.navigation { text-align:right; }
 
 /* DASHBOARD: READING HISTORY */
-#main.readings-index li.work ul { margin: 0.875em auto  !important;}
 #main.readings-index li.work { font-size:smaller;}
 #main.readings-index li.work-desc p { font-size:1em;}
+#main.readings-index .work-read {border: 1px solid black; margin-top: 0.5em; margin-bottom: 0.5em; padding-left: 0.5em; padding-bottom: 0.5em;}
+#main.readings-index .work-read ul.work {margin-right: 0.5em;}
 
 /* DASHBOARD: PREFERENCES */
 /* preferences form rules are in forms.css */
