@@ -43,7 +43,7 @@ background: #ddd;
 .home .logo  {position: absolute; left: 10px;}
 
 .home ul#main-navigation {left: 30%; width: 60%; border-left: 0;}
-.home #main-navigation span {border-bottom: 1px; border-left: 0px; border-right: 0px; padding: 0.15em 1em;}
+.home #main-navigation a {border-bottom: 1px; border-left: 0px; border-right: 0px; padding: 0.15em 1em;}
 .home #main-navigation li {margin-bottom: 0;}
 .home #main-navigation a {text-decoration: none;}
 

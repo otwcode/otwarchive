@@ -33,12 +33,12 @@ ul#greeting, ul#login { text-align:left; width:17.75em; float:right;clear:right;
 
 /* MAIN NAVIGATION (TABS) */
 ul#main-navigation { position: relative; clear: both; border-left: 1px solid #111; margin: 0 0 0 1em; }
-#main-navigation li { background: #fffef9; display: block; float: left; cursor: default; z-index:0;}
-#main-navigation a:link { color: #900; font-weight: 400; }
-#main-navigation a:hover, #main-navigation a:active { color: #111; font-weight: 400; border: none;}
-#main-navigation a span:hover { background: #ddd; }
-#main-navigation span { background: #111; color: #fffef9; font-weight: 100; float: left; display: block; padding: 0.5625em; border: 1px solid #111; border-bottom: 0; }
-#main-navigation a span { background: #fffef9; color: #111; border: 1px solid #111; border-bottom: 0; cursor: pointer;}
+#main-navigation li { background: #fffef9; display: block; float: left; z-index:0;}
+#main-navigation a:link { color: #111; font-weight: 400; }
+#main-navigation a:hover, #main-navigation a:active, #main-navigation a:visited { color: #111; font-weight: 400;}
+#main-navigation a:hover { background: #ddd; }
+#main-navigation a { background: #fffef9; color: #111; border: 1px solid #111; border-bottom: 0; display: block; font-weight: 100; float: left; padding: 0.5625em; }
+#main-navigation .current {background: #111; color: #fffef9; border: 1px solid #111; border-bottom: 0; display: block; font-weight: 100; float: left; padding: 0.5625em; cursor: default;}
 
 
 #header hr.clear, #header div.clear { background: url(/images/headergradient.png) top left repeat-x #fffef9; height: 20px; border-top: 6px solid #111; }
