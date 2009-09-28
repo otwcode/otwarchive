@@ -11,6 +11,7 @@ module HtmlFormatter
   
   # clean up the break tags after they have been added for display
   def cleanup_break_tags(text)
+    return "" if text.nil?
     text.gsub!(/<br\s*\/?>/i, "<br />")
     while text.gsub!(/<br \/><br \/><br \/>/im, "<br /><br />")
       # keep going
@@ -21,31 +22,37 @@ module HtmlFormatter
 
   # clean up tags
   def cleanup_and_format(text)
+    return "" if text.nil?
     text = cleanup_paragraph_tags(cleanup_break_tags_before_adding(close_tags(strip_comments(text))))
     return text
   end
   
   def sanitize_and_format_for_display(text, options = {})
+    return "" if text.nil?
     text = add_paragraph_tags_for_display(sanitize_whitelist(text, options))
   end
   
   # This is future-planning - titles are currently stripped of all html in order to make sort and search simpler, so there should be no tags in titles which need sanitize in the view. 
   def sanitize_title_for_display(text, options = {:tags => ['a', 'b', 'br', 'p', 'i', 'em', 'strong', 'strike', 'u', 'ins', 'q', 'del', 'cite', 'blockquote', 'pre', 'code', 'small', 'sup', 'sub']})
+    return "" if text.nil?
     sanitize_whitelist(text, options)
   end
  
   # A more limited display option for comments and summaries
   def sanitize_limit_and_format_for_display(text, options = {:tags => ['a', 'b', 'big', 'blockquote', 'br', 'center', 'cite', 'code', 'del', 'em', 'i', 'img', 'ins', 'p', 'pre', 'q', 'small', 'strike', 'strong',  'sub', 'sup', 'u']})
+    return "" if text.nil?
     text = add_paragraph_tags_for_display(sanitize_whitelist(text, options))
   end
   
   # Limited display option for the pseud description field. 
   def sanitize_description_for_display(text, options = {:tags => ['a', 'em', 'strong', 'b', 'i']})
+    return "" if text.nil?
     sanitize_whitelist(text, options)
   end
   
     # A more limited display option which strips obtrusive tags for index views.
   def sanitize_strip_images_and_format_for_display(text, options = {:tags => ['a', 'b', 'big', 'blockquote', 'br', 'center', 'cite', 'code', 'del', 'em', 'i', 'ins', 'p', 'pre', 'q', 'small', 'strike', 'strong', 'sub', 'sup', 'u']})
+    return "" if text.nil?
     text = add_paragraph_tags_for_display(sanitize_whitelist(text, options))
   end
 
@@ -53,6 +60,7 @@ module HtmlFormatter
   def cleanup_paragraph_tags(text)
     # Now we want to replace any cases where these have been doubled -- ie, 
     # where a new paragraph tag is opened before an old one is closed
+    return "" if text.nil?
     text.gsub!(/<p>\s*<p>/im, "<p>")
     text.gsub!(/<\/p>\s*<\/p>/im, "</p>")
     while text.gsub!(/<br\s*\/>\s*<p>/im, "<p>")
@@ -78,6 +86,7 @@ module HtmlFormatter
 
   # adds paragraphs and newlines, then gets rid of doubled ones
   def add_paragraph_tags_for_display(text)
+    return "" if text.nil?
     #The following are lists of tags according to their valid child elements
     #These tags are block-level
     block_tags_list = ['h1','h2','h3','h4','h5','h6','div','blockquote','ul','ol','dl','pre','table', 'center']
@@ -147,6 +156,7 @@ module HtmlFormatter
   #closes tags in html (uses http://snippets.dzone.com/posts/show/3822, but
   #modified)
   def close_tags(html)
+    return "" if html.nil?
 
     # no closing tag necessary for these
     soloTags = ["br","hr"]

@@ -64,11 +64,10 @@
       <h3><%=h "Notes:" %></h3>
       <%- if @work.notes.blank? -%>
         <%= t('link_to_endnotes', :default => "See the end of the page for {{notes_link}}.", :notes_link => (link_to t('notes_link', :default => "notes"), eval(linkpath))) %>
-      <%- else -%>
-        <%- unless @work.endnotes.blank? -%>
-          <%- work_notes = @work.notes + ' <span class="endnotes-link">' + t('link_more_endnotes', :default => "See the end of the page for more {{notes_link}}.", :notes_link => (link_to t('notes_link', :default => 'notes'), eval(linkpath))) + '</span>' -%>
-        <%- end -%>
-        <%=sanitize_and_format_for_display work_notes -%>
+      <%- elsif !@work.endnotes.blank? -%>
+        <%= sanitize_and_format_for_display @work.notes + ' <span class="endnotes-link">' 
+                                                        + t('link_more_endnotes', :default => "See the end of the page for more {{notes_link}}.", 
+                                                                 :notes_link => (link_to t('notes_link', :default => 'notes'), eval(linkpath))) + '</span>' -%>
       <%- end -%> 
       </blockquote>
     <%- end -%>

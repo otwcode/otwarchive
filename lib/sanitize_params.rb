@@ -12,6 +12,7 @@ module SanitizeParams
 
   # strip comment and <!whatever> tags like DOCTYPE
   def strip_comments(text)
+    return if text.nil?
     text.gsub!(/<!--(.*?)-->[\n]?/m, "")
     text.gsub!(/<!(.*?)>[\n]?/m, "")
     return text
@@ -19,6 +20,7 @@ module SanitizeParams
   
   # replace evil msword curly quotes
   def fix_quotes(text)
+    return "" if text.nil?
     text.gsub! "\342\200\230", "'"
     text.gsub! "\342\200\231", "'"
     text.gsub! "\221", "'"
@@ -32,6 +34,7 @@ module SanitizeParams
   
   # strip all html 
   def sanitize_fully(text)
+    return "" if text.nil?
     text.gsub!(/\xc2\x92/um, "")
     get_full_sanitizer
     @full_sanitizer.sanitize(text)
@@ -41,6 +44,7 @@ module SanitizeParams
   # if :tags => %w(list of tags) and :attributes => %w(list of attributes)
   # are passed as options, only those tags/attributes will be allowed. 
   def sanitize_whitelist(text, options = {})
+    return "" if text.nil?
     text.gsub!(/\xc2\x92/um, "")
     get_white_list_sanitizer
     @white_list_sanitizer.sanitize(text, options)
