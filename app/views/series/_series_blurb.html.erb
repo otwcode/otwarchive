@@ -50,9 +50,11 @@
         </div>
     <%- end -%>
 		</li>
-		<li class="summary">
-			<%= sanitize_and_format_for_display series.summary %>
-		</li>
+		<%- unless series.summary.blank? %>
+  		<li class="summary">
+  			<%= sanitize_and_format_for_display series.summary %>
+  		</li>
+		<%- end -%>
 		<li class="stats">
 			<dl>
 			<dt><%=h 'Words' + ': ' %></dt> 

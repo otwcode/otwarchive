@@ -28,10 +28,12 @@
     <%- end -%>
   </dl>
 
-  <div id="user-bio">
-    <h3><%=h t('about_me', :default => "About me:") %></h3>
-    <%=sanitize_and_format_for_display @user.profile.about_me -%>
-  </div>
+  <%- unless @user.profile.about_me.blank? -%>
+    <div id="user-bio">
+      <h3><%=h t('bio', :default => "Bio:") %></h3>
+      <%=sanitize_and_format_for_display @user.profile.about_me -%>
+    </div>
+  <%- end -%>
   
   <%- if logged_in? && current_user == @user -%>
   <div class="navigation">
