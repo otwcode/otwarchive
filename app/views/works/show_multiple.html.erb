@@ -1,0 +1,23 @@
+<h2><%=h "Works To Edit" -%></h2>
+
+<% form_tag edit_multiple_user_works_path(@user) do %>
+
+  <table class="story-list">
+    <tr>
+      <th>&nbsp;</th>
+      <th>Title</th>
+      <th>Fandom</th>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+    </tr>
+    
+    <%- for work in @works -%>
+      <%= render :partial => 'work_blurb_short', :locals => {:work => work} %>
+    <%- end -%>
+  </table>
+
+<%= submit_tag t('edit_checked', :default => "Edit Checked") %>
+<%= submit_tag t('delete_multiple', :default => "Delete Checked") %>
+  
+<% end %>

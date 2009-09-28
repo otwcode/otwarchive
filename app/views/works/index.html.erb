@@ -9,6 +9,15 @@
 
 <% paginated_section @works, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
 
+<% if @user && @user == current_user %>
+<div class="navigation" style="text-align: left;">
+  <span class="navitem" id="edit_multiple">
+    <%= link_to t('edit_multiple_link', :default => 'Edit Multiple Works'), 
+                show_multiple_user_works_path(@user) -%>
+  </span>
+</div>
+<% end %>
+
   <div class="navigation">
     <span class="navlabel"><%= t('sort_by', :default => 'Sort By') -%></span> 
     <%- unless @query.blank? -%>
@@ -29,3 +38,6 @@
   </ul>
 
 <% end %>
+
+
+

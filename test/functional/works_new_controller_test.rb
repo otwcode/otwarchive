@@ -53,10 +53,10 @@ class WorksNewControllerTest < ActionController::TestCase
       end
       context "upload work" do
         setup do
-          get :new, :locale => 'en', :upload_work => true
+          get :new, :locale => 'en', :import => true
         end
         should_render_template :new
-        should_assign_to(:use_upload_form) {true}
+        should_assign_to(:use_import_form) {true}
       end
     end
   end

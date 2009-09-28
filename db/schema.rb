@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090919161520) do
+ActiveRecord::Schema.define(:version => 20090921210056) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -17,6 +17,8 @@ ActiveRecord::Schema.define(:version => 20090919161520) do
     t.text     "comment",                    :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "ip_address"
+    t.string   "category"
   end
 
   create_table "admin_posts", :force => true do |t|
@@ -173,6 +175,9 @@ ActiveRecord::Schema.define(:version => 20090919161520) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "email"
+    t.string   "summary"
+    t.string   "user_agent"
+    t.string   "category"
   end
 
   create_table "filter_counts", :force => true do |t|

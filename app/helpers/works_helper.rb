@@ -53,16 +53,16 @@ module WorksHelper
 
   # select the default warnings if this is a new work
   def warning_selected(work)
-    @work.warning_strings.empty? ? ArchiveConfig.WARNING_DEFAULT_TAG_NAME : @work.warning_strings
+    work.nil? || work.warning_strings.empty? ? ArchiveConfig.WARNING_DEFAULT_TAG_NAME : work.warning_strings
   end
   
   # select default rating if this is a new work
   def rating_selected(work)
-    @work.rating_string.empty? ? ArchiveConfig.RATING_DEFAULT_TAG_NAME : @work.rating_string
+    work.nil? || work.rating_string.empty? ? ArchiveConfig.RATING_DEFAULT_TAG_NAME : work.rating_string
   end
   
   def category_selected(work)
-    @work.category_string.empty? ? ArchiveConfig.CATEGORY_DEFAULT_TAG_NAME : @work.category_string
+    work.nil? || work.category_string.empty? ? ArchiveConfig.CATEGORY_DEFAULT_TAG_NAME : work.category_string
   end
 
   def get_title_string(tags, category_name = "")

@@ -28,6 +28,10 @@ class StoryParser
   # places for which we have a custom parse_story_from_[source] method
   # for getting information out of the downloaded text
   KNOWN_STORY_PARSERS = %w(lj yuletide ffnet)
+  
+  # places for which we have a custom parse_author_from_[source] method
+  # which returns an external_author object including an email address
+  KNOWN_AUTHOR_PARSERS= %w(yuletide)
 
   # places for which we have a download_story_from_[source]
   # used to customize the downloading process
@@ -46,6 +50,59 @@ class StoryParser
   STORY_DOWNLOAD_TIMEOUT = 60
   MAX_CHAPTER_COUNT = 200
 
+
+  # Import many stories
+  def import_from_urls(urls, options = {})    
+    # Try to get the works
+    temp_works = []
+    saved_works = []
+    failed_urls = []
+    urls.each do |url|
+      begin
+        work = download_and_parse_story(url)
+        if options[:importing_for_others]
+          # try and create external authors for any of these works
+          if (external_author = parse_author(url))
+            work.external_authors << external_author
+          end
+        end
+        temp_works << work
+      rescue
+        failed_urls << url
+      end
+    end
+
+    # For whichever works succeeded, we now attempt to save
+    temp_works.each do |work|
+      # set default values for required tags for any works that don't have them
+      work.fandom_string = ArchiveConfig.FANDOM_NO_TAG_NAME if work.fandoms.empty?
+      work.rating_string = ArchiveConfig.RATING_DEFAULT_TAG_NAME if work.ratings.empty?
+      work.warning_strings = ArchiveConfig.WARNING_DEFAULT_TAG_NAME if work.warnings.empty?
+
+      # set authors for the works
+      pseuds = []
+      pseuds << @current_user.default_pseud if defined? @current_user
+      pseuds += options[:pseuds] if options[:pseuds]
+
+      pseuds.each do |pseud| 
+        work.pseuds << pseud
+        work.chapters.each {|chapter| chapter.pseuds << pseud}
+      end
+      
+      if options[:post_automatically]
+        work.posted = true
+      end
+      
+      if work.save
+        saved_works << work
+      else
+        failed_urls << work.imported_from_url
+        work.delete
+      end
+    end
+    return [saved_works, failed_urls]
+  end
+
   # Downloads a story and passes it on to the parser.
   # If the URL of the story is from a site for which we have special rules
   # (eg, downloading from a livejournal clone, you want to use ?format=light
@@ -59,6 +116,16 @@ class StoryParser
     else
       return download_and_parse_chaptered_story(source, location)
     end
+  end
+
+  # Given an array of urls for chapters of a single story, 
+  # download them all and combine into a single work
+  def download_and_parse_chapters_into_story(locations)
+    chapter_contents = []
+    locations.each do |location|
+      chapter_contents << download_text(location)
+    end
+    return parse_chaptered_story(locations.first, chapter_contents)
   end
 
   def download_and_parse_chapter(location)
@@ -86,15 +153,46 @@ class StoryParser
   def parse_chapter(chapter, location = nil)
     work_params = parse_common(chapter, location)
     work_params = sanitize_params(work_params)
-    @chapter = get_chapter_from_work_params(work_params)
-    return @chapter
+    chapter = get_chapter_from_work_params(work_params)
+    return chapter
+  end
+  
+  # tries to create the external author for a given url
+  def parse_author(location)
+    source = get_source_if_known(KNOWN_AUTHOR_PARSERS, location)
+    if !source.nil?
+      return eval("parse_author_from_#{source.downcase}(location)")
+    end
+    
   end
 
   # Everything below here is protected and should not be touched by outside
   # code -- please use the above functions to parse stories.
 
-  # protected
+  protected
   
+    def parse_author_from_yuletide(location)
+      #debugger
+      external_author = nil
+      if location.match(/archive\/([0-9]+\/.*)\.html/)
+        yuletide_location = $1
+        archive_url = "http://yuletidetreasure.org/cgi-bin/files/get_author.cgi?filename=#{yuletide_location}"
+        author_info = download_text(archive_url)
+        if author_info.match(/^EMAIL: (.*)$/) 
+          email = $1
+          external_author = ExternalAuthor.find_or_create_by_email(email)
+          if author_info.match(/^NAME: (.*)/) 
+            name = $1 
+            external_author_name = ExternalAuthorName.find(:first, :conditions => {:name => name, :external_author_id => external_author.id}) ||
+                                    ExternalAuthorName.new(:name => name) 
+            external_author.external_author_names << external_author_name
+            external_author.save
+          end
+          return external_author
+        end
+      end
+    end
+    
     def set_work_attributes(work, location) 
       work.imported_from_url = location
       work.expected_number_of_chapters = work.chapters.length
@@ -102,13 +200,17 @@ class StoryParser
     end
 
     def download_and_parse_chaptered_story(source, location)
-      work_params = { :title => "UPLOADED WORK", :chapter_attributes => {} }
       chapter_contents = eval("download_chaptered_from_#{source.downcase}(location)")
+      return parse_chaptered_story(location, chapter_contents)
+    end
+    
+    def parse_chaptered_story(location, chapter_contents)
       work = nil
+      work_params = { :title => "UPLOADED WORK", :chapter_attributes => {} }
       chapter_contents.each do |content|
-        #@doc = Hpricot(content)
         @doc = Nokogiri.parse(content)
-        chapter_params = eval("parse_story_from_#{source.downcase}(content)")
+        
+        chapter_params = parse_common(content, location)
         if work.nil?
           # create the new work
           work = Work.new(work_params.merge!(chapter_params))
@@ -121,6 +223,7 @@ class StoryParser
       end
       return set_work_attributes(work, location)
     end
+
 
     def get_chapter_from_work_params(work_params)
       @chapter = Chapter.new({:content => work_params[:chapter_attributes][:content]})
@@ -137,7 +240,7 @@ class StoryParser
       else
         story = eval("download_from_#{source.downcase}(location)")
       end
-      return fix_quotes(story)
+      story.empty? ? "" : fix_quotes(story)
     end
 
     # canonicalize the url for downloading from lj or clones
@@ -187,7 +290,6 @@ class StoryParser
     def parse_common(story, location = nil)
       work_params = { :title => "UPLOADED WORK", :chapter_attributes => {:content => ""} }
       @doc = Nokogiri.parse(story) rescue ""
-      #@doc = Hpricot(story) rescue ""
 
       if !location.nil?
         source = get_source_if_known(KNOWN_STORY_PARSERS, location)
@@ -261,10 +363,6 @@ class StoryParser
       work_params[:notes] = (@doc/"/html/body/p/table/tr/td[2]/table/tr/td[2]/center/p").inner_html
 
       tags = ['yuletide']
-      if storytext.match(/Fandom: <(.*)>(.*)<\/a>/i)
-        fandom_tag = $2
-        work_params[:fandom_string] = fandom_tag
-      end
 
       if storytext.match(/Written for: (.*) in the (.*) challenge/i)
         recip = $1
@@ -287,10 +385,8 @@ class StoryParser
         search_res = download_with_timeout(search_url)
         search_doc = Nokogiri.parse(search_res)
         summary = search_doc.css('dd.summary') ? search_doc.css('dd.summary').first.content : ""
-        rating = summary.gsub!(/<span="rating">\(Rated\s*([\w\-]+)\)/i, '') ? $1 : ""
         work_params[:summary] = summary
-        rating = convert_rating(rating)
-        work_params[:rating_string] = rating
+        work_params.merge!(scan_text_for_meta(search_res))
       rescue
         # couldn't get the summary data, oh well, keep going
       end
@@ -360,13 +456,13 @@ class StoryParser
       metapatterns.each do |metaname, pattern|
         # what this does is look for pattern: (whatever)
         # and then sets meta[:metaname] = whatever
-        # eg, if it finds Author: Blah The Great it will set meta[:author] = Blah The Great
+        # eg, if it finds Fandom: Stargate SG-1 it will set meta[:fandom] = Stargate SG-1
         # then it runs it through convert_<metaname> for cleanup if such a function is defined (eg convert_rating_string)
         metapattern = Regexp.new("(#{pattern})\s*:\s*(.*)", Regexp::IGNORECASE)
         metapattern_plural = Regexp.new("(#{pattern.pluralize})\s*:\s*(.*)", Regexp::IGNORECASE)
         if text.match(metapattern) || text.match(metapattern_plural)
           value = $2
-          value = sanitize_fully(value) if is_tag[metaname]
+          value = clean_tags(value) if is_tag[metaname]
           begin
             value = eval("convert_#{metaname.to_s.downcase}(value)")
           rescue NameError
@@ -426,16 +522,26 @@ class StoryParser
       newlist = []
       tagslist.each do |tag|
         tag.gsub!(/[\*\<\>]/, '')
-        if tag.length > ArchiveConfig.TAG_MAX
-          tag = tag[0..(ArchiveConfig.TAG_MAX-2)]
-        end
+        tag = truncate_on_word_boundary(tag, ArchiveConfig.TAG_MAX)
         newlist << tag
       end
-      return newlist.join(',')
+      return newlist.join(ArchiveConfig.DELIMITER)
+    end
+
+    def truncate_on_word_boundary(text, max_length)
+      return if text.blank?
+      words = text.split()
+      truncated = words.first
+      if words.length > 1
+        words[1..words.length].each do |word|
+          truncated += " " + word if truncated.length + word.length + 1 <= max_length
+        end
+      end
+      truncated[0..max_length-1]
     end
 
     # convert space-separated tags to comma-separated
-    def convert_default(tags)
+    def clean_and_split_tags(tags)
       if !tags.match(/,/) && tags.match(/\s/)
         tags = tags.split(/\s+/).join(',')
       end
@@ -466,5 +572,5 @@ class StoryParser
     def convert_published_at(date)
       Date.parse(date)
     end
-
+    
 end

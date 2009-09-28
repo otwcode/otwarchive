@@ -4,12 +4,12 @@ class WorksController < ApplicationController
   cache_sweeper :work_sweeper, :only => [:create, :update, :destroy]
 
   # only registered users and NOT admin should be able to create new works
-  before_filter :users_only, :only => [ :new, :create, :upload_work, :drafts, :preview ]
-  before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview]
+  before_filter :users_only, :only => [ :new, :create, :import, :import_multiple, :drafts, :preview, :show_multiple ]
+  before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview, :show_multiple, :edit_multiple]
   before_filter :load_work, :only => [ :show, :navigate, :edit, :update, :destroy, :preview ]
   before_filter :check_ownership, :only => [ :edit, :update, :destroy, :preview ]
   before_filter :check_visibility, :only => [ :show, :navigate ]
-  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :upload_work ]
+  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import ]
   before_filter :update_or_create_reading, :only => [ :show ]
 
   def load_work
@@ -246,8 +246,8 @@ class WorksController < ApplicationController
 
   # GET /works/new
   def new
-    if params[:upload_work]
-      @use_upload_form = true
+    if params[:import]
+      @use_import_form = true
     end
   end
 
@@ -415,16 +415,36 @@ class WorksController < ApplicationController
     redirect_to(user_works_url(current_user))
   end
 
-  # POST /works/upload_work
-  def upload_work
-    @use_upload_form = true
+  # POST /works/import
+  def import
+    @use_import_form = true
+    storyparser = StoryParser.new
 
-    # check to make sure we have a url to work with
-    unless (url = params[:work_url]) && !url.blank?
+    # check to make sure we have some urls to work with
+    unless (urls = params[:urls]) && !urls.blank?
       flash.now[:error] = t('enter_an_url', :default => "Did you want to enter a URL?")      
       render :action => :new and return
     end
     
+    @urls = urls.split
+    if params[:import_multiple] == "works" 
+      if @urls.length > ArchiveConfig.IMPORT_MAX_WORKS
+        flash.now[:error] = t('too_many_works', :default => "You cannot import more than {{max}} works at a time.", :max => ArchiveConfig.IMPORT_MAX_WORKS)
+        render :action => :new and return
+      end
+      # otherwise let's go for it
+      results = storyparser.import_from_urls(@urls, :pseuds => [current_user.default_pseud], :post_automatically => true)
+      @works = results[0]
+      @failed_urls = results[1]
+      redirect_to :action => :show_multiple, :user_id => current_user.login, :work_ids => @works.collect(&:id) and return
+    end
+    
+    if @urls.length > ArchiveConfig.IMPORT_MAX_CHAPTERS
+      flash.now[:error] = t('too_many_chapters', :default => "You cannot import more than {{max}} chapters at a time.", :max => ArchiveConfig.IMPORT_MAX_CHAPTERS)
+      render :action => :new and return
+    end
+    
+    url = @urls.first    
     # check to make sure no one has already imported the work
     @work = Work.find_by_imported_from_url(url)
     if @work      
@@ -439,9 +459,12 @@ class WorksController < ApplicationController
     end
     
     # try to download and get the work
-    storyparser = StoryParser.new
     begin
-      @work = storyparser.download_and_parse_story(url)
+      if @urls.length > 1
+        @work = storyparser.download_and_parse_chapters_into_story(@urls)
+      else
+        @work = storyparser.download_and_parse_story(url)
+      end
     rescue Timeout::Error
       flash.now[:error] = t('timed_out', :default => "Sorry, but we timed out trying to get that URL. If the site seems to be down, you can try again later.")
       render :action => :new and return
@@ -451,7 +474,7 @@ class WorksController < ApplicationController
     end
 
     # at this point we have at least a partial work for the user to play with
-    @use_upload_form = false
+    @use_import_form = false
     begin 
       @work.pseuds << current_user.default_pseud unless @work.pseuds.include?(current_user.default_pseud)
       chapters_saved = 0
@@ -473,6 +496,67 @@ class WorksController < ApplicationController
       render :action => :new and return
     end
   end
+  
+  def show_multiple
+    unless params[:user_id]
+      flash[:error] = t('whose_works', :default => "Whose works did you want to look at?")
+      redirect_to :controller => :users, :action => :index
+    else
+      @user = User.find_by_login(params[:user_id])
+      unless current_user == @user
+        flash[:error] = t('not_your_works', :default => "You can only review your own works, sorry!")
+        redirect_to current_user
+      else
+        if params[:pseud_id]
+          @author = @user.pseuds.find_by_name(params[:pseud_id])
+          @works = @author.works
+        else
+          @works = @user.works
+        end
+      end
+    end
+    if params[:work_ids]
+      @works = @works & Work.find(params[:work_ids])
+    end
+  end
+  
+  def edit_multiple
+    unless params[:user_id]
+      flash[:error] = t('whose_works', :default => "Whose works did you want to look at?")
+      redirect_to :controller => :users, :action => :index
+    else
+      @user = User.find_by_login(params[:user_id])
+      unless current_user == @user
+        flash[:error] = t('not_your_works', :default => "You can only review your own works, sorry!")
+        redirect_to current_user
+      end
+    end
+    
+    @works = Work.find(params[:work_ids]) & @user.works
+  end
+  
+  def update_multiple
+    unless params[:user_id]
+      flash[:error] = t('whose_works', :default => "Whose works did you want to look at?")
+      redirect_to :controller => :users, :action => :index
+    else
+      @user = User.find_by_login(params[:user_id])
+      unless current_user == @user
+        flash[:error] = t('not_your_works', :default => "You can only review your own works, sorry!")
+        redirect_to current_user
+      end
+    end
+
+    @works = Work.find(params[:work_ids]) & @user.works
+    @works.each do |work|
+      # actual stuff will happen here shortly
+      work.update_attributes!(params[:work].reject {|key,value| value.blank?})
+    end
+
+    redirect_to show_multiple_user_works_path(@user)
+  end
+
+  
 
   protected
 

@@ -52,8 +52,11 @@ class Admin::AdminUsersController < ApplicationController
   # PUT admin/users/1.xml
   def update
     if params[:user]
-      @user = User.find_by_login(params[:user][:login])
-      @user.attributes = params[:user]
+      @user = User.find_by_login(params[:user][:login]) 
+      #:suspended, :banned, :translation_admin, :tag_wrangler, :archivist, :recently_reset 
+      @user.translation_admin = params[:user][:translation_admin] if params[:user][:translation_admin]
+      @user.tag_wrangler = params[:user][:tag_wrangler] if params[:user][:tag_wrangler]
+      @user.archivist = params[:user][:archivist] if params[:user][:archivist]
       if @user.save(false)
         flash[:notice] = t('successfully_updated', :default => 'User was successfully updated.')
         redirect_to :back

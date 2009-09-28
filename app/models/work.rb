@@ -8,7 +8,7 @@ class Work < ActiveRecord::Base
   has_many :pseuds, :through => :creatorships
 	has_many :users, :through => :pseuds, :uniq => true
 
-  has_many :external_creatorships, :as => :creation
+  has_many :external_creatorships, :as => :creation, :dependent => :destroy
   has_many :external_authors, :through => :external_creatorships
 
   has_many :chapters, :dependent => :destroy
@@ -434,18 +434,24 @@ class Work < ActiveRecord::Base
   # always use string= methods to set tags
   # << and = don't trigger callbacks to update common_tags
   # or call after_destroy on taggings
-  # see rails bug http://dev.rubyonrails.org/ticket/7743
+  # see rails bug http://dev.rubyonrails.org/ticket/7743  
   def rating_string=(tag_string)
     tag = Rating.find_or_create_by_name(tag_string)
     return if self.ratings == [tag]
-    Tagging.find_by_tag(self, self.ratings.first).destroy unless self.ratings.blank?
+    unless self.ratings.blank?
+      tagging = Tagging.find_by_tag(self, self.ratings.first)
+      tagging.destroy if tagging 
+    end
     self.ratings = [tag] if tag.is_a?(Rating)
   end
 
   def category_string=(tag_string)
     tag = Category.find_or_create_by_name(tag_string)
     return if self.categories == [tag]
-    Tagging.find_by_tag(self, self.categories.first).destroy unless self.categories.blank?
+    unless self.categories.blank?
+      tagging = Tagging.find_by_tag(self, self.categories.first)
+      tagging.destroy if tagging
+    end
     self.categories = [tag] if tag.is_a?(Category)
   end
 
@@ -457,7 +463,8 @@ class Work < ActiveRecord::Base
     end
     remove = self.warnings - tags
     remove.each do |tag|
-      Tagging.find_by_tag(self, tag).destroy
+      tagging = Tagging.find_by_tag(self, tag)
+      tagging.destroy if tagging
     end
     self.warnings = tags
   end
@@ -470,7 +477,8 @@ class Work < ActiveRecord::Base
     end
     remove = self.warnings - tags
     remove.each do |tag|
-      Tagging.find_by_tag(self, tag).destroy
+      tagging = Tagging.find_by_tag(self, tag)
+      tagging.destroy if tagging
     end
     self.warnings = tags
   end
@@ -486,7 +494,8 @@ class Work < ActiveRecord::Base
     self.add_to_ambiguity(ambiguities)
     remove = self.fandoms - tags
     remove.each do |tag|
-      Tagging.find_by_tag(self, tag).destroy
+      tagging = Tagging.find_by_tag(self, tag)
+      tagging.destroy if tagging
     end
     self.fandoms = tags
   end

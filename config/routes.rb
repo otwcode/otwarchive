@@ -45,7 +45,7 @@ ActionController::Routing::Routes.draw do |map|
     user.resource :profile, :controller => 'profile', :only => :show
     user.resource :inbox, :controller => 'inbox', :collection => {:reply => :get, :cancel_reply => :get}, :only => [:show, :update]
     user.resources :bookmarks
-    user.resources :works, :collection => {:drafts => :get}
+    user.resources :works, :collection => {:drafts => :get, :show_multiple => :get, :edit_multiple => :post, :update_multiple => :put}
     user.resources :series, :member => {:manage => :get}, :has_many => :serial_works
     user.resources :readings, :only => [:index, :destroy]
     user.resources :comments, :member => { :approve => :put, :reject => :put }
@@ -54,7 +54,7 @@ ActionController::Routing::Routes.draw do |map|
   map.delete_confirmation '/delete_confirmation', :controller => 'users', :action => 'delete_confirmation'
 
   map.resources :works,
-                :collection => {:upload_work => :post},
+                :collection => { :import => :post },
                 :member => { :preview => :get, :post => :post, :navigate => :get } do |work|
       work.resources :chapters, :has_many => :comments,
                                 :collection => {:manage => :get,

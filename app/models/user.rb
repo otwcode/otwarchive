@@ -2,7 +2,9 @@ class User < ActiveRecord::Base
 
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user
-  attr_accessible :suspended, :banned, :translation_admin, :tag_wrangler, :recently_reset
+  
+  # NO NO NO! BAD IDEA! AWOOOOGAH! attr_accessible should ONLY ever be used on NON-SECURE fields
+  # attr_accessible :suspended, :banned, :translation_admin, :tag_wrangler, :archivist, :recently_reset
   
   # Acts_as_authentable plugin
   acts_as_authentable
@@ -223,6 +225,26 @@ class User < ActiveRecord::Base
       if self.is_tag_wrangler?
         self.is_not_tag_wrangler
         self.create_log_item( options = {:action => ArchiveConfig.ACTION_REMOVE_ROLE, :role_id => Role.find_by_name('tag_wrangler').id, :note => 'Change made by Admin'})
+      end
+    end
+  end
+
+  # Is this user an authorized archivist?
+  def archivist
+    self.is_archivist?
+  end
+  
+  # Set tag wrangler role for this user and log change
+  def archivist=(is_tag_wrangler)
+    if is_tag_wrangler == "1"
+      unless self.is_archivist?
+        self.is_archivist
+        self.create_log_item( options = {:action => ArchiveConfig.ACTION_ADD_ROLE, :role_id => Role.find_by_name('archivist').id, :note => 'Change made by Admin'})
+      end
+    else
+      if self.is_archivist?
+        self.is_not_archivist
+        self.create_log_item( options = {:action => ArchiveConfig.ACTION_REMOVE_ROLE, :role_id => Role.find_by_name('archivist').id, :note => 'Change made by Admin'})
       end
     end
   end
