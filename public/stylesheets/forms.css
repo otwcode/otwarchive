@@ -98,11 +98,9 @@ form.edit_preference ul { margin:0.562625em auto 1.12525em auto; padding:0.56262
 #main.users-edit hr.clear {margin-top:39em;}
 #main.users-edit #link_to_openid, #main.users-edit #link_to_passwd {clear:both; margin:0 0.25em 0.5625em 11.125em; font-size:1.125em;}
 
-/* NEW PSEUD */
-form#new_pseud {position:absolute;}
-
-/* EDIT PSEUD (Enigel Nov 25 08) */
-form.edit_pseud {position:absolute;}
+/* PSEUD EDIT/NEW FORMS */
+#main div.pseud-edit {float: left }
+#main .pseud-edit .pseud-name div.character_counter { width: 20em; }
 
 /*WORKS-INDEX -filters*/
 form.work-filters	{ background:#ddd; font-size:0.875em; width:12.25em; float:right;  padding:0.75em 0.5625em; max-width: 20%; }

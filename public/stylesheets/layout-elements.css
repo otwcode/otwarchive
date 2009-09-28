@@ -59,7 +59,7 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 #main.sidebar .own {background:#fffef9 !important; border:1px dotted #ccc;}
 
 /*MAIN CONTENT */
-#main { position: relative; margin: 1.5em auto; padding: 0 3.5em; }
+#main { position: relative; margin: 1.5em auto; padding: 0 4%; }
 .pagination { text-align: center; padding: 0.25em; margin:1.5em auto; }
 
 /* FOOTER */
@@ -108,15 +108,7 @@ dl#user-data dt {font-weight: 900; width: 9em; float:left; clear:left; margin:0.
 /* preferences form rules are in forms.css */
 /*PSEUDS*/
 #main.pseuds-index table ul.navigation, #main.external_authors-index table ul.navigation { border-bottom:0; }
-#main.pseuds-new.sidebar ul.navigation, #main.pseuds-edit.sidebar ul.navigation, #main.external_authors-new.sidebar ul.navigation { margin-top: 13.75em;}
-/* Enigel Mar 12 09: pseuds show is changing entirely */
-/*
-#main.pseuds-show.sidebar ul.navigation { margin-top: 13.75em;}
-#main.pseuds-show.sidebar { position:absolute; margin-top:2em;}
-#main.pseuds-show.sidebar dl { }
-#main.pseuds-show.sidebar dt { font-weight:600; float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
-#main.pseuds-show.sidebar dd { float:left; }
-*/
+
 .pseuds-list li { border-bottom:1px dotted #CCCCCC; padding-bottom: 0.5em; margin-bottom: 1.5em !important}
 .pseuds-list .navigation a {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:none; border:1px solid #ccc; padding:0.25em;}
 .pseuds-list .navigation, .pseuds-list .navigation li {border:0; background:transparent;}
