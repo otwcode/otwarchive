@@ -1,29 +1,22 @@
 <h2><%=h "Editing Multiple Works" -%></h2>
 
-<p>Works Being Edited</p>
-
-<p>Note that your edits will be applied to ALL of these stories, REPLACING any existing values for these fields!</p>
+<h3>Works Being Edited</h3>
 
 <% form_for :work, :url => update_multiple_user_works_path(@user), :html => { :method => :put } do |form| %>  
 
-  <table class="story-list">
-    <tr>
-      <th>Title</th>
-      <th>Fandom</th>
-    </tr>
-    
+  <ul class="story-list">
     <%- for work in @works -%>
-      <tr>
-      <td>
+      <li>
         <%= link_to sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small)), work %>
         <%= hidden_field_tag "work_ids[]", work.id%>
-      </td>
-      <td><%= work.fandom_tags.collect{|tag| link_to_tag(tag) }.join(', ') %></td>
-      </tr>
+      (<%= work.fandom_tags.collect{|tag| link_to_tag(tag) }.join(', ') %>)
+      </li>
     <%- end -%>
-  </table>
+  </ul>
+  
+  <p class="temp-hack">Note that your edits will be applied to ALL of these stories, REPLACING any existing values for these fields!</p>
 
-  <p class="notice required"><%=h '* Required information' %></p>
+  <p class="notice required temp-hack"><%=h '* Required information' %></p>
   <%= render :partial => 'work_tags_form', :locals => {:include_blank => true} -%>
 
 <%= submit_tag t('update_multiple', :default => "Update All Stories") %>
