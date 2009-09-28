@@ -60,17 +60,17 @@ ArchiveConfig.APP_NAME + ' logo', :class => 'logo', :height => '60', :width => '
 <div class="bigwrapper">
 
 <div class="wrapper box">
-	<h4>Accounts</h4>
-  <h3 id="red"><a href="session/new">Sign in</a></h3>
-  <h3 id="red"><a href="">Request an invite</a></h3>
+	<h4><%= t('home.accounts', :default => 'Accounts') %></h4>
+  <h3 id="red"><a href="session/new"><%= t('layout.header.sign_in', :default => 'Sign in') %></a></h3>
+  <h3 id="red"><a href=""><%= t('home.request_invite', :default => 'Request an invite') %></a></h3>
 </div>
 
 <div class="wrapper" style="padding-top: 3em;">
-	<h3>The Archive of Our Own is a fan-created, fan-run, non-profit, noncommercial archive for transformative fanworks.</h3>
+	<h3><%= t('home.about_us', :default => 'The Archive of Our Own is a fan-created, fan-run, non-profit, noncommercial archive for transformative fanworks.') %></h3>
 </div>
 
 <div class="wrapper box">
-	<h4>Explore</h4>
+	<h4><%= t('home.explore', :default => 'Explore') %></h4>
 	<ul class="meters">
 		<li><span id="red"><%= link_to t('home_fandoms', :default => 'fandoms'), media_path %></span>: <span><%= @fandom_count -%></span><%= ' ' + t('todate_count', :default => " to date") %></li>
 		<li><span id="red"><%= link_to t('home_works', :default => 'works'), works_path %></span>: <span><%= @work_count %></span><%= ' ' + t('todate_count', :default => " to date") %></li>
@@ -79,17 +79,17 @@ ArchiveConfig.APP_NAME + ' logo', :class => 'logo', :height => '60', :width => '
 </div>
 
 <div class="wrapper lines col1">
-  <h3>Updates</h3>
-  Incredibly important things that everyone should know: Open Beta is soon!
+  <h3><%= t('home.updates', :default => 'Updates') %></h3>
+  <%= t('home.updates.content', :default => 'Incredibly important things that everyone should know: Open Beta is soon!') %>
 </div>
 
 <div class="wrapper lines">
-  <h3>About</h3>
-  If you have questions or want to know more about the Archive check out the <%= link_to 'Archive FAQ', archive_faqs_path %>.
+  <h3><%= t('home.about', :default => 'About') %></h3>
+  <%= t('home.about.content', :default => 'If you have questions or want to know more about the Archive check out the ') %><%= link_to 'Archive FAQ', archive_faqs_path %>.
 </div>
 
 <div class="wrapper lines">
-  <h3>Read</h3>
+  <h3><%= t('home.read', :default => 'Read') %></h3>
   <%- if @latest_work -%>
     <%=h t('latest_work', :default => 'Latest work') + ': '%> <span><%= link_to @latest_work.title, @latest_work -%></span>
   <%- end -%>
