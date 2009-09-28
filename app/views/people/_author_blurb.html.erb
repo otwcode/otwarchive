@@ -10,8 +10,8 @@
       <%- unless authored_items(author).blank? -%>
         <h4><%= authored_items(author) -%></h4>
       <%- end -%>
-      <%- unless (sanitized_description = sanitize_description_for_display(author.description)).blank? -%>
-        <p><%= sanitized_description %></p>
+      <%- unless author.description.blank? -%>
+        <p><%= sanitize_description_for_display(author.description) %></p>
       <%- end -%>
       <%- unless (most_popular = author.most_popular_tags(:categories => Tag::USER_DEFINED, :limit => 5)).blank? -%>
         <span><%= "Most used tags: " -%></span>
