@@ -48,11 +48,7 @@ ArchiveConfig.APP_NAME + ' logo', :class => 'logo', :height => '60', :width => '
     <li>
       <%= link_to_unless_current t('layout.header.tags', :default => "tags"), tags_path %>
     </li>
-    
-    <%- if logged_in_as_admin? -%>
-      <%= render :partial => 'admin/header' -%>
-    <%- end -%>
-  </ul>
+</ul>
 
 <div class="clear"></div>
 
