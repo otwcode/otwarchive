@@ -9,7 +9,7 @@
 </noscript>
 <!-- END BETA CAVEATS! --> 
 <div class="home-header">
-<div id="signin">  
+<div id="home-signin">  
   <%- if logged_in? || logged_in_as_admin? -%>
     <div class="greeting"><%= render :partial => 'session/greeting' -%></div>
   <%- else -%>

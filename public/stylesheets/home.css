@@ -20,7 +20,7 @@ margin: 0.5em 0 0.5em 0;
 text-align: center;
 }
 
-.home #signin {
+.home #home-signin {
 text-align: right;
 }
 .home #greeting, .home #login {width:inherit; text-align: right;}
