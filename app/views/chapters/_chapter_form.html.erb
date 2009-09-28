@@ -35,10 +35,10 @@
       </dd>
 
     <p>Add notes</p>
-      <dt>
+      <dt class="work-endnotes">
         <%= f.label :storynotescheck, "at the beginning" %> 
       </dt>
-      <dd>
+      <dd class="work-endnotes">
        <input type="checkbox" id="storynotescheck" name="storynotescheck"  onclick="showNotesOptions()" 
        <%- unless chapter.notes.blank? -%>checked="checked"<%- end -%>/>
       </dd>
@@ -51,10 +51,10 @@
         </dd>
       </dl>
         
-      <dt>
+      <dt class="work-endnotes">
        <%= f.label :storyendnotescheck, "at the end" %> 
       </dt>
-      <dd>
+      <dd class="work-endnotes">
        <input type="checkbox" id="storyendnotescheck" name="storyendnotescheck"  onclick="showEndnotesOptions()" 
        <%- unless chapter.endnotes.blank? -%>checked="checked"<%- end -%>/>
       </dd>      

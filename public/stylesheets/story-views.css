@@ -73,6 +73,7 @@ div.work-meta { background:#eee; padding:0.25em; position:relative; margin: 0 0 
 .preface a, .preface a:link, .preface a:visited {color: #333 !important;} 
 .preface blockquote.summary, .preface blockquote.notes	{ border:0;}
 .preface blockquote.summary h3, .preface blockquote.notes h3 {color:#222; background:transparent; border-bottom:1px solid black;}
+.preface blockquote.notes span.endnotes-link { font-family: Fertigo,Cambria,Constantia,Palatino,Georgia,sans-serif;}
 
 /* SERIES */
 .series-and-view-data	{ clear:both}
