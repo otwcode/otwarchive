@@ -84,18 +84,18 @@ margin-bottom: 1em;
 margin-top: 0;
 text-align: left;}
 
-.home .wrapper h3, .home .wrapper .h3 a, .home #red a, .home #red a:visited  {
+.home .wrapper h3, .home .wrapper .h3 a, .home .red a, .home .red a:visited  {
 color: #900;
 font: oblique 100 1.25em "Gill Sans", Georgia,Verdana, sans-serif;
 text-align: center;
 margin: 0.3em 0 0.3em;
 }
 
-.home #red a, .home #red a:visited {
+.home .red a, .home .red a:visited {
 text-decoration: none;
 }
 
-.home #red a:hover {
+.home .red a:hover {
 text-decoration: underline;
 color: #222;
 }
