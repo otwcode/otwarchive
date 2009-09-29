@@ -37,7 +37,7 @@ module TagsHelper
 	# Adds a consistent class name to tags
 	def link_to_tag(tag, options = {})
     options = {:class => "tag"}.merge(options)
-	  link_to tag.name, {:controller => :tags, :action => :show, :id => tag.name}, options
+	  link_to tag.type == "Warning" ? warning_display_name(tag.name) : tag.name, {:controller => :tags, :action => :show, :id => tag.name}, options
 	end
 
 	def link_to_tag_with_text(tag, link_text, options = {})
@@ -94,4 +94,25 @@ module TagsHelper
       :method => :get
   end  
   
+  # Changes display name of warnings in works blurb
+  def warning_display_name(name)
+    case name
+    when ArchiveConfig.WARNING_DEFAULT_TAG_NAME
+      return ArchiveConfig.WARNING_DEFAULT_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_DEFAULT_TAG_DISPLAY_NAME.to_s : name
+    when ArchiveConfig.WARNING_NONE_TAG_NAME
+      return ArchiveConfig.WARNING_NONE_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_NONE_TAG_DISPLAY_NAME.to_s : name
+    when ArchiveConfig.WARNING_SOME_TAG_NAME
+      return ArchiveConfig.WARNING_SOME_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_SOME_TAG_DISPLAY_NAME.to_s : name
+    when ArchiveConfig.WARNING_VIOLENCE_TAG_NAME
+      return ArchiveConfig.WARNING_VIOLENCE_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_VIOLENCE_TAG_DISPLAY_NAME.to_s : name
+    when ArchiveConfig.WARNING_DEATH_TAG_NAME
+      return ArchiveConfig.WARNING_DEATH_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_DEATH_TAG_DISPLAY_NAME.to_s : name
+    when ArchiveConfig.WARNING_NONCON_TAG_NAME
+      return ArchiveConfig.WARNING_NONCON_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_NONCON_TAG_DISPLAY_NAME.to_s : name
+    when ArchiveConfig.WARNING_CHAN_TAG_NAME
+      return ArchiveConfig.WARNING_CHAN_TAG_DISPLAY_NAME ? ArchiveConfig.WARNING_CHAN_TAG_DISPLAY_NAME.to_s : name
+    else
+      return name
+    end
+  end
 end
