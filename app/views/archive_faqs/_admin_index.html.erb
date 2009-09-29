@@ -12,10 +12,6 @@
 </table>		
 <% end %>
 
-<div class="navigation">
-  <span class="navitem"><%= link_to 'Create New Archive FAQ', new_archive_faq_path %></span>
- </div>
-
 <% @archive_faqs.each do |archive_faq| %>
   <div class="navigation">
     <span class="navitem"><%= link_to "Show", archive_faq %></span>
