@@ -28,15 +28,16 @@
             <%= distance_of_time_in_words_to_now(inbox_comment.created_at) %>
           </p>
           <p><%= sanitize_and_format_for_display inbox_comment.feedback_comment.content %></p>
-          <ul class="navigation">
-            <li>
+          <div class="navigation">
+            <span class="navitem">
               <%= image_tag("replied_to.png", :size => "15x15", :alt => "Replied To") if inbox_comment.replied_to? %>
-              <%= inbox_reply_link(inbox_comment.feedback_comment) %></li>
+              <%= inbox_reply_link(inbox_comment.feedback_comment) %>
+            </span>
             <%- if @user.is_author_of?(inbox_comment.feedback_comment.ultimate_parent) -%>
-            <li><%= 'Spam' %></li>
-            <li><%= 'Delete From Story' %></li>
+            <span class="navitem"><%= 'Spam' %></span>
+            <span class="navitem"><%= 'Delete From Story' %></span>
             <%- end -%>
-          </ul>
+          </div>
         </td>
       </tr>
       <!-- END of single comment -->

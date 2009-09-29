@@ -20,9 +20,9 @@
 <% end %>
 </table>
 
-<ul class="navigation">
-<li><%= link_to 'New Community', new_community_path %></li>
-</ul>
+<div class="navigation">
+  <span class="navitem"><%= link_to 'New Community', new_community_path %></span>
+</div>
 
 <div class="pagination">
 	  <%= will_paginate @communities, :prev_label =>  "&laquo; Previous",:next_label => "Next &raquo;" %>

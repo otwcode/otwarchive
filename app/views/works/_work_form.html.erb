@@ -1,4 +1,4 @@
-<div class="navigation" style="text-align: left;">
+<div class="navigation-left">
 <% if current_user.unposted_work && !params[:load_unposted] && !@use_import_form -%>
   <span class="navitem" id='restore-link'><%= link_to 'Try To Restore From Last Unposted Draft?', url_for(:action => :new, :load_unposted => true) -%></span>
 <%- end -%>
@@ -143,11 +143,11 @@
             <dt><%= 'Current Series' -%></dt>
             <%- for serial in @serial_works -%>
               <dd>
-                <ul class="navigation">
-                  <li><%= link_to serial.series.title, serial.series %></li> 
-                  <li><%= link_to 'Remove', serial, :confirm => 'Are you sure?', :method => :delete %></li>
-                  <li><%= link_to 'Delete', serial.series, :confirm => 'Are you sure?', :method => :delete %></li>
-                </ul>
+                <div class="navigation">
+                  <span class="navitem"><%= link_to serial.series.title, serial.series %></span> 
+                  <span class="navitem"><%= link_to 'Remove', serial, :confirm => 'Are you sure?', :method => :delete %></span>
+                  <span class="navitem"><%= link_to 'Delete', serial.series, :confirm => 'Are you sure?', :method => :delete %></span>
+                </div>
               </dd>
             <%- end -%>
       	  <%- end -%>          

@@ -1,9 +1,9 @@
-<ul class="navigation">
-  <li><%= link_to 'Home', tag_wranglings_path %></li>
+<div class="navigation">
+  <span class="navitem"><%= link_to 'Home', tag_wranglings_path %></span>
   <% for categ in Tag::TYPES do %>
-  <li><%= link_to_unless_current categ, edit_tag_wrangling_path(categ) %></li>
+  <span class="navitem"><%= link_to_unless_current categ, edit_tag_wrangling_path(categ) %></span>
   <%- end -%>
-</ul>
+</div>
 
 <h2><%=h 'Wrangle' %> <%= @category %> <%=h 'Tags' %>
 <% if !@tags.blank? %>

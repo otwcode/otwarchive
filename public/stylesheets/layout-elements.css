@@ -1,6 +1,7 @@
 /*NAVIGATION ELEMENTS*/
 ul#skiplinks	{ margin-left:-999em; position:absolute; }
 ul.navigation, dl.navigation, div.navigation{ background: #fffef9; border-bottom: 1px solid #999; text-align:right; margin: 0 0 0.875em 0;}
+div.navigation-left {background: #fffef9; border-bottom: 1px solid #999; text-align: left; margin: 0 0 0.875em 0;}
 ul.navigation li, .navigation dd, li.navigation { background: #fffef9; display: inline; padding: 0 0.5625em; border:1px solid #999; border-bottom:0; text-indent:0; font-weight:900;}
 div.navigation span {font-size: 0.875em; line-height: 1.286; padding: 0 0.5625em; margin: 0.643em 0; }
 .navitem {background: #fffef9; border:1px solid #999; border-bottom: 0;}

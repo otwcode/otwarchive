@@ -1,6 +1,6 @@
 <%= render_orphan_partial(@to_be_orphaned) %>
 
-<ul class="navigation">
-<li><%= link_to t('orphans_about', :default => "Read More About The Orphaning Process"), about_orphans_path %></li> 
-<li><%= link_to t('links.cancel', :default => "Cancel"), :back %></li>
-</ul>
+<div class="navigation">
+  <span class="navitem"><%= link_to t('orphans_about', :default => "Read More About The Orphaning Process"), about_orphans_path %></span> 
+  <span class="navitem"><%= link_to t('links.cancel', :default => "Cancel"), :back %></span>
+</div>

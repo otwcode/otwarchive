@@ -1,7 +1,3 @@
-<ul class="navigation">
-    <li><%= link_to_unless_current "AO3 News", admin_posts_path %></li>
-    <li><%= link_to_unless_current "Archive FAQ", archive_faqs_path %></li>
-    <li><%= link_to_unless_current "Known Issues", known_issues_path %></li>
-  </ul>
+<%= render :partial => 'admin/admin_nav' %>
 <h1><%= t("known_issues", :default => "Edit Known Issues Post") -%></h1>
 <%= render :partial => 'known_issues_form' %>

@@ -1,16 +1,16 @@
-<ul class="navigation">
-  <li><%= link_to 'Home', tag_wranglings_path %></li>
+<div class="navigation">
+  <span class="navitem"><%= link_to 'Home', tag_wranglings_path %></span>
   <% for category in (Tag::USER_DEFINED - ["Ambiguity"]) do %>
-  <li><%= link_to_unless_current category, assign_tag_wrangling_path(category) %> (<%= category.constantize.no_parent.count %>)</li>
+  <span class="navitem"><%= link_to_unless_current category, assign_tag_wrangling_path(category) %> (<%= category.constantize.no_parent.count %>)</span>
   <%- end -%>
-</ul>
+</div>
 
 <%- form_tag assign_tag_wrangling_path(@category), :method => "get" do %>
-  <ul class="navigation_left">
-    <li><%= link_to("Most recent tags first", "?list=by_date") -%></li>
-    <li><%= link_to("Strictly alphabetical", "?list=by_name")  -%></li>
-    <li><%= label_tag(:date_tag_age, "Highlight tags created in the past ") + select_day(@tag_age ? @tag_age.to_i : 1, :field_name => "tag_age", :id => "tag_age") + " day(s) " + submit_tag("Go") %></li>
-  </ul>
+  <div class="navigation-left">
+    <span class="navitem"><%= link_to("Most recent tags first", "?list=by_date") -%></span>
+    <span class="navitem"><%= link_to("Strictly alphabetical", "?list=by_name")  -%></span>
+    <span class="navitem"><%= label_tag(:date_tag_age, "Highlight tags created in the past ") + select_day(@tag_age ? @tag_age.to_i : 1, :field_name => "tag_age", :id => "tag_age") + " day(s) " + submit_tag("Go") %></span>
+  </div>
 <%- end -%>
 
 <%- form_tag tag_wranglings_path do -%>

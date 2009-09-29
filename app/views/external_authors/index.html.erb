@@ -11,9 +11,9 @@
     you will automagically be given control over those stories if they have one of these email addresses attached.)") -%>
   </p>
 
-  <ul class="navigation">
-    <li><%= link_to t('new_external_author', :default => 'New external author identity'), new_user_external_author_path(@user) %></li>
-  </ul>
+  <div class="navigation">
+    <span class="navitem"><%= link_to t('new_external_author', :default => 'New external author identity'), new_user_external_author_path(@user) %></span>
+  </div>
 <% end -%>
 
 <ul class="external_authors-list">
@@ -32,21 +32,21 @@
       <%- end -%>
     
       <% if current_user == @user -%>
-        <ul class="navigation">
-          <li><%= link_to t('edit_link', :default => 'Edit'), [:edit, @user, external_author] -%></li>
-          <li>
+        <div class="navigation">
+          <span class="navitem"><%= link_to t('edit_link', :default => 'Edit'), [:edit, @user, external_author] -%></span>
+          <span class="navitem">
             <%= link_to t('delete_link', :default => 'Delete'), [@user, external_author], 
                           :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %>
-          </li>
-        </ul>
+          </span>
+        </div>
       <% end -%>
     </li>
   <% end -%>
 </ul>
       
 <% if current_user == @user -%>
-<ul class="navigation">
-  <li><%= link_to t('new_external_author', :default => 'New external author identity'), new_user_external_author_path(@user) %></li>
-</ul>
+<div class="navigation">
+  <span class="navitem"><%= link_to t('new_external_author', :default => 'New external author identity'), new_user_external_author_path(@user) %></span>
+</div>
 <% end -%>
 

@@ -1,8 +1,4 @@
-<ul class="navigation">
-    <li><%= link_to_unless_current "AO3 News", admin_posts_path %></li>
-    <li><%= link_to_unless_current "Archive FAQ", archive_faqs_path %></li>
-    <li><%= link_to_unless_current "Known Issues", known_issues_path %></li>
-  </ul>
+<%= render :partial => 'admin/admin_nav' %>
 <h1><%= t("admin_posts", :default => "New AO3 News Post") -%></h1>
 
 <%= render :partial => 'admin_post_form' %>
