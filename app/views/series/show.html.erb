@@ -5,43 +5,46 @@
 	<%- end -%>
 </h1>
 <div class="work-meta series-meta">
-  <div class="meta tags">
-    <span class="label"><%=h 'Series begun:' %></span>
-    <span class="item"><%=h @series.published_at.to_date %></span>
-  </div>
-	<div class="meta tags">
-    <span class="label"><%=h 'Series updated: ' %></span>
-    <span class="item"><%= @series.revised_at ? @series.revised_at.to_date : @series.published_at %></span>
-  </div>
-  <div class="meta tags">
-    <span class="label"><%=h 'Works included:' %></span>
-    <span class="item"><%= @serial_works.length %></span>
-  </div>
-  <div class="meta tags">
-    <span class="label"><%=h 'Word count:' %></span>
-    <span class="item"><%= number_with_delimiter(@serial_works.collect{|sw| sw.work.word_count}.sum) %></span>
-  </div>
-  <div class="meta tags">
+  <ul class="column">
+  <li class="meta tags">
+    <div class="label"><%=h 'Series begun:' %></div>
+    <div class="item"><%=h @series.published_at.to_date %></div>
+  </li>
+	<li class="meta tags">
+    <div class="label"><%=h 'Series updated: ' %></div>
+    <div class="item"><%= @series.revised_at ? @series.revised_at.to_date : @series.published_at %></div>
+  </li>
+  <li class="meta tags">
+    <div class="label"><%=h 'Works included:' %></div>
+    <div class="item"><%= @serial_works.length %></div>
+  </li>
+  <li class="meta tags">
+    <div class="label"><%=h 'Word count:' %></div>
+    <div class="item"><%= number_with_delimiter(@serial_works.collect{|sw| sw.work.word_count}.sum) %></div>
+  </li>
+  <li class="meta tags">
     <% if @series.pseuds.many?%>
-      <span class="label"><%=h 'Authors:' %></span>
-      <span class="item"><%= byline(@series) %></span>
+      <div class="label"><%=h 'Authors:' %></div>
+      <div class="item"><%= byline(@series) %></div>
     <% else %>
-      <span class="label"><%=h 'Author:' %></span>
-      <span class="item"><%= byline(@series) %></span>
+      <div class="label"><%=h 'Author:' %></div>
+      <div class="item"><%= byline(@series) %></div>
     <% end %>
-  </div>
+  </li>
   <%- unless @series.summary.blank? -%>
-		<div class="meta tags">
-      <span class="label"><%=h 'Description:' %></span>
-      <span class="item"><%= @series.summary %></span>
-    </div>
+		<li class="meta tags">
+      <div class="label"><%=h 'Description:' %></div>
+      <div class="item"><%= @series.summary %></div>
+    </li>
 	<%- end -%>
 	<%- unless @series.notes.blank? -%>
-		<div class="meta tags">
-      <span class="label"><%=h 'Notes:' %></span>
-      <span class="item"><%= @series.notes %></span>
-    </div>
+		<li class="meta tags">
+      <div class="label"><%=h 'Notes:' %></div>
+      <div class="item"><%= @series.notes %></div>
+    </li>
 	<%- end -%>
+  </ul>
+  <div class="spacer">&nbsp;</div>
 </div>
 
 <ul class="navigation">

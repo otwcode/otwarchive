@@ -56,7 +56,7 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 
 #main.sidebar { margin: 0 1em 1em 12em; }
 #main.sidebar h1 {margin-top: 0;}
-#main.sidebar .own {background:#fffef9 !important; border:1px dotted #ccc;}
+#main.sidebar .own {background:#fffef9 !important; border:1px dotted #ccc; padding-left: 0.3em;}
 
 /*MAIN CONTENT */
 #main { position: relative; margin: 1.5em auto; padding: 0 4%; }
@@ -190,7 +190,7 @@ ul#series-work-list li.work ul.work li ul li {display:inline;}
 
 #main .bookmark div.bookmark-count { font-size:15px; height:25px; line-height:25px; margin-left:29px; margin-top:-29px; text-align:center; vertical-align:middle; width:25px; }
 
-#main .bookmark li.bookmark-heading {position: relative; min-height: 25px;}
+#main .bookmark li.bookmark-heading {min-height: 25px;}
 #main ul.bookmark-icons {width:75px; height:27px;float:left;}
 #main ul.bookmark-icons li img {width:25px; height:25px;}
 #main ul.bookmark-icons li { display:inline; padding:0;margin:0; width:25px; height:25px;}
@@ -200,12 +200,12 @@ ul#series-work-list li.work ul.work li ul li {display:inline;}
 #main li.bookmark-options { text-align: right; font-size: 0.9em;    }
 #main .bookmark-options li { margin-left: 0.5em; display: inline; padding: 0 0.5625em; border:1px solid #DDDDDD; border-bottom:0; text-indent:0; }
 
-#main .bookmark ul.user-info { border: 1px dotted #DDDDDD; position: relative; padding-left: 0.5em; }
+#main .bookmark ul.user-info { border: 1px dotted #DDDDDD; padding-left: 0.5em; }
 #main .bookmark ul.recent-bookmarks li.bookmark { border: none;}
 #main ul.user-info ul.bookmark-icons {width: 35px; }
 #main .bookmark li.byline { color: #777777; font-weight: 700; }
 #main ul.user-info li.byline { min-height: 25px; }
-#main .bookmark li.byline-date { position: absolute; top: 0; right: 0; padding-right: 0.5em; } 
+#main .bookmark li.byline-date { float: right; padding-right: 0.5em; } 
 
 #bookmarks ul.work {margin-right: 0;}
 

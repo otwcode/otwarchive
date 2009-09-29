@@ -46,10 +46,10 @@
   <%- end -%>
 </ul>
  <ul class="user-info<%- if is_author_of?(bookmark) -%> own<%- end -%>">
+  <li class="byline-date"><span class="byline-date"><%= set_format_for_date(bookmark.updated_at) %></span></li>
   <li class="byline">
     <%= t('bookmarked_by', :default=>'Bookmarked by {{user}}', :user=>link_to(bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud])) %>
   </li>
-  <li class="byline-date"><span class="byline-date"><%= set_format_for_date(bookmark.updated_at) %></span></li>
   <%- unless bookmark.notes.blank? -%>
     <li class="user-notes">
           <%=sanitize_limit_and_format_for_display bookmark.notes -%>

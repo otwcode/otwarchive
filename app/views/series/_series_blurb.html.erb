@@ -27,28 +27,30 @@
 		<p class="update"><%= set_format_for_date(series.revised_at) %></p>
 		</li>
 		<li class="tagslist">
+    <ul class="column">
 		  <%- author_tags = series.works.visible.collect{|w| [w.categories, w.ratings, w.cast_tags, w.freeform_tags]}.transpose.flatten.uniq
       unless author_tags.size < 1 -%>
-			  <div class="blurb tags">
-			    <span class="label"><%=h 'Tags' + ': ' %></span>
-			    <span class="item">
+			  <li class="blurb tags">
+			    <div class="label"><%=h 'Tags' + ': ' %></div>
+			    <div class="item">
 			      <%= author_tags.collect{|tag| link_to(tag.name, link_to_tag(tag)) }.join(', ') %>
-			    </span>
-			  </div>
+			    </div>
+			  </li>
       <%- end -%>  
       <%- author_warnings = series.works.visible.collect(&:warning_tags).flatten.compact.uniq 
       unless author_warnings.size < 1 -%>
-        <div class="blurb tags">
-          <span class="label"><%=h 'Warnings:' %></span>
-          <span class="item" id="series_<%= series.id %>_category_warning">
+        <li class="blurb tags">
+          <div class="label"><%=h 'Warnings:' %></div>
+          <div class="item" id="series_<%= series.id %>_category_warning">
             <%- if hide_warnings?(series) -%>
               <%= show_warnings_link(series) %>
             <%- else -%>
               <%= author_warnings.collect{|tag| link_to(tag.name, link_to_tag(tag))}.join(', ') %>
             <%- end -%>
-          </span>
-        </div>
-    <%- end -%>
+          </div>
+        </li>
+      <%- end -%>
+    </ul>
 		</li>
 		<%- unless series.summary.blank? %>
   		<li class="summary">

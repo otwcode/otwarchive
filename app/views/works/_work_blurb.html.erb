@@ -22,39 +22,40 @@
  	<%- cast_tags = work.cast_tags; warning_tags = work.warning_tags; freeform_tags = work.freeform_tags -%>
 	<%- unless ((cast_tags.size + warning_tags.size + freeform_tags.size) < 1) -%>
   	<li class="tagslist">
-      
+      <ul class="column">
 		  <%- unless cast_tags.size < 1 -%>
-			<div class="blurb tags">
-      <span class="label"><%= t('cast_tags', :default => 'Cast') + ': ' %></span>
-			<span class="item"><%= cast_tags.collect{|tag| link_to_tag(tag)  }.join(', ') %></span>
-      </div>
+			<li class="blurb tags">
+      <div class="label"><%= t('cast_tags', :default => 'Cast') + ': ' %></div>
+			<div class="item"><%= cast_tags.collect{|tag| link_to_tag(tag)  }.join(', ') %></div>
+      </li>
 			<%- end -%>
       
-  <%- unless warning_tags.size < 1 -%>
-			<div class="blurb tags">
-      <span class="label"><%= link_to("Warnings", tos_faq_path(:anchor => "tags")) %>:</span>
-			<span class="item" id="work_<%= work.id %>_category_warning">
+      <%- unless warning_tags.size < 1 -%>
+			<li class="blurb tags">
+      <div class="label"><%= link_to("Warnings", tos_faq_path(:anchor => "tags")) %>:</div>
+			<div class="item" id="work_<%= work.id %>_category_warning">
           <%- if hide_warnings?(work) -%>
             <%= show_warnings_link(work) %>
           <%- else -%>
             <%= warning_tags.collect{|tag| link_to_tag(tag) }.join(', ') %>
           <%- end -%>
-			</span>
-      </div>
+			</div>
+      </li>
 			<%- end -%>
 
 			<%- unless freeform_tags.size < 1 -%>
-			<div class="blurb tags">
-      <span class="label"><%= t('work_tags', :default => 'Tags') + ': ' %></span>
-			<span class="item" id="work_<%= work.id %>_category_freeform">
+			<li class="blurb tags">
+      <div class="label"><%= t('work_tags', :default => 'Tags') + ': ' %></div>
+			<div class="item" id="work_<%= work.id %>_category_freeform">
         <%- if hide_freeform?(work) -%>
           <%= show_freeforms_link(work) %>
-       <%- else -%>   
+        <%- else -%>   
 				 <%= freeform_tags.collect{|tag| link_to_tag(tag) }.join(', ') %>
-           <%- end -%>
-			</span>
-      </div>
+        <%- end -%>
+			</div>
+      </li>
 			<%- end -%>
+      </ul>
 	</li>
 	
   <%- unless work.summary.blank? -%>

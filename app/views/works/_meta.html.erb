@@ -1,18 +1,20 @@
 ﻿<div class="work-meta">
   <%- work_tags = work.tags -%>
+  <ul class="column">
   <%- Tag::VISIBLE.each do |type| -%>
     <%- tags = work_tags.select{|tag| tag.type == type} -%>
+
     <%- unless tags.blank? -%>
-    <div class="<%= type.downcase -%> meta tags">
-      <span class="label">
+    <li class="<%= type.downcase -%> meta tags">
+      <div class="label">
         <%- if type == "Warning" -%>
           <%= link_to( tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize, tos_faq_path(:anchor => "tags") ) %>:
         <%- else -%>
           <%= tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize %>:
         <%- end -%>
-      </span>
+      </div>
 	    
-      <span class="item" id="work_<%= work.id %>_category_<%= type.downcase %>">
+      <div class="item" id="work_<%= work.id %>_category_<%= type.downcase %>">
         <%- if type == "Warning" && hide_warnings?(work) -%>        
           <%= show_warnings_link(work) %> 
           
@@ -23,8 +25,10 @@
           <%= tags.collect{|tag| "<span class='#{tag.type.downcase}'>" + link_to_tag(tag) + '</span>' }.join(', ') %>
         <%- end -%>
         <%- end -%>
-      </span>
-    </div>
+      </div>
+    </li>
     <%- end -%>
   <%- end -%>
+  </ul>
+  <div class="spacer">&nbsp;</div>
 </div>
