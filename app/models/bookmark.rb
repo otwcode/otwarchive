@@ -55,15 +55,11 @@ class Bookmark < ActiveRecord::Base
   # Use existing external work if relevant attributes and tags are the same
   def set_external(id)
     fetched = ExternalWork.find(id)
-    same = fetched.author == self.bookmarkable.author ? true : false
-
-#    if fetched.author == self.bookmarkable.author && fetched.fandom_string == self.bookmarkable.fandom_string && fetched.rating_string == self.bookmarkable.rating_string && fetched.category_string == self.bookmarkable.category_string && fetched.pairing_string == self.bookmarkable.pairing_string && fetched.character_string == self.bookmarkable.character_string
-#      same = true
-#    else
-#      same = false
-#    end
-    %w(title summary notes fandom_string).each {|a| same = false unless self.bookmarkable[a.to_sym] == fetched[a.to_sym]}
-    self.bookmarkable = fetched if same  
+    same = (fetched.author == self.bookmarkable.author && fetched.fandom_string == self.bookmarkable.fandom_string && 
+      fetched.rating_string == self.bookmarkable.rating_string && fetched.category_string == self.bookmarkable.category_string && 
+      fetched.pairing_string == self.bookmarkable.pairing_string && fetched.character_string == self.bookmarkable.character_string) ? true : false
+    %w(title summary notes).each {|a| same = false unless self.bookmarkable[a.to_sym] == fetched[a.to_sym]}
+    self.bookmarkable = fetched if same 
   end
   
   before_save :validate

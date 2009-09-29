@@ -35,6 +35,7 @@ class ExternalWork < ActiveRecord::Base
   validates_length_of :author, :maximum => AUTHOR_LENGTH_MAX, 
     :too_long=> t('author_too_long', :default => "must be less than {{max}} characters long.", :max => AUTHOR_LENGTH_MAX)
 
+  before_save :validate_url
   
   # Standardizes format of urls so they're easier to validate and compare
   def self.format_url(url)
