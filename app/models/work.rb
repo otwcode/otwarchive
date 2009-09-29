@@ -292,7 +292,9 @@ class Work < ActiveRecord::Base
     unless attributes[:title].blank?
       new_series = Series.new
       new_series.title = attributes[:title]
-      new_series.authors = self.authors
+      new_series.authors = self.pseuds
+      new_series.authors << self.authors unless self.authors.blank?
+      new_series.authors = new_series.authors.flatten.uniq
       new_series.save
       self.series << new_series
     end
