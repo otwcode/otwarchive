@@ -168,6 +168,7 @@ ul#series-work-list li.work ul.work li ul li {display:inline;}
 .media-index li.even { width: 40%; float: right; margin: 0 0 0 0.5625em; }
 
 /* PEOPLE-INDEX */
+.people-index .navigation { text-align: left;}
 .user div {position: relative; margin: 0 0 0.5625em; padding-right: 0.3775em; border-bottom: 1px solid #ddd; clear: both; overflow: auto; min-height: 8.5em;}
 .user h3,.user h3 a { color:#900;display:inline; }
 .user img {float:left; padding: 0 1em 0 0; clear:both;}

@@ -39,10 +39,10 @@ module ChaptersHelper
     links << link_to_chapter("Last Chapter", work, number_of_chapters-1)
   end
 
-  # returns LIST ITEMS with next/previous links as appropriate with the given chapter as the starting point
+  # returns SPANs with class NAVITEM with next/previous links as appropriate with the given chapter as the starting point
   def next_and_previous_links_listitems(work, chapter)
     links = next_and_previous_links(work, chapter)
-    links.collect {|link| "<li>" + link + "</li>\n"}
+    links.collect {|link| "<span class=""navitem"">" + link + "</span>\n"}
   end
   
   def link_to_chapter(string, work, chapter_position)
