@@ -137,3 +137,5 @@ form#wrangle-select-fandom p, form#wrangle-select-media p{ display:inline; margi
 /* BOOKMARKS */
 #bookmark-form dd { margin-top: 0; padding:0.25em 0.5625em 0.25em 0;}
 #bookmark-form fieldset { background:#fffef9; font-size:0.875em; margin: 0.5625em 0; padding:0.375em 1.5em; border:1px solid #bbb; clear:both; }
+
+form .edit-multiple-controls p.submit { text-align: left; clear: none;}

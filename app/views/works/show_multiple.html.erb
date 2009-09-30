@@ -2,6 +2,9 @@
 
 <% form_tag edit_multiple_user_works_path(@user) do %>
 
+<div style="text-align: center; margin: 0 auto;">
+<%= render :partial => 'edit_multiple_controls' %>
+
   <table class="story-list">
     <tr>
       <th>&nbsp;</th>
@@ -17,7 +20,7 @@
     <%- end -%>
   </table>
 
-<%= submit_tag t('edit_checked', :default => "Edit Checked") %>
-<%= submit_tag t('delete_multiple', :default => "Delete Checked") %>
-  
+<%= render :partial => 'edit_multiple_controls' %>
+</div>
+
 <% end %>
