@@ -6,7 +6,7 @@ set work styles
 .work-show a, .work-show a:link { color:#111; text-decoration:none; border-bottom:1px dotted #777; padding-right:0.125em}
 .work-show .navigation a, .work-show .navigation a:link {border:0;text-decoration:underline;}
 .work-show a:hover { border-bottom:0}
-.work-show a:visited { text-decoration:underline}
+.work-show a:visited { border-bottom-style: solid;}
 
 #chapters p {padding-bottom: 0.5em;}
 .unposted-chapter, .unposted-chapter .navigation {background:#eee}
