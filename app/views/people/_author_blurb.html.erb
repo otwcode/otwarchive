@@ -15,7 +15,7 @@
       <%- end -%>
       <%- unless (most_popular = author.most_popular_tags(:categories => Tag::USER_DEFINED, :limit => 5)).blank? -%>
         <span><%= "Most used tags: " -%></span>
-        <ul class="tags">      
+        <ul>      
           <%- most_popular.each do |tag_w_count| -%>
             <li><%= link_to_tag_with_count(author, tag_w_count) %></li>
           <%- end -%>
