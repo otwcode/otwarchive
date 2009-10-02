@@ -76,8 +76,9 @@ ArchiveConfig.APP_NAME + ' logo', :class => 'logo', :height => '60', :width => '
 
 <div class="wrapper lines col1">
   <h3><%= t('home.updates', :default => 'Updates') %></h3>
-  <%= t('home.updates.content', :default => 'Incredibly important things that everyone should know: Open Beta is soon!') %>
-  <br /><%= t('home.updates.also_see', :default => 'Also see') %> <%= link_to t('ao3_news', :default => 'AO3 News'), admin_posts_path %>.
+    <%= t('home.latest_ao3_news', :default => 'Latest AO3 News') %>: 
+    <%= link_to sanitize_title_for_display(@admin_posts.slice(0).title), @admin_posts.slice(0) %>
+    <br /><span class="date-posted">(<%= t('home.posted_on', :default => 'Posted on') %> <%=h @admin_posts.slice(0).created_at %>)</span>
 </div>
 
 <div class="wrapper lines">

@@ -31,6 +31,8 @@ class HomeController < ApplicationController
     @latest_work = Work.visible.find(:first, :conditions => {:restricted => false}, :order => "works.revised_at DESC")
     fandom = @latest_work.fandoms.first if @latest_work
     @latest_fandom = @latest_work.fandoms.first if fandom && fandom.canonical?
+    @admin_posts = AdminPost.find(:all)
+    @admin_posts = AdminPost.all.paginate :page => (params[:page] || 1), :per_page => 8, :order => 'updated_at DESC'
     render :action => "index", :layout => "home"
   end
   

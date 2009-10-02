@@ -153,3 +153,7 @@ clear: left;
 display: block;
 margin: auto
 }
+
+.home .date-posted {
+font-size: smaller;
+}
