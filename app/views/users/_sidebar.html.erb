@@ -12,7 +12,6 @@
   </a></div>
   <span id=expandable>
     <%= print_pseud_selector(@user.pseuds) %>
-    <div><%= link_to_unless_current t('pseud_main_user', :default => "Main user"), @user %></div>
   </span>
   </div>
 <%- end -%>
