@@ -12,16 +12,24 @@
   
 <% form_tag url_for(:controller => :works, :action => :import) do %>
   <p>
-    <%= label_tag "urls", t('import.url', :default => 'URLs for existing work(s) or for the chapters of a single work:') -%> <br />
+    <%= label_tag "urls", t('import.url', :default => 'URLs for existing work(s) or for the chapters of a single work (note: if you are importing a chaptered work from ff.net, you only need to enter the first chapter):') -%> <br />
     <%= text_area_tag "urls", @urls ? @urls.join("\n") : "", :rows => 20, :cols => 90 -%>
   </p>
   
   <p>
-    <%= radio_button_tag "import_multiple", "chapters", true %>
-    <%= label_tag "import_multiple_chapters", t('import.chapters', :default => "Chapters in a single work (limit of {{max}})", :max => ArchiveConfig.IMPORT_MAX_CHAPTERS) -%>
+    <%= radio_button_tag "import_multiple", "works", true %>
+    <%= label_tag "import_multiple_works", t('import.works', :default => "Works (limit of {{max}})", :max => current_user.is_archivist? ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS) -%>
     <br />
-    <%= radio_button_tag "import_multiple", "works" %>
-    <%= label_tag "import_multiple_works", t('import.works', :default => "Works (limit of {{max}})", :max => ArchiveConfig.IMPORT_MAX_WORKS) -%>
+    <%= radio_button_tag "import_multiple", "chapters" %>
+    <%= label_tag "import_multiple_chapters", t('import.chapters', :default => "Chapters in a single work (limit of {{max}})", :max => ArchiveConfig.IMPORT_MAX_CHAPTERS) -%>
+  </p>
+  
+  <p>
+    <%= radio_button_tag "post_without_preview", false, true %>
+    <%= label_tag "post_manually", t('import.post_manually', :default => "Post Manually (after reviewing drafts)") -%>
+    <br />
+    <%= radio_button_tag "post_without_preview", "true" %>
+    <%= label_tag "post_without_preview", t('import.post_without_preview', :default => "Post without preview (make sure you have tested manually on at least one work from this site first)") -%>
   </p>
   
   <%= submit_tag t('import.import_story', :default => 'Import') -%>
