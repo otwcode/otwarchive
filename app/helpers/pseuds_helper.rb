@@ -9,9 +9,7 @@ module PseudsHelper
   # used in the sidebar
   def print_pseud_selector(pseuds)
     pseuds -= [@pseud] if @pseud && @pseud.new_record?
-    list = "<div class=pseudlabel><a onClick=ShowExpandable(); style='cursor: pointer;'>Pseuds</a></div><span id=expandable>"
-    list += pseuds.sort.collect {|pseud| "<div>" + link_to_unless_current(pseud.name, [pseud.user, pseud]) + "</div>"}.join("")
-    list += "</span>"
+    list = pseuds.sort.collect {|pseud| "<div>" + link_to_unless_current(pseud.name, [pseud.user, pseud]) + "</div>"}.join("")
   end
 
   # For tag list on /people page

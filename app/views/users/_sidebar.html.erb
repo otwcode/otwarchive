@@ -1,11 +1,21 @@
 <% prefix = @user == current_user ? "My " : "" %>
 
-<%=
-# Pseud Selector: ugleh, ugleh display by Enigel Dec 5 08
-if @user.pseuds.size > 1
-	"<div class='pseud_selector_sidebar'>" + print_pseud_selector(@user.pseuds) + "</div>"
-end
-%>
+<%- if @user.pseuds.size > 1 -%>
+  <div class='pseud_selector_sidebar'>
+  <div class='pseudlabel'><a onClick='ShowExpandable();' style='cursor: pointer;'>
+    <%= if current_page?(@user)
+      "Pseuds"
+      else
+      @author ? "Pseud: " + @author.name : "Pseud: " + @user.login 
+      end %>
+    <%= image_tag('arrow-down.png', :alt => "Down arrow") %>
+  </a></div>
+  <span id=expandable>
+    <%= print_pseud_selector(@user.pseuds) %>
+    <div><%= link_to_unless_current t('pseud_main_user', :default => "Main user"), @user %></div>
+  </span>
+  </div>
+<%- end -%>
 <ul>
   <li><%= link_to_unless_current prefix + "Dashboard", @user %></li>
   <li><%= @author ? print_pseud_works_link(@author) : print_works_link(@user) %></li>
