@@ -11,8 +11,9 @@
 </p>
   
 <% form_tag url_for(:controller => :works, :action => :import) do %>
+<fieldset>
   <p>
-    <%= label_tag "urls", t('import.url', :default => 'URLs for existing work(s) or for the chapters of a single work (note: if you are importing a chaptered work from ff.net, you only need to enter the first chapter):') -%> <br />
+    <%= label_tag "urls", t('import.url', :default => 'URLs for existing work(s) or for the chapters of a single work, one URL per line (note: if you are importing a chaptered work from ff.net, you only need to enter the first chapter):') -%> <br />
     <%= text_area_tag "urls", @urls ? @urls.join("\n") : "", :rows => 20, :cols => 90 -%>
   </p>
   
@@ -23,15 +24,27 @@
     <%= radio_button_tag "import_multiple", "chapters" %>
     <%= label_tag "import_multiple_chapters", t('import.chapters', :default => "Chapters in a single work (limit of {{max}})", :max => ArchiveConfig.IMPORT_MAX_CHAPTERS) -%>
   </p>
-  
-  <p>
+</fieldset>
+<fieldset>
+  <p class="override-tags">
+    <%= radio_button_tag "override_tags", "fallback", true %> <%= label_tag "override_tags_fallback", t('import_fallback_tags', :default => 'Use below tags as fallbacks when tags cannot be automatically detected.') -%>
+    <br />
+    <%= radio_button_tag "override_tags", "override" %> <%= label_tag "override_tags_override", t('import_override_tags', :default => 'Override all automatically detected tags with below values') -%>
+  </p>
+  <%= render :partial => 'work_tags_form', :locals => {:include_blank => true} -%>
+</fieldset>
+  <fieldset>
+    <p>
     <%= radio_button_tag "post_without_preview", false, true %>
     <%= label_tag "post_manually", t('import.post_manually', :default => "Post Manually (after reviewing drafts)") -%>
     <br />
     <%= radio_button_tag "post_without_preview", "true" %>
     <%= label_tag "post_without_preview", t('import.post_without_preview', :default => "Post without preview (make sure you have tested manually on at least one work from this site first)") -%>
   </p>
+  </fieldset>
   
+  <p class="submit">
   <%= submit_tag t('import.import_story', :default => 'Import') -%>
+  </p>
 
 <%- end -%>
