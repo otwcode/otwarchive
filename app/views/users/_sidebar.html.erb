@@ -2,7 +2,7 @@
 
 <%- if @user.pseuds.size > 1 -%>
   <div class='pseud_selector_sidebar'>
-  <div class='pseudlabel'><a onClick='ShowExpandable();' style='cursor: pointer;'>
+  <div class='pseudlabel' id=collapsible><a onClick='ShowExpandable();' style='cursor: pointer;'>
     <%= if current_page?(@user)
       "Pseuds"
       else

@@ -13,6 +13,8 @@ document.observe("dom:loaded", function () {
 function ShowExpandable() {
   var expandable = document.getElementById('expandable');
   if (expandable != null) expandable.style.display = 'inline';
+  var collapsible = document.getElementById('collapsible');
+  if (collapsible != null) collapsible.style.display = 'none';
 }
 
 // Hides expandable fields if Javascript is enabled
