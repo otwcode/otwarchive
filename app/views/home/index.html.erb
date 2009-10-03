@@ -79,7 +79,7 @@ ArchiveConfig.APP_NAME + ' logo', :class => 'logo', :height => '60', :width => '
     <h3><%= t('home.updates', :default => 'Updates') %></h3>
     <%= t('home.latest_ao3_news', :default => 'Latest AO3 News') %>: 
     <%= link_to sanitize_title_for_display(@admin_posts.slice(0).title), @admin_posts.slice(0) %>
-    <br /><span class="date-posted">(<%= t('home.posted_on', :default => 'Posted on') %> <%=h @admin_posts.slice(0).created_at %>)</span>
+    <span class="date-posted">(<%= t('home.posted_on', :default => 'Posted on') %> <%=h @admin_posts.slice(0).created_at %>)</span>
   <% end -%>
 </div>
 
