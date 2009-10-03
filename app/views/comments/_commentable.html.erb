@@ -2,7 +2,7 @@
 <a name="comments"></a>
 <div id="feedback">
   <div class="navigation">
-    <%- if logged_in? && (commentable.class == Chapter || CanHasBookmarks > commentable.class) -%>
+    <%- if logged_in? && commentable.class != AdminPost -%>
       <span class="navitem" id="add_bookmark_link"><%= bookmark_link(commentable) %></span>			
     <%- end -%>
     <% if commentable.count_visible_comments > 0 -%>
