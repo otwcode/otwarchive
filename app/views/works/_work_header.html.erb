@@ -7,9 +7,9 @@
 <%- unless @preview_mode -%>
   <% if is_author_of?(@work) -%>
     <div class="navigation">
-      <span class="navitem"><%= link_to "Add Chapter", new_work_chapter_path(@work) %></span>
-      <span class="navitem"><%= link_to "Edit", edit_work_path(@work) %></span>
-      <span class="navitem"><%= link_to "Delete", @work, :confirm => "Are you sure?", :method => :delete -%></span>
+      <span class="navitem"><%= link_to t('add_chapter', :default => "Add Chapter"), new_work_chapter_path(@work) %></span>
+      <span class="navitem"><%= link_to t('edit', :default => "Edit"), edit_work_path(@work) %></span>
+      <span class="navitem"><%= link_to t('delete', :default => "Delete"), @work, :confirm => "Are you sure?", :method => :delete -%></span>
     </div>
   <% end -%>
 <%- end -%>
@@ -27,12 +27,12 @@
       <%- if @chapters.length == 1 -%> 
         <!-- we're reading chapter-by-chapter -->
         <div class="navigation">
-          <span class="navitem"><%= link_to "View Entire Work", @work -%></span>
+          <span class="navitem"><%= link_to t('view_entire_work', :default => "View Entire Work"), @work -%></span>
           <%= next_and_previous_links_listitems(@work, @chapter) -%>
         </div>
       <%- else -%>
         <div class="navigation">
-          <span class="navitem"><%= link_to "View Chapter By Chapter", 
+          <span class="navitem"><%= link_to t('view-by-chapter', :default => "View Chapter By Chapter"), 
                  url_for({:controller => :chapters, :action => :show, :work_id => @work, :id => @chapters.first}) -%>
           </span>
         </div>
@@ -53,7 +53,7 @@
   <%- if @chapter == @work.first_chapter -%>
     <%- unless @work.summary.blank? -%>
     <blockquote class="summary">
-      <h3><%=h "Summary:" %></h3>
+      <h3><%=h t('summary', :default => "Summary:") %></h3>
       <%=sanitize_limit_and_format_for_display @work.summary %>
     </blockquote>
     <%- end -%>
@@ -61,7 +61,7 @@
     <%- unless @work.notes.blank? && @work.endnotes.blank? -%>
       <%- current_page?(:controller => 'chapters', :action => 'show') ? linkpath = "chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes')" : linkpath = "work_path(@work, :anchor => 'work_endnotes')" %>
       <blockquote class="notes">
-      <h3><%=h "Notes:" %></h3>
+      <h3><%=h t('notes', :default => "Notes:") %></h3>
       <%- if @work.notes.blank? -%>
         <%= t('link_to_endnotes', :default => "See the end of the page for {{notes_link}}.", :notes_link => (link_to t('notes_link', :default => "notes"), eval(linkpath))) %>
       <%- elsif !@work.endnotes.blank? -%>
