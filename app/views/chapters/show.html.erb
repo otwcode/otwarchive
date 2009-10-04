@@ -21,7 +21,7 @@
 
   <%= render :partial => 'works/work_footer' -%>
   
-  <div id="link-to-top"><%= link_to image_tag("arrow-up.gif") + t('works_top_link_text', :default => "top"), work_path(@work, :anchor => "top")%></div>
+  <div id="link-to-top"><%= link_to image_tag("arrow-up.gif") + t('works_top_link_text', :default => "top"), chapter_path(:id => @chapter.id, :anchor => "top")%></div>
 </div>
 <!-- END work -->
 
