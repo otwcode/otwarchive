@@ -34,7 +34,7 @@
       <label for="work_category_string"><%= Category::NAME -%></label>
     </dt>
     <dd class="category">
-      <%= collection_select(:work, :category_string, Category.canonical, :name, :name, {:prompt => !include_blank, :include_blank =>  include_blank}) -%>
+      <%= collection_select(:work, :category_string, Category.canonical, :name, :name, {:include_blank =>  true}) -%>
     </dd>
   
     <dt class="pairing">
