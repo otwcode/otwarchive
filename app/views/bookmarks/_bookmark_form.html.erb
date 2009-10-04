@@ -3,7 +3,7 @@
 <div id="bookmark-form">
 <%- if @bookmark.new_record? && bookmarkable.class != ExternalWork -%>
   <p><%=h t('bookmark_add_new', :default => 'Add a new bookmark for "{{title}}"', :title => bookmarkable.title) %></p>
-  <%- else -%>
+  <%- elsif bookmarkable.class == ExternalWork && !@bookmark.new_record? -%>
   <p><%=h t('bookmark_add_new_external', :default => 'Add a new bookmark for an external work') %></p>
 <%- end -%>
 
