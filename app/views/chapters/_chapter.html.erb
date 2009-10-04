@@ -41,11 +41,14 @@
   <blockquote class="notes">
     <h3><%=h t('chapter_notes', :default => 'Notes:') %></h3>
     <%- if chapter.notes.blank? -%>
-      <%= t('link_to_c_endnotes', :default => "See the end of the chapter for {{notes_link}}.", :notes_link => (link_to t('notes_link', :default => "notes"), :anchor => "chapter_#{chapter.position.to_s}_endnotes")) %>
+      <span class="endnotes-link">
+        <%= t('link_to_c_endnotes', :default => "See the end of the chapter for {{notes_link}}.", :notes_link => (link_to t('notes_link', :default => "notes"), :anchor => "chapter_#{chapter.position.to_s}_endnotes")) %>
+      </span>
     <%- else -%>
       <%=sanitize_and_format_for_display chapter.notes -%>
       <%- unless chapter.endnotes.blank? -%>
-        <%= t('link_more_c_endnotes', :default => "See the end of the chapter for more {{notes_link}}.", :notes_link => (link_to t('notes_link', :default => "notes"), :anchor => "chapter_#{chapter.position.to_s}_endnotes")) %>
+        <span class="endnotes-link"><%= t('link_more_c_endnotes', :default => "See the end of the chapter for more {{notes_link}}.", :notes_link => (link_to t('notes_link', :default => "notes"), :anchor => "chapter_#{chapter.position.to_s}_endnotes")) %>
+        </span>
       <%- end -%>     
     <%- end -%> 
   </blockquote>

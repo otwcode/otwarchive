@@ -72,8 +72,10 @@ div.work-meta { background:#eee; padding:0.25em; position:relative; margin: 0 0 
 .preface .byline	{ text-align:center;}
 .preface a, .preface a:link, .preface a:visited {color: #333 !important;} 
 .preface blockquote.summary, .preface blockquote.notes	{ border:0;}
-.preface blockquote.summary h3, .preface blockquote.notes h3 {color:#222; background:transparent; border-bottom:1px solid black;}
-.preface blockquote.notes span.endnotes-link { font-family: Fertigo,Cambria,Constantia,Palatino,Georgia,sans-serif;}
+.preface blockquote.summary h3, .preface blockquote.notes h3 {color:#222; 
+background:transparent; border-bottom:1px solid black;}
+#chapters .preface blockquote.notes p {padding-bottom: 0;}
+.preface blockquote.notes span.endnotes-link { font-family: Fertigo,Cambria,Constantia,Palatino,Georgia,sans-serif; font-size: 80%}
 
 /* SERIES */
 .series-and-view-data	{ clear:both}

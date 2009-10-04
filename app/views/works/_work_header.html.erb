@@ -63,7 +63,7 @@
       <blockquote class="notes">
       <h3><%=h t('notes', :default => "Notes:") %></h3>
       <%- if @work.notes.blank? -%>
-        <%= t('link_to_endnotes', :default => "See the end of the work for {{notes_link}}.", :notes_link => (link_to t('notes_link', :default => "notes"), eval(linkpath))) %>
+        <span class="endnotes-link"><%= t('link_to_endnotes', :default => "See the end of the work for more {{notes_link}}.", :notes_link => (link_to t('notes_link', :default => "notes"), eval(linkpath))) %></span>
       <%- else -%>
         <%= sanitize_and_format_for_display(@work.notes) -%>
         <%- unless @work.endnotes.blank? -%>
