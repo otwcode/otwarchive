@@ -106,7 +106,14 @@ class BookmarksController < ApplicationController
   # POST /bookmarks.xml
   def create
     @bookmark = Bookmark.new(params[:bookmark])
-    @bookmark.set_external(params[:fetched][:value].to_i) unless params[:fetched].blank? || params[:fetched][:value].blank?
+    unless params[:fetched].blank? || params[:fetched][:value].blank?
+      fandom_string = params[:bookmark][:external][:fandom_string].to_s
+      rating_string = params[:bookmark][:external][:rating_string].to_s
+      category_string = params[:bookmark][:external][:category_string].to_s
+      pairing_string = params[:bookmark][:external][:pairing_string].to_s
+      character_string = params[:bookmark][:external][:character_string].to_s
+    @bookmark.set_external(params[:fetched][:value].to_i, fandom_string, rating_string, category_string, pairing_string, character_string)
+    end
     begin
       if @bookmark.save && @bookmark.tag_string=params[:tag_string]
         flash[:notice] = t('successfully_created', :default => 'Bookmark was successfully created.')
