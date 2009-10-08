@@ -108,7 +108,8 @@ background:transparent; border-bottom:1px solid black;}
 * #main.works-show ul#navigation	{ margin:0.75em 0; text-align:right}
 * .works-show #navigation li.go-back	{ display:block; float:left; padding:0 0.25em 0 0; }
 */
-#main ul.work-list li.tags	{ display:inline; }
+#main .work-list .tags	{ display:inline; margin: 0; padding: 0 0 0.8em;}
+#main .work-list .summary, #main .work-list .tagslist {clear: left;}
 
 .works-navigate ol, .works-navigate li {list-style-type:decimal;}
 .works-navigate ol {padding-left:2em;}
