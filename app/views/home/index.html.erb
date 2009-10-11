@@ -58,8 +58,7 @@ ArchiveConfig.APP_NAME + ' logo', :class => 'logo', :height => '60', :width => '
 <div class="wrapper box">
 	<h4><%= t('home.accounts', :default => 'Accounts') %></h4>
   <h3 class="red"><a href="session/new"><%= t('layout.header.sign_in', :default => 'Sign in') %></a></h3>
- <!-- commenting out request an invite link on test
-<h3 class="red"><a href=""><%= t('home.request_invite', :default => 'Request an invite') %></a></h3>-->
+  <h3 class="red"><%= link_to_help "coming-soon", t('home.request_invite', :default => 'Request an invite') %></h3>
 </div>
 
 <div class="wrapper" style="padding-top: 3em;">
