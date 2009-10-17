@@ -9,8 +9,8 @@ form p.temp-hack {clear: none;}
 form dl { position:relative; }
 form dt { float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
 form dd { float: left; }
-form .submit input {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px groove #222;}
-#work-form .submit input {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px groove #222;} /* because IE won't recognise the line above */
+form .submit input {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px solid #222;}
+#work-form .submit input {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px solid #222;} /* because IE won't recognise the line above */
 
 .character_counter { text-align:right; font-size:smaller; color:#777; /*line-height:1;*/}
 
