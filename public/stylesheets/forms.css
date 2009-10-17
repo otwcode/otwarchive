@@ -1,6 +1,7 @@
 /* GLOBAL */
 form fieldset legend	{ margin-left:-999em !important; position:absolute !important; }
 form p.submit { text-align:right; }
+#work-form p.submit { text-align: right; } /* because IE won't recognise the line above */
 form p { line-height:2; clear:both;}
 /* This is a temporary hack for editing multiple works. Fix it to work properly later. */
 form p.temp-hack {clear: none;}
@@ -9,6 +10,7 @@ form dl { position:relative; }
 form dt { float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
 form dd { float: left; }
 form .submit input {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px groove #222;}
+#work-form .submit input {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px groove #222;} /* because IE won't recognise the line above */
 
 .character_counter { text-align:right; font-size:smaller; color:#777; /*line-height:1;*/}
 
@@ -86,7 +88,7 @@ p.rtf-html-switch {margin:0; padding:0 0.875em 0; text-align:right; }
 .rtf-html-switch span {background:#f0f0ee; padding:0.5625em 0.5625em 0 0.5625em; border:1px solid #ddd;}
 #work-form textarea#content { height:31.25em;  margin:-0.625em auto auto;}
 
-#work-form p.submit input { font-size:1em; width: inherit; text-align:center}
+#work-form p.submit input { font-size:1em; width: auto; text-align:center}
 
 /*EDIT CHAPTERS */ 
 #main.chapters-edit dt {width:100%;float:none;}
