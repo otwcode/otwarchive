@@ -169,36 +169,36 @@ namespace :After do
 #   Tag.update_all(['media_id = ?', Media.uncategorized.id], 'media_id IS NULL')
 #  end     
 
-  desc "Generate log_items for existing users - SLOW"
-  task(:after_20090919125723_create_log_items => :environment) do
-    ThinkingSphinx.deltas_enabled=false
-    User.find(:all).each do |u|
-      if u.active?
-        LogItem.create(:user_id => u.id, :action => 0, :note => 'System Generated', :created_at => u.activated_at)
-      end
-      u.roles.collect(&:id).each do |r|
-        LogItem.create(:user_id => u.id, :action => 1, :role_id => r, :note => 'System Generated')
-      end
-    end
-    User.find(:all, :conditions => {:suspended => true}).each do |u|
-      LogItem.create(:user_id => u.id, :action => 3, :note => 'System Generated')
-    end
-    User.find(:all, :conditions => {:banned => true}).each do |u|
-      LogItem.create(:user_id => u.id, :action => 5, :note => 'System Generated')
-    end
-    ThinkingSphinx.deltas_enabled=true
-  end
+#  desc "Generate log_items for existing users - SLOW"
+#  task(:after_20090919125723_create_log_items => :environment) do
+#    ThinkingSphinx.deltas_enabled=false
+#    User.find(:all).each do |u|
+#      if u.active?
+#        LogItem.create(:user_id => u.id, :action => 0, :note => 'System Generated', :created_at => u.activated_at)
+#      end
+#      u.roles.collect(&:id).each do |r|
+#        LogItem.create(:user_id => u.id, :action => 1, :role_id => r, :note => 'System Generated')
+#      end
+#    end
+#    User.find(:all, :conditions => {:suspended => true}).each do |u|
+#      LogItem.create(:user_id => u.id, :action => 3, :note => 'System Generated')
+#    end
+#    User.find(:all, :conditions => {:banned => true}).each do |u|
+#      LogItem.create(:user_id => u.id, :action => 5, :note => 'System Generated')
+#    end
+#    ThinkingSphinx.deltas_enabled=true
+#  end
   
-  # Need to run this again, there has been a bug which appears to have mysteriously been fixed
-   desc "Fix Series pseuds"
-   task(:after_r1501 => :environment) do
-     Series.all.each do |s|
-       unless s.works.empty?
-         s.works.map(&:pseuds).flatten.each do |p|
-           s.pseuds << p unless s.pseuds.include? p
-         end
-       end
-     end
-   end
+#  # Need to run this again, there has been a bug which appears to have mysteriously been fixed
+#   desc "Fix Series pseuds"
+#   task(:after_r1501 => :environment) do
+#     Series.all.each do |s|
+#       unless s.works.empty?
+#         s.works.map(&:pseuds).flatten.each do |p|
+#           s.pseuds << p unless s.pseuds.include? p
+#         end
+#       end
+#     end
+#   end
   
 end
