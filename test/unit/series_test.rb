@@ -4,7 +4,7 @@ class SeriesTest < ActiveSupport::TestCase
 
   context "a series" do
     setup do
-      @series = create_series       
+      assert create_series       
     end
     should_have_many :serial_works, :works, :bookmarks
     should_validate_presence_of :title

@@ -5,7 +5,7 @@ class ReadingTest < ActiveSupport::TestCase
  
   context "A reading" do
     setup do
-      @reading = create_reading
+      assert create_reading
     end
     should_belong_to :user, :work
   end

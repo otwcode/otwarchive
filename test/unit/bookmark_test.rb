@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 class BookmarkTest < ActiveSupport::TestCase
   context "A Bookmark" do
     setup do
-      @bookmark = create_bookmark
+      assert create_bookmark
     end
     should_belong_to :bookmarkable
     should_belong_to :pseud

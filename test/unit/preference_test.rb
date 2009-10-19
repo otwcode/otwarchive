@@ -4,7 +4,7 @@ class PreferenceTest < ActiveSupport::TestCase
   # Test associations
   context "A preference" do
     setup do
-      @preference = create_preference
+      assert create_preference
     end
     should_belong_to :user
     should_not_allow_values_for :work_title_format, "ab!cd", :message => /contain/
