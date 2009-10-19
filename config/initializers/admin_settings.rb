@@ -6,8 +6,8 @@ begin
           :invite_from_queue_frequency => ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
           :account_creation_enabled => ArchiveConfig.ACCOUNT_CREATION_ENABLED,
           :days_to_purge_unactivated => ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED)
-    settings.save!
+    settings.save(false)
   end
 rescue
-  puts "no database connection"
+  puts "no admin settings for you"
 end

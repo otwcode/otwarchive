@@ -9,13 +9,13 @@
     <%= f.check_box :invite_from_queue_enabled %> <%= f.label :invite_from_queue_enabled %>
   </p>
   <p>
-    <%= f.label :invite_from_queue_number, "Number of people to invite from the queue at once:" %> <%= f.text_field :invite_from_queue_number %>
+    <%= f.label :invite_from_queue_number, "Number of people to invite from the queue at once:" %> <%= f.text_field :invite_from_queue_number, :size => "3" %>
   </p>
   <p>
-    <%= f.label :invite_from_queue_frequency, "How often (in days) should we invite people from the queue:" %> <%= f.text_field :invite_from_queue_frequency %>
+    <%= f.label :invite_from_queue_frequency, "How often (in days) should we invite people from the queue:" %> <%= f.text_field :invite_from_queue_frequency, :size => "3" %>
   </p>
   <p>
-    <%= f.label :days_to_purge_unactivated, "How often (in days) should you have to activate your account before we purge it:" %> <%= f.text_field :days_to_purge_unactivated %>
+    <%= f.label :days_to_purge_unactivated, "How often (in days) should you have to activate your account before we purge it:" %> <%= f.text_field :days_to_purge_unactivated, :size => "3" %>
   </p>
   <p>
     <%= f.hidden_field :last_updated_by, :value => current_admin.id %>
@@ -23,4 +23,4 @@
   </p>
 <% end %>
 
-<p>Last updated on <%= @admin_setting.updated_at %> by <%= @admin_setting.last_updated.login %>.</p>
+<p>Last updated on <%= @admin_setting.updated_at %> by <%= @admin_setting.last_updated ? @admin_setting.last_updated.login : "---" %>.</p>

@@ -3,7 +3,6 @@ class Admin::AdminInvitationsController < ApplicationController
   before_filter :admin_only
 
   def index
-    redirect_to new_admin_invitation_url
   end 
 
   def new

@@ -23,7 +23,6 @@ class User < ActiveRecord::Base
   #validates_presence_of :invitation_id, :message => 'is required', :unless => ArchiveConfig.ACCOUNT_CREATION_ENABLED
   validates_uniqueness_of :invitation_id, :allow_blank => true
   belongs_to :invitation
-  before_create :set_invitation_limit
   before_save :mark_invitation_used
   attr_accessible :invitation_token
   
@@ -77,6 +76,7 @@ class User < ActiveRecord::Base
   named_scope :alphabetical, :order => :login
   named_scope :starting_with, lambda {|letter| {:conditions => ['SUBSTR(login,1,1) = ?', letter]}}
   named_scope :valid, :conditions => {:banned => false, :suspended => false}
+  named_scope :out_of_invites, :conditions => {:out_of_invites => true}
 
   validates_format_of :login, 
     :message => t('login_invalid', :default => 'Your user name must begin and end with a letter or number; it may also contain underscores but no other characters.'),
@@ -332,12 +332,12 @@ class User < ActiveRecord::Base
       invitation.update_attribute(:used, true)
     end
   end
+
+  def unused_invite_total
+    self.invitations.unused.count
+  end
   
   private
-
-  def set_invitation_limit
-    self.invitation_limit = ArchiveConfig.INVITATION_LIMIT || 5
-  end
   
   # Create and/or return a user account for holding orphaned works
   def self.fetch_orphan_account

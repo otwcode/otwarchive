@@ -1,0 +1,48 @@
+<fieldset>
+  <h2>Invite new users</h2>
+  
+  <p>Send an invite code to the following email address</p>
+  <% form_for :invitation, @invitation, :url => {:controller => 'admin/admin_invitations', :action => :create} do |f| %>
+    <dl>
+      <dt><%= f.label :invitee_email, t('email address', :default => 'Email address') %></dt>
+      <dd><%= f.text_field :invitee_email %></dd>
+    </dl>
+    <p><%= f.submit t('submit_invite', :default => 'Invite user')  %></p>
+  <% end %>
+  
+  <p>Send invite codes to people in our invitations queue</p>
+  <% form_tag invitations_url do %>
+    <dl>
+      <dt><%= label_tag :invite_from_queue, t('invite_from_queue', :default => 'Number of people to invite:') %></dt>
+      <dd><%= text_field_tag :invite_from_queue  %></dt>
+    </dl>
+    <p><%= submit_tag t('submit_queue', :default => 'Invite from queue')  %></p>
+  <% end %>
+</fieldset>
+
+<fieldset>
+  <h2>Give invite codes to current users</h2>
+  
+  <% form_tag invitations_url do %>
+    <dl>
+      <dt><%= label_tag :number_of_invites, t('number_of_invites', :default => 'Number of invites:') %></dt>
+      <dd><%= text_field_tag :number_of_invites %></dt>
+
+      <dt><%= label_tag :user_group, t('user_group', :default => 'Users:') %></dt>
+      <dd><%= select_tag :user_group, "<option>All</option><option>With no unused invites</option>"  %></dt>
+    </dl>
+    <p><%= submit_tag "Generate invites" %></p>
+  <% end %>
+</fieldset>
+
+<fieldset>
+  <h2>View or edit a particular user's invitations</h2>
+    <% form_tag invitations_url do %>
+    <dl>
+      <dt><%= label_tag :user_invites, t('name_or_email', :default => 'Enter a name or email address:') %></dt>
+      <dd><%= text_field_tag :user_invites  %></dt>
+    </dl>
+    <p><%= submit_tag %></p>
+  <% end %>
+
+</fieldset>
