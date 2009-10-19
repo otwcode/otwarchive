@@ -1,4 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :invite_requests, :collection => {:status => :get}
   
   map.resources :known_issues
 
@@ -115,6 +116,7 @@ ActionController::Routing::Routes.draw do |map|
   map.admin_logout '/admin/logout', :controller => 'admin/admin_session', :action => 'destroy' 
 
   map.namespace :admin, :path_prefix => 'admin' do |admin|
+    admin.resources :settings, :only => [:index, :update]
     admin.resources :user_creations, :only => :destroy, :member => { :hide => :get }
     admin.resources :users, :controller => 'admin_users', :collection => {:notify => :get, :send_notification => :post}, :except => [:new, :create]
     admin.resources :invitations, :controller => 'admin_invitations', :only => [:index, :new, :create]

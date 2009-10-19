@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090921210056) do
+ActiveRecord::Schema.define(:version => 20091018174444) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -27,6 +27,17 @@ ActiveRecord::Schema.define(:version => 20090921210056) do
     t.text     "content"
     t.datetime "updated_at"
     t.datetime "created_at"
+  end
+
+  create_table "admin_settings", :force => true do |t|
+    t.boolean  "account_creation_enabled",                 :default => true, :null => false
+    t.boolean  "invite_from_queue_enabled",                :default => true, :null => false
+    t.integer  "invite_from_queue_number",    :limit => 8
+    t.integer  "invite_from_queue_frequency", :limit => 3
+    t.integer  "days_to_purge_unactivated",   :limit => 3
+    t.integer  "last_updated_by",             :limit => 8
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "admins", :force => true do |t|
@@ -208,14 +219,25 @@ ActiveRecord::Schema.define(:version => 20090921210056) do
   end
 
   create_table "invitations", :force => true do |t|
-    t.integer  "sender_id",          :limit => 8
-    t.string   "recipient_email"
+    t.integer  "creator_id",    :limit => 8
+    t.string   "invitee_email"
     t.string   "token"
     t.datetime "sent_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "used",                            :default => false, :null => false
-    t.integer  "external_author_id"
+    t.boolean  "used",                       :default => false, :null => false
+    t.integer  "invitee_id"
+    t.string   "invitee_type"
+    t.string   "creator_type"
+    t.datetime "redeemed_at"
+    t.boolean  "from_queue",                 :default => false, :null => false
+  end
+
+  create_table "invite_requests", :force => true do |t|
+    t.string   "email"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "known_issues", :force => true do |t|

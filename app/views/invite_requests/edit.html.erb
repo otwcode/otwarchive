@@ -1,0 +1,20 @@
+<h1>Editing invite_request</h1>
+
+<% form_for(@invite_request) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :email %><br />
+    <%= f.text_field :email %>
+  </p>
+  <p>
+    <%= f.label :position %><br />
+    <%= f.text_field :position %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @invite_request %> |
+<%= link_to 'Back', invite_requests_path %>

@@ -1,9 +1,9 @@
 # Beta invitations
 # http://railscasts.com/episodes/124-beta-invitations
 class Invitation < ActiveRecord::Base
-  belongs_to :sender, :class_name => 'User'
-  has_one :recipient, :class_name => 'User'
-  has_one :external_author
+  belongs_to :creator, :polymorphic => true
+  belongs_to :invitee, :polymorphic => true
+
 
   validates_presence_of :recipient_email
   validate :recipient_is_not_registered, :on => :create

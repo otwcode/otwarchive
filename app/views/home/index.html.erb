@@ -58,7 +58,9 @@ ArchiveConfig.APP_NAME + ' logo', :class => 'logo', :height => '60', :width => '
 <div class="wrapper box">
 	<h4><%= t('home.accounts', :default => 'Accounts') %></h4>
   <h3 class="red"><a href="session/new"><%= t('layout.header.sign_in', :default => 'Sign in') %></a></h3>
-  <h3 class="red"><%= link_to_help "coming-soon", t('home.request_invite', :default => 'Request an invite') %></h3>
+  <%- if AdminSetting.invite_from_queue_enabled? -%>
+  <h3 class="red"><%= link_to t('home.request_invite', :default => 'Request an invite'), invite_requests_path %></h3>
+  <%- end -%>
 </div>
 
 <div class="wrapper" style="padding-top: 3em;">

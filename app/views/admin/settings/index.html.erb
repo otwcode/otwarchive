@@ -1,0 +1,26 @@
+<h2>Archive Settings</h2>
+
+<% form_for @admin_setting, :url => admin_setting_path(@admin_setting), :html => {:method => :put} do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.check_box :account_creation_enabled %> <%= f.label :account_creation_enabled %>
+  </p>
+  <p>
+    <%= f.check_box :invite_from_queue_enabled %> <%= f.label :invite_from_queue_enabled %>
+  </p>
+  <p>
+    <%= f.label :invite_from_queue_number, "Number of people to invite from the queue at once:" %> <%= f.text_field :invite_from_queue_number %>
+  </p>
+  <p>
+    <%= f.label :invite_from_queue_frequency, "How often (in days) should we invite people from the queue:" %> <%= f.text_field :invite_from_queue_frequency %>
+  </p>
+  <p>
+    <%= f.label :days_to_purge_unactivated, "How often (in days) should you have to activate your account before we purge it:" %> <%= f.text_field :days_to_purge_unactivated %>
+  </p>
+  <p>
+    <%= f.hidden_field :last_updated_by, :value => current_admin.id %>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<p>Last updated on <%= @admin_setting.updated_at %> by <%= @admin_setting.last_updated.login %>.</p>

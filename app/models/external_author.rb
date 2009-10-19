@@ -11,6 +11,7 @@ class ExternalAuthor < ActiveRecord::Base
   accepts_nested_attributes_for :external_author_names, :allow_destroy => true
   validates_associated :external_author_names
 
+  has_one :invitation, :as => :invitee
 
   validates_presence_of :email, :message => t('email_blank', :default => 'Please enter an email address')
 
