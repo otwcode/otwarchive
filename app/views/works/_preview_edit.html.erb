@@ -13,7 +13,7 @@
     <%- unless @work.endnotes.blank? -%>
       <div class="preface">
         <blockquote class="notes">
-          <h3><%=h "Notes:" %></h3>
+          <h3><%=h t('notes', :default => "Notes:") %></h3>
           <%=sanitize_and_format_for_display @work.endnotes %>
         </blockquote>
       </div>
