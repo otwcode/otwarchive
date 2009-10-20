@@ -6,9 +6,12 @@ class Invitation < ActiveRecord::Base
 
   validate :recipient_is_not_registered, :on => :create
   
-  named_scope :unused, :conditions => {:redeemed_at => nil}
+  named_scope :unsent, :conditions => {:invitee_email => nil}
+  named_scope :unredeemed, :conditions => 'invitee_email IS NOT NULL and redeemed_at IS NULL'
+  named_scope :redeemed, :conditions => 'redeemed_at IS NOT NULL'
 
   before_create :generate_token
+  after_save :adjust_user_invite_status
 
   #Create a certain number of invitations for all valid users
   def self.grant_all(total)
@@ -43,6 +46,14 @@ class Invitation < ActiveRecord::Base
 
   def generate_token
     self.token = Digest::SHA1.hexdigest([Time.now, rand].join)
+  end
+  
+  #Update the user's out_of_invites status
+  def adjust_user_invite_status
+    if self.creator.respond_to(:out_of_invites)
+      self.creator.out_of_invites = (self.creator.invitations.unredeemed.count < 1)
+      self.creator.save(false)
+    end  
   end
   
 end

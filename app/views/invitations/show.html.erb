@@ -1,0 +1,31 @@
+<dl>
+<dt>Invitation token:</dt>
+<dd><%= @invitation.token %></dd>
+
+<dt>Created at:</dt>
+<dd><%= @invitation.created_at %></dd>
+
+<dt>Sent to:</dt>
+<%- if @invitation.redeemed_at -%>
+<dd><%= @invitation.invitee_email %></dd>
+<%- else -%>
+<dd>
+  <%- form_for([@user, @invitation]) do |f| -%>
+    <dl>
+      <dt>Enter an email address:</dt>
+      <dd><%= f.text_field :invitee_email %></dd>
+    </dl>
+    <p><%= f.submit %></p>
+  <%- end -%>
+</dd>
+<%- end -%>
+
+<%- if @invitation.sent_at -%>
+<dt>Sent at:</dt>
+<dd><%= @invitation.sent_at %></dd>
+<%- end -%>
+
+<%- if @invitation.redeemed_at -%>
+<dt>Redeemed at:</dt>
+<dd><%= @invitation.redeemed_at %></dd>
+<%- end -%>

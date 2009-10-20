@@ -50,6 +50,7 @@ ActionController::Routing::Routes.draw do |map|
     user.resources :series, :member => {:manage => :get}, :has_many => :serial_works
     user.resources :readings, :only => [:index, :destroy]
     user.resources :comments, :member => { :approve => :put, :reject => :put }
+    user.resources :invitations
   end
 
   map.delete_confirmation '/delete_confirmation', :controller => 'users', :action => 'delete_confirmation'

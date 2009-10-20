@@ -1,0 +1,37 @@
+<h2><%= logged_in_as_admin? ? (@user.login + "'s") : "Your" %> Invitations</h2>
+
+<ul>
+  <li><%= @user.invitations.unsent.count %> invitations not yet sent</li>
+  <li><%= @user.invitations.unredeemed.count %> invitations sent but not redeemed</li>
+  <li><%= @user.invitations.redeemed.count %> invitations sent and redeemed</li>
+</ul>
+
+Show only: 
+<ul>
+  <li><%= link_to_unless_current 'not sent', user_invitations_path(@user, :status => :unsent) %></li>
+  <li><%= link_to_unless_current 'not redeemed', user_invitations_path(@user, :status => :unredeemed) %></li> 
+  <li><%= link_to_unless_current 'redeemed', user_invitations_path(@user, :status => :redeemed) %></li> 
+  <li><%= link_to 'all', user_invitations_path(@user) %></li>  
+</ul>
+
+<%- unless @invitations.blank? -%>
+<table>
+  <tr>
+  <th scope="col">Token</th>
+  <th scope="col">Created</th>
+  <th scope="col">Sent To</th>
+  <th scope="col">Sent At</th>
+  <th scope="col">Redeemed</th>
+  </tr>
+
+  <%- for invitation in @invitations -%>
+  <tr>
+  <td><%= link_to invitation.token, [@user, invitation] %></td>
+  <td><%= invitation.created_at %></td>
+  <td><%= invitation.invitee_email %></td>
+  <td><%= invitation.sent_at %></td>
+  <td><%= invitation.redeemed_at %></td>
+  </tr>
+  <%- end -%>
+</table>
+<%- end -%>
