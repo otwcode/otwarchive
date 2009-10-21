@@ -20,8 +20,9 @@
   <%= render :partial => 'works/search_box' %>
 </div>
 
+<div class="home-subheader">
 <%= image_tag('logo.png', :alt =>
-ArchiveConfig.APP_NAME + ' logo', :class => 'logo', :height => '60', :width => '60') %>
+ArchiveConfig.APP_NAME + ' logo', :class => 'logo', :height => '70', :width => '105') %>
 
 <h1><span><%= ArchiveConfig.APP_NAME -%>
   <% unless ArchiveConfig.REVISION.blank? %>(BETA <%=h t('revision', :default => 'rev. {{rev_number}}', :rev_number => ArchiveConfig.REVISION) %>)<% end %></span>
@@ -49,7 +50,7 @@ ArchiveConfig.APP_NAME + ' logo', :class => 'logo', :height => '60', :width => '
       <%= link_to_unless_current t('layout.header.tags', :default => "tags"), tags_path %>
     </li>
 </ul>
-
+</div>
 <div class="clear"></div>
 
 </div>
@@ -57,9 +58,13 @@ ArchiveConfig.APP_NAME + ' logo', :class => 'logo', :height => '60', :width => '
 
 <div class="wrapper box">
 	<h4><%= t('home.accounts', :default => 'Accounts') %></h4>
-  <h3 class="red"><a href="session/new"><%= t('layout.header.sign_in', :default => 'Sign in') %></a></h3>
-  <%- if AdminSetting.invite_from_queue_enabled? -%>
-  <h3 class="red"><%= link_to t('home.request_invite', :default => 'Request an invite'), invite_requests_path %></h3>
+  <%- if logged_in? || logged_in_as_admin? -%>
+    <h3 class="red"><%= t('home.you_are_signed_in', :default => 'You are signed in') %></h3>
+  <%- else -%>
+    <h3 class="red"><a href="session/new"><%= t('layout.header.sign_in', :default => 'Sign in') %></a></h3>
+    <%- if AdminSetting.invite_from_queue_enabled? -%>
+    <h3 class="red"><%= link_to t('home.request_invite', :default => 'Request an invite'), invite_requests_path %></h3>
+    <%- end -%>
   <%- end -%>
 </div>
 
