@@ -33,7 +33,7 @@
 			  <li class="blurb tags">
 			    <div class="label"><%=h 'Tags' + ': ' %></div>
 			    <div class="item">
-			      <%= author_tags.collect{|tag| link_to(tag.name, link_to_tag(tag)) }.join(', ') %>
+			      <%= author_tags.collect{|tag| link_to_tag(tag) }.join(', ') %>
 			    </div>
 			  </li>
       <%- end -%>  
@@ -45,7 +45,7 @@
             <%- if hide_warnings?(series) -%>
               <%= show_warnings_link(series) %>
             <%- else -%>
-              <%= author_warnings.collect{|tag| link_to(tag.name, link_to_tag(tag))}.join(', ') %>
+              <%= author_warnings.collect{|tag| link_to_tag(tag)}.join(', ') %>
             <%- end -%>
           </div>
         </li>
