@@ -5,7 +5,7 @@
 <%- end -%>
 <%=h "View all comments on" -%> <%= link_to @commentable.commentable_name, 
                                 ArchiveConfig.APP_URL + 
-                                url_for(:controller => @commentable.class.to_s.downcase.pluralize, 
+                                url_for(:controller => @commentable.class.to_s.underscore.pluralize, 
                                 :action => :show, :id => @commentable, 
                                 :show_comments => true, :anchor => :comments) -%>
 </p>
