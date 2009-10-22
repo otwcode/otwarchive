@@ -249,6 +249,11 @@ class WorksController < ApplicationController
     if params[:import]
       @use_import_form = true
     end
+    
+    respond_to do |format|
+      format.html 
+      format.js 
+    end
   end
 
   # POST /works
