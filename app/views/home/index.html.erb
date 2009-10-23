@@ -8,19 +8,24 @@
   </div> 
 </noscript>
 <!-- END BETA CAVEATS! --> 
+<%- unless logged_in? || logged_in_as_admin? -%>
+  <div id="home-signin"> 
+  <%= render :partial => 'session/login' -%>
+  </div>
+<%- end -%>
+
 <div class="home-header">
-<div id="home-signin">  
+ 
   <%- if logged_in? || logged_in_as_admin? -%>
+  <div id="home-signin"> 
     <div class="greeting"><%= render :partial => 'session/greeting' -%></div>
-  <%- else -%>
-    <%= render :partial => 'session/login' -%>
+  </div>
   <%- end -%>
-</div>
+
 <div class="searchbox">
   <%= render :partial => 'works/search_box' %>
 </div>
 
-<div class="home-subheader">
 <%= image_tag('logo.png', :alt =>
 ArchiveConfig.APP_NAME + ' logo', :class => 'logo', :height => '70', :width => '105') %>
 
@@ -50,7 +55,7 @@ ArchiveConfig.APP_NAME + ' logo', :class => 'logo', :height => '70', :width => '
       <%= link_to_unless_current t('layout.header.tags', :default => "tags"), tags_path %>
     </li>
 </ul>
-</div>
+
 <div class="clear"></div>
 
 </div>
