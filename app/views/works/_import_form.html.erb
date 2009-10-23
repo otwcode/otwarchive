@@ -26,6 +26,8 @@
     <%= label_tag "import_multiple_chapters", t('import.chapters', :default => "Chapters in a single work (limit of {{max}})", :max => ArchiveConfig.IMPORT_MAX_CHAPTERS) -%>
   </p>
 </fieldset>
+
+<!-- this code is not yet functional 
 <fieldset>
   <legend>Work Tags</legend>
   <p class="override-tags">
@@ -45,6 +47,7 @@
     <%= label_tag "post_without_preview", t('import.post_without_preview', :default => "Post without preview (make sure you have tested manually on at least one work from this site first)") -%>
   </p>
   </fieldset>
+-->
   
   <p class="submit">
   <%= submit_tag t('import.import_story', :default => 'Import') -%>

@@ -91,6 +91,9 @@ class StoryParser
       
       if options[:post_automatically]
         work.posted = true
+        work.chapters.each do |chapter|
+          chapter.save
+        end
       end
       
       if work.save

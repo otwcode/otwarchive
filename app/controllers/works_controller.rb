@@ -432,7 +432,7 @@ class WorksController < ApplicationController
     end
     
     @urls = urls.split
-    if params[:import_multiple] == "works" 
+    if params[:import_multiple] == "works" && @urls.length > 1
       if @urls.length > ArchiveConfig.IMPORT_MAX_WORKS
         flash.now[:error] = t('too_many_works', :default => "You cannot import more than {{max}} works at a time.", :max => ArchiveConfig.IMPORT_MAX_WORKS)
         render :action => :new and return
@@ -491,7 +491,7 @@ class WorksController < ApplicationController
       if @work.save && chapters_saved == @work.chapters.length
         flash[:notice] = t('successfully_uploaded', :default => "Work successfully uploaded!<br />
           (But please check the results over carefully before posting!)")
-        redirect_to edit_work_path(@work) and return
+        redirect_to preview_work_path(@work) and return
       else
         render :action => :new and return
       end
