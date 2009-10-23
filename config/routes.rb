@@ -39,6 +39,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :admins, :only => [:index, :show] 
 
   map.signup '/signup/:invitation_token', :controller => 'users', :action => 'new' 
+  
   map.resources :users  do |user|
     user.resources :pseuds, :has_many => [:works, :series, :bookmarks]
     user.resources :external_authors, :has_many => [:external_author_names]
@@ -120,7 +121,7 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :settings, :only => [:index, :update]
     admin.resources :user_creations, :only => :destroy, :member => { :hide => :get }
     admin.resources :users, :controller => 'admin_users', :collection => {:notify => :get, :send_notification => :post}, :except => [:new, :create]
-    admin.resources :invitations, :controller => 'admin_invitations', :only => [:index, :new, :create]
+    admin.resources :invitations, :controller => 'admin_invitations', :only => [:index, :new, :create], :collection => {:invite_from_queue => :post, :grant_invites_to_users => :post, :find => :get}
     admin.resource :session, :controller => 'admin_session', :only => [:new, :create, :destroy]
   end
 

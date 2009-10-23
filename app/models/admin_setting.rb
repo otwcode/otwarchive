@@ -7,6 +7,10 @@ class AdminSetting < ActiveRecord::Base
     self.first ? self.first.invite_from_queue_enabled? : ArchiveConfig.INVITE_FROM_QUEUE_ENABLED
   end
   
+  def self.invite_from_queue_at
+    self.first.invite_from_queue_at
+  end
+  
   def self.invite_from_queue_number
     self.first ? self.first.invite_from_queue_number : ArchiveConfig.INVITE_FROM_QUEUE_NUMBER
   end

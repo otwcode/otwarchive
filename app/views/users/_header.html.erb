@@ -10,8 +10,8 @@
     <%- end -%>  
     <span class="navitem"><%= link_to_help "coming-soon", "Bookmark" %></span>
     <span class="navitem"><%= link_to_help "coming-soon", "Subscribe" %></span>
-    <%- if @user == current_user && !@user.out_of_invites -%>
-      <span class="navitem"><%= link_to 'Invite A Friend', user_invitations_path(user) %></span>
+    <%- if @user == current_user  -%>
+      <span class="navitem"><%= link_to 'Invitations', user_invitations_path(user) %></span>
     <%- end -%>  
   </div>
 </div>

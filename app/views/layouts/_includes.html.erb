@@ -9,6 +9,7 @@
 <%= stylesheet_link_tag 'globalize', :media => 'screen' %>
 <%= stylesheet_link_tag 'live_validation', :media => 'screen' %>
 <%= stylesheet_link_tag 'auto_complete', :media => 'screen' %>
+<%= stylesheet_link_tag 'visualize.jQuery', :media => 'screen' %>
 <%= stylesheet_link_tag 'tags', :media => 'screen' %>
 <%= stylesheet_link_tag 'system-messages', :media => 'screen' %>
 <%= stylesheet_link_tag 'aural', :media => 'screenreader' %>
@@ -21,9 +22,12 @@
 
 <!-- yield :tinymce needs to be before the scriptaculous elements. See http://wiki.moxiecode.com/index.php/TinyMCE:Ruby_on_Rails for more information. -->
 <%= yield :tinymce %>
+<%= javascript_include_tag 'jquery-1.3.2.min.js' %>
+<%= javascript_include_tag 'visualize.jQuery.js' %>
 <%= javascript_include_tag :defaults %>
 <%= javascript_include_tag 'live_validation' %>
 <%= javascript_include_tag 'accessible' %>
+
 <%= yield :tinymce_init %>
 
 <%= iboxify_page %>

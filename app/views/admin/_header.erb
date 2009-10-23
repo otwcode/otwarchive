@@ -17,3 +17,6 @@
 <li><%- if current_page?(admin_posts_path) -%><span class="current"><%- end -%>
   <%= link_to_unless_current t('admin_header_admin_posts', :default => "admin posts"), admin_posts_path %>
 <%- if current_page?(admin_posts_path) -%></span><%- end -%></li>
+<li><%- if current_page?(admin_settings_path) -%><span class="current"><%- end -%>
+  <%= link_to_unless_current t('admin_header_settings', :default => "settings"), admin_settings_path %>
+<%- if current_page?(admin_settings_path) -%></span><%- end -%></li>

@@ -15,8 +15,8 @@ class UsersController < ApplicationController
       redirect_to root_path
       return
     end
-    return true if ArchiveConfig.ACCOUNT_CREATION_ENABLED
     @invitation = Invitation.find_by_token(params[:invitation_token])
+    return true if AdminSetting.account_creation_enabled?   
     if !@invitation
       flash[:error] = t('creation_suspended', :default => "Account creation is suspended at the moment. Please check back with us later.")
       redirect_to login_path
@@ -57,8 +57,12 @@ class UsersController < ApplicationController
   # GET /users/new
   # GET /users/new.xml
   def new
-    @user = User.new(:invitation_token => params[:invitation_token])
-    @user.email = @user.invitation.recipient_email if @user.invitation
+    @user = User.new
+    if params[:invitation_token]
+      @invitation = Invitation.find_by_token(params[:invitation_token])
+      @user.invitation_token = @invitation.token
+      @user.email = @invitation.invitee_email
+    end
     @hide_dashboard = true
   end
 
@@ -78,9 +82,7 @@ class UsersController < ApplicationController
         # normalize OpenID url before validating
         @user.identity_url = OpenIdAuthentication.normalize_identifier(@user.identity_url)
       end
-      if @invitation
-        @user.invitation = @invitation
-      end
+      @user.invitation_token = params[:user][:invitation_token] if params[:user][:invitation_token]
       if @user.save
         flash[:notice] = t('development_activation', :default => "During testing you can activate via <a href='{{activation_url}}'>your activation url</a>.",
                             :activation_url => activate_path(@user.activation_code)) if ENV['RAILS_ENV'] == 'development'

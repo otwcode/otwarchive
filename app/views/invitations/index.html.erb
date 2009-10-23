@@ -6,6 +6,17 @@
   <li><%= @user.invitations.redeemed.count %> invitations sent and redeemed</li>
 </ul>
 
+  <%- if logged_in_as_admin?  -%>
+    <h3><%= t('create_more', :default => 'Create more invitations for this user') %></h3>
+    <% form_tag user_invitations_url(@user) do %>
+    <dl>
+      <dt><%= label_tag :number_of_invites, t('number_of_invites', :default => 'Number of invitations:') %></dt>
+      <dd><%= text_field_tag :number_of_invites  %></dt>
+    </dl>
+    <p><%= submit_tag 'Create' %></p>
+    <% end %> 
+  <%- end -%>
+
 Show only: 
 <ul>
   <li><%= link_to_unless_current 'not sent', user_invitations_path(@user, :status => :unsent) %></li>
@@ -31,6 +42,9 @@ Show only:
   <td><%= invitation.invitee_email %></td>
   <td><%= invitation.sent_at %></td>
   <td><%= invitation.redeemed_at %></td>
+  <%- if logged_in_as_admin? && invitation.redeemed_at.blank? -%>
+    <td><%= link_to("Delete", { :action => "destroy", :id => invitation }, :confirm => "Are you sure you want to delete this invitation?", :method => :delete) %></td> 
+  <%- end -%>
   </tr>
   <%- end -%>
 </table>

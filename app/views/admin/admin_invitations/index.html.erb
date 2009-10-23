@@ -10,8 +10,9 @@
     <p><%= f.submit t('submit_invite', :default => 'Invite user')  %></p>
   <% end %>
   
-  <p>Send invite codes to people in our invitations queue</p>
-  <% form_tag invitations_url do %>
+  <p>Send invite codes to people in our <%= link_to 'invitations queue', invite_requests_path %></p>
+  <p>(There are currently <%= InviteRequest.count %> requests in the queue.)</p>
+  <% form_tag url_for(:controller => 'admin/admin_invitations', :action => 'invite_from_queue') do %>
     <dl>
       <dt><%= label_tag :invite_from_queue, t('invite_from_queue', :default => 'Number of people to invite:') %></dt>
       <dd><%= text_field_tag :invite_from_queue  %></dt>
@@ -23,7 +24,7 @@
 <fieldset>
   <h2>Give invite codes to current users</h2>
   
-  <% form_tag invitations_url do %>
+  <% form_tag url_for(:controller => 'admin/admin_invitations', :action => 'grant_invites_to_users') do %>
     <dl>
       <dt><%= label_tag :number_of_invites, t('number_of_invites', :default => 'Number of invites:') %></dt>
       <dd><%= text_field_tag :number_of_invites %></dt>
@@ -37,10 +38,10 @@
 
 <fieldset>
   <h2>View or edit a particular user's invitations</h2>
-    <% form_tag invitations_url do %>
+    <% form_tag url_for(:controller => 'admin/admin_invitations', :action => 'find'), :method => :get do %>
     <dl>
-      <dt><%= label_tag :user_invites, t('name_or_email', :default => 'Enter a name or email address:') %></dt>
-      <dd><%= text_field_tag :user_invites  %></dt>
+      <dt><%= label_tag :user_name, t('user_name', :default => 'Enter a user name:') %></dt>
+      <dd><%= text_field_tag :user_name  %></dt>
     </dl>
     <p><%= submit_tag %></p>
   <% end %>

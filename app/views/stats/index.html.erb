@@ -1,0 +1,21 @@
+<h1>FUN WITH GRAPHS! (Extreme Beta)</h1>
+
+<div id="stats-graphs">
+<table  class="stats">
+	<caption>Invitations: by status</caption>
+	<thead>
+		<tr>
+			<td></td>
+			<th>total</th>
+		</tr>
+	</thead>
+	<tbody>
+	  <% @invitations_by_status.each_pair do |status, count| %>
+		<tr>
+			<th><%= status.to_s %></th>
+			<td><%= count.to_s %></td>
+		</tr>
+    <% end %>
+	</tbody>
+</table>
+</div>

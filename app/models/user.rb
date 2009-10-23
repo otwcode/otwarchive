@@ -21,10 +21,11 @@ class User < ActiveRecord::Base
   has_one :invitation, :as => :invitee
 
   #validates_presence_of :invitation_id, :message => 'is required', :unless => ArchiveConfig.ACCOUNT_CREATION_ENABLED
-  validates_uniqueness_of :invitation_id, :allow_blank => true
-  belongs_to :invitation
-  before_save :mark_invitation_used
+  #validates_uniqueness_of :invitation_id, :allow_blank => true
+  #belongs_to :invitation
+  attr_accessor :invitation_token
   attr_accessible :invitation_token
+  after_create :mark_invitation_redeemed
   
   has_many :external_authors, :dependent => :destroy
   has_many :external_creatorships, :foreign_key => 'archivist_id'
@@ -319,22 +320,12 @@ class User < ActiveRecord::Base
   
   ### BETA INVITATIONS ###
 
-  def invitation_token
-    invitation.token if invitation
-  end
-
-  def invitation_token=(token)
-    self.invitation = Invitation.find_by_token(token)
-  end
-
-  def mark_invitation_used
-    if invitation
-      invitation.update_attribute(:used, true)
+  #If a new user was invited, update the invitation
+  def mark_invitation_redeemed
+    if self.invitation_token
+      i = Invitation.find_by_token(self.invitation_token)
+      i.update_attributes(:invitee => self, :redeemed_at => Time.now)
     end
-  end
-
-  def unused_invite_total
-    self.invitations.unused.count
   end
   
   private

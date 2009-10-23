@@ -88,11 +88,6 @@ module UsersHelper
 #    total = pseud.unposted_works.size
 #    link_to_unless_current "My Drafts" + " (#{total})", drafts_user_pseud_works_path(@user, pseud)
 #  end
-
-  def user_invitations(user)
-    invitations = user.invitation_limit == 1 ? 'invitation' : 'invitations'
-    user.invitation_limit.to_s + ' ' + invitations
-  end
   
   def authors_header(collection)
     if collection.total_pages < 2

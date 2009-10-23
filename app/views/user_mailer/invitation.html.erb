@@ -5,4 +5,4 @@
 <%- end -%>
 
 <p><%=h "You can sign up at the following address:" -%>
-<%= link_to @signup_url, @signup_url %></p>
+<%= link_to("Sign up for an account today!", new_user_url(:invitation_token => @invitation.token, :host => @host)) %></p>

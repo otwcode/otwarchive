@@ -2,14 +2,13 @@ class UserMailer < ActionMailer::Base
   include ActionController::UrlWriter
   helper :application
   
-  def invitation(invitation, signup_url)
+  def invitation(invitation)
     subject       "[#{ArchiveConfig.APP_NAME}] Invitation"
-    recipients    invitation.recipient_email
-    from          ArchiveConfig.RETURN_ADDRESS
+    recipients    invitation.invitee_email
+    from            ArchiveConfig.RETURN_ADDRESS
     sent_on       Time.now
     content_type  "text/html"
-    body          :invitation => invitation, :signup_url => signup_url, :user_name => (invitation.sender ? invitation.sender.login : '')
-    invitation.update_attribute(:sent_at, Time.now)
+    body          :invitation => invitation, :user_name => (invitation.creator.is_a?(User) ? invitation.creator.login : ''), :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
   end
 
   def archive_notification(admin, user, subject, message)

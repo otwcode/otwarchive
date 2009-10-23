@@ -1,6 +1,7 @@
 class InvitationsController < ApplicationController
 
   before_filter :check_permission
+  before_filter :admin_only, :only => [:create, :destroy]
 
   def check_permission
     @user = User.find_by_login(params[:user_id])
@@ -19,15 +20,34 @@ class InvitationsController < ApplicationController
     @invitation = Invitation.find(params[:id])
   end
   
+  def create
+    if params[:number_of_invites].to_i > 0
+      params[:number_of_invites].to_i.times do
+        @user.invitations.create
+      end
+    end
+    flash[:notice] = "Invitations were successfully created."
+    redirect_to user_invitations_url(@user)
+  end
+  
   def update
     @invitation = Invitation.find(params[:id])
     if @invitation.update_attributes(params[:invitation])
-      #UserMailer.deliver_invitation(@invitation, signup_url(@invitation.token))
       flash[:notice] = 'Invitation was successfully sent.'
-      redirect_to(@invitation) 
+      redirect_to([@user, @invitation]) 
     else
       render :action => "show"
     end
+  end
+
+  def destroy
+    @invitation = Invitation.find(params[:id])
+    if @invitation.destroy
+      flash[:notice] = "Invitation successfully destroyed"
+    else
+      flash[:error] = "Invitation was not destroyed."
+    end
+    redirect_to user_invitations_url(@user)
   end
 
 end

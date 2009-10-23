@@ -3,11 +3,16 @@
 
 //things to do when the page loads
 document.observe("dom:loaded", function () {
+	visualizeTables();
 	hideFormFields(); 
 	hideFilters();
 	initSelect('languages_menu');
   hideExpandable();
 });
+
+function visualizeTables() {
+     $j("table.stats").visualize({type: 'pie', width: '600px', height: '300px'});
+}
 
 // Shows expandable fields when clicked on
 function ShowExpandable() {
