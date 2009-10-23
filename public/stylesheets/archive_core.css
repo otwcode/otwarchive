@@ -99,3 +99,6 @@ td	{ padding:0.375em; border:1px solid #ddd;}
 th a, th a:link	{ color: #fff; }
 th a:visited	{ color: #ddd; }
 th a:hover	{ color: #900; }
+
+/* Allow bulleted lists for Admin news posts */
+#lists-allowed  ul, #lists-allowed ul ul {padding-left: 2em !important;}
