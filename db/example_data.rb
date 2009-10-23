@@ -96,7 +96,7 @@ module FixtureReplacement
   end
 
   attributes_for :invitation do |a|
-    a.recipient_email = random_email
+    a.invitee_email = random_email
   end
 
   attributes_for :preference do |a|
