@@ -272,7 +272,11 @@ class WorksController < ApplicationController
       saved = @work.save
       unless saved && @work.has_required_tags? && @work.set_revised_at(@chapter.published_at)
         unless @work.has_required_tags?
-          @work.errors.add(:base, "Creating: Required tags are missing.")
+          if @work.fandoms.blank?
+            @work.errors.add(:base, "Creating: Please add all required tags. Fandom is missing.")
+          else
+            @work.errors.add(:base, "Creating: Required tags are missing.")
+          end
         end
         render :action => :new
       else
@@ -333,7 +337,11 @@ class WorksController < ApplicationController
       if @work.has_required_tags?
         render :action => "preview"
       else
-        @work.errors.add_to_base("Updating: Please add all required tags.")
+        if @work.fandoms.blank?
+          @work.errors.add_to_base("Updating: Please add all required tags. Fandom is missing.")
+        else
+          @work.errors.add_to_base("Updating: Please add all required tags.")
+        end
         render :action => :edit
       end
     elsif params[:cancel_button]
@@ -397,7 +405,11 @@ class WorksController < ApplicationController
           @chapter.errors.each {|err| @work.errors.add(:base, err)}
         end
         unless @work.has_required_tags?
-          @work.errors.add(:base, "Updating: Required tags are missing.")
+          if @work.fandoms.blank?
+            @work.errors.add(:base, "Updating: Please add all required tags. Fandom is missing.")
+          else
+            @work.errors.add(:base, "Updating: Required tags are missing.")
+          end
         end
         render :action => :edit
       end
