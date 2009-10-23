@@ -33,7 +33,11 @@
             <ul>              
               <%- @filters[type].each do |tag_info| -%>
                 <li>
+                  <%- if type == "Rating" || type == "Category" -%>
+                  <%= radio_button_tag "selected_tags[]", tag_info[:id], @selected_tags.include?(tag_info[:id]), :id => "selected_tags_#{tag_info[:id]}" -%>
+                  <%- else -%>
                   <%= check_box_tag "selected_tags[]", tag_info[:id], @selected_tags.include?(tag_info[:id]), :id => "selected_tags_#{tag_info[:id]}" -%>
+                  <%- end -%>
                   <%= label_tag "selected_tags_#{tag_info[:id]}", "#{tag_info[:name]} (#{tag_info[:count]})" %>  
                 </li>
               <%- end -%> 
