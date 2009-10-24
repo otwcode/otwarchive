@@ -21,7 +21,7 @@
 			
 		<h4><% author_fandoms = series.works.visible.collect(&:fandom_tags).flatten.compact.uniq
            unless author_fandoms.size <1 -%>
-		         <%= author_fandoms.collect{|tag| link_to(tag.name, link_to_tag(tag)) }.join(', ') %>
+		         <%= author_fandoms.collect{|tag| link_to_tag(tag) }.join(', ') %>
 		    <% end %>
 		</h4>
 		<p class="update"><%= set_format_for_date(series.revised_at) %></p>
