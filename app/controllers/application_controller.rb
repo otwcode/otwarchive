@@ -3,7 +3,7 @@
 
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
-  filter_parameter_logging :content, :password, :terms_of_service_text
+  filter_parameter_logging :content, :password, :terms_of_service_non_production
 
   include ExceptionNotifiable
 

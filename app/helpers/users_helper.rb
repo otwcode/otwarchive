@@ -123,4 +123,14 @@ module UsersHelper
     end
   end
   
+  #Give the TOS field in the new user form a different name in non-production environments
+  #so that it can be filtered out of the log, for ease of debugging
+  def tos_field_name
+    if ENV["RAILS_ENV"]=="production"
+      "terms_of_service"
+    else
+      "terms_of_service_non_production"
+    end
+  end
+  
 end
