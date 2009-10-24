@@ -14,7 +14,7 @@ class PasswordsController < ApplicationController
       flash[:notice] = t('check_email', :default => 'Check your email for your new password.')
       redirect_to login_path 
     rescue
-      flash[:login] = t('try_again', :default => "We couldn't find an account with that email address or username. Please try again?")
+      flash[:login] = '<br /><br /><div class="flash notice">' + t('try_again', :default => "We couldn't find an account with that email address or username. Please try again?") + "</div>"
       render :action => "new"
     end
   end    
