@@ -68,7 +68,7 @@
 <!-- Terms of Service -->
 				<p>
 					<%=h "And - really important - we need you to agree to our" %> <%= link_to "Terms of Service", tos_path -%>:<br />
-					<textarea name="terms_of_service" rows="8" cols="63" readonly="readonly">
+					<textarea name="terms_of_service_text" rows="8" cols="63" readonly="readonly">
 
 					  <%= html_to_text(render(:partial => 'home/tos')) %>
 
