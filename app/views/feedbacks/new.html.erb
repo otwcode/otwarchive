@@ -2,15 +2,20 @@
 
 <h1><%= t('support', :default => 'Support and Feedback') %></h1>
 
-<h3><%= t('contact_us', :default => "We love to hear from our users! If you'd like to ask for help, make a suggestion, or give us feedback, please use this form.") %></h3>
+<h3><%= t('contact_us', :default => "We love to hear from our users! If you'd like to ask for help, make a suggestion, or
+give us feedback please use this form.") %></h3>
 
 
 <p class="message"><%= t('try_faq', :default => "If you're looking for help, you can find answers to many common questions in our {{faq_link}}.", :faq_link => (link_to t('faq_link', :default => "FAQ section"), archive_faqs_path))%> 
 <%= t('try_known_issues', :default => "You may also like to check out our {{known_issues_link}} to see if your problem is something we've already identified.", 
-:known_issues_link => (link_to t('known_issues_link', :default => "Known Issues"), known_issues_path)) %> 
-  <%= t('submit_request', :default => "If you can't find what you're looking for, then please submit a support request here and we'll get back to you.") %></p>
+:known_issues_link => (link_to t('known_issues_link', :default => "Known Issues"), known_issues_path)) %></p>
+<p class="message"><%= t('submit_request', :default => "If you can't find what you're looking for, please submit a support request here. If
+you'd like us to reply, make sure you include your email address, but anonymous
+feedback is welcomed as well.") %></p>
 
-<p class="message"><%= t('still_beta', :default => "We're still in our beta phase, so there are still lots of improvements and new features planned. Please do use this form to let us know about your experience of using the site - good and bad.") %></p>
+<p class="message"><%= t('still_beta', :default => "We're still in our beta phase, so there are lots of improvements and new
+features planned. Please do use this form to let us know about your experience of
+using the site - good and bad.") %></p>
 
 <br />
 
