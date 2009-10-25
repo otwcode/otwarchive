@@ -5,7 +5,7 @@ class PeopleController < ApplicationController
     if params[:show] == "authors"
       authored_items_scope = ".select{|a| a.visible_works_count > 0}"
     elsif params[:show] == "reccers"
-      authored_items_scope = logged_in_as_admin? ? ".select{|a| a.bookmarks.count > 0}" : ".select{|a| a.bookmarks.visible.size > 0}"
+      authored_items_scope = ".select{|a| a.bookmarks.recs.visible.size > 0}"
     end
     @pseuds_alphabet = eval("Pseud.find(:all)#{authored_items_scope}").collect {|pseud| pseud.name.scan(/./mu)[0].upcase}.uniq.sort
     
