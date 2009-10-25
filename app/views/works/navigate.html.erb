@@ -1,5 +1,5 @@
 <h3>
-  Chapter Index for 
+  <%=h t('chapter_index', :default => "Chapter Index for") %> 
   <%= t('work_title_by_author', :default => "{{title}} by {{author}}", :title => link_to(sanitize_title_for_display(@work.title), @work), :author => byline(@work)) %>
 </h3>
 
