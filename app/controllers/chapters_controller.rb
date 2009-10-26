@@ -88,6 +88,18 @@ class ChaptersController < ApplicationController
       @chapters = [@chapter]
       @commentable = @work
       @comments = @chapter.comments
+      
+      @page_title = ""
+      if logged_in? && !current_user.preference.work_title_format.blank?
+        @page_title = current_user.preference.work_title_format
+        @page_title.gsub!(/FANDOM/, @work.fandoms.string)
+        @page_title.gsub!(/AUTHOR/, @work.pseuds.sort.collect(&:byline).join(', '))
+        @page_title.gsub!(/TITLE/, @work.title + " - Chapter " + @chapter.position.to_s)
+      else
+        @page_title = @work.title + " - Chapter " + @chapter.position.to_s + " - " + @work.pseuds.sort.collect(&:byline).join(', ') + " - " + @work.fandom_string
+      end
+      @page_title += " [#{ArchiveConfig.APP_NAME}]"
+    
       respond_to do |format|
         format.html
         format.js
