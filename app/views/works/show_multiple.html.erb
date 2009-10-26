@@ -1,4 +1,4 @@
-<h2><%=h "Works To Edit" -%></h2>
+<h2><%=h t('works_edit', :default  => "Works To Edit") -%></h2>
 
 <% form_tag edit_multiple_user_works_path(@user) do %>
 
@@ -8,8 +8,8 @@
   <table class="story-list">
     <tr>
       <th>&nbsp;</th>
-      <th>Title</th>
-      <th>Fandom</th>
+      <th><%=h t('title', :default =>"Title") %></th>
+      <th><%=h t('fandom', :default =>"Fandom") %></th>
       <th>&nbsp;</th>
       <th>&nbsp;</th>
       <th>&nbsp;</th>
