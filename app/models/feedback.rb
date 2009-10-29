@@ -12,13 +12,15 @@ class Feedback < ActiveRecord::Base
  BUGS_ASSISTANCE = 11483
  BUGS_BUG = 11482
  BUGS_FEEDBACK = 11484
+ BUGS_LANG = 11910
  BUGS_MISC = 11481
  BUGS_TAGS = 11485
  
 # Category names, used on form
- BUGS_ASSISTANCE_NAME = 'Assistance Using the Archive'
+ BUGS_ASSISTANCE_NAME = 'Help Using the Archive'
  BUGS_BUG_NAME = 'Bug Report'
  BUGS_FEEDBACK_NAME = 'Feedback/Suggestions'
+ BUGS_LANG_NAME = 'Languages/Translation'
  BUGS_MISC_NAME = 'General/Other'
  BUGS_TAGS_NAME = 'Tags'
 

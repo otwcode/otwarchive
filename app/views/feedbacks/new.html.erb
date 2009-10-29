@@ -23,8 +23,9 @@ using the site - good and bad.") %></p>
 
   <p class="message"><%= f.label :category, "Please select a category:"%></p>
   <p>
-    <%= f.select("category", [ [Feedback::BUGS_ASSISTANCE_NAME, Feedback::BUGS_ASSISTANCE], [Feedback::BUGS_BUG_NAME, Feedback::BUGS_BUG], 
-    [Feedback::BUGS_FEEDBACK_NAME, Feedback::BUGS_FEEDBACK], [Feedback::BUGS_MISC_NAME, Feedback::BUGS_MISC], [Feedback::BUGS_TAGS_NAME, Feedback::BUGS_TAGS] ], :selected => Feedback::BUGS_MISC) -%>
+    <%= f.select("category", [ [Feedback::BUGS_BUG_NAME, Feedback::BUGS_BUG], [Feedback::BUGS_FEEDBACK_NAME, Feedback::BUGS_FEEDBACK],  
+     [Feedback::BUGS_MISC_NAME, Feedback::BUGS_MISC], [Feedback::BUGS_ASSISTANCE_NAME, Feedback::BUGS_ASSISTANCE], [Feedback::BUGS_LANG_NAME, Feedback::BUGS_LANG], 
+     [Feedback::BUGS_TAGS_NAME, Feedback::BUGS_TAGS] ], :selected => Feedback::BUGS_MISC) -%>
   </p>
   
   <p class="message"><%= f.label :summary, "Brief summary (required):" %></p>
