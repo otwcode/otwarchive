@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
   #belongs_to :invitation
   attr_accessor :invitation_token
   attr_accessible :invitation_token
-  after_create :mark_invitation_redeemed
+  after_create :mark_invitation_redeemed, :remove_from_queue
   
   has_many :external_authors, :dependent => :destroy
   has_many :external_creatorships, :foreign_key => 'archivist_id'
@@ -326,6 +326,12 @@ class User < ActiveRecord::Base
       i = Invitation.find_by_token(self.invitation_token)
       i.update_attributes(:invitee => self, :redeemed_at => Time.now) if i
     end
+  end
+  
+  # Existing users should be removed from the invitations queue
+  def remove_from_queue
+    invite_request = InviteRequest.find_by_email(self.email)
+    invite_request.destroy if invite_request
   end
   
   private
