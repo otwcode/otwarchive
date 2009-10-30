@@ -11,7 +11,8 @@ document.observe("dom:loaded", function () {
 });
 
 function visualizeTables() {
-     $j("table.stats").visualize({type: 'pie', width: '600px', height: '300px'});
+     $j("table.stats-pie").visualize({type: 'pie', width: '600px', height: '300px'});
+     $j("table.stats-line").visualize({type: 'line'});
 }
 
 // Shows expandable fields when clicked on

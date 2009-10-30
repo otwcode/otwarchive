@@ -14,10 +14,22 @@ class InvitationsController < ApplicationController
     else
       @invitations = eval("@user.invitations." + params[:status])
     end
+    @unsent_invitations = @user.invitations.unsent.find(:all, :limit => 5)
   end
   
   def show
     @invitation = Invitation.find(params[:id])
+  end
+  
+  def invite_friend
+    @invitation = @user.invitations.find(params[:id])
+    @invitation.invitee_email = params[:invitee_email]
+    if @invitation.save
+      flash[:notice] = 'Invitation was successfully sent.'
+      redirect_to([@user, @invitation]) 
+    else
+      render :action => "show"
+    end    
   end
   
   def create

@@ -1,36 +1,54 @@
-<h2><%= logged_in_as_admin? ? (@user.login + "'s") : "Your" %> Invitations</h2>
-
-<ul>
-  <li><%= @user.invitations.unsent.count %> invitations not yet sent</li>
-  <li><%= @user.invitations.unredeemed.count %> invitations sent but not redeemed</li>
-  <li><%= @user.invitations.redeemed.count %> invitations sent and redeemed</li>
-</ul>
-
-  <%- if logged_in_as_admin?  -%>
-    <h3><%= t('create_more', :default => 'Create more invitations for this user') %></h3>
-    <% form_tag user_invitations_url(@user) do %>
+<%- if logged_in_as_admin?  -%>
+<h2><%= t('create_more', :default => 'Create more invitations for this user') %></h2>
+  <% form_tag user_invitations_url(@user) do %>
     <dl>
       <dt><%= label_tag :number_of_invites, t('number_of_invites', :default => 'Number of invitations:') %></dt>
       <dd><%= text_field_tag :number_of_invites  %></dt>
     </dl>
     <p><%= submit_tag 'Create' %></p>
-    <% end %> 
+  <% end %> 
+<%- end -%>
+  
+<h2>Invite a friend</h2>
+<%- if @unsent_invitations.blank? -%>
+  <p>Sorry, you have no unsent invitations right now.</p>  
+<%- else -%>
+  <%- form_tag url_for(:controller => 'invitations', :action => 'invite_friend', :user_id => @user) do -%>
+    <dl>
+      <dt><%= label_tag :invitee_email, t('email address', :default => 'Email address') %></dt>
+      <dd><%= text_field_tag :invitee_email %></dd>
+      <dt><%= label_tag :id, t('choose_invite', :default => 'Choose an invitation') %></dt>
+      <dd>
+        <ul>
+          <%- for unsent_invite in @unsent_invitations -%>
+          <li>
+            <%= radio_button_tag 'id', unsent_invite.id, (unsent_invite == @unsent_invitations.first) %> 
+            <%= label_tag 'id_' + unsent_invite.id.to_s, unsent_invite.token %>
+          </li>
+          <%- end -%>        
+        </ul>
+      </dd>
+    </dl>
+    <p><%= submit_tag t('submit_invite', :default => 'Send invite')  %></p>
   <%- end -%>
+<%- end -%>
 
-Show only: 
+<h2><%= logged_in_as_admin? ? (@user.login + "'s") : "Your" %> Invitations</h2>
+
 <ul>
-  <li><%= link_to_unless_current 'not sent', user_invitations_path(@user, :status => :unsent) %></li>
-  <li><%= link_to_unless_current 'not redeemed', user_invitations_path(@user, :status => :unredeemed) %></li> 
-  <li><%= link_to_unless_current 'redeemed', user_invitations_path(@user, :status => :redeemed) %></li> 
-  <li><%= link_to 'all', user_invitations_path(@user) %></li>  
-</ul>
+  <li><%= link_to_unless_current(@user.invitations.unsent.count.to_s + " invitations not yet sent", user_invitations_path(@user, :status => :unsent)) %></li>
+  <li><%= link_to_unless_current(@user.invitations.unredeemed.count.to_s + " invitations sent but not redeemed", user_invitations_path(@user, :status => :unredeemed)) %></li>
+  <li><%= link_to_unless_current(@user.invitations.redeemed.count.to_s + " invitations sent and redeemed", user_invitations_path(@user, :status => :redeemed)) %></li>
+  <li class="last"><%= link_to 'all', user_invitations_path(@user) %></li>
+</ul>  
 
 <%- unless @invitations.blank? -%>
 <table>
   <tr>
   <th scope="col">Token</th>
-  <th scope="col">Created</th>
   <th scope="col">Sent To</th>
+  <th scope="col">User Name</th>
+  <th scope="col">Created</th>
   <th scope="col">Sent At</th>
   <th scope="col">Redeemed</th>
   </tr>
@@ -38,8 +56,9 @@ Show only:
   <%- for invitation in @invitations -%>
   <tr>
   <td><%= link_to invitation.token, [@user, invitation] %></td>
-  <td><%= invitation.created_at %></td>
   <td><%= invitation.invitee_email %></td>
+  <td><%=invitee_link(invitation) %></td>
+  <td><%= invitation.created_at %></td>
   <td><%= invitation.sent_at %></td>
   <td><%= invitation.redeemed_at %></td>
   <%- if logged_in_as_admin? && invitation.redeemed_at.blank? -%>
