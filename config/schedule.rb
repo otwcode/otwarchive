@@ -18,8 +18,31 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
-every 1.day do
+
+set :cron_log, "/tmp/www-data.log"
+
+# Check to see if the invite queue is enabled and invite users if appropriate
+every 1.day, :at => '1:21 am' do
   rake "invitations:check_queue"
 end
 
+# Purge user accounts that haven't been activated
+every 1.day, :at => '1:31 am' do
+  rake "admin:purge_unvalidated_users"
+end
+
+# Resend signup emails
+every 1.day, :at => '1:41 am' do
+  rake "admin:resend_signup_emails"
+end
+
+# Unsuspend selected users
+every 1.day, :at => '1:51 am'  do
+  rake "admin:unsuspend_users"
+end
+
+# Delete unused tags
+every 1.day, :at => '2:10 am' do
+  rake "Tag:delete_unused"
+end
 

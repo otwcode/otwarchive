@@ -15,6 +15,16 @@ role :db, host, :primary => true
 before "deploy:setup", :local
 after "deploy:update_code", "local:update"
 
+
+after "deploy:symlink", "deploy:update_crontab"
+
+namespace :deploy do
+  desc "Update the crontab file"
+  task :update_crontab, :roles => :db do
+    run "cd #{release_path} && whenever --write-crontab #{application}"
+  end
+end
+
 namespace :local do
   desc "Create placeholders for configuration files"
   task :default do
