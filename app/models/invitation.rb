@@ -40,7 +40,7 @@ class Invitation < ActiveRecord::Base
   
   def recipient_is_not_registered
     if self.invitee_email && User.find_by_email(self.invitee_email)
-      errors.add :invitee_email, t('already_registered', :default => 'is already registered') 
+      errors.add :invitee_email, t('already_registered', :default => 'is already being used by an account holder.') 
       return false
     end
   end
