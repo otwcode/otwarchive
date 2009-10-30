@@ -16,7 +16,8 @@ class PasswordsControllerTest < ActionController::TestCase
     assert_not_equal after, before
     assert_equal(1, ActionMailer::Base.deliveries.length)
     assert flash.has_key?(:notice)
-    assert_redirected_to login_path
+    assert_template "new"
+    assert_response :success
   end
   def test_create_password_reset_fail
     post :create, :locale => 'en', :login => "no such user"
