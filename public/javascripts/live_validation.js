@@ -191,7 +191,7 @@ LiveValidation.prototype = {
    * sets the focused flag to false when field loses focus  and triggers TinyMCE to save content into field
    */
   doOnBlur: function(){
-	tinyMCE.triggerSave();
+  if (typeof(tinyMCE)!="undefined") tinyMCE.triggerSave();
 	this.focused = false;
     this.validate();
   },
@@ -453,7 +453,7 @@ LiveValidationForm.prototype = {
 	// tinyMCE save needs to be triggered here so live validation recognises content in the rich text editor
 	this.oldOnSubmit = this.element.onsubmit || function(){};
 	this.element.onsubmit = function(e){
-		tinyMCE.triggerSave(this.fields);
+	  if (typeof(tinyMCE)!="undefined") tinyMCE.triggerSave(this.fields);
 	  var ret = (LiveValidation.massValidate(this.fields)) ? this.oldOnSubmit.call(this.element, e) !== false : false;
 	   
 	  // don't freeze the form if the user has clicked on the 'cancel' button
