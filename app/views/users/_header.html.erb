@@ -4,14 +4,14 @@
 	<h2><%= image_tag("icon_placeholder.png", :size => "100x100", :alt => "(Icon!)") %></h2>
 
   <div class="navigation">
-    <span class="navitem"><%= link_to_unless_current("Profile", user_profile_path(user)) %></span>
+    <span class="navitem"><%= link_to_unless_current t('profile', :default =>"Profile"), user_profile_path(user) %></span>
     <%- if @user == current_user -%>
-      <span class="navitem"><%= link_to 'Post New', new_work_path -%></span>
+      <span class="navitem"><%= link_to t('post_new', :default =>"Post New"), new_work_path -%></span>
     <%- end -%>  
-    <span class="navitem"><%= link_to_help "coming-soon", "Bookmark" %></span>
-    <span class="navitem"><%= link_to_help "coming-soon", "Subscribe" %></span>
+    <span class="navitem"><%= link_to_help "coming-soon", t('bookmark', :default =>"Bookmark") %></span>
+    <span class="navitem"><%= link_to_help "coming-soon", t('subscribe', :default =>"Subscribe") %></span>
     <%- if @user == current_user  -%>
-      <span class="navitem"><%= link_to 'Invitations', user_invitations_path(user) %></span>
+      <span class="navitem"><%= link_to t('invitations', :default =>"Invitations"), user_invitations_path(user) %></span>
     <%- end -%>  
   </div>
 </div>
