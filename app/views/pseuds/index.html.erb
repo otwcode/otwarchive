@@ -15,15 +15,15 @@
       <p class="pseud-desc"><%= sanitize_description_for_display pseud.description %></p>
     <%- end -%>
       <% if current_user == @user -%>
-    <div class="navigation">
-        <span class="navitem"><%= link_to t('edit_link', :default => 'Edit'), [:edit, @user, pseud] -%></span>
+    <ul class="navigation">
+        <li><%= link_to t('edit_link', :default => 'Edit'), [:edit, @user, pseud] -%></li>
         <%- unless pseud.works.blank? %>
-          <span class="navitem"><%= link_to t('orphan_link', :default => 'Orphan Works'), {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} -%></span>
+          <li><%= link_to t('orphan_link', :default => 'Orphan Works'), {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} -%></li>
         <%- end -%>
         <% unless @user.login == pseud.name || pseud.is_default -%>
-          <span class="navitem"><%= link_to t('delete_link', :default => 'Delete'), [@user, pseud], :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></span>
+          <li><%= link_to t('delete_link', :default => 'Delete'), [@user, pseud], :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
         <% end -%>
-    </div>
+    </ul>
   <% end -%>
   </li>
 <% end %>
