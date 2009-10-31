@@ -1,6 +1,6 @@
 <%- unless @filters.blank? && (@pseuds.size < 1 || (@user && @pseuds.size < 2)) -%>
 <%- form_tag(works_path, :class => 'work-filters', :method => :get) do -%>
-  <%- field_set_tag t('filter_these', :default => 'Filter these results: ') do -%>
+  <%- field_set_tag t('filter_these', :default => 'Filter these results: ') do -%><%= link_to_help "filters" -%>
  		<dl class="filters">
 			<%- unless (@pseuds.size < 1 || (@user && @pseuds.size < 2 && !@author)) -%>
         <dt onclick='toggleFilters("filter-pseuds")'>
