@@ -10,7 +10,7 @@ class Invitation < ActiveRecord::Base
   named_scope :unredeemed, :conditions => 'invitee_email IS NOT NULL and redeemed_at IS NULL'
   named_scope :redeemed, :conditions => 'redeemed_at IS NOT NULL'
 
-  before_create :generate_token
+  before_validation_on_create :generate_token
   before_save :send_and_set_date
   after_save :adjust_user_invite_status
 
