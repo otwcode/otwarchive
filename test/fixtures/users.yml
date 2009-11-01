@@ -15,7 +15,6 @@ user_00004:
   suspended_until: 
   banned: false
   login: testuser4
-  invitation_limit: 1
   email: user4@example.com
   created_at: 2008-11-09 01:26:02 +00:00
 user_00015: 
@@ -34,7 +33,6 @@ user_00015:
   suspended_until: 
   banned: false
   login: parenthetical
-  invitation_limit: 1
   email: sarkymoocow@example.com
   created_at: 2009-07-17 22:44:23 +01:00
 user_00016: 
@@ -53,7 +51,6 @@ user_00016:
   suspended_until: 
   banned: false
   login: cal
-  invitation_limit: 1
   email: cal@example.com
   created_at: 2009-07-17 23:18:52 +01:00
 user_00005: 
@@ -72,7 +69,6 @@ user_00005:
   suspended_until: 
   banned: false
   login: Ash
-  invitation_limit: 1
   email: ash@example.com
   created_at: 2008-12-05 13:55:27 +00:00
 user_00006: 
@@ -91,7 +87,6 @@ user_00006:
   suspended_until: 
   banned: false
   login: orphan_account
-  invitation_limit: 1
   email: 
   created_at: 2008-12-05 13:55:28 +00:00
 user_00017: 
@@ -110,7 +105,6 @@ user_00017:
   suspended_until: 
   banned: false
   login: reccer
-  invitation_limit: 1
   email: reccer@example.com
   created_at: 2009-07-18 09:55:25 +01:00
 user_00007: 
@@ -129,7 +123,6 @@ user_00007:
   suspended_until: 
   banned: false
   login: Boccaccio
-  invitation_limit: 1
   email: boccaccio@example.org
   created_at: 2008-12-05 14:07:24 +00:00
 user_00019: 
@@ -148,7 +141,6 @@ user_00019:
   suspended_until: 
   banned: false
   login: Zee
-  invitation_limit: 1
   email: zooey.glass04@gmail.com
   created_at: 2009-09-16 23:37:53 +01:00
 user_00008: 
@@ -167,7 +159,6 @@ user_00008:
   suspended_until: 
   banned: false
   login: Chaucer
-  invitation_limit: 1
   email: chaucer@example.com
   created_at: 2008-12-06 22:53:08 +00:00
 user_00010: 
@@ -186,7 +177,6 @@ user_00010:
   suspended_until: 
   banned: false
   login: Sam
-  invitation_limit: 1
   email: Sam@example.com
   created_at: 2008-12-06 23:03:31 +00:00
 user_00009: 
@@ -205,7 +195,6 @@ user_00009:
   suspended_until: 
   banned: false
   login: Dean
-  invitation_limit: 1
   email: Dean@example.com
   created_at: 2008-12-06 22:58:44 +00:00
 user_00011: 
@@ -224,7 +213,6 @@ user_00011:
   suspended_until: 
   banned: false
   login: Ellen
-  invitation_limit: 1
   email: Ellen@example.com
   created_at: 2008-12-06 23:05:24 +00:00
 user_00012: 
@@ -243,7 +231,6 @@ user_00012:
   suspended_until: 
   banned: false
   login: Zooey_Glass
-  invitation_limit: 1
   email: zooey@example.com
   created_at: 2008-12-06 23:13:19 +00:00
 user_00001: 
@@ -262,7 +249,6 @@ user_00001:
   suspended_until: 
   banned: false
   login: testuser
-  invitation_limit: 1
   email: user1@example.com
   created_at: 2008-11-09 01:26:02 +00:00
 user_00002: 
@@ -281,7 +267,6 @@ user_00002:
   suspended_until: 
   banned: false
   login: testuser2
-  invitation_limit: 1
   email: user2@example.com
   created_at: 2008-11-09 01:26:02 +00:00
 user_00013: 
@@ -300,7 +285,6 @@ user_00013:
   suspended_until: 
   banned: false
   login: Jessica
-  invitation_limit: 1
   email: Jessica@example.com
   created_at: 2008-12-06 23:29:42 +00:00
 user_00014: 
@@ -319,7 +303,6 @@ user_00014:
   suspended_until: 
   banned: false
   login: Uriel
-  invitation_limit: 1
   email: Uriel@example.com
   created_at: 2008-12-07 19:54:32 +00:00
 user_00003: 
@@ -338,6 +321,5 @@ user_00003:
   suspended_until: 
   banned: false
   login: testuser3
-  invitation_limit: 1
   email: user3@example.com
   created_at: 2008-11-09 01:26:02 +00:00
