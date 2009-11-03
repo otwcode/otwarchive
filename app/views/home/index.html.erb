@@ -26,9 +26,6 @@
   <%= render :partial => 'works/search_box' %>
 </div>
 
-<%= image_tag('logo.png', :alt =>
-ArchiveConfig.APP_NAME + ' logo', :class => 'logo', :height => '70', :width => '105') %>
-
 <h1><span><%= ArchiveConfig.APP_NAME -%>
   <% unless ArchiveConfig.REVISION.blank? %>(BETA <%=h t('revision', :default => 'rev. {{rev_number}}', :rev_number => ArchiveConfig.REVISION) %>)<% end %></span>
 </h1>
@@ -61,52 +58,44 @@ ArchiveConfig.APP_NAME + ' logo', :class => 'logo', :height => '70', :width => '
 </div>
 <div class="bigwrapper">
 
-<div class="wrapper box">
-	<h4><%= t('home.accounts', :default => 'Accounts') %></h4>
-  <%- if logged_in? || logged_in_as_admin? -%>
-    <h3 class="red"><%= t('home.you_are_signed_in', :default => 'You are signed in') %></h3>
-  <%- else -%>
-    <h3 class="red"><a href="session/new"><%= t('layout.header.sign_in', :default => 'Sign in') %></a></h3>
-    <%- if AdminSetting.invite_from_queue_enabled? -%>
-    <h3 class="red"><%= link_to t('home.request_invite', :default => 'Request an invite'), invite_requests_path %></h3>
-    <%- end -%>
-  <%- end -%>
-</div>
-
-<div class="wrapper" style="padding-top: 3em;">
-	<h3><%= t('home.about_us', :default => 'The Archive of Our Own is a fan-created, fan-run, non-profit, noncommercial archive for transformative fanworks.') %></h3>
-</div>
-
-<div class="wrapper box">
-	<h4><%= t('home.explore', :default => 'Explore') %></h4>
-	<ul class="meters">
-		<li><span class="red"><%= link_to t('home_fandoms', :default => 'fandoms'), media_path %></span>: <span><%= @fandom_count -%></span><%= ' ' + t('todate_count', :default => " to date") %></li>
-		<li><span class="red"><%= link_to t('home_works', :default => 'works'), works_path %></span>: <span><%= @work_count %></span><%= ' ' + t('todate_count', :default => " to date") %></li>
-    <li><span class="red"><%= link_to t('home_people', :default => 'people'), people_path %></span>: <span><%= @user_count %></span><%= ' ' + t('todate_count', :default => " to date") %></li>
-	</ul>
-</div>
-
-<div class="wrapper lines col1">
-  <% unless @admin_posts.empty? -%>
-    <h3><%= t('home.updates', :default => 'Updates') %></h3>
-    <%= t('home.latest_ao3_news', :default => 'Latest AO3 News') %>: 
-    <%= link_to sanitize_title_for_display(@admin_posts.slice(0).title), @admin_posts.slice(0) %>
-    <span class="date-posted">(<%= t('home.posted_on', :default => 'Posted on') %> <%=h @admin_posts.slice(0).created_at %>)</span>
-  <% end -%>
-</div>
-
-<div class="wrapper lines">
-  <h3><%= t('home.about', :default => 'About') %></h3>
-  <%= t('home.about.content', :default => 'If you have questions or want to know more about the Archive check out the ') %><%= link_to 'Archive FAQ', archive_faqs_path %>.
-</div>
-
-<div class="wrapper lines">
-  <h3><%= t('home.read', :default => 'Read') %></h3>
-  <%- if @latest_work -%>
-    <%=h t('latest_work', :default => 'Latest work') + ': '%> <span><%= link_to @latest_work.title, @latest_work -%></span>
-  <%- end -%>
-</div>
-
+  <div class="open-beta-box">
+    <h2>Be part of our open beta!</h2>
+    <h1><%= link_to "SIGN UP NOW", invite_requests_path %></h1>
+    <p><%= t('home.about_us', :default => 'The Archive of Our Own is a fan-created, fan-run, non-profit, noncommercial archive for transformative fanworks.') %></p>
+  </div>
+  
+  <div class="sidebar">
+    <div class="sidebar-box">
+      <h3>Explore</h3>
+	    <ul class="meters">
+		    <li>
+		      <span><%= link_to t('home_fandoms', :default => 'fandoms'), media_path %></span>: 
+		      <span><%= @fandom_count -%></span><%= ' ' + t('todate_count', :default => " to date") %>
+		    </li>
+		    <li>
+		      <span><%= link_to t('home_works', :default => 'works'), works_path %></span>: 
+		      <span><%= @work_count %></span><%= ' ' + t('todate_count', :default => " to date") %>
+		    </li>
+        <li>
+          <span><%= link_to t('home_people', :default => 'people'), people_path %></span>: 
+          <span><%= @user_count %></span><%= ' ' + t('todate_count', :default => " to date") %>
+        </li>
+	    </ul>    
+    </div>
+    <div class="sidebar-box">
+       <h3>News</h3>
+       <p>
+         <%- if @admin_post -%><%= link_to sanitize_title_for_display(@admin_post.title), @admin_post %><%- end -%>
+       </p>   
+    </div>
+    <div class="sidebar-box">
+      <h3>About</h3>
+      <p>
+        <%= t('home.about.content', :default => 'If you have questions or want to know more about the Archive check out the ') %>
+        <%= link_to 'Archive FAQ', archive_faqs_path %>.
+      </p>    
+    </div>    
+  </div>
 </div>
 
 <!--<h5 id="signup"></h5>-->

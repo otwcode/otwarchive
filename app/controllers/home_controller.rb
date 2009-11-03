@@ -19,19 +19,8 @@ class HomeController < ApplicationController
   def index
     @user_count = User.count
     @work_count = Work.visible.size
-    unless @work_count.zero?
-      @random_work = Work.visible.find(:first, :offset => rand(@work_count))
-      unless @random_work.nil?
-        @random_user = @random_work.pseuds.first.user
-      end
-    end
-    @works_today = Work.visible.count(:all, :conditions => (['works.created_at > ?', 1.day.ago]))
-    
     @fandom_count = Fandom.canonical.count
-    @latest_work = Work.visible.find(:first, :conditions => {:restricted => false}, :order => "works.revised_at DESC")
-    fandom = @latest_work.fandoms.first if @latest_work
-    @latest_fandom = @latest_work.fandoms.first if fandom && fandom.canonical?
-    @admin_posts = AdminPost.find(:all, :order => "updated_at DESC")
+    @admin_post = AdminPost.find(:first, :order => "updated_at DESC")
     render :action => "index", :layout => "home"
   end
   

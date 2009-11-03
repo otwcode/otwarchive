@@ -1,14 +1,15 @@
 #main.home {
 padding: 0;
+font-family:Helvetica, Arial, Verdana, sans-serif;
 }
 .home .home-header {position: relative;}
 
+.home h1, .home h2, .home h3 {font-family:Helvetica, Arial, Verdana, sans-serif;}
+
 .home h1 {
-text-align: center;
-margin: 0.75em 0 0.125em 0;
+margin: 0.75em;
 border: 0;
 font-size:1.5em;
-font-family:Fertigo,Cambria,Constantia,Palatino,Georgia,sans-serif;
 font-weight:400;
 }
 .home h1 a {
@@ -16,9 +17,8 @@ text-decoration: none;
 }
 
 .home h2 {
-font: 100 0.75em "Gill Sans", Georgia, Verdana, sans-serif;
-margin: 0.5em 0 0.5em 0;
-text-align: center;
+margin: 0.75em;
+font-size: 1em;
 }
 
 .home #home-signin {
@@ -41,88 +41,21 @@ background: #ddd;
 }
 .home .greeting {position: absolute; right: 0.2em;}
 
-.home .searchbox {position: absolute; right: 0; top: 3.75em;}
-.home .logo  {position: absolute; left: 0.75em; top: -0.5em;}
-
-.home ul#main-navigation {margin-left: 30%; border-left: 0;}
-.home #main-navigation a {border-bottom: 1px; border-left: 0px; border-right: 0px; padding: 0.15em 1em;}
-.home #main-navigation li {margin-bottom: 0;}
+.home #main-navigation {width: 100%; background-color: #000; color: #FFF; }
+.home #main-navigation a {padding: 0.15em 1em; background-color: #000; color: #FFF; }
+.home #main-navigation a:hover {background-color: #900;}
+.home #main-navigation li {margin-bottom: 0; }
 .home #main-navigation a {text-decoration: none;}
 
 .home .clear {
 border: 0;
-border-bottom: 2px solid #777;
 clear: both; 
 height: 0; 
 margin-bottom: 0; 
 margin-top: 0;
 }
-
-.home .wrapper {
-padding: 0 2.5% 1em 2.5%;
-width: 24%;
-margin-right: 3%;
-min-width: 9em;
-min-height: 7em;
-float: left;
-}
-
-.home .box {
-background: url(/images/box2.jpg) bottom left no-repeat;
-padding: 0 2.5% 2em 2.5%;
-min-height: 11.5em;
-margin-top: 1.5em;
-margin-bottom: 0;}
-
-.home .bigwrapper {position: static; margin-left: 4%;}
-
-.home .col1 {clear: left;}
-
-.home .lines {
-border-width: 1px 0px 1px; 
-border-color: #222; 
-border-style: solid; 
-margin-bottom: 1em; 
-margin-top: 0;
-text-align: left;}
-
-.home .wrapper h3, .home .wrapper .h3 a, .home .red a, .home .red a:visited  {
-color: #900;
-font: oblique 100 1.25em "Gill Sans", Georgia,Verdana, sans-serif;
-text-align: center;
-margin: 0.3em 0 0.3em;
-}
-
-.home .red a, .home .red a:visited {
-text-decoration: none;
-}
-
-.home .red a:hover {
-text-decoration: underline;
-color: #222;
-}
-
-.home .wrapper h4 {
-color: #222;
-font-weight: 600;
-font-size: 2.25em;
-font-family: Fertigo,Cambria,Constantia,Palatino,Georgia,sans-serif;
-text-decoration: none;
-border-bottom: 1px solid #777;
-margin-bottom: 0.4em;
-text-align: center;
-}
-.home .wrapper ul {
-margin: 1em 0 0 0;
-}
-.home .wrapper ul span {
-font-weight: 900;
-font-size: larger;
-}
-
-.home h5 {
+.home h5 {
 text-align: right;
-font: 100 2.25em "Gill Sans", Georgia,Verdana, sans-serif;
 padding: 0 1em
 }
 
@@ -142,20 +75,28 @@ color: #fff;
 text-decoration: none
 }
 
-#quotebox {
-font: 100 1em/1.5 "Gill Sans", Georgia, Verdana, sans-serif;
-margin: auto;
-text-align: center
-}
-#quotebox p.attribution {
-text-indent: 3em;
-}
-#closed-sign img {
-clear: left;
-display: block;
-margin: auto
+.open-beta-box {
+float: left;
+width: 50%;
+margin: 2% 5%;
+text-align: center;
+background-color: #6a6a6a;
+color: #fff;
+font-size: 2em; 
+padding: 1em;
 }
 
-.home .date-posted {
-font-size: smaller;
+.open-beta-box h1 {font-size: 1.75em; color: #fff; text-decoration: underline;}
+.open-beta-box a {color: #fff;}
+.open-beta-box p {padding: .5em;}
+
+.sidebar {float: left; width: 25%; margin: 2% 0;}
+.sidebar-box {
+-moz-border-radius: 20px;
+-webkit-border-radius: 20px;
+  background-color: #900; color: #fff; padding: 1em; margin-bottom: 1em;
 }
+.sidebar-box a {color: #fff;}
+.sidebar-box h3 {font-size: 1.5em; padding-bottom: .5em; border-bottom: 1px solid #fff;}
+
+
