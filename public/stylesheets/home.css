@@ -2,7 +2,21 @@
 padding: 0;
 font-family:Helvetica, Arial, Verdana, sans-serif;
 }
-.home .home-header {position: relative;}
+
+.home .logo  {position: absolute; left: 0.75em; top: -0.5em;}
+
+.titles {padding-left: 110px; height: 70px; margin-bottom: -0.5em;}
+#home-header {position: relative;}
+#home-header  h1 , #home-header h2 {font-family: Fertigo, Cambria, Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; margin: 0;}
+#home-header h1 {font-size: 1.5em; color: #900; padding-left: 0.75em;}
+#home-header h2 {font-size: 1em; padding-left: 1.125em; padding-top: 0.25em;}
+
+#home-header #login-block {font-family: Fertigo, Cambria, Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; color: #000; font-size: 0.75em; text-align: right; }
+#home-header #login-block #signin_closed {float: right; font-size: 1.5em; padding-bottom: 0.25em;}
+#home-header #login-block a, #header #login-block a:link, #header #login-block a:visited {color: #000;}
+#home-header #login-block a:hover { color:#900;}
+#home-header #login-block ul { padding-right: 0.25em; }
+#home-header #login-block #signin p.submit	{ text-align:left; }
 
 .home h1, .home h2, .home h3 {font-family:Helvetica, Arial, Verdana, sans-serif;}
 
@@ -26,6 +40,7 @@ text-align: right;
 }
 .home #greeting, .home #login {width:inherit;}
 .home #greeting {text-align: right;}
+
 .home #signin form {
 background: url(/images/fff-ccc.png) bottom left repeat-x #fff;
 margin: -1.5em -0.25em 1em;
@@ -39,9 +54,8 @@ border: 1px groove #222;
 .home input:hover {
 background: #ddd;
 }
-.home .greeting {position: absolute; right: 0.2em;}
 
-.home #main-navigation {width: 100%; background-color: #000; color: #FFF; }
+.home #main-navigation {width: 100%; background-color: #000; color: #FFF; display: block;}
 .home #main-navigation a {padding: 0.15em 1em; background-color: #000; color: #FFF; }
 .home #main-navigation a:hover {background-color: #900;}
 .home #main-navigation li {margin-bottom: 0; }
@@ -53,6 +67,7 @@ clear: both;
 height: 0; 
 margin-bottom: 0; 
 margin-top: 0;
+background-color: #000; height: 2px;}
 }
 .home h5 {
 text-align: right;
