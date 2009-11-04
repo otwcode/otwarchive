@@ -70,6 +70,7 @@ class WorksController < ApplicationController
 
       @chapters = @work.chapters.in_order.blank? ? @work.chapters : @work.chapters.in_order
       @chapter = @chapters.first
+      # If we're in preview mode, we want to pick up any changes that have been made to the first chapter
       if params[:work] && params[:work][:chapter_attributes]
         @chapter.content = params[:work][:chapter_attributes][:content]
         @chapter.title = params[:work][:chapter_attributes][:title]
@@ -78,6 +79,8 @@ class WorksController < ApplicationController
         else  # date is coming in in three pieces and we need to splice it together using convert_date (application.rb)
           @chapter.published_at = convert_date(params[:work][:chapter_attributes], :published_at)
         end
+        # If we're previewing a multichapter work, we want the preview version of the first chapter,
+        # so we need to add it back to @chapters
         @chapters[0] = @chapter
       end
 
