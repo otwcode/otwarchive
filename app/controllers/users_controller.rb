@@ -15,13 +15,14 @@ class UsersController < ApplicationController
       redirect_to root_path
       return
     end
-    @invitation = Invitation.find_by_token(params[:invitation_token])
-    return true if AdminSetting.account_creation_enabled?   
+    token = params[:invitation_token] || params[:user][:invitation_token]
+    @invitation = Invitation.find_by_token(token)
+    #return true if AdminSetting.account_creation_enabled?   
     if !@invitation
       flash[:error] = t('creation_suspended', :default => "Account creation is suspended at the moment. Please check back with us later.")
       redirect_to login_path
       return
-    elsif @invitation.used?
+    elsif @invitation.redeemed_at
       flash[:error] = t('invitation_used', :default => "This invitation has already been used to create an account, sorry!")
       redirect_to login_path
       return
