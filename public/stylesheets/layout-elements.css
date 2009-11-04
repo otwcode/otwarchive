@@ -271,3 +271,5 @@ dl#symbols-key dd {margin: -55px auto auto 100px;}
 /*Link to top on works and chapters pages
 This is to make it appear on the same level as the comments menu */
 #link-to-top { margin-bottom: -7em; padding-top: 6em; }
+
+#first-login-help-banner a { text-decoration: none;}

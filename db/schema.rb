@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091029224425) do
+ActiveRecord::Schema.define(:version => 20091019013949) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -460,6 +460,7 @@ ActiveRecord::Schema.define(:version => 20091029224425) do
     t.boolean  "banned",                                   :default => false, :null => false
     t.integer  "invitation_id",             :limit => 8
     t.datetime "suspended_until"
+    t.boolean  "first_login"
     t.boolean  "out_of_invites",                           :default => true,  :null => false
   end
 

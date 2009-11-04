@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_filter :check_user_status, :only => [:edit, :update]
-  before_filter :load_user, :only => [:show, :edit, :update, :destroy, :after_reset]
+  before_filter :load_user, :only => [:show, :edit, :update, :destroy, :after_reset, :end_first_login]
   before_filter :check_ownership, :only => [:edit, :update, :destroy]
   before_filter :check_account_creation_status, :only => [:new, :create]
 
@@ -63,6 +63,7 @@ class UsersController < ApplicationController
       @user.invitation_token = @invitation.token
       @user.email = @invitation.invitee_email
     end
+    @user.first_login = true
     @hide_dashboard = true
   end
 
@@ -237,7 +238,14 @@ class UsersController < ApplicationController
 
   def delete_confirmation
   end
-
+  
+  def end_first_login
+    @user.update_attribute(:first_login, false)
+    
+    respond_to do |format|
+      format.js 
+    end
+  end
 
   protected
     def successful_update

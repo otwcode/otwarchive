@@ -1,0 +1,37 @@
+<!-- Note: anticipates that current_user is set -->
+
+<p>Welcome to the Archive of Our Own! Here are some tips to help you get started.</p>
+
+<p><%= link_to_remote "Click here to never see this message again.", :url => { :controller => 'users', :action => 'end_first_login', :id => current_user.login } %></p>
+
+<p>
+  <a href="#logging_in">Logging in</a> - 
+  <a href="#edit_profile">Editing your profile, password, and preferences</a> - 
+  <a href="#pseuds">Pseuds</a> - 
+  <a href="#posting">Posting works</a> - 
+  <a href="#bookmarking">Bookmarking works</a> - 
+  <a href="#support">Support and Feedback</a>
+</p>
+
+<h3><a id="logging_in">Logging in</a></h3>
+<p>To log in, just look towards the top of the page. If you're on the <%= link_to "main page", root_path %>, then there'll be a login area at the top of the screen; there's a login link there, everywhere else. If you forget your password, then just click the handy "forgot your password" link to reset it. If you're using OpenID, no password is necessary--the archive software will talk to your OpenID provider behind-the-scenes. To switch to OpenID login, just click on the eye-like logo next to the password box.</p>
+
+<p>Note: You'll have to have created an account already, and to have linked it with your OpenID in your Profile (<%= link_to "link to edit my profile", edit_user_path(current_user) %>) before you can log in with OpenID.</p>
+
+<h3><a id="edit_profile">Editing your profile, password, and preferences</a></h3>
+<p>To add your info, go to your home page, click on the "<%= link_to "Profile", user_profile_path(current_user) %>" tab, and click on "<%= link_to "Edit My Profile", edit_user_path(current_user) %>, near the bottom. Here, you can enter some basic personal information. It's also where to go to change your password.</p>
+
+<p>The "<%= link_to 'Edit My Preferences', user_preferences_path(current_user) %>" tab is located just over from "Edit My Profile," and is pretty self-explanatory. The Preferences area controls both archive behavior (such as whether your reading history is saved) and archive appearance. The archive appearance controls will get more and more sophisticated as we get closer and closer to A03's first full release. (If you hate the font, you will be able to change it soon.)</p>
+
+<h3><a id="pseuds">Pseuds</a></h3>
+<p>While you were making your profile all nice and pretty, you may have noticed our "pseuds" page. Pseuds are, basically, pen names. If you've written Buffyfic under the name "spikefan92," but you switched to calling yourself "Ariana" when you discovered SGA, you can use the pseuds function to post each fic under the appropriate name--but still manage them using the same account. If you'd like to manage your pseuds, <%= link_to "go here", user_pseuds_path(current_user) %>. </p>
+
+<h3><a id="posting">Posting works</a></h3>
+<p>To post a new work, just use the <%= link_to "post new", new_work_path %> link conveniently located at the top of every page. You can either copy-paste in HTML, use our WYSIWYG editor, or upload your story from an existing URL. Right now, that last feature is confirmed to work for LJ, but you may get erratic results from other places. (We'd love to hear about how well other places worked for you, or didn't&mdash;you can leave <%= link_to "feedback here", new_feedback_report_path %>.)</p>
+
+<h3><a id="bookmarking">Bookmarking works</a></h3>
+<p>To bookmark a work, just click the "bookmark this story" link, at the top of its metadata, while you're reading it. You can also bookmark stories not archived here by clicking on the "My Bookmarks" section of your Dashboard.</p>
+
+<h3><a id="support">Support and Feedback</a></h3>
+<p>As you use the archive, never forget that we're still in beta and that we love, love, love feedback. Please send us some, at our [handy-dandy feedback page], as often as you like.</p>
+<p>If there's anything more you want to know, then please visit our <%= link_to "FAQ", archive_faqs_path %> or contact our <%= link_to "support team", new_feedback_report_path %></p>

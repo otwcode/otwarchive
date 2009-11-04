@@ -15,6 +15,10 @@ class HomeController < ApplicationController
     render :action => "site_map", :layout => "application"
   end
 
+  def first_login_help
+    render :action => "first_login_help", :layout => false
+  end
+
   # home page itself
   def index
     @user_count = User.count

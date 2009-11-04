@@ -40,7 +40,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.signup '/signup/:invitation_token', :controller => 'users', :action => 'new' 
   
-  map.resources :users  do |user|
+  map.resources :users, :member => {:end_first_login => :post} do |user|
     user.resources :pseuds, :has_many => [:works, :series, :bookmarks]
     user.resources :external_authors, :has_many => [:external_author_names]
     user.resources :preferences, :only => [:index, :update]
@@ -53,6 +53,8 @@ ActionController::Routing::Routes.draw do |map|
     user.resources :comments, :member => { :approve => :put, :reject => :put }
     user.resources :invitations, :member => {:invite_friend => :post}
   end
+
+  map.first_login_help '/first_login_help', :controller => 'home', :action => 'first_login_help'
 
   map.delete_confirmation '/delete_confirmation', :controller => 'users', :action => 'delete_confirmation'
 
