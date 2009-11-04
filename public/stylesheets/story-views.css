@@ -17,10 +17,11 @@ set work styles
 .work-show dd		{ line-height:1.5; font-size:0.875em; text-indent:3em; margin-top:1.25em; margin-bottom:1.25em; }
 .work-show dd p		{ text-indent:0; margin:0; padding:0; }
 /* .work-show ul		{ margin:1.125em auto; padding:0 1em; } */
-.work-show ul li	{ list-style-type:disc; margin:0.75em 0 0.75em -1.75em;}
-.work-show .navigation ul li { margin:0.25em;}
+#main .work-show ul li	{ list-style-type:disc; margin:0.75em 0 0.75em 1.75em;}
+#main .work-show .navigation ul li { list-style-type: none; margin:0.25em;}
+#main .work-show .work-meta ul li {list-style-type: none; margin: 0.75em}
 .work-show ol		{ margin:1.125em auto; padding:0 1.5em; }
-.work-show ol li	{ list-style-type:decimal; margin:0.75em 0 0.75em -1.75em !important;}
+.work-show ol li	{ list-style-type:decimal; margin:0.75em 0 0.75em 1.75em !important;}
 .work-show ol li ol li	{ list-style-type: lower-alpha;}
 .work-show ol li ol li ol li	{ list-style-type: lower-roman;}
 .work-show li		{ font-weight:normal; }
