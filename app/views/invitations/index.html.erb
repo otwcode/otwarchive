@@ -42,29 +42,4 @@
   <li class="last"><%= link_to 'all', user_invitations_path(@user) %></li>
 </ul>  
 
-<%- unless @invitations.blank? -%>
-<table>
-  <tr>
-  <th scope="col">Token</th>
-  <th scope="col">Sent To</th>
-  <th scope="col">User Name</th>
-  <th scope="col">Created</th>
-  <th scope="col">Sent At</th>
-  <th scope="col">Redeemed</th>
-  </tr>
-
-  <%- for invitation in @invitations -%>
-  <tr>
-  <td><%= link_to invitation.token, [@user, invitation] %></td>
-  <td><%= invitation.invitee_email %></td>
-  <td><%=invitee_link(invitation) %></td>
-  <td><%= invitation.created_at %></td>
-  <td><%= invitation.sent_at %></td>
-  <td><%= invitation.redeemed_at %></td>
-  <%- if logged_in_as_admin? && invitation.redeemed_at.blank? -%>
-    <td><%= link_to("Delete", { :action => "destroy", :id => invitation }, :confirm => "Are you sure you want to delete this invitation?", :method => :delete) %></td> 
-  <%- end -%>
-  </tr>
-  <%- end -%>
-</table>
-<%- end -%>
+<%= render :partial => 'invitations/user_invitations', :locals => {:invitations => @invitations} -%>

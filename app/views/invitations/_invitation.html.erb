@@ -1,0 +1,43 @@
+<table>
+  <tr>
+    <th>Sender</th>
+    <td><%= creator_link(invitation) %></td>
+  </tr>
+  <tr>
+    <th>Invitation token</th>
+    <td><%= invitation.token %></td>
+  </tr>
+  <tr>
+    <th>Sent to</th>
+    <%- if invitation.redeemed_at -%>
+    <td><%= invitation.invitee_email %></td>
+    <%- else -%>
+    <td>
+      <%- form_for(invitation) do |f| -%>
+        <dl>
+          <dt>Enter an email address:</dt>
+          <dd><%= f.text_field :invitee_email %></dd>
+        </dl>
+        <span><%= hidden_field_tag :user_id, @user.andand.login %></span>
+        <p><%= f.submit %></p>
+      <%- end -%>
+    </td>
+    <%- end -%>
+  </tr>
+  <tr>
+    <th>Redeemed by</th>
+    <td><%= invitee_link(invitation) %></td>
+  </tr>
+  <tr>
+    <th>Created at</th>
+    <td><%= invitation.created_at %></td>
+  </tr>
+  <tr>
+    <th>Sent at</th>
+    <td><%= invitation.sent_at %></td>
+  </tr>
+  <tr>
+    <th>Redeemed at</th>
+    <td><%= invitation.redeemed_at %></td>
+  </tr>
+</table>

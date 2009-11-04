@@ -39,6 +39,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :admins, :only => [:index, :show] 
 
   map.signup '/signup/:invitation_token', :controller => 'users', :action => 'new' 
+  map.resources :invitations
   
   map.resources :users, :member => {:end_first_login => :post} do |user|
     user.resources :pseuds, :has_many => [:works, :series, :bookmarks]

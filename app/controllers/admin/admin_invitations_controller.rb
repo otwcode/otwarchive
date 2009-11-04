@@ -41,12 +41,16 @@ class Admin::AdminInvitationsController < ApplicationController
   end
   
   def find
-    user = User.find_by_login(params[:user_name])
-    if user
-      redirect_to user_invitations_path(user)
-    else
-      flash[:error] = t('user_not_found', :default => "Sorry, we couldn't find a user with that name.")
-      render :action => 'index'     
+    unless params[:user_name].blank?
+      @user = User.find_by_login(params[:user_name])
+      @hide_dashboard = true
+      @invitations = @user.invitations if @user
+    end
+    unless params[:token].blank?
+      @invitation = Invitation.find_by_token(params[:token])
+    end
+    unless @user || @invitation
+      flash[:error] = t('user_not_found', :default => "No results were found. Try another search.")
     end
   end
 

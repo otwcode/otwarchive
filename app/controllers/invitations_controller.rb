@@ -46,7 +46,11 @@ class InvitationsController < ApplicationController
     @invitation = Invitation.find(params[:id])
     if @invitation.update_attributes(params[:invitation])
       flash[:notice] = 'Invitation was successfully sent.'
-      redirect_to([@user, @invitation]) 
+      if logged_in_as_admin?
+        redirect_to find_admin_invitations_url(:token => @invitation.token)
+      else
+        redirect_to([@user, @invitation])        
+      end
     else
       render :action => "show"
     end
