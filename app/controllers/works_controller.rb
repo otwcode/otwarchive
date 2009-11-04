@@ -78,6 +78,7 @@ class WorksController < ApplicationController
         else  # date is coming in in three pieces and we need to splice it together using convert_date (application.rb)
           @chapter.published_at = convert_date(params[:work][:chapter_attributes], :published_at)
         end
+        @chapters[0] = @chapter
       end
 
       unless current_user == :false
@@ -322,15 +323,6 @@ class WorksController < ApplicationController
       @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       @preview_mode = true
-      @chapters = (@work.chapters.in_order != []) ? @work.chapters.in_order : @work.chapters
-      if !@chapter
-        @chapter = @chapters.first
-      end
-      if params[:work] && params[:work][:chapter_attributes]
-        @chapter.content = params[:work][:chapter_attributes][:content]
-        @chapter.title = params[:work][:chapter_attributes][:title]
-        @chapter.published_at = convert_date(params[:work][:chapter_attributes], :published_at)
-      end
 
       #flash[:notice] = "DEBUG: in UPDATE preview:  " + "all: " + @allpseuds.flatten.collect {|ap| ap.id}.inspect + " selected: " + @selected_pseuds.inspect + " co-authors: " + @coauthors.flatten.collect {|ap| ap.id}.inspect + " pseuds: " + @pseuds.flatten.collect {|ap| ap.id}.inspect + "  @work.authors: " + @work.authors.collect {|au| au.id}.inspect + "  @work.pseuds: " + @work.pseuds.collect {|ps| ps.id}.inspect
 
