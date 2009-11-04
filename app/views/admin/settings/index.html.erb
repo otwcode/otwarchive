@@ -23,4 +23,8 @@
   </p>
 <% end %>
 
+  <%- if @admin_setting.invite_from_queue_enabled? -%>
+  <p><%= @admin_setting.invite_from_queue_number -%> people are scheduled to be sent invitations on <%= @admin_setting.invite_from_queue_at %></p>
+  <%- end -%>
+
 <p>Last updated on <%= @admin_setting.updated_at %> by <%= @admin_setting.last_updated ? @admin_setting.last_updated.login : "---" %>.</p>
