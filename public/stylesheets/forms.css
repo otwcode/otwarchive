@@ -6,6 +6,10 @@ form p { line-height:2; clear:both;}
 /* This is a temporary hack for editing multiple works. Fix it to work properly later. */
 form p.temp-hack {clear: none;}
 /* end of silly hack */
+/* kludge for fixing invitations page. Fix me later, too! */
+.invitations-index form dt, .invitations-index form p { clear: none; width: 20%;}
+.invitations-index form dd { width: 75%}
+/* end kludge */
 form dl { position:relative; }
 form dt { float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
 form dd { float: left; }
