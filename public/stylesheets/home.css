@@ -11,12 +11,8 @@ font-family:Helvetica, Arial, Verdana, sans-serif;
 #home-header h1 {font-size: 1.5em; color: #900; padding-left: 0.75em;}
 #home-header h2 {font-size: 1em; padding-left: 1.125em; padding-top: 0.25em;}
 
-#home-header #login-block {font-family: Fertigo, Cambria, Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; color: #000; font-size: 0.75em; text-align: right; }
-#home-header #login-block #signin_closed {float: right; font-size: 1.5em; padding-bottom: 0.25em;}
-#home-header #login-block a, #header #login-block a:link, #header #login-block a:visited {color: #000;}
-#home-header #login-block a:hover { color:#900;}
-#home-header #login-block ul { padding-right: 0.25em; }
-#home-header #login-block #signin p.submit	{ text-align:left; }
+.home #login-block {position: absolute; right: 0.5em;}
+.home #search {margin-top: 0.3em;}
 
 .home h1, .home h2, .home h3 {font-family:Helvetica, Arial, Verdana, sans-serif;}
 
