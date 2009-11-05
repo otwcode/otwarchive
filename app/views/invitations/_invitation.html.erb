@@ -8,6 +8,10 @@
     <td><%= invitation.token %></td>
   </tr>
   <tr>
+    <th>Copy link</th>
+    <td><%- unless invitation.redeemed_at -%><%= link_to "copy and use", new_user_path(:invitation_token => invitation.token) %><%- end -%></td>
+  </tr>
+  <tr>
     <th>Sent to</th>
     <%- if invitation.redeemed_at -%>
     <td><%= invitation.invitee_email %></td>
