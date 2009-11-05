@@ -21,6 +21,7 @@ class Invitation < ActiveRecord::Base
       total.times do 
         user.invitations.create
       end
+      UserMailer.deliver_invite_increase_notification(user, total)
     end
     User.out_of_invites.update_all('out_of_invites = 0')
   end
@@ -32,6 +33,7 @@ class Invitation < ActiveRecord::Base
       total.times do 
         user.invitations.create
       end
+      UserMailer.deliver_invite_increase_notification(user, total)
     end
     User.out_of_invites.update_all('out_of_invites = 0')
   end

@@ -10,6 +10,12 @@ class UserMailer < ActionMailer::Base
     content_type  "text/html"
     body          :invitation => invitation, :user_name => (invitation.creator.is_a?(User) ? invitation.creator.login : ''), :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
   end
+  
+  def invite_increase_notification(user, total)
+    setup_email(user)
+    @subject    += 'New Invitations'  
+    @body[:total] = total 
+  end
 
   def archive_notification(admin, user, subject, message)
     setup_email(user)

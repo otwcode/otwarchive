@@ -1,7 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :user_invite_requests
 
-  map.resources :invite_requests, :collection => {:status => :get}
+  map.resources :invite_requests
   
   map.resources :known_issues
 

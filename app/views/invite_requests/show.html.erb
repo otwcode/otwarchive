@@ -1,9 +1,3 @@
-<h2>Invitation Status for <%= @invite_request.email %></h2>
+<%= render :partial => 'invite_request', :locals => {:invite_request => @invite_request} %>
 
-<p>You are currently number <%= @invite_request.position %> on our waiting list!</p>
-
-<%- if AdminSetting.invite_from_queue_enabled? && @invite_request.proposed_fill_date >= Time.now -%>
-  <p>At our current rate, you should receive an invitation on or around: <%= @invite_request.proposed_fill_date %></p>
-<%- else -%>
-  <p>New users are not currently being added from the list, but <%= link_to "stay tuned for updates", admin_posts_path %>.</p>
-<%- end -%>
+<p>(You can bookmark this page and come back to it if you'd like to keep tabs on your waiting time.)</p>
