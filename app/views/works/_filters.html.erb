@@ -33,12 +33,14 @@
             <ul>              
               <%- @filters[type].each do |tag_info| -%>
                 <li>
-                  <%- if type == "Rating" || type == "Category" -%>
-                  <%= radio_button_tag "selected_tags[]", tag_info[:id], @selected_tags.include?(tag_info[:id]), :id => "selected_tags_#{tag_info[:id]}" -%>
+                  <%- if (type == "Rating" || type == "Category") && @filters[type].length > 1 -%>
+                  <%= radio_button_tag "selected_tags[#{type.downcase}][]", tag_info[:id], @selected_tags.include?(tag_info[:id]), 
+                    :id => "selected_tags_" + type.downcase + '_' + tag_info[:id] -%>
+                  <%= label_tag "selected_tags_#{type.downcase}_#{tag_info[:id]}", "#{tag_info[:name]} (#{tag_info[:count]})" %>  
                   <%- else -%>
-                  <%= check_box_tag "selected_tags[]", tag_info[:id], @selected_tags.include?(tag_info[:id]), :id => "selected_tags_#{tag_info[:id]}" -%>
-                  <%- end -%>
-                  <%= label_tag "selected_tags_#{tag_info[:id]}", "#{tag_info[:name]} (#{tag_info[:count]})" %>  
+                  <%= check_box_tag "selected_tags[tags][]", tag_info[:id], @selected_tags.include?(tag_info[:id]), :id => "selected_tags_tags_#{tag_info[:id]}" -%>
+                  <%= label_tag "selected_tags_tags_#{tag_info[:id]}", "#{tag_info[:name]} (#{tag_info[:count]})" %>  
+                  <%- end -%> 
                 </li>
               <%- end -%> 
            </ul>

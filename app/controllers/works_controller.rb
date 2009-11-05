@@ -119,7 +119,7 @@ class WorksController < ApplicationController
 
     # if the user is filtering with tags, let's see what they're giving us
     unless params[:selected_tags].blank?
-      @selected_tags = params[:selected_tags]
+      @selected_tags = params[:selected_tags].values.flatten
     end
 
     # if we have a query, we are searching with sphinx, which will
