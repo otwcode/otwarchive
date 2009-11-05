@@ -1,6 +1,6 @@
 <%= stylesheet_link_tag 'archive_core', :media => 'all' %>
 <%= stylesheet_link_tag 'layout-elements', :media => 'all' %>
-<%- if controller.controller_name == 'home' -%> 
+<%- if controller.controller_name == 'home' && params[:action] == 'index' -%> 
   <%= stylesheet_link_tag 'home', :media => 'screen' %>
 <%- end -%>
 <%= stylesheet_link_tag 'forms', :media => 'screen' %>
