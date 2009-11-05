@@ -15,3 +15,27 @@
     <% end %>
 	</tbody>
 </table>
+
+<table  class="stats stats-line">
+	<caption>Invitations: by week</caption>
+	<thead>
+		<tr>
+			<td></td>
+			<%= @graph_dates.collect {|d| "<th>" + d.strftime('%m-%d-%y') + "</th>"} %>
+		</tr>
+	</thead>
+	<tbody>
+	  <tr>
+			<th>invitations created</th>
+			<% @graph_dates.each do |date| %>
+			<td><%= @invitations_created_weekly[date] ? @invitations_created_weekly[date].length : 0 %></td>
+			<% end %>
+		</tr>
+		<tr>
+			<th>invitations redeemed</th>
+			<% @graph_dates.each do |date| %>
+			<td><%= @invitations_redeemed_weekly[date] ? @invitations_redeemed_weekly[date].length : 0 %></td>
+			<% end %>
+		</tr>
+	</tbody>
+</table>

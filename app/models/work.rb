@@ -1007,8 +1007,8 @@ class Work < ActiveRecord::Base
 
     # sphinx ordering must be done on attributes
     order_clause = case options[:sort_column]
-      when "title" then "title_for_sort "
-      when "author" then "author_for_sort "
+      when "title" then "title_to_sort_on "
+      when "author" then "authors_to_sort_on "
       when "word_count" then "word_count "
       when "date" then "revised_at "
       else ""

@@ -1,0 +1,17 @@
+<table  class="stats stats-line">
+	<caption>Invitations: by week</caption>
+	<thead>
+		<tr>
+			<td></td>
+			<%= @graph_dates.collect {|d| "<th>" + d.strftime('%m-%d-%y') + "</th>"} %>
+		</tr>
+	</thead>
+	<tbody>
+	  <tr>
+			<th>users created</th>
+			<% @graph_dates.each do |date| %>
+			<td><%= @users_created_weekly[date] ? @users_created_weekly[date].length : 0 %></td>
+			<% end %>
+		</tr>
+	</tbody>
+</table>

@@ -1,6 +1,12 @@
 class StatsController < ApplicationController
 
   def index
+    @graph_dates = []
+    d = 3.months.ago.beginning_of_week
+    while d < Time.now
+      @graph_dates << d
+      d = d + 7.days
+    end
     if params[:model] == "invitations"
       @invitations_by_status = {:unsent => Invitation.unsent.count, :unredeemed => Invitation.unredeemed.count, :redeemed => Invitation.redeemed.count}
       @invitations_created_weekly = Invitation.find(:all, :select => :created_at, :conditions => ['created_at > ?', 3.months.ago]).group_by{|invitation| invitation.created_at.beginning_of_week}
