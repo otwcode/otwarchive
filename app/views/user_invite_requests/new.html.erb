@@ -1,0 +1,15 @@
+<h1>Request more invites</h1>
+
+<% form_for(@user_invite_request) do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label "How many invites are you requesting?" %> <%= f.text_field :quantity, :size => '2' %>
+  </p>
+  <p>
+    <%= f.label "Reason for your request:" %><br />
+    <%= f.text_area :reason, :size => '100x10' %>
+  </p>
+  <p>
+    <%= f.submit 'Create' %>
+  </p>
+<% end %>

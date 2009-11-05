@@ -9,6 +9,7 @@ form p.temp-hack {clear: none;}
 /* kludge for fixing invitations page. Fix me later, too! */
 .invitations-index form dt, .invitations-index form p { clear: none; width: 20%;}
 .invitations-index form dd { width: 75%}
+.invitations-index p.submit {clear:both; width: 100%;}
 /* end kludge */
 form dl { position:relative; }
 form dt { float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em 0.25em 0}

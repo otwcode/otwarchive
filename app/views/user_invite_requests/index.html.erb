@@ -1,0 +1,26 @@
+<h1>User invite requests</h1>
+
+<p>Enter "0" under quantity to deny the request. Clear the box to delay your decision for now.</p>
+
+<%- form_tag url_for(:controller => 'user_invite_requests', :action => 'update') do -%>
+<p><%= submit_tag "Update" %></p>
+<table>
+  <tr>
+    <th>User</th>
+    <th>Reason</th>
+    <th>Quantity</th>
+    <th>Created at</th>
+  </tr>
+
+  <% @user_invite_requests.each do |request| %>
+  <tr>
+    <td><%= link_to request.user.login, request.user %></td>
+    <td><%=h request.reason %></td>
+    <td><%= text_field_tag "requests[#{request.id}]", request.quantity, :size => 2 %></td>
+    <td><%=h request.created_at %></td>
+  </tr>
+  <% end %>
+</table>
+
+<p><%= submit_tag "Update" %></p>
+<%- end -%>

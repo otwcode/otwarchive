@@ -1,0 +1,21 @@
+<h2><%= logged_in_as_admin? ? (@user.login + "'s") : "Your" %> Invitations</h2>
+
+<ul class="navigation">
+  <li>
+    <%= link_to_unless_current("unsent (#{@user.invitations.unsent.count.to_s})", 
+      manage_user_invitations_path(@user, :status => :unsent)) %>
+  </li>
+  <li>
+    <%= link_to_unless_current("sent but not used (#{@user.invitations.unredeemed.count.to_s})", 
+      manage_user_invitations_path(@user, :status => :unredeemed)) %>
+  </li>
+  <li>
+    <%= link_to_unless_current("used (#{@user.invitations.redeemed.count.to_s})", 
+      manage_user_invitations_path(@user, :status => :redeemed)) %>
+  </li>
+  <li class="last">
+    <%= link_to 'all', manage_user_invitations_path(@user) %>
+  </li>
+</ul>  
+
+<%= render :partial => 'invitations/user_invitations', :locals => {:invitations => @invitations} -%>

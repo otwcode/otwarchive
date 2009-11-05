@@ -9,12 +9,15 @@ class InvitationsController < ApplicationController
   end
 
   def index
+    @unsent_invitations = @user.invitations.unsent.find(:all, :limit => 5)
+  end
+  
+  def manage
     if params[:status].blank?
       @invitations = @user.invitations
     else
       @invitations = eval("@user.invitations." + params[:status])
-    end
-    @unsent_invitations = @user.invitations.unsent.find(:all, :limit => 5)
+    end  
   end
   
   def show

@@ -1,3 +1,8 @@
+<div class="navigation">
+  <span class="navitem"><%= link_to "Manage invitations", {:controller => :invitations, :action => :manage, :user_id => @user.login} %></span>
+  <span class="navitem"><%= link_to "Request more", new_user_invite_request_path %></span>
+</div>
+
 <%- if logged_in_as_admin?  -%>
 <h2><%= t('create_more', :default => 'Create more invitations for this user') %></h2>
   <% form_tag user_invitations_url(@user) do %>
@@ -13,6 +18,7 @@
 <%- if @unsent_invitations.blank? -%>
   <p>Sorry, you have no unsent invitations right now.</p>  
 <%- else -%>
+  <p>You have <%= @user.invitations.unsent.count.to_s %> open invitations and <%= @user.invitations.unredeemed.count.to_s %> that have been sent but not yet used.</p>
   <%- form_tag url_for(:controller => 'invitations', :action => 'invite_friend', :user_id => @user) do -%>
     <dl>
       <dt><%= label_tag :invitee_email, t('email address', :default => 'Email address') %></dt>
@@ -29,17 +35,6 @@
         </ul>
       </dd>
     </dl>
-    <p><%= submit_tag t('submit_invite', :default => 'Send invite')  %></p>
+    <p class="submit"><%= submit_tag t('submit_invite', :default => 'Send invite')  %></p>
   <%- end -%>
 <%- end -%>
-
-<h2><%= logged_in_as_admin? ? (@user.login + "'s") : "Your" %> Invitations</h2>
-
-<ul>
-  <li><%= link_to_unless_current(@user.invitations.unsent.count.to_s + " invitations not yet sent", user_invitations_path(@user, :status => :unsent)) %></li>
-  <li><%= link_to_unless_current(@user.invitations.unredeemed.count.to_s + " invitations sent but not redeemed", user_invitations_path(@user, :status => :unredeemed)) %></li>
-  <li><%= link_to_unless_current(@user.invitations.redeemed.count.to_s + " invitations sent and redeemed", user_invitations_path(@user, :status => :redeemed)) %></li>
-  <li class="last"><%= link_to 'all', user_invitations_path(@user) %></li>
-</ul>  
-
-<%= render :partial => 'invitations/user_invitations', :locals => {:invitations => @invitations} -%>

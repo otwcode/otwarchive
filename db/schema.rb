@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091019013949) do
+ActiveRecord::Schema.define(:version => 20091029224425) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -439,6 +439,8 @@ ActiveRecord::Schema.define(:version => 20091019013949) do
     t.integer  "user_id"
     t.integer  "quantity"
     t.text     "reason"
+    t.boolean  "granted",    :default => false, :null => false
+    t.boolean  "handled",    :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -460,8 +462,8 @@ ActiveRecord::Schema.define(:version => 20091019013949) do
     t.boolean  "banned",                                   :default => false, :null => false
     t.integer  "invitation_id",             :limit => 8
     t.datetime "suspended_until"
-    t.boolean  "first_login"
     t.boolean  "out_of_invites",                           :default => true,  :null => false
+    t.boolean  "first_login"
   end
 
   add_index "users", ["identity_url"], :name => "index_users_on_identity_url", :unique => true

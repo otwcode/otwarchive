@@ -19,6 +19,7 @@ class User < ActiveRecord::Base
   ### BETA INVITATIONS ###
   has_many :invitations, :as => :creator
   has_one :invitation, :as => :invitee
+  has_many :user_invite_requests
 
   #validates_presence_of :invitation_id, :message => 'is required', :unless => ArchiveConfig.ACCOUNT_CREATION_ENABLED
   #validates_uniqueness_of :invitation_id, :allow_blank => true
