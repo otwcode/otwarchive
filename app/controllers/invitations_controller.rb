@@ -26,12 +26,17 @@ class InvitationsController < ApplicationController
   
   def invite_friend
     @invitation = @user.invitations.find(params[:id])
-    @invitation.invitee_email = params[:invitee_email]
-    if @invitation.save
-      flash[:notice] = 'Invitation was successfully sent.'
-      redirect_to([@user, @invitation]) 
+    if !params[:invitee_email].blank?
+      @invitation.invitee_email = params[:invitee_email]
+      if @invitation.save
+        flash[:notice] = 'Invitation was successfully sent.'
+        redirect_to([@user, @invitation]) 
+      else
+        render :action => "show"
+      end
     else
-      render :action => "show"
+      flash[:error] = "Please enter an email address."
+      render :action => "show" 
     end    
   end
   
@@ -47,7 +52,7 @@ class InvitationsController < ApplicationController
   
   def update
     @invitation = Invitation.find(params[:id])
-    if @invitation.update_attributes(params[:invitation])
+    if @invitation.invitee_email_changed? && @invitation.update_attributes(params[:invitation])
       flash[:notice] = 'Invitation was successfully sent.'
       if logged_in_as_admin?
         redirect_to find_admin_invitations_url(:token => @invitation.token)
@@ -55,6 +60,7 @@ class InvitationsController < ApplicationController
         redirect_to([@user, @invitation])        
       end
     else
+      flash[:error] = "Please enter an email address." if @invitation.invitee_email.blank?
       render :action => "show"
     end
   end
