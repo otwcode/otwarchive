@@ -9,6 +9,12 @@ class LocalesController < ApplicationController
     if params[:locale_id]
       session[:locale] = params[:locale_id]     
     end
+    # Temporary message for non-default locales for launch of open beta
+    unless params[:locale_id] == ArchiveConfig.DEFAULT_LOCALE_ISO
+      flash[:notice] = "We're working on making the <a href='http://archiveofourown.org/archive_faqs#locales'>AO3 
+      available in your language</a>, too! \\o/ If you want to help us add more languages, 
+      <a href='http://transformativeworks.org/node/540'>please consider volunteering</a>."
+    end
     redirect_to :back rescue redirect_to '/'
   end
   
