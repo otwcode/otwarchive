@@ -130,7 +130,9 @@ form.work-filters a {float: right; margin-top: -1.25em;}
 
 /*COMMENTS */
 #comment_form_div dt	{ width:6em; }
-textarea#comment_content	{ width:32em !important; height:11em !important}
+#comment_form_div dd { min-width:32em !important; width: 60% !important; margin: .3em 0}
+#comment_form_div dd p.instructions {margin: 0; font-size: 80%}
+textarea#comment_content	{ min-width:32em !important; width: 100% !important; height:11em !important}
 #comment_form_div p.submit		{ width:32em}     
 
 /* INBOX */

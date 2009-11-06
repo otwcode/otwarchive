@@ -18,7 +18,7 @@
 	    </dd>
 	  <% else %>  
     
-      <p class="instructions"><%=t('comment_requirements', :default => "All fields required. Your email address will not be published. Limited html is allowed.") %></p>
+      <p class="instructions"><%=t('comment_requirements', :default => "All fields required. Your email address will not be published.") %></p>
                   
 	    <dt><%= f.label :name, t('form_name', :default => "Name: ") %></dt>
       <dd><%= f.text_field :name, :live => true -%></dd>
@@ -30,6 +30,7 @@
 	       
       <dt><%= f.label :content, t('form_comment', :default => "Comment: ") %></dt>
       <dd>
+        <p class="instructions">Plain text with limited html <%= link_to_help "html-help" -%><br/><code>a href, b, blockquote, br, center, cite, code, del, em, i, img, ins, pre, q, small, strike, strong, sub, sup, u</code></p>
         <%= f.text_area :content, :live => true %>
         <%= generate_countdown_html("comment_content", ArchiveConfig.COMMENT_MAX) -%>
       </dd>	    
