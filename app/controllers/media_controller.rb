@@ -7,7 +7,7 @@ class MediaController < ApplicationController
       if medium == Media.uncategorized
         @fandom_listing[medium] = medium.fandoms.find(:all, :order => 'created_at DESC', :limit => 5)
       else
-        @fandom_listing[medium] = (logged_in? || logged_in_as_admin?) ? medium.fandoms.unhidden_top(5) : medium.fandoms.public_top(5)
+        @fandom_listing[medium] = (logged_in? || logged_in_as_admin?) ? medium.fandoms.canonical.unhidden_top(5) : medium.fandoms.canonical.public_top(5)
       end
     end
   end
