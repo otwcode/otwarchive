@@ -30,7 +30,7 @@ class InviteRequest < ActiveRecord::Base
   def invite_and_remove(creator=nil)
     invitation = creator ? creator.invitations.build(:invitee_email => self.email, :from_queue => true) : 
                                        Invitation.new(:invitee_email => self.email, :from_queue => true)
-    if invitation.save
+    if invitation.save!
       self.destroy
     end  
   end

@@ -53,8 +53,12 @@ class Invitation < ActiveRecord::Base
   
   def send_and_set_date
     if self.invitee_email_changed? && !self.invitee_email.blank?
-      UserMailer.deliver_invitation(self)
-      self.sent_at = Time.now
+      begin
+        UserMailer.deliver_invitation(self)
+        self.sent_at = Time.now
+      rescue
+        errors.add_to_base("Notification email could not be sent.")
+      end
     end
   end
   

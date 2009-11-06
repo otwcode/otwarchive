@@ -1,4 +1,6 @@
 class InviteRequestsController < ApplicationController
+  before_filter :admin_only, :only => [:manage, :destroy]
+  
   # GET /invite_requests
   # GET /invite_requests.xml
   def index
@@ -34,5 +36,18 @@ class InviteRequestsController < ApplicationController
       render :action => :index
     end
   end
-
+  
+  def manage
+    @invite_requests = InviteRequest.find(:all, :order => :position)
+  end
+  
+  def destroy
+    @invite_request = InviteRequest.find(params[:id])
+    if @invite_request.destroy
+      flash[:notice] = "Request was removed from the queue."
+    else
+      flash[:error] = "Request could not be removed. Please try again."
+    end
+    redirect_to manage_invite_requests_url
+  end
 end
