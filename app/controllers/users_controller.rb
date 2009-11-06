@@ -64,7 +64,6 @@ class UsersController < ApplicationController
       @user.invitation_token = @invitation.token
       @user.email = @invitation.invitee_email
     end
-    @user.first_login = true
     @hide_dashboard = true
   end
 

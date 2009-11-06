@@ -28,6 +28,8 @@ class User < ActiveRecord::Base
   attr_accessible :invitation_token
   after_create :mark_invitation_redeemed, :remove_from_queue
   
+  after_create :set_first_login
+  
   has_many :external_authors, :dependent => :destroy
   has_many :external_creatorships, :foreign_key => 'archivist_id'
   
@@ -121,6 +123,10 @@ class User < ActiveRecord::Base
     self.pseuds << Pseud.new(:name => self.login, :is_default => :true)  
     self.profile = Profile.new
     self.preference = Preference.new
+  end
+  
+  def set_first_login
+    self.update_attribute(:first_login, true)
   end
   
   protected                            
