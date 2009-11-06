@@ -15,7 +15,7 @@ class UsersController < ApplicationController
       redirect_to root_path
       return
     end
-    token = params[:invitation_token] || params[:user][:invitation_token]
+    token = params[:invitation_token] || (params[:user] && params[:user][:invitation_token])
     @invitation = Invitation.find_by_token(token)
     #return true if AdminSetting.account_creation_enabled?   
     if !@invitation
