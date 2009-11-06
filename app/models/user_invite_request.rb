@@ -1,5 +1,7 @@
 class UserInviteRequest < ActiveRecord::Base
   belongs_to :user
+  validates_presence_of :quantity
+  validates_presence_of :reason
   
   before_update :check_status, :grant_request
   
