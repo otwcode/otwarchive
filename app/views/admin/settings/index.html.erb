@@ -3,19 +3,24 @@
 <% form_for @admin_setting, :url => admin_setting_path(@admin_setting), :html => {:method => :put} do |f| %>
   <%= f.error_messages %>
   <p>
-    <%= f.check_box :account_creation_enabled %> <%= f.label :account_creation_enabled %>
+    <%= f.check_box :account_creation_enabled %> 
+    <%= f.label :account_creation_enabled %>
   </p>
   <p>
-    <%= f.check_box :invite_from_queue_enabled %> <%= f.label :invite_from_queue_enabled %>
+    <%= f.check_box :invite_from_queue_enabled %> 
+    <%= f.label :invite_from_queue_enabled %>
   </p>
   <p>
-    <%= f.label :invite_from_queue_number, "Number of people to invite from the queue at once:" %> <%= f.text_field :invite_from_queue_number, :size => "3" %>
+    <%= f.label :invite_from_queue_number, "Number of people to invite from the queue at once:" %> 
+    <%= f.text_field :invite_from_queue_number, :size => "3" %>
   </p>
   <p>
-    <%= f.label :invite_from_queue_frequency, "How often (in days) should we invite people from the queue:" %> <%= f.text_field :invite_from_queue_frequency, :size => "3" %>
+    <%= f.label :invite_from_queue_frequency, "How often (in days) should we invite people from the queue:" %> 
+    <%= f.text_field :invite_from_queue_frequency, :size => "3" %>
   </p>
   <p>
-    <%= f.label :days_to_purge_unactivated, "How often (in days) should you have to activate your account before we purge it:" %> <%= f.text_field :days_to_purge_unactivated, :size => "3" %>
+    <%= f.label :days_to_purge_unactivated, "How often (in days) should you have to activate your account before we purge it:" %> 
+    <%= f.text_field :days_to_purge_unactivated, :size => "3" %>
   </p>
   <p>
     <%= f.hidden_field :last_updated_by, :value => current_admin.id %>
@@ -24,7 +29,11 @@
 <% end %>
 
   <%- if @admin_setting.invite_from_queue_enabled? -%>
-  <p><%= @admin_setting.invite_from_queue_number -%> people are scheduled to be sent invitations on <%= @admin_setting.invite_from_queue_at.strftime("%d %b %Y") %></p>
+  <p><%= @admin_setting.invite_from_queue_number -%> people are scheduled to be sent invitations on 
+  <%= l(@admin_setting.invite_from_queue_at.to_date, :format => :long) %>.</p> 
+  
+  <p>(The automatic task that invites people from the queue only runs once a day. Don't be alarmed if the date you see is yesterday's. 
+  Do be alarmed if the date you see is more than one day in the past and the queue is supposed to be active.)</p>
   <%- end -%>
 
 <p>Last updated on <%= @admin_setting.updated_at %> by <%= @admin_setting.last_updated ? @admin_setting.last_updated.login : "---" %>.</p>
