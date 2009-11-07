@@ -27,11 +27,11 @@
 <p>While you were making your profile all nice and pretty, you may have noticed our "pseuds" page. Pseuds are, basically, pen names. If you've written Buffyfic under the name "spikefan92," but you switched to calling yourself "Ariana" when you discovered SGA, you can use the pseuds function to post each fic under the appropriate name--but still manage them using the same account. If you'd like to manage your pseuds, <%= link_to "go here", user_pseuds_path(current_user) %>. </p>
 
 <h3><a id="posting">Posting works</a></h3>
-<p>To post a new work, just use the <%= link_to "post new", new_work_path %> link conveniently located at the top of every page. You can either copy-paste in HTML, use our WYSIWYG editor, or upload your story from an existing URL. Right now, that last feature is confirmed to work for LJ, but you may get erratic results from other places. (We'd love to hear about how well other places worked for you, or didn't&mdash;you can leave <%= link_to "feedback here", new_feedback_report_path %>.)</p>
+<p>To post a new work, just use the <%= link_to "post new", new_work_path %> link conveniently located at the top of every page. You can either copy-paste in HTML, use our Rich Text editor, or upload your story from an existing URL. Right now, that last feature is confirmed to work for LJ, but you may get erratic results from other places. (We'd love to hear about how well other places worked for you, or didn't&mdash;you can leave <%= link_to "feedback here", new_feedback_report_path %>.)</p>
 
 <h3><a id="bookmarking">Bookmarking works</a></h3>
 <p>To bookmark a work, just click the "bookmark this story" link, at the top of its metadata, while you're reading it. You can also bookmark stories not archived here by clicking on the "My Bookmarks" section of your Dashboard.</p>
 
 <h3><a id="support">Support and Feedback</a></h3>
-<p>As you use the archive, never forget that we're still in beta and that we love, love, love feedback. Please send us some, at our [handy-dandy feedback page], as often as you like.</p>
+<p>As you use the archive, never forget that we're still in beta and that we love, love, love feedback. Please send us some, at our <%= link_to "handy-dandy feedback page", new_feedback_report_path %>, as often as you like.</p>
 <p>If there's anything more you want to know, then please visit our <%= link_to "FAQ", archive_faqs_path %> or contact our <%= link_to "support team", new_feedback_report_path %></p>
