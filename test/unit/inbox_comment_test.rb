@@ -18,28 +18,28 @@ class InboxCommentTest < ActiveSupport::TestCase
       subject { @inbox_comment }
       should "change the count_unread total" do
         assert_difference('InboxComment.count_unread', -1) do 
-          subject.update_attribute(:read, true)
+          @inbox_comment.update_attribute(:read, true)
         end
       end     
     end
     
     context "which has had its feedback comment deleted" do
       setup do
-        subject.feedback_comment.destroy
+        @inbox_comment.feedback_comment.destroy
       end
       subject { @inbox_comment }
       should "also be deleted" do
-        assert_raises(ActiveRecord::RecordNotFound) { subject.reload }
+        assert_raises(ActiveRecord::RecordNotFound) { @inbox_comment.reload }
       end
     end
     
     context "which belonged to a deleted user" do
       setup do
-        subject.user.destroy
+        @inbox_comment.user.destroy
       end
       subject { @inbox_comment }
       should "also be deleted" do
-        assert_raises(ActiveRecord::RecordNotFound) { subject.reload }
+        assert_raises(ActiveRecord::RecordNotFound) { @inbox_comment.reload }
       end
     end
 

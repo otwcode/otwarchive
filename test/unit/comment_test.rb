@@ -17,14 +17,14 @@ class CommentTest < ActiveSupport::TestCase
     # acts_as_commentable: CommentableEntity methods find_all_comments & count_all_comments
     context "with its own comment" do
       setup do
-        @second_comment = create_comment(:commentable => subject)
+        @second_comment = create_comment(:commentable => @comment)
       end
       subject { @comment }
       should "find that comment" do
-        assert_contains(subject.find_all_comments, @second_comment)
+        assert_contains(@comment.find_all_comments, @second_comment)
       end
       should "count that comment" do
-        assert_equal 1, subject.count_all_comments
+        assert_equal 1, @comment.count_all_comments
       end
     end
   end
@@ -37,8 +37,8 @@ class CommentTest < ActiveSupport::TestCase
     end
     subject { @comment }
     should "not have an email or name value" do
-      assert_equal nil, subject.email
-      assert_equal nil, subject.name
+      assert_equal nil, @comment.email
+      assert_equal nil, @comment.name
     end
   end
 
@@ -53,7 +53,7 @@ class CommentTest < ActiveSupport::TestCase
     should_not_allow_values_for :email, "abcd", :message => /invalid/
     should_allow_values_for :email, "user@google.com"
     should "not have a pseud" do
-      assert_equal nil, subject.pseud_id
+      assert_equal nil, @comment.pseud_id
     end
   end
 

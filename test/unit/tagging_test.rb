@@ -16,25 +16,25 @@ class TaggingTest < ActiveSupport::TestCase
     should_belong_to :tagger, :taggable
     should_validate_presence_of :tagger, :taggable
     should "delete its singleton, unwrangled tag on exit" do
-      subject.destroy
+      @tagging.destroy
       assert_raises(ActiveRecord::RecordNotFound) { @tag.reload }
     end
     should "not delete its tag if the tag has another tagging" do
       @work2 = create_work
       @work2.freeforms = [@tag]
-      subject.destroy
+      @tagging.destroy
       assert @tag.reload
     end
     should "not delete its tag if the tag has been wrangled canonical" do
       @tag.update_attribute(:canonical, true)
-      subject.reload
-      subject.destroy
+      @tagging.reload
+      @tagging.destroy
       assert @tag.reload
     end
     should "not delete its tag if the tag has been wrangled synonym" do
       @tag.update_attribute(:merger_id, @tag.id)
-      subject.reload
-      subject.destroy
+      @tagging.reload
+      @tagging.destroy
       assert @tag.reload
     end
   end
