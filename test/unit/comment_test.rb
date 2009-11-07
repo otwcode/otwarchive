@@ -6,7 +6,6 @@ class CommentTest < ActiveSupport::TestCase
       user = create_user
       @comment = create_comment(:pseud_id => user.default_pseud.id)
     end
-    subject { @comment }
     should_belong_to :pseud
     should_belong_to :commentable
     should_have_many :users, :through => :inbox_comments
@@ -19,7 +18,6 @@ class CommentTest < ActiveSupport::TestCase
       setup do
         @second_comment = create_comment(:commentable => @comment)
       end
-      subject { @comment }
       should "find that comment" do
         assert_contains(@comment.find_all_comments, @second_comment)
       end
@@ -35,7 +33,6 @@ class CommentTest < ActiveSupport::TestCase
       work = create_work
       assert @comment = Comment.new(:pseud_id => user.default_pseud.id, :commentable => work)
     end
-    subject { @comment }
     should "not have an email or name value" do
       assert_equal nil, @comment.email
       assert_equal nil, @comment.name
@@ -48,7 +45,6 @@ class CommentTest < ActiveSupport::TestCase
       work = create_work
       assert @comment = Comment.new(:email => random_email, :name => random_phrase, :commentable => work)
     end
-    subject { @comment }
     should_validate_presence_of :email, :name, :content
     should_not_allow_values_for :email, "abcd", :message => /invalid/
     should_allow_values_for :email, "user@google.com"
