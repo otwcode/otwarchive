@@ -12,16 +12,16 @@ class InviteRequestsController < ApplicationController
   def show
     if params[:email]
       @invite_request = InviteRequest.find_by_email(params[:email])
-      unless @invite_request
-        flash[:error] = "Sorry, we couldn't find your address in our queue."
+      unless  (request.xml_http_request?) || @invite_request
+        flash[:error] = "Sorry, we couldn't find that address in our queue."
         redirect_to invite_requests_url      
       end    
     else
       @invite_request = InviteRequest.find(params[:id])
     end
     respond_to do |format|
-      format.html 
-      format.js 
+      format.html
+      format.js
     end
   end
 
