@@ -9,6 +9,7 @@ class FandomTest < ActiveSupport::TestCase
       @fandom.add_parent_by_id(@media.id)
       @fandom.reload
     end
+    subject { @fandom }
     should_validate_presence_of :name
     should "have a display name" do
       assert_equal ArchiveConfig.FANDOM_CATEGORY_NAME, Fandom::NAME

@@ -83,11 +83,11 @@ class User < ActiveRecord::Base
   named_scope :out_of_invites, :conditions => {:out_of_invites => true}
 
   validates_format_of :login, 
-    :message => t('login_invalid', :default => 'Your user name must begin and end with a letter or number; it may also contain underscores but no other characters.'),
+    :message => t('login_invalid', :default => 'must begin and end with a letter or number; it may also contain underscores but no other characters.'),
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
 
   validates_email_veracity_of :email, 
-    :message => t('email_invalid', :default => 'This does not seem to be a valid email address.')
+    :message => t('email_invalid', :default => 'does not seem to be a valid address.')
  # validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create
   # validates_format_of :password, :with => /(?=.*\d)(?=.*([a-z]|[A-Z]))/, :message => 'must have at least one digit and one alphabet character.'
 
@@ -97,13 +97,13 @@ class User < ActiveRecord::Base
   attr_accessor :terms_of_service
   attr_accessible :age_over_13, :terms_of_service
   
-  validates_inclusion_of :terms_of_service,
-                         :in => %w{ 1 },
+  validates_acceptance_of :terms_of_service,
+                         :allow_nil => false, 
                          :message => t('must_accept_tos', :default => 'Sorry, you need to accept the Terms of Service in order to sign up.'),
                          :if => :first_save?
                          
-  validates_inclusion_of  :age_over_13,
-                          :in => %w{ 1 },
+  validates_acceptance_of  :age_over_13,
+                          :allow_nil => false, 
                           :message => t('must_be_over_13', :default => 'Sorry, you have to be over 13!'),
                           :if => :first_save?
                           
@@ -131,7 +131,7 @@ class User < ActiveRecord::Base
   
   protected                            
     def first_save?
-      crypted_password.blank? && identity_url.blank?
+      self.new_record?
     end
   
   public

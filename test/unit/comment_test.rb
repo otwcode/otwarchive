@@ -6,6 +6,7 @@ class CommentTest < ActiveSupport::TestCase
       user = create_user
       @comment = create_comment(:pseud_id => user.default_pseud.id)
     end
+    subject { @comment }
     should_belong_to :pseud
     should_belong_to :commentable
     should_have_many :users, :through => :inbox_comments
@@ -16,13 +17,14 @@ class CommentTest < ActiveSupport::TestCase
     # acts_as_commentable: CommentableEntity methods find_all_comments & count_all_comments
     context "with its own comment" do
       setup do
-        @comment2 = create_comment(:commentable => @comment)
+        @second_comment = create_comment(:commentable => subject)
       end
+      subject { @comment }
       should "find that comment" do
-        assert_contains(@comment.find_all_comments, @comment2)
+        assert_contains(subject.find_all_comments, @second_comment)
       end
       should "count that comment" do
-        assert_equal 1, @comment.count_all_comments
+        assert_equal 1, subject.count_all_comments
       end
     end
   end
@@ -33,9 +35,10 @@ class CommentTest < ActiveSupport::TestCase
       work = create_work
       assert @comment = Comment.new(:pseud_id => user.default_pseud.id, :commentable => work)
     end
+    subject { @comment }
     should "not have an email or name value" do
-      assert_equal nil, @comment.email
-      assert_equal nil, @comment.name
+      assert_equal nil, subject.email
+      assert_equal nil, subject.name
     end
   end
 
@@ -45,11 +48,12 @@ class CommentTest < ActiveSupport::TestCase
       work = create_work
       assert @comment = Comment.new(:email => random_email, :name => random_phrase, :commentable => work)
     end
+    subject { @comment }
     should_validate_presence_of :email, :name, :content
     should_not_allow_values_for :email, "abcd", :message => /invalid/
     should_allow_values_for :email, "user@google.com"
     should "not have a pseud" do
-      assert_equal nil, @comment.pseud_id
+      assert_equal nil, subject.pseud_id
     end
   end
 
