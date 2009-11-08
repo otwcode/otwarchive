@@ -201,18 +201,18 @@ namespace :After do
 #     end
 #   end
 
-desc "Invitations changes"
-task(:after_20091018155535_add_columns_to_invitations => :environment) do
-  Invitation.all.each do |i|
-    if i.invitee_id
-      i.invitee_type = "ExternalAuthor"
-    elsif user = User.find_by_invitation_id(i.id)
-      i.invitee = user      
-    end
-    i.creator_type = "User" if i.creator_id
-    i.redeemed_at = i.updated_at if i.used?
-    i.save!
-  end
-end
-  
-end
+# desc "Invitations changes"
+# task(:after_20091018155535_add_columns_to_invitations => :environment) do
+#  Invitation.all.each do |i|
+#    if i.invitee_id
+#      i.invitee_type = "ExternalAuthor"
+#    elsif user = User.find_by_invitation_id(i.id)
+#      i.invitee = user      
+#    end
+#    i.creator_type = "User" if i.creator_id
+#    i.redeemed_at = i.updated_at if i.used?
+#    i.save!
+#  end
+#end
+#  
+#end
