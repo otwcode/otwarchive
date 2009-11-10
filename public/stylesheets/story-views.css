@@ -9,6 +9,8 @@ set work styles
 .work-show a:visited { border-bottom-style: solid;}
 
 #chapters p {padding-bottom: 0.5em;}
+#chapters center { font-size: 0.875em; line-height: 1.286; margin: 0.643em 0; } /* To make works center tags have the same font size as paragraphs */
+#chapters center p { font-size: 1em; } 
 .unposted-chapter, .unposted-chapter .navigation {background:#eee}
 
 .work-show dl		{ font-size:1em; margin:1.5em 0; border-bottom:0.25em double #777; }
