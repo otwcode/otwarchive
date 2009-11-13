@@ -52,6 +52,7 @@ class InvitationsController < ApplicationController
   
   def update
     @invitation = Invitation.find(params[:id])
+    @invitation.attributes = params[:invitation]
     if @invitation.invitee_email_changed? && @invitation.update_attributes(params[:invitation])
       flash[:notice] = 'Invitation was successfully sent.'
       if logged_in_as_admin?
