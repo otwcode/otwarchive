@@ -4,7 +4,16 @@ class InviteRequest < ActiveRecord::Base
   validates_uniqueness_of :email, :message => "is already part of our queue."
   validates_email_veracity_of :email
   
-  before_validation :compare_with_users
+  before_validation_on_create :compare_with_users
+  
+  # Realign positions if they're incorrect
+  def self.reset_order
+    first_request = self.find(:first, :order => :position)
+    unless first_request.position == 1
+       requests = self.find(:all, :order => :position)
+       requests.each_with_index {|request, index| request.update_attribute(:position, index + 1)}   
+    end
+  end
   
   def proposed_fill_date
     number_of_rounds = (self.position.to_f/AdminSetting.invite_from_queue_number.to_f).ceil - 1
@@ -25,13 +34,14 @@ class InviteRequest < ActiveRecord::Base
     self.find(:all, :order => :position, :limit => AdminSetting.invite_from_queue_number).each do |request|
       request.invite_and_remove
     end
+    InviteRequest.reset_order
   end
   
   #Turn a request into an invite and then remove it from the queue
   def invite_and_remove(creator=nil)
     invitation = creator ? creator.invitations.build(:invitee_email => self.email, :from_queue => true) : 
                                        Invitation.new(:invitee_email => self.email, :from_queue => true)
-    if invitation.save!
+    if invitation.save
       self.destroy
     end  
   end

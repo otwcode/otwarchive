@@ -1,5 +1,9 @@
 <h1>Manage the invite queue</h1>
 
+  <% form_tag reorder_invite_requests_url do %>
+    <p><%= submit_tag t('reorder_queue', :default => 'Fix the order of the queue')  %></p>
+  <% end %>
+
 <table>
 <%- for request in @invite_requests -%>
 <tr>

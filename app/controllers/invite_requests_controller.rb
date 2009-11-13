@@ -1,5 +1,5 @@
 class InviteRequestsController < ApplicationController
-  before_filter :admin_only, :only => [:manage, :destroy]
+  before_filter :admin_only, :only => [:manage, :reorder, :destroy]
   
   # GET /invite_requests
   # GET /invite_requests.xml
@@ -39,6 +39,15 @@ class InviteRequestsController < ApplicationController
   
   def manage
     @invite_requests = InviteRequest.find(:all, :order => :position)
+  end
+  
+  def reorder
+    if InviteRequest.reset_order
+      flash[:notice] = "The queue has been successfully updated."
+    else
+      flash[:error] = "Something went wrong. Please try that again."
+    end
+    redirect_to manage_invite_requests_url
   end
   
   def destroy

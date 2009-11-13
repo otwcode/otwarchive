@@ -25,7 +25,8 @@ class Admin::AdminInvitationsController < ApplicationController
   def invite_from_queue
     InviteRequest.find(:all, :order => :position, :limit => params[:invite_from_queue].to_i).each do |request|
       request.invite_and_remove(current_admin)
-    end  
+    end
+    InviteRequest.reset_order  
     flash[:notice] = t('invited_from_queue', :default => "{{count}} people from the invite queue were invited.", :count => params[:invite_from_queue].to_i)
     redirect_to admin_invitations_url
   end
