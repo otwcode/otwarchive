@@ -14,7 +14,7 @@
   <td><%=invitee_link(invitation) %></td>
   <td><%- unless invitation.redeemed_at -%><%= link_to "copy and use", new_user_path(:invitation_token => invitation.token) %><%- end -%></td>
   <%- if logged_in_as_admin? && invitation.redeemed_at.blank? -%>
-    <td><%= link_to("Delete", { :action => "destroy", :id => invitation }, :confirm => "Are you sure you want to delete this invitation?", :method => :delete) %></td> 
+    <td><%= link_to("Delete", invitation, :confirm => "Are you sure you want to delete this invitation?", :method => :delete) %></td> 
   <%- end -%>
   </tr>
   <%- end -%>

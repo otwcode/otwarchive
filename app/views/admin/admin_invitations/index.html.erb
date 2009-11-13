@@ -45,9 +45,9 @@
   <h2>Track invitations</h2>
     <% form_tag url_for(:controller => 'admin/admin_invitations', :action => 'find'), :method => :get do %>
     <dl>
-      <dt><%= label_tag :user_name, t('user_name', :default => 'Enter a user name:') %></dt>
+      <dt><%= label_tag :user_name, t('find_user_name', :default => 'Enter a user name:') %></dt>
       <dd><%= text_field_tag :user_name  %></dt>
-      <dt><%= label_tag :token, t('user_name', :default => 'Enter an invite token:') %></dt>
+      <dt><%= label_tag :token, t('find_token', :default => 'Enter an invite token:') %></dt>
       <dd><%= text_field_tag :token  %></dt>
     </dl>
     <p><%= submit_tag "Go" %></p>

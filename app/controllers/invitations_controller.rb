@@ -67,12 +67,17 @@ class InvitationsController < ApplicationController
 
   def destroy
     @invitation = Invitation.find(params[:id])
+    @user = @invitation.creator
     if @invitation.destroy
       flash[:notice] = "Invitation successfully destroyed"
     else
       flash[:error] = "Invitation was not destroyed."
     end
-    redirect_to user_invitations_url(@user)
+    if @user.is_a?(User)
+      redirect_to user_invitations_url(@user)
+    else
+      redirect_to admin_invitations_url
+    end      
   end
 
 end
