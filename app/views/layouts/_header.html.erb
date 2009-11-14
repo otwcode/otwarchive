@@ -15,7 +15,7 @@
     <%= render :partial => 'works/search_box' %>
   </div>
   <h1><%= link_to ArchiveConfig.APP_NAME, root_path %>
-    <% unless ArchiveConfig.REVISION.blank? %>(<span>rev. <%= ArchiveConfig.REVISION %></span>)<% end %>
+    <% unless ArchiveConfig.REVISION.blank? %>(BETA <%=h t('revision', :default => 'rev. {{rev_number}}', :rev_number => ArchiveConfig.REVISION) %>)<% end %>
   </h1>
   
   <ul id="main-navigation">
