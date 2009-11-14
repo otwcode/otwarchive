@@ -11,13 +11,19 @@ class WorksController < ApplicationController
   before_filter :check_visibility, :only => [ :show, :navigate ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import ]
   before_filter :update_or_create_reading, :only => [ :show ]
+  before_filter :clean_emdashes, :only => [:update, :create]
 
   def load_work
     @work = Work.find(params[:id])
     @check_ownership_of = @work
     @check_visibility_of = @work
   end
-
+  
+  #clean up em dashes for things in the text box.
+  def clean_emdashes
+    params[:work][:chapter_attributes][:content].gsub!(/\xE2\x80"/, '&mdash;')
+  end
+  
   # Sets values for @work, @chapter, @coauthor_results, @pseuds, and @selected_pseuds
   # and @tags[category]
   def set_instance_variables
@@ -446,6 +452,7 @@ class WorksController < ApplicationController
       end
       # otherwise let's go for it
       results = storyparser.import_from_urls(@urls, :pseuds => [current_user.default_pseud], :post_automatically => true)
+      
       @works = results[0]
       @failed_urls = results[1]
       redirect_to :action => :show_multiple, :user_id => current_user.login, :work_ids => @works.collect(&:id) and return
