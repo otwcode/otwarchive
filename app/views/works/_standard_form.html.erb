@@ -29,37 +29,21 @@
         <%= generate_countdown_html("work_summary", ArchiveConfig.SUMMARY_MAX) -%>
       </dd>
 
-      <p><%=h t('add_notes', :default => "Add notes") -%></p>
-      <dt class="work-endnotes">
-        <%= f.label :storynotescheck, t('beginning_notes', :default => "at the beginning") %> 
-      </dt>
-      <dd class="work-endnotes">
-       <input type="checkbox" id="storynotescheck" name="storynotescheck"  onclick="showNotesOptions()" 
-       <%- unless @work.notes.blank? -%>checked="checked"<%- end -%>/>
-      </dd>
-      
+      <p><%=h t('add_notes', :default => "Add notes") -%></p>    
       <dl id="worknotesoptions">
         <dt class="notes">
-          <%= f.label :notes, "Notes (max " + ArchiveConfig.NOTES_MAX.to_s + " characters)" %>
+          <%= f.label :notes, "Notes at the beginning (max " + ArchiveConfig.NOTES_MAX.to_s + " characters)" %>
         </dt>
         <dd class="notes">
           <%= f.text_area :notes, :rows => 4, :cols => 60, :class => "notes-field" %>
           <%= live_validation_for_field('work_notes', :presence => false, :maximum_length => ArchiveConfig.NOTES_MAX) -%>
           <%= generate_countdown_html("work_notes", ArchiveConfig.NOTES_MAX) -%>
         </dd>
-      </dl>
-
-      <dt class="work-endnotes">
-      <%= f.label :storyendnotescheck, t('end_notes', :default => "at the end") %> 
-      </dt>
-      <dd class="work-endnotes">
-       <input type="checkbox" id="storyendnotescheck" name="storyendnotescheck"  onclick="showEndnotesOptions()" 
-       <%- unless @work.endnotes.blank? -%>checked="checked"<%- end -%>/>
-      </dd>      
+      </dl>    
       
       <dl id="workendnotesoptions"
         <dt class="notes">
-          <%= f.label :notes, "Notes (max " + ArchiveConfig.NOTES_MAX.to_s + " characters)" %>
+          <%= f.label :notes, "Notes at the end (max " + ArchiveConfig.NOTES_MAX.to_s + " characters)" %>
         </dt>
         <dd class="notes">
           <%= f.text_area :endnotes, :rows => 4, :cols => 60, :class => "notes-field" %>
