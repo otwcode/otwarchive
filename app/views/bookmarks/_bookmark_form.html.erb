@@ -12,7 +12,7 @@
   <dt><label><%=h t('form_pseud', :default => "Pseud: ") -%></label></dt>
   <dd>
     <% if current_user.pseuds.count > 1 %>
-      <%= f.collection_select :pseud_id, current_user.pseuds, :id, :name %>
+      <%= select_tag "bookmark[pseud_id]", options_for_select(current_user.pseuds.map{|pseud| [pseud.name, pseud.id]}, @bookmark.pseud ? @bookmark.pseud.id : current_user.default_pseud.id) %>
     <% else %>
     <%= current_user.default_pseud.name -%>
       <%= f.hidden_field :pseud_id, :value => "#{current_user.default_pseud.id}" %>
