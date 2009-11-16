@@ -7,7 +7,7 @@
     <li class="byline">
     <%= t('bookmarked_by', :default=>'Bookmarked by {{user}}', :user=>link_to(bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud])) %>
     </li>
-    <li class="byline-date"><span class="byline-date"><%= set_format_for_date(bookmark.updated_at) %></span></li>
+    <li class="byline-date"><span class="byline-date"><%= set_format_for_date(bookmark.created_at) %></span></li>
 
     <li class="user-notes">
       <%- unless bookmark.notes.blank? -%>
