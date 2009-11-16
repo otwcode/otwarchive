@@ -1,6 +1,7 @@
 <h1><%=h 'Editing series' %></h1>
 <div class="navigation">
 <span class="navitem"><%= link_to 'Delete Series', @series, :confirm => 'Are you sure?', :method => :delete %></span>
+<span class="navitem"><%= link_to 'Reorder Series', manage_series_path(@series) %></span>
 <span class="navitem"><%= link_to 'Show', @series %></span>
 <span class="navitem"><%= link_to 'Back', series_path %></span>
 </div>
