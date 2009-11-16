@@ -68,7 +68,7 @@
       <%= ew.collection_select(:rating_string, Rating.canonical, :name, :name, {:selected => ArchiveConfig.RATING_DEFAULT_TAG_NAME}) -%>		
     </dd>  
     <dt>
-      <%= ew.label :category_string, Category::NAME -%><%= link_to_help "category-help" -%>
+      <%= ew.label :category_string, Category::NAME -%>
     </dt>
     <dd>
       <%= ew.collection_select(:category_string, Category.canonical, :name, :name, {:include_blank => true}) -%>		
