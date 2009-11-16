@@ -89,6 +89,9 @@ class UsersController < ApplicationController
                             :activation_url => activate_path(@user.activation_code)) if ENV['RAILS_ENV'] == 'development'
         render :partial => "confirmation", :layout => "application"
       else
+        if params[:user] && params[:user][:identity_url]
+          params[:use_openid] = true
+        end
         render :action => "new"
       end
     end
@@ -142,6 +145,7 @@ class UsersController < ApplicationController
           flash[:notice] = t('profile_updated', :default => 'Your profile has been successfully updated.')
           redirect_to(user_profile_path(@user))
         else
+          params[:use_openid] = true
           flash[:error] = "Your OpenID failed to save. Please try again."
           render :edit
         end
@@ -149,6 +153,9 @@ class UsersController < ApplicationController
         successful_update
       end
     rescue
+      if params[:user] && params[:user][:identity_url]
+        params[:use_openid] = true
+      end
       flash[:error] = t('update_failed', :default => "Your update failed; please try again.")
       render :action => "edit"
     end
