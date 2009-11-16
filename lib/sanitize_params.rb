@@ -59,6 +59,7 @@ module SanitizeParams
   def walk_hash(hash)
     hash.keys.each do |key|
       if hash[key].is_a? String
+        hash[key].strip!
         if ArchiveConfig.FIELDS_ALLOWING_HTML.include?(key.to_s)
           hash[key] = @white_list_sanitizer.sanitize(fix_quotes(hash[key]))
         else

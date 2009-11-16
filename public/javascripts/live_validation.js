@@ -268,7 +268,8 @@ LiveValidation.prototype = {
    * @return {Boolean} - whether the validation has passed or failed
    */
   validateElement: function(validationFunction, validationParamsObj){
-    var value = (this.elementType == LiveValidation.SELECT) ? this.element.options[this.element.selectedIndex].value : this.element.value;     
+    var originalValue = (this.elementType == LiveValidation.SELECT) ? this.element.options[this.element.selectedIndex].value : this.element.value;
+    var value = $j.trim(originalValue); //we want validations to ignore leading and trailing whitespace, since it will be removed     
     if(validationFunction == Validate.Acceptance){
       if(this.elementType != LiveValidation.CHECKBOX) throw new Error('LiveValidation::validateElement - Element to validate acceptance must be a checkbox!');
       value = this.element.checked;
