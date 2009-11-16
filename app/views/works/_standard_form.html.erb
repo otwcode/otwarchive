@@ -204,7 +204,7 @@
   <legend><%= 'Story Text' -%></legend>
   <p><%= c.label :content, t('story_text', :default => "Story text"), :class => "required" %></p>
   <div id="toggleText" style="display: block">
-  <p><%=h t('plain_text', :default =>"Plain text with limited html") %> <%= link_to_help "html-help" -%><br/><code>a href, b, big, blockquote, br, caption, cite, code, col, colgroup, del, dd, dt, dl, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, ins, li, ol, p, pre, q, small, span, strike, strong, sub, sup, table, tr, td, th, tbody, thead, tfoot, u, ul</code></p>
+  <p><%=h t('plain_text', :default =>"Plain text with limited html") %> <%= link_to_help "html-help" -%><br/><code>a href, abbr, abbr, acronym, address, alt, b, big, blockquote, br, caption, center, cite, cite, class, code, col, colgroup, datetime, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, height, hr, href, i, img, ins, kbd, li, name, ol, p, pre, q, samp, small, span, src, strike, strong, sub, sup, table, tbody, td, tfoot, th, thead, title, tr, tt, u, ul, var, width</code></p>
   </div>
   <% use_tinymce -%>
   <p class="rtf-html-switch">
