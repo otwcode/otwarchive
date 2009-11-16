@@ -339,12 +339,15 @@ class WorksController < ApplicationController
 
       #flash[:notice] = "DEBUG: in UPDATE preview:  " + "all: " + @allpseuds.flatten.collect {|ap| ap.id}.inspect + " selected: " + @selected_pseuds.inspect + " co-authors: " + @coauthors.flatten.collect {|ap| ap.id}.inspect + " pseuds: " + @pseuds.flatten.collect {|ap| ap.id}.inspect + "  @work.authors: " + @work.authors.collect {|au| au.id}.inspect + "  @work.pseuds: " + @work.pseuds.collect {|ps| ps.id}.inspect
 
-      if @work.has_required_tags?
+      if @work.has_required_tags? && @work.invalid_tags.blank?
         render :action => "preview"
       else
+        if !@work.invalid_tags.blank?
+          @work.check_for_invalid_tags
+        end
         if @work.fandoms.blank?
           @work.errors.add_to_base("Updating: Please add all required tags. Fandom is missing.")
-        else
+        elsif !@work.has_required_tags?
           @work.errors.add_to_base("Updating: Please add all required tags.")
         end
         render :action => :edit

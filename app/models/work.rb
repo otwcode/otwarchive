@@ -64,6 +64,7 @@ class Work < ActiveRecord::Base
   attr_accessor :ambiguous_pseuds
   attr_accessor :new_parent, :url_for_parent
   attr_accessor :ambiguous_tags
+  attr_accessor :invalid_tags
   attr_accessor :should_reset_filters
 
   ########################################################################
@@ -159,7 +160,7 @@ class Work < ActiveRecord::Base
   after_save :save_chapters, :save_parents
 
   # before_save :validate_tags # Enigel's feeble attempt
-
+  before_save :check_for_invalid_tags
   before_update :validate_tags
 	after_update :save_series_data
 
@@ -404,32 +405,34 @@ class Work < ActiveRecord::Base
 
   # string methods
   # (didn't use define_method, despite the redundancy, because it doesn't cache in development)
+  # the Tag self.string method gets the values from the database, which is why we were losing the
+  # values for new works with validation errors
   def rating_string
-    self.ratings.string
+    self.ratings.map(&:name).join(ArchiveConfig.DELIMITER)
   end
   def category_string
-    self.categories.string
+    self.categories.map(&:name).join(ArchiveConfig.DELIMITER)
   end
   def warning_string
-    self.warnings.string
+    self.warnings.map(&:name).join(ArchiveConfig.DELIMITER)
   end
   def warning_strings
     self.warnings.map(&:name)
   end
   def fandom_string
-    self.fandoms.string
+    self.fandoms.map(&:name).join(ArchiveConfig.DELIMITER)
   end
   def pairing_string
-    self.pairings.string
+    self.pairings.map(&:name).join(ArchiveConfig.DELIMITER)
   end
   def character_string
-    self.characters.string
+    self.characters.map(&:name).join(ArchiveConfig.DELIMITER)
   end
   def freeform_string
-    self.freeforms.string
+    self.freeforms.map(&:name).join(ArchiveConfig.DELIMITER)
   end
   def ambiguity_string
-    self.ambiguities.string
+    self.ambiguities.map(&:name).join(ArchiveConfig.DELIMITER)
   end
 
   # _string= methods
@@ -488,10 +491,15 @@ class Work < ActiveRecord::Base
   def fandom_string=(tag_string)
     tags = []
     ambiguities = []
+    self.invalid_tags ||= []
     tag_string.split(ArchiveConfig.DELIMITER).each do |string|
       tag = Fandom.find_or_create_by_name(string)
-      tags << tag if tag.is_a?(Fandom)
-      ambiguities << tag if tag.is_a?(Ambiguity)
+      if tag.valid?
+        tags << tag if tag.is_a?(Fandom)
+        ambiguities << tag if tag.is_a?(Ambiguity)
+      else
+        self.invalid_tags << tag
+      end
     end
     self.add_to_ambiguity(ambiguities)
     remove = self.fandoms - tags
@@ -505,10 +513,15 @@ class Work < ActiveRecord::Base
   def pairing_string=(tag_string)
     tags = []
     ambiguities = []
+    self.invalid_tags ||= []
     tag_string.split(ArchiveConfig.DELIMITER).each do |string|
       tag = Pairing.find_or_create_by_name(string)
-      tags << tag if tag.is_a?(Pairing)
-      ambiguities << tag if tag.is_a?(Ambiguity)
+      if tag.valid?
+        tags << tag if tag.is_a?(Pairing)
+        ambiguities << tag if tag.is_a?(Ambiguity)
+      else
+        self.invalid_tags << tag
+      end
     end
     self.add_to_ambiguity(ambiguities)
     remove = self.pairings - tags
@@ -521,10 +534,15 @@ class Work < ActiveRecord::Base
   def character_string=(tag_string)
     tags = []
     ambiguities = []
+    self.invalid_tags ||= []
     tag_string.split(ArchiveConfig.DELIMITER).each do |string|
       tag = Character.find_or_create_by_name(string)
-      tags << tag if tag.is_a?(Character)
-      ambiguities << tag if tag.is_a?(Ambiguity)
+      if tag.valid?
+        tags << tag if tag.is_a?(Character)
+        ambiguities << tag if tag.is_a?(Ambiguity)
+      else
+        self.invalid_tags << tag
+      end        
     end
     self.add_to_ambiguity(ambiguities)
     remove = self.characters - tags
@@ -537,10 +555,15 @@ class Work < ActiveRecord::Base
   def freeform_string=(tag_string)
     tags = []
     ambiguities = []
+    self.invalid_tags ||= []    
     tag_string.split(ArchiveConfig.DELIMITER).each do |string|
       tag =  Freeform.find_or_create_by_name(string)
-      tags << tag if tag.is_a?(Freeform)
-      ambiguities << tag if tag.is_a?(Ambiguity)
+      if tag.valid?
+        tags << tag if tag.is_a?(Freeform)
+        ambiguities << tag if tag.is_a?(Ambiguity)
+      else
+        self.invalid_tags << tag
+      end        
     end
     self.add_to_ambiguity(ambiguities)
     remove = self.freeforms - tags
@@ -586,6 +609,13 @@ class Work < ActiveRecord::Base
   def validate_tags
     errors.add_to_base("Work must have required tags.") unless self.has_required_tags?
     self.has_required_tags?
+  end
+  
+  def check_for_invalid_tags
+    unless self.invalid_tags.blank?
+      errors.add_to_base("The following tags are invalid: " + self.invalid_tags.collect(&:name).join(', ') + ". Please make sure that your tags are less than 42 characters long.")
+    end
+    self.invalid_tags.blank?  
   end
 
   def update_common_tags

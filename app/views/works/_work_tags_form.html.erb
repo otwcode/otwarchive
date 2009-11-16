@@ -16,7 +16,7 @@
     </dt>
     <dd class="warning required">
       <select id="work_warning" name="work[warning_strings][]" multiple="multiple">
-        <%= options_for_select([ArchiveConfig.WARNING_DEFAULT_TAG_NAME, ArchiveConfig.WARNING_SOME_TAG_NAME, ArchiveConfig.WARNING_NONE_TAG_NAME, ArchiveConfig.WARNING_VIOLENCE_TAG_NAME, ArchiveConfig.WARNING_DEATH_TAG_NAME, ArchiveConfig.WARNING_NONCON_TAG_NAME, ArchiveConfig.WARNING_CHAN_TAG_NAME],  include_blank ? nil : warning_selected(@work) ) -%>
+        <%= options_for_select(warnings_for_tag_form,  (include_blank ? nil : warning_selected(@work)) ) -%>
       </select>
     </dd>
     

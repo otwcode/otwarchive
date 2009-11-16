@@ -1,5 +1,5 @@
 ﻿<div class="work-meta">
-  <%- work_tags = work.tags -%>
+  <%- work_tags = collect_work_tags(work, @preview_mode) -%>
   <ul class="column">
   <%- Tag::VISIBLE.each do |type| -%>
     <%- tags = work_tags.select{|tag| tag.type == type} -%>
