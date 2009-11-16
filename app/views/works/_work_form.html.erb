@@ -4,7 +4,7 @@
 <%- end -%>
 
 <span class="navitem" id="upload-link" <%= @use_import_form ? 'style="display: none;"' : '' -%> >
- <%= link_to_remote( t('upload', :default => 'Upload From An Existing URL?'), 
+ <%= link_to_remote( t('import', :default => 'Import From An Existing URL Instead?'), 
 {:url => {:controller => :works, :action => :new, :import => true}},
 :href => url_for(:controller => :works, :action => :new, :import => true)) -%>	
 </span>

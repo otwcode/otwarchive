@@ -8,6 +8,9 @@
     <li>
       <%= link_to 'Post New', new_work_path -%>&nbsp;|
     </li>
+	<li> 
+	<%= link_to 'Import', url_for(:controller => :works, :action => :new, :import => true) -%>	&nbsp;|
+	</li>	
     <li>
       <%= link_to 'Log out', logout_path -%>
     </li>

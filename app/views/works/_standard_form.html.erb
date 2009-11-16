@@ -1,4 +1,5 @@
 <%- form_for(@work, :html => {:name => "storyForm"}) do |f| -%> 
+<p class="message">Please use this form to upload new work via the HTML or Rich Text editors. Use the <%= link_to 'Import Form', url_for(:controller => :works, :action => :new, :import => true) -%> to import works from an existing URL.</p>
   <p class="notice required"><%=h t('required', :default => '* Required information') %></p>
   <%= render :partial => 'work_tags_form', :locals => {:include_blank => false} -%>
   <fieldset>
