@@ -58,7 +58,11 @@ class WorksController < ApplicationController
         @previous_published_at = @work.first_chapter.published_at
         @previous_backdate_setting = @work.backdate
         if params[:work]  # editing, save our changes
-          @work.attributes = params[:work]
+          begin
+            @work.attributes = params[:work]
+          rescue ActiveRecord::RecordInvalid => invalid
+            @work.errors.add_to_base(invalid.message)         
+          end
         end
       elsif params[:work] # create
          @work = Work.new(params[:work])
