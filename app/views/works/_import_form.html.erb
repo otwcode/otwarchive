@@ -1,11 +1,8 @@
 <!-- This partial renders a form for importing a work from an existing URL -->
 <p class="message">
   <strong><%= t('import.please_note', :default => 'Please note!') %></strong> 
-  <%= t('import.does_not_always_work', 
-        :default => 'We cannot always automatically import works. If you have trouble, please 
-                     <a href="http://code.google.com/p/otwarchive/issues/detail?id=785">let us know</a> so we can improve this tool!') %>
-</p>
-<p id="">
+  <%= t('import_problems', :default => 'We cannot always automatically import works.') %> If you have trouble, <%= link_to t('let_us_know', :default => "please let us know"), new_feedback_report_path -%> so we can improve this tool! If your text gets truncated at the point of an em dash or accented character, try replacing these characters with HTML entities, or cutting and pasting your story into the rich text editor on the standard form.</p>
+<p>
   <%= t('import.allowed_html', :default => 'Allowed HTML:') %><br />
   <code>a href, b, blockquote, br, center, cite, code, del, dd, dt, dl, div, em, h1, h2, h3, h4, h5, h6, i, ins, li, ol, pre, q, small, span, strike, strong, sub, sup, ul</code>
 </p>
