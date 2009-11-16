@@ -35,10 +35,10 @@ class Chapter < ActiveRecord::Base
   attr_accessor :ambiguous_pseuds
   attr_accessor :wip_length_placeholder
 
-  before_save :validate_authors, :clean_title, :clean_emdashes
+  before_save :validate_authors, :clean_title #, :clean_emdashes
   before_save :set_word_count
   before_save :validate_published_at
-  before_update :clean_emdashes
+#  before_update :clean_emdashes
 
   named_scope :in_order, {:order => :position}
   named_scope :posted, :conditions => {:posted => true}
@@ -58,9 +58,9 @@ class Chapter < ActiveRecord::Base
   end
  
   # make em-dashes into html code
-  def clean_emdashes
-    self.content.gsub!(/\xE2\x80\"/, '&mdash;')
-  end 
+#  def clean_emdashes
+#    self.content.gsub!(/\xE2\x80\"/, '&mdash;')
+#  end 
   # check if this chapter is the only chapter of its work
   def is_only_chapter?
     self.work.chapters.count == 1

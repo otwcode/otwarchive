@@ -23,12 +23,12 @@ module SanitizeParams
     return "" if text.nil?
     text.gsub! "\342\200\230", "'"
     text.gsub! "\342\200\231", "'"
-    text.gsub! "\221", "'"
-    text.gsub! "\222", "'"
+#    text.gsub! "\221", "'"
+#    text.gsub! "\222", "'"
     text.gsub! "\342\200\234", '"'
     text.gsub! "\342\200\235", '"'
-    text.gsub! "\223", '"'
-    text.gsub! "\224", '"'
+#    text.gsub! "\223", '"'
+#    text.gsub! "\224", '"'
     return text
   end
   
