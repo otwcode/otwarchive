@@ -509,6 +509,7 @@ class WorksController < ApplicationController
     rescue
       flash.now[:error] = t('partially_downloaded', :default => "We managed to partially download the work, but there are problems
         preventing us from saving it as a draft. Please look over the results very carefully!")
+      @chapter = @work.chapters.first
       render :action => :new and return
     end
   end

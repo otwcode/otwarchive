@@ -153,7 +153,7 @@ class Work < ActiveRecord::Base
   # These are methods that run before/after saves and updates to ensure
   # consistency and that associated variables are updated.
   ########################################################################
-  before_save :validate_authors, :clean_and_validate_title, :validate_published_at
+  before_save :validate_authors, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
   before_save :set_word_count, :post_first_chapter
 
@@ -274,6 +274,13 @@ class Work < ActiveRecord::Base
       else
         self.update_attribute(:revised_at, recent_date)
       end 
+    end
+  end
+  
+  # Just to catch any cases that haven't gone through set_revised_at
+  def ensure_revised_at
+    if self.revised_at.nil?
+      self.revised_at = Time.now
     end
   end
   
