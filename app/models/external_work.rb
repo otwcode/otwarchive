@@ -2,7 +2,7 @@ class ExternalWork < ActiveRecord::Base
   has_bookmarks
   has_many :user_tags, :through => :bookmarks, :source => :tags
   
-  has_many :taggings, :as => :taggable
+  has_many :taggings, :as => :taggable, :dependent => :destroy
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
   has_many :common_taggings, :as => :filterable
   has_many :common_tags, :through => :common_taggings

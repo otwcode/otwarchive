@@ -1,7 +1,7 @@
 class Bookmark < ActiveRecord::Base
   belongs_to :bookmarkable, :polymorphic => true
   belongs_to :pseud
-  has_many :taggings, :as => :taggable
+  has_many :taggings, :as => :taggable, :dependent => :destroy
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
   
   named_scope :public, :conditions => {:private => false}
