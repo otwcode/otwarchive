@@ -1,6 +1,17 @@
 
 .droppable { color: red;} 
 
+/* TAG SHOW PAGE */
+
+.tags-show li {
+  display: inline;
+}
+
+.tags-show ul {
+  padding: 1em 1em 2em 1em;
+  line-height: 2em;
+}
+
 /* TAG WRANGLING */	
 #tags-to-sort {
 	margin-top: 20px;

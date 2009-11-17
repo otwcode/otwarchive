@@ -33,9 +33,7 @@
 <% else %>
   <%- unless @tag.parents.blank? -%>
     <p><%=h t('parents', :default => 'Parent tags (more general):') %></p>
-    <%- @tag.parents.sort.each do |parent| %>
-      <%= link_to_tag parent %>
-    <%- end -%>
+    <ul class="tags"><%= tag_link_list(@tag.parents.sort) %></ul>
   <%- end -%>
 <%- end -%>
 
@@ -47,9 +45,7 @@
 
 <%- unless @tag.mergers.blank? -%>
   <p><%=h t('same_meaning', :default => 'Tags with the same meaning:') %></p>
-  <%- @tag.mergers.each do |merger| %>
-    <%= link_to_tag merger %>
-  <%- end -%>
+  <ul class="tags"><%= tag_link_list(@tag.mergers) %></ul>
 <%- end -%>
 
 <%- unless @tag.children.blank? -%>
@@ -60,9 +56,7 @@
   <% end %>
   <%- @tag.children.uniq.compact.sort.group_by(&:type).each do |type, tags| %>
     <p><%= type.pluralize %>:</p>
-    <% tags.each do |child| %>
-      <%= link_to_tag child %>
-    <%- end -%>
+    <ul class="tags"><%= tag_link_list(tags) %></ul>
   <%- end -%>
 <%- end -%>
 
