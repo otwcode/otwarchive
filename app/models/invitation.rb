@@ -6,7 +6,7 @@ class Invitation < ActiveRecord::Base
 
   validate_on_create :recipient_is_not_registered
   
-  named_scope :unsent, :conditions => {:invitee_email => nil}
+  named_scope :unsent, :conditions => {:invitee_email => nil, :redeemed_at => nil}
   named_scope :unredeemed, :conditions => 'invitee_email IS NOT NULL and redeemed_at IS NULL'
   named_scope :redeemed, :conditions => 'redeemed_at IS NOT NULL'
 
