@@ -3,7 +3,8 @@ page.replace_html "upload-work-form", :partial => 'works/import_form'
 page.replace_html "work-form", ""
 page.toggle 'upload-link', 'form-link'
 else
-page.replace_html "work-form", :partial => 'works/standard_form'  
+page.replace_html "work-form", :partial => 'works/standard_form' 
+page << "hideFormFields();" 
 page.replace_html "upload-work-form", ""
 page.toggle 'upload-link', 'form-link'
 end

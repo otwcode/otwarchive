@@ -23,5 +23,7 @@
 </div>
 
 <div id="work-form" class="work-form">
-<%= render :partial => "standard_form" %>
+  <%- unless params[:import] -%>
+  <%= render :partial => "standard_form" %>
+  <%- end -%>
 </div>
