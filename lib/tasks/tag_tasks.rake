@@ -51,6 +51,10 @@ namespace :Tag do
       puts deleted_names.join(", ")
     end
   end
+  desc "Clean up orphaned taggings"
+  task(:clean_up_taggings => :environment) do
+    Tagging.find_each {|t| t.destroy if t.taggable.nil?}  
+  end
   desc "Reset filter taggings"
   task(:reset_filters => :environment) do
     FilterTagging.delete_all

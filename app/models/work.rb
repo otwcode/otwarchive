@@ -28,7 +28,7 @@ class Work < ActiveRecord::Base
   has_many :filter_taggings, :as => :filterable, :dependent => :destroy
   has_many :filters, :through => :filter_taggings
 
-  has_many :taggings, :as => :taggable
+  has_many :taggings, :as => :taggable, :dependent => :destroy
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
 
   has_many :ratings, :through => :taggings, :source => :tagger, :source_type => 'Rating',
