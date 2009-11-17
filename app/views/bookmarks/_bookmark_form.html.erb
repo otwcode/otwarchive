@@ -107,7 +107,7 @@
 	<dd>
     <%= text_field_tag 'tag_string', @tag_string, :size => ArchiveConfig.TAG_MAX %>
     <div class="auto_complete" id="tag_string_auto_complete" ></div>
-    <%= javascript_tag("new Autocompleter.Local('tag_string', 'tag_string_auto_complete', #{Tag.all(:order => :name).map(&:name).to_json}, {tokens: ','});") %>
+    <%= javascript_tag("new Autocompleter.Local('tag_string', 'tag_string_auto_complete', #{Tag.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
     <div class="character_counter">
       <%=h t("comma_separated", :default => "Comma separated, #{ArchiveConfig.TAG_MAX} characters per tag") %>
     </div>
