@@ -58,11 +58,7 @@ class WorksController < ApplicationController
         @previous_published_at = @work.first_chapter.published_at
         @previous_backdate_setting = @work.backdate
         if params[:work]  # editing, save our changes
-          begin
             @work.attributes = params[:work]
-          rescue ActiveRecord::RecordInvalid => invalid
-            @work.errors.add_to_base(invalid.message)         
-          end
         end
       elsif params[:work] # create
          @work = Work.new(params[:work])
@@ -82,13 +78,7 @@ class WorksController < ApplicationController
       @chapter = @chapters.first
       # If we're in preview mode, we want to pick up any changes that have been made to the first chapter
       if params[:work] && params[:work][:chapter_attributes]
-        @chapter.content = params[:work][:chapter_attributes][:content]
-        @chapter.title = params[:work][:chapter_attributes][:title]
-        if params[:update_button] || params[:post_button]# date is coming in in one piece
-          @chapter.published_at = params[:work][:chapter_attributes][:published_at]
-        else  # date is coming in in three pieces and we need to splice it together using convert_date (application.rb)
-          @chapter.published_at = convert_date(params[:work][:chapter_attributes], :published_at)
-        end
+        @chapter.attributes = params[:work][:chapter_attributes]
         # If we're previewing a multichapter work, we want the preview version of the first chapter,
         # so we need to add it back to @chapters
         @chapters[0] = @chapter

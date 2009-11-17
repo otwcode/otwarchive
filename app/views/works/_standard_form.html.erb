@@ -1,3 +1,5 @@
+<%= debug(@chapter.published_at) %>
+
 <%- form_for(@work, :html => {:name => "storyForm"}) do |f| -%> 
 <p class="message">Please use this form to upload new work via the HTML or Rich Text editors. Use the <%= link_to 'Import Form', url_for(:controller => :works, :action => :new, :import => true) -%> to import works from an existing URL.</p>
   <p class="notice required"><%=h t('required', :default => '* Required information') %></p>
@@ -130,7 +132,7 @@
       </fieldset> 
     </dd>
     
-  <% fields_for_associated('work', @work.chapters.first) do |c| %>
+  <% fields_for_associated('work', @chapter) do |c| %>
     <!-- Chaptered checkbox (work_is_wip) -->
     <!-- Checking this box causes the expected number of chapters box to appear; unchecking it causes it to disappear. -->
     <dt class="work-is_wip">
@@ -159,23 +161,11 @@
       <%= c.label :published_at, t('change_pub_date', :default => "Set a different publication date") %> <%= link_to_help "backdating-help" -%>
     </dt>
     <dd>
-      <input type="checkbox" id="publicationdatecheck" onclick="showBackdateOptions()" 
-	    <%- if @work.backdate -%>
-		checked="checked"
-        <%- elsif @chapter != nil && @chapter.posted
-          if @chapter.created_at.to_date != @chapter.published_at -%>checked="checked"
-		  <%- end 
-        end -%> />
+      <input type="checkbox" id="publicationdatecheck" onclick="showBackdateOptions()" <%= check_backdate_box(@work, @chapter) %> />
     </dd>
 	<span id="publicationdateoptions">
     <dd id="managePublicationDate">
-      <%= 
-      if @chapter != nil
-        c.date_select("published_at", :start_year => Date.today.year, :end_year => 1950, :default => Date.today, :value => @chapter.published_at, :order => [:day, :month, :year]) 
-      else
-        c.date_select("published_at", :start_year => Date.today.year, :end_year => 1950, :default => Date.today, :order => [:day, :month, :year]) 
-      end
-	  %>   
+      <%= c.date_select("published_at", :start_year => Date.today.year, :end_year => 1950, :default => Date.today, :value => @chapter.published_at, :order => [:day, :month, :year]) %>   
 	</dd>
 	
     <dt class="work-is-backdated">
