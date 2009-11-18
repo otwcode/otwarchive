@@ -7,12 +7,13 @@
 function initSelect()
 {
 	var theSelect = document.getElementById("accessible_menu");
-	
+	if (theSelect) {
 	theSelect.changed = false;
 	theSelect.onfocus = selectFocussed;
 	theSelect.onchange = selectChanged;
 	theSelect.onkeydown = selectKeyed;
 	theSelect.onclick = selectClicked;
+	}
 	
 	return true;
 }

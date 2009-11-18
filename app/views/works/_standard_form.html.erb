@@ -29,15 +29,18 @@
         <%= live_validation_for_field('work_summary', :presence => false, :maximum_length => ArchiveConfig.SUMMARY_MAX) -%>
         <%= generate_countdown_html("work_summary", ArchiveConfig.SUMMARY_MAX) -%>
       </dd>
-
-      <p><%=h t('add_notes', :default => "Add notes") -%></p>    
+    </dl>
+    
+      <p class="label"><%=h t('add_notes', :default => "Add notes:") -%></p>    
+     <dl class="preface">
       <dt class="work-endnotes">
         <%= f.label :storynotescheck, t('beginning_notes', :default => "at the beginning") %> 
       </dt>
       <dd class="work-endnotes">
-       <input type="checkbox" id="storynotescheck" name="storynotescheck"  onclick="showNotesOptions()" 
-       <%- unless @work.notes.blank? -%>checked="checked"<%- end -%>/>   
-        <dl id="worknotesoptions">
+       <input type="checkbox" id="storynotescheck" name="storynotescheck" onclick="showNotesOptions()" <%- unless @work.notes.blank? -%> checked="checked" <%- end -%> />   
+      </dd>
+      <dd id="worknotesoptions" class="work-endnotes optionalField">
+        <dl>
           <dt class="notes">
             <%= f.label :notes, "Notes (max " + ArchiveConfig.NOTES_MAX.to_s + " characters)" %>
           </dt>
@@ -55,7 +58,9 @@
       <dd class="work-endnotes">
        <input type="checkbox" id="storyendnotescheck" name="storyendnotescheck"  onclick="showEndnotesOptions()" 
        <%- unless @work.endnotes.blank? -%>checked="checked"<%- end -%>/>
-        <dl id="workendnotesoptions"
+      </dd>
+    <dd id="workendnotesoptions" class="work-endnotes optionalField">
+        <dl>
           <dt class="notes">
             <%= f.label :notes, "Notes (max " + ArchiveConfig.NOTES_MAX.to_s + " characters)" %>
           </dt>
@@ -161,24 +166,24 @@
     <dd>
       <input type="checkbox" id="publicationdatecheck" onclick="showBackdateOptions()" <%= check_backdate_box(@work, @chapter) %> />
     </dd>
-	<span id="publicationdateoptions">
-    <dd id="managePublicationDate">
+    <dd id="publicationdateoptions" class="optionalField">
+        <p id="managePublicationDate">
       <%= c.date_select("published_at", :start_year => Date.today.year, :end_year => 1950, :default => Date.today, :value => @chapter.published_at, :order => [:day, :month, :year]) %>   
-	</dd>
-	
-    <dt class="work-is-backdated">
-      <%= f.label :backdate, "Set this publication date for the entire work" %>
-    </dt>
-    <dd class="work-is-backdated">
-      <%= f.check_box :backdate %>
+	</p>
+        <dl>
+            <dt class="work-is-backdated">
+              <%= f.label :backdate, "Set this publication date for the entire work" %>
+            </dt>
+            <dd class="work-is-backdated">
+              <%= f.check_box :backdate %>
+            </dd>
+        </dl>
     </dd>
-	</span>
-    
     <dt class="work-language">
       <%= f.label :language_id, t('choose_language', :default => "Choose a language") %><%= link_to_help "languages-help" -%>
     </dt>
     <dd>
-      <select id='work_language_id' name='work[language_id]' >
+      <select id="work_language_id" name="work[language_id]">
         <%= options_from_collection_for_select(Language.all(:order => :short), :id, :name, @work.language_id || Language.default.id) %>
       </select>
     </dd>
@@ -190,7 +195,7 @@
 <!-- Story text field (chapter_attributes_content) -->
 <fieldset>
   <legend><%= 'Story Text' -%></legend>
-  <p><%= c.label :content, t('story_text', :default => "Story text"), :class => "required" %></p>
+  <p class="label"><%= c.label :content, t('story_text', :default => "Story text"), :class => "required" %></p>
   <div id="toggleText" style="display: block">
   <p><%=h t('plain_text', :default =>"Plain text with limited html") %> <%= link_to_help "html-help" -%><br/><code>a href, abbr, abbr, acronym, address, alt, b, big, blockquote, br, caption, center, cite, cite, class, code, col, colgroup, datetime, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, height, hr, href, i, img, ins, kbd, li, name, ol, p, pre, q, samp, small, span, src, strike, strong, sub, sup, table, tbody, td, tfoot, th, thead, title, tr, tt, u, ul, var, width</code></p>
   </div>
@@ -200,7 +205,7 @@
     <span><a id="displayText" href="javascript:removeEditor('content');javascript:toggle();"><%=h 'HTML' %></a></span>
   </p>      
   
-  <p>
+  <div class="rtf-html-field">
   <%= 
     if @chapter != nil
       c.text_area :content, :value => @chapter.content, :class => "mce-editor", :id => "content"
@@ -215,7 +220,7 @@
       :failureMessage => t('validations.content.too_short', :default => 'Brevity is the soul of wit, but your content does have to be at least {{min}} characters long.', :min => ArchiveConfig.CONTENT_MIN.to_s))
   -%>
   <%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX) -%>
-  </p>      
+  </div>      
 </fieldset>
 
   <%- end -%> <!-- end of fields_for_associated -->
