@@ -51,12 +51,12 @@ module TagsHelper
   # edit_tag_path is behaving badly since around the Rails 2.2.2 upgrade
 	def link_to_edit_tag(tag, options = {})
     options = {:class => "tag"}.merge(options)
-    link_to tag.name, {:controller => :tags, :action => :edit, :id => tag}, options
+    link_to tag.name, {:controller => :tags, :action => :edit, :id => tag.name}, options
 	end
 
   def link_to_tag_works_with_text(tag, link_text, options = {})
     options = {:class => "tag"}.merge(options)
-	  link_to link_text, {:controller => :works, :action => :index, :tag_id => tag}, options
+	  link_to link_text, {:controller => :works, :action => :index, :tag_id => tag.name}, options
 	end
 
   def can_wrangle?

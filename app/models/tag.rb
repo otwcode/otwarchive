@@ -42,7 +42,7 @@ class Tag < ActiveRecord::Base
     :maximum => ArchiveConfig.TAG_MAX,
     :message => "is too long -- try using less than #{ArchiveConfig.TAG_MAX} characters or using commas to separate your tags."
   validates_format_of :name,
-    :with => /\A[-a-zA-Z0-9 \/?.!''"":;\|\]\[}{=~!@#\$%^&()_+]+\z/,
+    :with => /\A[-a-zA-Z0-9 \/?.!''"":;\|\]\[}{=~!@#\$%&()_+]+\z/,
     :message => "can only be made up of letters, numbers, spaces and basic punctuation, but not commas, asterisks or angle brackets."
 
   def before_validation
@@ -111,7 +111,7 @@ class Tag < ActiveRecord::Base
       :conditions => 'filter_counts.unhidden_works_count > 0',
       :limit => count
     }     
-  } 
+  }
   
   # Class methods
 
@@ -120,7 +120,11 @@ class Tag < ActiveRecord::Base
   end
 
   def to_param
-    name
+    name.gsub('&', '&amp;').gsub('/', '^')
+  end
+  
+  def self.find_by_name(string)
+    self.find(:first, :conditions => ['name = ?', string.gsub('&amp;', '&').gsub('^', '/')])
   end
 
   def self.find_or_create_by_name(string)
