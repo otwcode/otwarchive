@@ -26,18 +26,40 @@ tinyMCE.init({
  
 //Changes the labels and info at the top to Story Text section in _works_form and _chapter_form
   
+  //function toggle() {
+  //    var ele = document.getElementById("toggleText");
+  //    var text = document.getElementById("displayText");
+  //    if(ele.style.display == "block") {
+  //  		ele.style.display = "none";
+  //    text.innerHTML = "Rich text";
+  //    }
+  //    else {
+  //    ele.style.display = "block";
+  //    text.innerHTML = "Rich text";
+  //    }
+  //  }
+
   function toggle() {
-      var ele = document.getElementById("toggleText");
-      var text = document.getElementById("displayText");
-      if(ele.style.display == "block") {
-    		ele.style.display = "none";
-      text.innerHTML = "Rich text";
-      }
-      else {
-      ele.style.display = "block";
-      text.innerHTML = "Rich text";
-      }
+    var elems = new Array();
+    elems[0] = document.getElementById("richTextLink");
+    elems[1] = document.getElementById("plainTextLink");
+    elems[2] = document.getElementById("richTextNotes");
+    elems[3] = document.getElementById("plainTextNotes");
+    for (i=0; i<elems.length; i++) {
+        if (elems[i].style.display == "block" || elems[i].style.display == "inline") {
+            elems[i].style.display = "none";
+        }
+        else {
+            if (elems[i].parentNode.className == "rtf-html-switch" ) {
+                elems[i].style.display = "inline";
+            }
+            else {
+                elems[i].style.display = "block";
+            }
+        }
     }
+  }
+
     
 //Allows the user to turn the rich text editor off and on. 
   function addEditor(id) {

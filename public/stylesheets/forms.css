@@ -93,7 +93,7 @@ dd#seriesmanage {clear:both; float:none;}
 #work-form .preface dd.work-endnotes { float: left; margin: 0;}
 #main p.rtf-html-switch {margin:0 0 -0.55em 0; padding:0 0.875em 0; text-align:right; }
 #main .rtf-html-switch span {background:#f0f0ee; padding:0.5625em 0.5625em 0.2em 0.5625em; border:1px solid #ddd;}
-#main div.rtf-html-field { margin:0.643em 0; }
+#main div.rtf-html-field { margin:0.643em 0; } 
 
 #work-form textarea#content { height:31.25em;}
 #work-form dd.optionalField { clear: left; width: 100%; }

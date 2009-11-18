@@ -3,19 +3,20 @@
 	<%= f.error_messages %>
 	
  <fieldset>
-	<p>
+	<p class="label">
 	<%= f.label :content, t('form_content', :default => "Post most recent Archive FAQ content") %>
     </p>
-  <div id="toggleText" style="display: block">
-  <p>Plain text with limited html <%= link_to_help "html-help" -%><br/><code>a href, b, big, blockquote, br, caption, center, cite, code, col, colgroup, del, dd, dt, dl, div, em, h1, h2, h3, h4, h5, h6, i, ins, li, ol, pre, q, small, span, strike, strong, sub, sup, table, tr, td, th, tbody, thead, tfoot, ul</code></p>
+  <div id="toggleText">
+  <p id="plainTextNotes" style="display: block"><%=h t('plain_text', :default =>"Plain text with limited html") %> <%= link_to_help "html-help" -%><br/><code>a href, abbr, abbr, acronym, address, alt, b, big, blockquote, br, caption, center, cite, cite, class, code, col, colgroup, datetime, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, height, hr, href, i, img, ins, kbd, li, name, ol, p, pre, q, samp, small, span, src, strike, strong, sub, sup, table, tbody, td, tfoot, th, thead, title, tr, tt, u, ul, var, width</code></p>
+  <p id="richTextNotes" style="display: none"><%=h t('rich_text_notes', :default => "Type or paste formatted text. Select the icon to the far left (clipboard with a 'W') to paste documents from Microsoft Word.") %></p>
   </div>
   <% use_tinymce -%>
   <p class="rtf-html-switch">
-    <span><a id="displayText" href="javascript:addEditor('content');javascript:toggle();"><%=h 'Rich text' %></a></span>
-    <span><a id="displayText" href="javascript:removeEditor('content');javascript:toggle();"><%=h 'HTML' %></a></span>
-  </p>
+    <span id="richTextLink" style="display: inline"><a href="javascript:addEditor('content');javascript:toggle();"><%=h 'Rich text' %></a></span>
+    <span id="plainTextLink" style="display: none"><a href="javascript:removeEditor('content');javascript:toggle();"><%=h 'HTML' %></a></span>
+  </p>    
 
-	<p>
+	<div class="rtf-html-field">
 		<%= f.text_area :content, :class => "mce-editor", :id => "content" %>
       	<%= live_validation_for_field('content', 
   				:maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN, 
@@ -24,7 +25,7 @@
   			  :failureMessage => t('validations.content.failure', :default => 'You need to post some content here.'))
   		-%>
     <%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX) -%>
-	</p>
+	</div>
 	<% end %>
 </fieldset>
 <fieldset>
