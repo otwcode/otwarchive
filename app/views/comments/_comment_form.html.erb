@@ -31,7 +31,7 @@
       <dt><%= f.label :content, t('form_comment', :default => "Comment: ") %></dt>
       <dd>
         <p class="instructions">Plain text with limited html <%= link_to_help "html-help" -%><br/><code>a href, b, blockquote, br, center, cite, code, del, em, i, img, ins, pre, q, small, strike, strong, sub, sup, u</code></p>
-        <%= f.text_area :content, :live => true %>
+        <%= f.text_area :content %>
         <%= generate_countdown_html("comment_content", ArchiveConfig.COMMENT_MAX) -%>
       </dd>	    
       <dd>
