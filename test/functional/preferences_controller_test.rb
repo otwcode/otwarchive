@@ -36,7 +36,6 @@ class PreferencesControllerTest < ActionController::TestCase
     context "on edit" do
       should_respond_with :success
       should_render_template :index
-      should_render_a_form
       should_not_set_the_flash
       should_assign_to(:user) {@user}
       should_assign_to(:preference) {@user.preference}

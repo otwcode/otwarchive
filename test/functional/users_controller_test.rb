@@ -41,7 +41,6 @@ class UsersControllerTest < ActionController::TestCase
     should "assign assign @user to user" do
       assert_equal @user, assigns(:user)
     end
-    should_render_a_form
     should_not_set_the_flash
     should_render_template :edit
     should_respond_with :success

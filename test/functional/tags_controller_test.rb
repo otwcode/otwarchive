@@ -42,7 +42,6 @@ class TagsControllerTest < ActionController::TestCase
       end
       should_respond_with :success
       should_render_template :new
-      should_render_a_form
       should_assign_to :tag
     end
 
@@ -67,7 +66,6 @@ class TagsControllerTest < ActionController::TestCase
         put :create, :tag => {"name" => "", :canonical => false}
       end
       should_render_template "new"
-      should_render_a_form
       should_set_the_flash_to /Please provide a category/
       should_assign_to :tag
     end

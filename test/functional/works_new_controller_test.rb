@@ -20,7 +20,6 @@ class WorksNewControllerTest < ActionController::TestCase
         should_respond_with :success
         should_render_template :new
         should_assign_to :work
-        should_render_a_form
         should "not have unposted link" do
           assert_no_tag :tag => "span",  :attributes => {:id => "restore-link"}
         end

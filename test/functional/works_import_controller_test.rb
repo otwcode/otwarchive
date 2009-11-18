@@ -26,7 +26,6 @@ class WorksImportControllerTest < ActionController::TestCase
   #       post :import, :locale => 'en', :urls => "http://black-samvara.livejournal.com/381224.html\nhttp://cupidsbow.livejournal.com/147183.html\nhttp://yuletidetreasure.org/archive/33/duende.html"        
   #     end
   #     should_render_template 'show_multiple'
-  #     should_render_a_form
   #   end    
   # end
   
