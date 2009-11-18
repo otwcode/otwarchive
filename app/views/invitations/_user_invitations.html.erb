@@ -9,7 +9,7 @@
 
   <%- for invitation in invitations -%>
   <tr>
-  <td><%= link_to invitation.token, [invitation.creator, invitation] %></td>
+  <td><%= link_to invitation.token, (invitation.creator.is_a?(User) ? [invitation.creator, invitation] : invitation) %></td>
   <td><%= invitation.invitee_email %></td>
   <td><%=invitee_link(invitation) %></td>
   <td><%- unless invitation.redeemed_at -%><%= link_to "copy and use", new_user_path(:invitation_token => invitation.token) %><%- end -%></td>

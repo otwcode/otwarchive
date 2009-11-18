@@ -47,11 +47,14 @@ class Admin::AdminInvitationsController < ApplicationController
       @hide_dashboard = true
       @invitations = @user.invitations if @user
     end
-    unless params[:token].blank?
+    if !params[:token].blank?
       @invitation = Invitation.find_by_token(params[:token])
+    elsif !params[:invitee_email].blank?
+      @invitations = Invitation.find(:all, :conditions => ['invitee_email LIKE ?', '%' + params[:invitee_email] + '%'])
+      @invitation = @invitations.first if @invitations.length == 1
     end
-    unless @user || @invitation
-      flash[:error] = t('user_not_found', :default => "No results were found. Try another search.")
+    unless @user || @invitation || @invitations
+      flash.now[:error] = t('user_not_found', :default => "No results were found. Try another search.")
     end
   end
 
