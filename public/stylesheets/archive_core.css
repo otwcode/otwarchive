@@ -45,7 +45,7 @@ a.tag:hover	{ background: #900 !important; color: #fffef9 !important; }
 .blurb .item {padding-left: 7em;}
 .meta {margin: 0.643em 0;}
 .meta .label {width: 12em;}
-.meta .item {padding-left: 12em; }
+.meta .item {padding-left: 12em; padding-bottom: 0.1em;}
 .column {float: left; width: 100%;}
 .spacer {clear: both;}
 .work-show ul li.tags {list-style: none;}
