@@ -247,7 +247,7 @@ class UsersController < ApplicationController
   end
   
   def end_first_login
-    @user.update_attribute(:first_login, false)
+    @user.preference.update_attribute(:first_login, false)
     
     respond_to do |format|
       format.js 

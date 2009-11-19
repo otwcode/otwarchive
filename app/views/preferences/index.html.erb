@@ -53,6 +53,11 @@
       	<%= f.check_box :comment_copy_to_self_off %> 
       	<%= f.label :comment_copy_to_self_off, t('own_comments', :default => "Turn off copies of your own comments")  %>
     	</li>  	
+
+    	<li>
+      	<%= f.check_box :first_login %> 
+      	<%= f.label :first_login, t('first_login_display', :default => "Turn on the first login help banner")  %>
+    	</li>  	
   	</ul>
 		<p>
 			<%= f.label :work_title_format, t('format_titles', :default => "Format the titles on your works and series")  %>: 

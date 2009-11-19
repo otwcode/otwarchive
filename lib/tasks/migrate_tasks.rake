@@ -27,6 +27,11 @@ namespace :After do
 #  end
 #end
 
+  desc "Set first_login to false for existing users"
+  task(:after_fix_first_login => :environment) do
+    Preference.update_all("first_login = 0")
+  end
+
   desc "After r1721, clean up orphaned taggings"
   task :clean_up_taggings => 'Tag:clean_up_taggings'
   
@@ -40,4 +45,4 @@ end
 
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
-task :After => [:environment, 'After:clean_up_taggings', 'After:fix_import_dates']
+task :After => [:environment, 'After:clean_up_taggings', 'After:fix_import_dates', 'After:fix_first_login']

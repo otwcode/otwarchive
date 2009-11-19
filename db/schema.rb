@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091029224425) do
+ActiveRecord::Schema.define(:version => 20091107214504) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(:version => 20091029224425) do
     t.integer  "last_updated_by",             :limit => 8
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "invite_from_queue_at",                     :default => '2009-11-01 10:30:29'
+    t.datetime "invite_from_queue_at",                     :default => '2009-11-02 20:22:37'
   end
 
   create_table "admins", :force => true do |t|
@@ -307,6 +307,7 @@ ActiveRecord::Schema.define(:version => 20091029224425) do
     t.boolean  "comment_copy_to_self_off",              :default => true,                      :null => false
     t.string   "work_title_format",                     :default => "TITLE - AUTHOR - FANDOM"
     t.boolean  "hide_freeform",                         :default => false,                     :null => false
+    t.boolean  "first_login",                           :default => true
   end
 
   create_table "profiles", :force => true do |t|
@@ -463,7 +464,6 @@ ActiveRecord::Schema.define(:version => 20091029224425) do
     t.integer  "invitation_id",             :limit => 8
     t.datetime "suspended_until"
     t.boolean  "out_of_invites",                           :default => true,  :null => false
-    t.boolean  "first_login"
   end
 
   add_index "users", ["identity_url"], :name => "index_users_on_identity_url", :unique => true
