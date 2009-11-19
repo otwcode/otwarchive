@@ -42,7 +42,7 @@ class StoryParser
   CHAPTERED_STORY_LOCATIONS = %w(ffnet)
 
   # regular expressions to match against the URLS
-  SOURCE_LJ = '(live|dead|insane)?journal(fen)?\.com'
+  SOURCE_LJ = '((live|dead|insane)?journal(fen)?\.com)|dreamwidth\.org'
   SOURCE_YULETIDE = 'yuletidetreasure\.org'
   SOURCE_FFNET = 'fanfiction\.net'
 
