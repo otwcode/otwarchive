@@ -37,6 +37,8 @@ ul.navigation_left li, li.navigation_left {
   text-indent:0;
 }
 
+.tag_wranglings-assign .tag {margin-right: 1em;}
+
 /* TAG EDIT PAGE */
 
 ul.tag-edit-items li {

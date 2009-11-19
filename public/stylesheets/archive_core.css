@@ -36,7 +36,7 @@ a.tag:hover	{ background: #900 !important; color: #fffef9 !important; }
 
 /*EM SCALE */
 #main p	{ font-size: 0.875em; line-height: 1.286; margin: 0.643em 0; }
-#main li, #main dd {font-size: 0.875em; line-height: 1.286; margin: 0.643em 0;}
+#main li, #main dd {font-size: 0.875em; line-height: 1.286; margin: 0.643em 0;} /* probably should be #main span and #main div as well, but that'll need thorough testing */
 .label {padding: 0; float: left;}
 .item {padding-left: 7em;}
 .tags {float: left; width: 100%;}

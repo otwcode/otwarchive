@@ -25,7 +25,7 @@
     <h3><%=h letter -%></h3>
     <ul>
       <%- @tags.starting_with(letter).each do |tag| %>
-        <li><%= check_box_tag("tags[]", tag.name, false, :id => "tag_#{tag.id}") %><%= label :tag, tag.id, link_to_edit_tag(tag), :class => (@tag_age && tag.created_at >= @tag_age.to_i.days.ago) ? "recent" : "" %></li>
+        <li class="tag_wrangling_column"><%= check_box_tag("tags[]", tag.name, false, :id => "tag_#{tag.id}") %><%= label :tag, tag.id, link_to_edit_tag(tag), :class => (@tag_age && tag.created_at >= @tag_age.to_i.days.ago) ? "recent" : "" %></li>
       <%- end -%>
     </ul>
   </div>
