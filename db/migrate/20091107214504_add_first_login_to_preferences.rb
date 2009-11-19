@@ -1,7 +1,6 @@
 class AddFirstLoginToPreferences < ActiveRecord::Migration
   def self.up
     add_column :preferences, :first_login, :boolean, :default => 1
-    Preference.update_all("first_login = 0") # so that our existing users don't suddenly see it
     remove_column :users, :first_login
   end
 
