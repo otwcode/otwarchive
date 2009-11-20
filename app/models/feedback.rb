@@ -7,6 +7,9 @@ class Feedback < ActiveRecord::Base
   validates_presence_of :summary
   validates_email_veracity_of :email, :allow_blank => true, 
     :message => t('invalid_email', :default => 'address appears to be invalid. Please use a different address or leave blank.') 
+  validates_length_of :summary, :maximum => ArchiveConfig.FEEDBACK_SUMMARY_MAX,
+    :too_long => t('summary_too_long', :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.FEEDBACK_SUMMARY_MAX)
+
 
 # Category ids for 16bugs
  BUGS_ASSISTANCE = 11483

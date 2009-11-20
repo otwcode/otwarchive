@@ -29,14 +29,9 @@ class FeedbacksController < ApplicationController
         end
         # Email bug to feedback email address
         AdminMailer.deliver_feedback(@feedback)
-        if params[:cc_me]
-          # If user requests and supplies email address, email them a copy of their message
-          if !@feedback.email.blank?
-            UserMailer.deliver_feedback(@feedback)
-          else
-            flash[:error] = t('no_email', :default => "Sorry, we can only send you a copy of your message if you enter a valid email address.")
-            format.html { redirect_to :action => "new" }
-          end
+        # If user supplies email address, email them an auto-response
+        if !@feedback.email.blank?
+          UserMailer.deliver_feedback(@feedback)
         end
         flash[:notice] = t('successfully_sent', :default => 'Your message was sent to the archive team - thank you!')
         format.html { redirect_to '' }
@@ -59,6 +54,7 @@ class FeedbacksController < ApplicationController
    post_info << "<category-id type='integer'><![CDATA[" + feedback.category + "]]></category-id>" unless feedback.category.blank?
    post_info << "<custom-1389><![CDATA[" + feedback.email + "]]></custom-1389>" unless feedback.email.blank?
    post_info << "<custom-1407><![CDATA[" + feedback.user_agent + "]]></custom-1407>" unless feedback.user_agent.blank?
+   post_info << "<version-id type='integer' nil='true'>3910</version-id>"
    post_info << "</bug>"
    return post_info
  end

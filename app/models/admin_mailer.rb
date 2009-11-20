@@ -14,7 +14,7 @@ class AdminMailer < ActionMailer::Base
       @from = feedback.email
     end
     @recipients = ArchiveConfig.FEEDBACK_ADDRESS
-    @subject += "Feedback"
+    @subject = "#{ArchiveConfig.APP_NAME}" + ": Support - " + feedback.summary
     @body[:summary] = feedback.summary
     @body[:comment] = feedback.comment
   end

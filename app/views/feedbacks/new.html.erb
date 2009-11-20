@@ -30,6 +30,7 @@ using the site - good and bad.") %></p>
   
   <p class="message"><%= f.label :summary, "Brief summary (required):" %></p>
   <p><%= f.text_field :summary, :size => 60 %></p>
+  <%= generate_countdown_html("feedback_summary", ArchiveConfig.FEEDBACK_SUMMARY_MAX) -%>
   <%= live_validation_for_field('feedback_summary', :failureMessage => 'Please enter a brief summary of your message') %>
   
   <p class="message"><%= f.label :comment, "Your comment (required): " %></p>
@@ -38,7 +39,6 @@ using the site - good and bad.") %></p>
 	
   <p class="message"><%= f.label :email, "Your email (optional):" %></p>
   <p><%= f.text_field :email, :size => 60 %></p>
-  <p><%= label_tag('cc_me', "Email me a copy of my message (optional): ") %><%= check_box_tag('cc_me', false) %></p>
     
   <%= f.hidden_field :user_agent, :value => request.env["HTTP_USER_AGENT"] %>
 	

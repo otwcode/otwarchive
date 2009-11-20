@@ -28,7 +28,7 @@ class AdminMailerTest < ActionMailer::TestCase
 
     assert_match Regexp.new(feedback.comment), mail.body
     assert_match Regexp.new(ArchiveConfig.REVISION), mail.body
-    assert_equal ArchiveConfig.APP_NAME + " - Admin Feedback", mail.subject
+    assert_equal ArchiveConfig.APP_NAME + ": Support - " + feedback.summary, mail.subject
     assert_equal [ArchiveConfig.RETURN_ADDRESS], mail.from
     assert_equal [ArchiveConfig.FEEDBACK_ADDRESS], mail.to    
   end

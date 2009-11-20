@@ -118,7 +118,7 @@ class UserMailer < ActionMailer::Base
   
   def feedback(feedback)
     setup_email_without_name(feedback.email)
-    @subject += "Your message sent via the Support form"
+    @subject = "#{ArchiveConfig.APP_NAME}: Support - " + feedback.summary
     @body[:summary] = feedback.summary
     @body[:comment] = feedback.comment
   end  
