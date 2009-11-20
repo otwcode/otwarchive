@@ -120,11 +120,11 @@ class Tag < ActiveRecord::Base
   end
 
   def to_param
-    name.gsub('&', '&amp;').gsub('/', '^')
+    name.gsub('/', '%2F').gsub('&', '%26').gsub('.', '%2E')
   end
   
   def self.find_by_name(string)
-    self.find(:first, :conditions => ['name = ?', string.gsub('&amp;', '&').gsub('^', '/')])
+    self.find(:first, :conditions => ['name = ?', string.gsub('%26', '&').gsub('%2F', '/').gsub('%2E', '.')])
   end
 
   def self.find_or_create_by_name(string)

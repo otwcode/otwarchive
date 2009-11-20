@@ -8,11 +8,12 @@ class TagTest < ActiveSupport::TestCase
     should_belong_to :merger, :fandom, :media
     should_validate_presence_of :name
     should_ensure_length_in_range :name, (1..ArchiveConfig.TAG_MAX), :long_message => /too long/, :short_message => /blank/
-    should_allow_values_for :name, '"./?~!@#$%^&()_-+=', "1234567890", "spaces are not tag separators"
+    should_allow_values_for :name, '"./?~!@#$%&()_-+=', "1234567890", "spaces are not tag separators"
     should_not_allow_values_for :name, "commas, aren't allowed", :message => /can only/
     should_not_allow_values_for :name, "asterisks* aren't allowed", :message => /can only/
     should_not_allow_values_for :name, "angle brackets < aren't allowed", :message => /can only/
     should_not_allow_values_for :name, "angle brackets > aren't allowed", :message => /can only/
+    should_not_allow_values_for :name, "carats ^ aren't allowed", :message => /can only/
 
     should_allow_values_for :adult, true, false
     should_allow_values_for :canonical, true, false

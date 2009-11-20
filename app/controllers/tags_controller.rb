@@ -132,7 +132,7 @@ class TagsController < ApplicationController
         flash[:notice] = t('successfully_created', :default => 'Tag was successfully created.')
       end
       @tag.update_attribute(:canonical, params[:tag][:canonical])
-      redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag.name)
+      redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag)
     else
       render :action => "new" and return
     end
@@ -151,7 +151,7 @@ class TagsController < ApplicationController
   end
 
   def update
-    @tag = Tag.find_by_name(params[:id].gsub(/%2F/, '/'))
+    @tag = Tag.find_by_name(params[:id])
     if @tag.blank?
       flash[:error] = t('not_found', :default => "Tag not found")
       redirect_to tag_wranglings_path and return
@@ -229,6 +229,6 @@ class TagsController < ApplicationController
     @tag.update_common_tags unless old_common_tag_ids == new_common_tag_ids
 
     flash[:notice] = t('successfully_updated', :default => 'Tag was updated.')
-    redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag.name)
+    redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag)
   end
 end
