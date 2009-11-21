@@ -133,7 +133,7 @@ class UsersController < ApplicationController
         successful_update
       elsif params[:user] && !params[:user][:password].blank? && !@user.authenticated?(params[:user][:password], @user.salt) && !@user.authenticated?(params[:check][:password_check], @user.salt)
         flash[:error] = t('old_password_incorrect', :default => "Your old password was incorrect")
-        #unsuccessful_update
+        unsuccessful_update
       elsif params[:user] && params[:user][:identity_url] != @user.identity_url 
         if params[:user][:identity_url].blank?
           successful_update
