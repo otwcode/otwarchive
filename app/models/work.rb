@@ -349,7 +349,7 @@ class Work < ActiveRecord::Base
 
   def wip_length=(number)
     number = number.to_i
-    self.expected_number_of_chapters = (number != 0 && number >= self.number_of_chapters) ? number : nil
+    self.expected_number_of_chapters = (number != 0 && number >= self.chapters.length) ? number : nil
   end
 
   # Change the positions of the chapters in the work
@@ -1119,7 +1119,7 @@ class Work < ActiveRecord::Base
     command = 'Work.ids_only'
     visible = '.visible'
     visible_without_owners = '.visible(skip_owners = true)'
-    tags = '.with_all_tag_ids(options[:selected_tags].values.flatten)'
+    tags = '.with_all_tag_ids(options[:selected_tags])'
     written = '.written_by_id_conditions(options[:selected_pseuds])'
 
     if options[:selected_tags] && options[:selected_pseuds]
