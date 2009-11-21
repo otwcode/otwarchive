@@ -28,9 +28,9 @@ module WorksHelper
   end
   
   # work.tags doesn't include unsaved tags on preview
-  def collect_work_tags(work, preview_mode=nil)
-    if preview_mode
-      (work.ratings + work.categories + work.warnings + work.fandoms + work.characters + work.pairings + work.freeforms + work.tags).flatten.uniq
+  def collect_work_tags(work)
+    if work.preview_mode
+      work.placeholder_tags.values.flatten
     else
       work.tags
     end  

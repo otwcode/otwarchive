@@ -58,7 +58,12 @@ class WorksController < ApplicationController
         @previous_published_at = @work.first_chapter.published_at
         @previous_backdate_setting = @work.backdate
         if params[:work]  # editing, save our changes
-            @work.attributes = params[:work]
+          if params[:preview_button] || params[:cancel_button]
+            @work.preview_mode = true
+          else
+            @work.preview_mode = false
+          end 
+          @work.attributes = params[:work]
         end
       elsif params[:work] # create
          @work = Work.new(params[:work])

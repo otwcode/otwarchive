@@ -65,6 +65,7 @@ class Work < ActiveRecord::Base
   attr_accessor :new_parent, :url_for_parent
   attr_accessor :ambiguous_tags
   attr_accessor :invalid_tags
+  attr_accessor :preview_mode, :placeholder_tags
   attr_accessor :should_reset_filters
 
   ########################################################################
@@ -163,6 +164,7 @@ class Work < ActiveRecord::Base
   before_save :check_for_invalid_tags
   before_update :validate_tags
 	after_update :save_series_data
+	after_update :reset_placeholders
 
   before_save :update_ambiguous_tags
 
@@ -412,34 +414,40 @@ class Work < ActiveRecord::Base
 
   # string methods
   # (didn't use define_method, despite the redundancy, because it doesn't cache in development)
-  # the Tag self.string method gets the values from the database, which is why we were losing the
-  # values for new works with validation errors
   def rating_string
-    self.ratings.map(&:name).join(ArchiveConfig.DELIMITER)
+    self.preview_mode ? self.placeholder_tag_string(:rating) : self.ratings.string
   end
   def category_string
-    self.categories.map(&:name).join(ArchiveConfig.DELIMITER)
+    self.preview_mode ? self.placeholder_tag_string(:category) : self.categories.string
   end
   def warning_string
-    self.warnings.map(&:name).join(ArchiveConfig.DELIMITER)
+    self.preview_mode ? self.placeholder_tag_string(:warning) : self.warnings.string
   end
   def warning_strings
-    self.warnings.map(&:name)
+    self.preview_mode ? self.placeholder_tags[:warning].map(&:name) : self.warnings.map(&:name)
   end
   def fandom_string
-    self.fandoms.map(&:name).join(ArchiveConfig.DELIMITER)
+    self.preview_mode ? self.placeholder_tag_string(:fandom) : self.fandoms.string
   end
   def pairing_string
-    self.pairings.map(&:name).join(ArchiveConfig.DELIMITER)
+    self.preview_mode ? self.placeholder_tag_string(:pairing) : self.pairings.string
   end
   def character_string
-    self.characters.map(&:name).join(ArchiveConfig.DELIMITER)
+    self.preview_mode ? self.placeholder_tag_string(:character) : self.characters.string
   end
   def freeform_string
-    self.freeforms.map(&:name).join(ArchiveConfig.DELIMITER)
+    self.preview_mode ? self.placeholder_tag_string(:freeform) : self.freeforms.string
   end
   def ambiguity_string
-    self.ambiguities.map(&:name).join(ArchiveConfig.DELIMITER)
+    self.preview_mode ? self.placeholder_tag_string(:ambiguity) : self.ambiguities.string
+  end
+  
+  def placeholder_tag_string(key)
+    if self.placeholder_tags[key].blank? || !self.placeholder_tags[key].flatten.compact.first.respond_to?(:name)
+      ''
+    else
+      self.placeholder_tags[key].flatten.compact.map(&:name).join(ArchiveConfig.DELIMITER)
+    end
   end
 
   # _string= methods
@@ -449,22 +457,32 @@ class Work < ActiveRecord::Base
   # see rails bug http://dev.rubyonrails.org/ticket/7743  
   def rating_string=(tag_string)
     tag = Rating.find_or_create_by_name(tag_string)
-    return if self.ratings == [tag]
-    unless self.ratings.blank?
-      tagging = Tagging.find_by_tag(self, self.ratings.first)
-      tagging.destroy if tagging 
+    if self.preview_mode
+      self.placeholder_tags ||= {}
+      self.placeholder_tags[:rating] = [tag]
+    else
+      return if self.ratings == [tag]
+      unless self.ratings.blank?
+        tagging = Tagging.find_by_tag(self, self.ratings.first)
+        tagging.destroy if tagging 
+      end
+      self.ratings = [tag] if tag.is_a?(Rating)
     end
-    self.ratings = [tag] if tag.is_a?(Rating)
   end
 
   def category_string=(tag_string)
     tag = Category.find_or_create_by_name(tag_string)
-    return if self.categories == [tag]
-    unless self.categories.blank?
-      tagging = Tagging.find_by_tag(self, self.categories.first)
-      tagging.destroy if tagging
+    if self.preview_mode
+      self.placeholder_tags ||= {}
+      self.placeholder_tags[:category] = [tag]
+    else
+      return if self.categories == [tag]
+      unless self.categories.blank?
+        tagging = Tagging.find_by_tag(self, self.categories.first)
+        tagging.destroy if tagging
+      end   
+      self.categories = [tag] if tag.is_a?(Category)
     end
-    self.categories = [tag] if tag.is_a?(Category)
   end
 
   def warning_string=(tag_string)
@@ -473,12 +491,17 @@ class Work < ActiveRecord::Base
       tag = Warning.find_or_create_by_name(string)
       tags << tag if tag.is_a?(Warning)
     end
-    remove = self.warnings - tags
-    remove.each do |tag|
-      tagging = Tagging.find_by_tag(self, tag)
-      tagging.destroy if tagging
+    if self.preview_mode
+      self.placeholder_tags ||= {}
+      self.placeholder_tags[:warning] = tags
+    else
+      remove = self.warnings - tags
+      remove.each do |tag|
+        tagging = Tagging.find_by_tag(self, tag)
+        tagging.destroy if tagging
+      end
+      self.warnings = tags
     end
-    self.warnings = tags
   end
 
   def warning_strings=(array)
@@ -487,12 +510,17 @@ class Work < ActiveRecord::Base
       tag = Warning.find_or_create_by_name(string)
       tags << tag if tag.is_a?(Warning)
     end
-    remove = self.warnings - tags
-    remove.each do |tag|
-      tagging = Tagging.find_by_tag(self, tag)
-      tagging.destroy if tagging
+    if self.preview_mode
+      self.placeholder_tags ||= {}
+      self.placeholder_tags[:warning] = tags
+    else
+      remove = self.warnings - tags
+      remove.each do |tag|
+        tagging = Tagging.find_by_tag(self, tag)
+        tagging.destroy if tagging
+      end
+      self.warnings = tags
     end
-    self.warnings = tags
   end
 
   def fandom_string=(tag_string)
@@ -508,13 +536,19 @@ class Work < ActiveRecord::Base
         self.invalid_tags << tag
       end
     end
-    self.add_to_ambiguity(ambiguities)
-    remove = self.fandoms - tags
-    remove.each do |tag|
-      tagging = Tagging.find_by_tag(self, tag)
-      tagging.destroy if tagging
+    if self.preview_mode
+      self.placeholder_tags ||= {}
+      self.placeholder_tags[:fandom] = tags
+      (self.placeholder_tags[:ambiguity] ||= []) << ambiguities
+    else
+      self.add_to_ambiguity(ambiguities)
+      remove = self.fandoms - tags
+      remove.each do |tag|
+        tagging = Tagging.find_by_tag(self, tag)
+        tagging.destroy if tagging
+      end
+      self.fandoms = tags
     end
-    self.fandoms = tags
   end
 
   def pairing_string=(tag_string)
@@ -530,12 +564,18 @@ class Work < ActiveRecord::Base
         self.invalid_tags << tag
       end
     end
-    self.add_to_ambiguity(ambiguities)
-    remove = self.pairings - tags
-    remove.each do |tag|
-      Tagging.find_by_tag(self, tag).destroy
+    if self.preview_mode
+      self.placeholder_tags ||= {}
+      self.placeholder_tags[:pairing] = tags
+      (self.placeholder_tags[:ambiguity] ||= []) << ambiguities
+    else
+      self.add_to_ambiguity(ambiguities)
+      remove = self.pairings - tags
+      remove.each do |tag|
+        Tagging.find_by_tag(self, tag).destroy
+      end
+      self.pairings = tags
     end
-    self.pairings = tags
   end
 
   def character_string=(tag_string)
@@ -551,12 +591,18 @@ class Work < ActiveRecord::Base
         self.invalid_tags << tag
       end        
     end
-    self.add_to_ambiguity(ambiguities)
-    remove = self.characters - tags
-    remove.each do |tag|
-      Tagging.find_by_tag(self, tag).destroy
+    if self.preview_mode
+      self.placeholder_tags ||= {}
+      self.placeholder_tags[:character] = tags
+      (self.placeholder_tags[:ambiguity] ||= []) << ambiguities
+    else
+      self.add_to_ambiguity(ambiguities)
+      remove = self.characters - tags
+      remove.each do |tag|
+        Tagging.find_by_tag(self, tag).destroy
+      end
+      self.characters = tags
     end
-    self.characters = tags
   end
 
   def freeform_string=(tag_string)
@@ -572,12 +618,18 @@ class Work < ActiveRecord::Base
         self.invalid_tags << tag
       end        
     end
-    self.add_to_ambiguity(ambiguities)
-    remove = self.freeforms - tags
-    remove.each do |tag|
-      Tagging.find_by_tag(self, tag).destroy
+    if self.preview_mode
+      self.placeholder_tags ||= {}
+      self.placeholder_tags[:freeform] = tags
+      (self.placeholder_tags[:ambiguity] ||= []) << ambiguities
+    else
+      self.add_to_ambiguity(ambiguities)
+      remove = self.freeforms - tags
+      remove.each do |tag|
+        Tagging.find_by_tag(self, tag).destroy
+      end
+      self.freeforms = tags.compact - ambiguities
     end
-    self.freeforms = tags.compact - ambiguities
   end
 
   def ambiguity_string=(tag_string)
@@ -618,11 +670,18 @@ class Work < ActiveRecord::Base
     self.has_required_tags?
   end
   
+  # Add an error message if the user tried to add invalid tags to the work
   def check_for_invalid_tags
     unless self.invalid_tags.blank?
       errors.add_to_base("The following tags are invalid: " + self.invalid_tags.collect(&:name).join(', ') + ". Please make sure that your tags are less than 42 characters long.")
     end
     self.invalid_tags.blank?  
+  end
+  
+  # Make sure we don't have any phantom values hanging around
+  def reset_placeholders
+    self.preview_mode = false
+    self.placeholder_tags = {}
   end
 
   def update_common_tags
