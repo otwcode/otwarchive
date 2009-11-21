@@ -43,13 +43,29 @@ function showBackdateOptions() {
 }
 
 // Toggles the notes section of the work form
-function showNotesOptions() {
-	Element.toggle('worknotesoptions');
+function showNotesOptions(modelname) {
+	var worknotesoptions = $('worknotesoptions')
+	worknotesoptions.toggle();
+	if (!worknotesoptions.visible()) {
+		$(modelname + '_notes').clear();
+		$('worknoteswarning').hide();
+	}
+	else {
+		$('worknoteswarning').show();
+	}
 }
 
 // Toggles the endnotes section of the work form
-function showEndnotesOptions() {
-	Element.toggle('workendnotesoptions');
+function showEndnotesOptions(modelname) {
+	var worknotesoptions = $('workendnotesoptions')
+	worknotesoptions.toggle();
+	if (!worknotesoptions.visible()) {
+		$(modelname + '_endnotes').clear();
+		$('workendnoteswarning').hide();
+	}
+	else {
+		$('workendnoteswarning').show();
+	}
 }
 
 // Toggles the chaptered story section of the work form and resets the wip_length field
