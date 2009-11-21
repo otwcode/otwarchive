@@ -1119,7 +1119,7 @@ class Work < ActiveRecord::Base
     command = 'Work.ids_only'
     visible = '.visible'
     visible_without_owners = '.visible(skip_owners = true)'
-    tags = '.with_all_tag_ids(options[:selected_tags])'
+    tags = '.with_all_tag_ids(options[:selected_tags].values.flatten)'
     written = '.written_by_id_conditions(options[:selected_pseuds])'
 
     if options[:selected_tags] && options[:selected_pseuds]
@@ -1237,9 +1237,7 @@ class Work < ActiveRecord::Base
     filters = {}
     tags.each do |tag|
       count = tag.respond_to?(:count) ? tag.count : "0"
-      unless count == '1'
-        (filters[tag.type] ||= []) << {:name => tag.name, :id => tag.id.to_s, :count => count}
-      end
+      (filters[tag.type] ||= []) << {:name => tag.name, :id => tag.id.to_s, :count => count}
     end
     filters   
   end
