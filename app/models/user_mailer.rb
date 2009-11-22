@@ -139,7 +139,7 @@ class UserMailer < ActionMailer::Base
     attachment_string += "<br/>Published at: " + work.first_chapter.published_at.to_s + "<br/>\n" unless work.first_chapter.published_at.blank?
     attachment_string += "Revised at: " + work.revised_at.to_s + "<br/>\n" unless work.revised_at.blank?
 
-    work.chapters.in_order.each do |chapter|
+    work.chapters.each do |chapter|
       attachment_string += "<br/>Chapter " + chapter.position.to_s unless !work.chaptered?
       attachment_string += ": " + chapter.title unless chapter.title.blank?
       attachment_string += "\n<br/>by: " + chapter.pseuds.collect(&:name).join(", ") + "<br />\n" unless chapter.pseuds.sort == work.pseuds.sort
