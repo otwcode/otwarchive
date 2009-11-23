@@ -27,22 +27,24 @@ namespace :After do
 #  end
 #end
 
-  desc "Set first_login to false for existing users"
-  task(:after_fix_first_login => :environment) do
-    Preference.update_all("first_login = 0")
-  end
-
-  desc "After r1721, clean up orphaned taggings"
-  task :clean_up_taggings => 'Tag:clean_up_taggings'
-  
+#  desc "Set first_login to false for existing users"
+#  task(:after_fix_first_login => :environment) do
+#    Preference.update_all("first_login = 0")
+#  end
+#
+#  desc "After r1721, clean up orphaned taggings"
+#  task :clean_up_taggings => 'Tag:clean_up_taggings'
+#  
   # Only running on posted works, since unposted works will eventually
   # be edited or deleted, and imported drafts may not be valid
-  desc "After r1728, fix works that lack revised at dates"
-  task(:fix_import_dates => :environment) do
-    Work.find(:all, :conditions => {:revised_at => nil, :posted => true}).each {|work| work.set_revised_at}
-  end
+#  desc "After r1728, fix works that lack revised at dates"
+#  task(:fix_import_dates => :environment) do
+#    ThinkingSphinx.deltas_enabled=false
+#    Work.find(:all, :conditions => {:revised_at => nil, :posted => true}).each {|work| work.set_revised_at}
+#    ThinkingSphinx.deltas_enabled=true
+#  end
 end
 
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
-task :After => [:environment, 'After:clean_up_taggings', 'After:fix_import_dates', 'After:fix_first_login']
+task :After => [:environment]

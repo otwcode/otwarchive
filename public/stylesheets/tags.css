@@ -3,11 +3,11 @@
 
 /* TAG SHOW PAGE */
 
-.tags-show li {
+.tags-show .tags li {
   display: inline;
 }
 
-.tags-show ul {
+.tags-show ul.tags {
   padding: 1em 1em 2em 1em;
   line-height: 2em;
 }
