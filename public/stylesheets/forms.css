@@ -17,7 +17,7 @@ form dd { float: left; }
 form .submit input {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px solid #222;}
 #work-form .submit input {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px solid #222;} /* because IE won't recognise the line above */
 
-.character_counter { text-align:right; font-size:smaller; color:#777; /*line-height:1;*/}
+.character_counter { text-align:right; font-size:smaller; color:#777; height: 1.7em; float: right; /*line-height:1;*/}
 
 /* SIGN IN BOX */
 #signin p { display:inline;}
