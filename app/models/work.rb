@@ -714,7 +714,7 @@ class Work < ActiveRecord::Base
     characters = self.tags.select{|tag| tag.type == "Character"}.sort || []
     pairings = self.tags.select{|tag| tag.type == "Pairing"}.sort || []
     return [] if pairings.empty? && characters.empty?
-    canonical_pairings = Pairing.canonical.find(pairings.collect(&:merger_id).compact.uniq)
+    canonical_pairings = Pairing.canonical.find(:all, :conditions => {:id => pairings.collect(&:merger_id).compact.uniq})
     all_pairings = (pairings + canonical_pairings).flatten.uniq.compact
 
     #pairing_characters = all_pairings.collect{|p| p.all_characters}.flatten.uniq.compact
