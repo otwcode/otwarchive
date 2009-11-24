@@ -13,7 +13,7 @@
   </div>
 <%- end -%>
 
-<%- form_tag tag_wranglings_path do -%>
+<div id="mass_assign_prettifying"><%- form_tag tag_wranglings_path do -%>
 
 <h2><%= label :parent, 'parent_id', h("Mass Assign Tags to:") %> <%= select("parent", 'parent_id', @possible_parents.collect {|p| [ p.name, p.id ] }, { :include_blank => true }) %></h2>
 
@@ -33,6 +33,6 @@
     
 <p class="submit"><%= submit_tag "Assign" %></p>
 
-<%- end -%>
+<%- end -%></div>
 
 <%= tag_wrangler_footer %>

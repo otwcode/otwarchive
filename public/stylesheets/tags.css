@@ -3,11 +3,11 @@
 
 /* TAG SHOW PAGE */
 
-.tags-show .tags li {
+.tags-show li {
   display: inline;
 }
 
-.tags-show ul.tags {
+.tags-show ul {
   padding: 1em 1em 2em 1em;
   line-height: 2em;
 }
@@ -38,6 +38,21 @@ ul.navigation_left li, li.navigation_left {
 }
 
 .tag_wranglings-assign .tag {margin-right: 1em;}
+
+#mass_assign_prettifying li.tag_wrangling_column
+{
+border-bottom: 1px solid #e2decc;
+display: block;
+float: left;
+line-height: 2.5;
+margin: 0 0 .1em 0;
+padding: 0 2.8em .2em 0;
+white-space: nowrap;
+}
+
+#mass_assign_prettifying div.category,
+#mass_assign_prettifying div.category h3,
+#mass_assign_prettifying div.category ul {clear: both;}
 
 /* TAG EDIT PAGE */
 
