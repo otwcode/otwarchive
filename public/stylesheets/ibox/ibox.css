@@ -84,5 +84,15 @@
 	background: #000;
 	color:#fffef9;
 }
-	
 
+#ibox_content p {
+  margin: .5em auto;
+}
+
+#ibox_content dt {
+  margin-top: .5em;
+}
+
+#ibox_content dd {
+  margin-bottom: .5em;
+}
