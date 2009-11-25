@@ -7,6 +7,18 @@
   display: inline;
 }
 
+.tags-show ul.work, .tags-show ul.required-tags {
+  padding: 0;
+}
+
+.tags-show .work li.heading {
+  display: block;
+}
+
+.tags-show .work li li {
+  display: inline
+}
+
 .tags-show ul {
   padding: 1em 1em 2em 1em;
   line-height: 2em;
