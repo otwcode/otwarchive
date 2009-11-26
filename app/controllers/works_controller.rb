@@ -124,7 +124,9 @@ class WorksController < ApplicationController
 
     # if the user is filtering with tags, let's see what they're giving us
     unless params[:selected_tags].blank?
-      params[:selected_tags] = params[:selected_tags].values.flatten
+      if params[:selected_tags].respond_to?(:values)
+        params[:selected_tags] = params[:selected_tags].values.flatten
+      end
       @selected_tags = params[:selected_tags]
     end
 

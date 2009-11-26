@@ -34,7 +34,7 @@
         <%= link_to_remote "View most recent bookmarks", :url => {:controller => 'bookmarks', :action => 'fetch_recent', :id => bookmark.id, :params => {:fetch => true} },
       :method => :get %>
       <%- else -%>
-      <%- @tag = Tag.find_by_name(:tag_id) -%>
+      <%- @tag = Tag.find_by_name(params[:tag_id]) -%>
       <%= link_to_remote "View most recent bookmarks", :url => {:controller => 'bookmarks', :action => 'fetch_recent', :id => bookmark.id, :params => {:fetch => true, :tag_id => params[:tag_id]} },
       :method => :get %>
       <%- end -%>
