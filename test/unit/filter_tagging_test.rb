@@ -28,8 +28,9 @@ class FilterTaggingTest < ActiveSupport::TestCase
       assert @work.filters.include?(@fandom)      
     end
     should "be removed when a work is no longer tagged with a given tag" do
-      @work.fandoms << @fandom
-      @work.fandoms.delete(@fandom)
+      @fandom2.update_attribute(:canonical, true)
+      @work.fandom_string = @fandom2.name
+      assert @work.filters.include?(@fandom2)
       assert !@work.filters.include?(@fandom)      
     end    
   end
