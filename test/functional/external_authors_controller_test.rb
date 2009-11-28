@@ -4,30 +4,30 @@ require File.dirname(__FILE__) + '/../test_helper'
 class ExternalAuthorsControllerTest < ActionController::TestCase
 
   # Test create  POST  /:locale/users/:user_id/external_authors
-  def test_should_create_external_author
-    user = create_user
-    @request.session[:user] = user
-    assert_difference('ExternalAuthor.count') do
-      post :create, :user_id => user.login, 
-                    :external_author => { :email => 'foo@bar.com' }
-    end
-    assert_redirected_to user_external_authors_path(user)
-  end
-  
-  # Test destroy  DELETE /:locale/users/:user_id/external_authors/:id
-  def test_should_destroy_external_author
-    user = create_user
-    external_author = create_external_author(:user => user)
-    user = User.find(user.id)
-    @request.session[:user] = user
-    assert_difference('ExternalAuthor.count', -1) do
-      delete :destroy, 
-      :user_id => user.login, 
-      :id => ExternalAuthor.find(external_author.id)
-    end
-
-    assert_redirected_to user_external_authors_path(user)
-  end
+  # def test_should_create_external_author
+  #   user = create_user
+  #   @request.session[:user] = user
+  #   assert_difference('ExternalAuthor.count') do
+  #     post :create, :user_id => user.login, 
+  #                   :external_author => { :email => 'foo@bar.com' }
+  #   end
+  #   assert_redirected_to user_external_authors_path(user)
+  # end
+  # 
+  # # Test destroy  DELETE /:locale/users/:user_id/external_authors/:id
+  # def test_should_destroy_external_author
+  #   user = create_user
+  #   external_author = create_external_author(:user => user)
+  #   user = User.find(user.id)
+  #   @request.session[:user] = user
+  #   assert_difference('ExternalAuthor.count', -1) do
+  #     delete :destroy, 
+  #     :user_id => user.login, 
+  #     :id => ExternalAuthor.find(external_author.id)
+  #   end
+  # 
+  #   assert_redirected_to user_external_authors_path(user)
+  # end
 
   # Test edit  GET  /:locale/users/:user_id/external_authors/:id/edit  (named path: edit_user_external_author)
   def test_should_get_edit
@@ -43,6 +43,8 @@ class ExternalAuthorsControllerTest < ActionController::TestCase
   # Test index  GET  /:locale/users/:user_id/external_authors  (named path: user_external_authors)
   def test_user_external_authors_path
     user = create_user
+    external_author = create_external_author(:user => user)
+    @request.session[:user] = user
     get :index, :user_id => user.login
     assert_response :success
     assert_not_nil assigns(:external_authors)
