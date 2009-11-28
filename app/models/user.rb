@@ -324,8 +324,8 @@ class User < ActiveRecord::Base
   #If a new user was invited, update the invitation
   def mark_invitation_redeemed
     unless self.invitation_token.blank?
-      i = Invitation.find_by_token(self.invitation_token)
-      i.update_attributes(:invitee => self, :redeemed_at => Time.now) if i
+      invitation = Invitation.find_by_token(self.invitation_token)
+      invitation.mark_as_redeemed(self) if invitation
     end
   end
   

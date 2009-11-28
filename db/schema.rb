@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091107214504) do
+ActiveRecord::Schema.define(:version => 20091122210634) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -125,14 +125,6 @@ ActiveRecord::Schema.define(:version => 20091107214504) do
 
   add_index "common_taggings", ["common_tag_id", "filterable_type", "filterable_id"], :name => "index_common_tags", :unique => true
 
-  create_table "communities", :force => true do |t|
-    t.string   "name"
-    t.text     "description"
-    t.boolean  "open_membership"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "creatorships", :force => true do |t|
     t.integer  "creation_id",   :limit => 8
     t.string   "creation_type", :limit => 100
@@ -165,10 +157,10 @@ ActiveRecord::Schema.define(:version => 20091107214504) do
   create_table "external_creatorships", :force => true do |t|
     t.integer  "creation_id"
     t.string   "creation_type"
-    t.integer  "external_author_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "archivist_id"
+    t.integer  "external_author_name_id"
   end
 
   create_table "external_works", :force => true do |t|

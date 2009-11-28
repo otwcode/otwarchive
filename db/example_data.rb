@@ -71,8 +71,13 @@ module FixtureReplacement
     a.do_not_email = false
   end
 
-  attributes_for :external_creatorship do |a|
+  attributes_for :external_author_name do |a|
+    a.name = random_phrase
     a.external_author = create_external_author
+  end
+
+  attributes_for :external_creatorship do |a|
+    a.external_author_name = create_external_author_name
     a.creation_type = :work
     a.creation = default_work
     a.archivist = default_user

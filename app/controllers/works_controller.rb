@@ -5,25 +5,19 @@ class WorksController < ApplicationController
 
   # only registered users and NOT admin should be able to create new works
   before_filter :users_only, :only => [ :new, :create, :import, :import_multiple, :drafts, :preview, :show_multiple ]
-  before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview, :show_multiple, :edit_multiple]
+  before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview, :show_multiple, :edit_multiple ]
   before_filter :load_work, :only => [ :show, :navigate, :edit, :update, :destroy, :preview ]
   before_filter :check_ownership, :only => [ :edit, :update, :destroy, :preview ]
   before_filter :check_visibility, :only => [ :show, :navigate ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import ]
   before_filter :update_or_create_reading, :only => [ :show ]
-#  before_filter :clean_emdashes, :only => [:update, :create]
 
   def load_work
     @work = Work.find(params[:id])
     @check_ownership_of = @work
     @check_visibility_of = @work
   end
-  
-  #clean up em dashes for things in the text box.
-#  def clean_emdashes
-#    params[:work][:chapter_attributes][:content].gsub!(/\xE2\x80"/, '&mdash;')
-#  end
-  
+
   # Sets values for @work, @chapter, @coauthor_results, @pseuds, and @selected_pseuds
   # and @tags[category]
   def set_instance_variables
@@ -305,16 +299,8 @@ class WorksController < ApplicationController
       if pseuds_with_author_removed.empty?
         redirect_to :controller => 'orphans', :action => 'new', :work_id => @work.id
       else
-        @work.pseuds = pseuds_with_author_removed
-        @work.save
-        @work.chapters.each do |c|
-          c.pseuds = (c.pseuds - current_user.pseuds).uniq
-          if c.pseuds.empty?
-            c.pseuds = @work.pseuds
-          end
-          c.save
-        end
-        flash[:notice] = t('pseuds_not_found', :default => "You have been removed as an author from the work")
+        @work.remove_author(current_user)
+        flash[:notice] = t('author_successfully_removed', :default => "You have been removed as an author from the work")
         redirect_to current_user
       end
     end
@@ -390,8 +376,6 @@ class WorksController < ApplicationController
         end
         @work.posted = true
 
-        #bleep = "BEFORE SAVE: author attr: " + params[:work][:author_attributes][:ids].collect {|a| a}.inspect + "  @work.authors: " + @work.authors.collect {|au| au.id}.inspect + "  @work.pseuds: " + @work.pseuds.collect {|ps| ps.id}.inspect
-
         saved = @work.save
         @work.update_minor_version
       end
@@ -434,7 +418,7 @@ class WorksController < ApplicationController
       @work.destroy
     rescue
       flash[:error] = t('deletion_failed', :default => "We couldn't delete that right now, sorry! Please try again later.")
-   end
+    end
     redirect_to(user_works_url(current_user))
   end
 
@@ -444,101 +428,136 @@ class WorksController < ApplicationController
     storyparser = StoryParser.new
 
     # check to make sure we have some urls to work with
-    unless (urls = params[:urls]) && !urls.blank?
+    @urls = params[:urls].split
+    unless @urls.length > 0
       flash.now[:error] = t('enter_an_url', :default => "Did you want to enter a URL?")      
       render :action => :new and return
     end
     
-    @urls = urls.split
-    if params[:import_multiple] == "works" && @urls.length > 1
-      if @urls.length > ArchiveConfig.IMPORT_MAX_WORKS
-        flash.now[:error] = t('too_many_works', :default => "You cannot import more than {{max}} works at a time.", :max => ArchiveConfig.IMPORT_MAX_WORKS)
-        render :action => :new and return
-      end
-      # otherwise let's go for it
-      results = storyparser.import_from_urls(@urls, :pseuds => [current_user.default_pseud], :post_automatically => true)
-      
-      @works = results[0]
-      @failed_urls = results[1]
-      redirect_to :action => :show_multiple, :user_id => current_user.login, :work_ids => @works.collect(&:id) and return
-    end
-    
-    if @urls.length > ArchiveConfig.IMPORT_MAX_CHAPTERS
-      flash.now[:error] = t('too_many_chapters', :default => "You cannot import more than {{max}} chapters at a time.", :max => ArchiveConfig.IMPORT_MAX_CHAPTERS)
-      render :action => :new and return
-    end
-    
-    url = @urls.first    
-    # check to make sure no one has already imported the work
-    @work = Work.find_by_imported_from_url(url)
-    if @work      
-      if @work.users.include?(current_user)
-        flash.now[:error] = t('already_uploaded_by_you', :default => "You have already uploaded a work from that url. If you really want to replace it, first delete the previous draft.")
-        @work = Work.new
-        render :action => :new and return
-      else
-        flash.now[:error] = t('already_uploaded_by_other', :default => "Another user has already uploaded a work from that url: {{work_link}}.", :work_link => link_to(@work.title, work_path(@work)))
-        render :action => :new and return
-      end
-    end
-    
-    # try to download and get the work
-    begin
-      if @urls.length > 1
-        @work = storyparser.download_and_parse_chapters_into_story(@urls)
-      else
-        @work = storyparser.download_and_parse_story(url)
-      end
-    rescue Timeout::Error
-      flash.now[:error] = t('timed_out', :default => "Sorry, but we timed out trying to get that URL. If the site seems to be down, you can try again later.")
-      render :action => :new and return
-    rescue
-      flash.now[:error] = t('upload_failed', :default => "Sorry, but we couldn't get a story at that URL. You can still copy-and-paste the contents into our standard form, though!")
+    # is this an archivist importing? 
+    if params[:importing_for_others] && !current_user.archivist
+      flash.now[:error] = t('import.only_archivist', :default => "You may not import stories by other users unless you are an approved archivist.")
       render :action => :new and return
     end
 
-    # at this point we have at least a partial work for the user to play with
-    @use_import_form = false
-    begin 
-      @work.pseuds << current_user.default_pseud unless @work.pseuds.include?(current_user.default_pseud)
-      chapters_saved = 0
-      @work.chapters.each do |uploaded_chapter|
-        uploaded_chapter.pseuds << current_user.default_pseud unless uploaded_chapter.pseuds.include?(current_user.default_pseud)
-        chapters_saved += uploaded_chapter.save ? 1 : 0
-      end
-      
-      if @work.save && chapters_saved == @work.chapters.length
-        flash[:notice] = t('successfully_uploaded', :default => "Work successfully uploaded!<br />
-          (But please check the results over carefully before posting!)")
-        redirect_to preview_work_path(@work) and return
-      else
-        render :action => :new and return
-      end
-    rescue
-      flash.now[:error] = t('partially_downloaded', :default => "We managed to partially download the work, but there are problems
-        preventing us from saving it as a draft. Please look over the results very carefully!")
-      @chapter = @work.chapters.first
+    # make sure we're not importing too many at once
+    if params[:import_multiple] == "works" && (!current_user.archivist && @urls.length > ArchiveConfig.IMPORT_MAX_WORKS || @urls.length > ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST)
+      flash.now[:error] = t('too_many_works', :default => "You cannot import more than {{max}} works at a time.", :max => current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS)
+      render :action => :new and return
+    elsif params[:import_multiple] == "chapters" && @urls.length > ArchiveConfig.IMPORT_MAX_CHAPTERS
+      flash.now[:error] = t('too_many_chapters', :default => "You cannot import more than {{max}} chapters at a time.", :max => ArchiveConfig.IMPORT_MAX_CHAPTERS)
       render :action => :new and return
     end
+
+    # otherwise let's build the options
+    if params[:pseuds_to_apply]
+      @pseuds_to_apply = Pseud.find_by_name(params[:pseuds_to_apply])
+    end
+    options = {:pseuds => @pseuds_to_apply, 
+      :post_without_preview => params[:post_without_preview],
+      :importing_for_others => params[:importing_for_others],
+      :restricted => params[:restricted],
+      :override_tags => params[:override_tags],
+      :fandom => params[:fandom],
+      :character => params[:character],
+      :rating => params[:rating],
+      :pairing => params[:pairing],
+      :category => params[:category],
+      :freeform => params[:freeform]      
+    }
+    
+    # now let's do the import
+    if params[:import_multiple] == "works"
+      results = storyparser.import_from_urls(@urls, options)
+      @works = results[0]
+      @failed_urls = results[1]
+      @errors = results[2]
+    else # a single work with multiple chapters
+      begin
+        @works << storyparser.download_and_parse_chapters_into_story(@urls, options)
+      rescue Timeout::Error
+        flash[:error] = t('timed_out', :default => "Sorry, but we timed out trying to get that URL. If the site seems to be down, you can try again later.")
+        redirect_to :new and return
+      rescue Exception => exception
+        flash[:error] = t('upload_failed', :default => "We couldn't successfully import that story, sorry: {{message}}", :message => exception.message)
+        redirect_to :new and return
+      end
+    end
+    
+    # if we are importing for others, we need to send invitations
+    if params[:importing_for_others]
+      @external_authors = @works.collect(&:external_authors).flatten.uniq
+      if !@external_authors.empty?
+        @external_authors.each do |external_author|
+          external_author.find_or_invite(current_user)
+        end
+        flash[:notice] = t('import.for_others', :default => "We have notified the author(s) you imported stories for. You can also add them as co-authors manually.")
+      end
+    end
+    
+    # collect the errors
+    if !@failed_urls.empty?
+      flash[:error] = "<h3>Failed Imports</h3>\n<dl>"
+      0.upto(@failed_urls.length) do |index| 
+        flash[:error] += "<dt>#{@failed_urls[index]}</dt>\n"
+        flash[:error] += "<dd>#{@errors[index]}</dd>"
+      end
+      flash[:error] += "</dl>"
+    else
+      flash[:notice] = t('successfully_uploaded', :default => "Importing completed successfully! (But please check the results over carefully!)") 
+    end
+    
+    if @urls.length == 1 || params[:import_multiple] == "chapters"
+      # importing a single work, let the user preview or view it
+      @use_import_form = false
+      
+      @work = @works.first
+      @chapter = @work.chapters.first if @work
+      if @work.nil? || !@work.valid?
+        redirect_to :action => :new and return
+      elsif @work.posted
+        redirect_to work_path(@work) and return
+      else
+        redirect_to preview_work_path(@work) and return
+      end
+    end
   end
+
+  def post_draft
+    @user = current_user
+    @work = Work.find(params[:id])
+    unless @user.is_author_of?(@work)
+      flash[:error] = t('post_draft.not_your_work', :default => "You can only post your own works.")
+      redirect_to current_user
+    end
+    
+    if @work.posted
+      flash[:error] = t('post_draft.already_posted', :default => "That work is already posted. Do you want to edit it instead?")
+      redirect_to edit_user_work_path(@user, @work)
+    end
+    
+    @work.posted = true
+    @work.update_minor_version    
+    unless @work.valid? && @work.save
+      flash[:error] = t('post_draft.problem', :default => "There were problems posting your work.")
+      redirect_to edit_user_work_path(@user, @work)
+    end
+    
+    flash[:notice] = t('post_draft.success', :default => "Your work was successfully posted.")
+    redirect_to @work
+  end
+
+  
+  
+  # WORK ON MULTIPLE WORKS
   
   def show_multiple
-    unless params[:user_id]
-      flash[:error] = t('whose_works', :default => "Whose works did you want to look at?")
-      redirect_to :controller => :users, :action => :index
+    @user = current_user
+    if params[:pseud_id]
+      @author = @user.pseuds.find_by_name(params[:pseud_id])
+      @works = @author.works
     else
-      @user = User.find_by_login(params[:user_id])
-      unless current_user == @user
-        flash[:error] = t('not_your_works', :default => "You can only review your own works, sorry!")
-        redirect_to current_user
-      else
-        if params[:pseud_id]
-          @author = @user.pseuds.find_by_name(params[:pseud_id])
-          @works = @author.works
-        else
-          @works = @user.works
-        end
-      end
+      @works = @user.works
     end
     if params[:work_ids]
       @works = @works & Work.find(params[:work_ids])
@@ -546,42 +565,62 @@ class WorksController < ApplicationController
   end
   
   def edit_multiple
-    unless params[:user_id]
-      flash[:error] = t('whose_works', :default => "Whose works did you want to look at?")
-      redirect_to :controller => :users, :action => :index
-    else
-      @user = User.find_by_login(params[:user_id])
-      unless current_user == @user
-        flash[:error] = t('not_your_works', :default => "You can only review your own works, sorry!")
-        redirect_to current_user
-      end
-    end
-    
+    @user = current_user
     @works = Work.find(params[:work_ids]) & @user.works
+    
   end
   
   def update_multiple
-    unless params[:user_id]
-      flash[:error] = t('whose_works', :default => "Whose works did you want to look at?")
-      redirect_to :controller => :users, :action => :index
-    else
-      @user = User.find_by_login(params[:user_id])
-      unless current_user == @user
-        flash[:error] = t('not_your_works', :default => "You can only review your own works, sorry!")
-        redirect_to current_user
-      end
-    end
-
+    @user = current_user
     @works = Work.find(params[:work_ids]) & @user.works
+    @errors = []
     @works.each do |work|
       # actual stuff will happen here shortly
-      work.update_attributes!(params[:work].reject {|key,value| value.blank?})
+      unless work.update_attributes!(params[:work].reject {|key,value| value.blank?})
+        @errors << t('update_multiple.problem', :default => "The work {{title}} could not be edited: {{error}}", :title => work.title, :error => work.errors_on.to_s)
+      end
     end
-
-    redirect_to show_multiple_user_works_path(@user)
+    unless @errors.empty?
+      flash[:error] = t('update_multiple.error_message', :default => "There were problems editing some works: {{errors}}", :errors => @errors.join(", "))
+    end
+    redirect_to show_multiple_user_works_path(@user)        
   end
 
-  
+  # def post_multiple
+  #   @user = current_user
+  #   @works = Work.find(params[:work_ids]) & @user.works
+  #   @errors = []
+  #   
+  #   @works.each do |work|
+  #     work.posted = true
+  #     work.update_minor_version
+  #     unless work.save!
+  #       @errors << t('post_multiple.problem', :default => "The work {{title}} could not be posted: {{error}}", :title => work.title, :error => work.errors_on.to_s)
+  #     end
+  #   end
+  #   unless @errors.empty?
+  #     flash[:error] = t('post_multiple.error_message', :default => "There were problems posting some works: {{errors}}", :errors => @errors.join(", "))
+  #   end
+  #   redirect_to show_multiple_user_works_path(@user)
+  # end
+  # 
+  # def destroy_multiple
+  #   @user = current_user
+  #   @works = Work.find(params[:work_ids]) & @user.works
+  #   @errors = []
+  #   @works.each do |work|
+  #     begin
+  #       work.destroy
+  #     rescue
+  #       @errors << t('destroy_multiple.deletion_failed', :default => "There were problems deleting work {{title}}.", :title => work.title)
+  #     end
+  #   end
+  #   
+  #   unless @errors.empty?
+  #     flash[:error] = t('destroy_multiple.error_message', :default => "There were problems deleting some works: {{errors}}", :errors => @errors.join(", "))
+  #   end
+  #   redirect_to show_multiple_user_works_path(@user)
+  # end
 
   protected
 

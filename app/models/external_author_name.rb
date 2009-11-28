@@ -3,6 +3,8 @@ class ExternalAuthorName < ActiveRecord::Base
   NAME_LENGTH_MAX = 100
 
   belongs_to :external_author
+  has_many :external_creatorships
+  has_many :works, :through => :external_creatorships, :source => :creation, :source_type => 'Work', :uniq => true  
   
   validates_presence_of :name
 
@@ -14,12 +16,11 @@ class ExternalAuthorName < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => :external_author_id, :case_sensitive => false  
 
   validates_format_of :name, 
-    :message => t('name_invalid_characters', :default => 'can contain letters, numbers, spaces, underscores, and dashes.'),
-    :with => /\A[\w -]*\Z/    
+    :message => t('name_invalid_characters', :default => 'can contain letters, numbers, spaces, underscores, @-signs, dots, and dashes.'),
+    :with => /\A\w[ \w\-\@\.]*\Z/
 
   validates_format_of :name, 
     :message => t('name_no_letters_or_numbers', :default => 'must contain at least one letter or number.'),
     :with => /[a-zA-Z0-9]/
-
   
 end

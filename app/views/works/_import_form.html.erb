@@ -18,10 +18,26 @@
   
   <p>
     <%= radio_button_tag "import_multiple", "works", true %>
-    <%= label_tag "import_multiple_works", t('import.works', :default => "Works (limit of {{max}})", :max => current_user.is_archivist? ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS) -%>
+    <%= label_tag "import_multiple_works", t('import.works', :default => "Works (limit of {{max}})", :max => current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS) -%>
     <br />
     <%= radio_button_tag "import_multiple", "chapters" %>
     <%= label_tag "import_multiple_chapters", t('import.chapters', :default => "Chapters in a single work (limit of {{max}})", :max => ArchiveConfig.IMPORT_MAX_CHAPTERS) -%>
+  </p>
+  
+  <% if current_user.archivist %>
+  <p>
+    <%= check_box_tag "importing_for_others" -%>
+    <%= label_tag "importing_for_others", t('import.for_others', :default => "Import works for others (ONLY WITH PERMISSION)") -%>
+  </p>
+  <% end %>
+
+  <p>
+    <%= check_box_tag "post_without_preview" -%>
+    <% if current_user.archivist %>
+      <%= label_tag "post_without_preview", t('import.without_preview_by_archivist', :default => "Post without previewing (STRONGLY recommended if importing for others!)") -%>
+    <% else %>
+      <%= label_tag "post_without_preview", t('import.without_preview', :default => "Post without previewing") -%>
+    <% end %>
   </p>
 </fieldset>
   

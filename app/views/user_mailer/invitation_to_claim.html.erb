@@ -1,0 +1,35 @@
+<p>
+  Hello from the Archive of Our Own!
+</p>
+
+<p>
+  <%= @archivist ? @archivist : "An archivist" -%> has backed up a fanfiction archive to the Archive of Our Own, and their 
+  archive includes some of your stories. This gets you an automatic invitation to our beta, if 
+  you would like to join; if so, when you create your account using this invitation, you will 
+  find all of your uploaded stories in your account.
+</p>
+
+<p>
+  Please note: by default, when an archivist backs up an archive to the AO3, all of the stories 
+  are locked to registered users only, so your works will not appear in google searches (unless 
+  you choose to log in and unlock them). 
+</p>
+
+<p>
+  We hope that you don't mind having your stories backed up or transferred onto the AO3, but if you 
+  do, you don't need to create an account to remove them -- you can just follow the link and you will 
+  be given the option to orphan or delete your stories.  You can also choose not to be notified in 
+  future when stories are imported with this email address, and/or to block any future stories for 
+  this email address from being imported into the archive.
+</p>
+
+<p>
+  If your stories have been uploaded by someone you never gave permission to archive, let us know! 
+  We only offer this backup service to archivists who run archives where writers either upload stories 
+  for themselves or give permission to archive.
+</p>
+
+<p>
+  <%=h "You can claim your account or remove your stories at the following address:" -%>
+  <%= link_to(claim_url(:invitation_token => @invitation.token, :host => @host), claim_url(:invitation_token => @invitation.token, :host => @host)) %>
+</p>  

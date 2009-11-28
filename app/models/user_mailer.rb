@@ -11,6 +11,24 @@ class UserMailer < ActionMailer::Base
     body          :invitation => invitation, :user_name => (invitation.creator.is_a?(User) ? invitation.creator.login : ''), :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
   end
   
+  def invitation_to_claim(invitation, archivist)
+    subject       "[#{ArchiveConfig.APP_NAME}] Invitation To Claim Stories"
+    recipients    invitation.invitee_email
+    from          ArchiveConfig.RETURN_ADDRESS
+    sent_on       Time.now
+    content_type  "text/html"
+    body          :invitation => invitation, :archivist => archivist, :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
+  end
+  
+  def claim_notification(external_author, claimed_works)
+    subject       "[#{ArchiveConfig.APP_NAME}] Stories Uploaded"
+    recipients    external_author.user.email
+    from          ArchiveConfig.RETURN_ADDRESS
+    sent_on       Time.now
+    content_type  "text/html"
+    body          :external_author => external_author, :claimed_works => claimed_works, :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
+  end
+
   def invite_increase_notification(user, total)
     setup_email(user)
     @subject    += 'New Invitations'  

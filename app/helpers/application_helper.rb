@@ -46,8 +46,21 @@ module ApplicationHelper
     pseuds = []
     pseuds << creation.authors if creation.authors
     pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
-    pseuds.flatten.uniq.sort.collect { |pseud|
-      link_to pseud.byline, [pseud.user, pseud], :class => "login author"
+    pseuds = pseuds.flatten.uniq.sort
+    
+    archivists = {}
+    if creation.is_a?(Work)
+      external_creatorships = creation.external_creatorships.select {|ec| !ec.claimed?}
+      external_creatorships.each do |ec|
+        archivist_pseud = pseuds.select {|p| ec.archivist.pseuds.include?(p)}.first
+        archivists[archivist_pseud] = ec.external_author_name.name
+      end
+    end
+    
+    pseuds.collect { |pseud| 
+      archivists[pseud].nil? ? 
+        link_to(pseud.byline, [pseud.user, pseud], :class => "login author") : 
+        archivists[pseud] + " [archived by " + link_to(pseud.byline, [pseud.user, pseud], :class => "login author") + "]"
     }.join(', ')
   end
 

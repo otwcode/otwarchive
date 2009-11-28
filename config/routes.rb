@@ -32,6 +32,8 @@ ActionController::Routing::Routes.draw do |map|
   map.tos_faq '/tos_faq', :controller => 'home', :action => 'tos_faq'
   map.site_map '/site_map', :controller => 'home', :action => 'site_map' 
   
+  map.resources :redirects, :only => [:index, :show]
+  
   map.resources :abuse_reports, :except => [:edit, :update, :destroy] 
 
   map.resources :passwords, :only => [:new, :create] 
@@ -40,6 +42,10 @@ ActionController::Routing::Routes.draw do |map|
 
   map.signup '/signup/:invitation_token', :controller => 'users', :action => 'new' 
   map.resources :invitations
+  
+  map.claim '/claim/:invitation_token', :controller => 'external_authors', :action => 'claim'
+  map.complete_claim '/complete_claim/:invitation_token', :controller => 'external_authors', :action => 'complete_claim'  
+  map.resources :external_authors, :has_many => [:external_author_names]
   
   map.resources :users, :member => {:end_first_login => :post} do |user|
     user.resources :pseuds, :has_many => [:works, :series, :bookmarks]
@@ -61,7 +67,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :works,
                 :collection => { :import => :post },
-                :member => { :preview => :get, :post => :post, :navigate => :get } do |work|
+                :member => { :preview => :get, :post => :post, :post_draft => :put, :navigate => :get } do |work|
       work.resources :chapters, :has_many => :comments,
                                 :collection => {:manage => :get,
                                                 :update_positions => :post},

@@ -1,0 +1,59 @@
+<h2>Your Imported Stories</h2>
+<p class="message">
+  One or more of your stories have been uploaded to the archive by an archivist 
+  (who previously hosted them with your permission on an archive that has been backed up here).
+</p>
+
+<% if logged_in? -%>
+
+<p class="message">
+  <%= button_to t("claim.add_to_account", :default => "Add these stories to my currently-logged-in account"), complete_claim_url(:invitation_token => @invitation.token) %>
+</p>
+
+<% else %>
+
+<p class="message">
+  We would like to invite you to join our beta test and create an account! If you do, the stories will automatically be added
+  to your account as soon as you have done so, and you will have full control over them.
+  If you already <strong>have</strong> an archive account, just log in and reload this page, and we'll assign you the stories. Otherwise,
+  please choose below!
+</p>
+<p>
+  <%= button_to t("claim.sign_me_up", :default => "Sign me up and give me my stories! Yay!"), new_user_path(:invitation_token => @invitation.token) %>
+</p>
+<% end %>
+
+<hr />
+
+<p class="message">
+  If you don't want to claim these stories on the archive, you can either orphan them (leave them in the archive with your contact information
+  and optionally your name removed), or delete them. You can also tell us not to email you in future and/or not to import stories with this email 
+  address in future.
+</p>
+
+<% form_for @external_author do |f| %>
+  <%= hidden_field_tag :invitation_token, @invitation.token -%>
+  <p>
+    <%= radio_button_tag "imported_stories", "orphan" %>
+    <%= label_tag "imported_stories_orphan", t('claim.orphan_stories', :default => "Orphan my stories and take my contact information off them.")%>
+    <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <%= check_box_tag "remove_pseud" -%>
+    <%= label_tag "remove_pseud", t('claim.orphan_remove_pseud', :default => "Also remove my name.") -%>
+  </p>
+  <p>
+    <%= radio_button_tag "imported_stories", "delete" %>
+    <%= label_tag "imported_stories_delete", t('claim.delete_stories', :default => "Please remove my stories from the archive entirely.") -%>
+  </p>
+  <p>
+    <%= f.check_box :do_not_email %>
+    <%= f.label :do_not_email, t('claim.do_not_email', :default => "Do not email me in future when stories are imported with this email address.") %>
+  </p>
+  <p>
+    <%= f.check_box :do_not_import %>
+    <%= f.label :do_not_import, t('claim.do_not_import', :default => "Do not import stories with this email address in future at all.") %>
+  </p>
+  <p>
+    <%= f.submit t('update', :default => 'Update') %>
+  </p>
+<% end %>
+

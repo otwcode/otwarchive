@@ -31,7 +31,7 @@ class StoryParser
   
   # places for which we have a custom parse_author_from_[source] method
   # which returns an external_author object including an email address
-  KNOWN_AUTHOR_PARSERS= %w(yuletide)
+  KNOWN_AUTHOR_PARSERS= %w(yuletide lj)
 
   # places for which we have a download_story_from_[source]
   # used to customize the downloading process
@@ -54,90 +54,83 @@ class StoryParser
   # Import many stories
   def import_from_urls(urls, options = {})    
     # Try to get the works
-    temp_works = []
-    saved_works = []
+    works = []
     failed_urls = []
+    errors = []
     urls.each do |url|
       begin
-        work = download_and_parse_story(url)
-        if options[:importing_for_others]
-          # try and create external authors for any of these works
-          if (external_author = parse_author(url))
-            work.external_authors << external_author
-          end
+        work = download_and_parse_story(url, options)
+        if work && work.save
+          works << work
+        else
+          failed_urls << url
+          errors << work.errors.map {|err| err[1]}.join(", ")
+          work.delete if work
         end
-        temp_works << work
-      rescue
+      rescue Exception => exception
         failed_urls << url
+        errors << exception.message
+        work.delete if work
       end
     end
-
-    # For whichever works succeeded, we now attempt to save
-    temp_works.each do |work|
-      # set default values for required tags for any works that don't have them
-      work.fandom_string = ArchiveConfig.FANDOM_NO_TAG_NAME if work.fandoms.empty?
-      work.rating_string = ArchiveConfig.RATING_DEFAULT_TAG_NAME if work.ratings.empty?
-      work.warning_strings = ArchiveConfig.WARNING_DEFAULT_TAG_NAME if work.warnings.empty?
-
-      # set authors for the works
-      pseuds = []
-      pseuds << @current_user.default_pseud if defined? @current_user
-      pseuds += options[:pseuds] if options[:pseuds]
-
-      pseuds.each do |pseud| 
-        work.pseuds << pseud
-        work.chapters.each {|chapter| chapter.pseuds << pseud}
-      end
-      
-      if options[:post_automatically]
-        work.posted = true
-        work.chapters.each do |chapter|
-          chapter.save
-        end
-      end
-      
-      if work.save
-        saved_works << work
-      else
-        failed_urls << work.imported_from_url
-        work.delete
-      end
-    end
-    return [saved_works, failed_urls]
+    return [works, failed_urls, errors]
   end
+
+
+  ### DOWNLOAD-AND-PARSE WRAPPERS
+
+  #
+  # Options:
+  #
+  # do_not_set_current_author - true means do not save the current user as an author
+  # importing for others - true means try and add external author for the work
+  # pseuds - a list of pseuds to set as authors
+  # :set_tags, :fandom, :rating, :warning, :character, :pairing - sets these tags
+  # :override_tags - set tag values even if some were parsed out of the work
+  # post_without_preview - mark the story as posted without previewing
+  #
+
+
 
   # Downloads a story and passes it on to the parser.
   # If the URL of the story is from a site for which we have special rules
   # (eg, downloading from a livejournal clone, you want to use ?format=light
   # to get a nice and consistent post format), it will pre-process the url
   # according to the rules for that site.
-  def download_and_parse_story(location)
+  def download_and_parse_story(location, options = {})
+    check_for_previous_import(location)
+    work = nil
     source = get_source_if_known(CHAPTERED_STORY_LOCATIONS, location)
     if source.nil?
       story = download_text(location)
-      return parse_story(story, location)
+      work = parse_story(story, location, options)
     else
-      return download_and_parse_chaptered_story(source, location)
+      work = download_and_parse_chaptered_story(source, location, options)
     end
+    return work
+  end
+  
+  # download and add a new chapter to the end of a work
+  def download_and_parse_chapter_of_work(work, location, options = {})
+    chapter_content = download_text(location)
+    return parse_chapter_of_work(work, chapter_content, location, options)
   end
 
   # Given an array of urls for chapters of a single story, 
   # download them all and combine into a single work
-  def download_and_parse_chapters_into_story(locations)
+  def download_and_parse_chapters_into_story(locations, options = {})
+    check_for_previous_import(locations.first)
     chapter_contents = []
     locations.each do |location|
       chapter_contents << download_text(location)
     end
-    return parse_chaptered_story(locations.first, chapter_contents)
+    return parse_chapters_into_story(locations.first, chapter_contents, options)
   end
 
-  def download_and_parse_chapter(location)
-    story = download_text(location)
-    return parse_chapter(story, location)
-  end
+  ### PARSING METHODS
 
   # Parses the text of a story, optionally from a given location.
-  def parse_story(story, location = nil)
+  def parse_story(story, location, options = {})
     work_params = parse_common(story, location)
     work_params = sanitize_params(work_params)
     
@@ -148,85 +141,177 @@ class StoryParser
         work_params.delete(attrib)
       end
     end
-    
-    return set_work_attributes(Work.new(work_params), location)
+    return set_work_attributes(Work.new(work_params), location, options)
   end
 
-  # Parses text but returns a chapter instead
-  def parse_chapter(chapter, location = nil)
-    work_params = parse_common(chapter, location)
-    work_params = sanitize_params(work_params)
-    chapter = get_chapter_from_work_params(work_params)
-    return chapter
+  # parses and adds a new chapter to the end of the work
+  def parse_chapter_of_work(work, chapter_content, location, options = {})
+    tmp_work_params = parse_common(chapter_content, location)
+    tmp_work_params = sanitize_params(tmp_work_params)
+    chapter = get_chapter_from_work_params(tmp_work_params)
+    work.chapters << set_chapter_attributes(work, chapter, location, options)
+    return work
   end
-  
+
+  def parse_chapters_into_story(location, chapter_contents, options = {})
+    work = nil
+    work_params = { :title => "UPLOADED WORK", :chapter_attributes => {} }
+    chapter_contents.each do |content|
+      @doc = Nokogiri.parse(content)
+      
+      chapter_params = parse_common(content, location)
+      chapter_params = sanitize_params(chapter_params)
+      if work.nil?
+        # create the new work
+        work = Work.new(work_params.merge!(chapter_params))
+      else
+        new_chapter = get_chapter_from_work_params(chapter_params)
+        work.chapters << set_chapter_attributes(work, new_chapter, location, options)
+      end
+    end
+    return set_work_attributes(work, location, options)
+  end
+
   # tries to create the external author for a given url
   def parse_author(location)
     source = get_source_if_known(KNOWN_AUTHOR_PARSERS, location)
     if !source.nil?
       return eval("parse_author_from_#{source.downcase}(location)")
     end
-    
   end
 
+
   # Everything below here is protected and should not be touched by outside
-  # code -- please use the above functions to parse stories.
+  # code -- please use the above functions to parse external works.
 
   protected
   
+    # download an entire story from an archive type where we know how to parse multi-chaptered works
+    # this should only be called from download_and_parse_story
+    def download_and_parse_chaptered_story(source, location, options = {})
+      chapter_contents = eval("download_chaptered_from_#{source.downcase}(location)")
+      return parse_chapters_into_story(location, chapter_contents, options)
+    end
+    
+    def check_for_previous_import(location)
+      work = Work.find_by_imported_from_url(location)
+      if work
+        raise "A work has already been imported from #{location}."
+      end
+    end
+  
+    def set_chapter_attributes(work, chapter, location, options = {})
+      chapter.position = work.chapters.length + 1
+      chapter.posted = true # if options[:post_without_preview]
+      return chapter
+    end
+
+    def set_work_attributes(work, location, options = {}) 
+      raise "Work could not be downloaded" if work.nil?
+      work.imported_from_url = location
+      work.expected_number_of_chapters = work.chapters.length
+  
+      # set authors for the works
+      pseuds = []
+      pseuds << User.current_user.default_pseud unless options[:do_not_set_current_author] || User.current_user.nil?      
+      pseuds << options[:archivist].default_pseud if options[:archivist]
+      pseuds += options[:pseuds] if options[:pseuds]
+      pseuds = pseuds.uniq
+      raise "A work must have at least one author specified" if pseuds.empty? 
+      pseuds.each do |pseud| 
+        work.pseuds << pseud unless work.pseuds.include?(pseud)
+        work.chapters.each {|chapter| chapter.pseuds << pseud unless chapter.pseuds.include?(pseud)}
+      end
+
+      # handle importing works for others
+      if options[:importing_for_others]
+        external_author_name = parse_author(location)
+        if external_author_name.external_author.do_not_import
+          # we're not allowed to import works from this address
+          raise "Author #{external_author_name.name} at #{external_author_name.external_author.email} does not allow importing their work to this archive."                      
+        end
+        external_creatorship = ExternalCreatorship.new(:external_author_name => external_author_name, :creation => work, :archivist => (options[:archivist] || User.current_user) )
+        work.external_creatorships << external_creatorship        
+      end
+
+      # lock to registered users if specified or importing for others
+      work.restricted = options[:restricted] || options[:importing_for_others]
+  
+      # set default values for required tags for any works that don't have them
+      work.fandom_string = (options[:fandom] || ArchiveConfig.FANDOM_NO_TAG_NAME) if (work.fandoms.empty? || options[:override_tags])
+      work.rating_string = (options[:rating] || ArchiveConfig.RATING_DEFAULT_TAG_NAME) if (work.ratings.empty? || options[:override_tags])
+      work.warning_strings = (options[:warning] || ArchiveConfig.WARNING_DEFAULT_TAG_NAME) if (work.warnings.empty? || options[:override_tags])
+      work.category_string = options[:category] if options[:category] && (work.categories.empty? || options[:override_tags])
+      work.character_string = options[:character] if options[:character] && (work.characters.empty? || options[:override_tags])
+      work.pairing_string = options[:pairing] if options[:pairing] && (work.pairings.empty? || options[:override_tags])
+      work.freeform_string = options[:freeform] if options[:freeform] && (work.freeforms.empty? || options[:override_tags])
+
+      # set default value for title
+      work.title = "Untitled Imported Work" if work.title.blank?
+      
+      work.posted = true if options[:post_without_preview]
+      work.chapters.each do |chapter|
+        chapter.posted = true
+        chapter.save
+      end
+      return work
+    end
+  
     def parse_author_from_yuletide(location)
-      #debugger
-      external_author = nil
       if location.match(/archive\/([0-9]+\/.*)\.html/)
         yuletide_location = $1
         archive_url = "http://yuletidetreasure.org/cgi-bin/files/get_author.cgi?filename=#{yuletide_location}"
         author_info = download_text(archive_url)
+        email = name = ""
         if author_info.match(/^EMAIL: (.*)$/) 
           email = $1
-          external_author = ExternalAuthor.find_or_create_by_email(email)
-          if author_info.match(/^NAME: (.*)/) 
-            name = $1 
-            external_author_name = ExternalAuthorName.find(:first, :conditions => {:name => name, :external_author_id => external_author.id}) ||
-                                    ExternalAuthorName.new(:name => name) 
-            external_author.external_author_names << external_author_name
-            external_author.save
-          end
-          return external_author
         end
+        if author_info.match(/^NAME: (.*)/) 
+          name = $1 
+        end
+        return parse_author_common(email, name)
       end
     end
-    
-    def set_work_attributes(work, location) 
-      work.imported_from_url = location
-      work.expected_number_of_chapters = work.chapters.length
-      return work
-    end
 
-    def download_and_parse_chaptered_story(source, location)
-      chapter_contents = eval("download_chaptered_from_#{source.downcase}(location)")
-      return parse_chaptered_story(location, chapter_contents)
-    end
-    
-    def parse_chaptered_story(location, chapter_contents)
-      work = nil
-      work_params = { :title => "UPLOADED WORK", :chapter_attributes => {} }
-      chapter_contents.each do |content|
-        @doc = Nokogiri.parse(content)
-        
-        chapter_params = parse_common(content, location)
-        if work.nil?
-          # create the new work
-          work = Work.new(work_params.merge!(chapter_params))
-        else
-          new_chapter = get_chapter_from_work_params(chapter_params)
-          new_chapter.position = work.chapters.length + 1
-          new_chapter.posted = true
-          work.chapters << new_chapter
+    def parse_author_from_lj(location)
+      if location.match( /^(http:\/\/)?([^\.]*).(livejournal.com|dreamwidth.org|insanejournal.com|journalfen.net)/)
+        email = name = ""
+        lj_name = $2
+        site_name = $3
+        if lj_name == "community"
+          # whups
+          post_text = download_text(location)
+          doc = Nokogiri.parse(post_text)
+          lj_name = doc.xpath("/html/body/div[2]/div/div/div/table/tbody/tr/td[2]/span/a[2]/b").content
         end
+        profile_url = "http://#{lj_name}.#{site_name}/profile"
+        lj_profile = download_text(profile_url)
+        doc = Nokogiri.parse(lj_profile)
+        contact = doc.css('div.contact').inner_html
+        contact.gsub! '<p class="section_body_title">Contact:</p>', ""
+        contact.gsub! /<\/?(span|i)>/, ""
+        contact.gsub! /\n/, ""
+        contact.gsub! /<br\/>/, ""
+        if contact.match(/(.*@.*\..*)/)
+          email = $1
+        end
+        if email.blank?
+          email = "#{lj_name}@#{site_name}"
+        end
+        return parse_author_common(email, lj_name)
       end
-      return set_work_attributes(work, location)
     end
 
+    def parse_author_common(email, name)
+      external_author = ExternalAuthor.find_or_create_by_email(email)
+      unless name.blank?
+        external_author_name = ExternalAuthorName.find(:first, :conditions => {:name => name, :external_author_id => external_author.id}) ||
+                                  ExternalAuthorName.new(:name => name) 
+        external_author.external_author_names << external_author_name
+        external_author.save
+      end
+      return external_author_name || external_author.default_name
+    end
 
     def get_chapter_from_work_params(work_params)
       @chapter = Chapter.new({:content => work_params[:chapter_attributes][:content]})
@@ -243,12 +328,13 @@ class StoryParser
       else
         story = eval("download_from_#{source.downcase}(location)")
       end
-      story.empty? ? "" : fix_quotes(story)
+      story.blank? ? "" : fix_quotes(story)
     end
 
     # canonicalize the url for downloading from lj or clones
     def download_from_lj(location)
       url = location
+      url.gsub!(/\#(.*)$/, "") # strip off any anchor information
       url.gsub!(/\?(.*)$/, "") # strip off any existing params at the end
       url += "?format=light" # go to light format
       text = download_with_timeout(url)
@@ -269,6 +355,8 @@ class StoryParser
 
     # grab all the chapters of the story from ff.net
     def download_chaptered_from_ffnet(location)
+      raise "We cannot read #{location}. Are you trying to import from the story preview?" if location.match(/story_preview/)
+      raise "The url #{location} is locked." if location.match(/secure/)
       @chapter_contents = []
       if location.match(/^(.*fanfiction\.net\/s\/[0-9]+\/)([0-9]+)(\/.*)$/i)
         urlstart = $1
@@ -292,7 +380,7 @@ class StoryParser
     # used to parse either entire story or chapter
     def parse_common(story, location = nil)
       work_params = { :title => "UPLOADED WORK", :chapter_attributes => {:content => ""} }
-      @doc = Nokogiri.parse(story) rescue ""
+      @doc = Nokogiri::HTML.parse(story) rescue ""
 
       if !location.nil?
         source = get_source_if_known(KNOWN_STORY_PARSERS, location)
@@ -343,7 +431,8 @@ class StoryParser
       storytext = clean_storytext(storytext)
 
       work_params[:chapter_attributes][:content] = storytext
-      work_params[:title] = @doc.css("title").inner_html # default
+      work_params[:title] = @doc.css("title").inner_html
+      work_params[:title].gsub! /^[^:]+: /, ""
       work_params.merge!(scan_text_for_meta(storytext))
 
       return work_params

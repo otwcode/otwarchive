@@ -63,6 +63,7 @@ class WorksEditControllerTest < ActionController::TestCase
         should_redirect_to("the user's path") {user_path(@user)}
         should "remove you as author" do
           assert_equal [@new_user.default_pseud], Work.find(@work.id).pseuds
+          assert_equal [@new_user], Work.find(@work.id).users
         end
         should "replace you with co-author on your chapters" do
           assert_equal [@new_user.default_pseud], Chapter.find(@chapter.id).pseuds

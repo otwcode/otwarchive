@@ -1,7 +1,7 @@
 class ExternalAuthorsController < ApplicationController
   before_filter :load_user
-  before_filter :check_ownership, :only => [:create, :edit, :destroy, :new, :update]
-  before_filter :check_user_status, :only => [:new, :create, :edit, :update]
+  before_filter :check_ownership, :only => [:create, :edit, :destroy, :new]
+  before_filter :check_user_status, :only => [:new, :create, :edit]
 
   def load_user
     @user = User.find_by_login(params[:user_id])
@@ -9,49 +9,113 @@ class ExternalAuthorsController < ApplicationController
   end
 
   def index
-    @external_authors = @user.external_authors
+    if @user && current_user == @user
+      @external_authors = @user.external_authors
+    elsif logged_in? && current_user.archivist
+      @external_authors = ExternalCreatorship.find_all_by_archivist_id(current_user).collect(&:external_author).uniq
+    elsif logged_in?
+      redirect_to user_external_authors_path(current_user) and return
+    else
+      flash[:notice] = "You can't see that information."
+      redirect_to root_path and return
+    end
   end
 
   def new
-    @external_author = ExternalAuthor.new
-    @user = current_user
-    @external_author.external_author_names.build
+    flash[:notice] = "Coming soon!"
+    redirect_to :action => :index
+    # @external_author = ExternalAuthor.new
+    # @user = current_user
+    # @external_author.external_author_names.build
+  end
+
+  def create
+    # we need to confirm email addresses before we hand them over
+    flash[:notice] = "Coming soon!"
+    redirect_to :action => :index
+    
+    # @external_author = ExternalAuthor.new(params[:external_author])
+    # if @user == current_user
+    #   @external_author.is_claimed = true
+    #   @external_author.user = @user
+    # end
+    # 
+    # if @external_author.save
+    #   flash[:notice] = 'ExternalAuthor was successfully created.'
+    #   redirect_to user_external_authors_path(@user)
+    # else
+    #   render :action => "new"
+    # end
+  end
+
+  def destroy
+    flash[:notice] = "Coming soon!"
+    redirect_to :action => :index
+    # @external_author = ExternalAuthor.find(params[:id])
+    # @external_author.destroy
+    # 
+    # redirect_to user_external_authors_path(@user)
   end
 
   def edit
     @external_author = ExternalAuthor.find(params[:id])
   end
-
-  def create
-    @external_author = ExternalAuthor.new(params[:external_author])
-    if @user == current_user
-      @external_author.is_claimed = true
-      @external_author.user = @user
+  
+  def claim
+    token = params[:invitation_token] || (params[:user] && params[:user][:invitation_token])
+    @invitation = Invitation.find_by_token(token)
+    @invitee_email = @invitation.invitee_email
+    @external_author = ExternalAuthor.find_by_email(@invitee_email)
+    unless (@invitation && @external_author)
+      flash[:error] = t('external_author.no_invitation', :default => "You need an invitation to do that.")
+      redirect_to root_path and return
     end
+  end
 
-    if @external_author.save
-      flash[:notice] = 'ExternalAuthor was successfully created.'
-      redirect_to user_external_authors_path(@user)
-    else
-      render :action => "new"
+  def complete_claim
+    # go ahead and give the user the works
+    unless is_registered_user? 
+      flash[:error] = t('external_author.not_logged_in', :default => "You must be logged into your archive account to claim stories.")
+      redirect_to login_url and return
     end
+    @external_author.claim!(current_user)
+    token = params[:invitation_token] || (params[:user] && params[:user][:invitation_token])
+    @invitation = Invitation.find_by_token(token)
+    @invitation.mark_as_redeemed if @invitation
+    flash[:notice] = t('external_author_claimed', :default => "We have added the stories imported under #{@invitee_email} to your account.")
+    redirect_to external_authors_path(current_user)
   end
 
   def update
+    @invitation = Invitation.find_by_token(params[:invitation_token])
     @external_author = ExternalAuthor.find(params[:id])
+    unless (@invitation && @invitation.invitee == @external_author) || @external_author.user == current_user
+      flash[:error] = "You don't have permission to do that."
+      redirect_to root_path and return
+    end
+    
+    flash[:notice] = ""
+    if params[:imported_stories] == "orphan"
+      # orphan the works
+      @external_author.orphan(params[:remove_pseud])
+      flash[:notice] += "Your imported stories have been orphaned. Thank you for leaving them in the archive! "
+    elsif params[:imported_stories] == "delete"
+      # delete the works
+      @external_author.delete_works
+      flash[:notice] += "Your imported stories have been deleted. "
+    end
+    @invitation.mark_as_redeemed if @invitation && !params[:imported_stories].blank?
 
     if @external_author.update_attributes(params[:external_author])
-      flash[:notice] = 'ExternalAuthor was successfully updated.'
-      redirect_to user_external_authors_path(@user)
+      flash[:notice] += "Your preferences have been saved."
+      if @user
+        redirect_to user_external_authors_path(@user)
+      else
+        redirect_to root_path
+      end
     else
+      flash[:error] += "There were problems saving your preferences."
       render :action => "edit" 
     end
-  end
-
-  def destroy
-    @external_author = ExternalAuthor.find(params[:id])
-    @external_author.destroy
-
-    redirect_to user_external_authors_path(@user)
   end
 end

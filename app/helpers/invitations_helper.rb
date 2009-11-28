@@ -11,7 +11,7 @@ module InvitationsHelper
   end
 
   def invitee_link(invitation)
-    if invitation.invitee
+    if invitation.invitee && invitation.invitee.is_a?(User)
       link_to(invitation.invitee.login, invitation.invitee)
     end
   end

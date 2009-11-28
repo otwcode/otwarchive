@@ -9,7 +9,9 @@ class Work < ActiveRecord::Base
 	has_many :users, :through => :pseuds, :uniq => true
 
   has_many :external_creatorships, :as => :creation, :dependent => :destroy
-  has_many :external_authors, :through => :external_creatorships
+  has_many :archivists, :through => :external_creatorships
+  has_many :external_author_names, :through => :external_creatorships
+  has_many :external_authors, :through => :external_author_names, :uniq => true
 
   has_many :chapters, :dependent => :destroy
   validates_associated :chapters
@@ -223,6 +225,33 @@ class Work < ActiveRecord::Base
     end
     self.authors.flatten!
     self.authors.uniq!
+  end
+  
+  def remove_author(author_to_remove)
+    pseuds_with_author_removed = self.pseuds - author_to_remove.pseuds
+    raise Error("Cannot remove all authors") if pseuds_with_author_removed.empty?
+    self.pseuds = pseuds_with_author_removed
+    save
+    self.chapters.each do |chapter|
+      chapter.pseuds = (chapter.pseuds - author_to_remove.pseuds).uniq
+      if chapter.pseuds.empty?
+        chapter.pseuds = self.pseuds
+      end
+      chapter.save
+    end
+  end
+  
+  # Transfer ownership of the work from one user to another
+  def change_ownership(old_user, new_user, new_pseud=nil)
+    new_pseud = new_user.default_pseud if new_pseud.nil?
+    raise Error("Not owned by that user") unless users.include?(old_user)
+    self.pseuds << new_pseud
+    self.chapters.each do |chapter|
+      chapter.pseuds << new_pseud
+      chapter.save
+    end
+    save
+    self.remove_author(old_user)
   end
 
 

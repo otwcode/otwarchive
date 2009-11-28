@@ -38,6 +38,12 @@ class Invitation < ActiveRecord::Base
     User.out_of_invites.update_all('out_of_invites = 0')
   end
   
+  def mark_as_redeemed(user=nil)
+    self.invitee = user
+    self.redeemed_at = Time.now
+    save
+  end
+  
   private
   
   def recipient_is_not_registered
@@ -54,10 +60,16 @@ class Invitation < ActiveRecord::Base
   def send_and_set_date
     if self.invitee_email_changed? && !self.invitee_email.blank?
       begin
-        UserMailer.deliver_invitation(self)
+        if self.invitee_type == "ExternalAuthor"
+          external_author = self.invitee
+          archivist = external_author.external_creatorships.collect(&:archivist).collect(&:login).uniq.join(", ")
+          UserMailer.deliver_invitation_to_claim(self, archivist)
+        else
+          UserMailer.deliver_invitation(self)
+        end
         self.sent_at = Time.now
-      rescue
-        errors.add_to_base("Notification email could not be sent.")
+      rescue Exception => exception
+        errors.add_to_base("Notification email could not be sent: #{exception.message}")
       end
     end
   end

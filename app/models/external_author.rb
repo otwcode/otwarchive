@@ -1,16 +1,19 @@
 class ExternalAuthor < ActiveRecord::Base
 
+  # send :include, Activation # eventually we will let users create new identities
+
   EMAIL_LENGTH_MIN = 3
   EMAIL_LENGTH_MAX = 300
 
   belongs_to :user
-  has_many :external_creatorships
-  has_many :works, :through => :external_creatorships, :source => :creation, :source_type => 'Work', :uniq => true  
-  
+
   has_many :external_author_names, :dependent => :destroy
   accepts_nested_attributes_for :external_author_names, :allow_destroy => true
   validates_associated :external_author_names
 
+  has_many :external_creatorships, :through => :external_author_names
+  has_many :works, :through => :external_creatorships, :source => :creation, :source_type => 'Work', :uniq => true  
+  
   has_one :invitation, :as => :invitee
 
   validates_presence_of :email, :message => t('email_blank', :default => 'Please enter an email address')
@@ -25,31 +28,48 @@ class ExternalAuthor < ActiveRecord::Base
   validates_email_veracity_of :email, 
       :message => t('email_invalid', :default => 'This does not seem to be a valid email address.')
 
+  after_create :create_default_name
+  
+  def create_default_name
+    @default_name = self.external_author_names.build
+    @default_name.name = self.email.to_s
+  end
+
+  def default_name
+    self.external_author_names.select {|external_name| external_name.name == self.email.to_s }.first
+  end
+  
+  def names
+    self.external_author_names
+  end
   
   def claimed?
     is_claimed
   end
   
-  def claim!(user)
-    raise Error(t('no_claiming_user', :default => "There is no user claiming this external author.")) unless user 
-    raise Error(t('already_claimed', :default => "This external author is already claimed")) if claimed?
+  def claim!(claiming_user)
+    raise "There is no user claiming this external author." unless claiming_user 
+    raise "This external author is already claimed by another user" if claimed? && self.user != claiming_user
     
-    self.user = user
-    self.external_creatorships.select {|ec| ec.creation_type == "Work"}.each do |external_creatorship|
-      # remove archivist as owner, add user as owner
-      archivist = external_creatorship.archivist
-      work = external_creatorship.creation
-      pseuds_to_remove = work.pseuds.select {|pseud| archivist.pseuds.include?(pseud)}
-      pseud_to_add = self.user.default_pseud
-      
-      pseuds_to_remove.each do |pseud_to_remove|
-        pseud_to_remove.change_ownership(work, pseud_to_add)
+    claimed_works = []
+    external_author_names.each do |external_author_name|
+      external_author_name.external_creatorships.select {|ec| ec.creation_type == "Work"}.each do |external_creatorship|
+        work = external_creatorship.creation
+        # if previously claimed, don't do it again
+        unless work.users.include?(claiming_user) 
+          # remove archivist as owner, add user as owner
+          archivist = external_creatorship.archivist
+          pseud_to_add = claiming_user.pseuds.select {|pseud| pseud.name == external_author_name.name}.first || claiming_user.default_pseud        
+          raise "We could not assign that work to the claiming user." unless work.change_ownership(archivist, claiming_user, pseud_to_add)
+          claimed_works << work
+        end
       end
-      work.save!
     end
     
+    self.user = claiming_user
     self.is_claimed = true
-    save!
+    save
+    notify_user_of_claim(claimed_works)
   end
   
   def unclaim!
@@ -59,19 +79,58 @@ class ExternalAuthor < ActiveRecord::Base
       # remove user, add archivist back
       archivist = external_creatorship.archivist
       work = external_creatorship.creation
-
-      pseuds_to_remove = work.pseuds.select {|pseud| self.user.pseuds.include?(pseud)}
-      pseud_to_add = archivist.default_pseud
-      
-      pseuds_to_remove.each do |pseud_to_remove|
-        pseud_to_remove.change_ownership(work, pseud_to_add)
-      end
-      work.save!
+      work.change_ownership(user, archivist)
     end
     
     self.user = nil
     self.is_claimed = false
-    save!
+    save
+  end
+  
+  def orphan(remove_pseud)
+    external_author_names.each do |external_author_name|
+      external_author_name.external_creatorships.select {|ec| ec.creation_type == "Work"}.each do |external_creatorship|
+        # remove archivist as owner, convert to the pseud
+        archivist = external_creatorship.archivist
+        work = external_creatorship.creation
+        archivist_pseud = work.pseuds.select {|pseud| archivist.pseuds.include?(pseud)}.first
+        orphan_pseud = remove_pseud ? User.orphan_account.default_pseud : User.orphan_account.pseuds.find_or_create_by_name(external_author_name.name)
+        work.change_ownership(archivist, User.orphan_account, orphan_pseud)
+      end
+    end
+  end
+  
+  def delete_works
+    self.external_creatorships.select {|ec| ec.creation_type == "Work"}.each do |external_creatorship|
+      work = external_creatorship.creation
+      work.destroy
+    end
+  end
+
+  def block_import
+    self.do_not_import = true
+    
+  end
+  
+  def notify_user_of_claim(claimed_works)
+    # send announcement to user of the stories they have been given
+    UserMailer.deliver_claim_notification(self, claimed_works)
+  end
+  
+  def find_or_invite(archivist = nil)
+    if self.email 
+      matching_user = User.find_by_email(self.email)
+      if matching_user 
+        self.claim!(matching_user)
+      else
+        # invite person at the email address unless they don't want invites
+        unless self.do_not_email
+          @invitation = Invitation.new(:invitee_email => self.email, :invitee => self, :creator => User.current_user)
+          @invitation.save
+        end
+      end
+    end
+    # eventually we may want to try finding authors by pseud?
   end
   
 end
