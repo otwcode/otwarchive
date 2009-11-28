@@ -63,8 +63,9 @@ LOGNOTE_MAX: 1250
 FEEDBACK_SUMMARY_MAX: 100
 
 # max number of works/chapters that can be imported
-IMPORT_MAX_WORKS: 10 
+IMPORT_MAX_WORKS: 25 
 IMPORT_MAX_CHAPTERS: 200
+IMPORT_MAX_WORKS_BY_ARCHIVIST: 200
 
 # number of items in various displays
 ITEMS_PER_PAGE: 25
