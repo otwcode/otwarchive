@@ -2,6 +2,7 @@ class ExternalAuthorsController < ApplicationController
   before_filter :load_user
   before_filter :check_ownership, :only => [:create, :edit, :destroy, :new]
   before_filter :check_user_status, :only => [:new, :create, :edit]
+  before_filter :get_external_author_from_invitation, :only => [:claim, :complete_claim]
 
   def load_user
     @user = User.find_by_login(params[:user_id])
@@ -61,15 +62,18 @@ class ExternalAuthorsController < ApplicationController
     @external_author = ExternalAuthor.find(params[:id])
   end
   
-  def claim
+  def get_external_author_from_invitation
     token = params[:invitation_token] || (params[:user] && params[:user][:invitation_token])
     @invitation = Invitation.find_by_token(token)
-    @invitee_email = @invitation.invitee_email
-    @external_author = ExternalAuthor.find_by_email(@invitee_email)
+    @invitee_email = @invitation.invitee_email if @invitation
+    @external_author = ExternalAuthor.find_by_email(@invitee_email) if @invitee_email    
     unless (@invitation && @external_author)
       flash[:error] = t('external_author.no_invitation', :default => "You need an invitation to do that.")
       redirect_to root_path and return
     end
+  end
+
+  def claim
   end
 
   def complete_claim
@@ -79,11 +83,9 @@ class ExternalAuthorsController < ApplicationController
       redirect_to login_url and return
     end
     @external_author.claim!(current_user)
-    token = params[:invitation_token] || (params[:user] && params[:user][:invitation_token])
-    @invitation = Invitation.find_by_token(token)
     @invitation.mark_as_redeemed if @invitation
     flash[:notice] = t('external_author_claimed', :default => "We have added the stories imported under #{@invitee_email} to your account.")
-    redirect_to external_authors_path(current_user)
+    redirect_to user_external_authors_path(current_user)
   end
 
   def update
