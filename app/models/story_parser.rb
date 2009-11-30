@@ -172,12 +172,13 @@ class StoryParser
     return set_work_attributes(work, location, options)
   end
 
-  # tries to create the external author for a given url
+  # tries to create an external author for a given url
   def parse_author(location)
     source = get_source_if_known(KNOWN_AUTHOR_PARSERS, location)
     if !source.nil?
       return eval("parse_author_from_#{source.downcase}(location)")
     end
+    return parse_author_from_unknown(location)
   end
 
 
@@ -226,12 +227,14 @@ class StoryParser
       # handle importing works for others
       if options[:importing_for_others]
         external_author_name = parse_author(location)
-        if external_author_name.external_author.do_not_import
-          # we're not allowed to import works from this address
-          raise "Author #{external_author_name.name} at #{external_author_name.external_author.email} does not allow importing their work to this archive."                      
+        if external_author_name
+          if external_author_name.external_author.do_not_import
+            # we're not allowed to import works from this address
+            raise "Author #{external_author_name.name} at #{external_author_name.external_author.email} does not allow importing their work to this archive."
+          end
+          external_creatorship = ExternalCreatorship.new(:external_author_name => external_author_name, :creation => work, :archivist => (options[:archivist] || User.current_user) )
+          work.external_creatorships << external_creatorship        
         end
-        external_creatorship = ExternalCreatorship.new(:external_author_name => external_author_name, :creation => work, :archivist => (options[:archivist] || User.current_user) )
-        work.external_creatorships << external_creatorship        
       end
 
       # lock to registered users if specified or importing for others
@@ -300,6 +303,11 @@ class StoryParser
         end
         return parse_author_common(email, lj_name)
       end
+    end
+    
+    def parse_author_from_unknown(location)
+      # for now, nothing
+      return nil
     end
 
     def parse_author_common(email, name)
