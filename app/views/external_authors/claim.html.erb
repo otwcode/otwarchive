@@ -25,6 +25,8 @@
 
 <hr />
 
+<h3>If You Don't Want An Archive Account</h3>
+
 <p class="message">
   If you don't want to claim these stories on the archive, you can either orphan them (leave them in the archive with your contact information
   and optionally your name removed), or delete them. You can also tell us not to email you in future and/or not to import stories with this email 
@@ -51,6 +53,10 @@
   <p>
     <%= f.check_box :do_not_import %>
     <%= f.label :do_not_import, t('claim.do_not_import', :default => "Do not import stories with this email address in future at all.") %>
+  </p>
+  <p>
+    NOTE: if you do not block importing, but do turn off email notification, stories from this email account may still be imported, 
+    you will just not be informed. If that's not what you want, please be sure to turn off importing also.
   </p>
   <p>
     <%= f.submit t('update', :default => 'Update') %>

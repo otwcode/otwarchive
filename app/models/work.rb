@@ -229,7 +229,7 @@ class Work < ActiveRecord::Base
   
   def remove_author(author_to_remove)
     pseuds_with_author_removed = self.pseuds - author_to_remove.pseuds
-    raise Error("Cannot remove all authors") if pseuds_with_author_removed.empty?
+    raise "Cannot remove all authors" if pseuds_with_author_removed.empty?
     self.pseuds = pseuds_with_author_removed
     save
     self.chapters.each do |chapter|
@@ -243,15 +243,15 @@ class Work < ActiveRecord::Base
   
   # Transfer ownership of the work from one user to another
   def change_ownership(old_user, new_user, new_pseud=nil)
+    raise "No new user provided, cannot change ownership" unless new_user
     new_pseud = new_user.default_pseud if new_pseud.nil?
-    raise Error("Not owned by that user") unless users.include?(old_user)
     self.pseuds << new_pseud
     self.chapters.each do |chapter|
       chapter.pseuds << new_pseud
       chapter.save
     end
     save
-    self.remove_author(old_user)
+    self.remove_author(old_user) if users.include?(old_user)
   end
 
 
