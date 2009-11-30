@@ -467,6 +467,9 @@ class WorksController < ApplicationController
     }
     
     # now let's do the import
+    @works = []
+    @failed_urls = []
+    @errors = []
     if params[:import_multiple] == "works"
       results = storyparser.import_from_urls(@urls, options)
       @works = results[0]
@@ -474,13 +477,21 @@ class WorksController < ApplicationController
       @errors = results[2]
     else # a single work with multiple chapters
       begin
-        @works << storyparser.download_and_parse_chapters_into_story(@urls, options)
+        #debugger
+        @work = storyparser.download_and_parse_chapters_into_story(@urls, options)
+        if @work.save
+          @works << @work
+        else
+          @failed_urls << @urls.first
+          @errors << t('import.could_not_save', :default => "We couldn't save that chaptered work. Anything we managed to import is below.")
+          redirect_to :action => :new and return
+        end
       rescue Timeout::Error
         flash[:error] = t('timed_out', :default => "Sorry, but we timed out trying to get that URL. If the site seems to be down, you can try again later.")
-        redirect_to :new and return
+        redirect_to :action => :new and return
       rescue Exception => exception
         flash[:error] = t('upload_failed', :default => "We couldn't successfully import that story, sorry: {{message}}", :message => exception.message)
-        redirect_to :new and return
+        redirect_to :action => :new and return
       end
     end
     
