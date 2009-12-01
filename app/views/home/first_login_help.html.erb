@@ -2,7 +2,9 @@
 
 <p style="margin-bottom: 1em">Welcome to the Archive of Our Own! Here are some tips to help you get started.</p>
 
+<% if current_user %>
 <p style="margin-bottom: 1em"><strong><%= link_to_remote "To never see this message again, click here.", :url => { :controller => 'users', :action => 'end_first_login', :id => current_user.login } %></strong></p>
+<% end %>
 
 <p style="margin-bottom: 1em">
   <a href="#logging_in">Logging in</a> - 
