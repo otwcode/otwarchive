@@ -491,7 +491,7 @@ class StoryParser
         # couldn't get the summary data, oh well, keep going
       end
 
-      work_params[:freeform_string] = tags.join(ArchiveConfig.DELIMITER)
+      work_params[:freeform_string] = clean_tags(tags.join(ArchiveConfig.DELIMITER))
 
       return work_params
     end
@@ -531,7 +531,7 @@ class StoryParser
         tags << $3 unless $1 == $3
       end
 
-      work_params[:freeform_string] = tags.join(ArchiveConfig.DELIMITER)
+      work_params[:freeform_string] = clean_tags(tags.join(ArchiveConfig.DELIMITER))
       work_params[:chapter_attributes][:content] = storytext
 
       return work_params
@@ -623,7 +623,7 @@ class StoryParser
       tagslist.each do |tag|
         tag.gsub!(/[\*\<\>]/, '')
         tag = truncate_on_word_boundary(tag, ArchiveConfig.TAG_MAX)
-        newlist << tag
+        newlist << tag unless tag.blank?
       end
       return newlist.join(ArchiveConfig.DELIMITER)
     end
@@ -647,7 +647,7 @@ class StoryParser
       end
       return clean_tags(tags)
     end
-
+    
     # Convert the common ratings into whatever ratings we're
     # using on this archive.
     def convert_rating(rating)

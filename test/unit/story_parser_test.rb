@@ -168,14 +168,21 @@ class StoryParserTest < ActiveSupport::TestCase
   # single-chaptered work
   def test_ffnet
     @storyparser = StoryParser.new
-
     @url = "http://www.fanfiction.net/s/2180161/1/Hot_Springs"
     @work = @storyparser.download_and_parse_story(@url, :pseuds => [create_pseud])
     assert_match /After many months/, @work.chapters.first.content
     assert_equal "Hot Springs", @work.title
-    @work.save
+    assert @work.save
     assert_equal "Naruto", @work.fandom_string
     assert_equal Rating.find_by_name(ArchiveConfig.RATING_TEEN_TAG_NAME), @work.ratings.first
+  end
+  
+  def test_ffnet_general
+    @storyparser = StoryParser.new
+    @url = "http://www.fanfiction.net/s/4881862/1/Fleeting_Dreams"
+    #debugger
+    @work = @storyparser.download_and_parse_story(@url, :pseuds => [create_pseud])
+    assert @work.save
   end
 
   #multi-chaptered work
