@@ -113,13 +113,12 @@ class UsersController < ApplicationController
         external_authors = []
         external_authors << ExternalAuthor.find_by_email(@user.email)
         @invitation = Invitation.find_by_token(@user.invitation_token)
-        if @invitation && @invitation.invitee_type == "ExternalAuthor"
-          external_authors << @invitation.invitee
-        end
-        external_authors.each do |external_author|
-          external_author.claim!(@user)
-        end
+        external_authors << @invitation.invitee if @invitation && @invitation.invitee_type == "ExternalAuthor"
+        external_authors.compact!
         unless external_authors.empty?
+          external_authors.each do |external_author|
+            external_author.claim!(@user)
+          end
           flash[:notice] += t('external_authors_claimed', 
             :default => " We found some stories already uploaded to the Archive of Our Own that we think belong to you! You can see them either in your works below or in your drafts folder.")
         end
