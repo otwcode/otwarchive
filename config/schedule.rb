@@ -21,19 +21,24 @@
 
 set :cron_log, "/tmp/www-data.log"
 
-# Check to see if the invite queue is enabled and invite users if appropriate
-every 1.day, :at => '1:21 am' do
-  rake "invitations:check_queue"
+case @environment
+when 'production'
+  # run email-sending tasks
+  
+  # Check to see if the invite queue is enabled and invite users if appropriate
+  every 1.day, :at => '1:21 am' do
+    rake "invitations:check_queue"
+  end
+
+  # Resend signup emails
+  every 1.day, :at => '1:41 am' do
+    rake "admin:resend_signup_emails"
+  end
 end
 
 # Purge user accounts that haven't been activated
 every 1.day, :at => '1:31 am' do
   rake "admin:purge_unvalidated_users"
-end
-
-# Resend signup emails
-every 1.day, :at => '1:41 am' do
-  rake "admin:resend_signup_emails"
 end
 
 # Unsuspend selected users

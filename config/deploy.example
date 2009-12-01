@@ -18,10 +18,11 @@ after "deploy:update_code", "local:update"
 
 after "deploy:symlink", "deploy:update_crontab"
 
+# note that environment should be set to production only if you want email-sending tasks to be run
 namespace :deploy do
   desc "Update the crontab file"
   task :update_crontab, :roles => :db do
-    run "cd #{release_path} && whenever --write-crontab #{application}"
+    run "cd #{release_path} && whenever --write-crontab #{application} --set environment=production"
   end
 end
 

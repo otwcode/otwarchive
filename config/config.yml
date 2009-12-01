@@ -23,6 +23,9 @@ ERROR_PREFIX: "[ERROR] "
 # Because the default email addresses are fake,
 # email delivery is turned off by default, even for production.
 # The log file will nonetheless show "Sent mail:"
+#
+# Note that this is independent from whether the scheduled email-sending tasks will be run -- 
+# to make changes to that, please see schedule.rb and your deploy file. 
 PERFORM_DELIVERIES: false
 
 APP_URL: 'http://www.example.org'
