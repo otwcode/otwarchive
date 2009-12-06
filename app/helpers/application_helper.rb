@@ -26,20 +26,8 @@ module ApplicationHelper
     "%I:%M%p %Z %a %d %B %Y"
   end
   
-  # Used in navigation link list in header
-  def home_link
-    if logged_in? 
-			text = t('home.mine', :default => "my home")
-			link = user_path(current_user) 
-		else
-			text = t('home', :default => "home")
-			link = root_path
-		end
-		link_to_unless_current "<span>" + text + "</span>", link
-  end
-
   def span_if_current(link_to_default_text, path)
-    translation_name = "layout.header." + link_to_default_text
+    translation_name = "layout.header." + link_to_default_text.gsub(/\s+/, "_")
     link = link_to_unless_current(t(translation_name, :default => link_to_default_text), path)
     current_page?(path) ? "<span class=\"current\">#{link}</span>" : link
   end
