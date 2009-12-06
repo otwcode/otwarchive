@@ -62,5 +62,80 @@ class ExternalAuthorsControllerTest < ActionController::TestCase
                  :external_author => { :do_not_email => 'true' }
     assert_redirected_to user_external_authors_path(user)
   end
+
+  context "when claiming an external author" do
+    context "without a valid invitation" do
+      setup do
+        get :claim
+      end
+      should_set_the_flash_to /You need an invitation/
+      should_redirect_to("the home page") {root_path}
+    end
+    context "with a valid invitation" do
+      setup do 
+        @invitation = create_invitation
+        @invitation.save
+      end
+      context "that has no external author" do
+        setup do
+          get :claim, :invitation_token => @invitation.token
+        end
+        should_set_the_flash_to /no stories to claim/
+        should_redirect_to("the signup page") {signup_path(@invitation.token)}
+      end
+      context "with an external author attached" do
+        setup do
+          @external_author = create_external_author
+          @test_work = create_work 
+          @test_work.add_default_tags
+          creatorship = create_external_creatorship(:external_author_name => @external_author.names.first, :creation => @test_work)
+          @test_work.save 
+          @invitation.external_author = @external_author
+          @invitation.save
+          get :claim, :invitation_token => @invitation.token
+        end
+        should_respond_with :success
+        should "display a form" do
+          assert_select "form", true
+        end
+        should_render_template :claim
+        context "and completing a claim" do
+          context "without being logged in" do
+            setup do
+              get :complete_claim, :locale => 'en', :invitation_token => @invitation.token        
+            end
+            should_set_the_flash_to /Please log in/
+            should_redirect_to("the login page") {new_session_path}
+          end
+        end
+      end
+    end
+  end
+
+  context "completing a claim when logged in" do
+    setup do
+      @user = create_user
+      @request.session[:user] = @user
+      
+      @external_author = create_external_author
+      archivist = create_user(:login => "archivist")
+      @test_work = create_work(:authors => [archivist.default_pseud], :chapters => [new_chapter(:authors => [archivist.default_pseud])]) 
+      @test_work.add_default_tags
+      creatorship = create_external_creatorship(:external_author_name => @external_author.names.first, :creation => @test_work)
+      @test_work.save
+      @invitation = create_invitation(:external_author => @external_author)
+      #debugger
+      get :complete_claim, :locale => 'en', :invitation_token => @invitation.token
+    end
+    should_set_the_flash_to /have added the stories imported under/
+    should_redirect_to("the user's external authors page") {user_external_authors_path(@user)}
+    should "claim the external author for the user" do
+      @user.reload
+      @external_author.reload
+      assert @user.external_authors.include?(@external_author)
+      assert @external_author.user == @user
+      assert @user.works.include?(@test_work)
+    end
+  end
     
 end

@@ -14,7 +14,7 @@ class ExternalAuthor < ActiveRecord::Base
   has_many :external_creatorships, :through => :external_author_names
   has_many :works, :through => :external_creatorships, :source => :creation, :source_type => 'Work', :uniq => true  
   
-  has_one :invitation, :as => :invitee
+  has_one :invitation
 
   validates_presence_of :email, :message => t('email_blank', :default => 'Please enter an email address')
 
@@ -59,8 +59,8 @@ class ExternalAuthor < ActiveRecord::Base
         unless work.users.include?(claiming_user) 
           # remove archivist as owner, add user as owner
           archivist = external_creatorship.archivist
-          pseud_to_add = claiming_user.pseuds.select {|pseud| pseud.name == external_author_name.name}.first || claiming_user.default_pseud        
-          raise "We could not assign that work to the claiming user." unless work.change_ownership(archivist, claiming_user, pseud_to_add)
+          pseud_to_add = claiming_user.pseuds.select {|pseud| pseud.name == external_author_name.name}.first || claiming_user.default_pseud  
+          work.change_ownership(archivist, claiming_user, pseud_to_add) 
           claimed_works << work
         end
       end
@@ -125,7 +125,7 @@ class ExternalAuthor < ActiveRecord::Base
       else
         # invite person at the email address unless they don't want invites
         unless self.do_not_email
-          @invitation = Invitation.new(:invitee_email => self.email, :invitee => self, :creator => User.current_user)
+          @invitation = Invitation.new(:invitee_email => self.email, :external_author => self, :creator => User.current_user)
           @invitation.save
         end
       end

@@ -251,7 +251,7 @@ class Work < ActiveRecord::Base
       chapter.save
     end
     save
-    self.remove_author(old_user) if users.include?(old_user)
+    self.remove_author(old_user) if old_user && users.include?(old_user)
   end
 
 

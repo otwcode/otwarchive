@@ -17,7 +17,7 @@ class UserMailer < ActionMailer::Base
     from          ArchiveConfig.RETURN_ADDRESS
     sent_on       Time.now
     content_type  "text/html"
-    body          :invitation => invitation, :archivist => archivist, :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
+    body          :invitation => invitation, :external_author => invitation.external_author, :archivist => archivist, :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
   end
   
   def claim_notification(external_author, claimed_works)

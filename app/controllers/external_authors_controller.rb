@@ -3,6 +3,7 @@ class ExternalAuthorsController < ApplicationController
   before_filter :check_ownership, :only => [:create, :edit, :destroy, :new]
   before_filter :check_user_status, :only => [:new, :create, :edit]
   before_filter :get_external_author_from_invitation, :only => [:claim, :complete_claim]
+  before_filter :users_only, :only => [:complete_claim]
 
   def load_user
     @user = User.find_by_login(params[:user_id])
@@ -65,11 +66,15 @@ class ExternalAuthorsController < ApplicationController
   def get_external_author_from_invitation
     token = params[:invitation_token] || (params[:user] && params[:user][:invitation_token])
     @invitation = Invitation.find_by_token(token)
-    @invitee_email = @invitation.invitee_email if @invitation
-    @external_author = ExternalAuthor.find_by_email(@invitee_email) if @invitee_email    
-    unless (@invitation && @external_author)
+    unless @invitation
       flash[:error] = t('external_author.no_invitation', :default => "You need an invitation to do that.")
       redirect_to root_path and return
+    end
+      
+    @external_author = @invitation.external_author
+    unless @external_author
+      flash[:error] = t('external_author.no_external_author', :default => "There are no stories to claim on this invitation. Did you want to sign up instead?")
+      redirect_to signup_path(@invitation.token) and return
     end
   end
 
@@ -78,20 +83,16 @@ class ExternalAuthorsController < ApplicationController
 
   def complete_claim
     # go ahead and give the user the works
-    unless is_registered_user? 
-      flash[:error] = t('external_author.not_logged_in', :default => "You must be logged into your archive account to claim stories.")
-      redirect_to login_url and return
-    end
     @external_author.claim!(current_user)
-    @invitation.mark_as_redeemed if @invitation
-    flash[:notice] = t('external_author_claimed', :default => "We have added the stories imported under #{@invitee_email} to your account.")
+    @invitation.mark_as_redeemed(current_user) if @invitation
+    flash[:notice] = t('external_author_claimed', :default => "We have added the stories imported under #{@external_author.email} to your account.")
     redirect_to user_external_authors_path(current_user)
   end
 
   def update
     @invitation = Invitation.find_by_token(params[:invitation_token])
     @external_author = ExternalAuthor.find(params[:id])
-    unless (@invitation && @invitation.invitee == @external_author) || @external_author.user == current_user
+    unless (@invitation && @invitation.external_author == @external_author) || @external_author.user == current_user
       flash[:error] = "You don't have permission to do that."
       redirect_to root_path and return
     end

@@ -4,13 +4,13 @@
 
 <p>
   <%= @archivist ? @archivist : "An archivist" -%> has backed up a fanfiction archive to the Archive of Our Own, and their 
-  archive includes some of your stories. This gets you an automatic invitation to our site (currently still in beta), if 
+  archive includes some of your works. This gets you an automatic invitation to our site (currently still in beta), if 
   you would like to join; if so, when you create your account using this invitation, you will 
   find all of your uploaded stories in your account.
 </p>
 
 <p>
-  Please note: by default, when an archivist backs up an archive to the AO3, all of the stories 
+  Please note: by default, when an archivist backs up an archive to the AO3, all of the works 
   are locked to registered users only, so your works will not appear in Google searches (unless 
   you choose to log in and unlock them). 
 </p>
@@ -18,7 +18,9 @@
 <p>
   We hope that you don't mind having your stories backed up or transferred onto the AO3, but if you 
   do, you don't need to create an account to remove them -- you can just follow the link and you will 
-  be given the option to orphan or delete your stories. (Orphaning allows you to remove your name from your stories while leaving them on the Archive.) You can also choose not to be notified in future when stories are imported with this email address, and/or to block any future stories for 
+  be given the option to orphan or delete your stories. (Orphaning allows you to remove your name from 
+  your stories while leaving them on the Archive.) You can also choose not to be notified in future when 
+  stories are imported with this email address, and/or to block any future stories for 
   this email address from being imported into the archive.
 </p>
 
@@ -32,3 +34,12 @@
   <%=h "You can claim your account or remove your stories at the following address:" -%>
   <%= link_to(claim_url(:invitation_token => @invitation.token, :host => @host), claim_url(:invitation_token => @invitation.token, :host => @host)) %>
 </p>  
+
+<p>
+  The works uploaded include: 
+  <ul>
+    <% @external_author.works.each do |work| %>
+      <li><%= work.title + (work.fandom_string.blank? ? "" : " (#{work.fandom_string})") -%></li>
+    <% end %>
+  </ul>
+</p>

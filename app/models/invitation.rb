@@ -3,6 +3,7 @@
 class Invitation < ActiveRecord::Base
   belongs_to :creator, :polymorphic => true
   belongs_to :invitee, :polymorphic => true
+  belongs_to :external_author
 
   validate_on_create :recipient_is_not_registered
   
@@ -60,9 +61,8 @@ class Invitation < ActiveRecord::Base
   def send_and_set_date
     if self.invitee_email_changed? && !self.invitee_email.blank?
       begin
-        if self.invitee_type == "ExternalAuthor"
-          external_author = self.invitee
-          archivist = external_author.external_creatorships.collect(&:archivist).collect(&:login).uniq.join(", ")
+        if self.external_author
+          archivist = self.external_author.external_creatorships.collect(&:archivist).collect(&:login).uniq.join(", ")
           UserMailer.deliver_invitation_to_claim(self, archivist)
         else
           UserMailer.deliver_invitation(self)

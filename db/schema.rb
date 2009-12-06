@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091122210634) do
+ActiveRecord::Schema.define(:version => 20091205204625) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -212,18 +212,19 @@ ActiveRecord::Schema.define(:version => 20091122210634) do
   end
 
   create_table "invitations", :force => true do |t|
-    t.integer  "creator_id",    :limit => 8
+    t.integer  "creator_id",         :limit => 8
     t.string   "invitee_email"
     t.string   "token"
     t.datetime "sent_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "used",                       :default => false, :null => false
+    t.boolean  "used",                            :default => false, :null => false
     t.integer  "invitee_id"
     t.string   "invitee_type"
     t.string   "creator_type"
     t.datetime "redeemed_at"
-    t.boolean  "from_queue",                 :default => false, :null => false
+    t.boolean  "from_queue",                      :default => false, :null => false
+    t.integer  "external_author_id"
   end
 
   create_table "invite_requests", :force => true do |t|

@@ -31,6 +31,131 @@ class UsersControllerTest < ActionController::TestCase
     should_set_the_flash_to /have permission/
   end
 
+  context "when trying to create an account" do
+    context "without an invitation" do
+      setup do
+        get :new
+      end
+      should_redirect_to("the login page") {login_url}
+      should_set_the_flash_to /Account creation is suspended/
+    end
+    context "with an invitation" do
+      setup do
+        @invitation = create_invitation
+        assert @invitation.save
+      end
+      context "and loading the signup page" do
+        setup do 
+          get :new, :invitation_token => @invitation.token
+        end        
+        should_respond_with :success
+        should "display a form" do
+          assert_select "form", true
+        end
+        should_render_template :new
+      end
+      context "that has already been used" do
+        setup do
+          @invitation = create_invitation
+          @invitation.save
+          @invitation.mark_as_redeemed
+          get :new, :invitation_token => @invitation.token
+        end
+        should_redirect_to("the login page") {login_url}
+        should_set_the_flash_to /already been used/
+      end
+      context "after submitting valid data" do
+        setup do
+          @test_email = random_email
+          @test_login = String.random
+          @test_password = random_password
+          post :create, :user => {:invitation_token => @invitation.token, :email => @test_email, :login => @test_login, 
+                            :password => @test_password, :password_confirmation => @test_password, :age_over_13 => "1", :terms_of_service => "1"}
+          @user = User.find_by_email(@test_email)
+        end
+        should_assign_to :user
+        should "create a valid user that is not activated" do
+          assert @user.valid?
+          assert !@user.activated_at
+        end
+        should "mark the invitation as redeemed" do
+          @invitation.reload
+          assert @invitation.redeemed_at
+        end
+        should "set the invitation on the user" do
+          assert @user.invitation == @invitation
+        end 
+        should_render_template :confirmation
+        context "and then activating" do
+          setup do
+            @activation_code = @user.activation_code
+            get :activate, :id => @activation_code
+            @user.reload
+          end
+          should_assign_to :user
+          should_set_the_flash_to /Signup complete/
+          should "activate the user" do
+            assert @user.activated_at
+            assert @user.activation_code.nil?
+          end
+          should_redirect_to("the user's page") {user_path(@user)}
+        end 
+      end
+    end
+  end
+  
+  context "when trying to activate" do
+    context "without a valid activation code" do
+      setup do 
+        get :activate
+      end
+      should_set_the_flash_to /activation key is missing/
+      should_redirect_to("the home page") {root_path}
+    end
+  end
+
+  context "when activating a user account with an external author attached to the invitation" do
+    setup do
+      @external_author = create_external_author
+      @invitation = create_invitation(:external_author => @external_author, :invitee_email => @external_author.email)
+      @test_email = random_email
+      @test_login = String.random
+      @test_password = random_password
+      post :create, :user => {:invitation_token => @invitation.token, :email => @test_email, :login => @test_login, 
+                        :password => @test_password, :password_confirmation => @test_password, :age_over_13 => "1", :terms_of_service => "1"}
+      @user = User.find_by_email(@test_email)
+      @activation_code = @user.activation_code
+      get :activate, :id => @activation_code
+      @external_author.reload
+      @user.reload
+    end
+    should_set_the_flash_to /found some stories already uploaded/
+    should "assign the external author to the new user" do      
+      assert @external_author.user == @user
+    end
+  end
+
+  context "when activating a user account where there is an external author with the same email address" do
+    setup do
+      @test_email = random_email
+      @invitation = create_invitation
+      @external_author = create_external_author(:email => @test_email)
+      @test_login = String.random
+      @test_password = random_password
+      post :create, :user => {:invitation_token => @invitation.token, :email => @test_email, :login => @test_login, 
+                        :password => @test_password, :password_confirmation => @test_password, :age_over_13 => "1", :terms_of_service => "1"}
+      @user = User.find_by_email(@test_email)
+      @activation_code = @user.activation_code
+      get :activate, :id => @activation_code
+      @external_author.reload
+      @user.reload
+    end
+    should_set_the_flash_to /found some stories already uploaded/
+    should "assign the external author to the new user" do      
+      assert @external_author.user == @user
+    end
+  end
+
   context "on POST to :edit self" do
     setup do
       assert @user = create_user

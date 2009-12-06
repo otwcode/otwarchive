@@ -83,7 +83,6 @@ class UsersController < ApplicationController
         # normalize OpenID url before validating
         @user.identity_url = OpenIdAuthentication.normalize_identifier(@user.identity_url)
       end
-      @user.invitation_token = params[:user][:invitation_token] if params[:user][:invitation_token]
       if @user.save
         flash[:notice] = t('development_activation', :default => "During testing you can activate via <a href='{{activation_url}}'>your activation url</a>.",
                             :activation_url => activate_path(@user.activation_code)) if ENV['RAILS_ENV'] == 'development'
@@ -112,8 +111,8 @@ class UsersController < ApplicationController
         # assign over any external authors that belong to this user
         external_authors = []
         external_authors << ExternalAuthor.find_by_email(@user.email)
-        @invitation = Invitation.find_by_token(@user.invitation_token)
-        external_authors << @invitation.invitee if @invitation && @invitation.invitee_type == "ExternalAuthor"
+        @invitation = @user.invitation
+        external_authors << @invitation.external_author if @invitation
         external_authors.compact!
         unless external_authors.empty?
           external_authors.each do |external_author|

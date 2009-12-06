@@ -180,7 +180,6 @@ class StoryParserTest < ActiveSupport::TestCase
   def test_ffnet_general
     @storyparser = StoryParser.new
     @url = "http://www.fanfiction.net/s/4881862/1/Fleeting_Dreams"
-    #debugger
     @work = @storyparser.download_and_parse_story(@url, :pseuds => [create_pseud])
     assert @work.save
   end
