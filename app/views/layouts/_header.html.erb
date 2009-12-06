@@ -19,27 +19,16 @@
   </h1>
   
   <ul id="main-navigation">
-		<li><%- if (logged_in? and current_page?(user_path(current_user))) or current_page?(root_path) -%><span class="current"><%- end -%>
-      <%= home_link %>
-    <%- if (logged_in? and current_page?(user_path(current_user))) or current_page?(root_path) -%></span><%- end -%></li>
-	  <li><%- if current_page?(works_path) -%><span class="current"><%- end -%>
-      <%= link_to_unless_current t('layout.header.works', :default => "works"), works_path %>
-    <%- if current_page?(works_path) -%></span><%- end -%></li>
-    <li><%- if current_page?(media_path) -%><span class="current"><%- end -%>
-      <%= link_to_unless_current t('layout.header.fandoms', :default => "fandoms"), media_path %>
-    <%- if current_page?(media_path) -%></span><%- end -%></li>
-    <li><%- if current_page?(people_path) -%><span class="current"><%- end -%>
-      <%= link_to_unless_current t('layout.header.people', :default => "people"), people_path %>
-    <%- if current_page?(people_path) -%></span><%- end -%></li>
     <li>
-      <%= link_to_help "coming-soon", t('layout.header.communities', :default => "collections") %>
+      <%= ((logged_in? and current_page?(user_path(current_user))) or current_page?(root_path)) ?
+            "<span class=\"current\">#{home_link}</span>" : "#{home_link}" -%>
     </li>
-    <li><%- if current_page?(bookmarks_path) -%><span class="current"><%- end -%>
-      <%= link_to_unless_current t('layout.header.recs', :default => "bookmarks"), bookmarks_path %>
-    <%- if current_page?(bookmarks_path) -%></span><%- end -%></li>
-    <li><%- if current_page?(tags_path) -%><span class="current"><%- end -%>
-      <%= link_to_unless_current t('layout.header.tags', :default => "tags"), tags_path %>
-    <%- if current_page?(tags_path) -%></span><%- end -%></li>
+    <li><%= span_if_current('works', works_path) -%></li>
+    <li><%= span_if_current('fandoms', media_path) -%></li>
+    <li><%= span_if_current('people', people_path) -%></li>
+    <li><%= link_to_help "coming-soon", t('layout.header.collections', :default => "collections") %></li>
+    <li><%= span_if_current('bookmarks', bookmarks_path) -%></li>
+    <li><%= span_if_current('tags', tags_path) -%></li>
     
     <%- if logged_in_as_admin? -%>
       <%= render :partial => 'admin/header' -%>
