@@ -140,7 +140,7 @@ li.heading {position: relative; min-height: 50px;}
 .heading .required-tags li { display:inline;}
 
 .work h3 {margin-right:10em; margin-top:0em;}
-.work h3, .work h3 a:link, .work h3 img {color:#900; vertical-align:bottom;}
+.work h3 a:link, .work h3 img {color:#900; vertical-align:bottom;}
 
 .work p.update {font-size:0.875em; text-align:right; top:-0.875em; right:0; position:absolute; }
 /*.work dl.tags {padding-top:0.375em;}*/
