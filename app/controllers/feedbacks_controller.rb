@@ -54,7 +54,7 @@ class FeedbacksController < ApplicationController
    post_info << "<category-id type='integer'><![CDATA[" + feedback.category + "]]></category-id>" unless feedback.category.blank?
    post_info << "<custom-1389><![CDATA[" + feedback.email + "]]></custom-1389>" unless feedback.email.blank?
    post_info << "<custom-1407><![CDATA[" + feedback.user_agent + "]]></custom-1407>" unless feedback.user_agent.blank?
-   post_info << "<version-id type='integer' nil='true'>3910</version-id>"
+   post_info << "<custom-1573><![CDATA[" + ArchiveConfig.REVISION + "]]></custom-1573>" unless ArchiveConfig.REVISION.blank?
    post_info << "</bug>"
    return post_info
  end
