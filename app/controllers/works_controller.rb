@@ -140,7 +140,7 @@ class WorksController < ApplicationController
         @filters = Work.build_filters(@works_to_filter)
       end
     else
-      @most_recent_works = (params[:tag_id].blank? && params[:user_id].blank?)
+      @most_recent_works = (params[:tag_id].blank? && params[:user_id].blank? && params[:language_id].blank?)
       # we're browsing instead
       # if we're browsing by a particular tag, just add that
       # tag to the selected_tags list.
@@ -175,6 +175,12 @@ class WorksController < ApplicationController
       end
 
       @language_id = params[:language_id] ? Language.find_by_short(params[:language_id]) : nil
+      # Workaround for the getting-all-English-works problem
+      # TODO: better limits
+      if @language_id && @language_id == Language.default
+        @language_id = nil
+        @most_recent_works = true
+      end
 
       # Now let's build the query
       @works, @filters, @pseuds = Work.find_with_options(:user => @user, :author => @author, :selected_pseuds => @selected_pseuds,

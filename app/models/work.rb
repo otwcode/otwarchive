@@ -866,7 +866,7 @@ class Work < ActiveRecord::Base
     {:limit => limit.kind_of?(Fixnum) ? limit : 5}
   }
   
-  named_scope :recent, lambda { |*args| {:conditions => ["revised_at > ?", (args.first || 4.weeks.ago)]} }
+  named_scope :recent, lambda { |*args| {:conditions => ["revised_at > ?", (args.first || 1.week.ago.to_date)]} }
   named_scope :within_date_range, lambda { |*args| {:conditions => ["revised_at BETWEEN ? AND ?", (args.first || 4.weeks.ago), (args.last || Time.now)]} }
   named_scope :posted, :conditions => {:posted => true}
   named_scope :unposted, :conditions => {:posted => false}

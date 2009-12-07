@@ -17,8 +17,13 @@
   
   <%- for language in @languages -%>
   <tr>
+    <%- if language == Language.default -%>
+    <td><%= language.name %></td>
+    <td><%= link_to language.works.count, works_path %></td>
+    <%- else -%>
     <td><%= link_to language.name, language %></td>
     <td><%= link_to language.works.count, language_works_path(language) %></td>
+    <%- end -%>
   </tr>
   <%- end -%>
 </table>
