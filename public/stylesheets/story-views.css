@@ -107,10 +107,6 @@ background:transparent; border-bottom:1px solid black;}
 .bookmark .user-tags {  }*/
 
 /*WORK PAGE LAYOUT ELEMENTS*/
-/*I don't know what these rules refer to
-* #main.works-show ul#navigation	{ margin:0.75em 0; text-align:right}
-* .works-show #navigation li.go-back	{ display:block; float:left; padding:0 0.25em 0 0; }
-*/
 #main .work-list .tags	{ display:inline; margin: 0; padding: 0 0 0.8em;}
 #main .work-list .summary, #main .story-list .summary {clear: left;} /* fix for FF2 Issue 808 */
 

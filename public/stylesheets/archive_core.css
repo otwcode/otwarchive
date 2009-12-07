@@ -50,7 +50,7 @@ a.tag:hover	{ background: #900 !important; color: #fffef9 !important; }
 .spacer {clear: both;}
 .work-show ul li.tags {list-style: none;}
 
-/*sizing up and down through multiple nested lists; hold on to your hats, I've tried to cover as many nestings as I can think of */
+/*sizing up and down through multiple nested lists*/
 #main dl dd dl dd p, #main dl dd dl dd, #main dd dl dd p, #main dd dl dd dl dd p
 { font-size:1.142857em; }
 #main li li, #main li li li, #main li p, #main li dd, #main li dd p, #main dd p, #main dd li, #main dd li p, 
@@ -79,14 +79,11 @@ cite em, em cite, cite i, i cite, i em, em i, em em, i i, cite cite	{ font-style
 em cite, i cite	{ text-decoration: underline; }
 abbr, acronym	{ font-variant: small-caps; cursor: help; }
 del, strike {text-decoration:line-through;}
-ins {text-decoration: underline;}
-
-/* Enigel April 09, code issue 592 */
-big { font-size: 1.17em;}
-small { font-size: .83em;}
-sub, sup { font-size: .83em; line-height: 1;}
-sub { vertical-align: bottom;}
-sup { /*vertical-align: text-top;*/ vertical-align:top;}
+ins, u {text-decoration: underline;}
+big { font-size: larger;}
+small, sub, sup { font-size: smaller;}
+sub { vertical-align: sub;}
+sup { vertical-align:super;}
 
 /* TABLES AND LISTS */
 table	{ margin:auto; padding: 0.375em; }
