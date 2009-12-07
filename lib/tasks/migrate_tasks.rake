@@ -47,17 +47,18 @@ namespace :After do
 desc "Change Warning Tag name"
   task(:after_change_warning_tag_name => :environment) do
     @new = Warning.find_by_name('Choose Not To Warn')
-        @old = Warning.find_by_name('Choose Not To Warn For Some Content')
-            @old.works.each do |work|
-            work.warnings = work.warnings + [@new] - [@old]
-            work.common_tags = work.common_tags  + [@new] - [@old]
-            end
-        Warning.find_by_name('Choose Not To Warn').update_attribute(:name, 'Choose Not To Use Archive Warnings')
-        Warning.find_by_name('None Of These Warnings Apply').update_attribute(:name, 'No Archive Warnings Apply')    
-      end
+    @old = Warning.find_by_name('Choose Not To Warn For Some Content')
+    ThinkingSphinx.deltas_enabled=false
+    @old.works.each do |work|
+      work.warnings = work.warnings + [@new] - [@old]
+    end
+    ThinkingSphinx.deltas_enabled=true
+    Warning.find_by_name('Choose Not To Warn').update_attribute(:name, 'Choose Not To Use Archive Warnings')
+    Warning.find_by_name('None Of These Warnings Apply').update_attribute(:name, 'No Archive Warnings Apply')    
+  end
   
 end
 
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
-task :After => [:environment, 'After:change_warning_tag_name']
+task :After => [:environment, 'After:after_change_warning_tag_name']
