@@ -18,6 +18,11 @@
   <%= stylesheet_link_tag 'translations', :media => 'screen' %>
 <%- end -%> 
 
+<!-- browser-specific stylesheets -->
+<!--[if IE]>
+<%= stylesheet_link_tag 'ie_overrides', :media => 'all' %>
+<![endif]-->
+
 <%= logged_in_as_admin? ? (stylesheet_link_tag 'admin', :media => 'screen') : "" %>
 
 <!-- yield :tinymce needs to be before the scriptaculous elements. See http://wiki.moxiecode.com/index.php/TinyMCE:Ruby_on_Rails for more information. -->
