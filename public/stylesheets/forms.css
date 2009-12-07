@@ -1,7 +1,6 @@
 /* GLOBAL */
 form fieldset legend, legend { margin-left:-999em !important; position:absolute !important; color:;}
 form p.submit { text-align:right; }
-#work-form p.submit { text-align: right; } /* because IE won't recognise the line above */
 form p { line-height:2; clear:both;}
 
 
@@ -45,9 +44,15 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 #main.users-new form dt {width:100%; float:none;}
 
 /* SEARCH */
-#search {float:right;clear:right;}
-#search p { font-size: 0.75em; float: left; clear: both; padding: 0 0.25em; margin: 0; position:relative;}
+#header #search {float:right;clear:right;}
+#header #search p {float: left; clear: both; position:relative;}
+#search p { font-size: 0.75em; padding: 0 0.25em; margin: 0; }
 #search input.button {margin-left:5px;}
+
+/* ADVANCED SEARCH */
+#standard_search input { background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px groove; }
+#advanced_search input { border:1px groove; }
+#advanced_search input  .button{ background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px groove; }
 
 /*ADMIN */
 .admin_session-new dt { width:6em; }

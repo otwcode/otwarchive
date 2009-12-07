@@ -3,11 +3,13 @@ ul#skiplinks	{ margin-left:-999em; position:absolute; }
 ul.navigation, dl.navigation, div.navigation{ background: #fffef9; border-bottom: 1px solid #999; text-align:right; margin: 0 0 0.875em 0;}
 div.navigation-left {background: #fffef9; border-bottom: 1px solid #999; text-align: left; margin: 0 0 0.875em 0;}
 ul.navigation li, .navigation dd, li.navigation { background: #fffef9; display: inline; padding: 0 0.5625em; border:1px solid #999; border-bottom:0; text-indent:0; font-weight:900;}
+/* new navigation using divs and spans instead of uls, due to IE7 being made of fail */
 div.navigation span, div.navigation-left span {font-size: 0.875em; line-height: 1.286; padding: 0 0.5625em; margin: 0.643em 0; }
 .navitem {background: #fffef9; border:1px solid #999; border-bottom: 0;}
 .navigation dt, .navlabel { font-weight: 600; display: inline; padding: 0 0.5625em; border: 0;}
 .navigation a, .navigation-left a {font-weight: 100;}
 .navigation a:active, .navigation-left a:active { background:#900; color:#fffef9; }
+/* end of new navigation bit */
 td.navigation {background:#777;}
 td.navigation ul {background:transparent; text-align:left;}
 td.navigation li {padding:0.375em;}

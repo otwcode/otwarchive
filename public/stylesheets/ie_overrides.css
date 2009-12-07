@@ -1,2 +1,3 @@
 /* Put any IE-specific overrides into this file -- it will be loaded last and conditionally, only if the browser is IE. */
 
+#work-form p.submit { text-align: right; } /* because IE won't recognise the line without #work-form in forms.css */
