@@ -31,7 +31,7 @@
 		  <%- author_tags = series.works.visible.collect{|w| [w.categories, w.ratings, w.cast_tags, w.freeform_tags]}.transpose.flatten.uniq
       unless author_tags.size < 1 -%>
 			  <li class="blurb tags">
-			    <div class="label"><%=h 'Tags' + ': ' %></div>
+			    <div class="label"><%=h 'Additional Tags (Genre, Warnings, Other Information)' + ': ' %></div>
 			    <div class="item">
 			      <%= author_tags.collect{|tag| link_to_tag(tag) }.join(', ') %>
 			    </div>
@@ -40,7 +40,7 @@
       <%- author_warnings = series.works.visible.collect(&:warning_tags).flatten.compact.uniq 
       unless author_warnings.size < 1 -%>
         <li class="blurb tags">
-          <div class="label"><%=h 'Warnings:' %></div>
+          <div class="label"><%=h 'Archive Warnings:' %></div>
           <div class="item" id="series_<%= series.id %>_category_warning">
             <%- if hide_warnings?(series) -%>
               <%= show_warnings_link(series) %>

@@ -15,7 +15,6 @@ class WarningTest < ActiveSupport::TestCase
     should "have a required tags" do
       assert Tag.find_by_name(ArchiveConfig.WARNING_DEFAULT_TAG_NAME).is_a?(Warning)
       assert Tag.find_by_name(ArchiveConfig.WARNING_NONE_TAG_NAME).is_a?(Warning)
-      assert Tag.find_by_name(ArchiveConfig.WARNING_SOME_TAG_NAME).is_a?(Warning)
       assert Tag.find_by_name(ArchiveConfig.WARNING_VIOLENCE_TAG_NAME).is_a?(Warning)
       assert Tag.find_by_name(ArchiveConfig.WARNING_DEATH_TAG_NAME).is_a?(Warning)
       assert Tag.find_by_name(ArchiveConfig.WARNING_NONCON_TAG_NAME).is_a?(Warning)

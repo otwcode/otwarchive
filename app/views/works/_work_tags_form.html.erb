@@ -12,7 +12,7 @@
     </dd>
     
     <dt class="warning required">
-      <label for="work_warning"><%= Warning::NAME -%>*<%= link_to_help "warning-help" -%></label>
+      <label for="work_warning"><%= Warning::NAME.pluralize -%>*<%= link_to_help "warning-help" -%></label>
     </dt>
     <dd class="warning required">
       <select id="work_warning" name="work[warning_strings][]" multiple="multiple">
@@ -56,7 +56,7 @@
     </dd>
   
     <dt class="freeform">
-      <label for="work_freeform"><%= Freeform::NAME.pluralize -%></label>
+      <label for="work_freeform"><%= Freeform::NAME -%></label>
     </dt>
     <dd class="freeform">
       <input type="text" name="work[freeform_string]" id="work_freeform" value="<%=  @work ? @work.freeform_string : "" %>" />

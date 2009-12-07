@@ -32,7 +32,7 @@
       
       <%- unless warning_tags.size < 1 -%>
 			<li class="blurb tags">
-      <div class="label"><%= link_to("Warnings", tos_faq_path(:anchor => "tags")) %>:</div>
+      <div class="label"><%= link_to("Archive Warnings", tos_faq_path(:anchor => "tags")) %>:</div>
 			<div class="item" id="work_<%= work.id %>_category_warning">
           <%- if hide_warnings?(work) -%>
             <%= show_warnings_link(work) %>
@@ -45,7 +45,7 @@
 
 			<%- unless freeform_tags.size < 1 -%>
 			<li class="blurb tags">
-      <div class="label"><%= t('work_tags', :default => 'Tags') + ': ' %></div>
+      <div class="label"><%= t('work_tags', :default => 'Additional Tags (Genre, Warnings, Other Information)') + ': ' %></div>
 			<div class="item" id="work_<%= work.id %>_category_freeform">
         <%- if hide_freeform?(work) -%>
           <%= show_freeforms_link(work) %>

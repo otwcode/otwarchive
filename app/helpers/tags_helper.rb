@@ -94,7 +94,13 @@ module TagsHelper
     link_to_remote "Show tags",
       :url => {:controller => 'tags', :action => 'show_hidden_freeforms', :creation_type => creation.class.to_s, :creation_id => creation.id },
       :method => :get
-  end  
+  end 
+  
+  # Makes filters show warnings display name
+  def label_for_filter(type, tag_info)
+    name = (type == "Warning") ? warning_display_name(tag_info[:name]) : tag_info[:name]
+    name + " (#{tag_info[:count]})"
+  end 
   
   # Changes display name of warnings in works blurb
   def warning_display_name(name)

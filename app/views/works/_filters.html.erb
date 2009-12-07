@@ -39,8 +39,12 @@
                   <%= label_tag "selected_tags_#{type.downcase}_#{tag_info[:id]}", "#{tag_info[:name]} (#{tag_info[:count]})" %>  
                   <%- else -%>
                   <%= check_box_tag "selected_tags[tags][]", tag_info[:id], @selected_tags.include?(tag_info[:id]), :id => "selected_tags_tags_#{tag_info[:id]}" -%>
+				  <%- if (type == "Warning") -%>
+				  <%= label_tag "selected_tags_tags_#{tag_info[:id]}", label_for_filter(type, tag_info) %>  
+				  <%- else -%>
                   <%= label_tag "selected_tags_tags_#{tag_info[:id]}", "#{tag_info[:name]} (#{tag_info[:count]})" %>  
                   <%- end -%> 
+				  <%- end -%> 
                 </li>
               <%- end -%> 
            </ul>

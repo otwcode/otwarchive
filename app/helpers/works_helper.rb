@@ -63,7 +63,7 @@ module WorksHelper
   
   # Making absolutely sure that the tags and selected tags have the same capitalization so it doesn't throw the form off
   def warnings_for_tag_form
-    [ArchiveConfig.WARNING_DEFAULT_TAG_NAME, ArchiveConfig.WARNING_SOME_TAG_NAME, ArchiveConfig.WARNING_NONE_TAG_NAME, ArchiveConfig.WARNING_VIOLENCE_TAG_NAME, ArchiveConfig.WARNING_DEATH_TAG_NAME, ArchiveConfig.WARNING_NONCON_TAG_NAME, ArchiveConfig.WARNING_CHAN_TAG_NAME].map(&:titleize)
+    [ArchiveConfig.WARNING_DEFAULT_TAG_NAME, ArchiveConfig.WARNING_NONE_TAG_NAME, ArchiveConfig.WARNING_VIOLENCE_TAG_NAME, ArchiveConfig.WARNING_DEATH_TAG_NAME, ArchiveConfig.WARNING_NONCON_TAG_NAME, ArchiveConfig.WARNING_CHAN_TAG_NAME].map(&:titleize)
   end
 
   # select the default warnings if this is a new work
