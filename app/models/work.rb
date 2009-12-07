@@ -582,7 +582,7 @@ class Work < ActiveRecord::Base
   # Add an error message if the user tried to add invalid tags to the work
   def check_for_invalid_tags
     unless self.invalid_tags.blank?
-      errors.add_to_base("The following tags are invalid: " + self.invalid_tags.collect(&:name).join(', ') + ". Please make sure that your tags are less than 42 characters long.")
+      errors.add_to_base("The following tags are invalid: " + self.invalid_tags.collect(&:name).join(', ') + ". Please make sure that your tags are less than 100 characters long.")
     end
     self.invalid_tags.blank?  
   end
