@@ -27,8 +27,8 @@ class FilterCountTest < ActiveSupport::TestCase
     end
     should "decrease when a work is removed" do
       assert_difference('@fandom.filter_count.unhidden_works_count', -1) do
-        @public_work.fandoms = [@fandom2]
-        @fandom.filter_count.reload    
+        @public_work.update_attributes(:fandom_string => @fandom2.name)
+        @fandom.reload 
       end
     end
     should "change its public works count when a work is restricted" do

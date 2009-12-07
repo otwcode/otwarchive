@@ -88,3 +88,5 @@ ul.tag-edit-items {
 
 ul.taggable_strip {display:inline;}
 .taggable_strip li {display:inline; margin-right:0;}
+
+.tags-search .canonical {font-weight: bold}

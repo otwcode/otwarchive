@@ -16,6 +16,12 @@ class TagsController < ApplicationController
       format.js
     end
   end
+  
+  def search
+    unless params[:query].blank?
+      @tags = Tag.find(:all, :conditions => ["name LIKE ?", "%" + params[:query] + "%"], :order => 'type, name', :limit => 100)
+    end    
+  end  
 
   # if user is Admin or Tag Wrangler, show them details about the tag
   # if user is not logged in or a regular user, show them

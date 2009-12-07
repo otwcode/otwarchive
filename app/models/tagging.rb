@@ -3,7 +3,7 @@ class Tagging < ActiveRecord::Base
   belongs_to :taggable, :polymorphic => true
 
   validates_presence_of :tagger, :taggable
-  before_destroy :delete_unused_tags
+  before_destroy :delete_unused_tags, :remove_filter_tagging
   before_save :add_filter_taggings
   
   def add_filter_taggings
@@ -11,6 +11,13 @@ class Tagging < ActiveRecord::Base
       self.taggable.add_filter_tagging(self.tagger)
     end
     return true    
+  end
+  
+  def remove_filter_tagging
+    if self.tagger && self.taggable.is_a?(Work)
+      self.taggable.remove_filter_tagging(self.tagger)
+    end
+    return true   
   end
 
   # Gets rid of unwrangled tags that aren't tagging anything else

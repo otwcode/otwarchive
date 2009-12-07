@@ -123,4 +123,10 @@ module TagsHelper
       return name
     end
   end
+  
+  # Individual results for a tag search
+  def tag_search_result(tag)
+    span = tag.canonical? ? "<span class='canonical'>" : "<span>"
+    span + tag.type + ": " + link_to_tag(tag) + " (#{tag.taggings_count})</span>"
+  end
 end

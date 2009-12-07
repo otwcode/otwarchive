@@ -42,7 +42,8 @@ class Tag < ActiveRecord::Base
     :maximum => ArchiveConfig.TAG_MAX,
     :message => "is too long -- try using less than #{ArchiveConfig.TAG_MAX} characters or using commas to separate your tags."
   validates_format_of :name,
-    :with => /\A[-a-zA-Z0-9 \/?.!''"":;\|\]\[}{=~!@#\$%&()_+]+\z/,
+    :with => /\A[^,*<>^]+\z/,
+    #:with => /\A[-a-zA-Z0-9 \/?.!''"":;\|\]\[}{=~!@#\$%&()_+]+\z/,
     :message => "can only be made up of letters, numbers, spaces and basic punctuation, but not commas, asterisks or angle brackets."
 
   def before_validation
@@ -163,6 +164,11 @@ class Tag < ActiveRecord::Base
   end
   
   #### FILTERING ####
+  
+  # The version of the tag that should be used for filtering, if any
+  def filter
+    self.canonical? ? self : ((self.merger && self.merger.canonical?) ? self.merger : nil)
+  end
   
   before_save :update_filters_for_canonical_change
   before_save :update_filters_for_merger_change

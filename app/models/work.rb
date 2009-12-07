@@ -48,8 +48,8 @@ class Work < ActiveRecord::Base
   has_many :freeforms, :through => :taggings, :source => :tagger, :source_type => 'Freeform',
     :before_remove => :remove_filter_tagging
   has_many :ambiguities, :through => :taggings, :source => :tagger, :source_type => 'Ambiguity',
-    :before_remove => :remove_filter_tagging  
-
+    :before_remove => :remove_filter_tagging
+      
   acts_as_commentable
 
   belongs_to :language
@@ -444,31 +444,31 @@ class Work < ActiveRecord::Base
   # string methods
   # (didn't use define_method, despite the redundancy, because it doesn't cache in development)
   def rating_string
-    self.preview_mode ? self.placeholder_tag_string(:rating) : self.ratings.string
+    self.preview_mode ? self.placeholder_tag_string(:ratings) : self.ratings.string
   end
   def category_string
-    self.preview_mode ? self.placeholder_tag_string(:category) : self.categories.string
+    self.preview_mode ? self.placeholder_tag_string(:categories) : self.categories.string
   end
   def warning_string
-    self.preview_mode ? self.placeholder_tag_string(:warning) : self.warnings.string
+    self.preview_mode ? self.placeholder_tag_string(:warnings) : self.warnings.string
   end
   def warning_strings
-    self.preview_mode ? self.placeholder_tags[:warning].map(&:name) : self.warnings.map(&:name)
+    self.preview_mode ? self.placeholder_tags[:warnings].map(&:name) : self.warnings.map(&:name)
   end
   def fandom_string
-    self.preview_mode ? self.placeholder_tag_string(:fandom) : self.fandoms.string
+    self.preview_mode ? self.placeholder_tag_string(:fandoms) : self.fandoms.string
   end
   def pairing_string
-    self.preview_mode ? self.placeholder_tag_string(:pairing) : self.pairings.string
+    self.preview_mode ? self.placeholder_tag_string(:pairings) : self.pairings.string
   end
   def character_string
-    self.preview_mode ? self.placeholder_tag_string(:character) : self.characters.string
+    self.preview_mode ? self.placeholder_tag_string(:characters) : self.characters.string
   end
   def freeform_string
-    self.preview_mode ? self.placeholder_tag_string(:freeform) : self.freeforms.string
+    self.preview_mode ? self.placeholder_tag_string(:freeforms) : self.freeforms.string
   end
   def ambiguity_string
-    self.preview_mode ? self.placeholder_tag_string(:ambiguity) : self.ambiguities.string
+    self.preview_mode ? self.placeholder_tag_string(:ambiguities) : self.ambiguities.string
   end
   
   def placeholder_tag_string(key)
@@ -478,6 +478,38 @@ class Work < ActiveRecord::Base
       self.placeholder_tags[key].flatten.compact.map(&:name).join(ArchiveConfig.DELIMITER)
     end
   end
+  
+  # Process a string or array of tags from any tag class
+  def parse_tags(klass, incoming_tags)
+    tags = []
+    ambiguities = []
+    self.invalid_tags ||= []
+    klass_symbol = klass.to_s.downcase.pluralize.to_sym
+    tag_array = incoming_tags.is_a?(String) ? incoming_tags.split(ArchiveConfig.DELIMITER) : incoming_tags
+    tag_array.each do |string|
+      tag = klass.find_or_create_by_name(string)
+      if tag.valid?
+        tags << tag if tag.is_a?(klass)
+        ambiguities << tag if tag.is_a?(Ambiguity)
+      else
+        self.invalid_tags << tag
+      end
+    end
+    if self.preview_mode
+      self.placeholder_tags ||= {}
+      self.placeholder_tags[klass_symbol] = tags
+      (self.placeholder_tags[:ambiguities] ||= []) << ambiguities
+    else
+      self.add_to_ambiguity(ambiguities)
+      # we have to destroy the taggings directly in order to trigger the callbacks
+      remove = self.send(klass_symbol) - tags
+      remove.each do |tag|
+        tagging = Tagging.find_by_tag(self, tag)
+        tagging.destroy if tagging
+      end
+      self.send(klass_symbol.to_s + '=', tags)
+    end    
+  end
 
   # _string= methods
   # always use string= methods to set tags
@@ -485,180 +517,28 @@ class Work < ActiveRecord::Base
   # or call after_destroy on taggings
   # see rails bug http://dev.rubyonrails.org/ticket/7743  
   def rating_string=(tag_string)
-    tag = Rating.find_or_create_by_name(tag_string)
-    if self.preview_mode
-      self.placeholder_tags ||= {}
-      self.placeholder_tags[:rating] = [tag]
-    else
-      return if self.ratings == [tag]
-      unless self.ratings.blank?
-        tagging = Tagging.find_by_tag(self, self.ratings.first)
-        tagging.destroy if tagging 
-      end
-      self.ratings = [tag] if tag.is_a?(Rating)
-    end
+    parse_tags(Rating, tag_string)
   end
-
   def category_string=(tag_string)
-    tag = Category.find_or_create_by_name(tag_string)
-    if self.preview_mode
-      self.placeholder_tags ||= {}
-      self.placeholder_tags[:category] = [tag]
-    else
-      return if self.categories == [tag]
-      unless self.categories.blank?
-        tagging = Tagging.find_by_tag(self, self.categories.first)
-        tagging.destroy if tagging
-      end   
-      self.categories = [tag] if tag.is_a?(Category)
-    end
+    parse_tags(Category, tag_string)
   end
-
   def warning_string=(tag_string)
-    tags = []
-    tag_string.split(ArchiveConfig.DELIMITER).each do |string|
-      tag = Warning.find_or_create_by_name(string)
-      tags << tag if tag.is_a?(Warning)
-    end
-    if self.preview_mode
-      self.placeholder_tags ||= {}
-      self.placeholder_tags[:warning] = tags
-    else
-      remove = self.warnings - tags
-      remove.each do |tag|
-        tagging = Tagging.find_by_tag(self, tag)
-        tagging.destroy if tagging
-      end
-      self.warnings = tags
-    end
+    parse_tags(Warning, tag_string)
   end
-
   def warning_strings=(array)
-    tags = []
-    array.each do |string|
-      tag = Warning.find_or_create_by_name(string)
-      tags << tag if tag.is_a?(Warning)
-    end
-    if self.preview_mode
-      self.placeholder_tags ||= {}
-      self.placeholder_tags[:warning] = tags
-    else
-      remove = self.warnings - tags
-      remove.each do |tag|
-        tagging = Tagging.find_by_tag(self, tag)
-        tagging.destroy if tagging
-      end
-      self.warnings = tags
-    end
+    parse_tags(Warning, array)
   end
-
   def fandom_string=(tag_string)
-    tags = []
-    ambiguities = []
-    self.invalid_tags ||= []
-    tag_string.split(ArchiveConfig.DELIMITER).each do |string|
-      tag = Fandom.find_or_create_by_name(string)
-      if tag.valid?
-        tags << tag if tag.is_a?(Fandom)
-        ambiguities << tag if tag.is_a?(Ambiguity)
-      else
-        self.invalid_tags << tag
-      end
-    end
-    if self.preview_mode
-      self.placeholder_tags ||= {}
-      self.placeholder_tags[:fandom] = tags
-      (self.placeholder_tags[:ambiguity] ||= []) << ambiguities
-    else
-      self.add_to_ambiguity(ambiguities)
-      remove = self.fandoms - tags
-      remove.each do |tag|
-        tagging = Tagging.find_by_tag(self, tag)
-        tagging.destroy if tagging
-      end
-      self.fandoms = tags
-    end
+    parse_tags(Fandom, tag_string)
   end
-
   def pairing_string=(tag_string)
-    tags = []
-    ambiguities = []
-    self.invalid_tags ||= []
-    tag_string.split(ArchiveConfig.DELIMITER).each do |string|
-      tag = Pairing.find_or_create_by_name(string)
-      if tag.valid?
-        tags << tag if tag.is_a?(Pairing)
-        ambiguities << tag if tag.is_a?(Ambiguity)
-      else
-        self.invalid_tags << tag
-      end
-    end
-    if self.preview_mode
-      self.placeholder_tags ||= {}
-      self.placeholder_tags[:pairing] = tags
-      (self.placeholder_tags[:ambiguity] ||= []) << ambiguities
-    else
-      self.add_to_ambiguity(ambiguities)
-      remove = self.pairings - tags
-      remove.each do |tag|
-        Tagging.find_by_tag(self, tag).destroy
-      end
-      self.pairings = tags
-    end
+    parse_tags(Pairing, tag_string)
   end
-
   def character_string=(tag_string)
-    tags = []
-    ambiguities = []
-    self.invalid_tags ||= []
-    tag_string.split(ArchiveConfig.DELIMITER).each do |string|
-      tag = Character.find_or_create_by_name(string)
-      if tag.valid?
-        tags << tag if tag.is_a?(Character)
-        ambiguities << tag if tag.is_a?(Ambiguity)
-      else
-        self.invalid_tags << tag
-      end        
-    end
-    if self.preview_mode
-      self.placeholder_tags ||= {}
-      self.placeholder_tags[:character] = tags
-      (self.placeholder_tags[:ambiguity] ||= []) << ambiguities
-    else
-      self.add_to_ambiguity(ambiguities)
-      remove = self.characters - tags
-      remove.each do |tag|
-        Tagging.find_by_tag(self, tag).destroy
-      end
-      self.characters = tags
-    end
+    parse_tags(Character, tag_string)
   end
-
   def freeform_string=(tag_string)
-    tags = []
-    ambiguities = []
-    self.invalid_tags ||= []    
-    tag_string.split(ArchiveConfig.DELIMITER).each do |string|
-      tag =  Freeform.find_or_create_by_name(string)
-      if tag.valid?
-        tags << tag if tag.is_a?(Freeform)
-        ambiguities << tag if tag.is_a?(Ambiguity)
-      else
-        self.invalid_tags << tag
-      end        
-    end
-    if self.preview_mode
-      self.placeholder_tags ||= {}
-      self.placeholder_tags[:freeform] = tags
-      (self.placeholder_tags[:ambiguity] ||= []) << ambiguities
-    else
-      self.add_to_ambiguity(ambiguities)
-      remove = self.freeforms - tags
-      remove.each do |tag|
-        Tagging.find_by_tag(self, tag).destroy
-      end
-      self.freeforms = tags.compact - ambiguities
-    end
+    parse_tags(Freeform, tag_string)
   end
 
   def ambiguity_string=(tag_string)
@@ -792,19 +672,7 @@ class Work < ActiveRecord::Base
   
   # FILTERING CALLBACKS
   after_validation :check_filter_counts
-  before_save :check_filter_taggings
   after_save :adjust_filter_counts
-  
-  # Add and remove filter taggings as tags are added and removed
-  def check_filter_taggings
-    current_filters = self.tags.collect{|tag| tag.canonical? ? tag : tag.merger }.compact
-    current_filters.each {|filter| self.add_filter_tagging(filter)}
-    filters_to_remove = self.filters - current_filters
-    unless filters_to_remove.empty?
-      filters_to_remove.each {|filter| self.remove_filter_tagging(filter)}
-    end
-    return true    
-  end
   
   # Creates a filter_tagging relationship between the work and the tag or its canonical synonym
   def add_filter_tagging(tag)
