@@ -20,6 +20,10 @@ class ApplicationController < ActionController::Base
     User.current_user = logged_in_as_admin? ? current_admin : current_user
     @current_user = current_user
   end
+
+  def load_collection
+    @collection = Collection.find_by_name(params[:collection_id]) if params[:collection_id]
+  end
   
   ### GLOBALIZATION ###
 

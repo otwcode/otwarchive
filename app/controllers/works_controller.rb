@@ -4,6 +4,7 @@ class WorksController < ApplicationController
   cache_sweeper :work_sweeper, :only => [:create, :update, :destroy]
 
   # only registered users and NOT admin should be able to create new works
+  before_filter :load_collection
   before_filter :users_only, :only => [ :new, :create, :import, :import_multiple, :drafts, :preview, :show_multiple ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview, :show_multiple, :edit_multiple ]
   before_filter :load_work, :only => [ :show, :navigate, :edit, :update, :destroy, :preview ]
@@ -184,7 +185,8 @@ class WorksController < ApplicationController
 
       # Now let's build the query
       @works, @filters, @pseuds = Work.find_with_options(:user => @user, :author => @author, :selected_pseuds => @selected_pseuds,
-                                                    :tag => @tag, :selected_tags => @selected_tags,                                                                                   
+                                                    :tag => @tag, :selected_tags => @selected_tags,
+                                                    :collection => @collection,                                                    
                                                     :language_id => @language_id,
                                                     :sort_column => @sort_column, :sort_direction => @sort_direction,
                                                     :page => params[:page], :per_page => params[:per_page])
@@ -326,8 +328,6 @@ class WorksController < ApplicationController
       @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       @preview_mode = true
-
-      #flash[:notice] = "DEBUG: in UPDATE preview:  " + "all: " + @allpseuds.flatten.collect {|ap| ap.id}.inspect + " selected: " + @selected_pseuds.inspect + " co-authors: " + @coauthors.flatten.collect {|ap| ap.id}.inspect + " pseuds: " + @pseuds.flatten.collect {|ap| ap.id}.inspect + "  @work.authors: " + @work.authors.collect {|au| au.id}.inspect + "  @work.pseuds: " + @work.pseuds.collect {|ps| ps.id}.inspect
 
       if @work.has_required_tags? && @work.invalid_tags.blank?
         render :action => "preview"

@@ -1,4 +1,5 @@
 class MediaController < ApplicationController
+  before_filter :load_collection
 
   def index
     @media = Media.all - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)]

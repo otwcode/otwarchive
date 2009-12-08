@@ -4,7 +4,7 @@
 	<li class="heading">
 	  <%= get_symbols_for(work) -%>
 	  <h3>
-	    <%= link_to sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small)), work %>
+	    <%= link_to sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small)), @collection ? collection_work_path(@collection, work) : work %>
   		<%= t('title_by_author', :default => 'by') -%>
       <%= byline(work) -%>
   		<%- if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") -%><%- end -%>
@@ -70,11 +70,18 @@
 			<dd><%= number_with_delimiter(work.word_count) %></dd>
 		<dt><%=h t('work_chapters', :default => 'Chapters') + ': ' %></dt>
 			<dd><%= work.chapter_total_display %></dd>
-	 <%- end -%> 	
+	 <%- end -%>
+	 
+	  <%- unless work.collections.empty? %>
+			<dt><%=h t('work_collections', :default => 'Collections') + ': ' -%></dt>
+			<dd><%= link_to work.collections.length, work_collections_path(work) %></dd>
+		<%- end -%>
 			
 		<%- if work.count_visible_comments > 0 -%>
 		<dt><%=h t('work_comments', :default => 'Comments') + ': '%></dt>
-			<dd><%= link_to work.count_visible_comments, work_path(:id => work.id, :anchor => "comments", :show_comments => true) -%></dd>
+			<dd><%= link_to work.count_visible_comments, 
+			            @collection ? collection_work_path(@collection, work, :anchor => "comments", :show_comments => true) : 
+			                work_path(work, :anchor => "comments", :show_comments => true) -%></dd>
 		<%- end -%>
 		<%- if Bookmark.count_visible_bookmarks(work) > 0 -%>
 		<dt><%=h t('work_bookmarks', :default => 'Bookmarks') + ': '%></dt>

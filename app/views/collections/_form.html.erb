@@ -1,0 +1,63 @@
+<%= error_messages_for :collection -%>
+
+<% form_for(@collection) do |collection_form| %>
+  <% if @collection.new_record? && current_user.pseuds.size > 1 %>
+  <p>
+    <%= label_tag :owner_pseuds, t("collection_form.owners", :default => "Select owner pseudonym(s): ") -%><br />
+    <%= select_tag :owner_pseuds, options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud), :multiple => true %>
+  </p>
+  <% else -%>
+  <%= hidden_tag :owner_pseuds, [current_user.pseuds.first] -%>
+  <% end %>
+
+  <p>
+    <%= collection_form.label :name, t("collection_form.name", :default => "Collection Name* (letters, numbers, underscores):") %><br />
+    <%= collection_form.text_field :name %>
+  </p>
+  <p>
+    <%= collection_form.label :title, t("collection_form.title", :default => "Display Title* (text only):") %><br />
+    <%= collection_form.text_field :title %>
+  </p>
+  <p>
+
+  <p>
+    <%= collection_form.label :email, t("collection_form.email", :default => "Email (optional, otherwise notices will go to owners):") %><br />
+    <%= collection_form.text_field :email, :size => 40 %>
+  </p>
+  <p>
+    <%= collection_form.label :header_image_url, t("collection_form.header_image_url", :default => "URL for custom header image (jpg, gif, png): ") %><br />
+    <%= collection_form.text_field :header_image_url %>
+  </p>
+  <p>
+    <%= collection_form.label :description, t("collection_form.description", :default => "Brief Description: ") %><br />
+    <%= collection_form.text_area :description, :rows => 4, :cols => 60, :class => "description-field" %>
+  </p>
+
+  <% @collection.build_collection_preference unless @collection.collection_preference %>
+  <% collection_form.fields_for :collection_preference do |preference_form| %>
+  <p>
+    <%= preference_form.label :allowed_to_post, t("collection_form.allowed_to_post", :default => "Allowed to post:") %>
+    <%= preference_form.select(:allowed_to_post, CollectionPreference::POSTING_BY_OPTIONS) %>
+  </p>
+  <% end %>
+
+  <% @collection.build_collection_profile unless @collection.collection_profile %>
+  <% collection_form.fields_for :collection_profile do |profile_form| %>
+  <p>
+    <%= profile_form.label :intro, t("collection_form.intro", :default => "Introduction: ") %><br />
+    <%= profile_form.text_area :intro, :rows => 10, :cols => 80 %>
+  </p>
+  <p>
+    <%= profile_form.label :faq, t("collection_form.faq", :default => "FAQ: ") %><br />
+    <%= profile_form.text_area :faq, :rows => 10, :cols => 80 %>
+  </p>
+  <p>
+    <%= profile_form.label :rules, t("collection_form.rules", :default => "Rules: ") %><br />
+    <%= profile_form.text_area :rules, :rows => 10, :cols => 80 %>
+  </p>
+  <% end %>
+  
+  <p>
+    <%= collection_form.submit 'Submit' %>
+  </p>
+<% end %>

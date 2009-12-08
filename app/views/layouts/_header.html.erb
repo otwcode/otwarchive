@@ -1,4 +1,11 @@
 <!-- BEGIN header -->
+<% if @collection %>
+<!-- custom css for header -->
+<style type="text/css">
+#header  {  background:#7887AF url(<%= @collection.header_image_url -%>);}
+</style>
+<% end %>
+
 <div id="header">
      <div id="login-block">
     <%- if logged_in? || logged_in_as_admin? -%>
@@ -14,18 +21,24 @@
     <% end -%>
     <%= render :partial => 'works/search_box' %>
   </div>
-  <h1><%= link_to ArchiveConfig.APP_NAME, root_path %>
+  <h1>
+    <% if @collection && @collection.title -%>
+      <%= t('collection.title', :default => '{{title}} at the {{archive}}', :title => @collection.title, :archive => link_to(ArchiveConfig.APP_NAME, root_path)) -%>
+    <% else -%>
+      <%= link_to ArchiveConfig.APP_NAME, root_path %>
+    <% end -%>
     <% unless ArchiveConfig.REVISION.blank? %>(BETA <%=h t('revision', :default => 'rev. {{rev_number}}', :rev_number => ArchiveConfig.REVISION) %>)<% end %>
   </h1>
   
   <ul id="main-navigation">
+    <%= @collection ? "<li>#{span_if_current('main archive', media_path)}</li>" : "" -%>
     <li><%= logged_in? ? span_if_current('my home', user_path(current_user)) : span_if_current('home', root_path) %></li>
-    <li><%= span_if_current('works', works_path) -%></li>
-    <li><%= span_if_current('fandoms', media_path) -%></li>
-    <li><%= span_if_current('people', people_path) -%></li>
-    <li><%= link_to_help "coming-soon", t('layout.header.collections', :default => "collections") %></li>
-    <li><%= span_if_current('bookmarks', bookmarks_path) -%></li>
-    <li><%= span_if_current('tags', tags_path) -%></li>
+    <li><%= span_if_current('fandoms', @collection ? collection_media_path(@collection) : media_path) -%></li>
+    <li><%= span_if_current('works', @collection ? collection_works_path(@collection) : works_path) -%></li>
+    <li><%= span_if_current('people', @collection ? collection_people_path(@collection) : people_path) -%></li>
+    <li><%= span_if_current('bookmarks', @collection ? collection_bookmarks_path(@collection) : bookmarks_path) -%></li>
+    <li><%= span_if_current('tags', @collection ? collection_tags_path(@collection) : tags_path) -%></li>
+    <li><%= span_if_current('collections', collections_path) -%></li>
     
     <%- if logged_in_as_admin? -%>
       <%= render :partial => 'admin/header' -%>

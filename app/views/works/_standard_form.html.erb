@@ -21,6 +21,16 @@
       <!-- Add coauthors-->
       <%= render :partial => 'pseuds/byline', :locals =>{:form => f, :type => 'work'} %>
       
+      <!-- Add collection -->
+      <dt class="collection">
+        <%= f.label :collection_names, t('collection_names', :default => "Post to collection(s): ") -%>
+      </dt>
+      <dd class="collection">
+        <%= f.text_field :collection_names -%>
+        <div class="auto_complete" id="work_collection_names_auto_complete" ></div>
+        <%= javascript_tag("new Autocompleter.Local('work_collection_names', 'work_collection_names_auto_complete', #{Collection.find(:all, :order => :name).map(&:name).to_json}, {fullSearch: true, tokens: ','});") %>
+      </dd>
+      
       <dt class="summary">
         <%= f.label :summary, t('summary', :default =>"Summary (max " + ArchiveConfig.SUMMARY_MAX.to_s + " characters)") %>
       </dt>

@@ -64,6 +64,8 @@ CONTENT_MAX: 500000
 LOGNOTE_MIN: 5
 LOGNOTE_MAX: 1250
 FEEDBACK_SUMMARY_MAX: 100
+INFO_MAX: 100000
+
 
 # max number of works/chapters that can be imported
 IMPORT_MAX_WORKS: 25 

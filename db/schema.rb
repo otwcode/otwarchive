@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091205204625) do
+ActiveRecord::Schema.define(:version => 20091207234702) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -91,6 +91,54 @@ ActiveRecord::Schema.define(:version => 20091205204625) do
   end
 
   add_index "chapters", ["work_id"], :name => "works_chapter_index"
+
+  create_table "collection_items", :force => true do |t|
+    t.integer  "collection_id"
+    t.integer  "item_id"
+    t.string   "item_type",                               :default => "Work"
+    t.integer  "user_approval_status",       :limit => 1, :default => 0,      :null => false
+    t.integer  "collection_approval_status", :limit => 1, :default => 0,      :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "collection_items", ["collection_id", "item_id", "item_type"], :name => "by collection and item", :unique => true
+
+  create_table "collection_participants", :force => true do |t|
+    t.integer  "collection_id"
+    t.integer  "pseud_id"
+    t.string   "participant_role", :default => "None", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "collection_participants", ["collection_id", "pseud_id"], :name => "by collection and pseud", :unique => true
+
+  create_table "collection_preferences", :force => true do |t|
+    t.integer  "collection_id"
+    t.integer  "allowed_to_post", :limit => 1, :default => 1, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "collection_profiles", :force => true do |t|
+    t.integer  "collection_id"
+    t.text     "intro"
+    t.text     "faq"
+    t.text     "rules"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "collections", :force => true do |t|
+    t.string   "name"
+    t.string   "title"
+    t.string   "email"
+    t.string   "header_image_url"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "comments", :force => true do |t|
     t.integer  "pseud_id",         :limit => 8

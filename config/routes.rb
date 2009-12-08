@@ -1,4 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
+
   map.resources :user_invite_requests
 
   map.resources :invite_requests, :collection => {:manage => :get, :reorder => :post}
@@ -74,6 +75,7 @@ ActionController::Routing::Routes.draw do |map|
                                 :member => { :preview => :get, :post => :post }
       work.resources :comments, :member => { :approve => :put, :reject => :put }
       work.resources :bookmarks
+      work.resources :collections, :only => [:index]
   end
 
   map.resources :chapters, :has_many => :comments, :member => { :preview => :get, :post => :post } 
@@ -88,6 +90,20 @@ ActionController::Routing::Routes.draw do |map|
                     :cancel_comment_delete => :get}
 
   map.resources :bookmarks 
+  map.resource :media, :only => [:index, :show]
+  map.resource :people, :only => [:index]
+  map.resource :tags, :only => []
+  
+  map.resources :collections do |collection|
+    collection.resources :works
+    collection.resources :bookmarks
+    collection.resource :collection_profile, :only => [:show]
+    collection.resources :media, :only => [:index, :show]
+    collection.resources :people, :only => [:index]
+    collection.resources :tags, :collection =>  {:show_hidden => :get, :show_hidden_freeforms => :get},  :requirements => { :id => %r([^/;,?]+) }
+    collection.resources :participants, :controller => "collection_participants"
+    collection.resources :items, :controller => "collection_items"
+  end 
   
   # should stay below the main works mapping
   map.resources :languages do |language|

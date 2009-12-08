@@ -47,6 +47,34 @@ module FixtureReplacement
     a.content = random_chapter
     a.published_at = Date.today  
   end
+  
+  attributes_for :collection do |a|
+    pseud = create_pseud
+    
+    a.collection_participants_attributes = [{:pseud => pseud, :participant_role => CollectionParticipant::OWNER}]
+    a.name = String.random
+    a.title = random_phrase
+  end
+  
+  attributes_for :collection_item do |a|
+    a.collection = create_collection
+    a.item_type = 'Work'
+    a.item_id = create_work.id
+  end
+  
+  attributes_for :collection_preference do |a|
+    a.collection = create_collection
+  end
+  
+  attributes_for :collection_profile do |a|
+    a.collection = create_collection
+  end
+  
+  attributes_for :collection_participant do |a|
+    a.collection = create_collection
+    a.pseud = default_pseud
+    a.participant_role = CollectionParticipant::NONE
+  end
 
   # note: to get threading, you must use
   # comment = new_comment && comment.set_and_save

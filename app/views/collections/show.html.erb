@@ -1,0 +1,36 @@
+<p>
+  <b>Name:</b>
+  <%=h @collection.name %>
+</p>
+
+<p>
+  <b>Title:</b>
+  <%=h @collection.title %>
+</p>
+
+<p>
+  <b>Collection Email:</b>
+  <%=h @collection.email %>
+</p>
+
+<p>
+  <b>Header image url:</b>
+  <%=h @collection.header_image_url %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @collection.description %>
+</p>
+
+Intro: <%=h @collection.intro %>
+
+FAQ: <%=h @collection.faq %>
+
+Rules: <%=h @collection.rules %>
+
+<%= link_to 'Manage Participants', collection_participants_path(@collection) -%> |
+<%= link_to 'Manage Items', collection_items_path(@collection) -%> |
+
+<%= link_to 'Edit', edit_collection_path(@collection) %> |
+<%= link_to 'Back', collections_path %>

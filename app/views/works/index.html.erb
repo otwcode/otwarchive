@@ -1,6 +1,13 @@
 <%= taggable_list(params[:tag_id], "works") if params[:tag_id] -%>
 
-<%- if @most_recent_works -%><h1><%=h t('updated_last_week', :default => "Works updated in the last week") %></h1><%- end -%>
+<%- if @collection && @most_recent_works %>
+  <h1><%= t('updated_works_in_collection', :default => "Works in {{collection_title}} updated in the last week", :collection_title => @collection.title) -%></h1>
+<%- elsif @collection -%>
+  <h1><%= t('works_in_collection', :default => "Works in {{collection_title}}", :collection_title => @collection.title) -%></h1>
+<%- elsif @most_recent_works -%>
+  <h1><%=h t('updated_last_week', :default => "Works updated in the last week") %></h1>
+<%- end -%>
+
 <h2><%= search_header @works, @query %></h2>
 
 <%-if !@most_recent_works and @works.total_entries > ArchiveConfig.SEARCH_RESULTS_MAX %>

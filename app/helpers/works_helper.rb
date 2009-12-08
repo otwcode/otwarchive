@@ -23,9 +23,11 @@ module WorksHelper
   end
   
   def work_top_links_list(work)
+    collections_link = work.collections.empty? ? '' : 
+      "<li>" + link_to(t('work_collections_link', :default => "Collections: {{num_of_collections}}", :num_of_collections => work.collections.length), work_collections_path(work)) + "</li>"
     bookmark_link = logged_in? ? '<li>' + bookmark_link(work) + '</li>' : ''			
     comments_link = '<li>' + link_to("Comment(s)", work_path(work, :show_comments => true, :anchor => 'comments')) + '</li>'  
-    "<ul>" + bookmark_link + (comments_link ||= '') + "</ul>"    
+    "<ul>" + bookmark_link + (comments_link ||= '') + collections_link + "</ul>"    
   end
   
   # work.tags doesn't include unsaved tags on preview

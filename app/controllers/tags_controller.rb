@@ -1,4 +1,5 @@
 class TagsController < ApplicationController
+  before_filter :load_collection
   before_filter :check_user_status, :except => [ :show, :index, :show_hidden, :show_hidden_freeforms ]
   before_filter :check_permission, :except => [ :show, :index, :show_hidden, :show_hidden_freeforms ]
 

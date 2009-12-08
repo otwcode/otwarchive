@@ -3,6 +3,9 @@ class Bookmark < ActiveRecord::Base
   belongs_to :pseud
   has_many :taggings, :as => :taggable, :dependent => :destroy
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
+
+  has_many :collection_items, :as => :item, :dependent => :destroy
+  has_many :collections, :through => :collection_items
   
   named_scope :public, :conditions => {:private => false}
   named_scope :recent, lambda { |*args| {:conditions => ["bookmarks.created_at > ?", (args.first || 4.weeks.ago)]} }

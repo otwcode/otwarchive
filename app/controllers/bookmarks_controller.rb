@@ -1,4 +1,5 @@
 class BookmarksController < ApplicationController 
+  before_filter :load_collection
   before_filter :load_bookmarkable, :only => [ :index, :new, :create, :fetch_recent ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
   before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy, :fetch_recent ] 
@@ -38,11 +39,13 @@ class BookmarksController < ApplicationController
       owner = @pseud
     elsif params[:tag_id]
       owner ||= Tag.find_by_name(params[:tag_id])
+    elsif @collection
+      owner ||= @collection
     else
       owner ||= @bookmarkable
     end
     # Do not want to aggregate bookmarks on these pages
-    if params[:pseud_id] || params[:user_id] || params[:work_id] || params[:external_work_id] || params[:series_id]
+    if params[:pseud_id] || params[:user_id] || params[:work_id] || params[:external_work_id] || params[:series_id] || @collection
       if params[:existing] && params[:recs_only]
         search_by = "owner.bookmarks.find(:all, :conditions => ['rec = (?) AND pseud_id IN (?)', true, current_user.pseuds.collect(&:id)])"
       elsif params[:existing]

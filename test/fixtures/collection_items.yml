@@ -1,0 +1,23 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  collection_id: 1 
+  item_id: 6
+  item_type: Work
+  user_approval_status: 1
+  collection_approval_status: 1
+
+two:
+  collection_id: 1
+  item_id: 7
+  item_type: Work
+  user_approval_status: 1
+  collection_approval_status: 1
+
+three:
+  collection_id: 1
+  item_id: 26
+  item_type: Bookmark
+  user_approval_status: 1
+  collection_approval_status: 1
+  

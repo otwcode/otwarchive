@@ -24,6 +24,10 @@ class Work < ActiveRecord::Base
   has_bookmarks
   has_many :user_tags, :through => :bookmarks, :source => :tags
 
+  has_many :collection_items, :as => :item, :dependent => :destroy
+  has_many :collections, :through => :collection_items
+  accepts_nested_attributes_for :collection_items, :allow_destroy => true
+
   has_many :common_taggings, :as => :filterable
   has_many :common_tags, :through => :common_taggings
   
@@ -254,7 +258,36 @@ class Work < ActiveRecord::Base
     self.remove_author(old_user) if old_user && users.include?(old_user)
   end
 
-
+  def collection_names=(collection_names)
+    debugger
+    collection_attributes_to_set = []
+    collection_names.split(',').each do |collection_name|
+      collection = Collection.find_by_name(collection_name.strip)
+      collection_attributes_to_set << {:collection => collection} if collection
+    end
+    self.collection_items.clear
+    self.collection_items_attributes = collection_attributes_to_set
+  end
+  
+  def add_to_collection!(collection)
+    if collection && !self.collections.include?(collection)
+      self.collections << collection
+      save
+    end
+  end
+  
+  def remove_from_collection!(collection)
+    if collection && self.collections.include?(collection)
+      self.collections -= [collection]
+      save
+    end
+  end 
+  
+  def collection_names
+    self.collection_items.collect(&:collection).collect(&:name).join(",")
+  end
+      
+        
   ########################################################################
   # VISIBILITY
   ########################################################################
@@ -981,6 +1014,23 @@ class Work < ActiveRecord::Base
       :group => "works.id HAVING count(DISTINCT pseuds.id) = #{pseud_ids.size}"
     }
   }
+  
+  named_scope :in_collection, lambda {|collection|
+    {
+      :select => "DISTINCT works.*",
+      :joins => "INNER JOIN collection_items ON (collection_items.item_id = works.id AND collection_items.item_type = 'Work')
+                 INNER JOIN collections ON collection_items.collection_id = collections.id",
+      :conditions => ['collections.id = ?', collection.id]
+    }
+  }
+
+  named_scope :in_collection_conditions, lambda {|collection|
+    {
+      :joins => "INNER JOIN collection_items ON (collection_items.item_id = works.id AND collection_items.item_type = 'Work')
+                 INNER JOIN collections ON collection_items.collection_id = collections.id",
+      :conditions => ['collections.id = ?', collection.id]
+    }
+  }
 
   # shouldn't really use a named scope for this, but I'm afraid to try
   # to change the way work filtering works
@@ -1056,6 +1106,7 @@ class Work < ActiveRecord::Base
     tags = '.with_all_tag_ids(options[:selected_tags])'
     written = '.written_by_id_conditions(options[:selected_pseuds])'
     owned = '.owned_by_conditions(options[:user])'
+    collected = '.in_collection_conditions(options[:collection])'
     sort = '.ordered_by_' + options[:sort_column] + '_' + options[:sort_direction].downcase
     page_args = {:page => options[:page] || 1, :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE)}
     paginate = '.paginate(page_args)'
@@ -1102,7 +1153,10 @@ class Work < ActiveRecord::Base
       # all visible works
       command << visible + recent
     end
-
+    
+    # add on collections
+    command << (options[:collection] ? collected : '')
+    
     @works = eval("Work#{command + sort}")
 
     # Adds the co-authors of the displayed works to the available list of pseuds to filter on
