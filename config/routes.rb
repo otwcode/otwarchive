@@ -7,6 +7,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :known_issues
 
   map.resources :archive_faqs
+  
+  map.resources :search
 
   map.resources :admin_posts, :has_many => :comments
 
