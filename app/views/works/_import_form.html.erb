@@ -10,7 +10,7 @@
   
 <% form_tag url_for(:controller => :works, :action => :import) do %>
 <fieldset>
-  <legend><%= Works URLs -%></legend>
+  <legend><%= "Works URLs" -%></legend>
   <p>
     <%= label_tag "urls", t('import.url', :default => 'URLs for existing work(s) or for the chapters of a single work, one URL per line. (Note: if you are importing a chaptered work from ff.net, you only need to enter the first chapter. However, currently you cannot turn multiple ff.net works into the chapters of a single work.)') -%> <br />
     <%= text_area_tag "urls", @urls ? @urls.join("\n") : "", :rows => 20, :cols => 90 -%>
@@ -41,7 +41,7 @@
   </p>
 </fieldset>
   <fieldset>
-	<legend><%= Submit -%></legend>
+	<legend><%= "Submit" -%></legend>
   <p class="submit">
   <%= submit_tag t('import.import_story', :default => 'Import') -%>
   </p>
