@@ -3,7 +3,6 @@ form fieldset legend, legend { margin-left:-999em !important; position:absolute 
 form p.submit { text-align:right; }
 form p { line-height:2; clear:both;}
 
-
 /* This is a temporary hack for editing multiple works. Fix it to work properly later. */
 form p.temp-hack {clear: none;}
 /* end of silly hack */
@@ -117,6 +116,9 @@ dd#seriesmanage {clear:both; float:none;}
 #main.chapters-new.chapter_title input { width:80%; }
 #main.chapters-new dt, #main.chapters-new dd {clear:both; width:100%;}
 #main.chapters-new dd textarea {width:99%;margin:auto;}
+
+/*EDIT MULTIPLE WORKS */
+p.buttons {text-align:center;}
 
 /*EDIT PREFERENCES */
 form.edit_preference ul { margin:0.562625em auto 1.12525em auto; padding:0.562625em 0; border-bottom:1px dashed;}

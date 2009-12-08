@@ -91,7 +91,7 @@ sup { vertical-align:super;}
 table	{ margin:auto; padding: 0.375em; }
 caption	{ position: absolute; margin-left: -999em; }
 caption, th, td	{ text-align: left; }
-th	{ background:#777; color:#fff; font-weight: 100; padding: 0.25em;}
+th, thead td, tfoot	{ background:#777; color:#fff; font-weight: 100; padding: 0.25em; text-align:center;}
 td th	{ padding-right: 3em; }
 td	{ padding:0.375em; border:1px solid #ddd;}
 

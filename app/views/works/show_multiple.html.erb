@@ -1,27 +1,30 @@
 <h2><%=h t('works_edit', :default  => "Works To Edit") -%></h2>
 
-<% form_tag edit_multiple_user_works_path(@user) do %>
-
-<div style="text-align: center; margin: 0 auto;">
-<%= render :partial => 'edit_multiple_controls' %>
-
-  <table class="story-list">
-    <tr>
-      <th>&nbsp;</th>
-      <th><%=h t('title', :default =>"Title") %></th>
+<% form_tag edit_multiple_user_works_path(@user),  :id => 'edit-multiple-works' do %>
+<table class="works-list" summary="This page shows a list of your works. You can select a work, or many works, and then choose to edit, orphan, or delete them. You can post multiple drafts on this page too.">
+    <caption><!--caption here please--></caption>
+	<thead>
+      	<tr>
+		<td colspan="4"><%= render :partial => 'edit_multiple_controls' %></td>
+		</tr>
+		<tr>
+			<th><%=h t('Select', :default =>"Select") %></th>
+			<th><%=h t('title', :default =>"Title") %></th>
       <th><%=h t('fandom', :default =>"Fandom") %></th>
-      <th>&nbsp;</th>
-      <th>&nbsp;</th>
-      <th>&nbsp;</th>
-      <th>&nbsp;</th>
-    </tr>
-    
+      <th abbr="options"><%=h t('editing options', :default =>"Editing Options") %></th>
+</tr>
+    </thead>
+    <tbody>
     <%- for work in @works -%>
       <%= render :partial => 'work_blurb_short', :locals => {:work => work} %>
     <%- end -%>
+</tbody>
+<tfoot>
+	<tr>
+		<tr>
+		<td colspan="4"><%= render :partial => 'edit_multiple_controls' %></td>
+		</tr>
+	</tr>
+	</tfoot>
   </table>
-
-<%= render :partial => 'edit_multiple_controls' %>
-</div>
-
 <% end %>

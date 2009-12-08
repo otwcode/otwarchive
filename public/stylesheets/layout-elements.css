@@ -11,8 +11,9 @@ div.navigation span, div.navigation-left span {font-size: 0.875em; line-height: 
 .navigation a:active, .navigation-left a:active { background:#900; color:#fffef9; }
 /* end of new navigation bit */
 td.navigation {background:#777;}
-td.navigation ul {background:transparent; text-align:left;}
-td.navigation li {padding:0.375em;}
+td.navigation ul.navigation {background:transparent; text-align:left; border:0; margin-bottom:0;}
+td.navigation li {background:transparent; padding:0.375em; border:0;}
+td.navigation li a {color:#fff;}
 
 /* HEADER (MASTHEAD BLOCK) */
 #header  {  background:#900 url(/images/header-red.png) top left repeat-x; font-family: Fertigo, Cambria, Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; margin: 0 0 2.5em 0; position: relative; padding: 0.25em 0 0;}
