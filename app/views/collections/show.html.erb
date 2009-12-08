@@ -20,14 +20,20 @@
 
 <p>
   <b>Description:</b>
-  <%=h @collection.description %>
+  <%= sanitize_and_format_for_display @collection.description %>
 </p>
 
-Intro: <%=h @collection.intro %>
+<p>
+Intro: <%= sanitize_and_format_for_display @collection.collection_profile.intro %>
+</p>
 
-FAQ: <%=h @collection.faq %>
+<p>
+FAQ: <%= sanitize_and_format_for_display @collection.collection_profile.faq %>
+</p>
 
-Rules: <%=h @collection.rules %>
+<p>
+Rules: <%= sanitize_and_format_for_display @collection.collection_profile.rules %>
+</p>
 
 <%= link_to 'Manage Participants', collection_participants_path(@collection) -%> |
 <%= link_to 'Manage Items', collection_items_path(@collection) -%> |
