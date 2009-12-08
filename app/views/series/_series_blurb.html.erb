@@ -26,31 +26,27 @@
 		</h4>
 		<p class="update"><%= set_format_for_date(series.revised_at) %></p>
 		</li>
-		<li class="tagslist">
-    <ul class="column">
+		<li>
 		  <%- author_tags = series.works.visible.collect{|w| [w.categories, w.ratings, w.cast_tags, w.freeform_tags]}.transpose.flatten.uniq
       unless author_tags.size < 1 -%>
-			  <li class="blurb tags">
-			    <div class="label"><%=h 'Additional Tags (Genre, Warnings, Other Information)' + ': ' %></div>
-			    <div class="item">
-			      <%= author_tags.collect{|tag| link_to_tag(tag) }.join(', ') %>
-			    </div>
-			  </li>
+      <dl class="tags">
+			    <dt><%=h 'Additional Tags (Genre, Warnings, Other Information)' + ': ' %></dt>
+			    <dd><ul>
+			      <li><%= author_tags.collect{|tag| link_to_tag(tag) }.join(',</li><li>') %></li>
+			    </ul></dd>
       <%- end -%>  
       <%- author_warnings = series.works.visible.collect(&:warning_tags).flatten.compact.uniq 
       unless author_warnings.size < 1 -%>
-        <li class="blurb tags">
-          <div class="label"><%=h 'Archive Warnings:' %></div>
-          <div class="item" id="series_<%= series.id %>_category_warning">
+          <dt><%=h 'Archive Warnings:' %></dt>
+          <dd><ul class="item" id="series_<%= series.id %>_category_warning">
             <%- if hide_warnings?(series) -%>
-              <%= show_warnings_link(series) %>
+              <li><%= show_warnings_link(series) %></li>
             <%- else -%>
-              <%= author_warnings.collect{|tag| link_to_tag(tag)}.join(', ') %>
+              <li><%= author_warnings.collect{|tag| link_to_tag(tag)}.join(',</li><li>') %></li>
             <%- end -%>
-          </div>
-        </li>
+          </ul></dd>
+      </dl>
       <%- end -%>
-    </ul>
 		</li>
 		<%- unless series.summary.blank? %>
   		<li class="summary">

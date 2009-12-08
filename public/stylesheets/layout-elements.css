@@ -151,8 +151,6 @@ li.heading {position: relative; min-height: 50px;}
 .work li.stats dl {text-align:right;}
 .work li.stats dt, .work li.stats dd {display:inline; font-size:0.875em}
 .work li.stats dl dd {margin:0 0.375em 0 0;}
-.work li.tagslist {margin-top: 0;}
-.work dl.tags {margin-top: 0.643em;}
 
 /*series listing */
 #user-series ul	{ text-indent:2em; margin:1.125em auto; padding:0 1em;}
