@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091207234702) do
+ActiveRecord::Schema.define(:version => 20091208200602) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -123,9 +123,9 @@ ActiveRecord::Schema.define(:version => 20091207234702) do
 
   create_table "collection_profiles", :force => true do |t|
     t.integer  "collection_id"
-    t.text     "intro"
-    t.text     "faq"
-    t.text     "rules"
+    t.text     "intro",         :limit => 16777215
+    t.text     "faq",           :limit => 16777215
+    t.text     "rules",         :limit => 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
   end
