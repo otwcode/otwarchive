@@ -477,28 +477,28 @@ class Work < ActiveRecord::Base
   # string methods
   # (didn't use define_method, despite the redundancy, because it doesn't cache in development)
   def rating_string
-    self.preview_mode ? self.placeholder_tag_string(:ratings) : self.ratings.string
+    self.preview_mode ? self.placeholder_tag_string(:ratings) : self.ratings.map(&:name).join(ArchiveConfig.DELIMITER)
   end
   def category_string
-    self.preview_mode ? self.placeholder_tag_string(:categories) : self.categories.string
+    self.preview_mode ? self.placeholder_tag_string(:categories) : self.categories.map(&:name).join(ArchiveConfig.DELIMITER)
   end
   def warning_string
-    self.preview_mode ? self.placeholder_tag_string(:warnings) : self.warnings.string
+    self.preview_mode ? self.placeholder_tag_string(:warnings) : self.warnings.map(&:name).join(ArchiveConfig.DELIMITER)
   end
   def warning_strings
     self.preview_mode ? self.placeholder_tags[:warnings].map(&:name) : self.warnings.map(&:name)
   end
   def fandom_string
-    self.preview_mode ? self.placeholder_tag_string(:fandoms) : self.fandoms.string
+    self.preview_mode ? self.placeholder_tag_string(:fandoms) : self.fandoms.map(&:name).join(ArchiveConfig.DELIMITER)
   end
   def pairing_string
-    self.preview_mode ? self.placeholder_tag_string(:pairings) : self.pairings.string
+    self.preview_mode ? self.placeholder_tag_string(:pairings) : self.pairings.map(&:name).join(ArchiveConfig.DELIMITER)
   end
   def character_string
-    self.preview_mode ? self.placeholder_tag_string(:characters) : self.characters.string
+    self.preview_mode ? self.placeholder_tag_string(:characters) : self.characters.map(&:name).join(ArchiveConfig.DELIMITER)
   end
   def freeform_string
-    self.preview_mode ? self.placeholder_tag_string(:freeforms) : self.freeforms.string
+    self.preview_mode ? self.placeholder_tag_string(:freeforms) : self.freeforms.map(&:name).join(ArchiveConfig.DELIMITER)
   end
   def ambiguity_string
     self.preview_mode ? self.placeholder_tag_string(:ambiguities) : self.ambiguities.string
