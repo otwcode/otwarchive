@@ -9,6 +9,8 @@
       <div class="label">
         <%- if type == "Warning" -%>
           <%= link_to( tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize, tos_faq_path(:anchor => "tags") ) %>:
+        <%- elsif type.constantize::NAME == ArchiveConfig.FREEFORM_CATEGORY_NAME -%>
+          <%= type.constantize::NAME %>:
         <%- else -%>
           <%= tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize %>:
         <%- end -%>
