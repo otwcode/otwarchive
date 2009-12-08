@@ -43,8 +43,8 @@ a.tag:hover	{ background: #900 !important; color: #fffef9 !important; }
 .item {padding-left: 10em;}
 .tags {float: left; width: 100%;}
 .blurb {margin: 1em 0;}
-.blurb .label {font-weight: bold; width: 10em;}
-.blurb .item {padding-left: 10em;}
+.blurb .label {font-weight: bold; width: 10.5em;}
+.blurb .item {padding-left: 11em;}
 .meta {margin: 0.643em 0;}
 .meta .label {width: 12em;}
 .meta .item {padding-left: 12em; padding-bottom: 0.1em;}
