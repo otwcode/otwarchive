@@ -661,6 +661,7 @@ class Work < ActiveRecord::Base
 
     #pairing_characters = all_pairings.collect{|p| p.all_characters}.flatten.uniq.compact
     pairing_characters = Character.by_pairings(all_pairings)
+    pairing_characters = (pairing_characters + pairing_characters.collect(&:mergers).flatten).compact.uniq
 
     cast = pairings + characters - pairing_characters
     if cast.size > ArchiveConfig.TAGS_PER_LINE

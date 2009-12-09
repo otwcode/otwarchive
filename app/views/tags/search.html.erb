@@ -1,0 +1,20 @@
+<h1>Tag Search: Extreme Alpha</h1>
+
+<%- form_tag url_for(:controller => 'tags', :action => 'search'), :method => :get do -%>
+<p>
+  <%= text_field_tag :query, params[:query]  %> 
+  <%= submit_tag "Search tags" %>
+</p> 
+<%- end -%>
+
+<p>(Currently limited to 100 results. Canonical tags are bolded.)</p> 
+
+<%- if @tags -%>
+<ul>
+	<% for tag in @tags %>
+	<li><%= tag_search_result(tag) %></li>
+  <% end %>
+</ul>
+<%- end -%>
+
+<%= tag_wrangler_footer %>
