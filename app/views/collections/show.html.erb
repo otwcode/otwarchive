@@ -1,7 +1,22 @@
 <ul class="navigation">
-	<li><%= link_to 'Manage Participants', collection_participants_path(@collection) -%> </li>
-	<li><%= link_to 'Manage Items', collection_items_path(@collection) -%></li>
-	<li><%= link_to 'Edit', edit_collection_path(@collection) %></li>
+  <% if (@participant = @collection.get_participants_for_user(current_user).first) -%>  
+    <li><%= link_to t('participant_remove', :default => "Leave"), collection_participant_path(@collection, @participant), 
+      :confirm => t('participant_confirm_delete', :default => 'Are you certain you want to remove {{participant}}?', 
+                  :participant => @participant.pseud.name), 
+      :method => :delete %></li>
+  <% else %>
+    <li><%= link_to 'Join', join_collection_participant_path(@collection) -%></li>
+  <% end %>
+  <% if @collection.user_is_maintainer?(current_user) %>
+  	<li><%= link_to 'Manage Participants', collection_participants_path(@collection) -%> </li>
+  	<li><%= link_to 'Manage Items', collection_items_path(@collection) -%></li>
+  <% end %>
+  <% if @collection.user_is_owner?(current_user) %>
+	  <li><%= link_to 'Edit', edit_collection_path(@collection) %></li>
+	  <li><%= link_to 'Delete', collection_path(@collection), 
+      :confirm => t('collection_confirm_delete', :default => 'Are you certain you want to delete this collection?'),
+      :method => :delete %></li>
+  <% end %>
 	<li><%= link_to 'Back', collections_path %></li>
 </ul>
 
@@ -34,6 +49,14 @@
 </div>
 
 <ul class="navigation">
+  <% if (@participant = @collection.get_participants_for_user(current_user).first) -%>  
+    <%= link_to t('participant_remove', :default => "Leave"), collection_participant_path(@collection, @participant), 
+      :confirm => t('participant_confirm_delete', :default => 'Are you certain you want to remove {{participant}}?', 
+                  :participant => @participant.pseud.name), 
+      :method => :delete %>
+  <% else %>
+    <li><%= link_to 'Join', join_collection_participant_path(@collection) -%>
+  <% end %>
 	<li><%= link_to 'Manage Participants', collection_participants_path(@collection) -%> </li>
 	<li><%= link_to 'Manage Items', collection_items_path(@collection) -%></li>
 	<li><%= link_to 'Edit', edit_collection_path(@collection) %></li>
