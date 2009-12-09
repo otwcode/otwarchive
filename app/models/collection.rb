@@ -83,9 +83,22 @@ class Collection < ActiveRecord::Base
     !(user.pseuds & (self.moderators + self.owners)).empty?
   end
   
+  def user_is_participant?(user)
+    !get_participating_pseuds_for_user(user).empty?
+  end
+  
+  def get_participating_pseuds_for_user(user)
+    user.pseuds & self.participants
+  end
+  
+  def get_participants_for_user(user)
+    CollectionParticipant.in_collection(self).for_user(user)
+  end
+  
   def allowed_to_post?(pseud)
     collection_preference.allowed_to_post?(pseud)
   end
       
+  
   
 end

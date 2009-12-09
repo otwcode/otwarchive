@@ -103,7 +103,7 @@ ActionController::Routing::Routes.draw do |map|
     collection.resources :media, :only => [:index, :show]
     collection.resources :people, :only => [:index]
     collection.resources :tags, :collection =>  {:show_hidden => :get, :show_hidden_freeforms => :get},  :requirements => { :id => %r([^/;,?]+) }
-    collection.resources :participants, :controller => "collection_participants", :collection => {:add => :get}
+    collection.resources :participants, :controller => "collection_participants", :collection => {:add => :get}, :member => {:join => :get}
     collection.resources :items, :controller => "collection_items"
   end 
   
