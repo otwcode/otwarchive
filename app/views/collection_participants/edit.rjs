@@ -1,1 +1,0 @@
-page.replace_html "participant_#{@participant.id}", :partial => 'participant_form', :locals => {:participant => @participant}

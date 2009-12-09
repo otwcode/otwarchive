@@ -1,11 +1,16 @@
 <!--titled instead of labelled as per WCAG 2.0. do not revert.-->
 <% if participant %>
-<%- form_for([:collection, participant], :url => edit_collection_participant_path(@collection, participant)) do |form| -%> 
-<th scope="row"><%= link_to participant.pseud.byline, user_path(participant.pseud.user) %></th>
+<tr id="participant_<%= participant.id %>">
+<%- form_for(:collection_participant, participant, :url => {:controller => "collection_participants", :action => "update"}) do |form| -%>
+<th scope="row"><%= link_to participant.pseud.byline, user_path(participant.pseud.user) %><%= form.hidden_field :id %><%= form.hidden_field :collection_id %></th>
 <td><%= form.select(:participant_role, CollectionParticipant::PARTICIPANT_ROLE_OPTIONS) %></td>
 <td>
-  <%= form.submit t('forms.update', :default => "Update") %>
-  <% end %> 
-  <%= button_to 'Destroy', collection_participant_path(@collection, participant), :confirm => 'Are you sure?', :method => :delete %>
+<%= form.submit t('forms.update', :default => "Update") -%>
+<%- end -%> 
+<%= button_to t('participant_remove', :default => "Remove"), collection_participant_path(@collection, participant), 
+    :confirm => t('participant_confirm_delete', :default => 'Are you certain you want to remove {{participant}}?', 
+                :participant => participant.pseud.name), 
+    :method => :delete %>
 </td>
+</tr>
 <%- end -%>

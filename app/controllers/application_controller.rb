@@ -24,6 +24,16 @@ class ApplicationController < ActionController::Base
   def load_collection
     @collection = Collection.find_by_name(params[:collection_id]) if params[:collection_id]
   end
+
+  def collection_maintainers_only
+    logged_in? && @collection && @collection.user_is_maintainer?(current_user) || access_denied
+  end
+  
+  def collection_owners_only
+    logged_in? && @collection && @collection.user_is_owner?(current_user) || access_denied
+  end  
+  
+
   
   ### GLOBALIZATION ###
 

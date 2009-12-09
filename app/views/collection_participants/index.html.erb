@@ -1,7 +1,5 @@
 <h1>Participants in <%= @collection.title -%></h1>
 
-<h2>THIS PAGE ISN'T WORKING YET</h2>
-
 <table id="collection_participants_table">
 <caption><%=h t('list', :default => "List of participants") -%></caption>
 <tr>
@@ -9,9 +7,9 @@
   <th scope="col"><%=h t('role', :default => "Role") -%></th>
   <th scope="col"><%=h t('manage', :default => "Manage") -%></th>
 </tr>
-  <%- @collection_participants.each do |participant| -%>
-  <tr id="participant_<%= participant.id %>">
-    <%= render :partial => 'participant_form', :locals => {:participant => participant} %>
-  </tr> 
+<%- @collection_participants.each do |participant| -%>
+  <%= render :partial => 'participant_form', :locals => {:participant => participant} %>
 <%- end -%>
 </table>
+
+<%= render :partial => 'add_participants_form' -%>

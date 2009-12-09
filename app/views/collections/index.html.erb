@@ -1,13 +1,17 @@
-<h1>Listing collections</h1>
+<h1><%=h t('listing_collections', :default => "Listing collections") %></h1>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Title</th>
-    <th>Email</th>
-    <th>Header image url</th>
-    <th>Description</th>
+<table summary="" class="collections">
+	<caption></caption>
+  <thead>
+	<tr>
+    <th scope="col"><%=h t('name', :default => "Name") %></th>
+    <th scope="col"><%=h t('title', :default => "Title") %></th>
+    <th scope="col"><%=h t('email', :default => "Email") %></th>
+    <th scope="col"><%=h t('header_image_url', :default => "Header image url") %></th>
+    <th scope="col"><%=h t('description', :default => "Description") %></th>
   </tr>
+</thead>
+<tbody>
 
 <% @collections.each do |collection| %>
   <tr>
@@ -21,8 +25,9 @@
     <td><%= link_to 'Destroy', collection, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
+</tbody>
 </table>
 
-<br />
-
-<%= link_to 'New collection', new_collection_path %>
+<ul class="navigation">
+<li><%= link_to 'New collection', new_collection_path %></li>
+</ul>

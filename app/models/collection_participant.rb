@@ -1,5 +1,6 @@
 class CollectionParticipant < ActiveRecord::Base
   belongs_to :pseud
+  has_one :user, :through => :pseud
   belongs_to :collection
   
   PARTICIPANT_ROLES = ["None", "Owner", "Moderator", "Member"]
@@ -27,6 +28,14 @@ class CollectionParticipant < ActiveRecord::Base
   def approve_membership!
     self.participant_role = MEMBER
     save
+  end
+
+  def user_allowed_to_destroy?(user)
+    self.collection.user_is_maintainer?(user) || self.pseud.user == user
+  end
+  
+  def user_allowed_to_promote?(user, role)
+    (role == MEMBER || role == NONE) ? self.collection.user_is_maintainer?(user) : self.collection.user_is_owner?(user)
   end
 
 end

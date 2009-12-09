@@ -71,6 +71,18 @@ class Collection < ActiveRecord::Base
     self.owners + self.moderators
   end
   
+  def user_is_owner?(user)
+    !(user.pseuds & self.owners).empty?
+  end
+  
+  def user_is_moderator?(user)
+    !(user.pseuds & self.moderators).empty?
+  end
+  
+  def user_is_maintainer?(user)
+    !(user.pseuds & (self.moderators + self.owners)).empty?
+  end
+  
   def allowed_to_post?(pseud)
     collection_preference.allowed_to_post?(pseud)
   end
