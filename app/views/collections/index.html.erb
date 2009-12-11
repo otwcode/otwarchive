@@ -1,36 +1,30 @@
 <h1><%=h t('listing_collections', :default => "Listing collections") %></h1>
 
-<table summary="" class="collections">
-	<caption></caption>
-  <thead>
-	<tr>
-    <th scope="col"><%=h t('name', :default => "Collection") %></th>
-    <th scope="col"><%=h t('owners', :default => "Owners") %></th>    
-    <th scope="col"><%=h t('title', :default => "Description") %></th>
-    <th scope="col"><%=h t('email', :default => "Contents") %></th>
-  </tr>
-</thead>
-<tbody>
-
-<% @collections.each do |collection| %>
-  <tr>
-    <td><%= link_to collection.title, collection -%> (<%= collection.name -%>)</td>
-    <td><%=h collection.owners.collect(&:byline).join(", ") -%>
-    <td><%=h collection.description %></td>
-    <td>
-      <% if (@works_count = collection.works.count) > 0%>
-        <%= t('collections.works', :default => "Works: {{works_count}}", :works_count => @works_count) -%>
-      <% end %>
-      <% if (@bookmarks_count = collection.bookmarks.count) > 0%>
-        <%= @works_count > 0 ? "<br />" : "" -%>
-        <%= t('collections.bookmarks', :default => "Bookmarks: {{bookmarks_count}}", :bookmarks_count => @bookmarks_count) -%>
-      <% end %>
-    </td>    
-  </tr>
-<% end %>
-</tbody>
-</table>
-
 <ul class="navigation">
 <li><%= link_to 'New collection', new_collection_path %></li>
 </ul>
+
+<ul class="collections-list">
+
+<% @collections.each do |collection| %>
+  <li>
+    <h2><%= link_to collection.title, collection -%></h2> <h3>(<%= collection.name -%>)</h3>
+    <dl>
+    <dt><th scope="col"><%=h t('owners', :default => "Owners") %></dt>   
+    <dd><%=h collection.owners.collect(&:byline).join(", ") -%></dd>
+    <dt><%=h t('title', :default => "Description") %></dt>
+    <dd><%=h collection.description %></dd>
+    <dt><%=h t('email', :default => "Contents") %></dt>
+    <dd><ul>
+      <% if (@works_count = collection.works.count) > 0%>
+        <li><%= t('collections.works', :default => "Works: {{works_count}}", :works_count => @works_count) -%></li>
+      <% end %>
+      <% if (@bookmarks_count = collection.bookmarks.count) > 0%>
+         <%= @works_count > 0 ? ", " : "" -%>
+         <li><%= t('collections.bookmarks', :default => "Bookmarks: {{bookmarks_count}}", :bookmarks_count => @bookmarks_count) -%></li>
+      <% end %>
+    </ul></dd>
+  </dl></li>
+<% end %>
+</ul>
+

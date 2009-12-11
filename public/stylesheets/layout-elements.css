@@ -252,10 +252,14 @@ dl.translations {position:relative; margin: 1.5em auto; padding: 1.5em 0 2.5em; 
 .work ul.navigation, .bookmark ul.navigation {margin: 0;}
 
 /*COLLECTIONS */
-#main.collections-show h2, #main.collections-show h3 {display:inline;}
+#main.collections-show h2, #main.collections-show h3, #main .collections-list h2, #main .collections-list h3 {display:inline;}
 #main.collections-show blockquote h3 {display:block; border-bottom: 1px solid; margin-bottom:.875em;}
-#main.collections-show dl {border-bottom:1px dotted;}
-#main.collections-show dt {font-weight:bold;}
+#main.collections-show dl {border-top:1px dotted; border-bottom:1px dotted;}
+#main .collections-list  dl, #main.collections-show dl { position:relative; margin-top:0.5em;}
+#main .collections-list  dt, #main.collections-show dt { position:relative; width:12em; margin: 0; padding: 0.25em 0.5625em 0.25em 0; font-weight: bold;}
+#main .collections-list  dd, #main.collections-show dd { position:absolute; left:12.5em; padding: 0.25em 0.5625em 0.25em 0; margin: -1.75em 0 0;}
+#main .collections-list  dd li {display:inline; border-bottom: none;}
+#main .collections-list li {border-bottom: 1px #111 solid;}
 
 /*ToS and any other long text pages.
 * styling duplicates the work-views.css and is incorporated there*/

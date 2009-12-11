@@ -8,7 +8,7 @@
     <li><%= link_to 'Join', join_collection_participant_path(@collection) -%></li>
   <% end %>
   <% if @collection.user_is_maintainer?(current_user) %>
-  	<li><%= link_to 'Manage Participants', collection_participants_path(@collection) -%> </li>
+  	<li><%= link_to 'Manage Participants', collection_participants_path(@collection) -%></li>
   	<li><%= link_to 'Manage Items', collection_items_path(@collection) -%></li>
   <% end %>
   <% if @collection.user_is_owner?(current_user) %>
@@ -21,7 +21,7 @@
 </ul>
 
 
-<h2><%=h @collection.title %><h2>
+<h2><%=h @collection.title %></h2>
 <h3>(<%=h @collection.name %>)</h3>
 	<dl class="blurb">
 	<dt><%=h t('mods', :default => "Collection Email:") %></dt>
@@ -55,9 +55,9 @@
                   :participant => @participant.pseud.name), 
       :method => :delete %></li>
   <% else %>
-    <li><%= link_to 'Join', join_collection_participant_path(@collection) -%>
+    <li><%= link_to 'Join', join_collection_participant_path(@collection) -%></li>
   <% end %>
-	<li><%= link_to 'Manage Participants', collection_participants_path(@collection) -%> </li>
+	<li><%= link_to 'Manage Participants', collection_participants_path(@collection) -%></li>
 	<li><%= link_to 'Manage Items', collection_items_path(@collection) -%></li>
 	<li><%= link_to 'Edit', edit_collection_path(@collection) %></li>
 	<li><%= link_to 'Back', collections_path %></li>

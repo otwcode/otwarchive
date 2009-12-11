@@ -45,7 +45,7 @@
       <%= link_to_unless_current t('layout.header.people', :default => "people"), people_path %>
     </li>
     <li>
-      <%= link_to_help "coming-soon", t('layout.header.communities', :default => "collections") %>
+      <%= link_to_unless_current t('layout.header.communities', :default => "collections"), collections_path %>
     </li>
     <li>
       <%= link_to_unless_current t('layout.header.recs', :default => "bookmarks"), bookmarks_path %>
