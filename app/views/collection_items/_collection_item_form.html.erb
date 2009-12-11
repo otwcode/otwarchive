@@ -1,0 +1,22 @@
+<%- item ||= @item -%>
+<%- @collection_item ||= CollectionItem.new -%>
+<div id="collection-form">
+  <p>
+    <% t('collection_items.add_item_to_collection', :default => "Add {{title}} to collections", :title => item.title) %>
+  </p>
+
+<%- form_for([item, @collection_item], :url => {:controller => 'collection_items', :action => :create}) do |form| -%>
+<dl>
+  <!-- Add collection -->
+  <dt class="collection">
+    <%= label_tag :collection_names, t('collection_names', :default => "Enter collection name(s): ") -%>
+  </dt>
+  <dd class="collection">
+    <%= text_field_tag :collection_names, nil, :size => 40 -%>
+    <div class="auto_complete" id="collection_names_auto_complete" ></div>
+    <%= javascript_tag("new Autocompleter.Local('collection_names', 'collection_names_auto_complete', #{Collection.find(:all, :order => :name).map(&:name).to_json}, {fullSearch: true, tokens: ','});") %>
+  </dd>
+</dl>
+<p class="submit"><%= form.submit(t('collection_items.add', :default => "Add")) %></p>
+<% end %>
+</div>

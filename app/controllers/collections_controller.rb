@@ -1,4 +1,12 @@
 class CollectionsController < ApplicationController
+  
+  before_filter :users_only, :only => [:new, :edit, :create, :update]
+  before_filter :load_collection_from_id, :only => [:show, :edit, :update, :destroy]
+  before_filter :collection_owners_only, :only => [:edit, :update, :destroy]
+  
+  def load_collection_from_id
+    @collection = Collection.find_by_name(params[:id])
+  end
 
   def index
     if params[:work_id]
@@ -18,7 +26,6 @@ class CollectionsController < ApplicationController
   end
 
   def edit
-    @collection = Collection.find_by_name(params[:id])
   end
 
   def create
@@ -41,8 +48,6 @@ class CollectionsController < ApplicationController
   end
 
   def update
-    @collection = Collection.find_by_name(params[:id])
-
     if @collection.update_attributes(params[:collection])
       flash[:notice] = 'Collection was successfully updated.'
       redirect_to(@collection)

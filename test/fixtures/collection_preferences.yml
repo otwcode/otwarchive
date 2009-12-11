@@ -2,8 +2,10 @@
 
 one:
   collection_id: 1
-  allowed_to_post: 1
+  moderated: 1
+  closed: 0
 
 two:
   collection_id: 2
-  allowed_to_post: 4
+  moderated: 0
+  closed: 0

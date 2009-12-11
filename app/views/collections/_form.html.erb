@@ -1,24 +1,24 @@
 <%= error_messages_for :collection -%>
 
 <% form_for(@collection) do |collection_form| %>
-  <% if @collection.new_record? && current_user.pseuds.size > 1 %>
   <p>
-    <%= label_tag :owner_pseuds, t("collection_form.owners", :default => "Select owner pseudonym(s): ") -%><br />
-    <%= select_tag :owner_pseuds, options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud), :multiple => true %>
+    <% if @collection.new_record? && current_user.pseuds.size > 1 %>
+      <%= label_tag :owner_pseuds, t("collection_form.owners", :default => "Select owner pseudonym(s): ") -%><br />
+      <%= select_tag :owner_pseuds, options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud), :multiple => true %>
+    <% else -%>
+      <%= hidden_field_tag :owner_pseuds, [current_user.pseuds.first] -%>
+    <% end %>
   </p>
-  <% else -%>
-  <%= hidden_tag :owner_pseuds, [current_user.pseuds.first] -%>
-  <% end %>
 
   <p>
     <%= collection_form.label :name, t("collection_form.name", :default => "Collection Name* (letters, numbers, underscores):") %><br />
     <%= collection_form.text_field :name %>
   </p>
+
   <p>
     <%= collection_form.label :title, t("collection_form.title", :default => "Display Title* (text only):") %><br />
     <%= collection_form.text_field :title %>
   </p>
-  <p>
 
   <p>
     <%= collection_form.label :email, t("collection_form.email", :default => "Email (optional, otherwise notices will go to owners):") %><br />
@@ -36,8 +36,12 @@
   <% @collection.build_collection_preference unless @collection.collection_preference %>
   <% collection_form.fields_for :collection_preference do |preference_form| %>
   <p>
-    <%= preference_form.label :allowed_to_post, t("collection_form.allowed_to_post", :default => "Allowed to post:") %>
-    <%= preference_form.select(:allowed_to_post, CollectionPreference::POSTING_BY_OPTIONS) %>
+    <%= preference_form.label :moderated, t("collection_form.moderated", :default => "Is this collection moderated?") %> <%= link_to_help "moderated-collection" -%>
+    <%= preference_form.check_box :moderated %>
+  </p>
+  <p>
+    <%= preference_form.label :closed, t("collection_form.closed", :default => "Is this collection closed?") %>
+    <%= preference_form.check_box :closed %>
   </p>
   <% end %>
 

@@ -1,8 +1,4 @@
 class Collection < ActiveRecord::Base
-  STATUS_NEUTRAL = 0
-  STATUS_APPROVED = 1
-  STATUS_REJECTED = -1
-  
   
   has_one :collection_profile, :dependent => :destroy
   accepts_nested_attributes_for :collection_profile
@@ -16,13 +12,17 @@ class Collection < ActiveRecord::Base
   has_many :bookmarks, :through => :collection_items, :source => :item, :source_type => 'Bookmark'
 
   has_many :collection_participants, :dependent => :destroy
-  accepts_nested_attributes_for :collection_participants, :allow_destroy => true  
+  accepts_nested_attributes_for :collection_participants, :allow_destroy => true
+  
   has_many :participants, :through => :collection_participants, :source => :pseud
   has_many :users, :through => :participants, :source => :user
-  
+  has_many :invited, :through => :collection_participants, :source => :pseud, :conditions => ['collection_participants.participant_role = ?', CollectionParticipant::INVITED]  
   has_many :owners, :through => :collection_participants, :source => :pseud, :conditions => ['collection_participants.participant_role = ?', CollectionParticipant::OWNER]
   has_many :moderators, :through => :collection_participants, :source => :pseud, :conditions => ['collection_participants.participant_role = ?', CollectionParticipant::MODERATOR]
   has_many :members, :through => :collection_participants, :source => :pseud, :conditions => ['collection_participants.participant_role = ?', CollectionParticipant::MEMBER]
+  has_many :posting_participants, :through => :collection_participants, :source => :pseud, 
+      :conditions => ['collection_participants.participant_role in (?)', [CollectionParticipant::MEMBER,CollectionParticipant::MODERATOR, CollectionParticipant::OWNER ] ]
+
 
   validate :must_have_owners
 
@@ -41,7 +41,6 @@ class Collection < ActiveRecord::Base
   validates_format_of :name, 
     :message => t('collection.name_invalid', :default => 'must begin and end with a letter or number; it may also contain underscores but no other characters.'),
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
-
 
   validates_email_veracity_of :email, 
     :message => t('email_invalid', :default => 'does not seem to be a valid address.')
@@ -62,7 +61,7 @@ class Collection < ActiveRecord::Base
 
   validates_format_of :header_image_url, :allow_blank => true, :with => URI::regexp(%w(http https)), :message => t('collection.url_invalid', :default => "Not a valid URL.")
   validates_format_of :header_image_url, :allow_blank => true, :with => /\.(png|gif|jpg)$/, :message => t('collection.image_invalid', :default => "Only gif, jpg, png files allowed.")
-      
+
   def to_param
     name
   end
@@ -72,33 +71,35 @@ class Collection < ActiveRecord::Base
   end
   
   def user_is_owner?(user)
-    !(user.pseuds & self.owners).empty?
+    user && !(user.pseuds & self.owners).empty?
   end
   
   def user_is_moderator?(user)
-    !(user.pseuds & self.moderators).empty?
+    user && !(user.pseuds & self.moderators).empty?
   end
   
   def user_is_maintainer?(user)
-    !(user.pseuds & (self.moderators + self.owners)).empty?
+    user && !(user.pseuds & (self.moderators + self.owners)).empty?
   end
   
   def user_is_participant?(user)
-    !get_participating_pseuds_for_user(user).empty?
+    user && !get_participating_pseuds_for_user(user).empty?
+  end
+
+  def user_is_posting_participant?(user)
+    user && !(user.pseuds & self.posting_participants).empty?
   end
   
   def get_participating_pseuds_for_user(user)
-    user.pseuds & self.participants
+    user ? user.pseuds & self.participants : []
   end
   
   def get_participants_for_user(user)
     CollectionParticipant.in_collection(self).for_user(user)
   end
   
-  def allowed_to_post?(pseud)
-    collection_preference.allowed_to_post?(pseud)
-  end
-      
+  def moderated? ; self.collection_preference.moderated ; end
+  def closed? ; self.collection_preference.closed ; end
   
   
 end

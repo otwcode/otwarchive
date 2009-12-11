@@ -52,14 +52,16 @@ module FixtureReplacement
     pseud = create_pseud
     
     a.collection_participants_attributes = [{:pseud => pseud, :participant_role => CollectionParticipant::OWNER}]
+    a.collection_preference_attributes = {:closed => false, :moderated => false}
     a.name = String.random
     a.title = random_phrase
   end
   
   attributes_for :collection_item do |a|
+    work = create_work
     a.collection = create_collection
     a.item_type = 'Work'
-    a.item_id = create_work.id
+    a.item_id = work.id
   end
   
   attributes_for :collection_preference do |a|

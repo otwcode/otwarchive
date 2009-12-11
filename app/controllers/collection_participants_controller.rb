@@ -8,17 +8,6 @@ class CollectionParticipantsController < ApplicationController
   before_filter :users_only, :only => [:join]
 
 
-  def join
-    unless @collection
-      flash[:error] = t('no_collection', :default => "Which collection did you want to join?")
-      redirect_to :back and return
-    end
-    @participant = CollectionParticipant.new(:collection => @collection, :pseud => current_user.default_pseud, :participant_role => CollectionParticipant::NONE)
-    @participant.save
-    flash[:notice] = t('joined_collection', :default => "You have applied to join {{collection}}.", :collection => @collection.title)
-    redirect_to :back
-  end 
-  
   def owners_required
     flash[:error] = t('collection_participants.owners_required', :default => "You can't remove the only owner!")
     redirect_to collection_participants_path(@collection)
@@ -59,6 +48,36 @@ class CollectionParticipantsController < ApplicationController
     !@participant.is_owner? || (@collection.owners != [@participant.pseud]) || owners_required
   end
   
+  
+  
+  ## ACTIONS
+
+  def join
+    unless @collection
+      flash[:error] = t('no_collection', :default => "Which collection did you want to join?")
+      redirect_to :back and return
+    end
+    participants = CollectionParticipant.in_collection(@collection).for_user(current_user)
+    if participants.empty?
+      @participant = CollectionParticipant.new(:collection => @collection, :pseud => current_user.default_pseud, 
+                        :participant_role => CollectionParticipant::NONE)
+      @participant.save
+      flash[:notice] = t('applied_to_join_collection', :default => "You have applied to join {{collection}}.", :collection => @collection.title)
+    else
+      participants.each do |participant|
+        if participant.is_invited?
+          participant approve_membership!
+          flash[:notice] = t('collection_participants.accepted_invite', :default => "You are now a member of {{collection}}.", :collection => @collection.title)
+          redirect_to :back and return
+        end
+      end
+      
+      flash[:notice] = t('collection_participants.no_invitation', :default => "You have already joined (or applied to) this collection.")
+    end
+    
+    redirect_to :back
+  end 
+    
   def index
     @collection_participants = @collection.collection_participants.sort_by {|participant| participant.pseud.name.downcase }
   end
@@ -80,15 +99,32 @@ class CollectionParticipantsController < ApplicationController
 
   def add
     @participants_added = []
+    @participants_invited = []
     pseud_results = Pseud.parse_bylines(params[:participants_to_invite])
     pseud_results[:pseuds].each do |pseud|
-      unless @collection.participants.include?(pseud)
+      if @collection.participants.include?(pseud)
+        participant = CollectionParticipant.find(:collection => @collection, :pseud => pseud)
+        if participant && participant.is_none?
+          @participants_added << participant if participant.approve_membership! 
+        end
+      else
         participant = CollectionParticipant.new(:collection => @collection, :pseud => pseud, :participant_role => CollectionParticipant::MEMBER)
-        @participants_added << participant if participant.save
+        @participants_invited << participant if participant.save
       end
     end
-    @participants_added = @participants_added.sort_by {|participant| participant.pseud.name.downcase }
-    flash[:notice] = t('collection_participants.add', :default => "New members added: {{added}}", :added => @participants_added.collect(&:pseud).collect(&:byline).join(', '))
+    flash[:notice] = ""
+    unless @participants_invited.empty?
+      @participants_invited = @participants_invited.sort_by {|participant| participant.pseud.name.downcase }
+      flash[:notice] += t('collection_participants.invite', :default => "<strong>New members invited:</strong> {{invited}}", 
+                :added => @participants_invited.collect(&:pseud).collect(&:byline).join(', '))
+    end
+
+    unless @participants_added.empty?
+      @participants_added = @participants_added.sort_by {|participant| participant.pseud.name.downcase }
+      flash[:notice] += t('collection_participants.add', :default => "<strong>Members approved:</strong> {{added}}",
+                :added => @participants_added.collect(&:pseud).collect(&:byline).join(', '))
+    end
+    
     redirect_to collection_participants_path(@collection)
   end
 

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091208200602) do
+ActiveRecord::Schema.define(:version => 20091209215213) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -116,16 +116,17 @@ ActiveRecord::Schema.define(:version => 20091208200602) do
 
   create_table "collection_preferences", :force => true do |t|
     t.integer  "collection_id"
-    t.integer  "allowed_to_post", :limit => 1, :default => 1, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "moderated",     :default => false, :null => false
+    t.boolean  "closed",        :default => false, :null => false
   end
 
   create_table "collection_profiles", :force => true do |t|
     t.integer  "collection_id"
-    t.text     "intro",         :limit => 16777215
-    t.text     "faq",           :limit => 16777215
-    t.text     "rules",         :limit => 16777215
+    t.text     "intro",         :limit => 2147483647
+    t.text     "faq",           :limit => 2147483647
+    t.text     "rules",         :limit => 2147483647
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -334,21 +335,24 @@ ActiveRecord::Schema.define(:version => 20091208200602) do
   end
 
   create_table "preferences", :force => true do |t|
-    t.integer  "user_id",                  :limit => 8
-    t.boolean  "history_enabled",                       :default => true
-    t.boolean  "email_visible",                         :default => false
+    t.integer  "user_id",                           :limit => 8
+    t.boolean  "history_enabled",                                :default => true
+    t.boolean  "email_visible",                                  :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "date_of_birth_visible",                 :default => false
-    t.boolean  "edit_emails_off",                       :default => false,                     :null => false
-    t.boolean  "comment_emails_off",                    :default => false,                     :null => false
-    t.boolean  "adult",                                 :default => false
-    t.boolean  "hide_warnings",                         :default => false,                     :null => false
-    t.boolean  "comment_inbox_off",                     :default => false
-    t.boolean  "comment_copy_to_self_off",              :default => true,                      :null => false
-    t.string   "work_title_format",                     :default => "TITLE - AUTHOR - FANDOM"
-    t.boolean  "hide_freeform",                         :default => false,                     :null => false
-    t.boolean  "first_login",                           :default => true
+    t.boolean  "date_of_birth_visible",                          :default => false
+    t.boolean  "edit_emails_off",                                :default => false,                     :null => false
+    t.boolean  "comment_emails_off",                             :default => false,                     :null => false
+    t.boolean  "adult",                                          :default => false
+    t.boolean  "hide_warnings",                                  :default => false,                     :null => false
+    t.boolean  "comment_inbox_off",                              :default => false
+    t.boolean  "comment_copy_to_self_off",                       :default => true,                      :null => false
+    t.string   "work_title_format",                              :default => "TITLE - AUTHOR - FANDOM"
+    t.boolean  "hide_freeform",                                  :default => false,                     :null => false
+    t.boolean  "first_login",                                    :default => true
+    t.boolean  "automatically_approve_collections",              :default => false,                     :null => false
+    t.boolean  "collection_emails_off",                          :default => false,                     :null => false
+    t.boolean  "collection_inbox_off",                           :default => false,                     :null => false
   end
 
   create_table "profiles", :force => true do |t|

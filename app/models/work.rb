@@ -259,7 +259,6 @@ class Work < ActiveRecord::Base
   end
 
   def collection_names=(collection_names)
-    debugger
     collection_attributes_to_set = []
     collection_names.split(',').each do |collection_name|
       collection = Collection.find_by_name(collection_name.strip)
@@ -306,6 +305,11 @@ class Work < ActiveRecord::Base
     self.visible(user) == self
   end
 
+
+  def unrevealed?(user=User.current_user)
+    # eventually here is where we check if it's in a challenge that hasn't been made public yet
+    false
+  end
 
   ########################################################################
   # VERSIONS & REVISION DATES
@@ -1181,7 +1185,11 @@ class Work < ActiveRecord::Base
   
   # Takes an array of works, returns a hash (key = tag type) of arrays of hashes (of individual tag data)
   # Ex. {'Fandom' => [{:name => 'Star Trek', :id => '3', :count => '50'}, ...], 'Character' => ...}
-  def self.build_filters(works)  
+  def self.build_filters(works, options = {})
+    if options[:in_user_page]
+      # strip out works hidden in challenges
+      works = works.delete_if {|w| w.unrevealed?}
+    end
     self.build_filters_from_tags(Tag.filters_with_count(works.collect(&:id)))
   end
   

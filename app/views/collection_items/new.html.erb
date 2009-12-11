@@ -1,0 +1,6 @@
+<h1><%=h t('new_collection_item', :default => 'Add To Collection') %></h1>
+
+<%= error_messages_for :collection_item %>
+
+<%= render :partial => 'collection_item_form', :locals => {:item => @item} %>
+

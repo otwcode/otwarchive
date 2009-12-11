@@ -50,10 +50,10 @@
 
 <ul class="navigation">
   <% if (@participant = @collection.get_participants_for_user(current_user).first) -%>  
-    <%= link_to t('participant_remove', :default => "Leave"), collection_participant_path(@collection, @participant), 
+    <li><%= link_to t('participant_remove', :default => "Leave"), collection_participant_path(@collection, @participant), 
       :confirm => t('participant_confirm_delete', :default => 'Are you certain you want to remove {{participant}}?', 
                   :participant => @participant.pseud.name), 
-      :method => :delete %>
+      :method => :delete %></li>
   <% else %>
     <li><%= link_to 'Join', join_collection_participant_path(@collection) -%>
   <% end %>

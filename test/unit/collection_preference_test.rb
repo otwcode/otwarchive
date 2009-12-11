@@ -6,7 +6,11 @@ class CollectionPreferenceTest < ActiveSupport::TestCase
       assert create_collection_preference
     end
     should_belong_to :collection
-    should_allow_values_for :allowed_to_post, 1,2,3,4
-    should_not_allow_values_for :allowed_to_post, 0, 14, -2, "hello"
+    should "be unmoderated and open" do
+      @cpref = create_collection_preference
+      assert !@cpref.closed
+      assert !@cpref.moderated
+    end
+    
   end
 end

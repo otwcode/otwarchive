@@ -21,4 +21,5 @@ class CollectionTest < ActiveSupport::TestCase
     should_not_allow_values_for :header_image_url, "adjf afsd;jfa", "http://foobar.com/pic.jpg;execute(my_javascript)", "http://hello.com/"
     should_allow_values_for :header_image_url, "http://skitch.com/hello.jpg", "http://whee.com/pic.gif"
   end
+
 end

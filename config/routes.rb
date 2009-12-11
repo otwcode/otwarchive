@@ -78,6 +78,7 @@ ActionController::Routing::Routes.draw do |map|
       work.resources :comments, :member => { :approve => :put, :reject => :put }
       work.resources :bookmarks
       work.resources :collections, :only => [:index]
+      work.resources :collection_items, :only => [:new, :create]
   end
 
   map.resources :chapters, :has_many => :comments, :member => { :preview => :get, :post => :post } 

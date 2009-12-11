@@ -89,6 +89,9 @@ dl.series-meta dd { margin:-1.286em 0 1em 12em !important; text-indent:0; paddin
 .series-show ul li	{ display:inline; padding-right:0.5625em}
 .series-show ul#series-work-list li	{ display:block; padding:0; }
 
+/* COLLECTIONS */
+#dynamic-collection_item	{ background:#fffef9; position:fixed; height:8em; width:18em; bottom:2em; right:2em; z-index:42; padding:1em 2em;  border:2px solid; }
+
 /* Temporary bookmark content */
 #dynamic-bookmark	{ background:#fffef9; position:fixed; height:26em; width:36em; bottom:2em; right:2em; z-index:42; padding:1em 2em;  border:2px solid; }
 #bookmark_notes	{ width:28.125em; height:6.25em; }

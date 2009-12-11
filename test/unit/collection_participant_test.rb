@@ -7,7 +7,7 @@ class CollectionParticipantTest < ActiveSupport::TestCase
     end
     should_belong_to :collection
     should_belong_to :pseud
-    should_allow_values_for :participant_role, "Owner", "Moderator", "Member", "None"
+    should_allow_values_for :participant_role, "Owner", "Moderator", "Member", "None", "Invited"
     should_not_allow_values_for :participant_role, "Foo", 12, "aldjfa;jfd"
     
     context "who is not a member" do      
@@ -15,6 +15,8 @@ class CollectionParticipantTest < ActiveSupport::TestCase
         @participant = create_collection_participant(:participant_role => CollectionParticipant::NONE)
       end
       should "not be recognized as a member, moderator, or owner" do
+        assert @participant.is_none?
+        assert !@participant.is_invited?
         assert !@participant.is_member?
         assert !@participant.is_maintainer?
         assert !@participant.is_moderator?
@@ -26,6 +28,8 @@ class CollectionParticipantTest < ActiveSupport::TestCase
           @participant.reload
         end        
         should "be recognized as a member, but not as a moderator, maintainer, or owner" do
+          assert !@participant.is_none?
+          assert !@participant.is_invited?
           assert @participant.is_member?
           assert !@participant.is_maintainer?
           assert !@participant.is_moderator?

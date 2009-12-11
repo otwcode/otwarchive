@@ -21,7 +21,7 @@ class WorksNewControllerTest < ActionController::TestCase
         should_render_template :new
         should_assign_to :work
         should "not have unposted link" do
-          assert_no_tag :tag => "span",  :attributes => {:id => "restore-link"}
+          assert_no_tag :tag => "li",  :attributes => {:id => "restore-link"}
         end
       end
       context "new with unposted" do
@@ -30,7 +30,7 @@ class WorksNewControllerTest < ActionController::TestCase
           get :new, :locale => 'en'
         end
         should "have unposted link" do
-          assert_tag :tag => "span",  :attributes => {:id => "restore-link"}
+          assert_tag :tag => "li",  :attributes => {:id => "restore-link"}
         end
       end
       context "new with old unposted" do
@@ -39,7 +39,7 @@ class WorksNewControllerTest < ActionController::TestCase
           get :new, :locale => 'en'
         end
         should "not have unposted link" do
-          assert_no_tag :tag => "span",  :attributes => {:id => "restore-link"}
+          assert_no_tag :tag => "li",  :attributes => {:id => "restore-link"}
         end
       end
       context "load unposted" do

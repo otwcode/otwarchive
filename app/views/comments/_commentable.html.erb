@@ -2,6 +2,9 @@
 <a name="comments"></a>
 <div id="feedback">
   <div class="navigation">
+    <%- if logged_in? && commentable.class == Work -%>
+      <span class="navitem" id="add_collection_link"><%= collection_link(commentable) -%></span>
+    <%- end -%>
     <%- if logged_in? && commentable.class != AdminPost -%>
       <span class="navitem" id="add_bookmark_link"><%= bookmark_link(commentable) %></span>			
     <%- end -%>
@@ -10,6 +13,10 @@
     <%- end -%>
     <span class="navitem" id="add_comment_link"><%= add_cancel_comment_link(commentable) -%></span>
 
+  </div>
+
+  <!-- if we have javascript, here is where the collection window will pop up -->
+  <div id="dynamic-collection_item" style="display:none;">	
   </div>
 
   <!-- if we have javascript, here is where the bookmark window will pop up -->
