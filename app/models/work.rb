@@ -486,7 +486,7 @@ class Work < ActiveRecord::Base
     self.preview_mode ? self.placeholder_tag_string(:warnings) : self.warnings.map(&:name).join(ArchiveConfig.DELIMITER)
   end
   def warning_strings
-    self.preview_mode ? self.placeholder_tags[:warnings].map(&:name) : self.warnings.map(&:name)
+    self.preview_mode ? (self.placeholder_tags[:warnings] ||= []).map(&:name) : self.warnings.map(&:name)
   end
   def fandom_string
     self.preview_mode ? self.placeholder_tag_string(:fandoms) : self.fandoms.map(&:name).join(ArchiveConfig.DELIMITER)
