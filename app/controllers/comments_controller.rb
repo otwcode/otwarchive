@@ -172,14 +172,13 @@ class CommentsController < ApplicationController
   def approve
     @comment = Comment.find(params[:id])
     @comment.mark_as_ham!
-    redirect_to(comments_url)
+    redirect_to_all_comments(@comment.ultimate_parent, {:show_comments => true})
   end
 
   def reject
    @comment = Comment.find(params[:id])
    @comment.mark_as_spam!
-   # Needs better redirect
-   redirect_to_comments(@comment.ultimate_parent)
+   redirect_to_all_comments(@comment.ultimate_parent, {:show_comments => true})
   end
 
 ## Enigel Feb 09: added redirects for non-ajaxy requests to prevent script barf
