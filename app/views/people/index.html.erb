@@ -1,12 +1,16 @@
-<h1><%= "People" -%></h1>
+<% if @collection %>
+<h1><%= t('people.collection', :default => "People in {{collection}}", :collection => @collection.title) -%></h1>
+<% else -%>
+<h1><%= t('people.people', :default => "People") -%></h1>
 <div class="navigation">
-  <span class="navitem"><%= link_to "All", people_path(:letter => params[:letter], 
+  <span class="navitem"><%= link_to t('people.All', :default => "All"), people_path(:letter => params[:letter], 
       :page => params[:page], :per_page => params[:per_page], :show => "all") -%></span>
-  <span class="navitem"><%= link_to "Authors", people_path(:letter => params[:letter], 
+  <span class="navitem"><%= link_to t('people.Authors', :default => "Authors"), people_path(:letter => params[:letter], 
       :page => params[:page], :per_page => params[:per_page], :show => "authors") -%></span>  
-  <span class="navitem"><%= link_to "Reccers", people_path(:letter => params[:letter], 
+  <span class="navitem"><%= link_to t('people.Reccers', :default => "Reccers"), people_path(:letter => params[:letter], 
       :page => params[:page], :per_page => params[:per_page], :show => "reccers") -%></span>
 </div>
+<% end %>
 
 <%= alpha_paginated_section @pseuds_alphabet -%>
 

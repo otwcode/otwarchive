@@ -4,7 +4,7 @@
       :confirm => t('participant_confirm_delete', :default => 'Are you certain you want to remove {{participant}}?', 
                   :participant => @participant.pseud.name), 
       :method => :delete %></li>
-  <% else %>
+  <% elsif logged_in? %>
     <li><%= link_to 'Join', join_collection_participant_path(@collection) -%></li>
   <% end %>
   <% if @collection.user_is_maintainer?(current_user) %>

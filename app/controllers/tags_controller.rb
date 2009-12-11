@@ -10,7 +10,11 @@ class TagsController < ApplicationController
   # GET /tags
   # GET /tags.xml
   def index
-    @tags = Tag.for_tag_cloud
+    if @collection
+      @tags = @collection.works.collect(&:common_tags).flatten.uniq
+    else      
+      @tags = Tag.for_tag_cloud
+    end
 
     respond_to do |format|
       format.html # index.html.erb

@@ -71,27 +71,27 @@ class Collection < ActiveRecord::Base
   end
   
   def user_is_owner?(user)
-    user && !(user.pseuds & self.owners).empty?
+    user != :false && !(user.pseuds & self.owners).empty?
   end
   
   def user_is_moderator?(user)
-    user && !(user.pseuds & self.moderators).empty?
+    user != :false && !(user.pseuds & self.moderators).empty?
   end
   
   def user_is_maintainer?(user)
-    user && !(user.pseuds & (self.moderators + self.owners)).empty?
+    user != :false && !(user.pseuds & (self.moderators + self.owners)).empty?
   end
   
   def user_is_participant?(user)
-    user && !get_participating_pseuds_for_user(user).empty?
+    user != :false && !get_participating_pseuds_for_user(user).empty?
   end
 
   def user_is_posting_participant?(user)
-    user && !(user.pseuds & self.posting_participants).empty?
+    user != :false && !(user.pseuds & self.posting_participants).empty?
   end
   
   def get_participating_pseuds_for_user(user)
-    user ? user.pseuds & self.participants : []
+    user != :false ? user.pseuds & self.participants : []
   end
   
   def get_participants_for_user(user)

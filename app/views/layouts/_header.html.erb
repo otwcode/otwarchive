@@ -8,7 +8,7 @@
 
 <div id="header">
 	<% if @collection %>
-	  <h1 class="collection">&#8592;<%= link_to ArchiveConfig.APP_NAME, root_path -%></h1>
+	  <h1 class="collection"><%= link_to "&lt;&lt; #{ArchiveConfig.APP_NAME}", media_path -%></h1>
 	<% end %>
   <div id="login-block">
   <%- if logged_in? || logged_in_as_admin? -%>
@@ -26,7 +26,7 @@
 </div>
 
   <% if @collection && @collection.title -%>
-    <h1 class="collections"><%= t('collection.title', :default => '{{title}}', :title => @collection.title, :archive => link_to(ArchiveConfig.APP_NAME, root_path)) -%>
+    <h1 class="collections"><%= t('collection.title', :default => '{{title}}', :title => @collection.title) -%>
   <% else -%>
     <h1><%= link_to ArchiveConfig.APP_NAME, root_path %>
   <% end -%>
@@ -34,8 +34,11 @@
 	</h1>
 
   <ul id="main-navigation">
-    <%= @collection ? "<li>#{span_if_current('main archive', media_path)}</li>" : "" -%>
-    <li><%= logged_in? ? span_if_current('my home', user_path(current_user)) : span_if_current('home', root_path) %></li>
+    <% if @collection %>
+      <li><%= span_if_current('collection home', collection_path(@collection)) %></li>
+    <% else %>
+      <li><%= logged_in? ? span_if_current('my home', user_path(current_user)) : span_if_current('home', root_path) %></li>
+    <% end %>
     <li><%= span_if_current('fandoms', @collection ? collection_media_path(@collection) : media_path) -%></li>
     <li><%= span_if_current('works', @collection ? collection_works_path(@collection) : works_path) -%></li>
     <li><%= span_if_current('people', @collection ? collection_people_path(@collection) : people_path) -%></li>
