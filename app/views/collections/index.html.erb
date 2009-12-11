@@ -4,25 +4,28 @@
 	<caption></caption>
   <thead>
 	<tr>
-    <th scope="col"><%=h t('name', :default => "Name") %></th>
-    <th scope="col"><%=h t('title', :default => "Title") %></th>
-    <th scope="col"><%=h t('email', :default => "Email") %></th>
-    <th scope="col"><%=h t('header_image_url', :default => "Header image url") %></th>
-    <th scope="col"><%=h t('description', :default => "Description") %></th>
+    <th scope="col"><%=h t('name', :default => "Collection") %></th>
+    <th scope="col"><%=h t('owners', :default => "Owners") %></th>    
+    <th scope="col"><%=h t('title', :default => "Description") %></th>
+    <th scope="col"><%=h t('email', :default => "Contents") %></th>
   </tr>
 </thead>
 <tbody>
 
 <% @collections.each do |collection| %>
   <tr>
-    <td><%=h collection.name %></td>
-    <td><%=h collection.title %></td>
-    <td><%=h collection.email %></td>
-    <td><%=h collection.header_image_url %></td>
+    <td><%= link_to collection.title, collection -%> (<%= collection.name -%>)</td>
+    <td><%=h collection.owners.collect(&:byline).join(", ") -%>
     <td><%=h collection.description %></td>
-    <td><%= link_to 'Show', collection %></td>
-    <td><%= link_to 'Edit', edit_collection_path(collection) %></td>
-    <td><%= link_to 'Destroy', collection, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td>
+      <% if (@works_count = collection.works.count) > 0%>
+        <%= t('collections.works', :default => "Works: {{works_count}}", :works_count => @works_count) -%>
+      <% end %>
+      <% if (@bookmarks_count = collection.bookmarks.count) > 0%>
+        <%= @works_count > 0 ? "<br />" : "" -%>
+        <%= t('collections.bookmarks', :default => "Bookmarks: {{bookmarks_count}}", :bookmarks_count => @bookmarks_count) -%>
+      <% end %>
+    </td>    
   </tr>
 <% end %>
 </tbody>
