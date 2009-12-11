@@ -1,3 +1,9 @@
 /* Put any IE-specific overrides into this file -- it will be loaded last and conditionally, only if the browser is IE. */
 
 #work-form p.submit { text-align: right; } /* because IE won't recognise the line without #work-form in forms.css */
+
+.home #login {width: auto !important;} /* making Post New | Import | Log out on the homepage line up right */
+.home #search p {text-align: right; z-index: 1;} /* making the search box on the home page correct */
+.home #main-navigation {width: 80% !important;} /* stopping the navbar short so the search box is visible */
+
+#user-header .navigation li {margin-right: 0.2em !important;} /* making the sub-navigation menus have the little gaps */
