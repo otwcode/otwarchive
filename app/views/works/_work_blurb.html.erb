@@ -1,5 +1,11 @@
 <li class="work" id="work_<%=h work.id %>">
 
+<% if !is_author_of?(work) && work.unrevealed? -%>
+
+  <%= render :partial => "work_mystery_blurb" -%>
+  
+<% else %>
+
 <ul class="work<%- if is_author_of?(work) && controller.controller_name != 'series' -%> own<%- end -%>">
 	<li class="heading">
 	  <%= get_symbols_for(work) -%>
@@ -90,4 +96,5 @@
 	  <%- end -%>
   <%- end -%>
 	</ul>
+<%- end -%>
 </li>

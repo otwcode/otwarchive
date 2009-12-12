@@ -310,6 +310,11 @@ class Work < ActiveRecord::Base
     # eventually here is where we check if it's in a challenge that hasn't been made public yet
     false
   end
+  
+  def anonymous?(user=User.current_user)
+    # here we check if the story is in a currently-anonymous challenge
+    false
+  end
 
   ########################################################################
   # VERSIONS & REVISION DATES
