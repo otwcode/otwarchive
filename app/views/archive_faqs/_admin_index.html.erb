@@ -13,11 +13,11 @@
 <% end %>
 
 <% @archive_faqs.each do |archive_faq| %>
-  <div class="navigation">
-    <span class="navitem"><%= link_to "Show", archive_faq %></span>
-    <span class="navitem"><%= link_to "Edit", edit_archive_faq_path(archive_faq) %></span>
-    <span class="navitem"><%= link_to "Delete", archive_faq, :confirm => 'Are you sure?', :method => :delete %></span>
-  </div>
+  <ul class="navigation">
+    <li><%= link_to "Show", archive_faq %></li>
+    <li><%= link_to "Edit", edit_archive_faq_path(archive_faq) %></li>
+    <li><%= link_to "Delete", archive_faq, :confirm => 'Are you sure?', :method => :delete %></li>
+  </ul>
   <div id="tos" class="work-show">
     <h6>Updated at: <%=h archive_faq.updated_at %></h6>
     <%= sanitize_and_format_for_display archive_faq.content %>

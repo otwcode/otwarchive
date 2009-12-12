@@ -105,7 +105,7 @@
     </dd>
 	<dt><%= f.label :tag_string, t('form_your_tags', :default => "Your Tags") %></dt>
 	<dd>
-    <%= text_field_tag 'tag_string', @tag_string, :size => ArchiveConfig.TAG_MAX %>
+    <%= text_field_tag 'tag_string', @tag_string, :size => 80 %>
     <div class="auto_complete" id="tag_string_auto_complete" ></div>
     <%= javascript_tag("new Autocompleter.Local('tag_string', 'tag_string_auto_complete', #{Tag.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
     <div class="character_counter">
