@@ -248,16 +248,8 @@ class WorksController < ApplicationController
 
     @tag_categories_limited = Tag::VISIBLE - ["Warning"]
 
-    @page_title = ""
-    if logged_in? && !current_user.preference.work_title_format.blank?
-      @page_title = current_user.preference.work_title_format
-      @page_title.gsub!(/FANDOM/, @work.fandoms.string)
-      @page_title.gsub!(/AUTHOR/, @work.pseuds.sort.collect(&:byline).join(', '))
-      @page_title.gsub!(/TITLE/, @work.title)
-    else
-      @page_title = @work.title + " - " + @work.pseuds.sort.collect(&:byline).join(', ') + " - " + @work.fandom_string
-    end
-    @page_title += " [#{ArchiveConfig.APP_NAME}]"
+    @page_title = @work.unrevealed? ? t('works.mystery_title', :default => "Mystery Work") : 
+      get_page_title(@work.fandoms.string, @work.anonymous? ?  t('works.anonymous', :default => "Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '), @work.title)
   end
   
   def navigate

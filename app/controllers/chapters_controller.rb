@@ -89,16 +89,10 @@ class ChaptersController < ApplicationController
       @commentable = @work
       @comments = @chapter.comments
       
-      @page_title = ""
-      if logged_in? && !current_user.preference.work_title_format.blank?
-        @page_title = current_user.preference.work_title_format
-        @page_title.gsub!(/FANDOM/, @work.fandoms.string)
-        @page_title.gsub!(/AUTHOR/, @work.pseuds.sort.collect(&:byline).join(', '))
-        @page_title.gsub!(/TITLE/, @work.title + " - Chapter " + @chapter.position.to_s)
-      else
-        @page_title = @work.title + " - Chapter " + @chapter.position.to_s + " - " + @work.pseuds.sort.collect(&:byline).join(', ') + " - " + @work.fandom_string
-      end
-      @page_title += " [#{ArchiveConfig.APP_NAME}]"
+      @page_title = @work.unrevealed? ? t('works.mystery_chapter_title', :default => "Mystery Work - Chapter {{position}}", :position => @chapter.position.to_s) : 
+        get_page_title(@work.fandoms.string, 
+          @work.anonymous? ? t('chapters.anonymous', :default => "Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '), 
+          @work.title + " - Chapter " + @chapter.position.to_s)
     
       respond_to do |format|
         format.html

@@ -33,7 +33,18 @@ class ApplicationController < ActionController::Base
     logged_in? && @collection && @collection.user_is_owner?(current_user) || access_denied
   end  
   
-
+  def get_page_title(fandom, author, title)
+    @page_title = ""
+    if logged_in? && !current_user.preference.work_title_format.blank?
+      @page_title = current_user.preference.work_title_format
+      @page_title.gsub!(/FANDOM/, fandom)
+      @page_title.gsub!(/AUTHOR/, author)
+      @page_title.gsub!(/TITLE/, title)
+    else
+      @page_title = title + " - " + author + " - " + fandom
+    end
+    @page_title += " [#{ArchiveConfig.APP_NAME}]"
+  end
   
   ### GLOBALIZATION ###
 
