@@ -13,3 +13,17 @@ two:
   name: SecondCollection
   title: The Second Collection
   description: A second exciting collection.
+
+three:
+  id: 3
+  name: subcollection1
+  title: The First Subcollection
+  description: This is a subcollection.
+  parent_id: 1
+  
+four:
+  id: 4
+  name: challenge1
+  title: An Exciting Challenge
+  description: Wow check out this exciting challenge.
+  parent_id: 1

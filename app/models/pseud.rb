@@ -11,6 +11,9 @@ class Pseud < ActiveRecord::Base
   has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work'
   has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter'
   has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series'
+  has_many :collection_participants
+  has_many :collections, :through => :collection_participants
+
   validates_presence_of :name
   validates_length_of :name, 
     :within => NAME_LENGTH_MIN..NAME_LENGTH_MAX, 

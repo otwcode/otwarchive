@@ -98,6 +98,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :tags, :only => []
   
   map.resources :collections do |collection|
+    collection.resources :collections
     collection.resources :works
     collection.resources :bookmarks
     collection.resource :collection_profile, :only => [:show]

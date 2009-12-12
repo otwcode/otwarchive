@@ -9,6 +9,15 @@
       <%= hidden_field_tag :owner_pseuds, [current_user.pseuds.first] -%>
     <% end %>
   </p>
+  
+  <% if @collection.children.empty? %>
+  <p>
+    <%= collection_form.label :parent_name, t('collections.parent_name', :default => "Parent collection (must be one you maintain): ") -%><br />
+    <%= collection_form.text_field :parent_name -%>
+    <div class="auto_complete" id="collection_parent_name_auto_complete" ></div>
+    <%= javascript_tag("new Autocompleter.Local('collection_parent_name', 'collection_parent_name_auto_complete', #{current_user.maintained_collections.map(&:name).sort.to_json}, {fullSearch: true});") %>
+  </p>
+  <% end -%>
 
   <p>
     <%= collection_form.label :name, t("collection_form.name", :default => "Collection Name* (letters, numbers, underscores):") %><br />
@@ -42,6 +51,14 @@
   <p>
     <%= preference_form.label :closed, t("collection_form.closed", :default => "Is this collection closed?") %>
     <%= preference_form.check_box :closed %>
+  </p>
+  <p>
+    <%= preference_form.label :unrevealed, t("collection_form.unrevealed", :default => "Is this collection currently unrevealed") %>
+    <%= preference_form.check_box :unrevealed %>
+  </p>
+  <p>
+    <%= preference_form.label :anonymous, t("collection_form.anonymous", :default => "Is this collection currently anonymous?") %>
+    <%= preference_form.check_box :anonymous %>
   </p>
   <% end %>
 

@@ -1,5 +1,8 @@
 class Collection < ActiveRecord::Base
   
+  belongs_to :parent, :class_name => "Collection"
+  has_many :children, :class_name => "Collection", :foreign_key => "parent_id"
+  
   has_one :collection_profile, :dependent => :destroy
   accepts_nested_attributes_for :collection_profile
   
@@ -24,10 +27,16 @@ class Collection < ActiveRecord::Base
       :conditions => ['collection_participants.participant_role in (?)', [CollectionParticipant::MEMBER,CollectionParticipant::MODERATOR, CollectionParticipant::OWNER ] ]
 
 
-  validate :must_have_owners
+  validate :must_have_owners, :collection_depth
 
   def must_have_owners
     errors.add_to_base t('collection.no_owners', :default => "Collection has no valid owners.") if self.collection_participants.select {|p| p.is_owner?}.empty? 
+  end
+  
+  def collection_depth
+    if (self.parent && self.parent.parent) || (self.parent && !self.children.empty?) || (!self.children.empty? && !self.children.collect(&:children).flatten.empty?)
+      errors.add_to_base t('collection.depth', :default => "You cannot nest collections more than one deep.")
+    end
   end
 
   validates_presence_of :name, :message => t('collection.no_name', :default => "Please enter a name for your collection.")
@@ -53,7 +62,6 @@ class Collection < ActiveRecord::Base
     :maximum => ArchiveConfig.TITLE_MAX,
     :too_long=> t('title_too_long', :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.TITLE_MAX)
 
-
   validates_length_of :description,
     :allow_blank => true,
     :maximum => ArchiveConfig.SUMMARY_MAX,
@@ -62,36 +70,58 @@ class Collection < ActiveRecord::Base
   validates_format_of :header_image_url, :allow_blank => true, :with => URI::regexp(%w(http https)), :message => t('collection.url_invalid', :default => "Not a valid URL.")
   validates_format_of :header_image_url, :allow_blank => true, :with => /\.(png|gif|jpg)$/, :message => t('collection.image_invalid', :default => "Only gif, jpg, png files allowed.")
 
+  named_scope :top_level, :conditions => {:parent_id => nil}
+  named_scope :closed, :joins => :collection_preference, :conditions => ["collection_preferences.closed = ?", true]
+  named_scope :open, :joins => :collection_preference, :conditions => ["collection_preferences.closed = ?", false]
+  named_scope :unrevealed, :joins => :collection_preference, :conditions => ["collection_preferences.unrevealed = ?", true]
+  named_scope :anonymous, :joins => :collection_preference, :conditions => ["collection_preferences.anonymous = ?", true]
+
   def to_param
     name
   end
-
+  
+  def parent_name=(name)
+    self.parent = Collection.find_by_name(name)
+  end
+  
+  def parent_name
+    self.parent ? self.parent.name : ""
+  end
+  
+  def all_owners
+    self.owners + (self.parent ? self.parent.owners : [])
+  end
+  
+  def all_moderators
+    self.moderators + (self.parent ? self.parent.moderators : [])
+  end
+  
   def maintainers
-    self.owners + self.moderators
+    self.all_owners + self.all_moderators
   end
   
   def user_is_owner?(user)
-    user != :false && !(user.pseuds & self.owners).empty?
+    user && user != :false && !(user.pseuds & self.all_owners).empty?
   end
   
   def user_is_moderator?(user)
-    user != :false && !(user.pseuds & self.moderators).empty?
+    user && user != :false && !(user.pseuds & self.all_moderators).empty?
   end
   
   def user_is_maintainer?(user)
-    user != :false && !(user.pseuds & (self.moderators + self.owners)).empty?
+    user && user != :false && !(user.pseuds & (self.all_moderators + self.all_owners)).empty?
   end
   
   def user_is_participant?(user)
-    user != :false && !get_participating_pseuds_for_user(user).empty?
+    user && user != :false && !get_participating_pseuds_for_user(user).empty?
   end
 
   def user_is_posting_participant?(user)
-    user != :false && !(user.pseuds & self.posting_participants).empty?
+    user && user != :false && !(user.pseuds & self.posting_participants).empty?
   end
   
   def get_participating_pseuds_for_user(user)
-    user != :false ? user.pseuds & self.participants : []
+    (user && user != :false) ? user.pseuds & self.participants : []
   end
   
   def get_participants_for_user(user)
@@ -100,6 +130,8 @@ class Collection < ActiveRecord::Base
   
   def moderated? ; self.collection_preference.moderated ; end
   def closed? ; self.collection_preference.closed ; end
+  def unrevealed? ; self.collection_preference.unrevealed ; end
+  def anonymous? ; self.collection_preference.anonymous ; end
   
   
 end

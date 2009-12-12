@@ -43,6 +43,14 @@ class User < ActiveRecord::Base
   before_create :create_default_associateds
   
   before_update :validate_date_of_birth
+
+  has_many :collection_participants, :through => :pseuds
+  has_many :invited_collections, :through => :collection_participants, :source => :collection, 
+      :conditions => ['collection_participants.participant_role = ?', CollectionParticipant::INVITED]
+  has_many :participated_collections, :through => :collection_participants, :source => :collection, 
+      :conditions => ['collection_participants.participant_role IN (?)', [CollectionParticipant::OWNER, CollectionParticipant::MODERATOR, CollectionParticipant::MEMBER]]
+  has_many :maintained_collections, :through => :collection_participants, :source => :collection, 
+      :conditions => ['collection_participants.participant_role IN (?)', [CollectionParticipant::OWNER, CollectionParticipant::MODERATOR]]
   
   has_many :readings, :dependent => :destroy 
   has_many :bookmarks, :through => :pseuds 

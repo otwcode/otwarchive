@@ -1351,3 +1351,11 @@ two:
   intro: here is an intro
   faq: lots of faqs
   rules: whee some rules
+
+three:
+  collection_id: 3
+  intro: only an intro and no faqs or rules
+
+four:
+  collection_id: 4
+  rules: rules but no intro

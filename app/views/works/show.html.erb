@@ -2,6 +2,12 @@
 <%= render :partial => 'admin/admin_options', :locals => {:item => @work} %>
 <%- end -%>
 
+<% if @work.unrevealed? %>
+<h3>t('works.unrevealed', :default => "This work is part of an ongoing challenge and will be revealed soon!")</h3>
+<% end %>
+
+<% if !@work.unrevealed? || logged_in_as_admin? || is_author_of?(@work) %>
+
 <!-- BEGIN work --> 
 <div class="work-show"><a name="top">&nbsp;</a>
 	<%= render :partial => 'works/work_header' -%>
@@ -30,3 +36,4 @@
 <!-- BEGIN comment section -->
 <%= render :partial => 'comments/commentable', :locals => {:commentable => @work} %>
 <!-- END comment section -->
+<% end -%>

@@ -308,12 +308,12 @@ class Work < ActiveRecord::Base
 
   def unrevealed?(user=User.current_user)
     # eventually here is where we check if it's in a challenge that hasn't been made public yet
-    false
+    !self.collections.unrevealed.empty?
   end
   
   def anonymous?(user=User.current_user)
     # here we check if the story is in a currently-anonymous challenge
-    false
+    !self.collections.anonymous.empty?
   end
 
   ########################################################################
@@ -1030,7 +1030,7 @@ class Work < ActiveRecord::Base
       :select => "DISTINCT works.*",
       :joins => "INNER JOIN collection_items ON (collection_items.item_id = works.id AND collection_items.item_type = 'Work')
                  INNER JOIN collections ON collection_items.collection_id = collections.id",
-      :conditions => ['collections.id = ?', collection.id]
+      :conditions => ['collections.id IN (?)', [collection.id] + collection.children.collect(&:id)]
     }
   }
 
@@ -1038,7 +1038,7 @@ class Work < ActiveRecord::Base
     {
       :joins => "INNER JOIN collection_items ON (collection_items.item_id = works.id AND collection_items.item_type = 'Work')
                  INNER JOIN collections ON collection_items.collection_id = collections.id",
-      :conditions => ['collections.id = ?', collection.id]
+      :conditions => ['collections.id IN (?)', [collection.id] + collection.children.collect(&:id)]
     }
   }
 
@@ -1182,7 +1182,7 @@ class Work < ActiveRecord::Base
     end
     
     unless @works.empty?
-      @filters = build_filters(@works)
+      @filters = build_filters(@works, options)
     end
      
     return @works.paginate(page_args.merge(:total_entries => @works.size)), @filters, @pseuds
@@ -1191,8 +1191,8 @@ class Work < ActiveRecord::Base
   # Takes an array of works, returns a hash (key = tag type) of arrays of hashes (of individual tag data)
   # Ex. {'Fandom' => [{:name => 'Star Trek', :id => '3', :count => '50'}, ...], 'Character' => ...}
   def self.build_filters(works, options = {})
-    if options[:in_user_page]
-      # strip out works hidden in challenges
+    if options[:user]
+      # strip out works hidden in challenges if on a user's specific page
       works = works.delete_if {|w| w.unrevealed?}
     end
     self.build_filters_from_tags(Tag.filters_with_count(works.collect(&:id)))

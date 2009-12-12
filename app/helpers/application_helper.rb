@@ -37,6 +37,8 @@ module ApplicationHelper
   # and on Feb 24 09 to sort alphabetically for great justice
   # and show only the authors when in preview_mode, unless they're empty
   def byline(creation)
+    return t('byline.anonymous', :default => "Anonymous") if creation.methods.include?('anonymous?') && creation.anonymous?
+      
     pseuds = []
     pseuds << creation.authors if creation.authors
     pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
@@ -54,7 +56,9 @@ module ApplicationHelper
     pseuds.collect { |pseud| 
       archivists[pseud].nil? ? 
         link_to(pseud.byline, [pseud.user, pseud], :class => "login author") : 
-        archivists[pseud] + " [archived by " + link_to(pseud.byline, [pseud.user, pseud], :class => "login author") + "]"
+        archivists[pseud] + 
+          t('byline.archived_by', :default => "[archived by {{archivist}}]", 
+            :archivist => link_to(pseud.byline, [pseud.user, pseud], :class => "login author"))
     }.join(', ')
   end
 

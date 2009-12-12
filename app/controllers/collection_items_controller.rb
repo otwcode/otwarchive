@@ -32,5 +32,18 @@ class CollectionItemsController < ApplicationController
       render :action => :new
     end
   end
+  
+  
+  def approve
+    
+  end
+  
+  def reject
+    
+  end
+
+  def destroy
+    @collection_item = CollectionItem.find(params[:id])
+  end
 
 end

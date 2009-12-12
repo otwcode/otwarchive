@@ -2,7 +2,7 @@
 <%- if @collection -%>
 <!-- custom css for header -->
 <style type="text/css">
-#header  {  background:#7887AF url(<%= @collection.header_image_url -%>);}
+#header  {  background:#7887AF url(<%= @collection.header_image_url || (@collection_parent ? @collection_parent.header_image_url : '') -%>);}
 </style>
 <%- end -%>
 
@@ -25,8 +25,8 @@
   <%= render :partial => 'works/search_box' %>
 </div>
 
-  <% if @collection && @collection.title -%>
-    <h1 class="collections"><%= t('collection.title', :default => '{{title}}', :title => @collection.title) -%>
+  <% if @collection -%>
+    <h1 class="collections"><%= @collection.title ? @collection.title : (@collection_parent ? @collection_parent.title : t('layouts.new_collection', :default => "New Collection")) -%>
   <% else -%>
     <h1><%= link_to ArchiveConfig.APP_NAME, root_path %>
   <% end -%>
@@ -35,7 +35,7 @@
 
   <ul id="main-navigation">
     <% if @collection %>
-      <li><%= span_if_current('collection home', collection_path(@collection)) %></li>
+      <li><%= span_if_current('collection home', !@collection.new_record? ? collection_path(@collection) : (@collection_parent ? collection_path(@collection_parent) : collections_path)) %></li>
     <% else %>
       <li><%= logged_in? ? span_if_current('my home', user_path(current_user)) : span_if_current('home', root_path) %></li>
     <% end %>

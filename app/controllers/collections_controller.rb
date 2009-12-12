@@ -12,8 +12,11 @@ class CollectionsController < ApplicationController
     if params[:work_id]
       @work = Work.find(params[:work_id])
       @collections = @work.collections
+    elsif params[:collection_id]
+      @collection = Collection.find(params[:collection_id])
+      @collections = @collection.children
     else
-      @collections = Collection.all
+      @collections = Collection.top_level
     end
   end
 
@@ -23,6 +26,9 @@ class CollectionsController < ApplicationController
 
   def new
     @collection = Collection.new
+    if params[:collection_id] && (@collection_parent = Collection.find_by_name(params[:collection_id]))
+      @collection.parent_name = @collection_parent.name
+    end
   end
 
   def edit

@@ -28,7 +28,7 @@
       <dd class="collection">
         <%= f.text_field :collection_names -%>
         <div class="auto_complete" id="work_collection_names_auto_complete" ></div>
-        <%= javascript_tag("new Autocompleter.Local('work_collection_names', 'work_collection_names_auto_complete', #{Collection.find(:all, :order => :name).map(&:name).to_json}, {fullSearch: true, tokens: ','});") %>
+        <%= javascript_tag("new Autocompleter.Local('work_collection_names', 'work_collection_names_auto_complete', #{Collection.open.map(&:name).sort.to_json}, {fullSearch: true, tokens: ','});") %>
       </dd>
       
       <dt class="summary">

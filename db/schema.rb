@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091209215213) do
+ActiveRecord::Schema.define(:version => 20091212051923) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -120,6 +120,8 @@ ActiveRecord::Schema.define(:version => 20091209215213) do
     t.datetime "updated_at"
     t.boolean  "moderated",     :default => false, :null => false
     t.boolean  "closed",        :default => false, :null => false
+    t.boolean  "unrevealed",    :default => false, :null => false
+    t.boolean  "anonymous",     :default => false, :null => false
   end
 
   create_table "collection_profiles", :force => true do |t|
@@ -139,6 +141,7 @@ ActiveRecord::Schema.define(:version => 20091209215213) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "parent_id"
   end
 
   create_table "comments", :force => true do |t|
