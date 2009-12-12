@@ -3,7 +3,9 @@
 <%- end -%>
 
 <% if @work.unrevealed? %>
-<h3>t('works.unrevealed', :default => "This work is part of an ongoing challenge and will be revealed soon!")</h3>
+<h3><%= t('works.unrevealed', :default => "This work is part of an ongoing challenge, {{challenge}}, and will be revealed soon!",
+    :challenge => @work.collections.unrevealed.map {|challenge| link_to(challenge.title, collection_path(challenge))}) -%></h3>
+
 <% end %>
 
 <% if !@work.unrevealed? || logged_in_as_admin? || is_author_of?(@work) %>

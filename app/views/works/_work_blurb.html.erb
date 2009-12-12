@@ -2,7 +2,7 @@
 
 <% if !is_author_of?(work) && work.unrevealed? -%>
 
-  <%= render :partial => "work_mystery_blurb", :locals => {:work => work} -%>
+  <%= render :partial => "works/work_mystery_blurb", :locals => {:work => work} -%>
   
 <% else %>
 
