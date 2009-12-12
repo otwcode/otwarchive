@@ -383,14 +383,6 @@ tagging_1067724957:
   taggable_id: 14
   tagger_type: Tag
   created_at: 2008-12-07 20:52:14 +00:00
-tagging_1067725101: 
-  tagger_id: 1063753733
-  updated_at: 2009-03-12 00:34:06 +00:00
-  id: 1067725101
-  taggable_type: Work
-  taggable_id: 37
-  tagger_type: Tag
-  created_at: 2009-03-12 00:34:06 +00:00
 tagging_1067725289: 
   tagger_id: 1063753941
   updated_at: 2009-07-17 23:13:52 +01:00
@@ -560,7 +552,7 @@ tagging_1067725344:
   tagger_type: Tag
   created_at: 2009-07-17 23:46:14 +01:00
 tagging_1067725154: 
-  tagger_id: 1063753733
+  tagger_id: 1039617938
   updated_at: 2009-03-18 04:09:43 +00:00
   id: 1067725154
   taggable_type: Work
@@ -936,7 +928,7 @@ tagging_1067725213:
   tagger_type: Tag
   created_at: 2009-03-20 23:24:08 +00:00
 tagging_1067725023: 
-  tagger_id: 1063753733
+  tagger_id: 1039617938
   updated_at: 2009-03-09 21:55:12 +00:00
   id: 1067725023
   taggable_type: Work
@@ -2152,7 +2144,7 @@ tagging_1067725303:
   tagger_type: Tag
   created_at: 2009-07-17 23:25:27 +01:00
 tagging_1067725113: 
-  tagger_id: 1063753733
+  tagger_id: 1039617938
   updated_at: 2009-03-12 00:56:30 +00:00
   id: 1067725113
   taggable_type: Work
@@ -2600,7 +2592,7 @@ tagging_1067725415:
   tagger_type: Tag
   created_at: 2009-09-17 23:11:18 +01:00
 tagging_1067725225: 
-  tagger_id: 1063753733
+  tagger_id: 1039617938
   updated_at: 2009-05-10 13:20:06 +01:00
   id: 1067725225
   taggable_type: Work
@@ -3208,7 +3200,7 @@ tagging_1067725386:
   tagger_type: Tag
   created_at: 2009-07-18 10:10:30 +01:00
 tagging_1067725197: 
-  tagger_id: 1063753733
+  tagger_id: 1039617938
   updated_at: 2009-03-20 23:20:17 +00:00
   id: 1067725197
   taggable_type: Work
@@ -3600,7 +3592,7 @@ tagging_1067725257:
   tagger_type: Tag
   created_at: 2009-07-17 22:55:33 +01:00
 tagging_1067725067: 
-  tagger_id: 1063753733
+  tagger_id: 1039617938
   updated_at: 2009-03-11 22:30:12 +00:00
   id: 1067725067
   taggable_type: Work
@@ -3800,7 +3792,7 @@ tagging_1067725123:
   tagger_type: Tag
   created_at: 2009-03-12 01:43:37 +00:00
 tagging_1067725171: 
-  tagger_id: 1063753733
+  tagger_id: 1039617938
   updated_at: 2009-03-20 01:28:02 +00:00
   id: 1067725171
   taggable_type: Work
