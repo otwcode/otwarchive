@@ -1,5 +1,7 @@
-<h1>New collection</h1>
+<h1><%= t('collections.new', :default => "New Collection") %></h1>
 
 <%= render :partial => 'form' -%> 
 
-<%= link_to 'Back', collections_path %>
+<ul class="navigation">
+<li><%= link_to 'Back', collections_path %></li>
+</ul>

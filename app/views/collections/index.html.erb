@@ -1,30 +1,68 @@
 <h1><%=h t('listing_collections', :default => "Listing collections") %></h1>
-
+<h2><!--search_header X works found--></h2>
 <ul class="navigation">
-<li><%= link_to 'New collection', new_collection_path %></li>
+	<li><%= link_to 'New collection', new_collection_path %></li>
 </ul>
-
-<ul class="collections-list">
-
+<!--pagination here-->
+<!--sort navigation here-->
+<!--filters-->
+<ul class="work-list collections">
 <% @collections.each do |collection| %>
-  <li>
-    <h2><%= link_to collection.title, collection -%></h2> <h3>(<%= collection.name -%>)</h3>
-    <dl>
-    <dt><th scope="col"><%=h t('owners', :default => "Owners") %></dt>   
-    <dd><%=h collection.owners.collect(&:byline).join(", ") -%></dd>
-    <dt><%=h t('title', :default => "Description") %></dt>
-    <dd><%=h collection.description %></dd>
-    <dt><%=h t('email', :default => "Contents") %></dt>
-    <dd><ul>
-      <% if (@works_count = collection.works.count) > 0%>
-        <li><%= t('collections.works', :default => "Works: {{works_count}}", :works_count => @works_count) -%></li>
-      <% end %>
-      <% if (@bookmarks_count = collection.bookmarks.count) > 0%>
-         <%= @works_count > 0 ? ", " : "" -%>
-         <li><%= t('collections.bookmarks', :default => "Bookmarks: {{bookmarks_count}}", :bookmarks_count => @bookmarks_count) -%></li>
-      <% end %>
-    </ul></dd>
-  </dl></li>
+	<li class="work collections">
+    	<ul class="work collections">
+	 		<li class="heading">
+				<span class="icon"><img src="/images/collections.png" class="icon" alt="" /></span>
+				<!--or collections header image-->
+				<h3><%= link_to collection.title, collection -%>
+					<span>(<%= collection.name -%>)</span>
+						<%= t('collection_by_owner', :default => 'by') -%>
+						<!--linkify--><%=h collection.owners.collect(&:byline).join(", ") -%></h3>
+			<p class="update"><!--collection updated at--></p>
+			</li>
+			<!--unless mods are less than one
+			<li>
+				<dl class="mods">
+				<dt>Mods</dt>
+				<dd>
+					<ul>
+						<li>link to mod</li>
+						...
+					</ul>
+				</dd>
+				</dl>
+			</li>
+			-->
+			<!--unless tags are less than one
+			<li>
+				<dl class="tags">
+				<dt>Tags</dt>
+				<dd>
+					<ul>
+						<li>link to tag</li>
+						...
+					</ul>
+				</dd>
+				</dl>
+			</li>
+			-->
+			<li class="summary">
+				<%=h collection.description %>
+				<!--if greater than x characters then 
+				(...) link to collection show page-->
+			</li>
+			<!-- ONLY print if stats are available-->
+			<li class="stats">
+    		<dl>
+			<% if (@works_count = collection.works.count) > 0%>
+			<dt><%=h t('works', :default => "Works") %></dt>
+    		<dd><%= t('collections.works', :default => "{{works_count}}", :works_count => @works_count) -%></dd>
+      		<% end %>
+      			<% if (@bookmarks_count = collection.bookmarks.count) > 0%>
+         	<dt><%=h t('bookmarks', :default => "Bookmarks") %></dt>
+			<dd><%= t('collections.bookmarks', :default => "{{bookmarks_count}}", :bookmarks_count => @bookmarks_count) -%></dd>
+      			<% end %>
+			</dl>
+		</li>
 <% end %>
 </ul>
 

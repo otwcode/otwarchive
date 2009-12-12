@@ -127,7 +127,7 @@ dl#user-data dt {font-weight: 900; width: 9em; float:left; clear:left; margin:0.
 
 /* WORKS-INDEX */
 /*work filters rules are in forms.css */
-/*works blurb : shows on works, reading history, series, should be spoofed on bookmarks and users-show*/
+/*works blurb : shows on works, reading history, series, should be spoofed on bookmarks and users-show and collections index*/
 li.work ul.work {position: relative; margin: 0 13.5em 0.5625em auto;padding-right:0.3775em;}
 #user-page li.work ul.work, .series-show li.work ul.work, .series-index li.work ul.work, #series-work-list li.work ul.work, .works-drafts li.work ul.work { margin-right: 0; }
 ul.work {position:relative; border-bottom:1px solid #ddd; }
@@ -252,14 +252,17 @@ dl.translations {position:relative; margin: 1.5em auto; padding: 1.5em 0 2.5em; 
 .work ul.navigation, .bookmark ul.navigation {margin: 0;}
 
 /*COLLECTIONS */
-#main.collections-show h2, #main.collections-show h3, #main .collections-list h2, #main .collections-list h3 {display:inline;}
+/*blurb follows works-blurb*/
+.collections .heading span.icon {font-size:0.875em; height:55px; width:75px; overflow: hidden; display:block; float:left;}
+.collections .heading h3 span {display:inline; float:none;}
+
+#main.collections-show h2, #main.collections-show h3 {display:inline;}
 #main.collections-show blockquote h3 {display:block; border-bottom: 1px solid; margin-bottom:.875em;}
-#main.collections-show dl {border-top:1px dotted; border-bottom:1px dotted;}
-#main .collections-list  dl, #main.collections-show dl { position:relative; margin-top:0.5em;}
-#main .collections-list  dt, #main.collections-show dt { position:relative; width:12em; margin: 0; padding: 0.25em 0.5625em 0.25em 0; font-weight: bold;}
-#main .collections-list  dd, #main.collections-show dd { position:absolute; left:12.5em; padding: 0.25em 0.5625em 0.25em 0; margin: -1.75em 0 0;}
-#main .collections-list  dd li {display:inline; border-bottom: none;}
-#main .collections-list li {border-bottom: 1px #111 solid;}
+#main.collections-show dl{ position:relative; margin:0 1.5em;}
+#main.collections-show dt { width:12em; margin: 0; padding: 0.25em 0.5625em 0.25em 0; font-weight: bold; float:left; clear:left;}
+#main.collections-show dd { padding:0.25em 0.5625em 0.25em 0; margin:0; width:auto; float:left;}
+#main.collections-show .preface {clear:left;}
+
 
 /*ToS and any other long text pages.
 * styling duplicates the work-views.css and is incorporated there*/

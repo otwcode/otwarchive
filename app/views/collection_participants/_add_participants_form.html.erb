@@ -1,8 +1,11 @@
-
+<tr>
 <% form_tag add_collection_participants_path(@collection), :method => :get do %>
-<%= label_tag(:participants_to_invite, t('add_participants', :default => "Add new members: ")) -%><br />
+<td><%= label_tag(:participants_to_invite, t('add_participants', :default => "Add new members: ")) -%>
 <%= text_field_tag :participants_to_invite, nil, :size => 60 %>
 <div class="auto_complete" id="participants_to_invite_auto_complete" ></div>
 <%= javascript_tag("new Autocompleter.Local('participants_to_invite', 'participants_to_invite_auto_complete', #{Pseud.find(:all, :order => :name).map(&:byline).to_json}, {fullSearch: true, tokens: ','});") %>
-<%= submit_tag t('add_participants_submit', :default => "Submit") -%>
+</td>
+<td><!--missing select role dropdown?-->&nbsp;</td>
+	<td><%= submit_tag t('add_participants_submit', :default => "Submit") -%></td>
 <% end %>
+</tr>

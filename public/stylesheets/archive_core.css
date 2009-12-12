@@ -36,7 +36,9 @@ a.tag:hover	{ background: #900 !important; color: #fffef9 !important; }
 
 /*EM SCALE */
 #main p	{ font-size: 0.875em; line-height: 1.286; margin: 0.643em 0; }
-#main li, #main dd {font-size: 0.875em; line-height: 1.286; margin: 0.643em 0;} /* probably should be #main span and #main div as well, but that'll need thorough testing */
+#main li, #main dd {font-size: 0.875em; line-height: 1.286; margin: 0.643em 0;} 
+/* probably should be #main span and #main div as well, but that'll need thorough testing */ 
+/* span or div do not need sizing as text inside would be enclosed in a block element: p, li, dd . lim*/
 
 /*sizing up and down through multiple nested lists*/
 #main dl dd dl dd p, #main dl dd dl dd, #main dd dl dd p, #main dd dl dd dl dd p
@@ -56,7 +58,7 @@ h5	{ font-size: 0.75em; line-height: 1.5; margin: .375em 0; }
 h6	{ font-size: 0.625em; line-height: 1.8; margin: .3125em 0; }
 
 hr	{ margin: 0.75em auto; border:0; border-bottom: 3px double; }
-hr.clear, .clearboth	{ clear: both; height: 0; border: 0; margin-bottom: 0; margin-top: 0;}
+hr.clear, .clearboth	{ clear: both; height: 0; border: 0; margin:0; background:transparent; color:#fffef9;}
 
 blockquote, pre	{ font: 100 1em/1.125 Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; margin: 1.5em; }
 kbd, tt, code	{ font: normal 0.75em consolas, courier, monospace; margin: auto; padding: 0.25em; }
@@ -77,7 +79,8 @@ sup { vertical-align:super;}
 table	{ margin:auto; padding: 0.375em; }
 caption	{ position: absolute; margin-left: -999em; }
 caption, th, td	{ text-align: left; }
-th, thead td, tfoot	{ background:#777; color:#fff; font-weight: 100; padding: 0.25em; text-align:center;}
+th, thead td { background:#777; color:#fff; font-weight: 100; padding: 0.25em;}
+tfoot {margin: 0.875em auto;}
 td th	{ padding-right: 3em; }
 td	{ padding:0.375em; border:1px solid #ddd;}
 

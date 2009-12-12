@@ -19,14 +19,10 @@
   <% end %>
 	<li><%= link_to 'Back', collections_path %></li>
 </ul>
-
-
-<h2><%=h @collection.title %></h2>
-<h3>(<%=h @collection.name %>)</h3>
+<h1><%=h @collection.title %> <span>(<%=h @collection.name %>)</span></h1>
 	<dl class="blurb">
 	<dt><%=h t('mods', :default => "Collection Email:") %></dt>
-	<dd>
-	<%=h @collection.email %>
+	<dd><%=h @collection.email %></dd>
 	<dt><%=h t('description', :default => "Description:") %></dt>
 	<dd>
 	<%=h @collection.description %>

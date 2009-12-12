@@ -17,24 +17,24 @@
 <% paginated_section @works, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
 
 <% if @user && @user == current_user %>
-<div class="navigation" style="text-align: left;">
-  <span class="navitem" id="edit_multiple">
+<ul class="navigation" style="text-align: left;">
+  <li id="edit_multiple">
     <%= link_to t('edit_multiple_link', :default => 'Edit Multiple Works'), 
                 show_multiple_user_works_path(@user) -%>
-  </span>
-</div>
+  </li>
+</ul>
 <% end %>
 
-  <div class="navigation">
-    <span class="navlabel"><%= t('sort_by', :default => 'Sort By') -%></span> 
+  <ul class="navigation">
+    <li><%= t('sort_by', :default => 'Sort By') -%></li>
     <%- unless @query.blank? -%>
-    <span class="navitem"><%= sort_link t('sort.relevance', :default => 'Relevance') %></span>
+    <li><%= sort_link t('sort.relevance', :default => 'Relevance') %></li>
     <%- end -%>
-    <span class="navitem"><%= sort_link t('sort.author', :default => 'Author'), :author -%></span>
-    <span class="navitem"><%= sort_link t('sort.title', :default => 'Title'), :title -%></span>
-    <span class="navitem"><%= sort_link t('sort.date', :default => 'Date'), :date -%></span>
-    <span class="navitem"><%= sort_link t('sort.word_count', :default => 'Word Count'), :word_count -%></span>
-  </div>
+    <li><%= sort_link t('sort.author', :default => 'Author'), :author -%></li>
+    <li><%= sort_link t('sort.title', :default => 'Title'), :title -%></li>
+    <li><%= sort_link t('sort.date', :default => 'Date'), :date -%></li>
+    <li><%= sort_link t('sort.word_count', :default => 'Word Count'), :word_count -%></li>
+  </ul>
 
   <%= render :partial => 'filters' %>
 
