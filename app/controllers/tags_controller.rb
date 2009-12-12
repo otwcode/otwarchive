@@ -11,7 +11,7 @@ class TagsController < ApplicationController
   # GET /tags.xml
   def index
     if @collection
-      @tags = @collection.works.collect(&:common_tags).flatten.uniq
+      @tags = @collection.works.collect(&:filters).flatten.uniq
     else      
       @tags = Tag.for_tag_cloud
     end
