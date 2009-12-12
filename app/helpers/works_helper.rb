@@ -133,10 +133,13 @@ module WorksHelper
   def get_warnings_class(warning_tags)
     return "warning-yes" unless warning_tags
     none = true
+    choosenotto = true
     warning_tags.map(&:name).each do |name|
       none = false if name != ArchiveConfig.WARNING_NONE_TAG_NAME
+      choosenotto = false if name !=ArchiveConfig.WARNING_DEFAULT_TAG_NAME
     end
     return "warning-no" if none
+    return "warning-choosenotto" if choosenotto
     "warning-yes"
   end
 
