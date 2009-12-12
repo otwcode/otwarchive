@@ -12,7 +12,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :admin_posts, :has_many => :comments
 
-  map.resources :media, :only => [:index, :show] 
+  map.resources :media, :only => [:index, :show], :has_many => :fandoms
+  map.resources :fandoms, :only => [:index, :show] 
   
   map.resources :people, :only => :index
 
@@ -103,6 +104,7 @@ ActionController::Routing::Routes.draw do |map|
     collection.resources :bookmarks
     collection.resource :collection_profile, :only => [:show]
     collection.resources :media, :only => [:index, :show]
+    collection.resources :fandoms, :only => [:index, :show]
     collection.resources :people, :only => [:index]
     collection.resources :tags, :requirements => { :id => %r([^/;,?]+) }, :has_many => :works
     collection.resources :participants, :controller => "collection_participants", :collection => {:add => :get}, :member => {:join => :get}
