@@ -909,7 +909,7 @@ class Work < ActiveRecord::Base
     {:limit => limit.kind_of?(Fixnum) ? limit : 5}
   }
   
-  named_scope :recent, lambda { |*args| {:conditions => ["revised_at > ?", (args.first || 1.week.ago.to_date)]} }
+  named_scope :recent, lambda { |*args| {:conditions => ["revised_at > ?", (args.first || 4.weeks.ago.to_date)]} }
   named_scope :within_date_range, lambda { |*args| {:conditions => ["revised_at BETWEEN ? AND ?", (args.first || 4.weeks.ago), (args.last || Time.now)]} }
   named_scope :posted, :conditions => {:posted => true}
   named_scope :unposted, :conditions => {:posted => false}
@@ -1167,7 +1167,7 @@ class Work < ActiveRecord::Base
     # add on collections
     command << (options[:collection] ? collected : '')
     
-    @works = eval("Work#{command + sort}")
+    @works = eval("Work#{command + sort}").find(:all, :limit => ArchiveConfig.SEARCH_RESULTS_MAX)
 
     # Adds the co-authors of the displayed works to the available list of pseuds to filter on
     if !options[:user].nil?

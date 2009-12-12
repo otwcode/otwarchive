@@ -1,0 +1,19 @@
+<%- if @collection -%>
+  <h1>Fandoms in <%= @collection.title %></h1>   
+<%- elsif @medium -%>  
+  <h1><%= link_to t('fandoms', :default => 'Fandoms'), media_path %> > <%=h @medium.name %></h1>
+<%- else -%>
+  <h1><%= link_to t('fandoms', :default => 'Fandoms'), media_path %></h1> 
+<%- end -%>  
+  
+<ul class="fandoms-list">
+  <%- for fandom in @fandoms -%>
+  <li>
+    <%- if fandom.respond_to?(:count) -%>
+    <%= link_to_tag_works_with_text(fandom, fandom.name + " (" + fandom.count + ")") %>
+    <%- else -%>
+    <%= link_to_tag_works_with_text(fandom, fandom.name) %>        
+    <%- end -%>    
+  </li>
+  <%- end -%>
+</ul>

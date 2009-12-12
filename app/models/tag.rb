@@ -51,6 +51,7 @@ class Tag < ActiveRecord::Base
   end
 
   named_scope :canonical, {:conditions => {:canonical => true}, :order => 'name ASC'}
+  named_scope :noncanonical, {:conditions => {:canonical => false}, :order => 'name ASC'}
   named_scope :nonsynonymous, {:conditions => {:merger_id => nil, :canonical => false}, :order => 'name ASC'}
   named_scope :unwrangled, {:conditions => {:canonical => false, :merger_id => nil}, :order => 'name ASC'}
   named_scope :visible, {:conditions => ['type in (?)', VISIBLE], :order => 'name ASC' }
@@ -113,6 +114,10 @@ class Tag < ActiveRecord::Base
       :limit => count
     }     
   }
+  
+  named_scope :with_count, (User.current_user && User.current_user != :false) ? 
+  { :select => "tags.*, filter_counts.unhidden_works_count as count", :joins => :filter_count } :
+  { :select => "tags.*, filter_counts.public_works_count as count", :joins => :filter_count } 
   
   # Class methods
 

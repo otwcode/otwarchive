@@ -1,0 +1,24 @@
+class FandomsController < ApplicationController
+  before_filter :load_collection
+
+  def index
+    if @collection
+      @fandoms = @collection.filters.by_type("Fandom").by_name
+     elsif params[:medium_id]
+      @medium = Media.find_by_name(params[:medium_id])
+      if @medium == Media.uncategorized
+        @fandoms = @medium.children.by_type('Fandom').by_name
+      else
+        fandom_ids = @medium.children.by_type('Fandom').canonical.collect(&:id)
+        @fandoms = Fandom.by_name.with_count.find(:all, :conditions => {:id => fandom_ids})
+      end      
+    else
+      @fandoms = Fandom.by_name.with_count
+    end
+  end
+  
+  def show
+    @fandom = Fandom.find_by_name(params[:id])
+    @characters = @fandom.characters.canonical
+  end
+end

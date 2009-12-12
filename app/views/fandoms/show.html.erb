@@ -1,0 +1,25 @@
+<h1><%= @fandom.name %></h1>
+
+<ul>
+  <li><%= link_to "Works", tag_works_path(@fandom) %></li>
+  <li><%= link_to "Bookmarks", tag_bookmarks_path(@fandom) %></li>
+</ul>
+
+<h2>Characters and Pairings</h2>
+
+<%- unless @characters.blank? -%>
+<ul>
+  <%- for character in @characters -%>
+  <li>
+    <%= link_to character.name, tag_works_path(character) %>
+    <%- unless character.pairings.empty? -%>
+    <ul>
+      <%- for pairing in character.pairings -%>
+      <li><%= link_to pairing.name, tag_works_path(pairing) %></li>
+      <%- end -%>
+    </ul>  
+    <%- end -%>
+  </li>
+  <%- end -%>
+</ul>
+<%- end -%>

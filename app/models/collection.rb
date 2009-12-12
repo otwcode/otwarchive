@@ -13,6 +13,8 @@ class Collection < ActiveRecord::Base
   accepts_nested_attributes_for :collection_items, :allow_destroy => true
   has_many :works, :through => :collection_items, :source => :item, :source_type => 'Work' 
   has_many :bookmarks, :through => :collection_items, :source => :item, :source_type => 'Bookmark'
+  has_many :fandoms, :through => :works, :uniq => true
+  has_many :filters, :through => :works, :uniq => true
 
   has_many :collection_participants, :dependent => :destroy
   accepts_nested_attributes_for :collection_participants, :allow_destroy => true

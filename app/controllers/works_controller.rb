@@ -190,6 +190,12 @@ class WorksController < ApplicationController
                                                     :language_id => @language_id,
                                                     :sort_column => @sort_column, :sort_direction => @sort_direction,
                                                     :page => params[:page], :per_page => params[:per_page])
+      
+      # Limit the number of works returned and let users know that it's happening
+      if @works.size >= ArchiveConfig.SEARCH_RESULTS_MAX
+        flash.now[:notice] = "More than #{ArchiveConfig.SEARCH_RESULTS_MAX} works were returned. The first #{ArchiveConfig.SEARCH_RESULTS_MAX} works 
+        we found using the current sort and filters are shown."
+      end
     end
 
     # we now have @works found

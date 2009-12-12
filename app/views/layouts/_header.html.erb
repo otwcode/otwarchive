@@ -39,7 +39,7 @@
     <% else %>
       <li><%= logged_in? ? span_if_current('my home', user_path(current_user)) : span_if_current('home', root_path) %></li>
     <% end %>
-    <li><%= span_if_current('fandoms', @collection ? collection_media_path(@collection) : media_path) -%></li>
+    <li><%= span_if_current('fandoms', @collection ? collection_fandoms_path(@collection) : media_path) -%></li>
     <li><%= span_if_current('works', @collection ? collection_works_path(@collection) : works_path) -%></li>
     <li><%= span_if_current('people', @collection ? collection_people_path(@collection) : people_path) -%></li>
     <li><%= span_if_current('bookmarks', @collection ? collection_bookmarks_path(@collection) : bookmarks_path) -%></li>
