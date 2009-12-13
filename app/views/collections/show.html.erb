@@ -16,9 +16,13 @@
 	<dt><%=h t('collection.email', :default => "Collection Email:") %></dt>
 	<dd><%=h @collection.email %></dd>
 	<% end -%>
+	
+	<% unless @collection.description.blank? %>
 	<dt><%=h t('collection.description', :default => "Description:") %></dt>
 	<dd>
-	<%=h @collection.description %></dd>
+	  <%=h @collection.description %>
+	</dd>
+	<% end %>
 
   <% unless @collection.parent %>
  	<dt><%=h t('collections.children', :default => "Challenges and subcollections: ") -%></dt>
