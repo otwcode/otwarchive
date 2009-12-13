@@ -61,6 +61,7 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 
 /*ABUSE, FEEDBACK */
 #main.abuse_reports-new dt, form#new_feedback dt, form#new_feedback dd { width:100%; float:none;}
+#new_feedback p.submit {text-align: left;}
 
 
 /* POST WORK */
