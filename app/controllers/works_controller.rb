@@ -192,7 +192,7 @@ class WorksController < ApplicationController
                                                     :page => params[:page], :per_page => params[:per_page])
       
       # Limit the number of works returned and let users know that it's happening
-      if @works.size >= ArchiveConfig.SEARCH_RESULTS_MAX
+      unless @works.length < ArchiveConfig.SEARCH_RESULTS_MAX
         flash.now[:notice] = "More than #{ArchiveConfig.SEARCH_RESULTS_MAX} works were returned. The first #{ArchiveConfig.SEARCH_RESULTS_MAX} works 
         we found using the current sort and filters are shown."
       end
