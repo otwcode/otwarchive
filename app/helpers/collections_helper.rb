@@ -11,5 +11,11 @@ module CollectionsHelper
       link_to_remote text, {:url => fallback_url, :method => :get, :href => fallback_url}
     end
   end
+  
+  def check_has_received(user)
+    @received_pseuds ||= Pseud.parse_bylines(
+          @collection.collection_items.collect {|collection_item| collection_item.item.methods.include?("recipients") ? collection_item.item.recipients : ""}.join(","))[:pseuds]
+    !(@received_pseuds & user.pseuds).empty?
+  end
     
 end

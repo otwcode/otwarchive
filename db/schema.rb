@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091213013846) do
+ActiveRecord::Schema.define(:version => 20091213035516) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -122,6 +122,7 @@ ActiveRecord::Schema.define(:version => 20091213013846) do
     t.boolean  "closed",        :default => false, :null => false
     t.boolean  "unrevealed",    :default => false, :null => false
     t.boolean  "anonymous",     :default => false, :null => false
+    t.boolean  "gift_exchange", :default => false, :null => false
   end
 
   create_table "collection_profiles", :force => true do |t|

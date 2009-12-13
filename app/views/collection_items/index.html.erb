@@ -1,0 +1,24 @@
+<h1><%=h t('items', :default => "Items in") -%> <%= @collection.title -%></h1>
+
+<table id="collection_items_table" summary="This table shows the items in your collection; you can approve or reject or remove them.">
+<caption><%=h t('list', :default => "List of items") -%></caption>
+<thead>
+	<tr>
+  <th scope="col"><%=h t('item', :default => "Item") -%></th>
+  <th scope="col"><%=h t('creator', :default => "Creator") -%></th>
+  <th scope="col"><%=h t('approved_by_user', :default => "Creator-Approved") -%></th>
+  <th scope="col"><%=h t('approved_by_collection', :default => "Collection-Approved") -%></th>
+  <% if @collection.gift_exchange? -%>
+  <th scope="col"><%=h t('recipient', :default => "Recipient") -%></th>
+  <th scope="col"><%=h t('collection_items.received', :default => "Creator Has Received?")%>
+  <% end %>
+  
+  <th scope="col"><%=h t('manage', :default => "Manage") -%></th>
+</tr>
+</thead>
+<tbody>
+<%- @collection_items.each do |collection_item| -%>
+  <%= render :partial => 'item_form', :locals => {:collection_item => collection_item} %>
+<%- end -%>
+</tbody>
+</table>

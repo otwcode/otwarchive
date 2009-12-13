@@ -134,6 +134,7 @@ class Collection < ActiveRecord::Base
   def closed? ; self.collection_preference.closed ; end
   def unrevealed? ; self.collection_preference.unrevealed ; end
   def anonymous? ; self.collection_preference.anonymous ; end
+  def gift_exchange? ; self.collection_preference.gift_exchange ; end
   
   def not_empty?
     self.works.count > 0 || self.children.count > 0 || self.bookmarks.count > 0

@@ -3,10 +3,15 @@ class CollectionItem < ActiveRecord::Base
   NEUTRAL = 0
   APPROVED = 1
   REJECTED = -1
+
+  LABEL = {}
+  LABEL[NEUTRAL] = t('collection_item.neutral', :default => "Neutral")
+  LABEL[APPROVED] = t('collection_item.approved', :default => "Approved")
+  LABEL[REJECTED] = t('collection_item.rejected', :default => "Rejected")
   
-  APPROVAL_OPTIONS = [ [t('collection_item.neutral', :default => "Neutral"), NEUTRAL],
-                         [t('collection_item.approved', :default => "Approved"), APPROVED],
-                         [t('collection_item.rejected', :default => "Rejected"), REJECTED] ]
+  APPROVAL_OPTIONS = [ [LABEL[NEUTRAL], NEUTRAL],
+                       [LABEL[APPROVED], APPROVED],
+                       [LABEL[REJECTED], REJECTED] ]
 
   belongs_to :collection
   belongs_to :item, :polymorphic => :true

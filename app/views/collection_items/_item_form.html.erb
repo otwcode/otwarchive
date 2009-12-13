@@ -1,0 +1,32 @@
+<% if collection_item %>
+<tr id="collection_item_<%= collection_item.id %>">
+<%- form_for(:collection_item, collection_item, :url => {:controller => "collection_items", :action => "update"}) do |form| -%>
+<th scope="row">
+  <%= link_to(collection_item.item_type == "Bookmark" ? 
+    t('collection_items.bookmark', :default => "Bookmark for {{title}}", :title => collection_item.item.bookmarkable.title) : 
+    collection_item.item.title, collection_item.item) -%>
+  <%= form.hidden_field :id %><%= form.hidden_field :collection_id %>
+</th>
+<td><%= collection_item.item_type == "Bookmark" ? 
+          link_to(collection_item.item.pseud.byline, collection_item.item.pseud.user) :
+          collection_item.item.pseuds.map {|pseud| link_to(pseud.byline, pseud.user)}.join(", ") -%></td>
+<td><%= CollectionItem::LABEL[collection_item.user_approval_status] -%></td>
+<td><%= form.select(:collection_approval_status, CollectionItem::APPROVAL_OPTIONS) %></td>
+
+<% if @collection.gift_exchange? %>
+<td><%= collection_item.item.methods.include?("recipients") ? h(collection_item.item.recipients) : "" -%></td>
+<td><%= collection_item.item.methods.include?("users") ? collection_item.item.users.map {|user| check_has_received(user) ? "Yes" : "No"}.join(", ") : "N/A" -%></td>
+<% end %>
+
+<td class="submit button">
+<%= form.submit t('forms.update', :default => "Update") -%>
+<%- end -%> 
+<%= button_to t('item_remove', :default => "Remove"), collection_item_path(@collection, collection_item), 
+    :confirm => t('item_confirm_delete', :default => 'Are you certain you want to entirely remove {{item}} from the collection?', 
+                :item => collection_item.item_type == "Bookmark" ? 
+                  t('collection_items.bookmark', :default => "Bookmark for {{title}}", :title => collection_item.item.bookmarkable.title) : 
+                  collection_item.item.title), 
+    :method => :delete %>
+</td>
+</tr>
+<%- end -%>

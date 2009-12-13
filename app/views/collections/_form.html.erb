@@ -60,6 +60,10 @@
     <%= preference_form.label :anonymous, t("collection_form.anonymous", :default => "Is this collection currently anonymous?") %>
     <%= preference_form.check_box :anonymous %>
   </p>
+  <p>
+    <%= preference_form.label :gift_exchange, t("collection_form.gift_exchange", :default => "Is this collection a gift exchange?") %>
+    <%= preference_form.check_box :gift_exchange %>
+  </p>
   <% end %>
 
   <% @collection.build_collection_profile unless @collection.collection_profile %>
