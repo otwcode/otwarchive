@@ -135,5 +135,8 @@ class Collection < ActiveRecord::Base
   def unrevealed? ; self.collection_preference.unrevealed ; end
   def anonymous? ; self.collection_preference.anonymous ; end
   
-  
+  def not_empty?
+    self.works.count > 0 || self.children.count > 0 || self.bookmarks.count > 0
+  end
+    
 end

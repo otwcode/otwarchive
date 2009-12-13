@@ -53,6 +53,7 @@
     <%= collection.anonymous? ? t('collections_index.is_anonymous', :default => ", Anonymous") : "" %> )
 	</li>
 	<!-- ONLY print if stats are available-->
+	<%- if collection.not_empty? -%>
 	<li class="stats">
 		<dl>
       <% if (@challenges_count = collection.children.count) > 0%>
@@ -69,6 +70,7 @@
 			<% end %>
 	  </dl>
   </li>
+  <%- end -%>
   <% if collection.user_is_owner?(current_user) %>
 	  <li class="navigation"><%= link_to 'Edit', edit_collection_path(collection) %></li>
   <% end %>
