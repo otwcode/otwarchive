@@ -1,6 +1,8 @@
+<h1><%= sanitize_title_for_display @collection.title %> <span>(<%=h @collection.name %>)</span></h1>
+
 <%= render :partial => "collection_show_navigation" -%>
 
-<h1><%= sanitize_title_for_display @collection.title %> <span>(<%=h @collection.name %>)</span></h1>
+
 	<dl class="blurb">
 	<dt><%=h t('collections.mods', :default => "Moderators:") %></dt>
 	<dd>
@@ -8,43 +10,38 @@
 		  <%= @collection.all_moderators.map {|mod| "<li>#{link_to(mod.byline, mod.user)}</li>"} -%>
 		</ul>
 	</dd>
+	<%- unless @collection.email.blank? -%>
 	<dt><%=h t('collection.email', :default => "Collection Email:") %></dt>
 	<dd><%=h @collection.email %></dd>
+	<% end -%>
 	<dt><%=h t('collection.description', :default => "Description:") %></dt>
 	<dd>
-	<%=h @collection.description %>
-	</dd>
-</dl>
+	<%=h @collection.description %></dd>
 
-<div class="preface">
   <% unless @collection.parent %>
-  <blockquote>
-    <h3><%=h t('collections.children', :default => "Challenges and subcollections: ") -%></h3>
-    <%= @collection.children.sort_by {|child| child.created_at}.map {|child| link_to(child.title, child)}.join(", ") -%>
+ 	<dt><%=h t('collections.children', :default => "Challenges and subcollections: ") -%></dt>
+    <dd><%= @collection.children.sort_by {|child| child.created_at}.map {|child| link_to(child.title, child)}.join(", ") -%></dd>
     <% if @collection.user_is_maintainer?(current_user) -%>
-      (<%= link_to t('collections.add_child', :default => "Add new challenge/subcollection"), new_collection_collection_path(@collection) %>)
+      <dd>(<%= link_to t('collections.add_child', :default => "Add new challenge/subcollection"), new_collection_collection_path(@collection) %>)</dd>
     <% end %>
-  </blockquote>
   <% end -%>
   
   <% if @collection.parent %>
-  <blockquote>
-    <h3><%=h t('collections.parent', :default => "Parent Collection: ") -%></h3>
-    <%= link_to(@collection.parent.title, @collection.parent) -%>
-  </blockquote>
+    <dt><%=h t('collections.parent', :default => "Parent Collection: ") -%></dt>
+    <dd><%= link_to(@collection.parent.title, @collection.parent) -%></dd>
   <% end -%>
   
-  <blockquote>
-    <h3><%= t('collections.settings', :default => "Settings: ") %></h3>
-    <%= @collection.closed? ? t('collections.is_closed', :default => "This collection is not accepting new stories at this time. ") : 
+  <dt><%= t('collections.settings', :default => "Settings: ") %></dt>
+    <dd><%= @collection.closed? ? t('collections.is_closed', :default => "This collection is not accepting new stories at this time. ") : 
           t('collections.is_open', :default => "This collection is currently open for new stories. ")%>
     <%= @collection.moderated? ? t('collections.is_moderated', :default => "This collection is moderated. ") : 
           t('collections.is_unmoderated', :default => "This collection is not moderated: anyone may post. ") %>
     <%= @collection.unrevealed? ? t('collections.is_unrevealed', :default => "Stories in this collection are currently hidden. ") : "" %>
     <%= @collection.anonymous? ? t('collections.is_anonymous', :default => "Story authors are currently hidden. ") : "" %>
     <%= (@collection.unrevealed? || @collection.anonymous?) ? t('collections.see_details', :default => "See the collection details below for more information about how and when they will be revealed! ") : "" %>
-  </blockquote>
-      
+  </dd>
+</dl>
+    <div class="preface profile" 
   <% if @collection.collection_profile.intro %>
 	<blockquote>
 		<h3><%=h t('intro', :default => "Intro:") %></h3>

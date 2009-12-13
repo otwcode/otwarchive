@@ -1,5 +1,3 @@
-<%= taggable_list(params[:tag_id], "works") if params[:tag_id] -%>
-
 <%- if @collection && @most_recent_works %>
   <h1><%= t('updated_works_in_collection', :default => "Works in {{collection_title}} updated in the last month", :collection_title => @collection.title) -%></h1>
 <%- elsif @collection -%>
@@ -16,14 +14,17 @@
 
 <% paginated_section @works, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
 
+
+<ul class="navigation">
+  <!--this ul could print empty if neither of the below conditions are met. Please reconfigure logic as I am hopeless-->
 <% if @user && @user == current_user %>
-<ul class="navigation" style="text-align: left;">
-  <li id="edit_multiple">
+<li id="edit_multiple">
     <%= link_to t('edit_multiple_link', :default => 'Edit Multiple Works'), 
-                show_multiple_user_works_path(@user) -%>
-  </li>
-</ul>
+                show_multiple_user_works_path(@user) -%></li>
 <% end %>
+	<li><%= taggable_list(params[:tag_id], "works") if params[:tag_id] -%></li>
+</ul>
+
 
   <ul class="navigation">
     <li><%= t('sort_by', :default => 'Sort By') -%></li>

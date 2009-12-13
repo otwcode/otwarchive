@@ -46,7 +46,7 @@
 			<%- end -%>
 
 			<%- unless freeform_tags.size < 1 -%>
-      <dt><%= t('work_tags', :default => 'Additional Tags (Genre, Warnings, Other Information)') + ': ' %></dt>
+      <dt title="Genre, Warnings, Other Information"><%= t('work_tags', :default => 'Additional Tags') + ':' %></dt>
 			<dd><ul id="work_<%= work.id %>_category_freeform">
         <%- if hide_freeform?(work) -%>
           <li><%= show_freeforms_link(work) %></li>

@@ -1,5 +1,4 @@
 <h1><%=h t('listing_collections', :default => "Listing collections") %></h1>
-<h2><!--search_header X works found--></h2>
 <ul class="navigation">
 	<li><%= link_to 'New collection', new_collection_path %></li>
 </ul>
@@ -9,7 +8,7 @@
 <ul class="work-list collections">
 <% @collections.each do |collection| %>
   <li class="work collections">
-  	<ul class="work collections">
+  	<ul class="work collections<% if collection.user_is_owner?(current_user) %> own<%- end -%>">
  		<li class="heading">
 			<span class="icon"><img src="/images/collections.png" class="icon" alt="" /></span>
 			<!--or collections header image-->
@@ -71,7 +70,7 @@
 	  </dl>
   </li>
   <% if collection.user_is_owner?(current_user) %>
-	  <li><%= link_to 'Edit', edit_collection_path(collection) %></li>
+	  <li class="navigation"><%= link_to 'Edit', edit_collection_path(collection) %></li>
   <% end %>
 <% end %>
 </ul>

@@ -148,12 +148,15 @@ li.heading {position: relative; min-height: 50px;}
 
 .work p.update {font-size:0.875em; text-align:right; top:-0.875em; right:0; position:absolute; }
 /*.work dl.tags {padding-top:0.375em;}*/
-.work .tags dt {font-weight:bold; width:6em; padding:0.25em 0.5625em 0.25em 0; }
-.work .tags ul {margin:-2.25em 0 .75em 6em; text-indent:0; padding:0;}
+.work .tags dt, .work .mods dt {font-weight:bold; width:6em; padding:0.25em 0.5625em 0.25em 0; }
+.work .tags ul, .work .mods ul  {margin:-2.25em 0 .75em 6em; text-indent:0; padding:0;}
 .work li.summary {margin:0.5625em auto; padding:0.25em 0.25em 0 0;}
 .work li.stats dl {text-align:right;}
 .work li.stats dt, .work li.stats dd {display:inline; font-size:0.875em}
 .work li.stats dl dd {margin:0 0.375em 0 0;}
+
+.mystery li.heading {background: url(/images/mystery.png) top left no-repeat;}
+.mystery li.heading h3, .mystery li.heading h4 {margin-left: 75px;}
 
 /*series listing */
 #user-series ul	{ text-indent:2em; margin:1.125em auto; padding:0 1em;}
@@ -214,9 +217,6 @@ ul#series-work-list li.work ul.work li ul li {display:inline;}
 
 #bookmarks ul.work {margin-right: 0;}
 
-
-
-
 /*TAGS-INDEX */
 .tags-index ul { text-align: center; margin: 2em auto; }
 .tags-index li { display: inline; padding: 0.25em 0.5625em; }
@@ -252,18 +252,19 @@ dl.translations {position:relative; margin: 1.5em auto; padding: 1.5em 0 2.5em; 
 .work ul.navigation, .bookmark ul.navigation {margin: 0;}
 
 /*COLLECTIONS */
-/*blurb follows works-blurb*/
+/*blurb follows works-meta, work+collections follows works blurb*/
 .collections .heading span.icon {font-size:0.875em; height:55px; width:75px; overflow: hidden; display:block; float:left;}
 .collections .heading h3 span {display:inline; float:none;}
 
-#main.collections-show h2, #main.collections-show h3 {display:inline;}
+#main.collections-show h1 span {font-size:smaller;}
+#main.collections-show dl.blurb {background:#eee; padding:0.25em; position:relative;margin-top:0; border:1px solid #ddd;}
+#main.collections-show dt { width:12em;}
+#main.collections-show dd { margin:-1.45em 0 .75em 14em; text-indent:0; padding:0;}
+#main.collections-show dd ul, #main.collections-show dd ul li {text-indent:0; margin:0 auto !important; padding:0; display:inline;}
+
 #main.collections-show blockquote h3 {display:block; border-bottom: 1px solid; margin-bottom:.875em;}
-#main.collections-show dl{ position:relative; margin:0 1.5em;}
-#main.collections-show dt { width:12em; margin: 0; padding: 0.25em 0.5625em 0.25em 0; font-weight: bold; float:left; clear:left;}
-#main.collections-show dd { padding:0.25em 0.5625em 0.25em 0; margin:0; width:auto; float:left;}
-#main.collections-show .preface {clear:left;}
-
-
+#main.collections-show .preface {margin:1em auto;}
+ 
 /*ToS and any other long text pages.
 * styling duplicates the work-views.css and is incorporated there*/
 #tos {margin: 1.5em; padding: 0 2.25em;}
