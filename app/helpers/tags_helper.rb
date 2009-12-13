@@ -41,12 +41,13 @@ module TagsHelper
 	end
 
 	def link_to_tag_with_text(tag, link_text, options = {})
-    link_to_with_tag_class(@collection ? collection_tag_path(@collection, tag) : tag_path(tag), link_text, options)
+    link_to_with_tag_class(@collection ? collection_tag_path(@collection, tag) : 
+    {:controller => :tags, :action => :show, :id => tag}, link_text, options)
 	end
 
   # edit_tag_path is behaving badly since around the Rails 2.2.2 upgrade
 	def link_to_edit_tag(tag, options = {})
-    link_to_with_tag_class(edit_tag_path(tag), tag.name, options)
+    link_to_with_tag_class({:controller => :tags, :action => :edit, :id => tag}, tag.name, options)
 	end
 
   def link_to_tag_works_with_text(tag, link_text, options = {})
