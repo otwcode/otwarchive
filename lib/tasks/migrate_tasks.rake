@@ -48,15 +48,16 @@ namespace :After do
   task(:after_change_warning_tag_name => :environment) do
     @new = Warning.find_by_name('Choose Not To Warn')
     @old = Warning.find_by_name('Choose Not To Warn For Some Content')
-    if @old && @new
-      ThinkingSphinx.deltas_enabled=false
-      @old.works.each do |work|
-        work.warnings = work.warnings + [@new] - [@old]
-      end
-      ThinkingSphinx.deltas_enabled=true
-      Warning.find_by_name('Choose Not To Warn').update_attribute(:name, 'Choose Not To Use Archive Warnings')
-      Warning.find_by_name('None Of These Warnings Apply').update_attribute(:name, 'No Archive Warnings Apply')    
+    @none = Warning.find_by_name('None Of These Warnings Apply')
+    ThinkingSphinx.deltas_enabled=false
+    if @old && @new     
+      Tagging.find(:all, :conditions => {:tagger_id => @old.id}).update_all(["tagger_id = ?", @new.id])
+      FilterTagging.find(:all, :conditions => {:filter_id => @old.id}).update_all(["filter_id = ?", @new.id])
+      @new.reset_filter_count
+      @new.update_attribute(:name, 'Choose Not To Use Archive Warnings')
     end
+    @none.update_attribute(:name, 'No Archive Warnings Apply') if @none
+    ThinkingSphinx.deltas_enabled=true
   end
   
 end
