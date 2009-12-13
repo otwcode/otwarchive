@@ -22,9 +22,9 @@
 
   <% unless @collection.parent %>
  	<dt><%=h t('collections.children', :default => "Challenges and subcollections: ") -%></dt>
-    <dd><%= @collection.children.sort_by {|child| child.created_at}.map {|child| link_to(child.title, child)}.join(", ") -%></dd>
+  <dd><%= @collection.children.sort_by {|child| child.created_at}.map {|child| link_to(child.title, child)}.join(", ") -%>
     <% if @collection.user_is_maintainer?(current_user) -%>
-      <dd>(<%= link_to t('collections.add_child', :default => "Add new challenge/subcollection"), new_collection_collection_path(@collection) %>)</dd>
+      (<%= link_to t('collections.add_child', :default => "Add new challenge/subcollection"), new_collection_collection_path(@collection) %>)</dd>
     <% end %>
   <% end -%>
   
