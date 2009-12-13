@@ -51,8 +51,8 @@ namespace :After do
     @none = Warning.find_by_name('None Of These Warnings Apply')
     ThinkingSphinx.deltas_enabled=false
     if @old && @new     
-      Tagging.find(:all, :conditions => {:tagger_id => @old.id}).update_all(["tagger_id = ?", @new.id])
-      FilterTagging.find(:all, :conditions => {:filter_id => @old.id}).update_all(["filter_id = ?", @new.id])
+      Tagging.update_all(["tagger_id = ?", @new.id], ["tagger_id = ?", @old.id])
+      FilterTagging.update_all(["filter_id = ?", @new.id], ["filter_id = ?", @old.id])
       @new.reset_filter_count
       # if the new tag name was turned into a new tag by the initializer, get rid of it
       newest = Warning.find_by_name('Choose Not To Use Archive Warnings')
