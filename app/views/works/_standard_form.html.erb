@@ -30,6 +30,15 @@
         <div class="auto_complete" id="work_collection_names_auto_complete" ></div>
         <%= javascript_tag("new Autocompleter.Local('work_collection_names', 'work_collection_names_auto_complete', #{Collection.open.map(&:name).sort.to_json}, {fullSearch: true, tokens: ','});") %>
       </dd>
+
+      <dt class="recipient">
+        <%= f.label :recipients, t('recipients', :default => "Recipient(s): (if this story is a gift)") -%> <%= link_to_help "recipients" -%>
+      </dt>
+      <dd class="recipient">
+        <%= f.text_field :recipients -%>
+        <div class="auto_complete" id="work_recipients_auto_complete" ></div>
+        <%= javascript_tag("new Autocompleter.Local('work_recipients', 'work_recipients_auto_complete', #{(Pseud.all.map(&:byline) | ExternalAuthorName.all.map(&:name)).sort.to_json}, {fullSearch: true, tokens: ','});") %>
+      </dd>
       
       <dt class="summary">
         <%= f.label :summary, t('summary', :default =>"Summary (max " + ArchiveConfig.SUMMARY_MAX.to_s + " characters)") %>

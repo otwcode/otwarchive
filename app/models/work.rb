@@ -20,6 +20,10 @@ class Work < ActiveRecord::Base
   has_many :series, :through => :serial_works
 
   has_many :related_works, :as => :parent
+  
+  has_many :gifts, :dependent => :destroy
+  accepts_nested_attributes_for :gifts, :allow_destroy => true
+  has_many :recipients, :through => :gifts, :source => :recipient_name
 
   has_bookmarks
   has_many :user_tags, :through => :bookmarks, :source => :tags
@@ -286,6 +290,28 @@ class Work < ActiveRecord::Base
     self.collection_items.collect(&:collection).collect(&:name).join(",")
   end
       
+  def recipients=(recipient_names)
+    gift_attributes_to_set = []
+    recipient_names.split(',').each do |recipient_name|
+      gift_attributes_to_set << {:recipient_name => recipient_name}
+      # FOR THE FUTURE
+      # # try and get pseud
+      # results = Pseud.parse_bylines(recipient_name)
+      # if !results[:pseuds].empty?
+      #   pseud = results[:pseuds].first
+      #   gift_attributes_to_set << {:pseud => pseud}
+      # else
+      #   # set recipient name
+      #   gift_attributes_to_set << {:recipient_name => recipient_name}
+      # end
+    end
+    self.gifts.clear
+    self.gifts_attributes = gift_attributes_to_set
+  end
+
+  def recipients
+    self.gifts.collect(&:recipient_name).join(",")
+  end
         
   ########################################################################
   # VISIBILITY

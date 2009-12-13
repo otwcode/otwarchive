@@ -49,6 +49,11 @@
   <h3 class="byline">
    <%= byline(@work) -%>
   </h3>
+  <% if !@work.recipients.empty? %>
+    <h3 class="recipients">
+      <%= t('works.recipients', :default => "for {{recipients}}", :recipients => @work.recipients.map {|recip| h(recip)}.join(", ")) -%>
+    </h3>
+  <% end -%>
   
   <%- if @chapter == @work.first_chapter -%>
     <%- unless @work.summary.blank? -%>

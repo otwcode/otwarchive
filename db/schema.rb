@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091212051923) do
+ActiveRecord::Schema.define(:version => 20091213013846) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -253,6 +253,13 @@ ActiveRecord::Schema.define(:version => 20091212051923) do
   end
 
   add_index "filter_taggings", ["filterable_id", "filterable_type"], :name => "index_filter_taggings_filterable"
+
+  create_table "gifts", :force => true do |t|
+    t.integer  "work_id"
+    t.string   "recipient_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "inbox_comments", :force => true do |t|
     t.integer  "user_id",             :limit => 8
