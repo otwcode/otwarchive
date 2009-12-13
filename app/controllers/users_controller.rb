@@ -17,7 +17,7 @@ class UsersController < ApplicationController
     end
     token = params[:invitation_token] || (params[:user] && params[:user][:invitation_token])
     @invitation = Invitation.find_by_token(token)
-    return true if AdminSetting.account_creation_enabled?   
+    #return true if AdminSetting.account_creation_enabled?   
     if !@invitation
       flash[:error] = t('creation_suspended', :default => "Account creation is suspended at the moment. Please check back with us later.")
       redirect_to login_path
