@@ -26,13 +26,13 @@
     <%- end -%>
     <%- unless bookmark.bookmarkable.warning_tags.size < 1 -%>
       <dl style="margin-top: 0.5em">
-      <dt style="display:inline"><%= link_to("Warnings", tos_faq_path(:anchor => "tags")) %>:</dt>
+      <dt style="display:inline"><%= link_to("Archive Warnings", tos_faq_path(:anchor => "tags")) %>:</dt>
       <dd style="display:inline">
         <ul style="display:inline" id="work_<%= bookmark.bookmarkable.id %>_category_warning">
           <%- if hide_warnings?(bookmark.bookmarkable) -%>
             <li><%= show_warnings_link(bookmark.bookmarkable) %></li>
           <%- else -%>
-            <%= bookmark.bookmarkable.warning_tags.collect{|tag| '<li>' + link_to(tag.name, link_to_tag_bookmarks(tag)) + '</li>' }.join(', ') %>
+            <%= bookmark.bookmarkable.warning_tags.collect{|tag| '<li>' + link_to(warning_display_name(tag.name), link_to_tag_bookmarks(tag)) + '</li>' }.join(', ') %>
           <%- end -%>
         </ul>
       </dd>
