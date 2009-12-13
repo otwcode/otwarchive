@@ -37,8 +37,15 @@ module ApplicationHelper
   # and on Feb 24 09 to sort alphabetically for great justice
   # and show only the authors when in preview_mode, unless they're empty
   def byline(creation)
-    return t('byline.anonymous', :default => "Anonymous") if creation.methods.include?('anonymous?') && creation.anonymous?
+    if creation.respond_to?(:anonymous?) && creation.anonymous?
+      anon_byline = t('byline.anonymous', :default => "Anonymous") 
+      anon_byline += " [" + non_anonymous_byline(creation) + "]" if logged_in_as_admin? || is_author_of?(creation)
+      return anon_byline
+    end
+    non_anonymous_byline(creation)
+  end
       
+  def non_anonymous_byline(creation)
     pseuds = []
     pseuds << creation.authors if creation.authors
     pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
