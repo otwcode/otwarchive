@@ -62,9 +62,24 @@ namespace :After do
     @none.update_attribute(:name, 'No Archive Warnings Apply') if @none
     ThinkingSphinx.deltas_enabled=true
   end
-  
+
+  desc "Follow-up to warning changes"
+  task(:warnings_follow_up => :environment) do
+    @new = Warning.find_by_name('Choose Not To Use Archive Warnings')
+    @old = Warning.find_by_name('Choose Not To Warn For Some Content')
+    ThinkingSphinx.deltas_enabled=false
+    if @old && @old.works.count == 0 && @old.filtered_works.count == 0
+      @old.destroy
+    else
+      raise "Something isn't right here! Double-check the first warnings rake task."
+    end
+    if @new
+      @new.update_attribute(:taggings_count, @new.taggings.count)
+    end
+    ThinkingSphinx.deltas_enabled=true
+  end
 end
 
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
-task :After => [:environment, 'After:after_change_warning_tag_name']
+task :After => [:environment, 'After:after_change_warning_tag_name', 'After:warnings_follow_up']
