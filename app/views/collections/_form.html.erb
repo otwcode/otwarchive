@@ -6,7 +6,7 @@
       <%= label_tag :owner_pseuds, t("collection_form.owners", :default => "Select owner pseudonym(s): ") -%><br />
       <%= select_tag :owner_pseuds, options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud), :multiple => true %>
     <% else -%>
-      <%= hidden_field_tag :owner_pseuds, [current_user.pseuds.first] -%>
+      <%= hidden_field_tag :owner_pseuds, [current_user.default_pseud.id] -%>
     <% end %>
   </p>
   
