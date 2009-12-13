@@ -35,23 +35,23 @@
 </div>
 
 <ul id="main-navigation">
+    <li>
+      <%= link_to_unless_current t('layout.header.fandoms', :default => "fandoms"), media_path %>
+    </li>
 	  <li>
       <%= link_to_unless_current t('layout.header.works', :default => "works"), works_path %>
     </li>
     <li>
-      <%= link_to_unless_current t('layout.header.fandoms', :default => "fandoms"), media_path %>
-    </li>
-    <li>
       <%= link_to_unless_current t('layout.header.people', :default => "people"), people_path %>
-    </li>
-    <li>
-      <%= link_to_unless_current t('layout.header.communities', :default => "collections"), collections_path %>
     </li>
     <li>
       <%= link_to_unless_current t('layout.header.recs', :default => "bookmarks"), bookmarks_path %>
     </li>
     <li>
       <%= link_to_unless_current t('layout.header.tags', :default => "tags"), tags_path %>
+    </li>
+    <li>
+      <%= link_to_unless_current t('layout.header.communities', :default => "collections"), collections_path %>
     </li>
 </ul>
 
