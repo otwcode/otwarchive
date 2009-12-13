@@ -40,6 +40,20 @@ a.tag:hover	{ background: #900 !important; color: #fffef9 !important; }
 /* probably should be #main span and #main div as well, but that'll need thorough testing */ 
 /* span or div do not need sizing as text inside would be enclosed in a block element: p, li, dd . lim*/
 
+/* new design for works blurbs and meta sections, due to the old one breaking really horribly in IE. This ties in with the new HTML */
+.label {padding: 0; float: left;}
+.item {padding-left: 10em;}
+.tags {float: left; width: 100%;}
+.blurb {margin: 1em 0;}
+.blurb .label {font-weight: bold; width: 10.5em;}
+.blurb .item {padding-left: 11em;}
+.meta {margin: 0.643em 0;}
+.meta .label {width: 12em;}
+.meta .item {padding-left: 12em; padding-bottom: 0.1em;}
+.column {float: left; width: 100%;}
+.spacer {clear: both;}
+.work-show ul li.tags {list-style: none;}
+
 /*sizing up and down through multiple nested lists*/
 #main dl dd dl dd p, #main dl dd dl dd, #main dd dl dd p, #main dd dl dd dl dd p
 { font-size:1.142857em; }

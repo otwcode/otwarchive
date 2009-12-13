@@ -1,2 +1,2 @@
 tag_list = @display_tags.collect{|tag| link_to_tag(tag)}
-page.replace_html "#{@display_creation.class.to_s.underscore}_#{@display_creation.id}_category_#{@display_category}", "<li>" + tag_list.join(',</li><li>')
+page.replace_html "#{@display_creation.class.to_s.underscore}_#{@display_creation.id}_category_#{@display_category}", tag_list.join(', ')

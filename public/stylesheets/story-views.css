@@ -18,7 +18,7 @@ set work styles
 .work-show dt		{ font-weight:bold; text-indent:0;}
 .work-show dd		{ line-height:1.5; font-size:0.875em; text-indent:3em; margin-top:1.25em; margin-bottom:1.25em; }
 .work-show dd p		{ text-indent:0; margin:0; padding:0; }
-.work-show ul		{ margin:1.125em auto; padding:0 1em; }
+/* .work-show ul		{ margin:1.125em auto; padding:0 1em; } */
 #main .work-show ul li	{ list-style-type:disc; margin:0.75em 0 0.75em 1.75em;}
 #main .work-show .navigation ul li { list-style-type: none; margin:0.25em;}
 #main .work-show .work-meta ul li {list-style-type: none; margin: 0.75em}
@@ -66,8 +66,9 @@ set work styles
 
 /* WORK META DATA */
 dl.work-meta { background:#eee; padding:0.25em; position:relative;margin-top:0; border:1px solid #ddd;;}
+div.work-meta { background:#eee; padding:0.25em; position:relative; margin: 0 0 1.5em; border:1px solid #ddd;}
 .work-meta dt { width:7em; font-weight:100;}
-.work-meta ul { margin:-1.9675em 0 .75em 13em; text-indent:0; padding:0;}
+/* .work-meta ul { margin:-1.9675em 0 .75em 13em; text-indent:0; padding:0;} */
 .work-meta dd ul li {display:inline; margin:auto !important;}
 
 /*WORK PREFACE - TITLE AND NOTES */
@@ -85,7 +86,6 @@ background:transparent; border-bottom:1px solid black;}
 .preface blockquote.notes span.endnotes-link { font-family: Fertigo,Cambria,Constantia,Palatino,Georgia,sans-serif; font-size: 80%}
 
 /* SERIES */
-dl.series-meta dd { margin:-1.286em 0 1em 12em !important; text-indent:0; padding:0;}
 .series-and-view-data	{ clear:both}
 .series-show ul li	{ display:inline; padding-right:0.5625em}
 .series-show ul#series-work-list li	{ display:block; padding:0; }

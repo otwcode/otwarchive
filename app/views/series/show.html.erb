@@ -4,36 +4,48 @@
 		<%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") -%>
 	<%- end -%>
 </h1>
-<dl class="work-meta series-meta">
-    <dt><%=h 'Series begun:' %></dt>
-    <dd><%=h @series.published_at.to_date %></dd>
-    <dt><%=h 'Series updated: ' %></dt>
-    <dd><%= @series.revised_at ? @series.revised_at.to_date : @series.published_at %></dd>
-
-    <dt><%=h 'Works included:' %></dt>
-    <dd><%= @serial_works.length %></dd>
-
-    <dt><%=h 'Word count:' %></dt>
-    <dd><%= number_with_delimiter(@serial_works.collect{|sw| sw.work.word_count}.sum) %></dd>
-
+<div class="work-meta series-meta">
+  <ul class="column">
+  <li class="meta tags">
+    <div class="label"><%=h 'Series begun:' %></div>
+    <div class="item"><%=h @series.published_at.to_date %></div>
+  </li>
+	<li class="meta tags">
+    <div class="label"><%=h 'Series updated: ' %></div>
+    <div class="item"><%= @series.revised_at ? @series.revised_at.to_date : @series.published_at %></div>
+  </li>
+  <li class="meta tags">
+    <div class="label"><%=h 'Works included:' %></div>
+    <div class="item"><%= @serial_works.length %></div>
+  </li>
+  <li class="meta tags">
+    <div class="label"><%=h 'Word count:' %></div>
+    <div class="item"><%= number_with_delimiter(@serial_works.collect{|sw| sw.work.word_count}.sum) %></div>
+  </li>
+  <li class="meta tags">
     <% if @series.pseuds.many?%>
-      <dt><%=h 'Authors:' %></dt>
-      <dd><%= byline(@series) %></dd>
+      <div class="label"><%=h 'Authors:' %></div>
+      <div class="item"><%= byline(@series) %></div>
     <% else %>
-      <dt><%=h 'Author:' %></dt>
-      <dd><%= byline(@series) %></dd>
+      <div class="label"><%=h 'Author:' %></div>
+      <div class="item"><%= byline(@series) %></div>
     <% end %>
-
+  </li>
   <%- unless @series.summary.blank? -%>
-      <dt><%=h 'Description:' %></dt>
-      <dd><%= @series.summary %></dd>
+		<li class="meta tags">
+      <div class="label"><%=h 'Description:' %></div>
+      <div class="item"><%= @series.summary %></div>
+    </li>
 	<%- end -%>
 	<%- unless @series.notes.blank? -%>
-      <dt><%=h 'Notes:' %></dt>
-      <dd><%= @series.notes %></dd>
+		<li class="meta tags">
+      <div class="label"><%=h 'Notes:' %></div>
+      <div class="item"><%= @series.notes %></div>
+    </li>
 	<%- end -%>
   </ul>
-</dl>
+  <div class="spacer">&nbsp;</div>
+</div>
 
 <div class="navigation">
   <span class="navitem"><%= bookmark_link(bookmarkable=@series, blurb=false) %></span>
