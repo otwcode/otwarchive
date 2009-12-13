@@ -23,7 +23,6 @@ class Work < ActiveRecord::Base
   
   has_many :gifts, :dependent => :destroy
   accepts_nested_attributes_for :gifts, :allow_destroy => true
-  has_many :recipients, :through => :gifts, :source => :recipient_name
 
   has_bookmarks
   has_many :user_tags, :through => :bookmarks, :source => :tags

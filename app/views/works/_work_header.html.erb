@@ -51,7 +51,7 @@
   </h3>
   <% if !@work.recipients.empty? %>
     <h3 class="recipients">
-      <%= t('works.recipients', :default => "for {{recipients}}", :recipients => @work.recipients.map {|recip| h(recip)}.join(", ")) -%>
+      <%= t('works.recipients', :default => "for {{recipients}}", :recipients => h(@work.recipients)) -%>
     </h3>
   <% end -%>
   
