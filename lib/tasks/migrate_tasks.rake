@@ -54,6 +54,9 @@ namespace :After do
       Tagging.find(:all, :conditions => {:tagger_id => @old.id}).update_all(["tagger_id = ?", @new.id])
       FilterTagging.find(:all, :conditions => {:filter_id => @old.id}).update_all(["filter_id = ?", @new.id])
       @new.reset_filter_count
+      # if the new tag name was turned into a new tag by the initializer, get rid of it
+      newest = Warning.find_by_name('Choose Not To Use Archive Warnings')
+      newest.destroy if newest
       @new.update_attribute(:name, 'Choose Not To Use Archive Warnings')
     end
     @none.update_attribute(:name, 'No Archive Warnings Apply') if @none
