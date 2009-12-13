@@ -22,6 +22,18 @@
 <!--[if IE]>
 <%= stylesheet_link_tag 'ie_overrides', :media => 'all' %>
 <![endif]-->
+<!--[if IE 5]>
+<%= stylesheet_link_tag 'ie5_overrides', :media => 'all' %>
+<![endif]-->
+<!--[if IE 6]>
+<%= stylesheet_link_tag 'ie6_overrides', :media => 'all' %>
+<![endif]-->
+<!--[if IE 7]>
+<%= stylesheet_link_tag 'ie7_overrides', :media => 'all' %>
+<![endif]-->
+<!--[if IE 8]>
+<%= stylesheet_link_tag 'ie8_overrides', :media => 'all' %>
+<![endif]-->
 
 <%= logged_in_as_admin? ? (stylesheet_link_tag 'admin', :media => 'screen') : "" %>
 
