@@ -4,12 +4,14 @@
 
 
 	<dl class="blurb">
+	<%- unless @collection.all_moderators.map.blank? -%>
 	<dt><%=h t('collections.mods', :default => "Moderators:") %></dt>
 	<dd>
 		<ul>
 		  <%= @collection.all_moderators.map {|mod| "<li>#{link_to(mod.byline, mod.user)}</li>"} -%>
 		</ul>
 	</dd>
+	<% end -%>
 	<%- unless @collection.email.blank? -%>
 	<dt><%=h t('collection.email', :default => "Collection Email:") %></dt>
 	<dd><%=h @collection.email %></dd>
