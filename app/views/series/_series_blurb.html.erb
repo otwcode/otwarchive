@@ -32,7 +32,7 @@
       <dl class="tags">
 			    <dt title="Genre, Warnings, Other Information"><%= t('work_tags', :default => 'Additional Tags') + ':' %></dt>
 			    <dd><ul>
-			      <li><%= author_tags.collect{|tag| link_to_tag(tag) }.join(',</li><li>') %></li>
+			      <li><%= author_tags.collect{|tag| link_to_tag(tag) }.join(', </li><li>') %></li>
 			    </ul></dd>
       <%- end -%>  
       <%- author_warnings = series.works.visible.collect(&:warning_tags).flatten.compact.uniq 
@@ -42,7 +42,7 @@
             <%- if hide_warnings?(series) -%>
               <li><%= show_warnings_link(series) %></li>
             <%- else -%>
-              <li><%= author_warnings.collect{|tag| link_to_tag(tag)}.join(',</li><li>') %></li>
+              <li><%= author_warnings.collect{|tag| link_to_tag(tag)}.join(', </li><li>') %></li>
             <%- end -%>
           </ul></dd>
       </dl>

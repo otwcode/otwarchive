@@ -31,7 +31,7 @@
       <dl class="tags">
 		  <%- unless cast_tags.size < 1 -%>
       <dt><%= t('cast_tags', :default => 'Cast') + ': ' %></dt>
-			<dd><ul><li><%= cast_tags.collect{|tag| link_to_tag(tag)  }.join(',</li><li>') %></li></ul></dd>
+			<dd><ul><li><%= cast_tags.collect{|tag| link_to_tag(tag)  }.join(', </li><li>') %></li></ul></dd>
 			<%- end -%>
       
       <%- unless warning_tags.size < 1 -%>
@@ -40,7 +40,7 @@
           <%- if hide_warnings?(work) -%>
             <li><%= show_warnings_link(work) %></li>
           <%- else -%>
-            <li><%= warning_tags.collect{|tag| link_to_tag(tag) }.join(',</li><li>') %></li>
+            <li><%= warning_tags.collect{|tag| link_to_tag(tag) }.join(', </li><li>') %></li>
           <%- end -%>
 			</ul></dd>
 			<%- end -%>
@@ -51,7 +51,7 @@
         <%- if hide_freeform?(work) -%>
           <li><%= show_freeforms_link(work) %></li>
         <%- else -%>   
-          <li><%= freeform_tags.collect{|tag| link_to_tag(tag) }.join(',</li><li>') %></li>
+          <li><%= freeform_tags.collect{|tag| link_to_tag(tag) }.join(', </li><li>') %></li>
         <%- end -%>
 			</ul></dd>
 			<%- end -%>
