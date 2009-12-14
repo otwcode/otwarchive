@@ -4,7 +4,8 @@
 <th scope="row">
   <%= link_to(collection_item.item_type == "Bookmark" ? 
     t('collection_items.bookmark', :default => "Bookmark for {{title}}", :title => collection_item.item.bookmarkable.title) : 
-    collection_item.item.title, collection_item.item) -%>
+    (collection_item.item.posted? ? collection_item.item.title : t('collection_items.draft', :default => "{{title}} (draft)", :title => collection_item.item.title)),
+    collection_item.item) -%>
   <%= form.hidden_field :id %><%= form.hidden_field :collection_id %>
 </th>
 <td><%= collection_item.item_type == "Bookmark" ? 
