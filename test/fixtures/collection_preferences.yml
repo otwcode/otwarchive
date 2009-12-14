@@ -21,3 +21,12 @@ four:
   moderated: 1
   closed: 1
   anonymous: 1
+
+five:
+  collection_id: 5
+  closed: 1
+  
+six:
+  collection_id: 6
+  moderated: 1
+  

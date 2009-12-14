@@ -32,49 +32,59 @@ class CollectionItem < ActiveRecord::Base
     errors.add_to_base t('collection_preferences.closed', :default => "Collection {{title}} is currently closed.", :title => self.collection.title) if self.collection && self.collection.closed?
   end
     
-  after_save :approve_automatically
+  before_save :approve_automatically
   def approve_automatically
-    
-    # approve with the current user, who is the person who has just
-    # added this item -- might be either moderator or owner
-    approve(User.current_user)
+    if self.new_record?
+      # approve with the current user, who is the person who has just
+      # added this item -- might be either moderator or owner
+      approve(User.current_user)
 
-    # if the collection is open or the user who owns this work is a member, go ahead and approve
-    # for the collection
-    if collection
-      if !collection.moderated? || collection.user_is_maintainer?(User.current_user) || (collection.user_is_posting_participant?(User.current_user) && !(item.pseuds & User.current_user.pseuds).empty?) 
-        approve_by_collection
+      # if the collection is open or the user who owns this work is a member, go ahead and approve
+      # for the collection
+      if collection
+        if !collection.moderated? || collection.user_is_maintainer?(User.current_user) || (collection.user_is_posting_participant?(User.current_user) && !(item.pseuds & User.current_user.pseuds).empty?) 
+          approve_by_collection
+        end
       end
-    end
 
-    # if at least one of the owners of the items automatically approves
-    # adding or is a member of the collection, go ahead and approve by user
-    if item
-      item.users.each do |user|
-        if user.preference.automatically_approve_collections || (collection && collection.user_is_posting_participant?(user))
-          approve_by_user
-          break
+      # if at least one of the owners of the items automatically approves
+      # adding or is a member of the collection, go ahead and approve by user
+      if item
+        item.users.each do |user|
+          if user.preference.automatically_approve_collections || (collection && collection.user_is_posting_participant?(user))
+            approve_by_user
+            break
+          end
         end
       end
     end
   end
   
+  def user_allowed_to_destroy?(user) 
+    user.is_author_of?(self.item) || self.collection.user_is_maintainer?(user)
+  end
+  
   def approve_by_user ; self.user_approval_status = APPROVED ; end  
+  def reject_by_user ; self.user_approval_status = REJECTED ; end  
   def approved_by_user? ; self.user_approval_status == APPROVED ; end
   def rejected_by_user? ; self.user_approval_status == REJECTED ; end
   
   def approve_by_collection ; self.collection_approval_status = APPROVED ; end
+  def reject_by_collection ; self.collection_approval_status = REJECTED ; end  
   def approved_by_collection? ; self.collection_approval_status == APPROVED ; end  
   def rejected_by_collection? ; self.collection_approval_status == REJECTED ; end 
 
+  def approved? ; approved_by_user? && approved_by_collection? ; end
+  def rejected? ; rejected_by_user? && rejected_by_collection? ; end
+
   def reject(user)
-    self.user_approval_status = REJECTED if item.users.include?(user)
-    self.collection_approval_status = REJECTED unless (self.collection.maintainers & user.pseuds).empty?
+    reject_by_user if user && user.is_author_of?(item)
+    reject_by_collection if user && self.collection.user_is_maintainer?(user)
   end
 
   def approve(user)
-    self.user_approval_status = APPROVED if user && item.users.include?(user)
-    self.collection_approval_status = APPROVED unless user && (self.collection.maintainers & user.pseuds).empty?
+    approve_by_user if user && user.is_author_of?(item)
+    approve_by_collection if user && self.collection.user_is_maintainer?(user)
   end  
 
 end

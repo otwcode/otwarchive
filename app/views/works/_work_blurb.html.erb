@@ -72,9 +72,9 @@
 			<dd><%= work.chapter_total_display %></dd>
 	 <%- end -%>
 	 
-	  <%- unless work.collections.empty? %>
+	  <%- unless work.approved_collections.empty? %>
 			<dt><%=h t('work_collections', :default => 'Collections') + ': ' -%></dt>
-			<dd><%= link_to work.collections.length, work_collections_path(work) %></dd>
+			<dd><%= link_to work.approved_collections.length, work_collections_path(work) %></dd>
 		<%- end -%>
 			
 		<%- if work.count_visible_comments > 0 -%>

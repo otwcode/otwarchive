@@ -14,7 +14,7 @@
   <dd class="collection">
     <%= text_field_tag :collection_names, nil, :size => 40 -%>
     <div class="auto_complete" id="collection_names_auto_complete" ></div>
-    <%= javascript_tag("new Autocompleter.Local('collection_names', 'collection_names_auto_complete', #{Collection.find(:all, :order => :name).map(&:name).to_json}, {fullSearch: true, tokens: ','});") %>
+    <%= javascript_tag("new Autocompleter.Local('collection_names', 'collection_names_auto_complete', #{Collection.open.map(&:name).to_json}, {fullSearch: true, tokens: ','});") %>
   </dd>
 </dl>
 <p class="submit"><%= form.submit(t('collection_items.add', :default => "Add")) %></p>

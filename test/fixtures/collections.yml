@@ -27,3 +27,13 @@ four:
   title: An Exciting Challenge
   description: Wow check out this exciting challenge.
   parent_id: 1
+
+five:
+  id: 5
+  name: closed
+  title: So Closed
+
+six:
+  id: 6
+  name: moderated
+  title: Really Moderated

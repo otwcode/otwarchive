@@ -115,14 +115,14 @@ class CollectionParticipantsController < ApplicationController
     flash[:notice] = ""
     unless @participants_invited.empty?
       @participants_invited = @participants_invited.sort_by {|participant| participant.pseud.name.downcase }
-      flash[:notice] += t('collection_participants.invite', :default => "<strong>New members invited:</strong> {{invited}}", 
-                :added => @participants_invited.collect(&:pseud).collect(&:byline).join(', '))
+      flash[:notice] += "<strong>" + t('collection_participants.invite', :default => "New members invited:") + 
+        "</strong>" +  @participants_invited.collect(&:pseud).collect(&:byline).join(', ')
     end
 
     unless @participants_added.empty?
       @participants_added = @participants_added.sort_by {|participant| participant.pseud.name.downcase }
-      flash[:notice] += t('collection_participants.add', :default => "<strong>Members approved:</strong> {{added}}",
-                :added => @participants_added.collect(&:pseud).collect(&:byline).join(', '))
+      flash[:notice] += "<strong>" + t('collection_participants.add', :default => "Members added:") + 
+        "</strong>" +  @participants_added.collect(&:pseud).collect(&:byline).join(', ')
     end
     
     redirect_to collection_participants_path(@collection)

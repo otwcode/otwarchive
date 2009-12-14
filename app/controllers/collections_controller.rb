@@ -11,7 +11,7 @@ class CollectionsController < ApplicationController
   def index
     if params[:work_id]
       @work = Work.find(params[:work_id])
-      @collections = @work.collections
+      @collections = @work.approved_collections
     elsif params[:collection_id]
       @collection = Collection.find(params[:collection_id])
       @collections = @collection.children

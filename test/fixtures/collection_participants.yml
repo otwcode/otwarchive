@@ -19,13 +19,23 @@ four:
   collection_id: 4
   pseud_id: 5
   participant_role: Owner
-  
+
 five:
+  collection_id: 5
+  pseud_id: 18
+  participant_role: Owner
+
+six:
+  collection_id: 6
+  pseud_id: 18
+  participant_role: Owner
+  
+mod:
   collection_id: 1
   pseud_id: 18
   participant_role: Moderator
   
-six:
+member:
   collection_id: 1
   pseud_id: 7
   participant_role: Member

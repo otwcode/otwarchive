@@ -1,5 +1,25 @@
 <h1><%= t('collections.new', :default => "New Collection") %></h1>
 
+<h3>Suggestions</h3>
+<ul>
+  <li>Keep in mind that only registered users can post anyway, so leaving your
+      collection unmoderated will not open you up to spambots or similar issues. 
+      Mostly users won't add items to a collection inappropriately, so you don't
+      need to add the overhead of approving stories and members unless you really 
+      need it. You can always reject stories after the fact.</li>
+  <li>If you would like to run a regular challenge (eg, an annual challenge like Yuletide, 
+      or a weekly challenge similar to sga_flashfic), the best way to do that is to set 
+      up one parent collection, set it to be closed (meaning that people can't
+      add stories directly to the parent collection) and then add new subcollections 
+      for each challenge.
+       
+      If you limit membership for each challenge (eg, for a gift exchange), you can have people sign
+      up for the subcollections separately. If you just want the whole thing moderated,
+      you can have people sign up and be members of the parent collection, and then they will 
+      be able to post in each subcollection automatically.
+    </li>  
+</ul>
+  
 <%= render :partial => 'form' -%> 
 
 <ul class="navigation">

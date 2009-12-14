@@ -28,8 +28,11 @@ class Work < ActiveRecord::Base
   has_many :user_tags, :through => :bookmarks, :source => :tags
 
   has_many :collection_items, :as => :item, :dependent => :destroy
-  has_many :collections, :through => :collection_items
   accepts_nested_attributes_for :collection_items, :allow_destroy => true
+
+  has_many :collections, :through => :collection_items
+  has_many :approved_collections, :through => :collection_items, :source => :collection,
+    :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
 
   has_many :common_taggings, :as => :filterable
   has_many :common_tags, :through => :common_taggings
@@ -263,8 +266,8 @@ class Work < ActiveRecord::Base
 
   def collection_names=(collection_names)
     collection_attributes_to_set = []
-    collection_names.split(',').each do |collection_name|
-      collection = Collection.find_by_name(collection_name.strip)
+    collection_names.split(',').map {|name| name.strip}.uniq.each do |collection_name|
+      collection = Collection.find_by_name(collection_name)
       collection_attributes_to_set << {:collection => collection} if collection
     end
     self.collection_items.clear
@@ -333,12 +336,12 @@ class Work < ActiveRecord::Base
 
   def unrevealed?(user=User.current_user)
     # eventually here is where we check if it's in a challenge that hasn't been made public yet
-    !self.collections.unrevealed.empty?
+    !self.approved_collections.unrevealed.empty?
   end
   
   def anonymous?(user=User.current_user)
     # here we check if the story is in a currently-anonymous challenge
-    !self.collections.anonymous.empty?
+    !self.approved_collections.anonymous.empty?
   end
 
   ########################################################################
@@ -1055,7 +1058,8 @@ class Work < ActiveRecord::Base
       :select => "DISTINCT works.*",
       :joins => "INNER JOIN collection_items ON (collection_items.item_id = works.id AND collection_items.item_type = 'Work')
                  INNER JOIN collections ON collection_items.collection_id = collections.id",
-      :conditions => ['collections.id IN (?)', [collection.id] + collection.children.collect(&:id)]
+      :conditions => ['collections.id IN (?) AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', 
+                   [collection.id] + collection.children.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED]
     }
   }
 
@@ -1063,10 +1067,11 @@ class Work < ActiveRecord::Base
     {
       :joins => "INNER JOIN collection_items ON (collection_items.item_id = works.id AND collection_items.item_type = 'Work')
                  INNER JOIN collections ON collection_items.collection_id = collections.id",
-      :conditions => ['collections.id IN (?)', [collection.id] + collection.children.collect(&:id)]
+      :conditions => ['collections.id IN (?) AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', 
+        [collection.id] + collection.children.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED]
     }
   }
-
+  
   # shouldn't really use a named scope for this, but I'm afraid to try
   # to change the way work filtering works
   named_scope :by_language, lambda {|lang_id| {:conditions => ['language_id = ?', lang_id]}}
@@ -1195,32 +1200,30 @@ class Work < ActiveRecord::Base
     @works = eval("Work#{command + sort}").find(:all, :limit => ArchiveConfig.SEARCH_RESULTS_MAX)
 
     # Adds the co-authors of the displayed works to the available list of pseuds to filter on
-    if !options[:user].nil?
-      @pseuds = (@pseuds + Pseud.on_works(@works)).uniq
-    end
+    @pseuds = (@pseuds + Pseud.on_works(@works)).uniq if !options[:user].nil?
     
     # In order to filter by non-user coauthors, you need to split it up into two queries
     # and then return the works that overlap (you could do this with a nested query, but
     # it gets extremely complicated with the named scopes and all the other variables)
-    if owned_works
-      @works = @works & owned_works
-    end
+    @works = @works & owned_works if owned_works
     
-    unless @works.empty?
-      @filters = build_filters(@works, options)
-    end
-     
+    # if we're in user page, we have to strip out anonymous works
+    @works = @works.delete_if {|w| w.anonymous?} if (options[:user] && User.current_user != options[:user])
+    
+    @filters = build_filters(@works, options) unless @works.empty?
+    
     return @works.paginate(page_args.merge(:total_entries => @works.size)), @filters, @pseuds
   end
   
   # Takes an array of works, returns a hash (key = tag type) of arrays of hashes (of individual tag data)
   # Ex. {'Fandom' => [{:name => 'Star Trek', :id => '3', :count => '50'}, ...], 'Character' => ...}
   def self.build_filters(works, options = {})
-    if options[:user]
-      # strip out works hidden in challenges if on a user's specific page
-      works = works.delete_if {|w| w.unrevealed?}
+    works_to_build_from = works
+    if options[:user] || works.size < 10
+      # strip out works hidden in challenges if on a user's specific page or if there are too few in this listing to conceal
+      works_to_build_from = works.delete_if {|w| w.unrevealed?}
     end
-    self.build_filters_from_tags(Tag.filters_with_count(works.collect(&:id)))
+    self.build_filters_from_tags(Tag.filters_with_count(works_to_build_from.collect(&:id)))
   end
   
   def self.build_filters_from_tags(tags)
