@@ -174,6 +174,9 @@ ul#series-work-list li.work ul.work li ul li {display:inline;}
 .media-index li.odd { width: 40%; float: left; margin: 0 0.5625em 0 0; }
 .media-index li.even { width: 40%; float: right; margin: 0 0 0 0.5625em; }
 
+.fandoms-index ul.fandoms-list {float: left; width: 33%;}
+.fandoms-index div.main-fandoms-listing {clear:both;}
+
 /* PEOPLE-INDEX */
 .people-index .navigation { text-align: left;}
 .user div {position: relative; margin: 0 0 0.5625em; padding-right: 0.3775em; border-bottom: 1px solid #ddd; clear: both; overflow: auto; min-height: 8.5em;}

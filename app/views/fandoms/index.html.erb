@@ -5,15 +5,21 @@
 <%- else -%>
   <h1><%= link_to t('fandoms', :default => 'Fandoms'), media_path %></h1> 
 <%- end -%>  
-  
-<ul class="fandoms-list">
-  <%- for fandom in @fandoms -%>
-  <li>
-    <%- if fandom.respond_to?(:count) -%>
-    <%= link_to_tag_works_with_text(fandom, fandom.name + " (" + fandom.count + ")") %>
-    <%- else -%>
-    <%= link_to_tag_works_with_text(fandom, fandom.name) %>        
-    <%- end -%>    
-  </li>
+
+<%- unless @fandoms.blank? -%>
+<div class="main-fandoms-listing">
+  <%- @fandoms.in_groups_of((@fandoms.length/3.0).ceil, false) do |fandom_list| -%>  
+  <ul class="fandoms-list">
+    <%- for fandom in fandom_list -%>
+    <li>
+      <%- if fandom.respond_to?(:count) -%>
+      <%= link_to_tag_works_with_text(fandom, fandom.name + " (" + fandom.count + ")") %>
+      <%- else -%>
+      <%= link_to_tag_works_with_text(fandom, fandom.name) %>        
+      <%- end -%>    
+    </li>
+    <%- end -%>
+  </ul>
   <%- end -%>
-</ul>
+</div>  
+<%- end -%>
