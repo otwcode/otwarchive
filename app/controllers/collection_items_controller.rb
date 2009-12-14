@@ -2,7 +2,8 @@ class CollectionItemsController < ApplicationController
   before_filter :load_collection
   before_filter :load_item_and_collection, :only => [:update, :destroy]
   before_filter :load_collectible_item, :only => [ :new, :create ]
-  before_filter :collection_maintainers_only, :only => [:index, :destroy, :update]
+  before_filter :collection_maintainers_only, :only => [:index, :update]
+  before_filter :allowed_to_destroy, :only => [:destroy]
 
   def not_allowed
     flash[:error] = t('collection_items.not_allowed', :default => "Sorry, you're not allowed to do that.")
@@ -21,9 +22,9 @@ class CollectionItemsController < ApplicationController
   end    
 
   
-  # def allowed_to_destroy
-  #   @collection_item.user_allowed_to_destroy?(current_user) || not_allowed
-  # end
+  def allowed_to_destroy
+    @collection_item.user_allowed_to_destroy?(current_user) || not_allowed
+  end
   
   
   def index
@@ -52,13 +53,48 @@ class CollectionItemsController < ApplicationController
       flash[:error] = t('collection_items.no_item', :default => "What did you want to add to a collection?")
       redirect_to :back and return
     end
-    @item.collection_names = params[:collection_names] + ", " + @item.collection_names
-    if @item.save
-      flash[:notice] = t('collection_items.created', :default => "Added to collection.")
-      redirect_to(@item)
-    else
-      render :action => :new
+    # for each collection name
+    # see if it exists, is open, and isn't already one of this item's collections
+    # add the collection and save
+    # if there are errors, add them to errors
+    new_collections = []
+    unapproved_collections = []
+    errors = []
+    params[:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
+      collection = Collection.find_by_name(collection_name)
+      if !collection
+        errors << t('collection_items.not_found', :default => "We couldn't find a collection with the name {{name}}. Make sure you are using the one-word name, and not the title?", :name => collection_name)
+      elsif @item.collections.include?(collection)
+        errors << t('collection_items.already_there', :default => "This item has already been submitted to {{collection_title}}.", :collection_title => collection.title)
+      elsif collection.closed?
+        errors << t('collection_items.closed', :default => "{{collection_title}} is closed to new submissions.", :collection_title => collection.title)
+      elsif @item.add_to_collection!(collection)
+        if @item.approved_collections.include?(collection)
+          new_collections << collection
+        else
+          unapproved_collections << collection
+        end
+      else
+        errors << t('collection_items.something_else', :default => "Something went wrong trying to add collection {{name}}, sorry!", :name => collection_name)
+      end
     end
+
+    # messages to the user
+    unless errors.empty?
+      flash[:error] = t('collection_items.errors', :default => "We couldn't add your submission to the following collections: ") + errors.join("<br />")
+    end
+    flash[:notice] = "" unless new_collections.empty? && unapproved_collections.empty?
+    unless new_collections.empty?
+      flash[:notice] = t('collection_items.created', :default => "Added to collection(s): {{collections}}.", 
+                            :collections => new_collections.collect(&:title).join(", "))
+    end
+    unless unapproved_collections.empty?
+      flash[:notice] = "<br />" + t('collection_items.unapproved', 
+        :default => "Your submission will have to be approved by a moderator before it appears in {{moderated}}.", 
+        :moderated => unapproved_collections.collect(&:title).join(", "))
+    end
+
+    redirect_to(@item)
   end
   
   def update
@@ -71,9 +107,14 @@ class CollectionItemsController < ApplicationController
   end
   
   def destroy
+    @collectible_item = @collection_item.item
     @collection_item.destroy
-    flash[:notice] = t('collection_items.destroyed', :default => "Item completely removed from collection")
-    redirect_to collection_items_path(@collection)
+    flash[:notice] = t('collection_items.destroyed', :default => "Item completely removed from collection {{title}}.", :title => @collection.title)
+    if (@collection.user_is_maintainer?(current_user))
+      redirect_to collection_items_path(@collection)
+    else
+      redirect_to @collectible_item
+    end
   end
 
 end
