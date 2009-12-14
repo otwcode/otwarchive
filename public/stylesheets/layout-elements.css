@@ -267,6 +267,7 @@ dl.translations {position:relative; margin: 1.5em auto; padding: 1.5em 0 2.5em; 
 
 #main.collections-show blockquote h3 {display:block; border-bottom: 1px solid; margin-bottom:.875em;}
 #main.collections-show .preface {margin:1em auto;}
+#main.collections-show .preface ul.navigation {float:right;}
  
 /*ToS and any other long text pages.
 * styling duplicates the work-views.css and is incorporated there*/
