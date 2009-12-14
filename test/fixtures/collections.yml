@@ -37,3 +37,18 @@ six:
   id: 6
   name: moderated
   title: Really Moderated
+  
+seven:
+  id: 7
+  name: unrevealed
+  title: Full Of Secrets
+  
+eight: 
+  id: 8
+  name: anonymous
+  title: Who Wrote It?
+  
+nine:
+  id: 9
+  name: anon_unrevealed
+  title: Hidden Anonymous Stories  

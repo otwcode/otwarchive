@@ -4,6 +4,10 @@
 
   <%= render :partial => "works/work_mystery_blurb", :locals => {:work => work} -%>
   
+<% elsif (@user || @pseud) && work.anonymous? && !is_author_of?(work) %>
+
+<%= render :partial => "works/work_anonymous_blurb", :locals => {:work => work} -%>
+
 <% else %>
 
 <ul class="work<%- if is_author_of?(work) && controller.controller_name != 'series' -%> own<%- end -%>">

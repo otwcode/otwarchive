@@ -1207,9 +1207,6 @@ class Work < ActiveRecord::Base
     # it gets extremely complicated with the named scopes and all the other variables)
     @works = @works & owned_works if owned_works
     
-    # if we're in user page, we have to strip out anonymous works
-    @works = @works.delete_if {|w| w.anonymous?} if (options[:user] && User.current_user != options[:user])
-    
     @filters = build_filters(@works, options) unless @works.empty?
     
     return @works.paginate(page_args.merge(:total_entries => @works.size)), @filters, @pseuds

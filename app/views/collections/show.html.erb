@@ -2,8 +2,14 @@
 
 <%= render :partial => "collection_show_navigation" -%>
 
+<dl class="blurb">
+	<dt><%=h t('collections.owners', :default => "Owners:") %></dt>
+	<dd>
+		<ul>
+		  <%= @collection.all_owners.map {|owner| "<li>#{link_to(owner.byline, owner.user)}</li>"} -%>
+		</ul>
+	</dd>
 
-	<dl class="blurb">
 	<%- unless @collection.all_moderators.map.blank? -%>
 	<dt><%=h t('collections.mods', :default => "Moderators:") %></dt>
 	<dd>
@@ -12,20 +18,25 @@
 		</ul>
 	</dd>
 	<% end -%>
+	
 	<%- unless @collection.email.blank? -%>
 	<dt><%=h t('collection.email', :default => "Collection Email:") %></dt>
 	<dd><%=h @collection.email %></dd>
 	<% end -%>
+	
+	<%- unless @collection.description.blank? -%>
 	<dt><%=h t('collection.description', :default => "Description:") %></dt>
-	<dd>
-	<%=h @collection.description %></dd>
+	<dd><%=h @collection.description %></dd>
+	<%- end -%>
 
- <% unless @collection.parent %>
+ <% unless @collection.parent || (@collection.children.empty? && !@collection.user_is_maintainer?(current_user)) %>
 	<dt><%=h t('collections.children', :default => "Challenges and subcollections: ") -%></dt>
-   <dd><%= @collection.children.sort_by {|child| child.created_at}.map {|child| link_to(child.title, child)}.join(", ") -%></dd>
-   <% if @collection.user_is_maintainer?(current_user) -%>
-     <dd>(<%= link_to t('collections.add_child', :default => "Add new challenge/subcollection"), new_collection_collection_path(@collection) %>)</dd>
-   <% end %>
+  <dd>
+    <%= @collection.children.sort_by {|child| child.created_at}.map {|child| link_to(child.title, child)}.join(", ") -%>
+    <% if @collection.user_is_maintainer?(current_user) -%>
+      (<%= link_to t('collections.add_child', :default => "Add new challenge/subcollection"), new_collection_collection_path(@collection) %>)
+    <% end %>
+  </dd>
  <% end -%>
 
  <% if @collection.parent %>
@@ -41,59 +52,30 @@
    <%= @collection.unrevealed? ? t('collections.is_unrevealed', :default => "Stories in this collection are currently hidden. ") : "" %>
    <%= @collection.anonymous? ? t('collections.is_anonymous', :default => "Story authors are currently hidden. ") : "" %>
    <%= (@collection.unrevealed? || @collection.anonymous?) ? t('collections.see_details', :default => "See the collection details below for more information about how and when they will be revealed! ") : "" %>
- </dd>
+   </dd>
 </dl>
-   <div class="preface profile">
- <% if @collection.collection_profile.intro %>
-	<blockquote id="intro">
-		<ul class="navigation"><!--needs to go in its own partial-->
-			<% if @collection.collection_profile.rules %>
-			<li><!--needs rubyfying--><a href="#rules"><%=h t('rules', :default => "Rules:") %></a></li>
-			<% end -%>
-			<% if @collection.collection_profile.faq %>
-			<li><!--needs rubyfying--><a href="#faq"><%=h t('faq', :default => "FAQ:") %></a></li>
-			<% end -%>
-			<% if @collection.collection_profile.intro %>
-			<li><!--needs rubyfying--><a href="#intro"><%=h t('intro', :default => "Intro:") %></a></li>
-			<% end -%>
-			</ul>
-		<h3><%=h t('intro', :default => "Intro:") %></h3>
-		<%= sanitize_and_format_for_display @collection.collection_profile.intro %>
-	</blockquote>
-	<% end -%>
+
+<div class="preface profile">
+  <% if @collection.collection_profile.intro %>
+  <blockquote id="intro">
+    <%= render :partial => 'collection_profile_navigation', :locals => {:section => 'intro'} -%>
+    <h3><%=h t('intro', :default => "Intro:") %></h3>
+    <%= sanitize_and_format_for_display @collection.collection_profile.intro %>
+  </blockquote>
+  <% end -%>
 	
- <% if @collection.collection_profile.faq %>
+  <% if @collection.collection_profile.faq %>
 	<blockquote id="faq">
-		<ul class="navigation">
-			<% if @collection.collection_profile.rules %>
-			<li><a href="#rules"><%=h t('rules', :default => "Rules:") %></a></li>
-			<% end -%>
-			<% if @collection.collection_profile.faq %>
-			<li><a href="#faq"><%=h t('faq', :default => "FAQ:") %></a></li>
-			<% end -%>
-			<% if @collection.collection_profile.intro %>
-			<li><a href="#intro"><%=h t('intro', :default => "Intro:") %></a></li>
-			<% end -%>
-			</ul>
-			<h3><%=h t('faq', :default => "FAQ:") %></h3>
+    <%= render :partial => 'collection_profile_navigation', :locals => {:section => 'faq'} -%>
+		<h3><%=h t('faq', :default => "FAQ:") %></h3>
 		<%= sanitize_and_format_for_display @collection.collection_profile.faq %>
 	</blockquote>
 	<% end -%>
 
  <% if @collection.collection_profile.rules %>
 	<blockquote id="rules">
-		<ul class="navigation">
-			<% if @collection.collection_profile.rules %>
-			<li><!--links need ruby--><a href="#rules"><%=h t('rules', :default => "Rules:") %></a></li>
-			<% end -%>
-			<% if @collection.collection_profile.faq %>
-			<li><a href="#faq"><%=h t('faq', :default => "FAQ:") %></a></li>
-			<% end -%>
-			<% if @collection.collection_profile.intro %>
-			<li><a href="#intro"><%=h t('intro', :default => "Intro:") %></a></li>
-			<% end -%>
-			</ul>
-			<h3><%=h t('rules', :default => "Rules:") %></h3>
+    <%= render :partial => 'collection_profile_navigation', :locals => {:section => 'rules'} -%>
+		<h3><%=h t('rules', :default => "Rules:") %></h3>
 		<%= sanitize_and_format_for_display @collection.collection_profile.rules %>
 	</blockquote>
 	<% end -%>

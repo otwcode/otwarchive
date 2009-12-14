@@ -1359,3 +1359,20 @@ three:
 four:
   collection_id: 4
   rules: rules but no intro
+  
+five:
+  collection_id: 5
+  
+six:
+  collection_id: 6
+
+seven:
+  collection_id: 7
+
+eight:
+  collection_id: 8
+
+nine:
+  collection_id: 9
+
+  

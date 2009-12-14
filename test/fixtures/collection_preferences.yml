@@ -30,3 +30,16 @@ six:
   collection_id: 6
   moderated: 1
   
+seven:
+  collection_id: 7
+  unrevealed: 1
+  
+eight:
+  collection_id: 8
+  anonymous: 1
+  
+nine:
+  collection_id: 9
+  unrevealed: 1
+  anonymous: 1
+  
