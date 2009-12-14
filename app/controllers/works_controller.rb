@@ -193,7 +193,7 @@ class WorksController < ApplicationController
       
       # Limit the number of works returned and let users know that it's happening
       unless @works.length < ArchiveConfig.SEARCH_RESULTS_MAX
-        flash.now[:notice] = "More than #{ArchiveConfig.SEARCH_RESULTS_MAX} works were returned. The first #{ArchiveConfig.SEARCH_RESULTS_MAX} works 
+        flash[:notice] = "More than #{ArchiveConfig.SEARCH_RESULTS_MAX} works were returned. The first #{ArchiveConfig.SEARCH_RESULTS_MAX} works 
         we found using the current sort and filters are shown."
       end
     end

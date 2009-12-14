@@ -41,7 +41,8 @@ module TagsHelper
 	end
 
 	def link_to_tag_with_text(tag, link_text, options = {})
-    link_to_with_tag_class(@collection ? collection_tag_path(@collection, tag) : 
+    link_to_with_tag_class(@collection ? 
+    {:controller => :tags, :action => :show, :id => tag, :collection_id => @collection} : 
     {:controller => :tags, :action => :show, :id => tag}, link_text, options)
 	end
 
@@ -51,7 +52,9 @@ module TagsHelper
 	end
 
   def link_to_tag_works_with_text(tag, link_text, options = {})
-    link_to_with_tag_class( @collection ? collection_tag_works_path(@collection, tag) : tag_works_path(tag), link_text, options)
+    link_to_with_tag_class(@collection ? 
+    {:controller => :works, :action => :index, :tag_id => tag, :collection_id => @collection} : 
+    {:controller => :works, :action => :index, :tag_id => tag}, link_text, options)
 	end
 
 	# Adds the "tag" classname to links (for tag links)

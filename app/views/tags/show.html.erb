@@ -55,7 +55,7 @@
     <p><%=h t('child_tags', :default => 'Child tags (more specific):') %></p>
   <% end %>
   <%- @tag.children.uniq.compact.sort.group_by(&:type).each do |type, tags| %>
-    <p><%= type.pluralize %>:</p>
+    <p><%= type.to_s.pluralize %>:</p>
     <ul class="tags"><%= tag_link_list(tags) %></ul>
   <%- end -%>
 <%- end -%>

@@ -13,7 +13,7 @@ class FandomsController < ApplicationController
         @fandoms = Fandom.by_name.with_count.find(:all, :conditions => {:id => fandom_ids})
       end      
     else
-      @fandoms = Fandom.by_name.with_count
+      @fandoms = Fandom.canonical.by_name.with_count
     end
   end
   
