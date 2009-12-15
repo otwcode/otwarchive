@@ -90,32 +90,6 @@ dl.series-meta dd { margin:-1.286em 0 1em 12em !important; text-indent:0; paddin
 .series-show ul li	{ display:inline; padding-right:0.5625em}
 .series-show ul#series-work-list li	{ display:block; padding:0; }
 
-/* COLLECTIONS */
-#dynamic-collection_item	{ background:#fffef9; position:fixed; height:8em; width:18em; bottom:2em; right:2em; z-index:42; padding:1em 2em;  border:2px solid; }
-
-/* Temporary bookmark content */
-#dynamic-bookmark	{ background:#fffef9; position:fixed; height:26em; width:36em; bottom:2em; right:2em; z-index:42; padding:1em 2em;  border:2px solid; }
-#bookmark_notes	{ width:28.125em; height:6.25em; }
-#close-popup	{ position:absolute; top:0.375em; right:0.625em; }
-.chapter-position-list	{ list-style-type:none; padding:0.625em; }
-.work-edit-meta, .work-edit-notes	{ width:80%; }
-.work-edit-title	{ font-weight:700; font-size:1.5em; text-align:center; }
-
-/* BOOKMARKS */
-.bookmark li.bookmark-heading { color: #000000; }
-.bookmark-fandoms { font-weight: 500; font-size: 1.1em; }
-.bookmark-author-tags { font-weight: 100; font-size: 0.90em; }
-.bookmark .byline-date {}
-/*.bookmark .work-info li.summary, .work-info li.work-tags { border: 1px solid black !important; font-size: 0.75em !important; background: red !important; }
-.bookmark .user-notes {  }
-.bookmark .user-tags {  }*/
-
-/*WORK PAGE LAYOUT ELEMENTS*/
-#main .work-list .tags	{ display:inline; margin: 0; padding: 0 0 0.8em;}
-#main .work-list .summary, #main .story-list .summary {clear: left;} /* fix for FF2 Issue 808 */
-
-.works-navigate ol, .works-navigate li {list-style-type:decimal;}
-.works-navigate ol {padding-left:2em;}
 
 
 /*Link to top on works and chapters pages */

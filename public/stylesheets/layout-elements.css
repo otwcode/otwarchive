@@ -87,15 +87,15 @@ ul#main-navigation { position: relative; clear: both; border-left: 1px solid #11
 /*HOME PAGE (front page) currently living in home.css */
 
 /* USER HOME: USERS SHOW*/
-#main.users-show ul.work-list { margin: auto; }
+.user-module {position:relative;}
 .user-module h2 { background: #222; color: #fffef9; margin: 0.5em auto 0 ; padding: 0.125em; border-bottom: 4px double #fffef9;}
-#user-header { position: relative; margin-bottom:4em;}
+#user-header { position: relative; margin-bottom:1em;}
 #user-header img { top: 0; left: 0; position: absolute; margin: 0 0 0.5625em 0; }
 #user-header h1 { text-align: right; margin: 0 0 0 100px; /*sized in pixels because the icon it is avoiding has a fixed pixel value*/}
 #user-header h1 a {text-decoration:none; text-transform:lowercase}
 #user-header .navigation { margin: 0.5625em 0 0 100px;}
 #user-header ul li { display: inline; padding: 0.25em; }
-#user-header .navitem {padding: 0.25em;}
+
 
 /* USER HOME: PROFILE */
 #main.profile-show h3 { background: #222; color: #fffef9; margin: 2.75em auto 0 ; padding: 0.125em; border-bottom: 4px double #fffef9; }
@@ -125,38 +125,43 @@ dl#user-data dt {font-weight: 900; width: 9em; float:left; clear:left; margin:0.
 .external_authors-list .navigation, .external_authors-list .navigation li {border:0; background:transparent;}
 .external_authors-list ul.navigation {margin: 1em 0 -0.75em 0; text-align: left}
 
-/* WORKS-INDEX */
+/* WORKS */
 /*work filters rules are in forms.css */
 /*works blurb : shows on works, reading history, series, should be spoofed on bookmarks and users-show and collections index*/
 li.work ul.work {position: relative; margin: 0 13.5em 0.5625em auto;padding-right:0.3775em;}
-#user-page li.work ul.work, .series-show li.work ul.work, .series-index li.work ul.work, #series-work-list li.work ul.work, .works-drafts li.work ul.work { margin-right: 0; }
+#user-page li.work ul.work, #main.users-show ul.work-list, .series-show li.work ul.work, .series-index li.work ul.work, #series-work-list li.work ul.work, .works-drafts li.work ul.work, #main.users-show ul.work-list { margin-right: 0; }
 ul.work {position:relative; border-bottom:1px solid #ddd; }
-/* replaced ul.own with .own because bookmarks are inside ul Enigel Dec 10 08 */
+
 .own { border:1px dotted #ccc;background:#eee;}
 ul.work ul li, .work dd ul li { display:inline;}
 
-li.heading {position: relative; min-height: 50px;}
-/*.work li { margin-top: 0 !important; margin-bottom: 0 !important;  }*/
+li.heading {position: relative; display:block; min-height: 50px;}
+
 .work ul.required-tags {width:75px; height:55px;float:left;}
 .work ul.required-tags li img {width:25px; height:25px;}
 .work ul.required-tags li {padding:0;margin:0; width:25px; height:25px;}
-/* added Enigel Dec 10 08 for required tags everywhere with less regard to tag nestedness */
+
 .heading .required-tags li { display:inline;}
 
 .work h3 {margin-right:10em; margin-top:0em;}
 .work h3 a:link, .work h3 img {color:#900; vertical-align:bottom;}
 
-.work p.update {font-size:0.875em; text-align:right; top:-0.875em; right:0; position:absolute; }
-/*.work dl.tags {padding-top:0.375em;}*/
+.work p.update {font-size:0.875em; text-align:right; top:-0.875em; right:0; position:absolute;}
+
 .work .tags dt, .work .mods dt {font-weight:bold; width:10.5em; padding:0.25em 0.5625em 0.25em 0; }
 .work .tags ul, .work .mods ul  {margin:-2.25em 0 .75em 11em; text-indent:0; padding:0;}
-.work li.summary {margin:0.5625em auto; padding:0.25em 0.25em 0 0;}
+#main .work-list .tags	{ display:inline; margin: 0; padding: 0 0 0.8em;}
+
+.work li.summary {margin:0.5625em auto; padding:0.25em 0.25em 0 0; clear:none !important;}
 .work li.stats dl {text-align:right;}
 .work li.stats dt, .work li.stats dd {display:inline; font-size:0.875em}
 .work li.stats dl dd {margin:0 0.375em 0 0;}
 
 .mystery li.heading {background: url(/images/mystery.png) top left no-repeat;}
 .mystery li.heading h3, .mystery li.heading h4 {margin-left: 75px;}
+
+.works-navigate ol, .works-navigate li {list-style-type:decimal;}
+.works-navigate ol {padding-left:2em;}
 
 /*series listing */
 #user-series ul	{ text-indent:2em; margin:1.125em auto; padding:0 1em;}
@@ -189,9 +194,9 @@ ul#series-work-list li.work ul.work li ul li {display:inline;}
 .user ul.tags:after {content:" } ";}
 */
 
-/*BOOKMARKS-INDEX BOOKMARKS */
+/*BOOKMARKS-INDEX,  BOOKMARKS */
 #main ul.bookmark {margin-top: 0.875em;}
-#main li.bookmark {padding: 0 0.5em 0.5em 0.5em; margin-bottom: 1.25em !important; border: 1px solid #DDDDDD;}
+#main li.bookmark {padding: 0 0.5em 0.5em 0.5em; margin-bottom: 1.25em !important; border: 1px solid #ddd;}
 #main .bookmark p.byline {margin-left: 3em;}
 #main .bookmark .user-info dl {padding-top:0;}
 #main .bookmark .user-info dd ul li {padding:0 0 0.25em 0; margin:0;}
@@ -201,24 +206,35 @@ ul#series-work-list li.work ul.work li ul li {display:inline;}
 
 #main .bookmark div.bookmark-count { font-size:15px; height:25px; line-height:25px; margin-left:29px; margin-top:-29px; text-align:center; vertical-align:middle; width:25px; }
 
-#main .bookmark li.bookmark-heading {min-height: 25px;}
+#main .bookmark li.bookmark-heading {min-height: 25px; color:#111;}
 #main ul.bookmark-icons {width:75px; height:27px;float:left;}
 #main ul.bookmark-icons li img {width:25px; height:25px;}
 #main ul.bookmark-icons li { display:inline; padding:0;margin:0; width:25px; height:25px;}
 #main .bookmark ul.navigation {text-align:left; margin-bottom: -0.75em; padding-top: 0.5em;}
 #main .bookmark dd ul li {display: inline;}
 
-#main li.bookmark-options { text-align: right; font-size: 0.9em;    }
-#main .bookmark-options li { margin-left: 0.5em; display: inline; padding: 0 0.5625em; border:1px solid #DDDDDD; border-bottom:0; text-indent:0; }
+.bookmark-fandoms { font-weight: 500; font-size: 1.125em; }
+.bookmark-author-tags { font-weight: 100; font-size: 0.875em; }
 
-#main .bookmark ul.user-info { border: 1px dotted #DDDDDD; padding-left: 0.5em; }
+#main li.bookmark-options { text-align: right; font-size: 0.9em;    }
+#main .bookmark-options li { margin-left: 0.5em; display: inline; padding: 0 0.5625em; border:1px solid #ddd; border-bottom:0; text-indent:0; }
+
+#main .bookmark ul.user-info { border: 1px dotted #ddd; padding-left: 0.5em; }
 #main .bookmark ul.recent-bookmarks li.bookmark { border: none;}
 #main ul.user-info ul.bookmark-icons {width: 35px; }
-#main .bookmark li.byline { color: #777777; font-weight: 700; }
+#main .bookmark li.byline { color: #777; font-weight: 700; }
 #main ul.user-info li.byline { min-height: 25px; }
 #main .bookmark li.byline-date { float: right; padding-right: 0.5em; } 
 
 #bookmarks ul.work {margin-right: 0;}
+
+/* Temporary bookmark content */
+#dynamic-bookmark	{ background:#fffef9; position:fixed; height:26em; width:36em; bottom:2em; right:2em; z-index:42; padding:1em 2em;  border:2px solid; }
+#bookmark_notes	{ width:28.125em; height:6.25em; }
+#close-popup	{ position:absolute; top:0.375em; right:0.625em; }
+.chapter-position-list	{ list-style-type:none; padding:0.625em; }
+.work-edit-meta, .work-edit-notes	{ width:80%; }
+.work-edit-title	{ font-weight:700; font-size:1.5em; text-align:center; }
 
 /*TAGS-INDEX */
 .tags-index ul { text-align: center; margin: 2em auto; }
@@ -268,6 +284,8 @@ dl.translations {position:relative; margin: 1.5em auto; padding: 1.5em 0 2.5em; 
 #main.collections-show blockquote h3 {display:block; border-bottom: 1px solid; margin-bottom:.875em;}
 #main.collections-show .preface {margin:1em auto;}
 #main.collections-show .preface ul.navigation {float:right;}
+
+#dynamic-collection_item	{ background:#fffef9; position:fixed; height:8em; width:18em; bottom:2em; right:2em; z-index:42; padding:1em 2em;  border:2px solid; }
  
 /*ToS and any other long text pages.
 * styling duplicates the work-views.css and is incorporated there*/

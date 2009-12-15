@@ -19,7 +19,7 @@
         <%- if type == "Warning" && hide_warnings?(work) -%>        
           <li><%= show_warnings_link(work) %> </li>
           
-          <%- else if type == "Freeform" && hide_freeform?(work) -%>
+          <%- elsif type == "Freeform" && hide_freeform?(work) -%>
           <li><%= show_freeforms_link(work) %> </li>
           
         <%- else -%>                   

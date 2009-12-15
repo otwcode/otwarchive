@@ -1,14 +1,33 @@
 /* Put any IE-specific overrides into this file -- it will be loaded last and conditionally, only if the browser is IE. */
 
-#work-form p.submit { text-align: right; } /* because IE won't recognise the line without #work-form in forms.css */
+/* pathing*/
+#work-form p.submit { text-align: right; }
 
-.home #login {width: auto !important;} /* making Post New | Import | Log out on the homepage line up right */
-.home #search p {text-align: right; z-index: 1;} /* making the search box on the home page correct */
+/*layer stacking*/
+.home #search p {text-align: right; z-index: 1;}
+
+/*explicit widths*/
+.home #login {width: auto !important;} 
 .home #main-navigation {width: 70% !important; height: 80% !important;} /* stopping the navbar short so the search box is visible */
 
-#user-header .navigation li {margin-right: 0.25em !important;} /* making the sub-navigation menus have the little gaps */
-#main .navigation li {margin-right: 0.25em !important;} /* making the sub-navigation menus have the little gaps */
+/*margin and padding idiosyncracies*/ 
+#main .navigation li {margin-right: 0.25em !important;} 
 
+#user-header { margin-bottom:0;}
+#user-header .navigation li {margin-right: 0.25em !important;}
+
+/*min-height */
+#main .bookmark li.bookmark-heading {height: 25px;}
+#main ul.user-info li.byline {height: 25px; }
+.titles {height:70px; }
+li.heading {height: 50px;}
+.media-index li.category {height: 15em; }
+
+/*hasLayout */
+div#userpage, .user-module {zoom:1;}
+a {zoom:1;}
+
+
+/*clear quirks */
 .collection #login-block #greeting {clear:none !important;}
 
-a{zoom:1;} /* hasLayout fix */
