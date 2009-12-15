@@ -35,7 +35,9 @@ class Collection < ActiveRecord::Base
   validate :must_have_owners, :collection_depth
 
   def must_have_owners
-    errors.add_to_base t('collection.no_owners', :default => "Collection has no valid owners.") if self.collection_participants.select {|p| p.is_owner?}.empty? 
+    # we have to use collection participants because the association may not exist until after
+    # the collection is saved
+    errors.add_to_base t('collection.no_owners', :default => "Collection has no valid owners.") if (self.collection_participants + self.parent ? self.parent.collection_participants : []).select {|p| p.is_owner?}.empty? 
   end
   
   def collection_depth
@@ -84,6 +86,18 @@ class Collection < ActiveRecord::Base
   def to_param
     name
   end
+  
+  # Change membership of collection(s) from a particular pseud to the orphan account
+  def self.orphan(pseuds, collections, default=true)
+    for pseud in pseuds
+      for collection in collections
+        if pseud && collection && collection.owners.include?(pseud)
+          orphan_pseud = default ? User.orphan_account.default_pseud : User.orphan_account.pseuds.find_or_create_by_name(pseud.name)
+          pseud.change_membership(collection, orphan_pseud)
+        end
+      end
+    end    
+  end  
 
   # check to see if this user has received an item in this collection
   def user_has_received_item(user)

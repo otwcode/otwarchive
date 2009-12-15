@@ -179,7 +179,8 @@ class UsersController < ApplicationController
   def destroy
     @hide_dashboard = true
     @works = @user.works.find(:all, :conditions => {:posted => true})
-    if @works.blank?
+    @sole_owned_collections = @user.collections.delete_if {|collection| (collection.all_owners - @user.pseuds).size > 0}
+    if @works.empty? && @sole_owned_collections.empty?
       if @user.unposted_works
         @user.wipeout_unposted_works
       end
@@ -229,15 +230,20 @@ class UsersController < ApplicationController
           works = @sole_authored_works
           use_default = params[:use_default] == "true"
           Creatorship.orphan(pseuds, works, use_default)
+          Collection.orphan(pseuds, @sole_owned_collections, use_default)
           # Orphans works where user is sole author, uses the default orphan pseud
         elsif params[:sole_author] == 'orphan_pseud'
           pseuds = @user.pseuds
           works = @sole_authored_works
           Creatorship.orphan(pseuds, works)
+          Collection.orphan(pseuds, @sole_owned_collections)
           # Deletes works where user is sole author
         elsif params[:sole_author] == 'delete'
           @sole_authored_works.each do |s|
             s.destroy
+          end
+          @sole_owned_collections.each do |c|
+            c.destroy
           end
         end
         @works = @user.works.find(:all, :conditions => {:posted => true})

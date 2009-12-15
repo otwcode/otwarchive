@@ -11,7 +11,7 @@ class Pseud < ActiveRecord::Base
   has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work'
   has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter'
   has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series'
-  has_many :collection_participants
+  has_many :collection_participants, :dependent => :destroy
   has_many :collections, :through => :collection_participants
 
   validates_presence_of :name
@@ -147,6 +147,13 @@ class Pseud < ActiveRecord::Base
       end
       comment_ids = creation.find_all_comments.collect(&:id).join(",")
       Comment.update_all("pseud_id = #{pseud.id}", "pseud_id = '#{self.id}' AND id IN (#{comment_ids})") unless comment_ids.blank?
+    end
+  end
+  
+  def change_membership(collection, new_pseud)
+    self.collection_participants.in_collection(collection).each do |cparticipant| 
+      cparticipant.pseud = new_pseud
+      cparticipant.save
     end
   end
   
