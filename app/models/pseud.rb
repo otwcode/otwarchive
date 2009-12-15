@@ -128,6 +128,7 @@ class Pseud < ActiveRecord::Base
   def replace_me_with_default
     self.creations.each {|creation| change_ownership(creation, self.user.default_pseud) }
     Comment.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}") unless self.comments.blank?
+    change_collections_ownership
     self.destroy
   end
 
@@ -151,6 +152,10 @@ class Pseud < ActiveRecord::Base
   
   def change_bookmarks_ownership
     Bookmark.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}") and return
+  end
+
+  def change_collections_ownership
+    Collection.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}") and return
   end
   
   def check_default_pseud

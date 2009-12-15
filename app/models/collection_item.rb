@@ -60,6 +60,26 @@ class CollectionItem < ActiveRecord::Base
     end
   end
   
+  def title
+    item.respond_to?(:title) ? item.title : item.bookmarkable.title
+  end
+  
+  def recipients
+    item.respond_to?(:recipients) ? item.recipients : ""
+  end
+  
+  def item_creator_names
+    item.respond_to?(:pseuds) ? item.pseuds.collect(&:name).join(', ') : item.pseud.name
+  end
+  
+  def item_creator_pseuds
+    item.respond_to?(:pseuds) ? item.pseuds : [item.pseud]
+  end
+
+  def item_date
+    item.respond_to?(:revised_at) ? item.revised_at : item.updated_at
+  end
+  
   def user_allowed_to_destroy?(user) 
     user.is_author_of?(self.item) || self.collection.user_is_maintainer?(user)
   end

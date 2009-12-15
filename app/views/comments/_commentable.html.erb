@@ -2,7 +2,7 @@
 <a name="comments"></a>
 <div id="feedback">
   <div class="navigation">
-    <%- if logged_in? && commentable.class == Work -%>
+    <%- if is_author_of?(commentable) && commentable.class == Work -%>
       <span class="navitem" id="add_collection_link"><%= collection_link(commentable) -%></span>
     <%- end -%>
     <%- if logged_in? && commentable.class != AdminPost -%>

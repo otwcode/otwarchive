@@ -26,9 +26,24 @@ class CollectionItemsController < ApplicationController
     @collection_item.user_allowed_to_destroy?(current_user) || not_allowed
   end
   
-  
   def index
     @collection_items = @collection.collection_items
+    case params[:sort]
+    when "item"
+      @collection_items = @collection_items.sort_by {|ci| ci.title}
+    when "creator"
+      @collection_items = @collection_items.sort_by {|ci| ci.item_creator_names }
+    when "user_approval"
+      @collection_items = @collection_items.sort_by {|ci| ci.user_approval_status}
+    when "collection_approval"
+      @collection_items = @collection_items.sort_by {|ci| ci.collection_approval_status}
+    when "recipient"
+      @collection_items = @collection_items.sort_by {|ci| ci.recipients }
+    when "received"
+      @collection_items = @collection_items.sort_by {|ci| ci.item_creator_pseuds.map {|pseud| @collection.user_has_received_item(pseud.user) ? "Yes" : "No"}.join(", ")}
+    when "date"
+      @collection_items = @collection_items.sort_by {|ci| ci.item_date}
+    end
   end
   
   def load_collectible_item

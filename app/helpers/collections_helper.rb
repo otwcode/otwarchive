@@ -12,10 +12,4 @@ module CollectionsHelper
     end
   end
   
-  def check_has_received(user)
-    @received_pseuds ||= Pseud.parse_bylines(
-          @collection.collection_items.collect {|collection_item| collection_item.item.methods.include?("recipients") ? collection_item.item.recipients : ""}.join(","))[:pseuds]
-    !(@received_pseuds & user.pseuds).empty?
-  end
-    
 end

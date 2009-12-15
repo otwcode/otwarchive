@@ -2,21 +2,18 @@
 <tr id="collection_item_<%= collection_item.id %>">
 <%- form_for(:collection_item, collection_item, :url => {:controller => "collection_items", :action => "update"}) do |form| -%>
 <th scope="row">
-  <%= link_to(collection_item.item_type == "Bookmark" ? 
-    t('collection_items.bookmark', :default => "Bookmark for {{title}}", :title => collection_item.item.bookmarkable.title) : 
-    (collection_item.item.posted? ? collection_item.item.title : t('collection_items.draft', :default => "{{title}} (draft)", :title => collection_item.item.title)),
-    collection_item.item) -%>
+  <%= link_to(
+    collection_item.item_type == "Bookmark" ? t('collection_items.bookmark', :default => "Bookmark for {{title}}", :title => collection_item.title) : 
+    collection_item.title + collection_item.item.posted? ? t('collection_items.draft', :default => "(draft)") : "", collection_item.item) -%>
   <%= form.hidden_field :id %><%= form.hidden_field :collection_id %>
 </th>
-<td><%= collection_item.item_type == "Bookmark" ? 
-          link_to(collection_item.item.pseud.byline, collection_item.item.pseud.user) :
-          collection_item.item.pseuds.map {|pseud| link_to(pseud.byline, pseud.user)}.join(", ") -%></td>
+<td><%= collection_item.item_creator_names -%></td>
 <td><%= CollectionItem::LABEL[collection_item.user_approval_status] -%></td>
 <td><%= form.select(:collection_approval_status, CollectionItem::APPROVAL_OPTIONS) %></td>
 
 <% if @collection.gift_exchange? %>
-<td><%= collection_item.item.methods.include?("recipients") ? h(collection_item.item.recipients) : "" -%></td>
-<td><%= collection_item.item.methods.include?("users") ? collection_item.item.users.map {|user| check_has_received(user) ? "Yes" : "No"}.join(", ") : "N/A" -%></td>
+<td><%= collection_item.recipients -%></td>
+<td><%= collection_item.item_creator_pseuds.map {|pseud| @collection.user_has_received_item(pseud.user) ? "Yes" : "No"}.join(", ") -%></td>
 <% end %>
 
 <td class="submit button">

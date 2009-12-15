@@ -11,6 +11,9 @@ class Collection < ActiveRecord::Base
   
   has_many :collection_items, :dependent => :destroy
   accepts_nested_attributes_for :collection_items, :allow_destroy => true
+  has_many :approved_collection_items, :class_name => "CollectionItem", 
+    :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
+  
   has_many :works, :through => :collection_items, :source => :item, :source_type => 'Work' 
   has_many :bookmarks, :through => :collection_items, :source => :item, :source_type => 'Bookmark'
   has_many :fandoms, :through => :works, :uniq => true
@@ -81,6 +84,12 @@ class Collection < ActiveRecord::Base
   def to_param
     name
   end
+
+  # check to see if this user has received an item in this collection
+  def user_has_received_item(user)
+    @received_pseuds ||= Pseud.parse_bylines(approved_collection_items.collect(&:recipients).join(","))[:pseuds]
+    !(@received_pseuds & user.pseuds).empty?
+  end  
   
   def parent_name=(name)
     self.parent = Collection.find_by_name(name)
