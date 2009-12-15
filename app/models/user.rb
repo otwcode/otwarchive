@@ -45,6 +45,7 @@ class User < ActiveRecord::Base
   before_update :validate_date_of_birth
 
   has_many :collection_participants, :through => :pseuds
+  has_many :collections, :through => :collection_participants
   has_many :invited_collections, :through => :collection_participants, :source => :collection, 
       :conditions => ['collection_participants.participant_role = ?', CollectionParticipant::INVITED]
   has_many :participated_collections, :through => :collection_participants, :source => :collection, 
