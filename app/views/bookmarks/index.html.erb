@@ -1,18 +1,17 @@
-<%= taggable_list(params[:tag_id], "bookmarks") if params[:tag_id] -%>
-
 <%- if @most_recent_bookmarks -%>
   <h1>Bookmarks saved in the last month</h1>
 <%- else -%>
   <h1><%=h t('listing', :default => 'Listing bookmarks') %></h1>
 <%- end -%>
 
-
 <ul class="navigation">
 <% if @user && current_user && current_user == @user %>
   <li><%= link_to t('add_new', :default => "Add A New Bookmark"), new_external_work_path %></li>
 <% end %> 
-
   <li><%= toggle_recs_bookmarks %></li>
+<% if params[:tag_id] %>
+  <li><%= taggable_list(params[:tag_id], "bookmarks") -%></li>
+<% end %>
 </ul>
 
 <ul class="work-list bookmark" id="bookmarks">
