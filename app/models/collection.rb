@@ -37,7 +37,7 @@ class Collection < ActiveRecord::Base
   def must_have_owners
     # we have to use collection participants because the association may not exist until after
     # the collection is saved
-    errors.add_to_base t('collection.no_owners', :default => "Collection has no valid owners.") if (self.collection_participants + self.parent ? self.parent.collection_participants : []).select {|p| p.is_owner?}.empty? 
+    errors.add_to_base t('collection.no_owners', :default => "Collection has no valid owners.") if (self.collection_participants + (self.parent ? self.parent.collection_participants : [])).select {|p| p.is_owner?}.empty? 
   end
   
   def collection_depth
