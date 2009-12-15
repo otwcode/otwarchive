@@ -8,7 +8,7 @@
 
 /*explicit widths*/
 .home #login {width: auto !important;} 
-.home #main-navigation {width: 70% !important; height: 80% !important;} /* stopping the navbar short so the search box is visible */
+.home #main-navigation {width: 30em; !important;} /* stopping the navbar short so the search box is visible */
 
 /*margin and padding idiosyncracies*/ 
 #main .navigation li {margin-right: 0.25em !important;} 
