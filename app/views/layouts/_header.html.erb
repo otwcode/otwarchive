@@ -6,7 +6,7 @@
 </style>
 <%- end -%>
 
-<div id="header">
+<div id="header"<% if @collection %> class="collection"<% end %>>
 	<% if @collection %>
 	  <h1 class="collection"><%= link_to "&lt;&lt; #{ArchiveConfig.APP_NAME}", media_path -%></h1>
 	<% end %>
