@@ -8,12 +8,13 @@
   <%= form.hidden_field :id %><%= form.hidden_field :collection_id %>
 </th>
 <td><%= collection_item.item_creator_names -%></td>
+<td><%= collection_item.item_creator_pseuds.map {|pseud| @collection.user_is_posting_participant?(pseud.user) ? "Y" : "N"}.join(", ") -%>
 <td><%= CollectionItem::LABEL[collection_item.user_approval_status] -%></td>
 <td><%= form.select(:collection_approval_status, CollectionItem::APPROVAL_OPTIONS) %></td>
 
 <% if @collection.gift_exchange? %>
 <td><%= collection_item.recipients -%></td>
-<td><%= collection_item.item_creator_pseuds.map {|pseud| @collection.user_has_received_item(pseud.user) ? "Yes" : "No"}.join(", ") -%></td>
+<td><%= collection_item.item_creator_pseuds.map {|pseud| @collection.user_has_received_item(pseud.user) ? "Y" : "N"}.join(", ") -%></td>
 <% end %>
 
 <td class="submit button">

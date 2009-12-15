@@ -33,6 +33,8 @@ class CollectionItemsController < ApplicationController
       @collection_items = @collection_items.sort_by {|ci| ci.title}
     when "creator"
       @collection_items = @collection_items.sort_by {|ci| ci.item_creator_names }
+    when "member"
+      @collection_items = @collection_items.sort_by {|ci| ci.item_creator_pseuds.map {|pseud| @collection.user_is_posting_participant?(pseud.user) ? "Y" : "N"}.join(", ") }      
     when "user_approval"
       @collection_items = @collection_items.sort_by {|ci| ci.user_approval_status}
     when "collection_approval"
