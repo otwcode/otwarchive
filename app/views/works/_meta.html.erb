@@ -2,9 +2,8 @@
   <%- work_tags = collect_work_tags(work) -%>
   <%- Tag::VISIBLE.each do |type| -%>
     <%- tags = work_tags.select{|tag| tag.type == type} -%>
-
     <%- unless tags.blank? -%>
-    <dt class="<%= type.downcase -%>">
+      <dt class="<%= type.downcase -%>">
         <%- if type == "Warning" -%>
           <%= link_to( tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize, tos_faq_path(:anchor => "tags") ) %>:
         <%- elsif type.constantize::NAME == ArchiveConfig.FREEFORM_CATEGORY_NAME -%>
@@ -12,22 +11,19 @@
         <%- else -%>
           <%= tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize %>:
         <%- end -%>
-    </dt>
-    
-	  <dd>
+      </dt>
+
+      <dd>
       <ul id="work_<%= work.id %>_category_<%= type.downcase %>">
-        <%- if type == "Warning" && hide_warnings?(work) -%>        
-          <li><%= show_warnings_link(work) %> </li>
-          
-          <%- elsif type == "Freeform" && hide_freeform?(work) -%>
-          <li><%= show_freeforms_link(work) %> </li>
-          
-        <%- else -%>                   
-          <%= tags.collect{|tag| "<li class='#{tag.type.downcase}'>" + link_to_tag(tag) + '</li>' }.join(', ') %>
-        <%- end -%>
-        <%- end -%>
+      <%- if type == "Warning" && hide_warnings?(work) -%>        
+        <li><%= show_warnings_link(work) %> </li>
+      <%- elsif type == "Freeform" && hide_freeform?(work) -%>
+        <li><%= show_freeforms_link(work) %> </li>
+      <%- else -%>                   
+        <%= tags.collect{|tag| "<li class='#{tag.type.downcase}'>" + link_to_tag(tag) + '</li>' }.join(', ') %>
+      <%- end -%>
       </ul>
-    </dd>
+      </dd>
     <%- end -%>
   <%- end -%>
 </dl>
