@@ -56,27 +56,27 @@
 </dl>
 
 <div class="preface profile">
-  <% if @collection.collection_profile.intro %>
+  <% if !@collection.collection_profile.intro.blank? || (@collection.parent && !@collection.parent.collection_profile.intro.blank?) %>
   <blockquote id="intro">
     <%= render :partial => 'collection_profile_navigation', :locals => {:section => 'intro'} -%>
     <h3><%=h t('intro', :default => "Intro:") %></h3>
-    <%= sanitize_and_format_for_display @collection.collection_profile.intro %>
+    <%= sanitize_and_format_for_display (@collection.collection_profile.intro || @collection.parent.collection_profile.intro.blank?) %>
   </blockquote>
   <% end -%>
 	
-  <% if @collection.collection_profile.faq %>
+  <% if !@collection.collection_profile.faq.blank? || (@collection.parent && !@collection.parent.collection_profile.faq.blank?) %>
 	<blockquote id="faq">
     <%= render :partial => 'collection_profile_navigation', :locals => {:section => 'faq'} -%>
 		<h3><%=h t('faq', :default => "FAQ:") %></h3>
-		<%= sanitize_and_format_for_display @collection.collection_profile.faq %>
+		<%= sanitize_and_format_for_display (@collection.collection_profile.faq || @collection.parent.collection_profile.faq) %>
 	</blockquote>
 	<% end -%>
 
- <% if @collection.collection_profile.rules %>
+ <% if !@collection.collection_profile.rules.blank? || (@collection.parent && !@collection.parent.collection_profile.rules.blank?) %>
 	<blockquote id="rules">
     <%= render :partial => 'collection_profile_navigation', :locals => {:section => 'rules'} -%>
 		<h3><%=h t('rules', :default => "Rules:") %></h3>
-		<%= sanitize_and_format_for_display @collection.collection_profile.rules %>
+		<%= sanitize_and_format_for_display (@collection.collection_profile.rules || @collection.parent.collection_profile.rules) %>
 	</blockquote>
 	<% end -%>
 </div>

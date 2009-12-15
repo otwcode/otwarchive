@@ -1,11 +1,11 @@
 <ul class="navigation">
-	<% if @collection.collection_profile.intro && section != "intro" -%>
+	<% if (!@collection.collection_profile.intro.blank? || (@collection.parent && !@collection.parent.collection_profile.intro.blank?)) && section != "intro" -%>
 	<li><a href="#intro"><%=h t('intro', :default => "Intro:") %></a></li>
 	<% end -%>
-	<% if @collection.collection_profile.faq  && section != "faq" %>
+	<% if (!@collection.collection_profile.intro.blank? || (@collection.parent && !@collection.parent.collection_profile.intro.blank?)) && section != "faq" -%>
 	<li><a href="#faq"><%=h t('faq', :default => "FAQ:") %></a></li>
 	<% end -%>
-	<% if @collection.collection_profile.rules  && section != "rules" %>
+	<% if (!@collection.collection_profile.intro.blank? || (@collection.parent && !@collection.parent.collection_profile.intro.blank?)) && section != "rules" -%>
 	<li><a href="#rules"><%=h t('rules', :default => "Rules:") %></a></li>
 	<% end -%>
 </ul>

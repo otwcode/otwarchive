@@ -28,7 +28,7 @@
 		<dt>Mods</dt>
 		<dd>
 			<ul>
-			  <%= collection.all_moderators.map {|mod| "<li>#{link_to(mod.byline, mod.user)}</li>"} -%>
+			  <%= collection.all_moderators.map {|mod| "<li>#{link_to(mod.byline, mod.user)}</li>"}.join(", ") -%>
 			</ul>
 		</dd>
 		</dl>
