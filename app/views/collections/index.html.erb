@@ -1,7 +1,11 @@
-<h1><%=h t('listing_collections', :default => "Listing collections") %></h1>
+<h1><%=h t('listing_collections', :default => "Collections in the {{archive_name}}", :archive_name => ArchiveConfig.APP_NAME) %></h1>
+
+<%- if logged_in? %>
 <ul class="navigation">
 	<li><%= link_to 'New collection', new_collection_path %></li>
 </ul>
+<% end -%>
+
 <!--pagination here-->
 <!--sort navigation here-->
 <!--filters-->
@@ -12,8 +16,8 @@
  		<li class="heading">
 			<span class="icon"><img src="/images/collections.png" class="icon" alt="" /></span>
 			<!--or collections header image-->
-			<h3><%= link_to collection.title, collection -%>
-				<span>(<%= collection.name -%>)</span>
+			<h3><%= link_to sanitize_title_for_display(collection.title, :tags => %w(em i b strong strike small)), collection -%>
+				<span>(<%=h collection.name -%>)</span>
 					<%= t('collection_by_owner', :default => 'by') -%>
 					<%= collection.all_owners.map {|owner| link_to(owner.byline, owner.user)}.join(", ") -%></h3>
 			<p class="update"><!--collection updated at--></p>
@@ -44,13 +48,9 @@
 	</li>
 	-->
 	<li class="summary">
-		<%=h collection.description %>
-		<!--if greater than x characters then 
-		(...) link to collection show page-->		
-    ( <%= collection.closed? ? t('collections_index.is_closed', :default => "Closed") : t('collections_index.open', :default => "Open") %>, 
-    <%= collection.moderated? ? t('collections_index.is_moderated', :default => "Moderated") : t('collections_index.unmoderated', :default => "Unmoderated") %>
-    <%= collection.unrevealed? ? t('collections_index.is_unrevealed', :default => ", Unrevealed") : "" %>
-    <%= collection.anonymous? ? t('collections_index.is_anonymous', :default => ", Anonymous") : "" %> )
+	  <%= sanitize_strip_images_and_format_for_display collection.description %>
+
+    (<%= collection.closed? ? t('collections_index.is_closed', :default => "Closed") : t('collections_index.open', :default => "Open") %>, <%= collection.moderated? ? t('collections_index.is_moderated', :default => "Moderated") : t('collections_index.unmoderated', :default => "Unmoderated") %><%= collection.unrevealed? ? t('collections_index.is_unrevealed', :default => ", Unrevealed") : "" %><%= collection.anonymous? ? t('collections_index.is_anonymous', :default => ", Anonymous") : "" %>)
 	</li>
 
 	<%- if collection.not_empty? -%>
