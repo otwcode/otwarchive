@@ -42,7 +42,7 @@
        <input type="checkbox" id="storynotescheck" name="storynotescheck"  onclick="showNotesOptions('chapter')" 
        <%- unless chapter.notes.blank? -%>checked="checked"<%- end -%>/>
        <span id="worknoteswarning" class="warning" <%- if chapter.notes.blank? -%> style="display: none" <%- end -%>>
-       <%=h t('worknotes_warning', :default =>"Warning: Unchecking this box will delete any existing beginning note when you save the work.") %></span>
+       <%=h t('worknotes_warning', :default =>"Warning: Unchecking this box will delete any existing beginning note.") %></span>
       </dd>
       <dd id="worknotesoptions" class="work-endnotes optionalField">
         <dl>     
@@ -63,7 +63,7 @@
        <input type="checkbox" id="storyendnotescheck" name="storyendnotescheck"  onclick="showEndnotesOptions('chapter')" 
        <%- unless chapter.endnotes.blank? -%>checked="checked"<%- end -%>/>
 	<span id="workendnoteswarning" class="warning" <%- if chapter.endnotes.blank? -%> style="display: none" <%- end -%>>
-       <%=h t('workendnotes_warning', :default =>"Warning: Unchecking this box will delete any existing end note when you save the work.") %></span>
+       <%=h t('workendnotes_warning', :default =>"Warning: Unchecking this box will delete any existing end note.") %></span>
       </dd>
       <dd id="workendnotesoptions" class="work-endnotes optionalField">
         <dl>
