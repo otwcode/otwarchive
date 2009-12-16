@@ -26,13 +26,13 @@
 	
 	<%- unless @collection.description.blank? -%>
 	<dt><%=h t('collection.description', :default => "Description:") %></dt>
-	<dd><%=h @collection.description %></dd>
+	<dd><%= sanitize_and_format_for_display @collection.description %></dd>
 	<%- end -%>
 
  <% unless @collection.parent || (@collection.children.empty? && !@collection.user_is_maintainer?(current_user)) %>
 	<dt><%=h t('collections.children', :default => "Challenges and subcollections: ") -%></dt>
   <dd>
-    <%= @collection.children.sort_by {|child| child.created_at}.map {|child| link_to(child.title, child)}.join(", ") -%>
+    <%= @collection.children.sort_by {|child| child.created_at}.map {|child| link_to(sanitize_title_for_display(child.title), child)}.join(", ") -%>
     <% if @collection.user_is_maintainer?(current_user) -%>
       (<%= link_to t('collections.add_child', :default => "Add new challenge/subcollection"), new_collection_collection_path(@collection) %>)
     <% end %>
@@ -41,7 +41,7 @@
 
  <% if @collection.parent %>
    <dt><%=h t('collections.parent', :default => "Parent Collection: ") -%></dt>
-   <dd><%= link_to(@collection.parent.title, @collection.parent) -%></dd>
+   <dd><%= link_to(sanitize_title_for_display(@collection.parent.title), @collection.parent) -%></dd>
  <% end -%>
 
  <dt><%= t('collections.settings', :default => "Settings: ") %></dt>
