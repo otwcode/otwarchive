@@ -15,11 +15,11 @@
 	<%- if logged_in_as_admin? -%>
 	<%= render :partial => 'admin/admin_options', :locals => {:item => @work} %>
 	<%- end -%>
-	<div id="chapters">
+	<div id="chapters" class="user-generated-view">
 	<%= render :partial => 'chapters/chapters' -%>
 	</div>
   <%- unless @work.endnotes.blank? -%>
-    <div class="preface">
+    <div class="preface user-generated-view">
       <blockquote id="work_endnotes" class="notes">
         <h3><%=h t('notes', :default => "Notes:") %></h3>
         <%=sanitize_and_format_for_display @work.endnotes %>

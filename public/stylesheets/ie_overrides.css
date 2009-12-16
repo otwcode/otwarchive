@@ -3,7 +3,6 @@
 /* pathing and inheritance*/
 #work-form p.submit { text-align: right; }
 #work-form .submit input {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px solid #222;}
-.heading a {font-weight:bold; line-height:1.5; }
 
 /*layer stacking*/
 .home #search p {text-align: right; z-index: 1;}
@@ -28,12 +27,17 @@
 li.heading {height: 50px;}
 .media-index li.category {height: 15em; }
 
+/*line-height and baseline */
+.heading h3, .heading h4, .heading a {font-weight:bold; line-height:1.5; display:inline-block;}
+
 /*hasLayout */
-div#userpage, .user-module, a, form dd {zoom:1;}
+div#userpage, .user-module, a, form dd, {zoom:1;}
 
 /*float clear quirks */
 .collection #login-block #greeting {clear:none !important;}
 form dd {float:none;}
+
+
 
 
 

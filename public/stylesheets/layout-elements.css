@@ -41,12 +41,11 @@ ul#greeting, ul#login { text-align:left; width:17.75em; float:right;clear:right;
 
 /* MAIN NAVIGATION (TABS) */
 ul.main-navigation { position: relative; clear: both; border-left: 1px solid #111; margin: 0 0 0 1em; }
-.main-navigation li { background: #fffef9; display: block; float: left; }
-.main-navigation a:link { color: #111; font-weight: 100; }
-.main-navigation a:hover, .main-navigation a:active, .main-navigation a:visited { color: #111; font-weight: 100;}
-.main-navigation a:hover { background: #ddd; }
-.main-navigation a, #header .main-navigation a { background: #fffef9; color: #111; border: 1px solid #111; border-bottom: 0; display: block; font-weight: 100; float: left; padding: 0.5625em; }
+.main-navigation li { background: #fffef9; display: block; float: left; z-index:0;}
+#header .main-navigation a { background: #fffef9; color: #111; border: 1px solid #111; border-bottom: 0; display: block; font-weight: 100; float: left; padding: 0.5625em; }
+#header .main-navigation a:hover { background: #ddd; }
 .main-navigation .current {background: #111; color: #fffef9; border: 1px solid #111; border-bottom: 0; display: block; font-weight: 100; float: left; padding: 0.5625em; cursor: default;}
+
 
 /*MAIN NAV ADMIN VIEW*/
 #header ul.admin {border-bottom:2px solid;}
@@ -157,7 +156,7 @@ li.heading {position: relative; display:block; min-height: 50px;}
 .work .tags ul, .work .mods ul  {margin:-2.25em 0 .75em 11em; text-indent:0; padding:0;}
 #main .work-list .tags	{ display:inline; margin: 0; padding: 0 0 0.8em;}
 
-.work li.summary {margin:0.5625em auto; padding:0.25em 0.25em 0 0; clear:none !important;}
+.work li.summary {margin:0.5625em auto; padding:0.25em 0.25em 0 0; clear:none !important; text-align:justify;}
 .work li.stats dl {text-align:right;}
 .work li.stats dt, .work li.stats dd {display:inline; font-size:0.875em}
 .work li.stats dl dd {margin:0 0.375em 0 0;}

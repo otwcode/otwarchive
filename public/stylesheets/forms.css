@@ -130,6 +130,7 @@ form.edit_preference ul { margin:0.562625em auto 1.12525em auto; padding:0.56262
 
 /*EDIT PROFILE*/
 #main.users-edit form { float: left; }
+#main.users-edit form dl {margin: 0 auto;}
 #main.users-edit dt	{ width:12em; }
 #main.users-edit textarea#profile_attributes_about_me { height:12em; }
 #main.users-edit hr.clear {margin-top:39em;}

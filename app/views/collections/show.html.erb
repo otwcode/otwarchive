@@ -55,7 +55,7 @@
    </dd>
 </dl>
 
-<div class="preface profile">
+<div class="preface profile user-generated-view">
   <% if !@collection.collection_profile.intro.blank? || (@collection.parent && !@collection.parent.collection_profile.intro.blank?) %>
   <blockquote id="intro">
     <%= render :partial => 'collection_profile_navigation', :locals => {:section => 'intro'} -%>

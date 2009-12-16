@@ -2,7 +2,7 @@
 <div class="work-show"><a name="top" />
   <%= render :partial => 'works/work_header' -%>
 
-  <div id="chapters">
+  <div id="chapters" class="user-generated-view">
     <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } -%>
     <%- if !@work.endnotes.blank? && @chapter == @work.last_chapter -%>
       <div class="preface">

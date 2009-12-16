@@ -3,11 +3,6 @@
 <%= error_messages_for :user %>
 
 <% form_for(@user) do |f| %>  
-  <dl>
-	  <dt><%= f.label :email, "Change Email" %></dt>
-		<dd><%= f.text_field :email %></dd>
-  </dl>
-	
 	<!-- The password or OpenID login fields are shown in this div -->
 			<div id="switch_fields">
 <!-- use_openid set by link_to_passwd and link_to_openid below; needed for non-JS users to distinguish between versions of the page -->
@@ -43,9 +38,10 @@
 						<%- end -%>
 					<%- end -%>
 				</div>
-  
-  <% fields_for :profile_attributes,  @user.profile do |p| %>
   <dl>
+	<dt><%= f.label :email, "Change Email" %></dt>
+		<dd><%= f.text_field :email %></dd>
+  <% fields_for :profile_attributes,  @user.profile do |p| %>
 	  <dt><%= p.label :title, "Title" %></dt>
     <dd>
       <%= p.text_field :title %>
