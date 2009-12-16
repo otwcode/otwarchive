@@ -12,7 +12,7 @@ font-family:Helvetica, Arial, Verdana, sans-serif;
 #home-header h2 {font-size: 1em; padding-left: 1.125em; padding-top: 0.25em;}
 
 .home #login-block {position: absolute; right: 0.5em;}
-.home #search {margin-top: 0.3em;}
+.home #search p{padding:0.25em 0 0.25em 0;}
 
 .home h1, .home h2, .home h3 {font-family:Helvetica, Arial, Verdana, sans-serif;}
 

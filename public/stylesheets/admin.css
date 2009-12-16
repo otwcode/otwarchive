@@ -8,6 +8,10 @@ background: #066 top left no-repeat;
 background: #066;
 }
 
+.home #login-block {
+	background: transparent;
+}
+
 .login-admin:after {
 content: url( "\2020" );
 }
