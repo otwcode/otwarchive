@@ -4,7 +4,7 @@ class CreationObserver < ActiveRecord::Observer
   # Notify new co-authors that they've been added to a work
   def after_save(creation)
     work = creation.class == Chapter ? creation.work : creation
-    if !creation.authors.blank? && User.current_user.is_a?(User)
+    if work && !creation.authors.blank? && User.current_user.is_a?(User)
       new_authors = (creation.authors - (work.pseuds + User.current_user.pseuds)).uniq
       unless new_authors.blank?
         for pseud in new_authors

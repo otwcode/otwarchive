@@ -124,7 +124,6 @@ class ExternalAuthorsControllerTest < ActionController::TestCase
       creatorship = create_external_creatorship(:external_author_name => @external_author.names.first, :creation => @test_work)
       @test_work.save
       @invitation = create_invitation(:external_author => @external_author)
-      #debugger
       get :complete_claim, :locale => 'en', :invitation_token => @invitation.token
     end
     should_set_the_flash_to /have added the stories imported under/
