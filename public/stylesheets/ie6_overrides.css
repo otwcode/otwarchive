@@ -1,0 +1,5 @@
+/* stacking */
+#header {z-index:-50;}
+#header h1 {z-index: -40;}
+#header h1 a {z-index:10;}
+#header .main-navigation a{z-index:20;}

@@ -6,7 +6,7 @@ font-family:Helvetica, Arial, Verdana, sans-serif;
 .home .logo  {position: absolute; left: 0.75em; top: -0.5em;}
 
 .titles {padding-left: 110px; margin-bottom: -0.5em; margin-right: 13.75em; min-height: 70px; }
-#home-header {position: relative; border-bottom:2px solid;}
+#home-header {position: relative; border-bottom:2px solid #000;}
 #home-header  h1 , #home-header h2 {font-family: Fertigo, Cambria, Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; margin: 0;}
 #home-header h1 {font-size: 1.5em; color: #900; padding-left: 0.75em;}
 #home-header h2 {font-size: 1em; padding-left: 1.125em; padding-top: 0.25em;}
