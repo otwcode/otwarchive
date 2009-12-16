@@ -24,7 +24,7 @@ td.navigation li a {color:#fff;}
 #header h1 a:hover { color:#000;}
 #header a { font-weight: 600; text-decoration: none; }
 
-#header #login-block { color: #fffef9; font-size: 0.75em; text-align: right;}
+#header #login-block { color: #fffef9; font-size: 0.75em; text-align: right; }
 #header #login-block a, #header #login-block a:link, #header #login-block a:visited { color: #fffef9; }
 #header #login-block a:hover { color:#900;}
 #header #login-block ul { padding-right: 0.25em; }
@@ -42,7 +42,7 @@ ul#greeting, ul#login { text-align:left; width:17.75em; float:right;clear:right;
 /* MAIN NAVIGATION (TABS) */
 ul.main-navigation { position: relative; clear: both; border-left: 1px solid #111; margin: 0 0 0 1em; }
 .main-navigation li { background: #fffef9; display: block; float: left; z-index:0;}
-#header .main-navigation a { background: #fffef9; color: #111; border: 1px solid #111; border-bottom: 0; display: block; font-weight: 100; float: left; padding: 0.5625em; }
+.main-navigation a, #header .main-navigation a { background: #fffef9; color: #111; border: 1px solid #111; border-bottom: 0; display: block; font-weight: 100; float: left; padding: 0.5625em; }
 #header .main-navigation a:hover { background: #ddd; }
 .main-navigation .current {background: #111; color: #fffef9; border: 1px solid #111; border-bottom: 0; display: block; font-weight: 100; float: left; padding: 0.5625em; cursor: default;}
 
