@@ -506,6 +506,15 @@ class Work < ActiveRecord::Base
     self.word_count = self.chapters.collect(&:word_count).compact.sum
   end
   
+  # save hits
+  def increment_hit_count(visitor)
+    if !self.last_visitor || self.last_visitor != visitor
+      self.last_visitor = visitor
+      self.hit_count = self.hit_count + 1
+      save
+    end
+  end
+  
   #######################################################################
   # TAGGING
   # Works are taggable objects.

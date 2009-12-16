@@ -80,6 +80,9 @@
 			<dt><%=h t('work_collections', :default => 'Collections') + ': ' -%></dt>
 			<dd><%= link_to work.approved_collections.length, work_collections_path(work) %></dd>
 		<%- end -%>
+		
+		<dt><%=h t('works.hit_count', :default => "Hits: ") -%></dt>
+		<dd><%= work.hit_count -%></dd>
 			
 		<%- if work.count_visible_comments > 0 -%>
 		<dt><%=h t('work_comments', :default => 'Comments') + ': '%></dt>

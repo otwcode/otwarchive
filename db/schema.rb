@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091213035516) do
+ActiveRecord::Schema.define(:version => 20091216001101) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -546,6 +546,8 @@ ActiveRecord::Schema.define(:version => 20091213035516) do
     t.boolean  "backdate",                                 :default => false, :null => false
     t.text     "endnotes"
     t.string   "imported_from_url"
+    t.integer  "hit_count",                                :default => 0,     :null => false
+    t.string   "last_visitor"
   end
 
 end

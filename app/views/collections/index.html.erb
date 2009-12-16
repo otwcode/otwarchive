@@ -1,8 +1,19 @@
+<% if @user %>
+<h1><%=h t('owned_collections', :default => "Collections owned by {{user_name}}", :user_name => @user.login) %></h1>
+<% elsif @collection %>
+<h1><%=h t('listing_sub_collections', :default => "Challenges/Subcollections in {{collection_name}}", :collection_name => @collection.title) %></h1>
+<% elsif @work -%>
+<h1><%=h t('listing_work_collections', :default => "Collections including {{work_name}}", :work_name => @work.title) %></h1>
+<% else %>
 <h1><%=h t('listing_collections', :default => "Collections in the {{archive_name}}", :archive_name => ArchiveConfig.APP_NAME) %></h1>
+<% end %>
 
 <%- if logged_in? %>
 <ul class="navigation">
-	<li><%= link_to 'New collection', new_collection_path %></li>
+  <% if @user && @user == current_user %>
+    <li><%= link_to t('collections.my_collection_items', :default => "Manage Collected Works"), user_collection_items_path(@user) -%></li>
+  <% end %>
+	<li><%= link_to t('collections.new_collection', :default => "New Collection"), new_collection_path %></li>
 </ul>
 <% end -%>
 

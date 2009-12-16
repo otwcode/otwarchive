@@ -13,7 +13,8 @@ module WorksHelper
   def work_meta_list(work, chapter=nil)
     # if we're previewing, grab the unsaved date, else take the saved first chapter date
     published_date = (chapter && work.preview_mode) ? chapter.published_at : work.first_chapter.published_at
-    list = [['Published:', localize(published_date)], ['Words:', work.word_count], ['Chapters:', work.chapter_total_display]]
+    list = [[t('works_helper.published', :default => "Published:"), localize(published_date)], [t('works_helper.words', :default => "Words:"), work.word_count], 
+            [t('works_helper.chapters', :default => "Chapters:"), work.chapter_total_display], [t('works_helper.hits:', :default => "Hits:"), work.hit_count]]
     if work.chaptered? && work.revised_at
       prefix = work.is_wip ? "Updated:" : "Completed:"
       latest_date = (work.preview_mode && work.backdate) ? published_date : work.revised_at.to_date
@@ -24,7 +25,8 @@ module WorksHelper
   
   def work_top_links_list(work)
     collections_link = work.approved_collections.empty? ? '' : 
-      "<li>" + link_to(t('work_collections_link', :default => "Collections: {{num_of_collections}}", :num_of_collections => work.approved_collections.length), work_collections_path(work)) + "</li>"
+      ("<li>" + link_to(t('work_collections_link', :default => "Collections: {{num_of_collections}}", 
+                          :num_of_collections => work.approved_collections.length), work_collections_path(work)) + "</li>")
     bookmark_link = logged_in? ? '<li>' + bookmark_link(work) + '</li>' : ''			
     comments_link = '<li>' + link_to("Comment(s)", work_path(work, :show_comments => true, :anchor => 'comments')) + '</li>'  
     "<ul>" + bookmark_link + (comments_link ||= '') + collections_link + "</ul>"    

@@ -52,12 +52,16 @@ class User < ActiveRecord::Base
       :conditions => ['collection_participants.participant_role IN (?)', [CollectionParticipant::OWNER, CollectionParticipant::MODERATOR, CollectionParticipant::MEMBER]]
   has_many :maintained_collections, :through => :collection_participants, :source => :collection, 
       :conditions => ['collection_participants.participant_role IN (?)', [CollectionParticipant::OWNER, CollectionParticipant::MODERATOR]]
+  has_many :owned_collections, :through => :collection_participants, :source => :collection, 
+          :conditions => ['collection_participants.participant_role = ?', CollectionParticipant::OWNER]
   
   has_many :readings, :dependent => :destroy 
   has_many :bookmarks, :through => :pseuds 
+  has_many :bookmark_collection_items, :through => :bookmarks, :source => :collection_items
   has_many :comments, :through => :pseuds
   has_many :creatorships, :through => :pseuds  
   has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work', :uniq => true
+  has_many :work_collection_items, :through => :works, :source => :collection_items, :uniq => true
   has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter', :uniq => true
   has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series', :uniq => true
   

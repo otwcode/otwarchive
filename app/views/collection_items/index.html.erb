@@ -1,18 +1,34 @@
-<h1><%=h t('items', :default => "Items in") -%> <%= @collection.title -%></h1>
+<% if @user %>
 
-<table id="collection_items_table" summary="This table shows the items in your collection; you can approve or reject or remove them.">
-<caption><%=h t('ci_index.list', :default => "List of items in {{collection}}", :collection => @collection.title) -%></caption>
+  <h1><%=h t('items.by_user', :default => "Items by {{login}} in Collections", :login => @user.login) -%></h1>
+  <table id="collection_items_table" summary="This table shows the items you have submitted to collections; you can approve or reject or remove them.">
+  <caption><%=h t('ci_index.list', :default => "List of items in collections by {{user}}", :user => @user.login) -%></caption>  
+
+<% else %>
+
+  <h1><%=h t('items.in_collection', :default => "Items in {{collection}}", :collection => @collection.title) -%></h1>
+  <table id="collection_items_table" summary="This table shows the items in your collection; you can approve or reject or remove them.">
+  <caption><%=h t('ci_index.list', :default => "List of items in {{collection}}", :collection => @collection.title) -%></caption>
+
+<% end %>
+
 <thead>
 	<tr>
   <th scope="col"><%= link_to(t('ci_index.item', :default => "Item"), @controller.request.request_uri.split('?').first + "?sort=item") -%></th>
+<% if @user %>  
+  <th scope="col"><%= link_to(t('ci_index.collection', :default => "Collection"), @controller.request.request_uri.split('?').first + "?sort=collection") -%></th>
+<% else %>
   <th scope="col"><%= link_to(t('ci_index.creator', :default => "Creator"), @controller.request.request_uri.split('?').first + "?sort=creator") -%></th>
-  <th scope="col"><%= link_to(t('ci_index.member', :default => "Member"), @controller.request.request_uri.split('?').first + "?sort=member") -%></th>  
+<% end %>
+  <th scope="col"><%= link_to(t('ci_index.member', :default => "Member?"), @controller.request.request_uri.split('?').first + "?sort=member") -%></th>  
   <th scope="col"><%= link_to(t('ci_index.approved_by_user', :default => "Creator-Approved"), @controller.request.request_uri.split('?').first + "?sort=user_approval") -%></th>
-  <th scope="col"><%= link_to(t('ci_index.approved_by_collection', :default => "Collection-Approved"), @controller.request.request_uri.split('?').first + "?sort=collection_approval") -%></th>
-  <% if @collection.gift_exchange? -%>
-  <th scope="col"><%= link_to(t('ci_index.recipient', :default => "Recipient"), @controller.request.request_uri.split('?').first + "?sort=recipient") -%></th>
-  <th scope="col"><%= link_to(t('ci_index.received', :default => "Creator Has Received?"), @controller.request.request_uri.split('?').first + "?sort=received") %>
+  <th scope="col"><%= link_to(t('ci_index.approved_by_collection', :default => "Collection-Approved"), 
+                                                                      @controller.request.request_uri.split('?').first + "?sort=collection_approval") -%></th>
+  <% if !@user && @collection.gift_exchange? -%>
+    <th scope="col"><%= link_to(t('ci_index.recipient', :default => "Recipient"), @controller.request.request_uri.split('?').first + "?sort=recipient") -%></th>
+    <th scope="col"><%= link_to(t('ci_index.received', :default => "Creator Has Received?"), @controller.request.request_uri.split('?').first + "?sort=received") %>
   <% end %>
+  <th scope="col"><%= link_to(t('ci_index.date', :default => "Date"), @controller.request.request_uri.split('?').first + "?sort=date") -%></th>  
   
   <th scope="col"><%=h t('ci_index.manage', :default => "Manage") -%></th>
 </tr>

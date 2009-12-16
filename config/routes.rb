@@ -63,6 +63,8 @@ ActionController::Routing::Routes.draw do |map|
     user.resources :readings, :only => [:index, :destroy]
     user.resources :comments, :member => { :approve => :put, :reject => :put }
     user.resources :invitations, :member => {:invite_friend => :post}, :collection => {:manage => :get}
+    user.resources :collection_items, :only => [:index, :update, :destroy]
+    user.resources :collections, :only => [:index]
   end
 
   map.first_login_help '/first_login_help', :controller => 'home', :action => 'first_login_help'

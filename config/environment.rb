@@ -88,7 +88,8 @@ Rails::Initializer.run do |config|
   # Make Time.zone default to the specified zone, and make Active Record store time values
   # in the database in UTC, and return them converted to the specified local zone.
   # Run "rake -D time" for a list of tasks for finding time zone names. Uncomment to use default local time.
-#  config.time_zone = 'UTC'
+  #config.time_zone = 'UTC' --> produces weird bugs!
+  # config.active_record.default_timezone = :utc
 
   # The internationalization framework can be changed 
   # to have another default locale (standard is :en) or more load paths.

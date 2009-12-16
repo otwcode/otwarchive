@@ -250,6 +250,9 @@ class WorksController < ApplicationController
 
     @page_title = @work.unrevealed? ? t('works.mystery_title', :default => "Mystery Work") : 
       get_page_title(@work.fandoms.string, @work.anonymous? ?  t('works.anonymous', :default => "Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '), @work.title)
+      
+    # increment view
+    @work.increment_hit_count(request.env['REMOTE_ADDR'])
   end
   
   def navigate

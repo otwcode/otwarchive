@@ -2,7 +2,6 @@ class CollectionItemsController < ApplicationController
   before_filter :load_collection
   before_filter :load_item_and_collection, :only => [:update, :destroy]
   before_filter :load_collectible_item, :only => [ :new, :create ]
-  before_filter :collection_maintainers_only, :only => [:index, :update]
   before_filter :allowed_to_destroy, :only => [:destroy]
 
   def not_allowed
@@ -27,10 +26,20 @@ class CollectionItemsController < ApplicationController
   end
   
   def index
-    @collection_items = @collection.collection_items
+    if @collection && @collection.user_is_maintainer?(current_user)
+      @collection_items = @collection.collection_items
+    elsif params[:user_id] && (@user = User.find_by_login(params[:user_id])) && @user == current_user
+      @collection_items = @user.work_collection_items + @user.bookmark_collection_items
+    else
+      flash[:error] = t('collection_items.no_items_found', :default => "We couldn't find any items for you to view.")
+      redirect_to :back and return
+    end
+
     case params[:sort]
     when "item"
       @collection_items = @collection_items.sort_by {|ci| ci.title}
+    when "collection"
+      @collection_items = @collection_items.sort_by {|ci| ci.collection.title}
     when "creator"
       @collection_items = @collection_items.sort_by {|ci| ci.item_creator_names }
     when "member"
@@ -115,22 +124,39 @@ class CollectionItemsController < ApplicationController
   end
   
   def update
-    if @collection_item.update_attributes(params[:collection_item])
-      flash[:notice] = t('collection_item.update_success', :default => "Updated item.")
+    @collection_item = CollectionItem.find(params[:collection_item][:id])
+    if params[:user_id] && (@user = User.find_by_login(params[:user_id])) && @user == current_user
+      @collection_item.user_approval_status = params[:collection_item][:user_approval_status]
+      if @collection_item.save
+        flash[:notice] = t('collection_items.updated', :default => "Updated {{item}}.", :item => @collection_item.title)
+      else
+        flash[:error] = t('collection_items.update_failed', :default => "We couldn't update {{item}}: {{errors}}", :item => @collection_item.title, :errors => @collection_item.errors.each {|attrib, msg| msg}.join(", "))
+      end
+      redirect_to user_collection_items_path(@user) and return
+    elsif @collection && @collection.user_is_maintainer?(current_user)
+      # update as allowed -- currently just approval status
+      @collection_item.collection_approval_status = params[:collection_item][:collection_approval_status]
+      if @collection_item.save
+        flash[:notice] = t('collection_items.updated', :default => "Updated {{item}}.", :item => @collection_item.title)
+      else
+        flash[:error] = t('collection_items.update_failed', :default => "We couldn't update {{item}}: {{errors}}", :item => @collection_item.title, :errors => @collection_item.errors.each {|attrib, msg| msg}.join(", "))
+      end
+      redirect_to collection_items_path(@collection) and return
     else
-      flash[:error] = t('collection_item.update_failure', :default => "Couldn't update item.")
+      flash[:error] = t('collection_items.update_not_allowed', :default => "You're not allowed to make that change.")
+      redirect_to :back and return
     end
-    redirect_to collection_items_path(@collection)
   end
   
   def destroy
+    @user = User.find_by_login(params[:user_id]) if params[:user_id]
     @collectible_item = @collection_item.item
     @collection_item.destroy
     flash[:notice] = t('collection_items.destroyed', :default => "Item completely removed from collection {{title}}.", :title => @collection.title)
-    if (@collection.user_is_maintainer?(current_user))
-      redirect_to collection_items_path(@collection)
-    else
-      redirect_to @collectible_item
+    if @user
+      redirect_to user_collection_items_path(@user) and return
+    elsif (@collection.user_is_maintainer?(current_user))
+      redirect_to collection_items_path(@collection) and return
     end
   end
 

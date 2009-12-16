@@ -15,6 +15,9 @@ class CollectionsController < ApplicationController
     elsif params[:collection_id]
       @collection = Collection.find(params[:collection_id])
       @collections = @collection.children
+    elsif params[:user_id]
+      @user = User.find_by_login(params[:user_id])
+      @collections = @user.owned_collections
     else
       @collections = Collection.top_level
     end
@@ -22,6 +25,10 @@ class CollectionsController < ApplicationController
 
   def show
     @collection = Collection.find_by_name(params[:id])
+    unless @collection
+  	  flash[:error] = t('collection_not_found', :default => "Sorry, we couldn't find the collection you were looking for.")
+      redirect_to collections_path and return
+    end
   end
 
   def new

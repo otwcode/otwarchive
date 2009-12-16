@@ -52,14 +52,14 @@
   </h3>
   <% if !@work.recipients.empty? %>
     <h3 class="recipients">
-      <%= t('works.recipients', :default => "for {{recipients}}", :recipients => h(@work.recipients)) -%>
+      <%= t('work_header.recipients', :default => "for {{recipients}}", :recipients => h(@work.recipients)) -%>
     </h3>
   <% end -%>
   
   <%- if @chapter == @work.first_chapter -%>
     <%- unless @work.summary.blank? -%>
       <blockquote class="summary">
-        <h3><%=h t('summary', :default => "Summary:") %></h3>
+        <h3><%=h t('work_header.summary', :default => "Summary:") %></h3>
         <%=sanitize_limit_and_format_for_display @work.summary %>
       </blockquote>
     <%- end -%>
@@ -67,14 +67,14 @@
     <%- unless @work.notes.blank? && @work.endnotes.blank? -%>
       <%- current_page?(:controller => 'chapters', :action => 'show') ? linkpath = "chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes')" : linkpath = "work_path(@work, :anchor => 'work_endnotes')" %>
       <blockquote class="notes">
-      <h3><%=h t('notes', :default => "Notes:") %></h3>
+      <h3><%=h t('work_header.notes', :default => "Notes:") %></h3>
       <%- if @work.notes.blank? -%>
         <span class="endnotes-link"><%= t('link_to_endnotes', :default => "See the end of the work for more {{notes_link}}.", :notes_link => (link_to t('notes_link', :default => "notes"), eval(linkpath))) %></span>
       <%- else -%>
         <%= sanitize_and_format_for_display(@work.notes) -%>
         <%- unless @work.endnotes.blank? -%>
           <span class="endnotes-link"> 
-          <%= t('link_more_endnotes', :default => "See the end of the work for more {{notes_link}}.", 
+          <%= t('work_header.link_more_endnotes', :default => "See the end of the work for more {{notes_link}}.", 
                                     :notes_link => link_to( t('notes_link', :default => 'notes'), eval(linkpath) ) ) -%>
           </span>
         <%- end -%>  
