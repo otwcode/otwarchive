@@ -99,13 +99,20 @@ class Pseud < ActiveRecord::Base
   
   # Takes a comma-separated list of bylines
   # Returns a hash containing an array of pseuds and an array of bylines that couldn't be found
-  def self.parse_bylines(list)
+  def self.parse_bylines(list, assume_matching_login=false)
     valid_pseuds, ambiguous_pseuds, failures = [], {}, []
     bylines = list.split ","
     for byline in bylines
-      if byline.include? "("
-        pseud_name, user_login = byline.split('(', 2)
-        conditions = ['users.login = ? AND name = ?', user_login.strip.chop, pseud_name.strip]
+      if byline.include? "(" || assume_matching_login
+        if byline.include? "(" 
+          pseud_name, user_login = byline.split('(', 2)
+          pseud_name = pseud_name.strip
+          user_login = user_login.strip.chop
+        elsif assume_matching_login
+          pseud_name = byline.strip
+          user_login = pseud_name
+        end
+        conditions = ['users.login = ? AND name = ?', user_login, pseud_name]
       else
         conditions = {:name => byline.strip}
       end
