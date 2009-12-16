@@ -104,6 +104,12 @@ class Collection < ActiveRecord::Base
     @received_pseuds ||= Pseud.parse_bylines(approved_collection_items.collect(&:recipients).join(","))[:pseuds]
     !(@received_pseuds & user.pseuds).empty?
   end  
+
+  # check to see if this pseud has received an item in this collection
+  def pseud_has_received_item(pseud)
+    @received_pseuds ||= Pseud.parse_bylines(approved_collection_items.collect(&:recipients).join(","))[:pseuds]
+    !(@received_pseuds & [pseud]).empty?
+  end  
   
   def parent_name=(name)
     self.parent = Collection.find_by_name(name)

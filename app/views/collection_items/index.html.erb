@@ -15,7 +15,6 @@
 <thead>
 	<tr>
   <th scope="col"><%= link_to(t('ci_index.item', :default => "Item"), @controller.request.request_uri.split('?').first + "?sort=item") -%></th>
-  <th scope="col"><%= link_to(t('ci_index.word_count', :default => "Word Count"), @controller.request.request_uri.split('?').first + "?sort=word_count") -%></th>  
 <% if @user %>  
   <th scope="col"><%= link_to(t('ci_index.collection', :default => "Collection"), @controller.request.request_uri.split('?').first + "?sort=collection") -%></th>
 <% else %>
@@ -29,7 +28,8 @@
     <th scope="col"><%= link_to(t('ci_index.recipient', :default => "Recipient"), @controller.request.request_uri.split('?').first + "?sort=recipient") -%></th>
     <th scope="col"><%= link_to(t('ci_index.received', :default => "Creator Has Received?"), @controller.request.request_uri.split('?').first + "?sort=received") %>
   <% end %>
-  <th scope="col"><%= link_to(t('ci_index.date', :default => "Date"), @controller.request.request_uri.split('?').first + "?sort=date") -%></th>  
+  <th scope="col"><%= link_to(t('ci_index.word_count', :default => "Word Count"), @controller.request.request_uri.split('?').first + "?sort=word_count") -%></th>  
+  <th scope="col"><%= link_to(t('ci_index.date', :default => "Date Last Updated"), @controller.request.request_uri.split('?').first + "?sort=date") -%></th>  
   
   <th scope="col"><%=h t('ci_index.manage', :default => "Manage") -%></th>
 </tr>
@@ -40,3 +40,11 @@
 <%- end -%>
 </tbody>
 </table>
+
+<p>
+  Note: M* - Manual: This means that this creator has received a story in this collection, but under a different pseudonym. 
+  That might happen if the creator used a different pseud to post their story than the one
+  their author used as the recipient name, or it might be the case that the creator has also posted a story for 
+  a different user (eg as a proxy for someone who doesn't have an archive account), and has not gotten a story
+  for herself. 
+</p>

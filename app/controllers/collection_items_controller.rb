@@ -53,7 +53,7 @@ class CollectionItemsController < ApplicationController
     when "recipient"
       @collection_items = @collection_items.sort_by {|ci| ci.recipients }
     when "received"
-      @collection_items = @collection_items.sort_by {|ci| ci.item_creator_pseuds.map {|pseud| @collection.user_has_received_item(pseud.user) ? "Yes" : "No"}.join(", ")}
+      @collection_items = @collection_items.sort_by {|ci| ci.check_gift_received}
     when "date"
       @collection_items = @collection_items.sort_by {|ci| ci.item_date}
     end

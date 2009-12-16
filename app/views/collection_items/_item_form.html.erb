@@ -7,7 +7,6 @@
     collection_item.title + (!collection_item.item.posted? ? t('collection_items.draft', :default => "(draft)") : ""), collection_item.item) -%>
   <%= form.hidden_field :id %><%= form.hidden_field :collection_id %>
 </th>
-  <td><%= collection_item.item.respond_to?(:word_count) ? collection_item.item.word_count : t('collection_items.na', :default => "N/A") -%></td>
 <%- unless @user -%>
   <!-- collection view -->
   <td><%= collection_item.item_creator_names -%></td>
@@ -16,7 +15,7 @@
   <td><%= form.select(:collection_approval_status, CollectionItem::APPROVAL_OPTIONS) %></td>
   <% if @collection.gift_exchange? %>
     <td><%= collection_item.recipients -%></td>
-    <td><%= collection_item.item_creator_pseuds.map {|pseud| collection_item.collection.user_has_received_item(pseud.user) ? "Y" : "N"}.join(", ") -%></td>
+    <td><%= collection_item.check_gift_received -%></td>
   <% end %>
 <% else %>
   <!-- user version -->
@@ -26,6 +25,7 @@
   <td><%= CollectionItem::LABEL[collection_item.collection_approval_status] -%></td>
 <% end %>
 
+<td><%= collection_item.item.respond_to?(:word_count) ? collection_item.item.word_count : t('collection_items.na', :default => "N/A") -%></td>
 <td><%= collection_item.item_date.strftime("%B %d#{", %Y" if collection_item.item_date.year != Date.today.year} %H:%M") -%>
 
 <td class="submit button">

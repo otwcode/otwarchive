@@ -40,6 +40,8 @@
   <p>
     <%= collection_form.label :description, t("collection_form.description", :default => "Brief Description: ") %><br />
     <%= collection_form.text_area :description, :rows => 4, :cols => 60, :class => "description-field" %>
+    <%= live_validation_for_field('collection_description', :presence => false, :maximum_length => ArchiveConfig.SUMMARY_MAX) -%>
+    <%= generate_countdown_html("collection_description", ArchiveConfig.SUMMARY_MAX) -%>
   </p>
 
   <% @collection.build_collection_preference unless @collection.collection_preference %>
@@ -69,16 +71,26 @@
   <% @collection.build_collection_profile unless @collection.collection_profile %>
   <% collection_form.fields_for :collection_profile do |profile_form| %>
   <p>
+    Quick tip: if this is a subcollection or challenge, and you leave any of these fields blank, they will be 
+    inherited from the parent collection, so you don't need to repeat shared information.
+  </p>
+  <p>
     <%= profile_form.label :intro, t("collection_form.intro", :default => "Introduction: ") %><br />
     <%= profile_form.text_area :intro, :rows => 10, :cols => 80 %>
+    <%= live_validation_for_field('collection_collection_profile_attributes_intro', :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) -%>
+    <%= generate_countdown_html("collection_collection_profile_attributes_intro", ArchiveConfig.INFO_MAX) -%>
   </p>
   <p>
     <%= profile_form.label :faq, t("collection_form.faq", :default => "FAQ: ") %><br />
     <%= profile_form.text_area :faq, :rows => 10, :cols => 80 %>
+    <%= live_validation_for_field('collection_collection_profile_attributes_faq', :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) -%>
+    <%= generate_countdown_html("collection_collection_profile_attributes_faq", ArchiveConfig.INFO_MAX) -%>
   </p>
   <p>
     <%= profile_form.label :rules, t("collection_form.rules", :default => "Rules: ") %><br />
     <%= profile_form.text_area :rules, :rows => 10, :cols => 80 %>
+    <%= live_validation_for_field('collection_collection_profile_attributes_rules', :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) -%>
+    <%= generate_countdown_html("collection_collection_profile_attributes_rules", ArchiveConfig.INFO_MAX) -%>
   </p>
   <% end %>
   

@@ -61,6 +61,13 @@ class CollectionItem < ActiveRecord::Base
       end
     end
   end
+
+  def check_gift_received
+    item_creator_pseuds.map {|pseud| 
+      collection.pseud_has_received_item(pseud) ? "Y" :
+        collection.user_has_received_item(pseud.user) ? "M*" : "N" 
+    }.join(", ")
+  end
   
   def title
     item.respond_to?(:title) ? item.title : item.bookmarkable.title
@@ -71,7 +78,7 @@ class CollectionItem < ActiveRecord::Base
   end
   
   def item_creator_names
-    item.respond_to?(:pseuds) ? item.pseuds.collect(&:name).join(', ') : item.pseud.name
+    item.respond_to?(:pseuds) ? item.pseuds.collect(&:byline).join(', ') : item.pseud.byline
   end
   
   def item_creator_pseuds

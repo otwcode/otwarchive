@@ -11,5 +11,5 @@ module CollectionsHelper
       link_to_remote text, {:url => fallback_url, :method => :get, :href => fallback_url}
     end
   end
-  
+
 end
