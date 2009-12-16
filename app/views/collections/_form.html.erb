@@ -1,100 +1,110 @@
 <%= error_messages_for :collection -%>
 
 <% form_for(@collection) do |collection_form| %>
-  <p>
-    <% if @collection.new_record? && current_user.pseuds.size > 1 %>
-      <%= label_tag :owner_pseuds, t("collection_form.owners", :default => "Select owner pseudonym(s): ") -%><br />
-      <%= select_tag :owner_pseuds, options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud), :multiple => true %>
+  <fieldset>
+	<legend>Header</legend>
+		<dl>
+	   
+	 	<% if @collection.new_record? && current_user.pseuds.size > 1 %>
+      <dt><%= label_tag :owner_pseuds, t("collection_form.owners", :default => "Select owner pseudonym(s): ") -%></dt>
+      <dd><%= select_tag :owner_pseuds, options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud), :multiple => true %></dd>
     <% else -%>
-      <%= hidden_field_tag :owner_pseuds, [current_user.default_pseud.id] -%>
+      <p><%= hidden_field_tag :owner_pseuds, [current_user.default_pseud.id] -%></p>
     <% end %>
-  </p>
   
   <% if @collection.children.empty? %>
-  <p>
-    <%= collection_form.label :parent_name, t('collections.parent_name', :default => "Parent collection (must be one you maintain): ") -%><br />
-    <%= collection_form.text_field :parent_name -%>
+	<dt>
+    <%= collection_form.label :parent_name, t('collections.parent_name', :default => "Parent collection (must be one you maintain): ") -%></dt>
+    <dd><%= collection_form.text_field :parent_name -%>
     <div class="auto_complete" id="collection_parent_name_auto_complete" ></div>
     <%= javascript_tag("new Autocompleter.Local('collection_parent_name', 'collection_parent_name_auto_complete', #{current_user.maintained_collections.map(&:name).sort.to_json}, {fullSearch: true});") %>
-  </p>
+  </dd
   <% end -%>
 
-  <p>
-    <%= collection_form.label :name, t("collection_form.name", :default => "Collection Name* (letters, numbers, underscores):") %><br />
-    <%= collection_form.text_field :name %>
-  </p>
+    <dt><%= collection_form.label :name, t("collection_form.name", :default => "Collection Name* (letters, numbers, underscores):") %></dt>
+    <dd><%= collection_form.text_field :name %></dd>
 
-  <p>
-    <%= collection_form.label :title, t("collection_form.title", :default => "Display Title* (text only):") %><br />
-    <%= collection_form.text_field :title %>
-  </p>
 
-  <p>
-    <%= collection_form.label :email, t("collection_form.email", :default => "Email (optional, otherwise notices will go to owners):") %><br />
-    <%= collection_form.text_field :email, :size => 40 %>
-  </p>
-  <p>
-    <%= collection_form.label :header_image_url, t("collection_form.header_image_url", :default => "URL for custom header image (jpg, gif, png): ") %><br />
-    <%= collection_form.text_field :header_image_url %>
-  </p>
-  <p>
-    <%= collection_form.label :description, t("collection_form.description", :default => "Brief Description: ") %><br />
-    <%= collection_form.text_area :description, :rows => 4, :cols => 60, :class => "description-field" %>
+  <dt>
+    <%= collection_form.label :title, t("collection_form.title", :default => "Display Title* (text only):") %></dt>
+   <dd> <%= collection_form.text_field :title %></dd>
+
+  <dt>
+    <%= collection_form.label :email, t("collection_form.email", :default => "Email (optional, otherwise notices will go to owners):") %></dt>
+    <dd><%= collection_form.text_field :email, :size => 40 %>
+  </dd>
+  <dt>
+    <%= collection_form.label :header_image_url, t("collection_form.header_image_url", :default => "URL for custom header image (jpg, gif, png): ") %></dt>
+   <dd><%= collection_form.text_field :header_image_url %>
+  </dd>
+  <dt>
+    <%= collection_form.label :description, t("collection_form.description", :default => "Brief Description: ") %></dt>
+    <dd>
+<%= collection_form.text_area :description, :rows => 4, :cols => 60, :class => "description-field" %>
     <%= live_validation_for_field('collection_description', :presence => false, :maximum_length => ArchiveConfig.SUMMARY_MAX) -%>
     <%= generate_countdown_html("collection_description", ArchiveConfig.SUMMARY_MAX) -%>
-  </p>
-
+  </dd>
+</dl>
+</fieldset>
   <% @collection.build_collection_preference unless @collection.collection_preference %>
   <% collection_form.fields_for :collection_preference do |preference_form| %>
-  <p>
-    <%= preference_form.label :moderated, t("collection_form.moderated", :default => "Is this collection moderated?") %> <%= link_to_help "moderated-collection" -%>
-    <%= preference_form.check_box :moderated %>
-  </p>
-  <p>
-    <%= preference_form.label :closed, t("collection_form.closed", :default => "Is this collection closed?") %>
-    <%= preference_form.check_box :closed %>
-  </p>
-  <p>
-    <%= preference_form.label :unrevealed, t("collection_form.unrevealed", :default => "Is this collection currently unrevealed?") %>
-    <%= preference_form.check_box :unrevealed %>
-  </p>
-  <p>
-    <%= preference_form.label :anonymous, t("collection_form.anonymous", :default => "Is this collection currently anonymous?") %>
-    <%= preference_form.check_box :anonymous %>
-  </p>
-  <p>
-    <%= preference_form.label :gift_exchange, t("collection_form.gift_exchange", :default => "Is this collection a gift exchange?") %>
-    <%= preference_form.check_box :gift_exchange %>
-  </p>
+<fieldset>
+	<legend>Preferences</legend>
+    <dl>
+	<dt><%= preference_form.label :moderated, t("collection_form.moderated", :default => "Is this collection moderated?") %> <%= link_to_help "moderated-collection" -%></dt>
+    <dd><%= preference_form.check_box :moderated %>
+  </dd>
+  <dt>
+    <%= preference_form.label :closed, t("collection_form.closed", :default => "Is this collection closed?") %></dt>
+    <dd><%= preference_form.check_box :closed %></dd>
+  <dt>
+    <%= preference_form.label :unrevealed, t("collection_form.unrevealed", :default => "Is this collection currently unrevealed?") %></dt>
+   <dd><%= preference_form.check_box :unrevealed %>
+  </dd>
+  <dt>
+    <%= preference_form.label :anonymous, t("collection_form.anonymous", :default => "Is this collection currently anonymous?") %></dt>
+    <dd><%= preference_form.check_box :anonymous %>
+  </dd>
+  <dt>
+    <%= preference_form.label :gift_exchange, t("collection_form.gift_exchange", :default => "Is this collection a gift exchange?") %></dt>
+   <dd> <%= preference_form.check_box :gift_exchange %>
+  </dd>
+</dl>
+</fieldset>
   <% end %>
 
   <% @collection.build_collection_profile unless @collection.collection_profile %>
   <% collection_form.fields_for :collection_profile do |profile_form| %>
-  <p>
+  <fieldset class="preface profile">
+		<legend>Profile</legend>
+		<p class="note">
     Quick tip: if this is a subcollection or challenge, and you leave any of the following fields blank, they will be 
     inherited from the parent collection, so you don't need to repeat shared information.
   </p>
-  <p>
-    <%= profile_form.label :intro, t("collection_form.intro", :default => "Introduction: ") %><br />
+  <h3><%= profile_form.label :intro, t("collection_form.intro", :default => "Introduction: ") %></h3>
+	<p>
     <%= profile_form.text_area :intro, :rows => 10, :cols => 80 %>
     <%= live_validation_for_field('collection_collection_profile_attributes_intro', :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) -%>
     <%= generate_countdown_html("collection_collection_profile_attributes_intro", ArchiveConfig.INFO_MAX) -%>
   </p>
-  <p>
-    <%= profile_form.label :faq, t("collection_form.faq", :default => "FAQ: ") %><br />
-    <%= profile_form.text_area :faq, :rows => 10, :cols => 80 %>
+
+    <h3><%= profile_form.label :faq, t("collection_form.faq", :default => "FAQ: ") %></h3>
+    <p><%= profile_form.text_area :faq, :rows => 10, :cols => 80 %>
     <%= live_validation_for_field('collection_collection_profile_attributes_faq', :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) -%>
     <%= generate_countdown_html("collection_collection_profile_attributes_faq", ArchiveConfig.INFO_MAX) -%>
   </p>
-  <p>
-    <%= profile_form.label :rules, t("collection_form.rules", :default => "Rules: ") %><br />
-    <%= profile_form.text_area :rules, :rows => 10, :cols => 80 %>
+  <h3>
+    <%= profile_form.label :rules, t("collection_form.rules", :default => "Rules: ") %></h3>
+    <p><%= profile_form.text_area :rules, :rows => 10, :cols => 80 %>
     <%= live_validation_for_field('collection_collection_profile_attributes_rules', :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) -%>
     <%= generate_countdown_html("collection_collection_profile_attributes_rules", ArchiveConfig.INFO_MAX) -%>
   </p>
   <% end %>
-  
-  <p>
+ </fieldset>
+<fieldset>
+	<legend><%h= 'Submit' -%></legend> 
+  <p class="submit">
     <%= collection_form.submit 'Submit' %>
   </p>
+</fieldset>
 <% end %>
