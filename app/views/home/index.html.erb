@@ -16,8 +16,7 @@
 <%- end -%>
 
 <div id="home-header">
- 
-  <div id="login-block">
+	<div id="login-block">
     <%- if logged_in? || logged_in_as_admin? -%>
       <%= render :partial => 'session/greeting' -%>
     <% end -%>
@@ -26,41 +25,25 @@
 
 <%= image_tag('logo.png', :alt => ArchiveConfig.APP_NAME + ' logo', :class => 'logo', :height=> '70', :width => '105') %>
   
-<div class="titles">
-<h1><%= ArchiveConfig.APP_NAME -%>
-  <% unless ArchiveConfig.REVISION.blank? %>(BETA <%=h t('revision', :default => 'rev. {{rev_number}}', :rev_number => ArchiveConfig.REVISION) %>)<% end %>
-</h1>
+	<div class="titles">
+		<h1><%= ArchiveConfig.APP_NAME -%>
+  <% unless ArchiveConfig.REVISION.blank? %>(BETA <%=h t('revision', :default => 'rev. {{rev_number}}', :rev_number => ArchiveConfig.REVISION) %>)<% end %></h1>
 
-<h2><%= t('otw_link', :default => "A project of the {{otw}}", :otw => '<a href="http://transformativeworks.org">Organization For Transformative Works</a>') %></h2>
-</div>
+		<h2><%= t('otw_link', :default => "A project of the {{otw}}", :otw => '<a href="http://transformativeworks.org">Organization For Transformative Works</a>') %></h2>
+	</div>
 
-<ul id="main-navigation">
-    <li>
-      <%= link_to_unless_current t('layout.header.fandoms', :default => "fandoms"), media_path %>
-    </li>
-	  <li>
-      <%= link_to_unless_current t('layout.header.works', :default => "works"), works_path %>
-    </li>
-    <li>
-      <%= link_to_unless_current t('layout.header.people', :default => "people"), people_path %>
-    </li>
-    <li>
-      <%= link_to_unless_current t('layout.header.recs', :default => "bookmarks"), bookmarks_path %>
-    </li>
-    <li>
-      <%= link_to_unless_current t('layout.header.tags', :default => "tags"), tags_path %>
-    </li>
-    <li>
-      <%= link_to_unless_current t('layout.header.communities', :default => "collections"), collections_path %>
-    </li>
-</ul>
-
-<div class="clear"></div>
-
+	<ul class="main-navigation">
+    	<li><%= link_to_unless_current t('layout.header.fandoms', :default => "fandoms"), media_path %></li>
+		<li><%= link_to_unless_current t('layout.header.works', :default => "works"), works_path %></li>
+    	<li><%= link_to_unless_current t('layout.header.people', :default => "people"), people_path %></li>
+    	<li><%= link_to_unless_current t('layout.header.recs', :default => "bookmarks"), bookmarks_path %></li>
+    	<li><%= link_to_unless_current t('layout.header.tags', :default => "tags"), tags_path %></li>
+    	<li><%= link_to_unless_current t('layout.header.communities', :default => "collections"), collections_path %></li>
+	</ul>
+	<div class="clear"></div>
 </div>
 <div class="bigwrapper">
-
-  <div class="open-beta-box">
+	<div class="open-beta-box">
   <%- if logged_in? || logged_in_as_admin? -%>
     <h2><%= t('home.you_are_signed_in', :default => 'Welcome to open beta!') %></h2>
     <h1><%= link_to t('invite_friends', :default => 'INVITE A FRIEND'), user_invitations_path(current_user) %></h1> 

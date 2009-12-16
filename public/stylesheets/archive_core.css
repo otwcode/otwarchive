@@ -58,7 +58,7 @@ h5	{ font-size: 0.75em; line-height: 1.5; margin: .375em 0; }
 h6	{ font-size: 0.625em; line-height: 1.8; margin: .3125em 0; }
 
 hr	{ margin: 0.75em auto; border:0; border-bottom: 3px double; }
-hr.clear, .clearboth	{ clear: both; height: 0; border: 0; margin:0; background:transparent; color:#fffef9;}
+hr.clear, .clearboth, .clear	{ clear: both; height: 0; border: 0; margin:0; background:transparent; color:#fffef9;}
 
 blockquote, pre	{ font: 100 1em/1.125 Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; margin: 1.5em; }
 kbd, tt, code	{ font: normal 0.75em consolas, courier, monospace; margin: auto; padding: 0.25em; }
@@ -76,8 +76,8 @@ sub { vertical-align: sub;}
 sup { vertical-align:super;}
 
 /* TABLES AND LISTS */
-table	{ margin:auto; padding: 0.375em; }
-caption	{ position: absolute; margin-left: -999em; }
+table	{ margin:auto; padding: 0.375em; width:99%;}
+caption	{ font-size:0; color:#fffef9; }
 caption, th, td	{ text-align: left; }
 th, thead td { background:#777; color:#fff; font-weight: 100; padding: 0.25em;}
 tfoot {margin: 0.875em auto;}

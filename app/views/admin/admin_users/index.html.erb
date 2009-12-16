@@ -1,14 +1,14 @@
 <h1><%= t("Find users:", :default => "Find users:") -%></h1>
 
 <% form_tag url_for(:controller => "admin/admin_users", :action => "index"), :method => :get do -%>
-  <dl>
+    <p><%= t('search_by', :default => 'Search for a user by username, pseud or email, or search by role') -%></p>
+<dl>
     <dt><%= label_tag "query", t("user_find_query", :default => "Name or email") -%></dt>
       <dd><%= text_field_tag "query", params[:query] -%></dd>
     <dt><%= label_tag "role", t("user_find_role", :default => "Role") -%></dt>
       <dd><%= select_tag "role", "<option id='0' name='regular' value='0'>Regular User</option><option id='1' name='unvalidated' value='1'>Unvalidated</option>" + options_for_select(Role.all.collect(&:name).uniq.map{|role_name| [role_name.humanize.titlecase, role_name]}, params[:role] ? params[:role] : nil) -%></dd>
   </dl>
-  <p><%= t('search_by', :default => 'Search for a user by username, pseud or email, or search by role') -%></p>
-  <p><%= submit_tag t("find_user_button", :default => "Find") -%></p>
+  <p class="submit"><%= submit_tag t("find_user_button", :default => "Find") -%></p>
 <%- end -%>
 
 <% if @users %>

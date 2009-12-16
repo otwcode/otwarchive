@@ -33,7 +33,7 @@
   <% unless ArchiveConfig.REVISION.blank? %>(BETA <%=h t('revision', :default => 'rev. {{rev_number}}', :rev_number => ArchiveConfig.REVISION) %>)<% end %>
 	</h1>
 
-  <ul id="main-navigation">
+  <ul class="main-navigation">
     <% if @collection %>
       <li><%= span_if_current('collection home', !@collection.new_record? ? collection_path(@collection) : (@collection_parent ? collection_path(@collection_parent) : collections_path)) %></li>
     <% else %>
@@ -45,11 +45,11 @@
     <li><%= span_if_current('bookmarks', @collection ? collection_bookmarks_path(@collection) : bookmarks_path) -%></li>
     <li><%= span_if_current('tags', @collection ? collection_tags_path(@collection) : tags_path) -%></li>
     <li><%= span_if_current('collections', collections_path) -%></li>
-    
-    <%- if logged_in_as_admin? -%>
-      <%= render :partial => 'admin/header' -%>
-    <%- end -%>
   </ul>
+	
+  <%- if logged_in_as_admin? -%>
+    <%= render :partial => 'admin/header' -%>
+  <%- end -%>
   <div class="clear"></div>
 </div>
 

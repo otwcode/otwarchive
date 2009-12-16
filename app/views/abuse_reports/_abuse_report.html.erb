@@ -1,5 +1,3 @@
-<!--titled instead of labelled as per WCAG 2.0. do not revert.-->
-
 <th scope="row"><%=h abuse_report.id %></th>
 <td><%= abuse_report.email.blank? ? t('anonymous', :default => '(Anonymous)') : mail_to(abuse_report.email) -%></td>
 <td><%= link_to abuse_report.url, abuse_report.url -%></td>

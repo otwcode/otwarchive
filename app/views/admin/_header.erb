@@ -1,7 +1,5 @@
-<!-- extra navigation tabs for admin users -->
-<li>
-  <span class="current">&mdash;</span>
-</li>
+<!-- navigation tabs for admin users -->
+<ul class="main-navigation admin">
 <li><%- if current_page?(admin_users_path) -%><span class="current"><%- end -%>
   <%= link_to_unless_current t('admin_header_users', :default => "users"), admin_users_path %>
 <%- if current_page?(admin_users_path) -%></span><%- end -%></li>
@@ -20,3 +18,4 @@
 <li><%- if current_page?(admin_settings_path) -%><span class="current"><%- end -%>
   <%= link_to_unless_current t('admin_header_settings', :default => "settings"), admin_settings_path %>
 <%- if current_page?(admin_settings_path) -%></span><%- end -%></li>
+</ul>

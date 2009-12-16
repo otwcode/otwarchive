@@ -4,7 +4,6 @@ set work styles
 */
 .work-show { font-family:Geneva, Verdana, Helvetica, Arial, sans-serif; padding:1.5em 4% 6em 4%;}
 .work-show a, .work-show a:link { color:#111; text-decoration:none; border-bottom:1px dotted #777; padding-right:0.125em}
-.work-show .navigation a, .work-show .navigation a:link {border:0;text-decoration:underline;}
 .work-show a:hover { border-bottom:0}
 .work-show a:visited { border-bottom-style: solid;}
 
@@ -20,7 +19,6 @@ set work styles
 .work-show dd p		{ text-indent:0; margin:0; padding:0; }
 .work-show ul		{ margin:1.125em auto; padding:0 1em; }
 #main .work-show ul li	{ list-style-type:disc; margin:0.75em 0 0.75em 1.75em;}
-#main .work-show .navigation ul li { list-style-type: none; margin:0.25em;}
 #main .work-show .work-meta ul li {list-style-type: none; margin: 0.75em}
 .work-show ol		{ margin:1.125em auto; padding:0 1.5em; }
 .work-show ol li	{ list-style-type:decimal; margin:0.75em 0 0.75em 1.75em !important;}

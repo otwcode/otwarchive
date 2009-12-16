@@ -6,7 +6,7 @@ font-family:Helvetica, Arial, Verdana, sans-serif;
 .home .logo  {position: absolute; left: 0.75em; top: -0.5em;}
 
 .titles {padding-left: 110px; margin-bottom: -0.5em; margin-right: 13.75em; min-height: 70px; }
-#home-header {position: relative;}
+#home-header {position: relative; border-bottom:2px solid;}
 #home-header  h1 , #home-header h2 {font-family: Fertigo, Cambria, Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; margin: 0;}
 #home-header h1 {font-size: 1.5em; color: #900; padding-left: 0.75em;}
 #home-header h2 {font-size: 1em; padding-left: 1.125em; padding-top: 0.25em;}
@@ -51,20 +51,10 @@ border: 1px groove #222;
 background: #ddd;
 }
 
-.home #main-navigation {width: 100%; background-color: #000; color: #FFF; display: block;}
-.home #main-navigation a {padding: 0.15em 1em; background-color: #000; color: #FFF; }
-.home #main-navigation a:hover {background-color: #900;}
-.home #main-navigation li {margin-bottom: 0; }
-.home #main-navigation a {text-decoration: none;}
-
-.home .clear {
-border: 0;
-clear: both; 
-height: 0; 
-margin-bottom: 0; 
-margin-top: 0;
-background-color: #000; height: 2px;}
-}
+.home ul.main-navigation {border:0}
+.home .main-navigation li, .home .main-navigation li a  {background: #000; color:#fff; margin-bottom:0 !important;}
+.home .main-navigation a:hover {background: #900; }
+.home .main-navigation a {text-decoration: none; }
 
 .home h5 {
 text-align: right;

@@ -3,13 +3,9 @@
 <h1><%= t("archive_faq", :default => "Archive FAQ") -%></h1>
 
 <%- if @archive_faqs.empty? -%>
-<table>
-	<tr>
-		<td>
-  		<%= link_to 'Create New Archive FAQ', new_archive_faq_path %>
-		</td>
-	<tr>
-</table>		
+<ul class="navigation">
+  	<li><%= link_to 'Create New Archive FAQ', new_archive_faq_path %></li>
+</ul>		
 <% end %>
 
 <% @archive_faqs.each do |archive_faq| %>
@@ -24,4 +20,3 @@
   </div>
 <% end %>  
 	
-<br />

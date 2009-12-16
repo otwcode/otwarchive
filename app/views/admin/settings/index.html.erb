@@ -1,31 +1,21 @@
-<h2>Archive Settings</h2>
+<h1><%=h 'Archive Settings' -%></h1>
 
 <% form_for @admin_setting, :url => admin_setting_path(@admin_setting), :html => {:method => :put} do |f| %>
   <%= f.error_messages %>
-  <p>
-    <%= f.check_box :account_creation_enabled %> 
-    <%= f.label :account_creation_enabled %>
-  </p>
-  <p>
-    <%= f.check_box :invite_from_queue_enabled %> 
-    <%= f.label :invite_from_queue_enabled %>
-  </p>
-  <p>
-    <%= f.label :invite_from_queue_number, "Number of people to invite from the queue at once:" %> 
-    <%= f.text_field :invite_from_queue_number, :size => "3" %>
-  </p>
-  <p>
-    <%= f.label :invite_from_queue_frequency, "How often (in days) should we invite people from the queue:" %> 
-    <%= f.text_field :invite_from_queue_frequency, :size => "3" %>
-  </p>
-  <p>
-    <%= f.label :days_to_purge_unactivated, "How often (in days) should you have to activate your account before we purge it:" %> 
-    <%= f.text_field :days_to_purge_unactivated, :size => "3" %>
-  </p>
-  <p>
-    <%= f.hidden_field :last_updated_by, :value => current_admin.id %>
-    <%= f.submit 'Update' %>
-  </p>
+  <dl>
+    <dt><%= f.label :account_creation_enabled %></dt>
+	<dd><%= f.check_box :account_creation_enabled %> </dd>
+  	<dt><%= f.label :invite_from_queue_enabled %></dt>
+	<dd><%= f.check_box :invite_from_queue_enabled %></dt> 
+ 	<dt><%= f.label :invite_from_queue_number, "Number of people to invite from the queue at once:" %> </dt>
+    <dd><%= f.text_field :invite_from_queue_number, :size => "3" %></dd>
+  <dt><%= f.label :invite_from_queue_frequency, "How often (in days) should we invite people from the queue:" %></dt>
+   <dd><%= f.text_field :invite_from_queue_frequency, :size => "3" %></dd>
+  <dt><%= f.label :days_to_purge_unactivated, "How often (in days) should you have to activate your account before we purge it:" %> </dt>
+    <dd><%= f.text_field :days_to_purge_unactivated, :size => "3" %></dd>
+</dl>
+    <p><%= f.hidden_field :last_updated_by, :value => current_admin.id %></p>
+    <p class="submit"><%= f.submit 'Update' %></p>
 <% end %>
 
   <%- if @admin_setting.invite_from_queue_enabled? -%>

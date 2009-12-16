@@ -2,15 +2,19 @@
 
 /* pathing*/
 #work-form p.submit { text-align: right; }
+#work-form .submit input {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px solid #222;}
 
 /*layer stacking*/
 .home #search p {text-align: right; z-index: 1;}
+.main-navigation li { z-index:0;}
 
 /*explicit widths*/
 .home #login {width: auto !important;} 
-.home #main-navigation {width: 30em; !important;} /* stopping the navbar short so the search box is visible */
+.home .main-navigation {width: 70% !important; height: 80% !important;} 
 
-/*margin and padding idiosyncracies*/ 
+/*margin and padding quirks*/ 
+#header ul.admin {position:absolute; z-index:50; right:0; margin-top:auto;}
+
 #main .navigation li {margin-right: 0.25em !important;} 
 
 #user-header { margin-bottom:0;}
@@ -24,10 +28,11 @@ li.heading {height: 50px;}
 .media-index li.category {height: 15em; }
 
 /*hasLayout */
-div#userpage, .user-module {zoom:1;}
-a {zoom:1;}
+div#userpage, .user-module, a, form dd {zoom:1;}
 
-
-/*clear quirks */
+/*float clear quirks */
 .collection #login-block #greeting {clear:none !important;}
+form dd {float:none;}
+
+
 

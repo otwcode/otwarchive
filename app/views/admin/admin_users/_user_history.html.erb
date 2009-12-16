@@ -1,10 +1,14 @@
 <h2><%= t('history', :default => 'User History') -%></h2>
-<table border="0">
-  <tr>
-    <th><%= t('log_date', :default => 'Date / Time') -%></th>
-    <th><%= t('log_action', :default => 'Action') -%></th>
-    <th><%= t('log_details', :default => 'Details') -%></th>
+<table summary="">
+	<caption><!--please caption me--></caption>
+  <thead>
+	<tr>
+    <th scope="col"><%= t('log_date', :default => 'Date / Time') -%></th>
+    <th scope="col"><%= t('log_action', :default => 'Action') -%></th>
+    <th scope="col"><%= t('log_details', :default => 'Details') -%></th>
   </tr>
+</thead>
+<tbody>
   <% unless @log_items.blank?
      @log_items.each do |item| %>
   <tr>
@@ -19,5 +23,5 @@
     <td><%= t('log_created', :default => 'Account Created') %></td>
     <td><%= t('log_system', :default => 'System Generated') %></td>
   </tr>
-  
+ </tbody> 
 </table>

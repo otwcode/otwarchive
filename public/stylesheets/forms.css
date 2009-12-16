@@ -1,7 +1,13 @@
 /* GLOBAL */
-form fieldset legend, legend { margin-left:-999em !important; position:absolute !important; color:;}
+form fieldset legend, legend { height:0 !important; font-size:0; color:#fffef9;}
 form p.submit { text-align:right; }
 form p { line-height:2; clear:both;}
+form dl { position:relative; }
+form dt { float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
+form dd { float: left;}
+form .submit input {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px solid #222; width:auto;}
+
+.character_counter { font-size:smaller; color:#666; display:inline;}
 
 /* This is a temporary hack for editing multiple works. Fix it to work properly later. */
 form p.temp-hack {clear: none;}
@@ -11,14 +17,6 @@ form p.temp-hack {clear: none;}
 .invitations-index form dd { width: 75%}
 .invitations-index p.submit {clear:both; width: 100%;}
 /* end kludge */
-
-form dl { position:relative; }
-form dt { float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
-form dd { float: left; }
-form .submit input {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px solid #222;}
-#work-form .submit input {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px solid #222;} /* because IE won't recognise the line above */
-
-.character_counter { font-size:smaller; color:#666; display:inline;}
 
 /* SIGN IN BOX */
 #signin p { display:inline;}
@@ -54,10 +52,14 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 #advanced_search input  .button{ background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px groove; }
 
 /*ADMIN */
-.admin_session-new dt { width:6em; }
+.admin_session-new dt { width:12em; padding-top:0.5em;}
+.admin_session-new form {width: 50%; margin:auto; border:1px solid #ddd; padding:0.25em;}
 .admin_users-notify dd {width:40%;}
-.admin_users-notify dd input {width:100%;}
+.admin_users-notify input {width:100%;}
 .admin_users-notify textarea {height:20em; width:100%;}
+
+.admin_invitations-index form {border:1px solid #ddd; margin: 1.5em auto; padding:.5em;}
+.settings-index dt {width: 70%}
 
 /*ABUSE, FEEDBACK */
 #main.abuse_reports-new dt, form#new_feedback dt, form#new_feedback dd { width:100%; float:none;}
@@ -120,6 +122,7 @@ dd#seriesmanage {clear:both; float:none;}
 
 /*EDIT MULTIPLE WORKS */
 p.buttons {text-align:center;}
+form .edit-multiple-controls p.submit { text-align: left; clear: none;}
 
 /*EDIT PREFERENCES */
 form.edit_preference ul { margin:0.562625em auto 1.12525em auto; padding:0.562625em 0; border-bottom:1px dashed;}
@@ -138,7 +141,7 @@ form.edit_preference ul { margin:0.562625em auto 1.12525em auto; padding:0.56262
 
 /*WORKS-INDEX -filters*/
 form.work-filters	{ background:#ddd; font-size:0.875em; width:12.25em; float:right;  padding:0.75em 0.5625em; max-width: 20%; }
-form.work-filters legend { position: relative !important;  margin-left: auto !important; }
+form.work-filters legend { color:#111; height:auto; font-size:1em; line-height:1.2;}
 form.work-filters dt, form.work-filters dt { float: none; width: auto; }
 form.work-filters a {float: right; margin-top: -1.25em;}
 .filters dt	{ font-weight: 600; text-transform: capitalize; margin:0.5625em auto 0; padding:0; border-bottom:1px solid #fffef9; }
@@ -170,4 +173,3 @@ form#wrangle-select-fandom p, form#wrangle-select-media p{ display:inline; margi
 #bookmark-form dd { margin-top: 0; padding:0.25em 0.5625em 0.25em 0;}
 #bookmark-form fieldset { background:#fffef9; font-size:0.875em; margin: 0.5625em 0; padding:0.375em 1.5em; border:1px solid #bbb; clear:both; }
 
-form .edit-multiple-controls p.submit { text-align: left; clear: none;}
