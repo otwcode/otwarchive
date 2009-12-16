@@ -23,7 +23,7 @@
       
       <!-- Add collection -->
       <dt class="collection">
-        <%= f.label :collection_names, t('collection_names', :default => "Post to collection(s): ") -%>
+        <%= f.label :collection_names, t('collection_names', :default => "Post to collection(s): ") -%> <%= link_to_help "add-work-to-collection" -%>
       </dt>
       <dd class="collection">
         <%= f.text_field :collection_names -%>
