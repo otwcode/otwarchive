@@ -7,9 +7,9 @@ class FandomsController < ApplicationController
      elsif params[:medium_id]
       @medium = Media.find_by_name(params[:medium_id])
       if @medium == Media.uncategorized
-        @fandoms = @medium.children.by_type('Fandom').by_name
+        @fandoms = @medium.fandoms.by_name
       else
-        fandom_ids = @medium.children.by_type('Fandom').canonical.collect(&:id)
+        fandom_ids = @medium.fandoms.canonical.collect(&:id)
         @fandoms = Fandom.by_name.with_count.find(:all, :conditions => {:id => fandom_ids})
       end      
     else
