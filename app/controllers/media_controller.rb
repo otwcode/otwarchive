@@ -14,6 +14,6 @@ class MediaController < ApplicationController
   end
 
   def show
-    redirect_to media_fandoms_path(:medium_id => params[:id])
+    redirect_to medium_fandoms_path(:medium_id => params[:id])
   end
 end
