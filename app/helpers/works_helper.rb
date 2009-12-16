@@ -14,7 +14,7 @@ module WorksHelper
     # if we're previewing, grab the unsaved date, else take the saved first chapter date
     published_date = (chapter && work.preview_mode) ? chapter.published_at : work.first_chapter.published_at
     list = [[t('works_helper.published', :default => "Published:"), localize(published_date)], [t('works_helper.words', :default => "Words:"), work.word_count], 
-            [t('works_helper.chapters', :default => "Chapters:"), work.chapter_total_display], [t('works_helper.hits:', :default => "Hits:"), work.hit_count]]
+            [t('works_helper.chapters', :default => "Chapters:"), work.chapter_total_display]]
     if work.chaptered? && work.revised_at
       prefix = work.is_wip ? "Updated:" : "Completed:"
       latest_date = (work.preview_mode && work.backdate) ? published_date : work.revised_at.to_date
@@ -23,13 +23,20 @@ module WorksHelper
     '<dl>' + list.map {|l| '<dt>' + l.first + '</dt><dd>' + l.last.to_s + '</dd>'}.to_s + '</dl>'
   end
   
+  def show_hit_count?(work)
+    author_wants_to_see_hits = is_author_of?(work) && !current_user.preference.hide_private_hit_count
+    all_authors_want_public_hits = work.users.select {|u| u.preference.hide_public_hit_count}.empty?
+    author_wants_to_see_hits || (!is_author_of?(work) && all_authors_want_public_hits)
+  end
+  
   def work_top_links_list(work)
+    hits_info =  show_hit_count?(work) ? "<li>" + t('works_helper.hits:', :default => "Hits: {{hitcount}}", :hitcount => work.hit_count) + "</li>" : ""
     collections_link = work.approved_collections.empty? ? '' : 
       ("<li>" + link_to(t('work_collections_link', :default => "Collections: {{num_of_collections}}", 
                           :num_of_collections => work.approved_collections.length), work_collections_path(work)) + "</li>")
     bookmark_link = logged_in? ? '<li>' + bookmark_link(work) + '</li>' : ''			
     comments_link = '<li>' + link_to("Comment(s)", work_path(work, :show_comments => true, :anchor => 'comments')) + '</li>'  
-    "<ul>" + bookmark_link + (comments_link ||= '') + collections_link + "</ul>"    
+    "<ul>" + bookmark_link + (comments_link ||= '') + collections_link + hits_info + "</ul>"    
   end
   
   # work.tags doesn't include unsaved tags on preview
