@@ -43,6 +43,7 @@
 	<div class="clear"></div>
 </div>
 <div class="bigwrapper">
+	 <%= flash_div :error, :warning, :notice %>
 	<div class="open-beta-box">
   <%- if logged_in? || logged_in_as_admin? -%>
     <h2><%= t('home.you_are_signed_in', :default => 'Welcome to open beta!') %></h2>
