@@ -27,10 +27,10 @@
   <%- if @work.number_of_posted_chapters > 1 -%>
     <%- if @chapters.length == 1 -%> 
       <!-- we're reading chapter-by-chapter -->
-      <div class="navigation">
-        <span class="navitem"><%= link_to t('view_entire_work', :default => "View Entire Work"), @work -%></span>
+      <ul class="navigation">
+        <li><%= link_to t('view_entire_work', :default => "View Entire Work"), @work -%></li>
         <%= next_and_previous_links_listitems(@work, @chapter) -%>
-      </div>
+      </ul>
     <%- else -%>
       <ul class="navigation">
         <li><%= link_to t('view-by-chapter', :default => "View Chapter By Chapter"), 

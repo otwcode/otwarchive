@@ -36,11 +36,11 @@
   <%- end -%>
   
   <%- if logged_in? && current_user == @user -%>
-  <div class="navigation">
-    <span class="navitem"><%= link_to t('edit_profile', :default => "Edit My Profile"), edit_user_path(@user) %></span>
-    <span class="navitem"><%= link_to t('manage_pseuds', :default => "Manage My Pseuds"), user_pseuds_path(@user) %></span>
-    <span class="navitem"><%= link_to t('set_preferences', :default => "Set My Preferences"), user_preferences_path(@user) %></span>
-		<span class="navitem"><%= link_to t('delete_account', :default => "Delete My Account"), @user, :confirm => t('deletion_warning', :default => 'This will permanently delete your account and cannot be undone. Are you sure?'), :method => :delete %></span>
-  </div>
+  <ul class="navigation">
+    <li><%= link_to t('edit_profile', :default => "Edit My Profile"), edit_user_path(@user) %></li>
+    <li><%= link_to t('manage_pseuds', :default => "Manage My Pseuds"), user_pseuds_path(@user) %></li>
+    <li><%= link_to t('set_preferences', :default => "Set My Preferences"), user_preferences_path(@user) %></li>
+		<li><%= link_to t('delete_account', :default => "Delete My Account"), @user, :confirm => t('deletion_warning', :default => 'This will permanently delete your account and cannot be undone. Are you sure?'), :method => :delete %></li>
+  </ul>
   <%- end -%>
 </div>

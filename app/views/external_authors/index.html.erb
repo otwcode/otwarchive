@@ -9,9 +9,9 @@
 
   <!--
   Adding/removing new external identities is coming soon 
-    <div class="navigation">
-      <span class="navitem"><%= link_to t('new_external_author', :default => 'New external author identity'), new_user_external_author_path(@user) %></span>
-    </div>
+    <ul class="navigation">
+      <li><%= link_to t('new_external_author', :default => 'New external author identity'), new_user_external_author_path(@user) %></li>
+    </ul>
   -->
 <% elsif current_user.archivist -%>
 <h1><%= t('external_authors_unclaimed', :default => "External Authors Imported") %>
@@ -41,15 +41,15 @@
       </p>
     
       <% if @user && current_user == @user -%>
-        <div class="navigation">
-          <span class="navitem"><%= link_to t('edit_link', :default => 'Edit'), [:edit, @user, external_author] -%></span>
+        <ul class="navigation">
+          <li><%= link_to t('edit_link', :default => 'Edit'), [:edit, @user, external_author] -%></li>
           <!-- coming soon 
-          <span class="navitem">
+          <li>
             <%= link_to t('delete_link', :default => 'Delete'), [@user, external_author], 
                           :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %>
-          </span>
+          </li>
           -->
-        </div>
+        </ul>
       <% end -%>
     </li>
   <% end -%>

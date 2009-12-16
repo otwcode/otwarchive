@@ -42,7 +42,7 @@
   <%=h t('orphan_serial4', :default => 'If the work is kept as part of the series, the orphan_account will be listed as one of the authors of the series.') %>
   </p>
 </div>
-<div class="navigation">
-  <span class="navitem"><%= link_to t('links.back', :default => 'Back'), :back %></span>
-  <span class="navitem"><%= link_to t('view_orphans', :default => 'View Orphaned Works'), user_works_path(User.orphan_account) %></span>
-</div>
+<ul class="navigation">
+  <li><%= link_to t('links.back', :default => 'Back'), :back %></li>
+  <li><%= link_to t('view_orphans', :default => 'View Orphaned Works'), user_works_path(User.orphan_account) %></li>
+</ul>

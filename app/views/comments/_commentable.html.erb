@@ -1,19 +1,19 @@
 <!-- Gets embedded anywhere we need to list comments on a top-level commentable. We need the local variable "commentable" here. -->
 <a name="comments"></a>
 <div id="feedback">
-  <div class="navigation">
+  <ul class="navigation">
     <%- if is_author_of?(commentable) && commentable.class == Work -%>
-      <span class="navitem" id="add_collection_link"><%= collection_link(commentable) -%></span>
+      <li id="add_collection_link"><%= collection_link(commentable) -%></li>
     <%- end -%>
     <%- if logged_in? && commentable.class != AdminPost -%>
-      <span class="navitem" id="add_bookmark_link"><%= bookmark_link(commentable) %></span>			
+      <li id="add_bookmark_link"><%= bookmark_link(commentable) %></li>			
     <%- end -%>
     <% if commentable.count_visible_comments > 0 -%>
-      <span class="navitem" id="show_comments_link"><%= show_hide_comments_link(commentable) -%></span>
+      <li id="show_comments_link"><%= show_hide_comments_link(commentable) -%></li>
     <%- end -%>
-    <span class="navitem" id="add_comment_link"><%= add_cancel_comment_link(commentable) -%></span>
+    <li id="add_comment_link"><%= add_cancel_comment_link(commentable) -%></li>
 
-  </div>
+  </ul>
 
   <!-- if we have javascript, here is where the collection window will pop up -->
   <div id="dynamic-collection_item" style="display:none;">	

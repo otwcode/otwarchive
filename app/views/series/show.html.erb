@@ -35,14 +35,14 @@
   </ul>
 </dl>
 
-<div class="navigation">
-  <span class="navitem"><%= bookmark_link(bookmarkable=@series, blurb=false) %></span>
+<ul class="navigation">
+  <li><%= bookmark_link(bookmarkable=@series, blurb=false) %></li>
   <%- if is_author_of?(@series) -%>
-    <span class="navitem"><%= link_to "Edit", edit_series_path(@series) %></span>
-    <span class="navitem"><%= link_to 'Delete Series', @series, :confirm => 'Are you sure?', :method => :delete %></span>
-    <span class="navitem"><%= link_to "Reorder Series", manage_series_path(@series) %></span>
+    <li><%= link_to "Edit", edit_series_path(@series) %></li>
+    <li><%= link_to 'Delete Series', @series, :confirm => 'Are you sure?', :method => :delete %></li>
+    <li><%= link_to "Reorder Series", manage_series_path(@series) %></li>
   <%- end -%>
-</div>
+</ul>
 
 <div id="dynamic-bookmark" style="display:none;">	
 </div>

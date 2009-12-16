@@ -1,7 +1,7 @@
-<div class="navigation">
-  <span class="navitem"><%= link_to "Manage invitations", {:controller => :invitations, :action => :manage, :user_id => @user.login} %></span>
-  <span class="navitem"><%= link_to "Request more", new_user_invite_request_path %></span>
-</div>
+<ul class="navigation">
+  <li><%= link_to "Manage invitations", {:controller => :invitations, :action => :manage, :user_id => @user.login} %></li>
+  <li><%= link_to "Request more", new_user_invite_request_path %></li>
+</ul>
 
 <%- if logged_in_as_admin?  -%>
 <h2><%= t('create_more', :default => 'Create more invitations for this user') %></h2>

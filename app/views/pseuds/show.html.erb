@@ -3,9 +3,9 @@
   <%= render :partial => "users/contents" %>
 </div>
 
-<div class="navigation">
+<ul class="navigation">
   <% if @user == current_user -%>
-    <span class="navitem"><%= link_to t('edit_link', :default => 'Edit'), [:edit, @user, @author] %></span>
+    <li><%= link_to t('edit_link', :default => 'Edit'), [:edit, @user, @author] %></li>
   <% end -%>
-  <span class="navitem"><%= link_to t('index_link', :default => 'Back To Pseuds'), user_pseuds_path(@user) %></span>
-</div>
+  <li><%= link_to t('index_link', :default => 'Back To Pseuds'), user_pseuds_path(@user) %></li>
+</ul>

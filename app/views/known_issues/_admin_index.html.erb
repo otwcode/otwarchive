@@ -11,11 +11,11 @@
 </table>		
 <% end %>
 <% @known_issues.each do |known_issue| %>
-  <div class="navigation">
-    <span class="navitem"><%= link_to "Show", known_issue %></span>
-    <span class="navitem"><%= link_to "Edit", edit_known_issue_path(known_issue) %></span>
-    <span class="navitem"><%= link_to "Delete", known_issue, :confirm => 'Are you sure?', :method => :delete %></span>
-  </div>
+  <ul class="navigation">
+    <li><%= link_to "Show", known_issue %></li>
+    <li><%= link_to "Edit", edit_known_issue_path(known_issue) %></li>
+    <li><%= link_to "Delete", known_issue, :confirm => 'Are you sure?', :method => :delete %></li>
+  </ul>
   <div id="tos" class="work-show">
     <h3><%= sanitize_and_format_for_display known_issue.title %></h3>
     <h6>Updated at: <%=h known_issue.updated_at %></h6>

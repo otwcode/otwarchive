@@ -2,19 +2,19 @@
 <div class="work-show <%= 'unposted-chapter' unless chapter.posted? %>">
 <!-- chapter management -->  
   <%- if is_author_of?(@work) -%>
-      <div class="navigation chapter-control">
+      <ul class="navigation chapter-control">
         <% unless chapter.posted? -%>
-          <span class="navitem"><%= link_to t('chapter_post', :default => 'Post Chapter'), [:post, @work, chapter], :method => :post -%></span>
+          <li><%= link_to t('chapter_post', :default => 'Post Chapter'), [:post, @work, chapter], :method => :post -%></li>
         <%- end -%>
         <%- if @preview_mode and @preview_mode == true -%>
-          <span class="navitem"><%= link_to t('chapter_revert', :default => 'Revert To Saved'), [:edit, @work, chapter] -%></span>
+          <li><%= link_to t('chapter_revert', :default => 'Revert To Saved'), [:edit, @work, chapter] -%></li>
         <%- else -%>
-          <span class="navitem"><%= link_to t('chapter_edit', :default => 'Edit Chapter'), [:edit, @work, chapter] -%></span>
+          <li><%= link_to t('chapter_edit', :default => 'Edit Chapter'), [:edit, @work, chapter] -%></li>
         <%- end -%>
         <%- if @work.chapters.count > 1 -%>
-          <span class="navitem"><%= link_to t('chapter_delete', :default => 'Delete Chapter'), [@work, chapter], :confirm => 'Are you sure?', :method => :delete %></span>
+          <li><%= link_to t('chapter_delete', :default => 'Delete Chapter'), [@work, chapter], :confirm => 'Are you sure?', :method => :delete %></li>
         <%- end -%>
-      </div>
+      </ul>
   <%- end -%>
 
 <div class="preface chapter">
