@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091216001101) do
+ActiveRecord::Schema.define(:version => 20091216150855) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -364,6 +364,8 @@ ActiveRecord::Schema.define(:version => 20091216001101) do
     t.boolean  "automatically_approve_collections",              :default => false,                     :null => false
     t.boolean  "collection_emails_off",                          :default => false,                     :null => false
     t.boolean  "collection_inbox_off",                           :default => false,                     :null => false
+    t.boolean  "hide_private_hit_count",                         :default => false,                     :null => false
+    t.boolean  "hide_public_hit_count",                          :default => false,                     :null => false
   end
 
   create_table "profiles", :force => true do |t|
