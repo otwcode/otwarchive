@@ -15,6 +15,7 @@
 <thead>
 	<tr>
   <th scope="col"><%= link_to(t('ci_index.item', :default => "Item"), @controller.request.request_uri.split('?').first + "?sort=item") -%></th>
+  <th scope="col"><%= link_to(t('ci_index.word_count', :default => "Word Count"), @controller.request.request_uri.split('?').first + "?sort=word_count") -%></th>  
 <% if @user %>  
   <th scope="col"><%= link_to(t('ci_index.collection', :default => "Collection"), @controller.request.request_uri.split('?').first + "?sort=collection") -%></th>
 <% else %>

@@ -40,6 +40,8 @@ class CollectionItemsController < ApplicationController
       @collection_items = @collection_items.sort_by {|ci| ci.title}
     when "collection"
       @collection_items = @collection_items.sort_by {|ci| ci.collection.title}
+    when "word_count"
+      @collection_items = @collection_items.sort_by {|ci| ci.item.respond_to?(:word_count) ? ci.item.word_count : 0 }      
     when "creator"
       @collection_items = @collection_items.sort_by {|ci| ci.item_creator_names }
     when "member"

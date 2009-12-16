@@ -7,6 +7,7 @@
     collection_item.title + (!collection_item.item.posted? ? t('collection_items.draft', :default => "(draft)") : ""), collection_item.item) -%>
   <%= form.hidden_field :id %><%= form.hidden_field :collection_id %>
 </th>
+  <td><%= collection_item.item.respond_to?(:word_count) ? collection_item.item.word_count : t('collection_items.na', :default => "N/A") -%></td>
 <%- unless @user -%>
   <!-- collection view -->
   <td><%= collection_item.item_creator_names -%></td>
