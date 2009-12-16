@@ -55,7 +55,7 @@
     <%= preference_form.check_box :closed %>
   </p>
   <p>
-    <%= preference_form.label :unrevealed, t("collection_form.unrevealed", :default => "Is this collection currently unrevealed") %>
+    <%= preference_form.label :unrevealed, t("collection_form.unrevealed", :default => "Is this collection currently unrevealed?") %>
     <%= preference_form.check_box :unrevealed %>
   </p>
   <p>
@@ -71,7 +71,7 @@
   <% @collection.build_collection_profile unless @collection.collection_profile %>
   <% collection_form.fields_for :collection_profile do |profile_form| %>
   <p>
-    Quick tip: if this is a subcollection or challenge, and you leave any of these fields blank, they will be 
+    Quick tip: if this is a subcollection or challenge, and you leave any of the following fields blank, they will be 
     inherited from the parent collection, so you don't need to repeat shared information.
   </p>
   <p>
