@@ -260,10 +260,9 @@ class WorksController < ApplicationController
   end
 
   # GET /works/new
-  def new
-    if params[:import]
-      @use_import_form = true
-    end
+  def new    
+    @use_import_form = true if params[:import]
+    @work.collection_names = @collection.name if @collection  
     
     respond_to do |format|
       format.html 

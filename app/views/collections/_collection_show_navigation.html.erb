@@ -1,4 +1,7 @@
 <ul class="navigation">
+  <% if logged_in? && !@collection.closed? %>
+    <li><%= link_to t('collections.post_new', :default => "Post New Story"), new_collection_work_path(@collection) %></li>
+  <% end %>
   <% unless @collection.user_is_owner?(current_user) %>
     <% if (@participant ||= @collection.get_participants_for_user(current_user).first) -%>  
       <li><%= link_to t('participant_remove', :default => "Leave"), collection_participant_path(@collection, @participant), 

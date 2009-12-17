@@ -1,7 +1,9 @@
 <%- if @collection && @most_recent_works %>
-  <h1><%= t('updated_works_in_collection', :default => "Works in {{collection_title}} updated in the last month", :collection_title => @collection.title) -%></h1>
+  <h1><%= t('updated_works_in_collection', :default => "Works in {{collection_title}} updated in the last month", 
+    :collection_title => link_to(sanitize_title_for_display(@collection.title), @collection)) -%></h1>
 <%- elsif @collection -%>
-  <h1><%= t('works_in_collection', :default => "Works in {{collection_title}}", :collection_title => @collection.title) -%></h1>
+  <h1><%= t('works_in_collection', :default => "Works in {{collection_title}}", 
+    :collection_title => link_to(sanitize_title_for_display(@collection.title), @collection)) -%></h1>
 <%- elsif @most_recent_works -%>
   <h1><%=h t('recently_updated', :default => "Works updated in the last month") %></h1>
 <%- end -%>
