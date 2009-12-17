@@ -13,7 +13,7 @@ class Pseud < ActiveRecord::Base
   has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series'
   has_many :collection_participants, :dependent => :destroy
   has_many :collections, :through => :collection_participants
-
+  
   validates_presence_of :name
   validates_length_of :name, 
     :within => NAME_LENGTH_MIN..NAME_LENGTH_MAX, 
@@ -49,6 +49,10 @@ class Pseud < ActiveRecord::Base
   rescue
     puts "no database yet, not initializing pseud alphabet"
     ALPHABET = ['A']
+  end
+
+  def gifts
+    Gift.find_all_by_recipient_name(self.name)
   end
 
   # Enigel Dec 12 08: added sort method

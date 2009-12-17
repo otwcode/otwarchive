@@ -148,6 +148,10 @@ class User < ActiveRecord::Base
      works.collect(&:pseuds).flatten.uniq - pseuds
   end
   
+  def gifts
+    pseuds.collect(&:gifts).flatten.uniq
+  end
+  
   # Gets the user's most recent unposted work
   def unposted_work
     return @unposted_work if @unposted_work
