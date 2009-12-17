@@ -29,6 +29,15 @@ class UserMailer < ActionMailer::Base
     body          :external_author => external_author, :claimed_works => claimed_works, :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
   end
 
+  def recipient_notification(user, work, collection=nil)
+    setup_email(user)
+    subject       "[#{ArchiveConfig.APP_NAME}] A Gift Story For You #{collection ? "From " + collection.title : ''}"
+    sent_on       Time.now
+    from          ArchiveConfig.RETURN_ADDRESS
+    content_type  "text/html"
+    body          :work => work, :collection => collection, :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
+  end
+
   def invite_increase_notification(user, total)
     setup_email(user)
     @subject    += 'New Invitations'  

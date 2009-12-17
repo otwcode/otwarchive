@@ -69,6 +69,11 @@
       	<%= f.label :collection_inbox_off, t('preferences.collection_inbox_off', :default => "Turn off Inbox messages from Collections.") %>
     	</li>  	
 
+    	<li>
+      	<%= f.check_box :recipient_emails_off %> 
+      	<%= f.label :recipient_emails_off, t('preferences.recipient_emails_off', :default => "Turn off gift story notification emails.") %>
+    	</li>  	
+
       <li>
         <%= f.check_box :hide_private_hit_count -%>
         <%= f.label :hide_private_hit_count, t('preferences.hide_private_hit_count', :default => "Don't show me hits on my stories.") -%>

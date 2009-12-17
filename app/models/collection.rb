@@ -159,6 +159,10 @@ class Collection < ActiveRecord::Base
     CollectionParticipant.in_collection(self).for_user(user)
   end
   
+  def gift_notification
+    self.collection_profile.gift_notification || (parent ? parent.collection_profile.gift_notification : "")
+  end
+  
   def moderated? ; self.collection_preference.moderated ; end
   def closed? ; self.collection_preference.closed ; end
   def unrevealed? ; self.collection_preference.unrevealed ; end

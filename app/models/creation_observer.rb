@@ -1,8 +1,8 @@
 class CreationObserver < ActiveRecord::Observer
   observe Chapter, Work, Series
 
-  # Notify new co-authors that they've been added to a work
   def after_save(creation)
+    # Notify new co-authors that they've been added to a work
     work = creation.class == Chapter ? creation.work : creation
     if work && !creation.authors.blank? && User.current_user.is_a?(User)
       new_authors = (creation.authors - (work.pseuds + User.current_user.pseuds)).uniq
@@ -12,7 +12,21 @@ class CreationObserver < ActiveRecord::Observer
         end
       end
     end
-    save_creatorships(creation)
+    save_creatorships(creation)    
+  end
+  
+  def before_update(new_work)
+    return unless new_work.class == Work && new_work.valid?
+    old_work = Work.find(new_work)
+    if !old_work.posted && new_work.posted
+      # newly-posted, notify recipients that they have gotten a story!
+      if !new_work.recipients.blank? && !new_work.unrevealed?
+        recipient_pseuds = Pseud.parse_bylines(new_work.recipients, true)[:pseuds]
+        recipient_pseuds.each do |pseud|
+          UserMailer.deliver_recipient_notification(pseud.user, new_work)
+        end
+      end
+    end
   end
   
   # Save creatorships after the creation is saved

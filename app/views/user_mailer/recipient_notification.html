@@ -1,0 +1,22 @@
+<p>
+  A gift story has been posted for you <%= @collection ? "in the #{@collection.title} collection " : "" -%>at the Archive of Our Own!
+</p>
+
+<p>
+  <%= link_to(@work.title, work_url(@work, :host => @host)) + "(#{@work.word_count} words)" -%><br />
+  <%= work_url(@work, :host => @host) -%><br />
+  by <%= @work.anonymous? ? "an anonymous giver" : @work.pseuds.collect(&:byline).join(", ") -%>
+</p>
+
+<p>
+  Summary: <%= "(#{@work.fandom_string}) " + sanitize_and_format_for_display(@work.summary) %>
+</p>
+
+<%- if @collection && !@collection.gift_notification.blank? -%>
+  <%= sanitize_and_format_for_display(@collection.gift_notification) -%>
+<%- end -%>
+
+<p>
+  Please note: if you don't want to receive emails like this one, you can set your preferences 
+  at the archive not to receive notification of gift stories.
+</p>

@@ -99,6 +99,17 @@
     <%= live_validation_for_field('collection_collection_profile_attributes_rules', :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) -%>
     <%= generate_countdown_html("collection_collection_profile_attributes_rules", ArchiveConfig.INFO_MAX) -%>
   </p>
+
+  <h3><%= profile_form.label :gift_notification, t("collection_form.gift_notification", :default => "Gift Notification Message: ") %></h3>
+  <p class="note">
+    (This message will be appended to the story notifications sent out when you reveal the stories in a gift exchange. Plain text only.)
+  </p>
+	<p>
+    <%= profile_form.text_area :gift_notification, :rows => 10, :cols => 80 %>
+    <%= live_validation_for_field('collection_collection_profile_attributes_gift_notification', :presence => false, :maximum_length => ArchiveConfig.SUMMARY_MAX) -%>
+    <%= generate_countdown_html("collection_collection_profile_attributes_gift_notification", ArchiveConfig.SUMMARY_MAX) -%>
+  </p>
+
   <% end %>
  </fieldset>
 <fieldset>

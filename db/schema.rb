@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091216150855) do
+ActiveRecord::Schema.define(:version => 20091217005945) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -127,11 +127,12 @@ ActiveRecord::Schema.define(:version => 20091216150855) do
 
   create_table "collection_profiles", :force => true do |t|
     t.integer  "collection_id"
-    t.text     "intro",         :limit => 2147483647
-    t.text     "faq",           :limit => 2147483647
-    t.text     "rules",         :limit => 2147483647
+    t.text     "intro",             :limit => 2147483647
+    t.text     "faq",               :limit => 2147483647
+    t.text     "rules",             :limit => 2147483647
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "gift_notification"
   end
 
   create_table "collections", :force => true do |t|
@@ -366,6 +367,7 @@ ActiveRecord::Schema.define(:version => 20091216150855) do
     t.boolean  "collection_inbox_off",                           :default => false,                     :null => false
     t.boolean  "hide_private_hit_count",                         :default => false,                     :null => false
     t.boolean  "hide_public_hit_count",                          :default => false,                     :null => false
+    t.boolean  "recipient_emails_off",                           :default => false,                     :null => false
   end
 
   create_table "profiles", :force => true do |t|
