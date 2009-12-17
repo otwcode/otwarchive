@@ -71,11 +71,11 @@
       <dt><%= t('collections.children', :default => "Challenges/Subcollections") -%></dt>
         <dd><%= @challenges_count -%></dd>
       <% end %>
-			<% if (@works_count = collection.works.count) > 0%>
+			<% if (@works_count = collection.all_approved_works.count) > 0%>
 			<dt><%=h t('works', :default => "Works") %></dt>
     		<dd><%= @works_count -%></dd>
   		<% end %>
-			<% if (@bookmarks_count = collection.bookmarks.count) > 0%>
+			<% if (@bookmarks_count = collection.all_approved_bookmarks.count) > 0%>
      	<dt><%=h t('bookmarks', :default => "Bookmarks") %></dt>
 	      <dd><%= @bookmarks_count -%></dd>
 			<% end %>

@@ -18,6 +18,8 @@ class Collection < ActiveRecord::Base
   has_many :approved_works, :through => :collection_items, :source => :item, :source_type => 'Work', 
     :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
   has_many :bookmarks, :through => :collection_items, :source => :item, :source_type => 'Bookmark'
+  has_many :approved_bookmarks, :through => :collection_items, :source => :item, :source_type => 'Bookmark', 
+    :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
   has_many :fandoms, :through => :works, :uniq => true
   has_many :filters, :through => :works, :uniq => true
 
@@ -141,6 +143,13 @@ class Collection < ActiveRecord::Base
     (self.participants + (self.parent ? self.parent.participants : [])).uniq
   end
     
+  def all_approved_works
+    (self.approved_works + (self.children ? self.children.collect(&:approved_works).flatten : [])).uniq
+  end
+  
+  def all_approved_bookmarks
+    (self.approved_bookmarks + (self.children ? self.children.collect(&:approved_bookmarks).flatten : [])).uniq
+  end
   
   def maintainers
     self.all_owners + self.all_moderators
