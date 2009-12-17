@@ -122,12 +122,25 @@ class Collection < ActiveRecord::Base
   end
   
   def all_owners
-    self.owners + (self.parent ? self.parent.owners : [])
+    (self.owners + (self.parent ? self.parent.owners : [])).uniq
   end
   
   def all_moderators
-    self.moderators + (self.parent ? self.parent.moderators : [])
+    (self.moderators + (self.parent ? self.parent.moderators : [])).uniq
   end
+  
+  def all_members
+    (self.members + (self.parent ? self.parent.members : [])).uniq
+  end
+  
+  def all_posting_participants
+    (self.posting_participants + (self.parent ? self.parent.posting_participants : [])).uniq
+  end
+  
+  def all_participants
+    (self.participants + (self.parent ? self.parent.participants : [])).uniq
+  end
+    
   
   def maintainers
     self.all_owners + self.all_moderators
@@ -150,11 +163,11 @@ class Collection < ActiveRecord::Base
   end
 
   def user_is_posting_participant?(user)
-    user && user != :false && !(user.pseuds & self.posting_participants).empty?
+    user && user != :false && !(user.pseuds & self.all_posting_participants).empty?
   end
   
   def get_participating_pseuds_for_user(user)
-    (user && user != :false) ? user.pseuds & self.participants : []
+    (user && user != :false) ? user.pseuds & self.all_participants : []
   end
   
   def get_participants_for_user(user)

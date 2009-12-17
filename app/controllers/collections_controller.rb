@@ -13,7 +13,7 @@ class CollectionsController < ApplicationController
       @work = Work.find(params[:work_id])
       @collections = @work.approved_collections
     elsif params[:collection_id]
-      @collection = Collection.find(params[:collection_id])
+      @collection = Collection.find_by_name(params[:collection_id])
       @collections = @collection.children
     elsif params[:user_id]
       @user = User.find_by_login(params[:user_id])
