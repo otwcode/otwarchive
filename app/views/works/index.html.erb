@@ -10,6 +10,10 @@
 
 <h2><%= search_header @works, @query %></h2>
 
+<%- if @collection && @collection.gift_exchange? -%>
+  <%= render :partial => 'gifts/gift_search' -%>
+<%- end -%>
+
 <%-if !@most_recent_works and @works.total_entries > ArchiveConfig.SEARCH_RESULTS_MAX %>
   <p><%= t('search_too_broad', :default => "Your search was so broad it would have returned more than {{search_max}} works. You can either browse through the ones that we found first, or narrow your search down by adding some more keywords to your search, like character names or tags.", :search_max => ArchiveConfig.SEARCH_RESULTS_MAX) %></p>
 <%- end -%>

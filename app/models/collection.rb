@@ -14,7 +14,9 @@ class Collection < ActiveRecord::Base
   has_many :approved_collection_items, :class_name => "CollectionItem", 
     :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
   
-  has_many :works, :through => :collection_items, :source => :item, :source_type => 'Work' 
+  has_many :works, :through => :collection_items, :source => :item, :source_type => 'Work'
+  has_many :approved_works, :through => :collection_items, :source => :item, :source_type => 'Work', 
+    :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
   has_many :bookmarks, :through => :collection_items, :source => :item, :source_type => 'Bookmark'
   has_many :fandoms, :through => :works, :uniq => true
   has_many :filters, :through => :works, :uniq => true

@@ -65,6 +65,7 @@ ActionController::Routing::Routes.draw do |map|
     user.resources :invitations, :member => {:invite_friend => :post}, :collection => {:manage => :get}
     user.resources :collection_items, :only => [:index, :update, :destroy]
     user.resources :collections, :only => [:index]
+    user.resources :gifts, :only => [:index]
   end
 
   map.first_login_help '/first_login_help', :controller => 'home', :action => 'first_login_help'
@@ -111,7 +112,10 @@ ActionController::Routing::Routes.draw do |map|
     collection.resources :tags, :requirements => { :id => %r([^/;,?]+) }, :has_many => :works
     collection.resources :participants, :controller => "collection_participants", :collection => {:add => :get}, :member => {:join => :get}
     collection.resources :items, :controller => "collection_items"
+    collection.resources :gifts, :only => [:index]
   end 
+
+  map.resources :gifts, :only => [:index]
   
   # should stay below the main works mapping
   map.resources :languages do |language|

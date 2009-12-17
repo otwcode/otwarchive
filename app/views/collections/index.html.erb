@@ -61,7 +61,7 @@
 	<li class="summary">
 	  <%= sanitize_strip_images_and_format_for_display collection.description %>
 
-    (<%= collection.closed? ? t('collections_index.is_closed', :default => "Closed") : t('collections_index.open', :default => "Open") %>, <%= collection.moderated? ? t('collections_index.is_moderated', :default => "Moderated") : t('collections_index.unmoderated', :default => "Unmoderated") %><%= collection.unrevealed? ? t('collections_index.is_unrevealed', :default => ", Unrevealed") : "" %><%= collection.anonymous? ? t('collections_index.is_anonymous', :default => ", Anonymous") : "" %>)
+    (<%= collection.closed? ? t('collections_index.is_closed', :default => "Closed") : t('collections_index.open', :default => "Open") %>, <%= collection.moderated? ? t('collections_index.is_moderated', :default => "Moderated") : t('collections_index.unmoderated', :default => "Unmoderated") %><%= collection.unrevealed? ? t('collections_index.is_unrevealed', :default => ", Unrevealed") : "" %><%= collection.anonymous? ? t('collections_index.is_anonymous', :default => ", Anonymous") : "" %><%= collection.gift_exchange? ? t('collections_index.is_gift_exchange', :default => ", Gift Exchange") : "" %>)
 	</li>
 
 	<%- if collection.not_empty? -%>

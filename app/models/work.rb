@@ -1081,6 +1081,14 @@ class Work < ActiveRecord::Base
     }
   }
   
+  named_scope :for_recipient, lambda {|recipient|
+    {
+      :select => "DISTINCT works.*",
+      :joins => "INNER JOIN gifts ON (gifts.work_id = works.id)",
+      :conditions => ['gifts.recipient_name = ?', recipient]
+    }
+  }
+  
   # shouldn't really use a named scope for this, but I'm afraid to try
   # to change the way work filtering works
   named_scope :by_language, lambda {|lang_id| {:conditions => ['language_id = ?', lang_id]}}

@@ -1,0 +1,9 @@
+<h1><%= t('gifts.gifts_for', :default => "Gifts for {{recipient}}", :recipient => @user ? @user.login : h(@recipient_name)) -%></h1>
+
+<%= render :partial => 'gifts/gift_search' -%>
+
+<ul class="work-list">
+  <%- for work in @works -%>
+    <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
+  <%- end -%>
+</ul>
