@@ -143,7 +143,7 @@ form.edit_preference ul { margin:0.562625em auto 1.12525em auto; padding:0.56262
 /*WORKS-INDEX -filters*/
 form.work-filters	{ background:#ddd; font-size:0.875em; width:12.25em; float:right;  padding:0.75em 0.5625em; max-width: 20%; }
 form.work-filters legend { color:#111; height:auto; font-size:1em; line-height:1.2;}
-form.work-filters dt, form.work-filters dt { float: none; width: auto; }
+form.work-filters dt, form.work-filters dt { float: none; width: auto; clear:both;}
 form.work-filters a {float: right; margin-top: -1.25em;}
 .filters dt	{ font-weight: 600; text-transform: capitalize; margin:0.5625em auto 0; padding:0; border-bottom:1px solid #fffef9; }
 .filters dd {padding:0;}
@@ -179,3 +179,6 @@ form.new_collection fieldset,  form.new_user fieldset {border:1px solid #ddd; pa
 form.new_collection p, form.new_user p {font-size:1.5em;}
 form.new_collection dt {width:45%;}
 form.new_collection div {display:block;}
+
+/*GIFT SEARCH*/
+form#gift-search {width:50%; margin: auto auto 0.5em auto; border:1px solid #ddd; padding:0.5em;}

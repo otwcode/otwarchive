@@ -72,6 +72,10 @@ module WorksHelper
     end
   end
   
+  def recipients_link(work)
+    work.gifts.collect(&:recipient_name).map {|recipname| link_to(h(recipname), gifts_path(:recipient => recipname))}.join(", ")
+  end
+  
   # Making absolutely sure that the tags and selected tags have the same capitalization so it doesn't throw the form off
   def warnings_for_tag_form
     [ArchiveConfig.WARNING_DEFAULT_TAG_NAME, ArchiveConfig.WARNING_NONE_TAG_NAME, ArchiveConfig.WARNING_VIOLENCE_TAG_NAME, ArchiveConfig.WARNING_DEATH_TAG_NAME, ArchiveConfig.WARNING_NONCON_TAG_NAME, ArchiveConfig.WARNING_CHAN_TAG_NAME].map(&:titleize)

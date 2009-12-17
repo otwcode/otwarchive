@@ -1,7 +1,10 @@
 <ul class="work mystery">
 	<li class="heading">
 	<h3><%= t('works.mystery', :default => "Mystery Work") %></h3>
-	<h4><%= t('works.part_of', :default => "Part of: {{collections}}", :collections => work.collections.unrevealed.map {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ")) %></h4>
+	<h4><%= 
+	 t('works.part_of', :default => "Part of: {{collections}}", :collections => work.collections.unrevealed.map {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ")) +
+	 (work.recipients.blank? ? '' : t('works.written_for', :default => " for {{recipients}}", :recipients => recipients_link(work)))
+	 %></h4>
 	</li>
 	<li class="summary"><%= t('works.will_be_revealed', :default => "This work is part of an ongoing challenge and will be revealed soon!") %></li>
 </ul>

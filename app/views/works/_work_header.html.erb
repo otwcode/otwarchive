@@ -50,9 +50,9 @@
   <h3 class="byline">
    <%= byline(@work) -%>
   </h3>
-  <% if !@work.recipients.empty? %>
+  <% if !@work.recipients.blank? %>
     <h3 class="recipients">
-      <%= t('work_header.recipients', :default => "for {{recipients}}", :recipients => h(@work.recipients)) -%>
+      <%= t('work_header.recipients', :default => "for {{recipients}}", :recipients => recipients_link(@work)) -%>
     </h3>
   <% end -%>
   

@@ -294,7 +294,7 @@ class Work < ActiveRecord::Base
       
   def recipients=(recipient_names)
     gift_attributes_to_set = []
-    recipient_names.split(',').each do |recipient_name|
+    recipient_names.split(',').map {|n| n.strip}.uniq.each do |recipient_name|
       gift_attributes_to_set << {:recipient_name => recipient_name}
       # FOR THE FUTURE
       # # try and get pseud

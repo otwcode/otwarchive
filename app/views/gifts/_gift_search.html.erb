@@ -1,4 +1,4 @@
-<% form_tag (@collection ? collection_gifts_path(@collection) : gifts_path), :method => :get do %>
+<% form_tag (@collection ? collection_gifts_path(@collection) : gifts_path), :method => :get, :id => 'gift-search' do %>
   <p>
     <%= label_tag :recipient, t('gifts.recipient_field', :default => "Find gifts for: ")%>
     <%= text_field_tag :recipient, params[:recipient], :class => 'text', :title => 'gift search' %>

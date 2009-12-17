@@ -1,6 +1,8 @@
 <h1><%= t('gifts.gifts_for', :default => "Gifts for {{recipient}}", :recipient => @user ? @user.login : h(@recipient_name)) -%></h1>
 
-<%= render :partial => 'gifts/gift_search' -%>
+<% unless @user %>
+  <%= render :partial => 'gifts/gift_search' -%>
+<% end %>
 
 <ul class="work-list">
   <%- for work in @works -%>
