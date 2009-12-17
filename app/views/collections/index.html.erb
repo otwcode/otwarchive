@@ -27,7 +27,7 @@
  		<li class="heading">
 			<span class="icon"><img src="/images/collections.png" class="icon" alt="" /></span>
 			<!--or collections header image-->
-			<h3><%= link_to sanitize_title_for_display(collection.title, :tags => %w(em i b strong strike small)), collection_works_path(collection) -%>
+			<h3><%= link_to sanitize_title_for_display(collection.title, :tags => %w(em i b strong strike small)), collection_path(collection) -%>
 				<span>(<%=h collection.name -%>)</span>
 					<%= t('collection_by_owner', :default => 'by') -%>
 					<%= collection.all_owners.map {|owner| link_to(owner.byline, owner.user)}.join(", ") -%></h3>

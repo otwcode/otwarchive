@@ -53,6 +53,18 @@
    <%= @collection.anonymous? ? t('collections.is_anonymous', :default => "Story authors are currently hidden. ") : "" %>
    <%= (@collection.unrevealed? || @collection.anonymous?) ? t('collections.see_details', :default => "See the collection details below for more information about how and when they will be revealed! ") : "" %>
    </dd>
+   
+ 	<%- if @collection.not_empty? -%>
+		<% if (@works_count = @collection.all_approved_works.count) > 0%>
+  		<dt><%=h t('works', :default => "Works") %></dt>
+   		<dd><%= link_to(@works_count, collection_works_path(@collection)) -%></dd>
+		<% end %>
+
+		<% if (@bookmarks_count = @collection.all_approved_bookmarks.count) > 0%>
+  	  <dt><%=h t('bookmarks', :default => "Bookmarks") %></dt>
+      <dd><%= link_to(@bookmarks_count, collection_bookmarks_path(@collection)) -%></dd>
+		<% end %>
+  <%end %>
 </dl>
 
 <div class="preface profile user-generated-view">

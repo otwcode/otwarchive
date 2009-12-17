@@ -194,7 +194,7 @@ class Collection < ActiveRecord::Base
   def gift_exchange? ; self.collection_preference.gift_exchange ; end
   
   def not_empty?
-    self.works.count > 0 || self.children.count > 0 || self.bookmarks.count > 0
+    self.all_approved_works.count > 0 || self.children.count > 0 || self.all_approved_bookmarks.count > 0
   end
     
 end
