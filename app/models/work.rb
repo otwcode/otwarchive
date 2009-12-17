@@ -759,7 +759,7 @@ class Work < ActiveRecord::Base
     filter = tag.canonical? ? tag : tag.merger
     if filter && !self.filters.include?(filter)
       self.filters << filter
-      filter.reset_filter_count 
+      filter.reset_filter_count unless AdminSetting.suspend_filter_counts? 
     end
   end
   
@@ -775,6 +775,9 @@ class Work < ActiveRecord::Base
   # Determine if filter counts need to be reset after the work is saved
   def check_filter_counts
     self.should_reset_filters = (self.new_record? || self.visibility_changed?)
+    if AdminSetting.suspend_filter_counts? && !(self.restricted_changed? || self.hidden_by_admin_changed?)
+      self.should_reset_filters = false
+    end
     return true 
   end
   

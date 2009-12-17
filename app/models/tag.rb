@@ -240,8 +240,10 @@ class Tag < ActiveRecord::Base
   end
   
   def reset_filter_count
-    filter = self.canonical? ? self : self.merger
-    if filter && filter.reload
+    filter = self.filter
+    # we only need to cache values for user-defined tags
+    # because they're the only ones we access
+    if filter && filter.reload && (Tag::USER_DEFINED.include?(filter.class.to_s))
       attributes = {:public_works_count => filter.filtered_works.posted.unhidden.unrestricted.count, 
                     :unhidden_works_count => filter.filtered_works.posted.unhidden.count}
       if filter.filter_count

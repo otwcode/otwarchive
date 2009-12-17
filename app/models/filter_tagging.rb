@@ -18,4 +18,14 @@ class FilterTagging < ActiveRecord::Base
       end
     end 
   end
+  
+  def self.update_filter_counts_since(date)
+    if date
+      FilterTagging.find(:all, :conditions => ["created_at > ?", date]).collect(&:filter).compact.uniq.each do |filter| 
+        filter.reset_filter_count
+      end
+    else
+      raise "date not set for filter count suspension! very bad!"
+    end
+  end  
 end
