@@ -1,27 +1,44 @@
-		<h2><%=h "Create Account" %></h2>
+		<h1><%=h "Create Account" %></h1>
 		<p class="message"><%=h "Please select a user name. You will be allowed to post works under multiple pseudonyms, but you will only have one user name, which is hard for us to change - choose wisely!" %>
 		<%= "User names will be displayed as entered. Please check you have entered your preferred spelling and capitalization before submitting this form." %></p>
 		<%= error_messages_for :user, :id => "errorExplanationNone", :header_tag => "p", :header_message => "Oops, there's some problems with the stuff you told us.", :message => nil  %>
 		<% form_for @user do |f| -%>
 		  <p><%= f.hidden_field :invitation_token, :value => params[:invitation_token] %></p>
+<fieldset><legend>User Details</legend>
 <!-- Create login -->
-			<p>
-				<%= f.label :login, "What would you like as your user name?" %><br />
-				<%= f.text_field :login, :class => "user_login" %>
+<!--POOR XHTML STRUCTURE. This page needs to be refactored so the fieldset User Details is ONE definition list without OpenId divs as child of dl (it may be child of dt or dd) -->
+			<dl>
+				<dt><%= f.label :login, "What would you like as your user name?" %></dt>
+				<dd><%= f.text_field :login, :class => "user_login" %>
 				        <%= live_validation_for_field('user_login', 
 						:maximum_length => User::LOGIN_LENGTH_MAX, :minimum_length => User::LOGIN_LENGTH_MIN, 
 					  :failureMessage => 'You need a login name! (At least ' + User::LOGIN_LENGTH_MIN.to_s + ' letters long, please.)')
 				-%>
-			</p>
+			</dd>
+			</dl>
+			<div id="link_to_openid"><p>
+<!-- !params[:use_openid] ensures this is hidden on the openid version of the page for non-JS users -->
+				<%- if !params[:use_openid] -%>
+				<%- if ArchiveConfig.USE_OPENID -%>
+					<%= image_tag("openid.png", :alt => 'OpenID logo') %>
+					<%= link_to_function("Sign up using OpenID", :href => url_for(:action => 'new', :use_openid => true), :class => 'footnote') do |page|
+						page.replace_html "switch_fields", :partial => 'openid', :locals => {:f => f}
+						page[:link_to_openid].hide
+						page[:link_to_passwd].show
+						end %>
+					<%- end -%>
+				<%- end -%></p></div>
     
 <!-- The password or OpenID login fields are shown in this div -->
 			<div id="switch_fields">
+				<dl>
 <!-- use_openid set by link_to_passwd and link_to_openid below; needed for non-JS users to distinguish between versions of the page -->
 					<%- if params[:use_openid] -%>
 					<%= render :partial => 'openid', :locals => {:f => f} %>
 					<%- else -%>
 					<%= render :partial => 'passwd', :locals => {:f => f} %>
 					<% end -%>
+			</dl>
 			</div>
 <!-- Link to toggle between password and OpenID. Ugly code! :( -->
 <!-- Two versions of the div tag here so the link to passwd is not shown when the page is first loaded; for non-JS users clicking the link sets use_openid to true, showing the div on reload; for JS users the display is toggled -->
@@ -37,33 +54,25 @@
 						page[:link_to_openid].show
 						end %>
 			</div>
-				<div id="link_to_openid">
-<!-- !params[:use_openid] ensures this is hidden on the openid version of the page for non-JS users -->
-					<%- if !params[:use_openid] -%>
-					<%- if ArchiveConfig.USE_OPENID -%>
-						<%= image_tag("openid.png", :alt => 'OpenID logo') %>
-						<%= link_to_function("Sign up using OpenID", :href => url_for(:action => 'new', :use_openid => true), :class => 'footnote') do |page|
-							page.replace_html "switch_fields", :partial => 'openid', :locals => {:f => f}
-							page[:link_to_openid].hide
-							page[:link_to_passwd].show
-							end %>
-						<%- end -%>
-					<%- end -%>
-				</div>
 <!-- Email address -->
-				<p><%= f.label :email, "What email address would you like us to use? (This has to be valid - we'll be sending a confirmation email before you can activate your account.)" %><br />
-				<%= f.text_field :email %>
+				<dl>
+					<dt><%= f.label :email, "What email address would you like us to use? (This has to be valid - we'll be sending a confirmation email before you can activate your account.)" %></dt>
+				<dd><%= f.text_field :email %>
 				<%= live_validation_for_field('user_email', 
 						:maximum_length => User::EMAIL_LENGTH_MAX, :minimum_length => User::EMAIL_LENGTH_MIN, 
 					  :failureMessage => 'You need to enter a valid email address!')
 				-%>
-				</p>
+				</dd>
+				</dl>
+				</fieldset>
+				<fieldset><legend>Legal Agreements</legend>
 <!-- Age Check -->
-				<p>
+				<p class="note">
 					<%=h 'You need to be over 13 years old to become a registered member of the archive.' %>
-					<%=h "(Sorry to our younger readers! You'll be more than welcome when the time comes.)" %><br />
-					<%= f.check_box :age_over_13 %>
-					<%= f.label :age_over_13, "Yes, I am over 13."  %>
+					<%=h "(Sorry to our younger readers! You'll be more than welcome when the time comes.)" %></p>
+				
+				<p><%= f.check_box :age_over_13 %>
+					<%= f.label :age_over_13, "Yes, I am over 13." %>
 				</p>
 <!-- Terms of Service -->
 				<p>
@@ -79,10 +88,13 @@
 					<%= f.check_box :terms_of_service -%>
 					<%= f.label :terms_of_service, "Yes, I have read the Terms of Service and agree to them.",  :class => 'important' %>
 				</p>
+				</fieldset>
+				<fieldset><legend>Submit</legend>
 <!-- Buttons for "Cancel" and "Create Account" -->
 <!-- "Create Account" needs to submit form information and send out an email to the user with confirmation information; the confirmation info should send the user back to accountconfirm.html -->
 				<p class="submit">
 					<input type="submit" name="cancel_create_account" value="Cancel" />
 					<%= submit_tag 'Create Account' %>
 				</p>
+				</fieldset>
 			<% end -%>

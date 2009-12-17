@@ -174,8 +174,8 @@ form#wrangle-select-fandom p, form#wrangle-select-media p{ display:inline; margi
 #bookmark-form dd { margin-top: 0; padding:0.25em 0.5625em 0.25em 0;}
 #bookmark-form fieldset { background:#fffef9; font-size:0.875em; margin: 0.5625em 0; padding:0.375em 1.5em; border:1px solid #bbb; clear:both; }
 
-/*COLLECTIONS */
-form.new_collection fieldset {border:1px solid #ddd; padding:0.5em; margin:1em auto;}
-form.new_collection p {font-size:1.5em;}
+/*COLLECTIONS, CREATE, similar complex forms*/
+form.new_collection fieldset,  form.new_user fieldset {border:1px solid #ddd; padding:0.5em; margin:1em auto;}
+form.new_collection p, form.new_user p {font-size:1.5em;}
 form.new_collection dt {width:45%;}
 form.new_collection div {display:block;}

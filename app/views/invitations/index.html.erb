@@ -6,11 +6,7 @@
 <%- if logged_in_as_admin?  -%>
 <h2><%= t('create_more', :default => 'Create more invitations for this user') %></h2>
   <% form_tag user_invitations_url(@user) do %>
-    <dl>
-      <dt><%= label_tag :number_of_invites, t('number_of_invites', :default => 'Number of invitations:') %></dt>
-      <dd><%= text_field_tag :number_of_invites  %></dt>
-    </dl>
-    <p><%= submit_tag 'Create' %></p>
+    <p><%= label_tag :number_of_invites, t('number_of_invites', :default => 'Number of invitations:') %> <%= text_field_tag :number_of_invites  %> <%= submit_tag 'Create' %></p>
   <% end %> 
 <%- end -%>
   

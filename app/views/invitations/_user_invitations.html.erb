@@ -1,13 +1,16 @@
 <%- unless invitations.blank? -%>
-<table>
-  <tr>
+<table summary="">
+  <caption><!-- --></caption>
+	<thead>
+	<tr>
   <th scope="col">Token</th>
   <th scope="col">Sent To</th>
   <th scope="col">User Name</th>
   <th scope="col">External Author</th>
   <th scope="col">Copy Link</th>
   </tr>
-
+	</thead>
+	<tbody>
   <%- for invitation in invitations -%>
   <tr>
   <td><%= link_to invitation.token, (invitation.creator.is_a?(User) ? [invitation.creator, invitation] : invitation) %></td>
@@ -27,5 +30,6 @@
   <%- end -%>
   </tr>
   <%- end -%>
+</tbody>
 </table>
 <%- end -%>

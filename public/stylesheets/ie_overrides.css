@@ -3,6 +3,7 @@
 /* pathing and inheritance*/
 #work-form p.submit { text-align: right; }
 #work-form .submit input {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px solid #222;}
+form.new_collection p, form.new_user p {font-size:1em;}
 
 /*layer stacking*/
 .home #search p {text-align: right; z-index: 1;}

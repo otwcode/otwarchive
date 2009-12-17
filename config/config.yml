@@ -26,7 +26,7 @@ ERROR_PREFIX: "[ERROR] "
 #
 # Note that this is independent from whether the scheduled email-sending tasks will be run -- 
 # to make changes to that, please see schedule.rb and your deploy file. 
-PERFORM_DELIVERIES: false
+PERFORM_DELIVERIES: true
 
 APP_URL: 'http://www.example.org'
 APP_NAME: 'Example Archive'
@@ -46,7 +46,7 @@ SMTP_DOMAIN: localhost
 #SMTP_AUTHENTICATION: # :plain, :login or :cram_md5
 
 ACCOUNT_CREATION_ENABLED: true
-INVITATION_LIMIT: 1
+INVITATION_LIMIT: 20
 INVITE_FROM_QUEUE_ENABLED: true
 INVITE_FROM_QUEUE_NUMBER: 10
 INVITE_FROM_QUEUE_FREQUENCY: 7
