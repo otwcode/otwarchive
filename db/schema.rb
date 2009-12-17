@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091217005945) do
+ActiveRecord::Schema.define(:version => 20091217162252) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -39,6 +39,8 @@ ActiveRecord::Schema.define(:version => 20091217005945) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "invite_from_queue_at",                     :default => '2009-11-02 20:22:37'
+    t.boolean  "suspend_filter_counts",                    :default => false
+    t.datetime "suspend_filter_counts_at"
   end
 
   create_table "admins", :force => true do |t|
