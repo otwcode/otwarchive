@@ -45,10 +45,11 @@
     <li><%= span_if_current('bookmarks', @collection ? collection_bookmarks_path(@collection) : bookmarks_path) -%></li>
     <li><%= span_if_current('tags', @collection ? collection_tags_path(@collection) : tags_path) -%></li>
     <% if @collection && !@collection.children.empty? %>
-      <li><%= span_if_current('challenges', collection_collections_path(@collection)) -%></li>
+      <li><%= span_if_current('subcollections', collection_collections_path(@collection)) -%></li>
     <% elsif @collection && @collection.parent %>
       <li><%= span_if_current('parent collection', collection_works_path(@collection.parent)) -%></li>
-    <% elsif @collection %>
+    <% end %>
+    <% if @collection %>
       <li><%= span_if_current('all collections', collections_path) -%></li>
     <% else %>
       <li><%= span_if_current('collections', collections_path) -%></li>
