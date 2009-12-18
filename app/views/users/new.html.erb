@@ -16,18 +16,6 @@
 				-%>
 			</dd>
 			</dl>
-			<div id="link_to_openid"><p>
-<!-- !params[:use_openid] ensures this is hidden on the openid version of the page for non-JS users -->
-				<%- if !params[:use_openid] -%>
-				<%- if ArchiveConfig.USE_OPENID -%>
-					<%= image_tag("openid.png", :alt => 'OpenID logo') %>
-					<%= link_to_function("Sign up using OpenID", :href => url_for(:action => 'new', :use_openid => true), :class => 'footnote') do |page|
-						page.replace_html "switch_fields", :partial => 'openid', :locals => {:f => f}
-						page[:link_to_openid].hide
-						page[:link_to_passwd].show
-						end %>
-					<%- end -%>
-				<%- end -%></p></div>
     
 <!-- The password or OpenID login fields are shown in this div -->
 			<div id="switch_fields">
@@ -42,7 +30,20 @@
 			</div>
 <!-- Link to toggle between password and OpenID. Ugly code! :( -->
 <!-- Two versions of the div tag here so the link to passwd is not shown when the page is first loaded; for non-JS users clicking the link sets use_openid to true, showing the div on reload; for JS users the display is toggled -->
-				<%- if params[:use_openid] -%>
+							<div id="link_to_openid"><p>
+				<!-- !params[:use_openid] ensures this is hidden on the openid version of the page for non-JS users -->
+								<%- if !params[:use_openid] -%>
+								<%- if ArchiveConfig.USE_OPENID -%>
+									<%= image_tag("openid.png", :alt => 'OpenID logo') %>
+									<%= link_to_function("Sign up using OpenID", :href => url_for(:action => 'new', :use_openid => true), :class => 'footnote') do |page|
+										page.replace_html "switch_fields", :partial => 'openid', :locals => {:f => f}
+										page[:link_to_openid].hide
+										page[:link_to_passwd].show
+										end %>
+									<%- end -%>
+								<%- end -%></p></div>
+								
+								<%- if params[:use_openid] -%>
 			<div id="link_to_passwd">
 					<%- else -%>
 			<div id="link_to_passwd" style="display: none;">
