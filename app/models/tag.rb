@@ -240,18 +240,18 @@ class Tag < ActiveRecord::Base
   end
   
   def reset_filter_count
-    filter = self.filter
+    current_filter = self.filter
     # we only need to cache values for user-defined tags
     # because they're the only ones we access
-    if filter && filter.reload && (Tag::USER_DEFINED.include?(filter.class.to_s))
-      attributes = {:public_works_count => filter.filtered_works.posted.unhidden.unrestricted.count, 
-                    :unhidden_works_count => filter.filtered_works.posted.unhidden.count}
-      if filter.filter_count
-        filter.filter_count.update_attributes(attributes)        
+    if current_filter && current_filter.reload && (Tag::USER_DEFINED.include?(current_filter.class.to_s))
+      attributes = {:public_works_count => current_filter.filtered_works.posted.unhidden.unrestricted.count, 
+                    :unhidden_works_count => current_filter.filtered_works.posted.unhidden.count}
+      if current_filter.filter_count
+        current_filter.filter_count.update_attributes(attributes)        
       else
-        filter.create_filter_count(attributes)
+        current_filter.create_filter_count(attributes)
       end
-      filter.filter_count.reload
+      current_filter.filter_count.reload
     end
   end
   

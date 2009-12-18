@@ -5,7 +5,7 @@ class ArchiveFaq < ActiveRecord::Base
   validates_length_of :content, :minimum => ArchiveConfig.CONTENT_MIN, 
     :too_short => t('content_too_short', :default => "must be at least {{min}} letters long.", :min => ArchiveConfig.CONTENT_MIN)
 
-  validates_length_of :content, :maximum => ArchiveConfig.CONTENT_MAX, 
-    :too_long => t('content_too_long', :default => "cannot be more than {{max}} characters long.", :max => ArchiveConfig.CONTENT_MAX)
+  validates_length_of :content, :maximum => ArchiveConfig.FAQ_MAX, 
+    :too_long => t('content_too_long', :default => "cannot be more than {{max}} characters long.", :max => ArchiveConfig.FAQ_MAX)
   
 end
