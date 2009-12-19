@@ -39,20 +39,27 @@ class CollectionItem < ActiveRecord::Base
     if self.new_record?
       # approve with the current user, who is the person who has just
       # added this item -- might be either moderator or owner
-      approve(User.current_user)
+      approve(User.current_user == :false ? nil : User.current_user)
 
       # if the collection is open or the user who owns this work is a member, go ahead and approve
       # for the collection
-      if collection
-        if !collection.moderated? || collection.user_is_maintainer?(User.current_user) || (collection.user_is_posting_participant?(User.current_user) && !(item.pseuds & User.current_user.pseuds).empty?) 
+      if !approved_by_collection? && collection
+        if !collection.moderated? || collection.user_is_maintainer?(User.current_user) || collection.user_is_posting_participant?(User.current_user)
           approve_by_collection
         end
       end
 
       # if at least one of the owners of the items automatically approves
       # adding or is a member of the collection, go ahead and approve by user
-      if item
-        item.users.each do |user|
+      if !approved_by_user?
+        case item_type
+        when "Work" 
+          users = item.users || [User.current_user] # if the work has no users, it is also new and being created by the current user
+        when "Bookmark"
+          users = [item.user] || [User.current_user]
+        end
+
+        users.each do |user|
           if user.preference.automatically_approve_collections || (collection && collection.user_is_posting_participant?(user))
             approve_by_user
             break
@@ -112,7 +119,7 @@ class CollectionItem < ActiveRecord::Base
   end
 
   def approve(user)
-    approve_by_user if user && user.is_author_of?(item)
+    approve_by_user if user && (user.is_author_of?(item) || (user == User.current_user && item.respond_to?(:pseuds) ? item.pseuds.empty? : item.pseud.nil?) )
     approve_by_collection if user && self.collection.user_is_maintainer?(user)
   end  
 

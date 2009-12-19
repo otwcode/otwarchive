@@ -264,13 +264,21 @@ class Work < ActiveRecord::Base
     self.remove_author(old_user) if old_user && users.include?(old_user)
   end
 
-  def collection_names=(collection_names)
+  def collection_names=(new_collection_names)
     collection_attributes_to_set = []
-    collection_names.split(',').map {|name| name.strip}.uniq.each do |collection_name|
-      collection = Collection.find_by_name(collection_name)
-      collection_attributes_to_set << {:collection => collection} if collection
+    new_collection_names_array = new_collection_names.split(',').map {|name| name.strip}.uniq.sort
+    old_collection_names_array = collection_items.collect(&:collection).collect(&:name)
+
+    added_collections = (new_collection_names_array - old_collection_names_array).map {|name| Collection.find_by_name(name)}.compact
+    added_collections.each do |collection|
+      collection_attributes_to_set << {:collection => collection}
     end
-    self.collection_items.clear
+
+    removed_collections = (old_collection_names_array - new_collection_names_array).map {|name| Collection.find_by_name(name)}.compact
+    removed_collections.each do |collection|
+      collection_item = collection_items.find_by_collection_id(collection.id)
+      collection_attributes_to_set << {:id => collection_item.id, '_delete' => '1'} if collection_item
+    end
     self.collection_items_attributes = collection_attributes_to_set
   end
   
@@ -289,7 +297,7 @@ class Work < ActiveRecord::Base
   end 
   
   def collection_names
-    self.collection_items.collect(&:collection).collect(&:name).join(",")
+    self.collection_items.delete_if {|ci| ci.marked_for_destruction?}.collect(&:collection).collect(&:name).join(",")
   end
       
   def recipients=(recipient_names)

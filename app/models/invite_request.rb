@@ -9,7 +9,7 @@ class InviteRequest < ActiveRecord::Base
   # Realign positions if they're incorrect
   def self.reset_order
     first_request = self.find(:first, :order => :position)
-    unless first_request.position == 1
+    unless first_request && first_request.position == 1
        requests = self.find(:all, :order => :position)
        requests.each_with_index {|request, index| request.update_attribute(:position, index + 1)}   
     end

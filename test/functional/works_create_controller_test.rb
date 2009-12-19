@@ -7,6 +7,90 @@ class WorksCreateControllerTest < ActionController::TestCase
     setup { post :create, :locale => 'en' }
     should_redirect_to("new session") {new_session_url}
   end
+  context "when logged in" do
+    setup do
+      @user = create_user
+      @request.session[:user] = @user
+    end
+    context "basic create" do
+      setup do
+        @title = random_phrase
+        @content = random_paragraph
+        @fandom = random_phrase
+        @chapter_attribs = {"title"=>"", "content"=>@content}
+        @author_attribs = {"ids"=>[@user.default_pseud.id]}
+        @rating = "Not Rated"
+        @warning = ["Choose Not To Use Archive Warnings"]
+      end
+      context "without title" do
+        setup do
+          post :create, :locale => 'en', "preview_button"=>"Preview", 
+            "work"=>{"chapter_attributes"=>@chapter_attribs,"author_attributes"=>@author_attribs, "title"=>"", "fandom_string"=>@fandom, 
+                    "rating_string"=>@rating, "warning_strings"=>@warning, "wip_length"=>"1"}
+        end
+        should_render_template :new
+        should_assign_to :work
+      end
+      context "without fandom" do
+        setup do
+          post :create, :locale => 'en', "preview_button"=>"Preview", 
+            "work"=>{"chapter_attributes"=>@chapter_attribs,"author_attributes"=>@author_attribs, "title"=>@title, "fandom_string"=>"", 
+                    "rating_string"=>@rating, "warning_strings"=>@warning, "wip_length"=>"1"}
+        end
+        should_render_template :new
+        should_assign_to :work
+        should "have some errors" do
+          assert assigns(:work).errors.on(:base)
+          assert_match /Fandom is missing/, assigns(:work).errors.on(:base).to_s
+        end
+      end
+      context "without other required tags" do
+        setup do
+          post :create, :locale => 'en', "preview_button"=>"Preview", 
+            "work"=>{"chapter_attributes"=>@chapter_attribs,"author_attributes"=>@author_attribs, "title"=>@title, "fandom_string"=>@fandom, 
+                    "rating_string"=>"", "warning_strings"=>"", "wip_length"=>"1"}
+          @work = Work.find_by_title(@title) 
+        end
+        should_render_template :new
+        should_assign_to :work
+        should "have some errors" do
+          assert assigns(:work).errors.on(:base)
+        end
+      end      
+      context "with bare required attributes" do
+        setup do
+          post :create, :locale => 'en', "preview_button"=>"Preview", 
+            "work"=>{"chapter_attributes"=>@chapter_attribs,"author_attributes"=>@author_attribs, "title"=>@title, "fandom_string"=>@fandom, 
+                    "rating_string"=>@rating, "warning_strings"=>@warning, "wip_length"=>"1"}
+
+          @work = Work.find_by_title(@title)                    
+        end
+        should_redirect_to("preview path") {preview_work_path(@work)}
+        should_assign_to :work
+        should "set the first chapter content" do
+          assert_match @work.chapters.first.content, @content
+        end
+      end
+      context "with collection to which the user can post" do
+        setup do
+          @collection = create_collection
+          post :create, :locale => 'en', "preview_button"=>"Preview", 
+            "work"=>{"chapter_attributes"=>@chapter_attribs,"author_attributes"=>@author_attribs, "title"=>@title, "fandom_string"=>@fandom, 
+                    "rating_string"=>@rating, "warning_strings"=>@warning, "wip_length"=>"1", :collection_names => @collection.name}
+          @work = Work.find_by_title(@title)                    
+        end
+        should_redirect_to("preview path") {preview_work_path(@work)}
+        should_assign_to :work
+        should "add the work to the collection" do
+          assert @collection.works.include?(@work)
+          assert @collection.approved_works.include?(@work)
+          assert @work.approved_collections.include?(@collection)
+        end
+      end
+    end
+  end
+
+
   
   # TODO: REWRITE WITHOUT FORM_TEST_HELPER CODE
   

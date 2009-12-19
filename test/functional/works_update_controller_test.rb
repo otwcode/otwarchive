@@ -18,6 +18,13 @@ class WorksUpdateControllerTest < ActionController::TestCase
     setup do
       @user = create_user
       @request.session[:user] = @user
+      @title = random_phrase
+      @content = random_paragraph
+      @fandom = random_phrase
+      @chapter_attribs = {"title"=>"", "content"=>@content}
+      @author_attribs = {"ids"=>[@user.default_pseud.id]}
+      @rating = "Not Rated"
+      @warning = ["Choose Not To Use Archive Warnings"]
     end
 
     context "when working with someone else's work" do
@@ -42,7 +49,29 @@ class WorksUpdateControllerTest < ActionController::TestCase
         assert_equal "new title", Work.find(@work.id).title
       end
     end
+
+    context "when editing your own work in a collection" do
+      setup do
+        @collection = create_collection
+        @work = create_work(:authors => [@user.default_pseud])
+        @work.add_default_tags
+        @work.add_to_collection!(@collection)
+        put :update, :locale => 'en', :id => @work.id, :preview_button => "Preview", :work => {"chapter_attributes"=>@chapter_attribs, 
+                "author_attributes"=>@author_attribs, "title"=>@title, "fandom_string"=>@fandom, 
+                "rating_string"=>@rating, "warning_strings"=>@warning, "wip_length"=>"1", 
+                :collection_names => @collection.name}
+      end
+      should_respond_with :success
+      should_render_template :preview
+      should_assign_to :work
+      should_eventually "keep the work in the collection" do
+        assert @collection.works.include?(assigns(:work))
+        assert @collection.approved_works.include?(assigns(:work))
+        assert assigns(:work).approved_collections.include?(@collection)
+      end
+    end
+    
   end
 
-
+  
 end

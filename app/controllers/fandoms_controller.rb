@@ -3,7 +3,7 @@ class FandomsController < ApplicationController
 
   def index
     if @collection
-      @fandoms = @collection.filters.by_type("Fandom").by_name
+      @fandoms = (@collection.filters.by_type("Fandom").by_name + @collection.children.collect {|child_collection| child_collection.filters.by_type("Fandom").by_name}.flatten).uniq
      elsif params[:medium_id]
       @medium = Media.find_by_name(params[:medium_id])
       if @medium == Media.uncategorized
