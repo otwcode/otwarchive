@@ -26,6 +26,7 @@ class CollectionItemsController < ApplicationController
   end
   
   def index
+
     if @collection && @collection.user_is_maintainer?(current_user)
       @collection_items = @collection.collection_items
     elsif params[:user_id] && (@user = User.find_by_login(params[:user_id])) && @user == current_user
@@ -33,6 +34,12 @@ class CollectionItemsController < ApplicationController
     else
       flash[:error] = t('collection_items.no_items_found', :default => "We couldn't find any items for you to view.")
       redirect_to root_path and return
+    end
+
+    @has_received = {}
+    if @collection && @collection.gift_exchange?
+      @gift_recipients = Gift.in_collection(@collection).name_only.collect(&:recipient_name).uniq
+      @gift_recipients.each {|recip| @has_received[recip] = true}
     end
 
     case params[:sort]
@@ -52,8 +59,8 @@ class CollectionItemsController < ApplicationController
       @collection_items = @collection_items.sort_by {|ci| ci.collection_approval_status}
     when "recipient"
       @collection_items = @collection_items.sort_by {|ci| ci.recipients } if @collection.gift_exchange?
-    #when "received"
-    #  @collection_items = @collection_items.sort_by {|ci| ci.check_gift_received} if @collection.gift_exchange?
+    when "received"
+      @collection_items = @collection_items.sort_by {|ci| ci.check_gift_received(@has_received)} if @collection.gift_exchange?
     when "date"
       @collection_items = @collection_items.sort_by {|ci| ci.item_date}
     end

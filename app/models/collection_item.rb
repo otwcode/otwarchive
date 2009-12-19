@@ -69,10 +69,10 @@ class CollectionItem < ActiveRecord::Base
     end
   end
 
-  def check_gift_received
+  def check_gift_received(has_received)
     item_creator_pseuds.map {|pseud| 
-      collection.pseud_has_received_item(pseud) ? "Y" :
-        collection.user_has_received_item(pseud.user) ? "M*" : "N" 
+      has_received[pseud.name] ? "Y" :
+        (pseud.user.pseuds.collect(&:name).flatten & has_received.keys).empty? ? "N" : "M*"
     }.join(", ")
   end
   

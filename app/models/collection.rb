@@ -103,17 +103,17 @@ class Collection < ActiveRecord::Base
     end    
   end  
 
-  # check to see if this user has received an item in this collection
-  def user_has_received_item(user)
-    @received_pseuds ||= Pseud.parse_bylines(approved_collection_items.collect(&:recipients).join(","), true)[:pseuds]
-    !(@received_pseuds & user.pseuds).empty?
-  end  
-
-  # check to see if this pseud has received an item in this collection
-  def pseud_has_received_item(pseud)
-    @received_pseuds ||= Pseud.parse_bylines(approved_collection_items.collect(&:recipients).join(","), true)[:pseuds]
-    !(@received_pseuds & [pseud]).empty?
-  end  
+  # # check to see if this user has received an item in this collection
+  # def user_has_received_item(user)
+  #   @received_pseuds ||= Pseud.parse_bylines(approved_collection_items.collect(&:recipients).join(","), true)[:pseuds]
+  #   !(@received_pseuds & user.pseuds).empty?
+  # end  
+  # 
+  # # check to see if this pseud has received an item in this collection
+  # def pseud_has_received_item(pseud)
+  #   @received_pseuds ||= Pseud.parse_bylines(approved_collection_items.collect(&:recipients).join(","), true)[:pseuds]
+  #   !(@received_pseuds & [pseud]).empty?
+  # end  
   
   def parent_name=(name)
     self.parent = Collection.find_by_name(name)

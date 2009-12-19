@@ -302,25 +302,24 @@ class Work < ActiveRecord::Base
       
   def recipients=(recipient_names)
     gift_attributes_to_set = []
-    recipient_names.split(',').map {|n| n.strip}.uniq.each do |recipient_name|
+    new_recipients_array = recipients_names.split(',').map {|name| name.strip}.uniq.sort
+    old_recipients_array = gifts.name_only.collect(&:recipient_name)
+    
+    new_recips = new_recipients_array - old_recipients_array
+    new_recips.each do |recipient_name|
       gift_attributes_to_set << {:recipient_name => recipient_name}
-      # FOR THE FUTURE
-      # # try and get pseud
-      # results = Pseud.parse_bylines(recipient_name)
-      # if !results[:pseuds].empty?
-      #   pseud = results[:pseuds].first
-      #   gift_attributes_to_set << {:pseud => pseud}
-      # else
-      #   # set recipient name
-      #   gift_attributes_to_set << {:recipient_name => recipient_name}
-      # end
     end
-    self.gifts.clear
+    
+    removed_recips = old_recipients_array - new_recipients_array
+    removed_recips.each do |recipient_name|
+      gift_to_remove = gifts.for_recipient(recipient_name).first
+      gift_attributes_to_set << {:id => gift_to_remove.id, '_delete' => '1'} if gift_to_remove
+    end
     self.gifts_attributes = gift_attributes_to_set
   end
 
   def recipients
-    self.gifts.collect(&:recipient_name).join(",")
+    self.gifts.delete_if {|gift| gift.marked_for_destruction?}.collect(&:recipient_name).join(",")
   end
         
   ########################################################################
