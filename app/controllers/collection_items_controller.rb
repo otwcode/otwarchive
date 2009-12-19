@@ -36,11 +36,11 @@ class CollectionItemsController < ApplicationController
       redirect_to root_path and return
     end
 
-    @has_received = {}
-    if @collection && @collection.gift_exchange?
-      @gift_recipients = Gift.in_collection(@collection).name_only.collect(&:recipient_name).uniq
-      @gift_recipients.each {|recip| @has_received[recip] = true}
-    end
+    # @has_received = {}
+    # if @collection && @collection.gift_exchange?
+    #   @gift_recipients = Gift.in_collection(@collection).name_only.collect(&:recipient_name).uniq
+    #   @gift_recipients.each {|recip| @has_received[recip] = true}
+    # end
 
     case params[:sort]
     when "item"
@@ -59,8 +59,8 @@ class CollectionItemsController < ApplicationController
       @collection_items = @collection_items.sort_by {|ci| ci.collection_approval_status}
     when "recipient"
       @collection_items = @collection_items.sort_by {|ci| ci.recipients } if @collection.gift_exchange?
-    when "received"
-      @collection_items = @collection_items.sort_by {|ci| ci.check_gift_received(@has_received)} if @collection.gift_exchange?
+    # when "received"
+    #   @collection_items = @collection_items.sort_by {|ci| ci.check_gift_received(@has_received)} if @collection.gift_exchange?
     when "date"
       @collection_items = @collection_items.sort_by {|ci| ci.item_date}
     end

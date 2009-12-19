@@ -20,8 +20,8 @@
   	<% end %>
   <% end %>
   <% if @collection.user_is_owner?(current_user) %>
-	  <li><%= link_to 'Edit', edit_collection_path(@collection) %></li>
-	  <li><%= link_to 'Delete', collection_path(@collection), 
+	  <li><%= link_to t('collections.settings', :default => "Settings"), edit_collection_path(@collection) %></li>
+	  <li><%= link_to t('collections.delete', :default => "Delete"), collection_path(@collection), 
       :confirm => t('collection_confirm_delete', :default => 'Are you certain you want to delete this collection?'),
       :method => :delete %></li>
   <% end %>

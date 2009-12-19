@@ -22,8 +22,17 @@
         <%=h gift.recipient_name -%>
       </td>
       <td>
-        <%= gift.work.pseuds.map {|pseud| @recipient_names.include?(pseud.name) ? 'Y' : 'N'} %>
+        <%= gift.work.pseuds.map {|pseud| @recipient_names.include?(pseud.name) ? 'Y' : 
+                  (pseud.user.pseuds.collect(&:name) & @recipient_names).empty? ? 'N' : 'M*'} %>
       </td>
     </tr>
   <% end %>
 </table>
+
+<p>
+  Note: M* - Manual: This means that this creator has received a story in this collection, but under a different pseudonym. 
+  That might happen if the creator used a different pseud to post their story than the one
+  their author used as the recipient name, or it might be the case that the creator has also posted a story for 
+  a different user (eg as a proxy for someone who doesn't have an archive account), and has not gotten a story
+  for herself. 
+</p>

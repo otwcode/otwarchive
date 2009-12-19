@@ -1,4 +1,7 @@
-<h1><%= t('gifts.gifts_for', :default => "Gifts for {{recipient}}", :recipient => @user ? @user.login : h(@recipient_name)) -%></h1>
+<h1>
+  <%= t('gifts.gifts_for', :default => "Gifts for {{recipient}}", :recipient => @user ? @user.login : h(@recipient_name)) -%>
+  <%= @collection ? t('gifts.in_collection', :default => "in {{collection}}", :collection => h(@collection.title)) : "" -%>
+</h1>
 
 <% unless @user %>
   <%= render :partial => 'gifts/gift_search' -%>
