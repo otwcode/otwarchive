@@ -28,7 +28,7 @@ class CollectionItemsController < ApplicationController
   def index
 
     if @collection && @collection.user_is_maintainer?(current_user)
-      @collection_items = @collection.collection_items
+      @collection_items = @collection.collection_items.include_for_works
     elsif params[:user_id] && (@user = User.find_by_login(params[:user_id])) && @user == current_user
       @collection_items = @user.work_collection_items + @user.bookmark_collection_items
     else

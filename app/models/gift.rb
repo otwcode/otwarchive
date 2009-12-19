@@ -29,5 +29,7 @@ class Gift < ActiveRecord::Base
   }
   
   named_scope :name_only, :select => :recipient_name
+  
+  named_scope :include_pseuds, :include => [{:work => :pseuds}]
 
 end

@@ -15,7 +15,12 @@ class CollectionItem < ActiveRecord::Base
 
   belongs_to :collection
   belongs_to :item, :polymorphic => :true
+  belongs_to :work,  :class_name => "Work", :foreign_key => "item_id"
+  belongs_to :bookmark, :class_name => "Bookmark", :foreign_key => "item_id"
   
+  has_many :approved_collections, :through => :collection_items, :source => :collection,
+    :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
+    
   validates_uniqueness_of :collection_id, :scope => [:item_id, :item_type], 
     :message => t('collection_item.not_unique', :default => "That item appears to already be in that collection.")
   
@@ -33,6 +38,8 @@ class CollectionItem < ActiveRecord::Base
       errors.add_to_base t('collection_preferences.closed', :default => "Collection {{title}} is currently closed.", :title => self.collection.title) 
     end
   end
+  
+  named_scope :include_for_works, :include => [{:work => :pseuds}]
     
   before_save :approve_automatically
   def approve_automatically
@@ -85,11 +92,11 @@ class CollectionItem < ActiveRecord::Base
   end
   
   def item_creator_names
-    item.respond_to?(:pseuds) ? item.pseuds.collect(&:byline).join(', ') : item.pseud.byline
+    item_creator_pseuds.collect(&:byline).join(', ')
   end
   
   def item_creator_pseuds
-    item.respond_to?(:pseuds) ? item.pseuds : [item.pseud]
+    work.pseuds || [bookmark.pseud]
   end
 
   def item_date

@@ -5,18 +5,28 @@ class GiftsController < ApplicationController
   def index
     @user = User.find_by_login(params[:user_id]) if params[:user_id]
     @recipient_name = params[:recipient]
-    unless @user || @recipient_name
+    unless @user || @recipient_name || @collection
       flash[:error] = t('gifts.whose', :default => "Whose gifts did you want to see?")
-      redirect_to :back and return
+      redirect_to root_path and return
     end
-    if @user
-      @gifts = @user.gifts
-    else      
-      @gifts = Gift.find_all_by_recipient_name(@recipient_name)
+    if @user || @recipient_name
+      if @user
+        @gifts = @user.gifts
+      else
+        @gifts = Gift.find_all_by_recipient_name(@recipient_name)
+      end
+      @works = @gifts.collect(&:work).uniq
+      @works = (@works & @collection.approved_works) if @collection && (@user || @recipient_name)
+    elsif @collection
+      # only moderators can see
+      if !@collection.user_is_maintainer?(current_user)
+        flash[:error] = t('gifts.not_maintainer', :default => "Only maintainers can see gifts in a collection, sorry!")
+        redirect_to root_path and return
+      end
+      @gifts = Gift.in_collection(@collection).include_pseuds
+      @recipient_names = @gifts.collect(&:recipient_name)
+      render :index_for_collection
     end
-    
-    @works = @gifts.collect(&:work).uniq
-    @works = (@works & @collection.approved_works) if @collection
   end
   
 end

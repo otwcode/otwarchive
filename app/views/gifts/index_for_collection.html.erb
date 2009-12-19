@@ -1,0 +1,29 @@
+<h1><%= t('gifts.gifts_in_collection', :default => "Gifts in {{collection}}", :collection => h(@collection.title)) -%></h1>
+
+<%= render :partial => 'gifts/gift_search' -%>
+
+<table>
+  <tr>
+    <th>Gift</th>
+    <th>Author</th>
+    <th>Recipient</th>
+    <th>Author Pseud Has Received?</th>
+  </tr>
+  <%- for gift in @gifts -%>
+    <tr>
+      <td>
+        <%= link_to sanitize_title_for_display(gift.work.title, :tags => %w(em i b strong strike small)), 
+                    collection_work_path(@collection, gift.work) %>
+      </td>
+      <td>
+        <%=h gift.work.pseuds.collect(&:byline).join(",") -%>
+      </td>
+      <td>
+        <%=h gift.recipient_name -%>
+      </td>
+      <td>
+        <%= gift.work.pseuds.map {|pseud| @recipient_names.include?(pseud.name) ? 'Y' : 'N'} %>
+      </td>
+    </tr>
+  <% end %>
+</table>

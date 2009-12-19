@@ -15,6 +15,9 @@
   <% if @collection.user_is_maintainer?(current_user) %>
   	<li><%= link_to 'Manage Participants', collection_participants_path(@collection) -%></li>
   	<li><%= link_to 'Manage Items', collection_items_path(@collection) -%></li>
+  	<% if @collection.gift_exchange? %>
+  	  <li><%= link_to 'Review Gifts', collection_gifts_path(@collection) -%></li>
+  	<% end %>
   <% end %>
   <% if @collection.user_is_owner?(current_user) %>
 	  <li><%= link_to 'Edit', edit_collection_path(@collection) %></li>
