@@ -5,9 +5,9 @@
 <table>
   <tr>
     <th>Gift</th>
-    <th>Author</th>
     <th>Recipient</th>
-    <th>Author Pseud Has Received?</th>
+    <th>Author</th>
+    <th>Author Has Received?</th>
   </tr>
   <%- for gift in @gifts -%>
     <tr>
@@ -16,14 +16,13 @@
                     collection_work_path(@collection, gift.work) %>
       </td>
       <td>
-        <%=h gift.work.pseuds.collect {|p| "#{p.byline} (#{p.user.email})"}.join(", ") -%>
-      </td>
-      <td>
         <%=h gift.recipient_name -%>
       </td>
       <td>
-        <%= gift.work.pseuds.map {|pseud| (@recipient_names.include?(pseud.name) || @recipient_names.include?(pseud.byline)) ? 'Y' : 
-                  (pseud.user.pseuds.collect {|p| [p.name, p.byline]}.flatten & @recipient_names).empty? ? 'N' : 'M*'}.join(", ") %>
+        <%=h gift.work.pseuds.collect {|p| "#{p.byline} (#{p.user.email})"}.join(", ") -%>
+      </td>
+      <td>
+        <%= @has_received[gift.id] %>
       </td>
     </tr>
   <% end %>

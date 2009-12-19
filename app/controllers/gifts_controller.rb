@@ -25,6 +25,12 @@ class GiftsController < ApplicationController
       end
       @gifts = Gift.in_collection(@collection).include_pseuds
       @recipient_names = @gifts.collect(&:recipient_name)
+      @has_received = {}
+      @gifts.each do |gift|
+        @has_received[gift.id] = gift.work.pseuds.map {|pseud| (@recipient_names.include?(pseud.name) || @recipient_names.include?(pseud.byline)) ? 'Y' : 
+                (pseud.user.pseuds.collect {|p| [p.name, p.byline]}.flatten & @recipient_names).empty? ? 'N' : 'M*'}.join(", ")
+      end
+      @gifts = @gifts.sort_by {|gift| @has_received[gift.id]}
       render :index_for_collection
     end
   end
