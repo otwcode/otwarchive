@@ -302,7 +302,7 @@ class Work < ActiveRecord::Base
       
   def recipients=(recipient_names)
     gift_attributes_to_set = []
-    new_recipients_array = recipients_names.split(',').map {|name| name.strip}.uniq.sort
+    new_recipients_array = recipient_names.split(',').map {|name| name.strip}.uniq.sort
     old_recipients_array = gifts.name_only.collect(&:recipient_name)
     
     new_recips = new_recipients_array - old_recipients_array
