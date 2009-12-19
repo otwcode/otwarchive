@@ -115,13 +115,15 @@ class Tag < ActiveRecord::Base
     }     
   }
   
-  named_scope :with_count, (User.current_user && User.current_user != :false) ? 
-  { :select => "tags.*, filter_counts.unhidden_works_count as count", 
-    :joins => :filter_count, 
-    :conditions => 'filter_counts.unhidden_works_count > 0' } :
-  { :select => "tags.*, filter_counts.public_works_count as count", 
-    :joins => :filter_count,
-    :conditions => 'filter_counts.public_works_count > 0' } 
+  named_scope :with_count, lambda {
+      ([Admin, User].include?(User.current_user.class)) ? 
+      { :select => "tags.*, filter_counts.unhidden_works_count as count", 
+        :joins => :filter_count, 
+        :conditions => 'filter_counts.unhidden_works_count > 0' } :
+      { :select => "tags.*, filter_counts.public_works_count as count", 
+        :joins => :filter_count,
+        :conditions => 'filter_counts.public_works_count > 0' }
+    } 
   
   # Class methods
 
