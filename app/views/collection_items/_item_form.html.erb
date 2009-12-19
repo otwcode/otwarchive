@@ -15,7 +15,7 @@
   <td><%= form.select(:collection_approval_status, CollectionItem::APPROVAL_OPTIONS) %></td>
   <% if @collection.gift_exchange? %>
     <td><%= collection_item.recipients -%></td>
-    <td><%= collection_item.check_gift_received -%></td>
+    <td>*</td>
   <% end %>
 <% else %>
   <!-- user version -->

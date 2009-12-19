@@ -51,9 +51,9 @@ class CollectionItemsController < ApplicationController
     when "collection_approval"
       @collection_items = @collection_items.sort_by {|ci| ci.collection_approval_status}
     when "recipient"
-      @collection_items = @collection_items.sort_by {|ci| ci.recipients }
-    when "received"
-      @collection_items = @collection_items.sort_by {|ci| ci.check_gift_received}
+      @collection_items = @collection_items.sort_by {|ci| ci.recipients } if @collection.gift_exchange?
+    #when "received"
+    #  @collection_items = @collection_items.sort_by {|ci| ci.check_gift_received} if @collection.gift_exchange?
     when "date"
       @collection_items = @collection_items.sort_by {|ci| ci.item_date}
     end
