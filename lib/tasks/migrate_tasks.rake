@@ -81,9 +81,14 @@ namespace :After do
 
   desc "Add missing filter counts"
   task(:add_filter_counts => :environment) do
+    ThinkingSphinx.deltas_enabled=false
     Fandom.canonical.find_each do |fandom|
-      fandom.reset_filter_count unless fandom.filter_count
+      unless fandom.filter_count
+        fandom.reset_filter_count
+        puts "Added filter count for #{fandom.name}"
+      end
     end
+    ThinkingSphinx.deltas_enabled=true
   end
 
 end
