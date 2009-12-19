@@ -13,6 +13,8 @@
       <%- unless author.description.blank? -%>
         <p><%= sanitize_description_for_display(author.description) %></p>
       <%- end -%>
+      <!-- most used tags temporarily suppressed until proper bugfix for showing concealed info is in -->
+      <% unless true %>
       <%- unless (most_popular = author.most_popular_tags(:categories => Tag::USER_DEFINED, :limit => 5)).blank? -%>
         <span><%= "Most used tags: " -%></span>
         <ul>      
@@ -21,6 +23,7 @@
           <%- end -%>
         </ul>
       <%- end -%>
+      <% end %>
   	</div>
   </div>
 </li>
