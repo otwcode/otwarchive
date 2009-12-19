@@ -16,14 +16,14 @@
                     collection_work_path(@collection, gift.work) %>
       </td>
       <td>
-        <%=h gift.work.pseuds.collect(&:byline).join(",") -%>
+        <%=h gift.work.pseuds.collect {|p| "#{p.byline} (#{p.user.email})"}.join(", ") -%>
       </td>
       <td>
         <%=h gift.recipient_name -%>
       </td>
       <td>
-        <%= gift.work.pseuds.map {|pseud| @recipient_names.include?(pseud.name) ? 'Y' : 
-                  (pseud.user.pseuds.collect(&:name) & @recipient_names).empty? ? 'N' : 'M*'} %>
+        <%= gift.work.pseuds.map {|pseud| (@recipient_names.include?(pseud.name) || @recipient_names.include?(pseud.byline)) ? 'Y' : 
+                  (pseud.user.pseuds.collect {|p| [p.name, p.byline]}.flatten & @recipient_names).empty? ? 'N' : 'M*'}.join(", ") %>
       </td>
     </tr>
   <% end %>
