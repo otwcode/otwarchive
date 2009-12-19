@@ -14,10 +14,10 @@ class FilterCountTest < ActiveSupport::TestCase
       @hidden_work = create_work(:posted => true, :hidden_by_admin => true, :fandom_string => @fandom.name)
     end
     should "not reflect restricted, unposted or hidden works in its public works count" do
-      assert @fandom.filter_count.public_works_count == 1
+      assert_equal 1, @fandom.filter_count.public_works_count
     end
     should "not reflect unposted or hidden works in its unhidden works count" do
-      assert @fandom.filter_count.unhidden_works_count == 2
+      assert_equal 2, @fandom.filter_count.unhidden_works_count
     end
     should "increase when a new work is added" do
       assert_difference('@fandom.filter_count.unhidden_works_count') do
@@ -34,12 +34,23 @@ class FilterCountTest < ActiveSupport::TestCase
     should "change its public works count when a work is restricted" do
       @public_work.restricted = true
       @public_work.save
-      assert @fandom.filter_count.public_works_count == 0 
+      assert_equal 0, @fandom.filter_count.public_works_count 
     end
     should "change its unhidden works count when a work is hidden" do
       @public_work.hidden_by_admin = true
       @public_work.save
-      assert @fandom.filter_count.unhidden_works_count == 1 
-    end   
+      assert_equal 1, @fandom.filter_count.unhidden_works_count 
+    end
+    context "for a tag with mergers that have works" do
+      setup do
+        @merger = create_fandom
+        @public_work.update_attributes(:restricted => false, :hidden_by_admin => false, :fandom_string => @merger.name)
+        @canonical = create_fandom(:canonical => true)
+        @merger.update_attributes(:merger_id => @canonical.id)
+      end
+      should "include the works that belong to its mergers" do
+        assert_equal 1, @canonical.filter_count.public_works_count
+      end 
+    end       
   end
 end

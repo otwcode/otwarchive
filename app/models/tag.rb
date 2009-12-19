@@ -217,10 +217,11 @@ class Tag < ActiveRecord::Base
   # Add filter taggings for a given tag
   def add_filter_taggings
     filter = self.canonical? ? self : self.merger
-    if filter
+    if filter && filter.id
       Work.with_any_tags([self, filter]).each do |work|
         work.filter_taggings.find_or_create_by_filter_id(filter.id)
       end
+      filter.reset_filter_count
     end
   end
   
@@ -235,9 +236,11 @@ class Tag < ActiveRecord::Base
           filter_tagging = work.filter_taggings.find_by_filter_id(old_filter.id)
           filter_tagging.destroy if filter_tagging
         end
-      end      
+      end
+      old_filter.reset_filter_count      
     else
       self.filter_taggings.destroy_all
+      self.reset_filter_count
     end    
   end
   
