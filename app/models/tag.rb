@@ -193,6 +193,7 @@ class Tag < ActiveRecord::Base
         self.add_filter_taggings
       elsif self.merger && self.merger.canonical?
         self.filter_taggings.update_all(["filter_id = ?", self.merger_id])
+        self.reset_filter_count
       else
         self.remove_filter_taggings
       end
@@ -211,13 +212,13 @@ class Tag < ActiveRecord::Base
       if old_merger && old_merger.canonical?
         self.remove_filter_taggings(old_merger)
       end
-    end    
+    end  
   end
   
   # Add filter taggings for a given tag
   def add_filter_taggings
     filter = self.canonical? ? self : self.merger
-    if filter && filter.id
+    if filter && !filter.new_record?
       Work.with_any_tags([self, filter]).each do |work|
         work.filter_taggings.find_or_create_by_filter_id(filter.id)
       end
@@ -241,22 +242,25 @@ class Tag < ActiveRecord::Base
     else
       self.filter_taggings.destroy_all
       self.reset_filter_count
-    end    
+    end   
   end
   
   def reset_filter_count
     current_filter = self.filter
     # we only need to cache values for user-defined tags
     # because they're the only ones we access
-    if current_filter && current_filter.reload && (Tag::USER_DEFINED.include?(current_filter.class.to_s))
+    if current_filter && (Tag::USER_DEFINED.include?(current_filter.class.to_s))
       attributes = {:public_works_count => current_filter.filtered_works.posted.unhidden.unrestricted.count, 
                     :unhidden_works_count => current_filter.filtered_works.posted.unhidden.count}
       if current_filter.filter_count
-        current_filter.filter_count.update_attributes(attributes)        
+        unless current_filter.filter_count.update_attributes(attributes)
+          raise "Filter count error for #{current_filter.name}"
+        end        
       else
-        current_filter.create_filter_count(attributes)
+        unless current_filter.create_filter_count(attributes)
+          raise "Filter count error for #{current_filter.name}"
+        end
       end
-      current_filter.filter_count.reload
     end
   end
   
