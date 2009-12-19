@@ -32,7 +32,7 @@ class CollectionItemsController < ApplicationController
       @collection_items = @user.work_collection_items + @user.bookmark_collection_items
     else
       flash[:error] = t('collection_items.no_items_found', :default => "We couldn't find any items for you to view.")
-      redirect_to :back and return
+      redirect_to root_path and return
     end
 
     case params[:sort]
