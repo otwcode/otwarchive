@@ -1,12 +1,29 @@
-<%- if logged_in_as_admin? -%>
-<%= render :partial => "admin_index" %>
-<%- else -%>
 <h1><%= t("archive_faq", :default => "Archive FAQ") -%></h1>
+
+<%- if logged_in_as_admin? -%>
+<p><%= link_to "Add a new section", new_archive_faq_path %></p>  
+<%- end -%>
+
 <div id="tos" class="work-show">
-	<% @archive_faqs.each do |archive_faq| %>
-			<h6>
-				<b>Updated:</b> <%=h archive_faq.updated_at %>  
-			</h6>
-	    <%=sanitize_and_format_for_display archive_faq.content %>
-<% end %> 
-<% end %>   
+  <p>Some commonly asked questions about the Archive are answered here. 
+  You may also like to check out our <%= link_to "Known Issues", known_issues_path %>. 
+  If you need more help, please submit a <%= link_to "support request", feedbacks_path %>.</p>
+
+<%- unless @archive_faqs.blank?  -%>
+  <h2><a name="categories">Available Categories</a></h2>
+  <ul>
+    <%- for faq in @archive_faqs -%>
+    <li><%= link_to faq.title, "##{faq.title.underscore}" %></li>
+    <%- end -%>
+  </ul>
+
+	<%- for faq in @archive_faqs -%>
+		<h2 id="<%= faq.title.underscore %>"><%=h faq.title %></h2>
+		<%- if logged_in_as_admin? -%>
+		<p><%= link_to "Edit this section", edit_archive_faq_path(faq) %></p>  
+		<%- end -%>	
+	  <%= sanitize_and_format_for_display faq.content %>
+	  <p class="categories-link"><a href='#categories'>Back to Available Categories</a></p>
+	<%- end -%>
+<%- end -%>
+</div>   

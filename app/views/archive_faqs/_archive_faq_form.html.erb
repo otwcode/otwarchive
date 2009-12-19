@@ -3,9 +3,12 @@
 	<%= f.error_messages %>
 	
  <fieldset>
+	<p class="label"><%= f.label :title, t('faq_title', :default => "FAQ Subsection Title") %></p>
+	<p><%= f.text_field :title %></p>
+
 	<p class="label">
-	<%= f.label :content, t('form_content', :default => "Post most recent Archive FAQ content") %>
-    </p>
+	<%= f.label :content, t('faq_content', :default => "FAQ Subsection Content") %>
+  </p>
   <div id="toggleText">
   <p id="plainTextNotes" style="display: block"><%=h t('plain_text', :default =>"Plain text with limited html") %> <%= link_to_help "html-help" -%><br/><code>a href, abbr, abbr, acronym, address, alt, b, big, blockquote, br, caption, center, cite, cite, class, code, col, colgroup, datetime, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, height, hr, href, i, img, ins, kbd, li, name, ol, p, pre, q, samp, small, span, src, strike, strong, sub, sup, table, tbody, td, tfoot, th, thead, title, tr, tt, u, ul, var, width</code></p>
   <p id="richTextNotes" style="display: none"><%=h t('rich_text_notes', :default => "Type or paste formatted text. Select the icon to the far left (clipboard with a 'W') to paste documents from Microsoft Word.") %></p>
@@ -31,8 +34,7 @@
 <fieldset>
 <legend><%= t('form_post', :default => 'Post') %></legend>
     <p class="submit">
-		<%= submit_tag t('form_post', :default => 'Post'), :name => 'post_button' %>
-      
+		<%= submit_tag t('form_post', :default => 'Post'), :name => 'post_button' %>      
     </p>
 </fieldset>
 </div>
