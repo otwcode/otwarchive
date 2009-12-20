@@ -307,7 +307,7 @@ class Tag < ActiveRecord::Base
     return unless parent.is_a?(Tag) && parent.canonical?
     self.parents << parent unless self.parents.include?(parent)
     self.add_fandom(parent.fandom) unless self.fandom == parent.fandom
-    self.add_media(parent.media) unless self.media == parent.media
+    self.add_media(parent.media) unless self.media == parent.media || self.medias.include?(parent.media)
     self.update_common_tags if update_works
   end
 
