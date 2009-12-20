@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091217162252) do
+ActiveRecord::Schema.define(:version => 20091220182557) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(:version => 20091217162252) do
     t.text     "content"
     t.datetime "updated_at"
     t.datetime "created_at"
+    t.integer  "position",   :default => 1
   end
 
   create_table "bookmarks", :force => true do |t|
@@ -137,6 +138,8 @@ ActiveRecord::Schema.define(:version => 20091217162252) do
     t.text     "gift_notification"
   end
 
+  add_index "collection_profiles", ["collection_id"], :name => "index_collection_profiles_on_collection_id"
+
   create_table "collections", :force => true do |t|
     t.string   "name"
     t.string   "title"
@@ -147,6 +150,8 @@ ActiveRecord::Schema.define(:version => 20091217162252) do
     t.datetime "updated_at"
     t.integer  "parent_id"
   end
+
+  add_index "collections", ["name"], :name => "index_collections_on_name"
 
   create_table "comments", :force => true do |t|
     t.integer  "pseud_id",         :limit => 8
@@ -248,6 +253,8 @@ ActiveRecord::Schema.define(:version => 20091217162252) do
     t.datetime "updated_at"
   end
 
+  add_index "filter_counts", ["filter_id"], :name => "index_filter_counts_on_filter_id"
+
   create_table "filter_taggings", :force => true do |t|
     t.integer  "filter_id",       :limit => 8,   :null => false
     t.integer  "filterable_id",   :limit => 8,   :null => false
@@ -256,6 +263,7 @@ ActiveRecord::Schema.define(:version => 20091217162252) do
     t.datetime "updated_at"
   end
 
+  add_index "filter_taggings", ["filter_id", "filterable_type"], :name => "index_filter_taggings_on_filter_id_and_filterable_type"
   add_index "filter_taggings", ["filterable_id", "filterable_type"], :name => "index_filter_taggings_filterable"
 
   create_table "gifts", :force => true do |t|
@@ -265,6 +273,9 @@ ActiveRecord::Schema.define(:version => 20091217162252) do
     t.datetime "updated_at"
   end
 
+  add_index "gifts", ["recipient_name"], :name => "index_gifts_on_recipient_name"
+  add_index "gifts", ["work_id"], :name => "index_gifts_on_work_id"
+
   create_table "inbox_comments", :force => true do |t|
     t.integer  "user_id",             :limit => 8
     t.integer  "feedback_comment_id", :limit => 8
@@ -273,6 +284,8 @@ ActiveRecord::Schema.define(:version => 20091217162252) do
     t.boolean  "read",                             :default => false, :null => false
     t.boolean  "replied_to",                       :default => false, :null => false
   end
+
+  add_index "inbox_comments", ["read", "user_id"], :name => "index_inbox_comments_on_read_and_user_id"
 
   create_table "invitations", :force => true do |t|
     t.integer  "creator_id",         :limit => 8
@@ -372,6 +385,8 @@ ActiveRecord::Schema.define(:version => 20091217162252) do
     t.boolean  "recipient_emails_off",                           :default => false,                     :null => false
   end
 
+  add_index "preferences", ["user_id"], :name => "index_preferences_on_user_id"
+
   create_table "profiles", :force => true do |t|
     t.integer  "user_id",       :limit => 8
     t.string   "location"
@@ -381,6 +396,8 @@ ActiveRecord::Schema.define(:version => 20091217162252) do
     t.datetime "updated_at"
     t.string   "title"
   end
+
+  add_index "profiles", ["user_id"], :name => "index_profiles_on_user_id"
 
   create_table "pseuds", :force => true do |t|
     t.integer  "user_id",     :limit => 8
@@ -470,6 +487,7 @@ ActiveRecord::Schema.define(:version => 20091217162252) do
     t.boolean  "has_characters",                :default => false, :null => false
   end
 
+  add_index "tags", ["media_id", "type"], :name => "index_tags_on_media_id_and_type"
   add_index "tags", ["name"], :name => "index_tags_on_name", :unique => true
 
   create_table "translation_notes", :force => true do |t|
