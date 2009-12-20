@@ -11,7 +11,7 @@ class TagsController < ApplicationController
   # GET /tags.xml
   def index
     if @collection
-      @tags = @collection.filters
+      @tags = (@collection.filters.by_type("Freeform") + @collection.children.collect {|c| c.filters.by_type("Freeform")}.flatten).uniq.sort
     else      
       @tags = Tag.for_tag_cloud
     end
