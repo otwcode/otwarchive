@@ -58,8 +58,7 @@
     </dt>
     <dd>
       <%= ew.text_field :fandom_string %>
-      <div class="auto_complete" id="bookmark_external_fandom_string_auto_complete" ></div>
-      <%= javascript_tag("new Autocompleter.Local('bookmark_external_fandom_string', 'bookmark_external_fandom_string_auto_complete', #{Fandom.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
+      <%= autocomplete_text_field "bookmark_external_fandom_string" -%>
     </dd>
     <dt class="rating">
       <%= ew.label :rating_string, Rating::NAME -%><%= link_to_help "rating-help" -%>
@@ -78,16 +77,14 @@
     </dt>
     <dd>
       <%= ew.text_field :pairing_string %>
-      <div class="auto_complete" id="bookmark_external_pairing_string_auto_complete" ></div>
-      <%= javascript_tag("new Autocompleter.Local('bookmark_external_pairing_string', 'bookmark_external_pairing_string_auto_complete', #{Pairing.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
+      <%= autocomplete_text_field "bookmark_external_pairing_string" -%>
     </dd>
     <dt>
       <%= ew.label :character_string, Character::NAME.pluralize -%>
     </dt>
     <dd>
       <%= ew.text_field :character_string %>
-      <div class="auto_complete" id="bookmark_external_character_string_auto_complete" ></div>
-      <%= javascript_tag("new Autocompleter.Local('bookmark_external_character_string', 'bookmark_external_character_string_auto_complete', #{Character.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
+      <%= autocomplete_text_field "bookmark_external_character_string" -%>
     </dd>    
   </dl>
   </fieldset>
@@ -106,8 +103,7 @@
 	<dt><%= f.label :tag_string, t('form_your_tags', :default => "Your Tags") %></dt>
 	<dd>
     <%= text_field_tag 'tag_string', @tag_string, :size => 80 %>
-    <div class="auto_complete" id="tag_string_auto_complete" ></div>
-    <%= javascript_tag("new Autocompleter.Local('tag_string', 'tag_string_auto_complete', #{Tag.canonical.find(:all, :order => :name).map(&:name).to_json}, {tokens: ','});") %>
+    <%= autocomplete_text_field "tag_string" -%>
     <div class="character_counter">
       <%=h t("comma_separated", :default => "Comma separated, #{ArchiveConfig.TAG_MAX} characters per tag") %>
     </div>

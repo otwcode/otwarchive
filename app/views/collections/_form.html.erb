@@ -15,10 +15,10 @@
   <% if @collection.children.empty? %>
 	<dt>
     <%= collection_form.label :parent_name, t('collections.parent_name', :default => "Parent collection (must be one you maintain): ") -%></dt>
-    <dd><%= collection_form.text_field :parent_name -%>
-    <div class="auto_complete" id="collection_parent_name_auto_complete" ></div>
-    <%= javascript_tag("new Autocompleter.Local('collection_parent_name', 'collection_parent_name_auto_complete', #{current_user.maintained_collections.map(&:name).sort.to_json}, {fullSearch: true});") %>
-  </dd
+    <dd>
+      <%= collection_form.text_field :parent_name -%>
+      <%= autocomplete_text_field("collection_parent_name") -%>      
+    </dd
   <% end -%>
 
     <dt><%= collection_form.label :name, t("collection_form.name", :default => "Collection Name* (letters, numbers, underscores):") %></dt>
