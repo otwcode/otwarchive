@@ -183,5 +183,21 @@ module ApplicationHelper
     generated_html += "</div>"
     return generated_html
   end
+  
+  def autocomplete_text_field(fieldname)
+    "\n<span id=\"indicator_#{fieldname}\" style=\"display:none\">" +
+    '<img src="/images/spinner.gif" alt="Working..." /></span>' +
+    "\n<div class=\"auto_complete\" id=\"#{fieldname}_auto_complete\"></div>" +
+    javascript_tag("new Ajax.Autocompleter('#{fieldname}', 
+                            '#{fieldname}_auto_complete', 
+                            '/autocomplete/#{fieldname}', 
+                            { 
+                              indicator: 'indicator_#{fieldname}',
+                              minChars: 2,
+                              paramName: '#{fieldname}',
+                              fullSearch: true,
+                              tokens: ','
+                            });")    
+  end
 
 end # end of ApplicationHelper

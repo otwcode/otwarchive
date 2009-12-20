@@ -86,6 +86,14 @@ class Collection < ActiveRecord::Base
   named_scope :open, :joins => :collection_preference, :conditions => ["collection_preferences.closed = ?", false]
   named_scope :unrevealed, :joins => :collection_preference, :conditions => ["collection_preferences.unrevealed = ?", true]
   named_scope :anonymous, :joins => :collection_preference, :conditions => ["collection_preferences.anonymous = ?", true]
+  named_scope :name_only, :select => :name
+  
+  named_scope :with_name_like, lambda {|name|
+    {
+      :conditions => ["collections.name LIKE ?", '%' + name + '%'],
+      :limit => 10
+    }
+  }
 
   def to_param
     name

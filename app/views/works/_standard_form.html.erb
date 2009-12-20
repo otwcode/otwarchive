@@ -27,8 +27,7 @@
       </dt>
       <dd class="collection">
         <%= f.text_field :collection_names -%>
-        <div class="auto_complete" id="work_collection_names_auto_complete" ></div>
-        <%= javascript_tag("new Autocompleter.Local('work_collection_names', 'work_collection_names_auto_complete', #{Collection.open.map(&:name).sort.to_json}, {fullSearch: true, tokens: ','});") %>
+        <%= autocomplete_text_field("work_collection_names") -%>
       </dd>
 
       <dt class="recipient">
@@ -36,8 +35,7 @@
       </dt>
       <dd class="recipient">
         <%= f.text_field :recipients -%>
-        <div class="auto_complete" id="work_recipients_auto_complete" ></div>
-        <%= javascript_tag("new Autocompleter.Local('work_recipients', 'work_recipients_auto_complete', #{(Pseud.all.map(&:byline) | ExternalAuthorName.all.map(&:name)).sort.to_json}, {fullSearch: true, tokens: ','});") %>
+        <%= autocomplete_text_field("work_recipients") -%>
       </dd>
       
       <dt class="summary">
