@@ -79,20 +79,20 @@ namespace :After do
 #    ThinkingSphinx.deltas_enabled=true
 #  end
 
-  desc "Add missing filter counts"
-  task(:add_filter_counts => :environment) do
-    ThinkingSphinx.deltas_enabled=false
-    Fandom.canonical.find_each do |fandom|
-      unless fandom.filter_count
-        fandom.reset_filter_count
-        puts "Added filter count for #{fandom.name}"
-      end
-    end
-    ThinkingSphinx.deltas_enabled=true
-  end
+#  desc "Add missing filter counts"
+#  task(:add_filter_counts => :environment) do
+#    ThinkingSphinx.deltas_enabled=false
+#    Fandom.canonical.find_each do |fandom|
+#      unless fandom.filter_count
+#        fandom.reset_filter_count
+#        puts "Added filter count for #{fandom.name}"
+#      end
+#    end
+#    ThinkingSphinx.deltas_enabled=true
+#  end
 
 end
 
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
-task :After => [:environment, 'After:add_filter_counts']
+task :After => [:environment, ]
