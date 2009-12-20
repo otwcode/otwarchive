@@ -680,16 +680,16 @@ class Work < ActiveRecord::Base
   end
 
   def update_common_tags
-    new_tags = []
-    # work.tags is empty at this point?!?!?
-    Tagging.find_all_by_taggable_id_and_taggable_type(self.id, 'work').each do |tagging|
-      new_tags << tagging.tagger.common_tags_to_add rescue nil
-    end
-    new_tags = new_tags.flatten.uniq.compact
-    old_tags = self.common_tags
-    self.common_tags.delete(old_tags - new_tags)
-    self.common_tags << (new_tags - old_tags)
-    self.common_tags
+    # new_tags = []
+    # # work.tags is empty at this point?!?!?
+    # Tagging.find_all_by_taggable_id_and_taggable_type(self.id, 'work').each do |tagging|
+    #   new_tags << tagging.tagger.common_tags_to_add rescue nil
+    # end
+    # new_tags = new_tags.flatten.uniq.compact
+    # old_tags = self.common_tags
+    # self.common_tags.delete(old_tags - new_tags)
+    # self.common_tags << (new_tags - old_tags)
+    # self.common_tags
   end
 
   def update_ambiguous_tags
@@ -701,7 +701,7 @@ class Work < ActiveRecord::Base
       end
     end
     self.ambiguities = new_ambiguities if new_ambiguities
-    self.update_common_tags
+    #self.update_common_tags
   end
 
   def cast_tags

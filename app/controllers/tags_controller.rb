@@ -237,7 +237,7 @@ class TagsController < ApplicationController
     end
 
     new_common_tag_ids = @tag.common_tags_to_add.map(&:id).sort
-    @tag.update_common_tags unless old_common_tag_ids == new_common_tag_ids
+    #@tag.update_common_tags unless old_common_tag_ids == new_common_tag_ids
 
     flash[:notice] = t('successfully_updated', :default => 'Tag was updated.')
     redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag)

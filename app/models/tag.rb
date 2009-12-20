@@ -268,9 +268,9 @@ class Tag < ActiveRecord::Base
 
 
   def update_common_tags
-    self.works.each do |work|
-      work.update_common_tags
-    end
+    # self.works.each do |work|
+    #   work.update_common_tags
+    # end
   end
 
   def wrangle_canonical(update_works=true)

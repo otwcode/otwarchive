@@ -4,7 +4,7 @@ namespace :Tag do
     ThinkingSphinx.deltas_enabled=false
     Work.find(:all).each do |w|
       print "." if w.id.modulo(100) == 0; STDOUT.flush
-      w.update_common_tags
+      #w.update_common_tags
     end
     puts "Common tags reset."
     ThinkingSphinx.deltas_enabled=true

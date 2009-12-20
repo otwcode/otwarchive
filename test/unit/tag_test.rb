@@ -69,9 +69,6 @@ class TagTest < ActiveSupport::TestCase
       @work.freeform_string = @tag.name
       @work.reload
     end
-    should "not originally be included in common taggings" do
-      assert_does_not_contain(@work.common_tags, @tag)
-    end
     context "and another tag with a fandom" do
       setup do
         @tag2 = create_freeform
@@ -105,12 +102,6 @@ class TagTest < ActiveSupport::TestCase
         should "get the merger's fandom_id" do
           assert_equal @tag2.fandom_id, @tag.fandom_id
         end
-        should "have the merger in the tag's work's common tags" do
-          assert_contains(@work.common_tags, @tag2)
-        end
-        should "have the merger's fandom in the tag's work's common tags" do
-          assert_contains(@work.common_tags, @fandom)
-        end
         should "be listed in the merger's family" do
           assert_contains(@tag2.family, @tag)
         end
@@ -128,12 +119,6 @@ class TagTest < ActiveSupport::TestCase
         end
         should "get the parent's fandom" do
           assert_contains(@tag.fandoms, @fandom)
-        end
-        should "have the parent in the tag's work's common tags" do
-          assert_contains(@work.common_tags, @tag2)
-        end
-        should "have the parent's fandom in the tag's work's common tags" do
-          assert_contains(@work.common_tags, @fandom)
         end
         should "be listed in the parents children" do
           assert_contains(@tag2.children, @tag)
@@ -154,22 +139,6 @@ class TagTest < ActiveSupport::TestCase
       end
       should "not be merged" do
         assert_not_equal @tag2.merger, @tag
-      end
-    end
-    context "when made canonical" do
-      setup do
-        @tag.wrangle_canonical
-      end
-      should "be added to common taggings" do
-        assert_contains(@work.common_tags, @tag)
-      end
-      context "when made non-canonical" do
-        setup do
-          @tag.wrangle_not_canonical
-        end
-        should "be removed from common taggings" do
-          assert_does_not_contain(@work.common_tags, @tag)
-        end
       end
     end
   end
@@ -196,5 +165,4 @@ class TagTest < ActiveSupport::TestCase
       assert_does_not_contain(@tag.common_tags_to_add, @tag)
     end
   end
-
 end
