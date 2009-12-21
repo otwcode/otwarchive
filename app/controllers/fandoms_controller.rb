@@ -3,8 +3,22 @@ class FandomsController < ApplicationController
 
   def index
     if @collection
-      @fandoms = (@collection.filters.by_type("Fandom").by_name + @collection.children.collect {|child_collection| child_collection.filters.by_type("Fandom").by_name}.flatten).uniq
-     elsif params[:medium_id]
+      if AdminSetting.enable_test_caching?      
+        @fandoms = Rails.cache.fetch("collection#{@collection.id}-fandoms", :expires_in => AdminSetting.cache_expiration.minutes) do
+          if @collection.children.empty? 
+            @collection.filters.by_type("Fandom").by_name
+          else
+            (@collection.filters.by_type("Fandom").by_name + @collection.children.collect {|child_collection| child_collection.filters.by_type("Fandom").by_name}.flatten).uniq.sort
+          end               
+        end
+      else
+        if @collection.children.empty? 
+          @fandoms = @collection.filters.by_type("Fandom").by_name
+        else
+          @fandoms = (@collection.filters.by_type("Fandom").by_name + @collection.children.collect {|child_collection| child_collection.filters.by_type("Fandom").by_name}.flatten).uniq.sort
+        end        
+      end
+    elsif params[:medium_id]
       @medium = Media.find_by_name(params[:medium_id])
       if @medium == Media.uncategorized
         @fandoms = @medium.fandoms.by_name

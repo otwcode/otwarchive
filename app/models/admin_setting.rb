@@ -26,7 +26,14 @@ class AdminSetting < ActiveRecord::Base
   end
   def self.suspend_filter_counts?
     self.first ? self.first.suspend_filter_counts? : false
+  end
+  def self.enable_test_caching?
+    self.first ? self.first.enable_test_caching? : false
+  end
+  def self.cache_expiration
+    self.first ? self.first.cache_expiration : 10
   end  
+    
     
   private
   
