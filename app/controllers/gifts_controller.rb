@@ -15,7 +15,7 @@ class GiftsController < ApplicationController
       else
         @gifts = Gift.find_all_by_recipient_name(@recipient_name)
       end
-      @works = @gifts.collect(&:work).uniq
+      @works = @gifts.collect(&:work).uniq.select {|w| w.visible?}
       @works = (@works & @collection.approved_works) if @collection && (@user || @recipient_name)
     elsif @collection
       # only moderators can see
