@@ -42,7 +42,7 @@ class AdminSetting < ActiveRecord::Base
       if self.suspend_filter_counts?
         self.suspend_filter_counts_at = Time.now
       else
-        FilterTagging.update_filter_counts_since(self.suspend_filter_counts_at)
+        #FilterTagging.update_filter_counts_since(self.suspend_filter_counts_at)
       end
     end
   end

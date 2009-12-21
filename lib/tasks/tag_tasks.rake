@@ -64,4 +64,10 @@ namespace :Tag do
   task(:reset_filter_counts => :environment) do
     FilterCount.set_all
   end
+  desc "Reset filter counts from date"
+  task(:unsuspend_filter_counts => :environment) do
+    if AdminSetting.first && AdminSetting.first.suspend_filter_counts_at
+      FilterTagging.update_filter_counts_since(AdminSetting.first.suspend_filter_counts_at)
+    end    
+  end
 end

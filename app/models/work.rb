@@ -583,7 +583,7 @@ class Work < ActiveRecord::Base
     end
     if self.preview_mode
       self.placeholder_tags ||= {}
-      self.placeholder_tags[klass_symbol] = tags
+      self.placeholder_tags[klass_symbol] = tags.uniq
       (self.placeholder_tags[:ambiguities] ||= []) << ambiguities
     else
       self.add_to_ambiguity(ambiguities)
@@ -593,7 +593,7 @@ class Work < ActiveRecord::Base
         tagging = Tagging.find_by_tag(self, tag)
         tagging.destroy if tagging
       end
-      self.send(klass_symbol.to_s + '=', tags)
+      self.send(klass_symbol.to_s + '=', tags.uniq)
     end    
   end
 
