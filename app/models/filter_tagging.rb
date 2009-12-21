@@ -23,9 +23,13 @@ class FilterTagging < ActiveRecord::Base
     if date
       filters = FilterTagging.find(:all, :include => :filter, :conditions => ["created_at > ?", date]).collect(&:filter).compact.uniq
       count = filters.length
-      filters.each_with_index do |filter, i| 
-        filter.reset_filter_count
-        puts "Updating filter #{i + 1} of #{count} - #{filter.name}"
+      filters.each_with_index do |filter, i|
+        begin 
+          filter.reset_filter_count
+          puts "Updating filter #{i + 1} of #{count} - #{filter.name}"
+        rescue
+          puts "Did not update filter #{i + 1} of #{count} - #{filter.name}"         
+        end
       end
     else
       raise "date not set for filter count suspension! very bad!"
