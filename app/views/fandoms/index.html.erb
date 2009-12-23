@@ -1,5 +1,5 @@
 <%- if @collection -%>
-  <h1>Fandoms in <%= @collection.title %></h1>   
+  <h1>The <%= @fandoms.length %> Fandoms in <%= @collection.title %></h1>   
 <%- elsif @medium -%>  
   <h1><%= link_to t('fandoms', :default => 'Fandoms'), media_path %> > <%=h @medium.name %></h1>
 <%- else -%>

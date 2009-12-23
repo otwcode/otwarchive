@@ -6,16 +6,16 @@ class FandomsController < ApplicationController
       if AdminSetting.enable_test_caching?      
         @fandoms = Rails.cache.fetch("collection#{@collection.id}-fandoms", :expires_in => AdminSetting.cache_expiration.minutes) do
           if @collection.children.empty? 
-            @collection.filters.by_type("Fandom").by_name
+            Fandom.for_collection(@collection)
           else
-            (@collection.filters.by_type("Fandom").by_name + @collection.children.collect {|child_collection| child_collection.filters.by_type("Fandom").by_name}.flatten).uniq.sort
+            (Fandom.for_collection(@collection) + @collection.children.collect {|child_collection| Fandom.for_collection(child_collection)}.flatten).uniq.sort
           end               
         end
       else
         if @collection.children.empty? 
-          @fandoms = @collection.filters.by_type("Fandom").by_name
+          @fandoms = Fandom.for_collection(@collection)
         else
-          @fandoms = (@collection.filters.by_type("Fandom").by_name + @collection.children.collect {|child_collection| child_collection.filters.by_type("Fandom").by_name}.flatten).uniq.sort
+          @fandoms = (Fandom.for_collection(@collection) + @collection.children.collect {|child_collection| Fandom.for_collection(child_collection)}.flatten).uniq.sort
         end        
       end
     elsif params[:medium_id]
