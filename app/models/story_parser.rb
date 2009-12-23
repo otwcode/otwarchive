@@ -585,6 +585,8 @@ class StoryParser
           end
         rescue Errno::ECONNREFUSED
           nil
+        rescue SocketError
+          nil
         end
       }
     end
