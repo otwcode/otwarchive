@@ -1168,8 +1168,6 @@ class Work < ActiveRecord::Base
   # Used for non-search work filtering
   def self.find_with_options(options = {})
     command = ''
-    visible = '.visible'
-    visible_without_owners = '.visible(skip_owners = true)'
     tags = '.with_all_tag_ids(options[:selected_tags])'
     written = '.written_by_id_conditions(options[:selected_pseuds])'
     owned = '.owned_by_conditions(options[:user])'
@@ -1195,30 +1193,36 @@ class Work < ActiveRecord::Base
     if !options[:user].nil? && !options[:selected_pseuds].empty? && !options[:selected_tags].empty?
       # We have an indiv. user, selected pseuds and selected tags
       owned_works = Work.owned_by_conditions(options[:user])
-      command << written + visible_without_owners + tags
+      command << written + tags
     elsif !options[:user].nil? && !options[:selected_pseuds].empty?
       # We have an indiv. user, selected pseuds but no selected tags
       owned_works = Work.owned_by_conditions(options[:user])
-      command << written + visible_without_owners
+      command << written
     elsif !options[:user].nil? && !options[:selected_tags].empty?
       # filtered results on a user's works page
       # no pseuds but a specific user, and selected tags
-      command << owned + visible_without_owners + tags
+      command << owned + tags
     elsif !options[:user].nil?
       # a user's default works page
-      command << owned + visible_without_owners
+      command << owned
       @pseuds = options[:user].pseuds
     elsif !options[:tag].blank?
       # works for a specific tag  
-      command << visible + tags
+      command << tags
     elsif !options[:selected_tags].blank?
       # no user but selected tags
-      command << visible + tags + recent
+      command << tags + recent
     elsif !options[:language_id].blank?
-      command << visible + '.by_language(options[:language_id])'
+      command << '.by_language(options[:language_id])'
     else
       # all visible works
-      command << visible + recent
+      command << recent
+    end
+    
+    if User.current_user && User.current_user != :false
+      command << '.posted.unhidden'
+    else
+      command << '.posted.unhidden.unrestricted'
     end
     
     # add on collections

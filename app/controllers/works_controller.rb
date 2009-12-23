@@ -1,7 +1,7 @@
 class WorksController < ApplicationController
   include HtmlFormatter
 
-  cache_sweeper :work_sweeper, :only => [:create, :update, :destroy]
+  #cache_sweeper :work_sweeper, :only => [:create, :update, :destroy]
 
   # only registered users and NOT admin should be able to create new works
   before_filter :load_collection
@@ -182,14 +182,33 @@ class WorksController < ApplicationController
         @language_id = nil
         @most_recent_works = true
       end
+      
+      if AdminSetting.enable_test_caching?
+       works_cache_key = (logged_in? || logged_in_as_admin?) ? params.to_s : "lo" + params.to_s 
+      end
 
       # Now let's build the query
-      @works, @filters, @pseuds = Work.find_with_options(:user => @user, :author => @author, :selected_pseuds => @selected_pseuds,
-                                                    :tag => @tag, :selected_tags => @selected_tags,
-                                                    :collection => @collection,                                                    
-                                                    :language_id => @language_id,
-                                                    :sort_column => @sort_column, :sort_direction => @sort_direction,
-                                                    :page => params[:page], :per_page => params[:per_page])
+      @works, @filters, @pseuds = AdminSetting.enable_test_caching? ?      
+        Rails.cache.fetch(works_cache_key, :expires_in => AdminSetting.cache_expiration.minutes) do
+          Work.find_with_options(:user => @user, :author => @author, :selected_pseuds => @selected_pseuds,
+                                                        :tag => @tag, :selected_tags => @selected_tags,
+                                                        :collection => @collection,                                                    
+                                                        :language_id => @language_id,
+                                                        :sort_column => @sort_column, :sort_direction => @sort_direction,
+                                                        :page => params[:page], :per_page => params[:per_page])
+        end :                                                         
+
+        Work.find_with_options(:user => @user, :author => @author, :selected_pseuds => @selected_pseuds,
+                                                      :tag => @tag, :selected_tags => @selected_tags,
+                                                      :collection => @collection,                                                    
+                                                      :language_id => @language_id,
+                                                      :sort_column => @sort_column, :sort_direction => @sort_direction,
+                                                      :page => params[:page], :per_page => params[:per_page])
+                                                        
+ 
+ 
+      
+      
       
       # Limit the number of works returned and let users know that it's happening
       unless @works.total_entries < ArchiveConfig.SEARCH_RESULTS_MAX
