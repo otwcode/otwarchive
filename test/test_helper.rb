@@ -38,7 +38,7 @@ class ActionController::TestCase
   # For the Translator plugin - if you don't disable strict mode, it causes an error
   # every time it comes across a missing translation, which includes months, dates, etc.
   # in English, so that's kind of a pain in the neck --elz
-  ScopeTranslator::Translator.strict_mode(false)
+  # ScopeTranslator::Translator.strict_mode(false)
 
   # Add more helper methods to be used by all tests here...
   

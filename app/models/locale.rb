@@ -47,6 +47,6 @@ class Locale < ActiveRecord::Base
   # Sets up a hash with keys like "app.pages.membership/n_months_free" and values being
   # translation activerecord objects
   def self.find_main_translations
-    find_main_cached.translations.inject({}) { |memo, tr| memo["#{tr.namespace}/#{tr.tr_key}"] = tr; memo }
+    #find_main_cached.translations.inject({}) { |memo, tr| memo["#{tr.namespace}/#{tr.tr_key}"] = tr; memo }
   end
 end
