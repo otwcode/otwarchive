@@ -284,18 +284,20 @@ class Tag < ActiveRecord::Base
   end
 
   def wrangle_merger(merger, update_works=true)
-    return unless merger.canonical? && merger.is_a?(self.class)
-    self.update_attribute(:merger_id, merger.id)
-    self.parents << merger.parents rescue nil
-    merger.parents << self.parents rescue nil
-    self.update_attribute(:fandom_id, merger.fandom_id)
-    self.update_attribute(:media_id, merger.media_id)
-    self.ensure_correct_fandom_id
-    self.ensure_correct_media_id
-    self.mergers.each do |synonym|
-      synonym.wrangle_merger(merger)
+    unless merger == self
+      return unless merger.canonical? && merger.is_a?(self.class)
+      self.update_attribute(:merger_id, merger.id)
+      self.parents << merger.parents rescue nil
+      merger.parents << self.parents rescue nil
+      self.update_attribute(:fandom_id, merger.fandom_id)
+      self.update_attribute(:media_id, merger.media_id)
+      self.ensure_correct_fandom_id
+      self.ensure_correct_media_id
+      self.mergers.each do |synonym|
+        synonym.wrangle_merger(merger)
+      end
+      self.update_common_tags if update_works
     end
-    self.update_common_tags if update_works
   end
 
   def remove_merger(update_works=true)

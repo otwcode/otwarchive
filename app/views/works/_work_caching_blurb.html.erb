@@ -1,6 +1,6 @@
 <ul class="work<%- if is_author_of?(work) && controller.controller_name != 'series' -%> own<%- end -%>">
                                                
-<%- cache(:key => "work-#{work.id}", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
+<%- cache("work-#{work.id}-#{work.major_version}-#{work.minor_version}", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
 
   	<li class="heading">
   	  <%= get_symbols_for(work) -%>
@@ -33,14 +33,14 @@
         <%- unless warning_tags.size < 1 -%>
         <dt><%= link_to("Archive Warnings", tos_faq_path(:anchor => "tags")) %>:</dt>
   			<dd><ul id="work_<%= work.id %>_category_warning">
-          <li><%= show_warnings_link(work) %></li>
+          <li><%= warning_tags.collect{|tag| link_to_tag(tag) }.join(', </li><li>') %></li>
   			</ul></dd>
   			<%- end -%>
 
   			<%- unless freeform_tags.size < 1 -%>
         <dt title="Genre, Warnings, Other Information"><%= t('work_tags', :default => 'Additional Tags') + ':' %></dt>
   			<dd><ul id="work_<%= work.id %>_category_freeform">
-          <li><%= show_freeforms_link(work) %></li>
+          <li><%= freeform_tags.collect{|tag| link_to_tag(tag) }.join(', </li><li>') %></li>
   			</ul></dd>
   			<%- end -%>
         </dl>

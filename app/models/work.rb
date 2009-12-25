@@ -516,9 +516,10 @@ class Work < ActiveRecord::Base
   # save hits
   def increment_hit_count(visitor)
     if !self.last_visitor || self.last_visitor != visitor
-      self.last_visitor = visitor
-      self.hit_count = self.hit_count + 1
-      save
+      unless User.current_user.is_a?(User) && User.current_user.is_author_of?(self)
+        self.update_attribute(:last_visitor, visitor)
+        self.update_attribute(:hit_count, self.hit_count + 1)
+      end
     end
   end
   

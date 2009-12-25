@@ -232,7 +232,7 @@ class TagsController < ApplicationController
     else
       merger = Tag.find_by_id(params[:tag][:merger_id]) if params[:tag][:merger_id]
     end
-    if merger.is_a? Tag
+    if merger.is_a?(Tag) && merger != @tag
       @tag.wrangle_merger(merger)
     end
 
