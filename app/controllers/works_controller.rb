@@ -197,7 +197,7 @@ class WorksController < ApplicationController
         if params_copy[:collection_id]
           params_copy[:collection_id] = @collection.andand.id
         end
-        works_cache_key = (logged_in? || logged_in_as_admin?) ? params_copy.to_s : "lo" + params_copy.to_s 
+        works_cache_key = (logged_in? || logged_in_as_admin?) ? params_copy.to_s.gsub(' ', '') : "lo" + params_copy.to_s.gsub(' ', '') 
       end
 
       # Now let's build the query
