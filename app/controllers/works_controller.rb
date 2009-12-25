@@ -184,7 +184,20 @@ class WorksController < ApplicationController
       end
       
       if AdminSetting.enable_test_caching?
-       works_cache_key = (logged_in? || logged_in_as_admin?) ? params.to_s : "lo" + params.to_s 
+        params_copy = params
+        if params_copy[:user_id]
+          params_copy[:user_id] = @user.andand.id
+          if params_copy[:pseud_id]
+            params_copy[:pseud_id] = @author.andand.id
+          end
+        end
+        if params_copy[:tag_id]
+          params_copy[:tag_id] = @tag.andand.id  
+        end
+        if params_copy[:collection_id]
+          params_copy[:collection_id] = @collection.andand.id
+        end
+        works_cache_key = (logged_in? || logged_in_as_admin?) ? params_copy.to_s : "lo" + params_copy.to_s 
       end
 
       # Now let's build the query
