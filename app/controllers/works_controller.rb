@@ -11,7 +11,8 @@ class WorksController < ApplicationController
   before_filter :check_ownership, :only => [ :edit, :update, :destroy, :preview ]
   before_filter :check_visibility, :only => [ :show, :navigate ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import ]
-  before_filter :update_or_create_reading, :only => [ :show ]
+  after_filter :update_or_create_reading, :only => [ :show ]
+  after_filter :increment_hit_counter, :only => [:show]
 
   def load_work
     @work = Work.find(params[:id])
@@ -282,9 +283,11 @@ class WorksController < ApplicationController
 
     @page_title = @work.unrevealed? ? t('works.mystery_title', :default => "Mystery Work") : 
       get_page_title(@work.fandoms.string, @work.anonymous? ?  t('works.anonymous', :default => "Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '), @work.title)
-      
+  end
+  
+  def increment_hit_counter
     # increment view
-    @work.increment_hit_count(request.env['REMOTE_ADDR'])
+    @work.increment_hit_count(request.env['REMOTE_ADDR'])    
   end
   
   def navigate

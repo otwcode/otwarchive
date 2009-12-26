@@ -15,9 +15,9 @@
 
       <dd>
       <ul id="work_<%= work.id %>_category_<%= type.downcase %>">
-      <%- if type == "Warning" && hide_warnings?(work) -%>        
+      <%- if type == "Warning" && !AdminSetting.enable_test_caching? && hide_warnings?(work) -%>        
         <li><%= show_warnings_link(work) %> </li>
-      <%- elsif type == "Freeform" && hide_freeform?(work) -%>
+      <%- elsif type == "Freeform" && !AdminSetting.enable_test_caching? && hide_freeform?(work) -%>
         <li><%= show_freeforms_link(work) %> </li>
       <%- else -%>                   
         <%= tags.collect{|tag| "<li class='#{tag.type.downcase}'>" + link_to_tag(tag) + '</li>' }.join(', ') %>

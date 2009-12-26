@@ -7,11 +7,15 @@ class AutocompleteController < ApplicationController
 
   # works for any tag class where what you want to return are the names
   def tag_finder(tag_class, search_param)
-    render_output(tag_class.canonical.find(:all, :order => :name, :conditions => ["name LIKE ?", '%' + search_param + '%'], :limit => 10).map(&:name))
+    if search_param
+      render_output(tag_class.canonical.find(:all, :order => :name, :conditions => ["name LIKE ?", '%' + search_param + '%'], :limit => 10).map(&:name))
+    end
   end
 
   def pseud_finder(search_param)
-    render_output(Pseud.find(:all, :order => :name, :conditions => ["name LIKE ?", '%' + search_param + '%'], :limit => 10).map(&:byline))
+    if search_param
+      render_output(Pseud.find(:all, :order => :name, :conditions => ["name LIKE ?", '%' + search_param + '%'], :limit => 10).map(&:byline))
+    end
   end
   
   def collection_finder(search_param)

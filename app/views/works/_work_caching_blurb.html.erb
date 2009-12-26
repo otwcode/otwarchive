@@ -1,13 +1,14 @@
 <ul class="work<%- if is_author_of?(work) && controller.controller_name != 'series' -%> own<%- end -%>">
                                                
-<%- cache("work-#{work.id}-#{work.major_version}-#{work.minor_version}", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
-
+<%- cache("work-#{work.id}-#{work.major_version}-#{work.minor_version}-top", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
   	<li class="heading">
   	  <%= get_symbols_for(work) -%>
   	  <h3>
   	    <%= link_to sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small)), @collection ? collection_work_path(@collection, work) : work %>
     		<%= t('title_by_author', :default => 'by') -%>
+<%- end -%>   		
         <%= byline(work) -%>
+<%- cache("work-#{work.id}-#{work.major_version}-#{work.minor_version}-bottom", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
         <%= !work.recipients.blank? ? t('works.for_recipients', :default => "for {{recipients}}", :recipients => recipients_link(work)) : "" -%>
     		<%- if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") -%><%- end -%>
         <%- if work.hidden_by_admin -%><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><%- end -%>
