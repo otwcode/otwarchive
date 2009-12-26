@@ -185,7 +185,7 @@ class WorksController < ApplicationController
       end
       
       if AdminSetting.enable_test_caching?
-        params_copy = params
+        params_copy = params.dup
         if params_copy[:user_id]
           params_copy[:user_id] = @user.andand.id
           if params_copy[:pseud_id]
