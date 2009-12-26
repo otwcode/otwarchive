@@ -186,6 +186,9 @@ class WorksController < ApplicationController
       
       if AdminSetting.enable_test_caching?
         params_copy = params.dup
+        params_copy.delete(:commit)
+        params_copy.delete(:action)
+        params_copy.delete(:controller)
         if params_copy[:user_id]
           params_copy[:user_id] = @user.andand.id
           if params_copy[:pseud_id]
@@ -198,11 +201,12 @@ class WorksController < ApplicationController
         if params_copy[:collection_id]
           params_copy[:collection_id] = @collection.andand.id
         end
-        works_cache_key = (logged_in? || logged_in_as_admin?) ? params_copy.to_s.gsub(' ', '') : "lo" + params_copy.to_s.gsub(' ', '') 
+        works_cache_key = (logged_in? || logged_in_as_admin?) ? params_copy.to_s.gsub(' ', '') : "lo" + params_copy.to_s.gsub(' ', '')
+        key_within_limit = (works_cache_key.length < 251) 
       end
 
       # Now let's build the query
-      @works, @filters, @pseuds = AdminSetting.enable_test_caching? ?      
+      @works, @filters, @pseuds = (AdminSetting.enable_test_caching? && key_within_limit) ?      
         Rails.cache.fetch(works_cache_key, :expires_in => AdminSetting.cache_expiration.minutes) do
           Work.find_with_options(:user => @user, :author => @author, :selected_pseuds => @selected_pseuds,
                                                         :tag => @tag, :selected_tags => @selected_tags,
