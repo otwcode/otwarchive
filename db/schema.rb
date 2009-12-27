@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091223003205) do
+ActiveRecord::Schema.define(:version => 20091227192528) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -139,9 +139,9 @@ ActiveRecord::Schema.define(:version => 20091223003205) do
 
   create_table "collection_profiles", :force => true do |t|
     t.integer  "collection_id"
-    t.text     "intro",             :limit => 16777215
-    t.text     "faq",               :limit => 16777215
-    t.text     "rules",             :limit => 16777215
+    t.text     "intro",             :limit => 2147483647
+    t.text     "faq",               :limit => 2147483647
+    t.text     "rules",             :limit => 2147483647
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "gift_notification"
@@ -417,6 +417,7 @@ ActiveRecord::Schema.define(:version => 20091223003205) do
     t.boolean  "hide_private_hit_count",            :default => false,                     :null => false
     t.boolean  "hide_public_hit_count",             :default => false,                     :null => false
     t.boolean  "recipient_emails_off",              :default => false,                     :null => false
+    t.boolean  "hide_all_hit_counts",               :default => false,                     :null => false
   end
 
   add_index "preferences", ["user_id"], :name => "index_preferences_on_user_id"
