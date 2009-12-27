@@ -11,11 +11,8 @@
     color:#c00;
 }
     
-.LV_valid_field,
 input.LV_valid_field:hover, 
-input.LV_valid_field:active,
-textarea.LV_valid_field:hover, 
-textarea.LV_valid_field:active {
+input.LV_valid_field:active {
     border: 1px solid #0c0;
 }
     
