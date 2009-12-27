@@ -1,16 +1,13 @@
-div.auto_complete {
+.auto_complete ul {	
 	background: #fffef9;
-	width: 350px;
-	height: 100%;
-	position: absolute;
-	z-index: 50;
-}
-div.auto_complete ul {
-	width: 100%;
 	border: 1px solid #777;
-}
+	width:100%;
+	padding: 0.125em; 
+	position: absolute;
+	overflow:auto;
+	z-index: 50;
+	}
 div.auto_complete ul li {
-	background: #fffef9;
 	display: block !important;
 	padding: 0.125em;
 }
@@ -21,3 +18,4 @@ div.auto_complete ul li.selected {
 div.auto_complete ul strong.highlight {
 	color: #777;
 }
+
