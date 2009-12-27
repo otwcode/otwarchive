@@ -41,6 +41,9 @@
     <li><%= sort_link t('sort.title', :default => 'Title'), :title -%></li>
     <li><%= sort_link t('sort.date', :default => 'Date'), :date -%></li>
     <li><%= sort_link t('sort.word_count', :default => 'Word Count'), :word_count -%></li>
+    <% unless current_user.preference.hide_all_hit_counts -%>
+    <li><%= sort_link t('sort.hit_count', :default => 'Hits'), :hit_count -%></li>
+    <% end %>
   </ul>
 
   <%= render :partial => 'filters' %>

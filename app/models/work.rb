@@ -950,6 +950,8 @@ class Work < ActiveRecord::Base
   named_scope :ordered_by_title_asc, :order => "title_to_sort_on ASC"
   named_scope :ordered_by_word_count_desc, :order => "word_count DESC"
   named_scope :ordered_by_word_count_asc, :order => "word_count ASC"
+  named_scope :ordered_by_hit_count_desc, :order => "hit_count DESC"
+  named_scope :ordered_by_hit_count_asc, :order => "hit_count ASC"
   named_scope :ordered_by_date_desc, :order => "revised_at DESC"
   named_scope :ordered_by_date_asc, :order => "revised_at ASC"
 

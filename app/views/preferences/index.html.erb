@@ -75,6 +75,11 @@
     	</li>  	
 
       <li>
+        <%= f.check_box :hide_all_hit_counts -%>
+        <%= f.label :hide_all_hit_counts, t('preferences.hide_all_hit_counts', :default => "Don't show me any hit counts.") -%>
+      </li>
+    	
+      <li>
         <%= f.check_box :hide_private_hit_count -%>
         <%= f.label :hide_private_hit_count, t('preferences.hide_private_hit_count', :default => "Don't show me hits on my stories.") -%>
       </li>

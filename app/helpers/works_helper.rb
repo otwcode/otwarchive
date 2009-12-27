@@ -24,6 +24,7 @@ module WorksHelper
   end
   
   def show_hit_count?(work)
+    return false if current_user.preference.hide_all_hit_counts
     author_wants_to_see_hits = is_author_of?(work) && !current_user.preference.hide_private_hit_count
     all_authors_want_public_hits = work.users.select {|u| u.preference.hide_public_hit_count}.empty?
     author_wants_to_see_hits || (!is_author_of?(work) && all_authors_want_public_hits)
