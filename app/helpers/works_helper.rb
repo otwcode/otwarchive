@@ -220,4 +220,8 @@ module WorksHelper
     end
   end
 
+  # which controllers are allowed to display anonymous works on user pages
+  def allowed_controllers
+    ['gifts', 'readings'].include?(controller.controller_name)
+  end
 end

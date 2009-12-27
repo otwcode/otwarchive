@@ -4,7 +4,7 @@
 
   <%= render :partial => "works/work_mystery_blurb", :locals => {:work => work} -%>
   
-<% elsif (@user || @pseud) && work.anonymous? && !is_author_of?(work) && controller.controller_name != 'gifts' %>
+<% elsif (@user || @pseud) && work.anonymous? && !is_author_of?(work) && !allowed_controllers %>
 
 <%= render :partial => "works/work_anonymous_blurb", :locals => {:work => work} -%>
 
