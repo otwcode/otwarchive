@@ -24,19 +24,29 @@ class BookmarksController < ApplicationController
   end
 
   
-  # GET    /:locale/bookmarks
-  # GET    /:locale/users/:user_id/bookmarks
-  # GET    /:locale/works/:work_id/bookmarks
-  # GET    /:locale/external_works/:external_work_id/bookmarks
+  # aggragates bookmarks for the same bookmarkable
+  # GET    /bookmarks
+  # GET    /tags/:tag_id/bookmarks
+  # GET    /collections/:collection_id/works/bookmarks  # Not implemented,
+           # but would be the bookmarks on the works in the collection
+  # non aggragates - show all bookmarks, even duplicates
+  # GET    /collections/:collection_id/bookmarks
+  # GET    /users/:user_id/pseuds/:pseud_id/bookmarks
+  # GET    /users/:user_id/bookmarks
+  # GET    /works/:work_id/bookmarks
+  # GET    /external_works/:external_work_id/bookmarks
+  # GET    /series/:series/bookmarks
   def index
-    if params[:user_id]
-      @user = User.find_by_login(params[:user_id])
-      owner = @user
+    if @bookmarkable
+      access_denied unless is_admin? || @bookmarkable.visible
     end
-    if params[:pseud_id] && @user
-      @author = @pseud = @user.pseuds.find_by_name(params[:pseud_id])
-      # @author is needed in the sidebar and I'm too lazy to redo the whole thing
-      owner = @pseud
+    if params[:user_id]
+      # @user is needed in the sidebar
+      owner = @user = User.find_by_login(params[:user_id])
+      if params[:pseud_id] && @user
+        # @author is needed in the sidebar
+        owner = @author = @user.pseuds.find_by_name(params[:pseud_id])
+      end
     elsif params[:tag_id]
       owner ||= Tag.find_by_name(params[:tag_id])
     elsif @collection
@@ -44,42 +54,46 @@ class BookmarksController < ApplicationController
     else
       owner ||= @bookmarkable
     end
-    # Do not want to aggregate bookmarks on these pages
-    if params[:pseud_id] || params[:user_id] || params[:work_id] || params[:external_work_id] || params[:series_id] || @collection
-      if params[:existing] && params[:recs_only]
-        search_by = "owner.bookmarks.find(:all, :conditions => ['rec = (?) AND pseud_id IN (?)', true, current_user.pseuds.collect(&:id)])"
-      elsif params[:existing]
-        search_by = "owner.bookmarks.find(:all, :conditions => ['pseud_id IN (?)', current_user.pseuds.collect(&:id)])"
-      elsif params[:recs_only]
-        search_by = "owner.bookmarks.recs.visible"
+    if params[:user_id] || params[:work_id] || params[:external_work_id] || params[:series_id] || params[:collection_id]
+      # Do not aggregate bookmarks on these pages
+      if params[:recs_only]
+        @bookmarks = owner.bookmarks.recs.visible
       else
-        search_by = "owner.bookmarks.visible"
+        @bookmarks = owner.bookmarks.visible
       end
-      @bookmarks = eval(search_by).sort_by(&:created_at).reverse.paginate(:page => params[:page])
-    else # Aggregate on main bookmarks page, tag page
-      if params[:tag_id]
-        @most_recent_bookmarks = false
-        # Want to get not only bookmarks with tag, but also bookmarks on works with tag
-        @works_with_tag = owner.works.visible.collect{|w| ["Work", w.id]}
-        @external_works_with_tag = owner.external_works.visible.collect{|ew| ["ExternalWork", ew.id]}
-        @bookmarks_with_tag = owner.bookmarks.visible.collect{|b| [b.bookmarkable_type, b.bookmarkable_id]}.uniq
-        @bookmarkables = @bookmarks_with_tag | @works_with_tag | @external_works_with_tag
-      else # Show only bookmarks from past month on main page
-        @most_recent_bookmarks = true
-        @bookmarkables = Bookmark.recent.visible.collect{|b| [b.bookmarkable_type, b.bookmarkable_id]}.uniq
-      end
-      @bookmarks = []
-      search_by = params[:recs_only] ? "eval(b[0]).find(b[1]).bookmarks.recs.visible" : "eval(b[0]).find(b[1]).bookmarks.visible"
-      @bookmarkables.each do |b|
-        if eval(b[0]).exists?(b[1])
-          @bookmarks << eval(search_by).last unless eval(search_by).blank?
+    else 
+      # Aggregate on main bookmarks page and tags bookmarks page
+      if params[:tag_id]  # tag page
+        if params[:recs_only]
+          bookmarks_grouped = owner.bookmarks.recs.visible.group_by(&:bookmarkable_id)
+        else
+          bookmarks_grouped = owner.bookmarks.visible.group_by(&:bookmarkable_id)
+        end
+      else # main page
+# not that much performance gained in restricting at the moment, and it hides seed data
+#        @most_recent_bookmarks = true # last week only
+        # FIXME: using public instead of visible for performance reasons for now
+        # this means private bookmarks won't show up on the main page
+        if params[:recs_only]
+          bookmarks_grouped = Bookmark.recs.recent.public.group_by(&:bookmarkable_id)
+        else
+          bookmarks_grouped = Bookmark.recent.public.group_by(&:bookmarkable_id)
         end
       end
-      @bookmarks = @bookmarks.sort_by(&:created_at).reverse.paginate(:page => params[:page])
+      @bookmarks = []
+      bookmarks_grouped.values.each do |bookmarks|
+        if bookmarks.size == 1 || bookmarks.map(&:bookmarkable_type).uniq.size == 1
+           @bookmarks << bookmarks.first
+        else
+           bookmarkables = bookmarks.map(&:bookmarkable).uniq
+           bookmarkables.each do |bookmarkable|
+             @bookmarks << bookmarkable.bookmarks.public.first
+           end
+        end
+      end
+      @bookmarks = @bookmarks.sort_by{|b| - b.id}
     end
-    if @bookmarkable
-      access_denied unless is_admin? || @bookmarkable.visible
-    end
+    @bookmarks = @bookmarks.paginate(:page => params[:page])
   end
   
   # GET    /:locale/bookmark/:id

@@ -10,7 +10,7 @@ class BookmarkTest < ActiveSupport::TestCase
     should_have_many :taggings
     should_have_many :tags, :through => :taggings
     should_ensure_length_in_range :notes, (0..ArchiveConfig.NOTES_MAX), :long_message => /must be less/
-    should_have_named_scope :public, :conditions => {:private => false}
+    should_have_named_scope :public
 
   end
   context "A public bookmark on a posted work" do

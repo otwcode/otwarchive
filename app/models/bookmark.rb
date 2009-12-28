@@ -6,9 +6,11 @@ class Bookmark < ActiveRecord::Base
 
   has_many :collection_items, :as => :item, :dependent => :destroy
   has_many :collections, :through => :collection_items
+
+  default_scope :order => "bookmarks.id DESC" # id's stand in for creation date
   
-  named_scope :public, :conditions => {:private => false}
-  named_scope :recent, lambda { |*args| {:conditions => ["bookmarks.created_at > ?", (args.first || 4.weeks.ago)]} }
+  named_scope :public, :conditions => {:private => false, :hidden_by_admin => false}
+  named_scope :recent, lambda { |*args| {:conditions => ["bookmarks.created_at > ?", (args.first || 1.week.ago)]} }
   named_scope :recs, :conditions => {:rec => true} #must come before visible in the chain
   
   validates_length_of :notes, 
