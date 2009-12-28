@@ -1,9 +1,10 @@
+<%- cache("bookmarkinfo-#{bookmark.id}", :expires_in => AdminSetting.cache_expiration.minutes ) do -%> 
 <ul>
   <li class="heading bookmark-heading">
     <%- if bookmark.bookmarkable.blank? %>
       <%= "This item has been deleted, sorry!" %>
     <%- else -%>
-    <%- bookmark_count = Bookmark.count_visible_bookmarks(bookmark.bookmarkable, current_user) -%>
+    <%- bookmark_count = bookmark.bookmarkable.bookmarks.public.count -%>
     <ul class="bookmark-icons">
       <%= get_symbol_for_bookmark(bookmark) %>
       <li><%= image_tag 'category-none.png', :alt => '', :title => "" -%> <div class="bookmark-count" title="<%= bookmark_count %> Bookmarks">
@@ -23,7 +24,7 @@
       <%- else -%>
         <%= link_to_bookmarkable_bookmarks(bookmark.bookmarkable, t('bookmarks_total_single', :default=>'Bookmarked {{count}} time', :count=>bookmark_count)) -%>
       <%- end -%>
-    <%- if logged_in? && !is_author_of?(bookmark) -%>
+    <%- if true #logged_in? && !is_author_of?(bookmark) -%>
        | <%= bookmark_link(bookmark.bookmarkable, true)%>
     <%- end -%>
   </li>
@@ -71,6 +72,7 @@
     </li>
   <%- end -%>
   <li>
+<%- end -%>  
   <%- if is_author_of?(bookmark) -%>
     <%= render :partial => 'bookmarks/bookmark_owner_navi', :locals => {:bookmark => bookmark} %>
   <%- elsif logged_in_as_admin? -%>

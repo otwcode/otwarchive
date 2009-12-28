@@ -33,6 +33,8 @@
 					<%= collection.all_owners.map {|owner| link_to(owner.byline, owner.user)}.join(", ") -%></h3>
 			<p class="update"><!--collection updated at--></p>
 	</li>
+
+<%- cache("collections-#{collection.id}", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
 	<% if collection.all_moderators.length > 0%>
 	<li>
 		<dl class="mods">
@@ -82,6 +84,7 @@
 	  </dl>
   </li>
   <%- end -%>
+<%- end -%>  
   <% if collection.user_is_owner?(current_user) %>
 	  <li class="navigation"><%= link_to 'Edit', edit_collection_path(collection) %></li>
   <% end %>

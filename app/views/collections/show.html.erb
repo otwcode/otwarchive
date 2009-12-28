@@ -1,3 +1,5 @@
+<%- cache("collection-show-#{@collection.id}-top", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
+
 <h1><%= sanitize_title_for_display @collection.title %> <span>(<%=h @collection.name %>)</span></h1>
 
 <%= render :partial => "collection_show_navigation" -%>
@@ -28,6 +30,8 @@
 	<dt><%=h t('collection.description', :default => "Description:") %></dt>
 	<dd><%= sanitize_and_format_for_display @collection.description %></dd>
 	<%- end -%>
+	
+<%- end -%>	
 
  <% unless @collection.parent || (@collection.children.empty? && !@collection.user_is_maintainer?(current_user)) %>
 	<dt><%=h t('collections.children', :default => "Challenges and subcollections: ") -%></dt>
@@ -38,7 +42,8 @@
     <% end %>
   </dd>
  <% end -%>
-
+ 
+<%- cache("collection-show-#{@collection.id}-bottom", :expires_in => AdminSetting.cache_expiration.minutes ) do -%> 
  <% if @collection.parent %>
    <dt><%=h t('collections.parent', :default => "Parent Collection: ") -%></dt>
    <dd><%= link_to(sanitize_title_for_display(@collection.parent.title), @collection.parent) -%></dd>
@@ -76,13 +81,13 @@
   </blockquote>
   <% end -%>
 	
-  <% if !@collection.collection_profile.faq.blank? || (@collection.parent && !@collection.parent.collection_profile.faq.blank?) %>
+  <%- if !@collection.collection_profile.faq.blank? || (@collection.parent && !@collection.parent.collection_profile.faq.blank?) -%>
 	<blockquote id="faq">
     <%= render :partial => 'collection_profile_navigation', :locals => {:section => 'faq'} -%>
 		<h3><%=h t('faq', :default => "FAQ:") %></h3>
 		<%= sanitize_and_format_for_display(@collection.collection_profile.faq.blank? ? @collection.parent.collection_profile.faq : @collection.collection_profile.faq) %>
 	</blockquote>
-	<% end -%>
+	<%- end -%>
 
  <% if !@collection.collection_profile.rules.blank? || (@collection.parent && !@collection.parent.collection_profile.rules.blank?) %>
 	<blockquote id="rules">
@@ -90,7 +95,9 @@
 		<h3><%=h t('rules', :default => "Rules:") %></h3>
 		<%= sanitize_and_format_for_display(@collection.collection_profile.rules.blank? ? @collection.parent.collection_profile.rules : @collection.collection_profile.rules) %>
 	</blockquote>
-	<% end -%>
+	<%- end -%>
 </div>
+
+<%- end -%>
 
 <%= render :partial => "collection_show_navigation" -%>
