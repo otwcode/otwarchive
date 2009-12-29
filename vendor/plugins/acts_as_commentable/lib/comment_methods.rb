@@ -26,7 +26,12 @@ module CommentMethods
       if self.thread.blank? && self.reply_comment? 
         self.commentable.thread_parent
       elsif self.reply_comment?
-        Comment.find(:first, :conditions => ["thread = (?) AND depth = 0", self.thread])
+        comments = Comment.find(:all, :conditions => ["thread = (?) AND depth = 0", self.thread])
+        if comments.length > 1
+          self.commentable.thread_parent          
+        else
+          comments.first
+        end
       else
         self
       end

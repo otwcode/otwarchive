@@ -1,8 +1,8 @@
-<%- cache("collection-show-#{@collection.id}-top", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
-
 <h1><%= sanitize_title_for_display @collection.title %> <span>(<%=h @collection.name %>)</span></h1>
 
 <%= render :partial => "collection_show_navigation" -%>
+
+<%- cache("collection-show-#{@collection.id}-top", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
 
 <dl class="blurb">
 	<dt><%=h t('collections.owners', :default => "Owners:") %></dt>
