@@ -55,6 +55,11 @@ class BookmarksController < ApplicationController
       owner ||= @bookmarkable
     end
     if params[:user_id] || params[:work_id] || params[:external_work_id] || params[:series_id] || params[:collection_id]
+      unless owner
+        # we have to manually trigger a 404 when we're using find_by_name
+        # otherwise the user gets a 500 error
+        raise ActiveRecord::RecordNotFound
+      end
       # Do not aggregate bookmarks on these pages
       if params[:recs_only]
         @bookmarks = owner.bookmarks.recs.visible
@@ -64,6 +69,9 @@ class BookmarksController < ApplicationController
     else 
       # Aggregate on main bookmarks page and tags bookmarks page
       if params[:tag_id]  # tag page
+        unless owner
+          raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'"
+        end        
         if params[:recs_only]
           bookmarks_grouped = owner.bookmarks.recs.visible.group_by(&:bookmarkable_id)
         else
