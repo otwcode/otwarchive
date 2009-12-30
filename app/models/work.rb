@@ -1179,7 +1179,7 @@ class Work < ActiveRecord::Base
     page_args = {:page => options[:page] || 1, :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE)}
     paginate = '.paginate(page_args)'
     sort_and_paginate = sort + '.paginate(page_args)'
-    recent = '.recent'
+    recent = (options[:collection] ? '' : '.recent')
 
     @works = []
     @pseuds = []
@@ -1231,7 +1231,11 @@ class Work < ActiveRecord::Base
     # add on collections
     command << (options[:collection] ? collected : '')
     
-    @works = eval("Work#{command + sort}").find(:all, :limit => ArchiveConfig.SEARCH_RESULTS_MAX)
+    if options[:collection]
+      @works = eval("Work#{command + sort}").find(:all)    
+    else
+      @works = eval("Work#{command + sort}").find(:all, :limit => ArchiveConfig.SEARCH_RESULTS_MAX)
+    end
 
     # Adds the co-authors of the displayed works to the available list of pseuds to filter on
     @pseuds = (@pseuds + Pseud.on_works(@works)).uniq if !options[:user].nil?
