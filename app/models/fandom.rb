@@ -18,6 +18,19 @@ class Fandom < Tag
     :order => 'name ASC'}    
   }
   
+  named_scope :for_collections, lambda { |collections|
+    {:select =>  "tags.*, count(tags.id) as count", 
+    :joins => "INNER JOIN filter_taggings ON ( tags.id = filter_taggings.filter_id ) 
+    INNER JOIN works ON ( filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work') 
+    INNER JOIN collection_items ON ( works.id = collection_items.item_id AND collection_items.item_type = 'Work')",
+    :conditions => ["(collection_items.collection_id IN (?)) 
+    AND ((`tags`.`type` = 'Fandom') 
+    AND (collection_items.collection_id IN (?))) 
+    AND (works.posted = 1)", collections.collect(&:id), collections.collect(&:id)], 
+    :group => 'tags.id', 
+    :order => 'name ASC'}    
+  }  
+  
   before_save :add_media_for_uncategorized
   def add_media_for_uncategorized
     if self.media_id.nil?

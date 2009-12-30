@@ -8,14 +8,14 @@ class FandomsController < ApplicationController
           if @collection.children.empty? 
             Fandom.for_collection(@collection)
           else
-            (Fandom.for_collection(@collection) + @collection.children.collect {|child_collection| Fandom.for_collection(child_collection)}.flatten).uniq.sort
+            Fandom.for_collections([@collection] + @collection.children)
           end               
         end
       else
         if @collection.children.empty? 
           @fandoms = Fandom.for_collection(@collection)
         else
-          @fandoms = (Fandom.for_collection(@collection) + @collection.children.collect {|child_collection| Fandom.for_collection(child_collection)}.flatten).uniq.sort
+          @fandoms = Fandom.for_collections([@collection] + @collection.children)
         end        
       end
     elsif params[:medium_id]
