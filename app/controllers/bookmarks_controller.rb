@@ -24,12 +24,11 @@ class BookmarksController < ApplicationController
   end
 
   
-  # aggragates bookmarks for the same bookmarkable
+  # aggregates bookmarks for the same bookmarkable
+  # note, these do not show private bookmarks
   # GET    /bookmarks
   # GET    /tags/:tag_id/bookmarks
-  # GET    /collections/:collection_id/works/bookmarks  # Not implemented,
-           # but would be the bookmarks on the works in the collection
-  # non aggragates - show all bookmarks, even duplicates
+  # non aggregates - show all bookmarks, even duplicates and private
   # GET    /collections/:collection_id/bookmarks
   # GET    /users/:user_id/pseuds/:pseud_id/bookmarks
   # GET    /users/:user_id/bookmarks
@@ -72,20 +71,27 @@ class BookmarksController < ApplicationController
         unless owner
           raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'"
         end        
+        bookmarks_on_synonyms = []
         if params[:recs_only]
-          bookmarks_grouped = owner.bookmarks.recs.visible.group_by(&:bookmarkable_id)
+          bookmarks_primary = owner.bookmarks.recs.visible
+          owner.synonyms.each do |synonym|
+            bookmarks_on_synonyms << synonym.bookmarks.recs.visible 
+          end rescue NoMethodError
+          bookmarks_indirect = owner.indirect_bookmarks(true)
         else
-          bookmarks_grouped = owner.bookmarks.visible.group_by(&:bookmarkable_id)
+          bookmarks_primary = owner.bookmarks.visible
+          owner.synonyms.each do |synonym|
+            bookmarks_on_synonyms << synonym.bookmarks.visible 
+          end rescue NoMethodError
+          bookmarks_indirect = owner.indirect_bookmarks
         end
+        bookmarks_grouped = (bookmarks_primary + bookmarks_on_synonyms + bookmarks_indirect).flatten.compact.group_by(&:bookmarkable)
       else # main page
-# not that much performance gained in restricting at the moment, and it hides seed data
-#        @most_recent_bookmarks = true # last week only
-        # FIXME: using public instead of visible for performance reasons for now
-        # this means private bookmarks won't show up on the main page
+        @most_recent_bookmarks = true
         if params[:recs_only]
-          bookmarks_grouped = Bookmark.recs.recent.public.group_by(&:bookmarkable_id)
+          bookmarks_grouped = Bookmark.recs.recent.public.group_by(&:bookmarkable)
         else
-          bookmarks_grouped = Bookmark.recent.public.group_by(&:bookmarkable_id)
+          bookmarks_grouped = Bookmark.recent.public.group_by(&:bookmarkable)
         end
       end
       @bookmarks = []
@@ -93,7 +99,7 @@ class BookmarksController < ApplicationController
         if bookmarks.size == 1 || bookmarks.map(&:bookmarkable_type).uniq.size == 1
            @bookmarks << bookmarks.first
         else
-           bookmarkables = bookmarks.map(&:bookmarkable).uniq
+           bookmarkables = bookmarks.map(&:bookmarkable).uniq.compact
            bookmarkables.each do |bookmarkable|
              @bookmarks << bookmarkable.bookmarks.public.first
            end
@@ -101,7 +107,7 @@ class BookmarksController < ApplicationController
       end
       @bookmarks = @bookmarks.sort_by{|b| - b.id}
     end
-    @bookmarks = @bookmarks.paginate(:page => params[:page])
+    @bookmarks = @bookmarks.compact.paginate(:page => params[:page])
   end
   
   # GET    /:locale/bookmark/:id

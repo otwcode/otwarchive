@@ -768,4 +768,11 @@ class Tag < ActiveRecord::Base
     self.canonical? ? self.mergers : [self.merger] + self.merger.mergers - [self]
   end
 
+  def indirect_bookmarks(rec=false)
+    cond = rec ? {:rec => true, :private => false, :hidden_by_admin => false} : {:private => false, :hidden_by_admin => false}
+    work_bookmarks = Bookmark.find(:all, :conditions => {:bookmarkable_id => self.work_ids, :bookmarkable_type => 'Work'}.merge(cond))
+    ext_work_bookmarks = Bookmark.find(:all, :conditions => {:bookmarkable_id => self.external_work_ids, :bookmarkable_type => 'ExternalWork'}.merge(cond))
+    series_bookmarks = [] # can't tag a series directly? # Bookmark.find(:all, :conditions => {:bookmarkable_id => self.series_ids, :bookmarkable_type => 'Series'}.merge(cond))
+    (work_bookmarks + ext_work_bookmarks + series_bookmarks)
+  end
 end
