@@ -1,8 +1,6 @@
 class WorksController < ApplicationController
   include HtmlFormatter
 
-  #cache_sweeper :work_sweeper, :only => [:create, :update, :destroy]
-
   # only registered users and NOT admin should be able to create new works
   before_filter :load_collection
   before_filter :users_only, :only => [ :new, :create, :import, :import_multiple, :drafts, :preview, :show_multiple ]
@@ -236,6 +234,7 @@ class WorksController < ApplicationController
     end
 
     # we now have @works found
+    @over_anon_threshold = @works.collect(&:authors_to_sort_on).uniq.count > ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT
 
     if @works.empty? && !@selected_tags.empty?
       begin

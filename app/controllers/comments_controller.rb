@@ -11,6 +11,8 @@ class CommentsController < ApplicationController
   before_filter :check_permission_to_edit, :only => [:edit, :update ]
   before_filter :check_permission_to_delete, :only => [:delete_comment, :destroy]
   
+  cache_sweeper :comment_sweeper
+  
   def load_comment
     @comment = Comment.find(params[:id])
     @check_ownership_of = @comment
@@ -55,9 +57,7 @@ class CommentsController < ApplicationController
   end
 
   def index
-    if @commentable.nil?
-      @comments = Comment.recent
-    else
+    unless @commentable.nil?
       @comments = @commentable.comments
       if @commentable.class == Comment
         # we link to the parent object at the top
@@ -79,7 +79,7 @@ class CommentsController < ApplicationController
   def new
     if @commentable.nil?
       flash[:error] = t('no_commentable', :default => "What did you want to comment on?")
-     redirect_to :back rescue redirect_to '/'
+      redirect_to :back rescue redirect_to '/'
     else
       @comment = Comment.new
       @controller_name = params[:controller_name] if params[:controller_name]
@@ -115,8 +115,13 @@ class CommentsController < ApplicationController
       
       if @comment.set_and_save
         if @comment.approved?
+          # save user's name/email if not logged in
+          if @comment.pseud.nil?
+            session[:comment_name] = @comment.name
+            session[:comment_email] = @comment.email
+          end
           flash[:comment_notice] = t('comment_created', :default => 'Comment created!')
-         respond_to do |format|
+          respond_to do |format|
             format.html do 
               if request.env['HTTP_REFERER'] =~ /inbox/
                 redirect_to user_inbox_path(current_user)

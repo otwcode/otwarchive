@@ -132,6 +132,10 @@ AMBIGUOUS_CATEGORY_NAME: 'Ambiguous'
 # enabled, cached on production/test environments.
 MAX_RECENT: 20
 
+# This is used to determine how many works or how many authors have to be
+# present in order for anonymous or mystery works to begin being displayed
+ANONYMOUS_THRESHOLD_COUNT: 10
+
 # Only the following fields are allowed to have HTML. In all others,
 # all HTML tags will be stripped.
 FIELDS_ALLOWING_HTML: %w(content summary notes endnotes about_me comment note description intro faq rules)

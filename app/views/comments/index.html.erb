@@ -1,13 +1,18 @@
 <%- if @commentable.nil? -%>
 	<!-- the most recent comments -->
-	<h2><%= t('viewing_last', :default => "Viewing the last {{count}} comments posted in the archive", :count => @comments.size) -%></h2>
-	<%- for comment in @comments -%>
-		<%- if comment.approved or logged_in? -%>
-		  <%= render :partial => 'comments/single_comment_abbreviated', :locals => {:single_comment => comment} -%>
-		<%- end -%>
-	<%- end -%>
+	<% cache('latest_comments') do -%>
+  	<% @comments = Comment.top_level.not_deleted.limited(20).ordered_by_date.include_pseud %>
+  	<h2><%= t('viewing_last', :default => "Viewing {{count}} recent comments", :count => @comments.length) -%></h2>
+  	<%- for comment in @comments -%>
+  		<%- if comment.approved or logged_in? -%>
+  		  <%= render :partial => 'comments/single_comment_abbreviated', :locals => {:single_comment => comment} -%>
+  		<% end -%>
+  	<% end -%>
+  <% end -%>
 <%- else -%>
-	<h2><%=h t('viewing_comments_on', :default => 'Viewing Comments on') %> <%- unless @commentable.title.blank? -%><%= link_to sanitize_title_for_display(@commentable.title, :tags => %w(em i b strong strike small)), @commentable %><%- end -%></h2>  
+	<h2>
+	  <%=sanitize_title_for_display t('viewing_comments_on', :default => 'Viewing Comments on {{title}}', 
+	            :title => (@commentable.title.blank? ? "" : link_to(@commentable.title, @commentable))) %>
+	</h2>  
 	<%= render :partial => 'comments/comment_thread', :locals => { :comments => @comments, :depth => 0 } %>
 <%- end -%>
-

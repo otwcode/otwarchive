@@ -1,6 +1,6 @@
 <li class="work" id="work_<%=h work.id %>">
 
-<% if !is_author_of?(work) && work.unrevealed? -%>
+<% if !is_author_of?(work) && (work.unrevealed? || (work.anonymous? && !@over_anon_threshold)) -%>
 
   <%= render :partial => "works/work_mystery_blurb", :locals => {:work => work} -%>
   

@@ -1244,21 +1244,20 @@ class Work < ActiveRecord::Base
     # and then return the works that overlap (you could do this with a nested query, but
     # it gets extremely complicated with the named scopes and all the other variables)
     @works = @works & owned_works if owned_works
+    if options[:user] || @works.size < ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT
+      # strip out works hidden in challenges if on a user's specific page or if there are too few in this listing to conceal
+      @works = @works.delete_if {|w| w.unrevealed?}
+    end
     
-    @filters = build_filters(@works, options) unless @works.empty?
+    @filters = build_filters(@works) unless @works.empty?
     
     return @works.paginate(page_args.merge(:total_entries => @works.size)), @filters, @pseuds
   end
   
   # Takes an array of works, returns a hash (key = tag type) of arrays of hashes (of individual tag data)
   # Ex. {'Fandom' => [{:name => 'Star Trek', :id => '3', :count => '50'}, ...], 'Character' => ...}
-  def self.build_filters(works, options = {})
-    works_to_build_from = works
-    if options[:user] || works.size < 10
-      # strip out works hidden in challenges if on a user's specific page or if there are too few in this listing to conceal
-      works_to_build_from = works.delete_if {|w| w.unrevealed?}
-    end
-    self.build_filters_from_tags(Tag.filters_with_count(works_to_build_from.collect(&:id)))
+  def self.build_filters(works)
+    self.build_filters_from_tags(Tag.filters_with_count(works.collect(&:id)))
   end
   
   def self.build_filters_from_tags(tags)
