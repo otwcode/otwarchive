@@ -1,4 +1,3 @@
-<%- cache("bookmarkinfo-#{bookmark.id}", :expires_in => AdminSetting.cache_expiration.minutes ) do -%> 
 <ul>
   <li class="heading bookmark-heading">
     <%- if bookmark.bookmarkable.blank? %>
@@ -72,7 +71,6 @@
     </li>
   <%- end -%>
   <li>
-<%- end -%>  
   <%- if is_author_of?(bookmark) -%>
     <%= render :partial => 'bookmarks/bookmark_owner_navi', :locals => {:bookmark => bookmark} %>
   <%- elsif logged_in_as_admin? -%>
