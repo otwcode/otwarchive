@@ -142,7 +142,7 @@ class WorksController < ApplicationController
         @filters = Work.build_filters(@works_to_filter)
       end
     else
-      @most_recent_works = (params[:tag_id].blank? && params[:user_id].blank? && params[:language_id].blank?)
+      @most_recent_works = (params[:tag_id].blank? && params[:user_id].blank? && params[:language_id].blank? && params[:collection_id].blank?)
       # we're browsing instead
       # if we're browsing by a particular tag, just add that
       # tag to the selected_tags list.
