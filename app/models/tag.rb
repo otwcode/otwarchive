@@ -178,7 +178,7 @@ class Tag < ActiveRecord::Base
   
   # Add any filter taggings that should exist but don't
   def self.add_missing_filter_taggings
-    Tag.find_each(:conditions => "taggings_count != 0 AND (canonical = 1 OR merger_id IS NOT NULL)", :order => :name) do |tag|
+    Tag.find_each(:conditions => "taggings_count != 0 AND (canonical = 1 OR merger_id IS NOT NULL)") do |tag|
       if tag.filter
         begin
           puts "Adding filter taggings for #{tag.name}"
