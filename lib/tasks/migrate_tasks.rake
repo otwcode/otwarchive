@@ -91,6 +91,15 @@ namespace :After do
 #    ThinkingSphinx.deltas_enabled=true
 #  end
 
+  desc "Rake task of DOOOOOOM"
+  task(:realign_filters => :environment) do
+    ThinkingSphinx.deltas_enabled=false
+    FilterTagging.remove_invalid
+    Tag.add_missing_filter_taggings
+    FilterCount.set_all
+    ThinkingSphinx.deltas_enabled=true
+  end
+
 end
 
 # Remove tasks from the list once they've been run on the deployed site

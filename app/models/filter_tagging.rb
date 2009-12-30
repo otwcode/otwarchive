@@ -7,6 +7,29 @@ class FilterTagging < ActiveRecord::Base
   
   validates_presence_of :filter, :filterable
   
+  # Is this a valid filter tagging that should actually exist?
+  def should_exist?
+    return false unless self.filter && self.filter.canonical?
+    tags = [self.filter] + self.filter.mergers
+    !(self.filterable.tags & tags).empty?
+  end 
+  
+  # Remove all invalid filter taggings
+  def self.remove_invalid
+    i = self.count
+    self.find_each do |filter_tagging|
+      begin
+        puts "Checking #{i}"
+        unless filter_tagging.should_exist?
+          filter_tagging.destroy       
+        end
+        i = i - 1
+      rescue
+        "Problem with filter tagging #{filter_tagging.id}"
+      end
+    end
+  end  
+  
   # Build all filter taggings from current taggings data
   def self.build_from_taggings
     Tagging.find(:all, :conditions => {:taggable_type => 'Work'}).each do |tagging|

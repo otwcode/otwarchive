@@ -176,6 +176,23 @@ class Tag < ActiveRecord::Base
   
   #### FILTERING ####
   
+  # Add any filter taggings that should exist but don't
+  def self.add_missing_filter_taggings
+    Tag.find_each(:conditions => "taggings_count != 0 AND (canonical = 1 OR merger_id IS NOT NULL)", :order => :name) do |tag|
+      if tag.filter
+        begin
+          puts "Adding filter taggings for #{tag.name}"
+          to_add = tag.works - tag.filter.filtered_works
+          to_add.each do |work|
+            tag.filter.filter_taggings.create!(:filterable => work)
+          end
+        rescue
+          puts "Problem adding filter taggings for #{tag.name}"
+        end
+      end
+    end
+  end 
+  
   # The version of the tag that should be used for filtering, if any
   def filter
     self.canonical? ? self : ((self.merger && self.merger.canonical?) ? self.merger : nil)

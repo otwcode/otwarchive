@@ -5,14 +5,12 @@ class FilterCount < ActiveRecord::Base
   
   # Set accurate filter counts for all canonical tags
   def self.set_all
-    filters = Tag.canonical
-    filters.each do |filter|
-      attributes = {:public_works_count => filter.filtered_works.posted.unhidden.unrestricted.count, 
-                    :unhidden_works_count => filter.filtered_works.posted.unhidden.count}
-      if filter.filter_count
-        filter.filter_count.update_attributes(attributes)        
-      else
-        filter.create_filter_count(attributes)
+    Tag.canonical.by_name.find_each do |filter|
+      begin
+        puts "Resetting #{filter.name}"
+        filter.reset_filter_count
+      rescue
+        puts "Problem resetting #{filter.name}"
       end
     end 
   end
