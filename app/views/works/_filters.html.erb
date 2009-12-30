@@ -52,6 +52,13 @@
 					<%- end -%>
         <%- end -%>         
       <%- end -%>
+      <dt>Filter by:</dt>
+      <dd>
+        <%= radio_button_tag "boolean_type", 'and', params[:boolean_type] != 'or' -%>
+        <%= label_tag "boolean_type_and", "and (works with all of these tags)" %><br />  
+        <%= radio_button_tag "boolean_type", 'or', params[:boolean_type] == 'or' -%>
+        <%= label_tag "boolean_type_or", "or (works with any of these tags)" %>      
+      </dd>
 		</dl>
 		<p>
   		<%= hidden_field_tag("tag_id", @tag.name) if @tag %>

@@ -1136,7 +1136,9 @@ class Work < ActiveRecord::Base
     command = 'Work.ids_only'
     visible = '.visible'
     visible_without_owners = '.visible(skip_owners = true)'
-    tags = '.with_all_tag_ids(options[:selected_tags])'
+    tags = (options[:boolean_type] == 'or') ?
+      '.with_any_tag_ids(options[:selected_tags])' :  
+      '.with_all_tag_ids(options[:selected_tags])'
     written = '.written_by_id_conditions(options[:selected_pseuds])'
 
     if options[:selected_tags] && options[:selected_pseuds]
@@ -1171,7 +1173,9 @@ class Work < ActiveRecord::Base
   # Used for non-search work filtering
   def self.find_with_options(options = {})
     command = ''
-    tags = '.with_all_tag_ids(options[:selected_tags])'
+    tags = (options[:boolean_type] == 'or') ?
+      '.with_any_tag_ids(options[:selected_tags])' :  
+      '.with_all_tag_ids(options[:selected_tags])'
     written = '.written_by_id_conditions(options[:selected_pseuds])'
     owned = '.owned_by_conditions(options[:user])'
     collected = '.in_collection_conditions(options[:collection])'

@@ -154,7 +154,6 @@ class CommentsControllerTest < ActionController::TestCase
     assert_response :success
     assert_tag :tag => 'p', :content => @comment1.content
     assert_tag  :tag => 'p', :content => @comment2.content
-    assert_tag :tag => 'p', :content => @child1.content
   end
   # Test index  GET  /:locale/comments/:comment_id/comments  (named path: comment_comments)
   def test_comment_comments_path

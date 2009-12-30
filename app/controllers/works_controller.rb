@@ -212,7 +212,8 @@ class WorksController < ApplicationController
                                                         :collection => @collection,                                                    
                                                         :language_id => @language_id,
                                                         :sort_column => @sort_column, :sort_direction => @sort_direction,
-                                                        :page => params[:page], :per_page => params[:per_page])
+                                                        :page => params[:page], :per_page => params[:per_page],
+                                                        :boolean_type => params[:boolean_type])
         end :                                                         
 
         Work.find_with_options(:user => @user, :author => @author, :selected_pseuds => @selected_pseuds,
@@ -220,7 +221,8 @@ class WorksController < ApplicationController
                                                       :collection => @collection,                                                    
                                                       :language_id => @language_id,
                                                       :sort_column => @sort_column, :sort_direction => @sort_direction,
-                                                      :page => params[:page], :per_page => params[:per_page])
+                                                      :page => params[:page], :per_page => params[:per_page],
+                                                      :boolean_type => params[:boolean_type])
                                                         
  
  
