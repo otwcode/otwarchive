@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
     logged_in? && @collection && @collection.user_is_owner?(current_user) || access_denied
   end
   
-  @over_anon_threshold ||= true  
+  @over_anon_threshold = true if @over_anon_threshold.nil? 
   
   def get_page_title(fandom, author, title)
     @page_title = ""
