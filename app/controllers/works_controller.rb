@@ -131,6 +131,7 @@ class WorksController < ApplicationController
       begin
         @works = Work.search_with_sphinx(params)
         @works_to_filter = Work.search_with_sphinx(params, filterable=true)
+        @search = true;
       rescue ThinkingSphinx::ConnectionError
         flash[:error] = t('errors.search_engine_down', :default => "The search engine seems to be down at the moment, sorry!")
         redirect_to :action => :index and return
