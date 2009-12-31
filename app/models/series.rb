@@ -47,6 +47,10 @@ class Series < ActiveRecord::Base
   def visible?(user=User.current_user)
     self.visible(user) == self
   end
+  
+  def anonymous?
+    !self.works.select { |work| work.anonymous? }.empty?    
+  end
 	
 	# if the series includes an unrestricted work, restricted should be false
 	# if the series includes no unrestricted works, restricted should be true
