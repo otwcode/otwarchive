@@ -65,8 +65,8 @@ class AutocompleteController < ApplicationController
   end
   
   def bookmark_external_fandom_string ; tag_finder(Fandom, params[:bookmark_external_fandom_string]) ; end
-  def bookmark_external_character_string ; tag_finder(Fandom, params[:bookmark_external_character_string]) ; end
-  def bookmark_external_pairing_string ; tag_finder(Fandom, params[:bookmark_external_pairing_string]) ; end
+  def bookmark_external_character_string ; tag_finder(Character, params[:bookmark_external_character_string]) ; end
+  def bookmark_external_pairing_string ; tag_finder(Pairing, params[:bookmark_external_pairing_string]) ; end
 
   
 end
