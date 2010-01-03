@@ -144,7 +144,8 @@ class ExternalWork < ActiveRecord::Base
   def fandom_string=(tag_string)
     tags = []
     ambiguities = []
-    tag_string.split(ArchiveConfig.DELIMITER).each do |string|
+    tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT).each do |string|
+      string.squish!
       tag = Fandom.find_or_create_by_name(string)
       tags << tag if tag.is_a?(Fandom)
       ambiguities << tag if tag.is_a?(Ambiguity)
@@ -160,7 +161,8 @@ class ExternalWork < ActiveRecord::Base
   def pairing_string=(tag_string)
     tags = []
     ambiguities = []
-    tag_string.split(ArchiveConfig.DELIMITER).each do |string|
+    tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT).each do |string|
+      string.squish!
       tag = Pairing.find_or_create_by_name(string)
       tags << tag if tag.is_a?(Pairing)
       ambiguities << tag if tag.is_a?(Ambiguity)
@@ -176,7 +178,8 @@ class ExternalWork < ActiveRecord::Base
   def character_string=(tag_string)
     tags = []
     ambiguities = []
-    tag_string.split(ArchiveConfig.DELIMITER).each do |string|
+    tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT).each do |string|
+      string.squish!
       tag = Character.find_or_create_by_name(string)
       tags << tag if tag.is_a?(Character)
       ambiguities << tag if tag.is_a?(Ambiguity)
@@ -191,7 +194,8 @@ class ExternalWork < ActiveRecord::Base
 
   def ambiguity_string=(tag_string)
     tags = []
-    tag_string.split(ArchiveConfig.DELIMITER).each do |string|
+    tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT).each do |string|
+      string.squish!
       tag = Ambiguity.find_or_create_by_name(string)
       tags << tag if tag.is_a?(Ambiguity)
     end

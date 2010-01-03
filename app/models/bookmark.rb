@@ -92,7 +92,7 @@ class Bookmark < ActiveRecord::Base
   
   def tag_string=(tag_string)
     self.tags = []
-    tag_string.split(ArchiveConfig.DELIMITER).each do |string|
+    tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT).each do |string|
       string.squish!
       tag = Tag.find_by_name(string)
       if tag

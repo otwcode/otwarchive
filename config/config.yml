@@ -35,7 +35,8 @@ ALT_LOGO: 'OTW Logo:closing the circle of the copyright symbol, it symbolizes ou
 REVISION: ''
 
 # tag settings
-DELIMITER: ', '  # if you change this, you probably need to change the label regexp as well
+DELIMITER_FOR_INPUT: ','  # if you change this, you probably need to change the label regexp as well
+DELIMITER_FOR_OUTPUT: ', '
 
 SMTP_SERVER: localhost
 SMTP_PORT: 25

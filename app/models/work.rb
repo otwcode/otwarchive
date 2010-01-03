@@ -531,28 +531,28 @@ class Work < ActiveRecord::Base
   # string methods
   # (didn't use define_method, despite the redundancy, because it doesn't cache in development)
   def rating_string
-    self.preview_mode ? self.placeholder_tag_string(:ratings) : self.ratings.map(&:name).join(ArchiveConfig.DELIMITER)
+    self.preview_mode ? self.placeholder_tag_string(:ratings) : self.ratings.map(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
   end
   def category_string
-    self.preview_mode ? self.placeholder_tag_string(:categories) : self.categories.map(&:name).join(ArchiveConfig.DELIMITER)
+    self.preview_mode ? self.placeholder_tag_string(:categories) : self.categories.map(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
   end
   def warning_string
-    self.preview_mode ? self.placeholder_tag_string(:warnings) : self.warnings.map(&:name).join(ArchiveConfig.DELIMITER)
+    self.preview_mode ? self.placeholder_tag_string(:warnings) : self.warnings.map(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
   end
   def warning_strings
     self.preview_mode ? (self.placeholder_tags[:warnings] ||= []).map(&:name) : self.warnings.map(&:name)
   end
   def fandom_string
-    self.preview_mode ? self.placeholder_tag_string(:fandoms) : self.fandoms.map(&:name).join(ArchiveConfig.DELIMITER)
+    self.preview_mode ? self.placeholder_tag_string(:fandoms) : self.fandoms.map(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
   end
   def pairing_string
-    self.preview_mode ? self.placeholder_tag_string(:pairings) : self.pairings.map(&:name).join(ArchiveConfig.DELIMITER)
+    self.preview_mode ? self.placeholder_tag_string(:pairings) : self.pairings.map(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
   end
   def character_string
-    self.preview_mode ? self.placeholder_tag_string(:characters) : self.characters.map(&:name).join(ArchiveConfig.DELIMITER)
+    self.preview_mode ? self.placeholder_tag_string(:characters) : self.characters.map(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
   end
   def freeform_string
-    self.preview_mode ? self.placeholder_tag_string(:freeforms) : self.freeforms.map(&:name).join(ArchiveConfig.DELIMITER)
+    self.preview_mode ? self.placeholder_tag_string(:freeforms) : self.freeforms.map(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
   end
   def ambiguity_string
     self.preview_mode ? self.placeholder_tag_string(:ambiguities) : self.ambiguities.string
@@ -562,7 +562,7 @@ class Work < ActiveRecord::Base
     if self.placeholder_tags[key].blank? || !self.placeholder_tags[key].flatten.compact.first.respond_to?(:name)
       ''
     else
-      self.placeholder_tags[key].flatten.compact.map(&:name).join(ArchiveConfig.DELIMITER)
+      self.placeholder_tags[key].flatten.compact.map(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
     end
   end
   
@@ -572,8 +572,9 @@ class Work < ActiveRecord::Base
     ambiguities = []
     self.invalid_tags ||= []
     klass_symbol = klass.to_s.downcase.pluralize.to_sym
-    tag_array = incoming_tags.is_a?(String) ? incoming_tags.split(ArchiveConfig.DELIMITER) : incoming_tags
+    tag_array = incoming_tags.is_a?(String) ? incoming_tags.split(ArchiveConfig.DELIMITER_FOR_INPUT) : incoming_tags
     tag_array.each do |string|
+      string.squish!
       tag = klass.find_or_create_by_name(string)
       if tag.valid?
         tags << tag if tag.is_a?(klass)
@@ -630,7 +631,8 @@ class Work < ActiveRecord::Base
 
   def ambiguity_string=(tag_string)
     tags = []
-    tag_string.split(ArchiveConfig.DELIMITER).each do |string|
+    tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT).each do |string|
+      string.squish!
       tag = Ambiguity.find_or_create_by_name(string)
       tags << tag if tag.is_a?(Ambiguity)
     end
@@ -669,7 +671,12 @@ class Work < ActiveRecord::Base
   # Add an error message if the user tried to add invalid tags to the work
   def check_for_invalid_tags
     unless self.invalid_tags.blank?
-      errors.add_to_base("The following tags are invalid: " + self.invalid_tags.collect(&:name).join(', ') + ". Please make sure that your tags are less than #{ArchiveConfig.TAG_MAX} characters long.")
+      errors.add_to_base("The following tags are invalid: " + self.invalid_tags.collect(&:name).join(', ') + ". Please make sure that your tags are less than #{ArchiveConfig.TAG_MAX} characters long and do not contain any invalid characters.")
+      self.invalid_tags.each do |tag|
+        tag.errors.each do |error|
+          errors.add_to_base(error)
+        end
+      end
     end
     self.invalid_tags.blank?  
   end
