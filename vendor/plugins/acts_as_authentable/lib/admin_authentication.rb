@@ -27,7 +27,11 @@ module AdminAuthentication
       respond_to do |accepts|
         accepts.html do
           flash[:error] = "I'm sorry, only an admin can look at that area." 
-          redirect_to new_admin_session_path
+          begin
+            redirect_to :back
+          rescue ActionController::RedirectBackError
+            redirect_to :controller => '/home', :action => 'index'
+          end
         end
         accepts.xml do
           headers["Status"]           = "Unauthorized"
