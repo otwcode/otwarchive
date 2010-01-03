@@ -58,6 +58,7 @@ class WorksController < ApplicationController
             @work.preview_mode = false
           end 
           @work.attributes = params[:work]
+          @work.save_parents if @work.preview_mode
         end
       elsif params[:work] # create
          @work = Work.new(params[:work])
