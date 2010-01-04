@@ -1,6 +1,7 @@
 class BookmarksController < ApplicationController 
   before_filter :load_collection
   before_filter :load_bookmarkable, :only => [ :index, :new, :create, :fetch_recent ]
+  before_filter :users_only, :only => [:new, :create, :edit, :update]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
   before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy, :fetch_recent ] 
   before_filter :check_visibility, :only => [ :show ]
