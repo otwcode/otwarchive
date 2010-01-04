@@ -178,18 +178,19 @@ class Tag < ActiveRecord::Base
   
   # Add any filter taggings that should exist but don't
   def self.add_missing_filter_taggings
-    Tag.find_each(:conditions => "taggings_count != 0 AND (canonical = 1 OR merger_id IS NOT NULL)") do |tag|
-      if tag.filter
-        begin
-          puts "Adding filter taggings for #{tag.name}"
-          to_add = tag.works - tag.filter.filtered_works
-          to_add.each do |work|
-            tag.filter.filter_taggings.create!(:filterable => work)
-          end
-        rescue
-          puts "Problem adding filter taggings for #{tag.name}"
+    i = Work.posted.count
+    Work.find_each(:conditions => "posted = 1") do |work|
+      begin
+        should_have = work.tags.collect(&:filter).compact.uniq
+        should_add = should_have - work.filters
+        unless should_add.empty?
+          puts "Fixing work #{i}"
+          work.filters = (work.filters + should_add).uniq
         end
+      rescue
+        puts "Problem with work #{work.id}"
       end
+      i = i - 1
     end
   end 
   

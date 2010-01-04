@@ -3,6 +3,7 @@ module CommentableEntity
   def self.included(commentable)
     commentable.class_eval do      
       has_many :comments, :as => :commentable, :dependent => :destroy
+      has_many :total_comments, :class_name => 'Comment', :as => :parent, :dependent => :destroy 
       extend ClassMethods
     end
   end
@@ -12,21 +13,12 @@ module CommentableEntity
 
   # Returns all comments
   def find_all_comments
-    direct_comments = self.comments
-    if direct_comments 
-      @comments = []
-      for comment in direct_comments
-        @comments += comment.full_set
-      end
-      @comments
-    end
+    self.total_comments.find(:all, :order => 'thread, threaded_left')
   end
 
   # Returns the total number of comments
   def count_all_comments
-    direct_comments = self.comments
-    grandchildren = direct_comments.collect { |comment| comment.children_count }
-    direct_comments.empty? ? 0 : direct_comments.length + grandchildren.sum
+    self.total_comments.count
   end
 
   # These below have all been redefined to work for the archive
@@ -35,7 +27,7 @@ module CommentableEntity
   # hidden-by-admin comments.
   # returns number of visible (not deleted) comments
   def count_visible_comments
-    self.find_all_comments.select {|c| !c.hidden_by_admin and !c.is_deleted }.length
+    self.total_comments.count(:all, :conditions => {:hidden_by_admin => false, :is_deleted => false})
   end  
 
   # Return the name of this commentable object

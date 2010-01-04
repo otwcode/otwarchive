@@ -103,17 +103,8 @@ class CommentsController < ApplicationController
       @comment.commentable = Comment.commentable_object(@commentable)
       @controller_name = params[:controller_name]
 
-      # First, try saving the comment
-      unless @comment.valid?
-        flash[:comment_error] = t('problem_saving', :default => "There was a problem saving your comment:") 
-        msg = @comment.errors.full_messages.map {|msg| "<li>#{msg}</li>"}.join
-        unless msg.blank?
-          flash[:comment_error] += "<ul>#{msg}</ul>"
-        end
-        redirect_to_all_comments(@commentable) and return
-      end
-      
-      if @comment.set_and_save
+      # First, try saving the comment     
+      if @comment.save
         if @comment.approved?
           # save user's name/email if not logged in
           if @comment.pseud.nil?
@@ -136,8 +127,12 @@ class CommentsController < ApplicationController
          redirect_to :back
         end
       else
-        flash[:comment_error] = t('problem_saving', :default => "There was a problem saving your comment.")
-       redirect_to :back
+        flash[:comment_error] = t('problem_saving', :default => "There was a problem saving your comment:") 
+        msg = @comment.errors.full_messages.map {|msg| "<li>#{msg}</li>"}.join
+        unless msg.blank?
+          flash[:comment_error] += "<ul>#{msg}</ul>"
+        end
+        redirect_to_all_comments(@commentable) and return
       end
     end
   end

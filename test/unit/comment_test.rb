@@ -53,15 +53,15 @@ class CommentTest < ActiveSupport::TestCase
     end
   end
 
-  # has_comment_methods: set_and_save, destroy_or_mark_deleted, full_set
+  # has_comment_methods: save, destroy_or_mark_deleted, full_set
   # TODO test rest of comment methods, if used
-  def test_set_and_save
-    # set_and_save sets the depth, the thread, and adds as a child if it's a reply to a comment
+  def test_save
+    # save sets the depth, the thread, and adds as a child if it's a reply to a comment
     comment = new_comment
-    comment.set_and_save
+    comment.save
     assert_equal 0, comment.depth
     child = new_comment(:commentable_type => 'Comment', :commentable_id => comment.id)
-    child.set_and_save
+    child.save
     assert_equal 1, child.depth
     assert_equal comment.thread, child.thread
     assert_contains(Comment.find(comment.id).all_children, child)
@@ -70,10 +70,10 @@ class CommentTest < ActiveSupport::TestCase
   def test_mark_deleted
     # a comment with a child gets marked is_deleted
     comment = new_comment
-    comment.set_and_save
+    comment.save
     # give it a child
     child = new_comment(:commentable_type => 'Comment', :commentable_id => comment.id)
-    child.set_and_save
+    child.save
     comment = Comment.find(comment.id)
     comment.destroy_or_mark_deleted
     assert comment = Comment.find(comment.id)
@@ -83,7 +83,7 @@ class CommentTest < ActiveSupport::TestCase
     # another comment with no children gets destroyed
     comment = new_comment
     another_comment = new_comment
-    another_comment.set_and_save
+    another_comment.save
     another_comment.reload
     another_comment.destroy_or_mark_deleted
     assert_raises(ActiveRecord::RecordNotFound) { Comment.find(another_comment.id) }
@@ -92,11 +92,11 @@ class CommentTest < ActiveSupport::TestCase
   def test_full_set
     # Returns all sub-comments plus the comment itself
     comment = new_comment
-    comment.set_and_save
+    comment.save
     comment = Comment.find(comment.id)
     assert_equal [comment], comment.full_set
     child = new_comment(:commentable_type=>'Comment', :commentable_id=> comment.id)
-    child.set_and_save
+    child.save
     comment = Comment.find(comment.id)
     assert_equal [comment, child], comment.full_set
   end

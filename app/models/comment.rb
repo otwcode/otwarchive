@@ -1,6 +1,7 @@
 class Comment < ActiveRecord::Base
   belongs_to :pseud         
   belongs_to :commentable, :polymorphic => true
+  belongs_to :parent, :polymorphic => true
 
   has_many :inbox_comments, :foreign_key => 'feedback_comment_id', :dependent => :destroy
   has_many :users, :through => :inbox_comments
@@ -28,7 +29,7 @@ class Comment < ActiveRecord::Base
   named_scope :not_deleted, :conditions => {:is_deleted => false}
   
   # Gets methods and associations from acts_as_commentable plugin
-  acts_as_commentable  
+  acts_as_commentable
   has_comment_methods 
   
   def akismet_attributes
@@ -43,8 +44,40 @@ class Comment < ActiveRecord::Base
     }
   end
   
+  before_create :set_depth
+  before_create :set_thread_for_replies
+  before_create :set_parent
+  after_create :update_thread
+  before_save :adjust_threading, :if => :reply_comment?
+  
+  # Set the depth of the comment: 0 for a first-class comment, increasing with each level of nesting
+  def set_depth
+    self.depth = self.reply_comment? ? self.commentable.depth + 1 : 0
+  end
+  
+  # The thread value for a reply comment should be the same as its parent comment
+  def set_thread_for_replies
+    self.thread = self.commentable.thread if self.reply_comment?
+  end
+  
+  # Save the ultimate parent
+  def set_parent
+    self.parent = self.reply_comment? ? self.commentable.parent : self.commentable
+  end
+  
+  # We need a unique thread id for replies, so we'll make use of the fact
+  # that ids are unique
+  def update_thread
+    self.update_attribute(:thread, self.id) unless self.thread
+  end
+  
+  def adjust_threading
+    self.commentable.add_child(self)
+  end
+  
+  # Is this a first-class comment?
   def top_level?
-    commentable_type != "Comment"
+    !self.reply_comment?
   end
   
   def comment_owner
@@ -90,6 +123,18 @@ class Comment < ActiveRecord::Base
   def self.commentable_object(commentable)
     commentable.kind_of?(Work) ? commentable.last_chapter : commentable
   end
+  
+  def find_all_comments
+    self.all_children
+  end
+  
+  def count_all_comments
+    self.children_count
+  end
+  
+  def count_visible_comments
+    self.children_count #FIXME
+  end    
   
   def check_for_spam
     #don't check for spam if the comment is 'signed'

@@ -2,52 +2,28 @@ module CommentMethods
   
   def self.included(comment)
     comment.class_eval do      
-      extend ClassMethods
+      #extend ClassMethods
       include InstanceMethods
     end
   end 
-  
-  module ClassMethods
-    # Returns the last thread number assigned
-    def max_thread
-      Comment.maximum(:thread)
-    end
-  end
+  # 
+  # module ClassMethods
+  #   # Returns the last thread number assigned
+  #   def max_thread
+  #     Comment.maximum(:thread)
+  #   end
+  # end 
 
   module InstanceMethods      
     
     # Gets the object (chapter, bookmark, etc.) that the comment ultimately belongs to
     def ultimate_parent
-      thread_parent.commentable
+      self.parent
     end
 
     # gets the comment that is the parent of this thread
     def thread_parent
-      if self.thread.blank? && self.reply_comment? 
-        self.commentable.thread_parent
-      elsif self.reply_comment?
-        comments = Comment.find(:all, :conditions => ["thread = (?) AND depth = 0", self.thread])
-        if comments.length > 1
-          self.commentable.thread_parent          
-        else
-          comments.first
-        end
-      else
-        self
-      end
-    end
-
-    # Sets pseud, depth and thread values and adjusts threading for sub-comments
-    def set_and_save
-      self.set_depth
-      if self.reply_comment?
-        old_comment = Comment.find(self.commentable_id)
-        self.thread = old_comment.thread
-        self.depth && self.thread ? old_comment.add_child(self) : false
-      else
-        self.thread = Comment.max_thread ? Comment.max_thread.to_i + 1 : 1 
-        self.depth && self.thread ? self.save : false
-      end
+      self.reply_comment? ? self.commentable.thread_parent : self
     end
     
     # Only destroys childless comments, sets is_deleted to true for the rest
@@ -65,11 +41,6 @@ module CommentMethods
     def reply_comment?
       self.commentable_type == self.class.to_s
     end
-
-    # Sets the depth value for threaded display purposes (higher depth value = more indenting)                     
-    def set_depth
-      self.depth = self.reply_comment? ? self.commentable.depth + 1 : 0 
-    end     
 
     # Returns the total number of sub-comments
     def children_count
@@ -106,9 +77,6 @@ module CommentMethods
     # other elements in the tree and shift them to the right, keeping everything
     # balanced. 
     def add_child( child )
-      #self.reload
-      #child.reload
-
       if ( (self.threaded_left == nil) || (self.threaded_right == nil) )
         # Looks like we're now the root node!  Woo
         self.threaded_left = 1
@@ -120,7 +88,6 @@ module CommentMethods
         child.commentable_id = self.id
         child.threaded_left = 2
         child.threaded_right= 3
-        return child.save
       else
         # OK, we need to add and shift everything else to the right
         child.commentable_id = self.id
@@ -133,7 +100,6 @@ module CommentMethods
           Comment.update_all("threaded_left = (threaded_left + 2)", ["thread = (?) AND threaded_left >= (?)", self.thread, right_bound])
           Comment.update_all("threaded_right = (threaded_right + 2)",  ["thread = (?) AND threaded_right >= (?)", self.thread, right_bound])
           self.save
-          child.save
         }
       end
     end

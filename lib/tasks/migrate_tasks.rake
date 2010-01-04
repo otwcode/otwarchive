@@ -92,10 +92,22 @@ namespace :After do
 #  end
 
   desc "Rake task of DOOOOOOM"
-  task(:realign_filters => :environment) do
+  task(:remove_wrong_filters => :environment) do
     ThinkingSphinx.deltas_enabled=false
     FilterTagging.remove_invalid
+    ThinkingSphinx.deltas_enabled=true
+  end
+  
+  desc "Rake task of DOOOOOOM, Part 2"
+  task(:add_missing_filters => :environment) do
+    ThinkingSphinx.deltas_enabled=false
     Tag.add_missing_filter_taggings
+    ThinkingSphinx.deltas_enabled=true
+  end
+  
+  desc "Rake task of DOOOOOOM, Part 3"
+  task(:reset_counts => :environment) do
+    ThinkingSphinx.deltas_enabled=false
     FilterCount.set_all
     ThinkingSphinx.deltas_enabled=true
   end
@@ -108,8 +120,33 @@ namespace :After do
     ThinkingSphinx.deltas_enabled=true
   end
 
+  desc "Fix for existing non-unique threads"  
+  task(:fix_threads) do
+    duplicate_threads = Comment.find(:all, :conditions => {:depth => 0}, :group => "thread HAVING count(thread) > 1", 
+      :order => :thread, :select => :thread).collect(&:thread)
+    Comment.find(:all, :conditions => {:thread => duplicate_threads}, :order => 'depth ASC').each do |comment|
+      new_thread = comment.reply_comment? ? comment.commentable.thread : comment.id
+      comment.update_attribute(:thread, new_thread)
+    end  
+  end
+  
+  desc "Set parent for comments"
+  task(:add_comment_parents => :environment) do
+    max = Comment.maximum(:depth)
+    (0..max).each do |i|
+      Comment.find(:all, :conditions => {:depth => i}).each do |comment|
+        if comment.commentable        
+          comment.parent = (comment.depth == 0) ? comment.commentable : comment.commentable.parent
+          comment.save
+        else  
+          puts "Comment #{comment.id} has no commentable!"
+        end
+      end      
+    end    
+  end  
+
 end
 
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
-task :After => [:environment, ]
+task :After => [:environment, 'After:fix_threads', 'After:add_comment_parents']

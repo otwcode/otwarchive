@@ -64,6 +64,7 @@ class Work < ActiveRecord::Base
     :before_remove => :remove_filter_tagging
       
   acts_as_commentable
+  has_many :total_comments, :class_name => 'Comment', :through => :chapters 
 
   belongs_to :language
 

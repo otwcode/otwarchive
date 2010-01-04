@@ -15,11 +15,11 @@ class CommentsControllerTest < ActionController::TestCase
     @chapter2 = new_chapter(:work_id => @work.id, :authors => [@pseud])
     @chapter2.save
     @comment1 = create_comment(:commentable => @chapter1, :content => 'first comment', :pseud => @pseud)
-    @comment1.set_and_save
+    @comment1.save
     @comment2 = create_comment(:commentable => @chapter2, :content => 'second comment', :pseud => @pseud)
-    @comment2.set_and_save
+    @comment2.save
     @child1 = create_comment(:commentable => @comment1, :content => 'first child', :pseud => @pseud)
-    @child1.set_and_save
+    @child1.save
     @work.reload
   end
 
