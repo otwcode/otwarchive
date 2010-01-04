@@ -99,6 +99,14 @@ namespace :After do
     FilterCount.set_all
     ThinkingSphinx.deltas_enabled=true
   end
+  
+  desc "Hide/anonymize existing collection items as appropriate"
+  task(:update_collection_items => :environment) do
+    ThinkingSphinx.deltas_enabled=false
+    Collection.unrevealed.collect(&:collection_items).flatten.each {|ci| ci.unrevealed=true; ci.save}
+    Collection.anonymous.collect(&:collection_items).flatten.each {|ci| ci.anonymous=true; ci.save}
+    ThinkingSphinx.deltas_enabled=true
+  end
 
 end
 

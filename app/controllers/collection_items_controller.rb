@@ -145,6 +145,12 @@ class CollectionItemsController < ApplicationController
     elsif @collection && @collection.user_is_maintainer?(current_user)
       # update as allowed -- currently just approval status
       @collection_item.collection_approval_status = params[:collection_item][:collection_approval_status]
+      @collection_item.anonymous = params[:collection_item][:anonymous]
+      if @collection_item.unrevealed && !params[:collection_item][:unrevealed]
+        @collection_item.reveal!
+      else
+        @collection_item.unrevealed = params[:collection_item][:unrevealed]
+      end
       if @collection_item.save
         flash[:notice] = t('collection_items.updated', :default => "Updated {{item}}.", :item => @collection_item.title)
       else

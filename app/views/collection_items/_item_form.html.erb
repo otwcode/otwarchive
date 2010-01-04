@@ -16,6 +16,12 @@
   <% if @collection.gift_exchange? %>
     <td><%= collection_item.recipients -%></td>
   <% end %>
+  <% if @collection.unrevealed? %>
+    <td><%= form.check_box :unrevealed -%></td>
+  <% end -%>
+  <% if @collection.anonymous? %>
+    <td><%= form.check_box :anonymous -%></td>
+  <% end -%>
 <% else %>
   <!-- user version -->
   <td><%=h collection_item.collection.title -%></td>

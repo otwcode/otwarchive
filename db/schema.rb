@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091227192528) do
+ActiveRecord::Schema.define(:version => 20100104041510) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -80,6 +80,7 @@ ActiveRecord::Schema.define(:version => 20091227192528) do
 
   add_index "bookmarks", ["bookmarkable_id", "bookmarkable_type", "pseud_id"], :name => "index_bookmarkable_pseud"
   add_index "bookmarks", ["bookmarkable_id", "bookmarkable_type"], :name => "index_bookmarkable"
+  add_index "bookmarks", ["private", "hidden_by_admin", "created_at"], :name => "index_bookmarks_on_private_and_hidden_by_admin_and_created_at"
   add_index "bookmarks", ["pseud_id"], :name => "index_bookmarks_on_pseud_id"
   add_index "bookmarks", ["user_id"], :name => "fk_bookmarks_user"
 
@@ -110,9 +111,12 @@ ActiveRecord::Schema.define(:version => 20091227192528) do
     t.integer  "collection_approval_status", :limit => 1, :default => 0,      :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "anonymous",                               :default => false,  :null => false
+    t.boolean  "unrevealed",                              :default => false,  :null => false
   end
 
   add_index "collection_items", ["collection_id", "item_id", "item_type"], :name => "by collection and item", :unique => true
+  add_index "collection_items", ["collection_id", "user_approval_status", "collection_approval_status"], :name => "index_collection_items_approval_status"
 
   create_table "collection_participants", :force => true do |t|
     t.integer  "collection_id"
@@ -122,6 +126,7 @@ ActiveRecord::Schema.define(:version => 20091227192528) do
     t.datetime "updated_at"
   end
 
+  add_index "collection_participants", ["collection_id", "participant_role"], :name => "participants_by_collection_and_role"
   add_index "collection_participants", ["collection_id", "pseud_id"], :name => "by collection and pseud", :unique => true
 
   create_table "collection_preferences", :force => true do |t|

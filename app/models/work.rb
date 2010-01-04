@@ -29,6 +29,9 @@ class Work < ActiveRecord::Base
 
   has_many :collection_items, :as => :item, :dependent => :destroy
   accepts_nested_attributes_for :collection_items, :allow_destroy => true
+  has_many :approved_collection_items, :class_name => "CollectionItem", :as => :item, 
+    :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
+  
 
   has_many :collections, :through => :collection_items
   has_many :approved_collections, :through => :collection_items, :source => :collection,
@@ -343,12 +346,12 @@ class Work < ActiveRecord::Base
 
   def unrevealed?(user=User.current_user)
     # eventually here is where we check if it's in a challenge that hasn't been made public yet
-    !self.approved_collections.unrevealed.empty?
+    !self.approved_collection_items.unrevealed.empty?
   end
   
   def anonymous?(user=User.current_user)
     # here we check if the story is in a currently-anonymous challenge
-    !self.approved_collections.anonymous.empty?
+    !self.approved_collection_items.anonymous.empty?
   end
 
   ########################################################################

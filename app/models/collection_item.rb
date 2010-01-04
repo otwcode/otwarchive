@@ -40,6 +40,16 @@ class CollectionItem < ActiveRecord::Base
   end
   
   named_scope :include_for_works, :include => [{:work => :pseuds}]
+  named_scope :unrevealed, :conditions => {:unrevealed => true}
+  named_scope :anonymous, :conditions =>  {:anonymous => true}
+  
+  before_save :set_anonymous_and_unrevealed
+  def set_anonymous_and_unrevealed
+    if self.new_record? && collection
+      self.unrevealed = true if collection.unrevealed?
+      self.anonymous = true if collection.anonymous?
+    end
+  end
     
   before_save :approve_automatically
   def approve_automatically
@@ -129,5 +139,24 @@ class CollectionItem < ActiveRecord::Base
     approve_by_user if user && (user.is_author_of?(item) || (user == User.current_user && item.respond_to?(:pseuds) ? item.pseuds.empty? : item.pseud.nil?) )
     approve_by_collection if user && self.collection.user_is_maintainer?(user)
   end  
+  
+  def reveal!
+    # if this item was previously unrevealed, reveal it now & notify the recipient if there was one
+    if self.unrevealed
+      self.unrevealed = false
+      recipient_pseuds = Pseud.parse_bylines(self.recipients, true)[:pseuds]
+      recipient_pseuds.each do |pseud|
+        unless pseud.user.preference.recipient_emails_off
+          UserMailer.deliver_recipient_notification(pseud.user, collection_item.item, new_collection)
+        end
+      end
+      save
+    end
+  end
+  
+  def reveal_author!
+    self.anonymous = false
+    save
+  end
 
 end
