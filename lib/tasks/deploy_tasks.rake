@@ -27,8 +27,8 @@ namespace :deploy do
 
   desc "Revert testarchive db"
   task(:revert_db_test => :check_environment) do
-    Rake::Task['db:drop']
-    Rake::Task['db:create']
+    Rake::Task['db:drop'].invoke
+    Rake::Task['db:create'].invoke
     @backup_file ||= ask("Enter the location of the backup file (possibly /backup/latest.dump): ")
     @db_password ||= ask("Enter the database password: ")
     puts %x{mysql -uotwarchive -p#{@db_password} otwarchive_production < #{@backup_file}}
