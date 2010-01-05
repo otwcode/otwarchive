@@ -1,4 +1,5 @@
 namespace :After do
+
 # everything commented out has already been run on the archive...
 # keeping only the most recent tasks - if you need to go back further, check subversion
   
@@ -91,37 +92,37 @@ namespace :After do
 #    ThinkingSphinx.deltas_enabled=true
 #  end
 
-  desc "Rake task of DOOOOOOM"
-  task(:remove_wrong_filters => :environment) do
-    ThinkingSphinx.deltas_enabled=false
-    FilterTagging.remove_invalid
-    ThinkingSphinx.deltas_enabled=true
-  end
-  
-  desc "Rake task of DOOOOOOM, Part 2"
-  task(:add_missing_filters => :environment) do
-    ThinkingSphinx.deltas_enabled=false
-    Tag.add_missing_filter_taggings
-    ThinkingSphinx.deltas_enabled=true
-  end
-  
-  desc "Rake task of DOOOOOOM, Part 3"
-  task(:reset_counts => :environment) do
-    ThinkingSphinx.deltas_enabled=false
-    FilterCount.set_all
-    ThinkingSphinx.deltas_enabled=true
-  end
-  
+  #### Add your new tasks here
+
+
   desc "Hide/anonymize existing collection items as appropriate"
   task(:update_collection_items => :environment) do
-    ThinkingSphinx.deltas_enabled=false
+    puts "Hiding and anonymizing existing collection items"
     Collection.unrevealed.collect(&:collection_items).flatten.each {|ci| ci.unrevealed=true; ci.save}
     Collection.anonymous.collect(&:collection_items).flatten.each {|ci| ci.anonymous=true; ci.save}
-    ThinkingSphinx.deltas_enabled=true
   end
 
+  desc "Rake task of DOOOOOOM: remove wrong filters"
+  task(:remove_wrong_filters => :environment) do
+    puts "Removing invalid filters"
+    FilterTagging.remove_invalid
+  end
+  
+  desc "Rake task of DOOOOOOM, Part 2: add missing filters"
+  task(:add_missing_filters => :environment) do
+    puts "Adding missing filters"
+    Tag.add_missing_filter_taggings
+  end
+  
+  desc "Rake task of DOOOOOOM, Part 3: reset all filter counts"
+  task(:reset_counts => :environment) do
+    puts "Resetting filter counts"
+    FilterCount.set_all
+  end
+  
   desc "Fix for existing non-unique threads"  
   task(:fix_threads => :environment) do
+    puts "Fixing duplicate threads"
     duplicate_threads = Comment.find(:all, :conditions => {:depth => 0}, :group => "thread HAVING count(thread) > 1", 
       :order => :thread, :select => :thread).collect(&:thread)
     Comment.find(:all, :conditions => {:thread => duplicate_threads}, :order => 'depth ASC').each do |comment|
@@ -133,6 +134,7 @@ namespace :After do
   
   desc "Set parent for comments"
   task(:add_comment_parents => :environment) do
+    puts "Setting parent for all comments"
     max = Comment.maximum(:depth)
     (0..max).each do |i|
       puts "On depth #{i}!"
@@ -148,8 +150,36 @@ namespace :After do
     end    
   end  
 
+  # LEAVE THESE ALONE -- turns off TS deltas and turns them back on 
+  # after all migrate tasks are run
+  desc "Turn off thinking sphinx deltas"
+  task(:turn_off_deltas => :environment) do
+    puts "Disabling Thinking Sphinx updates while we migrate..."
+    ThinkingSphinx.deltas_enabled=false
+  end
+  
+  desc "Turn on thinking sphinx deltas"
+  task(:turn_on_deltas => :environment) do
+    ThinkingSphinx.deltas_enabled=true
+    puts "Re-enabled Thinking Sphinx updates"
+  end
+
 end
+
+##################
+# ADD NEW MIGRATE TASKS TO THIS LIST ONCE THEY ARE WORKING
 
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
-task :After => [:environment, 'After:fix_threads', 'After:add_comment_parents']
+task :After => ['After:update_collection_items', 'After:fix_threads', 'After:add_comment_parents']
+
+##################################################################
+# LEAVE THIS ALONE: 
+# top_level_tasks isn't writable so we need to do this 
+# instance_variable_set hack to prepend/append the delta
+# tasks.
+current_tasks =  Rake.application.top_level_tasks
+current_tasks.unshift('After:turn_off_deltas')
+current_tasks << 'After:turn_on_deltas'
+Rake.application.instance_variable_set(:@top_level_tasks, current_tasks)
+
