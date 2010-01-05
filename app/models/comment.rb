@@ -48,7 +48,7 @@ class Comment < ActiveRecord::Base
   before_create :set_thread_for_replies
   before_create :set_parent
   after_create :update_thread
-  before_save :adjust_threading, :if => :reply_comment?
+  before_create :adjust_threading, :if => :reply_comment?
   
   # Set the depth of the comment: 0 for a first-class comment, increasing with each level of nesting
   def set_depth
