@@ -141,4 +141,10 @@ ActionController::AbstractRequest.relative_url_root = ArchiveConfig.PRODUCTION_U
 class ActiveRecord::Base
     include FindRandom
 end
-ThinkingSphinx.suppress_delta_output = true
+
+begin
+  if ThinkingSphinx.respond_to?("suppress_delta_output=")
+    ThinkingSphinx.suppress_delta_output=true 
+  end
+rescue NameError
+end
