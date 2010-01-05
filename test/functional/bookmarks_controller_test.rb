@@ -198,7 +198,7 @@ class BookmarksControllerTest < ActionController::TestCase
       get :edit, :id => @bookmark.id
     end
       should_set_the_flash_to /have permission/
-      should_redirect_to("the bookmark path") {bookmark_path(@bookmark)}
+      should_redirect_to("the login path") {new_session_path}
   end
 
   context "when logged in" do
