@@ -4,7 +4,7 @@ class AdminsControllerTest < ActionController::TestCase
   # create  POST  /:locale/admins
   def test_create_admin_fail
     post :create, :locale => 'en', :admin => {}
-    assert_redirected_to new_admin_session_path
+    assert_redirected_to '/'
   end
   def test_create_admin
     admin = create_admin
@@ -16,7 +16,7 @@ class AdminsControllerTest < ActionController::TestCase
   def test_destroy_admin_fail
     admin = create_admin
     delete :destroy, :locale => 'en', :id => admin.id
-    assert_redirected_to new_admin_session_path 
+    assert_redirected_to '/'
   end
   def test_destroy_admin
     admin = create_admin
@@ -30,7 +30,7 @@ class AdminsControllerTest < ActionController::TestCase
   def test_edit_admin_path_fail
     admin = create_admin
     get :edit, :locale => 'en', :id => admin.id
-    assert_redirected_to new_admin_session_path
+    assert_redirected_to '/'
   end
   def test_edit_admin_path
     admin = create_admin
@@ -41,7 +41,7 @@ class AdminsControllerTest < ActionController::TestCase
   # index  GET  /:locale/admins  (named path: admins)
   def test_admins_path_fail
     get :index, :locale => 'en'
-    assert_redirected_to new_admin_session_path
+    assert_redirected_to '/'
   end
   def test_admins_path
     admin = create_admin
@@ -53,7 +53,7 @@ class AdminsControllerTest < ActionController::TestCase
   # new  GET  /:locale/admins/new  (named path: new_admin)
   def test_new_admin_path_fail
     get :new, :locale => 'en'
-    assert_redirected_to new_admin_session_path
+    assert_redirected_to '/'
   end
   def test_new_admin_path
     admin = create_admin
@@ -65,7 +65,7 @@ class AdminsControllerTest < ActionController::TestCase
   def test_admin_path_fail
     admin = create_admin
     get :show, :id => admin.id, :locale => 'en'
-    assert_redirected_to new_admin_session_path
+    assert_redirected_to '/'
     end
 # Don't have a page for admins yet
 #  def test_admin_path
@@ -78,7 +78,7 @@ class AdminsControllerTest < ActionController::TestCase
   def test_update_admin_fail
     admin = create_admin
     put :update, :id => admin.id, :locale => 'en'
-    assert_redirected_to new_admin_session_path
+    assert_redirected_to '/'
   end
   def test_update_admin
     admin = create_admin
