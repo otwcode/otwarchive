@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100104041510) do
+ActiveRecord::Schema.define(:version => 20100104232756) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -187,9 +187,12 @@ ActiveRecord::Schema.define(:version => 20100104041510) do
     t.boolean  "approved",         :default => false, :null => false
     t.boolean  "hidden_by_admin",  :default => false, :null => false
     t.datetime "edited_at"
+    t.integer  "parent_id"
+    t.string   "parent_type"
   end
 
   add_index "comments", ["commentable_id", "commentable_type"], :name => "index_comments_commentable"
+  add_index "comments", ["parent_id", "parent_type"], :name => "index_comments_parent"
   add_index "comments", ["pseud_id"], :name => "index_comments_on_pseud_id"
 
   create_table "common_taggings", :force => true do |t|
@@ -515,6 +518,18 @@ ActiveRecord::Schema.define(:version => 20100104041510) do
     t.text     "notes"
     t.boolean  "hidden_by_admin", :default => false, :null => false
     t.boolean  "restricted",      :default => true,  :null => false
+  end
+
+  create_table "set_taggings", :force => true do |t|
+    t.integer  "tag_id"
+    t.integer  "tag_set_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tag_sets", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "taggings", :force => true do |t|

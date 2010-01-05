@@ -71,6 +71,7 @@ class Tag < ActiveRecord::Base
   }
 
   named_scope :by_type, lambda {|*types| {:conditions => (types.first.blank? ? {} : {:type => types.first})}}
+  named_scope :with_type, lambda {|type| {:conditions =>  {:type => type}}}
 
   # enigel Feb 09
   named_scope :starting_with, lambda {|letter| {:conditions => ['SUBSTR(name,1,1) = ?', letter]}}
