@@ -1127,7 +1127,7 @@ class Work < ActiveRecord::Base
     end
   end
 
-  def self.search_with_sphinx(options, filterable=false)
+  def self.search_with_sphinx(options)
 
     # sphinx ordering must be done on attributes
     order_clause = case options[:sort_column]
@@ -1162,22 +1162,14 @@ class Work < ActiveRecord::Base
       command += visible
     end
     ids = eval("#{command}").collect(&:id)
-    conditions_clause = ids.empty? || ids.length >= ArchiveConfig.SPHINX_FILTER_SIZE_LIMIT ? {:work_ids => '-1'}  : {:work_ids => ids}
 
-    search_options = {:conditions => conditions_clause,
-                      :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE),
-                      :page => options[:page]}
+    # can't use thinking sphinx's pagination, because some are removed
+    # which throws off the pagination 
+    search_options = {:per_page => 10000, :page => 1, :max_matches => 10000}
     search_options.merge!({:order => order_clause}) if !order_clause.blank?
 
-    if filterable
-      search_options[:per_page] = ArchiveConfig.SEARCH_RESULTS_MAX
-      search_options[:page] = 1
-    end
-
     works = Work.search(options[:query], search_options)
-    if (ids.length  >= ArchiveConfig.SPHINX_FILTER_SIZE_LIMIT) 
-      works.delete_if {|work| !ids.include?(work.id)}
-    end
+    works.delete_if {|work| !ids.include?(work.id)}
     works
   end
 

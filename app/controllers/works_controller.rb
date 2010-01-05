@@ -125,21 +125,23 @@ class WorksController < ApplicationController
       @selected_tags = params[:selected_tags]
     end
 
-    # if we have a query, we are searching with sphinx, which will
-    # paginate for us automatically
+    # if we have a query, we are searching with sphinx
     if params[:query]
       @query = params[:query]
       begin
-        @works = Work.search_with_sphinx(params)
-        @works_to_filter = Work.search_with_sphinx(params, filterable=true)
+        works = Work.search_with_sphinx(params)
+        if works.size > ArchiveConfig.SEARCH_RESULTS_MAX
+          @too_many = true 
+          works = works[0...ArchiveConfig.SEARCH_RESULTS_MAX]
+        end
+        unless works.empty?
+          @filters = Work.build_filters(works)
+        end
+        @works = works.paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
         @search = true;
       rescue ThinkingSphinx::ConnectionError
         flash[:error] = t('errors.search_engine_down', :default => "The search engine seems to be down at the moment, sorry!")
         redirect_to :action => :index and return
-      end
-
-      unless @works.empty?
-        @filters = Work.build_filters(@works_to_filter)
       end
     else
       @most_recent_works = (params[:tag_id].blank? && params[:user_id].blank? && params[:language_id].blank? && params[:collection_id].blank?)
