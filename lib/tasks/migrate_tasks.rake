@@ -1,5 +1,32 @@
 namespace :After do
 
+  ##################################################################
+  # LEAVE THIS SECTION ALONE -- turns off TS deltas and turns them back on 
+  # after all migrate tasks are run
+  desc "Turn off thinking sphinx deltas"
+  task(:turn_off_deltas => :environment) do
+    puts "Disabling Thinking Sphinx updates while we migrate..."
+    ThinkingSphinx.deltas_enabled=false
+  end
+  
+  desc "Turn on thinking sphinx deltas"
+  task(:turn_on_deltas => :environment) do
+    ThinkingSphinx.deltas_enabled=true
+    puts "Re-enabled Thinking Sphinx updates"
+  end
+
+  # top_level_tasks isn't writable so we need to do this 
+  # instance_variable_set hack to prepend/append the delta
+  # tasks when the After tasks are run
+  current_tasks =  Rake.application.top_level_tasks
+  if current_tasks.first && current_tasks.first.match(/After/)
+    current_tasks.unshift('After:turn_off_deltas')
+    current_tasks << 'After:turn_on_deltas'
+    Rake.application.instance_variable_set(:@top_level_tasks, current_tasks)
+  end
+  ###################################################################
+
+
 # everything commented out has already been run on the archive...
 # keeping only the most recent tasks - if you need to go back further, check subversion
   
@@ -150,20 +177,6 @@ namespace :After do
     end    
   end  
 
-  # LEAVE THESE ALONE -- turns off TS deltas and turns them back on 
-  # after all migrate tasks are run
-  desc "Turn off thinking sphinx deltas"
-  task(:turn_off_deltas => :environment) do
-    puts "Disabling Thinking Sphinx updates while we migrate..."
-    ThinkingSphinx.deltas_enabled=false
-  end
-  
-  desc "Turn on thinking sphinx deltas"
-  task(:turn_on_deltas => :environment) do
-    ThinkingSphinx.deltas_enabled=true
-    puts "Re-enabled Thinking Sphinx updates"
-  end
-
 end
 
 ##################
@@ -172,14 +185,4 @@ end
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
 task :After => ['After:update_collection_items', 'After:fix_threads', 'After:add_comment_parents']
-
-##################################################################
-# LEAVE THIS ALONE: 
-# top_level_tasks isn't writable so we need to do this 
-# instance_variable_set hack to prepend/append the delta
-# tasks.
-current_tasks =  Rake.application.top_level_tasks
-current_tasks.unshift('After:turn_off_deltas')
-current_tasks << 'After:turn_on_deltas'
-Rake.application.instance_variable_set(:@top_level_tasks, current_tasks)
 
