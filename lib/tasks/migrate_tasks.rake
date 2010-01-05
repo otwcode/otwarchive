@@ -121,10 +121,11 @@ namespace :After do
   end
 
   desc "Fix for existing non-unique threads"  
-  task(:fix_threads) do
+  task(:fix_threads => :environment) do
     duplicate_threads = Comment.find(:all, :conditions => {:depth => 0}, :group => "thread HAVING count(thread) > 1", 
       :order => :thread, :select => :thread).collect(&:thread)
     Comment.find(:all, :conditions => {:thread => duplicate_threads}, :order => 'depth ASC').each do |comment|
+      puts "Updating #{comment.id}"
       new_thread = comment.reply_comment? ? comment.commentable.thread : comment.id
       comment.update_attribute(:thread, new_thread)
     end  
@@ -134,8 +135,10 @@ namespace :After do
   task(:add_comment_parents => :environment) do
     max = Comment.maximum(:depth)
     (0..max).each do |i|
+      puts "On depth #{i}!"
       Comment.find(:all, :conditions => {:depth => i}).each do |comment|
-        if comment.commentable        
+        if comment.commentable
+          puts "Updating #{comment.id}"        
           comment.parent = (comment.depth == 0) ? comment.commentable : comment.commentable.parent
           comment.save
         else  
