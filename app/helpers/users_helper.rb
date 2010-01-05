@@ -29,46 +29,64 @@ module UsersHelper
   # (The total should reflect the number of bookmarks the user can actually see.)
   def print_bookmarks_link(user)
     total = logged_in_as_admin? ? @user.bookmarks.count : @user.bookmarks.visible.size
-    prefix = (@user == current_user) ? "My " : ""
-    link_to_unless_current prefix + "Bookmarks" + " (" + total.to_s + ")", user_bookmarks_path(@user)
+    if @user == current_user
+	  link_to_unless_current t('my_bookmarks', :default => "My Bookmarks ({{bookmark_number}})", :bookmark_number => total.to_s), user_bookmarks_path(@user)
+	else
+	  link_to_unless_current t('bookmarks', :default => "Bookmarks ({{bookmark_number}})", :bookmark_number => total.to_s), user_bookmarks_path(@user)
+	end
   end
 	
-	def print_pseud_bookmarks_link(pseud)
+  def print_pseud_bookmarks_link(pseud)
     total = logged_in_as_admin? ? pseud.bookmarks.count : pseud.bookmarks.visible.size
-    prefix = (@user == current_user) ? "My " : ""
-    link_to_unless_current prefix + "Bookmarks" + " (" + total.to_s + ")", user_pseud_bookmarks_path(@user, pseud)
+    if @user == current_user
+	  link_to_unless_current t('my_pseud_bookmarks', :default => "My Bookmarks ({{bookmark_number}})", :bookmark_number => total.to_s), user_pseud_bookmarks_path(@user, pseud)
+	else
+	  link_to_unless_current t('pseud_bookmarks', :default => "Bookmarks ({{bookmark_number}})", :bookmark_number => total.to_s), user_pseud_bookmarks_path(@user, pseud)
+	end
   end
   
   # Prints link to works page with user-appropriate number of works
   # (The total should reflect the number of works the user can actually see.)
   def print_works_link(user)
     total = user.visible_work_count
-    prefix = (@user == current_user) ? "My " : ""
-    link_to_unless_current prefix + "Works" + " (" + total.to_s + ")", user_works_path(@user)
+    if @user == current_user
+	  link_to_unless_current t('my_works', :default => "My Works ({{works_number}})", :works_number => total.to_s), user_works_path(@user)
+	else
+	  link_to_unless_current t('works', :default => "Works ({{works_number}})", :works_number => total.to_s), user_works_path(@user)
+	end
   end
   
   def print_pseud_works_link(pseud)
     total = pseud.visible_works_count
-    prefix = (@user == current_user) ? "My " : ""
-    link_to_unless_current prefix + "Works" + " (" + total.to_s + ")", user_pseud_works_path(@user, pseud)
+    if @user == current_user
+	  link_to_unless_current t('my_works', :default => "My Works ({{works_number}})", :works_number => total.to_s), user_pseud_works_path(@user, pseud)
+	else
+	  link_to_unless_current t('works', :default => "Works ({{works_number}})", :works_number => total.to_s), user_pseud_works_path(@user, pseud)
+	end
   end
 
   # Prints link to series page with user-appropriate number of series
   def print_series_link(user)
     total = user.series.select{|s| s.visible?(current_user)}.size
-    prefix = (@user == current_user) ? "My " : ""
-    link_to_unless_current prefix + "Series" + " (#{total})", user_series_index_path(@user)
+    if @user == current_user
+	  link_to_unless_current t('my_series', :default => "My Series ({{series_number}})", :series_number => total.to_s), user_series_index_path(@user)
+	else
+	  link_to_unless_current t('series', :default => "Series ({{series_number}})", :series_number => total.to_s), user_series_index_path(@user)
+	end
   end
   
   def print_pseud_series_link(pseud)
     total = pseud.series.select{|s| s.visible?(current_user)}.size
-    prefix = (@user == current_user) ? "My " : ""
-    link_to_unless_current prefix + "Series" + " (#{total})", user_pseud_series_index_path(@user, pseud)
+    if @user == current_user
+	  link_to_unless_current t('my_series', :default => "My Series ({{series_number}})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)
+	else
+	  link_to_unless_current t('series', :default => "Series ({{series_number}})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)
+	end
   end
 
   def print_drafts_link(user)
     total = @user.unposted_works.size
-    link_to_unless_current "My Drafts" + " (#{total})", drafts_user_works_path(@user)
+    link_to_unless_current t('my_drafts', :default => "My Drafts") + " (#{total})", drafts_user_works_path(@user)
   end
   
   def authored_items(pseud)
@@ -86,7 +104,7 @@ module UsersHelper
   
 #  def print_pseud_drafts_link(pseud)
 #    total = pseud.unposted_works.size
-#    link_to_unless_current "My Drafts" + " (#{total})", drafts_user_pseud_works_path(@user, pseud)
+#    link_to_unless_current t('my_drafts', :default =>"My Drafts") + " (#{total})", drafts_user_pseud_works_path(@user, pseud)
 #  end
   
   def authors_header(collection)
