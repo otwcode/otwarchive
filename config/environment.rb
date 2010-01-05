@@ -119,6 +119,8 @@ Rails::Initializer.run do |config|
   config.gem 'mechanize'
   config.gem 'rest-client', :lib => 'rest_client'
 
+  config.gem 'thinking-sphinx', :lib => 'thinking_sphinx'
+  config.gem 'ts-delayed-delta', :lib => 'thinking_sphinx/deltas/delayed_delta'
   
   # Override the sanitize defaults to allow some extra formatting attributes. 
   config.action_view.sanitized_allowed_attributes = 'align'
@@ -139,3 +141,4 @@ ActionController::AbstractRequest.relative_url_root = ArchiveConfig.PRODUCTION_U
 class ActiveRecord::Base
     include FindRandom
 end
+ThinkingSphinx.suppress_delta_output = true

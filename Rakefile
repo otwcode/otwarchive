@@ -16,6 +16,14 @@ rescue Exception
 end
 
 begin
+  require 'thinking_sphinx/tasks'
+  require 'thinking_sphinx/deltas/delayed_delta/tasks'
+rescue Exception
+  puts "thinking-sphinx gem not installed yet"
+end
+
+
+begin
   load File.join(RAILS_ROOT, Dir["vendor/gems/relevance-tarantula-*/tasks/*.rake"])
 rescue Exception
   puts "after installing the tarantula gem, do the following to run its rake tests:"

@@ -46,6 +46,7 @@ namespace :local do
     run "cd #{release_path} && rake ts:stop RAILS_ENV=production"
     run "cd #{release_path} && rake ts:index RAILS_ENV=production"
     run "cd #{release_path} && rake ts:start RAILS_ENV=production"
+    run "cd #{release_path} && rake ts:dd RAILS_ENV=production&"
   end
 end
 

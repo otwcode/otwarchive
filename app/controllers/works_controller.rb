@@ -139,7 +139,7 @@ class WorksController < ApplicationController
         end
         @works = works.paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
         @search = true;
-      rescue ThinkingSphinx::ConnectionError
+      rescue Riddle::ConnectionError
         flash[:error] = t('errors.search_engine_down', :default => "The search engine seems to be down at the moment, sorry!")
         redirect_to :action => :index and return
       end

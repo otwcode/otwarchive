@@ -929,7 +929,7 @@ class Work < ActiveRecord::Base
     has tags(:id), :as => :tag_ids
 
     # properties
-    set_property :delta => true
+    set_property :delta => :delayed
     set_property :field_weights => { :tag_name => 10,
                                      :title => 10, :pseud_name => 10,
                                      :summary => 5, :notes => 5,
