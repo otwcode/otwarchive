@@ -19,13 +19,16 @@ class FandomsController < ApplicationController
         end        
       end
     elsif params[:medium_id]
-      @medium = Media.find_by_name(params[:medium_id])
-      if @medium == Media.uncategorized
-        @fandoms = @medium.fandoms.by_name
+      if @medium = Media.find_by_name(params[:medium_id])
+        if @medium == Media.uncategorized
+          @fandoms = @medium.fandoms.by_name
+        else
+          fandom_ids = @medium.fandoms.canonical.collect(&:id)
+          @fandoms = Fandom.by_name.with_count.find(:all, :conditions => {:id => fandom_ids})
+        end      
       else
-        fandom_ids = @medium.fandoms.canonical.collect(&:id)
-        @fandoms = Fandom.by_name.with_count.find(:all, :conditions => {:id => fandom_ids})
-      end      
+        raise ActiveRecord::RecordNotFound, "Couldn't find media category named '#{params[:medium_id]}'"
+      end
     else
       @fandoms = Fandom.canonical.by_name.with_count
     end
