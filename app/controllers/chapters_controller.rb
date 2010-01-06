@@ -234,7 +234,7 @@ class ChaptersController < ApplicationController
       else
         flash[:error] = t('delete_failed', :default => "Something went wrong. Please try again.")
       end
-      redirect_to(edit_work_url(@work))
+      redirect_to :controller => 'works', :action => 'show', :id => @work
     end
   end
   

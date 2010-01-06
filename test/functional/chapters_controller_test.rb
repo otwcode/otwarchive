@@ -42,7 +42,7 @@ class ChaptersControllerTest < ActionController::TestCase
     assert_difference('Chapter.count', -1) do
       delete :destroy, :work_id => work.id, :id => chapter1.id
     end
-    assert_redirected_to edit_work_url(assigns(:work))
+    assert_redirected_to work_url(assigns(:work))
     assert_equal Work.find(work.id).number_of_chapters, 1
   end  
   # Test edit  GET  /:locale/chapters/:id/edit  (named path: edit_chapter)
