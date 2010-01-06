@@ -114,8 +114,8 @@
   <p><%= t('note_author', :default => "Please note that the author's summary and tags will be added automatically.") %>
 <%- end -%>
 <p> <%= f.check_box :private %> <%= f.label :private, t('form_private', :default => "Private bookmark?") %>&nbsp;&nbsp;&nbsp;<%= f.check_box :rec %> <%= f.label :rec, t('form_rec', :default => "Rec?") %></p>
-<%= f.hidden_field :bookmarkable_id, :value => bookmarkable.id %>
-<%= f.hidden_field :bookmarkable_type, :value => bookmarkable.class.to_s %>
+<%= f.hidden_field :bookmarkable_id, :value => bookmarkable.id if bookmarkable%>
+<%= f.hidden_field :bookmarkable_type, :value => bookmarkable.class.to_s if bookmarkable %>
 <p class="submit"><%= f.submit(button_name ||= t('forms.create', :default => "Create")) %></p>
 <% end %>
 </div>

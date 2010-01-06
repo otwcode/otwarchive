@@ -23,7 +23,7 @@
       <%- else -%>
         <%= link_to_bookmarkable_bookmarks(bookmark.bookmarkable, t('bookmarks_total_single', :default=>'Bookmarked {{count}} time', :count=>bookmark_count)) -%>
       <%- end -%>
-    <%- if true #logged_in? && !is_author_of?(bookmark) -%>
+    <%- if logged_in? && !is_author_of?(bookmark) -%>
        | <%= bookmark_link(bookmark.bookmarkable, true)%>
     <%- end -%>
   </li>
