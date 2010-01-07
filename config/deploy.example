@@ -43,10 +43,9 @@ namespace :local do
     run "echo -n 'REVISION: ' >> #{shared_path}/config/local.yml"
     run "cat #{release_path}/REVISION >> #{shared_path}/config/local.yml"
     run "ln -sf #{shared_path}/config/database.yml #{release_path}/config/database.yml" 
-    run "cd #{release_path} && rake ts:stop RAILS_ENV=production"
-    run "cd #{release_path} && rake ts:index RAILS_ENV=production"
-    run "cd #{release_path} && rake ts:start RAILS_ENV=production"
-    run "cd #{release_path} && rake ts:dd RAILS_ENV=production&"
+    run "cd #{release_path} && ruby script/delayed_job stop production"
+    run "cd #{release_path} && rake ts:rebuild RAILS_ENV=production"
+    run "cd #{release_path} && ruby script/delayed_job start production"
   end
 end
 
