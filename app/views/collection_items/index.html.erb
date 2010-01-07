@@ -6,7 +6,7 @@
 
 <% else %>
 
-  <h1><%=h t('items.in_collection', :default => "Items in {{collection}}", :collection => @collection.title) -%></h1>
+  <h1><%=sanitize_title_for_display t('items.in_collection', :default => "Items in {{collection}}", :collection => link_to(@collection.title, @collection)) -%></h1>
   <table id="collection_items_table" summary="This table shows the items in your collection; you can approve or reject or remove them.">
   <caption><%=h t('ci_index.list', :default => "List of items in {{collection}}", :collection => @collection.title) -%></caption>
 

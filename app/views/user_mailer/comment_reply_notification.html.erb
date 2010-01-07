@@ -1,5 +1,12 @@
-<p><%=h @comment.comment_owner_name -%> <%=h "replied to your comment on" -%> <%=h @commentable.commentable_name -%>:</p>
+<p><%=h t('user_mailer.comment_reply_top', :default => "{{name}} replied to your comment on {{commentable_name}}.", :name => @comment.comment_owner_name, :commentable_name => @commentable.commentable_name) -%></p>
 
-<p><%=h @comment.content %></p>
+<p><%=h t('user_mailer.comment_reply_youwrote', :default => "You wrote: ") -%></p>
+<blockquote>  
+  <%=sanitize_limit_and_format_for_display @comment.commentable && @comment.commentable.content ? @comment.commentable.content : "" %>
+</blockquote>
 
-<%= render :partial => 'comment_notification_footer' -%>
+<p><%=h t('user_mailer.comment_reply_responded', :default => "{{name}} responded: ", :name => @comment.comment_owner_name) -%></p>
+
+<%=sanitize_limit_and_format_for_display @comment.content %>
+
+<%= render :partial => 'comment_notification_footer' %>

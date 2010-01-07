@@ -40,6 +40,10 @@ module WorksHelper
     "<ul>" + bookmark_link + (comments_link ||= '') + collections_link + hits_info + "</ul>"    
   end
   
+  def work_collection_names_list(work)
+    work.approved_collections.map {|collection| link_to(h(collection.title), collection)}.to_sentence
+  end
+  
   # work.tags doesn't include unsaved tags on preview
   def collect_work_tags(work)
     if work.preview_mode

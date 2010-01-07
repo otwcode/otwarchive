@@ -13,9 +13,9 @@ class Gift < ActiveRecord::Base
     :message => t('gift.name_no_letters_or_numbers', :default => 'must contain at least one letter or number.'),
     :with => /[a-zA-Z0-9]/
 
-  named_scope :for_pseud, lambda {|pseud| {:conditions => ["recipient_name = ?", pseud.name]}}
+  named_scope :for_pseud, lambda {|pseud| {:conditions => ["recipient_name = ?", pseud.byline]}}
   
-  named_scope :for_user, lambda {|user| {:conditions => ["recipient_name IN (?)", user.pseuds.collect(&:name).flatten]}}
+  named_scope :for_user, lambda {|user| {:conditions => ["recipient_name IN (?)", user.pseuds.collect(&:byline).flatten]}}
   
   named_scope :for_recipient, lambda {|name| {:conditions => ["recipient_name = ?", name]}}
   

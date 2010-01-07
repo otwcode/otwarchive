@@ -146,7 +146,7 @@ class CollectionItemsController < ApplicationController
       # update as allowed -- currently just approval status
       @collection_item.collection_approval_status = params[:collection_item][:collection_approval_status]
       @collection_item.anonymous = params[:collection_item][:anonymous]
-      if @collection_item.unrevealed && !params[:collection_item][:unrevealed]
+      if @collection_item.unrevealed && (params[:collection_item][:unrevealed] == "0")
         @collection_item.reveal!
       else
         @collection_item.unrevealed = params[:collection_item][:unrevealed]

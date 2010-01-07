@@ -61,12 +61,15 @@
    
  	<%- if @collection.not_empty? -%>
 		<% if (@works_count = @collection.all_approved_works.count) > 0%>
-  		<dt><%=h t('works', :default => "Works") %></dt>
+  		<dt><%=h t('collection_show.fandoms', :default => "Fandoms") %></dt>
+   		<dd><%= link_to(@collection.fandoms.count, collection_fandoms_path(@collection)) -%></dd>
+
+  		<dt><%=h t('collection_show.works', :default => "Works") %></dt>
    		<dd><%= link_to(@works_count, collection_works_path(@collection)) -%></dd>
 		<% end %>
 
 		<% if (@bookmarks_count = @collection.all_approved_bookmarks.count) > 0%>
-  	  <dt><%=h t('bookmarks', :default => "Bookmarks") %></dt>
+  	  <dt><%=h t('collection_show.bookmarks', :default => "Bookmarks") %></dt>
       <dd><%= link_to(@bookmarks_count, collection_bookmarks_path(@collection)) -%></dd>
 		<% end %>
   <%end %>
