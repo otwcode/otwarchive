@@ -172,13 +172,11 @@ class Collection < ActiveRecord::Base
   end
   
   def all_fandoms
-    self.children ? Fandom.for_collections([self] + self.children) : self.fandoms
+    self.children ? Fandom.for_collections_without_count([self] + self.children) : self.fandoms
   end
     
   def all_fandoms_count
-    count = self.fandoms.count
-    self.children.each {|child| count += child.fandoms.count}
-    count
+    self.children ? Fandom.id_for_collections([self] + self.children).count : self.fandoms.count
   end
   
   def maintainers

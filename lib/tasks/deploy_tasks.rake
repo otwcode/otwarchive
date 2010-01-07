@@ -64,16 +64,16 @@ namespace :deploy do
   
   desc "Deploy code on testarchive: you must have sudo power or this WILL NOT WORK"
   task(:deploy_code_test) do
-    @new_revision = %x{svnversion -n /home/www-data}
+    @new_revision = %x{sudo su - www-data -c "svnversion -n /home/www-data"}
     @new_revision.gsub!(/M/, "")
-    puts %x{sudo su - www-data -c "cap deploy:migrations -s revision=#{@new_revision} "}
+    puts %x{sudo su - www-data -c "cap deploy:migrations -s revision=#{@new_revision}"}
   end
   
   desc "Notify testers list that deploy is complete"
   task(:notify_testers) do
-    @new_revision ||= %x{svnversion -n /home/www-data}
+    @new_revision = %x{sudo su - www-data -c "svnversion -n /home/www-data"}
     @new_revision.gsub!(/M/, "")
-    puts %x{"testarchive deployed to #{@new_revision}" | mail -s "testarchive deployed" otw-coders@transformativeworks.org}
+    puts %x{echo "testarchive deployed to #{@new_revision}" | mail -s "testarchive deployed" otw-coders@transformativeworks.org}
   end
 
   desc "Run after tasks"
