@@ -15,7 +15,6 @@ class Fandom < Tag
     {:select =>  "tags.*, count(tags.id) as count", 
     :joins => COLLECTION_JOIN,
     :conditions => ["collection_items.collection_id = ? 
-                    AND tags.type = 'Fandom'
                     AND works.posted = 1", collection.id], 
     :group => 'tags.id', 
     :order => 'name ASC'}    
@@ -25,7 +24,6 @@ class Fandom < Tag
     {:select =>  "tags.*, count(tags.id) as count", 
     :joins => COLLECTION_JOIN,
     :conditions => ["collection_items.collection_id IN (?) 
-                    AND tags.type = 'Fandom'
                     AND works.posted = 1", collections.collect(&:id)], 
     :group => 'tags.id', 
     :order => 'name ASC'}
@@ -37,7 +35,6 @@ class Fandom < Tag
       :select => "DISTINCT tags.*",
       :joins => COLLECTION_JOIN,
       :conditions => ["collection_items.collection_id IN (?) 
-                      AND tags.type = 'Fandom'
                       AND works.posted = 1", collections.collect(&:id)]
     } 
   }
@@ -48,7 +45,6 @@ class Fandom < Tag
       :select => "distinct tags.id",
       :joins => COLLECTION_JOIN,
       :conditions => ["collection_items.collection_id IN (?) 
-                      AND tags.type = 'Fandom'
                       AND works.posted = 1", collections.collect(&:id)]
     } 
   }

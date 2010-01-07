@@ -58,20 +58,23 @@ namespace :deploy do
   
   desc "Test code on testarchive: you must have sudo power or this WILL NOT WORK"
   task(:run_tests) do
+    puts "Updating test db..."
     puts %x{sudo su - www-data -c "rake db:migrate RAILS_ENV=test"}
+    puts "Running tests (will take a while!)"
     puts %x{sudo su - www-data -c "rake test RAILS_ENV=test"}
   end
   
   desc "Deploy code on testarchive: you must have sudo power or this WILL NOT WORK"
   task(:deploy_code_test) do
-    @new_revision = %x{sudo su - www-data -c "svnversion -n /home/www-data"}
+    @new_revision = %x{sudo su - www-data -c "svnversion"}
     @new_revision.gsub!(/M/, "")
+    puts "Deploying to revision #{@new_revision}..."
     puts %x{sudo su - www-data -c "cap deploy:migrations -s revision=#{@new_revision}"}
   end
   
   desc "Notify testers list that deploy is complete"
   task(:notify_testers) do
-    @new_revision = %x{sudo su - www-data -c "svnversion -n /home/www-data"}
+    @new_revision = %x{sudo su - www-data -c "svnversion"}
     @new_revision.gsub!(/M/, "")
     puts %x{echo "testarchive deployed to #{@new_revision}" | mail -s "testarchive deployed" otw-coders@transformativeworks.org}
   end
