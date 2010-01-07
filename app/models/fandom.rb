@@ -11,9 +11,11 @@ class Fandom < Tag
     INNER JOIN works ON ( filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work') 
     INNER JOIN collection_items ON ( works.id = collection_items.item_id AND collection_items.item_type = 'Work')",
     :conditions => ["(collection_items.collection_id = ? ) 
-    AND ((`tags`.`type` = 'Fandom') 
-    AND (collection_items.collection_id = ? )) 
-    AND (works.posted = 1)", collection.id, collection.id], 
+                    AND (collection_items.collection_approval_status = ?)
+                    AND (collection_items.user_approval_status = ?)
+                    AND ((`tags`.`type` = 'Fandom') 
+                    AND (collection_items.collection_id = ? )) 
+                    AND (works.posted = 1)", collection.id, CollectionItem::APPROVED, CollectionItem::APPROVED, collection.id], 
     :group => 'tags.id', 
     :order => 'name ASC'}    
   }
@@ -24,9 +26,11 @@ class Fandom < Tag
     INNER JOIN works ON ( filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work') 
     INNER JOIN collection_items ON ( works.id = collection_items.item_id AND collection_items.item_type = 'Work')",
     :conditions => ["(collection_items.collection_id IN (?)) 
-    AND ((`tags`.`type` = 'Fandom') 
-    AND (collection_items.collection_id IN (?))) 
-    AND (works.posted = 1)", collections.collect(&:id), collections.collect(&:id)], 
+                    AND (collection_items.collection_approval_status = ?)
+                    AND (collection_items.user_approval_status = ?)
+                    AND ((`tags`.`type` = 'Fandom') 
+                    AND (collection_items.collection_id IN (?))) 
+                    AND (works.posted = 1)", collections.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED, collections.collect(&:id)], 
     :group => 'tags.id', 
     :order => 'name ASC'}    
   }  

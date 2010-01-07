@@ -155,8 +155,30 @@ class Collection < ActiveRecord::Base
     (self.approved_works + (self.children ? self.children.collect(&:approved_works).flatten : [])).uniq
   end
   
+  def all_approved_works_count
+    count = self.approved_works.count
+    self.children.each {|child| count += child.approved_works.count}
+    count
+  end
+  
   def all_approved_bookmarks
     (self.approved_bookmarks + (self.children ? self.children.collect(&:approved_bookmarks).flatten : [])).uniq
+  end
+  
+  def all_approved_bookmarks_count
+    count = self.approved_bookmarks.count
+    self.children.each {|child| count += child.approved_bookmarks.count}
+    count
+  end
+  
+  def all_fandoms
+    self.children ? Fandom.for_collections([self] + self.children) : self.fandoms
+  end
+    
+  def all_fandoms_count
+    count = self.fandoms.count
+    self.children.each {|child| count += child.fandoms.count}
+    count
   end
   
   def maintainers
