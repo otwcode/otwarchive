@@ -35,6 +35,7 @@
   </ul>
 </dl>
 
+<%- if logged_in? -%>
 <ul class="navigation">
   <li><%= bookmark_link(bookmarkable=@series, blurb=false) %></li>
   <%- if is_author_of?(@series) -%>
@@ -43,6 +44,7 @@
     <li><%= link_to "Reorder Series", manage_series_path(@series) %></li>
   <%- end -%>
 </ul>
+<%- end -%>
 
 <div id="dynamic-bookmark" style="display:none;">	
 </div>
