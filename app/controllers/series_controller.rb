@@ -32,7 +32,7 @@ class SeriesController < ApplicationController
   def show
     @serial_works = @series.serial_works.find(:all, :include => :work, :conditions => ['works.posted = ?', true], :order => :position).select{|sw| sw.work.visible(User.current_user)}
     # sets the page title with the data for the series
-    @page_title = get_page_title(@series.allfandoms.collect(&:name).join(', '), @series.allpseuds.collect(&:byline).join(', '), @series.title)
+    @page_title = @series.unrevealed? ? t('series.mystery_title', :default => "Mystery Series") : get_page_title(@series.allfandoms.collect(&:name).join(', '), @series.anonymous? ? t('series.anonymous', :default => "Anonymous") : @series.allpseuds.collect(&:byline).join(', '), @series.title)
   end
 
   # GET /series/new

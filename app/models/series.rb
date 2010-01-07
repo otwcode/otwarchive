@@ -52,6 +52,10 @@ class Series < ActiveRecord::Base
     !self.works.select { |work| work.anonymous? }.empty?    
   end
 	
+  def unrevealed?
+    !self.works.select { |work| work.unrevealed? }.empty?    
+  end
+  
 	# if the series includes an unrestricted work, restricted should be false
 	# if the series includes no unrestricted works, restricted should be true
 	def adjust_restricted
