@@ -1,4 +1,4 @@
-<h1>Tag Search: Extreme Alpha</h1>
+<h1>Tag Search: Alpha</h1>
 
 <%- form_tag url_for(:controller => 'tags', :action => 'search'), :method => :get do -%>
 <p>
@@ -7,14 +7,23 @@
 </p> 
 <%- end -%>
 
-<p>(Currently limited to 100 results. Canonical tags are bolded.)</p> 
+<p>Canonical tags are <span class='canonical'>highlighted</span>.</p>
+<p>New tags will be out of alphabetical order.</p>
+<p><em>book*</em> will find <em>book</em> and <em>books</em>.</p>
+<p>Space means AND: <em>John Beckett</em> will find <em>John Beckett</em> and <em>Carson Beckett/John Sheppard</em>.</p> 
 
 <%- if @tags -%>
-<ul>
-	<% for tag in @tags %>
-	<li><%= tag_search_result(tag) %></li>
-  <% end %>
-</ul>
+  <%- begin -%>
+    <%= will_paginate @tags %>
+    <strong><%= @tags.total_entries %> Found</strong>
+    <ul>
+    <% for tag in @tags %>
+      <li><%= tag_search_result(tag) %></li>
+    <% end %>
+    </ul>
+  <% rescue Riddle::ConnectionError %>
+    <span class='error'>Search appears to be down right now. Please try again later.</span>
+  <%- end -%>
 <%- end -%>
 
 <%= tag_wrangler_footer %>

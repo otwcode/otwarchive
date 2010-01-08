@@ -10,8 +10,13 @@ class DelayedJobWorker < DaemonSpawn::Base
     ENV['RAILS_ENV'] ||= args.first || 'development'
     Dir.chdir RAILS_ROOT
     require File.join('config', 'environment')
+    require 'delayed/worker'
+    require 'thinking_sphinx/deltas/delayed_delta'
  
-    Delayed::Worker.new.start
+    Delayed::Worker.new(
+      :min_priority => ENV['MIN_PRIORITY'],
+      :max_priority => ENV['MAX_PRIORITY']
+    ).start
   end
  
   def stop

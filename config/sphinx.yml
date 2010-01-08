@@ -3,8 +3,10 @@ development:
    min_prefix_len: 1 
    min_infix_len: 0 
    max_matches: 10000
+   mem_limit: 256M
 production: 
    allow_star: true 
    min_prefix_len: 1 
    min_infix_len: 0 
    max_matches: 10000
+   mem_limit: 256M

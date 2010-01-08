@@ -794,4 +794,17 @@ class Tag < ActiveRecord::Base
     series_bookmarks = [] # can't tag a series directly? # Bookmark.find(:all, :conditions => {:bookmarkable_id => self.series_ids, :bookmarkable_type => 'Series'}.merge(cond))
     (work_bookmarks + ext_work_bookmarks + series_bookmarks)
   end
+
+
+  # Index for Thinking Sphinx
+  define_index do
+
+    # fields
+    indexes name, :sortable => true
+    has :type, :sortable => true
+
+    # properties
+    set_property :delta => :delayed
+  end
+
 end

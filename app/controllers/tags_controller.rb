@@ -24,7 +24,7 @@ class TagsController < ApplicationController
   
   def search
     unless params[:query].blank?
-      @tags = Tag.find(:all, :conditions => ["name LIKE ?", "%" + params[:query] + "%"], :order => 'type, name', :limit => 100)
+      @tags = Tag.search(params[:query], :order => "type ASC, name ASC", :page => params[:page])
     end    
   end  
 
