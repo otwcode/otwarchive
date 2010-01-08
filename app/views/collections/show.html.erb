@@ -1,9 +1,13 @@
+<!--Descriptive page name and system messages, descriptions, and instructions.-->
 <h1><%= sanitize_title_for_display @collection.title %> <span>(<%=h @collection.name %>)</span></h1>
+<!--/descriptions-->
 
+<!--subnavigation, sorting and actions-->
 <%= render :partial => "collection_show_navigation" -%>
+<!--/subnav-->
 
 <%- cache("collection-show-#{@collection.id}-top", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
-
+<!--subsection main-->
 <dl class="blurb">
 	<dt><%=h t('collections.owners', :default => "Owners:") %></dt>
 	<dd>
@@ -74,7 +78,9 @@
 		<% end %>
   <%end %>
 </dl>
+<!--/subsection-->
 
+<!--main content-->
 <div class="preface profile user-generated-view">
   <% if !@collection.collection_profile.intro.blank? || (@collection.parent && !@collection.parent.collection_profile.intro.blank?) %>
   <blockquote id="intro">
@@ -102,5 +108,6 @@
 </div>
 
 <%- end -%>
-
+<!--subnavigation-->
 <%= render :partial => "collection_show_navigation" -%>
+<!--/subnav-->
