@@ -8,6 +8,7 @@
 
 <%- cache("collection-show-#{@collection.id}-top", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
 <!--subsection main-->
+<h3 class="landmark">About Collection, Metadata</h3>
 <dl class="blurb">
 	<dt><%=h t('collections.owners', :default => "Owners:") %></dt>
 	<dd>

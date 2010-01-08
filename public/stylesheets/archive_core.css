@@ -57,6 +57,8 @@ h4	{ font-size: 1em; line-height: 1.125; margin:0.5625em 0; }
 h5	{ font-size: 0.75em; line-height: 1.5; margin: .375em 0; }
 h6	{ font-size: 0.625em; line-height: 1.8; margin: .3125em 0; }
 
+h3.landmark {font-size:0 !important; color:#fffef9;}
+
 hr	{ margin: 0.75em auto; border:0; border-bottom: 3px double; }
 hr.clear, .clearboth, .clear	{ clear: both; height: 0; border: 0; margin:0; background:transparent; color:#fffef9;}
 
