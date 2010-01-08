@@ -2,13 +2,13 @@ class CreationObserver < ActiveRecord::Observer
   observe Chapter, Work, Series
 
   def after_save(creation)
-    # Notify new co-authors that they've been added to a work
-    work = creation.class == Chapter ? creation.work : creation
-    if work && !creation.authors.blank? && User.current_user.is_a?(User)
-      new_authors = (creation.authors - (work.pseuds + User.current_user.pseuds)).uniq
+    # Notify new co-authors that they've been added to a creation
+    creation = creation.class == Series ? creation : (creation.class == Chapter ? creation.work : creation)
+    if creation && !creation.authors.blank? && User.current_user.is_a?(User)
+      new_authors = (creation.authors - (creation.pseuds + User.current_user.pseuds)).uniq
       unless new_authors.blank?
         for pseud in new_authors
-          UserMailer.deliver_coauthor_notification(pseud.user, work)
+          UserMailer.deliver_coauthor_notification(pseud.user, creation)
         end
       end
     end

@@ -107,10 +107,10 @@ class UserMailer < ActionMailer::Base
   end
    
   # Sends email when a user is added as a co-author
-  def coauthor_notification(user, work)
+  def coauthor_notification(user, creation)
     setup_email(user)
     @subject    += "Co-Author Notification"
-    @body[:work] = work
+    @body[:creation] = creation
   end 
    
   # Sends emails to authors whose stories were listed as the inspiration of another work
