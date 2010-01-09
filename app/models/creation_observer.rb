@@ -3,6 +3,7 @@ class CreationObserver < ActiveRecord::Observer
 
   def after_save(creation)
     # Notify new co-authors that they've been added to a creation
+    this_creation = creation
     creation = creation.class == Series ? creation : (creation.class == Chapter ? creation.work : creation)
     if creation && !creation.authors.blank? && User.current_user.is_a?(User)
       new_authors = (creation.authors - (creation.pseuds + User.current_user.pseuds)).uniq
@@ -12,7 +13,7 @@ class CreationObserver < ActiveRecord::Observer
         end
       end
     end
-    save_creatorships(creation)    
+    save_creatorships(this_creation)
   end
   
   def before_update(new_work)
@@ -31,6 +32,9 @@ class CreationObserver < ActiveRecord::Observer
   
   # Save creatorships after the creation is saved
   def save_creatorships(creation)
+    if creation.nil?
+      raise "Bad creation..."
+    end
     if !creation.authors.blank?
       new_authors = (creation.authors - creation.pseuds).uniq
       new_authors.each do |pseud|
