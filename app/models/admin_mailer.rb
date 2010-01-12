@@ -25,7 +25,11 @@ class AdminMailer < ActionMailer::Base
     @body[:admin] = admin
     @body[:subject] = subject
     @body[:message] = message
-    @body[:users] = users.map(&:login).join(", ")
+    if users.size < 20
+      @body[:users] = users.map(&:login).join(", ")
+    else
+      @body[:users] = users.size.to_s + " users, including: " + users[0..20].map(&:login).join(", ")
+    end
   end
   
   protected
