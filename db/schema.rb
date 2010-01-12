@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100104232756) do
+ActiveRecord::Schema.define(:version => 20100108002148) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -216,6 +216,19 @@ ActiveRecord::Schema.define(:version => 20100104232756) do
   add_index "creatorships", ["creation_id", "creation_type", "pseud_id"], :name => "creation_id_creation_type_pseud_id", :unique => true
   add_index "creatorships", ["creation_id", "creation_type"], :name => "index_creatorships_creation"
   add_index "creatorships", ["pseud_id"], :name => "index_creatorships_pseud"
+
+  create_table "delayed_jobs", :force => true do |t|
+    t.integer  "priority",   :default => 0
+    t.integer  "attempts",   :default => 0
+    t.text     "handler"
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "external_author_names", :force => true do |t|
     t.integer  "external_author_id", :null => false
@@ -557,6 +570,7 @@ ActiveRecord::Schema.define(:version => 20100104232756) do
     t.integer  "merger_id"
     t.boolean  "wrangled",                      :default => false, :null => false
     t.boolean  "has_characters",                :default => false, :null => false
+    t.boolean  "delta",                         :default => false
   end
 
   add_index "tags", ["fandom_id"], :name => "index_tags_on_fandom_id"

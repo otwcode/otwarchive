@@ -7,7 +7,8 @@ class FilterCount < ActiveRecord::Base
   def self.set_all
     Tag.canonical.by_name.find_each do |filter|
       begin
-        puts "Resetting #{filter.name}"
+#        puts "Resetting #{filter.name}"
+         print "."; STDOUT.flush
         filter.reset_filter_count
       rescue
         puts "Problem resetting #{filter.name}"

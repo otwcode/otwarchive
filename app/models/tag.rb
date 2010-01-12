@@ -363,7 +363,7 @@ class Tag < ActiveRecord::Base
     return unless ['Pairing', 'Character', 'Freeform'].include?(self[:type])
 
     # get the nofandom tag
-    nofandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
+    nofandom = Fandom.find_or_create_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
 
     # get the first fandom of the current tag which is not nofandom
     fandom = (self.fandoms - [nofandom]).first
@@ -448,7 +448,7 @@ class Tag < ActiveRecord::Base
 
     # if the media id isn't for our first media or "Uncategorized Fandoms", verify that it's a real media
     if !(self.media_id == uncategorized.id || (media && self.media_id == media.id))
-      listed_media = Media.find(self.media_id)
+      listed_media = Media.find_by_id(self.media_id)
       # it's not a real media or it's been removed
       if !listed_media.is_a?(Media) || !self.medias.include?(listed_media)
         if media

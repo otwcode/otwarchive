@@ -33,6 +33,7 @@ class FilterTagging < ActiveRecord::Base
   # Build all filter taggings from current taggings data
   def self.build_from_taggings
     Tagging.find(:all, :conditions => {:taggable_type => 'Work'}).each do |tagging|
+      print "." if tagging.id.modulo(10) == 0; STDOUT.flush
       if tagging.tagger && tagging.taggable
         tag = tagging.tagger.canonical? ? tagging.tagger : tagging.tagger.merger
         unless tag.nil? 

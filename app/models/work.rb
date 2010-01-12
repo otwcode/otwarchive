@@ -1168,7 +1168,7 @@ class Work < ActiveRecord::Base
     search_options = {:per_page => 10000, :page => 1, :max_matches => 10000}
     search_options.merge!({:order => order_clause}) if !order_clause.blank?
 
-    works = Work.search(options[:query], search_options)
+    works = Work.search(options[:query], search_options).compact
     works.delete_if {|work| !ids.include?(work.id)}
     works
   end

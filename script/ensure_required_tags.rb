@@ -1,3 +1,7 @@
+#!/usr/bin/env script/runner
+# usage:
+# RAILS_ENV=production script/ensure_required_tags.rb
+
 def create_canonical(name, type, adult=false)
   tag = type.find_by_name(name)
   unless tag
