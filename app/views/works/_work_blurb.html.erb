@@ -65,6 +65,7 @@
 			</ul></dd>
 			<%- end -%>
       </dl>
+	 <%- end -%>
 	</li>
 	
   <%- unless work.summary.blank? -%>
@@ -79,7 +80,6 @@
 			<dd><%= number_with_delimiter(work.word_count) %></dd>
 		<dt><%=h t('work_chapters', :default => 'Chapters') + ': ' %></dt>
 			<dd><%= work.chapter_total_display %></dd>
-	 <%- end -%>
 	 
 	  <%- unless work.approved_collections.empty? %>
 			<dt><%=h t('work_collections', :default => 'Collections') + ': ' -%></dt>
