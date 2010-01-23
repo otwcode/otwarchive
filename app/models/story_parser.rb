@@ -672,7 +672,11 @@ class StoryParser
     end
 
     def convert_published_at(date)
-      Date.parse(date)
+      begin
+        return Date.parse(date)
+      rescue ArgumentError
+        return ''
+      end
     end
     
 end
