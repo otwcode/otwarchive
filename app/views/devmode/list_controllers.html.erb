@@ -1,0 +1,31 @@
+<?= link_to "Devmode top", devmode_path ?>
+<h1><%= t('controller_info', :default => "Controller info") %></h1>
+    <% if @errors %>
+      <div class="error" style="color: red">
+        <%= @errors %>
+      </div>
+    <% end %>
+<div class="form">
+  <table>
+    <tr>
+      <th>Controller name</th>
+      <th>View methods</th>
+      <th>Other methods</th>
+    </tr>
+    <% for controller_info in @controllers %>
+      <tr>
+        <td><%=h controller_info[0] %></td>
+        <td>
+          <% for view_method in controller_info[1] %>
+            <%= link_to h(view_method),
+                :action => 'inspect_view',
+                :controller_name => controller_info[0],
+                :view_name => view_method
+            %>,
+          <% end %>
+        </td>
+        <td><%=h controller_info[2].inspect %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>

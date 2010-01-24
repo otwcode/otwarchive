@@ -1,0 +1,35 @@
+<?= link_to "Devmode top", devmode_path ?>
+<h1><%= t('seed_works', :default => "Seed works") %></h1>
+    <% if @errors %>
+      <div class="error" style="color: red">
+        <%= @errors %>
+        <%= "<!-- #{@errors.inspect} -->" %>
+      </div>
+    <% end %>
+<p>
+  This operation currently does not handle series, collections, parent/inspiration links, or restricted works.
+</p>
+<div class="form">
+    <form name="seedusers" method="post" action="">
+      <table>
+        <% for name, l in @params %>
+          <% if l.nil? %>
+            </table>
+            <h3><%=h name %></h3>
+            <table>
+          <% else %>
+            <% display_name = name %>
+            <% input_type, default = l[0], l[1] %>
+            <% desc = l.length >= 3? l[2]: '' %>
+            <tr>
+              <td><small><%= display_name %></small></td>
+              <td><%= "<input name=\"#{name}\" type=\"#{input_type}\" value=\"#{default}\"/>"%></td>
+              <td><%= desc %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </table>
+      <h2 style="color: red">This may time out! The process will continue to run, and works will be added.</h2>(If it errors, it does so quickly...)
+      <input type="submit" name="seed" value="Create seed works"/>
+    </form>
+</div>

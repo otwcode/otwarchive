@@ -163,10 +163,12 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.activate '/activate/:id', :controller => 'users', :action => 'activate'
-  
+
   # to preserve links with locales in the route
   map.with_locale '/en/works/:id', :controller => 'works', :action => 'show', :id => :id
-  
+
+  map.devmode "/devmode", :controller => "devmode", :action => "index", :view => "index"
+
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:
