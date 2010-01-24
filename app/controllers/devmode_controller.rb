@@ -14,7 +14,7 @@ class DevmodeController < ApplicationController
       for work in Work.all
         if work.imported_from_url
           work.imported_from_url = nil
-          work.save!
+          work.save false
         end
       end
       flash[:info] = 'Successfully cleared URL associations'
