@@ -174,7 +174,7 @@ module HtmlFormatter
           node[3].gsub!('<', '&lt;')
           node[3].gsub!('>', '&gt;')
           # Escape any non-entity ampersands
-          node[3].gsub!(/&(?![a-z]+;)(.*?;?)/, '&amp;\1')
+          node[3].gsub!(/&(?!(?:[a-z]+|#[0-9]+);)(.*?;?)/, '&amp;\1')
           out_nodes.push(node)
         elsif name == _comment
           node[3].gsub!('--', '- - ') # double dash is illegal in comments
