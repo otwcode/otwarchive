@@ -18,10 +18,13 @@ module HtmlFormatter
     end
   end
 
+  # The "options[:tags]" parameter here is to preserve calling compatibility
+  # with existing code.
+
   # This is future-planning - titles are currently stripped of all html in order to make sort and search simpler, so there should be no tags in titles which need sanitize in the view. 
   def sanitize_title_for_display(text, options = {:tags => ['a', 'b', 'br', 'p', 'i', 'em', 'strong', 'strike', 'u', 'ins', 'q', 'del', 'cite', 'blockquote', 'pre', 'code', 'small', 'sup', 'sub']})
     return "" if text.nil?
-    sanitize_and_format_for_display(text, options)
+    return clean_fully(text, options[:tags], true, true, false)
   end
  
   # A more limited display option for comments and summaries
@@ -42,8 +45,9 @@ module HtmlFormatter
     sanitize_and_format_for_display(text, options)
   end
 
-  def clean_fully(text_input, allowed_tags=@@allowed_tags_default, sanitize=true, tidy=true)
-    return "" if text_input.nil? or text_input.empty?
+  def clean_fully(text_input, allowed_tags=@@allowed_tags_default, sanitize=true, tidy=true, block_container=true)
+    return "" if text_input.nil?
+    return "" if text_input.empty?
     # text is assumed to have been sanitised by the HTML parser.
     _text = '#text'
     _comment = '#comment'
@@ -65,7 +69,7 @@ module HtmlFormatter
 
     # The various (recursive) functions that do the real work
     parse_text = lambda do |text|
-      return [], nil if text.nil?
+      return [], '' if text.nil?
       # Takes a snippet of html. returns: nodes, leftover_text
       # nodes is a list where each node takes the form:
       # (tagname, attribute_hash, child_list, text_value)
@@ -127,7 +131,7 @@ module HtmlFormatter
             children.push new_child if new_child[2] != nil
           end unless self_closing
           closing = nil
-          if text.empty? and new_child and new_child[2] != nil
+          if (text.nil? or text.empty?) and new_child and new_child[2] != nil
             # End of stream. This tag has no closing tag.
             closing = "!#{tag_name}" unless self_closing
           elsif not new_child.nil? and new_child[0] != tag_name
@@ -324,12 +328,22 @@ module HtmlFormatter
       end
       handle_nodes.call(nodes)
       new_para.call()
-      paras
+      if not block_container
+        # If our container is a block container, then remove outer <p> tag.
+        out_nodes = []
+        for para in paras
+          for node in para[2]
+            out_nodes.push(node)
+          end
+        end
+        return out_nodes
+      end
+      return paras
     end
     parse_html = lambda do |html_text|
       nodes = []
       return nodes if html_text.nil?
-      while not html_text.empty?
+      while not (html_text.nil? or html_text.empty?)
         node, html_text = parse_text.call(html_text)
         unless node[2].nil?
           # Don't record the stray end tags, but keep looping to get as much
