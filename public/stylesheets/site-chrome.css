@@ -1,0 +1,278 @@
+/*Forms are laid out in forms.css. User-generated content from textarea inputs are laid out in user-generated-views.
+1. page regions, shown on every page
+2. general rules by content and structure type, shown on many pages
+3. individual page (children of #main) styling, shown on one page
+
+1. Page regions*/
+
+/* HEADER*/
+ #header 					{ background: #900 url(/images/header-red.png) top left repeat-x; color: #fffef9; font-family: FertigoProRegular, Cambria, Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; padding: 0.25em 0 0; position: relative }
+ #header h1 				{ float: left; font-size: 1.5em; margin: 0; padding-left: 0.75em }
+ #header h1.collection 		{ background: #900 url(/images/header-red.png) top left repeat-x; border-bottom: 6px solid #111; float:none; margin-top:-.25em;}
+ #header a,#header a:visited 
+							{ color: #fffef9; font-weight: 600; border: none;}
+ #header a:hover 			{ color: #000; border: none;}
+ #header ul.navigation 		{ border-left: 1px solid #111; clear: both; list-style: none; margin: 0 0 0 1em; position: relative }
+ #header .navigation a,#header .navigation .current 
+							{ background: #fffef9 url(/images/fffef9-ccc.png) bottom left repeat-x; border: 1px solid #111; border-bottom: 0; color: #111; display: block; float: left; font-family: FertigoProRegular, Cambria, Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; font-weight: 100; margin: 0; padding: 0.5625em; text-decoration: none !important;}
+ #header ul.admin 			{ margin-top: 2.375em; position: absolute; right: 1em; z-index: 50 }
+ #header ul.admin a,#header ul.admin .current 
+							{ border-bottom: 3px solid #111; float: right }
+ #header #login-block 		{ color: #fffef9; font-size: 0.75em; text-align: right; }
+ #login li 					{ display: inline }
+ p#greeting,ul#login, #search { clear: right; float: right;  text-align:left; width:17em; padding:0 }
+ #greeting.logged-out 		{ float: none; margin-top: 1em;  width:auto}
+
+
+ #header .clear 				{ background: url(/images/headergradient.png) top left repeat-x #fffef9; border-top: 6px solid #111; height: 20px }
+
+/* DASHBOARD*/
+ #dashboard ul 				{ background: #fffef9; border: 2px solid #111; float: left; font: 100 1em/1.5 'Lucida Grande', Geneva, Verdana, Helvetica, Arial, sans-serif; margin: 1em 1em 3em 1em; text-transform: capitalize; width: 10.5em }
+ #dashboard a,#dashboard span 
+							{ color: #111; display: block; padding: 0 0.5625em; border: none;}
+ #dashboard li:hover,#dashboard a:hover 
+							{ background: #900; color: #fffef9; border:none;}
+ #dashboard ul#subnav		{ margin:0; border: none; border-bottom: 2px solid #111;}
+
+/* MAIN CONTENT */
+ #main 						{ margin: 1em auto; padding: 0 1em; position: relative }
+ #main.sidebar 				{ margin: 1em auto 1em 12em }
+ #main.error 				{ background: #fffef9 url(/images/sadface.png) top right no-repeat; border: 0; font-weight: 700; min-height: 365px }
+
+/* FOOTER */
+ #footer ul 				{ border-top: 1px solid #999; clear: both; color: #999; font-size: 0.75em; margin: 1.5em 0; padding: 1em; text-align: center }
+ #footer ul.navigation a 	{ border: 0; font-weight: 400; margin: auto; padding: 0 }
+
+/* 2. General rules by content and structure type (shown on many pages) Forms are in forms.css. 
+ NAVIGATION, ACTIONS (BUTTONS)*/
+ ul#skiplinks,.landmark 	{ border: 0 !important; color: #fffef9; font-size: 0 !important; line-height: 0 !important; margin: 0 !important; clear:right; }
+ #header .landmark 			{color:#900 !important;}
+ #main ul.navigation, p.navigation, li.navigation, p.submit, dd.submit 	
+							{ margin: 0.5em auto 1em; border:1px solid #bbb; background:#fffef9 url(/images/fffef9-ccc.png) bottom left repeat-x; padding:0.15em 0.5em 0.25em; float:right; border-radius:3em; -moz-border-radius:3em; -webkit-border-radius:2em;}
+ .navigation li,li.navigation,  #main .navigation h4  
+							{ display: inline }
+ #main .navigation a, .submit input, .submit a
+							{ background: transparent; border:0;  border-right:1px solid #ccc; border-left:1px solid #ccc; cursor: pointer; font-weight: 700; margin: 0 0.125em; padding: 0.25em 0.5em; text-decoration: none; width: auto }
+ .navigation a:hover, .submit a:hover, .submit input:hover 
+							{ background: #ddd !important;  color: #111 }
+ .navigation a:active 		{ background: #999; border: 1px solid #777 }
+ .navigation .pagination a 	{ border: 0; padding: 0 }
+
+/* Navigation in contexts - easier to have it all together */
+ 
+#main li.blurb .navigation	{ float:left; margin:auto; font-size:0.8575em;}
+#main li.bookmark .navigation 
+							{ float:right; }
+#main li.blurb .own .navigation
+							{ float:left; margin:-1.5em auto auto;}
+#main li.bookmark .own .navigation
+							{ margin:0.25em auto auto -0.25em;}
+.pagination 				{ font: 100 1em 'Lucida Grande', Geneva, Verdana, Helvetica, Arial, sans-serif; margin: .5em auto; padding: 0.25em; text-align: center }
+ #main .pagination a		{ border:0;}
+ #main .current 			{ border: 1px solid #000; padding: 0.25em }
+
+/* GROUPING: MODULE, WRAPPER, INDEX */
+ .module,  .index  			{ width: 100%; position: relative; float: left; }
+ .wrapper					{ background: transparent url(/images/drop-shadow-light.gif) bottom right no-repeat; padding: 0 12px 13px 0;}
+
+/* ROLES/STATES*/
+ .current 					{ background: #111 !important; color: #fffef9 !important; cursor: default }
+ .own 						{ background: #eee; border: 1px dashed #ddd }
+ .draft 					{ background: #eee; border: 2px dashed #ddd }
+ .draft .wrapper			{ background: #eee; }
+
+/* META*/
+ #main dl.meta 				{ background: #fffef9; border: 2px solid; clear: right; margin: 0 auto; padding: 0.5em; position: relative }
+ .meta dt, .meta dt.warning	{ font-size: 0.875em; font-weight: 100; width: 10.5em }
+ #main .meta dd				{ margin: -1.3em 0 .7em 13em;  }
+ #main .meta .stats dl dd	{ margin: 0 0.5em 0 }
+ .meta dd ul li 			{ display: inline; margin: auto }
+ .meta dd blockquote		{ margin: -1em 0 0 0 !important;}
+
+/* BLURB - this can be simplified a lot if/when new blurb is approved*/
+ .blurb ul li,.blurb dd ul li	{ display: inline }
+ li.blurb 						{ border-bottom: 1px solid #ddd; padding: 0 0 0.375em; position: relative; clear:left;}
+ .blurb li.heading 				{ display: block; position: relative }
+ .blurb ul.required-tags 		{ position: absolute; top: 0; width:55px; left:3.5em; }
+ .blurb ul.required-tags li img { height: 25px; width: 25px }
+ .blurb ul.required-tags li 	{ display: inline; height: 25px; margin: 0; padding: 0; width: 25px }
+ .blurb ul.required-tags li a	{ border:none;}
+ .blurb h4 						{ font-size: 1.1425em; margin: 0.375em 5.25em 0 9.6em }
+ .blurb h5 						{ font-size: 1em; margin: 0.375em 6em 0 11em }
+ .blurb h4 a:link,.blurb h3 img { color: #900; vertical-align: bottom }
+ .blurb .tags dt,.blurb .mods dt
+								{ font-weight: 700; padding: 0.5em 0.5625em 0.25em 0; width: 10.75em }
+ .blurb .tags ul,.blurb .mods ul
+								{ margin: -2em 0 .75em 11em; padding: 0; text-indent: 0 }
+ .blurb .tags,.blurb .tags li 	{ display: inline; margin: 0; padding: 0 0 0.8em }
+ .blurb blockquote 				{ clear: none; margin: 0.5625em auto 0.5625em 11em; text-align: justify }
+ .blurb blockquote blockquote 	{ margin: auto }
+ .blurb li.stats dl 			{ text-align: right }
+
+/* BOOKMARK this can be simplified a lot if/when new blurb is approved*/
+ .bookmark p.count 				{ float: left; padding-left: 3.4575em; }
+ .bookmark .count img			{ height: 25px; width: 25px }
+ .bookmark p.count span 		{ background: url(/images/category-none.png) top left no-repeat; border: 1px solid #eee; display: block; float: left; height: 25px; line-height: 1.875; margin: 0 2.5px 0 0; text-align: center; width: 25px }
+ .bookmark ul.required-tags		{ top:30px;}
+ .bookmark ul.tags 				{ display:block; margin: 0.643em auto auto 11em }
+ .bookmark h5.byline 			{ color: #999; font: 700 0.875em 'Lucida Grande', Geneva, Verdana, Tahoma, sans-serif; margin: 0 }
+ .bookmark .blurb 				{ border: 1px solid #ccc; padding: 0.125em; }
+ .bookmark .module 				{ float:none}
+ .bookmark .user 				{ clear:right; border: 1px solid #ddd; width:auto; margin: 0.25em 0.125em; padding: 0.125em; }
+ #main .bookmark .user .navigation 
+								{ font-size: 0.8575em; margin: 0.5em 0 0.5em -.5em}
+ .bookmark .symbol img 			{ height: 25px; width: 25px }
+
+/* COLLECTION, ANON, MYSTERY */
+ .blurb ul.collection			{ background: url(/images/collections.png) 3.5em 0 no-repeat;}
+ .collection .blurb ul.own		{ background: #eee url(/images/collections.png) 3.5em 0 no-repeat;}
+ .mystery li.heading 			{ background: url(/images/mystery.png) 3.5em 0 no-repeat }
+ #main .collection p.type		{ margin: auto auto auto 11em;}
+
+/* STATS*/
+ .stats dt,.stats dd 			{ display: inline }
+ .stats li dt,.stats dd dt 		{ font-size: 0.8575em }
+ .stats dl dd 					{ margin: 0 0.375em 0 0; padding: 0 0.375em 0 0 }
+ 
+ #main .datetime 				{ font: 100 0.8575em consolas, monaco, courier, monospace; position: absolute; right: 0; text-align: right; top: -0.75em }
+
+/* PREFACE - title, notes, description, collections faq, rules; has a fair few id weights as it sometimes appears within a user-generated-view*/
+ .preface 						{ border-bottom: 3px double; margin: auto 3em 1.5em; padding: 0.5em 0.5em 0 }
+ #main .preface .module				{ float:none; margin:0; padding:0;  width:auto }
+ #main .preface h3				{ background: transparent; border-bottom: 1px solid; color: #333; font-size: 1.125em }				
+ #main .preface h2.title, #main .preface h3.title 	
+								{ font-size: 1.5em; font-weight: 700; margin: 1.5em auto 0; text-align: center; border-bottom:0}
+ #main .preface h3.byline, #main .preface .byline a 	
+								{ border: 0; text-align: center; text-decoration: none }
+ #main .preface a:link, #main .preface a:visited 
+								{ color: #333; }
+ .preface a:hover 				{ text-decoration: underline }
+ #main .preface blockquote		{ border: 0}  					
+
+/* PROFILE -user profile user home, and soon collections and challenges profiles and home */
+ #main .profile p.alt			{ margin: 3em auto 3em 100px }
+ .profile .header img 			{ left: 0; margin: 0 0 0.5625em; position: absolute; top: 0 }
+ .profile .header h2 			{ font-size:2.25em; margin: 0.675em 0 0 100px; text-align: right; border-bottom:2px solid; }
+ .profile .module h3			{ background: #222; color: #fffef9; margin:0; padding: 0.125em; border-bottom: 4px double #fffef9;}
+ .profile .series 				{ clear:left; float:none;}
+ .profile li.blurb				{ margin-top: 0 }
+ .profile .meta dt				{ width:12em}
+ #main .profile .meta dd 		{ margin: -1.125em auto 1.125em 13em;}
+
+/* CHAPTER*/
+ #chapters 						{ margin: auto 3% 2.5em; padding: 0.5em 3% 0;}
+ .chapter						{ margin: auto auto 3em;}
+ #chapters .preface				{ margin: auto 0 1.286em 0; padding: 0;}
+ #main #chapters .footnote 		{ font-size: 85.7%; border-bottom: 1px solid #ddd}  
+
+/* COMMENTS -works-show, inbox, admin posts for now*/
+li.comment 						{ position:relative; clear:right; background:url(/images/icon_placeholder.png) top left no-repeat; min-height: 100px}
+li.comment h4, li.comment blockquote 
+								{ margin: auto auto auto 110px}
+li.comment h4					{ font-size: 1.25em;}
+.comment .even, .thread .even 	{ background:#eee url(/images/icon_placeholder.png) top left no-repeat;}
+.thread .thread 				{ margin: 0 0 0 3em;}
+
+/* SERIES */
+ p.series 						{ text-align:center; margin: 0 auto 2.5em auto}
+
+/*PAGE BY PAGE, where page is a class of main*/
+
+/* SESSIONS (front front pages - login, create, logout(feedbacks)etc)*/
+ #main.session h1,#main.session h1,#main.passwords-new h1 
+								{ border: 0; margin: 0.75em 0 0.125em; text-align: left }
+ #main.session h1 a,#main.session h1 a,#main.passwords-new h1 a 
+								{ border: none; }
+ #main.session h1 span span 	{ font-size: 0.5625em }
+ #main.session h2,#main.session h2,#main.passwords-new h2 
+								{ font: 100 0.75em "Gill Sans", Georgia, Helvetica, Verdana, sans-serif; margin: 0.25em auto 2em }
+ .session #logo 				{ display: block; float: left; margin-bottom: 1.5em; width: 49% }
+ .session #signin 				{ float: left; margin-bottom: 1.5em; width: 49% }
+
+/* DASHBOARD: HISTORY */
+ .readings-index .module h3 	{ border-bottom: 2px dotted #ddd; font-size: 1em }
+ .readings-index .module 		{ border: 1px solid #ddd; margin: 0.25em; padding: 0 0.25em }
+ .readings-index li.blurb 		{ border: 0 }
+/* DASHBOARD: INBOX */
+ .inbox-show p.navigation		{ float:left;}
+/* USER PROFILE SHOW */
+ .profile-show .module h3 		{ margin-top: 2.75em }
+ .profile-show .datetime 		{ top:-3.25em }
+
+/* WORKS-INDEX */
+ .works-index .index 			{ width: 75% }
+
+/* MEDIA-INDEX, SHOW, FANDOMS-INDEX, SHOW*/
+ .media-index li.category 		{ min-height: 15em; padding: 0.5em }
+ #main.media-index ol, #main.fandoms-index ol, #main.fandoms-show ol 
+								{ list-style-type: decimal }
+ .media-index li.odd 			{ float: left; margin: 0 0.5625em 0 0; width: 40% }
+ .media-index li.even 			{ float: right; margin: 0 0 0 0.5625em; width: 40% }
+ .fandoms-index ul.index 		{ float: left; width: 33% }
+ .fandoms-index div.main-fandoms-listing 
+								{ clear: both }
+/* PEOPLE-INDEX */
+ .people-index p.icon, .people-index .icon img 
+								{ height: 75px; width:75px; float:left; margin:0 0 0 2.375em;}
+ .people-index li.blurb 		{ min-height: 75px;}
+
+/* COLLECTIONS INDEX*/
+ #main.collections-show h2 span { font-size: smaller }
+
+/* TRANSLATIONS*/
+ #main.translation-translate 	{ margin-bottom: 2.5em }
+ dl.translations 				{ border-top: 1px solid; margin: 1.5em auto; padding: 1.5em 0 2.5em; position: relative }
+ .translations dt			 	{ clear: both; margin: -0.25em; padding: 0.25em }
+ .translated 					{ background: #d1e1ef; font-style: italic }
+ .untranslated 					{ font-weight: 600 }
+
+/* ToS and ADMIN long body copy tweaks*/
+ .archive_faqs-index div, .known_issues-index .user-generated-view, #tos, #faq, .admin_posts-index .user-generated-view 
+								{ margin: auto 3em; padding: 0.5em 3em 0  }
+ #main #tos .toc li 			{ list-style-type: upper-roman }
+ .home-tos_faq #contents 		{ margin: auto; padding: 1em; width: 60% }
+ .home-tos_faq #contents h2 	{ text-align: center }
+ .home-tos_faq #contents ul li 	{ border-bottom: 1px solid #ddd; list-style-type: upper-roman}
+
+/* ================================================== end of redraft. legacy styles follow
+
+ TAG SHOW PAGE */
+ .droppable { color: red;} 
+ .tags-show li { display: inline }
+ .tags-show ul.work,.tags-show ul.required-tags { padding: 0 }
+ .tags-show .work li.heading { display: block }
+ .tags-show .work li li { display: inline }
+ .tags-show ul { line-height: 2em; padding: 1em 1em 2em }
+
+/* TAG EDIT PAGE */
+ ul.tag-edit-items { margin: 0.5em auto }
+ ul.tag-edit-items li { display: inline; white-space: nowrap }
+ #edit-tag dt { width: 20% }
+ #edit-tag dd { width: 75% }
+ .tags-search .canonical { font-weight: 700 }
+
+/*TAGS-INDEX */
+ .tags-index ul { margin: 2em auto; text-align: center }
+ .tags-index li { display: inline; padding: 0.25em 0.5625em }
+ .tags-index a { text-decoration: none }
+ .tags-index a:hover { background: #900; color: #fffef9 }
+ a.cloud1 { color: #111; font-size: 0.625em; font-weight: 100 }
+ a.cloud2 { color: #240F0F; font-size: 0.75em; font-weight: 200 }
+ a.cloud3 { color: #380C0C; font-size: 0.875em; font-weight: 300 }
+ a.cloud4 { color: #4B0A0A; font-size: 1em; font-weight: 400 }
+ a.cloud5 { color: #5F0707; font-size: 1.125em; font-weight: 500 }
+ a.cloud6 { color: #720505; font-size: 1.5em; font-weight: 600 }
+ a.cloud7 { color: #860202; font-size: 1.875em; font-weight: 700 }
+ a.cloud8 { color: #900; font-size: 2.25em; font-weight: 800 }
+
+/*TAG WRANGLING */
+ #tags-to-sort { height: 10em; margin-top: 20px; overflow: scroll; width: 30% }
+ .recent { font-weight: 900 }
+ #mass_assign_prettifying li.tag_wrangling_column { border-bottom: 1px solid #e2decc; display: block; float: left; line-height: 2.5; margin: 0 0 .1em; padding: 0 2.8em .2em 0; white-space: nowrap }
+ #mass_assign_prettifying div.category,#mass_assign_prettifying div.category h3,#mass_assign_prettifying div.category ul { clear: both }
+ .tag_wranglings-assign .category h3 { font-size: 2.5em }
+ .tag_wranglings-assign .category ul { margin-left: 5em }
+ .tag_wranglings-assign .category ul li { display: inline }
+ .tag_wranglings-assign .tag { margin-right: 1em }
+ ul#tag-wrangler-footer { clear: both; margin-top: 2.5em }
+

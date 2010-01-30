@@ -23,7 +23,8 @@
 
 <!--main content-->
 <h3 class="landmark">Series Metadata</h3>
-<dl class="series meta">
+<div class="wrapper">
+	<dl class="series meta">
     <dt><%=h 'Series begun:' %></dt>
     <dd><%=h @series.published_at.to_date %></dd>
     <dt><%=h 'Series updated: ' %></dt>
@@ -52,7 +53,7 @@
       <dd><blockquote class="user-generated-view"><%= sanitize_and_format_for_display @series.notes %></blockquote></dd>
 	<%- end -%>
 </dl>
-
+</div>
 <div id="dynamic-bookmark" style="display:none;">	
 </div>
 

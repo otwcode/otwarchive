@@ -1,0 +1,56 @@
+/* content inputted by a user into a textarea.*/
+
+#main .user-generated-view p { margin:0.643em auto; }
+
+/*lists */
+.user-generated-view dl		{ font-size:1em; margin:1.5em 0; border: 0; }
+.user-generated-view dl dl	{ width:90%; margin:auto;}
+.user-generated-view dt		{ font-weight:bold; text-indent:0;}
+.user-generated-view dd		{ line-height:1.5; font-size:0.875em; margin:1.25em auto 1.25em 3em; }
+.user-generated-view dd p	{ text-indent:0; margin:0; padding:0; }
+.user-generated-view ul		{ margin:1.125em auto; padding:0 1em; }
+.user-generated-view li		{ list-style-type:disc; margin:0.75em 0 0.75em 1.75em;}
+.user-generated-view ol		{ margin:0.75em auto; padding:0 1.5em; }
+.user-generated-view ol li	{ list-style-type:decimal; margin:0.75em 0 0.75em 1.75em ;}
+.user-generated-view ol li ol li	
+							{ list-style-type: lower-alpha;}
+.user-generated-view ol li ol li ol li	
+							{ list-style-type: lower-roman;}
+.user-generated-view li		{ font-weight:normal; }
+
+/* headings */
+.user-generated-view h1		{ font-family:Cambria, Constantia, Palatino, Georgia, serif; text-align:center; }
+.user-generated-view h2		{ color:#333; font-variant:normal; text-align:left; text-transform:none; margin:1.5em 0;}
+.user-generated-view h3		{ background:#333; color:#fffef9; font-weight:100; padding: 0.125em; border-bottom:0.25em double #fffef9; }
+.user-generated-view h4		{ font-variant:small-caps;}
+.user-generated-view h5		{ font-weight:600; font-size: 1em;}
+.user-generated-view h6		{ font-size: 0.975em; border-bottom:1px solid; }
+.user-generated-view h3 a, .user-generated-view h3 a:link, .user-generated-view h3 a:visited
+							{ color:#fffef9; border-bottom:0; text-decoration: none; } 
+/*tables */
+.user-generated-view caption
+							{ height:auto; font-size:1em; color:#222; }
+.user-generated-view th, .user-generated-view thead td, .user-generated-view th a, .user-generated-view th a:link 
+							{ background:transparent; color:#222; font-weight: 600; }
+.user-generated-view td		{ border:0;}
+
+/* quotes and stresses */
+.user-generated-view blockquote	
+							{ font-size:1em; margin:auto auto auto 1.5em; padding:0.75em; border-left:2px solid #999; }
+.user-generated-view blockquote blockquote	
+							{ padding:0.25em; border:0; }
+.user-generated-view hr		{ width:33%; margin:0.875em auto 1.2525em auto; border:1px solid; }
+
+.dropcap					{ font:3em Georgia, serif; }
+.flashback					{ font-style:italic; }
+.caps						{ font-variant:small-caps; }
+
+/*expected behaviours, exceptioning*/
+.user-generated-view center { font-size: 0.875em; line-height: 1.286; margin: 0.643em 0; } 
+.user-generated-view center p 
+							{ font-size: 1em; }
+							
+
+
+
+
