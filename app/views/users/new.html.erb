@@ -1,7 +1,14 @@
-		<h1><%=h "Create Account" %></h1>
+<!--Descriptive page name, messages and instructions-->
+		<h2><%=h "Create Account" %></h2>
 		<p class="message"><%=h "Please select a user name. You will be allowed to post works under multiple pseudonyms, but you will only have one user name, which is hard for us to change - choose wisely!" %>
 		<%= "User names will be displayed as entered. Please check you have entered your preferred spelling and capitalization before submitting this form." %></p>
 		<%= error_messages_for :user, :id => "errorExplanationNone", :header_tag => "p", :header_message => "Oops, there's some problems with the stuff you told us.", :message => nil  %>
+		<!--/descriptions-->
+
+<!--subnav-->
+<!--/subnav-->
+		
+		<!--main content-->
 		<% form_for @user do |f| -%>
 		  <p><%= f.hidden_field :invitation_token, :value => params[:invitation_token] %></p>
 <fieldset><legend>User Details</legend>
@@ -76,14 +83,8 @@
 					<%= f.label :age_over_13, "Yes, I am over 13." %>
 				</p>
 <!-- Terms of Service -->
-				<p>
-					<%=h "And - really important - we need you to agree to our" %> <%= link_to "Terms of Service", tos_path -%>:<br />
-					<textarea name="<%= tos_field_name %>" rows="8" cols="63" readonly="readonly">
-
-					  <%= html_to_text(render(:partial => 'home/tos')) %>
-
-          </textarea>
-				</p>
+				<p><%=h "And - really important - we need you to agree to our" %> <%= link_to "Terms of Service", tos_path -%>:</p>
+					<div name="<%= tos_field_name %>"id="tos-partial"><%= render(:partial => 'home/tos') %></div>
 <!-- If this box is not checked, needs a modal dialog box: "You must agree to the Terms of Service in order to create an account.", with OK as the only choice. -->
 				<p>
 					<%= f.check_box :terms_of_service -%>
@@ -99,3 +100,4 @@
 				</p>
 				</fieldset>
 			<% end -%>
+<!--/content-->

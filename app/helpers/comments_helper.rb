@@ -52,28 +52,25 @@ module CommentsHelper
   
   def show_comments_link(commentable)
     if commentable.count_visible_comments > 0
-      commentable_id = eval(":#{commentable.class.to_s.underscore}_id")
+      commentable_id = "#{commentable.class.to_s.underscore}_id".to_sym
       #Added if/else to get singular agreement for one comment
       if commentable.count_visible_comments == 1
         link_to_remote(
-            "Read Comments",
+            t("comments.read_one", :default => "Read {{comment_count}} Comment", :comment_count => commentable.count_visible_comments.to_s),
             {:url => { :controller => :comments, :action => :show_comments, commentable_id => (commentable.id)}, :method => :get}, 
-            {:href => fallback_url_for_top_level(commentable, {:show_comments => true})} ) +
-        '&nbsp;' + '(' + commentable.count_visible_comments.to_s + ' comment)'
-        # this comment is here just to fix aptana code coloring after the / 
+            {:href => fallback_url_for_top_level(commentable, {:show_comments => true})} )
       else
         link_to_remote(
-            "Read Comments",
+            t("comments.read_many", :default => "Read {{comment_count}} Comments", :comment_count => commentable.count_visible_comments.to_s),
             {:url => { :controller => :comments, :action => :show_comments, commentable_id => (commentable.id)}, :method => :get}, 
-            {:href => fallback_url_for_top_level(commentable, {:show_comments => true})} ) +
-        '&nbsp;' + '(' + commentable.count_visible_comments.to_s + ' comments)'
-        # this comment is here just to fix aptana code coloring after the / 
+            {:href => fallback_url_for_top_level(commentable, {:show_comments => true})} )
       end
     end
   end
+  
     
   def hide_comments_link(commentable) 
-    commentable_id = eval(":#{commentable.class.to_s.underscore}_id")
+    commentable_id = "#{commentable.class.to_s.underscore}_id".to_sym
     link_to_remote("Hide Comments", 
       {:url => { :controller => :comments, :action => :hide_comments, commentable_id => (commentable.id)}, :method => :get },     
       {:href => fallback_url_for_top_level(commentable, {:show_comments => nil})} )
@@ -118,24 +115,20 @@ end
   # return link to add new reply to a comment
   def add_comment_reply_link(comment)
     commentable_id = eval(":#{comment.ultimate_parent.class.to_s.underscore}_id")
-    "(" + 
     link_to_remote( 
       "Reply", 
       {:url => {:controller => :comments, :action => :add_comment_reply, :id => comment.id, :comment_id => params[:comment_id], commentable_id => (comment.ultimate_parent.id)}, :method => :get}, 
       {:href => fallback_url_for_comment(comment, 
-                {:add_comment => nil, :edit_comment_id => nil, :delete_comment_id => nil, :add_comment_reply_id => comment.id})} ) +
-     ")"
+                {:add_comment => nil, :edit_comment_id => nil, :delete_comment_id => nil, :add_comment_reply_id => comment.id})} )
   end  
   
   # return link to cancel new reply to a comment
   def cancel_comment_reply_link(comment)
     commentable_id = eval(":#{comment.ultimate_parent.class.to_s.underscore}_id")
-    "(" + 
     link_to_remote( 
       "Cancel", 
       {:url => {:controller => :comments, :action => :cancel_comment_reply, :id => comment.id, :comment_id => params[:comment_id], commentable_id => (comment.ultimate_parent.id)}, :method => :get}, 
-      {:href => fallback_url_for_comment(comment, {:add_comment_reply_id => nil})} ) +
-     ")"
+      {:href => fallback_url_for_comment(comment, {:add_comment_reply_id => nil})} ) 
   end  
 
   # TO DO: create fallbacks to support non-JavaScript requests!
@@ -169,12 +162,10 @@ end
     
   # return html link to edit comment
   def edit_comment_link(comment)
-      "(" +
       link_to_remote("Edit", 
         {:url => {:controller => :comments, :action => :edit, :id => comment, :comment_id => params[:comment_id]}, :method => :get}, 
         {:href => fallback_url_for_comment(comment, 
-                {:add_comment => nil, :add_comment_reply_id => nil, :delete_comment_id => nil, :edit_comment_id => comment.id})} ) +
-      ")"
+                {:add_comment => nil, :add_comment_reply_id => nil, :delete_comment_id => nil, :edit_comment_id => comment.id})} ) 
   end
   
   def do_cancel_delete_comment_link(comment)
@@ -187,33 +178,29 @@ end
   
   # return html link to delete comments
   def delete_comment_link(comment)
-    "(" +
     link_to_remote( 
       "Delete", 
       {:url => {:controller => :comments, :action => :delete_comment, :id => comment, :comment_id => params[:comment_id]}, :method => :get}, 
       {:href => fallback_url_for_comment(comment, 
-                {:add_comment => nil, :add_comment_reply_id => nil, :edit_comment_id => nil, :delete_comment_id => comment.id})} ) +
-    ")"
+                {:add_comment => nil, :add_comment_reply_id => nil, :edit_comment_id => nil, :delete_comment_id => comment.id})} )
   end
 
   # return link to cancel new reply to a comment
   def cancel_delete_comment_link(comment)
-    "(" + 
     link_to_remote( 
       "Cancel", 
       {:url => {:controller => :comments, :action => :cancel_comment_delete, :id => comment, :comment_id => params[:comment_id]}, :method => :get}, 
       {:href => fallback_url_for_comment(comment, 
-                {:delete_comment_id => nil})} ) +
-     ")"
+                {:delete_comment_id => nil})} )
   end    
   
   # return html link to mark/unmark comment as spam
   def tag_comment_as_spam_link(comment)
     
     if comment.approved
-      "(" + link_to('Spam', reject_comment_path(comment), :method => :put) + ")"
+      link_to('Spam', reject_comment_path(comment), :method => :put)
     else
-      "(" + link_to('Not Spam', approve_comment_path(comment), :method => :put)  + ")"
+      link_to('Not Spam', approve_comment_path(comment), :method => :put)
     end
   end
 

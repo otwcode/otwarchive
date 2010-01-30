@@ -32,7 +32,7 @@
 		<h2><%= t('otw_link', :default => "A project of the {{otw}}", :otw => '<a href="http://transformativeworks.org">Organization For Transformative Works</a>') %></h2>
 	</div>
 
-	<ul class="main-navigation">
+	<ul class="navigation">
     	<li><%= link_to_unless_current t('layout.header.fandoms', :default => "fandoms"), media_path %></li>
 		<li><%= link_to_unless_current t('layout.header.works', :default => "works"), works_path %></li>
     	<li><%= link_to_unless_current t('layout.header.people', :default => "people"), people_path %></li>

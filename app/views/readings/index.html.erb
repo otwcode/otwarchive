@@ -1,14 +1,17 @@
-<h1><%= t('history', :default => 'History') %></h1>
+<!--Descriptive page name, messages and instructions-->
+<h2><%= t('history', :default => 'History') %></h2>
+<p><%= t('readings_options', :default => "You can disable your viewing history in {{preferences_link}}.", :preferences_link => (link_to t('user_preferences', :default => "Preferences"), user_preferences_path(@user))) %></p>
+<!--/descriptions-->
 
+<!--subnav-->
+<!--/subnav-->
 
-<%= t('readings_options', :default => "You can disable your reading history in {{preferences_link}}.", :preferences_link => (link_to t('user_preferences', :default => "Preferences"), user_preferences_path(@user))) %>
-
+<!--main content-->
 <% if logged_in? && !current_user.readings.empty? %>
-  <ul>
     <%= render :partial => 'reading', :collection => @readings %>
-  </ul>
 <% end %>
+<!--/content-->
 
-<div class="pagination">
+<!--subnav-->
 	  <%= will_paginate @readings, :prev_label =>  "&laquo; " + t('pagination.previous', :default => "Previous") ,:next_label => t('pagination.next', :default => "Next") + " &raquo;" %>
-</div>
+<!--/subnav-->

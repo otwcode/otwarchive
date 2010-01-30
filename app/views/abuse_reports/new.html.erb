@@ -1,6 +1,11 @@
+<!--Descriptive page name, messages and instructions--><h2><%=h t('report_abuse', :default => 'Report Abuse') %></h2>
 <%= error_messages_for :abuse_report %>
+<!--/descriptions-->
 
-<h1><%=h t('report_abuse', :default => 'Report Abuse') %></h1>
+<!--subnav-->
+<!--/subnav-->
+
+<!--main content-->
 <% form_for(@abuse_report) do |f| %>
   <dl>
   	<dt><%= f.label :url, t('link', :default => "Link to the page you are reporting (required):") %></dt>
@@ -36,3 +41,4 @@
 	  <dd class="submit"><%= f.submit t('submit', :default => "Submit") %></dd>
 	</dl>
 <% end %>
+<!--/content-->

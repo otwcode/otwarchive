@@ -74,7 +74,7 @@ module TagsHelper
     taggable_things.each do |tt|
       list << link_to(tt.titlecase, {:controller => tt, :action => :index, :tag_id => tag}) unless tt == controller_class
     end
-    "<ul class=""taggable_strip""><li>" + t("see_also", :default => "See also: ") + "</li>" + list.map{|li| "<li>" + li + "</li>"}.to_s + "</ul>"
+    list.map{|li| "<li>" + li + "</li>"}.to_s 
   end
   
   # Determines whether or not to display warnings for a creation

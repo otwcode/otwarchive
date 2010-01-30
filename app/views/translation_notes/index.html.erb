@@ -1,15 +1,28 @@
-<h1>Listing translation notes</h1>
-<%= link_to 'Back to translations', translations_path %> | <%= link_to 'Add a new note', new_translation_note_path(:namespace => @namespace) %>
+<!--Descriptive page name, messages and instructions-->
+<h2>Listing translation notes</h2>
+<!--/descriptions-->
 
+<!--subnav-->
+<ul class="navigation">
+	<li><%= link_to 'Back to translations', translations_path %></li>
+	<li><%= link_to 'Add a new note', new_translation_note_path(:namespace => @namespace) %></li>
+</ul>
+<!--/subnav-->
+
+<!--main content-->
 <%- for translation_note in @translation_notes -%>
 <div class='note'>
   <p>
     <%=h translation_note.user.login %>, <%= l(translation_note.created_at) %>
     <%- if current_user == translation_note.user -%>
-      <span class='edit-links'><%= link_to '(destroy)', translation_note, :confirm => 'Are you sure?', :method => :delete %></span>
+      <span class='navigation'><%= link_to '(destroy)', translation_note, :confirm => 'Are you sure?', :method => :delete %></span>
     <%- end -%>
   </p> 
   <div class='note-text'><%= sanitize_and_format_for_display translation_note.note %></div>
 </div>
 <%- end -%>
+<!--/content-->
+<!--investigate-->
 
+<!--subnav-->
+<!--/subnav-->

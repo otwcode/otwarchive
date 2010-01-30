@@ -1,4 +1,6 @@
-﻿<dl class="work-meta">
+﻿<h3 class="landmark">Work Header</h3>
+<div class="wrapper">
+	<dl class="work meta" role="complementary">
   <%- work_tags = collect_work_tags(work) -%>
   <%- Tag::VISIBLE.each do |type| -%>
     <%- tags = work_tags.select{|tag| tag.type == type} -%>
@@ -13,17 +15,26 @@
         <%- end -%>
       </dt>
 
-      <dd>
+      <dd class="<%= type.downcase -%>">
       <ul id="work_<%= work.id %>_category_<%= type.downcase %>">
       <%- if type == "Warning" && !AdminSetting.enable_test_caching? && hide_warnings?(work) -%>        
         <li><%= show_warnings_link(work) %> </li>
       <%- elsif type == "Freeform" && !AdminSetting.enable_test_caching? && hide_freeform?(work) -%>
         <li><%= show_freeforms_link(work) %> </li>
       <%- else -%>                   
-        <%= tags.collect{|tag| "<li class='#{tag.type.downcase}'>" + link_to_tag(tag) + '</li>' }.join(', ') %>
+        <%= tag_link_list(tags) %>
       <%- end -%>
       </ul>
       </dd>
     <%- end -%>
   <%- end -%>
+ <%- unless @work.series.blank? -%>
+      <dt class="series">Series</dt>
+		<dd class="series">
+		<%= show_series_data(@work) %>
+		</dd>
+		<%- end -%>
+		<dt class="stats">Stats<!--comment link and bookmark link should come out of here and go in navigation. comment count and bookmark count can remain--></dt>
+		<dd class="stats"><%= work_meta_list(@work, @chapter) %></dd>
 </dl>
+</div>

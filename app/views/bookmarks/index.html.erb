@@ -1,26 +1,35 @@
+<!--descriptive page name and system messages, descriptions, and instructions.-->
 <%- if @most_recent_bookmarks -%>
-  <h1>Recent Bookmarks</h1>
+  <h2>Recent Bookmarks</h2>
+<%- elsif @user -%>
+<h2><%=h t('owned_bookmarks', :default => "{{user_name}}'s Bookmarks", :user_name => @user.login) %></h2>
 <%- else -%>
-  <h1><%=h t('listing', :default => 'Listing bookmarks') %></h1>
+  <h2><%=h t('listing', :default => 'Listing bookmarks') %></h2>
 <%- end -%>
+<!-- /descriptions-->
 
-<ul class="navigation">
+<!--subnav-->
+<h3 class="landmark">Actions</h3>
+<ul class="navigation" role="navigation">
 <% if @user && current_user && current_user == @user %>
   <li><%= link_to t('add_new', :default => "Add A New Bookmark"), new_external_work_path %></li>
 <% end %> 
   <li><%= toggle_recs_bookmarks %></li>
 <% if params[:tag_id] %>
-  <li><%= taggable_list(params[:tag_id], "bookmarks") -%></li>
+  <%= taggable_list(params[:tag_id], "bookmarks") -%>
 <% end %>
 </ul>
+<!--/subnav-->
 
-<ul class="work-list bookmark" id="bookmarks">
+<!--main content-->
+<h3 class="landmark">List of Bookmarks</h3>
+<ol class="bookmark index">
 	<%= render :partial => 'bookmarks/bookmarks' %>
-</ul>
+</ol>
+<!-- /content-->
 
-<div id="dynamic-bookmark" style="display:none;">	
-</div>
+<div id="dynamic-bookmark" style="display:none;">	</div>
 
-<div class="pagination">
+<!--subnav-->
 	  <%= will_paginate @bookmarks, :prev_label =>  "&laquo; " + t('pagination.previous', :default => "Previous"), :next_label => t('pagination.next', :default => "Next") + " &raquo;" %>
-</div>
+<!-- /subnav-->

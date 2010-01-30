@@ -1,10 +1,21 @@
-<h1>Manage the invite queue</h1>
+<!--Descriptive page name, messages and instructions-->
+<h2>Manage the invite queue</h2>
+<!--/descriptions-->
 
+
+<!--main content-->
   <% form_tag reorder_invite_requests_url do %>
     <p><%= submit_tag t('reorder_queue', :default => 'Fix the order of the queue')  %></p>
   <% end %>
 
-<table>
+<table summary="Lists each request/email and its current place in the queue. You can also delete each request">
+<caption>Manage the Invite Queue</caption>
+<thead>
+	<tr>
+	<th scope="col">Queue Position</th>
+	<th scope="col">Email Address</th>
+	<th scope="col">Action</th>
+	</tr>
 <%- for request in @invite_requests -%>
 <tr>
   <td><%=h request.position %></td>
@@ -13,3 +24,7 @@
 </tr>
 <%- end -%>
 </table>
+<!--/content-->.
+.
+<!--subnav-->
+<!--/subnav-->

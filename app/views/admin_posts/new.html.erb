@@ -1,4 +1,11 @@
-<%= render :partial => 'admin/admin_nav' %>
-<h1><%= t("admin_posts", :default => "New AO3 News Post") -%></h1>
+<!--Descriptive page name, messages and instructions-->
+<h2><%= t("admin_posts", :default => "New AO3 News Post") -%></h2>
+<!--/descriptions-->
 
+<!--subnav-->
+<%= render :partial => 'admin/admin_nav' %>
+<!--/subnav-->
+
+<!--main content-->
 <%= render :partial => 'admin_post_form' %>
+<!--/content-->

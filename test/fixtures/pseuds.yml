@@ -1,198 +1,326 @@
 --- 
+pseud_00027: 
+  name: yulechatrulesall
+  created_at: 2009-12-12 21:07:09 +00:00
+  updated_at: 2009-12-12 21:07:09 +00:00
+  is_default: false
+  id: 27
+  user_id: 21
+  description: 
 pseud_00016: 
   name: Non-Default Pseud
+  created_at: 2009-02-24 03:13:36 +00:00
   updated_at: 2009-03-20 23:55:54 +00:00
   is_default: false
   id: 16
-  description: ""
   user_id: 2
-  created_at: 2009-02-24 03:13:36 +00:00
+  description: ""
 pseud_00005: 
   name: Non-Default Pseud
-  updated_at: 2009-09-17 22:05:58 +01:00
+  created_at: 2008-11-09 01:26:02 +00:00
+  updated_at: 2009-09-17 21:05:58 +00:00
   is_default: false
   id: 5
-  description: This is a non default pseud for testuser.
   user_id: 1
-  created_at: 2008-11-09 01:26:02 +00:00
+  description: This is a non default pseud for testuser.
+pseud_00038: 
+  name: tassos
+  created_at: 2009-12-12 22:39:41 +00:00
+  updated_at: 2009-12-12 22:39:41 +00:00
+  is_default: false
+  id: 38
+  user_id: 31
+  description: 
+pseud_00039: 
+  name: Enigel
+  created_at: 2009-12-12 23:45:44 +00:00
+  updated_at: 2009-12-12 23:45:44 +00:00
+  is_default: false
+  id: 39
+  user_id: 32
+  description: 
 pseud_00006: 
   name: orphan_account
+  created_at: 2008-12-05 13:55:28 +00:00
   updated_at: 2008-12-05 13:55:28 +00:00
   is_default: true
   id: 6
-  description: Default pseud
   user_id: 6
-  created_at: 2008-12-05 13:55:28 +00:00
+  description: Default pseud
 pseud_00017: 
   name: Some other fucking pseud
+  created_at: 2009-02-24 03:48:42 +00:00
   updated_at: 2009-03-17 20:53:58 +00:00
   is_default: false
   id: 17
-  description: some fucking description
   user_id: 1
-  created_at: 2009-02-24 03:48:42 +00:00
+  description: some fucking description
+pseud_00028: 
+  name: Jenn_Calaelen
+  created_at: 2009-12-12 21:07:24 +00:00
+  updated_at: 2009-12-12 21:07:24 +00:00
+  is_default: false
+  id: 28
+  user_id: 22
+  description: 
+pseud_00040: 
+  name: invitest
+  created_at: 2009-12-17 11:37:58 +00:00
+  updated_at: 2009-12-17 11:37:58 +00:00
+  is_default: false
+  id: 40
+  user_id: 33
+  description: 
+pseud_00041: 
+  name: thelongestpseudinthegoshdarnworldomgwtfo
+  created_at: 2010-01-03 17:25:44 +00:00
+  updated_at: 2010-01-03 17:25:44 +00:00
+  is_default: false
+  id: 41
+  user_id: 1
+  description: ""
+pseud_00029: 
+  name: Llwyden
+  created_at: 2009-12-12 21:07:37 +00:00
+  updated_at: 2009-12-12 21:13:29 +00:00
+  is_default: true
+  id: 29
+  user_id: 23
+  description: 
 pseud_00018: 
   name: unique snowflake
+  created_at: 2009-02-24 08:35:25 +00:00
   updated_at: 2009-03-20 23:43:41 +00:00
   is_default: false
   id: 18
-  description: This pseud is just for reccing / bookmarking.
   user_id: 4
-  created_at: 2009-02-24 08:35:25 +00:00
+  description: This pseud is just for reccing / bookmarking.
 pseud_00007: 
   name: Ash
+  created_at: 2008-12-05 13:55:29 +00:00
   updated_at: 2008-12-05 13:55:29 +00:00
   is_default: true
   id: 7
-  description: Default pseud
   user_id: 5
-  created_at: 2008-12-05 13:55:29 +00:00
+  description: Default pseud
+pseud_00030: 
+  name: moriann
+  created_at: 2009-12-12 21:07:42 +00:00
+  updated_at: 2009-12-12 21:07:42 +00:00
+  is_default: false
+  id: 30
+  user_id: 24
+  description: 
 pseud_00008: 
   name: Boccaccio
+  created_at: 2008-12-05 14:07:24 +00:00
   updated_at: 2008-12-05 14:07:24 +00:00
   is_default: true
   id: 8
-  description: Default pseud
   user_id: 7
-  created_at: 2008-12-05 14:07:24 +00:00
+  description: Default pseud
 pseud_00019: 
   name: parenthetical
-  updated_at: 2009-07-17 22:44:23 +01:00
+  created_at: 2009-07-17 21:44:23 +00:00
+  updated_at: 2009-07-17 21:44:23 +00:00
   is_default: false
   id: 19
-  description: 
   user_id: 15
-  created_at: 2009-07-17 22:44:23 +01:00
+  description: 
+pseud_00031: 
+  name: badjuju
+  created_at: 2009-12-12 21:07:52 +00:00
+  updated_at: 2009-12-12 21:07:52 +00:00
+  is_default: false
+  id: 31
+  user_id: 25
+  description: 
 pseud_00020: 
   name: sarkymoocow
-  updated_at: 2009-07-17 23:05:00 +01:00
+  created_at: 2009-07-17 22:05:00 +00:00
+  updated_at: 2009-07-17 22:05:00 +00:00
   is_default: false
   id: 20
-  description: parenthetical back in her HP days
   user_id: 15
-  created_at: 2009-07-17 23:05:00 +01:00
+  description: parenthetical back in her HP days
 pseud_00009: 
   name: Chaucer
+  created_at: 2008-12-06 22:53:08 +00:00
   updated_at: 2008-12-06 22:53:08 +00:00
   is_default: true
   id: 9
-  description: Default pseud
   user_id: 8
-  created_at: 2008-12-06 22:53:08 +00:00
+  description: Default pseud
 pseud_00010: 
   name: Dean
+  created_at: 2008-12-06 22:58:44 +00:00
   updated_at: 2008-12-06 22:58:44 +00:00
   is_default: true
   id: 10
-  description: Default pseud
   user_id: 9
-  created_at: 2008-12-06 22:58:44 +00:00
+  description: Default pseud
 pseud_00021: 
   name: cal
-  updated_at: 2009-07-17 23:18:52 +01:00
+  created_at: 2009-07-17 22:18:52 +00:00
+  updated_at: 2009-07-17 22:18:52 +00:00
   is_default: false
   id: 21
-  description: 
   user_id: 16
-  created_at: 2009-07-17 23:18:52 +01:00
+  description: 
+pseud_00032: 
+  name: DawningStar
+  created_at: 2009-12-12 21:08:12 +00:00
+  updated_at: 2009-12-12 21:08:12 +00:00
+  is_default: false
+  id: 32
+  user_id: 26
+  description: 
+pseud_00033: 
+  name: yulechatismadeofawesome
+  created_at: 2009-12-12 21:09:13 +00:00
+  updated_at: 2009-12-12 21:09:13 +00:00
+  is_default: false
+  id: 33
+  user_id: 27
+  description: 
 pseud_00022: 
   name: reccer
-  updated_at: 2009-07-18 09:55:25 +01:00
+  created_at: 2009-07-18 08:55:25 +00:00
+  updated_at: 2009-07-18 08:55:25 +00:00
   is_default: false
   id: 22
-  description: 
   user_id: 17
-  created_at: 2009-07-18 09:55:25 +01:00
+  description: 
 pseud_00011: 
   name: Sam
+  created_at: 2008-12-06 23:03:31 +00:00
   updated_at: 2008-12-06 23:03:31 +00:00
   is_default: true
   id: 11
-  description: Default pseud
   user_id: 10
-  created_at: 2008-12-06 23:03:31 +00:00
+  description: Default pseud
 pseud_00012: 
   name: Ellen
+  created_at: 2008-12-06 23:05:24 +00:00
   updated_at: 2008-12-06 23:05:24 +00:00
   is_default: true
   id: 12
-  description: Default pseud
   user_id: 11
-  created_at: 2008-12-06 23:05:24 +00:00
+  description: Default pseud
 pseud_00001: 
   name: testuser
+  created_at: 2008-11-09 01:26:02 +00:00
   updated_at: 2009-03-20 01:18:30 +00:00
   is_default: false
   id: 1
-  description: This is a default pseud for testuser.
   user_id: 1
-  created_at: 2008-11-09 01:26:02 +00:00
+  description: This is a default pseud for testuser.
+pseud_00034: 
+  name: Shusu
+  created_at: 2009-12-12 21:10:24 +00:00
+  updated_at: 2009-12-12 21:10:24 +00:00
+  is_default: false
+  id: 34
+  user_id: 28
+  description: 
+pseud_00035: 
+  name: Llwyden ferch Gyfrinach
+  created_at: 2009-12-12 21:13:28 +00:00
+  updated_at: 2009-12-12 21:13:29 +00:00
+  is_default: false
+  id: 35
+  user_id: 23
+  description: ""
 pseud_00002: 
   name: testuser2
+  created_at: 2008-11-09 01:26:02 +00:00
   updated_at: 2009-03-20 23:55:54 +00:00
   is_default: true
   id: 2
-  description: This is a default pseud for testuser2.
   user_id: 2
-  created_at: 2008-11-09 01:26:02 +00:00
+  description: This is a default pseud for testuser2.
 pseud_00013: 
   name: Zooey_Glass
+  created_at: 2008-12-06 23:13:19 +00:00
   updated_at: 2008-12-06 23:13:19 +00:00
   is_default: true
   id: 13
-  description: Default pseud
   user_id: 12
-  created_at: 2008-12-06 23:13:19 +00:00
+  description: Default pseud
 pseud_00024: 
   name: Zee
-  updated_at: 2009-09-16 23:37:53 +01:00
+  created_at: 2009-09-16 22:37:53 +00:00
+  updated_at: 2009-09-16 22:37:53 +00:00
   is_default: false
   id: 24
-  description: 
   user_id: 19
-  created_at: 2009-09-16 23:37:53 +01:00
+  description: 
 pseud_00025: 
   name: Cal
-  updated_at: 2009-09-18 22:35:47 +01:00
+  created_at: 2009-09-17 21:05:57 +00:00
+  updated_at: 2009-09-18 21:35:47 +00:00
   is_default: true
   id: 25
-  description: |-
-    <b>Bold</b>
-    <i>Italics</i>
-    <em>Emphasised</em>
-    <strong>Strong</strong>
-    <a href="http://www.dreamwidth.org/support/faqbrowse?faqid=91">This is a link</a>
   user_id: 1
-  created_at: 2009-09-17 22:05:57 +01:00
+  description: |-
+    <b>Bold</b>
+    <i>Italics</i>
+    <em>Emphasised</em>
+    <strong>Strong</strong>
+    <a href="http://www.dreamwidth.org/support/faqbrowse?faqid=91">This is a link</a>
 pseud_00014: 
   name: Jessica
+  created_at: 2008-12-06 23:29:42 +00:00
   updated_at: 2008-12-06 23:29:42 +00:00
   is_default: true
   id: 14
-  description: Default pseud
   user_id: 13
-  created_at: 2008-12-06 23:29:42 +00:00
+  description: Default pseud
 pseud_00003: 
   name: testuser3
+  created_at: 2008-11-09 01:26:02 +00:00
   updated_at: 2009-03-21 00:01:28 +00:00
   is_default: true
   id: 3
-  description: This is a default pseud.
   user_id: 3
-  created_at: 2008-11-09 01:26:02 +00:00
+  description: This is a default pseud.
+pseud_00036: 
+  name: whetherwoman
+  created_at: 2009-12-12 21:13:55 +00:00
+  updated_at: 2009-12-12 21:13:55 +00:00
+  is_default: false
+  id: 36
+  user_id: 29
+  description: 
+pseud_00037: 
+  name: Lizifer
+  created_at: 2009-12-12 21:58:12 +00:00
+  updated_at: 2009-12-12 21:58:12 +00:00
+  is_default: false
+  id: 37
+  user_id: 30
+  description: 
 pseud_00004: 
   name: testuser4
+  created_at: 2008-11-09 01:26:02 +00:00
   updated_at: 2009-03-20 23:55:54 +00:00
   is_default: true
   id: 4
-  description: This is a default pseud.
   user_id: 4
-  created_at: 2008-11-09 01:26:02 +00:00
+  description: This is a default pseud.
 pseud_00015: 
   name: Uriel
+  created_at: 2008-12-07 19:54:32 +00:00
   updated_at: 2008-12-07 19:54:32 +00:00
   is_default: true
   id: 15
-  description: Default pseud
   user_id: 14
-  created_at: 2008-12-07 19:54:32 +00:00
+  description: Default pseud
+pseud_00026: 
+  name: hh_ook
+  created_at: 2009-12-12 21:06:59 +00:00
+  updated_at: 2009-12-12 21:06:59 +00:00
+  is_default: false
+  id: 26
+  user_id: 20
+  description: 

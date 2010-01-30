@@ -1,8 +1,8 @@
-<h1><%=h t('editing_collection', :default => "Editing collection") %></h1>
+<h2><%=h t('editing_collection', :default => "Editing collection") %></h2>
 
 <%= render :partial => 'form' -%>
 
-<ul class="navigation">
+<ul class="navigation" role="navigation">
 	<li><%= link_to 'Show', @collection %></li>
 	<li><%= link_to 'Back', collections_path %></li>
 </ul>

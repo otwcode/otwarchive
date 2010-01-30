@@ -3,13 +3,13 @@ module PseudsHelper
   # Prints array of pseuds with links to user pages
   # used on Profile page
   def print_pseud_list(pseuds)
-    pseuds.collect {|pseud| link_to_unless_current(pseud.name, [pseud.user, pseud])}.join(", ")
+    pseuds.collect {|pseud| span_if_current(pseud.name, [pseud.user, pseud])}.join(", ")
   end
   
   # used in the sidebar
   def print_pseud_selector(pseuds)
     pseuds -= [@pseud] if @pseud && @pseud.new_record?
-    list = pseuds.sort.collect {|pseud| "<div>" + link_to_unless_current(pseud.name, [pseud.user, pseud]) + "</div>"}.join("")
+    list = pseuds.sort.collect {|pseud| "<li>" + span_if_current(pseud.name, [pseud.user, pseud]) + "</li>"}.join("")
   end
 
   # For tag list on /people page

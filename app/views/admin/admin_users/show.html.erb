@@ -1,12 +1,19 @@
-<h1><%= t('user_name', :default => 'User: ') -%><%= @user.login %></h1>
+<!--Descriptive page name, messages and instructions-->
+<h2><%= t('user_name', :default => 'User: ') -%><%= @user.login %></h2>
+<!--/descriptions-->
 
-<%= button_to "Send Activation Email", {:action => 'send_activation', :id => @user}, :disabled => @user.active? -%>
-<br />
+<!--subnav-->
+
+<ul class="navigation buttons" role="navigation"><li><%= button_to "Send Activation Email", {:action => 'send_activation', :id => @user}, :disabled => @user.active? -%></li>
+<li>
 <%= button_to "Activate User Account", {:action => 'activate', :id => @user}, :disabled => @user.active? -%>
-<br />
-<p><%= link_to "Manage User Roles", {:action => "index", :query => @user.login, :role => '0'} %></p>
+</li>
+<li><%= link_to "Manage User Roles", {:action => "index", :query => @user.login, :role => '0'} %></li>
+</ul>
+<!--/subnav-->
 
-<h2><%= t('abuse_admin', :default => 'Abuse Administration') -%></h2>
+<!--main content-->
+<h3><%= t('abuse_admin', :default => 'Abuse Administration') -%></h3>
 <%- form_tag ('/admin/admin_users/update') do -%> 
 <%= hidden_field_tag 'user_login', @user.login %>
 <fieldset>
@@ -45,8 +52,8 @@
 </p>
 </fieldset>
 
-<p><%= submit_tag t('forms.update', :default => "Update") %></p>
+<p class="submit"><%= submit_tag t('forms.update', :default => "Update") %></p>
 <%- end -%>
 
-<br />
 <%= render :partial => 'user_history', :locals => {:user => @user} %>
+<!--/content-->

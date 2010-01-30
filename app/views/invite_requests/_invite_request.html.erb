@@ -1,9 +1,14 @@
+<!--Descriptive page name, messages and instructions-->
 <h2>Invitation Status for <%= invite_request.email %></h2>
+<!--/descriptions-->
 
-<p>You are currently number <%= invite_request.position %> on our waiting list!</p>
+<!--main content-->
+<p>You are currently number <strong><%= invite_request.position %></strong> on our waiting list! 
 
 <%- if AdminSetting.invite_from_queue_enabled? && invite_request.proposed_fill_date >= Date.today -%>
-  <p>At our current rate, you should receive an invitation on or around: <%= l(invite_request.proposed_fill_date, :format => :long) %></p>
+At our current rate, you should receive an invitation on or around: <%= l(invite_request.proposed_fill_date, :format => :long) %>
 <%- else -%>
-  <p>New users are not currently being added from the list, but <%= link_to "stay tuned for updates", admin_posts_path %>.</p>
+New users are not currently being added from the list, but <%= link_to "stay tuned for updates", admin_posts_path %>.
 <%- end -%>
+</p>
+<!--/content-->

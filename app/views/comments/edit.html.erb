@@ -1,10 +1,19 @@
-<h1><%=h t('editing', :default => 'Editing comment') %></h1>
+<!--Descriptive page name, messages and instructions-->
+<h2><%=h t('editing', :default => 'Editing comment') %></h2>
 
 <%= error_messages_for :comment %>
+<!--/descriptions-->
 
+<!--subnav-->
+<!--/subnav-->
+
+<!--main content-->
 <%= render :partial => 'comments/comment_form', :locals => {:comment => @comment, :commentable => @comment.commentable, :button_name => t('forms.update', :default => "Update")}%>
+<!--/content-->
 
-<ul class="navigation">
+<!--subnav-->
+<ul class="navigation" role="navigation">
 	<li><%= link_to t('links.show', :default => 'Show'), @comment %></li>
 	<li><%= link_to t('links.back', :default => 'Back'), @comment.commentable %></li>
 </ul>
+<!--/subnav-->

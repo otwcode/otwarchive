@@ -36,14 +36,14 @@
   
 	  <!-- BEGIN sidebar -->
 	  <%- if @user && !@hide_dashboard -%> 
-	  <div id="dashboard-sidebar">
+	  <div id="dashboard" role="navigation">
 	    <%= render :partial => 'users/sidebar' %>
 	  </div>
 	  <%- end -%>
 	  <!-- END sidebar -->
   
 	  <!-- BEGIN main -->
-	  <div id="main" class="<%= classes_for_main %>">
+	  <div id="main" class="<%= classes_for_main %>" role="main">
 	    <%= flash_div :error, :warning, :notice %>
 	    <%= yield  %>
 	  </div>

@@ -6,9 +6,9 @@
 </style>
 <%- end -%>
 
-<div id="header"<% if @collection %> class="collection"<% end %>>
+<div id="header"<% if @collection %> class="collection"<% end %> role="banner">
 	<% if @collection %>
-	  <h1 class="collection"><%= link_to "&lt;&lt; #{ArchiveConfig.APP_NAME}", media_path -%></h1>
+	  <h1 class="collection"><%= link_to "&#8592; #{ArchiveConfig.APP_NAME}", media_path -%> <% unless ArchiveConfig.REVISION.blank? %> (BETA <%=h t('revision', :default => 'rev. {{rev_number}}', :rev_number => ArchiveConfig.REVISION) %>)<% end %></h1>
 	<% end %>
   <div id="login-block">
   <%- if logged_in? || logged_in_as_admin? -%>
@@ -25,15 +25,16 @@
   <%= render :partial => 'works/search_box' %>
 </div>
 
-  <% if @collection -%>
-    <h1 class="collections"><%= @collection.title ? @collection.title : (@collection_parent ? @collection_parent.title : t('layouts.new_collection', :default => "New Collection")) -%>
-  <% else -%>
-    <h1><%= link_to ArchiveConfig.APP_NAME, root_path %>
-  <% end -%>
-  <% unless ArchiveConfig.REVISION.blank? %>(BETA <%=h t('revision', :default => 'rev. {{rev_number}}', :rev_number => ArchiveConfig.REVISION) %>)<% end %>
-	</h1>
+<% if @collection -%>
+  <h1 class="collections"><%= @collection.title ? @collection.title : (@collection_parent ? @collection_parent.title : t('layouts.new_collection', :default => "New Collection")) -%></h1>
+<% else -%>
+  <h1><%= link_to ArchiveConfig.APP_NAME, root_path %>
+  <% unless ArchiveConfig.REVISION.blank? %> (BETA <%=h t('revision', :default => 'rev. {{rev_number}}', :rev_number => ArchiveConfig.REVISION) %>)<% end %>
+  </h1>
+<% end -%>
 
-  <ul class="main-navigation">
+<h3 class="landmark">Site Navigation</h3>
+  <ul class="navigation" role="navigation">
     <% if @collection %>
       <li><%= span_if_current('collection home', !@collection.new_record? ? collection_path(@collection) : (@collection_parent ? collection_path(@collection_parent) : collections_path)) %></li>
     <% else %>

@@ -1,9 +1,10 @@
-<div id="user-page">
+<div id="user-page" class="profile">
   <%= render :partial => "users/header", :locals => {:user => @user} %>
   <%= render :partial => "users/contents" %>
 </div>
 
-<ul class="navigation">
+<h3 class="landmark">Navigation</h3>
+<ul class="navigation" role="navigation">
   <% if @user == current_user -%>
     <li><%= link_to t('edit_link', :default => 'Edit'), [:edit, @user, @author] %></li>
   <% end -%>

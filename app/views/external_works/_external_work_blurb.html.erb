@@ -24,7 +24,7 @@
 <%- end -%>  
     </li>
     <li class="summary">
-      <%= sanitize_strip_images_and_format_for_display bookmarkable.summary %>
+      <blockquote class="user-generated-view"><%= sanitize_strip_images_and_format_for_display bookmarkable.summary %></blockquote>
     </li>
     <%- if logged_in? -%>    
       <li>

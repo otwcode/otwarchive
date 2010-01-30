@@ -1,22 +1,26 @@
+<%= stylesheet_link_tag 'font', :media => 'all' %>
 <%= stylesheet_link_tag 'archive_core', :media => 'all' %>
-<%= stylesheet_link_tag 'layout-elements', :media => 'all' %>
+<%= stylesheet_link_tag 'system-messages', :media => 'screen' %>
+<%= stylesheet_link_tag 'site-chrome', :media => 'screen' %>
+<%= stylesheet_link_tag 'forms', :media => 'screen' %>
+<%= stylesheet_link_tag 'user-generated-views', :media => 'all' %>
 <%- if controller.controller_name == 'home' && params[:action] == 'index' -%> 
   <%= stylesheet_link_tag 'home', :media => 'screen' %>
 <%- end -%>
-<%= stylesheet_link_tag 'forms', :media => 'screen' %>
-<%= stylesheet_link_tag 'story-views', :media => 'all' %>
-<%= stylesheet_link_tag 'comments', :media => 'screen' %>
+<%- if controller.controller_name == 'translations' || controller.controller_name == 'translation_notes' -%>
+  <%= stylesheet_link_tag 'translations', :media => 'screen' %>
+<%- end -%>
+<%= logged_in_as_admin? ? (stylesheet_link_tag 'admin', :media => 'screen') : "" %>
+
+<%= stylesheet_link_tag 'handheld', :media => 'handheld' %>
+<%= stylesheet_link_tag 'aural', :media => 'screenreader' %>
+<%= stylesheet_link_tag 'print', :media => 'print' %>
+<!--plugins-->
 <%= stylesheet_link_tag 'globalize', :media => 'screen' %>
 <%= stylesheet_link_tag 'live_validation', :media => 'screen' %>
 <%= stylesheet_link_tag 'auto_complete', :media => 'screen' %>
 <%= stylesheet_link_tag 'visualize.jQuery', :media => 'screen' %>
-<%= stylesheet_link_tag 'tags', :media => 'screen' %>
-<%= stylesheet_link_tag 'system-messages', :media => 'screen' %>
-<%= stylesheet_link_tag 'aural', :media => 'screenreader' %>
-<%= stylesheet_link_tag 'print', :media => 'print' %>
-<%- if controller.controller_name == 'translations' || controller.controller_name == 'translation_notes' -%>
-  <%= stylesheet_link_tag 'translations', :media => 'screen' %>
-<%- end -%> 
+
 
 <!-- browser-specific stylesheets -->
 <!--[if IE]>
@@ -34,8 +38,6 @@
 <!--[if IE 8]>
 <%= stylesheet_link_tag 'ie8_overrides', :media => 'all' %>
 <![endif]-->
-
-<%= logged_in_as_admin? ? (stylesheet_link_tag 'admin', :media => 'screen') : "" %>
 
 <!-- yield :tinymce needs to be before the scriptaculous elements. See http://wiki.moxiecode.com/index.php/TinyMCE:Ruby_on_Rails for more information. -->
 <%= yield :tinymce %>

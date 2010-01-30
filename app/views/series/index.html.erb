@@ -1,11 +1,26 @@
-<h1><%=h "View All Series" %></h1>
+<!--descriptive page name and system messages, descriptions, and instructions.-->
+<%- if @user %>
+	<h2><%=h t('owned_series', :default => "{{user_name}}'s Series", :user_name => @user.login) %></h2>
+  <% else %>
+	<h2><%=h "View All Series" %></h2>
+<% end %>
 
-<ul class="work-list">
+
+<!-- /descriptions-->
+
+<!--subnavigation-->
+	  <%= will_paginate @series, :prev_label =>  "&laquo; Previous",:next_label => "Next &raquo;" %>
+<!--subnav-->
+
+<!--Main content-->
+<h3 class="landmark">List of Series</h3>
+<ul class="series index">
   <% for series in @series %>
 	<%= render :partial => 'series/series_blurb', :locals => {:series => series} %>
   <% end %>
 </ul>
+<!-- /content-->
 
-<div class="pagination">
+<!--subnav-->
 	  <%= will_paginate @series, :prev_label =>  "&laquo; Previous",:next_label => "Next &raquo;" %>
-</div>
+<!--/subnav-->

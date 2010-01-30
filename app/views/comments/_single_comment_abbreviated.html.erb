@@ -1,17 +1,17 @@
-<div class="comment <%= cycle :odd, :even %>" id="comment_<%= single_comment.id -%>">
-	<%- unless single_comment.pseud.nil? -%>
-		<p><img class="icon" src="/images/icon_placeholder.png" alt="icon placeholder"></p>
-	<%- end -%>
-	
-	<h3>
+<li class="comment <%= cycle :odd, :even %>" id="comment_<%= single_comment.id -%>" role="article">
+	<!--title should be the first element in this list item, not icon. icon goes after name and before comment text-->
+	<h4>
 	  <%= t('single_comment_abbr_posted_on', :default => "Posted on {{commented_on}} by {{commenter}}", 
 	        :commented_on => link_to_comment_ultimate_parent(single_comment), :commenter => get_pseud_or_mailaddress(single_comment)) -%>
-	</h3>
+	</h4>
+	<%- unless single_comment.pseud.nil? -%>
+		<div class="icon">&nbsp;</div>
+	<%- end -%>
+	<blockquote class="user-generated-view"><%=sanitize_and_format_for_display single_comment.content %></blockquote>
 	
-	<%= sanitize_limit_and_format_for_display single_comment.content %>
-	
-	<h4 class="datestamp"><%=h t('single_comment_abbr_posted', :default => 'Posted {{date}}', :date => single_comment.created_at) %></h4>
+	<p class="datetime"><%=h t('single_comment_abbr_posted', :default => 'Posted {{date}}', :date => single_comment.created_at) %>
   <%- unless single_comment.edited_at.blank? -%>
-    <h4 class="datestamp"><%=h t('single_comment_edited', :default => "Last Edited {{date}}", :date => l(single_comment.edited_at)) %></h4>
+  <%=h t('single_comment_edited', :default => ", Last Edited {{date}}", :date => l(single_comment.edited_at)) %>
   <%- end -%>
-</div>
+	</p>
+</li>

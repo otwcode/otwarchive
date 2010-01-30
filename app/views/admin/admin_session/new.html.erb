@@ -1,5 +1,8 @@
-<h1><%= t('log_in', :default => "Log in as Admin") %></h1>
+<!--Descriptive page name, messages and instructions-->
+<h2><%= t('log_in', :default => "Log in as Admin") %></h2>
+<!--/descriptions-->
 
+<!--main content-->
 <%- form_tag(:controller => 'admin/admin_session', :action => :create) do -%>
 	<dl>
 		<dt><%= label_tag :login, t('name', :default => "Admin user name") %></dt>
@@ -9,3 +12,4 @@
 	</dl>
   	<p class="submit"><%= submit_tag t('submit', :default => 'Log in') %></p>
 <%- end -%>
+<!--/content-->

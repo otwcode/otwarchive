@@ -10,35 +10,36 @@ module WorksHelper
   end
   
   # List of date, chapter and length info for the work show page
-  def work_meta_list(work, chapter=nil)
-    # if we're previewing, grab the unsaved date, else take the saved first chapter date
-    published_date = (chapter && work.preview_mode) ? chapter.published_at : work.first_chapter.published_at
-    list = [[t('works_helper.published', :default => "Published:"), localize(published_date)], [t('works_helper.words', :default => "Words:"), work.word_count], 
-            [t('works_helper.chapters', :default => "Chapters:"), work.chapter_total_display]]
-    if work.chaptered? && work.revised_at
-      prefix = work.is_wip ? "Updated:" : "Completed:"
-      latest_date = (work.preview_mode && work.backdate) ? published_date : work.revised_at.to_date
-      list.insert(1, [prefix, localize(latest_date)])
+    def work_meta_list(work, chapter=nil)
+      # if we're previewing, grab the unsaved date, else take the saved first chapter date
+      published_date = (chapter && work.preview_mode) ? chapter.published_at : work.first_chapter.published_at
+      list = [[t('works_helper.published', :default => "Published:"), localize(published_date)], [t('works_helper.words', :default => "Words:"), work.word_count], 
+              [t('works_helper.chapters', :default => "Chapters:"), work.chapter_total_display]]
+      list.concat([[t('works_helper.hits:', :default => "Hits:"), work.hit_count]]) if show_hit_count?(work)
+      if work.chaptered? && work.revised_at
+        prefix = work.is_wip ? "Updated:" : "Completed:"
+        latest_date = (work.preview_mode && work.backdate) ? published_date : work.revised_at.to_date
+        list.insert(1, [prefix, localize(latest_date)])
+      end
+      '<dl>' + list.map {|l| '<dt>' + l.first + '</dt><dd>' + l.last.to_s + '</dd>'}.to_s + '</dl>'
     end
-    '<dl>' + list.map {|l| '<dt>' + l.first + '</dt><dd>' + l.last.to_s + '</dd>'}.to_s + '</dl>'
-  end
+
+    def show_hit_count?(work)
+      return false if logged_in? && current_user.preference.hide_all_hit_counts
+      author_wants_to_see_hits = is_author_of?(work) && !current_user.preference.hide_private_hit_count
+      all_authors_want_public_hits = work.users.select {|u| u.preference.hide_public_hit_count}.empty?
+      author_wants_to_see_hits || (!is_author_of?(work) && all_authors_want_public_hits)
+    end
+
+    def work_top_links_list(work)
+      collections_link = work.approved_collections.empty? ? '' : 
+        ("<li>" + link_to(t('work_collections_link', :default => "Collections: {{num_of_collections}}", 
+                            :num_of_collections => work.approved_collections.length), work_collections_path(work)) + "</li>")
+      bookmark_link = logged_in? ? '<li>' + bookmark_link(work) + '</li>' : ''			
+      comments_link = '<li>' + link_to("Comment(s)", work_path(work, :show_comments => true, :anchor => 'comments')) + '</li>'  
+      "<ul>" + bookmark_link + (comments_link ||= '') + collections_link + "</ul>"    
+    end
   
-  def show_hit_count?(work)
-    return false if logged_in? && current_user.preference.hide_all_hit_counts
-    author_wants_to_see_hits = is_author_of?(work) && !current_user.preference.hide_private_hit_count
-    all_authors_want_public_hits = work.users.select {|u| u.preference.hide_public_hit_count}.empty?
-    author_wants_to_see_hits || (!is_author_of?(work) && all_authors_want_public_hits)
-  end
-  
-  def work_top_links_list(work)
-    hits_info =  show_hit_count?(work) ? "<li>" + t('works_helper.hits:', :default => "Hits: {{hitcount}}", :hitcount => work.hit_count) + "</li>" : ""
-    collections_link = work.approved_collections.empty? ? '' : 
-      ("<li>" + link_to(t('work_collections_link', :default => "Collections: {{num_of_collections}}", 
-                          :num_of_collections => work.approved_collections.length), work_collections_path(work)) + "</li>")
-    bookmark_link = logged_in? ? '<li>' + bookmark_link(work) + '</li>' : ''			
-    comments_link = '<li>' + link_to("Comment(s)", work_path(work, :show_comments => true, :anchor => 'comments')) + '</li>'  
-    "<ul>" + bookmark_link + (comments_link ||= '') + collections_link + hits_info + "</ul>"    
-  end
   
   def work_collection_names_list(work)
     work.approved_collections.map {|collection| link_to(h(collection.title), collection)}.to_sentence
@@ -136,17 +137,17 @@ module WorksHelper
     end
 
     symbol_block = ""
-    symbol_block << "<ul class=\"required-tags\">\n" if not symbols_only
-    %w(rating category warning iswip).each do |w|
-      css_class = eval("#{w}_class")
-      title_string = eval("#{w}_string")
-      symbol_block << "<li class=\"#{css_class}\">"
-      symbol_block << link_to_help('symbols-key', link = image_tag( "#{css_class}.png", :alt => title_string, :title => title_string))
-      symbol_block << "</li>\n"
-    end
-    symbol_block << "</ul>\n" if not symbols_only 
-    return symbol_block
-  end
+        symbol_block << "<ul class=\"required-tags\">\n" if not symbols_only
+        %w(rating category warning iswip).each do |w|
+          css_class = eval("#{w}_class")
+          title_string = eval("#{w}_string")
+          symbol_block << "<li class=\"#{css_class}\">"
+          symbol_block << link_to_help('symbols-key', link = image_tag( "#{css_class}.png", :alt => title_string, :title => title_string))
+          symbol_block << "</li>\n"
+        end
+        symbol_block << "</ul>\n" if not symbols_only
+        return symbol_block
+      end
 
   def get_warnings_class(warning_tags)
     return "warning-yes" unless warning_tags

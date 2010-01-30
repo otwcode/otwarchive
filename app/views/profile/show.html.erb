@@ -1,17 +1,12 @@
-<div id="user-profile">
+<div class="user profile module">
   <%= render :partial => 'users/header', :locals => {:user => @user} %>
 
-  <h3><%=h t('about', :default => "About {{name}}", :name => @user.login) %></h3>
-
-  <p><%= t('member_since', :default => "Member since: {{date}}", :date => l(@user.created_at.to_date)) %></p>
-
-  <%- if @user.is_beta_tester? -%>
-    <p><%= t('beta_tester', :default => "Beta tester") %></p>
-  <%- end -%>
-  
-  <p><%=h @user.profile.title %></p>
-
-  <dl id="user-data">
+<div class="user module">
+<h3><%=h t('about', :default => "About {{name}}", :name => @user.login) %></h3>
+<p class="datetime"><%= t('member_since', :default => "Member since: {{date}}", :date => l(@user.created_at.to_date)) %></p>
+<h4><%=h @user.profile.title %></h4>
+<div class="wrapper">
+  <dl class="user meta">
     <dt class="pseuds"><%= link_to t('my_pseuds', :default => "My pseuds:"), user_pseuds_path(@user) %></dt>
       <dd class="pseuds"><%= print_pseud_list(@user.pseuds) %></dd>
     <%- if @user.profile.location? -%>
@@ -27,20 +22,22 @@
       <dd class="email">&nbsp;<%= mail_to @user.email, nil, :encode => "hex" %></dd>
     <%- end -%>
   </dl>
-
+</div>
+</div>
   <%- unless @user.profile.about_me.blank? -%>
-    <div id="user-bio">
+    <div class="user module">
       <h3><%=h t('bio', :default => "Bio:") %></h3>
-      <%=sanitize_and_format_for_display @user.profile.about_me -%>
+      <blockquote class="user-generated-view"><%=sanitize_and_format_for_display @user.profile.about_me -%></blockquote>
     </div>
   <%- end -%>
   
   <%- if logged_in? && current_user == @user -%>
-  <ul class="navigation">
+  <h3 class="landmark">Actions</h3>
+<ul class="navigation" role="navigation">
     <li><%= link_to t('edit_profile', :default => "Edit My Profile"), edit_user_path(@user) %></li>
-    <li><%= link_to t('manage_pseuds', :default => "Manage My Pseuds"), user_pseuds_path(@user) %></li>
     <li><%= link_to t('set_preferences', :default => "Set My Preferences"), user_preferences_path(@user) %></li>
-		<li><%= link_to t('delete_account', :default => "Delete My Account"), @user, :confirm => t('deletion_warning', :default => 'This will permanently delete your account and cannot be undone. Are you sure?'), :method => :delete %></li>
+	<li><%= link_to t('manage_pseuds', :default => "Manage My Pseuds"), user_pseuds_path(@user) %></li>
+	<li><%= link_to t('delete_account', :default => "Delete My Account"), @user, :confirm => t('deletion_warning', :default => 'This will permanently delete your account and cannot be undone. Are you sure?'), :method => :delete %></li>
   </ul>
   <%- end -%>
 </div>

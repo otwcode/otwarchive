@@ -1,29 +1,40 @@
-<h1><%=h 'Editing series' %></h1>
-<ul class="navigation">
+<!--Descriptive page name, messages and instructions-->
+<h2><%=h 'Editing series' %></h2>
+<!--/descriptions-->
+
+<!--subnav-->
+<h3 class="landmark">Actions</h3>
+<ul class="navigation" role="navigation">
 <li><%= link_to 'Delete Series', @series, :confirm => 'Are you sure?', :method => :delete %></li>
 <li><%= link_to 'Reorder Series', manage_series_path(@series) %></li>
 <li><%= link_to 'Show', @series %></li>
 <li><%= link_to 'Back', series_path %></li>
 </ul>
+<!--/subnav-->
 
+<!--main content-->
 <% form_for(@series) do |f| %>
   <%= f.error_messages %>
 <dl>
 	<dt><%= f.label :title, "Series Title" %></dt>
-	<dd><%= f.text_field :title %></dd><br />
+	<dd><%= f.text_field :title %></dd>
   <%= render :partial => 'pseuds/byline', :locals => {:form => f, :type => 'series'} -%>
 	<dt><%= f.label :summary, "Series Description" %><dt>
 	<dd>
+	<code>a href, b, big, blockquote, br, center, cite, code, del, em, i, img, ins, p, pre, q, small, strike, strong, sub, sup, u </code>
     <%= f.text_area :summary %>
     <%= generate_countdown_html("series_summary", ArchiveConfig.SUMMARY_MAX) -%>
   </dd>
 	<dt><%= f.label :notes, "Series Notes" %><dt>
 	<dd>
-    <%= f.text_area :notes %>
+    <code>a href, b, big, blockquote, br, center, cite, code, del, em, i, img, ins, p, pre, q, small, strike, strong, sub, sup, u </code>
+	<%= f.text_area :notes %>
     <%= generate_countdown_html("series_notes", ArchiveConfig.NOTES_MAX) -%>
 </dd>
 </dl>
-<p class="submit">
+<p class="submit navigation">
 	<%= f.submit "Update" %>
+	<%= link_to 'Cancel', series_path %>
 </p>
 <% end %>
+<!--/content-->

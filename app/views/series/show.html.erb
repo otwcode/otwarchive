@@ -1,10 +1,29 @@
-<h1>
+<!--Descriptive page name, messages and instructions-->
+<h2>
 	<%=h @series.title %>
 	<%- if @series.restricted %>
 		<%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") -%>
 	<%- end -%>
-</h1>
-<dl class="work-meta series-meta">
+</h2>
+<!--/descriptions-->
+
+<!--subnav-->
+<%- if logged_in? -%>
+<h3 class="landmark">Actions</h3>
+<ul class="navigation" role="navigation">
+  <li><%= bookmark_link(bookmarkable=@series, blurb=false) %></li>
+  <%- if is_author_of?(@series) -%>
+    <li><%= link_to "Edit", edit_series_path(@series) %></li>
+    <li><%= link_to 'Delete Series', @series, :confirm => 'Are you sure?', :method => :delete %></li>
+    <li><%= link_to "Reorder Series", manage_series_path(@series) %></li>
+  <%- end -%>
+</ul>
+<%- end -%>
+<!--/subnav-->
+
+<!--main content-->
+<h3 class="landmark">Series Metadata</h3>
+<dl class="series meta">
     <dt><%=h 'Series begun:' %></dt>
     <dd><%=h @series.published_at.to_date %></dd>
     <dt><%=h 'Series updated: ' %></dt>
@@ -26,25 +45,13 @@
 
   <%- unless @series.summary.blank? -%>
       <dt><%=h 'Description:' %></dt>
-      <dd><%= @series.summary %></dd>
+      <dd><blockquote class="user-generated-view"><%= sanitize_and_format_for_display @series.summary %></blockquote></dd>
 	<%- end -%>
 	<%- unless @series.notes.blank? -%>
       <dt><%=h 'Notes:' %></dt>
-      <dd><%= @series.notes %></dd>
+      <dd><blockquote class="user-generated-view"><%= sanitize_and_format_for_display @series.notes %></blockquote></dd>
 	<%- end -%>
-  </ul>
 </dl>
-
-<%- if logged_in? -%>
-<ul class="navigation">
-  <li><%= bookmark_link(bookmarkable=@series, blurb=false) %></li>
-  <%- if is_author_of?(@series) -%>
-    <li><%= link_to "Edit", edit_series_path(@series) %></li>
-    <li><%= link_to 'Delete Series', @series, :confirm => 'Are you sure?', :method => :delete %></li>
-    <li><%= link_to "Reorder Series", manage_series_path(@series) %></li>
-  <%- end -%>
-</ul>
-<%- end -%>
 
 <div id="dynamic-bookmark" style="display:none;">	
 </div>
@@ -54,9 +61,13 @@
 <%= render :partial => 'admin/admin_options', :locals => {:item => @series} %>
 <%- end -%>
 
-<ul class="work-list" id="series-work-list">
+<h3 class="landmark">List of Series</h3>
+<ul class="series work index">
   <%- for serial in @serial_works -%>
     <%= render :partial => 'works/work_blurb', :locals => {:work => serial.work} %>
   <%- end -%>
 </ul>
+<!--/content-->
 
+<!--subnav-->
+<!--/subnav-->

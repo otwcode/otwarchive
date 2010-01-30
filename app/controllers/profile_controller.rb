@@ -2,7 +2,6 @@ class ProfileController < ApplicationController
   
   def show
     @user = User.find_by_login(params[:user_id])
-    @hide_dashboard = true
     if @user.nil?
       flash[:error] = t('invalid_user', :default => "Sorry, there's no user by that name.")
       redirect_to '/'

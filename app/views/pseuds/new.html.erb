@@ -1,7 +1,14 @@
-<h1><%= t('new_pseud', :default => 'New pseud') %></h1>
-<ul class="navigation">
+<!--Descriptive page name, messages and instructions-->
+<h2><%= t('new_pseud', :default => 'New pseud') %></h2>
+<%= error_messages_for :pseud %>
+<!--/descriptions-->
+
+<!--subnav-->
+<ul class="navigation" role="navigation">
 <li><%= link_to t('index_link', :default => 'Back To Pseuds'), user_pseuds_path(@user) %></li>
 </ul>
-<%= error_messages_for :pseud %>
+<!--/subnav-->
 
+<!--main content-->
 <%= render :partial => 'pseuds_form', :locals => { :button_text => t('forms.create', :default => "Create") }%>
+<!--/content-->

@@ -1,264 +1,154 @@
 --- 
-bookmark_00026: 
-  updated_at: 2009-07-18 10:01:39 +01:00
-  pseud_id: 22
-  bookmarkable_type: Work
-  private: false
-  bookmarkable_id: 57
-  rec: false
-  notes: I really don't want to eat popcorn any time soon now.
-  id: 26
-  hidden_by_admin: false
-  created_at: 2009-07-18 10:01:39 +01:00
-bookmark_00004: 
-  updated_at: 2009-03-20 23:38:19 +00:00
-  pseud_id: 18
-  bookmarkable_type: Work
-  private: false
-  bookmarkable_id: 50
-  rec: false
-  notes: rather disturbing but good
-  id: 4
-  hidden_by_admin: false
-  created_at: 2009-03-20 23:38:19 +00:00
-bookmark_00015: 
-  updated_at: 2009-07-18 00:12:40 +01:00
-  pseud_id: 21
-  bookmarkable_type: Work
-  private: false
-  bookmarkable_id: 58
-  rec: false
-  notes: Dean breaks my heart! *huggles him*
-  id: 15
-  hidden_by_admin: false
-  created_at: 2009-07-18 00:12:40 +01:00
-bookmark_00037: 
-  updated_at: 2009-07-18 10:38:18 +01:00
-  pseud_id: 21
-  bookmarkable_type: ExternalWork
-  private: false
-  bookmarkable_id: 3
-  rec: false
-  notes: Man, I suck at writing summaries.
-  id: 37
-  hidden_by_admin: false
-  created_at: 2009-07-18 10:38:18 +01:00
-bookmark_00038: 
-  updated_at: 2009-07-18 10:42:57 +01:00
-  pseud_id: 22
-  bookmarkable_type: Work
-  private: false
-  bookmarkable_id: 15
-  rec: false
-  notes: These authors chose not to to warn for Mary Sue, clearly.
-  id: 38
-  hidden_by_admin: false
-  created_at: 2009-07-18 10:42:57 +01:00
-bookmark_00016: 
-  updated_at: 2009-07-18 00:14:46 +01:00
-  pseud_id: 21
-  bookmarkable_type: Work
-  private: false
-  bookmarkable_id: 60
-  rec: false
-  notes: I love Luna SO MUCH, omg. She wins at life! Dean/Luna is a bit of a random pairing, but I love the idea of them hanging out together.
-  id: 16
-  hidden_by_admin: false
-  created_at: 2009-07-18 00:14:46 +01:00
-bookmark_00005: 
-  updated_at: 2009-03-20 23:39:06 +00:00
-  pseud_id: 18
-  bookmarkable_type: Work
-  private: true
-  bookmarkable_id: 51
-  rec: false
-  notes: nnggg, so hot
-  id: 5
-  hidden_by_admin: false
-  created_at: 2009-03-20 23:39:06 +00:00
-bookmark_00027: 
-  updated_at: 2009-07-18 10:03:11 +01:00
-  pseud_id: 22
-  bookmarkable_type: Work
-  private: false
-  bookmarkable_id: 33
-  rec: false
-  notes: Some other fucking pseud is a great author. I love their name, too. &lt;3
-  id: 27
-  hidden_by_admin: false
-  created_at: 2009-07-18 10:03:11 +01:00
-bookmark_00028: 
-  updated_at: 2009-07-18 10:04:33 +01:00
-  pseud_id: 22
-  bookmarkable_type: Work
-  private: false
-  bookmarkable_id: 25
-  rec: false
-  notes: Testing fandom is the BEST! It's where all the best works of art live.
-  id: 28
-  hidden_by_admin: false
-  created_at: 2009-07-18 10:04:33 +01:00
-bookmark_00006: 
-  updated_at: 2009-03-20 23:41:05 +00:00
-  pseud_id: 18
-  bookmarkable_type: Work
-  private: false
-  bookmarkable_id: 52
-  rec: false
-  notes: ack, I hope this is not the conclusion to the series ;_;
-  id: 6
-  hidden_by_admin: false
-  created_at: 2009-03-20 23:40:25 +00:00
 bookmark_00017: 
-  updated_at: 2009-07-18 00:16:47 +01:00
   pseud_id: 21
   bookmarkable_type: Work
-  private: false
+  created_at: 2009-07-17 23:16:47 +00:00
   bookmarkable_id: 57
-  rec: false
+  updated_at: 2009-07-17 23:16:47 +00:00
+  private: false
   notes: How much do I want to see Dean's scandalised face? THIS MUCH.
+  rec: false
   id: 17
   hidden_by_admin: false
-  created_at: 2009-07-18 00:16:47 +01:00
 bookmark_00039: 
-  updated_at: 2009-07-18 10:43:57 +01:00
   pseud_id: 22
   bookmarkable_type: Work
-  private: true
+  created_at: 2009-07-18 09:43:57 +00:00
   bookmarkable_id: 59
-  rec: false
+  updated_at: 2009-07-18 09:43:57 +00:00
+  private: true
   notes: I'm so ashamed about wanting to re-read this that I'm going to bookmark it privately.
+  rec: false
   id: 39
   hidden_by_admin: false
-  created_at: 2009-07-18 10:43:57 +01:00
-bookmark_00040: 
-  updated_at: 2009-07-18 10:45:22 +01:00
+bookmark_00028: 
   pseud_id: 22
   bookmarkable_type: Work
-  private: true
-  bookmarkable_id: 64
-  rec: false
-  notes: Here's a private bookmark on a work the admin is going to hide
-  id: 40
-  hidden_by_admin: false
-  created_at: 2009-07-18 10:45:22 +01:00
-bookmark_00018: 
-  updated_at: 2009-07-18 00:18:28 +01:00
-  pseud_id: 21
-  bookmarkable_type: Work
+  created_at: 2009-07-18 09:04:33 +00:00
+  bookmarkable_id: 25
+  updated_at: 2009-07-18 09:04:33 +00:00
   private: false
-  bookmarkable_id: 59
+  notes: Testing fandom is the BEST! It's where all the best works of art live.
   rec: false
-  notes: Kind of disturbing, and yet.
-  id: 18
+  id: 28
   hidden_by_admin: false
-  created_at: 2009-07-18 00:18:28 +01:00
+bookmark_00006: 
+  pseud_id: 18
+  bookmarkable_type: Work
+  created_at: 2009-03-20 23:40:25 +00:00
+  bookmarkable_id: 52
+  updated_at: 2009-03-20 23:41:05 +00:00
+  private: false
+  notes: ack, I hope this is not the conclusion to the series ;_;
+  rec: false
+  id: 6
+  hidden_by_admin: false
 bookmark_00007: 
-  updated_at: 2009-07-17 23:46:13 +01:00
   pseud_id: 19
   bookmarkable_type: Work
-  private: false
+  created_at: 2009-07-17 22:46:13 +00:00
   bookmarkable_id: 61
-  rec: false
+  updated_at: 2009-07-17 22:46:13 +00:00
+  private: false
   notes: Bela! &lt;3 I was so gutted to see her go.
+  rec: false
   id: 7
   hidden_by_admin: false
-  created_at: 2009-07-17 23:46:13 +01:00
 bookmark_00029: 
-  updated_at: 2009-07-18 10:07:01 +01:00
   pseud_id: 22
   bookmarkable_type: Work
-  private: false
+  created_at: 2009-07-18 09:07:01 +00:00
   bookmarkable_id: 11
-  rec: false
+  updated_at: 2009-07-18 09:07:01 +00:00
+  private: false
   notes: "Awwwwwwwwww, I loved this. Now I will write super long notes longer than the actual work to explain why: love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love love "
+  rec: false
   id: 29
   hidden_by_admin: false
-  created_at: 2009-07-18 10:07:01 +01:00
-bookmark_00030: 
-  updated_at: 2009-07-18 10:10:30 +01:00
+bookmark_00040: 
   pseud_id: 22
   bookmarkable_type: Work
-  private: false
-  bookmarkable_id: 14
+  created_at: 2009-07-18 09:45:22 +00:00
+  bookmarkable_id: 64
+  updated_at: 2009-07-18 09:45:22 +00:00
+  private: true
+  notes: Here's a private bookmark on a work the admin is going to hide
   rec: false
-  notes: My love for Uriel knows no bounds. He can get righteous on <em>my</em> ass any time.
-  id: 30
+  id: 40
   hidden_by_admin: false
-  created_at: 2009-07-18 10:10:30 +01:00
-bookmark_00008: 
-  updated_at: 2009-07-17 23:48:57 +01:00
-  pseud_id: 19
-  bookmarkable_type: Work
-  private: false
-  bookmarkable_id: 62
-  rec: false
-  notes: Blah blah blah blah blah really long user notes. Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
-  id: 8
-  hidden_by_admin: false
-  created_at: 2009-07-17 23:48:57 +01:00
-bookmark_00019: 
-  updated_at: 2009-07-18 00:21:37 +01:00
+bookmark_00018: 
   pseud_id: 21
   bookmarkable_type: Work
+  created_at: 2009-07-17 23:18:28 +00:00
+  bookmarkable_id: 59
+  updated_at: 2009-07-17 23:18:28 +00:00
   private: false
-  bookmarkable_id: 56
+  notes: Kind of disturbing, and yet.
   rec: false
+  id: 18
+  hidden_by_admin: false
+bookmark_00019: 
+  pseud_id: 21
+  bookmarkable_type: Work
+  created_at: 2009-07-17 23:21:37 +00:00
+  bookmarkable_id: 56
+  updated_at: 2009-07-17 23:21:37 +00:00
+  private: false
   notes: Heeee, boys! Don't worry, Jared, everyone has a crush on Dean, it's part of the nature of the universe.
+  rec: false
   id: 19
   hidden_by_admin: false
-  created_at: 2009-07-18 00:21:37 +01:00
 bookmark_00041: 
-  updated_at: 2009-07-18 10:46:23 +01:00
   pseud_id: 22
   bookmarkable_type: Work
-  private: false
+  created_at: 2009-07-18 09:46:23 +00:00
   bookmarkable_id: 46
-  rec: false
+  updated_at: 2009-07-18 09:46:23 +00:00
+  private: false
   notes: Work with no author's summary
+  rec: false
   id: 41
   hidden_by_admin: false
-  created_at: 2009-07-18 10:46:23 +01:00
-bookmark_00042: 
-  updated_at: 2009-07-18 10:47:31 +01:00
+bookmark_00030: 
   pseud_id: 22
   bookmarkable_type: Work
-  private: true
-  bookmarkable_id: 17
-  rec: false
-  notes: All the bookmarks on this work are private.
-  id: 42
-  hidden_by_admin: false
-  created_at: 2009-07-18 10:47:31 +01:00
-bookmark_00020: 
-  updated_at: 2009-07-18 00:23:43 +01:00
-  pseud_id: 21
-  bookmarkable_type: ExternalWork
+  created_at: 2009-07-18 09:10:30 +00:00
+  bookmarkable_id: 14
+  updated_at: 2009-07-18 09:10:30 +00:00
   private: false
-  bookmarkable_id: 1
+  notes: My love for Uriel knows no bounds. He can get righteous on <em>my</em> ass any time.
   rec: false
-  notes: I really enjoyed this too!
-  id: 20
+  id: 30
   hidden_by_admin: false
-  created_at: 2009-07-18 00:23:43 +01:00
-bookmark_00009: 
-  updated_at: 2009-07-17 23:51:41 +01:00
+bookmark_00008: 
   pseud_id: 19
   bookmarkable_type: Work
+  created_at: 2009-07-17 22:48:57 +00:00
+  bookmarkable_id: 62
+  updated_at: 2009-07-17 22:48:57 +00:00
   private: false
-  bookmarkable_id: 63
+  notes: Blah blah blah blah blah really long user notes. Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
   rec: false
+  id: 8
+  hidden_by_admin: false
+bookmark_00009: 
+  pseud_id: 19
+  bookmarkable_type: Work
+  created_at: 2009-07-17 22:51:41 +00:00
+  bookmarkable_id: 63
+  updated_at: 2009-07-17 22:51:41 +00:00
+  private: false
   notes: I really want a bouquet of chocolate flowers now.
+  rec: false
   id: 9
   hidden_by_admin: false
-  created_at: 2009-07-17 23:51:41 +01:00
 bookmark_00031: 
-  updated_at: 2009-07-18 10:16:59 +01:00
   pseud_id: 19
   bookmarkable_type: Work
-  private: false
+  created_at: 2009-07-18 09:16:59 +00:00
   bookmarkable_id: 2
-  rec: false
+  updated_at: 2009-07-18 09:16:59 +00:00
+  private: false
   notes: |-
     Notes with allowed html in them!
     <a href="http://parenthetical.livejournal.com/friends">Link</a>
@@ -290,226 +180,358 @@ bookmark_00031:
     <sub>sub</sub>
     <sup>sup</sup>
     <ul><li>ul, li</li></ul>
+  rec: false
   id: 31
   hidden_by_admin: false
-  created_at: 2009-07-18 10:16:59 +01:00
-bookmark_00032: 
-  updated_at: 2009-07-18 10:23:33 +01:00
-  pseud_id: 19
+bookmark_00042: 
+  pseud_id: 22
   bookmarkable_type: Work
-  private: false
-  bookmarkable_id: 45
+  created_at: 2009-07-18 09:47:31 +00:00
+  bookmarkable_id: 17
+  updated_at: 2009-07-18 09:47:31 +00:00
+  private: true
+  notes: All the bookmarks on this work are private.
   rec: false
-  notes: I've never seen Torchwood, but this fic made me want to.
-  id: 32
+  id: 42
   hidden_by_admin: false
-  created_at: 2009-07-18 10:23:33 +01:00
-bookmark_00010: 
-  updated_at: 2009-07-17 23:53:17 +01:00
-  pseud_id: 19
-  bookmarkable_type: Work
-  private: false
-  bookmarkable_id: 64
-  rec: false
-  notes: Bookmark on a work which is going to be hidden by an admin for being TOO SCHMOOPY TO LIVE.
-  id: 10
-  hidden_by_admin: false
-  created_at: 2009-07-17 23:53:17 +01:00
-bookmark_00021: 
-  updated_at: 2009-07-18 00:33:05 +01:00
+bookmark_00020: 
   pseud_id: 21
   bookmarkable_type: ExternalWork
+  created_at: 2009-07-17 23:23:43 +00:00
+  bookmarkable_id: 1
+  updated_at: 2009-07-17 23:23:43 +00:00
   private: false
-  bookmarkable_id: 2
+  notes: I really enjoyed this too!
   rec: false
+  id: 20
+  hidden_by_admin: false
+bookmark_00021: 
+  pseud_id: 21
+  bookmarkable_type: ExternalWork
+  created_at: 2009-07-17 23:33:05 +00:00
+  bookmarkable_id: 2
+  updated_at: 2009-07-17 23:33:05 +00:00
+  private: false
   notes: Genius fic of geniusness. &lt;3
+  rec: false
   id: 21
   hidden_by_admin: false
-  created_at: 2009-07-18 00:33:05 +01:00
 bookmark_00043: 
-  updated_at: 2009-07-18 10:48:43 +01:00
   pseud_id: 22
   bookmarkable_type: Work
-  private: false
+  created_at: 2009-07-18 09:48:43 +00:00
   bookmarkable_id: 3
-  rec: false
+  updated_at: 2009-07-18 09:48:43 +00:00
+  private: false
   notes: It's a tragedy that this work wasn't recced earlier.
+  rec: false
   id: 43
   hidden_by_admin: false
-  created_at: 2009-07-18 10:48:43 +01:00
-bookmark_00044: 
-  updated_at: 2009-08-26 21:17:46 +01:00
-  pseud_id: 17
+bookmark_00032: 
+  pseud_id: 19
   bookmarkable_type: Work
-  private: true
-  bookmarkable_id: 9
-  rec: true
-  notes: This is a marvellous story
-  id: 44
-  hidden_by_admin: false
-  created_at: 2009-08-26 21:17:46 +01:00
-bookmark_00022: 
-  updated_at: 2009-07-18 00:38:19 +01:00
-  pseud_id: 21
-  bookmarkable_type: Work
+  created_at: 2009-07-18 09:23:33 +00:00
+  bookmarkable_id: 45
+  updated_at: 2009-07-18 09:23:33 +00:00
   private: false
-  bookmarkable_id: 52
+  notes: I've never seen Torchwood, but this fic made me want to.
   rec: false
-  notes: Woe, the angst bunny made me cry. :(
-  id: 22
+  id: 32
   hidden_by_admin: false
-  created_at: 2009-07-18 00:38:19 +01:00
+bookmark_00010: 
+  pseud_id: 19
+  bookmarkable_type: Work
+  created_at: 2009-07-17 22:53:17 +00:00
+  bookmarkable_id: 64
+  updated_at: 2009-07-17 22:53:17 +00:00
+  private: false
+  notes: Bookmark on a work which is going to be hidden by an admin for being TOO SCHMOOPY TO LIVE.
+  rec: false
+  id: 10
+  hidden_by_admin: false
 bookmark_00011: 
-  updated_at: 2009-07-17 23:56:42 +01:00
   pseud_id: 19
   bookmarkable_type: ExternalWork
-  private: false
+  created_at: 2009-07-17 22:56:42 +00:00
   bookmarkable_id: 1
-  rec: false
+  updated_at: 2009-07-17 22:56:42 +00:00
+  private: false
   notes: A bookmark on an external work
+  rec: false
   id: 11
   hidden_by_admin: false
-  created_at: 2009-07-17 23:56:42 +01:00
 bookmark_00033: 
-  updated_at: 2009-07-18 10:25:53 +01:00
   pseud_id: 19
   bookmarkable_type: Work
-  private: false
+  created_at: 2009-07-18 09:25:53 +00:00
   bookmarkable_id: 6
-  rec: false
+  updated_at: 2009-07-18 09:25:53 +00:00
+  private: false
   notes: Ash is too hot for <em>anyone</em> to handle. TRUFAX. (It's the mullet.)
+  rec: false
   id: 33
   hidden_by_admin: false
-  created_at: 2009-07-18 10:25:53 +01:00
-bookmark_00034: 
-  updated_at: 2009-07-18 10:29:29 +01:00
-  pseud_id: 19
+bookmark_00044: 
+  pseud_id: 17
   bookmarkable_type: Work
-  private: false
-  bookmarkable_id: 35
-  rec: false
-  notes: I do love a good, long, multi-chapter epic. OF DOOM.
-  id: 34
+  created_at: 2009-08-26 20:17:46 +00:00
+  bookmarkable_id: 9
+  updated_at: 2009-08-26 20:17:46 +00:00
+  private: true
+  notes: This is a marvellous story
+  rec: true
+  id: 44
   hidden_by_admin: false
-  created_at: 2009-07-18 10:29:29 +01:00
-bookmark_00012: 
-  updated_at: 2009-07-17 23:59:25 +01:00
-  pseud_id: 20
-  bookmarkable_type: Work
-  private: false
-  bookmarkable_id: 65
-  rec: false
-  notes: Sam is totally onto something re Shakira.
-  id: 12
-  hidden_by_admin: false
-  created_at: 2009-07-17 23:59:25 +01:00
-bookmark_00001: 
-  updated_at: 2009-03-18 13:14:26 +00:00
-  pseud_id: 12
-  bookmarkable_type: Work
-  private: false
-  bookmarkable_id: 8
-  rec: false
-  notes: "Girls always get what they want. "
-  id: 1
-  hidden_by_admin: false
-  created_at: 2008-12-06 23:11:11 +00:00
-bookmark_00023: 
-  updated_at: 2009-07-18 09:56:43 +01:00
-  pseud_id: 22
-  bookmarkable_type: Work
-  private: false
-  bookmarkable_id: 61
-  rec: false
-  notes: There needs to be moar Bela in the world.
-  id: 23
-  hidden_by_admin: false
-  created_at: 2009-07-18 09:56:43 +01:00
-bookmark_00024: 
-  updated_at: 2009-07-18 09:58:41 +01:00
-  pseud_id: 22
-  bookmarkable_type: Work
-  private: false
-  bookmarkable_id: 52
-  rec: false
-  notes: It's all so tragic!
-  id: 24
-  hidden_by_admin: false
-  created_at: 2009-07-18 09:58:41 +01:00
-bookmark_00002: 
-  updated_at: 2009-03-18 13:14:26 +00:00
-  pseud_id: 14
-  bookmarkable_type: Work
-  private: false
-  bookmarkable_id: 12
-  rec: false
-  notes: I'm not sure why, but I'm slightly weirded out by this. The characters seem familiar somehow...
-  id: 2
-  hidden_by_admin: false
-  created_at: 2008-12-06 23:35:54 +00:00
-bookmark_00013: 
-  updated_at: 2009-07-18 00:03:03 +01:00
-  pseud_id: 20
-  bookmarkable_type: Work
-  private: false
-  bookmarkable_id: 58
-  rec: false
-  notes: Poor wee!Dean! He needs lots and lots of hugs, omg.
-  id: 13
-  hidden_by_admin: false
-  created_at: 2009-07-18 00:03:03 +01:00
-bookmark_00035: 
-  updated_at: 2009-07-18 10:58:01 +01:00
-  pseud_id: 19
-  bookmarkable_type: Work
-  private: false
-  bookmarkable_id: 10
-  rec: false
-  notes: Awwwwwww, boys. I'm going to go into such graphic detail about what I want to do with them that an admin is going to feel it necessary to hide this bookmark. Dude.
-  id: 35
-  hidden_by_admin: true
-  created_at: 2009-07-18 10:32:39 +01:00
-bookmark_00036: 
-  updated_at: 2009-07-18 10:34:58 +01:00
+bookmark_00022: 
   pseud_id: 21
   bookmarkable_type: Work
+  created_at: 2009-07-17 23:38:19 +00:00
+  bookmarkable_id: 52
+  updated_at: 2009-07-17 23:38:19 +00:00
   private: false
-  bookmarkable_id: 60
+  notes: Woe, the angst bunny made me cry. :(
   rec: false
-  notes: Long author's notes are long, dude.
-  id: 36
+  id: 22
   hidden_by_admin: false
-  created_at: 2009-07-18 10:34:58 +01:00
-bookmark_00014: 
-  updated_at: 2009-07-18 00:09:10 +01:00
+bookmark_00001: 
+  pseud_id: 12
+  bookmarkable_type: Work
+  created_at: 2008-12-06 23:11:11 +00:00
+  bookmarkable_id: 8
+  updated_at: 2009-03-18 13:14:26 +00:00
+  private: false
+  notes: "Girls always get what they want. "
+  rec: false
+  id: 1
+  hidden_by_admin: false
+bookmark_00023: 
+  pseud_id: 22
+  bookmarkable_type: Work
+  created_at: 2009-07-18 08:56:43 +00:00
+  bookmarkable_id: 61
+  updated_at: 2009-07-18 08:56:43 +00:00
+  private: false
+  notes: There needs to be moar Bela in the world.
+  rec: false
+  id: 23
+  hidden_by_admin: false
+bookmark_00045: 
+  pseud_id: 25
+  bookmarkable_type: Work
+  created_at: 2009-12-17 13:52:03 +00:00
+  bookmarkable_id: 90
+  updated_at: 2009-12-17 13:52:03 +00:00
+  private: false
+  notes: oh wow this form is broken remind me to come back and fix this layout
+  rec: true
+  id: 45
+  hidden_by_admin: false
+bookmark_00034: 
+  pseud_id: 19
+  bookmarkable_type: Work
+  created_at: 2009-07-18 09:29:29 +00:00
+  bookmarkable_id: 35
+  updated_at: 2009-07-18 09:29:29 +00:00
+  private: false
+  notes: I do love a good, long, multi-chapter epic. OF DOOM.
+  rec: false
+  id: 34
+  hidden_by_admin: false
+bookmark_00012: 
   pseud_id: 20
-  bookmarkable_type: ExternalWork
-  private: true
-  bookmarkable_id: 1
+  bookmarkable_type: Work
+  created_at: 2009-07-17 22:59:25 +00:00
+  bookmarkable_id: 65
+  updated_at: 2009-07-17 22:59:25 +00:00
+  private: false
+  notes: Sam is totally onto something re Shakira.
   rec: false
-  notes: I really enjoyed this! Private bookmark on an external work
-  id: 14
+  id: 12
   hidden_by_admin: false
-  created_at: 2009-07-18 00:09:10 +01:00
+bookmark_00013: 
+  pseud_id: 20
+  bookmarkable_type: Work
+  created_at: 2009-07-17 23:03:03 +00:00
+  bookmarkable_id: 58
+  updated_at: 2009-07-17 23:03:03 +00:00
+  private: false
+  notes: Poor wee!Dean! He needs lots and lots of hugs, omg.
+  rec: false
+  id: 13
+  hidden_by_admin: false
+bookmark_00035: 
+  pseud_id: 19
+  bookmarkable_type: Work
+  created_at: 2009-07-18 09:32:39 +00:00
+  bookmarkable_id: 10
+  updated_at: 2009-07-18 09:58:01 +00:00
+  private: false
+  notes: Awwwwwww, boys. I'm going to go into such graphic detail about what I want to do with them that an admin is going to feel it necessary to hide this bookmark. Dude.
+  rec: false
+  id: 35
+  hidden_by_admin: true
+bookmark_00046: 
+  pseud_id: 5
+  bookmarkable_type: Work
+  created_at: 2009-12-17 13:53:30 +00:00
+  bookmarkable_id: 67
+  updated_at: 2009-12-17 13:53:30 +00:00
+  private: false
+  notes: Looks like the inside fieldset is em-widthed. This might cause issues in IE6 and 7
+  rec: true
+  id: 46
+  hidden_by_admin: false
+bookmark_00024: 
+  pseud_id: 22
+  bookmarkable_type: Work
+  created_at: 2009-07-18 08:58:41 +00:00
+  bookmarkable_id: 52
+  updated_at: 2009-07-18 08:58:41 +00:00
+  private: false
+  notes: It's all so tragic!
+  rec: false
+  id: 24
+  hidden_by_admin: false
+bookmark_00002: 
+  pseud_id: 14
+  bookmarkable_type: Work
+  created_at: 2008-12-06 23:35:54 +00:00
+  bookmarkable_id: 12
+  updated_at: 2009-03-18 13:14:26 +00:00
+  private: false
+  notes: I'm not sure why, but I'm slightly weirded out by this. The characters seem familiar somehow...
+  rec: false
+  id: 2
+  hidden_by_admin: false
 bookmark_00003: 
-  updated_at: 2009-03-20 23:36:59 +00:00
   pseud_id: 18
   bookmarkable_type: Work
-  private: false
+  created_at: 2009-03-20 23:36:59 +00:00
   bookmarkable_id: 49
-  rec: false
+  updated_at: 2009-03-20 23:36:59 +00:00
+  private: false
   notes: awesome story with OT3 potential
+  rec: false
   id: 3
   hidden_by_admin: false
-  created_at: 2009-03-20 23:36:59 +00:00
 bookmark_00025: 
-  updated_at: 2009-07-18 10:00:31 +01:00
   pseud_id: 22
   bookmarkable_type: ExternalWork
-  private: false
+  created_at: 2009-07-18 09:00:31 +00:00
   bookmarkable_id: 1
-  rec: false
+  updated_at: 2009-07-18 09:00:31 +00:00
+  private: false
   notes: Man, I love the way it loads the summary for me SO MUCH. ...The fic's awesome too! \0/
+  rec: false
   id: 25
   hidden_by_admin: false
-  created_at: 2009-07-18 10:00:31 +01:00
+bookmark_00036: 
+  pseud_id: 21
+  bookmarkable_type: Work
+  created_at: 2009-07-18 09:34:58 +00:00
+  bookmarkable_id: 60
+  updated_at: 2009-07-18 09:34:58 +00:00
+  private: false
+  notes: Long author's notes are long, dude.
+  rec: false
+  id: 36
+  hidden_by_admin: false
+bookmark_00014: 
+  pseud_id: 20
+  bookmarkable_type: ExternalWork
+  created_at: 2009-07-17 23:09:10 +00:00
+  bookmarkable_id: 1
+  updated_at: 2009-07-17 23:09:10 +00:00
+  private: true
+  notes: I really enjoyed this! Private bookmark on an external work
+  rec: false
+  id: 14
+  hidden_by_admin: false
+bookmark_00015: 
+  pseud_id: 21
+  bookmarkable_type: Work
+  created_at: 2009-07-17 23:12:40 +00:00
+  bookmarkable_id: 58
+  updated_at: 2009-07-17 23:12:40 +00:00
+  private: false
+  notes: Dean breaks my heart! *huggles him*
+  rec: false
+  id: 15
+  hidden_by_admin: false
+bookmark_00037: 
+  pseud_id: 21
+  bookmarkable_type: ExternalWork
+  created_at: 2009-07-18 09:38:18 +00:00
+  bookmarkable_id: 3
+  updated_at: 2009-07-18 09:38:18 +00:00
+  private: false
+  notes: Man, I suck at writing summaries.
+  rec: false
+  id: 37
+  hidden_by_admin: false
+bookmark_00026: 
+  pseud_id: 22
+  bookmarkable_type: Work
+  created_at: 2009-07-18 09:01:39 +00:00
+  bookmarkable_id: 57
+  updated_at: 2009-07-18 09:01:39 +00:00
+  private: false
+  notes: I really don't want to eat popcorn any time soon now.
+  rec: false
+  id: 26
+  hidden_by_admin: false
+bookmark_00004: 
+  pseud_id: 18
+  bookmarkable_type: Work
+  created_at: 2009-03-20 23:38:19 +00:00
+  bookmarkable_id: 50
+  updated_at: 2009-03-20 23:38:19 +00:00
+  private: false
+  notes: rather disturbing but good
+  rec: false
+  id: 4
+  hidden_by_admin: false
+bookmark_00005: 
+  pseud_id: 18
+  bookmarkable_type: Work
+  created_at: 2009-03-20 23:39:06 +00:00
+  bookmarkable_id: 51
+  updated_at: 2009-03-20 23:39:06 +00:00
+  private: true
+  notes: nnggg, so hot
+  rec: false
+  id: 5
+  hidden_by_admin: false
+bookmark_00027: 
+  pseud_id: 22
+  bookmarkable_type: Work
+  created_at: 2009-07-18 09:03:11 +00:00
+  bookmarkable_id: 33
+  updated_at: 2009-07-18 09:03:11 +00:00
+  private: false
+  notes: Some other fucking pseud is a great author. I love their name, too. &lt;3
+  rec: false
+  id: 27
+  hidden_by_admin: false
+bookmark_00038: 
+  pseud_id: 22
+  bookmarkable_type: Work
+  created_at: 2009-07-18 09:42:57 +00:00
+  bookmarkable_id: 15
+  updated_at: 2009-07-18 09:42:57 +00:00
+  private: false
+  notes: These authors chose not to to warn for Mary Sue, clearly.
+  rec: false
+  id: 38
+  hidden_by_admin: false
+bookmark_00016: 
+  pseud_id: 21
+  bookmarkable_type: Work
+  created_at: 2009-07-17 23:14:46 +00:00
+  bookmarkable_id: 60
+  updated_at: 2009-07-17 23:14:46 +00:00
+  private: false
+  notes: I love Luna SO MUCH, omg. She wins at life! Dean/Luna is a bit of a random pairing, but I love the idea of them hanging out together.
+  rec: false
+  id: 16
+  hidden_by_admin: false

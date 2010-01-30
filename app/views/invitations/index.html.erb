@@ -1,8 +1,4 @@
-<ul class="navigation">
-  <li><%= link_to "Manage invitations", {:controller => :invitations, :action => :manage, :user_id => @user.login} %></li>
-  <li><%= link_to "Request more", new_user_invite_request_path %></li>
-</ul>
-
+<!--Descriptive page name, messages and instructions-->
 <%- if logged_in_as_admin?  -%>
 <h2><%= t('create_more', :default => 'Create more invitations for this user') %></h2>
   <% form_tag user_invitations_url(@user) do %>
@@ -11,6 +7,18 @@
 <%- end -%>
   
 <h2>Invite a friend</h2>
+<!--/descriptions-->
+
+<!--subnav-->
+<h3 class="landmark">Actions</h3>
+<ul class="navigation" role="navigation">
+  <li><%= link_to "Manage invitations", {:controller => :invitations, :action => :manage, :user_id => @user.login} %></li>
+  <li><%= link_to "Request more", new_user_invite_request_path %></li>
+</ul>
+
+<!--/subnav-->
+
+<!--main content-->
 <%- if @unsent_invitations.blank? -%>
   <p>Sorry, you have no unsent invitations right now.</p>  
 <%- else -%>
@@ -34,3 +42,7 @@
     <p class="submit"><%= submit_tag t('submit_invite', :default => 'Send invite')  %></p>
   <%- end -%>
 <%- end -%>
+<!--/content-->
+
+<!--subnav-->
+<!--/subnav-->

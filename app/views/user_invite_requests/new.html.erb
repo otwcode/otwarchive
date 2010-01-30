@@ -1,15 +1,19 @@
-<h1>Request more invites</h1>
+<!--Descriptive page name, messages and instructions-->
+<h2>Request more invites</h2>
+<!--/descriptions-->
 
+<!--main content-->
 <% form_for(@user_invite_request) do |f| %>
   <%= f.error_messages %>
   <p>
     <%= f.label "How many invites are you requesting?" %> <%= f.text_field :quantity, :size => '2' %>
   </p>
   <p>
-    <%= f.label "Reason for your request:" %><br />
+    <%= f.label "Reason for your request:" %>
     <%= f.text_area :reason, :size => '100x10' %>
   </p>
-  <p>
+  <p class="submit">
     <%= f.submit 'Create' %>
   </p>
 <% end %>
+<!--/content-->

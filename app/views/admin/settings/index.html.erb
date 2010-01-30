@@ -1,5 +1,8 @@
-<h1><%=h 'Archive Settings' -%></h1>
+<!--Descriptive page name, messages and instructions-->
+<h2><%=h 'Archive Settings' -%></h2>
+<!--/descriptions-->
 
+<!--main content-->
 <% form_for @admin_setting, :url => admin_setting_path(@admin_setting), :html => {:method => :put} do |f| %>
   <%= f.error_messages %>
   <dl>
@@ -24,7 +27,7 @@
     <p><%= f.hidden_field :last_updated_by, :value => current_admin.id %></p>
     <p class="submit"><%= f.submit 'Update' %></p>
 <% end %>
-
+<hr class="clear" />
   <%- if @admin_setting.invite_from_queue_enabled? -%>
   <p><%= @admin_setting.invite_from_queue_number -%> people are scheduled to be sent invitations on 
   <%= l(@admin_setting.invite_from_queue_at.to_date, :format => :long) %>.</p> 
@@ -34,3 +37,4 @@
   <%- end -%>
 
 <p>Last updated on <%= @admin_setting.updated_at %> by <%= @admin_setting.last_updated ? @admin_setting.last_updated.login : "---" %>.</p>
+<!--/content-->

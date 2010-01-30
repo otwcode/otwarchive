@@ -1,4 +1,6 @@
-<h1><%=h t('participants', :default => "Participants in") -%> <%= @collection.title -%></h1>
+<!--Descriptive page name, messages and instructions-->
+<h2><%=h t('participants', :default => "Participants in") -%> <%= @collection.title -%></h2>
+<!--descriptions-->
 
 <table id="collection_participants_table" summary="This table shows the participants in your collection; you can change their roles, remove participants and add new ones">
 <caption><%=h t('list', :default => "List of participants") -%></caption>
@@ -17,7 +19,7 @@
 <tfoot>
 	<tr>
 		<th scope="col" colspan="3"><%=h t('add_participants', :default => "Add Participant") -%></th>
-</tr>
 <%= render :partial => 'add_participants_form' -%>
+</tr>
 </tfoot>
 </table>

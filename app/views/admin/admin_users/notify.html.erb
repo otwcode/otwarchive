@@ -1,5 +1,8 @@
-<h1><%=h t('send_notification', :default => "Send Notification To Users") -%></h1>
+<!--Descriptive page name, messages and instructions-->
+<h2><%=h t('send_notification', :default => "Send Notification To Users") -%></h2>
+<!--/descriptions-->
 
+<!--main content-->
 <%- form_tag send_notification_admin_users_path, :method => :post do -%>
 <fieldset>
 	<legend>Write Notification</legend>
@@ -59,4 +62,4 @@
   <p class="submit"><%= submit_tag t('submit', :default => "Send Notification") -%></p>
 </fieldset>
 <%- end -%>
-
+<!--/content-->

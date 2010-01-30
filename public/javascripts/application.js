@@ -174,3 +174,61 @@ function hideLogin() {
 		if (selected != true) {toggleLogin(signin.id, 0.0);}
 	});	
 }
+
+
+
+
+//generic show hide toggler
+
+function ViewToggle(el_selector, show_link_selector, hide_link_selector, effect_duration, start_shown) {
+  this.el = el_selector
+  this.show_el = show_link_selector
+  this.hide_el = hide_link_selector
+  this.options = {
+    duration: effect_duration || 0.2
+  }
+  if (!start_shown) { // this is null == false, if not provided
+    // Call on body DOM loaded event courtesy of jQuery
+    var thisone = this
+    jQuery(function(){thisone.hide()})
+  }
+}
+ViewToggle.prototype = {
+  toggle: function toggle() {
+    var el = $(this.el)
+    if (el) Effect.toggle(el, 'blind', this.options)
+    this._toggle_el(this.show_el)
+    this._toggle_el(this.hide_el)
+  },
+  hide: function hide() {
+    var el = $(this.el)
+    if (el) Effect.BlindUp(el, this.options)
+    this._show_el(this.show_el)
+    this._hide_el(this.hide_el)
+  },
+  show: function show() {
+    var el = $(this.el)
+    if (el) Effect.BlindDown(el, this.options)
+    this._show_el(this.hide_el)
+    this._hide_el(this.show_el)
+  },
+  _hide_el: function(el) {
+    el = $(el)
+    if (el) Effect.Fade(el, {duration:0})
+  },
+  _toggle_el: function(el) {
+    el = $(el)
+    if (el) Effect.toggle(el, 'appear', {duration:0})
+  },
+  _show_el: function(el) {
+    el = $(el)
+    if (el) Effect.Appear(el, {duration:0})
+  }
+}
+
+// commented out for now as it is inadvertently disabling sessions view login login_view = new ViewToggle('signin', 'signin_closed', 'signin_open')
+subnav_view = new ViewToggle('subnav');
+flash_view = new ViewToggle('flash');
+
+
+

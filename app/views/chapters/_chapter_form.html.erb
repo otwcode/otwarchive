@@ -3,23 +3,25 @@
 
 <fieldset id="chapter-ordering">
 	<legend><%= t('form_naming', :default => 'Naming, Ordering and Date') %></legend>
-	<p>
-		<%= f.label :title, t('form_title', :default => 'Chapter title') %>
-		<%= f.text_field :title, :class => "storyinputfield", :live => true %>
-    <%= link_to_help "story-title" -%>
+	<dl>
+		<dt><%= f.label :title, t('form_title', :default => 'Chapter title') %></dt>
+		<dd><p><%= f.text_field :title, :class => "storyinputfield", :live => true %>
+    <%= link_to_help "story-title" -%></p>
     <%= generate_countdown_html("chapter_title", ArchiveConfig.TITLE_MAX) -%>
-  </p>
-	<p>
-    <%= f.label :position, t('form_position', :default => 'Chapter number') %> 
-		<%= f.text_field :position, :class => "number-field" %> 
+  </dd>
+	
+    <dt><%= f.label :position, t('form_position', :default => 'Chapter number') %></dt>
+		<dd><p><%= f.text_field :position, :class => "number-field" %> 
 		<%= f.label :wip_length, t('form_x_of_x', :default => 'of'), :title => t('form_of_total', :default => 'of total chapters') %> 
 		<%= f.text_field :wip_length, :class => "number-field" %> 
   </p>
-  <p id="managePublicationDate">
-  	<%= f.label :published_at, t('form_date', :default => 'Chapter publication date') %>
-	<%= f.date_select "published_at", :start_year => Date.today.year, :end_year => 1950, :default => default_date, :order => [:day, :month, :year] %>
+</dd>
+  <dt id="managePublicationDate">
+  	<%= f.label :published_at, t('form_date', :default => 'Chapter publication date') %></dt>
+	<dd><p><%= f.date_select "published_at", :start_year => Date.today.year, :end_year => 1950, :default => default_date, :order => [:day, :month, :year] %>
     <%= link_to_help "backdating-help" -%>
-  </p>  
+  </p></dd>
+</dl>
 </fieldset>
 
 <fieldset>
@@ -32,11 +34,9 @@
       <dd class="summary">
         <%= f.text_area :summary, :rows => 4, :cols => 60, :live => true %>
         <%= generate_countdown_html("chapter_summary", ArchiveConfig.SUMMARY_MAX) -%>
-      </dd>
-
-    <p>Add notes</p>    
+      </dd>    
       <dt class="work-endnotes">
-        <%= f.label :storynotescheck, "at the beginning" %> 
+        Add notes <%= f.label :storynotescheck, "at the beginning" %> 
       </dt>
       <dd class="work-endnotes">
        <input type="checkbox" id="storynotescheck" name="storynotescheck"  onclick="showNotesOptions('chapter')" 
@@ -57,7 +57,7 @@
       </dd>      
         
       <dt class="work-endnotes">
-       <%= f.label :storyendnotescheck, "at the end" %> 
+       Add notes <%= f.label :storyendnotescheck, "at the end" %> 
       </dt>
       <dd class="work-endnotes">
        <input type="checkbox" id="storyendnotescheck" name="storyendnotescheck"  onclick="showEndnotesOptions('chapter')" 

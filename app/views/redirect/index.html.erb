@@ -1,4 +1,3 @@
-
 <h2>Lookup Original Stories</h2>
 
 <p>
@@ -8,6 +7,7 @@
 
 <% form_tag url_for(:controller => :redirect, :action => :show) do %>
 <fieldset>
+	<legend>Find story by URL</legend>
   <p>
     <%= label_tag "original_url", t('redirect.original_url', :default => 'Original URL of work:') -%> <br />
     <%= text_field_tag "original_url", "", :size => 70 -%>

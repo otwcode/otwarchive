@@ -1,5 +1,5 @@
 <!--Descriptive page name and system messages, descriptions, and instructions.-->
-<h1><%= sanitize_title_for_display @collection.title %> <span>(<%=h @collection.name %>)</span></h1>
+<h2><%= sanitize_title_for_display @collection.title %> <span>(<%=h @collection.name %>)</span></h2>
 <!--/descriptions-->
 
 <!--subnavigation, sorting and actions-->
@@ -8,8 +8,10 @@
 
 <%- cache("collection-show-#{@collection.id}-top", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
 <!--subsection main-->
+
 <h3 class="landmark">About Collection, Metadata</h3>
-<dl class="blurb">
+<div class="wrapper">
+	<dl class="collection meta">
 	<dt><%=h t('collections.owners', :default => "Owners:") %></dt>
 	<dd>
 		<ul>
@@ -33,7 +35,7 @@
 	
 	<%- unless @collection.description.blank? -%>
 	<dt><%=h t('collection.description', :default => "Description:") %></dt>
-	<dd><%= sanitize_and_format_for_display @collection.description %></dd>
+	<dd><blockquote class="user-generated-view"><%= sanitize_and_format_for_display @collection.description %></blockquote></dd>
 	<%- end -%>
 	
 <%- end -%>	
@@ -79,35 +81,40 @@
 		<% end %>
   <%end %>
 </dl>
+</div>
 <!--/subsection-->
 
 <!--main content-->
-<div class="preface profile user-generated-view">
+<!--BACK END please move this logic to a helper method-->
+<% if !@collection.collection_profile.intro.blank? || !@collection.collection_profile.faq.blank? || !@collection.collection_profile.rules.blank? ||
+@collection.parent && (!@collection.parent.collection_profile.intro.blank? || !@collection.parent.collection_profile.faq.blank? || !@collection.parent.collection_profile.rules.blank?)
+ %>
+<div class="collection preface">
   <% if !@collection.collection_profile.intro.blank? || (@collection.parent && !@collection.parent.collection_profile.intro.blank?) %>
-  <blockquote id="intro">
+  <div id="intro" class="module">
     <%= render :partial => 'collection_profile_navigation', :locals => {:section => 'intro'} -%>
     <h3><%=h t('intro', :default => "Intro:") %></h3>
-    <%= sanitize_and_format_for_display(@collection.collection_profile.intro.blank? ? @collection.parent.collection_profile.intro : @collection.collection_profile.intro) %>
-  </blockquote>
+    <blockquote class="user-generated-view"><%= sanitize_and_format_for_display(@collection.collection_profile.intro.blank? ? @collection.parent.collection_profile.intro : @collection.collection_profile.intro) %></blockquote>
+  </div>
   <% end -%>
 	
   <%- if !@collection.collection_profile.faq.blank? || (@collection.parent && !@collection.parent.collection_profile.faq.blank?) -%>
-	<blockquote id="faq">
+	<div id="faq" class="module">
     <%= render :partial => 'collection_profile_navigation', :locals => {:section => 'faq'} -%>
 		<h3><%=h t('faq', :default => "FAQ:") %></h3>
-		<%= sanitize_and_format_for_display(@collection.collection_profile.faq.blank? ? @collection.parent.collection_profile.faq : @collection.collection_profile.faq) %>
-	</blockquote>
+		<blockquote class="user-generated-view"><%= sanitize_and_format_for_display(@collection.collection_profile.faq.blank? ? @collection.parent.collection_profile.faq : @collection.collection_profile.faq) %></blockquote>
+	</div>
 	<%- end -%>
 
  <% if !@collection.collection_profile.rules.blank? || (@collection.parent && !@collection.parent.collection_profile.rules.blank?) %>
-	<blockquote id="rules">
+	<div id="rules" class="module">
     <%= render :partial => 'collection_profile_navigation', :locals => {:section => 'rules'} -%>
 		<h3><%=h t('rules', :default => "Rules:") %></h3>
-		<%= sanitize_and_format_for_display(@collection.collection_profile.rules.blank? ? @collection.parent.collection_profile.rules : @collection.collection_profile.rules) %>
-	</blockquote>
+		<blockquote class="user-generated-view"><%= sanitize_and_format_for_display(@collection.collection_profile.rules.blank? ? @collection.parent.collection_profile.rules : @collection.collection_profile.rules) %></blockquote>
+	</div>
 	<%- end -%>
 </div>
-
+<%- end -%>
 <%- end -%>
 <!--subnavigation-->
 <%= render :partial => "collection_show_navigation" -%>

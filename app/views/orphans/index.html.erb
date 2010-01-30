@@ -1,7 +1,17 @@
-<h1><%=h t('orphaned_works', :default => 'Orphaned Works') %></h1>
+<!--Descriptive page name, messages and instructions-->
+<h2><%=h t('orphaned_works', :default => 'Orphaned Works') %></h2>
+<!--/descriptions-->
 
-<ul class="work-list">
+<!--subnav-->
+<!--/subnav-->
+
+<!--main content-->
+<ul class="work index">
   <% for work in @works %>
 	<%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
   <% end %>
 </ul>
+<!--/content-->
+
+<!--subnav-->
+<!--/subnav-->

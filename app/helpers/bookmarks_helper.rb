@@ -85,7 +85,7 @@ module BookmarksHelper
       img = "bookmark-public"
       title_string = "Public Bookmark"
     end
-    '<li>' + link_to_help('bookmark-symbols-key', link = image_tag( "#{img}.png", :alt => title_string, :title => title_string)) + '</li>'
+    link_to_help('bookmark-symbols-key', link = image_tag( "#{img}.png", :alt => title_string, :title => title_string))
   end
   
   def toggle_recs_bookmarks

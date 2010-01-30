@@ -1,5 +1,15 @@
+<!--Descriptive page name, messages and instructions-->
+<h2><%=h t('new', :default => 'Post New Work') -%> 
+<!--BACK END. 
+if @ import from url then
+Import New Work
+to resolve issue 1227--></h2>
 <%= error_messages_for :work %>
+<!--/descriptions-->
 
-<h1><%=h t('new', :default => 'Post New Work') -%></h1>
+<!--subnav-->
+<!--/subnav-->
 
+<!--main content-->
 <%= render :partial => "work_form" %>
+<!--/content-->

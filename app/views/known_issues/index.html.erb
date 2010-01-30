@@ -1,13 +1,20 @@
+<!--Descriptive page name, messages and instructions-->
 <%- if logged_in_as_admin? -%>
 <%= render :partial => "admin_index" %>
 <%- else -%>
-<h1><%= t("known_issues", :default => "Known Issues") -%></h1>
-<div id="tos" class="work-show">
-	<% @known_issues.each do |known_issue| %>
-			<h6>
-				<b>Updated:</b> <%=h known_issue.updated_at %>  
-			</h6>
+<h2><%= t("known_issues", :default => "Known Issues") -%></h2>
+<!--/descriptions-->
+
+<!--subnav-->
+<!--/subnav-->
+
+<!--main content-->
+
+<% @known_issues.each do |known_issue| %>
+				<div class="user-generated-view" role="article"><h4>Updated <%=h known_issue.updated_at %></h4>
 	    <%=sanitize_and_format_for_display known_issue.content %>
-<% end %> 
+	</div>
+<% end %>
+
 <% end %>
 

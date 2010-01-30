@@ -1,7 +1,7 @@
 <tr>
-  <td><%= check_box_tag "work_ids[]", work.id %></td>
 	<td><%= label_tag "work_ids[]", link_to(sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small))) %></td>
   <td><%= work.fandom_tags.collect{|tag| link_to_tag(tag) }.join(', ') %></td>
+<td><%= check_box_tag "work_ids[]", work.id %></td>
   <td class="navigation">
 	<ul class="navigation">
 	<li><%= link_to t('short_blurb.edit', :default => 'Edit'), edit_work_path(work) -%></li>

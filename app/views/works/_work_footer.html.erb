@@ -1,7 +1,7 @@
 <!-- footer for work -->
  	<%- unless @work.parents.blank? -%>
- 	<div id="parents">
- 	  <p><%= t('inspired_by', :default => 'Inspired by:') -%></p>
+ 	<div id="parents" class="module">
+ 	  <h4><%= t('inspired_by', :default => 'Inspired by:') -%></h4>
  	  <ul>
  	  <%- for parent in @work.parents -%>
  	    <li><%= link_to parent.title, parent %></li>
@@ -14,8 +14,8 @@
  	<%- end -%>
  	
  	<%- unless @work.approved_children.blank? -%>
- 	<div id="children">
- 	  <p><%=h t('inspired_by_this', :default => 'Works inspired by this one:') -%></p>
+ 	<div id="children" class="module">
+ 	  <h4><%=h t('inspired_by_this', :default => 'Works inspired by this one:') -%></h4>
  	  <ul>
  	  <%- for child in @work.approved_children -%>
  	    <li><%= link_to child.title, child %></li>

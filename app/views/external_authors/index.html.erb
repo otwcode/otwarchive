@@ -1,5 +1,5 @@
 <% if @user && current_user == @user -%>
-<h1><%= t('external_authors_for', :default => "External author identities for {{user}}", :user => @user.login) -%></h1>
+<h2><%= t('external_authors_for', :default => "External author identities for {{user}}", :user => @user.login) -%></h2>
 
   <p>
     <%= t('external_authors_explanation', 
@@ -14,31 +14,29 @@
     </ul>
   -->
 <% elsif current_user.archivist -%>
-<h1><%= t('external_authors_unclaimed', :default => "External Authors Imported") %>
+<h2><%= t('external_authors_unclaimed', :default => "External Authors Imported") %></h2>
 <% end %>
 
-<ul class="external_authors-list">
+<ul class="index">
   <% @external_authors.each do |external_author| %>
     <li>
-      <p class="external_author-names">
-        Identity: <%= external_author.external_author_names.collect(&:name).join(", ") -%>
-      </p>
+      <h4>Identity: <%= external_author.external_author_names.collect(&:name).join(", ") -%>
+      </h4>
       <% if external_author.do_not_email -%>
-        <p><%= t('do_not_email', :default => "No notifications sent for stories imported with this email." ) -%></p>
+        <p><%= t('do_not_email', :default => "No notifications will be sent to this email address." ) -%></p>
       <%- end -%>
 
       <% if external_author.do_not_import -%>
         <p><%= t('do_not_import', :default => "Archivists may not import stories with this email." ) -%></p>
       <%- end -%>
       
-      <p class="external_author-works">
-        Works:
-        <ul>
+      <h4>Works:</h4>
+        <ul class="work index">
         <%- external_author.external_creatorships.each do |ext_creatorship| -%>
         <li><%= link_to(ext_creatorship.creation.title, work_path(ext_creatorship.creation)) -%></li>
         <%- end -%>
         </ul>
-      </p>
+    
     
       <% if @user && current_user == @user -%>
         <ul class="navigation">

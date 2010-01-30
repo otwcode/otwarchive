@@ -1,27 +1,25 @@
 <!-- BEGIN work --> 
-<div class="work-show"><a name="top" />
+<div class="work"><p><a name="top">&nbsp;</a></p>
   <%= render :partial => 'works/work_header' -%>
 
-  <div id="chapters" class="user-generated-view">
+  <div id="chapters">
     <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } -%>
     <%- if !@work.endnotes.blank? && @chapter == @work.last_chapter -%>
-      <div class="preface">
-        <blockquote id="work_endnotes" class="notes">
+      <div id="work_endnotes" class="chapter preface footnotes module" role="complementary">
           <h3><%=h "Notes:" %></h3>
-          <%=sanitize_and_format_for_display @work.endnotes %>
-        </blockquote>
+          <blockquote class="user-generated-view"><%=sanitize_and_format_for_display @work.endnotes %></blockquote>
       </div>    
     <%- end -%>
 	  <!-- Series links -->
     <%- unless @preview_mode || @work.series.blank? || @chapter != @work.last_chapter-%>
       <%= render :partial => 'works/series_links' -%>
     <%- end -%>
-    <%= render :partial => 'chapters/chapter_control', :locals => {:work => @work, :chapter => @chapter } -%>
+    <!--BACK END move chapter control into main nav in work_header please-->
+	<%= render :partial => 'chapters/chapter_control', :locals => {:work => @work, :chapter => @chapter } -%>
   </div>
 
   <%= render :partial => 'works/work_footer' -%>
   
-  <div id="link-to-top"><%= link_to image_tag("arrow-up.gif") + t('works_top_link_text', :default => "top"), :anchor => "top" %></div>
 </div>
 <!-- END work -->
 

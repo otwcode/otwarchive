@@ -1,3 +1,10 @@
+<!--Descriptive page name, messages and instructions-->
+<!--/descriptions-->
+
+<!--subnav-->
+<!--/subnav-->
+
+<!--main content-->
 <%- unless @related_works.blank? -%>
   <%- @related_works.each do |related_work| -%>
     <%- if related_work.reciprocal? -%>
@@ -7,3 +14,4 @@
     <%- end -%> 
   <%- end -%>
 <%- end -%>
+<!--/subnav-->

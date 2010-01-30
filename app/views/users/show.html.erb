@@ -1,14 +1,11 @@
 <%- if @user == current_user && @user.preference.first_login -%>
   <div class="flash notice" id="first-login-help-banner"><!-- pseudoflash because putting it in a real one was making for some ugly code -->
-    <div style='width: 90%;'>
-      <%= link_to_ibox t("new-user-help", :default => "Hi! It looks like you\'ve just logged into the archive for the first time. Click here for some tips and tricks (and to make this message go away permanently)."), :for => first_login_help_path, :title => "First login help", :size => "600x400" %>
-      </div>
-      <div style='float:right; margin-top: -1em'>
-        <%= link_to_function image_tag('close-flash.png'), "$('first-login-help-banner').hide" %>
-      </div>
+     <p>Hi! It looks like you've just logged into the archive for the first time. <%= link_to_ibox t("new-user-help", :default => "Learn some tips and tricks."), :for => first_login_help_path, :title => "First login help", :size => "600x400" %> or
+<%= link_to_remote "Dismiss this message permanently", :url => { :controller => 'users', :action => 'end_first_login', :id => current_user.login, :class => 'navigation' } %></p>
+      <p class="submit"><%= link_to_function image_tag('close-flash.png'), "$('first-login-help-banner').hide" %></p>
   </div>
 <%- end -%>
-<div id="user-page">
+<div id="user-page" class="profile">
   <%= render :partial => "users/header", :locals => {:user => @user} %>
   <%= render :partial => "users/contents" %>
 </div> 

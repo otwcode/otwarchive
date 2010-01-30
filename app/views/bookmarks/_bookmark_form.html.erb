@@ -2,23 +2,20 @@
 <%- @bookmark ||= Bookmark.new -%>
 <div id="bookmark-form">
 <%- if @bookmark.new_record? && bookmarkable.class != ExternalWork -%>
-  <p><%=h t('bookmark_add_new', :default => 'Add a new bookmark for "{{title}}"', :title => bookmarkable.title) %></p>
+  <h4><%=h t('bookmark_add_new', :default => 'Add a new bookmark for "{{title}}"', :title => bookmarkable.title) %></h4>
   <%- elsif bookmarkable.class == ExternalWork && !@bookmark.new_record? -%>
-  <p><%=h t('bookmark_add_new_external', :default => 'Add a new bookmark for an external work') %></p>
+  <h4><%=h t('bookmark_add_new_external', :default => 'Add a new bookmark for an external work') %></h4>
 <%- end -%>
 
 <%- form_for([bookmarkable, @bookmark], :url => {:controller => 'bookmarks', :action => (action ||= 'create')}) do |f| -%>
-<dl>
-  <dt><label><%=h t('form_pseud', :default => "Pseud: ") -%></label></dt>
-  <dd>
+<p><label><%=h t('form_pseud', :default => "Pseud: ") -%></label>
     <% if current_user.pseuds.count > 1 %>
       <%= select_tag "bookmark[pseud_id]", options_for_select(current_user.pseuds.map{|pseud| [pseud.name, pseud.id]}, @bookmark.pseud ? @bookmark.pseud.id : current_user.default_pseud.id) %>
     <% else %>
     <%= current_user.default_pseud.name -%>
       <%= f.hidden_field :pseud_id, :value => "#{current_user.default_pseud.id}" %>
     <% end %>
-  </dd>
-</dl>
+</p>
 <% if bookmarkable.class == ExternalWork && bookmarkable.new_record? %>
   <% fields_for 'bookmark[external]', bookmarkable do |ew| %>
   <fieldset>
@@ -94,8 +91,8 @@
   <legend>Bookmark Comments</legend>
 <dl>
   <dt><%= f.label :notes, t('form_your_notes', :default => "Your Notes") %></dt>
-  <dd style="max-width: 25em;">
-    <code>a href, b, big, blockquote, br, center, cite, code, del, em, i, img, ins, p, pre, q, small, strike, strong, sub, sup, u </code><br/>
+  <dd>
+    <code>a href, b, big, blockquote, br, center, cite, code, del, em, i, img, ins, p, pre, q, small, strike, strong, sub, sup, u </code>
       <%= f.text_area :notes %>
       <%= generate_countdown_html("bookmark_notes", ArchiveConfig.NOTES_MAX) -%> 
       
@@ -104,18 +101,23 @@
 	<dd>
     <%= text_field_tag 'tag_string', @tag_string, :size => 80 %>
     <%= autocomplete_text_field "tag_string" -%>
-    <div class="character_counter">
+    <p class="character_counter">
       <%=h t("comma_separated", :default => "Comma separated, #{ArchiveConfig.TAG_MAX} characters per tag") %>
-    </div>
   </dd>
 </dl>
 </fieldset>
 <%- if bookmarkable.class != ExternalWork -%>
   <p><%= t('note_author', :default => "Please note that the author's summary and tags will be added automatically.") %>
 <%- end -%>
-<p> <%= f.check_box :private %> <%= f.label :private, t('form_private', :default => "Private bookmark?") %>&nbsp;&nbsp;&nbsp;<%= f.check_box :rec %> <%= f.label :rec, t('form_rec', :default => "Rec?") %></p>
+<p> <%= f.check_box :private %> <%= f.label :private, t('form_private', :default => "Private bookmark?") %>
+<%= f.check_box :rec %> <%= f.label :rec, t('form_rec', :default => "Rec?") %></p>
 <%= f.hidden_field :bookmarkable_id, :value => bookmarkable.id if bookmarkable%>
 <%= f.hidden_field :bookmarkable_type, :value => bookmarkable.class.to_s if bookmarkable %>
+<!-- BACK END
+please add option CANCEL
+if bookmarks form @ bookmarks/new then CANCEL routes BACK
+if bookmarks form @ dynamic_bookmark then CANCEL function is CLOSE
+-->
 <p class="submit"><%= f.submit(button_name ||= t('forms.create', :default => "Create")) %></p>
 <% end %>
 </div>

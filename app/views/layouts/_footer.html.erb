@@ -1,68 +1,23 @@
 <!-- BEGIN footer -->
-<div class="footer">
+<div id="footer" role="contentinfo">
+	<h3 class="landmark">Footer</h3>
   <div id="globalize"><!-- locales_menu --></div>
-  <p>
-  	<%= link_to "Terms of Service", tos_path -%>
-	&#8212; <%= link_to "Site Map", site_map_path %>
-  	&#8212; <%= link_to 'Report Abuse', new_abuse_report_path %>
-  	&#8212; <%= link_to 'Support and Feedback', new_feedback_report_path -%>
-  	&#8212; <%= link_to 'Archive FAQ', archive_faqs_path %>
-	&#8212; <%= link_to 'Known Issues', known_issues_path %>
+  <ul class="navigation" role="navigation">
+  	<li><%= link_to "Terms of Service", tos_path -%>&#8212;</li>
+	<li> <%= link_to "Site Map", site_map_path %>&#8212;</li>
+  	<li> <%= link_to 'Report Abuse', new_abuse_report_path %>&#8212;</li>
+  	<li> <%= link_to 'Support and Feedback', new_feedback_report_path -%>&#8212;</li>
+  	<li> <%= link_to 'Archive FAQ', archive_faqs_path %>&#8212;</li>
+	<li> <%= link_to 'Known Issues', known_issues_path %>&#8212;</li>
   	<%- if (logged_in_as_admin? || logged_in? && current_user.is_tag_wrangler?) -%>
-  	  &#8212; <%= link_to 'Tag Wrangling', tag_wranglings_path -%>
+  	  <li> <%= link_to 'Tag Wrangling', tag_wranglings_path -%>&#8212;</li>
   	<%- end -%>
-  	<%- if ENV["RAILS_ENV"] == "development" -%>
-  	  &#8212; <%= link_to 'Devmode', devmode_path -%>
+	<li><%- if ENV["RAILS_ENV"] == "development" -%>
+  	  <%= link_to 'Devmode', devmode_path -%>
   	<%- end -%>
-	&#8212;
-	<a href="http://creativecommons.org/licenses/GPL/2.0/" title="View License">GPL/CC</a>
-	  	<%=h t('layout.footer.by_the_otw', :default => 'by the') %> <a href="http://transformativeworks.org/" title="The Organization for Transformative Works">OTW</a>
-</p>
+	&#8212;</li>
+	<li><a href="http://creativecommons.org/licenses/GPL/2.0/" title="View License">GPL/CC</a>
+	  	<%=h t('layout.footer.by_the_otw', :default => 'by the') %> <a href="http://transformativeworks.org/" title="The Organization for Transformative Works">OTW</a></li>
+  </ul>
 </div>
-
 <!-- END footer -->
-<% if ENV["RAILS_ENV"]=="development" %>
-<div id="debug">
-  <h1>Development Notice</h1>
-  <p>
-    This is a development site. That means, please don't put in 
-    anything you need to keep secure or want to preserve. 
-    All the contents of this site (including user accounts) can and 
-    probably will be wiped without notice as we work. 
-  </p>
-  <p>
-    Please <strong>do</strong>
-    help us out and <a href="http://code.google.com/p/otwarchive/issues/list">report any problems</a>!
-  </p>
-  <p>
-    These links below here are just to provide debugging info for your friendly neighborhood coders, 
-    please ignore. 
-  </p>
-  <dl class="debug_navigation">
-    <dt>
-      <a href="#" onclick="Element.toggle('params_debug_info'); return false;">params</a>
-    </dt>
-    <dd id="params_debug_info" class="debug_info" style="display:none">
-      <%= debug(params) %>
-    </dd>
-    <dt>
-      <a href="#" onclick="Element.toggle('session_debug_info'); return false;">session</a>
-    </dt>
-    <dd id="session_debug_info" class="debug_info" style="display:none">
-      <%= debug(session) %>
-    </dd>
-    <dt>
-      <a href="#" onclick="Element.toggle('env_debug_info'); return false;">env</a>
-    </dt>
-    <dd id="env_debug_info" class="debug_info" style="display:none">
-      <%= debug(request.env) %>
-    </dd>
-    <dt>
-      <a href="#" onclick="Element.toggle('request_debug_info'); return false;">request</a>
-    </dt>
-    <dd id="request_debug_info" class="debug_info" style="display:none">
-      <%= debug(request) %>
-    </dd>
-  </dl>
-</div>
-<% end %>

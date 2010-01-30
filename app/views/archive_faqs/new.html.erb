@@ -1,4 +1,11 @@
-<%= render :partial => 'admin/admin_nav' %>
-<h1><%= t("archive_faq_subsection", :default => "Create New Archive FAQ Subsection") -%></h1>
+<!--Descriptive page name, messages and instructions-->
+<h2><%= t("archive_faq_subsection", :default => "Create New Archive FAQ Subsection") -%></h2>
+<!--/descriptions-->
 
+<!--subnav-->
+<%= render :partial => 'admin/admin_nav' %>
+<!--/subnav-->
+
+<!--main content-->
 <%= render :partial => 'archive_faq_form' %>
+<!--/content-->

@@ -1,12 +1,32 @@
-<div class="work-date-info">
-  <%= work_meta_list(@work, @chapter) %>
-  <%= work_top_links_list(@work) %>
-</div>
+<!-- BEGIN navigation 
+NOTE for backend, please refactor thus:
 
-<!-- BEGIN navigation -->
+<h3 class="landmark">Actions</h3>
+<ul class="navigation" role="navigation">
+IF AUTHOR
+<li> add chapter</li>
+<li> edit</li>
+<li> delete</li>
+END
+IF chapter by chapter
+<li> view entire work</li>
+<li> CURRENT chapter number 
+<ol> <li>CHAPTERS IN ORDER</li></ol>
+</li>
+END
+IF viewing entire
+<li> view chapter by chapter </li>
+END
+UNLESS post is Admin
+<li> bookmark </li>
+END
+<li> {{COUNT}} comment/s</li>
+<li class="landmark"><a name="top">&nbsp;</a></li>
+</ul>
+-->
 <%- unless @preview_mode -%>
   <% if is_author_of?(@work) -%>
-    <ul class="navigation">
+    <ul class="navigation" role="navigation">
       <li><%= link_to t('add_chapter', :default => "Add Chapter"), new_work_chapter_path(@work) %></li>
       <li><%= link_to t('edit', :default => "Edit"), edit_work_path(@work) %></li>
       <li><%= link_to t('delete', :default => "Delete"), @work, :confirm => "Are you sure?", :method => :delete -%></li>
@@ -18,56 +38,41 @@
 <%- if @preview_mode || !AdminSetting.enable_test_caching? -%>
    <%= render :partial => 'works/meta', :locals => {:work => @work} %>
 
-  <div class="series-and-view-data">
-    <%- unless @work.series.blank? -%>
-      <ul class="work-series-data">
-        <%= show_series_data(@work) %>
-      </ul>
-    <%- end -%> 
-
     <%- if @work.number_of_posted_chapters > 1 -%>
       <%- if @chapters.length == 1 -%> 
         <!-- we're reading chapter-by-chapter -->
-        <ul class="navigation">
+        <ul class="navigation" role="navigation">
           <li><%= link_to t('view_entire_work', :default => "View Entire Work"), @work -%></li>
           <%= next_and_previous_links_listitems(@work, @chapter) -%>
         </ul>
       <%- else -%>
-        <ul class="navigation">
+        <ul class="navigation" role="navigation">
           <li><%= link_to t('view-by-chapter', :default => "View Chapter By Chapter"), 
                  url_for({:controller => :chapters, :action => :show, :work_id => @work, :id => @chapters.first}) -%>
           </li>
         </ul>
       <%- end -%>
     <%- end -%>
-  </div>  
+ 
 <%- else -%>
 <%- cache("workshowmeta-#{@work.id}-#{@work.major_version}-#{@work.minor_version}", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
  <%= render :partial => 'works/meta', :locals => {:work => @work} %>
-
-<div class="series-and-view-data">
-  <%- unless @work.series.blank? -%>
-    <ul class="work-series-data">
-      <%= show_series_data(@work) %>
-    </ul>
-  <%- end -%> 
   
   <%- if @work.number_of_posted_chapters > 1 -%>
     <%- if @chapters.length == 1 -%> 
       <!-- we're reading chapter-by-chapter -->
-      <ul class="navigation">
+      <ul class="navigation" role="navigation">
         <li><%= link_to t('view_entire_work', :default => "View Entire Work"), @work -%></li>
         <%= next_and_previous_links_listitems(@work, @chapter) -%>
       </ul>
     <%- else -%>
-      <ul class="navigation">
+      <ul class="navigation" role="navigation">
         <li><%= link_to t('view-by-chapter', :default => "View Chapter By Chapter"), 
                url_for({:controller => :chapters, :action => :show, :work_id => @work, :id => @chapters.first}) -%>
         </li>
       </ul>
     <%- end -%>
   <%- end -%>
-</div>
 <%- end -%>
 <%- end -%>
 
@@ -80,28 +85,26 @@
   <h3 class="byline">
    <%= byline(@work) -%>
   </h3>
-  <% if !@work.recipients.blank? %>
-    <h3 class="recipients">
-      <%= t('work_header.recipients', :default => "for {{recipients}}", :recipients => recipients_link(@work)) -%>
-    </h3>
-  <% end -%>
   
   <%- if @chapter == @work.first_chapter -%>
     <%- unless @work.summary.blank? -%>
-      <blockquote class="summary">
+      <div class="summary module" role="complementary">
         <h3><%=h t('work_header.summary', :default => "Summary:") %></h3>
-        <%=sanitize_limit_and_format_for_display @work.summary %>
-      </blockquote>
+        <blockquote class="user-generated-view"><%=sanitize_limit_and_format_for_display @work.summary %></blockquote>
+      </div>
     <%- end -%>
   
     <%- unless @work.notes.blank? && @work.endnotes.blank? -%>
       <%- current_page?(:controller => 'chapters', :action => 'show') ? linkpath = "chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes')" : linkpath = "work_path(@work, :anchor => 'work_endnotes')" %>
-      <blockquote class="notes">
+      <div class="notes module" role="complementary">
       <h3><%=h t('work_header.notes', :default => "Notes:") %></h3>
-      <%- if @work.notes.blank? -%>
+      <% if !@work.recipients.blank? %>
+	    <p><%= t('work_header.recipients', :default => "For {{recipients}}", :recipients => recipients_link(@work)) -%></p>
+	  <% end -%>
+	<%- if @work.notes.blank? -%>
         <span class="endnotes-link"><%= t('link_to_endnotes', :default => "See the end of the work for more {{notes_link}}.", :notes_link => (link_to t('notes_link', :default => "notes"), eval(linkpath))) %></span>
       <%- else -%>
-        <%= sanitize_and_format_for_display(@work.notes) -%>
+        <blockquote class="user-generated-view"><%= sanitize_and_format_for_display(@work.notes) -%></blockquote>
         <%- unless @work.endnotes.blank? -%>
           <span class="endnotes-link"> 
           <%= t('work_header.link_more_endnotes', :default => "See the end of the work for more {{notes_link}}.", 
@@ -109,7 +112,7 @@
           </span>
         <%- end -%>  
       <%- end -%> 
-      </blockquote>
+      </div>
     <%- end -%>
   <%- end -%>  
 </div>

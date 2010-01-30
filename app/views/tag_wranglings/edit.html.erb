@@ -1,10 +1,4 @@
-<ul class="navigation">
-  <li><%= link_to 'Home', tag_wranglings_path %></li>
-  <% for categ in Tag::TYPES do %>
-  <li><%= link_to_unless_current categ, edit_tag_wrangling_path(categ) %></li>
-  <%- end -%>
-</ul>
-
+<!--descriptive page name, messages and instructions-->
 <h2><%=h 'Wrangle' %> <%= @category %> <%=h 'Tags' %>
 <% if !@tags.blank? %>
   <%- if @fandom %>
@@ -14,7 +8,18 @@
   <%- end -%>
 <%- end -%>
 </h2>
+<!--/descriptions-->
 
+<!--subnav-->
+<ul class="navigation" role="navigation">
+  <li><%= link_to 'Home', tag_wranglings_path %></li>
+  <% for categ in Tag::TYPES do %>
+  <li><%= link_to_unless_current categ, edit_tag_wrangling_path(categ) %></li>
+  <%- end -%>
+</ul>
+<!--/subnav-->
+
+<!--main content--><!--INVESTIGATE-->
 <%- if @fandoms %>
   <%- form_tag tag_wranglings_path, :id => 'wrangle-select-fandom' do -%>
     <p><%= hidden_field_tag(:id, @category) %>

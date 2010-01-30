@@ -1,8 +1,14 @@
-<h1><%=h t('works.edit.edit_work', :default =>'Edit Work') %></h1>
+<!--Descriptive page name, messages and instructions-->
+<h2><%=h t('works.edit.edit_work', :default =>'Edit Work') %></h2>
 
 <%= error_messages_for :work %>
+<!--/descriptions-->
 
+<!--subnav-->
 <%= render :partial => 'work_edit_navigation' %> 
-					
-<%= render :partial => 'work_form' %> 
+<!--/subnav-->
+
+<!--main content-->					
+<%= render :partial => 'work_form' %>
+<!--/content--> 
 

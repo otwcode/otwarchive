@@ -1,5 +1,10 @@
-<h1><%= t("Find users:", :default => "Find users:") -%></h1>
+<!--Descriptive page name, messages and instructions--><h2><%= t("Find users:", :default => "Find users:") -%></h2>
+<!--/descriptions-->
 
+<!--subnav-->
+<!--/subnav-->
+
+<!--main content-->
 <% form_tag url_for(:controller => "admin/admin_users", :action => "index"), :method => :get do -%>
     <p><%= t('search_by', :default => 'Search for a user by username, pseud or email, or search by role') -%></p>
 <dl>
@@ -36,3 +41,4 @@
 <%- end -%>
 
 <%- end -%>
+<!--/content-->

@@ -1,22 +1,24 @@
-<li class="user">
-  <div>
-    <p><%= image_tag("icon_placeholder.png", :size => "75x75", :alt => "(Icon!)") %></p>
-    <div class="author-data">
-      <h3><%= link_to(author.name, user_pseud_path(author.user, author)) -%> 
+<li class="user blurb" role="article">
+    <div class="module">
+      <p class="icon"><img src="/images/icon_placeholder" alt="" title="your icon eventually"/></p>
+		<h4><%= link_to(author.name, user_pseud_path(author.user, author)) -%> 
       <%- if (author.name != author.user_name || author.user.pseuds.size > 1) -%>
         (<%= link_to(author.user_name, user_path(author.user)) -%>)
       <%- end -%>
-      </h3>
-      <%- unless authored_items(author).blank? -%>
-        <h4><%= authored_items(author) -%></h4>
+      </h4>
+      <!--BACK END- suggest comma separator instead of pipe-->
+		<%- unless authored_items(author).blank? -%>
+        <h5><%= authored_items(author) -%></h5>
       <%- end -%>
       <%- unless author.description.blank? -%>
-        <p><%= sanitize_description_for_display(author.description) %></p>
+        <blockquote class="user-generated-view">
+		<p><%= sanitize_description_for_display(author.description) %></p>
+		</blockquote>
       <%- end -%>
       <!-- most used tags temporarily suppressed until proper bugfix for showing concealed info is in -->
       <% unless true %>
       <%- unless (most_popular = author.most_popular_tags(:categories => Tag::USER_DEFINED, :limit => 5)).blank? -%>
-        <span><%= "Most used tags: " -%></span>
+        <h5><%= "Most used tags: " -%></h5>
         <ul>      
           <%- most_popular.each do |tag_w_count| -%>
             <li><%= link_to_tag_with_count(author, tag_w_count) %></li>
@@ -25,5 +27,4 @@
       <%- end -%>
       <% end %>
   	</div>
-  </div>
 </li>

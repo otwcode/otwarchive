@@ -1,32 +1,45 @@
+<!--Descriptive page name, messages and instructions-->
+<h2><%=h 'AO3 News (includes Release Notes)' %></h2>
+<!--/descriptions-->
+<!--subnav-->		
 <%= render :partial => 'admin/admin_nav' %>
-<h1><%=h 'AO3 News (includes Release Notes)' %></h1>
-
-<ul class="navigation"><li><%= link_to 'Create New AO3 News Post', new_admin_post_path %></li></ul>
-		
-<table>
+<!--/subnav-->
+<!--main content-->
+<table summary="This table lists News posts by title, date posted and date updated, and lets you show, edit, and delete each post. You can also make a new post.">
+	<caption>Manage News Postings</caption>
 	<thead>
 		<tr>
-		<th scope="col"><%=h 'Title' -%></th>
-		<th scope="col"><%=h 'Posted' -%></th>
-		<th scope="col"><%=h 'Updated' -%></th>
-		<th scope="col" colspan="3"><%=h 'Controls' -%></th>
-	</tr>
+			<th scope="row" colspan="3"><span class="landmark"><%=h 'Action' -%></span></th>
+			<td colspan="3"><p class="navigation"><%= link_to 'Post AO3 News', new_admin_post_path %></p></td>
+		</tr>
+		<tr>
+			<th scope="col"><%=h 'Title' -%></th>
+			<th scope="col"><%=h 'Posted' -%></th>
+			<th scope="col"><%=h 'Updated' -%></th>
+			<th scope="col" colspan="3"><%=h 'Actions' -%></th>
+		</tr>
 	</thead>
 	<tbody>	
   <% @admin_posts.each do |admin_post| %>
-	<tr>
-		<td><%= link_to sanitize_title_for_display(admin_post.title), admin_post %></td>
-		<td><%=h admin_post.created_at %></td>
-		<td><%=h admin_post.updated_at %></td>
-	    <td><%= link_to "Show", admin_post %></td>
-        <td><%= link_to "Edit", edit_admin_post_path(admin_post) %></td>
-        <td><%= link_to "Delete", admin_post, :confirm => 'Are you sure?', :method => :delete %></td>
-	</tr>
+		<tr>
+			<td><%= link_to sanitize_title_for_display(admin_post.title), admin_post %></td>
+			<td><%=h admin_post.created_at %></td>
+			<td><%=h admin_post.updated_at %></td>
+	    	<td><%= link_to "Show", admin_post %></td>
+        	<td><%= link_to "Edit", edit_admin_post_path(admin_post) %></td>
+        	<td><%= link_to "Delete", admin_post, :confirm => 'Are you sure?', :method => :delete %></td>
+		</tr>
   <% end %> 
 </tbody>
+<tfoot>
+	<tr>
+		<th scope="row" colspan="3"><span class="landmark"><%=h 'Action' -%></span></th>
+		<td colspan="3"><p class="navigation"><%= link_to 'Post AO3 News', new_admin_post_path %></p></td>
+	</tr>
+</tfoot>
 </table>
-		<div class="pagination">
-			  <%= will_paginate @admin_posts %>
-		</div>			
-		
+<!--/content-->
+<!--subnav-->
+			  <%= will_paginate @admin_posts %>			
+<!--/subnav-->		
 </div>

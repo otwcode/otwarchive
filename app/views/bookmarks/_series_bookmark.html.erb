@@ -1,4 +1,6 @@
-<h3><%- if bookmark.bookmarkable.nil? -%>
+<div class="series module">
+<!--title, byline, fandom-->
+		<h4><%- if bookmark.bookmarkable.nil? -%>
       (<%= t('bookmark_oh_noes', :default => 'Oh noes, this series has been deleted.') -%>)
     <%- end -%>
     <%- if bookmark.bookmarkable.restricted -%>
@@ -10,44 +12,34 @@
     <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable %>
     <%=h t('bookmark_by', :default => 'by') %>
     <%= byline(bookmark.bookmarkable) %>
-</h3>
-</li>
-<li class="heading">
-  <%- if not bookmark.bookmarkable.nil? -%>
-    <ul class="required-tags">
-			<li><img src="/images/category-none.png" alt="" title="dummy icons for layout purpose" /></li>
-			<li><img src="/images/category-none.png" alt="" title="dummy icons for layout purpose" /></li>
-			<li><img src="/images/category-none.png" alt="" title="dummy icons for layout purpose" /></li>
-			<li><img src="/images/category-none.png" alt="" title="dummy icons for layout purpose" /></li>
-	  </ul>
-  <%- end -%>
-  <h4>
-    <span class="bookmark-fandoms">
-      <% author_fandoms = bookmark.bookmarkable.works.visible.collect(&:fandom_tags).flatten.compact.uniq
+		</h4>
+  <h5 class="fandoms">
+    <% author_fandoms = bookmark.bookmarkable.works.visible.collect(&:fandom_tags).flatten.compact.uniq
       unless author_fandoms.size <1 -%>
 		    <%= author_fandoms.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', ') %>
 		  <% end %>
-    </span>
-    <%- author_tags = bookmark.bookmarkable.works.visible.collect{|w| [w.cast_tags, w.freeform_tags]}.transpose.flatten.uniq
-    unless author_tags.size < 1 -%> | 
-    <span class="bookmark-author-tags"><%= t('bookmark_author_tags', :default => 'Tags') %>: 
-	    <%= author_tags.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', ') %>
-    </span>
+    </h5>
+	<%- if not bookmark.bookmarkable.nil? -%>
+	    <ul class="required-tags">
+				<li><img src="/images/category-none.png" alt="" title="dummy icons for layout purpose" /></li>
+				<li><img src="/images/category-none.png" alt="" title="dummy icons for layout purpose" /></li>
+				<li><img src="/images/category-none.png" alt="" title="dummy icons for layout purpose" /></li>
+				<li><img src="/images/category-none.png" alt="" title="dummy icons for layout purpose" /></li>
+		  </ul>
+	  <%- end -%>
+<!--tags-->
+<ul class="tags" title="tags">
+<%- unless author_warnings.size < 1 -%>      
+       <%- if hide_warnings?(bookmark.bookmarkable) -%>
+         <li class="warnings"><strong><%= show_warnings_link(bookmark.bookmarkable) %></strong></li>
+       <%- else -%>
+         <li class="warnings"><strong><%= author_warnings.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag))}.join(',</strong> </li> ') %></li>
+       <%- end -%>        
+ <%- end -%>
+<%- author_tags = bookmark.bookmarkable.works.visible.collect{|w| [w.cast_tags, w.freeform_tags]}.transpose.flatten.uniq
+    unless author_tags.size < 1 -%> 
+	    <li><%= author_tags.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', </li><li> ') %></li>
     <%- end -%>
-    <%- author_warnings = bookmark.bookmarkable.works.visible.collect(&:warning_tags).flatten.compact.uniq 
-    unless author_warnings.size < 1 -%>
-      <dl style="margin-top: 0.5em">
-      <dt style="display:inline"><%= link_to("Warnings", tos_faq_path(:anchor => "tags")) %>:</dt>
-      <dd style="display:inline">
-        <ul style="display:inline" id="series_<%= bookmark.bookmarkable.id %>_category_warning">        
-          <%- if hide_warnings?(bookmark.bookmarkable) -%>
-            <li><%= show_warnings_link(bookmark.bookmarkable) %></li>
-          <%- else -%>
-            <%= author_warnings.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag))}.join(', ') %>
-          <%- end -%>        
-        </ul>
-      </dd>
-      </dl>
-    <%- end -%>
-  </h4>
-</li>
+    <%- author_warnings = bookmark.bookmarkable.works.visible.collect(&:warning_tags).flatten.compact.uniq -%>
+</ul>
+</div>

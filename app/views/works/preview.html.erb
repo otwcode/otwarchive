@@ -1,5 +1,8 @@
+<!--Descriptive page name, messages and instructions-->
+<h2><%=h t('preview_story', :default => "Preview Work") %></h2>
 <%= error_messages_for :work -%>
+<!--/descriptions-->
 
-  <h2><%=h t('preview_story', :default => "Preview Story") %></h2>
-
+<!--main content-->
 <%= render :partial => 'preview_edit' -%>
+<!--/content-->

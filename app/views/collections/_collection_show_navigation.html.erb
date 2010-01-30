@@ -1,4 +1,4 @@
-<ul class="navigation">
+<ul class="navigation" role="navigation">
   <% if logged_in? && !@collection.closed? %>
     <li><%= link_to t('collections.post_new', :default => "Post New Story"), new_collection_work_path(@collection) %></li>
   <% end %>

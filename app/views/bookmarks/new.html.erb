@@ -1,9 +1,20 @@
-<h1><%=h t('new_bookmark', :default => 'New bookmark') %></h1>
+<!--Descriptive page name, messages and instructions-->
+<h2><%=h t('new_bookmark', :default => 'New bookmark') %></h2>
 
 <%= error_messages_for :bookmark %>
+<!--/descriptions-->
 
+<!--main content-->
 <%= render :partial => 'bookmark_form' %>
+<!--/content-->
 
-<ul class="navigation">
+<!--subnav-->
+<!--BACK END, please integrate this into bookmark form SUBMIT CANCEL field. 
+if @ bookmarks/new then CANCEL is
+link_to t('links.back', :default => 'Back'), bookmarks_path
+if @ dynamic_bookmark then CANCEL is close overlay
+-->
+<ul class="navigation" role="navigation">
 <li><%= link_to t('links.back', :default => 'Back'), bookmarks_path %></li>
 </ul>
+<!--/subnav-->

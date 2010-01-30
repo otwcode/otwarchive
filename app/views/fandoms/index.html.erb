@@ -1,15 +1,16 @@
+<!--Descriptive page name, messages and instructions-->
 <%- if @collection -%>
-  <h1>The <%= @fandoms.length %> Fandoms in <%= @collection.title %></h1>   
+  <h2>The <%= @fandoms.length %> Fandoms in <%= @collection.title %></h2>   
 <%- elsif @medium -%>  
-  <h1><%= link_to t('fandoms', :default => 'Fandoms'), media_path %> > <%=h @medium.name %></h1>
+  <h2><%= link_to t('fandoms', :default => 'Fandoms'), media_path %> > <%=h @medium.name %></h2>
 <%- else -%>
-  <h1><%= link_to t('fandoms', :default => 'Fandoms'), media_path %></h1> 
+  <h2><%= link_to t('fandoms', :default => 'Fandoms'), media_path %></h2> 
 <%- end -%>  
-
+<!--/descriptions-->
 <%- unless @fandoms.blank? -%>
-<div class="main-fandoms-listing">
+<!--main content-->
   <%- @fandoms.in_groups_of((@fandoms.length/3.0).ceil, false) do |fandom_list| -%>  
-  <ul class="fandoms-list">
+  <ul class="fandoms index">
     <%- for fandom in fandom_list -%>
     <li>
       <%- if fandom.respond_to?(:count) -%>
@@ -21,5 +22,5 @@
     <%- end -%>
   </ul>
   <%- end -%>
-</div>  
+ <!--/content--> 
 <%- end -%>

@@ -1,35 +1,34 @@
+<!--Descriptive page name, messages and instructions-->
 <h2><%=h t('my_inbox', :default => 'My Inbox') %> (<%= t('inbox_count', :default => "{{total}} comments, {{unread}} unread", :total => @inbox_total, :unread => @unread) %>)</h2>
 
 <%= flash_div :comment_error, :comment_notice -%>
+<!--/descriptions-->
 
+<!--main content-->
 <%- unless @inbox_comments.blank? -%>
   <%- form_tag user_inbox_path(@user), :method => :put, :id => 'inbox-form' do -%>
-    <p>
-      <%= "Mark checked as:" %> 
-      <%= submit_tag t('read', :default => 'read') %>
-      <%= submit_tag t('unread', :default => 'unread') %>
-      <%= submit_tag t('delete_from_inbox', :default => 'delete from inbox') %>
-    </p>
-
-    <table>
-      <tr>
-        <th id="inbox_select_option">
-          <input id="check_all" name="check_all" type="checkbox" onclick="Form.getInputs('inbox-form', 'checkbox').each(function(box){box.checked = $('check_all').checked})" />
-        </th>
-        <th><%= 'Comments' %></th>
-      </tr>
+   <fieldset>
+	<legend>Mass Edit Options</legend>
+	<p class="submit">
+      	<%= "Mark checked as:" %> 
+      	<%= submit_tag t('read', :default => 'Read') %>
+    	<%= submit_tag t('unread', :default => 'Unread') %>
+    	<%= submit_tag t('delete_from_inbox', :default => 'Delete From Inbox') %>
+   	</p>
+	</fieldset>
+	<fieldset>
+	<legend>List of Comments</legend>
+	<ol class="comment index">
     <%- for inbox_comment in @inbox_comments -%>
       <!-- START of single comment -->
-      <tr class="<%= inbox_comment.read? ? 'read' : 'unread' %>">
-        <td><%= check_box_tag "inbox_comments[#{inbox_comment.id}]", "checked" %></td>
-        <td>
-          <p>
-            <%= get_pseud_or_mailaddress(inbox_comment.feedback_comment) %> <%= 'to' %> <%= commentable_description_link(inbox_comment.feedback_comment) %> 
-            <%= distance_of_time_in_words_to_now(inbox_comment.created_at) %>
-          </p>
-          <p><%= sanitize_and_format_for_display inbox_comment.feedback_comment.content %></p>
-          <ul class="navigation">
-            <li>
+      <li class="comment <%= inbox_comment.read? ? 'read' : 'unread' %> <%= cycle :odd, :even %>" role="article">
+		<h4><%= get_pseud_or_mailaddress(inbox_comment.feedback_comment) %> <%= 'to' %> <%= commentable_description_link(inbox_comment.feedback_comment) %> </h4>
+		<!--when user icons are in, image here-->
+        <blockquote class="user-generated-view"><%= sanitize_and_format_for_display inbox_comment.feedback_comment.content %></blockquote>
+		<p class="datetime"><%= distance_of_time_in_words_to_now(inbox_comment.created_at) %></p>
+			<h5 class="landmark">Comment Actions</h5>
+			<ul class="navigation">
+			<li>
               <%= image_tag("replied_to.png", :size => "15x15", :alt => "Replied To") if inbox_comment.replied_to? %>
               <%= inbox_reply_link(inbox_comment.feedback_comment) %>
             </li>
@@ -37,24 +36,32 @@
             <li><%= 'Spam' %></li>
             <li><%= 'Delete From Story' %></li>
             <%- end -%>
+			<li><%= check_box_tag "inbox_comments[#{inbox_comment.id}]", "unchecked", :title => "select this comment" %></li>
           </ul>
-        </td>
-      </tr>
+<div id="reply-to-comment"></div>
+        </li>
       <!-- END of single comment -->
     <%- end -%>
-    </table>
-
-    <p>
+</ol>
+</fieldset>
+<fieldset>
+	<legend>Mass Edit Options Again</legend>
+    <p class="submit">
       <%= "Mark checked as:" %> 
-      <%= submit_tag t('read', :default => 'read') %>
-      <%= submit_tag t('unread', :default => 'unread') %>
-      <%= submit_tag t('delete_from_inbox', :default => 'delete from inbox') %>
+      <%= submit_tag t('read', :default => 'Read') %>
+      <%= submit_tag t('unread', :default => 'Unread') %>
+      <%= submit_tag t('delete_from_inbox', :default => 'Delete From Inbox') %>
     </p>
+</fieldset>
     <!-- coming soon <%= submit_tag t('mass_reply', :default => 'mass reply') %> -->
   <%- end -%>
 <%- end -%>
 
-<%- form_tag(user_inbox_path(@user), :class => 'work-filters', :method => :get) do -%>
+<!--/content-->
+
+<!--subnav-->
+<h3 class="landmark">Filter</h3>
+<%- form_tag(user_inbox_path(@user), :class => 'filters', :method => :get) do -%>
   <%- field_set_tag do -%>
  		<dl class="filters">
  		  <dt><%= 'Filter by read' %></dt>
@@ -98,5 +105,5 @@
  	<%- end -%>
  	<p class="submit"><%= submit_tag t('filter_inbox', :default => 'Filter Inbox') %></p>
 <%- end -%>
+<!--/subnav-->
 
-<div id="reply-to-comment" style="display:none;"></div>

@@ -1,36 +1,40 @@
+<!--Descriptive page name and system messages, descriptions, and instructions.-->
 <% if @user %>
-<h1><%=h t('owned_collections', :default => "Collections owned by {{user_name}}", :user_name => @user.login) %></h1>
+<h2><%=h t('owned_collections', :default => "{{user_name}}'s Collections", :user_name => @user.login) %></h2>
 <% elsif @collection %>
-<h1><%=h t('listing_sub_collections', :default => "Challenges/Subcollections in {{collection_name}}", :collection_name => @collection.title) %></h1>
+<h2><%=h t('listing_sub_collections', :default => "Challenges/Subcollections in {{collection_name}}", :collection_name => @collection.title) %></h2>
 <% elsif @work -%>
-<h1><%=h t('listing_work_collections', :default => "Collections including {{work_name}}", :work_name => @work.title) %></h1>
+<h2><%=h t('listing_work_collections', :default => "Collections including {{work_name}}", :work_name => @work.title) %></h2>
 <% else %>
-<h1><%=h t('listing_collections', :default => "Collections in the {{archive_name}}", :archive_name => ArchiveConfig.APP_NAME) %></h1>
+<h2><%=h t('listing_collections', :default => "Collections in the {{archive_name}}", :archive_name => ArchiveConfig.APP_NAME) %></h2>
 <% end %>
+<!--/descriptions-->
 
+<!--Subnavigation, sorting and actions-->
 <%- if logged_in? %>
-<ul class="navigation">
+<h3 class="landmark">Navigation</h3>
+<ul class="navigation" role="navigation">
   <% if @user && @user == current_user %>
     <li><%= link_to t('collections.my_collection_items', :default => "Manage Collected Works"), user_collection_items_path(@user) -%></li>
   <% end %>
 	<li><%= link_to t('collections.new_collection', :default => "New Collection"), new_collection_path %></li>
 </ul>
 <% end -%>
-
 <!--pagination here-->
 <!--sort navigation here-->
-<!--filters-->
-<ul class="work-list collections">
+
+<!--main content-->
+<h3 class="landmark">List of Collections</h3>
+<ul class="collection index">
 <% @collections.each do |collection| %>
-  <li class="work collections">
-  	<ul class="work collections<% if collection.user_is_owner?(current_user) %> own<%- end -%>">
+  <li class="collection blurb">
+  	<ul class="collection<% if collection.user_is_owner?(current_user) %> own<%- end -%>">
  		<li class="heading">
-			<span class="icon"><img src="/images/collections.png" class="icon" alt="" /></span>
-			<!--or collections header image-->
-			<h3><%= link_to sanitize_title_for_display(collection.title, :tags => %w(em i b strong strike small)), collection_path(collection) -%>
+			<h4 title="name"><%= link_to sanitize_title_for_display(collection.title, :tags => %w(em i b strong strike small)), collection_path(collection) -%>
 				<span>(<%=h collection.name -%>)</span>
 					<%= t('collection_by_owner', :default => 'by') -%>
-					<%= collection.all_owners.map {|owner| link_to(owner.byline, owner.user)}.join(", ") -%></h3>
+					<%= collection.all_owners.map {|owner| link_to(owner.byline, owner.user)}.join(", ") -%></h4>
+					<!--collections header iconised header image-->
 			<p class="update"><!--collection updated at--></p>
 	</li>
 
@@ -60,14 +64,14 @@
 		</dl>
 	</li>
 	-->
-	<li class="summary">
-	  <%= sanitize_strip_images_and_format_for_display collection.description %>
+	<li class="summary" title="description">
+	  <blockquote class="user-generated-view"><%= sanitize_strip_images_and_format_for_display collection.description %></blockquote>
 
-    (<%= collection.closed? ? t('collections_index.is_closed', :default => "Closed") : t('collections_index.open', :default => "Open") %>, <%= collection.moderated? ? t('collections_index.is_moderated', :default => "Moderated") : t('collections_index.unmoderated', :default => "Unmoderated") %><%= collection.unrevealed? ? t('collections_index.is_unrevealed', :default => ", Unrevealed") : "" %><%= collection.anonymous? ? t('collections_index.is_anonymous', :default => ", Anonymous") : "" %><%= collection.gift_exchange? ? t('collections_index.is_gift_exchange', :default => ", Gift Exchange") : "" %>)
+    <p class="type">(<%= collection.closed? ? t('collections_index.is_closed', :default => "Closed") : t('collections_index.open', :default => "Open") %>, <%= collection.moderated? ? t('collections_index.is_moderated', :default => "Moderated") : t('collections_index.unmoderated', :default => "Unmoderated") %><%= collection.unrevealed? ? t('collections_index.is_unrevealed', :default => ", Unrevealed") : "" %><%= collection.anonymous? ? t('collections_index.is_anonymous', :default => ", Anonymous") : "" %><%= collection.gift_exchange? ? t('collections_index.is_gift_exchange', :default => ", Gift Exchange") : "" %>)</p>
 	</li>
 
 	<%- if collection.not_empty? -%>
-	<li class="stats">
+	<li class="stats" title="stats">
 		<dl>
       <% if (@challenges_count = collection.children.count) > 0%>
       <dt><%= t('collections.children', :default => "Challenges/Subcollections") -%></dt>

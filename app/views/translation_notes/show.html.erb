@@ -1,23 +1,26 @@
-<p>
-  <b>Note:</b>
-  <%=h @translation_note.note %>
-</p>
+<!--Descriptive page name, messages and instructions-->
+<!--/descriptions-->
 
-<p>
-  <b>Namespace:</b>
-  <%=h @translation_note.namespace %>
-</p>
+<!--subnav-->
+<!--/subnav-->
 
-<p>
-  <b>User:</b>
-  <%=h @translation_note.user %>
-</p>
+<!--main content-->
+<h3>Note:</h3>
+<p><%=h @translation_note.note %><p>
 
-<p>
-  <b>Locale:</b>
-  <%=h @translation_note.locale %>
-</p>
+<h3>Namespace:</h3>
+<p><%=h @translation_note.namespace %></p>
 
+<h3>User:</h3>
+<p><%=h @translation_note.user %></p>
 
-<%= link_to 'Edit', edit_translation_note_path(@translation_note) %> |
-<%= link_to 'Back', translation_notes_path %>
+<h3>Locale:</h3>
+<p><%=h @translation_note.locale %></p>
+<!--/content-->
+
+<!--subnav-->
+<ul class="navigation">
+	<li><%= link_to 'Edit', edit_translation_note_path(@translation_note) %></li>
+	<li><%= link_to 'Back', translation_notes_path %></li>
+</ul>
+<!--/subnav-->

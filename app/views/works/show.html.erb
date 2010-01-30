@@ -1,37 +1,53 @@
+<!--page description, messages-->
+<% if @work.unrevealed? %>
+<p class="message"><%= t('works.unrevealed', :default => "This work is part of an ongoing challenge, {{challenge}}, and will be revealed soon!",
+    :challenge => @work.collections.unrevealed.collect {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ")) -%></p>
+<% end %>
+<!--/descriptions-->
+
+<!--subnav-->
 <%- if logged_in_as_admin? -%>
 <%= render :partial => 'admin/admin_options', :locals => {:item => @work} %>
 <%- end -%>
-
-<% if @work.unrevealed? %>
-<h3><%= t('works.unrevealed', :default => "This work is part of an ongoing challenge, {{challenge}}, and will be revealed soon!",
-    :challenge => @work.collections.unrevealed.collect {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ")) -%></h3>
-<% end %>
+<!--/subnav-->
 
 <% if !@work.unrevealed? || logged_in_as_admin? || is_author_of?(@work) %>
-
 <!-- BEGIN work --> 
-<div class="work-show"><a name="top">&nbsp;</a>
+<p class="landmark"><a name="top">&nbsp;</a></p>
+<!--work description, metadata, notes and messages-->
 	<%= render :partial => 'works/work_header' -%>
 	<%- if logged_in_as_admin? -%>
 	<%= render :partial => 'admin/admin_options', :locals => {:item => @work} %>
 	<%- end -%>
-	<div id="chapters" class="user-generated-view">
+
+<!--/descriptions-->
+
+
+<!--main content-->
+	<div id="chapters" class="user-generated-view" role="article">
+	<h3 class="landmark">Work Text:</h3>
 	<%= render :partial => 'chapters/chapters' -%>
 	</div>
-  <%- unless @work.endnotes.blank? -%>
-    <div class="preface user-generated-view">
-      <blockquote id="work_endnotes" class="notes">
+<!--/main-->
+ 
+ <%- unless @work.endnotes.blank? -%>
+<!--work description, metadata, notes and messages-->
+    <div class="preface" role="complementary">
+      <div id="work_endnotes" class="footnotes">
         <h3><%=h t('notes', :default => "Notes:") %></h3>
-        <%=sanitize_and_format_for_display @work.endnotes %>
-      </blockquote>
+        <blockquote class="user-generated-view"><%=sanitize_and_format_for_display @work.endnotes %></blockquote>
+      </div>
     </div>
   <%- end -%>
+<!-- /descriptions-->
+
+<!--subnav-->
   <%- unless @work.series.blank? -%>
     <%= render :partial => 'works/series_links' -%>
   <%- end -%>
 	<%= render :partial => 'works/work_footer' -%>
-  <div id="link-to-top"><%= link_to image_tag("arrow-up.gif") + t('works_top_link_text', :default => "top"), work_path(@work, :anchor => "top")%></div>
-</div>
+<!--/subnav-->
+
 <!-- END work -->
 
 <!-- BEGIN comment section -->

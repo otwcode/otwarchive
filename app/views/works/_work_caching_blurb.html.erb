@@ -1,9 +1,8 @@
-<ul class="work<%- if is_author_of?(work) && controller.controller_name != 'series' -%> own<%- end -%>">
+<ul class="work blurb<%- if is_author_of?(work) && controller.controller_name != 'series' -%> own<%- end -%>">
                                                
 <%- cache("work-#{work.id}-#{work.major_version}-#{work.minor_version}-top", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
   	<li class="heading">
-  	  <%= get_symbols_for(work) -%>
-  	  <h3>
+  	  <h4 title="title">
   	    <%= link_to sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small)), @collection ? collection_work_path(@collection, work) : work %>
     		<%= t('title_by_author', :default => 'by') -%>
 <%- end -%>   		
@@ -12,13 +11,13 @@
         <%= !work.recipients.blank? ? t('works.for_recipients', :default => "for {{recipients}}", :recipients => recipients_link(work)) : "" -%>
     		<%- if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") -%><%- end -%>
         <%- if work.hidden_by_admin -%><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><%- end -%>
-      </h3>
+      </h4>
 
-  	  <h4>
+  	  <h5 title="fandom">
         <%= work.fandom_tags.collect{|tag| link_to_tag(tag) }.join(', ') %>
   		&nbsp;
-  	  </h4>
-
+  	  </h5>
+		<%= get_symbols_for(work) -%>
   	  <p class="update"><%= set_format_for_date(work.revised_at) %></p>
   	</li>
 
@@ -48,13 +47,13 @@
   	</li>
 
     <%- unless work.summary.blank? -%>
-  	<li class="summary">
-  	  <%= sanitize_strip_images_and_format_for_display work.summary %>
+  	<li class="summary" title="summary">
+  	  <blockquote class="user-generated-view"><%= sanitize_strip_images_and_format_for_display work.summary %></blockquote>
   	</li>
     <%- end -%>
 
   	<li class="stats">
-  		<dl>
+  		<dl title="stats">
   		<dt><%=h t('words', :default => 'Words') + ': ' %></dt>
   			<dd><%= number_with_delimiter(work.word_count) %></dd>
   		<dt><%=h t('work_chapters', :default => 'Chapters') + ': ' %></dt>

@@ -1,12 +1,16 @@
-<h1><%= @fandom.name %></h1>
+<!--Descriptive page name, messages and instructions-->
+<h2><%= @fandom.name %></h2>
+<!--/descriptions-->
 
-<ul>
+<!--subnavigation, sorting and actions-->
+<ul class="navigation" role="navigation">
   <li><%= link_to "Works", tag_works_path(@fandom) %></li>
   <li><%= link_to "Bookmarks", tag_bookmarks_path(@fandom) %></li>
 </ul>
+<!--subnav-->
 
-<h2>Characters and Pairings</h2>
-
+<!--main content-->
+<h3>Characters and Pairings</h3>
 <%- unless @characters.blank? -%>
 <ul>
   <%- for character in @characters -%>
@@ -23,3 +27,4 @@
   <%- end -%>
 </ul>
 <%- end -%>
+<!--/content-->

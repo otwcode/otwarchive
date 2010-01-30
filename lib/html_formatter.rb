@@ -318,7 +318,7 @@ module HtmlFormatter
               current_para[2].push(node)
               if false and inl_cont_tags_list.include? name
                 # Inline containers need further paras, according to the
-                # previouss code, but it looks tidier to me without, hence
+                # previous code, but it looks tidier to me without, hence
                 # the 'false' in the condition above.
                 node[2].replace(tidy_nodes.call(node[2]))
               end

@@ -1,24 +1,30 @@
+<!--Descriptive page name, messages and instructions-->
 <h2><%=h t('edit_multiple', :default => "Editing Multiple Works") -%></h2>
+<!--/descriptions-->
 
-<h3><%=h t('works_being_edited', :default => "Works Being Edited") %></h3>
+<!--subnav-->
+<!--/subnav-->
 
-<% form_for :work, :url => update_multiple_user_works_path(@user), :html => { :method => :put } do |form| %>  
-
-  <ul class="story-list">
+<!--main content-->
+<% form_for :work, :url => update_multiple_user_works_path(@user), :html => { :method => :put } do |form| %>
+<ul class="work index">
     <%- for work in @works -%>
-      <li>
+	<li>
         <%= link_to sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small)), work %>
         <%= hidden_field_tag "work_ids[]", work.id%>
       (<%= work.fandom_tags.collect{|tag| link_to_tag(tag) }.join(', ') %>, <%=t('other_tags_here', :default => "other tags go here") %>)
-      </li>
+	</li>
     <%- end -%>
-  </ul>
-  
-  <p class="temp-hack"><%=h t('all_stories', :default => "Note that your edits will be applied to ALL of these stories, REPLACING any existing values for these fields!") %></p>
+</ul>
 
-  <p class="notice required temp-hack"><%=h t('required_info', :default => "* Required information") %></p>
-  <div id="work-form" class="work-form"><%= render :partial => 'work_tags_form', :locals => {:include_blank => true} -%></div>
+<p class="important message"><%=h t('all_stories', :default => "Note that your edits will be applied to <em>all</em> of these stories, <strong>replacing</strong> any existing values for these fields!") %></p>
 
-<%= submit_tag t('update_multiple', :default => "Update All Stories") %>
+<p class="required message"><%=h t('required_info', :default => "* Required information") %></p>
+
+<div id="work-form" class="work-form"><%= render :partial => 'work_tags_form', :locals => {:include_blank => true} -%></div>
+
+<p class="submit"><%= submit_tag t('update_multiple', :default => "Update All Stories") %></p>
   
 <% end %>
+<!--/content-->
+

@@ -1,6 +1,10 @@
+<!--Descriptive page name, messages and instructions-->
 <h2><%= logged_in_as_admin? ? (@user.login + "'s") : "Your" %> Invitations</h2>
+<!--/descriptions-->
 
-<ul class="navigation">
+<!--subnav-->
+<h3 class='landmark'>Navigation</h3>
+<ul class="navigation" role="navigation">
   <li>
     <%= link_to_unless_current("unsent (#{@user.invitations.unsent.count.to_s})", 
       manage_user_invitations_path(@user, :status => :unsent)) %>
@@ -17,5 +21,8 @@
     <%= link_to 'all', manage_user_invitations_path(@user) %>
   </li>
 </ul>  
+<!--/subnav-->
 
+<!--main content-->
 <%= render :partial => 'invitations/user_invitations', :locals => {:invitations => @invitations} -%>
+<!--/content-->

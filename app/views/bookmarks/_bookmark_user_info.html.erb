@@ -1,22 +1,15 @@
 <!-- This partial requires local variable 'bookmark' -->
-<li>
-  <ul class="user-info<%- if is_author_of?(bookmark) -%> own<%- end -%>">
-    <ul class="bookmark-icons">
-      <%= get_symbol_for_bookmark(bookmark) %>
-    </ul>
-    <li class="byline">
+<li class="user<%- if is_author_of?(bookmark) -%> own<%- end -%>">
+	<%= get_symbol_for_bookmark(bookmark) %>
+	<h5 class="byline">
     <%= t('bookmarked_by', :default=>'Bookmarked by {{user}}', :user=>link_to(bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud])) %>
-    </li>
-    <li class="byline-date"><span class="byline-date"><%= set_format_for_date(bookmark.created_at) %></span></li>
-
-    <li class="user-notes">
+    </h5>
+    <p class="datetime"><%= set_format_for_date(bookmark.created_at) %></p>
       <%- unless bookmark.notes.blank? -%>
-      <%=sanitize_limit_and_format_for_display bookmark.notes -%>
+      <blockquote class="user-generated-view summary" title="notes"><%=sanitize_limit_and_format_for_display bookmark.notes -%></blockquote>
       <%- end -%>
-    </li>
     <%- unless bookmark.tag_string.blank? -%>
-      <li class="user-tags">
-        <dl>
+        <dl class="tags">
           <dt><%=h t('bookmark_tags', :default => "User's Tags:") -%></dt>
           <dd>
             <ul>
@@ -26,14 +19,10 @@
             </ul>
           </dd>
         </dl>
-      </li>
     <%- end -%>
   <%- if is_author_of?(bookmark) -%>
-    <li>
       <%= render :partial => 'bookmarks/bookmark_owner_navi', :locals => {:bookmark => bookmark} %>
-    </li>
   <%- elsif logged_in_as_admin? -%>
     <%= render :partial => 'admin/admin_options', :locals => {:item => bookmark} %>
   <%- end -%>
-  </ul>
 </li>

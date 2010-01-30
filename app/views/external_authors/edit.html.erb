@@ -1,4 +1,4 @@
-<h1><%= t('edit_external_author', :default => 'Editing external author identity') -%></h1>
+<h2><%= t('edit_external_author', :default => 'Editing external author identity') -%></h2>
 
 <% form_for([@user, @external_author]) do |f| %>
   <%= f.error_messages %>
@@ -29,5 +29,7 @@
   </p>
 <% end %>
 
-<%= link_to t('back', :default => 'Back'), user_external_authors_path(@user) %>
+<ul class="navigation">
+	<li><%= link_to t('back', :default => 'Back'), user_external_authors_path(@user) %></li>
+</ul>
 

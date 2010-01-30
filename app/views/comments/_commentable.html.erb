@@ -1,8 +1,17 @@
 <!-- Gets embedded anywhere we need to list comments on a top-level commentable. We need the local variable "commentable" here. -->
-<a name="comments"></a>
-<div id="feedback">
-  <ul class="navigation">
-    <%- if is_author_of?(commentable) && commentable.class == Work -%>
+<div id="feedback" role="complementary">
+	
+  <h3 class="landmark">Actions</h3>
+	<ul class="navigation" role="navigation">
+<!--note to BACK END: please refactor this so work_top_link works for Admin posts as well. Suggest possibly junking whole thing and just dropping a link to #main in. Supported in all major browser after NN4. Also please:
+if @admin_posts 
+<li>link_to 'Back to AO3 News Index', admin_posts_path</li>
+end
+-->
+<%- if @work -%>
+    <li><%= link_to t('works_top_link_text', :default => "&#8593; Top"), work_path(@work, :anchor => "top")%></li>
+<%- end -%>
+<%- if is_author_of?(commentable) && commentable.class == Work -%>
       <li id="add_collection_link"><%= collection_link(commentable) -%></li>
     <%- end -%>
     <%- if logged_in? && commentable.class != AdminPost -%>
@@ -14,14 +23,10 @@
     <li id="add_comment_link"><%= add_cancel_comment_link(commentable) -%></li>
 
   </ul>
-
   <!-- if we have javascript, here is where the collection window will pop up -->
-  <div id="dynamic-collection_item" style="display:none;">	
-  </div>
-
+  <div id="dynamic-collection_item" class="wrapper" style="display:none;"></div>
   <!-- if we have javascript, here is where the bookmark window will pop up -->
-  <div id="dynamic-bookmark" style="display:none;">	
-  </div>
+  <div id="dynamic-bookmark" class="wrapper" style="display:none;"></div>
   <%= flash_div :comment_error, :comment_notice -%>
   <!-- If we have javascript, here is where the Add Comment window will appear. -->
   <!-- If not, and we have params telling us to comment on this object, we will manually display the comment window. --> 
@@ -38,8 +43,9 @@
   <!-- If we have javascript, here is where the comments will be spiffily inserted -->
   <!-- If not, and show_comments is true, here is where the comments will be rendered -->
   <%- if params[:show_comments] -%>
-    <div id="comments_placeholder">
-      <%= render :partial => 'comments/comment_thread', :locals => { :comments => commentable.comments, :depth => 0 }%>
+    	<h3 class="landmark"><a name="comments">Comments</a></h3>
+		<div id="comments_placeholder">
+      <%= render :partial => 'comments/comment_thread', :locals => { :comments => commentable.comments, :depth => 0 }%></ol>
   <%- else -%>
     <div id="comments_placeholder" style="display: none;">
   <%- end -%>

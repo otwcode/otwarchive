@@ -1,7 +1,9 @@
-<h1><%=h 'Edit My Profile' %></h1>
-
+<!--Descriptive page name, messages and instructions-->
+<h2><%=h 'Edit My Profile' %></h2>
 <%= error_messages_for :user %>
+<!--/descriptions-->
 
+<!--main content-->
 <% form_for(@user) do |f| %>  
 	<!-- The password or OpenID login fields are shown in this div -->
 			<div id="switch_fields">
@@ -57,10 +59,10 @@
     <dt><%= p.label :date_of_birth, "Date of Birth" %></dt>
     <dd><%= p.date_select :date_of_birth, :start_year => 13.years.ago.year, :end_year => 90.years.ago.year, :include_blank => true %></dd>
     <dt><p><%= p.label :about_me, "About Me" %></p>
-    <p><code>a href, b, big, blockquote, br, caption, center, cite, code, col, colgroup, del, dd, dt, dl, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, ins, li, ol, p, pre, q, small, span, strike, strong, sub, sup, table, tr, td, th, tbody, thead, tfoot, u, ul</code></p>
     </dt>
-    <dd>
-      <%= p.text_area :about_me %>
+    <dd class="description">
+      <p><code>a href, b, big, blockquote, br, caption, center, cite, code, col, colgroup, del, dd, dt, dl, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, ins, li, ol, p, pre, q, small, span, strike, strong, sub, sup, table, tr, td, th, tbody, thead, tfoot, u, ul</code></p>
+<%= p.text_area :about_me %>
       <%= live_validation_for_field("profile_attributes_about_me", :presence => false, :maximum_length => Profile::ABOUT_ME_MAX) -%>
       <%= generate_countdown_html("profile_attributes_about_me", Profile::ABOUT_ME_MAX) -%>
     </dd>
@@ -73,3 +75,4 @@
   </p>
 <% end %>
 <hr class="clear" />
+<!--/content-->

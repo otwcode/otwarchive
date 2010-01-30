@@ -1,5 +1,5 @@
 <!-- Requires locals 'work' and 'chapter' -->
-<ul class="navigation">
+<ul class="navigation" role="navigation">
   <%- if work.number_of_posted_chapters > 1 -%>
     <%= next_and_previous_links_listitems(work, chapter) -%>
     <li><%= link_to t('control_view_entire_work', :default => 'View Entire Work'), work_path(work) %></li> 

@@ -1,15 +1,15 @@
-<%- form_for(@work, :html => {:name => "storyForm"}) do |f| -%> 
+<!--INVESTIGATE--><%- form_for(@work, :html => {:name => "storyForm"}) do |f| -%> 
 <p class="message">Please use this form to upload new work via the HTML or Rich Text editors. Use the <%= link_to 'Import Form', url_for(:controller => :works, :action => :new, :import => true) -%> to import works from an existing URL.</p>
   <p class="notice required"><%=h t('required', :default => '* Required information') %></p>
   <%= render :partial => 'work_tags_form', :locals => {:include_blank => false} -%>
   <fieldset>
     <legend><%= 'Work Preface' -%></legend>
     <dl class="preface">
-      <dt class="work-title">
+      <dt class="title">
         <%= f.label :title, t('add_title', :default => "Add Title*"), :class => "required" %>
 		<%= link_to_help "story-title" -%>
       </dt>
-      <dd class="work-title">
+      <dd class="title">
         <%= f.text_field :title, :class => "storyinputfield" %>
         <%= live_validation_for_field('work_title', 
 				      :maximum_length => ArchiveConfig.TITLE_MAX, :minimum_length => ArchiveConfig.TITLE_MIN, 
@@ -50,10 +50,10 @@
     
       <p class="label"><%=h t('add_notes', :default => "Add notes:") -%></p>    
      <dl class="preface">
-      <dt class="work-endnotes">
+      <dt class="endnotes">
         <%= f.label :storynotescheck, t('beginning_notes', :default => "at the beginning") %> 
       </dt>
-      <dd class="work-endnotes">
+      <dd class="endnotes">
        <input type="checkbox" id="storynotescheck" name="storynotescheck" onclick="showNotesOptions('work')" <%- unless @work.notes.blank? -%> checked="checked" <%- end -%> />   
        <span id="worknoteswarning" class="warning" <%- if @work.notes.blank? -%> style="display: none" <%- end -%>>
        <%=h t('worknotes_warning', :default =>"Warning: Unchecking this box will delete any existing beginning note.") %></span>
@@ -71,10 +71,10 @@
         </dl>
       </dd>
       
-      <dt class="work-endnotes">
+      <dt class="endnotes">
       <%= f.label :storyendnotescheck, t('end_notes', :default => "at the end") %> 
       </dt>
-      <dd class="work-endnotes">
+      <dd class="endnotes">
        <input type="checkbox" id="storyendnotescheck" name="storyendnotescheck"  onclick="showEndnotesOptions('work')" 
        <%- unless @work.endnotes.blank? -%>checked="checked"<%- end -%>/>
         <span id="workendnoteswarning" class="warning" <%- if @work.endnotes.blank? -%> style="display: none" <%- end -%>>

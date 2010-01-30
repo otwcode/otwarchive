@@ -1,12 +1,23 @@
+<!--Descriptive page name, messages and instructions-->
 <% if @user %>
 
-  <h1><%=h t('items.by_user', :default => "Items by {{login}} in Collections", :login => @user.login) -%></h1>
+  <h2><%=h t('items.by_user', :default => "Items by {{login}} in Collections", :login => @user.login) -%></h2>
+<!--/descriptions-->
+<!--subnav-->
+<!--/subnav-->
+
+<!--main content-->
   <table id="collection_items_table" summary="This table shows the items you have submitted to collections; you can approve or reject or remove them.">
   <caption><%=h t('ci_index.list', :default => "List of items in collections by {{user}}", :user => @user.login) -%></caption>  
 
 <% else %>
 
-  <h1><%=sanitize_title_for_display t('items.in_collection', :default => "Items in {{collection}}", :collection => link_to(@collection.title, @collection)) -%></h1>
+  <h2><%=sanitize_title_for_display t('items.in_collection', :default => "Items in {{collection}}", :collection => link_to(@collection.title, @collection)) -%></h2>
+<!--/descriptions-->
+<!--subnav-->
+<!--/subnav-->
+
+<!--main content-->
   <table id="collection_items_table" summary="This table shows the items in your collection; you can approve or reject or remove them.">
   <caption><%=h t('ci_index.list', :default => "List of items in {{collection}}", :collection => @collection.title) -%></caption>
 
@@ -48,4 +59,4 @@
 <%- end -%>
 </tbody>
 </table>
-
+<!--/content-->

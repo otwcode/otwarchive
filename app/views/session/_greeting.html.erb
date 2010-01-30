@@ -1,9 +1,7 @@
 <%- if logged_in? -%>
-  <ul id="greeting">
-    <li>
+  <p id="greeting">
       <%=h t('hi', :default => "Hi,") -%>&nbsp;<%= link_to current_user.login, user_path(current_user), :class => 'login' -%>!
-    </li>
-  </ul>
+    </p>
   <ul id="login">
     <li>
       <%= link_to t('post_new', :default => "Post New"), new_work_path -%>&nbsp;|

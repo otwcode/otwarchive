@@ -134,7 +134,7 @@ module ApplicationHelper
     unless column.nil?
       sort_dir_sym = "sort_direction_for_#{column}".to_sym
       sort_dir = params[sort_dir_sym] == 'ASC' ? 'DESC' : 'ASC'
-      link_to_unless condition, image_tag(sort_dir == 'ASC' ? 'arrow-up.png' : 'arrow-down.png') + " " + title, 
+      link_to_unless condition, (sort_dir == 'ASC' ? '&#8593;  ' : '&#8595;  ') + title, 
         request.parameters.merge( {:sort_column => column, sort_dir_sym => sort_dir} )
     else
       link_to_unless params[:sort_column].nil?, title, url_for(:overwrite_params => {:sort_column => nil})
@@ -177,10 +177,10 @@ module ApplicationHelper
   end
   
   def generate_countdown_html(field_id, max) 
-    generated_html = "<div class=\"character_counter\">"
+    generated_html = "<p class=\"character_counter\">"
     generated_html += "<span id=\"#{field_id}_counter\">?</span>"
     generated_html += countdown_field(field_id, field_id + "_counter", max) + " " + t('characters_left', :default => 'characters left')
-    generated_html += "</div>"
+    generated_html += "</p>"
     return generated_html
   end
   

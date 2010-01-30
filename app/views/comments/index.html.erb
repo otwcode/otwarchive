@@ -1,3 +1,4 @@
+<!--Descriptive page name, messages and instructions-->
 <%- if @commentable.nil? -%>
 	<!-- the most recent comments -->
 	<% cache('latest_comments') do -%>
@@ -13,6 +14,13 @@
 	<h2>
 	  <%=sanitize_title_for_display t('viewing_comments_on', :default => 'Viewing Comments on {{title}}', 
 	            :title => (@commentable.title.blank? ? "" : link_to(@commentable.title, @commentable))) %>
-	</h2>  
+	</h2> 
+<!--/descriptions-->
+
+<!--main content--> 
 	<%= render :partial => 'comments/comment_thread', :locals => { :comments => @comments, :depth => 0 } %>
 <%- end -%>
+<!--main content-->
+
+<!--subnav-->
+<!--/subnav-->

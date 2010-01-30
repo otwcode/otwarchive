@@ -12,7 +12,7 @@
 (that is, until you close your browser). If you are logged in you can set your preferences so that you are never asked.') %></p>
 
 <% if logged_in? %>
-<p class="message footnote">
+<p class="message footnote navigation">
   <%= link_to t('adult_set_preferences', :default => 'Set your preferences now.'), user_preferences_path(current_user) %>
 </p>
 <%- end -%> 

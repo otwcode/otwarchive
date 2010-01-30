@@ -1,5 +1,7 @@
+<!--Descriptive page name, messages and instructions-->
 <h2><%=h 'Tag Wrangling' %></h2>
 
+<!--main content-->
 <h3><%=h 'Mass Assign to Fandom (or Media)' %></h3>
 <ul>
 <% for category in (Tag::USER_DEFINED - ["Ambiguity"]) do %>
@@ -15,5 +17,5 @@
   <li><%= link_to_unless_current category, edit_tag_wrangling_path(category) %></li>
 <% end %>
 </ul>
-
+<!--/content-->
 <%= tag_wrangler_footer %>

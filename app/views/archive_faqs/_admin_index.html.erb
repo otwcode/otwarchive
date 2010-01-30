@@ -1,22 +1,28 @@
-<%= render :partial => 'admin/admin_nav' %>
+<!--Descriptive page name, messages and instructions-->
+<h2><%= t("archive_faq", :default => "Archive FAQ") -%></h2>
+<!--/descriptions-->
 
-<h1><%= t("archive_faq", :default => "Archive FAQ") -%></h1>
+<!--subnav-->
+<%= render :partial => 'admin/admin_nav' %>
 
 <%- if @archive_faqs.empty? -%>
 <ul class="navigation">
   	<li><%= link_to 'Create New Archive FAQ', new_archive_faq_path %></li>
 </ul>		
 <% end %>
+<!--/subnav-->
 
+<!--main content-->
 <% @archive_faqs.each do |archive_faq| %>
-  <ul class="navigation">
+  <h3 class="landmark">Actions</h3>
+	<ul class="navigation">
     <li><%= link_to "Show", archive_faq %></li>
     <li><%= link_to "Edit", edit_archive_faq_path(archive_faq) %></li>
     <li><%= link_to "Delete", archive_faq, :confirm => 'Are you sure?', :method => :delete %></li>
   </ul>
-  <div id="tos" class="work-show">
-    <h6>Updated at: <%=h archive_faq.updated_at %></h6>
+  <div class="user-generated-view" role="article">
+    <h4>Updated at: <%=h archive_faq.updated_at %></h4>
     <%= sanitize_and_format_for_display archive_faq.content %>
   </div>
 <% end %>  
-	
+<!--/content-->	

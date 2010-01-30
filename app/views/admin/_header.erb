@@ -1,5 +1,6 @@
 <!-- navigation tabs for admin users -->
-<ul class="main-navigation admin">
+<h3 class="landmark">Admins' Main Navigation</h3>
+<ul class="admin navigation" role="navigation">
 <li><%- if current_page?(admin_users_path) -%><span class="current"><%- end -%>
   <%= link_to_unless_current t('admin_header_users', :default => "users"), admin_users_path %>
 <%- if current_page?(admin_users_path) -%></span><%- end -%></li>

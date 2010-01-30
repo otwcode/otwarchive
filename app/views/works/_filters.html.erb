@@ -1,7 +1,8 @@
 <%- unless @filters.blank? && (@pseuds.size < 1 || (@user && @pseuds.size < 2)) -%>
-<%- form_tag( @collection ? collection_works_path(@collection) : works_path, :class => 'work-filters', :method => :get) do -%>
-  <%- field_set_tag t('filter_these', :default => 'Filter these results: ') + link_to_help("filters") do -%>
- 		<dl class="filters">
+<h3 class="landmark">Filters</h3>
+<%- form_tag( @collection ? collection_works_path(@collection) : works_path, :class => 'filters', :method => :get) do -%>
+  <%- field_set_tag t('filter_these', :default => 'Filter results:') + link_to_help("filters") do -%>
+ 		<dl class="filters" role="complementary navigation">
 			<%- unless (@pseuds.size < 1 || (@user && @pseuds.size < 2 && !@author)) -%>
         <dt onclick='toggleFilters("filter-pseuds")'>
           <span id="filter-pseuds_closed" style="display: none;"><%= image_tag 'arrow-right.gif', :alt => "" -%></span>
@@ -67,6 +68,7 @@
       <%= hidden_field_tag("pseud_id", @author.name) if @author %>
   		<%= hidden_field_tag("user_id", @user.login) if @user %>
 		</p>
+		<div class="clear"><!--purely presentational for IE6; phase me out--></div>
 		<p class="submit"><%= submit_tag t('filter_works', :default => 'Filter Works') %></p>
   <%- end -%>
   <%- end -%>

@@ -1,4 +1,4 @@
-<ul class="subnav">
+<ul class="navigation">
 <% if current_user.unposted_work && !params[:load_unposted] && !@use_import_form -%>
 	<li id='restore-link'><%= link_to 'Try To Restore From Last Unposted Draft?', url_for(:action => :new, :load_unposted => true) -%>
 	</li>

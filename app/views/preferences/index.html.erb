@@ -1,17 +1,24 @@
-<h1><%=h t('update_preferences', :default => 'Update My Preferences') %></h1>
-<ul class="navigation">
+<!--Descriptive page name, messages and instructions-->
+<h2><%=h t('update_preferences', :default => 'Update My Preferences') %></h2>
+<%= error_messages_for :preference %>
+
+<!--/descriptions-->
+
+<!--subnav-->
+<h3 class="landmark">Navigation</h3>
+<ul class="navigation" role="navigation">
 	<li><%= link_to t('edit_profile', :default => "Edit My Profile"), edit_user_path(@user) %></li>
 	<li><%= link_to t('manage_pseuds', :default => 'Manage My Pseuds'), user_pseuds_path(@user) %></li>
 	<li><%= link_to t('orphan_works', :default => 'Orphan My Works'), new_orphan_path %></li>
 </ul>
+<!--/subnav-->
 
-<%= error_messages_for :preference %>
-
+<!--main content-->
 <%- form_for(@preference, :url => { :action => "update", :user_id => @user }) do |f| -%>  
 		<ul>
     	<li>
     	  <%= f.check_box :history_enabled %> 
-    	  <%= f.label :history_enabled, t('enable_history', :default => "Enable Reading History") %>
+    	  <%= f.label :history_enabled, t('enable_history', :default => "Enable Viewing History") %>
     	</li>
    		
    		<li>
@@ -71,7 +78,7 @@
 
     	<li>
       	<%= f.check_box :recipient_emails_off %> 
-      	<%= f.label :recipient_emails_off, t('preferences.recipient_emails_off', :default => "Turn off gift story notification emails.") %>
+      	<%= f.label :recipient_emails_off, t('preferences.recipient_emails_off', :default => "Turn off gift work notification emails.") %>
     	</li>  	
 
       <li>
@@ -81,12 +88,12 @@
     	
       <li>
         <%= f.check_box :hide_private_hit_count -%>
-        <%= f.label :hide_private_hit_count, t('preferences.hide_private_hit_count', :default => "Don't show me hits on my stories.") -%>
+        <%= f.label :hide_private_hit_count, t('preferences.hide_private_hit_count', :default => "Don't show me hits on my works.") -%>
       </li>
     	
       <li>
         <%= f.check_box :hide_public_hit_count -%>
-        <%= f.label :hide_public_hit_count, t('preferences.hide_public_hit_count', :default => "Don't publicly display hits on my stories.") -%>
+        <%= f.label :hide_public_hit_count, t('preferences.hide_public_hit_count', :default => "Don't publicly display hits on my works.") -%>
       </li>
     	
     	<li>
@@ -104,6 +111,6 @@
   	</p>
 <%- end -%>
 <hr class="clear" />
-
+<!--/content-->
 
 

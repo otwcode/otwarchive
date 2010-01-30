@@ -1,14 +1,17 @@
 <div id="work-form">
 	<% form_for(@known_issue) do |f| %>
 	<%= f.error_messages %>
-	
-		    <%= f.label :title, t('form_title', :default => "Beta Revision"), :class => "required" %><br />
+	<fieldset>
+		<legend>Update Revision Number</legend>
+		    <p><%= f.label :title, t('form_title', :default => "Beta Revision"), :class => "required" %>
 		    <%= f.text_field :title %>
 		  </p>
+		</fieldset>
  <fieldset>
-	<p class="label">
+	<legend>Add known issue</legend>
+	<h3>
 	<%= f.label :content, t('form_content', :default => "Post most recent Known Issues content") %>
-    </p>
+    </h3>
   <div id="toggleText">
   <p id="plainTextNotes" style="display: block"><%=h t('plain_text', :default =>"Plain text with limited html") %> <%= link_to_help "html-help" -%><br/><code>a href, abbr, abbr, acronym, address, alt, b, big, blockquote, br, caption, center, cite, cite, class, code, col, colgroup, datetime, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, height, hr, href, i, img, ins, kbd, li, name, ol, p, pre, q, samp, small, span, src, strike, strong, sub, sup, table, tbody, td, tfoot, th, thead, title, tr, tt, u, ul, var, width</code></p>
   <p id="richTextNotes" style="display: none"><%=h t('rich_text_notes', :default => "Type or paste formatted text. Select the icon to the far left (clipboard with a 'W') to paste documents from Microsoft Word.") %></p>

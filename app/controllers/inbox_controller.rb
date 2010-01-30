@@ -8,7 +8,6 @@ class InboxController < ApplicationController
   end
   
   def show
-    @hide_dashboard = true 
     @inbox_total = @user.inbox_comments.count
     @unread = @user.inbox_comments.count_unread
     filters = params[:filters] || {}   

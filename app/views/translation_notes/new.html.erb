@@ -1,19 +1,30 @@
-<h1>New translation_note</h1>
+<!--Descriptive page name, messages and instructions-->
+<h2>New translation_note</h2>
+<!--/descriptions-->
 
+<!--subnav-->
+<!--/subnav-->
+
+<!--main content-->
 <% form_for(@translation_note) do |f| %>
   <%= f.error_messages %>
 
   <p>
-    <%= f.label :namespace %><br />
+    <%= f.label :namespace %>
     <p><%= f.select :namespace, @namespaces, :selected => @current_namespace %></p>
   </p>
   <p>
-    <%= f.label :note, 'Your notes:' %><br />
+    <%= f.label :note, 'Your notes:' %>
     <%= f.text_area :note %>
   </p>
-  <p>
+  <p class="submit">
     <%= f.submit "Create" %>
   </p>
 <% end %>
+<!--/content-->
 
-<%= link_to 'Back', translations_path %>
+<!--/subnav-->
+<ul class="navigation">
+	<li><%= link_to 'Back', translations_path %></li>
+</ul>
+<!--/subnav-->

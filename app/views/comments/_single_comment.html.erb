@@ -1,6 +1,5 @@
 <!-- START of single comment -->
-<div class="comment <%= cycle :odd, :even %>" id="comment_<%= single_comment.id -%>">
-  <a name="comment<%=single_comment.id %>"></a>
+<li class="comment <%= cycle :odd, :even %>" id="comment_<%= single_comment.id -%>" role="article">
   <%- if params[:edit_comment_id] && params[:edit_comment_id] == single_comment.id.to_s && is_author_of?(single_comment) -%>
     <!-- we're editing this comment -->
     <%= render :partial => 'comments/comment_form', 
@@ -9,26 +8,27 @@
     <%- if single_comment.is_deleted -%>
       <p>(<%=sanitize_whitelist t('single_comment_deleted_comment', :default => "previous comment by {{commenter}} deleted", :commenter => get_pseud_or_mailaddress(single_comment)) -%>)</p>
     <%- elsif single_comment.hidden_by_admin? && !logged_in_as_admin? -%>
-      <p>(<%=h t('single_comment_admin_review', :default => "This comment is under review by an admin and is currently unavailable.") -%>)</p>
+      <p class="message">(<%=h t('single_comment_admin_review', :default => "This comment is under review by an admin and is currently unavailable.") -%>)</p>
     <%- else -%>
       <%- unless single_comment.pseud.nil? -%>
-        <p><img class="icon" src="/images/icon_placeholder.png" alt="icon placeholder" /></p>
+        <div class="icon">&nbsp;</div>
       <%- end -%>
-      
-      <h3><%= get_pseud_or_mailaddress(single_comment) %></h3>
-      <%=sanitize_limit_and_format_for_display single_comment.content %>
-      <h4 class="datestamp">
+      	<!--title should be the first element in this list item, not icon. icon goes after name and before comment text-->
+      <h4><%= get_pseud_or_mailaddress(single_comment) %></h4>
+      <blockquote class="user-generated-view"><%=sanitize_limit_and_format_for_display single_comment.content %></blockquote>
+      <p class="datetime">
         <%=h t('single_comment_posted', :default => "Posted {{date}}", :date => l(single_comment.created_at)) %>
-      </h4>
+      </p>
       <%- unless single_comment.edited_at.blank? -%>
-        <h4 class="datestamp">
+        <p class="datetime">
           <%=h t('single_comment_edited', :default => "Last Edited {{date}}", :date => l(single_comment.edited_at)) %>
-        </h4>
+        </p>
       <%- end -%>
       
-      <ul class="">
+      <h5 class="landmark">Comment Actions</h5>
+		<ul class="navigation" role="navigation">
         <li id="add_comment_reply_link_<%= single_comment.id -%>"><%= add_cancel_comment_reply_link single_comment -%></li>
-        <li id="thread_link">(<%= link_to t('single_comment_thread_link', :default => "Thread"), single_comment -%>)</li>
+        <li><%= link_to t('single_comment_thread_link', :default => "Thread"), single_comment -%></li>
         <%- if is_author_of?(single_comment) && single_comment.count_all_comments == 0 -%>
           <li id="edit_comment_link_<%= single_comment.id -%>"><%= edit_comment_link single_comment -%></li>
         <%- end -%>
@@ -65,5 +65,5 @@
 
     <%- end -%>
   <%- end -%>
-</div>
+</li>
 <!-- END of single comment -->

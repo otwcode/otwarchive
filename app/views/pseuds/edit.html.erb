@@ -1,10 +1,18 @@
-<h1><%= t('editing_pseud', :default => 'Editing pseud') %></h1>
+<!--Descriptive page name, messages and instructions-->
+<h2><%= t('editing_pseud', :default => 'Editing pseud') %></h2>
+<%= error_messages_for :pseud %>
+<!--/descriptions-->
 
-<ul class="navigation">
+<!--subnav-->
+<ul class="navigation" role="navigation">
 	<li><%= link_to t('show_link', :default => 'Show'), [@user, @pseud] %></li>
 	<li><%= link_to t('index_link', :default => 'Back To Pseuds'), user_pseuds_path(@user) %></li>
 </ul>
+<!--/subnav-->
 
-<%= error_messages_for :pseud %>
+<!--main content-->
 <%= render :partial => 'pseuds_form', :locals => { :button_text => t('forms.update', :default => "Update") } %>
+<!--/content-->
 
+<!--subnav-->
+<!--/subnav-->

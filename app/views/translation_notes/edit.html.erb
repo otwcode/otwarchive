@@ -1,28 +1,39 @@
-<h1>Editing translation_note</h1>
+<!--Descriptive page name, messages and instructions-->
+<h2>Editing translation_note</h2>
+<!--/descriptions-->
 
+<!--subnav-->
+<!--/subnav-->
+
+<!--main content-->
 <% form_for(@translation_note) do |f| %>
   <%= f.error_messages %>
 
   <p>
-    <%= f.label :note %><br />
+    <%= f.label :note %>
     <%= f.text_area :note %>
   </p>
   <p>
-    <%= f.label :namespace %><br />
+    <%= f.label :namespace %>
     <%= f.text_field :namespace %>
   </p>
   <p>
-    <%= f.label :user %><br />
+    <%= f.label :user %>
     <%= f.text_field :user %>
   </p>
   <p>
-    <%= f.label :locale %><br />
+    <%= f.label :locale %>
     <%= f.text_field :locale %>
   </p>
-  <p>
+  <p class="submit">
     <%= f.submit "Update" %>
   </p>
 <% end %>
+<!--/content-->
 
-<%= link_to 'Show', @translation_note %> |
-<%= link_to 'Back', translation_notes_path %>
+<!--subnav-->
+<ul class="navigation" role="navigation">
+	<li><%= link_to 'Show', @translation_note %></li>
+	<li><%= link_to 'Back', translation_notes_path %></li>
+</ul>
+<!--/subnav-->

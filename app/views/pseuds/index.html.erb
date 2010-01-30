@@ -1,21 +1,26 @@
-<h1><%= t('pseuds_for', :default => "Pseuds for {{user}}", :user => @user.login) -%></h1>
+<!--Descriptive page name, messages and instructions-->
+<h2><%= t('pseuds_for', :default => "Pseuds for {{user}}", :user => @user.login) -%></h2>
+<!--/descriptions-->
 
+<!--subnav-->
 <% if current_user == @user -%>
 <ul class="navigation">
 <li><%= link_to t('new_pseud', :default => 'New Pseud'), new_user_pseud_path(@user) %></li>
 </ul>
 <% end -%>
-<ul class="pseuds-list">
+<!--/subnav-->
+
+<!--main content-->
+<dl class="pseud index">
   <% for pseud in @pseuds %>
-  <li>
-    <p class="pseud-name"><%=link_to pseud.name, [@user, pseud] %>
+  <dt><%=link_to pseud.name, [@user, pseud] %>
 <%- if pseud.is_default then %> (<%= t('default_pseud', :default => 'Default') %>) <% end %>
-    </p>
+    </dt>
     <%- unless pseud.description.blank? -%>
-      <p class="pseud-desc"><%= sanitize_description_for_display pseud.description %></p>
+      <dd><blockquote class="user-generated-view"><%= sanitize_description_for_display pseud.description %></blockquote></dd>
     <%- end -%>
       <% if current_user == @user -%>
-    <ul class="navigation">
+    <dd><ul class="navigation">
         <li><%= link_to t('edit_link', :default => 'Edit'), [:edit, @user, pseud] -%></li>
         <%- unless pseud.works.blank? %>
           <li><%= link_to t('orphan_link', :default => 'Orphan Works'), {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} -%></li>
@@ -23,15 +28,16 @@
         <% unless @user.login == pseud.name || pseud.is_default -%>
           <li><%= link_to t('delete_link', :default => 'Delete'), [@user, pseud], :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
         <% end -%>
-    </ul>
+    </ul></dd>
   <% end -%>
-  </li>
 <% end %>
-</ul>
+</dl>
+<!--/content-->
 
+<!--subnav-->
 <% if current_user == @user -%>
 <ul class="navigation">
 <li><%= link_to t('new_pseud', :default => 'New Pseud'), new_user_pseud_path(@user) %></li>
 </ul>
 <% end -%>
-
+<!--/subnav-->

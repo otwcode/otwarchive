@@ -1,9 +1,17 @@
-<h1><%= t("archive_faq", :default => "Archive FAQ") -%></h1>
-<div id="tos" class="work-show user-generated-view">
-			<h6>
-				<b>Updated:</b> <%=h @archive_faq.updated_at %>  
+<!--Descriptive page name, messages and instructions-->
+<h2><%= t("archive_faq", :default => "Archive FAQ") -%></h2>
+<!--/descriptions-->
+
+<!--subnav-->
+<!--/subnav-->
+
+<!--main content-->
+<div class="user-generated-view" role="article">
+			<h4>Updated:<%=h @archive_faq.updated_at %>  
 					<%- if logged_in_as_admin? -%>
 				    | <%= link_to 'Edit', edit_archive_faq_path(@archive_faq) %>
 				<%- end -%>
-			</h6>
+			</h4>
 	    <%=sanitize_and_format_for_display @archive_faq.content %>
+	
+	<!--/content-->

@@ -1,5 +1,11 @@
-<h1><%=h t('about', :default => "All Abuse Reports:") -%></h1>
+<!--Descriptive page names, messages and instructions-->
+<h2><%=h t('about', :default => "All Abuse Reports:") -%></h2>
+<!--/descriptions-->
 
+<!--subnav-->
+<!--/subnav-->
+
+<!--main content-->
 <table id="abuse_reports_table">
 <caption><%=h t('listing', :default => "Listing all the abuse reports made on the archive.") -%></caption>
 <tr>
@@ -15,7 +21,7 @@
   </tr>
   <%- end -%>
 </table>
-
-<div class="pagination">
+<!--/content-->
+<!--subnav-->
 	  <%= will_paginate @abuse_reports, :prev_label =>  "&laquo; " + t('pagination.previous', :default => "Previous"), :next_label => t('pagination.next', :default => "Next") + " &raquo;" %>
-</div>
+<!--/subnav-->

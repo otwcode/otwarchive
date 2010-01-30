@@ -1,4 +1,5 @@
-<h1><%= t('collections.new', :default => "New Collection") %></h1>
+<!--Descriptive page name and system messages, descriptions, and instructions.-->
+<h2><%= t('collections.new', :default => "New Collection") %></h2>
 
 <h3><%=h 'Suggestions' -%></h3>
 <ul>
@@ -12,16 +13,25 @@
       up one parent collection, set it to be closed (meaning that people can't
       add stories directly to the parent collection) and then add new subcollections 
       for each challenge.
-       
+   </li>
+    <li>
       If you limit membership for each challenge (eg, for a gift exchange), you can have people sign
       up for the subcollections separately. If you just want the whole thing moderated,
       you can have people sign up and be members of the parent collection, and then they will 
       be able to post in each subcollection automatically.
     </li>  
 </ul>
-  
-<%= render :partial => 'form' -%> 
+<!-- /descriptions-->
+<!--subnavgiation, sorting and actions-->
+<!--/subnav-->
 
-<ul class="navigation">
+<!--main content-->
+<h3 class="landmark">New Collection Form</h3>
+<%= render :partial => 'form' -%> 
+<!--/content-->
+
+<!--subnav-->
+<ul class="navigation" role="navigation">
 <li><%= link_to 'Back', collections_path %></li>
 </ul>
+<!--/subnav-->

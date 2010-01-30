@@ -1,5 +1,11 @@
-<h1><%=h 'New series' %></h1>
+<!--Descriptive page name, messages and instructions-->
+<h2><%=h 'New series' %></h2>
+<!--/descriptions-->
 
+<!--subnav-->
+<!--/subnav-->
+
+<!--main content-->
 <% form_for(@series) do |f| %>
   <%= f.error_messages %>
 
@@ -7,7 +13,10 @@
     <%= f.submit "Create" %>
   </p>
 <% end %>
+<!--/content-->
 
+<!--subnav-->
 <ul class="navigation">
 <li><%= link_to 'Back', series_path %></li>
 </ul>
+<!--/subnav-->

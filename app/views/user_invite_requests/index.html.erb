@@ -1,26 +1,37 @@
-<h1>User invite requests</h1>
+<!--Descriptive page name, messages and instructions-->
+<h2>User invite requests</h2>
 
 <p>Enter "0" under quantity to deny the request. Clear the box to delay your decision for now.</p>
+<!--/descriptions-->
 
+<!--main content-->
 <%- form_tag url_for(:controller => 'user_invite_requests', :action => 'update') do -%>
-<p><%= submit_tag "Update" %></p>
-<table>
-  <tr>
-    <th>User</th>
-    <th>Reason</th>
-    <th>Quantity</th>
-    <th>Created at</th>
-  </tr>
-
-  <% @user_invite_requests.each do |request| %>
-  <tr>
-    <td><%= link_to request.user.login, request.user %></td>
-    <td><%=h request.reason %></td>
-    <td><%= text_field_tag "requests[#{request.id}]", request.quantity, :size => 2 %></td>
-    <td><%=h request.created_at %></td>
-  </tr>
+<table summary="This table shows requests from users for invites, with their given reasons. You can allot invites to individuals under the heading Quantity">
+	<caption>Allot invites to users</caption>
+	<thead>
+		<tr>
+    		<th scope="col">User</th>
+    		<th scope="col">Reason</th>
+    		<th scope="col">Quantity</th>
+    		<th scope="col">Created at</th>
+  		</tr>
+	</thead>
+  	<tbody>
+	<% @user_invite_requests.each do |request| %>
+  		<tr>
+    		<td><%= link_to request.user.login, request.user %></td>
+    		<td><%=h request.reason %></td>
+    		<td><%= text_field_tag "requests[#{request.id}]", request.quantity, :size => 2 %></td>
+    		<td><%=h request.created_at %></td>
+  		</tr>
   <% end %>
+	</tbody>
+	<tfoot>
+		<tr>
+			<th scope="row" colspan="3">Submit:</th>
+			<td class="submit"><%= submit_tag "Update" %></td>
+		</tr>
+	</tfoot>
 </table>
-
-<p><%= submit_tag "Update" %></p>
 <%- end -%>
+<!--/content-->
