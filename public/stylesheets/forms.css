@@ -1,18 +1,45 @@
 /* GLOBAL */
-form fieldset legend, legend { height:0 !important; font-size:0; color:#fffef9;}
-form p.submit { text-align:right; }
+/*form buttons (input, button, are currently styled the same as navigation and sorting buttons, in site-chrome.css)*/
+form fieldset legend, legend { height:0; width:0; font-size:0; color:#fffef9;}
+form input {font-size: 1em;}
+form p.submit, input.submit { text-align:right; }
 form p { line-height:2; clear:both;}
 form dl { position:relative; }
 form dt { float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
 form dd { float: left;}
-form .submit input {background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px solid #222; width:auto;}
+form code { display:block;}
+p.character_counter { font-size:85.7%; color:#666; display:inline; position:relative;}
+.character_counter span { display:inline-block; width: 3.75em; text-align:right ;}
 
-.character_counter { font-size:smaller; color:#666; display:inline;}
+/*DASHBOARD */
+.sidebar form {float:left}
 
-/* This is a temporary hack for editing multiple works. Fix it to work properly later. */
-form p.temp-hack {clear: none;}
-/* end of silly hack */
-/* kludge for fixing invitations page. Fix me later, too! */
+/*DASHBOARD: EDIT MULTIPLE WORKS */
+ p.buttons {text-align:center;}
+ form .edit-multiple-controls p.submit { text-align: left; clear: none;}
+
+/*DASHBOARD: EDIT PREFERENCES */
+ form.edit_preference ul { margin:0.562625em auto 1.12525em auto; padding:0.562625em 0; border-bottom:1px dashed;}
+ .edit_preference li { margin:0.562625em 0;}
+
+/*DASHBOARD: EDIT PROFILE*/
+ #main.users-edit form dl {margin: 0 auto;}
+ #main.users-edit dt	{ width:12em; }
+ #main.users-edit dd.description {float:none;}
+ #main.users-edit textarea#profile_attributes_about_me { height:12em; width:99%; }
+ #main.users-edit hr.clear {margin-top:39em;}
+ #main.users-edit #link_to_openid, #main.users-edit #link_to_passwd {clear:both; margin:0 0.25em 0.5625em 11.125em; font-size:1.125em;}
+
+/* DASHBOARD: PSEUD EDIT/NEW FORMS */
+#main .pseud-edit .pseud-name div.character_counter { width: 20em; }
+
+/* DASHBOARD: INBOX */
+#inbox-form {width:72.5%;}
+
+/*DASHBOARD: REQUEST INVITES */
+#new_user_invite_request textarea {width:99%;}
+
+/* kludge for fixing invitations page. Fix me later, too! INVESTIGATE */
 .invitations-index form dt, .invitations-index form p { clear: none; width: 20%;}
 .invitations-index form dd { width: 75%}
 .invitations-index p.submit {clear:both; width: 100%;}
@@ -20,41 +47,31 @@ form p.temp-hack {clear: none;}
 
 /* SIGN IN BOX */
 #signin p { display:inline;}
-#signin p.footnote	{ font-size:smaller;  padding:0.125em 0 0 .125em;}
+#signin p.footnote	{ font-size:85.7%;  padding:0.125em 0 0 .125em;}
 #signin input#remember_me	{ margin:0.125em 0.125em 0.125em 0; vertical-align:middle; }
 img#openid	{ margin-left:-20px; vertical-align:middle; }
-
 /* sign in box when present in #header #login-block */
-#header #signin { text-align:right;}
-#header #signin form { background: url(/images/header-red.png) bottom left repeat-x #777; margin:-1.5em -0.25em 1em;padding:0.25em; border:1px groove #500000}
-#header input { background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px groove; }
-#header input:hover { background:#ddd; }
+#header #signin form { background: url(/images/header-red.png) bottom left repeat-x #777; margin:-1.5em -0.25em 1em;padding:0.25em; border:1px groove #500;}
+#header #signin p.submit, #header #signin .submit input {padding:0.15em; border:0; line-height:1;}
 
 /*SESSIONS (front front pages - login, create, etc)*/
 .session form {padding-top:1.5em;margin-bottom:1.5em; padding-bottom:1.5em; border-bottom:1px solid; }
 .session form p, .session input#login, .session input#password, .session input#openid_url {float:none; display:block !important;margin:0 0 0.875em 0; width:24em;}
 .session input#openid_url, .session form img {display:inline;}
-.session form p.submit {margin:-2em auto 0 auto !important;}
-.session form .footnote	{ font-size:.875em !important;}
-.session form p.openid {margin-top:2em !important;}
+#main.session #signin form p.submit {margin:-2em auto 0 auto; width:6em; float:right;}
+#main.session #signin form p.openid {margin-top:2em }
 
 #main.users-new form dt {width:100%; float:none;}
 #main.users-new form dl {position: static;}
+#main.users-new #tos-partial {height: 10em; overflow:auto; border: 1px solid}
 
 /* SEARCH */
-#header #search {float:right;clear:right;}
-#header #search p {float: left; clear: both; position:relative;}
+#search {float:right;clear:right;}
 #search p { font-size: 0.75em; padding: 0 0.25em; margin: 0; }
-#search input.button {margin-left:5px;}
-
-/* ADVANCED SEARCH */
-#standard_search input { background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px groove; }
-#advanced_search input { border:1px groove; }
-#advanced_search input  .button{ background:url(/images/ccc-fff.png) top left repeat-x #fff; border:1px groove; }
 
 /*ADMIN */
 .admin_session-new dt { width:12em; padding-top:0.5em;}
-.admin_session-new form {width: 50%; margin:auto; border:1px solid #ddd; padding:0.25em;}
+.admin_session-new form {width: 50%; margin:auto; padding:0.25em;}
 .admin_users-notify dd {width:40%;}
 .admin_users-notify input {width:100%;}
 .admin_users-notify textarea {height:20em; width:100%;}
@@ -65,7 +82,7 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 /*ABUSE, FEEDBACK */
 #main.abuse_reports-new dt, form#new_feedback dt, form#new_feedback dd { width:100%; float:none;}
 #new_feedback p.submit {text-align: left;}
-
+.feedbacks-new form p.message { clear: both; }
 
 /* POST WORK */
 /*work-meta  and work-show rules in story-views.css */
@@ -120,48 +137,25 @@ dd#seriesmanage {clear:both; float:none;}
 #main.chapters-new.chapter_title input { width:80%; }
 #main.chapters-new dt, #main.chapters-new dd {clear:both; width:100%;}
 #main.chapters-new dd textarea {width:99%;margin:auto;}
+#main.chapters-new #chapter-ordering select {width:30%; float:left;}
 
-/*EDIT MULTIPLE WORKS */
-p.buttons {text-align:center;}
-form .edit-multiple-controls p.submit { text-align: left; clear: none;}
-
-/*EDIT PREFERENCES */
-form.edit_preference ul { margin:0.562625em auto 1.12525em auto; padding:0.562625em 0; border-bottom:1px dashed;}
-.edit_preference li { margin:0.562625em 0;}
-
-/*EDIT PROFILE*/
-#main.users-edit form { float: left; }
-#main.users-edit form dl {margin: 0 auto;}
-#main.users-edit dt	{ width:12em; }
-#main.users-edit textarea#profile_attributes_about_me { height:12em; }
-#main.users-edit hr.clear {margin-top:39em;}
-#main.users-edit #link_to_openid, #main.users-edit #link_to_passwd {clear:both; margin:0 0.25em 0.5625em 11.125em; font-size:1.125em;}
-
-/* PSEUD EDIT/NEW FORMS */
-#main div.pseud-edit {float: left }
-#main .pseud-edit .pseud-name div.character_counter { width: 20em; }
-
-/*WORKS-INDEX -filters*/
-form.work-filters	{ background:#ddd; font-size:0.875em; width:12.25em; float:right;  padding:0.75em 0.5625em; max-width: 20%; }
-form.work-filters legend { color:#111; height:auto; font-size:1em; line-height:1.2;}
-form.work-filters dt, form.work-filters dt { float: none; width: auto; clear:both;}
-form.work-filters a {float: right; margin-top: -1.25em;}
-.filters dt	{ font-weight: 600; text-transform: capitalize; margin:0.5625em auto 0; padding:0; border-bottom:1px solid #fffef9; }
+/*FILTERS*/
+form.filters	{ margin: 0.5em auto; width:12.25em; max-width:20%; padding:0.75em 0.5625em; float:right; border: 2px solid #ddd; background: #eee;}
+.filters legend	{font-size: 1em; color:#111; height:1.5em; width: auto;}
+.filters a 		{ float: right; margin-top: -1.25em;}
+.filters legend a {float:none; margin:0 }
+form.filters dt	{ background: #eee; font-weight: 600; text-transform: capitalize; margin:0.5625em auto 0; padding:0; font-size: 0.875em; float: none; width: auto; clear:both;}
 .filters dd {padding:0;}
 .filters dt:hover	{ color:#fffef9; background:#777; } 
-.filters span {font-size: 0.75em; font-weight: 500;}
-.filters p.submit {font-size:0.75em;}
+.filters span {font-weight: 500;}
+.filters dd label {font-size:0.8575em;}
 
-/*COMMENTS */
-#comment_form_div dt	{ width:6em; }
-#comment_form_div dd { min-width:32em !important; width: 70% !important; margin: .3em 0}
-#comment_form_div dd p.instructions {margin: 0; font-size: 80%}
-textarea#comment_content	{ min-width:32em !important; width: 100% !important; height:11em !important}
-#comment_form_div p.submit		{ width: 70%; margin-left: 7.5em;}     
-
-/* INBOX */
-.inbox-show form p { clear: right; }
-#inbox-form .comment { margin-bottom: 2em;}
+/*COMMENT */
+#comment_form .instructions {font-size: 0.8575em;}
+#comment_form dd.module {width:70%; margin-top:-0}
+textarea#comment_content {width:99%; height:12em;}
+#feedback li dl{ font-size:1.142857em; } 
+#new_comment {clear:right; margin-top:1.5em;}   
 
 /*TAG WRANGLINGS*/
 form#wrangle-select-fandom p, form#wrangle-select-media p{ display:inline; margin-right:0.5625em;}
@@ -171,9 +165,18 @@ form#wrangle-select-fandom p, form#wrangle-select-media p{ display:inline; margi
 
 /* GLOBALIZE (in footer) you can find this in globalize.css*/
 
-/* BOOKMARKS */
+/* BOOKMARKING */
+#dynamic-bookmark { position: absolute;  z-index: 40; }
+#dynamic-bookmark #bookmark-form { border: 2px solid; height: 26em; width: 36em; padding: 1em; overflow:auto; }
+#dynamic-bookmark p#close-popup {top:0; right:2em; position:absolute; z-index:60;}
+#bookmark-form h4 {margin:auto;}
 #bookmark-form dd { margin-top: 0; padding:0.25em 0.5625em 0.25em 0;}
-#bookmark-form fieldset { background:#fffef9; font-size:0.875em; margin: 0.5625em 0; padding:0.375em 1.5em; border:1px solid #bbb; clear:both; }
+#bookmark-form fieldset { background:#fffef9; font-size:0.875em; margin: 0.5625em 0; padding:0.375em 1.5em; border:1px solid #bbb; clear:both; width:inherit}
+#bookmark-form p.character_counter {display:block; text-align:right}
+#bookmark-form p label {padding-right: 2em;}
+#bookmark-form input#tag_string, #bookmark-form textarea {width:99%;}
+
+#dynamic-collection_item 		{ background: #fffef9; border: 2px solid; bottom: 2em; height: 8em; padding: 1em 2em; position:absolute; z-index: 42 }
 
 /*COLLECTIONS, CREATE, similar complex forms*/
 form.new_collection fieldset,  form.new_user fieldset {border:1px solid #ddd; padding:0.5em; margin:1em auto;}

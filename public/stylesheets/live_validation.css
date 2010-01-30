@@ -1,6 +1,5 @@
 .LV_validation_message{
     font-weight:bold;
-    margin:0 0 0 0.375em;
 }
 
 .LV_valid {
@@ -13,7 +12,7 @@
     
 input.LV_valid_field:hover, 
 input.LV_valid_field:active {
-    border: 1px solid #0c0;
+    outline: 3px solid #0c0;
 }
     
 .LV_invalid_field, 

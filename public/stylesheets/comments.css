@@ -1,4 +1,4 @@
-#feedback .navigation, .comment .navigation {text-align:right;}
+
 
 div.comment {
     position: relative;
@@ -11,7 +11,7 @@ div.comment {
     margin: 0 0.5625em 0.5625em 0;
 }
 
-h4.datestamp {
+.datetime {
     font-size: 0.75em;
     text-align: right;
 	clear: left;

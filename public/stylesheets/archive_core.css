@@ -1,13 +1,8 @@
 /*MEYERS RESET.***********************************************do not edit */
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, 
-p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, 
-em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, 
-dl, dt, dd, ol, ul, li, fieldset, form, label, legend, 
-table, caption, tbody, tfoot, thead, tr, th, td	
-{ border: 0; outline: 0; font-weight: inherit; font-style: inherit; font-size: 100%; font-family: inherit; vertical-align: baseline; list-style: none; margin: 0; padding: 0; }
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td	{ border: 0; outline: 0; font-weight: inherit; font-style: inherit; font-size: 100%; font-family: inherit; vertical-align: baseline; list-style: none; margin: 0; padding: 0; }
 /************************************************end of uneditable rules */
 
-/* GLOBAL RULES. 
+/* This sheet sets out the GLOBAL RULES that apply to all content. Brand font is declared in font.css. The site chrome is laid out in site-chrome.css. Forms are laid out in forms.css. User-generated content from textarea inputs are laid out in user-generated-views.css. A brief style guide follows:
 See internal wiki "Em scale" to grok the font sizing and measures. #main p set to 14px.
 Colours:
 red:	#900 (otw brand red)
@@ -17,78 +12,57 @@ greys:	#ddd, #ccc, #bbb, #999, #777, #333 (borders, backgrounds, reverse text)
 plus system messages in system-messages.css (red, yellow, green, blue)
 */
 
-/* Fertigo by Jos Buivenga (exljbris) -> www.exljbris.nl */
-@font-face {
-	  font-family: "Fertigo";
-	  src: url(Fertigo.otf)
-	  	  format("opentype");
-}
+body					{ background: #fffef9; color: #222; font: 100%/1.125 'Lucida Grande', Verdana, Helvetica, Arial, sans-serif; }
 
-body	{ background: #fffef9; color: #222; font: 100%/1.125 'Lucida Grande', Verdana, Helvetica, Arial, sans-serif; }
-
-a, a:link	{ color: #111; }
-a:hover	{ color: #999; }
-a:active, a:focus { text-decoration:overline underline; border:1px dotted;}
-a:visited	{ color: #777; }
-a img	{ border: 0; }
-a.tag	{ color: #111; text-decoration:none; padding: 0 0.125em; border-bottom:1px dotted; }
-a.tag:hover	{ background: #900 !important; color: #fffef9 !important; }
+a, a:link				{ color: #111; text-decoration: none; border-bottom: 1px solid;}
+a.tag, .tags a			{ color: #111; text-decoration:none; padding: 0 0.125em; border-bottom:1px dotted; }
+a:visited				{ color: #777; text-decoration: none; border-bottom: 1px solid;}
+a:hover					{ color: #999; }
+a.tag:hover				{ background: #900; color: #fffef9; }
+a:active, a:focus 		{ outline:1px dotted;}
+a img					{ border: 0; }
 
 /*EM SCALE */
-#main p	{ font-size: 0.875em; line-height: 1.286; margin: 0.643em 0; }
-#main li, #main dd {font-size: 0.875em; line-height: 1.286; margin: 0.643em 0;} 
-/* probably should be #main span and #main div as well, but that'll need thorough testing */ 
-/* span or div do not need sizing as text inside would be enclosed in a block element: p, li, dd . lim*/
+#main p					{ font-size: 0.875em; line-height: 1.286; margin: 0.5em 0; }
+#main li, #main dd 		{ font-size: 0.875em; line-height: 1.286; margin: 0.5em 0; } 
+/*sizing up and down through multiple nested lists, this could be streamlined somewhat*/
+#main dl dd dl dd p, #main dl dd dl dd, #main dd dl dd p, #main dd dl dd dl dd p { font-size:1.142857em; }
+#main li li, #main li li dd, #main li p, #main li dd, #main li dd p, #main dd p, #main dd li, #main dd li p, #main dd dl dd dl dd p, #main dd dl dd dl dd ul li, #main dd dl dd dl dd ul li p, #main dl dd dl dd, #main dl dd dl dd p, #main dl dd dl dt, #main li li dl dt, #main li code, #main dd code { font-size:1em; }
 
-/*sizing up and down through multiple nested lists*/
-#main dl dd dl dd p, #main dl dd dl dd, #main dd dl dd p, #main dd dl dd dl dd p
-{ font-size:1.142857em; }
-#main li li, #main li li li, #main li p, #main li dd, #main li dd p, #main dd p, #main dd li, #main dd li p, 
-#main dd dl dd dl dd p, #main dd dl dd dl dd ul li, #main dd dl dd dl dd ul li p 
-{ font-size:1em; }
-#main dl dd dl dd p
-{font-size: 0.875em;}
+h1, h2, h3, h4, h5, h6	{ font-family: FertigoProRegular, Cambria, Constantia, Palatino, Georgia, sans-serif; font-weight: 400;}
+h1						{ font-size: 2.25em; line-height: 1; margin: 0.5em 0; }
+h2						{ font-size: 1.5em; line-height: 1; margin: .643em 0; }
+h3						{ font-size: 1.125em; line-height: 1; margin: 1em 0; }
+h4						{ font-size: 1em; line-height: 1.125; margin:1.138889em 0; }
+h5						{ font-size: 0.875em; line-height: 1.1286; margin:0.643em 0; }
+h6						{ font-size: 0.75em; line-height: 1.5; margin: 1.5em 0; }
 
-h1, h2, h3, h4, h5, h6	{ font-family: Fertigo, Cambria, Constantia, Palatino, Georgia, sans-serif; font-weight: 400;}
-h1	{ font-size: 2.25em; line-height: 1; margin: 1.125em 0 0.875em; }
-h2	{ font-size: 1.5em; line-height: 1; margin: .75em 0; }
-h3	{ font-size: 1.125em; line-height: 1; margin: .5625em 0; }
-h4	{ font-size: 1em; line-height: 1.125; margin:0.5625em 0; }
-h5	{ font-size: 0.75em; line-height: 1.5; margin: .375em 0; }
-h6	{ font-size: 0.625em; line-height: 1.8; margin: .3125em 0; }
+hr						{ margin: 0.75em auto; border:0; border-bottom: 3px double; }
+.clear					{ clear: both; height: 0; border: 0; margin:0; background:transparent; color:#fffef9;}
 
-h3.landmark {font-size:0 !important; color:#fffef9;}
-
-hr	{ margin: 0.75em auto; border:0; border-bottom: 3px double; }
-hr.clear, .clearboth, .clear	{ clear: both; height: 0; border: 0; margin:0; background:transparent; color:#fffef9;}
-
-blockquote, pre	{ font: 100 1em/1.125 Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; margin: 1.5em; }
-kbd, tt, code	{ font: normal 0.75em consolas, courier, monospace; margin: auto; padding: 0.25em; }
-pre { white-space: pre; }
-strong, b, .important	{ font-weight: 900; }
-em, cite, i	{ font-style: oblique; }
-cite em, em cite, cite i, i cite, i em, em i, em em, i i, cite cite	{ font-style: normal; }
-em cite, i cite	{ text-decoration: underline; }
-abbr, acronym	{ font-variant: small-caps; cursor: help; }
-del, strike {text-decoration:line-through;}
-ins, u {text-decoration: underline;}
-big { font-size: larger;}
-small, sub, sup { font-size: smaller;}
-sub { vertical-align: sub;}
-sup { vertical-align:super;}
+blockquote, pre			{ font: 100 1em/1.125 'Lucida Grande', Verdana, Helvetica, Tahoma, Arial, sans-serif;  margin: 1.5em; }
+kbd, tt, code, var		{ font: normal 0.75em consolas, courier, monospace; margin: auto; padding: 0.25em; }
+p code, dd code, li code{ font-size: 0.98em;}
+pre 					{ white-space: pre; }
+strong, b, .important	{ font-weight: bolder; }
+em, cite, i				{ font-style: oblique; }
+cite em, em cite, cite i, i cite, i em, em i, em em, i i, cite cite	
+						{ font-style: normal; }
+em cite, i cite			{ text-decoration: underline; }
+dfn, abbr, acronym		{ font-variant: small-caps; cursor: help; }
+del, strike 			{ text-decoration:line-through;}
+ins, u 					{ text-decoration: underline;}
+big 					{ font-size: larger;}
+small, sub, sup 		{ font-size: smaller;}
+small small small small { font-size: 100%;}
+sub 					{ vertical-align: sub;}
+sup 					{ vertical-align:super;}
 
 /* TABLES AND LISTS */
-table	{ margin:auto; padding: 0.375em; width:99%;}
-caption	{ font-size:0; color:#fffef9; }
-caption, th, td	{ text-align: left; }
-th, thead td { background:#777; color:#fff; font-weight: 100; padding: 0.25em;}
-tfoot {margin: 0.875em auto;}
-td th	{ padding-right: 3em; }
-td	{ padding:0.375em; border:1px solid #ddd;}
-
-th a, th a:link	{ color: #fff; }
-th a:visited	{ color: #ddd; }
-th a:hover	{ color: #900; }
-
-/* Allow bulleted lists for Admin news posts */
-#lists-allowed  ul, #lists-allowed ul ul {padding-left: 2em !important;}
+table					{ margin:auto; padding: 0.375em; width:99%;}
+caption					{ font-size:0; color:#fffef9; }
+caption, th, td			{ text-align: left; }
+th, thead, tfoot 		{ background:#ddd; padding: 0.25em; font-family: FertigoProRegular, Cambria, Constantia, Palatino, Georgia, sans-serif; font-weight: 400;}
+tfoot 					{ margin: 0.875em auto;}
+td th					{ padding-right: 3em; }
+td						{ padding:0.375em; border:1px solid #ddd;}

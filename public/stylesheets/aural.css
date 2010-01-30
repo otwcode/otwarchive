@@ -8,7 +8,7 @@ strong, .warning {
 voice-stress: strong;
 }
 cite {
-voice-rate: 90%;
+voice-rate: 95%;
 }
 acronym {
 speak: spell-out;
@@ -17,25 +17,34 @@ abbr {
 content: attr(title);
 }
 code, kbd, tt {
-voice-rate: 90%;
+voice-rate: 95%;
 }
 
-.work-show {
+.user-generated-view {
 speak-numeral: continuous;
 }
 
-.work-show work-meta {
+.meta {
 voice-rate: 110%;
 }
 
-.work-show h1, .work-show h2.chapter-title {
-voice-rate: 90%;
+.blurb {
+voice-rate: 105%;
 }
 
-.work-show dt {
+.user-generated-view h1, .user-generated-view h2.title {
+voice-rate: 90%;
+pause: 5ms 10ms;
+}
+
+.chapter {
+	pause: 10ms 10ms;
+}
+
+.user-generated-view dt {
 voice-balance: leftwards;
 }
-.work-show dd {
+.user-generated-view dd {
 voice-balance: rightwards;
 }
 
@@ -47,7 +56,8 @@ speak: no-punctuation;
 /*SAY-INSTEAD DRAFTS 
 
 [recs] say-instead: "wrecks";
-acronym[ToS] say-instead: "toss"; */
+acronym[ToS] say-instead: "toss"; 
+[TOSd] say*/
 
 
 
