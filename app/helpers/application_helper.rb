@@ -134,7 +134,7 @@ module ApplicationHelper
     unless column.nil?
       sort_dir_sym = "sort_direction_for_#{column}".to_sym
       sort_dir = params[sort_dir_sym] == 'ASC' ? 'DESC' : 'ASC'
-      link_to_unless condition, (sort_dir == 'ASC' ? '&#8593;  ' : '&#8595;  ') + title, 
+      link_to_unless condition, (sort_dir == 'ASC' ? '<span>&#8593;  ' : '<span class="current">&#8595;  ') + title + '<span>', 
         request.parameters.merge( {:sort_column => column, sort_dir_sym => sort_dir} )
     else
       link_to_unless params[:sort_column].nil?, title, url_for(:overwrite_params => {:sort_column => nil})

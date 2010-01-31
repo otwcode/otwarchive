@@ -67,7 +67,7 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 
 /* SEARCH */
 #search {float:right;clear:right;}
-#search p { font-size: 0.75em; padding: 0 0.25em; margin: 0; }
+#search p { font-size: 0.8575em; padding: 0 0.25em 0 0; margin: 0; }
 
 /*ADMIN */
 .admin_session-new dt { width:12em; padding-top:0.5em;}

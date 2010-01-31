@@ -29,18 +29,18 @@
         <dt><%= t('cast_tags', :default => 'Cast') + ': ' %></dt>
   			<dd><ul><li><%= cast_tags.collect{|tag| link_to_tag(tag)  }.join(', </li><li>') %></li></ul></dd>
   			<%- end -%>
-
+<!--BACK END: this has no tag show toggle as opposed to work blurb. can this be fixed?-->
         <%- unless warning_tags.size < 1 -%>
         <dt><%= link_to("Archive Warnings", tos_faq_path(:anchor => "tags")) %>:</dt>
   			<dd><ul id="work_<%= work.id %>_category_warning">
-          <li><%= warning_tags.collect{|tag| link_to_tag(tag) }.join(', </li><li>') %></li>
+          <li class="warnings"><%= warning_tags.collect{|tag| link_to_tag(tag) }.join(', </li><li class="warnings">') %></li>
   			</ul></dd>
   			<%- end -%>
 
   			<%- unless freeform_tags.size < 1 -%>
         <dt title="Genre, Warnings, Other Information"><%= t('work_tags', :default => 'Additional Tags') + ':' %></dt>
   			<dd><ul id="work_<%= work.id %>_category_freeform">
-          <li><%= freeform_tags.collect{|tag| link_to_tag(tag) }.join(', </li><li>') %></li>
+          <li class="freeform"><%= freeform_tags.collect{|tag| link_to_tag(tag) }.join(', </li><li class="freeform">') %></li>
   			</ul></dd>
   			<%- end -%>
         </dl>
