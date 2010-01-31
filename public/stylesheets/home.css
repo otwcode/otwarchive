@@ -19,6 +19,11 @@ min-height: 70px;
 position: relative;
 border-bottom: 2px solid #000;
 }
+#home-header #login-block 
+{  
+width:17.75em;	
+float:right;
+}
 #home-header  h1 , #home-header h2 {
 font-family: Fertigo, Cambria, Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif;
 margin: 0;
