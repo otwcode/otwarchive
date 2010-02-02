@@ -10,6 +10,7 @@ class Bookmark < ActiveRecord::Base
   default_scope :order => "bookmarks.id DESC" # id's stand in for creation date
   
   named_scope :public, :conditions => {:private => false, :hidden_by_admin => false}
+  named_scope :not_public, :conditions => {:private => true}
   named_scope :since, lambda { |*args| {:conditions => ["bookmarks.created_at > ?", (args.first || 1.week.ago)]} }
   named_scope :recent, :limit => ArchiveConfig.SEARCH_RESULTS_MAX
   named_scope :recs, :conditions => {:rec => true} #must come before visible in the chain

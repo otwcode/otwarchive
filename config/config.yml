@@ -84,8 +84,6 @@ SEARCH_RESULTS_MAX: 1000
 
 # LEGACY - will be removed after beta has been migrated and the migrations reset
 DEFAULT_CATEGORY_NAME: 'default'
-AMBIGUOUS_CATEGORY_NAME: 'ambiguous'
-
 
 # Tag kinds and default tags
 WARNING_CATEGORY_NAME: 'Archive Warning'
@@ -123,7 +121,6 @@ CHARACTER_CATEGORY_NAME: 'Character'
 FREEFORM_CATEGORY_NAME: 'Additional Tags'
 COMMON_CATEGORY_NAME: 'Common'
 BANNED_CATEGORY_NAME: 'Banned'
-AMBIGUOUS_CATEGORY_NAME: 'Ambiguous'
 
 # This is used to determine how many recent items
 # to cache for recent lookups -- eg if we want to

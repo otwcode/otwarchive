@@ -1,0 +1,60 @@
+<h1>Tag Wrangling Assignments</h1>
+
+<%- form_tag tag_wranglers_path, :method => :get do -%>
+  <h3>Filter by Media</h3>
+  <p>Show only:</p>
+  <%= select_tag :media_id, options_for_select([''] + Media.canonical.collect(&:name), params[:media_id]) -%>
+
+  <h3>Filter by Wrangler</h3>
+  <p>Show only:</p>
+  <%= select_tag :wrangler_id, options_for_select(['', 'No Wrangler'] + @wranglers.collect(&:login), params[:wrangler_id]) -%>
+
+  <h3>Filter by Fandom Name</h3>
+  <p>Show only fandoms that start with:</p>
+  <%= text_field_tag :fandom_string, params[:fandom_string] -%>
+  <p><%= submit_tag 'Go' -%></p>  
+<%- end -%>
+
+<!-- I suspect this should be a dl instead -->
+
+<table>
+  <thead>
+    <tr>
+      <th>Fandom</th>
+      <th>Wranglers</th>    
+    </tr>
+  </thead>
+  <tbody>
+  <%- @assignments.group_by(&:name).each do |name, assignments| -%>
+  <tr>
+    <td><%= name -%>
+    <span class="fake-tooltip">
+      <%= link_to 'edit', {:controller => :tags, :action => :edit, :id => assignments.first} %> | 
+      <%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => assignments.first} %> | 
+      <%= link_to 'works', {:controller => :works, :action => :index, :tag_id => assignments.first} %>
+    </span>       
+    
+    </td>
+    <td>
+    <%- assignments.collect(&:wrangler).compact.each do |wrangler| -%>
+      <p><%= link_to wrangler, tag_wrangler_path(:id => wrangler) -%> 
+      <%= link_to '(remove)', tag_wrangler_path(:id => wrangler, :fandom_id => assignments.first.id), :method => :delete %></p>
+    <%- end -%>
+    <%- form_tag url_for(:controller => 'tag_wranglers', :action => "create") do -%> 
+      <div id="wranglers-for-<%= assignments.first.id %>"
+        <%= hidden_field_tag :fandom_id, assignments.first.id %>
+        <p><%= select_tag 'user_ids[]', options_for_select([''] + @wranglers.collect(&:login)) %>
+        <%= submit_tag 'Assign' %>
+        <%= link_to_function("add more") do |page| 
+            page.insert_html(:bottom, "wranglers-for-#{assignments.first.id}", 
+            '<p>' + select_tag('user_ids[]', options_for_select([''] + @wranglers.collect(&:login))) + '</p>')
+            end -%></p>  
+      </div>
+    <%- end -%>      
+    </td>
+  </tr>
+  <%- end -%>  
+  </tbody>
+</table>
+
+<%= will_paginate(@assignments) %>

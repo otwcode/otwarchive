@@ -1,7 +1,7 @@
 class TagsController < ApplicationController
   before_filter :load_collection
-  before_filter :check_user_status, :except => [ :show, :index, :show_hidden, :show_hidden_freeforms ]
-  before_filter :check_permission, :except => [ :show, :index, :show_hidden, :show_hidden_freeforms ]
+  before_filter :check_user_status, :except => [ :show, :index, :show_hidden, :show_hidden_freeforms, :search ]
+  before_filter :check_permission, :except => [ :show, :index, :show_hidden, :show_hidden_freeforms, :search ]
 
   def check_permission
     logged_in_as_admin? || permit?("tag_wrangler") || access_denied
@@ -11,9 +11,9 @@ class TagsController < ApplicationController
   # GET /tags.xml
   def index
     if @collection
-      @tags = (@collection.filters.by_type("Freeform") + @collection.children.collect {|c| c.filters.by_type("Freeform")}.flatten).uniq.sort
+      @tags = Freeform.for_collections([@collection] + @collection.children)       
     else      
-      @tags = Tag.for_tag_cloud
+      @tags = Freeform.for_tag_cloud
     end
 
     respond_to do |format|
@@ -24,7 +24,11 @@ class TagsController < ApplicationController
   
   def search
     unless params[:query].blank?
-      @tags = Tag.search(params[:query], :order => "type ASC, name ASC", :page => params[:page])
+      if params[:tag_type] && params[:tag_type] != 'All'
+        @tags = Tag.search(params[:query], :order => "type ASC, name ASC", :conditions => {:tag_type => params[:tag_type]}, :page => params[:page])
+      else
+        @tags = Tag.search(params[:query], :order => "type ASC, name ASC", :page => params[:page])
+      end
     end    
   end  
 
@@ -109,10 +113,7 @@ class TagsController < ApplicationController
       flash[:error] = t('need_javascript', :default => "Sorry, you need to have JavaScript enabled for this.")
       redirect_to :back
     end
-
-  end  
-  
-  
+  end
   
   # GET /tags/new
   # GET /tags/new.xml
@@ -159,87 +160,79 @@ class TagsController < ApplicationController
       flash[:error] = t('not_found', :default => "Tag not found")
       redirect_to tag_wranglings_path and return
     end
+    @parents = @tag.parents.find(:all, :order => :name).group_by {|tag| tag[:type]}
+    @parents['MetaTag'] = @tag.meta_tags.by_name
+    @children = @tag.children.find(:all, :order => :name).group_by {|tag| tag[:type]}
+    @children['SubTag'] = @tag.sub_tags.by_name
+    @children['Merger'] = @tag.mergers.by_name
   end
 
   def update
     @tag = Tag.find_by_name(params[:id])
-    if @tag.blank?
-      flash[:error] = t('not_found', :default => "Tag not found")
-      redirect_to tag_wranglings_path and return
+    if @tag.update_attributes(params[:tag])
+      flash[:notice] = t('successfully_updated', :default => 'Tag was updated.')
+      redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag)
+    else
+      @parents = @tag.parents.find(:all, :order => :name).group_by {|tag| tag[:type]}
+      @parents['MetaTag'] = @tag.meta_tags.by_name
+      @children = @tag.children.find(:all, :order => :name).group_by {|tag| tag[:type]}
+      @children['SubTag'] = @tag.sub_tags.by_name
+      @children['Merger'] = @tag.mergers.by_name
+      render :edit
     end
-    old_common_tag_ids = @tag.common_tags_to_add.map(&:id).sort
-
-    if (params[:tag][:name] != @tag.name && logged_in_as_admin?)
-      if ['Rating', 'Warning', 'Category'].include?(@tag[:type])
-        flash[:error] = t('name_change', :default => "Name can't be changed from this interface.")
-      elsif params[:tag][:name] != @tag.name
-        begin
-          @tag.update_attribute(:name, params[:tag][:name])
-        rescue
-          @tag = Tag.find_by_name(params[:id]) # reset name
-          flash[:error] = t('name_taken', :default => "Name already taken.")
+  end
+  
+  def remove_association
+    @tag = Tag.find_by_name(params[:id])
+    if params[:to_remove]   
+      tag_to_remove = Tag.find_by_name(params[:to_remove])
+      @tag.remove_association(tag_to_remove)
+    end
+    flash[:notice] = t('successfully_updated', :default => 'Tag was updated.')
+    redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag)    
+  end
+  
+  def wrangle
+    @tag = Tag.find_by_name(params[:id])
+    @counts = {}
+    @tag.child_types.map{|t| t.underscore.pluralize.to_sym}.each do |tag_type|      
+      @counts[tag_type] = @tag.send(tag_type).count
+    end
+    unless params[:show].blank?
+      sort = params[:sort] || 'name ASC' 
+      if sort.include?('suggested')
+        sort = sort + ", name ASC"
+      end
+      if %w(unfilterable canonical noncanonical).include?(params[:status])          
+        @tags = @tag.send(params[:show]).send(params[:status]).find(:all, :order => sort).paginate(:page => params[:page], :per_page => 50)
+      elsif params[:status] == "unwrangled"
+        @tags = @tag.same_work_tags.unwrangled.by_type(params[:show].singularize.camelize).find(:all, :order => sort).paginate(:page => params[:page], :per_page => 50)
+      else
+        @tags = @tag.send(params[:show]).find(:all, :order => sort).paginate(:page => params[:page], :per_page => 50)
+      end       
+    end    
+  end
+  
+  def mass_update
+    params[:page] = '1' if params[:page].blank?
+    params[:sort] = 'name ASC' if params[:sort].blank?
+    unless params[:canonicals].blank?
+      tags = Tag.find(params[:tag_ids].split(','))
+      saved = []
+      not_saved = []
+      tags.each do |tag|
+        tag.canonical = params[:canonicals].include?(tag.id.to_s)
+        if tag.canonical_changed?
+          saved << tag
+          tag.save! rescue (not_saved << tag)
         end
       end
-    end
-    @tag.update_type(params[:tag][:type], logged_in_as_admin?) if params[:tag][:type]
-    @tag.update_attribute("canonical", params[:tag][:canonical]) if params[:tag][:canonical]
-    @tag.update_attribute("adult", params[:tag][:adult]) if params[:tag][:adult] && logged_in_as_admin?
-
-    fandoms = []
-    fandoms << params[:fandom][:fandom_name] if params[:fandom]
-    fandoms << params[:fandoms] if params[:fandoms]
-    @tag.update_fandoms(fandoms.flatten.compact) if !fandoms.blank?
-    medias = []
-    medias << params[:media][:media_name] if params[:media]
-    medias << params[:medias] if params[:medias]
-    @tag.update_medias(medias.flatten.compact) if !medias.blank?
-    freeforms = []
-    freeforms << params[:freeform][:freeform_name] if params[:freeform]
-    freeforms << params[:freeforms] if params[:freeforms]
-    @tag.update_freeforms(freeforms.flatten.compact) if !freeforms.blank?
-    characters = []
-    characters << params[:character][:character_name] if params[:character]
-    characters << params[:characters] if params[:characters]
-    @tag.update_characters(characters.flatten.compact) if !characters.blank?
-    pairings = []
-    pairings << params[:pairing][:pairing_name] if params[:pairing]
-    pairings << params[:pairings] if params[:pairings]
-    @tag.update_pairings(pairings.flatten.compact) unless pairings.blank?
-    synonyms = []
-    synonyms << params[:synonym][:synonym_name] if params[:synonym]
-    synonyms << params[:synonyms] if params[:synonyms]
-    @tag.update_synonyms(synonyms.flatten.compact) unless synonyms.blank?
-    disambiguators = []
-    disambiguators << params[:disambiguator][:disambiguator_name] if params[:disambiguator]
-    disambiguators << params[:disambiguators] if params[:disambiguators]
-    @tag.update_disambiguators(disambiguators.flatten.compact) unless disambiguators.blank?
-
-    if @tag.merger_id && params[:keep_synonym].blank?
-      @tag.remove_merger
-    elsif !params[:new_synonym].blank?
-      merger = @tag.class.find_or_create_by_name(params[:new_synonym])
-      if merger.id == @tag.id # find on new synonym returned the same tag => only capitalization different
-        @tag.update_attribute(:name, params[:new_synonym]) # use the new capitalization
-      else # new (or possibly old) tag should be canonical
-        merger.wrangle_canonical
-        fandoms = (@tag.fandoms + merger.fandoms).compact
-        fandom_names = fandoms.map(&:name) unless fandoms.blank?
-        merger.update_fandoms(fandom_names)
-        medias = (@tag.medias + merger.medias).compact
-        media_names = medias.map(&:name) unless medias.blank?
-        merger.update_medias(media_names)
+      if not_saved.empty? && !saved.empty?
+        flash[:notice] = "The following tags were successfully updated: #{saved.collect(&:name).join(', ')}"
+      elsif !not_saved.empty?
+        flash[:error] = "The following tags weren't saved: #{not_saved.collect(&:name).join(', ')}"
       end
-    else
-      merger = Tag.find_by_id(params[:tag][:merger_id]) if params[:tag][:merger_id]
     end
-    if merger.is_a?(Tag) && merger != @tag
-      @tag.wrangle_merger(merger)
-    end
-
-    new_common_tag_ids = @tag.common_tags_to_add.map(&:id).sort
-    #@tag.update_common_tags unless old_common_tag_ids == new_common_tag_ids
-
-    flash[:notice] = t('successfully_updated', :default => 'Tag was updated.')
-    redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag)
-  end
+    redirect_to url_for(:controller => :tags, :action => :wrangle, :id => params[:id], :show => params[:show], :page => params[:page], :sort => params[:sort])            
+  end  
 end

@@ -11,6 +11,13 @@ class AutocompleteController < ApplicationController
       render_output(tag_class.canonical.find(:all, :order => :name, :conditions => ["name LIKE ?", '%' + search_param + '%'], :limit => 10).map(&:name))
     end
   end
+  
+  # works for any tag class where what you want to return are the names
+  def canonical_tag_finder(tag_class, search_param)
+    if search_param
+      render_output(tag_class.canonical.find(:all, :order => :name, :conditions => ["canonical = 1 AND name LIKE ?", '%' + search_param + '%'], :limit => 10).map(&:name))
+    end
+  end
 
   def pseud_finder(search_param)
     if search_param
@@ -63,10 +70,43 @@ class AutocompleteController < ApplicationController
   def tag_string
     tag_finder(Tag, params[:tag_string])
   end
+
+  # tag wrangling
+  
+  def tag_syn_string
+    canonical_tag_finder(Tag, params[:tag_syn_string])
+  end
+
+  def tag_merger_string
+    tag_finder(Tag, params[:tag_merger_string])
+  end
+  
+  def tag_media_string
+    canonical_tag_finder(Media, params[:tag_media_string])
+  end 
+  def tag_fandom_string
+    canonical_tag_finder(Fandom, params[:tag_fandom_string])
+  end  
+  def tag_character_string
+    canonical_tag_finder(Character, params[:tag_character_string])
+  end  
+  def tag_pairing_string
+    canonical_tag_finder(Pairing, params[:tag_pairing_string])
+  end  
+  def tag_freeform_string
+    canonical_tag_finder(Freeform, params[:tag_freeform_string])
+  end    
+  def tag_meta_tag_string
+    canonical_tag_finder(Tag, params[:tag_meta_tag_string])
+  end
+  def tag_sub_tag_string
+    canonical_tag_finder(Tag, params[:tag_sub_tag_string])
+  end   
   
   def bookmark_external_fandom_string ; tag_finder(Fandom, params[:bookmark_external_fandom_string]) ; end
   def bookmark_external_character_string ; tag_finder(Character, params[:bookmark_external_character_string]) ; end
   def bookmark_external_pairing_string ; tag_finder(Pairing, params[:bookmark_external_pairing_string]) ; end
-
+  def fandom_string ; canonical_tag_finder(Fandom, params[:fandom_string]) ; end
+  def character_string ; canonical_tag_finder(Character, params[:character_string]) ; end
   
 end

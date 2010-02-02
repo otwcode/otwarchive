@@ -3,6 +3,14 @@ class Pairing < Tag
   NAME = ArchiveConfig.PAIRING_CATEGORY_NAME
 
   named_scope :no_characters, :conditions => {:has_characters => false}
+  
+  # Types of tags to which a character tag can belong via common taggings or meta taggings
+  def parent_types
+    ['Fandom', 'Character', 'MetaTag']
+  end
+  def child_types
+    ['SubTag', 'Merger']
+  end
 
   def characters
     parents.by_type('Character').by_name

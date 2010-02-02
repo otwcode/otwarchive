@@ -22,16 +22,6 @@
   <p class="warning"><%=h t('adult_content', :default => 'This tag indicates adult content.') %></p>
 <%- end -%>
 
-
-<%- unless @tag.ambiguities.blank? -%>
-  <h4><%=h t('disambiguate', :default => 'Tags which disambiguate here:') %></h4>
-  <ul class="tags">
-	<%- @tag.ambiguities.each do |ambiguous| %>
-    <li><%= link_to_tag ambiguous %></li>
-  <%- end -%>
-  </ul>
-<%- end -%>
-
 <% if @tag.is_a?(Fandom) %>
   <h4><%=h t('parents', :default => 'Parent tags (more general):') %></h4>
   <ul class="tags">
@@ -56,11 +46,7 @@
 <%- end -%>
 
 <%- unless @tag.children.blank? -%>
-  <% if @tag.is_a?(Ambiguity) %>
-    <h4><%=h t('disambiguators', :default => 'Disambiguators:') %></h4>
-  <% else %>
-    <h4><%=h t('child_tags', :default => 'Child tags (more specific):') %></h4>
-  <% end %>
+  <p><%=h t('child_tags', :default => 'Child tags (more specific):') %></p>
   <%- @tag.children.uniq.compact.sort.group_by(&:type).each do |type, tags| %>
     <p><%= type.to_s.pluralize %>:</p>
     <ul class="tags"><%= tag_link_list(tags) %></ul>
@@ -69,11 +55,7 @@
 
 <%- if @works -%>
 
-  <% if @tag.is_a?(Ambiguity) %>
-    <p><%=h t('ambiguous_cannot_filter', :default => 'This tag is ambiguous and cannot be filtered on.') %></p>
-  <% else %>
-    <p><%=h t('not_common_cannot_filter', :default => "This tag has not been marked common and can't be filtered on (yet).") %></p>
-  <% end %>
+  <p><%=h t('not_common_cannot_filter', :default => "This tag has not been marked common and can't be filtered on (yet).") %></p>
   
   <% unless @works.blank? %>
     <h4><%=h t('works_used_it', :default => 'Works which have used it as a tag:') %></h4>

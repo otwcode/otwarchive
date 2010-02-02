@@ -36,7 +36,7 @@ class FilterTagging < ActiveRecord::Base
       print "." if tagging.id.modulo(10) == 0; STDOUT.flush
       if tagging.tagger && tagging.taggable
         tag = tagging.tagger.canonical? ? tagging.tagger : tagging.tagger.merger
-        unless tag.nil? 
+        if tag && tag.canonical? 
           tag.filter_taggings.create!(:filterable => tagging.taggable)
         end
       end

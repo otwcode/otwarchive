@@ -1,21 +1,155 @@
 <!--Descriptive page name, messages and instructions-->
 <h2><%=h 'Tag Wrangling' %></h2>
 
+<%= tag_wrangler_footer %>
+
 <!--main content-->
-<h3><%=h 'Mass Assign to Fandom (or Media)' %></h3>
-<ul>
-<% for category in (Tag::USER_DEFINED - ["Ambiguity"]) do %>
-  <li>
-    <%= link_to_unless_current category, assign_tag_wrangling_path(category) %> (
-      <%= category.constantize.no_parent.count %>)
-  </li>
+<h3><%=h 'Mass Wrangle New/Unwrangled Tags' %></h3>
+
+<%- unless params[:show] -%>
+<p>When users create new tags, they're initially not 'canonical', or official, and they don't have any associations with other tags. 
+The mass wrangling pages are the easiest way to manage new tags as they come in and edit multiple tags at once. Choose a category below to 
+get started. (Note: to associate pairings with characters, first choose a fandom to narrow down the scope.)</p>
+
+<p>The counts are the number of unwrangled tags in each category.</p>
 <%- end -%>
-</ul>
-<h3><%=h 'Mass wrangle tags by Category' %></h3>
+
 <ul>
-<% for category in Tag::TYPES do %>
-  <li><%= link_to_unless_current category, edit_tag_wrangling_path(category) %></li>
-<% end %>
+  <li><%= link_to_unless_current "Fandoms by media (#{@counts[:fandoms]})", tag_wranglings_path(:show => "fandoms") %></li>
+  <li><%= link_to_unless_current "Characters by fandom (#{@counts[:characters]})", tag_wranglings_path(:show => "characters") %></li>
+  <li><%= link_to_unless_current "Pairings by fandom (#{@counts[:pairings]})", tag_wranglings_path(:show => "pairings") %></li>
+  <li><%= link_to_unless_current "Pairings by character", tag_wranglings_path(:show => "character_pairings") %></li>
+  <li><%= link_to_unless_current "Freeforms by fandom (#{@counts[:freeforms]})", tag_wranglings_path(:show => "freeforms") %></li>
 </ul>
 <!--/content-->
+<%- if params[:show] == "character_pairings" -%>
+  <h3>First, choose a canonical fandom:</h3>
+  <%- form_tag url_for(:controller => 'tag_wranglings', :action => 'index'), :method => :get do -%>
+    <dt><%= label_tag :fandom_string, t('fandom', :default => 'Fandom:') %></dt>
+    <dd><%= text_field_tag 'fandom_string', params[:fandom_string] %><%= autocomplete_text_field "fandom_string" -%></dd>  
+  </dl>
+  <%= hidden_field_tag :show, 'character_pairings' %>
+  <%= submit_tag "Go" %>  
+  <%- end -%>
+<%- end -%>
+
+<%- if @tags && @tags.empty? -%>
+  <p>There are no unwrangled tags in this category at the moment.</p>
+<%- elsif @tags -%>
+  <%- form_tag url_for(:controller => 'tag_wranglings', :action => 'wrangle'), :method => :post, :id => 'wrangulator' do -%> 
+    <dl>
+    <%- if params[:show] == "fandoms" -%>
+      <dt><%= label_tag :media, t('media', :default => 'Media:') %></dt>
+      <dd><%= select_tag :media, options_for_select(@media_names) %></dd>  
+    <%- elsif params[:show] == "character_pairings" -%>
+      <dt><%= label_tag :character_string, t('character', :default => 'Character:') %></dt>
+      <dd><%= text_field_tag 'character_string' %><%= autocomplete_text_field "character_string" -%></dd>     
+    <%- else -%>      
+      <dt><%= label_tag :fandom_string, t('fandom', :default => 'Fandom:') %></dt>
+      <dd><%= text_field_tag 'fandom_string', params[:fandom_string] %><%= autocomplete_text_field "fandom_string" -%></dd>  
+    <%- end -%>
+    </dl>    
+    <h3>Mass wrangle:</h3>
+    <ul>
+      <li><a onclick="$('wrangulator').getInputs('checkbox', 'selected_tags[]').each(function(box){box.checked = 1})">select all</a></li>
+      <li><a onclick="$('wrangulator').getInputs('checkbox', 'selected_tags[]').each(function(box){box.checked = 0})">unselect all</a></li> 
+    </ul>
+
+    <h3>Canonical:</h3>
+    <ul>
+      <li><a onclick="$('wrangulator').getInputs('checkbox', 'canonicals[]').each(function(box){box.checked = 1})">select all</a></li>
+      <li><a onclick="$('wrangulator').getInputs('checkbox', 'canonicals[]').each(function(box){box.checked = 0})">unselect all</a></li> 
+    </ul>
+    <table>
+      <caption><%= @tags.first.class.to_s.pluralize %> to be wrangled</caption>
+      <thead>
+  			<tr>
+  				<th scope="row">Mass Wrangle</th>
+  				<td><%= submit_tag "Wrangle" %></td>
+  			</tr>     
+        <tr>
+          <th scope="col">
+            <%- if params[:sort] == "name DESC" -%>
+              <%= link_to "Tag Name", url_for(:show => params[:show], :sort => "name ASC") %>
+            <%- else -%>
+              <%= link_to "Tag Name", url_for(:show => params[:show], :sort => "name DESC") %>          
+            <%- end -%>
+          </th>
+          <th scope="col">Mass Wrangle</th>         
+          <th scope="col">
+            <%- if params[:sort] == "created_at DESC" -%>
+              <%= link_to "Created", url_for(:show => params[:show], :sort => "created_at ASC") %>
+            <%- else -%>
+              <%= link_to "Created", url_for(:show => params[:show], :sort => "created_at DESC") %>          
+            <%- end -%>
+          </th>
+          <%- if params[:show] == 'character_pairings' -%>
+          <th scope="col">Characters</th>  
+          <%- elsif params[:show] != "fandoms" -%>
+          <th scope="col">
+            <%- if params[:sort] == "suggested_fandoms ASC" -%>
+              <%= link_to "Suggested Fandoms", url_for(:show => params[:show], :sort => "suggested_fandoms DESC"), :title => 'Fandoms associated with the same works as this tag.' %>
+            <%- else -%>
+              <%= link_to "Suggested Fandoms", url_for(:show => params[:show], :sort => "suggested_fandoms ASC"), :title => 'Fandoms associated with the same works as this tag.' %>          
+            <%- end -%>
+          </th>
+          <%- end -%>
+          <th scope="col">Canonical</th>
+          <th scope="col">
+            <%- if params[:sort] == "taggings_count DESC" -%>
+              <%= link_to "Taggings Count", url_for(:show => params[:show], :sort => "taggings_count ASC") %>
+            <%- else -%>
+              <%= link_to "Taggings Count", url_for(:show => params[:show], :sort => "taggings_count DESC") %>          
+            <%- end -%>
+          </th>   
+        </tr>
+      </thead>
+      <tbody>
+        <%- for tag in @tags -%>
+        <tr>
+          <td>
+            <%= label_tag "selected_tags_#{tag.id}", "#{tag.name}" %> 
+            <span class="fake-tooltip">
+              <%= link_to 'edit', {:controller => :tags, :action => :edit, :id => tag} %> | 
+              <%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => tag} %> | 
+              <%= link_to 'works', {:controller => :works, :action => :index, :tag_id => tag} %>
+            </span>       
+          </td>      
+          <td><%= check_box_tag "selected_tags[]", tag.id, nil, :id => "selected_tags_#{tag.id}" -%></td>
+          <td><%= l(tag.created_at.to_date) %></td>
+          <%- if params[:show] == 'character_pairings' -%>
+          <td>  
+            <%- unless tag.characters.empty? -%>
+            <ul><%= tag_link_list(tag.characters) %></ul>
+            <%- end -%>
+          </td>  
+          <%- elsif params[:show] != "fandoms" -%>
+          <td><%= tag.suggested_fandoms %></td>
+          <%- end -%>        
+          <td>
+            <%= check_box_tag "canonicals[]", tag.id, tag.canonical?, :id => "canonicals_#{tag.id}", :disabled => (tag.canonical? && (!tag.mergers.empty? || !tag.children.empty?)) -%>
+          </td>
+          <td><%= tag.taggings_count %></td>      
+        </tr>
+        <%- end -%>
+      </tbody>
+			<tfoot>
+				<tr>
+					<th scope="row">Mass Wrangle</th>
+					<td><%= submit_tag "Wrangle" %></td>
+				</tr>
+			</tfoot>     
+    </table>
+    <p>
+    <%- if params[:fandom_string] -%><%= hidden_field_tag :fandom_string, params[:fandom_string] %><%- end -%>
+    <%= hidden_field_tag :show, params[:show] %> 
+    <%= hidden_field_tag :sort, params[:sort] %>
+    <%= hidden_field_tag :page, params[:page] %>
+    <%= hidden_field_tag 'tag_ids[]', @tags.collect(&:id) %> 
+    </p>
+  <%- end -%>
+
+  <%= will_paginate @tags %>  
+<%- end -%>
+
 <%= tag_wrangler_footer %>

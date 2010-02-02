@@ -9,6 +9,9 @@ class Tagging < ActiveRecord::Base
   def add_filter_taggings
     if self.tagger && self.taggable.is_a?(Work)
       self.taggable.add_filter_tagging(self.tagger)
+      unless self.tagger.meta_tags.empty?
+        self.tagger.meta_tags.each { |m| self.taggable.add_filter_tagging(m) }
+      end
     end
     return true    
   end

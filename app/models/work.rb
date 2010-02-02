@@ -788,6 +788,17 @@ class Work < ActiveRecord::Base
     if filter && (self.tags & tag.synonyms).empty? && self.filters.include?(filter)
       self.filters.delete(filter)
       filter.reset_filter_count
+    end
+    unless filter.meta_tags.empty?
+      filter.meta_tags.each do |meta_tag|
+        other_sub_tags = meta_tag.sub_tags - [filter]
+        sub_mergers = other_sub_tags.empty? ? [] : other_sub_tags.collect(&:mergers).flatten.compact
+        if self.filters.include?(meta_tag) && (self.filters & other_sub_tags).empty?
+          unless self.tags.include?(meta_tag) || !(self.tags & meta_tag.mergers).empty? || !(self.tags & sub_mergers).empty?
+            self.filters.delete(meta_tag)
+          end
+        end
+      end
     end  
   end
 

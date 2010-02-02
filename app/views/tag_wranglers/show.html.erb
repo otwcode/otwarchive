@@ -1,0 +1,31 @@
+<h2><%= @wrangler.login %>'s Wrangling Page</h2>
+
+<%= tag_wrangler_footer %> 
+
+<%- if @fandoms -%>
+  <h3>Assigned Fandoms</h3>
+  <p>Fandoms assigned to you via the <%= link_to 'tag wranglers page', tag_wranglers_path %>. The count is the number of 
+  unwrangled tags which were used on works in the given fandom.</p>
+  <ul>
+    <%- for fandom in @fandoms -%>
+    <li><%= link_to fandom.name + ' (' + fandom.same_work_tags.unwrangled.count(:all).to_s + ')', {:controller => :tags, :action => :wrangle, :id => fandom} %></li>
+    <%- end -%>  
+  </ul>
+  <p><%= link_to 'Most recent works in your fandoms', works_path(:selected_tags => @fandoms.collect(&:id), :boolean_type => 'or') %></p>
+<%- end -%>
+
+<h3>Mass Wrangle New/Unwrangled Tags</h3>
+
+<ul>
+  <li><%= link_to "Fandoms by media (#{@counts[:fandoms]})", tag_wranglings_path(:show => "fandoms") %></li>
+  <li><%= link_to "Characters by fandom (#{@counts[:characters]})", tag_wranglings_path(:show => "characters") %></li>
+  <li><%= link_to "Pairings by fandom (#{@counts[:pairings]})", tag_wranglings_path(:show => "pairings") %></li>
+  <li><%= link_to "Pairings by character", tag_wranglings_path(:show => "character_pairings") %></li>
+  <li><%= link_to "Freeforms by fandom (#{@counts[:freeforms]})", tag_wranglings_path(:show => "freeforms") %></li>
+</ul>
+
+<h3>Find a Tag</h3>
+
+<%= render :partial => 'tags/search_form' %>
+
+<%= tag_wrangler_footer %>

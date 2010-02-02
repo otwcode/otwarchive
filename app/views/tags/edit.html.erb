@@ -1,156 +1,148 @@
-<h2>
-  <%= 'Edit Tag' %>
-</h2>
+<h2><%= 'Edit Tag: ' + link_to_tag(@tag) %></h2>
 
+<table>
+<caption>Uses:</caption>
+  <tr>
+    <th>Type</th>
+    <th>Count</th>
+  </tr>
+  <tr>
+    <td><%= link_to 'Works', {:controller => :works, :action => :index, :tag_id => @tag} %></td>
+    <td><%= @tag.visible_works_count %></td>
+  </tr>
+  <tr>
+    <td><%= "Drafts" %></td>
+    <td><%= @tag.works.unposted.count %></td>
+  </tr>
+  <tr>
+    <td><%= link_to "Bookmarks", {:controller => :bookmarks, :action => :index, :tag_id => @tag} %></td>
+    <td><%= @tag.visible_bookmarks_count %></td>
+  </tr>
+  <tr>
+    <td><%= "Private Bookmarks" %></td>
+    <td><%= @tag.bookmarks.not_public.count %></td>
+  </tr>
+  <tr>
+    <td><%= "External Works" %></td>
+    <td><%= @tag.visible_external_works_count %></td>
+  </tr>                              
+</table>
+     
 <%= error_messages_for :tag %>
 <%- form_for :tag, @tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| -%>
 
+<fieldset>
+  <legend>Tag info:</legend>
   <dl>
     <dt><%= f.label :name, 'Name' %></dt>
-    <dd><%= f.text_field :name, :readonly => (!logged_in_as_admin? || ['Rating', 'Warning', 'Category'].include?(@tag[:type])), :size => ArchiveConfig.TAG_MAX %></dd>
-
-    <dt><%=h 'Works (count)' %></dt>
-    <dd><%= link_to_tag_with_text(@tag, @tag.visible_works_count) %></dd>
-    <dt><%=h 'Bookmarks (count)' %></dt>
-    <dd><%= link_to_tag_with_text(@tag, @tag.visible_bookmarks_count) %></dd>
-    <dt><%= 'External Works (count)' %></dt>
-    <dd><%= link_to_tag_with_text(@tag, @tag.visible_external_works_count) %></dd>
-
-    <dt><%= f.label :type, 'Category' %></dt>
     <dd>
-    <ul>
-    <%- (Tag::TYPES - [@tag.class.name, "Ambiguity"]).each do |type| -%>
-      <li>
-      <%= f.radio_button(:type, type, {:disabled => !logged_in_as_admin?}) %>&nbsp;<%= f.label("type_#{type.downcase}", type) %>
-      </li>
-    <%- end -%>
-    <%- [@tag.class.name, "Ambiguity"].uniq.each do |type| -%>
-      <li>
-      <%= f.radio_button(:type, type, {:disabled => !( logged_in_as_admin? || Tag::USER_DEFINED.include?(@tag.class.name) )}) %>&nbsp;<%= f.label("type_#{type.downcase}", type) %>
-      </li>
-    <%- end -%>
-    </ul>
+      <%= f.text_field :name, :size => @tag.name.length %>
+      <%- unless logged_in_as_admin? -%>
+      <p>Only changes to capitalization are permitted.</p>  
+      <%- end -%>
     </dd>
-
+    
+    <dt><%= 'Category' %></dt>
+    <!-- FRONT-END: this is important info, so it would be good to have a way to make it stand out a little more -->       
+    <dd><%= @tag.type %></dd>
+    
     <dt><%= f.label :canonical, 'Canonical' %></dt>
     <dd>
-    <%= f.check_box("canonical", :disabled => !(logged_in_as_admin? || Tag::USER_DEFINED.include?(@tag.class.name) )) %>&nbsp;<%= "This is the official name for the " + @tag.class.name %></dd>
+      <%= f.check_box("canonical", :disabled => !(logged_in_as_admin? || Tag::USER_DEFINED.include?(@tag.class.name)) || !@tag.mergers.empty? || !@tag.children.empty? ) %>&nbsp;
+      <%= "This is the official name for the " + @tag.class.name %>
+      <%- if @tag.canonical? && (!@tag.mergers.empty? || !@tag.children.empty?) -%>
+      <p><%= link_to 'Make tag non-canonical and unhook all associations', {:controller => :tags, :action => :update, 'tag[canonical]' => 0, :id => @tag}, :method => :put, :confirm => "Are you sure?" -%></p>  
+      <%- end -%>
+    </dd>
+    
+    <dt><%= f.label :ambiguous, 'Ambiguous' %></dt>
+    <dd><%= f.check_box :ambiguous %>&nbsp;<%= "This tag is ambiguous." %></dd>
 
     <%- if @tag.is_a?(Rating)-%>
-      <dt><%= f.label :adult, 'Adult' %></dt>
-      <dd><%= f.check_box("adult", :disabled => !logged_in_as_admin? )%>&nbsp;<%=h 'This tag indicates adult content.'%></dd>
+    <dt><%= f.label :adult, 'Adult' %></dt>
+    <dd><%= f.check_box("adult", :disabled => !logged_in_as_admin? )%>&nbsp;<%=h 'This tag indicates adult content.'%></dd>
     <%- end %>
 
-    <%- if Tag::USER_DEFINED.include?(@tag.class.name) %>
-
-      <% if @tag.is_a?(Fandom) %>
-        <dt><%= f.label :type, 'Media' %></dt>
-        <dd><%=h 'Add Media:' %>&nbsp;<%= select("media", 'media_name', (Media.canonical - @tag.family).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %><br />
-        <%- unless @tag.medias.blank? -%>
-          <ul>
-          <% @tag.medias.each do |tag| %>
-            <li><%= check_box_tag("medias[]", tag.name, true, :id => "tag_media_#{tag.id}") %><%= f.label "media_#{tag.id}",   link_to_edit_tag(tag) %></li>
-          <%- end %>
-          </ul>
-        <%- end %>
-        </dd>
-      <%- elsif !@tag.is_a?(Ambiguity) -%>
-        <dt><%= f.label :type, 'Fandom(s)' %></dt>
-        <dd><%=h 'Add Fandom:' %>&nbsp;<%= select("fandom", 'fandom_name', (Fandom.canonical - @tag.family).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %><br />
-        <%- unless @tag.fandoms.blank? -%>
-          <ul>
-          <% @tag.fandoms.each do |tag| %>
-            <li><%= check_box_tag("fandoms[]", tag.name, true, :id => "tag_fandom_#{tag.id}") %><%= f.label "fandom_#{tag.id}", link_to_edit_tag(tag) %></li>
+    <dt><%= f.label :syn_string, 'Synonym of' %></dt>
+    <dd>
+      <%= f.text_field :syn_string, :size => ArchiveConfig.TAG_MAX %><%= autocomplete_text_field "tag_syn_string" -%>
+      <p>Choose an existing tag or add a new tag name here to create a new canonical and associate this tag with it.</p>
+      <%- if @tag.merger -%>
+        <p>Edit <%= link_to_edit_tag(@tag.merger) %></p>
+      <%- elsif @tag.canonical? -%>
+        <!-- FRONT-END: if we have some sort of ACHTUNG! class, this would be a good place for it. -->      
+        <p>Adding a synonym to a canonical tag will make it non-canonical and move its associations to the other tag. (Be careful with this!)</p>
+      <%- end -%>  
+    </dd>
+  </dl>
+</fieldset>
+    
+<%- if Tag::USER_DEFINED.include?(@tag[:type]) -%>
+<fieldset>
+  <legend>Parent tags:</legend>
+  <dl>    
+    <%- @tag.parent_types.each do |tag_type| -%>
+      <dt><%= f.label tag_type.underscore + '_string', tag_category_name(tag_type) %></dt>
+      <dd>
+        <%= f.text_field tag_type.underscore + '_string', :size => ArchiveConfig.TAG_MAX %>
+        <%= autocomplete_text_field "tag_#{tag_type.underscore}_string" -%><br />
+        <%- if @parents[tag_type] -%>
+          <%- @parents[tag_type].in_groups(2, false) do |tag_list| -%>
+          <ul class="tag-column">
+          <%- for tag in tag_list -%>
+            <li>
+              <%= link_to_edit_tag(tag) %>
+              <span class="fake-tooltip">
+                <%= link_to 'remove', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %> 
+              </span>              
+            </li>
           <%- end -%>
           </ul>
+          <%- end -%>
         <%- end -%>
-        </dd>
-      <%- end -%>
-
-      <%- if @tag.canonical? %>
-
-        <% if @tag.is_a?(Fandom) || @tag.is_a?(Pairing) %>
-          <dt><%= f.label :type, 'Character(s)' %></dt>
-          <dd><%=h 'Add Character:' %>&nbsp;<%= select("character", 'character_name', (Character.canonical - @tag.family).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %><br />
-          <%- unless @tag.characters.blank? -%>
-          <ul>
-          <% @tag.characters.each do |tag| %>
-          <li><%= check_box_tag("characters[]", tag.name, true, :id => "tag_character_#{tag.id}") %><%= f.label "character_#{tag.id}", link_to_edit_tag(tag) %></li>
-          <%- end %>
-          </ul>
-          <%- end %>
-          </dd>
-        <%- end %>
-
-        <% if @tag.is_a?(Fandom) || @tag.is_a?(Character) %>
-          <dt><%= f.label :type, 'Pairings(s)' %></dt>
-          <dd><%=h 'Add Pairing:' %>&nbsp;<%= select("pairing", 'pairing_name', (Pairing.canonical - @tag.family).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %><br />
-          <%- unless @tag.pairings.blank? -%>
-            <ul>
-            <% @tag.pairings.each do |tag| %>
-              <li><%= check_box_tag("pairings[]", tag.name, true, :id => "tag_pairing_#{tag.id}") %><%= f.label "pairing_#{tag.id}", link_to_edit_tag(tag) %></li>
-            <%- end %>
-            </ul>
-          <%- end %>
-          </dd>
-        <%- end %>
-
-        <%- if @tag.is_a?(Fandom) %>
-          <dt><%= f.label :type, 'Freeforms' %></dt>
-          <dd><%=h 'Add Freeform:' %>&nbsp;<%= select("freeform", 'freeform_name', (Freeform.canonical - @tag.family).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %><br />
-          <%- unless @tag.freeforms.blank? -%>
-            <ul>
-            <% @tag.freeforms.each do |tag| %>
-              <li><%= check_box_tag("freeforms[]", tag.name, true, :id => "tag_freeform_#{tag.id}") %><%= f.label "freeform_#{tag.id}", link_to_edit_tag(tag) %></li>
-            <%- end %>
-            </ul>
-          <%- end %>
-          </dd>
-        <%- end -%>
-
-        <%- if @tag.is_a?(Ambiguity) %>
-          <dt><%= f.label :type, 'Disambiguators' %>:</dt>
-          <dd><%=h 'Add Disambiguator:' %>&nbsp;<%= select("disambiguator", 'disambiguator_name', (@tag.find_similar - @tag.disambiguators - [@tag]).collect {|p| [ description(p), p.name ] }, { :include_blank => true }) %><br />
-          <%- unless @tag.disambiguators.blank? -%>
-            <ul>
-            <% @tag.disambiguators.each do |tag| %>
-              <li><%= check_box_tag("disambiguators[]", tag.name, true, :id => "tag_disambiguator_#{tag.id}") %><%= f.label "disambiguator_#{tag.id}", link_to_edit_tag(tag) %></li>
-            <%- end %>
-            </ul>
-          <%- end %>
-          </dd>
-        <%- end %>
-
-        <dt><%= f.label :type, 'Synonyms' %></dt>
-        <dd><%=h 'Add Synonym:' %>&nbsp;<%= select("synonym", 'synonym_name', (@tag.class.nonsynonymous - @tag.family).collect {|p| [ p.name, p.name ] }, { :include_blank => true }) %><br />
-        <%- unless @tag.mergers.blank? -%>
-          <ul>
-          <% @tag.mergers.each do |tag| %>
-            <li><%= check_box_tag("synonyms[]", tag.name, true, :id => "tag_synonym_#{tag.id}") %><%= f.label "synonym_#{tag.id}", link_to_edit_tag(tag) %></li>
-          <%- end %>
-          </ul>
-        <%- end -%>
-
-      <%- else %>
-        <dt><%= f.label :type, 'Synonym of' %></dt>
-        <% if @tag.merger.is_a? Tag %>
-          <dd><%= check_box_tag("keep_synonym", @tag.merger.name, true, :id => "tag_keep_synonym") %><%= f.label :keep_synonym, link_to_edit_tag(@tag.merger) %></dd>
-        <%- else %>
-          <dd><%= f.select('merger_id', (@tag.class.canonical - [@tag]).collect {|p| [ p.name, p.id ]}, { :include_blank => true, :selected => nil }) %></dd>
-          <dt><%= label :new_synonym, 'Rename' %>*:</dt>
-          <dd><%= text_field_tag :new_synonym, nil, :size => ArchiveConfig.TAG_MAX %>
-          <%=h '<p>*This text box will do one of two things:' %> <%=h '1. correct the capitalization of the current tag.' %> <%=h 'OR 2. Create a canonical tag, to which the current tag is then made a synonym.</p>' %></dd>
-        <%- end %>
-      <%- end %>
-      </dd>
-
-    <% end %>
+      </dd> 
+    <%- end -%>  
   </dl>
+</fieldset>
+
+<%- if @tag.canonical? %>
+<fieldset>
+  <legend>Child tags:</legend>
+  <p><%= link_to 'wrangle all child tags', {:controller => :tags, :action => :wrangle, :id => @tag} %></p>
+  <dl>    
+    <%- @tag.child_types.each do |tag_type| -%>
+      <dt><%= f.label tag_type.underscore + '_string', tag_category_name(tag_type) %></dt>
+      <dd>
+        <%= f.text_area tag_type.underscore + '_string', :size => "100x5" %>
+        <%= autocomplete_text_field "tag_#{tag_type.underscore}_string" -%><br />
+        <%- if @children[tag_type] -%>
+          <%- @children[tag_type][0..19].in_groups(2, false) do |tag_list| -%>
+          <ul class="tag-column">
+          <%- for tag in tag_list -%>
+            <li>
+              <%= link_to_edit_tag(tag) %>
+              <span class="fake-tooltip">
+                <%= link_to 'remove', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %>
+              </span>              
+            </li>
+          <%- end -%>
+          </ul>
+          <%- end -%>
+          <%- if @children[tag_type].length > 20 -%>
+          <p><%= link_to "See all (#{@tag.send(tag_type.underscore.pluralize).count})", {:controller => :tags, :action => :wrangle, :id => @tag, :show => tag_type.underscore.pluralize} %></p>   
+          <%- end -%>
+        <%- end -%>    
+      </dd> 
+    <%- end -%>  
+  </dl>
+</fieldset>
+<%- end -%>
+
+<%- end -%>  
+  
   <p class="submit">
   <%= submit_tag "Save changes" %>
   </p>
 <%- end -%>
 
-
 <%= tag_wrangler_footer %>
-

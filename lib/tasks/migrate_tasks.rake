@@ -122,61 +122,91 @@ namespace :After do
   #### Add your new tasks here
 
 
-  desc "Hide/anonymize existing collection items as appropriate"
-  task(:update_collection_items => :environment) do
-    puts "Hiding and anonymizing existing collection items"
-    Collection.unrevealed.collect(&:collection_items).flatten.each {|ci| ci.unrevealed=true; ci.save}
-    Collection.anonymous.collect(&:collection_items).flatten.each {|ci| ci.anonymous=true; ci.save}
-  end
+  # desc "Hide/anonymize existing collection items as appropriate"
+  # task(:update_collection_items => :environment) do
+  #   puts "Hiding and anonymizing existing collection items"
+  #   Collection.unrevealed.collect(&:collection_items).flatten.each {|ci| ci.unrevealed=true; ci.save}
+  #   Collection.anonymous.collect(&:collection_items).flatten.each {|ci| ci.anonymous=true; ci.save}
+  # end
+  # 
+  # desc "Rake task of DOOOOOOM: remove wrong filters"
+  # task(:remove_wrong_filters => :environment) do
+  #   puts "Removing invalid filters"
+  #   FilterTagging.remove_invalid
+  # end
+  # 
+  # desc "Rake task of DOOOOOOM, Part 2: add missing filters"
+  # task(:add_missing_filters => :environment) do
+  #   puts "Adding missing filters"
+  #   Tag.add_missing_filter_taggings
+  # end
+  # 
+  # desc "Rake task of DOOOOOOM, Part 3: reset all filter counts"
+  # task(:reset_counts => :environment) do
+  #   puts "Resetting filter counts"
+  #   FilterCount.set_all
+  # end
+  # 
+  # desc "Fix for existing non-unique threads"  
+  # task(:fix_threads => :environment) do
+  #   puts "Fixing duplicate threads"
+  #   duplicate_threads = Comment.find(:all, :conditions => {:depth => 0}, :group => "thread HAVING count(thread) > 1", 
+  #     :order => :thread, :select => :thread).collect(&:thread)
+  #   Comment.find(:all, :conditions => {:thread => duplicate_threads}, :order => 'depth ASC').each do |comment|
+  #     puts "Updating #{comment.id}"
+  #     new_thread = comment.reply_comment? ? comment.commentable.thread : comment.id
+  #     comment.update_attribute(:thread, new_thread)
+  #   end  
+  # end
+  # 
+  # desc "Set parent for comments"
+  # task(:add_comment_parents => :environment) do
+  #   puts "Setting parent for all comments"
+  #   max = Comment.maximum(:depth)
+  #   (0..max).each do |i|
+  #     puts "On depth #{i}!"
+  #     Comment.find(:all, :conditions => {:depth => i}).each do |comment|
+  #       if comment.commentable
+  #         puts "Updating #{comment.id}"        
+  #         comment.parent = (comment.depth == 0) ? comment.commentable : comment.commentable.parent
+  #         comment.save
+  #       else  
+  #         puts "Comment #{comment.id} has no commentable!"
+  #       end
+  #     end      
+  #   end    
+  # end  
 
-  desc "Rake task of DOOOOOOM: remove wrong filters"
-  task(:remove_wrong_filters => :environment) do
-    puts "Removing invalid filters"
-    FilterTagging.remove_invalid
-  end
-  
-  desc "Rake task of DOOOOOOM, Part 2: add missing filters"
-  task(:add_missing_filters => :environment) do
-    puts "Adding missing filters"
-    Tag.add_missing_filter_taggings
-  end
-  
-  desc "Rake task of DOOOOOOM, Part 3: reset all filter counts"
-  task(:reset_counts => :environment) do
-    puts "Resetting filter counts"
-    FilterCount.set_all
-  end
-  
-  desc "Fix for existing non-unique threads"  
-  task(:fix_threads => :environment) do
-    puts "Fixing duplicate threads"
-    duplicate_threads = Comment.find(:all, :conditions => {:depth => 0}, :group => "thread HAVING count(thread) > 1", 
-      :order => :thread, :select => :thread).collect(&:thread)
-    Comment.find(:all, :conditions => {:thread => duplicate_threads}, :order => 'depth ASC').each do |comment|
-      puts "Updating #{comment.id}"
-      new_thread = comment.reply_comment? ? comment.commentable.thread : comment.id
-      comment.update_attribute(:thread, new_thread)
-    end  
-  end
-  
-  desc "Set parent for comments"
-  task(:add_comment_parents => :environment) do
-    puts "Setting parent for all comments"
-    max = Comment.maximum(:depth)
-    (0..max).each do |i|
-      puts "On depth #{i}!"
-      Comment.find(:all, :conditions => {:depth => i}).each do |comment|
-        if comment.commentable
-          puts "Updating #{comment.id}"        
-          comment.parent = (comment.depth == 0) ? comment.commentable : comment.commentable.parent
-          comment.save
-        else  
-          puts "Comment #{comment.id} has no commentable!"
+  desc "Clear up wrangling relationships"
+  task(:tidy_wranglings => :environment) do
+    [Character, Pairing, Freeform].each do |klass|
+      puts "Updating #{klass.to_s.downcase.pluralize}"
+      klass.by_name.find(:all, :conditions => "fandom_id IS NOT NULL").each do |tag|
+        begin
+          puts tag.name
+          if tag.fandom && !tag.fandoms.include?(tag.fandom)
+            tag.fandoms << tag.fandom
+          end
+        rescue
+          puts "Something went wrong with #{tag.name}!"
         end
-      end      
-    end    
+      end
+    end
+    Fandom.by_name.each do |tag|
+      begin
+        puts tag.name
+        if tag.media_id && tag.media && !tag.medias.include?(tag.media)
+          tag.parents << tag.media
+        end
+        if tag.medias.empty?
+          tag.parents << Media.uncategorized          
+        end
+      rescue
+        puts "Something went wrong with #{tag.name}!"        
+      end
+    end
   end  
-
+  
 end
 
 ##################
@@ -184,5 +214,4 @@ end
 
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
-task :After => ['After:update_collection_items', 'After:fix_threads', 'After:add_comment_parents']
-
+task :After => ['After:tidy_wranglings']

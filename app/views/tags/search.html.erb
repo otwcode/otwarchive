@@ -1,11 +1,6 @@
 <h2>Tag Search: Alpha</h2>
 
-<%- form_tag url_for(:controller => 'tags', :action => 'search'), :method => :get do -%>
-<p>
-  <%= text_field_tag :query, params[:query]  %> 
-  <%= submit_tag "Search tags" %>
-</p> 
-<%- end -%>
+<%= render :partial => 'tags/search_form' %>
 
 <p>Canonical tags are <span class='canonical'>highlighted</span>.</p>
 <p>New tags will be out of alphabetical order.</p>

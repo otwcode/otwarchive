@@ -1,9 +1,11 @@
 class Fandom < Tag
 
   NAME = ArchiveConfig.FANDOM_CATEGORY_NAME
-
+  
+  has_many :wrangling_assignments
+  has_many :wranglers, :through => :wrangling_assignments, :source => :user 
+  
   named_scope :by_media, lambda{|media| {:conditions => {:media_id => media.id}}}
-  named_scope :no_parent, :conditions => {:media_id => Media.uncategorized.andand.id}
   
   COLLECTION_JOIN =  "INNER JOIN filter_taggings ON ( tags.id = filter_taggings.filter_id ) 
                       INNER JOIN works ON ( filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work') 
@@ -52,15 +54,28 @@ class Fandom < Tag
   
   before_save :add_media_for_uncategorized
   def add_media_for_uncategorized
-    if self.media_id.nil?
-      uncategorized = Media.uncategorized
-      other_media = self.medias - [uncategorized]
-      if !other_media.empty?
-        self.media = other_media.first
-      else
-        self.media = uncategorized
+    if self.medias.empty?
+      self.parents << Media.uncategorized
+    end
+    true    
+  end
+  
+  before_update :check_wrangling_status
+  def check_wrangling_status
+    if self.canonical_changed? && !self.canonical?
+      if !self.canonical? && self.merger_id
+        self.merger.wranglers = (self.wranglers + self.merger.wranglers).uniq
       end
-    end    
+      self.wranglers = []     
+    end
+  end
+  
+  # Types of tags to which a character tag can belong via common taggings or meta taggings
+  def parent_types
+    ['Media', 'MetaTag']
+  end
+  def child_types
+    ['Character', 'Pairing', 'Freeform', 'SubTag', 'Merger']
   end
 
   def characters
@@ -82,7 +97,16 @@ class Fandom < Tag
   def medias
     parents.by_type('Media').by_name
   end
-
+  
+  def add_association(tag)
+    if tag.is_a?(Media)
+      self.parents << tag unless self.parents.include?(tag)
+      # Remove default media if another is added
+      if self.medias.length > 1 && self.medias.include?(Media.uncategorized)
+        self.medias.delete(Media.uncategorized)
+      end
+    else
+      self.children << tag unless self.children.include?(tag)
+    end   
+  end
 end
-
-

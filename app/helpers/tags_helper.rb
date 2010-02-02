@@ -12,28 +12,25 @@ module TagsHelper
   def description(tag)
     tag.name + " (" + tag.class.name + ")"
   end
-
+  
+  # Adds the appropriate css classes for the tag index page
   def tag_cloud(tags, classes)
     max, min = 0, 0
     tags.each { |t|
-      max = t.taggings_count.to_i if t.taggings_count.to_i > max
-      min = t.taggings_count.to_i if t.taggings_count.to_i < min
+      max = t.count.to_i if t.count.to_i > max
+      min = t.count.to_i if t.count.to_i < min
     }
 
     divisor = ((max - min) / classes.size) + 1
 
     tags.each { |t|
-      yield t, classes[(t.taggings_count - min) / divisor]
+      yield t, classes[(t.count.to_i - min) / divisor]
     }
   end
 
   # Displays a list of links for navigating the tag wrangling section of the site
   def tag_wrangler_footer
     render :partial => 'tag_wranglings/footer'
-  end
-
-  def tag_wrangler_header
-    render :partial => 'tag_wranglings/header'
   end
 
 	def link_to_tag(tag, options = {})
@@ -59,13 +56,18 @@ module TagsHelper
 
 	# Adds the "tag" classname to links (for tag links)
   def link_to_with_tag_class(path, text, options)
-    options = {:class => "tag"}.merge(options)
+    options[:class] ? options[:class] << " tag" : options[:class] = "tag"
     link_to text, path, options
   end
   
-
+  # Used on tag edit page
+  def tag_category_name(tag_type)
+    tag_type == "Merger" ? "Synonyms" : tag_type.pluralize
+  end
+  
+  # Should the current user be able to access tag wrangling pages?
   def can_wrangle?
-    logged_in_as_admin? || ( current_user.is_a?(User) && current_user.is_tag_wrangler? )
+    logged_in_as_admin? || (current_user.is_a?(User) && current_user.is_tag_wrangler?)
   end
   
   def taggable_list(tag, controller_class)
@@ -134,4 +136,5 @@ module TagsHelper
     span = tag.canonical? ? "<span class='canonical'>" : "<span>"
     span + tag.type + ": " + link_to_tag(tag) + " (#{tag.taggings_count})</span>"
   end
+    
 end

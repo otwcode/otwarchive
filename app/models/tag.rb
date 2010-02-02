@@ -4,7 +4,7 @@ class Tag < ActiveRecord::Base
   # It is the order that tags are shown in the header of a work
   # (ambiguous tags are grouped with freeform tags)
   # (banned tags are not shown)
-  TYPES = ['Rating', 'Warning', 'Category', 'Media', 'Fandom', 'Pairing', 'Character', 'Freeform', 'Ambiguity', 'Banned' ]
+  TYPES = ['Rating', 'Warning', 'Category', 'Media', 'Fandom', 'Pairing', 'Character', 'Freeform', 'Banned' ]
 
   # these tags can be filtered on
   FILTERS = TYPES - ['Banned', 'Media']
@@ -13,8 +13,8 @@ class Tag < ActiveRecord::Base
   VISIBLE = TYPES - ['Media', 'Banned']
 
   # these are tags which have been created by users
-  USER_DEFINED = ['Fandom', 'Pairing', 'Character', 'Freeform', 'Ambiguity']
-
+  USER_DEFINED = ['Fandom', 'Pairing', 'Character', 'Freeform']
+  
   has_many :mergers, :foreign_key => 'merger_id', :class_name => 'Tag'
   belongs_to :merger, :class_name => 'Tag'
   belongs_to :fandom
@@ -27,9 +27,15 @@ class Tag < ActiveRecord::Base
   has_many :common_taggings, :foreign_key => 'common_tag_id'
   has_many :child_taggings, :class_name => 'CommonTagging', :as => :filterable
   has_many :children, :through => :child_taggings, :source => :common_tag 
-  has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag'
-  has_many :ambiguities, :through => :common_taggings, :source => :filterable, :source_type => 'Ambiguity'
-  #has_many :filtered_works, :through => :common_taggings, :source => :filterable, :source_type => 'Work'
+  has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag', :before_remove => :check_parent_status
+
+  has_many :meta_taggings, :foreign_key => 'sub_tag_id'
+  has_many :meta_tags, :through => :meta_taggings, :source => :meta_tag, :before_remove => :remove_meta_filters
+  has_many :sub_taggings, :class_name => 'MetaTagging', :foreign_key => 'meta_tag_id'
+  has_many :sub_tags, :through => :sub_taggings, :source => :sub_tag
+  
+  has_many :same_work_tags, :through => :works, :source => :tags, :uniq => true
+  has_many :same_work_fandoms, :through => :works, :source => :fandoms, :uniq => true
 
   has_many :taggings, :as => :tagger
   has_many :works, :through => :taggings, :source => :taggable, :source_type => 'Work'
@@ -46,6 +52,25 @@ class Tag < ActiveRecord::Base
     #:with => /\A[-a-zA-Z0-9 \/?.!''"":;\|\]\[}{=~!@#\$%&()_+]+\z/,
     :message => " of a tag can only be made up of letters, numbers, spaces and basic punctuation, but not commas, asterisks or angle brackets."
 
+  def validate
+    if !self.new_record? && self.name_changed?
+      unless User.current_user.is_a?(Admin) || (self.name.downcase == self.name_was.downcase)
+        self.errors.add(:name, "can only be changed by an admin.")        
+      end
+    end
+    if self.merger_id
+      if self.canonical?
+        self.errors.add_to_base("A canonical can't be a synonym")       
+      end 
+      if self.merger_id == self.id
+        self.errors.add_to_base("A tag can't be a synonym of itself.")
+      end
+      unless self.merger.class == self.class
+        self.errors.add_to_base("A tag can only be a synonym of a tag in the same category as itself.")        
+      end
+    end    
+  end
+
   def before_validation
     self.name = name.squish if self.name
   end
@@ -53,15 +78,17 @@ class Tag < ActiveRecord::Base
   named_scope :canonical, {:conditions => {:canonical => true}, :order => 'name ASC'}
   named_scope :noncanonical, {:conditions => {:canonical => false}, :order => 'name ASC'}
   named_scope :nonsynonymous, {:conditions => {:merger_id => nil, :canonical => false}, :order => 'name ASC'}
-  named_scope :unwrangled, {:conditions => {:canonical => false, :merger_id => nil}, :order => 'name ASC'}
+  named_scope :unfilterable, {:conditions => {:merger_id => nil, :canonical => false}}
+  named_scope :unwrangled, {:joins => "LEFT JOIN `common_taggings` ON common_taggings.common_tag_id = tags.id", 
+    :conditions => "common_taggings.id IS NULL"}
   named_scope :visible, {:conditions => ['type in (?)', VISIBLE], :order => 'name ASC' }
 
   named_scope :by_popularity, {:order => 'taggings_count DESC'}
   named_scope :by_name, {:order => 'name ASC'}
   named_scope :by_date, {:order => 'created_at DESC'}
 
-  named_scope :by_fandom, lambda{|fandom| {:conditions => {:fandom_id => fandom.id}}}
-  named_scope :no_parent, :conditions => {:fandom_id => nil}
+  named_scope :first_class, {:joins => "LEFT JOIN `meta_taggings` ON meta_taggings.sub_tag_id = tags.id", 
+    :conditions => "meta_taggings.id IS NULL"}
 
   named_scope :by_pseud, lambda {|pseud|
     {
@@ -96,23 +123,23 @@ class Tag < ActiveRecord::Base
     }     
   }
   
-  named_scope :public_top, lambda { |count|
+  named_scope :public_top, lambda { |tag_count|
     {
       :select => "tags.*, filter_counts.public_works_count as count",
       :joins => :filter_count,
       :order => 'filter_counts.public_works_count DESC',
       :conditions => 'filter_counts.public_works_count > 0',
-      :limit => count
+      :limit => tag_count
     }     
   }
   
-  named_scope :unhidden_top, lambda { |count|
+  named_scope :unhidden_top, lambda { |tag_count|
     {
       :select => "tags.*, filter_counts.unhidden_works_count as count",
       :joins => :filter_count,
       :order => 'filter_counts.unhidden_works_count DESC',
-      :conditions => 'filter_counts.unhidden_works_count > 0',
-      :limit => count
+      :conditions => 'filter_counts.unhidden_works_count > 0 AND tags.type = "Fandom" AND tags.canonical = 1',
+      :limit => tag_count
     }     
   }
   
@@ -124,7 +151,17 @@ class Tag < ActiveRecord::Base
       { :select => "tags.*, filter_counts.public_works_count as count", 
         :joins => :filter_count,
         :conditions => 'filter_counts.public_works_count > 0' }
-    } 
+    }
+    
+  named_scope :with_related_tags, lambda {|tag_type, sort_order|
+    {:select => "DISTINCT tags.*, GROUP_CONCAT(DISTINCT tags_2.name SEPARATOR ', ') AS suggested_fandoms",
+    :joins => "LEFT JOIN taggings ON ( tags.id = taggings.tagger_id AND taggings.tagger_type = 'Tag') 
+    LEFT JOIN works ON ( taggings.taggable_id = works.id AND taggings.taggable_type = 'Work') 
+    LEFT JOIN taggings taggings_2 ON ( works.id = taggings_2.taggable_id AND taggings_2.taggable_type = 'Work') 
+    LEFT JOIN tags tags_2 ON ( tags_2.id = taggings_2.tagger_id AND tags_2.type = '#{tag_type}')",
+    :group => 'tags.id',
+    :order => sort_order}
+  }     
   
   # Class methods
 
@@ -133,39 +170,38 @@ class Tag < ActiveRecord::Base
   end
 
   def to_param
-    name.gsub('/', '%2F').gsub('&', '%26').gsub('.', '%2E')
+    # can't find a tag with a name that hasn't been saved yet
+    saved_name = self.name_changed? ? self.name_was : self.name
+    saved_name.gsub('/', '%2F').gsub('&', '%26').gsub('.', '%2E')
   end
   
+  # Substitute characters that are particularly prone to cause trouble in urls
   def self.find_by_name(string)
     self.find(:first, :conditions => ['name = ?', string.gsub('%26', '&').gsub('%2F', '/').gsub('%2E', '.')])
   end
-
-  def self.find_or_create_by_name(string)
-    return if !string.is_a?(String) || string.blank?
-    string.squish!
-    # try to find the tag
-    tag = self.find_by_name(string)
-    return tag if tag
-    # try to create the tag
-    tag = self.create(:name => string) rescue nil
-    return tag if tag.andand.valid?
-    # it wasn't valid, which probably means it already exists in another category
-    old_tag = Tag.find_by_name(string)
-    if old_tag # so create this one with the category appended
-      new_tag = self.find_or_create_by_name(string + " - " + self.to_s)
-      return new_tag if new_tag
-    else
-      # other tag validation errors - wasn't saved
-      return tag
-    end
-  end
-
-  def self.for_tag_cloud
-    if fandom_no_tag_name = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
-      if freeform = Freeform.find(:all, :conditions => {:fandom_id => fandom_no_tag_name.id, :canonical => true})
-        freeform.sort
+  
+  # If a tag by this name exists in another class, add a suffix to disambiguate them
+  def self.find_or_create_by_name(new_name)
+    if new_name && new_name.is_a?(String)
+      new_name.squish!
+      tag = Tag.find_by_name(new_name)
+      if tag && tag.class == self
+        tag
+      elsif tag
+        self.find_or_create_by_name(new_name + " - " + self.to_s)
+      else
+        self.create(:name => string)
       end
     end
+  end
+  
+  # Inherited tag classes can set this to indicate types of tags with which they may have a parent/child
+  # relationship (ie. media: parent, fandom: child; fandom: parent, character: child)
+  def parent_types
+    []
+  end
+  def child_types
+    []
   end
 
   # Instance methods that are common to all subclasses (may be overridden in the subclass)
@@ -176,6 +212,18 @@ class Tag < ActiveRecord::Base
   end
   
   #### FILTERING ####
+
+  # Add any filter taggings that should exist but don't
+  def self.add_missing_filter_taggings
+    Tag.find_each(:conditions => "taggings_count != 0 AND (canonical = 1 OR merger_id IS NOT NULL)") do |tag|
+      if tag.filter
+        to_add = tag.works - tag.filter.filtered_works
+        to_add.each do |work|
+          tag.filter.filter_taggings.create!(:filterable => work)
+        end
+      end
+    end
+  end
   
   # Add any filter taggings that should exist but don't
   def self.add_missing_filter_taggings
@@ -199,7 +247,7 @@ class Tag < ActiveRecord::Base
   def filter
     self.canonical? ? self : ((self.merger && self.merger.canonical?) ? self.merger : nil)
   end
-  
+
   before_save :update_filters_for_canonical_change
   before_save :update_filters_for_merger_change
   
@@ -236,10 +284,13 @@ class Tag < ActiveRecord::Base
   
   # Add filter taggings for a given tag
   def add_filter_taggings
-    filter = self.canonical? ? self : self.merger
-    if filter && !filter.new_record?
-      Work.with_any_tags([self, filter]).each do |work|
-        work.filter_taggings.find_or_create_by_filter_id(filter.id)
+    filter_tag = self.filter
+    if filter_tag  && !filter_tag.new_record?
+      Work.with_any_tags([self, filter_tag]).each do |work|
+        work.filters << filter_tag unless work.filters.include?(filter_tag)
+        unless filter_tag.meta_tags.empty?
+          filter_tag.meta_tags.each { |m| work.filters << m unless work.filters.include?(m) }
+        end
       end
       filter.reset_filter_count
     end
@@ -256,7 +307,18 @@ class Tag < ActiveRecord::Base
           filter_tagging = work.filter_taggings.find_by_filter_id(old_filter.id)
           filter_tagging.destroy if filter_tagging
         end
-      end
+        unless old_filter.meta_tags.empty?
+          old_filter.meta_tags.each do |meta_tag|
+            other_sub_tags = meta_tag.sub_tags - [old_filter]
+            sub_mergers = other_sub_tags.empty? ? [] : other_sub_tags.collect(&:mergers).flatten.compact
+            if work.filters.include?(meta_tag) && (work.filters & other_sub_tags).empty?
+              unless work.tags.include?(meta_tag) || !(work.tags & meta_tag.mergers).empty? || !(work.tags & sub_mergers).empty?
+                work.filters.delete(meta_tag)
+              end
+            end
+          end
+        end        
+      end      
       old_filter.reset_filter_count      
     else
       self.filter_taggings.destroy_all
@@ -285,482 +347,18 @@ class Tag < ActiveRecord::Base
   
   #### END FILTERING ####
 
-
-  def update_common_tags
-    # self.works.each do |work|
-    #   work.update_common_tags
-    # end
-  end
-
-  def wrangle_canonical(update_works=true)
-    self.update_attribute(:canonical, true)
-    self.update_common_tags if update_works
-  end
-
-  def wrangle_not_canonical(update_works=true)
-    self.update_attribute(:canonical, false)
-    self.update_common_tags if update_works
-  end
-
-  def wrangle_merger(merger, update_works=true)
-    unless merger == self
-      return unless merger.canonical? && merger.is_a?(self.class)
-      self.update_attribute(:merger_id, merger.id)
-      self.parents << merger.parents rescue nil
-      merger.parents << self.parents rescue nil
-      self.update_attribute(:fandom_id, merger.fandom_id)
-      self.update_attribute(:media_id, merger.media_id)
-      self.ensure_correct_fandom_id
-      self.ensure_correct_media_id
-      self.mergers.each do |synonym|
-        synonym.wrangle_merger(merger)
-      end
-      self.update_common_tags if update_works
-    end
-  end
-
-  def remove_merger(update_works=true)
-    self.update_attribute(:merger_id, nil)
-    self.update_common_tags if update_works
-  end
-
-  def wrangle_parent(parent, update_works=true)
-    return unless parent.is_a?(Tag) && parent.canonical?
-    self.parents << parent unless self.parents.include?(parent)
-    self.add_fandom(parent.fandom) unless self.fandom == parent.fandom
-    self.add_media(parent.media) unless self.media == parent.media || self.medias.include?(parent.media)
-    self.update_common_tags if update_works
-  end
-
-  # all tags which have given tag as a parent
-  #def children
-  #  CommonTagging.find_all_by_filterable_id_and_filterable_type(self.id, 'Tag').map(&:common_tag).uniq.compact.sort
-  #end
-
-  # parents children and self
-  def family
-    ([self] + self.children + self.parents + self.mergers + [self.merger]).compact
-  end
-
-  # Tag       Tag_to_add    Relationship
-  #  All        Media         Parent
-  #  All        Fandom        Parent
-  #  All        Freeform      Child
-  #  Fandom     Character     Child
-  #  Character  Character     Child
-  #  Pairing    Character     Parent
-  #  Freeform   Character     Parent
-  #  Fandom     Pairing       Child
-  #  Character  Pairing       Child
-  #  Pairing    Pairing       Child
-  #  Freeform   Pairing       Parent
-
-  # a pairing character or freeform tag which has been wrangled
-  # should have a fandom_id so it no longer shows up on the mass
-  # assign page. This should only be "No Fandom" if it has no others.
-  def ensure_correct_fandom_id
-    # only pairing character and freeform tags must have fandoms
-    return unless ['Pairing', 'Character', 'Freeform'].include?(self[:type])
-
-    # get the nofandom tag
-    nofandom = Fandom.find_or_create_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
-
-    # get the first fandom of the current tag which is not nofandom
-    fandom = (self.fandoms - [nofandom]).first
-
-    # if we have a fandom, we don't need "No Fandom" as a fandom
-    if fandom && self.fandoms.include?(nofandom)
-      self.remove_fandom(nofandom)
-    end
-
-    # make sure the tag has a fandom id
-    if !self.fandom_id # we don't have a fandom id
-      if !fandom # and we don't have a fandom
-        # we don't have anything, but we're being wrangled, so add "No Fandom"
-        self.update_attribute(:fandom_id, nofandom.id)
-        self.parents << nofandom unless self.parents.include?(nofandom)
-      else # we do have a fandom
-        # use the one for our first fandom
-        self.update_attribute(:fandom_id, fandom.id)
-      end
-    end
-
-    # make sure the fandom_id is only for "No Fandom" if we don't have any other fandoms
-    if self.fandom_id == nofandom.id
-      if fandom
-        self.update_attribute(:fandom_id, fandom.id)
-      else
-        # ensure No Fandom is actually one of its fandoms
-        self.parents << nofandom unless self.parents.include?(nofandom)
-      end
-    end
-
-    # if the fandom id isn't for our first fandom or nofandom, verify that it's a real fandom
-    if !(self.fandom_id == nofandom.id || (fandom && self.fandom_id == fandom.id))
-      listed_fandom = Fandom.find_by_id(self.fandom_id)
-      # it's not a real fandom or it's been removed
-      if !listed_fandom.is_a?(Fandom) || !self.fandoms.include?(listed_fandom)
-        if fandom
-          self.update_attribute(:fandom_id, fandom.id)
-        else
-          self.update_attribute(:fandom_id, nofandom.id)
-        end
-      end
-    end
-
-    # now that we know we have a good fandom_id, propagate it to our mergers
-    self.mergers.each do |merger|
-      merger.update_attribute(:fandom_id, self.fandom_id)
-    end
-  end
-
-  # a fandom tag which has been wrangled should have a media_id
-  # so it no longer shows up on the mass assign page. If it doesn't,
-  # give it the "No Media" media
-  # If it has any media besides "no Media" make sure "No Media" is removed
-  def ensure_correct_media_id
-    # only fandoms tags must have medias
-    return unless self[:type] == 'Fandom'
-
-    uncategorized = Media.uncategorized
-
-    # get the first media of the current tag which is not "Uncategorized Fandoms"
-    current_media = ([self.media] + self.medias).compact
-    media = (current_media - [uncategorized]).first
-
-    # if we have a media, we don't need "Uncategorized Fandoms" as a media
-    if media 
-      self.remove_media(uncategorized) if self.medias.include?(uncategorized)
-      self.update_attribute(:media_id, media.id) if self.media == uncategorized
-    end
-
-    # make sure the tag has a media id
-    if !self.media_id # we don't have a media id
-      if !media # and we don't have a media
-        # we don't have anything, but we're being wrangled, so add "Uncategorized Fandoms"
-        self.update_attribute(:media_id, uncategorized.id)
-        self.parents << uncategorized unless self.parents.include?(uncategorized)
-      else # we do have a media
-        # use the one for our first media
-        self.update_attribute(:media_id, media.id)
-      end
-    end
-
-    # if the media id isn't for our first media or "Uncategorized Fandoms", verify that it's a real media
-    if !(self.media_id == uncategorized.id || (media && self.media_id == media.id))
-      listed_media = Media.find_by_id(self.media_id)
-      # it's not a real media or it's been removed
-      if !listed_media.is_a?(Media) || !self.medias.include?(listed_media)
-        if media
-          self.update_attribute(:media_id, media.id)
-        else
-          self.update_attribute(:media_id, uncategorized.id)
-        end
-      end
-    end
-
-  end
-
-  def add_parent_by_id(parent_id)
-    if self.is_a?(Fandom)
-      add_media(Media.find_by_id(parent_id))
-    elsif Tag::USER_DEFINED.include?(self[:type])
-      add_fandom(Fandom.find_by_id(parent_id))
-    end
-  end
-
-  def add_disambiguator(tag)
-    return unless self.is_a?(Ambiguity)
-    return false unless tag.is_a? Tag
-    tag.ambiguities << self unless tag.ambiguities.include?(self)
-  end
-  def remove_disambiguator(tag)
-    return unless self.is_a?(Ambiguity)
-    return false unless tag.is_a? Tag
-    tag.ambiguities.delete(self)
-  end
-
-  def add_media(media_to_add)
-    return unless self.is_a?(Fandom)
-    return false unless media_to_add.is_a? Media
-    self.wrangle_parent(media_to_add)
-    if self.media == Media.uncategorized || self.media.nil?
-      self.media = media_to_add
-      self.save  
-    end
-    self.ensure_correct_media_id
-  end
-  def remove_media(media_to_remove)
-    return unless self.is_a?(Fandom)
-    return false unless media_to_remove.is_a? Media
-    self.parents.delete(media_to_remove)
-    if self.media == media_to_remove
-      uncategorized = Media.uncategorized
-      other_media = self.medias - [uncategorized]
-      new_media = other_media.empty? ? uncategorized : other_media.first
-      self.update_attribute(:media_id, new_media.id)
-    end 
-    self.ensure_correct_media_id
-  end
-
-  def add_fandom(fandom)
-    return unless Tag::USER_DEFINED.include?(self[:type])
-    return false unless fandom.is_a? Fandom
-    self.wrangle_parent(fandom)
-    self.ensure_correct_fandom_id
-  end
-
-  def remove_fandom(fandom)
-    return unless Tag::USER_DEFINED.include?(self[:type])
-    return false unless fandom.is_a? Fandom
-    self.parents.delete(fandom)
-    self.ensure_correct_fandom_id
-  end
-
-  def add_freeform(freeform)
-    return unless Tag::USER_DEFINED.include?(self[:type])
-    return false unless freeform.is_a? Freeform
-    freeform.wrangle_parent(self)
-  end
-  def remove_freeform(freeform)
-    return unless Tag::USER_DEFINED.include?(self[:type])
-    return false unless freeform.is_a? Freeform
-    freeform.parents.delete(self)
-  end
-
-  def add_pairing(pairing)
-    return unless Tag::USER_DEFINED.include?(self[:type])
-    return false unless pairing.is_a? Pairing
-    if self.is_a?(Freeform)
-      self.wrangle_parent(pairing)
-    else
-      pairing.wrangle_parent(self)
-    end
-    if self.is_a?(Character)
-      pairing.update_attribute(:has_characters, true)
-    end
-  end
-  def remove_pairing(pairing)
-    return unless Tag::USER_DEFINED.include?(self[:type])
-    return false unless pairing.is_a? Pairing
-    if self.is_a?(Freeform)
-      self.parents.delete(pairing)
-    else
-      pairing.parents.delete(self)
-    end
-    if self.is_a?(Character)
-      pairing.update_attribute(:has_characters, false) if pairing.characters.blank?
-    end
-  end
-
-  def add_character(character)
-    return unless Tag::USER_DEFINED.include?(self[:type])
-    return false unless character.is_a? Character
-    if self.is_a?(Fandom) || self.is_a?(Character)
-      character.wrangle_parent(self)
-    else
-      self.wrangle_parent(character)
-    end
-    if self.is_a?(Pairing)
-      self.update_attribute(:has_characters, true)
-    end
-  end
-  def remove_character(character)
-    return unless Tag::USER_DEFINED.include?(self[:type])
-    return false unless character.is_a? Character
-    if self.is_a?(Fandom) || self.is_a?(Character)
-      character.parents.delete(self)
-    else
-      self.parents.delete(character)
-    end
-    if self.is_a?(Pairing)
-      self.update_attribute(:has_characters, false) if self.characters.blank?
-    end
-  end
-
-  def add_synonym(synonym)
-    return false unless synonym.is_a?(self.class)
-    synonym.wrangle_merger(self)
-  end
-  def remove_synonym(synonym)
-    return false unless synonym.is_a?(self.class)
-    self.mergers.delete(synonym)
-  end
-
-  def update_type(type, admin=false)
-    if type=="Ambiguity" || admin
-      self.update_attribute("type", type)
-    else
-      return false
-    end
-  end
-
-  def update_disambiguators(new=[])
-    return unless self[:type] == 'Ambiguity'
-    current = self.disambiguators.map(&:name)
-    current = [] unless current
-    new = [] unless new
-    remove = current - new
-    add = new - current
-    remove.each do |disambiguator_name|
-      self.remove_disambiguator(Tag.find_by_name(disambiguator_name))
-    end
-    add.each do |disambiguator_name|
-      self.add_disambiguator(Tag.find_by_name(disambiguator_name))
-    end
-    disambiguators
-  end
-
-  def update_characters(new=[])
-    return unless Tag::USER_DEFINED.include?(self[:type])
-    current = self.characters.map(&:name)
-    current = [] unless current
-    new = [] unless new
-    remove = current - new
-    add = new - current
-    remove.each do |character_name|
-      self.remove_character(Character.find_by_name(character_name))
-    end
-    add.each do |character_name|
-      self.add_character(Character.find_by_name(character_name))
-    end
-    characters
-  end
-
-  def update_pairings(new=[])
-    return unless Tag::USER_DEFINED.include?(self[:type])
-    current = self.pairings.map(&:name)
-    current = [] unless current
-    new = [] unless new
-    remove = current - new
-    add = new - current
-    remove.each do |pairing_name|
-      self.remove_pairing(Pairing.find_by_name(pairing_name))
-    end
-    add.each do |pairing_name|
-      self.add_pairing(Pairing.find_by_name(pairing_name))
-    end
-    pairings
-  end
-
-  def update_fandoms(new=[])
-    return unless Tag::USER_DEFINED.include?(self[:type])
-    current = self.fandoms.map(&:name)
-    current = [] unless current
-    new = [] unless new
-    remove = current - new
-    add = new - current
-    remove.each do |fandom_name|
-      self.remove_fandom(Fandom.find_by_name(fandom_name))
-    end
-    add.each do |fandom_name|
-      self.add_fandom(Fandom.find_by_name(fandom_name))
-    end
-    self.ensure_correct_fandom_id
-    fandoms
-  end
-
-  def update_medias(new_medias=[])
-    return unless self[:type] == 'Fandom'
-    current = self.medias.map(&:name)
-    current = [] unless current
-    new_medias = [] unless new_medias
-    remove = current - new_medias
-    add = new_medias - current
-    remove.each do |media_name|
-      self.remove_media(Media.find_by_name(media_name))
-    end
-    add.each do |media_name|
-      self.add_media(Media.find_by_name(media_name))
-    end
-    self.ensure_correct_media_id
-    medias
-  end
-
-  def update_freeforms(new_freeforms=[])
-    return unless Tag::USER_DEFINED.include?(self[:type])
-    current = self.freeforms.map(&:name)
-    remove = current - new_freeforms
-    add = new_freeforms - current
-    remove.each do |freeform_name|
-      self.remove_freeform(Freeform.find_by_name(freeform_name))
-    end
-    add.each do |freeform_name|
-      self.add_freeform(Freeform.find_by_name(freeform_name))
-    end
-    freeforms
-  end
-
-  def update_synonyms(new=[])
-    current = self.mergers.map(&:name)
-    current = [] unless current
-    new = [] unless new
-    remove = current - new
-    add = new - current
-    remove.each do |tag_name|
-      self.remove_synonym(Tag.find_by_name(tag_name))
-    end
-    add.each do |tag_name|
-      self.add_synonym(Tag.find_by_name(tag_name))
-    end
-    mergers
-  end
-
-  # return an array of all the common_tags which tagging with self should add
-  def common_tags_to_add
-    common_tags = []
-    common_tags << self.merger
-    common_tags << self if self.canonical
-    common_tags << self.parents
-    common_tags.flatten.uniq.compact
-  end
-
   # methods for counting visible
-
-  def visible_works_count
-    if User.current_user && User.current_user.kind_of?(Admin)
-      self.works.count(:all,
-          :conditions => {:posted => true})
-    elsif User.current_user.is_a? User
-      self.works.visible_to_user(User.current_user.id).size
-    else
-      self.works.count(:all,
-          :conditions => {:posted => true, :restricted => false, :hidden_by_admin => false})
-    end
-  end
-
-  def visible_synonyms_works_count
-    if self.canonical
-      total = self.visible_works_count
-      self.mergers.each do |merger|
-        total += merger.visible_works_count
-      end
-      return total
-    elsif self.merger
-      return self.merger.visible_synonyms_works_count
-    else
-      return self.visible_works_count
-    end
-  end
   
+  def visible_works_count
+    User.current_user == :false ? self.works.posted.unhidden.unrestricted.count : self.works.posted.unhidden.count 
+  end
+
   def visible_bookmarks_count
-    if User.current_user && User.current_user.kind_of?(Admin)
-      conditions = {:private => false}
-    elsif User.current_user.is_a? User
-      conditions = ['bookmarks.private = ? AND bookmarks.hidden_by_admin = ? OR bookmarks.pseud_id in (?)', false, false, User.current_user.pseuds.collect(&:id)]
-    else
-      conditions = {:private => false, :hidden_by_admin => false}
-    end
-    self.bookmarks.count(:all, :conditions => conditions )
+    self.bookmarks.public.count
   end
 
   def visible_external_works_count
-    if User.current_user && User.current_user.kind_of?(Admin)
-      conditions = {}
-    else
-      conditions = {:hidden_by_admin => false}
-    end
-    self.external_works.count(:all, :conditions => conditions )
+    self.external_works.count(:all, :conditions => {:hidden_by_admin => false})
   end
 
   def visible_taggables_count
@@ -768,23 +366,139 @@ class Tag < ActiveRecord::Base
   end
 
   def banned
-    return self if self.is_a?(Banned)
-  end
-
-  def ambiguous
-    return self if self.is_a?(Ambiguity)
-  end
-
-  def unwrangled
-    return self unless (self.canonical || self.merger || ['Ambiguity', 'Banned'].include?(self.class) )
-  end
-
-  def find_similar
-    Tag.find(:all, :conditions => ["name like ? and canonical = ?", "%" + self.name + "%", true])
+    self.is_a?(Banned)
   end
   
   def synonyms
     self.canonical? ? self.mergers : [self.merger] + self.merger.mergers - [self]
+  end
+  
+  # Add a common tagging association
+  # Offloading most of the logic to the inherited tag models
+  def add_association(tag)
+    self.parents << tag unless self.parents.include?(tag)    
+  end
+  
+  # Determine how two tags are related and divorce them from each other
+  def remove_association(tag)
+    if tag.class == self.class
+      if self.mergers.include?(tag)
+        tag.update_attributes(:merger_id => nil)
+      elsif self.meta_tags.include?(tag)
+        self.meta_tags.delete(tag)
+      elsif self.sub_tags.include?(tag)
+        tag.meta_tags.delete(self)
+      end
+    else
+      if self.parents.include?(tag)
+        self.parents.delete(tag)
+      elsif tag.parents.include?(self)
+        tag.parents.delete(self)
+      end
+    end    
+  end
+  
+  # When a meta tagging relationship is removed, things filter-tagged with the meta tag 
+  # and the sub tag should have the meta filter-tagging removed unless it's directly tagged 
+  # with the meta tag or one of its synonyms or a different sub tag of the meta tag or one of its synonyms
+  def remove_meta_filters(meta_tag)
+    if self.meta_tags.length == 1
+      self.toggle!(:has_meta_tags)
+    end
+    other_sub_tags = meta_tag.sub_tags - [self]
+    self.filtered_works.each do |work|
+      if work.filters.include?(meta_tag) && (work.filters & other_sub_tags).empty?
+        unless work.tags.include?(meta_tag) || !(work.tags & meta_tag.mergers).empty?
+          work.filters.delete(meta_tag)
+        end
+      end
+    end
+  end
+  
+  # If we're making a tag non-canonical, we need to update its synonyms and children
+  before_update :check_canonical
+  def check_canonical
+    if self.canonical_changed? && !self.canonical?
+      self.mergers.each {|tag| tag.update_attributes(:merger_id => nil)}
+      self.children.each {|tag| tag.parents.delete(self)}
+      self.sub_tags.each {|tag| tag.meta_tags.delete(self)}
+      self.meta_tags.each {|tag| self.meta_tags.delete(tag)}
+    elsif self.canonical_changed? && self.canonical?
+      self.merger_id = nil
+    end
+    true
+  end
+  
+  attr_reader :media_string, :fandom_string, :character_string, :pairing_string, :freeform_string, :meta_tag_string, :sub_tag_string, :merger_string
+  
+  def add_parent_string(tag_string)
+    names = tag_string.split(',').map(&:squish)
+    names.each do |name|
+      parent = Tag.find_by_name(name)
+      self.add_association(parent) if parent && parent.canonical?
+    end   
+  end
+  
+  def fandom_string=(tag_string); self.add_parent_string(tag_string); end
+  def media_string=(tag_string); self.add_parent_string(tag_string); end
+  def character_string=(tag_string); self.add_parent_string(tag_string); end
+  def pairing_string=(tag_string); self.add_parent_string(tag_string); end
+  def freeform_string=(tag_string); self.add_parent_string(tag_string); end
+  def meta_tag_string=(tag_string)
+    names = tag_string.split(',').map(&:squish)
+    names.each do |name|
+      parent = Tag.find_by_name(name)
+      if parent && parent.canonical?
+        self.meta_taggings.create(:meta_tag => parent, :direct => true) unless self.meta_tags.include?(parent)
+      end
+    end        
+  end
+  
+  def sub_tag_string=(tag_string)
+    names = tag_string.split(',').map(&:squish)
+    names.each do |name|
+      sub = Tag.find_by_name(name)
+      if sub && sub.canonical?
+        sub.meta_taggings.create(:meta_tag => self, :direct => true) unless sub.meta_tags.include?(self)
+      end
+    end        
+  end
+  
+  def syn_string
+    self.merger.name if self.merger
+  end
+  
+  def syn_string=(tag_string)
+    new_merger = Tag.find_by_name(tag_string)
+    if new_merger && !new_merger.canonical?
+      self.errors.add_to_base(new_merger.name + " is not a canonical tag. Please make it canonical before adding synonyms to it.")
+    else
+      unless new_merger
+        new_merger = self.class.create(:name => new_name, :canonical => true)
+      end
+      self.canonical = false      
+      self.merger_id = new_merger.id
+      if self.valid?
+        new_merger.parents << self.parents
+        new_merger.children << self.children
+        new_merger.meta_tags << self.meta_tags
+        new_merger.sub_tags << self.sub_tags             
+        self.mergers.each {|m| m.update_attributes(:merger_id => new_merger.id)}
+        self.children = []
+        self.meta_tags = []
+        self.sub_tags = []        
+      end
+    end    
+  end
+  
+  def merger_string=(tag_string)
+    names = tag_string.split(',').map(&:squish)
+    names.each do |name|
+      syn = Tag.find_by_name(name)
+      if syn && !syn.canonical?
+        syn.update_attributes(:merger_id => self.id)
+      end
+    end          
   end
 
   def indirect_bookmarks(rec=false)
@@ -795,13 +509,12 @@ class Tag < ActiveRecord::Base
     (work_bookmarks + ext_work_bookmarks + series_bookmarks)
   end
 
-
   # Index for Thinking Sphinx
   define_index do
 
     # fields
-    indexes name, :sortable => true
-    has :type, :sortable => true
+    indexes :name, :sortable => true
+    indexes :type, :as => :tag_type, :sortable => true
 
     # properties
     set_property :delta => :delayed
