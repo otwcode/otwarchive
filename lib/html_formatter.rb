@@ -65,92 +65,131 @@ module HtmlFormatter
     # content. This feature was added because the previous code seemed to be
     # trying to do this, but I've disabled the feature lower down in the code,
     # beause it looks much tidier that way! (This list, therefore, does nothing)
-    inl_cont_tags_list = ['h1','h2','h3','h4','h5','h6','i','em','big','small','cite','b','strong','del','ins','caption','code']
+    # UPDATE: These items, if found unclosed, will be assumed to contain all
+    # following text nodes. Other nodes will be assumed to have no content.
+    inl_cont_tags_list = ['h1','h2','h3','h4','h5','h6','i','em','big','small','cite','b','strong','del','ins','caption','code', 'li']
 
-    # The various (recursive) functions that do the real work
+    # The various functions that do the real work. Some of these used to be
+    # recursive, but have been reduced to a monolithic loop and a state stack
+    # which is unlimited, unlike the function stack. See 'start_node' and
+    # 'end_node' for stack pushing and popping.
+    # Some are still recursive. 'tidy_nodes' in particular cannot deal with a
+    # html element depth of maybe 800, but that's going to involve another
+    # fiddly loop optimisation that I don't want to do unless it's necessary.
     parse_text = lambda do |text|
       return [], '' if text.nil?
+      nodes = []
+      state_stack = []
+      return_node = lambda do |node, text2|
+        nodes.push node
+        text = text2
+        return true
+      end
+      start_node = lambda do |node, text2|
+        state_stack.push [node, nodes]
+        nodes = node[2]
+        text = text2
+      end
+      end_node = lambda do |tag, text2|
+        text = text2
+        if state_stack.empty?
+          # Discard bogus end node
+          return true
+        else
+          node, nodes = state_stack.pop
+          closing = nil
+          if (text.nil? or text.empty?) and tag and tag[2] != nil
+            # End of stream. This tag has no closing tag.
+            closing = "!#{node[0]}"
+          elsif not tag.nil? and tag[0] != node[0]
+            # Tag does not match opening tag
+            closing = "-#{tag[0]}"
+          end
+          node[3] = closing
+          ret = return_node[node, text]
+          return ret
+        end
+      end
       # Takes a snippet of html. returns: nodes, leftover_text
       # nodes is a list where each node takes the form:
       # (tagname, attribute_hash, child_list, text_value)
       # with the special tagnames '#text' and '#comment' having a text_value.
-      if text[0..0] == '<'
-        # A tag
-        if (pos = text.index('<', 1)) and pos < text.index('>')
-          # If another lt before gt then it's a text node.
-          return [[_text, {}, [], text[0...pos]], text[pos...text.length]]
-        elsif text[1..1] == '!'
-          # It's a comment or we drop it
-          if text[2..3] == '--'
-            value, rest = text.split('-->', 2)
-            value = value[4..value.length]
-            return [[_comment, {}, [], value], rest]
+      while not text.nil? and not text.empty?
+        if text[0..0] == '<'
+          # A tag
+          if (pos = text.index('<', 1)) and pos < text.index('>')
+            # If another lt before gt then it's a text node.
+            return_node[[_text, {}, [], text[0...pos]], text[pos...text.length]] and next or break
+          elsif text[1..1] == '!'
+            # It's a comment or we drop it
+            if text[2..3] == '--'
+              value, rest = text.split('-->', 2)
+              value = value[4..value.length]
+              return_node[[_comment, {}, [], value], rest] and next or break
+            else
+              return_node[nil, text.split('>', 2)[1]] and next or break
+            end
+          elsif text[1..1] == '/'
+            # A closing tag
+            name, rest = text.split('>', 2)
+            name = name[2..name.length].strip
+            end_node[[name, {}, nil, nil], rest] and next or break
           else
-            return parse_text.call(text.split('>', 2)[1])
+            # Either an open tag or a self closing tag.
+            # Attributes
+            tag, text = text.split('>', 2)
+            tag = tag[1..tag.length]
+            tag_name, attrs = tag.split(' ', 2)
+            attrs = (attrs || '').strip || ''
+            self_closing = false
+            if attrs.end_with? '/'
+              # Self closing tag
+              self_closing = true
+              attrs = attrs.strip[0...attrs.length-1]
+            elsif tag_name.end_with? '/'
+              # Self closing tag
+              self_closing = true
+              tag_name = tag_name.strip[0...tag_name.length-1]
+            elsif always_self_close_list.include? tag_name
+              # Treat as a self closing tag
+              self_closing = true
+            elsif tag_name == 'br'
+              self_closing = true
+            end
+            attr_hash = {}
+            for attr in attrs.split(' ')
+              attr = attr.strip
+              next if attr.empty?
+              k, v = attr.split('="')
+              next if v.nil?
+              attr_hash[k] = v[0...v.length-1]
+            end
+            # Children
+            children = []
+            node = [tag_name, attr_hash, children, '-NOT-SET-']
+            if self_closing
+              node[3] = nil
+              return_node[node, text] and next or break
+            else
+              start_node[node, text]
+              next
+            end
           end
-        elsif text[1..1] == '/'
-          # A closing tag
-          name, rest = text.split('>', 2)
-          name = name[2..name.length].strip
-          return [[name, {}, nil, nil], rest]
         else
-          # Either an open tag or a self closing tag.
-          # Attributes
-          tag, text = text.split('>', 2)
-          tag = tag[1..tag.length]
-          tag_name, attrs = tag.split(' ', 2)
-          attrs = (attrs or '').strip
-          self_closing = false
-          if attrs.end_with? '/'
-            # Self closing tag
-            self_closing = true
-            attrs = attrs.strip[0...attrs.length-1]
-          elsif tag_name.end_with? '/'
-            # Self closing tag
-            self_closing = true
-            tag_name = tag_name.strip[0...tag_name.length-1]
-          elsif always_self_close_list.include? tag_name
-            # Treat as a self closing tag
-            self_closing = true
-          elsif tag_name == 'br'
-            self_closing = true
+          # A text node
+          pos = text.index '<'
+          if pos.nil?
+            value, rest = text, ''
+          else
+            value, rest = text[0...pos], text[pos...text.length]
           end
-          attr_hash = {}
-          for attr in attrs.split(' ')
-            attr = attr.strip
-            next if attr.empty?
-            k, v = attr.split('="')
-            next if v.nil?
-            attr_hash[k] = v[0...v.length-1]
-          end
-          # Children
-          children = []
-          while not text.empty? \
-          and ((new_child, text = parse_text.call(text))[0][2] != nil \
-          or (new_child and always_self_close_list.include? new_child[0].downcase))
-            children.push new_child if new_child[2] != nil
-          end unless self_closing
-          closing = nil
-          if (text.nil? or text.empty?) and new_child and new_child[2] != nil
-            # End of stream. This tag has no closing tag.
-            closing = "!#{tag_name}" unless self_closing
-          elsif not new_child.nil? and new_child[0] != tag_name
-            # Tag does not match opening tag
-            closing = "-#{new_child[0]}"
-          end
-          return [[tag_name, attr_hash, children, closing], text]
+          return_node[[_text, {}, [], value], rest] and next or break
         end
-      else
-        # A text node
-        pos = text.index '<'
-        if pos.nil?
-          value, rest = text, ''
-        else
-          value, rest = text[0...pos], text[pos...text.length]
-        end
-        return [[_text, {}, [], value], rest]
       end
-      raise "processing broke on " + text.inspect
+      while not state_stack.empty?
+        end_node[['#none', {}, [], nil], '']
+      end
+      return nodes
     end
     def render_node(node)
       # Converts the node tree format parsed above back into html.
@@ -160,6 +199,8 @@ module HtmlFormatter
         return node[3]
       elsif node[0] == 'br'
         return '<br/>'
+      elsif node[0] == 'hr'
+        return '<hr/>'
       else
         attrs = node[1].entries.map{|x,y| "#{x}=\"#{y}\""}
         attrs = ' ' + attrs.join(' ') unless attrs.empty?
@@ -170,43 +211,71 @@ module HtmlFormatter
     sanitize_nodes = lambda do |nodes|
       # Clean up nodes we don't want, and put appropriate escapes into the
       # text nodes.
+      _include = '#include'
       out_nodes = []
+      work_list = []
+      push_node = lambda do |out_list, node|
+        work_list.push [[_include, node], out_list]
+      end
+      push_work = lambda do |lst, node|
+        work_list.push [node, lst]
+      end
       for node in nodes
+        push_work[out_nodes, node]
+      end
+      while not work_list.empty?
+        node, out_list = work_list.shift
         name = node[0].downcase
-        if name == _text
+        if name == _include
+          out_list.push node[1]
+        elsif name == _text
           # Escape '<' and '>'
           node[3].gsub!('<', '&lt;')
           node[3].gsub!('>', '&gt;')
           # Escape any non-entity ampersands
           node[3].gsub!(/&(?!(?:[a-z]+|#[0-9]+);)(.*?;?)/, '&amp;\1')
-          out_nodes.push(node)
+          push_node[out_list, node]
         elsif name == _comment
           node[3].gsub!('--', '- - ') # double dash is illegal in comments
-          out_nodes.push(node)
+          push_node[out_list, node]
         elsif not allowed_tags.include? name
           if true # "<!--xxx-->" comment bad nodes
-            out_nodes.push([_comment, {}, [], "<#{name}>"])
-            for node in sanitize_nodes.call(node[2])
-              out_nodes.push(node)
+            push_node[out_list, [_comment, {}, [], "<#{name}>"]]
+            for n in node[2]
+              push_work[out_list, node]
             end
-            out_nodes.push([_comment, {}, [], "</#{name}>"])
+            push_node[out_list, [_comment, {}, [], "</#{name}>"]]
           else # "&gt;xxx&lt;" escape bad nodes
-            out_nodes.push([_text, {}, [], "&lt;#{name}&gt;"])
-            for node in sanitize_nodes.call(node[2])
-              out_nodes.push(node)
+            push_node[out_list, [_text, {}, [], "&lt;#{name}&gt;"]]
+            for n in node[2]
+              push_work[out_list, n]
             end
-            out_nodes.push([_text, {}, [], "&lt;/#{name}&gt;"])
+            push_node[out_list, [_text, {}, [], "&lt;/#{name}&gt;"]]
           end
         elsif not node[3].nil? and node[3].start_with? '!'
           # Unmatched tag - assume not to have contents
-          out_nodes.push [node[0], node[1], [], nil]
-          sanitize_nodes.call(node[2]).each {|x|
-            out_nodes.push x
-          }
+          children = []
+          push_node[out_list, [node[0], node[1], children, nil]]
+          if inl_cont_tags_list.include? name
+            child_list = children
+          else
+            child_list = out_list
+          end
+          for n in node[2]
+            child_list = out_list unless n[0] == _text
+            push_work[child_list, n]
+          end
         else
-          node[2].replace(sanitize_nodes.call(node[2]))
-          out_nodes.push(node)
+          cnodes = node[2].dup
+          node[2].replace([])
+          push_node[out_list, node]
+          for n in cnodes
+            push_work[node[2], n]
+          end
         end
+      end
+      for n in out_nodes
+        raise [n, out_nodes, text_input].inspect if n[2] == nil
       end
       return out_nodes
     end
@@ -340,48 +409,26 @@ module HtmlFormatter
       end
       return paras
     end
-    parse_html = lambda do |html_text|
-      nodes = []
-      return nodes if html_text.nil?
-      while not (html_text.nil? or html_text.empty?)
-        node, html_text = parse_text.call(html_text)
-        unless node[2].nil?
-          # Don't record the stray end tags, but keep looping to get as much
-          # data as possible from the fragment.
-          nodes.push node
-        end
-      end
-      # Check for any unclosed wrapper tags that might indicate a stray
-      # opening tag near the start, and turn them into self-closing tags.
-      prefix_nodes = []
-      while not nodes.empty? and not [_text, _comment].include? nodes.first[0] \
-      and not nodes.first[3].nil? and nodes.first[3].start_with? '!'
-        # A node that is not a text or comment but has a '-...' value in the
-        # fourth field is an unmatched closing tag. A '!...' value indicates
-        # an unclosed opening tag.
-        unclosed = nodes.shift
-        unclosed[2].reverse.each{|x| nodes.insert(0, x)}
-        prefix_nodes.insert(0, [node[0], node[1], [], nil])
-      end
-      return prefix_nodes + nodes
-    end
 
     # The actual program
     # 1. Parse text into HTML 'tree'
-    raw_nodes = parse_html.call(text_input)
+    raw_nodes = parse_text.call(text_input)
     raise text_input.inspect if raw_nodes.nil?
     nodes = raw_nodes
     # 2. Do our tidying up
+    snodes = nil
     if sanitize
       nodes = sanitize_nodes.call(nodes)
       raise raw_nodes.inspect if nodes.nil?
     end
+    tnodes = nil
     if tidy
       nodes = tidy_nodes.call(nodes)
       raise raw_nodes.inspect if nodes.nil?
     end
     # 3. Render and return
-    return nodes.map{|x| render_node(x)}.join('')
+    txt = nodes.map{|x| render_node(x)}.join('')
+    return txt
   end
 
   # adds paragraphs and newlines, then gets rid of doubled ones
