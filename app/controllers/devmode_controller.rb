@@ -1,5 +1,5 @@
 
-MAX_REPORTED_ERRORS = 5
+MAX_REPORTED_ERRORS = 1
 WORK_CREATOR_VERSION = 'VER 3;;'
 
 class DevmodeController < ApplicationController
@@ -19,6 +19,23 @@ class DevmodeController < ApplicationController
       end
       flash[:info] = 'Successfully cleared URL associations'
     end
+  end
+
+  def profile_logs
+    path = ApplicationController.prof_log_path
+    if params[:logname]
+      f = File.new(File.join(path, params[:logname]), 'rb')
+      render :text => f.read()
+      f.close()
+      return
+    end
+    paths = []
+    raise ["bad dir", path, File::Stat.new(path)].inspect unless File.exist?(path)
+    Dir.new(path).entries.each do |name|
+      next unless name.end_with? '.html'
+      paths.push File.join(path, name)
+    end
+    @paths = paths
   end
 
   # GET list_views
@@ -337,6 +354,8 @@ class DevmodeController < ApplicationController
     raise "Provide chapter count" if chapter_count.nil?
     raise "Provide chapter char count" if chapter_char_count.nil?
     raise "Provide authors" if authors.nil? or authors.empty?
+    raise "Non unique fandoms" if fandoms.uniq.sort != fandoms.sort
+    raise "Non unique characters #{characters.map(&:to_str).inspect}" if characters.uniq.sort != characters.sort
 
     # Provide a function to generate new chapters. Keeps them all different
     new_chapter = lambda {"#{WORK_CREATOR_VERSION} #{random_chapter chapter_char_count}"}
@@ -581,8 +600,10 @@ class DevmodeController < ApplicationController
         if item.nil?
           item = create_func.call
           # Put the new item into the list
-          nil_pos = list.index nil
-          list[nil_pos..nil_pos] = item
+          if not list.include? item
+            nil_pos = list.index nil
+            list[nil_pos..nil_pos] = item
+          end
         end
         item
       end
