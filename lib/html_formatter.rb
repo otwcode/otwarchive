@@ -81,7 +81,7 @@ module HtmlFormatter
       nodes = []
       state_stack = []
       return_node = lambda do |node, text2|
-        nodes.push node
+        nodes.push node unless node.nil?
         text = text2
         return true
       end
@@ -129,6 +129,8 @@ module HtmlFormatter
             else
               return_node[nil, text.split('>', 2)[1]] and next or break
             end
+          elsif text[1..1] == '?'
+            return_node[nil, text.split('>', 2)[1]] and next or break
           elsif text[1..1] == '/'
             # A closing tag
             name, rest = text.split('>', 2)
@@ -160,8 +162,8 @@ module HtmlFormatter
             for attr in attrs.split(' ')
               attr = attr.strip
               next if attr.empty?
-              k, v = attr.split('="')
-              next if v.nil?
+              k, v = attr.split('="', 2)
+              next if v.nil? or v.empty?
               attr_hash[k] = v[0...v.length-1]
             end
             # Children
@@ -225,6 +227,7 @@ module HtmlFormatter
       end
       while not work_list.empty?
         node, out_list = work_list.shift
+        next if node.nil?
         name = node[0].downcase
         if name == _include
           out_list.push node[1]
@@ -242,7 +245,7 @@ module HtmlFormatter
           if true # "<!--xxx-->" comment bad nodes
             push_node[out_list, [_comment, {}, [], "<#{name}>"]]
             for n in node[2]
-              push_work[out_list, node]
+              push_work[out_list, n]
             end
             push_node[out_list, [_comment, {}, [], "</#{name}>"]]
           else # "&gt;xxx&lt;" escape bad nodes
@@ -416,12 +419,10 @@ module HtmlFormatter
     raise text_input.inspect if raw_nodes.nil?
     nodes = raw_nodes
     # 2. Do our tidying up
-    snodes = nil
     if sanitize
       nodes = sanitize_nodes.call(nodes)
       raise raw_nodes.inspect if nodes.nil?
     end
-    tnodes = nil
     if tidy
       nodes = tidy_nodes.call(nodes)
       raise raw_nodes.inspect if nodes.nil?
