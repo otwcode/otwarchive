@@ -43,6 +43,9 @@
     <%- form_tag url_for(:controller => 'tag_wranglers', :action => "create") do -%> 
       <div id="wranglers-for-<%= assignments.first.id %>"
         <%= hidden_field_tag :fandom_id, assignments.first.id %>
+        <%= hidden_field_tag :fandom_string, params[:fandom_string] %>
+        <%= hidden_field_tag :media_id, params[:media_id] %>
+        <%= hidden_field_tag :wrangler_id, params[:wrangler_id] %>
         <p><%= select_tag 'user_ids[]', options_for_select([''] + @wranglers.collect(&:login)) %>
         <%= submit_tag 'Assign' %>
         <%= link_to_function("add more") do |page| 

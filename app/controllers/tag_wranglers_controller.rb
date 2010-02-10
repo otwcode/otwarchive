@@ -54,7 +54,7 @@ class TagWranglersController < ApplicationController
       end
     end
     flash[:notice] = "Wranglers were successfully assigned!"
-    redirect_to tag_wranglers_path    
+    redirect_to tag_wranglers_path(:media_id => params[:media_id], :fandom_string => params[:fandom_string], :wrangler_id => params[:wrangler_id])    
   end
   
   def destroy
