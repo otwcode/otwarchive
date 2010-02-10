@@ -48,6 +48,11 @@
     <!-- FRONT-END: this is important info, so it would be good to have a way to make it stand out a little more -->       
     <dd><%= @tag.type %></dd>
     
+    <%- if @wranglers -%>
+    <dt><%= 'Wranglers' %></dt>
+    <dd><%= wrangler_list(@wranglers) %></dd>
+    <%- end -%>
+    
     <dt><%= f.label :canonical, 'Canonical' %></dt>
     <dd>
       <%= f.check_box("canonical", :disabled => !(logged_in_as_admin? || Tag::USER_DEFINED.include?(@tag.class.name)) || !@tag.mergers.empty? || !@tag.children.empty? ) %>&nbsp;

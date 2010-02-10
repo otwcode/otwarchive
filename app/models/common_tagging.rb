@@ -5,11 +5,13 @@ class CommonTagging < ActiveRecord::Base
   validates_presence_of :common_tag, :filterable
   validates_uniqueness_of :common_tag_id, :scope => :filterable_id 
   
-  before_create :update_wrangler  
+  after_create :update_wrangler  
   after_create :inherit_parents 
   
   def update_wrangler
-    common_tag.update_attributes(:last_wrangler => User.current_user)
+    unless User.current_user == :false
+      common_tag.update_attributes(:last_wrangler => User.current_user)
+    end
   end
   
   # A pairing should inherit its characters' fandoms

@@ -165,6 +165,11 @@ class TagsController < ApplicationController
     @children = @tag.children.find(:all, :order => :name).group_by {|tag| tag[:type]}
     @children['SubTag'] = @tag.sub_tags.by_name
     @children['Merger'] = @tag.mergers.by_name
+    if @tag.respond_to?(:wranglers)
+      @wranglers = @tag.wranglers
+    elsif !@tag.fandoms.empty?
+      @wranglers = @tag.fandoms.collect(&:wranglers).flatten.uniq
+    end
   end
 
   def update

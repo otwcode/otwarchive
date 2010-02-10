@@ -32,6 +32,14 @@ module TagsHelper
   def tag_wrangler_footer
     render :partial => 'tag_wranglings/footer'
   end
+  
+  def wrangler_list(wranglers)
+    if wranglers.blank?
+      link_to "Sign Up", tag_wranglers_path
+    else
+      wranglers.collect(&:login).join(', ')
+    end
+  end
 
 	def link_to_tag(tag, options = {})
     link_to_tag_with_text(tag, tag.type == "Warning" ? warning_display_name(tag.name) : tag.name, options)
