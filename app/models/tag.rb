@@ -38,6 +38,8 @@ class Tag < ActiveRecord::Base
   has_many :meta_tags, :through => :meta_taggings, :source => :meta_tag, :before_remove => :remove_meta_filters
   has_many :sub_taggings, :class_name => 'MetaTagging', :foreign_key => 'meta_tag_id'
   has_many :sub_tags, :through => :sub_taggings, :source => :sub_tag
+  has_many :direct_meta_tags, :through => :meta_taggings, :source => :meta_tag, :conditions => "meta_taggings.direct = 1"
+  has_many :direct_sub_tags, :through => :sub_taggings, :source => :sub_tag, :conditions => "meta_taggings.direct = 1"
   
   has_many :same_work_tags, :through => :works, :source => :tags, :uniq => true
   has_many :same_work_fandoms, :through => :works, :source => :fandoms, :uniq => true
