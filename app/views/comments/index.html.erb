@@ -11,14 +11,11 @@
   	<% end -%>
   <% end -%>
 <%- else -%>
-	<h2>
-	  <%=sanitize_title_for_display t('viewing_comments_on', :default => 'Viewing Comments on {{title}}', 
-	            :title => (@commentable.title.blank? ? "" : link_to(@commentable.title, @commentable))) %>
-	</h2> 
+	<h2><%= title_for_comment_page(@commentable) %></h2> 
 <!--/descriptions-->
 
-<!--main content--> 
-	<%= render :partial => 'comments/comment_thread', :locals => { :comments => @comments, :depth => 0 } %>
+<!--main content-->
+	<%= render :partial => 'comments/commentable', :locals => { :commentable => @commentable } %>
 <%- end -%>
 <!--main content-->
 

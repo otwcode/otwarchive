@@ -6,9 +6,6 @@ class RatingTest < ActiveSupport::TestCase
     setup do
       @rating = create_rating
     end
-    should "not error on update_medias" do
-      assert_nil @rating.update_medias([Media.first])
-    end
     should "have a display name" do
       assert_equal ArchiveConfig.RATING_CATEGORY_NAME, Rating::NAME
     end

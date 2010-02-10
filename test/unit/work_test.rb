@@ -194,7 +194,7 @@ class WorkTest < ActiveSupport::TestCase
     end
     context "where the character is wrangled" do
       setup do
-        @character.add_pairing(@pairing)
+        @character.add_association(@pairing)
       end
       should "only have the pairing in cast list" do
         assert_equal [@pairing], @work.cast_tags
@@ -203,7 +203,7 @@ class WorkTest < ActiveSupport::TestCase
     context "where the character is wrangled but not to the pairing" do
       setup do
         @new_pairing = create_pairing(:canonical => true)
-        @character.add_pairing(@new_pairing)
+        @character.add_association(@new_pairing)
       end
       should "have both in cast list" do
         assert_equal [@pairing, @character], @work.cast_tags
@@ -212,8 +212,8 @@ class WorkTest < ActiveSupport::TestCase
     context "where the character is wrangled but to the pairing's merger" do
       setup do
         @new_pairing = create_pairing(:canonical => true)
-        @pairing.wrangle_merger(@new_pairing)
-        @character.add_pairing(@new_pairing)
+        @pairing.update_attributes(:merger_id => @new_pairing.id)
+        @character.add_association(@new_pairing)
         @work.reload
       end
       should "only have the pairing in cast list" do

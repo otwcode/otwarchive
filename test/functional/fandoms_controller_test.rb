@@ -5,9 +5,12 @@ class FandomsControllerTest < ActionController::TestCase
   context "a media with canonical and non-canonical fandoms" do
     setup do
       @medium = create_media(:canonical => true)
-      @fandom1 = create_fandom(:media_id => @medium.id)
-      @fandom2 = create_fandom(:canonical => true, :media_id => @medium.id)
-      @fandom_without_works = create_fandom(:canonical => true, :media_id => @medium.id)
+      @fandom1 = create_fandom
+      @fandom2 = create_fandom(:canonical => true)
+      @fandom_without_works = create_fandom(:canonical => true)
+      @fandom1.add_association(@medium)
+      @fandom2.add_association(@medium)
+      @fandom_without_works.add_association(@medium)
       @fandom_with_other_media = create_fandom(:canonical => true)
       fandom_string = [@fandom1.name, @fandom2.name, @fandom_with_other_media.name].join(', ')
       @work = create_work(:posted => true, :fandom_string => fandom_string)

@@ -53,6 +53,8 @@ class CommentsController < ApplicationController
       @commentable = Bookmark.find(params[:bookmark_id])
     elsif params[:admin_post_id]
       @commentable = AdminPost.find(params[:admin_post_id])
+    elsif params[:tag_id]
+      @commentable = Tag.find_by_name(params[:tag_id])      
     end
   end
 
@@ -288,11 +290,19 @@ class CommentsController < ApplicationController
   # redirect to a particular comment in a thread, going into the thread
   # if necessary to display it
   def redirect_to_comment(comment, options = {})
-    if comment.depth > ArchiveConfig.COMMENT_THREAD_MAX_DEPTH
-      default_options = {:controller => comment.commentable.class.to_s.underscore.pluralize, 
-                         :action => :show,
-                         :id => comment.commentable.id,
-                         :anchor => "comment#{comment.id}"}
+    if comment.depth > ArchiveConfig.COMMENT_THREAD_MAX_DEPTH 
+      if commentable.is_a?(Tag)
+        default_options = {:controller => :comments, 
+                           :action => :index,
+                           :tag_id => comment.commentable.name,
+                           :anchor => "comment#{comment.id}"}
+        
+      else
+        default_options = {:controller => comment.commentable.class.to_s.underscore.pluralize, 
+                           :action => :show,
+                           :id => comment.commentable.id,
+                           :anchor => "comment#{comment.id}"}
+      end
       # display the comment's direct parent (and its associated thread)
       redirect_to(url_for(default_options.merge(options)))
     else
@@ -303,13 +313,21 @@ class CommentsController < ApplicationController
   def redirect_to_all_comments(commentable, options = {})
     default_options = {:anchor => "comments"}
     options = default_options.merge(options)
-    redirect_to :controller => commentable.class.to_s.underscore.pluralize,
-                :action => :show,
-                :id => commentable.id,
-                :show_comments => options[:show_comments],
-                :add_comment => options[:add_comment],
-                :add_comment_reply_id => options[:add_comment_reply_id],
-                :delete_comment_id => options[:delete_comment_id],
-                :anchor => options[:anchor]
+    if commentable.is_a?(Tag)
+      redirect_to comments_path(:tag_id => commentable.name, 
+      :add_comment => options[:add_comment],
+      :add_comment_reply_id => options[:add_comment_reply_id],
+      :delete_comment_id => options[:delete_comment_id],
+      :anchor => options[:anchor])
+    else
+      redirect_to :controller => commentable.class.to_s.underscore.pluralize,
+                  :action => :show,
+                  :id => commentable.id,
+                  :show_comments => options[:show_comments],
+                  :add_comment => options[:add_comment],
+                  :add_comment_reply_id => options[:add_comment_reply_id],
+                  :delete_comment_id => options[:delete_comment_id],
+                  :anchor => options[:anchor]
+    end
   end
 end

@@ -11,83 +11,68 @@ class FreeformTest < ActiveSupport::TestCase
   context "tags for tag cloud" do
     setup do
       @tag = create_character
-      @tag.add_fandom(Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME))
+      @no_fandom = Fandom.find_or_create_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
+      @tag.add_association(@no_fandom)
     end
     should "not include other kinds of tags" do
-       assert_does_not_contain(Tag.for_tag_cloud, @tag)
+       assert_does_not_contain(Freeform.for_tag_cloud, @tag)
     end
   end
 
   context "tags without a fandom" do
     setup { @tag = create_freeform }
     should "not be included in the cloud" do
-       assert_does_not_contain(Tag.for_tag_cloud, @tag)
+       assert_does_not_contain(Freeform.for_tag_cloud, @tag)
     end
   end
   context "tags whose fandom is No Fandom" do
     setup do
       @tag = create_freeform
-      @tag.add_fandom(Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME))
-    end
-    should "not be included in the cloud unless they are canonical" do
-       assert_does_not_contain(Tag.for_tag_cloud, @tag)
-    end
-    context "which have been made canonical" do
+      @no_fandom = Fandom.find_or_create_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
+      @tag.add_association(@no_fandom)
+    end   
+    context "with at least one visible work" do
       setup do
-        @tag.update_attribute(:canonical, true)
+        @work = create_work(:posted => true, :freeform_string => @tag.name)
       end
-      should "be included in the cloud" do
-        assert_contains(Tag.for_tag_cloud, @tag)
+      should "not be included in the cloud unless they are canonical" do
+         assert_does_not_contain(Freeform.for_tag_cloud, @tag)
       end
-    end
-  end
-  context "tags with a work which is not visible" do
-    setup do
-      @tag = create_freeform
-      @work = create_work(:restricted => true)
-      @work.update_attribute(:posted, true)
-      @work.tags << @tag
-    end
-    should_eventually "not be included in the cloud" do
-       assert_does_not_contain(Tag.for_tag_cloud, @tag)
+      context "which have been made canonical" do
+        setup do
+          @tag.update_attributes(:canonical => true)
+       end
+        should "be included in the cloud" do
+          assert_contains(Freeform.for_tag_cloud, @tag)
+        end
+      end
+      context "whose work is no longer visible" do
+        setup do
+          @work.update_attribute(:restricted, true)
+        end
+        should "not be included in the cloud" do
+          assert_does_not_contain(Freeform.for_tag_cloud, @tag)
+        end        
+      end
     end
   end
   context "a canonical freeform" do
     setup do
       @freeform = create_freeform
-      @freeform.wrangle_canonical
+      @freeform.update_attributes(:canonical => true)
     end
     context "with a synonym" do
       setup do
         @freeform2 = create_freeform
-        @freeform.add_synonym(@freeform2)
+        @freeform2.update_attributes(:merger_id => @freeform.id)
       end
       should "be listed in its mergers" do
         assert_equal [@freeform2], @freeform.mergers
       end
       context "which is removed" do
         setup do
-          @freeform.remove_synonym(@freeform2)
-        end
-        should "not be listed in its mergers" do
-          assert_equal [], @freeform.mergers
-        end
-      end
-    end
-    context "using update to add synonyms" do
-      setup do
-        @freeform2 = create_freeform
-        @freeform.update_synonyms([@freeform2.name])
-        @freeform.reload
-      end
-      should "be listed in its mergers" do
-        assert_equal [@freeform2], @freeform.mergers
-      end
-      context "which is removed" do
-        setup do
-          @freeform.update_synonyms([""])
-          @freeform.reload
-        end
+          @freeform2.update_attributes(:merger_id => nil)
+       end
         should "not be listed in its mergers" do
           assert_equal [], @freeform.mergers
         end
@@ -96,36 +81,11 @@ class FreeformTest < ActiveSupport::TestCase
     context "with a tag of a different class" do
       setup do
         @character = create_character
-        @freeform.add_synonym(@character)
+        @freeform.update_attributes(:merger_id => @character.id)
       end
       should "should not be able to be merged" do
         assert_equal [], @freeform.mergers
       end
     end
-    context "which is wrangled by an admin" do
-      setup do
-        @freeform.update_type("Character", true)
-      end
-      should "be updated" do
-        assert_equal 'Character', @freeform[:type]
-      end
-    end
-    context "which is not wrangled by an admin" do
-      setup do
-        @freeform.update_type("Ambiguity", false)
-      end
-      should "be updated to an Ambiguity" do
-        assert_equal 'Ambiguity', @freeform[:type]
-      end
-    end
-    context "which is not wrangled by an admin or an Ambiguity" do
-      setup do
-        @freeform.update_type("Character", false)
-      end
-      should "not be updated to a Character" do
-        assert_equal 'Freeform', @freeform[:type]
-      end
-    end
   end
-
 end

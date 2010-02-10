@@ -11,83 +11,39 @@ class PairingTest < ActiveSupport::TestCase
     end
     context "which is canonical" do
       setup do
-        @pairing.wrangle_canonical
-      end
-      context "which uses update on names" do
-        setup do
-          @character = create_character(:canonical => true)
-          @character2 = create_character(:canonical => true)
-          @pairing.update_characters([@character.name, @character2.name])
-        end
-        should "have both characters as a parents" do
-          assert_same_elements [@character, @character2], @pairing.parents
-        end
-        context "removing one" do
-          setup do
-            @pairing.update_characters([@character.name])
-          end
-          should "have only one character as parent" do
-            assert_equal [@character], @pairing.parents
-          end
-          should "mark the pairing as having characters" do
-            assert @pairing.has_characters
-          end
-        end
-        context "removing both" do
-          setup do
-            @pairing.update_characters([""])
-          end
-          should "have no characters as parent" do
-            assert_equal [], @pairing.parents
-          end
-          should "mark the pairing as not having characters" do
-            assert !@pairing.has_characters
-          end
-        end
+        @pairing.update_attribute(:canonical, true)
       end
       context "which gets a character added" do
         setup do
           @character = create_character(:canonical => true)
-          @pairing.add_character(@character)
+          @pairing.add_association(@character)
         end
         should "have the character as a parent" do
           assert_contains(@pairing.parents, @character)
         end
-        should "mark the pairing as having characters" do
-          assert @pairing.has_characters
-        end
         context "which is later removed" do
           setup do
-            @pairing.remove_character(@character)
+            @pairing.remove_association(@character)
           end
           should "not have the character as a parent" do
             assert_does_not_contain(@pairing.parents, @character)
-          end
-          should "mark the pairing as not having characters" do
-            assert !@pairing.has_characters
           end
         end
         context "which gets a second character added" do
           setup do
             @character2 = create_character(:canonical => true)
-            @pairing.add_character(@character2)
+            @pairing.add_association(@character2)
           end
           should "have both characters as a parents" do
             assert_same_elements [@character, @character2], @pairing.parents
           end
-          should "mark the pairing as having characters" do
-            assert @pairing.has_characters
-          end
           context "when one is removed" do
             setup do
-              @pairing.remove_character(@character)
+              @pairing.remove_association(@character)
             end
             should "still have the second character as a parent" do
               assert_does_not_contain(@pairing.parents, @character)
               assert_contains(@pairing.parents, @character2)
-            end
-            should "still mark the pairing as having characters" do
-              assert @pairing.has_characters
             end
           end
         end

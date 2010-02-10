@@ -17,20 +17,6 @@ namespace :Tag do
     end
     puts "Tag count reset."
   end
-  desc "Reset tag fandom and media ids"
-  task(:reset_parents => :environment) do
-    ThinkingSphinx.deltas_enabled=false
-    nofandom = Tag.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
-    Tag.find(:all).each do |t|
-      t.parents.delete(nofandom) if t.is_a?(Fandom)
-      t.update_attribute(:fandom_id, nil) if t.is_a?(Fandom)
-      t.update_attribute(:media_id, nil) if t.is_a?(Media)
-      t.ensure_correct_media_id if t.media_id
-      t.ensure_correct_fandom_id if t.fandom_id
-    end
-    ThinkingSphinx.deltas_enabled=true
-    puts "Tag parents reset."
-  end
   desc "Update pairing has_characters"
   task(:update_has_characters => :environment) do
     Pairing.all.each do |pairing|

@@ -1,4 +1,19 @@
 module CommentsHelper
+  
+  def value_for_comment_form(commentable, comment)
+    commentable.is_a?(Tag) ? comment : [commentable, comment]
+  end
+  
+  def title_for_comment_page(commentable)
+    if commentable.commentable_name.blank?
+      title = ""
+    elsif commentable.is_a?(Tag)
+      title = link_to_tag(commentable)
+    else
+      title = link_to(commentable.commentable_name, commentable)
+    end
+    sanitize_title_for_display t('viewing_comments_on', :default => 'Viewing Comments on {{title}}', :title => title)
+  end
 
   def link_to_comment_ultimate_parent(comment)
     ultimate = comment.ultimate_parent
@@ -10,7 +25,11 @@ module CommentsHelper
       when 'AdminPost' then 
           link_to sanitize(ultimate.title, :tags => %w(em i b strong strike small)), ultimate
       else
-        link_to 'Something Interesting', ultimate
+        if ultimate.is_a?(Tag)
+          link_to_tag(ultimate)
+        else
+          link_to 'Something Interesting', ultimate
+        end
     end
   end
 
@@ -206,12 +225,17 @@ end
 
   # non-JavaScript fallbacks for great justice!
   
-  def fallback_url_for_top_level(commentable, options = {})
-    
+  def fallback_url_for_top_level(commentable, options = {})    
     default_options = {:anchor => "comments"}
-    default_options[:controller] = commentable.class.to_s.underscore.pluralize
-    default_options[:action] = "show"
-    default_options[:id] = commentable.id
+    if commentable.is_a?(Tag)
+      default_options[:controller] = :comments
+      default_options[:action] = :index
+      default_options[:tag_id] = commentable.name      
+    else
+      default_options[:controller] = commentable.class.to_s.underscore.pluralize
+      default_options[:action] = "show"
+      default_options[:id] = commentable.id
+    end
     default_options[:add_comment] = params[:add_comment] if params[:add_comment]
     default_options[:show_comments] = params[:show_comments] if params[:show_comments]
     

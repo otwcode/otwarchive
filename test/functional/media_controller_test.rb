@@ -4,9 +4,11 @@ class MediaControllerTest < ActionController::TestCase
 
   context "a media with canonical and non-canonical fandoms" do
     setup do
-      @media = create_media(:canonical => true)
-      @fandom1 = create_fandom(:media_id => @media.id)
-      @fandom2 = create_fandom(:canonical => true, :media_id => @media.id)
+      @medium = create_media(:canonical => true)
+      @fandom1 = create_fandom
+      @fandom2 = create_fandom(:canonical => true)
+      @fandom1.add_association(@medium)
+      @fandom2.add_association(@medium)      
       fandom_string = [@fandom1.name, @fandom2.name].join(', ')
       @work = create_work(:posted => true, :fandom_string => fandom_string)
     end
@@ -14,14 +16,14 @@ class MediaControllerTest < ActionController::TestCase
       setup {get :index}
       should_render_template :index
       should "produce an array of media tags" do
-        assert assigns(:media).include? @media
+        assert assigns(:media).include? @medium
       end
       should "only include the canonical fandom in the fandom_listing" do
-        assert_contains assigns(:fandom_listing)[@media], @fandom2
+        assert_contains assigns(:fandom_listing)[@medium], @fandom2
       end
     end
     # context "on list" do
-    #   setup { get :show, :id => @media.name }
+    #   setup { get :show, :id => @medium.name }
     #   should "include canonical fandom" do
     #     assert_contains(assigns(:fandoms), @fandom2)
     #   end
@@ -32,7 +34,8 @@ class MediaControllerTest < ActionController::TestCase
     context "and five more canonical fandoms" do
       setup do
         for i in 0...5 do
-          fandom = create_fandom(:canonical => true, :media_id => @media.id)
+          fandom = create_fandom(:canonical => true)
+          fandom.add_association(@medium)
           @work.fandoms << fandom
         end
       end
@@ -45,14 +48,14 @@ class MediaControllerTest < ActionController::TestCase
     end
     # context "that start with the letter f" do
     #   setup do
-    #     @media = create_media(:canonical => true)
-    #     @fandom1 = create_fandom(:canonical => true, :media_id => @media.id, :name => "Farscape")
-    #     @fandom2 = create_fandom(:canonical => true, :media_id => @media.id, :name => "Firefly") 
+    #     @medium = create_media(:canonical => true)
+    #     @fandom1 = create_fandom(:canonical => true, :media_id => @medium.id, :name => "Farscape")
+    #     @fandom2 = create_fandom(:canonical => true, :media_id => @medium.id, :name => "Firefly") 
     #     @work = create_work(:posted => true, :fandom_string => "Farscape")
     #     @invisible_work = create_work(:fandom_string => "Firefly")
     #   end
     #   context "on list" do
-    #     setup { get :show, :id => @media.name, :letter => 'F' }
+    #     setup { get :show, :id => @medium.name, :letter => 'F' }
     #     should_assign_to :fandoms
     #     should "include canonical fandoms with visible works" do
     #       assert_contains(assigns(:fandoms), @fandom1)

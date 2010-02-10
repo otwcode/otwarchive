@@ -3,8 +3,14 @@ class Fandom < Tag
   NAME = ArchiveConfig.FANDOM_CATEGORY_NAME
   
   has_many :wrangling_assignments
-  has_many :wranglers, :through => :wrangling_assignments, :source => :user 
+  has_many :wranglers, :through => :wrangling_assignments, :source => :user
   
+  has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag', :after_remove => :check_media
+  has_many :medias, :through => :common_taggings, :source => :filterable, :source_type => 'Tag', :conditions => "type = 'Media'"
+  has_many :characters, :through => :child_taggings, :source => :common_tag, :conditions => "type = 'Character'"
+  has_many :pairings, :through => :child_taggings, :source => :common_tag, :conditions => "type = 'Pairing'"
+  has_many :freeforms, :through => :child_taggings, :source => :common_tag, :conditions => "type = 'Freeform'"
+    
   named_scope :by_media, lambda{|media| {:conditions => {:media_id => media.id}}}
   
   COLLECTION_JOIN =  "INNER JOIN filter_taggings ON ( tags.id = filter_taggings.filter_id ) 
@@ -51,8 +57,12 @@ class Fandom < Tag
     } 
   }
   
+  # An association callback to add the default media if all others have been removed
+  def check_media(media)
+    self.add_media_for_uncategorized
+  end  
   
-  before_save :add_media_for_uncategorized
+  after_save :add_media_for_uncategorized
   def add_media_for_uncategorized
     if self.medias.empty?
       self.parents << Media.uncategorized
@@ -77,33 +87,13 @@ class Fandom < Tag
   def child_types
     ['Character', 'Pairing', 'Freeform', 'SubTag', 'Merger']
   end
-
-  def characters
-    children.by_type('Character').by_name
-  end
-
-  def pairings
-    children.by_type('Pairing').by_name
-  end
-
-  def freeforms
-    children.by_type('Freeform').by_name
-  end
-
-  def fandoms
-    (children + parents).select {|t| t.is_a? Fandom}.sort
-  end
-
-  def medias
-    parents.by_type('Media').by_name
-  end
   
   def add_association(tag)
     if tag.is_a?(Media)
       self.parents << tag unless self.parents.include?(tag)
       # Remove default media if another is added
-      if self.medias.length > 1 && self.medias.include?(Media.uncategorized)
-        self.medias.delete(Media.uncategorized)
+      if self.medias.include?(Media.uncategorized)
+        self.remove_association(Media.uncategorized)
       end
     else
       self.children << tag unless self.children.include?(tag)

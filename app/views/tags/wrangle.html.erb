@@ -1,5 +1,7 @@
 <h2><%= 'Wrangle Tags for ' + link_to_tag(@tag) %></h2>
 
+<p><%= tag_comment_link(@tag) %></p>  
+
 <p><%= link_to 'edit tag and parent associations', {:controller => :tags, :action => :edit, :id => @tag} %></p>
 
 <%- if params[:show] -%>

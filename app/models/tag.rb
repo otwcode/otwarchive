@@ -15,6 +15,11 @@ class Tag < ActiveRecord::Base
   # these are tags which have been created by users
   USER_DEFINED = ['Fandom', 'Pairing', 'Character', 'Freeform']
   
+  acts_as_commentable
+  def commentable_name
+    self.name
+  end
+  
   has_many :mergers, :foreign_key => 'merger_id', :class_name => 'Tag'
   belongs_to :merger, :class_name => 'Tag'
   belongs_to :fandom
@@ -27,7 +32,7 @@ class Tag < ActiveRecord::Base
   has_many :common_taggings, :foreign_key => 'common_tag_id'
   has_many :child_taggings, :class_name => 'CommonTagging', :as => :filterable
   has_many :children, :through => :child_taggings, :source => :common_tag 
-  has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag', :before_remove => :check_parent_status
+  has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag'
 
   has_many :meta_taggings, :foreign_key => 'sub_tag_id'
   has_many :meta_tags, :through => :meta_taggings, :source => :meta_tag, :before_remove => :remove_meta_filters
@@ -46,11 +51,11 @@ class Tag < ActiveRecord::Base
   validates_uniqueness_of :name
   validates_length_of :name,
     :maximum => ArchiveConfig.TAG_MAX,
-    :message => " of tag is too long -- try using less than #{ArchiveConfig.TAG_MAX} characters or using commas to separate your tags."
+    :message => "of tag is too long -- try using less than #{ArchiveConfig.TAG_MAX} characters or using commas to separate your tags."
   validates_format_of :name,
     :with => /\A[^,*<>^]+\z/,
     #:with => /\A[-a-zA-Z0-9 \/?.!''"":;\|\]\[}{=~!@#\$%&()_+]+\z/,
-    :message => " of a tag can only be made up of letters, numbers, spaces and basic punctuation, but not commas, asterisks or angle brackets."
+    :message => "of a tag can only be made up of letters, numbers, spaces and basic punctuation, but not commas, asterisks or angle brackets. Your tag name: #{self.name}"
 
   def validate
     if !self.new_record? && self.name_changed?
@@ -190,7 +195,7 @@ class Tag < ActiveRecord::Base
       elsif tag
         self.find_or_create_by_name(new_name + " - " + self.to_s)
       else
-        self.create(:name => string)
+        self.create(:name => new_name)
       end
     end
   end
@@ -205,6 +210,10 @@ class Tag < ActiveRecord::Base
   end
 
   # Instance methods that are common to all subclasses (may be overridden in the subclass)
+  
+  def unwrangled?
+    !self.canonical && !self.merger_id && self.mergers.empty?  
+  end
 
   # sort tags by name
   def <=>(another_tag)
@@ -402,9 +411,9 @@ class Tag < ActiveRecord::Base
   # and the sub tag should have the meta filter-tagging removed unless it's directly tagged 
   # with the meta tag or one of its synonyms or a different sub tag of the meta tag or one of its synonyms
   def remove_meta_filters(meta_tag)
-    if self.meta_tags.length == 1
-      self.toggle!(:has_meta_tags)
-    end
+    # if self.meta_tags.length == 1
+    #   self.toggle!(:has_meta_tags)
+    # end
     other_sub_tags = meta_tag.sub_tags - [self]
     self.filtered_works.each do |work|
       if work.filters.include?(meta_tag) && (work.filters & other_sub_tags).empty?
@@ -470,27 +479,29 @@ class Tag < ActiveRecord::Base
   
   def syn_string=(tag_string)
     new_merger = Tag.find_by_name(tag_string)
-    if new_merger && !new_merger.canonical?
-      self.errors.add_to_base(new_merger.name + " is not a canonical tag. Please make it canonical before adding synonyms to it.")
-    else
-      unless new_merger
-        new_merger = self.class.create(:name => new_name, :canonical => true)
-      end
-      self.canonical = false      
-      self.merger_id = new_merger.id
-      if self.valid?
-        new_merger.parents << self.parents
-        new_merger.children << self.children
-        new_merger.meta_tags << self.meta_tags
-        new_merger.sub_tags << self.sub_tags             
-        self.mergers.each {|m| m.update_attributes(:merger_id => new_merger.id)}
-        self.children = []
-        self.meta_tags = []
-        self.sub_tags = []        
-      end
-    end    
+    unless new_merger && new_merger == self.merger
+      if new_merger && !new_merger.canonical?
+        self.errors.add_to_base(new_merger.name + " is not a canonical tag. Please make it canonical before adding synonyms to it.")
+      else
+        unless new_merger
+          new_merger = self.class.create(:name => tag_string, :canonical => true)
+        end
+        self.canonical = false      
+        self.merger_id = new_merger.id
+        if self.valid?
+          new_merger.parents << self.parents
+          new_merger.children << self.children
+          new_merger.meta_tags << self.meta_tags
+          new_merger.sub_tags << self.sub_tags             
+          self.mergers.each {|m| m.update_attributes(:merger_id => new_merger.id)}
+          self.children = []
+          self.meta_tags = []
+          self.sub_tags = []        
+        end
+      end    
+    end
   end
-  
+    
   def merger_string=(tag_string)
     names = tag_string.split(',').map(&:squish)
     names.each do |name|

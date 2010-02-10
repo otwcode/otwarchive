@@ -206,10 +206,6 @@ module FixtureReplacement
     a.name = random_tag_name
   end
 
-  attributes_for :ambiguity do |a|
-    a.name = random_tag_name
-  end
-
   attributes_for :banned do |a|
     a.name = random_tag_name
   end

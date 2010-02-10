@@ -27,6 +27,7 @@ ActionController::Routing::Routes.draw do |map|
         tag.with_options :requirements => { :tag_id => %r([^/;,?]+) } do |tag_requirements|
         tag_requirements.resources :works
         tag_requirements.resources :bookmarks
+        tag_requirements.resources :comments
     end
 	end
 

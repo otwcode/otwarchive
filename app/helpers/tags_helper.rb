@@ -136,5 +136,16 @@ module TagsHelper
     span = tag.canonical? ? "<span class='canonical'>" : "<span>"
     span + tag.type + ": " + link_to_tag(tag) + " (#{tag.taggings_count})</span>"
   end
+  
+  def tag_comment_link(tag)
+    count = tag.total_comments.count.to_s
+    if count == "0"
+      last_comment = ""
+    else
+      last_comment = " (last comment: " + tag.total_comments.find(:first, :order => 'created_at DESC').created_at.to_s + ")"
+    end
+    link_text = count + " comments" + last_comment
+    link_to link_text, tag_comments_path(tag)
+  end
     
 end

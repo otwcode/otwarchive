@@ -14,7 +14,7 @@ class TagTest < ActiveSupport::TestCase
     should_not_allow_values_for :name, "angle brackets < aren't allowed", :message => /can only/
     should_not_allow_values_for :name, "angle brackets > aren't allowed", :message => /can only/
     should_not_allow_values_for :name, "carats ^ aren't allowed", :message => /can only/
-
+    
     should_allow_values_for :adult, true, false
     should_allow_values_for :canonical, true, false
 

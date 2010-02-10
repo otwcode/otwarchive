@@ -18,6 +18,10 @@
 <%- end -%>
 </p>
 
+<%- if can_wrangle? -%>
+<p><%= tag_comment_link(@tag) %></p>  
+<%- end -%>  
+
 <%- if @tag.is_a?(Rating) && @tag.adult -%>
   <p class="warning"><%=h t('adult_content', :default => 'This tag indicates adult content.') %></p>
 <%- end -%>

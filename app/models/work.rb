@@ -677,7 +677,7 @@ class Work < ActiveRecord::Base
     unless self.invalid_tags.blank?
       errors.add_to_base("The following tags are invalid: " + self.invalid_tags.collect(&:name).join(', ') + ". Please make sure that your tags are less than #{ArchiveConfig.TAG_MAX} characters long and do not contain any invalid characters.")
       self.invalid_tags.each do |tag|
-        tag.errors.each do |error|
+        tag.errors.each_full do |error|
           errors.add_to_base(error)
         end
       end
@@ -737,24 +737,19 @@ class Work < ActiveRecord::Base
   end
 
   def freeform_tags
-    freeform = self.tags.select{|tag| tag.type == "Freeform"}.sort || []
-    ambiguous = self.tags.select{|tag| tag.type == "Ambiguous"}.sort || []
-
-    tags = freeform + ambiguous
-    if tags.size > ArchiveConfig.TAGS_PER_LINE
-      tags = tags[0..(ArchiveConfig.TAGS_PER_LINE-1)]
+    freeforms = self.tags.select{|tag| tag.type == "Freeform"}.sort || []
+    if freeforms.size > ArchiveConfig.TAGS_PER_LINE
+      freeforms = freeforms[0..(ArchiveConfig.TAGS_PER_LINE-1)]
     end
-    return tags
+    return freeforms
   end
 
   def warning_tags
     warnings = self.tags.select{|tag| tag.type == "Warning"}.sort || []
-
-    tags = warnings
-    if tags.size > ArchiveConfig.TAGS_PER_LINE
-      tags = tags[0..(ArchiveConfig.TAGS_PER_LINE-1)]
+    if warnings.size > ArchiveConfig.TAGS_PER_LINE
+      warnings = warnings[0..(ArchiveConfig.TAGS_PER_LINE-1)]
     end
-    return tags
+    return warnings
   end
   
   def fandom_tags
@@ -789,7 +784,7 @@ class Work < ActiveRecord::Base
       self.filters.delete(filter)
       filter.reset_filter_count
     end
-    unless filter.meta_tags.empty?
+    unless filter.nil? || filter.meta_tags.empty?
       filter.meta_tags.each do |meta_tag|
         other_sub_tags = meta_tag.sub_tags - [filter]
         sub_mergers = other_sub_tags.empty? ? [] : other_sub_tags.collect(&:mergers).flatten.compact

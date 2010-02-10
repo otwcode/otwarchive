@@ -42,7 +42,7 @@ end
 
   <!-- If we have javascript, here is where the comments will be spiffily inserted -->
   <!-- If not, and show_comments is true, here is where the comments will be rendered -->
-  <%- if params[:show_comments] -%>
+  <%- if params[:show_comments] || params[:tag_id] -%>
     	<h3 class="landmark"><a name="comments">Comments</a></h3>
 		<div id="comments_placeholder">
       <%= render :partial => 'comments/comment_thread', :locals => { :comments => commentable.comments, :depth => 0 }%></ol>
