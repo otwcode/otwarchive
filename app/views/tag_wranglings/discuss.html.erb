@@ -1,0 +1,24 @@
+<h2>Tag Wrangling Discussion</h2>
+
+<table> 
+  <tr>
+    <th>Tag</th>
+    <th>Comment</th>
+    <th>Replies</th>
+    <th>Thread Started By</th>
+    <th>Last Reply By</th>
+    <th>Last Updated At</th>
+  </tr>
+  <%- for comment in @comments -%>
+  <tr>
+    <td><%= link_to_tag(comment.parent) %></td>
+    <td><%= link_to comment.content[0..50] + '...', comment, :title => comment.content %></td>
+    <td><%= comment.count_all_comments %></td>
+    <td><%= link_to comment.pseud.name, [comment.pseud.user, comment.pseud] %></td>
+    <td><%= last_reply_by(comment) %></td>
+    <td><%= comment.updated_at %></td>
+  </tr>  
+  <%- end -%>
+</table>
+
+<%= will_paginate(@comments) %>

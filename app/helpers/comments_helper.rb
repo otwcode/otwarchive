@@ -14,6 +14,15 @@ module CommentsHelper
     end
     sanitize_title_for_display t('viewing_comments_on', :default => 'Viewing Comments on {{title}}', :title => title)
   end
+  
+  def last_reply_by(comment)
+    if comment.count_all_comments > 0
+      c = Comment.find(:first, :conditions => {:thread => comment.id}, :order => 'created_at DESC')
+      if c.pseud
+        link_to c.pseud.name, [c.pseud.user, c.pseud]
+      end
+    end    
+  end
 
   def link_to_comment_ultimate_parent(comment)
     ultimate = comment.ultimate_parent

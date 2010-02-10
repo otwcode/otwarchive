@@ -49,13 +49,14 @@ class Tag < ActiveRecord::Base
 
   validates_presence_of :name
   validates_uniqueness_of :name
+  validates_length_of :name, :minimum => 1, :message => "cannot be blank."
   validates_length_of :name,
     :maximum => ArchiveConfig.TAG_MAX,
     :message => "of tag is too long -- try using less than #{ArchiveConfig.TAG_MAX} characters or using commas to separate your tags."
   validates_format_of :name,
     :with => /\A[^,*<>^]+\z/,
     #:with => /\A[-a-zA-Z0-9 \/?.!''"":;\|\]\[}{=~!@#\$%&()_+]+\z/,
-    :message => "of a tag can only be made up of letters, numbers, spaces and basic punctuation, but not commas, asterisks or angle brackets. Your tag name: #{self.name}"
+    :message => "of a tag can only be made up of letters, numbers, spaces and basic punctuation, but not commas, asterisks or angle brackets."
 
   def validate
     if !self.new_record? && self.name_changed?
@@ -478,30 +479,35 @@ class Tag < ActiveRecord::Base
   end
   
   def syn_string=(tag_string)
-    new_merger = Tag.find_by_name(tag_string)
-    unless new_merger && new_merger == self.merger
-      if new_merger && !new_merger.canonical?
-        self.errors.add_to_base(new_merger.name + " is not a canonical tag. Please make it canonical before adding synonyms to it.")
-      else
-        unless new_merger
-          new_merger = self.class.create(:name => tag_string, :canonical => true)
-        end
-        self.canonical = false      
-        self.merger_id = new_merger.id
-        if self.valid?
-          new_merger.parents << self.parents
-          new_merger.children << self.children
-          new_merger.meta_tags << self.meta_tags
-          new_merger.sub_tags << self.sub_tags             
-          self.mergers.each {|m| m.update_attributes(:merger_id => new_merger.id)}
-          self.children = []
-          self.meta_tags = []
-          self.sub_tags = []        
-        end
-      end    
+    if tag_string.blank?
+      self.merger_id = nil
+    else
+      new_merger = Tag.find_by_name(tag_string)
+      unless new_merger && new_merger == self.merger
+        if new_merger && !new_merger.canonical?
+          self.errors.add_to_base(new_merger.name + " is not a canonical tag. Please make it canonical before adding synonyms to it.")
+        elsif new_merger && new_merger.class != self.class
+          self.errors.add_to_base(new_merger.name + " is a #{new_merger.type.to_s.downcase}. Synonyms must belong to the same category.")          
+        else
+          unless new_merger
+            new_merger = self.class.create(:name => tag_string, :canonical => true)
+          end
+          self.canonical = false      
+          self.merger_id = new_merger.id
+          if self.valid?
+            [(self.parents + self.children) - (new_merger.parents + new_merger.children)].each { |tag| new_merger.add_association(tag) }
+            self.meta_tags.each { |tag| new_merger.meta_tags << tag unless new_merger.meta_tags.include?(tag) }
+            self.sub_tags.each { |tag| tag.meta_tags << new_merger unless tag.meta_tags.include?(new_merger) }            
+            self.mergers.each {|m| m.update_attributes(:merger_id => new_merger.id)}
+            self.children = []
+            self.meta_tags = []
+            self.sub_tags = []        
+          end
+        end    
+      end
     end
   end
-    
+  
   def merger_string=(tag_string)
     names = tag_string.split(',').map(&:squish)
     names.each do |name|

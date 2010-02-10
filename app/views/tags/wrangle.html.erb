@@ -83,7 +83,6 @@
         <td>
           <%= label_tag "selected_tags_#{tag.id}", "#{tag.name}" %>
           <span class="fake-tooltip">
-            <%= link_to 'remove', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %> | 
             <%= link_to 'edit', {:controller => :tags, :action => :edit, :id => tag} %> | 
             <%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => tag} %> | 
             <%= link_to 'works', {:controller => :works, :action => :index, :tag_id => tag} %>
@@ -93,7 +92,6 @@
         <td>
           <%= tag.name %>
           <span class="fake-tooltip">
-            <%= link_to 'remove', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %> | 
             <%= link_to 'edit', {:controller => :tags, :action => :edit, :id => tag} %> | 
             <%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => tag} %> | 
             <%= link_to 'works', {:controller => :works, :action => :index, :tag_id => tag} %>

@@ -11,7 +11,7 @@ class TagsController < ApplicationController
   # GET /tags.xml
   def index
     if @collection
-      @tags = Freeform.for_collections([@collection] + @collection.children)       
+      @tags = Freeform.canonical.for_collections([@collection] + @collection.children)
     else      
       @tags = Freeform.for_tag_cloud
     end

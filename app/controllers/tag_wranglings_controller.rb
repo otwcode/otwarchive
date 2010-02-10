@@ -70,5 +70,9 @@ class TagWranglingsController < ApplicationController
     flash[:notice] = "Tags were successfully wrangled!"
     redirect_to tag_wranglings_path(:show => params[:show], :page => params[:page], :sort => params[:sort])            
   end
+  
+  def discuss
+    @comments = Comment.find(:all, :conditions => {:commentable_type => 'Tag'}, :order => 'updated_at DESC').paginate(:page => params[:page])
+  end
 
 end
