@@ -24,6 +24,7 @@ class Tag < ActiveRecord::Base
   belongs_to :merger, :class_name => 'Tag'
   belongs_to :fandom
   belongs_to :media
+  belongs_to :last_wrangler, :polymorphic => true
   
   has_many :filter_taggings, :foreign_key => 'filter_id'
   has_many :filtered_works, :through => :filter_taggings, :source => :filterable, :source_type => 'Work'
@@ -32,7 +33,7 @@ class Tag < ActiveRecord::Base
   has_many :common_taggings, :foreign_key => 'common_tag_id'
   has_many :child_taggings, :class_name => 'CommonTagging', :as => :filterable
   has_many :children, :through => :child_taggings, :source => :common_tag 
-  has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag'
+  has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag', :before_remove => :update_wrangler
 
   has_many :meta_taggings, :foreign_key => 'sub_tag_id'
   has_many :meta_tags, :through => :meta_taggings, :source => :meta_tag, :before_remove => :remove_meta_filters
@@ -81,6 +82,14 @@ class Tag < ActiveRecord::Base
 
   def before_validation
     self.name = name.squish if self.name
+  end
+  
+  before_save :set_last_wrangler
+  def set_last_wrangler
+    self.last_wrangler = User.current_user
+  end
+  def update_wrangler(tag)
+    self.update_attributes(:last_wrangler => User.current_user)
   end
 
   named_scope :canonical, {:conditions => {:canonical => true}, :order => 'name ASC'}

@@ -2,7 +2,7 @@
 
 <%= tag_wrangler_footer %> 
 
-<%- if @fandoms -%>
+<%- unless @fandoms.empty? -%>
   <h3>Assigned Fandoms</h3>
   <p>Fandoms assigned to you via the <%= link_to 'tag wranglers page', tag_wranglers_path %>. The count is the number of 
   unwrangled tags which were used on works in the given fandom.</p>

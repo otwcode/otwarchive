@@ -73,7 +73,8 @@ class User < ActiveRecord::Base
   has_many :translation_notes
   
   has_many :wrangling_assignments
-  has_many :fandoms, :through => :wrangling_assignments 
+  has_many :fandoms, :through => :wrangling_assignments
+  has_many :wrangled_tags, :class_name => 'Tag', :as => :last_wrangler 
   
   has_many :inbox_comments, :dependent => :destroy
   has_many :feedback_comments, :through => :inbox_comments, :conditions => {:is_deleted => false, :approved => true}, :order => 'created_at DESC'
