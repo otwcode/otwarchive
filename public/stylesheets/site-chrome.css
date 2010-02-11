@@ -215,6 +215,7 @@ li.comment h4					{ font-size: 1.25em;}
  .people-index li.blurb 		{ min-height: 75px;}
 
 /* COLLECTIONS INDEX*/
+ .collections-index .index 			{ width: 75% }
  #main.collections-show h2 span { font-size: smaller }
 
 /* TRANSLATIONS*/

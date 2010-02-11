@@ -109,4 +109,11 @@ class AutocompleteController < ApplicationController
   def fandom_string ; canonical_tag_finder(Fandom, params[:fandom_string]) ; end
   def character_string ; canonical_tag_finder(Character, params[:character_string]) ; end
   
+  def collection_filters_title
+    render_output(Collection.find(:all, :conditions => ["parent_id IS NULL AND title LIKE ?", params[:collection_filters_title] + '%'], :limit => 10, :order => :title).map(&:title))    
+  end
+  def collection_filters_fandom
+    canonical_tag_finder(Fandom, params[:collection_filters_fandom])
+  end
+  
 end

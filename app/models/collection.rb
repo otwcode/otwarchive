@@ -87,6 +87,7 @@ class Collection < ActiveRecord::Base
   named_scope :unrevealed, :joins => :collection_preference, :conditions => ["collection_preferences.unrevealed = ?", true]
   named_scope :anonymous, :joins => :collection_preference, :conditions => ["collection_preferences.anonymous = ?", true]
   named_scope :name_only, :select => :name
+  named_scope :by_title, :order => :title
   
   named_scope :with_name_like, lambda {|name|
     {
@@ -223,6 +224,34 @@ class Collection < ActiveRecord::Base
   
   def not_empty?
     self.all_approved_works.count > 0 || self.children.count > 0 || self.all_approved_bookmarks.count > 0
+  end
+  
+  def self.sorted_and_filtered(sort, filters, page)
+    select = "collections.*, count(collections.id) AS count"
+    group = "collections.id"
+    joins = "LEFT JOIN collection_items ON collection_items.collection_id = collections.id 
+    INNER JOIN collection_preferences ON collection_preferences.collection_id = collections.id"
+    conditions = ["parent_id IS NULL "]
+    unless filters[:title].blank?
+      conditions.first << "AND title LIKE ? "
+      conditions << (filters[:title] + "%")
+    end
+    %w(closed moderated gift_exchange).each do |attribute|
+      unless filters[attribute].blank?
+        value = (filters[attribute] == "true") ? 1 : 0
+        conditions.first << "AND collection_preferences.#{attribute} = #{value} "
+      end
+    end
+    if !filters[:fandom].blank?
+      fandom = Fandom.find_by_name(filters[:fandom])
+      if fandom
+        fandom.approved_collections.find(:all, :select => select, :group => group, :joins => joins, :conditions => conditions, :order => sort).paginate(:page => page)
+      else
+        []
+      end
+    else
+      Collection.find(:all, :select => select, :group => group, :joins => joins, :conditions => conditions, :order => sort).paginate(:page => page)        
+    end     
   end
     
 end

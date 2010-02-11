@@ -21,9 +21,22 @@
 </ul>
 <% end -%>
 <!--pagination here-->
-<!--sort navigation here-->
+
+<%- if @sort_and_filter -%> 
+<!--sorting subnav-->
+<div class="navigation module">
+  <ul class="sorting navigation" role="navigation">
+    <li><h4><%= t('sort_by', :default => 'Sort By') -%></h4></li>
+    <li><%= sort_link t('sort.title', :default => 'Title'), :title -%></li>
+    <li><%= sort_link t('sort.date', :default => 'Date'), :created_at -%></li>
+    <li><%= sort_link t('sort.size', :default => 'Size'), :count -%></li>
+  </ul>
+</div>
+<!---/subnav-->
+<%- end -%>
 
 <!--main content-->
+
 <h3 class="landmark">List of Collections</h3>
 <ul class="collection index">
 <% @collections.each do |collection| %>
@@ -99,4 +112,50 @@
 <% end %>
 </ul>
 
+<%- if @sort_and_filter -%>
+<!--filters subnav-->
+<h3 class="landmark">Filters</h3>
+<%- form_tag collections_url, :method => :get, :class => 'filters' do -%>
+  <%- field_set_tag t('filter_these', :default => 'Filter collections:') do -%>
+ 		<dl class="filters" role="complementary navigation">
+      <dt><%= label_tag 'collection_filters_title', "Filter by title" %></dt>
+      <dd>
+        <%= text_field_tag 'collection_filters[title]', params[:collection_filters][:title] %>
+        <%= autocomplete_text_field "collection_filters_title" -%>        
+      </dd>
+      <dt><%= label_tag 'collection_filters_fandom', "Filter by fandom" %></dt>
+      <dd>
+        <%= text_field_tag 'collection_filters[fandom]', params[:collection_filters][:fandom] %>
+        <%= autocomplete_text_field "collection_filters_fandom" -%>
+      </dd>
+      <dt>Closed</dt>
+      <dd>
+        <%= radio_button_tag "collection_filters[closed]", true, params[:collection_filters][:closed] == "true" -%>
+        <%= label_tag "collection_filters_closed_true", "Yes" %>    
+        <%= radio_button_tag "collection_filters[closed]", false, params[:collection_filters][:closed] == "false" -%>
+        <%= label_tag "collection_filters_closed_false", "No" %>      
+      </dd>
+      <dt>Moderated</dt>
+      <dd>
+        <%= radio_button_tag "collection_filters[moderated]", true, params[:collection_filters][:moderated] == "true" -%>
+        <%= label_tag "collection_filters_moderated_true", "Yes" %>    
+        <%= radio_button_tag "collection_filters[moderated]", false, params[:collection_filters][:moderated] == "false" -%>
+        <%= label_tag "collection_filters_moderated_false", "No" %>      
+      </dd>
+      <dt>Gift Exchange</dt>
+      <dd>
+        <%= radio_button_tag "collection_filters[gift_exchange]", true, params[:collection_filters][:gift_exchange] == "true" -%>
+        <%= label_tag "collection_filters_gift_exchange_true", "Yes" %>    
+        <%= radio_button_tag "collection_filters[gift_exchange]", false, params[:collection_filters][:gift_exchange] == "false" -%>
+        <%= label_tag "collection_filters_gift_exchange_false", "No" %>      
+      </dd>
+    </dl>
+    <div class="clear"><!--purely presentational for IE6; phase me out--></div>
+    <p class="submit"><%= submit_tag "Filter" %></p>
+  <%- end -%>
+<%- end -%>
+<!---/subnav-->
+<%- end -%> 
+<div class="clear"><!-- presentational--></div>
 
+<%= will_paginate @collections, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>

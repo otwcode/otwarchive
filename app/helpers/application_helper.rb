@@ -128,14 +128,14 @@ module ApplicationHelper
     return result
   end  
   
+  # Generates sorting links for index pages, with column names and directions
   def sort_link(title, column=nil, options = {})
     condition = options[:unless] if options.has_key?(:unless)
 
     unless column.nil?
-      sort_dir_sym = "sort_direction_for_#{column}".to_sym
-      sort_dir = params[sort_dir_sym] == 'ASC' ? 'DESC' : 'ASC'
-      link_to_unless condition, (sort_dir == 'ASC' ? '<span>&#8593;  ' : '<span class="current">&#8595;  ') + title + '<span>', 
-        request.parameters.merge( {:sort_column => column, sort_dir_sym => sort_dir} )
+      direction = params[:sort_direction] == 'ASC' ? 'DESC' : 'ASC'
+      link_to_unless condition, (direction == 'ASC' ? '<span>&#8593;  ' : '<span class="current">&#8595;  ') + title + '<span>', 
+        request.parameters.merge( {:sort_column => column, :sort_direction => direction} )
     else
       link_to_unless params[:sort_column].nil?, title, url_for(:overwrite_params => {:sort_column => nil})
     end

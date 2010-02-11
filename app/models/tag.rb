@@ -49,6 +49,7 @@ class Tag < ActiveRecord::Base
   has_many :works, :through => :taggings, :source => :taggable, :source_type => 'Work'
   has_many :bookmarks, :through => :taggings, :source => :taggable, :source_type => 'Bookmark'
   has_many :external_works, :through => :taggings, :source => :taggable, :source_type => 'ExternalWork'
+  has_many :approved_collections, :through => :filtered_works
 
   validates_presence_of :name
   validates_uniqueness_of :name

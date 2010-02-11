@@ -106,7 +106,7 @@ class WorksController < ApplicationController
     @selected_tags = []
     @selected_pseuds = []
     @sort_column = params[:sort_column] || 'date'
-    @sort_direction = params["sort_direction_for_#{@sort_column}".to_sym] || 'DESC'
+    @sort_direction = params[:sort_direction] || 'DESC'
     
     # numerical ids for now
     unless params[:selected_pseuds].blank?

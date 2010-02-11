@@ -11,15 +11,20 @@ class CollectionsController < ApplicationController
   def index
     if params[:work_id]
       @work = Work.find(params[:work_id])
-      @collections = @work.approved_collections
+      @collections = @work.approved_collections.by_title.paginate(:page => params[:page])
     elsif params[:collection_id]
       @collection = Collection.find_by_name(params[:collection_id])
-      @collections = @collection.children
+      @collections = @collection.children.by_title.paginate(:page => params[:page])
     elsif params[:user_id]
       @user = User.find_by_login(params[:user_id])
-      @collections = @user.owned_collections
+      @collections = @user.owned_collections.by_title.paginate(:page => params[:page])
     else
-      @collections = Collection.top_level
+      @sort_and_filter = true
+      params[:collection_filters] ||= {}
+      @sort_column = params[:sort_column] || 'created_at'
+      @sort_direction = params["sort_direction"] || 'DESC'
+      sort = @sort_column + " " + @sort_direction      
+      @collections = Collection.sorted_and_filtered(sort, params[:collection_filters], params[:page])
     end
   end
 
