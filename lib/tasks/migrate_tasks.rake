@@ -175,7 +175,30 @@ namespace :After do
   #       end
   #     end      
   #   end    
-  # end  
+  # end 
+  
+  desc "Fix warning tags"
+  task(:fix_warnings => :environment) do
+    good_tag = Warning.find_by_name("Rape/Non-Con")
+    bad_tag = Warning.find_by_name("Rape/Non Con")
+    if good_tag && bad_tag
+      # First make them synonyms so that the works get the good tag as a filter
+      bad_tag.merger = good_tag
+      bad_tag.save!
+      # Then just move all the taggings to the right tag
+      Tagging.update_all("tagger_id = #{good_tag.id}", "tagger_id = #{bad_tag.id}")
+      bad_tag.reload
+      if bad_tag.taggings.count == 0
+        bad_tag.destroy
+      else
+        raise "Something went wrong with the warning tags"
+      end
+    end
+    violence_tag = Warning.find_by_name(ArchiveConfig.WARNING_VIOLENCE_TAG_NAME)
+    if violence_tag && violence_tag.name != ArchiveConfig.WARNING_VIOLENCE_TAG_NAME
+      violence_tag.update_attribute(:name, ArchiveConfig.WARNING_VIOLENCE_TAG_NAME)
+    end
+  end 
 
   desc "Clear up wrangling relationships"
   task(:tidy_wranglings => :environment) do
@@ -214,4 +237,4 @@ end
 
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
-task :After => ['After:tidy_wranglings']
+task :After => ['After:fix_warnings', 'After:tidy_wranglings']
