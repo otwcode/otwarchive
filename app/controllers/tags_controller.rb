@@ -25,7 +25,7 @@ class TagsController < ApplicationController
   def search
     unless params[:query].blank?
       if params[:tag_type] && params[:tag_type] != 'All'
-        @tags = Tag.search(params[:query], :order => "type ASC, name ASC", :conditions => {:tag_type => params[:tag_type]}, :page => params[:page])
+        @tags = params[:tag_type].singularize.constantize.search(params[:query], :order => "name ASC", :page => params[:page])
       else
         @tags = Tag.search(params[:query], :order => "type ASC, name ASC", :page => params[:page])
       end

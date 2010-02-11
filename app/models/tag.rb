@@ -555,8 +555,8 @@ class Tag < ActiveRecord::Base
   define_index do
 
     # fields
-    indexes :name, :sortable => true
-    indexes :type, :as => :tag_type, :sortable => true
+    indexes name, :sortable => true
+    has :type, :sortable => true
 
     # properties
     set_property :delta => :delayed
