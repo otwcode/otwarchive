@@ -3,6 +3,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 class TagsControllerTest < ActionController::TestCase
   context "on GET with :index" do
     setup do
+      Fandom.create_canonical(ArchiveConfig.FANDOM_NO_TAG_NAME)
       get :index
     end
     should_respond_with :success

@@ -66,7 +66,7 @@ class UserMailerTest < ActionMailer::TestCase
     assert_equal [email1], mail.to    
   end
   def test_comment_sent_notification
-    email = "test@foo.com"
+    email = "test@example.com"
     comment = create_comment(:email => email, :pseud=>nil, :name=>'Test Foo')
     mail = UserMailer.create_comment_sent_notification(comment)
     assert_match 'Comment you sent on ', mail.subject

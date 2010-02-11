@@ -500,7 +500,7 @@ class StoryParser
       work_params = {:chapter_attributes => {}}
       storytext = clean_storytext((@doc/"#storytext").inner_html)
 
-      work_params[:notes] = ((@doc/"#storytext")/"p").first.inner_html
+      work_params[:notes] = ((@doc/"#storytext")/"p").first.try(:inner_html)
 
       # put in some blank lines to make it readable in the textarea
       # the processing will strip out the extras

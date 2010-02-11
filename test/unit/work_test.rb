@@ -212,7 +212,7 @@ class WorkTest < ActiveSupport::TestCase
     context "where the character is wrangled but to the pairing's merger" do
       setup do
         @new_pairing = create_pairing(:canonical => true)
-        @pairing.update_attributes(:merger_id => @new_pairing.id)
+        @pairing.update_attribute(:merger_id, @new_pairing.id)
         @character.add_association(@new_pairing)
         @work.reload
       end

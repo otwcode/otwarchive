@@ -231,8 +231,8 @@ class StoryParserTest < ActiveSupport::TestCase
     assert_match /It was really cool/, work.chapters.first.content
     assert_match /Madrigals/, work.title
     assert_match /Wherein there is magic/, work.summary
-    work.category_string = Category.first.name
-    work.warning_strings = [Warning.first.name]
+    work.category_string = random_tag_name
+    work.warning_strings = [random_tag_name]
     work.authors = [create_pseud]
     work.save
     assert_match /Idol RPF/, work.fandoms.string

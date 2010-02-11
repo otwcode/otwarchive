@@ -4,6 +4,7 @@ class FandomTest < ActiveSupport::TestCase
 
   context "a fandom Tag" do
     setup do
+      Fandom.create_canonical(ArchiveConfig.FANDOM_NO_TAG_NAME)
       @myfandom = create_fandom
       @media = create_media(:canonical => true)
       @myfandom.add_association(@media)
@@ -12,6 +13,9 @@ class FandomTest < ActiveSupport::TestCase
     should_validate_presence_of :name
     should "have a display name" do
       assert_equal ArchiveConfig.FANDOM_CATEGORY_NAME, Fandom::NAME
+    end
+    should "have required tags" do
+      assert Tag.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME).is_a?(Fandom)
     end
     should "be able to add a media" do
       assert_contains @myfandom.medias, @media

@@ -5,6 +5,7 @@ class WorksShowControllerTest < ActionController::TestCase
 
   context "a non-adult work" do
     setup do
+      Rating.create_canonical(ArchiveConfig.RATING_GENERAL_TAG_NAME, false)
       @work = create_work(:authors => [create_user.default_pseud])
       @work.add_default_tags
       @work.rating_string = ArchiveConfig.RATING_GENERAL_TAG_NAME
@@ -103,6 +104,7 @@ class WorksShowControllerTest < ActionController::TestCase
   end
   context "an adult work" do
     setup do
+      Rating.create_canonical(ArchiveConfig.RATING_EXPLICIT_TAG_NAME, true)
       @work = create_work(:authors => [create_user.default_pseud])
       @work.add_default_tags
       @work.rating_string = ArchiveConfig.RATING_EXPLICIT_TAG_NAME

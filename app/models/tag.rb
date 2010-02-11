@@ -215,6 +215,15 @@ class Tag < ActiveRecord::Base
       end
     end
   end
+
+  def self.create_canonical(name, adult=false)
+    tag = self.find_or_create_by_name(name)
+    raise "how did this happen?" unless tag
+    tag.update_attribute(:canonical,true)
+    tag.update_attribute(:adult, adult)
+    raise "how did this happen?" unless tag.canonical?
+    return tag
+  end
   
   # Inherited tag classes can set this to indicate types of tags with which they may have a parent/child
   # relationship (ie. media: parent, fandom: child; fandom: parent, character: child)

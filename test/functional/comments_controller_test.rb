@@ -134,14 +134,14 @@ class CommentsControllerTest < ActionController::TestCase
   # Test index  GET  /:locale/chapters/:chapter_id/comments  (named path: chapter_comments)
   def test_chapter_comments_path1
     create_comments
-    get :index, :chapter_id => @chapter2.id
+    get :index, :chapter_id => @chapter2.id, :show_comments => true
     assert_response :success
     assert_no_tag :tag => 'p', :content => 'first comment'
     assert_tag :tag => 'p', :content => 'second comment'
   end
   def test_chapter_comments_path2
     create_comments
-    get :index, :chapter_id => @chapter1.id
+    get :index, :chapter_id => @chapter1.id, :show_comments => true
     assert_response :success
     assert_tag :tag => 'p', :content => 'first comment'
     assert_no_tag :tag => 'p', :content => 'second comment'
@@ -155,21 +155,10 @@ class CommentsControllerTest < ActionController::TestCase
     assert_tag :tag => 'p', :content => @comment1.content
     assert_tag  :tag => 'p', :content => @comment2.content
   end
-  # Test index  GET  /:locale/comments/:comment_id/comments  (named path: comment_comments)
-  def test_comment_comments_path
-    # FIXME ignoring attempt to close body with div
-    create_comments
-    get :index, :comment_id => @comment1.id
-    assert_response :success
-    assert_not_nil assigns(:comments)
-    assert_no_tag :tag => 'p', :content => @comment1.content
-    assert_no_tag  :tag => 'p', :content => @comment2.content
-    assert_tag :tag => 'p', :content => @child1.content
-  end
   # Test index  GET  /:locale/works/:work_id/chapters/:chapter_id/comments  (named path: work_chapter_comments)
   def test_work_chapter_comments_path
     create_comments
-    get :index, :work_id => @work.id, :chapter_id => @chapter1.id
+    get :index, :work_id => @work.id, :chapter_id => @chapter1.id, :show_comments => true
     assert_response :success
     assert_not_nil assigns(:comments)
     assert_tag :tag => 'p', :content => 'first comment'
@@ -208,7 +197,6 @@ class CommentsControllerTest < ActionController::TestCase
     assert_tag :tag => 'p', :content => 'first child'
     assert_no_tag :tag => 'p', :content => 'second comment'
   end
-  # Test show  GET  /:locale/comments/:comment_id/comments/:id  (named path: comment_comment)
   # Test show  GET  /:locale/comments/:id  (named path: comment)
   def test_comment_path
     create_comments
@@ -216,6 +204,7 @@ class CommentsControllerTest < ActionController::TestCase
     assert_response :success
     assert_tag :tag => 'p', :content => @comment1.content
     assert_no_tag :tag => 'p', :content => @comment2.content
+    assert_tag :tag => 'p', :content => @child1.content
   end
   # Test show  GET  /:locale/works/:work_id/chapters/:chapter_id/comments/:id  (named path: work_chapter_comment)
   def test_work_chapter_comment_path
