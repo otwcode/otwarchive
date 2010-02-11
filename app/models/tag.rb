@@ -86,10 +86,14 @@ class Tag < ActiveRecord::Base
   
   before_save :set_last_wrangler
   def set_last_wrangler
-    self.last_wrangler = User.current_user
+    unless User.current_user == :false
+      self.last_wrangler = User.current_user
+    end
   end
   def update_wrangler(tag)
-    self.update_attributes(:last_wrangler => User.current_user)
+    unless User.current_user == :false
+      self.update_attributes(:last_wrangler => User.current_user)
+    end
   end
 
   named_scope :canonical, {:conditions => {:canonical => true}, :order => 'name ASC'}
