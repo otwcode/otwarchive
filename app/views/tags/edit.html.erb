@@ -72,7 +72,7 @@
 
     <dt><%= f.label :syn_string, 'Synonym of' %></dt>
     <dd>
-      <%= f.text_field :syn_string, :size => ArchiveConfig.TAG_MAX %><%= autocomplete_text_field "tag_syn_string" -%>
+      <%= f.text_field :syn_string, :size => ArchiveConfig.TAG_MAX %><%= autocomplete_text_field_with_type @tag, "tag_syn_string" -%>
       <p>Choose an existing tag or add a new tag name here to create a new canonical and associate this tag with it.</p>
       <%- if @tag.merger -%>
         <p>Edit <%= link_to_edit_tag(@tag.merger) %></p>
@@ -92,7 +92,7 @@
       <dt><%= f.label tag_type.underscore + '_string', tag_category_name(tag_type) %></dt>
       <dd>
         <%= f.text_field tag_type.underscore + '_string', :size => ArchiveConfig.TAG_MAX %>
-        <%= autocomplete_text_field "tag_#{tag_type.underscore}_string" -%><br />
+        <%= autocomplete_text_field_with_type @tag, "tag_#{tag_type.underscore}_string" -%><br />
         <%- if @parents[tag_type] -%>
           <%- @parents[tag_type].in_groups(2, false) do |tag_list| -%>
           <ul class="tag-column">
@@ -121,7 +121,7 @@
       <dt><%= f.label tag_type.underscore + '_string', tag_category_name(tag_type) %></dt>
       <dd>
         <%= f.text_area tag_type.underscore + '_string', :size => "100x5" %>
-        <%= autocomplete_text_field "tag_#{tag_type.underscore}_string" -%><br />
+        <%= autocomplete_text_field_with_type @tag, "tag_#{tag_type.underscore}_string" -%><br />
         <%- if @children[tag_type] -%>
           <%- @children[tag_type][0..19].in_groups(2, false) do |tag_list| -%>
           <ul class="tag-column">

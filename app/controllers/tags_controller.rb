@@ -161,9 +161,9 @@ class TagsController < ApplicationController
       redirect_to tag_wranglings_path and return
     end
     @parents = @tag.parents.find(:all, :order => :name).group_by {|tag| tag[:type]}
-    @parents['MetaTag'] = @tag.meta_tags.by_name
+    @parents['MetaTag'] = @tag.direct_meta_tags.by_name
     @children = @tag.children.find(:all, :order => :name).group_by {|tag| tag[:type]}
-    @children['SubTag'] = @tag.sub_tags.by_name
+    @children['SubTag'] = @tag.direct_sub_tags.by_name
     @children['Merger'] = @tag.mergers.by_name
     if @tag.respond_to?(:wranglers)
       @wranglers = @tag.wranglers
@@ -179,9 +179,9 @@ class TagsController < ApplicationController
       redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag)
     else
       @parents = @tag.parents.find(:all, :order => :name).group_by {|tag| tag[:type]}
-      @parents['MetaTag'] = @tag.meta_tags.by_name
+      @parents['MetaTag'] = @tag.direct_meta_tags.by_name
       @children = @tag.children.find(:all, :order => :name).group_by {|tag| tag[:type]}
-      @children['SubTag'] = @tag.sub_tags.by_name
+      @children['SubTag'] = @tag.direct_sub_tags.by_name
       @children['Merger'] = @tag.mergers.by_name
       render :edit
     end

@@ -199,5 +199,23 @@ module ApplicationHelper
                               tokens: ','
                             });")    
   end
+  
+  # Trying out a way of sending the tag type to the autocomplete
+  # controller so that it can return the right class of results
+  def autocomplete_text_field_with_type(object, fieldname)
+    "\n<span id=\"indicator_#{fieldname}\" style=\"display:none\">" +
+    '<img src="/images/spinner.gif" alt="Working..." /></span>' +
+    "\n<div class=\"auto_complete\" id=\"#{fieldname}_auto_complete\"></div>" +
+    javascript_tag("new Ajax.Autocompleter('#{fieldname}', 
+                            '#{fieldname}_auto_complete', 
+                            '/autocomplete/#{fieldname}?type=#{object.type}', 
+                            { 
+                              indicator: 'indicator_#{fieldname}',
+                              minChars: 2,
+                              paramName: '#{fieldname}',
+                              fullSearch: true,
+                              tokens: ','
+                            });")    
+  end
 
 end # end of ApplicationHelper

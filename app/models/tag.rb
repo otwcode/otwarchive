@@ -436,9 +436,9 @@ class Tag < ActiveRecord::Base
   # and the sub tag should have the meta filter-tagging removed unless it's directly tagged 
   # with the meta tag or one of its synonyms or a different sub tag of the meta tag or one of its synonyms
   def remove_meta_filters(meta_tag)
-    # if self.meta_tags.length == 1
-    #   self.toggle!(:has_meta_tags)
-    # end
+    other_meta_tags = meta_tag.direct_meta_tags
+    other_meta_tags.each{|tag| self.meta_tags.delete(tag) if self.meta_tags.include?(tag)}
+    
     other_sub_tags = meta_tag.sub_tags - [self]
     self.filtered_works.each do |work|
       if work.filters.include?(meta_tag) && (work.filters & other_sub_tags).empty?
@@ -481,7 +481,7 @@ class Tag < ActiveRecord::Base
   def meta_tag_string=(tag_string)
     names = tag_string.split(',').map(&:squish)
     names.each do |name|
-      parent = Tag.find_by_name(name)
+      parent = self.class.find_by_name(name)
       if parent && parent.canonical?
         self.meta_taggings.create(:meta_tag => parent, :direct => true) unless self.meta_tags.include?(parent)
       end
@@ -491,7 +491,7 @@ class Tag < ActiveRecord::Base
   def sub_tag_string=(tag_string)
     names = tag_string.split(',').map(&:squish)
     names.each do |name|
-      sub = Tag.find_by_name(name)
+      sub = self.class.find_by_name(name)
       if sub && sub.canonical?
         sub.meta_taggings.create(:meta_tag => self, :direct => true) unless sub.meta_tags.include?(self)
       end

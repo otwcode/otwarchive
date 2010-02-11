@@ -7,6 +7,12 @@ class MetaTagging < ActiveRecord::Base
   
   before_create :add_filters, :inherit_meta_tags
   
+  def validate
+    unless self.meta_tag.class == self.sub_tag.class
+      self.errors.add_to_base("Meta taggings can only exist between two tags of the same type.")
+    end
+  end
+  
   # When you filter by the meta tag, you should get the works associated with the sub tag
   # but not vice versa
   def add_filters

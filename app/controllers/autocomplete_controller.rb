@@ -74,11 +74,11 @@ class AutocompleteController < ApplicationController
   # tag wrangling
   
   def tag_syn_string
-    canonical_tag_finder(Tag, params[:tag_syn_string])
+    canonical_tag_finder(params[:type].constantize, params[:tag_syn_string])
   end
 
   def tag_merger_string
-    tag_finder(Tag, params[:tag_merger_string])
+    tag_finder(params[:type].constantize, params[:tag_merger_string])
   end
   
   def tag_media_string
@@ -97,10 +97,10 @@ class AutocompleteController < ApplicationController
     canonical_tag_finder(Freeform, params[:tag_freeform_string])
   end    
   def tag_meta_tag_string
-    canonical_tag_finder(Tag, params[:tag_meta_tag_string])
+    canonical_tag_finder(params[:type].constantize, params[:tag_meta_tag_string])
   end
   def tag_sub_tag_string
-    canonical_tag_finder(Tag, params[:tag_sub_tag_string])
+    canonical_tag_finder(params[:type].constantize, params[:tag_sub_tag_string])
   end   
   
   def bookmark_external_fandom_string ; tag_finder(Fandom, params[:bookmark_external_fandom_string]) ; end
