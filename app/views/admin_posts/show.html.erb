@@ -4,7 +4,7 @@
 
 <!--subnav-->
 <ul class="navigation" role="navigation">
-	<li><%= link_to 'Back to AO3 News Index', admin_posts_path %></li>
+	<li><%= link_to t('admin_posts_link_text', :default => 'Back to AO3 News Index'), admin_posts_path %></li>
 </ul>
 <!--/subnav-->
 
@@ -22,12 +22,6 @@
 	    <%=sanitize_and_format_for_display @admin_post.content %>
 </div>
 <!--/content-->
-
-<!--subnav-->
-<ul class="navigation" role="navigation">
-	<li><%= link_to 'Back to AO3 News Index', admin_posts_path %></li>
-</ul>
-<!--/subnav-->
 
 <!-- BEGIN comment section -->
 <%= render :partial => 'comments/commentable', :locals => {:commentable => @admin_post} %>

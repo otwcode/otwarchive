@@ -3,26 +3,24 @@
 	
   <h3 class="landmark">Actions</h3>
 	<ul class="navigation" role="navigation">
-<!--note to BACK END: please refactor this so work_top_link works for Admin posts as well. Suggest possibly junking whole thing and just dropping a link to #main in. Supported in all major browser after NN4. Also please:
-if @admin_posts 
-<li>link_to 'Back to AO3 News Index', admin_posts_path</li>
-end
--->
-<%- if @work -%>
-    <li><%= link_to t('works_top_link_text', :default => "&#8593; Top"), work_path(@work, :anchor => "top")%></li>
+<%- if @work || @admin_post -%>
+    <li><%= link_to t('top_link_text', :default => "&#8593; Top"), :anchor => "main" %></li>
+<%- end -%>
+<%- if @admin_post -%>
+    <li><%= link_to t('admin_posts_link_text', :default => 'Back to AO3 News Index'), admin_posts_path %></li>
 <%- end -%>
 <%- if is_author_of?(commentable) && commentable.class == Work -%>
-      <li id="add_collection_link"><%= collection_link(commentable) -%></li>
-    <%- end -%>
-    <%- if logged_in? && commentable.class != AdminPost -%>
-      <li id="add_bookmark_link"><%= bookmark_link(commentable) %></li>			
-    <%- end -%>
-    <% if commentable.count_visible_comments > 0 -%>
-      <li id="show_comments_link"><%= show_hide_comments_link(commentable) -%></li>
-    <%- end -%>
+    <li id="add_collection_link"><%= collection_link(commentable) -%></li>
+<%- end -%>
+<%- if logged_in? && commentable.class != AdminPost -%>
+    <li id="add_bookmark_link"><%= bookmark_link(commentable) %></li>			
+<%- end -%>
+<% if commentable.count_visible_comments > 0 -%>
+    <li id="show_comments_link"><%= show_hide_comments_link(commentable) -%></li>
+<%- end -%>
     <li id="add_comment_link"><%= add_cancel_comment_link(commentable) -%></li>
-
   </ul>
+
   <!-- if we have javascript, here is where the collection window will pop up -->
   <div id="dynamic-collection_item" class="wrapper" style="display:none;"></div>
   <!-- if we have javascript, here is where the bookmark window will pop up -->
