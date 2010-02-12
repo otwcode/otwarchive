@@ -133,11 +133,16 @@ module ApplicationHelper
     condition = options[:unless] if options.has_key?(:unless)
 
     unless column.nil?
-      direction = params[:sort_direction] == 'ASC' ? 'DESC' : 'ASC'
-      link_to_unless condition, (direction == 'ASC' ? '<span>&#8593;  ' : '<span class="current">&#8595;  ') + title + '<span>', 
-        request.parameters.merge( {:sort_column => column, :sort_direction => direction} )
+      if params[:sort_column] == column.to_s # is this the column that is currently doing the sorting?
+        direction = params[:sort_direction] == 'ASC' ? 'DESC' : 'ASC'
+        link_to_unless condition, (direction == 'ASC' ? '&#8593;  ' : '&#8595;  ') + title, 
+          request.parameters.merge( {:sort_column => column, :sort_direction => direction} ), {:class => "current"}
+      else
+        link_to_unless condition, '&#8593;  ' + title,
+          request.parameters.merge( {:sort_column => column, :sort_direction => 'ASC'} )
+      end
     else
-      link_to_unless params[:sort_column].nil?, title, url_for(:overwrite_params => {:sort_column => nil})
+      link_to_unless params[:sort_column].nil?, title, url_for(:overwrite_params => {:sort_column => nil, :sort_direction => nil})
     end
   end
 
