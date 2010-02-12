@@ -9,13 +9,15 @@
 <%- elsif @most_recent_works -%>
   <h2><%= search_header @works, @query %> <%=h t('recently_updated', :default => "updated in the last month") %></h2>
 <%- elsif @user -%>
-	<h2><%= search_header @works, @query %> <%=h t('owned_works', :default => "by {{user_name}}", :user_name => @user.login) %></h2>
-	<%- elsif @tag -%>
-		<h2><%= search_header @works, @query %> <%=h t('owned_works', :default => "in {{tag_name}}", :tag_name => @tag.name) %></h2>
+  <h2><%= search_header @works, @query %> <%=h t('owned_works', :default => "by {{user_name}}", :user_name => @user.login) %></h2>
+<%- elsif @tag -%>
+  <h2><%= search_header @works, @query %> <%=h t('works_with_tag', :default => "in {{tag_name}}", :tag_name => @tag.name) %></h2>
+<%- else -%>    
+  <h2><%= search_header @works, @query %></h2>
 <%- end -%>
 
 <%-if @too_many %>
-  <p><%= t('search_too_broad', :default => "Your search was so broad it would have returned more than {{search_max}} works. You can either browse through the ones that we found first, or narrow your search down by adding some more keywords to your search, like character names or tags.", :search_max => ArchiveConfig.SEARCH_RESULTS_MAX) %></p>
+  <p><%= t('search_too_broad', :default => "The Archive is currently unable to return more than {{search_max}} results. You can browse through the ones that we found first, or narrow your results by adding some more keywords, like character names or tags.", :search_max => ArchiveConfig.SEARCH_RESULTS_MAX) %></p>
 <%- end -%>
 <!-- /end descriptions-->
 
@@ -39,7 +41,7 @@
 </ul>
 <% end %>
 <!--sorting subnav-->
-<ul class="sorting navigation" role="navigation">
+  <ul class="sorting navigation" role="navigation">
     <li><h4><%= t('sort_by', :default => 'Sort By') -%></h4></li>
     <%- unless @query.blank? -%>
     <li><%= sort_link t('sort.relevance', :default => 'Relevance') %></li>
