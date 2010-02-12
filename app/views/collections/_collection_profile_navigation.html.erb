@@ -1,12 +1,16 @@
 <h3 class="landmark">Navigation</h3>
+<%
+if show_collection_profile_navigation(@collection, section)
+%>
 <ul class="navigation" role="navigation">
-	<% if (!@collection.collection_profile.intro.blank? || (@collection.parent && !@collection.parent.collection_profile.intro.blank?)) && section != "intro" -%>
+	<% if show_collection_section(@collection, "intro") && section != "intro" -%>
 	<li><a href="#intro"><%=h t('intro', :default => "Intro:") %></a></li>
 	<% end -%>
-	<% if (!@collection.collection_profile.intro.blank? || (@collection.parent && !@collection.parent.collection_profile.intro.blank?)) && section != "faq" -%>
+	<% if show_collection_section(@collection, "faq") && section != "faq" -%>
 	<li><a href="#faq"><%=h t('faq', :default => "FAQ:") %></a></li>
 	<% end -%>
-	<% if (!@collection.collection_profile.intro.blank? || (@collection.parent && !@collection.parent.collection_profile.intro.blank?)) && section != "rules" -%>
+	<% if show_collection_section(@collection, "rules") && section != "rules" -%>
 	<li><a href="#rules"><%=h t('rules', :default => "Rules:") %></a></li>
 	<% end -%>
 </ul>
+<% end -%>

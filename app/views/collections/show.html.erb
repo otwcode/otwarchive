@@ -85,12 +85,9 @@
 <!--/subsection-->
 
 <!--main content-->
-<!--BACK END please move this logic to a helper method-->
-<% if !@collection.collection_profile.intro.blank? || !@collection.collection_profile.faq.blank? || !@collection.collection_profile.rules.blank? ||
-@collection.parent && (!@collection.parent.collection_profile.intro.blank? || !@collection.parent.collection_profile.faq.blank? || !@collection.parent.collection_profile.rules.blank?)
- %>
+<% if show_collection_preface(@collection) %>
 <div class="collection preface">
-  <% if !@collection.collection_profile.intro.blank? || (@collection.parent && !@collection.parent.collection_profile.intro.blank?) %>
+  <% if show_collection_section(@collection, "intro") %>
   <div id="intro" class="module">
     <%= render :partial => 'collection_profile_navigation', :locals => {:section => 'intro'} -%>
     <h3><%=h t('intro', :default => "Intro:") %></h3>
@@ -98,7 +95,7 @@
   </div>
   <% end -%>
 	
-  <%- if !@collection.collection_profile.faq.blank? || (@collection.parent && !@collection.parent.collection_profile.faq.blank?) -%>
+  <%- if show_collection_section(@collection, "faq") -%>
 	<div id="faq" class="module">
     <%= render :partial => 'collection_profile_navigation', :locals => {:section => 'faq'} -%>
 		<h3><%=h t('faq', :default => "FAQ:") %></h3>
@@ -106,7 +103,7 @@
 	</div>
 	<%- end -%>
 
- <% if !@collection.collection_profile.rules.blank? || (@collection.parent && !@collection.parent.collection_profile.rules.blank?) %>
+ <% if show_collection_section(@collection, "rules") %>
 	<div id="rules" class="module">
     <%= render :partial => 'collection_profile_navigation', :locals => {:section => 'rules'} -%>
 		<h3><%=h t('rules', :default => "Rules:") %></h3>
