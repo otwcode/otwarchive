@@ -29,7 +29,7 @@
  #dashboard a,#dashboard span 
 							{ color: #111; display: block; padding: 0 0.5625em; border: none;}
  #dashboard li:hover,#dashboard a:hover 
-							{ background: #900; color: #fffef9; border:none;}
+							{ background:#900 url(/images/header-red.png) bottom left repeat-x color: #fffef9; border:none;}
  #dashboard ul#subnav		{ margin:0; border: none; border-bottom: 2px solid #111;}
 
 /* MAIN CONTENT */
@@ -45,8 +45,7 @@
  NAVIGATION, ACTIONS (BUTTONS)*/
  ul#skiplinks,.landmark 	{ border: 0 !important; color: #fffef9; font-size: 0 !important; line-height: 0 !important; margin: 0 !important; clear:right; }
  #header .landmark 			{color:#900 !important;}
- #main ul.navigation, p.navigation, li.navigation, p.submit, dd.submit 	
-							{ margin: 0.5em auto 1em; border:1px solid #bbb; background:#fffef9 url(/images/fffef9-ccc.png) bottom left repeat-x; padding:0.15em 0.5em 0.25em; float:right; border-radius:3em; -moz-border-radius:3em; -webkit-border-radius:2em;}
+ #main ul.navigation, p.navigation, li.navigation, span.navigation, p.submit, dd.submit, span.submit 				{ margin: 0.5em auto 1em; border:1px solid #bbb; background:#fffef9 url(/images/fffef9-ccc.png) bottom left repeat-x; padding:0.15em 0.5em 0.25em; float:right; border-radius:3em; -moz-border-radius:3em; -webkit-border-radius:2em;}
  .navigation li,li.navigation,  #main .navigation h4  
 							{ display: inline }
  #main .navigation a, .submit input, .submit a
@@ -59,7 +58,7 @@
 /* Navigation in contexts - easier to have it all together */
  
 #main li.blurb .navigation	{ float:left; margin:auto; font-size:0.8575em;}
-#main li.bookmark .navigation 
+#main li.bookmark .navigation, #main li.fandom .navigation 
 							{ float:right; }
 #main li.blurb .own .navigation
 							{ float:left; margin:-1.5em auto auto;}
@@ -71,13 +70,29 @@
 
 /* GROUPING: MODULE, WRAPPER, INDEX */
  .module,  .index  			{ width: 100%; position: relative; float: left; }
- .wrapper					{ background: transparent url(/images/drop-shadow-light.gif) bottom right no-repeat; padding: 0 12px 13px 0;}
+ .wrapper					{ background: transparent url(/images/drop-shadow-light.gif) bottom right repeat-y; padding: 0 12px 13px 0;}
 
 /* ROLES/STATES*/
- .current 					{ background: #111 !important; color: #fffef9 !important; cursor: default }
+ .current, .current a:visited
+							{ background: #111 !important; color: #fffef9 !important; cursor: default }
  .own 						{ background: #eee; border: 1px dashed #ddd }
  .draft 					{ background: #eee; border: 2px dashed #ddd }
  .draft .wrapper			{ background: #eee; }
+ .droppable 				{ color: red; } 
+ .canonical 				{ font-weight: 700 }
+
+/*TAGS */
+ #main ul.tags li			{ display:inline; line-height:2;}
+
+/*CLOUD */
+a.cloud1 					{ color: #111; font-size: 0.625em; font-weight: 100 }
+a.cloud2 					{ color: #240F0F; font-size: 0.75em; font-weight: 200 }
+a.cloud3 					{ color: #380C0C; font-size: 0.875em; font-weight: 300 }
+a.cloud4 					{ color: #4B0A0A; font-size: 1em; font-weight: 400 }
+a.cloud5 					{ color: #5F0707; font-size: 1.125em; font-weight: 500 }
+a.cloud6 					{ color: #720505; font-size: 1.5em; font-weight: 600 }
+a.cloud7 					{ color: #860202; font-size: 1.875em; font-weight: 700 }
+a.cloud8 					{ color: #900; font-size: 2.25em; font-weight: 800 }
 
 /* META*/
  #main dl.meta 				{ background: #fffef9; border: 2px solid; clear: right; margin: 0 auto; padding: 0.5em; position: relative }
@@ -103,7 +118,8 @@
  .blurb .tags ul,.blurb .mods ul
 								{ margin: -2em 0 .75em 11em; padding: 0; text-indent: 0 }
  .blurb .tags,.blurb .tags li 	{ display: inline; margin: 0; padding: 0 0 0.8em }
- .blurb blockquote 				{ clear: none; margin: 0.5625em auto 0.5625em 11em; text-align: justify }
+ .blurb blockquote, .blurb ul.wranglers, .blurb form
+ 								{ clear: none; margin: 0.5625em auto 0.5625em 11em; text-align: justify }
  .blurb blockquote blockquote 	{ margin: auto }
  .blurb li.stats dl 			{ text-align: right }
 
@@ -112,7 +128,7 @@
  .bookmark .count img			{ height: 25px; width: 25px }
  .bookmark p.count span 		{ background: url(/images/category-none.png) top left no-repeat; border: 1px solid #eee; display: block; float: left; height: 25px; line-height: 1.875; margin: 0 2.5px 0 0; text-align: center; width: 25px }
  .bookmark ul.required-tags		{ top:30px;}
- .bookmark ul.tags 				{ display:block; margin: 0.643em auto auto 11em }
+#main .bookmark ul.tags 		{ display:block; margin: 0.643em auto auto 11em; line-height: 1.286;}
  .bookmark h5.byline 			{ color: #999; font: 700 0.875em 'Lucida Grande', Geneva, Verdana, Tahoma, sans-serif; margin: 0 }
  .bookmark .blurb 				{ border: 1px solid #ccc; padding: 0.125em; }
  .bookmark .module 				{ float:none}
@@ -136,7 +152,7 @@
 
 /* PREFACE - title, notes, description, collections faq, rules; has a fair few id weights as it sometimes appears within a user-generated-view*/
  .preface 						{ border-bottom: 3px double; margin: auto 3em 1.5em; padding: 0.5em 0.5em 0 }
- #main .preface .module				{ float:none; margin:0; padding:0;  width:auto }
+ #main .preface .module			{ float:none; margin:0; padding:0;  width:auto }
  #main .preface h3				{ background: transparent; border-bottom: 1px solid; color: #333; font-size: 1.125em }				
  #main .preface h2.title, #main .preface h3.title 	
 								{ font-size: 1.5em; font-weight: 700; margin: 1.5em auto 0; text-align: center; border-bottom:0}
@@ -197,10 +213,10 @@ li.comment h4					{ font-size: 1.25em;}
  .profile-show .module h3 		{ margin-top: 2.75em }
  .profile-show .datetime 		{ top:-3.25em }
 
-/* WORKS-INDEX */
+/* WORKS INDEX */
  .works-index .index 			{ width: 75% }
 
-/* MEDIA-INDEX, SHOW, FANDOMS-INDEX, SHOW*/
+/* MEDIA INDEX, SHOW, FANDOMS INDEX, SHOW*/
  .media-index li.category 		{ min-height: 15em; padding: 0.5em }
  #main.media-index ol, #main.fandoms-index ol, #main.fandoms-show ol 
 								{ list-style-type: decimal }
@@ -209,7 +225,7 @@ li.comment h4					{ font-size: 1.25em;}
  .fandoms-index ul.index 		{ float: left; width: 33% }
  .fandoms-index div.main-fandoms-listing 
 								{ clear: both }
-/* PEOPLE-INDEX */
+/* PEOPLE INDEX */
  .people-index p.icon, .people-index .icon img 
 								{ height: 75px; width:75px; float:left; margin:0 0 0 2.375em;}
  .people-index li.blurb 		{ min-height: 75px;}
@@ -218,12 +234,35 @@ li.comment h4					{ font-size: 1.25em;}
  .collections-index .index 			{ width: 75% }
  #main.collections-show h2 span { font-size: smaller }
 
+/* TAG WRANGLERS INDEX */
+ #main.tag_wranglers-index .index 
+								{ width:65%;}
+ #main.tag_wranglers-index form.filters 
+								{ width:16em; max-width:40%;}
+/* TAGS EDIT, front end coder please modularise the tooltip navigation rules*/
+ .tags-edit li span.navigation 	{ position:absolute; left:-999em;}
+ .tags-edit li:hover span.navigation 
+								{ left:auto;}
+/*TAGS INDEX */
+ .tags-index ul 				{ margin: 2em auto; text-align: center }
+ .tags-index li 				{ display: inline; padding: 0.25em 0.5625em }
+
+/*TAG WRANGLINGS INDEX */
+ .tag_wranglings-index .module 	{ width: 70%; margin:auto; }
+ .tag_wranglings-index td ul.navigation 
+								{ position:absolute; left:-999em;}
+ .tag_wranglings-index td:hover ul.navigation 
+								{ left:auto; }
+								
 /* TRANSLATIONS*/
  #main.translation-translate 	{ margin-bottom: 2.5em }
  dl.translations 				{ border-top: 1px solid; margin: 1.5em auto; padding: 1.5em 0 2.5em; position: relative }
  .translations dt			 	{ clear: both; margin: -0.25em; padding: 0.25em }
  .translated 					{ background: #d1e1ef; font-style: italic }
  .untranslated 					{ font-weight: 600 }
+
+/*ADMIN POSTS */
+ #main.admin_posts-index .module { width:auto; clear:both; margin: 0.5em auto; border:1px solid;}
 
 /* ToS and ADMIN long body copy tweaks*/
  .archive_faqs-index div, .known_issues-index .user-generated-view, #tos, #faq, .admin_posts-index .user-generated-view 
@@ -232,46 +271,4 @@ li.comment h4					{ font-size: 1.25em;}
  .home-tos_faq #contents 		{ margin: auto; padding: 1em; width: 60% }
  .home-tos_faq #contents h2 	{ text-align: center }
  .home-tos_faq #contents ul li 	{ border-bottom: 1px solid #ddd; list-style-type: upper-roman}
-
-/* ================================================== end of redraft. legacy styles follow
-
- TAG SHOW PAGE */
- .droppable { color: red;} 
- .tags-show li { display: inline }
- .tags-show ul.work,.tags-show ul.required-tags { padding: 0 }
- .tags-show .work li.heading { display: block }
- .tags-show .work li li { display: inline }
- .tags-show ul { line-height: 2em; padding: 1em 1em 2em }
-
-/* TAG EDIT PAGE */
- ul.tag-edit-items { margin: 0.5em auto }
- ul.tag-edit-items li { display: inline; white-space: nowrap }
- #edit-tag dt { width: 20% }
- #edit-tag dd { width: 75% }
- .tags-search .canonical { font-weight: 700 }
-
-/*TAGS-INDEX */
- .tags-index ul { margin: 2em auto; text-align: center }
- .tags-index li { display: inline; padding: 0.25em 0.5625em }
- .tags-index a { text-decoration: none }
- .tags-index a:hover { background: #900; color: #fffef9 }
- a.cloud1 { color: #111; font-size: 0.625em; font-weight: 100 }
- a.cloud2 { color: #240F0F; font-size: 0.75em; font-weight: 200 }
- a.cloud3 { color: #380C0C; font-size: 0.875em; font-weight: 300 }
- a.cloud4 { color: #4B0A0A; font-size: 1em; font-weight: 400 }
- a.cloud5 { color: #5F0707; font-size: 1.125em; font-weight: 500 }
- a.cloud6 { color: #720505; font-size: 1.5em; font-weight: 600 }
- a.cloud7 { color: #860202; font-size: 1.875em; font-weight: 700 }
- a.cloud8 { color: #900; font-size: 2.25em; font-weight: 800 }
-
-/*TAG WRANGLING */
- #tags-to-sort { height: 10em; margin-top: 20px; overflow: scroll; width: 30% }
- .recent { font-weight: 900 }
- #mass_assign_prettifying li.tag_wrangling_column { border-bottom: 1px solid #e2decc; display: block; float: left; line-height: 2.5; margin: 0 0 .1em; padding: 0 2.8em .2em 0; white-space: nowrap }
- #mass_assign_prettifying div.category,#mass_assign_prettifying div.category h3,#mass_assign_prettifying div.category ul { clear: both }
- .tag_wranglings-assign .category h3 { font-size: 2.5em }
- .tag_wranglings-assign .category ul { margin-left: 5em }
- .tag_wranglings-assign .category ul li { display: inline }
- .tag_wranglings-assign .tag { margin-right: 1em }
- ul#tag-wrangler-footer { clear: both; margin-top: 2.5em }
 

@@ -59,10 +59,16 @@ sub 					{ vertical-align: sub;}
 sup 					{ vertical-align:super;}
 
 /* TABLES AND LISTS */
-table					{ margin:auto; padding: 0.375em; width:99%;}
+table					{ background: #efe0e0; border-collapse: collapse; margin:auto; width:100%; clear: right;}
 caption					{ font-size:0; color:#fffef9; }
-caption, th, td			{ text-align: left; }
-th, thead, tfoot 		{ background:#ddd; padding: 0.25em; font-family: FertigoProRegular, Cambria, Constantia, Palatino, Georgia, sans-serif; font-weight: 400;}
-tfoot 					{ margin: 0.875em auto;}
+thead, tfoot  			{ border-bottom:2px solid #bbb; padding: 0.75em; vertical-align:middle;}
+tfoot td				{ border-top:1px solid #aaa}
 td th					{ padding-right: 3em; }
-td						{ padding:0.375em; border:1px solid #ddd;}
+tbody tr				{ border-bottom: 1px solid #fffef9;}
+td						{ padding:0.375em;}
+thead td				{ background: #efe0e0;  border-bottom: 1px solid #fffef9;}
+col.name				{ background: #fffef9; border:1px solid #999;}
+th, tr:hover 			{ background:#fffef9; border:1px solid #bbb; padding:0.15em 0.5em 0.25em; vertical-align:middle; }
+th 						{ font-weight: bold; border:1px solid #bbb; padding:0.25em}
+th a, th a:visited, th a:link
+						{ text-decoration: none; border:0;}

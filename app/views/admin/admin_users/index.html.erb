@@ -15,30 +15,39 @@
   </dl>
   <p class="submit"><%= submit_tag t("find_user_button", :default => "Find") -%></p>
 <%- end -%>
-
+<div class="clear"><!--presentational, phase me out--></div>
 <% if @users %>
 
 <h3><%= @users.size == 1 ? "1 user found" : @users.size == 0 ? "No users found" : @users.size.to_s + " users found" -%></h3>
 
 <%- if @users.size > 0 -%>
-  <table id="admin_users_table">
+  <div class="wrapper">
+	<table id="admin_users_table">
   <caption><%=h t('list', :default => "List of users") -%></caption>
-  <tr>
-    <th scope="col"><%=h t('username', :default => "Username") -%></th>
-    <th scope="col"><%=h t('email', :default => "Email") -%></th>
-    <th scope="col"><%=h t('translation_admin', :default => "Translation Admin") -%></th>
-    <th scope="col"><%=h t('tag_wrangler', :default => "Tag Wrangler") -%></th>
-    <th scope="col"><%=h t('archivist', :default => "Archivist") -%></th>
-    <th scope="col"><%=h t('update', :default => "Update") -%></th>
-    <th scope="col"><%=h t('details', :default => "Details") -%></th>
-  </tr>
+  <colgroup>
+	<col class="name"/>
+	<col span="6" />
+	</colgroup>
+	<thead>
+		<tr>
+    		<th scope="col"><%=h t('username', :default => "Username") -%></th>
+    		<th scope="col"><%=h t('email', :default => "Email") -%></th>
+    		<th scope="col"><%=h t('translation_admin', :default => "Translation Admin") -%></th>
+    		<th scope="col"><%=h t('tag_wrangler', :default => "Tag Wrangler") -%></th>
+    		<th scope="col"><%=h t('archivist', :default => "Archivist") -%></th>
+    		<th scope="col"><%=h t('update', :default => "Update") -%></th>
+    		<th scope="col"><%=h t('details', :default => "Details") -%></th>
+  		</tr>
+	</thead>
+	<tbody>
     <%- @users.each do |user| -%>
-    <tr id="user_<%= user.id %>">
-      <%= render :partial => 'user_form', :locals => {:user => user} %>
-    </tr> 
+    	<tr id="user_<%= user.id %>">
+      		<%= render :partial => 'user_form', :locals => {:user => user} %>
+    	</tr> 
   <%- end -%>
-  </table>
+	</tbody>
 <%- end -%>
-
+  </table>
+</div>
 <%- end -%>
 <!--/content-->

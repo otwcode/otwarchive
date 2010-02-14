@@ -11,7 +11,7 @@
 <!--main content-->
 <% @admin_posts.each do |admin_post| %>
 
- 	<div class="user-generated-view" role="article">
+ 	<div class="user-generated-view module" role="article">
 			<h3>
 				<%= link_to sanitize_title_for_display(admin_post.title), admin_post %>
 			</h3>
@@ -23,12 +23,13 @@
 				</h4>
 		    <%=sanitize_and_format_for_display admin_post.content %>
 			<!-- BEGIN comment section -->
-				<p>
-				<%=h t('admin_post_comments', :default => 'Comments') + ': '%> 
-				<%= link_to admin_post.count_visible_comments, admin_post_path(:id => admin_post.id, :anchor => "comments", :show_comments => true) -%> | 
-				<%= link_to t('admin_post_comments_add', :default => 'Add Comment'), admin_post_path(:id => admin_post.id, :anchor => "comments", :add_comment => true) -%>
+				<h3 class="landmark">Comment</h3>
+				<ul class="navigation">
+				<!--BACK END, please make this consistent with /works comment buttons, which say "Read (n) Comment/s" -->
+				<li>Read <%= link_to admin_post.count_visible_comments, admin_post_path(:id => admin_post.id, :anchor => "comments", :show_comments => true) -%></li> 
+				<li><%= link_to t('admin_post_comments_add', :default => 'Add Comment'), admin_post_path(:id => admin_post.id, :anchor => "comments", :add_comment => true) -%></li>
 
-				</p>	
+				</ul>	
 			<!-- END comment section -->
 	
 	</div>

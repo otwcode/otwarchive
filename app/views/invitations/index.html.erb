@@ -19,6 +19,7 @@
 <!--/subnav-->
 
 <!--main content-->
+<div class="module">
 <%- if @unsent_invitations.blank? -%>
   <p>Sorry, you have no unsent invitations right now.</p>  
 <%- else -%>
@@ -42,6 +43,7 @@
     <p class="submit"><%= submit_tag t('submit_invite', :default => 'Send invite')  %></p>
   <%- end -%>
 <%- end -%>
+</div>
 <!--/content-->
 
 <!--subnav-->

@@ -1,14 +1,17 @@
+<!--Descriptive page name, messages and instructions-->
 <h2><%= 'Wrangle Tags for ' + link_to_tag(@tag) %></h2>
+<!--/descriptions-->
+<!--subnav-->
+<ul class="navigation">
+<li><%= link_to 'edit tag and parent associations', {:controller => :tags, :action => :edit, :id => @tag} %></li>
+<li><%= tag_comment_link(@tag) %></li>  
+</ul>
+<%= tag_wrangler_footer %>
+<!--/subnav-->
 
-<p><%= tag_comment_link(@tag) %></p>  
-
-<p><%= link_to 'edit tag and parent associations', {:controller => :tags, :action => :edit, :id => @tag} %></p>
-
-<%- if params[:show] -%>
+<!--main content--><%- if params[:show] -%>
   <h3><%= "Showing " + params[:show] %></h3>
 <%- end -%>
-
-<%= tag_wrangler_footer %>
 
 <%- if @tag.canonical? && !@tag.child_types.empty? -%>
 <h4>Choose a group of tags to show:</h4>
@@ -82,20 +85,22 @@
         <%- if params[:show] == "pairings" -%>
         <td>
           <%= label_tag "selected_tags_#{tag.id}", "#{tag.name}" %>
-          <span class="fake-tooltip">
-            <%= link_to 'edit', {:controller => :tags, :action => :edit, :id => tag} %> | 
-            <%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => tag} %> | 
-            <%= link_to 'works', {:controller => :works, :action => :index, :tag_id => tag} %>
-          </span>
+		    <ul class="navigation">
+	            <li><%= link_to 'remove', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %></li>
+	            <li><%= link_to 'edit', {:controller => :tags, :action => :edit, :id => tag} %></li> 
+	            <li><%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => tag} %></li>
+	            <li><%= link_to 'works', {:controller => :works, :action => :index, :tag_id => tag} %></li>
+	          </ul>
         </td>
         <%- else -%>      
         <td>
           <%= tag.name %>
-          <span class="fake-tooltip">
-            <%= link_to 'edit', {:controller => :tags, :action => :edit, :id => tag} %> | 
-            <%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => tag} %> | 
-            <%= link_to 'works', {:controller => :works, :action => :index, :tag_id => tag} %>
-          </span>
+          <ul class="navigation">
+            <li><%= link_to 'remove', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %></li>
+            <li><%= link_to 'edit', {:controller => :tags, :action => :edit, :id => tag} %></li> 
+            <li><%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => tag} %></li>
+            <li><%= link_to 'works', {:controller => :works, :action => :index, :tag_id => tag} %></li>
+          </ul>
         </td>
         <%- end -%>
         <%- if params[:show] == "pairings" -%>
@@ -120,8 +125,11 @@
     </p>
     <p class="submit"><%= submit_tag "Wrangle" %></p>
   <%- end -%>
+<!--/content-->
+<!--subnav-->
 
   <%= will_paginate @tags %>  
 <%- end -%>
 
 <%= tag_wrangler_footer %>
+<!--/subnav-->

@@ -1,8 +1,10 @@
 /* GLOBAL */
 /*form buttons (input, button, are currently styled the same as navigation and sorting buttons, in site-chrome.css)*/
 form fieldset legend, legend { height:0; width:0; font-size:0; color:#fffef9;}
+#main form fieldset.table		{ border:none;}
 form input {font-size: 1em;}
 form p.submit, input.submit { text-align:right; }
+#main form .submit input {width:auto;}
 form p { line-height:2; clear:both;}
 form dl { position:relative; }
 form dt { float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
@@ -38,13 +40,7 @@ p.character_counter { font-size:85.7%; color:#666; display:inline; position:rela
 
 /*DASHBOARD: REQUEST INVITES */
 #new_user_invite_request textarea {width:99%;}
-
-/* kludge for fixing invitations page. Fix me later, too! INVESTIGATE */
-.invitations-index form dt, .invitations-index form p { clear: none; width: 20%;}
-.invitations-index form dd { width: 75%}
-.invitations-index p.submit {clear:both; width: 100%;}
-/* end kludge */
-
+#invitations-index form {clear:right;}
 /* SIGN IN BOX */
 #signin p { display:inline;}
 #signin p.footnote	{ font-size:85.7%;  padding:0.125em 0 0 .125em;}
@@ -65,9 +61,12 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 #main.users-new form dl {position: static;}
 #main.users-new #tos-partial {height: 10em; overflow:auto; border: 1px solid}
 
-/* SEARCH */
-#search {float:right;clear:right;}
+/* SITE SEARCH */
+#header #search {float:right;clear:right;}
 #search p { font-size: 0.8575em; padding: 0 0.25em 0 0; margin: 0; }
+
+/*Subset search IN MAIN */
+#main .search {width:50%; margin: auto auto 0.5em auto; border:1px solid #ddd; padding:0.5em;}
 
 /*ADMIN */
 .admin_session-new dt { width:12em; padding-top:0.5em;}
@@ -76,8 +75,9 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 .admin_users-notify input {width:100%;}
 .admin_users-notify textarea {height:20em; width:100%;}
 
-.admin_invitations-index form {border:1px solid #ddd; margin: 1.5em auto; padding:.5em;}
+.admin_invitations-index form {float:right; width:99%; border:1px solid #ddd; margin: 0 auto 1em auto; padding:.5em;}
 .settings-index dt {width: 70%}
+.admin_invitations-index h3 {clear: right;}
 
 /*ABUSE, FEEDBACK */
 #main.abuse_reports-new dt, form#new_feedback dt, form#new_feedback dd { width:100%; float:none;}
@@ -159,6 +159,7 @@ textarea#comment_content {width:99%; height:12em;}
 
 /*TAG WRANGLINGS*/
 form#wrangle-select-fandom p, form#wrangle-select-media p{ display:inline; margin-right:0.5625em;}
+.tag_wranglings-index form fieldset {border:1px solid #bbb; padding:0.5em}
 
 /* TAGS */
 #edit-tag input[readonly] { background:#ededde; border:1px solid #dfdffd;}
@@ -184,5 +185,4 @@ form.new_collection p, form.new_user p {font-size:1.5em;}
 form.new_collection dt {width:45%;}
 form.new_collection div {display:block;}
 
-/*GIFT SEARCH*/
-form#gift-search {width:50%; margin: auto auto 0.5em auto; border:1px solid #ddd; padding:0.5em;}
+

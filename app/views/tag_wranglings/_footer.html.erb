@@ -1,11 +1,11 @@
 <h3 class="landmark">Navigation</h3>
-<ul id="tag-wrangler-footer" class="navigation" role="navigation">
+<ul class="navigation" role="navigation">
   <%- if current_user.is_a?(User) -%>
-  <li><%= link_to_unless_current('Wrangling Home', tag_wrangler_path(current_user)) %></li>
+  <li><%= span_if_current('Wrangling Home', tag_wrangler_path(current_user)) %></li>
   <%- end -%>
-  <li><%= link_to_unless_current('Mass Wrangling', tag_wranglings_path) %></li>
-  <li><%= link_to_unless_current('Wranglers', tag_wranglers_path) %></li>  
-  <li><%= link_to_unless_current('Tags', tags_path) %></li>		
-  <li><%= link_to_unless_current('Search Tags', search_tags_path) %></li> 
-  <li><%= link_to_unless_current('New Tag', new_tag_path) %></li> 
+  <li><%= span_if_current('Mass Wrangling', tag_wranglings_path) %></li>
+  <li><%= span_if_current('Wranglers', tag_wranglers_path) %></li>  
+  <li><%= span_if_current('Tags', tags_path) %></li>		
+  <li><%= span_if_current('Search Tags', search_tags_path) %></li> 
+  <li><%= span_if_current('New Tag', new_tag_path) %></li> 
 </ul>

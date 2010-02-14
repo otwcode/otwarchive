@@ -1,7 +1,8 @@
 <h3><%= t('history', :default => 'User History') -%></h3>
 <!--note, the summary should explain the table, the caption should title it-->
-<table summary="shows what notable actions, such as creating an account, a user performed, and when they did them">
-	<caption><%= t('user_history_caption', :default => 'History of when certain actions happened, such as accounts being created') %></caption>
+<div class="wrapper">
+	<table summary="shows what notable actions, such as creating an account, a user performed, and when they did them">
+	<caption><%= t('user_history_caption', :default => 'History of user actions') %></caption>
   <thead>
 	<tr>
     <th scope="col"><%= t('log_date', :default => 'Date / Time') -%></th>
@@ -26,3 +27,4 @@
   </tr>
  </tbody> 
 </table>
+</div>

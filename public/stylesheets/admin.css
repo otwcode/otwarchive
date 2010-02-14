@@ -1,11 +1,14 @@
 /* anything in here should override other styles for admin users */
 
+#header .landmark {
+	color: #066 !important;
+}
 #header {
-background: #066 top left no-repeat;
+	background: #066 top left no-repeat;
 }
 
 #login-block {
-background: #066;
+	background: #066;
 }
 
 .home #login-block {
@@ -13,14 +16,24 @@ background: #066;
 }
 
 .login-admin:after {
-content: url( "\2020" );
+	content: url( "\2020" );
 }
 
 #admin-options a {
-color: #900;
+	color: #900;
 }
 
-#admin_users_table  th a:visited{ color: #ddd; }
+#admin_users_table th a:visited {
+	color: #ddd;
+}
 
-#admin_users_table  th a:hover { color: #066; }
+#admin_users_table th a:hover {
+	color: #066;
+}
+
+/* TABLES AND LISTS */
+table, thead td {
+	background: #E0EFE9
+}
+
 

@@ -4,12 +4,14 @@
 	<% cache('latest_comments') do -%>
   	<% @comments = Comment.top_level.not_deleted.limited(20).ordered_by_date.include_pseud %>
   	<h2><%= t('viewing_last', :default => "Viewing {{count}} recent comments", :count => @comments.length) -%></h2>
-  	<%- for comment in @comments -%>
+  	<ol class="comment index">
+	<%- for comment in @comments -%>
   		<%- if comment.approved or logged_in? -%>
-  		  <%= render :partial => 'comments/single_comment_abbreviated', :locals => {:single_comment => comment} -%>
+		<%= render :partial => 'comments/single_comment_abbreviated', :locals => {:single_comment => comment} -%>
   		<% end -%>
   	<% end -%>
   <% end -%>
+</ol>
 <%- else -%>
 	<h2><%= title_for_comment_page(@commentable) %></h2> 
 <!--/descriptions-->

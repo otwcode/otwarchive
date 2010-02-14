@@ -3,6 +3,9 @@
     <li><%- if current_page?(admin_posts_path) -%><span class="current"><%- end -%>
 		<%= link_to_unless_current "AO3 News", admin_posts_path %>
 		<%- if current_page?(admin_posts_path) -%></span><%- end -%></li>
+	<li><%- if current_page?(new_admin_post_path) -%><span class="current"><%- end -%>
+		<%= link_to 'Post AO3 News', new_admin_post_path %>
+		<%- if current_page?(new_admin_post_path) -%></span><%- end -%></li>
 	<li><%- if current_page?(archive_faqs_path) -%><span class="current"><%- end -%>
 		<%= link_to_unless_current "Archive FAQ", archive_faqs_path %>
 		<%- if current_page?(archive_faqs_path) -%></span><%- end -%></li>

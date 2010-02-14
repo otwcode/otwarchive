@@ -1,9 +1,16 @@
+<!--Descriptive page name, messages and instructions-->
 <h2><%=h 'New tag' %></h2>
 
 <%= error_messages_for :tag %>
 
 <p><%=h "Once you have created the tag, the attributes that are particular for that tag category will be available for editing" %></p>
 
+<!--/descriptions-->
+
+<!--subnav-->
+<!--/subnav-->
+
+<!--main content-->
 <%- form_for :tag, @tag, :url => { :action => "create" }  do |f| -%>
   <dl>
     <dt><%= f.label :name, 'Name' %></dt>
@@ -28,6 +35,9 @@
 <p class="submit">
 <%= f.submit %></p>
 <%- end -%>
+<!--/content-->
+
+<!--subnav-->
 
 <%= tag_wrangler_footer %>
-
+<!--/subnav-->

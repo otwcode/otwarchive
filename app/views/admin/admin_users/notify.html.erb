@@ -29,9 +29,9 @@
 </fieldset>
 <fieldset>
 	<legend>Notify Individuals</legend>
-    <h2><%= t('select_users', :default => 'Or Select Users To Notify') -%></h3>
+    <h3><%= t('select_users', :default => 'Or Select Users To Notify') -%></h3>
 	<%= alpha_paginated_section -%>
-
+	<div class="wrapper">
       <table id="admin_users_table">
       <caption><%=h t('select_users', :default => 'Select Users To Notify') -%></caption>
       <thead>
@@ -54,7 +54,7 @@
       <%- end -%>
 </tbody>
       </table>
-    
+  </div>  
       <%= alpha_paginated_section -%>
 </fieldset>
 <fieldset>

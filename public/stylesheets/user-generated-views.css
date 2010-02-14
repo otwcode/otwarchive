@@ -30,9 +30,8 @@
 /*tables */
 .user-generated-view caption
 							{ height:auto; font-size:1em; color:#222; }
-.user-generated-view th, .user-generated-view thead td, .user-generated-view th a, .user-generated-view th a:link 
-							{ background:transparent; color:#222; font-weight: 600; }
-.user-generated-view td		{ border:0;}
+.user-generated-view table, .user-generated-view td, .user-generated-view col, .user-generated-view tr, .user-generated-view thead, .user-generated-view tfoot, .user-generated-view tbody, .user-generated-view th, .user-generated-view thead td, .user-generated-view th a, .user-generated-view th a:link 
+							{ background:transparent; color:#222; border: none; }
 
 /* quotes and stresses */
 .user-generated-view blockquote	

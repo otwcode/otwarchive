@@ -1,46 +1,25 @@
-<h1>Tag Wrangling Assignments</h1>
+<!--Descriptive page name, messages and instructions-->
+<h2>Tag Wrangling Assignments</h2>
+<!--/descriptions-->
 
-<%- form_tag tag_wranglers_path, :method => :get do -%>
-  <h3>Filter by Media</h3>
-  <p>Show only:</p>
-  <%= select_tag :media_id, options_for_select([''] + Media.canonical.collect(&:name), params[:media_id]) -%>
+<!--subnav-->
+<%= tag_wrangler_footer %>
+<!--/subnav-->
 
-  <h3>Filter by Wrangler</h3>
-  <p>Show only:</p>
-  <%= select_tag :wrangler_id, options_for_select(['', 'No Wrangler'] + @wranglers.collect(&:login), params[:wrangler_id]) -%>
-
-  <h3>Filter by Fandom Name</h3>
-  <p>Show only fandoms that start with:</p>
-  <%= text_field_tag :fandom_string, params[:fandom_string] -%>
-  <p><%= submit_tag 'Go' -%></p>  
-<%- end -%>
-
-<!-- I suspect this should be a dl instead -->
-
-<table>
-  <thead>
-    <tr>
-      <th>Fandom</th>
-      <th>Wranglers</th>    
-    </tr>
-  </thead>
-  <tbody>
-  <%- @assignments.group_by(&:name).each do |name, assignments| -%>
-  <tr>
-    <td><%= name -%>
-    <span class="fake-tooltip">
-      <%= link_to 'edit', {:controller => :tags, :action => :edit, :id => assignments.first} %> | 
-      <%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => assignments.first} %> | 
-      <%= link_to 'works', {:controller => :works, :action => :index, :tag_id => assignments.first} %>
-    </span>       
-    
-    </td>
-    <td>
-    <%- assignments.collect(&:wrangler).compact.each do |wrangler| -%>
-      <p><%= link_to wrangler, tag_wrangler_path(:id => wrangler) -%> 
-      <%= link_to '(remove)', tag_wrangler_path(:id => wrangler, :fandom_id => assignments.first.id), :method => :delete %></p>
+<!--main content-->
+<h3 class="landmark">Listing by fandom</h3>
+<ul class="index">
+	<%- @assignments.group_by(&:name).each do |name, assignments| -%>
+	<li class="fandom tag blurb">
+	<h4><%= name -%></h4>
+<!--BACK END if assignments not blank-->
+ 	<ul class="wranglers">
+	<%- assignments.collect(&:wrangler).compact.each do |wrangler| -%>
+      <li><%= link_to wrangler, tag_wrangler_path(:id => wrangler) -%> 
+      <%= link_to '(remove)', tag_wrangler_path(:id => wrangler, :fandom_id => assignments.first.id), :method => :delete %></li>
     <%- end -%>
-    <%- form_tag url_for(:controller => 'tag_wranglers', :action => "create") do -%> 
+    </ul>
+	<%- form_tag url_for(:controller => 'tag_wranglers', :action => "create") do -%> 
       <div id="wranglers-for-<%= assignments.first.id %>"
         <%= hidden_field_tag :fandom_id, assignments.first.id %>
         <%= hidden_field_tag :fandom_string, params[:fandom_string] %>
@@ -54,10 +33,37 @@
             end -%></p>  
       </div>
     <%- end -%>      
-    </td>
-  </tr>
+	<ul class="navigation">
+		<li><%= link_to 'edit', {:controller => :tags, :action => :edit, :id => assignments.first} %></li> 
+      	<li><%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => assignments.first} %></li> 
+      	<li><%= link_to 'works', {:controller => :works, :action => :index, :tag_id => assignments.first} %></li>
+	</ul>
+		</li>
   <%- end -%>  
-  </tbody>
-</table>
+</ul>
+<!--/content-->
 
+<!--subnav-->
+<h3 class="landmark">Filters</h3>
+<%- form_tag tag_wranglers_path, :class => 'filters', :method => :get do -%>
+  <dl class="filters">
+	<dt>Filter by Media</dt>
+  <dd><p>Show only:</p>
+  <%= select_tag :media_id, options_for_select([''] + Media.canonical.collect(&:name), params[:media_id]) -%></dd>
+
+  <dt>Filter by Wrangler</dt>
+  <dd>
+	<p>Show only:</p>
+  <%= select_tag :wrangler_id, options_for_select(['', 'No Wrangler'] + @wranglers.collect(&:login), params[:wrangler_id]) -%>
+</dd>
+  <dt>Filter by Fandom Name</dt>
+  <p>Show only fandoms that start with:</p>
+  <%= text_field_tag :fandom_string, params[:fandom_string] -%>
+  </dd>
+</dl>
+<p class="submit"><%= submit_tag 'Go' -%></p>  
+<%- end -%>
+<div class="clear"><!--presentational, phase me out--></div>
+<h3 class="landmark">Next Page</h3>
 <%= will_paginate(@assignments) %>
+<!--/subnav-->

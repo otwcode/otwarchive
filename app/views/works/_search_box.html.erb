@@ -1,4 +1,4 @@
-<% form_tag works_path, :id => 'search', :role => 'search', :method => :get do -%>
+<% form_tag works_path, :id => 'search', :class => 'search', :role => 'search', :method => :get do -%>
   <fieldset>
 	<legend>Search for works</legend>
 	<p><%= text_field_tag :query, params[:query], :class => 'text', :title => 'site search' %>

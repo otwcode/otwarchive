@@ -1,9 +1,18 @@
+<div id="user-page" class="profile">
+<div class="wrangler header module">
+<!--Descriptive page name, messages and instructions-->
 <h2><%= @wrangler.login %>'s Wrangling Page</h2>
-
+	<p><%= image_tag("icon_placeholder.png", :size => "100x100", :alt => "", :class => "icon") %></p>
+	<!--/descriptions-->
+<!--subnav-->
 <%= tag_wrangler_footer %> 
+</div>
+<!--/subnav-->
 
+<!--main content-->
 <%- unless @fandoms.empty? -%>
-  <h3>Assigned Fandoms</h3>
+  <div class="wrangler user module">
+	<h3>Assigned Fandoms</h3>
   <p>Fandoms assigned to you via the <%= link_to 'tag wranglers page', tag_wranglers_path %>. The count is the number of 
   unwrangled tags which were used on works in the given fandom.</p>
   <ul>
@@ -12,20 +21,28 @@
     <%- end -%>  
   </ul>
   <p><%= link_to 'Most recent works in your fandoms', works_path(:selected_tags => @fandoms.collect(&:id), :boolean_type => 'or') %></p>
+</div>
 <%- end -%>
 
+
+<div class="wrangler user module">
 <h3>Mass Wrangle New/Unwrangled Tags</h3>
 
-<ul>
+<ul class="index">
   <li><%= link_to "Fandoms by media (#{@counts[:fandoms]})", tag_wranglings_path(:show => "fandoms") %></li>
   <li><%= link_to "Characters by fandom (#{@counts[:characters]})", tag_wranglings_path(:show => "characters") %></li>
   <li><%= link_to "Pairings by fandom (#{@counts[:pairings]})", tag_wranglings_path(:show => "pairings") %></li>
   <li><%= link_to "Pairings by character", tag_wranglings_path(:show => "character_pairings") %></li>
   <li><%= link_to "Freeforms by fandom (#{@counts[:freeforms]})", tag_wranglings_path(:show => "freeforms") %></li>
 </ul>
-
-<h3>Find a Tag</h3>
-
+</div>
+<div class="wrangler user module">
+	<h3>Find a Tag</h3>
 <%= render :partial => 'tags/search_form' %>
+</div>
+<!--/content-->
 
+<!--subnav-->
 <%= tag_wrangler_footer %>
+<!--/subnav-->
+</div>

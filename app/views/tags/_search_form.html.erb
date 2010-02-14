@@ -1,7 +1,9 @@
-<%- form_tag url_for(:controller => 'tags', :action => 'search'), :method => :get do -%>
-<p>
-  <%= text_field_tag :query, params[:query]  %>
+<%- form_tag url_for(:controller => 'tags', :action => 'search'), :class => 'search', :method => :get do -%>
+  <fieldset>
+	<legend>Search tags</legend>
+	<p><%= text_field_tag :query, params[:query]  %>
   <%= select_tag :tag_type, options_for_select(%w(All Fandoms Characters Pairings Freeforms), params[:tag_type]) %> 
   <%= submit_tag "Search tags" %>
 </p> 
+</fieldset>
 <%- end -%>

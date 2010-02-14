@@ -1,36 +1,29 @@
-<h2><%= 'Edit Tag: ' + link_to_tag(@tag) %></h2>
-
-<p><%= tag_comment_link(@tag) %></p>  
-
-<table>
-<caption>Uses:</caption>
-  <tr>
-    <th>Type</th>
-    <th>Count</th>
-  </tr>
-  <tr>
-    <td><%= link_to 'Works', {:controller => :works, :action => :index, :tag_id => @tag} %></td>
-    <td><%= @tag.visible_works_count %></td>
-  </tr>
-  <tr>
-    <td><%= "Drafts" %></td>
-    <td><%= @tag.works.unposted.count %></td>
-  </tr>
-  <tr>
-    <td><%= link_to "Bookmarks", {:controller => :bookmarks, :action => :index, :tag_id => @tag} %></td>
-    <td><%= @tag.visible_bookmarks_count %></td>
-  </tr>
-  <tr>
-    <td><%= "Private Bookmarks" %></td>
-    <td><%= @tag.bookmarks.not_public.count %></td>
-  </tr>
-  <tr>
-    <td><%= "External Works" %></td>
-    <td><%= @tag.visible_external_works_count %></td>
-  </tr>                              
-</table>
-     
+<!--Descriptive page name, messages and instructions-->
+<h2><%= 'Edit ' + '<cite>' + link_to_tag(@tag) + '</cite>' + ' Tag' %></h2>
 <%= error_messages_for :tag %>
+<!--/descriptions-->
+
+<!--subnav-->
+<p class="navigation"><%= tag_comment_link(@tag) %></p>
+<div class="clear"><!--presentational, phase me out--></div>
+<!--/subnav-->
+
+<!--main content-->
+<div class="wrapper">
+	<dl class="tag meta">
+		<dt><%= link_to 'Works', {:controller => :works, :action => :index, :tag_id => @tag} %></dt>
+		<dd><%= @tag.visible_works_count %></dd>
+		<dt><%= "Drafts" %></dt>
+		<dd><%= @tag.works.unposted.count %></dd>
+		<dt><%= link_to "Bookmarks", {:controller => :bookmarks, :action => :index, :tag_id => @tag} %></dt>
+		<dd><%= @tag.visible_bookmarks_count %></dd>
+		<dt><%= "Private Bookmarks" %></dt>
+		<dd><%= @tag.bookmarks.not_public.count %></dd>
+		<dt><%= "External Works" %></dt>
+		<dd><%= @tag.visible_external_works_count %></dd>
+	</dl>
+</div>    
+
 <%- form_for :tag, @tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| -%>
 
 <fieldset>
@@ -45,8 +38,8 @@
     </dd>
     
     <dt><%= 'Category' %></dt>
-    <!-- FRONT-END: this is important info, so it would be good to have a way to make it stand out a little more -->       
-    <dd><%= @tag.type %></dd>
+    <!-- FRONT-END: this is important info, so it would be good to have a way to make it stand out a little more . Attention SYSTEM MESSAGES wrangler-->       
+    <dd><strong><%= @tag.type %></strong></dd>
     
     <%- if @wranglers -%>
     <dt><%= 'Wranglers' %></dt>
@@ -77,8 +70,8 @@
       <%- if @tag.merger -%>
         <p>Edit <%= link_to_edit_tag(@tag.merger) %></p>
       <%- elsif @tag.canonical? -%>
-        <!-- FRONT-END: if we have some sort of ACHTUNG! class, this would be a good place for it. -->      
-        <p>Adding a synonym to a canonical tag will make it non-canonical and move its associations to the other tag. (Be careful with this!)</p>
+        <!-- FRONT-END: if we have some sort of ACHTUNG! class, this would be a good place for it. Attention SYSTEM MESSAGES wrangler-->      
+        <p class="important warning">Adding a synonym to a canonical tag will make it non-canonical and move its associations to the other tag. <strong>(Be careful with this!)</strong></p>
       <%- end -%>  
     </dd>
   </dl>
@@ -95,11 +88,11 @@
         <%= autocomplete_text_field_with_type @tag, "tag_#{tag_type.underscore}_string" -%><br />
         <%- if @parents[tag_type] -%>
           <%- @parents[tag_type].in_groups(2, false) do |tag_list| -%>
-          <ul class="tag-column">
+          <ul class="tags">
           <%- for tag in tag_list -%>
             <li>
               <%= link_to_edit_tag(tag) %>
-              <span class="fake-tooltip">
+              <span class="navigation">
                 <%= link_to 'remove', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %> 
               </span>              
             </li>
@@ -124,11 +117,11 @@
         <%= autocomplete_text_field_with_type @tag, "tag_#{tag_type.underscore}_string" -%><br />
         <%- if @children[tag_type] -%>
           <%- @children[tag_type][0..19].in_groups(2, false) do |tag_list| -%>
-          <ul class="tag-column">
+          <ul class="tags">
           <%- for tag in tag_list -%>
             <li>
               <%= link_to_edit_tag(tag) %>
-              <span class="fake-tooltip">
+              <span class="navigation">
                 <%= link_to 'remove', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %>
               </span>              
             </li>
@@ -146,14 +139,19 @@
 <%- end -%>
 
 <%- end -%>  
-  
+  <fieldset>
+	<legend>Submit</legend>
   <p class="submit">
   <%= submit_tag "Save changes" %>
   </p>
+</fieldset>
 <%- end -%>
 
 <%- if logged_in_as_admin? -%>
 <p>Last updated by <%= @tag.last_wrangler.andand.login || '---' %> on <%= @tag.updated_at %></p>  
 <%- end -%>
+<!--/content-->
 
+<!--subnav-->
 <%= tag_wrangler_footer %>
+<!--/subnav-->

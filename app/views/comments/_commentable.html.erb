@@ -12,7 +12,7 @@
 <%- if is_author_of?(commentable) && commentable.class == Work -%>
     <li id="add_collection_link"><%= collection_link(commentable) -%></li>
 <%- end -%>
-<%- if logged_in? && commentable.class != AdminPost -%>
+<%- if logged_in? && commentable.class != AdminPost && commentable.class != Tag -%>
     <li id="add_bookmark_link"><%= bookmark_link(commentable) %></li>			
 <%- end -%>
 <% if commentable.count_visible_comments > 0 -%>
