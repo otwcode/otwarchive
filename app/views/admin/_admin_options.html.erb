@@ -1,6 +1,6 @@
 <!-- BEGIN admin options -->
   <h3 class="landmark">Admin Actions</h3>
-	<ul class="admin navigation" id="admin-options" role="navigation">
+	<ul class="admin navigation" role="navigation">
 	<% if item.hidden_by_admin? %>
     <li><%= link_to t('options_make_visible', :default => 'Make Visible'), {:controller=>"admin/user_creations", :action=>"hide", :id=>item, :creation_type => item.class, :hidden=>'false'} %></li>
   <%- else -%>
