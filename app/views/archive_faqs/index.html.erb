@@ -3,8 +3,9 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<!--BACK END admin_header should go here for consistency with KI and AP-->
 <%- if logged_in_as_admin? -%>
+<%= render :partial => 'admin/admin_nav' %>
+<div class="clear"><!--presentational, phase me out--></div>
 <p class="navigation" role="navigation"><%= link_to "Add a new section", new_archive_faq_path %></p>  
 <%- end -%>
 <!--/subnav-->

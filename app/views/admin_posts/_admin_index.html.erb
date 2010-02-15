@@ -23,20 +23,19 @@
 	</thead>
 	<tbody>	
   <% @admin_posts.each do |admin_post| %>
-		<tr>
-			<td><%= link_to sanitize_title_for_display(admin_post.title), admin_post %></td>
-			<td><%=h admin_post.created_at %></td>
-			<td><%=h admin_post.updated_at %></td>
-	    	<td><%= link_to "Show", admin_post %></td>
-        	<td><%= link_to "Edit", edit_admin_post_path(admin_post) %></td>
-        	<td><%= link_to "Delete", admin_post, :confirm => 'Are you sure?', :method => :delete %></td>
-		</tr>
+    <tr>
+      <td><%= link_to sanitize_title_for_display(admin_post.title), admin_post %></td>
+      <td><%=h admin_post.created_at %></td>
+      <td><%=h admin_post.updated_at %></td>
+      <td><%= link_to "Show", admin_post %></td>
+      <td><%= link_to "Edit", edit_admin_post_path(admin_post) %></td>
+      <td><%= link_to "Delete", admin_post, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
   <% end %> 
 </tbody>
 </table>
 </div>
 <!--/content-->
 <!--subnav-->
-			  <%= will_paginate @admin_posts %>			
-<!--/subnav-->		
-</div>
+  <%= will_paginate @admin_posts %>			
+<!--/subnav-->
