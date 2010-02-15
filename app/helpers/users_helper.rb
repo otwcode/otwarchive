@@ -138,6 +138,8 @@ module UsersHelper
       t('log_ban', :default => 'Suspended Permanently')
     elsif action == ArchiveConfig.ACTION_WARN
       t('log_warn', :default => 'Warned')
+    elsif action == ArchiveConfig.ACTION_RENAME
+      t('log_rename', :default => 'Username Changed')
     end
   end
   

@@ -52,8 +52,8 @@ ActionController::Routing::Routes.draw do |map|
   map.claim '/claim/:invitation_token', :controller => 'external_authors', :action => 'claim'
   map.complete_claim '/complete_claim/:invitation_token', :controller => 'external_authors', :action => 'complete_claim'  
   map.resources :external_authors, :has_many => [:external_author_names]
-  
-  map.resources :users, :member => {:end_first_login => :post} do |user|
+
+  map.resources :users, :member => {:edit_username => :get, :end_first_login => :post} do |user|
     user.resources :pseuds, :has_many => [:works, :series, :bookmarks]
     user.resources :external_authors, :has_many => [:external_author_names]
     user.resources :preferences, :only => [:index, :update]

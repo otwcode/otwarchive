@@ -125,6 +125,16 @@ module ValidationHelper
       validation_code += "\"validMessage\":\"#{options[:validMessage]}\"});\n"
     end
     
+    if options[:exclusion]
+      exclusion_string = "['"
+      exclusion_string += options[:exclusion].join("', '")
+      exclusion_string += "']"
+      validation_code += "#{live_validation_varname(id)}.add(Validate.Exclusion, { \n"
+      validation_code += "\"within\": #{exclusion_string}, \n"
+      validation_code += "\"failureMessage\":\"#{options[:failureMessage]}\", \n"
+      validation_code += "\"validMessage\":\"#{options[:validMessage]}\"});\n"
+    end
+    
     return live_validation_wrapper(id, validation_code)
   end
 

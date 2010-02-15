@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_filter :check_user_status, :only => [:edit, :update]
-  before_filter :load_user, :only => [:show, :edit, :update, :destroy, :after_reset, :end_first_login]
-  before_filter :check_ownership, :only => [:edit, :update, :destroy]
+  before_filter :load_user, :only => [:show, :edit, :update, :destroy, :after_reset, :end_first_login, :edit_username]
+  before_filter :check_ownership, :only => [:edit, :update, :destroy, :end_first_login, :edit_username]
   before_filter :check_account_creation_status, :only => [:new, :create]
 
   def load_user
@@ -69,6 +69,9 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+  end
+  
+  def edit_username
   end
 
   # POST /users
@@ -161,6 +164,19 @@ class UsersController < ApplicationController
           params[:use_openid] = true
           flash[:error] = "Your OpenID failed to save. Please try again."
           render :edit
+        end
+      elsif params[:login]
+        if User.authenticate(params[:login], params[:password])
+          if @user.update_attribute(:login, params[:login])
+            flash[:notice] = t('edit_username_worked', :default => "Username successfully changed")
+            redirect_to(user_path(@user))
+          else
+            flash[:error] = t('edit_username_failed', :default => "Username change failed.")
+            redirect_to(url_for(:controller => :user, :action => :edit_username, :user => @user))
+          end
+        else
+          flash[:error] = t('password_incorrect', :default => "Your password was incorrect")
+          redirect_to(url_for(:controller => :user, :action => :edit_username, :user => @user))
         end
       else
         successful_update

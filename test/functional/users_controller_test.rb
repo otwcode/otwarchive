@@ -178,6 +178,15 @@ class UsersControllerTest < ActionController::TestCase
     end
     should_redirect_to("the people index") {people_path}
   end
+  
+  context "on POST to :end_first_login" do
+    setup do
+      assert @user = create_user
+      assert @request.session[:user] = @user
+      get :show, :id => @user.login
+    end
+    
+  end
 
   context "on DELETE of self" do
     setup do

@@ -9,6 +9,7 @@
 <ul class="navigation" role="navigation">
 	<li><%= link_to t('edit_profile', :default => "Edit My Profile"), edit_user_path(@user) %></li>
 	<li><%= link_to t('manage_pseuds', :default => 'Manage My Pseuds'), user_pseuds_path(@user) %></li>
+	<li><%= link_to t('change_username', :default => "Change My Username"), url_for(:controller => :users, :action => :edit_username, :id => @user.login) %></li>
 	<li><%= link_to t('orphan_works', :default => 'Orphan My Works'), new_orphan_path %></li>
 </ul>
 <!--/subnav-->

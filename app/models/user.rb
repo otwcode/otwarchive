@@ -43,6 +43,8 @@ class User < ActiveRecord::Base
   before_create :create_default_associateds
   
   before_update :validate_date_of_birth
+  
+  after_update :log_change_if_login_was_edited
 
   has_many :collection_participants, :through => :pseuds
   has_many :collections, :through => :collection_participants
@@ -100,6 +102,7 @@ class User < ActiveRecord::Base
   validates_format_of :login, 
     :message => t('login_invalid', :default => 'must begin and end with a letter or number; it may also contain underscores but no other characters.'),
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
+  #validates_uniqueness_of :login, :message => ('login_already_used', :default => 'must be unique')
 
   validates_email_veracity_of :email, 
     :message => t('email_invalid', :default => 'does not seem to be a valid address.')
@@ -370,5 +373,8 @@ class User < ActiveRecord::Base
     end
     orphan_account   
   end
-   
+
+   def log_change_if_login_was_edited
+     create_log_item( options = {:action => ArchiveConfig.ACTION_RENAME, :note => "Old Username: #{login_was}; New Username: #{login}"}) if login_changed?
+   end
 end
