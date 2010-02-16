@@ -2,48 +2,52 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
-  # Inline profiling options
-  def self.prof_log_path
-    cdir = File.split(__FILE__)[0]
-    path = File.join(cdir, '..', '..', 'tmp', 'performance')
-    return path
-  end
   if ENV['RAILS_ENV'] == 'development'
-  def self.process(request, response)
-    profile = false
-    if (cookies = request.headers['Cookie'])
-      if cookies.include? 'profile='
-        prof_etag = cookies[cookies.index('profile=')+8...cookies.length]
-        prof_etag = prof_etag[0...prof_etag.index(';')||prof_etag.length] + "\n"
-        prof_list_file_name = File.join(prof_log_path, 'used_tags.txt')
-        File.new(prof_list_file_name, 'wb').close unless File.exists? prof_list_file_name
-        prof_list_file = File.new(File.join(prof_log_path, 'used_tags.txt'), 'rb')
-        list = prof_list_file.readlines()
-        unless list.include? prof_etag
-          profile = true
-          prof_list_file.reopen(prof_list_file.path, 'ab')
-          prof_list_file.write(prof_etag)
+    # Inline profiling options
+    def self.prof_log_path
+      cdir = File.split(__FILE__)[0]
+      path = File.join(cdir, '..', '..', 'tmp', 'performance')
+      return path
+    end
+
+    def self.process(request, response)
+      profile = false
+      if (cookies = request.headers['Cookie'])
+        if cookies.include? 'profile='
+          prof_etag = cookies[cookies.index('profile=')+8...cookies.length]
+          prof_etag = prof_etag[0...prof_etag.index(';')||prof_etag.length] + "\n"
+          prof_list_file_name = File.join(prof_log_path, 'used_tags.txt')
+          unless File.directory? prof_log_path
+            Dir.mkdir prof_log_path
+          end
+          File.new(prof_list_file_name, 'wb').close unless File.exists? prof_list_file_name
+          prof_list_file = File.new(File.join(prof_log_path, 'used_tags.txt'), 'rb')
+          list = prof_list_file.readlines()
+          unless list.include? prof_etag
+            profile = true
+            prof_list_file.reopen(prof_list_file.path, 'ab')
+            prof_list_file.write(prof_etag)
+          end
+          prof_list_file.close()
         end
-        prof_list_file.close()
+      end
+      if profile
+        name = "#{Time.now} #{request.path_info} #{request.query_string.split('.')[0].gsub('/', '_')}.html"
+        start = Time.now
+        require 'ruby-prof'
+        ret = []
+        results = RubyProf.profile do
+          ret.push super(request, response)
+        end
+        duration = Time.now - start
+        f = File.new(File.join(prof_log_path, name), 'wb')
+        RubyProf::GraphHtmlPrinter.new(results).print(f)
+        f.close()
+        return ret[0]
+      else
+        super(request, response)
       end
     end
-    if profile
-      name = "#{Time.now} #{request.path_info} #{request.query_string.split('.')[0].gsub('/', '_')}.html"
-      start = Time.now
-      require 'ruby-prof'
-      ret = []
-      results = RubyProf.profile do
-        ret.push super(request, response)
-      end
-      duration = Time.now - start
-      f = File.new(File.join(prof_log_path, name), 'wb')
-      RubyProf::GraphHtmlPrinter.new(results).print(f)
-      f.close()
-      return ret[0]
-    else
-      super(request, response)
-    end
-  end
   end
 
   helper :all # include all helpers, all the time
