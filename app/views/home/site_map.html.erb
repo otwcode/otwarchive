@@ -172,15 +172,13 @@
 		<% end %>
 		<li>My Subscriptions - coming soon</li>
 		<li><%= link_to t('set_preferences', :default => "Set My Preferences"), user_preferences_path(current_user) %>
-			<ul>
-				<li></li></ul>
 	</ul>
 	<h3>Change your account settings</h3>
 	<ul>
-		<li><a href="">Edit My Profile</a></li>
-		<li><%= link_to t('my_profile', :default => "My Profile"), user_profile_path(current_user) %></li>
-	    <li><%= link_to t('manage_pseuds', :default => "Manage My Pseuds"), user_pseuds_path(current_user) %></li>
-	    <li><%= link_to t('delete_account', :default => "Delete My Account"), @user, :confirm => t('deletion_warning', :default => 'This will permanently delete your account and cannot be undone. Are you sure?'), :method => :delete %></li>
+    <li><a href="">Edit My Profile</a></li>
+    <li><%= link_to t('my_profile', :default => "My Profile"), user_profile_path(current_user) %></li>
+    <li><%= link_to t('manage_pseuds', :default => "Manage My Pseuds"), user_pseuds_path(current_user) %></li>
+    <li><%= link_to t('delete_account', :default => "Delete My Account"), @user, :confirm => t('deletion_warning', :default => 'This will permanently delete your account and cannot be undone. Are you sure?'), :method => :delete %></li>
 	</ul>
 <%- end -%>
 	

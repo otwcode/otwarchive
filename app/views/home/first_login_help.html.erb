@@ -1,7 +1,7 @@
 <!-- Note: anticipates that current_user is set -->
 <h2>Welcome to the Archive of Our Own!</h2>
 <p>Here are some tips to help you get started. <% if current_user %>
-<%= link_to_remote "Dismiss this message permanently", :url => { :controller => 'users', :action => 'end_first_login', :id => current_user.login, :class => 'navigation' } %></p>
+<%= link_to_remote "Dismiss this message permanently", { :url => { :controller => "users", :action => "end_first_login", :id => current_user.login} }, { :class => 'navigation' } %></p>
 <% end %>
 
 <h3 class="landmark">Contents links list</h3>
@@ -17,7 +17,7 @@
 </ul>
 
 <h3 id="logging_in">Logging in</h3>
-<p>The sign in link is at the top right of the screen, at the very start of the page. If you're on the <%= link_to "main page", root_path %>, then there'll be a sign in area at the very top of the page; there's a sign in <em>link</em> there everywhere else. If you forget your password, then select "forgot your password" <!--BACK END please linkify-->.</p>
+<p>The sign in link is at the top right of the screen, at the very start of the page. If you're on the <%= link_to "main page", root_path %>, then there'll be a sign in area at the very top of the page; there's a sign in <em>link</em> there everywhere else. If you forget your password, then select <%= link_to "forgot your password", new_password_path %>.</p>
 
 <p>If you're using OpenID, no password is necessary&#8212;the archive software will talk to your OpenID provider behind the scenes. To switch to OpenID login, just click on the eye-like logo next to the password input box.</p>
 
@@ -39,10 +39,10 @@
 <p>To bookmark a work, select the "bookmark this story" link, at the start of its metadata, while you're reading it. You can also bookmark stories not archived here by selecting "My Bookmarks" in your Dashboard.</p>
 
 <h3 id="edit_profile">Editing your profile, password, and preferences</h3>
-<p>To add your info, go to your home page <!--BACK END please linkify-->, select the "<%= link_to "Profile", user_profile_path(current_user) %>" tab, and select "<%= link_to "Edit My Profile", edit_user_path(current_user) %>" from the range of options at the end of the page. Here, you can enter some basic personal information. It's also where to go to change your password .</p>
+<p>To add your info, go to <%= link_to "your home page", user_path(current_user) %>, select the "<%= link_to "Profile", user_profile_path(current_user) %>" tab, and select "<%= link_to "Edit My Profile", edit_user_path(current_user) %>" from the range of options at the end of the page. Here, you can enter some basic personal information. It's also where to go to change your password.</p>
 
 <p>"<%= link_to 'Set My Preferences', user_preferences_path(current_user) %>" is located next to "Edit My Profile," and is pretty self-explanatory. The Preferences area controls both archive behavior (such as whether your viewing history is saved) and archive appearance. The archive appearance controls will get more and more sophisticated as we get closer and closer to <acronym title="Archive of Our Own">A03</acronym>'s first full release. (If you hate the font, you will be able to change it soon.) You can also access your preferences from your Dashboard.</p>
 
 <h3 id="support">Support and Feedback</h3>
 <p>As you use the archive, never forget that we're still in beta and that we love, love, love feedback. Please send us some, at our <%= link_to "handy-dandy feedback page", new_feedback_report_path %>, as often as you like.</p>
-<p>If there's anything more you want to know, then please visit our <%= link_to "FAQ", archive_faqs_path %> or contact our <%= link_to "support team", new_feedback_report_path %></p>
+<p>If there's anything more you want to know, then please visit our <%= link_to "FAQ", archive_faqs_path %> or contact our <%= link_to "support team", new_feedback_report_path %>.</p>
