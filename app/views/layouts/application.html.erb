@@ -35,9 +35,13 @@
 	<%= render :partial => 'layouts/header' %>
   
 	  <!-- BEGIN sidebar -->
-	  <%- if @user && !@hide_dashboard -%> 
+	  <%- unless (@user.blank? && @admin_posts.blank?) || @hide_dashboard -%> 
 	  <div id="dashboard" role="navigation">
-	    <%= render :partial => 'users/sidebar' %>
+      <%- if @admin_posts -%>
+        <%= render :partial => 'admin_posts/sidebar' %>  
+      <%- else -%>
+        <%= render :partial => 'users/sidebar' %>
+      <%- end -%>
 	  </div>
 	  <%- end -%>
 	  <!-- END sidebar -->

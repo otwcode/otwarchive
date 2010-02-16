@@ -55,9 +55,9 @@ END
     <%- end -%>
  
 <%- else -%>
-<%- cache("workshowmeta-#{@work.id}-#{@work.major_version}-#{@work.minor_version}", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
- <%= render :partial => 'works/meta', :locals => {:work => @work} %>
-  
+  <%- cache("workshowmeta-#{@work.id}-#{@work.major_version}-#{@work.minor_version}", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
+  <%= render :partial => 'works/meta', :locals => {:work => @work} %>
+  <%- end -%> 
   <%- if @work.number_of_posted_chapters > 1 -%>
     <%- if @chapters.length == 1 -%> 
       <!-- we're reading chapter-by-chapter -->
@@ -73,7 +73,6 @@ END
       </ul>
     <%- end -%>
   <%- end -%>
-<%- end -%>
 <%- end -%>
 
 <div class="preface">
@@ -116,4 +115,3 @@ END
     <%- end -%>
   <%- end -%>  
 </div>
-  

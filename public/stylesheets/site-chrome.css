@@ -262,7 +262,10 @@ li.comment h4					{ font-size: 1.25em;}
  .untranslated 					{ font-weight: 600 }
 
 /*ADMIN POSTS */
- #main.admin_posts-index .module { width:auto; clear:both; margin: 0.5em auto; border:1px solid;}
+ #main.admin_posts-index .module { width: 75%; clear: right; margin: 0.5em auto; border:1px solid; }
+ #dashboard.admin-posts li       { font-size: 90%; margin: .5em 0em; }
+ #dashboard.admin-posts a:hover  { background: #333; color: #fff; }
+  
 
 /* ToS and ADMIN long body copy tweaks*/
  .archive_faqs-index div, .known_issues-index .user-generated-view, #tos, #faq, .admin_posts-index .user-generated-view 

@@ -93,18 +93,18 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 #work-form fieldset fieldset { line-height:1.5; margin: 0 auto 0.5625em auto; }
 
 #work-form #chapter-ordering input.number-field { width:5em! important;}
-#work-form fieldset.work-meta, #upload-work-form fieldset.work-meta {background:#ddd; }
-#work-form .work-meta dt, #upload-work-form .work-meta dt  { float:left; clear:left; width:9em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
-#work-form .work-meta dd, #upload-work-form .work-meta dd  { float: left; margin:0; padding:0; width:60%}
+#work-form fieldset.meta, #upload-work-form fieldset.meta {background:#ddd; }
+#work-form .meta dt, #upload-work-form .meta dt  { float:left; clear:left; width:9em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
+#work-form .meta dd, #upload-work-form .meta dd  { float: left; margin:0; padding:0; width:60%}
 
 #work-preface textarea {height:10em;}
 #work-form .preface dt {float:none; width:auto; text-align: left}
 #work-form .preface dd { margin-bottom:0.5625em;float:none;}
 
-#upload-work-form .work-meta input, #upload-work-form .work-meta select, #upload-work-form .work-meta textarea {width:99%; margin:auto}
+#upload-work-form .meta input, #upload-work-form .meta select, #upload-work-form .meta textarea {width:99%; margin:auto}
 #upload-work-form .override-tags { margin-bottom:0.75em; margin-left:1em; }
 
-dd.work-title input, input#chapter_title { width:80%; }
+#work-form dd.work-title input, input#chapter_title { width:80%; }
 #work-form .preface { border:0; }
 
 fieldset#associations { font-size:0.875em;}

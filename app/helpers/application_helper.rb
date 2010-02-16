@@ -5,9 +5,10 @@ module ApplicationHelper
 
 	# Generates class names for the main div in the application layout
 	def classes_for_main
-		class_names = controller.controller_name + '-' + controller.action_name
-		class_names += " sidebar" unless @user.blank? || @hide_dashboard
-		class_names
+    class_names = controller.controller_name + '-' + controller.action_name
+    show_sidebar = ((@user || @admin_posts) && !@hide_dashboard)
+    class_names += " sidebar" if show_sidebar
+    class_names
 	end
 
   # A more gracefully degrading link_to_remote.

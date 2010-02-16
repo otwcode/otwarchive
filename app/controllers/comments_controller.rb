@@ -7,6 +7,7 @@ class CommentsController < ApplicationController
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :destroy]
   before_filter :load_comment, :only => [:show, :edit, :update, :delete_comment, :destroy]
   before_filter :check_visibility, :only => [:show]
+  before_filter :check_tag_wrangler_access, :only => [:index, :show]
   before_filter :check_ownership, :only => [:edit, :update]
   before_filter :check_permission_to_edit, :only => [:edit, :update ]
   before_filter :check_permission_to_delete, :only => [:delete_comment, :destroy]
@@ -17,6 +18,12 @@ class CommentsController < ApplicationController
     @comment = Comment.find(params[:id])
     @check_ownership_of = @comment
     @check_visibility_of = @comment
+  end
+  
+  def check_tag_wrangler_access
+    if @commentable.is_a?(Tag)
+      logged_in_as_admin? || permit?("tag_wrangler") || access_denied
+    end
   end
   
   # Must be able to delete other people's comments on owned works, not just owned comments!
