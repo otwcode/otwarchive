@@ -43,7 +43,7 @@ namespace :deploy do
   desc "Revert testarchive code: you must have sudo power or this WILL NOT WORK"
   task(:revert_code_test => :check_environment) do
     @revision_number ||= ask("Enter the revision number you want to revert to: ")
-    puts %x{sudo su - www-data -c "cap deploy:migrations -s revision=#{@revision_number}"}
+    puts %x{sudo su - www-data -c "cap deploy -s revision=#{@revision_number}"}
   end
 
   desc "Reset testarchive completely: you must have sudo power or this WILL NOT WORK"
@@ -87,7 +87,7 @@ namespace :deploy do
   desc "Interactive deploy: asks before running each step"
   task :all_interactive_test do
     @yes = ask("Reset testarchive? (y/n): ").match(/[yY](es)?/)
-    Rake::Task['deploy::reset_test'].invoke if @yes
+    Rake::Task['deploy:reset_test'].invoke if @yes
 
     @yes = ask("Update code and migrate/install gems? (y/n): ").match(/[yY](es)?/)
     Rake::Task['deploy:update_code_test'].invoke if @yes
