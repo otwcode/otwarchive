@@ -180,11 +180,11 @@ a.cloud8 					{ color: #900; font-size: 2.25em; font-weight: 800 }
  #main #chapters .footnote 		{ font-size: 85.7%; border-bottom: 1px solid #ddd}  
 
 /* COMMENTS -works-show, inbox, admin posts for now*/
-li.comment 						{ position:relative; clear:right; background:url(/images/icon_placeholder.png) top left no-repeat; min-height: 100px}
+li.comment 						{ position:relative; clear:right; min-height: 100px}
 li.comment h4, li.comment blockquote 
 								{ margin: auto auto auto 110px}
 li.comment h4					{ font-size: 1.25em;}
-.comment .even, .thread .even 	{ background:#eee url(/images/icon_placeholder.png) top left no-repeat;}
+.comment .even, .thread .even 	{ background:#eee;}
 .thread .thread 				{ margin: 0 0 0 3em;}
 
 /* SERIES */
@@ -227,8 +227,8 @@ li.comment h4					{ font-size: 1.25em;}
 								{ clear: both }
 /* PEOPLE INDEX */
  .people-index p.icon, .people-index .icon img 
-								{ height: 75px; width:75px; float:left; margin:0 0 0 2.375em;}
- .people-index li.blurb 		{ min-height: 75px;}
+								{ height: 100px; width:100px; float:left; margin:0 0 0 2.375em;}
+ .people-index li.blurb 		{ min-height: 100px;}
 
 /* COLLECTIONS INDEX*/
  .collections-index .index 			{ width: 75% }

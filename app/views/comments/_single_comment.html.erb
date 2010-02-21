@@ -11,7 +11,9 @@
       <p class="message">(<%=h t('single_comment_admin_review', :default => "This comment is under review by an admin and is currently unavailable.") -%>)</p>
     <%- else -%>
       <%- unless single_comment.pseud.nil? -%>
-        <div class="icon">&nbsp;</div>
+        <div class="icon">
+        <%= image_tag(single_comment.pseud.andand.icon.url, :size => "100x100", :alt => "", :class => "icon") %>
+        </div>
       <%- end -%>
       	<!--title should be the first element in this list item, not icon. icon goes after name and before comment text-->
       <h4><%= get_pseud_or_mailaddress(single_comment) %></h4>

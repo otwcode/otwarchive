@@ -1,5 +1,5 @@
 
-<% form_for([@user, @pseud]) do |f| %>
+<% form_for([@user, @pseud], :html => {:multipart => true}) do |f| %>
 <dl>
 <dt>
 <%= f.label :name, 'Name' %></dt>
@@ -18,6 +18,11 @@
     <%= f.text_area :description, :rows => 4, :cols => 60 -%>
     <%= generate_countdown_html("pseud_description", Pseud::DESCRIPTION_MAX) -%>
  </dd>
+ 
+  <dt><%= f.label :icon %></dt>
+  <dd><%= f.file_field :icon %>
+</dd>
+ 
 </dl>
  <p class="submit">
     <%= f.submit button_text %>

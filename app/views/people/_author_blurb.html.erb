@@ -1,7 +1,9 @@
 <li class="user blurb" role="article">
     <div class="module">
-      <p class="icon"><img src="/images/icon_placeholder" alt="" title="your icon eventually"/></p>
-		<h4><%= link_to(author.name, user_pseud_path(author.user, author)) -%> 
+      <p class="icon">
+        <%= image_tag(author.icon.url, :size => "100x100", :alt => "", :class => "icon") %>
+      </p>
+		  <h4><%= link_to(author.name, user_pseud_path(author.user, author)) -%> 
       <%- if (author.name != author.user_name || author.user.pseuds.size > 1) -%>
         (<%= link_to(author.user_name, user_path(author.user)) -%>)
       <%- end -%>

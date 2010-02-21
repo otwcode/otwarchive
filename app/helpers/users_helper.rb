@@ -20,6 +20,15 @@ module UsersHelper
     user.pseuds.collect(&:name).join(", ")
   end
   
+  # Determine which icon to show on user pages
+  def standard_icon(user, pseud)
+    if pseud
+      pseud.icon.url
+    elsif user
+      user.default_pseud.icon.url
+    end
+  end
+  
   # Prints coauthors
   def print_coauthors(user)
     user.coauthors.collect(&:name).join(", ")

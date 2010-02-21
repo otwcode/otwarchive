@@ -122,6 +122,7 @@ Rails::Initializer.run do |config|
   config.gem 'thinking-sphinx', :lib => 'thinking_sphinx'
   config.gem 'ts-delayed-delta', :lib => 'thinking_sphinx/deltas/delayed_delta'
   config.gem 'daemon-spawn'
+  config.gem 'aws-s3'
   
   # Override the sanitize defaults to allow some extra formatting attributes. 
   config.action_view.sanitized_allowed_attributes = 'align'
