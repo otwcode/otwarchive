@@ -1,9 +1,7 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h t('new', :default => 'Post New Work') -%> 
-<!--BACK END. 
-if @ import from url then
-Import New Work
-to resolve issue 1227--></h2>
+<h2 id='upload-heading' <%= @use_import_form ? '' : 'style="display: none;"' -%> ><%=h t('works.import', :default => 'Import New Work') -%></h2>
+<h2 id='work-form-heading' <%= @use_import_form ? 'style="display: none;"' : '' -%> ><%=h t('works.new', :default => 'Post New Work') -%></h2>
+
 <%= error_messages_for :work %>
 <!--/descriptions-->
 
