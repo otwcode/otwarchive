@@ -1,6 +1,5 @@
-<!-- Autocomplete fields need to be refactored and moved to a helper, but I'd like to make them completely functional first. -->
 <fieldset class="work meta">
-  <p><%= h t('tags', :default =>"Story Tags (comma separated, #{ArchiveConfig.TAG_MAX} characters per tag)") -%><%= link_to_help "tagging-help" -%></p>
+  <p><%= h t('tags', :default =>"Work Tags (comma separated, #{ArchiveConfig.TAG_MAX} characters per tag)") -%><%= link_to_help "tagging-help" -%></p>
   <dl>
     <dt class="rating required">
       <label for="work_rating_string"><%= Rating::NAME -%>*<%= link_to_help "rating-help" -%></label>
@@ -27,7 +26,7 @@
       <input type="text" name="work[fandom_string]" id="work_fandom" value="<%= @work ? @work.fandom_string : "" %>" />
       <%= autocomplete_text_field("work_fandom") -%>
     </dd>
-  	<dd class="fandom delay_notice"><%=h t('first_for_fandom', :default => "If this is the first story for a fandom, it may not show up in the fandoms page for a day or two") -%></dd>
+  	<dd class="fandom delay_notice"><%=h t('first_for_fandom', :default => "If this is the first work for a fandom, it may not show up in the fandoms page for a day or two") -%></dd>
 	
     <dt class="category">
       <label for="work_category_string"><%= Category::NAME -%></label>

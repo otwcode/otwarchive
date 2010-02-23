@@ -1,0 +1,21 @@
+<!--Descriptive page name, messages and instructions-->
+<h2><%=h t('works.edit.edit_work_tags', :default =>'Edit Work Tags') %></h2>
+
+<%= error_messages_for :work %>
+<!--/descriptions-->
+<div id="work-form" class="work-form">
+<%- form_for(@work, :html => {:name => "storyForm"}, :url => { :action => "update_tags" }) do |f| -%> 
+
+<!--main content-->					
+<%= render :partial => 'work_tags_form', :locals => {:include_blank => false} %>
+<!--/content--> 
+
+  <fieldset>
+    <legend><%= 'Post Work' -%></legend>
+    <p class="submit">
+      <%= submit_tag 'Preview', :name => 'preview_button' %>
+      <%= submit_tag 'Cancel', :name => 'cancel_button' %>
+    </p> 
+  </fieldset>
+<%- end -%> <!-- end of form_for -->
+</div>

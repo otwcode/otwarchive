@@ -5,10 +5,11 @@ class WorksController < ApplicationController
   before_filter :load_collection
   before_filter :users_only, :only => [ :new, :create, :import, :import_multiple, :drafts, :preview, :show_multiple ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview, :show_multiple, :edit_multiple ]
-  before_filter :load_work, :only => [ :show, :navigate, :edit, :update, :destroy, :preview ]
+  before_filter :load_work, :only => [ :show, :navigate, :edit, :update, :destroy, :preview, :edit_tags, :update_tags ]
   before_filter :check_ownership, :only => [ :edit, :update, :destroy, :preview ]
   before_filter :check_visibility, :only => [ :show, :navigate ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import ]
+  before_filter :set_instance_variables_tags, :only => [ :edit_tags, :update_tags, :preview_tags ]
   after_filter :update_or_create_reading, :only => [ :show ]
   after_filter :increment_hit_counter, :only => [:show]
 
@@ -87,6 +88,25 @@ class WorksController < ApplicationController
       unless current_user == :false
         load_pseuds
         @series = current_user.series.uniq
+      end
+    rescue
+    end
+  end
+
+  # Sets values for @work and @tags[category]
+  def set_instance_variables_tags
+    begin
+      if params[:id] # edit_tags, update_tags, preview_tags
+        @work ||= Work.find(params[:id])
+        if params[:work]  # editing, save our changes
+          if params[:preview_button] || params[:cancel_button]
+            @work.preview_mode = true
+          else
+            @work.preview_mode = false
+          end 
+          @work.attributes = params[:work]
+          @work.save_parents if @work.preview_mode
+        end
       end
     rescue
     end
@@ -278,7 +298,7 @@ class WorksController < ApplicationController
   # GET /works/1.xml
   def show
     unless @work
-  	  flash[:error] = t('work_not_found', :default => "Sorry, we couldn't find the story you were looking for.")
+  	  flash[:error] = t('work_not_found', :default => "Sorry, we couldn't find the work you were looking for.")
       redirect_to works_path and return
     end
     # Users must explicitly okay viewing of adult content
@@ -356,6 +376,10 @@ class WorksController < ApplicationController
         redirect_to current_user
       end
     end
+  end
+
+  # GET /works/1/edit_tags
+  def edit_tags
   end
 
   # PUT /works/1
@@ -456,8 +480,68 @@ class WorksController < ApplicationController
     end
   end
 
+  def update_tags
+    unless @work.errors.empty?
+      render :action => :edit_tags and return
+    end
+
+    if params[:preview_button]
+      @preview_mode = true
+
+      if @work.has_required_tags? && @work.invalid_tags.blank?
+        render :action => "preview_tags"
+      else
+        if !@work.invalid_tags.blank?
+          @work.check_for_invalid_tags
+        end
+        if @work.fandoms.blank?
+          @work.errors.add_to_base("Updating: Please add all required tags. Fandom is missing.")
+        elsif !@work.has_required_tags?
+          @work.errors.add_to_base("Updating: Please add all required tags.")
+        end
+        render :action => :edit_tags
+      end
+    elsif params[:cancel_button]
+      cancel_posting_and_redirect
+    elsif params[:edit_button]
+      render :action => :edit_tags # render :partial => 'work_tags_form', :layout => 'application'
+    else
+      saved = true
+
+      @work.has_required_tags? || saved = false
+      if saved
+        @work.posted = true
+        saved = @work.save
+        @work.update_minor_version
+      end
+      if saved
+        if params[:post_button]
+          flash[:notice] = t('successfully_posted', :default => 'Work was successfully posted.')
+        elsif params[:update_button]
+          flash[:notice] = t('successfully_updated', :default => 'Work was successfully updated.')
+        end
+
+        redirect_to(@work)
+      else
+        unless @work.has_required_tags?
+          if @work.fandoms.blank?
+            @work.errors.add(:base, "Updating: Please add all required tags. Fandom is missing.")
+          else
+            @work.errors.add(:base, "Updating: Required tags are missing.")
+          end
+        end
+        render :action => :edit_tags
+      end
+    end
+  end
+
+
   # GET /works/1/preview
   def preview
+    @preview_mode = true
+  end
+  
+  def preview_tags
     @preview_mode = true
   end
 
