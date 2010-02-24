@@ -99,7 +99,7 @@ class WorksController < ApplicationController
       if params[:id] # edit_tags, update_tags, preview_tags
         @work ||= Work.find(params[:id])
         if params[:work]  # editing, save our changes
-          if params[:preview_button] || params[:cancel_button]
+          if params[:preview_button] || params[:cancel_button] || params[:edit_button]
             @work.preview_mode = true
           else
             @work.preview_mode = false
@@ -456,9 +456,9 @@ class WorksController < ApplicationController
       if saved
         if params[:post_button]
           flash[:notice] = t('successfully_posted', :default => 'Work was successfully posted.')
-       elsif params[:update_button]
+        elsif params[:update_button]
           flash[:notice] = t('successfully_updated', :default => 'Work was successfully updated.')
-       end
+        end
 
         #bleep += "  AFTER SAVE: author attr: " + params[:work][:author_attributes][:ids].collect {|a| a}.inspect + "  @work.authors: " + @work.authors.collect {|au| au.id}.inspect + "  @work.pseuds: " + @work.pseuds.collect {|ps| ps.id}.inspect
         #flash[:notice] = "DEBUG: in UPDATE save:  " + bleep
@@ -508,21 +508,19 @@ class WorksController < ApplicationController
     else
       saved = true
 
-      @work.has_required_tags? || saved = false
+      (@work.has_required_tags? && @work.invalid_tags.blank?) || saved = false
       if saved
         @work.posted = true
         saved = @work.save
         @work.update_minor_version
       end
       if saved
-        if params[:post_button]
-          flash[:notice] = t('successfully_posted', :default => 'Work was successfully posted.')
-        elsif params[:update_button]
-          flash[:notice] = t('successfully_updated', :default => 'Work was successfully updated.')
-        end
-
+        flash[:notice] = t('successfully_updated', :default => 'Work was successfully updated.')
         redirect_to(@work)
       else
+        if !@work.invalid_tags.blank?
+          @work.check_for_invalid_tags
+        end
         unless @work.has_required_tags?
           if @work.fandoms.blank?
             @work.errors.add(:base, "Updating: Please add all required tags. Fandom is missing.")
