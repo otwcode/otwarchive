@@ -260,11 +260,7 @@ module Paperclip
       message = options[:message] || "file size must be between :min and :max bytes."
       message = message.gsub(/:min/, min.to_s).gsub(/:max/, max.to_s)
 
-      validates_inclusion_of :"#{name}_file_size",
-                             :in      => range,
-                             :message => message,
-                             :if      => options[:if],
-                             :unless  => options[:unless]
+      validates_inclusion_of :"#{name}_file_size", options.merge(:in => range, :message => message)
     end
 
     # Adds errors if thumbnail creation fails. The same as specifying :whiny_thumbnails => true.

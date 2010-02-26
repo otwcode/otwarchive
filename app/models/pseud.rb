@@ -1,5 +1,5 @@
 class Pseud < ActiveRecord::Base
-
+ 
   has_attached_file :icon,
     :styles => { :standard => "100x100>", :thumb => "80x80>" },
     :path => ENV['RAILS_ENV'] == 'production' ? ":attachment/:id/:style.:extension" : ":rails_root/public:url",
@@ -7,8 +7,8 @@ class Pseud < ActiveRecord::Base
     :s3_credentials => "/etc/s3conf/s3config.yml",
     :bucket => "otw-ao3-icons"
    
-  validates_attachment_content_type :icon, :content_type => /image\/\S+/ 
-  validates_attachment_size :icon, :less_than => 500.kilobytes 
+  validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true 
+  validates_attachment_size :icon, :less_than => 500.kilobytes, :allow_nil => true 
  
   NAME_LENGTH_MIN = 1
   NAME_LENGTH_MAX = 40
