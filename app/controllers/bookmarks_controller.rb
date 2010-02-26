@@ -92,7 +92,7 @@ class BookmarksController < ApplicationController
         if params[:recs_only]
           bookmarks_grouped = Bookmark.recs.recent.public.group_by(&:bookmarkable)
         else
-          bookmarks_grouped = Bookmark.recent.public.group_by(&:bookmarkable)
+          bookmarks_grouped = Bookmark.recent.public.reject{|b| !b.bookmarkable.visible?(current_user)}.group_by(&:bookmarkable)
         end
       end
       @bookmarks = []
