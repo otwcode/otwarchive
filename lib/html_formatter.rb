@@ -336,20 +336,25 @@ module HtmlFormatter
           if node[0] == _text
             # Text nodes are to be split in to paras at double line breaks,
             # and <br> tags inserted at single line breaks
-            text_paras = node[3].split("\n\n")
+            text_paras = node[3].gsub("\n\n\n+", "\n\n").split("\n\n", -1)
             first = true
             # text_paras = text_paras.select{|para| not para.strip.empty?}
             text_paras.each do |para|
               new_para.call() if not first
               first_line = true
-              for line in para.split("\n")
-                if (true or not line.empty?)
-                  if (not first_line)
-                    current_para[2].push(['br', {}, [], nil])
-                  end
-                  current_para[2].push([_text, {}, [], line])
-                  first_line = false
+	      # String#split method doesn't work as one might expect here.
+	      # I think "".split('x') should give [""], not []
+	      if para == ''
+		lines = [para]
+	      else
+                lines = para.split("\n", -1)
+	      end
+              for line in lines
+                if not first_line
+                  current_para[2].push(['br', {}, [], nil])
                 end
+                current_para[2].push([_text, {}, [], line]) if line
+                first_line = false
               end
               first = false
             end

@@ -77,9 +77,11 @@ text2
 text3
 " => "<p>text1<br/>text2</p><hr/><p>text3</p>",
 
-      "This is a test.
+      "This is a test
+<i>Of a line</i> starting with the i tag." => "<p>This is a test<br/><i>Of a line</i> starting with the i tag.</p>",
+      "This is a test
 
-<i>Of a line</i> starting with the i tag." => "<p>This is a test<br/><i>Of a line</i> starting with the i tag.</p>"
+<i>Of a line</i> starting with the i tag." => "<p>This is a test</p><p><i>Of a line</i> starting with the i tag.</p>",
       
     }
 
@@ -91,26 +93,17 @@ text3
 
     @@identity_data.each do |data|
       mod_data = nil
-      begin
-        mod_data = nil
-        Timeout.timeout(10) do
-          mod_data = add_paragraph_tags_for_display data
-        end
-        assert_equal data, mod_data
-      rescue e
-        flunk "Error: #{e}"
+      Timeout.timeout(10) do
+        mod_data = add_paragraph_tags_for_display data
       end
+      assert_equal data, mod_data
     end
     @@bad_data.each do |k,v|
-      begin
-        mod_data = nil
-        Timeout.timeout(10) do
-          mod_data = add_paragraph_tags_for_display k
-        end
-        assert_equal mod_data, v, k
-      rescue Exception, Timeout::Error => e
-        flunk "Error: #{e}\n#{e.backtrace.join("\n")}\n (#{k})"
+      mod_data = nil
+      Timeout.timeout(10) do
+        mod_data = add_paragraph_tags_for_display k
       end
+      assert_equal v, mod_data, k
     end
   end
 end
