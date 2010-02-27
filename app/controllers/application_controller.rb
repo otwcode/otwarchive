@@ -1,49 +1,70 @@
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
 
+PROFILER_SESSIONS_FILE = 'used_tags.txt'
+
 class ApplicationController < ActionController::Base
   if ENV['RAILS_ENV'] == 'development'
     # Inline profiling options
-    def self.prof_log_path
-      cdir = File.split(__FILE__)[0]
-      path = File.join(cdir, '..', '..', 'tmp', 'performance')
+    def self.profiler_logging_path
+      current_dir = File.split(__FILE__)[0]
+      path = File.join(current_dir, '..', '..', 'tmp', 'performance')
       return path
     end
 
     def self.process(request, response)
+      cookie_name = 'profile'
       profile = false
       if (cookies = request.headers['Cookie'])
-        if cookies.include? 'profile='
-          prof_etag = cookies[cookies.index('profile=')+8...cookies.length]
-          prof_etag = prof_etag[0...prof_etag.index(';')||prof_etag.length] + "\n"
-          prof_list_file_name = File.join(prof_log_path, 'used_tags.txt')
-          unless File.directory? prof_log_path
-            Dir.mkdir prof_log_path
+        cookie_prefix = cookie_name + '='
+        if cookies.include? cookie_prefix
+          profiler_session_id = cookies[cookies.index(cookie_prefix)+cookie_prefix.length...cookies.length]
+          profiler_session_id = profiler_session_id[0...profiler_session_id.index(';')||profiler_session_id.length] + "\n"
+	  # Create log directory, if missing.
+          unless File.directory? profiler_logging_path
+            Dir.mkdir profiler_logging_path
           end
-          File.new(prof_list_file_name, 'wb').close unless File.exists? prof_list_file_name
-          prof_list_file = File.new(File.join(prof_log_path, 'used_tags.txt'), 'rb')
-          list = prof_list_file.readlines()
-          unless list.include? prof_etag
+          profiler_sessions_file_name = File.join(profiler_logging_path, PROFILER_SESSIONS_FILE)
+	  # Create the file for storing used session ids, if it doesn't exist.
+          File.new(profiler_sessions_file_name, 'wb').close unless File.exists? profiler_sessions_file_name
+	  # Then open it for reading.
+          profiler_sessions_file = File.new(profiler_sessions_file_name, 'rb')
+          used_ids_list = profiler_sessions_file.readlines()
+          unless profiler_session_id == 'No' or used_ids_list.include? profiler_session_id
             profile = true
-            prof_list_file.reopen(prof_list_file.path, 'ab')
-            prof_list_file.write(prof_etag)
+	    # We've only got a read handle. Reopen the file for appending in binary mode.
+            profiler_sessions_file.reopen(profiler_sessions_file.path, 'ab')
+	    # Add the current session ID to the list of used IDs.
+            profiler_sessions_file.write(profiler_session_id)
           end
-          prof_list_file.close()
+          profiler_sessions_file.close()
         end
       end
       if profile
-        name = "#{Time.now} #{request.path_info} #{request.query_string.split('.')[0].gsub('/', '_')}.html"
+	begin
+	  require 'ruby-prof'
+	rescue LoadError
+	  # We just continue quietly without profiling if ruby-prof is not
+	  # available.
+	  profile = false
+	end
+      end
+      if profile
+	querystring = request.query_string || ''
+	pathinfo = request.path_info || ''
+        name = "#{Time.now} #{pathinfo} #{querystring.split('.')[0].gsub('/', '_')}.html"
         start = Time.now
-        require 'ruby-prof'
-        ret = []
-        results = RubyProf.profile do
-          ret.push super(request, response)
+	# We use this array to get data out of the profiler's closure.
+	# It only ever holds the one element
+        result = []
+        profiler_results = RubyProf.profile do
+          result.push super(request, response)
         end
         duration = Time.now - start
-        f = File.new(File.join(prof_log_path, name), 'wb')
-        RubyProf::GraphHtmlPrinter.new(results).print(f)
+        f = File.new(File.join(profiler_logging_path, name), 'wb')
+        RubyProf::GraphHtmlPrinter.new(profiler_results).print(f)
         f.close()
-        return ret[0]
+        return result[0]
       else
         super(request, response)
       end

@@ -22,15 +22,17 @@ class DevmodeController < ApplicationController
   end
 
   def profile_logs
-    path = ApplicationController.prof_log_path
+    path = ApplicationController.profiler_logging_path
     if params[:logname]
+      # If fetching a specific log, just return the html in the log file.
       f = File.new(File.join(path, params[:logname]), 'rb')
       render :text => f.read()
       f.close()
       return
     end
+    # If not fetching a log, return a list of log entries.
     paths = []
-    raise ["bad dir", path, File::Stat.new(path)].inspect unless File.exist?(path)
+    raise ["bad dir", path].inspect unless File.exist?(path)
     Dir.new(path).entries.each do |name|
       next unless name.end_with? '.html'
       paths.push File.join(path, name)
