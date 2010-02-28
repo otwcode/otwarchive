@@ -125,8 +125,7 @@ module WorksHelper
     rating_string = get_title_string(ratings, "rating")
     
     categories = work.tags.select{|tag| tag.type == "Category"}
-    category = categories.blank? ? nil : categories.first
-    category_class = get_category_class(category)
+    category_class = get_category_class(categories)
     category_string = get_title_string(categories, "category")
 
     iswip_class = get_complete_class(work)
@@ -178,23 +177,28 @@ module WorksHelper
     end
   end
 
-  def get_category_class(category_tag)
-    return "category-none" unless category_tag
-    case category_tag.name
-    when ArchiveConfig.CATEGORY_GEN_TAG_NAME
-      "category-gen"
-    when ArchiveConfig.CATEGORY_SLASH_TAG_NAME
-      "category-slash"
-    when ArchiveConfig.CATEGORY_HET_TAG_NAME
-      "category-het"
-    when ArchiveConfig.CATEGORY_FEMSLASH_TAG_NAME
-      "category-femslash"
-    when ArchiveConfig.CATEGORY_MULTI_TAG_NAME
-      "category-multi"
-    when ArchiveConfig.CATEGORY_OTHER_TAG_NAME
-      "category-other"
-    else
+  def get_category_class(category_tags)
+    if category_tags.blank?
       "category-none"
+    elsif category_tags.length > 1
+      "category-multi"
+    else
+      case category_tags.first.name
+      when ArchiveConfig.CATEGORY_GEN_TAG_NAME
+        "category-gen"
+      when ArchiveConfig.CATEGORY_SLASH_TAG_NAME
+        "category-slash"
+      when ArchiveConfig.CATEGORY_HET_TAG_NAME
+        "category-het"
+      when ArchiveConfig.CATEGORY_FEMSLASH_TAG_NAME
+        "category-femslash"
+      when ArchiveConfig.CATEGORY_MULTI_TAG_NAME
+        "category-multi"
+      when ArchiveConfig.CATEGORY_OTHER_TAG_NAME
+        "category-other"
+      else
+        "category-none"
+      end
     end
   end
 
