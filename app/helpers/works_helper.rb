@@ -207,13 +207,9 @@ module WorksHelper
     end
   end
   
-  # Return a string to determine whether the published at field should show on the work form
+  # Return true or false to determine whether the published at field should show on the work form
   def check_backdate_box(work, chapter)
-    if work.backdate || (chapter.created_at && chapter.created_at.to_date != chapter.published_at)
-		  'checked="checked"'
-    else
-      ''
-    end
+    work.backdate || (chapter.created_at && chapter.created_at.to_date != chapter.published_at)
   end
 
   # Use time_ago_in_words if less than a month ago, otherwise display date

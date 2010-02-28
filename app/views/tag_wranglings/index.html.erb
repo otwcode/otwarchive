@@ -46,6 +46,7 @@ get started. (Note: to associate pairings with characters, first choose a fandom
 <%- if @tags && @tags.empty? -%>
   <p>There are no unwrangled tags in this category at the moment.</p>
 <%- elsif @tags -%>
+  <%= will_paginate @tags %>
   <%- form_tag url_for(:controller => 'tag_wranglings', :action => 'wrangle'), :method => :post, :id => 'wrangulator' do -%> 
     <div class="module">
 	<fieldset>
@@ -156,7 +157,11 @@ get started. (Note: to associate pairings with characters, first choose a fandom
           <td><%= tag.suggested_fandoms %></td>
           <%- end -%>        
           <td>
-            <%= check_box_tag "canonicals[]", tag.id, tag.canonical?, :id => "canonicals_#{tag.id}", :disabled => (tag.canonical? && (!tag.mergers.empty? || !tag.children.empty?)) -%>
+            <%- if tag.canonical? -%>
+              Yes
+            <%- else -%>
+              <%= check_box_tag "canonicals[]", tag.id, tag.canonical?, :id => "canonicals_#{tag.id}" -%>
+            <%- end -%>
           </td>
           <td><%= tag.taggings_count %></td>      
         </tr>
@@ -170,7 +175,6 @@ get started. (Note: to associate pairings with characters, first choose a fandom
     <%= hidden_field_tag :show, params[:show] %> 
     <%= hidden_field_tag :sort, params[:sort] %>
     <%= hidden_field_tag :page, params[:page] %>
-    <%= hidden_field_tag 'tag_ids[]', @tags.collect(&:id) %> 
     </p>
   <%- end -%>
 <!--/content-->

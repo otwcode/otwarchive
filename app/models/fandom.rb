@@ -12,7 +12,7 @@ class Fandom < Tag
   has_many :freeforms, :through => :child_taggings, :source => :common_tag, :conditions => "type = 'Freeform'"
     
   named_scope :by_media, lambda{|media| {:conditions => {:media_id => media.id}}}
-  named_scope :unwrangled, {:joins => "INNER JOIN `common_taggings` ON common_taggings.common_tag_id = tags.id", 
+  named_scope :unwrangled, {:joins => "INNER JOIN `common_taggings` ON tags.id = common_taggings.common_tag_id", 
     :conditions => ["common_taggings.filterable_id = ?", Media.uncategorized.andand.id]}
     
   COLLECTION_JOIN =  "INNER JOIN filter_taggings ON ( tags.id = filter_taggings.filter_id ) 

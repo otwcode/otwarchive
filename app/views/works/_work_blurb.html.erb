@@ -8,18 +8,17 @@
 
 <%= render :partial => "works/work_anonymous_blurb", :locals => {:work => work} -%>
 
-<% elsif AdminSetting.enable_test_caching? %>
-
-<%= render :partial => "works/work_caching_blurb", :locals => {:work => work} -%>
-
 <% else %>
 
 <ul class="work<%- if is_author_of?(work) && controller.controller_name != 'series' -%> own<%- end -%>" role="article">
+<%- cache("work-#{work.id}-#{work.major_version}-#{work.minor_version}-top", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
 	<li class="heading">
 	  <h4 title="title">
 	    <%= link_to sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small)), @collection ? collection_work_path(@collection, work) : work %>
   		<%= t('title_by_author', :default => 'by') -%>
+<%- end -%> 
       <%= byline(work) -%>
+<%- cache("work-#{work.id}-#{work.major_version}-#{work.minor_version}-middle", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
       <%= !work.recipients.blank? ? t('works.for_recipients', :default => "for {{recipients}}", :recipients => recipients_link(work)) : "" -%>
   		<%- if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") -%><%- end -%>
       <%- if work.hidden_by_admin -%><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><%- end -%>
@@ -41,6 +40,7 @@
       <dt><%= t('cast_tags', :default => 'Cast') + ': ' %></dt>
 			<dd><ul><li class="cast"><%= cast_tags.collect{|tag| link_to_tag(tag)  }.join(', </li><li>') %></li></ul></dd>
 			<%- end -%>
+<%- end -%>
       
       <%- unless warning_tags.size < 1 -%>
       <dt><%= link_to("Archive Warnings", tos_faq_path(:anchor => "tags")) %>:</dt>
@@ -66,7 +66,9 @@
       </dl>
 	 <%- end -%>
 	</li>
-	
+
+<%- cache("work-#{work.id}-#{work.major_version}-#{work.minor_version}-bottom", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
+
   <%- unless work.summary.blank? -%>
 	<li class="summary" title="summary">
 	  <blockquote class="user-generated-view"><%= sanitize_strip_images_and_format_for_display work.summary %></blockquote>
@@ -95,6 +97,7 @@
 		<dt><%=h t('work_bookmarks', :default => 'Bookmarks') + ': '%></dt>
 			<dd><%= link_to_bookmarkable_bookmarks(work) -%></dd>
 		<%- end -%>
+<%- end -%>		
 
 		<% if show_hit_count?(work) %>
   		<dt><%=h t('works.hit_count', :default => "Hits: ") -%></dt>

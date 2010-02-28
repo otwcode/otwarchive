@@ -222,14 +222,14 @@ class TagsController < ApplicationController
     params[:page] = '1' if params[:page].blank?
     params[:sort] = 'name ASC' if params[:sort].blank?
     unless params[:canonicals].blank?
-      tags = Tag.find(params[:tag_ids].split(','))
       saved = []
       not_saved = []
-      tags.each do |tag|
-        tag.canonical = params[:canonicals].include?(tag.id.to_s)
-        if tag.canonical_changed?
+      params[:canonicals].each do |tag_id|
+        tag = Tag.find(tag_id)
+        if tag.update_attributes(:canonical => true)
           saved << tag
-          tag.save! rescue (not_saved << tag)
+        else
+          not_saved << tag
         end
       end
       if not_saved.empty? && !saved.empty?

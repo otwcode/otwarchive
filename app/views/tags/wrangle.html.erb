@@ -49,6 +49,8 @@
   <p><%= link_to "wrangle pairings to characters", tag_wranglings_path(:show => 'character_pairings', :fandom_string => @tag.name) %></p>
   <%- end -%>
   
+  <%= will_paginate @tags %>
+  
   <%- form_tag url_for(:controller => 'tags', :action => 'mass_update'), :method => :post, :id => 'wrangulator' do -%>   
     <p class="submit"><%= submit_tag "Wrangle" %></p>
     <table>
@@ -110,7 +112,13 @@
           <%- end -%>
         </td>
         <%- end -%>        
-        <td><%= check_box_tag "canonicals[]", tag.id, tag.canonical?, :id => "canonicals_#{tag.id}", :disabled => (tag.canonical? && (!tag.mergers.empty? || !tag.children.empty?)) -%></td>
+        <td>
+          <%- if tag.canonical? -%>
+          Yes
+          <%- else -%>
+          <%= check_box_tag "canonicals[]", tag.id, tag.canonical?, :id => "canonicals_#{tag.id}" -%>
+          <%- end -%>
+        </td>
         <td><%- if tag.merger -%><%= link_to_tag(tag.merger) %><%- end -%></td>
         <td><%= tag.created_at.to_date %></td>
         <td><%= tag.taggings_count %></td>
@@ -121,7 +129,6 @@
     <%= hidden_field_tag :show, params[:show] %> 
     <%= hidden_field_tag :sort, params[:sort] %>
     <%= hidden_field_tag :page, params[:page] %>
-    <%= hidden_field_tag 'tag_ids', @tags.collect(&:id).join(',') %> 
     </p>
     <p class="submit"><%= submit_tag "Wrangle" %></p>
   <%- end -%>

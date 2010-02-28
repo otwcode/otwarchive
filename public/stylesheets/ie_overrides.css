@@ -39,6 +39,20 @@ form.new_collection p, form.new_user p {font-size:1em;}
 .collection #login-block #greeting {clear:none !important;}
 form dd {float:none;}
 
+/*form width quirks on Post New*/
+#work-form input[type="text"] {width:70em;}
+#work-form select {width:73.5em;}
+#work-form textarea {width:73em;}
+
+#seriesmanage input[type="text"] {width:45em;}
+#seriesmanage select {width:47.5em;}
+#number-of-chapters input[type="text"] {width:56em;}
+#number-of-chapters input[type="text"].number-field {width:10em;}
+#work-form #chapter-ordering input.number-field { width:5em! important;}
+#managePublicationDate select {width:auto;}
+
+#work-form p.submit input { font-size:1em; width: auto; text-align:center}
+
 
 
 

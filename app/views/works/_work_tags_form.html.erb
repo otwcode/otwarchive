@@ -14,10 +14,13 @@
       <label for="work_warning"><%= Warning::NAME.pluralize -%>*<%= link_to_help "warning-help" -%></label>
     </dt>
     <dd class="warning required">
-      <select id="work_warning" name="work[warning_strings][]" multiple="multiple">
-        <%= options_for_select(warnings_for_tag_form,  (include_blank ? nil : warning_selected(@work)) ) -%>
-      </select>
-    </dd>
+      <dl>
+        <%- for tag in Warning.canonical -%>
+        <dt><%= check_box_tag "work[warning_strings][]", tag.name, @work.warnings.include?(tag), :id => "work_warning_strings_#{tag.id}" %></dt>
+        <dd><%= label_tag "work_warning_strings_#{tag.id}", tag.name %></dd>
+        <%- end -%>
+      </dl>
+    </dd>    
     
     <dt class="fandom required">
       <label for="work_fandom"><%= Fandom::NAME.pluralize -%>*</label>
@@ -32,7 +35,13 @@
       <label for="work_category_string"><%= Category::NAME -%></label>
     </dt>
     <dd class="category">
-      <%= collection_select(:work, :category_string, Category.canonical, :name, :name, {:include_blank =>  true}) -%>
+      <dl>
+        <%- for tag in Category.canonical -%>
+        <%- cycle_class = cycle("odd", "even") %>
+        <dt class=<%= cycle_class %>><%= check_box_tag "work[category_string][]", tag.name, @work.categories.include?(tag), :id => "work_category_string_#{tag.id}" %></dt>
+        <dd class=<%= cycle_class %>><%= label_tag "work_category_string_#{tag.id}", tag.name %></dd>
+        <%- end -%>
+      </dl>
     </dd>
   
     <dt class="pairing">

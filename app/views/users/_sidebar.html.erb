@@ -1,3 +1,4 @@
+<div id="dashboard" role="navigation">
 <% prefix = @user == current_user ? "My " : "" %>
 <ul role="navigation">
 	<li><%= span_if_current prefix + "Dashboard", @user %></li>
@@ -37,4 +38,5 @@
 	<li><%= span_if_current "My Preferences", user_preferences_path(@user) %></li>
 <% end %>
 </ul>
+</div>
 

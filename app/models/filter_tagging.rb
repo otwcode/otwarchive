@@ -10,7 +10,7 @@ class FilterTagging < ActiveRecord::Base
   # Is this a valid filter tagging that should actually exist?
   def should_exist?
     return false unless self.filter && self.filter.canonical?
-    tags = [self.filter] + self.filter.mergers
+    tags = [self.filter] + self.filter.mergers + self.filter.meta_tags
     !(self.filterable.tags & tags).empty?
   end 
   

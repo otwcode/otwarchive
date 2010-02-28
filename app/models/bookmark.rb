@@ -15,6 +15,16 @@ class Bookmark < ActiveRecord::Base
   named_scope :recent, :limit => ArchiveConfig.SEARCH_RESULTS_MAX
   named_scope :recs, :conditions => {:rec => true} #must come before visible in the chain
   
+   named_scope :visible_to_public, {
+   	:joins => "LEFT JOIN works ON (bookmarks.bookmarkable_id = works.id AND bookmarks.bookmarkable_type = 'Work')",
+   	:conditions => "private = 0 AND bookmarks.hidden_by_admin = 0 AND works.restricted != 1 AND works.hidden_by_admin != 1"
+  }
+  
+   named_scope :visible_logged_in, {
+   	:joins => "LEFT JOIN works ON (bookmarks.bookmarkable_id = works.id AND bookmarks.bookmarkable_type = 'Work')",
+   	:conditions => "private = 0 AND bookmarks.hidden_by_admin = 0 AND works.hidden_by_admin != 1"
+  }
+  
   validates_length_of :notes, 
     :maximum => ArchiveConfig.NOTES_MAX, :too_long => t('notes_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.NOTES_MAX)
     

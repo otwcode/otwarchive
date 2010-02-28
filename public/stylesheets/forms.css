@@ -6,7 +6,7 @@ form input {font-size: 1em;}
 form p.submit, input.submit { text-align:right; }
 #main form .submit input {width:auto;}
 form p { line-height:2; clear:both;}
-form dl { position:relative; }
+/*form dl { position:relative; }*/
 form dt { float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
 form dd { float: left;}
 form code { display:block;}
@@ -86,50 +86,92 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 
 /* POST WORK */
 /*work-meta  and work-show rules in story-views.css */
-#work-form legend {position:static; margin:0; padding:0.375em; background:#fffef9; border:1px solid #bbb;}
+#work-form fieldset, #upload-work-form fieldset {background:#fffef9; font-size:0.875em; margin: 0.5625em 0 2em 0; padding:0.375em 1.5em 3em 1.5em; border:1px solid #bbb; }
+#work-form fieldset fieldset { line-height:1.5; margin: 0 auto 0.5625em auto; padding-bottom:1em}
+#work-form legend {background:#fffef9; padding:0.375em; height:auto; width:auto; font-size: 1em;color:#222222;}
 .works-preview legend, .works-update legend {color:#fff;}
-#work-form input[type="text"], #work-form select, #work-form textarea { width:99%; margin:auto}
-#work-form fieldset, #upload-work-form fieldset { background:#fffef9; font-size:0.875em; margin: 0.5625em 0; padding:0.375em 1.5em; border:1px solid #bbb; }
-#work-form fieldset fieldset { line-height:1.5; margin: 0 auto 0.5625em auto; }
+#work-form input[type="text"] {width:70em;}
+#work-form select {width:74em;}
+#work-form textarea {width:75.5em;}
 
-#work-form #chapter-ordering input.number-field { width:5em! important;}
+#work-form dl, #work-form dt, #work-form dd {float: none; display:block; margin:0; padding:0;width: auto;border: 0}
+#work-form dt, #work-form dd {font-size:1em;}
+#work-form dd dt, #work-form dd dd, #work-form dd fieldset {font-size:1.1em;letter-spacing:normal;}
+#work-form dl {margin-top: 0;}
+#work-form dl dl, #work-form .meta dl {margin-top: 0;}
+#work-form dd fieldset, #work-form dd fieldset legend, #work-form fieldset.post-work {margin:0; padding:0; border:0;}
+#work-form dd fieldset legend, #work-form fieldset.post-work legend{height:0;width:0;font-size:0;}
+
+#work-form dt {margin: 1.5em 0 .5em 0;}
+#work-form dt.work-is_serial,
+#work-form dt.work-restricted,
+#work-form dt.work-is_wip,
+#work-form dt.work-is-backdated,
+#work-form dt.coauthors,
+#work-form dt.endnotes  {position:relative; bottom:-1.5em; width:2em; height:1em; margin:1em 0 0 0;}
+#work-form dd.work-is_serial,
+#work-form dd.work-restricted,
+#work-form dd.work-is_wip,
+#work-form dd.work-is-backdated,
+#work-form dd.coauthors,
+#work-form dd.endnotes {position:relative;top:.5em;left:2em;width:60em;}
+
+#work-form dd dl {margin:0 0 0 5em;}
+#work-form dd dt {position:relative;bottom:-1em;height:1em;padding:0;margin:0;}
+#work-form dd dd {position:relative;top:0;padding:0;margin:0;}
+
+#work-form .meta input[type="text"] {width:49em;}
+#work-form .meta select {width:51.73em;}
 #work-form fieldset.meta, #upload-work-form fieldset.meta {background:#ddd; }
 #work-form .meta dt, #upload-work-form .meta dt  { float:left; clear:left; width:9em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
-#work-form .meta dd, #upload-work-form .meta dd  { float: left; margin:0; padding:0; width:60%}
-
-#work-preface textarea {height:10em;}
-#work-form .preface dt {float:none; width:auto; text-align: left}
-#work-form .preface dd { margin-bottom:0.5625em;float:none;}
-
+#work-form .meta dd, #upload-work-form .meta dd  { float: left; margin:0 0 1em 0; padding:0;}
+#work-form .meta dd.delay_notice {padding-left:9.5625em;margin-top:-1em;clear:left;width:70%;}
 #upload-work-form .meta input, #upload-work-form .meta select, #upload-work-form .meta textarea {width:99%; margin:auto}
 #upload-work-form .override-tags { margin-bottom:0.75em; margin-left:1em; }
 
-#work-form dd.work-title input, input#chapter_title { width:80%; }
-#work-form .preface { border:0; }
+#work-form .meta .warning dl, #work-form .meta .warning dt, #work-form .meta .warning dd, #work-form .meta .category dl, #work-form .meta .category dt, #work-form .meta .category dd {float:none; clear:none; display:block; position:relative; margin:0;}
+#work-form .meta .warning dl, #work-form .meta .category dl {border: 1px solid #7f9db9; background:#ffffff; width:48.15em; padding: .2em .5em .4em .5em}
+#work-form .meta .warning dt, #work-form .meta .category dt {top:0; left:0; width:1.8em; height:0;margin-bottom:-.2em;}
+#work-form .meta .warning dd, #work-form .meta .category dd {top:-.1em; left:1.8em;position:relative;width:auto;}
+#work-form .meta .category dd {width:5em;}
+#work-form .meta .category dt.even {left: 10em; top:-1.6em; margin-bottom:-1.8em;}
+#work-form .meta .category dd.even {left: 11.8em; top:0em;}
 
-fieldset#associations { font-size:0.875em;}
+#work-preface textarea {height:10em;}
+#work-form dd.validation {padding:0.5em 0 1em 0;}
+#work-form span.LV_validation_message  {display:inline;clear:none;float:left;margin:0; padding-top:.4em;}
+#work-form p.character_counter  {display:inline;clear:none;float:left;margin:0;}
+#work-form .byline input[type="checkbox"] {margin: 0 .5em 0 0;}
+#work-form dl.notes {margin:-1.5em 0 0 0;}
+#work-form dl.notes dl {margin:.7em 0 0 .1em; top:0; left:0;}
+#work-form dl.notes dl dt {top:0; left: 0; margin:0;}
+#work-form dl.notes dl dd {top:0; left: 0; margin:.5em 0 0 0;}
+#work-form dl.notes dl dd.validation {margin-top:0;}
+#work-form .endnotes span.warning {position:absolute; top:0; left:10em;}
+
+#seriesmanage dl dt {width: 19em;}
+#seriesmanage dl dd {left:20em;width:46em;}
+#seriesmanage input[type="text"] {width:45em;}
+#seriesmanage select {width:47.5em;}
+#number-of-chapters dl dt {width: 8em;}
+#number-of-chapters dl dd {left:9em;width:56em;}
+#number-of-chapters input[type="text"] {width:56em;}
+#number-of-chapters input[type="text"].number-field {width:10em;}
+#work-form #chapter-ordering input.number-field { width:5em! important;}
+#publicationdateoptions dl dd.managePublicationDate {top:1.5em;}
 #managePublicationDate select {width:auto;}
-dd#managePublicationDate {clear:both;}
-dt.work-parent, dd.work-parent {float:none; width:99%; margin:auto}
-dd#co-authors { margin:0 auto 0.875em auto; padding:0.375em; border:1px solid #bbb;}
-input#work_parent_url {margin:0.375em auto 0.875em auto;}
-dd#seriesmanage {clear:both; float:none;}
-#seriesmanage dt, dt.work-restricted, dt.work-is_wip, dt.work-is_serial, dt.work-is-backdated{ width: 50%;}
-#main #work-form dd, #work-form dt { margin: 0.25em 0; padding: 0.25em 0; }
-#work-form .preface dt.work-endnotes, #work-form .preface dt.work-endnotes { width: 10em; clear: left; float: left;}
-#work-form p.label { font-size: 1em; }
-#seriesmanage dd, dd.work-restricted, dd.work-is_wip, dd.work-is_serial	{ clear:right; margin:0; }
-#work-form .preface dd.work-endnotes { float: left; margin: 0; width: auto; clear: none;}
-#main p.rtf-html-switch {margin:0 0 -0.55em 0; padding:0 0.875em 0; text-align:right; }
-#main .rtf-html-switch span {background:#f0f0ee; padding:0.5625em 0.5625em 0.2em 0.5625em; border:1px solid #ddd;}
-#main div.rtf-html-field { margin:0.643em 0; } 
+#work-form dt.work-language {position:relative; bottom:-1.5em; width:12em; height:1em; margin:1em 0 0 0;}
+#work-form dd.work-language {position:relative;top:.5em;left:13em;width:2em;}
+#work-form dd.work-language select {width:auto;}
 
+#work-form .work-text textarea {width:99%;}
 #work-form textarea#content { height:31.25em;}
 #work-form dd.optionalField { clear: left; width: 100%; }
 #work-form dd.optionalField dd { font-size: 1em;}
 #work-form .optionalField {font-size: 1em;}
 
 #work-form p.submit input { font-size:1em; width: auto; text-align:center}
+
 
 /*EDIT CHAPTERS */ 
 #main.chapters-edit dt {width:100%;float:none;}
@@ -184,5 +226,3 @@ form.new_collection fieldset,  form.new_user fieldset {border:1px solid #ddd; pa
 form.new_collection p, form.new_user p {font-size:1.5em;}
 form.new_collection dt {width:45%;}
 form.new_collection div {display:block;}
-
-

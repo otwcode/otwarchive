@@ -84,6 +84,17 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/1.xml
   def show
     @chapter = @work.chapters.find(params[:id])
+    if logged_in? && current_user.is_author_of?(@work)
+      chapters = @work.chapters.in_order
+    else
+      chapters = @work.chapters.posted.in_order
+    end 
+    chapter_position = chapters.index(@chapter)
+    if chapters.length > 1
+      chapter_position = chapters.index(@chapter)
+      @previous_chapter = chapters[chapter_position-1] unless chapter_position == 0
+      @next_chapter = chapters[chapter_position+1]
+    end
     if @chapter.posted? || (logged_in? && current_user.is_author_of?(@work))
       @chapters = [@chapter]
       @commentable = @work

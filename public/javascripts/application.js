@@ -29,6 +29,15 @@ function hideExpandable() {
   if (expandable != null) expandable.style.display = 'none';
 }
 
+// An attempt to replace the various work form toggle methods with a more generic one
+function toggleFormField(element_id) {
+    // don't clear the value for a date select or you wind up with the first of the year
+    if (element_id != 'publicationdateoptions') {
+        Element.descendants(element_id).each(function(d) {d.value = ''});
+    }
+	Element.toggle(element_id);
+}
+
 // Toggles the chaptered story section of the work form and resets the wip_length field
 function showChapteredStoryOptions() {
 	var item = document.getElementById('work_wip_length');

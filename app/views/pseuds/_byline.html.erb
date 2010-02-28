@@ -3,11 +3,11 @@
 <dt class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
   <%= label :pseud, :id, t('byline_select_author', :default => "Select author/pseudonym(s)") %>
 </dt>
-	<dd class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
-	  <%= '<select name="' + h(type) +'[author_attributes][ids][]" multiple="multiple">' %>
-	    <%= options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds) %>
-	  </select>	 
-	</dd>
+<dd class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
+  <%= '<select name="' + h(type) +'[author_attributes][ids][]" multiple="multiple">' %>
+    <%= options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds) %>
+  </select>	 
+</dd>
 
 <%- unless @coauthors.blank? -%>
 <%= '<select name="' + h(type) + '[author_attributes][coauthors][]" multiple="multiple" style="display: none;">' %>
@@ -26,12 +26,19 @@
     </dd>
 <% end %>
 
-<dt class="byline">
-  <%= link_to_function(t('add_coauthors', :default => 'Add co-authors?'), "Element.toggle('co-authors')") %>          
+<dt class="byline coauthors">
+  <%= check_box_tag "show-coauthors", "1", nil, :onclick => "toggleFormField('co-authors');" %>
 </dt>
-  <dd id="co-authors">
-    <%= form.label :storycoauthor, h('Enter co-author name(s):') %>
-    <%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
+<dd class="byline coauthors">
+  <%= label_tag "show-coauthors", t('add_coauthors', :default => 'Add co-authors?') %>
+</dd>        
+<dd id="co-authors">
+  <dl>
+    <dt><%= form.label :storycoauthor, "Enter co-author name(s):" %></dt>
+    <dd>
+      <%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
         { :url => {:controller => 'pseuds', :action => 'choose_coauthors'}, :method => :get, :param_name => 'search', 
-          :tokens => ',', :min_chars => 2, :skip_style => true } %>            
-  </dd>
+        :tokens => ',', :min_chars => 2, :skip_style => true } %>
+    </dd>
+  </dl>            
+</dd>
