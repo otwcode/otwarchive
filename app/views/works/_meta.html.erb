@@ -2,14 +2,6 @@
 
 <div class="wrapper">
 
-<%- unless @preview_mode -%>
-  <% if is_author_of?(work) -%>
-    <ul class="navigation" role="navigation">
-      <li><%= link_to t('edit_tags', :default => "Edit Tags"), url_for(:controller => :works, :id => work.id, :action => :edit_tags) %></li>
-    </ul>
-  <% end -%>
-<%- end -%>
-
 	<dl class="work meta" role="complementary">
   <%- work_tags = collect_work_tags(work) -%>
   <%- Tag::VISIBLE.each do |type| -%>
