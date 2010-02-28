@@ -90,9 +90,9 @@ class BookmarksController < ApplicationController
       else # main page
         @most_recent_bookmarks = true
         if params[:recs_only]
-          bookmarks_grouped = Bookmark.recs.recent.public.group_by(&:bookmarkable)
+          bookmarks_grouped = Bookmark.recs.recent.public.reject{|b| b.bookmarkable && !b.bookmarkable.visible?(current_user)}.group_by(&:bookmarkable)
         else
-          bookmarks_grouped = Bookmark.recent.public.reject{|b| !b.bookmarkable.visible?(current_user)}.group_by(&:bookmarkable)
+          bookmarks_grouped = Bookmark.recent.public.reject{|b| b.bookmarkable && !b.bookmarkable.visible?(current_user)}.group_by(&:bookmarkable)
         end
       end
       @bookmarks = []
@@ -165,7 +165,7 @@ class BookmarksController < ApplicationController
     begin
       if @bookmark.update_attributes(params[:bookmark]) && @bookmark.tag_string=params[:tag_string]
         flash[:notice] = t('successfully_updated', :default => 'Bookmark was successfully updated.')
-       redirect_to(@bookmark) 
+        redirect_to(@bookmark) 
       else
         raise
       end
