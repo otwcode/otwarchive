@@ -31,10 +31,9 @@ function hideExpandable() {
 
 // An attempt to replace the various work form toggle methods with a more generic one
 function toggleFormField(element_id) {
-    // don't clear the value for a date select or you wind up with the first of the year
-    if (element_id != 'publicationdateoptions') {
-        Element.descendants(element_id).each(function(d) {d.value = ''});
-    }
+    Element.descendants(element_id).each(function(d) {
+        if (d.nodeName != "OPTION") {d.value = ''}
+    });
 	Element.toggle(element_id);
 }
 
