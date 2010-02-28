@@ -33,8 +33,8 @@
   <%= label_tag "show-coauthors", t('add_coauthors', :default => 'Add co-authors?') %>
 </dd>        
 <dd id="co-authors">
-  <dl>
-    <dt><%= form.label :storycoauthor, "Enter co-author name(s):" %></dt>
+  <dl class="coauthors">
+    <dt><%= label_tag :pseud_byline, "Enter co-author name(s):" %></dt>
     <dd>
       <%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
         { :url => {:controller => 'pseuds', :action => 'choose_coauthors'}, :method => :get, :param_name => 'search', 
