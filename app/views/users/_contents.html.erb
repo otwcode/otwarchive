@@ -6,7 +6,7 @@
     <ul class="index">
       <%- for work in @works -%>
     	  <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
-        <%- end -%>
+      <%- end -%>
     </ul>
     <%- if @works.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD -%>
       <ul class="navigation"><li><%= @author ? print_pseud_works_link(@author) : print_works_link(@user) %></li></ul>
@@ -19,7 +19,7 @@
     <h3><%=h t('recent_series', :default => "Recent series") %></h3>
     <ul class="index">
       <%- for series in @series -%>
-        <li><%= link_to series.title, series %></li>
+        <%= render :partial => 'series/series_blurb', :locals => {:series => series} %>
       <%- end -%>
       <%- if @author -%>
         <%- if @author.series.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD -%>
