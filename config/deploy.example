@@ -33,12 +33,13 @@ namespace :local do
     run "mkdir -p #{shared_path}/config" 
     touch "#{shared_path}/config/database.yml" 
     touch "#{shared_path}/config/local.yml" 
-    touch "#{shared_path}/ultrasphinx/production.base"
+    touch "#{shared_path}/config/s3.yml" 
     puts "requires manual configuration"
   end
 
   desc "Update version and link to current" 
   task :update do
+    run "ln -sf #{shared_path}/config/s3.yml #{release_path}/config/s3.yml" 
     run "ln -sf #{shared_path}/config/local.yml #{release_path}/config/local.yml" 
     run "sed -i '$d' #{shared_path}/config/local.yml"
     run "echo -n 'REVISION: ' >> #{shared_path}/config/local.yml"
