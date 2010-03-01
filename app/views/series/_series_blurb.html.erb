@@ -18,33 +18,32 @@
 		         <%= author_fandoms.collect{|tag| link_to_tag(tag) }.join(', ') %>
 		    <% end %>
 		</h5>
-		<ul class="required-tags">
-		<li><img src="/images/category-none.png" alt="" title="dummy icons for layout purpose" /></li>
-		<li><img src="/images/category-none.png" alt="" title="dummy icons for layout purpose" /></li>
-		<li><img src="/images/category-none.png" alt="" title="dummy icons for layout purpose" /></li>
-		<li><img src="/images/category-none.png" alt="" title="dummy icons for layout purpose" /></li>
-		</ul>
+    <%= get_series_symbols_for(series) -%>
 		<p class="datetime"><%= set_format_for_date(series.revised_at) %></p>
 		</li>
-		<li>
-		  <%- author_tags = series.works.visible.collect{|w| [w.categories, w.ratings, w.cast_tags, w.freeform_tags]}.transpose.flatten.uniq
+		<li class="series-tags">
+		  <%- author_tags = series.works.visible.collect{|w| [w.cast_tags, w.freeform_tags]}.transpose.flatten.uniq
       unless author_tags.size < 1 -%>
       <dl class="tags">
-			    <dt title="Genre, Warnings, Other Information"><%= t('work_tags', :default => 'Additional Tags') + ':' %></dt>
-			    <dd><ul>
-			      <li><%= author_tags.collect{|tag| link_to_tag(tag) }.join(', </li><li>') %></li>
-			    </ul></dd>
-      <%- end -%>  
-      <%- author_warnings = series.works.visible.collect(&:warning_tags).flatten.compact.uniq 
-      unless author_warnings.size < 1 -%>
-          <dt><%= link_to("Archive Warnings", tos_faq_path(:anchor => "tags")) %></dt>
-          <dd><ul class="item" id="series_<%= series.id %>_category_warning">
+        <%- author_warnings = series.works.visible.collect(&:warning_tags).flatten.compact.uniq 
+        unless author_warnings.size < 1 -%>
+        <dt><%= link_to("Archive Warnings", tos_faq_path(:anchor => "tags")) %></dt>
+        <dd><ul class="item" id="series_<%= series.id %>_category_warning">
             <%- if hide_warnings?(series) -%>
               <li><%= show_warnings_link(series) %></li>
             <%- else -%>
               <li><%= author_warnings.collect{|tag| link_to_tag(tag)}.join(', </li><li>') %></li>
             <%- end -%>
-          </ul></dd>
+          </ul>
+        </dd>
+      
+			  <dt title="Genre, Warnings, Other Information"><%= t('work_tags', :default => 'Additional Tags') + ':' %></dt>
+			  <dd>
+			    <ul>
+			      <li><%= author_tags.collect{|tag| link_to_tag(tag) }.join(', </li><li>') %></li>
+			    </ul>
+			  </dd>
+      <%- end -%>  
       </dl>
       <%- end -%>
 		</li>

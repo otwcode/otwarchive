@@ -26,8 +26,8 @@ namespace :Tag do
   desc "Delete unused tags"
   task(:delete_unused => :environment) do
     deleted_names = []
-    Tag.all.each do |t|
-      if t.taggings.length == 0 && !t.merger_id && t.mergers.empty? && !t.canonical
+    Tag.find(:all, :conditions => {:canonical => false, :merger_id => nil, :taggings_count => 0}).each do |t|
+      if t.taggings.count == 0 && t.child_taggings.count == 0
         deleted_names << t.name
         t.destroy
       end

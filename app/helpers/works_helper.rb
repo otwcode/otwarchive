@@ -162,7 +162,7 @@ module WorksHelper
   end
 
   def get_ratings_class(rating_tag)
-    return "rating-notrate" unless rating_tag
+    return "rating-notrated" unless rating_tag
     case rating_tag.name
     when ArchiveConfig.RATING_EXPLICIT_TAG_NAME
       "rating-explicit"

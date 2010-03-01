@@ -1,6 +1,7 @@
 class Series < ActiveRecord::Base
   has_many :serial_works, :dependent => :destroy
   has_many :works, :through => :serial_works
+  has_many :tags, :through => :works, :uniq => true
   has_bookmarks
   has_many :user_tags, :through => :bookmarks, :source => :tags
   has_many :creatorships, :as => :creation
