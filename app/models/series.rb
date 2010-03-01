@@ -29,6 +29,12 @@ class Series < ActiveRecord::Base
 
   attr_accessor :authors
   attr_accessor :toremove
+  
+  named_scope :visible_logged_in, {:conditions => {:hidden_by_admin => false}, :order => 'updated_at DESC'}
+  named_scope :visible_to_public, {:conditions => {:hidden_by_admin => false, :restricted => false}, :order => 'updated_at DESC'}
+  named_scope :exclude_anonymous, {:joins => [:works => :collection_items],
+    :conditions => "collection_items.anonymous != 1 AND collection_items.unrevealed != 1"}
+  
  
   def posted_works
     self.works.posted

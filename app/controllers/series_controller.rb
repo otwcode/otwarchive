@@ -15,16 +15,25 @@ class SeriesController < ApplicationController
   def index
     if params[:user_id]
       @user = User.find_by_login(params[:user_id])
+      author = @user
       if params[:pseud_id]
         @author = @user.pseuds.find_by_name(params[:pseud_id])
-        @series = @author.series.select{|s| s.visible?(current_user)}.sort_by(&:revised_at).reverse
+        author = @author
+      end
+    end
+    if author        
+      if current_user == :false
+        @series = author.series.visible_to_public.exclude_anonymous.paginate(:page => params[:page])
       else
-        @series = @user.series.select{|s| s.visible?(current_user)}.sort_by(&:revised_at).reverse
+        @series = author.series.visible_logged_in.exclude_anonymous.paginate(:page => params[:page])
       end
     else
-      @series = Series.find(:all).select{|s| s.visible?(User.current_user)}.sort_by(&:revised_at).reverse
+      if current_user == :false
+        @series = Series.visible_to_public.paginate(:page => params[:page])
+      else
+        @series = Series.visible_logged_in.paginate(:page => params[:page])
+      end
     end
-    @series = @series.paginate(:page => params[:page])
   end
 
   # GET /series/1

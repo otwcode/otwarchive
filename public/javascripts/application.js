@@ -7,7 +7,7 @@ document.observe("dom:loaded", function () {
 	hideFormFields(); 
 	hideFilters();
 	initSelect('languages_menu');
-  hideExpandable();
+    hideExpandable();
 });
 
 function visualizeTables() {
@@ -31,23 +31,18 @@ function hideExpandable() {
 
 // An attempt to replace the various work form toggle methods with a more generic one
 function toggleFormField(element_id) {
-    Element.descendants(element_id).each(function(d) {
-        if (d.nodeName != "OPTION") {d.value = ''}
-    });
+    if (element_id == 'number-of-chapters') {
+        var item = document.getElementById('work_wip_length');
+    	if (item.value == 1) {item.value = '?';}
+    	else {item.value = 1;}
+    }
+    else {
+        Element.descendants(element_id).each(function(d) {
+            if (d.type == "checkbox") {d.checked = false}
+            else if (d.type != "hidden" && (d.nodeName == "INPUT" || d.nodeName == "SELECT")) {d.value = ''}
+        });
+    }
 	Element.toggle(element_id);
-}
-
-// Toggles the chaptered story section of the work form and resets the wip_length field
-function showChapteredStoryOptions() {
-	var item = document.getElementById('work_wip_length');
-	if (item.value == 1) {item.value = '?';}
-	else {item.value = 1;}
-	Element.toggle('number-of-chapters');
-}
-
-// Toggles the backdating options section of the work form
-function showBackdateOptions() {
-	Element.toggle('publicationdateoptions');
 }
 
 // Toggles the notes section of the work form
@@ -74,18 +69,6 @@ function showEndnotesOptions(modelname) {
 	else {
 		$('workendnoteswarning').show();
 	}
-}
-
-// Toggles the chaptered story section of the work form and resets the wip_length field
-function showWorkSeriesOptions() {
-	var checkbox = document.getElementById('storyseriescheck');
-	var seriesField = document.getElementById('work_series_attributes_title');
-	var seriesSelect = document.getElementById('work_series_attributes_id');
-	if (!checkbox.checked) {
-		seriesField.value = '';
-		seriesSelect.selectedIndex = 0;
-	}
-	Element.toggle('seriesmanage');
 }
 
 function showOptions(idToCheck, idToShow) {
