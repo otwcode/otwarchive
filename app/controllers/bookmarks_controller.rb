@@ -77,12 +77,14 @@ class BookmarksController < ApplicationController
           bookmarks_primary = owner.bookmarks.recs.visible
           owner.synonyms.each do |synonym|
             bookmarks_on_synonyms << synonym.bookmarks.recs.visible 
+            bookmarks_on_synonyms << synonym.indirect_bookmarks(true)
           end rescue NoMethodError
           bookmarks_indirect = owner.indirect_bookmarks(true)
         else
           bookmarks_primary = owner.bookmarks.visible
           owner.synonyms.each do |synonym|
             bookmarks_on_synonyms << synonym.bookmarks.visible 
+            bookmarks_on_synonyms << synonym.indirect_bookmarks
           end rescue NoMethodError
           bookmarks_indirect = owner.indirect_bookmarks
         end
