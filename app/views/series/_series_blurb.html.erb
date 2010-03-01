@@ -1,6 +1,6 @@
 <li class="series blurb  <%- if is_author_of?(series) -%>own<% end -%>" id="series_<%=h series.id %>_blurb" role="article">
 	<ul class="work">
-		<li class="header">
+		<li class="heading">
 			<h4 title="Series Title">
 				<%= link_to sanitize_title_for_display(series.title), series %>
 				<%=h 'by' %>
