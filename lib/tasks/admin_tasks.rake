@@ -14,10 +14,12 @@ namespace :admin do
     puts "Sign-up notification emails resent"
   end
   
-  desc "Purge unvalidated accounts created more than 48 hours ago"
+  desc "Purge unvalidated accounts created more than 72 hours ago"
   task(:purge_unvalidated_users => :environment) do
-    User.destroy_all(["activated_at IS NULL AND created_at < ?", 48.hours.ago])
-    puts "Unvalidated accounts created more than 48 hours ago have been purged"
+    users = User.find(:all, :conditions => ["activated_at IS NULL AND created_at < ?", 72.hours.ago])
+    puts users.map(&:login).join(", ")
+    users.map(&:destroy)
+    puts "Unvalidated accounts created more than 72 hours ago have been purged"
   end
   
 end

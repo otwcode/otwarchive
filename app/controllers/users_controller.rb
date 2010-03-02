@@ -22,7 +22,7 @@ class UsersController < ApplicationController
       flash[:error] = t('creation_suspended', :default => "Account creation is suspended at the moment. Please check back with us later.")
       redirect_to login_path
       return
-    elsif @invitation.redeemed_at
+    elsif @invitation.redeemed_at && @invitation.invitee
       flash[:error] = t('invitation_used', :default => "This invitation has already been used to create an account, sorry!")
       redirect_to login_path
       return
@@ -130,7 +130,7 @@ class UsersController < ApplicationController
         end
         redirect_to(@user)
       else
-        flash[:error] = t('activation_key_invalid', :default => "Your activation key is invalid. Perhaps it has expired.")
+        flash[:error] = t('activation_key_invalid', :default => "Your activation key is invalid. If you didn't activate within 72 hours, your account was deleted. Please sign up again.")
         redirect_to ''
       end
     end

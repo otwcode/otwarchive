@@ -56,13 +56,25 @@ class UsersControllerTest < ActionController::TestCase
       end
       context "that has already been used" do
         setup do
-          @invitation = create_invitation
-          @invitation.save
-          @invitation.mark_as_redeemed
+          @test_email = random_email
+          @test_password = random_password
+          post :create, :user => {:invitation_token => @invitation.token, :email => @test_email, :login => String.random,
+                        :password => @test_password, :password_confirmation => @test_password, :age_over_13 => "1", :terms_of_service => "1"}
           get :new, :invitation_token => @invitation.token
         end
         should_redirect_to("the login page") {login_url}
         should_set_the_flash_to /already been used/
+        context "but then purged" do
+          setup do
+            User.find_by_email(@test_email).destroy
+            get :new, :invitation_token => @invitation.token
+          end
+          should_respond_with :success
+          should "display a form" do
+            assert_select "form", true
+          end
+          should_render_template :new
+        end
       end
       context "after submitting valid data" do
         setup do
