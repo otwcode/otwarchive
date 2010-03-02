@@ -29,7 +29,7 @@
  #dashboard a,#dashboard span 
 							{ color: #111; display: block; padding: 0 0.5625em; border: none;}
  #dashboard li:hover,#dashboard a:hover 
-							{ background:#900 url(/images/header-red.png) bottom left repeat-x color: #fffef9; border:none;}
+							{ background:#900 url(/images/header-red.png) bottom left repeat-x; color: #fffef9; border:none;}
  #dashboard ul#subnav		{ margin:0; border: none; border-bottom: 2px solid #111;}
 
 /* MAIN CONTENT */
@@ -301,4 +301,6 @@ li.comment h4					{ font-size: 1.25em;}
  #main.chapters-manage li.chapter-position-list:hover  { background: #eee; border: 1px solid black; cursor: move;}
  #main.chapters-manage ul.navigation                   { display: inline; float: none; width: auto; }
  
+ #main.works-navigate ol, #main.works-navigate ol li   { display: block; }
+ #main.works-navigate ol a  {border: 0;} 
 
