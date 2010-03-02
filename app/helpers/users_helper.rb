@@ -76,21 +76,29 @@ module UsersHelper
 
   # Prints link to series page with user-appropriate number of series
   def print_series_link(user)
-    total = user.series.select{|s| s.visible?(current_user)}.size
+    if current_user == :false
+      total = user.series.visible_to_public.exclude_anonymous.find(:all, :select => "DISTINCT series.*").count
+    else
+      total = user.series.visible_logged_in.exclude_anonymous.find(:all, :select => "DISTINCT series.*").count
+    end
     if @user == current_user
-	  span_if_current t('my_series', :default => "My Series ({{series_number}})", :series_number => total.to_s), user_series_index_path(@user)
-	else
-	  span_if_current t('series', :default => "Series ({{series_number}})", :series_number => total.to_s), user_series_index_path(@user)
-	end
+  	  span_if_current t('my_series', :default => "My Series ({{series_number}})", :series_number => total.to_s), user_series_index_path(@user)
+  	else
+  	  span_if_current t('series', :default => "Series ({{series_number}})", :series_number => total.to_s), user_series_index_path(@user)
+  	end
   end
   
   def print_pseud_series_link(pseud)
-    total = pseud.series.select{|s| s.visible?(current_user)}.size
-	    if @user == current_user
-	  span_if_current t('my_series', :default => "My Series ({{series_number}})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)
-	else
-	  span_if_current t('series', :default => "Series ({{series_number}})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)
-	end
+    if current_user == :false
+      total = pseud.series.visible_to_public.exclude_anonymous.find(:all, :select => "DISTINCT series.*").count
+    else
+      total = pseud.series.visible_logged_in.exclude_anonymous.find(:all, :select => "DISTINCT series.*").count
+    end
+  	if @user == current_user
+  	  span_if_current t('my_series', :default => "My Series ({{series_number}})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)
+  	else
+  	  span_if_current t('series', :default => "Series ({{series_number}})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)
+  	end
   end
 
   def print_drafts_link(user)

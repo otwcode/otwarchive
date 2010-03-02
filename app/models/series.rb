@@ -32,8 +32,13 @@ class Series < ActiveRecord::Base
   
   named_scope :visible_logged_in, {:conditions => {:hidden_by_admin => false}, :order => 'updated_at DESC'}
   named_scope :visible_to_public, {:conditions => {:hidden_by_admin => false, :restricted => false}, :order => 'updated_at DESC'}
-  named_scope :exclude_anonymous, {:joins => [:works => :collection_items],
-    :conditions => "collection_items.anonymous != 1 AND collection_items.unrevealed != 1"}
+  
+  #TODO: figure out why select distinct gets clobbered
+  named_scope :exclude_anonymous, {
+    :joins => "INNER JOIN `serial_works` ON (`series`.`id` = `serial_works`.`series_id`) 
+    INNER JOIN `works` ON (`works`.`id` = `serial_works`.`work_id`) 
+    LEFT JOIN `collection_items` ON `collection_items`.item_id = `works`.id AND `collection_items`.item_type = 'Work'",
+    :conditions => "collection_items.id IS NULL OR (collection_items.anonymous = 0 AND collection_items.unrevealed = 0)"}
   
  
   def posted_works
@@ -110,6 +115,10 @@ class Series < ActiveRecord::Base
   # returns list of fandoms on this series
   def allfandoms
     works.collect(&:fandoms).flatten.compact.uniq.sort
+  end
+  
+  def author_tags
+    self.tags.select{|t| t.type == "Pairing"} + self.tags.select{|t| t.type == "Character"} + self.tags.select{|t| t.type == "Freeform"}
   end
   
   # Grabs the earliest published_at date of the visible works in the series

@@ -540,6 +540,9 @@ class Work < ActiveRecord::Base
   def category_string
     self.preview_mode ? self.placeholder_tag_string(:categories) : self.categories.map(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
   end
+  def category_strings
+    self.preview_mode ? (self.placeholder_tags[:categories] ||= []).map(&:name) : self.categories.map(&:name)
+  end
   def warning_string
     self.preview_mode ? self.placeholder_tag_string(:warnings) : self.warnings.map(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
   end

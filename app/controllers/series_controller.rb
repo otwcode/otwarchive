@@ -23,9 +23,9 @@ class SeriesController < ApplicationController
     end
     if author        
       if current_user == :false
-        @series = author.series.visible_to_public.exclude_anonymous.paginate(:page => params[:page])
+        @series = author.series.visible_to_public.exclude_anonymous.find(:all, :select => "DISTINCT series.*").paginate(:page => params[:page])
       else
-        @series = author.series.visible_logged_in.exclude_anonymous.paginate(:page => params[:page])
+        @series = author.series.visible_logged_in.exclude_anonymous.find(:all, :select => "DISTINCT series.*").paginate(:page => params[:page])
       end
     else
       if current_user == :false

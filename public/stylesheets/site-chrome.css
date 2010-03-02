@@ -182,12 +182,13 @@ a.cloud8 					{ color: #900; font-size: 2.25em; font-weight: 800 }
  #main #chapters .footnote 		{ font-size: 85.7%; border-bottom: 1px solid #ddd}  
 
 /* COMMENTS -works-show, inbox, admin posts for now*/
-li.comment 						{ position:relative; clear:right; min-height: 100px}
+li.comment 						{ position:relative; clear:right; min-height: 120px; padding: 0.25em;}
 li.comment h4, li.comment blockquote 
-								{ margin: auto auto auto 110px}
+								{ margin: auto; display: inline; clear: right;}
 li.comment h4					{ font-size: 1.25em;}
 .comment .even, .thread .even 	{ background:#eee;}
 .thread .thread 				{ margin: 0 0 0 3em;}
+.comment .icon                  { float: left; margin-right: 0.5em; }
 
 /* SERIES */
  p.series 						{ text-align:center; margin: 0 auto 2.5em auto}
@@ -219,21 +220,31 @@ li.comment h4					{ font-size: 1.25em;}
  .works-index .index 			{ width: 75% }
 
 /* MEDIA INDEX, SHOW, FANDOMS INDEX, SHOW*/
- .media-index li.category 		{ min-height: 15em; padding: 0.5em }
- #main.media-index ol, #main.fandoms-index ol, #main.fandoms-show ol 
+  .media-index li.category      { min-height: 15em; padding: 0; border: 1px solid #DDD; }
+  .media-index li.category h3   { background:#333; color:#fffef9; font-weight:100; padding: .5em 1em; border-bottom:0.25em double #fffef9; margin: 0; top: 0;}
+  .media-index li.category h3 a { color: #fff; }
+  #main.media-index ol          { margin: 0 0 1em 1em; }
+  #main.media-index p           { margin-left: 1em;}
+  #main.media-index ol, #main.fandoms-index ol, #main.fandoms-show ol 
 								{ list-style-type: decimal }
- .media-index li.odd 			{ float: left; margin: 0 0.5625em 0 0; width: 40% }
- .media-index li.even 			{ float: right; margin: 0 0 0 0.5625em; width: 40% }
- .fandoms-index ul.index 		{ float: left; width: 33% }
- .fandoms-index div.main-fandoms-listing 
+  #main.media-index li.category { margin: 1em 2em }   							
+  .media-index li.odd           { float: left; width: 40% }
+  .media-index li.even          { float: left; width: 40% }
+  .fandoms-index ul.index       { float: left; width: 33% }
+  .fandoms-index div.main-fandoms-listing 
 								{ clear: both }
 /* PEOPLE INDEX */
  .people-index p.icon, .people-index .icon img 
 								{ height: 100px; width:100px; float:left; margin:0 0 0 2.375em;}
- .people-index li.blurb 		{ min-height: 100px;}
+ .people-index li.blurb 		{ min-height: 100px; float: left; width: 90%;}
+
+ .pseuds-index p.icon, .pseuds-index .icon img 
+								{ height: 100px; width:100px; float:left; margin:0 0 0 2.375em;}
+ .pseuds-index li.blurb 		{ min-height: 100px; float: left; width: 90%;}
+ #main.pseuds-index li.blurb .navigation {float: right;}
 
 /* COLLECTIONS INDEX*/
- .collections-index .index 			{ width: 75% }
+ .collections-index .index 		{ width: 75% }
  #main.collections-show h2 span { font-size: smaller }
 
 /* TAG WRANGLERS INDEX */

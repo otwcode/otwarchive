@@ -5,39 +5,23 @@
 <!--subnav-->
 <% if current_user == @user -%>
 <ul class="navigation">
-<li><%= link_to t('new_pseud', :default => 'New Pseud'), new_user_pseud_path(@user) %></li>
+  <li><%= link_to t('new_pseud', :default => 'New Pseud'), new_user_pseud_path(@user) %></li>
 </ul>
 <% end -%>
 <!--/subnav-->
 
 <!--main content-->
-<dl class="pseud index">
-  <% for pseud in @pseuds %>
-  <dt><%=link_to pseud.name, [@user, pseud] %>
-<%- if pseud.is_default then %> (<%= t('default_pseud', :default => 'Default') %>) <% end %>
-    </dt>
-    <%- unless pseud.description.blank? -%>
-      <dd><blockquote class="user-generated-view"><%= sanitize_description_for_display pseud.description %></blockquote></dd>
-    <%- end -%>
-      <% if current_user == @user -%>
-    <dd><ul class="navigation">
-        <li><%= link_to t('edit_link', :default => 'Edit'), [:edit, @user, pseud] -%></li>
-        <%- unless pseud.works.blank? %>
-          <li><%= link_to t('orphan_link', :default => 'Orphan Works'), {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} -%></li>
-        <%- end -%>
-        <% unless @user.login == pseud.name || pseud.is_default -%>
-          <li><%= link_to t('delete_link', :default => 'Delete'), [@user, pseud], :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
-        <% end -%>
-    </ul></dd>
-  <% end -%>
-<% end %>
-</dl>
+<ul class="pseud index">
+  <%- @pseuds.each do |pseud| -%>
+    <%= render :partial => 'pseuds/pseud_blurb', :locals => {:pseud => pseud} -%>
+  <%- end -%>  
+</ul>
 <!--/content-->
 
 <!--subnav-->
 <% if current_user == @user -%>
 <ul class="navigation">
-<li><%= link_to t('new_pseud', :default => 'New Pseud'), new_user_pseud_path(@user) %></li>
+  <li><%= link_to t('new_pseud', :default => 'New Pseud'), new_user_pseud_path(@user) %></li>
 </ul>
 <% end -%>
 <!--/subnav-->

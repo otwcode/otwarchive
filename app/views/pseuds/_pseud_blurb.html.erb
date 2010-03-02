@@ -1,0 +1,45 @@
+<li class="user blurb" role="article">
+  <div class="module">
+    <p class="icon">
+      <%= image_tag(pseud.icon.url, :size => "100x100", :alt => "", :class => "icon") %>
+    </p>
+	  <h4><%= link_to(pseud.name, user_pseud_path(pseud.user, pseud)) -%> 
+    <%- if (pseud.name != pseud.user_name || pseud.user.pseuds.size > 1) -%>
+      (<%= link_to(pseud.user_name, user_path(pseud.user)) -%>)
+    <%- end -%>
+    </h4>
+    <!--BACK END- suggest comma separator instead of pipe-->
+	  <%- unless authored_items(pseud).blank? -%>
+      <h5><%= authored_items(pseud) -%></h5>
+    <%- end -%>
+    <%- unless pseud.description.blank? -%>
+      <blockquote class="user-generated-view">
+	    <p><%= sanitize_description_for_display(pseud.description) %></p>
+	    </blockquote>
+    <%- end -%>
+    <!-- most used tags temporarily suppressed until proper bugfix for showing concealed info is in -->
+    <% unless true %>
+    <%- unless (most_popular = pseud.most_popular_tags(:categories => Tag::USER_DEFINED, :limit => 5)).blank? -%>
+      <h5><%= "Most used tags: " -%></h5>
+      <ul>      
+        <%- most_popular.each do |tag_w_count| -%>
+          <li><%= link_to_tag_with_count(pseud, tag_w_count) %></li>
+        <%- end -%>
+      </ul>
+    <%- end -%>
+    <% end %>
+    
+    <%- if current_user == pseud.user -%>
+  	<ul class="navigation" role="navigation">
+      <li><%= link_to t('edit_link', :default => 'Edit'), [:edit, @user, pseud] -%></li>
+      <%- unless pseud.works.blank? %>
+        <li><%= link_to t('orphan_link', :default => 'Orphan Works'), {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} -%></li>
+      <%- end -%>
+      <% unless @user.login == pseud.name || pseud.is_default -%>
+        <li><%= link_to t('delete_link', :default => 'Delete'), [@user, pseud], :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
+      <% end -%>
+    </ul>
+    <%- end -%>
+    
+	</div>  	
+</li>
