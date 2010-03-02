@@ -21,7 +21,7 @@ module UsersHelper
   end
   
   # Determine which icon to show on user pages
-  def standard_icon(user, pseud)
+  def standard_icon(user, pseud=nil)
     if pseud
       pseud.icon.url
     elsif user && user.default_pseud

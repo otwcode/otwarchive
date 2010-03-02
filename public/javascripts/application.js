@@ -39,7 +39,7 @@ function toggleFormField(element_id) {
     else {
         Element.descendants(element_id).each(function(d) {
             if (d.type == "checkbox") {d.checked = false}
-            else if (d.type != "hidden" && (d.nodeName == "INPUT" || d.nodeName == "SELECT")) {d.value = ''}
+            else if (d.type != "hidden" && (d.nodeName == "INPUT" || d.nodeName == "SELECT" || d.nodeName == "TEXTAREA")) {d.value = ''}
         });
     }
 	Element.toggle(element_id);

@@ -2,10 +2,17 @@
 <div class="wrangler header module">
 <!--Descriptive page name, messages and instructions-->
 <h2><%= @wrangler.login %>'s Wrangling Page</h2>
-	<p><%= image_tag("icon_placeholder.png", :size => "100x100", :alt => "", :class => "icon") %></p>
+	<p><%= image_tag(standard_icon(@wrangler), :size => "100x100", :alt => "", :class => "icon") %></p>
 	<!--/descriptions-->
 </div>
 <!--subnav-->
+<ul class="navigation" role="navigation">
+  <%- if @fandoms.empty? -%>
+  <li><%= link_to 'Your lack of fandoms makes the wrangulator sad', tag_wranglers_path %></li>   
+  <%- else -%>  
+  <li><%= link_to 'Most recent works in your fandoms', works_path(:selected_tags => @fandoms.collect(&:id), :boolean_type => 'or') %></li>
+  <%- end -%>
+</ul>
 <!--/subnav-->
 
 <!--main content-->
@@ -19,7 +26,6 @@
     <li><%= link_to fandom.name + ' (' + fandom.same_work_tags.unwrangled.count(:all).to_s + ')', {:controller => :tags, :action => :wrangle, :id => fandom} %></li>
     <%- end -%>  
   </ul>
-  <p><%= link_to 'Most recent works in your fandoms', works_path(:selected_tags => @fandoms.collect(&:id), :boolean_type => 'or') %></p>
 </div>
 <%- end -%>
 

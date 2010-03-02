@@ -157,7 +157,7 @@ a.cloud8 					{ color: #900; font-size: 2.25em; font-weight: 800 }
  #main .preface .module			{ float:none; margin:0; padding:0;  width:auto }
  #main .preface h3				{ background: transparent; border-bottom: 1px solid; color: #333; font-size: 1.125em }				
  #main .preface h2.title, #main .preface h3.title 	
-								{ font-size: 1.5em; font-weight: 700; margin: 1.5em auto 0; text-align: center; border-bottom:0}
+								{ font-size: 1.5em; font-weight: 700; margin: 1.5em auto 0; text-align: center; border-bottom:0; clear: both;}
  #main .preface h3.byline, #main .preface .byline a 	
 								{ border: 0; text-align: center; text-decoration: none }
  #main .preface a:link, #main .preface a:visited 
@@ -296,4 +296,9 @@ li.comment h4					{ font-size: 1.25em;}
  .home-tos_faq #contents 		{ margin: auto; padding: 1em; width: 60% }
  .home-tos_faq #contents h2 	{ text-align: center }
  .home-tos_faq #contents ul li 	{ border-bottom: 1px solid #ddd; list-style-type: upper-roman}
+ 
+ #main.chapters-manage li.chapter-position-list        { clear: both; padding: 1em;}
+ #main.chapters-manage li.chapter-position-list:hover  { background: #eee; border: 1px solid black; cursor: move;}
+ #main.chapters-manage ul.navigation                   { display: inline; float: none; width: auto; }
+ 
 
