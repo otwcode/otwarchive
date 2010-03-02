@@ -2,7 +2,8 @@ module TagsHelper
   
   # Takes an array of tags and returns a marked-up, comma-separated list
   def tag_link_list(tags)
-    if tags.respond_to?(:collect)
+    tags = tags.uniq.compact
+    if !tags.blank? && tags.respond_to?(:collect)
       last_tag = tags.pop
       tag_list = tags.collect{|tag| "<li>" + link_to_tag(tag) + ", </li>"}.join
       tag_list + "<li>" + link_to_tag(last_tag) + "</li>"      
