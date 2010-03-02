@@ -19,7 +19,7 @@
     <%- if @next_chapter -%>
       <li><%= link_to t('next_chapter', :default => "Next Chapter &#8594;"), [@work, @next_chapter] %></li>
     <%- end -%>
-    <li class="mega">
+    <li>
       <%= link_to 'Chapter Index', navigate_work_path(@work), :onclick => "$('chapter-index').toggle();return false" %>
       <div id="chapter-index" style="display:none">
         <h4><%= link_to 'View full-page index', navigate_work_path(@work) %></h4>
