@@ -15,17 +15,17 @@ class SeriesController < ApplicationController
   def index
     if params[:user_id]
       @user = User.find_by_login(params[:user_id])
-      author = @user
+      pseuds = @user.pseuds
       if params[:pseud_id]
         @author = @user.pseuds.find_by_name(params[:pseud_id])
-        author = @author
+        pseuds = [@author]
       end
     end
-    if author        
+    if pseuds        
       if current_user == :false
-        @series = author.series.visible_to_public.exclude_anonymous.find(:all, :select => "DISTINCT series.*").paginate(:page => params[:page])
+        @series = Series.visible_to_public.exclude_anonymous.for_pseuds(pseuds).paginate(:page => params[:page])
       else
-        @series = author.series.visible_logged_in.exclude_anonymous.find(:all, :select => "DISTINCT series.*").paginate(:page => params[:page])
+        @series = Series.visible_logged_in.exclude_anonymous.for_pseuds(pseuds).paginate(:page => params[:page])
       end
     else
       if current_user == :false

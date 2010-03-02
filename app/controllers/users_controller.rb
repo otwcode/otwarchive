@@ -46,9 +46,9 @@ class UsersController < ApplicationController
       end
       @works = Work.owned_by_conditions(@user).visible.ordered_by_date_desc.limited(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)      
       if current_user == :false
-        @series = @user.series.visible_to_public.exclude_anonymous.find(:all, :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :select => "DISTINCT series.*").paginate(:page => params[:page])
+        @series = Series.visible_to_public.exclude_anonymous.for_pseuds(@user.pseuds).find(:all, :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).paginate(:page => params[:page])
       else
-        @series = @user.series.visible_logged_in.exclude_anonymous.find(:all, :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD, :select => "DISTINCT series.*").paginate(:page => params[:page])
+        @series = Series.visible_logged_in.exclude_anonymous.for_pseuds(@user.pseuds).find(:all, :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).paginate(:page => params[:page])
       end
       visible_bookmarks = @user.bookmarks.visible(:order => 'bookmarks.created_at DESC')
       # Having the number of items as a limit was finding the limited number of items, then visible ones within them

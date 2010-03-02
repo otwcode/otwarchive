@@ -35,10 +35,18 @@ class Series < ActiveRecord::Base
   
   #TODO: figure out why select distinct gets clobbered
   named_scope :exclude_anonymous, {
+    :select => "DISTINCT series.*, MAX(collection_items.anonymous) AS anon, MAX(collection_items.unrevealed) AS unrevealed",
     :joins => "INNER JOIN `serial_works` ON (`series`.`id` = `serial_works`.`series_id`) 
     INNER JOIN `works` ON (`works`.`id` = `serial_works`.`work_id`) 
     LEFT JOIN `collection_items` ON `collection_items`.item_id = `works`.id AND `collection_items`.item_type = 'Work'",
-    :conditions => "collection_items.id IS NULL OR (collection_items.anonymous = 0 AND collection_items.unrevealed = 0)"}
+    :group => "series.id",
+    :having => "(anon IS NULL OR anon = 0) AND (unrevealed IS NULL OR unrevealed = 0)"}
+  
+  # Needed to keep the normal pseud.series association from eating the exclude_anonymous selects  
+  named_scope :for_pseuds, lambda {|pseuds|
+    {:joins => "INNER JOIN creatorships ON (series.id = creatorships.creation_id AND creatorships.creation_type = 'Series')",
+    :conditions => ["creatorships.pseud_id IN (?)", pseuds.collect(&:id)]}   
+  }
   
  
   def posted_works
