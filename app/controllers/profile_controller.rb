@@ -6,8 +6,8 @@ class ProfileController < ApplicationController
       flash[:error] = t('invalid_user', :default => "Sorry, there's no user by that name.")
       redirect_to '/'
     elsif @user.profile.nil?
-      flash[:error] = t('no_profile', :default => "Sorry, there's no profile for this user.")
-      redirect_to @user      
+      Profile.create(:user_id => @user.id)
+      @user.reload
     end
   end
   

@@ -24,8 +24,10 @@ module UsersHelper
   def standard_icon(user, pseud)
     if pseud
       pseud.icon.url
-    elsif user
+    elsif user && user.default_pseud
       user.default_pseud.icon.url
+    else
+      "/images/user_icon.png"
     end
   end
   

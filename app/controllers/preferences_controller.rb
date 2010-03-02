@@ -10,7 +10,7 @@ class PreferencesController < ApplicationController
   
   def index
     @user = User.find_by_login(params[:user_id])
-    @preference = @user.preference
+    @preference = @user.preference || Preference.create(:user_id => @user.id)
   end
 
   def update

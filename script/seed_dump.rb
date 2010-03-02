@@ -4,8 +4,8 @@
 # RAILS_ENV=production script/dump.rb
 
 SEEDS = ["Sidra", "astolat", "Enigel", "hope", "awils1", 
-         "Cesy", "elz", "justira", "lim", "melange", 
-          "rklyne", "zelempa"] # users who have webdavs
+         "Cesy", "elz", "justira", "lim", "melange", "eel",
+          "rklyne", "zelempa"] # users who have webdavs or asked to be added
 ADD_EXTERNAL = true
 NTH = 20
 

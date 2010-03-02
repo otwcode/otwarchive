@@ -335,6 +335,7 @@ class User < ActiveRecord::Base
   # Checks date of birth when user updates profile
   # Has to be called before_update (above) not before_save so new users can be created
   def validate_date_of_birth
+    return false unless self.profile
     unless self.profile.date_of_birth.blank?
       if self.profile.date_of_birth > 13.years.ago.to_date  
         errors.add_to_base("You must be over 13.")
