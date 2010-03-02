@@ -1,7 +1,7 @@
 class Pseud < ActiveRecord::Base
  
   has_attached_file :icon,
-    :styles => { :standard => "100x100>", :thumb => "80x80>" },
+    :styles => { :standard => "100x100>" },
     :path => ENV['RAILS_ENV'] == 'production' ? ":attachment/:id/:style.:extension" : ":rails_root/public:url",
     :storage => ENV['RAILS_ENV'] == 'production' ? :s3 : :filesystem,
     :s3_credentials => "#{RAILS_ROOT}/config/s3.yml",
