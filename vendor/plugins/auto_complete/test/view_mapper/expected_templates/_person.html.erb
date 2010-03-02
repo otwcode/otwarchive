@@ -1,0 +1,22 @@
+<div class="child">
+  <p>
+    Testy <%= f.label :first_name %><br />
+    <%= f.text_field_with_auto_complete :first_name, {}, { :method => :get, :skip_style => true } %>
+  </p>
+  <p>
+    Testy <%= f.label :last_name %><br />
+    <%= f.text_field_with_auto_complete :last_name, {}, { :method => :get, :skip_style => true } %>
+  </p>
+  <p>
+    Testy <%= f.label :address %><br />
+    <%= f.text_field_with_auto_complete :address, {}, { :method => :get, :skip_style => true } %>
+  </p>
+  <p>
+    Testy <%= f.label :some_flag %><br />
+    <%= f.check_box :some_flag %>
+  </p>
+  <p>
+    <%= f.hidden_field :_delete, :class => 'delete' %>
+    <%= remove_child_link 'remove', f %>
+  </p>
+</div>

@@ -1,0 +1,24 @@
+<%%= f.error_messages %>
+<% for attribute in attributes -%>
+
+<p>
+  <%%= f.label :<%= attribute.name %> %><br />
+<%- if is_auto_complete_attribute? singular_name, attribute.name -%>
+  <%%= f.text_field_with_auto_complete :<%= attribute.name %>, {}, { :method => :get, :skip_style => true } %>
+<%- else -%>
+  <%%= f.<%= attribute.field_type %> :<%= attribute.name %> %>
+<%- end -%>
+</p>
+<% end -%>
+<% child_models.each do |child_model| -%>
+
+<div id='<%= child_model.name.underscore %>_children'>
+  <%% f.fields_for :<%= child_model.name.underscore.pluralize %> do |<%= child_model.name.underscore %>_form| %>
+    <%%= render :partial => '<%= child_model.name.underscore %>', :locals => { :f => <%= child_model.name.underscore %>_form } %>
+  <%% end %>
+</div>
+
+<p>
+  <%%= add_child_link 'Add a <%= child_model.name %>', '<%= child_model.name.underscore %>', f %>
+</p>
+<% end -%>

@@ -1,0 +1,11 @@
+<h1>Editing parent</h1>
+
+<% form_for(@parent) do |f| %>
+  <%= render :partial => 'form', :locals => { :f => f } %>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @parent %> |
+<%= link_to 'Back', parents_path %>

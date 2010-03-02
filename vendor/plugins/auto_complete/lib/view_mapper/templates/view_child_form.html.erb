@@ -1,0 +1,16 @@
+<div class="child">
+<% for attribute in child_model.attributes -%>
+  <p>
+    <%= child_model.name %> <%%= f.label :<%= attribute.name %> %><br />
+<%- if is_auto_complete_attribute? child_model.name.downcase, attribute.name -%>
+    <%%= f.text_field_with_auto_complete :<%= attribute.name %>, {}, { :method => :get, :skip_style => true } %>
+<%- else -%>
+    <%%= f.<%= attribute.field_type %> :<%= attribute.name %> %>
+<%- end -%>
+  </p>
+<% end -%>
+  <p>
+    <%%= f.hidden_field :_delete, :class => 'delete' %>
+    <%%= remove_child_link 'remove', f %>
+  </p>
+</div>

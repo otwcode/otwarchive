@@ -1,0 +1,4 @@
+The code in this folder is a "View Mapper" module. It will generate scaffolding for a complex form
+that uses auto complete and nested attributes.
+
+For details see: http://patshaughnessy.net/view_mapper

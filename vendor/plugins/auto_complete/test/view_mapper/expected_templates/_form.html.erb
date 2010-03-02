@@ -1,0 +1,26 @@
+<%= f.error_messages %>
+
+<p>
+  <%= f.label :name %><br />
+  <%= f.text_field_with_auto_complete :name, {}, { :method => :get, :skip_style => true } %>
+</p>
+
+<div id='some_other_model_children'>
+  <% f.fields_for :some_other_models do |some_other_model_form| %>
+    <%= render :partial => 'some_other_model', :locals => { :f => some_other_model_form } %>
+  <% end %>
+</div>
+
+<p>
+  <%= add_child_link 'Add a SomeOtherModel', 'some_other_model', f %>
+</p>
+
+<div id='testy_children'>
+  <% f.fields_for :testies do |testy_form| %>
+    <%= render :partial => 'testy', :locals => { :f => testy_form } %>
+  <% end %>
+</div>
+
+<p>
+  <%= add_child_link 'Add a Testy', 'testy', f %>
+</p>
