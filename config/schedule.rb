@@ -37,7 +37,7 @@ when 'production'
 end
 
 # Purge user accounts that haven't been activated
-every 14.days, :at => '1:31 am' do
+every 1.days, :at => '1:31 am' do
   rake "admin:purge_unvalidated_users"
 end
 
