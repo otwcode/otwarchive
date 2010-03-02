@@ -19,8 +19,16 @@
     <%= generate_countdown_html("pseud_description", Pseud::DESCRIPTION_MAX) -%>
  </dd>
  
-  <dt><%= f.label :icon %></dt>
-  <dd><%= f.file_field :icon %>
+ <dt>Icon</dt>
+ <dd>
+   <p class="icon">
+     <%= image_tag(@pseud.icon.url, :size => "100x100", :alt => "", :class => "icon") %>
+   </p>
+   <%= f.label :icon, "Upload a new icon:" %>
+   <%= f.file_field :icon %>
+   <p>You may currently have one icon for each pseud. Icons may be in png, jpeg or gif format.</p>
+ </dd>
+
 </dd>
  
 </dl>
