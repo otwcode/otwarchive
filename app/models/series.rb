@@ -126,7 +126,7 @@ class Series < ActiveRecord::Base
   end
   
   def author_tags
-    self.tags.select{|t| t.type == "Pairing"} + self.tags.select{|t| t.type == "Character"} + self.tags.select{|t| t.type == "Freeform"}
+    self.tags.select{|t| t.type == "Pairing"}.sort + self.tags.select{|t| t.type == "Character"}.sort + self.tags.select{|t| t.type == "Freeform"}.sort
   end
   
   # Grabs the earliest published_at date of the visible works in the series

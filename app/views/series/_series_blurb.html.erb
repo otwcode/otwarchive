@@ -14,7 +14,7 @@
 			</h4>
 			
 		<h5 title="fandoms">
-		  <%= series.tags.select{|tag| tag.type == "Fandom"}.collect{|tag| link_to_tag(tag) }.join(', ') %>
+		  <%= series.tags.select{|tag| tag.type == "Fandom"}.sort.collect{|tag| link_to_tag(tag) }.join(', ') %>
 		</h5>
     <%= get_series_symbols_for(series) -%>
 		<p class="datetime"><%= set_format_for_date(series.revised_at) %></p>
@@ -27,7 +27,7 @@
             <%- if hide_warnings?(series) -%>
               <li><%= show_warnings_link(series) %></li>
             <%- else -%>
-              <%= tag_link_list(series.tags.select{|tag| tag.type == "Warning"}) %>
+              <%= tag_link_list(series.tags.select{|tag| tag.type == "Warning"}.sort) %>
             <%- end -%>
           </ul>
         </dd>
