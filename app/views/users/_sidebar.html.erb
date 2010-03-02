@@ -2,6 +2,7 @@
 <% prefix = @user == current_user ? "My " : "" %>
 <ul role="navigation">
 	<li><%= span_if_current prefix + "Dashboard", @user %></li>
+	<li><%= span_if_current prefix + "Pseuds (#{@user.pseuds.count})", user_pseuds_path(@user) %></li>
 	<%- if @user.pseuds.size > 1 -%>
 	  <li class="pseud"><a onclick="subnav_view.toggle()" title="Switch Pseuds">
 			<%= if current_page?(@user)
