@@ -5,7 +5,7 @@ class Pseud < ActiveRecord::Base
     :path => ENV['RAILS_ENV'] == 'production' ? ":attachment/:id/:style.:extension" : ":rails_root/public:url",
     :storage => ENV['RAILS_ENV'] == 'production' ? :s3 : :filesystem,
     :s3_credentials => "#{RAILS_ROOT}/config/s3.yml",
-    :bucket => YAML.load_file("#{RAILS_ROOT}/config/s3.yml")['bucket'],
+    :bucket => ENV['RAILS_ENV'] == 'production' ? YAML.load_file("#{RAILS_ROOT}/config/s3.yml")['bucket'] : "",
     :default_url => "/images/user_icon.png"
    
   validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true 
