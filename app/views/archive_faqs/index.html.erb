@@ -20,12 +20,12 @@
   <h3 id="categories">Available Categories</h3>
   <ol role="navigation">
     <%- for faq in @archive_faqs -%>
-    <li><%= link_to faq.title, "##{faq.title.underscore}" %></li>
+    <li><%= link_to faq.title, "##{faq.title.parameterize}" %></li>
     <%- end -%>
   </ol>
 
 	<%- for faq in @archive_faqs -%>
-		<h3 id="<%= faq.title.underscore %>"><%=h faq.title %></h3>
+		<h3 id="<%= faq.title.parameterize %>"><%=h faq.title %></h3>
 		<%- if logged_in_as_admin? -%>
 		<p class="navigation" role="navigation"><%= link_to "Edit this section", edit_archive_faq_path(faq) %></p>  
 		<%- end -%>	

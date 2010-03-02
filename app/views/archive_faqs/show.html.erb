@@ -7,11 +7,11 @@
 
 <!--main content-->
 <div class="user-generated-view" role="article">
-			<h4>Updated:<%=h @archive_faq.updated_at %>  
+			<h4>Updated: <%=h @archive_faq.updated_at %>  
 					<%- if logged_in_as_admin? -%>
 				    | <%= link_to 'Edit', edit_archive_faq_path(@archive_faq) %>
 				<%- end -%>
 			</h4>
 	    <%=sanitize_and_format_for_display @archive_faq.content %>
-	
+</div>	
 	<!--/content-->
