@@ -11,10 +11,18 @@
   
     <%- if @counts -%>
       <li><hr /></li>
-      <%- if @tag && @tag.child_types -%>
+      <%- if @tag && @uses -%>
+        <%- for key in @uses -%>
+          <%- if key == 'Works' || key == 'Bookmarks' -%>
+          <li><%= span_if_current "#{key} (#{@counts[key]})", {:controller => key.downcase.to_sym, :action => :index, :tag_id => @tag} %></li>  
+          <%- else -%>
+          <li><span><%= "#{key} (#{@counts[key]})" %></span></li>
+          <%- end -%>
+        <%- end -%>
+      <%- elsif @tag  && @tag.child_types -%>
         <%- for tag_type in @tag.child_types -%>
           <li>
-            <%= link_to tag_type.pluralize + " (#{@counts[tag_type.underscore.pluralize.to_sym]})", url_for(:show => tag_type.underscore.pluralize) %>
+            <%= span_if_current tag_type.pluralize + " (#{@counts[tag_type.underscore.pluralize.to_sym]})", url_for(:show => tag_type.underscore.pluralize) %>
           </li>
         <%- end -%>
       <%- else -%>  

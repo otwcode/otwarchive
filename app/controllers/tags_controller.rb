@@ -160,6 +160,14 @@ class TagsController < ApplicationController
       flash[:error] = t('not_found', :default => "Tag not found")
       redirect_to tag_wranglings_path and return
     end
+    @counts = {}
+    @uses = ['Works', 'Drafts', 'Bookmarks', 'Private Bookmarks', 'External Works']
+    @counts['Works'] = @tag.visible_works_count
+    @counts['Drafts'] = @tag.works.unposted.count
+    @counts['Bookmarks'] = @tag.visible_bookmarks_count
+    @counts['Private Bookmarks'] = @tag.bookmarks.not_public.count
+    @counts['External Works'] = @tag.visible_external_works_count
+   
     @parents = @tag.parents.find(:all, :order => :name).group_by {|tag| tag[:type]}
     @parents['MetaTag'] = @tag.direct_meta_tags.by_name
     @children = @tag.children.find(:all, :order => :name).group_by {|tag| tag[:type]}

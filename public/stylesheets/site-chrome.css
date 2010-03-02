@@ -258,6 +258,8 @@ li.comment h4					{ font-size: 1.25em;}
  
     							
 /* TAGS EDIT, front end coder please modularise the tooltip navigation rules*/
+ .tags-edit dd                  { width: 70%;} 
+ .tags-edit dd input.tags       { width: 100%; }
  .tags-edit li span.navigation 	{ position:absolute; left:-999em;}
  .tags-edit li:hover span.navigation 
 								{ left:auto;}
@@ -285,8 +287,9 @@ li.comment h4					{ font-size: 1.25em;}
 
 /*ADMIN POSTS */
  #main.admin_posts-index .module { width: 75%; clear: right; margin: 0.5em auto; border:1px solid; }
- #dashboard.admin-posts li       { font-size: 90%; margin: .5em 0em; }
- #dashboard.admin-posts a:hover  { background: #333; color: #fff; }
+ #dashboard.admin-posts li, #dashboard.wrangling li 
+                                { font-size: 90%; margin: .5em 0em; }
+ #dashboard.admin-posts a:hover { background: #333; color: #fff; }
   
 
 /* ToS and ADMIN long body copy tweaks*/
