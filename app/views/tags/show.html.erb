@@ -60,6 +60,20 @@
 </div>
 <%- end -%>
 
+<%- unless @tag.direct_meta_tags.blank? -%>
+  <div class="module">
+	<h3><%=h t('metatags', :default => 'Meta tags:') %></h3>
+  <ul class="tags"><%= tag_link_list(@tag.direct_meta_tags) %></ul>
+</div>
+<%- end -%>
+
+<%- unless @tag.direct_sub_tags.blank? -%>
+  <div class="module">
+	<h3><%=h t('subtags', :default => 'Sub tags:') %></h3>
+  <ul class="tags"><%= tag_link_list(@tag.direct_sub_tags) %></ul>
+</div>
+<%- end -%>
+
 <%- unless @tag.children.blank? -%>
   <div class="module">
 	<h3><%=h t('child_tags', :default => 'Child tags (more specific):') %></h3>

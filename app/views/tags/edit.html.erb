@@ -5,7 +5,6 @@
 
 <!--subnav-->
 <p class="navigation"><%= tag_comment_link(@tag) %></p>
-<div class="clear"><!--presentational, phase me out--></div>
 <!--/subnav-->
 
 <!--main content-->
@@ -55,12 +54,9 @@
       <%- end -%>
     </dd>
     
-    <dt><%= f.label :ambiguous, 'Ambiguous' %></dt>
-    <dd><%= f.check_box :ambiguous %>&nbsp;<%= "This tag is ambiguous." %></dd>
-
     <%- if @tag.is_a?(Rating)-%>
     <dt><%= f.label :adult, 'Adult' %></dt>
-    <dd><%= f.check_box("adult", :disabled => !logged_in_as_admin? )%>&nbsp;<%=h 'This tag indicates adult content.'%></dd>
+    <dd><%= f.check_box("adult", :disabled => !logged_in_as_admin? )%>&nbsp;<%= 'This tag indicates adult content.'%></dd>
     <%- end %>
 
     <dt><%= f.label :syn_string, 'Synonym of' %></dt>
@@ -138,6 +134,8 @@
 </fieldset>
 <%- end -%>
 
+<%- elsif @tag.is_a?(Media) -%>
+<p><%= link_to 'See all fandoms', {:controller => :tags, :action => :wrangle, :id => @tag, :show => 'fandoms'} %></p>
 <%- end -%>  
   <fieldset>
 	<legend>Submit</legend>
@@ -153,5 +151,4 @@
 <!--/content-->
 
 <!--subnav-->
-<%= tag_wrangler_footer %>
 <!--/subnav-->

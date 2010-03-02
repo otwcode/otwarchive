@@ -176,7 +176,13 @@ class TagsController < ApplicationController
     @tag = Tag.find_by_name(params[:id])
     if @tag.update_attributes(params[:tag])
       flash[:notice] = t('successfully_updated', :default => 'Tag was updated.')
-      redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag)
+      if params[:commit] == "Wrangle"
+        params[:page] = '1' if params[:page].blank?
+        params[:sort] = 'name ASC' if params[:sort].blank?
+        redirect_to url_for(:controller => :tags, :action => :wrangle, :id => params[:id], :show => params[:show], :page => params[:page], :sort => params[:sort])        
+      else
+        redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag)
+      end
     else
       @parents = @tag.parents.find(:all, :order => :name).group_by {|tag| tag[:type]}
       @parents['MetaTag'] = @tag.direct_meta_tags.by_name

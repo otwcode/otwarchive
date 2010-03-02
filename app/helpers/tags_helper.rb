@@ -157,6 +157,12 @@ module TagsHelper
     end
     link_text = count + " comments" + last_comment
     link_to link_text, tag_comments_path(tag)
+  end 
+  
+  def show_wrangling_dashboard
+    %w(tag_wranglings tag_wranglers).include?(controller.controller_name) || 
+    (can_wrangle? && controller.controller_name == 'tags') || 
+    (@tag && controller.controller_name == 'comments')
   end
     
 end

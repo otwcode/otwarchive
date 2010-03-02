@@ -252,10 +252,19 @@ li.comment h4					{ font-size: 1.25em;}
 								{ width:65%;}
  #main.tag_wranglers-index form.filters 
 								{ width:16em; max-width:40%;}
+ #main.tag_wranglers-index .blurb { float: left; }
+ #main.tag_wranglers-index .blurb h4, #main.tag_wranglers-index .blurb ul, #main.tag_wranglers-index .blurb form
+                                {margin: 0;}
+ 
+    							
 /* TAGS EDIT, front end coder please modularise the tooltip navigation rules*/
  .tags-edit li span.navigation 	{ position:absolute; left:-999em;}
  .tags-edit li:hover span.navigation 
 								{ left:auto;}
+ #main.tags-edit ul.tags        { float: left; margin-right: 2em;}
+ #main.tags-edit ul.tags, #main.tags-edit ul.tags li
+                                { display: block; }
+ 
 /*TAGS INDEX */
  .tags-index ul 				{ margin: 2em auto; text-align: center }
  .tags-index li 				{ display: inline; padding: 0.25em 0.5625em }

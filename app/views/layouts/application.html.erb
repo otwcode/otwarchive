@@ -35,13 +35,13 @@
 	<%= render :partial => 'layouts/header' %>
   
 	  <!-- BEGIN sidebar -->
-	  <%- unless (@user.blank? && @admin_posts.blank?) || @hide_dashboard -%> 
-      <%- if @admin_posts -%>
-        <%= render :partial => 'admin_posts/sidebar' %>  
-      <%- else -%>
-        <%= render :partial => 'users/sidebar' %>
-      <%- end -%>
-	  <%- end -%>
+    <%- if @admin_posts -%>
+      <%= render :partial => 'admin_posts/sidebar' %>  
+    <%- elsif @user && !@hide_dashboard -%>
+      <%= render :partial => 'users/sidebar' %>
+    <%- elsif show_wrangling_dashboard -%>  
+      <%= render :partial => 'tag_wranglings/wrangler_dashboard' %>
+    <%- end -%>
 	  <!-- END sidebar -->
   
 	  <!-- BEGIN main -->

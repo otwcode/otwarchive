@@ -11,7 +11,7 @@
 <ul class="index">
 	<%- @assignments.group_by(&:name).each do |name, assignments| -%>
 	<li class="fandom tag blurb">
-	<h4><%= name -%></h4>
+	<h4><%= link_to name, {:controller => :tags, :action => :edit, :id => assignments.first} %></h4>
  	<ul class="wranglers">
 	<%- assignments.collect(&:wrangler).compact.each do |wrangler| -%>
       <li><%= link_to wrangler, tag_wrangler_path(:id => wrangler) -%> 
@@ -31,12 +31,7 @@
             '<p>' + select_tag('user_ids[]', options_for_select([''] + @wranglers.collect(&:login))) + '</p>')
             end -%></p>  
       </div>
-    <%- end -%>      
-	<ul class="navigation">
-		<li><%= link_to 'edit', {:controller => :tags, :action => :edit, :id => assignments.first} %></li> 
-    <li><%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => assignments.first} %></li> 
-    <li><%= link_to 'works', {:controller => :works, :action => :index, :tag_id => assignments.first} %></li>
-	</ul>
+    <%- end -%>
 		</li>
   <%- end -%>  
 </ul>

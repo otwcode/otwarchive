@@ -2,20 +2,6 @@
 <h2><%=h 'Tag Wrangling' %></h2>
 <!--/descriptions-->
 <!--subnav-->
-
-<%= tag_wrangler_footer %>
-
-<!--NOTE to ADT this subnavigation block is a candidate for navigation redesign. Suggest actualfax wranglings dashboard-->
-<div id="dashboard">
-	<h3 class="landmark">Show tags grouped by...</h3>
-	<ul role="navigation">
-  		<li><%= span_if_current "Fandoms by media (#{@counts[:fandoms]})", tag_wranglings_path(:show => "fandoms") %></li>
-  		<li><%= span_if_current "Characters by fandom (#{@counts[:characters]})", tag_wranglings_path(:show => "characters") %></li>
-  		<li><%= span_if_current "Pairings by fandom (#{@counts[:pairings]})", tag_wranglings_path(:show => "pairings") %></li>
-  		<li><%= span_if_current "Pairings by character", tag_wranglings_path(:show => "character_pairings") %></li>
-  		<li><%= span_if_current "Freeforms by fandom (#{@counts[:freeforms]})", tag_wranglings_path(:show => "freeforms") %></li>
-	</ul>
-</div>
 <!--/subnav-->
 <!--main content-->
 	<h3><%=h 'Mass Wrangle New/Unwrangled Tags' %></h3>
@@ -183,6 +169,4 @@ get started. (Note: to associate pairings with characters, first choose a fandom
 <!--subnav-->
  <%= will_paginate @tags %>  
 <%- end -%>
-<div class="clear"><!--presentational, phase me out--></div>
-<%= tag_wrangler_footer %>
 <!--/subnav-->
