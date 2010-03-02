@@ -175,7 +175,7 @@ class TagsController < ApplicationController
     @children['Merger'] = @tag.mergers.by_name
     if @tag.respond_to?(:wranglers)
       @wranglers = @tag.wranglers
-    elsif !@tag.fandoms.empty?
+    elsif @tag.respond_to?(:fandoms) && !@tag.fandoms.empty?
       @wranglers = @tag.fandoms.collect(&:wranglers).flatten.uniq
     end
   end
