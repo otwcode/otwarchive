@@ -13,9 +13,9 @@ class AutocompleteController < ApplicationController
   end
   
   # works for any tag class where what you want to return are the names
-  def canonical_tag_finder(tag_class, search_param)
+  def noncanonical_tag_finder(tag_class, search_param)
     if search_param
-      render_output(tag_class.canonical.find(:all, :order => :name, :conditions => ["canonical = 1 AND name LIKE ?", '%' + search_param + '%'], :limit => 10).map(&:name))
+      render_output(tag_class.find(:all, :order => :name, :conditions => ["canonical = 0 AND name LIKE ?", '%' + search_param + '%'], :limit => 10).map(&:name))
     end
   end
 
@@ -74,46 +74,46 @@ class AutocompleteController < ApplicationController
   # tag wrangling
   
   def tag_syn_string
-    canonical_tag_finder(params[:type].constantize, params[:tag_syn_string])
+    tag_finder(params[:type].constantize, params[:tag_syn_string])
   end
 
   def tag_merger_string
-    tag_finder(params[:type].constantize, params[:tag_merger_string])
+    noncanonical_tag_finder(params[:type].constantize, params[:tag_merger_string])
   end
   
   def tag_media_string
-    canonical_tag_finder(Media, params[:tag_media_string])
+    tag_finder(Media, params[:tag_media_string])
   end 
   def tag_fandom_string
-    canonical_tag_finder(Fandom, params[:tag_fandom_string])
+    tag_finder(Fandom, params[:tag_fandom_string])
   end  
   def tag_character_string
-    canonical_tag_finder(Character, params[:tag_character_string])
+    tag_finder(Character, params[:tag_character_string])
   end  
   def tag_pairing_string
-    canonical_tag_finder(Pairing, params[:tag_pairing_string])
+    tag_finder(Pairing, params[:tag_pairing_string])
   end  
   def tag_freeform_string
-    canonical_tag_finder(Freeform, params[:tag_freeform_string])
+    tag_finder(Freeform, params[:tag_freeform_string])
   end    
   def tag_meta_tag_string
-    canonical_tag_finder(params[:type].constantize, params[:tag_meta_tag_string])
+    tag_finder(params[:type].constantize, params[:tag_meta_tag_string])
   end
   def tag_sub_tag_string
-    canonical_tag_finder(params[:type].constantize, params[:tag_sub_tag_string])
+    tag_finder(params[:type].constantize, params[:tag_sub_tag_string])
   end   
   
   def bookmark_external_fandom_string ; tag_finder(Fandom, params[:bookmark_external_fandom_string]) ; end
   def bookmark_external_character_string ; tag_finder(Character, params[:bookmark_external_character_string]) ; end
   def bookmark_external_pairing_string ; tag_finder(Pairing, params[:bookmark_external_pairing_string]) ; end
-  def fandom_string ; canonical_tag_finder(Fandom, params[:fandom_string]) ; end
-  def character_string ; canonical_tag_finder(Character, params[:character_string]) ; end
+  def fandom_string ; tag_finder(Fandom, params[:fandom_string]) ; end
+  def character_string ; tag_finder(Character, params[:character_string]) ; end
   
   def collection_filters_title
     render_output(Collection.find(:all, :conditions => ["parent_id IS NULL AND title LIKE ?", params[:collection_filters_title] + '%'], :limit => 10, :order => :title).map(&:title))    
   end
   def collection_filters_fandom
-    canonical_tag_finder(Fandom, params[:collection_filters_fandom])
+    tag_finder(Fandom, params[:collection_filters_fandom])
   end
   
 end
