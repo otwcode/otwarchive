@@ -1,5 +1,5 @@
 <ol class="navigation" role="navigation">
 <%- for chapter in chapters -%>
-  <li><%= chapter_link_with_title(chapter) %></li>
+  <li><%= chapter_link_with_title(chapter) %> (<%= chapter.published_at.to_date %>)</li>
 <%- end -%>
 </ol>

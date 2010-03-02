@@ -14,8 +14,6 @@
     <%- unless @preview_mode || @work.series.blank? || @chapter != @work.last_chapter-%>
       <%= render :partial => 'works/series_links' -%>
     <%- end -%>
-    <!--BACK END move chapter control into main nav in work_header please-->
-	<%= render :partial => 'chapters/chapter_control', :locals => {:work => @work, :chapter => @chapter } -%>
   </div>
 
   <%= render :partial => 'works/work_footer' -%>

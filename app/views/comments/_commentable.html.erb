@@ -6,6 +6,12 @@
 <%- if @work || @admin_post -%>
     <li><%= link_to t('top_link_text', :default => "&#8593; Top"), :anchor => "main" %></li>
 <%- end -%>
+<%- if @work && @previous_chapter -%>
+    <li><%= link_to t('previous_chapter', :default => "&#8592; Previous Chapter"), [@work, @previous_chapter] %></li>
+<%- end -%>
+<%- if @work && @next_chapter -%>
+    <li><%= link_to t('next_chapter', :default => "Next Chapter &#8594;"), [@work, @next_chapter] %></li>
+<%- end -%>
 <%- if @admin_post -%>
     <li><%= link_to t('admin_posts_link_text', :default => 'Back to AO3 News Index'), admin_posts_path %></li>
 <%- end -%>
