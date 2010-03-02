@@ -83,6 +83,9 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/1
   # GET /work/:work_id/chapters/1.xml
   def show
+    if params[:selected_id]
+      redirect_to url_for(:controller => :chapters, :action => :show, :work_id => @work.id, :id => params[:selected_id]) and return
+    end
     @chapter = @work.chapters.find(params[:id])
     if logged_in? && current_user.is_author_of?(@work)
       chapters = @work.chapters.in_order

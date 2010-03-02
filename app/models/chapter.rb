@@ -56,6 +56,14 @@ class Chapter < ActiveRecord::Base
       self.title = self.title.gsub(/^\s*/, '')
     end
   end
+  
+  def display_title
+    self.title.blank? ? "Chapter #{self.position}" : self.title
+  end
+  
+  def abbreviated_display_title
+    self.display_title.length > 50 ? (self.display_title[0..50] + "...") : self.display_title
+  end
  
   # make em-dashes into html code
 #  def clean_emdashes

@@ -305,5 +305,12 @@ li.comment h4					{ font-size: 1.25em;}
  #main.chapters-manage ul.navigation                   { display: inline; float: none; width: auto; }
  
  #main.works-navigate ol, #main.works-navigate ol li   { display: block; }
- #main.works-navigate ol a  {border: 0;} 
+ #main.works-navigate ol a  {border: 0;}
+ 
+ /* FRONT END: temporary chapter index */
+ #chapter-index             { min-width: 15em; margin-left: auto; position: absolute; top: 1.6em; right: 0em; z-index: 99; background: #fff; border: 2px solid black; padding: 1em; }
+ #main div#chapter-index h4, #main div#chapter-index h4 a 
+                            { margin: 0; border: none;}
+ #chapter-index form        { padding: 1em; } 
+ li.mega                    { position: relative; } 
 
