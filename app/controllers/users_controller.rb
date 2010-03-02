@@ -130,7 +130,7 @@ class UsersController < ApplicationController
         end
         redirect_to(@user)
       else
-        flash[:error] = t('activation_key_invalid', :default => "Your activation key is invalid. If you didn't activate within 72 hours, your account was deleted. Please sign up again.")
+        flash[:error] = t('activation_key_invalid', :default => "Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again.")
         redirect_to ''
       end
     end
@@ -287,9 +287,9 @@ class UsersController < ApplicationController
   
   def end_first_login
     @user.preference.update_attribute(:first_login, false)
-    
+
     respond_to do |format|
-      format.js 
+      format.js
     end
   end
 
