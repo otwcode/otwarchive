@@ -133,7 +133,6 @@ a.cloud8 					{ color: #900; font-size: 2.25em; font-weight: 800 }
 
 /* COLLECTION, ANON, MYSTERY */
  .collection .blurb .header		{ background: url(/images/collections.png) 0 0 no-repeat;}
- .collection .own				{ background: #eee url(/images/collections.png) 0 0 no-repeat;}
  .mystery .header	 			{ background: url(/images/mystery.png) 0 0 no-repeat }
 
 /* STATS*/
@@ -160,6 +159,8 @@ a.cloud8 					{ color: #900; font-size: 2.25em; font-weight: 800 }
  #main .profile p.alt			{ margin: 3em auto 3em 100px }
  .profile .header img 			{ left: 0; margin: 0 0 0.5625em; position: absolute; top: 0 }
  .profile .header h2 			{ font-size:2.25em; margin: 0.675em 0 0 100px; text-align: right; border-bottom:2px solid; }
+ .profile .header .user-generated-view	
+                                { margin-left: 120px;}
  .profile .module h3			{ background: #222; color: #fffef9; margin:0; padding: 0.125em; border-bottom: 4px double #fffef9;}
  .profile .series 				{ clear:left; float:none;}
  .profile li.blurb				{ margin-top: 0 }
