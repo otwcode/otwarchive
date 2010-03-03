@@ -52,9 +52,6 @@ Rails::Initializer.run do |config|
   # :all can be used as a placeholder for all plugins not explicitly named
   # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
 
-  # Add additional load paths for your own custom dirs
-  # config.load_paths += %W( #{RAILS_ROOT}/extras )
-
   # Force all environments to use the same logger level
   # (by default production uses :info, the others :debug)
   # config.log_level = :debug
@@ -135,7 +132,12 @@ Rails::Initializer.run do |config|
   #    ActionView::Base.sanitized_allowed_tags.delete tag
   #  end
   #end
-  config.load_paths << "#{RAILS_ROOT}/app/sweepers"
+
+  # Add additional load paths for your own custom dirs
+  # config.load_paths += %W( #{RAILS_ROOT}/extras )
+  config.load_paths += %W( #{RAILS_ROOT}/app/sweepers )
+  config.load_paths += %W( #{RAILS_ROOT}/app/challenge )
+
 end
 
 ActionController::AbstractRequest.relative_url_root = ArchiveConfig.PRODUCTION_URL_ROOT if ArchiveConfig.PRODUCTION_URL_ROOT && ENV['RAILS_ENV'] == 'production'

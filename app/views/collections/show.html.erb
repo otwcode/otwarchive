@@ -1,118 +1,34 @@
-<!--Descriptive page name and system messages, descriptions, and instructions.-->
-<h2><%= sanitize_title_for_display @collection.title %> <span>(<%=h @collection.name %>)</span></h2>
-<!--/descriptions-->
+<div id="collection-page" class="profile">
 
-<!--subnavigation, sorting and actions-->
-<%= render :partial => "collection_show_navigation" -%>
-<!--/subnav-->
+  <%= render :partial => "collections/header", :locals => {:collection => @collection} %>
 
-<%- cache("collection-show-#{@collection.id}-top", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
-<!--subsection main-->
+  <!--main content-->
+  <!-- expects @works, @bookmarks -->
+    <%- unless @works.blank? -%>
+    <div class="works module" id="collection-works">
+      <h3><%=h @collection.closed? ? t('collections.random_works', :default => "Random works") : t('recent_works', :default => "Recent works") %></h3>
+      <ul class="index">
+        <%- for work in @works -%>
+      	  <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
+          <%- end -%>
+      </ul>
+    </div>
+    <%- end -%>
 
-<h3 class="landmark">About Collection, Metadata</h3>
-<div class="wrapper">
-	<dl class="collection meta">
-	<dt><%=h t('collections.owners', :default => "Owners:") %></dt>
-	<dd>
-		<ul>
-		  <%= @collection.all_owners.map {|owner| "<li>#{link_to(owner.byline, owner.user)}</li>"}.join(', ') -%>
-		</ul>
-	</dd>
+    <%- unless @bookmarks.blank? -%>
+    <div class="bookmarks module" id="collection-bookmarks">
+      <h3><%=h @collection.closed? ? t('collections.random_bookmarks', :default => "Random bookmarks") : t('recent_bookmarks', :default => "Recent bookmarks") %></h3>
+      <ul class="index">
+      <%- for bookmark in @bookmarks -%>
+        <%= render :partial => 'bookmarks/bookmark', :locals => {:bookmark => bookmark} %>
+      <%- end -%>
+      </ul>
+    </div>
+    <%- end -%>
 
-	<%- unless @collection.all_moderators.map.blank? -%>
-	<dt><%=h t('collections.mods', :default => "Moderators:") %></dt>
-	<dd>
-		<ul>
-		  <%= @collection.all_moderators.map {|mod| "<li>#{link_to(mod.byline, mod.user)}</li>"}.join(', ') -%>
-		</ul>
-	</dd>
-	<% end -%>
-	
-	<%- unless @collection.email.blank? -%>
-	<dt><%=h t('collection.email', :default => "Collection Email:") %></dt>
-	<dd><%=h @collection.email %></dd>
-	<% end -%>
-	
-	<%- unless @collection.description.blank? -%>
-	<dt><%=h t('collection.description', :default => "Description:") %></dt>
-	<dd><blockquote class="user-generated-view"><%= sanitize_and_format_for_display @collection.description %></blockquote></dd>
-	<%- end -%>
-	
-<%- end -%>	
-
- <% unless @collection.parent || (@collection.children.empty? && !@collection.user_is_maintainer?(current_user)) %>
-	<dt><%=h t('collections.children', :default => "Challenges and subcollections: ") -%></dt>
-  <dd>
-    <%= @collection.children.sort_by {|child| child.created_at}.map {|child| link_to(sanitize_title_for_display(child.title), child)}.join(", ") -%>
-    <% if @collection.user_is_maintainer?(current_user) -%>
-      (<%= link_to t('collections.add_child', :default => "Add new challenge/subcollection"), new_collection_collection_path(@collection) %>)
-    <% end %>
-  </dd>
- <% end -%>
- 
-<%- cache("collection-show-#{@collection.id}-bottom", :expires_in => AdminSetting.cache_expiration.minutes ) do -%> 
- <% if @collection.parent %>
-   <dt><%=h t('collections.parent', :default => "Parent Collection: ") -%></dt>
-   <dd><%= link_to(sanitize_title_for_display(@collection.parent.title), @collection.parent) -%></dd>
- <% end -%>
-
- <dt><%= t('collections.settings', :default => "Settings: ") %></dt>
-   <dd><%= @collection.closed? ? t('collections.is_closed', :default => "This collection is not accepting new stories at this time. ") : 
-         t('collections.is_open', :default => "This collection is currently open for new stories. ")%>
-   <%= @collection.moderated? ? t('collections.is_moderated', :default => "This collection is moderated. ") : 
-         t('collections.is_unmoderated', :default => "This collection is not moderated: anyone may post. ") %>
-   <%= @collection.unrevealed? ? t('collections.is_unrevealed', :default => "Stories in this collection are currently hidden. ") : "" %>
-   <%= @collection.anonymous? ? t('collections.is_anonymous', :default => "Story authors are currently hidden. ") : "" %>
-   <%= (@collection.unrevealed? || @collection.anonymous?) ? t('collections.see_details', :default => "See the collection details below for more information about how and when they will be revealed! ") : "" %>
-   </dd>
-   
- 	<%- if @collection.not_empty? -%>
-		<% if (@works_count = @collection.all_approved_works_count) > 0%>
-  		<dt><%=h t('collection_show.fandoms', :default => "Fandoms") %></dt>
-   		<dd><%= link_to(@collection.all_fandoms_count, collection_fandoms_path(@collection)) -%></dd>
-
-  		<dt><%=h t('collection_show.works', :default => "Works") %></dt>
-   		<dd><%= link_to(@works_count, collection_works_path(@collection)) -%></dd>
-		<% end %>
-
-		<% if (@bookmarks_count = @collection.all_approved_bookmarks_count) > 0%>
-  	  <dt><%=h t('collection_show.bookmarks', :default => "Bookmarks") %></dt>
-      <dd><%= link_to(@bookmarks_count, collection_bookmarks_path(@collection)) -%></dd>
-		<% end %>
-  <%end %>
-</dl>
-</div>
-<!--/subsection-->
-
-<!--main content-->
-<% if show_collection_preface(@collection) %>
-<div class="collection preface">
-  <% if show_collection_section(@collection, "intro") %>
-  <div id="intro" class="module">
-    <%= render :partial => 'collection_profile_navigation', :locals => {:section => 'intro'} -%>
-    <h3><%=h t('intro', :default => "Intro:") %></h3>
-    <blockquote class="user-generated-view"><%= sanitize_and_format_for_display(@collection.collection_profile.intro.blank? ? @collection.parent.collection_profile.intro : @collection.collection_profile.intro) %></blockquote>
-  </div>
-  <% end -%>
-	
-  <%- if show_collection_section(@collection, "faq") -%>
-	<div id="faq" class="module">
-    <%= render :partial => 'collection_profile_navigation', :locals => {:section => 'faq'} -%>
-		<h3><%=h t('faq', :default => "FAQ:") %></h3>
-		<blockquote class="user-generated-view"><%= sanitize_and_format_for_display(@collection.collection_profile.faq.blank? ? @collection.parent.collection_profile.faq : @collection.collection_profile.faq) %></blockquote>
-	</div>
-	<%- end -%>
-
- <% if show_collection_section(@collection, "rules") %>
-	<div id="rules" class="module">
-    <%= render :partial => 'collection_profile_navigation', :locals => {:section => 'rules'} -%>
-		<h3><%=h t('rules', :default => "Rules:") %></h3>
-		<blockquote class="user-generated-view"><%= sanitize_and_format_for_display(@collection.collection_profile.rules.blank? ? @collection.parent.collection_profile.rules : @collection.collection_profile.rules) %></blockquote>
-	</div>
-	<%- end -%>
-</div>
-<%- end -%>
-<%- end -%>
-<!--subnavigation-->
-<%= render :partial => "collection_show_navigation" -%>
-<!--/subnav-->
+  <% if @works.blank? && @bookmarks.blank? %>
+    <p class="alt message">There are no works or bookmarks in this collection yet.</p>
+  <% end %>
+  <!--/content-->
+  
+</div> 

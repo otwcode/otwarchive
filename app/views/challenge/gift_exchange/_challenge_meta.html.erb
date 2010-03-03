@@ -1,0 +1,29 @@
+<!-- added to the meta section for the collection. please enclose elements in dt/dd. @collection is defined here but @challenge may not be.  -->
+
+<dt><%=h t('gift_exchange.signup_status', :default => "Signup: ")%></dt>
+<dd><%= @collection.challenge.signup_open ? t('gift_exchange.signup_is_open', :default => "OPEN") : t('gift_exchange.signup_is_closed', :default => "CLOSED") -%></dd>
+
+<dt><%=h t('gift_exchange.signups_open_at', :default => "Signup opens: ")%></dt>
+<dd><%= @collection.challenge.signups_open_at -%></dd>
+
+<dt><%=h t('gift_exchange.signups_close_at', :default => "Signup closes: ")%></dt>
+<dd><%= @collection.challenge.signups_close_at -%></dd>
+
+<dt><%=h t('gift_exchange.assignments_due_at', :default => "Assignments due: ")%></dt>
+<dd><%= @collection.challenge.assignments_due_at -%></dd>
+
+<% if @collection.unrevealed? %>
+  <dt><%=h t('gift_exchange.works_reveal_at', :default => "Works revealed: ")%></dt>
+  <dd><%= @collection.challenge.works_reveal_at -%></dd>
+<% end %>
+
+<% if @collection.anonymous? %>
+  <dt><%=h t('gift_exchange.authors_reveal_at', :default => "Authors revealed: ")%></dt>
+  <dd><%= @collection.challenge.authors_reveal_at -%></dd>
+<% end %>
+
+<dt><%=h t('gift_exchange.signups', :default => "Signed up:") %></dt>
+<dd>
+  <%= @collection.signups.count -%>
+  <ul><%= @collection.signups.collect(&:pseud).map {|pseud| "<li>#{pseud.byline}</li>"}.join(", ") %></ul>
+</dd>

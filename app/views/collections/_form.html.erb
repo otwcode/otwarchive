@@ -12,6 +12,9 @@
       <p><%= hidden_field_tag :owner_pseuds, [current_user.default_pseud.id] -%></p>
     <% end %>
   
+    <dt><%= collection_form.label :icon %></dt>
+    <dd><%= collection_form.file_field :icon %></dd>
+
   <% if @collection.children.empty? %>
 	<dt>
     <%= collection_form.label :parent_name, t('collections.parent_name', :default => "Parent collection (must be one you maintain): ") -%></dt>
@@ -65,10 +68,8 @@
     <%= preference_form.label :anonymous, t("collection_form.anonymous", :default => "Is this collection currently anonymous?") %></dt>
     <dd><%= preference_form.check_box :anonymous %>
   </dd>
-  <dt>
-    <%= preference_form.label :gift_exchange, t("collection_form.gift_exchange", :default => "Is this collection a gift exchange?") %></dt>
-   <dd> <%= preference_form.check_box :gift_exchange %>
-  </dd>
+  <dt><%= label_tag :challenge_type, t("collection_form.challenge_type", :default => "If this collection is for a challenge, please choose the type: ") %></dt>
+    <dd><%= select_tag :challenge_type, options_for_select(Collection::CHALLENGE_TYPE_OPTIONS, @collection.challenge ? @collection.challenge.class.name : "") %></dd>
 </dl>
 </fieldset>
   <% end %>

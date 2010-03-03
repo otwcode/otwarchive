@@ -24,6 +24,8 @@ class Pseud < ActiveRecord::Base
   has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series'
   has_many :collection_participants, :dependent => :destroy
   has_many :collections, :through => :collection_participants
+  has_many :challenge_signups, :dependent => :destroy
+  has_many :prompts, :dependent => :destroy
   
   validates_presence_of :name
   validates_length_of :name, 
@@ -63,7 +65,7 @@ class Pseud < ActiveRecord::Base
   end
 
   def gifts
-    Gift.find_all_by_recipient_name(self.name)
+    Gift.for_pseud(self)
   end
 
   # Enigel Dec 12 08: added sort method

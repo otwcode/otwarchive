@@ -1,0 +1,40 @@
+
+<!--Descriptive page name, messages and instructions-->
+<div class="header module">
+	<h2><%= link_to_unless_current(sanitize_title_for_display(@collection.title), @collection) %></h2>
+	<p><%= image_tag(@collection.icon.url, :size => "100x100", :alt => "icon for #{@collection.name}", :class => "icon") %></p>
+	<p class="user-generated-view"><%= sanitize_and_format_for_display @collection.description -%></p>
+<!--/descriptions-->
+
+<!--subnav-->
+  <ul class="navigation" role="navigation">
+    <li><%= link_to_unless_current t('profile', :default =>"Profile"), collection_profile_path(@collection) %></li>
+
+    <% if logged_in? && !@collection.closed? %>
+      <li><%= link_to t('collections.post_new', :default => "Post To Collection"), new_collection_work_path(@collection) %></li>
+    <% end %>
+
+  	<% if @collection.challenge # add custom navigation for the specific challenge if there is one %>
+  	  <%= render :partial => "challenge/#{challenge_class_name(@collection)}/challenge_navigation_user" -%>
+  	<% end %>
+
+    <% unless @collection.user_is_owner?(current_user) %>
+      <% if (@participant ||= @collection.get_participants_for_user(current_user).first) -%>  
+        <li><%= link_to t('participant_remove', :default => "Leave"), collection_participant_path(@collection, @participant), 
+          :confirm => t('participant_confirm_delete', :default => 'Are you certain you want to leave this collection?', 
+                      :participant => @participant.pseud.name), 
+          :method => :delete %></li>
+      <% elsif logged_in? && !@collection.closed? && @collection.moderated? %>
+        <li><%= link_to 'Join', join_collection_participants_path(@collection) -%></li>
+      <% end %>
+    <% end -%>
+
+    <% if @collection.user_is_maintainer?(current_user) %>
+    	<li><%= link_to t('collections.participants', :default => "Membership", :count => @collection.collection_participants.count), collection_participants_path(@collection) -%></li>
+    	<li><%= link_to t('collections.items', :default => "Manage Items", :count => @collection.collection_items.count), collection_items_path(@collection) -%></li>
+    <% end %>
+
+  </ul>
+</div>
+<!--/subnav-->
+

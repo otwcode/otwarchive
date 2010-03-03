@@ -2,7 +2,7 @@ class AutocompleteController < ApplicationController
 
   def render_output(result_strings)
     @results = result_strings
-    render :inline  => "<ul><%= @results.map {|string| '<li>' + string + '</li>'} -%></ul>"
+    render :inline  => @results.length > 0 ? "<ul><%= @results.map {|string| '<li>' + string + '</li>'} -%></ul>" : ""
   end
 
   # works for any tag class where what you want to return are the names
@@ -114,6 +114,26 @@ class AutocompleteController < ApplicationController
   end
   def collection_filters_fandom
     tag_finder(Fandom, params[:collection_filters_fandom])
+  end
+  
+  # to handle the autocomplete requests for each type from the nested prompt form, using define_method to set up all
+  # the different tag types
+  %w(fandom character pairing rating category freeform warning).each do |tag_type| 
+    define_method("canonical_#{tag_type}_finder") do
+      tag_finder("#{tag_type}".classify.constantize, params[params[:fieldname]])
+    end
+  end 
+  
+  def canonical_tag_finder
+    tag_finder(Tag, params[params[:fieldname]])
+  end
+  
+  def gift_exchange_request_restriction_attributes_tag_set_attributes_tagnames
+    tag_finder(Tag, params[:gift_exchange_request_restriction_attributes_tag_set_attributes_tagnames])
+  end
+  
+  def gift_exchange_offer_restriction_attributes_tag_set_attributes_tagnames
+    tag_finder(Tag, params[:gift_exchange_offer_restriction_attributes_tag_set_attributes_tagnames])
   end
   
 end

@@ -1,0 +1,24 @@
+<!-- offer_restriction_form partial, expects a local variable called "challenge_form" and @challenge -->
+<% @challenge.build_offer_restriction unless @challenge.offer_restriction %>
+<% challenge_form.fields_for :offer_restriction do |offer_restriction_form| %>
+<fieldset class="preface profile">
+	<legend>Offer Settings</legend>
+	<h3>Offer Settings</h3>
+	<p class="note">
+	  These settings determine what each separate offer can contain. Note these can be entirely different from the request settings!
+	</p>
+  <dl>
+
+    <%= prompt_restriction_settings(offer_restriction_form, false) -%>     
+
+    <% @challenge.offer_restriction.build_tag_set unless @challenge.offer_restriction.tag_set %>
+    <% offer_restriction_form.fields_for :tag_set_attributes do |tag_set_form| %>
+    <dt><%= tag_set_form.label :tagnames, t('offer_restrictions.tags', :default => "Tag Options") %>
+    <dd>
+      <%= tag_set_form.text_area :tagnames, :rows => 5, :cols => 70, :value => (@challenge.offer_restriction.tag_set ? @challenge.offer_restriction.tag_set.tagnames : "") %>
+      <%= autocomplete_text_field("#{@challenge.class.name.tableize.singularize}_offer_restriction_attributes_tag_set_attributes_tagnames") %>      
+    </dd>
+    <% end %>
+  </dl>
+</fieldset>
+<% end -%>

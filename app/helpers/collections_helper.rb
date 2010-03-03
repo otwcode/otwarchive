@@ -33,4 +33,8 @@ module CollectionsHelper
     end
     return false # if it passed through all tests above and not found a match, then we don't need the navigation
   end
+  
+  def challenge_class_name(collection)
+    collection.challenge.class.name.demodulize.tableize.singularize
+  end
 end

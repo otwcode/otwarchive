@@ -26,18 +26,18 @@ class Tag < ActiveRecord::Base
   belongs_to :media
   belongs_to :last_wrangler, :polymorphic => true
   
-  has_many :filter_taggings, :foreign_key => 'filter_id'
+  has_many :filter_taggings, :foreign_key => 'filter_id', :dependent => :destroy
   has_many :filtered_works, :through => :filter_taggings, :source => :filterable, :source_type => 'Work'
   has_one :filter_count, :foreign_key => 'filter_id'
 
-  has_many :common_taggings, :foreign_key => 'common_tag_id'
+  has_many :common_taggings, :foreign_key => 'common_tag_id', :dependent => :destroy
   has_many :child_taggings, :class_name => 'CommonTagging', :as => :filterable
   has_many :children, :through => :child_taggings, :source => :common_tag 
   has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag', :before_remove => :update_wrangler
 
-  has_many :meta_taggings, :foreign_key => 'sub_tag_id'
+  has_many :meta_taggings, :foreign_key => 'sub_tag_id', :dependent => :destroy
   has_many :meta_tags, :through => :meta_taggings, :source => :meta_tag, :before_remove => :remove_meta_filters
-  has_many :sub_taggings, :class_name => 'MetaTagging', :foreign_key => 'meta_tag_id'
+  has_many :sub_taggings, :class_name => 'MetaTagging', :foreign_key => 'meta_tag_id', :dependent => :destroy
   has_many :sub_tags, :through => :sub_taggings, :source => :sub_tag
   has_many :direct_meta_tags, :through => :meta_taggings, :source => :meta_tag, :conditions => "meta_taggings.direct = 1"
   has_many :direct_sub_tags, :through => :sub_taggings, :source => :sub_tag, :conditions => "meta_taggings.direct = 1"
@@ -45,11 +45,13 @@ class Tag < ActiveRecord::Base
   has_many :same_work_tags, :through => :works, :source => :tags, :uniq => true
   has_many :same_work_fandoms, :through => :works, :source => :fandoms, :uniq => true
 
-  has_many :taggings, :as => :tagger
+  has_many :taggings, :as => :tagger, :dependent => :destroy
   has_many :works, :through => :taggings, :source => :taggable, :source_type => 'Work'
   has_many :bookmarks, :through => :taggings, :source => :taggable, :source_type => 'Bookmark'
   has_many :external_works, :through => :taggings, :source => :taggable, :source_type => 'ExternalWork'
   has_many :approved_collections, :through => :filtered_works
+
+  has_many :set_taggings, :dependent => :destroy
 
   validates_presence_of :name
   validates_uniqueness_of :name
@@ -103,6 +105,27 @@ class Tag < ActiveRecord::Base
   named_scope :unfilterable, {:conditions => {:merger_id => nil, :canonical => false}}
   named_scope :unwrangled, {:joins => "LEFT JOIN `common_taggings` ON common_taggings.common_tag_id = tags.id", 
     :conditions => "common_taggings.id IS NULL"}
+  
+  named_scope :related_tags, lambda {|tag| 
+    {
+      :joins => "INNER JOIN taggings ON (tags.id = taggings.tagger_id)
+                INNER JOIN works ON (taggings.taggable_id = works.id AND taggings.taggable_type = 'Work') 
+                INNER JOIN taggings taggings2 ON (works.id = taggings2.taggable_id AND taggings2.taggable_type = 'Work')",
+      :conditions => ["taggings2.tagger_id = ?", tag.id],
+      :group => "tags.id"
+    }
+  }
+  
+  named_scope :related_tags_for_all, lambda {|tags|
+    {
+      :joins => "INNER JOIN taggings ON (tags.id = taggings.tagger_id)
+                INNER JOIN works ON (taggings.taggable_id = works.id AND taggings.taggable_type = 'Work') 
+                INNER JOIN taggings taggings2 ON (works.id = taggings2.taggable_id AND taggings2.taggable_type = 'Work')",
+      :conditions => ["taggings2.tagger_id IN (?)", tags.collect(&:id)],
+      :group => "tags.id"
+    }    
+  }
+  
   named_scope :visible, {:conditions => ['type in (?)', VISIBLE], :order => 'name ASC' }
 
   named_scope :by_popularity, {:order => 'taggings_count DESC'}
@@ -199,7 +222,7 @@ class Tag < ActiveRecord::Base
   
   # Substitute characters that are particularly prone to cause trouble in urls
   def self.find_by_name(string)
-    self.find(:first, :conditions => ['name = ?', string.gsub('%26', '&').gsub('%2F', '/').gsub('%2E', '.')])
+    self.find(:first, :conditions => ['name = ?', string.gsub('%26', '&').gsub('%2F', '/').gsub('%2E', '.')]) if string
   end
   
   # If a tag by this name exists in another class, add a suffix to disambiguate them
@@ -556,7 +579,7 @@ class Tag < ActiveRecord::Base
 
     # fields
     indexes name, :sortable => true
-    has :type, :sortable => true
+    has type, canonical
 
     # properties
     set_property :delta => :delayed

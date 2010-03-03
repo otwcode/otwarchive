@@ -1,0 +1,84 @@
+<h2><%= t('challenge_signups.enter', :default => "Sign Up For {{title}}", :title => @collection.title) %></h2>
+
+<!-- note for FRONT END
+The fields in the form frequently wrap around to a second line. 
+So if anyone can think of a better design for this, that would be awesome
+-->
+
+<!-- descriptions-->
+<!-- /descriptions-->
+<!--subnavigation, sorting and actions-->
+<!--/subnav-->
+
+<!--main content-->
+<% form_for([@collection, @challenge_signup], :url => (edit_record ? collection_signup_path(@collection) : collection_signups_path(@collection))) do |signup_form| %>
+  <%= signup_form.error_messages %>
+
+  <fieldset class="preface profile">
+  	<legend>General Information</legend>
+  	<h3>General Information</h3>
+    <% if @challenge.signup_instructions_general %>
+      <%= sanitize_and_format_for_display @challenge.signup_instructions_general %>
+    <% end %>
+    <dl>
+     	<% if signup_form.object.new_record? && current_user.pseuds.size > 1 %>
+        <dt><%= signup_form.label :pseud_id, t("prompt.pseud", :default => "Select pseudonym: ") -%></dt>
+        <dd><%= signup_form.select :pseud_id, options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud.id) %></dd>
+      <% else -%>
+        <p><%= signup_form.hidden_field :pseud_id -%></p>
+      <% end %>  
+    </dl>
+  </fieldset>
+
+  <fieldset class="preface profile">
+  	<legend>Requests</legend>
+  	<h3>Requests (<%= "#{@challenge.requests_num_required}" + (@challenge.requests_num_required == @challenge.requests_num_allowed ? "" : " - #{@challenge.requests_num_allowed}") -%>)</h3>
+    <% if @challenge.signup_instructions_requests %>
+      <%= sanitize_and_format_for_display @challenge.signup_instructions_requests %>
+    <% end %>
+    <% if @challenge_signup.requests.empty? %>
+  	  <% 1.upto(@challenge.requests_num_allowed) do %>
+        <% @challenge_signup.requests.build %>
+      <% end %>
+    <% end %>
+    <% @challenge_signup.requests.each_with_index do |request, index| %>
+      <% signup_form.fields_for :requests, request do |prompt_form| %>
+        <%= render :partial => "prompts/prompt_form", :locals => {:form => prompt_form, :is_offer => false, :index => index}%>
+      <% end %>
+    <% end %>
+  </fieldset>
+
+  <fieldset class="preface profile">
+  	<legend>Offers</legend>
+  	<h3>Offers (<%= "#{@challenge.offers_num_required}" + (@challenge.offers_num_required == @challenge.offers_num_allowed ? "" : " - #{@challenge.offers_num_allowed}") -%>)</h3>
+    <% if @challenge.signup_instructions_offers %>
+      <%= sanitize_and_format_for_display @challenge.signup_instructions_offers %>
+    <% end %>
+    <% if @challenge_signup.offers.empty? %>
+  	  <% 1.upto(@challenge.offers_num_allowed) do %>
+        <% @challenge_signup.offers.build %>
+      <% end %>
+    <% end %>    
+    <% @challenge_signup.offers.each_with_index do |offer, index| %>
+      <% signup_form.fields_for :offers, offer do |prompt_form| %>
+        <%= render :partial => "prompts/prompt_form", :locals => {:form => prompt_form, :is_offer => true, :index => index}%>
+      <% end %>
+    <% end %>
+  </fieldset>
+
+  <fieldset>
+  	<legend><%h= 'Submit' -%></legend> 
+    <p class="submit">
+      <%= signup_form.submit 'Submit' %>
+    </p>
+  </fieldset>
+
+<% end %>
+
+<!--/content-->
+
+<!--subnav-->
+<ul class="navigation" role="navigation">
+<li><%= link_to 'Back', @collection %></li>
+</ul>
+<!--/subnav-->

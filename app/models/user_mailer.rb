@@ -50,6 +50,13 @@ class UserMailer < ActionMailer::Base
     @body[:message] = message
     @body[:admin] = admin
   end
+  
+  def collection_notification(collection, email, subject, message)
+    setup_email_without_name(email)
+    @subject = "[#{ArchiveConfig.APP_NAME}] Notice About Your Collection #{subject}"
+    @body[:message] = message
+    @body[:collection] = collection
+  end
 
   def signup_notification(user)
     setup_email(user)

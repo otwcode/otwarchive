@@ -929,18 +929,27 @@ class Work < ActiveRecord::Base
 
     # associations
     indexes chapters.content, :as => 'chapter_content'
-    indexes tags.name, :as => 'tag_name'
-    indexes pseuds.name, :as => 'pseud_name'
+    indexes fandoms.name, :as => 'fandom'
+    indexes pairings.name, :as => 'pairing'
+    indexes ratings.name, :as => 'rating'
+    indexes characters.name, :as => 'character'
+    indexes warnings.name, :as => 'warning'
+    indexes freeforms.name, :as => 'tag'
+    indexes filters.name, :as => 'filter'
+    
+    indexes pseuds.name, :as => 'author'
 
     # attributes
     has :id, :as => :work_ids
-    has word_count, revised_at
+    has word_count, revised_at, hit_count
     has tags(:id), :as => :tag_ids
 
     # properties
     set_property :delta => :delayed
-    set_property :field_weights => { :tag_name => 10,
-                                     :title => 10, :pseud_name => 10,
+    set_property :field_weights => { :fandom => 10, :character => 10,
+                                     :pairing => 10, :rating => 5, :warning => 5,
+                                     :tag => 10, :filter => 10,
+                                     :title => 10, :author => 10,
                                      :summary => 5, :notes => 5,
                                      :chapter_content => 1}
   end
@@ -974,6 +983,7 @@ class Work < ActiveRecord::Base
   named_scope :ordered_by_hit_count_asc, :order => "hit_count ASC"
   named_scope :ordered_by_date_desc, :order => "revised_at DESC"
   named_scope :ordered_by_date_asc, :order => "revised_at ASC"
+  named_scope :random_order, :order => "RAND()"
 
   named_scope :limited, lambda {|limit|
     {:limit => limit.kind_of?(Fixnum) ? limit : 5}
@@ -1144,6 +1154,7 @@ class Work < ActiveRecord::Base
       when "author" then "authors_to_sort_on "
       when "word_count" then "word_count "
       when "date" then "revised_at "
+      when "hits" then "hit_count "
       else ""
     end
 
@@ -1174,7 +1185,7 @@ class Work < ActiveRecord::Base
 
     # can't use thinking sphinx's pagination, because some are removed
     # which throws off the pagination 
-    search_options = {:per_page => 10000, :page => 1, :max_matches => 10000}
+    search_options = {:per_page => 10000, :page => 1, :max_matches => 10000, :match_mode => :extended}
     search_options.merge!({:order => order_clause}) if !order_clause.blank?
 
     works = Work.search(options[:query], search_options).compact

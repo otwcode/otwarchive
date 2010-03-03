@@ -1,5 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
 
+
   map.resources :user_invite_requests
 
   map.resources :invite_requests, :collection => {:manage => :get, :reorder => :post}
@@ -103,18 +104,28 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :people, :only => [:index]
   map.resource :tags, :only => []
   
+  map.resources :prompt_restrictions
+  map.resources :prompts
   map.resources :collections do |collection|
+    collection.resource  :profile, :controller => "collection_profile", :only => [:show]
+
     collection.resources :collections
     collection.resources :works
     collection.resources :bookmarks
-    collection.resource :collection_profile, :only => [:show]
     collection.resources :media, :only => [:index, :show]
     collection.resources :fandoms, :only => [:index, :show]
     collection.resources :people, :only => [:index]
     collection.resources :tags, :requirements => { :id => %r([^/;,?]+) }, :has_many => :works
-    collection.resources :participants, :controller => "collection_participants", :collection => {:add => :get}, :member => {:join => :get}
+    collection.resources :participants, :controller => "collection_participants", :collection => {:add => :get, :join => :get}
     collection.resources :items, :controller => "collection_items"
     collection.resources :gifts, :only => [:index]
+
+    collection.resources :signups, :controller => "challenge_signups"
+    collection.resources :assignments, :controller => "challenge_assignments"
+
+    # challenge types
+    collection.resource :gift_exchange, :controller => 'challenge/gift_exchange'
+
   end 
 
   map.resources :gifts, :only => [:index]

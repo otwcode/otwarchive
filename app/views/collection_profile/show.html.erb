@@ -1,0 +1,134 @@
+<div class="collection profile module">
+  <%= render :partial => 'collections/header', :locals => {:collection => @collection} %>
+
+<%- cache("collection-show-#{@collection.id}-top", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
+
+<div class="collection module">
+  <h3><%=h t('about', :default => "About {{name}}", :name => @collection.name) %></h3>
+  <p class="datetime"><%= t('active_since', :default => "Active since: {{date}}", :date => l(@collection.created_at.to_date)) %></p>
+  <div class="wrapper">
+    <dl class="collection meta">
+      <dt><%=h t('collections.owners', :default => "Owners:") %></dt>
+      <dd>
+        <ul>
+          <%= @collection.all_owners.map {|owner| "<li>#{link_to(owner.byline, owner.user)}</li>"}.join(', ') -%>
+        </ul>
+      </dd>
+
+      <%- unless @collection.all_moderators.map.blank? -%>
+        <dt><%=h t('collections.mods', :default => "Moderators:") %></dt>
+        <dd>
+          <ul>
+            <%= @collection.all_moderators.map {|mod| "<li>#{link_to(mod.byline, mod.user)}</li>"}.join(', ') -%>
+          </ul>
+        </dd>
+      <% end -%>
+
+      <%- unless @collection.email.blank? -%>
+        <dt><%=h t('collection.email', :default => "Collection Email:") %></dt>
+        <dd><%=h @collection.email %></dd>
+      <% end -%>
+
+      <%- unless @collection.description.blank? -%>
+        <dt><%=h t('collection.description', :default => "Description:") %></dt>
+        <dd><blockquote class="user-generated-view"><%= sanitize_and_format_for_display @collection.description %></blockquote></dd>
+      <%- end -%>
+
+  <%- end # of cached top -%>	
+
+      <% unless @collection.parent || (@collection.children.empty? && !@collection.user_is_maintainer?(current_user)) %>
+        <dt><%=h t('collections.children', :default => "Challenges and subcollections: ") -%></dt>
+        <dd>
+          <%= @collection.children.sort_by {|child| child.created_at}.map {|child| link_to(sanitize_title_for_display(child.title), child)}.join(", ") -%>
+          <% if @collection.user_is_maintainer?(current_user) -%>
+          (<%= link_to t('collections.add_child', :default => "Add new challenge/subcollection"), new_collection_collection_path(@collection) %>)
+          <% end %>
+        </dd>
+      <% end -%>
+
+  <%- cache("collection-show-#{@collection.id}-bottom", :expires_in => AdminSetting.cache_expiration.minutes ) do -%> 
+
+      <% if @collection.parent %>
+        <dt><%=h t('collections.parent', :default => "Parent Collection: ") -%></dt>
+        <dd><%= link_to(sanitize_title_for_display(@collection.parent.title), @collection.parent) -%></dd>
+      <% end -%>
+
+      <dt><%= t('collections.status', :default => "Status: ") %> <%= link_to_help "collection-status" -%></dt>
+      <dd>
+        <ul>
+          <li><%= @collection.closed? ? t('collections.status_closed', :default => "Closed, ") : t('collections.status_open', :default => "Open, ") %></li>
+          <li><%= @collection.moderated? ? t('collections.status_moderated', :default => "Moderated") : t('collections.status_unmoderated', :default => "Unmoderated") %></li>
+          <%= @collection.unrevealed? ? "<li>" + t('collections.status_unrevealed', :default => ", Hidden")  + "</li>" : "" %>
+          <%= @collection.anonymous? ? "<li>" + t('collections.is_anonymous', :default => ", Anonymous") + "</li>" : "" %>
+        </ul>
+      </dd>
+
+      <% if @collection.challenge %>
+      <!-- challenge information -->
+        <%= render :partial => "challenge/#{challenge_class_name(@collection)}/challenge_meta" %>
+      <!-- end challenge subsection -->
+      <% end %>
+    </dl>
+  </div>
+</div>
+<%- end # of cached bottom -%>
+
+<!--main content-->
+<hr class="clear"/><!-- FRONT END this is here temporarily until the right fix can be put in -->
+
+<%- cache("collection-profile-#{@collection.id}", :expires_in => AdminSetting.cache_expiration.minutes ) do -%> 
+
+<% if show_collection_preface(@collection) %>
+  <div class="collection preface">
+    <% if show_collection_section(@collection, "intro") %>
+    <div id="intro" class="module">
+      <%= render :partial => 'navigation', :locals => {:section => 'intro'} -%>
+      <h3><%=h t('intro', :default => "Intro:") %></h3>
+      <blockquote class="user-generated-view"><%= sanitize_and_format_for_display(@collection.collection_profile.intro.blank? ? @collection.parent.collection_profile.intro : @collection.collection_profile.intro) %></blockquote>
+    </div>
+    <% end -%>
+
+    <%- if show_collection_section(@collection, "faq") -%>
+    <div id="faq" class="module">
+      <%= render :partial => 'navigation', :locals => {:section => 'faq'} -%>
+      <h3><%=h t('faq', :default => "FAQ:") %></h3>
+      <blockquote class="user-generated-view"><%= sanitize_and_format_for_display(@collection.collection_profile.faq.blank? ? @collection.parent.collection_profile.faq : @collection.collection_profile.faq) %></blockquote>
+    </div>
+    <%- end -%>
+
+    <% if show_collection_section(@collection, "rules") %>
+      <div id="rules" class="module">
+        <%= render :partial => 'navigation', :locals => {:section => 'rules'} -%>
+        <h3><%=h t('rules', :default => "Rules:") %></h3>
+        <blockquote class="user-generated-view"><%= sanitize_and_format_for_display(@collection.collection_profile.rules.blank? ? @collection.parent.collection_profile.rules : @collection.collection_profile.rules) %></blockquote>
+      </div>
+    <%- end -%>
+  </div>
+<%- end -%>
+
+<%- end # of cached bottom -%>
+  
+<%- if @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user) -%>
+  <h3 class="landmark">Actions</h3>
+  <ul class="navigation" role="navigation">
+
+  	<% if @collection.challenge # add maintainer-specific custom navigation for the challenge %>
+  	  <%= render :partial => "challenge/#{challenge_class_name(@collection)}/challenge_navigation_maintainer" -%>
+  	<% end %>
+
+    <% if @collection.user_is_owner?(current_user) %>
+  	  <li><%= link_to t('collections.settings', :default => "Settings"), edit_collection_path(@collection) %></li>
+  	  <li><%= link_to t('collections.delete', :default => "Delete"), collection_path(@collection), 
+        :confirm => t('collection_confirm_delete', :default => 'Are you certain you want to delete this collection? All collection settings will be lost. (Works will not be deleted.)'),
+        :method => :delete %></li>
+      <% if @collection.challenge %>
+        <li><%= link_to t('collections.challenge_delete', 
+          :default => "Delete Challenge"), eval("collection_#{challenge_class_name(@collection)}_path(@collection)"), 
+          :confirm => t('collection_confirm_challenge_delete', :default => 'Are you certain you want to delete the challenge from this collection? All signups, assignments, and settings will be lost. (Works will remain in the collection.)'),
+          :method => :delete %></li>
+      <% end %>
+    <% end %>
+  </ul>
+  <%- end -%>
+  
+</div>

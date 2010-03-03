@@ -100,14 +100,14 @@ module TagsHelper
 
   # Link to show warnings if they're currently hidden
   def show_warnings_link(creation)
-    link_to_remote "Show warnings",
+    link_to_remote t('tags.show_warnings', :default => "Show warnings"),
       :url => {:controller => 'tags', :action => 'show_hidden', :creation_type => creation.class.to_s, :creation_id => creation.id },
       :method => :get
   end
   
   # Link to show tags if they're currently hidden
   def show_freeforms_link(creation)
-    link_to_remote "Show tags",
+    link_to_remote t('tags.show_freeforms', :default => "Show additional tags"),
       :url => {:controller => 'tags', :action => 'show_hidden_freeforms', :creation_type => creation.class.to_s, :creation_id => creation.id },
       :method => :get
   end 

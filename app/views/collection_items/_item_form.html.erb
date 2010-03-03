@@ -34,15 +34,15 @@
 <td><%= collection_item.item_date.strftime("%B %d#{", %Y" if collection_item.item_date.year != Date.today.year} %H:%M") -%>
 
 <td class="submit button">
-<%= form.submit t('forms.update', :default => "Update") -%>
-<%- end -%> 
-<%= button_to t('item_remove', :default => "Remove"), 
-      @user ? user_collection_item_path(@user, collection_item) : collection_item_path(collection_item.collection, collection_item), 
-      :confirm => t('item_confirm_delete', :default => 'Are you certain you want to entirely remove {{item}} from the collection?', 
+  <%= form.submit t('forms.update', :default => "Update") -%>
+  <%- end -%> 
+  <%= button_to t('item_remove', :default => "Remove"), 
+                @user ? user_collection_item_path(@user, collection_item) : collection_item_path(collection_item.collection, collection_item), 
+                :confirm => t('item_confirm_delete', :default => 'Are you certain you want to entirely remove {{item}} from the collection?', 
                 :item => collection_item.item_type == "Bookmark" ? 
-                  t('collection_items.bookmark', :default => "Bookmark for {{title}}", :title => collection_item.item.bookmarkable.title) : 
-                  collection_item.item.title), 
-      :method => :delete %>
+                t('collection_items.bookmark', :default => "Bookmark for {{title}}", :title => collection_item.item.bookmarkable.title) : 
+                collection_item.item.title), 
+                :method => :delete %>
 </td>
 </tr>
 <%- end -%>

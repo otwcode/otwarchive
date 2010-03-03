@@ -1,5 +1,15 @@
 class Collection < ActiveRecord::Base
-  
+
+  has_attached_file :icon,
+    :styles => { :standard => "100x100>", :thumb => "80x80>" },
+    :path => ENV['RAILS_ENV'] == 'production' ? ":attachment/:id/:style.:extension" : ":rails_root/public:url",
+    :storage => ENV['RAILS_ENV'] == 'production' ? :s3 : :filesystem,
+    :s3_credentials => "/etc/s3conf/s3config.yml",
+    :bucket => "otw-ao3-icons"
+   
+  validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true 
+  validates_attachment_size :icon, :less_than => 500.kilobytes, :allow_nil => true 
+   
   belongs_to :parent, :class_name => "Collection"
   has_many :children, :class_name => "Collection", :foreign_key => "parent_id"
   
@@ -8,7 +18,13 @@ class Collection < ActiveRecord::Base
   
   has_one :collection_preference, :dependent => :destroy
   accepts_nested_attributes_for :collection_preference
+
+  belongs_to :challenge, :dependent => :destroy, :polymorphic => true
+  has_many :prompts, :dependent => :destroy
   
+  has_many :signups, :class_name => "ChallengeSignup", :dependent => :destroy
+  # has_many :assignments, :class_name => "ChallengeAssignment", :dependent => :destroy
+    
   has_many :collection_items, :dependent => :destroy
   accepts_nested_attributes_for :collection_items, :allow_destroy => true
   has_many :approved_collection_items, :class_name => "CollectionItem", 
@@ -34,6 +50,13 @@ class Collection < ActiveRecord::Base
   has_many :members, :through => :collection_participants, :source => :pseud, :conditions => ['collection_participants.participant_role = ?', CollectionParticipant::MEMBER]
   has_many :posting_participants, :through => :collection_participants, :source => :pseud, 
       :conditions => ['collection_participants.participant_role in (?)', [CollectionParticipant::MEMBER,CollectionParticipant::MODERATOR, CollectionParticipant::OWNER ] ]
+
+
+
+  CHALLENGE_TYPE_OPTIONS = [ 
+                             ["", ""],
+                             [t('challenge_type.gift_exchange', :default => "Gift Exchange"), "GiftExchange"],
+                           ]
 
 
   validate :must_have_owners, :collection_depth
@@ -220,10 +243,18 @@ class Collection < ActiveRecord::Base
   def closed? ; self.collection_preference.closed ; end
   def unrevealed? ; self.collection_preference.unrevealed ; end
   def anonymous? ; self.collection_preference.anonymous ; end
-  def gift_exchange? ; self.collection_preference.gift_exchange ; end
+  def challenge? ; !self.challenge.nil? ; end
+  def gift_exchange? 
+    self.collection_preference.gift_exchange 
+  end
   
   def not_empty?
     self.all_approved_works.count > 0 || self.children.count > 0 || self.all_approved_bookmarks.count > 0
+  end
+  
+  def notify_maintainers(subject, message)
+    # send maintainers a notice via email
+    UserMailer.deliver_collection_notification(self, self.email || "#{self.maintainers.collect(&:user).flatten.uniq.collect(&:email).join(",")}", subject, message)
   end
   
   def self.sorted_and_filtered(sort, filters, page)

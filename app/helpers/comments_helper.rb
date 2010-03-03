@@ -81,25 +81,17 @@ module CommentsHelper
   def show_comments_link(commentable)
     if commentable.count_visible_comments > 0
       commentable_id = "#{commentable.class.to_s.underscore}_id".to_sym
-      #Added if/else to get singular agreement for one comment
-      if commentable.count_visible_comments == 1
-        link_to_remote(
-            t("comments.read_one", :default => "Read {{comment_count}} Comment", :comment_count => commentable.count_visible_comments.to_s),
-            {:url => { :controller => :comments, :action => :show_comments, commentable_id => (commentable.id)}, :method => :get}, 
-            {:href => fallback_url_for_top_level(commentable, {:show_comments => true})} )
-      else
-        link_to_remote(
-            t("comments.read_many", :default => "Read {{comment_count}} Comments", :comment_count => commentable.count_visible_comments.to_s),
-            {:url => { :controller => :comments, :action => :show_comments, commentable_id => (commentable.id)}, :method => :get}, 
-            {:href => fallback_url_for_top_level(commentable, {:show_comments => true})} )
-      end
+      link_to_remote(
+          t("comments.read_many", :default => "Read Comments ({{comment_count}})", :comment_count => commentable.count_visible_comments.to_s),
+          {:url => { :controller => :comments, :action => :show_comments, commentable_id => (commentable.id)}, :method => :get}, 
+          {:href => fallback_url_for_top_level(commentable, {:show_comments => true})} )
     end
   end
-  
     
   def hide_comments_link(commentable) 
     commentable_id = "#{commentable.class.to_s.underscore}_id".to_sym
-    link_to_remote("Hide Comments", 
+    
+    link_to_remote(t('comments.hide_comments', :default => "Hide Comments ({{comment_count}})", :comment_count => commentable.count_visible_comments.to_s), 
       {:url => { :controller => :comments, :action => :hide_comments, commentable_id => (commentable.id)}, :method => :get },     
       {:href => fallback_url_for_top_level(commentable, {:show_comments => nil})} )
   end

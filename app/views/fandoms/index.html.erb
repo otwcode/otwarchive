@@ -1,6 +1,6 @@
 <!--Descriptive page name, messages and instructions-->
 <%- if @collection -%>
-  <h2>The <%= @fandoms.length %> Fandoms in <%= @collection.title %></h2>   
+  <h2><%=sanitize_title_for_display t('fandoms.in_collection', :default => "The {{count}} Fandoms in {{collection}}", :count => @fandoms.length, :collection => link_to(@collection.title, @collection)) -%></h2>
 <%- elsif @medium -%>  
   <h2><%= link_to t('fandoms', :default => 'Fandoms'), media_path %> > <%=h @medium.name %></h2>
 <%- else -%>

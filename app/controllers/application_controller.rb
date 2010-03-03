@@ -40,18 +40,21 @@ class ApplicationController < ActionController::Base
           profiler_sessions_file.close()
         end
       end
+      # manually putting this in to turn off the code as it is throwing errors and I need to
+      # test the collections code 
+      profile = false
       if profile
-	begin
-	  require 'ruby-prof'
-	rescue LoadError
-	  # We just continue quietly without profiling if ruby-prof is not
-	  # available.
-	  profile = false
-	end
+      	begin
+      	  require 'ruby-prof'
+      	rescue LoadError
+      	  # We just continue quietly without profiling if ruby-prof is not
+      	  # available.
+      	  profile = false
+      	end
       end
       if profile
-	querystring = request.query_string || ''
-	pathinfo = request.path_info || ''
+      	querystring = request.query_string || ''
+      	pathinfo = request.path_info || ''
         name = "#{Time.now} #{pathinfo} #{querystring.split('.')[0].gsub('/', '_')}.html"
         start = Time.now
 	# We use this array to get data out of the profiler's closure.

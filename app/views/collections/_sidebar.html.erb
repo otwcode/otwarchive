@@ -1,0 +1,37 @@
+<div id="dashboard" role="navigation">
+  <ul role="navigation">
+  	<li><%= span_if_current "Dashboard", @collection %></li>
+
+    <li><%= span_if_current t('collections.profile', :default => "Profile"), collection_profile_path(@collection) -%></li>
+    <% if !@collection.collection_profile.faq.blank? %>
+    <li><%= span_if_current t('collections.faq', :default => "FAQ"), collection_profile_path(@collection, :anchor => "faq") -%></li>
+    <% end %>
+    <% if !@collection.collection_profile.rules.blank? %>
+    <li><%= link_to t('collections.rules', :default => "Rules"), collection_profile_path(@collection, :anchor => "rules") -%></li>
+    <% end %>
+  
+    <% if @collection.parent %>
+    <li><%= link_to t('collections.parent', :default => "Parent Collection"), collection_path(@collection.parent) -%></li>
+    <% elsif (@children_count = @collection.children.count) > 0 %>
+    <li><%= span_if_current t('collections.subcollections', :default => "Subcollections ({{count}})", :count => @children_count), collection_collections_path(@collection) -%></li>
+    <% end %>
+
+    <%- if @collection.not_empty? -%>
+      <% if (@works_count = @collection.all_approved_works_count) > 0%>
+        <li><%= span_if_current(h(t('collection_show.fandoms', :default => "Fandoms ({{count}})", :count => @collection.all_fandoms_count)), collection_fandoms_path(@collection)) -%></li>
+        <li><%= span_if_current(h(t('collection_show.works', :default => "Works ({{count}})", :count => @works_count)), collection_works_path(@collection)) -%></li>
+      <% end %>
+      <% if (@bookmarks_count = @collection.all_approved_bookmarks_count) > 0 %>
+        <li><%= span_if_current(h(t('collection_show.bookmarks', :default => "Bookmarks ({{count}})", :count => @bookmarks_count)), collection_bookmarks_path(@collection)) -%></li>
+      <% end %>
+    <% end %>
+  
+    <%- if @collection.challenge %>
+  	  <%= render :partial => "challenge/#{challenge_class_name(@collection)}/challenge_sidebar" -%>
+  	<% end %>
+
+    <% if @collection.user_is_owner?(current_user) %>
+  	  <li><%= span_if_current t('collections.settings', :default => "Settings"), edit_collection_path(@collection) %></li>
+    <% end %>
+  </ul>
+</div>

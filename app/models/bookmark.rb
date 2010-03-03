@@ -7,6 +7,9 @@ class Bookmark < ActiveRecord::Base
   has_many :collection_items, :as => :item, :dependent => :destroy
   has_many :collections, :through => :collection_items
 
+  validates_length_of :notes, 
+    :maximum => ArchiveConfig.NOTES_MAX, :too_long => t('notes_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.NOTES_MAX)
+
   default_scope :order => "bookmarks.id DESC" # id's stand in for creation date
   
   named_scope :public, :conditions => {:private => false, :hidden_by_admin => false}
@@ -15,6 +18,16 @@ class Bookmark < ActiveRecord::Base
   named_scope :recent, :limit => ArchiveConfig.SEARCH_RESULTS_MAX
   named_scope :recs, :conditions => {:rec => true} #must come before visible in the chain
   
+  named_scope :in_collection, lambda {|collection|
+    {
+      :select => "DISTINCT bookmarks.*",
+      :joins => "INNER JOIN collection_items ON (collection_items.item_id = works.id AND collection_items.item_type = 'Bookmark')
+                 INNER JOIN collections ON collection_items.collection_id = collections.id",
+      :conditions => ['collections.id IN (?) AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', 
+                   [collection.id] + collection.children.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED]
+    }
+  }
+
    named_scope :visible_to_public, {
    	:joins => "LEFT JOIN works ON (bookmarks.bookmarkable_id = works.id AND bookmarks.bookmarkable_type = 'Work')",
    	:conditions => "private = 0 AND bookmarks.hidden_by_admin = 0 AND works.restricted != 1 AND works.hidden_by_admin != 1"
@@ -24,10 +37,7 @@ class Bookmark < ActiveRecord::Base
    	:joins => "LEFT JOIN works ON (bookmarks.bookmarkable_id = works.id AND bookmarks.bookmarkable_type = 'Work')",
    	:conditions => "private = 0 AND bookmarks.hidden_by_admin = 0 AND works.hidden_by_admin != 1"
   }
-  
-  validates_length_of :notes, 
-    :maximum => ArchiveConfig.NOTES_MAX, :too_long => t('notes_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.NOTES_MAX)
-    
+      
   def self.visible(options = {})
     current_user=User.current_user
     with_scope :find => options do

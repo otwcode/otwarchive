@@ -1,0 +1,105 @@
+<h2><%= t('gift_exchanges.setup', :default => "Setting Up The {{title}} Gift Exchange", :title => sanitize_title_for_display(@collection.title)) -%></h2>
+
+<h3><%=h 'Suggestions' -%></h3>
+<ul>
+  <li>The more options you allow here, the more complicated your signup form will be.</li>
+  <li>If you can keep to one request and one offer, automated matching will be easier! Keep in mind a single request can include multiple fandoms. Unless you want to do fairly complicated requests, you probably don't need more than one request/offer.</li>
+  <li>If you put in specific tags for a particular type of tag (eg, fandoms), the signup form will make members choose among them with checkboxes. If you don't put in specific tags, members will have an autocomplete form where they can enter only the single canonical tag-wrangled version of the tag. That is, if someone tries to type in "SPN" they won't get an autocomplete result; they would have to enter "Supernatural". This is how you can be sure everyone is using the same word/spelling even without making a specific list.</li>
+</ul>
+
+<!-- /descriptions-->
+<!--subnavigation, sorting and actions-->
+<!--/subnav-->
+
+<!--main content-->
+<h3 class="landmark">Gift Exchange Settings</h3>
+
+<% form_for([@collection, @challenge], :url => collection_gift_exchange_path(@collection)) do |f| %>
+  <%= f.error_messages %>
+  <fieldset class="preface profile">
+    <legend>Schedule</legend>
+    <h3>Schedule</h3>
+    <p class="notes">
+      Currently the dates are provided <strong>only for information</strong>. You will need to manually open and close signup.
+      If your collection is set to unrevealed/anonymous, you can set dates for those as well.
+    </p>
+    <dl>
+      <dt><%= f.label :signup_open, t('gift_exchange.signup_open', :default => "Signup open?") -%></dt>
+      <dd><%= f.check_box :signup_open %></dd>
+        
+      <dt><%= f.label :signups_open_at, t('gift_exchange.signups_open_at', :default => "Signup opens: ")%></dt>
+      <dd><%= datetime_select :gift_exchange, :signups_open_at -%></dd>
+
+      <dt><%= f.label :signups_close_at, t('gift_exchange.signups_close_at', :default => "Signup closes: ")%></dt>
+      <dd><%= datetime_select :gift_exchange, :signups_close_at -%></dd>
+
+      <dt><%= f.label :assignments_due_at, t('gift_exchange.assignments_due_at', :default => "Assignments due: ")%></dt>
+      <dd><%= datetime_select :gift_exchange, :assignments_due_at -%></dd>
+
+      <% if @collection.unrevealed? %>
+        <dt><%= f.label :works_reveal_at, t('gift_exchange.works_reveal_at', :default => "Works revealed: ")%></dt>
+        <dd><%= datetime_select :gift_exchange, :works_reveal_at -%></dd>
+      <% end %>
+
+      <% if @collection.anonymous? %>
+        <dt><%= f.label :authors_reveal_at, t('gift_exchange.authors_reveal_at', :default => "Authors revealed: ")%></dt>
+        <dd><%= datetime_select :gift_exchange, :authors_reveal_at -%></dd>
+      <% end %>
+    </dl>
+  </fieldset>  
+
+  <fieldset class="preface profile">
+  	<legend>Requests and Offers</legend>
+  	<h3>Requests and Offers</h3>
+    <dl>
+      <dt><%= f.label :requests_num_required, t('gift_exchanges.num_requests', :default => "Number of requests per signup: ") -%></dt>
+      <%= required_and_allowed(f, "requests") -%>
+
+      <dt><%= f.label :offers_num_required, t('gift_exchanges.num_offers', :default => "Number of offers per signup: ") -%></dt>
+      <%= required_and_allowed(f, "offers") -%>
+    </dl>
+  </fieldset>
+
+  <%= render :partial => "prompt_restrictions/request_restriction_form", :locals => {:challenge_form => f} -%>
+  
+  <%= render :partial => "prompt_restrictions/offer_restriction_form", :locals => {:challenge_form => f} -%>
+
+  <fieldset class="preface profile">
+    <legend>Signup Instructions</legend>
+    <h3>Signup Instructions</h3>
+    <p class="note">Here you can enter instructions to explain to your members how you want them to sign up.</p>
+    <dl>
+      <dt><%= f.label :signup_instructions_general, t('gift_exchange.signup_instructions_general', :default => "General Signup Instructions: ") %></dt>
+      <dd><%= f.text_area :signup_instructions_general, :rows => 6, :cols => 60 %></dd>
+
+      <dt><%= f.label :signup_instructions_requests, t('gift_exchange.signup_instructions_requests', :default => "Request Instructions: ") %></dt>
+      <dd><%= f.text_area :signup_instructions_requests, :rows => 6, :cols => 60 %></dd>
+
+      <dt><%= f.label :signup_instructions_offers, t('gift_exchange.signup_instructions_offers', :default => "Offer Instructions: ") %></dt>
+      <dd><%= f.text_area :signup_instructions_offers, :rows => 6, :cols => 60 %></dd>
+    </dl>
+  </fieldset>
+
+  <fieldset>
+  	<legend><%h= 'Submit' -%></legend> 
+    <p class="submit">
+      <%= f.submit 'Submit' %>
+    </p>
+  </fieldset>
+
+<% end %>
+
+<!--/content-->
+
+<!--subnav-->
+<ul class="navigation" role="navigation">
+  <% if @collection.challenge %>
+    <li><%= link_to t('collections.challenge_delete', 
+      :default => "Delete Challenge"), eval("collection_#{challenge_class_name(@collection)}_path(@collection)"), 
+      :confirm => t('collection_confirm_challenge_delete', :default => 'Are you certain you want to delete the challenge from this collection? All signups, assignments, and settings will be lost. (Works will remain in the collection.)'),
+      :method => :delete %></li>
+  <% end %>
+  <li><%= link_to 'Back', collection_path(@collection) %></li>
+</ul>
+<!--/subnav-->
+

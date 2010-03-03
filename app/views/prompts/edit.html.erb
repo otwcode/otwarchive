@@ -1,0 +1,36 @@
+<h1>Editing prompt</h1>
+
+<% form_for(@prompt) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :collection %><br />
+    <%= f.text_field :collection %>
+  </p>
+  <p>
+    <%= f.label :pseud %><br />
+    <%= f.text_field :pseud %>
+  </p>
+  <p>
+    <%= f.label :url %><br />
+    <%= f.text_field :url %>
+  </p>
+  <p>
+    <%= f.label :description %><br />
+    <%= f.text_area :description %>
+  </p>
+  <p>
+    <%= f.label :offer %><br />
+    <%= f.check_box :offer %>
+  </p>
+  <p>
+    <%= f.label :tag_set %><br />
+    <%= f.text_field :tag_set %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @prompt %> |
+<%= link_to 'Back', prompts_path %>

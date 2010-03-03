@@ -8,7 +8,7 @@
 
 <div id="header"<% if @collection %> class="collection"<% end %> role="banner">
 	<% if @collection %>
-	  <h1 class="collection"><%= link_to "&#8592; #{ArchiveConfig.APP_NAME}", media_path -%> <% unless ArchiveConfig.REVISION.blank? %> (BETA <%=h t('revision', :default => 'rev. {{rev_number}}', :rev_number => ArchiveConfig.REVISION) %>)<% end %></h1>
+	  <h1 class="collection"><%= link_to ArchiveConfig.APP_NAME, root_path -%> <% unless ArchiveConfig.REVISION.blank? %> (BETA <%=h t('revision', :default => 'rev. {{rev_number}}', :rev_number => ArchiveConfig.REVISION) %>)<% end %></h1>
 	<% end %>
   <div id="login-block">
   <%- if logged_in? || logged_in_as_admin? -%>
@@ -35,26 +35,13 @@
 
 <h3 class="landmark">Site Navigation</h3>
   <ul class="navigation" role="navigation">
-    <% if @collection %>
-      <li><%= span_if_current('collection home', !@collection.new_record? ? collection_path(@collection) : (@collection_parent ? collection_path(@collection_parent) : collections_path)) %></li>
-    <% else %>
-      <li><%= logged_in? ? span_if_current('my home', user_path(current_user)) : span_if_current('home', root_path) %></li>
-    <% end %>
-    <li><%= span_if_current('fandoms', @collection ? collection_fandoms_path(@collection) : media_path) -%></li>
-    <li><%= span_if_current('works', @collection ? collection_works_path(@collection) : works_path) -%></li>
-    <li><%= span_if_current('people', @collection ? collection_people_path(@collection) : people_path) -%></li>
-    <li><%= span_if_current('bookmarks', @collection ? collection_bookmarks_path(@collection) : bookmarks_path) -%></li>
-    <li><%= span_if_current('tags', @collection ? collection_tags_path(@collection) : tags_path) -%></li>
-    <% if @collection && !@collection.children.empty? %>
-      <li><%= span_if_current('subcollections', collection_collections_path(@collection)) -%></li>
-    <% elsif @collection && @collection.parent %>
-      <li><%= span_if_current('parent collection', collection_works_path(@collection.parent)) -%></li>
-    <% end %>
-    <% if @collection %>
-      <li><%= span_if_current('all collections', collections_path) -%></li>
-    <% else %>
-      <li><%= span_if_current('collections', collections_path) -%></li>
-    <% end %>
+    <li><%= logged_in? ? span_if_current('my home', user_path(current_user)) : span_if_current('home', root_path) %></li>
+    <li><%= span_if_current('fandoms', media_path) -%></li>
+    <li><%= span_if_current('works', works_path) -%></li>
+    <li><%= span_if_current('people', people_path) -%></li>
+    <li><%= span_if_current('bookmarks', bookmarks_path) -%></li>
+    <li><%= span_if_current('tags', tags_path) -%></li>
+    <li><%= span_if_current('collections', collections_path) -%></li>
   </ul>
 	
   <%- if logged_in_as_admin? -%>

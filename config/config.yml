@@ -68,6 +68,13 @@ FEEDBACK_SUMMARY_MAX: 100
 INFO_MAX: 100000
 FAQ_MAX: 200000 
 
+# max number of tags of each type allowed in challenge prompts (requests/offers)
+# increasing this number can lead to slower automated matching
+PROMPT_TAGS_MAX: 20
+
+# max number of prompts of each type (offer, request) allowed
+PROMPTS_MAX: 10
+
 
 # max number of works/chapters that can be imported
 IMPORT_MAX_WORKS: 25 
@@ -136,7 +143,7 @@ ANONYMOUS_THRESHOLD_COUNT: 10
 
 # Only the following fields are allowed to have HTML. In all others,
 # all HTML tags will be stripped.
-FIELDS_ALLOWING_HTML: %w(content summary notes endnotes about_me comment note description intro faq rules)
+FIELDS_ALLOWING_HTML: %w(content summary notes endnotes about_me comment note description intro faq rules signup_instructions_general signup_instructions_requests signup_instructions_offers)
 
 # variables for Askimet http://akismet.com/
 AKISMET_KEY: '6833ee7298cf'

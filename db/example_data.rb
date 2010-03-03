@@ -140,6 +140,15 @@ module FixtureReplacement
   attributes_for :profile do |a|
     a.date_of_birth = DateTime.now.years_ago(rand(30)+14) + rand(12).months
   end
+  
+  attributes_for :prompt do |a|
+    a.collection = create_collection
+    a.tag_set = create_tag_set
+  end
+  
+  attributes_for :prompt_restriction do |a|
+    a.tag_set = create_tag_set
+  end
 
   attributes_for :pseud do |a|
     a.user = default_user
@@ -166,6 +175,10 @@ module FixtureReplacement
     a.series = create_series
     a.pseud = create_pseud
     a.position = 1
+  end
+  
+  attributes_for :tag_set do |a|
+    a.tags = [create_tag(:canonical => true)]
   end
 
   attributes_for :tag do |a|
@@ -240,7 +253,7 @@ module FixtureReplacement
     a.revised_at = DateTime.now
   end
 
-  ##### some random generators
+  ##### some random generators  
   def random_word
     Faker::Lorem.words(1).to_s
   end

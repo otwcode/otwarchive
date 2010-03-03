@@ -41,24 +41,24 @@ module WorksHelper
   end
 
   def work_blurb_tag_block(work)
-    warnings_block = work.warning_tags.size < 1 ? nil :
-      hide_warnings?(work) ? '<li class="warnings"><strong><%= show_warnings_link(work) %></strong></li>' :
+    warnings_block = work.warning_tags.empty? ? nil :
+      hide_warnings?(work) ? '<li class="warnings"><strong><span id="' + "work_#{work.id}_category_warning\">" + show_warnings_link(work) + '</span></strong></li>' :
       '<li class="warnings"><strong>' + 
         work.warning_tags.collect{|tag| link_to_tag(tag) }.join(ArchiveConfig.DELIMITER_FOR_OUTPUT + '</strong></li> <li class="warnings"><strong>') +
         '</strong></li>'
 
-    pairings_block = work.pairing_tags.size < 1 ? nil :
+    pairings_block = work.pairing_tags.empty? ? nil :
       '<li class="pairing">' + 
         work.pairing_tags.collect{|tag| link_to_tag(tag)  }.join(ArchiveConfig.DELIMITER_FOR_OUTPUT + '</li> <li class="pairing">') +
         '</li>'
 
-    character_block = work.character_tags.size < 1 ? nil :
+    character_block = work.character_tags.empty? ? nil :
       '<li class="character">' + 
         work.character_tags.collect{|tag| link_to_tag(tag)  }.join(ArchiveConfig.DELIMITER_FOR_OUTPUT + '</li> <li class="character">') +
         '</li>'
 
-    freeform_block = work.freeform_tags.size < 1 ? nil :
-      hide_freeform?(work) ? '<li class="freeform"><%= show_freeforms_link(work) %></li>' :
+    freeform_block = work.freeform_tags.empty? ? nil :
+      hide_freeform?(work) ? '<li class="freeform"><span id="' + "work_#{work.id}_category_freeform\"><strong>" + show_freeforms_link(work) + '</strong></span></li>' :
       '<li class="freeform">' +
         work.freeform_tags.collect{|tag| link_to_tag(tag) }.join(ArchiveConfig.DELIMITER_FOR_OUTPUT + '</li> <li class="freeform">') +
         '</li>'
