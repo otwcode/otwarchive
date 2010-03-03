@@ -76,7 +76,7 @@ namespace :deploy do
   task(:notify_testers) do
     @new_revision = %x{sudo su - www-data -c "svnversion"}
     @new_revision.gsub!(/M/, "")
-    puts %x{echo "testarchive deployed to #{@new_revision}" | mail -s "testarchive deployed" otw-coders@transformativeworks.org}
+    puts %x{echo "testarchive deployed to #{@new_revision}" | mail -s "testarchive deployed" otw-coders@transformativeworks.org otw-testers@transformativeworks.org}
   end
 
   desc "Run after tasks"
