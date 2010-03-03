@@ -13,7 +13,7 @@
 
       <h4 title="title">
   	    <%= link_to sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small)), @collection ? collection_work_path(@collection, work) : work %>
-   		  <%= t('title_by_author', :default => 'by') -%>
+   		  <%= t('title_by_author', :default => 'by') %>
 <%- end # top cache -%> 
         <%= byline(work) -%>
 
