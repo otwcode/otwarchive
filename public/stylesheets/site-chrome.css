@@ -83,7 +83,7 @@
  .canonical 				{ font-weight: 700 }
 
 /*TAGS */
- #main ul.tags li			{ display:inline; line-height:2;}
+ #main ul.tags li			{ display:inline;}
 
 /*CLOUD */
 a.cloud1 					{ color: #111; font-size: 0.625em; font-weight: 100 }
@@ -257,7 +257,7 @@ li.comment h4					{ font-size: 1.25em;}
                                 { display: block; }
  
 /*TAGS INDEX */
- .tags-index ul 				{ margin: 2em auto; text-align: center }
+ .tags-index ul 				{ margin: 2em auto; text-align: center; line-height: 2;}
  .tags-index li 				{ display: inline; padding: 0.25em 0.5625em }
 
 /*TAG WRANGLINGS INDEX */
