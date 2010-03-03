@@ -4,7 +4,7 @@
 PROFILER_SESSIONS_FILE = 'used_tags.txt'
 
 class ApplicationController < ActionController::Base
-  if ENV['RAILS_ENV'] == 'development'
+  if ENV['RAILS_ENV'] == 'development' && ArchiveConfig.DEVELOPMENT_PROFILING_ENABLED
     # Inline profiling options
     def self.profiler_logging_path
       current_dir = File.split(__FILE__)[0]
