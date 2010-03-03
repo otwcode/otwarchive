@@ -46,7 +46,7 @@ class TagWranglersController < ApplicationController
   
   def create
     unless params[:tag_fandom_string].blank?
-      names = params[:tag_fandom_string].split(',').map(&:strip)
+      names = params[:tag_fandom_string].gsub(/$/, ',').split(',').map(&:strip)
       fandoms = Fandom.find(:all, :conditions => ['name IN (?)', names])
       unless fandoms.blank?
         for fandom in fandoms

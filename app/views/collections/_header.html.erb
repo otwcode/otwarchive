@@ -2,7 +2,7 @@
 <!--Descriptive page name, messages and instructions-->
 <div class="header module">
 	<h2><%= link_to_unless_current(sanitize_title_for_display(@collection.title), @collection) %></h2>
-	<p><%= image_tag(@collection.icon.url, :size => "100x100", :alt => "icon for #{@collection.name}", :class => "icon") %></p>
+	<p><%= image_tag(@collection.icon.url(:standard), :size => "100x100", :alt => "icon for #{@collection.name}", :class => "icon") %></p>
 	<div class="user-generated-view"><%= sanitize_and_format_for_display @collection.description -%></div>
 <!--/descriptions-->
 

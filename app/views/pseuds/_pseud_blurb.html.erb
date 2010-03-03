@@ -1,7 +1,7 @@
 <li class="user blurb" role="article">
   <div class="module">
     <p class="icon">
-      <%= image_tag(pseud.icon.url, :size => "100x100", :alt => "", :class => "icon") %>
+      <%= image_tag(pseud.icon.url(:standard), :size => "100x100", :alt => "", :class => "icon") %>
     </p>
 	  <h4><%= link_to(pseud.name, user_pseud_path(pseud.user, pseud)) -%> 
     <%- if (pseud.name != pseud.user_name || pseud.user.pseuds.size > 1) -%>

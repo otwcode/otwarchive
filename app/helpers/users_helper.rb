@@ -23,9 +23,9 @@ module UsersHelper
   # Determine which icon to show on user pages
   def standard_icon(user, pseud=nil)
     if pseud
-      pseud.icon.url
+      pseud.icon.url(:standard)
     elsif user && user.default_pseud
-      user.default_pseud.icon.url
+      user.default_pseud.icon.url(:standard)
     else
       "/images/user_icon.png"
     end

@@ -22,7 +22,7 @@
  <dt>Icon</dt>
  <dd>
    <p class="icon">
-     <%= image_tag(@pseud.icon.url, :size => "100x100", :alt => "", :class => "icon") %>
+     <%= image_tag(@pseud.icon.url(:standard), :size => "100x100", :alt => "", :class => "icon") %>
    </p>
    <%= f.label :icon, "Upload a new icon:" %>
    <%= f.file_field :icon %>
