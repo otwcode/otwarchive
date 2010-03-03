@@ -45,15 +45,21 @@ class TagWranglersController < ApplicationController
   end
   
   def create
-    @fandom = Fandom.find(params[:fandom_id])
-    params[:user_ids].uniq.each do |login|
-      user = User.find_by_login(login)
-      unless user.fandoms.include?(@fandom)
-        assignment = user.wrangling_assignments.build(:fandom_id => @fandom.id)
-        assignment.save!
+    unless params[:assignments].blank?
+      params[:assignments].each_pair do |fandom_id, user_logins|
+        fandom = Fandom.find(fandom_id)
+        user_logins.uniq.each do |login|
+          unless login.blank?
+            user = User.find_by_login(login)
+            unless user.nil? || user.fandoms.include?(fandom)
+              assignment = user.wrangling_assignments.build(:fandom_id => fandom.id)
+              assignment.save!
+            end
+          end
+        end        
       end
+      flash[:notice] = "Wranglers were successfully assigned!"
     end
-    flash[:notice] = "Wranglers were successfully assigned!"
     redirect_to tag_wranglers_path(:media_id => params[:media_id], :fandom_string => params[:fandom_string], :wrangler_id => params[:wrangler_id])    
   end
   
