@@ -25,7 +25,7 @@
  #header .clear 				{ background: url(/images/headergradient.png) top left repeat-x #fffef9; border-top: 6px solid #111; height: 20px }
 
 /* DASHBOARD*/
- #dashboard ul 				{ background: #fffef9; border: 2px solid #111; float: left; font: 100 1em/1.5 'Lucida Grande', Geneva, Verdana, Helvetica, Arial, sans-serif; margin: 1em 1em 3em 1em; text-transform: capitalize; width: 10.5em }
+ #dashboard ul 				{ background: #fffef9; border: 2px solid #111; float: left; font: 100 1em/1.5 'Lucida Grande', Geneva, Verdana, Helvetica, Arial, sans-serif; margin: 1em 1em 3em 1em; width: 10.5em }
  #dashboard a,#dashboard span 
 							{ color: #111; display: block; padding: 0 0.5625em; border: none;}
  #dashboard li:hover,#dashboard a:hover 
