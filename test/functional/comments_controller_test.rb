@@ -64,7 +64,7 @@ class CommentsControllerTest < ActionController::TestCase
                     :comment => { :content => 'foo', :name => 'Someone', :email => 'newcommenter@someplace.org' }
     end
     @comment = Comment.find_by_email('newcommenter@someplace.org')
-    assert_redirected_to work_path(:id => @work.id, :show_comments => true, :anchor => "comment#{@comment.id}")
+    assert_redirected_to work_path(:id => @work.id, :show_comments => true, :anchor => "comment_#{@comment.id}")
   end
   # Test create  POST  /:locale/works/:work_id/chapters/:chapter_id/comments
   def test_create_work_chapter_comment

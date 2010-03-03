@@ -253,7 +253,7 @@ end
   end
   
   def fallback_url_for_comment(comment, options = {})
-    default_options = {:anchor => "comment#{comment.id}"}
+    default_options = {:anchor => "comment_#{comment.id}"}
     default_options[:action] = "show"
     default_options[:show_comments] = true
     

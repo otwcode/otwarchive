@@ -302,18 +302,18 @@ class CommentsController < ApplicationController
         default_options = {:controller => :comments, 
                            :action => :index,
                            :tag_id => comment.commentable.name,
-                           :anchor => "comment#{comment.id}"}
+                           :anchor => "comment_#{comment.id}"}
         
       else
         default_options = {:controller => comment.commentable.class.to_s.underscore.pluralize, 
                            :action => :show,
                            :id => comment.commentable.id,
-                           :anchor => "comment#{comment.id}"}
+                           :anchor => "comment_#{comment.id}"}
       end
       # display the comment's direct parent (and its associated thread)
       redirect_to(url_for(default_options.merge(options)))
     else
-      redirect_to_all_comments(comment.ultimate_parent, options.merge({:show_comments => true, :anchor => "comment#{comment.id}"}))
+      redirect_to_all_comments(comment.ultimate_parent, options.merge({:show_comments => true, :anchor => "comment_#{comment.id}"}))
     end
   end
 

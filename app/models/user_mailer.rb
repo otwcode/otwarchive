@@ -67,26 +67,31 @@ class UserMailer < ActionMailer::Base
     @subject    += 'Password reset'
   end
    
+  ### COMMENT NOTIFICATIONS ###
+  
   # Sends email to an owner of the top-level commentable when a new comment is created
   def comment_notification(user, comment)
     setup_email(user)
-    @subject += "New comment on " + comment.ultimate_parent.commentable_name
     @body[:commentable] = comment.ultimate_parent     
     @body[:comment] = comment
+    setup_comment_links(comment)
+    @subject += "New comment on " + comment.ultimate_parent.commentable_name
   end
 
   # Sends email to an owner of the top-level commentable when a comment is edited
   def edited_comment_notification(user, comment)
     setup_email(user)
-    @subject += "Edited comment on " + comment.ultimate_parent.commentable_name
     @body[:commentable] = comment.ultimate_parent     
     @body[:comment] = comment
+    setup_comment_links(comment)
+    @subject += "Edited comment on " + comment.ultimate_parent.commentable_name
   end
 
   # Sends email to comment creator when a reply is posted to their comment
   # This may be a non-user of the archive
   def comment_reply_notification(old_comment, new_comment)
     setup_comment_email(old_comment)
+    setup_comment_links(new_comment)
     @subject += "Reply to your comment on " + old_comment.ultimate_parent.commentable_name     
     @body[:comment] = new_comment
   end
@@ -95,6 +100,7 @@ class UserMailer < ActionMailer::Base
   # This may be a non-user of the archive
   def edited_comment_reply_notification(old_comment, edited_comment)
     setup_comment_email(old_comment)
+    setup_comment_links(edited_comment)
     @subject += "Edited reply to your comment on " + old_comment.ultimate_parent.commentable_name     
     @body[:comment] = edited_comment
   end
@@ -102,10 +108,14 @@ class UserMailer < ActionMailer::Base
    # Sends email to the poster of a comment 
   def comment_sent_notification(comment)
     setup_comment_email(comment)
+    setup_comment_links(comment)
     @subject += "Comment you sent on " + comment.ultimate_parent.commentable_name
+    @body[:reply_to_link] = nil # don't give reply link to your own comment
     @body[:comment] = comment
   end
    
+  ### WORKS NOTIFICATIONS ###
+  
   # Sends email when a user is added as a co-author
   def coauthor_notification(user, creation)
     setup_email(user)
@@ -143,6 +153,7 @@ class UserMailer < ActionMailer::Base
     end
   end
   
+  # archive feedback
   def feedback(feedback)
     setup_email_without_name(feedback.email)
     @subject = "#{ArchiveConfig.APP_NAME}: Support - " + feedback.summary
@@ -210,6 +221,24 @@ class UserMailer < ActionMailer::Base
     def setup_comment_email(comment)
       setup_email_to_nonuser(comment.comment_owner_email, comment.comment_owner_name)
       @body[:commentable] = comment.ultimate_parent
+    end
+    
+    def setup_comment_links(comment)
+      commentable = @body[:commentable]
+      @body[:comment_owner_link_or_name] = comment.comment_owner ? url_for(:host => @body[:host], :controller => :pseuds, :action => :show,
+                                                           :id => comment.comment_owner_name, :user_id => comment.comment_owner) : comment.comment_owner_name
+      @body[:commentable_link] = url_for(:host => @body[:host], :controller => commentable.class.to_s.underscore.pluralize, 
+                                :action => :show, :id => commentable)
+      @body[:all_comments_link] = url_for(:host => @body[:host], :controller => commentable.class.to_s.underscore.pluralize, 
+                                :action => :show, :id => commentable, 
+                                :show_comments => true, :anchor => :comments)
+      @body[:reply_to_link] = url_for(:host => @body[:host], :controller => comment.class.to_s.underscore.pluralize, 
+                                :action => :show, :id => comment, 
+                                :add_comment_reply_id => comment.id, :show_comments => true, :anchor => "comment_#{comment.id}")
+      @body[:starting_thread_link] = url_for(:host => @body[:host], :controller => comment.class.to_s.underscore.pluralize, 
+                                :action => :show, :id => comment)
+      @body[:originating_thread_link] = url_for(:host => @body[:host], :controller => comment.class.to_s.underscore.pluralize, 
+                                :action => :show, :id => comment.thread)
     end
          
 end

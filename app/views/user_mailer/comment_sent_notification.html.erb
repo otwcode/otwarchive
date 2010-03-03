@@ -1,5 +1,5 @@
-<p><%=h "You left the following comment on" -%> <%= @commentable.commentable_name -%>:</p> 
+<h4><%= t('user_mailer.own_comment', :default => 'You left the following comment on') -%> <%= link_to @commentable.commentable_name, @commentable_link -%>:</h4> 
 
-<p><%=h @comment.content %></p>
+<p><%=sanitize_limit_and_format_for_display @comment.content %></p>
 
 <%= render :partial => 'comment_notification_footer' -%>

@@ -3,9 +3,14 @@
 <%- unless @comment.edited_at.blank? -%>
 <%=h "Last edited" -%> <%= @comment.edited_at -%><br />
 <%- end -%>
-<%=h "View all comments on" -%> <%= link_to @commentable.commentable_name, 
-                                ArchiveConfig.APP_URL + 
-                                url_for(:controller => @commentable.class.to_s.underscore.pluralize, 
-                                :action => :show, :id => @commentable, 
-                                :show_comments => true, :anchor => :comments) -%>
+</p>
+<p>
+<%= link_to "Read all comments on " + @commentable.commentable_name, @all_comments_link -%><br />
+<%- unless !@reply_to_link -%>
+<%= link_to "Reply to this comment", @reply_to_link -%><br />
+<%- end -%>
+<%= link_to "Go to the thread starting from this comment", @starting_thread_link -%><br />
+<% unless @comment.id == @comment.thread %>
+<%= link_to "Go to the thread to which this comment belongs", @originating_thread_link -%><br />
+<% end %>
 </p>

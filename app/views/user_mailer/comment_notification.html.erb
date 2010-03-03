@@ -1,5 +1,9 @@
-<p><%=h @comment.comment_owner_name -%> <%=h 'left the following comment on' %> <%=h @commentable.commentable_name -%>:</p>
+<h4>
+<%= @comment.comment_owner ? (link_to @comment.comment_owner_name, @comment_owner_link_or_name) : @comment_owner_link_or_name -%>
+ <%= t('user_mailer.comment_top', :default => 'left the following comment on') %> 
+<%= link_to @commentable.commentable_name, @commentable_link -%>:
+</h4>
 
-<p><%=h @comment.content %></p>
+<p><%=sanitize_limit_and_format_for_display @comment.content %></p>
 
 <%= render :partial => 'comment_notification_footer' -%>
