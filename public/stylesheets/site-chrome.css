@@ -239,12 +239,15 @@ li.comment h4					{ font-size: 1.25em;}
  #main.collections-show h2 span { font-size: smaller }
 
 /* TAG WRANGLERS INDEX */
- #main.tag_wranglers-index .index       { width:100%;}
+ #main.tag_wranglers-index .index       { width:100%; margin-top: 2em;}
+ #main.tag_wranglers-index .index li    { width:100%;}
+ #main.tag_wranglers-index form         { width: 60%;}
  #main.tag_wranglers-index form.filters { width:16em; max-width:40%;}
  #main.tag_wranglers-index .blurb       { float: left; }
  #main.tag_wranglers-index .blurb h4, #main.tag_wranglers-index .blurb ul, #main.tag_wranglers-index .blurb form
                                         { margin: 0;}
- .tag_wranglers-index ul.wranglers li   { display: block;} 
+ .tag_wranglers-index ul.wranglers li   { display: block;}
+ .tag_wranglers-index textarea          { width: 100%; height: 5em;} 
  
 /* TAGS EDIT, front end coder please modularise the tooltip navigation rules*/
  .tags-edit dd                  { width: 70%;} 

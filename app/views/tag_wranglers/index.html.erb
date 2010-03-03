@@ -10,6 +10,13 @@
 <h3 class="landmark">Listing by fandom</h3>
 <%- form_tag url_for(:controller => 'tag_wranglers', :action => "create") do -%>
   <p class="submit"><%= submit_tag 'Assign' %></p>
+  
+  <h3>Assign fandoms to yourself</h3>
+  <div>
+    <%= text_area_tag "tag_fandom_string" %>
+    <%= autocomplete_text_field "tag_fandom_string" -%>
+  </div> 
+  
   <ul class="index">
   	<%- @assignments.group_by(&:name).each do |name, assignments| -%>
   	<li class="fandom tag blurb">

@@ -45,6 +45,18 @@ class TagWranglersController < ApplicationController
   end
   
   def create
+    unless params[:tag_fandom_string].blank?
+      names = params[:tag_fandom_string].split(',').map(&:strip)
+      fandoms = Fandom.find(:all, :conditions => ['name IN (?)', names])
+      unless fandoms.blank?
+        for fandom in fandoms
+          unless !current_user.respond_to?(:fandoms) || current_user.fandoms.include?(fandom)
+            assignment = current_user.wrangling_assignments.build(:fandom_id => fandom.id)
+            assignment.save!
+          end          
+        end
+      end
+    end
     unless params[:assignments].blank?
       params[:assignments].each_pair do |fandom_id, user_logins|
         fandom = Fandom.find(fandom_id)
