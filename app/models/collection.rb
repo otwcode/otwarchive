@@ -1,11 +1,13 @@
 class Collection < ActiveRecord::Base
 
   has_attached_file :icon,
-    :styles => { :standard => "100x100>", :thumb => "80x80>" },
-    :path => ENV['RAILS_ENV'] == 'production' ? ":attachment/:id/:style.:extension" : ":rails_root/public:url",
-    :storage => ENV['RAILS_ENV'] == 'production' ? :s3 : :filesystem,
-    :s3_credentials => "/etc/s3conf/s3config.yml",
-    :bucket => "otw-ao3-icons"
+  :styles => { :standard => "100x100>" },
+  :url => "/system/:class/:attachment/:id/:style/:basename.:extension", 
+  :path => ENV['RAILS_ENV'] == 'production' ? ":class/:attachment/:id/:style.:extension" : ":rails_root/public:url",  
+  :storage => ENV['RAILS_ENV'] == 'production' ? :s3 : :filesystem,
+  :s3_credentials => "#{RAILS_ROOT}/config/s3.yml",
+  :bucket => ENV['RAILS_ENV'] == 'production' ? YAML.load_file("#{RAILS_ROOT}/config/s3.yml")['bucket'] : "",
+  :default_url => "/images/collection_icon.png"
    
   validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true 
   validates_attachment_size :icon, :less_than => 500.kilobytes, :allow_nil => true 
