@@ -1,7 +1,7 @@
 #!/usr/bin/env script/runner
 # usage:
-# rm db/seed/*
-# RAILS_ENV=production script/dump.rb
+# rm -f db/seed/*
+# RAILS_ENV=production script/seed_dump.rb
 
 SEEDS = ["Sidra", "astolat", "Enigel", "hope", "awils1", 
          "Cesy", "elz", "justira", "lim", "melange", "eel",
@@ -33,10 +33,11 @@ end
 
 def add_tags(items)
   x = []
-  taggables = items.select{|i| i.respond_to?("tags")}.uniq
+  taggables = items.select{|i| i.respond_to?("taggings")}.uniq
   puts " finding taggings"
   taggings = taggables.map(&:taggings).flatten.compact.uniq
   x << taggings
+  taggables = items.select{|i| i.respond_to?("tags")}.uniq
   puts " finding tags"
   tags = taggables.map(&:tags).flatten.compact.uniq
   x << tags

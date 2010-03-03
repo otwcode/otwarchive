@@ -1,7 +1,8 @@
 #!/usr/bin/env script/runner
 # usage:
 # rake db:reset
-# script/restore.rb
+# rake db:migrate
+# script/seed_restore.rb
 # rake Tag:reset_filters
 # rake Tag:reset_filter_counts
 
