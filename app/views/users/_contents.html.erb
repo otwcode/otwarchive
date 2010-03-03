@@ -1,7 +1,7 @@
 ﻿<!--main content-->
 <!-- expects @works, @series, @bookmarks -->
   <%- unless @works.blank? -%>
-  <div class="works module" id="user-works">
+  <div class="work module" id="user-works">
     <h3><%=h t('recent_works', :default => "Recent works") %></h3>
     <ul class="index">
       <%- for work in @works -%>
@@ -36,7 +36,7 @@
   <%- end -%>
   
   <%- unless @bookmarks.blank? -%>
-  <div class="bookmarks module" id="user-bookmarks">
+  <div class="bookmark module" id="user-bookmarks">
     <h3><%=h t('recent_bookmarks', :default => "Recent bookmarks") %></h3>
     <ul class="index">
 <%- for bookmark in @bookmarks -%>

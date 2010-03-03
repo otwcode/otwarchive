@@ -20,7 +20,7 @@
     <li><%= link_to "Edit", edit_archive_faq_path(archive_faq) %></li>
     <li><%= link_to "Delete", archive_faq, :confirm => 'Are you sure?', :method => :delete %></li>
   </ul>
-  <div class="user-generated-view" role="article">
+  <div class="admin user-generated-view" role="article">
     <h4>Updated at: <%=h archive_faq.updated_at %></h4>
     <%= sanitize_and_format_for_display archive_faq.content %>
   </div>

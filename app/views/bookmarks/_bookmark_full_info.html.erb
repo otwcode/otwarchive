@@ -11,7 +11,10 @@
 
 <!--summary-->
 <%- unless bookmark.bookmarkable.summary.blank? %>
-      <blockquote class="user-generated-view summary" title="summary"><%= sanitize_strip_images_and_format_for_display bookmark.bookmarkable.summary %></blockquote>
+    <h6 class="landmark">Summary</h6>
+	<blockquote class="user-generated-view summary" title="summary">
+	<%= sanitize_strip_images_and_format_for_display bookmark.bookmarkable.summary %>
+	</blockquote>
   <%- end %>
 
 <!--navigation and actions-->
@@ -43,7 +46,6 @@
   <%- end -%>
 </ul>
 
-<!--MARKER-->
  <div class="user module<%- if is_author_of?(bookmark) -%> own<%- end -%>">
 
 <!--time, bookmarker-->
@@ -51,12 +53,7 @@
   <h5 class="byline">
     <%= t('bookmarked_by', :default=>'Bookmarked by {{user}}', :user=>link_to(bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud])) %>
   </h5>
-
-<!--notes-->
-  <%- unless bookmark.notes.blank? -%>
-          <blockquote class="user-generated-view notes" title="notes"><%=sanitize_limit_and_format_for_display bookmark.notes -%></blockquote>
-  <%- end -%>
-    
+   
 <!--tags-->
  <%- unless bookmark.tag_string.blank? -%>
       <dl class="tags">
@@ -69,6 +66,14 @@
           </ul>
         </dd>
       </dl>
+  <%- end -%>
+
+<!--notes-->
+  <%- unless bookmark.notes.blank? -%>
+        <h6 class="landmark">Notes</h6>
+		<blockquote class="user-generated-view notes" title="notes">
+		<%=sanitize_limit_and_format_for_display bookmark.notes -%>
+		</blockquote>
   <%- end -%>
 
 <!--navigation and actions-->

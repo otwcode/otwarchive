@@ -721,8 +721,8 @@ class Work < ActiveRecord::Base
 
   def cast_tags
     # we combine pairing and character tags up to the limit
-    characters = self.tags.select{|tag| tag.type == "Character"}.sort || []
-    pairings = self.tags.select{|tag| tag.type == "Pairing"}.sort || []
+    characters = self.characters.by_name || []
+    pairings = self.pairings.by_name || []
     return [] if pairings.empty? && characters.empty?
     canonical_pairings = Pairing.canonical.find(:all, :conditions => {:id => pairings.collect(&:merger_id).compact.uniq})
     all_pairings = (pairings + canonical_pairings).flatten.uniq.compact
@@ -731,32 +731,32 @@ class Work < ActiveRecord::Base
     pairing_characters = Character.by_pairings(all_pairings)
     pairing_characters = (pairing_characters + pairing_characters.collect(&:mergers).flatten).compact.uniq
 
-    cast = pairings + characters - pairing_characters
-    if cast.size > ArchiveConfig.TAGS_PER_LINE
-      cast = cast[0..(ArchiveConfig.TAGS_PER_LINE-1)]
-    end
-
-    return cast
+    line_limited_tags(pairings + characters - pairing_characters)
+  end
+  
+  def pairing_tags
+    line_limited_tags(self.pairings.by_name || [])
+  end
+  
+  def character_tags
+    line_limited_tags(self.characters.by_name || [])
   end
 
   def freeform_tags
-    freeforms = self.tags.select{|tag| tag.type == "Freeform"}.sort || []
-    if freeforms.size > ArchiveConfig.TAGS_PER_LINE
-      freeforms = freeforms[0..(ArchiveConfig.TAGS_PER_LINE-1)]
-    end
-    return freeforms
+    line_limited_tags(self.freeforms.by_name || [])
   end
 
   def warning_tags
-    warnings = self.tags.select{|tag| tag.type == "Warning"}.sort || []
-    if warnings.size > ArchiveConfig.TAGS_PER_LINE
-      warnings = warnings[0..(ArchiveConfig.TAGS_PER_LINE-1)]
-    end
-    return warnings
+    line_limited_tags(self.warnings.by_name || [])
+  end
+  
+  def line_limited_tags(taglist)
+    taglist = taglist[0..(ArchiveConfig.TAGS_PER_LINE-1)] if taglist.size > ArchiveConfig.TAGS_PER_LINE
+    taglist
   end
   
   def fandom_tags
-    self.tags.select{|tag| tag.type == "Fandom"}.sort
+    self.fandoms.by_name
   end
 
   # for testing

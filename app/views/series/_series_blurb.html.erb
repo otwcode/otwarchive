@@ -1,6 +1,6 @@
 <li class="series blurb  <%- if is_author_of?(series) -%>own<% end -%>" id="series_<%=h series.id %>_blurb" role="article">
-	<ul class="work">
-		<li class="heading">
+<!--title etc-->
+	<div class="header module">
 			<h4 title="Series Title">
 				<%= link_to sanitize_title_for_display(series.title), series %>
 				<%=h 'by' %>
@@ -12,49 +12,37 @@
 					<%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %>
 				<% end %>
 			</h4>
-			
-		<h5 title="fandoms">
+			<h5 title="fandoms">
 		  <%= series.tags.select{|tag| tag.type == "Fandom"}.sort.collect{|tag| link_to_tag(tag) }.join(', ') %>
 		</h5>
     <%= get_series_symbols_for(series) -%>
 		<p class="datetime"><%= set_format_for_date(series.revised_at) %></p>
-		</li>
-		<li class="series-tags">
-      <dl class="tags">
-        <dt><%= link_to("Archive Warnings", tos_faq_path(:anchor => "tags")) %></dt>
-        <dd>
-          <ul class="item" id="series_<%= series.id %>_category_warning">
-            <%- if hide_warnings?(series) -%>
+		</div>
+<!--tags BACK END PLEASE CHECK THIS AGAINST WORK BLURB-->
+      <ul class="tags">
+		<%- if hide_warnings?(series) -%>
               <li><%= show_warnings_link(series) %></li>
             <%- else -%>
               <%= tag_link_list(series.tags.select{|tag| tag.type == "Warning"}.sort) %>
             <%- end -%>
-          </ul>
-        </dd>
-        
-        <%- if series.author_tags.length > 1 -%>
-			  <dt title="Genre, Warnings, Other Information"><%= t('work_tags', :default => 'Additional Tags') + ':' %></dt>
-			  <dd>
-			    <ul><%= tag_link_list(series.author_tags) %></ul>
-			  </dd>
+ <%- if series.author_tags.length > 1 -%>
+			  <%= tag_link_list(series.author_tags) %>
         <%- end -%>  
-      </dl>
-		</li>
+      </ul>
+<!--summary-->
 		<%- unless series.summary.blank? %>
-  		<li class="summary" title="summary">
-  			<blockquote class="user-generated-view"><%= sanitize_and_format_for_display series.summary %></blockquote>
-  		</li>
+  		<h6 class="landmark">Summary</h6>
+  			<blockquote class="user-generated-view summary" title="summary"><%= sanitize_and_format_for_display series.summary %></blockquote>
 		<%- end -%>
-		<li class="stats" title="stats">
-			<dl>
+<!--stats-->
+			<dl class="stats" title="stats">
 			<dt><%=h 'Words' + ': ' %></dt> 
 				<dd><%= number_with_delimiter(series.works.select{|work| work.visible(current_user)}.collect(&:word_count).sum) %></dd>
 			<dt><%=h 'Works' + ': ' %></dt> 
 				<dd><%=h series.serial_works.select{|sw| sw.work.visible(current_user)}.size %></dd>
 			</dl>
-		</li>
+<!--actions-->
     <%- if is_author_of?(series) -%>
-	    <li class="navigation"><%= link_to t('links.edit', :default => 'Edit'), edit_series_path(series) -%></li>
+	    <p class="navigation"><%= link_to t('links.edit', :default => 'Edit'), edit_series_path(series) -%></p>
     <%- end -%>
-	</ul>
 </li>

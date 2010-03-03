@@ -40,30 +40,24 @@
 <h3 class="landmark">List of Collections</h3>
 <ul class="collection index">
 <% @collections.each do |collection| %>
-  <li class="collection blurb">
-  	<ul class="collection<% if collection.user_is_owner?(current_user) %> own<%- end -%>">
- 		<li class="heading">
-			<h4 title="name"><%= link_to sanitize_title_for_display(collection.title, :tags => %w(em i b strong strike small)), collection_path(collection) -%>
+  <li class="<% if collection.user_is_owner?(current_user) %>own<%- end -%> collection blurb">
+ 		<div class="header module">
+			<h4 title="name">
+			<%= link_to sanitize_title_for_display(collection.title, :tags => %w(em i b strong strike small)), collection_path(collection) -%>
 				<span>(<%=h collection.name -%>)</span>
 					<%= t('collection_by_owner', :default => 'by') -%>
-					<%= collection.all_owners.map {|owner| link_to(owner.byline, owner.user)}.join(", ") -%></h4>
+					<%= collection.all_owners.map {|owner| link_to(owner.byline, owner.user)}.join(", ") -%>
+			</h4>
 					<!--collections header iconised header image-->
-			<p class="update"><!--collection updated at--></p>
-	</li>
-
+			<p class="datetime"><!--collection updated at--></p>
 <%- cache("collections-#{collection.id}", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
 	<% if collection.all_moderators.length > 0%>
-	<li>
-		<dl class="mods">
-		<dt>Mods</dt>
-		<dd>
-			<ul>
+			<h6 class="landmark">Mods</h6>
+			<ul title="moderated by" class="mods">
 			  <%= collection.all_moderators.map {|mod| "<li>#{link_to(mod.byline, mod.user)}</li>"}.join(", ") -%>
 			</ul>
-		</dd>
-		</dl>
-	</li>
 	<% end -%>
+		</div>
 	<!--unless tags are less than one
 	<li>
 		<dl class="tags">
@@ -77,15 +71,19 @@
 		</dl>
 	</li>
 	-->
-	<li class="summary" title="description">
-	  <blockquote class="user-generated-view"><%= sanitize_strip_images_and_format_for_display collection.description %></blockquote>
+	<!--summary/descriptions-->
+	<h6 class="landmark">Summary</h6>
+	<blockquote class="user-generated-view summary">
+	<%= sanitize_strip_images_and_format_for_display collection.description %>
+	</blockquote>
 
-    <p class="type">(<%= collection.closed? ? t('collections_index.is_closed', :default => "Closed") : t('collections_index.open', :default => "Open") %>, <%= collection.moderated? ? t('collections_index.is_moderated', :default => "Moderated") : t('collections_index.unmoderated', :default => "Unmoderated") %><%= collection.unrevealed? ? t('collections_index.is_unrevealed', :default => ", Unrevealed") : "" %><%= collection.anonymous? ? t('collections_index.is_anonymous', :default => ", Anonymous") : "" %><%= collection.gift_exchange? ? t('collections_index.is_gift_exchange', :default => ", Gift Exchange") : "" %>)</p>
-	</li>
+    <p class="type">
+	(<%= collection.closed? ? t('collections_index.is_closed', :default => "Closed") : t('collections_index.open', :default => "Open") %>, <%= collection.moderated? ? t('collections_index.is_moderated', :default => "Moderated") : t('collections_index.unmoderated', :default => "Unmoderated") %><%= collection.unrevealed? ? t('collections_index.is_unrevealed', :default => ", Unrevealed") : "" %><%= collection.anonymous? ? t('collections_index.is_anonymous', :default => ", Anonymous") : "" %><%= collection.gift_exchange? ? t('collections_index.is_gift_exchange', :default => ", Gift Exchange") : "" %>)
+	</p>
 
+	<!--stats-->
 	<%- if collection.not_empty? -%>
-	<li class="stats" title="stats">
-		<dl>
+		<dl class="stats" title="stats">
       <% if (@challenges_count = collection.children.count) > 0%>
       <dt><%= t('collections.children', :default => "Challenges/Subcollections") -%></dt>
         <dd><%= link_to(@challenges_count, collection_collections_path(collection)) -%></dd>
@@ -101,14 +99,13 @@
 	      <dd><%= link_to(@bookmarks_count, collection_bookmarks_path(collection)) -%></dd>
 			<% end %>
 	  </dl>
-  </li>
   <%- end -%>
 <%- end -%>  
   <% if collection.user_is_owner?(current_user) %>
-	  <li class="navigation"><%= link_to 'Edit', edit_collection_path(collection) %></li>
+	  <p class="navigation"><%= link_to 'Edit', edit_collection_path(collection) %></p>
   <% end %>
-</ul>
 </li>
+<!--end single blurb-->
 <% end %>
 </ul>
 

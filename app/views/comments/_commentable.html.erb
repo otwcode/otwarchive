@@ -30,7 +30,7 @@
   <!-- if we have javascript, here is where the collection window will pop up -->
   <div id="dynamic-collection_item" class="wrapper" style="display:none;"></div>
   <!-- if we have javascript, here is where the bookmark window will pop up -->
-  <div id="dynamic-bookmark" class="wrapper" style="display:none;"></div>
+  <div style="position:relative;"><div id="dynamic-bookmark" class="wrapper" style="display:none;"></div></div>
   <%= flash_div :comment_error, :comment_notice -%>
   <!-- If we have javascript, here is where the Add Comment window will appear. -->
   <!-- If not, and we have params telling us to comment on this object, we will manually display the comment window. --> 

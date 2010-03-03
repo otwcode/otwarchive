@@ -1,4 +1,5 @@
 <div class="work module">
+<div class="header module">
 <!--title byline fandom-->
 	<h4>
   <%- if bookmark.bookmarkable.nil? -%>
@@ -15,12 +16,12 @@
     <%= byline(bookmark.bookmarkable) %>
   <%- end -%>
 </h4>
-<h5><%= bookmark.bookmarkable.fandom_tags.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', ') %></h5>
+<h5 title="fandom"><%= bookmark.bookmarkable.fandom_tags.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', ') %></h5>
 
 <%- if not bookmark.bookmarkable.nil? -%>
     <%= get_symbols_for(bookmark.bookmarkable) -%>
   <%- end -%>
-
+</div>
 <!--tags-->
 <ul class="tags" title="tags">
 <%- unless bookmark.bookmarkable.warning_tags.size < 1 -%>

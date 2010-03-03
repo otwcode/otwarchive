@@ -45,7 +45,8 @@
  NAVIGATION, ACTIONS (BUTTONS)*/
  ul#skiplinks,.landmark 	{ border: 0 !important; color: #fffef9; font-size: 0 !important; line-height: 0 !important; margin: 0 !important; clear:right; }
  #header .landmark 			{color:#900 !important;}
- #main ul.navigation, p.navigation, li.navigation, span.navigation, p.submit, dd.submit, span.submit 				{ margin: 0.5em auto 1em; border:1px solid #bbb; background:#fffef9 url(/images/fffef9-ccc.png) bottom left repeat-x; padding:0.15em 0.5em 0.25em; float:right; border-radius:3em; -moz-border-radius:3em; -webkit-border-radius:2em;}
+ 
+#main ul.navigation, p.navigation, li.navigation, span.navigation, p.submit, dd.submit, span.submit 				{ margin: 0.5em auto 1em; border:1px solid #bbb; background:#fffef9 url(/images/fffef9-ccc.png) bottom left repeat-x; padding:0.15em 0.5em 0.25em; float:right; border-radius:3em; -moz-border-radius:3em; -webkit-border-radius:2em;}
  .navigation li,li.navigation,  #main .navigation h4  
 							{ display: inline }
  #main .navigation a, .submit input, .submit a
@@ -58,12 +59,12 @@
 /* Navigation in contexts - easier to have it all together */
  
 #main li.blurb .navigation	{ float:left; margin:auto; font-size:0.8575em;}
-#main li.bookmark .navigation, #main li.fandom .navigation 
+#main li.bookmark .navigation, #main li.fandom .navigation,  #main.pseuds-index li.blurb .navigation 
 							{ float:right; }
-#main li.blurb .own .navigation
-							{ float:left; margin:-1.5em auto auto;}
+#main .work .own .navigation
+							{ float:left; margin:-1.25em auto auto;}
 #main li.bookmark .own .navigation
-							{ margin:0.25em auto auto -0.25em;}
+							{ float: left; margin:0.25em auto auto -0.25em;}
 .pagination 				{ font: 100 1em 'Lucida Grande', Geneva, Verdana, Helvetica, Arial, sans-serif; margin: .5em auto; padding: 0.25em; text-align: center }
  #main .pagination a		{ border:0;}
  #main .current 			{ border: 1px solid #000; padding: 0.25em }
@@ -102,48 +103,38 @@ a.cloud8 					{ color: #900; font-size: 2.25em; font-weight: 800 }
  .meta dd ul li 			{ display: inline; margin: auto }
  .meta dd blockquote		{ margin: -1em 0 0 0 !important;}
 
-/* BLURB - this can be simplified a lot if/when new blurb is approved*/
+/* BLURB*/
  .blurb ul li,.blurb dd ul li	{ display: inline }
- li.blurb 						{ border-bottom: 1px solid #ddd; padding: 0 0 0.375em; position: relative; clear:left;}
- .blurb li.heading 				{ display: block; position: relative }
- .blurb ul.required-tags 		{ position: absolute; top: 0; width:55px; left:3.5em; }
- .blurb ul.required-tags li img { height: 25px; width: 25px }
- .blurb ul.required-tags li 	{ display: inline; height: 25px; margin: 0; padding: 0; width: 25px }
- .blurb ul.required-tags li a	{ border:none;}
- .blurb h4 						{ font-size: 1.1425em; margin: 0.375em 5.25em 0 9.6em }
- .blurb h5 						{ font-size: 1em; margin: 0.375em 6em 0 11em }
- .blurb h4 a:link,.blurb h3 img { color: #900; vertical-align: bottom }
- .blurb .tags dt,.blurb .mods dt
-								{ font-weight: 700; padding: 0.5em 0.5625em 0.25em 0; width: 10.75em }
- .blurb .tags ul,.blurb .mods ul
-								{ margin: -2em 0 .75em 11em; padding: 0; text-indent: 0 }
- .blurb .tags,.blurb .tags li 	{ display: inline; margin: 0; padding: 0 0 0.8em }
+ li.blurb 						{ border-bottom: 1px solid #ddd; padding: 0 0 0.375em; position: relative; clear:left; min-height: 50px;}
+ .blurb .module					{ float:none;}
+ .blurb .header 				{ min-height:55px; }
+ .blurb .header h4 				{ font-size: 1.1425em; margin: 0.375em 5.25em 0 75px }
+ .blurb .header h5, .blurb .header ul 	
+								{ font-size: 1em; margin: 0.375em 6em 0 75px }
+ .blurb h4 a:link,.blurb h4 img { color: #900; vertical-align: bottom }
+ .blurb ul.required-tags 		{ position: absolute; top: 0; width:55px; margin:0;}
+ .blurb ul.required-tags li, #main .blurb ul.required-tags li img, .blurb ul.required-tags li a 	
+								{ position:static; display: inline; height: 25px; width: 25px; margin: 0; padding: 0; border:none;}
+ .blurb .pairing 				{ background: #eee;}							
  .blurb blockquote, .blurb ul.wranglers, .blurb form
- 								{ clear: none; margin: 0.5625em auto 0.5625em 11em; text-align: justify }
- .blurb blockquote blockquote 	{ margin: auto }
- .blurb li.stats dl 			{ text-align: right }
+ 								{ clear: none; margin: 0.5625em auto; text-align: justify }
+ .blurb dl.stats 				{ background: #eee; font-size: 0.8575em; text-align: right;}
+ .own dl.stats					{ background: #fffef9;}
 
- .blurb li.series-tags            {display: block;}
-
-/* BOOKMARK this can be simplified a lot if/when new blurb is approved*/
- .bookmark p.count 				{ float: left; padding-left: 3.4575em; }
- .bookmark .count img			{ height: 25px; width: 25px }
+/* BOOKMARK*/
+ .bookmark p.count 				{ float: right }
+ .bookmark .count img,  .bookmark .symbol img 
+								{ height: 25px; width: 25px }
  .bookmark p.count span 		{ background: url(/images/category-none.png) top left no-repeat; border: 1px solid #eee; display: block; float: left; height: 25px; line-height: 1.875; margin: 0 2.5px 0 0; text-align: center; width: 25px }
- .bookmark ul.required-tags		{ top:30px;}
-#main .bookmark ul.tags 		{ display:block; margin: 0.643em auto auto 11em; line-height: 1.286;}
- .bookmark h5.byline 			{ color: #999; font: 700 0.875em 'Lucida Grande', Geneva, Verdana, Tahoma, sans-serif; margin: 0 }
- .bookmark .blurb 				{ border: 1px solid #ccc; padding: 0.125em; }
- .bookmark .module 				{ float:none}
+ .bookmark .blurb 				{ border: 1px solid #ccc; padding: 0.125em 0.4em; }
  .bookmark .user 				{ clear:right; border: 1px solid #ddd; width:auto; margin: 0.25em 0.125em; padding: 0.125em; }
  #main .bookmark .user .navigation 
 								{ font-size: 0.8575em; margin: 0.5em 0 0.5em -.5em}
- .bookmark .symbol img 			{ height: 25px; width: 25px }
 
 /* COLLECTION, ANON, MYSTERY */
- .blurb ul.collection			{ background: url(/images/collections.png) 3.5em 0 no-repeat;}
- .collection .blurb ul.own		{ background: #eee url(/images/collections.png) 3.5em 0 no-repeat;}
- .mystery li.heading 			{ background: url(/images/mystery.png) 3.5em 0 no-repeat }
- #main .collection p.type		{ margin: auto auto auto 11em;}
+ .collection .blurb .header		{ background: url(/images/collections.png) 0 0 no-repeat;}
+ .collection .own				{ background: #eee url(/images/collections.png) 0 0 no-repeat;}
+ .mystery .header	 			{ background: url(/images/mystery.png) 0 0 no-repeat }
 
 /* STATS*/
  .stats dt,.stats dd 			{ display: inline }
@@ -181,7 +172,7 @@ a.cloud8 					{ color: #900; font-size: 2.25em; font-weight: 800 }
  #chapters .preface				{ margin: auto 0 1.286em 0; padding: 0;}
  #main #chapters .footnote 		{ font-size: 85.7%; border-bottom: 1px solid #ddd}  
 
-/* COMMENTS -works-show, inbox, admin posts for now*/
+/* COMMENTS - works-show, inbox, admin posts for now*/
 li.comment 						{ position:relative; clear:right; min-height: 120px; padding: 0.25em;}
 li.comment h4, li.comment blockquote 
 								{ margin: auto; display: inline; clear: right;}
@@ -192,6 +183,9 @@ li.comment h4					{ font-size: 1.25em;}
 
 /* SERIES */
  p.series 						{ text-align:center; margin: 0 auto 2.5em auto}
+
+/* ADMIN */
+ #main div.admin				{ margin: auto 3em; padding: 0.5em 3em 0  }
 
 /*3. PAGE BY PAGE, where page is a class of main*/
 
@@ -233,16 +227,12 @@ li.comment h4					{ font-size: 1.25em;}
   .fandoms-index ul.index       { float: left; width: 33% }
   .fandoms-index div.main-fandoms-listing 
 								{ clear: both }
-/* PEOPLE INDEX */
- .people-index p.icon, .people-index .icon img 
-								{ height: 100px; width:100px; float:left; margin:0 0 0 2.375em;}
- .people-index li.blurb 		{ min-height: 100px; float: left; width: 90%;}
 
- .pseuds-index p.icon, .pseuds-index .icon img 
-								{ height: 100px; width:100px; float:left; margin:0 0 0 2.375em;}
- .pseuds-index li.blurb 		{ min-height: 100px; float: left; width: 90%;}
- #main.pseuds-index li.blurb .navigation {float: right;}
-
+/* PEOPLE INDEX, PSEUDS-INDEX */
+ .people-index p.icon, .people-index .icon img,  .pseuds-index p.icon, .pseuds-index .icon img 
+								{ float:left; margin: -0.25em; padding: 0 1em 0 0}
+ .people-index li.blurb, .pseuds-index li.blurb 
+								{float: left; width: 90%;}
 /* COLLECTIONS INDEX*/
  .collections-index .index 		{ width: 75% }
  #main.collections-show h2 span { font-size: smaller }
@@ -256,7 +246,6 @@ li.comment h4					{ font-size: 1.25em;}
  #main.tag_wranglers-index .blurb h4, #main.tag_wranglers-index .blurb ul, #main.tag_wranglers-index .blurb form
                                 {margin: 0;}
  
-    							
 /* TAGS EDIT, front end coder please modularise the tooltip navigation rules*/
  .tags-edit dd                  { width: 70%;} 
  .tags-edit dd input.tags       { width: 100%; }
@@ -293,8 +282,6 @@ li.comment h4					{ font-size: 1.25em;}
   
 
 /* ToS and ADMIN long body copy tweaks*/
- .archive_faqs-index div, .known_issues-index .user-generated-view, #tos, #faq, .admin_posts-index .user-generated-view 
-								{ margin: auto 3em; padding: 0.5em 3em 0  }
  #main #tos .toc li 			{ list-style-type: upper-roman }
  .home-tos_faq #contents 		{ margin: auto; padding: 1em; width: 60% }
  .home-tos_faq #contents h2 	{ text-align: center }

@@ -11,7 +11,7 @@
 <!--main content-->
 <% @admin_posts.each do |admin_post| %>
 
- 	<div class="user-generated-view module" role="article">
+ 	<div class="admin user-generated-view module" role="article">
 			<h3>
 				<%= link_to sanitize_title_for_display(admin_post.title), admin_post %>
 			</h3>
@@ -38,7 +38,7 @@
 	</div>
 <%- end -%>
 <!--/content-->
-<div class="clear"><!--presentational, phase me out--></div>
+<hr class="clear" />
 
 <!--subnav-->
 	  <%= will_paginate @admin_posts %>

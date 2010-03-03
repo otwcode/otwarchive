@@ -15,7 +15,7 @@ plus system messages in system-messages.css (red, yellow, green, blue)
 body					{ background: #fffef9; color: #222; font: 100%/1.125 'Lucida Grande', Verdana, Helvetica, Arial, sans-serif; }
 
 a, a:link				{ color: #111; text-decoration: none; border-bottom: 1px solid;}
-a.tag, .tags a			{ color: #111; text-decoration:none; padding: 0 0.125em; border-bottom:1px dotted; }
+a.tag, .tags a			{ color: #111; text-decoration:none; padding: 0 0.125em; border-bottom:1px dotted; line-height:1.5;}
 a:visited				{ color: #777; text-decoration: none; border-bottom: 1px solid;}
 a:hover					{ color: #999; }
 a.tag:hover				{ background: #900; color: #fffef9; }

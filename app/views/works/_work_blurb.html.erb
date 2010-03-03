@@ -1,118 +1,99 @@
-<li class="work blurb" id="work_<%=h work.id %>">
+<li class="<%- if is_author_of?(work) && controller.controller_name != 'series' -%>own <%- end -%>work blurb" id="work_<%=h work.id %>" role="article">
 
-<% if !is_author_of?(work) && (work.unrevealed? || (work.anonymous? && !@over_anon_threshold && @search)) -%>
+  <% if !is_author_of?(work) && (work.unrevealed? || (work.anonymous? && !@over_anon_threshold && @search)) -%>
+    <%= render :partial => "works/work_mystery_blurb", :locals => {:work => work} -%>
+  <% elsif (@user || @pseud) && work.anonymous? && !is_author_of?(work) && !allowed_controllers %>
+    <%= render :partial => "works/work_anonymous_blurb", :locals => {:work => work} -%>
+  <% else %>
 
-  <%= render :partial => "works/work_mystery_blurb", :locals => {:work => work} -%>
-  
-<% elsif (@user || @pseud) && work.anonymous? && !is_author_of?(work) && !allowed_controllers %>
+    <!--title, author, fandom-->
+    <div class="header module">
 
-<%= render :partial => "works/work_anonymous_blurb", :locals => {:work => work} -%>
-
-<% else %>
-
-<ul class="work<%- if is_author_of?(work) && controller.controller_name != 'series' -%> own<%- end -%>" role="article">
 <%- cache("work-#{work.id}-#{work.major_version}-#{work.minor_version}-top", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
-	<li class="heading">
-	  <h4 title="title">
-	    <%= link_to sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small)), @collection ? collection_work_path(@collection, work) : work %>
-  		<%= t('title_by_author', :default => 'by') -%>
-<%- end -%> 
-      <%= byline(work) -%>
+
+      <h4 title="title">
+  	    <%= link_to sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small)), @collection ? collection_work_path(@collection, work) : work %>
+   		  <%= t('title_by_author', :default => 'by') -%>
+<%- end # top cache -%> 
+        <%= byline(work) -%>
+
 <%- cache("work-#{work.id}-#{work.major_version}-#{work.minor_version}-middle", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
-      <%= !work.recipients.blank? ? t('works.for_recipients', :default => "for {{recipients}}", :recipients => recipients_link(work)) : "" -%>
-  		<%- if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") -%><%- end -%>
-      <%- if work.hidden_by_admin -%><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><%- end -%>
-    </h4>
 
-	  <h5 title="fandom">
-      <%= work.fandom_tags.collect{|tag| link_to_tag(tag) }.join(', ') %>
-		&nbsp;
-	  </h5>
-	<%= get_symbols_for(work) -%>
-	  <p class="datetime"><%= set_format_for_date(work.revised_at) %></p>
-	</li>
+        <%= !work.recipients.blank? ? t('works.for_recipients', :default => "for {{recipients}}", :recipients => recipients_link(work)) : "" -%>
+   		  <%- if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") -%><%- end -%>
+        <%- if work.hidden_by_admin -%><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><%- end -%>
+      </h4>
 
- 	<%- cast_tags = work.cast_tags; warning_tags = work.warning_tags; freeform_tags = work.freeform_tags -%>
-	<%- unless ((cast_tags.size + warning_tags.size + freeform_tags.size) < 1) -%>
-  	<li class="tags">
-      <dl class="tags">
-		  <%- unless cast_tags.size < 1 -%>
-      <dt><%= t('cast_tags', :default => 'Cast') + ': ' %></dt>
-			<dd><ul><li class="cast"><%= cast_tags.collect{|tag| link_to_tag(tag)  }.join(', </li><li>') %></li></ul></dd>
-			<%- end -%>
-<%- end -%>
-      
-      <%- unless warning_tags.size < 1 -%>
-      <dt><%= link_to("Archive Warnings", tos_faq_path(:anchor => "tags")) %>:</dt>
-			<dd><ul id="work_<%= work.id %>_category_warning">
-          <%- if hide_warnings?(work) -%>
-            <li><%= show_warnings_link(work) %></li>
-          <%- else -%>
-            <li class="warnings"><%= warning_tags.collect{|tag| link_to_tag(tag) }.join(', </li><li class="warnings">') %></li>
-          <%- end -%>
-			</ul></dd>
-			<%- end -%>
+  	  <h5 title="fandom">
+        <%= work.fandom_tags.collect{|tag| link_to_tag(tag) }.join(', ') %>
+  		  &nbsp;
+  	  </h5>
 
-			<%- unless freeform_tags.size < 1 -%>
-      <dt title="Genre, Warnings, Other Information"><%= t('work_tags', :default => 'Additional Tags') + ':' %></dt>
-			<dd><ul id="work_<%= work.id %>_category_freeform">
-        <%- if hide_freeform?(work) -%>
-          <li><%= show_freeforms_link(work) %></li>
-        <%- else -%>   
-          <li class="freeform"><%= freeform_tags.collect{|tag| link_to_tag(tag) }.join(', </li><li class="freeform">') %></li>
-        <%- end -%>
-			</ul></dd>
-			<%- end -%>
-      </dl>
-	 <%- end -%>
-	</li>
+      <!--required tags-->
+  	  <%= get_symbols_for(work) -%>
+    </div>
+	
+    <!--warnings again, cast, freeform tags-->
+  	<h6 class="landmark">Tags</h6>
+  	<ul class="tags">
+  	  <%= work_blurb_tag_block(work) -%>
+  	</ul>
+	
+    <!--summary-->	
+  	<%- unless work.summary.blank? -%>
+  		<h6 class="landmark">Summary</h6>
+  		<blockquote class="user-generated-view summary" title="summary">
+  		  <%= sanitize_strip_images_and_format_for_display work.summary %>
+  		</blockquote>
+
+  	<%- end -%>
+
+<%- end # middle cache -%>
 
 <%- cache("work-#{work.id}-#{work.major_version}-#{work.minor_version}-bottom", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
 
-  <%- unless work.summary.blank? -%>
-	<li class="summary" title="summary">
-	  <blockquote class="user-generated-view"><%= sanitize_strip_images_and_format_for_display work.summary %></blockquote>
-	</li>
-  <%- end -%>
-
-	<li class="stats" title="stats">
-		<dl>
-		<dt><%=h t('words', :default => 'Words') + ': ' %></dt>
-			<dd><%= number_with_delimiter(work.word_count) %></dd>
-		<dt><%=h t('work_chapters', :default => 'Chapters') + ': ' %></dt>
-			<dd><%= work.chapter_total_display %></dd>
+    <!--stats-->
+  	<dl class="stats" title="stats">
+  		<dt><%=h t('words', :default => 'Words') + ': ' %></dt>
+  		<dd><%= number_with_delimiter(work.word_count) %></dd>
+  		<dt><%=h t('work_chapters', :default => 'Chapters') + ': ' %></dt>
+  		<dd><%= work.chapter_total_display %></dd>
 	 
-	  <%- unless work.approved_collections.empty? %>
-			<dt><%=h t('work_collections', :default => 'Collections') + ': ' -%></dt>
-			<dd><%= link_to work.approved_collections.length, work_collections_path(work) %></dd>
-		<%- end -%>
+  	  <%- unless work.approved_collections.empty? %>
+  			<dt><%=h t('work_collections', :default => 'Collections') + ': ' -%></dt>
+  			<dd><%= link_to work.approved_collections.length, work_collections_path(work) %></dd>
+  		<%- end -%>
 		
-		<%- if work.count_visible_comments > 0 -%>
-		<dt><%=h t('work_comments', :default => 'Comments') + ': '%></dt>
-			<dd><%= link_to work.count_visible_comments, 
-			            @collection ? collection_work_path(@collection, work, :anchor => "comments", :show_comments => true) : 
-			                work_path(work, :anchor => "comments", :show_comments => true) -%></dd>
-		<%- end -%>
-		<%- if Bookmark.count_visible_bookmarks(work) > 0 -%>
-		<dt><%=h t('work_bookmarks', :default => 'Bookmarks') + ': '%></dt>
-			<dd><%= link_to_bookmarkable_bookmarks(work) -%></dd>
-		<%- end -%>
-<%- end -%>		
+  		<%- if work.count_visible_comments > 0 -%>
+  		  <dt><%=h t('work_comments', :default => 'Comments') + ': '%></dt>
+  			<dd><%= link_to work.count_visible_comments, 
+  			            @collection ? collection_work_path(@collection, work, :anchor => "comments", :show_comments => true) : 
+  			                work_path(work, :anchor => "comments", :show_comments => true) -%></dd>
+  		<%- end -%>
+  		<%- if Bookmark.count_visible_bookmarks(work) > 0 -%>
+  		  <dt><%=h t('work_bookmarks', :default => 'Bookmarks') + ': '%></dt>
+  			<dd><%= link_to_bookmarkable_bookmarks(work) -%></dd>
+  		<%- end -%>
 
-		<% if show_hit_count?(work) %>
-  		<dt><%=h t('works.hit_count', :default => "Hits: ") -%></dt>
-  		<dd><%= work.hit_count -%></dd>
-  	<% end %>
+<%- end # bottom cache -%>		
+
+    	<% if show_hit_count?(work) %>
+     		<dt><%=h t('works.hit_count', :default => "Hits: ") -%></dt>
+     		<dd><%= work.hit_count -%></dd>
+     	<% end %>
 			
-		</dl>
-  </li>
-  <%- if is_author_of?(work) && controller.controller_name != 'series' -%>
-    <li class="navigation"><%= link_to t('links.edit', :default => 'Edit'), edit_work_path(work) -%></li>
-    <li class="navigation"><%= link_to t('edit_tags', :default => "Edit Tags"), edit_tags_work_path(work) %></li>    
-    <%- if work.is_wip %>
-      <li class="navigation"><%= link_to t('links.add_chapter', :default => 'Add Chapter'), new_work_chapter_path(work) -%></li>
+    </dl>
+
+    <%- if is_author_of?(work) && controller.controller_name != 'series' -%>
+      <h6 class="landmark">Author Actions</h5>
+  	  <ul class="navigation" role="navigation">
+  		  <li class="navigation"><%= link_to t('links.edit', :default => 'Edit'), edit_work_path(work) -%></li>
+  	    <li class="navigation"><%= link_to t('edit_tags', :default => "Edit Tags"), edit_tags_work_path(work) %></li> 
+        <%- if work.is_wip %>
+          <li><%= link_to t('links.add_chapter', :default => 'Add Chapter'), new_work_chapter_path(work) -%></li>
+        <%- end -%>
+      </ul>
     <%- end -%>
-  <%- end -%>
-  </ul>
-<%- end -%>
+
+  <%- end # of else statement at top -%>
 </li>
