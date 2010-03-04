@@ -7,31 +7,33 @@
 <!--main content-->
 <%- form_tag url_for(:controller => 'user_invite_requests', :action => 'update') do -%>
 <table summary="This table shows requests from users for invites, with their given reasons. You can allot invites to individuals under the heading Quantity">
-	<caption>Allot invites to users</caption>
-	<thead>
-		<tr>
-    		<th scope="col">User</th>
-    		<th scope="col">Reason</th>
-    		<th scope="col">Quantity</th>
-    		<th scope="col">Created at</th>
-  		</tr>
-	</thead>
-  	<tbody>
-	<% @user_invite_requests.each do |request| %>
-  		<tr>
-    		<td><%= link_to request.user.login, request.user %></td>
-    		<td><%=h request.reason %></td>
-    		<td><%= text_field_tag "requests[#{request.id}]", request.quantity, :size => 2 %></td>
-    		<td><%=h request.created_at %></td>
-  		</tr>
+  <caption>Allot invites to users</caption>
+  <thead>
+    <tr>
+        <th scope="col">User</th>
+        <th scope="col">Reason</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Created at</th>
+        <th scope="col">Previous</th>
+      </tr>
+  </thead>
+    <tbody>
+  <% @user_invite_requests.each do |request| %>
+      <tr>
+        <td><%= link_to request.user.login, request.user %></td>
+        <td><%=h request.reason %></td>
+        <td><%= text_field_tag "requests[#{request.id}]", request.quantity, :size => 2 %></td>
+        <td><%=h request.created_at %>
+        <td><%= link_to_previous_invite_requests(request) %></td>
+      </tr>
   <% end %>
-	</tbody>
-	<tfoot>
-		<tr>
-			<th scope="row" colspan="3">Submit:</th>
-			<td class="submit"><%= submit_tag "Update" %></td>
-		</tr>
-	</tfoot>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th scope="row" colspan="3">Submit:</th>
+      <td class="submit"><%= submit_tag "Update" %></td>
+    </tr>
+  </tfoot>
 </table>
 <%- end -%>
 <!--/content-->
