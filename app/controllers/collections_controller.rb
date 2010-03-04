@@ -47,6 +47,10 @@ class CollectionsController < ApplicationController
   	  flash[:error] = t('collection_not_found', :default => "Sorry, we couldn't find the collection you were looking for.")
       redirect_to collections_path and return
     end
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   def new
