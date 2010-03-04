@@ -9,7 +9,7 @@ module ChaptersHelper
   end
   
   def chapter_link_with_title(chapter)
-    span_if_current chapter_title_with_position(chapter), [chapter.work, chapter]
+    link_to chapter_title_with_position(chapter), [chapter.work, chapter]
   end 
   
   # Creates a link with the appropriate chapter number

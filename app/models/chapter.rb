@@ -58,7 +58,8 @@ class Chapter < ActiveRecord::Base
   end
   
   def display_title
-    self.title.blank? ? "Chapter #{self.position}" : self.title
+    t = self.title.blank? ? "Chapter #{self.position}" : self.title
+    self.position.to_s + '. ' + t
   end
   
   def abbreviated_display_title
