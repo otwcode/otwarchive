@@ -24,6 +24,7 @@
       <% if (@bookmarks_count = @collection.all_approved_bookmarks_count) > 0 %>
         <li><%= span_if_current(h(t('collection_show.bookmarks', :default => "Bookmarks ({{count}})", :count => @bookmarks_count)), collection_bookmarks_path(@collection)) -%></li>
       <% end %>
+      <li><%= link_to 'Random Items', collection_path(@collection, :show_random => true) %></li>     
     <% end %>
   
     <%- if @collection.challenge %>

@@ -68,6 +68,12 @@
     <%= preference_form.label :anonymous, t("collection_form.anonymous", :default => "Is this collection currently anonymous?") %></dt>
     <dd><%= preference_form.check_box :anonymous %>
   </dd>
+  <dt>
+    <%= preference_form.label :show_random, t("collection_form.random", :default => "Would you like to show random stories on the front page instead of the most recent?") %>
+  </dt>
+  <dd>
+    <%= preference_form.check_box :show_random %>
+  </dd>  
   <dt><%= label_tag :challenge_type, t("collection_form.challenge_type", :default => "If this collection is for a challenge, please choose the type: ") %></dt>
     <dd><%= select_tag :challenge_type, options_for_select(Collection::CHALLENGE_TYPE_OPTIONS, @collection.challenge ? @collection.challenge.class.name : "") %></dd>
 </dl>

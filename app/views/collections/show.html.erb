@@ -6,7 +6,13 @@
   <!-- expects @works, @bookmarks -->
     <%- unless @works.blank? -%>
     <div class="works module" id="collection-works">
-      <h3><%=h @collection.closed? ? t('collections.random_works', :default => "Random works") : t('recent_works', :default => "Recent works") %></h3>
+      <h3>
+        <%- if @collection.collection_preference.show_random || params[:show_random] -%>
+        <%=h t('collections.random_works', :default => "Random works") %>  
+        <%- else -%>  
+        <%=h t('recent_works', :default => "Recent works") %>
+        <%- end -%>
+      </h3>
       <ul class="index">
         <%- for work in @works -%>
       	  <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
@@ -17,7 +23,13 @@
 
     <%- unless @bookmarks.blank? -%>
     <div class="bookmarks module" id="collection-bookmarks">
-      <h3><%=h @collection.closed? ? t('collections.random_bookmarks', :default => "Random bookmarks") : t('recent_bookmarks', :default => "Recent bookmarks") %></h3>
+      <h3>
+        <%- if @collection.collection_preference.show_random || params[:show_random] -%>
+        <%=h t('collections.random_bookmarks', :default => "Random bookmarks") %>  
+        <%- else -%>  
+        <%=h t('recent_bookmarks', :default => "Recent bookmarks") %>
+        <%- end -%>
+      </h3>
       <ul class="index">
       <%- for bookmark in @bookmarks -%>
         <%= render :partial => 'bookmarks/bookmark', :locals => {:bookmark => bookmark} %>

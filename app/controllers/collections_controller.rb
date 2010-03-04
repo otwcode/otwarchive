@@ -31,7 +31,7 @@ class CollectionsController < ApplicationController
   def show
     @collection = Collection.find_by_name(params[:id])
     
-    if @collection.closed?
+    if @collection.collection_preference.show_random? || params[:show_random]
       # show a random selection of works/bookmarks
       @works = Work.in_collection(@collection).visible.random_order.limited(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
       visible_bookmarks = @collection.bookmarks.visible(:order => 'RAND()')
