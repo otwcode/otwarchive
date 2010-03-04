@@ -21,6 +21,7 @@ module SanitizeParams
   # replace evil msword curly quotes
   def fix_quotes(text)
     return "" if text.nil?
+    text.gsub! "<3", "&#60;3"
     text.gsub! "\342\200\230", "'"
     text.gsub! "\342\200\231", "'"
 #    text.gsub! "\221", "'"
