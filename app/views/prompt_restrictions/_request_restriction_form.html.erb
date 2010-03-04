@@ -22,7 +22,7 @@
     <dt><%= tag_set_form.label :tagnames, t('request_restrictions.tagnames', :default => "Tag Options") %> <%= link_to_help("prompt-restriction-tag-set")%></dt>
     <dd>
       <%= tag_set_form.text_area :tagnames, :rows => 6, :cols => 70, :value => (@challenge.request_restriction.tag_set ? @challenge.request_restriction.tag_set.tagnames : "") %>
-      <%= autocomplete_text_field("#{@challenge.class.name.tableize.singularize}_request_restriction_attributes_tag_set_attributes_tagnames") %>      
+      <%= autocomplete_text_field("#{@challenge.class.name.tableize.singularize}_request_restriction_attributes_tag_set_attributes_tagnames", "canonical_tag_finder") %>      
     </dd>
     <% end %>
   </dl>

@@ -7,9 +7,10 @@
   <%- end -%>
   </ul>
   <p><%= form.label :pseud, t('coauthor_try_again', :default => 'Try again:') %></p>
-  <p><%= text_field_with_auto_complete :pseud, :byline, { :size => 50 }, 
-      { :url => {:controller => 'pseuds', :action => 'choose_coauthors'}, :method => :get, :param_name => 'search', 
-        :tokens => ',', :min_chars => 2, :skip_style => true } %></p>
+  <p>
+    <%= text_field :pseud, :byline, :size => 50 %>
+    <%= autocomplete_text_field "pseud_byline" -%>
+  </p>
 <%- end -%> 
 
 <%- unless creation.ambiguous_pseuds.blank? -%>

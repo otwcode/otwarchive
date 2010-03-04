@@ -29,50 +29,75 @@ class AutocompleteController < ApplicationController
     render_output(Collection.open.with_name_like(search_param).name_only.map(&:name).sort)
   end
 
-  ## field-specific methods 
+  ###### all the field-specific methods go here 
   
-  def collection_names
-    collection_finder(params[:collection_names])
+  # pseud-finder methods -- to add a new one, just put the name of the field into the 
+  # %w list
+  %w(work_recipients participants_to_invite pseud_byline).each do |field|
+    define_method("#{field}") do
+      pseud_finder(params[params[:fieldname]])
+    end
   end
   
-  def work_collection_names
-    collection_finder(params[:work_collection_names])
+  # to handle the autocomplete requests for each type from the nested prompt form, using define_method to set up all
+  # the different tag types
+  %w(rating category warning).each do |tag_type| 
+    define_method("canonical_#{tag_type}_finder") do
+      tag_finder("#{tag_type}".classify.constantize, params[params[:fieldname]])
+    end
+  end 
+
+  # generic canonical tag finders
+  %w(canonical_tag_finder tag_string).each do |field|
+    define_method("#{field}") do
+      tag_finder(Tag, params[params[:fieldname]])
+    end
   end
+
+  # fandom finders
+  %w(canonical_fandom_finder fandom_string work_fandom tag_fandom_string collection_filters_fandom bookmark_external_fandom_string ).each do |field|
+    define_method("#{field}") do
+      tag_finder(Fandom, params[params[:fieldname]])
+    end
+  end
+
+  # pairing finders
+  %w(canonical_pairing_finder work_pairing tag_pairing_string bookmark_external_pairing_string).each do |field|
+    define_method("#{field}") do
+      tag_finder(Pairing, params[params[:fieldname]]) 
+    end
+  end
+
+  # character finders
+  %w(canonical_character_finder character_string work_character tag_character_string bookmark_external_character_string).each do |field|
+    define_method("#{field}") do
+      tag_finder(Character, params[params[:fieldname]])
+    end
+  end
+
+  # freeform finders
+  %w(canonical_freeform_finder work_freeform tag_freeform_string).each do |field|
+    define_method("#{field}") do
+      tag_finder(Freeform, params[params[:fieldname]])
+    end
+  end  
   
+  # collection name finders
+  %w(collection_names work_collection_names).each do |field|
+    define_method("#{field}") do
+      collection_finder(params[params[:fieldname]])
+    end
+  end
+
   def collection_parent_name
     render_output(current_user.maintained_collections.top_level.with_name_like(params[:collection_parent_name]).name_only.map(&:name).sort)
   end
 
-  def participants_to_invite
-    pseud_finder(params[:participants_to_invite])
-  end
-    
-  def work_recipients
-    pseud_finder(params[:work_recipients])
-  end
-  
-  def work_fandom
-    tag_finder(Fandom, params[:work_fandom])
-  end
-  
-  def work_pairing
-    tag_finder(Pairing, params[:work_pairing])
+  def collection_filters_title
+    render_output(Collection.find(:all, :conditions => ["parent_id IS NULL AND title LIKE ?", params[:collection_filters_title] + '%'], :limit => 10, :order => :title).map(&:title))    
   end
 
-  def work_character
-    tag_finder(Character, params[:work_character])
-  end
-
-  def work_freeform
-    tag_finder(Freeform, params[:work_freeform])
-  end
-
-  def tag_string
-    tag_finder(Tag, params[:tag_string])
-  end
-
-  # tag wrangling
-  
+  # tag wrangling finders
   def tag_syn_string
     tag_finder(params[:type].constantize, params[:tag_syn_string])
   end
@@ -84,56 +109,14 @@ class AutocompleteController < ApplicationController
   def tag_media_string
     tag_finder(Media, params[:tag_media_string])
   end 
-  def tag_fandom_string
-    tag_finder(Fandom, params[:tag_fandom_string])
-  end  
-  def tag_character_string
-    tag_finder(Character, params[:tag_character_string])
-  end  
-  def tag_pairing_string
-    tag_finder(Pairing, params[:tag_pairing_string])
-  end  
-  def tag_freeform_string
-    tag_finder(Freeform, params[:tag_freeform_string])
-  end    
+  
   def tag_meta_tag_string
     tag_finder(params[:type].constantize, params[:tag_meta_tag_string])
   end
+  
   def tag_sub_tag_string
     tag_finder(params[:type].constantize, params[:tag_sub_tag_string])
   end   
-  
-  def bookmark_external_fandom_string ; tag_finder(Fandom, params[:bookmark_external_fandom_string]) ; end
-  def bookmark_external_character_string ; tag_finder(Character, params[:bookmark_external_character_string]) ; end
-  def bookmark_external_pairing_string ; tag_finder(Pairing, params[:bookmark_external_pairing_string]) ; end
-  def fandom_string ; tag_finder(Fandom, params[:fandom_string]) ; end
-  def character_string ; tag_finder(Character, params[:character_string]) ; end
-  
-  def collection_filters_title
-    render_output(Collection.find(:all, :conditions => ["parent_id IS NULL AND title LIKE ?", params[:collection_filters_title] + '%'], :limit => 10, :order => :title).map(&:title))    
-  end
-  def collection_filters_fandom
-    tag_finder(Fandom, params[:collection_filters_fandom])
-  end
-  
-  # to handle the autocomplete requests for each type from the nested prompt form, using define_method to set up all
-  # the different tag types
-  %w(fandom character pairing rating category freeform warning).each do |tag_type| 
-    define_method("canonical_#{tag_type}_finder") do
-      tag_finder("#{tag_type}".classify.constantize, params[params[:fieldname]])
-    end
-  end 
-  
-  def canonical_tag_finder
-    tag_finder(Tag, params[params[:fieldname]])
-  end
-  
-  def gift_exchange_request_restriction_attributes_tag_set_attributes_tagnames
-    tag_finder(Tag, params[:gift_exchange_request_restriction_attributes_tag_set_attributes_tagnames])
-  end
-  
-  def gift_exchange_offer_restriction_attributes_tag_set_attributes_tagnames
-    tag_finder(Tag, params[:gift_exchange_offer_restriction_attributes_tag_set_attributes_tagnames])
-  end
+
   
 end
