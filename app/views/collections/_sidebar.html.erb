@@ -1,7 +1,6 @@
 <div id="dashboard" role="navigation">
   <ul role="navigation">
-  	<li><%= span_if_current "Dashboard", @collection %></li>
-
+    <li><%= span_if_current "Dashboard", @collection %></li>
     <li><%= span_if_current t('collections.profile', :default => "Profile"), collection_profile_path(@collection) -%></li>
     <% if !@collection.collection_profile.faq.blank? %>
     <li><%= span_if_current t('collections.faq', :default => "FAQ"), collection_profile_path(@collection, :anchor => "faq") -%></li>

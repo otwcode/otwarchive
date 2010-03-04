@@ -54,6 +54,7 @@ class CollectionsController < ApplicationController
   end
 
   def new
+    @hide_dashboard = true
     @collection = Collection.new
     if params[:collection_id] && (@collection_parent = Collection.find_by_name(params[:collection_id]))
       @collection.parent_name = @collection_parent.name
@@ -64,6 +65,7 @@ class CollectionsController < ApplicationController
   end
 
   def create
+    @hide_dashboard = true
     @collection = Collection.new(params[:collection])
 
     # add the owner
@@ -115,6 +117,7 @@ class CollectionsController < ApplicationController
   end
 
   def destroy
+    @hide_dashboard = true
     @collection = Collection.find_by_name(params[:id])
     @collection.destroy
 
