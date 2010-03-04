@@ -45,7 +45,7 @@ class Tag < ActiveRecord::Base
   has_many :same_work_tags, :through => :works, :source => :tags, :uniq => true
   has_many :same_work_fandoms, :through => :works, :source => :fandoms, :uniq => true
 
-  has_many :taggings, :as => :tagger, :dependent => :destroy
+  has_many :taggings, :as => :tagger
   has_many :works, :through => :taggings, :source => :taggable, :source_type => 'Work'
   has_many :bookmarks, :through => :taggings, :source => :taggable, :source_type => 'Bookmark'
   has_many :external_works, :through => :taggings, :source => :taggable, :source_type => 'ExternalWork'

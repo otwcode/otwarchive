@@ -43,7 +43,7 @@
 
 /* 2. General rules by content and structure type (shown on many pages) Forms are in forms.css. 
  NAVIGATION, ACTIONS (BUTTONS)*/
- ul#skiplinks,.landmark 	{ border: 0 !important; color: #fffef9; font-size: 0 !important; line-height: 0 !important; margin: 0 !important; clear:right; }
+ ul#skiplinks,.landmark 	{ border: 0 !important; color: #fffef9; font-size: 0 !important; line-height: 0 !important; height: 0 !important; margin: 0 !important; clear:right; }
  #header .landmark 			{color:#900 !important;}
  
 #main ul.navigation, p.navigation, li.navigation, span.navigation, p.submit, dd.submit, span.submit 				{ margin: 0.5em auto 1em; border:1px solid #bbb; background:#fffef9 url(/images/fffef9-ccc.png) bottom left repeat-x; padding:0.15em 0.5em 0.25em; float:right; border-radius:3em; -moz-border-radius:3em; -webkit-border-radius:2em;}
