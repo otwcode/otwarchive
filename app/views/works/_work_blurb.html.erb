@@ -31,6 +31,7 @@
 
       <!--required tags-->
   	  <%= get_symbols_for(work) -%>
+  	  <p class="datetime"><%= set_format_for_date(work.revised_at) %></p>
     </div>
 	
     <!--warnings again, cast, freeform tags-->
