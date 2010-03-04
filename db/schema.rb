@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100108002148) do
+ActiveRecord::Schema.define(:version => 20100301211829) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -83,6 +83,28 @@ ActiveRecord::Schema.define(:version => 20100108002148) do
   add_index "bookmarks", ["private", "hidden_by_admin", "created_at"], :name => "index_bookmarks_on_private_and_hidden_by_admin_and_created_at"
   add_index "bookmarks", ["pseud_id"], :name => "index_bookmarks_on_pseud_id"
   add_index "bookmarks", ["user_id"], :name => "fk_bookmarks_user"
+
+  create_table "challenge_assignments", :force => true do |t|
+    t.integer  "pseud_id"
+    t.integer  "challenge_signup_id"
+    t.integer  "collection_id"
+    t.boolean  "fulfilled",           :default => false, :null => false
+    t.boolean  "defaulted",           :default => false, :null => false
+    t.datetime "assigned_at"
+    t.datetime "fulfilled_at"
+    t.datetime "defaulted_at"
+    t.integer  "creation_id"
+    t.string   "creation_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "challenge_signups", :force => true do |t|
+    t.integer  "collection_id"
+    t.integer  "pseud_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "chapters", :force => true do |t|
     t.text     "content",         :limit => 2147483647,                    :null => false
@@ -163,6 +185,12 @@ ActiveRecord::Schema.define(:version => 20100108002148) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "parent_id"
+    t.integer  "challenge_id"
+    t.string   "challenge_type"
+    t.string   "icon_file_name"
+    t.string   "icon_content_type"
+    t.integer  "icon_file_size"
+    t.datetime "icon_updated_at"
   end
 
   add_index "collections", ["name"], :name => "index_collections_on_name"
@@ -306,6 +334,26 @@ ActiveRecord::Schema.define(:version => 20100108002148) do
   add_index "filter_taggings", ["filter_id", "filterable_type"], :name => "index_filter_taggings_on_filter_id_and_filterable_type"
   add_index "filter_taggings", ["filterable_id", "filterable_type"], :name => "index_filter_taggings_filterable"
 
+  create_table "gift_exchanges", :force => true do |t|
+    t.integer  "request_restriction_id"
+    t.integer  "offer_restriction_id"
+    t.integer  "requests_num_required",        :default => 1,     :null => false
+    t.integer  "offers_num_required",          :default => 1,     :null => false
+    t.integer  "requests_num_allowed",         :default => 1,     :null => false
+    t.integer  "offers_num_allowed",           :default => 1,     :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "signup_instructions_general"
+    t.text     "signup_instructions_requests"
+    t.text     "signup_instructions_offers"
+    t.boolean  "signup_open",                  :default => false, :null => false
+    t.datetime "signups_open_at"
+    t.datetime "signups_close_at"
+    t.datetime "assignments_due_at"
+    t.datetime "works_reveal_at"
+    t.datetime "authors_reveal_at"
+  end
+
   create_table "gifts", :force => true do |t|
     t.integer  "work_id"
     t.string   "recipient_name"
@@ -401,6 +449,14 @@ ActiveRecord::Schema.define(:version => 20100108002148) do
   add_index "log_items", ["role_id"], :name => "index_log_items_on_role_id"
   add_index "log_items", ["user_id"], :name => "index_log_items_on_user_id"
 
+  create_table "meta_taggings", :force => true do |t|
+    t.integer  "meta_tag_id", :limit => 8,                   :null => false
+    t.integer  "sub_tag_id",  :limit => 8,                   :null => false
+    t.boolean  "direct",                   :default => true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "open_id_authentication_associations", :force => true do |t|
     t.integer "issued"
     t.integer "lifetime"
@@ -455,13 +511,57 @@ ActiveRecord::Schema.define(:version => 20100108002148) do
 
   add_index "profiles", ["user_id"], :name => "index_profiles_on_user_id"
 
-  create_table "pseuds", :force => true do |t|
-    t.integer  "user_id"
-    t.string   "name",                           :null => false
-    t.text     "description"
-    t.boolean  "is_default",  :default => false, :null => false
+  create_table "prompt_restrictions", :force => true do |t|
+    t.integer  "tag_set_id"
+    t.boolean  "optional_tags_allowed",  :default => false, :null => false
+    t.boolean  "description_allowed",    :default => true,  :null => false
+    t.boolean  "url_required",           :default => false, :null => false
+    t.integer  "fandom_num_required",    :default => 0,     :null => false
+    t.integer  "category_num_required",  :default => 0,     :null => false
+    t.integer  "rating_num_required",    :default => 0,     :null => false
+    t.integer  "character_num_required", :default => 0,     :null => false
+    t.integer  "pairing_num_required",   :default => 0,     :null => false
+    t.integer  "freeform_num_required",  :default => 0,     :null => false
+    t.integer  "warning_num_required",   :default => 0,     :null => false
+    t.integer  "fandom_num_allowed",     :default => 0,     :null => false
+    t.integer  "category_num_allowed",   :default => 0,     :null => false
+    t.integer  "rating_num_allowed",     :default => 0,     :null => false
+    t.integer  "character_num_allowed",  :default => 0,     :null => false
+    t.integer  "pairing_num_allowed",    :default => 0,     :null => false
+    t.integer  "freeform_num_allowed",   :default => 0,     :null => false
+    t.integer  "warning_num_allowed",    :default => 0,     :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "description_required",   :default => false, :null => false
+    t.boolean  "url_allowed",            :default => false, :null => false
+  end
+
+  create_table "prompts", :force => true do |t|
+    t.integer  "collection_id"
+    t.integer  "challenge_signup_id"
+    t.integer  "pseud_id"
+    t.integer  "tag_set_id"
+    t.integer  "optional_tag_set_id"
+    t.string   "title"
+    t.string   "url"
+    t.text     "description"
+    t.boolean  "offer"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "pseuds", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "name",                                 :null => false
+    t.text     "description"
+    t.boolean  "is_default",        :default => false, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "icon_file_name"
+    t.string   "icon_content_type"
+    t.integer  "icon_file_size"
+    t.datetime "icon_updated_at"
   end
 
   add_index "pseuds", ["user_id", "name"], :name => "index_pseuds_on_user_id_and_name"
@@ -558,19 +658,22 @@ ActiveRecord::Schema.define(:version => 20100108002148) do
   add_index "taggings", ["tagger_id", "tagger_type", "taggable_id", "taggable_type"], :name => "index_taggings_polymorphic", :unique => true
 
   create_table "tags", :force => true do |t|
-    t.string   "name",           :limit => 100, :default => ""
-    t.boolean  "canonical",                     :default => false, :null => false
+    t.string   "name",               :limit => 100, :default => ""
+    t.boolean  "canonical",                         :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "taggings_count",                :default => 0
-    t.boolean  "adult",                         :default => false
+    t.integer  "taggings_count",                    :default => 0
+    t.boolean  "adult",                             :default => false
     t.string   "type"
     t.integer  "media_id"
     t.integer  "fandom_id"
     t.integer  "merger_id"
-    t.boolean  "wrangled",                      :default => false, :null => false
-    t.boolean  "has_characters",                :default => false, :null => false
-    t.boolean  "delta",                         :default => false
+    t.boolean  "wrangled",                          :default => false, :null => false
+    t.boolean  "has_characters",                    :default => false, :null => false
+    t.boolean  "delta",                             :default => false
+    t.boolean  "ambiguous",                         :default => false
+    t.integer  "last_wrangler_id"
+    t.string   "last_wrangler_type"
   end
 
   add_index "tags", ["fandom_id"], :name => "index_tags_on_fandom_id"
@@ -672,5 +775,10 @@ ActiveRecord::Schema.define(:version => 20100108002148) do
 
   add_index "works", ["imported_from_url"], :name => "index_works_on_imported_from_url"
   add_index "works", ["language_id"], :name => "index_works_on_language_id"
+
+  create_table "wrangling_assignments", :force => true do |t|
+    t.integer "user_id"
+    t.integer "fandom_id"
+  end
 
 end
