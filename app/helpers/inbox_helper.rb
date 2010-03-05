@@ -9,7 +9,7 @@ module InboxHelper
   
   def inbox_reply_link(comment)
     if comment.depth > ArchiveConfig.COMMENT_THREAD_MAX_DEPTH
-      fallback_url = url_for(comment_path(comment, :add_comment_reply_id => comment.id, :anchor => 'comment' + comment.id.to_s))
+      fallback_url = url_for(comment_path(comment, :add_comment_reply_id => comment.id, :anchor => 'comment_' + comment.id.to_s))
     else
       fallback_url = fallback_url_for_comment(comment, {:add_comment_reply_id => comment.id})
     end    

@@ -7,14 +7,14 @@
 <!--main content-->
 <%- unless @inbox_comments.blank? -%>
   <%- form_tag user_inbox_path(@user), :method => :put, :id => 'inbox-form' do -%>
-   <fieldset>
+  <fieldset>
 	<legend>Mass Edit Options</legend>
 	<p class="submit">
-      	<%= "Mark checked as:" %> 
-      	<%= submit_tag t('read', :default => 'Read') %>
-    	<%= submit_tag t('unread', :default => 'Unread') %>
-    	<%= submit_tag t('delete_from_inbox', :default => 'Delete From Inbox') %>
-   	</p>
+      <%= "Mark checked as:" %> 
+      <%= submit_tag t('read', :default => 'Read') %>
+      <%= submit_tag t('unread', :default => 'Unread') %>
+      <%= submit_tag t('delete_from_inbox', :default => 'Delete From Inbox') %>
+  </p>
 	</fieldset>
 	<fieldset>
 	<legend>List of Comments</legend>
@@ -22,29 +22,32 @@
     <%- for inbox_comment in @inbox_comments -%>
       <!-- START of single comment -->
       <li class="comment <%= inbox_comment.read? ? 'read' : 'unread' %> <%= cycle :odd, :even %>" role="article">
-		<h4><%= get_pseud_or_mailaddress(inbox_comment.feedback_comment) %> <%= 'to' %> <%= commentable_description_link(inbox_comment.feedback_comment) %> </h4>
-		<!--when user icons are in, image here-->
+        <h4><%= get_pseud_or_mailaddress(inbox_comment.feedback_comment) %> <%= 'to' %> <%= commentable_description_link(inbox_comment.feedback_comment) %> </h4>
+        <%- unless inbox_comment.feedback_comment.pseud.nil? -%>
+        <div class="icon">
+          <%= image_tag(inbox_comment.feedback_comment.pseud.andand.icon.url, :size => "100x100", :alt => "", :class => "icon") %>
+        </div>
+        <%- end -%>
         <blockquote class="user-generated-view"><%= sanitize_and_format_for_display inbox_comment.feedback_comment.content %></blockquote>
-		<p class="datetime"><%= distance_of_time_in_words_to_now(inbox_comment.created_at) %></p>
-			<h5 class="landmark">Comment Actions</h5>
-			<ul class="navigation">
-			<li>
-              <%= image_tag("replied_to.png", :size => "15x15", :alt => "Replied To") if inbox_comment.replied_to? %>
-              <%= inbox_reply_link(inbox_comment.feedback_comment) %>
-            </li>
-            <%- if @user.is_author_of?(inbox_comment.feedback_comment.ultimate_parent) -%>
-            <li><%= 'Spam' %></li>
-            <li><%= 'Delete From Story' %></li>
-            <%- end -%>
-			<li><%= check_box_tag "inbox_comments[#{inbox_comment.id}]", "unchecked", :title => "select this comment" %></li>
-          </ul>
-<div id="reply-to-comment"></div>
-        </li>
+        <p class="datetime"><%= distance_of_time_in_words_to_now(inbox_comment.created_at) %></p>
+        <h5 class="landmark">Comment Actions</h5>
+        <ul class="navigation">
+          <li>
+            <%= image_tag("replied_to.png", :size => "15x15", :alt => "Replied To") if inbox_comment.replied_to? %>
+            <%= inbox_reply_link(inbox_comment.feedback_comment) %>
+          </li>
+          <%- if @user.is_author_of?(inbox_comment.feedback_comment.ultimate_parent) -%>
+          <li><%= 'Spam' %></li>
+          <li><%= 'Delete From Story' %></li>
+          <%- end -%>
+          <li><%= check_box_tag "inbox_comments[#{inbox_comment.id}]", "unchecked", false, :title => "select this comment" %></li>
+        </ul>
+      </li>
       <!-- END of single comment -->
     <%- end -%>
-</ol>
-</fieldset>
-<fieldset>
+  </ol>
+  </fieldset>
+  <fieldset>
 	<legend>Mass Edit Options Again</legend>
     <p class="submit">
       <%= "Mark checked as:" %> 
@@ -52,9 +55,10 @@
       <%= submit_tag t('unread', :default => 'Unread') %>
       <%= submit_tag t('delete_from_inbox', :default => 'Delete From Inbox') %>
     </p>
-</fieldset>
+  </fieldset>
     <!-- coming soon <%= submit_tag t('mass_reply', :default => 'mass reply') %> -->
-  <%- end -%>
+  <%- end -%> <!-- end of inbox form -->
+  <div id="reply-to-comment"></div> <!-- this div will contain the reply to comment form -->
 <%- end -%>
 
 <!--/content-->

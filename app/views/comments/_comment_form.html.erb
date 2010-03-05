@@ -42,7 +42,9 @@
     </p>
 	  <p class="submit">
       <%= f.submit button_name %>
-	    <%- unless controller.controller_name == 'inbox' -%>
+	    <%- if controller.controller_name == 'inbox' -%>
+        <p id="close-popup" role="navigation" class="navigation"></p>
+      <%- else -%>
         <%= cancel_comment_button(comment, commentable) -%>
       <%- end -%>
 	  </p>
