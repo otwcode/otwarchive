@@ -40,9 +40,6 @@ class ApplicationController < ActionController::Base
           profiler_sessions_file.close()
         end
       end
-      # manually putting this in to turn off the code as it is throwing errors and I need to
-      # test the collections code 
-      profile = false
       if profile
       	begin
       	  require 'ruby-prof'
