@@ -19,6 +19,12 @@
             <ul class="tags">
               <%= tag_link_list request.tag_set.tags %>
             </ul>
+            <% if request.optional_tag_set && !request.optional_tag_set.tags.empty? %>
+              <p>(Optional)</p>
+              <ul class="tags">
+                <%= tag_link_list request.optional_tag_set.tags %>
+              </ul>
+            <% end %>
           </dd>
         <% end %>
       </dl>
@@ -37,6 +43,12 @@
             <ul class="tags">
               <%= tag_link_list offer.tag_set.tags %>
             </ul>
+            <% if offer.optional_tag_set && !offer.optional_tag_set.tags.empty? %>
+              <p>(Optional)</p>
+              <ul class="tags">
+                <%= tag_link_list offer.optional_tag_set.tags %>
+              </ul>
+            <% end %>
           </dd>
         <% end -%>
       </dl>
