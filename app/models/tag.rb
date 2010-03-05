@@ -99,6 +99,8 @@ class Tag < ActiveRecord::Base
     end
   end
 
+  named_scope :id_only, {:select => "tags.id"}
+
   named_scope :canonical, {:conditions => {:canonical => true}, :order => 'name ASC'}
   named_scope :noncanonical, {:conditions => {:canonical => false}, :order => 'name ASC'}
   named_scope :nonsynonymous, {:conditions => {:merger_id => nil, :canonical => false}, :order => 'name ASC'}

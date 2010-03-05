@@ -5,9 +5,10 @@ class Prompt < ActiveRecord::Base
   
   belongs_to :tag_set, :dependent => :destroy
   accepts_nested_attributes_for :tag_set
-  
   has_many :tags, :through => :tag_set
+
   belongs_to :optional_tag_set, :class_name => "TagSet", :dependent => :destroy
+  accepts_nested_attributes_for :optional_tag_set
   has_many :optional_tags, :through => :optional_tag_set, :source => :tag
 
   # VALIDATION
@@ -34,51 +35,26 @@ class Prompt < ActiveRecord::Base
     (restriction = get_prompt_restriction) && restriction.description_required
   end
 
-  validate :correct_number_of_tags
-  def correct_number_of_tags
+  validate :allowed_tags
+  def allowed_tags
     errors_to_add = []
     if (restriction = get_prompt_restriction)
-      # make sure prompt has no more/less than the required/allowed number of tags of each type
-      %w(fandom character pairing rating category freeform warning).each do |tag_type|
-        required = eval("restriction.#{tag_type}_num_required")
-        allowed = eval("restriction.#{tag_type}_num_allowed")
-        prompt_type = offer ? 'Offer' : 'Request'
-        tag_count = tag_set.with_type(tag_type).count
-        taglist = tag_set.with_type(tag_type).collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
-        unless tag_count.between?(required, allowed)
-          if allowed == 0
-            errors_to_add << t("prompt.#{prompt_type}_#{tag_type}_not_allowed", 
-              :default => "#{prompt_type} cannot include any #{tag_type} tags. You currently have: {{taglist}}.", 
-              :taglist => taglist)
-          elsif required == allowed
-            errors_to_add << t("prompt.#{prompt_type}_#{tag_type}_mismatch", 
-              :default => "#{prompt_type} must have exactly {{required}} #{tag_type} tags. You currently have {{count}}: {{taglist}}.", 
-              :required => required, :count => tag_count, :taglist => taglist)
-          else
-            errors_to_add << t("prompt.#{prompt_type}_#{tag_type}_range_mismatch", 
-              :default => "#{prompt_type} must have between {{required}} and {{allowed}} #{tag_type} tags. You currently have {{count}}: {{taglist}}.",
-              :required => required, :allowed => allowed, :count => tag_count, :taglist => taglist)
+      TagSet::TAG_TYPES.each do |tag_type|
+        # if we have a specified set of tags of this type, make sure that all the
+        # tags in the prompt are in the set.
+        if restriction.has_tags_of_type?(tag_type)
+          taglist = tag_set.nil? ? [] : tag_set.tags.select {|tag| tag.type == tag_type.classify} - restriction.tag_set.with_type(tag_type.classify)
+          unless taglist.empty?
+            errors_to_add << t('prompt.specific_tags_not_allowed', :default => "The following #{tag_type} tags are not allowed in this challenge: {{taglist}}",
+              :taglist => taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT))
           end
         end
       end
-      
-      unless errors_to_add.empty?
-        # yuuuuuck :( but so much less ugly than define-method'ing these all
-        self.errors.add_to_base(errors_to_add.join("</li><li>"))
-      end
-      
     end
-  end
-
-  validate :allowed_tags
-  def allowed_tags
-    # # if we have a specified set of tags of this type, make sure that all the
-    # # tags in the prompt are in the set.
-    # if restriction.has_tags_of_type?(tag_type)
-    #   unless restriction.tag_set.is_superset_of?(self.tag_set, tag_type.classify)
-    #     return false
-    #   end
-    # end    
+    unless errors_to_add.empty?
+      # yuuuuuck :( but so much less ugly than define-method'ing these all
+      self.errors.add_to_base(errors_to_add.join("</li><li>"))
+    end
   end
 
   def get_prompt_restriction

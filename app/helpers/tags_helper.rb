@@ -43,7 +43,7 @@ module TagsHelper
   end
 
 	def link_to_tag(tag, options = {})
-    link_to_tag_with_text(tag, tag.type == "Warning" ? warning_display_name(tag.name) : tag.name, options)
+    link_to_tag_with_text(tag, tag.is_a?(Warning) ? warning_display_name(tag.name) : tag.name, options)
 	end
 
 	def link_to_tag_with_text(tag, link_text, options = {})

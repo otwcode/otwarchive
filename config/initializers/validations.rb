@@ -8,7 +8,6 @@ ActiveRecord::Base.class_eval do
   require 'uri'
     
   @@ipv4_part = /\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]/ # 0-255
-  @@is_valid_url_format_msg = t('lib.invalid_url_error', :default => "does not appear to be a valid URL.")
   @@is_valid_url_format = %r{
 \A
 https?:// # http:// or https://
@@ -20,8 +19,10 @@ https?:// # http:// or https://
 \Z
 }iux
   
+  @@is_valid_url_format_msg = t('lib.invalid_url_error', :default => "does not appear to be a valid URL.")
   @@is_active_url_msg = t('lib.inactive_url_error', :default => "could not be reached. If the URL is correct and the site is currently down, please try again later.")
   @@is_active_url_timeout = 15 # seconds
+  @@is_canonical_tag_msg = t('initializers.canonical_tag_error', :default => "include the following noncanonical tags: {{value}}")
   
   # Here's where we define the added validations
   def self.validates_url_format_of(*attr_names)
@@ -50,6 +51,30 @@ https?:// # http:// or https://
       end
     end
   end
+
+  # This can handle input of both individual and lists of tags, as well as lists of string
+  # tagnames.
+  def self.validates_tag_canonicity_of(*attr_names)
+    configuration = { :message => @@is_canonical_tag_msg }
+    configuration.update(attr_names.pop) if attr_names.last.is_a?(Hash)
+    
+    validates_each attr_names do |model, attr_name, taglist|
+      noncanonical = []
+      if !taglist.blank?
+        taglist = taglist.kind_of?(String) ? taglist.split(ArchiveConfig.DELIMITER_FOR_INPUT) : (taglist.kind_of?(Array) ? taglist : [taglist])
+        taglist.each do |tag|
+          if tag.kind_of?(String) 
+            noncanonical << tag unless Tag.canonical.find_by_name(tag.squish)
+          elsif tag.kind_of?(Tag)
+            noncanonical << tag.name unless tag.canonical
+          end
+        end
+      end
+      unless noncanonical.empty? 
+        model.errors.add(attr_name, configuration[:message], :value => noncanonical.join(ArchiveConfig.DELIMITER_FOR_OUTPUT))
+      end
+    end
+  end  
 
 
   ### extra helper functions 

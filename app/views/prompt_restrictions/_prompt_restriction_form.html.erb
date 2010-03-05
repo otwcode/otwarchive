@@ -1,0 +1,67 @@
+<!-- prompt restriction_form partial, expects a local variable called "challenge_form" and @challenge, as well as boolean "is_offer"  -->
+<% if is_offer %>
+  <% @challenge.build_offer_restriction unless @challenge.offer_restriction %>
+  <% restriction = @challenge.offer_restriction %>
+<% else %>
+  <% @challenge.build_request_restriction unless @challenge.request_restriction %>
+  <% restriction = @challenge.request_restriction %>
+<% end %>
+  
+<% challenge_form.fields_for (is_offer ? :offer_restriction : :request_restriction) do |prompt_restriction_form| %>
+
+  <fieldset class="preface profile">
+  
+    <% if is_offer %>
+      <!-- skip the notes -->
+    	<legend>Offer Settings</legend>
+    	<h3>Offer Settings</h3>
+    	<p class="note">
+    	  These settings determine what each separate offer can contain. Note these can be entirely different from the request settings!
+    	</p>
+    <% else %>
+    	<legend>Request Settings</legend>
+    	<h3>Request Settings</h3>
+    	<p class="note">
+    	  These settings determine what each separate request can contain, and in particular how many different tags of each kind. 
+    	  If you plan to use automated matching, keep in mind it will be slower the more tags you allow people to request.
+    	</p>
+    <% end %>
+    <dl>
+      <%= prompt_restriction_settings(prompt_restriction_form, (is_offer ? false : true)) -%>
+    </dl>
+  </fieldset>
+  
+  <% if is_offer %>
+    <fieldset class="preface profile">
+      <legend>Tag Options</legend>
+      <h3>Tag Options <%= link_to_help("prompt-restriction-tag-set") %></h3>
+    	<p class="note">
+    	  
+    	  If you are running a challenge that is specifically for a given fandom or pairing or character, just leave that 
+    	  set of tag options set to no tags required or allowed -- don't put in that one tag as the only choice. Tag options should 
+    	  only be used where you want users to have a choice. 
+    	</p>
+    	<p class="note">
+    	  In a gift exchange, the same set of tag options is used for both requests and offers, since otherwise offers and 
+    	  requests can't match against each other. (People can choose different tags in their requests and offers, but they
+    	  have to choose from the same set.)
+    	</p>
+
+      <dl>
+        <% restriction.build_tag_set unless restriction.tag_set %>
+        <% prompt_restriction_form.fields_for :tag_set_attributes do |tag_set_form| %>
+          <% TagSet::TAG_TYPES.each do |tag_type| %>
+            <dt><%= tag_set_form.label "#{tag_type}_tagnames".to_sym, t("offer_restrictions.#{tag_type}_tagnames", :default => "#{tag_type.classify}: ") %> </dt>
+            <dd>
+              <%= tag_set_form.text_area "#{tag_type}_tagnames".to_sym, :rows => 2, :cols => 50, 
+                    :value => (restriction.tag_set ? eval("restriction.tag_set.#{tag_type}_tagnames") : "") %>
+              <% tag_fieldname = "#{@challenge.class.name.tableize.singularize}_offer_restriction_attributes_tag_set_attributes_#{tag_type}_tagnames" %>
+              <%= autocomplete_text_field(tag_fieldname, "canonical_#{tag_type}_finder") %>
+            </dd>
+          <% end %>
+        <% end %>
+      </dl>
+    </fieldset>
+  <% end %>
+
+<% end -%>

@@ -32,6 +32,15 @@ module ApplicationHelper
     link = link_to_unless_current(t(translation_name, :default => link_to_default_text), path)
     current_page?(path) ? "<span class=\"current\">#{link}</span>" : link
   end
+  
+  def limited_html_instructions
+    h(t('plain_text', :default =>"Plain text with limited html")) + 
+    link_to_help("html-help") + 
+    "<br/><code>a, abbr, acronym, address, alt, b, big, blockquote, br, caption, center, cite, class, code, 
+    col, colgroup, datetime, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, height, hr, href, i, img, 
+    ins, kbd, li, name, ol, p, pre, q, samp, small, span, src, strike, strong, sub, sup, table, tbody, td, 
+    tfoot, th, thead, title, tr, tt, u, ul, var, width</code>"
+  end
     
   # modified by Enigel Dec 13 08 to use pseud byline rather than just pseud name
   # in order to disambiguate in the case of identical pseuds

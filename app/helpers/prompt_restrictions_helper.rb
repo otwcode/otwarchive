@@ -22,7 +22,7 @@ module PromptRestrictionsHelper
 
     result += dt_wrapper(form.label(:url_required, t('prompt_restrictions.url_required', :default => "URL: ")))
     result += required_and_allowed_boolean(form, "url")
-
+    
     result += dt_wrapper(form.label(:fandom_num_required, t('prompt_restrictions.fandom_num_required', :default => "Fandom(s): ")))
     result += required_and_allowed(form, "fandom")
 
@@ -56,11 +56,11 @@ module PromptRestrictionsHelper
   end
   
   def dt_wrapper(string)
-    return "<dt>#{string}</dt>"
+    return "<dt>#{string}</dt>\n"
   end
   
   def dd_wrapper(string)
-    return "<dd>#{string}</dd>"
+    return "<dd>#{string}</dd>\n"
   end
   
 

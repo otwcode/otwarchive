@@ -4,7 +4,10 @@
 <ul>
   <li>The more options you allow here, the more complicated your signup form will be.</li>
   <li>If you can keep to one request and one offer, automated matching will be easier! Keep in mind a single request can include multiple fandoms. Unless you want to do fairly complicated requests, you probably don't need more than one request/offer.</li>
-  <li>If you put in specific tags for a particular type of tag (eg, fandoms), the signup form will make members choose among them with checkboxes. If you don't put in specific tags, members will have an autocomplete form where they can enter only the single canonical tag-wrangled version of the tag. That is, if someone tries to type in "SPN" they won't get an autocomplete result; they would have to enter "Supernatural". This is how you can be sure everyone is using the same word/spelling even without making a specific list.</li>
+  <li>If you set the "Required" value higher than the corresponding "Allowed" value, we will 
+	  automatically assume that you want the allowed value to be the same as the required value. You only need to manually
+	  set the "Allowed" number if you want more allowed than required. </li>
+  <li>If you put in specific tag options for a particular type of tag (eg, fandoms), the signup form will make members choose among them with checkboxes. If you don't put in specific tags, members will have an autocomplete form where they can enter only the single canonical tag-wrangled version of the tag. That is, if someone tries to type in "SPN" they won't get an autocomplete result; they would have to enter "Supernatural". This is how you can be sure everyone is using the same word/spelling even without making a specific list.</li>
 </ul>
 
 <!-- /descriptions-->
@@ -60,23 +63,38 @@
     </dl>
   </fieldset>
 
-  <%= render :partial => "prompt_restrictions/request_restriction_form", :locals => {:challenge_form => f} -%>
+  <!-- restrictions for requests -->
+  <%= render :partial => "prompt_restrictions/prompt_restriction_form", :locals => {:challenge_form => f, :is_offer => false} -%>
   
-  <%= render :partial => "prompt_restrictions/offer_restriction_form", :locals => {:challenge_form => f} -%>
+  <!-- restrictions for offers -->
+  <%= render :partial => "prompt_restrictions/prompt_restriction_form", :locals => {:challenge_form => f, :is_offer => true} -%>
 
   <fieldset class="preface profile">
     <legend>Signup Instructions</legend>
     <h3>Signup Instructions</h3>
     <p class="note">Here you can enter instructions to explain to your members how you want them to sign up.</p>
+    <p><%= limited_html_instructions -%></p>
     <dl>
       <dt><%= f.label :signup_instructions_general, t('gift_exchange.signup_instructions_general', :default => "General Signup Instructions: ") %></dt>
-      <dd><%= f.text_area :signup_instructions_general, :rows => 6, :cols => 60 %></dd>
+      <dd>
+        <%= f.text_area :signup_instructions_general, :rows => 6, :cols => 60 %>
+        <%= live_validation_for_field(:gift_exchange_signup_instructions_general, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) -%>
+        <%= generate_countdown_html("gift_exchange_signup_instructions_general", ArchiveConfig.INFO_MAX) -%>        
+      </dd>
 
       <dt><%= f.label :signup_instructions_requests, t('gift_exchange.signup_instructions_requests', :default => "Request Instructions: ") %></dt>
-      <dd><%= f.text_area :signup_instructions_requests, :rows => 6, :cols => 60 %></dd>
+      <dd>
+        <%= f.text_area :signup_instructions_requests, :rows => 6, :cols => 60 %>
+        <%= live_validation_for_field(:gift_exchange_signup_instructions_requests, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) -%>
+        <%= generate_countdown_html("gift_exchange_signup_instructions_requests", ArchiveConfig.INFO_MAX) -%>        
+      </dd>
 
       <dt><%= f.label :signup_instructions_offers, t('gift_exchange.signup_instructions_offers', :default => "Offer Instructions: ") %></dt>
-      <dd><%= f.text_area :signup_instructions_offers, :rows => 6, :cols => 60 %></dd>
+      <dd>
+        <%= f.text_area :signup_instructions_offers, :rows => 6, :cols => 60 %>
+        <%= live_validation_for_field(:gift_exchange_signup_instructions_offers, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) -%>
+        <%= generate_countdown_html("gift_exchange_signup_instructions_offers", ArchiveConfig.INFO_MAX) -%>        
+      </dd>
     </dl>
   </fieldset>
 

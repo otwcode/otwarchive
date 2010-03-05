@@ -9,6 +9,12 @@ class GiftExchange < ActiveRecord::Base
   belongs_to :offer_restriction, :class_name => "PromptRestriction", :dependent => :destroy
   accepts_nested_attributes_for :offer_restriction
 
+  validates_length_of :signup_instructions_general, :signup_instructions_requests, :signup_instructions_offers, { 
+    :allow_blank => true,
+    :maximum => ArchiveConfig.INFO_MAX, :too_long => t('gift_exchange.instructions_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.INFO_MAX)
+  }
+
+
 
   %w(requests_num_required offers_num_required requests_num_allowed offers_num_allowed).each do |prompt_limit_field|
       validates_numericality_of prompt_limit_field, :only_integer => true, :less_than_or_equal_to => ArchiveConfig.PROMPTS_MAX, :greater_than_or_equal_to => 0
@@ -22,6 +28,15 @@ class GiftExchange < ActiveRecord::Base
       if required > allowed
         eval("#{prompt_type}s_num_allowed = required")
       end
+    end
+  end
+
+  after_save :copy_tag_set_from_offer_to_request
+  def copy_tag_set_from_offer_to_request
+    if offer_restriction && offer_restriction.tag_set
+      request_restriction.build_tag_set unless request_restriction.tag_set
+      request_restriction.tag_set.tags = offer_restriction.tag_set.tags
+      request_restriction.tag_set.save
     end
   end
 
