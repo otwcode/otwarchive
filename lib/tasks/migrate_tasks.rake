@@ -228,6 +228,12 @@ namespace :After do
         puts "Something went wrong with #{tag.name}!"        
       end
     end
+  end
+  
+  desc "Remove invalid synonyms from canonical tags"
+  task(:exorcise_syns => :environment) do
+    tags = Tag.canonical.find(:all, :conditions => "merger_id IS NOT NULL")
+    tags.each { |tag| tag.update_attribute(:merger_id, nil) }
   end  
   
 end
@@ -237,4 +243,4 @@ end
 
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
-task :After => ['After:fix_warnings', 'After:tidy_wranglings']
+task :After => ['After:fix_warnings', 'After:tidy_wranglings', 'After:exorcise_syns']
