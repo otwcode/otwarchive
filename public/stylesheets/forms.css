@@ -141,6 +141,7 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 #work-form dd.validation {padding:0.5em 0 1em 0;}
 #work-form span.LV_validation_message  {display:inline;clear:none;float:left;margin:0; padding-top:.4em;}
 #work-form p.character_counter  {display:inline;clear:none;float:left;margin:0;}
+#work-form #work_title {display:block;} /* Enigel 03-2010 */
 #work-form .byline input[type="checkbox"] {margin: 0 .5em 0 0;}
 #co-authors dl.coauthors, #co-authors dl dt, #co-authors dl dd {top:0; left:0; margin:.1em 0 0 0;}
 #co-authors dl dt, #co-authors dl dd {margin-top:.5em;}
