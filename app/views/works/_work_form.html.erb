@@ -1,24 +1,26 @@
-<ul class="navigation">
-<% if current_user.unposted_work && !params[:load_unposted] && !@use_import_form -%>
-	<li id='restore-link'><%= link_to 'Try To Restore From Last Unposted Draft?', url_for(:action => :new, :load_unposted => true) -%>
-	</li>
+<%- if @work.new_record? -%>
+  <ul class="navigation">
+  <% if current_user.unposted_work && !params[:load_unposted] && !@use_import_form -%>
+  	<li id='restore-link'><%= link_to 'Try To Restore From Last Unposted Draft?', url_for(:action => :new, :load_unposted => true) -%>
+  	</li>
+  <%- end -%>
+  	<li id="upload-link" <%= @use_import_form ? 'style="display: none;"' : '' -%> >
+   <%= link_to_remote( t('import', :default => 'Import From An Existing URL Instead?'), 
+  {:url => {:controller => :works, :action => :new, :import => true}},
+  :href => url_for(:controller => :works, :action => :new, :import => true)) -%>	
+  	</li>
+  	<li id="form-link"  <%= @use_import_form ? '' : 'style="display: none;"' -%> >	
+   <%= link_to_remote( t('standard', :default => 'Return to Standard Form'), 
+  {:url => {:controller => :works, :action => :new, :import => false}},
+  :href => url_for(:controller => :works, :action => :new, :import => false)) -%>	
+  	</li>
+  </ul>
+  <div id="upload-work-form">
+  	<% if params[:import] -%>
+  	<%= render :partial => "import_form" %>
+  	<%- end -%>
+  </div>
 <%- end -%>
-	<li id="upload-link" <%= @use_import_form ? 'style="display: none;"' : '' -%> >
- <%= link_to_remote( t('import', :default => 'Import From An Existing URL Instead?'), 
-{:url => {:controller => :works, :action => :new, :import => true}},
-:href => url_for(:controller => :works, :action => :new, :import => true)) -%>	
-	</li>
-	<li id="form-link"  <%= @use_import_form ? '' : 'style="display: none;"' -%> >	
- <%= link_to_remote( t('standard', :default => 'Return to Standard Form'), 
-{:url => {:controller => :works, :action => :new, :import => false}},
-:href => url_for(:controller => :works, :action => :new, :import => false)) -%>	
-	</li>
-</ul>
-<div id="upload-work-form">
-	<% if params[:import] -%>
-	<%= render :partial => "import_form" %>
-	<%- end -%>
-</div>
 
 <div id="work-form" class="work-form">
   <%- unless params[:import] -%>
