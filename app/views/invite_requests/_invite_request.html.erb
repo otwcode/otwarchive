@@ -5,7 +5,7 @@
 <!--main content-->
 <p>You are currently number <strong><%= invite_request.position %></strong> on our waiting list! 
 
-<%- if AdminSetting.invite_from_queue_enabled? && invite_request.proposed_fill_date >= Date.today -%>
+<%- if AdminSetting.invite_from_queue_enabled? -%>
 At our current rate, you should receive an invitation on or around: <%= l(invite_request.proposed_fill_date, :format => :long) %>
 <%- else -%>
 New users are not currently being added from the list, but <%= link_to "stay tuned for updates", admin_posts_path %>.

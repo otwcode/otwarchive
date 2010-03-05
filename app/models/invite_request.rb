@@ -18,7 +18,7 @@ class InviteRequest < ActiveRecord::Base
   def proposed_fill_date
     number_of_rounds = (self.position.to_f/AdminSetting.invite_from_queue_number.to_f).ceil - 1
     proposed_date = AdminSetting.invite_from_queue_at.to_date + (AdminSetting.invite_from_queue_frequency * number_of_rounds).days
-    proposed_date == Date.yesterday ? Date.today : proposed_date
+    Date.today > proposed_date ? Date.today : proposed_date
   end
   
   #Ensure that invite request is for a new user

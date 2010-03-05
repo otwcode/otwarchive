@@ -177,6 +177,7 @@ a.cloud8 					{ color: #900; font-size: 2.25em; font-weight: 800 }
 li.comment 						{ position:relative; clear:right; min-height: 120px; padding: 0.25em;}
 li.comment h4, li.comment blockquote 
 								{ margin: auto; display: inline; clear: right;}
+li.comment p                    { clear: none; }								
 li.comment h4					{ font-size: 1.25em;}
 .comment .even, .thread .even 	{ background:#eee;}
 .thread .thread 				{ margin: 0 0 0 3em;}
