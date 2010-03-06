@@ -65,7 +65,7 @@ class Pseud < ActiveRecord::Base
   end
 
   def gifts
-    Gift.for_pseud(self)
+    self.new_record? ? [] : Gift.for_pseud(self)
   end
 
   # Enigel Dec 12 08: added sort method

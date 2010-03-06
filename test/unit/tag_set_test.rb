@@ -91,9 +91,12 @@ class TagSetTest < ActiveSupport::TestCase
       eval("#{type}_tag = create_#{type}(:canonical => true)")
       eval("@taglist << #{type}_tag")
       eval("@tagset.#{type}_tagnames = #{type}_tag.name")
+      assert @tagset.valid?
+      assert eval("@tagset.#{type}_taglist") == eval("[#{type}_tag]")
     end
-    assert @tagset.valid?
-    assert @tagset.tags == @taglist
+    assert @tagset.save
+    assert @tagset.reload
+    assert (@tagset.tags - @taglist).empty?
   end  
       
 end

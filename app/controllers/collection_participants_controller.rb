@@ -79,7 +79,7 @@ class CollectionParticipantsController < ApplicationController
   end 
     
   def index
-    @collection_participants = @collection.collection_participants.sort_by {|participant| participant.pseud.name.downcase }
+    @collection_participants = @collection.collection_participants.reject {|p| p.pseud.nil?}.sort_by {|participant| participant.pseud.name.downcase }
   end
   
   def update

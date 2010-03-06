@@ -52,31 +52,6 @@ https?:// # http:// or https://
     end
   end
 
-  # This can handle input of both individual and lists of tags, as well as lists of string
-  # tagnames.
-  def self.validates_tag_canonicity_of(*attr_names)
-    configuration = { :message => @@is_canonical_tag_msg }
-    configuration.update(attr_names.pop) if attr_names.last.is_a?(Hash)
-    
-    validates_each attr_names do |model, attr_name, taglist|
-      noncanonical = []
-      if !taglist.blank?
-        taglist = taglist.kind_of?(String) ? taglist.split(ArchiveConfig.DELIMITER_FOR_INPUT) : (taglist.kind_of?(Array) ? taglist : [taglist])
-        taglist.each do |tag|
-          if tag.kind_of?(String) 
-            noncanonical << tag unless Tag.canonical.find_by_name(tag.squish)
-          elsif tag.kind_of?(Tag)
-            noncanonical << tag.name unless tag.canonical
-          end
-        end
-      end
-      unless noncanonical.empty? 
-        model.errors.add(attr_name, configuration[:message], :value => noncanonical.join(ArchiveConfig.DELIMITER_FOR_OUTPUT))
-      end
-    end
-  end  
-
-
   ### extra helper functions 
 
   # Make urls consistent

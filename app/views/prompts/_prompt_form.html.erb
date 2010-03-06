@@ -36,13 +36,13 @@ See the challenge_signup form for an example of how this is used.
               <% tag_fieldname = "challenge_signup[#{(is_offer ? 'offers' : 'requests')}_attributes][#{index}][tag_set_attributes][#{tag_type}_tagnames][]" %>
               <% taglist.each do |tag| %>
                 <%= tag.name %>
-                <%= check_box_tag tag_fieldname, tag.name, form.object.tag_set.has_tag?(tag) -%>
+                <%= check_box_tag tag_fieldname, tag.name, eval("form.object.#{tag_type}_taglist").include?(tag) -%>
               <% end %>
               <!-- need to add hidden field to ensure this is passed if none of the boxes are checked -->
               <%= hidden_field_tag tag_fieldname, " " -%>           
             <% else %>
               <% tag_fieldname = "challenge_signup_#{(is_offer ? 'offers' : 'requests')}_attributes_#{index}_tag_set_attributes_#{tag_type}_tagnames" %>
-              <%= tag_set_form.text_field "#{tag_type}_tagnames", :size => 50 %>
+              <%= tag_set_form.text_field "#{tag_type}_tagnames", :size => 50, :value => eval("form.object.#{tag_type}_tagnames") %>
               <%= autocomplete_text_field tag_fieldname, "canonical_#{tag_type}_finder" %>            
             <% end %>
           </dd>
@@ -61,18 +61,15 @@ See the challenge_signup form for an example of how this is used.
     <% end %>
     
     <% if get_prompt_restriction.optional_tags_allowed %>
-      <dt>Optional Tags <%= link_to_help("challenge-optional-tags-user")%></dt>
       <% form.object.build_optional_tag_set unless form.object.optional_tag_set %>
       <% form.fields_for :optional_tag_set_attributes do |optional_tag_set_form| %>
-        <% TagSet::TAG_TYPES.each do |tag_type| %>
-          <dt><%= optional_tag_set_form.label "#{tag_type}_tagnames".to_sym, t("optional_tag_set.#{tag_type}_tagnames", :default => "#{tag_type.classify}: ") %> </dt>
-          <dd>          
-            <%= optional_tag_set_form.text_area "#{tag_type}_tagnames".to_sym, :rows => 2, :cols => 50, 
-              :value => (form.object.optional_tag_set ? eval("form.object.optional_tag_set.#{tag_type}_tagnames") : "") %>
-            <% optional_tag_fieldname =  "challenge_signup_#{(is_offer ? 'offers' : 'requests')}_attributes_#{index}_optional_tag_set_attributes_#{tag_type}_tagnames" %>
-            <%= autocomplete_text_field(optional_tag_fieldname, "canonical_#{tag_type}_finder") %>
-          </dd>
-        <% end %>
+        <dt><%= optional_tag_set_form.label :tagnames, t("optional_tag_set.tagnames", :default => "Optional Tags: ") %> <%= link_to_help("challenge-optional-tags-user")%></dt>
+        <dd>          
+          <%= optional_tag_set_form.text_area :tagnames, :rows => 2, :cols => 50, 
+            :value => eval("form.object.optional_tag_set.tagnames") %>
+          <% optional_tag_fieldname =  "challenge_signup_#{(is_offer ? 'offers' : 'requests')}_attributes_#{index}_optional_tag_set_attributes_tagnames" %>
+          <%= autocomplete_text_field(optional_tag_fieldname, "canonical_tag_finder") %>
+        </dd>
       <% end %>
     <% end %>    
   </dl>
