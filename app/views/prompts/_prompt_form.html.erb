@@ -50,17 +50,17 @@ See the challenge_signup form for an example of how this is used.
       <% end %>
     <% end %>
     
-    <% if get_prompt_restriction.url_allowed %>
-    <dt<%= get_prompt_restriction.url_required ? ' class="required"' : '' %>><%= form.label :url , t('prompts.url', :default => "Prompt URL: ") -%></dt>
+    <% if get_prompt_restriction(is_offer).url_allowed %>
+    <dt<%= get_prompt_restriction(is_offer).url_required ? ' class="required"' : '' %>><%= form.label :url , t('prompts.url', :default => "Prompt URL: ") -%></dt>
     <dd><%= form.text_field :url, :size => 50 %></dd>
     <% end %>
 
-    <% if get_prompt_restriction.description_allowed  %>
-      <dt<%= get_prompt_restriction.description_required ? ' class="required"' : '' %>><%= form.label :description, t('prompts.description', :default => "Details: ") -%></dt>
+    <% if get_prompt_restriction(is_offer).description_allowed  %>
+      <dt<%= get_prompt_restriction(is_offer).description_required ? ' class="required"' : '' %>><%= form.label :description, t('prompts.description', :default => "Details: ") -%></dt>
       <dd><%= form.text_area :description, :rows => 6, :cols => 50 %></dd>
     <% end %>
     
-    <% if get_prompt_restriction.optional_tags_allowed %>
+    <% if get_prompt_restriction(is_offer).optional_tags_allowed %>
       <% form.object.build_optional_tag_set unless form.object.optional_tag_set %>
       <% form.fields_for :optional_tag_set_attributes do |optional_tag_set_form| %>
         <dt><%= optional_tag_set_form.label :tagnames, t("optional_tag_set.tagnames", :default => "Optional Tags: ") %> <%= link_to_help("challenge-optional-tags-user")%></dt>

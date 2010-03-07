@@ -7,7 +7,7 @@
   <% restriction = @challenge.request_restriction %>
 <% end %>
   
-<% challenge_form.fields_for (is_offer ? :offer_restriction : :request_restriction) do |prompt_restriction_form| %>
+<% challenge_form.fields_for(is_offer ? :offer_restriction : :request_restriction) do |prompt_restriction_form| %>
 
   <fieldset class="preface profile">
   
