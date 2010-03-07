@@ -32,5 +32,12 @@ class MetaTagging < ActiveRecord::Base
         end
       end
     end
-  end   
+    unless self.sub_tag.sub_tags.empty?
+      self.sub_tag.sub_tags.each do |s|
+        unless s.meta_tags.include?(self.meta_tag)
+          MetaTagging.create(:meta_tag => self.meta_tag, :sub_tag => s, :direct => false) 
+        end
+      end
+    end
+  end
 end

@@ -261,6 +261,10 @@ li.comment h4					{ font-size: 1.25em;}
  .tags-index ul 				{ margin: 2em auto; text-align: center; line-height: 2;}
  .tags-index li 				{ display: inline; padding: 0.25em 0.5625em }
 
+/*TAGS SHOW */
+ #main.tags-show ul.tree        { display: block; margin: .5em 1em; }
+ #main.tags-show ul.tree li     { list-style-type:disc; }
+
 /*TAG WRANGLINGS INDEX */
  .tag_wranglings-index .module 	{ width: 70%; margin:auto; }
 
@@ -300,7 +304,4 @@ li.comment h4					{ font-size: 1.25em;}
  #main div#chapter-index h4, #main div#chapter-index h4 a 
                                                     { margin: 0; border: none;}
                                     
- #main.tags-search form, #main.tags-index form      {float: none;}                                    
- 
-  
-
+ #main.tags-search form, #main.tags-index form      {float: none;}

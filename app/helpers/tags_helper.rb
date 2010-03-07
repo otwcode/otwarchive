@@ -164,5 +164,36 @@ module TagsHelper
     (can_wrangle? && controller.controller_name == 'tags') || 
     (@tag && controller.controller_name == 'comments')
   end
-    
+  
+  # Returns a nested list of meta tags
+  def meta_tag_tree(tag)
+    tree = []
+    meta = tag.direct_meta_tags.first
+    while meta
+      tree << meta
+      meta = meta.direct_meta_tags.first
+    end
+    meta_ul = ""
+    tree.reverse.each do |t|
+      meta_ul << ("<ul class='tags tree'>" + link_to_tag(t))
+    end
+    tree.length.times { meta_ul << "</ul>" }
+    meta_ul
+  end
+  
+  # Returns a nested list of sub tags 
+  def sub_tag_tree(tag)
+    sub_ul = ""
+    unless tag.direct_sub_tags.empty?
+      sub_ul << "<ul class='tags tree'>"
+      tag.direct_sub_tags.each do |sub|
+        sub_ul << link_to_tag(sub)
+        unless sub.direct_sub_tags.empty?
+          sub_ul << sub_tag_tree(sub)
+        end
+      end
+      sub_ul << "</ul>"
+    end
+    sub_ul
+  end
 end

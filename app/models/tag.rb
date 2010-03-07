@@ -461,10 +461,16 @@ class Tag < ActiveRecord::Base
   # When a meta tagging relationship is removed, things filter-tagged with the meta tag 
   # and the sub tag should have the meta filter-tagging removed unless it's directly tagged 
   # with the meta tag or one of its synonyms or a different sub tag of the meta tag or one of its synonyms
-  def remove_meta_filters(meta_tag)
-    other_meta_tags = meta_tag.direct_meta_tags
-    other_meta_tags.each{|tag| self.meta_tags.delete(tag) if self.meta_tags.include?(tag)}
-    
+  def remove_meta_filters(meta_tag) 
+    # remove meta tag from this tag's sub tags 
+    self.sub_tags.each {|sub| sub.meta_tags.delete(meta_tag) if sub.meta_tags.include?(meta_tag)}
+    # remove inherited meta tags from this tag and all of its sub tags
+    inherited_meta_tags = meta_tag.meta_tags
+    inherited_meta_tags.each do |tag| 
+      self.meta_tags.delete(tag) if self.meta_tags.include?(tag)
+      self.sub_tags.each {|sub| sub.meta_tags.delete(tag) if sub.meta_tags.include?(tag)}
+    end
+    # remove filters for meta tag from this tag's works
     other_sub_tags = meta_tag.sub_tags - [self]
     self.filtered_works.each do |work|
       if work.filters.include?(meta_tag) && (work.filters & other_sub_tags).empty?
@@ -508,7 +514,7 @@ class Tag < ActiveRecord::Base
     names = tag_string.split(',').map(&:squish)
     names.each do |name|
       parent = self.class.find_by_name(name)
-      if parent && parent.canonical?
+      if parent && parent.canonical? && parent != self
         self.meta_taggings.create(:meta_tag => parent, :direct => true) unless self.meta_tags.include?(parent) || self.sub_tags.include?(parent)
       end
     end        
@@ -518,7 +524,7 @@ class Tag < ActiveRecord::Base
     names = tag_string.split(',').map(&:squish)
     names.each do |name|
       sub = self.class.find_by_name(name)
-      if sub && sub.canonical?
+      if sub && sub.canonical? && sub != self
         sub.meta_taggings.create(:meta_tag => self, :direct => true) unless sub.meta_tags.include?(self) || sub.sub_tags.include?(parent) 
       end
     end        
