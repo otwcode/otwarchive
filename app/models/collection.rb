@@ -262,7 +262,7 @@ class Collection < ActiveRecord::Base
   def self.sorted_and_filtered(sort, filters, page)
     select = "collections.*, count(collections.id) AS count"
     group = "collections.id"
-    joins = "LEFT JOIN collection_items ON collection_items.collection_id = collections.id 
+    joins = "LEFT JOIN collection_items ci ON ci.collection_id = collections.id 
     INNER JOIN collection_preferences ON collection_preferences.collection_id = collections.id"
     conditions = ["parent_id IS NULL "]
     unless filters[:title].blank?
