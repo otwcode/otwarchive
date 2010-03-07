@@ -1,7 +1,7 @@
 <div class="work module">
 <div class="header module">
 <!--title byline fandom-->
-	<h4>
+<h4>
   <%- if bookmark.bookmarkable.nil? -%>
     (<%= t('bookmark_oh_noes', :default => 'Oh noes, this work has been deleted.') -%>)
   <%- else -%>
@@ -19,21 +19,21 @@
 <h5 title="fandom"><%= bookmark.bookmarkable.fandom_tags.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', ') %></h5>
 
 <%- if not bookmark.bookmarkable.nil? -%>
-    <%= get_symbols_for(bookmark.bookmarkable) -%>
-  <%- end -%>
+  <%= get_symbols_for(bookmark.bookmarkable) -%>
+<%- end -%>
 </div>
 <!--tags-->
 <ul class="tags" title="tags">
 <%- unless bookmark.bookmarkable.warning_tags.size < 1 -%>
 	<%- if hide_warnings?(bookmark.bookmarkable) -%>
-        <li class="warnings"><strong><%= show_warnings_link(bookmark.bookmarkable) %></strong></li>
-      <%- else -%>
-        <%= bookmark.bookmarkable.warning_tags.collect{|tag| '<li class="warnings"><strong>' + link_to(warning_display_name(tag.name), link_to_tag_bookmarks(tag)) + '</strong>, </li>' }.join(' ') %>
-      <%- end -%>
-<%- author_tags = bookmark.bookmarkable.cast_tags + bookmark.bookmarkable.freeform_tags
-    unless author_tags.size < 1 -%>
-	<li><%= author_tags.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', </li><li> ') %></li>
-    <%- end -%>
-    <%- end -%>
+    <li class="warnings"><strong><%= show_warnings_link(bookmark.bookmarkable) %></strong></li>
+  <%- else -%>
+    <%= bookmark.bookmarkable.warning_tags.collect{|tag| '<li class="warnings"><strong>' + link_to(warning_display_name(tag.name), link_to_tag_bookmarks(tag)) + '</strong>, </li>' }.join(' ') %>
+  <%- end -%>
+  <%- author_tags = bookmark.bookmarkable.cast_tags + bookmark.bookmarkable.freeform_tags
+  unless author_tags.size < 1 -%>
+    <li><%= author_tags.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', </li><li> ') %></li>
+  <%- end -%>
+<%- end -%>
 </ul>
 </div>
