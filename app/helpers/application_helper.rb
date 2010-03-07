@@ -224,11 +224,12 @@ module ApplicationHelper
     "\n<div class=\"auto_complete\" id=\"#{fieldname}_auto_complete\"></div>" +
     javascript_tag("new Ajax.Autocompleter('#{fieldname}', 
                             '#{fieldname}_auto_complete', 
-                            '/autocomplete/#{fieldname}?type=#{object.type}', 
+                            '/autocomplete/#{fieldname}', 
                             { 
                               indicator: 'indicator_#{fieldname}',
                               minChars: 2,
                               paramName: '#{fieldname}',
+                              parameters: 'fieldname=#{fieldname}&type=#{object.type}',
                               fullSearch: true,
                               tokens: ','
                             });")    
