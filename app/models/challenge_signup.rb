@@ -2,7 +2,7 @@ class ChallengeSignup < ActiveRecord::Base
   belongs_to :pseud
   has_one :user, :through => :pseud
   belongs_to :collection
-  has_many :challenge_assignments, :dependent => :destroy
+  #has_many :challenge_assignments, :dependent => :destroy
 
   has_many :prompts, :dependent => :destroy
   has_many :requests, :class_name => "Prompt", :conditions => {:offer => false}
@@ -36,7 +36,7 @@ class ChallengeSignup < ActiveRecord::Base
         required = challenge.respond_to?("#{prompt_type}_num_required") ? 
           challenge.send("#{prompt_type}_num_required") :
           0
-        count = eval("#{prompt_type}.count") || 0
+        count = eval("self.#{prompt_type}.length") || 0
         unless count.between?(required, allowed)
           if allowed == 0
             errors_to_add << t("challenge_signup.#{prompt_type}_not_allowed", 

@@ -33,10 +33,12 @@ class GiftExchange < ActiveRecord::Base
 
   after_save :copy_tag_set_from_offer_to_request
   def copy_tag_set_from_offer_to_request
-    if offer_restriction && offer_restriction.tag_set
-      request_restriction.build_tag_set unless request_restriction.tag_set
-      request_restriction.tag_set.tags = offer_restriction.tag_set.tags
-      request_restriction.tag_set.save
+    debugger
+    if self.offer_restriction && self.offer_restriction.tag_set
+      self.request_restriction.build_tag_set unless self.request_restriction.tag_set
+      self.request_restriction.tag_set.tags = self.offer_restriction.tag_set.tags
+      self.request_restriction.tag_set.save
+      self.request_restriction.save
     end
   end
 
