@@ -103,7 +103,7 @@ class CollectionItemsController < ApplicationController
         errors << t('collection_items.already_there', :default => "This item has already been submitted to {{collection_title}}.", :collection_title => collection.title)
       elsif collection.closed?
         errors << t('collection_items.closed', :default => "{{collection_title}} is closed to new submissions.", :collection_title => collection.title)
-      elsif !is_author_of?(@item) && !collection.user_is_maintainer(current_user)
+      elsif !current_user.is_author_of?(@item) && !collection.user_is_maintainer(current_user)
         errors << t('collection_items.not_author_or_maintainer', :default => "Not allowed: either you don't own this item or are not a moderator of {{collection_title}}", :collection_title => collection.title)
       elsif @item.add_to_collection!(collection)
         if @item.approved_collections.include?(collection)
