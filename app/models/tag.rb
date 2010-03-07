@@ -509,7 +509,7 @@ class Tag < ActiveRecord::Base
     names.each do |name|
       parent = self.class.find_by_name(name)
       if parent && parent.canonical?
-        self.meta_taggings.create(:meta_tag => parent, :direct => true) unless self.meta_tags.include?(parent)
+        self.meta_taggings.create(:meta_tag => parent, :direct => true) unless self.meta_tags.include?(parent) || self.sub_tags.include?(parent)
       end
     end        
   end
@@ -519,7 +519,7 @@ class Tag < ActiveRecord::Base
     names.each do |name|
       sub = self.class.find_by_name(name)
       if sub && sub.canonical?
-        sub.meta_taggings.create(:meta_tag => self, :direct => true) unless sub.meta_tags.include?(self)
+        sub.meta_taggings.create(:meta_tag => self, :direct => true) unless sub.meta_tags.include?(self) || sub.sub_tags.include?(parent) 
       end
     end        
   end
