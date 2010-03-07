@@ -13,33 +13,30 @@
 				<% end %>
 			</h4>
 			<h5 title="fandoms">
-		  <%= series.tags.select{|tag| tag.type == "Fandom"}.sort.collect{|tag| link_to_tag(tag) }.join(', ') %>
-		</h5>
+        <%= series.tags.select{|tag| tag.type == "Fandom"}.sort.collect{|tag| link_to_tag(tag) }.join(', ') %>
+      </h5>
     <%= get_series_symbols_for(series) -%>
 		<p class="datetime"><%= set_format_for_date(series.revised_at) %></p>
 		</div>
-<!--tags BACK END PLEASE CHECK THIS AGAINST WORK BLURB-->
-      <ul class="tags">
-		<%- if hide_warnings?(series) -%>
-              <li><%= show_warnings_link(series) %></li>
-            <%- else -%>
-              <%= tag_link_list(series.tags.select{|tag| tag.type == "Warning"}.sort) %>
-            <%- end -%>
- <%- if series.author_tags.length > 1 -%>
-			  <%= tag_link_list(series.author_tags) %>
-        <%- end -%>  
-      </ul>
+<!--tags-->
+    <ul class="tags">
+      <%= series_blurb_tag_block(series) %>
+    </ul>
 <!--summary-->
 		<%- unless series.summary.blank? %>
-  		<h6 class="landmark">Summary</h6>
-  			<blockquote class="user-generated-view summary" title="summary"><%= sanitize_and_format_for_display series.summary %></blockquote>
-		<%- end -%>
+      <h6 class="landmark">Summary</h6>
+        <blockquote class="user-generated-view summary" title="summary"><%= sanitize_and_format_for_display series.summary %></blockquote>
+    <%- end -%>
 <!--stats-->
 			<dl class="stats" title="stats">
-			<dt><%=h 'Words' + ': ' %></dt> 
-				<dd><%= number_with_delimiter(series.works.select{|work| work.visible(current_user)}.collect(&:word_count).sum) %></dd>
-			<dt><%=h 'Works' + ': ' %></dt> 
-				<dd><%=h series.serial_works.select{|sw| sw.work.visible(current_user)}.size %></dd>
+      <dt><%=h 'Words' + ': ' %></dt> 
+        <dd><%= number_with_delimiter(series.works.select{|work| work.visible(current_user)}.collect(&:word_count).sum) %></dd>
+      <dt><%=h 'Works' + ': ' %></dt> 
+        <dd><%=h series.serial_works.select{|sw| sw.work.visible(current_user)}.size %></dd>
+      <%- if Bookmark.count_visible_bookmarks(series) > 0 -%>
+      <dt><%=h t('work_bookmarks', :default => 'Bookmarks') + ': '%></dt>
+        <dd><%= link_to_bookmarkable_bookmarks(series) -%></dd>
+      <%- end -%>
 			</dl>
 <!--actions-->
     <%- if is_author_of?(series) -%>

@@ -115,4 +115,31 @@ module SeriesHelper
     "category-none"
   end
   
+  def series_blurb_tag_block(series)
+
+    warnings_block = hide_warnings?(series) ? '<li class="warnings"><strong><span id="' + "series_#{series.id}_category_warning\">" + show_warnings_link(series) + '</span></strong></li>' :
+      '<li class="warnings"><strong>' + 
+        series.tags.select{|tag| tag.type == "Warning"}.sort.collect{|tag| link_to_tag(tag) }.join(ArchiveConfig.DELIMITER_FOR_OUTPUT + '</strong></li> <li class="warnings"><strong>') +
+        '</strong></li>'
+
+    pairings = series.tags.select{|tag| tag.type == "Pairing"}
+    pairings_block = pairings.empty? ? nil : '<li class="pairing">' + 
+        pairings.collect{|tag| link_to_tag(tag) }.join(ArchiveConfig.DELIMITER_FOR_OUTPUT + '</li> <li class="pairing">') +
+        '</li>'
+        
+    characters = series.tags.select{|tag| tag.type == "Character"}
+    character_block = characters.empty? ? nil : '<li class="character">' + 
+        characters.collect{|tag| link_to_tag(tag)  }.join(ArchiveConfig.DELIMITER_FOR_OUTPUT + '</li> <li class="character">') +
+        '</li>'
+        
+    freeforms = series.tags.select{|tag| tag.type == "Freeform"}
+    freeform_block = freeforms.empty? ? nil :
+      hide_freeform?(series) ? '<li class="freeform"><span id="' + "series_#{series.id}_category_freeform\"><strong>" + show_freeforms_link(series) + '</strong></span></li>' :
+        '<li class="freeform">' +
+        freeforms.collect{|tag| link_to_tag(tag) }.join(ArchiveConfig.DELIMITER_FOR_OUTPUT + '</li> <li class="freeform">') +
+        '</li>'
+
+    [warnings_block, pairings_block, character_block, freeform_block].compact.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+  end
+  
 end
