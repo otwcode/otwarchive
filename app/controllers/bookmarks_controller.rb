@@ -88,7 +88,7 @@ class BookmarksController < ApplicationController
           end rescue NoMethodError
           bookmarks_indirect = owner.indirect_bookmarks
         end
-        bookmarks_grouped = (bookmarks_primary + bookmarks_on_synonyms + bookmarks_indirect).flatten.compact.group_by(&:bookmarkable)
+        bookmarks_grouped = (bookmarks_primary + bookmarks_on_synonyms + bookmarks_indirect).flatten.compact.reject{|b| b.bookmarkable && !b.bookmarkable.visible?(current_user)}.group_by(&:bookmarkable)
       else # main page
         @most_recent_bookmarks = true
         if params[:recs_only]
