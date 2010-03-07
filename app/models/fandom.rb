@@ -13,7 +13,7 @@ class Fandom < Tag
     
   named_scope :by_media, lambda{|media| {:conditions => {:media_id => media.id}}}
   named_scope :unwrangled, {:joins => "INNER JOIN `common_taggings` ON tags.id = common_taggings.common_tag_id", 
-    :conditions => ["common_taggings.filterable_id = ?", Media.uncategorized.andand.id]}
+    :conditions => ["common_taggings.filterable_id = ? AND common_taggings.filterable_type = 'Tag'", Media.uncategorized.andand.id]}
     
   COLLECTION_JOIN =  "INNER JOIN filter_taggings ON ( tags.id = filter_taggings.filter_id ) 
                       INNER JOIN works ON ( filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work') 
