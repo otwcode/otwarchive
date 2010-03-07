@@ -25,5 +25,5 @@
 <dt><%=h t('gift_exchange.signups', :default => "Signed up:") %></dt>
 <dd>
   <%= @collection.signups.count -%>
-  <ul><%= @collection.signups.collect(&:pseud).map {|pseud| "<li>#{pseud.byline}</li>"}.join(", ") %></ul>
+  <ul><%= @collection.signups.collect(&:pseud).compact.map {|pseud| "<li>#{pseud.byline}</li>"}.join(", ") %></ul>
 </dd>
