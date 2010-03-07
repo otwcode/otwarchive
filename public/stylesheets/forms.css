@@ -212,7 +212,7 @@ form#wrangle-select-fandom p, form#wrangle-select-media p{ display:inline; margi
 /* GLOBALIZE (in footer) you can find this in globalize.css*/
 
 /* BOOKMARKING */
-#dynamic-bookmark { position: absolute;  z-index: 40; }
+#dynamic-bookmark { position: absolute;  z-index: 40; background:#fffef9;}
 #dynamic-bookmark #bookmark-form { border: 2px solid; height: 100%; width: 36em; padding: 1em; overflow:auto; }
 #dynamic-bookmark p#close-popup {top:0; right:2em; position:absolute; z-index:60;}
 #bookmark-form h4 {margin:auto;}
