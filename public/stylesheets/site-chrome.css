@@ -253,9 +253,6 @@ li.comment h4					{ font-size: 1.25em;}
 /* TAGS EDIT, front end coder please modularise the tooltip navigation rules*/
  .tags-edit dd                  { width: 70%;} 
  .tags-edit dd input.tags       { width: 100%; }
- .tags-edit li span.navigation 	{ position:absolute; left:-999em;}
- .tags-edit li:hover span.navigation 
-								{ left:auto;}
  #main.tags-edit ul.tags        { float: left; margin-right: 2em;}
  #main.tags-edit ul.tags, #main.tags-edit ul.tags li
                                 { display: block; }
@@ -266,10 +263,7 @@ li.comment h4					{ font-size: 1.25em;}
 
 /*TAG WRANGLINGS INDEX */
  .tag_wranglings-index .module 	{ width: 70%; margin:auto; }
- .tag_wranglings-index td ul.navigation 
-								{ position:absolute; left:-999em;}
- .tag_wranglings-index td:hover ul.navigation 
-								{ left:auto; }
+
 								
 /* TRANSLATIONS*/
  #main.translation-translate 	{ margin-bottom: 2.5em }

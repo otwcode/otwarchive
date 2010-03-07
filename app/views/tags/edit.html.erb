@@ -79,7 +79,7 @@
           <%- for tag in tag_list -%>
             <li>
               <%= link_to_edit_tag(tag) %>
-              <span class="navigation">
+              <span>
                 <%= link_to 'remove', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %> 
               </span>              
             </li>
@@ -108,7 +108,7 @@
           <%- for tag in tag_list -%>
             <li>
               <%= link_to_edit_tag(tag) %>
-              <span class="navigation">
+              <span>
                 <%= link_to 'remove', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %>
               </span>              
             </li>

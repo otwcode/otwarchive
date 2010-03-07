@@ -12,6 +12,10 @@
   <h3><%= "Showing " + params[:show] %></h3>
 <%- end -%>
 
+<%- if @tag.is_a?(Fandom) && params[:show] == "pairings" -%>
+<p><%= link_to "wrangle pairings to characters", tag_wranglings_path(:show => 'character_pairings', :fandom_string => @tag.name) %></p>
+<%- end -%>
+
 <%- if params[:show] -%>
   <h3>Add new <%= params[:show] %></h3>
   <%- form_for :tag, @tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| -%>
@@ -27,18 +31,14 @@
 <%- if @tags && @tags.empty? -%>
   <p>There are no tags in this category at the moment.</p>
 <%- elsif @tags -%>
-  <h4>Filter by tag status:</h4>
-  <ul>
+  <ul class="navigation">
+    <li>Show: </li>
     <li><%= link_to 'all', url_for(:show => params[:show], :status => 'all') %></li>
     <li><%= link_to 'canonical', url_for(:show => params[:show], :status => 'canonical') %></li>
     <li><%= link_to 'non-canonical', url_for(:show => params[:show], :status => 'noncanonical') %></li>
     <li><%= link_to 'unfilterable', url_for(:show => params[:show], :status => 'unfilterable'), :title => "non-canonical tags without synonyms" %></li>
     <li><%= link_to 'unwrangled', url_for(:show => params[:show], :status => 'unwrangled'), :title => "tags which were used on the same works but haven't been wrangled yet" %></li>
   </ul>
-  
-  <%- if @tag.is_a?(Fandom) && params[:show] == "pairings" -%>
-  <p><%= link_to "wrangle pairings to characters", tag_wranglings_path(:show => 'character_pairings', :fandom_string => @tag.name) %></p>
-  <%- end -%>
   
   <%= will_paginate @tags %>
   
