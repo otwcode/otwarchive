@@ -50,7 +50,7 @@ class PromptRestriction < ActiveRecord::Base
   end
   
   def tags_of_type(type)
-    tag_set.with_type(type.classify)
+    self.tag_set ? tag_set.with_type(type.classify) : []
   end
   
 end
