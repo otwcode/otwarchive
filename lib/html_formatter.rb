@@ -117,7 +117,9 @@ module HtmlFormatter
       while not text.nil? and not text.empty?
         if text[0..0] == '<'
           # A tag
-          if (pos = text.index('<', 1)) and pos < text.index('>')
+          pos = text.index('<', 1)
+          closing_bracket_pos = text.index('>')
+          if pos && closing_bracket_pos && (pos < closing_bracket_pos)
             # If another lt before gt then it's a text node.
             return_node[[_text, {}, [], text[0...pos]], text[pos...text.length]] and next or break
           elsif text[1..1] == '!'
@@ -181,7 +183,9 @@ module HtmlFormatter
           # A text node
           pos = text.index '<'
           if pos.nil?
-            value, rest = text, ''
+            value, rest = text, '' 
+          elsif !(text.index('>'))
+            value, rest = text.gsub('<', '&#60;'), ''
           else
             value, rest = text[0...pos], text[pos...text.length]
           end
@@ -443,4 +447,3 @@ module HtmlFormatter
   end
 
 end
-
