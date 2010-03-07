@@ -85,7 +85,7 @@
 			
     </dl>
 
-    <%- if is_author_of?(work) && controller.controller_name != 'series' -%>
+    <%- if is_author_of?(work) -%>
       <h6 class="landmark">Author Actions</h6>
   	  <ul class="navigation" role="navigation">
   		  <li><%= link_to t('links.edit', :default => 'Edit'), edit_work_path(work) -%></li>
