@@ -3,6 +3,12 @@
 <%= error_messages_for :user %>
 <!--/descriptions-->
 
+<!--subnav-->
+<ul class="navigation" role="navigation">
+  <li><%= link_to 'Edit default pseud and icon', [:edit, @user, @user.default_pseud] %></li>
+</ul>
+<!--/subnav-->
+
 <!--main content-->
 <% form_for(@user) do |f| %>  
 	<!-- The password or OpenID login fields are shown in this div -->

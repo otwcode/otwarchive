@@ -35,7 +35,9 @@
       <%- unless pseud.works.blank? %>
         <li><%= link_to t('orphan_link', :default => 'Orphan Works'), {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} -%></li>
       <%- end -%>
-      <% unless @user.login == pseud.name || pseud.is_default -%>
+      <%- if pseud.is_default -%>
+        <li>Default Pseud</li>
+      <%- elsif @user.login != pseud.name -%>
         <li><%= link_to t('delete_link', :default => 'Delete'), [@user, pseud], :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
       <% end -%>
     </ul>
