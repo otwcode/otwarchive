@@ -1,12 +1,11 @@
 <!-- Co-Author stuff -->
 
 <dt class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
-  <%= label :pseud, :id, t('byline_select_author', :default => "Select author/pseudonym(s)") %>
+  <%= label_tag "#{type}_author_attributes_ids_", t('byline_select_author', :default => "Select author/pseudonym(s)") %>
 </dt>
 <dd class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' -%>>
-  <%= '<select name="' + h(type) +'[author_attributes][ids][]" multiple="multiple">' %>
-    <%= options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds) %>
-  </select>	 
+  <%= select_tag "#{type}[author_attributes][ids][]", 
+      options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds), :multiple => true %>	 
 </dd>
 
 <%- unless @coauthors.blank? -%>
