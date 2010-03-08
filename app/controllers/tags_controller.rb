@@ -156,9 +156,8 @@ class TagsController < ApplicationController
       flash[:error] = t('errors.log_in_as_admin', :default => "Please log in as admin")
       redirect_to tag_wranglings_path and return
     end
-    if @tag.blank?
-      flash[:error] = t('not_found', :default => "Tag not found")
-      redirect_to tag_wranglings_path and return
+    unless @tag
+      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:id]}'"
     end
     @counts = {}
     @uses = ['Works', 'Drafts', 'Bookmarks', 'Private Bookmarks', 'External Works']
@@ -203,6 +202,9 @@ class TagsController < ApplicationController
   
   def remove_association
     @tag = Tag.find_by_name(params[:id])
+    unless @tag
+      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:id]}'"
+    end
     if params[:to_remove]   
       tag_to_remove = Tag.find_by_name(params[:to_remove])
       @tag.remove_association(tag_to_remove)
@@ -213,6 +215,9 @@ class TagsController < ApplicationController
   
   def wrangle
     @tag = Tag.find_by_name(params[:id])
+    unless @tag
+      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:id]}'"
+    end    
     @counts = {}
     @tag.child_types.map{|t| t.underscore.pluralize.to_sym}.each do |tag_type|      
       @counts[tag_type] = @tag.send(tag_type).count
