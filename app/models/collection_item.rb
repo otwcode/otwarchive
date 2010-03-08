@@ -106,7 +106,17 @@ class CollectionItem < ActiveRecord::Base
   end
   
   def item_creator_pseuds
-    work.pseuds || [bookmark.pseud]
+    if self.item
+      if self.item.respond_to?(:pseuds)
+        self.item.pseuds
+      elsif self.item.respond_to?(:pseud)
+        [self.item.pseud]
+      else
+        []
+      end
+    else
+      []
+    end
   end
 
   def item_date
