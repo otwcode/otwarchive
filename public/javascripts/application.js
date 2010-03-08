@@ -2,11 +2,11 @@
 // This file is automatically included by javascript_include_tag :defaults 
 
 //things to do when the page loads
-document.observe("dom:loaded", function () {
-	visualizeTables();
-	hideFormFields(); 
-	hideFilters();
-	initSelect('languages_menu');
+$j(document).ready(function() {
+    // visualizeTables();
+    if ($('work-form')) { hideFormFields(); }; 
+    if ($$('form.filters')) { hideFilters(); };
+    // initSelect('languages_menu');
     hideExpandable();
 });
 
@@ -31,10 +31,14 @@ function hideExpandable() {
 
 // An attempt to replace the various work form toggle methods with a more generic one
 function toggleFormField(element_id) {
-    if (element_id == 'number-of-chapters') {
+    var ticky = $(element_id + '-show');
+    if (ticky.checked) { $(element_id).removeClassName('hidden'); }
+    else { $(element_id).addClassName('hidden'); }
+    
+    if (element_id == 'chapters-options') {
         var item = document.getElementById('work_wip_length');
-    	if (item.value == 1) {item.value = '?';}
-    	else {item.value = 1;}
+        if (item.value == 1) {item.value = '?';}
+        else {item.value = 1;}
     }
     else {
         Element.descendants(element_id).each(function(d) {
@@ -42,12 +46,11 @@ function toggleFormField(element_id) {
             else if (d.type != "hidden" && (d.nodeName == "INPUT" || d.nodeName == "SELECT" || d.nodeName == "TEXTAREA")) {d.value = ''}
         });
     }
-	Element.toggle(element_id);
 }
 
 // Toggles the notes section of the work form
 function showNotesOptions(modelname) {
-	var worknotesoptions = $('worknotesoptions')
+	var worknotesoptions = $('front-notes-options')
 	worknotesoptions.toggle();
 	if (!worknotesoptions.visible()) {
 		$(modelname + '_notes').clear();
@@ -60,7 +63,7 @@ function showNotesOptions(modelname) {
 
 // Toggles the endnotes section of the work form
 function showEndnotesOptions(modelname) {
-	var worknotesoptions = $('workendnotesoptions')
+	var worknotesoptions = $('end-notes-options')
 	worknotesoptions.toggle();
 	if (!worknotesoptions.visible()) {
 		$(modelname + '_endnotes').clear();
@@ -93,28 +96,15 @@ function selectAllCheckboxes(basefield, count, checked) {
 
 // Hides expandable form field options if Javascript is enabled
 function hideFormFields() {
-	var coAuthors = document.getElementById('co-authors');
-	if (coAuthors != null) coAuthors.style.display='none';
-	 
-	if (document.storyForm != null) var isWip = document.storyForm.isWip;
-	var chapteredOptions = document.getElementById('number-of-chapters');
-	if (isWip != null && chapteredOptions != null && !isWip.checked) chapteredOptions.style.display='none';
-	
-	if (document.storyForm != null) var hasSeries = document.storyForm.storyseriescheck;
-	var seriesOptions = document.getElementById('seriesmanage');
-	if (hasSeries != null && seriesOptions != null && !hasSeries.checked) seriesOptions.style.display='none';
-	
-	if (document.storyForm != null) var isBackdated = document.storyForm.publicationdatecheck;
-	var backdateOptions = document.getElementById('publicationdateoptions');
-	if (isBackdated != null && backdateOptions != null && !isBackdated.checked) backdateOptions.style.display='none';
-  
-	if (document.storyForm != null) var hasNotes = document.storyForm.storynotescheck;
-	var notesOptions = document.getElementById('worknotesoptions');
-	if (hasNotes != null && notesOptions != null && !hasNotes.checked) notesOptions.style.display='none';
-  
-	if (document.storyForm != null) var hasEndnotes = document.storyForm.storyendnotescheck;
-	var endnotesOptions = document.getElementById('workendnotesoptions');
-	if (hasEndnotes != null && endnotesOptions != null && !hasEndnotes.checked) endnotesOptions.style.display='none';    	
+    if ($('work-form') != null) {
+        var toHide = ['co-authors-options', 'front-notes-options', 'end-notes-options', 'chapters-options', 'series-options', 'backdate-options']
+        toHide.each(function(name) {
+            if ($(name)) {
+                if ($(name + '-show').checked == false) { $(name).addClassName('hidden'); }
+            }
+        });
+        $('work-form').className = $('work-form').className;
+    }
 }
 
 // Toggles items in filter list
@@ -220,6 +210,3 @@ ViewToggle.prototype = {
 // commented out for now as it is inadvertently disabling sessions view login login_view = new ViewToggle('signin', 'signin_closed', 'signin_open')
 subnav_view = new ViewToggle('subnav');
 flash_view = new ViewToggle('flash');
-
-
-

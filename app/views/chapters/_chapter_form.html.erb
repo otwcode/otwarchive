@@ -1,5 +1,5 @@
 <div id="work-form">
-<% form_for([@work, chapter], :html => {:name => "storyForm"}) do |f| %>
+<% form_for([@work, chapter]) do |f| %>
 
 <fieldset id="chapter-ordering">
 	<legend><%= t('form_naming', :default => 'Naming, Ordering and Date') %></legend>
@@ -36,15 +36,14 @@
         <%= generate_countdown_html("chapter_summary", ArchiveConfig.SUMMARY_MAX) -%>
       </dd>    
       <dt class="work-endnotes">
-        Add notes <%= f.label :storynotescheck, "at the beginning" %> 
+        Add notes <%= f.label 'front-notes-options-show', "at the beginning" %> 
       </dt>
       <dd class="work-endnotes">
-       <input type="checkbox" id="storynotescheck" name="storynotescheck"  onclick="showNotesOptions('chapter')" 
-       <%- unless chapter.notes.blank? -%>checked="checked"<%- end -%>/>
-       <span id="worknoteswarning" class="warning" <%- if chapter.notes.blank? -%> style="display: none" <%- end -%>>
-       <%=h t('worknotes_warning', :default =>"Warning: Unchecking this box will delete any existing beginning note.") %></span>
+        <%= check_box_tag "front-notes-options-show", "1", !chapter.notes.blank?, :onclick => "toggleFormField('front-notes-options')" %>
+        <span id="worknoteswarning" class="warning" <%- if chapter.notes.blank? -%> style="display: none" <%- end -%>>
+        <%=h t('worknotes_warning', :default =>"Warning: Unchecking this box will delete any existing beginning note.") %></span>
       </dd>
-      <dd id="worknotesoptions" class="work-endnotes optionalField">
+      <dd id="front-notes-options" class="work-endnotes optionalField">
         <dl>     
           <dt class="notes">
             <%= f.label :notes, t('form_notes', :default => "Chapter notes (max {{max}} characters)", :max => ArchiveConfig.NOTES_MAX.to_s) %>
@@ -60,12 +59,11 @@
        Add notes <%= f.label :storyendnotescheck, "at the end" %> 
       </dt>
       <dd class="work-endnotes">
-       <input type="checkbox" id="storyendnotescheck" name="storyendnotescheck"  onclick="showEndnotesOptions('chapter')" 
-       <%- unless chapter.endnotes.blank? -%>checked="checked"<%- end -%>/>
-	<span id="workendnoteswarning" class="warning" <%- if chapter.endnotes.blank? -%> style="display: none" <%- end -%>>
-       <%=h t('workendnotes_warning', :default =>"Warning: Unchecking this box will delete any existing end note.") %></span>
+        <%= check_box_tag "end-notes-options-show", "1", !chapter.endnotes.blank?, :onclick => "toggleFormField('end-notes-options')" %>
+        <span id="workendnoteswarning" class="warning" <%- if chapter.endnotes.blank? -%> style="display: none" <%- end -%>>
+        <%=h t('workendnotes_warning', :default =>"Warning: Unchecking this box will delete any existing end note.") %></span>
       </dd>
-      <dd id="workendnotesoptions" class="work-endnotes optionalField">
+      <dd id="end-notes-options" class="work-endnotes optionalField">
         <dl>
           <dt class="notes">
             <%= f.label :endnotes, t('form_notes', :default => "Chapter notes (max {{max}} characters)", :max => ArchiveConfig.NOTES_MAX.to_s) %>

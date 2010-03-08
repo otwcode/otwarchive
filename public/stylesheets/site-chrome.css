@@ -305,3 +305,5 @@ li.comment h4					{ font-size: 1.25em;}
                                                     { margin: 0; border: none;}
                                     
  #main.tags-search form, #main.tags-index form      {float: none;}
+ 
+ #main .hidden  {display: none;}

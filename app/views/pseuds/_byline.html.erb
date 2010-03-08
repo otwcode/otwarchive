@@ -27,12 +27,12 @@
 <% end %>
 
 <dt class="byline coauthors">
-  <%= check_box_tag "show-coauthors", "1", nil, :onclick => "toggleFormField('co-authors');" %>
+  <%= check_box_tag "co-authors-options-show", "1", nil, :onclick => "toggleFormField('co-authors-options');" %>
 </dt>
 <dd class="byline coauthors">
-  <%= label_tag "show-coauthors", t('add_coauthors', :default => 'Add co-authors?') %>
+  <%= label_tag "co-authors-options-show", t('add_coauthors', :default => 'Add co-authors?') %>
 </dd>        
-<dd id="co-authors">
+<dd id="co-authors-options">
   <dl class="coauthors">
     <dt><%= label_tag :pseud_byline, t('pseuds.enter_coauthors', :default => "Enter co-author name(s):") %></dt>
     <dd>

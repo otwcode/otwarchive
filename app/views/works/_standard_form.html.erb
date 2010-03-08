@@ -42,14 +42,14 @@
       <dd>
         <dl class="notes">
           <dt class="endnotes">
-            <%= check_box_tag "storynotescheck", "1", !@work.notes.blank?, :onclick => "toggleFormField('worknotesoptions')" %>
+            <%= check_box_tag "front-notes-options-show", "1", !@work.notes.blank?, :onclick => "toggleFormField('front-notes-options')" %>
           </dt>
           <dd class="endnotes">
-            <%= label_tag :storynotescheck, t('beginning_notes', :default => "at the beginning") %>
+            <%= label_tag 'front-notes-options-show', t('beginning_notes', :default => "at the beginning") %>
             <span id="worknoteswarning" class="warning" <%- if @work.notes.blank? -%> style="display: none" <%- end -%>>
             <%=h t('worknotes_warning', :default =>"Warning: Unchecking this box will delete any existing beginning note.") %></span>
           </dd>
-          <dd id="worknotesoptions" class="work-endnotes optionalField">
+          <dd id="front-notes-options" class="work-endnotes optionalField">
             <dl>
               <dt class="notes">
                 <%= f.label :notes, "Notes (max " + ArchiveConfig.NOTES_MAX.to_s + " characters)" %>
@@ -65,14 +65,14 @@
           </dd>
 
           <dt class="endnotes">
-            <%= check_box_tag "storyendnotescheck", "1", !@work.endnotes.blank?, :onclick => "toggleFormField('workendnotesoptions')" %>
+            <%= check_box_tag "end-notes-options-show", "1", !@work.endnotes.blank?, :onclick => "toggleFormField('end-notes-options')" %>
           </dt>
           <dd class="endnotes">
-          <%= label_tag :storyendnotescheck, t('end_notes', :default => "at the end") %>
+          <%= label_tag 'end-notes-options-show', t('end_notes', :default => "at the end") %>
             <span id="workendnoteswarning" class="warning" <%- if @work.endnotes.blank? -%> style="display: none" <%- end -%>>
            <%=h t('workendnotes_warning', :default =>"Warning: Unchecking this box will delete any existing end note.") %></span>
           </dd>
-          <dd id="workendnotesoptions" class="work-endnotes optionalField">
+          <dd id="end-notes-options" class="work-endnotes optionalField">
             <dl>
               <dt class="notes">
                 <%= f.label :notes, "Notes (max " + ArchiveConfig.NOTES_MAX.to_s + " characters)" %>
@@ -122,15 +122,15 @@
       <!-- Series checkbox (storyseriescheck) -->
       <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear. -->
       <dt class="work-is_serial">
-        <%= check_box_tag "storyseriescheck", "1", !@work.series.blank?, :onclick => "toggleFormField('seriesmanage');" %> 
+        <%= check_box_tag "series-options-show", "1", !@work.series.blank?, :onclick => "toggleFormField('series-options');" %> 
       </dt>
       <dd class="work-is_serial">
-        <%= label_tag :storyseriescheck, t('part', :default => "This work is part of a series") %>
+        <%= label_tag 'series-options-show', t('part', :default => "This work is part of a series") %>
         <%= link_to_help "choosing-series" -%>
       </dd>
     
       <!-- Toggles on with series checkbox -->
-      <dd id="seriesmanage">
+      <dd id="series-options">
         <dl>
         <% fields_for "work[series_attributes]" do |s| %>
           <dt><%= s.label 'series_id', 'Choose one of your existing series:' %></dt>
@@ -160,12 +160,12 @@
       <!-- Chaptered checkbox (work_is_wip) -->
       <!-- Checking this box causes the expected number of chapters box to appear; unchecking it causes it to disappear. -->
       <dt class="work-is_wip">
-        <%= check_box_tag "isWip", "1", @work.chaptered?, :onclick => "toggleFormField('number-of-chapters');" %>
+        <%= check_box_tag "chapters-options-show", "1", @work.chaptered?, :onclick => "toggleFormField('chapters-options');" %>
       </dt>
       <dd class="work-is_wip">
-        <%= label_tag :isWip, t('multiple_chapters', :default =>"This work has multiple chapters") %>
+        <%= label_tag "chapters-options-show", t('multiple_chapters', :default =>"This work has multiple chapters") %>
       </dd>        
-      <dd id="number-of-chapters">
+      <dd id="chapters-options">
         <dl>
           <dt><%=h 'Chapter 1 of' %></dt>
           <dd><%= f.text_field :wip_length, :class => "number-field" %></dd>
@@ -176,12 +176,12 @@
     
       <!-- User-facing dates -->
       <dt class="work-is-backdated">
-        <%= check_box_tag "publicationdatecheck", "1", check_backdate_box(@work, @chapter), :onclick => "toggleFormField('publicationdateoptions');" %>
+        <%= check_box_tag "backdate-options-show", "1", check_backdate_box(@work, @chapter), :onclick => "toggleFormField('backdate-options');" %>
       </dt>
       <dd class="work-is-backdated">
-        <%= label_tag :publicationdatecheck, t('change_pub_date', :default => "Set a different publication date") %> <%= link_to_help "backdating-help" -%>
+        <%= label_tag "backdate-options-show", t('change_pub_date', :default => "Set a different publication date") %> <%= link_to_help "backdating-help" -%>
       </dd>
-      <dd id="publicationdateoptions" class="optionalField">
+      <dd id="backdate-options" class="optionalField">
         <dl>
           <dd id="managePublicationDate" class="managePublicationDate">
             <%= c.date_select("published_at", :start_year => Date.today.year, :end_year => 1950, :default => Date.today, :value => @chapter.published_at, :order => [:day, :month, :year]) %>   

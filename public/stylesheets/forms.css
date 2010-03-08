@@ -141,10 +141,12 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 #work-form dd.validation {padding:0.5em 0 1em 0;}
 #work-form span.LV_validation_message  {display:inline;clear:none;float:left;margin:0; padding-top:.4em;}
 #work-form p.character_counter  {display:inline;clear:none;float:left;margin:0;}
+#work-form .rtf-html-field textarea {float: left; clear:both;}
+#work-form .rtf-html-field p.character_counter {display: block; clear:both;}
 #work-form #work_title {display:block;} /* Enigel 03-2010 */
 #work-form .byline input[type="checkbox"] {margin: 0 .5em 0 0;}
-#co-authors dl.coauthors, #co-authors dl dt, #co-authors dl dd {top:0; left:0; margin:.1em 0 0 0;}
-#co-authors dl dt, #co-authors dl dd {margin-top:.5em;}
+#co-authors-options dl.coauthors, #co-authors-options dl dt, #co-authors-options dl dd {top:0; left:0; margin:.1em 0 0 0;}
+#co-authors-options dl dt, #co-authors-options dl dd {margin-top:.5em;}
 #work-form dl.notes {margin:-1.5em 0 0 0;}
 #work-form dl.notes dl {margin:.7em 0 0 .1em; top:0; left:0;}
 #work-form dl.notes dl dt {top:0; left: 0; margin:0;}
@@ -152,16 +154,16 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 #work-form dl.notes dl dd.validation {margin-top:0;}
 #work-form .endnotes span.warning {position:absolute; top:0; left:10em;}
 
-#seriesmanage dl dt {width: 19em;}
-#seriesmanage dl dd {left:20em;width:46em;}
-#seriesmanage input[type="text"] {width:45em;}
-#seriesmanage select {width:47.5em;}
-#number-of-chapters dl dt {width: 8em;}
-#number-of-chapters dl dd {left:9em;width:56em;}
-#number-of-chapters input[type="text"] {width:56em;}
-#number-of-chapters input[type="text"].number-field {width:10em;}
+#series-options dl dt {width: 19em;}
+#series-options dl dd {left:20em;width:46em;}
+#series-options input[type="text"] {width:45em;}
+#chapters-options select {width:47.5em;}
+#chapters-options dl dt {width: 8em;}
+#chapters-options dl dd {left:9em;width:56em;}
+#chapters-options input[type="text"] {width:56em;}
+#chapters-options input[type="text"].number-field {width:10em;}
 #work-form #chapter-ordering input.number-field { width:5em! important;}
-#publicationdateoptions dl dd.managePublicationDate {top:1.5em;}
+#backdate-options dl dd.managePublicationDate {top:1.5em;}
 #managePublicationDate select {width:auto;}
 #work-form dt.work-language {position:relative; bottom:-1.5em; width:12em; height:1em; margin:1em 0 0 0;}
 #work-form dd.work-language {position:relative;top:.5em;left:13em;width:2em;}
