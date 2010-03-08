@@ -52,7 +52,7 @@ class Fandom < Tag
   # This one can be '.count'ed, the others can't!
   named_scope :id_for_collections, lambda { |collections|
     {
-      :select => "distinct tags.id",
+      :select => "DISTINCT tags.id",
       :joins => COLLECTION_JOIN,
       :conditions => ["collection_items.collection_id IN (?) 
                       AND works.posted = 1", collections.collect(&:id)]

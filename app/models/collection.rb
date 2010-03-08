@@ -198,11 +198,11 @@ class Collection < ActiveRecord::Base
   end
   
   def all_fandoms
-    self.children ? Fandom.for_collections_without_count([self] + self.children) : self.fandoms
+    Fandom.for_collections_without_count([self] + self.children)
   end
     
   def all_fandoms_count
-    self.children ? Fandom.id_for_collections([self] + self.children).count : self.fandoms.count
+    Fandom.id_for_collections([self] + self.children).count(:all, :select => "DISTINCT tags.id")
   end
   
   def maintainers
