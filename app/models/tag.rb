@@ -525,7 +525,7 @@ class Tag < ActiveRecord::Base
     names.each do |name|
       sub = self.class.find_by_name(name)
       if sub && sub.canonical? && sub != self
-        sub.meta_taggings.create(:meta_tag => self, :direct => true) unless sub.meta_tags.include?(self) || sub.sub_tags.include?(parent) 
+        sub.meta_taggings.create(:meta_tag => self, :direct => true) unless sub.meta_tags.include?(self) || sub.sub_tags.include?(self) 
       end
     end        
   end
