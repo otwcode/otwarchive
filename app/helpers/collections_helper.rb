@@ -37,4 +37,10 @@ module CollectionsHelper
   def challenge_class_name(collection)
     collection.challenge.class.name.demodulize.tableize.singularize
   end
+  
+  def show_collections_data(work)
+    collections = work.approved_collections
+    collections.collect {|coll| link_to coll.title, collection_path(coll)}.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+  end
+  
 end

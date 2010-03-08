@@ -15,12 +15,21 @@ module WorksHelper
     published_date = (chapter && work.preview_mode) ? chapter.published_at : work.first_chapter.published_at
     list = [[t('works_helper.published', :default => "Published:"), localize(published_date)], [t('works_helper.words', :default => "Words:"), work.word_count], 
             [t('works_helper.chapters', :default => "Chapters:"), work.chapter_total_display]]
+
+    if work.count_visible_comments > 0
+      list.concat([[t('work_comments', :default => 'Comments') + ': ', work.count_visible_comments.to_s]])
+    end
+    if (bookmark_count = Bookmark.count_visible_bookmarks(work)) > 0
+      list.concat([[t('work_bookmarks', :default => 'Bookmarks') + ': ', bookmark_count.to_s]])
+    end
     list.concat([[t('works_helper.hits:', :default => "Hits:"), work.hit_count]]) if show_hit_count?(work)
+
     if work.chaptered? && work.revised_at
       prefix = work.is_wip ? "Updated:" : "Completed:"
       latest_date = (work.preview_mode && work.backdate) ? published_date : work.revised_at.to_date
       list.insert(1, [prefix, localize(latest_date)])
     end
+    
     '<dl>' + list.map {|l| '<dt>' + l.first + '</dt><dd>' + l.last.to_s + '</dd>'}.to_s + '</dl>'
   end
 

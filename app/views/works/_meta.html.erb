@@ -30,13 +30,19 @@
       </dd>
     <%- end -%>
   <%- end -%>
- <%- unless @work.series.blank? -%>
-      <dt class="series">Series</dt>
-		<dd class="series">
-		<%= show_series_data(@work) %>
-		</dd>
-		<%- end -%>
-		<dt class="stats">Stats<!--comment link and bookmark link should come out of here and go in navigation. comment count and bookmark count can remain--></dt>
-		<dd class="stats"><%= work_meta_list(@work, @chapter) %></dd>
+  <%- unless @work.series.blank? -%>
+    <dt class="series">Series</dt>
+    <dd class="series">
+    <%= show_series_data(@work) %>
+    </dd>
+  <%- end -%>
+
+  <%- unless @work.approved_collections.empty? %>
+    <dt><%= t('work_collections', :default => 'Collections') + ': ' -%></dt>
+    <dd><%= show_collections_data(@work) %></dd>
+  <%- end -%>
+
+  <dt class="stats">Stats<</dt>
+  <dd class="stats"><%= work_meta_list(@work, @chapter) %></dd>
 </dl>
 </div>
