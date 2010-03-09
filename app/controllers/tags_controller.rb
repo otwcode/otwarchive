@@ -181,7 +181,8 @@ class TagsController < ApplicationController
 
   def update
     @tag = Tag.find_by_name(params[:id])
-    if @tag.update_attributes(params[:tag])
+    @tag.attributes = params[:tag]
+    if @tag.errors.empty? && @tag.save
       flash[:notice] = t('successfully_updated', :default => 'Tag was updated.')
       if params[:commit] == "Wrangle"
         params[:page] = '1' if params[:page].blank?

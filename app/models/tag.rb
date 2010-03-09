@@ -543,22 +543,23 @@ class Tag < ActiveRecord::Base
         if new_merger && !new_merger.canonical?
           self.errors.add_to_base(new_merger.name + " is not a canonical tag. Please make it canonical before adding synonyms to it.")
         elsif new_merger && new_merger.class != self.class
-          self.errors.add_to_base(new_merger.name + " is a #{new_merger.type.to_s.downcase}. Synonyms must belong to the same category.")          
-        else
-          unless new_merger
-            new_merger = self.class.create(:name => tag_string, :canonical => true)
+          self.errors.add_to_base(new_merger.name + " is a #{new_merger.type.to_s.downcase}. Synonyms must belong to the same category.")
+        elsif !new_merger
+          new_merger = self.class.new(:name => tag_string, :canonical => true)
+          unless new_merger.save
+            self.errors.add_to_base(tag_string + " could not be saved. Please make sure that it's a valid tag name.")
           end
+        end
+        if new_merger && self.errors.empty?
           self.canonical = false      
           self.merger_id = new_merger.id
-          if self.valid?
-            [(self.parents + self.children) - (new_merger.parents + new_merger.children)].each { |tag| new_merger.add_association(tag) }
-            self.meta_tags.each { |tag| new_merger.meta_tags << tag unless new_merger.meta_tags.include?(tag) }
-            self.sub_tags.each { |tag| tag.meta_tags << new_merger unless tag.meta_tags.include?(new_merger) }            
-            self.mergers.each {|m| m.update_attributes(:merger_id => new_merger.id)}
-            self.children = []
-            self.meta_tags = []
-            self.sub_tags = []        
-          end
+          [(self.parents + self.children) - (new_merger.parents + new_merger.children)].each { |tag| new_merger.add_association(tag) }
+          self.meta_tags.each { |tag| new_merger.meta_tags << tag unless new_merger.meta_tags.include?(tag) }
+          self.sub_tags.each { |tag| tag.meta_tags << new_merger unless tag.meta_tags.include?(new_merger) }            
+          self.mergers.each {|m| m.update_attributes(:merger_id => new_merger.id)}
+          self.children = []
+          self.meta_tags = []
+          self.sub_tags = []        
         end    
       end
     end
