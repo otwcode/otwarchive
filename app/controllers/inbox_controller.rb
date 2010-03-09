@@ -19,14 +19,16 @@ class InboxController < ApplicationController
     @commentable = Comment.find(params[:comment_id]) 
     @comment = Comment.new
   end
-
+  
   def update
     begin
-      @inbox_comments = InboxComment.find(params[:inbox_comments].keys)
-      case params[:commit]
-        when 'read' then @inbox_comments.each { |i| i.update_attribute(:read, true) }
-        when 'unread' then @inbox_comments.each { |i| i.update_attribute(:read, false) }
-        when 'delete from inbox' then @inbox_comments.each { |i| i.destroy }
+      @inbox_comments = InboxComment.find(params[:inbox_comments])
+      if params[:read]
+        @inbox_comments.each { |i| i.update_attribute(:read, true) }
+      elsif params[:unread]
+        @inbox_comments.each { |i| i.update_attribute(:read, false) }
+      elsif params[:delete]
+        @inbox_comments.each { |i| i.destroy }
       end    
     rescue
       flash[:warning] = t('please_select', :default => "Please select something first")
