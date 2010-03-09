@@ -23,17 +23,9 @@
 <%- end -%>
 </div>
 <!--tags-->
+<%- if not bookmark.bookmarkable.nil? -%>
 <ul class="tags" title="tags">
-<%- unless bookmark.bookmarkable.warning_tags.size < 1 -%>
-	<%- if hide_warnings?(bookmark.bookmarkable) -%>
-    <li class="warnings"><strong><%= show_warnings_link(bookmark.bookmarkable) %></strong></li>
-  <%- else -%>
-    <%= bookmark.bookmarkable.warning_tags.collect{|tag| '<li class="warnings"><strong>' + link_to(warning_display_name(tag.name), link_to_tag_bookmarks(tag)) + '</strong>, </li>' }.join(' ') %>
-  <%- end -%>
-  <%- author_tags = bookmark.bookmarkable.cast_tags + bookmark.bookmarkable.freeform_tags
-  unless author_tags.size < 1 -%>
-    <li><%= author_tags.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', </li><li> ') %></li>
-  <%- end -%>
-<%- end -%>
+  <%= work_blurb_tag_block(bookmark.bookmarkable) -%>
 </ul>
+<%- end -%>
 </div>

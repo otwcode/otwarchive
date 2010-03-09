@@ -25,18 +25,9 @@
 	<%- end -%>
 </div>
 <!--tags-->
-<ul class="tags" title="tags">
-<%- author_warnings = bookmark.bookmarkable.works.visible.collect(&:warning_tags).flatten.compact.uniq -%>
-<%- unless author_warnings.size < 1 -%>      
-  <%- if hide_warnings?(bookmark.bookmarkable) -%>
-    <li class="warnings"><strong><%= show_warnings_link(bookmark.bookmarkable) %></strong></li>
-  <%- else -%>
-    <%= author_warnings.collect{|tag| '<li class="warnings"><strong>' + link_to(warning_display_name(tag.name), link_to_tag_bookmarks(tag)) + '</strong>, </li>' }.join(' ') %>
-  <%- end -%>        
+<%- if not bookmark.bookmarkable.nil? -%>
+  <ul class="tags" title="tags">
+    <%= series_blurb_tag_block(bookmark.bookmarkable) %>
+  </ul>
 <%- end -%>
-<%- author_tags = bookmark.bookmarkable.works.visible.collect{|w| [w.cast_tags, w.freeform_tags]}.transpose.flatten.uniq
-  unless author_tags.size < 1 -%> 
-	  <li><%= author_tags.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', </li><li> ') %></li>
-  <%- end -%>
-</ul>
 </div>
