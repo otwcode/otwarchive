@@ -3,7 +3,7 @@ module SeriesHelper
   def show_series_data(work)
     # this should only show prev and next works visible to the current user
     series = work.series.select{|s| s.visible?(current_user)}
-    series.map do |serial|
+    series_data = series.map do |serial|
       # cull visible works
       serial_works = serial.serial_works.find(:all, :include => :work, :conditions => ['works.posted = ?', true], :order => :position).select{|sw| sw.work.visible(current_user)}.collect{|sw| sw.work}
       visible_position = serial_works.index(work) if serial_works     
@@ -14,6 +14,7 @@ module SeriesHelper
         previous_link + main_link + next_link
       end
     end
+    series_data.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
   end
   
   def get_series_title_string(tags, category_name = "")

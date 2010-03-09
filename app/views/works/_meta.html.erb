@@ -42,7 +42,7 @@
     <dd><%= show_collections_data(@work) %></dd>
   <%- end -%>
 
-  <dt class="stats">Stats<</dt>
+  <dt class="stats"><%= t("works.stats", :default => "Stats") %>:</dt>
   <dd class="stats"><%= work_meta_list(@work, @chapter) %></dd>
 </dl>
 </div>
