@@ -5,9 +5,11 @@
 <!--/descriptions-->
 
 <!--main content-->
-<%- unless @inbox_comments.blank? -%>
-  
-  <ul class="navigation">
+<%- unless @inbox_comments.blank? -%>  
+  <%- form_tag user_inbox_path(@user), :method => :put, :id => 'inbox-form' do -%>
+  <fieldset>
+	<legend>Mass Edit Options</legend>
+	<ul class="navigation">
     <li>Select: </li>
     <li>
       <a onclick="$('inbox-form').getInputs('checkbox', 'inbox_comments[]').each(function(box){box.checked = 1})">all</a>
@@ -16,10 +18,6 @@
       <a onclick="$('inbox-form').getInputs('checkbox', 'inbox_comments[]').each(function(box){box.checked = 0})">none</a>
     </li>
   </ul>
-  
-  <%- form_tag user_inbox_path(@user), :method => :put, :id => 'inbox-form' do -%>
-  <fieldset>
-	<legend>Mass Edit Options</legend>
 	<p class="submit">
       <%= "Mark checked as:" %> 
       <%= submit_tag t('read', :default => 'Read'), :name => 'read' %>
@@ -62,6 +60,15 @@
   </fieldset>
   <fieldset>
 	<legend>Mass Edit Options Again</legend>
+	<ul class="navigation">
+    <li>Select: </li>
+    <li>
+      <a onclick="$('inbox-form').getInputs('checkbox', 'inbox_comments[]').each(function(box){box.checked = 1})">all</a>
+    </li>
+    <li>
+      <a onclick="$('inbox-form').getInputs('checkbox', 'inbox_comments[]').each(function(box){box.checked = 0})">none</a>
+    </li>
+  </ul>
     <p class="submit">
       <%= "Mark checked as:" %> 
       <%= submit_tag t('read', :default => 'Read'), :name => 'read' %>
