@@ -1,6 +1,31 @@
-<h2><%= t('challenge_signups.signups_listing', :default => "Signups for {{collection}}", :collection => sanitize_title_for_display(@collection.title)) -%></h2>
-
-<!-- render differently based on the challenge -->
 <%- if @collection && @collection.challenge %>
+  <h2><%= t('challenge_signups.signups_listing', :default => "Signups for {{collection}}", :collection => sanitize_title_for_display(@collection.title)) -%></h2>
+
+  <!-- render differently based on the challenge -->
   <%= render :partial => "challenge/#{challenge_class_name(@collection)}/challenge_signups" -%>
+<% elsif @user %>
+  <h2><%= t('challenge_signups.user_signups_listing', :default => "Challenge Signups for {{user}}", :user => @user.login) -%></h2>
+
+  <table>
+    <tr>
+      <th>Pseud</th>
+      <th>Collection</th>
+      <th>Manage</th>
+    </tr>
+    <% @challenge_signups.each do |challenge_signup| %>
+      <tr>
+        <td><%= challenge_signup.pseud.byline -%></td>
+        <td><%= link_to sanitize_title_for_display(challenge_signup.collection.title), challenge_signup.collection %></td>
+        <td class="navigation">
+          <ul class="navigation">
+            <li><%= link_to t('challenge_signups.show', :default => "Show"), collection_signup_path(challenge_signup.collection, challenge_signup) %></li>
+            <li><%= link_to t('challenge_signups.edit', :default => "Edit"), edit_collection_signup_path(challenge_signup.collection, challenge_signup) %></li>
+            <li><%= link_to t('challenge_signups.delete', :default => "Delete"), 
+                      collection_signup_path(challenge_signup.collection, challenge_signup), :confirm => 'Are you sure?', :method => :delete %></li>
+          </ul>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+
 <% end %>

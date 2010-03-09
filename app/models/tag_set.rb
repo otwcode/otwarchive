@@ -6,6 +6,8 @@ class TagSet < ActiveRecord::Base
   has_many :tags, :through => :set_taggings
 
   has_one :prompt
+  has_one :offer
+  has_one :request
 
   # how this works: we don't want to set the actual "tags" variable initially because that will
   # create SetTaggings even if the tags are not canonical or wrong. So we need to create a temporary
@@ -76,12 +78,13 @@ class TagSet < ActiveRecord::Base
   
   validate :correct_number_of_tags
   def correct_number_of_tags
-    if prompt && (restriction = prompt.get_prompt_restriction)
+    prompt_to_check = (offer ? offer : (request ? request : prompt))
+    if prompt_to_check && (restriction = prompt_to_check.get_prompt_restriction)
       # make sure prompt has no more/less than the required/allowed number of tags of each type
       TAG_TYPES.each do |tag_type|
         required = eval("restriction.#{tag_type}_num_required")
         allowed = eval("restriction.#{tag_type}_num_allowed")
-        prompt_type = prompt.offer ? 'Offer' : 'Request'
+        prompt_type = prompt_to_check.class.name
         taglist = eval("#{tag_type}_taglist")
         tag_count = taglist.count
         unless tag_count.between?(required, allowed)
@@ -114,22 +117,16 @@ class TagSet < ActiveRecord::Base
               :default => "^#{prompt_type} must have between {{required}} and {{allowed}} #{tag_type} tags. You currently have {{taglist}}.",
               :required => required, :allowed => allowed, :taglist => taglist_string))
           end
-          
         end
       end
-      
-      # unless errors_to_add.empty?
-      #   # yuuuuuck :( but so much less ugly than define-method'ing these all
-      #   self.errors.add_to_base(errors_to_add.join("</li><li>"))
-      #   return false
-      # end
     end
   end
   
   
   validate :allowed_tags
   def allowed_tags
-    if prompt && (restriction = prompt.get_prompt_restriction)
+    prompt_to_check = (offer ? offer : (request ? request : prompt))
+    if prompt_to_check && (restriction = prompt_to_check.get_prompt_restriction)
       TAG_TYPES.each do |tag_type|
         # if we have a specified set of tags of this type, make sure that all the
         # tags in the prompt are in the set.

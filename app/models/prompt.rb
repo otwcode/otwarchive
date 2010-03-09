@@ -66,9 +66,6 @@ class Prompt < ActiveRecord::Base
     }    
   }
   
-  named_scope :offers, :conditions => {:offer => true}
-  named_scope :requests, :conditions => {:offer => false}
-  
   named_scope :by_position, {:order => "position ASC", :conditions => "position IS NOT NULL"}
   named_scope :without_position, :conditions => "position IS NULL"
     
@@ -94,7 +91,7 @@ class Prompt < ActiveRecord::Base
 
   def get_prompt_restriction
     if collection && collection.challenge
-      self.offer ? collection.challenge.offer_restriction : (collection.challenge.request_restriction || collection.challenge.prompt_restriction)
+      collection.challenge.prompt_restriction
     else
       nil
     end

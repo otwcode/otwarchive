@@ -25,7 +25,7 @@ So if anyone can think of a better design for this, that would be awesome
         <dt><%= signup_form.label :pseud_id, t("prompt.pseud", :default => "Select pseudonym: ") -%></dt>
         <dd><%= signup_form.select :pseud_id, options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud.id) %></dd>
       <% else -%>
-        <p><%= signup_form.hidden_field :pseud_id -%></p>
+        <p><%= signup_form.hidden_field :pseud_id, :value => (signup_form.object.new_record? ? current_user.default_pseud.id : signup_form.object.pseud.id) -%></p>
       <% end %>  
     </dl>
   </fieldset>

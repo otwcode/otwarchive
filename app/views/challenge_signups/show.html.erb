@@ -55,19 +55,19 @@
     </div>
     <% end %>
   </div>
-<!--/content-->
+  <!--/content-->
 
-<!--subnav-->
-<ul class="navigation" role="navigation">
-  <li><%= link_to 'Edit', edit_collection_signup_path(@collection, @challenge_signup) %></li>
-  <li>
-    <%= link_to t('challenge_signup.delete_signup', :default => "Delete"), 
-      collection_signup_path(@collection, @challenge_signup), 
-      :confirm => t('challenge_signup.confirm_delete_signup', :default => "Are you sure you want to delete your signup? All information will be lost."), 
-      :method => :delete %>
-  </li>
-  <li><%= link_to 'Back', @collection %></li>
-</ul>
-<!--/subnav-->
-
+  <!--subnav-->
+  <ul class="navigation" role="navigation">
+    <li><%= link_to 'Edit', edit_collection_signup_path(@collection, @challenge_signup) %></li>
+    <li>
+      <%= link_to t('challenge_signup.delete_signup', :default => "Delete"), 
+        collection_signup_path(@collection, @challenge_signup), 
+        :confirm => t('challenge_signup.confirm_delete_signup', :default => "Are you sure you want to delete your signup? All information will be lost."), 
+        :method => :delete %>
+    </li>
+    <li><%= link_to 'Back', @collection %></li>
+  </ul>
+  <!--/subnav-->
+</div>
 

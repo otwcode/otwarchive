@@ -37,12 +37,12 @@ class PromptRestriction < ActiveRecord::Base
   before_validation :update_allowed_values
   # if anything is required make sure it is also allowed
   def update_allowed_values
-    self.url_allowed = self.url_required ? true : self.url_allowed
-    self.description_allowed = self.description_required ? true : self.description_allowed
+    self.url_allowed = true if @url_required
+    self.description_allowed = true if @description_required
 
     TagSet::TAG_TYPES.each do |tag_type|
-      required = eval("self.#{tag_type}_num_required")
-      allowed = eval("self.#{tag_type}_num_allowed")
+      required = eval("@#{tag_type}_num_required")
+      allowed = eval("@#{tag_type}_num_allowed")
       if required > allowed
         eval("self.#{tag_type}_num_allowed = required")
       end

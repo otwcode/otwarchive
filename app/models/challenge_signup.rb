@@ -1,16 +1,15 @@
 class ChallengeSignup < ActiveRecord::Base
   belongs_to :pseud
-  has_one :user, :through => :pseud
   belongs_to :collection
   #has_many :challenge_assignments, :dependent => :destroy
 
   has_many :prompts, :dependent => :destroy
-  has_many :requests, :class_name => "Prompt", :conditions => {:offer => false}
-  has_many :offers, :class_name => "Prompt", :conditions => {:offer => true}
+  has_many :requests, :dependent => :destroy
+  has_many :offers, :dependent => :destroy
   
   # we reject prompts if they are empty except for associated references
-  accepts_nested_attributes_for :offers, :allow_destroy => true, :reject_if => proc { |attrs| attrs.all? { |k, v| v.blank? || k.match(/collection/) } }
-  accepts_nested_attributes_for :requests, :allow_destroy => true, :reject_if => proc { |attrs| attrs.all? { |k, v| v.blank? || k.match(/collection/) } }
+  
+  accepts_nested_attributes_for :offers, :prompts, :requests, {:allow_destroy => true, :reject_if => proc { |attrs| attrs.all? { |k, v| v.blank? || k.match(/collection/) } } }
 
   named_scope :by_user, lambda {|user|
     {
@@ -35,8 +34,8 @@ class ChallengeSignup < ActiveRecord::Base
           ArchiveConfig.PROMPTS_MAX
         required = challenge.respond_to?("#{prompt_type}_num_required") ? 
           challenge.send("#{prompt_type}_num_required") :
-          0
-        count = eval("self.#{prompt_type}.length") || 0
+          0          
+        count = eval("@#{prompt_type}") ? eval("@#{prompt_type}.size") : eval("#{prompt_type}.size")
         unless count.between?(required, allowed)
           if allowed == 0
             errors_to_add << t("challenge_signup.#{prompt_type}_not_allowed", 
@@ -59,6 +58,9 @@ class ChallengeSignup < ActiveRecord::Base
     end
   end
 
+  def user
+    self.pseud.user
+  end
 
   def user_allowed_to_destroy?(current_user) 
     (self.pseud.user == current_user) || self.collection.user_is_maintainer?(current_user)

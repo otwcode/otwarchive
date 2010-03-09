@@ -69,6 +69,7 @@ ActionController::Routing::Routes.draw do |map|
     user.resources :collection_items, :only => [:index, :update, :destroy]
     user.resources :collections, :only => [:index]
     user.resources :gifts, :only => [:index]
+    user.resources :signups, :controller => "challenge_signups", :only => [:index]
   end
 
   map.first_login_help '/first_login_help', :controller => 'home', :action => 'first_login_help'

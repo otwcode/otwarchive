@@ -57,6 +57,8 @@ class User < ActiveRecord::Base
   has_many :owned_collections, :through => :collection_participants, :source => :collection, 
           :conditions => ['collection_participants.participant_role = ?', CollectionParticipant::OWNER]
   
+  has_many :challenge_signups, :through => :pseuds
+  
   has_many :readings, :dependent => :destroy 
   has_many :bookmarks, :through => :pseuds 
   has_many :bookmark_collection_items, :through => :bookmarks, :source => :collection_items

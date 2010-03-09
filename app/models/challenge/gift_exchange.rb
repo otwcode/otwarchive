@@ -1,8 +1,11 @@
 class GiftExchange < ActiveRecord::Base
   belongs_to :collection
   has_one :collection, :as => :challenge 
-
+  
   # limits the kind of prompts users can submit 
+  belongs_to :prompt_restriction, :class_name => "PromptRestriction", :dependent => :destroy  
+  accepts_nested_attributes_for :prompt_restriction
+
   belongs_to :request_restriction, :class_name => "PromptRestriction", :dependent => :destroy  
   accepts_nested_attributes_for :request_restriction
 
@@ -33,7 +36,6 @@ class GiftExchange < ActiveRecord::Base
 
   after_save :copy_tag_set_from_offer_to_request
   def copy_tag_set_from_offer_to_request
-    debugger
     if self.offer_restriction && self.offer_restriction.tag_set
       self.request_restriction.build_tag_set unless self.request_restriction.tag_set
       self.request_restriction.tag_set.tags = self.offer_restriction.tag_set.tags
