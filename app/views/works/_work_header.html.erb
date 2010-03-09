@@ -45,8 +45,9 @@
 <%- if @preview_mode || !AdminSetting.enable_test_caching? -%>
    <%= render :partial => 'works/meta', :locals => {:work => @work} %> 
 <%- else -%>
-  <%- cache("workshowmeta-#{@work.id}-#{@work.major_version}-#{@work.minor_version}-#{hide_warnings?(@work)}-#{hide_freeform?(@work)}", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
-  <%= render :partial => 'works/meta', :locals => {:work => @work} %>
+  <% cachename = "workshowmeta-#{@work.id}-#{@work.major_version}-#{@work.minor_version}-#{hide_warnings?(@work) ? "1" : "0"}-#{hide_freeform?(@work) ? "1" : "0"}" %>
+  <%- cache(cachename, :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
+    <%= render :partial => 'works/meta', :locals => {:work => @work} %>
   <%- end -%> 
 <%- end -%>
 
