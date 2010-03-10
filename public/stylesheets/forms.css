@@ -233,7 +233,7 @@ form#wrangle-select-fandom p, form#wrangle-select-media p{ display:inline; margi
 #reply-to-comment p#close-popup     { top:0; right:2em; position:absolute; z-index:60;}
 
 /*COLLECTIONS, CREATE, similar complex forms*/
-form.new_collection fieldset,  form.new_user fieldset {border:1px solid #ddd; padding:0.5em; margin:1em auto;}
-form.new_collection p, form.new_user p {font-size:1.5em;}
-form.new_collection dt {width:45%;}
-form.new_collection div {display:block;}
+form.new_collection fieldset,  form.new_user fieldset,  form.edit_collection fieldset {border:1px solid #ddd; padding:0.5em; margin:1em auto;}
+form.new_collection p, form.new_user p , form.edit_collection p {font-size:1.5em;}
+form.new_collection dt , form.edit_collection dt {width:45%;}
+form.new_collection div, form.edit_collection div {display:block;}
