@@ -236,11 +236,20 @@ namespace :After do
     tags.each { |tag| tag.update_attribute(:merger_id, nil) }
   end  
   
-end
+  desc "Clean up invites belonging to deleted users"
+  task(:deleted_invites_cleanup => :environment) do
+    UserInviteRequest.all.each do |user_invite_request|
+      if user_invite_request.user.nil?
+        user_invite_request.destroy
+      end
+    end
+  end
+
+end # this is the end that you have to put new tasks above
 
 ##################
 # ADD NEW MIGRATE TASKS TO THIS LIST ONCE THEY ARE WORKING
 
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
-task :After => ['After:fix_warnings', 'After:tidy_wranglings', 'After:exorcise_syns']
+task :After => ['After:fix_warnings', 'After:tidy_wranglings', 'After:exorcise_syns', 'After:deleted_invites_cleanup']
