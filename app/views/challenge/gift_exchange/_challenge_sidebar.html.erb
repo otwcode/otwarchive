@@ -14,7 +14,7 @@
       <li><%= span_if_current t('gift_exchange.signup', :default => "Signup Form"), new_collection_signup_path(@collection) %></li>
     <% end %>
   <% end %>
-  <% if @collection.user_is_maintainer?(current_user) -%>
+  <% if @collection.user_is_owner?(current_user) -%>
       <li><%= link_to t('gift_exchange.challenge_settings', :default => "Challenge Settings"), edit_collection_gift_exchange_path(@collection) %></li>
   <% end %>
 <% end %>
