@@ -5,7 +5,7 @@
 <fieldset>
 	<legend><%= t('users.works_with_others', :default => "Works You Made With Others") %></legend>
 <p>
-    <%= "You have #{@coauthored_works.size} work(s) co-authored with the following users: " + print_coauthors(@user) %>
+    <%= "You have #{@coauthored_works.size} work(s) co-authored with the following users: " + print_coauthors(@user)  + "." %>
 </p>
 <p>
     <%= 'You are not able to delete these as they are shared works.' %>
