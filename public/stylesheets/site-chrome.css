@@ -54,6 +54,7 @@
  .navigation a:hover, .submit a:hover, .submit input:hover 
 							{ background: #ddd !important;  color: #111 }
  .navigation a:active 		{ background: #999; border: 1px solid #777 }
+ #main .navigation a:visited { color: #111111; }
  .navigation .pagination a 	{ border: 0; padding: 0 }
 
 /* Navigation in contexts - easier to have it all together */
@@ -81,6 +82,7 @@
  .draft .wrapper			{ background: #eee; }
  .droppable 				{ color: red; } 
  .canonical 				{ font-weight: 700 }
+ .inline                    { display:inline; margin-bottom: 0.5em; }
 
 /*TAGS */
  #main ul.tags li			{ display:inline;}
@@ -217,6 +219,9 @@ li.comment h4					{ font-size: 1.25em;}
 
 /* WORKS INDEX */
  .works-index .index 			{ width: 75% }
+ 
+ /* WORKS SHOW */
+ #main .notes                            { padding-bottom: 0.5em !important}
 
 /* MEDIA INDEX, SHOW, FANDOMS INDEX, SHOW*/
   .media-index li.category      { min-height: 15em; padding: 0; border: 1px solid #DDD; }

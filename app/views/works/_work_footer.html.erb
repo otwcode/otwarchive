@@ -1,17 +1,5 @@
 <!-- footer for work -->
- 	<%- unless @work.parents.blank? -%>
- 	<div id="parents" class="module">
- 	  <h4><%= t('inspired_by', :default => 'Inspired by:') -%></h4>
- 	  <ul>
- 	  <%- for parent in @work.parents -%>
- 	    <li><%= link_to parent.title, parent %></li>
- 	    <%- if is_author_of?(@work) -%>
-    		<%= link_to t('remove_relationship', :default => 'Remove relationship'), {:controller => :related_works, :action => :destroy, :parent_id => parent.id, :work_id => @work.id},  :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %>
-    	<%- end -%>
- 	  <%- end -%>
- 	  </ul>
-	</div>
- 	<%- end -%>
+
  	
  	<%- unless @work.approved_children.blank? -%>
  	<div id="children" class="module">
