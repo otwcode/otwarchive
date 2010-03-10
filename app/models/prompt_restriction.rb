@@ -37,7 +37,6 @@ class PromptRestriction < ActiveRecord::Base
   before_validation :update_allowed_values
   # if anything is required make sure it is also allowed
   def update_allowed_values
-    debugger
     self.url_allowed = true if url_required
     self.description_allowed = true if description_required
 

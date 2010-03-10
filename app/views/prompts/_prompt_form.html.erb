@@ -35,8 +35,9 @@ See the challenge_signup form for an example of how this is used.
               <!-- checkboxes -->
               <% tag_fieldname = "challenge_signup[#{(is_offer ? 'offers' : 'requests')}_attributes][#{index}][tag_set_attributes][#{tag_type}_tagnames][]" %>
               <% taglist.each do |tag| %>
-                <%= tag.name %>
-                <%= check_box_tag tag_fieldname, tag.name, eval("form.object.#{tag_type}_taglist").include?(tag) -%>
+                <% tag_checkbox_id = "challenge_signup_#{(is_offer ? 'offers' : 'requests')}_attributes_#{index}_#{tag_type}_#{tag.id}"%>
+                <%= label_tag tag_checkbox_id, tag.name %>
+                <%= check_box_tag tag_fieldname, tag.name, eval("form.object.#{tag_type}_taglist").include?(tag), {:id => tag_checkbox_id} -%>
               <% end %>
               <!-- need to add hidden field to ensure this is passed if none of the boxes are checked -->
               <%= hidden_field_tag tag_fieldname, " " -%>           

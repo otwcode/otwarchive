@@ -1,4 +1,5 @@
 class Prompt < ActiveRecord::Base
+  
   belongs_to :collection
   belongs_to :pseud
   has_one :user, :through => :pseud 
@@ -34,6 +35,60 @@ class Prompt < ActiveRecord::Base
   def description_required?
     (restriction = get_prompt_restriction) && restriction.description_required
   end
+
+  validate :correct_number_of_tags
+  def correct_number_of_tags
+    prompt_type = self.class.name
+    restriction = get_prompt_restriction
+    if restriction
+      # make sure tagset has no more/less than the required/allowed number of tags of each type
+      TagSet::TAG_TYPES.each do |tag_type|
+        required = eval("restriction.#{tag_type}_num_required")
+        allowed = eval("restriction.#{tag_type}_num_allowed")
+        taglist = eval("tag_set.#{tag_type}_taglist")
+        tag_count = taglist.count
+        unless tag_count.between?(required, allowed)
+          taglist_string = taglist.empty? ?  
+              t('tag_set.taglist_none', :default => "none") : 
+              "(#{tag_count}) -- " + taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+          if allowed == 0
+            errors.add_to_base(t("tag_set.#{prompt_type}_#{tag_type}_not_allowed", 
+              :default => "#{prompt_type} cannot include any #{tag_type} tags. You currently have {{taglist}}.", 
+              :taglist => taglist_string))
+          elsif required == allowed
+            errors.add_to_base(t("tag_set.#{prompt_type}_#{tag_type}_mismatch", 
+              :default => "#{prompt_type} must have exactly {{required}} #{tag_type} tags. You currently have {{taglist}}.", 
+              :required => required, :taglist => taglist_string))
+          else
+            errors.add_to_base(t("tag_set.#{prompt_type}_#{tag_type}_range_mismatch", 
+              :default => "#{prompt_type} must have between {{required}} and {{allowed}} #{tag_type} tags. You currently have {{taglist}}.",
+              :required => required, :allowed => allowed, :taglist => taglist_string))
+          end
+        end
+      end
+    end
+  end
+  
+  validate :allowed_tags
+  def allowed_tags
+    restriction = get_prompt_restriction
+    if restriction
+      TagSet::TAG_TYPES.each do |tag_type|
+        # if we have a specified set of tags of this type, make sure that all the
+        # tags in the prompt are in the set.
+        if restriction.has_tags_of_type?(tag_type)
+          taglist = eval("tag_set.#{tag_type}_taglist") - restriction.tag_set.with_type(tag_type.classify)
+          unless taglist.empty?
+            errors.add_to_base(t("tag_set.specific_#{tag_type}_tags_not_allowed", 
+              :default => "These tags are not allowed in this challenge: {{taglist}}",
+              :taglist => taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
+          end
+        end
+      end
+    end
+  end
+
+
 
   named_scope :in_collection, lambda {|collection| { :conditions => {:collection => collection} }}
   

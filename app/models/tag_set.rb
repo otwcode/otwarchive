@@ -6,8 +6,6 @@ class TagSet < ActiveRecord::Base
   has_many :tags, :through => :set_taggings
 
   has_one :prompt
-  has_one :offer
-  has_one :request
 
   # how this works: we don't want to set the actual "tags" variable initially because that will
   # create SetTaggings even if the tags are not canonical or wrong. So we need to create a temporary
@@ -39,7 +37,7 @@ class TagSet < ActiveRecord::Base
     end
   end
 
-  # this actually runs and saves the validation
+  # this actually runs and saves the tags but only after validation
   after_save :assign_tags
   def assign_tags
     if @tagnames
@@ -55,7 +53,6 @@ class TagSet < ActiveRecord::Base
       end
     end
   end
-
 
   validate :all_tags_must_be_canonical  
   def all_tags_must_be_canonical
@@ -76,72 +73,6 @@ class TagSet < ActiveRecord::Base
     end
   end
   
-  validate :correct_number_of_tags
-  def correct_number_of_tags
-    prompt_to_check = (offer ? offer : (request ? request : prompt))
-    if prompt_to_check && (restriction = prompt_to_check.get_prompt_restriction)
-      # make sure prompt has no more/less than the required/allowed number of tags of each type
-      TAG_TYPES.each do |tag_type|
-        required = eval("restriction.#{tag_type}_num_required")
-        allowed = eval("restriction.#{tag_type}_num_allowed")
-        prompt_type = prompt_to_check.class.name
-        taglist = eval("#{tag_type}_taglist")
-        tag_count = taglist.count
-        unless tag_count.between?(required, allowed)
-          taglist_string = taglist.empty? ?  
-              t('tag_set.taglist_none', :default => "none") : 
-              "(#{tag_count}) -- " + taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
-          # if allowed == 0
-          #   errors_to_add << t("tag_set.#{prompt_type}_#{tag_type}_not_allowed", 
-          #     :default => "#{prompt_type} cannot include any #{tag_type} tags. You currently have {{taglist}}.", 
-          #     :taglist => taglist_string)
-          # elsif required == allowed
-          #   errors_to_add << t("tag_set.#{prompt_type}_#{tag_type}_mismatch", 
-          #     :default => "#{prompt_type} must have exactly {{required}} #{tag_type} tags. You currently have {{taglist}}.", 
-          #     :required => required, :taglist => taglist_string)
-          # else
-          #   errors_to_add << t("tag_set.#{prompt_type}_#{tag_type}_range_mismatch", 
-          #     :default => "#{prompt_type} must have between {{required}} and {{allowed}} #{tag_type} tags. You currently have {{taglist}}.",
-          #     :required => required, :allowed => allowed, :taglist => taglist_string)
-          # end
-          if allowed == 0
-            errors.add("#{tag_type}_tagnames".to_sym, t("tag_set.#{prompt_type}_#{tag_type}_not_allowed", 
-              :default => "^#{prompt_type} cannot include any #{tag_type} tags. You currently have {{taglist}}.", 
-              :taglist => taglist_string))
-          elsif required == allowed
-            errors.add("#{tag_type}_tagnames".to_sym,  t("tag_set.#{prompt_type}_#{tag_type}_mismatch", 
-              :default => "^#{prompt_type} must have exactly {{required}} #{tag_type} tags. You currently have {{taglist}}.", 
-              :required => required, :taglist => taglist_string))
-          else
-            errors.add("#{tag_type}_tagnames".to_sym, t("tag_set.#{prompt_type}_#{tag_type}_range_mismatch", 
-              :default => "^#{prompt_type} must have between {{required}} and {{allowed}} #{tag_type} tags. You currently have {{taglist}}.",
-              :required => required, :allowed => allowed, :taglist => taglist_string))
-          end
-        end
-      end
-    end
-  end
-  
-  
-  validate :allowed_tags
-  def allowed_tags
-    prompt_to_check = (offer ? offer : (request ? request : prompt))
-    if prompt_to_check && (restriction = prompt_to_check.get_prompt_restriction)
-      TAG_TYPES.each do |tag_type|
-        # if we have a specified set of tags of this type, make sure that all the
-        # tags in the prompt are in the set.
-        if restriction.has_tags_of_type?(tag_type)
-          taglist = eval("#{tag_type}_taglist") - restriction.tag_set.with_type(tag_type.classify)
-          unless taglist.empty?
-            errors.add("#{tag_type}_tagnames".to_sym, t("tag_set.specific_#{tag_type}_tags_not_allowed", 
-              :default => "^These tags are not allowed in this challenge: {{taglist}}",
-              :taglist => taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
-          end
-        end
-      end
-    end
-  end
-
   named_scope :matching, lambda {|tag_set_to_match|
     {
       :select => "DISTINCT tag_sets.*",

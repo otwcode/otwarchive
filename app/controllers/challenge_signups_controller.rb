@@ -103,7 +103,8 @@ class ChallengeSignupsController < ApplicationController
     @challenge_signup = ChallengeSignup.new(params[:challenge_signup])
     @challenge_signup.pseud = current_user.default_pseud unless @challenge_signup.pseud
     @challenge_signup.collection = @collection
-    if @challenge_signup.save
+    # we check validity first to prevent saving tag sets if invalid
+    if @challenge_signup.valid? && @challenge_signup.save
       flash[:notice] = 'Signup was successfully created.'
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
