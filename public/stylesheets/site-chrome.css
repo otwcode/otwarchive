@@ -111,6 +111,7 @@ a.cloud8 					{ color: #900; font-size: 2.25em; font-weight: 800 }
  .blurb .module					{ float:none;}
  .blurb .header 				{ min-height:55px; }
  .blurb .header h4 				{ font-size: 1.1425em; margin: 0.375em 5.25em 0 75px }
+ #main .blurb .header img       { position: relative; margin: 0; }
  .blurb .header h5, .blurb .header ul 	
 								{ font-size: 1em; margin: 0.375em 6em 0 75px }
  .blurb h4 a:link,.blurb h4 img { color: #900; vertical-align: bottom }
