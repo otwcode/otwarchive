@@ -16,7 +16,7 @@
     <dd class="warning required">
       <dl>
         <%- for tag in Warning.canonical -%>
-        <dt><%= check_box_tag "work[warning_strings][]", tag.name, @work.warning_strings.include?(tag.name), :id => "work_warning_strings_#{tag.id}" %></dt>
+        <dt><%= check_box_tag "work[warning_strings][]", tag.name, check_warning(@work, tag), :id => "work_warning_strings_#{tag.id}" %></dt>
         <dd><%= label_tag "work_warning_strings_#{tag.id}", tag.name %></dd>
         <%- end -%>
       </dl>

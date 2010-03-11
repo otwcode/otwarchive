@@ -143,7 +143,9 @@ module HtmlFormatter
             # Attributes
             tag, text = text.split('>', 2)
             tag = tag[1..tag.length]
-            tag_name, attrs = tag.split(' ', 2)
+            tag_name, attrs = tag.split(' ', 2) 
+            # atempt to prevent nil errors from empty string split
+            tag_name = (tag_name || '').strip || ''
             attrs = (attrs || '').strip || ''
             self_closing = false
             if attrs.end_with? '/'

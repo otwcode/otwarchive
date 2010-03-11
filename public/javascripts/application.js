@@ -39,18 +39,19 @@ function hideHideMe() {
 function toggleFormField(element_id) {
     var ticky = $(element_id + '-show');
     if (ticky.checked) { $(element_id).removeClassName('hidden'); }
-    else { $(element_id).addClassName('hidden'); }
-    
-    if (element_id == 'chapters-options') {
-        var item = document.getElementById('work_wip_length');
-        if (item.value == 1) {item.value = '?';}
-        else {item.value = 1;}
-    }
-    else {
-        Element.descendants(element_id).each(function(d) {
-            if (d.type == "checkbox") {d.checked = false}
-            else if (d.type != "hidden" && (d.nodeName == "INPUT" || d.nodeName == "SELECT" || d.nodeName == "TEXTAREA")) {d.value = ''}
-        });
+    else { 
+        $(element_id).addClassName('hidden');
+        if (element_id == 'chapters-options') {
+            var item = document.getElementById('work_wip_length');
+            if (item.value == 1) {item.value = '?';}
+            else {item.value = 1;}
+        }
+        else {
+            Element.descendants(element_id).each(function(d) {
+                if (d.type == "checkbox") {d.checked = false}
+                else if (d.type != "hidden" && (d.nodeName == "INPUT" || d.nodeName == "SELECT" || d.nodeName == "TEXTAREA")) {d.value = ''}
+            });
+        }
     }
 }
 

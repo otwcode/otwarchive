@@ -1,23 +1,21 @@
+<%- unless @preview_mode -%>
 <!-- BEGIN navigation -->
-
 <h3 class="landmark">Actions</h3>
 <ul class="navigation" role="navigation">
-  <%- unless @preview_mode -%>
-    <% if is_author_of?(@work) -%>
-      <li><%= link_to t('add_chapter', :default => "Add Chapter"), new_work_chapter_path(@work) %></li>
-      <li><%= link_to t('edit', :default => "Edit"), edit_work_path(@work) %></li>
-      <li><%= link_to t('edit_tags', :default => "Edit Tags"), edit_tags_work_path(@work) %></li>
-      <li><%= link_to t('delete', :default => "Delete"), @work, :confirm => "Are you sure?", :method => :delete -%></li>
-    <% end -%>
-  <%- end -%>
+  <% if is_author_of?(@work) -%>
+    <li><%= link_to t('add_chapter', :default => "Add Chapter"), new_work_chapter_path(@work) %></li>
+    <li><%= link_to t('edit', :default => "Edit"), edit_work_path(@work) %></li>
+    <li><%= link_to t('edit_tags', :default => "Edit Tags"), edit_tags_work_path(@work) %></li>
+    <li><%= link_to t('delete', :default => "Delete"), @work, :confirm => "Are you sure?", :method => :delete -%></li>
+  <% end -%>
 
   <%- if @previous_chapter || @next_chapter -%>
-  <li><%= link_to "View Entire Work", @work %></li>
+    <li><%= link_to "View Entire Work", @work %></li>
     <%- if @previous_chapter -%>
-      <li><%= link_to t('previous_chapter', :default => "&#8592; Previous Chapter"), [@work, @previous_chapter] %></li>
+    <li><%= link_to t('previous_chapter', :default => "&#8592; Previous Chapter"), [@work, @previous_chapter] %></li>
     <%- end -%>
     <%- if @next_chapter -%>
-      <li><%= link_to t('next_chapter', :default => "Next Chapter &#8594;"), [@work, @next_chapter] %></li>
+    <li><%= link_to t('next_chapter', :default => "Next Chapter &#8594;"), [@work, @next_chapter] %></li>
     <%- end -%>
     <li>
       <%= link_to 'Chapter Index', navigate_work_path(@work), :onclick => "$('chapter-index').toggle();return false" %>
@@ -29,18 +27,18 @@
         <%- end -%>
       </div>
     </li>
-
   <%- elsif @work.chapters.posted.count > 1 -%>
-  <li><%= link_to 'View chapter by chapter', [@work, @chapters.first] %></li>
+    <li><%= link_to 'View chapter by chapter', [@work, @chapters.first] %></li>
   <%- end -%>
   
   <%- if current_user.is_a?(User) -%>
-  <li><%= bookmark_link(@work) %></li>
+    <li><%= bookmark_link(@work) %></li>
   <%- end -%>
-  <li><%= link_to "Comments", url_for(:show_comments => true, :anchor => 'comments') %></li>
-  <li class="landmark"><a name="top">&nbsp;</a></li>
+    <li><%= link_to "Comments", url_for(:show_comments => true, :anchor => 'comments') %></li>
+    <li class="landmark"><a name="top">&nbsp;</a></li>
 </ul>
 <!-- END navigation -->
+<%- end -%>
 
 <%- if @preview_mode || !AdminSetting.enable_test_caching? -%>
    <%= render :partial => 'works/meta', :locals => {:work => @work} %> 

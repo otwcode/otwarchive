@@ -51,10 +51,13 @@ module WorksHelper
 
   def work_blurb_tag_block(work)
     warnings_block = work.warning_tags.empty? ? nil :
-      hide_warnings?(work) ? '<li class="warnings"><strong><span id="' + "work_#{work.id}_category_warning\">" + show_warnings_link(work) + '</span></strong></li>' :
-      '<li class="warnings"><strong>' + 
+      if hide_warnings?(work) 
+        '<li class="warnings" id="' + "work_#{work.id}_category_warning" + '"><strong>' + show_warnings_link(work) + '</strong></li>'
+      else
+        '<li class="warnings"><strong>' + 
         work.warning_tags.collect{|tag| link_to_tag(tag) }.join(ArchiveConfig.DELIMITER_FOR_OUTPUT + '</strong></li> <li class="warnings"><strong>') +
         '</strong></li>'
+      end
 
     pairings_block = work.pairing_tags.empty? ? nil :
       '<li class="pairing">' + 
@@ -67,10 +70,13 @@ module WorksHelper
         '</li>'
 
     freeform_block = work.freeform_tags.empty? ? nil :
-      hide_freeform?(work) ? '<li class="freeform"><span id="' + "work_#{work.id}_category_freeform\"><strong>" + show_freeforms_link(work) + '</strong></span></li>' :
-      '<li class="freeform">' +
+      if hide_freeform?(work) 
+        '<li class="freeform" id="' + "work_#{work.id}_category_freeform\"><strong>" + show_freeforms_link(work) + '</strong></li>'
+      else 
+        '<li class="freeform">' +
         work.freeform_tags.collect{|tag| link_to_tag(tag) }.join(ArchiveConfig.DELIMITER_FOR_OUTPUT + '</li> <li class="freeform">') +
         '</li>'
+      end
 
     [warnings_block, pairings_block, character_block, freeform_block].compact.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
   end
@@ -121,9 +127,13 @@ module WorksHelper
     [ArchiveConfig.WARNING_DEFAULT_TAG_NAME, ArchiveConfig.WARNING_NONE_TAG_NAME, ArchiveConfig.WARNING_VIOLENCE_TAG_NAME, ArchiveConfig.WARNING_DEATH_TAG_NAME, ArchiveConfig.WARNING_NONCON_TAG_NAME, ArchiveConfig.WARNING_CHAN_TAG_NAME]
   end
 
-  # select the default warnings if this is a new work
-  def warning_selected(work)
-    work.nil? || work.warning_strings.empty? ? ArchiveConfig.WARNING_DEFAULT_TAG_NAME : work.warning_strings
+  # select the default warning if this is a new work
+  def check_warning(work, warning)
+    if work.nil? || work.warning_strings.empty? 
+      warning.name == ArchiveConfig.WARNING_DEFAULT_TAG_NAME 
+    else
+      work.warning_strings.include?(warning.name)
+    end
   end
   
   # select default rating if this is a new work
