@@ -1,18 +1,26 @@
 <% @challenge ||= @collection.challenge -%>
-<% show_req_url = @challenge.request_restriction.url_allowed && !params[:hide_urls] %>
-<% show_off_url = @challenge.offer_restriction.url_allowed && !params[:hide_urls] %>
-<% show_req_description = @challenge.request_restriction.description_allowed && !params[:hide_descriptions] %>
-<% show_off_description = @challenge.offer_restriction.description_allowed && !params[:hide_descriptions] %>
+<% show_request_url = @challenge.request_restriction.url_allowed && !params[:hide_urls] %>
+<% show_offer_url = @challenge.offer_restriction.url_allowed && !params[:hide_urls] %>
+<% show_request_description = @challenge.request_restriction.description_allowed && !params[:hide_descriptions] %>
+<% show_offer_description = @challenge.offer_restriction.description_allowed && !params[:hide_descriptions] %>
+<% 
+  show_request_tags = @challenge.request_restriction.optional_tags_allowed ||
+    (TagSet::TAG_TYPES.collect {|type| eval("@challenge.request_restriction.#{type}_num_allowed")}.sum > 0) 
+%>
+<% 
+  show_offer_tags = @challenge.offer_restriction.optional_tags_allowed ||
+    (TagSet::TAG_TYPES.collect {|type| eval("@challenge.offer_restriction.#{type}_num_allowed")}.sum > 0) 
+%>
 
 <ul class="navigation">
-<% if show_off_description || show_req_description %>
+<% if show_offer_description || show_request_description %>
   <li><%= link_to t('gift_exchange.hide_desc', :default => "Hide Descriptions"), 
       collection_signups_path(@collection, :hide_descriptions => true, :hide_urls => params[:hide_urls]) -%></li>
 <% elsif params[:hide_descriptions] %>
   <li><%= link_to t('gift_exchange.show_desc', :default => "Show Descriptions"), 
       collection_signups_path(@collection, :hide_descriptions => false, :hide_urls => params[:hide_urls]) -%></li>
 <% end %>
-<% if show_off_url|| show_req_url %>
+<% if show_offer_url|| show_request_url %>
   <li><%= link_to t('gift_exchange.hide_url', :default => "Hide URLs"), 
       collection_signups_path(@collection, :hide_descriptions => params[:hide_descriptions], :hide_urls => true) -%></li>
 <% elsif params[:hide_urls] %>
@@ -24,71 +32,65 @@
 </ul>
 
 <table>
+  <!-- top header row showing requests and offers numbered -->
   <tr>
     <th rowspan=2>Pseud</th>
     <% @challenge.requests_num_allowed.times do |i| %>
-    <th colspan=<%= show_req_url ? (show_req_description ? '3' : '2') : (show_req_description ? '2' : '1') -%>>
+    <th colspan=<%= show_request_url ? (show_request_description ? '3' : '2') : (show_request_description ? '2' : '1') -%>>
       <%= t("gift_exchange.request#{i+1}", :default => "Request {{num}}", :num => i+1) %>
     </th>
     <% end %>
     <% @challenge.offers_num_allowed.times do |i| %>
-    <th colspan=<%= show_off_url ? (show_off_description ? '3' : '2') : (show_off_description ? '2' : '1') -%>>
+    <th colspan=<%= show_offer_url ? (show_offer_description ? '3' : '2') : (show_offer_description ? '2' : '1') -%>>
       <%= t("gift_exchange.offer#{i+1}", :default => "Offer {{num}}", :num => i+1) %></th>
     <% end %>
     <th rowspan=2 abbr="options" scope="col"><%=h t('editing options', :default =>"Editing Options") %></th>
   </tr>
+
+  <!-- secondary header row showing the tags, description, url -->
   <tr>
-    <% @challenge.requests_num_allowed.times do |i| %>
-      <th>Tags</th>
-      <% if show_req_description %><th>Description</th><% end %>
-      <% if show_req_url %><th>URL</th><% end %>
+    <% %w(request offer).each do |prompt_type| %>
+      <% eval("@challenge.#{prompt_type.pluralize}_num_allowed").times do |i| %>
+        <% if eval("show_#{prompt_type}_tags") %><th>Tags</th><% end %>
+        <% if eval("show_#{prompt_type}_description") %><th>Description</th><% end %>
+        <% if eval("show_#{prompt_type}_url") %><th>URL</th><% end %>
+      <% end %>
     <% end %>
-    <% @challenge.offers_num_allowed.times do |i| %>
-      <th>Tags</th>
-      <% if show_off_description %><th>Description</th><% end %>
-      <% if show_off_url %><th>URL</th><% end %>
-    <% end %>
-  </tr>
-    
   </tr>
 
+  <!-- body of table -->
   <% @challenge_signups.each do |challenge_signup| %>
-  <tr>
-    <td><%=h challenge_signup.pseud.name %></td>
-    <% @challenge.requests_num_allowed.times do |i| %>
-      <% prompt = challenge_signup.requests[i] %>
-      <td><%= !prompt || prompt.tag_set.tags.empty? ? "" : "<ul>" + tag_link_list(prompt.tag_set.tags) + "</ul>" -%></td>
-      <% if show_req_description %>
-        <td><%= !prompt || prompt.description.blank? ? "" : sanitize_and_format_for_display(prompt.description) -%></td>
+    <tr>
+      <td><%=h challenge_signup.pseud.name %></td>
+      <!-- show tags, description, url for all allowed requests and offers: using a lot of evals here to DRY up the code since it's so repetitive -->
+      <% %w(request offer).each do |prompt_type| %>    
+        <% eval("@challenge.#{prompt_type.pluralize}_num_allowed").times do |i| %>
+          <% prompt = eval("challenge_signup.#{prompt_type.pluralize}[i]") %>
+          <% if eval("show_#{prompt_type}_tags") %>
+            <td><%= !prompt || !prompt.tag_set || prompt.tag_set.tags.empty? ? "" : "<ul>" + tag_link_list(prompt.tag_set.tags) + "</ul>" -%></td>
+          <% end %>
+          <% if eval("show_#{prompt_type}_description") %>
+            <td><%= !prompt || !prompt.tag_set || prompt.description.blank? ? "" : sanitize_and_format_for_display(prompt.description) -%></td>
+          <% end %>
+          <% if eval("show_#{prompt_type}_url") %>
+            <td><%= !prompt || !prompt.tag_set || prompt.url.blank? ? "" : link_to(prompt.url, prompt.url) -%></td>
+          <% end %>
+        <% end %>
       <% end %>
-      <% if show_req_url %>
-        <td><%= !prompt || prompt.url.blank? ? "" : link_to(prompt.url, prompt.url) -%></td>
-      <% end %>
-    <% end %>
-    <% @challenge.offers_num_allowed.times do |i| %>
-      <% prompt = challenge_signup.offers[i] %>
-      <td><%= !prompt || prompt.tag_set.tags.empty? ? "" : "<ul>" + tag_link_list(prompt.tag_set.tags) + "</ul>" -%></td>
-      <% if show_off_description %>
-        <td><%= !prompt || prompt.description.blank? ? "" : sanitize_and_format_for_display(prompt.description) -%></td>
-      <% end %>
-      <% if show_off_url %>
-        <td><%= !prompt || prompt.url.blank? ? "" : link_to(prompt.url, prompt.url) -%></td>
-      <% end %>
-    <% end %>
     
-    <td class="navigation">
-      <ul class="navigation">
-        <li><%= link_to t('challenge_signups.show', :default => "Show"), collection_signup_path(@collection, challenge_signup) %></li>
-        <% if challenge_signup.user == current_user %>
-          <li><%= link_to t('challenge_signups.edit', :default => "Edit"), edit_collection_signup_path(@collection, challenge_signup) %></li>
-        <% end %>
-        <% if challenge_signup.user == current_user || @collection.user_is_maintainer?(current_user) %>
-          <li><%= link_to t('challenge_signups.delete', :default => "Delete"), 
-                  collection_signup_path(@collection, challenge_signup), :confirm => 'Are you sure?', :method => :delete %></li>
-        <% end %>
-      </ul>
-    </td>
-  </tr>
-<% end %>
+      <td class="navigation">
+        <ul class="navigation">
+          <li><%= link_to t('challenge_signups.show', :default => "Show"), collection_signup_path(@collection, challenge_signup) %></li>
+          <% if challenge_signup.user == current_user %>
+            <li><%= link_to t('challenge_signups.edit', :default => "Edit"), edit_collection_signup_path(@collection, challenge_signup) %></li>
+          <% end %>
+          <% if challenge_signup.user == current_user || @collection.user_is_maintainer?(current_user) %>
+            <li><%= link_to t('challenge_signups.delete', :default => "Delete"), 
+                    collection_signup_path(@collection, challenge_signup), :confirm => 'Are you sure?', :method => :delete %></li>
+          <% end %>
+        </ul>
+      </td>
+    </tr>
+  <% end %>
 </table>
 

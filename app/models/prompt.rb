@@ -48,7 +48,7 @@ class Prompt < ActiveRecord::Base
       TagSet::TAG_TYPES.each do |tag_type|
         required = eval("restriction.#{tag_type}_num_required")
         allowed = eval("restriction.#{tag_type}_num_allowed")
-        taglist = eval("tag_set.#{tag_type}_taglist")
+        taglist = tag_set ? eval("tag_set.#{tag_type}_taglist") : []
         tag_count = taglist.count
         unless tag_count.between?(required, allowed)
           taglist_string = taglist.empty? ?  
@@ -80,7 +80,7 @@ class Prompt < ActiveRecord::Base
         # if we have a specified set of tags of this type, make sure that all the
         # tags in the prompt are in the set.
         if restriction.has_tags_of_type?(tag_type)
-          taglist = eval("tag_set.#{tag_type}_taglist") - restriction.tag_set.with_type(tag_type.classify)
+          taglist = tag_set ? (eval("tag_set.#{tag_type}_taglist") - restriction.tag_set.with_type(tag_type.classify)) : []
           unless taglist.empty?
             errors.add_to_base(t("tag_set.specific_#{tag_type}_tags_not_allowed", 
               :default => "These tags are not allowed in this challenge: {{taglist}}",
