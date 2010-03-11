@@ -18,11 +18,11 @@
       </dt>
 
       <dd class="<%= type.downcase -%>">
-      <ul id="work_<%= work.id %>_category_<%= type.downcase %>">
+      <ul>
       <%- if type == "Warning" && hide_warnings?(work) -%>        
-        <li><%= show_warnings_link(work) %> </li>
+        <li id="work_<%= work.id %>_category_<%= type.downcase %>"><%= show_warnings_link(work) %> </li>
       <%- elsif type == "Freeform" && hide_freeform?(work) -%>
-        <li><%= show_freeforms_link(work) %> </li>
+        <li id="work_<%= work.id %>_category_<%= type.downcase %>"><%= show_freeforms_link(work) %> </li>
       <%- else -%>                   
         <%= tag_link_list(tags) %>
       <%- end -%>
