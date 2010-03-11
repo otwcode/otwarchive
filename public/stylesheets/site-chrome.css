@@ -46,7 +46,7 @@
  ul#skiplinks,.landmark 	{ border: 0 !important; color: #fffef9; font-size: 0 !important; line-height: 0 !important; height: 0 !important; margin: 0 !important; clear:right; }
  #header .landmark 			{color:#900 !important;}
  
-#main ul.navigation, p.navigation, li.navigation, span.navigation, p.submit, dd.submit, span.submit 				{ margin: 0.5em auto 1em; border:1px solid #bbb; background:#fffef9 url(/images/fffef9-ccc.png) bottom left repeat-x; padding:0.15em 0.5em 0.25em; float:right; border-radius:3em; -moz-border-radius:3em; -webkit-border-radius:2em;}
+#main ul.navigation, p.navigation, li.navigation, span.navigation, p.submit, dd.submit, span.submit, td.submit				{ margin: 0.5em auto 1em; border:1px solid #bbb; background:#fffef9 url(/images/fffef9-ccc.png) bottom left repeat-x; padding:0.15em 0.5em 0.25em; float:right; border-radius:3em; -moz-border-radius:3em; -webkit-border-radius:2em;}
  .navigation li,li.navigation,  #main .navigation h4  
 							{ display: inline }
  #main .navigation a, .submit input, .submit a
@@ -59,7 +59,7 @@
 
 /* Navigation in contexts - easier to have it all together */
  
-#main li.blurb .navigation	{ float:left; margin:auto; font-size:0.8575em;}
+#main li.blurb .navigation, #main td.submit input	{ float:left; margin:auto; font-size:0.8575em;}
 #main li.bookmark .navigation, #main li.fandom .navigation,  #main.pseuds-index li.blurb .navigation 
 							{ float:right; }
 #main .work .own .navigation

@@ -36,22 +36,22 @@
       <dd><%= f.check_box :signup_open %></dd>
         
       <dt><%= f.label :signups_open_at, t('gift_exchange.signups_open_at', :default => "Signup opens: ")%></dt>
-      <dd><%= datetime_select :gift_exchange, :signups_open_at -%></dd>
+      <dd><%= f.datetime_select :signups_open_at, :minute_step => 15 -%></dd>
 
       <dt><%= f.label :signups_close_at, t('gift_exchange.signups_close_at', :default => "Signup closes: ")%></dt>
-      <dd><%= datetime_select :gift_exchange, :signups_close_at -%></dd>
+      <dd><%= f.datetime_select :signups_close_at, :minute_step => 15 -%></dd>
 
       <dt><%= f.label :assignments_due_at, t('gift_exchange.assignments_due_at', :default => "Assignments due: ")%></dt>
-      <dd><%= datetime_select :gift_exchange, :assignments_due_at -%></dd>
+      <dd><%= f.datetime_select :assignments_due_at, :minute_step => 15 -%></dd>
 
       <% if @collection.unrevealed? %>
         <dt><%= f.label :works_reveal_at, t('gift_exchange.works_reveal_at', :default => "Works revealed: ")%></dt>
-        <dd><%= datetime_select :gift_exchange, :works_reveal_at -%></dd>
+        <dd><%= f.datetime_select :works_reveal_at, :minute_step => 15 -%></dd>
       <% end %>
 
       <% if @collection.anonymous? %>
         <dt><%= f.label :authors_reveal_at, t('gift_exchange.authors_reveal_at', :default => "Authors revealed: ")%></dt>
-        <dd><%= datetime_select :gift_exchange, :authors_reveal_at -%></dd>
+        <dd><%= f.datetime_select :authors_reveal_at , :minute_step => 15-%></dd>
       <% end %>
     </dl>
   </fieldset>  

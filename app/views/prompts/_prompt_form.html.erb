@@ -19,7 +19,7 @@ See the challenge_signup form for an example of how this is used.
     <!-- tags section -->
     <% form.object.build_tag_set unless form.object.tag_set %>
     <% form.fields_for :tag_set do |tag_set_form| %>
-      <% %w(fandom character pairing rating category freeform warning).each do |tag_type| %>
+      <% TagSet::TAG_TYPES.each do |tag_type| %>
         <% num_allowed = eval("restriction.#{tag_type}_num_allowed") %>
         <% num_required = eval("restriction.#{tag_type}_num_required") %>
         <% taglist = restriction.tags_of_type(tag_type.classify).sort  %>
@@ -34,14 +34,43 @@ See the challenge_signup form for an example of how this is used.
             <% if has_tags %>
               <!-- checkboxes -->
               <% tag_fieldname = "challenge_signup[#{(is_offer ? 'offers' : 'requests')}_attributes][#{index}][tag_set_attributes][#{tag_type}_tagnames][]" %>
-              <% taglist.each do |tag| %>
-                <% tag_checkbox_id = "challenge_signup_#{(is_offer ? 'offers' : 'requests')}_attributes_#{index}_#{tag_type}_#{tag.id}"%>
-                <%= label_tag tag_checkbox_id, tag.name %>
-                <%= check_box_tag tag_fieldname, tag.name, eval("form.object.#{tag_type}_taglist").include?(tag), {:id => tag_checkbox_id} -%>
-              <% end %>
+              <% tag_field_id =  "challenge_signup_#{(is_offer ? 'offers' : 'requests')}_attributes_#{index}_#{tag_type}" -%>
+              <% max_tagindex = 0 %>
+              <ul onclick="$('<%= tag_field_id -%>_hide').show(); $('<%= tag_field_id -%>_more').hide();">
+                <!-- FRONT END NOTE: generally we want checkbox after label but in this case makes form much more usable to keep clicking in same vertical line -->
+                <% taglist.each_with_index do |tag, tagindex| %>
+                  <li>
+                    <% tag_checkbox_id = "#{tag_field_id}_#{tag.id}" %>
+                    <%= check_box_tag tag_fieldname, tag.name, eval("form.object.#{tag_type}_taglist").include?(tag), {:id => tag_checkbox_id} -%>
+                    <%= label_tag tag_checkbox_id, tag.name %>
+                  </li>
+                  
+                  <% max_tagindex = tagindex %>
+                  <% if tagindex == (Prompt::OPTIONS_TO_SHOW - 1) && taglist.size > (Prompt::OPTIONS_TO_SHOW * 2) %>
+                    <!-- we add a blind-down area for more if we have a lot of checkboxes to show -->
+                    </ul>
+                    <h5 id="<%= tag_field_id -%>_more" onclick="$('<%= tag_field_id -%>_hide').show(); this.hide()">
+                      <%= t("prompts.show_more_#{tag_type}", 
+                        :default => "{{tag_count}} more #{tag_type.pluralize} to choose from...",
+                        :tag_count => (taglist.size - Prompt::OPTIONS_TO_SHOW) ) -%>
+                    </h5>
+                    <div id="<%= tag_field_id -%>_hide" class="hideme">
+                    <ul>
+                  <% end %>
+                <% end # of taglist.each loop %>
+                
+                <% if max_tagindex >= Prompt::OPTIONS_TO_SHOW && taglist.size > (Prompt::OPTIONS_TO_SHOW * 2) %>
+                  <!-- close the blind-down section we opened -->
+                  </ul>
+                  </div>
+                <% else %>
+                  </ul>
+                <% end %>
+
               <!-- need to add hidden field to ensure this is passed if none of the boxes are checked -->
               <%= hidden_field_tag tag_fieldname, " " -%>           
             <% else %>
+              <!-- using an autocomplete -->
               <% tag_fieldname = "challenge_signup_#{(is_offer ? 'offers' : 'requests')}_attributes_#{index}_tag_set_attributes_#{tag_type}_tagnames" %>
               <%= tag_set_form.text_field "#{tag_type}_tagnames", :size => 50, :value => eval("form.object.#{tag_type}_tagnames") %>
               <%= autocomplete_text_field tag_fieldname, "canonical_#{tag_type}_finder" %>            

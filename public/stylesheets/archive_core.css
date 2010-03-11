@@ -72,3 +72,4 @@ th, tr:hover 			{ background:#fffef9; border:1px solid #bbb; padding:0.15em 0.5e
 th 						{ font-weight: bold; border:1px solid #bbb; padding:0.25em}
 th a, th a:visited, th a:link
 						{ text-decoration: none; border:0;}
+tbody tr th             {text-align:left;}

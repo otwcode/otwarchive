@@ -1,5 +1,8 @@
 class Prompt < ActiveRecord::Base
   
+  # number of checkbox options to keep visible by default in form
+  OPTIONS_TO_SHOW = 3
+  
   belongs_to :collection
   belongs_to :pseud
   has_one :user, :through => :pseud 

@@ -8,6 +8,7 @@ $j(document).ready(function() {
     if ($$('form.filters')) { hideFilters(); };
     // initSelect('languages_menu');
     hideExpandable();
+    hideHideMe();
 });
 
 function visualizeTables() {
@@ -27,6 +28,11 @@ function ShowExpandable() {
 function hideExpandable() {
   var expandable = document.getElementById('expandable');
   if (expandable != null) expandable.style.display = 'none';
+}
+
+function hideHideMe() {
+    nodes = $$('div.hideme');
+    nodes.each( function(node) { node.hide(); });
 }
 
 // An attempt to replace the various work form toggle methods with a more generic one
@@ -156,7 +162,11 @@ function hideLogin() {
 	});	
 }
 
-
+// Hides the extra checkbox fields in prompt form
+function hideField(id) {
+    var id_to_hide =  document.getElementById(id);
+    Effect.toggle(id_to_hide, 'blind', {duration: 0.0});
+}
 
 
 //generic show hide toggler

@@ -12,6 +12,7 @@ form dd { float: left;}
 form code { display:block;}
 p.character_counter { font-size:85.7%; color:#666; display:inline; position:relative;}
 .character_counter span { display:inline-block; width: 3.75em; text-align:right ;}
+form select {vertical-align:text-top;}
 
 /*DASHBOARD */
 .sidebar form {float:left}
@@ -237,3 +238,5 @@ form.new_collection fieldset,  form.new_user fieldset,  form.edit_collection fie
 form.new_collection p, form.new_user p , form.edit_collection p {font-size:1.5em;}
 form.new_collection dt , form.edit_collection dt {width:45%;}
 form.new_collection div, form.edit_collection div {display:block;}
+/* temp workaround for collection_participants/participant_form */
+.collection_participants-index table td.submit input { font-size:0.75em}
