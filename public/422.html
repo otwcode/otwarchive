@@ -65,33 +65,6 @@
 	<!-- BEGIN header -->
 		<div id="header">
 			<div id="login-block">
-				<ul id="greeting" class="logged-out">
-					<li>
-						<div id="signin">
-							<form action="/session" method="post">
-								<div id="small_login">
-									<p>
-										<label for="login">User name:</label>
-										<input id="login" name="login" type="text" value="" />
-										<a href="/media?use_openid=true" onclick="new Ajax.Request('/session/openid_small', {asynchronous:true, evalScripts:true}); return false;"><img alt="OpenID" class="openid" src="/images/openid.png?1251050642" title="OpenID" /></a>
-										<label for="password">Password:</label>
-										<input id="password" name="password" type="password" value="" />
-									</p>
-									<p class="footnote">
-										<input id="remember_me" name="remember_me" type="checkbox" value="1" />
-										<label for="remember_me">Remember me</label>&nbsp;|
-										<a href="/passwords/new">forgot password?</a>
-									</p>
-									<p class="submit">
-										<input class="submit" name="commit" type="submit" value="Login" />
-									</p>
-								</div>
-							</form>
-						</div>
-						<a id='signin_closed' onclick='toggleLogin("signin")' style='display:none;'>Sign in</a>
-						<a id='signin_open' onclick='toggleLogin("signin")'>Cancel</a>
-					</li>
-				</ul>
 				<form action="/works" id="search" method="get">
 					<p>
 						<input class="text" id="query" name="query" title="site search" type="text" />
