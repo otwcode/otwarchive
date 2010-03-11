@@ -563,6 +563,7 @@ class WorksController < ApplicationController
     @urls = params[:urls].split
     unless @urls.length > 0
       flash.now[:error] = t('enter_an_url', :default => "Did you want to enter a URL?")      
+      params[:import] = true
       render :action => :new and return
     end
     
