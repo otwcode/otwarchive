@@ -1,1 +1,3 @@
 #dynamic-bookmark #bookmark-form form#new_bookmark dl {height:16em; overflow:scroll;}
+#ibox { z-index: 1; }
+#new_comment .module { z-index: -1; }
