@@ -9,12 +9,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100301211829) do
+ActiveRecord::Schema.define(:version => 20100312165910) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
-    t.string   "url",        :null => false
-    t.text     "comment",    :null => false
+    t.string   "url",        :default => "", :null => false
+    t.text     "comment",                    :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "ip_address"
@@ -67,7 +67,7 @@ ActiveRecord::Schema.define(:version => 20100301211829) do
 
   create_table "bookmarks", :force => true do |t|
     t.datetime "created_at",                                         :null => false
-    t.string   "bookmarkable_type", :limit => 15,                    :null => false
+    t.string   "bookmarkable_type", :limit => 15, :default => "",    :null => false
     t.integer  "bookmarkable_id",                                    :null => false
     t.integer  "user_id"
     t.text     "notes"
@@ -160,6 +160,7 @@ ActiveRecord::Schema.define(:version => 20100301211829) do
     t.boolean  "unrevealed",    :default => false, :null => false
     t.boolean  "anonymous",     :default => false, :null => false
     t.boolean  "gift_exchange", :default => false, :null => false
+    t.boolean  "show_random",   :default => false, :null => false
   end
 
   add_index "collection_preferences", ["collection_id"], :name => "index_collection_preferences_on_collection_id"
@@ -293,12 +294,12 @@ ActiveRecord::Schema.define(:version => 20100301211829) do
   add_index "external_creatorships", ["external_author_name_id"], :name => "index_external_creatorships_on_external_author_name_id"
 
   create_table "external_works", :force => true do |t|
-    t.string   "url",                                :null => false
-    t.string   "author",                             :null => false
+    t.string   "url",             :default => "",    :null => false
+    t.string   "author",          :default => "",    :null => false
     t.boolean  "dead",            :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title",                              :null => false
+    t.string   "title",           :default => "",    :null => false
     t.text     "summary"
     t.boolean  "hidden_by_admin", :default => false, :null => false
   end
@@ -352,6 +353,7 @@ ActiveRecord::Schema.define(:version => 20100301211829) do
     t.datetime "assignments_due_at"
     t.datetime "works_reveal_at"
     t.datetime "authors_reveal_at"
+    t.integer  "prompt_restriction_id"
   end
 
   create_table "gifts", :force => true do |t|
@@ -467,9 +469,9 @@ ActiveRecord::Schema.define(:version => 20100301211829) do
   end
 
   create_table "open_id_authentication_nonces", :force => true do |t|
-    t.integer "timestamp",  :null => false
+    t.integer "timestamp",                  :null => false
     t.string  "server_url"
-    t.string  "salt",       :null => false
+    t.string  "salt",       :default => "", :null => false
   end
 
   create_table "preferences", :force => true do |t|
@@ -495,6 +497,7 @@ ActiveRecord::Schema.define(:version => 20100301211829) do
     t.boolean  "hide_public_hit_count",             :default => false,                     :null => false
     t.boolean  "recipient_emails_off",              :default => false,                     :null => false
     t.boolean  "hide_all_hit_counts",               :default => false,                     :null => false
+    t.boolean  "view_full_works",                   :default => false,                     :null => false
   end
 
   add_index "preferences", ["user_id"], :name => "index_preferences_on_user_id"
@@ -545,15 +548,15 @@ ActiveRecord::Schema.define(:version => 20100301211829) do
     t.string   "title"
     t.string   "url"
     t.text     "description"
-    t.boolean  "offer"
     t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "type"
   end
 
   create_table "pseuds", :force => true do |t|
     t.integer  "user_id"
-    t.string   "name",                                 :null => false
+    t.string   "name",              :default => "",    :null => false
     t.text     "description"
     t.boolean  "is_default",        :default => false, :null => false
     t.datetime "created_at"
@@ -626,7 +629,7 @@ ActiveRecord::Schema.define(:version => 20100301211829) do
   create_table "series", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title",                              :null => false
+    t.string   "title",           :default => "",    :null => false
     t.text     "summary"
     t.text     "notes"
     t.boolean  "hidden_by_admin", :default => false, :null => false
@@ -757,7 +760,7 @@ ActiveRecord::Schema.define(:version => 20100301211829) do
     t.boolean  "posted",                      :default => false, :null => false
     t.integer  "language_id"
     t.boolean  "restricted",                  :default => false
-    t.string   "title",                                          :null => false
+    t.string   "title",                       :default => "",    :null => false
     t.text     "summary"
     t.text     "notes"
     t.integer  "word_count"

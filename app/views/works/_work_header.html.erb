@@ -10,7 +10,7 @@
   <% end -%>
 
   <%- if @previous_chapter || @next_chapter -%>
-    <li><%= link_to "View Entire Work", @work %></li>
+    <li><%= link_to "View Entire Work", work_path(@work, :view_full_work => 'true') %></li>
     <%- if @previous_chapter -%>
     <li><%= link_to t('previous_chapter', :default => "&#8592; Previous Chapter"), [@work, @previous_chapter] %></li>
     <%- end -%>

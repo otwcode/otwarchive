@@ -47,6 +47,7 @@ class PreferencesControllerTest < ActionController::TestCase
         form.preference.email_visible.check
         form.preference.date_of_birth_visible.check
         form.preference.adult.check
+        form.preference.view_full_works.check
         form.preference.hide_warnings.check
         form.preference.comment_emails_off.check
         form.preference.comment_inbox_off.check
@@ -62,6 +63,7 @@ class PreferencesControllerTest < ActionController::TestCase
         assert @user.preference.email_visible
         assert @user.preference.date_of_birth_visible
         assert @user.preference.adult
+        assert @user.preference.view_full_works
         assert @user.preference.hide_warnings
         assert @user.preference.comment_emails_off
         assert @user.preference.comment_inbox_off

@@ -16,50 +16,55 @@
 
 <!--main content-->
 <%- form_for(@preference, :url => { :action => "update", :user_id => @user }) do |f| -%>  
-		<ul>
+    <ul>
     	<li>
     	  <%= f.check_box :history_enabled %> 
     	  <%= f.label :history_enabled, t('enable_history', :default => "Enable Viewing History") %>
     	</li>
    		
-   		<li>
-   		  <%= f.check_box :email_visible %> 
-   		  <%= f.label :email_visible, t('display_email', :default => "Display Email Address") %>
-   		</li>
+  	<li>
+   	  <%= f.check_box :email_visible %> 
+   	  <%= f.label :email_visible, t('display_email', :default => "Display Email Address") %>
+   	</li>
     	
     	<li>
-      	<%= f.check_box :date_of_birth_visible %> 
-      	<%= f.label :date_of_birth_visible, t('display_birthday', :default => "Display Date of Birth") %>
+      	  <%= f.check_box :date_of_birth_visible %> 
+      	  <%= f.label :date_of_birth_visible, t('display_birthday', :default => "Display Date of Birth") %>
     	</li>
     	
     	<li>
-      	<%= f.check_box :adult %> 
-      	<%= f.label :adult, t('show_adult_content', :default => "Show me adult content without prompting") %>
+      	  <%= f.check_box :adult %> 
+      	  <%= f.label :adult, t('show_adult_content', :default => "Show me adult content without prompting") %>
     	</li>
-			
-			<li>
-  			<%= f.check_box :hide_warnings %> 
-  			<%= f.label :hide_warnings, t('hide_warnings', :default => "Hide warnings by default (you will still have the option of revealing them)")  %>
-			</li>
+
+    	<li>
+      	  <%= f.check_box :view_full_works %> 
+      	  <%= f.label :view_full_works, t('view_full_works', :default => "Always view entire work by default") %>
+    	</li>
+ 
+	<li>
+  	  <%= f.check_box :hide_warnings %> 
+  	  <%= f.label :hide_warnings, t('hide_warnings', :default => "Hide warnings by default (you will still have the option of revealing them)")  %>
+	</li>
       
-      			<li>
-  			<%= f.check_box :hide_freeform %> 
-  			<%= f.label :hide_freeform, t('hide_freeform', :default => "Hide freeform tags by default (you will still have the option of revealing them)")  %>
-			</li>
+      	<li>
+  	  <%= f.check_box :hide_freeform %> 
+  	  <%= f.label :hide_freeform, t('hide_freeform', :default => "Hide freeform tags by default (you will still have the option of revealing them)")  %>
+	</li>
     	
     	<li>
-      	<%= f.check_box :comment_emails_off %> 
-      	<%= f.label :comment_emails_off, t('comment_notifications_email', :default => "Turn off comment-notification emails")  %>
+      	  <%= f.check_box :comment_emails_off %> 
+      	  <%= f.label :comment_emails_off, t('comment_notifications_email', :default => "Turn off comment-notification emails")  %>
     	</li>
     	
     	<li>
-      	<%= f.check_box :comment_inbox_off %> 
-      	<%= f.label :comment_inbox_off, t('comment_notifications_inbox', :default => "Turn off comment-notification messages to your Inbox")  %>
+      	  <%= f.check_box :comment_inbox_off %> 
+      	  <%= f.label :comment_inbox_off, t('comment_notifications_inbox', :default => "Turn off comment-notification messages to your Inbox")  %>
     	</li>
     	
     	<li>
-      	<%= f.check_box :comment_copy_to_self_off %> 
-      	<%= f.label :comment_copy_to_self_off, t('own_comments', :default => "Turn off copies of your own comments")  %>
+      	  <%= f.check_box :comment_copy_to_self_off %> 
+      	  <%= f.label :comment_copy_to_self_off, t('own_comments', :default => "Turn off copies of your own comments")  %>
     	</li>
     	
     	<li>
@@ -68,18 +73,18 @@
     	</li>
     	
     	<li>
-      	<%= f.check_box :collection_emails_off %> 
-      	<%= f.label :collection_emails_off, t('preferences.collection_emails_off', :default => "Turn off notification emails from Collections.") %>
+      	  <%= f.check_box :collection_emails_off %> 
+      	  <%= f.label :collection_emails_off, t('preferences.collection_emails_off', :default => "Turn off notification emails from Collections.") %>
     	</li>  	
 
     	<li>
-      	<%= f.check_box :collection_inbox_off %> 
-      	<%= f.label :collection_inbox_off, t('preferences.collection_inbox_off', :default => "Turn off Inbox messages from Collections.") %>
+      	  <%= f.check_box :collection_inbox_off %> 
+      	  <%= f.label :collection_inbox_off, t('preferences.collection_inbox_off', :default => "Turn off Inbox messages from Collections.") %>
     	</li>  	
 
     	<li>
-      	<%= f.check_box :recipient_emails_off %> 
-      	<%= f.label :recipient_emails_off, t('preferences.recipient_emails_off', :default => "Turn off gift work notification emails.") %>
+      	  <%= f.check_box :recipient_emails_off %> 
+      	  <%= f.label :recipient_emails_off, t('preferences.recipient_emails_off', :default => "Turn off gift work notification emails.") %>
     	</li>  	
 
       <li>
@@ -97,11 +102,11 @@
         <%= f.label :hide_public_hit_count, t('preferences.hide_public_hit_count', :default => "Don't publicly display hits on my works.") -%>
       </li>
     	
-    	<li>
+      <li>
       	<%= f.check_box :first_login %> 
       	<%= f.label :first_login, t('first_login_display', :default => "Turn on the first login help banner")  %>
-    	</li>  	
-  	</ul>
+      </li>  	
+  </ul>
 		<p>
 			<%= f.label :work_title_format, t('format_titles', :default => "Format the titles on your works and series")  %>: 
 			<%= f.text_field :work_title_format %> 

@@ -23,6 +23,7 @@ preference_484751134:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751112: 
   history_enabled: true
   hide_freeform: false
@@ -47,6 +48,7 @@ preference_484751112:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751123: 
   history_enabled: true
   hide_freeform: false
@@ -71,6 +73,7 @@ preference_484751123:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751124: 
   history_enabled: true
   hide_freeform: false
@@ -95,6 +98,7 @@ preference_484751124:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751113: 
   history_enabled: true
   hide_freeform: false
@@ -119,6 +123,7 @@ preference_484751113:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751135: 
   history_enabled: true
   hide_freeform: false
@@ -143,6 +148,7 @@ preference_484751135:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751136: 
   history_enabled: true
   hide_freeform: false
@@ -167,6 +173,7 @@ preference_484751136:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751114: 
   history_enabled: true
   hide_freeform: false
@@ -191,6 +198,7 @@ preference_484751114:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751125: 
   history_enabled: true
   hide_freeform: false
@@ -215,6 +223,7 @@ preference_484751125:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751126: 
   history_enabled: true
   hide_freeform: false
@@ -239,6 +248,7 @@ preference_484751126:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751115: 
   history_enabled: true
   hide_freeform: false
@@ -263,6 +273,7 @@ preference_484751115:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_78869998: 
   history_enabled: true
   hide_freeform: false
@@ -287,6 +298,7 @@ preference_78869998:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751116: 
   history_enabled: true
   hide_freeform: false
@@ -311,6 +323,7 @@ preference_484751116:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751127: 
   history_enabled: true
   hide_freeform: false
@@ -335,6 +348,7 @@ preference_484751127:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751128: 
   history_enabled: true
   hide_freeform: false
@@ -359,6 +373,7 @@ preference_484751128:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751117: 
   history_enabled: true
   hide_freeform: false
@@ -383,6 +398,7 @@ preference_484751117:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: true
 preference_78869999: 
   history_enabled: true
   hide_freeform: false
@@ -407,6 +423,7 @@ preference_78869999:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: true
 preference_484751107: 
   history_enabled: true
   hide_freeform: true
@@ -431,6 +448,7 @@ preference_484751107:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_78870000: 
   history_enabled: true
   hide_freeform: false
@@ -455,6 +473,7 @@ preference_78870000:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751118: 
   history_enabled: true
   hide_freeform: false
@@ -479,6 +498,7 @@ preference_484751118:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751129: 
   history_enabled: true
   hide_freeform: false
@@ -503,6 +523,7 @@ preference_484751129:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751130: 
   history_enabled: true
   hide_freeform: false
@@ -527,6 +548,7 @@ preference_484751130:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751119: 
   history_enabled: true
   hide_freeform: false
@@ -551,6 +573,7 @@ preference_484751119:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751108: 
   history_enabled: true
   hide_freeform: false
@@ -575,6 +598,7 @@ preference_484751108:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751109: 
   history_enabled: true
   hide_freeform: false
@@ -599,6 +623,7 @@ preference_484751109:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751120: 
   history_enabled: true
   hide_freeform: false
@@ -623,6 +648,7 @@ preference_484751120:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751131: 
   history_enabled: true
   hide_freeform: false
@@ -647,6 +673,7 @@ preference_484751131:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751132: 
   history_enabled: true
   hide_freeform: false
@@ -671,6 +698,7 @@ preference_484751132:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751110: 
   history_enabled: true
   hide_freeform: false
@@ -695,6 +723,7 @@ preference_484751110:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751122: 
   history_enabled: true
   hide_freeform: false
@@ -719,6 +748,7 @@ preference_484751122:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751111: 
   history_enabled: true
   hide_freeform: false
@@ -743,6 +773,7 @@ preference_484751111:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false
 preference_484751133: 
   history_enabled: true
   hide_freeform: false
@@ -767,3 +798,4 @@ preference_484751133:
   automatically_approve_collections: false
   hide_public_hit_count: false
   hide_private_hit_count: false
+  view_full_works: false

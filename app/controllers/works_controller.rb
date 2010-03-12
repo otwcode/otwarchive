@@ -301,6 +301,18 @@ class WorksController < ApplicationController
   	  flash[:error] = t('work_not_found', :default => "Sorry, we couldn't find the work you were looking for.")
       redirect_to works_path and return
     end
+
+    unless params[:view_full_work]
+      unless logged_in? && current_user.preference && current_user.preference.view_full_works
+        if @work.chapters.posted.count > 1
+          if params[:view_adult]
+            session[:adult] = true
+          end
+          redirect_to [@work, @chapters.first] and return
+        end
+      end
+    end
+
     # Users must explicitly okay viewing of adult content
     if params[:view_adult]
       session[:adult] = true
