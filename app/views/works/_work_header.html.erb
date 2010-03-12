@@ -71,7 +71,7 @@
     <%- end -%>
     
     <%- unless @work.notes.blank? && @work.endnotes.blank? && @work.parents.blank? && @work.recipients.blank? -%>
-      <%- current_page?(:controller => 'chapters', :action => 'show') ? linkpath = "chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes')" : linkpath = "work_path(@work, :anchor => 'work_endnotes')" %>
+      <%- current_page?(:controller => 'chapters', :action => 'show') ? linkpath = chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes') : linkpath = work_path(@work, :anchor => 'work_endnotes') %>
       <div class="notes module" role="complementary">
       <h3><%=h t('work_header.notes', :default => "Notes:") %></h3>
         <% if !@work.recipients.blank? %>
@@ -88,13 +88,13 @@
     <%- end -%>
     <%- unless @work.notes.blank? && @work.endnotes.blank? -%>
     <%- if @work.notes.blank? -%>
-        <span class="endnotes-link"><%= t('link_to_endnotes', :default => "See the end of the work for more {{notes_link}}.", :notes_link => (link_to t('notes_link', :default => "notes"), eval(linkpath))) %></span>
+        <span class="endnotes-link"><%= t('link_to_endnotes', :default => "See the end of the work for more {{notes_link}}.", :notes_link => (link_to t('notes_link', :default => "notes"), linkpath)) %></span>
     <%- else -%>
         <blockquote class="user-generated-view"><%= sanitize_and_format_for_display(@work.notes) -%></blockquote>
         <%- unless @work.endnotes.blank? -%>
           <span class="endnotes-link"> 
           <%= t('work_header.link_more_endnotes', :default => "See the end of the work for more {{notes_link}}.", 
-                                    :notes_link => link_to( t('notes_link', :default => 'notes'), eval(linkpath) ) ) -%>
+                                    :notes_link => link_to( t('notes_link', :default => 'notes'), linkpath)) -%>
           </span>
         <%- end -%>  
     <%- end -%> 

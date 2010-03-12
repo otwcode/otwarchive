@@ -24,7 +24,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :tag_wranglings, :member => {:wrangle => :post}, :collection => {:discuss => :get}, :only => [:index]
   map.resources :tag_wranglers
 
-  map.resources :tags, :member => {:wrangle => :get, :mass_update => :post, :remove_association => :get}, :collection =>  {:show_hidden => :get, :show_hidden_freeforms => :get, :search => :get},  :requirements => { :id => %r([^/;,?]+) } do |tag|
+  map.resources :tags, :member => {:wrangle => :get, :mass_update => :post, :remove_association => :get}, :collection =>  {:show_hidden => :get, :search => :get},  :requirements => { :id => %r([^/;,?]+) } do |tag|
         tag.with_options :requirements => { :tag_id => %r([^/;,?]+) } do |tag_requirements|
         tag_requirements.resources :works
         tag_requirements.resources :bookmarks

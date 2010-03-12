@@ -26,26 +26,25 @@ module SeriesHelper
   end
   
   def get_series_symbols_for(series, symbols_only = false)
+    mappings = {}
     warnings = series.tags.select{|tag| tag.type == "Warning"}
-    warning_class = get_series_warnings_class(warnings)
-    warning_string = get_series_title_string(warnings)
+    mappings[:warning] = {:class_name => get_series_warnings_class(warnings), :string =>  get_series_title_string(warnings)}
     
     ratings = series.tags.select{|tag| tag.type == "Rating"}
-    rating_class = get_series_ratings_class(ratings)
-    rating_string = get_series_title_string(ratings, "rating")
+    mappings[:rating] = {:class_name => get_series_ratings_class(ratings), :string =>  get_title_string(ratings, "rating")}
     
     categories = series.tags.select{|tag| tag.type == "Category"}
-    category_class = get_series_category_class(categories)
-    category_string = get_series_title_string(categories, "category")
-
-    iswip_class = get_series_complete_class(series)
+    mappings[:category] = {:class_name => get_series_category_class(categories), :string =>  get_series_title_string(categories, "category")}
+    
+    # placeholder
     iswip_string = true ? "Series in Progress" : "Complete Series"
+    mappings[:iswip] = {:class_name => get_series_complete_class(series), :string =>  iswip_string}
 
     symbol_block = ""
         symbol_block << "<ul class=\"required-tags\">\n" if not symbols_only
         %w(rating category warning iswip).each do |w|
-          css_class = eval("#{w}_class")
-          title_string = eval("#{w}_string")
+          css_class = mappings[w.to_sym][:class_name]
+          title_string = mappings[w.to_sym][:string]
           symbol_block << "<li class=\"#{css_class}\">"
           symbol_block << link_to_help('symbols-key', link = image_tag( "#{css_class}.png", :alt => title_string, :title => title_string))
           symbol_block << "</li>\n"
@@ -116,31 +115,36 @@ module SeriesHelper
     "category-none"
   end
   
-  def series_blurb_tag_block(series)
+  # TODO: merge with work_blurb_tag_block
+  def series_blurb_tag_block(series)    
+    warnings = series.tags.select{|tag| tag.type == "Warning"}.sort
+    pairings = series.tags.select{|tag| tag.type == "Pairing"}.sort
+    characters = series.tags.select{|tag| tag.type == "Character"}.sort
+    freeforms = series.tags.select{|tag| tag.type == "Freeform"}.sort
 
-    warnings_block = hide_warnings?(series) ? '<li class="warnings"><strong><span id="' + "series_#{series.id}_category_warning\">" + show_warnings_link(series) + '</span></strong></li>' :
-      '<li class="warnings"><strong>' + 
-        series.tags.select{|tag| tag.type == "Warning"}.sort.collect{|tag| link_to_tag(tag) }.join(ArchiveConfig.DELIMITER_FOR_OUTPUT + '</strong></li> <li class="warnings"><strong>') +
-        '</strong></li>'
+    last_tag = (warnings + pairings + characters + freeforms).last
+    tag_block = ""
 
-    pairings = series.tags.select{|tag| tag.type == "Pairing"}
-    pairings_block = pairings.empty? ? nil : '<li class="pairing">' + 
-        pairings.collect{|tag| link_to_tag(tag) }.join(ArchiveConfig.DELIMITER_FOR_OUTPUT + '</li> <li class="pairing">') +
-        '</li>'
-        
-    characters = series.tags.select{|tag| tag.type == "Character"}
-    character_block = characters.empty? ? nil : '<li class="character">' + 
-        characters.collect{|tag| link_to_tag(tag)  }.join(ArchiveConfig.DELIMITER_FOR_OUTPUT + '</li> <li class="character">') +
-        '</li>'
-        
-    freeforms = series.tags.select{|tag| tag.type == "Freeform"}
-    freeform_block = freeforms.empty? ? nil :
-      hide_freeform?(series) ? '<li class="freeform"><span id="' + "series_#{series.id}_category_freeform\"><strong>" + show_freeforms_link(series) + '</strong></span></li>' :
-        '<li class="freeform">' +
-        freeforms.collect{|tag| link_to_tag(tag) }.join(ArchiveConfig.DELIMITER_FOR_OUTPUT + '</li> <li class="freeform">') +
-        '</li>'
-
-    [warnings_block, pairings_block, character_block, freeform_block].compact.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+    [warnings, pairings, characters, freeforms].each do |tags|
+      unless tags.empty?
+        class_name = tags.first.type.downcase.pluralize
+        if (class_name == "warnings" && hide_warnings?(series)) || (class_name == "freeforms" && hide_freeform?(series))
+          open_tags = "<li class='#{class_name}' id='series_#{series.id}_category_#{class_name}'><strong>"
+          close_tags = "</strong></li>"
+          delimiter = (class_name == 'freeform' || last_tag.is_a?(Warning)) ? '' : ArchiveConfig.DELIMITER_FOR_OUTPUT
+          tag_block <<  open_tags + show_hidden_tags_link(series, class_name) + delimiter + close_tags
+        elsif class_name == "warnings"
+          open_tags = "<li class='#{class_name}'><strong>"
+          close_tags = "</strong></li>"
+          link_array = tags.collect{|tag| link_to_tag(tag) + (tag == last_tag ? '' : ArchiveConfig.DELIMITER_FOR_OUTPUT) }
+          tag_block <<  open_tags + link_array.join("</strong></li> <li class='#{class_name}'><strong>") + close_tags
+        else
+          link_array = tags.collect{|tag| link_to_tag(tag) + (tag == last_tag ? '' : ArchiveConfig.DELIMITER_FOR_OUTPUT) }
+          tag_block << "<li class='#{class_name}'>" + link_array.join("</li> <li class='#{class_name}'>") + '</li>'        
+        end
+      end
+    end
+    tag_block
   end
   
 end

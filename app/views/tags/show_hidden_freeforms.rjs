@@ -1,6 +1,0 @@
-tag_list = @display_tags.collect do |tag|
-  "<li class=\"#{@display_category}\">" + link_to_tag(tag) + "</li>"
-end
-
-page.replace "#{@display_creation.class.to_s.underscore}_#{@display_creation.id}_category_#{@display_category}", 
-  tag_list.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)  

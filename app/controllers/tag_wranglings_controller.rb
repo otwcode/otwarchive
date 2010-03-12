@@ -40,8 +40,8 @@ class TagWranglingsController < ApplicationController
     params[:sort] = 'name ASC' if params[:sort].blank?
     options = {:show => params[:show], :page => params[:page], :sort => params[:sort]}
     unless params[:canonicals].blank?
-      params[:canonicals].each do |tag_id|
-        tag = Tag.find(tag_id)
+      canonicals = Tag.find(params[:canonicals])
+      canonicals.each do |tag|
         tag.update_attributes(:canonical => true)
       end
     end

@@ -13,10 +13,10 @@ class InvitationsController < ApplicationController
   end
   
   def manage
-    if params[:status].blank?
+    if params[:status].blank? || !['unsent', 'unredeemed', 'redeemed'].include?(params[:status])
       @invitations = @user.invitations
     else
-      @invitations = eval("@user.invitations." + params[:status])
+      @invitations = @user.invitations.send(params[:status])
     end  
   end
   

@@ -30,9 +30,8 @@ module BookmarksHelper
         # Enigel Dec 10 08 - adding an edit link for now
         if blurb == true 
           if @existing.many?
-            string = bookmarkable.class.to_s.underscore
-            path = string + "_bookmarks_path(bookmarkable, :existing => true)"
-            link_to t('saved_bookmarks', :default => 'Saved'), eval(path) 
+            id_symbol = (bookmarkable.class.to_s.underscore + '_id').to_sym
+            link_to t('saved_bookmarks', :default => 'Saved'), {:controller => :bookmarks, :action => :index, id_symbol => bookmarkable, :existing => true} 
           else
             link_to t('saved_bookmark', :default => 'Saved'), bookmark_path(@existing)
           end
@@ -48,15 +47,13 @@ module BookmarksHelper
   end
   
   def link_to_new_bookmarkable_bookmark(bookmarkable)
-    string = bookmarkable.class.to_s.underscore
-    path = "new_" + string + "_bookmark_path(bookmarkable)"
-    link_to "Add a new bookmark for this item", eval(path)
+    id_symbol = (bookmarkable.class.to_s.underscore + '_id').to_sym
+    link_to "Add a new bookmark for this item", {:controller => :bookmarks, :action => :new, id_symbol => bookmarkable}
   end
   
   def link_to_user_bookmarkable_bookmarks(bookmarkable)
-    string = bookmarkable.class.to_s.underscore
-    path = string + "_bookmarks_path(bookmarkable, :existing => true)"
-    link_to "You have saved multiple bookmarks for this item", eval(path)
+    id_symbol = (bookmarkable.class.to_s.underscore + '_id').to_sym
+    link_to "You have saved multiple bookmarks for this item", {:controller => :bookmarks, :action => :index, id_symbol => bookmarkable, :existing => true}
   end
   
   # tag_bookmarks_path was behaving badly for tags with slashes
@@ -68,7 +65,8 @@ module BookmarksHelper
     if link_text.blank? 
       link_text = Bookmark.count_visible_bookmarks(bookmarkable, current_user)
     end
-    link_to link_text, eval(bookmarkable.class.to_s.underscore + "_bookmarks_path(bookmarkable)")
+    id_symbol = (bookmarkable.class.to_s.underscore + '_id').to_sym    
+    link_to link_text, {:controller => :bookmarks, :action => :index, id_symbol => bookmarkable}
   end
   
   def get_symbol_for_bookmark(bookmark)

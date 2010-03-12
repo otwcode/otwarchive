@@ -3,8 +3,6 @@ class PeopleController < ApplicationController
   before_filter :load_collection
     
   def index
-    authored_items_scope = ""
-    include_objects = []
     if @collection
       @pseuds_alphabet = @collection.participants.find(:all, :select => 'name')
     else
@@ -28,7 +26,7 @@ class PeopleController < ApplicationController
     if @collection
       @authors = @collection.participants.alphabetical.starting_with(letter).paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
     else
-      @authors = eval("Pseud.alphabetical.starting_with(letter)#{authored_items_scope}").paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
+      @authors = Pseud.alphabetical.starting_with(letter).paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
     end
   end 
 

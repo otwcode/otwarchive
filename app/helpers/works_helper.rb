@@ -50,35 +50,30 @@ module WorksHelper
   end
 
   def work_blurb_tag_block(work)
-    warnings_block = work.warning_tags.empty? ? nil :
-      if hide_warnings?(work) 
-        '<li class="warnings" id="' + "work_#{work.id}_category_warning" + '"><strong>' + show_warnings_link(work) + '</strong></li>'
-      else
-        '<li class="warnings"><strong>' + 
-        work.warning_tags.collect{|tag| link_to_tag(tag) }.join(ArchiveConfig.DELIMITER_FOR_OUTPUT + '</strong></li> <li class="warnings"><strong>') +
-        '</strong></li>'
+    tags = work.warning_tags + work.pairing_tags + work.character_tags + work.freeform_tags
+    last_tag = tags.last
+    tag_block = ""
+
+    [work.warning_tags, work.pairing_tags, work.character_tags, work.freeform_tags].each do |tags|
+      unless tags.empty?
+        class_name = tags.first.type.downcase.pluralize
+        if (class_name == "warnings" && hide_warnings?(work)) || (class_name == "freeforms" && hide_freeform?(work))
+          open_tags = "<li class='#{class_name}' id='work_#{work.id}_category_#{class_name}'><strong>"
+          close_tags = "</strong></li>"
+          delimiter = (class_name == 'freeforms' || last_tag.is_a?(Warning)) ? '' : ArchiveConfig.DELIMITER_FOR_OUTPUT
+          tag_block <<  open_tags + show_hidden_tags_link(work, class_name) + delimiter + close_tags
+        elsif class_name == "warnings"
+          open_tags = "<li class='#{class_name}'><strong>"
+          close_tags = "</strong></li>"
+          link_array = tags.collect{|tag| link_to_tag(tag) + (tag == last_tag ? '' : ArchiveConfig.DELIMITER_FOR_OUTPUT) }
+          tag_block <<  open_tags + link_array.join("</strong></li> <li class='#{class_name}'><strong>") + close_tags
+        else
+          link_array = tags.collect{|tag| link_to_tag(tag) + (tag == last_tag ? '' : ArchiveConfig.DELIMITER_FOR_OUTPUT) }
+          tag_block << "<li class='#{class_name}'>" + link_array.join("</li> <li class='#{class_name}'>") + '</li>'        
+        end
       end
-
-    pairings_block = work.pairing_tags.empty? ? nil :
-      '<li class="pairing">' + 
-        work.pairing_tags.collect{|tag| link_to_tag(tag)  }.join(ArchiveConfig.DELIMITER_FOR_OUTPUT + '</li> <li class="pairing">') +
-        '</li>'
-
-    character_block = work.character_tags.empty? ? nil :
-      '<li class="character">' + 
-        work.character_tags.collect{|tag| link_to_tag(tag)  }.join(ArchiveConfig.DELIMITER_FOR_OUTPUT + '</li> <li class="character">') +
-        '</li>'
-
-    freeform_block = work.freeform_tags.empty? ? nil :
-      if hide_freeform?(work) 
-        '<li class="freeform" id="' + "work_#{work.id}_category_freeform\"><strong>" + show_freeforms_link(work) + '</strong></li>'
-      else 
-        '<li class="freeform">' +
-        work.freeform_tags.collect{|tag| link_to_tag(tag) }.join(ArchiveConfig.DELIMITER_FOR_OUTPUT + '</li> <li class="freeform">') +
-        '</li>'
-      end
-
-    [warnings_block, pairings_block, character_block, freeform_block].compact.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+    end
+    tag_block
   end
 
   def work_collection_names_list(work)
@@ -152,45 +147,42 @@ module WorksHelper
       category_name.blank? ? "" : "No" + " " + category_name
     end
   end
-
+  
   def get_symbols_for(work, symbols_only = false)
+    mappings = {}
     unless work.class == ExternalWork
       warnings = work.tags.select{|tag| tag.type == "Warning"}
-      warning_class = get_warnings_class(warnings)
-      warning_string = get_title_string(warnings)
+      mappings[:warning] = {:class_name => get_warnings_class(warnings), :string =>  get_title_string(warnings)}
     else
-      warning_class = "external-work"
-      warning_string = "External Work"
+      mappings[:warning] = {:class_name => 'external-work', :string =>  "External Work"}
     end
     
     ratings = work.tags.select{|tag| tag.type == "Rating"}
     rating = ratings.blank? ? nil : ratings.first
-    rating_class = get_ratings_class(rating)
-    rating_string = get_title_string(ratings, "rating")
+    mappings[:rating] = {:class_name => get_ratings_class(rating), :string =>  get_title_string(ratings, "rating")}
     
     categories = work.tags.select{|tag| tag.type == "Category"}
-    category_class = get_category_class(categories)
-    category_string = get_title_string(categories, "category")
-
-    iswip_class = get_complete_class(work)
+    mappings[:category] = {:class_name => get_category_class(categories), :string =>  get_title_string(categories, "category")}
+    
     if work.class == Work
       iswip_string = work.is_wip ? "Work in Progress" : "Complete Work"
     else
       iswip_string = "External Work"
     end
+    mappings[:iswip] = {:class_name => get_complete_class(work), :string =>  iswip_string}
 
     symbol_block = ""
-        symbol_block << "<ul class=\"required-tags\">\n" if not symbols_only
-        %w(rating category warning iswip).each do |w|
-          css_class = eval("#{w}_class")
-          title_string = eval("#{w}_string")
-          symbol_block << "<li class=\"#{css_class}\">"
-          symbol_block << link_to_help('symbols-key', link = image_tag( "#{css_class}.png", :alt => title_string, :title => title_string))
-          symbol_block << "</li>\n"
-        end
-        symbol_block << "</ul>\n" if not symbols_only
-        return symbol_block
-      end
+    symbol_block << "<ul class=\"required-tags\">\n" if not symbols_only
+    %w(rating category warning iswip).each do |w|
+      css_class = mappings[w.to_sym][:class_name]
+      title_string = mappings[w.to_sym][:string]
+      symbol_block << "<li class=\"#{css_class}\">"
+      symbol_block << link_to_help('symbols-key', link = image_tag( "#{css_class}.png", :alt => title_string, :title => title_string))
+      symbol_block << "</li>\n"
+    end
+    symbol_block << "</ul>\n" if not symbols_only
+    return symbol_block
+  end
 
   def get_warnings_class(warning_tags)
     return "warning-yes" unless warning_tags

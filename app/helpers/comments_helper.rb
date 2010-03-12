@@ -107,7 +107,7 @@ module CommentsHelper
   
   # return html link to add new comment on a commentable object
   def add_comment_link(commentable)
-    commentable_id = eval(":#{commentable.class.to_s.underscore}_id")
+    commentable_id = "#{commentable.class.to_s.underscore}_id".to_sym
     link_to_remote(
       "Add Comment",
         {:url => { :controller => :comments, :action => :add_comment, commentable_id => (commentable.id)}, :method => :get}, 
@@ -115,7 +115,7 @@ module CommentsHelper
   end
       
   def cancel_comment_link(commentable)
-    commentable_id = eval(":#{commentable.class.to_s.underscore}_id")
+    commentable_id = "#{commentable.class.to_s.underscore}_id".to_sym
     link_to_remote(
       "Cancel Comment",
         {:url => { :controller => :comments, :action => :cancel_comment, commentable_id => (commentable.id)}, :method => :get}, 
@@ -134,7 +134,7 @@ end
   
   # return link to add new reply to a comment
   def add_comment_reply_link(comment)
-    commentable_id = eval(":#{comment.ultimate_parent.class.to_s.underscore}_id")
+    commentable_id = "#{comment.ultimate_parent.class.to_s.underscore}_id".to_sym
     link_to_remote( 
       "Reply", 
       {:url => {:controller => :comments, :action => :add_comment_reply, :id => comment.id, :comment_id => params[:comment_id], commentable_id => (comment.ultimate_parent.id)}, :method => :get}, 
@@ -144,7 +144,7 @@ end
   
   # return link to cancel new reply to a comment
   def cancel_comment_reply_link(comment)
-    commentable_id = eval(":#{comment.ultimate_parent.class.to_s.underscore}_id")
+    commentable_id = "#{comment.ultimate_parent.class.to_s.underscore}_id".to_sym
     link_to_remote( 
       "Cancel", 
       {:url => {:controller => :comments, :action => :cancel_comment_reply, :id => comment.id, :comment_id => params[:comment_id], commentable_id => (comment.ultimate_parent.id)}, :method => :get}, 
@@ -158,14 +158,14 @@ end
     if comment.new_record?
       if commentable.class == comment.class
         # canceling a reply to a comment
-        commentable_id = eval(":#{comment.ultimate_parent.class.to_s.underscore}_id")
+        commentable_id = "#{comment.ultimate_parent.class.to_s.underscore}_id".to_sym
         submit_to_remote( 
           'cancel', "Cancel", 
            :url => {:controller => :comments, :action => :cancel_comment_reply, :id => commentable.id, :comment_id => params[:comment_id], commentable_id => (commentable.ultimate_parent.id)}, :method => :get, 
            :href => fallback_url_for_comment(commentable, {:add_comment_reply_id => nil}) )
       else
         # canceling a reply to a different commentable thingy
-        commentable_id = eval(":#{commentable.class.to_s.underscore}_id")
+        commentable_id = "#{commentable.class.to_s.underscore}_id".to_sym
         submit_to_remote(
           'cancel', "Cancel", 
           :url => { :controller => :comments, :action => :cancel_comment, commentable_id => (commentable.id)}, :method => :get, 

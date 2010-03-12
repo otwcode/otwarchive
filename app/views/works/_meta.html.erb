@@ -19,10 +19,8 @@
 
       <dd class="<%= type.downcase -%>">
       <ul>
-      <%- if type == "Warning" && hide_warnings?(work) -%>        
-        <li id="work_<%= work.id %>_category_<%= type.downcase %>"><%= show_warnings_link(work) %> </li>
-      <%- elsif type == "Freeform" && hide_freeform?(work) -%>
-        <li id="work_<%= work.id %>_category_<%= type.downcase %>"><%= show_freeforms_link(work) %> </li>
+      <%- if (type == "Warning" && hide_warnings?(work)) || (type == "Freeform" && hide_freeform?(work)) -%>        
+        <li id="work_<%= work.id %>_category_<%= type.downcase.pluralize %>"><%= show_hidden_tags_link(work, type.downcase.pluralize) %> </li>
       <%- else -%>                   
         <%= tag_link_list(tags) %>
       <%- end -%>

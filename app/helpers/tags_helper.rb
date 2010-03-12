@@ -98,19 +98,12 @@ module TagsHelper
     current_user.is_a?(User) && current_user.preference && current_user.preference.hide_freeform? && !current_user.is_author_of?(creation)
   end
 
-  # Link to show warnings if they're currently hidden
-  def show_warnings_link(creation)
-    link_to_remote t('tags.show_warnings', :default => "Show warnings"),
-      :url => {:controller => 'tags', :action => 'show_hidden', :creation_type => creation.class.to_s, :creation_id => creation.id },
-      :method => :get
-  end
-  
   # Link to show tags if they're currently hidden
-  def show_freeforms_link(creation)
-    link_to_remote t('tags.show_freeforms', :default => "Show additional tags"),
-      :url => {:controller => 'tags', :action => 'show_hidden_freeforms', :creation_type => creation.class.to_s, :creation_id => creation.id },
-      :method => :get
-  end 
+  def show_hidden_tags_link(creation, tag_type)
+    text = t("tags.show_#{tag_type}", :default => (tag_type == 'freeforms' ? "Show additional tags" : "Show #{tag_type}"))
+    url = {:controller => 'tags', :action => 'show_hidden', :creation_type => creation.class.to_s, :creation_id => creation.id, :tag_type => tag_type }
+    link_to_remote text, :url => url, :method => :get
+  end
   
   # Makes filters show warnings display name
   def label_for_filter(type, tag_info)

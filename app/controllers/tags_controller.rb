@@ -1,7 +1,7 @@
 class TagsController < ApplicationController
   before_filter :load_collection
-  before_filter :check_user_status, :except => [ :show, :index, :show_hidden, :show_hidden_freeforms, :search ]
-  before_filter :check_permission, :except => [ :show, :index, :show_hidden, :show_hidden_freeforms, :search ]
+  before_filter :check_user_status, :except => [ :show, :index, :show_hidden, :search ]
+  before_filter :check_permission, :except => [ :show, :index, :show_hidden, :search ]
 
   def check_permission
     logged_in_as_admin? || permit?("tag_wrangler") || access_denied
@@ -70,39 +70,21 @@ class TagsController < ApplicationController
   end
 
   def show_hidden
-    unless params[:creation_id].blank? && params[:creation_type].blank?
+    unless params[:creation_id].blank? || params[:creation_type].blank? || params[:tag_type].blank?
+      @display_creation = params[:creation_type].constantize.find(params[:creation_id])
       # Tags aren't directly on series, so we need to handle them differently
       if params[:creation_type] == 'Series'
-        @display_creation = Series.find(params[:creation_id])
-        @display_tags = @display_creation.works.visible.collect(&:warning_tags).flatten.compact.uniq
+        if params[:tag_type] == 'warnings'
+          @display_tags = @display_creation.works.visible.collect(&:warning_tags).flatten.compact.uniq.sort
+        else
+          @display_tags = @display_creation.works.visible.collect(&:freeform_tags).flatten.compact.uniq.sort
+        end
       else
-        @display_creation = eval(params[:creation_type]).find(params[:creation_id])
-        @display_tags = @display_creation.warnings
+        if %w(warnings freeforms).include?(params[:tag_type])
+          @display_tags = @display_creation.send(params[:tag_type]).sort
+        end
       end
-      @display_category = @display_tags.first.class.name.downcase
-    end
-    if request.xml_http_request?
-      respond_to do |format|
-        format.js
-      end
-    else
-      # This is just a quick fix to avoid script barf if JavaScript is disabled
-      flash[:error] = t('need_javascript', :default => "Sorry, you need to have JavaScript enabled for this.")
-      redirect_to :back
-    end
-  end
-
-  def show_hidden_freeforms
-    unless params[:creation_id].blank? && params[:creation_type].blank?
-      # Tags aren't directly on series, so we need to handle them differently
-      if params[:creation_type] == 'Series'
-        @display_creation = Series.find(params[:creation_id])
-        @display_tags = @display_creation.works.visible.collect(&:warning_tags).flatten.compact.uniq
-      else
-        @display_creation = eval(params[:creation_type]).find(params[:creation_id])
-        @display_tags = @display_creation.freeforms
-      end
-      @display_category = @display_tags.first.class.name.downcase
+      @display_category = @display_tags.first.class.name.downcase.pluralize
     end
     if request.xml_http_request?
       respond_to do |format|

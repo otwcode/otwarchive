@@ -15,7 +15,7 @@ module CollectionsHelper
   # show a section if it's not empty or if the parent collection has it
   def show_collection_section(collection, section)
     if ["intro", "faq", "rules"].include?(section) # just a check that we're not using a bogus section string
-      !eval("collection.collection_profile.#{section}").blank? || collection.parent && !eval("collection.parent.collection_profile.#{section}").blank?
+      !collection.collection_profile.send(section).blank? || collection.parent && !collection.parent.collection_profile.send(section).blank?
     end
   end
 
