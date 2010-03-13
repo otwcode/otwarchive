@@ -168,7 +168,7 @@ module TagsHelper
     end
     meta_ul = ""
     tree.reverse.each do |t|
-      meta_ul << ("<ul class='tags tree'>" + link_to_tag(t))
+      meta_ul << ("<ul class='tags tree'>" + "<li>" + link_to_tag(t) + "</li>")
     end
     tree.length.times { meta_ul << "</ul>" }
     meta_ul
@@ -180,7 +180,7 @@ module TagsHelper
     unless tag.direct_sub_tags.empty?
       sub_ul << "<ul class='tags tree'>"
       tag.direct_sub_tags.each do |sub|
-        sub_ul << link_to_tag(sub)
+        sub_ul << "<li>" + link_to_tag(sub) + "</li>"
         unless sub.direct_sub_tags.empty?
           sub_ul << sub_tag_tree(sub)
         end
