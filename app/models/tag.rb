@@ -38,7 +38,7 @@ class Tag < ActiveRecord::Base
   has_many :meta_taggings, :foreign_key => 'sub_tag_id', :dependent => :destroy
   has_many :meta_tags, :through => :meta_taggings, :source => :meta_tag, :before_remove => :remove_meta_filters
   has_many :sub_taggings, :class_name => 'MetaTagging', :foreign_key => 'meta_tag_id', :dependent => :destroy
-  has_many :sub_tags, :through => :sub_taggings, :source => :sub_tag
+  has_many :sub_tags, :through => :sub_taggings, :source => :sub_tag, :before_remove => :remove_sub_filters
   has_many :direct_meta_tags, :through => :meta_taggings, :source => :meta_tag, :conditions => "meta_taggings.direct = 1"
   has_many :direct_sub_tags, :through => :sub_taggings, :source => :sub_tag, :conditions => "meta_taggings.direct = 1"
   
@@ -471,7 +471,7 @@ class Tag < ActiveRecord::Base
       self.sub_tags.each {|sub| sub.meta_tags.delete(tag) if sub.meta_tags.include?(tag)}
     end
     # remove filters for meta tag from this tag's works
-    other_sub_tags = meta_tag.sub_tags - [self]
+    other_sub_tags = meta_tag.sub_tags - ([self] + self.sub_tags)
     self.filtered_works.each do |work|
       if work.filters.include?(meta_tag) && (work.filters & other_sub_tags).empty?
         unless work.tags.include?(meta_tag) || !(work.tags & meta_tag.mergers).empty?
@@ -479,6 +479,10 @@ class Tag < ActiveRecord::Base
         end
       end
     end
+  end
+  
+  def remove_sub_filters(sub_tag)
+    sub_tag.remove_meta_filters(self)
   end
   
   # If we're making a tag non-canonical, we need to update its synonyms and children
