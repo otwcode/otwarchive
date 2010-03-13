@@ -163,12 +163,8 @@ module HtmlFormatter
               self_closing = true
             end
             attr_hash = {}
-            for attr in attrs.split(' ')
-              attr = attr.strip
-              next if attr.empty?
-              k, v = attr.split('="', 2)
-              next if v.nil? or v.empty?
-              attr_hash[k] = v[0...v.length-1]
+            (attrs + " ").scan(/(\w+)="?([^"]+)"?\s+/).each do |key, value|
+              attr_hash[key] = value
             end
             # Children
             children = []
