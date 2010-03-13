@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100312165910) do
+ActiveRecord::Schema.define(:version => 20100313165910) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -565,6 +565,7 @@ ActiveRecord::Schema.define(:version => 20100312165910) do
     t.string   "icon_content_type"
     t.integer  "icon_file_size"
     t.datetime "icon_updated_at"
+    t.string   "icon_alt_text",     :default => ""
   end
 
   add_index "pseuds", ["user_id", "name"], :name => "index_pseuds_on_user_id_and_name"

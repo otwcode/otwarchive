@@ -22,11 +22,17 @@
  <dt>Icon</dt>
  <dd>
    <p class="icon">
-     <%= image_tag(@pseud.icon.url(:standard), :size => "100x100", :alt => "", :class => "icon") %>
+     <%= image_tag(@pseud.icon.url(:standard), :size => "100x100", :alt => @pseud.icon_alt_text, :class => "icon") %>
    </p>
    <%= f.label :icon, "Upload a new icon:" %>
    <%= f.file_field :icon %>
    <p>You may currently have one icon for each pseud. Icons may be in png, jpeg or gif format.</p>
+ </dd>
+ 
+ <dt><%= f.label :icon_alt_text, 'Icon alt text for screenreaders' %></dt>
+ <dd>
+    <%= f.text_field :icon_alt_text %>
+    <%= generate_countdown_html("pseud_icon_alt_text", Pseud::ICON_ALT_MAX) -%>
  </dd>
 
 </dd>
