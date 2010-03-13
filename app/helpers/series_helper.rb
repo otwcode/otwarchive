@@ -131,7 +131,7 @@ module SeriesHelper
         if (class_name == "warnings" && hide_warnings?(series)) || (class_name == "freeforms" && hide_freeform?(series))
           open_tags = "<li class='#{class_name}' id='series_#{series.id}_category_#{class_name}'><strong>"
           close_tags = "</strong></li>"
-          delimiter = (class_name == 'freeform' || last_tag.is_a?(Warning)) ? '' : ArchiveConfig.DELIMITER_FOR_OUTPUT
+          delimiter = (class_name == 'freeforms' || last_tag.is_a?(Warning)) ? '' : ArchiveConfig.DELIMITER_FOR_OUTPUT
           tag_block <<  open_tags + show_hidden_tags_link(series, class_name) + delimiter + close_tags
         elsif class_name == "warnings"
           open_tags = "<li class='#{class_name}'><strong>"
