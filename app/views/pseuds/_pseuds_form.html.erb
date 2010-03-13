@@ -29,7 +29,7 @@
    <p>You may currently have one icon for each pseud. Icons may be in png, jpeg or gif format.</p>
  </dd>
  
- <dt><%= f.label :icon_alt_text, 'Icon alt text for screenreaders' %></dt>
+ <dt><%= f.label :icon_alt_text, 'Icon alt text for screenreaders' %><%= link_to_help "icon-alt-text" -%></dt>
  <dd>
     <%= f.text_field :icon_alt_text %>
     <%= generate_countdown_html("pseud_icon_alt_text", Pseud::ICON_ALT_MAX) -%>
