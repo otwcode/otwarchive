@@ -34,7 +34,7 @@ module UsersHelper
   def icon_display(user, pseud=nil)
     if current_user == user
       pseud ||= user.default_pseud
-      link_to image_tag(standard_icon(user, pseud), :size => "100x100", :alt => "", :class => "icon"), [:edit, user, pseud], :title => "edit"
+      link_to image_tag(standard_icon(user, pseud), :size => "100x100", :alt => pseud.icon_alt_text, :class => "icon"), [:edit, user, pseud], :title => "edit"
     else
       image_tag(standard_icon(user, pseud), :size => "100x100", :alt => "", :class => "icon")
     end
