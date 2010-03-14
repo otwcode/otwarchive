@@ -473,9 +473,12 @@ class Tag < ActiveRecord::Base
     # remove filters for meta tag from this tag's works
     other_sub_tags = meta_tag.sub_tags - ([self] + self.sub_tags)
     self.filtered_works.each do |work|
-      if work.filters.include?(meta_tag) && (work.filters & other_sub_tags).empty?
-        unless work.tags.include?(meta_tag) || !(work.tags & meta_tag.mergers).empty?
-          work.filters.delete(meta_tag)
+      to_remove = [meta_tag] + inherited_meta_tags
+      to_remove.each do |tag|
+        if work.filters.include?(tag) && (work.filters & other_sub_tags).empty?
+          unless work.tags.include?(tag) || !(work.tags & tag.mergers).empty?
+            work.filters.delete(tag)
+          end
         end
       end
     end
