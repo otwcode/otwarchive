@@ -269,7 +269,7 @@ class Collection < ActiveRecord::Base
       conditions.first << "AND title LIKE ? "
       conditions << (filters[:title] + "%")
     end
-    %w(closed moderated gift_exchange).each do |attribute|
+    %w(closed moderated).each do |attribute|
       unless filters[attribute].blank?
         value = (filters[attribute] == "true") ? 1 : 0
         conditions.first << "AND collection_preferences.#{attribute} = #{value} "

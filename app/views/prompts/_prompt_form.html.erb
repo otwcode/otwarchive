@@ -12,10 +12,7 @@ See the challenge_signup form for an example of how this is used.
 -->
 <fieldset class="preface profile">
   <p>
-    <% restriction = (form.object.class == Offer ? @challenge.offer_restriction : (form.object.class == Request ? @challenge.request_restriction : @challenge.prompt_restriction)) %>
-    <% unless required %>
-      <%= link_to_remove_section(t('prompts.delete_prompt', :default => "Remove?"), form) %>
-    <% end %>
+    <% restriction = (is_offer ? @challenge.offer_restriction : @challenge.request_restriction) %>
     <%= form.hidden_field :collection_id, :value => @collection.id -%>
   </p>
   
@@ -85,12 +82,16 @@ See the challenge_signup form for an example of how this is used.
     <% end %>
     
     <% if restriction.url_allowed %>
-    <dt<%= restriction.url_required ? ' class="required"' : '' %>><%= form.label :url , t('prompts.url', :default => "Prompt URL: ") -%></dt>
+    <dt<%= restriction.url_required ? ' class="required"' : '' %>>
+      <%= form.label :url , (@challenge.send("#{(is_offer ? 'offer' : 'request')}_url_label") || t('prompts.url', :default => "Prompt URL: ")) -%>
+    </dt>
     <dd><%= form.text_field :url, :size => 50 %></dd>
     <% end %>
 
     <% if restriction.description_allowed  %>
-      <dt<%= restriction.description_required ? ' class="required"' : '' %>><%= form.label :description, t('prompts.description', :default => "Description/Details: ") -%></dt>
+      <dt<%= restriction.description_required ? ' class="required"' : '' %>>
+        <%= form.label :description, (@challenge.send("#{(is_offer ? 'offer' : 'request')}_description_label") || t('prompts.description', :default => "Description: ")) -%>
+      </dt>
       <dd><%= form.text_area :description, :rows => 6, :cols => 50 %></dd>
     <% end %>
     
@@ -108,7 +109,12 @@ See the challenge_signup form for an example of how this is used.
           <%= autocomplete_text_field(optional_tag_fieldname, "canonical_tag_finder") %>
         </dd>
       <% end %>
-    <% end %>    
+    <% end %>
+    <% unless required %>
+      <dt></dt>
+      <dd><%= link_to_remove_section(t('prompts.delete_prompt', :default => "Remove?"), form) %></dd>
+    <% end %>
+     
   </dl>
 </fieldset>
 </div>

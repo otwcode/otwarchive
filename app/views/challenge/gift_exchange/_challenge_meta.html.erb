@@ -3,23 +3,33 @@
 <dt><%=h t('gift_exchange.signup_status', :default => "Signup: ")%></dt>
 <dd><%= @collection.challenge.signup_open ? t('gift_exchange.signup_is_open', :default => "OPEN") : t('gift_exchange.signup_is_closed', :default => "CLOSED") -%></dd>
 
+<dt><%=h t('gift_exchange.time_zone', :default => "Challenge time zone: ")%></dt>
+<dd>
+  <%= zone = (@collection.challenge.time_zone || Time.zone.name) -%>
+  <% if logged_in? && !current_user.preference.time_zone %>
+    <%= link_to h(t('gift_exchange.set_time_zone', :default => "(set your preferences to see times in your timezone)")), user_preference_path(current_user) -%>
+  <% elsif !logged_in? %>
+    <%=h t('gift_exchange.sign_in', :default => "(sign in to see times in your timezone)")%>
+  <% end %>
+</dd>
+
 <dt><%=h t('gift_exchange.signups_open_at', :default => "Signup opens: ")%></dt>
-<dd><%= @collection.challenge.signups_open_at -%></dd>
+<dd><%= time_in_zone(@collection.challenge.signups_open_at, zone) -%></dd>
 
 <dt><%=h t('gift_exchange.signups_close_at', :default => "Signup closes: ")%></dt>
-<dd><%= @collection.challenge.signups_close_at -%></dd>
+<dd><%= time_in_zone(@collection.challenge.signups_close_at, zone) -%></dd>
 
 <dt><%=h t('gift_exchange.assignments_due_at', :default => "Assignments due: ")%></dt>
-<dd><%= @collection.challenge.assignments_due_at -%></dd>
+<dd><%= time_in_zone(@collection.challenge.assignments_due_at, zone) -%></dd>
 
 <% if @collection.unrevealed? %>
   <dt><%=h t('gift_exchange.works_reveal_at', :default => "Works revealed: ")%></dt>
-  <dd><%= @collection.challenge.works_reveal_at -%></dd>
+  <dd><%= time_in_zone(@collection.challenge.works_reveal_at, zone) -%></dd>
 <% end %>
 
 <% if @collection.anonymous? %>
   <dt><%=h t('gift_exchange.authors_reveal_at', :default => "Authors revealed: ")%></dt>
-  <dd><%= @collection.challenge.authors_reveal_at -%></dd>
+  <dd><%= time_in_zone(@collection.challenge.authors_reveal_at, zone) -%></dd>
 <% end %>
 
 <dt><%=h t('gift_exchange.signups', :default => "Signed up:") %></dt>

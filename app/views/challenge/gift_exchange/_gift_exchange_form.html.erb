@@ -34,6 +34,9 @@
     <dl>
       <dt><%= f.label :signup_open, t('gift_exchange.signup_open', :default => "Signup open?") -%></dt>
       <dd><%= f.check_box :signup_open %></dd>
+      
+      <dt><%= f.label :time_zone, t('gift_exchange.time_zone', :default => "Time zone: (default is server timezone)")%></dt>
+      <dd><%= f.time_zone_select :time_zone, nil, :default => Time.zone.name %></dd>
         
       <dt><%= f.label :signups_open_at, t('gift_exchange.signups_open_at', :default => "Signup opens: ")%></dt>
       <dd><%= f.datetime_select :signups_open_at, :minute_step => 15 -%></dd>
@@ -77,7 +80,10 @@
   <fieldset class="preface profile">
     <legend>Signup Instructions</legend>
     <h3>Signup Instructions</h3>
-    <p class="note">Here you can enter instructions to explain to your members how you want them to sign up.</p>
+    <p class="note">
+      Enter instructions to explain to your members how you want them to sign up, and change the labels for the fields
+      you are using if appropriate.
+    </p>
     <p><%= limited_html_instructions -%></p>
     <dl>
       <dt><%= f.label :signup_instructions_general, t('gift_exchange.signup_instructions_general', :default => "General Signup Instructions: ") %></dt>
@@ -93,13 +99,26 @@
         <%= live_validation_for_field(:gift_exchange_signup_instructions_requests, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) -%>
         <%= generate_countdown_html("gift_exchange_signup_instructions_requests", ArchiveConfig.INFO_MAX) -%>        
       </dd>
-
+      
       <dt><%= f.label :signup_instructions_offers, t('gift_exchange.signup_instructions_offers', :default => "Offer Instructions: ") %></dt>
       <dd>
         <%= f.text_area :signup_instructions_offers, :rows => 6, :cols => 60 %>
         <%= live_validation_for_field(:gift_exchange_signup_instructions_offers, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) -%>
         <%= generate_countdown_html("gift_exchange_signup_instructions_offers", ArchiveConfig.INFO_MAX) -%>        
       </dd>
+
+      <dt><%= f.label :request_url_label, t('gift_exchange.request_url_label', :default => "Label to use for Prompt URL in requests: ") %></dt>
+      <dd><%= f.text_field :request_url_label %></dd>
+      
+      <dt><%= f.label :request_description_label, t('gift_exchange.request_description_label', :default => "Label to use for Description in requests: ") %></dt>
+      <dd><%= f.text_field :request_description_label %></dd>
+
+      <dt><%= f.label :offer_url_label, t('gift_exchange.offer_url_label', :default => "Label to use for Prompt URL in offers: ") %></dt>
+      <dd><%= f.text_field :offer_url_label %></dd>
+
+      <dt><%= f.label :offer_description_label, t('gift_exchange.offer_description_label', :default => "Label to use for Description in offers: ") %></dt>
+      <dd><%= f.text_field :offer_description_label %></dd>
+
     </dl>
   </fieldset>
 

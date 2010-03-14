@@ -4,8 +4,18 @@ class Challenge::GiftExchangeController < ChallengesController
   before_filter :load_collection
   before_filter :load_challenge, :except => [:new, :create]
   before_filter :collection_owners_only, :only => [:new, :create, :edit, :update, :destroy]
+  before_filter :set_time_zone, :only => [:create, :edit, :update]
 
   # ACTIONS
+
+  # we use this to make the times get set in the moderator's specified timezone
+  def set_time_zone
+    if params[:gift_exchange] && params[:gift_exchange][:time_zone]
+      Time.zone = params[:gift_exchange][:time_zone]
+    elsif @challenge && @challenge.time_zone
+      Time.zone = @challenge.time_zone
+    end
+  end
 
   def show
   end

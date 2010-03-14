@@ -251,4 +251,17 @@ module ApplicationHelper
     link_to_function(linktext, "remove_section(this, \"#{class_of_section_to_remove}\")")
   end
   
+  def time_zone_abbr(zone)
+    ActiveSupport::TimeZone::ZONES.find{|z| z.name == zone}.tzinfo.current_period.abbreviation.to_s
+  end
+  
+  def time_in_zone(time, zone)
+    abbr = 
+    time.in_time_zone(zone).strftime("%a %d %b %Y %I:%M%p") + 
+      " #{time_zone_abbr(zone)} " + 
+      ((logged_in? && current_user.preference.time_zone) ? "(" + 
+        time.in_time_zone(current_user.preference.time_zone).strftime("%I:%M%p") + " #{time_zone_abbr(current_user.preference.time_zone)})" : 
+        "")
+  end
+  
 end # end of ApplicationHelper

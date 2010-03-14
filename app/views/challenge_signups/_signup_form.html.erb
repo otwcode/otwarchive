@@ -30,49 +30,40 @@ So if anyone can think of a better design for this, that would be awesome
     </dl>
   </fieldset>
 
+  <% %w(requests offers).each do |prompt_type| %>
   <fieldset class="preface profile">
-  	<legend>Requests</legend>
-  	<h3>Requests (<%= "#{@challenge.requests_num_required}" + (@challenge.requests_num_required == @challenge.requests_num_allowed ? "" : " - #{@challenge.requests_num_allowed}") -%>)</h3>
-    <% if @challenge.signup_instructions_requests %>
-      <%= sanitize_and_format_for_display @challenge.signup_instructions_requests %>
+  	<legend><%= prompt_type.capitalize -%></legend>
+  	<h3>
+  	  <%= prompt_type.capitalize -%> 
+  	  (<%= @challenge.send("#{prompt_type}_num_required") -%>
+  	  <% if @challenge.send("#{prompt_type}_num_required") != @challenge.send("#{prompt_type}_num_allowed") -%>
+  	    - <%= @challenge.send("#{prompt_type}_num_allowed") -%><% end -%>)
+  	</h3>
+    <% if @challenge.send("signup_instructions_#{prompt_type}") %>
+      <%= sanitize_and_format_for_display @challenge.send("signup_instructions_#{prompt_type}") %>
     <% end %>
-    <% if @challenge_signup.requests.empty? %>
-  	  <% 1.upto(@challenge.requests_num_required) do %>
-        <% @challenge_signup.requests.build %>
+    <% if @challenge_signup.send("#{prompt_type}").empty? %>
+  	  <% 1.upto(@challenge.send("#{prompt_type}_num_required")) do %>
+        <% @challenge_signup.send("#{prompt_type}").build %>
       <% end %>
     <% end %>
-    <% @challenge_signup.requests.each_with_index do |request, index| %>
-      <% signup_form.fields_for :requests, request do |prompt_form| %>
-        <%= render :partial => "prompts/prompt_form", :locals => {:form => prompt_form, :is_offer => false, :index => index, :required => true} %>
+    <% @challenge_signup.send("#{prompt_type}").each_with_index do |prompt, index| %>
+      <% signup_form.fields_for prompt_type.to_sym, prompt do |prompt_form| %>
+        <%= render :partial => "prompts/prompt_form", 
+            :locals => {:form => prompt_form, :is_offer => (prompt_type == "offers"), :index => index, 
+                        :required => (index < @challenge.send("#{prompt_type}_num_required"))} %>
       <% end %>
     <% end %>
-    <% if @challenge.requests_num_allowed > @challenge.requests_num_required %>
+    <% if @challenge.send("#{prompt_type}_num_allowed") > @challenge.send("#{prompt_type}_num_required") %>
       <p class="note">
         <%= link_to_add_section(
-             t('challenge_signups.add_request', :default => "Add another? (Up to {{allowed}} allowed.)", :allowed => @challenge.requests_num_allowed), 
-             signup_form, :requests, "prompts/prompt_form", {:is_offer => false, :required => false}) 
+             t("challenge_signups.add_#{prompt_type}", :default => "Add another? (Up to {{allowed}} allowed.)", :allowed => @challenge.send("#{prompt_type}_num_allowed")), 
+             signup_form, :requests, "prompts/prompt_form", {:is_offer => (prompt_type == "offers"), :required => false}) 
         %>
       </p>
     <% end %>
   </fieldset>
-
-  <fieldset class="preface profile">
-  	<legend>Offers</legend>
-  	<h3>Offers (<%= "#{@challenge.offers_num_required}" + (@challenge.offers_num_required == @challenge.offers_num_allowed ? "" : " - #{@challenge.offers_num_allowed}") -%>)</h3>
-    <% if @challenge.signup_instructions_offers %>
-      <%= sanitize_and_format_for_display @challenge.signup_instructions_offers %>
-    <% end %>
-    <% if @challenge_signup.offers.empty? %>
-  	  <% 1.upto(@challenge.offers_num_required) do %>
-        <% @challenge_signup.offers.build %>
-      <% end %>
-    <% end %>    
-    <% @challenge_signup.offers.each_with_index do |offer, index| %>
-      <% signup_form.fields_for :offers, offer do |prompt_form| %>
-        <%= render :partial => "prompts/prompt_form", :locals => {:form => prompt_form, :is_offer => true, :index => index, :required => true}%>
-      <% end %>
-    <% end %>
-  </fieldset>
+  <% end # requests & offers section %>
 
   <fieldset>
   	<legend><%h= 'Submit' -%></legend> 
