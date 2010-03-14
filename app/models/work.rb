@@ -1159,8 +1159,7 @@ class Work < ActiveRecord::Base
     end
 
     if !order_clause.blank?
-      sort_dir_sym = "sort_direction_for_#{options[:sort_column]}".to_sym
-      order_clause += (options[sort_dir_sym] == "ASC" ? "ASC" : "DESC")
+      order_clause += options[:sort_direction]
     end
 
     conditions_clause = {}
