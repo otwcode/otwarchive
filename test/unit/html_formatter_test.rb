@@ -45,6 +45,11 @@ class HtmlFormatterTest < ActiveSupport::TestCase
     one_test "<b><i><img src=\"gif.gif\">my post. <b>big</b> day!</i> more words",  "<p><b></b><i><img src=\"gif.gif\"></img>my post. <b>big</b> day!</i> more words</p>"
   end
 
+  def test_self_closing
+    one_test "<b><i><img src=\"gif.gif\">my post. <b>big</b> day!</i> more words",  "<p><b></b><i><img src=\"gif.gif\"></img>my post. <b>big</b> day!</i> more words</p>"
+    one_test "<b><i><img src=\"gif.gif\"></img>my post. <b>big</b> day!</i> more words",  "<p><b></b><i><img src=\"gif.gif\"></img>my post. <b>big</b> day!</i> more words</p>"
+  end
+  
   def test_doctype
     one_test "<!doctype blah blah>text", "<p>text</p>"
   end
@@ -103,22 +108,32 @@ text3
 
   def test_attributes
     one_test '<div class="attrtest">line</div>',  '<div class="attrtest"><p>line</p></div>'
-    puts "DEFERRED spaces in attributes test pending a fix from RK."
-    #one_test '<div class="attrtest attrtest2">line</div>',  '<div class="attrtest attrtest2"><p>line</p></div>'
+    one_test '<div class="attrtest attrtest2">line</div>',  '<div class="attrtest attrtest2"><p>line</p></div>'
 
     one_test "<xxx blah blah>text",  "<!--<xxx>--><!--</xxx>--><p>text</p>"
   end
-      
+
+  def test_unclosed_attribute
+    one_test '<div class="attrtest attrtest2>line</div>',  '<div class="attrtest attrtest2"><p>line</p></div>'
+  end
+  
   def test_lt_in_title      
-    puts "DEFERRED title=\"<3\" test pending a fix from RK."
-    #one_test '<span title="woo! <3">text</span>', '<p><span title="woo! <3">text</span></p>'
+    one_test '<span title="woo! <3">text</span>', '<p><span title="woo! <3">text</span></p>'
+  end
+  
+  def test_many_lts
+    one_test '(<.<)', '<p>(&lt;.&lt;)</p>'
+  end
+
+  def test_many_lts_in_tag
+    one_test '<p>(<.<)</p>', '<p>(&lt;.&lt;)</p>'
   end
 
   def one_test(data, test_value=nil)
     require 'timeout'
     test_value ||= data
     mod_data = nil
-    Timeout.timeout(10) do
+    Timeout.timeout(4) do
       mod_data = add_paragraph_tags_for_display data
     end
     assert_equal test_value, mod_data

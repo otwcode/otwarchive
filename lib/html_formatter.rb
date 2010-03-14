@@ -51,6 +51,7 @@ module HtmlFormatter
     # text is assumed to have been sanitised by the HTML parser.
     _text = '#text'
     _comment = '#comment'
+    _close = '#close'
 
     # Some data:
     block_tags_list = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'br', 'div', 'blockquote', 'ul', 'ol', 'dl', 'pre', 'table', 'center']
@@ -92,8 +93,10 @@ module HtmlFormatter
       end
       end_node = lambda do |tag, text2|
         text = text2
+        return true if always_self_close_list.include? tag[0]
         if state_stack.empty?
-          # Discard bogus end node
+          # Record bogus end node
+          return_node.call(tag, text2)
           return true
         else
           node, nodes = state_stack.pop
@@ -110,6 +113,8 @@ module HtmlFormatter
           return ret
         end
       end
+      apos = "'"
+      quote = '"'
       # Takes a snippet of html. returns: nodes, leftover_text
       # nodes is a list where each node takes the form:
       # (tagname, attribute_hash, child_list, text_value)
@@ -117,15 +122,38 @@ module HtmlFormatter
       while not text.nil? and not text.empty?
         if text[0..0] == '<'
           # A tag
-          pos = text.index('<', 1)
-          closing_bracket_pos = text.index('>')
-          if pos && closing_bracket_pos && (pos < closing_bracket_pos)
+          quote_pos = text.index(quote)
+          apos_pos = text.index(apos)
+          first_quote_type = apos
+          if apos_pos == nil or apos_pos > quote_pos
+            first_quote_type = quote
+          end unless quote_pos == nil
+          pos = text.index('<')
+          second_pos = text.index('<', pos+1)
+          close_pos = text.index('>', pos+1)
+          while text[0...close_pos].count(first_quote_type) % 2 == 1
+            close_pos = text.index('>', close_pos+1)
+            break unless close_pos
+            if second_pos and second_pos < close_pos
+              # Back to the start
+              close_pos = text.index('>', pos+1)
+              break
+            end
+          end if pos and close_pos
+          if not pos or not close_pos
+            # If another lt before gt then it's a text node.
+            return_node[[_text, {}, [], text[0...text.length]], ''] and next or break
+          elsif pos > 0
             # If another lt before gt then it's a text node.
             return_node[[_text, {}, [], text[0...pos]], text[pos...text.length]] and next or break
           elsif text[1..1] == '!'
             # It's a comment or we drop it
             if text[2..3] == '--'
-              value, rest = text.split('-->', 2)
+              if text.index('-->')
+                value, rest = text.split('-->', 2)
+              else
+                value, rest = text, ''
+              end
               value = value[4..value.length]
               return_node[[_comment, {}, [], value], rest] and next or break
             else
@@ -139,13 +167,22 @@ module HtmlFormatter
             name = name[2..name.length].strip
             end_node[[name, {}, nil, nil], rest] and next or break
           else
+            second_pos = text.index('<', 1)
+            if second_pos != nil
+              while text[0...second_pos].count(first_quote_type) % 2 == 1
+                second_pos = text.index('<', second_pos+1)
+                break if second_pos == nil
+              end
+              if second_pos and second_pos < close_pos
+                return_node[[_text, {}, [], text[0...second_pos]], text[second_pos...text.length]] and next or break
+              end
+            end
             # Either an open tag or a self closing tag.
             # Attributes
             tag, text = text.split('>', 2)
+            text ||= ''
             tag = tag[1..tag.length]
-            tag_name, attrs = tag.split(' ', 2) 
-            # atempt to prevent nil errors from empty string split
-            tag_name = (tag_name || '').strip || ''
+            tag_name, attrs = tag.split(' ', 2)
             attrs = (attrs || '').strip || ''
             self_closing = false
             if attrs.end_with? '/'
@@ -163,9 +200,50 @@ module HtmlFormatter
               self_closing = true
             end
             attr_hash = {}
-            (attrs + " ").scan(/(\w+)="?([^"]+)"?\s+/).each do |key, value|
-              attr_hash[key] = value
+            attrs.lstrip!
+            while not attrs.empty?
+              equals_pos = attrs.index('=')
+              break if equals_pos == nil
+              attr_name = attrs[0...equals_pos].strip
+              rest = attrs[equals_pos+1...attrs.length]
+              if "\"'".include? rest.lstrip[0]
+                rest.lstrip!
+                attr_value_end = rest.index(rest[0], 1)
+                if attr_value_end == nil
+                  # Unclosed quote - let's grab the lot, excepting that one quote.
+                  attr_hash[attr_name] = rest[1...rest.length]
+                  break
+                else
+                  attr_hash[attr_name] = rest[1...attr_value_end]
+                  attrs = rest[attr_value_end+1...attrs.length].lstrip
+                  next
+                end
+              else
+                # An unquoted value - dangerous to make assumptions...
+                # I think the best thing to do is to take a single word if
+                # there is no space after the equals, or drop the attribute
+                # if there is a space.
+                space_pos = rest.index(' ')
+                if space_pos == nil
+                  attr_hash[attr_name] = rest
+                  break
+                elsif space_pos == 0
+                  attrs = rest.lstrip
+                  next
+                else
+                  attr_hash[attr_name], attrs = rest[0...space_pos], rest[space_pos...rest.length].lstrip
+                  next
+                end
+              end
             end
+            # Broken loop...
+#            for attr in attrs.split(' ')
+#              attr = attr.strip
+#              next if attr.empty?
+#              k, v = attr.split('="', 2)
+#              next if v.nil? or v.empty?
+#              attr_hash[k] = v[0...v.length-1]
+#            end unless attrs.empty?
             # Children
             children = []
             node = [tag_name, attr_hash, children, '-NOT-SET-']
@@ -181,9 +259,7 @@ module HtmlFormatter
           # A text node
           pos = text.index '<'
           if pos.nil?
-            value, rest = text, '' 
-          elsif !(text.index('>'))
-            value, rest = text.gsub('<', '&#60;'), ''
+            value, rest = text, ''
           else
             value, rest = text[0...pos], text[pos...text.length]
           end
@@ -201,13 +277,10 @@ module HtmlFormatter
         return "<!--#{node[3]}-->"
       elsif node[0] == '#text'
         return node[3]
-      elsif node[0] == 'br'
-        return '<br/>'
-      elsif node[0] == 'hr'
-        return '<hr/>'
       else
         attrs = node[1].entries.map{|x,y| "#{x}=\"#{y}\""}
         attrs = ' ' + attrs.join(' ') unless attrs.empty?
+        return "<#{node[0]}#{attrs}/>" if ['hr', 'br'].include? node[0]
         content = node[2].map{|x| render_node(x)}.join('')
         return "<#{node[0]}#{attrs}>#{content}</#{node[0]}>"
       end
@@ -445,3 +518,4 @@ module HtmlFormatter
   end
 
 end
+
