@@ -1,3 +1,5 @@
+<!-- prompt form -->
+<div class="removeme">
 <!-- 
 CODE NOTES: 
 This is meant to be used as a nested form inside other forms, so that multiple prompts can be submitted within a single form. 
@@ -10,12 +12,14 @@ See the challenge_signup form for an example of how this is used.
 -->
 <fieldset class="preface profile">
   <p>
-    <%= form.hidden_field :collection_id, :value => @collection.id -%>
     <% restriction = (form.object.class == Offer ? @challenge.offer_restriction : (form.object.class == Request ? @challenge.request_restriction : @challenge.prompt_restriction)) %>
+    <% unless required %>
+      <%= link_to_remove_section(t('prompts.delete_prompt', :default => "Remove?"), form) %>
+    <% end %>
+    <%= form.hidden_field :collection_id, :value => @collection.id -%>
   </p>
   
   <dl>
-
     <!-- tags section -->
     <% form.object.build_tag_set unless form.object.tag_set %>
     <% form.fields_for :tag_set do |tag_set_form| %>
@@ -93,7 +97,10 @@ See the challenge_signup form for an example of how this is used.
     <% if restriction.optional_tags_allowed %>
       <% form.object.build_optional_tag_set unless form.object.optional_tag_set %>
       <% form.fields_for :optional_tag_set_attributes do |optional_tag_set_form| %>
-        <dt><%= optional_tag_set_form.label :tagnames, t("optional_tag_set.tagnames", :default => "Optional Tags: ") %> <%= link_to_help("challenge-optional-tags-user")%></dt>
+        <dt>
+          <%= optional_tag_set_form.label :tagnames, t("optional_tag_set.tagnames", :default => "Optional Tags: ") %> <%= link_to_help("challenge-optional-tags-user")%>
+          <p class="note"><%= t('prompts.comma_separated', :default => "(comma-separated)") %></p>
+        </dt>
         <dd>          
           <%= optional_tag_set_form.text_area :tagnames, :rows => 2, :cols => 50, 
             :value => eval("form.object.optional_tag_set.tagnames") %>
@@ -104,3 +111,5 @@ See the challenge_signup form for an example of how this is used.
     <% end %>    
   </dl>
 </fieldset>
+</div>
+<!-- end of nested prompt form -->

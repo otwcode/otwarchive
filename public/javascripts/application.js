@@ -35,6 +35,21 @@ function hideHideMe() {
     nodes.each( function(node) { node.hide(); });
 }
 
+// used in nested form fields for deleting a nested resource 
+// see prompt form for example
+function remove_section(link, class_of_section_to_remove) {
+    $(link).previous("input[type=hidden]").value = "1"; // relies on the "_destroy" field being the nearest hidden field
+    $(link).up("." + class_of_section_to_remove).hide();
+}
+
+function add_section(link, nested_model_name, content) {
+    var new_id = new Date().getTime();
+    var regexp = new RegExp("new_" + nested_model_name, "g");
+    content = content.replace(regexp, new_id)
+    $(link).up().insert({before: content});
+}
+
+
 // An attempt to replace the various work form toggle methods with a more generic one
 function toggleFormField(element_id) {
     var ticky = $(element_id + '-show');

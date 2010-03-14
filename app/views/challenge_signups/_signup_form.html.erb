@@ -37,14 +37,22 @@ So if anyone can think of a better design for this, that would be awesome
       <%= sanitize_and_format_for_display @challenge.signup_instructions_requests %>
     <% end %>
     <% if @challenge_signup.requests.empty? %>
-  	  <% 1.upto(@challenge.requests_num_allowed) do %>
+  	  <% 1.upto(@challenge.requests_num_required) do %>
         <% @challenge_signup.requests.build %>
       <% end %>
     <% end %>
     <% @challenge_signup.requests.each_with_index do |request, index| %>
       <% signup_form.fields_for :requests, request do |prompt_form| %>
-        <%= render :partial => "prompts/prompt_form", :locals => {:form => prompt_form, :is_offer => false, :index => index}%>
+        <%= render :partial => "prompts/prompt_form", :locals => {:form => prompt_form, :is_offer => false, :index => index, :required => true} %>
       <% end %>
+    <% end %>
+    <% if @challenge.requests_num_allowed > @challenge.requests_num_required %>
+      <p class="note">
+        <%= link_to_add_section(
+             t('challenge_signups.add_request', :default => "Add another? (Up to {{allowed}} allowed.)", :allowed => @challenge.requests_num_allowed), 
+             signup_form, :requests, "prompts/prompt_form", {:is_offer => false, :required => false}) 
+        %>
+      </p>
     <% end %>
   </fieldset>
 
@@ -55,13 +63,13 @@ So if anyone can think of a better design for this, that would be awesome
       <%= sanitize_and_format_for_display @challenge.signup_instructions_offers %>
     <% end %>
     <% if @challenge_signup.offers.empty? %>
-  	  <% 1.upto(@challenge.offers_num_allowed) do %>
+  	  <% 1.upto(@challenge.offers_num_required) do %>
         <% @challenge_signup.offers.build %>
       <% end %>
     <% end %>    
     <% @challenge_signup.offers.each_with_index do |offer, index| %>
       <% signup_form.fields_for :offers, offer do |prompt_form| %>
-        <%= render :partial => "prompts/prompt_form", :locals => {:form => prompt_form, :is_offer => true, :index => index}%>
+        <%= render :partial => "prompts/prompt_form", :locals => {:form => prompt_form, :is_offer => true, :index => index, :required => true}%>
       <% end %>
     <% end %>
   </fieldset>

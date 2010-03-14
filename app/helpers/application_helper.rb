@@ -234,5 +234,21 @@ module ApplicationHelper
                               tokens: ','
                             });")    
   end
+  
+  # see http://asciicasts.com/episodes/197-nested-model-form-part-2
+  def link_to_add_section(linktext, form, nested_model_name, partial_to_render, locals = {})
+    new_nested_model = form.object.class.reflect_on_association(nested_model_name).klass.new
+    child_index = "new_#{nested_model_name}"
+    rendered_partial_to_add = 
+      form.fields_for(nested_model_name, new_nested_model, :child_index => child_index) {|child_form|
+        render(:partial => partial_to_render, :locals => {:form => child_form, :index => child_index}.merge(locals))
+      }
+    link_to_function(linktext, h("add_section(this, \"#{nested_model_name}\", \"#{escape_javascript(rendered_partial_to_add)}\")"))
+  end
 
+  def link_to_remove_section(linktext, form, class_of_section_to_remove="removeme")
+    form.hidden_field(:_destroy) + "\n" +
+    link_to_function(linktext, "remove_section(this, \"#{class_of_section_to_remove}\")")
+  end
+  
 end # end of ApplicationHelper

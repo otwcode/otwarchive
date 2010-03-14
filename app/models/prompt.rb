@@ -21,6 +21,12 @@ class Prompt < ActiveRecord::Base
   # based on the prompt restriction
   validates_presence_of :url, :if => :url_required?
   validates_presence_of :description, :if => :description_required?
+  def url_required?
+    (restriction = get_prompt_restriction) && restriction.url_required
+  end
+  def description_required?
+    (restriction = get_prompt_restriction) && restriction.description_required
+  end
 
   # From the custom validations in config/initializers/validations.rb
   validates_url_format_of :url, :allow_blank => true # we validate the presence above, conditionally
@@ -29,14 +35,6 @@ class Prompt < ActiveRecord::Base
   before_validation :cleanup_url
   def cleanup_url
     self.url = reformat_url(self.url) if self.url
-  end
-  
-  def url_required?
-    (restriction = get_prompt_restriction) && restriction.url_required
-  end
-
-  def description_required?
-    (restriction = get_prompt_restriction) && restriction.description_required
   end
 
   validate :correct_number_of_tags
@@ -91,7 +89,18 @@ class Prompt < ActiveRecord::Base
     end
   end
 
-
+  # make sure we are not blank
+  def blank?
+    return false if (url || description)
+    tagcount = 0
+    [tag_set, optional_tag_set].each do |set|
+      if set
+        tagcount += set.taglist.size + (TagSet::TAG_TYPES.collect {|type| eval("set.#{type}_taglist.size")}.sum)
+      end
+    end
+    return false if tagcount > 0
+    true # everything empty
+  end
 
   named_scope :in_collection, lambda {|collection| { :conditions => {:collection => collection} }}
   

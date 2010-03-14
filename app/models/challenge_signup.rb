@@ -9,7 +9,13 @@ class ChallengeSignup < ActiveRecord::Base
   
   # we reject prompts if they are empty except for associated references
   
-  accepts_nested_attributes_for :offers, :prompts, :requests, {:allow_destroy => true, :reject_if => proc { |attrs| attrs.all? { |k, v| v.blank? || k.match(/collection/) } } }
+  accepts_nested_attributes_for :offers, :prompts, :requests, {:allow_destroy => true, 
+    :reject_if => proc { |attrs| 
+                          attrs[:url].blank? && attrs[:description].blank? && 
+                          (attrs[:tag_set_attributes].nil? || attrs[:tag_set_attributes].all? {|k,v| v.blank?}) &&
+                          (attrs[:optional_tag_set_attributes].nil? || attrs[:optional_tag_set_attributes].all? {|k,v| v.blank?})                          
+                        }
+  }
 
   named_scope :by_user, lambda {|user|
     {
