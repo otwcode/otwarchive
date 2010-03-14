@@ -1,4 +1,4 @@
-<div class="header module">
+<div class="header module mystery">
 	<h4 title="title"><%= t('works.mystery', :default => "Mystery Work") %></h4>
 	<h5><%= t('works.part_of', :default => "Part of: {{collections}}", :collections => work.collections.unrevealed.map {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ")) %></h5>
 	</div>
