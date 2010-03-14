@@ -11,7 +11,7 @@ class Collection < ActiveRecord::Base
    
   validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true 
   validates_attachment_size :icon, :less_than => 500.kilobytes, :allow_nil => true 
-   
+  
   belongs_to :parent, :class_name => "Collection"
   has_many :children, :class_name => "Collection", :foreign_key => "parent_id"
   
@@ -55,13 +55,12 @@ class Collection < ActiveRecord::Base
 
 
 
-  CHALLENGE_TYPE_OPTIONS = [ 
+  CHALLENGE_TYPE_OPTIONS = [
                              ["", ""],
                              [t('challenge_type.gift_exchange', :default => "Gift Exchange"), "GiftExchange"],
                            ]
 
-
-  validate :must_have_owners, :collection_depth
+  validate :must_have_owners, :collection_depth, :parent_exists, :parent_is_allowed
 
   def must_have_owners
     # we have to use collection participants because the association may not exist until after
@@ -74,6 +73,22 @@ class Collection < ActiveRecord::Base
       errors.add_to_base t('collection.depth', :default => "You cannot nest collections more than one deep.")
     end
   end
+
+  def parent_exists
+    unless parent_name.blank? || Collection.find_by_name(parent_name)
+      errors.add_to_base(t('collection.no_parent', :default => "We couldn't find a collection with name {{name}}.", :name => parent_name))
+    end
+  end
+
+  def parent_is_allowed
+    if parent && parent == self
+      errors.add_to_base(t('collection.no_self_parenting', :default => "Collections are not self-parenting."))
+    elsif parent && !parent.user_is_maintainer?(User.current_user)
+      errors.add_to_base(t('collections.not_allowed_subcollection', :default => "You don't have permission to work on a subcollection of {{name}}.", :name => parent.name))
+    end
+  end
+   
+
 
   validates_presence_of :name, :message => t('collection.no_name', :default => "Please enter a name for your collection.")
   validates_uniqueness_of :name, :case_sensitive => false, :message => t('collection.duplicate_name', :default => 'Sorry, that name is already taken. Try again, please!')
@@ -150,11 +165,12 @@ class Collection < ActiveRecord::Base
   # end  
   
   def parent_name=(name)
+    @parent_name = name
     self.parent = Collection.find_by_name(name)
   end
   
   def parent_name
-    self.parent ? self.parent.name : ""
+    @parent_name || (self.parent ? self.parent.name : "")
   end
   
   def all_owners

@@ -10,9 +10,9 @@
     <% end %>
   
     <% if @collection.parent %>
-    <li><%= link_to t('collections.parent', :default => "Parent Collection"), collection_path(@collection.parent) -%></li>
-    <% elsif (@children_count = @collection.children.count) > 0 %>
-    <li><%= span_if_current t('collections.subcollections', :default => "Subcollections ({{count}})", :count => @children_count), collection_collections_path(@collection) -%></li>
+      <li><%= link_to t('collections.parent', :default => "Parent Collection"), collection_path(@collection.parent) -%></li>
+    <% else %>
+      <li><%= span_if_current t('collections.subcollections', :default => "Subcollections ({{count}})", :count => @collection.children.count), collection_collections_path(@collection) -%></li>
     <% end %>
 
     <%- if @collection.not_empty? -%>

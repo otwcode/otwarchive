@@ -31,7 +31,7 @@ function hideExpandable() {
 }
 
 function hideHideMe() {
-    nodes = $$('div.hideme');
+    nodes = $$('.hideme');
     nodes.each( function(node) { node.hide(); });
 }
 

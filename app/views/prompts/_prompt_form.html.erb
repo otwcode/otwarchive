@@ -12,7 +12,9 @@ See the challenge_signup form for an example of how this is used.
 -->
 <fieldset class="preface profile">
   <p>
-    <% restriction = (is_offer ? @challenge.offer_restriction : @challenge.request_restriction) %>
+    <% prompt_type = (form.object.class == Offer ? "offer" : (form.object.class == Request ? "request" : "prompt")) %>
+    <% prompt_types = prompt_type.pluralize %>
+    <% restriction = @challenge.send("#{prompt_type}_restriction") %>
     <%= form.hidden_field :collection_id, :value => @collection.id -%>
   </p>
   
@@ -34,8 +36,8 @@ See the challenge_signup form for an example of how this is used.
           <dd>
             <% if has_tags %>
               <!-- checkboxes -->
-              <% tag_fieldname = "challenge_signup[#{(is_offer ? 'offers' : 'requests')}_attributes][#{index}][tag_set_attributes][#{tag_type}_tagnames][]" %>
-              <% tag_field_id =  "challenge_signup_#{(is_offer ? 'offers' : 'requests')}_attributes_#{index}_#{tag_type}" -%>
+              <% tag_fieldname = "challenge_signup[#{prompt_types}_attributes][#{index}][tag_set_attributes][#{tag_type}_tagnames][]" %>
+              <% tag_field_id =  "challenge_signup_#{prompt_types}_attributes_#{index}_#{tag_type}" -%>
               <% max_tagindex = 0 %>
               <ul onclick="$('<%= tag_field_id -%>_hide').show(); $('<%= tag_field_id -%>_more').hide();">
                 <!-- FRONT END NOTE: generally we want checkbox after label but in this case makes form much more usable to keep clicking in same vertical line -->
@@ -72,7 +74,7 @@ See the challenge_signup form for an example of how this is used.
               <%= hidden_field_tag tag_fieldname, " " -%>           
             <% else %>
               <!-- using an autocomplete -->
-              <% tag_fieldname = "challenge_signup_#{(is_offer ? 'offers' : 'requests')}_attributes_#{index}_tag_set_attributes_#{tag_type}_tagnames" %>
+              <% tag_fieldname = "challenge_signup_#{prompt_types}_attributes_#{index}_tag_set_attributes_#{tag_type}_tagnames" %>
               <%= tag_set_form.text_field "#{tag_type}_tagnames", :size => 50, :value => eval("form.object.#{tag_type}_tagnames") %>
               <%= autocomplete_text_field tag_fieldname, "canonical_#{tag_type}_finder" %>            
             <% end %>
@@ -83,14 +85,14 @@ See the challenge_signup form for an example of how this is used.
     
     <% if restriction.url_allowed %>
     <dt<%= restriction.url_required ? ' class="required"' : '' %>>
-      <%= form.label :url , (@challenge.send("#{(is_offer ? 'offer' : 'request')}_url_label") || t('prompts.url', :default => "Prompt URL: ")) -%>
+      <%= form.label :url , (@challenge.send("#{prompt_type}_url_label") || t('prompts.url', :default => "Prompt URL: ")) -%>
     </dt>
     <dd><%= form.text_field :url, :size => 50 %></dd>
     <% end %>
 
     <% if restriction.description_allowed  %>
       <dt<%= restriction.description_required ? ' class="required"' : '' %>>
-        <%= form.label :description, (@challenge.send("#{(is_offer ? 'offer' : 'request')}_description_label") || t('prompts.description', :default => "Description: ")) -%>
+        <%= form.label :description, (@challenge.send("#{prompt_type}_description_label") || t('prompts.description', :default => "Description: ")) -%>
       </dt>
       <dd><%= form.text_area :description, :rows => 6, :cols => 50 %></dd>
     <% end %>
@@ -102,20 +104,18 @@ See the challenge_signup form for an example of how this is used.
           <%= optional_tag_set_form.label :tagnames, t("optional_tag_set.tagnames", :default => "Optional Tags: ") %> <%= link_to_help("challenge-optional-tags-user")%>
           <p class="note"><%= t('prompts.comma_separated', :default => "(comma-separated)") %></p>
         </dt>
-        <dd>          
-          <%= optional_tag_set_form.text_area :tagnames, :rows => 2, :cols => 50, 
-            :value => eval("form.object.optional_tag_set.tagnames") %>
-          <% optional_tag_fieldname =  "challenge_signup_#{(is_offer ? 'offers' : 'requests')}_attributes_#{index}_optional_tag_set_attributes_tagnames" %>
+        <dd>
+          <% optional_tag_fieldname =  "challenge_signup_#{prompt_types}_attributes_#{index}_optional_tag_set_attributes_tagnames" %>
+          <%= optional_tag_set_form.text_area :tagnames, :rows => 2, :cols => 50, :value => form.object.optional_tag_set.tagnames %>
           <%= autocomplete_text_field(optional_tag_fieldname, "canonical_tag_finder") %>
         </dd>
       <% end %>
     <% end %>
-    <% unless required %>
-      <dt></dt>
-      <dd><%= link_to_remove_section(t('prompts.delete_prompt', :default => "Remove?"), form) %></dd>
-    <% end %>
      
   </dl>
+  <% unless required %>
+    <p class="navigation"><%= link_to_remove_section(t('prompts.delete_prompt', :default => "Remove?"), form) %></p>
+  <% end %>
 </fieldset>
 </div>
 <!-- end of nested prompt form -->

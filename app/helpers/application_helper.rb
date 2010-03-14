@@ -257,11 +257,13 @@ module ApplicationHelper
   
   def time_in_zone(time, zone)
     abbr = 
-    time.in_time_zone(zone).strftime("%a %d %b %Y %I:%M%p") + 
-      " #{time_zone_abbr(zone)} " + 
+    time.in_time_zone(zone).strftime('<abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span> <span class="time">%I:%M%p</span>') + 
+      " <abbr class=\"timezone\" title=\"#{zone}\">#{time_zone_abbr(zone)}</abbr> " + 
       ((logged_in? && current_user.preference.time_zone) ? "(" + 
-        time.in_time_zone(current_user.preference.time_zone).strftime("%I:%M%p") + " #{time_zone_abbr(current_user.preference.time_zone)})" : 
-        "")
+        time.in_time_zone(current_user.preference.time_zone).strftime('<span class="time">%I:%M%p</span>') +
+          " <abbr class=\"timezone\" title=\"#{current_user.preference.time_zone}\">#{time_zone_abbr(current_user.preference.time_zone)}</abbr>)" : 
+        (logged_in? ? 
+          link_to(h(t('application.set_time_zone', :default => "(set timezone)")), user_preferences_path(current_user)) : ""))
   end
-  
+
 end # end of ApplicationHelper
