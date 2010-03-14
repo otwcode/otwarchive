@@ -160,17 +160,17 @@ module TagsHelper
   
   # Returns a nested list of meta tags
   def meta_tag_tree(tag)
-    tree = []
-    meta = tag.direct_meta_tags.first
-    while meta
-      tree << meta
-      meta = meta.direct_meta_tags.first
-    end
     meta_ul = ""
-    tree.reverse.each do |t|
-      meta_ul << ("<ul class='tags tree'>" + "<li>" + link_to_tag(t) + "</li>")
+    unless tag.direct_meta_tags.empty?
+      meta_ul << "<ul class='tags tree'>"
+      tag.direct_meta_tags.each do |meta|
+        meta_ul << "<li>" + link_to_tag(meta) + "</li>"
+        unless meta.direct_meta_tags.empty?
+          meta_ul << meta_tag_tree(meta)
+        end
+      end
+      meta_ul << "</ul>"
     end
-    tree.length.times { meta_ul << "</ul>" }
     meta_ul
   end
   

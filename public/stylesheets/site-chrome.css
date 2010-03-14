@@ -273,7 +273,7 @@ li.comment h4					{ font-size: 1.25em;}
 
 /*TAGS SHOW */
  #main.tags-show ul.tree        { display: block; margin: .5em 1em; }
- #main.tags-show ul.tree li     { list-style-type:disc; }
+ #main.tags-show ul.tree li     { display: block; list-style-type:disc; }
 
 /*TAG WRANGLINGS INDEX */
  .tag_wranglings-index .module 	{ width: 70%; margin:auto; }
@@ -307,9 +307,11 @@ li.comment h4					{ font-size: 1.25em;}
  #main.works-navigate ol a  {border: 0;}
  
  /* FRONT END: temporary chapter index */
- .chapters-show ul.navigation li                    { position: relative; }
- .chapters-show .wrapper                            { position: relative; z-index: -1;}
- .chapters-show #chapter-index                      { min-width: 15em; margin-left: auto; position: absolute; top: 1.6em; right: 0em; z-index: 99; background: #fff; border: 2px solid black; padding: 1em; }
+ .chapters-show ul.navigation, .chapters-show ul.navigation li
+                                                    { position: relative; }
+ .chapters-show ul.navigation                       { z-index: 99;}                                                   
+ .chapters-show .wrapper                            { position: relative; }
+ .chapters-show #chapter-index                      { min-width: 15em; margin-left: auto; position: absolute; top: 1.6em; right: 0em; background: #fff; border: 2px solid black; padding: 1em; }
  .chapters-show #chapter-index form                 { padding: 1em; }
  #main div#chapter-index h4, #main div#chapter-index h4 a 
                                                     { margin: 0; border: none;}
