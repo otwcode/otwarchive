@@ -1,6 +1,6 @@
 class AutocompleteController < ApplicationController
 
-  def render_output(result_strings)
+  def render_output(result_strings, to_highlight="")
     @results = result_strings
     render :inline  => @results.length > 0 ? "<ul><%= @results.map {|string| '<li>' + string + '</li>'} -%></ul>" : ""
   end
@@ -8,14 +8,30 @@ class AutocompleteController < ApplicationController
   # works for any tag class where what you want to return are the names
   def tag_finder(tag_class, search_param)
     if search_param
-      render_output(tag_class.canonical.find(:all, :order => :name, :conditions => ["name LIKE ?", '%' + search_param + '%'], :limit => 10).map(&:name))
+      tags = tag_class.canonical.find(:all, :order => ['taggings_count DESC'], :conditions => ["name LIKE ?", search_param + '%'], :limit => 10)
+      extra_limit = 10 - tags.size + 5
+      tags += tag_class.canonical.find(:all, :order => ['taggings_count DESC'], :conditions => ["name LIKE ?", '%' + search_param + '%'], :limit => extra_limit)
+      render_output(tags.uniq.map(&:name))
+    end
+  end
+  
+  # handle pairings specially
+  def pairing_finder(search_param)
+    if search_param && search_param.match(/(\&|\/)/)
+      tag_finder(Pairing, search_param)
+    else
+      tags = Pairing.canonical.find(:all, :order => ['taggings_count DESC'], 
+        :conditions => ["name LIKE ? OR name LIKE ? OR name LIKE ?", 
+            search_param + '%', '%/' + search_param + '%', '%& ' + search_param + '%'],
+            :limit => 15)
+      render_output(tags.uniq.sort {|a,b| b.taggings_count <=> a.taggings_count}.map(&:name))
     end
   end
   
   # works for any tag class where what you want to return are the names
   def noncanonical_tag_finder(tag_class, search_param)
     if search_param
-      render_output(tag_class.find(:all, :order => :name, :conditions => ["canonical = 0 AND name LIKE ?", '%' + search_param + '%'], :limit => 10).map(&:name))
+      render_output(tag_class.find(:all, :order => ['taggings_count DESC'], :conditions => ["canonical = 0 AND name LIKE ?", '%' + search_param + '%'], :limit => 10).map(&:name))
     end
   end
 
@@ -64,7 +80,7 @@ class AutocompleteController < ApplicationController
   # pairing finders
   %w(canonical_pairing_finder work_pairing tag_pairing_string bookmark_external_pairing_string).each do |field|
     define_method("#{field}") do
-      tag_finder(Pairing, params[params[:fieldname]]) 
+      pairing_finder(params[params[:fieldname]]) 
     end
   end
 

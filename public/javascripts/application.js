@@ -35,6 +35,11 @@ function hideHideMe() {
     nodes.each( function(node) { node.hide(); });
 }
 
+// used in autocompleters to automatically insert comma
+function addCommaToField(element, item) {
+    element.value = element.value + ', '
+}
+
 // used in nested form fields for deleting a nested resource 
 // see prompt form for example
 function remove_section(link, class_of_section_to_remove) {

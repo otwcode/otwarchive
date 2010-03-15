@@ -212,7 +212,8 @@ module ApplicationHelper
                               paramName: '#{fieldname}',
                               parameters: 'fieldname=#{fieldname}',
                               fullSearch: true,
-                              tokens: ','
+                              tokens: '#{ArchiveConfig.DELIMITER_FOR_INPUT}',
+                              afterUpdateElement: addCommaToField
                             });")    
   end
   
