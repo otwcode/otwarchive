@@ -2,11 +2,6 @@
       all items should be enclosed in <li> </li> and linked with span_if_current! 
       @collection is defined, @challenge may not be. -->
 <% if logged_in? %>
-  <% if @collection.challenge.user_allowed_to_see_signups?(current_user) %>
-    <li>
-      <%= span_if_current t('gift_exchange.signups', :default => "Signups ({{count}})", :count => @collection.signups.count), collection_signups_path(@collection) %>
-    </li>
-  <% end %>
   <% if @collection.challenge.user_allowed_to_sign_up?(current_user) %>
     <% if (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first) %>
       <li><%= span_if_current t('gift_exchange.my_signup', :default => "Your Signup"), collection_signup_path(@collection, @challenge_signup) %></li>
@@ -14,7 +9,9 @@
       <li><%= span_if_current t('gift_exchange.signup', :default => "Signup Form"), new_collection_signup_path(@collection) %></li>
     <% end %>
   <% end %>
-  <% if @collection.user_is_owner?(current_user) -%>
-      <li><%= link_to t('gift_exchange.challenge_settings', :default => "Challenge Settings"), edit_collection_gift_exchange_path(@collection) %></li>
+  <% if @collection.challenge.user_allowed_to_see_signups?(current_user) %>
+    <li>
+      <%= span_if_current t('gift_exchange.signups', :default => "Signups ({{count}})", :count => @collection.signups.count), collection_signups_path(@collection) %>
+    </li>
   <% end %>
 <% end %>
