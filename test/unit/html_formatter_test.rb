@@ -6,6 +6,16 @@ require 'html_formatter.rb'
 class HtmlFormatterTest < ActiveSupport::TestCase
   include HtmlFormatter
 
+  def test_bad_self_closed_tag
+    # illegally self-closed tag - test failing
+    one_test '<a href="http:" />wiki</a>', '<p><a href="http:"></a>wiki</p>'
+  end
+  
+  def test_start_with_closing_tag
+    # text begins with close-tag
+    one_test "</b> foo", "<p> foo</p>"
+  end
+
   def test_identity_data
     one_test ""
     one_test "<p>1</p>"
@@ -133,9 +143,9 @@ text3
     require 'timeout'
     test_value ||= data
     mod_data = nil
-    Timeout.timeout(4) do
+    #Timeout.timeout(4) do
       mod_data = add_paragraph_tags_for_display data
-    end
+    #end
     assert_equal test_value, mod_data
   end
 

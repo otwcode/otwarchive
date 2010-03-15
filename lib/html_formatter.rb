@@ -344,11 +344,13 @@ module HtmlFormatter
             push_work[child_list, n]
           end
         else
-          cnodes = node[2].dup
-          node[2].replace([])
-          push_node[out_list, node]
-          for n in cnodes
-            push_work[node[2], n]
+          unless node[2].nil?
+            cnodes = node[2].dup
+            node[2].replace([])
+            push_node[out_list, node]
+            for n in cnodes
+              push_work[node[2], n]
+            end
           end
         end
       end
