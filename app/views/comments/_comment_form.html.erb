@@ -31,8 +31,7 @@
 	  <% end %>
       <dt><%= f.label :content, t('form_comment', :default => "Comment: ") %></dt>
       <dd class="module">
-			<p class="instructions">Plain text with limited html <%= link_to_help "html-help" -%>
-	    		<code>a href, b, blockquote, br, center, cite, code, del, em, i, img, ins, pre, q, small, strike, strong, sub, sup, u</code></p>
+			<p class="instructions"><%= limited_html_instructions %></p>
        			<p> <%= f.text_area :content %>
         	<%= generate_countdown_html("comment_content", ArchiveConfig.COMMENT_MAX) -%>
         	<%= live_validation_for_field("comment_content",

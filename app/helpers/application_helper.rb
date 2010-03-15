@@ -33,7 +33,7 @@ module ApplicationHelper
     current_page?(path) ? "<span class=\"current\">#{link}</span>" : link
   end
   
-  def limited_html_instructions
+  def allowed_html_instructions
     h(t('plain_text', :default =>"Plain text with limited html")) + 
     link_to_help("html-help") + 
     "<br/><code>a, abbr, acronym, address, alt, b, big, blockquote, br, caption, center, cite, class, code, 
@@ -41,6 +41,13 @@ module ApplicationHelper
     ins, kbd, li, name, ol, p, pre, q, samp, small, span, src, strike, strong, sub, sup, table, tbody, td, 
     tfoot, th, thead, title, tr, tt, u, ul, var, width</code>"
   end
+  
+  def limited_html_instructions
+    h(t('plain_text', :default =>"Plain text with limited html")) + 
+    link_to_help("html-help") + 
+    "<br/><code>a, (alt), b, big, blockquote, br, center, cite, code, del, em, (href), i, img, ins, p, pre, q, small, (src), strike, strong, sub, sup, u</code>"
+  end
+    	
     
   # modified by Enigel Dec 13 08 to use pseud byline rather than just pseud name
   # in order to disambiguate in the case of identical pseuds

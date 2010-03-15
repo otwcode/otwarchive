@@ -88,7 +88,7 @@
     Quick tip: if this is a subcollection or challenge, and you leave any of the following fields blank, they will be 
     inherited from the parent collection, so you don't need to repeat shared information.
     </p>
-    <p><%= limited_html_instructions -%></p>
+    <p><%= allowed_html_instructions -%></p>
     <h3><%= profile_form.label :intro, t("collection_form.intro", :default => "Introduction: ") %></h3>
   	<p>
       <%= profile_form.text_area :intro, :rows => 10, :cols => 80 %>

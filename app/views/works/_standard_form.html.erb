@@ -221,7 +221,7 @@
     <legend><%= 'Work Text' -%></legend>
     <p class="label"><%= label_tag 'content', t('story_text', :default => "Work text"), :class => "required" %></p>
     <div id="toggleText">
-    <p id="plainTextNotes" style="display: block"><%= limited_html_instructions -%></p>
+    <p id="plainTextNotes" style="display: block"><%= allowed_html_instructions -%></p>
     <p id="richTextNotes" style="display: none"><%=h t('rich_text_notes', :default => "Type or paste formatted text. Select the icon to the far left (clipboard with a 'W') to paste documents from Microsoft Word.") %></p>
     </div>
     <% use_tinymce -%>
