@@ -15,23 +15,19 @@
       <li><%= span_if_current t('collections.subcollections', :default => "Subcollections ({{count}})", :count => @collection.children.count), collection_collections_path(@collection) -%></li>
     <% end %>
 
-    <%- if @collection.not_empty? -%>
-      <% if (@works_count = @collection.all_approved_works_count) > 0%>
-        <li><%= span_if_current(h(t('collection_show.fandoms', :default => "Fandoms ({{count}})", :count => @collection.all_fandoms_count)), collection_fandoms_path(@collection)) -%></li>
-        <li><%= span_if_current(h(t('collection_show.works', :default => "Works ({{count}})", :count => @works_count)), collection_works_path(@collection)) -%></li>
-      <% end %>
-      <% if (@bookmarks_count = @collection.all_approved_bookmarks_count) > 0 %>
-        <li><%= span_if_current(h(t('collection_show.bookmarks', :default => "Bookmarks ({{count}})", :count => @bookmarks_count)), collection_bookmarks_path(@collection)) -%></li>
-      <% end %>
-      <li>
-        <%- if controller.controller_name == 'collections' && controller.action_name == 'show' %>
-        <%= link_to_remote 'Random Items', 
-          :url => collection_path(@collection, :show_random => true), :method => :get %>  
-        <%- else -%>  
-        <%= link_to 'Random Items', collection_path(@collection, :show_random => true) %>
-        <%- end -%>
-      </li>     
-    <% end %>
+    <% @works_count = @collection.all_approved_works_count %>
+    <li><%= span_if_current(h(t('collection_show.fandoms', :default => "Fandoms ({{count}})", :count => @collection.all_fandoms_count)), collection_fandoms_path(@collection)) -%></li>
+    <li><%= span_if_current(h(t('collection_show.works', :default => "Works ({{count}})", :count => @works_count)), collection_works_path(@collection)) -%></li>
+    <% @bookmarks_count = @collection.all_approved_bookmarks_count %>
+    <li><%= span_if_current(h(t('collection_show.bookmarks', :default => "Bookmarks ({{count}})", :count => @bookmarks_count)), collection_bookmarks_path(@collection)) -%></li>
+    <li>
+      <%- if controller.controller_name == 'collections' && controller.action_name == 'show' %>
+      <%= link_to_remote 'Random Items', 
+        :url => collection_path(@collection, :show_random => true), :method => :get %>  
+      <%- else -%>  
+      <%= link_to 'Random Items', collection_path(@collection, :show_random => true) %>
+      <%- end -%>
+    </li>     
   
     <%- if @collection.challenge %>
   	  <%= render :partial => "challenge/#{challenge_class_name(@collection)}/challenge_sidebar" -%>
