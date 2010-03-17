@@ -8,17 +8,19 @@ class MetaTagging < ActiveRecord::Base
   before_create :add_filters, :inherit_meta_tags
   
   def validate
-    unless self.meta_tag.class == self.sub_tag.class
-      self.errors.add_to_base("Meta taggings can only exist between two tags of the same type.")
-    end
-    unless self.meta_tag.canonical? && self.sub_tag.canonical
-      self.errors.add_to_base("Meta taggings can only exist between canonical tags.")
-    end
-    if self.meta_tag == self.sub_tag
-      self.errors.add_to_base("A tag can't be its own meta tag.")
-    end
-    if (self.meta_tag.meta_tags + self.meta_tag.sub_tags).include?(self.sub_tag)
-      self.errors.add_to_base("A meta tag can't be its own grandpa.")
+    if self.meta_tag && self.sub_tag
+      unless self.meta_tag.class == self.sub_tag.class
+        self.errors.add_to_base("Meta taggings can only exist between two tags of the same type.")
+      end
+      unless self.meta_tag.canonical? && self.sub_tag.canonical
+        self.errors.add_to_base("Meta taggings can only exist between canonical tags.")
+      end
+      if self.meta_tag == self.sub_tag
+        self.errors.add_to_base("A tag can't be its own meta tag.")
+      end
+      if (self.meta_tag.meta_tags + self.meta_tag.sub_tags).include?(self.sub_tag)
+        self.errors.add_to_base("A meta tag can't be its own grandpa.")
+      end
     end
   end
   
