@@ -143,8 +143,8 @@ a.cloud8 					{ color: #900; font-size: 2.25em; font-weight: 800 }
  .stats li dt,.stats dd dt 		{ font-size: 0.8575em }
  .stats dl dd 					{ margin: 0 0.375em 0 0; padding: 0 0.375em 0 0 }
  
- #main  #feedback .edited { top: 0.9em; }
- #main .datetime 				{ font: 100 0.8575em consolas, monaco, courier, monospace; position: absolute; right: 0; text-align: right; top: -0.5em }
+ #main  #feedback .edited { top: 0.8em; }
+ #main .datetime 				{ font: 100 0.8575em consolas, monaco, courier, monospace; position: absolute; right: 0.1em; text-align: right; top: -0.5em }
  #main .collection .meta .datetime {position:static; top:auto; text-align:left}
  #main .collection .meta .datetime {position:static; top:auto; text-align:left}
  .datetime abbr {font-variant:normal;}
@@ -300,6 +300,7 @@ li.comment h4					{ font-size: 1.25em;}
  #dashboard.admin-posts li, #dashboard.wrangling li 
                                 { font-size: 90%; margin: .5em 0em; }
  #dashboard.admin-posts a:hover { background: #333; color: #fff; }
+ #main.admin_posts-show .user-generated-view { margin-top: 2em; } /* hacky fix so the first header doesn't overlap the subnav */
   
 
 /* ToS and ADMIN long body copy tweaks*/
