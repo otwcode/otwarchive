@@ -143,7 +143,7 @@ a.cloud8 					{ color: #900; font-size: 2.25em; font-weight: 800 }
  .stats li dt,.stats dd dt 		{ font-size: 0.8575em }
  .stats dl dd 					{ margin: 0 0.375em 0 0; padding: 0 0.375em 0 0 }
  
- #main  #feedback .edited { top: 1em; }
+ #main  #feedback .edited { top: 0.9em; }
  #main .datetime 				{ font: 100 0.8575em consolas, monaco, courier, monospace; position: absolute; right: 0; text-align: right; top: -0.5em }
  #main .collection .meta .datetime {position:static; top:auto; text-align:left}
  #main .collection .meta .datetime {position:static; top:auto; text-align:left}
