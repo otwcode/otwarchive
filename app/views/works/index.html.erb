@@ -54,6 +54,9 @@
     <li><%= sort_link t('sort.hit_count', :default => 'Hits'), :hit_count -%></li>
     <% end %>
   </ul>
+  <%- if params[:query] -%>
+    <%= render :partial => 'works/search_box' -%> 
+  <%- end -%>
 </div>
 <!---/subnav-->
 
@@ -61,13 +64,17 @@
 <h3 class="landmark">Works List</h3>
  <ol class="work index">
     <%- for work in @works -%>
+      <%- if work -%>
       <%= render :partial => 'work_blurb', :locals => {:work => work} %>
+      <%- end -%>
     <%- end -%>
   </ol>
 <!--/content-->
 
 <!--filters subnav-->
+<%- if !@filters.blank? -%>
 <%= render :partial => 'filters' %>
+<%- end -%>
 <!---/subnav-->
 <div class="clear"><!-- presentational--></div>
 <%= will_paginate @works, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>

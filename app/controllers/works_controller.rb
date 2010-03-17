@@ -149,16 +149,12 @@ class WorksController < ApplicationController
     if params[:query]
       @query = params[:query]
       begin
-        works = Work.search_with_sphinx(params)
-        if works.size > ArchiveConfig.SEARCH_RESULTS_MAX
+        @works = Work.search_with_sphinx(params)
+        if @works.size >= ArchiveConfig.SEARCH_RESULTS_MAX
           @too_many = true 
-          works = works[0...ArchiveConfig.SEARCH_RESULTS_MAX]
         end
-        unless works.empty?
-          @filters = Work.build_filters(works)
-        end
-        @works = works.paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
         @search = true;
+        return
       rescue Riddle::ConnectionError
         flash[:error] = t('errors.search_engine_down', :default => "The search engine seems to be down at the moment, sorry!")
         redirect_to :action => :index and return

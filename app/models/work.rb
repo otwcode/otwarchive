@@ -1147,7 +1147,6 @@ class Work < ActiveRecord::Base
   end
 
   def self.search_with_sphinx(options)
-
     # sphinx ordering must be done on attributes
     order_clause = case options[:sort_column]
       when "title" then "title_to_sort_on "
@@ -1162,34 +1161,9 @@ class Work < ActiveRecord::Base
       order_clause += options[:sort_direction]
     end
 
-    conditions_clause = {}
-    command = 'Work.ids_only'
-    visible = '.visible'
-    visible_without_owners = '.visible(skip_owners = true)'
-    tags = (options[:boolean_type] == 'or') ?
-      '.with_any_tag_ids(options[:selected_tags])' :  
-      '.with_all_tag_ids(options[:selected_tags])'
-    written = '.written_by_id_conditions(options[:selected_pseuds])'
-
-    if options[:selected_tags] && options[:selected_pseuds]
-      command += written + visible_without_owners + tags
-    elsif options[:selected_tags]
-      command += visible + tags
-    elsif options[:selected_pseuds]
-      command += written + visible_without_owners
-    else
-      command += visible
-    end
-    ids = eval("#{command}").collect(&:id)
-
-    # can't use thinking sphinx's pagination, because some are removed
-    # which throws off the pagination 
-    search_options = {:per_page => 10000, :page => 1, :max_matches => 10000, :match_mode => :extended}
+    search_options = {:per_page => ArchiveConfig.ITEMS_PER_PAGE, :page =>(options[:page] || 1), :match_mode => :extended}
     search_options.merge!({:order => order_clause}) if !order_clause.blank?
-
-    works = Work.search(options[:query], search_options).compact
-    works.delete_if {|work| !ids.include?(work.id)}
-    works
+    Work.search(options[:query], search_options)
   end
 
   # Used for non-search work filtering
