@@ -22,7 +22,7 @@
         <%=h t('single_comment_posted', :default => "Posted {{date}}", :date => l(single_comment.created_at)) %>
       </p>
       <%- unless single_comment.edited_at.blank? -%>
-        <p class="datetime">
+        <p class="datetime edited">
           <%=h t('single_comment_edited', :default => "Last Edited {{date}}", :date => l(single_comment.edited_at)) %>
         </p>
       <%- end -%>
