@@ -20,6 +20,8 @@ module CommentsHelper
       c = Comment.find(:first, :conditions => {:thread => comment.id}, :order => 'created_at DESC')
       if c.pseud
         link_to c.pseud.name, [c.pseud.user, c.pseud]
+      else
+        h(c.name)
       end
     end    
   end

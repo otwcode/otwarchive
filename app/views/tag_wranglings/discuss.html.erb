@@ -24,7 +24,13 @@
     	<td><%= link_to_tag(comment.parent) %></td>
     	<td><%= link_to strip_tags(comment.content[0..50]) + '...', comment, :title => strip_tags(comment.content) %></td>
     	<td><%= comment.count_all_comments %></td>
-    	<td><%= link_to comment.pseud.name, [comment.pseud.user, comment.pseud] %></td>
+    	<td>
+    	  <%- if comment.pseud -%>
+    	  <%= link_to comment.pseud.name, [comment.pseud.user, comment.pseud] %>
+    	  <%- else -%>
+    	  <%=h comment.name %>
+    	  <%- end -%>
+    	</td>
     	<td><%= last_reply_by(comment) %></td>
     	<td><%= comment.updated_at %></td>
   	</tr>  
