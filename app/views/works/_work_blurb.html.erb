@@ -14,7 +14,7 @@
       <h4 title="title">
   	    <%= link_to sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small)), @collection ? collection_work_path(@collection, work) : work %>
    		  <%= t('title_by_author', :default => 'by') %>
-<%- end # top cache -%> 
+<%- end -%> 
         <%= byline(work) -%>
 
 <%- cache("work-#{work.id}-#{work.major_version}-#{work.minor_version}-middle", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
@@ -49,7 +49,7 @@
 
   	<%- end -%>
 
-<%- end # middle cache -%>
+<%- end -%>
 
 <%- cache("work-#{work.id}-#{work.major_version}-#{work.minor_version}-bottom", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
 
@@ -76,7 +76,7 @@
   			<dd><%= link_to_bookmarkable_bookmarks(work) -%></dd>
   		<%- end -%>
 
-<%- end # bottom cache -%>		
+<%- end -%>		
 
     	<% if show_hit_count?(work) %>
      		<dt><%=h t('works.hit_count', :default => "Hits: ") -%></dt>
@@ -96,5 +96,5 @@
       </ul>
     <%- end -%>
 
-  <%- end # of else statement at top -%>
+  <%- end -%>
 </li>
