@@ -942,6 +942,7 @@ class Work < ActiveRecord::Base
     # attributes
     has :id, :as => :work_ids
     has word_count, revised_at, hit_count
+    has posted, restricted, hidden_by_admin
     has tags(:id), :as => :tag_ids
 
     # properties
@@ -1163,6 +1164,11 @@ class Work < ActiveRecord::Base
 
     search_options = {:per_page => ArchiveConfig.ITEMS_PER_PAGE, :page =>(options[:page] || 1), :match_mode => :extended}
     search_options.merge!({:order => order_clause}) if !order_clause.blank?
+    if User.current_user == :false
+      search_options[:with] = {:posted => true, :hidden_by_admin => false, :restricted => false}
+    else
+      search_options[:with] = {:posted => true, :hidden_by_admin => false} 
+    end
     Work.search(options[:query], search_options)
   end
 
