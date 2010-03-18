@@ -234,11 +234,17 @@ class UserMailer < ActionMailer::Base
       commentable = @body[:commentable]
       @body[:comment_owner_link_or_name] = comment.comment_owner ? url_for(:host => @body[:host], :controller => :pseuds, :action => :show,
                                                            :id => comment.comment_owner_name, :user_id => comment.comment_owner) : comment.comment_owner_name
-      @body[:commentable_link] = url_for(:host => @body[:host], :controller => commentable.class.to_s.underscore.pluralize, 
-                                :action => :show, :id => commentable)
-      @body[:all_comments_link] = url_for(:host => @body[:host], :controller => commentable.class.to_s.underscore.pluralize, 
-                                :action => :show, :id => commentable, 
-                                :show_comments => true, :anchor => :comments)
+      if commentable.is_a?(Tag)
+        @body[:commentable_link] = url_for(:host => @body[:host], :controller => :tags, :action => :show, :id => commentable)
+        @body[:all_comments_link] = url_for(:host => @body[:host], :controller => :comments, :action => :index, 
+                                    :tag_id => commentable, :show_comments => true, :anchor => :comments)
+      else
+        @body[:commentable_link] = url_for(:host => @body[:host], :controller => commentable.class.to_s.underscore.pluralize, 
+                                  :action => :show, :id => commentable)
+        @body[:all_comments_link] = url_for(:host => @body[:host], :controller => commentable.class.to_s.underscore.pluralize, 
+                                  :action => :show, :id => commentable, 
+                                  :show_comments => true, :anchor => :comments)
+      end
       @body[:reply_to_link] = url_for(:host => @body[:host], :controller => comment.class.to_s.underscore.pluralize, 
                                 :action => :show, :id => comment, 
                                 :add_comment_reply_id => comment.id, :show_comments => true, :anchor => "comment_#{comment.id}")

@@ -298,10 +298,11 @@ class CommentsController < ApplicationController
   # if necessary to display it
   def redirect_to_comment(comment, options = {})
     if comment.depth > ArchiveConfig.COMMENT_THREAD_MAX_DEPTH 
-      if commentable.is_a?(Tag)
+      if comment.ultimate_parent.is_a?(Tag)
         default_options = {:controller => :comments, 
-                           :action => :index,
-                           :tag_id => comment.commentable.name,
+                           :action => :show,
+                           :id => comment.commentable.id,
+                           :tag_id => comment.ultimate_parent,
                            :anchor => "comment_#{comment.id}"}
         
       else

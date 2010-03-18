@@ -1,8 +1,14 @@
 module InboxHelper
   # Describes commentable - used on inbox show page
   def commentable_description_link(comment)
-    name = comment.ultimate_parent.title
-    link_to name, work_comment_path(comment.ultimate_parent, comment)
+    commentable = comment.ultimate_parent
+    if commentable.is_a?(Tag)
+      link_to commentable.name, tag_comment_path(commentable, comment)
+    elsif commentable.is_a?(AdminPost)
+      link_to commentable.title, admin_post_comment_path(commentable, comment)
+    else
+      link_to commentable.title, work_comment_path(commentable, comment)
+    end
   end
   
   # get_pseud_or_mailaddress can be found in comments_helper
