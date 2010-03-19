@@ -19,7 +19,7 @@
   <% end %>
   <% if @collection && !@collection.parent && @collection.user_is_maintainer?(current_user) %>
     <li><%= link_to t('collections.new_collection', :default => "New Subcollection"), new_collection_collection_path(@collection) %></li>
-  <% elsif !@collection %>
+  <% else %>
 	  <li><%= link_to t('collections.new_collection', :default => "New Collection"), new_collection_path %></li>
 	<% end %>
 </ul>

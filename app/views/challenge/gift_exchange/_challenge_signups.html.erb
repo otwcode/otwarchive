@@ -12,6 +12,7 @@
     (TagSet::TAG_TYPES.collect {|type| eval("@challenge.offer_restriction.#{type}_num_allowed")}.sum > 0) 
 %>
 
+<% if show_offer_description || show_request_description || show_offer_url|| show_request_url || params[:hide_descriptions] || params[:hide_urls] %>
 <ul class="navigation">
 <% if show_offer_description || show_request_description %>
   <li><%= link_to t('gift_exchange.hide_desc', :default => "Hide Descriptions"), 
@@ -27,9 +28,8 @@
   <li><%= link_to t('gift_exchange.show_desc', :default => "Show URLs"), 
       collection_signups_path(@collection, :hide_descriptions => params[:hide_descriptions], :hide_urls => false) -%></li>
 <% end %>
-
-
 </ul>
+<% end %>
 
 <table>
   <!-- top header row showing requests and offers numbered -->
