@@ -60,7 +60,7 @@
 
 /* Navigation in contexts - easier to have it all together */
  
-#main li.blurb .navigation, #main td.submit input	{ float:left; margin:auto; font-size:0.8575em;}
+#main li.blurb .navigation, #main td.submit input	{ float:left; font-size:0.8575em;}
 #main li.bookmark .navigation, #main li.fandom .navigation,  #main.pseuds-index li.blurb .navigation 
 							{ float:right; }
 #main .work .own .navigation
