@@ -11,7 +11,7 @@
     <%- end -%>
     </div>
     <%- unless @work.endnotes.blank? -%>
-      <div class="preface notes module">
+      <div class="preface notes">
           <h3><%=h t('notes', :default => "Notes:") %></h3>
           <blockquote class="user-generated-view"><%=sanitize_and_format_for_display @work.endnotes %></blockquote>
        </div>
