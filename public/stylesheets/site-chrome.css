@@ -108,7 +108,7 @@ a.cloud8 					{ color: #900; font-size: 2.25em; font-weight: 800 }
 
 /* BLURB*/
  .blurb ul li,.blurb dd ul li	{ display: inline }
- li.blurb 						{ border-bottom: 1px solid #ddd; padding: 0 0 0.375em; position: relative; clear:left; min-height: 50px;}
+ li.blurb 						{ border-bottom: 1px solid #ddd; padding: 0 0 0.375em; position: relative; clear:left; min-height: 50px; }
  .blurb .module					{ float:none;}
  .blurb .header 				{ min-height:55px; }
  .blurb .header h4 				{ font-size: 1.1425em; margin: 0.375em 5.25em 0 75px }
@@ -118,7 +118,32 @@ a.cloud8 					{ color: #900; font-size: 2.25em; font-weight: 800 }
  .blurb h4 a:link,.blurb h4 img { color: #900; vertical-align: bottom }
  .blurb ul.required-tags 		{ position: absolute; top: 0; width:60px; margin:0;}
  .blurb ul.required-tags li, #main .blurb ul.required-tags li img, .blurb ul.required-tags li a 	
-								{ position:static; display: inline; height: 25px; width: 25px; margin: 0; padding: 0; border:none;}
+								{ position:static; display: inline; height: 25px; width: 25px; margin: 0; padding: 0; border:none; }
+ .blurb ul.required-tags li  span { display: none; }
+ .blurb ul.required-tags div { background-repeat:no-repeat; height: 25px; width: 25px; }
+  .blurb ul.required-tags .category, .blurb ul.required-tags .iswip { position: absolute; left: 28px; }
+  .blurb ul.required-tags .category { top: 0; }
+  .blurb ul.required-tags .iswip { top: 28px; }
+  .blurb ul.required-tags  .rating { margin-bottom: 3px; }
+  .blurb ul.required-tags  .warnings { margin-bottom: 3px; }
+  .blurb ul.required-tags .rating-general-audience {background-image:url("/images/rating-general-audience-s.png");}
+  .blurb ul.required-tags .rating-explicit {background-image:url("/images/rating-explicit-s.png");}
+  .blurb ul.required-tags .rating-mature {background-image:url("/images/rating-mature-s.png");}
+  .blurb ul.required-tags .rating-notrated {background-image:url("/images/rating-notrated-s.png");}
+  .blurb ul.required-tags .rating-teen {background-image:url("/images/rating-teen-s.png");}
+  .blurb ul.required-tags .category-femslash {background-image:url("/images/category-femslash-s.png");}
+  .blurb ul.required-tags .category-gen {background-image:url("/images/category-gen-s.png");}
+  .blurb ul.required-tags .category-slash {background-image:url("/images/category-slash-s.png");}
+  .blurb ul.required-tags .category-het {background-image:url("/images/category-het-s.png");}
+  .blurb ul.required-tags .category-multi {background-image:url("/images/category-multi-s.png");}
+  .blurb ul.required-tags .category-other {background-image:url("/images/category-other-s.png");}
+  .blurb ul.required-tags .category-none {background-image:url("/images/category-none-s.png");}
+  .blurb ul.required-tags .complete-no {background-image:url("/images/complete-no-s.png");}
+  .blurb ul.required-tags .complete-yes {background-image:url("/images/complete-yes-s.png");}
+  .blurb ul.required-tags .warning-yes {background-image:url("/images/warning-yes-s.png");}
+  .blurb ul.required-tags .warning-no {background-image:url("/images/warning-no-s.png");}
+  .blurb ul.required-tags .warning-choosenotto {background-image:url("/images/warning-choosenotto-s.png");}
+
  .blurb .pairings 				{ background: #eee;}							
  .blurb blockquote, .blurb ul.wranglers, .blurb form
  								{ clear: none; margin: 0.5625em auto; text-align: justify }
@@ -137,7 +162,7 @@ a.cloud8 					{ color: #900; font-size: 2.25em; font-weight: 800 }
 
 /* COLLECTION, ANON, MYSTERY */
  .collection .blurb .header		{ background: url(/images/collections.png) 0 0 no-repeat;}
- .blurb .mystery 	 			{ background: url(/images/mystery.png) 0 0 no-repeat }
+ .blurb .mystery 	 			{ background: url(/images/mystery-s.png) 0 0 no-repeat }
 
 /* STATS*/
  .stats dt,.stats dd 			{ display: inline }

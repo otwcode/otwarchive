@@ -20,7 +20,9 @@
 <%= stylesheet_link_tag 'live_validation', :media => 'screen' %>
 <%= stylesheet_link_tag 'auto_complete', :media => 'screen' %>
 <%= stylesheet_link_tag 'visualize.jQuery', :media => 'screen' %>
-
+<%- if current_user.is_a?(User) && current_user.preference.plain_text_skin -%>
+<%= stylesheet_link_tag 'plain_text_skin', :media => 'all' %>
+<%- end -%>
 
 <!-- browser-specific stylesheets -->
 <!--[if IE]>

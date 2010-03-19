@@ -176,64 +176,64 @@ module WorksHelper
     %w(rating category warning iswip).each do |w|
       css_class = mappings[w.to_sym][:class_name]
       title_string = mappings[w.to_sym][:string]
-      symbol_block << "<li class=\"#{css_class}\">"
-      symbol_block << link_to_help('symbols-key', link = image_tag( "#{css_class}.png", :alt => title_string, :title => title_string))
-      symbol_block << "</li>\n"
+      symbol_block << "<li><div class=\"#{css_class}\" title=\"#{title_string}\"><span>"
+      symbol_block << link_to_help('symbols-key', link = title_string)
+      symbol_block << "</span></div></li>\n"
     end
     symbol_block << "</ul>\n" if not symbols_only
     return symbol_block
   end
 
   def get_warnings_class(warning_tags)
-    return "warning-yes" unless warning_tags
+    return "warning-yes warnings" unless warning_tags
     none = true
     choosenotto = true
     warning_tags.map(&:name).each do |name|
       none = false if name != ArchiveConfig.WARNING_NONE_TAG_NAME
       choosenotto = false if name !=ArchiveConfig.WARNING_DEFAULT_TAG_NAME
     end
-    return "warning-no" if none
-    return "warning-choosenotto" if choosenotto
-    "warning-yes"
+    return "warning-no warnings" if none
+    return "warning-choosenotto warnings" if choosenotto
+    "warning-yes warnings"
   end
 
   def get_ratings_class(rating_tag)
-    return "rating-notrated" unless rating_tag
+    return "rating-notrated rating" unless rating_tag
     case rating_tag.name
     when ArchiveConfig.RATING_EXPLICIT_TAG_NAME
-      "rating-explicit"
+      "rating-explicit rating"
     when ArchiveConfig.RATING_MATURE_TAG_NAME
-      "rating-mature"
+      "rating-mature rating"
     when ArchiveConfig.RATING_TEEN_TAG_NAME
-      "rating-teen"
+      "rating-teen rating"
     when ArchiveConfig.RATING_GENERAL_TAG_NAME
-      "rating-general-audience"
+      "rating-general-audience rating"
     else
-      "rating-notrated"
+      "rating-notrated rating"
     end
   end
 
   def get_category_class(category_tags)
     if category_tags.blank?
-      "category-none"
+      "category-none category"
     elsif category_tags.length > 1
-      "category-multi"
+      "category-multi category"
     else
       case category_tags.first.name
       when ArchiveConfig.CATEGORY_GEN_TAG_NAME
-        "category-gen"
+        "category-gen category"
       when ArchiveConfig.CATEGORY_SLASH_TAG_NAME
-        "category-slash"
+        "category-slash category"
       when ArchiveConfig.CATEGORY_HET_TAG_NAME
-        "category-het"
+        "category-het category"
       when ArchiveConfig.CATEGORY_FEMSLASH_TAG_NAME
-        "category-femslash"
+        "category-femslash category"
       when ArchiveConfig.CATEGORY_MULTI_TAG_NAME
-        "category-multi"
+        "category-multi category"
       when ArchiveConfig.CATEGORY_OTHER_TAG_NAME
-        "category-other"
+        "category-other category"
       else
-        "category-none"
+        "category-none category"
       end
     end
   end
@@ -241,9 +241,9 @@ module WorksHelper
   def get_complete_class(work)
     return "category-none" if work.class == ExternalWork
     if work.is_wip
-      "complete-no"
+      "complete-no iswip"
     else
-      "complete-yes"
+      "complete-yes iswip"
     end
   end
   

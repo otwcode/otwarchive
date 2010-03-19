@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100313165910) do
+ActiveRecord::Schema.define(:version => 20100320165910) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -354,6 +354,11 @@ ActiveRecord::Schema.define(:version => 20100313165910) do
     t.datetime "works_reveal_at"
     t.datetime "authors_reveal_at"
     t.integer  "prompt_restriction_id"
+    t.string   "request_url_label"
+    t.string   "request_description_label"
+    t.string   "offer_url_label"
+    t.string   "offer_description_label"
+    t.string   "time_zone"
   end
 
   create_table "gifts", :force => true do |t|
@@ -498,6 +503,8 @@ ActiveRecord::Schema.define(:version => 20100313165910) do
     t.boolean  "recipient_emails_off",              :default => false,                     :null => false
     t.boolean  "hide_all_hit_counts",               :default => false,                     :null => false
     t.boolean  "view_full_works",                   :default => false,                     :null => false
+    t.string   "time_zone"
+    t.boolean  "plain_text_skin",                   :default => false,                     :null => false
   end
 
   add_index "preferences", ["user_id"], :name => "index_preferences_on_user_id"

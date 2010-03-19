@@ -16,6 +16,7 @@
 
 <!--main content-->
 <%- form_for(@preference, :url => { :action => "update", :user_id => @user }) do |f| -%>  
+<h4>Privacy and Other</h4>
   <ul>
     <li>
       <%= f.label :time_zone, t('gift_exchange.time_zone', :default => "Your time zone: ")%>
@@ -36,7 +37,9 @@
     	  <%= f.check_box :date_of_birth_visible %> 
     	  <%= f.label :date_of_birth_visible, t('display_birthday', :default => "Display Date of Birth") %>
   	</li>
-    	
+  </ul>
+<h4>Display</h4>
+  <ul>
   	<li>
     	  <%= f.check_box :adult %> 
     	  <%= f.label :adult, t('show_adult_content', :default => "Show me adult content without prompting") %>
@@ -56,41 +59,6 @@
   	  <%= f.check_box :hide_freeform %> 
   	  <%= f.label :hide_freeform, t('hide_freeform', :default => "Hide freeform tags by default (you will still have the option of revealing them)")  %>
 	  </li>
-    	
-  	<li>
-    	  <%= f.check_box :comment_emails_off %> 
-    	  <%= f.label :comment_emails_off, t('comment_notifications_email', :default => "Turn off comment-notification emails")  %>
-  	</li>
-  	
-  	<li>
-    	  <%= f.check_box :comment_inbox_off %> 
-    	  <%= f.label :comment_inbox_off, t('comment_notifications_inbox', :default => "Turn off comment-notification messages to your Inbox")  %>
-  	</li>
-  	
-  	<li>
-    	  <%= f.check_box :comment_copy_to_self_off %> 
-    	  <%= f.label :comment_copy_to_self_off, t('own_comments', :default => "Turn off copies of your own comments")  %>
-  	</li>
-  	
-  	<li>
-  	  <%= f.check_box :automatically_approve_collections -%>
-  	  <%= f.label :pref, t('preferences.automatically_approve_collections', :default => "Automatically approve when a moderator adds your work to a collection in the archive.") -%>
-  	</li>
-  	
-  	<li>
-    	  <%= f.check_box :collection_emails_off %> 
-    	  <%= f.label :collection_emails_off, t('preferences.collection_emails_off', :default => "Turn off notification emails from Collections.") %>
-  	</li>  	
-
-  	<li>
-    	  <%= f.check_box :collection_inbox_off %> 
-    	  <%= f.label :collection_inbox_off, t('preferences.collection_inbox_off', :default => "Turn off Inbox messages from Collections.") %>
-  	</li>  	
-
-  	<li>
-    	  <%= f.check_box :recipient_emails_off %> 
-    	  <%= f.label :recipient_emails_off, t('preferences.recipient_emails_off', :default => "Turn off gift work notification emails.") %>
-  	</li>  	
 
     <li>
       <%= f.check_box :hide_all_hit_counts -%>
@@ -110,7 +78,51 @@
     <li>
     	<%= f.check_box :first_login %> 
     	<%= f.label :first_login, t('first_login_display', :default => "Turn on the first login help banner")  %>
-    </li>  	
+    </li>
+  	
+    <li>
+    	<%= f.check_box :plain_text_skin %> 
+    	<%= f.label :plain_text_skin, t('preferences.plain_text_skin', :default => "Display in plain text skin")  %>
+    </li>
+  </ul>
+<h4>Comments</h4>
+  <ul>
+  	<li>
+    	  <%= f.check_box :comment_emails_off %> 
+    	  <%= f.label :comment_emails_off, t('comment_notifications_email', :default => "Turn off comment-notification emails")  %>
+  	</li>
+  	
+  	<li>
+    	  <%= f.check_box :comment_inbox_off %> 
+    	  <%= f.label :comment_inbox_off, t('comment_notifications_inbox', :default => "Turn off comment-notification messages to your Inbox")  %>
+  	</li>
+  	
+  	<li>
+    	  <%= f.check_box :comment_copy_to_self_off %> 
+    	  <%= f.label :comment_copy_to_self_off, t('own_comments', :default => "Turn off copies of your own comments")  %>
+  	</li>
+  </ul>
+<h4>Collections, Challenges and Gifts</h4>
+  <ul>
+  	<li>
+  	  <%= f.check_box :automatically_approve_collections -%>
+  	  <%= f.label :pref, t('preferences.automatically_approve_collections', :default => "Automatically approve when a moderator adds your work to a collection in the archive.") -%>
+  	</li>
+  	
+  	<li>
+    	  <%= f.check_box :collection_emails_off %> 
+    	  <%= f.label :collection_emails_off, t('preferences.collection_emails_off', :default => "Turn off notification emails from Collections.") %>
+  	</li>  	
+
+  	<li>
+    	  <%= f.check_box :collection_inbox_off %> 
+    	  <%= f.label :collection_inbox_off, t('preferences.collection_inbox_off', :default => "Turn off Inbox messages from Collections.") %>
+  	</li>  	
+
+  	<li>
+    	  <%= f.check_box :recipient_emails_off %> 
+    	  <%= f.label :recipient_emails_off, t('preferences.recipient_emails_off', :default => "Turn off gift work notification emails.") %>
+  	</li>  	
   </ul>
 		<p>
 			<%= f.label :work_title_format, t('format_titles', :default => "Format the titles on your works and series")  %>: 
