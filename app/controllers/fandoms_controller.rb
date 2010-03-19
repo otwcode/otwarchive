@@ -3,13 +3,7 @@ class FandomsController < ApplicationController
 
   def index
     if @collection
-      if AdminSetting.enable_test_caching?      
-        @fandoms = Rails.cache.fetch("collection#{@collection.id}-fandoms", :expires_in => AdminSetting.cache_expiration.minutes) do
-          Fandom.for_collections([@collection] + @collection.children)
-        end
-      else
-        @fandoms = Fandom.for_collections([@collection] + @collection.children)
-      end
+      @fandoms = Fandom.for_collections([@collection] + @collection.children)
     elsif params[:medium_id]
       if @medium = Media.find_by_name(params[:medium_id])
         if @medium == Media.uncategorized

@@ -202,40 +202,8 @@ class WorksController < ApplicationController
         @most_recent_works = true
       end
       
-      if AdminSetting.enable_test_caching?
-        params_copy = params.dup
-        params_copy.delete(:commit)
-        params_copy.delete(:action)
-        params_copy.delete(:controller)
-        if params_copy[:user_id]
-          params_copy[:user_id] = @user.andand.id
-          if params_copy[:pseud_id]
-            params_copy[:pseud_id] = @author.andand.id
-          end
-        end
-        if params_copy[:tag_id]
-          params_copy[:tag_id] = @tag.andand.id  
-        end
-        if params_copy[:collection_id]
-          params_copy[:collection_id] = @collection.andand.id
-        end
-        works_cache_key = (logged_in? || logged_in_as_admin?) ? params_copy.to_s.gsub(' ', '') : "lo" + params_copy.to_s.gsub(' ', '')
-        key_within_limit = (works_cache_key.length < 251) 
-      end
-
       # Now let's build the query
-      @works, @filters, @pseuds = (AdminSetting.enable_test_caching? && key_within_limit) ?      
-        Rails.cache.fetch(works_cache_key, :expires_in => AdminSetting.cache_expiration.minutes) do
-          Work.find_with_options(:user => @user, :author => @author, :selected_pseuds => @selected_pseuds,
-                                                        :tag => @tag, :selected_tags => @selected_tags,
-                                                        :collection => @collection,                                                    
-                                                        :language_id => @language_id,
-                                                        :sort_column => @sort_column, :sort_direction => @sort_direction,
-                                                        :page => params[:page], :per_page => params[:per_page],
-                                                        :boolean_type => params[:boolean_type])
-        end :                                                         
-
-        Work.find_with_options(:user => @user, :author => @author, :selected_pseuds => @selected_pseuds,
+      @works, @filters, @pseuds = Work.find_with_options(:user => @user, :author => @author, :selected_pseuds => @selected_pseuds,
                                                       :tag => @tag, :selected_tags => @selected_tags,
                                                       :collection => @collection,                                                    
                                                       :language_id => @language_id,
@@ -243,11 +211,7 @@ class WorksController < ApplicationController
                                                       :page => params[:page], :per_page => params[:per_page],
                                                       :boolean_type => params[:boolean_type])
                                                         
- 
- 
-      
-      
-      
+
       # Limit the number of works returned and let users know that it's happening
       if @most_recent_works && @works.total_entries >= ArchiveConfig.SEARCH_RESULTS_MAX
         flash.now[:notice] = "More than #{ArchiveConfig.SEARCH_RESULTS_MAX} works were returned. The first #{ArchiveConfig.SEARCH_RESULTS_MAX} works 
