@@ -31,6 +31,11 @@ class CollectionsController < ApplicationController
   def show
     @collection = Collection.find_by_name(params[:id])
     
+    unless @collection
+  	  flash[:error] = t('collection_not_found', :default => "Sorry, we couldn't find the collection you were looking for.")
+      redirect_to collections_path and return
+    end
+    
     if @collection.collection_preference.show_random? || params[:show_random]
       # show a random selection of works/bookmarks
       @works = Work.in_collection(@collection).visible.random_order.limited(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
@@ -43,10 +48,6 @@ class CollectionsController < ApplicationController
     # Having the number of items as a limit was finding the limited number of items, then visible ones within them
     @bookmarks = visible_bookmarks[0...ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD]
 
-    unless @collection
-  	  flash[:error] = t('collection_not_found', :default => "Sorry, we couldn't find the collection you were looking for.")
-      redirect_to collections_path and return
-    end
     respond_to do |format|
       format.html
       format.js
