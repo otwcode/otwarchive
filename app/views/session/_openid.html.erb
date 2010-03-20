@@ -1,7 +1,7 @@
 <!-- OpenID field -->
 	<p>
 		<%= label_tag 'openid_url', 'Log in with OpenID:' %>	<br />
-		<%= image_tag("openid.png", :alt => '', :class => 'openid') %> <%= text_field_tag "openid_url", '' %>
+		<%= image_tag("openid.png", :alt => 'The option to trigger OpenID login on or off, as appropriate. Represented by a stylised "O" crossding over with a sideways "I".', :class => 'openid') %> <%= text_field_tag "openid_url", '' %>
 	</p>
 	<p>
 		<%= check_box_tag('remember_me', '1', false) %>

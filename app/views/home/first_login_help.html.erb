@@ -4,44 +4,44 @@
 <%= link_to_remote "Dismiss this message permanently", { :url => { :controller => "users", :action => "end_first_login", :id => current_user.login} }, { :class => 'navigation' } %></p>
 <% end %>
 
-<h3 class="landmark">Contents links list</h3>
+<h3 class="landmark">Table Of Contents</h3>
 <ul id="toc" role="navigation">
-  <li><a href="#logging_in">Logging in</a></li> 
+  <li><a href="#logging_in">Logging In</a></li> 
   <li><a href="#pseuds">Pseuds</a></li>
-  <li><a href="#posting">Posting works</a></li> 
-  <li><a href="#bookmarking">Bookmarking works</a></li> 
+  <li><a href="#posting">Posting Works</a></li> 
+  <li><a href="#bookmarking">Bookmarking Works</a></li> 
   <li><a href="#warnings">Warnings</a></li>
   <li><a href="#tags">Tags</a></li>
-  <li><a href="#edit_profile">Editing your profile, password, and preferences</a></li>
+  <li><a href="#edit_profile">Editing Your Profile, Password, and Preferences</a></li>
   <li><a href="#support">Support and Feedback</a></li>
 </ul>
 
-<h3 id="logging_in">Logging in</h3>
-<p>The sign in link is at the top right of the screen, at the very start of the page. If you're on the <%= link_to "main page", root_path %>, then there'll be a sign in area at the very top of the page; there's a sign in <em>link</em> there everywhere else. If you forget your password, then select <%= link_to "forgot your password", new_password_path %>.</p>
+<h3 id="logging_in">Logging In</h3>
+<p>To log in, locate and fill in the sign in link (located at the top of the screen for those using a visual browser, and as indicated by your screenreader if you're using one). If you're on the <%= link_to "main page", root_path %>, then there'll be a sign in area at the very top of the page; there's a sign in link there everywhere else on the Archive as well. If you forget your password, then select <%= link_to "forgot your password", new_password_path %>.</p>
 
 <p>If you're using OpenID, no password is necessary&#8212;the archive software will talk to your OpenID provider behind the scenes. To switch to OpenID login, just click on the eye-like logo next to the password input box.</p>
 
 <p><strong>Note:</strong> You'll have to have created an account already, and to have linked it with your OpenID in your Profile (<%= link_to "edit your profile", edit_user_path(current_user) %>) before you can log in with OpenID.</p>
 
 <h3 id="pseuds">Pseuds</h3>
-<p>While you were making your profile all nice and pretty, you may have noticed our "pseuds" page. Pseuds are, basically, pen names. If you've written Buffyfic under the name "spikefan92," but you switched to calling yourself "Ariana" when you discovered <acronym title="Stargate: Atlantis">SGA</acronym>, you can use the pseuds function to post each fic under the appropriate name&#8212;but still manage them using the same account. You can <%= link_to "manage your pseuds", user_pseuds_path(current_user) %> through your profile page. </p>
+<p>While you were making your profile all nice and pretty, you may have noticed our "pseuds" page. Pseuds are basically pen names. If you've written Buffyfic under the name "spikefan92", but you switched to calling yourself "Ariana" when you discovered <acronym title="Stargate: Atlantis">SGA</acronym>, you can use the pseuds function to post each fic under the appropriate name&#8212;but still manage them using the same account. You can <%= link_to "manage your pseuds", user_pseuds_path(current_user) %> through your profile page. </p>
 
-<h3 id="posting">Posting works</h3>
-<p>To post a new work, just use the <%= link_to "post new", new_work_path %> link conveniently located near the start of every page. You can either copy-paste in <acronym title="Hyper Text Markup Language">HTML</acronym>, use our Rich Text editor, or upload your story from an existing <acronym title="Uniform Resource Location, web address">URL</acronym>. Right now, that last feature is confirmed to work for <acronym title="Live Journal">LJ</acronym>, but you may get erratic results from other places. (We'd love to hear about how well other places worked for you, or didn't&#8212;you can <%= link_to "send us feedback", new_feedback_report_path %>.)</p>
+<h3 id="posting">Posting Works</h3>
+<p>To post a new work, just use the <%= link_to "Post New", new_work_path %> link conveniently located near the start of every page. You can either copy and paste in your work's <acronym title="Hyper Text Markup Language">HTML</acronym>, use our Rich Text editor, or upload your story from an existing <acronym title="Uniform Resource Location, web address">URL</acronym>. Right now, that last feature is confirmed to work for <acronym title="Live Journal">LJ</acronym>, but you may get erratic results from other places. (We'd love to hear about how well other places worked for you, or didn't&#8212;you can <%= link_to "send us feedback", new_feedback_report_path %>.)</p>
 
 <h3 id="warnings">Warnings</h3>
-<p>The archive defines four "primary" warnings: "Graphic Depictions of Violence," "Major Character Death," "Rape/Non-Con," and "Underage." You also have the option of choosing not to warn, or of choosing not to warn for some content&#8212;for example, if you'd like to warn for violence but don't want to spoil a character death. If you'd like to warn for something not on the core warnings list, please feel free to use the story's tags! Remember, "None of These Warnings Apply" does only refer to primary warnings.</p>
+<p>The archive defines four "primary" Archive-specific warnings: "Graphic Depictions of Violence", "Major Character Death", "Rape/Non-Con", and "Underage". You also have the option of choosing not to warn, or of choosing not to use Archive warnings&#8212;for example, if you'd like to warn for violence but don't want to spoil a character death. If you'd like to warn for something not on the core warnings list, please feel free to use the story's tags! Remember, "No Archive Warnings Apply" does only refer to primary warnings.</p>
 
 <h3 id="tags">Tags</h3>
-<p>All tags on the archive, including those for fandoms, pairings, and characters, start out user-created. Feel free to label your stories with whatever you want&#8212;behind the scenes, our incredible tag wrangling team will hook the tags up with their synonyms, so that people can find your fic whether you call it "<acronym>AMTDI</acronym>," "Aliens Made Them Do It," or "sex pollen." Read this <%= link_to "admin post explaining tags", url_for(:controller => :admin_posts, :action => :show, :id => 11) %> to learn more.</p>
+<p>All tags on the archive&#8212;including those for fandoms, pairings, and characters&#8212;start out user-created. Feel free to label your stories with whatever you want! Behind the scenes, our incredible tag wrangling team will hook the tags up with their synonyms, so that people can find your fic whether you call it "<acronym>AMTDI</acronym>", "Aliens Made Them Do It", or "sex pollen". Read this <%= link_to "admin post explaining tags", url_for(:controller => :admin_posts, :action => :show, :id => 11) %> to learn more.</p>
 
-<h3 id="bookmarking">Bookmarking works</h3>
-<p>To bookmark a work, select the "bookmark this story" link, at the start of its metadata, while you're reading it. You can also bookmark stories not archived here by selecting "My Bookmarks" in your Dashboard.</p>
+<h3 id="bookmarking">Bookmarking Works</h3>
+<p>To bookmark a work, select the "bookmark this story" link at the start of its metadata while you're reading it. You can also bookmark stories not archived here by selecting "My Bookmarks" in your Dashboard.</p>
 
-<h3 id="edit_profile">Editing your profile, password, and preferences</h3>
+<h3 id="edit_profile">Editing Your Profile, Password, and Preferences</h3>
 <p>To add your info, go to <%= link_to "your home page", user_path(current_user) %>, select the "<%= link_to "Profile", user_profile_path(current_user) %>" tab, and select "<%= link_to "Edit My Profile", edit_user_path(current_user) %>" from the range of options at the end of the page. Here, you can enter some basic personal information. It's also where to go to change your password.</p>
 
-<p>"<%= link_to 'Set My Preferences', user_preferences_path(current_user) %>" is located next to "Edit My Profile," and is pretty self-explanatory. The Preferences area controls both archive behavior (such as whether your viewing history is saved) and archive appearance. The archive appearance controls will get more and more sophisticated as we get closer and closer to <acronym title="Archive of Our Own">A03</acronym>'s first full release. (If you hate the font, you will be able to change it soon.) You can also access your preferences from your Dashboard.</p>
+<p>"<%= link_to 'Set My Preferences', user_preferences_path(current_user) %>" is located next to "Edit My Profile", and is pretty self-explanatory. The Preferences area controls both the Archive's behavior (such as whether your viewing history is saved) and the Archive's appearance. The Archive's appearance controls will get more and more sophisticated as we get closer and closer to <acronym title="Archive of Our Own">AO3</acronym>'s first full release; i.e. if you really hate the font(s) we use, you will be able to change them soon. You can also access your preferences from your Dashboard.</p>
 
 <h3 id="support">Support and Feedback</h3>
 <p>As you use the archive, never forget that we're still in beta and that we love, love, love feedback. Please send us some, at our <%= link_to "handy-dandy feedback page", new_feedback_report_path %>, as often as you like.</p>
