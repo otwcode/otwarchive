@@ -48,10 +48,20 @@ class PreferencesControllerTest < ActionController::TestCase
         form.preference.date_of_birth_visible.check
         form.preference.adult.check
         form.preference.view_full_works.check
+        form.preference.plain_text_skin.check
+        form.preference.hide_freeform.check
         form.preference.hide_warnings.check
+        form.preference.hide_all_hitcounts.check
+        form.preference.hide_private_hitcount.check
+        form.preference.hide_public_hitcount.check
         form.preference.comment_emails_off.check
         form.preference.comment_inbox_off.check
         form.preference.comment_copy_to_self_off.uncheck
+        form.preference.automatically_approve_collections.check
+        form.preference.collection_emails_off.check
+        form.preference.collection_inbox_off.check
+        form.preference.recipient_emails_off.check
+        form.preference.first_login.check
         form.preference.work_title_format = "AUTHOR - FANDOM - TITLE"
         assert form.submit
       end
@@ -64,10 +74,20 @@ class PreferencesControllerTest < ActionController::TestCase
         assert @user.preference.date_of_birth_visible
         assert @user.preference.adult
         assert @user.preference.view_full_works
+        assert @user.preference.plain_text_skin
+        assert @user.preference.hide_freeform
         assert @user.preference.hide_warnings
+        assert @user.preference.hide_all_hitcounts
+        assert @user.preference.hide_private_hitcount
+        assert @user.preference.hide_public_hitcount
         assert @user.preference.comment_emails_off
         assert @user.preference.comment_inbox_off
         assert !@user.preference.comment_copy_to_self_off
+        assert @user.preference.automatically_approve_collections
+        assert @user.preference.collection_emails_off
+        assert @user.preference.collection_inbox_off
+        assert @user.preference.recipient_emails_off
+        assert @user.preference.first_login
         assert_equal "AUTHOR - FANDOM - TITLE", @user.preference.work_title_format
       end
     end

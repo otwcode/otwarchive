@@ -16,18 +16,8 @@
 
 <!--main content-->
 <%- form_for(@preference, :url => { :action => "update", :user_id => @user }) do |f| -%>  
-<h4>Privacy and Other</h4>
+<h4>Privacy</h4>
   <ul>
-    <li>
-      <%= f.label :time_zone, t('gift_exchange.time_zone', :default => "Your time zone: ")%>
-      <%= f.time_zone_select :time_zone, nil, :default => Time.zone.name %>
-    </li>
-
-  	<li>
-  	  <%= f.check_box :history_enabled %> 
-  	  <%= f.label :history_enabled, t('enable_history', :default => "Enable Viewing History") %>
-  	</li>
-   		
   	<li>
    	  <%= f.check_box :email_visible %> 
    	  <%= f.label :email_visible, t('display_email', :default => "Display Email Address") %>
@@ -38,7 +28,7 @@
     	  <%= f.label :date_of_birth_visible, t('display_birthday', :default => "Display Date of Birth") %>
   	</li>
   </ul>
-<h4>Display</h4>
+<h4>Site Display</h4>
   <ul>
   	<li>
     	  <%= f.check_box :adult %> 
@@ -59,7 +49,14 @@
   	  <%= f.check_box :hide_freeform %> 
   	  <%= f.label :hide_freeform, t('hide_freeform', :default => "Hide freeform tags by default (you will still have the option of revealing them)")  %>
 	  </li>
-
+  	
+    <li>
+    	<%= f.check_box :plain_text_skin %> 
+    	<%= f.label :plain_text_skin, t('preferences.plain_text_skin', :default => "Display in plain text skin")  %>
+    </li>
+  </ul>
+<h4>Statistics</h4>
+  <ul>
     <li>
       <%= f.check_box :hide_all_hit_counts -%>
       <%= f.label :hide_all_hit_counts, t('preferences.hide_all_hit_counts', :default => "Don't show me any hit counts.") -%>
@@ -73,16 +70,6 @@
     <li>
       <%= f.check_box :hide_public_hit_count -%>
       <%= f.label :hide_public_hit_count, t('preferences.hide_public_hit_count', :default => "Don't publicly display hits on my works.") -%>
-    </li>
-  	
-    <li>
-    	<%= f.check_box :first_login %> 
-    	<%= f.label :first_login, t('first_login_display', :default => "Turn on the first login help banner")  %>
-    </li>
-  	
-    <li>
-    	<%= f.check_box :plain_text_skin %> 
-    	<%= f.label :plain_text_skin, t('preferences.plain_text_skin', :default => "Display in plain text skin")  %>
     </li>
   </ul>
 <h4>Comments</h4>
@@ -124,11 +111,30 @@
     	  <%= f.label :recipient_emails_off, t('preferences.recipient_emails_off', :default => "Turn off gift work notification emails.") %>
   	</li>  	
   </ul>
-		<p>
-			<%= f.label :work_title_format, t('format_titles', :default => "Format the titles on your works and series")  %>: 
+<h4>Misc</h4>
+  <ul>
+    <li>
+      <%= f.label :time_zone, t('gift_exchange.time_zone', :default => "Your time zone: ")%>
+      <%= f.time_zone_select :time_zone, nil, :default => Time.zone.name %>
+    </li>
+
+  	<li>
+  	  <%= f.check_box :history_enabled %> 
+  	  <%= f.label :history_enabled, t('enable_history', :default => "Enable Viewing History") %>
+  	</li>
+    
+    <li>
+    	<%= f.check_box :first_login %> 
+    	<%= f.label :first_login, t('first_login_display', :default => "Turn on the first login help banner")  %>
+    </li>
+    
+    <li>
+      <%= f.label :work_title_format, t('format_titles', :default => "Format the titles on your works and series")  %>: 
 			<%= f.text_field :work_title_format %> 
 			<%= link_to_help "work_title_format" -%>
-		</p>
+    </li>
+  </ul>
+  
   	<p class="submit">
     	<%= f.submit t('forms.update', :default => "Update") %>
   	</p>
