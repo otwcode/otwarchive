@@ -2,6 +2,7 @@ class UserMailer < ActionMailer::Base
   include ActionController::UrlWriter
   helper :application
   
+  # Sends an invitation to join the archive
   def invitation(invitation)
     subject       "[#{ArchiveConfig.APP_NAME}] Invitation"
     recipients    invitation.invitee_email
@@ -11,6 +12,7 @@ class UserMailer < ActionMailer::Base
     body          :invitation => invitation, :user_name => (invitation.creator.is_a?(User) ? invitation.creator.login : ''), :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
   end
   
+  # Sends an invitation to join the archive and claim stories that have been imported as part of a bulk import
   def invitation_to_claim(invitation, archivist)
     subject       "[#{ArchiveConfig.APP_NAME}] Invitation To Claim Stories"
     recipients    invitation.invitee_email
@@ -20,6 +22,7 @@ class UserMailer < ActionMailer::Base
     body          :invitation => invitation, :external_author => invitation.external_author, :archivist => archivist, :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
   end
   
+  # Notifies a writer that their imported works have been claimed
   def claim_notification(external_author, claimed_works)
     subject       "[#{ArchiveConfig.APP_NAME}] Stories Uploaded"
     recipients    external_author.user.email
@@ -29,6 +32,7 @@ class UserMailer < ActionMailer::Base
     body          :external_author => external_author, :claimed_works => claimed_works, :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
   end
 
+  # Emails a recipient to say that a gift has been posted for them
   def recipient_notification(user, work, collection=nil)
     setup_email(user)
     subject       "[#{ArchiveConfig.APP_NAME}] A Gift Story For You #{collection ? "From " + collection.title : ''}"
@@ -38,12 +42,14 @@ class UserMailer < ActionMailer::Base
     body          :work => work, :collection => collection, :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
   end
 
+  # Emails a user to say they have been given more invitations for their friends
   def invite_increase_notification(user, total)
     setup_email(user)
     @subject    += 'New Invitations'  
     @body[:total] = total 
   end
 
+  # Sends an admin message to a user
   def archive_notification(admin, user, subject, message)
     setup_email(user)
     @subject = "[#{ArchiveConfig.APP_NAME}] Admin Message #{subject}"
@@ -58,17 +64,20 @@ class UserMailer < ActionMailer::Base
     @body[:collection] = collection
   end
 
+  # Asks a user to validate and activate their new account
   def signup_notification(user)
     setup_email(user)
     @subject    += 'Please activate your new account' 
     @body[:url] += "/activate/#{user.activation_code}"  
   end
    
+  # Emails a user to confirm that their account is validated and activated
   def activation(user)
     setup_email(user)
     @subject += 'Your account has been activated.'
   end 
-   
+  
+  # Confirms to a user that their password was reset
   def reset_password(user)
     setup_email(user)
     @subject    += 'Password reset'
@@ -133,6 +142,7 @@ class UserMailer < ActionMailer::Base
   # Sends emails to authors whose stories were listed as the inspiration of another work
   def related_work_notification(user, related_work)
     setup_email(user)
+    setup_related_links(related_work)
     @subject    += "Related work notification"
     @body[:related_work] = related_work
   end
@@ -253,5 +263,11 @@ class UserMailer < ActionMailer::Base
       @body[:originating_thread_link] = url_for(:host => @body[:host], :controller => comment.class.to_s.underscore.pluralize, 
                                 :action => :show, :id => comment.thread)
     end
-         
+    
+    def setup_related_links(related_work)
+      @body[:related_work] = related_work
+      @body[:related_parent_link] = url_for(:host => @body[:host], :controller => :works, :action => :show, :id => @body[:related_work].parent)
+      @body[:related_child_link] = url_for(:host => @body[:host], :controller => :works, :action => :show, :id => @body[:related_work].work)
+    end
+      
 end

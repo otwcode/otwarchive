@@ -1,4 +1,4 @@
-<p><%=h "Your work" -%> <cite><%= @related_work.parent.title %></cite> <%=h "was listed as the inspiration of" -%> <cite><%= @related_work.work.title %></cite>
+<p><%=h "Your work" -%> <cite><%= link_to(@related_work.parent.title, @related_parent_link) %></cite> <%=h "was listed as the inspiration of" -%> <cite><%= link_to(@related_work.work.title, @related_child_link) %></cite>
  <%=h "by" -%> <%= @related_work.work.pseuds.collect(&:name).join(", ") %></p>
 
 <p><%= link_to("Approve relationship and link back to this work from your work", related_work_url(@related_work, :host => @host)) -%></p>
