@@ -60,8 +60,8 @@ class Tag < ActiveRecord::Base
     :maximum => ArchiveConfig.TAG_MAX,
     :message => "of tag is too long -- try using less than #{ArchiveConfig.TAG_MAX} characters or using commas to separate your tags."
   validates_format_of :name,
-    :with => /\A[^,*<>^{}=`\\]+\z/,
-    :message => 'of a tag can not include the following restricted characters: , ^ * < > { } = ` \\'
+    :with => /\A[^,*<>^{}=`\\%]+\z/,
+    :message => 'of a tag can not include the following restricted characters: , ^ * < > { } = ` \\ %'
 
   def validate
     if !self.new_record? && self.name_changed?
