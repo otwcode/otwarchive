@@ -121,11 +121,11 @@
       <dt><%= 'Sort by date' %></dt>
       <dd>
         <%= radio_button_tag 'filters[date]', 'DESC', @select_date != 'ASC' %>
-        <%= label_tag 'filters_date_DESC', 'Newest first' %>
+        <%= label_tag 'filters_date_desc', 'Newest first' %>
       </dd>
       <dd>
         <%= radio_button_tag 'filters[date]', 'ASC', @select_date == 'ASC' %>
-        <%= label_tag 'filters_date_ASC', 'Oldest first' %>
+        <%= label_tag 'filters_date_asc', 'Oldest first' %>
       </dd>
     </dl>
   <%- end -%>
