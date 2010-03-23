@@ -48,9 +48,9 @@
       <tr>
         <th>
           <%- if params[:sort] == "name DESC" -%>
-            <%= link_to "Tag Name", url_for(:show => params[:show], :sort => "name ASC") %>
+            <%= link_to "Tag Name", url_for(:show => params[:show], :status => params[:status], :sort => "name ASC") %>
           <%- else -%>
-            <%= link_to "Tag Name", url_for(:show => params[:show], :sort => "name DESC") %>          
+            <%= link_to "Tag Name", url_for(:show => params[:show], :status => params[:status], :sort => "name DESC") %>          
           <%- end -%>
         </th>
         <%- if params[:show] == "pairings" -%>
@@ -60,16 +60,16 @@
         <th>Synonym</th>
         <th>
           <%- if params[:sort] == "created_at DESC" -%>
-            <%= link_to "Created", url_for(:show => params[:show], :sort => "created_at ASC") %>
+            <%= link_to "Created", url_for(:show => params[:show], :status => params[:status], :sort => "created_at ASC") %>
           <%- else -%>
-            <%= link_to "Created", url_for(:show => params[:show], :sort => "created_at DESC") %>          
+            <%= link_to "Created", url_for(:show => params[:show], :status => params[:status], :sort => "created_at DESC") %>          
           <%- end -%>        
         </th>
         <th>
           <%- if params[:sort] == "taggings_count DESC" -%>
-            <%= link_to "Taggings Count", url_for(:show => params[:show], :sort => "taggings_count ASC") %>
+            <%= link_to "Taggings Count", url_for(:show => params[:show], :status => params[:status], :sort => "taggings_count ASC") %>
           <%- else -%>
-            <%= link_to "Taggings Count", url_for(:show => params[:show], :sort => "taggings_count DESC") %>          
+            <%= link_to "Taggings Count", url_for(:show => params[:show], :status => params[:status], :sort => "taggings_count DESC") %>          
           <%- end -%>        
         </th>    
       </tr>

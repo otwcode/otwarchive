@@ -250,6 +250,7 @@ end
     default_options = {:anchor => "comment_#{comment.id}"}
     default_options[:action] = "show"
     default_options[:show_comments] = true
+    default_options[:id] = comment.id if comment.ultimate_parent.is_a?(Tag)
     
     options = default_options.merge(options)
     

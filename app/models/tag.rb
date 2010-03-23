@@ -19,6 +19,9 @@ class Tag < ActiveRecord::Base
   def commentable_name
     self.name
   end
+  def commentable_owners
+    self.wranglers
+  end
   
   has_many :mergers, :foreign_key => 'merger_id', :class_name => 'Tag'
   belongs_to :merger, :class_name => 'Tag'
