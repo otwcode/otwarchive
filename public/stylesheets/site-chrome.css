@@ -147,7 +147,7 @@ a.cloud8 					{ color: #900; font-size: 2.25em; font-weight: 800 }
  .blurb .pairings 				{ background: #eee;}							
  .blurb blockquote, .blurb ul.wranglers, .blurb form
  								{ clear: none; margin: 0.5625em auto; text-align: justify }
- .blurb dl.stats 				{ background: #eee; font-size: 0.8575em; text-align: right;}
+ .blurb dl.stats 				{ background: #eee; font-size: 0.8575em; text-align: right; padding-left: 11em; }
  .own dl.stats					{ background: #fffef9;}
 
 /* BOOKMARK*/
