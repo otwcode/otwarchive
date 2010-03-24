@@ -169,7 +169,7 @@ class TagsController < ApplicationController
       if params[:commit] == "Wrangle"
         params[:page] = '1' if params[:page].blank?
         params[:sort] = 'name ASC' if params[:sort].blank?
-        redirect_to url_for(:controller => :tags, :action => :wrangle, :id => params[:id], :show => params[:show], :page => params[:page], :sort => params[:sort])        
+        redirect_to url_for(:controller => :tags, :action => :wrangle, :id => params[:id], :show => params[:show], :page => params[:page], :sort => params[:sort], :status => params[:status])        
       else
         redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag)
       end
@@ -240,6 +240,6 @@ class TagsController < ApplicationController
         flash[:error] = "The following tags weren't saved: #{not_saved.collect(&:name).join(', ')}"
       end
     end
-    redirect_to url_for(:controller => :tags, :action => :wrangle, :id => params[:id], :show => params[:show], :page => params[:page], :sort => params[:sort])            
+    redirect_to url_for(:controller => :tags, :action => :wrangle, :id => params[:id], :show => params[:show], :page => params[:page], :sort => params[:sort], :status => params[:status])            
   end  
 end

@@ -24,13 +24,12 @@
     <%= hidden_field_tag :show, params[:show] %> 
     <%= hidden_field_tag :sort, params[:sort] %>
     <%= hidden_field_tag :page, params[:page] %> 
+    <%= hidden_field_tag :status, params[:status] %>
     <%= f.submit 'Wrangle' %>    
   <%- end -%>
 <%- end -%>
 
-<%- if @tags && @tags.empty? -%>
-  <p>There are no tags in this category at the moment.</p>
-<%- elsif @tags -%>
+<%- if params[:show] -%>
   <ul class="navigation">
     <li>Show: </li>
     <li><%= link_to 'all', url_for(:show => params[:show], :status => 'all') %></li>
@@ -39,7 +38,11 @@
     <li><%= link_to 'unfilterable', url_for(:show => params[:show], :status => 'unfilterable'), :title => "non-canonical tags without synonyms" %></li>
     <li><%= link_to 'unwrangled', url_for(:show => params[:show], :status => 'unwrangled'), :title => "tags which were used on the same works but haven't been wrangled yet" %></li>
   </ul>
+<%- end -%>
   
+<%- if @tags && @tags.empty? -%>
+  <p>There are no tags in this category at the moment.</p>
+<%- elsif @tags -%>
   <%= will_paginate @tags %>
   
   <%- form_tag url_for(:controller => 'tags', :action => 'mass_update'), :method => :post, :id => 'wrangulator' do -%>   
@@ -111,6 +114,7 @@
     <%= hidden_field_tag :show, params[:show] %> 
     <%= hidden_field_tag :sort, params[:sort] %>
     <%= hidden_field_tag :page, params[:page] %>
+    <%= hidden_field_tag :status, params[:status] %>
     </p>
     <p class="submit"><%= submit_tag "Wrangle" %></p>
   <%- end -%>
