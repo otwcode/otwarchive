@@ -756,6 +756,7 @@ class WorksController < ApplicationController
       unless current_user.is_author_of?(@work)
         reading = Reading.find_or_initialize_by_work_id_and_user_id(@work.id, current_user.id)
         reading.major_version_read, reading.minor_version_read = @work.major_version, @work.minor_version
+        reading.touch
         reading.save
       end
     end
