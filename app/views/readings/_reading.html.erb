@@ -14,5 +14,9 @@
   </h3>
   <ul><%= render :partial => 'works/work_blurb', :locals => {:work => reading.work} %></ul>
 <% end %>
+<!-- actions -->
+  <ul class="navigation">
+     <li><%= link_to t('links.delete', :default => "Delete"), user_reading_path(current_user, reading), :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
+  </ul>
 </div>
 
