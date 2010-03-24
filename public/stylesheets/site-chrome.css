@@ -60,7 +60,7 @@
 
 /* Navigation in contexts - easier to have it all together */
  
-#main li.blurb .navigation, #main td.submit input	{ float:left; font-size:0.8575em;}
+#main li.blurb .navigation, #main td.submit input, #main.readings-index .module .navigation 	{ float:left; font-size:0.8575em;}
 #main li.bookmark .navigation, #main li.fandom .navigation,  #main.pseuds-index li.blurb .navigation 
 							{ float:right; }
 #main .work .navigation /* should only occur on your own works, but your own works are not always marked .own */
