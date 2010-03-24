@@ -29,7 +29,7 @@
     <%- end -%>
   <%- end -%>
   <%- unless @work.series.blank? -%>
-    <dt class="series">Series</dt>
+    <dt class="series"><%= t('works.series', :default => "Series:") %></dt>
     <dd class="series">
     <%= show_series_data(@work) %>
     </dd>
