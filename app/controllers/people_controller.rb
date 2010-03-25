@@ -7,7 +7,7 @@ class PeopleController < ApplicationController
       @pseuds_alphabet = @collection.participants.find(:all, :select => 'name')
     else
       if params[:show] == "authors"
-        @pseuds_alphabet = Pseud.find(:all).select{|a| a.visible_works_count > 0}
+        @pseuds_alphabet = Pseud.find(:all).select {|a| a.visible_works_count > 0}
       elsif params[:show] == "reccers"
         @pseuds_alphabet = Pseud.find(:all).select {|a| a.bookmarks.recs.visible.size > 0}
       else
@@ -26,7 +26,13 @@ class PeopleController < ApplicationController
     if @collection
       @authors = @collection.participants.alphabetical.starting_with(letter).paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
     else
-      @authors = Pseud.alphabetical.starting_with(letter).paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
+      if params[:show] == "authors"
+        @authors = Pseud.alphabetical.starting_with(letter).select{|pseud| pseud.visible_works_count > 0}.paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
+      elsif params[:show] == "reccers"
+        @authors = Pseud.alphabetical.starting_with(letter).select{|pseud| pseud.bookmarks.recs.visible.size > 0}.paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
+      else
+        @authors = Pseud.authors.starting_with(letter).paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
+      end
     end
   end 
 
