@@ -53,7 +53,8 @@ form dd {float:none;}
 
 #work-form p.submit input { font-size:1em; width: auto; text-align:center}
 
-
-
-
-
+/* font for performance */
+@font-face {
+	font-family: 'FertigoProRegular';
+	src: url('Fertigo_PRO.eot');
+  }
