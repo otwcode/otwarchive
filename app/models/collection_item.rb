@@ -160,6 +160,12 @@ class CollectionItem < ActiveRecord::Base
           UserMailer.deliver_recipient_notification(pseud.user, self.item, self.collection)
         end
       end
+
+      # also notify the owners of any parent/inspired-by works 
+      if item_type == "Work" && !item.parent_work_relationships.empty?
+        item.parent_work_relationships.each {|relationship| relationship.notify_parent_owners}
+      end
+
       save
     end
   end

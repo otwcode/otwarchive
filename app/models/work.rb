@@ -20,6 +20,7 @@ class Work < ActiveRecord::Base
   has_many :series, :through => :serial_works
 
   has_many :related_works, :as => :parent
+  has_many :parent_work_relationships, :class_name => "RelatedWork"
   
   has_many :gifts, :dependent => :destroy
   accepts_nested_attributes_for :gifts, :allow_destroy => true

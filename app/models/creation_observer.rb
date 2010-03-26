@@ -20,13 +20,21 @@ class CreationObserver < ActiveRecord::Observer
     return unless new_work.class == Work && new_work.valid?
     old_work = Work.find(new_work)
     if !old_work.posted && new_work.posted
-      # newly-posted, notify recipients that they have gotten a story!
+      # newly-posted
+      
+      # notify recipients that they have gotten a story!
       if !new_work.recipients.blank? && !new_work.unrevealed?
         recipient_pseuds = Pseud.parse_bylines(new_work.recipients, true)[:pseuds]
         recipient_pseuds.each do |pseud|
           UserMailer.deliver_recipient_notification(pseud.user, new_work)
         end
       end
+      
+      # notify authors of related work
+      if !new_work.parent_work_relationships.empty? && !new_work.unrevealed?
+        new_work.parent_work_relationships.each {|relationship| relationship.notify_parent_owners}
+      end
+      
     end
   end
   
