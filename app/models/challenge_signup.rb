@@ -34,13 +34,9 @@ class ChallengeSignup < ActiveRecord::Base
   def number_of_prompts
     if (challenge = collection.challenge)
       errors_to_add = []
-      %w(prompts offers requests).each do |prompt_type|
-        allowed = challenge.respond_to?("#{prompt_type}_num_allowed") ? 
-          challenge.send("#{prompt_type}_num_allowed") : 
-          ArchiveConfig.PROMPTS_MAX
-        required = challenge.respond_to?("#{prompt_type}_num_required") ? 
-          challenge.send("#{prompt_type}_num_required") :
-          0          
+      %w(offers requests).each do |prompt_type|
+        allowed = self.send("#{prompt_type}_num_allowed")
+        required = self.send("#{prompt_type}_num_required")
         count = eval("@#{prompt_type}") ? eval("@#{prompt_type}.size") : eval("#{prompt_type}.size")
         unless count.between?(required, allowed)
           if allowed == 0
@@ -60,6 +56,15 @@ class ChallengeSignup < ActiveRecord::Base
       unless errors_to_add.empty?
         # yuuuuuck :( but so much less ugly than define-method'ing these all
         self.errors.add_to_base(errors_to_add.join("</li><li>"))
+      end
+    end
+  end
+
+  # define "offers_num_allowed" etc here 
+  %w(offers requests).each do |prompt_type|
+    %w(required allowed).each do |permission|
+      define_method("#{prompt_type}_num_#{permission}") do
+        collection.challenge.respond_to?("#{prompt_type}_num_#{permission}") ? collection.challenge.send("#{prompt_type}_num_#{permission}") : 0
       end
     end
   end

@@ -85,8 +85,9 @@ Rails::Initializer.run do |config|
   # Make Time.zone default to the specified zone, and make Active Record store time values
   # in the database in UTC, and return them converted to the specified local zone.
   # Run "rake -D time" for a list of tasks for finding time zone names. Uncomment to use default local time.
-  config.time_zone = 'Eastern Time (US & Canada)' # does this still produce weird bugs?
+  # config.time_zone = 'Eastern Time (US & Canada)' # does this still produce weird bugs? grr, yes as of Rails 2.3.5
   # config.active_record.default_timezone = :utc
+  config.active_record.default_timezone = :local
 
   # The internationalization framework can be changed 
   # to have another default locale (standard is :en) or more load paths.
@@ -120,6 +121,7 @@ Rails::Initializer.run do |config|
   config.gem 'ts-delayed-delta', :lib => 'thinking_sphinx/deltas/delayed_delta'
   config.gem 'daemon-spawn'
   config.gem 'aws-s3', :lib => 'aws/s3'
+  # config.gem 'fastercsv' -- will use this eventually for exporting to excel tsv format
   
   # Override the sanitize defaults to allow some extra formatting attributes. 
   config.action_view.sanitized_allowed_attributes = 'align'

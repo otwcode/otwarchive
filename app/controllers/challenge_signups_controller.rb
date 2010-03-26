@@ -1,3 +1,6 @@
+# eventually for exporting to Excel TSV format
+# require 'iconv'
+
 class ChallengeSignupsController < ApplicationController
 
   before_filter :users_only
@@ -6,35 +9,11 @@ class ChallengeSignupsController < ApplicationController
   before_filter :load_signup_from_id, :only => [:show, :edit, :update, :destroy]
   before_filter :allowed_to_destroy, :only => [:destroy]
   before_filter :signup_owner_only, :only => [:edit, :update]
-  before_filter :check_signup_open, :only => [:new, :edit, :update]
+  before_filter :check_signup_open, :only => [:new, :create, :edit, :update]
 
   
   def check_signup_open
-    signup_closed and return unless @challenge.signup_open
-  end
-
-  def signup_owner_only
-    not_signup_owner and return unless (@challenge_signup.pseud.user == current_user)
-  end
-
-  def load_challenge
-    @challenge = @collection.challenge
-    no_challenge and return unless @challenge
-  end
-
-  def allowed_to_destroy
-    @challenge_signup.user_allowed_to_destroy?(current_user) || not_allowed
-  end
-  
-  def load_signup_from_id
-    @challenge_signup = ChallengeSignup.find(params[:id])
-    no_signup and return unless @challenge_signup
-  end
-
-  def not_signup_owner
-    flash[:error] = t('challenge_signups.not_owner', :default => "You can't edit someone else's signup!")
-    redirect_to @collection
-    false
+    signup_closed and return unless (@challenge.signup_open || @collection.user_is_owner?(current_user)) 
   end
 
   def signup_closed
@@ -43,16 +22,40 @@ class ChallengeSignupsController < ApplicationController
     false
   end
 
+  def signup_owner_only
+    not_signup_owner and return unless (@challenge_signup.pseud.user == current_user || (!@challenge.signup_open && @collection.user_is_owner?(current_user)))
+  end
+
+  def not_signup_owner
+    flash[:error] = t('challenge_signups.not_owner', :default => "You can't edit someone else's signup!")
+    redirect_to @collection
+    false
+  end
+
+  def load_challenge
+    @challenge = @collection.challenge
+    no_challenge and return unless @challenge
+  end
+
   def no_challenge
     flash[:error] = t('challenges.no_challenge', :default => "What challenge did you want to sign up for?")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
   
+  def allowed_to_destroy
+    @challenge_signup.user_allowed_to_destroy?(current_user) || not_allowed
+  end
+  
   def not_allowed
     flash[:error] = t('challenge_signups.not_allowed', :default => "Sorry, you're not allowed to do that.")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
+  end
+
+  def load_signup_from_id
+    @challenge_signup = ChallengeSignup.find(params[:id])
+    no_signup and return unless @challenge_signup
   end
 
   def no_signup
@@ -82,6 +85,13 @@ class ChallengeSignupsController < ApplicationController
         @challenge_signups = @collection.signups.by_user(current_user)
       end
     end
+    
+    # using respond_to in order to provide Excel output
+    # see below for export_excel method
+    respond_to do |format|
+      format.html
+      format.xls {export_html(@challenge_signups)}
+    end    
   end
 
   def show
@@ -134,4 +144,27 @@ class ChallengeSignupsController < ApplicationController
       redirect_to @collection
     end
   end
+  
+  
+protected
+  # eventually for exporting to excel tsv format
+  # BOM = "\377\376" #Byte Order Mark
+  # 
+  # def export_tsv(signups)
+  #   filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.tsv"
+  #   content = signups.collect {|signup| signup.to_tsv}.join("\n")
+  #   content = BOM + Iconv.conv("utf-16le", "utf-8", content)
+  #   send_data content, :filename => filename
+  # end
+
+  # We just export an HTML table, but we give it the xls suffix to have Excel/Open Office recognize it correctly
+  def export_html
+    @title = "#{@collection.name} Signups at #{Time.now.strftime('%Y-%m-%d-%H%M')}"
+    @hide_navigation = true
+    filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.xls"
+    content = render("index", :layout => "barebones")
+    send_data content, :filename => filename
+  end
+  
+  
 end
