@@ -349,7 +349,7 @@ class StoryParser
       if text.match(/adult_check/)
         Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
           begin
-            agent = WWW::Mechanize.new
+            agent = Mechanize.new
             form = agent.get(url).forms.first
             page = agent.submit(form, form.buttons.first) # submits the adult concepts form
             text = page.body
