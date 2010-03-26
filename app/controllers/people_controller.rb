@@ -31,7 +31,7 @@ class PeopleController < ApplicationController
       elsif params[:show] == "reccers"
         @authors = Pseud.alphabetical.starting_with(letter).select{|pseud| pseud.bookmarks.recs.visible.size > 0}.paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
       else
-        @authors = Pseud.authors.starting_with(letter).paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
+        @authors = Pseud.alphabetical.starting_with(letter).paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
       end
     end
   end 
