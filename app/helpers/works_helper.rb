@@ -17,10 +17,10 @@ module WorksHelper
             [t('works_helper.chapters', :default => "Chapters:"), work.chapter_total_display]]
 
     if work.count_visible_comments > 0
-      list.concat([[t('work_comments', :default => 'Comments') + ': ', work.count_visible_comments.to_s]])
+      list.concat([[t('work_comments', :default => 'Comments') + ':', work.count_visible_comments.to_s]])
     end
     if (bookmark_count = Bookmark.count_visible_bookmarks(work)) > 0
-      list.concat([[t('work_bookmarks', :default => 'Bookmarks') + ': ', bookmark_count.to_s]])
+      list.concat([[t('work_bookmarks', :default => 'Bookmarks') + ':', link_to(bookmark_count.to_s, work_bookmarks_path(work))]])
     end
     list.concat([[t('works_helper.hits:', :default => "Hits:"), work.hit_count]]) if show_hit_count?(work)
 
