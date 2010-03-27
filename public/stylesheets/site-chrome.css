@@ -216,6 +216,7 @@
 li.comment 						{ position:relative; clear:right; min-height: 120px; padding: 0.8575em 0.25em;}
 li.comment h4, li.comment blockquote 
 								{ margin: auto; display: inline; clear: right;}
+li.comment blockquote blockquote{ display:block; margin:auto auto auto 1.5em; padding:0.75em;}
 li.comment p                    { clear: none; }								
 li.comment h4					{ font-size: 1.25em;}
 .comment .even, .thread .even 	{ background:#eee;}
