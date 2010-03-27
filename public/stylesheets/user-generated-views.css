@@ -9,7 +9,8 @@
 .user-generated-view dd		{ line-height:1.5; font-size:0.875em; margin:1.25em auto 1.25em 3em; }
 .user-generated-view dd p	{ text-indent:0; margin:0; padding:0; }
 .user-generated-view ul		{ margin:1.125em auto; padding:0 1em; }
-.user-generated-view li		{ list-style-type:disc; margin:0.75em 0 0.75em 1.75em;}
+.user-generated-view li, .user-generated-view ol ul li
+							{ list-style-type:disc; margin:0.75em 0 0.75em 1.75em;}
 .user-generated-view ol		{ margin:0.75em auto; padding:0 1.5em; }
 .user-generated-view ol li	{ list-style-type:decimal; margin:0.75em 0 0.75em 1.75em ;}
 .user-generated-view ol li ol li	
