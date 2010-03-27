@@ -33,16 +33,16 @@
       <li class="comment <%= inbox_comment.read? ? 'read' : 'unread' %> <%= cycle :odd, :even %>" role="article">
         <h4><%= get_pseud_or_mailaddress(inbox_comment.feedback_comment) %> <%= 'to' %> <%= commentable_description_link(inbox_comment.feedback_comment) %> </h4>
         <%- unless inbox_comment.feedback_comment.pseud.nil? -%>
-        <div class="icon">
-          <%= image_tag(inbox_comment.feedback_comment.pseud.andand.icon.url, :size => "100x100", :alt => inbox_comment.feedback_comment.pseud.andand.icon_alt_text, :class => "icon") %>
-        </div>
+        <p class="icon">
+          <%= image_tag(inbox_comment.feedback_comment.pseud.andand.icon.url, :alt => inbox_comment.feedback_comment.pseud.andand.icon_alt_text, :class => "icon") %>
+        </p>
         <%- end -%>
         <blockquote class="user-generated-view"><%= sanitize_and_format_for_display inbox_comment.feedback_comment.content %></blockquote>
         <p class="datetime"><%= distance_of_time_in_words_to_now(inbox_comment.created_at) %></p>
         <h5 class="landmark">Comment Actions</h5>
         <ul class="navigation">
           <%- unless inbox_comment.read? -%>
-            <li><span class="unread">Unread</span></li>
+            <li class="unread">Unread </li>
           <%- end -%>
           <li>
             <%= image_tag("replied_to.png", :size => "15x15", :alt => "Replied To") if inbox_comment.replied_to? %>

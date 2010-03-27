@@ -12,7 +12,7 @@
     <%- else -%>
       <%- unless single_comment.pseud.nil? -%>
         <div class="icon">
-        <%= image_tag(single_comment.pseud.andand.icon.url, :size => "100x100", :alt => single_comment.pseud.andand.icon_alt_text, :class => "icon") %>
+        <%= image_tag(single_comment.pseud.andand.icon.url, :alt => single_comment.pseud.andand.icon_alt_text, :class => "icon") %>
         </div>
       <%- end -%>
       	<!--title should be the first element in this list item, not icon. icon goes after name and before comment text-->

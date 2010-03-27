@@ -70,14 +70,14 @@
 .pagination 				{ font: 100 1em 'Lucida Grande', Geneva, Verdana, Helvetica, Arial, sans-serif; margin: .5em auto; padding: 0.25em; text-align: center }
  #main .pagination a		{ border:0;}
  #main .current 			{ border: 1px solid #000; padding: 0.25em }
+ .current, .current a:visited
+							{ background: #111 !important; color: #fffef9 !important; cursor: default }
 
 /* GROUPING: MODULE, WRAPPER, INDEX */
  .module,  .index  			{ width: 100%; position: relative; float: left; }
  .wrapper					{ background: transparent url(/images/drop-shadow-light.gif) bottom right repeat-y; padding: 0 12px 13px 0;}
 
 /* ROLES/STATES*/
- .current, .current a:visited
-							{ background: #111 !important; color: #fffef9 !important; cursor: default }
  .own 						{ background: #eee; border: 1px dashed #ddd }
  .draft 					{ background: #eee; border: 2px dashed #ddd }
  .draft .wrapper			{ background: #eee; }
@@ -89,14 +89,17 @@
  #main ul.tags li			{ display:inline;}
 
 /*CLOUD */
-a.cloud1 					{ color: #111; font-size: 0.625em; font-weight: 100 }
-a.cloud2 					{ color: #240F0F; font-size: 0.75em; font-weight: 200 }
-a.cloud3 					{ color: #380C0C; font-size: 0.875em; font-weight: 300 }
-a.cloud4 					{ color: #4B0A0A; font-size: 1em; font-weight: 400 }
-a.cloud5 					{ color: #5F0707; font-size: 1.125em; font-weight: 500 }
-a.cloud6 					{ color: #720505; font-size: 1.5em; font-weight: 600 }
-a.cloud7 					{ color: #860202; font-size: 1.875em; font-weight: 700 }
-a.cloud8 					{ color: #900; font-size: 2.25em; font-weight: 800 }
+ a.cloud1 					{ color: #111; font-size: 0.625em; font-weight: 100 }
+ a.cloud2 					{ color: #240F0F; font-size: 0.75em; font-weight: 200 }
+ a.cloud3 					{ color: #380C0C; font-size: 0.875em; font-weight: 300 }
+ a.cloud4 					{ color: #4B0A0A; font-size: 1em; font-weight: 400 }
+ a.cloud5 					{ color: #5F0707; font-size: 1.125em; font-weight: 500 }
+ a.cloud6 					{ color: #720505; font-size: 1.5em; font-weight: 600 }
+ a.cloud7 					{ color: #860202; font-size: 1.875em; font-weight: 700 }
+ a.cloud8 					{ color: #900; font-size: 2.25em; font-weight: 800 }
+
+/*ICON */
+ p.icon, div.icon			{ height: 100px; width: 100px; overflow: hidden;}
 
 /* META*/
  #main dl.meta 				{ background: #fffef9; border: 2px solid; clear: right; margin: 0 auto; padding: 0.5em; position: relative }
@@ -170,13 +173,13 @@ a.cloud8 					{ color: #900; font-size: 2.25em; font-weight: 800 }
  .stats dl dd 					{ margin: 0 0.375em 0 0; padding: 0 0.375em 0 0 }
  
  #main  #feedback .edited { top: 0.8em; }
- #main .datetime 				{ font: 100 0.8575em consolas, monaco, courier, monospace; position: absolute; right: 0.1em; text-align: right; top: -0.5em }
- #main .collection .meta .datetime {position:static; top:auto; text-align:left}
- #main .collection .meta .datetime {position:static; top:auto; text-align:left}
- .datetime abbr {font-variant:normal;}
- .datetime .date, .datetime .month {font-weight:900;}
- .datetime .time, .datetime .timezone {font-size: 0.8575em; color:#900}
-
+ #main .datetime 					{ font: 100 0.8575em consolas, monaco, courier, monospace; position: absolute; right: 0.1em; text-align: right; top: -0.5em }
+ #main .collection .meta .datetime 	{ position:static; top:auto; text-align:left}
+ #main .collection .meta .datetime 	{ position:static; top:auto; text-align:left}
+ .datetime abbr 					{ font-variant:normal;}
+ .datetime .date, .datetime .month 	{ font-weight:900;}
+ .datetime .time, .datetime .timezone
+									{ font-size: 0.8575em; color:#900}
 
 /* PREFACE - title, notes, description, collections faq, rules; has a fair few id weights as it sometimes appears within a user-generated-view*/
  .preface 						{ border-bottom: 3px double; margin: auto 3em 1.5em; padding: 0.5em 0.5em 0 }
@@ -245,7 +248,7 @@ li.comment h4					{ font-size: 1.25em;}
 /* DASHBOARD: INBOX */
  .inbox-show p.navigation		{ float:left;}
  #main.inbox-show .filters dd   { float:none;}
- .inbox-show span.unread        { color: #900;}
+ .inbox-show li.unread        	{ color: #900;}
 
 /* USER PROFILE SHOW */
  .profile-show .module h3 		{ margin-top: 2.75em }
