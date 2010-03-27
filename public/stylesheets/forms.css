@@ -60,7 +60,7 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 
 #main.users-new form dt {width:100%; float:none;}
 #main.users-new form dl {position: static;}
-#main.users-new #tos-partial {height: 10em; overflow:auto; border: 1px solid}
+#tos-partial {height: 10em; overflow:auto; border: 1px solid}
 
 /* SITE SEARCH */
 #header #search {float:right;clear:right;}
