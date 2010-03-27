@@ -86,7 +86,6 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 .feedbacks-new form p.message { clear: both; }
 
 /* POST WORK */
-/*work-meta  and work-show rules in story-views.css */
 #work-form fieldset, #upload-work-form fieldset {background:#fffef9; font-size:0.875em; margin: 0.5625em 0 2em 0; padding:0.375em 1.5em 3em 1.5em; border:1px solid #bbb; }
 #work-form fieldset fieldset { line-height:1.5; margin: 0 auto 0.5625em auto; padding-bottom:1em}
 #work-form legend {background:#fffef9; padding:0.375em; height:auto; width:auto; font-size: 1em;color:#222222;}

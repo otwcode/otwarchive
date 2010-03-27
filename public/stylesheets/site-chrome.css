@@ -213,7 +213,7 @@
  #main #chapters .footnote 		{ font-size: 85.7%; border-bottom: 1px solid #ddd}  
 
 /* COMMENTS - works-show, inbox, admin posts for now*/
-li.comment 						{ position:relative; clear:right; min-height: 120px; padding: 0.25em;}
+li.comment 						{ position:relative; clear:right; min-height: 120px; padding: 0.8575em 0.25em;}
 li.comment h4, li.comment blockquote 
 								{ margin: auto; display: inline; clear: right;}
 li.comment p                    { clear: none; }								
