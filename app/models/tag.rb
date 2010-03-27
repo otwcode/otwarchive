@@ -20,7 +20,15 @@ class Tag < ActiveRecord::Base
     self.name
   end
   def commentable_owners
-    self.wranglers
+    if self.is_a?(Fandom)
+      self.wranglers
+    else
+      begin
+        self.fandoms.collect {|f| f.wranglers}.compact.flatten.uniq
+      rescue
+        []
+      end
+    end
   end
   
   has_many :mergers, :foreign_key => 'merger_id', :class_name => 'Tag'
