@@ -9,14 +9,14 @@ html body #header #login-block #greeting.logged-out li #signin form #small_login
 form.new_collection p, form.new_user p {font-size:1em;}
 #signin #small_login p.submit {float:none; display:inline;}
 #home #home-header #login-block ul#login li {  display:inline;}
-.blurb .stats dd {position:static;}
+.blurb .stats dd { position:static;}
 
 /*layer stacking*/
 .home #search p {text-align: right; z-index: 1;}
 #header .navigation li { z-index:0;}
 
 /*explicit widths*/
- 
+.meta li a, .meta dd {position:static; zoom:1;} 
 
 /*margin and padding quirks*/ 
 #header ul.admin {position:absolute; z-index:50; right:0; margin-top:auto;}
