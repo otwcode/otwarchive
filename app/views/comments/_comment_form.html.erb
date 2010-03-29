@@ -38,7 +38,6 @@
 				      :failureMessage => t('comment_not_there', :default => 'Brevity is the soul of wit, but we need your comment to have text in it.'),
 				      :maximum_length => ArchiveConfig.COMMENT_MAX,
 				      :tooLongMessage => t('comment_too_long', :default => "must be less than {{count}} characters long.", :count => ArchiveConfig.COMMENT_MAX)) %>
-      		</p>
 		</dd>
     </dl>
     <p> <input type="hidden" id="controller_name" name="controller_name" value="<%= @controller_name ||= @controller.controller_name %>" />
