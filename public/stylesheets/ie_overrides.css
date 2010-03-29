@@ -35,6 +35,8 @@ form.new_collection p, form.new_user p {font-size:1em;}
 /*hasLayout */
 .index, .profile, .module, a, form dd, .bigwrapper, .bookmark li, #feedback, .series, #header #signin, .blurb .tags li, #comment_form code {zoom:1;}
 
+.stats a {zoom:normal;}
+
 /*float clear quirks */
 .collection #login-block #greeting {clear:none !important;}
 form dd {float:none;}
