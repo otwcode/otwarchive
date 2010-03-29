@@ -333,7 +333,8 @@ li.comment h4					{ font-size: 1.25em;}
  #dashboard.admin-posts li, #dashboard.wrangling li 
                                 { font-size: 90%; margin: .5em 0em; }
  #dashboard.admin-posts a:hover { background: #333; color: #fff; }
- #main.admin_posts-show .user-generated-view { margin-top: 2em; } /* hacky fix so the first header doesn't overlap the subnav */
+ #main.admin_posts-index .wrapper {clear:right;}
+#main.admin_posts-show .user-generated-view { margin-top: 2em; } /* hacky fix so the first header doesn't overlap the subnav */
   
 
 /* ToS and ADMIN long body copy tweaks*/
