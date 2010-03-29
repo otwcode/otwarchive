@@ -1,4 +1,4 @@
-require 'test_helper'
+require File.dirname(__FILE__) + '/../test_helper'
 
 class SetTaggingTest < ActiveSupport::TestCase
   context "a set tagging" do

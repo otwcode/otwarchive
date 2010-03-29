@@ -1,4 +1,4 @@
-require 'test_helper'
+require File.dirname(__FILE__) + '/../test_helper'
 
 class CollectionProfileTest < ActiveSupport::TestCase
   context "a collection profile" do

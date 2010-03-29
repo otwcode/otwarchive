@@ -124,7 +124,7 @@ class StoryParserTest < ActiveSupport::TestCase
     assert_equal work.chapters.length, num_chapters + 1
     chapter = work.chapters.last 
     assert !chapter.content.blank?
-    assert_match /\"I want to go to college,\" he says./, chapter.content
+    assert_match /\"I want to go to college,\" he says./, chapter.content  #"
     assert !chapter.title.blank?
     assert_match /Triptych/, chapter.title
   end

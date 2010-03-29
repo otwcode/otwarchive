@@ -83,8 +83,9 @@ class WorksCreateControllerTest < ActionController::TestCase
         should_assign_to :work
         should "add the work to the collection" do
           assert @collection.works.include?(@work)
-          assert @collection.approved_works.include?(@work)
           assert @work.approved_collections.include?(@collection)
+          @work.update_attribute(:posted, true)
+          assert @collection.approved_works.include?(@work)
         end
       end
     end

@@ -1,4 +1,4 @@
-require 'test_helper'
+require File.dirname(__FILE__) + '/../test_helper'
 
 class CollectionTest < ActiveSupport::TestCase
   context "a collection with an owner" do
