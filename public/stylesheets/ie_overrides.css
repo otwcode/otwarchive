@@ -14,6 +14,7 @@ form.new_collection p, form.new_user p {font-size:1em;}
 /*layer stacking*/
 .home #search p {text-align: right; z-index: 1;}
 #header .navigation li { z-index:0;}
+#new_comment .module {position:static;}
 
 /*explicit widths*/
 

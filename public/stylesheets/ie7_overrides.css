@@ -1,9 +1,5 @@
 #dynamic-bookmark #bookmark-form form#new_bookmark dl {height:16em; overflow:scroll;}
 
-/* New bookmark popup hidden behind add comment form on works-show */
-#ibox { z-index: 1; }
-#new_comment .module { z-index: -1; }
-
 /* bookmarks index has funny float issues */
 .bookmarks-index .blurb {position: relative;}
 .bookmark p.count {float: none; position: absolute; right: 0;}

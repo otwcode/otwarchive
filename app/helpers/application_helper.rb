@@ -36,16 +36,16 @@ module ApplicationHelper
   def allowed_html_instructions
     h(t('plain_text', :default =>"Plain text with limited html")) + 
     link_to_help("html-help") + 
-    "<br/><code>a, abbr, acronym, address, alt, b, big, blockquote, br, caption, center, cite, class, code, 
-    col, colgroup, datetime, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, height, hr, href, i, img, 
-    ins, kbd, li, name, ol, p, pre, q, samp, small, span, src, strike, strong, sub, sup, table, tbody, td, 
-    tfoot, th, thead, title, tr, tt, u, ul, var, width</code>"
+    "<br /><code>a, abbr, acronym, address, [alt], b, big, blockquote, br, caption, center, cite, [class], code, 
+    col, colgroup, datetime, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, [height], hr, [href], i, img, 
+    ins, kbd, li, name, ol, p, pre, q, samp, small, span, [src], strike, strong, sub, sup, table, tbody, td, 
+    tfoot, th, thead, [title], tr, tt, u, ul, var, [width]</code>"
   end
   
   def limited_html_instructions
     h(t('plain_text', :default =>"Plain text with limited html")) + 
     link_to_help("html-help") + 
-    "<br/><code>a, (alt), b, big, blockquote, br, center, cite, code, del, em, (href), i, img, ins, p, pre, q, small, (src), strike, strong, sub, sup, u</code>"
+    "<br /><code>a, [alt], b, big, blockquote, br, center, cite, code, del, em, [href], i, img, ins, p, pre, q, small, [src], strike, strong, sub, sup, u</code>"
   end
     	
     
