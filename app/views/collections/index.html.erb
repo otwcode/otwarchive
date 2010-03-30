@@ -11,6 +11,7 @@
 <!--/descriptions-->
 
 <!--Subnavigation, sorting and actions-->
+<div class="navigation module">
 <%- if logged_in? %>
 <h3 class="landmark">Navigation</h3>
 <ul class="navigation" role="navigation">
@@ -28,19 +29,17 @@
 
 <%- if @sort_and_filter -%> 
 <!--sorting subnav-->
-<div class="navigation module">
   <ul class="sorting navigation" role="navigation">
     <li><h4><%= t('sort_by', :default => 'Sort By') -%></h4></li>
     <li><%= sort_link t('sort.title', :default => 'Title'), :title -%></li>
     <li><%= sort_link t('sort.date', :default => 'Date'), :created_at -%></li>
     <li><%= sort_link t('sort.size', :default => 'Size'), :count -%></li>
   </ul>
-</div>
 <!---/subnav-->
 <%- end -%>
+</div>
 
 <!--main content-->
-
 <h3 class="landmark">List of Collections</h3>
 <ul class="collection index">
 <% @collections.each do |collection| %>

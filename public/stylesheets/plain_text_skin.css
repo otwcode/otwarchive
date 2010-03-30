@@ -1,37 +1,28 @@
-body, #dashboard ul , #header, #header .navigation a, #header .navigation .current, .pagination, #main, h1, h2, h3, h4, h5, h6
-	{ font-family: 'Times New Roman', serif; }
+/*suggest moving this rule into a separate serif skin*/
+ *								{ font-family: serif !important; }
 
+/*no icon skin */
 
-
-
- .blurb .header 				{ min-height: 5.5em; border-bottom: 1px dashed; }
- .blurb .header h4 				{ font-size: 1.1425em; margin: 0.375em 5.25em 0 12em;}
- .blurb .header h5, .blurb .header ul 	
-								{ font-size: 1em; margin: 0.375em 6em 0 0.2em; }
- .blurb .header h5 { margin-left: 14em; }
- .blurb ul.required-tags	{margin-right: 0;}
- .blurb ul.required-tags 		{ width:15em; }
- .blurb ul.required-tags li, #main .blurb ul.required-tags li img, .blurb ul.required-tags li a 	
-								{ position:static; display: inline; height: 1em; width: auto; margin: 0; padding: 0; border:none; }
- .blurb ul.required-tags li  span { display: inline; } 
- .blurb ul.required-tags div { height: 1em; width: auto; }
-  .blurb ul.required-tags .category, .blurb ul.required-tags .iswip { position: static; }
-  .blurb ul.required-tags  .rating { margin-bottom: 3px; }
-  .blurb ul.required-tags  .warnings { margin-bottom: 3px; }
-  .blurb ul.required-tags .rating-general-audience {background-image: none;}
-  .blurb ul.required-tags .rating-explicit {background-image: none;}
-  .blurb ul.required-tags .rating-mature {background-image: none;}
-  .blurb ul.required-tags .rating-notrated {background-image: none;}
-  .blurb ul.required-tags .rating-teen {background-image: none;}
-  .blurb ul.required-tags .category-femslash {background-image: none;}
-  .blurb ul.required-tags .category-gen {background-image: none;}
-  .blurb ul.required-tags .category-slash {background-image: none;}
-  .blurb ul.required-tags .category-het {background-image: none;}
-  .blurb ul.required-tags .category-multi {background-image: none;}
-  .blurb ul.required-tags .category-other {background-image: none;}
-  .blurb ul.required-tags .category-none {background-image: none;}
-  .blurb ul.required-tags .complete-no {background-image: none;}
-  .blurb ul.required-tags .complete-yes {background-image: none;}
-  .blurb ul.required-tags .warning-yes {background-image: none;}
-  .blurb ul.required-tags .warning-no {background-image: none;}
-  .blurb ul.required-tags .warning-choosenotto {background-image: none;}
+/*reset positioning */
+ .blurb .header, .blurb ul.required-tags, .blurb ul.required-tags li, #main .blurb ul.required-tags li img, .blurb ul.required-tags li a, .blurb ul.required-tags li span, .blurb ul.required-tags div, .blurb ul.required-tags .category, .blurb ul.required-tags .iswip		
+								{ position:static; display: inline; height: auto; min-height:0.1em; width: auto; margin: 0; padding: 0; border:none; font-weight: normal; }
+ 
+ .blurb .header h4, .blurb .header h5, .blurb .header ul 				
+								{ margin: auto 6em auto 0; line-height:1.5; }
+ .blurb ul.required-tags  .warnings  
+								{ display:none; }
+  
+/*turn off icons */
+ .blurb ul.required-tags .rating-general-audience, .blurb ul.required-tags .rating-explicit, .blurb ul.required-tags .rating-mature, .blurb ul.required-tags .rating-notrated, .blurb ul.required-tags .rating-teen, .blurb ul.required-tags .category-femslash, .blurb ul.required-tags .category-gen, .blurb ul.required-tags .category-slash, .blurb ul.required-tags .category-het, .blurb ul.required-tags .category-multi, .blurb ul.required-tags .category-other, .blurb ul.required-tags .category-none, .blurb ul.required-tags .complete-no, .blurb ul.required-tags .complete-yes, .blurb ul.required-tags .warning-yes, .blurb ul.required-tags .warning-no, .blurb ul.required-tags .warning-choosenotto 
+								{ background: none; }
+ .collection .blurb .header, .blurb .mystery 
+								{ background: none; }
+								
+/*css3 non-critical perks*/
+ .blurb ul.required-tags:before { content: "(";}
+ .blurb ul.required-tags:after 	{ content: ")";}
+ .blurb ul.required-tags div:after
+								{ content: ",";}
+ .blurb ul.required-tags div.warnings:after, .blurb ul.required-tags li:last-child div:after
+								{ content: "";}
+								

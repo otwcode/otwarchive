@@ -114,10 +114,10 @@
  li.blurb 						{ border-bottom: 1px solid #ddd; padding: 0 0 0.375em; position: relative; clear:left; min-height: 50px; }
  .blurb .module					{ float:none;}
  .blurb .header 				{ min-height:55px; }
- .blurb .header h4 				{ font-size: 1.1425em; margin: 0.375em 5.25em 0 75px }
+ .blurb .header h4 				{ font-size: 1.1425em; margin: 0.375em 5.25em 0 65px }
  #main .blurb .header img       { position: relative; margin: 0; }
  .blurb .header h5, .blurb .header ul 	
-								{ font-size: 1em; margin: 0.375em 6em 0 75px }
+								{ font-size: 1em; margin: 0.375em 6em 0 65px }
  .blurb h4 a:link,.blurb h4 img { color: #900; vertical-align: bottom }
  .blurb ul.required-tags 		{ position: absolute; top: 0; width:60px; margin:0;}
  .blurb ul.required-tags li, #main .blurb ul.required-tags li img, .blurb ul.required-tags li a 	
