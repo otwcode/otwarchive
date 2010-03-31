@@ -63,7 +63,7 @@
 #main li.blurb .navigation, #main td.submit input, #main.readings-index .module .navigation 	{ float:left; font-size:0.8575em;}
 #main li.bookmark .navigation, #main li.fandom .navigation,  #main.pseuds-index li.blurb .navigation 
 							{ float:right; }
-#main .work .navigation /* should only occur on your own works, but your own works are not always marked .own */
+#main .work .own .navigation
 							{ float:left; margin:-1.25em auto auto;}
 #main li.bookmark .own .navigation
 							{ float: left; margin:0.25em auto auto -0.25em;}
@@ -254,6 +254,8 @@ li.comment h4					{ font-size: 1.25em;}
 /* USER PROFILE SHOW */
  .profile-show .module h3 		{ margin-top: 2.75em }
  .profile-show .datetime 		{ top:-3.25em }
+/* USER OWN WORKS */
+ .works-own .own                        { background: transparent; }
 
 /* WORKS INDEX */
  .works-index .index                { width: 75% }

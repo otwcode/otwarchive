@@ -45,74 +45,74 @@ module SeriesHelper
         %w(rating category warning iswip).each do |w|
           css_class = mappings[w.to_sym][:class_name]
           title_string = mappings[w.to_sym][:string]
-          symbol_block << "<li class=\"#{css_class}\">"
-          symbol_block << link_to_help('symbols-key', link = image_tag( "#{css_class}.png", :alt => title_string, :title => title_string))
-          symbol_block << "</li>\n"
+          symbol_block << "<li><div class=\"#{css_class}\" title=\"#{title_string}\"><span>"
+          symbol_block << link_to_help('symbols-key', link = title_string)
+          symbol_block << "</span></div></li>\n"
         end
         symbol_block << "</ul>\n" if not symbols_only
         return symbol_block
       end
 
   def get_series_warnings_class(warning_tags)
-    return "warning-yes" unless warning_tags
+    return "warning-yes warnings" unless warning_tags
     none = true
     choosenotto = true
     warning_tags.map(&:name).each do |name|
       none = false if name != ArchiveConfig.WARNING_NONE_TAG_NAME
       choosenotto = false if name !=ArchiveConfig.WARNING_DEFAULT_TAG_NAME
     end
-    return "warning-no" if none
-    return "warning-choosenotto" if choosenotto
-    "warning-yes"
+    return "warning-no warnings" if none
+    return "warning-choosenotto warnings" if choosenotto
+    "warning-yes warnings"
   end
 
   def get_series_ratings_class(rating_tags)
     if rating_tags.blank?
-      "rating-notrated"
+      "rating-notrated rating"
     else
       names = rating_tags.collect(&:name)
       if names.include?(ArchiveConfig.RATING_EXPLICIT_TAG_NAME)
-        "rating-explicit"
+        "rating-explicit rating"
       elsif names.include?(ArchiveConfig.RATING_MATURE_TAG_NAME)
-        "rating-mature"
+        "rating-mature rating"
       elsif names.include?(ArchiveConfig.RATING_TEEN_TAG_NAME)
-        "rating-teen"
+        "rating-teen rating"
       elsif names.include?(ArchiveConfig.RATING_GENERAL_TAG_NAME)
-        "rating-general-audience"
+        "rating-general-audience rating"
       else
-        "rating-notrated"
+        "rating-notrated rating"
       end
     end
   end
 
   def get_series_category_class(category_tags)
     if category_tags.blank?
-      "category-none"
+      "category-none category"
     elsif category_tags.length > 1
-      "category-multi"
+      "category-multi category"
     else
       case category_tags.first.name
       when ArchiveConfig.CATEGORY_GEN_TAG_NAME
-        "category-gen"
+        "category-gen category"
       when ArchiveConfig.CATEGORY_SLASH_TAG_NAME
-        "category-slash"
+        "category-slash category"
       when ArchiveConfig.CATEGORY_HET_TAG_NAME
-        "category-het"
+        "category-het category"
       when ArchiveConfig.CATEGORY_FEMSLASH_TAG_NAME
-        "category-femslash"
+        "category-femslash category"
       when ArchiveConfig.CATEGORY_MULTI_TAG_NAME
-        "category-multi"
+        "category-multi category"
       when ArchiveConfig.CATEGORY_OTHER_TAG_NAME
-        "category-other"
+        "category-other category"
       else
-        "category-none"
+        "category-none category"
       end
     end
   end
 
   #TODO: add complete attribute to series and adjust accordingly
   def get_series_complete_class(series)
-    "category-none"
+    "category-none category"
   end
   
   # TODO: merge with work_blurb_tag_block

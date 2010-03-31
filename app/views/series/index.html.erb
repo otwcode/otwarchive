@@ -14,7 +14,7 @@
 
 <!--Main content-->
 <h3 class="landmark">List of Series</h3>
-<ul class="series index">
+<ul class="series index<%- if current_user = @user -%> works-own<%- end -%>">
   <% for series in @series %>
 	<%= render :partial => 'series/series_blurb', :locals => {:series => series} %>
   <% end %>
