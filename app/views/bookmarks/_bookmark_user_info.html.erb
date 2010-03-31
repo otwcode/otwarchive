@@ -1,6 +1,6 @@
 <!-- This partial requires local variable 'bookmark' -->
 <li class="user<%- if is_author_of?(bookmark) -%> own<%- end -%>">
-	<div class="header">
+	<div class="header module">
 	<h5 class="byline">
     <%= t('bookmarked_by', :default=>'Bookmarked by {{user}}', :user=>link_to(bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud])) %>
     </h5>
@@ -12,7 +12,7 @@
         <dl class="tags">
           <dt><%=h t('bookmark_tags', :default => "User's Tags:") -%></dt>
           <dd>
-            <ul>
+            <ul class="tags">
               <%- bookmark.tags.each do |tag| -%>
                 <li><%= link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') -%><%- unless tag == bookmark.tags.last -%><%= "," -%><%- end -%></li>
               <%- end -%>

@@ -291,6 +291,9 @@ li.comment h4					{ font-size: 1.25em;}
  
 /* Collections */
   .twobutton { width: 12em; }
+  
+/* BOOKMARKS */
+ .bookmarks-index .user .module      { float: none; }
 
 /* TAG WRANGLERS INDEX */
  #main.tag_wranglers-index .index       { width:100%; margin-top: 2em;}
