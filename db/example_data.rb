@@ -298,7 +298,7 @@ module FixtureReplacement
   end
 
   def random_email(fake=false)
-    Faker::Internet.user_name + '@' + random_domain(fake)
+    Faker::Internet.user_name + Time.now.sec.to_s + '@' + random_domain(fake)
   end
 
   def random_url(host=nil,path=nil)
