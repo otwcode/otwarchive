@@ -34,7 +34,7 @@
   <%= flash_div :comment_error, :comment_notice -%>
   <!-- If we have javascript, here is where the Add Comment window will appear. -->
   <!-- If not, and we have params telling us to comment on this object, we will manually display the comment window. --> 
-  <%- if true -%>
+  <%- if params[:add_comment] -%>
     <div id="add_comment_placeholder">
       <div id="add_comment">
         <%= render :partial => 'comments/comment_form', :locals => {:comment => Comment.new, :commentable => commentable, :button_name => t('forms.add_comment', :default => "Add Comment")}%> 		
