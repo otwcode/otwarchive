@@ -312,7 +312,7 @@ module FixtureReplacement
   end
   
   def random_future_date
-    Date.civil((2010...2020).to_a.rand, (1..12).to_a.rand, (1..28).to_a.rand)
+    Date.civil(Date.today.year + (1..10).to_a.rand, (1..12).to_a.rand, (1..28).to_a.rand)
   end
 
 end
