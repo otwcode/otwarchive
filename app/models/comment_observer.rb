@@ -3,6 +3,7 @@ class CommentObserver < ActiveRecord::Observer
   # Add new comments to the inbox of the person to whom they're directed
   # Send that user a notification email
   def after_create(comment)
+    comment.reload
     # eventually we will set the locale to the user's stored language of choice
     #Locale.set ArchiveConfig.SUPPORTED_LOCALES[ArchiveConfig.DEFAULT_LOCALE]    
     users = []
