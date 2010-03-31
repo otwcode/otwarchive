@@ -39,6 +39,8 @@
 <%- end -%>
 </div>
 
+<%= will_paginate @collections, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>
+
 <!--main content-->
 <h3 class="landmark">List of Collections</h3>
 <ul class="collection index">
