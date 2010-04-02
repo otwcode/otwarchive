@@ -10,14 +10,14 @@
     <%- elsif single_comment.hidden_by_admin? && !logged_in_as_admin? -%>
       <p class="message">(<%=h t('single_comment_admin_review', :default => "This comment is under review by an admin and is currently unavailable.") -%>)</p>
     <%- else -%>
-      <%- unless single_comment.pseud.nil? -%>
-        <div class="icon">
-        <%= image_tag(single_comment.pseud.andand.icon.url, :alt => single_comment.pseud.andand.icon_alt_text, :class => "icon") %>
-        </div>
-      <%- end -%>
-      	<!--title should be the first element in this list item, not icon. icon goes after name and before comment text-->
-      <h4><%= get_pseud_or_mailaddress(single_comment) %></h4>
-      <blockquote class="user-generated-view"><%=sanitize_limit_and_format_for_display single_comment.content %></blockquote>
+	      <h4><%= get_pseud_or_mailaddress(single_comment) %></h4>
+	    	<div class="icon">
+			<%- unless single_comment.pseud.nil? -%>
+	          <%= image_tag(single_comment.pseud.andand.icon.url, :alt => single_comment.pseud.andand.icon_alt_text, :class => "icon") %>
+	      <%- end -%>
+	<!--BACK END, please if user not logged in print <span class="visitor icon"><comment saying visitor icon holder></span>-->
+			</div>
+	      <blockquote class="user-generated-view"><%=sanitize_limit_and_format_for_display single_comment.content %></blockquote>
       <p class="datetime">
         <%=h t('single_comment_posted', :default => "Posted {{date}}", :date => l(single_comment.created_at)) %>
       </p>

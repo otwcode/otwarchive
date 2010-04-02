@@ -67,6 +67,8 @@
 							{ float:left; margin:-1.25em auto auto;}
 #main li.bookmark .own .navigation
 							{ float: left; margin:0.25em auto auto -0.25em;}
+#main li.comment ul.navigation 
+							{ clear:both;}
 .pagination 				{ font: 100 1em 'Lucida Grande', Geneva, Verdana, Helvetica, Arial, sans-serif; margin: .5em auto; padding: 0.25em; text-align: center }
  #main .pagination a		{ border:0;}
  #main .current 			{ border: 1px solid #000; padding: 0.25em }
@@ -99,7 +101,7 @@
  a.cloud8 					{ color: #900; font-size: 2.25em; font-weight: 800 }
 
 /*ICON */
- p.icon, div.icon			{ height: 100px; width: 100px; overflow: hidden; border: 2px solid;}
+ p.icon, div.icon			{ height: 100px; width: 100px; overflow: hidden; position:absolute; left: 0.25em; border:2px solid;}
 
 /* META*/
  #main dl.meta 				{ background: #fffef9; border: 2px solid; clear: right; margin: 0 auto; padding: 0.5em; position: relative }
@@ -111,7 +113,7 @@
 
 /* BLURB*/
  .blurb ul li,.blurb dd ul li	{ display: inline }
- li.blurb 						{ border-bottom: 1px solid #ddd; padding: 0 0 0.375em; position: relative; clear:left; min-height: 50px; }
+ li.blurb 						{ border-bottom: 1px solid #ddd; padding: 0 0 0.375em; position: relative; clear:left; min-height: 100px; }
  .blurb .module					{ float:none;}
  .blurb .header 				{ min-height:55px; }
  .blurb .header h4 				{ font-size: 1.1425em; margin: 0.375em 5.25em 0 65px }
@@ -215,15 +217,18 @@
  #main #chapters .footnote 		{ font-size: 85.7%; border-bottom: 1px solid #ddd}  
 
 /* COMMENTS - works-show, inbox, admin posts for now*/
-li.comment 						{ position:relative; clear:right; min-height: 120px; padding: 0.8575em 0.25em;}
-li.comment h4, li.comment blockquote 
-								{ margin: auto; display: inline; clear: right;}
-li.comment blockquote blockquote{ display:block; margin:auto auto auto 1.5em; padding:0.75em;}
-li.comment p                    { clear: none; }								
-li.comment h4					{ font-size: 1.25em;}
-.comment .even, .thread .even 	{ background:#eee;}
-.thread .thread 				{ margin: 0 0 0 3em;}
-.comment .icon                  { float: left; margin-right: 0.5em; }
+li.comment 		{ position:relative; clear:right;  padding: 0.8575em 0.25em; min-height: 100px;}
+.comment h4, li.comment blockquote 
+				{ margin-left: 110px; display:block;}
+li.comment blockquote blockquote
+				{ margin:auto auto auto 1.5em; padding:0.75em;}
+li.comment p    { clear: none; }								
+li.comment h4	{ font-size: 1.25em; margin-top:0; }
+.comment .even, .thread .even 	
+				{ background:#eee;}
+.thread .thread { margin: 0 0 0 3em;}
+.comment div.icon  
+				{ top:0.875em;}
 
 /* SERIES */
  p.series 						{ text-align:center; margin: 0 auto 2.5em auto}
@@ -257,7 +262,7 @@ li.comment h4					{ font-size: 1.25em;}
  .profile-show .module h3 		{ margin-top: 2.75em }
  .profile-show .datetime 		{ top:-3.25em }
 /* USER OWN WORKS */
- .works-own .own                        { background: transparent; }
+ .works-own .own                { background: transparent; }
 
 /* WORKS INDEX */
  .works-index .index                { width: 75% }
@@ -283,10 +288,10 @@ li.comment h4					{ font-size: 1.25em;}
 								{ clear: both }
 
 /* PEOPLE INDEX, PSEUDS-INDEX */
- .people-index p.icon, .people-index .icon img,  .pseuds-index p.icon, .pseuds-index .icon img 
-								{ float:left; margin: -0.25em; padding: 0 1em 0 0}
+ .pseud .user h4,  .pseud .user h5, .pseud .user blockquote 
+								{ margin:0 0 0 120px; float:left; clear:left; }
  .people-index li.blurb, .pseuds-index li.blurb 
-								{float: left; width: 90%;}
+								{ float: left; width: 90%;}
 /* COLLECTIONS INDEX*/
  .collections-index .index 		{ width: 75% }
  #main.collections-show h2 span { font-size: smaller }
@@ -294,7 +299,7 @@ li.comment h4					{ font-size: 1.25em;}
 /* Collections */
   .twobutton { width: 12em; }
   
-/* BOOKMARKS */
+/* BOOKMARKS INDEX*/
  .bookmarks-index .user .module      { float: none; }
 
 /* TAG WRANGLERS INDEX */

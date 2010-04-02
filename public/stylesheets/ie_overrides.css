@@ -23,7 +23,7 @@ form.new_collection p, form.new_user p {font-size:1em;}
 .profile-show .datetime {top: 0;}
 #main .navigation li {margin-right: 0.25em !important;} 
 #user-page {margin-top:1em;}
-.bookmark ul.required-tags { margin:0;}
+.bookmark ul.required-tags, .comment div.icon { margin:0;}
 
 /*min-height */
 .titles {height:70px; }

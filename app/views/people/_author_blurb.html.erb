@@ -1,8 +1,5 @@
 <li class="user blurb" role="article">
     <div class="module">
-      <p class="icon">
-        <%= image_tag(author.icon.url(:standard), :alt => author.icon_alt_text, :class => "icon") %>
-      </p>
 		  <h4><%= link_to(author.name, user_pseud_path(author.user, author)) -%> 
       <%- if (author.name != author.user_name || author.user.pseuds.size > 1) -%>
         (<%= link_to(author.user_name, user_path(author.user)) -%>)
@@ -12,6 +9,9 @@
 		<%- unless authored_items(author).blank? -%>
         <h5><%= authored_items(author) -%></h5>
       <%- end -%>
+		<div class="icon">
+	        <%= image_tag(author.icon.url(:standard), :alt => author.icon_alt_text, :class => "icon") %>
+	      </div>
       <%- unless author.description.blank? -%>
         <blockquote class="user-generated-view">
 		<p><%= sanitize_description_for_display(author.description) %></p>

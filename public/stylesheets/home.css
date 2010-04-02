@@ -161,5 +161,8 @@ font-size: 1.5em;
 padding-bottom: .5em;
 border-bottom: 1px solid #fff;
 }
+.sidebar-box p {
+margin: 1em auto;
+}
 
 
