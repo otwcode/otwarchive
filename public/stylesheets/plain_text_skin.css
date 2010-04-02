@@ -13,7 +13,7 @@
 								{ display:none; }
   
 /*turn off icons */
- .blurb ul.required-tags .rating-general-audience, .blurb ul.required-tags .rating-explicit, .blurb ul.required-tags .rating-mature, .blurb ul.required-tags .rating-notrated, .blurb ul.required-tags .rating-teen, .blurb ul.required-tags .category-femslash, .blurb ul.required-tags .category-gen, .blurb ul.required-tags .category-slash, .blurb ul.required-tags .category-het, .blurb ul.required-tags .category-multi, .blurb ul.required-tags .category-other, .blurb ul.required-tags .category-none, .blurb ul.required-tags .complete-no, .blurb ul.required-tags .complete-yes, .blurb ul.required-tags .warning-yes, .blurb ul.required-tags .warning-no, .blurb ul.required-tags .warning-choosenotto 
+ .blurb ul.required-tags .rating-general-audience, .blurb ul.required-tags .rating-explicit, .blurb ul.required-tags .rating-mature, .blurb ul.required-tags .rating-notrated, .blurb ul.required-tags .rating-teen, .blurb ul.required-tags .category-femslash, .blurb ul.required-tags .category-gen, .blurb ul.required-tags .category-slash, .blurb ul.required-tags .category-het, .blurb ul.required-tags .category-multi, .blurb ul.required-tags .category-other, .blurb ul.required-tags .category-none, .blurb ul.required-tags .complete-no, .blurb ul.required-tags .complete-yes, .blurb ul.required-tags .warning-yes, .blurb ul.required-tags .warning-no, .blurb ul.required-tags .warning-choosenotto , .blurb ul.required-tags .external-work 
 								{ background: none; }
  .collection .blurb .header, .blurb .mystery 
 								{ background: none; }

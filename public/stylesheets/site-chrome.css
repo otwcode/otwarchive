@@ -127,6 +127,7 @@
   .blurb ul.required-tags .category, .blurb ul.required-tags .iswip { position: absolute; left: 28px; }
   .blurb ul.required-tags .category { top: 0; }
   .blurb ul.required-tags .iswip { top: 28px; }
+  .blurb ul.required-tags .external-work { position: absolute; top: 28px; }
   .blurb ul.required-tags  .rating { margin-bottom: 3px; }
   .blurb ul.required-tags  .warnings { margin-bottom: 3px; }
   .blurb ul.required-tags .rating-general-audience {background-image:url("/images/rating-general-audience-s.png");}
@@ -146,6 +147,7 @@
   .blurb ul.required-tags .warning-yes {background-image:url("/images/warning-yes-s.png");}
   .blurb ul.required-tags .warning-no {background-image:url("/images/warning-no-s.png");}
   .blurb ul.required-tags .warning-choosenotto {background-image:url("/images/warning-choosenotto-s.png");}
+  .blurb ul.required-tags .external-work {background-image:url("/images/external-work-s.png");}
 
  .blurb .pairings 				{ background: #eee;}							
  .blurb blockquote, .blurb ul.wranglers, .blurb form
