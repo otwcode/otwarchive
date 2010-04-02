@@ -101,7 +101,7 @@
  a.cloud8 					{ color: #900; font-size: 2.25em; font-weight: 800 }
 
 /*ICON */
- p.icon, div.icon			{ height: 100px; width: 100px; overflow: hidden; position:absolute; left: 0.25em; border:2px solid;}
+ p.icon, div.icon			{ height: 100px; width: 100px; overflow: hidden; position:absolute; left: 0.25em;}
 
 /* META*/
  #main dl.meta 				{ background: #fffef9; border: 2px solid; clear: right; margin: 0 auto; padding: 0.5em; position: relative }
