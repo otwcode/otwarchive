@@ -62,7 +62,7 @@
 
 <!--main content-->
 <h3 class="landmark">Works List</h3>
- <ol class="work index">
+ <ol class="work index<% if @user && @user == current_user %> works-own<% end %>">
     <%- for work in @works -%>
       <%- if work -%>
       <%= render :partial => 'work_blurb', :locals => {:work => work} %>
