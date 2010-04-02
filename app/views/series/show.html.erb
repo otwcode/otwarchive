@@ -63,7 +63,7 @@
 <%- end -%>
 
 <h3 class="landmark">List of Series</h3>
-<ul class="series work index">
+<ul class="series work index<%- if is_author_of?(@series) -%> works-own<%- end -%>">
   <%- for serial in @serial_works -%>
     <%= render :partial => 'works/work_blurb', :locals => {:work => serial.work} %>
   <%- end -%>

@@ -1,4 +1,4 @@
-<li class="<%- if is_author_of?(work) && controller.controller_name != 'series' -%>own <%- end -%>work blurb" id="work_<%=h work.id %>" role="article">
+<li class="<%- if is_author_of?(work) -%>own <%- end -%>work blurb" id="work_<%=h work.id %>" role="article">
 
   <% if !is_author_of?(work) && (work.unrevealed? || (work.anonymous? && !@over_anon_threshold && @search)) -%>
     <%= render :partial => "works/work_mystery_blurb", :locals => {:work => work} -%>
