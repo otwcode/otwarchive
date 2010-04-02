@@ -249,7 +249,7 @@ li.comment h4					{ font-size: 1.25em;}
 /* DASHBOARD: INBOX */
  .inbox-show p.navigation		{ float:left;}
  #main.inbox-show .filters dd   { float:none;}
- .inbox-show li.unread        	{ color: #900;}
+ .inbox-show span.unread        	{ color: #900;}
 
 /* USER PROFILE SHOW */
  .profile-show .module h3 		{ margin-top: 2.75em }
