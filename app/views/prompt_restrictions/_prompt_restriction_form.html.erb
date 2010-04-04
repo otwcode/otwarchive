@@ -31,7 +31,7 @@
     </dl>
   </fieldset>
   
-  <% if is_offer %>
+  <% if show_tag_options %>
     <fieldset class="preface profile">
       <legend>Tag Options</legend>
       <h3>Tag Options <%= link_to_help("prompt-restriction-tag-set") %></h3>
@@ -56,7 +56,7 @@
               <%= tag_set_form.text_area "#{tag_type}_tagnames".to_sym, :rows => 2, :cols => 50, 
                     :value => (restriction.tag_set ? eval("restriction.tag_set.#{tag_type}_tagnames") : "") %>
               <% tag_fieldname = "#{@challenge.class.name.tableize.singularize}_offer_restriction_attributes_tag_set_attributes_#{tag_type}_tagnames" %>
-              <%= autocomplete_text_field(tag_fieldname, "canonical_#{tag_type}_finder") %>
+              <%= autocomplete_text_field(tag_fieldname, :methodname => "canonical_#{tag_type}_finder") %>
             </dd>
           <% end %>
         <% end %>
