@@ -76,7 +76,7 @@ See the challenge_signup form for an example of how this is used.
               <!-- using an autocomplete -->
               <% tag_fieldname = "challenge_signup_#{prompt_types}_attributes_#{index}_tag_set_attributes_#{tag_type}_tagnames" %>
               <%= tag_set_form.text_field "#{tag_type}_tagnames", :size => 50, :value => eval("form.object.#{tag_type}_tagnames") %>
-              <%= autocomplete_text_field tag_fieldname, "canonical_#{tag_type}_finder" %>            
+              <%= autocomplete_text_field tag_fieldname, :methodname => "canonical_#{tag_type}_finder" %>            
             <% end %>
           </dd>
         <% end %>
@@ -107,7 +107,7 @@ See the challenge_signup form for an example of how this is used.
         <dd>
           <% optional_tag_fieldname =  "challenge_signup_#{prompt_types}_attributes_#{index}_optional_tag_set_attributes_tagnames" %>
           <%= optional_tag_set_form.text_area :tagnames, :rows => 2, :cols => 50, :value => form.object.optional_tag_set.tagnames %>
-          <%= autocomplete_text_field(optional_tag_fieldname, "canonical_tag_finder") %>
+          <%= autocomplete_text_field(optional_tag_fieldname, :methodname => "canonical_tag_finder") %>
         </dd>
       <% end %>
     <% end %>

@@ -26,6 +26,8 @@ class Pseud < ActiveRecord::Base
   has_many :collection_participants, :dependent => :destroy
   has_many :collections, :through => :collection_participants
   has_many :challenge_signups, :dependent => :destroy
+  has_many :challenge_assignments, :through => :challenge_signups, :source => :offer_assignment, :conditions => ["challenge_assignments.sent_at IS NOT NULL"]
+  has_many :pinch_hit_assignments, :class_name => "ChallengeAssignment", :foreign_key => "pinch_hitter_id", :conditions => ["challenge_assignments.sent_at IS NOT NULL"]
   has_many :prompts, :dependent => :destroy
   
   validates_presence_of :name
@@ -116,6 +118,16 @@ class Pseud < ActiveRecord::Base
   def unposted_works
     @unposted_works = self.works.find(:all, :conditions => {:posted => false}, :order => 'works.created_at DESC')
   end
+  
+  named_scope :by_byline, lambda {|byline|
+    {
+      :conditions => ['users.login = ? AND pseuds.name = ?', 
+        (byline.include?('(') ? byline.split('(', 2)[1].strip.chop : byline),
+        (byline.include?('(') ? byline.split('(', 2)[0].strip : byline)
+      ],
+      :include => :user
+    }
+  }
   
   # Takes a comma-separated list of bylines
   # Returns a hash containing an array of pseuds and an array of bylines that couldn't be found

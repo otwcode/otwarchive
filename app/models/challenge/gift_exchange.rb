@@ -12,12 +12,13 @@ class GiftExchange < ActiveRecord::Base
   belongs_to :offer_restriction, :class_name => "PromptRestriction", :dependent => :destroy
   accepts_nested_attributes_for :offer_restriction
 
+  belongs_to :potential_match_settings, :dependent => :destroy
+  accepts_nested_attributes_for :potential_match_settings
+
   validates_length_of :signup_instructions_general, :signup_instructions_requests, :signup_instructions_offers, { 
     :allow_blank => true,
     :maximum => ArchiveConfig.INFO_MAX, :too_long => t('gift_exchange.instructions_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.INFO_MAX)
   }
-
-
 
   %w(requests_num_required offers_num_required requests_num_allowed offers_num_allowed).each do |prompt_limit_field|
       validates_numericality_of prompt_limit_field, :only_integer => true, :less_than_or_equal_to => ArchiveConfig.PROMPTS_MAX, :greater_than_or_equal_to => 0
@@ -45,6 +46,10 @@ class GiftExchange < ActiveRecord::Base
   end
 
   def user_allowed_to_see_signups?(user)
+    self.collection.user_is_maintainer?(user)
+  end
+
+  def user_allowed_to_see_assignments?(user)
     self.collection.user_is_maintainer?(user)
   end
 

@@ -11,6 +11,17 @@ class ChallengeSignupsController < ApplicationController
   before_filter :signup_owner_only, :only => [:edit, :update]
   before_filter :check_signup_open, :only => [:new, :create, :edit, :update]
 
+
+  def load_challenge
+    @challenge = @collection.challenge
+    no_challenge and return unless @challenge
+  end
+
+  def no_challenge
+    flash[:error] = t('challenges.no_challenge', :default => "What challenge did you want to sign up for?")
+    redirect_to collection_path(@collection) rescue redirect_to '/'
+    false
+  end
   
   def check_signup_open
     signup_closed and return unless (@challenge.signup_open || @collection.user_is_owner?(current_user)) 
@@ -29,17 +40,6 @@ class ChallengeSignupsController < ApplicationController
   def not_signup_owner
     flash[:error] = t('challenge_signups.not_owner', :default => "You can't edit someone else's signup!")
     redirect_to @collection
-    false
-  end
-
-  def load_challenge
-    @challenge = @collection.challenge
-    no_challenge and return unless @challenge
-  end
-
-  def no_challenge
-    flash[:error] = t('challenges.no_challenge', :default => "What challenge did you want to sign up for?")
-    redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
   

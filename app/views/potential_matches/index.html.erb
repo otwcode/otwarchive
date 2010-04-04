@@ -1,0 +1,107 @@
+<h3>Matching for <%= sanitize_title_for_display(@collection.title) -%></h3>
+<% if @in_progress %>
+  <p class="note">
+    The archive is currently generating potential matches for this challenge. This process can take some time,
+    especially for a large challenge! A notification email will be sent to the collection maintainers when
+    all potential matches have been generated.
+  </p>
+  
+  <p>
+    Currently generating potential matches for: <%= @current_position %>
+  </p>
+  
+<% else %>  
+  <p class="note">
+    The following lists all the participants in your challenge, along with the archive's pass at an initial automated
+    match for all of them. You can now update the assignments however you like. 
+  </p>
+
+  <h4>Useful Tips</h4>
+  <ul>
+    <li>If you have people with no potential matches, you will need to have them expand their signup options. (Once signups are closed, you can hand-edit their signup yourself without reopening signups.)</li>
+    <li>The pull-down menus include all the potential matches for each person -- that is, everyone whose offer matched that person's request. They are listed in order of match "quality".</li>
+    <li>You can write-in anyone with an archive account as a pinch hitter, whether or not they are participants or actually matched.</li>
+    <li>Pinch "recipients" must be people who have actual signups. </li>
+    <li>You can regenerate the assignments to get a new randomized match-up.</li>
+    <li>You should <strong>not</strong> regenerate potential matches unless you have edited signups or your matching rules. You won't get different results and it will take a long time.</li>
+    <li>You can update the assignments as many times as you want until you actually send them out.</li>
+  </ul>
+
+  <!-- list all the requesters with their potential matches -->
+  <% form_tag set_collection_assignments_path, :method => :get do %>
+
+    <%= render :partial => "match_navigation" -%>
+
+    <table>
+      <tr>
+        <th>Pseud</th>
+        <th>Giving Gift To</th>
+        <th>Getting Gift From</th>
+        <th>Write-In Pinch Hitter</th>
+      </tr>
+
+      <% @assignments.each do |assignment| %>
+        <% fields_for "challenge_assignments[]", assignment do |assignment_form| %>
+        <% request_signup = assignment.request_signup %>
+        <% unless request_signup %>
+          <tr>
+            <td colspan=3>
+              <%= assignment_form.hidden_field :collection_id, :value => @collection.id %>
+              <%= assignment_form.hidden_field :offer_signup_id, :value => assignment.offer_signup.id %>
+              <% if !assignment.offer_signup.offer_potential_matches.empty? %>
+                No recipient assigned for <%= assignment.offer_signup.pseud.byline -%>.  
+                </td><td>
+                <%= assignment_form.collection_select :pinch_request_signup_id, assignment.offer_signup.offer_potential_matches.sort.reverse.collect(&:request_signup), :id, :byline, :include_blank => "Please select a potential match as pinch recipient" -%>
+              <% else %>
+                No potential recipients for <%= assignment.offer_signup.pseud.byline -%>. 
+                Write-in pinch recipient (must be signed up): 
+                </td><td>
+                <%= assignment_form.text_field :pinch_request_byline, :value => assignment.pinch_request_byline %>
+                <%= autocomplete_text_field "challenge_assignments_#{assignment.id}_pinch_request_byline", :methodname => "challenge_participants", :no_comma => true, :extra_params => "collection_id=#{@collection.id}" %>
+              <% end %>
+            </td>
+          </tr>
+        <% else %>
+          <tr>
+            <td>
+              <%= assignment_form.hidden_field :collection_id, :value => @collection.id %>
+              <%= assignment_form.hidden_field :request_signup_id, :value => request_signup.id %>
+              <%= link_to(request_signup.pseud.byline, collection_signup_path(@collection, request_signup)) -%>
+              <ul class="navigation">
+                <li><%= link_to(t("potential_matches.send_note", :default => "email"), "mailto:#{request_signup.pseud.user.email}?subject=[#{ArchiveConfig.APP_NAME}][#{h(@collection.title)}] Message from Collection Maintainer") %></li>
+              </ul>
+            </td>
+            <td>
+              <%= request_signup.offer_assignments.map { |offer_assignment| 
+                offer_assignment.request_signup ?
+                  "#{offer_assignment.request_signup.pseud.byline}" :
+                  (offer_assignment.pinch_request_signup ?
+                    "#{offer_assignment.pinch_request_signup.pseud.byline}* 
+                     (pinch recipient)" : 
+                     "<strong>None</strong>")}.join(", ") 
+              -%>
+            </td>  
+            <td>
+              <% if !request_signup.request_potential_matches.empty? %>
+                <%= assignment_form.collection_select :offer_signup_id, request_signup.request_potential_matches.sort.reverse.collect(&:offer_signup), :id, :byline, 
+                                                      :include_blank => "- None Assigned -" -%>
+              <% else %>
+                <strong>No matches</strong>
+              <% end %>
+            </td>
+            <td>
+              <%= assignment_form.text_field :pinch_hitter_byline %>
+              <%= autocomplete_text_field("challenge_assignments_#{assignment.id}_pinch_hitter_byline", :methodname => "pseud_byline", :no_comma => true) -%>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+      <% end %>
+
+    </table>
+
+    <%= render :partial => "match_navigation" -%>
+
+  <% end %>
+  
+<% end %>

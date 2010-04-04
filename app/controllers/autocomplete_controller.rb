@@ -45,6 +45,16 @@ class AutocompleteController < ApplicationController
     render_output(Collection.open.with_name_like(search_param).name_only.map(&:name).sort)
   end
 
+  # find people signed up for a challenge
+  def challenge_participants
+    search_param = params[params[:fieldname]]
+    collection_id = params[:collection_id]
+    render_output(Pseud.find(:all, :limit => 10, :order => :name, 
+      :joins => "INNER JOIN challenge_signups ON challenge_signups.pseud_id = pseuds.id", 
+      :conditions => ["pseuds.name LIKE ? AND challenge_signups.collection_id = ?", 
+                      '%' + search_param + '%', collection_id]).map(&:byline))
+  end
+
   ###### all the field-specific methods go here 
   
   # pseud-finder methods -- to add a new one, just put the name of the field into the 

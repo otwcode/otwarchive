@@ -1,11 +1,16 @@
 class Prompt < ActiveRecord::Base
   
+  # -1 represents all matching
+  ALL = -1
+  
   # number of checkbox options to keep visible by default in form
   OPTIONS_TO_SHOW = 3
   
   belongs_to :collection
   belongs_to :pseud
   has_one :user, :through => :pseud 
+  
+  belongs_to :challenge_signup
   
   belongs_to :tag_set, :dependent => :destroy
   accepts_nested_attributes_for :tag_set
@@ -103,41 +108,10 @@ class Prompt < ActiveRecord::Base
     true # everything empty
   end
 
-  named_scope :in_collection, lambda {|collection| { :conditions => {:collection => collection} }}
+  named_scope :in_collection, lambda {|collection| { :conditions => ["collection.id = ?", collection.id] }}
   
   named_scope :unused, {:conditions => {:used_up => false}}
   
-  # find all matching prompts -- normally will want to chain this with in_collection and unused
-  named_scope :matching, lambda {|prompt_to_match|
-    {
-      :select => "DISTINCT prompts.*",
-      :joins => [:tag_sets, :tags],
-      :group => 'prompts.id',
-      :conditions => ["prompts.id != ? AND tags.id in (?)", prompt_to_match.id, prompt_to_match.tag_set.tags],
-      :order => "count(tags.id) desc"
-    }
-  }
-
-  named_scope :optional_matching, lambda {|prompt_to_match|
-    {
-      :select => "DISTINCT prompts.*",
-      :joins => [:tag_sets, :tags],
-      :group => 'prompts.id',
-      :conditions => ["prompts.id != ? AND tags.id in (?)", prompt_to_match.id, prompt_to_match.tag_set.tags + prompt_to_match.tag_set.optional_tags],
-      :order => "count(tags.id) desc"      
-    }    
-  }
-  
-  named_scope :by_user, lambda {|user|
-    {
-      :conditions => {:user => user}
-    }    
-  }
-  
-  named_scope :by_position, {:order => "position ASC", :conditions => "position IS NOT NULL"}
-  named_scope :without_position, :conditions => "position IS NULL"
-    
-    
   # We want to have all the matching methods defined on
   # TagSet available here, too, without rewriting them, 
   # so we just pass them through method_missing
@@ -148,7 +122,7 @@ class Prompt < ActiveRecord::Base
       super
     end
   end
-  
+
   def respond_to?(method, include_private = false)
     if tag_set.respond_to?(method)
       true
@@ -157,9 +131,48 @@ class Prompt < ActiveRecord::Base
     end
   end
 
+  # Returns PotentialPromptMatch object if matches, otherwise nil   
+  # self is the request, other is the offer
+  def match(other)
+    settings = get_match_settings
+    return nil unless settings
+    
+    potential_prompt_match_attributes = {:offer => other, :request => self}
+    full_request_tag_set = self.optional_tag_set ? self.tag_set + self.optional_tag_set : self.tag_set
+    full_offer_tag_set = other.optional_tag_set ? (other.tag_set + other.optional_tag_set) : other.tag_set
+
+    TagSet::TAG_TYPES.each do |type|
+      required_count = settings.send("num_required_#{type.pluralize}")
+      if settings.send("include_optional_#{type.pluralize}")
+        match_count = full_request_tag_set.match_rank(full_offer_tag_set, type)
+      else
+        # we don't use optional tags to count towards required
+        match_count = self.tag_set.match_rank(other.tag_set, type)
+      end
+      return nil if required_count == ALL && match_count != ALL
+      return nil if match_count != ALL && match_count < required_count
+
+      # now get the match rank including optional tags if we didn't before
+      if !settings.send("include_optional_#{type.pluralize}")
+        match_count = full_request_tag_set.match_rank(full_offer_tag_set, type) 
+      end
+      
+      potential_prompt_match_attributes["num_#{type.pluralize}_matched"] = match_count
+    end
+    return PotentialPromptMatch.new(potential_prompt_match_attributes)
+  end
+
   def get_prompt_restriction
     if collection && collection.challenge
       collection.challenge.prompt_restriction
+    else
+      nil
+    end
+  end
+  
+  def get_match_settings
+    if collection && collection.challenge
+      collection.challenge.potential_match_settings
     else
       nil
     end

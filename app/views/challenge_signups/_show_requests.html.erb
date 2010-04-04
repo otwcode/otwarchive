@@ -1,0 +1,24 @@
+<!-- expects local variable "challenge_signup" -->
+<% challenge_signup.requests.each_with_index do |request, index| %>
+  <h3><%=h t('signup.show.request', :default => "Request {{num}}", :num => index+1) %></h3>
+  <div class="wrapper">
+    <dl class="collection meta">
+      <%= request.url.blank? ? "" : "<dt>URL:</dt><dd>" + link_to(request.url, request.url) + "</dd>" -%>
+      <%= request.description.blank? ? "" : "<dt>Details:</dt><dd>" + sanitize_and_format_for_display(request.description) + "</dd>" %>        
+      <% if request.tag_set && !request.tag_set.tags.empty? %>
+        <dt>Tags:</dt>
+        <dd>
+          <ul class="tags">
+            <%= tag_link_list request.tag_set.tags %>
+          </ul>
+          <% if request.optional_tag_set && !request.optional_tag_set.tags.empty? %>
+            <p>Optional:</p>
+            <ul class="tags">
+              <%= tag_link_list request.optional_tag_set.tags %>
+            </ul>
+          <% end %>
+        </dd>
+      <% end %>
+    </dl>
+  </div>
+<% end %>

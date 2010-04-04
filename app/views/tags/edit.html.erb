@@ -51,7 +51,7 @@
     <%- if Tag::USER_DEFINED.include?(@tag[:type]) -%> 
     <dt><%= f.label :syn_string, 'Synonym of' %></dt>
     <dd>
-      <%= f.text_field :syn_string, :class => 'tags' %><%= autocomplete_text_field_with_type @tag, "tag_syn_string" -%>
+      <%= f.text_field :syn_string, :class => 'tags' %><%= autocomplete_text_field_with_type @tag, "tag_syn_string", :no_comma => true -%>
       <p>Choose an existing tag or add a new tag name here to create a new canonical and associate this tag with it.</p>
       <%- if @tag.merger -%>
         <p>Edit <%= link_to_edit_tag(@tag.merger) %></p>

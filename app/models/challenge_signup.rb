@@ -1,14 +1,24 @@
 class ChallengeSignup < ActiveRecord::Base
+  # -1 represents all matching
+  ALL = -1
+  
   belongs_to :pseud
   belongs_to :collection
-  #has_many :challenge_assignments, :dependent => :destroy
 
   has_many :prompts, :dependent => :destroy
   has_many :requests, :dependent => :destroy
   has_many :offers, :dependent => :destroy
   
+  has_many :offer_potential_matches, :class_name => "PotentialMatch", :foreign_key => 'offer_signup_id', :dependent => :destroy
+  has_many :request_potential_matches, :class_name => "PotentialMatch", :foreign_key => 'request_signup_id', :dependent => :destroy
+
+  # really there should only be one, but temporarily more than one can 
+  # exist due to changing assignments
+  has_many :offer_assignments, :class_name => "ChallengeAssignment", :foreign_key => 'offer_signup_id', :dependent => :destroy
+  has_many :request_assignments, :class_name => "ChallengeAssignment", :foreign_key => 'request_signup_id', :dependent => :destroy
+
+
   # we reject prompts if they are empty except for associated references
-  
   accepts_nested_attributes_for :offers, :prompts, :requests, {:allow_destroy => true, 
     :reject_if => proc { |attrs| 
                           attrs[:url].blank? && attrs[:description].blank? && 
@@ -25,6 +35,13 @@ class ChallengeSignup < ActiveRecord::Base
       :conditions => ['users.id = ?', user.id]
     }
   }
+
+  named_scope :by_pseud, lambda {|pseud|
+    {
+      :conditions => ['pseud_id = ?', pseud.id]
+    }
+  }
+      
 
   named_scope :in_collection, lambda {|collection| {:conditions => ['collection_id = ?', collection.id] }}
 
@@ -68,6 +85,12 @@ class ChallengeSignup < ActiveRecord::Base
       end
     end
   end
+  
+  # sort alphabetically
+  include Comparable
+  def <=>(other)
+    self.pseud.name.downcase <=> other.pseud.name.downcase
+  end
 
   def user
     self.pseud.user
@@ -85,5 +108,43 @@ class ChallengeSignup < ActiveRecord::Base
     self.collection.user_is_maintainer?(user) || 
       (self.challenge.respond_to?("user_allowed_to_see_signups?") && self.challenge.user_allowed_to_see_signups?(user))
   end
-    
+  
+  def get_match_settings
+    if collection && collection.challenge
+      collection.challenge.potential_match_settings
+    else
+      nil
+    end
+  end
+  
+  def byline
+    pseud.byline
+  end
+
+  # Returns nil if not a match otherwise returns PotentialMatch object
+  # self is the request, other is the offer
+  def match(other)
+    settings = get_match_settings
+    return nil unless settings
+    potential_match_attributes = {:offer_signup => other, :request_signup => self, :collection => self.collection}
+    prompt_matches = []
+    self.requests.each do |request|
+      other.offers.each do |offer|
+        if (match = request.match(offer))
+          prompt_matches << match
+        end
+      end
+    end
+    return nil if settings.num_required_prompts == ALL && prompt_matches.size != self.requests.size
+    if prompt_matches.size >= settings.num_required_prompts
+      # we have a match
+      potential_match_attributes[:num_prompts_matched] = prompt_matches.size
+      potential_match = PotentialMatch.new(potential_match_attributes)
+      potential_match.potential_prompt_matches = prompt_matches
+      potential_match
+    else
+      nil
+    end
+  end
+  
 end

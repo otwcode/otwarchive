@@ -38,6 +38,17 @@ module FixtureReplacement
     a.bookmarkable = default_work
   end
 
+  attributes_for :challenge_assignment do |a|
+    a.collection = create_collection
+    a.offer_signup = create_challenge_signup(:collection => a.collection)
+    a.request_signup = create_challenge_signup(:collection => a.collection)
+  end
+
+  attributes_for :challenge_signup do |a|
+    a.pseud = default_pseud
+    a.collection = create_collection
+  end
+
   # to create (save) a new chapter you have to have a work first
   # FIXME: authors are only added by default for the first chapter
   # chapter1=new_chapter
@@ -125,6 +136,10 @@ module FixtureReplacement
     a.comment = random_paragraph
   end
   
+  attributes_for :gift_exchange do |a|
+    a.signup_open = false
+  end
+  
   attributes_for :inbox_comment do |a|
     a.user = default_user
     a.feedback_comment = default_comment
@@ -141,10 +156,31 @@ module FixtureReplacement
     a.date_of_birth = DateTime.now.years_ago(rand(30)+14) + rand(12).months
   end
   
+  attributes_for :potential_match do |a|
+    a.collection = create_collection
+    a.request_signup = create_challenge_signup(:collection => a.collection)
+    a.offer_signup = create_challenge_signup(:collection => a.collection)
+  end
+  
+  attributes_for :potential_match_settings do |a|
+    a.num_required_prompts = 1
+    a.num_required_fandoms = 1
+  end
+  
   attributes_for :prompt do |a|
     a.collection = create_collection
     a.tag_set = create_tag_set
   end
+  
+  attributes_for :request do |a|
+    a.collection = create_collection
+    a.tag_set = create_tag_set
+  end
+  
+  attributes_for :offer do |a|
+    a.collection = create_collection
+    a.tag_set = create_tag_set
+  end  
   
   attributes_for :prompt_restriction do |a|
     a.tag_set = create_tag_set

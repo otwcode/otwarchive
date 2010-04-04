@@ -35,26 +35,26 @@
       <dt><%= f.label :signup_open, t('gift_exchange.signup_open', :default => "Signup open?") -%></dt>
       <dd><%= f.check_box :signup_open %></dd>
       
-      <dt><%= f.label :time_zone, t('gift_exchange.time_zone', :default => "Time zone: (default is server timezone)")%></dt>
+      <dt><%= f.label :time_zone, t('gift_exchange.time_zone', :default => "Time zone: ")%></dt>
       <dd><%= f.time_zone_select :time_zone, nil, :default => Time.zone.name %></dd>
         
       <dt><%= f.label :signups_open_at, t('gift_exchange.signups_open_at', :default => "Signup opens: ")%></dt>
-      <dd><%= f.datetime_select :signups_open_at, :minute_step => 15 -%></dd>
+      <dd><%= f.datetime_select :signups_open_at, :minute_step => 15, :start_year => (Time.now.year - 1) -%></dd>
 
       <dt><%= f.label :signups_close_at, t('gift_exchange.signups_close_at', :default => "Signup closes: ")%></dt>
-      <dd><%= f.datetime_select :signups_close_at, :minute_step => 15 -%></dd>
+      <dd><%= f.datetime_select :signups_close_at, :minute_step => 15, :start_year => (Time.now.year - 1) -%></dd>
 
       <dt><%= f.label :assignments_due_at, t('gift_exchange.assignments_due_at', :default => "Assignments due: ")%></dt>
-      <dd><%= f.datetime_select :assignments_due_at, :minute_step => 15 -%></dd>
+      <dd><%= f.datetime_select :assignments_due_at, :minute_step => 15, :start_year => (Time.now.year - 1) -%></dd>
 
       <% if @collection.unrevealed? %>
         <dt><%= f.label :works_reveal_at, t('gift_exchange.works_reveal_at', :default => "Works revealed: ")%></dt>
-        <dd><%= f.datetime_select :works_reveal_at, :minute_step => 15 -%></dd>
+        <dd><%= f.datetime_select :works_reveal_at, :minute_step => 15, :start_year => (Time.now.year - 1) -%></dd>
       <% end %>
 
       <% if @collection.anonymous? %>
         <dt><%= f.label :authors_reveal_at, t('gift_exchange.authors_reveal_at', :default => "Authors revealed: ")%></dt>
-        <dd><%= f.datetime_select :authors_reveal_at , :minute_step => 15-%></dd>
+        <dd><%= f.datetime_select :authors_reveal_at , :minute_step => 15, :start_year => (Time.now.year - 1) -%></dd>
       <% end %>
     </dl>
   </fieldset>  
@@ -72,10 +72,13 @@
   </fieldset>
 
   <!-- restrictions for requests -->
-  <%= render :partial => "prompt_restrictions/prompt_restriction_form", :locals => {:challenge_form => f, :is_offer => false} -%>
+  <%= render :partial => "prompt_restrictions/prompt_restriction_form", :locals => {:challenge_form => f, :is_offer => false, :show_tag_options => false} -%>
   
   <!-- restrictions for offers -->
-  <%= render :partial => "prompt_restrictions/prompt_restriction_form", :locals => {:challenge_form => f, :is_offer => true} -%>
+  <%= render :partial => "prompt_restrictions/prompt_restriction_form", :locals => {:challenge_form => f, :is_offer => true, :show_tag_options => true} -%>
+
+  <!-- matching settings -->
+  <%= render :partial => "potential_match_settings/potential_match_settings_form", :locals => {:challenge_form => f} -%>
 
   <fieldset class="preface profile">
     <legend>Signup Instructions</legend>

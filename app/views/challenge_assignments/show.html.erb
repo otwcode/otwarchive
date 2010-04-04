@@ -1,0 +1,38 @@
+<p>
+  <b>Collection:</b>
+  <%=h @challenge_assignment.collection %>
+</p>
+
+<p>
+  <b>Creation:</b>
+  <%=h @challenge_assignment.creation %>
+</p>
+
+<p>
+  <b>Offer signup:</b>
+  <%=h @challenge_assignment.offer_signup_id %>
+</p>
+
+<p>
+  <b>Request signup:</b>
+  <%=h @challenge_assignment.request_signup_id %>
+</p>
+
+<p>
+  <b>Sent at:</b>
+  <%=h @challenge_assignment.sent_at %>
+</p>
+
+<p>
+  <b>Fulfilled at:</b>
+  <%=h @challenge_assignment.fulfilled_at %>
+</p>
+
+<p>
+  <b>Defaulted at:</b>
+  <%=h @challenge_assignment.defaulted_at %>
+</p>
+
+
+<%= link_to 'Edit', edit_challenge_assignment_path(@challenge_assignment) %> |
+<%= link_to 'Back', challenge_assignments_path %>

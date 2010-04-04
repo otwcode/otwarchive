@@ -4,12 +4,12 @@ class CollectionObserver < ActiveRecord::Observer
     old_collection = Collection.find(new_collection)
     if old_collection && new_collection.valid?
       if old_collection.unrevealed? && !new_collection.unrevealed?
-        # we have just revealed a collection
-        new_collection.approved_collection_items.each {|collection_item| collection_item.reveal!}
+        # we have just revealed a collection: delay this so the email notifications don't bog us down 
+        new_collection.send_later(:reveal!)
       end
       if old_collection.anonymous? && !new_collection.anonymous?
-        # we've just revealed authors
-        new_collection.approved_collection_items.each {|collection_item| collection_item.reveal_author!}
+        # we've just revealed authors: delay this so the email notifications don't bog us down
+        new_collection.send_later(:reveal_authors!)
       end
     end
   end

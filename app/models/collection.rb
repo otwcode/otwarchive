@@ -25,7 +25,19 @@ class Collection < ActiveRecord::Base
   has_many :prompts, :dependent => :destroy
   
   has_many :signups, :class_name => "ChallengeSignup", :dependent => :destroy
-  # has_many :assignments, :class_name => "ChallengeAssignment", :dependent => :destroy
+  has_many :potential_matches, :dependent => :destroy
+  has_many :assignments, :class_name => "ChallengeAssignment", :dependent => :destroy
+  
+  # We need to get rid of all of these if the challenge is destroyed
+  after_save :clean_up_challenge
+  def clean_up_challenge
+    if self.challenge.nil?
+      assignments.each {|assignment| assignment.destroy}      
+      potential_matches.each {|potential_match| potential_match.destroy}
+      signups.each {|signup| signup.destroy}
+      prompts.each {|prompt| prompt.destroy}
+    end
+  end
     
   has_many :collection_items, :dependent => :destroy
   accepts_nested_attributes_for :collection_items, :allow_destroy => true
@@ -270,9 +282,21 @@ class Collection < ActiveRecord::Base
     self.all_approved_works.count > 0 || self.children.count > 0 || self.all_approved_bookmarks.count > 0
   end
   
+  def get_maintainers_email
+    self.email || "#{self.maintainers.collect(&:user).flatten.uniq.collect(&:email).join(',')}"
+  end
+  
   def notify_maintainers(subject, message)
     # send maintainers a notice via email
-    UserMailer.deliver_collection_notification(self, self.email || "#{self.maintainers.collect(&:user).flatten.uniq.collect(&:email).join(",")}", subject, message)
+    UserMailer.deliver_collection_notification(self, subject, message)
+  end
+  
+  def reveal!
+    approved_collection_items.each {|collection_item| collection_item.reveal!}
+  end
+  
+  def reveal_authors!
+    approved_collection_items.each {|collection_item| collection_item.reveal_author!}
   end
   
   def self.sorted_and_filtered(sort, filters, page)

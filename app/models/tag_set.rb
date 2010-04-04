@@ -1,5 +1,8 @@
 class TagSet < ActiveRecord::Base
   
+  # a complete match is numerically represented with ALL
+  ALL = -1
+  
   TAG_TYPES = %w(fandom character pairing freeform category rating warning)
   
   has_many :set_taggings, :dependent => :destroy
@@ -83,34 +86,64 @@ class TagSet < ActiveRecord::Base
     }
   }
   
+  def +(other)
+    TagSet.new(:tags => (self.tags + other.tags))
+  end
+  
+  def -(other)
+    TagSet.new(:tags => (self.tags - other.tags))
+  end
+  
   def has_tag?(tag)
     self.tags.include?(tag)
   end
-
   
   def with_type(type)
-    return self.tags.with_type(type)
+    return self.new_record? ? self.tags.select {|t| t.type == type.classify} : self.tags.with_type(type)
+  end
+
+  def tags_with_type(type)
+    return with_type(type)
   end
 
   def empty?
     self.tags.empty?
   end
   
-  def exact_match?(another)
-    self.tags == another.tags
-  end
-    
-  def no_match?(another)
-    (self.tags & another.tags).empty? && !self.tags.empty?
+  def match_rank(another, type=nil)
+    return 0 if tags.empty?
+    return 0 if type && tags_with_type(type).empty?
+    return ALL if is_subset_of?(another, type) 
+    matching_tags(another, type).size
   end
   
-  def partial_match?(another)
-    !(self.tags & another.tags).empty?
+  def exact_match?(another, type=nil)
+    if type
+      self.tags_with_type(type) == another.tags_with_type(type)
+    else
+      self.tags == another.tags
+    end
+  end
+    
+  def no_match?(another, type=nil)
+    if type
+      (self.tags_with_type(type) & another.tags_with_type(type)).empty? && !self.tags.empty?
+    else
+      (self.tags & another.tags).empty? && !self.tags.empty?
+    end
+  end
+  
+  def partial_match?(another, type=nil)
+    if type
+      !(self.tags_with_type(type) & another.tags_with_type(type)).empty?
+    else
+      !(self.tags & another.tags).empty?
+    end
   end
   
   def is_subset_of?(another, type=nil)
     if type
-      (self.tags.with_type(type) & another.tags.with_type(type)) == self.tags.with_type(type)
+      (self.tags_with_type(type) & another.tags_with_type(type)) == self.tags_with_type(type)
     else
       (self.tags & another.tags) == self.tags
     end
@@ -118,28 +151,19 @@ class TagSet < ActiveRecord::Base
   
   def is_superset_of?(another, type=nil)
     if type
-      (self.tags.with_type(type) & another.tags.with_type(type)) == another.tags.with_type(type)
+      (self.tags_with_type(type) & another.tags_with_type(type)) == another.tags_with_type(type)
     else
       (self.tags & another.tags) == another.tags
     end
   end
-
-  def match_with_type?(another, type)
-    (self.tags.with_type(type) & another.tags.with_type(type)) == self.tags.with_type(type)
-  end
   
-  def partial_match_with_type?(another, type)
-    !(self.tags.with_type(type) & another.tags.with_type(type)).empty?
-  end
-  
-  def matching_tags(another)
-    self.tags & another.tags
-  end
-  
-  def matching_tags_with_type(another)
-    self.tags.with_type(type) & another.tags.with_type(type)
-  end
-  
+  def matching_tags(another, type=nil)
+    if type
+      self.tags_with_type(type) & another.tags_with_type(type)
+    else
+      self.tags & another.tags
+    end
+  end  
   
   ### protected 
   
@@ -152,6 +176,5 @@ class TagSet < ActiveRecord::Base
         taglist.reject {|tagname| tagname.blank? }.map {|tagname| Tag.find_by_name(tagname.squish) || Freeform.find_or_create_by_name(tagname.squish)}
       end
     end
-  
   
 end

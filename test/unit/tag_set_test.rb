@@ -51,8 +51,8 @@ class TagSetTest < ActiveSupport::TestCase
     assert @tagset1.no_match?(@tagset2)
     assert !(@tagset1 == @tagset2)
     assert !@tagset1.partial_match?(@tagset2)
-    assert !@tagset1.match_with_type?(@tagset2, "Fandom")
-    assert !@tagset1.partial_match_with_type?(@tagset2, "Fandom")
+    assert !@tagset1.exact_match?(@tagset2, "Fandom")
+    assert !@tagset1.partial_match?(@tagset2, "Fandom")
 
     # now set up some matches
     @tagset3.tags << @fandom_tag1
@@ -66,8 +66,8 @@ class TagSetTest < ActiveSupport::TestCase
     assert !(@tagset2 == @tagset3)
     assert @tagset1.partial_match?(@tagset3)
     assert @tagset2.partial_match?(@tagset3)
-    assert @tagset1.match_with_type?(@tagset3, "Fandom")
-    assert !@tagset2.match_with_type?(@tagset3, "Fandom")
+    assert @tagset1.exact_match?(@tagset3, "Fandom")
+    assert !@tagset2.exact_match?(@tagset3, "Fandom")
     
     assert @tagset3.is_superset_of?(@tagset1)
     assert @tagset1.is_subset_of?(@tagset3)
@@ -82,6 +82,12 @@ class TagSetTest < ActiveSupport::TestCase
     assert (matched_sets.length == 2)
     assert matched_sets[0] == @tagset1
     assert matched_sets[1] == @tagset2
+    
+    # test addition/subtraction
+    assert (@tagset1 + @tagset2).tags = @tagset1.tags + @tagset2.tags
+    assert (@tagset1 - @tagset2).tags = @tagset1.tags - @tagset2.tags
+    assert (@tagset1 + @tagset3).tags = @tagset1.tags + @tagset3.tags
+    assert (@tagset1 - @tagset3).tags = @tagset1.tags - @tagset3.tags
   end
   
   test "tagnames functions" do

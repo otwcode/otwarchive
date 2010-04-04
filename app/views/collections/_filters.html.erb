@@ -5,12 +5,12 @@
       <dt><%= label_tag 'collection_filters_title', "Filter by title" %></dt>
       <dd>
         <%= text_field_tag 'collection_filters[title]', params[:collection_filters][:title] %>
-        <%= autocomplete_text_field "collection_filters_title" -%>        
+        <%= autocomplete_text_field "collection_filters_title", :no_comma => true -%>        
       </dd>
       <dt><%= label_tag 'collection_filters_fandom', "Filter by fandom" %></dt>
       <dd>
         <%= text_field_tag 'collection_filters[fandom]', params[:collection_filters][:fandom] %>
-        <%= autocomplete_text_field "collection_filters_fandom" -%>
+        <%= autocomplete_text_field "collection_filters_fandom", :no_comma => true -%>
       </dd>
       <dt>Closed</dt>
       <dd>

@@ -58,6 +58,8 @@ class User < ActiveRecord::Base
           :conditions => ['collection_participants.participant_role = ?', CollectionParticipant::OWNER]
   
   has_many :challenge_signups, :through => :pseuds
+  has_many :challenge_assignments, :through => :pseuds
+  has_many :pinch_hit_assignments, :through => :pseuds
   
   has_many :readings, :dependent => :destroy 
   has_many :bookmarks, :through => :pseuds 

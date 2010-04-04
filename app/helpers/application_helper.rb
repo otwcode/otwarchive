@@ -206,41 +206,41 @@ module ApplicationHelper
     return generated_html
   end
   
-  def autocomplete_text_field(fieldname, methodname="")
+  def autocomplete_text_field(fieldname, options={})
     "\n<span id=\"indicator_#{fieldname}\" style=\"display:none\">" +
     '<img src="/images/spinner.gif" alt="Working..." /></span>' +
     "\n<div class=\"auto_complete\" id=\"#{fieldname}_auto_complete\"></div>" +
     javascript_tag("new Ajax.Autocompleter('#{fieldname}', 
                             '#{fieldname}_auto_complete', 
-                            '/autocomplete/#{methodname.blank? ? fieldname : methodname}', 
+                            '/autocomplete/#{options[:methodname].blank? ? fieldname : options[:methodname]}', 
                             { 
                               indicator: 'indicator_#{fieldname}',
                               minChars: 3,
                               paramName: '#{fieldname}',
-                              parameters: 'fieldname=#{fieldname}',
+                              parameters: 'fieldname=#{fieldname}#{options[:extra_params] ? '&' + options[:extra_params] : ''}',
                               fullSearch: true,
-                              tokens: '#{ArchiveConfig.DELIMITER_FOR_INPUT}',
-                              afterUpdateElement: addCommaToField
+                              tokens: '#{ArchiveConfig.DELIMITER_FOR_INPUT}'
+                              #{options[:no_comma] ? '' : ', afterUpdateElement: addCommaToField'}
                             });")    
   end
   
   # Trying out a way of sending the tag type to the autocomplete
   # controller so that it can return the right class of results
-  def autocomplete_text_field_with_type(object, fieldname)
+  def autocomplete_text_field_with_type(object, fieldname, options={})
     "\n<span id=\"indicator_#{fieldname}\" style=\"display:none\">" +
     '<img src="/images/spinner.gif" alt="Working..." /></span>' +
     "\n<div class=\"auto_complete\" id=\"#{fieldname}_auto_complete\"></div>" +
     javascript_tag("new Ajax.Autocompleter('#{fieldname}', 
                             '#{fieldname}_auto_complete', 
-                            '/autocomplete/#{fieldname}', 
+                            '/autocomplete/#{options[:methodname].blank? ? fieldname : options[:methodname]}', 
                             { 
                               indicator: 'indicator_#{fieldname}',
                               minChars: 2,
                               paramName: '#{fieldname}',
                               parameters: 'fieldname=#{fieldname}&type=#{object.type}',
                               fullSearch: true,
-                              tokens: '#{ArchiveConfig.DELIMITER_FOR_INPUT}',
-                              afterUpdateElement: addCommaToField
+                              tokens: '#{ArchiveConfig.DELIMITER_FOR_INPUT}'
+                              #{options[:no_comma] ? '' : ', afterUpdateElement: addCommaToField'}
                             });")    
   end
   
@@ -264,15 +264,15 @@ module ApplicationHelper
     ActiveSupport::TimeZone::ZONES.find{|z| z.name == zone}.tzinfo.current_period.abbreviation.to_s
   end
   
-  def time_in_zone(time, zone)
+  def time_in_zone(time, zone, user=User.current_user)
     abbr = 
     time.in_time_zone(zone).strftime('<abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span> <span class="time">%I:%M%p</span>') + 
       " <abbr class=\"timezone\" title=\"#{zone}\">#{time_zone_abbr(zone)}</abbr> " + 
-      ((logged_in? && current_user.preference.time_zone) ? "(" + 
-        time.in_time_zone(current_user.preference.time_zone).strftime('<span class="time">%I:%M%p</span>') +
-          " <abbr class=\"timezone\" title=\"#{current_user.preference.time_zone}\">#{time_zone_abbr(current_user.preference.time_zone)}</abbr>)" : 
-        (logged_in? ? 
-          link_to(h(t('application.set_time_zone', :default => "(set timezone)")), user_preferences_path(current_user)) : ""))
+      ((user.is_a?(User) && user.preference.time_zone) ? "(" + 
+        time.in_time_zone(user.preference.time_zone).strftime('<span class="time">%I:%M%p</span>') +
+          " <abbr class=\"timezone\" title=\"#{user.preference.time_zone}\">#{time_zone_abbr(user.preference.time_zone)}</abbr>)" : 
+        (user.is_a?(User) ? 
+          link_to(h(t('application.set_time_zone', :default => "(set timezone)")), user_preferences_path(user)) : ""))
   end
-
+  
 end # end of ApplicationHelper

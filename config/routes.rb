@@ -1,6 +1,4 @@
 ActionController::Routing::Routes.draw do |map|
-
-
   map.resources :user_invite_requests
 
   map.resources :invite_requests, :collection => {:manage => :get, :reorder => :post}
@@ -70,6 +68,8 @@ ActionController::Routing::Routes.draw do |map|
     user.resources :collections, :only => [:index]
     user.resources :gifts, :only => [:index]
     user.resources :signups, :controller => "challenge_signups", :only => [:index]
+    user.resources :assignments, :controller => "challenge_assignments", :only => [:index]
+    
   end
 
   map.first_login_help '/first_login_help', :controller => 'home', :action => 'first_login_help'
@@ -122,13 +122,14 @@ ActionController::Routing::Routes.draw do |map|
     collection.resources :gifts, :only => [:index]
 
     collection.resources :signups, :controller => "challenge_signups"
-    collection.resources :assignments, :controller => "challenge_assignments"
+    collection.resources :assignments, :controller => "challenge_assignments", :collection => {:set => :get, :generate => :get}
+    collection.resources :potential_matches, :only => [:index, :show], :collection => {:generate => :get}
 
     # challenge types
     collection.resource :gift_exchange, :controller => 'challenge/gift_exchange'
 
   end 
-
+  
   map.resources :gifts, :only => [:index]
   
   # should stay below the main works mapping

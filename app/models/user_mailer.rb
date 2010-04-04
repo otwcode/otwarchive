@@ -1,6 +1,7 @@
 class UserMailer < ActionMailer::Base
   include ActionController::UrlWriter
   helper :application
+  add_template_helper(TagsHelper)
   
   # Sends an invitation to join the archive
   def invitation(invitation)
@@ -35,7 +36,7 @@ class UserMailer < ActionMailer::Base
   # Emails a recipient to say that a gift has been posted for them
   def recipient_notification(user, work, collection=nil)
     setup_email(user)
-    subject       "[#{ArchiveConfig.APP_NAME}] A Gift Story For You #{collection ? "From " + collection.title : ''}"
+    subject       "[#{ArchiveConfig.APP_NAME}][#{collection ? collection.title : ''}] A Gift Story For You #{collection ? "From " + collection.title : ''}"
     sent_on       Time.now
     from          ArchiveConfig.RETURN_ADDRESS
     content_type  "text/html"
@@ -57,11 +58,25 @@ class UserMailer < ActionMailer::Base
     @body[:admin] = admin
   end
   
-  def collection_notification(collection, email, subject, message)
-    setup_email_without_name(email)
-    @subject = "[#{ArchiveConfig.APP_NAME}] Notice About Your Collection #{subject}"
-    @body[:message] = message
-    @body[:collection] = collection
+  def collection_notification(collection, subject, message)
+    setup_email_without_name(collection.get_maintainers_email)
+    subject   "[#{ArchiveConfig.APP_NAME}][#{collection.title}] #{subject}"
+    body      :message => message, :collection => collection, :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
+  end
+
+  def potential_match_generation_notification(collection)
+    setup_email_without_name(collection.get_maintainers_email)
+    subject    "[#{ArchiveConfig.APP_NAME}][#{collection.title}] Potential Match Generation Complete"
+    body	:collection => collection, :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
+  end
+
+  def challenge_assignment_notification(collection, assigned_user, assignment)
+    setup_email(assigned_user)
+    subject       "[#{ArchiveConfig.APP_NAME}][#{collection.title}] Your Assignment!"
+    sent_on       Time.now
+    from          ArchiveConfig.RETURN_ADDRESS
+    content_type  "text/html"
+    body          :collection => collection, :assigned_user => assigned_user, :request => assignment.request_signup || assignment.pinch_request_signup, :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
   end
 
   # Asks a user to validate and activate their new account

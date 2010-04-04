@@ -1,0 +1,32 @@
+<h2>Your Assignment</h2>
+
+<p>
+  You have been assigned the following request in the <%= link_to(h(@collection.title), @collection) -%> challenge at the Archive of Our Own!
+</p>
+
+<p>
+  This assignment is due at: <%= time_in_zone(@collection.challenge.assignments_due_at, (@collection.challenge.time_zone || Time.zone.name), @assigned_user) -%>
+</p>
+
+<p>
+  Recipient: <%= link_to(@request.pseud.byline, user_pseud_url(@request.pseud.user, @request.pseud, :host => @host)) %>
+</p>
+
+<%= render :partial => "challenge_signups/show_requests", :locals => {:challenge_signup => @request} -%>
+
+<p>
+  You can look up this assignment from your archive dashboard at: 
+  <%= user_assignments_url(@assigned_user, :host => @host) -%>
+</p>
+
+<p>
+  For more information about this challenge and contact information for the moderators, please see the collection profile at:
+  <%= collection_profile_url(@collection, :host => @host) %> 
+</p>
+
+<p>
+  Note: you should only have received this message if you signed up for this challenge. If you did not,
+  please let us know!
+</p>
+  
+<p><%=h "Sent at:" -%> <%= Time.now.strftime(common_timestring) -%></p>
