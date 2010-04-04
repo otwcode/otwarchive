@@ -48,6 +48,9 @@ SMTP_DOMAIN: localhost
 #SMTP_PASSWORD:
 #SMTP_AUTHENTICATION: # :plain, :login or :cram_md5
 
+# used to turn off delayed jobs locally for testing -- set to true in your local.yml
+NO_DELAYS: false
+
 ACCOUNT_CREATION_ENABLED: true
 INVITATION_LIMIT: 1
 INVITE_FROM_QUEUE_ENABLED: true

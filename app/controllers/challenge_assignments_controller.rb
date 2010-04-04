@@ -86,8 +86,11 @@ class ChallengeAssignmentsController < ApplicationController
     # see http://asciicasts.com/episodes/198-edit-multiple-individually
     if params["send"]
       # sending these assignments out!
-      # ChallengeAssignment.send_later send_out!, @collection
-      ChallengeAssignment.send_out!(@collection)
+      if ArchiveConfig.NO_DELAYS
+        ChallengeAssignment.send_out!(@collection)
+      else
+        ChallengeAssignment.send_later send_out!, @collection
+      end
       flash[:notice] = "Assignments are now being sent out."
       redirect_to collection_assignments_path(@collection)
     else
