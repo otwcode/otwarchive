@@ -4,8 +4,9 @@ class PotentialMatchesController < ApplicationController
   before_filter :load_collection
   before_filter :collection_maintainers_only
   before_filter :load_challenge
-  before_filter :load_potential_match_from_id, :only => [:show]
+  before_filter :check_assignments_not_sent
   before_filter :check_signup_closed, :only => [:generate]
+  before_filter :load_potential_match_from_id, :only => [:show]
 
 
   def load_challenge
@@ -46,6 +47,16 @@ class PotentialMatchesController < ApplicationController
     false
   end
 
+  def check_assignments_not_sent
+    assignments_sent and return unless @challenge.assignments_sent_at.nil? 
+  end
+
+  def assignments_sent
+    flash[:error] = t('challenge_assignments.assignments_sent', :default => "Assignments have already been sent! If necessary, you can purge them.")
+    redirect_to collection_assignments_path(@collection) rescue redirect_to '/'
+    false
+  end
+
   def index
     if PotentialMatch.in_progress?(@collection)
       @in_progress = true
@@ -72,6 +83,7 @@ class PotentialMatchesController < ApplicationController
       PotentialMatch.clear!(@collection)
       
       flash[:notice] = t("potential_matches.generating_beginning", :default => "Beginning generation of potential matches. This may take some time, especially if your challenge is large.")
+      PotentialMatch.set_up_generating(@collection)
       if ArchiveConfig.NO_DELAYS
         PotentialMatch.generate!(@collection)
       else

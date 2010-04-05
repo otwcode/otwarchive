@@ -39,9 +39,10 @@ class ChallengeSignup < ActiveRecord::Base
       :conditions => ['pseud_id = ?', pseud.id]
     }
   }
-      
+   
+  named_scope :order_by_pseud, {:joins => :pseud, :order => "pseuds.name"}
 
-  named_scope :in_collection, lambda {|collection| {:conditions => ['collection_id = ?', collection.id] }}
+  named_scope :in_collection, lambda {|collection| {:conditions => ['challenge_signups.collection_id = ?', collection.id] }}
 
   ### VALIDATION
   # we validate number of prompts/requests/offers at the challenge

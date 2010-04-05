@@ -37,7 +37,7 @@ class ChallengeAssignment < ActiveRecord::Base
     }
   }
 
-  named_scope :in_collection, lambda {|collection| {:conditions => ['collection_id = ?', collection.id] }}
+  named_scope :in_collection, lambda {|collection| {:conditions => ['challenge_assignments.collection_id = ?', collection.id] }}
   
   named_scope :defaulted, {:conditions => ["defaulted_at IS NOT NULL"]}
   named_scope :open, {:conditions => ["defaulted_at IS NULL"]}
@@ -135,6 +135,7 @@ class ChallengeAssignment < ActiveRecord::Base
     collection.assignments.each do |assignment|
       assignment.send_out!
     end
+    collection.notify_maintainers("Assignments Sent", "All assignments have now been sent out.")
   end
 
   # generate automatic match for a collection

@@ -1,5 +1,10 @@
 <h3>Matching for <%= sanitize_title_for_display(@collection.title) -%></h3>
-<% if @in_progress %>
+<% if @challenge.signup_open %>
+  <p class="note">
+    You cannot generate matches while signup is still open! After you have closed signup (in Challenge Settings),
+    you will be able to generate potential matches here.
+  </p>
+<% elsif @in_progress %>
   <p class="note">
     The archive is currently generating potential matches for this challenge. This process can take some time,
     especially for a large challenge! A notification email will be sent to the collection maintainers when
@@ -9,23 +14,24 @@
   <p>
     Currently generating potential matches for: <%= @current_position %>
   </p>
-  
 <% else %>  
-  <p class="note">
-    The following lists all the participants in your challenge, along with the archive's pass at an initial automated
-    match for all of them. You can now update the assignments however you like. 
-  </p>
+  <% if !@collection.potential_matches.empty? %>  
+    <p class="note">
+      The following lists all the participants in your challenge, along with the archive's pass at an initial automated
+      match for all of them. You can now update the assignments however you like. 
+    </p>
 
-  <h4>Useful Tips</h4>
-  <ul>
-    <li>If you have people with no potential matches, you will need to have them expand their signup options. (Once signups are closed, you can hand-edit their signup yourself without reopening signups.)</li>
-    <li>The pull-down menus include all the potential matches for each person -- that is, everyone whose offer matched that person's request. They are listed in order of match "quality".</li>
-    <li>You can write-in anyone with an archive account as a pinch hitter, whether or not they are participants or actually matched.</li>
-    <li>Pinch "recipients" must be people who have actual signups. </li>
-    <li>You can regenerate the assignments to get a new randomized match-up.</li>
-    <li>You should <strong>not</strong> regenerate potential matches unless you have edited signups or your matching rules. You won't get different results and it will take a long time.</li>
-    <li>You can update the assignments as many times as you want until you actually send them out.</li>
-  </ul>
+    <h4>Useful Tips</h4>
+    <ul>
+      <li>If you have people with no potential matches, you will need to have them expand their signup options. (Once signups are closed, you can hand-edit their signup yourself without reopening signups.)</li>
+      <li>The pull-down menus include all the potential matches for each person -- that is, everyone whose offer matched that person's request. They are listed in order of match "quality".</li>
+      <li>You can write-in anyone with an archive account as a pinch hitter, whether or not they are participants or actually matched.</li>
+      <li>Pinch "recipients" must be people who have actual signups. </li>
+      <li>You can regenerate the assignments to get a new randomized match-up.</li>
+      <li>You should <strong>not</strong> regenerate potential matches unless you have edited signups or your matching rules. You won't get different results and it will take a long time.</li>
+      <li>You can update the assignments as many times as you want until you actually send them out.</li>
+    </ul>
+  <% end %>
 
   <!-- list all the requesters with their potential matches -->
   <% form_tag set_collection_assignments_path, :method => :get do %>
@@ -36,7 +42,8 @@
       <tr>
         <th>Pseud</th>
         <th>Giving Gift To</th>
-        <th>Getting Gift From</th>
+        <th>Potential Matches</th>
+        <th>Assigned Giver</th>
         <th>Write-In Pinch Hitter</th>
       </tr>
 
@@ -45,7 +52,7 @@
         <% request_signup = assignment.request_signup %>
         <% unless request_signup %>
           <tr>
-            <td colspan=3>
+            <td colspan=4>
               <%= assignment_form.hidden_field :collection_id, :value => @collection.id %>
               <%= assignment_form.hidden_field :offer_signup_id, :value => assignment.offer_signup.id %>
               <% if !assignment.offer_signup.offer_potential_matches.empty? %>
@@ -82,12 +89,16 @@
               -%>
             </td>  
             <td>
-              <% if !request_signup.request_potential_matches.empty? %>
-                <%= assignment_form.collection_select :offer_signup_id, request_signup.request_potential_matches.sort.reverse.collect(&:offer_signup), :id, :byline, 
-                                                      :include_blank => "- None Assigned -" -%>
+              <% if !(@pmatches = request_signup.request_potential_matches).empty? %>
+                <% @pmatches = @pmatches.sort.reverse %>
+                <%= @pmatches.map {|pm| link_to(pm.offer_signup.byline, collection_potential_match_path(@collection, pm))}.join(", ") -%>
               <% else %>
                 <strong>No matches</strong>
               <% end %>
+            </td>
+            <td>
+                <%= assignment_form.collection_select :offer_signup_id, @pmatches.collect(&:offer_signup), :id, :byline, 
+                                                      :include_blank => "- None Assigned -" -%>
             </td>
             <td>
               <%= assignment_form.text_field :pinch_hitter_byline %>

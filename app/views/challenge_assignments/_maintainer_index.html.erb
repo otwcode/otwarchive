@@ -15,26 +15,28 @@
     </tr>
     
     <% @collection.assignments.defaulted.uncovered.each do |assignment| %>
-      <tr>
-        <% request = assignment.request_signup || assignment.pinch_request_signup %>
-        <td><%= link_to request.pseud.byline, collection_signup_path(@collection, request) -%></td>
-        <td><%= assignment.offer_signup ? assignment.offer_signup.pseud.byline : (assignment.pinch_hitter ? assignment.pinch_hitter.byline : "") -%></td>
-        <td>
-          <% new_assignment = ChallengeAssignment.new %>
-          <% form_for [@collection, new_assignment], :url => collection_assignments_path(@collection) do |assignment_form| %>
-            <%= hidden_field_tag :assignment_to_cover, assignment.id -%>
-            <%= assignment_form.hidden_field :collection_id, :value => @collection.id %>
-            <%= assignment_form.hidden_field :request_signup_id, :value => request.id %>
-            <%= assignment_form.text_field :pinch_hitter_byline %>
-            <%= autocomplete_text_field "challenge_assignment_pinch_hitter_byline", :methodname => "pseud_byline", :no_comma => true %>
-        </td><td>
-            <ul class=navigation>
-              <li><%= submit_tag "Assign Pinch Hitter" %></li>
-              <li><%= link_to "Clear Default", undefault_collection_assignment_path(@collection, assignment) -%></li>
-            </ul>
-          <% end %>
-        </td>
-      </tr>
+      <% request = assignment.request_signup || assignment.pinch_request_signup %>
+      <% if request %>
+        <tr>
+          <td><%= link_to request.pseud.byline, collection_signup_path(@collection, request) -%></td>
+          <td><%= assignment.offer_signup ? assignment.offer_signup.pseud.byline : (assignment.pinch_hitter ? assignment.pinch_hitter.byline : "") -%></td>
+          <td>
+            <% new_assignment = ChallengeAssignment.new %>
+            <% form_for [@collection, new_assignment], :url => collection_assignments_path(@collection) do |assignment_form| %>
+              <%= hidden_field_tag :assignment_to_cover, assignment.id -%>
+              <%= assignment_form.hidden_field :collection_id, :value => @collection.id %>
+              <%= assignment_form.hidden_field :request_signup_id, :value => request.id %>
+              <%= assignment_form.text_field :pinch_hitter_byline %>
+              <%= autocomplete_text_field "challenge_assignment_pinch_hitter_byline", :methodname => "pseud_byline", :no_comma => true %>
+          </td><td>
+              <ul class=navigation>
+                <li><%= submit_tag "Assign Pinch Hitter" %></li>
+                <li><%= link_to "Clear Default", undefault_collection_assignment_path(@collection, assignment) -%></li>
+              </ul>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
     <% end %>
   </table>
 <% end %>
@@ -65,8 +67,12 @@
         <td><%= assignment.offer_signup ? assignment.offer_signup.pseud.byline : (assignment.pinch_hitter ? assignment.pinch_hitter.byline + "* (pinch hitter)" : "") -%></td>          
         <td>
           <% request = assignment.request_signup || assignment.pinch_request_signup %>
-          <%= link_to request.pseud.byline, collection_assignment_path(@collection, assignment) -%>
-          <%= assignment.pinch_request_signup && assignment.pinch_request_signup == request ? "* (pinch recipient)" : "" %>
+          <% if request %>
+            <%= link_to request.pseud.byline, collection_assignment_path(@collection, assignment) -%>
+            <%= assignment.pinch_request_signup && assignment.pinch_request_signup == request ? "* (pinch recipient)" : "" %>
+          <% else %>
+            <strong>No Recipient</strong>
+          <% end %>
         </td>
         <td>
           <% if assignment.creation %>
@@ -92,7 +98,7 @@
 
   <ul class="navigation">
     <li><%= submit_tag "Update Defaulters"%></li>
-  </ul>
+    <li><%= link_to t("challenge_assignments.purge", :default => "Purge Assignments"), purge_collection_assignments_path(@collection), 
+            :confirm => "This will delete ALL assignments so you can edit and send them over. Please do not do this unless you absolutely must!" %></li>  </ul>
 
 <% end %>  
-

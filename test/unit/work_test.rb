@@ -247,6 +247,7 @@ class WorkTest < ActiveSupport::TestCase
       @work.set_revised_at(@chapter1.published_at)
     end
     should "have the same revised_at date as the chapter date" do
+      debugger
       assert @work.revised_at.to_date == @chapter1.published_at
     end
     should "have the same published_at date as the chapter date" do

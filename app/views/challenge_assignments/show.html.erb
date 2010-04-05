@@ -6,8 +6,12 @@
   <!--main content-->
   <% request = (@challenge_assignment.request_signup || @challenge_assignment.pinch_request_signup) %>
   <h3>
-    <%=h t('challenge_assignment.view', :default => "Assigned to {{requester}}: {{offerer}}", 
-      :requester => request.pseud.byline, :offerer => @challenge_assignment.offer_byline) -%>
+    <% if request %>
+      <%=h t('challenge_assignment.view', :default => "Assigned to {{requester}}: {{offerer}}", 
+        :requester => request.pseud.byline, :offerer => @challenge_assignment.offer_byline) -%>
+    <% else %>
+      No Assignment
+    <% end %>
   </h3>
 
   <div class="collection preface">
@@ -16,6 +20,7 @@
       <%= render :partial => "challenge_signups/show_requests", :locals => {:challenge_signup => request} %>
     <% else %>
       <p class="note">No request!</p>
+      <p class="note">Contact challenge moderators for help.</p>
     <% end %>
     
     <% if @challenge_assignment.offer_signup %>
@@ -25,6 +30,7 @@
       <p class="note">Pinch Hitter</p>
     <% else %>
       <p class="note">No assigned giver!</p>
+      <p class="note">Contact challenge moderators for help.</p>
     <% end %>
   </div>
 

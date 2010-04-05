@@ -17,10 +17,14 @@ class PotentialMatch < ActiveRecord::Base
     # destroy all potential matches in this collection
     PotentialMatch.destroy_all(["collection_id = ?", collection.id])
   end
+  
+  def self.set_up_generating(collection)
+    @@collection_position[collection.name] = collection.signups.order_by_pseud.first.pseud.byline
+  end
 
   def self.generate!(collection)
     PotentialMatch.clear!(collection)
-    collection.signups.each do |request_signup|
+    collection.signups.order_by_pseud.each do |request_signup|
       PotentialMatch.generate_for_signup(collection, request_signup)
     end
     PotentialMatch.finish_generation(collection)

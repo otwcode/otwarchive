@@ -3,21 +3,30 @@ class ChallengeAssignmentsController < ApplicationController
   before_filter :users_only
   before_filter :load_collection, :except => [:index, :default]
   before_filter :collection_owners_only, :except => [:index, :show, :default]
-  before_filter :load_challenge, :except => [:index, :default]
-  before_filter :load_user, :only => [:default]
   before_filter :load_assignment_from_id, :only => [:show, :default, :undefault]
-  before_filter :owner_only, :only => [:default]
-  before_filter :allowed_to_destroy, :only => [:destroy]
-  before_filter :check_signup_closed, :only => [:new, :create, :edit, :update]
 
+  before_filter :load_challenge, :except => [:index]
+  before_filter :check_signup_closed, :except => [:index]
+  before_filter :check_assignments_not_sent, :only => [:generate, :set, :send_out]
+  before_filter :check_assignments_sent, :only => [:create, :default, :undefault, :mark_defaulted, :purge]
+
+  before_filter :load_user, :only => [:default]
+  before_filter :owner_only, :only => [:default]
+
+
+  # PERMISSIONS AND STATUS CHECKING
 
   def load_challenge
-    @challenge = @collection.challenge
+    if @collection
+      @challenge = @collection.challenge
+    elsif @challenge_assignment
+      @challenge = @challenge_assignment.collection.challenge
+    end
     no_challenge and return unless @challenge
   end
 
   def no_challenge
-    flash[:error] = t('challenges.no_challenge', :default => "What challenge did you want to sign up for?")
+    flash[:error] = t('challenge_assignments.no_challenge', :default => "What challenge did you want to work with?")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -65,6 +74,26 @@ class ChallengeAssignmentsController < ApplicationController
     false
   end
 
+  def check_assignments_not_sent
+    assignments_sent and return unless @challenge.assignments_sent_at.nil? 
+  end
+
+  def assignments_sent
+    flash[:error] = t('challenge_assignments.assignments_sent', :default => "Assignments have already been sent! If necessary, you can purge them.")
+    redirect_to collection_assignments_path(@collection) rescue redirect_to '/'
+    false
+  end
+
+  def check_assignments_sent
+    assignments_not_sent and return unless @challenge.assignments_sent_at 
+  end
+
+  def assignments_not_sent
+    flash[:error] = t('challenge_assignments.assignments_not_sent', :default => "Assignments have not been sent! You might want matching instead.")
+    redirect_to collection_path(@collection) rescue redirect_to '/'
+    false
+  end
+
   def allowed_to_destroy
     @challenge_assignment.user_allowed_to_destroy?(current_user) || not_allowed
   end
@@ -74,26 +103,32 @@ class ChallengeAssignmentsController < ApplicationController
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
+  
+  
+  # ACTIONS
 
   def index
     if params[:user_id] && (@user = User.find_by_login(params[:user_id]))
       if current_user == @user
-        @challenge_assignments = @user.offer_assignments.open + @user.pinch_hit_assignments.open
+        if params[:collection_id] && (@collection = Collection.find_by_name(params[:collection_id]))
+          @challenge_assignments = @user.offer_assignments.in_collection(@collection).open + @user.pinch_hit_assignments.in_collection(@collection).open          
+        else
+          @challenge_assignments = @user.offer_assignments.open + @user.pinch_hit_assignments.open
+        end
       else
         flash[:error] = t('challenge_assignments.not_allowed_to_see_other', :default => "You aren't allowed to see that user's assignments.")
         redirect_to '/' and return
       end
     else
-      load_collection 
-      load_challenge if @collection
-      unless @challenge
-        no_challenge
-        redirect_to '/' and return
-      end
+      # do error-checking for the collection case
+      return unless load_collection 
+      return unless load_challenge
+      return unless check_signup_closed
+      return unless check_assignments_sent
       
       if !@challenge.user_allowed_to_see_assignments?(current_user)
-        @challenge_assignments = @collection.assignments.by_offering_user(current_user)
         @user = current_user
+        @challenge_assignments = @user.offer_assignments.in_collection(@collection).open + @user.pinch_hit_assignments.in_collection(@collection).open
       end
     end
   end
@@ -111,31 +146,38 @@ class ChallengeAssignmentsController < ApplicationController
     redirect_to collection_potential_matches_path(@collection)
   end
   
+  def send_out
+    # sending the current assignments out
+    @challenge.assignments_sent_at = Time.now
+    @challenge.save
+    
+    # purge the potential matches! we don't want bazillions of them in our db
+    PotentialMatch.clear!(@collection)
+    
+    if ArchiveConfig.NO_DELAYS
+      ChallengeAssignment.send_out!(@collection)
+    else
+      ChallengeAssignment.send_later send_out!, @collection
+    end
+    flash[:notice] = "Assignments are now being sent out."
+    redirect_to collection_assignments_path(@collection)
+  end
+  
   def set
     # update all the assignments
     # see http://asciicasts.com/episodes/198-edit-multiple-individually
-    if params["send"]
-      # sending these assignments out!
-      if ArchiveConfig.NO_DELAYS
-        ChallengeAssignment.send_out!(@collection)
-      else
-        ChallengeAssignment.send_later send_out!, @collection
-      end
-      flash[:notice] = "Assignments are now being sent out."
-      redirect_to collection_assignments_path(@collection)
-    else
-      ChallengeAssignment.update(params[:challenge_assignments].keys, params[:challenge_assignments].values)
-      ChallengeAssignment.update_placeholder_assignments!(@collection)
-      flash[:notice] = "Assignments updated"
-      redirect_to collection_potential_matches_path(@collection)
-    end    
+    ChallengeAssignment.update(params[:challenge_assignments].keys, params[:challenge_assignments].values)
+    ChallengeAssignment.update_placeholder_assignments!(@collection)
+    flash[:notice] = "Assignments updated"
+    redirect_to collection_potential_matches_path(@collection)
   end
   
   def create
     # create a new (presumably pinch hit) assignment
     assignment = ChallengeAssignment.new(params[:challenge_assignment])
     if assignment.save
-      flash[:notice] = "New assignment created."
+      assignment.send_out!
+      flash[:notice] = "New assignment created and sent."
     else
       flash[:error] = "We couldn't save the new assignment."
     end
@@ -144,6 +186,14 @@ class ChallengeAssignmentsController < ApplicationController
       @old_assignment.save
     end
     redirect_to collection_assignments_path(@collection)
+  end
+  
+  def purge
+    ChallengeAssignment.clear!(@collection)
+    @challenge.assignments_sent_at = nil
+    @challenge.save
+    flash[:notice] = "Assignments purged!"
+    redirect_to collection_path(@collection)
   end
   
   def mark_defaulted
