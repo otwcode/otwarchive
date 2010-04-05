@@ -14,4 +14,9 @@
       <%= span_if_current t('gift_exchange.signups', :default => "Signups ({{count}})", :count => @collection.signups.count), collection_signups_path(@collection) %>
     </li>
   <% end %>
+  <% if @collection.challenge.user_allowed_to_see_assignments?(current_user) %>
+    <li><%= span_if_current t("gift_exchange.potential_matches", :default => "Matching"), collection_potential_matches_path(@collection) %></li>
+    <li><%= span_if_current t("gift_exchange.assignments", :default => "Assignments"), collection_assignments_path(@collection) %></li>
+  <% end %>
+    
 <% end %>

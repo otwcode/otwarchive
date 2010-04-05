@@ -1,38 +1,34 @@
-<p>
-  <b>Collection:</b>
-  <%=h @challenge_assignment.collection %>
-</p>
+<!-- descriptions-->
+<div id="collection-page" class="profile">
+  <!-- /descriptions-->
+  <!--subnavigation, sorting and actions-->
+  <!--/subnav-->
+  <!--main content-->
+  <% request = (@challenge_assignment.request_signup || @challenge_assignment.pinch_request_signup) %>
+  <h3>
+    <%=h t('challenge_assignment.view', :default => "Assigned to {{requester}}: {{offerer}}", 
+      :requester => request.pseud.byline, :offerer => @challenge_assignment.offer_byline) -%>
+  </h3>
 
-<p>
-  <b>Creation:</b>
-  <%=h @challenge_assignment.creation %>
-</p>
+  <div class="collection preface">
+    <% if request %>
+      <h3><%=h t("challenge_assignments.requests_for", :default => "Requests by {{requester}}", :requester => request.pseud.byline) %></h3>
+      <%= render :partial => "challenge_signups/show_requests", :locals => {:challenge_signup => request} %>
+    <% else %>
+      <p class="note">No request!</p>
+    <% end %>
+    
+    <% if @challenge_assignment.offer_signup %>
+      <h3><%=h t("challenge_assignments.offers_for", :default => "Offers from {{offerer}}", :offerer => @challenge_assignment.offer_byline) %></h3>
+      <%= render :partial => "challenge_signups/show_offers", :locals => {:challenge_signup => @challenge_assignment.offer_signup} %>
+    <% elsif @challenge_assignment.pinch_hitter %>
+      <p class="note">Pinch Hitter</p>
+    <% else %>
+      <p class="note">No assigned giver!</p>
+    <% end %>
+  </div>
 
-<p>
-  <b>Offer signup:</b>
-  <%=h @challenge_assignment.offer_signup_id %>
-</p>
+  <!--/content-->
+  
+</div>
 
-<p>
-  <b>Request signup:</b>
-  <%=h @challenge_assignment.request_signup_id %>
-</p>
-
-<p>
-  <b>Sent at:</b>
-  <%=h @challenge_assignment.sent_at %>
-</p>
-
-<p>
-  <b>Fulfilled at:</b>
-  <%=h @challenge_assignment.fulfilled_at %>
-</p>
-
-<p>
-  <b>Defaulted at:</b>
-  <%=h @challenge_assignment.defaulted_at %>
-</p>
-
-
-<%= link_to 'Edit', edit_challenge_assignment_path(@challenge_assignment) %> |
-<%= link_to 'Back', challenge_assignments_path %>

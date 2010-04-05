@@ -26,8 +26,12 @@ class Pseud < ActiveRecord::Base
   has_many :collection_participants, :dependent => :destroy
   has_many :collections, :through => :collection_participants
   has_many :challenge_signups, :dependent => :destroy
-  has_many :challenge_assignments, :through => :challenge_signups, :source => :offer_assignment, :conditions => ["challenge_assignments.sent_at IS NOT NULL"]
-  has_many :pinch_hit_assignments, :class_name => "ChallengeAssignment", :foreign_key => "pinch_hitter_id", :conditions => ["challenge_assignments.sent_at IS NOT NULL"]
+  
+  has_many :offer_assignments, :through => :challenge_signups, :conditions => ["challenge_assignments.sent_at IS NOT NULL"]
+  has_many :pinch_hit_assignments, :class_name => "ChallengeAssignment", :foreign_key => "pinch_hitter_id", 
+    :conditions => ["challenge_assignments.sent_at IS NOT NULL"]
+
+
   has_many :prompts, :dependent => :destroy
   
   validates_presence_of :name

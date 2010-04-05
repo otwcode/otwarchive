@@ -7,6 +7,7 @@ class ChallengeAssignment < ActiveRecord::Base
   belongs_to :request_signup, :class_name => "ChallengeSignup"
   belongs_to :pinch_hitter, :class_name => "Pseud"
   belongs_to :pinch_request_signup, :class_name => "ChallengeSignup"
+  belongs_to :creation, :polymorphic => true
 
   named_scope :for_request_signup, lambda {|signup|
     {:conditions => ['request_signup_id = ?', signup.id]}
@@ -37,6 +38,12 @@ class ChallengeAssignment < ActiveRecord::Base
   }
 
   named_scope :in_collection, lambda {|collection| {:conditions => ['collection_id = ?', collection.id] }}
+  
+  named_scope :defaulted, {:conditions => ["defaulted_at IS NOT NULL"]}
+  named_scope :open, {:conditions => ["defaulted_at IS NULL"]}
+  named_scope :uncovered, {:conditions => ["covered_at IS NULL"]}
+  named_scope :covered, {:conditions => ["covered_at IS NOT NULL"]}
+  
 
   before_destroy :clear_assignment
   def clear_assignment
@@ -50,12 +57,49 @@ class ChallengeAssignment < ActiveRecord::Base
       request_signup.save
     end
   end
+  
+  def get_collection_item
+    return nil unless self.creation
+    CollectionItem.find(:first, :conditions => ["collection_id = ? AND item_id = ? AND item_type = ?", self.collection_id, self.creation_id, self.creation_type])
+  end
+  
+  def fulfilled?
+    self.creation && (item = get_collection_item) && item.approved?
+  end
+
+  def defaulted=(value)
+    if value == "1"
+      self.defaulted_at = Time.now
+    else
+      self.defaulted_at = nil
+    end
+  end
+      
+  def defaulted
+    !self.defaulted_at.nil?
+  end
 
   include Comparable
   def <=>(other)
     return 1 if self.request_signup.nil?
     return -1 if other.request_signup.nil?
     self.request_signup.pseud.name.downcase <=> other.request_signup.pseud.name.downcase
+  end
+  
+  def offering_pseud
+    offer_signup ? offer_signup.pseud : pinch_hitter
+  end
+  
+  def requesting_pseud
+    request_signup ? request_signup.pseud : (request_pinch_signup ? request_pinch_signup.pseud : nil)
+  end
+  
+  def offer_byline
+    offer_signup ? offer_signup.pseud.byline : (pinch_hitter ? (pinch_hitter.byline + "* (pinch hitter)") : "none")
+  end
+  
+  def request_byline
+    request_signup ? request_signup.pseud.byline : (pinch_request_signup ? (pinch_request_byline + "* (pinch recipient)") : "none")
   end
 
   def pinch_hitter_byline
@@ -74,14 +118,22 @@ class ChallengeAssignment < ActiveRecord::Base
     pinch_pseud = Pseud.by_byline(byline).first
     self.pinch_request_signup = ChallengeSignup.in_collection(self.collection).by_pseud(pinch_pseud).first if pinch_pseud
   end
+  
+  def send_out!
+    # don't resend!
+    unless self.sent_at
+      self.sent_at = Time.now
+      save
+      assigned_to = self.offer_signup ? self.offer_signup.pseud.user : (self.pinch_hitter ? self.pinch_hitter.user : nil)
+      request = self.request_signup || self.pinch_request_signup
+      UserMailer.deliver_challenge_assignment_notification(collection, assigned_to, self) if assigned_to && request
+    end
+  end
 
   # send assignments out to all participants 
   def self.send_out!(collection)
     collection.assignments.each do |assignment|
-      assignment.sent_at = Time.now
-      assigned_to = assignment.offer_signup ? assignment.offer_signup.pseud.user : (assignment.pinch_hitter ? assignment.pinch_hitter.user : nil)
-      request = assignment.request_signup || assignment.pinch_request_signup
-      UserMailer.deliver_challenge_assignment_notification(collection, assigned_to, assignment) if assigned_to && request
+      assignment.send_out!
     end
   end
 

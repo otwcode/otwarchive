@@ -31,7 +31,7 @@
 	<li><%= span_if_current prefix + "Collections (#{@user.owned_collections.count})", user_collections_path(@user) %> </li>
 	<% if @user == current_user %>
 	<li><%= span_if_current prefix + "Signups (#{@user.challenge_signups.count})", user_signups_path(@user) %> </li>
-	<li><%= span_if_current prefix + "Assignments (#{@user.challenge_assignments.count + @user.pinch_hit_assignments.count})", user_assignments_path(@user) %> </li>	
+	<li><%= span_if_current prefix + "Assignments (#{@user.offer_assignments.open.count + @user.pinch_hit_assignments.open.count})", user_assignments_path(@user) %> </li>	
 	<% end %>
 	<li><%= span_if_current prefix + "Gifts (#{@user.gifts.select {|g| g.work.visible?}.count})", user_gifts_path(@user) %></li>
 	<% if @user == current_user %>    

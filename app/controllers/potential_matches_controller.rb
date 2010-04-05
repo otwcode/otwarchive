@@ -67,7 +67,8 @@ class PotentialMatchesController < ApplicationController
     if PotentialMatch.in_progress?(@collection)
       flash[:error] = t("potential_matches.generating_already", :default => "Potential matches are already being generated for this collection!")
     else
-      # delete all existing potential matches for this collection
+      # delete all existing assignments and potential matches for this collection
+      ChallengeAssignment.clear!(@collection)
       PotentialMatch.clear!(@collection)
       
       flash[:notice] = t("potential_matches.generating_beginning", :default => "Beginning generation of potential matches. This may take some time, especially if your challenge is large.")

@@ -12,10 +12,8 @@ class ChallengeSignup < ActiveRecord::Base
   has_many :offer_potential_matches, :class_name => "PotentialMatch", :foreign_key => 'offer_signup_id', :dependent => :destroy
   has_many :request_potential_matches, :class_name => "PotentialMatch", :foreign_key => 'request_signup_id', :dependent => :destroy
 
-  # really there should only be one, but temporarily more than one can 
-  # exist due to changing assignments
-  has_many :offer_assignments, :class_name => "ChallengeAssignment", :foreign_key => 'offer_signup_id', :dependent => :destroy
-  has_many :request_assignments, :class_name => "ChallengeAssignment", :foreign_key => 'request_signup_id', :dependent => :destroy
+  has_many :offer_assignments, :class_name => "ChallengeAssignment", :foreign_key => 'offer_signup_id'
+  has_many :request_assignments, :class_name => "ChallengeAssignment", :foreign_key => 'request_signup_id'
 
 
   # we reject prompts if they are empty except for associated references

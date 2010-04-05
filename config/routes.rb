@@ -68,7 +68,7 @@ ActionController::Routing::Routes.draw do |map|
     user.resources :collections, :only => [:index]
     user.resources :gifts, :only => [:index]
     user.resources :signups, :controller => "challenge_signups", :only => [:index]
-    user.resources :assignments, :controller => "challenge_assignments", :only => [:index]
+    user.resources :assignments, :controller => "challenge_assignments", :only => [:index], :member => {:default => :get}
     
   end
 
@@ -122,7 +122,9 @@ ActionController::Routing::Routes.draw do |map|
     collection.resources :gifts, :only => [:index]
 
     collection.resources :signups, :controller => "challenge_signups"
-    collection.resources :assignments, :controller => "challenge_assignments", :collection => {:set => :get, :generate => :get}
+    collection.resources :assignments, :controller => "challenge_assignments", :only => [:index, :show, :create], 
+                            :collection => {:set => :get, :generate => :get, :mark_defaulted => :get}, 
+                            :member => {:undefault => :get}
     collection.resources :potential_matches, :only => [:index, :show], :collection => {:generate => :get}
 
     # challenge types

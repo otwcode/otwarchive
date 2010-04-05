@@ -1,30 +1,5 @@
-<h1>Listing challenge_assignments</h1>
-
-<table>
-  <tr>
-    <th>Collection</th>
-    <th>Creation</th>
-    <th>Offer signup</th>
-    <th>Request signup</th>
-    <th>Sent at</th>
-    <th>Fulfilled at</th>
-    <th>Defaulted at</th>
-  </tr>
-
-<% @challenge_assignments.each do |challenge_assignment| %>
-  <tr>
-    <td><%=h challenge_assignment.collection %></td>
-    <td><%=h challenge_assignment.creation %></td>
-    <td><%=h challenge_assignment.offer_signup_id %></td>
-    <td><%=h challenge_assignment.request_signup_id %></td>
-    <td><%=h challenge_assignment.sent_at %></td>
-    <td><%=h challenge_assignment.fulfilled_at %></td>
-    <td><%=h challenge_assignment.defaulted_at %></td>
-    <td><%= link_to 'Show', challenge_assignment %></td>
-    <td><%= link_to 'Edit', edit_challenge_assignment_path(challenge_assignment) %></td>
-    <td><%= link_to 'Destroy', challenge_assignment, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
+<% if @user %>
+  <%= render :partial => "user_index" %>
+<% elsif @challenge && @challenge.user_allowed_to_see_assignments?(current_user) %>
+  <%= render :partial => "maintainer_index" %>
 <% end %>
-</table>
-
-

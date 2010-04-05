@@ -1,0 +1,98 @@
+<h2>Assignments for <%= sanitize_title_for_display @collection.title -%></h2>
+
+<% if @collection.assignments.defaulted.count < 1 %>
+  <p class="note">No defaulted assignments!</p>
+<% elsif @collection.assignments.defaulted.uncovered.count < 1 %>
+  <p class="note">All defaulted assignments are covered!</p>
+<% else %>
+  <h3>Defaulted Assignments</h3>
+  <table>
+    <tr>
+      <th>Pseud</th>
+      <th>Original Writer</th>
+      <th>Pinch Hitter</th>
+      <th>Manage</th>
+    </tr>
+    
+    <% @collection.assignments.defaulted.uncovered.each do |assignment| %>
+      <tr>
+        <% request = assignment.request_signup || assignment.pinch_request_signup %>
+        <td><%= link_to request.pseud.byline, collection_signup_path(@collection, request) -%></td>
+        <td><%= assignment.offer_signup ? assignment.offer_signup.pseud.byline : (assignment.pinch_hitter ? assignment.pinch_hitter.byline : "") -%></td>
+        <td>
+          <% new_assignment = ChallengeAssignment.new %>
+          <% form_for [@collection, new_assignment], :url => collection_assignments_path(@collection) do |assignment_form| %>
+            <%= hidden_field_tag :assignment_to_cover, assignment.id -%>
+            <%= assignment_form.hidden_field :collection_id, :value => @collection.id %>
+            <%= assignment_form.hidden_field :request_signup_id, :value => request.id %>
+            <%= assignment_form.text_field :pinch_hitter_byline %>
+            <%= autocomplete_text_field "challenge_assignment_pinch_hitter_byline", :methodname => "pseud_byline", :no_comma => true %>
+        </td><td>
+            <ul class=navigation>
+              <li><%= submit_tag "Assign Pinch Hitter" %></li>
+              <li><%= link_to "Clear Default", undefault_collection_assignment_path(@collection, assignment) -%></li>
+            </ul>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>
+
+<h3>Assignments</h3>
+
+<% form_tag mark_defaulted_collection_assignments_path, :method => :get do %>
+  <ul class="navigation">
+    <li><%= submit_tag "Update Defaulters"%></li>
+  </ul>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Pseud</th>
+        <th>Writing For</th>
+        <th>Work Info</th>
+        <th>
+          Default?<br/>
+          <%= button_to_function t('select_all', :default => "Select All"), "$$('input[type=checkbox]').each(function(box) {box.checked = true})" %>
+          <%= button_to_function t('deselect_all', :default => "Deselect All"), "$$('input[type=checkbox]').each(function(box) {box.checked = false})" %>
+        </th>
+      </tr>
+    </thead>
+
+    <% @collection.assignments.open.each do |assignment| %>
+      <tr>
+        <td><%= assignment.offer_signup ? assignment.offer_signup.pseud.byline : (assignment.pinch_hitter ? assignment.pinch_hitter.byline + "* (pinch hitter)" : "") -%></td>          
+        <td>
+          <% request = assignment.request_signup || assignment.pinch_request_signup %>
+          <%= link_to request.pseud.byline, collection_assignment_path(@collection, assignment) -%>
+          <%= assignment.pinch_request_signup && assignment.pinch_request_signup == request ? "* (pinch recipient)" : "" %>
+        </td>
+        <td>
+          <% if assignment.creation %>
+            <%= link_to "Posted on #{assignment.fulfilled_at}", assignment.creation %>
+            <%= assignment.creation.respond_to?("tags") ? "Tags: " + tag_link_list(assignment.creation.tags) : "" %>
+            <% if !assignment.fulfilled? %>
+              <p class="note">Not yet approved</p>
+            <% end %>
+          <% else %>
+            Not yet posted
+          <% end %>
+        </td>
+        <td>
+          <% unless assignment.fulfilled? %>
+            <% fields_for "challenge_assignments[]", assignment do |assignment_form| %>
+              <%= assignment_form.check_box :defaulted %>
+            <% end %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+
+  <ul class="navigation">
+    <li><%= submit_tag "Update Defaulters"%></li>
+  </ul>
+
+<% end %>  
+
