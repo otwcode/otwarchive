@@ -4,29 +4,29 @@
 <!--subnav-->
 <!--/subnav-->
 <!--main content-->
-	<h3><%=h 'Mass Wrangle New/Unwrangled Tags' %></h3>
+<h3><%=h 'Mass Wrangle New/Unwrangled Tags' %></h3>
 <%- unless params[:show] -%>
-<p>When users create new tags, they're initially not 'canonical', or official, and they don't have any associations with other tags. 
+  <p>When users create new tags, they're initially not 'canonical', or official, and they don't have any associations with other tags. 
 The mass wrangling pages are the easiest way to manage new tags as they come in and edit multiple tags at once. Choose a category below to 
 get started. (Note: to associate pairings with characters, first choose a fandom to narrow down the scope.)</p>
 
-<p>The counts are the number of unwrangled tags in each category.</p>
+  <p>The counts are the number of unwrangled tags in each category.</p>
 <%- end -%>
 
 <%- if params[:show] == "character_pairings" -%>
   <div class="module">
 	<h3>First, choose a canonical fandom:</h3>
   <%- form_tag url_for(:controller => 'tag_wranglings', :action => 'index'), :method => :get do -%>
+  <fieldset>
+    <legend>Choose fandom</legend>
+    <p><%= label_tag :fandom_string, t('fandom', :default => 'Fandom:') %> <%= text_field_tag 'fandom_string', params[:fandom_string] %><%= autocomplete_text_field "fandom_string", :no_comma => true -%></p>
+  </fieldset>
 	<fieldset>
-		<legend>Choose fandom</legend>
-		<p><%= label_tag :fandom_string, t('fandom', :default => 'Fandom:') %> <%= text_field_tag 'fandom_string', params[:fandom_string] %><%= autocomplete_text_field "fandom_string" -%></p>
-		</fieldset>
-	<fieldset>
-		<legend>Submit</legend>
-  <p class="submit"><%= hidden_field_tag :show, 'character_pairings' %><%= submit_tag "Go" %></p>
-</fieldset>
+    <legend>Submit</legend>
+    <p class="submit"><%= hidden_field_tag :show, 'character_pairings' %><%= submit_tag "Go" %></p>
+  </fieldset>
   <%- end -%>
-</div>
+  </div>
 <%- end -%>
 
 <%- if @tags && @tags.empty? -%>
@@ -34,20 +34,19 @@ get started. (Note: to associate pairings with characters, first choose a fandom
 <%- elsif @tags -%>
   <%= will_paginate @tags %>
   <%- form_tag url_for(:controller => 'tag_wranglings', :action => 'wrangle'), :method => :post, :id => 'wrangulator' do -%> 
-    <div class="module">
-	<fieldset>
-	<legend>Assign and Mass Select</legend>
-	<dl>
-	<%- if params[:show] == "fandoms" -%>
-      <dt><%= label_tag :media, t('media', :default => 'Wrangle to Media') %></dt>
-	<dd><%= select_tag :media, options_for_select(@media_names) %></dd>  
-    <%- elsif params[:show] == "character_pairings" -%>
-       <dt><%= label_tag :character_string, t('character', :default => 'Wrangle to Character') %></dt>
-	<dd><%= text_field_tag 'character_string' %><%= autocomplete_text_field "character_string" -%> 
-	</dd>     
-    <%- else -%>      
-      <dt><%= label_tag :fandom_string, t('fandom', :default => 'Wrangle to Fandom') %></dt>
-	<dd><%= text_field_tag 'fandom_string', params[:fandom_string] %><%= autocomplete_text_field "fandom_string" -%></dd>  
+  <div class="module">
+  <fieldset>
+  <legend>Assign and Mass Select</legend>
+  <dl>
+  <%- if params[:show] == "fandoms" -%>
+    <dt><%= label_tag :media, t('media', :default => 'Wrangle to Media') %></dt>
+    <dd><%= select_tag :media, options_for_select(@media_names) %></dd>  
+  <%- elsif params[:show] == "character_pairings" -%>
+    <dt><%= label_tag :character_string, t('character', :default => 'Wrangle to Character') %></dt>
+    <dd><%= text_field_tag 'character_string' %><%= autocomplete_text_field "character_string", :no_comma => true -%></dd>     
+  <%- else -%>      
+    <dt><%= label_tag :fandom_string, t('fandom', :default => 'Wrangle to Fandom') %></dt>
+    <dd><%= text_field_tag 'fandom_string', params[:fandom_string] %><%= autocomplete_text_field "fandom_string", :no_comma => true -%></dd>  
 	<%- end -%>
 	<dt>Wrangle All <span class="landmark">the tags shown in <a href="#wrangulise">the table</a> (following)</span></dt>
 		<dd><span class="navigation">
