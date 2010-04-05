@@ -9,12 +9,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100320165910) do
+ActiveRecord::Schema.define(:version => 20100404223432) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
-    t.string   "url",        :default => "", :null => false
-    t.text     "comment",                    :null => false
+    t.string   "url",        :null => false
+    t.text     "comment",    :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "ip_address"
@@ -67,7 +67,7 @@ ActiveRecord::Schema.define(:version => 20100320165910) do
 
   create_table "bookmarks", :force => true do |t|
     t.datetime "created_at",                                         :null => false
-    t.string   "bookmarkable_type", :limit => 15, :default => "",    :null => false
+    t.string   "bookmarkable_type", :limit => 15,                    :null => false
     t.integer  "bookmarkable_id",                                    :null => false
     t.integer  "user_id"
     t.text     "notes"
@@ -85,18 +85,19 @@ ActiveRecord::Schema.define(:version => 20100320165910) do
   add_index "bookmarks", ["user_id"], :name => "fk_bookmarks_user"
 
   create_table "challenge_assignments", :force => true do |t|
-    t.integer  "pseud_id"
-    t.integer  "challenge_signup_id"
     t.integer  "collection_id"
-    t.boolean  "fulfilled",           :default => false, :null => false
-    t.boolean  "defaulted",           :default => false, :null => false
-    t.datetime "assigned_at"
-    t.datetime "fulfilled_at"
-    t.datetime "defaulted_at"
     t.integer  "creation_id"
     t.string   "creation_type"
+    t.integer  "offer_signup_id"
+    t.integer  "request_signup_id"
+    t.datetime "sent_at"
+    t.datetime "fulfilled_at"
+    t.datetime "defaulted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "pinch_hitter_id"
+    t.integer  "pinch_request_signup_id"
+    t.datetime "covered_at"
   end
 
   create_table "challenge_signups", :force => true do |t|
@@ -104,6 +105,8 @@ ActiveRecord::Schema.define(:version => 20100320165910) do
     t.integer  "pseud_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "assigned_as_request", :default => false
+    t.boolean  "assigned_as_offer",   :default => false
   end
 
   create_table "chapters", :force => true do |t|
@@ -294,12 +297,12 @@ ActiveRecord::Schema.define(:version => 20100320165910) do
   add_index "external_creatorships", ["external_author_name_id"], :name => "index_external_creatorships_on_external_author_name_id"
 
   create_table "external_works", :force => true do |t|
-    t.string   "url",             :default => "",    :null => false
-    t.string   "author",          :default => "",    :null => false
+    t.string   "url",                                :null => false
+    t.string   "author",                             :null => false
     t.boolean  "dead",            :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title",           :default => "",    :null => false
+    t.string   "title",                              :null => false
     t.text     "summary"
     t.boolean  "hidden_by_admin", :default => false, :null => false
   end
@@ -359,6 +362,7 @@ ActiveRecord::Schema.define(:version => 20100320165910) do
     t.string   "offer_url_label"
     t.string   "offer_description_label"
     t.string   "time_zone"
+    t.integer  "potential_match_settings_id"
   end
 
   create_table "gifts", :force => true do |t|
@@ -474,9 +478,54 @@ ActiveRecord::Schema.define(:version => 20100320165910) do
   end
 
   create_table "open_id_authentication_nonces", :force => true do |t|
-    t.integer "timestamp",                  :null => false
+    t.integer "timestamp",  :null => false
     t.string  "server_url"
-    t.string  "salt",       :default => "", :null => false
+    t.string  "salt",       :null => false
+  end
+
+  create_table "potential_match_settings", :force => true do |t|
+    t.integer  "num_required_prompts",        :default => 1,     :null => false
+    t.integer  "num_required_fandoms",        :default => 0,     :null => false
+    t.integer  "num_required_characters",     :default => 0,     :null => false
+    t.integer  "num_required_pairings",       :default => 0,     :null => false
+    t.integer  "num_required_freeforms",      :default => 0,     :null => false
+    t.integer  "num_required_categories",     :default => 0,     :null => false
+    t.integer  "num_required_ratings",        :default => 0,     :null => false
+    t.integer  "num_required_warnings",       :default => 0,     :null => false
+    t.boolean  "include_optional_fandoms",    :default => false, :null => false
+    t.boolean  "include_optional_characters", :default => false, :null => false
+    t.boolean  "include_optional_pairings",   :default => false, :null => false
+    t.boolean  "include_optional_freeforms",  :default => false, :null => false
+    t.boolean  "include_optional_categories", :default => false, :null => false
+    t.boolean  "include_optional_ratings",    :default => false, :null => false
+    t.boolean  "include_optional_warnings",   :default => false, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "potential_matches", :force => true do |t|
+    t.integer  "collection_id"
+    t.integer  "offer_signup_id"
+    t.integer  "request_signup_id"
+    t.integer  "num_prompts_matched"
+    t.boolean  "assigned",            :default => false, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "potential_prompt_matches", :force => true do |t|
+    t.integer  "potential_match_id"
+    t.integer  "offer_id"
+    t.integer  "request_id"
+    t.integer  "num_fandoms_matched"
+    t.integer  "num_characters_matched"
+    t.integer  "num_pairings_matched"
+    t.integer  "num_freeforms_matched"
+    t.integer  "num_categories_matched"
+    t.integer  "num_ratings_matched"
+    t.integer  "num_warnings_matched"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "preferences", :force => true do |t|
@@ -563,7 +612,7 @@ ActiveRecord::Schema.define(:version => 20100320165910) do
 
   create_table "pseuds", :force => true do |t|
     t.integer  "user_id"
-    t.string   "name",              :default => "",    :null => false
+    t.string   "name",                                 :null => false
     t.text     "description"
     t.boolean  "is_default",        :default => false, :null => false
     t.datetime "created_at"
@@ -637,7 +686,7 @@ ActiveRecord::Schema.define(:version => 20100320165910) do
   create_table "series", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title",           :default => "",    :null => false
+    t.string   "title",                              :null => false
     t.text     "summary"
     t.text     "notes"
     t.boolean  "hidden_by_admin", :default => false, :null => false
@@ -768,7 +817,7 @@ ActiveRecord::Schema.define(:version => 20100320165910) do
     t.boolean  "posted",                      :default => false, :null => false
     t.integer  "language_id"
     t.boolean  "restricted",                  :default => false
-    t.string   "title",                       :default => "",    :null => false
+    t.string   "title",                                          :null => false
     t.text     "summary"
     t.text     "notes"
     t.integer  "word_count"
