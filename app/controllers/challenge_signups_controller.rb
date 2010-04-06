@@ -9,6 +9,7 @@ class ChallengeSignupsController < ApplicationController
   before_filter :load_signup_from_id, :only => [:show, :edit, :update, :destroy]
   before_filter :allowed_to_destroy, :only => [:destroy]
   before_filter :signup_owner_only, :only => [:edit, :update]
+  before_filter :maintainer_or_signup_owner_only, :only => [:show]
   before_filter :check_signup_open, :only => [:new, :create, :edit, :update]
 
 
@@ -35,6 +36,10 @@ class ChallengeSignupsController < ApplicationController
 
   def signup_owner_only
     not_signup_owner and return unless (@challenge_signup.pseud.user == current_user || (!@challenge.signup_open && @collection.user_is_owner?(current_user)))
+  end
+  
+  def maintainer_or_signup_owner_only
+    not_allowed and return unless (@challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user))
   end
 
   def not_signup_owner
