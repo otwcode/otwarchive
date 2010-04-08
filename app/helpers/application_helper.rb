@@ -63,27 +63,31 @@ module ApplicationHelper
   end
       
   def non_anonymous_byline(creation)
-    pseuds = []
-    pseuds << creation.authors if creation.authors
-    pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
-    pseuds = pseuds.flatten.uniq.sort
+    if creation.respond_to?(:author)
+      creation.author
+    else
+      pseuds = []
+      pseuds << creation.authors if creation.authors
+      pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
+      pseuds = pseuds.flatten.uniq.sort
     
-    archivists = {}
-    if creation.is_a?(Work)
-      external_creatorships = creation.external_creatorships.select {|ec| !ec.claimed?}
-      external_creatorships.each do |ec|
-        archivist_pseud = pseuds.select {|p| ec.archivist.pseuds.include?(p)}.first
-        archivists[archivist_pseud] = ec.external_author_name.name
+      archivists = {}
+      if creation.is_a?(Work)
+        external_creatorships = creation.external_creatorships.select {|ec| !ec.claimed?}
+        external_creatorships.each do |ec|
+          archivist_pseud = pseuds.select {|p| ec.archivist.pseuds.include?(p)}.first
+          archivists[archivist_pseud] = ec.external_author_name.name
+        end
       end
-    end
     
-    pseuds.collect { |pseud| 
-      archivists[pseud].nil? ? 
-        link_to(pseud.byline, [pseud.user, pseud], :class => "login author") : 
-        archivists[pseud] + 
-          t('byline.archived_by', :default => "[archived by {{archivist}}]", 
-            :archivist => link_to(pseud.byline, [pseud.user, pseud], :class => "login author"))
-    }.join(', ')
+      pseuds.collect { |pseud| 
+        archivists[pseud].nil? ? 
+          link_to(pseud.byline, [pseud.user, pseud], :class => "login author") : 
+          archivists[pseud] + 
+            t('byline.archived_by', :default => "[archived by {{archivist}}]", 
+              :archivist => link_to(pseud.byline, [pseud.user, pseud], :class => "login author"))
+      }.join(', ')
+    end
   end
 
   # Currently, help files are static. We may eventually want to make these dynamic? 

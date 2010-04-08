@@ -124,10 +124,41 @@
       
       <!-- Inspiration / remix -->
       <dt class="work-parent">
-        <%= f.label :parent_url, t('remix_or_inspired', :default => "If your work is a remix or was inspired by another work in the archive, copy and paste that work's url below:") %>
+        <%= check_box_tag "parent-options-show", "1", !@work.parent_work_relationships.blank?, :onclick => "toggleFormField('parent-options');" %>
       </dt>
       <dd class="work-parent">
-        <%= f.text_field :parent_url, :value => @work.url_for_parent, :live => true %>
+        <%= label_tag 'parent-options-show', t('related_work', :default => "This work is is a remix or was inspired by another work") %>
+      </dd>
+      
+      <!-- Toggles on with parent checkbox -->
+      <dd id="parent-options">
+        <dl>
+        <% fields_for "work[parent_attributes]" do |p| %>
+          <dt><%= p.label :url %></dt>
+          <dd>
+            <%= p.text_field :url %>
+            <p class="important">For a work in the archive, only the url is required.</p>
+          </dd>
+
+          <dt><%= p.label :title %></dt>
+          <dd><%= p.text_field :title %></dd>
+
+          <dt><%= p.label :author %></dt>
+          <dd><%= p.text_field :author %></dd> 
+        <%- end -%>
+
+        <%- unless @work.parent_work_relationships.blank? -%>
+          <dt><%= 'Current parent works' -%></dt>
+          <%- for related_work in @work.parent_work_relationships -%>
+            <dd>
+              <ul class="navigation">
+                <li><%= link_to related_work.parent.title, related_work.parent %></li> 
+                <li><%= link_to 'Remove', related_work, :confirm => 'Are you sure?', :method => :delete %></li>
+              </ul>
+            </dd>
+          <%- end -%>
+        <%- end -%>          
+        </dl>
       </dd>
 
       <!-- Series checkbox (storyseriescheck) -->

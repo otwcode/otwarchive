@@ -124,7 +124,7 @@ function selectAllCheckboxes(basefield, count, checked) {
 // Hides expandable form field options if Javascript is enabled
 function hideFormFields() {
     if ($('work-form') != null) {
-        var toHide = ['co-authors-options', 'front-notes-options', 'end-notes-options', 'chapters-options', 'series-options', 'backdate-options']
+        var toHide = ['co-authors-options', 'front-notes-options', 'end-notes-options', 'chapters-options', 'parent-options', 'series-options', 'backdate-options']
         toHide.each(function(name) {
             if ($(name)) {
                 if ($(name + '-show').checked == false) { $(name).addClassName('hidden'); }

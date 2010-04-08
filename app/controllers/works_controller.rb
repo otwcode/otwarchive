@@ -316,27 +316,29 @@ class WorksController < ApplicationController
     load_pseuds
     @series = current_user.series.uniq
 
-    if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
-      @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
-    elsif params[:edit_button]
+    if params[:edit_button]
       render :action => :new
     elsif params[:cancel_button]
       flash[:notice] = t('posting_canceled', :default => "New work posting canceled.")
       redirect_to current_user
-    else # now also treating the cancel_coauthor_button case, bc it should function like a preview, really
-      saved = @work.save
-      unless saved && @work.has_required_tags? && @work.set_revised_at(@chapter.published_at)
-        unless @work.has_required_tags?
-          if @work.fandoms.blank?
-            @work.errors.add(:base, "Creating: Please add all required tags. Fandom is missing.")
-          else
-            @work.errors.add(:base, "Creating: Required tags are missing.")
-          end
-        end
-        render :action => :new
-      else
+    else # now also treating the cancel_coauthor_button case, bc it should function like a preview, really 
+      valid = (@work.errors.empty? && @work.invalid_pseuds.blank? && @work.ambiguous_pseuds.blank? && @work.has_required_tags?)
+      if valid && @work.save && @work.set_revised_at(@chapter.published_at)
         flash[:notice] = t('draft_created', :default => 'Draft was successfully created.')
         redirect_to preview_work_path(@work)
+      else
+        if @work.errors.empty? && (!@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?)
+          render :partial => 'choose_coauthor', :layout => 'application'
+        else
+          unless @work.has_required_tags?
+            if @work.fandoms.blank?
+              @work.errors.add(:base, "Please add all required tags. Fandom is missing.")
+            else
+              @work.errors.add(:base, "Required tags are missing.")
+            end
+          end
+          render :action => :new
+        end
       end
     end
   end

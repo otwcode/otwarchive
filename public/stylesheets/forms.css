@@ -103,12 +103,14 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 #work-form dd fieldset legend, #work-form fieldset.post-work legend{height:0;width:0;font-size:0;}
 
 #work-form dt {margin: 1.5em 0 .5em 0;}
+#work-form dt.work-parent,
 #work-form dt.work-is_serial,
 #work-form dt.work-restricted,
 #work-form dt.work-is_wip,
 #work-form dt.work-is-backdated,
 #work-form dt.coauthors,
 #work-form dt.endnotes  {position:relative; bottom:-1.5em; width:2em; height:1em; margin:1em 0 0 0;}
+#work-form dd.work-parent,
 #work-form dd.work-is_serial,
 #work-form dd.work-restricted,
 #work-form dd.work-is_wip,
@@ -154,6 +156,11 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 #work-form dl.notes dl dd.validation {margin-top:0;}
 #work-form .endnotes span.warning {position:absolute; top:0; left:10em;}
 
+#work-form #parent-options dl dt {width:9em;}
+#work-form #parent-options dl dd {left:10em;}
+#work-form dd ul.navigation {float:left;}
+#work-form dd dd input[type="text"] {width:80%;}
+#work-form dd dd select {width:auto;}
 #series-options dl dt {width: 19em;}
 #series-options dl dd {left:20em;width:46em;}
 #series-options input[type="text"] {width:45em;}

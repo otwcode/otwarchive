@@ -153,7 +153,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :orphans, :collection => {:about => :get}, :only => [:index, :new, :create] 
 
-  map.resources :external_works, :has_many => :bookmarks, :only => :new 
+  map.resources :external_works, :has_many => :bookmarks
 
   map.resources :communities 
 

@@ -11,6 +11,10 @@ class ExternalWorksController < ApplicationController
      url = ExternalWork.format_url(params['external_url'])
      @external_work = ExternalWork.find(:first, :conditions => {:url => url})
    end  
-  end  
+  end
+  
+  def show
+    @external_work = ExternalWork.find(params[:id])
+  end
   
 end

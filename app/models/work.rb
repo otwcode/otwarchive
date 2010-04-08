@@ -20,6 +20,7 @@ class Work < ActiveRecord::Base
   has_many :series, :through => :serial_works
 
   has_many :related_works, :as => :parent
+  has_many :parent_works, :class_name => "RelatedWork"
   has_many :parent_work_relationships, :class_name => "RelatedWork"
   
   has_many :gifts, :dependent => :destroy
@@ -113,12 +114,6 @@ class Work < ActiveRecord::Base
     :allow_blank => true,
     :maximum => ArchiveConfig.NOTES_MAX,
     :too_long => t('notes_too_long', :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.NOTES_MAX)
-
-  #temporary validation to let people know they can't enter external urls yet
-  validates_format_of :parent_url,
-    :with => Regexp.new(ArchiveConfig.APP_URL, true),
-    :allow_blank => true,
-    :message => t('parent_archive_only', :default => "can only be in the archive for now - we're working on expanding that!")
 
   # Checks that work has at least one author
   def validate_authors
@@ -890,19 +885,33 @@ class Work < ActiveRecord::Base
   end
 
   # Virtual attribute for parent work, via related_works
-  def parent_url
-    self.url_for_parent
-  end
-
-  def parent_url=(url)
-    self.url_for_parent = url
-    unless url.blank?
-      if url.include?(ArchiveConfig.APP_URL)
-        id = url.match(/works\/\d+/).to_a.first
+  def parent_attributes=(attributes)
+    unless attributes[:url].blank?
+      if attributes[:url].include?(ArchiveConfig.APP_URL)
+        id = attributes[:url].match(/works\/\d+/).to_a.first
         id = id.split("/").last unless id.nil?
         self.new_parent = Work.find(id)
+      elsif attributes[:title].blank? || attributes[:author].blank?
+        error_message = ""
+        if attributes[:title].blank?
+          error_message << "A parent work outside the archive needs to have a title. "
+        end
+        if attributes[:author].blank?
+          error_message << "A parent work outside the archive needs to have an author. "
+        end
+        self.errors.add_to_base(error_message)
       else
-        #TODO: handle related works that are not in the archive
+        ew = ExternalWork.find_by_url(attributes[:url])
+        if ew && (ew.title == attributes[:title]) && (ew.author == attributes[:author])
+          self.new_parent = ew
+        else
+          ew = ExternalWork.new(attributes)
+          if ew.save
+            self.new_parent = ew
+          else
+            self.errors.add_to_base("Parent work info would not save.")
+          end
+        end
       end
     end
   end
