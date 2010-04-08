@@ -100,6 +100,15 @@ namespace :After do
 
 
   #### Add your new tasks here
+  desc "Map gifts to pseuds where that is feasible"
+  task(:map_gifts => :environment) do
+    gifts = Gift.find(:all)
+    gifts.each do |gift|
+      gift.recipient = gift.recipient_name
+      gift.save
+    end
+  end
+  
 
 end # this is the end that you have to put new tasks above
 

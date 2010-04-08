@@ -69,7 +69,9 @@ class PotentialMatchesController < ApplicationController
         @potential_matches[match.request_signup.id] ||= []
         @potential_matches[match.request_signup.id] << match
       end
-      @assignments = @collection.assignments.sort
+      @assignments_with_request_and_offer = @collection.assignments.with_request.with_offer.sort
+      @assignments_with_no_offer = @collection.assignments.with_no_offer.sort
+      @assignments_with_no_request = @collection.assignments.with_no_request.sort
     end
   end
 

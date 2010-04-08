@@ -44,6 +44,10 @@ class ChallengeAssignment < ActiveRecord::Base
   named_scope :uncovered, {:conditions => ["covered_at IS NULL"]}
   named_scope :covered, {:conditions => ["covered_at IS NOT NULL"]}
   
+  named_scope :with_offer, {:conditions => ["offer_signup_id IS NOT NULL"]}
+  named_scope :with_request, {:conditions => ["request_signup_id IS NOT NULL"]}
+  named_scope :with_no_request, {:conditions => ["request_signup_id IS NULL"]}
+  named_scope :with_no_offer, {:conditions => ["offer_signup_id IS NULL"]}  
 
   before_destroy :clear_assignment
   def clear_assignment
@@ -81,9 +85,21 @@ class ChallengeAssignment < ActiveRecord::Base
 
   include Comparable
   def <=>(other)
-    return 1 if self.request_signup.nil?
-    return -1 if other.request_signup.nil?
-    self.request_signup.pseud.name.downcase <=> other.request_signup.pseud.name.downcase
+    return -1 if self.request_signup.nil? && other.request_signup
+    return 1 if other.request_signup.nil? && self.request_signup
+    return -1 if self.offer_signup.nil? && other.offer_signup
+    return 1 if other.offer_signup.nil? && self.offer_signup
+    cmp = self.request_byline.downcase <=> other.request_byline.downcase
+    return cmp if cmp != 0
+    self.offer_byline.downcase <=> other.offer_byline.downcase
+  end
+  
+  def title
+    "#{self.collection.title} (#{self.request_byline})"
+  end
+  
+  def offering_user
+    offering_pseud ? offering_pseud.user : nil
   end
   
   def offering_pseud
@@ -95,11 +111,11 @@ class ChallengeAssignment < ActiveRecord::Base
   end
   
   def offer_byline
-    offer_signup ? offer_signup.pseud.byline : (pinch_hitter ? (pinch_hitter.byline + "* (pinch hitter)") : "none")
+    offer_signup ? offer_signup.pseud.byline : (pinch_hitter ? (pinch_hitter.byline + "* (pinch hitter)") : "- none -")
   end
   
   def request_byline
-    request_signup ? request_signup.pseud.byline : (pinch_request_signup ? (pinch_request_byline + "* (pinch recipient)") : "none")
+    request_signup ? request_signup.pseud.byline : (pinch_request_signup ? (pinch_request_byline + "* (pinch recipient)") : "- None -")
   end
 
   def pinch_hitter_byline
@@ -181,7 +197,6 @@ class ChallengeAssignment < ActiveRecord::Base
         end
       end
     end
-      
   end
   
   # go through the request's potential matches in order from best to worst and try and assign

@@ -60,6 +60,7 @@ class User < ActiveRecord::Base
   has_many :challenge_signups, :through => :pseuds
   has_many :offer_assignments, :through => :pseuds
   has_many :pinch_hit_assignments, :through => :pseuds
+  has_many :gifts, :through => :pseuds
   
   has_many :readings, :dependent => :destroy 
   has_many :bookmarks, :through => :pseuds 
@@ -157,10 +158,6 @@ class User < ActiveRecord::Base
   # Returns an array (of pseuds) of this user's co-authors
   def coauthors
      works.collect(&:pseuds).flatten.uniq - pseuds
-  end
-  
-  def gifts
-    pseuds.collect(&:gifts).flatten.uniq
   end
   
   # Gets the user's most recent unposted work

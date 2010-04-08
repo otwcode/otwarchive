@@ -33,12 +33,15 @@
         <% end %>
       </td>
       <td>
-        <ul class="navigation">
-          <li>
-            <%= link_to "Default", default_user_assignment_path(@user, assignment), 
-                :confirm => "Are you sure? This will mark you as having defaulted and notify the collection maintainer! It cannot be undone." %>
-          </li>
-        </ul>
+        <% unless assignment.fulfilled? %>
+          <ul class="navigation">
+            <li>
+              <%= link_to "Default", default_user_assignment_path(@user, assignment), 
+                  :confirm => "Are you sure? This will mark you as having defaulted and notify the collection maintainer! It cannot be undone." %>
+            </li>
+            <li><%= link_to t('assignment.post_new', :default => "Post To Fulfill"), new_collection_work_path(assignment.collection, :assignment_id => assignment.id) %></li>
+          </ul>
+        <% end %>
       </td>
     </tr>
   <% end %>

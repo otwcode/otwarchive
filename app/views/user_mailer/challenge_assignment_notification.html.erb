@@ -1,7 +1,7 @@
 <h2>Your Assignment</h2>
 
 <p>
-  You have been assigned the following request in the <%= link_to(h(@collection.title), @collection) -%> challenge at the Archive of Our Own!
+  You have been assigned the following request in the <%= link_to(h(@collection.title), collection_url(@collection, :host => @host)) -%> challenge at the Archive of Our Own!
 </p>
 
 <p>
@@ -9,7 +9,7 @@
 </p>
 
 <p>
-  Recipient: <%= link_to(@request.pseud.byline, user_pseud_url(@request.pseud.user, @request.pseud, :host => @host)) %>
+  Recipient: <%= @request.nil? ? "None: contact a moderator for help!" : link_to(@request.pseud.byline, user_pseud_url(@request.pseud.user, @request.pseud, :host => @host)) %>
 </p>
 
 <%= render :partial => "challenge_signups/show_requests", :locals => {:challenge_signup => @request} -%>

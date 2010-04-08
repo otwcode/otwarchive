@@ -3,12 +3,12 @@ class ChallengeAssignmentsController < ApplicationController
   before_filter :users_only
   before_filter :load_collection, :except => [:index, :default]
   before_filter :collection_owners_only, :except => [:index, :show, :default]
-  before_filter :load_assignment_from_id, :only => [:show, :default, :undefault]
+  before_filter :load_assignment_from_id, :only => [:show, :default, :undefault, :ignore_default]
 
   before_filter :load_challenge, :except => [:index]
   before_filter :check_signup_closed, :except => [:index]
   before_filter :check_assignments_not_sent, :only => [:generate, :set, :send_out]
-  before_filter :check_assignments_sent, :only => [:create, :default, :undefault, :mark_defaulted, :purge]
+  before_filter :check_assignments_sent, :only => [:create, :default, :undefault, :mark_defaulted, :ignore_default, :purge]
 
   before_filter :load_user, :only => [:default]
   before_filter :owner_only, :only => [:default]
@@ -157,7 +157,7 @@ class ChallengeAssignmentsController < ApplicationController
     if ArchiveConfig.NO_DELAYS
       ChallengeAssignment.send_out!(@collection)
     else
-      ChallengeAssignment.send_later send_out!, @collection
+      ChallengeAssignment.send_later :send_out!, @collection
     end
     flash[:notice] = "Assignments are now being sent out."
     redirect_to collection_assignments_path(@collection)
@@ -217,6 +217,13 @@ class ChallengeAssignmentsController < ApplicationController
     @challenge_assignment.defaulted_at = nil
     @challenge_assignment.save
     flash[:notice] = "Assignment marked as not-defaulted."
+    redirect_to collection_assignments_path(@collection)
+  end
+  
+  def ignore_default
+    @challenge_assignment.covered_at = Time.now
+    @challenge_assignment.save
+    flash[:notice] = "Assignment marked as covered, it will not appear in the defaulted list anymore."
     redirect_to collection_assignments_path(@collection)
   end
   

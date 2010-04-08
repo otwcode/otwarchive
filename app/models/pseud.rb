@@ -26,6 +26,7 @@ class Pseud < ActiveRecord::Base
   has_many :collection_participants, :dependent => :destroy
   has_many :collections, :through => :collection_participants
   has_many :challenge_signups, :dependent => :destroy
+  has_many :gifts
   
   has_many :offer_assignments, :through => :challenge_signups, :conditions => ["challenge_assignments.sent_at IS NOT NULL"]
   has_many :pinch_hit_assignments, :class_name => "ChallengeAssignment", :foreign_key => "pinch_hitter_id", 
@@ -61,7 +62,7 @@ class Pseud < ActiveRecord::Base
       :order => :name
     }
   }
-
+  
   named_scope :alphabetical, :order => :name
   named_scope :starting_with, lambda {|letter| {:conditions => ['SUBSTR(name,1,1) = ?', letter]}}
   
@@ -73,9 +74,6 @@ class Pseud < ActiveRecord::Base
     ALPHABET = ['A']
   end
 
-  def gifts
-    self.new_record? ? [] : Gift.for_pseud(self)
-  end
 
   # Enigel Dec 12 08: added sort method
   # sorting by pseud name or by login name in case of equality
@@ -114,15 +112,12 @@ class Pseud < ActiveRecord::Base
     end
   end
 
-  # Produces a byline that indicates the user's name if pseud is not unique
-  def byline
-    (name != user_name) ? name + " (" + user_name + ")" : name
-  end
-  
   def unposted_works
     @unposted_works = self.works.find(:all, :conditions => {:posted => false}, :order => 'works.created_at DESC')
   end
   
+
+  # look up by byline
   named_scope :by_byline, lambda {|byline|
     {
       :conditions => ['users.login = ? AND pseuds.name = ?', 
@@ -132,27 +127,37 @@ class Pseud < ActiveRecord::Base
       :include => :user
     }
   }
+
+  # Produces a byline that indicates the user's name if pseud is not unique
+  def byline
+    (name != user_name) ? name + " (" + user_name + ")" : name
+  end
+
+  # Parse a string of the "pseud.name (user.login)" format into a pseud
+  def self.parse_byline(byline, options = {})
+    pseud_name = ""
+    user_login = ""
+    if byline.include?("(") 
+      pseud_name, user_login = byline.split('(', 2)
+      pseud_name = pseud_name.strip
+      user_login = user_login.strip.chop
+      conditions = ['users.login = ? AND pseuds.name = ?', user_login, pseud_name]
+    elsif options[:assume_matching_login]
+      pseud_name = byline.strip
+      conditions = ['users.login = ? AND pseuds.name = ?', pseud_name, pseud_name]
+    else
+      conditions = ['pseuds.name = ?', pseud_name]
+    end
+    Pseud.find(:all, :include => :user, :conditions => conditions)
+  end    
   
   # Takes a comma-separated list of bylines
   # Returns a hash containing an array of pseuds and an array of bylines that couldn't be found
-  def self.parse_bylines(list, assume_matching_login=false)
+  def self.parse_bylines(list, options = {})
     valid_pseuds, ambiguous_pseuds, failures = [], {}, []
     bylines = list.split ","
     for byline in bylines
-      if byline.include?("(") || assume_matching_login
-        if byline.include? "(" 
-          pseud_name, user_login = byline.split('(', 2)
-          pseud_name = pseud_name.strip
-          user_login = user_login.strip.chop
-        elsif assume_matching_login
-          pseud_name = byline.strip
-          user_login = pseud_name
-        end
-        conditions = ['users.login = ? AND name = ?', user_login, pseud_name]
-      else
-        conditions = {:name => byline.strip}
-      end
-      pseuds = Pseud.find(:all, :include => :user, :conditions => conditions)
+      pseuds = Pseud.parse_byline(byline, options)
       if pseuds.length == 1 
         valid_pseuds << pseuds.first
       elsif pseuds.length > 1 
@@ -172,6 +177,7 @@ class Pseud < ActiveRecord::Base
     self.creations.each {|creation| change_ownership(creation, self.user.default_pseud) }
     Comment.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}") unless self.comments.blank?
     change_collections_membership
+    change_gift_recipients
     self.destroy
   end
 
@@ -198,6 +204,10 @@ class Pseud < ActiveRecord::Base
       cparticipant.pseud = new_pseud
       cparticipant.save
     end
+  end
+  
+  def change_gift_recipients
+    Gift.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}") and return
   end
   
   def change_bookmarks_ownership

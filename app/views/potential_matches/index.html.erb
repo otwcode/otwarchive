@@ -1,4 +1,4 @@
-<h3>Matching for <%= sanitize_title_for_display(@collection.title) -%></h3>
+<h2>Matching for <%= sanitize_title_for_display(@collection.title) -%></h2>
 <% if @challenge.signup_open %>
   <p class="note">
     You cannot generate matches while signup is still open! After you have closed signup (in Challenge Settings),
@@ -38,77 +38,83 @@
 
     <%= render :partial => "match_navigation" -%>
 
+    <h3>This header bonks into the controls</h3>
+
     <table>
+      <% if @assignments_with_no_request.size > 0 %>
+        <tr>
+          <th colspan=5>Missing Recipients</th>
+        </tr>
+        <tr>
+          <td colspan=5>
+            <p class="note">
+              These people could not be assigned a request. 
+              For these special cases, you may be able to assign a request by shuffling the assigned givers below in the
+              main assignments (in which case the giver's line will disappear from this section after you update), 
+              or you can manually assign a pinch recipient (who will then get two gifts instead of one).
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <th>Pseud</th>
+          <th colspan=3>Write-In Pinch Recipient</th>
+          <th>Manage</th>
+        </tr>      
+
+        <% @assignments_with_no_request.each do |assignment| %>
+          <%= render :partial => "assignment_with_no_request", :locals => {:assignment => assignment} %>
+        <% end %>
+      <% end %>
+
+      <% if @assignments_with_no_offer.size > 0 %>        
+        <tr>
+          <th colspan=5>Missing Givers</th>
+        </tr>
+        <tr>
+          <td colspan=5>
+            <p class="note">
+              These people could not be assigned a giver. You can shuffle the main assignments below to free someone up and 
+              assign them as a giver, or you can assign a pinch hitter. (Note: the form <em>will</em> allow you to double-assign
+              people, but you need to make sure they are willing to write two assignments first!)
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <th>Pseud</th>
+          <th>Giving Gift To</th>
+          <th>Assigned Giver</th>
+          <th>Write-In Pinch Hitter</th>
+          <th>Manage</th>
+        </tr>
+
+        <% @assignments_with_no_offer.each do |assignment| %>
+          <%= render :partial => "assignment_with_request", :locals => {:assignment => assignment} %>
+        <% end %>
+      <% end %>
+      
+      <tr>
+        <th colspan=5>Main Assignments</th>
+      </tr>
+      <tr>
+        <td colspan=5>
+          <p class="note">
+            Everyone in this section has been assigned a giver. You can shuffle these assignments around
+            as much as you want. Note that circular matches (where A is assigned to B and B is assigned to A)
+            do happen by random chance. 
+          </p>
+        </td>
+      </tr>
       <tr>
         <th>Pseud</th>
         <th>Giving Gift To</th>
-        <th>Potential Matches</th>
         <th>Assigned Giver</th>
         <th>Write-In Pinch Hitter</th>
+        <th>Manage</th>
       </tr>
 
-      <% @assignments.each do |assignment| %>
-        <% fields_for "challenge_assignments[]", assignment do |assignment_form| %>
-        <% request_signup = assignment.request_signup %>
-        <% unless request_signup %>
-          <tr>
-            <td colspan=4>
-              <%= assignment_form.hidden_field :collection_id, :value => @collection.id %>
-              <%= assignment_form.hidden_field :offer_signup_id, :value => assignment.offer_signup.id %>
-              <% if !assignment.offer_signup.offer_potential_matches.empty? %>
-                No recipient assigned for <%= assignment.offer_signup.pseud.byline -%>.  
-                </td><td>
-                <%= assignment_form.collection_select :pinch_request_signup_id, assignment.offer_signup.offer_potential_matches.sort.reverse.collect(&:request_signup), :id, :byline, :include_blank => "Please select a potential match as pinch recipient" -%>
-              <% else %>
-                No potential recipients for <%= assignment.offer_signup.pseud.byline -%>. 
-                Write-in pinch recipient (must be signed up): 
-                </td><td>
-                <%= assignment_form.text_field :pinch_request_byline, :value => assignment.pinch_request_byline %>
-                <%= autocomplete_text_field "challenge_assignments_#{assignment.id}_pinch_request_byline", :methodname => "challenge_participants", :no_comma => true, :extra_params => "collection_id=#{@collection.id}" %>
-              <% end %>
-            </td>
-          </tr>
-        <% else %>
-          <tr>
-            <td>
-              <%= assignment_form.hidden_field :collection_id, :value => @collection.id %>
-              <%= assignment_form.hidden_field :request_signup_id, :value => request_signup.id %>
-              <%= link_to(request_signup.pseud.byline, collection_signup_path(@collection, request_signup)) -%>
-              <ul class="navigation">
-                <li><%= link_to(t("potential_matches.send_note", :default => "email"), "mailto:#{request_signup.pseud.user.email}?subject=[#{ArchiveConfig.APP_NAME}][#{h(@collection.title)}] Message from Collection Maintainer") %></li>
-              </ul>
-            </td>
-            <td>
-              <%= request_signup.offer_assignments.map { |offer_assignment| 
-                offer_assignment.request_signup ?
-                  "#{offer_assignment.request_signup.pseud.byline}" :
-                  (offer_assignment.pinch_request_signup ?
-                    "#{offer_assignment.pinch_request_signup.pseud.byline}* 
-                     (pinch recipient)" : 
-                     "<strong>None</strong>")}.join(", ") 
-              -%>
-            </td>  
-            <td>
-              <% if !(@pmatches = request_signup.request_potential_matches).empty? %>
-                <% @pmatches = @pmatches.sort.reverse %>
-                <%= @pmatches.map {|pm| link_to(pm.offer_signup.byline, collection_potential_match_path(@collection, pm))}.join(", ") -%>
-              <% else %>
-                <strong>No matches</strong>
-              <% end %>
-            </td>
-            <td>
-                <%= assignment_form.collection_select :offer_signup_id, @pmatches.collect(&:offer_signup), :id, :byline, 
-                                                      :include_blank => "- None Assigned -" -%>
-            </td>
-            <td>
-              <%= assignment_form.text_field :pinch_hitter_byline %>
-              <%= autocomplete_text_field("challenge_assignments_#{assignment.id}_pinch_hitter_byline", :methodname => "pseud_byline", :no_comma => true) -%>
-            </td>
-          </tr>
-        <% end %>
+      <% @assignments_with_request_and_offer.each do |assignment| %>
+        <%= render :partial => "assignment_with_request", :locals => {:assignment => assignment} %>
       <% end %>
-      <% end %>
-
     </table>
 
     <%= render :partial => "match_navigation" -%>

@@ -32,6 +32,7 @@
               <ul class=navigation>
                 <li><%= submit_tag "Assign Pinch Hitter" %></li>
                 <li><%= link_to "Clear Default", undefault_collection_assignment_path(@collection, assignment) -%></li>
+                <li><%= link_to "Ignore", ignore_default_collection_assignment_path(@collection, assignment) -%></li>
               </ul>
             <% end %>
           </td>
@@ -76,8 +77,7 @@
         </td>
         <td>
           <% if assignment.creation %>
-            <%= link_to "Posted on #{assignment.fulfilled_at}", assignment.creation %>
-            <%= assignment.creation.respond_to?("tags") ? "Tags: " + tag_link_list(assignment.creation.tags) : "" %>
+            <%= link_to "Posted on #{assignment.creation.published_at}", assignment.creation %>
             <% if !assignment.fulfilled? %>
               <p class="note">Not yet approved</p>
             <% end %>

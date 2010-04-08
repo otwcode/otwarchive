@@ -33,6 +33,8 @@ class Work < ActiveRecord::Base
   has_many :approved_collection_items, :class_name => "CollectionItem", :as => :item, 
     :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
   
+  has_many :challenge_assignments, :as => :creation
+  accepts_nested_attributes_for :challenge_assignments
 
   has_many :collections, :through => :collection_items
   has_many :approved_collections, :through => :collection_items, :source => :collection,
@@ -173,7 +175,7 @@ class Work < ActiveRecord::Base
   ########################################################################
   before_save :validate_authors, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
-  before_save :set_word_count, :post_first_chapter
+  before_save :set_word_count, :post_first_chapter, :set_challenge_info
 
   after_save :save_chapters, :save_parents
 
@@ -233,7 +235,7 @@ class Work < ActiveRecord::Base
     end
     self.authors << Pseud.find(attributes[:ambiguous_pseuds]) if attributes[:ambiguous_pseuds]
     if !attributes[:byline].blank?
-      results = Pseud.parse_bylines(attributes[:byline])
+      results = Pseud.parse_bylines(attributes[:byline], :keep_ambiguous => true)
       self.authors << results[:pseuds]
       self.invalid_pseuds = results[:invalid_pseuds]
       self.ambiguous_pseuds = results[:ambiguous_pseuds]
@@ -268,6 +270,21 @@ class Work < ActiveRecord::Base
     save
     self.remove_author(old_user) if old_user && users.include?(old_user)
   end
+  
+  def set_challenge_info
+    # if this is fulfilling a challenge, add the collection and recipient
+    challenge_assignments.each do |assignment|
+      add_to_collection(assignment.collection)
+      unless recipients.include?(assignment.request_byline)
+        gift = Gift.new(:pseud => assignment.requesting_pseud)
+        self.gifts << gift
+      end
+    end
+  end      
+
+  def challenge_assignment_ids
+    challenge_assignments.map(&:id)
+  end
 
   def collection_names=(new_collection_names)
     collection_attributes_to_set = []
@@ -287,11 +304,15 @@ class Work < ActiveRecord::Base
     self.collection_items_attributes = collection_attributes_to_set
   end
   
-  def add_to_collection!(collection)
+  def add_to_collection(collection)
     if collection && !self.collections.include?(collection)
       self.collections << collection
-      save
     end
+  end
+  
+  def add_to_collection!(collection)
+    add_to_collection(collection)
+    save
   end
   
   def remove_from_collection!(collection)
@@ -308,23 +329,23 @@ class Work < ActiveRecord::Base
   def recipients=(recipient_names)
     gift_attributes_to_set = []
     new_recipients_array = recipient_names.split(',').map {|name| name.strip}.uniq.sort
-    old_recipients_array = gifts.name_only.collect(&:recipient_name)
+    old_recipients_array = gifts.collect(&:recipient)
     
     new_recips = new_recipients_array - old_recipients_array
     new_recips.each do |recipient_name|
-      gift_attributes_to_set << {:recipient_name => recipient_name}
+      gift_attributes_to_set << {:recipient => recipient_name}
     end
     
     removed_recips = old_recipients_array - new_recipients_array
-    removed_recips.each do |recipient_name|
-      gift_to_remove = gifts.for_recipient(recipient_name).first
+    removed_recips.each do |recipient|
+      gift_to_remove = gifts.select {|g| (g.pseud.byline == recipient || g.recipient_name == recipient)}.first
       gift_attributes_to_set << {:id => gift_to_remove.id, '_delete' => '1'} if gift_to_remove
     end
     self.gifts_attributes = gift_attributes_to_set
   end
 
   def recipients
-    self.gifts.delete_if {|gift| gift.marked_for_destruction?}.collect(&:recipient_name).join(",")
+    self.gifts.delete_if {|gift| gift.marked_for_destruction?}.collect(&:recipient).join(",")
   end
         
   ########################################################################

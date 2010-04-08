@@ -76,7 +76,7 @@ class UserMailer < ActionMailer::Base
     sent_on       Time.now
     from          ArchiveConfig.RETURN_ADDRESS
     content_type  "text/html"
-    body          :collection => collection, :assigned_user => assigned_user, :request => assignment.request_signup || assignment.pinch_request_signup, :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
+    body          :collection => collection, :assigned_user => assigned_user, :request => (assignment.request_signup || assignment.pinch_request_signup), :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
   end
 
   # Asks a user to validate and activate their new account

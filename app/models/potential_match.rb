@@ -6,6 +6,9 @@ class PotentialMatch < ActiveRecord::Base
   # class variable for tracking state of potential match generation
   # collection => pseud of current signup
   @@collection_position = {}
+  
+  # class variable for interrupting potential match generation
+  @@collection_interrupt = {}
 
   belongs_to :collection
   belongs_to :offer_signup, :class_name => "ChallengeSignup"
@@ -25,6 +28,9 @@ class PotentialMatch < ActiveRecord::Base
   def self.generate!(collection)
     PotentialMatch.clear!(collection)
     collection.signups.order_by_pseud.each do |request_signup|
+      if @@collection_interrupt[collection.name]
+        break
+      end
       PotentialMatch.generate_for_signup(collection, request_signup)
     end
     PotentialMatch.finish_generation(collection)
@@ -41,8 +47,13 @@ class PotentialMatch < ActiveRecord::Base
 
   def self.finish_generation(collection)
     @@collection_position.delete(collection.name)
-    ChallengeAssignment.generate!(collection)
-    UserMailer.deliver_potential_match_generation_notification(collection)
+    if @@collection_interrupt[collection.name]
+      @@collection_interrupt.delete(collection.name)
+      PotentialMatch.clear!(collection)
+    else
+      ChallengeAssignment.generate!(collection)
+      UserMailer.deliver_potential_match_generation_notification(collection)
+    end
   end
 
   def self.in_progress?(collection)

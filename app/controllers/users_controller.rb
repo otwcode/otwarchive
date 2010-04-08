@@ -244,24 +244,25 @@ class UsersController < ApplicationController
             end
           end
         end
-        # Orphans works where user is sole author, keeps their pseud on the orphan account
         if params[:sole_author] == 'keep_pseud'
+          # Orphans works where user is sole author, keeps their pseud on the orphan account
           pseuds = @user.pseuds
           works = @sole_authored_works
           use_default = params[:use_default] == "true"
           Creatorship.orphan(pseuds, works, use_default)
           Collection.orphan(pseuds, @sole_owned_collections, use_default)
-          # Orphans works where user is sole author, uses the default orphan pseud
         elsif params[:sole_author] == 'orphan_pseud'
+          # Orphans works where user is sole author, uses the default orphan pseud
           pseuds = @user.pseuds
           works = @sole_authored_works
           Creatorship.orphan(pseuds, works)
           Collection.orphan(pseuds, @sole_owned_collections)
-          # Deletes works where user is sole author
         elsif params[:sole_author] == 'delete'
+          # Deletes works where user is sole author
           @sole_authored_works.each do |s|
             s.destroy
           end
+          # Deletes collections where user is sole author
           @sole_owned_collections.each do |c|
             c.destroy
           end

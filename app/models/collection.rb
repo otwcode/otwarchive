@@ -166,13 +166,13 @@ class Collection < ActiveRecord::Base
 
   # # check to see if this user has received an item in this collection
   # def user_has_received_item(user)
-  #   @received_pseuds ||= Pseud.parse_bylines(approved_collection_items.collect(&:recipients).join(","), true)[:pseuds]
+  #   @received_pseuds ||= Pseud.parse_bylines(approved_collection_items.collect(&:recipients).join(","), :assume_matching_login => true)[:pseuds]
   #   !(@received_pseuds & user.pseuds).empty?
   # end  
   # 
   # # check to see if this pseud has received an item in this collection
   # def pseud_has_received_item(pseud)
-  #   @received_pseuds ||= Pseud.parse_bylines(approved_collection_items.collect(&:recipients).join(","), true)[:pseuds]
+  #   @received_pseuds ||= Pseud.parse_bylines(approved_collection_items.collect(&:recipients).join(","), :assume_matching_login => true)[:pseuds]
   #   !(@received_pseuds & [pseud]).empty?
   # end  
   
@@ -283,7 +283,9 @@ class Collection < ActiveRecord::Base
   end
   
   def get_maintainers_email
-    self.email || "#{self.maintainers.collect(&:user).flatten.uniq.collect(&:email).join(',')}"
+    return self.email if !self.email.blank?
+    return parent.email if parent && !parent.email.blank?
+    "#{self.maintainers.collect(&:user).flatten.uniq.collect(&:email).join(',')}"
   end
   
   def notify_maintainers(subject, message)

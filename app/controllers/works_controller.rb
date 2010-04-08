@@ -298,7 +298,12 @@ class WorksController < ApplicationController
   # GET /works/new
   def new    
     @use_import_form = true if params[:import]
-    @work.collection_names = @collection.name if @collection  
+    if params[:assignment_id] && (@challenge_assignment = ChallengeAssignment.find(params[:assignment_id])) && @challenge_assignment.offering_user == current_user
+      @work.challenge_assignments << @challenge_assignment
+      @work.collection_names = @challenge_assignment.collection.name
+    else   
+      @work.collection_names = @collection.name if @collection  
+    end
     
     respond_to do |format|
       format.html 

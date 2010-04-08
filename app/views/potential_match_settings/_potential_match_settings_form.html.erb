@@ -23,7 +23,7 @@
       <dt>
         <%= match_settings_form.label(:num_required_prompts, t('num_required_prompts', :default => "Requests: ")) -%> 
       </dt>
-      <dd><%= match_settings_form.select(:num_required_prompts, PotentialMatchSettings::REQUIRED_MATCH_OPTIONS, :selected => potential_match_settings.num_required_prompts) -%></dd>
+      <dd><%= match_settings_form.select(:num_required_prompts, PotentialMatchSettings::REQUIRED_MATCH_OPTIONS.delete("0"), :selected => potential_match_settings.num_required_prompts) -%></dd>
       
       <% %w(fandoms characters pairings freeforms categories ratings warnings).each do |type| %>
         <dt><%= match_settings_form.label("num_required_#{type}", t("#{type}", :default => "#{type.capitalize}:")) -%></dt>

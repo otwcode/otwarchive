@@ -24,7 +24,7 @@ class CreationObserver < ActiveRecord::Observer
       
       # notify recipients that they have gotten a story!
       if !new_work.recipients.blank? && !new_work.unrevealed?
-        recipient_pseuds = Pseud.parse_bylines(new_work.recipients, true)[:pseuds]
+        recipient_pseuds = Pseud.parse_bylines(new_work.recipients, :assume_matching_login => true)[:pseuds]
         recipient_pseuds.each do |pseud|
           UserMailer.deliver_recipient_notification(pseud.user, new_work)
         end
