@@ -112,7 +112,7 @@ module SeriesHelper
 
   #TODO: add complete attribute to series and adjust accordingly
   def get_series_complete_class(series)
-    "category-none category"
+    "category-none iswip"
   end
   
   # TODO: merge with work_blurb_tag_block
