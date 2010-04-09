@@ -114,7 +114,7 @@ module WorksHelper
   end
   
   def recipients_link(work)
-    work.gifts.map {|gift| link_to(h(gift.recipient), gift.pseud ? user_gifts_path(gift.pseud.user) : gifts_path(:recipient => recipname))}.join(", ")
+    work.gifts.map {|gift| link_to(h(gift.recipient), gift.pseud ? user_gifts_path(gift.pseud.user) : gifts_path(:recipient => gift.recipient_name))}.join(", ")
   end
   
   # Making absolutely sure that the tags and selected tags have the same capitalization so it doesn't throw the form off
