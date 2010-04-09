@@ -247,6 +247,19 @@ module WorksHelper
     end
   end
   
+  # Determines whether or not to expand the related work association fields when the work form loads
+  def check_parent_box(work)
+    !work.parent_work_relationships.blank? || 
+    (params[:work] && !(work_parent_value(:url).blank? && work_parent_value(:title).blank? && work_parent_value(:author).blank?))
+  end
+  
+  # Passes value of fields for related works back to form when an error occurs on posting
+  def work_parent_value(field)
+    if params[:work] && params[:work][:parent_attributes]
+      params[:work][:parent_attributes][field]
+    end
+  end
+  
   # Return true or false to determine whether the published at field should show on the work form
   def check_backdate_box(work, chapter)
     work.backdate || (chapter.created_at && chapter.created_at.to_date != chapter.published_at)
