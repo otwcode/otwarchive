@@ -17,7 +17,10 @@ namespace :deploy do
   
   desc "Get server name"
   task(:get_server) do
-    @server ||= %x{hostname}
+    unless @server 
+      @server = %x{hostname}.chomp
+      puts "Running on server #{@server}."
+    end
   end
 
   # Tasks for managing the process of deploying to test and to beta
