@@ -104,6 +104,7 @@ namespace :After do
   task(:map_gifts => :environment) do
     gifts = Gift.find(:all)
     gifts.each do |gift|
+      puts "Setting recipient for gift to #{gift.recipient_name}"
       gift.recipient = gift.recipient_name
       gift.save
     end
@@ -118,4 +119,4 @@ end # this is the end that you have to put new tasks above
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
 #task :After => ['After:fix_warnings', 'After:tidy_wranglings', 'After:exorcise_syns', 'After:deleted_invites_cleanup']
-task :After => []
+task :After => ['After:map_gifts']
