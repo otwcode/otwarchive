@@ -77,9 +77,9 @@
         </td>
         <td>
           <% if assignment.creation %>
-            <%= link_to "Posted on #{assignment.creation.published_at}", assignment.creation %>
+            <%= link_to "Gift posted on #{assignment.creation.published_at}.", assignment.creation %>
             <% if !assignment.fulfilled? %>
-              <p class="note">Not yet approved</p>
+              <strong>Not yet approved.</strong>
             <% end %>
           <% else %>
             Not yet posted

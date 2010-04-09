@@ -26,7 +26,7 @@
             <%= link_to sanitize_title_for_display(assignment.creation.title), work_path(assignment.creation) -%>
           <% end %>
           <% if !assignment.fulfilled? %>
-            <br/><strong>This work has not been approved by the challenge moderators.</strong>
+            <br/><strong>This work has not yet been approved by the challenge moderators.</strong>
           <% end %>
         <% else %>
           Not yet posted.
