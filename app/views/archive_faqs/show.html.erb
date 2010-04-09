@@ -12,7 +12,6 @@
 				    | <%= link_to 'Edit', edit_archive_faq_path(@archive_faq) %>
 				<%- end -%>
 			</h4>
-      <!--Parser was creating invalid code below, temporary change to cleanup_and_format; needs to be looked at properly-->
-	    <%= cleanup_and_format(@archive_faq.content) %>
+	    <%=sanitize_and_format_for_display @archive_faq.content %>
 </div>	
 	<!--/content-->

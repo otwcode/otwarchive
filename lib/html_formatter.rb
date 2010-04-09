@@ -2,522 +2,216 @@
 module HtmlFormatter
   include SanitizeParams
 
-  @@allowed_tags_default = ['a', 'abbr', 'acronym', 'address', 'alt', 'b', 'big', 'blockquote', 'br', 'caption', 'center', 'cite', 'class', 'code', 'col', 'colgroup', 'datetime', 'dd', 'del', 'dfn', 'div', 'dl', 'dt', 'em', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'height', 'hr', 'href', 'i', 'img', 'ins', 'kbd', 'li', 'name', 'ol', 'p', 'pre', 'q', 'samp', 'small', 'span', 'src', 'strike', 'strong', 'sub', 'sup', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'title', 'tr', 'tt', 'u', 'ul', 'var', 'width']
-
-  @@all_html_tags = ['a', 'abbr', 'acronym', 'address', 'area', 'b', 'base', 'bdo', 'big', 'blockquote', 'body', 'br', 'button', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'dd', 'del', 'dfn', 'div', 'dl', 'dt', 'em', 'fieldset', 'font', 'form', 'frame', 'frameset', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'hr', 'html', 'i', 'iframe', 'img', 'input', 'ins', 'kbd', 'label', 'legend', 'li', 'link', 'map', 'menu', 'meta', 'noframes', 'noscript', 'object', 'ol', 'optgroup', 'option', 'p', 'param', 'pre', 'q', 's', 'samp', 'script', 'select', 'small', 'span', 'strike', 'strong', 'style', 'sub', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'title', 'tr', 'tt', 'u', 'ul', 'var']
-
-  def cleanup_and_format(text)
-    return clean_fully(text, @@all_html_tags, true, false)
+  # clean up the break tags and convert them into newlines
+  # before saving
+  def cleanup_break_tags_before_adding(text)
+    text.gsub!(/<br\s*?\/?>/i, "\n")
+    return text
   end
-
-  def sanitize_and_format_for_display(text, options = {})
-    if options[:tags]
-      return clean_fully(text, options[:tags])
-    else
-      return clean_fully(text)
+  
+  # clean up the break tags after they have been added for display
+  def cleanup_break_tags(text)
+    return "" if text.nil?
+    text.gsub!(/<br\s*\/?>/i, "<br />")
+    while text.gsub!(/<br \/><br \/><br \/>/im, "<br /><br />")
+      # keep going
     end
+    
+    return text
   end
 
-  # The "options[:tags]" parameter here is to preserve calling compatibility
-  # with existing code.
-
+  # clean up tags
+  def cleanup_and_format(text)
+    return "" if text.nil?
+    text = cleanup_paragraph_tags(cleanup_break_tags_before_adding(close_tags(strip_comments(text))))
+    return text
+  end
+  
+  def sanitize_and_format_for_display(text, options = {})
+    return "" if text.nil?
+    text = add_paragraph_tags_for_display(sanitize_whitelist(text, options))
+  end
+  
   # This is future-planning - titles are currently stripped of all html in order to make sort and search simpler, so there should be no tags in titles which need sanitize in the view. 
   def sanitize_title_for_display(text, options = {:tags => ['a', 'b', 'br', 'p', 'i', 'em', 'strong', 'strike', 'u', 'ins', 'q', 'del', 'cite', 'blockquote', 'pre', 'code', 'small', 'sup', 'sub']})
     return "" if text.nil?
-    return clean_fully(text, options[:tags], true, true, false)
+    sanitize_whitelist(text, options)
   end
  
   # A more limited display option for comments and summaries
   def sanitize_limit_and_format_for_display(text, options = {:tags => ['a', 'b', 'big', 'blockquote', 'br', 'center', 'cite', 'code', 'del', 'em', 'i', 'img', 'ins', 'p', 'pre', 'q', 'small', 'strike', 'strong',  'sub', 'sup', 'u']})
     return "" if text.nil?
-    text = sanitize_and_format_for_display(text, options)
+    text = add_paragraph_tags_for_display(sanitize_whitelist(text, options))
   end
-
+  
   # Limited display option for the pseud description field. 
   def sanitize_description_for_display(text, options = {:tags => ['a', 'em', 'strong', 'b', 'i']})
     return "" if text.nil?
-    sanitize_and_format_for_display(text, options)
+    sanitize_whitelist(text, options)
   end
   
     # A more limited display option which strips obtrusive tags for index views.
   def sanitize_strip_images_and_format_for_display(text, options = {:tags => ['a', 'b', 'big', 'blockquote', 'br', 'center', 'cite', 'code', 'del', 'em', 'i', 'ins', 'p', 'pre', 'q', 'small', 'strike', 'strong', 'sub', 'sup', 'u']})
     return "" if text.nil?
-    sanitize_and_format_for_display(text, options)
+    text = add_paragraph_tags_for_display(sanitize_whitelist(text, options))
   end
 
-  def clean_fully(text_input, allowed_tags=@@allowed_tags_default, sanitize=true, tidy=true, block_container=true)
-    return "" if text_input.nil?
-    return "" if text_input.empty?
-    # text is assumed to have been sanitised by the HTML parser.
-    _text = '#text'
-    _comment = '#comment'
-    _close = '#close'
-
-    # Some data:
-    block_tags_list = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'br', 'div', 'blockquote', 'ul', 'ol', 'dl', 'pre', 'table', 'center']
-    # These tags will cause paragraphs to end before them, and new paragraphs
-    # to begin afterwards
-    block_cont_tags_list = ['div', 'blockquote', 'hr', 'center', 'ul', 'ol', 'dl']
-    #These tags act as containers and can't have <br> or <p> tags preceding
-    cont_tags_list = ['tbody','col','tr','caption']
-    # These tags are forced to self-close with no content.
-    always_self_close_list = ['br', 'hr', 'img']
-    # These non-block tags will have extra paragraph tags wrapped around their
-    # content. This feature was added because the previous code seemed to be
-    # trying to do this, but I've disabled the feature lower down in the code,
-    # beause it looks much tidier that way! (This list, therefore, does nothing)
-    # UPDATE: These items, if found unclosed, will be assumed to contain all
-    # following text nodes. Other nodes will be assumed to have no content.
-    inl_cont_tags_list = ['h1','h2','h3','h4','h5','h6','i','em','big','small','cite','b','strong','del','ins','caption','code', 'li']
-
-    # The various functions that do the real work. Some of these used to be
-    # recursive, but have been reduced to a monolithic loop and a state stack
-    # which is unlimited, unlike the function stack. See 'start_node' and
-    # 'end_node' for stack pushing and popping.
-    # Some are still recursive. 'tidy_nodes' in particular cannot deal with a
-    # html element depth of maybe 800, but that's going to involve another
-    # fiddly loop optimisation that I don't want to do unless it's necessary.
-    parse_text = lambda do |text|
-      return [], '' if text.nil?
-      nodes = []
-      state_stack = []
-      return_node = lambda do |node, text2|
-        nodes.push node unless node.nil?
-        text = text2
-        return true
-      end
-      start_node = lambda do |node, text2|
-        state_stack.push [node, nodes]
-        nodes = node[2]
-        text = text2
-      end
-      end_node = lambda do |tag, text2|
-        text = text2
-        return true if always_self_close_list.include? tag[0]
-        if state_stack.empty?
-          # Record bogus end node
-          return_node.call(tag, text2)
-          return true
-        else
-          node, nodes = state_stack.pop
-          closing = nil
-          if (text.nil? or text.empty?) and tag and tag[2] != nil
-            # End of stream. This tag has no closing tag.
-            closing = "!#{node[0]}"
-          elsif not tag.nil? and tag[0] != node[0]
-            # Tag does not match opening tag
-            closing = "-#{tag[0]}"
-          end
-          node[3] = closing
-          ret = return_node[node, text]
-          return ret
-        end
-      end
-      apos = "'"
-      quote = '"'
-      # Takes a snippet of html. returns: nodes, leftover_text
-      # nodes is a list where each node takes the form:
-      # (tagname, attribute_hash, child_list, text_value)
-      # with the special tagnames '#text' and '#comment' having a text_value.
-      while not text.nil? and not text.empty?
-        if text[0..0] == '<'
-          # A tag
-          quote_pos = text.index(quote)
-          apos_pos = text.index(apos)
-          first_quote_type = apos
-          if apos_pos == nil or apos_pos > quote_pos
-            first_quote_type = quote
-          end unless quote_pos == nil
-          pos = text.index('<')
-          second_pos = text.index('<', pos+1)
-          close_pos = text.index('>', pos+1)
-          while text[0...close_pos].count(first_quote_type) % 2 == 1
-            close_pos = text.index('>', close_pos+1)
-            break unless close_pos
-            if second_pos and second_pos < close_pos
-              # Back to the start
-              close_pos = text.index('>', pos+1)
-              break
-            end
-          end if pos and close_pos
-          if not pos or not close_pos
-            # If another lt before gt then it's a text node.
-            return_node[[_text, {}, [], text[0...text.length]], ''] and next or break
-          elsif pos > 0
-            # If another lt before gt then it's a text node.
-            return_node[[_text, {}, [], text[0...pos]], text[pos...text.length]] and next or break
-          elsif text[1..1] == '!'
-            # It's a comment or we drop it
-            if text[2..3] == '--'
-              if text.index('-->')
-                value, rest = text.split('-->', 2)
-              else
-                value, rest = text, ''
-              end
-              value = value[4..value.length]
-              return_node[[_comment, {}, [], value], rest] and next or break
-            else
-              return_node[nil, text.split('>', 2)[1]] and next or break
-            end
-          elsif text[1..1] == '?'
-            return_node[nil, text.split('>', 2)[1]] and next or break
-          elsif text[1..1] == '/'
-            # A closing tag
-            name, rest = text.split('>', 2)
-            name = name[2..name.length].strip
-            end_node[[name, {}, nil, nil], rest] and next or break
-          else
-            second_pos = text.index('<', 1)
-            if second_pos != nil
-              while text[0...second_pos].count(first_quote_type) % 2 == 1
-                second_pos = text.index('<', second_pos+1)
-                break if second_pos == nil
-              end
-              if second_pos and second_pos < close_pos
-                return_node[[_text, {}, [], text[0...second_pos]], text[second_pos...text.length]] and next or break
-              end
-            end
-            # Either an open tag or a self closing tag.
-            # Attributes
-            tag, text = text.split('>', 2)
-            text ||= ''
-            tag = tag[1..tag.length]
-            tag_name, attrs = tag.split(' ', 2)
-            attrs = (attrs || '').strip || ''
-            self_closing = false
-            if attrs.end_with? '/'
-              # Self closing tag
-              self_closing = true
-              attrs = attrs.strip[0...attrs.length-1]
-            elsif tag_name.end_with? '/'
-              # Self closing tag
-              self_closing = true
-              tag_name = tag_name.strip[0...tag_name.length-1]
-            elsif always_self_close_list.include? tag_name
-              # Treat as a self closing tag
-              self_closing = true
-            elsif tag_name == 'br'
-              self_closing = true
-            end
-            attr_hash = {}
-            attrs.lstrip!
-            while not attrs.empty?
-              equals_pos = attrs.index('=')
-              break if equals_pos == nil
-              attr_name = attrs[0...equals_pos].strip
-              rest = attrs[equals_pos+1...attrs.length]
-              if "\"'".include? rest.lstrip[0]
-                rest.lstrip!
-                attr_value_end = rest.index(rest[0], 1)
-                if attr_value_end == nil
-                  # Unclosed quote - let's grab the lot, excepting that one quote.
-                  attr_hash[attr_name] = rest[1...rest.length]
-                  break
-                else
-                  attr_hash[attr_name] = rest[1...attr_value_end]
-                  attrs = rest[attr_value_end+1...attrs.length].lstrip
-                  next
-                end
-              else
-                # An unquoted value - dangerous to make assumptions...
-                # I think the best thing to do is to take a single word if
-                # there is no space after the equals, or drop the attribute
-                # if there is a space.
-                space_pos = rest.index(' ')
-                if space_pos == nil
-                  attr_hash[attr_name] = rest
-                  break
-                elsif space_pos == 0
-                  attrs = rest.lstrip
-                  next
-                else
-                  attr_hash[attr_name], attrs = rest[0...space_pos], rest[space_pos...rest.length].lstrip
-                  next
-                end
-              end
-            end
-            # Broken loop...
-#            for attr in attrs.split(' ')
-#              attr = attr.strip
-#              next if attr.empty?
-#              k, v = attr.split('="', 2)
-#              next if v.nil? or v.empty?
-#              attr_hash[k] = v[0...v.length-1]
-#            end unless attrs.empty?
-            # Children
-            children = []
-            node = [tag_name, attr_hash, children, '-NOT-SET-']
-            if self_closing
-              node[3] = nil
-              return_node[node, text] and next or break
-            else
-              start_node[node, text]
-              next
-            end
-          end
-        else
-          # A text node
-          pos = text.index '<'
-          if pos.nil?
-            value, rest = text, ''
-          else
-            value, rest = text[0...pos], text[pos...text.length]
-          end
-          return_node[[_text, {}, [], value], rest] and next or break
-        end
-      end
-      while not state_stack.empty?
-        end_node[['#none', {}, [], nil], '']
-      end
-      return nodes
-    end
-    def render_node(node)
-      # Converts the node tree format parsed above back into html.
-      if node[0] == '#comment'
-        return "<!--#{node[3]}-->"
-      elsif node[0] == '#text'
-        return node[3]
-      else
-        attrs = node[1].entries.map{|x,y| "#{x}=\"#{y}\""}
-        attrs = ' ' + attrs.join(' ') unless attrs.empty?
-        return "<#{node[0]}#{attrs}/>" if ['hr', 'br'].include? node[0]
-        content = node[2].map{|x| render_node(x)}.join('')
-        return "<#{node[0]}#{attrs}>#{content}</#{node[0]}>"
-      end
-    end
-    sanitize_nodes = lambda do |nodes|
-      # Clean up nodes we don't want, and put appropriate escapes into the
-      # text nodes.
-      _include = '#include'
-      out_nodes = []
-      work_list = []
-      push_node = lambda do |out_list, node|
-        work_list.push [[_include, node], out_list]
-      end
-      push_work = lambda do |lst, node|
-        work_list.push [node, lst]
-      end
-      for node in nodes
-        push_work[out_nodes, node]
-      end
-      while not work_list.empty?
-        node, out_list = work_list.shift
-        next if node.nil?
-        name = node[0].downcase
-        if name == _include
-          out_list.push node[1]
-        elsif name == _text
-          # Escape '<' and '>'
-          node[3].gsub!('<', '&lt;')
-          node[3].gsub!('>', '&gt;')
-          # Escape any non-entity ampersands
-          node[3].gsub!(/&(?!(?:[a-z]+|#[0-9]+);)(.*?;?)/, '&amp;\1')
-          push_node[out_list, node]
-        elsif name == _comment
-          node[3].gsub!('--', '- - ') # double dash is illegal in comments
-          push_node[out_list, node]
-        elsif not allowed_tags.include? name
-          if true # "<!--xxx-->" comment bad nodes
-            push_node[out_list, [_comment, {}, [], "<#{name}>"]]
-            for n in node[2]
-              push_work[out_list, n]
-            end
-            push_node[out_list, [_comment, {}, [], "</#{name}>"]]
-          else # "&gt;xxx&lt;" escape bad nodes
-            push_node[out_list, [_text, {}, [], "&lt;#{name}&gt;"]]
-            for n in node[2]
-              push_work[out_list, n]
-            end
-            push_node[out_list, [_text, {}, [], "&lt;/#{name}&gt;"]]
-          end
-        elsif not node[3].nil? and node[3].start_with? '!'
-          # Unmatched tag - assume not to have contents
-          children = []
-          push_node[out_list, [node[0], node[1], children, nil]]
-          if inl_cont_tags_list.include? name
-            child_list = children
-          else
-            child_list = out_list
-          end
-          for n in node[2]
-            child_list = out_list unless n[0] == _text
-            push_work[child_list, n]
-          end
-        else
-          unless node[2].nil?
-            cnodes = node[2].dup
-            node[2].replace([])
-            push_node[out_list, node]
-            for n in cnodes
-              push_work[node[2], n]
-            end
-          end
-        end
-      end
-      for n in out_nodes
-        raise [n, out_nodes, text_input].inspect if n[2] == nil
-      end
-      return out_nodes
-    end
-    tidy_nodes = lambda do |nodes|
-      # This function restructures and tidies by copying what we need into
-      # these output variables. It assumes that it's outer container is a block
-      # container and thus should have para tags around it's text content.
-
-      # All completed paragraphs
-      paras = []
-
-      # The current paragraph
-      # current_para[0] => tag name
-      # current_para[1] => hash or attributes. never nil
-      # current_para[2] => array of children. nil for a lone closing tag
-      # current_para[3] => text value of text or comment node, nil otherwise
-      current_para = ['p', {}, [], nil]
-
-      new_para = lambda do
-        fix_ws = lambda do
-          while current_para[0] == 'p' and (not current_para[2].empty?) and (current_para[2].first[0] == _text and current_para[2].first[3].strip.empty?)
-            current_para[2].shift
-          end
-          while current_para[0] == 'p' and (not current_para[2].empty?) and (current_para[2].last[0] == _text and current_para[2].last[3].strip.empty?)
-            current_para[2].pop
-          end
-        end
-        fix_ws.call()
-        while (not current_para[2].empty?) and current_para[2].first[0] == 'br'
-          current_para[2].shift
-          fix_ws.call()
-        end
-        while (not current_para[2].empty?) and current_para[2].last[0] == 'br'
-          current_para[2].pop
-          fix_ws.call()
-        end
-        if current_para[0] != 'p' or not current_para[2].empty?
-          paras.push current_para
-          current_para = ['p', {}, [], nil]
-        end
-      end
-      # This inner function handles paragraph reorganisation within a block
-      # element, and it sometimes recurses to flatten the structure.
-      handle_nodes = lambda do |nodes|
-        for node in nodes
-          # Skip comments
-          if node[0] == _comment
-            if current_para[2].empty?
-              paras.push node
-            else
-              current_para[2].push node
-            end
-            next
-          end
-          if node[0] == _text
-            # Text nodes are to be split in to paras at double line breaks,
-            # and <br> tags inserted at single line breaks
-            text_paras = node[3].gsub("\n\n\n+", "\n\n").split("\n\n", -1)
-            first = true
-            # text_paras = text_paras.select{|para| not para.strip.empty?}
-            text_paras.each do |para|
-              new_para.call() if not first
-              first_line = true
-	      # String#split method doesn't work as one might expect here.
-	      # I think "".split('x') should give [""], not []
-	      if para == ''
-		lines = [para]
-	      else
-                lines = para.split("\n", -1)
-	      end
-              for line in lines
-                if not first_line
-                  current_para[2].push(['br', {}, [], nil])
-                end
-                current_para[2].push([_text, {}, [], line]) if line
-                first_line = false
-              end
-              first = false
-            end
-            next
-          end
-          if node[0] == 'p'
-            new_para.call()
-            # Just handle the contents
-            handle_nodes.call(node[2])
-            # A dummy value to preserve the paragraph break.
-            current_para.push [_text, {}, [], '']
-            next
-          end
-          name = node[0].downcase
-          if block_tags_list.include? name
-            # All block tags require new paras inside
-            sub_nodes = tidy_nodes.call(node[2])
-            node[2].replace(sub_nodes)
-            # handle contents
-            if block_cont_tags_list.include? name
-              # Block level containers should be paragraph siblings
-              # End the current para, and overwrite the generated new para with a
-              # sibling #{node}, then start a new para
-              new_para.call()
-              current_para.replace(node)
-              new_para.call()
-            else
-              # Otherwise, add to the text
-              current_para[2].push node
-            end
-          else
-            if always_self_close_list.include? name
-              current_para[2].push [name, node[1], [], nil]
-              handle_nodes[node[2]]
-            else
-              # Inline elements are handled here
-              # An inline tag should never be alone in a para because of us. :(
-              current_para[2].push(node)
-              if false and inl_cont_tags_list.include? name
-                # Inline containers need further paras, according to the
-                # previous code, but it looks tidier to me without, hence
-                # the 'false' in the condition above.
-                node[2].replace(tidy_nodes.call(node[2]))
-              end
-            end
-          end
-        end
-      end
-      handle_nodes.call(nodes)
-      new_para.call()
-      if not block_container
-        # If our container is a block container, then remove outer <p> tag.
-        out_nodes = []
-        for para in paras
-          for node in para[2]
-            out_nodes.push(node)
-          end
-        end
-        return out_nodes
-      end
-      return paras
+  # cleans up doubled paragraph/newline tags
+  def cleanup_paragraph_tags(text)
+    # Now we want to replace any cases where these have been doubled -- ie, 
+    # where a new paragraph tag is opened before an old one is closed
+    return "" if text.nil?
+    text.gsub!(/<p>\s*<p>/im, "<p>")
+    text.gsub!(/<\/p>\s*<\/p>/im, "</p>")
+    while text.gsub!(/<br\s*\/>\s*<p>/im, "<p>")
     end
 
-    # The actual program
-    # 1. Parse text into HTML 'tree'
-    raw_nodes = parse_text.call(text_input)
-    raise text_input.inspect if raw_nodes.nil?
-    nodes = raw_nodes
-    # 2. Do our tidying up
-    if sanitize
-      nodes = sanitize_nodes.call(nodes)
-      raise raw_nodes.inspect if nodes.nil?
+    while text.gsub!(/<p>\s*<br\s*\/>/im, "<p>")
     end
-    if tidy
-      nodes = tidy_nodes.call(nodes)
-      raise raw_nodes.inspect if nodes.nil?
+
+    #<pre> blocks shouldn't contain any linebreak markup
+    a = text.scan(/<pre>.*?<\/pre>/im) 
+    a.each do |pre|
+      text = text.sub(pre.to_s(), pre.to_s().gsub(/<(\/)?(br|p)(\s)?(\/)?>/, "")) 
     end
-    # 3. Render and return
-    txt = nodes.map{|x| render_node(x)}.join('')
-    return txt
+
+    # and where there are empty paragraphs
+    text.gsub!(/<p>\s*<\/p>/im, "")
+    
+    # also get rid of blank paragraphs inserted by tinymce
+    text.gsub!(/<p>&nbsp;<\/p>/, "")
+    
+    return cleanup_break_tags(text)
   end
 
   # adds paragraphs and newlines, then gets rid of doubled ones
   def add_paragraph_tags_for_display(text)
-    return clean_fully(text, @@all_html_tags)
+    return "" if text.nil?
+    #The following are lists of tags according to their valid child elements
+    #These tags are block-level
+    block_tags_list = ['h1','h2','h3','h4','h5','h6','div','blockquote','ul','ol','dl','pre','table', 'center']
+    #Block inline container tags - These tags will have both text and block-level nodes
+    block_inl_cont_tags_list = ['li','dd','dt','td','th','a']
+    #These tags will only contain block-level nodes
+    block_cont_tags_list = ['div','blockquote']
+    #These tags can only contain inline nodes
+    inl_cont_tags_list = ['h1','h2','h3','h4','h5','h6','i','em','big','small','cite','b','strong','del','ins','caption','code']
+    #These tags act as containers and can't have <br> or <p> tags preceding
+    cont_tags_list = ['tbody','col','tr','caption']
+    #Matches the properties of an HTML tag (accounts for > inside properties)
+    tag_props = /((\s+\w+(\s*=\s*(?:".*?"|'.*?'|[^'">\s]+))?)+\s*|\s*)\/?/
+
+    #Create the strings to be used in the regexes
+    block_tags = block_tags_list.join("|")
+    block_inl_cont_tags = block_inl_cont_tags_list.join("|")
+    block_cont_tags = block_cont_tags_list.join("|")
+    inl_cont_tags = inl_cont_tags_list.join("|")
+    cont_tags = cont_tags_list.join("|")
+
+    #Make certain we have a container paragraph
+    text = "<p>" + text.to_s.dup + "</p>"
+
+    # Standardise our linebreak chars
+    text.gsub!(/\r\n?/, "\n")
+
+    #Create paragraphs around block-level tags (ie <h1></h1> goes to </p><h1></h1><p>)
+    text.gsub!(/<\/(#{block_tags}#{tag_props})>(\s|\n)?(?!<(#{block_tags}))/im, '</\1>\2'+"\n<p>") # Block tag not followed by another block tag...
+    text.gsub!(/<(#{block_tags}#{tag_props})>/im, '</p><\1>') #Close any previous paragraph tags
+    text.gsub!(/<\/(#{block_tags}#{tag_props})>(\s)?<\/p>/im, '</\1>') #Cleans up (won't be a </p> with a preceding block tag)
+
+    # make sure there are paragraphs inside blockquotes and divs
+    text.gsub!(/(<(#{block_cont_tags})#{tag_props}>)/, '\1<p>')
+    text.gsub!(/(<\/(#{block_cont_tags})>)/, '</p>\1')
+
+    #These tags can't contain paragraphs (doesn't cope with nested tags - not sure if this will be a problem)
+    elements = text.scan(/(<(#{inl_cont_tags})#{tag_props}>.*?<\/\2>)/imx) 
+    elements.each do |el|
+      text = text.sub(el[0].to_s(), el[0].to_s().gsub(/\n/, "\n<br />")) 
+    end
+
+    #Closes and reopens <p> tags for double lines (but not before a block level or container tag)
+    text.gsub!(/\n\s?\n(?!<\/?(#{block_tags}|#{block_inl_cont_tags}|#{cont_tags}))/, "</p>\n\n<p>")
+
+    #Add initial and closing paragraphs inside table cells and list items where necessary
+    elements = text.scan(/(<(#{block_inl_cont_tags})#{tag_props}>(.*?)<\/(#{block_inl_cont_tags})>)/im) 
+    elements.each do |el|
+      par = el[0].to_s().dup
+      contents = el[5].to_s().dup #Group 5 is the contents of the tag
+      if /<\/p>\n\n<p>/ =~ contents then
+        contents = "<p>" << contents << "</p>"
+      end
+      text = text.sub(par, par.sub(el[5].to_s(), contents)) 
+    end
+
+    #Adds linebreaks, but only where it's appropriate
+    text.gsub!(/(([^\n])\n)(?!<\/?(p|br|#{block_tags}|#{block_inl_cont_tags}|#{cont_tags}))(?![\n])/, '\2<br />'<<"\n") #Not putting them before block level elements
+    text.gsub!(/(<\/?(p|#{block_tags}|#{block_inl_cont_tags}|#{cont_tags})#{tag_props}>)<br \/>/, '\1') #clean out any linebreaks immediately after block level elements
+
+    text = cleanup_paragraph_tags(text)
+    text = close_tags(text)
+    
+    return text
   end
 
+  #closes tags in html (uses http://snippets.dzone.com/posts/show/3822, but
+  #modified)
+  def close_tags(html)
+    return "" if html.nil?
+
+    # no closing tag necessary for these
+    soloTags = ["br","hr"]
+
+    # Analyze all <> elements
+    stack = Array.new
+    result = html.gsub( /(<.*?>)/m ) do | element |
+      if element =~ /\A<\/(\w+)/ then
+        # </tag>
+        tag = $1.downcase
+        if stack.include?(tag) then
+          # If allowed and on the stack
+          # Then pop down the stack
+          top = stack.pop
+          out = "</#{top}>"
+          until top == tag do
+            top = stack.pop
+            out << "</#{top}>"
+          end
+          out
+        end
+      elsif element =~ /\A<(\w+)\s*\/>/
+        # <tag />
+        tag = $1.downcase
+        "<#{tag} />"
+      elsif element =~ /\A<(\w+)/ then
+        # <tag ...>
+        tag = $1.downcase
+        if ! soloTags.include?(tag) then
+          stack.push(tag)
+        end
+        out = "<#{tag}"
+        tag = $1.downcase
+        while ( $' =~ /(\w+)=("[^"]+")/ )
+          attr = $1.downcase
+          valu = $2
+          out << " #{attr}=#{valu}"
+        end
+        out << ">"
+      end
+    end
+    
+    # eat up unmatched leading >
+    while result.sub!(/\A([^<]*)>/m) { $1 } do end
+    
+    # eat up unmatched trailing <
+    while result.sub!(/<([^>]*)\Z/m) { $1 } do end
+    
+    # clean up the stack
+    if stack.length > 0 then
+      result << "</#{stack.reverse.join('></')}>"
+    end
+    
+    result
+  end
+    
 end
 
