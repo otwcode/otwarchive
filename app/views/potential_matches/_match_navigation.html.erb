@@ -1,5 +1,28 @@
 <% if !@collection.challenge.signup_open %>
-  <% if !@potential_matches.empty? %>
+
+  <% if top && !@collection.potential_matches.empty? %>
+    <ul class="navigation">
+      <li>
+        <%= link_to "Send Assignments", send_out_collection_assignments_path(@collection), :confirm => "Are you sure? This will send out the currently saved assignments to all participants!" %>
+      </li>
+    </ul>
+    <div class="clear"></div>
+  <% end %>
+  
+  <ul class="navigation">
+    <% if @collection.potential_matches.empty? %>
+      <li><%= link_to t("potential_matches.generate", :default => "Generate Potential Matches"), generate_collection_potential_matches_path(@collection) %></li>
+    <% else %>
+      <li><%= submit_tag "Update Assignments" %></li>
+      <li><%= link_to t("potential_matches.generate_assignments", :default => "Regenerate Assignments"), generate_collection_assignments_path(@collection),
+                :confirm => "Are you sure? This will delete all current assignments." %></li>
+      <li><%= link_to t("potential_matches.regenerate", :default => "Regenerate Potential Matches"), generate_collection_potential_matches_path(@collection),
+                 :confirm => "Are you sure? This will delete all current assignments and potential matches." %></li>
+    <% end %>
+  </ul>  
+
+  <% if !top && !@collection.potential_matches.empty? %>
+    <div class="clear"></div>
     <ul class="navigation">
       <li>
         <%= link_to "Send Assignments", send_out_collection_assignments_path(@collection), :confirm => "Are you sure? This will send out the currently saved assignments to all participants!" %>
@@ -7,15 +30,4 @@
     </ul>
   <% end %>
 
-  <ul class="navigation">
-    <% if @potential_matches.empty? %>
-      <li><%= link_to t("potential_matches.generate", :default => "Generate Potential Matches"), generate_collection_potential_matches_path(@collection) %></li>
-    <% else %>
-      <li><%= submit_tag "Update Assignments" %></li>
-      <li><%= link_to t("potential_matches.generate_assignments", :default => "Regenerate Assignments"), generate_collection_assignments_path(@collection),
-                :confirm => "Are you sure? This will delete all current assignments." %></li>
-      <li><%= link_to t("potential_matches.generate", :default => "Regenerate Potential Matches"), generate_collection_potential_matches_path(@collection),
-                 :confirm => "Are you sure? This will delete all current assignments and potential matches." %></li>
-    <% end %>
-  </ul>  
 <% end %>

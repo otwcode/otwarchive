@@ -36,7 +36,7 @@
 
 <dt><%=h t('gift_exchange.signups', :default => "Signed up:") %></dt>
 <dd>
-  <% num_to_show = 4 # arbitrary number for how many names to list %>
+  <% num_to_show = 20 # arbitrary number for how many names to list %>
   <%= signup_count = @collection.signups.count -%>
   <ul>
     <% @collection.signups.collect(&:pseud).compact.each_with_index do |pseud, index| %>

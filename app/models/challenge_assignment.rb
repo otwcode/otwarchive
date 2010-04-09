@@ -198,20 +198,31 @@ class ChallengeAssignment < ActiveRecord::Base
       end
     end
   end
-  
+    
   # go through the request's potential matches in order from best to worst and try and assign
   def self.assign_request!(collection, request_signup)
     assignment = ChallengeAssignment.new(:collection => collection, :request_signup => request_signup)
+    last_choice = nil
+    assigned = false
     request_signup.request_potential_matches.sort.reverse.each do |potential_match|
       # skip if this signup has already been assigned as an offer
       next if potential_match.offer_signup.assigned_as_offer
+      
+      # if there's a circular match let's save it as our last choice
+      if potential_match.offer_signup.assigned_as_request && !last_choice && collection.assignments.for_request_signup(potential_match.offer_signup).first.offer_signup == request_signup
+        last_choice = potential_match
+        next
+      end
 
       # otherwise let's use it
-      assignment.offer_signup = potential_match.offer_signup
-      potential_match.offer_signup.assigned_as_offer = true
-      potential_match.offer_signup.save!
+      assigned = ChallengeAssignment.do_assign_request!(assignment, potential_match)
       break
     end
+
+    if !assigned && last_choice
+      ChallengeAssignment.do_assign_request!(assignment, last_choice)
+    end
+
     request_signup.assigned_as_request = true
     request_signup.save!
 
@@ -222,21 +233,49 @@ class ChallengeAssignment < ActiveRecord::Base
   # go through the offer's potential matches in order from best to worst and try and assign
   def self.assign_offer!(collection, offer_signup)
     assignment = ChallengeAssignment.new(:collection => collection, :offer_signup => offer_signup)
+    last_choice = nil
+    assigned = false
     offer_signup.offer_potential_matches.sort.reverse.each do |potential_match|
       # skip if already assigned as a request
       next if potential_match.request_signup.assigned_as_request
-      
+
+      # if there's a circular match let's save it as our last choice
+      if potential_match.request_signup.assigned_as_offer && !last_choice && collection.assignments.for_offer_signup(potential_match.request_signup).first.request_signup == offer_signup
+        last_choice = potential_match
+        next
+      end
+
       # otherwise let's use it
-      assignment.request_signup = potential_match.request_signup
-      potential_match.request_signup.assigned_as_request = true
-      potential_match.request_signup.save!
+      assigned = ChallengeAssignment.do_assign_offer!(assignment, potential_match)
       break
     end
+
+    if !assigned && last_choice
+      ChallengeAssignment.do_assign_offer!(assignment, last_choice)
+    end
+
     offer_signup.assigned_as_offer = true
     offer_signup.save!
+    
     assignment.save!
     assignment
   end
+
+  
+  def self.do_assign_request!(assignment, potential_match)
+    assignment.offer_signup = potential_match.offer_signup
+    potential_match.offer_signup.assigned_as_offer = true
+    potential_match.offer_signup.save!
+  end
+
+  
+  def self.do_assign_offer!(assignment, potential_match)
+    assignment.request_signup = potential_match.request_signup
+    potential_match.request_signup.assigned_as_request = true
+    potential_match.request_signup.save!
+  end
+
+
 
   # clear out all previous assignments
   def self.clear!(collection)

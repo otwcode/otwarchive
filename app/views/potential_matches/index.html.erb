@@ -5,17 +5,62 @@
     you will be able to generate potential matches here.
   </p>
 <% elsif @in_progress %>
+
   <p class="note">
     The archive is currently generating potential matches for this challenge. This process can take some time,
     especially for a large challenge! A notification email will be sent to the collection maintainers when
     all potential matches have been generated.
   </p>
-  
+
   <p>
     Currently generating potential matches for: <%= @current_position %>
   </p>
-<% else %>  
-  <% if !@collection.potential_matches.empty? %>  
+
+  <ul class="navigation">
+    <li><%= link_to t("potential_matches.cancel_generate", :default => "Cancel Potential Match Generation"), cancel_generate_collection_potential_matches_path(@collection) %></li>
+  </ul>
+
+<% elsif @assignments_with_no_potential_requests.size > 0 %>
+  <h3>No Potential Recipients</h3>
+  <p class="note">
+    <strong>Warning!</strong> These participants have no potential recipients: no one else
+    signed up for the challenge has requested anything that matches what they have offered. 
+  </p>
+  <p class="note">
+    Every participant needs at least one potential recipient, so you will need to either
+    edit your match settings or edit their signups (or delete them). 
+    Then regenerate potential matches to continue. 
+  </p>
+
+  <ul class="navigation">
+    <li><%= link_to t("potential_matches.regenerate", :default => "Regenerate Potential Matches"), generate_collection_potential_matches_path(@collection) %></li>
+  </ul>
+  
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Pseud</th>
+        <th scope="col">Email</th>
+        <th scope="col">Manage</th>
+      </tr>
+    </thead>
+    
+    <% @assignments_with_no_potential_requests.each do |assignment| %>
+      <tr>
+        <th scope="row"><%= link_to assignment.offer_byline, collection_signup_path(@collection, assignment.offer_signup) %></th>
+        <td><%= mailto_link assignment.offer_signup.pseud.user,  :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %></td>
+        <td>
+          <%= link_to "Edit", edit_collection_signup_path(@collection, assignment.offer_signup) %>
+          <%= link_to t('challenge_signups.delete', :default => "Delete"), 
+                  collection_signup_path(@collection, assignment.offer_signup), :confirm => 'Are you sure?', :method => :delete %>
+              
+        </td>
+      </tr>
+    <% end %>
+  </table>
+  
+<% else %>
+  <% if !@collection.potential_matches.empty? %>
     <p class="note">
       The following lists all the participants in your challenge, along with the archive's pass at an initial automated
       match for all of them. You can now update the assignments however you like. 
@@ -23,101 +68,96 @@
 
     <h4>Useful Tips</h4>
     <ul>
-      <li>If you have people with no potential matches, you will need to have them expand their signup options. (Once signups are closed, you can hand-edit their signup yourself without reopening signups.)</li>
       <li>The pull-down menus include all the potential matches for each person -- that is, everyone whose offer matched that person's request. They are listed in order of match "quality".</li>
       <li>You can write-in anyone with an archive account as a pinch hitter, whether or not they are participants or actually matched.</li>
-      <li>Pinch "recipients" must be people who have actual signups. </li>
+      <li>You should <strong>not</strong> regenerate potential matches unless you have edited signups or your matching rules.</li>
       <li>You can regenerate the assignments to get a new randomized match-up.</li>
-      <li>You should <strong>not</strong> regenerate potential matches unless you have edited signups or your matching rules. You won't get different results and it will take a long time.</li>
       <li>You can update the assignments as many times as you want until you actually send them out.</li>
     </ul>
   <% end %>
 
   <!-- list all the requesters with their potential matches -->
-  <% form_tag set_collection_assignments_path, :method => :get do %>
+  <% form_tag set_collection_assignments_path, :method => :put do %>
 
-    <%= render :partial => "match_navigation" -%>
+    <%= render :partial => "match_navigation", :locals => {:top => true} -%>
+    
+    <div class="clear"></div>
 
-    <h3>This header bonks into the controls</h3>
+    <% if @assignments_with_no_request.size > 0 %>
+      <h3>Missing Recipients</h3>
+      <p class="note">
+        These people could not be assigned a recipient. 
+        You may be able to assign a recipient by shuffling the assigned givers below in the
+        main assignments (in which case the giver's line will disappear from this section after you update), 
+        or you can manually assign a pinch recipient (who will then get two gifts instead of one).
+      </p>
 
-    <table>
-      <% if @assignments_with_no_request.size > 0 %>
-        <tr>
-          <th colspan=5>Missing Recipients</th>
-        </tr>
-        <tr>
-          <td colspan=5>
-            <p class="note">
-              These people could not be assigned a request. 
-              For these special cases, you may be able to assign a request by shuffling the assigned givers below in the
-              main assignments (in which case the giver's line will disappear from this section after you update), 
-              or you can manually assign a pinch recipient (who will then get two gifts instead of one).
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <th>Pseud</th>
-          <th colspan=3>Write-In Pinch Recipient</th>
-          <th>Manage</th>
-        </tr>      
+      <table summary="lists assignments with no request; you can assign a pinch recipient">
+        <caption>
+          Lists assignments with no recipient.
+        </caption> 
+        <thead>
+          <tr>
+            <th scope="col">Pseud</th>
+            <th scope="col" colspan=3>Pinch Recipient</th>
+          </tr>
+        </thead>
 
         <% @assignments_with_no_request.each do |assignment| %>
           <%= render :partial => "assignment_with_no_request", :locals => {:assignment => assignment} %>
         <% end %>
-      <% end %>
+      </table>
+    <% end %>
 
-      <% if @assignments_with_no_offer.size > 0 %>        
-        <tr>
-          <th colspan=5>Missing Givers</th>
-        </tr>
-        <tr>
-          <td colspan=5>
-            <p class="note">
-              These people could not be assigned a giver. You can shuffle the main assignments below to free someone up and 
-              assign them as a giver, or you can assign a pinch hitter. (Note: the form <em>will</em> allow you to double-assign
-              people, but you need to make sure they are willing to write two assignments first!)
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <th>Pseud</th>
-          <th>Giving Gift To</th>
-          <th>Assigned Giver</th>
-          <th>Write-In Pinch Hitter</th>
-          <th>Manage</th>
-        </tr>
+    <% if @assignments_with_no_offer.size > 0 %>
+      <h3>Missing Givers</h3>
+      <p class="note">
+        These people could not be assigned a giver. You can shuffle the main assignments below to free someone up, or you can assign a pinch hitter. 
+        (Note: the form <em>will</em> allow you to double-assign people, but you will want to make sure they are willing to write two assignments first!)
+      </p>
+      <table summary="lists assignments with no giver; you can assign a pinch hitter">
+        <caption>Lists assignments with no giver.</caption>
+        <thead>
+          <tr>
+            <th scope="col">Pseud</th>
+            <th scope="col">Giving Gift To</th>
+            <th scope="col">Assigned Giver</th>
+            <th scope="col">Potential Givers</th>
+            <th scope="col">Write-In Pinch Hitter</th>
+          </tr>
+        </thead>
 
         <% @assignments_with_no_offer.each do |assignment| %>
           <%= render :partial => "assignment_with_request", :locals => {:assignment => assignment} %>
         <% end %>
-      <% end %>
-      
-      <tr>
-        <th colspan=5>Main Assignments</th>
-      </tr>
-      <tr>
-        <td colspan=5>
-          <p class="note">
-            Everyone in this section has been assigned a giver. You can shuffle these assignments around
-            as much as you want. Note that circular matches (where A is assigned to B and B is assigned to A)
-            do happen by random chance. 
-          </p>
-        </td>
-      </tr>
-      <tr>
-        <th>Pseud</th>
-        <th>Giving Gift To</th>
-        <th>Assigned Giver</th>
-        <th>Write-In Pinch Hitter</th>
-        <th>Manage</th>
-      </tr>
+      </table>
+    <% end %>
+
+    <h3>Main Assignments</h3>
+    <p class="note">
+      You can shuffle these assignments around as much as you want. 
+      Note that circular matches (where A is assigned to B and B is assigned to A)
+      will happen sometimes randomly. 
+    </p>
+    
+    <table summary="lists assignments with giver; you can reassign">
+      <caption>Lists assignments with an assigned giver.</caption>
+      <thead>
+        <tr>
+          <th scope="col">Pseud</th>
+          <th scope="col">Giving Gift To</th>
+          <th scope="col">Assigned Giver</th>
+          <th scope="col">Potential Givers</th>
+          <th scope="col">Write-In Pinch Hitter</th>
+        </tr>
+      </thead>
 
       <% @assignments_with_request_and_offer.each do |assignment| %>
         <%= render :partial => "assignment_with_request", :locals => {:assignment => assignment} %>
       <% end %>
     </table>
 
-    <%= render :partial => "match_navigation" -%>
+    <%= render :partial => "match_navigation", :locals => {:top => false} -%>
 
   <% end %>
   

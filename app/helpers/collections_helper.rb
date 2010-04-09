@@ -43,12 +43,4 @@ module CollectionsHelper
     collections.collect {|coll| link_to coll.title, collection_path(coll)}.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
   end
   
-  def manage_challenge_signup_links(signup)
-    "<ul class=\"navigation\"><li>" + 
-      link_to(t("potential_matches.send_note", :default => "Email"), "mailto:#{signup.pseud.user.email}?subject=[#{ArchiveConfig.APP_NAME}][#{h(@collection.title)}] Message from Collection Maintainer") +
-      "</li><li>" +
-      link_to(t("potential_matches.edit_signup", :default => "Signup"), edit_collection_signup_path(@collection, signup)) +
-      "</li></ul>"    
-  end
-  
 end

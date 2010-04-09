@@ -276,7 +276,13 @@ module ApplicationHelper
         time.in_time_zone(user.preference.time_zone).strftime('<span class="time">%I:%M%p</span>') +
           " <abbr class=\"timezone\" title=\"#{user.preference.time_zone}\">#{time_zone_abbr(user.preference.time_zone)}</abbr>)" : 
         (user.is_a?(User) ? 
-          link_to(h(t('application.set_time_zone', :default => "(set timezone)")), user_preferences_path(user)) : ""))
+          link_to(h(t('application.set_time_zone', :default => "(set timezone)")), (@host ? user_preferences_url(user, :host => @host) : user_preferences_path(user)) ) : ""))
+  end
+  
+  def mailto_link(user, options={})
+    "<a href=\"mailto:#{user.email}?subject=[#{ArchiveConfig.APP_NAME}]#{options[:subject]}\" class=\"mailto\">
+      <img src=\"/images/envelope_icon.gif\" alt=\"#{user.login}'s email\">
+    </a>"
   end
   
 end # end of ApplicationHelper

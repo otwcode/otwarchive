@@ -8,14 +8,22 @@
       <% if request.tag_set && !request.tag_set.tags.empty? %>
         <dt>Tags:</dt>
         <dd>
-          <ul class="tags">
-            <%= tag_link_list request.tag_set.tags %>
-          </ul>
+          <% if @host %>
+            <%= request.tag_set.tags.collect(&:name).join(", ")%>
+          <% else %>
+            <ul class="tags">
+              <%= tag_link_list request.tag_set.tags %>
+            </ul>
+          <% end %>
           <% if request.optional_tag_set && !request.optional_tag_set.tags.empty? %>
             <p>Optional:</p>
-            <ul class="tags">
-              <%= tag_link_list request.optional_tag_set.tags %>
-            </ul>
+            <% if @host %>
+              <%= request.optional_tag_set.tags.collect(&:name).join(", ") -%>
+            <% else %>
+              <ul class="tags">
+                <%= tag_link_list(request.optional_tag_set.tags) %>
+              </ul>
+            <% end %>
           <% end %>
         </dd>
       <% end %>

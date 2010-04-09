@@ -24,6 +24,10 @@ class PotentialMatch < ActiveRecord::Base
   def self.set_up_generating(collection)
     @@collection_position[collection.name] = collection.signups.order_by_pseud.first.pseud.byline
   end
+  
+  def self.cancel_generation(collection)
+    @@collection_interrupt[collection.name] = true
+  end
 
   def self.generate!(collection)
     PotentialMatch.clear!(collection)

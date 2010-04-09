@@ -1,22 +1,13 @@
 <% fields_for "challenge_assignments[]", assignment do |assignment_form| %>
   <tr>
+    <th scope="row">
+      <%= mailto_link assignment.offer_signup.pseud.user,  :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" -%>
+      <%= link_to assignment.offer_byline, collection_signup_path(@collection, assignment.offer_signup) -%>
+    </th>
     <td>
       <%= assignment_form.hidden_field :collection_id, :value => @collection.id %>
       <%= assignment_form.hidden_field :offer_signup_id, :value => assignment.offer_signup.id %>
-      <%= assignment.offer_signup.pseud.byline -%>
-    </td>
-    <td colspan=3>
-      <% if !assignment.offer_signup.offer_potential_matches.empty? %>
-        <!-- mismatch, but this person has potential people they could write for -->
-        <%= assignment_form.collection_select :pinch_request_signup_id, assignment.offer_signup.offer_potential_matches.sort.reverse.collect(&:request_signup), :id, :byline, :include_blank => "Please select a potential match as pinch recipient" -%>
-      <% else %>
-        <!-- this person has no potential recipients at all -->
-        <%= assignment_form.text_field :pinch_request_byline, :value => assignment.pinch_request_byline %>
-        <%= autocomplete_text_field "challenge_assignments_#{assignment.id}_pinch_request_byline", :methodname => "challenge_participants", :no_comma => true, :extra_params => "collection_id=#{@collection.id}" %>
-      <% end %>
-    </td>
-    <td>
-      <%= manage_challenge_signup_links(assignment.offer_signup) -%>
+      <%= assignment_form.collection_select :pinch_request_signup_id, assignment.offer_signup.offer_potential_matches.sort.reverse.collect(&:request_signup), :id, :byline, :include_blank => "Please select a potential match as pinch recipient" -%>
     </td>
   </tr>
 <% end %>

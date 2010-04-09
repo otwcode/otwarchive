@@ -59,16 +59,17 @@ sub 					{ vertical-align: sub;}
 sup 					{ vertical-align:super;}
 
 /* TABLES AND LISTS */
-table					{ background: #efe0e0; border-collapse: collapse; margin:auto; width:100%; clear: right;}
+table					{ background: #efe0e0; border-collapse: collapse; margin:auto; width:100%; clear: right; font-size: 0.97em;}
 caption					{ font-size:0; color:#fffef9; }
-thead, tfoot  			{ border-bottom:2px solid #bbb; padding: 0.75em; vertical-align:middle;}
+thead, tfoot  			{ border-bottom:2px solid #bbb; padding: 0.75em; vertical-align:top;}
 tfoot td				{ border-top:1px solid #aaa}
-td th					{ padding-right: 3em; }
+td th					{ padding-right: 1em; }
 tbody tr				{ border-bottom: 1px solid #fffef9;}
-td						{ padding:0.375em;}
+td						{ padding:0.2em; vertical-align: top;}
+th                      {text-align: left;}
 thead td				{ background: #efe0e0;  border-bottom: 1px solid #fffef9;}
 col.name				{ background: #fffef9; border:1px solid #999;}
-th, tr:hover 			{ background:#fffef9; border:1px solid #bbb; padding:0.15em 0.5em 0.25em; vertical-align:middle; }
+th, tr:hover 			{ background:#fffef9; border:1px solid #bbb; padding:0.15em 0.5em 0.25em; vertical-align:top; }
 th 						{ font-weight: bold; border:1px solid #bbb; padding:0.25em}
 th a, th a:visited, th a:link
 						{ text-decoration: none; border:0;}

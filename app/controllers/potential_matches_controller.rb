@@ -62,16 +62,19 @@ class PotentialMatchesController < ApplicationController
       @in_progress = true
       @current_position = PotentialMatch.position(@collection)
     else
-      # we have potential_matches and assignments
+      # we have potential_matches and assignments      
+      
       # index the potential matches by request_signup
-      @potential_matches = {}
-      @collection.potential_matches.each do |match| 
-        @potential_matches[match.request_signup.id] ||= []
-        @potential_matches[match.request_signup.id] << match
-      end
-      @assignments_with_request_and_offer = @collection.assignments.with_request.with_offer.sort
       @assignments_with_no_offer = @collection.assignments.with_no_offer.sort
       @assignments_with_no_request = @collection.assignments.with_no_request.sort
+
+      @assignments_with_no_potential_requests = @assignments_with_no_request.select {|assignment| assignment.offer_signup.offer_potential_matches.empty?}
+      
+      unless (@assignments_with_no_potential_requests.size > 0)
+        @assignments_with_request_and_offer = @collection.assignments.with_request.with_offer.sort
+
+        @assignments_with_no_assigned_requests = @collection.assignments.with_no_request.select {|assignment| assignment.pinch_request_signup.blank?}
+      end
     end
   end
 
@@ -94,6 +97,17 @@ class PotentialMatchesController < ApplicationController
     end
 
     # redirect to index
+    redirect_to collection_potential_matches_path(@collection)
+  end
+  
+  def cancel_generate
+    if !PotentialMatch.in_progress?(@collection)
+      flash[:error] = t("potential_matches.not_generating", :default => "Potential matches are not currently being generated for this challenge.")
+    else
+      PotentialMatch.cancel_generation(@collection)
+      flash[:notice] = t("potential_matches.cancelled", :default => "Potential match generation cancellation requested. This may take a while, please refresh shortly.")
+    end
+    
     redirect_to collection_potential_matches_path(@collection)
   end
   
