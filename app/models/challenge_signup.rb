@@ -127,15 +127,17 @@ class ChallengeSignup < ActiveRecord::Base
     return nil unless settings
     potential_match_attributes = {:offer_signup => other, :request_signup => self, :collection => self.collection}
     prompt_matches = []
-    self.requests.each do |request|
-      other.offers.each do |offer|
-        if (match = request.match(offer))
-          prompt_matches << match
+    unless settings.no_match_required?
+      self.requests.each do |request|
+        other.offers.each do |offer|
+          if (match = request.match(offer))
+            prompt_matches << match
+          end
         end
       end
+      return nil if settings.num_required_prompts == ALL && prompt_matches.size != self.requests.size
     end
-    return nil if settings.num_required_prompts == ALL && prompt_matches.size != self.requests.size
-    if prompt_matches.size >= settings.num_required_prompts
+    if settings.no_match_required? || prompt_matches.size >= settings.num_required_prompts
       # we have a match
       potential_match_attributes[:num_prompts_matched] = prompt_matches.size
       potential_match = PotentialMatch.new(potential_match_attributes)

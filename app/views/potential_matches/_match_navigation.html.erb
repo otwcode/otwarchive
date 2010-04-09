@@ -11,7 +11,14 @@
   
   <ul class="navigation">
     <% if @collection.potential_matches.empty? %>
-      <li><%= link_to t("potential_matches.generate", :default => "Generate Potential Matches"), generate_collection_potential_matches_path(@collection) %></li>
+      <li>
+        <% if @settings.no_match_required? %>
+          <%= link_to t("potential_matches.generate", :default => "Generate Potential Matches"), generate_collection_potential_matches_path(@collection),
+                        :confirm => "Your challenge settings don't require any matching. Assignments will be completely random. Is this what you want?" %>
+        <% else %>
+          <%= link_to t("potential_matches.generate", :default => "Generate Potential Matches"), generate_collection_potential_matches_path(@collection) %>
+        <% end %>
+      </li>
     <% else %>
       <li><%= submit_tag "Update Assignments" %></li>
       <li><%= link_to t("potential_matches.generate_assignments", :default => "Regenerate Assignments"), generate_collection_assignments_path(@collection),

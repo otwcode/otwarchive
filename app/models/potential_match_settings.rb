@@ -11,8 +11,8 @@ class PotentialMatchSettings < ActiveRecord::Base
                             ]
 
   # VALIDATION
-  REQUIRED_TAG_ATTRIBUTES = %w(num_required_fandoms, num_required_characters, num_required_pairings, num_required_freeforms, num_required_categories, 
-     num_required_ratings, num_required_warnings)
+  REQUIRED_TAG_ATTRIBUTES = %w(num_required_fandoms num_required_characters num_required_pairings num_required_freeforms num_required_categories 
+     num_required_ratings num_required_warnings)
   
   REQUIRED_TAG_ATTRIBUTES.each do |tag_limit_field|
       validates_numericality_of tag_limit_field, :only_integer => true, :less_than_or_equal_to => ArchiveConfig.PROMPT_TAGS_MAX, :greater_than_or_equal_to => 0
@@ -23,7 +23,7 @@ class PotentialMatchSettings < ActiveRecord::Base
   
   # are all settings 0
   def no_match_required?
-    REQUIRED_TAG_ATTRIBUTES.all? {|attrib| self.attrib == 0}
+    REQUIRED_TAG_ATTRIBUTES.all? {|attrib| self.send("#{attrib}") == 0}
   end
                            
 end

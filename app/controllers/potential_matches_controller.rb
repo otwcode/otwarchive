@@ -58,6 +58,8 @@ class PotentialMatchesController < ApplicationController
   end
 
   def index
+    @settings = @collection.challenge.potential_match_settings
+    
     if PotentialMatch.in_progress?(@collection)
       @in_progress = true
       @current_position = PotentialMatch.position(@collection)
