@@ -3,12 +3,12 @@ class ChallengeAssignmentsController < ApplicationController
   before_filter :users_only
   before_filter :load_collection, :except => [:index, :default]
   before_filter :collection_owners_only, :except => [:index, :show, :default]
-  before_filter :load_assignment_from_id, :only => [:show, :default, :undefault, :ignore_default]
+  before_filter :load_assignment_from_id, :only => [:show, :default, :undefault, :cover_default, :uncover_default]
 
   before_filter :load_challenge, :except => [:index]
   before_filter :check_signup_closed, :except => [:index]
   before_filter :check_assignments_not_sent, :only => [:generate, :set, :send_out]
-  before_filter :check_assignments_sent, :only => [:create, :default, :undefault, :mark_defaulted, :ignore_default, :purge]
+  before_filter :check_assignments_sent, :only => [:create, :default, :undefault, :default_multiple, :cover_default, :uncover_default, :purge]
 
   before_filter :load_user, :only => [:default]
   before_filter :owner_only, :only => [:default]
@@ -122,14 +122,23 @@ class ChallengeAssignmentsController < ApplicationController
     else
       # do error-checking for the collection case
       return unless load_collection 
-      return unless load_challenge
-      return unless check_signup_closed
-      return unless check_assignments_sent
+      @challenge = @collection.challenge if @collection
+      signup_open and return unless !@challenge.signup_open
+      assignments_not_sent and return unless @challenge.assignments_sent_at
+      
+      if params[:show_covered]
+        @defaulted_assignments = @collection.assignments.defaulted.order_by_requesting_pseud
+      else
+        @defaulted_assignments = @collection.assignments.defaulted.uncovered.order_by_requesting_pseud
+      end
+      
+      @open_assignments = @collection.assignments.open.order_by_offering_pseud.paginate :page => params[:page], :per_page => 20
       
       if !@challenge.user_allowed_to_see_assignments?(current_user)
         @user = current_user
         @challenge_assignments = @user.offer_assignments.in_collection(@collection).open + @user.pinch_hit_assignments.in_collection(@collection).open
       end
+
     end
   end
   
@@ -196,10 +205,20 @@ class ChallengeAssignmentsController < ApplicationController
     redirect_to collection_path(@collection)
   end
   
-  def mark_defaulted
+  def default_multiple
     # update all the assignments
     ChallengeAssignment.update(params[:challenge_assignments].keys, params[:challenge_assignments].values)
     flash[:notice] = "Defaulters updated."
+    redirect_to collection_assignments_path(@collection)
+  end
+  
+  def default_all
+    # mark all unfulfilled assignments as defaulted
+    ChallengeAssignment.in_collection(@collection).unfulfilled.each do |unfulfilled_assignment|
+      unfulfilled_assignment.defaulted_at = Time.now
+      unfulfilled_assignment.save
+    end
+    flash[:notice] = "All unfulfilled assignments marked as defaulting."
     redirect_to collection_assignments_path(@collection)
   end
   
@@ -220,10 +239,17 @@ class ChallengeAssignmentsController < ApplicationController
     redirect_to collection_assignments_path(@collection)
   end
   
-  def ignore_default
+  def cover_default
     @challenge_assignment.covered_at = Time.now
     @challenge_assignment.save
-    flash[:notice] = "Assignment marked as covered, it will not appear in the defaulted list anymore."
+    flash[:notice] = "Assignment marked as covered. It will not appear in the defaulted list anymore."
+    redirect_to collection_assignments_path(@collection)
+  end
+  
+  def uncover_default
+    @challenge_assignment.covered_at = nil
+    @challenge_assignment.save
+    flash[:notice] = "Assignment marked as uncovered. It will appear in the defaulted list until it is covered."
     redirect_to collection_assignments_path(@collection)
   end
   

@@ -41,8 +41,8 @@ class Gift < ActiveRecord::Base
   named_scope :include_pseuds, :include => [{:work => :pseuds}]
 
   def recipient=(new_recipient_name)
-    pseud = Pseud.parse_byline(new_recipient_name, :assume_matching_login => true).first
-    recipient_name = pseud ? nil : new_recipient_name
+    self.pseud = Pseud.parse_byline(new_recipient_name, :assume_matching_login => true).first
+    self.recipient_name = pseud ? nil : new_recipient_name
   end
 
   def recipient

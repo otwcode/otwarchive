@@ -172,7 +172,7 @@ class Work < ActiveRecord::Base
   ########################################################################
   before_save :validate_authors, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
-  before_save :set_word_count, :post_first_chapter, :set_challenge_info
+  before_save :set_word_count, :post_first_chapter
 
   after_save :save_chapters, :save_parents
 
@@ -272,11 +272,9 @@ class Work < ActiveRecord::Base
     # if this is fulfilling a challenge, add the collection and recipient
     challenge_assignments.each do |assignment|
       add_to_collection(assignment.collection)
-      unless recipients.include?(assignment.request_byline)
-        gift = Gift.new(:pseud => assignment.requesting_pseud)
-        self.gifts << gift
-      end
+      self.gifts << Gift.new(:pseud => assignment.requesting_pseud) unless (recipients && recipients.include?(assignment.request_byline))
     end
+    save
   end      
 
   def challenge_assignment_ids
@@ -315,8 +313,12 @@ class Work < ActiveRecord::Base
   def remove_from_collection!(collection)
     if collection && self.collections.include?(collection)
       self.collections -= [collection]
-      save
     end
+  end
+  
+  def remove_from_collection!(collection)
+    remove_from_collection(collection)
+    save
   end 
   
   def collection_names

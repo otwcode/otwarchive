@@ -322,8 +322,8 @@ class WorksController < ApplicationController
       flash[:notice] = t('posting_canceled', :default => "New work posting canceled.")
       redirect_to current_user
     else # now also treating the cancel_coauthor_button case, bc it should function like a preview, really 
-      valid = (@work.errors.empty? && @work.invalid_pseuds.blank? && @work.ambiguous_pseuds.blank? && @work.has_required_tags?)
-      if valid && @work.save && @work.set_revised_at(@chapter.published_at)
+      valid = (@work.valid? && @work.errors.empty? && @work.invalid_pseuds.blank? && @work.ambiguous_pseuds.blank? && @work.has_required_tags?)
+      if valid && @work.save && @work.set_revised_at(@chapter.published_at) && @work.set_challenge_info
         flash[:notice] = t('draft_created', :default => 'Draft was successfully created.')
         redirect_to preview_work_path(@work)
       else
@@ -431,6 +431,7 @@ class WorksController < ApplicationController
 
         saved = @work.save
         @work.update_minor_version
+        @work.set_challenge_info
       end
       if saved
         if params[:post_button]

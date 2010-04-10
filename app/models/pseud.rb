@@ -178,6 +178,7 @@ class Pseud < ActiveRecord::Base
     Comment.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}") unless self.comments.blank?
     change_collections_membership
     change_gift_recipients
+    change_challenge_participation
     self.destroy
   end
 
@@ -206,16 +207,22 @@ class Pseud < ActiveRecord::Base
     end
   end
   
+  def change_challenge_participation
+    ChallengeSignup.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}")
+    ChallengeAssignment.update_all("pinch_hitter_id = #{self.user.default_pseud.id}", "pinch_hitter_id = #{self.id}")
+    return
+  end
+  
   def change_gift_recipients
-    Gift.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}") and return
+    Gift.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}")
   end
   
   def change_bookmarks_ownership
-    Bookmark.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}") and return
+    Bookmark.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}")
   end
 
   def change_collections_membership
-    CollectionParticipant.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}") and return
+    CollectionParticipant.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}")
   end
   
   def check_default_pseud

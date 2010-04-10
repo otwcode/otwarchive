@@ -47,10 +47,45 @@ class ChallengeAssignment < ActiveRecord::Base
   named_scope :with_offer, {:conditions => ["offer_signup_id IS NOT NULL"]}
   named_scope :with_request, {:conditions => ["request_signup_id IS NOT NULL"]}
   named_scope :with_no_request, {:conditions => ["request_signup_id IS NULL"]}
-  named_scope :with_no_offer, {:conditions => ["offer_signup_id IS NULL"]}  
+  named_scope :with_no_offer, {:conditions => ["offer_signup_id IS NULL"]}
+  named_scope :unposted, {:conditions => ["challenge_assignments.creation_id IS NULL"]}  
 
-  named_scope :order_by_requesting_pseud, {:joins => {:request_signup => :pseud}, :order => "pseuds.name"}
-  named_scope :order_by_offering_pseud, {:joins => {:offer_signup => :pseud}, :order => "pseuds.name"}
+  REQUESTING_PSEUD_JOIN = "INNER JOIN challenge_signups ON (challenge_assignments.request_signup_id = challenge_signups.id 
+                                                            OR challenge_assignments.pinch_request_signup_id = challenge_signups.id)
+                           INNER JOIN pseuds ON challenge_signups.pseud_id = pseuds.id"
+
+  OFFERING_PSEUD_JOIN = "INNER JOIN challenge_signups ON challenge_assignments.offer_signup_id = challenge_signups.id 
+                         INNER JOIN pseuds ON (challenge_assignments.pinch_hitter_id = pseuds.id OR challenge_signups.pseud_id = pseuds.id)"
+
+  COLLECTION_ITEMS_JOIN = "INNER JOIN collection_items ON (collection_items.collection_id = challenge_assignments.collection_id AND 
+                                                           collection_items.item_id = challenge_assignments.creation_id AND 
+                                                           collection_items.item_type = challenge_assignments.creation_type)"
+
+  COLLECTION_ITEMS_LEFT_JOIN =  "LEFT JOIN collection_items ON (collection_items.collection_id = challenge_assignments.collection_id AND 
+                                                                collection_items.item_id = challenge_assignments.creation_id AND 
+                                                                collection_items.item_type = challenge_assignments.creation_type)"
+
+  named_scope :order_by_requesting_pseud, {
+    :joins => REQUESTING_PSEUD_JOIN, 
+    :order => "pseuds.name"
+  }
+  
+  named_scope :order_by_offering_pseud, {
+    :joins => OFFERING_PSEUD_JOIN,
+    :order => "pseuds.name"
+  }
+
+  named_scope :fulfilled, {
+    :joins => COLLECTION_ITEMS_JOIN,
+    :conditions => ['challenge_assignments.creation_id IS NOT NULL AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', 
+                    CollectionItem::APPROVED, CollectionItem::APPROVED]
+  }
+  
+  # has to be a left join to get works that don't have a collection item
+  named_scope :unfulfilled, {
+    :joins => COLLECTION_ITEMS_LEFT_JOIN,
+    :conditions => ['challenge_assignments.creation_id IS NULL OR collection_items.user_approval_status != ? OR collection_items.collection_approval_status != ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
+  }
 
   before_destroy :clear_assignment
   def clear_assignment
