@@ -38,7 +38,7 @@
       <% end %>
     </td>
     <td>
-      <%= assignment_form.text_field :pinch_hitter_byline, :size => 40 %>
+      <%= assignment_form.text_field :pinch_hitter_byline, :size => 20 %>
       <%= autocomplete_text_field("challenge_assignments_#{assignment.id}_pinch_hitter_byline", :methodname => "pseud_byline", :no_comma => true) -%>
     </td>
   </tr>

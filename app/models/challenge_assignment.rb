@@ -49,6 +49,9 @@ class ChallengeAssignment < ActiveRecord::Base
   named_scope :with_no_request, {:conditions => ["request_signup_id IS NULL"]}
   named_scope :with_no_offer, {:conditions => ["offer_signup_id IS NULL"]}  
 
+  named_scope :order_by_requesting_pseud, {:joins => {:request_signup => :pseud}, :order => "pseuds.name"}
+  named_scope :order_by_offering_pseud, {:joins => {:offer_signup => :pseud}, :order => "pseuds.name"}
+
   before_destroy :clear_assignment
   def clear_assignment
     if offer_signup

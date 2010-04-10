@@ -1,7 +1,14 @@
 <h2>Matching for <%= sanitize_title_for_display(@collection.title) -%></h2>
-<% if @challenge.signup_open %>
+<% if !@settings %>
   <p class="note">
-    You cannot generate matches while signup is still open! After you have closed signup (in Challenge Settings),
+    Your challenge doesn't currently have any match settings defined. To set them up, please
+    go to Challenge Settings and enter them in the <strong>Minimum Number To Match</strong> section. 
+    You will then be able to use the archive matching tools to help you create 
+    and send out assignments for all your challenge participants, after signup is over. 
+  </p>
+<% elsif @challenge.signup_open %>
+  <p class="note">
+    You cannot generate matches while signup is still open. After you have closed signup (in Challenge Settings),
     you will be able to generate potential matches here.
   </p>
 <% elsif @in_progress %>
@@ -60,21 +67,6 @@
   </table>
   
 <% else %>
-  <% if !@collection.potential_matches.empty? %>
-    <p class="note">
-      The following lists all the participants in your challenge, along with the archive's pass at an initial automated
-      match for all of them. You can now update the assignments however you like. 
-    </p>
-
-    <h4>Useful Tips</h4>
-    <ul>
-      <li>The pull-down menus include all the potential matches for each person -- that is, everyone whose offer matched that person's request. They are listed in order of match "quality".</li>
-      <li>You can write-in anyone with an archive account as a pinch hitter, whether or not they are participants or actually matched.</li>
-      <li>You should <strong>not</strong> regenerate potential matches unless you have edited signups or your matching rules.</li>
-      <li>You can regenerate the assignments to get a new randomized match-up.</li>
-      <li>You can update the assignments as many times as you want until you actually send them out.</li>
-    </ul>
-  <% end %>
 
   <!-- list all the requesters with their potential matches -->
   <% form_tag set_collection_assignments_path, :method => :put do %>
@@ -99,7 +91,7 @@
         <thead>
           <tr>
             <th scope="col">Pseud</th>
-            <th scope="col" colspan=3>Pinch Recipient</th>
+            <th scope="col" colspan=3>Pinch Recipient <%= link_to_help "challenge-pinch-recipient" -%></th>
           </tr>
         </thead>
 
@@ -122,8 +114,8 @@
             <th scope="col">Pseud</th>
             <th scope="col">Giving Gift To</th>
             <th scope="col">Assigned Giver</th>
-            <th scope="col">Potential Givers</th>
-            <th scope="col">Write-In Pinch Hitter</th>
+            <th scope="col">Potential Givers <%= link_to_help "challenge-potential-giver" -%></th>
+            <th scope="col">Write-In Pinch Hitter <%= link_to_help "challenge-pinch-hitter" %></th>
           </tr>
         </thead>
 
@@ -140,6 +132,8 @@
       will happen sometimes randomly. 
     </p>
     
+    <%= will_paginate @assignments_with_request_and_offer -%>
+
     <table summary="lists assignments with giver; you can reassign">
       <caption>Lists assignments with an assigned giver.</caption>
       <thead>
@@ -147,8 +141,8 @@
           <th scope="col">Pseud</th>
           <th scope="col">Giving Gift To</th>
           <th scope="col">Assigned Giver</th>
-          <th scope="col">Potential Givers</th>
-          <th scope="col">Write-In Pinch Hitter</th>
+          <th scope="col">Potential Givers <%= link_to_help "challenge-potential-giver" -%></th>
+          <th scope="col">Write-In Pinch Hitter <%= link_to_help "challenge-pinch-hitter" %></th>
         </tr>
       </thead>
 
@@ -156,6 +150,8 @@
         <%= render :partial => "assignment_with_request", :locals => {:assignment => assignment} %>
       <% end %>
     </table>
+    
+    <%= will_paginate @assignments_with_request_and_offer -%>
 
     <%= render :partial => "match_navigation", :locals => {:top => false} -%>
 
