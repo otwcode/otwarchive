@@ -95,7 +95,7 @@ class ChallengeSignupsController < ApplicationController
     # see below for export_excel method
     respond_to do |format|
       format.html
-      format.xls {export_html(@challenge_signups)}
+      format.xls {export_html}
     end    
   end
 
