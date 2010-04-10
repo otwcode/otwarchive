@@ -15,6 +15,12 @@ class ChallengeSignup < ActiveRecord::Base
   has_many :offer_assignments, :class_name => "ChallengeAssignment", :foreign_key => 'offer_signup_id'
   has_many :request_assignments, :class_name => "ChallengeAssignment", :foreign_key => 'request_signup_id'
 
+  before_destroy :clear_assignments
+  def clear_assignments
+    # remove this signup reference from any existing assignments
+    offer_assignments.each {|assignment| assignment.offer_signup = nil; assignment.save}
+    request_assignments.each {|assignment| assignment.request_signup = nil; assignment.save}
+  end
 
   # we reject prompts if they are empty except for associated references
   accepts_nested_attributes_for :offers, :prompts, :requests, {:allow_destroy => true, 
