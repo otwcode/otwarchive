@@ -72,20 +72,11 @@
       <% unless @hide_navigation %>
         <!-- because rows can be unmanageably long, put nav at start -->
         <td>
-          <ul class="navigation">
-            <li><%= link_to t('challenge_signups.show', :default => "Show"), collection_signup_path(@collection, challenge_signup) %></li>
-            <% if challenge_signup.user == current_user || (!@challenge.signup_open && @collection.user_is_owner?(current_user)) %>
-              <li><%= link_to t('challenge_signups.edit', :default => "Edit"), edit_collection_signup_path(@collection, challenge_signup) %></li>
-            <% end %>
-            <% if challenge_signup.user == current_user || @collection.user_is_maintainer?(current_user) %>
-              <li><%= link_to t('challenge_signups.delete', :default => "Delete"), 
-                      collection_signup_path(@collection, challenge_signup), :confirm => 'Are you sure?', :method => :delete %></li>
-            <% end %>
-          </ul>
+          <%= render :partial => "signup_controls", :locals => {:challenge_signup => challenge_signup} -%>
         </td>
       <% end %>
 
-      <td><%=h challenge_signup.pseud.name %></td>
+      <td><%= link_to challenge_signup.pseud.name, collection_signup_path(@collection, challenge_signup) %></td>
       <!-- show tags, description, url for all allowed requests and offers: using a lot of evals here to DRY up the code since it's so repetitive -->
       <% %w(request offer).each do |prompt_type| %>    
         <% eval("@challenge.#{prompt_type.pluralize}_num_allowed").times do |i| %>

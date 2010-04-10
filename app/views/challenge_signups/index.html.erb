@@ -18,19 +18,10 @@
     </tr>
     <% @challenge_signups.each do |challenge_signup| %>
       <tr>
-        <td><%= challenge_signup.pseud.byline -%></td>
+        <td><%= challenge_signup.pseud.byline %></td>
         <td><%= link_to sanitize_title_for_display(challenge_signup.collection.title), challenge_signup.collection %></td>
         <td class="navigation">
-          <ul class="navigation">
-            <li><%= link_to t('challenge_signups.show', :default => "Show"), collection_signup_path(challenge_signup.collection, challenge_signup) %></li>
-            <% if challenge_signup.user == current_user %>
-              <li><%= link_to t('challenge_signups.edit', :default => "Edit"), edit_collection_signup_path(challenge_signup.collection, challenge_signup) %></li>
-            <% end %>
-            <% if challenge_signup.user == current_user || @collection.user_is_maintainer?(current_user) %>
-              <li><%= link_to t('challenge_signups.delete', :default => "Delete"), 
-                      collection_signup_path(challenge_signup.collection, challenge_signup), :confirm => 'Are you sure?', :method => :delete %></li>
-            <% end %>
-          </ul>
+          <%= render :partial => "signup_controls", :locals => {:challenge_signup => challenge_signup} -%>
         </td>
       </tr>
     <% end %>
