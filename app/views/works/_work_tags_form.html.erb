@@ -16,7 +16,7 @@
     <dd class="warning required">
       <dl>
         <%- for tag in Warning.canonical -%>
-        <dt><%= check_box_tag "work[warning_strings][]", tag.name, check_warning(@work, tag), :id => "work_warning_strings_#{tag.id}" %></dt>
+        <dt><%= check_box_tag "work[warning_strings][]", tag.name, include_blank ? false : check_warning(@work, tag), :id => "work_warning_strings_#{tag.id}" %></dt>
         <dd><%= label_tag "work_warning_strings_#{tag.id}", tag.name %></dd>
         <%- end -%>
       </dl>
@@ -26,7 +26,7 @@
       <label for="work_fandom"><%= Fandom::NAME.pluralize -%>*</label>
     </dt>
     <dd class="fandom required">
-      <%= text_field_tag "work[fandom_string]", @work.fandom_string, :id => "work_fandom" %>
+      <%= text_field_tag "work[fandom_string]", include_blank ? "" : @work.fandom_string, :id => "work_fandom" %>
       <%= autocomplete_text_field("work_fandom") -%>
     </dd>
   	<dd class="fandom delay_notice"><%=h t('first_for_fandom', :default => "If this is the first work for a fandom, it may not show up in the fandoms page for a day or two") -%></dd>
@@ -38,7 +38,7 @@
       <dl>
         <%- for tag in Category.canonical -%>
         <%- cycle_class = cycle("odd", "even") %>
-        <dt class="<%= cycle_class %>"><%= check_box_tag "work[category_string][]", tag.name, @work.category_strings.include?(tag.name), :id => "work_category_string_#{tag.id}" %></dt>
+        <dt class="<%= cycle_class %>"><%= check_box_tag "work[category_string][]", tag.name, include_blank ? false : @work.category_strings.include?(tag.name), :id => "work_category_string_#{tag.id}" %></dt>
         <dd class="<%= cycle_class %>"><%= label_tag "work_category_string_#{tag.id}", tag.name %></dd>
         <%- end -%>
       </dl>
@@ -48,7 +48,7 @@
       <label for="work_pairing"><%= Pairing::NAME.pluralize -%></label>
     </dt>
     <dd class="pairing">
-      <%= text_field_tag "work[pairing_string]", @work.pairing_string, :id => "work_pairing" %> 
+      <%= text_field_tag "work[pairing_string]", include_blank ? "" : @work.pairing_string, :id => "work_pairing" %> 
       <%= autocomplete_text_field("work_pairing") -%>
     </dd>
   
@@ -56,7 +56,7 @@
       <label for="work_character"><%= Character::NAME.pluralize -%></label>
     </dt>
     <dd class="character">
-      <%= text_field_tag "work[character_string]", @work.character_string, :id => "work_character" %>
+      <%= text_field_tag "work[character_string]", include_blank ? "" : @work.character_string, :id => "work_character" %>
       <%= autocomplete_text_field("work_character") -%>
     </dd>
   
@@ -64,7 +64,7 @@
       <label for="work_freeform"><%= Freeform::NAME -%></label>
     </dt>
     <dd class="freeform">
-      <%= text_field_tag "work[freeform_string]", @work.freeform_string, :id => "work_freeform" %>
+      <%= text_field_tag "work[freeform_string]", include_blank ? "" : @work.freeform_string, :id => "work_freeform" %>
       <%= autocomplete_text_field("work_freeform") -%>
     </dd>
     
