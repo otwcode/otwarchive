@@ -70,19 +70,21 @@
       </div>
     <%- end -%>
     
-    <%- unless @work.notes.blank? && @work.endnotes.blank? && @work.parents.blank? && @work.recipients.blank? -%>
+    <%- unless @work.notes.blank? && @work.endnotes.blank? && @work.parent_work_relationships.blank? && @work.recipients.blank? -%>
       <%- current_page?(:controller => 'chapters', :action => 'show') ? linkpath = chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes') : linkpath = work_path(@work, :anchor => 'work_endnotes') %>
       <div class="notes module" role="complementary">
       <h3><%=h t('work_header.notes', :default => "Notes:") %></h3>
         <% if !@work.recipients.blank? %>
           <h4 class="inline"><%= t('work_header.recipients', :default => "For {{recipients}}.", :recipients => recipients_link(@work)) -%></h4>
         <% end -%>
-    <%- unless @work.parents.blank? -%>
+    <%- unless @work.parent_work_relationships.blank? -%>
         <h4 class="inline"><%= t('inspired_by', :default => 'Inspired by') -%>
-        <%- for parent in @work.parents -%>
-          <h4 class="inline"><%= link_to parent.title, parent %> by <%= byline(parent) %></h4>
-          <%- if is_author_of?(@work) -%>
-            <h5 class="inline"><%= link_to t('remove_relationship', :default => '[Remove link]'), {:controller => :related_works, :action => :destroy, :parent_id => parent.id, :work_id => @work.id},  :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></h5>
+        <%- for related_work in @work.parent_work_relationships -%>
+          <%- if related_work.parent -%>
+            <h4 class="inline"><%= link_to related_work.parent.title, related_work.parent %> by <%= byline(related_work.parent) %></h4>
+            <%- if is_author_of?(@work) -%>
+              <h5 class="inline"><%= link_to t('remove_relationship', :default => '[Remove link]'), {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></h5>
+            <%- end -%>
           <%- end -%>
         <%- end -%>
     <%- end -%>

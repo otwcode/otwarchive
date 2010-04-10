@@ -20,9 +20,11 @@ class Work < ActiveRecord::Base
   has_many :series, :through => :serial_works
 
   has_many :related_works, :as => :parent
-  has_many :parent_works, :class_name => "RelatedWork"
-  has_many :parent_work_relationships, :class_name => "RelatedWork"
-  
+  has_many :approved_related_works, :as => :parent, :class_name => "RelatedWork", :conditions => "reciprocal = 1"
+  has_many :parent_work_relationships, :class_name => "RelatedWork", :dependent => :destroy
+  has_many :children, :through => :related_works, :source => :work
+  has_many :approved_children, :through => :approved_related_works, :source => :work
+
   has_many :gifts, :dependent => :destroy
   accepts_nested_attributes_for :gifts, :allow_destroy => true
 
@@ -867,21 +869,12 @@ class Work < ActiveRecord::Base
   ########################################################################
   # RELATED WORKS
   # These are for inspirations/remixes/etc
-  ########################################################################
-
-  # Works this work belongs to through related_works
+  ######################################################################## 
+  
+  # Works (internal or external) that this work was inspired by
+  # Can't make this a has_many association because it's polymorphic
   def parents
-    RelatedWork.find(:all, :conditions => {:work_id => self.id}, :include => :parent).collect(&:parent).uniq
-  end
-
-  # Works that belong to this work through related_works
-  def children
-    RelatedWork.find(:all, :conditions => {:parent_id => self.id}, :include => :work).collect(&:work).uniq
-  end
-
-  # Works that belongs to this work and which have been approved for linking back
-  def approved_children
-    RelatedWork.find(:all, :conditions => {:parent_id => self.id, :reciprocal => true}, :include => :work).collect(&:work).uniq
+    self.parent_work_relationships.collect(&:parent).compact
   end
 
   # Virtual attribute for parent work, via related_works
