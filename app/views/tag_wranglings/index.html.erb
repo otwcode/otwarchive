@@ -110,7 +110,8 @@ get started. (Note: to associate pairings with characters, first choose a fandom
             <%- else -%>
               <%= link_to "Taggings Count&#160;&#8595;", url_for(:show => params[:show], :sort => "taggings_count DESC") %>          
             <%- end -%>
-          </th>   
+          </th> 
+          <th scope="col">Manage</th>  
         </tr>
       </thead>
 		<tfoot>
@@ -124,11 +125,6 @@ get started. (Note: to associate pairings with characters, first choose a fandom
         <tr>
           <td>
             <%= label_tag "selected_tags_#{tag.id}", "#{tag.name}" %> 
-            <ul class="navigation">
-              <li><%= link_to 'edit', {:controller => :tags, :action => :edit, :id => tag} %></li> 
-              <li><%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => tag} %></li> 
-              <li><%= link_to 'works', {:controller => :works, :action => :index, :tag_id => tag} %></li>
-            </ul>       
           </td>      
           <td><%= check_box_tag "selected_tags[]", tag.id, nil, :id => "selected_tags_#{tag.id}" -%></td>
           <td><%= l(tag.created_at.to_date) %></td>
@@ -149,6 +145,13 @@ get started. (Note: to associate pairings with characters, first choose a fandom
             <%- end -%>
           </td>
           <td><%= tag.taggings_count %></td>      
+          <td class="navigation">
+            <ul class="navigation">
+              <li><%= link_to 'edit', {:controller => :tags, :action => :edit, :id => tag} %></li> 
+              <li><%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => tag} %></li> 
+              <li><%= link_to 'works', {:controller => :works, :action => :index, :tag_id => tag} %></li>
+            </ul>       
+          </td>
         </tr>
         <%- end -%>
       </tbody>    

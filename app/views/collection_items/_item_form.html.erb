@@ -1,11 +1,11 @@
 <% if collection_item %>
 <tr id="collection_item_<%= collection_item.id %>">
-<%- form_for(:collection_item, collection_item, :url => {:controller => "collection_items", :action => "update"}) do |form| -%>
 <th scope="row">
-  <%= link_to(
-    collection_item.item_type == "Bookmark" ? t('collection_items.bookmark', :default => "Bookmark for {{title}}", :title => collection_item.title) : 
-    collection_item.title + (!collection_item.item.posted? ? t('collection_items.draft', :default => "(draft)") : ""), collection_item.item) -%>
-  <%= form.hidden_field :id %><%= form.hidden_field :collection_id %>
+  <%- form_for(:collection_item, collection_item, :url => {:controller => "collection_items", :action => "update"}) do |form| -%>
+    <%= form.hidden_field :id %><%= form.hidden_field :collection_id %>
+    <%= link_to(
+      collection_item.item_type == "Bookmark" ? t('collection_items.bookmark', :default => "Bookmark for {{title}}", :title => collection_item.title) : 
+      collection_item.title + (!collection_item.item.posted? ? t('collection_items.draft', :default => "(draft)") : ""), collection_item.item) -%>
 </th>
 <%- unless @user -%>
   <!-- collection view -->
@@ -24,14 +24,14 @@
   <% end -%>
 <% else %>
   <!-- user version -->
-  <td><%=h collection_item.collection.title -%></td>
+  <td><%= link_to sanitize_title_for_display(collection_item.collection.title), collection_path(collection_item.collection) -%></td>
   <td><%=h collection_item.collection.user_is_posting_participant?(@user) ? "Y" : "N" -%>
   <td><%= form.select(:user_approval_status, CollectionItem::APPROVAL_OPTIONS) %><%= hidden_field_tag :user_id, @user.login %></td>
   <td><%= CollectionItem::LABEL[collection_item.collection_approval_status] -%></td>
 <% end %>
 
 <td><%= collection_item.item.respond_to?(:word_count) ? collection_item.item.word_count : t('collection_items.na', :default => "N/A") -%></td>
-<td><%= collection_item.item_date.strftime("%B %d#{", %Y" if collection_item.item_date.year != Date.today.year} %H:%M") -%>
+<td><%= collection_item.item_date.to_date %></td>
 
 <td class="submit button">
   <%= form.submit t('forms.update', :default => "Update") -%>
