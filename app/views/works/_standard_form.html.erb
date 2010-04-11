@@ -150,12 +150,14 @@
         <%- unless @work.parent_work_relationships.blank? -%>
           <dt><%= 'Current parent works' -%></dt>
           <%- for related_work in @work.parent_work_relationships -%>
+            <%- if related_work.parent -%>
             <dd>
               <ul class="navigation">
                 <li><%= link_to related_work.parent.title, related_work.parent %></li> 
                 <li><%= link_to 'Remove', related_work, :confirm => 'Are you sure?', :method => :delete %></li>
               </ul>
             </dd>
+            <%- end -%>
           <%- end -%>
         <%- end -%>          
         </dl>

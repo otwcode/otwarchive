@@ -249,7 +249,7 @@ module WorksHelper
   
   # Determines whether or not to expand the related work association fields when the work form loads
   def check_parent_box(work)
-    !work.parent_work_relationships.blank? || 
+    !work.parents.blank? || 
     (params[:work] && !(work_parent_value(:url).blank? && work_parent_value(:title).blank? && work_parent_value(:author).blank?))
   end
   
