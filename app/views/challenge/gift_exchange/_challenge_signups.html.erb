@@ -13,25 +13,23 @@
 <% num_offer_tag_categories = TagSet::TAG_TYPES.collect {|type| eval("@show_offer_#{type}_tags") ? 1 : 0 }.sum + (show_offer_optional_tags ? 1 : 0) %>
 
 <% unless @hide_navigation %>
-  <% if show_offer_description || show_request_description || show_offer_url || show_request_url || params[:hide_descriptions] || params[:hide_urls] %>
-    <ul class="navigation">
-      <li><%= link_to t('gift_exchange.download_excel', :default => "Download (Excel)"), collection_signups_path(@collection, :format => :xls) %></li>
-      <% if show_offer_description || show_request_description %>
-        <li><%= link_to t('gift_exchange.hide_desc', :default => "Hide Descriptions"), 
-            collection_signups_path(@collection, :hide_descriptions => true, :hide_urls => params[:hide_urls]) -%></li>
-      <% elsif params[:hide_descriptions] %>
-        <li><%= link_to t('gift_exchange.show_desc', :default => "Show Descriptions"), 
-            collection_signups_path(@collection, :hide_descriptions => false, :hide_urls => params[:hide_urls]) -%></li>
-      <% end %>
-      <% if show_offer_url|| show_request_url %>
-        <li><%= link_to t('gift_exchange.hide_url', :default => "Hide URLs"), 
-            collection_signups_path(@collection, :hide_descriptions => params[:hide_descriptions], :hide_urls => true) -%></li>
-      <% elsif params[:hide_urls] %>
-        <li><%= link_to t('gift_exchange.show_desc', :default => "Show URLs"), 
-            collection_signups_path(@collection, :hide_descriptions => params[:hide_descriptions], :hide_urls => false) -%></li>
-      <% end %>
-    </ul>
-  <% end %>
+  <ul class="navigation">
+    <li><%= link_to t('gift_exchange.download_excel', :default => "Download (Excel)"), collection_signups_path(@collection, :format => :xls) %></li>
+    <% if show_offer_description || show_request_description %>
+      <li><%= link_to t('gift_exchange.hide_desc', :default => "Hide Descriptions"), 
+          collection_signups_path(@collection, :hide_descriptions => true, :hide_urls => params[:hide_urls]) -%></li>
+    <% elsif params[:hide_descriptions] %>
+      <li><%= link_to t('gift_exchange.show_desc', :default => "Show Descriptions"), 
+          collection_signups_path(@collection, :hide_descriptions => false, :hide_urls => params[:hide_urls]) -%></li>
+    <% end %>
+    <% if show_offer_url|| show_request_url %>
+      <li><%= link_to t('gift_exchange.hide_url', :default => "Hide URLs"), 
+          collection_signups_path(@collection, :hide_descriptions => params[:hide_descriptions], :hide_urls => true) -%></li>
+    <% elsif params[:hide_urls] %>
+      <li><%= link_to t('gift_exchange.show_desc', :default => "Show URLs"), 
+          collection_signups_path(@collection, :hide_descriptions => params[:hide_descriptions], :hide_urls => false) -%></li>
+    <% end %>
+  </ul>
 <% end %>
 
 <table>
