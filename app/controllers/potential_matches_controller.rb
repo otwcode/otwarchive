@@ -105,6 +105,8 @@ class PotentialMatchesController < ApplicationController
   def cancel_generate
     if !PotentialMatch.in_progress?(@collection)
       flash[:error] = t("potential_matches.not_generating", :default => "Potential matches are not currently being generated for this challenge.")
+    elsif PotentialMatch.canceled?(@collection)
+      flash[:error] = t("potential_matches.already_canceled", :default => "Potential match generation has already been canceled, please refresh again shortly.")
     else
       PotentialMatch.cancel_generation(@collection)
       flash[:notice] = t("potential_matches.cancelled", :default => "Potential match generation cancellation requested. This may take a while, please refresh shortly.")

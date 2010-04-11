@@ -3,45 +3,58 @@ class PotentialMatch < ActiveRecord::Base
   # We use "-1" to represent all the requested items matching 
   ALL = -1
 
-  # class variable for tracking state of potential match generation
-  # collection => pseud of current signup
-  @@collection_position = {}
-  
-  # class variable for interrupting potential match generation
-  @@collection_interrupt = {}
+  CACHE_PROGRESS_KEY = "potential_match_status_for_"
+  CACHE_INTERRUPT_KEY = "potential_match_interrupt_for_"
 
   belongs_to :collection
   belongs_to :offer_signup, :class_name => "ChallengeSignup"
   belongs_to :request_signup, :class_name => "ChallengeSignup"
   
   has_many :potential_prompt_matches, :dependent => :destroy
+
+protected
+
+  # note: this will only work if memcache is being used as the cache store,
+  # not the built-in memory cache store, as delayed_job doesn't share the 
+  # same memory space as the Rails app itself 
+  def self.progress_key(collection)
+    CACHE_PROGRESS_KEY + "#{collection.id}"
+  end
   
+  def self.interrupt_key(collection)
+    CACHE_INTERRUPT_KEY + "#{collection.id}"
+  end
+  
+public
+
   def self.clear!(collection)
     # destroy all potential matches in this collection
     PotentialMatch.destroy_all(["collection_id = ?", collection.id])
   end
   
   def self.set_up_generating(collection)
-    @@collection_position[collection.name] = collection.signups.order_by_pseud.first.pseud.byline
+    Rails.cache.write progress_key(collection), collection.signups.order_by_pseud.first.pseud.byline
   end
   
   def self.cancel_generation(collection)
-    @@collection_interrupt[collection.name] = true
+    Rails.cache.write interrupt_key(collection), true
+  end
+
+  def self.canceled?(collection)
+    !Rails.cache.read(interrupt_key(collection)).nil?
   end
 
   def self.generate!(collection)
     PotentialMatch.clear!(collection)
     collection.signups.order_by_pseud.each do |request_signup|
-      if @@collection_interrupt[collection.name]
-        break
-      end
+      break if Rails.cache.read(interrupt_key(collection))
       PotentialMatch.generate_for_signup(collection, request_signup)
     end
     PotentialMatch.finish_generation(collection)
   end
 
   def self.generate_for_signup(collection, request_signup)
-    @@collection_position[collection.name] = request_signup.pseud.byline
+    Rails.cache.write progress_key(collection), request_signup.pseud.byline
     collection.signups.each do |offer_signup|
       next if request_signup == offer_signup
       potential_match = request_signup.match(offer_signup)
@@ -50,9 +63,9 @@ class PotentialMatch < ActiveRecord::Base
   end
 
   def self.finish_generation(collection)
-    @@collection_position.delete(collection.name)
-    if @@collection_interrupt[collection.name]
-      @@collection_interrupt.delete(collection.name)
+    Rails.cache.write progress_key(collection), nil
+    if Rails.cache.read(interrupt_key(collection))
+      Rails.cache.write interrupt_key(collection), false
       PotentialMatch.clear!(collection)
     else
       ChallengeAssignment.generate!(collection)
@@ -61,11 +74,11 @@ class PotentialMatch < ActiveRecord::Base
   end
 
   def self.in_progress?(collection)
-    @@collection_position.has_key?(collection.name) 
+    !Rails.cache.read(progress_key(collection)).nil?
   end
 
   def self.position(collection)
-    @@collection_position[collection.name]
+    Rails.cache.read(progress_key(collection))
   end
 
   # sorting routine for potential matches
