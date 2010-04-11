@@ -1,25 +1,24 @@
 <!-- requires 'challenge_signup' local -->
-<% @collection = challenge_signup.collection unless @collection %>
-<% if @collection.challenge.signup_open || (!@collection.challenge.signup_open && @collection.user_is_owner?(current_user)) %>
+<% if challenge_signup.collection.challenge.signup_open || (!challenge_signup.collection.challenge.signup_open && challenge_signup.collection.user_is_owner?(current_user)) %>
   <ul class="navigation" role="navigation">
     <li>
-      <% unless @collection.potential_matches.count == 0 %>
-        <%= link_to('Edit', edit_collection_signup_path(@collection, challenge_signup), 
+      <% unless challenge_signup.collection.potential_matches.count == 0 %>
+        <%= link_to('Edit', edit_collection_signup_path(challenge_signup.collection, challenge_signup), 
                 :confirm => t("challenge_signups.potentials_already", 
                 :default => "Note: potential matches will need to be regenerated after your edits.")) %>
       <% else %>
-        <%= link_to('Edit', edit_collection_signup_path(@collection, challenge_signup)) %>
+        <%= link_to('Edit', edit_collection_signup_path(challenge_signup.collection, challenge_signup)) %>
       <% end %>
     </li>
     <li>
-      <% unless @collection.potential_matches.count == 0 %>
+      <% unless challenge_signup.collection.potential_matches.count == 0 %>
         <%= link_to t('challenge_signup.delete_signup', :default => "Delete"), 
-          collection_signup_path(@collection, challenge_signup), 
+          collection_signup_path(challenge_signup.collection, challenge_signup), 
           :confirm => t('challenge_signup.confirm_delete_signup', :default => "Are you sure? Potential matches will need to be regenerated afterwards."), 
           :method => :delete %>
       <% else %>
         <%= link_to t('challenge_signup.delete_signup', :default => "Delete"), 
-          collection_signup_path(@collection, challenge_signup), 
+          collection_signup_path(challenge_signup.collection, challenge_signup), 
           :confirm => t('challenge_signup.confirm_delete_signup', :default => "Are you sure? All information will be lost."), 
           :method => :delete %>
       <% end %>
