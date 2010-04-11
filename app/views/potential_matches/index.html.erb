@@ -11,6 +11,10 @@
     You cannot generate matches while signup is still open. After you have closed signup (in Challenge Settings),
     you will be able to generate potential matches here.
   </p>
+<% elsif @collection.signups.count < 2 %>
+  <p class="note">
+    You cannot generate matches without at least two people signed up. :)
+  </p>
 <% elsif @in_progress %>
 
   <p class="note">
