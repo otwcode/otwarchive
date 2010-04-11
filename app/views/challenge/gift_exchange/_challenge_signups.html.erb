@@ -69,7 +69,7 @@
     <tr>
       <% unless @hide_navigation %>
         <!-- because rows can be unmanageably long, put nav at start -->
-        <td>
+        <td class="navigation">
           <%= render :partial => "signup_controls", :locals => {:challenge_signup => challenge_signup} -%>
         </td>
       <% end %>
