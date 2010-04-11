@@ -42,39 +42,53 @@
  #footer ul.navigation a 	{ border: 0; font-weight: 400; margin: auto; padding: 0 }
 
 /* 2. General rules by content and structure type (shown on many pages) Forms are in forms.css. 
- NAVIGATION, ACTIONS (BUTTONS)*/
- ul#skiplinks,.landmark 	{ border: 0 !important; color: #fffef9; font-size: 0 !important; line-height: 0 !important; height: 0 !important; margin: 0 !important; clear:right; }
- #header .landmark 			{color:#900 !important;}
- 
-#main ul.navigation, p.navigation, li.navigation, span.navigation, p.submit, dd.submit, span.submit, td.submit				{ margin: 0.5em auto 1em; border:1px solid #bbb; background:#fffef9 url(/images/fffef9-ccc.png) bottom left repeat-x; padding:0.15em 0.5em 0.25em; float:right; border-radius:3em; -moz-border-radius:3em; -webkit-border-radius:2em;}
+NAVIGATION, ACTIONS (BUTTONS)*/
+ ul#skiplinks,.landmark 						
+			{ border: 0 !important; color: #fffef9; font-size: 0 !important; line-height: 0 !important; height: 0 !important; margin: 0 !important; clear:right; }
+ #header .landmark 								
+			{color:#900 !important;}
+
+#main ul.navigation, p.navigation, li.navigation, span.navigation, p.submit, dd.submit, span.submit									
+			{ margin: 0.5em auto 1em; border:1px solid #bbb; background:#fffef9 url(/images/fffef9-ccc.png) bottom left repeat-x; padding:0.15em 0.5em 0.25em; float:right; border-radius:3em; -moz-border-radius:3em; -webkit-border-radius:2em;}
  .navigation li,li.navigation,  #main .navigation h4  
-							{ display: inline }
+			{ display: inline }
  #main .navigation a, .submit input, .submit a, #main .navigation input
-							{ background: transparent; border:0;  border-right:1px solid #ccc; border-left:1px solid #ccc; cursor: pointer; font-weight: 700; margin: 0 0.125em; padding: 0.25em 0.5em; text-decoration: none; width: auto }
-#main.admin_users-show .navigation form, #main.admin_users-show .navigation div { display: inline; } /* cancelling out the side-effects of button_to */
+			{ background: transparent; border:0;  border-right:1px solid #ccc; border-left:1px solid #ccc; cursor: pointer; font-weight: 700; margin: 0 0.125em; padding: 0.25em 0.5em; text-decoration: none; width: auto }
+#main.admin_users-show .navigation form, #main.admin_users-show .navigation div 					
+			{ display: inline; } /* cancelling out the side-effects of button_to */
  .navigation a:hover, .submit a:hover, .submit input:hover 
-							{ background: #ddd !important;  color: #111 }
- .navigation a:active 		{ background: #999; border: 1px solid #777 }
- #main .navigation a:visited { color: #111111; }
- .navigation .pagination a 	{ border: 0; padding: 0 }
+			{ background: #ddd !important;  color: #111 }
+ .navigation a:active 							
+			{ background: #999; border: 1px solid #777 }
+ #main .navigation a:visited 					
+			{ color: #111111; }
+ .navigation .pagination a 						
+			{ border: 0; padding: 0 }
 
 /* Navigation in contexts - easier to have it all together */
- 
-#main li.blurb .navigation, #main td.submit input, #main.readings-index .module .navigation 	{ float:left; font-size:0.8575em;}
+#main li.blurb .navigation, #main td.submit input, #main.readings-index .module .navigation 						
+			{ float:left; font-size:0.8575em;}
 #main li.bookmark .navigation, #main li.fandom .navigation,  #main.pseuds-index li.blurb .navigation 
-							{ float:right; }
+			{ float:right; }
 #main .work .own .navigation
-							{ float:left; margin:-1.25em auto auto;}
+			{ float:left; margin:-1.25em auto auto;}
 #main li.bookmark .own .navigation
-							{ float: left; margin:0.25em auto auto -0.25em;}
+			{ float: left; margin:0.25em auto auto -0.25em;}
 #main li.comment ul.navigation 
-							{ clear:both;}
-.pagination 				{ font: 100 1em 'Lucida Grande', Geneva, Verdana, Helvetica, Arial, sans-serif; margin: .5em auto; padding: 0.25em; text-align: center }
- #main .pagination a		{ border:0;}
- #main .current 			{ border: 1px solid #000; padding: 0.25em }
+			{ clear:both;}
+.pagination { font: 100 1em 'Lucida Grande', Geneva, Verdana, Helvetica, Arial, sans-serif; margin: .5em auto; padding: 0.25em; text-align: center }
+ #main .pagination a							
+			{ border:0;}
+ #main .current 								
+			{ border: 1px solid #000; padding: 0.25em }
  .current, .current a:visited
-							{ background: #111 !important; color: #fffef9 !important; cursor: default }
-
+			{ background: #111 !important; color: #fffef9 !important; cursor: default }
+			
+ /*Navigation in tables*/
+#main table ul.navigation, table span.navigation, table span.input  {margin:auto; border:none; background:transparent; padding:0; float:none; border-radius:0; -moz-border-radius:0; -webkit-border-radius:0}
+#main table .navigation li a, #main td.submit input{ border:none; float:none}
+#main table td.navigation, td.submit {border:1px solid #bbb; background:#fffef9 url(/images/fffef9-ccc.png) bottom left repeat-x;}
+            
 /* GROUPING: MODULE, WRAPPER, INDEX */
  .module,  .index  			{ width: 100%; position: relative; float: left; }
  .wrapper					{ background: transparent url(/images/drop-shadow-light.gif) bottom right repeat-y; padding: 0 12px 13px 0;}
