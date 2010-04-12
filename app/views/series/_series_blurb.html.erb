@@ -25,7 +25,7 @@
 <!--summary-->
 		<%- unless series.summary.blank? %>
       <h6 class="landmark">Summary</h6>
-        <blockquote class="user-generated-view summary" title="summary"><%= sanitize_and_format_for_display series.summary %></blockquote>
+        <blockquote class="user-generated-view summary" title="summary"><%= sanitize_strip_images_and_format_for_display series.summary %></blockquote>
     <%- end -%>
 <!--stats-->
 			<dl class="stats" title="stats">
