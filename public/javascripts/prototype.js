@@ -2077,7 +2077,9 @@ Element.Methods = {
   },
 
   getOffsetParent: function(element) {
-    if (element.offsetParent) return $(element.offsetParent);
+    if (element.offsetParent && Element.visible(element)) return $(element.offsetParent);
+    //was: if (element.offsetParent) return $(element.offsetParent);
+    //patch from: https://prototype.lighthouseapp.com/projects/8886/tickets/618-getoffsetparent-returns-body-for-new-hidden-elements-in-ie8-final#ticket-618-7
     if (element == document.body) return $(element);
 
     while ((element = element.parentNode) && element != document.body)
