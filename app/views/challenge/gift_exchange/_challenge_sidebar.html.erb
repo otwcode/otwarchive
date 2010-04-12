@@ -2,26 +2,29 @@
       all items should be enclosed in <li> </li> and linked with span_if_current! 
       @collection is defined, @challenge may not be. -->
 <% if logged_in? %>
-  <% if @collection.challenge.user_allowed_to_sign_up?(current_user) %>
-    <% if (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first) %>
-      <li><%= span_if_current t('gift_exchange.my_signup', :default => "Your Signup"), collection_signup_path(@collection, @challenge_signup) %></li>
-      <% if (! @collection.challenge.assignments_sent_at.nil?) %>
-        <% @challenge_assignments = ChallengeAssignment.in_collection(@collection).by_offering_user(current_user) %>
-        <% if @challenge_assignments.size == 1 %>
-          <li><%= span_if_current t("gift_exchange.assignments", :default => "Your Assignment"), collection_assignment_path(@collection, @challenge_assignments.first) %></li>
-        <% elsif @challenge_assignments.size > 1 %>
-          <li><%= span_if_current t("gift_exchange.assignments", :default => "Your Assignments"), user_assignments_path(current_user, :collection_id => @collection.name) %>
-        <% end %>
-      <% end %>
-    <% elsif (!@collection.moderated? || @collection.user_is_posting_participant?(current_user)) %>
-      <li><%= span_if_current t('gift_exchange.signup', :default => "Signup Form"), new_collection_signup_path(@collection) %></li>
+  <!-- signup form or link -->
+  <% if (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first) %>
+    <li><%= span_if_current t('gift_exchange.my_signup', :default => "Your Signup"), collection_signup_path(@collection, @challenge_signup) %></li>
+  <% elsif @collection.challenge.user_allowed_to_sign_up?(current_user) || !@collection.moderated? || @collection.user_is_posting_participant?(current_user) %>
+    <li><%= span_if_current t('gift_exchange.signup', :default => "Signup Form"), new_collection_signup_path(@collection) %></li>
+  <% end %>
+
+  <!-- assignment link -->
+  <% unless @collection.challenge.assignments_sent_at.nil? %>
+    <% @challenge_assignments = ChallengeAssignment.in_collection(@collection).by_offering_user(current_user) %>
+    <% if @challenge_assignments.size == 1 %>
+      <li><%= span_if_current t("gift_exchange.assignments", :default => "Your Assignment"), collection_assignment_path(@collection, @challenge_assignments.first) %></li>
+    <% elsif @challenge_assignments.size > 1 %>
+      <li><%= span_if_current t("gift_exchange.assignments", :default => "Your Assignments"), user_assignments_path(current_user, :collection_id => @collection.name) %>
     <% end %>
   <% end %>
+
   <% if @collection.challenge.user_allowed_to_see_signups?(current_user) %>
     <li>
       <%= span_if_current t('gift_exchange.signups', :default => "Signups ({{count}})", :count => @collection.signups.count), collection_signups_path(@collection) %>
     </li>
   <% end %>
+
   <% if @collection.challenge.user_allowed_to_see_assignments?(current_user) %>
     <% if @collection.challenge.assignments_sent_at.nil? %>
       <li><%= span_if_current t("gift_exchange.potential_matches", :default => "Matching"), collection_potential_matches_path(@collection) %></li>

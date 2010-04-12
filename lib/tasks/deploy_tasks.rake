@@ -73,7 +73,7 @@ namespace :deploy do
   
   desc "Create backup of archive database"
   task(:backup_db => [:check_environment, :get_server]) do 
-    if @server != "otw2.archiveofourown.org"
+    if @server != "otw2.transformativeworks.org"
       puts "You cannot back up the database except on otw2."
     else
       @db_backup_name ||= ask("Enter the release number to name the db backup -- no spaces! (eg 0.7.3): ")
@@ -134,7 +134,7 @@ namespace :deploy do
   
   desc "Deploy db migrations on otw2: you must have sudo power"
   task(:deploy_migrations_beta => :get_server) do
-    unless @server == "otw2.archiveofourown.org"
+    unless @server == "otw2.transformativeworks.org"
       puts "You can only run this command on otw2!"
     else
       puts %x{sudo su - www-data -c "cap deploy:migrations"}
@@ -143,7 +143,7 @@ namespace :deploy do
 
   desc "Deploy code on beta: you must have sudo power"
   task(:deploy_code_beta => :get_server) do
-    unless @server == "otw1.archiveofourown.org"
+    unless @server == "otw1.transformativeworks.org"
       puts "You can only run this command on otw1!"
     else
       @new_revision = %x{sudo su - www-data -c "svnversion"}
@@ -180,7 +180,7 @@ namespace :deploy do
 
   desc "Run after tasks on beta"
   task(:run_after_tasks_beta) do
-    unless @server == "otw2.archiveofourown.org"
+    unless @server == "otw2.transformativeworks.org"
       puts "You can only run this command on otw2!"
     else
       @yes = ask("Did the migrations deploy run without errors just now? (y/n): ").match(/[yY](es)?/)
@@ -226,10 +226,10 @@ namespace :deploy do
   task(:all_interactive_beta => :get_server) do
     puts "NOTE: Remember, if you run into errors at any stage do not proceed until they are resolved!"
     
-    if @server == "otw1.archiveofourown.org"
+    if @server == "otw1.transformativeworks.org"
       @reminder = true
       puts "Running on OTW1... (don't forget to also run this on OTW2!)"
-    elsif @server == "otw2.archiveofourown.org"
+    elsif @server == "otw2.transformativeworks.org"
       @reminder = true
       puts "Running on OTW2... (don't forget to also run this on OTW1!)"
     end
@@ -238,7 +238,7 @@ namespace :deploy do
     @yes = ask("Update code & gems? (y/n): ").match(/[yY](es)?/)
     Rake::Task['deploy:update_code'].invoke if @yes
 
-    if @server == "otw1.archiveofourown.org"
+    if @server == "otw1.transformativeworks.org"
       @yes = ask("Run tests? (y/n): ").match(/[yY](es)?/)
       Rake::Task['deploy:update_db'].invoke if @yes
       Rake::Task['deploy:run_tests'].invoke if @yes
@@ -254,7 +254,7 @@ namespace :deploy do
     @yes = ask("Shut down archive? (y/n): ").match(/[yY](es)?/)
     Rake::Task['deploy:shutdown_beta'].invoke if @yes
 
-    if @server == "otw2.archiveofourown.org"
+    if @server == "otw2.transformativeworks.org"
       @yes = ask("Backup db? (y/n): ").match(/[yY](es)?/)
       Rake::Task['deploy:backup_db'].invoke if @yes
       
@@ -268,7 +268,7 @@ namespace :deploy do
       puts "*** run the database backup, migration, and After tasks on otw2 before proceeding ***"
     end
       
-    if @server == "otw1.archiveofourown.org"
+    if @server == "otw1.transformativeworks.org"
       @yes = ask("Deploy new code? (y/n): ").match(/[yY](es)?/)
       Rake::Task['deploy:deploy_code_beta'].invoke if @yes      
       
@@ -284,7 +284,7 @@ namespace :deploy do
     ask("Restart webserver? (y/n): ").match(/[yY](es)?/)
     Rake::Task['deploy:restart_beta'].invoke if @yes      
     
-    if @server == "otw1.archiveofourown.org"
+    if @server == "otw1.transformativeworks.org"
       @yes = ask("Notify testers? (y/n): ").match(/[yY](es)?/)
       Rake::Task['deploy:notify_testers_beta'].invoke if @yes
     end

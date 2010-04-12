@@ -18,7 +18,7 @@
     </tr>
     <% @challenge_signups.each do |challenge_signup| %>
       <tr>
-        <td><%= challenge_signup.pseud.byline %></td>
+        <td><%= link_to challenge_signup.pseud.byline, collection_signup_path(challenge_signup.collection, challenge_signup) %></td>
         <td><%= link_to sanitize_title_for_display(challenge_signup.collection.title), challenge_signup.collection %></td>
         <td class="navigation">
           <%= render :partial => "signup_controls", :locals => {:challenge_signup => challenge_signup} -%>
