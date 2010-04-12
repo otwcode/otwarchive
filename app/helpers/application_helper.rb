@@ -1,3 +1,4 @@
+
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
   
@@ -156,10 +157,11 @@ module ApplicationHelper
     unless column.nil?
       if params[:sort_column] == column.to_s # is this the column that is currently doing the sorting?
         direction = params[:sort_direction] == 'ASC' ? 'DESC' : 'ASC'
-        link_to_unless condition, (direction == 'ASC' ? '&#8593;  ' : '&#8595;  ') + title, 
+        link_to_unless condition, (direction == 'ASC' ? '&#8593; <span
+      class="landmark">ascending</span>' : '&#8595; <span class="landmark">descending</span>') + title, 
           request.parameters.merge( {:sort_column => column, :sort_direction => direction} ), {:class => "current"}
       else
-        link_to_unless condition, '&#8593;  ' + title,
+        link_to_unless condition, '&#8593; <span class="landmark">ascending</span>' + title,
           request.parameters.merge( {:sort_column => column, :sort_direction => 'ASC'} )
       end
     else
