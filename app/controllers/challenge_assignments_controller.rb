@@ -143,7 +143,7 @@ class ChallengeAssignmentsController < ApplicationController
   end
   
   def show
-    unless @challenge.user_allowed_to_see_assignments?(current_user) || @challenge_assignment.offer_pseud.user == current_user
+    unless @challenge.user_allowed_to_see_assignments?(current_user) || @challenge_assignment.offering_pseud.user == current_user
       flash[:error] = "You aren't allowed to see that assignment!"
       redirect_to "/" and return
     end
