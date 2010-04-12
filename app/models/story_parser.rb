@@ -562,6 +562,9 @@ class StoryParser
         metapattern_plural = Regexp.new("(#{pattern.pluralize})\s*:\s*(.*)", Regexp::IGNORECASE)
         if text.match(metapattern) || text.match(metapattern_plural)
           value = $2
+          if value.match(metapattern) || value.match(metapattern_plural)
+            value = $2
+          end
           value = clean_tags(value) if is_tag[metaname]
           begin
             value = eval("convert_#{metaname.to_s.downcase}(value)")
