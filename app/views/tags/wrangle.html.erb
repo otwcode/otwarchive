@@ -8,8 +8,17 @@
 </ul>
 <!--/subnav-->
 
-<!--main content--><%- if params[:show] -%>
-  <h3><%= "Showing " + params[:show] %></h3>
+<!--main content-->
+<%
+  showing_header = ""
+  if params[:show] && params[:status]
+    showing_header = "Showing " + params[:status] + " " + params[:show]
+  elsif params[:show]
+    showing_header = "Showing " + params[:show]
+  end
+%>
+<%- unless showing_header.blank? -%>
+<h3><%= showing_header %></h3>
 <%- end -%>
 
 <%- if @tag.is_a?(Fandom) && params[:show] == "pairings" -%>
@@ -50,29 +59,33 @@
     <table>
       <tr>
         <th>
-          <%- if params[:sort] == "name DESC" -%>
-            <%= link_to "Tag Name", url_for(:show => params[:show], :status => params[:status], :sort => "name ASC") %>
+          <%- if params[:sort].blank? || params[:sort] == "name ASC" -%>
+            <%= link_to 'Tag Name&#160;&#8595;<span class="landmark">descending</span>', url_for(:show => params[:show], :status => params[:status], :sort => "name DESC") %>
           <%- else -%>
-            <%= link_to "Tag Name", url_for(:show => params[:show], :status => params[:status], :sort => "name DESC") %>          
+            <%= link_to 'Tag Name&#160;&#8593;<span class="landmark">ascending</span>', url_for(:show => params[:show], :status => params[:status], :sort => "name ASC") %>          
           <%- end -%>
         </th>
         <%- if params[:show] == "pairings" -%>
         <th>Characters</th>
         <%- end -%>      
         <th>Canonical</th>
+        <%- if params[:status] == "canonical" -%>
+        <th>Metatag</th>
+        <%- else -%>
         <th>Synonym</th>
+        <%- end -%>
         <th>
           <%- if params[:sort] == "created_at DESC" -%>
-            <%= link_to "Created", url_for(:show => params[:show], :status => params[:status], :sort => "created_at ASC") %>
+            <%= link_to 'Created&#160;&#8593;<span class="landmark">ascending</span>', url_for(:show => params[:show], :status => params[:status], :sort => "created_at ASC") %>
           <%- else -%>
-            <%= link_to "Created", url_for(:show => params[:show], :status => params[:status], :sort => "created_at DESC") %>          
+            <%= link_to 'Created&#160;&#8595;<span class="landmark">descending</span>', url_for(:show => params[:show], :status => params[:status], :sort => "created_at DESC") %>          
           <%- end -%>        
         </th>
         <th>
           <%- if params[:sort] == "taggings_count DESC" -%>
-            <%= link_to "Taggings Count", url_for(:show => params[:show], :status => params[:status], :sort => "taggings_count ASC") %>
+            <%= link_to 'Taggings Count&#160;&#8593;<span class="landmark">ascending</span>', url_for(:show => params[:show], :status => params[:status], :sort => "taggings_count ASC") %>
           <%- else -%>
-            <%= link_to "Taggings Count", url_for(:show => params[:show], :status => params[:status], :sort => "taggings_count DESC") %>          
+            <%= link_to 'Taggings Count&#160;&#8595;<span class="landmark">descending</span>', url_for(:show => params[:show], :status => params[:status], :sort => "taggings_count DESC") %>          
           <%- end -%>        
         </th>
         <th scope="col">Manage</th>    
@@ -97,7 +110,13 @@
           <%= check_box_tag "canonicals[]", tag.id, tag.canonical?, :id => "canonicals_#{tag.id}" -%>
           <%- end -%>
         </td>
-        <td><%- if tag.merger -%><%= link_to_tag(tag.merger) %><%- end -%></td>
+        <td>
+        <%- if params[:status] == "canonical" -%>
+          <%- unless tag.direct_meta_tags.blank? %><%= tag_link_list(tag.direct_meta_tags) %><% end %>
+        <%- else -%>
+          <%- if tag.merger -%><%= link_to_tag(tag.merger) %><%- end -%>
+        <%- end -%>
+        </td>
         <td><%= tag.created_at.to_date %></td>
         <td><%= tag.taggings_count %></td>
         <td class="navigation">

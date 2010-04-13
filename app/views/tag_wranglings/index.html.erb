@@ -30,7 +30,11 @@ get started. (Note: to associate pairings with characters, first choose a fandom
 <%- end -%>
 
 <%- if @tags && @tags.empty? -%>
-  <p>There are no unwrangled tags in this category at the moment.</p>
+  <%- if params[:show] == "character_pairings" -%>
+    <p>There are no canonical pairings in this fandom at the moment.</p>
+  <%- else -%>
+    <p>There are no unwrangled tags in this category at the moment.</p>
+  <%- end -%>
 <%- elsif @tags -%>
   <%= will_paginate @tags %>
   <%- form_tag url_for(:controller => 'tag_wranglings', :action => 'wrangle'), :method => :post, :id => 'wrangulator' do -%> 
@@ -75,21 +79,20 @@ get started. (Note: to associate pairings with characters, first choose a fandom
 		<col span="4" />
 	</colgroup>
 	<thead> 
-		<!--BACK END, please give the sorting headers sorting arrows, right arrow &#8594; for unsorted, down arrow &#8595; for DESC, up arrow &#8593; for ASC-->	
     	<tr>
 			<th scope="col">
-            <%- if params[:sort] == "name DESC" -%>
-              <%= link_to "Tag Name&#160;&#8593;", url_for(:show => params[:show], :sort => "name ASC") %>
+            <%- if params[:sort].blank? || params[:sort] == "name ASC" -%>
+              <%= link_to 'Tag Name&#160;&#8595;<span class="landmark">descending</span>', url_for(:show => params[:show], :sort => "name DESC") %>
             <%- else -%>
-              <%= link_to "Tag Name&#160;&#8595;", url_for(:show => params[:show], :sort => "name DESC") %>          
+              <%= link_to 'Tag Name&#160;&#8593;<span class="landmark">ascending</span>', url_for(:show => params[:show], :sort => "name ASC") %>          
             <%- end -%>
           </th>
           <th scope="col">Mass Wrangle</th>         
           <th scope="col">
             <%- if params[:sort] == "created_at DESC" -%>
-              <%= link_to "Created&#160;&#8593;", url_for(:show => params[:show], :sort => "created_at ASC") %>
+              <%= link_to 'Created&#160;&#8593;<span class="landmark">ascending</span>', url_for(:show => params[:show], :sort => "created_at ASC") %>
             <%- else -%>
-              <%= link_to "Created&#160;&#8595;", url_for(:show => params[:show], :sort => "created_at DESC") %>          
+              <%= link_to 'Created&#160;&#8595;<span class="landmark">descending</span>', url_for(:show => params[:show], :sort => "created_at DESC") %>          
             <%- end -%>
           </th>
           <%- if params[:show] == 'character_pairings' -%>
@@ -97,18 +100,18 @@ get started. (Note: to associate pairings with characters, first choose a fandom
           <%- elsif params[:show] != "fandoms" -%>
           <th scope="col">
             <%- if params[:sort] == "suggested_fandoms ASC" -%>
-              <%= link_to "Suggested Fandoms&#160;&#8595;", url_for(:show => params[:show], :sort => "suggested_fandoms DESC"), :title => 'Fandoms associated with the same works as this tag.' %>
+              <%= link_to 'Suggested Fandoms&#160;&#8595;<span class="landmark">descending</span>', url_for(:show => params[:show], :sort => "suggested_fandoms DESC"), :title => 'Fandoms associated with the same works as this tag.' %>
             <%- else -%>
-              <%= link_to "Suggested Fandoms&#160;&#8593;", url_for(:show => params[:show], :sort => "suggested_fandoms ASC"), :title => 'Fandoms associated with the same works as this tag.' %>          
+              <%= link_to 'Suggested Fandoms&#160;&#8593;<span class="landmark">ascending</span>', url_for(:show => params[:show], :sort => "suggested_fandoms ASC"), :title => 'Fandoms associated with the same works as this tag.' %>          
             <%- end -%>
           </th>
           <%- end -%>
           <th scope="col">Canonical</th>
           <th scope="col">
             <%- if params[:sort] == "taggings_count DESC" -%>
-              <%= link_to "Taggings Count&#160;&#8593;", url_for(:show => params[:show], :sort => "taggings_count ASC") %>
+              <%= link_to 'Taggings Count&#160;&#8593;<span class="landmark">ascending</span>', url_for(:show => params[:show], :sort => "taggings_count ASC") %>
             <%- else -%>
-              <%= link_to "Taggings Count&#160;&#8595;", url_for(:show => params[:show], :sort => "taggings_count DESC") %>          
+              <%= link_to 'Taggings Count&#160;&#8595;<span class="landmark">descending</span>', url_for(:show => params[:show], :sort => "taggings_count DESC") %>          
             <%- end -%>
           </th> 
           <th scope="col">Manage</th>  

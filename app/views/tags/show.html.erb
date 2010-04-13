@@ -3,12 +3,11 @@
   <div class="header module">
     <h2><%= @tag.name %></h2>
     <%- if can_wrangle? -%>
-    <ul class="navigation">
+    <ul class="navigation" role="navigation">
       <li><%= link_to ' Edit', {:controller => :tags, :action => :edit, :id => @tag} %> </li>
       <li><%= tag_comment_link(@tag) %></li>  
     </ul>
     <%- end -%>
-    <!--subnavigation requested here in Coders 30/12/09 23:20 but I can't parse the requirement. Commenting correct position and structure: <ul class="navigation" role="navigation"><li>..</li></ul>-->
   </div>
 
   <%= error_messages_for :tag %>
