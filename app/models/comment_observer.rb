@@ -134,21 +134,21 @@ class CommentObserver < ActiveRecord::Observer
     end
 
     # notify the user unless 
-    # - they aren't a user :>
+    # - they aren't a user :> (but notify them it they're an admin)
     # - they are the orphan user
     # - they have preferences set not to be notified
     def notify_user_by_email?(user)
-      user.nil? ? false : 
-        !(user == User.orphan_account || user.preference.comment_emails_off?)      
+      user.nil? ? false : ( user.is_a?(Admin) ? :true :
+        !(user == User.orphan_account || user.preference.comment_emails_off?) )
     end
     
     def notify_user_by_inbox?(user)
-      user.nil? ? false :
+      user.nil? || user.is_a?(Admin) ? false :
         !(user == User.orphan_account || user.preference.comment_inbox_off?)       
     end
     
     def notify_user_of_own_comments?(user)
-      user.nil? ? false :
+      user.nil? || user.is_a?(Admin) ? false :
         !(user == User.orphan_account || user.preference.comment_copy_to_self_off?)       
     end
 

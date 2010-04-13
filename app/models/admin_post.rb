@@ -23,5 +23,12 @@ class AdminPost < ActiveRecord::Base
   def commentable_name
     self.title
   end
+  def commentable_owners
+    begin
+        [Admin.find(self.admin_id)]
+    rescue
+      []
+    end
+  end
 
 end

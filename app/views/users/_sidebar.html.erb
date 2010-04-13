@@ -4,11 +4,11 @@
     <li><%= span_if_current "My Dashboard", @user %></li>
     <li><%= span_if_current "My Pseuds (#{@user.pseuds.count})", user_pseuds_path(@user) %></li>
   <% else %>
-  	<li><%= span_if_current "Dashboard", @user %></li>
+    <li><%= span_if_current "Dashboard", @user %></li>
     <li><%= span_if_current "Pseuds (#{@user.pseuds.count})", user_pseuds_path(@user) %></li>
   <% end %>
-	<%- if @user.pseuds.size > 1 -%>
-	  <li class="pseud"><a onclick="subnav_view.toggle()" title="Switch Pseuds">
+  <%- if @user.pseuds.size > 1 -%>
+    <li class="pseud"><a onclick="subnav_view.toggle()" title="Switch Pseuds">
 			<%= if current_page?(@user)
 
 			      "Switch Pseuds"
@@ -22,7 +22,7 @@
   				<%= print_pseud_selector(@user.pseuds) %>
  				<li><a onclick="subnav_view.toggle()" style='cursor: pointer;' title="Close Pseud Switcher">Close</a></li>
 			</ul>
-	</li>
+    </li>
 	<%- end -%>
 	<li><%= @author ? print_pseud_works_link(@author) : print_works_link(@user) %></li>
 	<%- if @user == current_user -%>
@@ -45,16 +45,15 @@
     <li><%= span_if_current "My Gifts (#{@user.gifts.select {|g| g.work.visible?}.count})", user_gifts_path(@user) %></li>
   <% else %>
     <li><%= span_if_current "Gifts (#{@user.gifts.select {|g| g.work.visible?}.count})", user_gifts_path(@user) %></li>
-  < % end %>
-	<% if @user == current_user %>    
-    <li><%= span_if_current "My Inbox (" + @user.unread_inbox_comments_count.to_s + ")", user_inbox_path(@user) %></li>
   <% end %>
-	<% if @user.preference.try(:history_enabled?) %>
-    <li><%= span_if_current "My History", user_readings_path(@user) %></li>
-	<% end %>
-	<li><%= link_to_help "coming-soon", "My Subscriptions" %></li>
-	<li><%= span_if_current "My Preferences", user_preferences_path(@user) %></li>
-<% end %>
+	<% if @user == current_user %>
+    <li><%= span_if_current "My Inbox (" + @user.unread_inbox_comments_count.to_s + ")", user_inbox_path(@user) %></li>
+    <% if @user.preference.try(:history_enabled?) %>
+      <li><%= span_if_current "My History", user_readings_path(@user) %></li>
+    <% end %>
+    <li><%= link_to_help "coming-soon", "My Subscriptions" %></li>
+    <li><%= span_if_current "My Preferences", user_preferences_path(@user) %></li>
+  <% end %>
 </ul>
 </div>
 

@@ -15,11 +15,17 @@
 			<% if current_user.pseuds.count > 1 %>
           <dt><%= f.label :name, t('form_name', :default => "Name: ") %></dt>
 			    <dd><%= select_tag "comment[pseud_id]", options_for_select(current_user.pseuds.map{|pseud| [pseud.name, pseud.id]}, comment.pseud ? comment.pseud.id : current_user.default_pseud.id) %></dd>
-	      <% else %>
+	    <% else %>
           <dt>Name:</dt>
 			    <dd><%= current_user.default_pseud.name -%>
           <%= f.hidden_field :pseud_id, :value => "#{current_user.default_pseud.id}" %></dd>
-	      <% end %>
+	    <% end %>
+    <%- elsif logged_in_as_admin? -%>
+          <dt>Name:</dt>
+          <dd><%= current_admin.login -%>
+              <%= f.hidden_field :name, :value => "#{current_admin.login}" %>
+              <%= f.hidden_field :email, :value => "#{current_admin.email}" %>
+          </dd>
 	  <% else %>  
       <dt class="landmark">Note:</dt>
     	<dd class="instructions"><%=t('comment_requirements', :default => "All fields are required. Your email address will not be published.") %></dd>
