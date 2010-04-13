@@ -12,8 +12,12 @@ class TagsController < ApplicationController
   def index
     if @collection
       @tags = Freeform.canonical.for_collections([@collection] + @collection.children)
-    else      
-      @tags = Freeform.for_tag_cloud
+    else
+      if params[:show] == "random"
+        @tags = Freeform.for_tag_cloud_random
+      else
+        @tags = Freeform.for_tag_cloud_popular
+      end
     end
 
     respond_to do |format|

@@ -16,13 +16,20 @@ class Freeform < Tag
     ['SubTag', 'Merger']
   end
   
-  # Freeform tags for the tag index page
-  def self.for_tag_cloud
+  # Freeform tags for the tag index page - random
+  def self.for_tag_cloud_random
     if no_fandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
-      no_fandom.children.with_count.canonical.first_class.by_type("Freeform").find(:all, :select => "DISTINCT tags.*, filter_counts.unhidden_works_count as count")
+      no_fandom.children.with_count.canonical.first_class.by_type("Freeform").find(:all, :select => "DISTINCT tags.*, filter_counts.unhidden_works_count as count", :order => "RAND()", :limit => ArchiveConfig.TAGS_IN_CLOUD).sort
     end
   end
   
+  # Freeform tags for the tag index page - popular
+  def self.for_tag_cloud_popular
+    if no_fandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
+      no_fandom.children.with_count.canonical.first_class.by_type("Freeform").find(:all, :select => "DISTINCT tags.*, filter_counts.unhidden_works_count as count", :order => "filter_counts.unhidden_works_count DESC", :limit => ArchiveConfig.TAGS_IN_CLOUD).sort
+    end
+  end
+
   named_scope :for_collections, lambda { |collections|
     {:select =>  "tags.*, count(tags.id) as count", 
     :joins => COLLECTION_JOIN,
