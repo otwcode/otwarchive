@@ -19,13 +19,26 @@
 <%- unless @fandoms.empty? -%>
   <div class="wrangler user module">
 	<h3>Assigned Fandoms</h3>
-  <p>Fandoms assigned to you via the <%= link_to 'tag wranglers page', tag_wranglers_path %>. The count is the number of 
+  <p>Fandoms assigned to you via the <%= link_to 'tag wranglers page', tag_wranglers_path %>. The unwrangled count is the number of 
   unwrangled tags which were used on works in the given fandom.</p>
-  <ul>
+  <table>
+    <tr>
+      <th rowspan="2">Fandom</th><th colspan="3">Unfilterable</th><th colspan="3">Unwrangled</th>
+    </tr><tr>
+      <th>Characters</th><th>Pairings</th><th>Freeforms</th><th>Characters</th><th>Pairings</th><th>Freeforms</th>
+    </tr>
     <%- for fandom in @fandoms -%>
-    <li><%= link_to fandom.name + ' (' + fandom.same_work_tags.unwrangled.count(:all).to_s + ')', {:controller => :tags, :action => :wrangle, :id => fandom} %></li>
+    <tr>
+      <td><%= link_to fandom.name, {:controller => :tags, :action => :wrangle, :id => fandom} %></td>
+      <td><%= (tag_count = fandom.characters.unfilterable.size) > 0 ? link_to(tag_count, {:controller => :tags, :action => :wrangle, :id => fandom, :show => :characters, :status => :unfilterable}) : " " %></td>
+      <td><%= (tag_count = fandom.pairings.unfilterable.size)   > 0 ? link_to(tag_count, {:controller => :tags, :action => :wrangle, :id => fandom, :show => :pairings, :status => :unfilterable}) : " " %></td>
+      <td><%= (tag_count = fandom.freeforms.unfilterable.size)  > 0 ? link_to(tag_count, {:controller => :tags, :action => :wrangle, :id => fandom, :show => :freeforms, :status => :unfilterable}) : " " %></td>
+      <td><%= (tag_count = fandom.same_work_tags.unwrangled.by_type("Character").size) > 0 ? link_to(tag_count, {:controller => :tags, :action => :wrangle, :id => fandom, :show => :characters, :status => :unwrangled}) : " " %></td>
+      <td><%= (tag_count = fandom.same_work_tags.unwrangled.by_type("Pairing").size)   > 0 ? link_to(tag_count, {:controller => :tags, :action => :wrangle, :id => fandom, :show => :pairings, :status => :unwrangled}) : " " %></td>
+      <td><%= (tag_count = fandom.same_work_tags.unwrangled.by_type("Freeform").size)  > 0 ? link_to(tag_count, {:controller => :tags, :action => :wrangle, :id => fandom, :show => :freeforms, :status => :unwrangled}) : " " %></td>
+    </tr>
     <%- end -%>  
-  </ul>
+  </table>
 </div>
 <%- end -%>
 
