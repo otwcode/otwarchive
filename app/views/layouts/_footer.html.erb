@@ -5,18 +5,17 @@
   <ul class="navigation" role="navigation">
     <li><%= link_to "Terms of Service", tos_path -%>&#8212;</li>
     <li> <%= link_to "Site Map", site_map_path %>&#8212;</li>
-  	<li> <%= link_to 'Report Abuse', new_abuse_report_path %>&#8212;</li>
-  	<li> <%= link_to 'Support and Feedback', new_feedback_report_path -%>&#8212;</li>
-  	<li> <%= link_to 'Archive FAQ', archive_faqs_path %>&#8212;</li>
+    <li> <%= link_to 'Report Abuse', new_abuse_report_path %>&#8212;</li>
+    <li> <%= link_to 'Support and Feedback', new_feedback_report_path -%>&#8212;</li>
+    <li> <%= link_to 'Archive FAQ', archive_faqs_path %>&#8212;</li>
     <li> <%= link_to 'Known Issues', known_issues_path %>&#8212;</li>
-  	<%- if (logged_in_as_admin? || logged_in? && current_user.is_tag_wrangler?) -%>
-  	  <li> <%= link_to 'Tag Wrangling', tag_wranglings_path -%>&#8212;</li>
-  	<%- end -%>
+    <%- if (logged_in_as_admin? || logged_in? && current_user.is_tag_wrangler?) -%>
+      <li> <%= link_to 'Tag Wrangling', tag_wranglings_path -%>&#8212;</li>
+    <%- end -%>
     <%- if ENV["RAILS_ENV"] == "development"  && ArchiveConfig.DEVELOPMENT_PROFILING_ENABLED -%>
       <li> <%= link_to 'Devmode', devmode_path -%>&#8212;</li>
-  	<%- end -%>
-    <li><a href="http://creativecommons.org/licenses/GPL/2.0/" title="View License">GPL/CC</a>
-      <%=h t('layout.footer.by_the_otw', :default => 'by the') %> <a href="http://transformativeworks.org/" title="The Organization for Transformative Works">OTW</a></li>
+    <%- end -%>
+    <li><a href="http://creativecommons.org/licenses/GPL/2.0/" title="View License">GPL/CC</a><%=h t('layout.footer.by_the_otw', :default => 'by the') %> <a href="http://transformativeworks.org/" title="The Organization for Transformative Works">OTW</a></li>
   </ul>
 </div>
 <!-- END footer -->
