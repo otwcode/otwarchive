@@ -97,28 +97,29 @@ namespace :After do
 #      end
 #    end
 #  end
+#
+# desc "Map gifts to pseuds where that is feasible"
+# task(:map_gifts => :environment) do
+#   gifts = Gift.find(:all)
+#   gifts.each do |gift|
+#     puts "Setting recipient for gift to #{gift.recipient_name}"
+#     gift.recipient = gift.recipient_name
+#     gift.save
+#   end
+# end
+# 
+# desc "Clean up related works that are connected to deleted works"
+# task(:related_work_cleanup => :environment) do
+#   RelatedWork.all.each do |rw| 
+#     unless rw.parent && rw.work
+#       rw.destroy
+#     end
+#   end
+# end
+# 
 
 
   #### Add your new tasks here
-  desc "Map gifts to pseuds where that is feasible"
-  task(:map_gifts => :environment) do
-    gifts = Gift.find(:all)
-    gifts.each do |gift|
-      puts "Setting recipient for gift to #{gift.recipient_name}"
-      gift.recipient = gift.recipient_name
-      gift.save
-    end
-  end
-  
-  desc "Clean up related works that are connected to deleted works"
-  task(:related_work_cleanup => :environment) do
-    RelatedWork.all.each do |rw| 
-      unless rw.parent && rw.work
-        rw.destroy
-      end
-    end
-  end
-  
 
 end # this is the end that you have to put new tasks above
 
@@ -128,4 +129,4 @@ end # this is the end that you have to put new tasks above
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
 #task :After => ['After:fix_warnings', 'After:tidy_wranglings', 'After:exorcise_syns', 'After:deleted_invites_cleanup']
-task :After => ['After:map_gifts', 'After:related_work_cleanup']
+task :After => []

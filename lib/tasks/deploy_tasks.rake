@@ -72,12 +72,12 @@ namespace :deploy do
   end
   
   desc "Create backup of archive database"
-  task(:backup_db => [:check_environment, :get_server]) do 
+  task(:backup_db => [:get_server]) do 
     if @server != "otw2.transformativeworks.org"
       puts "You cannot back up the database except on otw2."
     else
       @db_backup_name ||= ask("Enter the release number to name the db backup -- no spaces! (eg 0.7.3): ")
-      puts %x{sudo su - -c "mysqldump -uroot --all-databases --single-transaction --quick --master-data=1 > /backup/otwarchive/deploys/pre.#{@db_backup_name}"}      
+      puts %x{sudo su - -c "mysqldump -uroot --all-databases --single-transaction --quick --master-data=1 > /backup/otwarchive/deploys/pre.#{@db_backup_name}"}   
     end
   end
 
@@ -134,7 +134,7 @@ namespace :deploy do
   
   desc "Deploy db migrations on otw2: you must have sudo power"
   task(:deploy_migrations_beta => :get_server) do
-    unless @server == "otw2.transformativeworks.org"
+    if @server != "otw2.transformativeworks.org"
       puts "You can only run this command on otw2!"
     else
       puts %x{sudo su - www-data -c "cap deploy:migrations"}
@@ -259,7 +259,7 @@ namespace :deploy do
       Rake::Task['deploy:backup_db'].invoke if @yes
       
       @yes = ask("Deploy migrations? (y/n): ").match(/[yY](es)?/)
-      Rake::Task['deploy_migrations_beta'] if @yes
+      Rake::Task['deploy:deploy_migrations_beta'].invoke if @yes
       
       @yes = ask("Run the post-migration After tasks? (y/n): ").match(/[yY](es)?/)
       Rake::Task['deploy:run_after_tasks'].invoke if @yes
