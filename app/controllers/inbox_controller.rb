@@ -33,6 +33,6 @@ class InboxController < ApplicationController
     rescue
       flash[:warning] = t('please_select', :default => "Please select something first")
     end
-    redirect_to user_inbox_path(@user)
+    redirect_to user_inbox_path(@user, :filters => params[:filters])
   end
 end

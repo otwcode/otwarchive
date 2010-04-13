@@ -33,11 +33,12 @@
       <li class="comment <%= inbox_comment.read? ? 'read' : 'unread' %> <%= cycle :odd, :even %>" role="article">
         <h4><%= get_pseud_or_mailaddress(inbox_comment.feedback_comment) %> <%= 'to' %> <%= commentable_description_link(inbox_comment.feedback_comment) %> </h4>
         <div class="icon">
-		<%- unless inbox_comment.feedback_comment.pseud.nil? -%>
-          <%= image_tag(inbox_comment.feedback_comment.pseud.andand.icon.url, :alt => inbox_comment.feedback_comment.pseud.andand.icon_alt_text, :class => "icon") %>
-			<!--BACK END, please if user not logged in print <span class="visitor icon"><comment saying visitor icon holder></span>-->
-        <%- end -%>
-		</div>
+          <%- if !inbox_comment.feedback_comment.pseud.nil? -%>
+            <%= image_tag(inbox_comment.feedback_comment.pseud.andand.icon.url, :alt => inbox_comment.feedback_comment.pseud.andand.icon_alt_text, :class => "icon") %>
+          <% else %>
+            <span class="visitor icon"><!-- visitor icon holder --></span>
+          <%- end -%>
+        </div>
         <blockquote class="user-generated-view"><%= sanitize_and_format_for_display inbox_comment.feedback_comment.content %></blockquote>
         <p class="datetime"><%= distance_of_time_in_words_to_now(inbox_comment.created_at) %></p>
         <h5 class="landmark">Comment Actions</h5>
@@ -71,6 +72,9 @@
     </li>
   </ul>
     <p class="submit">
+      <%= hidden_field_tag("filters[read]", params[:filters][:read]) %>
+      <%= hidden_field_tag("filters[replied_to]", params[:filters][:replied_to]) %>
+      <%= hidden_field_tag("filters[date]", params[:filters][:date]) %>
       <%= "Mark checked as:" %> 
       <%= submit_tag t('read', :default => 'Read'), :name => 'read' %>
       <%= submit_tag t('unread', :default => 'Unread'), :name => 'unread' %>
