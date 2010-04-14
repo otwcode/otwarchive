@@ -158,8 +158,10 @@ class Admin::AdminUsersController < ApplicationController
   def send_notification
     if !params[:notify_all].blank?
       if params[:notify_all].include?("0")
-        @users = User.all
+        # exclude users who've opted out of admin emails, if the message is one to all users
+        @users = User.all.select {|u| !u.preference.admin_emails_off?}
       else
+        # do not exclude users if they are part of a targeted group, like translations, wranglers or individually selected users
         @users = []
         params[:notify_all].each do |role_name|
           @users += User.all.select{|u| u.roles.collect(&:name).include?(role_name)}
@@ -169,7 +171,7 @@ class Admin::AdminUsersController < ApplicationController
     elsif params[:user_ids]
       @users = User.find(params[:user_ids])
     end
-   
+        
     if @users.blank?
       flash[:error] = t('no_user', :default => "Who did you want to notify?")
       redirect_to :action => :notify and return
