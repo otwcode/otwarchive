@@ -43,7 +43,7 @@ hr						{ margin: 0.75em auto; border:0; border-bottom: 3px double; }
 blockquote, pre			{ font: 100 1em/1.125 'Lucida Grande', Verdana, Helvetica, Tahoma, Arial, sans-serif;  margin: 1.5em; }
 kbd, tt, code, var		{ font: normal 0.75em consolas, courier, monospace; margin: auto; padding: 0.25em; }
 p code, dd code, li code{ font-size: 0.98em;}
-pre 					{ white-space: pre; }
+pre 					{ white-space: pre; font-family: consolas, courier, monospace;}
 strong, b, .important	{ font-weight: bolder; }
 em, cite, i				{ font-style: oblique; }
 cite em, em cite, cite i, i cite, i em, em i, em em, i i, cite cite	
