@@ -66,12 +66,14 @@ class CommentsController < ApplicationController
   end
 
   def index
-    unless @commentable.nil?
+    if !@commentable.nil?
       @comments = @commentable.comments
       if @commentable.class == Comment
         # we link to the parent object at the top
         @commentable = @commentable.ultimate_parent
       end
+    else
+      @comments = Comment.top_level.not_deleted.limited(ArchiveConfig.ITEMS_PER_PAGE).ordered_by_date.include_pseud.select {|c| c.ultimate_parent.respond_to?(:visible?) && c.ultimate_parent.visible?(current_user)}
     end
   end
   
@@ -105,7 +107,7 @@ class CommentsController < ApplicationController
   def create
     if @commentable.nil?
       flash[:error] = t('no_commentable', :default => "What did you want to comment on?")
-     redirect_to :back rescue redirect_to '/'
+      redirect_to :back rescue redirect_to '/'
     else
       @comment = Comment.new(params[:comment])
       @comment.user_agent = request.env['HTTP_USER_AGENT']
