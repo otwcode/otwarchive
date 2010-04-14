@@ -14,11 +14,12 @@
       <h4 title="title">
   	    <%= link_to sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small)), @collection ? collection_work_path(@collection, work) : work %>
    		  <%= t('title_by_author', :default => 'by') %>
-<%- end -%> 
+<%- end -%>
+        
+        <!-- do not cache -->
         <%= byline(work) -%>
 
 <%- cache("work-#{work.id}-#{work.major_version}-#{work.minor_version}-middle", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
-
         <%= !work.recipients.blank? ? t('works.for_recipients', :default => "for {{recipients}}", :recipients => recipients_link(work)) : "" -%>
    		  <%- if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") -%><%- end -%>
         <%- if work.hidden_by_admin -%><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><%- end -%>
@@ -33,25 +34,23 @@
   	  <%= get_symbols_for(work) -%>
   	  <p class="datetime"><%= set_format_for_date(work.revised_at) %></p>
     </div>
-	
+<%- end -%>
+	  
+	  <!-- do not cache -->
     <!--warnings again, cast, freeform tags-->
   	<h6 class="landmark">Tags</h6>
   	<ul class="tags">
   	  <%= work_blurb_tag_block(work) -%>
   	</ul>
-	
+
+<%- cache("work-#{work.id}-#{work.major_version}-#{work.minor_version}-bottom", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>	
     <!--summary-->	
   	<%- unless work.summary.blank? -%>
   		<h6 class="landmark">Summary</h6>
   		<blockquote class="user-generated-view summary" title="summary">
   		  <%= sanitize_strip_images_and_format_for_display work.summary %>
   		</blockquote>
-
   	<%- end -%>
-
-<%- end -%>
-
-<%- cache("work-#{work.id}-#{work.major_version}-#{work.minor_version}-bottom", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
 
     <!--stats-->
   	<dl class="stats" title="stats">
