@@ -10,8 +10,9 @@ config.cache_classes = true
 config.whiny_nils = true
 
 # Show full error reports and disable caching
-config.action_controller.consider_all_requests_local = true
 config.action_controller.perform_caching             = false
+# set this to false to test custom error handling in test mode
+config.action_controller.consider_all_requests_local = true
 
 # Disable request forgery protection in test environment
 config.action_controller.allow_forgery_protection    = false

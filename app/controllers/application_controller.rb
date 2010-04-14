@@ -217,6 +217,22 @@ class ApplicationController < ActionController::Base
   
   public
   
+  # with thanks to http://henrik.nyh.se/2008/07/rails-404
+  def render_optional_error_file(status_code)
+    case(status_code)
+      when :not_found then
+        render :template => "errors/404", :layout => 'application', :status => 404
+      when :forbidden then
+        render :template => "errors/403", :layout => 'application', :status => 403
+      when :unprocessable_entity then
+        render :template => "errors/422", :layout => 'application', :status => 422
+      when :internal_server_error then
+        render :template => "errors/500", :layout => 'application', :status => 500
+      else
+        super
+    end
+  end
+    
   #### -- AUTHORIZATION -- ####
 
   # See ActionController::RequestForgeryProtection for details

@@ -9,9 +9,10 @@ config.cache_classes = false
 config.whiny_nils = true
 
 # Show full error reports and disable caching
-config.action_controller.consider_all_requests_local = true
 config.action_view.debug_rjs                         = true
 config.action_controller.perform_caching             = false
+# set this to false to test custom error handling in development
+config.action_controller.consider_all_requests_local = true
 
 # when testing caching, uncomment, and don't forget you will
 # have to restart your server after every code change!
