@@ -885,7 +885,7 @@ class Work < ActiveRecord::Base
       if attributes[:url].include?(ArchiveConfig.APP_URL)
         id = attributes[:url].match(/works\/\d+/).to_a.first
         id = id.split("/").last unless id.nil?
-        self.new_parent = Work.find(id)
+        self.new_parent = {:parent => Work.find(id), :translation => attributes[:translation]}
       elsif attributes[:title].blank? || attributes[:author].blank?
         error_message = ""
         if attributes[:title].blank?
@@ -898,11 +898,11 @@ class Work < ActiveRecord::Base
       else
         ew = ExternalWork.find_by_url(attributes[:url])
         if ew && (ew.title == attributes[:title]) && (ew.author == attributes[:author])
-          self.new_parent = ew
+          self.new_parent = {:parent => ew, :translation => attributes[:translation]}
         else
           ew = ExternalWork.new(attributes)
           if ew.save
-            self.new_parent = ew
+            self.new_parent = {:parent => ew, :translation => attributes[:translation]}
           else
             self.errors.add_to_base("Parent work info would not save.")
           end
@@ -914,9 +914,11 @@ class Work < ActiveRecord::Base
   # Save relationship to parent work if applicable
   def save_parents
     if self.new_parent and !(self.parents.include?(self.new_parent))
-      relationship = self.new_parent.related_works.build :work_id => self.id
-      if relationship.save
-        self.new_parent = nil
+      unless self.new_parent.blank? || self.new_parent[:parent].blank?
+        relationship = self.new_parent[:parent].related_works.build :work_id => self.id, :translation => self.new_parent[:translation]
+        if relationship.save
+          self.new_parent = nil
+        end
       end
     end
   end

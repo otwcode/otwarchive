@@ -127,7 +127,7 @@
         <%= check_box_tag "parent-options-show", "1", check_parent_box(@work), :onclick => "toggleFormField('parent-options');" %>
       </dt>
       <dd class="work-parent">
-        <%= label_tag 'parent-options-show', t('related_work', :default => "This work is is a remix or was inspired by another work") %>
+        <%= label_tag 'parent-options-show', t('related_work', :default => "This work is a remix, a translation, or was inspired by another work") %>
       </dd>
       
       <!-- Toggles on with parent checkbox -->
@@ -145,6 +145,12 @@
 
           <dt><%= p.label :author %></dt>
           <dd><%= p.text_field :author, :value => work_parent_value(:author) %></dd> 
+          
+          <dt class="work-restricted"><%= p.check_box :translation %></dt>
+          <dd class="work-restricted">
+            <%= p.label :translation, t('is_translation', :default => "This is a translation") %> 
+            <%= link_to_help "translation-link" -%>
+          </dd>
         <%- end -%>
 
         <%- unless @work.parent_work_relationships.blank? -%>
