@@ -142,11 +142,13 @@ class Pseud < ActiveRecord::Base
       pseud_name = pseud_name.strip
       user_login = user_login.strip.chop
       conditions = ['users.login = ? AND pseuds.name = ?', user_login, pseud_name]
-    elsif options[:assume_matching_login]
-      pseud_name = byline.strip
-      conditions = ['users.login = ? AND pseuds.name = ?', pseud_name, pseud_name]
     else
-      conditions = ['pseuds.name = ?', pseud_name]
+      pseud_name = byline.strip
+      if options[:assume_matching_login]
+        conditions = ['users.login = ? AND pseuds.name = ?', pseud_name, pseud_name]
+      else
+        conditions = ['pseuds.name = ?', pseud_name]
+      end
     end
     Pseud.find(:all, :include => :user, :conditions => conditions)
   end    
