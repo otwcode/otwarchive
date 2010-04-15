@@ -12,7 +12,6 @@ tag_1063753983:
   adult: false
   id: 1063753983
   type: Freeform
-  has_characters: false
 tag_1063753794: 
   name: don't look back
   merger_id: 
@@ -26,7 +25,6 @@ tag_1063753794:
   adult: false
   id: 1063753794
   type: Freeform
-  has_characters: false
 tag_1063753936: 
   name: Bellatrix Lestrange/Pansy Parkinson
   merger_id: 
@@ -40,7 +38,6 @@ tag_1063753936:
   adult: false
   id: 1063753936
   type: Pairing
-  has_characters: false
 tag_1063753746: 
   name: Dean
   merger_id: 
@@ -53,8 +50,7 @@ tag_1063753746:
   taggings_count: 2
   adult: false
   id: 1063753746
-  type: Ambiguity
-  has_characters: false
+  type: Character
 tag_1063754079: 
   name: Jack Harkness/Hogwarts Staff
   merger_id: 
@@ -68,7 +64,6 @@ tag_1063754079:
   adult: false
   id: 1063754079
   type: Pairing
-  has_characters: false
 tag_1063753984: 
   name: steps song stuck in my head now
   merger_id: 
@@ -82,7 +77,6 @@ tag_1063753984:
   adult: false
   id: 1063753984
   type: Freeform
-  has_characters: false
 tag_1063753795: 
   name: incest
   merger_id: 
@@ -96,7 +90,6 @@ tag_1063753795:
   adult: false
   id: 1063753795
   type: Freeform
-  has_characters: false
 tag_1063753937: 
   name: Harry Potter - Fandom
   merger_id: 
@@ -110,7 +103,6 @@ tag_1063753937:
   adult: false
   id: 1063753937
   type: Fandom
-  has_characters: false
 tag_1063753747: 
   name: John/Rodney
   merger_id: 1063753811
@@ -124,7 +116,6 @@ tag_1063753747:
   adult: false
   id: 1063753747
   type: Pairing
-  has_characters: false
 tag_1063753985: 
   name: masterpiece
   merger_id: 
@@ -138,7 +129,6 @@ tag_1063753985:
   adult: false
   id: 1063753985
   type: Freeform
-  has_characters: false
 tag_1063754130: 
   name: Opie
   merger_id: 
@@ -152,7 +142,6 @@ tag_1063754130:
   adult: false
   id: 1063754130
   type: Character
-  has_characters: false
 tag_1063753938: 
   name: Pansy Parkinson
   merger_id: 
@@ -166,7 +155,6 @@ tag_1063753938:
   adult: false
   id: 1063753938
   type: Character
-  has_characters: false
 tag_1063753748: 
   name: John
   merger_id: 1063753751
@@ -180,7 +168,6 @@ tag_1063753748:
   adult: false
   id: 1063753748
   type: Character
-  has_characters: false
 tag_1063753986: 
   name: testing ftw
   merger_id: 
@@ -194,7 +181,6 @@ tag_1063753986:
   adult: false
   id: 1063753986
   type: Freeform
-  has_characters: false
 tag_1063753796: 
   name: mud monkeys
   merger_id: 
@@ -208,7 +194,6 @@ tag_1063753796:
   adult: false
   id: 1063753796
   type: Freeform
-  has_characters: false
 tag_1063754131: 
   name: Penelope Clearwater
   merger_id: 
@@ -222,7 +207,6 @@ tag_1063754131:
   adult: false
   id: 1063754131
   type: Character
-  has_characters: false
 tag_1063753939: 
   name: Bellatrix Lestrange
   merger_id: 
@@ -236,7 +220,6 @@ tag_1063753939:
   adult: false
   id: 1063753939
   type: Character
-  has_characters: false
 tag_1063753749: 
   name: Rodney
   merger_id: 1063753752
@@ -250,7 +233,6 @@ tag_1063753749:
   adult: false
   id: 1063753749
   type: Character
-  has_characters: false
 tag_1063753987: 
   name: uriel
   merger_id: 
@@ -264,7 +246,6 @@ tag_1063753987:
   adult: false
   id: 1063753987
   type: Freeform
-  has_characters: false
 tag_1063753797: 
   name: Lot/Lot's Wife
   merger_id: 
@@ -278,7 +259,6 @@ tag_1063753797:
   adult: false
   id: 1063753797
   type: Pairing
-  has_characters: false
 tag_1063754132: 
   name: Forest
   merger_id: 
@@ -292,7 +272,6 @@ tag_1063754132:
   adult: false
   id: 1063754132
   type: Character
-  has_characters: false
 tag_1063753988: 
   name: html testing
   merger_id: 
@@ -306,7 +285,6 @@ tag_1063753988:
   adult: false
   id: 1063753988
   type: Freeform
-  has_characters: false
 tag_1063753798: 
   name: Lot/Lot's Daughters
   merger_id: 
@@ -320,7 +298,6 @@ tag_1063753798:
   adult: false
   id: 1063753798
   type: Pairing
-  has_characters: false
 tag_1063754133: 
   name: Graham
   merger_id: 
@@ -334,7 +311,6 @@ tag_1063754133:
   adult: false
   id: 1063754133
   type: Character
-  has_characters: false
 tag_741440589: 
   name: Supernatural
   merger_id: 
@@ -348,7 +324,6 @@ tag_741440589:
   adult: false
   id: 741440589
   type: Fandom
-  has_characters: false
 tag_788108366: 
   name: Other Media
   merger_id: 
@@ -362,7 +337,6 @@ tag_788108366:
   adult: false
   id: 788108366
   type: Media
-  has_characters: false
 tag_1063753800: 
   name: OMC/OMC
   merger_id: 
@@ -376,7 +350,6 @@ tag_1063753800:
   adult: false
   id: 1063753800
   type: Pairing
-  has_characters: false
 tag_1063753799: 
   name: OFC/OMC
   merger_id: 
@@ -390,7 +363,6 @@ tag_1063753799:
   adult: false
   id: 1063753799
   type: Pairing
-  has_characters: false
 tag_1063754134: 
   name: some tags
   merger_id: 
@@ -404,7 +376,6 @@ tag_1063754134:
   adult: false
   id: 1063754134
   type: Freeform
-  has_characters: false
 tag_1063753801: 
   name: Bible
   merger_id: 
@@ -418,7 +389,6 @@ tag_1063753801:
   adult: false
   id: 1063753801
   type: Fandom
-  has_characters: false
 tag_1063753989: 
   name: frak
   merger_id: 
@@ -432,7 +402,6 @@ tag_1063753989:
   adult: false
   id: 1063753989
   type: Freeform
-  has_characters: false
 tag_1063754135: 
   name: some more tags
   merger_id: 
@@ -446,7 +415,6 @@ tag_1063754135:
   adult: false
   id: 1063754135
   type: Freeform
-  has_characters: false
 tag_1063753850: 
   name: ch
   merger_id: 
@@ -460,7 +428,6 @@ tag_1063753850:
   adult: false
   id: 1063753850
   type: Character
-  has_characters: false
 tag_1063753802: 
   name: Lot
   merger_id: 
@@ -474,7 +441,6 @@ tag_1063753802:
   adult: false
   id: 1063753802
   type: Character
-  has_characters: false
 tag_1063754136: 
   name: some day i will wrangle some tags
   merger_id: 
@@ -488,7 +454,6 @@ tag_1063754136:
   adult: false
   id: 1063754136
   type: Freeform
-  has_characters: false
 tag_1063753803: 
   name: Lot's Wife
   merger_id: 
@@ -502,7 +467,6 @@ tag_1063753803:
   adult: false
   id: 1063753803
   type: Character
-  has_characters: false
 tag_1063753851: 
   name: tt
   merger_id: 
@@ -516,7 +480,6 @@ tag_1063753851:
   adult: false
   id: 1063753851
   type: Character
-  has_characters: false
 tag_426547448: 
   name: Multi
   merger_id: 
@@ -530,7 +493,6 @@ tag_426547448:
   adult: false
   id: 426547448
   type: Category
-  has_characters: false
 tag_1063753804: 
   name: Lot's Daughters
   merger_id: 
@@ -544,7 +506,6 @@ tag_1063753804:
   adult: false
   id: 1063753804
   type: Character
-  has_characters: false
 tag_1063754137: 
   name: nina
   merger_id: 
@@ -558,7 +519,6 @@ tag_1063754137:
   adult: false
   id: 1063754137
   type: Freeform
-  has_characters: false
 tag_1063753852: 
   name: tin
   merger_id: 
@@ -572,7 +532,6 @@ tag_1063753852:
   adult: false
   id: 1063753852
   type: Freeform
-  has_characters: false
 tag_1063753805: 
   name: People of Sodom
   merger_id: 
@@ -586,7 +545,6 @@ tag_1063753805:
   adult: false
   id: 1063753805
   type: Character
-  has_characters: false
 tag_1063754138: 
   name: jenny
   merger_id: 
@@ -600,7 +558,6 @@ tag_1063754138:
   adult: false
   id: 1063754138
   type: Freeform
-  has_characters: false
 tag_1063753853: 
   name: Tin/Tin
   merger_id: 
@@ -614,7 +571,6 @@ tag_1063753853:
   adult: false
   id: 1063753853
   type: Pairing
-  has_characters: false
 tag_1063753806: 
   name: People of Gomorrah
   merger_id: 
@@ -628,7 +584,6 @@ tag_1063753806:
   adult: false
   id: 1063753806
   type: Character
-  has_characters: false
 tag_1063754139: 
   name: balloons and a hatstand
   merger_id: 
@@ -642,7 +597,6 @@ tag_1063754139:
   adult: false
   id: 1063754139
   type: Freeform
-  has_characters: false
 tag_1063753854: 
   name: Teen
   merger_id: 
@@ -656,7 +610,6 @@ tag_1063753854:
   adult: false
   id: 1063753854
   type: Fandom
-  has_characters: false
 tag_1063753807: 
   name: No Fandom
   merger_id: 
@@ -670,7 +623,6 @@ tag_1063753807:
   adult: false
   id: 1063753807
   type: Fandom
-  has_characters: false
 tag_1063753855: 
   name: Tintin
   merger_id: 
@@ -684,7 +636,6 @@ tag_1063753855:
   adult: false
   id: 1063753855
   type: Character
-  has_characters: false
 tag_1063754000: 
   name: Speed Racer - Character
   merger_id: 
@@ -698,7 +649,6 @@ tag_1063754000:
   adult: false
   id: 1063754000
   type: Character
-  has_characters: false
 tag_1063753808: 
   name: Jensen Ackles/Jared Padalecki
   merger_id: 
@@ -712,7 +662,6 @@ tag_1063753808:
   adult: false
   id: 1063753808
   type: Pairing
-  has_characters: false
 tag_1063753856: 
   name: bli
   merger_id: 
@@ -726,7 +675,6 @@ tag_1063753856:
   adult: false
   id: 1063753856
   type: Freeform
-  has_characters: false
 tag_1063754001: 
   name: Trixie
   merger_id: 
@@ -740,7 +688,6 @@ tag_1063754001:
   adult: false
   id: 1063754001
   type: Character
-  has_characters: false
 tag_1063753809: 
   name: Sam Anders/Jack Harkness
   merger_id: 
@@ -754,7 +701,6 @@ tag_1063753809:
   adult: false
   id: 1063753809
   type: Pairing
-  has_characters: true
 tag_1063753857: 
   name: boo
   merger_id: 
@@ -768,7 +714,6 @@ tag_1063753857:
   adult: false
   id: 1063753857
   type: Pairing
-  has_characters: false
 tag_1063754002: 
   name: Choose Not To Use Archive Warnings
   merger_id: 
@@ -782,7 +727,6 @@ tag_1063754002:
   adult: false
   id: 1063754002
   type: Warning
-  has_characters: false
 tag_1063754050: 
   name: Farscape
   merger_id: 
@@ -796,7 +740,6 @@ tag_1063754050:
   adult: false
   id: 1063754050
   type: Fandom
-  has_characters: false
 tag_1063753858: 
   name: poo
   merger_id: 
@@ -810,7 +753,6 @@ tag_1063753858:
   adult: false
   id: 1063753858
   type: Fandom
-  has_characters: false
 tag_1063754003: 
   name: Donna/Ten
   merger_id: 
@@ -824,7 +766,6 @@ tag_1063754003:
   adult: false
   id: 1063754003
   type: Pairing
-  has_characters: false
 tag_1063754051: 
   name: Moay Crew
   merger_id: 
@@ -838,7 +779,6 @@ tag_1063754051:
   adult: false
   id: 1063754051
   type: Character
-  has_characters: false
 tag_1063753859: 
   name: bla
   merger_id: 
@@ -852,7 +792,6 @@ tag_1063753859:
   adult: false
   id: 1063753859
   type: Character
-  has_characters: false
 tag_1063754004: 
   name: adventure
   merger_id: 
@@ -866,7 +805,6 @@ tag_1063754004:
   adult: false
   id: 1063754004
   type: Freeform
-  has_characters: false
 tag_1063754052: 
   name: SG1 Team
   merger_id: 
@@ -880,7 +818,6 @@ tag_1063754052:
   adult: false
   id: 1063754052
   type: Character
-  has_characters: false
 tag_1063754005: 
   name: au
   merger_id: 
@@ -894,7 +831,6 @@ tag_1063754005:
   adult: false
   id: 1063754005
   type: Freeform
-  has_characters: false
 tag_946152233: 
   name: Music & Bands
   merger_id: 
@@ -908,7 +844,6 @@ tag_946152233:
   adult: false
   id: 946152233
   type: Media
-  has_characters: false
 tag_1063753910: 
   name: Severus Snape
   merger_id: 
@@ -922,7 +857,6 @@ tag_1063753910:
   adult: false
   id: 1063753910
   type: Character
-  has_characters: false
 tag_1063754054: 
   name: Alternate Universe
   merger_id: 
@@ -936,7 +870,6 @@ tag_1063754054:
   adult: false
   id: 1063754054
   type: Freeform
-  has_characters: false
 tag_1063754006: 
   name: something
   merger_id: 
@@ -950,7 +883,6 @@ tag_1063754006:
   adult: false
   id: 1063754006
   type: Freeform
-  has_characters: false
 tag_1063753911: 
   name: Snarry
   merger_id: 
@@ -964,7 +896,6 @@ tag_1063753911:
   adult: false
   id: 1063753911
   type: Pairing
-  has_characters: false
 tag_1063754055: 
   name: Back to Earth
   merger_id: 
@@ -978,7 +909,6 @@ tag_1063754055:
   adult: false
   id: 1063754055
   type: Freeform
-  has_characters: false
 tag_1063753960: 
   name: funtiemz in hell
   merger_id: 
@@ -992,7 +922,6 @@ tag_1063753960:
   adult: false
   id: 1063753960
   type: Freeform
-  has_characters: false
 tag_1063753770: 
   name: Future fic
   merger_id: 
@@ -1006,7 +935,6 @@ tag_1063753770:
   adult: false
   id: 1063753770
   type: Freeform
-  has_characters: false
 tag_1063754007: 
   name: Donna
   merger_id: 
@@ -1020,7 +948,6 @@ tag_1063754007:
   adult: false
   id: 1063754007
   type: Character
-  has_characters: false
 tag_1063753912: 
   name: Snape
   merger_id: 
@@ -1034,7 +961,6 @@ tag_1063753912:
   adult: false
   id: 1063753912
   type: Character
-  has_characters: false
 tag_1063754056: 
   name: OC
   merger_id: 
@@ -1048,7 +974,6 @@ tag_1063754056:
   adult: false
   id: 1063754056
   type: Freeform
-  has_characters: false
 tag_1063753771: 
   name: drabble
   merger_id: 
@@ -1062,7 +987,6 @@ tag_1063753771:
   adult: false
   id: 1063753771
   type: Freeform
-  has_characters: false
 tag_1063754008: 
   name: The Doctor
   merger_id: 
@@ -1076,7 +1000,6 @@ tag_1063754008:
   adult: false
   id: 1063754008
   type: Character
-  has_characters: false
 tag_1063753913: 
   name: restricted
   merger_id: 
@@ -1090,7 +1013,6 @@ tag_1063753913:
   adult: false
   id: 1063753913
   type: Freeform
-  has_characters: false
 tag_1063754057: 
   name: Moya Crew
   merger_id: 
@@ -1104,7 +1026,6 @@ tag_1063754057:
   adult: false
   id: 1063754057
   type: Character
-  has_characters: false
 tag_1063753961: 
   name: blah blah blah
   merger_id: 
@@ -1118,7 +1039,6 @@ tag_1063753961:
   adult: false
   id: 1063753961
   type: Freeform
-  has_characters: false
 tag_1063753772: 
   name: post-series
   merger_id: 
@@ -1132,7 +1052,6 @@ tag_1063753772:
   adult: false
   id: 1063753772
   type: Freeform
-  has_characters: false
 tag_1063754009: 
   name: No Archive Warnings Apply
   merger_id: 
@@ -1146,7 +1065,6 @@ tag_1063754009:
   adult: false
   id: 1063754009
   type: Warning
-  has_characters: false
 tag_1063753914: 
   name: McKay/withheld
   merger_id: 
@@ -1160,7 +1078,6 @@ tag_1063753914:
   adult: false
   id: 1063753914
   type: Pairing
-  has_characters: false
 tag_1063754058: 
   name: Futrue!Fic
   merger_id: 
@@ -1174,7 +1091,6 @@ tag_1063754058:
   adult: false
   id: 1063754058
   type: Freeform
-  has_characters: false
 tag_1063753962: 
   name: long notes are long
   merger_id: 
@@ -1188,7 +1104,6 @@ tag_1063753962:
   adult: false
   id: 1063753962
   type: Freeform
-  has_characters: false
 tag_1063753773: 
   name: Dean Forester/Rory Gilmore
   merger_id: 
@@ -1202,7 +1117,6 @@ tag_1063753773:
   adult: false
   id: 1063753773
   type: Pairing
-  has_characters: false
 tag_1063753915: 
   name: OT3
   merger_id: 
@@ -1216,7 +1130,6 @@ tag_1063753915:
   adult: false
   id: 1063753915
   type: Freeform
-  has_characters: false
 tag_1063754059: 
   name: Supernatrual
   merger_id: 
@@ -1230,7 +1143,6 @@ tag_1063754059:
   adult: false
   id: 1063754059
   type: Freeform
-  has_characters: false
 tag_1063753963: 
   name: flower power
   merger_id: 
@@ -1244,7 +1156,6 @@ tag_1063753963:
   adult: false
   id: 1063753963
   type: Freeform
-  has_characters: false
 tag_1063753916: 
   name: Ronon/Rodney/John
   merger_id: 
@@ -1258,7 +1169,6 @@ tag_1063753916:
   adult: false
   id: 1063753916
   type: Pairing
-  has_characters: false
 tag_1063753964: 
   name: hurt!dean
   merger_id: 
@@ -1272,7 +1182,6 @@ tag_1063753964:
   adult: false
   id: 1063753964
   type: Freeform
-  has_characters: false
 tag_1063753774: 
   name: Gilmore Girls
   merger_id: 
@@ -1286,7 +1195,6 @@ tag_1063753774:
   adult: false
   id: 1063753774
   type: Fandom
-  has_characters: false
 tag_1063753917: 
   name: Rodney gets around
   merger_id: 
@@ -1300,7 +1208,6 @@ tag_1063753917:
   adult: false
   id: 1063753917
   type: Freeform
-  has_characters: false
 tag_1063753965: 
   name: too schmoopy to live
   merger_id: 
@@ -1314,7 +1221,6 @@ tag_1063753965:
   adult: false
   id: 1063753965
   type: Freeform
-  has_characters: false
 tag_1063753775: 
   name: Rory Gilmore
   merger_id: 
@@ -1328,7 +1234,6 @@ tag_1063753775:
   adult: false
   id: 1063753775
   type: Character
-  has_characters: false
 tag_1063754110: 
   name: Oz
   merger_id: 
@@ -1342,7 +1247,6 @@ tag_1063754110:
   adult: false
   id: 1063754110
   type: Character
-  has_characters: false
 tag_1063753918: 
   name: woobie!Rodney
   merger_id: 
@@ -1356,7 +1260,6 @@ tag_1063753918:
   adult: false
   id: 1063753918
   type: Freeform
-  has_characters: false
 tag_1063753966: 
   name: hidden work
   merger_id: 
@@ -1370,7 +1273,6 @@ tag_1063753966:
   adult: false
   id: 1063753966
   type: Freeform
-  has_characters: false
 tag_1063753776: 
   name: Dean Forester
   merger_id: 
@@ -1384,7 +1286,6 @@ tag_1063753776:
   adult: false
   id: 1063753776
   type: Character
-  has_characters: false
 tag_1063754111: 
   name: Jack
   merger_id: 
@@ -1398,7 +1299,6 @@ tag_1063754111:
   adult: false
   id: 1063754111
   type: Character
-  has_characters: false
 tag_1063753919: 
   name: hothothot
   merger_id: 
@@ -1412,7 +1312,6 @@ tag_1063753919:
   adult: false
   id: 1063753919
   type: Freeform
-  has_characters: false
 tag_986046160: 
   name: Rowling - Harry Potter
   merger_id: 
@@ -1426,7 +1325,6 @@ tag_986046160:
   adult: false
   id: 986046160
   type: Fandom
-  has_characters: false
 tag_1063753967: 
   name: external work
   merger_id: 
@@ -1440,7 +1338,6 @@ tag_1063753967:
   adult: false
   id: 1063753967
   type: Freeform
-  has_characters: false
 tag_1063753777: 
   name: J-squared
   merger_id: 
@@ -1454,7 +1351,6 @@ tag_1063753777:
   adult: false
   id: 1063753777
   type: Freeform
-  has_characters: false
 tag_1063754112: 
   name: Daniel
   merger_id: 
@@ -1468,7 +1364,6 @@ tag_1063754112:
   adult: false
   id: 1063754112
   type: Character
-  has_characters: false
 tag_1063753968: 
   name: castiel/dean
   merger_id: 
@@ -1482,7 +1377,6 @@ tag_1063753968:
   adult: false
   id: 1063753968
   type: Freeform
-  has_characters: false
 tag_1063753778: 
   name: Dom/Sub
   merger_id: 
@@ -1496,7 +1390,6 @@ tag_1063753778:
   adult: false
   id: 1063753778
   type: Freeform
-  has_characters: false
 tag_1063754113: 
   name: Buffy/Giles
   merger_id: 
@@ -1510,7 +1403,6 @@ tag_1063754113:
   adult: false
   id: 1063754113
   type: Pairing
-  has_characters: false
 tag_1063753969: 
   name: bathtime fun
   merger_id: 
@@ -1524,7 +1416,6 @@ tag_1063753969:
   adult: false
   id: 1063753969
   type: Freeform
-  has_characters: false
 tag_1063753779: 
   name: Jared Padalecki/Jensen Ackles
   merger_id: 1063753808
@@ -1538,7 +1429,6 @@ tag_1063753779:
   adult: false
   id: 1063753779
   type: Pairing
-  has_characters: false
 tag_1063754114: 
   name: cheating
   merger_id: 
@@ -1552,7 +1442,6 @@ tag_1063754114:
   adult: false
   id: 1063754114
   type: Freeform
-  has_characters: false
 tag_1019428968: 
   name: Movies
   merger_id: 
@@ -1566,7 +1455,6 @@ tag_1019428968:
   adult: false
   id: 1019428968
   type: Media
-  has_characters: false
 tag_1063754115: 
   name: yelling
   merger_id: 
@@ -1580,7 +1468,6 @@ tag_1063754115:
   adult: false
   id: 1063754115
   type: Freeform
-  has_characters: false
 tag_1063753830: 
   name: t
   merger_id: 
@@ -1594,7 +1481,6 @@ tag_1063753830:
   adult: false
   id: 1063753830
   type: Fandom
-  has_characters: false
 tag_1063754116: 
   name: pissing in your cheerios
   merger_id: 
@@ -1608,7 +1494,6 @@ tag_1063754116:
   adult: false
   id: 1063754116
   type: Freeform
-  has_characters: false
 tag_1063753880: 
   name: new not long
   merger_id: 
@@ -1622,7 +1507,6 @@ tag_1063753880:
   adult: false
   id: 1063753880
   type: Pairing
-  has_characters: false
 tag_1063754117: 
   name: cheerios
   merger_id: 
@@ -1636,7 +1520,6 @@ tag_1063754117:
   adult: false
   id: 1063754117
   type: Freeform
-  has_characters: false
 tag_1063753832: 
   name: Testings
   merger_id: 
@@ -1650,7 +1533,6 @@ tag_1063753832:
   adult: false
   id: 1063753832
   type: Fandom
-  has_characters: false
 tag_1063753881: 
   name: newer small
   merger_id: 
@@ -1664,7 +1546,6 @@ tag_1063753881:
   adult: false
   id: 1063753881
   type: Freeform
-  has_characters: false
 tag_1063754118: 
   name: ponies - Freeform
   merger_id: 
@@ -1678,7 +1559,6 @@ tag_1063754118:
   adult: false
   id: 1063754118
   type: Freeform
-  has_characters: false
 tag_1063753833: 
   name: ttt
   merger_id: 
@@ -1692,7 +1572,6 @@ tag_1063753833:
   adult: false
   id: 1063753833
   type: Freeform
-  has_characters: false
 tag_1063753882: 
   name: new short
   merger_id: 
@@ -1706,7 +1585,6 @@ tag_1063753882:
   adult: false
   id: 1063753882
   type: Character
-  has_characters: false
 tag_1063754119: 
   name: a vampire with emotional problems
   merger_id: 
@@ -1720,7 +1598,6 @@ tag_1063754119:
   adult: false
   id: 1063754119
   type: Freeform
-  has_characters: false
 tag_1063753834: 
   name: t/t
   merger_id: 
@@ -1734,7 +1611,6 @@ tag_1063753834:
   adult: false
   id: 1063753834
   type: Pairing
-  has_characters: false
 tag_1063753883: 
   name: newest small
   merger_id: 
@@ -1748,7 +1624,6 @@ tag_1063753883:
   adult: false
   id: 1063753883
   type: Freeform
-  has_characters: false
 tag_1063753835: 
   name: t - Character
   merger_id: 
@@ -1762,7 +1637,6 @@ tag_1063753835:
   adult: false
   id: 1063753835
   type: Character
-  has_characters: false
 tag_1063753836: 
   name: yyy
   merger_id: 
@@ -1776,7 +1650,6 @@ tag_1063753836:
   adult: false
   id: 1063753836
   type: Freeform
-  has_characters: false
 tag_1063753884: 
   name: newer not long
   merger_id: 
@@ -1790,7 +1663,6 @@ tag_1063753884:
   adult: false
   id: 1063753884
   type: Pairing
-  has_characters: false
 tag_1063753837: 
   name: y/y
   merger_id: 
@@ -1804,7 +1676,6 @@ tag_1063753837:
   adult: false
   id: 1063753837
   type: Pairing
-  has_characters: false
 tag_1063753885: 
   name: picky
   merger_id: 
@@ -1818,7 +1689,6 @@ tag_1063753885:
   adult: false
   id: 1063753885
   type: Fandom
-  has_characters: false
 tag_1063754030: 
   name: Foo
   merger_id: 
@@ -1832,7 +1702,6 @@ tag_1063754030:
   adult: false
   id: 1063754030
   type: Character
-  has_characters: false
 tag_1063753838: 
   name: y
   merger_id: 
@@ -1846,7 +1715,6 @@ tag_1063753838:
   adult: false
   id: 1063753838
   type: Character
-  has_characters: false
 tag_1063753886: 
   name: Janto - Pairing
   merger_id: 1063753889
@@ -1860,7 +1728,6 @@ tag_1063753886:
   adult: false
   id: 1063753886
   type: Pairing
-  has_characters: false
 tag_1063754031: 
   name: Bar
   merger_id: 
@@ -1874,7 +1741,6 @@ tag_1063754031:
   adult: false
   id: 1063754031
   type: Character
-  has_characters: false
 tag_1063753839: 
   name: aliens
   merger_id: 
@@ -1888,7 +1754,6 @@ tag_1063753839:
   adult: false
   id: 1063753839
   type: Freeform
-  has_characters: false
 tag_611729728: 
   name: Gen
   merger_id: 
@@ -1902,7 +1767,6 @@ tag_611729728:
   adult: false
   id: 611729728
   type: Category
-  has_characters: false
 tag_1063753887: 
   name: Jack H
   merger_id: 1063753891
@@ -1916,7 +1780,6 @@ tag_1063753887:
   adult: false
   id: 1063753887
   type: Character
-  has_characters: false
 tag_1063754032: 
   name: Gin
   merger_id: 
@@ -1930,7 +1793,6 @@ tag_1063754032:
   adult: false
   id: 1063754032
   type: Character
-  has_characters: false
 tag_1063754080: 
   name: Rockstar AU
   merger_id: 
@@ -1944,7 +1806,6 @@ tag_1063754080:
   adult: false
   id: 1063754080
   type: Freeform
-  has_characters: false
 tag_1063753888: 
   name: Ianto
   merger_id: 1063753890
@@ -1958,7 +1819,6 @@ tag_1063753888:
   adult: false
   id: 1063753888
   type: Character
-  has_characters: false
 tag_1063754033: 
   name: Tonic
   merger_id: 
@@ -1972,7 +1832,6 @@ tag_1063754033:
   adult: false
   id: 1063754033
   type: Character
-  has_characters: false
 tag_1063754081: 
   name: Minerva McGonagall
   merger_id: 
@@ -1986,7 +1845,6 @@ tag_1063754081:
   adult: false
   id: 1063754081
   type: Character
-  has_characters: false
 tag_1063753889: 
   name: Jack Harkness/Ianto Jones
   merger_id: 
@@ -2000,7 +1858,6 @@ tag_1063753889:
   adult: false
   id: 1063753889
   type: Pairing
-  has_characters: true
 tag_1063754034: 
   name: Flannery O'Connor
   merger_id: 
@@ -2014,7 +1871,6 @@ tag_1063754034:
   adult: false
   id: 1063754034
   type: Fandom
-  has_characters: false
 tag_112726825: 
   name: Explicit
   merger_id: 
@@ -2028,7 +1884,6 @@ tag_112726825:
   adult: true
   id: 112726825
   type: Rating
-  has_characters: false
 tag_1063754082: 
   name: Harry/Draco
   merger_id: 
@@ -2042,7 +1897,6 @@ tag_1063754082:
   adult: false
   id: 1063754082
   type: Pairing
-  has_characters: false
 tag_1063754035: 
   name: NCIS
   merger_id: 
@@ -2056,7 +1910,6 @@ tag_1063754035:
   adult: false
   id: 1063754035
   type: Fandom
-  has_characters: false
 tag_713695255: 
   name: Sam
   merger_id: 
@@ -2069,8 +1922,7 @@ tag_713695255:
   taggings_count: 1
   adult: false
   id: 713695255
-  type: Ambiguity
-  has_characters: false
+  type: Character
 tag_1063753750: 
   name: John Sheppard/Rodney McKay
   merger_id: 1063753811
@@ -2084,7 +1936,6 @@ tag_1063753750:
   adult: false
   id: 1063753750
   type: Pairing
-  has_characters: false
 tag_1063754083: 
   name: Jack/Daniel
   merger_id: 
@@ -2098,7 +1949,6 @@ tag_1063754083:
   adult: false
   id: 1063754083
   type: Pairing
-  has_characters: false
 tag_1063754036: 
   name: NCIS series
   merger_id: 
@@ -2112,7 +1962,6 @@ tag_1063754036:
   adult: false
   id: 1063754036
   type: Freeform
-  has_characters: false
 tag_1063753940: 
   name: Crossover
   merger_id: 
@@ -2126,7 +1975,6 @@ tag_1063753940:
   adult: false
   id: 1063753940
   type: Freeform
-  has_characters: false
 tag_1063753751: 
   name: John Sheppard
   merger_id: 
@@ -2140,7 +1988,6 @@ tag_1063753751:
   adult: false
   id: 1063753751
   type: Character
-  has_characters: false
 tag_1063754084: 
   name: Buffy/Willow
   merger_id: 
@@ -2154,7 +2001,6 @@ tag_1063754084:
   adult: false
   id: 1063754084
   type: Pairing
-  has_characters: false
 tag_1063754037: 
   name: Abby Scuito
   merger_id: 
@@ -2168,7 +2014,6 @@ tag_1063754037:
   adult: false
   id: 1063754037
   type: Character
-  has_characters: false
 tag_1063753941: 
   name: Stanford Era
   merger_id: 
@@ -2182,7 +2027,6 @@ tag_1063753941:
   adult: false
   id: 1063753941
   type: Freeform
-  has_characters: false
 tag_1063754085: 
   name: Buffy/Oz
   merger_id: 
@@ -2196,7 +2040,6 @@ tag_1063754085:
   adult: false
   id: 1063754085
   type: Pairing
-  has_characters: false
 tag_1063753990: 
   name: mullet
   merger_id: 
@@ -2210,7 +2053,6 @@ tag_1063753990:
   adult: false
   id: 1063753990
   type: Freeform
-  has_characters: false
 tag_1063753942: 
   name: Dean Winchester/Luna Lovegood
   merger_id: 
@@ -2224,7 +2066,6 @@ tag_1063753942:
   adult: false
   id: 1063753942
   type: Pairing
-  has_characters: false
 tag_1063753752: 
   name: Rodney McKay
   merger_id: 
@@ -2238,7 +2079,6 @@ tag_1063753752:
   adult: false
   id: 1063753752
   type: Character
-  has_characters: false
 tag_1063754086: 
   name: Angel/Spike
   merger_id: 
@@ -2252,7 +2092,6 @@ tag_1063754086:
   adult: false
   id: 1063754086
   type: Pairing
-  has_characters: false
 tag_1063753991: 
   name: DOOM
   merger_id: 
@@ -2266,7 +2105,6 @@ tag_1063753991:
   adult: false
   id: 1063753991
   type: Freeform
-  has_characters: false
 tag_1063754038: 
   name: Sam Wimchester
   merger_id: 
@@ -2280,7 +2118,6 @@ tag_1063754038:
   adult: false
   id: 1063754038
   type: Character
-  has_characters: false
 tag_1063753943: 
   name: Luna Lovegood
   merger_id: 
@@ -2294,7 +2131,6 @@ tag_1063753943:
   adult: false
   id: 1063753943
   type: Character
-  has_characters: false
 tag_1063753753: 
   name: Sam Winchester/Dean Winchester
   merger_id: 545584597
@@ -2308,7 +2144,6 @@ tag_1063753753:
   adult: false
   id: 1063753753
   type: Pairing
-  has_characters: false
 tag_1063754087: 
   name: Giles/Buffy
   merger_id: 
@@ -2322,7 +2157,6 @@ tag_1063754087:
   adult: false
   id: 1063754087
   type: Pairing
-  has_characters: false
 tag_1063753992: 
   name: multi-chapter
   merger_id: 
@@ -2336,7 +2170,6 @@ tag_1063753992:
   adult: false
   id: 1063753992
   type: Freeform
-  has_characters: false
 tag_1063754039: 
   name: Victor Hendrickson
   merger_id: 
@@ -2350,7 +2183,6 @@ tag_1063754039:
   adult: false
   id: 1063754039
   type: Character
-  has_characters: false
 tag_1063753944: 
   name: "spn: season three"
   merger_id: 
@@ -2364,7 +2196,6 @@ tag_1063753944:
   adult: false
   id: 1063753944
   type: Freeform
-  has_characters: false
 tag_1063754088: 
   name: slash
   merger_id: 
@@ -2378,7 +2209,6 @@ tag_1063754088:
   adult: false
   id: 1063754088
   type: Freeform
-  has_characters: false
 tag_1063753993: 
   name: hidden bookmark
   merger_id: 
@@ -2392,7 +2222,6 @@ tag_1063753993:
   adult: false
   id: 1063753993
   type: Freeform
-  has_characters: false
 tag_1063753945: 
   name: "spn: season four"
   merger_id: 
@@ -2406,7 +2235,6 @@ tag_1063753945:
   adult: false
   id: 1063753945
   type: Freeform
-  has_characters: false
 tag_1063753755: 
   name: Ash/Everyone
   merger_id: 
@@ -2420,7 +2248,6 @@ tag_1063753755:
   adult: false
   id: 1063753755
   type: Pairing
-  has_characters: false
 tag_1063754089: 
   name: femslash
   merger_id: 
@@ -2434,7 +2261,6 @@ tag_1063754089:
   adult: false
   id: 1063754089
   type: Freeform
-  has_characters: false
 tag_1063753946: 
   name: hell
   merger_id: 
@@ -2448,7 +2274,6 @@ tag_1063753946:
   adult: false
   id: 1063753946
   type: Freeform
-  has_characters: false
 tag_1063753756: 
   name: Ash
   merger_id: 
@@ -2462,7 +2287,6 @@ tag_1063753756:
   adult: false
   id: 1063753756
   type: Character
-  has_characters: false
 tag_26796919: 
   name: Dean Winchester
   merger_id: 
@@ -2476,7 +2300,6 @@ tag_26796919:
   adult: false
   id: 26796919
   type: Character
-  has_characters: false
 tag_1063753994: 
   name: mary sue
   merger_id: 
@@ -2490,7 +2313,6 @@ tag_1063753994:
   adult: false
   id: 1063753994
   type: Freeform
-  has_characters: false
 tag_1063753947: 
   name: Bela Talbot
   merger_id: 
@@ -2504,7 +2326,6 @@ tag_1063753947:
   adult: false
   id: 1063753947
   type: Character
-  has_characters: false
 tag_1063753757: 
   name: Gualtieri/Griselda
   merger_id: 
@@ -2518,21 +2339,6 @@ tag_1063753757:
   adult: false
   id: 1063753757
   type: Pairing
-  has_characters: false
-tag_751871740: 
-  name: None Of These Warnings Apply
-  merger_id: 
-  fandom_id: 
-  canonical: true
-  created_at: 2008-11-09 01:26:02 +00:00
-  media_id: 1063753922
-  delta: false
-  updated_at: 2008-11-21 06:14:51 +00:00
-  taggings_count: 28
-  adult: false
-  id: 751871740
-  type: Warning
-  has_characters: false
 tag_1063753995: 
   name: private bookmark
   merger_id: 
@@ -2546,7 +2352,6 @@ tag_1063753995:
   adult: false
   id: 1063753995
   type: Freeform
-  has_characters: false
 tag_1063754140: 
   name: no knickers
   merger_id: 
@@ -2560,7 +2365,6 @@ tag_1063754140:
   adult: false
   id: 1063754140
   type: Freeform
-  has_characters: false
 tag_1063753948: 
   name: pre-slash
   merger_id: 
@@ -2574,7 +2378,6 @@ tag_1063753948:
   adult: false
   id: 1063753948
   type: Freeform
-  has_characters: false
 tag_1063753758: 
   name: Medieval romance
   merger_id: 
@@ -2588,7 +2391,6 @@ tag_1063753758:
   adult: false
   id: 1063753758
   type: Fandom
-  has_characters: false
 tag_1063753996: 
   name: marvellous
   merger_id: 
@@ -2602,7 +2404,6 @@ tag_1063753996:
   adult: false
   id: 1063753996
   type: Freeform
-  has_characters: false
 tag_1063754141: 
   name: Harry/Hermione
   merger_id: 
@@ -2616,7 +2417,6 @@ tag_1063754141:
   adult: false
   id: 1063754141
   type: Pairing
-  has_characters: false
 tag_1063753949: 
   name: "spn: season one"
   merger_id: 
@@ -2630,7 +2430,6 @@ tag_1063753949:
   adult: false
   id: 1063753949
   type: Freeform
-  has_characters: false
 tag_1063753759: 
   name: Saladin
   merger_id: 
@@ -2644,7 +2443,6 @@ tag_1063753759:
   adult: false
   id: 1063753759
   type: Character
-  has_characters: false
 tag_1063753997: 
   name: story
   merger_id: 
@@ -2658,7 +2456,6 @@ tag_1063753997:
   adult: false
   id: 1063753997
   type: Freeform
-  has_characters: false
 tag_1063754142: 
   name: Squid/Willow
   merger_id: 
@@ -2672,7 +2469,6 @@ tag_1063754142:
   adult: false
   id: 1063754142
   type: Pairing
-  has_characters: false
 tag_1063753810: 
   name: Jack Harkness/Sam Anders
   merger_id: 1063753809
@@ -2686,7 +2482,6 @@ tag_1063753810:
   adult: false
   id: 1063753810
   type: Pairing
-  has_characters: false
 tag_1063753998: 
   name: Speed/Trixie
   merger_id: 
@@ -2700,7 +2495,6 @@ tag_1063753998:
   adult: false
   id: 1063753998
   type: Pairing
-  has_characters: false
 tag_1063754143: 
   name: solid black
   merger_id: 
@@ -2714,7 +2508,6 @@ tag_1063754143:
   adult: false
   id: 1063754143
   type: Freeform
-  has_characters: false
 tag_1063753811: 
   name: Rodney McKay/John Sheppard
   merger_id: 
@@ -2728,7 +2521,6 @@ tag_1063753811:
   adult: false
   id: 1063753811
   type: Pairing
-  has_characters: false
 tag_1063753999: 
   name: Speed Racer
   merger_id: 
@@ -2742,7 +2534,6 @@ tag_1063753999:
   adult: false
   id: 1063753999
   type: Fandom
-  has_characters: false
 tag_1063754144: 
   name: border bottom
   merger_id: 
@@ -2756,7 +2547,6 @@ tag_1063754144:
   adult: false
   id: 1063754144
   type: Freeform
-  has_characters: false
 tag_1063753812: 
   name: Sam/Kara
   merger_id: 1063753813
@@ -2770,7 +2560,6 @@ tag_1063753812:
   adult: false
   id: 1063753812
   type: Pairing
-  has_characters: false
 tag_1063754145: 
   name: override all
   merger_id: 
@@ -2784,7 +2573,6 @@ tag_1063754145:
   adult: false
   id: 1063754145
   type: Freeform
-  has_characters: false
 tag_1063753860: 
   name: sense
   merger_id: 
@@ -2798,7 +2586,6 @@ tag_1063753860:
   adult: false
   id: 1063753860
   type: Freeform
-  has_characters: false
 tag_1063753813: 
   name: Sam Anders/Kara Thrace
   merger_id: 
@@ -2812,7 +2599,6 @@ tag_1063753813:
   adult: false
   id: 1063753813
   type: Pairing
-  has_characters: false
 tag_177887685: 
   name: Doctor Who
   merger_id: 
@@ -2826,7 +2612,6 @@ tag_177887685:
   adult: false
   id: 177887685
   type: Fandom
-  has_characters: false
 tag_1063754146: 
   name: inheritance and pathing
   merger_id: 
@@ -2840,7 +2625,6 @@ tag_1063754146:
   adult: false
   id: 1063754146
   type: Freeform
-  has_characters: false
 tag_1063753861: 
   name: makes
   merger_id: 
@@ -2854,7 +2638,6 @@ tag_1063753861:
   adult: false
   id: 1063753861
   type: Pairing
-  has_characters: false
 tag_1063754147: 
   name: w3c
   merger_id: 
@@ -2868,7 +2651,6 @@ tag_1063754147:
   adult: false
   id: 1063754147
   type: Fandom
-  has_characters: false
 tag_1063753814: 
   name: John/John
   merger_id: 1063753819
@@ -2882,7 +2664,6 @@ tag_1063753814:
   adult: false
   id: 1063753814
   type: Pairing
-  has_characters: false
 tag_362175678: 
   name: fluff
   merger_id: 
@@ -2896,7 +2677,6 @@ tag_362175678:
   adult: false
   id: 362175678
   type: Freeform
-  has_characters: false
 tag_1063753862: 
   name: Mooo
   merger_id: 
@@ -2910,7 +2690,6 @@ tag_1063753862:
   adult: false
   id: 1063753862
   type: Fandom
-  has_characters: false
 tag_1063753816: 
   name: Cartoons & Comics
   merger_id: 
@@ -2924,7 +2703,6 @@ tag_1063753816:
   adult: false
   id: 1063753816
   type: Media
-  has_characters: false
 tag_1063753863: 
   name: "no"
   merger_id: 
@@ -2938,7 +2716,6 @@ tag_1063753863:
   adult: false
   id: 1063753863
   type: Character
-  has_characters: false
 tag_1063753817: 
   name: Anime & Manga
   merger_id: 
@@ -2952,7 +2729,6 @@ tag_1063753817:
   adult: false
   id: 1063753817
   type: Media
-  has_characters: false
 tag_1063753864: 
   name: paa
   merger_id: 
@@ -2966,7 +2742,6 @@ tag_1063753864:
   adult: false
   id: 1063753864
   type: Freeform
-  has_characters: false
 tag_1063753818: 
   name: Battlestar Galactica (2003)
   merger_id: 
@@ -2980,7 +2755,6 @@ tag_1063753818:
   adult: false
   id: 1063753818
   type: Fandom
-  has_characters: false
 tag_1063753865: 
   name: moo
   merger_id: 
@@ -2994,7 +2768,6 @@ tag_1063753865:
   adult: false
   id: 1063753865
   type: Pairing
-  has_characters: false
 tag_1063754011: 
   name: crack
   merger_id: 
@@ -3008,7 +2781,6 @@ tag_1063754011:
   adult: false
   id: 1063754011
   type: Freeform
-  has_characters: false
 tag_1063753819: 
   name: John Sheppard/John Sheppard
   merger_id: 
@@ -3022,7 +2794,6 @@ tag_1063753819:
   adult: false
   id: 1063753819
   type: Pairing
-  has_characters: false
 tag_545584597: 
   name: Dean Winchester/Sam Winchester
   merger_id: 
@@ -3036,7 +2807,6 @@ tag_545584597:
   adult: false
   id: 545584597
   type: Pairing
-  has_characters: false
 tag_1063753866: 
   name: maa
   merger_id: 
@@ -3050,7 +2820,6 @@ tag_1063753866:
   adult: false
   id: 1063753866
   type: Character
-  has_characters: false
 tag_1063754012: 
   name: Luna
   merger_id: 
@@ -3064,7 +2833,6 @@ tag_1063754012:
   adult: false
   id: 1063754012
   type: Character
-  has_characters: false
 tag_552317390: 
   name: Sam Carter
   merger_id: 
@@ -3078,7 +2846,6 @@ tag_552317390:
   adult: false
   id: 552317390
   type: Character
-  has_characters: false
 tag_1063753867: 
   name: janto
   merger_id: 
@@ -3092,7 +2859,6 @@ tag_1063753867:
   adult: false
   id: 1063753867
   type: Freeform
-  has_characters: false
 tag_1063754013: 
   name: Hermione
   merger_id: 
@@ -3106,7 +2872,6 @@ tag_1063754013:
   adult: false
   id: 1063754013
   type: Character
-  has_characters: false
 tag_344412843: 
   name: Teen And Up Audiences
   merger_id: 
@@ -3120,21 +2885,6 @@ tag_344412843:
   adult: false
   id: 344412843
   type: Rating
-  has_characters: false
-tag_1039617938: 
-  name: Choose Not To Warn
-  merger_id: 
-  fandom_id: 
-  canonical: true
-  created_at: 2008-11-09 01:26:02 +00:00
-  media_id: 1063753922
-  delta: false
-  updated_at: 2008-11-21 06:14:51 +00:00
-  taggings_count: 7
-  adult: false
-  id: 1039617938
-  type: Warning
-  has_characters: false
 tag_1063754060: 
   name: Violence
   merger_id: 
@@ -3148,7 +2898,6 @@ tag_1063754060:
   adult: false
   id: 1063754060
   type: Freeform
-  has_characters: false
 tag_1063754014: 
   name: Cedric
   merger_id: 
@@ -3162,7 +2911,6 @@ tag_1063754014:
   adult: false
   id: 1063754014
   type: Character
-  has_characters: false
 tag_66216446: 
   name: angsty
   merger_id: 1063753740
@@ -3176,7 +2924,6 @@ tag_66216446:
   adult: false
   id: 66216446
   type: Freeform
-  has_characters: false
 tag_1063754061: 
   name: Kidnapping
   merger_id: 
@@ -3190,7 +2937,6 @@ tag_1063754061:
   adult: false
   id: 1063754061
   type: Freeform
-  has_characters: false
 tag_1063753869: 
   name: fucking language
   merger_id: 
@@ -3204,7 +2950,6 @@ tag_1063753869:
   adult: false
   id: 1063753869
   type: Freeform
-  has_characters: false
 tag_711936337: 
   name: SGA
   merger_id: 951091623
@@ -3218,7 +2963,6 @@ tag_711936337:
   adult: false
   id: 711936337
   type: Fandom
-  has_characters: false
 tag_1063754015: 
   name: Harry
   merger_id: 
@@ -3232,7 +2976,6 @@ tag_1063754015:
   adult: false
   id: 1063754015
   type: Character
-  has_characters: false
 tag_1063754062: 
   name: Angel
   merger_id: 
@@ -3246,7 +2989,6 @@ tag_1063754062:
   adult: false
   id: 1063754062
   type: Fandom
-  has_characters: false
 tag_402275454: 
   name: Not Rated
   merger_id: 
@@ -3260,7 +3002,6 @@ tag_402275454:
   adult: true
   id: 402275454
   type: Rating
-  has_characters: false
 tag_1063753920: 
   name: Elizabeth dies
   merger_id: 
@@ -3274,7 +3015,6 @@ tag_1063753920:
   adult: false
   id: 1063753920
   type: Freeform
-  has_characters: false
 tag_1063754063: 
   name: John Crichton
   merger_id: 
@@ -3288,7 +3028,6 @@ tag_1063754063:
   adult: false
   id: 1063754063
   type: Character
-  has_characters: false
 tag_1063754016: 
   name: Ron
   merger_id: 
@@ -3302,7 +3041,6 @@ tag_1063754016:
   adult: false
   id: 1063754016
   type: Character
-  has_characters: false
 tag_1063753921: 
   name: Bobby Singer
   merger_id: 
@@ -3316,7 +3054,6 @@ tag_1063753921:
   adult: false
   id: 1063753921
   type: Character
-  has_characters: false
 tag_1063754064: 
   name: Aeryn Sun
   merger_id: 
@@ -3330,7 +3067,6 @@ tag_1063754064:
   adult: false
   id: 1063754064
   type: Character
-  has_characters: false
 tag_1063753922: 
   name: Uncategorized Fandoms
   merger_id: 
@@ -3344,7 +3080,6 @@ tag_1063753922:
   adult: false
   id: 1063753922
   type: Media
-  has_characters: false
 tag_1063753732: 
   name: Other
   merger_id: 
@@ -3358,7 +3093,6 @@ tag_1063753732:
   adult: false
   id: 1063753732
   type: Category
-  has_characters: false
 tag_1063754065: 
   name: Chiana
   merger_id: 
@@ -3372,7 +3106,6 @@ tag_1063754065:
   adult: false
   id: 1063754065
   type: Character
-  has_characters: false
 tag_1063753970: 
   name: mimetastic
   merger_id: 
@@ -3386,7 +3119,6 @@ tag_1063753970:
   adult: false
   id: 1063753970
   type: Freeform
-  has_characters: false
 tag_1063753780: 
   name: Supernatural RPF
   merger_id: 
@@ -3400,7 +3132,6 @@ tag_1063753780:
   adult: false
   id: 1063753780
   type: Fandom
-  has_characters: false
 tag_1063754017: 
   name: "Joel Pi\xC3\xB1eiro"
   merger_id: 
@@ -3414,7 +3145,6 @@ tag_1063754017:
   adult: false
   id: 1063754017
   type: Character
-  has_characters: false
 tag_1063753923: 
   name: Jared/Dean!Jensen
   merger_id: 
@@ -3428,21 +3158,6 @@ tag_1063753923:
   adult: false
   id: 1063753923
   type: Freeform
-  has_characters: false
-tag_1063753733: 
-  name: Choose Not To Warn For Some Content
-  merger_id: 
-  fandom_id: 
-  canonical: true
-  created_at: 2008-11-21 06:14:51 +00:00
-  media_id: 1063753922
-  delta: false
-  updated_at: 2008-11-21 06:14:51 +00:00
-  taggings_count: 9
-  adult: false
-  id: 1063753733
-  type: Warning
-  has_characters: false
 tag_1063754066: 
   name: D'argo
   merger_id: 
@@ -3456,7 +3171,6 @@ tag_1063754066:
   adult: false
   id: 1063754066
   type: Character
-  has_characters: false
 tag_1063753971: 
   name: mary as hunter
   merger_id: 
@@ -3470,7 +3184,6 @@ tag_1063753971:
   adult: false
   id: 1063753971
   type: Freeform
-  has_characters: false
 tag_1063753781: 
   name: Jared Padalecki
   merger_id: 
@@ -3484,7 +3197,6 @@ tag_1063753781:
   adult: false
   id: 1063753781
   type: Character
-  has_characters: false
 tag_1063754018: 
   name: bees
   merger_id: 
@@ -3498,7 +3210,6 @@ tag_1063754018:
   adult: false
   id: 1063754018
   type: Character
-  has_characters: false
 tag_1063753924: 
   name: roleplaying
   merger_id: 
@@ -3512,7 +3223,6 @@ tag_1063753924:
   adult: false
   id: 1063753924
   type: Freeform
-  has_characters: false
 tag_1063753734: 
   name: Rape/Non-Con
   merger_id: 
@@ -3526,7 +3236,6 @@ tag_1063753734:
   adult: false
   id: 1063753734
   type: Warning
-  has_characters: false
 tag_1063754067: 
   name: Angel - Character
   merger_id: 
@@ -3540,7 +3249,6 @@ tag_1063754067:
   adult: false
   id: 1063754067
   type: Character
-  has_characters: false
 tag_1063753782: 
   name: Jensen Ackles
   merger_id: 
@@ -3554,7 +3262,6 @@ tag_1063753782:
   adult: false
   id: 1063753782
   type: Character
-  has_characters: false
 tag_569823665: 
   name: Torchwood
   merger_id: 
@@ -3568,7 +3275,6 @@ tag_569823665:
   adult: false
   id: 569823665
   type: Fandom
-  has_characters: false
 tag_1063754019: 
   name: RPF
   merger_id: 
@@ -3582,7 +3288,6 @@ tag_1063754019:
   adult: false
   id: 1063754019
   type: Fandom
-  has_characters: false
 tag_1063753925: 
   name: the Impala
   merger_id: 
@@ -3596,7 +3301,6 @@ tag_1063753925:
   adult: false
   id: 1063753925
   type: Freeform
-  has_characters: false
 tag_1063753735: 
   name: F/M
   merger_id: 
@@ -3610,7 +3314,6 @@ tag_1063753735:
   adult: false
   id: 1063753735
   type: Category
-  has_characters: false
 tag_1063754068: 
   name: Cordelia Chase
   merger_id: 
@@ -3624,7 +3327,6 @@ tag_1063754068:
   adult: false
   id: 1063754068
   type: Character
-  has_characters: false
 tag_1063753972: 
   name: love
   merger_id: 
@@ -3638,7 +3340,6 @@ tag_1063753972:
   adult: false
   id: 1063753972
   type: Freeform
-  has_characters: false
 tag_1063753783: 
   name: sad
   merger_id: 
@@ -3652,7 +3353,6 @@ tag_1063753783:
   adult: false
   id: 1063753783
   type: Freeform
-  has_characters: false
 tag_1063753926: 
   name: Jared Padalecki/Dean Winchester
   merger_id: 
@@ -3666,7 +3366,6 @@ tag_1063753926:
   adult: false
   id: 1063753926
   type: Pairing
-  has_characters: false
 tag_1063753736: 
   name: M/M
   merger_id: 
@@ -3680,7 +3379,6 @@ tag_1063753736:
   adult: false
   id: 1063753736
   type: Category
-  has_characters: false
 tag_1063754069: 
   name: Wesley Wyndom-Price
   merger_id: 
@@ -3694,7 +3392,6 @@ tag_1063754069:
   adult: false
   id: 1063754069
   type: Character
-  has_characters: false
 tag_1063753973: 
   name: awesome
   merger_id: 
@@ -3708,7 +3405,6 @@ tag_1063753973:
   adult: false
   id: 1063753973
   type: Freeform
-  has_characters: false
 tag_1063753784: 
   name: Jessica Moore/Sam Winchester
   merger_id: 
@@ -3722,7 +3418,6 @@ tag_1063753784:
   adult: false
   id: 1063753784
   type: Pairing
-  has_characters: false
 tag_211186876: 
   name: American Idol
   merger_id: 
@@ -3736,7 +3431,6 @@ tag_211186876:
   adult: false
   id: 211186876
   type: Fandom
-  has_characters: false
 tag_1063753927: 
   name: Christmas
   merger_id: 
@@ -3750,7 +3444,6 @@ tag_1063753927:
   adult: false
   id: 1063753927
   type: Freeform
-  has_characters: false
 tag_1063753737: 
   name: F/F
   merger_id: 
@@ -3764,7 +3457,6 @@ tag_1063753737:
   adult: false
   id: 1063753737
   type: Category
-  has_characters: false
 tag_1063753974: 
   name: woe is dean
   merger_id: 
@@ -3778,7 +3470,6 @@ tag_1063753974:
   adult: false
   id: 1063753974
   type: Freeform
-  has_characters: false
 tag_1063754120: 
   name: too much information
   merger_id: 
@@ -3792,7 +3483,6 @@ tag_1063754120:
   adult: false
   id: 1063754120
   type: Freeform
-  has_characters: false
 tag_1063753928: 
   name: popcorn
   merger_id: 
@@ -3806,7 +3496,6 @@ tag_1063753928:
   adult: false
   id: 1063753928
   type: Freeform
-  has_characters: false
 tag_1063753738: 
   name: No Media
   merger_id: 
@@ -3820,7 +3509,6 @@ tag_1063753738:
   adult: false
   id: 1063753738
   type: Media
-  has_characters: false
 tag_1063753975: 
   name: silence
   merger_id: 
@@ -3834,7 +3522,6 @@ tag_1063753975:
   adult: false
   id: 1063753975
   type: Freeform
-  has_characters: false
 tag_1063753785: 
   name: Jessica Moore
   merger_id: 
@@ -3848,7 +3535,6 @@ tag_1063753785:
   adult: false
   id: 1063753785
   type: Character
-  has_characters: false
 tag_1063754121: 
   name: House MD
   merger_id: 
@@ -3862,7 +3548,6 @@ tag_1063754121:
   adult: false
   id: 1063754121
   type: Fandom
-  has_characters: false
 tag_1063753929: 
   name: Humor
   merger_id: 
@@ -3876,7 +3561,6 @@ tag_1063753929:
   adult: false
   id: 1063753929
   type: Freeform
-  has_characters: false
 tag_1063753976: 
   name: luna pwns all
   merger_id: 
@@ -3890,7 +3574,6 @@ tag_1063753976:
   adult: false
   id: 1063753976
   type: Freeform
-  has_characters: false
 tag_1063754122: 
   name: Sherlock Holmes
   merger_id: 
@@ -3904,7 +3587,6 @@ tag_1063754122:
   adult: false
   id: 1063754122
   type: Fandom
-  has_characters: false
 tag_1063753977: 
   name: dean/luna ftw
   merger_id: 
@@ -3918,7 +3600,6 @@ tag_1063753977:
   adult: false
   id: 1063753977
   type: Freeform
-  has_characters: false
 tag_1063754123: 
   name: Buffy - Fandom
   merger_id: 
@@ -3932,7 +3613,6 @@ tag_1063754123:
   adult: false
   id: 1063754123
   type: Fandom
-  has_characters: false
 tag_1063753978: 
   name: wtf
   merger_id: 
@@ -3946,7 +3626,6 @@ tag_1063753978:
   adult: false
   id: 1063753978
   type: Freeform
-  has_characters: false
 tag_1063753788: 
   name: smiting
   merger_id: 
@@ -3960,7 +3639,6 @@ tag_1063753788:
   adult: false
   id: 1063753788
   type: Freeform
-  has_characters: false
 tag_1063754124: 
   name: Quentin Tarantino
   merger_id: 
@@ -3974,7 +3652,6 @@ tag_1063754124:
   adult: false
   id: 1063754124
   type: Character
-  has_characters: false
 tag_1063753979: 
   name: bella/pansy
   merger_id: 
@@ -3988,7 +3665,6 @@ tag_1063753979:
   adult: false
   id: 1063753979
   type: Freeform
-  has_characters: false
 tag_1063753789: 
   name: the Lord's wrath
   merger_id: 
@@ -4002,7 +3678,6 @@ tag_1063753789:
   adult: false
   id: 1063753789
   type: Freeform
-  has_characters: false
 tag_1063754125: 
   name: Wilma Hubble
   merger_id: 
@@ -4016,7 +3691,6 @@ tag_1063754125:
   adult: false
   id: 1063754125
   type: Character
-  has_characters: false
 tag_1063753840: 
   name: j/i
   merger_id: 1063753889
@@ -4030,7 +3704,6 @@ tag_1063753840:
   adult: false
   id: 1063753840
   type: Pairing
-  has_characters: false
 tag_1063753841: 
   name: j
   merger_id: 1063753891
@@ -4044,7 +3717,6 @@ tag_1063753841:
   adult: false
   id: 1063753841
   type: Character
-  has_characters: false
 tag_1063754126: 
   name: Eddie the Eagle
   merger_id: 
@@ -4058,7 +3730,6 @@ tag_1063754126:
   adult: false
   id: 1063754126
   type: Character
-  has_characters: false
 tag_951091623: 
   name: Stargate Atlantis
   merger_id: 
@@ -4072,7 +3743,6 @@ tag_951091623:
   adult: false
   id: 951091623
   type: Fandom
-  has_characters: false
 tag_1063753842: 
   name: i
   merger_id: 1063753890
@@ -4086,7 +3756,6 @@ tag_1063753842:
   adult: false
   id: 1063753842
   type: Character
-  has_characters: false
 tag_1063753890: 
   name: Ianto Jones
   merger_id: 
@@ -4100,7 +3769,6 @@ tag_1063753890:
   adult: false
   id: 1063753890
   type: Character
-  has_characters: false
 tag_1063754127: 
   name: Thom Yorke
   merger_id: 
@@ -4114,7 +3782,6 @@ tag_1063754127:
   adult: false
   id: 1063754127
   type: Character
-  has_characters: false
 tag_1063753843: 
   name: pp
   merger_id: 
@@ -4128,7 +3795,6 @@ tag_1063753843:
   adult: false
   id: 1063753843
   type: Freeform
-  has_characters: false
 tag_221905380: 
   name: Sam Winchester
   merger_id: 
@@ -4142,7 +3808,6 @@ tag_221905380:
   adult: false
   id: 221905380
   type: Character
-  has_characters: false
 tag_1063753891: 
   name: Jack Harkness
   merger_id: 
@@ -4156,7 +3821,6 @@ tag_1063753891:
   adult: false
   id: 1063753891
   type: Character
-  has_characters: false
 tag_1063754128: 
   name: Yan
   merger_id: 
@@ -4170,7 +3834,6 @@ tag_1063754128:
   adult: false
   id: 1063754128
   type: Character
-  has_characters: false
 tag_1063753844: 
   name: p/p
   merger_id: 
@@ -4184,7 +3847,6 @@ tag_1063753844:
   adult: false
   id: 1063753844
   type: Pairing
-  has_characters: false
 tag_1063753892: 
   name: Connor/Murphy
   merger_id: 
@@ -4198,7 +3860,6 @@ tag_1063753892:
   adult: false
   id: 1063753892
   type: Pairing
-  has_characters: false
 tag_1063754129: 
   name: Ulrika Johnsson
   merger_id: 
@@ -4212,7 +3873,6 @@ tag_1063754129:
   adult: false
   id: 1063754129
   type: Character
-  has_characters: false
 tag_1063753845: 
   name: p
   merger_id: 
@@ -4226,7 +3886,6 @@ tag_1063753845:
   adult: false
   id: 1063753845
   type: Character
-  has_characters: false
 tag_1063753893: 
   name: Owen Harper/Ianto Jones
   merger_id: 
@@ -4240,7 +3899,6 @@ tag_1063753893:
   adult: false
   id: 1063753893
   type: Pairing
-  has_characters: true
 tag_1063753846: 
   name: "#"
   merger_id: 
@@ -4254,7 +3912,6 @@ tag_1063753846:
   adult: false
   id: 1063753846
   type: Warning
-  has_characters: false
 tag_1063753894: 
   name: Gwen Cooper/Toshiko Sato
   merger_id: 
@@ -4268,7 +3925,6 @@ tag_1063753894:
   adult: false
   id: 1063753894
   type: Pairing
-  has_characters: false
 tag_1063753847: 
   name: twen
   merger_id: 
@@ -4282,7 +3938,6 @@ tag_1063753847:
   adult: false
   id: 1063753847
   type: Character
-  has_characters: false
 tag_1063753848: 
   name: chhhhhhh
   merger_id: 
@@ -4296,7 +3951,6 @@ tag_1063753848:
   adult: false
   id: 1063753848
   type: Freeform
-  has_characters: false
 tag_1063753895: 
   name: Dream/Morpheus
   merger_id: 
@@ -4310,7 +3964,6 @@ tag_1063753895:
   adult: false
   id: 1063753895
   type: Character
-  has_characters: false
 tag_1063753849: 
   name: ch/t
   merger_id: 
@@ -4324,7 +3977,6 @@ tag_1063753849:
   adult: false
   id: 1063753849
   type: Pairing
-  has_characters: false
 tag_1063753896: 
   name: McShep
   merger_id: 1063753811
@@ -4338,7 +3990,6 @@ tag_1063753896:
   adult: false
   id: 1063753896
   type: Pairing
-  has_characters: false
 tag_1063753897: 
   name: McDex
   merger_id: 1063753899
@@ -4352,7 +4003,6 @@ tag_1063753897:
   adult: false
   id: 1063753897
   type: Pairing
-  has_characters: false
 tag_1063754043: 
   name: Bridges verse
   merger_id: 
@@ -4366,7 +4016,6 @@ tag_1063754043:
   adult: false
   id: 1063754043
   type: Freeform
-  has_characters: false
 tag_1063753900: 
   name: Rodney McKay/Elizabeth Weir
   merger_id: 
@@ -4380,7 +4029,6 @@ tag_1063753900:
   adult: false
   id: 1063753900
   type: Pairing
-  has_characters: true
 tag_1063754090: 
   name: het
   merger_id: 
@@ -4394,7 +4042,6 @@ tag_1063754090:
   adult: false
   id: 1063754090
   type: Freeform
-  has_characters: false
 tag_1063753898: 
   name: McWeir
   merger_id: 1063753900
@@ -4408,7 +4055,6 @@ tag_1063753898:
   adult: false
   id: 1063753898
   type: Pairing
-  has_characters: false
 tag_130714128: 
   name: Stargate SG-1
   merger_id: 
@@ -4422,7 +4068,6 @@ tag_130714128:
   adult: false
   id: 130714128
   type: Fandom
-  has_characters: false
 tag_1063753901: 
   name: Elizabeth Weir/Rodney McKay
   merger_id: 1063753900
@@ -4436,7 +4081,6 @@ tag_1063753901:
   adult: false
   id: 1063753901
   type: Pairing
-  has_characters: false
 tag_1063754091: 
   name: rimming
   merger_id: 
@@ -4450,7 +4094,6 @@ tag_1063754091:
   adult: false
   id: 1063754091
   type: Freeform
-  has_characters: false
 tag_1063753899: 
   name: Ronon Dex/Rodney McKay
   merger_id: 
@@ -4464,7 +4107,6 @@ tag_1063753899:
   adult: false
   id: 1063753899
   type: Pairing
-  has_characters: true
 tag_1063754044: 
   name: mini slayers
   merger_id: 
@@ -4478,7 +4120,6 @@ tag_1063754044:
   adult: false
   id: 1063754044
   type: Freeform
-  has_characters: false
 tag_1063753760: 
   name: Messer Torello
   merger_id: 
@@ -4492,7 +4133,6 @@ tag_1063753760:
   adult: false
   id: 1063753760
   type: Character
-  has_characters: false
 tag_1063753902: 
   name: Sheppcest
   merger_id: 1063753903
@@ -4506,7 +4146,6 @@ tag_1063753902:
   adult: false
   id: 1063753902
   type: Pairing
-  has_characters: true
 tag_1063754092: 
   name: pissing
   merger_id: 
@@ -4520,7 +4159,6 @@ tag_1063754092:
   adult: false
   id: 1063754092
   type: Freeform
-  has_characters: false
 tag_1063754045: 
   name: Buffy the Vampire Slayer
   merger_id: 
@@ -4534,7 +4172,6 @@ tag_1063754045:
   adult: false
   id: 1063754045
   type: Fandom
-  has_characters: false
 tag_1063753950: 
   name: "spn: season two"
   merger_id: 
@@ -4548,7 +4185,6 @@ tag_1063753950:
   adult: false
   id: 1063753950
   type: Freeform
-  has_characters: false
 tag_1063753761: 
   name: smut
   merger_id: 
@@ -4562,7 +4198,6 @@ tag_1063753761:
   adult: false
   id: 1063753761
   type: Freeform
-  has_characters: false
 tag_1063754093: 
   name: fucking
   merger_id: 
@@ -4576,7 +4211,6 @@ tag_1063754093:
   adult: false
   id: 1063754093
   type: Freeform
-  has_characters: false
 tag_1063753903: 
   name: Dave Sheppard/John Sheppard
   merger_id: 
@@ -4590,7 +4224,6 @@ tag_1063753903:
   adult: false
   id: 1063753903
   type: Pairing
-  has_characters: false
 tag_1063754046: 
   name: Xander Harris
   merger_id: 
@@ -4604,7 +4237,6 @@ tag_1063754046:
   adult: false
   id: 1063754046
   type: Character
-  has_characters: false
 tag_1063753951: 
   name: dean on the ceiling
   merger_id: 
@@ -4618,7 +4250,6 @@ tag_1063753951:
   adult: false
   id: 1063753951
   type: Freeform
-  has_characters: false
 tag_1063753762: 
   name: Ricciardo Manardi/Caterina Lizio
   merger_id: 
@@ -4632,7 +4263,6 @@ tag_1063753762:
   adult: false
   id: 1063753762
   type: Pairing
-  has_characters: false
 tag_1063754094: 
   name: biting
   merger_id: 
@@ -4646,7 +4276,6 @@ tag_1063754094:
   adult: false
   id: 1063754094
   type: Freeform
-  has_characters: false
 tag_1063753904: 
   name: Sam Anders
   merger_id: 
@@ -4660,7 +4289,6 @@ tag_1063753904:
   adult: false
   id: 1063753904
   type: Character
-  has_characters: false
 tag_1063754047: 
   name: Jack O'Neill
   merger_id: 
@@ -4674,7 +4302,6 @@ tag_1063754047:
   adult: false
   id: 1063754047
   type: Character
-  has_characters: false
 tag_1063753952: 
   name: First Time
   merger_id: 
@@ -4688,7 +4315,6 @@ tag_1063753952:
   adult: false
   id: 1063753952
   type: Freeform
-  has_characters: false
 tag_1063754095: 
   name: screaming
   merger_id: 
@@ -4702,7 +4328,6 @@ tag_1063754095:
   adult: false
   id: 1063754095
   type: Freeform
-  has_characters: false
 tag_1063753905: 
   name: Harry Potter
   merger_id: 
@@ -4716,7 +4341,6 @@ tag_1063753905:
   adult: false
   id: 1063753905
   type: Character
-  has_characters: false
 tag_1063754048: 
   name: Bridges universe
   merger_id: 
@@ -4730,7 +4354,6 @@ tag_1063754048:
   adult: false
   id: 1063754048
   type: Freeform
-  has_characters: false
 tag_1063753953: 
   name: 5 Things
   merger_id: 
@@ -4744,7 +4367,6 @@ tag_1063753953:
   adult: false
   id: 1063753953
   type: Freeform
-  has_characters: false
 tag_1063753763: 
   name: dark
   merger_id: 
@@ -4758,7 +4380,6 @@ tag_1063753763:
   adult: false
   id: 1063753763
   type: Freeform
-  has_characters: false
 tag_1063754096: 
   name: cutting
   merger_id: 
@@ -4772,7 +4393,6 @@ tag_1063754096:
   adult: false
   id: 1063754096
   type: Freeform
-  has_characters: false
 tag_1063753906: 
   name: Video Games
   merger_id: 
@@ -4786,7 +4406,6 @@ tag_1063753906:
   adult: false
   id: 1063753906
   type: Media
-  has_characters: false
 tag_1063753954: 
   name: flowers
   merger_id: 
@@ -4800,7 +4419,6 @@ tag_1063753954:
   adult: false
   id: 1063753954
   type: Freeform
-  has_characters: false
 tag_1063753764: 
   name: Griselda/Walter
   merger_id: 
@@ -4814,7 +4432,6 @@ tag_1063753764:
   adult: false
   id: 1063753764
   type: Pairing
-  has_characters: false
 tag_1063754097: 
   name: shouting
   merger_id: 
@@ -4828,7 +4445,6 @@ tag_1063754097:
   adult: false
   id: 1063754097
   type: Freeform
-  has_characters: false
 tag_1063753907: 
   name: eep!
   merger_id: 
@@ -4842,7 +4458,6 @@ tag_1063753907:
   adult: false
   id: 1063753907
   type: Freeform
-  has_characters: false
 tag_1063753955: 
   name: 3 Things
   merger_id: 
@@ -4856,7 +4471,6 @@ tag_1063753955:
   adult: false
   id: 1063753955
   type: Freeform
-  has_characters: false
 tag_1063754100: 
   name: eating
   merger_id: 
@@ -4870,7 +4484,6 @@ tag_1063754100:
   adult: false
   id: 1063754100
   type: Freeform
-  has_characters: false
 tag_1063754098: 
   name: puking
   merger_id: 
@@ -4884,7 +4497,6 @@ tag_1063754098:
   adult: false
   id: 1063754098
   type: Freeform
-  has_characters: false
 tag_1063753908: 
   name: legilimency
   merger_id: 
@@ -4898,7 +4510,6 @@ tag_1063753908:
   adult: false
   id: 1063753908
   type: Freeform
-  has_characters: false
 tag_1063753956: 
   name: Crack Fic
   merger_id: 
@@ -4912,7 +4523,6 @@ tag_1063753956:
   adult: false
   id: 1063753956
   type: Freeform
-  has_characters: false
 tag_1063753766: 
   name: wincest
   merger_id: 
@@ -4926,7 +4536,6 @@ tag_1063753766:
   adult: false
   id: 1063753766
   type: Freeform
-  has_characters: false
 tag_1063754101: 
   name: crying
   merger_id: 
@@ -4940,7 +4549,6 @@ tag_1063754101:
   adult: false
   id: 1063754101
   type: Freeform
-  has_characters: false
 tag_1063754099: 
   name: shitting
   merger_id: 
@@ -4954,7 +4562,6 @@ tag_1063754099:
   adult: false
   id: 1063754099
   type: Freeform
-  has_characters: false
 tag_1063753909: 
   name: Harry/Snape
   merger_id: 
@@ -4968,7 +4575,6 @@ tag_1063753909:
   adult: false
   id: 1063753909
   type: Pairing
-  has_characters: false
 tag_385776504: 
   name: Iron Man (2008)
   merger_id: 
@@ -4982,7 +4588,6 @@ tag_385776504:
   adult: false
   id: 385776504
   type: Fandom
-  has_characters: false
 tag_1063753957: 
   name: shakira
   merger_id: 
@@ -4996,7 +4601,6 @@ tag_1063753957:
   adult: false
   id: 1063753957
   type: Freeform
-  has_characters: false
 tag_1063753767: 
   name: Ficlet
   merger_id: 
@@ -5010,7 +4614,6 @@ tag_1063753767:
   adult: false
   id: 1063753767
   type: Freeform
-  has_characters: false
 tag_899944269: 
   name: Real People & Celebrities
   merger_id: 
@@ -5024,7 +4627,6 @@ tag_899944269:
   adult: false
   id: 899944269
   type: Media
-  has_characters: false
 tag_1063754102: 
   name: swearing
   merger_id: 
@@ -5038,7 +4640,6 @@ tag_1063754102:
   adult: false
   id: 1063754102
   type: Freeform
-  has_characters: false
 tag_1063753958: 
   name: mime
   merger_id: 
@@ -5052,7 +4653,6 @@ tag_1063753958:
   adult: false
   id: 1063753958
   type: Freeform
-  has_characters: false
 tag_1063753768: 
   name: schmoop
   merger_id: 
@@ -5066,7 +4666,6 @@ tag_1063753768:
   adult: false
   id: 1063753768
   type: Freeform
-  has_characters: false
 tag_1063754103: 
   name: breathing
   merger_id: 
@@ -5080,7 +4679,6 @@ tag_1063754103:
   adult: false
   id: 1063754103
   type: Freeform
-  has_characters: false
 tag_1063753959: 
   name: bela kicks ass
   merger_id: 
@@ -5094,7 +4692,6 @@ tag_1063753959:
   adult: false
   id: 1063753959
   type: Freeform
-  has_characters: false
 tag_1063753769: 
   name: deal!fic
   merger_id: 
@@ -5108,7 +4705,6 @@ tag_1063753769:
   adult: false
   id: 1063753769
   type: Freeform
-  has_characters: false
 tag_1063754104: 
   name: walking
   merger_id: 
@@ -5122,7 +4718,6 @@ tag_1063754104:
   adult: false
   id: 1063754104
   type: Freeform
-  has_characters: false
 tag_1063754105: 
   name: oh oh how many things can we do
   merger_id: 
@@ -5136,7 +4731,6 @@ tag_1063754105:
   adult: false
   id: 1063754105
   type: Freeform
-  has_characters: false
 tag_1063753820: 
   name: Col. Caldwell
   merger_id: 
@@ -5150,7 +4744,6 @@ tag_1063753820:
   adult: false
   id: 1063753820
   type: Character
-  has_characters: false
 tag_1063754106: 
   name: lots of tags
   merger_id: 
@@ -5164,7 +4757,6 @@ tag_1063754106:
   adult: false
   id: 1063754106
   type: Freeform
-  has_characters: false
 tag_1063753821: 
   name: Dr. Horrible
   merger_id: 
@@ -5178,7 +4770,6 @@ tag_1063753821:
   adult: false
   id: 1063753821
   type: Character
-  has_characters: false
 tag_791950904: 
   name: TV Shows
   merger_id: 
@@ -5192,7 +4783,6 @@ tag_791950904:
   adult: false
   id: 791950904
   type: Media
-  has_characters: false
 tag_1063753870: 
   name: c/m
   merger_id: 1063753892
@@ -5206,7 +4796,6 @@ tag_1063753870:
   adult: false
   id: 1063753870
   type: Pairing
-  has_characters: false
 tag_1063754107: 
   name: let's break the layout
   merger_id: 
@@ -5220,7 +4809,6 @@ tag_1063754107:
   adult: false
   id: 1063754107
   type: Freeform
-  has_characters: false
 tag_1063753822: 
   name: Dr. Horrible's Blog
   merger_id: 
@@ -5234,7 +4822,6 @@ tag_1063753822:
   adult: false
   id: 1063753822
   type: Fandom
-  has_characters: false
 tag_1063753871: 
   name: BDS
   merger_id: 
@@ -5248,7 +4835,6 @@ tag_1063753871:
   adult: false
   id: 1063753871
   type: Fandom
-  has_characters: false
 tag_1063754108: 
   name: Buffy
   merger_id: 
@@ -5262,7 +4848,6 @@ tag_1063754108:
   adult: false
   id: 1063754108
   type: Character
-  has_characters: false
 tag_1063753823: 
   name: ofc
   merger_id: 
@@ -5276,7 +4861,6 @@ tag_1063753823:
   adult: false
   id: 1063753823
   type: Freeform
-  has_characters: false
 tag_1063753872: 
   name: c
   merger_id: 
@@ -5290,7 +4874,6 @@ tag_1063753872:
   adult: false
   id: 1063753872
   type: Character
-  has_characters: false
 tag_1063754109: 
   name: Willow
   merger_id: 
@@ -5304,7 +4887,6 @@ tag_1063754109:
   adult: false
   id: 1063754109
   type: Character
-  has_characters: false
 tag_1063753824: 
   name: Testing
   merger_id: 
@@ -5318,7 +4900,6 @@ tag_1063753824:
   adult: false
   id: 1063753824
   type: Fandom
-  has_characters: false
 tag_1063753825: 
   name: ponies!
   merger_id: 
@@ -5332,7 +4913,6 @@ tag_1063753825:
   adult: false
   id: 1063753825
   type: Freeform
-  has_characters: false
 tag_885489802: 
   name: Mature
   merger_id: 
@@ -5346,7 +4926,6 @@ tag_885489802:
   adult: true
   id: 885489802
   type: Rating
-  has_characters: false
 tag_1063753873: 
   name: m
   merger_id: 
@@ -5360,7 +4939,6 @@ tag_1063753873:
   adult: false
   id: 1063753873
   type: Character
-  has_characters: false
 tag_1063753826: 
   name: pony/pony
   merger_id: 
@@ -5374,7 +4952,6 @@ tag_1063753826:
   adult: false
   id: 1063753826
   type: Pairing
-  has_characters: false
 tag_1063753874: 
   name: piiiiii
   merger_id: 
@@ -5388,7 +4965,6 @@ tag_1063753874:
   adult: false
   id: 1063753874
   type: Freeform
-  has_characters: false
 tag_1063753827: 
   name: ponies
   merger_id: 
@@ -5402,7 +4978,6 @@ tag_1063753827:
   adult: false
   id: 1063753827
   type: Character
-  has_characters: false
 tag_1063753875: 
   name: pp - Character
   merger_id: 
@@ -5416,7 +4991,6 @@ tag_1063753875:
   adult: false
   id: 1063753875
   type: Character
-  has_characters: false
 tag_1063754020: 
   name: yulechat/awesome
   merger_id: 
@@ -5430,7 +5004,6 @@ tag_1063754020:
   adult: false
   id: 1063754020
   type: Pairing
-  has_characters: false
 tag_1063753828: 
   name: poony
   merger_id: 
@@ -5444,7 +5017,6 @@ tag_1063753828:
   adult: false
   id: 1063753828
   type: Freeform
-  has_characters: false
 tag_1063753876: 
   name: small
   merger_id: 
@@ -5458,7 +5030,6 @@ tag_1063753876:
   adult: false
   id: 1063753876
   type: Freeform
-  has_characters: false
 tag_1063754021: 
   name: "rpf - #yuletide"
   merger_id: 
@@ -5472,7 +5043,6 @@ tag_1063754021:
   adult: false
   id: 1063754021
   type: Fandom
-  has_characters: false
 tag_1063753829: 
   name: Test
   merger_id: 
@@ -5486,7 +5056,6 @@ tag_1063753829:
   adult: false
   id: 1063753829
   type: Fandom
-  has_characters: false
 tag_1063753877: 
   name: not long
   merger_id: 
@@ -5500,7 +5069,6 @@ tag_1063753877:
   adult: false
   id: 1063753877
   type: Pairing
-  has_characters: false
 tag_1063754022: 
   name: "#yuletide/NCIS"
   merger_id: 
@@ -5514,7 +5082,6 @@ tag_1063754022:
   adult: false
   id: 1063754022
   type: Pairing
-  has_characters: false
 tag_1063753878: 
   name: short
   merger_id: 
@@ -5528,7 +5095,6 @@ tag_1063753878:
   adult: false
   id: 1063753878
   type: Character
-  has_characters: false
 tag_1063754023: 
   name: RPF-#yuletide
   merger_id: 
@@ -5542,7 +5108,6 @@ tag_1063754023:
   adult: false
   id: 1063754023
   type: Fandom
-  has_characters: false
 tag_1063754070: 
   name: Drama
   merger_id: 
@@ -5556,7 +5121,6 @@ tag_1063754070:
   adult: false
   id: 1063754070
   type: Freeform
-  has_characters: false
 tag_1063753879: 
   name: new small
   merger_id: 
@@ -5570,7 +5134,6 @@ tag_1063753879:
   adult: false
   id: 1063753879
   type: Freeform
-  has_characters: false
 tag_1063754024: 
   name: "#yuletide"
   merger_id: 
@@ -5584,7 +5147,6 @@ tag_1063754024:
   adult: false
   id: 1063754024
   type: Character
-  has_characters: false
 tag_1063754071: 
   name: Mystery
   merger_id: 
@@ -5598,7 +5160,6 @@ tag_1063754071:
   adult: false
   id: 1063754071
   type: Freeform
-  has_characters: false
 tag_1063754025: 
   name: NCIS team
   merger_id: 
@@ -5612,7 +5173,6 @@ tag_1063754025:
   adult: false
   id: 1063754025
   type: Character
-  has_characters: false
 tag_1063753740: 
   name: angst
   merger_id: 
@@ -5626,7 +5186,6 @@ tag_1063753740:
   adult: false
   id: 1063753740
   type: Freeform
-  has_characters: false
 tag_1063754072: 
   name: Casefic
   merger_id: 
@@ -5640,7 +5199,6 @@ tag_1063754072:
   adult: false
   id: 1063754072
   type: Freeform
-  has_characters: false
 tag_1063754073: 
   name: Bob
   merger_id: 
@@ -5654,7 +5212,6 @@ tag_1063754073:
   adult: false
   id: 1063754073
   type: Freeform
-  has_characters: false
 tag_1063754026: 
   name: stray baseball players
   merger_id: 
@@ -5668,7 +5225,6 @@ tag_1063754026:
   adult: false
   id: 1063754026
   type: Character
-  has_characters: false
 tag_441672848: 
   name: Books & Literature
   merger_id: 
@@ -5682,7 +5238,6 @@ tag_441672848:
   adult: false
   id: 441672848
   type: Media
-  has_characters: false
 tag_992891255: 
   name: General Audiences
   merger_id: 
@@ -5696,7 +5251,6 @@ tag_992891255:
   adult: false
   id: 992891255
   type: Rating
-  has_characters: false
 tag_1063753930: 
   name: pre-series
   merger_id: 
@@ -5710,7 +5264,6 @@ tag_1063753930:
   adult: false
   id: 1063753930
   type: Freeform
-  has_characters: false
 tag_1063753741: 
   name: Graphic Depictions of Violence
   merger_id: 1063753815
@@ -5724,7 +5277,6 @@ tag_1063753741:
   adult: false
   id: 1063753741
   type: Warning
-  has_characters: false
 tag_1063753931: 
   name: Weechesters
   merger_id: 
@@ -5738,7 +5290,6 @@ tag_1063753931:
   adult: false
   id: 1063753931
   type: Freeform
-  has_characters: false
 tag_1063754074: 
   name: High School
   merger_id: 
@@ -5752,7 +5303,6 @@ tag_1063754074:
   adult: false
   id: 1063754074
   type: Freeform
-  has_characters: false
 tag_1063753742: 
   name: Major Character Death
   merger_id: 
@@ -5766,7 +5316,6 @@ tag_1063753742:
   adult: false
   id: 1063753742
   type: Warning
-  has_characters: false
 tag_1063753932: 
   name: wee!Dean
   merger_id: 
@@ -5780,7 +5329,6 @@ tag_1063753932:
   adult: false
   id: 1063753932
   type: Freeform
-  has_characters: false
 tag_1063753980: 
   name: character bleed
   merger_id: 
@@ -5794,7 +5342,6 @@ tag_1063753980:
   adult: false
   id: 1063753980
   type: Freeform
-  has_characters: false
 tag_1063753790: 
   name: show some respect
   merger_id: 
@@ -5808,7 +5355,6 @@ tag_1063753790:
   adult: false
   id: 1063753790
   type: Freeform
-  has_characters: false
 tag_1063754027: 
   name: None
   merger_id: 
@@ -5822,7 +5368,6 @@ tag_1063754027:
   adult: false
   id: 1063754027
   type: Pairing
-  has_characters: false
 tag_1063754075: 
   name: OCs
   merger_id: 
@@ -5836,7 +5381,6 @@ tag_1063754075:
   adult: false
   id: 1063754075
   type: Freeform
-  has_characters: false
 tag_1063753743: 
   name: Underage
   merger_id: 
@@ -5850,7 +5394,6 @@ tag_1063753743:
   adult: false
   id: 1063753743
   type: Warning
-  has_characters: false
 tag_1063753933: 
   name: silent!Dean
   merger_id: 
@@ -5864,7 +5407,6 @@ tag_1063753933:
   adult: false
   id: 1063753933
   type: Freeform
-  has_characters: false
 tag_1063753981: 
   name: genius
   merger_id: 
@@ -5878,7 +5420,6 @@ tag_1063753981:
   adult: false
   id: 1063753981
   type: Freeform
-  has_characters: false
 tag_1063753791: 
   name: getting righteous on your ass
   merger_id: 
@@ -5892,7 +5433,6 @@ tag_1063753791:
   adult: false
   id: 1063753791
   type: Freeform
-  has_characters: false
 tag_1063754028: 
   name: Foo/Bar
   merger_id: 
@@ -5906,7 +5446,6 @@ tag_1063754028:
   adult: false
   id: 1063754028
   type: Pairing
-  has_characters: false
 tag_1063754076: 
   name: OFC - Character
   merger_id: 
@@ -5920,7 +5459,6 @@ tag_1063754076:
   adult: false
   id: 1063754076
   type: Character
-  has_characters: false
 tag_1063753744: 
   name: Sam/Dean
   merger_id: 545584597
@@ -5934,7 +5472,6 @@ tag_1063753744:
   adult: false
   id: 1063753744
   type: Pairing
-  has_characters: false
 tag_1063753934: 
   name: pwp
   merger_id: 
@@ -5948,7 +5485,6 @@ tag_1063753934:
   adult: false
   id: 1063753934
   type: Freeform
-  has_characters: false
 tag_1063753982: 
   name: bela ftw
   merger_id: 
@@ -5962,7 +5498,6 @@ tag_1063753982:
   adult: false
   id: 1063753982
   type: Freeform
-  has_characters: false
 tag_1063753792: 
   name: offer up your daughters
   merger_id: 
@@ -5976,7 +5511,6 @@ tag_1063753792:
   adult: false
   id: 1063753792
   type: Freeform
-  has_characters: false
 tag_1063754029: 
   name: Gin/Tonic
   merger_id: 
@@ -5990,7 +5524,6 @@ tag_1063754029:
   adult: false
   id: 1063754029
   type: Pairing
-  has_characters: false
 tag_1063754077: 
   name: Rape/Non Con
   merger_id: 
@@ -6004,7 +5537,6 @@ tag_1063754077:
   adult: false
   id: 1063754077
   type: Warning
-  has_characters: false
 tag_1063754078: 
   name: Jack Harkness/Harry Potter
   merger_id: 
@@ -6018,7 +5550,6 @@ tag_1063754078:
   adult: false
   id: 1063754078
   type: Pairing
-  has_characters: false
 tag_1063753793: 
   name: pillars of salt
   merger_id: 
@@ -6032,7 +5563,6 @@ tag_1063753793:
   adult: false
   id: 1063753793
   type: Freeform
-  has_characters: false
 tag_1063753935: 
   name: dubcon
   merger_id: 
@@ -6046,4 +5576,3 @@ tag_1063753935:
   adult: false
   id: 1063753935
   type: Freeform
-  has_characters: false
