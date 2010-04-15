@@ -101,7 +101,9 @@
           <%=h t('translation', :default => 'Translation into {{language}} available: ', :language => related_work.work.language.name) -%>
           <%= link_to related_work.work.title, related_work.work %> by <%= byline(related_work.work) %>
           </h4>
-        <%- end -%>    
+        <%- else -%><%- if @work.notes.blank? && @work.endnotes.blank? && @work.parents.blank? && @work.recipients.blank? -%>
+          <h4><%= t('link_to_inspired_works', :default => "See the end of the work for other works inspired by this one.") %></h4>
+        <%- end -%><%- end -%> 
       <%- end -%>
     <%- end -%>
     <%- unless @work.notes.blank? && @work.endnotes.blank? -%>
