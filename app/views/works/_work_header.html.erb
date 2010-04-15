@@ -70,7 +70,7 @@
       </div>
     <%- end -%>
     
-    <%- unless @work.notes.blank? && @work.endnotes.blank? && @work.parents.blank? && @work.recipients.blank? -%>
+    <%- unless @work.notes.blank? && @work.endnotes.blank? && @work.parents.blank? && @work.recipients.blank? && @work.approved_children.blank? -%>
       <%- current_page?(:controller => 'chapters', :action => 'show') ? linkpath = chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes') : linkpath = work_path(@work, :anchor => 'work_endnotes') %>
       <div class="notes module" role="complementary">
       <h3><%=h t('work_header.notes', :default => "Notes:") %></h3>
@@ -93,6 +93,16 @@
             </h4>
           <%- end -%>
         <%- end -%>
+    <%- end -%>
+    <%- unless @work.approved_children.blank? -%>
+      <%- for related_work in @work.approved_related_works -%>
+        <%- if related_work.translation -%>
+          <h4>
+          <%=h t('translation', :default => 'Translation into {{language}} available: ', :language => related_work.work.language.name) -%>
+          <%= link_to related_work.work.title, related_work.work %> by <%= byline(related_work.work) %>
+          </h4>
+        <%- end -%>    
+      <%- end -%>
     <%- end -%>
     <%- unless @work.notes.blank? && @work.endnotes.blank? -%>
     <%- if @work.notes.blank? -%>
