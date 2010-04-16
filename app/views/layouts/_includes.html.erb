@@ -1,4 +1,6 @@
-<%= stylesheet_link_tag 'font', :media => 'screen' %>
+<%- unless params[:stylelight] || (current_user.is_a?(User) && current_user.preference.always_light_style && !params[:stylecreator]) -%>
+  <%= stylesheet_link_tag 'font', :media => 'screen' %>
+<%- end -%>
 <%= stylesheet_link_tag 'archive_core', :media => 'all' %>
 <%= stylesheet_link_tag 'system-messages', :media => 'screen' %>
 <%= stylesheet_link_tag 'site-chrome', :media => 'screen' %>
@@ -20,8 +22,20 @@
 <%= stylesheet_link_tag 'live_validation', :media => 'screen' %>
 <%= stylesheet_link_tag 'auto_complete', :media => 'screen' %>
 <%= stylesheet_link_tag 'visualize.jQuery', :media => 'screen' %>
+
 <%- if current_user.is_a?(User) && current_user.preference.plain_text_skin -%>
-<%= stylesheet_link_tag 'plain_text_skin', :media => 'all' %>
+  <%= stylesheet_link_tag 'plain_text_skin', :media => 'all' %>
+<%- end -%>
+
+<%- if params[:stylelight] || (current_user.is_a?(User) && current_user.preference.always_light_style && !params[:stylecreator]) -%>
+  <style type="text/css">
+  body {
+  background-color: white;
+  color: black !important;
+  }
+  </style>
+<%- else -%>
+  <%= stylesheet_link_tag 'ugv-style-creator', :media => 'all' %>
 <%- end -%>
 
 <!-- browser-specific stylesheets -->

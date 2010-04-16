@@ -41,10 +41,6 @@
 							{ padding:0.25em; border:0; }
 .user-generated-view hr		{ width:33%; margin:0.875em auto 1.2525em auto; border:1px solid; }
 
-.dropcap					{ font:3em Georgia, serif; }
-.flashback					{ font-style:italic; }
-.caps						{ font-variant:small-caps; }
-
 /*expected behaviours, exceptioning*/
 .user-generated-view center { font-size: 0.875em; line-height: 1.286; margin: 0.643em 0; } 
 .user-generated-view center p 

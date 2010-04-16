@@ -35,6 +35,14 @@
     <li><%= bookmark_link(@work) %></li>
   <%- end -%>
     <li><%= link_to "Comments", url_for(:show_comments => true, :anchor => 'comments') %></li>
+    
+  <% if params[:stylecreator] -%>
+    <li><%= link_to (t('light_style', :default => 'Switch to light style'), work_path(@work, :stylelight => true)) -%></li>
+  <%- end -%>
+  <% if params[:stylelight] || (current_user.preference.try(:always_light_style) && !params[:stylecreator]) -%>
+    <li><%= link_to (t('creator_style', :default => "Switch to creator's style"), work_path(@work, :stylecreator => true)) -%></li>
+  <%- end -%>  
+    
     <li class="landmark"><a name="top">&nbsp;</a></li>
 </ul>
 <!-- END navigation -->
