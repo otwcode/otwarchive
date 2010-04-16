@@ -1,4 +1,4 @@
-<%- unless params[:stylelight] || (current_user.is_a?(User) && current_user.preference.always_light_style && !params[:stylecreator]) -%>
+<%- unless params[:style] == 'light' || (current_user.is_a?(User) && current_user.preference.always_light_style && params[:style] != 'creator') -%>
   <%= stylesheet_link_tag 'font', :media => 'screen' %>
 <%- end -%>
 <%= stylesheet_link_tag 'archive_core', :media => 'all' %>
@@ -27,7 +27,7 @@
   <%= stylesheet_link_tag 'plain_text_skin', :media => 'all' %>
 <%- end -%>
 
-<%- if params[:stylelight] || (current_user.is_a?(User) && current_user.preference.always_light_style && !params[:stylecreator]) -%>
+<%- if params[:style] == 'light' || (current_user.is_a?(User) && current_user.preference.always_light_style && params[:style] != 'creator') -%>
   <style type="text/css">
   body {
   background-color: white;
