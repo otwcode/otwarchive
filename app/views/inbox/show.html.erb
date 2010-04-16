@@ -72,9 +72,9 @@
     </li>
   </ul>
     <p class="submit">
-      <%= hidden_field_tag("filters[read]", params[:filters][:read]) %>
-      <%= hidden_field_tag("filters[replied_to]", params[:filters][:replied_to]) %>
-      <%= hidden_field_tag("filters[date]", params[:filters][:date]) %>
+      <%= hidden_field_tag("filters[read]", params[:filters][:read]) if params[:filters] %>
+      <%= hidden_field_tag("filters[replied_to]", params[:filters][:replied_to]) if params[:filters] %>
+      <%= hidden_field_tag("filters[date]", params[:filters][:date]) if params[:filters] %>
       <%= "Mark checked as:" %> 
       <%= submit_tag t('read', :default => 'Read'), :name => 'read' %>
       <%= submit_tag t('unread', :default => 'Unread'), :name => 'unread' %>
