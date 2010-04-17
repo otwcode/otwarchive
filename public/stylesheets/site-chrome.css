@@ -128,7 +128,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  .blurb ul li,.blurb dd ul li	{ display: inline }
  li.blurb 						{ padding-left: 0.5em; padding-right: 0.5em; padding-top: 0.25em; padding-bottom: 0.25em; position: relative; clear:left; min-height: 100px }
  .blurb .module					{ float:none;}
- .blurb .header 				{ min-height:55px; }
+ .work .blurb .header 				{ min-height:55px; }
  .blurb .header h4 				{ font-size: 1.1425em; margin: 0.375em 5.25em 0 65px }
  #main .blurb .header img       { position: relative; margin: 0; }
  .blurb .header h5, .blurb .header ul 	
@@ -167,7 +167,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  .blurb .pairings 				{ background: #eee;}							
  .blurb blockquote, .blurb ul.wranglers, .blurb form
  								{ clear: none; margin: 0.5625em auto; text-align: justify }
- .blurb dl.stats 				{ background: #eee; font-size: 0.8575em; text-align: right; }
+ .blurb dl.stats 				{ background: #eee; font-size: 0.8575em; text-align: right; padding: 0 0.3em 0.3em; margin-top: 0.1em; }
  .blurb .own dl.stats     { padding-left: 11em; }
  .own dl.stats					{ background: #fffef9; padding-bottom: 0.10em}
 
@@ -182,8 +182,12 @@ NAVIGATION, ACTIONS (BUTTONS)*/
 								{ font-size: 0.8575em; margin: 0.5em 0 0.5em -.5em}
 
 /* COLLECTION, ANON, MYSTERY */
- .collection .blurb .header		{ background: url(/images/collections.png) 0 0 no-repeat;}
  .blurb .mystery 	 			{ background: url(/images/mystery-s.png) 0 0 no-repeat }
+ .collection .blurb  { min-height:100px }
+ .collection .blurb h4, .collection .blurb .mods, .collection .blurb blockquote, #main .collection .blurb p.type, .collection .blurb dl.stats
+      { margin:0 0 0 120px; }
+ #main .collection .blurb p.type { margin-bottom: 0.3em; margin-top: 0.3em; }
+ .collection div.icon { top: -0.5em; }
 
 /* STATS*/
  .stats dt,.stats dd 			{ display: inline }
