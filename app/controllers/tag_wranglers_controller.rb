@@ -9,30 +9,31 @@ class TagWranglersController < ApplicationController
   def index
     @wranglers = Role.find_by_name("tag_wrangler").users.alphabetical
     conditions = ["canonical = 1"]
+    joins = "LEFT JOIN wrangling_assignments ON (wrangling_assignments.fandom_id = tags.id) 
+             LEFT JOIN users ON (users.id = wrangling_assignments.user_id)"
     unless params[:fandom_string].blank?
       conditions.first << " AND name LIKE ?"
       conditions << params[:fandom_string] + "%"
     end
-    if !params[:media_id].blank?
-      @media = Media.find_by_name(params[:media_id])
-      @assignments = @media.fandoms.find(:all, :select => 'tags.*, users.login AS wrangler', 
-      :joins => "LEFT JOIN wrangling_assignments ON (wrangling_assignments.fandom_id = tags.id) 
-      LEFT JOIN users ON (users.id = wrangling_assignments.user_id)", :conditions => conditions, :order => :name).paginate(:page => params[:page], :per_page => 50)
-    elsif !params[:wrangler_id].blank? && params[:wrangler_id] == "No Wrangler"
-      conditions.first << " AND users.id IS NULL"
-      @assignments = Fandom.find(:all, :select => 'tags.*, users.login AS wrangler', 
-      :joins => "LEFT JOIN wrangling_assignments ON (wrangling_assignments.fandom_id = tags.id) 
-      LEFT JOIN users ON (users.id = wrangling_assignments.user_id)", :conditions => conditions, :order => :name).paginate(:page => params[:page], :per_page => 50)     
-    elsif !params[:wrangler_id].blank?
-      @wrangler = User.find_by_login(params[:wrangler_id])  
-      @assignments = @wrangler.fandoms.find(:all, :select => 'tags.*, users.login AS wrangler', 
-      :joins => "LEFT JOIN wrangling_assignments wa2 ON (wa2.fandom_id = tags.id) 
-      LEFT JOIN users ON (users.id = wa2.user_id)", :conditions => conditions, :order => :name).paginate(:page => params[:page], :per_page => 50)     
-    else
-      @assignments = Fandom.find(:all, :select => 'tags.*, users.login AS wrangler', 
-      :joins => "LEFT JOIN wrangling_assignments ON (wrangling_assignments.fandom_id = tags.id) 
-      LEFT JOIN users ON (users.id = wrangling_assignments.user_id)", :conditions => conditions, :order => :name).paginate(:page => params[:page], :per_page => 50)
+    unless params[:wrangler_id].blank?
+      if params[:wrangler_id] == "No Wrangler"
+        conditions.first << " AND users.id IS NULL"
+      else
+        @wrangler = User.find_by_login(params[:wrangler_id])
+        if @wrangler
+          conditions.first << " AND users.id = #{@wrangler.id}"
+        end
+      end
     end
+    unless params[:media_id].blank?
+      @media = Media.find_by_name(params[:media_id])
+      if @media
+        joins << " INNER JOIN common_taggings ON (tags.id = common_taggings.common_tag_id)" 
+        conditions.first << " AND common_taggings.filterable_id = #{@media.id} AND common_taggings.filterable_type = 'Tag'"
+      end
+    end
+    @assignments = Fandom.find(:all, :select => 'tags.*, users.login AS wrangler', 
+    :joins => joins, :conditions => conditions, :order => :name).paginate(:page => params[:page], :per_page => 50)
   end
 
   def show
