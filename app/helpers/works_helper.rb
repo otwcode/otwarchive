@@ -56,7 +56,7 @@ module WorksHelper
 
     [work.warning_tags, work.pairing_tags, work.character_tags, work.freeform_tags].each do |tags|
       unless tags.empty?
-        class_name = tags.first.type.downcase.pluralize
+        class_name = tags.first.type.to_s.downcase.pluralize
         if (class_name == "warnings" && hide_warnings?(work)) || (class_name == "freeforms" && hide_freeform?(work))
           open_tags = "<li class='#{class_name}' id='work_#{work.id}_category_#{class_name}'><strong>"
           close_tags = "</strong></li>"
