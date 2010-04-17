@@ -128,7 +128,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  .blurb ul li,.blurb dd ul li	{ display: inline }
  li.blurb 						{ padding-left: 0.5em; padding-right: 0.5em; padding-top: 0.25em; padding-bottom: 0.25em; position: relative; clear:left; min-height: 100px }
  .blurb .module					{ float:none;}
- .work .blurb .header 				{ min-height:55px; }
+ .work .blurb .header, .series .blurb .header, 	.blurb .work .header	{ min-height:55px; }
  .blurb .header h4 				{ font-size: 1.1425em; margin: 0.375em 5.25em 0 65px }
  #main .blurb .header img       { position: relative; margin: 0; }
  .blurb .header h5, .blurb .header ul 	
@@ -187,7 +187,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  .collection .blurb h4, .collection .blurb .mods, .collection .blurb blockquote, #main .collection .blurb p.type, .collection .blurb dl.stats
       { margin:0 0 0 120px; }
  #main .collection .blurb p.type { margin-bottom: 0.3em; margin-top: 0.3em; }
- .collection div.icon { top: -0.5em; }
+ .collection div.icon { top: 0.1em; }
 
 /* STATS*/
  .stats dt,.stats dd 			{ display: inline }
