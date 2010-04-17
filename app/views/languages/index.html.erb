@@ -13,19 +13,24 @@
 <!--/subnav-->
 
 <!--main content-->
-<h3 class="landmark">List of Languages and Number of Works</h3>
-<dl id="languages_list">
+<table id="languages_table">
+ 	  <caption><%=h t('list', :default => "List of all current languages in the archive and the number of works in each") -%></caption>
+ 	  <tr>
+ 	  	<th scope="col"><%=h t('name', :default => "Name") -%></th>
+ 	  	<th scope="col"><%=h t('work_count', :default => "Works") -%></th>
+ 	  </tr>
   <%- for language in @languages -%>
-
+  <tr>
     <%- if language == Language.default -%>
-    <dt><%= language.name %></dt>
-    <dd><%= link_to language.works.count, works_path %></dd>
+    <td><%= language.name %></td>
+    <td><%= link_to language.works.count, works_path %></td>
     <%- else -%>
-    <dt><%= link_to language.name, language %></dt>
-    <dd><%= link_to language.works.count, language_works_path(language) %></dd>
+    <td><%= link_to language.name, language %></td>
+    <td><%= link_to language.works.count, language_works_path(language) %></td>
     <%- end -%>
+  </tr>
   <%- end -%>
-</dl>
+</table>
 <!--main content-->
 
 <!--subnav-->

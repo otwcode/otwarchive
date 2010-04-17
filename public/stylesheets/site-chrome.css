@@ -362,6 +362,9 @@ li.comment h4	{ font-size: 1.25em; margin-top:0; }
  .translations dt			 	{ clear: both; margin: -0.25em; padding: 0.25em }
  .translated 					{ background: #d1e1ef; font-style: italic }
  .untranslated 					{ font-weight: 600 }
+ 
+/* LANGUAGES */
+ #main.languages-index #languages_table { margin-top: 0.5em; width: 80%; }
 
 /*ADMIN POSTS */
  #main.admin_posts-index .module { width: 75%; clear: right; margin: 0.5em auto; border:1px solid; }
