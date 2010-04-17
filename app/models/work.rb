@@ -1268,9 +1268,9 @@ class Work < ActiveRecord::Base
     command << (options[:collection] ? collected : '')
     
     if options[:collection]
-      @works = eval("Work#{command + sort}").find(:all)    
+      @works = eval("Work#{command + sort}").find(:all).uniq
     else
-      @works = eval("Work#{command + sort}").find(:all, :limit => ArchiveConfig.SEARCH_RESULTS_MAX)
+      @works = eval("Work#{command + sort}").find(:all, :limit => ArchiveConfig.SEARCH_RESULTS_MAX).uniq
     end
 
     # Adds the co-authors of the displayed works to the available list of pseuds to filter on
