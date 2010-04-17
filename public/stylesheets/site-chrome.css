@@ -183,11 +183,6 @@ NAVIGATION, ACTIONS (BUTTONS)*/
 
 /* COLLECTION, ANON, MYSTERY */
  .blurb .mystery 	 			{ background: url(/images/mystery-s.png) 0 0 no-repeat }
- .collection .blurb  { min-height:100px }
- .collection .blurb h4, .collection .blurb .mods, .collection .blurb blockquote, #main .collection .blurb p.type, .collection .blurb dl.stats
-      { margin:0 0 0 120px; }
- #main .collection .blurb p.type { margin-bottom: 0.3em; margin-top: 0.3em; }
- .collection div.icon { top: 0.1em; }
 
 /* STATS*/
  .stats dt,.stats dd 			{ display: inline }
@@ -279,8 +274,13 @@ li.comment h4	{ font-size: 1.25em; margin-top:0; }
 /* USER PROFILE SHOW */
  .profile-show .module h3 		{ margin-top: 2.75em }
  .profile-show .datetime 		{ top:-3.25em }
+ 
+/* USER PROFILE EDIT PSEUD */
+ .edit_pseud p.icon { position: static; }
+ 
 /* USER OWN WORKS */
  .works-own .own                { background: transparent; }
+ .works-own .own dl.stats { background: #eee; }
 
 /* WORKS INDEX */
  .works-index .index                { width: 75% }
@@ -313,6 +313,11 @@ li.comment h4	{ font-size: 1.25em; margin-top:0; }
 /* COLLECTIONS INDEX*/
  .collections-index .index 		{ width: 75% }
  #main.collections-show h2 span { font-size: smaller }
+ .collection .blurb  { min-height:100px }
+ .collection .blurb h4, .collection .blurb .mods, .collection .blurb blockquote, #main .collection .blurb p.type, .collection .blurb dl.stats
+      { margin:0 0 0 120px; }
+ #main .collection .blurb p.type { margin-bottom: 0.3em; margin-top: 0.3em; }
+ .collection div.icon { top: 0.1em; }
  
 /* Collections */
   .twobutton { width: 12em; }
