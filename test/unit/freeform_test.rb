@@ -15,14 +15,14 @@ class FreeformTest < ActiveSupport::TestCase
       @tag.add_association(@no_fandom)
     end
     should "not include other kinds of tags" do
-       assert_does_not_contain(Freeform.for_tag_cloud, @tag)
+       assert_does_not_contain(Freeform.for_tag_cloud_popular, @tag)
     end
   end
 
   context "tags without a fandom" do
     setup { @tag = create_freeform }
     should "not be included in the cloud" do
-       assert_does_not_contain(Freeform.for_tag_cloud, @tag)
+       assert_does_not_contain(Freeform.for_tag_cloud_popular, @tag)
     end
   end
   context "tags whose fandom is No Fandom" do
@@ -36,14 +36,14 @@ class FreeformTest < ActiveSupport::TestCase
         @work = create_work(:posted => true, :freeform_string => @tag.name)
       end
       should "not be included in the cloud unless they are canonical" do
-         assert_does_not_contain(Freeform.for_tag_cloud, @tag)
+         assert_does_not_contain(Freeform.for_tag_cloud_popular, @tag)
       end
       context "which have been made canonical" do
         setup do
           @tag.update_attributes(:canonical => true)
        end
         should "be included in the cloud" do
-          assert_contains(Freeform.for_tag_cloud, @tag)
+          assert_contains(Freeform.for_tag_cloud_popular, @tag)
         end
       end
       context "whose work is no longer visible" do
@@ -51,7 +51,7 @@ class FreeformTest < ActiveSupport::TestCase
           @work.update_attribute(:restricted, true)
         end
         should "not be included in the cloud" do
-          assert_does_not_contain(Freeform.for_tag_cloud, @tag)
+          assert_does_not_contain(Freeform.for_tag_cloud_popular, @tag)
         end        
       end
     end
