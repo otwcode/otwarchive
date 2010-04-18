@@ -7,7 +7,7 @@
       <%= link_to t('post_new', :default => "Post New"), new_work_path -%>&nbsp;|
     </li>
 	<li> 
-	<%= link_to t('import', :default => "Import"), url_for(:controller => :works, :action => :new, :import => true) -%>	&nbsp;|
+	<%= link_to t('import', :default => "Import"), new_work_path(:import => true) -%>	&nbsp;|
 	</li>	
     <li>
       <%= link_to t('log_out', :default => "Log out"), logout_path -%>
