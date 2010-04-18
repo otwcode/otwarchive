@@ -13,7 +13,7 @@
       <h4><%= get_pseud_or_mailaddress(single_comment) %></h4>
       <div class="icon">
         <%- if !single_comment.pseud.nil? -%>
-          <%= image_tag(single_comment.pseud.andand.icon.url, :alt => single_comment.pseud.andand.icon_alt_text, :class => "icon") %>
+          <%= image_tag(single_comment.pseud.andand.icon.url(:standard), :alt => single_comment.pseud.andand.icon_alt_text, :class => "icon") %>
         <% else %>
           <span class="visitor icon"><!-- visitor icon holder --></span>
         <%- end -%>

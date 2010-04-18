@@ -34,7 +34,7 @@
         <h4><%= get_pseud_or_mailaddress(inbox_comment.feedback_comment) %> <%= 'to' %> <%= commentable_description_link(inbox_comment.feedback_comment) %> </h4>
         <div class="icon">
           <%- if !inbox_comment.feedback_comment.pseud.nil? -%>
-            <%= image_tag(inbox_comment.feedback_comment.pseud.andand.icon.url, :alt => inbox_comment.feedback_comment.pseud.andand.icon_alt_text, :class => "icon") %>
+            <%= image_tag(inbox_comment.feedback_comment.pseud.andand.icon.url(:standard), :alt => inbox_comment.feedback_comment.pseud.andand.icon_alt_text, :class => "icon") %>
           <% else %>
             <span class="visitor icon"><!-- visitor icon holder --></span>
           <%- end -%>

@@ -6,7 +6,7 @@
 	</h4>
 	<%- unless single_comment.pseud.nil? -%>
 		<div class="icon">
-	  <%= image_tag(single_comment.pseud.andand.icon.url, :size => "100x100", :alt => "", :class => "icon") %>
+	  <%= image_tag(single_comment.pseud.andand.icon.url(:standard), :alt => single_comment.pseud.andand.icon_alt_text, :class => "icon") %>
 		</div>
 	<%- end -%>
 	<blockquote class="user-generated-view"><%=sanitize_and_format_for_display single_comment.content %></blockquote>
