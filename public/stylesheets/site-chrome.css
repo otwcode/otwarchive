@@ -287,8 +287,11 @@ li.comment h4	{ font-size: 1.25em; margin-top:0; }
 
 /* WORKS INDEX */
  .works-index .index                { width: 75% }
- .works-index #search               { float: left;}
- .works-index #search input.text    { width: 30em;}
+ .works-index #search_main               { float: left;}
+ #main.works-index #search_main { border: none; }
+ .works-index #search_main input.text    { width: 30em;}
+ .works-index span.submit { margin-top: 0; margin-bottom: 0; }
+ #main.works-index #search_main input.text { border: 2px inset #f0f0f0; background-color: white; }
  
  /* WORKS SHOW */
  #main .notes                            { padding-bottom: 0.5em !important}
