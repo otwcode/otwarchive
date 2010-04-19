@@ -828,9 +828,15 @@ class Work < ActiveRecord::Base
   def parent_attributes=(attributes)
     unless attributes[:url].blank?
       if attributes[:url].include?(ArchiveConfig.APP_URL)
-        id = attributes[:url].match(/works\/\d+/).to_a.first
-        id = id.split("/").last unless id.nil?
-        self.new_parent = {:parent => Work.find(id), :translation => attributes[:translation]}
+        if attributes[:url].match(/\/works\/(\d+)/)
+          begin
+            self.new_parent = {:parent => Work.find($1), :translation => attributes[:translation]}
+          rescue
+            self.errors.add_to_base("The work you listed as an inspiration does not seem to exist.")
+          end
+        else
+          self.errors.add_to_base("Only a link to a work can be listed as an inspiration.")
+        end
       elsif attributes[:title].blank? || attributes[:author].blank?
         error_message = ""
         if attributes[:title].blank?
