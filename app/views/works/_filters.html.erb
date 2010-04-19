@@ -67,6 +67,7 @@
   		<%= hidden_field_tag("fandom_id", @fandom.id) if @fandom %>
       <%= hidden_field_tag("pseud_id", @author.name) if @author %>
   		<%= hidden_field_tag("user_id", @user.login) if @user %>
+  		<%= hidden_field_tag("language_id", params[:language_id]) if params[:language_id] %>
 		</p>
 		<div class="clear"><!--purely presentational for IE6; phase me out--></div>
 		<p class="submit"><%= submit_tag t('filter_works', :default => 'Filter Works') %></p>

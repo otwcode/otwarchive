@@ -1200,6 +1200,9 @@ class Work < ActiveRecord::Base
     elsif !options[:tag].blank?
       # works for a specific tag  
       command << tags
+    elsif !options[:selected_tags].blank? && !options[:language_id].blank?
+      # language and selected tags
+      command << tags + '.by_language(options[:language_id])'
     elsif !options[:selected_tags].blank?
       # no user but selected tags
       command << tags + recent
