@@ -37,10 +37,10 @@
     <li><%= link_to "Comments", url_for(:show_comments => true, :anchor => 'comments') %></li>
     
   <% if params[:style] == 'creator' || (!current_user.is_a?(User) && params[:style] != 'light') || (current_user.is_a?(User) && !current_user.preference.try(:always_light_style) && params[:style] != 'light') -%>
-    <li><%= link_to (t('light_style', :default => 'Switch to light style'), work_path(@work, :style => 'light')) -%></li>
+    <li><%= link_to (t('light_style', :default => 'Switch to light style'), url_for(:style => 'light')) -%></li>
   <%- end -%>
   <% if params[:style] == 'light' || (current_user.is_a?(User) && current_user.preference.try(:always_light_style) && params[:style] != 'creator') -%>
-    <li><%= link_to (t('creator_style', :default => "Switch to creator's style"), work_path(@work, :style => 'creator')) -%></li>
+    <li><%= link_to (t('creator_style', :default => "Switch to creator's style"), url_for(:style => 'creator')) -%></li>
   <%- end -%>  
     
     <li class="landmark"><a name="top">&nbsp;</a></li>
