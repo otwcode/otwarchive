@@ -36,7 +36,7 @@
   <%- end -%>
     <li><%= link_to "Comments", url_for(:show_comments => true, :anchor => 'comments') %></li>
     
-  <% if params[:style] == 'creator' -%>
+  <% if params[:style] == 'creator' || (!current_user.is_a?(User) && params[:style] != 'light') || (current_user.is_a?(User) && !current_user.preference.try(:always_light_style) && params[:style] != 'light') -%>
     <li><%= link_to (t('light_style', :default => 'Switch to light style'), work_path(@work, :style => 'light')) -%></li>
   <%- end -%>
   <% if params[:style] == 'light' || (current_user.is_a?(User) && current_user.preference.try(:always_light_style) && params[:style] != 'creator') -%>
