@@ -1,6 +1,6 @@
 /* content inputted by a user into a textarea.*/
 
-#main .user-generated-view p { margin:0.643em auto; }
+#main .user-generated-view p { margin:1.5em auto; }
 
 /*lists */
 .user-generated-view dl		{ font-size:1em; margin:1.5em 0; border: 0; }
@@ -22,12 +22,11 @@
 /* headings */
 .user-generated-view h1		{ font-family:Cambria, Constantia, Palatino, Georgia, serif; text-align:center; }
 .user-generated-view h2		{ color:#333; font-variant:normal; text-align:left; text-transform:none; margin:1.5em 0;}
-.user-generated-view h3		{ background:#333; color:#fffef9; font-weight:100; padding: 0.125em; border-bottom:0.25em double #fffef9; }
-.user-generated-view h4		{ font-variant:small-caps;}
+.user-generated-view h3		{ font-weight:500; padding: 0.125em; border-bottom:0.25em double #333; }
 .user-generated-view h5		{ font-weight:600; font-size: 1em;}
 .user-generated-view h6		{ font-size: 0.975em; border-bottom:1px solid; }
 .user-generated-view h3 a, .user-generated-view h3 a:link, .user-generated-view h3 a:visited
-							{ color:#fffef9; border-bottom:0; text-decoration: none; } 
+							{ font-weight:500; border-bottom:0; text-decoration: none; } 
 /*tables */
 .user-generated-view caption
 							{ height:auto; font-size:1em; color:#222; }

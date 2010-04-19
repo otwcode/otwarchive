@@ -11,8 +11,9 @@
 <!--main content-->
 <% @admin_posts.each do |admin_post| %>
 
- 	<div class="admin user-generated-view module" role="article">
-			<h3>
+ 	<div class="admin module" role="article">
+			<div class="admin-header">
+      <h3>
 				<%= link_to sanitize_title_for_display(admin_post.title), admin_post %>
 			</h3>
 				<h4>
@@ -20,8 +21,11 @@
 						<%- if logged_in_as_admin? -%>
 					    <%= link_to t('edit', :default => 'Edit Post', :class => 'navigation'), edit_admin_post_path(@admin_post) %>
 						<%- end -%>
-				</h4>
+        </h4>
+      </div>
+      <div class="admin-content user-generated-view">
 		    <%=sanitize_and_format_for_display admin_post.content %>
+      </div>
 			<!-- BEGIN comment section -->
 				<h3 class="landmark">Comment</h3>
 				<ul class="navigation">

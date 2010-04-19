@@ -2,6 +2,6 @@
   <fieldset>
 	<legend>Search for works</legend>
 	<p><%= text_field_tag :query, params[:query], :class => 'text', :title => 'site search' %>
-  <%= submit_tag t('forms.search', :default => 'Search'), :class => 'button', :name => nil %></p>
+  <span class="submit"><%= submit_tag t('forms.search', :default => 'Search'), :class => 'button', :name => nil %></span></p>
 </fieldset>
 <% end -%>

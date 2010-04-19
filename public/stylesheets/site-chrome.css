@@ -9,8 +9,8 @@
  #header 					{ background: #900 url(/images/header-red.png) top left repeat-x; color: #fffef9; font-family: FertigoProRegular, Cambria, Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; padding: 0.25em 0 0; position: relative }
  #header #login-block 		{ color: #fffef9; font-size: 0.75em; text-align: right; }
  #login li 					{ display: inline }
- p#greeting, ul#login, #search{ clear: right; float: right;  text-align:left; width:17em; padding:0 }
- #greeting.logged-out 		{ float: none; margin-top: 1em;  width:auto}
+ p#greeting, ul#login, #search{ clear: right; float: right;  text-align:left; width:17.5em; padding:0 }
+ #greeting.logged-out 		{ float: none; margin-top: 1em;  width:auto; padding-right: 0.5em; }
  #header h1 				{ float: left; font-size: 1.5em; margin: 0; padding-left: 0.75em }
  #header h1.collection 		{ background: #900 url(/images/header-red.png) top left repeat-x; border-bottom: 6px solid #111; float:none; margin-top:-.25em;}
  #header a,#header a:visited 
@@ -69,7 +69,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
 			{ float:left; font-size:0.8575em;}
 #main li.bookmark .navigation, #main li.fandom .navigation,  #main.pseuds-index li.blurb .navigation 
 			{ float:right; }
-#main .work .own .navigation
+#main .work .own .navigation, #main .collection .own .navigation, #main .bookmark .own .navigation
 			{ float:left; margin:-1.25em auto auto;}
 #main li.bookmark .own .navigation
 			{ float: left; margin:0.25em auto auto -0.25em;}
@@ -128,7 +128,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  .blurb ul li,.blurb dd ul li	{ display: inline }
  li.blurb 						{ padding-left: 0.5em; padding-right: 0.5em; padding-top: 0.25em; padding-bottom: 0.25em; position: relative; clear:left; min-height: 100px }
  .blurb .module					{ float:none;}
- .work .blurb .header, .series .blurb .header, 	.blurb .work .header	{ min-height:55px; }
+ .work .blurb .header, .series .blurb .header, 	.blurb .work .header, .bookmark .blurb .header	{ min-height:55px; }
  .blurb .header h4 				{ font-size: 1.1425em; margin: 0.375em 5.25em 0 65px }
  #main .blurb .header img       { position: relative; margin: 0; }
  .blurb .header h5, .blurb .header ul 	
@@ -189,10 +189,11 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  .stats li dt,.stats dd dt 		{ font-size: 0.8575em }
  .stats dl dd 					{ margin: 0 0.375em 0 0; padding: 0 0.375em 0 0 }
  
- #main  #feedback .edited { top: 0.8em; }
+ #main  #feedback .edited, #main .thread .edited { top: 0.8em; }
  #main .datetime 					{ font: 100 0.8575em consolas, monaco, courier, monospace; position: absolute; right: 0.1em; text-align: right; top: -0.5em }
  #main .collection .meta .datetime 	{ position:static; top:auto; text-align:left}
  #main .collection .meta .datetime 	{ position:static; top:auto; text-align:left}
+ #main .admin .datetime { position: static; }
  .datetime abbr 					{ font-variant:normal;}
  .datetime .date, .datetime .month 	{ font-weight:900;}
  .datetime .time, .datetime .timezone
@@ -230,7 +231,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  #main #chapters .footnote 		{ font-size: 85.7%; border-bottom: 1px solid #ddd}  
 
 /* COMMENTS - works-show, inbox, admin posts for now*/
-li.comment 		{ position:relative; clear:right;  padding: 0.8575em 0.25em; min-height: 100px;}
+li.comment 		{ position:relative; clear:right;  padding: 0.8575em 0.25em; min-height: 100px; }
 .comment h4, li.comment blockquote 
 				{ margin-left: 110px; display:block;}
 li.comment blockquote blockquote
@@ -238,7 +239,9 @@ li.comment blockquote blockquote
 li.comment p    { clear: none; }								
 li.comment h4	{ font-size: 1.25em; margin-top:0; }
 .comment .even, .thread .even 	
-				{ background:#eee;}
+				{ background:#eee; }
+.comment .odd, .thread .odd
+                { background:#f6f0f0; }
 .thread .thread { margin: 0 0 0 3em;}
 .comment div.icon  
 				{ top:0.875em;}
@@ -316,6 +319,7 @@ li.comment h4	{ font-size: 1.25em; margin-top:0; }
  .collection .blurb  { min-height:100px }
  .collection .blurb h4, .collection .blurb .mods, .collection .blurb blockquote, #main .collection .blurb p.type, .collection .blurb dl.stats
       { margin:0 0 0 120px; }
+ #main .collection .blurb .navigation { margin-left: 120px; }
  #main .collection .blurb p.type { margin-bottom: 0.3em; margin-top: 0.3em; }
  .collection div.icon { top: 0.1em; }
  
@@ -371,9 +375,14 @@ li.comment h4	{ font-size: 1.25em; margin-top:0; }
  #dashboard.admin-posts li, #dashboard.wrangling li 
                                 { font-size: 90%; margin: .5em 0em; }
  #dashboard.admin-posts a:hover { background: #333; color: #fff; }
- #main.admin_posts-index .wrapper {clear:right;}
-#main.admin_posts-show .user-generated-view { margin-top: 2em; } /* hacky fix so the first header doesn't overlap the subnav */
-  
+ #main.admin_posts-index .wrapper, #main.admin_posts-show .admin-header {clear:right;}
+ #main.admin_posts-show .user-generated-view { margin-top: 2em; } /* hacky fix so the first header doesn't overlap the subnav */
+ #main.admin_posts-show .admin-header h3, #main.admin_posts-index .admin-header h3 
+       { font-weight:500; padding: 0.125em; border-bottom:0.25em double #fffef9; color: #fffef9; background-color: #333; }
+ #main.admin_posts-index .admin-header h3 a, #main.admin_posts-index .admin-header h3 a:link, #main.admin_posts-index .admin-header h3 a:visited, 
+    #main.admin_posts-show .admin-header h3 a, #main.admin_posts-show .admin-header h3 a:link, #main.admin_posts-show .admin-header h3 a:visited
+            { border-bottom:0; text-decoration: none; color: #fffef9; }
+ #main.admin_posts-show .admin-header h4, #main.admin_posts-index .admin-header h4 { font-variant:small-caps; }
 
 /* ToS and ADMIN long body copy tweaks*/
  #main #tos .toc li 			{ list-style-type: upper-roman }
