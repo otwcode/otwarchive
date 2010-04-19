@@ -10,9 +10,9 @@ class CommentsControllerTest < ActionController::TestCase
     @user = create_user
     @pseud = @user.default_pseud
     @chapter1 = new_chapter(:authors => [@pseud])
-    @work = create_work(:chapters => [@chapter1], :authors => [@pseud])
+    @work = create_work(:chapters => [@chapter1], :authors => [@pseud], :posted => true)
     @chapter1.save
-    @chapter2 = new_chapter(:work_id => @work.id, :authors => [@pseud])
+    @chapter2 = new_chapter(:work_id => @work.id, :authors => [@pseud], :posted => true)
     @chapter2.save
     @comment1 = create_comment(:commentable => @chapter1, :content => 'first comment', :pseud => @pseud)
     @comment1.save
