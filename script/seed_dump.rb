@@ -1,11 +1,15 @@
 #!/usr/bin/env script/runner
 # usage:
+# RAILS_ENV=production rake db:drop
+# RAILS_ENV=production rake db:create
+# RAILS_ENV=production script/dbconsole -p < ../latest.dump 
 # rm -f db/seed/*
 # RAILS_ENV=production script/seed_dump.rb
 
+# users who have webdavs or asked to be added
 SEEDS = ["Sidra", "astolat", "Enigel", "hope", "awils1", 
          "Cesy", "elz", "justira", "lim", "melange", "eel",
-          "rklyne", "zelempa"] # users who have webdavs or asked to be added
+          "rklyne", "zelempa", "Zooey_Glass"] 
 ADD_EXTERNAL = true
 NTH = 20
 
@@ -13,8 +17,8 @@ NTH = 20
 #  SEEDS = [ "Enigel" ]
 #  ADD_EXTERNAL = false 
 #  NTH = 1
-#### note, this will dump all their comments and bookmarks, but not the associated works
-
+#### note: this will dump all their works, comments and bookmarks, 
+#### but not the associated works on their comments and bookmarks
 
 #### end of configuration
 
