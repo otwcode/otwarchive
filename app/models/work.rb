@@ -841,13 +841,14 @@ class Work < ActiveRecord::Base
         end
         self.errors.add_to_base(error_message)
       else
+        translation = attributes.delete(:translation)
         ew = ExternalWork.find_by_url(attributes[:url])
         if ew && (ew.title == attributes[:title]) && (ew.author == attributes[:author])
-          self.new_parent = {:parent => ew, :translation => attributes[:translation]}
+          self.new_parent = {:parent => ew, :translation => translation}
         else
           ew = ExternalWork.new(attributes)
-          if ew.save
-            self.new_parent = {:parent => ew, :translation => attributes[:translation]}
+          if ew.save!
+            self.new_parent = {:parent => ew, :translation => translation}
           else
             self.errors.add_to_base("Parent work info would not save.")
           end
