@@ -18,8 +18,6 @@ class ExternalWork < ActiveRecord::Base
   has_many :fandoms, :through => :taggings, :source => :tagger, :source_type => 'Fandom', :before_remove => :remove_filter_tagging
   has_many :pairings, :through => :taggings, :source => :tagger, :source_type => 'Pairing', :before_remove => :remove_filter_tagging
   has_many :characters, :through => :taggings, :source => :tagger, :source_type => 'Character', :before_remove => :remove_filter_tagging
-  has_many :ambiguities, :through => :taggings, :source => :tagger, :source_type => 'Ambiguity', :before_remove => :remove_filter_tagging
-  attr_accessor :ambiguous_tags
 
   AUTHOR_LENGTH_MAX = 500
   
@@ -86,8 +84,6 @@ class ExternalWork < ActiveRecord::Base
   # External works are taggable objects.
   ####################################################################### 
 
-  before_save :update_ambiguous_tags
-
   # string methods
   # (didn't use define_method, despite the redundancy, because it doesn't cache in development)
   def rating_string
@@ -104,9 +100,6 @@ class ExternalWork < ActiveRecord::Base
   end
   def character_string
     self.characters.string
-  end
-  def ambiguity_string
-    self.ambiguities.string
   end
 
   # _string= methods
@@ -130,14 +123,11 @@ class ExternalWork < ActiveRecord::Base
 
   def fandom_string=(tag_string)
     tags = []
-    ambiguities = []
     tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT).each do |string|
       string.squish!
       tag = Fandom.find_or_create_by_name(string)
       tags << tag if tag.is_a?(Fandom)
-      ambiguities << tag if tag.is_a?(Ambiguity)
     end
-    self.add_to_ambiguity(ambiguities)
     remove = self.fandoms - tags
     remove.each do |tag|
       Tagging.find_by_tag(self, tag).destroy
@@ -147,14 +137,11 @@ class ExternalWork < ActiveRecord::Base
 
   def pairing_string=(tag_string)
     tags = []
-    ambiguities = []
     tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT).each do |string|
       string.squish!
       tag = Pairing.find_or_create_by_name(string)
       tags << tag if tag.is_a?(Pairing)
-      ambiguities << tag if tag.is_a?(Ambiguity)
     end
-    self.add_to_ambiguity(ambiguities)
     remove = self.pairings - tags
     remove.each do |tag|
       Tagging.find_by_tag(self, tag).destroy
@@ -164,14 +151,11 @@ class ExternalWork < ActiveRecord::Base
 
   def character_string=(tag_string)
     tags = []
-    ambiguities = []
     tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT).each do |string|
       string.squish!
       tag = Character.find_or_create_by_name(string)
       tags << tag if tag.is_a?(Character)
-      ambiguities << tag if tag.is_a?(Ambiguity)
     end
-    self.add_to_ambiguity(ambiguities)
     remove = self.characters - tags
     remove.each do |tag|
       Tagging.find_by_tag(self, tag).destroy
@@ -179,54 +163,11 @@ class ExternalWork < ActiveRecord::Base
     self.characters = tags
   end
 
-  def ambiguity_string=(tag_string)
-    tags = []
-    tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT).each do |string|
-      string.squish!
-      tag = Ambiguity.find_or_create_by_name(string)
-      tags << tag if tag.is_a?(Ambiguity)
-    end
-    self.add_to_ambiguity(tags.compact)
-  end
-
-  def add_to_ambiguity(tags)
-    if self.ambiguous_tags
-      self.ambiguous_tags << tags
-    else
-      self.ambiguous_tags = tags
-    end
-  end
-
   # a work can only have one rating, so using first will work
   def adult?
     # should always have a rating, if it doesn't err conservatively
     return true if self.ratings.blank?
     self.ratings.first.adult?
-  end
-
-  def update_common_tags
-    # new_tags = []
-    # # work.tags is empty at this point?!?!?
-    # Tagging.find_all_by_taggable_id_and_taggable_type(self.id, 'external_work').each do |tagging|
-    #   new_tags << tagging.tagger.common_tags_to_add rescue nil
-    # end
-    # new_tags = new_tags.flatten.uniq.compact
-    # old_tags = self.common_tags
-    # self.common_tags.delete(old_tags - new_tags)
-    # self.common_tags << (new_tags - old_tags)
-    # self.common_tags
-  end
-
-  def update_ambiguous_tags
-    new_ambiguities = ambiguous_tags.flatten.uniq.compact if ambiguous_tags
-    unless ambiguous_tags.blank?
-      old_ambiguities = self.ambiguities
-      (old_ambiguities - new_ambiguities).each do |tag|
-        Tagging.find_by_tag(self, tag).destroy
-      end
-    end
-    self.ambiguities = new_ambiguities if new_ambiguities
-    #self.update_common_tags
   end
 
   def cast_tags

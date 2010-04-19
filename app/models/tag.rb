@@ -2,7 +2,6 @@ class Tag < ActiveRecord::Base
 
   # Note: the order of this array is important.
   # It is the order that tags are shown in the header of a work
-  # (ambiguous tags are grouped with freeform tags)
   # (banned tags are not shown)
   TYPES = ['Rating', 'Warning', 'Category', 'Media', 'Fandom', 'Pairing', 'Character', 'Freeform', 'Banned' ]
 
@@ -576,7 +575,7 @@ class Tag < ActiveRecord::Base
         if new_merger && self.errors.empty?
           self.canonical = false      
           self.merger_id = new_merger.id
-          [(self.parents + self.children) - (new_merger.parents + new_merger.children)].each { |tag| new_merger.add_association(tag) }
+          ((self.parents + self.children) - (new_merger.parents + new_merger.children)).each { |tag| new_merger.add_association(tag) }
           self.meta_tags.each { |tag| new_merger.meta_tags << tag unless new_merger.meta_tags.include?(tag) }
           self.sub_tags.each { |tag| tag.meta_tags << new_merger unless tag.meta_tags.include?(new_merger) }            
           self.mergers.each {|m| m.update_attributes(:merger_id => new_merger.id)}

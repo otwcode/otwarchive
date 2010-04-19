@@ -1,2 +1,0 @@
-class Ambiguity < Tag
-end

@@ -66,9 +66,7 @@ class Work < ActiveRecord::Base
     :before_remove => :remove_filter_tagging
   has_many :freeforms, :through => :taggings, :source => :tagger, :source_type => 'Freeform',
     :before_remove => :remove_filter_tagging
-  has_many :ambiguities, :through => :taggings, :source => :tagger, :source_type => 'Ambiguity',
-    :before_remove => :remove_filter_tagging
-      
+
   acts_as_commentable
   has_many :total_comments, :class_name => 'Comment', :through => :chapters 
 
@@ -85,7 +83,6 @@ class Work < ActiveRecord::Base
   attr_accessor :invalid_pseuds
   attr_accessor :ambiguous_pseuds
   attr_accessor :new_parent, :url_for_parent
-  attr_accessor :ambiguous_tags
   attr_accessor :invalid_tags
   attr_accessor :preview_mode, :placeholder_tags
   attr_accessor :should_reset_filters
@@ -181,8 +178,6 @@ class Work < ActiveRecord::Base
   before_update :validate_tags
 	after_update :save_series_data
 	after_update :reset_placeholders
-
-  before_save :update_ambiguous_tags
 
   # SECTION IN PROGRESS -- CONSIDERING MOVE OF WORK CODE INTO HERE
 
@@ -582,9 +577,6 @@ class Work < ActiveRecord::Base
   def freeform_string
     self.preview_mode ? self.placeholder_tag_string(:freeforms) : self.freeforms.map(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
   end
-  def ambiguity_string
-    self.preview_mode ? self.placeholder_tag_string(:ambiguities) : self.ambiguities.string
-  end
   
   def placeholder_tag_string(key)
     if self.placeholder_tags[key].blank? || !self.placeholder_tags[key].flatten.compact.first.respond_to?(:name)
@@ -597,7 +589,6 @@ class Work < ActiveRecord::Base
   # Process a string or array of tags from any tag class
   def parse_tags(klass, incoming_tags)
     tags = []
-    ambiguities = []
     self.invalid_tags ||= []
     klass_symbol = klass.to_s.downcase.pluralize.to_sym
     tag_array = incoming_tags.is_a?(String) ? incoming_tags.split(ArchiveConfig.DELIMITER_FOR_INPUT) : incoming_tags
@@ -606,7 +597,6 @@ class Work < ActiveRecord::Base
       tag = klass.find_or_create_by_name(string)
       if tag.valid?
         tags << tag if tag.is_a?(klass)
-        ambiguities << tag if tag.is_a?(Ambiguity)
       else
         self.invalid_tags << tag
       end
@@ -614,9 +604,7 @@ class Work < ActiveRecord::Base
     if self.preview_mode
       self.placeholder_tags ||= {}
       self.placeholder_tags[klass_symbol] = tags.uniq
-      (self.placeholder_tags[:ambiguities] ||= []) << ambiguities
     else
-      self.add_to_ambiguity(ambiguities)
       # we have to destroy the taggings directly in order to trigger the callbacks
       remove = self.send(klass_symbol) - tags
       remove.each do |tag|
@@ -657,24 +645,6 @@ class Work < ActiveRecord::Base
     parse_tags(Freeform, tag_string)
   end
 
-  def ambiguity_string=(tag_string)
-    tags = []
-    tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT).each do |string|
-      string.squish!
-      tag = Ambiguity.find_or_create_by_name(string)
-      tags << tag if tag.is_a?(Ambiguity)
-    end
-    self.add_to_ambiguity(tags.compact)
-  end
-
-  def add_to_ambiguity(tags)
-    if self.ambiguous_tags
-      self.ambiguous_tags << tags
-    else
-      self.ambiguous_tags = tags
-    end
-  end
-
   # a work can only have one rating, so using first will work
   def adult?
     # should always have a rating, if it doesn't err conservatively
@@ -713,31 +683,6 @@ class Work < ActiveRecord::Base
   def reset_placeholders
     self.preview_mode = false
     self.placeholder_tags = {}
-  end
-
-  def update_common_tags
-    # new_tags = []
-    # # work.tags is empty at this point?!?!?
-    # Tagging.find_all_by_taggable_id_and_taggable_type(self.id, 'work').each do |tagging|
-    #   new_tags << tagging.tagger.common_tags_to_add rescue nil
-    # end
-    # new_tags = new_tags.flatten.uniq.compact
-    # old_tags = self.common_tags
-    # self.common_tags.delete(old_tags - new_tags)
-    # self.common_tags << (new_tags - old_tags)
-    # self.common_tags
-  end
-
-  def update_ambiguous_tags
-    new_ambiguities = ambiguous_tags.flatten.uniq.compact if ambiguous_tags
-    unless ambiguous_tags.blank?
-      old_ambiguities = self.ambiguities
-      (old_ambiguities - new_ambiguities).each do |tag|
-        Tagging.find_by_tag(self, tag).destroy
-      end
-    end
-    self.ambiguities = new_ambiguities if new_ambiguities
-    #self.update_common_tags
   end
 
   def cast_tags

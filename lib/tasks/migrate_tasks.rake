@@ -119,7 +119,21 @@ namespace :After do
 # 
 
 
-  #### Add your new tasks here
+  #### Add your new tasks here 
+  
+  desc "Clean up common taggings"
+  task(:common_tagging_cleanup => :environment) do
+    # Remove common taggings that associate tags with works - they're no longer used
+    CommonTagging.delete_all("filterable_type = 'Work'")
+    
+    # Find common taggings that make a non-media tag the parent of a fandom, and delete them
+    common_taggings = CommonTagging.find(:all, :joins => "INNER JOIN tags ON tags.id = common_taggings.common_tag_id 
+    INNER JOIN tags as parents ON parents.id = common_taggings.filterable_id", 
+    :conditions => "tags.type = 'Fandom' AND common_taggings.filterable_type = 'Tag' AND parents.type != 'Media'")
+
+    common_taggings.each {|ct| ct.destroy}
+  end 
+  
 
 end # this is the end that you have to put new tasks above
 
@@ -129,4 +143,4 @@ end # this is the end that you have to put new tasks above
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
 #task :After => ['After:fix_warnings', 'After:tidy_wranglings', 'After:exorcise_syns', 'After:deleted_invites_cleanup']
-task :After => []
+task :After => ['After:common_tagging_cleanup']
