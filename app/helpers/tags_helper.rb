@@ -149,7 +149,7 @@ module TagsHelper
       last_comment = " (last comment: " + tag.total_comments.find(:first, :order => 'created_at DESC').created_at.to_s + ")"
     end
     link_text = count + " comments" + last_comment
-    link_to link_text, tag_comments_path(tag)
+    link_to link_text, {:controller => :comments, :action => :index, :tag_id => tag.name}
   end 
   
   def show_wrangling_dashboard
