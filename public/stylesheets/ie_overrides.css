@@ -24,7 +24,7 @@ form.new_collection p, form.new_user p {font-size:1em;}
 #main .navigation li {margin-right: 0.25em !important;} 
 #user-page {margin-top:1em;}
 .bookmark ul.required-tags, .comment div.icon, #main .bookmark .required-tags li { margin:0;}
-#main .bookmark .required-tags li .warnings { margin-top: 3px; }
+#main .required-tags li .warnings { margin-top: 3px; }
 
 /*min-height */
 .titles {height:70px; }
