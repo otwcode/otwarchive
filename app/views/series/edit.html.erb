@@ -13,28 +13,38 @@
 <!--/subnav-->
 
 <!--main content-->
+<div id="work-form" class="work-form">
 <% form_for(@series) do |f| %>
   <%= f.error_messages %>
-<dl>
-	<dt><%= f.label :title, "Series Title" %></dt>
-	<dd><%= f.text_field :title %></dd>
-  <%= render :partial => 'pseuds/byline', :locals => {:form => f, :type => 'series'} -%>
-	<dt><%= f.label :summary, "Series Description" %><dt>
-	<dd>
-	<code>a href, b, big, blockquote, br, center, cite, code, del, em, i, img, ins, p, pre, q, small, strike, strong, sub, sup, u </code>
-    <%= f.text_area :summary %>
-    <%= generate_countdown_html("series_summary", ArchiveConfig.SUMMARY_MAX) -%>
-  </dd>
-	<dt><%= f.label :notes, "Series Notes" %><dt>
-	<dd>
-    <code>a href, b, big, blockquote, br, center, cite, code, del, em, i, img, ins, p, pre, q, small, strike, strong, sub, sup, u </code>
-	<%= f.text_area :notes %>
-    <%= generate_countdown_html("series_notes", ArchiveConfig.NOTES_MAX) -%>
-</dd>
-</dl>
-<p class="submit navigation">
-	<%= f.submit "Update" %>
-	<%= link_to 'Cancel', series_path %>
-</p>
+  <fieldset>
+    <dl>
+      <dt><%= f.label :title, "Series Title" %></dt>
+      <dd><%= f.text_field :title %></dd>
+      <%= render :partial => 'pseuds/byline', :locals => {:form => f, :type => 'series'} -%>
+    </dl>
+  </fieldset>
+  <fieldset>
+    <dl>      
+      <dt><%= f.label :summary, "Series Description" %><dt>
+      <dd>
+        <code>a href, b, big, blockquote, br, center, cite, code, del, em, i, img, ins, p, pre, q, small, strike, strong, sub, sup, u </code>
+        <%= f.text_area :summary %>
+        <%= generate_countdown_html("series_summary", ArchiveConfig.SUMMARY_MAX) -%>
+      </dd>
+      <dt><%= f.label :notes, "Series Notes" %><dt>
+      <dd>
+        <code>a href, b, big, blockquote, br, center, cite, code, del, em, i, img, ins, p, pre, q, small, strike, strong, sub, sup, u </code>
+        <%= f.text_area :notes %>
+        <%= generate_countdown_html("series_notes", ArchiveConfig.NOTES_MAX) -%>
+      </dd>
+    </dl>
+  </fieldset>
+  <fieldset>
+    <p class="submit navigation">
+    <%= f.submit "Update" %>
+    <%= link_to 'Cancel', series_path %>
+    </p>
+  </fieldset>
 <% end %>
+</div>
 <!--/content-->
