@@ -10,7 +10,10 @@ class CommentSweeper < ActionController::Caching::Sweeper
   end
 
   def expire_cache(comment)
-    expire_fragment('latest_comments') if comment.top_level?
+    if comment.top_level?
+      expire_fragment('latest_comments')
+      expire_fragment('latest_comments_public')
+    end
   end
 
 end
