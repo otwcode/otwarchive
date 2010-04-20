@@ -501,10 +501,10 @@ class Tag < ActiveRecord::Base
   before_update :check_canonical
   def check_canonical
     if self.canonical_changed? && !self.canonical?
-      self.mergers.each {|tag| tag.update_attributes(:merger_id => nil)}
-      self.children.each {|tag| tag.parents.delete(self)}
-      self.sub_tags.each {|tag| tag.meta_tags.delete(self)}
-      self.meta_tags.each {|tag| self.meta_tags.delete(tag)}
+      self.mergers.each {|tag| tag.update_attributes(:merger_id => nil) if tag.merger_id == self.id }
+      self.children.each {|tag| tag.parents.delete(self) if tag.parents.include?(self) }
+      self.sub_tags.each {|tag| tag.meta_tags.delete(self) if tag.meta_tags.include?(self) }
+      self.meta_tags.each {|tag| self.meta_tags.delete(tag) if self.meta_tags.include?(tag) }
     elsif self.canonical_changed? && self.canonical?
       self.merger_id = nil
     end
