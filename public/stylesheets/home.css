@@ -71,7 +71,7 @@ border:0;
 line-height:1;
 font-size: smaller;
 }
-.home input:hover {
+.home input.text:hover {
 background: #ddd;
 }
 

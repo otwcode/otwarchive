@@ -1,20 +1,20 @@
 <p>
-	<%= label_tag 'login', t('user_name', :default => "User name:")  %>
-	<%= text_field_tag 'login', '' %>
-	<%- if ArchiveConfig.USE_OPENID -%>
+  <%= label_tag 'login', t('user_name', :default => "User name:")  %>
+  <%= text_field_tag 'login', '', :class => 'text' %>
+  <%- if ArchiveConfig.USE_OPENID -%>
     <%= link_to_remote image_tag("openid.png", :class => 'openid', :alt => 'OpenID', :title => 'OpenID') , 
-																	 {:url => {:controller => :session, :action => 'openid_small'}}, 
-							 										 :href => url_for(:overwrite_params => { :use_openid => true }) 
-																	 -%>
-    <%- end -%>
-	<%= label_tag 'password', t('passard', :default => "Password:")  %>
-	<%= password_field_tag 'password', '' %>
+                                  {:url => {:controller => :session, :action => 'openid_small'}}, 
+                                  :href => url_for(:overwrite_params => { :use_openid => true }) 
+                                  -%>
+  <%- end -%>
+  <%= label_tag 'password', t('password', :default => "Password:")  %>
+  <%= password_field_tag 'password', '', :class => 'text' %>
 </p>
 <p class="footnote">
-	<%= check_box_tag('remember_me', '1', false) %>
-	<%= label_tag 'remember_me', t('remember_me', :default => "Remember me")  %>&nbsp;| 
-	<%= link_to t('forgot_password', :default => "forgot password?"), new_password_path %>
+  <%= check_box_tag('remember_me', '1', false) %>
+  <%= label_tag 'remember_me', t('remember_me', :default => "Remember me") %>&nbsp;| 
+  <%= link_to t('forgot_password', :default => "forgot password?"), new_password_path %>
 </p>
 <p>
-	<%= submit_tag t('login', :default => "Login"), :class => 'button' %>
+  <%= submit_tag t('login', :default => "Login"), :class => 'button' %>
 </p>
