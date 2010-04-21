@@ -308,8 +308,8 @@ class Collection < ActiveRecord::Base
     INNER JOIN collection_preferences ON collection_preferences.collection_id = collections.id"
     conditions = ["parent_id IS NULL "]
     unless filters[:title].blank?
-      conditions.first << "AND title LIKE ? "
-      conditions << (filters[:title] + "%")
+      conditions.first << "AND collections.title LIKE ? "
+      conditions << ("%" + filters[:title] + "%")
     end
     %w(closed moderated).each do |attribute|
       unless filters[attribute].blank?

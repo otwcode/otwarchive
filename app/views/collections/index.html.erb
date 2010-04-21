@@ -39,15 +39,17 @@
 <%- end -%>
 </div>
 
-<%= will_paginate @collections, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>
+<%- unless @collections.blank? -%>
+  <%= will_paginate @collections, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>
 
-<!--main content-->
-<h3 class="landmark">List of Collections</h3>
-<ul class="collection index<% if @user && current_user == @user %> works-own<% end %>">
-<% @collections.each do |collection| %>
-  <%= render :partial => "collection_blurb", :locals => {:collection => collection} %>
-<% end %>
-</ul>
+  <!--main content-->
+  <h3 class="landmark">List of Collections</h3>
+  <ul class="collection index<% if @user && current_user == @user %> works-own<% end %>">
+  <% @collections.each do |collection| %>
+    <%= render :partial => "collection_blurb", :locals => {:collection => collection} %>
+  <% end %>
+  </ul>
+<%- end -%>
 
 <%- if @sort_and_filter -%>
 <!--filters subnav-->
@@ -56,4 +58,6 @@
 <%- end -%> 
 <div class="clear"><!-- presentational--></div>
 
+<%- unless @collections.blank? -%>
 <%= will_paginate @collections, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>
+<%- end -%>
