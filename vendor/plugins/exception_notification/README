@@ -17,13 +17,13 @@ First, include the ExceptionNotifiable mixin in whichever controller you want
 to generate error emails (typically ApplicationController):
 
   class ApplicationController < ActionController::Base
-    include ExceptionNotifiable
+    include ExceptionNotification::Notifiable
     ...
   end
 
 Then, specify the email recipients in your environment:
 
-  ExceptionNotifier.exception_recipients = %w(joe@schmoe.com bill@schmoe.com)
+  ExceptionNotification::Notifier.exception_recipients = %w(joe@schmoe.com bill@schmoe.com)
 
 And that's it! The defaults take care of the rest.
 
@@ -33,11 +33,20 @@ You can tweak other values to your liking, as well. In your environment file,
 just set any or all of the following values:
 
   # defaults to exception.notifier@default.com
-  ExceptionNotifier.sender_address =
+  ExceptionNotification::Notifier.sender_address =
     %("Application Error" <app.error@myapp.com>)
 
   # defaults to "[ERROR] "
-  ExceptionNotifier.email_prefix = "[APP] "
+  ExceptionNotification::Notifier.email_prefix = "[APP] "
+
+Even if you have mixed into ApplicationController you can skip notification in
+some controllers by
+  
+  class MyController  < ApplicationController
+    skip_exception_notifications
+  end
+  
+== Deprecated local_request? overriding
 
 Email notifications will only occur when the IP address is determined not to
 be local. You can specify certain addresses to always be local so that you'll
@@ -57,6 +66,19 @@ NOT be considered local), you can simply do, somewhere in your controller:
 
   local_addresses.clear
 
+NOTE: The above functionality has has been pulled out to consider_local.rb,
+as interfering with rails local determination is orthogonal to notification, 
+unnecessarily clutters backtraces, and even occasionally errs on odd ip or 
+requests bugs. To return original functionality add an initializer with:
+ 
+  ActionController::Base.send :include, ConsiderLocal
+
+or just include it per controller that wants it
+
+ class MyController  < ApplicationController
+   include ExceptionNotification::ConsiderLocal
+ end
+
 == Customization
 
 By default, the notification email includes four parts: request, session,
@@ -75,7 +97,7 @@ access to the following variables:
 * @sections: the array of sections to include in the email
 
 You can reorder the sections, or exclude sections completely, by altering the
-ExceptionNotifier.sections variable. You can even add new sections that
+ExceptionNotification::Notifier.sections variable. You can even add new sections that
 describe application-specific data--just add the section's name to the list
 (whereever you'd like), and define the corresponding partial. Then, if your
 new section requires information that isn't available by default, make sure
@@ -97,15 +119,26 @@ In the above case, @document and @person would be made available to the email
 renderer, allowing your new section(s) to access and display them. See the
 existing sections defined by the plugin for examples of how to write your own.
 
-== Advanced Customization
+== 404s errors
 
-By default, the email notifier will only notify on critical errors. For
-ActiveRecord::RecordNotFound and ActionController::UnknownAction, it will
-simply render the contents of your public/404.html file. Other exceptions
-will render public/500.html and will send the email notification. If you want
-to use different rules for the notification, you will need to implement your
-own rescue_action_in_public method. You can look at the default implementation
-in ExceptionNotifiable for an example of how to go about that.
+Notification is skipped if you return a 404 status, which happens by default 
+for an ActiveRecord::RecordNotFound or ActionController::UnknownAction error.
 
+== Manually notifying of error in a rescue block
+
+If your controller action manually handles an error, the notifier will never be
+run.  To manually notify of an error call notify_about_exception from within the
+rescue block
+
+  def index
+    #risky operation here
+  rescue StandardError => error
+    #custom error handling here
+    notify_about_exception(error)
+  end
+
+== Support and tickets
+
+https://rails.lighthouseapp.com/projects/8995-rails-plugins
 
 Copyright (c) 2005 Jamis Buck, released under the MIT license

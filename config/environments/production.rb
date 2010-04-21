@@ -18,9 +18,9 @@ config.action_controller.perform_caching             = true
 # config.action_mailer.raise_delivery_errors = false
 
 config.after_initialize do
-  ExceptionNotifier.exception_recipients = ArchiveConfig.ERROR_ADDRESS
-  ExceptionNotifier.sender_address = ArchiveConfig.RETURN_ADDRESS
-  ExceptionNotifier.email_prefix = ArchiveConfig.ERROR_PREFIX
+  ExceptionNotification::Notifier.exception_recipients = ArchiveConfig.ERROR_ADDRESS
+  ExceptionNotification::Notifier.sender_address = ArchiveConfig.RETURN_ADDRESS
+  ExceptionNotification::Notifier.email_prefix = ArchiveConfig.ERROR_PREFIX
 end
 
 case ArchiveConfig.PRODUCTION_CACHE
