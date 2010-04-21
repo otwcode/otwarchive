@@ -164,7 +164,7 @@ class TagsController < ApplicationController
     @children['SubTag'] = @tag.direct_sub_tags.by_name
     @children['Merger'] = @tag.mergers.by_name
     if @tag.respond_to?(:wranglers)
-      @wranglers = @tag.wranglers
+      @wranglers = @tag.canonical ? @tag.wranglers : (@tag.merger ? @tag.merger.wranglers : [])
     elsif @tag.respond_to?(:fandoms) && !@tag.fandoms.empty?
       @wranglers = @tag.fandoms.collect(&:wranglers).flatten.uniq
     end
