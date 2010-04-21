@@ -13,12 +13,13 @@
   <%- end -%>   
   </h4>
 <%- if !bookmark.bookmarkable.tags.blank? %>
-  <%- if not bookmark.bookmarkable.nil? -%>
-    <%= get_symbols_for(bookmark.bookmarkable) -%>
-  <%- end -%>
   <%- unless bookmark.bookmarkable.fandom_tags.blank? -%>  
     <h5 class="fandom" title="fandom"><%= bookmark.bookmarkable.fandom_tags.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', ') %></h5>
   <%- end -%>
+  <%- if not bookmark.bookmarkable.nil? -%>
+    <%= get_symbols_for(bookmark.bookmarkable) -%>
+  <%- end -%>
+
 </div>
   <%- author_tags = bookmark.bookmarkable.cast_tags
   unless author_tags.size < 1 -%>
