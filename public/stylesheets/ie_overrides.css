@@ -25,6 +25,7 @@ form.new_collection p, form.new_user p {font-size:1em;}
 #user-page {margin-top:1em;}
 .bookmark ul.required-tags, .comment div.icon, #main .bookmark .required-tags li { margin:0;}
 #main .required-tags li .warnings { margin-top: 3px; }
+.blurb .external .required-tags { left: 0; }
 
 /*min-height */
 .titles {height:70px; }

@@ -239,7 +239,7 @@ module WorksHelper
   end
 
   def get_complete_class(work)
-    return "category-none" if work.class == ExternalWork
+    return "category-none iswip" if work.class == ExternalWork
     if work.is_wip
       "complete-no iswip"
     else
