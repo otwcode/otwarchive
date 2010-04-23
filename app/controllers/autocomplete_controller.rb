@@ -120,7 +120,7 @@ class AutocompleteController < ApplicationController
   end
 
   def collection_filters_title
-    render_output(Collection.find(:all, :conditions => ["parent_id IS NULL AND title LIKE ?", params[:collection_filters_title] + '%'], :limit => 10, :order => :title).map(&:title))    
+    render_output(Collection.find(:all, :conditions => ["parent_id IS NULL AND title LIKE ?", '%' + params[:collection_filters_title] + '%'], :limit => 10, :order => :title).map(&:title))    
   end
 
   # tag wrangling finders
