@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100404223432) do
+ActiveRecord::Schema.define(:version => 20100420211328) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -363,6 +363,7 @@ ActiveRecord::Schema.define(:version => 20100404223432) do
     t.string   "offer_description_label"
     t.string   "time_zone"
     t.integer  "potential_match_settings_id"
+    t.datetime "assignments_sent_at"
   end
 
   create_table "gifts", :force => true do |t|
@@ -370,6 +371,7 @@ ActiveRecord::Schema.define(:version => 20100404223432) do
     t.string   "recipient_name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "pseud_id"
   end
 
   add_index "gifts", ["recipient_name"], :name => "index_gifts_on_recipient_name"
@@ -554,6 +556,8 @@ ActiveRecord::Schema.define(:version => 20100404223432) do
     t.boolean  "view_full_works",                   :default => false,                     :null => false
     t.string   "time_zone"
     t.boolean  "plain_text_skin",                   :default => false,                     :null => false
+    t.boolean  "admin_emails_off",                  :default => false,                     :null => false
+    t.boolean  "always_light_style",                :default => false,                     :null => false
   end
 
   add_index "preferences", ["user_id"], :name => "index_preferences_on_user_id"
@@ -645,6 +649,7 @@ ActiveRecord::Schema.define(:version => 20100404223432) do
     t.boolean  "reciprocal",  :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "translation", :default => false, :null => false
   end
 
   add_index "related_works", ["parent_id", "parent_type"], :name => "index_related_works_on_parent_id_and_parent_type"
@@ -725,20 +730,13 @@ ActiveRecord::Schema.define(:version => 20100404223432) do
     t.integer  "taggings_count",                    :default => 0
     t.boolean  "adult",                             :default => false
     t.string   "type"
-    t.integer  "media_id"
-    t.integer  "fandom_id"
     t.integer  "merger_id"
-    t.boolean  "wrangled",                          :default => false, :null => false
-    t.boolean  "has_characters",                    :default => false, :null => false
     t.boolean  "delta",                             :default => false
-    t.boolean  "ambiguous",                         :default => false
     t.integer  "last_wrangler_id"
     t.string   "last_wrangler_type"
   end
 
-  add_index "tags", ["fandom_id"], :name => "index_tags_on_fandom_id"
   add_index "tags", ["id", "type"], :name => "index_tags_on_id_and_type"
-  add_index "tags", ["media_id", "type"], :name => "index_tags_on_media_id_and_type"
   add_index "tags", ["merger_id"], :name => "index_tags_on_merger_id"
   add_index "tags", ["name"], :name => "index_tags_on_name", :unique => true
 

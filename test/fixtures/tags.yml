@@ -1517,17 +1517,6 @@ tag_1063754032:
   adult: false
   id: 1063754032
   type: Character
-tag_1063754080: 
-  name: Rockstar AU
-  merger_id: 
-  canonical: false
-  created_at: 2009-12-12 23:51:59 +00:00
-  delta: false
-  updated_at: 2009-12-12 23:51:59 +00:00
-  taggings_count: 1
-  adult: false
-  id: 1063754080
-  type: Freeform
 tag_1063753888: 
   name: Ianto
   merger_id: 1063753890
