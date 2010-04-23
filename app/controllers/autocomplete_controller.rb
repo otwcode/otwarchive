@@ -1,4 +1,5 @@
 class AutocompleteController < ApplicationController
+  skip_before_filter :store_location
 
   def render_output(result_strings, to_highlight="")
     @results = result_strings
@@ -120,7 +121,9 @@ class AutocompleteController < ApplicationController
   end
 
   def collection_filters_title
-    render_output(Collection.find(:all, :conditions => ["parent_id IS NULL AND title LIKE ?", '%' + params[:collection_filters_title] + '%'], :limit => 10, :order => :title).map(&:title))    
+    unless params[:collection_filters_title].blank?
+      render_output(Collection.find(:all, :conditions => ["parent_id IS NULL AND title LIKE ?", '%' + params[:collection_filters_title] + '%'], :limit => 10, :order => :title).map(&:title))    
+    end
   end
 
   # tag wrangling finders

@@ -19,6 +19,7 @@ Disallow:	/ru/
 Disallow:	/zh/
 Disallow:	/en/
 Disallow:	/works? # cruel but efficient
+Disallow: /autocomplete/
 
 User-agent:	Googlebot
 Disallow:	/cs/
@@ -34,6 +35,7 @@ Disallow:	/pt/
 Disallow:	/ru/
 Disallow:	/zh/
 Disallow:	/en/
+Disallow: /autocomplete/
 # Googlebot is smart and knows pattern matching
 Disallow: /works/*?
 Disallow:	/*?*query=
