@@ -119,7 +119,7 @@ namespace :deploy do
   task(:run_tests) do
     remind
     puts "Updating test db..."
-    puts %x{sudo su - www-data -c "rake db:migrate RAILS_ENV=test"}
+    puts %x{sudo su - www-data -c "rake db:test:clone_structure"}
     puts "Running tests (will take a while!)"
     puts %x{sudo su - www-data -c "rake test RAILS_ENV=test"}
   end
@@ -153,10 +153,16 @@ namespace :deploy do
     end
   end
   
-  desc "Restart sphinx on beta"
+  desc "Restart sphinx"
   task(:restart_sphinx => :get_server) do
     remind
-    puts %x{sudo su - 'www-data' -c "/usr/local/bin/ts.sh"}
+    puts %x{sudo su - 'www-data' -c "/usr/local/bin/ts_restart.sh"}
+  end
+
+  desc "Rebuild sphinx (slow)"
+  task(:rebuild_sphinx => :get_server) do
+    remind
+    puts %x{sudo su - 'www-data' -c "/usr/local/bin/ts_rebuild.sh"}
   end
   
   desc "Notify testers list that deploy is complete"
@@ -213,6 +219,12 @@ namespace :deploy do
 
     @yes = ask("Run the After migration tasks? (y/n): ").match(/[yY](es)?/)
     Rake::Task['deploy:run_after_tasks'].invoke if @yes
+
+    @yes = ask("Rebuild sphinx (only if indexes in models changed)? (y/n): ").match(/[yY](es)?/)
+    Rake::Task['deploy:rebuild_sphinx'].invoke if @yes      
+    
+    @yes = ask("Restart sphinx? (y/n): ").match(/[yY](es)?/)
+    Rake::Task['deploy:restart_sphinx'].invoke if @yes 
 
     @yes = ask("Restart testarchive? (y/n): ").match(/[yY](es)?/)
     Rake::Task['deploy:restart_test'].invoke if @yes
@@ -277,9 +289,14 @@ namespace :deploy do
       puts "*** deploy new code on otw1 before proceeding ***"
     end
     
-    # deploy sphinx
-    @yes = ask("Restart sphinx? (y/n): ").match(/[yY](es)?/)
-    Rake::Task['deploy:restart_sphinx'].invoke if @yes      
+    if @server == "otw1.transformativeworks.org"
+      # deploy sphinx
+      @yes = ask("Rebuild sphinx (indexes in models changed)? (y/n): ").match(/[yY](es)?/)
+      Rake::Task['deploy:rebuild_sphinx'].invoke if @yes      
+      
+      @yes = ask("Restart sphinx? (y/n): ").match(/[yY](es)?/)
+      Rake::Task['deploy:restart_sphinx'].invoke if @yes 
+    end
     
     ask("Restart webserver? (y/n): ").match(/[yY](es)?/)
     Rake::Task['deploy:restart_beta'].invoke if @yes      
@@ -292,7 +309,7 @@ namespace :deploy do
   end
   
   desc "Silent deploy: runs all tasks in order without checking"
-  task :all_test => [:update_code, :update_db, :run_tests, :shutdown_test, :deploy_code_test, :run_after_tasks, :restart_test, :notify_testers]
+  task :all_test => [:update_code, :update_db, :run_tests, :shutdown_test, :deploy_code_test, :run_after_tasks, :restart_sphinx, :restart_test, :notify_testers]
   
   desc "Fully reset and deploy, silently"
   task :all_with_reset_test => [:reset_test, :all_test]

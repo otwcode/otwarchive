@@ -45,9 +45,6 @@ namespace :local do
     run "echo -n 'REVISION: ' >> #{shared_path}/config/local.yml"
     run "cat #{release_path}/REVISION >> #{shared_path}/config/local.yml"
     run "ln -sf #{shared_path}/config/database.yml #{release_path}/config/database.yml" 
-    run "cd #{release_path} && ruby script/delayed_job stop"
-    run "cd #{release_path} && rake ts:rebuild"
-    run "cd #{release_path} && ruby script/delayed_job start"
   end
 end
 
