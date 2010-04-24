@@ -77,13 +77,15 @@
         </li>
 	    </ul>    
     </div>
-    <div class="sidebar-box">
-       <h3>News</h3>
-       <p>
-         <%- if @admin_post -%><%= link_to sanitize_title_for_display(@admin_post.title), @admin_post %><%- end -%>
-       </p>
-      <p><%= link_to t('page.more_news', :default => 'More news&#8230;'), admin_posts_path %></p>
-    </div>
+    <%- if @admin_post -%>
+      <div class="sidebar-box">
+        <h3>News</h3>
+        <p><%= link_to sanitize_title_for_display(@admin_post.title), @admin_post %></p>
+        <%- if @admin_post_show_more -%>
+          <p><%= link_to t('page.more_news', :default => 'More news&#8230;'), admin_posts_path %></p>
+        <%- end -%>
+      </div>
+    <%- end -%>
     <div class="sidebar-box">
       <h3>About</h3>
       <p>
