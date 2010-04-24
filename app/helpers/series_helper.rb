@@ -59,7 +59,7 @@ module SeriesHelper
     choosenotto = true
     warning_tags.map(&:name).each do |name|
       none = false if name != ArchiveConfig.WARNING_NONE_TAG_NAME
-      choosenotto = false if name !=ArchiveConfig.WARNING_DEFAULT_TAG_NAME
+      choosenotto = false if name !=ArchiveConfig.WARNING_DEFAULT_TAG_NAME && name != ArchiveConfig.WARNING_NONE_TAG_NAME
     end
     return "warning-no warnings" if none
     return "warning-choosenotto warnings" if choosenotto
