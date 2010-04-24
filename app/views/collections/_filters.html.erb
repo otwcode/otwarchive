@@ -19,7 +19,7 @@
         <%= radio_button_tag "collection_filters[closed]", false, params[:collection_filters][:closed] == "false" -%>
         <%= label_tag "collection_filters_closed_false", "No" %>   
         <%= radio_button_tag "collection_filters[closed]", '', params[:collection_filters][:closed] == "" -%>
-        <%= label_tag "collection_filters_closed_any", "Either" %>          
+        <%= label_tag "collection_filters_closed_", "Either" %>          
       </dd>
       <dt>Moderated</dt>
       <dd>
@@ -28,7 +28,7 @@
         <%= radio_button_tag "collection_filters[moderated]", false, params[:collection_filters][:moderated] == "false" -%>
         <%= label_tag "collection_filters_moderated_false", "No" %>
         <%= radio_button_tag "collection_filters[moderated]", '', params[:collection_filters][:moderated] == "" -%>
-        <%= label_tag "collection_filters_moderated_any", "Either" %>    
+        <%= label_tag "collection_filters_moderated_", "Either" %>    
       </dd>
     </dl>
     <div class="clear"><!--purely presentational for IE6; phase me out--></div>
