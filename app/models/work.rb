@@ -489,8 +489,11 @@ class Work < ActiveRecord::Base
   end
 
   # Get the total number of posted chapters for a work
+  # Issue 1316: total number needs to reflect the actual number of chapters posted
+  # rather than the total number of chapters indicated by user
   def number_of_posted_chapters
-     Chapter.maximum(:position, :conditions => {:work_id => self.id, :posted => true}) || 0
+    self.chapters.count(:conditions => {:work_id => self.id, :posted => true}) || 0
+     #Chapter.maximum(:position, :conditions => {:work_id => self.id, :posted => true}) || 0
   end
 
   # Gets the current first chapter
