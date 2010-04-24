@@ -19,6 +19,9 @@
 
 # Learn more: http://github.com/javan/whenever
 
+# set your path in cron before the whenever section and use --update-crontab
+set :set_path_automatically, false
+
 set :cron_log, "/tmp/www-data.log"
 
 case @environment
