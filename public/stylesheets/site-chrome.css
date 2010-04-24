@@ -74,7 +74,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
 #main li.bookmark .own .navigation
 			{ float: left; margin:0.25em auto auto -0.25em;}
 #main li.comment ul.navigation 
-			{ clear:both;}
+			{ position: absolute; bottom: 0.2em; right: 0.2em; float: none; margin: 0; }
 .pagination { font: 100 1em 'Lucida Grande', Geneva, Verdana, Helvetica, Arial, sans-serif; margin: .5em auto; padding: 0.25em; text-align: center }
  #main .pagination a							
 			{ border:0;}
