@@ -21,7 +21,7 @@
 <%- if logged_in? && @work -%>
     <li id="add_bookmark_link"><%= bookmark_link(commentable) %></li>			
 <%- end -%>
-<% if commentable.count_visible_comments > 0 -%>
+<% if commentable.count_visible_comments > 0 && !commentable.is_a?(Tag) -%>
     <li id="show_comments_link"><%= show_hide_comments_link(commentable) -%></li>
 <%- end -%>
     <li id="add_comment_link"><%= add_cancel_comment_link(commentable) -%></li>
