@@ -35,6 +35,8 @@ class Pseud < ActiveRecord::Base
 
   has_many :prompts, :dependent => :destroy
   
+  before_validation :clear_icon
+  
   validates_presence_of :name
   validates_length_of :name, 
     :within => NAME_LENGTH_MIN..NAME_LENGTH_MAX, 
@@ -232,6 +234,20 @@ class Pseud < ActiveRecord::Base
       default_pseud = self.user.pseuds.select{|ps| ps.name.downcase == self.user_name.downcase}.first
       default_pseud.update_attribute(:is_default, true)
     end
+  end
+  
+  # Delete current icon (thus reverting to archive default icon)
+  def delete_icon=(value)
+    @delete_icon = !value.to_i.zero?
+  end
+  
+  def delete_icon
+    !!@delete_icon
+  end
+  alias_method :delete_icon?, :delete_icon
+  
+  def clear_icon
+    self.icon = nil if delete_icon? && !icon.dirty?
   end
     
 end

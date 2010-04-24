@@ -24,6 +24,10 @@
    <p class="icon">
      <%= image_tag(@pseud.icon.url(:standard), :alt => @pseud.icon_alt_text, :class => "icon") %>
    </p>
+   <%- if @pseud.icon_file_name -%>
+     <%= f.check_box :delete_icon, {:checked => false} %>
+     <%= f.label :delete_icon, 'Delete this icon and revert to archive default icon' %><br/>
+   <%- end -%>
    <%= f.label :icon, "Upload a new icon:" %>
    <%= f.file_field :icon %>
    <p>You may currently have one icon for each pseud. Icons may be in png, jpeg or gif format.</p>
