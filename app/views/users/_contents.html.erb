@@ -1,7 +1,7 @@
 ﻿<!--main content-->
 <!-- expects @works, @series, @bookmarks -->
   <%- unless @works.blank? -%>
-  <div class="work module<%- if current_user = @user -%> works-own<%- end -%>" id="user-works">
+  <div class="work module<%- if current_user == @user -%> works-own<%- end -%>" id="user-works">
     <h3><%=h t('recent_works', :default => "Recent works") %></h3>
     <ul class="index">
       <%- for work in @works -%>
@@ -15,7 +15,7 @@
   <%- end -%>
   
   <%- unless @series.blank? -%>
-  <div class="series module<%- if current_user = @user -%> works-own<%- end -%>" id="user-series">
+  <div class="series module<%- if current_user == @user -%> works-own<%- end -%>" id="user-series">
     <h3><%=h t('recent_series', :default => "Recent series") %></h3>
     <ul class="index">
       <%- for series in @series -%>

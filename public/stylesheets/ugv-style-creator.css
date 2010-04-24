@@ -2,6 +2,7 @@
 .flashback					{ font-style:italic; }
 .caps						{ font-variant:small-caps; }
 .user-generated-view .font-red { color: red; }
+.user-generated-view .font-blue { color: blue; }
 .user-generated-view .font-serif { font-family: "Cambria, Constantia, Palatino, Georgia, serif"; }
 .user-generated-view .font-big { font-size: bigger; }
 .user-generated-view .font-small { font-size: smaller; }
