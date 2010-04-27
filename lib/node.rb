@@ -20,7 +20,7 @@ class Node
   end
   
   def block_container_tag?
-    ['div', 'blockquote', 'hr', 'center', 'ul', 'ol', 'dl'].include?(self.tag_name)
+    ['div', 'blockquote', 'center', 'ul', 'ol', 'dl'].include?(self.tag_name)
   end
   
   def inline_tag?
