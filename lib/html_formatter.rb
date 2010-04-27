@@ -566,6 +566,7 @@ module HtmlFormatter
             new_paragraph.call()
           end
           node.children = tidy_nodes(node.children, block_container, inline)
+          inline = false
           if node.block_container_tag?
             new_paragraph.call()
             current_paragraph = node.clone
@@ -585,6 +586,7 @@ module HtmlFormatter
             if node.inline_tag?
               #node.children = tidy_nodes(node.children, block_container, inline=true)
               node.add_paragraph_tags_to_children(inline=true)
+              inline = false
             end
           end
         end
