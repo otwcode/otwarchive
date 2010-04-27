@@ -9,16 +9,16 @@ Feature: Create Works
 		Then I should see "Please log in"
 
 	Scenario: Creating a new valid work
-		Given I am logged in as a random user
+		Given I have a canonical Warning tag named "No Warnings"
+		And I am logged in as a random user
 		When I go to the new work page
 		And I select "Not Rated" from "Rating"
-		And I select "Choose Not To Warn" from "Warning"
-		And I select "Gen" from "Category"
+		And I check "No Warnings"
 		And I fill in "Fandoms" with "Supernatural"
-		And I fill in "Add Title" with "All Hell Breaks Loose"
+		And I fill in "Work Title" with "All Hell Breaks Loose"
 		And I fill in "content" with "Bad things happen, etc."
 		When I press "Preview"
-		Then I should see "Preview Story"
+		Then I should see "Preview Work"
 		When I press "Post"
 		Then I should see "Work was successfully posted."
 		When I go to the list of works

@@ -3,14 +3,16 @@ module NavigationHelpers
   #
   #   When /^I go to (.+)$/ do |page_name|
   #
-  # step definition in webrat_steps.rb
+  # step definition in web_steps.rb
   #
   def path_to(page_name)
     case page_name
     
-    when /the homepage/
+    when /the home\s?page/
       '/'
-      
+    
+    # Add more mappings here.
+
     when /the list of works/
       works_path     
     when /the new work page/
@@ -26,9 +28,11 @@ module NavigationHelpers
       user_path(current_user)
     when /the new user page/
       new_user_path
-    
-    # Add more mappings here.
-    # Here is a more fancy example:
+     
+    when /the tag search page/
+      search_tags_path
+
+    # Here is an example that pulls values out of the Regexp:
     #
     #   when /^(.*)'s profile page$/i
     #     user_profile_path(User.find_by_login($1))

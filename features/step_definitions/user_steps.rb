@@ -39,3 +39,4 @@ When /^I visit user page for "([^\"]*)"$/ do |login|
   user = User.find_by_login!(login)
   visit user_url(user)
 end
+

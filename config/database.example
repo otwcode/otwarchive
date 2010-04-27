@@ -12,13 +12,17 @@ development:
 # Warning: The database defined as 'test' will be erased and
 # re-generated from your development database when you run 'rake'.
 # Do not set this db to the same as development or production.
-test:
+test: &TEST
   database: otwarchive_test
   <<: *defaults
 
 production:
   database: otwarchive_production
   <<: *defaults
+
+cucumber:
+  <<: *TEST
+
 
 #
 # The following is an example of how to set up the db for sqlite3

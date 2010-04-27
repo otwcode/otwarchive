@@ -1,7 +1,7 @@
 <% form_tag works_path, :id => 'search_main', :class => 'search', :role => 'search', :method => :get do -%>
   <fieldset>
 	<legend>Search for works</legend>
-	<p><%= t('refine_search', :default => 'Refine your search') -%>: <%= text_field_tag :query, params[:query], :class => 'text', :title => 'site search' %>
+	<p><%= t('refine_search', :default => 'Refine your search') -%>: <%= text_field_tag :query, params[:query], :class => 'text', :title => 'site search', :id => 'refine_search' %>
   <span class="submit"><%= submit_tag t('forms.search', :default => 'Search'), :class => 'button', :name => nil %></span></p>
 </fieldset>
 <% end -%>
