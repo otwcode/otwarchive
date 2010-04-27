@@ -143,4 +143,4 @@ end # this is the end that you have to put new tasks above
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
 #task :After => ['After:fix_warnings', 'After:tidy_wranglings', 'After:exorcise_syns', 'After:deleted_invites_cleanup']
-task :After => ['After:common_tagging_cleanup']
+task :After => []
