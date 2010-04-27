@@ -566,14 +566,12 @@ module HtmlFormatter
             new_paragraph.call()
           end
           node.children = tidy_nodes(node.children, block_container, inline)
-          inline = false
-          if node.block_container_tag?
+          if !inline
             new_paragraph.call()
             current_paragraph = node.clone
             new_paragraph.call()
-          else
-            #current_paragraph.children << node
           end
+          inline = false
         else
           if node.self_closing?
             new_node = Node.new(:node_type => :html, :tag_name => node.tag_name, :tag_attributes => node.tag_attributes, :contents => nil)
