@@ -125,9 +125,11 @@ class WorksController < ApplicationController
     @tag = nil
     @selected_tags = []
     @selected_pseuds = []
-    @sort_column = params[:sort_column] || 'date'
-    @sort_direction = params[:sort_direction] || 'DESC'
-    
+    @sort_column = (valid_sort_column(params[:sort_column]) ? params[:sort_column] : 'date')
+    @sort_direction = (valid_sort_direction(params[:sort_direction]) ? params[:sort_direction] : 'DESC')
+    if !params[:sort_direction].blank? && !valid_sort_direction(params[:sort_direction])
+      params[:sort_direction] = 'DESC'
+    end
     # numerical ids for now
     unless params[:selected_pseuds].blank?
       begin

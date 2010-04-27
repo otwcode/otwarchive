@@ -31,7 +31,8 @@
     <%= f.text_area "#{params[:show].singularize}_string", :size => "100x5" %>
     <%= autocomplete_text_field_with_type @tag, "tag_#{params[:show].singularize}_string" -%>
     <%= hidden_field_tag :show, params[:show] %> 
-    <%= hidden_field_tag :sort, params[:sort] %>
+    <%= hidden_field_tag :sort_column, params[:sort_column] %>
+    <%= hidden_field_tag :sort_direction, params[:sort_direction] %>
     <%= hidden_field_tag :page, params[:page] %> 
     <%= hidden_field_tag :status, params[:status] %>
     <%= f.submit 'Wrangle' %>    
@@ -56,14 +57,11 @@
   
   <%- form_tag url_for(:controller => 'tags', :action => 'mass_update'), :method => :post, :id => 'wrangulator' do -%>   
     <p class="submit"><%= submit_tag "Wrangle" %></p>
+    <% sort_url_options = {:show => params[:show], :status => params[:status], :sort_column => params[:sort_column]} %>
     <table>
       <tr>
         <th>
-          <%- if params[:sort].blank? || params[:sort] == "name ASC" -%>
-            <%= link_to 'Tag Name&#160;&#8595;<span class="landmark">descending</span>', url_for(:show => params[:show], :status => params[:status], :sort => "name DESC") %>
-          <%- else -%>
-            <%= link_to 'Tag Name&#160;&#8593;<span class="landmark">ascending</span>', url_for(:show => params[:show], :status => params[:status], :sort => "name ASC") %>          
-          <%- end -%>
+          <%= sort_link t('sort.tag_name', :default => 'Tag Name'), :name, {:sort_default => true} -%>
         </th>
         <%- if params[:show] == "pairings" -%>
         <th>Characters</th>
@@ -75,18 +73,10 @@
         <th>Synonym</th>
         <%- end -%>
         <th>
-          <%- if params[:sort] == "created_at DESC" -%>
-            <%= link_to 'Created&#160;&#8593;<span class="landmark">ascending</span>', url_for(:show => params[:show], :status => params[:status], :sort => "created_at ASC") %>
-          <%- else -%>
-            <%= link_to 'Created&#160;&#8595;<span class="landmark">descending</span>', url_for(:show => params[:show], :status => params[:status], :sort => "created_at DESC") %>          
-          <%- end -%>        
+          <%= sort_link t('sort.created_at', :default => 'Created'), :created_at, {:desc_default => true} -%>
         </th>
         <th>
-          <%- if params[:sort] == "taggings_count DESC" -%>
-            <%= link_to 'Taggings Count&#160;&#8593;<span class="landmark">ascending</span>', url_for(:show => params[:show], :status => params[:status], :sort => "taggings_count ASC") %>
-          <%- else -%>
-            <%= link_to 'Taggings Count&#160;&#8595;<span class="landmark">descending</span>', url_for(:show => params[:show], :status => params[:status], :sort => "taggings_count DESC") %>          
-          <%- end -%>        
+          <%= sort_link t('sort.taggings_count', :default => 'Taggings Count'), :taggings_count, {:desc_default => true} -%>
         </th>
         <th scope="col">Manage</th>    
       </tr>
@@ -134,7 +124,8 @@
     </table>
     <p>
     <%= hidden_field_tag :show, params[:show] %> 
-    <%= hidden_field_tag :sort, params[:sort] %>
+    <%= hidden_field_tag :sort_column, params[:sort_column] %>
+    <%= hidden_field_tag :sort_direction, params[:sort_direction] %>
     <%= hidden_field_tag :page, params[:page] %>
     <%= hidden_field_tag :status, params[:status] %>
     </p>

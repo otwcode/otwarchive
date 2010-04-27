@@ -155,15 +155,19 @@ module ApplicationHelper
     condition = options[:unless] if options.has_key?(:unless)
 
     unless column.nil?
-      if params[:sort_column] == column.to_s # is this the column that is currently doing the sorting?
-        direction = params[:sort_direction] == 'ASC' ? 'DESC' : 'ASC'
-        link_to_unless condition, (direction == 'ASC' ? '&#8593; <span
-      class="landmark">ascending</span>' : '&#8595; <span class="landmark">descending</span>') + title, 
-          request.parameters.merge( {:sort_column => column, :sort_direction => direction} ), {:class => "current"}
+      current_column = (params[:sort_column] == column.to_s) || params[:sort_column].blank? && options[:sort_default]
+      css_class = current_column ? "current" : nil
+      if current_column # explicitly or implicitly doing the existing sorting, so we need to toggle
+        if params[:sort_direction]
+          direction = params[:sort_direction].to_s.upcase == 'ASC' ? 'DESC' : 'ASC'
+        else 
+          direction = options[:desc_default] ? 'ASC' : 'DESC'
+        end
       else
-        link_to_unless condition, '&#8593; <span class="landmark">ascending</span>' + title,
-          request.parameters.merge( {:sort_column => column, :sort_direction => 'ASC'} )
+        direction = options[:desc_default] ? 'DESC' : 'ASC'
       end
+      link_to_unless condition, (direction == 'ASC' ? '&#8593;<span class="landmark">ascending</span>&#160;' : '&#8595;<span class="landmark">descending</span>&#160;') + title, 
+          request.parameters.merge( {:sort_column => column, :sort_direction => direction} ), {:class => css_class}
     else
       link_to_unless params[:sort_column].nil?, title, url_for(:overwrite_params => {:sort_column => nil, :sort_direction => nil})
     end

@@ -12,7 +12,9 @@ class TagWranglingsController < ApplicationController
       @counts[klass.to_s.downcase.pluralize.to_sym] = klass.unwrangled.count
     end
     unless params[:show].blank?
-      sort = params[:sort] || 'name ASC' 
+      params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], 'tag')
+      params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
+      sort = params[:sort_column] + " " + params[:sort_direction] 
       if sort.include?('suggested')
         sort = sort + ", name ASC"
       end
@@ -37,8 +39,9 @@ class TagWranglingsController < ApplicationController
   
   def wrangle
     params[:page] = '1' if params[:page].blank?
-    params[:sort] = 'name ASC' if params[:sort].blank?
-    options = {:show => params[:show], :page => params[:page], :sort => params[:sort]}
+    params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], 'tag')
+    params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
+    options = {:show => params[:show], :page => params[:page], :sort_column => params[:sort_column], :sort_direction => params[:sort_direction]}
     unless params[:canonicals].blank?
       canonicals = Tag.find(params[:canonicals])
       canonicals.each do |tag|

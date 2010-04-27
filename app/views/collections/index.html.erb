@@ -32,8 +32,8 @@
   <ul class="sorting navigation" role="navigation">
     <li><h4><%= t('sort_by', :default => 'Sort By') -%></h4></li>
     <li><%= sort_link t('sort.title', :default => 'Title'), :title -%></li>
-    <li><%= sort_link t('sort.date', :default => 'Date'), :created_at -%></li>
-    <li><%= sort_link t('sort.size', :default => 'Size'), :count -%></li>
+    <li><%= sort_link t('sort.date', :default => 'Date'), :created_at, {:sort_default => true, :desc_default => true} -%></li>
+    <li><%= sort_link t('sort.size', :default => 'Size'), :count, {:desc_default => true} -%></li>
   </ul>
 <!---/subnav-->
 <%- end -%>

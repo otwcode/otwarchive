@@ -1140,7 +1140,7 @@ class Work < ActiveRecord::Base
       when "author" then "authors_to_sort_on "
       when "word_count" then "word_count "
       when "date" then "revised_at "
-      when "hits" then "hit_count "
+      when "hit_count" then "hit_count "
       else ""
     end
 

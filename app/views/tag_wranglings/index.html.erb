@@ -79,45 +79,29 @@ get started. (Note: to associate pairings with characters, first choose a fandom
 		<col span="4" />
 	</colgroup>
 	<thead> 
-    	<tr>
+    <tr>
 			<th scope="col">
-            <%- if params[:sort].blank? || params[:sort] == "name ASC" -%>
-              <%= link_to 'Tag Name&#160;&#8595;<span class="landmark">descending</span>', url_for(:show => params[:show], :sort => "name DESC", :fandom_string => params[:fandom_string]) %>
-            <%- else -%>
-              <%= link_to 'Tag Name&#160;&#8593;<span class="landmark">ascending</span>', url_for(:show => params[:show], :sort => "name ASC", :fandom_string => params[:fandom_string]) %>          
-            <%- end -%>
-          </th>
-          <th scope="col">Mass Wrangle</th>         
-          <th scope="col">
-            <%- if params[:sort] == "created_at DESC" -%>
-              <%= link_to 'Created&#160;&#8593;<span class="landmark">ascending</span>', url_for(:show => params[:show], :sort => "created_at ASC", :fandom_string => params[:fandom_string]) %>
-            <%- else -%>
-              <%= link_to 'Created&#160;&#8595;<span class="landmark">descending</span>', url_for(:show => params[:show], :sort => "created_at DESC", :fandom_string => params[:fandom_string]) %>          
-            <%- end -%>
-          </th>
-          <%- if params[:show] == 'character_pairings' -%>
-          <th scope="col">Characters</th>  
-          <%- elsif params[:show] != "fandoms" -%>
-          <th scope="col">
-            <%- if params[:sort] == "suggested_fandoms ASC" -%>
-              <%= link_to 'Suggested Fandoms&#160;&#8595;<span class="landmark">descending</span>', url_for(:show => params[:show], :sort => "suggested_fandoms DESC", :fandom_string => params[:fandom_string]), :title => 'Fandoms associated with the same works as this tag.' %>
-            <%- else -%>
-              <%= link_to 'Suggested Fandoms&#160;&#8593;<span class="landmark">ascending</span>', url_for(:show => params[:show], :sort => "suggested_fandoms ASC", :fandom_string => params[:fandom_string]), :title => 'Fandoms associated with the same works as this tag.' %>          
-            <%- end -%>
-          </th>
-          <%- end -%>
-          <th scope="col">Canonical</th>
-          <th scope="col">
-            <%- if params[:sort] == "taggings_count DESC" -%>
-              <%= link_to 'Taggings Count&#160;&#8593;<span class="landmark">ascending</span>', url_for(:show => params[:show], :sort => "taggings_count ASC", :fandom_string => params[:fandom_string]) %>
-            <%- else -%>
-              <%= link_to 'Taggings Count&#160;&#8595;<span class="landmark">descending</span>', url_for(:show => params[:show], :sort => "taggings_count DESC", :fandom_string => params[:fandom_string]) %>          
-            <%- end -%>
-          </th> 
-          <th scope="col">Manage</th>  
-        </tr>
-      </thead>
-		<tfoot>
+        <%= sort_link t('sort.tag_name', :default => 'Tag Name'), :name, {:sort_default => true} -%>
+      </th>
+      <th scope="col">Mass Wrangle</th>         
+      <th scope="col">
+        <%= sort_link t('sort.created_at', :default => 'Created'), :created_at, {:desc_default => true} -%>
+      </th>
+      <%- if params[:show] == 'character_pairings' -%>
+        <th scope="col">Characters</th>  
+      <%- elsif params[:show] != "fandoms" -%>
+        <th scope="col">
+          <%= sort_link t('sort.suggested_fandoms', :default => 'Suggested Fandoms'), :suggested_fandoms, {:title => 'Fandoms associated with the same works as this tag.'} -%>
+        </th>
+      <%- end -%>
+      <th scope="col">Canonical</th>
+      <th scope="col">
+        <%= sort_link t('sort.taggings_count', :default => 'Taggings Count'), :taggings_count, {:desc_default => true} -%>
+      </th> 
+      <th scope="col">Manage</th>  
+    </tr>
+  </thead>
+  <tfoot>
 			<tr>
 				<th scope="row">Action:</th>
 				<td colspan="5"><span class="submit"><%= submit_tag "Wrangle" %></span></td>
@@ -163,7 +147,8 @@ get started. (Note: to associate pairings with characters, first choose a fandom
 </fieldset>
     <p>
     <%= hidden_field_tag :show, params[:show] %> 
-    <%= hidden_field_tag :sort, params[:sort] %>
+    <%= hidden_field_tag :sort_column, params[:sort_column] %>
+    <%= hidden_field_tag :sort_direction, params[:sort_direction] %>
     <%= hidden_field_tag :page, params[:page] %>
     <%= hidden_field_tag(:fandom_string, params[:fandom_string]) if params[:fandom_string] && params[:show] == "character_pairings" %>
     </p>

@@ -44,14 +44,14 @@
   <ul class="sorting navigation" role="navigation">
     <li><h4><%= t('sort_by', :default => 'Sort By') -%></h4></li>
     <%- unless @query.blank? -%>
-    <li><%= sort_link t('sort.relevance', :default => 'Relevance') %></li>
+      <li><%= sort_link t('sort.relevance', :default => 'Relevance') %></li>
     <%- end -%>
     <li><%= sort_link t('sort.author', :default => 'Author'), :author -%></li>
     <li><%= sort_link t('sort.title', :default => 'Title'), :title -%></li>
-    <li><%= sort_link t('sort.date', :default => 'Date'), :date -%></li>
-    <li><%= sort_link t('sort.word_count', :default => 'Word Count'), :word_count -%></li>
+    <li><%= sort_link t('sort.date', :default => 'Date'), :date, {:sort_default => @query.blank?, :desc_default => true} -%></li>
+    <li><%= sort_link t('sort.word_count', :default => 'Word Count'), :word_count, {:desc_default => true} -%></li>
     <% unless logged_in? && current_user.preference.hide_all_hit_counts -%>
-    <li><%= sort_link t('sort.hit_count', :default => 'Hits'), :hit_count -%></li>
+      <li><%= sort_link t('sort.hit_count', :default => 'Hits'), :hit_count, {:desc_default => true} -%></li>
     <% end %>
   </ul>
   <%- if params[:query] -%>

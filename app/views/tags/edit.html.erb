@@ -92,52 +92,52 @@
   </dl>
 </fieldset>
 
-<%- if @tag.canonical? %>
-<fieldset>
-  <legend>Child tags:</legend>
-  <p><%= link_to 'wrangle all child tags', {:controller => :tags, :action => :wrangle, :id => @tag} %></p>
-  <dl>    
-    <%- @tag.child_types.each do |tag_type| -%>
-      <dt><%= f.label tag_type.underscore + '_string', tag_category_name(tag_type) %></dt>
-      <dd>
-        <%= f.text_field tag_type.underscore + '_string', :class => 'tags' %>
-        <%= autocomplete_text_field_with_type @tag, "tag_#{tag_type.underscore}_string" -%><br />
-        <%- if @children[tag_type] -%>
-          <%- @children[tag_type][0..19].in_groups(2, false) do |tag_list| -%>
-          <ul class="tags">
-          <%- for tag in tag_list -%>
-            <li>
-              <%= link_to_edit_tag(tag) %>
-              <span>
-                <%= link_to 'remove', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %>
-              </span>              
-            </li>
-          <%- end -%>
-          </ul>
-          <%- end -%>
-          <%- if @children[tag_type].length > 20 -%>
-          <p><%= link_to "See all (#{@tag.send(tag_type.underscore.pluralize).count})", {:controller => :tags, :action => :wrangle, :id => @tag, :show => tag_type.underscore.pluralize} %></p>   
-          <%- end -%>
-        <%- end -%>    
-      </dd> 
-    <%- end -%>  
-  </dl>
-</fieldset>
-<%- end -%>
-
-<%- elsif @tag.is_a?(Media) -%>
-<p><%= link_to 'See all fandoms', {:controller => :tags, :action => :wrangle, :id => @tag, :show => 'fandoms'} %></p>
-<%- end -%>  
+  <%- if @tag.canonical? %>
   <fieldset>
-	<legend>Submit</legend>
+    <legend>Child tags:</legend>
+    <p><%= link_to 'wrangle all child tags', {:controller => :tags, :action => :wrangle, :id => @tag} %></p>
+    <dl>    
+      <%- @tag.child_types.each do |tag_type| -%>
+        <dt><%= f.label tag_type.underscore + '_string', tag_category_name(tag_type) %></dt>
+        <dd>
+          <%= f.text_field tag_type.underscore + '_string', :class => 'tags' %>
+          <%= autocomplete_text_field_with_type @tag, "tag_#{tag_type.underscore}_string" -%><br />
+          <%- if @children[tag_type] -%>
+            <%- @children[tag_type][0..19].in_groups(2, false) do |tag_list| -%>
+            <ul class="tags">
+            <%- for tag in tag_list -%>
+              <li>
+                <%= link_to_edit_tag(tag) %>
+                <span>
+                  <%= link_to 'remove', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %>
+                </span>              
+              </li>
+            <%- end -%>
+            </ul>
+            <%- end -%>
+            <%- if @children[tag_type].length > 20 -%>
+            <p><%= link_to "See all (#{@tag.send(tag_type.underscore.pluralize).count})", {:controller => :tags, :action => :wrangle, :id => @tag, :show => tag_type.underscore.pluralize} %></p>   
+            <%- end -%>
+          <%- end -%>    
+        </dd> 
+      <%- end -%>  
+    </dl>
+  </fieldset>
+  <%- end -%>
+  <%- elsif @tag.is_a?(Media) -%>
+    <p><%= link_to 'See all fandoms', {:controller => :tags, :action => :wrangle, :id => @tag, :show => 'fandoms'} %></p>
+  <%- end -%>
+
+  <fieldset>
+  <legend>Submit</legend>
   <p class="submit">
-  <%= submit_tag "Save changes" %>
+    <%= submit_tag "Save changes" %>
   </p>
-</fieldset>
+  </fieldset>
 <%- end -%>
 
 <%- if logged_in_as_admin? -%>
-<p>Last updated by <%= @tag.last_wrangler.andand.login || '---' %> on <%= @tag.updated_at %></p>  
+  <p>Last updated by <%= @tag.last_wrangler.andand.login || '---' %> on <%= @tag.updated_at %></p>  
 <%- end -%>
 <!--/content-->
 

@@ -232,7 +232,23 @@ class ApplicationController < ActionController::Base
         super
     end
   end
-    
+
+  def valid_sort_column(param, model='work')
+    allowed = []
+    if model.to_s.downcase == 'work'
+      allowed = ['author', 'title', 'date', 'word_count', 'hit_count']
+    elsif model.to_s.downcase == 'tag'
+      allowed = ['name', 'created_at', 'suggested_fandoms', 'taggings_count']
+    elsif model.to_s.downcase == 'collection'
+      allowed = ['title', 'created_at', 'count']
+    end
+    !param.blank? && allowed.include?(param.to_s.downcase)
+  end
+
+  def valid_sort_direction(param)
+    !param.blank? && ['asc', 'desc'].include?(param.to_s.downcase)
+  end
+      
   #### -- AUTHORIZATION -- ####
 
   # See ActionController::RequestForgeryProtection for details

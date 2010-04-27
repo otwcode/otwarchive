@@ -177,8 +177,9 @@ class TagsController < ApplicationController
       flash[:notice] = t('successfully_updated', :default => 'Tag was updated.')
       if params[:commit] == "Wrangle"
         params[:page] = '1' if params[:page].blank?
-        params[:sort] = 'name ASC' if params[:sort].blank?
-        redirect_to url_for(:controller => :tags, :action => :wrangle, :id => params[:id], :show => params[:show], :page => params[:page], :sort => params[:sort], :status => params[:status])        
+        params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], "tag")
+        params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
+        redirect_to url_for(:controller => :tags, :action => :wrangle, :id => params[:id], :show => params[:show], :page => params[:page], :sort_column => params[:sort_column], :sort_direction => params[:sort_direction], :status => params[:status])        
       else
         redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag)
       end
@@ -215,7 +216,9 @@ class TagsController < ApplicationController
       @counts[tag_type] = @tag.send(tag_type).count
     end
     unless params[:show].blank?
-      sort = params[:sort] || 'name ASC' 
+      params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], 'tag')
+      params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
+      sort = params[:sort_column] + " " + params[:sort_direction]
       if sort.include?('suggested')
         sort = sort + ", name ASC"
       end
@@ -231,7 +234,8 @@ class TagsController < ApplicationController
   
   def mass_update
     params[:page] = '1' if params[:page].blank?
-    params[:sort] = 'name ASC' if params[:sort].blank?
+    params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], 'tag')
+    params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
     unless params[:canonicals].blank?
       saved = []
       not_saved = []
@@ -249,6 +253,6 @@ class TagsController < ApplicationController
         flash[:error] = "The following tags weren't saved: #{not_saved.collect(&:name).join(', ')}"
       end
     end
-    redirect_to url_for(:controller => :tags, :action => :wrangle, :id => params[:id], :show => params[:show], :page => params[:page], :sort => params[:sort], :status => params[:status])            
+    redirect_to url_for(:controller => :tags, :action => :wrangle, :id => params[:id], :show => params[:show], :page => params[:page], :sort_column => params[:sort_column], :sort_direction => params[:sort_direction], :status => params[:status])            
   end  
 end
