@@ -13,13 +13,6 @@ backupdir = RAILS_ROOT + '/db/seed'
 FileUtils.mkdir_p(backupdir)
 FileUtils.chdir(backupdir)
 
-puts "restoring Roles"
-YAML.load_documents(File.read("roles_users.yml")) do |item|
-  user = User.find_by_id(item["user_id"])
-  role = Role.find_by_id(item["role_id"])
-  user.roles << role if user
-end
-
 Dir.glob("*.yml").each do |file|
   klass = file.gsub('.yml', '').camelcase.constantize rescue nil
   puts "skipping #{file}" unless klass
@@ -30,20 +23,26 @@ Dir.glob("*.yml").each do |file|
   klass.after_create.clear
   klass.before_save.clear
   klass.after_save.clear
+  Media.delete_all if klass == Media
   YAML.load_documents(File.read(file)) do |item|
     unless klass.find_by_id(item["id"])
-      if klass == Media
-        new = klass.find_by_name(item["name"])
-        new = klass.new(item) unless new
-      else
-        new = klass.new(item)
-      end
+      new = klass.new(item)
       new.id = item["id"]
       new.save_with_validation(false)
+      # Users and Admins don't save crypted_password or salt on create
       if klass == User || klass == Admin
         klass.before_update.clear
-        item.each {|k,v| new.update_attribute(k, v)}
+        new.update_attribute(:crypted_password, item["crypted_password"])
+        new.update_attribute(:salt, item["salt"])
       end
     end
   end
 end
+
+puts "restoring Role associations"
+YAML.load_documents(File.read("roles_users.yml")) do |item|
+  user = User.find_by_id(item["user_id"])
+  role = Role.find_by_id(item["role_id"])
+  user.roles << role if user
+end
+

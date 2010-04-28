@@ -3,6 +3,8 @@
 # RAILS_ENV=production rake db:drop
 # RAILS_ENV=production rake db:create
 # RAILS_ENV=production script/dbconsole -p < ../latest.dump 
+# RAILS_ENV=production rake db:migrate
+# RAILS_ENV=production rake After
 # rm -f db/seed/*
 # RAILS_ENV=production script/seed_dump.rb
 
@@ -11,7 +13,7 @@ SEEDS = ["Sidra", "astolat", "Enigel", "hope", "awils1",
          "Cesy", "elz", "justira", "lim", "melange", "eel",
           "rklyne", "zelempa", "Zooey_Glass"] 
 ADD_EXTERNAL = true
-NTH = 20
+NTH = 25
 
 #### to dump just one user (e.g. Enigel):
 #  SEEDS = [ "Enigel" ]
