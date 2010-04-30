@@ -6,3 +6,6 @@
 .user-generated-view .font-serif { font-family: "Cambria, Constantia, Palatino, Georgia, serif"; }
 .user-generated-view .font-big { font-size: bigger; }
 .user-generated-view .font-small { font-size: smaller; }
+.user-generated-view .align-right { text-align: right; }
+.user-generated-view .align-center { text-align: center; }
+.user-generated-view .align-justify { text-align: justify; }
