@@ -77,6 +77,7 @@ def add_works(items)
     x << work.collection_items
     x << work.series
     x << work.serial_works
+    x << work.language
   end
   puts ""
   puts "Dumping records for works"
