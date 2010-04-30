@@ -1,3 +1,6 @@
-<h2><%= link_to @external_work.title, @external_work.url %></h2>
-
-<p>by <%= @external_work.author %></p>
+<%- unless @external_work.blank? -%>
+  <h3 class="landmark">External Work</h3>
+  <ol class="work index">
+    <li><%= render :partial => 'external_works/blurb', :locals => {:external_work => @external_work} %></li>
+  </ol>
+<%- end -%>

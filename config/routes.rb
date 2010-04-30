@@ -59,6 +59,7 @@ ActionController::Routing::Routes.draw do |map|
     user.resource :profile, :controller => 'profile', :only => :show
     user.resource :inbox, :controller => 'inbox', :collection => {:reply => :get, :cancel_reply => :get}, :only => [:show, :update]
     user.resources :bookmarks
+    user.resources :related_works
     user.resources :works, :collection => {:drafts => :get, :show_multiple => :get, :edit_multiple => :post, :update_multiple => :put}
     user.resources :series, :member => {:manage => :get}, :has_many => :serial_works
     user.resources :readings, :only => [:index, :destroy]
@@ -153,7 +154,10 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :orphans, :collection => {:about => :get}, :only => [:index, :new, :create] 
 
-  map.resources :external_works, :has_many => :bookmarks
+  map.resources :external_works, :collection => {:compare => :get, :merge => :post} do |external_work|
+    external_work.resources :bookmarks
+    external_work.resources :related_works
+  end
 
   map.resources :communities 
 

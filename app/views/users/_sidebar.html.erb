@@ -46,6 +46,9 @@
   <% else %>
     <li><%= span_if_current "Gifts (#{@user.gifts.select {|g| g.work.visible?}.count})", user_gifts_path(@user) %></li>
   <% end %>
+  <%- if @user == current_user -%>
+    <li><%= span_if_current "My Related Works (#{@user.related_works.count + @user.parent_work_relationships.count})", user_related_works_path(@user) -%></li>
+  <%- end -%>
 	<% if @user == current_user %>
     <li><%= span_if_current "My Inbox (" + @user.unread_inbox_comments_count.to_s + ")", user_inbox_path(@user) %></li>
     <% if @user.preference.try(:history_enabled?) %>

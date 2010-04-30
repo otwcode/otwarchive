@@ -21,6 +21,8 @@ class Pseud < ActiveRecord::Base
   has_many :comments  
   has_many :creatorships
   has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work'
+  has_many :tags, :through => :works
+  has_many :filters, :through => :works
   has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter'
   has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series'
   has_many :collection_participants, :dependent => :destroy
@@ -31,7 +33,6 @@ class Pseud < ActiveRecord::Base
   has_many :offer_assignments, :through => :challenge_signups, :conditions => ["challenge_assignments.sent_at IS NOT NULL"]
   has_many :pinch_hit_assignments, :class_name => "ChallengeAssignment", :foreign_key => "pinch_hitter_id", 
     :conditions => ["challenge_assignments.sent_at IS NOT NULL"]
-
 
   has_many :prompts, :dependent => :destroy
   

@@ -145,7 +145,12 @@ class AutocompleteController < ApplicationController
   
   def tag_sub_tag_string
     tag_finder(params[:type].constantize, params[:tag_sub_tag_string])
-  end   
-
+  end
+  
+  def external_work_url
+    unless params[:external_work_url].blank?
+      render_output(ExternalWork.find(:all, :conditions => ["url LIKE ?", '%' + params[:external_work_url] + '%'], :limit => 10, :order => :url).map(&:url))    
+    end    
+  end
   
 end

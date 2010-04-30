@@ -1,0 +1,16 @@
+<h2>External Works</h2>
+
+<%- if logged_in_as_admin? -%>
+<%= link_to "Show duplicates (#{ExternalWork.duplicate.count})", url_for(:show => 'duplicates') %>
+<%- end -%>
+
+<%- unless @external_works.blank? -%>
+  <h3 class="landmark">External Works List</h3>
+  <%= will_paginate @external_works %>
+  <ol class="work index">
+  <%- for external_work in @external_works -%>
+    <li><%= render :partial => 'external_works/blurb', :locals => {:external_work => external_work} %></li>
+  <%- end -%>
+  </ol>
+  <%= will_paginate @external_works %>
+<%- end -%>

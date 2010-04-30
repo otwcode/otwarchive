@@ -146,7 +146,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
   .blurb ul.required-tags .category, .blurb ul.required-tags .iswip { position: absolute; left: 28px; }
   .blurb ul.required-tags .category { top: 0; }
   .blurb ul.required-tags .iswip { top: 28px; }
-  .blurb ul.required-tags .external-work { position: absolute; top: 28px; }
+  .blurb ul.required-tags .external-work { position: absolute; left: 28px; top: 28px; }
   .blurb ul.required-tags  .rating { margin-bottom: 3px; }
   .blurb ul.required-tags  .warnings { margin-bottom: 3px; }
   .blurb ul.required-tags .rating-general-audience {background-image:url("/images/rating-general-audience-s.png");}

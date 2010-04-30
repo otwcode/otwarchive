@@ -1,17 +1,89 @@
-<!--Descriptive page name, messages and instructions-->
+<!--Descriptive page name, messages and instructions--
+<%- if @user -%>
+<h2>Works related to those by <%= link_to @user.login, @user %></h2>
+<%- else -%>
+<h2>Related Works</h2>
+<%- end -%>
 <!--/descriptions-->
 
 <!--subnav-->
 <!--/subnav-->
 
 <!--main content-->
-<%- unless @related_works.blank? -%>
-  <%- @related_works.each do |related_work| -%>
-    <%- if related_work.reciprocal? -%>
-      <%= render :partial => 'remove', :locals => { :related_work => related_work } %>
-    <%- else -%>
-      <%= render :partial => 'approve', :locals => { :related_work => related_work } %>
-    <%- end -%> 
-  <%- end -%>
+<%- unless @related_works_as_parent.blank? -%>
+  
+  <h3>Works inspired by <%= @user.login %>'s works</h3>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Original</th>
+        <th>Remix/Translation/Inspired Work</th>
+        <th>Translation?</th>
+        <%- if current_user == @user -%>
+        <th>Approve/remove link</th>
+        <%- end -%>
+      </tr>
+    </thead>
+    <tbody>
+    <%- @related_works_as_parent.each do |related_work| -%>
+      <%- if related_work.parent && related_work.work -%>
+      <tr>
+        <td><%= link_to related_work.parent.title, related_work.parent %></td>
+        <td><%= link_to related_work.work.title, related_work.work %> by <%= byline(related_work.work) %></td>
+        <td>
+          <%- if related_work.translation? -%>
+            From <%= language_link(related_work.parent) %> to <%= language_link(related_work.work) %>
+          <%- end -%>
+        </td>
+        <%- if current_user == @user -%>
+          <%- if related_work.reciprocal? -%>
+            <td><%= link_to "Remove", related_work %></td>
+          <%- else -%>
+            <td><%= link_to "Approve", related_work %></td>
+          <%- end -%>        
+        <%- end -%>
+      </tr>
+      <%- end -%>
+    <%- end -%>
+    </tbody>
+  </table>
 <%- end -%>
-<!--/subnav-->
+
+<%- unless @related_works_as_child.blank? -%>
+  
+  <h3>Works <%= @user.login %>'s works were inspired by</h3>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Original</th>
+        <th>Remix/Translation/Inspired Work</th>
+        <th>Translation?</th>
+        <%- if current_user == @user -%>
+        <th>Remove connection</th>
+        <%- end -%>
+      </tr>
+    </thead>
+    <tbody>
+    <%- @related_works_as_child.each do |related_work| -%>
+      <%- if related_work.parent && related_work.work -%>
+      <tr>
+        <td><%= link_to related_work.parent.title, related_work.parent %> by <%= byline(related_work.parent) %></td>
+        <td><%= link_to related_work.work.title, related_work.work %></td>
+        <td>
+          <%- if related_work.translation? -%>
+            From <%= language_link(related_work.parent) %> to <%= language_link(related_work.work) %>
+          <%- end -%>
+        </td>
+        <%- if current_user == @user -%>
+        <td><%= link_to "Remove", {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></td>
+        <%- end -%>
+      </tr>
+      <%- end -%>
+    <%- end -%>
+    </tbody>
+  </table>
+<%- end -%>
+
+<!--/main content-->

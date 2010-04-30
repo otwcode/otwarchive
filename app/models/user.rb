@@ -71,9 +71,13 @@ class User < ActiveRecord::Base
   has_many :work_collection_items, :through => :works, :source => :collection_items, :uniq => true
   has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter', :uniq => true
   has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series', :uniq => true
-  
+
+  has_many :related_works, :through => :works
+  has_many :parent_work_relationships, :through => :works
+
   has_many :tags, :through => :works
   has_many :bookmark_tags, :through => :bookmarks, :source => :tags
+  has_many :filters, :through => :works
 
   has_many :translations, :foreign_key => 'translator_id' 
   has_many :translations_to_beta, :class_name => 'Translation', :foreign_key => 'beta_id'

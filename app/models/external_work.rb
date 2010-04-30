@@ -1,5 +1,7 @@
 class ExternalWork < ActiveRecord::Base
   
+  include Taggable
+  
   has_bookmarks
   has_many :user_tags, :through => :bookmarks, :source => :tags
   
@@ -7,17 +9,19 @@ class ExternalWork < ActiveRecord::Base
   
   has_many :taggings, :as => :taggable, :dependent => :destroy
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
-  has_many :common_taggings, :as => :filterable
-  has_many :common_tags, :through => :common_taggings
   
   has_many :filter_taggings, :as => :filterable, :dependent => :destroy
   has_many :filters, :through => :filter_taggings
 
   has_many :ratings, :through => :taggings, :source => :tagger, :source_type => 'Rating', :before_remove => :remove_filter_tagging
   has_many :categories, :through => :taggings, :source => :tagger, :source_type => 'Category', :before_remove => :remove_filter_tagging
+  has_many :warnings, :through => :taggings, :source => :tagger, :source_type => 'Warning', :before_remove => :remove_filter_tagging
   has_many :fandoms, :through => :taggings, :source => :tagger, :source_type => 'Fandom', :before_remove => :remove_filter_tagging
   has_many :pairings, :through => :taggings, :source => :tagger, :source_type => 'Pairing', :before_remove => :remove_filter_tagging
   has_many :characters, :through => :taggings, :source => :tagger, :source_type => 'Character', :before_remove => :remove_filter_tagging
+  has_many :freeforms, :through => :taggings, :source => :tagger, :source_type => 'Freeform', :before_remove => :remove_filter_tagging
+
+  named_scope :duplicate, :group => "url HAVING count(DISTINCT id) > 1"
 
   AUTHOR_LENGTH_MAX = 500
   
@@ -83,116 +87,6 @@ class ExternalWork < ActiveRecord::Base
   # TAGGING
   # External works are taggable objects.
   ####################################################################### 
-
-  # string methods
-  # (didn't use define_method, despite the redundancy, because it doesn't cache in development)
-  def rating_string
-    self.ratings.string
-  end
-  def category_string
-    self.categories.string
-  end
-  def fandom_string
-    self.fandoms.string
-  end
-  def pairing_string
-    self.pairings.string
-  end
-  def character_string
-    self.characters.string
-  end
-
-  # _string= methods
-  # always use string= methods to set tags
-  # << and = don't trigger callbacks to update common_tags
-  # or call after_destroy on taggings
-  # see rails bug http://dev.rubyonrails.org/ticket/7743
-  def rating_string=(tag_string)
-    tag = Rating.find_or_create_by_name(tag_string)
-    return if self.ratings == [tag]
-    Tagging.find_by_tag(self, self.ratings.first).destroy unless self.ratings.blank?
-    self.ratings = [tag] if tag.is_a?(Rating)
-  end
-
-  def category_string=(tag_string)
-    tag = Category.find_or_create_by_name(tag_string)
-    return if self.categories == [tag]
-    Tagging.find_by_tag(self, self.categories.first).destroy unless self.categories.blank?
-    self.categories = [tag] if tag.is_a?(Category)
-  end
-
-  def fandom_string=(tag_string)
-    tags = []
-    tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT).each do |string|
-      string.squish!
-      tag = Fandom.find_or_create_by_name(string)
-      tags << tag if tag.is_a?(Fandom)
-    end
-    remove = self.fandoms - tags
-    remove.each do |tag|
-      Tagging.find_by_tag(self, tag).destroy
-    end
-    self.fandoms = tags
-  end
-
-  def pairing_string=(tag_string)
-    tags = []
-    tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT).each do |string|
-      string.squish!
-      tag = Pairing.find_or_create_by_name(string)
-      tags << tag if tag.is_a?(Pairing)
-    end
-    remove = self.pairings - tags
-    remove.each do |tag|
-      Tagging.find_by_tag(self, tag).destroy
-    end
-    self.pairings = tags
-  end
-
-  def character_string=(tag_string)
-    tags = []
-    tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT).each do |string|
-      string.squish!
-      tag = Character.find_or_create_by_name(string)
-      tags << tag if tag.is_a?(Character)
-    end
-    remove = self.characters - tags
-    remove.each do |tag|
-      Tagging.find_by_tag(self, tag).destroy
-    end
-    self.characters = tags
-  end
-
-  # a work can only have one rating, so using first will work
-  def adult?
-    # should always have a rating, if it doesn't err conservatively
-    return true if self.ratings.blank?
-    self.ratings.first.adult?
-  end
-
-  def cast_tags
-    # we combine pairing and character tags up to the limit
-    characters = self.tags.select{|tag| tag.type == "Character"}.sort || []
-    pairings = self.tags.select{|tag| tag.type == "Pairing"}.sort || []
-    return [] if pairings.empty? && characters.empty?
-    canonical_pairings = Pairing.canonical.find(pairings.collect(&:merger_id).compact.uniq)
-    all_pairings = (pairings + canonical_pairings).flatten.uniq.compact
-
-    #pairing_characters = all_pairings.collect{|p| p.all_characters}.flatten.uniq.compact
-    pairing_characters = Character.by_pairings(all_pairings)
-
-    cast = pairings + characters - pairing_characters
-    if cast.size > ArchiveConfig.TAGS_PER_LINE
-      cast = cast[0..(ArchiveConfig.TAGS_PER_LINE-1)]
-    end
-
-    return cast
-  end
-
-  def fandom_tags
-    self.tags.select{|tag| tag.type == "Fandom"}.sort
-  end  
-  
  
   # FILTERING CALLBACKS
   before_save :check_filter_taggings
@@ -224,6 +118,32 @@ class ExternalWork < ActiveRecord::Base
       self.filters.delete(filter)
       filter.reset_filter_count
     end  
+  end
+  
+  # Assign the bookmarks and related works of other external works
+  # to this one, and then delete them
+  # TODO: use update_all instead?
+  def merge_similar(externals)
+    for external_work in externals
+      unless external_work == self
+        if external_work.bookmarks
+          external_work.bookmarks.each do |bookmark|
+            bookmark.bookmarkable = self
+            bookmark.save!
+          end
+        end
+        if external_work.related_works
+          external_work.related_works.each do |related_work|
+            related_work.parent = self
+            related_work.save!
+          end        
+        end
+        external_work.reload
+        if external_work.bookmarks.empty? && external_work.related_works.empty?
+          external_work.destroy
+        end
+      end
+    end
   end
    
 end

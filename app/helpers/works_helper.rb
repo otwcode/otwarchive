@@ -150,13 +150,10 @@ module WorksHelper
   
   def get_symbols_for(work, symbols_only = false)
     mappings = {}
-    unless work.class == ExternalWork
-      warnings = work.tags.select{|tag| tag.type == "Warning"}
-      mappings[:warning] = {:class_name => get_warnings_class(warnings), :string =>  get_title_string(warnings)}
-    else
-      mappings[:warning] = {:class_name => 'external-work', :string =>  "External Work"}
-    end
-    
+
+    warnings = work.tags.select{|tag| tag.type == "Warning"}
+    mappings[:warning] = {:class_name => get_warnings_class(warnings), :string =>  get_title_string(warnings)}
+   
     ratings = work.tags.select{|tag| tag.type == "Rating"}
     rating = ratings.blank? ? nil : ratings.first
     mappings[:rating] = {:class_name => get_ratings_class(rating), :string =>  get_title_string(ratings, "rating")}
@@ -166,10 +163,10 @@ module WorksHelper
     
     if work.class == Work
       iswip_string = work.is_wip ? "Work in Progress" : "Complete Work"
+      mappings[:iswip] = {:class_name => get_complete_class(work), :string =>  iswip_string}
     else
-      iswip_string = "External Work"
+      mappings[:iswip] = {:class_name => 'external-work', :string =>  "External Work"}
     end
-    mappings[:iswip] = {:class_name => get_complete_class(work), :string =>  iswip_string}
 
     symbol_block = ""
     symbol_block << "<ul class=\"required-tags\">\n" if not symbols_only
@@ -239,7 +236,7 @@ module WorksHelper
   end
 
   def get_complete_class(work)
-    return "category-none iswip" if work.class == ExternalWork
+    return "category-none" if work.class == ExternalWork
     if work.is_wip
       "complete-no iswip"
     else
