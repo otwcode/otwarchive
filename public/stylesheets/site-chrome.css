@@ -52,7 +52,10 @@ NAVIGATION, ACTIONS (BUTTONS)*/
 			{ margin: 0.5em auto 1em; border:1px solid #bbb; background:#fffef9 url(/images/fffef9-ccc.png) bottom left repeat-x; padding:0.15em 0.5em 0.25em; float:right; border-radius:3em; -moz-border-radius:3em; -webkit-border-radius:2em;}
  .navigation li,li.navigation,  #main .navigation h4  
 			{ display: inline }
- #main .navigation a, .submit input, .submit a, #main .navigation input           { background: transparent; border:0;  border-right:1px solid #ccc; border-left:1px solid #ccc; cursor: pointer; font-weight: 700; margin: 0 0.125em; padding: 0.25em 0.5em; text-decoration: none; width: auto }
+#main .navigation a, .submit input, .submit a, #main .navigation input 
+            { background: transparent; border:0;  border-right:1px solid #ccc; border-left:1px solid #ccc; cursor: pointer; font-weight: 700; margin: 0 0.125em; padding: 0.25em 0.5em; text-decoration: none; width: auto }
+.submit input.text, #main .navigation input.text
+            { cursor: text;}
 #main.admin_users-show .navigation form, #main.admin_users-show .navigation div 					
 			{ display: inline; } /* cancelling out the side-effects of button_to */
  .navigation a:hover, .submit a:hover, .submit input:hover 
