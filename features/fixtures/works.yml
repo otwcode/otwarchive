@@ -3,7 +3,7 @@ first:
   title: First work
   word_count: 100
   title_to_sort_on: first work
-  hit_count: 0
+  hit_count: 1001
   language: english
   authors_to_sort_on: testuser
 second:
@@ -19,6 +19,6 @@ third:
   title: third work
   word_count: 10000
   title_to_sort_on: third work
-  hit_count: 100
+  hit_count: 10000
   language: german
   authors_to_sort_on: testuser

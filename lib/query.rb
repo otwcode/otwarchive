@@ -33,20 +33,14 @@ module Query
     for string in WORK_FIELDS
       text = (text + " @" + string + " " + query[string.to_sym]) unless query[string.to_sym].blank?
     end
-    unless query[:words].blank?
-      match = query[:words].match(/^([<>]*)\s*([\d -]+)\s*$/)
-      if match
-        with[:word_count] = Query.numerical_range(match[1], match[2]) 
-      else
-        errors<<"bad words format (ignored)"
-      end
-    end
-    unless query[:hits].blank?
-      match = query[:hits].match(/^([<>]*)\s*([\d -]+)\s*$/)
-      if match
-        with[:hit_count] = Query.numerical_range(match[1], match[2])
-      else
-        errors<<"bad hits format (ignored)"
+    for string in %w{word hit} do
+      unless query[string.pluralize.to_sym].blank?
+        match = query[string.pluralize.to_sym].match(/^([<>]*)\s*([\d,. -]+)\s*$/)
+        if match
+          with[(string + "_count").to_sym] = Query.numerical_range(match[1], match[2]) 
+        else
+          errors<<"bad #{string.pluralize} format (ignored)"
+        end
       end
     end
     unless query[:date].blank?
@@ -64,7 +58,9 @@ module Query
   # operand can be "<", ">" or ""
   # string must be an integer unless operand is ""
   # in which case it can be two numbers connected by "-"
+  # punctuation such as , and . are ignored (10.000 == 10,000 == 10000)
   def self.numerical_range(operand, string)
+    string = string.gsub(/[,.]/, "")
     case operand
       when "<"
         Range.new(0, string.to_i - 1)
