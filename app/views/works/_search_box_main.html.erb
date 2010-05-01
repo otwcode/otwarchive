@@ -37,7 +37,8 @@
     <%= link_to_help "work-search-numerical-help" -%>
   </dd>
   <dt>
-	  <label for="refine_revised_at"><%= t('date', :default => 'date:') %></label>
+	  <label for="refine_revised_at"><%= t('date_desc', :default => 
+'date:') %></label>
     </dt><dd>
     <%= text_field_tag "query[date]", @query[:date], :id => 'refine_revised_at' %>
     <%= link_to_help "work-search-date-help" -%>
