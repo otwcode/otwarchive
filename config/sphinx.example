@@ -12,7 +12,6 @@ development:
    min_infix_len: 0 
    max_matches: 1000
    mem_limit: 256M
-   port: 1400
 production: 
    allow_star: true 
    min_prefix_len: 1 
