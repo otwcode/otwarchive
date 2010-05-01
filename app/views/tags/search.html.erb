@@ -1,22 +1,14 @@
-<h2>Tag Search: Alpha</h2>
+<h2>Tag Search: Beta</h2>
 
 <%= render :partial => 'tags/search_form' %>
 
-<p>Canonical tags are <span class='canonical'>highlighted</span>.</p>
-<p>New tags will be out of alphabetical order.</p>
-<p><em>book*</em> will find <em>book</em> and <em>books</em>.</p>
-<p>Space means AND: <em>John Beckett</em> will find <em>John Beckett</em> and <em>Carson Beckett/John Sheppard</em>.</p> 
-
 <%- if @tags -%>
-  <%- begin -%>
-    <%= will_paginate @tags %>
-    <strong><%= @tags.total_entries %> Found</strong>
-    <ul>
+  <p><strong><%= @tags.total_entries %> Found</strong><%= link_to_help "tag-search-results-help" -%></p>
+  <h3 class="landmark">Tags List</h3>
+  <ol class="tag index">
     <% for tag in @tags %>
-      <li><%= tag_search_result(tag) %></li>
+      <p><%= tag_search_result(tag) %></p>
     <% end %>
-    </ul>
-  <% rescue Riddle::ConnectionError %>
-    <span class='error'>Search appears to be down right now. Please try again later.</span>
-  <%- end -%>
+  </ol>
+  <%= will_paginate @tags %>
 <%- end -%>

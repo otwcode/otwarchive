@@ -698,68 +698,6 @@ class Work < ActiveRecord::Base
     end
   end
 
-
-
-  #################################################################################
-  #
-  # SEARCH & FIND
-  # In this section we define various named scopes that can be chained together
-  # to do finds in the database, as well as settings for the ThinkingSphinx
-  # plugin that connects us to the Sphinx search engine.
-  #
-  #################################################################################
-  def sorted_authors
-    self.authors.map(&:name).join(",  ").downcase.gsub(/^[\+-=_\?!'"\.\/]/, '')
-  end
-
-  def sorted_pseuds
-    self.pseuds.map(&:name).join(",  ").downcase.gsub(/^[\+-=_\?!'"\.\/]/, '')
-  end
-
-  def sorted_title
-    sorted_title = self.title.downcase.gsub(/^["'\.\/]/, '')
-    sorted_title = sorted_title.gsub(/^(an?) (.*)/, '\2, \1')
-    sorted_title = sorted_title.gsub(/^the (.*)/, '\1, the')
-    sorted_title.gsub(/^(\d+)/) {|s| "%05d" % s}
-  end
-
-  # Index for Thinking Sphinx
-  define_index do
-
-    # fields
-    indexes summary
-    indexes notes
-    indexes authors_to_sort_on, :sortable => true
-    indexes title_to_sort_on, :sortable => true
-
-    # associations
-    indexes chapters.content, :as => 'chapter_content'
-    indexes fandoms.name, :as => 'fandom'
-    indexes pairings.name, :as => 'pairing'
-    indexes ratings.name, :as => 'rating'
-    indexes characters.name, :as => 'character'
-    indexes warnings.name, :as => 'warning'
-    indexes freeforms.name, :as => 'tag'
-    indexes filters.name, :as => 'filter'
-    
-    indexes pseuds.name, :as => 'author'
-
-    # attributes
-    has :id, :as => :work_ids
-    has word_count, revised_at, hit_count
-    has posted, restricted, hidden_by_admin
-    has tags(:id), :as => :tag_ids
-
-    # properties
-    set_property :delta => :delayed
-    set_property :field_weights => { :fandom => 10, :character => 10,
-                                     :pairing => 10, :rating => 5, :warning => 5,
-                                     :tag => 10, :filter => 10,
-                                     :title => 10, :author => 10,
-                                     :summary => 5, :notes => 5,
-                                     :chapter_content => 1}
-  end
-
   protected
 
   # a string for use in :joins => clause to add ownership lookup
@@ -777,6 +715,13 @@ class Work < ActiveRecord::Base
 
   VISIBLE_TO_ADMIN_CONDITIONS = {:posted => true}
 
+  #################################################################################
+  #
+  # In this section we define various named scopes that can be chained together
+  # to do finds in the database
+  #
+  #################################################################################
+  
   public
 
   named_scope :ordered_by_author_desc, :order => "authors_to_sort_on DESC"
@@ -952,31 +897,6 @@ class Work < ActiveRecord::Base
     end
   end
 
-  def self.search_with_sphinx(options)
-    # sphinx ordering must be done on attributes
-    order_clause = case options[:sort_column]
-      when "title" then "title_to_sort_on "
-      when "author" then "authors_to_sort_on "
-      when "word_count" then "word_count "
-      when "date" then "revised_at "
-      when "hit_count" then "hit_count "
-      else ""
-    end
-
-    if !order_clause.blank?
-      order_clause += options[:sort_direction]
-    end
-
-    search_options = {:per_page => ArchiveConfig.ITEMS_PER_PAGE, :page =>(options[:page] || 1), :match_mode => :extended}
-    search_options.merge!({:order => order_clause}) if !order_clause.blank?
-    if User.current_user == :false
-      search_options[:with] = {:posted => true, :hidden_by_admin => false, :restricted => false}
-    else
-      search_options[:with] = {:posted => true, :hidden_by_admin => false} 
-    end
-    Work.search(options[:query], search_options)
-  end
-
   # Used for non-search work filtering
   def self.find_with_options(options = {})
     command = ''
@@ -1082,9 +1002,86 @@ class Work < ActiveRecord::Base
     end
     filters   
   end
+  
+  ########################################################################
+  # SORTING
+  ########################################################################
+
+  def sorted_authors
+    self.authors.map(&:name).join(",  ").downcase.gsub(/^[\+-=_\?!'"\.\/]/, '')
+  end
+
+  def sorted_pseuds
+    self.pseuds.map(&:name).join(",  ").downcase.gsub(/^[\+-=_\?!'"\.\/]/, '')
+  end
+
+  def sorted_title
+    sorted_title = self.title.downcase.gsub(/^["'\.\/]/, '')
+    sorted_title = sorted_title.gsub(/^(an?) (.*)/, '\2, \1')
+    sorted_title = sorted_title.gsub(/^the (.*)/, '\1, the')
+    sorted_title.gsub(/^(\d+)/) {|s| "%05d" % s}
+  end  
 
   # sort works by title
   def <=>(another_work)
-    title.strip.downcase <=> another_work.strip.downcase
+    self.title_to_sort_on <=> another_work.title_to_sort_on
   end
+  #############################################################################
+  #
+  # SEARCH
+  # settings and methods used with the ThinkingSphinx plugin
+  # that connects us to the Sphinx search engine.
+  # 
+  # most of the logic is contained in module Query in lib/query.rb
+  #
+  #############################################################################
+
+  def self.search_with_sphinx(query, page)
+    search_string, with_hash, query_errors = Query.split_query(query)
+    # set pagination and extend mode
+    options = {
+      :per_page => ArchiveConfig.ITEMS_PER_PAGE, 
+      :max_matches => ArchiveConfig.SEARCH_RESULTS_MAX, 
+      :page => page, 
+      :match_mode => :extended 
+      }
+    # attribute restrictions
+    if User.current_user == :false
+      with_hash.update({:posted => true, :hidden_by_admin => false, :restricted => false})
+    else
+      with_hash.update({:posted => true, :hidden_by_admin => false})
+      ## TODO add personal filters here
+    end
+    options[:with] = with_hash
+    return query_errors, Work.search(search_string, options)
+  end
+
+  # Index for Thinking Sphinx
+  define_index do
+
+    # fields
+    indexes authors_to_sort_on, :as => 'author', :sortable => true
+    indexes title_to_sort_on, :as => 'title', :sortable => true
+    indexes summary
+    indexes notes
+
+    # associations
+    indexes tags(:name), :as => 'tag'
+    indexes language(:name), :as => 'language'
+    indexes chapters.content, :as => 'content'
+        
+    # attributes
+    has word_count, revised_at, hit_count
+    has posted, restricted, hidden_by_admin
+
+    # properties
+    set_property :delta => :delayed
+    set_property :field_weights => { 
+                                     :title => 20, :author => 20,
+                                     :tag => 15, :filter => 15,
+                                     :language => 10,
+                                     :summary => 5, :notes => 5,
+                                     :content => 1}
+  end
+
 end

@@ -1,0 +1,20 @@
+<h2>Work Search: Beta</h2>
+
+<%= render :partial => 'works/search_box_main' -%> 
+
+<%- if @works %>
+<%- begin %>
+  <p><strong><%= @works.total_entries %> Found</strong><%= link_to_help "work-search-results-help" -%></p>
+  
+  <h3 class="landmark">Works List</h3>
+  <ol class="work index">
+    <%- for work in @works -%>
+      <%= render :partial => 'work_blurb', :locals => {:work => work} %>
+    <%- end -%>
+  </ol>
+  <div class="clear"><!-- presentational--></div>
+  <%= will_paginate @works, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>
+<%- rescue Riddle::ConnectionError %>
+   <%= t('errors.search_engine_down', :default => "The search engine seems to be down at the moment, try back later!")%>
+  <%- end -%>
+<%- end -%>

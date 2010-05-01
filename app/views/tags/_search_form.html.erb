@@ -1,9 +1,13 @@
 <%- form_tag url_for(:controller => 'tags', :action => 'search'), :class => 'search', :method => :get do -%>
-  <fieldset>
-	<legend>Search tags</legend>
-	<p><%= text_field_tag :query, params[:query], :id => 'tag_search' %>
-  <%= select_tag :tag_type, options_for_select(%w(All Fandoms Characters Pairings Freeforms), params[:tag_type]) %> 
-  <%= submit_tag "Search tags" %>
-</p> 
+<fieldset>
+  <legend>Search tags</legend>
+  <p>
+    <%= text_field_tag :name, params[:name], :id => 'tag_search'  %>
+    <%= link_to_help "tag-search-text-help" -%>
+    <%= select_tag :type, options_for_select(%w(All Fandom Character Pairing Freeform), params[:type]) %>
+    <label for="canonical">canonical?</label>&nbsp;<%= check_box_tag :canonical, "true", params[:canonical] %>
+    <%= link_to_help "tag-search-type-help" -%>
+  </p>
+  <span class="submit"><%= submit_tag t('tags.search', :default => 'Search tags'), :name => nil %></span>
 </fieldset>
 <%- end -%>

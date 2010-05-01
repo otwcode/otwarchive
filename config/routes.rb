@@ -7,8 +7,6 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :archive_faqs
   
-  map.resources :search
-
   map.resources :admin_posts, :has_many => :comments
 
   map.resources :media, :only => [:index, :show], :has_many => :fandoms
@@ -78,7 +76,7 @@ ActionController::Routing::Routes.draw do |map|
   map.delete_confirmation '/delete_confirmation', :controller => 'users', :action => 'delete_confirmation'
 
   map.resources :works,
-                :collection => { :import => :post },
+                :collection => { :import => :post, :search => :get },
                 :member => { :preview => :get, :post => :post, :post_draft => :put, :navigate => :get, :edit_tags => :get, :preview_tags => :get, :update_tags => :put } do |work|
       work.resources :chapters, :has_many => :comments,
                                 :collection => {:manage => :get,

@@ -54,9 +54,6 @@
       <li><%= sort_link t('sort.hit_count', :default => 'Hits'), :hit_count, {:desc_default => true} -%></li>
     <% end %>
   </ul>
-  <%- if params[:query] -%>
-    <%= render :partial => 'works/search_box_main' -%> 
-  <%- end -%>
 </div>
 <!---/subnav-->
 

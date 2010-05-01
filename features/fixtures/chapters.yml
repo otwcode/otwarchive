@@ -1,0 +1,13 @@
+chapter1:
+  posted: true
+  content: some content for the first work
+  work: first
+chapter2:
+  posted: true
+  content: this work was written a long time ago
+  published_at: 2004-04-30
+  work: second
+chapter3:
+  posted: true
+  work: third
+  content: This work is in a different language

@@ -1,7 +1,47 @@
-<% form_tag works_path, :id => 'search_main', :class => 'search', :role => 'search', :method => :get do -%>
-  <fieldset>
-	<legend>Search for works</legend>
-	<p><%= t('refine_search', :default => 'Refine your search') -%>: <%= text_field_tag :query, params[:query], :class => 'text', :title => 'site search', :id => 'refine_search' %>
-  <span class="submit"><%= submit_tag t('forms.search', :default => 'Search'), :class => 'button', :name => nil %></span></p>
+<%- form_tag url_for(:controller => 'works', :action => 'search'), :class => 'search', :method => :get do -%>
+<fieldset>
+	<legend>Search works</legend>
+	<p>
+	  <%= text_field_tag "query[text]", @query[:text], :id => 'refine_text' %>
+    <%= link_to_help "work-search-text-help" -%> (any field)
+  </p>
+  </p>
+	  <label for="refine_tag">tag:</label>
+    <%= text_field_tag "query[tag]", @query[:tag], :id => 'refine_tag' %>
+    <%= link_to_help "work-search-text-help" -%>
+  </p>
+  </p>
+	  <label for="refine_title">title:</label>
+    <%= text_field_tag "query[title]", @query[:title], :id => 'refine_title' %>
+    <%= link_to_help "work-search-text-help" -%>
+  </p>
+  </p>
+	  <label for="refine_author">author:</label>
+    <%= text_field_tag "query[author]", @query[:author], :id => 'refine_author' %>
+    <%= link_to_help "work-search-text-help" -%>
+  </p>
+  </p>
+	  <label for="refine_word_count">words:</label>
+    <%= text_field_tag "query[words]", @query[:words], :id => 'refine_word_count' %>
+    <%= link_to_help "work-search-numerical-help" -%>
+  </p>
+  </p>
+	  <label for="refine_hit_count">hits:</label>
+    <%= text_field_tag "query[hits]", @query[:hits], :id => 'refine_hit_count' %>
+    <%= link_to_help "work-search-numerical-help" -%>
+  </p>
+  </p>
+	  <label for="refine_revised_at">date:</label>
+    <%= text_field_tag "query[date]", @query[:date], :id => 'refine_revised_at' %>
+    <%= link_to_help "work-search-date-help" -%>
+  </p>
+  </p>
+	  <label for="refine_language">language:</label>
+    <%= select_tag "query[language]", "<option></option>" + options_from_collection_for_select(@languages, 'name', 'name', @query[:language]), :id => 'refine_language' %>
+    <%= link_to_help "work-search-language-help" -%>
+  </p>
+  <span class="submit">
+    <%= submit_tag t('forms.search', :default => 'Search works'), :class => 'button', :name => nil %>
+  </span>
 </fieldset>
 <% end -%>

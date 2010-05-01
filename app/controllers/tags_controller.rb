@@ -27,13 +27,7 @@ class TagsController < ApplicationController
   end
   
   def search
-    unless params[:query].blank?
-      if params[:tag_type] && params[:tag_type] != 'All'
-        @tags = params[:tag_type].singularize.constantize.search(params[:query], :order => "name ASC", :page => params[:page])
-      else
-        @tags = Tag.search(params[:query], :order => "type ASC, name ASC", :page => params[:page])
-      end
-    end    
+    @tags = Tag.search_with_sphinx(params) unless params[:name].blank?
   end  
 
   # if user is Admin or Tag Wrangler, show them details about the tag

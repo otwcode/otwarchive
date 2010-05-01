@@ -17,6 +17,8 @@ module NavigationHelpers
       works_path     
     when /the new work page/
       new_work_path
+    when /the search works page/
+      search_works_path
       
     when /the login page/
       login_path

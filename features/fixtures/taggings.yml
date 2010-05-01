@@ -1,0 +1,27 @@
+tagging1:
+  tagger: not (Tag)
+  taggable: first (Work)
+tagging2:
+  tagger: not (Tag)
+  taggable: second (Work)
+tagging3:
+  tagger: not (Tag)
+  taggable: third (Work)
+tagging4:
+  tagger: none (Tag)
+  taggable: first (Work)
+tagging5:
+  tagger: none (Tag)
+  taggable: second (Work)
+tagging6:
+  tagger: none (Tag)
+  taggable: third (Work)
+tagging7:
+  tagger: fandom1 (Tag)
+  taggable: first (Work)
+tagging8:
+  tagger: fandom2 (Tag)
+  taggable: second (Work)
+tagging9:
+  tagger: fandom1 (Tag)
+  taggable: third (Work)

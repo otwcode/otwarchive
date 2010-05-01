@@ -1,0 +1,13 @@
+not:
+  name: Not Rated
+  type: Rating
+none:
+  name: No Warnings
+  canonical: true
+  type: Warning
+fandom1:
+  name: first fandom
+  type: Fandom
+fandom2:
+  name: second fandom
+  type: Fandom

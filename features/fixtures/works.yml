@@ -1,0 +1,24 @@
+first:
+  posted: true
+  title: First work
+  word_count: 100
+  title_to_sort_on: first work
+  hit_count: 0
+  language: english
+  authors_to_sort_on: testuser
+second:
+  posted: true
+  title: second work
+  word_count: 1000
+  title_to_sort_on: second work
+  hit_count: 10
+  language: english
+  authors_to_sort_on: testuser
+third:
+  posted: true
+  title: third work
+  word_count: 10000
+  title_to_sort_on: third work
+  hit_count: 100
+  language: german
+  authors_to_sort_on: testuser

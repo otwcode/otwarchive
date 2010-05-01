@@ -112,6 +112,26 @@ class WorksController < ApplicationController
     end
   end
 
+  def search
+    @languages = Language.all(:order => :short)
+    @query = {}
+    if params[:query]
+      @query = Query.standardize(params[:query])
+      if @query == params[:query]
+        begin
+          page = params[:page] || 1
+          errors, @works = Work.search_with_sphinx(@query, page)
+          flash.now[:error] = errors.join(" ") unless errors.blank?
+        rescue Riddle::ConnectionError
+          flash.now[:error] = t('errors.search_engine_down', :default => "The search engine seems to be down at the moment, sorry!")
+        end
+      else 
+        params[:query] = @query
+        redirect_to url_for(params)
+      end
+    end
+  end  
+
   # GET /works
   def index
     # what we're getting for the view
@@ -120,7 +140,6 @@ class WorksController < ApplicationController
     @pseuds = []
 
     # default values for our inputs
-    @query = nil
     @user = nil
     @tag = nil
     @selected_tags = []
@@ -147,83 +166,66 @@ class WorksController < ApplicationController
       @selected_tags = params[:selected_tags]
     end
 
-    # if we have a query, we are searching with sphinx
-    if params[:query]
-      @query = params[:query]
-      begin
-        @works = Work.search_with_sphinx(params)
-        if @works.size >= ArchiveConfig.SEARCH_RESULTS_MAX
-          @too_many = true 
-        end
-        @search = true;
+    @most_recent_works = (params[:tag_id].blank? && params[:user_id].blank? && params[:language_id].blank? && params[:collection_id].blank?)
+    # if we're browsing by a particular tag, just add that
+    # tag to the selected_tags list.
+    unless params[:tag_id].blank?
+      @tag = Tag.find_by_name(params[:tag_id])
+      if @tag
+        @tag = @tag.merger if @tag.merger
+        redirect_to url_for({:controller => :tags, :action => :show, :id => @tag}) and return unless @tag.canonical
+        @selected_tags << @tag.id.to_s unless @selected_tags.include?(@tag.id.to_s)
+      else
+        flash[:error] = t('tag_not_found', :default => "Sorry, there's no tag by that name in our system.")
+        redirect_to works_path
         return
-      rescue Riddle::ConnectionError
-        flash[:error] = t('errors.search_engine_down', :default => "The search engine seems to be down at the moment, sorry!")
-        redirect_to :action => :index and return
       end
-    else
-      @most_recent_works = (params[:tag_id].blank? && params[:user_id].blank? && params[:language_id].blank? && params[:collection_id].blank?)
-      # we're browsing instead
-      # if we're browsing by a particular tag, just add that
-      # tag to the selected_tags list.
-      unless params[:tag_id].blank?
-        @tag = Tag.find_by_name(params[:tag_id])
-        if @tag
-          @tag = @tag.merger if @tag.merger
-          redirect_to url_for({:controller => :tags, :action => :show, :id => @tag}) and return unless @tag.canonical
-          @selected_tags << @tag.id.to_s unless @selected_tags.include?(@tag.id.to_s)
-        else
-          flash[:error] = t('tag_not_found', :default => "Sorry, there's no tag by that name in our system.")
-          redirect_to works_path
-          return
-        end
-      end
+    end
 
-      # if we're browsing by a particular user get works by that user
-      unless params[:user_id].blank?
-        @user = User.find_by_login(params[:user_id])
-        if @user
-          unless params[:pseud_id].blank?
-            @author = @user.pseuds.find_by_name(params[:pseud_id])
-            if @author
-              @selected_pseuds << @author.id unless @selected_pseuds.include?(@author.id)
-            end
+    # if we're browsing by a particular user get works by that user
+    unless params[:user_id].blank?
+      @user = User.find_by_login(params[:user_id])
+      if @user
+        unless params[:pseud_id].blank?
+          @author = @user.pseuds.find_by_name(params[:pseud_id])
+          if @author
+            @selected_pseuds << @author.id unless @selected_pseuds.include?(@author.id)
           end
-        else
-          flash[:error] = t('user_not_found', :default => "Sorry, there's no user by that name in our system.")
-          redirect_to works_path
-          return
         end
+      else
+        flash[:error] = t('user_not_found', :default => "Sorry, there's no user by that name in our system.")
+        redirect_to works_path
+        return
       end
+    end
 
-      @language_id = params[:language_id] ? Language.find_by_short(params[:language_id]) : nil
-      # Workaround for the getting-all-English-works problem
-      # TODO: better limits
-      if @language_id && @language_id == Language.default
-        @language_id = nil
-        @most_recent_works = true
-      end
-      
-      # Now let's build the query
-      @works, @filters, @pseuds = Work.find_with_options(:user => @user, :author => @author, :selected_pseuds => @selected_pseuds,
-                                                      :tag => @tag, :selected_tags => @selected_tags,
-                                                      :collection => @collection,                                                    
-                                                      :language_id => @language_id,
-                                                      :sort_column => @sort_column, :sort_direction => @sort_direction,
-                                                      :page => params[:page], :per_page => params[:per_page],
-                                                      :boolean_type => params[:boolean_type])
-                                                        
+    @language_id = params[:language_id] ? Language.find_by_short(params[:language_id]) : nil
+    # Workaround for the getting-all-English-works problem
+    # TODO: better limits
+    if @language_id && @language_id == Language.default
+      @language_id = nil
+      @most_recent_works = true
+    end
+    
+    # Now let's build the query
+    @works, @filters, @pseuds = Work.find_with_options(:user => @user, :author => @author, :selected_pseuds => @selected_pseuds,
+                                                    :tag => @tag, :selected_tags => @selected_tags,
+                                                    :collection => @collection,                                                    
+                                                    :language_id => @language_id,
+                                                    :sort_column => @sort_column, :sort_direction => @sort_direction,
+                                                    :page => params[:page], :per_page => params[:per_page],
+                                                    :boolean_type => params[:boolean_type])
+                                                      
 
-      # Limit the number of works returned and let users know that it's happening
-      if @most_recent_works && @works.total_entries >= ArchiveConfig.SEARCH_RESULTS_MAX
-        flash.now[:notice] = "More than #{ArchiveConfig.SEARCH_RESULTS_MAX} works were returned. The first #{ArchiveConfig.SEARCH_RESULTS_MAX} works 
-        we found using the current sort and filters are shown."        
-      end
+    # Limit the number of works returned and let users know that it's happening
+    if @most_recent_works && @works.total_entries >= ArchiveConfig.SEARCH_RESULTS_MAX
+      flash.now[:notice] = "More than #{ArchiveConfig.SEARCH_RESULTS_MAX} works were returned. The first #{ArchiveConfig.SEARCH_RESULTS_MAX} works 
+      we found using the current sort and filters are shown."        
     end
 
     # we now have @works found
     @over_anon_threshold = @works.collect(&:authors_to_sort_on).uniq.count > ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT
-
+  
     if @works.empty? && !@selected_tags.empty?
       begin
         # build filters so we can go back
