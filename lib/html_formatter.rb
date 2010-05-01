@@ -81,9 +81,9 @@ module HtmlFormatter
   end
   
   # Turn newlines into paragraphs and linebreaks
-  def add_paragraphs_to_text(parent_node, working_parent=nil)
+  def add_paragraphs_to_text(parent_node, allowed_tags, working_parent=nil, block_container=true)
     working_parent ||= parent_node
-    inline = INLINE_HTML_TAGS.include?(parent_node.node_name)    
+    inline = INLINE_HTML_TAGS.include?(parent_node.node_name) || !block_container
     fakedoc = Nokogiri::HTML.parse("<br />")
     br_node = fakedoc.at_css('br')
     break_before_first_p = true
@@ -129,6 +129,9 @@ module HtmlFormatter
           end
           first_paragraph = false
         end
+      elsif !allowed_tags.include?(node.node_name) || (!block_container && node.node_name == 'p')
+        add_paragraphs_to_text(node, allowed_tags, working_parent, block_container)
+        node.unlink 
       # If this node is for an inline tag
       elsif INLINE_HTML_TAGS.include?(node.node_name)
         if first_node && !inline
@@ -146,7 +149,7 @@ module HtmlFormatter
         end
         working_parent.add_child(clone_node)
         working_parent = clone_node
-        add_paragraphs_to_text(node, working_parent)
+        add_paragraphs_to_text(node, allowed_tags, working_parent)
         working_parent = working_parent.parent
         node.unlink
         break_before_first_p = false
@@ -155,7 +158,7 @@ module HtmlFormatter
         break_before_first_p = true
         parent_node.add_child(node)
         unless NO_PARAGRAPHS_REQUIRED.include?(node.node_name)
-          add_paragraphs_to_text(node, nil)
+          add_paragraphs_to_text(node, allowed_tags, nil)
         end
       end
       first_node = false
@@ -171,9 +174,9 @@ module HtmlFormatter
       doc = Nokogiri::HTML.parse(text_input)
       body = doc.at_css("body")
       # Make sure text is contained in paragraphs for consistent styling
-      add_paragraphs_to_nodes(body.children)
+      add_paragraphs_to_nodes(body.children) if block_container
       # Convert newlines into p and br tags
-      add_paragraphs_to_text(body)
+      add_paragraphs_to_text(body, allowed_tags, nil, block_container)
       # Remove empty paragraphs
       clean_up_paragraphs(doc.css("p"))
       return body.children.to_xhtml
