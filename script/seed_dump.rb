@@ -13,12 +13,15 @@ SEEDS = ["Sidra", "astolat", "Enigel", "hope", "awils1",
          "Cesy", "elz", "justira", "lim", "melange", "eel",
           "rklyne", "zelempa", "Zooey_Glass"] 
 ADD_EXTERNAL = true
-NTH = 25
+NTH = 30
+#### private bookmarks and unpublished works are not dumped by default
+PRIVATE = false
 
 #### to dump just one user (e.g. Enigel):
 #  SEEDS = [ "Enigel" ]
 #  ADD_EXTERNAL = false 
 #  NTH = 1
+#  PRIVATE = true
 #### note: this will dump all their works, comments and bookmarks, 
 #### but not the associated works on their comments and bookmarks
 
@@ -103,21 +106,24 @@ def user_records(u)
         end
       end
     end
-    p.bookmarks.find_in_batches(:batch_size => NTH) do |batch|
-      bookmark = batch.last
-      x << bookmark
-      bookmarkable = bookmark.bookmarkable
-      if bookmarkable.is_a?(Work)
-        WORKS << bookmarkable if ADD_EXTERNAL
-      else
-        TAGGABLES << bookmarkable
-        x << bookmarkable if ADD_EXTERNAL
+    p.bookmarks.each do |bookmark|
+      if !bookmark.private? || PRIVATE
+        x << bookmark
+        bookmarkable = bookmark.bookmarkable
+        if bookmarkable.is_a?(Work)
+          WORKS << bookmarkable if ADD_EXTERNAL
+        else
+          TAGGABLES << bookmarkable
+          x << bookmarkable if ADD_EXTERNAL
+        end
       end
     end
     x << p.creatorships
     p.creatorships.map(&:creation).each do |item|
       if item.is_a?(Work)
-        WORKS << item
+        if item.posted? || PRIVATE
+          WORKS << item
+        end
       elsif item.is_a?(Chapter)
         nil
       else
@@ -148,8 +154,9 @@ def user_records(u)
 end
 
 def write_model(thing)
-  print "."; STDOUT.flush
   klass = thing.class.name
+  initial = klass[0..0].downcase
+  print initial; STDOUT.flush
   attributes = thing.attributes
   attributes["email"] = "REDACTED@transformativeworks.org" if attributes["email"]
   # the following is to fix a bug in YAML slurp
