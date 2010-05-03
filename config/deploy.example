@@ -34,11 +34,13 @@ namespace :local do
     touch "#{shared_path}/config/database.yml" 
     touch "#{shared_path}/config/local.yml" 
     touch "#{shared_path}/config/s3.yml" 
-    puts "requires manual configuration"
+    touch "#{shared_path}/config/sphinx.yml" 
+    puts "#{shared_path}/config requires manual configuration"
   end
 
   desc "Update version and link to current" 
   task :update do
+    run "ln -sf #{shared_path}/config/sphinx.yml #{release_path}/config/sphinx.yml" 
     run "ln -sf #{shared_path}/config/s3.yml #{release_path}/config/s3.yml" 
     run "ln -sf #{shared_path}/config/local.yml #{release_path}/config/local.yml" 
     run "sed -i '$d' #{shared_path}/config/local.yml"

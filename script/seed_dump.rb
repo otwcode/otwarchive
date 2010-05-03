@@ -155,7 +155,7 @@ end
 
 def write_model(thing)
   klass = thing.class.name
-  initial = klass[0..0].downcase
+  initial = klass.first.downcase
   print initial; STDOUT.flush
   attributes = thing.attributes
   attributes["email"] = "REDACTED@transformativeworks.org" if attributes["email"]
