@@ -43,4 +43,27 @@ module CollectionsHelper
     collections.collect {|coll| link_to coll.title, collection_path(coll)}.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
   end
   
+  def challenge_assignment_byline(assignment)
+    if assignment.offer_signup 
+      assignment.offer_signup.pseud.byline 
+    elsif assignment.pinch_hitter 
+      assignment.pinch_hitter.byline + "* (pinch hitter)" 
+    else
+      ""
+    end
+  end
+  
+  def challenge_assignment_email(assignment)
+    if assignment.offer_signup 
+      user = assignment.offer_signup.pseud.user
+    elsif assignment.pinch_hitter 
+      user = assignment.pinch_hitter.user
+    else
+      user = nil
+    end
+    if user
+      mailto_link user, :subject => "[#{h(@collection.title)}] Message from Collection Maintainer"
+    end
+  end
+  
 end

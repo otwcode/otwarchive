@@ -77,6 +77,7 @@
     <thead>
       <tr>
         <th>Pseud</th>
+        <th>Email</th>
         <th>Writing For</th>
         <th>Work Info</th>
         <th>
@@ -89,7 +90,8 @@
 
     <% @open_assignments.each do |assignment| %>
       <tr>
-        <td><%= assignment.offer_signup ? assignment.offer_signup.pseud.byline : (assignment.pinch_hitter ? assignment.pinch_hitter.byline + "* (pinch hitter)" : "") -%></td>          
+        <td><%= challenge_assignment_byline(assignment) -%></td>
+        <td><%= challenge_assignment_email(assignment) %></td>
         <td>
           <% request = assignment.request_signup || assignment.pinch_request_signup %>
           <% if request %>

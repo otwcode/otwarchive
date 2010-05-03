@@ -39,6 +39,7 @@
       <th rowspan=2 abbr="options" scope="col"><%=h t('editing options', :default =>"Editing Options") %></th>
     <% end %>
     <th rowspan=2>Pseud</th>
+    <th rowspan=2>Email</th>
     <% @challenge.requests_num_allowed.times do |i| %>
     <th colspan=<%= (num_request_tag_categories + (show_request_description ? 1 : 0 ) + (show_request_url ? 1 : 0)) -%>>
       <%= t("gift_exchange.request#{i+1}", :default => "Request {{num}}", :num => i+1) %>
@@ -75,6 +76,7 @@
       <% end %>
 
       <td><%= link_to challenge_signup.pseud.name, collection_signup_path(@collection, challenge_signup) %></td>
+      <td><%= mailto_link challenge_signup.pseud.user, :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %></td>
       <!-- show tags, description, url for all allowed requests and offers: using a lot of evals here to DRY up the code since it's so repetitive -->
       <% %w(request offer).each do |prompt_type| %>    
         <% eval("@challenge.#{prompt_type.pluralize}_num_allowed").times do |i| %>
@@ -104,4 +106,3 @@
     </tr>
   <% end %>
 </table>
-
