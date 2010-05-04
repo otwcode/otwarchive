@@ -22,7 +22,7 @@
  <dt>Icon</dt>
  <dd>
    <p class="icon">
-     <%= image_tag(@pseud.icon.url(:standard), :alt => @pseud.icon_alt_text, :class => "icon") %>
+     <%= standard_icon_display(@user, @pseud) %>
    </p>
    <%- if @pseud.icon_file_name -%>
      <%= f.check_box :delete_icon, {:checked => false} %>

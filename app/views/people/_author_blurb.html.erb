@@ -10,7 +10,7 @@
         <h5><%= authored_items(author) -%></h5>
       <%- end -%>
 		<div class="icon">
-	        <%= image_tag(author.icon.url(:standard), :alt => author.icon_alt_text, :class => "icon") %>
+	        <%= standard_icon_display(author.user, author) %>
 	      </div>
       <%- unless author.description.blank? -%>
         <blockquote class="user-generated-view">

@@ -31,12 +31,17 @@ module UsersHelper
     end
   end
   
+  def standard_icon_display(user, pseud=nil)
+    pseud ||= user.default_pseud
+    image_tag(standard_icon(user, pseud), :alt => (pseud.icon_file_name ? pseud.icon_alt_text : "Archive of Our Own default icon: the AO3 logo in grey, on a white background"), :class => "icon")
+  end
+  
   def icon_display(user, pseud=nil)
     pseud ||= user.default_pseud
     if current_user == user
-      link_to image_tag(standard_icon(user, pseud), :alt => pseud.icon_alt_text, :class => "icon"), [:edit, user, pseud], :title => "Edit pseud"
+      link_to standard_icon_display(user, pseud), [:edit, user, pseud], :title => "Edit pseud"
     else
-      image_tag(standard_icon(user, pseud), :alt => pseud.icon_alt_text, :class => "icon")
+      standard_icon_display(user, pseud)
     end
   end
   
