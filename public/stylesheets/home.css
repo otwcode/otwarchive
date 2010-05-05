@@ -60,7 +60,7 @@ font-size: 1em;
 
 .home #signin form {
 background: url(/images/fffef9-ccc.png) bottom left repeat-x #fffef9;
-margin: -1.5em -0.25em 1em;
+margin: -1.5em 0em 1em;
 padding: 0.25em;
 border: 1px groove #777;
 text-align:right;
