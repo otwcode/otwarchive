@@ -131,6 +131,18 @@ class WorksController < ApplicationController
       end
     end
   end  
+  
+  def advancedsearch
+    @languages = Language.all(:order => :short)
+    @query = {}
+    if params[:query]
+      @query = Query.standardize(params[:query])
+      unless @query == params[:query]
+        params[:query] = @query
+        redirect_to url_for(params)
+      end
+    end
+  end  
 
   # GET /works
   def index

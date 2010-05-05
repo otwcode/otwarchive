@@ -1,57 +1,61 @@
 <%- form_tag url_for(:controller => 'works', :action => 'search'), :class => 'search', :method => :get do -%>
 <fieldset>
 	<legend>Search works</legend>
-  <p>
-	  <%= text_field_tag "query[text]", @query[:text], :id => 'refine_text' %>
-    <%= link_to_help "work-search-text-help" -%> (any field)
-  </p>
+  <%- unless @query %>
+  <%- @query ||= {} %>
+  <%- end -%>
   <dl>
   <dt>
-	  <label for="refine_tag"><%= t('tag', :default => 'tag:') %></label>
+    <label for="refine_text"><%= t('text', :default => 'Full text:') %></label>
+    </dt><dd>
+	  <%= text_field_tag "query[text]", @query[:text], :id => 'refine_text' %>
+    <%= link_to_help "work-search-text-help" -%> 
+  </dd>
+  <dt>
+	  <label for="refine_tag"><%= t('tag', :default => 'Tag:') %></label>
     </dt><dd>
     <%= text_field_tag "query[tag]", @query[:tag], :id => 'refine_tag' %>
     <%= link_to_help "work-search-text-help" -%>
   </dd>
   <dt>
-	  <label for="refine_title"><%= t('title', :default => 'title:') %></label>
+	  <label for="refine_title"><%= t('title', :default => 'Title:') %></label>
     </dt><dd>
     <%= text_field_tag "query[title]", @query[:title], :id => 'refine_title' %>
     <%= link_to_help "work-search-text-help" -%>
   </dd>
   <dt>
-	  <label for="refine_author"><%= t('author', :default => 'author:') %></label>
+	  <label for="refine_author"><%= t('author', :default => 'Author:') %></label>
     </dt><dd>
     <%= text_field_tag "query[author]", @query[:author], :id => 'refine_author' %>
     <%= link_to_help "work-search-text-help" -%>
   </dd>
   <dt>
-	  <label for="refine_word_count"><%= t('words', :default => 'words:') %></label>
+	  <label for="refine_word_count"><%= t('words', :default => 'Words:') %></label>
     </dt><dd>
     <%= text_field_tag "query[words]", @query[:words], :id => 'refine_word_count' %>
     <%= link_to_help "work-search-numerical-help" -%>
   </dd>
   <dt>
-	  <label for="refine_hit_count"><%= t('hits', :default => 'hits:') %></label>
+	  <label for="refine_hit_count"><%= t('hits', :default => 'Hits:') %></label>
     </dt><dd>
     <%= text_field_tag "query[hits]", @query[:hits], :id => 'refine_hit_count' %>
     <%= link_to_help "work-search-numerical-help" -%>
   </dd>
   <dt>
-	  <label for="refine_revised_at"><%= t('date_desc', :default => 
-'date:') %></label>
+	  <label for="refine_revised_at"><%= t('date_desc', :default => 'Date:') %></label>
     </dt><dd>
     <%= text_field_tag "query[date]", @query[:date], :id => 'refine_revised_at' %>
     <%= link_to_help "work-search-date-help" -%>
   </dd>
   <dt>
-	  <label for="refine_language"><%= t('language', :default => 'language:') %></label>
+	  <label for="refine_language"><%= t('language', :default => 'Language:') %></label>
     </dt><dd>
     <%= select_tag "query[language]", "<option></option>" + options_from_collection_for_select(@languages, 'name', 'name', @query[:language]), :id => 'refine_language' %>
     <%= link_to_help "work-search-language-help" -%>
   </dd>
   </dl>
-  <span class="submit">
+  <p class="submit">
     <%= submit_tag t('forms.search', :default => 'Search works'), :class => 'button', :name => nil %>
-  </span>
+  </p>
 </fieldset>
 <% end -%>
