@@ -153,6 +153,10 @@ module HtmlFormatter
         working_parent = working_parent.parent
         node.unlink
         break_before_first_p = false
+      # A block tag inside an inline tag, argh
+      elsif INLINE_HTML_TAGS.include?(parent_node.node_name)
+        working_parent.add_child(node)
+        add_paragraphs_to_text(node, allowed_tags, nil, false)
       # If this node is for a block tag
       else
         break_before_first_p = true
