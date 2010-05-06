@@ -50,7 +50,7 @@
   <dt>
 	  <label for="refine_language"><%= t('language', :default => 'Language:') %></label>
     </dt><dd>
-    <%= select_tag "query[language]", "<option></option>" + options_from_collection_for_select(@languages, 'name', 'name', @query[:language]), :id => 'refine_language' %>
+    <%= select_tag "query[language]", "<option></option>" + options_from_collection_for_select(@languages, 'name', 'name', @query[:language].capitalize), :id => 'refine_language' %>
     <%= link_to_help "work-search-language-help" -%>
   </dd>
   </dl>
