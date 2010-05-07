@@ -17,7 +17,8 @@
 								{ background: none; }
  .collection .blurb .header, .blurb .mystery 
 								{ background: none; }
-.collection .blurb .header h4, .blurb .header h5, .blurb .header ul         { margin: auto 6em auto 120px; }								
+.collection .blurb .header h4, .blurb .header h5, .blurb .header ul { margin: auto 6em auto 0; }
+
 /*css3 non-critical perks*/
  .blurb ul.required-tags:before { content: "(";}
  .blurb ul.required-tags:after 	{ content: ")";}
