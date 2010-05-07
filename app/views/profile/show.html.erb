@@ -11,15 +11,15 @@
       <dd class="pseuds"><%= print_pseud_list(@user.pseuds) %></dd>
     <%- if @user.profile.location? -%>
     <dt class="location"><%=h t('location', :default => "I live in:") %></dt>
-      <dd>&nbsp;<%=h @user.profile.location -%></dd>
+      <dd><%=h @user.profile.location -%></dd>
     <%- end -%>
     <%- if @user.preference.try(:date_of_birth_visible) -%>
     <dt class="birthday"><%=h t('birthday', :default => "My birthday:") %></dt>
-      <dd class="birthday">&nbsp;<%=l(@user.profile.date_of_birth) unless @user.profile.date_of_birth.blank? -%></dd> 
+      <dd class="birthday"><%=l(@user.profile.date_of_birth) unless @user.profile.date_of_birth.blank? -%></dd> 
     <%- end -%>
     <%- if @user.preference.try(:email_visible) -%>
     <dt class="email"><%=h t('email', :default => "My email address:") %></dt>
-      <dd class="email">&nbsp;<%= mail_to @user.email, nil, :encode => "hex" %></dd>
+      <dd class="email"><%= mail_to @user.email, nil, :encode => "hex" %></dd>
     <%- end -%>
   </dl>
 </div>

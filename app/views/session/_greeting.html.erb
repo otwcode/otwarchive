@@ -1,6 +1,6 @@
 <%- if logged_in? -%>
   <p id="greeting">
-      <%=h t('hi', :default => "Hi,") -%>&nbsp;<%= link_to current_user.login, user_path(current_user), :class => 'login' -%>!
+      <%=h t('hi', :default => "Hi,") -%> <%= link_to current_user.login, user_path(current_user), :class => 'login' -%>!
     </p>
   <ul id="login">
     <li>
