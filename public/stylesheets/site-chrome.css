@@ -323,15 +323,15 @@ li.comment h4	{ font-size: 1.25em; margin-top:0; }
 /* COLLECTIONS INDEX*/
  .collections-index .index 		{ width: 75% }
  #main.collections-show h2 span { font-size: smaller }
- .collection .blurb  { min-height:100px }
- .collection .blurb h4, .collection .blurb .mods, .collection .blurb blockquote, #main .collection .blurb p.type, .collection .blurb dl.stats
-      { margin:0 0 0 120px; }
+ .collection .blurb  { min-height:100px; padding-bottom: 0.5em; }
+ .collection .blurb h4, .collection .blurb .mods, .collection .blurb  blockquote, #main .collection
+ .blurb p.type, .collection .blurb  dl.stats    { margin:0 0 0 120px; }
  #main .collection .blurb .navigation { margin-left: 120px; }
  #main .collection .blurb p.type { margin-bottom: 0.3em; margin-top: 0.3em; }
  .collection div.icon { top: 0.1em; }
- 
+
 /* Collections */
-  .twobutton { width: 12em; }
+  .twobutton { width: 12em }
   
 /* BOOKMARKS INDEX*/
  .bookmarks-index .user .module      { float: none; }

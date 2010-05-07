@@ -82,7 +82,7 @@
         <h3>News</h3>
         <p><%= link_to sanitize_title_for_display(@admin_post.title), @admin_post %></p>
         <%- if @admin_post_show_more -%>
-          <p><%= link_to t('page.more_news', :default => 'More news&#8230;'), admin_posts_path %></p>
+        <p><%= link_to t('page.more_news', :default => 'More news&#8230;'), admin_posts_path %></p>
         <%- end -%>
       </div>
     <%- end -%>

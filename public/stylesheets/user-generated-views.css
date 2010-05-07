@@ -1,6 +1,6 @@
 /* content inputted by a user into a textarea.*/
 
-#main .user-generated-view p { margin:1.5em auto; }
+#main .user-generated-view p { margin:1.5em auto; line-height:1.50em}
 
 /*lists */
 .user-generated-view dl		{ font-size:1em; margin:1.5em 0; border: 0; }
@@ -11,7 +11,7 @@
 .user-generated-view ul		{ margin:1.125em auto; padding:0 1em; }
 .user-generated-view li, .user-generated-view ol ul li
 							{ list-style-type:disc; margin:0.75em 0 0.75em 1.75em;}
-.user-generated-view ol		{ margin:0.75em auto; padding:0 1.5em; }
+v.user-generated-view ol		{ margin:0.75em auto; padding:0 1.5em; }
 .user-generated-view ol li	{ list-style-type:decimal; margin:0.75em 0 0.75em 1.75em ;}
 .user-generated-view ol li ol li	
 							{ list-style-type: lower-alpha;}
