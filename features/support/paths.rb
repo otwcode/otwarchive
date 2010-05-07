@@ -33,6 +33,8 @@ module NavigationHelpers
      
     when /the tag search page/
       search_tags_path
+    when /the advanced search page/
+      search_path
 
     # Here is an example that pulls values out of the Regexp:
     #

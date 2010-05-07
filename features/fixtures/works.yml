@@ -5,7 +5,8 @@ first:
   title_to_sort_on: first work
   hit_count: 1001
   language: english
-  authors_to_sort_on: testuser
+  authors_to_sort_on: testuser1
+  revised_at: 2010-04-30
 second:
   posted: true
   title: second work
@@ -14,6 +15,7 @@ second:
   hit_count: 10
   language: english
   authors_to_sort_on: testuser
+  revised_at: 2004-04-30
 third:
   posted: true
   title: third work
@@ -22,3 +24,12 @@ third:
   hit_count: 10000
   language: german
   authors_to_sort_on: testuser
+fourth:
+  posted: true
+  title: fourth
+  word_count: 10000
+  title_to_sort_on: fourth work
+  hit_count: 0
+  language: french
+  authors_to_sort_on: testuser2
+  

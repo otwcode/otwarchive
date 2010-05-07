@@ -2,6 +2,7 @@ chapter1:
   posted: true
   content: some content for the first work
   work: first
+  published_at: 2010-04-30
 chapter2:
   posted: true
   content: this work was written a long time ago
@@ -11,3 +12,12 @@ chapter3:
   posted: true
   work: third
   content: This work is in a different language
+chapter4:
+  posted: true
+  work: third
+  content: This is a second chapter
+chapter5:
+  posted: true
+  work: fourth
+  content: This work is by a different user.
+  published_at: 2010-04-30

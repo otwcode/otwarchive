@@ -4,14 +4,14 @@
 
 <p>
   <%= t('you_searched_for', :default => 'You searched for:') %>
-    <%- unless @query[:text].blank? %><%= t('text', :default => 'Text') %>: <%= @query[:text] %>. <%- end %>
-    <%- unless @query[:tag].blank? %><%= t('tag', :default => 'Tag') %>: <%= @query[:tag] %>. <%- end %>
-    <%- unless @query[:title].blank? %><%= t('title', :default => 'Title') %>: <%=  @query[:title] %>. <%- end %>
-    <%- unless @query[:author].blank? %><%= t('author', :default => 'Author') %>: <%= @query[:author] %>. <%- end %>
-    <%- unless @query[:words].blank? %><%= t('words', :default => 'Words') %>: <%= @query[:words] %>. <%- end %>
-    <%- unless @query[:hits].blank? %><%= t('hits', :default => 'Hits') %>: <%= @query[:hits] %>. <%- end %>
-    <%- unless @query[:date].blank? %><%= t('date_desc', :default => 'Date') %>: <%= @query[:date] %>. <%- end %>
-    <%- unless @query[:language].blank? %><%= t('language', :default => 'Language') %>: <%= @query[:language] %>. <%- end %>
+    <%- unless @query[:text].blank? %><%= t('text', :default => 'Text') %>: <%= @query[:text] %> <%- end %>
+    <%- unless @query[:tag].blank? %><%= t('tag', :default => 'Tag') %>: <%= @query[:tag] %> <%- end %>
+    <%- unless @query[:title].blank? %><%= t('title', :default => 'Title') %>: <%=  @query[:title] %> <%- end %>
+    <%- unless @query[:author].blank? %><%= t('author', :default => 'Author') %>: <%= @query[:author] %> <%- end %>
+    <%- unless @query[:words].blank? %><%= t('words', :default => 'Words') %>: <%= @query[:words] %> <%- end %>
+    <%- unless @query[:hits].blank? %><%= t('hits', :default => 'Hits') %>: <%= @query[:hits] %> <%- end %>
+    <%- unless @query[:date].blank? %><%= t('date_desc', :default => 'Date') %>: <%= @query[:date] %> <%- end %>
+    <%- unless @query[:language].blank? %><%= t('language', :default => 'Language') %>: <%= @query[:language] %> <%- end %>
     </p>
 
 <%- form_tag url_for(:controller => 'works', :action => 'search'), :class => 'search', :method => :get do -%>

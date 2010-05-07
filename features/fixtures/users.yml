@@ -1,2 +1,8 @@
 testuser:
   login: testuser
+  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1
+  activated_at: 2009-12-12 21:08:07 +00:00
+
+testusera:
+  login: testusera
+  crypted_password: test

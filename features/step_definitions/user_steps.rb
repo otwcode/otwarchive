@@ -40,3 +40,22 @@ When /^I visit user page for "([^\"]*)"$/ do |login|
   visit user_url(user)
 end
 
+When /^I edit the work "([^\"]*)"$/ do |work|
+  work = Work.find_by_title!(work)
+  visit work_url(work)
+  click_link("Edit")
+end
+
+When /^I view the work "([^\"]*)"$/ do |work|
+  work = Work.find_by_title!(work)
+  visit work_url(work)
+end
+
+When /^I log in as "([^\"]*)" with password "([^\"]*)"$/ do |login, password|
+  unless login.blank?
+    fill_in "User name", :with => login
+    fill_in "Password", :with => password
+    check "Remember me"
+    click_button "Login"
+  end
+end

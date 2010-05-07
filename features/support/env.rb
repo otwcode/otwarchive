@@ -47,7 +47,7 @@ ActionController::Base.allow_rescue = false
 # block that will explicitly put your database in a known state.
 Cucumber::Rails::World.use_transactional_fixtures = false
 
-require 'factory_girl'
+ require 'factory_girl'
 
 # How to clean your database when transactions are turned off. See
 # http://github.com/bmabey/database_cleaner for more info.
@@ -58,3 +58,12 @@ if defined?(ActiveRecord::Base)
   rescue LoadError => ignore_if_database_cleaner_not_present
   end
 end
+
+
+Before do
+  Fixtures.reset_cache
+  fixtures_folder = File.join(RAILS_ROOT, 'features', 'fixtures')
+  fixtures = Dir[File.join(fixtures_folder, '*.yml')].map {|f| File.basename(f, '.yml') }
+  Fixtures.create_fixtures(fixtures_folder, fixtures)
+end
+
