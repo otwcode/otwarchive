@@ -131,7 +131,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  .blurb ul li,.blurb dd ul li	{ display: inline }
  li.blurb 						{ padding-left: 0.5em; padding-right: 0.5em; padding-top: 0.25em; padding-bottom: 0.25em; position: relative; clear:left; min-height: 100px }
  .blurb .module					{ float:none;}
- .work .blurb .header, .series .blurb .header, 	.blurb .work .header, .bookmark .blurb .header, .works .blurb .header, .story-list .blurb .header	
+ .work .blurb .header, .series .blurb .header, 	.blurb .work .header, .bookmark .blurb .header, .works .blurb .header, .story-list .blurb .header, .work.blurb .header	
           { min-height:55px; }
  .blurb .header h4 				{ font-size: 1.1425em; margin: 0.375em 5.25em 0 65px }
  #main .blurb .header img       { position: relative; margin: 0; }
@@ -270,8 +270,8 @@ li.comment h4	{ font-size: 1.25em; margin-top:0; }
  .session #signin 				{ float: left; margin-bottom: 1.5em; width: 49% }
 
 /* DASHBOARD: HISTORY */
- .readings-index .module h3 	{ border-bottom: 2px dotted #ddd; font-size: 1em }
- .readings-index .module 		{ border: 1px solid #ddd; margin: 0.25em; padding: 0 0.25em }
+ .readings-index .module h3 	{ border-top: 2px dotted #ddd; font-size: 1em; margin-top: 0.5em; padding-top: 0.5em; }
+ .readings-index .reading.module 		{ border: 1px solid #ddd; margin: 0.25em; padding: 0 0.25em }
  .readings-index li.blurb 		{ border: 0 }
 /* DASHBOARD: INBOX */
  .inbox-show p.navigation		{ float:left;}
@@ -282,8 +282,8 @@ li.comment h4	{ font-size: 1.25em; margin-top:0; }
  .profile-show .module h3 		{ margin-top: 2.75em }
  .profile-show .datetime 		{ top:-3.25em }
  
-/* USER PROFILE EDIT PSEUD */
- .edit_pseud p.icon { position: static; }
+/* USER PROFILE NEW or EDIT PSEUD */
+ .edit_pseud p.icon, .new_pseud p.icon { position: static; }
  
 /* USER OWN WORKS */
  .works-own .own                { background: transparent; }
