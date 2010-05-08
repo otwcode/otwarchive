@@ -42,24 +42,38 @@ class HtmlFormatterTest < ActiveSupport::TestCase
 
 
     one_test "<div><div>chapter1</div></div><div>chapter1contentcontent</div>",  
-      "<div><div><p>chapter1</p></div></div><div><p>chapter1contentcontent</p></div>"
+      "<div>
+  <div>
+    <p>chapter1</p>
+  </div>
+</div><div>
+  <p>chapter1contentcontent</p>
+</div>"
 
     one_test "<div>chapter1</div><div>chapter1contentcontent</div>",  
-      "<div><p>chapter1</p></div><div><p>chapter1contentcontent</p></div>"
+      "<div>
+  <p>chapter1</p>
+</div><div>
+  <p>chapter1contentcontent</p>
+</div>"
 
     one_test "<p>  </p>",  ""
-    one_test "<a href=\"xyz\"/><br/>text",  "<p><a href=\"xyz\"></a><br/>text</p>"
+    one_test "<a href=\"xyz\"/><br/>text",  "<p><a href=\"xyz\"></a><br />text</p>"
 
-    one_test "<p><a href=\"xyz\"/><br/>text</p>",  "<p><a href=\"xyz\"></a><br/>text</p>"
+    one_test "<p><a href=\"xyz\"/><br/>text</p>",  "<p><a href=\"xyz\"></a><br />text</p>"
 
-    one_test "<b>title: </b> value<br/><b>title2</b> value 2",  "<p><b>title: </b> value<br/><b>title2</b> value 2</p>"
-    one_test "<i><img src=\"gif.gif\">my post. <b>big</b> day!</i> more words",  "<p><i><img src=\"gif.gif\"/>my post. <b>big</b> day!</i> more words</p>"
-    one_test "<b><i><img src=\"gif.gif\">my post. <b>big</b> day!</i> more words",  "<p><b></b><i><img src=\"gif.gif\"/>my post. <b>big</b> day!</i> more words</p>"
+    one_test "<b>title: </b> value<br/><b>title2</b> value 2",  "<p><b>title: </b> value<br /><b>title2</b> value 2</p>"
+    one_test "<i><img src=\"gif.gif\">my post. <b>big</b> day!</i> more words",  
+      "<p><i><img src=\"gif.gif\" />my post. <b>big</b> day!</i> more words</p>"
+    one_test "<b><i><img src=\"gif.gif\">my post. <b>big</b> day!</i> more words",  
+      "<p><b></b><i><img src=\"gif.gif\" />my post. <b>big</b> day!</i> more words</p>"
   end
 
   def test_self_closing
-    one_test "<b><i><img src=\"gif.gif\">my post. <b>big</b> day!</i> more words",  "<p><b></b><i><img src=\"gif.gif\"/>my post. <b>big</b> day!</i> more words</p>"
-    one_test "<b><i><img src=\"gif.gif\"></img>my post. <b>big</b> day!</i> more words",  "<p><b></b><i><img src=\"gif.gif\"/>my post. <b>big</b> day!</i> more words</p>"
+    one_test "<b><i><img src=\"gif.gif\">my post. <b>big</b> day!</i> more words",  
+      "<p><b></b><i><img src=\"gif.gif\" />my post. <b>big</b> day!</i> more words</p>"
+    one_test "<b><i><img src=\"gif.gif\"></img>my post. <b>big</b> day!</i> more words",  
+      "<p><b></b><i><img src=\"gif.gif\" />my post. <b>big</b> day!</i> more words</p>"
   end
   
   def test_doctype
@@ -89,7 +103,7 @@ text2
 
 <hr />
 text3
-", "<p>text1<br/>text2</p><hr/><p>text3</p>"
+", "<p>text1<br />text2</p><hr /><p>text3</p>"
 
     one_test "This is a test
 <i>Of a line</i> starting with the i tag.", "<p>This is a test<br/><i>Of a line</i> starting with the i tag.</p>"
@@ -119,8 +133,12 @@ text3
   end
 
   def test_attributes
-    one_test '<div class="attrtest">line</div>',  '<div class="attrtest"><p>line</p></div>'
-    one_test '<div class="attrtest attrtest2">line</div>',  '<div class="attrtest attrtest2"><p>line</p></div>'
+    one_test '<div class="attrtest">line</div>',  '<div class="attrtest">
+  <p>line</p>
+</div>'
+    one_test '<div class="attrtest attrtest2">line</div>',  '<div class="attrtest attrtest2">
+  <p>line</p>
+</div>'
 
     one_test "<xxx blah blah>text",  "<!--<xxx>--><!--</xxx>--><p>text</p>"
   end
@@ -130,7 +148,9 @@ text3
   end
   
   def test_lt_in_title      
-    one_test '<span title="woo! <3">text</span>', '<p><span title="woo! <3">text</span></p>'
+    one_test '<span title="woo! <3">text</span>', '<p>
+  <span title="woo! <3">text</span>
+</p>'
   end
   
   def test_many_lts
