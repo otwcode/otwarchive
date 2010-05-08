@@ -776,7 +776,7 @@ class WorksController < ApplicationController
   # history enabled and is not the author of the work
   def update_or_create_reading
     return unless @work
-    if logged_in? && current_user.preference.history_enabled
+    if logged_in? && current_user.preference.try(:history_enabled)
       unless current_user.is_author_of?(@work)
         reading = Reading.find_or_initialize_by_work_id_and_user_id(@work.id, current_user.id)
         reading.major_version_read, reading.minor_version_read = @work.major_version, @work.minor_version

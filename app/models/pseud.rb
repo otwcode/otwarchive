@@ -18,6 +18,7 @@ class Pseud < ActiveRecord::Base
   
   belongs_to :user
   has_many :bookmarks, :dependent => :destroy
+  has_many :recs, :class_name => 'Bookmark', :conditions => {:rec => true}
   has_many :comments  
   has_many :creatorships
   has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work'
@@ -251,4 +252,42 @@ class Pseud < ActiveRecord::Base
     self.icon = nil if delete_icon? && !icon.dirty?
   end
     
+  def self.search_with_sphinx(query, page)
+    search_string, with_hash, query_errors = Query.split_query(query)
+    # set pagination and extend mode
+    options = {
+      :per_page => ArchiveConfig.ITEMS_PER_PAGE, 
+      :max_matches => ArchiveConfig.SEARCH_RESULTS_MAX, 
+      :page => page, 
+      :match_mode => :extended 
+      }
+    # attribute restrictions
+    options[:with] = with_hash
+    return query_errors, Pseud.search(search_string, options)
+  end
+
+  # Index for Thinking Sphinx
+  define_index do
+
+    # fields
+    indexes :name
+    indexes :description
+    indexes :icon_alt_text
+
+    # associations
+    indexes user(:login), :as => 'user'
+#    indexes works(:id), :as => 'work_id'
+#    indexes tags(:name), :as => 'tag'
+
+    # attributes
+    has bookmarks(:id), :as => :bookmarks_ids
+    has "COUNT(bookmarks.id)", :as => 'bookmark_count', :type => :integer
+
+#    has creatorship.creation(:id), :as => :creation_ids
+#    has "COUNT(works.id)", :as => 'work_count', :type => :integer
+
+    # properties
+    set_property :delta => :delayed
+  end
+  
 end

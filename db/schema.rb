@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100420211328) do
+ActiveRecord::Schema.define(:version => 20100502024059) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -76,6 +76,7 @@ ActiveRecord::Schema.define(:version => 20100420211328) do
     t.boolean  "hidden_by_admin",                 :default => false, :null => false
     t.integer  "pseud_id",                                           :null => false
     t.boolean  "rec",                             :default => false, :null => false
+    t.boolean  "delta",                           :default => true
   end
 
   add_index "bookmarks", ["bookmarkable_id", "bookmarkable_type", "pseud_id"], :name => "index_bookmarkable_pseud"
@@ -626,6 +627,7 @@ ActiveRecord::Schema.define(:version => 20100420211328) do
     t.integer  "icon_file_size"
     t.datetime "icon_updated_at"
     t.string   "icon_alt_text",     :default => ""
+    t.boolean  "delta",             :default => true
   end
 
   add_index "pseuds", ["user_id", "name"], :name => "index_pseuds_on_user_id_and_name"

@@ -4,6 +4,9 @@ module Query
 
   WORK_FIELDS = %w{author title language tag}
   WORK_INDEXES = WORK_FIELDS + %w{words hits date}
+  BOOKMARK_FIELDS = %w{tag indirect notes bookmarker}
+  PEOPLE_FIELDS = %w{name icon_alt_text description}
+  ALL_FIELDS = (WORK_FIELDS + BOOKMARK_FIELDS + PEOPLE_FIELDS).uniq
   
   # this is used to take a full text query from the small search box
   # like "author: astolat words: > 1000" 
@@ -30,10 +33,11 @@ module Query
     with = {}
     errors = []
     text = query[:text] || ""
-    for string in WORK_FIELDS
+    for string in ALL_FIELDS
       text = (text + " @" + string + " " + query[string.to_sym]) unless query[string.to_sym].blank?
     end
-    for string in %w{word hit} do
+    text = (text + " @type " + query[:type]) unless query[:type].blank?
+    for string in %w{word hit bookmark} do
       unless query[string.pluralize.to_sym].blank?
         match = query[string.pluralize.to_sym].match(/^([<>]*)\s*([\d,. -]+)\s*$/)
         if match
@@ -43,6 +47,7 @@ module Query
         end
       end
     end
+    with[:rec] = true if query[:rec]
     unless query[:date].blank?
       match = query[:date].match(/^([<>]*)\s*([\d -]+)\s*(year|week|month|day|hour)s?(\s*ago)?s*$/)
       if match
@@ -51,6 +56,7 @@ module Query
         errors<<"bad date format (ignored)"
       end
     end
+    text = text.gsub(/AND/, "").gsub(/OR/, "|").gsub(/NOT\s+/, "-")
     return [text.strip, with, errors]
   end
   

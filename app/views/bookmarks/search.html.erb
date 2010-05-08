@@ -1,0 +1,14 @@
+<h2>Bookmark Search: Beta</h2>
+
+<%= render :partial => 'bookmarks/search_form' %>
+
+<%- if @bookmarks -%>
+  <p><strong><%= @bookmarks.total_entries %> Found</strong><%= link_to_help "bookmark-search-results-help" -%></p>
+  <h3 class="landmark">Bookmarks List</h3>
+  <ol class="bookmark index">
+    <% for bookmark in @bookmarks %>
+      <%= render :partial => 'bookmark', :locals => {:bookmark => bookmark} %>
+    <% end %>
+  </ol>
+  <%= will_paginate @bookmarks %>
+<%- end -%>

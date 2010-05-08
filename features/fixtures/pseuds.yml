@@ -1,3 +1,9 @@
 testuser:
   name: testuser
   user: testuser
+testuser2:
+  name: testuser2
+  user: testuser2
+testpseud2:
+  name: something else
+  user: testuser2

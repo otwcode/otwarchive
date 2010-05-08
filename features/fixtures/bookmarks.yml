@@ -1,0 +1,10 @@
+bookm1:
+  pseud: testuser
+  bookmarkable: first (Work)
+  rec: true
+bookm2:
+  pseud: testuser
+  bookmarkable: second (Work)
+bookm3:
+  pseud: testuser
+  bookmarkable: third (Work)

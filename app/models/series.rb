@@ -1,12 +1,16 @@
 class Series < ActiveRecord::Base
   has_many :serial_works, :dependent => :destroy
   has_many :works, :through => :serial_works
-  has_many :tags, :through => :works, :uniq => true
+  has_many :work_tags, :through => :works, :uniq => true, :source => :tags
+
+  has_many :taggings, :as => :taggable, :dependent => :destroy
+  has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
   has_bookmarks
   has_many :user_tags, :through => :bookmarks, :source => :tags
+
   has_many :creatorships, :as => :creation
   has_many :pseuds, :through => :creatorships
-	has_many :users, :through => :pseuds, :uniq => true
+  has_many :users, :through => :pseuds, :uniq => true
   
   validates_presence_of :title
   validates_length_of :title, 
@@ -126,7 +130,7 @@ class Series < ActiveRecord::Base
   end
   
   def author_tags
-    self.tags.select{|t| t.type == "Pairing"}.sort + self.tags.select{|t| t.type == "Character"}.sort + self.tags.select{|t| t.type == "Freeform"}.sort
+    self.work_tags.select{|t| t.type == "Pairing"}.sort + self.work_tags.select{|t| t.type == "Character"}.sort + self.work_tags.select{|t| t.type == "Freeform"}.sort
   end
   
   # Grabs the earliest published_at date of the visible works in the series

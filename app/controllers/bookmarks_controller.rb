@@ -24,6 +24,19 @@ class BookmarksController < ApplicationController
     @check_visibility_of = @bookmark
   end
 
+  def search
+    @query = params[:query] || {}
+    unless @query.blank?
+      begin
+        page = params[:page] || 1
+        errors, @bookmarks = Bookmark.search_with_sphinx(@query, page)
+        flash.now[:error] = errors.join(" ") unless errors.blank?
+      rescue Riddle::ConnectionError
+        flash.now[:error] = t('errors.search_engine_down', :default => "The search engine seems to be down at the moment, sorry!")
+      end
+    end
+  end  
+
   
   # aggregates bookmarks for the same bookmarkable
   # note, these do not show private bookmarks

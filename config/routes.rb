@@ -12,7 +12,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :media, :only => [:index, :show], :has_many => :fandoms
   map.resources :fandoms, :only => [:index, :show] 
   
-  map.resources :people, :only => :index
+  map.resources :people, :only => [:index, :search], :collection => {:search => :get}
 
   map.feedbacks '/support/', :controller => 'feedbacks', :action => 'create' , :conditions => { :method => :post }
   map.new_feedback_report '/support/', :controller => 'feedbacks', :action => 'new' 
@@ -99,7 +99,7 @@ ActionController::Routing::Routes.draw do |map|
                     :cancel_comment_edit => :get, :delete_comment => :get ,
                     :cancel_comment_delete => :get}
 
-  map.resources :bookmarks 
+  map.resources :bookmarks , :collection => {:search => :get}
   map.resource :media, :only => [:index, :show]
   map.resource :people, :only => [:index]
   map.resource :tags, :only => []

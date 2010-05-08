@@ -27,13 +27,13 @@ module SeriesHelper
   
   def get_series_symbols_for(series, symbols_only = false)
     mappings = {}
-    warnings = series.tags.select{|tag| tag.type == "Warning"}
+    warnings = series.work_tags.select{|tag| tag.type == "Warning"}
     mappings[:warning] = {:class_name => get_series_warnings_class(warnings), :string =>  get_series_title_string(warnings)}
     
-    ratings = series.tags.select{|tag| tag.type == "Rating"}
+    ratings = series.work_tags.select{|tag| tag.type == "Rating"}
     mappings[:rating] = {:class_name => get_series_ratings_class(ratings), :string =>  get_title_string(ratings, "rating")}
     
-    categories = series.tags.select{|tag| tag.type == "Category"}
+    categories = series.work_tags.select{|tag| tag.type == "Category"}
     mappings[:category] = {:class_name => get_series_category_class(categories), :string =>  get_series_title_string(categories, "category")}
     
     # placeholder

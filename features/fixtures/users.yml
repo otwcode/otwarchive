@@ -1,8 +1,8 @@
+# password: testuser
 testuser:
   login: testuser
-  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1
   activated_at: 2009-12-12 21:08:07 +00:00
-
-testusera:
-  login: testusera
-  crypted_password: test
+  salt: 2aa64c10d3ea67188845a59d3d9d411d52301838
+  crypted_password: 9c0ee17fb87de657bed5f271beccfc45fd33b056
+testuser2:
+  login: testuser2

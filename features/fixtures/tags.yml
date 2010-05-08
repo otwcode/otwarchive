@@ -11,3 +11,6 @@ fandom1:
 fandom2:
   name: second fandom
   type: Fandom
+classic:
+  name: classic
+  type: Freeform

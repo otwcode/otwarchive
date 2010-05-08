@@ -178,15 +178,6 @@ Then /^(?:|I )should see \/([^\/]*)\/ within "([^\"]*)"$/ do |regexp, selector|
   end
 end
 
-Then /^(?:|I )should see work "([^\"]*)" with tags "([^\"]*)"$/ do |regexp, tags|
-  regexp = Regexp.new(regexp)
-  if defined?(Spec::Rails::Matchers)
-    response.should contain(regexp)
-  else
-    assert_match(regexp, response_body)
-  end
-end
-
 Then /^(?:|I )should not see "([^\"]*)"$/ do |text|
   if defined?(Spec::Rails::Matchers)
     response.should_not contain(text)
