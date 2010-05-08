@@ -9,6 +9,12 @@ Given /the following activated users? exists?/ do |table|
   end
 end
 
+Given /the following admins? exists?/ do |table|
+  table.hashes.each do |hash|
+    admin = Factory.create(:admin, hash)
+  end
+end
+
 Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, password|
   visit login_path
   fill_in "User name", :with => login
