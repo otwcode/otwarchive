@@ -113,7 +113,7 @@ Rails::Initializer.run do |config|
   config.gem 'htmlentities'
   config.gem 'relevance-tarantula', :source => "http://gems.github.com", :lib => 'relevance/tarantula'
   config.gem 'javan-whenever', :lib => false, :source => 'http://gems.github.com'
-  config.gem 'nokogiri'
+  config.gem 'nokogiri', :version => '~> 1.4.0'
   config.gem 'mechanize', :version => '~> 1.0.0'
   config.gem 'rest-client', :lib => 'rest_client'
 
