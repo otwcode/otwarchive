@@ -10,7 +10,7 @@ Feature: Edit profile
     | login         | password   |
     | editname      | password   |
     And I am logged in as "editname" with password "password"
-  Then I should see "Hi, editname!"
+  Then I should see "Hi, editname!"
     And I should see "Log out"
   When I follow "editname"
   Then I should see "My Dashboard"
@@ -33,7 +33,7 @@ Feature: Edit profile
     | login         | password   |
     | editpseuds    | password   |
     And I am logged in as "editpseuds" with password "password"
-  Then I should see "Hi, editpseuds!"
+  Then I should see "Hi, editpseuds!"
     And I should see "Log out"
   When I follow "editpseuds"
   Then I should see "My Dashboard"

@@ -8,9 +8,9 @@ module SeriesHelper
       serial_works = serial.serial_works.find(:all, :include => :work, :conditions => ['works.posted = ?', true], :order => :position).select{|sw| sw.work.visible(current_user)}.collect{|sw| sw.work}
       visible_position = serial_works.index(work) || serial_works.length     
       unless !visible_position
-        previous_link = (visible_position > 0) ? link_to("&#8592; ", serial_works[visible_position - 1]) : ""
+        previous_link = (visible_position > 0) ? link_to("&laquo; ", serial_works[visible_position - 1]) : ""
         main_link = "Part " + (visible_position+1).to_s + " of the " + link_to(serial.title, serial) + " series"
-        next_link = (visible_position < serial_works.size-1) ? link_to(" &#8594;", serial_works[visible_position + 1]) : ""
+        next_link = (visible_position < serial_works.size-1) ? link_to(" &raquo;", serial_works[visible_position + 1]) : ""
         previous_link + main_link + next_link
       end
     end
