@@ -6,6 +6,8 @@ module HtmlFormatter
 
   @@all_html_tags = ['a', 'abbr', 'acronym', 'address', 'area', 'b', 'base', 'bdo', 'big', 'blockquote', 'body', 'br', 'button', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'dd', 'del', 'dfn', 'div', 'dl', 'dt', 'em', 'fieldset', 'font', 'form', 'frame', 'frameset', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'hr', 'html', 'i', 'iframe', 'img', 'input', 'ins', 'kbd', 'label', 'legend', 'li', 'link', 'map', 'menu', 'meta', 'noframes', 'noscript', 'object', 'ol', 'optgroup', 'option', 'p', 'paragraphm', 'pre', 'q', 's', 'samp', 'script', 'select', 'small', 'span', 'strike', 'strong', 'style', 'sub', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'title', 'tr', 'tt', 'u', 'ul', 'var']
 
+  @@allowed_attribute_keys = %w(alt align border class height href src title width)
+
   def cleanup_and_format(text)
     return clean_fully(text, @@all_html_tags, true, false)
   end
@@ -110,6 +112,7 @@ module HtmlFormatter
           elsif !inline && (break_before_first_p || !first_paragraph)
             parent_node.before("<p></p>")
             working_parent = parent_node.previous
+            copy_node_attributes(parent_node, working_parent)
           end          
           first_line = true
           # Create an array of lines, splitting on single newlines
@@ -137,16 +140,14 @@ module HtmlFormatter
         if first_node && !inline
           parent_node.before("<p></p>")
           working_parent = parent_node.previous
+          copy_node_attributes(parent_node, working_parent)
         end
         # Have to create a new node to add the child nodes to
         # because if you accidentally put two text nodes next to 
         # one another, they're automatically combined
         clone_node = node.clone(0)
-        unless node.attributes.empty?
-          node.attributes.each_pair do |key, value|
-            clone_node[key] = value
-          end
-        end
+        copy_node_attributes(node, clone_node)
+        
         working_parent.add_child(clone_node)
         working_parent = clone_node
         add_paragraphs_to_text(node, allowed_tags, working_parent)
@@ -184,6 +185,17 @@ module HtmlFormatter
       # Remove empty paragraphs
       clean_up_paragraphs(doc.css("p"))
       return body.children.to_xhtml
+    end
+  end
+  
+  # Copy allowed attributes from one node to another
+  def copy_node_attributes(source_node, target_node)
+    unless source_node.attributes.empty?
+      source_node.attributes.each_pair do |key, value|
+        if @@allowed_attribute_keys.include?(key)
+          target_node[key] = value
+        end
+      end
     end
   end
 
