@@ -1,17 +1,17 @@
 <div id="dashboard" role="navigation">
 <ul role="navigation">
   <%- if @user == current_user -%>
-    <li><%= span_if_current "My Dashboard", @user %></li>
-    <li><%= span_if_current "My Pseuds (#{@user.pseuds.count})", user_pseuds_path(@user) %></li>
-  <% else %>
-    <li><%= span_if_current "Dashboard", @user %></li>
-    <li><%= span_if_current "Pseuds (#{@user.pseuds.count})", user_pseuds_path(@user) %></li>
-  <% end %>
+    <li><%= span_if_current t('my_dashboard', :default =>"My Dashboard"), @user %></li>
+    <li><%= span_if_current t('my_pseuds', :default =>"My Pseuds (#{@user.pseuds.count})"), user_pseuds_path(@user) %></li>
+  <%- else -%>
+    <li><%= span_if_current t('dash', :default =>"Dashboard"), @user %></li>
+    <li><%= span_if_current t('pseuds', :default =>"Pseuds (#{@user.pseuds.count})"), user_pseuds_path(@user) %></li>
+  <%- end -%>
   <%- if @user.pseuds.size > 1 -%>
     <li class="pseud"><a onclick="subnav_view.toggle()" title="Switch Pseuds">
 			<%= if current_page?(@user)
 
-			      "Switch Pseuds"
+			      t('switch_pseuds', :default =>"Switch Pseuds")
 
 			      else
 
@@ -33,29 +33,29 @@
 	<li><%= @author ? print_pseud_bookmarks_link(@author) : print_bookmarks_link(@user) %></li>
 	<%- end -%>
   <%- if @user == current_user -%>
-    <li><%= span_if_current  "My Collections (#{@user.owned_collections.count})", user_collections_path(@user) %> </li>
+    <li><%= span_if_current  t('my_collections', :default =>"My Collections (#{@user.owned_collections.count})"), user_collections_path(@user) %> </li>
   <% else %>
-    <li><%= span_if_current "Collections (#{@user.owned_collections.count})", user_collections_path(@user) %> </li>
+    <li><%= span_if_current t('collections', :default =>"Collections (#{@user.owned_collections.count})"), user_collections_path(@user) %> </li>
   <% end %>
 	<% if @user == current_user %>
-    <li><%= span_if_current "My Signups (#{@user.challenge_signups.count})", user_signups_path(@user) %> </li>
-    <li><%= span_if_current "My Assignments (#{@user.offer_assignments.open.count + @user.pinch_hit_assignments.open.count})", user_assignments_path(@user) %> </li>	
+    <li><%= span_if_current t('my_signups', :default =>"My Signups (#{@user.challenge_signups.count})"), user_signups_path(@user) %> </li>
+    <li><%= span_if_current t('my_assignments', :default =>"My Assignments (#{@user.offer_assignments.open.count + @user.pinch_hit_assignments.open.count})"), user_assignments_path(@user) %> </li>	
 	<% end %>
   <%- if @user == current_user -%>
-    <li><%= span_if_current "My Gifts (#{@user.gifts.select {|g| g.work.visible?}.count})", user_gifts_path(@user) %></li>
+    <li><%= span_if_current t('my_gifts', :default =>"My Gifts (#{@user.gifts.select {|g| g.work.visible?}.count})"), user_gifts_path(@user) %></li>
   <% else %>
-    <li><%= span_if_current "Gifts (#{@user.gifts.select {|g| g.work.visible?}.count})", user_gifts_path(@user) %></li>
+    <li><%= span_if_current t('gifts', :default =>"Gifts (#{@user.gifts.select {|g| g.work.visible?}.count})"), user_gifts_path(@user) %></li>
   <% end %>
   <%- if @user == current_user -%>
-    <li><%= span_if_current "My Related Works (#{@user.related_works.count + @user.parent_work_relationships.count})", user_related_works_path(@user) -%></li>
+    <li><%= span_if_current t('related_works', :default =>"My Related Works (#{@user.related_works.count + @user.parent_work_relationships.count})"), user_related_works_path(@user) -%></li>
   <%- end -%>
 	<% if @user == current_user %>
-    <li><%= span_if_current "My Inbox (" + @user.unread_inbox_comments_count.to_s + ")", user_inbox_path(@user) %></li>
+    <li><%= span_if_current t('inbox', :default =>"My Inbox (" + @user.unread_inbox_comments_count.to_s + ")"), user_inbox_path(@user) %></li>
     <% if @user.preference.try(:history_enabled?) %>
-      <li><%= span_if_current "My History", user_readings_path(@user) %></li>
+      <li><%= span_if_current t('history', :default =>"My History"), user_readings_path(@user) %></li>
     <% end %>
-    <li><%= link_to_help "coming-soon", "My Subscriptions" %></li>
-    <li><%= span_if_current "My Preferences", user_preferences_path(@user) %></li>
+    <li><%= link_to_help "coming-soon", t('subscriptions', :default =>"My Subscriptions") %></li>
+    <li><%= span_if_current t('preferences', :default =>"My Preferences"), user_preferences_path(@user) %></li>
   <% end %>
 </ul>
 </div>
