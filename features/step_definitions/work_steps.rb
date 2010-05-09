@@ -18,3 +18,8 @@ Then /^(?:|I )should see work "([^\"]*)" with tags "([^\"]*)"$/ do |regexp, tags
   end
 end
 
+When /^I edit the bookmark for "([^\"]*)"$/ do |work|
+  work = Work.find_by_title!(work)
+  visit work_url(work)
+  click_link("Edit/Add Bookmark")
+end
