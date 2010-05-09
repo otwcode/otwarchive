@@ -8,7 +8,7 @@ class Admin::AdminSessionController < ApplicationController
   end
   
   def create
-    self.current_admin = Admin.authenticate(params[:login], params[:password])
+    self.current_admin = Admin.authenticate(params[:admin_login], params[:admin_password])
     if logged_in_as_admin?
       redirect_to admin_users_path
       flash[:notice] = t('logged_in', :default => "Logged in successfully")

@@ -5,10 +5,10 @@
 <!--main content-->
 <%- form_tag(:controller => 'admin/admin_session', :action => :create) do -%>
 	<dl>
-		<dt><%= label_tag :login, t('name', :default => "Admin user name") %></dt>
-  			<dd><%= text_field_tag 'login' %></dd>
-		<dt><%= label_tag :password, t('password', :default => "Admin password") %></dt>
-  			<dd><%= password_field_tag 'password' %></dd>
+		<dt><%= label_tag :admin_login, t('name', :default => "Admin user name") %></dt>
+  			<dd><%= text_field_tag 'admin_login' %></dd>
+		<dt><%= label_tag :admin_password, t('password', :default => "Admin password") %></dt>
+  			<dd><%= password_field_tag 'admin_password' %></dd>
 	</dl>
   	<p class="submit"><%= submit_tag t('submit', :default => 'Log in') %></p>
 <%- end -%>
