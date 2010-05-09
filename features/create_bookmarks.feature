@@ -33,6 +33,8 @@ Feature: Create bookmarks
 		Then I should see "Work was successfully posted."
 		When I go to the works page
 		Then I should see "Revenge of the Sith"
+    When I go to the bookmarks page
+    Then I should not see "Revenge of the Sith"
     When I follow "Log out"
     Then I should see "logged out"
     When I am logged in as "bookmarkuser1" with password "password"
@@ -42,3 +44,15 @@ Feature: Create bookmarks
     Then I should see "Bookmark"
     When I follow "Bookmark"
     Then I should see "Add a new bookmark"
+    When I fill in "bookmark_notes" with "I liked this story"
+      And I fill in "tag_string" with " This is a tag, and another tag,"
+      And I check "bookmark_rec"
+      And I press "Create"
+    Then I should see "Bookmark was successfully created"
+    When I follow "Log out"
+      And I am logged in as "bookmarkuser2" with password "password"
+      And I go to the bookmarks page
+    Then I should see "Revenge of the Sith"
+      And I should see " This is a tag, and another tag"
+      And I should see "I liked this story"
+    

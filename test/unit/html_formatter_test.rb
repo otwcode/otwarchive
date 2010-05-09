@@ -66,14 +66,20 @@ class HtmlFormatterTest < ActiveSupport::TestCase
     one_test "<i><img src=\"gif.gif\">my post. <b>big</b> day!</i> more words",  
       "<p><i><img src=\"gif.gif\" />my post. <b>big</b> day!</i> more words</p>"
     one_test "<b><i><img src=\"gif.gif\">my post. <b>big</b> day!</i> more words",  
-      "<p><b></b><i><img src=\"gif.gif\" />my post. <b>big</b> day!</i> more words</p>"
+      "<p>
+  <b><i><img src=\"gif.gif\" />my post. <b>big</b> day!</i> more words</b>
+</p>"
   end
 
   def test_self_closing
     one_test "<b><i><img src=\"gif.gif\">my post. <b>big</b> day!</i> more words",  
-      "<p><b></b><i><img src=\"gif.gif\" />my post. <b>big</b> day!</i> more words</p>"
+      "<p>
+  <b><i><img src=\"gif.gif\" />my post. <b>big</b> day!</i> more words</b>
+</p>"
     one_test "<b><i><img src=\"gif.gif\"></img>my post. <b>big</b> day!</i> more words",  
-      "<p><b></b><i><img src=\"gif.gif\" />my post. <b>big</b> day!</i> more words</p>"
+      "<p>
+  <b><i><img src=\"gif.gif\" />my post. <b>big</b> day!</i> more words</b>
+</p>"
   end
   
   def test_doctype
@@ -147,9 +153,9 @@ text3
     one_test '<div class="attrtest attrtest2>line</div>',  '<div class="attrtest attrtest2"><p>line</p></div>'
   end
   
-  def test_lt_in_title      
+  def test_lt_in_title
     one_test '<span title="woo! <3">text</span>', '<p>
-  <span title="woo! <3">text</span>
+  <span title="woo! &lt;3">text</span>
 </p>'
   end
   
