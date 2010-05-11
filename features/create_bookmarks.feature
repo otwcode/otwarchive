@@ -65,3 +65,13 @@ Feature: Create bookmarks
     When I check "bookmark_private"
       And I press "Update"
     Then I should see "Bookmark was successfully updated"
+    When I go to the bookmarks page
+    Then I should not see "I liked this story"
+    When I go to bookmarkuser1's user page
+    Then I should see "I liked this story"
+    When I follow "Log out"
+      And I am logged in as "bookmarkuser2" with password "password"
+      And I go to the bookmarks page
+    Then I should not see "I liked this story"
+    When I go to bookmarkuser1's user page
+    Then I should not see "I liked this story"
