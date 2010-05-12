@@ -3,13 +3,13 @@
   <h3><%= t('sorry', :default => 'Sorry!') %></h3>
   <p>
     <%= t('restricted1', :default => 'This story is only available to registered users of the Archive.') %> 
-    <%= t('restricted2', :default => 'If you already have an Archive of Our Own account, sign in now.') %> 
+    <%= t('restricted2', :default => 'If you already have an Archive of Our Own account, log in now.') %> 
     <%- if ArchiveConfig.ACCOUNT_CREATION_ENABLED -%>
 	  <%= t('join_us', :default => "Or join us for free - it's easy.") %>
 	<%- end -%>  
   </p>
 <%- else -%>
-  <h3><%= t('login_now', :default => 'Login') %></h3>
+  <h3><%= t('login_now', :default => 'Log in') %></h3>
   <p>
     <strong><%= t('reminder', :default => 'Reminder:') %></strong>
     <%= t('beta_risks', :default => "This site is in early beta. Things may break or crash without notice. Please report any pesky bugs and ") %>

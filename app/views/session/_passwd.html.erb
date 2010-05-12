@@ -11,13 +11,13 @@
 	<%= label_tag 'remember_me', t('remember_me', :default => "Remember me")  %>
 	</p>
 	<p class="submit">
-		<%= submit_tag t('login', :default => "Login"), :class => 'submit' %>
+		<%= submit_tag t('login', :default => "Log in"), :class => 'submit' %>
 	</p>
 	<p class="footnote">
 		<%= link_to t('forgot_password', :default => "forgot password?"), new_password_path %>
 	</p>
 	<% if ArchiveConfig.USE_OPENID %>
 	<p class="openid">
-		<%= image_tag("openid.png", :alt => '') %> <%= link_to_remote(t('open_id_login', :default => "Login with OpenID"), {:url => { :action => 'openid' }}, :href => url_for(:action => 'new', :use_openid => true ) )%>
+		<%= image_tag("openid.png", :alt => '') %> <%= link_to_remote(t('open_id_login', :default => "Log in with OpenID"), {:url => { :action => 'openid' }}, :href => url_for(:action => 'new', :use_openid => true ) )%>
 	</p>
 <%- end -%>

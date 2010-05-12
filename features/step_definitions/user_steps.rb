@@ -20,7 +20,7 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
   fill_in "User name", :with => login
   fill_in "Password", :with => password
   check "Remember me"
-  click_button "Login"
+  click_button "Log in"
 end
 
 Given /^I am logged in as a random user$/ do 
@@ -30,5 +30,5 @@ Given /^I am logged in as a random user$/ do
   fill_in "User name", :with => "testuser"
   fill_in "Password", :with => "password"
   check "Remember me"
-  click_button "Login"
+  click_button "Log in"
 end

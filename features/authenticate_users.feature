@@ -19,7 +19,7 @@ Feature: User Authentication
     Given I have no users
      And a user exists with login: "sam"
     When I am on sam's user page
-      Then I should see "Sign in"
+      Then I should see "Log in"
       Then I should not see "Log out"
       And I should not see "My Preferences"
 
@@ -35,7 +35,7 @@ Feature: User Authentication
 
     Examples:
       | login | user  | action                   |
-      | sam   | sam   | not see "Sign in"         |
+      | sam   | sam   | not see "Log in"         |
       | sam   | sam   | see "Log out"            |
       | sam   | sam   | see "My Preferences"     |
       | sam   | dean  | see "Log out"            |

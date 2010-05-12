@@ -17,7 +17,7 @@
     <ul id="greeting" class="logged-out">
       <li>
 		    <%= render :partial => 'session/login' -%>
-        <span><a id='signin_closed' onclick='toggleLogin("signin")' style='display:none;'><%=h t('layout.header.sign_in', :default => 'Sign in') %></a>
+        <span><a id='signin_closed' onclick='toggleLogin("signin")' style='display:none;'><%=h t('layout.header.sign_in', :default => 'Log in') %></a>
         <a id='signin_open' onclick='toggleLogin("signin")'><%=h t('links.cancel', :default => 'Cancel') %></a></span>
 		  </li>
     </ul>

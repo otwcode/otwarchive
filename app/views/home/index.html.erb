@@ -53,7 +53,7 @@
     <%- if AdminSetting.invite_from_queue_enabled? -%>
     <h1><%= link_to t('home.request_invite', :default => 'SIGN UP NOW'), invite_requests_path %></h1>
     <%- else -%>
-    <h2><a href="session/new"><%= t('layout.header.sign_in', :default => 'Sign in') %></a></h2>
+    <h2><a href="session/new"><%= t('layout.header.sign_in', :default => 'Log in') %></a></h2>
     <%- end -%>
   <%- end -%>
     <p><%= t('home.about_us', :default => 'The Archive of Our Own is a fan-created, fan-run, non-profit, noncommercial archive for transformative fanworks.') %></p>
