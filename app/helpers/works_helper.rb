@@ -276,4 +276,13 @@ module WorksHelper
   def allowed_controllers
     ['gifts', 'readings'].include?(controller.controller_name)
   end
+  
+  def can_see_work(work, user)
+    unless work.collections.empty?
+      for collection in work.collections
+        return true if collection.user_is_maintainer?(user)
+      end
+    end
+    false
+  end
 end

@@ -11,7 +11,7 @@
 <%- end -%>
 <!--/subnav-->
 
-<% if !@work.unrevealed? || logged_in_as_admin? || is_author_of?(@work) %>
+<% if !@work.unrevealed? || logged_in_as_admin? || is_author_of?(@work) || (@work.unrevealed? && can_see_work(@work, current_user)) %>
 <!-- BEGIN work --> 
 <p class="landmark"><a name="top">&nbsp;</a></p>
 <!--work description, metadata, notes and messages-->
