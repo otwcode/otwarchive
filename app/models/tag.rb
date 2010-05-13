@@ -576,6 +576,11 @@ class Tag < ActiveRecord::Base
           self.canonical = false      
           self.merger_id = new_merger.id
           ((self.parents + self.children) - (new_merger.parents + new_merger.children)).each { |tag| new_merger.add_association(tag) }
+          if new_merger.is_a?(Fandom)
+            (new_merger.medias - self.medias).each {|medium| self.add_association(medium)}
+          else
+            (new_merger.fandoms.canonical - self.fandoms).each {|fandom| self.add_association(fandom)}
+          end
           self.meta_tags.each { |tag| new_merger.meta_tags << tag unless new_merger.meta_tags.include?(tag) }
           self.sub_tags.each { |tag| tag.meta_tags << new_merger unless tag.meta_tags.include?(new_merger) }            
           self.mergers.each {|m| m.update_attributes(:merger_id => new_merger.id)}
@@ -593,6 +598,13 @@ class Tag < ActiveRecord::Base
       syn = Tag.find_by_name(name)
       if syn && !syn.canonical?
         syn.update_attributes(:merger_id => self.id)
+        if syn.is_a?(Fandom)
+          syn.medias.each {|medium| self.add_association(medium)}
+          self.medias.each {|medium| syn.add_association(medium)}
+        else
+          syn.fandoms.canonical.each {|fandom| self.add_association(fandom)}
+          self.fandoms.canonical.each {|fandom| syn.add_association(fandom)}
+        end
       end
     end          
   end
