@@ -9,7 +9,7 @@ Feature: Invite queue management
     When I go to the admin_login page
       And I fill in "admin_login" with "admin-sam"
       And I fill in "admin_password" with "password"
-      And I press "Log in"
+      And I press "Log in as admin"
     Then I should see "Logged in successfully"
     When I follow "Settings"
       And I check "admin_setting_invite_from_queue_enabled"
