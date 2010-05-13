@@ -1,5 +1,9 @@
 <h2>Bookmark Search: Beta</h2>
 
+<ul class="navigation" role="navigation"><li>
+  <%= link_to(t('refine_search', :default => "Advanced search"), url_for(:controller => "works", :action => "advancedsearch", :query => @query)) %>
+</li></ul>
+
 <%= render :partial => 'bookmarks/search_form' %>
 
 <%- if @bookmarks -%>
