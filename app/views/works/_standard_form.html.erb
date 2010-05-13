@@ -197,7 +197,7 @@
             <dd>
               <ul class="navigation">
                 <li><%= link_to serial.series.title, serial.series %></li> 
-                <li><%= link_to 'Remove', serial, :confirm => 'Are you sure?', :method => :delete %></li>
+                <li><%= link_to 'Remove', serial_work_path(serial), :method => :delete %></li>
                 <li><%= link_to 'Delete', serial.series, :confirm => 'Are you sure?', :method => :delete %></li>
               </ul>
             </dd>
