@@ -25,6 +25,7 @@ third:
   language: german
   authors_to_sort_on: testuser
   revised_at: 2008-07-10
+  summary: for the second time
 fourth:
   posted: true
   title: fourth

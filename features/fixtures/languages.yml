@@ -4,3 +4,6 @@ english:
 german:
   short: de
   name: Deutsch
+french:
+  short: fr
+  name: Français

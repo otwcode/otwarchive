@@ -37,6 +37,8 @@ class QueryTest < ActiveSupport::TestCase
     assert_equal ["@title stone", {:hit_count => 0..99}, []], Query.split_query({:hits => "< 100", :title => "stone"})
     assert_equal ["sidra", {}, ["bad words format (ignored)"]], Query.split_query({:text => "sidra", :words => "long"})
     assert_equal ["@language Deutsch @tag harry -potter", {:word_count => 101..1000000}, []], Query.split_query({:tag => "harry -potter", :language => "Deutsch", :words => ">100"})
+    assert_equal ["@(tag,indirect) harry @bookmarker painless_j", {}, []] , Query.split_query({:text => "(tag,indirect): harry", :bookmarker =>"painless_j"})
+    assert_equal ["@(tag,indirect) harry", {:hit_count => 1001..1000000}, []] , Query.split_query({:text => "(tag,indirect): harry", :hits =>">1000"})
   end
 
   def test_standardize_query
@@ -58,5 +60,13 @@ class QueryTest < ActiveSupport::TestCase
     assert_equal ({:text => "", :tag => "community: something"}), Query.standardize(:text =>"tag: community: something")
     # : in fields and text 
     assert_equal ({:text => "boo:hiss", :tag => "community: something"}), Query.standardize(:text =>"boo:hiss tag: community: something")
+    # preserve parenthesis
+    assert_equal ({:text => "(tag,indirect): harry"}), Query.standardize(:text => "(tag,indirect): harry")
+    # preserve parenthesis multiple fields
+    assert_equal ({:text => "(tag,indirect,bookmarker): harry"}), Query.standardize(:text => "(tag,indirect,bookmarker): harry")
+    # preserve parenthesis but allow other fields after as well
+    assert_equal ({:text => "(tag,indirect): harry", :bookmarker =>"painless_j"}), Query.standardize(:text => "(tag,indirect): harry  bookmarker:painless_j")
+    # preserve parenthesis but allow other fields before as well
+    assert_equal ({:text => "(tag,indirect): harry", :hits =>">1"}), Query.standardize(:text => "hits: >1 (tag,indirect): harry")
   end
 end

@@ -7,32 +7,54 @@ module Query
   BOOKMARK_FIELDS = %w{tag indirect notes bookmarker}
   PEOPLE_FIELDS = %w{name icon_alt_text description}
   ALL_FIELDS = (WORK_FIELDS + BOOKMARK_FIELDS + PEOPLE_FIELDS).uniq
+  ALL_INDEXES = ALL_FIELDS + %w{words hits date rec}
   
   # this is used to take a full text query from the small search box
   # like "author: astolat words: > 1000" 
   # and turn it into a hash that can be put into separate boxes on the full search page
+  # a single multiple-field search operator can be made, but it will stay in the text field
   def Query.standardize(query)
     return unless query[:text]
     # change something: to @something so we know a section ends when the next section starts
-    for string in WORK_INDEXES
+    for string in ALL_INDEXES
       query[:text] = query[:text].sub(/#{string}:/i, "@#{string} ")
     end
-    for string in WORK_INDEXES
+    # remove multiple-field search operator of the form
+    #   (field1,field2): search string
+    match = query[:text].match(/\(\S+?\,\S+?\): ([^@]*)/)
+    if match
+      query[:group] = match[0]
+      query[:text] = match.pre_match + match.post_match
+    end
+    for string in ALL_INDEXES
       match = query[:text].match(/@#{string} ([^@]*)/)
       if match
         query[:text] = match.pre_match + match.post_match
         query[string.to_sym] = match[1]
       end
     end
+    # add multiple-field search operator back at the end
+    if query[:group]
+      query[:text] = query[:text] + query.delete(:group)
+    end
     query.each { |k, v| query[k] = v.strip }
   end
   
   # transform the full search page into
   # a search string plus an attributes hash for sphinx
-  def Query.split_query(query)
+  def Query.split_query(query={})
     with = {}
     errors = []
     text = query[:text] || ""
+    # transform 
+    #   (field1,field2): search string
+    # into sphinx's multiple-field search operator
+    #   @(field1,field2) search string
+    match = text.match(/(\(\S+?\,\S+?\)):( .+)$/)
+    if match
+      text = match.pre_match + match.post_match
+      text = text + "@" + match[1]  + match[2]
+    end
     for string in ALL_FIELDS
       text = (text + " @" + string + " " + query[string.to_sym]) unless query[string.to_sym].blank?
     end
