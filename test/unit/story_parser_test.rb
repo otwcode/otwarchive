@@ -2,6 +2,8 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class StoryParserTest < ActiveSupport::TestCase
   
+  include HtmlFormatter
+  
   def setup
     @working_stories = [      
       # note, files use url modifications and go past adult notices
@@ -77,7 +79,7 @@ class StoryParserTest < ActiveSupport::TestCase
       should "create a new unposted work with the text as its content" do
         @work = @storyparser.parse_story(@text, @location, :pseuds => [create_pseud])
         assert !@work.posted
-        assert_match @text, @work.chapters.first.content
+        assert_match clean_fully(@text), @work.chapters.first.content
         assert @work.valid?
       end
       context "with the title and summary in the text" do
@@ -90,7 +92,7 @@ class StoryParserTest < ActiveSupport::TestCase
           @work = @storyparser.parse_story(@text, @location, :pseuds => [create_pseud])
           assert @work.title == @title
           assert @work.summary == @summary
-          assert_match @text, @work.chapters.first.content
+          assert_match clean_fully(@text), @work.chapters.first.content
         end
       end
     end
@@ -103,7 +105,7 @@ class StoryParserTest < ActiveSupport::TestCase
       end
       should "create a work using the title tag and body content" do
         @work = @storyparser.parse_story(@text, @location, :pseuds => [create_pseud])
-        assert @work.chapters.first.content == @content
+        assert @work.chapters.first.content == clean_fully(@content)
         assert @work.title == @title
       end
     end
