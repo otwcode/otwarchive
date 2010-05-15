@@ -47,7 +47,7 @@ module HtmlFormatter
     sanitize_and_format_for_display(text, options)
   end
   
-  INLINE_HTML_TAGS = %w(a b big br caption cite code del em i img q s small span strike strong tt u)
+  INLINE_HTML_TAGS = %w(a b big br caption cite code del em i img q s small span strike strong sub sup tt u)
   BLOCK_HTML_TAGS = %w(div blockquote center pre ul ol li dl dt dd table tbody tfoot thead td tr th)
   NO_PARAGRAPHS_REQUIRED = %w(h1 h2 h3 h4 h5 h6 hr)
   

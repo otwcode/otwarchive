@@ -64,7 +64,9 @@ module SanitizeParams
         if ArchiveConfig.FIELDS_ALLOWING_HTML.include?(key.to_s)
           hash[key] = @white_list_sanitizer.sanitize(fix_quotes(hash[key]))
         else
-          hash[key] = @full_sanitizer.sanitize(hash[key])
+          hash[key].gsub!("<", "&lt;")
+          hash[key].gsub!(">", "&gt;") 
+          #hash[key] = @full_sanitizer.sanitize(hash[key])
         end
       elsif hash[key].is_a? Hash
         hash[key] = walk_hash(hash[key])
