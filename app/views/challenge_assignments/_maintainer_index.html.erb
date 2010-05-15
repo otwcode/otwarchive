@@ -35,14 +35,15 @@
           <% if params[:show_covered] %><td><%= assignment.covered_at.nil? ? "No" : "Yes" %></td><% end %>
           <td><%= assignment.offer_signup ? assignment.offer_signup.pseud.byline : (assignment.pinch_hitter ? assignment.pinch_hitter.byline : "") -%></td>
           <td>
-            <% new_assignment = ChallengeAssignment.new %>
+            <% new_assignment = ChallengeAssignment.new(:pinch_hitter_byline => assignment.pinch_hitter_byline) %>
             <% form_for [@collection, new_assignment], :url => collection_assignments_path(@collection) do |assignment_form| %>
               <%= hidden_field_tag :assignment_to_cover, assignment.id -%>
               <%= assignment_form.hidden_field :collection_id, :value => @collection.id %>
               <%= assignment_form.hidden_field :request_signup_id, :value => request.id %>
               <%= assignment_form.text_field :pinch_hitter_byline %>
               <%= autocomplete_text_field "challenge_assignment_pinch_hitter_byline", :methodname => "pseud_byline", :no_comma => true %>
-          </td><td>
+          </td>
+          <td>
               <ul class="navigation">
                 <li><%= submit_tag "Assign" %></li>
                 <li><%= link_to "Undefault", undefault_collection_assignment_path(@collection, assignment) -%></li>
