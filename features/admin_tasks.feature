@@ -9,7 +9,7 @@ Feature: Admin tasks
       And the following activated user exists
       | login       | password      | 
       | dizmo       | wrangulator   |
-    When I go to the home page
+   When I go to the home page
       And I fill in "login" with "Zooey"
       And I fill in "password" with "secret"
       And I press "Log in"
@@ -37,8 +37,7 @@ Feature: Admin tasks
     When I follow "Add a new section"
       And I fill in "content" with "Some text, that is sufficiently long to pass validation."
       And I fill in "archive_faq_title" with "New subsection"
-    Then I should see "characters left"
-    When I press "Post"
-    Then I should see "ArchiveFaq was successfully created"
+    When I click the Post button for archive_faqs with title "Post"
+    Then I should see a "ArchiveFaq was successfully created" message
     When I go to the archive_faqs page
     Then I should see "Some text" within ".user-generated-view"

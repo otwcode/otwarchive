@@ -116,7 +116,7 @@ Rails::Initializer.run do |config|
   config.gem 'nokogiri', :version => '~> 1.4.0'
   config.gem 'mechanize', :version => '~> 1.0.0'
   config.gem 'rest-client', :lib => 'rest_client'
-
+  config.gem 'delayed_job', :version => "<2" 
   config.gem 'thinking-sphinx', :lib => 'thinking_sphinx'
   config.gem 'ts-delayed-delta', :lib => 'thinking_sphinx/deltas/delayed_delta'
   config.gem 'daemon-spawn'
