@@ -12,10 +12,12 @@ chapter3:
   posted: true
   work: third
   content: This work is in a different language
+  published_at: 2009-02-03
 chapter4:
   posted: true
   work: third
   content: This is a second chapter
+  published_at: 2009-06-30
 chapter5:
   posted: true
   work: fourth

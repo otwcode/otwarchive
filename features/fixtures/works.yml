@@ -24,6 +24,7 @@ third:
   hit_count: 10000
   language: german
   authors_to_sort_on: testuser
+  revised_at: 2008-07-10
 fourth:
   posted: true
   title: fourth
