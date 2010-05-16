@@ -32,7 +32,6 @@
   		-%>
     <%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX) -%>
 	</div>
-	<% end %>
 </fieldset>
 <fieldset>
 <legend><%= t('form_post', :default => 'Post') %></legend>
@@ -40,4 +39,5 @@
 		<%= submit_tag t('form_post', :default => 'Post'), :name => 'post_button' %>      
     </p>
 </fieldset>
+	<% end %>
 </div>

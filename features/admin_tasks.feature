@@ -37,7 +37,7 @@ Feature: Admin tasks
     When I follow "Add a new section"
       And I fill in "content" with "Some text, that is sufficiently long to pass validation."
       And I fill in "archive_faq_title" with "New subsection"
-    When I click the Post button for archive_faqs with title "New subsection"
-    Then I should see a "ArchiveFaq was successfully created" message
+    When I press "Post"
+    Then I should see "ArchiveFaq was successfully created"
     When I go to the archive_faqs page
     Then I should see "Some text" within ".user-generated-view"
