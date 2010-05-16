@@ -83,7 +83,7 @@ class WorksController < ApplicationController
         # If we're previewing a multichapter work, we want the preview version of the first chapter,
         # so we need to add it back to @chapters
         @chapters[0] = @chapter
-      end
+      end 
 
       unless current_user == :false
         load_pseuds
@@ -386,6 +386,8 @@ class WorksController < ApplicationController
     # Need to update @pseuds and @selected_pseuds values so we don't lose new co-authors if the form needs to be rendered again
     load_pseuds
     @series = current_user.series.uniq
+    
+    @chapter ||= @work.chapters.in_order.first
 
     if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
       @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
