@@ -3,6 +3,7 @@ Feature: Invite queue management
 
   Scenario: Turn on queue, join queue and check status
     Given I have no users
+      And I have an AdminSetting
       And the following admin exists
       | login       | password   | email                    |
       | admin-sam   | password   | test@archiveofourown.org |
