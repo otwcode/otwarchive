@@ -30,6 +30,13 @@
     <%= text_field_tag "query[icon_alt_text]", @query[:icon_alt_text], :id => 'refine_icon_alt_text' %>
     <%= link_to_help "people-search-text-help" -%>
   </dd>
+  <dt>
+    <label for="text"><%= t('text', :default => 'All fields:') %></label>
+  </dt>
+  <dd>
+    <%= text_field_tag "query[text]", @query[:text], :id => 'text' %>
+    <%= link_to_help "people-search-text-help" -%>
+  </dd>
   </dl>
   <span class="submit"><%= submit_tag t('people.search', :default => 'Search people'), :name => nil %></span>
 </fieldset>

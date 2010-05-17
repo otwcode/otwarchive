@@ -9,7 +9,7 @@
 <%- if @people -%>
   <p><strong><%= @people.total_entries %> Found</strong><%= link_to_help "people-search-results-help" -%></p>
   <h3 class="landmark">People List</h3>
-  <ol class="people index">
+  <ol class="pseud index">
     <% for person in @people %>
       <%= render :partial => 'people/author_blurb', :locals => {:author => person} %>
     <% end %>

@@ -56,6 +56,13 @@
       <%= text_field_tag "query[bookmarker]", @query[:bookmarker], :id => 'refine_bookmarker' %>
       <%= link_to_help "bookmark-search-text-help" -%>
     </dd> 
+    <dt>
+      <label for="text"><%= t('text', :default => 'All fields:') %></label>
+    </dt>
+    <dd>
+      <%= text_field_tag "query[text]", @query[:text], :id => 'refine_text' %>
+      <%= link_to_help "bookmark-search-text-help" -%>
+    </dd> 
   </dl>
   <span class="submit">
     <%= submit_tag t('bookmarks.search', :default => 'Search bookmarks'), :name => nil %>
