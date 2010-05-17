@@ -13,7 +13,7 @@ class HtmlFormatterTest < ActiveSupport::TestCase
   
   def test_start_with_closing_tag
     # text begins with close-tag
-    one_test "</b> foo", "<p> foo</p>"
+    one_test "</strong> foo", "<p> foo</p>"
   end
 
   def test_identity_data
@@ -35,8 +35,8 @@ class HtmlFormatterTest < ActiveSupport::TestCase
     one_test "text",  "<p>text</p>"
     one_test "<h1>head</h1>text",  "<h1>head</h1><p>text</p>"
 
-    one_test "<p>words <i>word</i> words words</p>",  "<p>words <i>word</i> words words</p>"
-    one_test "<p>words \"<i>quote</i>\" words words</p>",  "<p>words \"<i>quote</i>\" words words</p>"
+    one_test "<p>words <em>word</em> words words</p>",  "<p>words <em>word</em> words words</p>"
+    one_test "<p>words \"<em>quote</em>\" words words</p>",  "<p>words \"<em>quote</em>\" words words</p>"
 
 
     one_test "<div><div>chapter1</div></div><div>chapter1contentcontent</div>",  
@@ -60,23 +60,23 @@ class HtmlFormatterTest < ActiveSupport::TestCase
 
     one_test "<p><a href=\"xyz\"/><br/>text</p>",  "<p><a href=\"xyz\"></a><br />text</p>"
 
-    one_test "<b>title: </b> value<br/><b>title2</b> value 2",  "<p><b>title: </b> value<br /><b>title2</b> value 2</p>"
-    one_test "<i><img src=\"gif.gif\">my post. <b>big</b> day!</i> more words",  
-      "<p><i><img src=\"gif.gif\" />my post. <b>big</b> day!</i> more words</p>"
-    one_test "<b><i><img src=\"gif.gif\">my post. <b>big</b> day!</i> more words",  
+    one_test "<strong>title: </strong> value<br/><strong>title2</strong> value 2",  "<p><strong>title: </strong> value<br /><strong>title2</strong> value 2</p>"
+    one_test "<em><img src=\"gif.gif\">my post. <strong>big</strong> day!</em> more words",  
+      "<p><em><img src=\"gif.gif\" />my post. <strong>big</strong> day!</em> more words</p>"
+    one_test "<strong><em><img src=\"gif.gif\">my post. <strong>big</strong> day!</em> more words",  
       "<p>
-  <b><i><img src=\"gif.gif\" />my post. <b>big</b> day!</i> more words</b>
+  <strong><em><img src=\"gif.gif\" />my post. <strong>big</strong> day!</em> more words</strong>
 </p>"
   end
 
   def test_self_closing
-    one_test "<b><i><img src=\"gif.gif\">my post. <b>big</b> day!</i> more words",  
+    one_test "<strong><em><img src=\"gif.gif\">my post. <strong>big</strong> day!</em> more words",  
       "<p>
-  <b><i><img src=\"gif.gif\" />my post. <b>big</b> day!</i> more words</b>
+  <strong><em><img src=\"gif.gif\" />my post. <strong>big</strong> day!</em> more words</strong>
 </p>"
-    one_test "<b><i><img src=\"gif.gif\"></img>my post. <b>big</b> day!</i> more words",  
+    one_test "<strong><em><img src=\"gif.gif\"></img>my post. <strong>big</strong> day!</em> more words",  
       "<p>
-  <b><i><img src=\"gif.gif\" />my post. <b>big</b> day!</i> more words</b>
+  <strong><em><img src=\"gif.gif\" />my post. <strong>big</strong> day!</em> more words</strong>
 </p>"
   end
   
@@ -111,10 +111,10 @@ text3
 ", "<p>text1<br />text2</p><hr /><p><br />text3<br /></p>"
 
     one_test "This is a test
-<i>Of a line</i> starting with the i tag.", "<p>This is a test<br /><i>Of a line</i> starting with the i tag.</p>"
+<em>Of a line</em> starting with the i tag.", "<p>This is a test<br /><em>Of a line</em> starting with the i tag.</p>"
     one_test "This is a test
 
-<i>Of a line</i> starting with the i tag.", "<p>This is a test</p><p><i>Of a line</i> starting with the i tag.</p>"
+<em>Of a line</em> starting with the i tag.", "<p>This is a test</p><p><em>Of a line</em> starting with the i tag.</p>"
 
     one_test "<p>1</p>
       <p  >
