@@ -3,6 +3,7 @@ Feature: Tag wrangling
 
   Scenario: Log in as a tag wrangler and see wrangler pages
     Given I have no users
+      And I have no tags
       And the following admin exists
       | login       | password | 
       | Zooey       | secret   |
