@@ -108,7 +108,7 @@ text2
 
 <hr />
 text3
-", "<p>text1<br />text2</p><hr /><p><br />text3<br /></p>"
+", "<p>text1<br />text2</p><hr /><p>text3<br /></p>"
 
     one_test "This is a test
 <em>Of a line</em> starting with the i tag.", "<p>This is a test<br /><em>Of a line</em> starting with the i tag.</p>"
@@ -118,7 +118,7 @@ text3
 
     one_test "<p>1</p>
       <p  >
-      2</ p >",  "<p>1</p><p><br />      2 p &gt;</p>"
+      2</ p >",  "<p>1</p><p>      2 p &gt;</p>"
 
     one_test "<p>chapter1
       line2

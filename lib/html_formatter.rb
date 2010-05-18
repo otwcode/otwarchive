@@ -6,7 +6,7 @@ module HtmlFormatter
 
   @@all_html_tags = ['a', 'abbr', 'acronym', 'address', 'area', 'b', 'base', 'bdo', 'big', 'blockquote', 'body', 'br', 'button', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'dd', 'del', 'dfn', 'div', 'dl', 'dt', 'em', 'fieldset', 'font', 'form', 'frame', 'frameset', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'hr', 'html', 'i', 'iframe', 'img', 'input', 'ins', 'kbd', 'label', 'legend', 'li', 'link', 'map', 'menu', 'meta', 'noframes', 'noscript', 'object', 'ol', 'optgroup', 'option', 'p', 'paragraphm', 'pre', 'q', 's', 'samp', 'script', 'select', 'small', 'span', 'strike', 'strong', 'style', 'sub', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'title', 'tr', 'tt', 'u', 'ul', 'var']
 
-  @@allowed_attribute_keys = %w(alt align border class height href src title width)
+  @@allowed_attribute_keys = %w(alt align border class height href name src title width)
 
   def cleanup_and_format(text)
     return clean_fully(text, @@all_html_tags, true, false)
@@ -47,9 +47,9 @@ module HtmlFormatter
     sanitize_and_format_for_display(text, options)
   end
   
-  INLINE_HTML_TAGS = %w(a b big br caption cite code del em i img q s small span strike strong sub sup tt u)
-  BLOCK_HTML_TAGS = %w(div blockquote center pre ul ol li dl dt dd table tbody tfoot thead td tr th)
-  NO_PARAGRAPHS_REQUIRED = %w(h1 h2 h3 h4 h5 h6 hr)
+  INLINE_HTML_TAGS = %w(a b big br cite code del em i img q s small span strike strong sub sup tt u)
+  BLOCK_HTML_TAGS = %w(div blockquote center ul ol li dl dt dd table tbody tfoot thead td tr th)
+  NO_PARAGRAPHS_REQUIRED = %w(caption h1 h2 h3 h4 h5 h6 hr pre)
   
   # Ensure that all text that isn't a heading is contained in a paragraph
   def add_paragraphs_to_nodes(nodes)
@@ -99,7 +99,7 @@ module HtmlFormatter
         first_paragraph = true
         # If we don't unlink the node up here, the first line_node
         # gets created as a duplicate of it (??)
-        node.unlink 
+        node.unlink
         text_paragraphs.each do |p|
           # If we're inside an inline element, add two br tags between
           # paragraphs instead of using paragraph tags
@@ -123,12 +123,12 @@ module HtmlFormatter
               working_parent.add_child(br_node.dup)
             end
             # Add the text to the current working tag
-            unless line.blank?
+            unless line.empty? || line == "____spacer____"
               line_node = Nokogiri::XML::Text.new(line, fakedoc)
               line_node.unlink
-              working_parent.add_child(line_node)
+              working_parent.add_child(line_node) 
+              first_line = false
             end
-            first_line = false
           end
           first_paragraph = false
         end
@@ -187,6 +187,8 @@ module HtmlFormatter
       # Standardize linebreaks
       text_input.gsub!("\r\n", "\n")
       text_input.gsub!("\n\n\n+", "\n\n")
+      # Hack: Nokogiri eats linebreaks between self-closing tags and other tags.
+      text_input.gsub!(/(<img[^\>]*\/?>\s*)$/, '\1' + "____spacer____\n")
       # Create a Nokogiri document
       doc = Nokogiri::HTML.parse(text_input)
       body = doc.at_css("body")
