@@ -76,8 +76,10 @@ module HtmlFormatter
   # Pop off empty paragraphs
   def clean_up_paragraphs(nodes)
     for node in nodes
-      if node.node_name == 'p' && node.children.blank?
-        node.remove
+      if node.node_name == 'p' 
+        if node.children.blank? || (node.children.length == 1 && node.children.first.text? && node.content.blank?)
+          node.remove
+        end
       end
     end
   end
@@ -116,7 +118,7 @@ module HtmlFormatter
           end          
           first_line = true
           # Create an array of lines, splitting on single newlines
-          lines = p.blank? ? [''] : p.split("\n", -1)
+          lines = (p.nil? || p.empty?) ? [''] : p.split("\n", -1)
           for line in lines
             # add a linebreak before any line that comes after a newline
             unless first_line
