@@ -76,8 +76,9 @@ module HtmlFormatter
   # Pop off empty paragraphs
   def clean_up_paragraphs(nodes)
     for node in nodes
-      if node.node_name == 'p' 
-        if node.children.blank? || (node.children.length == 1 && node.children.first.text? && node.content.blank?)
+      if node.node_name == 'p'
+        child_types = node.children.collect(&:node_name).uniq - ["text", "br"]         
+        if child_types.blank? && node.content.blank?
           node.remove
         end
       end
