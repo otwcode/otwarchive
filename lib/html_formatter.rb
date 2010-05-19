@@ -30,7 +30,7 @@ module HtmlFormatter
   end
  
   # A more limited display option for comments and summaries
-  def sanitize_limit_and_format_for_display(text, options = {:tags => ['a', 'b', 'big', 'blockquote', 'br', 'center', 'cite', 'code', 'del', 'em', 'i', 'img', 'ins', 'p', 'pre', 'q', 'small', 'strike', 'strong',  'sub', 'sup', 'u']})
+  def sanitize_limit_and_format_for_display(text, options = {:tags => ['a', 'b', 'big', 'blockquote', 'br', 'center', 'cite', 'code', 'del', 'em', 'i', 'img', 'ins', 'p', 'pre', 'q', 's', 'small', 'strike', 'strong', 'sub', 'sup', 'u']})
     return "" if text.nil?
     text = sanitize_and_format_for_display(text, options)
   end
@@ -42,7 +42,7 @@ module HtmlFormatter
   end
   
     # A more limited display option which strips obtrusive tags for index views.
-  def sanitize_strip_images_and_format_for_display(text, options = {:tags => ['a', 'b', 'big', 'blockquote', 'br', 'center', 'cite', 'code', 'del', 'em', 'i', 'ins', 'p', 'pre', 'q', 'small', 'strike', 'strong', 'sub', 'sup', 'u']})
+  def sanitize_strip_images_and_format_for_display(text, options = {:tags => ['a', 'b', 'big', 'blockquote', 'br', 'center', 'cite', 'code', 'del', 'em', 'i', 'ins', 'p', 'pre', 'q', 's', 'small', 'strike', 'strong', 'sub', 'sup', 'u']})
     return "" if text.nil?
     sanitize_and_format_for_display(text, options)
   end
