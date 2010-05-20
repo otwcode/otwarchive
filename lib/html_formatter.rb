@@ -49,7 +49,7 @@ module HtmlFormatter
   
   INLINE_HTML_TAGS = %w(a b big br cite code del em i img q s small span strike strong sub sup tt u)
   BLOCK_HTML_TAGS = %w(div blockquote center ul ol li dl dt dd table tbody tfoot thead td tr th)
-  NO_PARAGRAPHS_REQUIRED = %w(caption h1 h2 h3 h4 h5 h6 hr pre)
+  NO_PARAGRAPHS_REQUIRED = %w(caption dt h1 h2 h3 h4 h5 h6 hr pre)
   
   # Ensure that all text that isn't a heading is contained in a paragraph
   def add_paragraphs_to_nodes(nodes)

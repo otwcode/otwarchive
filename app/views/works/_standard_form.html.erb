@@ -94,7 +94,7 @@
   <fieldset id="associations">
     <legend><%=h 'Associations' -%></legend>
     <dl>
-      <% if !(@assignments = current_user.offer_assignments).empty? || !@work.challenge_assignments.empty? %>
+      <% if !(@assignments = current_user.offer_assignments + current_user.pinch_hit_assignments).empty? || !@work.challenge_assignments.empty? %>
         <!-- if the user has open assignments? -->
         <dt class="collection">
           <%= f.label :challenge_assignment_ids, t("work_form.assignments", :default => "Fulfill an Assignment: ") %> <%= link_to_help "add-work-to-assignment" -%>
