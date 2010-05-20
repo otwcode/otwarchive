@@ -129,9 +129,9 @@ module HtmlFormatter
             unless line.empty? || line == "____spacer____"
               line_node = Nokogiri::XML::Text.new(line, fakedoc)
               line_node.unlink
-              working_parent.add_child(line_node) 
-              first_line = false
+              working_parent.add_child(line_node)              
             end
+            first_line = false
           end
           first_paragraph = false
         end
