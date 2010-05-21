@@ -117,10 +117,10 @@ module SeriesHelper
   
   # TODO: merge with work_blurb_tag_block
   def series_blurb_tag_block(series)    
-    warnings = series.tags.select{|tag| tag.type == "Warning"}.sort
-    pairings = series.tags.select{|tag| tag.type == "Pairing"}.sort
-    characters = series.tags.select{|tag| tag.type == "Character"}.sort
-    freeforms = series.tags.select{|tag| tag.type == "Freeform"}.sort
+    warnings = series.work_tags.select{|tag| tag.type == "Warning"}.sort
+    pairings = series.work_tags.select{|tag| tag.type == "Pairing"}.sort
+    characters = series.work_tags.select{|tag| tag.type == "Character"}.sort
+    freeforms = series.work_tags.select{|tag| tag.type == "Freeform"}.sort
 
     last_tag = (warnings + pairings + characters + freeforms).last
     tag_block = ""
