@@ -87,6 +87,7 @@ module HtmlFormatter
   
   # Turn newlines into paragraphs and linebreaks
   def add_paragraphs_to_text(parent_node, allowed_tags, working_parent=nil, block_container=true)
+    return unless parent_node
     working_parent ||= parent_node
     inline = INLINE_HTML_TAGS.include?(parent_node.node_name) || !block_container
     fakedoc = Nokogiri::HTML.parse("<br />")
@@ -120,6 +121,7 @@ module HtmlFormatter
           first_line = true
           # Create an array of lines, splitting on single newlines
           lines = (p.nil? || p.empty?) ? [''] : p.split("\n", -1)
+          last_line = lines.last
           for line in lines
             # add a linebreak before any line that comes after a newline
             unless first_line
@@ -195,13 +197,17 @@ module HtmlFormatter
       # Create a Nokogiri document
       doc = Nokogiri::HTML.parse(text_input)
       body = doc.at_css("body")
-      # Make sure text is contained in paragraphs for consistent styling
-      add_paragraphs_to_nodes(body.children) if block_container
-      # Convert newlines into p and br tags
-      add_paragraphs_to_text(body, allowed_tags, nil, block_container)
-      # Remove empty paragraphs
-      clean_up_paragraphs(doc.css("p"))
-      return body.children.to_xhtml
+      if body
+        # Make sure text is contained in paragraphs for consistent styling
+        add_paragraphs_to_nodes(body.children) if block_container
+        # Convert newlines into p and br tags
+        add_paragraphs_to_text(body, allowed_tags, nil, block_container)
+        # Remove empty paragraphs
+        clean_up_paragraphs(doc.css("p"))
+        return body.children.to_xhtml
+      else
+        return ""
+      end
     end
   end
   

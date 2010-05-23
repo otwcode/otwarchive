@@ -27,7 +27,7 @@
     </thead>
     <tbody>
     <%- @related_works_as_parent.each do |related_work| -%>
-      <%- if related_work.parent && related_work.work -%>
+      <%- if related_work.parent && related_work.work && !related_work.work.unrevealed? -%>
       <tr>
         <td><%= link_to related_work.parent.title, related_work.parent %></td>
         <td><%= link_to related_work.work.title, related_work.work %> by <%= byline(related_work.work) %></td>

@@ -579,7 +579,7 @@ class Tag < ActiveRecord::Base
           if new_merger.is_a?(Fandom)
             (new_merger.medias - self.medias).each {|medium| self.add_association(medium)}
           else
-            (new_merger.fandoms.canonical - self.fandoms).each {|fandom| self.add_association(fandom)}
+            (new_merger.parents.by_type("Fandom").canonical - self.fandoms).each {|fandom| self.add_association(fandom)}
           end
           self.meta_tags.each { |tag| new_merger.meta_tags << tag unless new_merger.meta_tags.include?(tag) }
           self.sub_tags.each { |tag| tag.meta_tags << new_merger unless tag.meta_tags.include?(new_merger) }            
