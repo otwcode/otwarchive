@@ -277,6 +277,14 @@ module WorksHelper
     ['gifts', 'readings'].include?(controller.controller_name)
   end
   
+  def language_link(work)
+    if work.respond_to?(:language) && work.language
+      link_to work.language.name, work.language
+    else
+      "N/A"
+    end
+  end
+    
   def can_see_work(work, user)
     unless work.collections.empty?
       for collection in work.collections
