@@ -27,9 +27,15 @@
     </thead>
     <tbody>
     <%- @related_works_as_parent.each do |related_work| -%>
-      <%- if related_work.parent && related_work.work && !related_work.work.unrevealed? -%>
+      <%- if related_work.parent && related_work.work -%>
       <tr>
-        <td><%= link_to related_work.parent.title, related_work.parent %></td>
+        <td>
+          <%- if related_work.work.unrevealed? -%>
+          <%= "A work in an unrevealed challenge" %>  
+          <%- else -%>
+          <%= link_to related_work.parent.title, related_work.parent %>
+          <%- end -%>
+        </td>
         <td><%= link_to related_work.work.title, related_work.work %> by <%= byline(related_work.work) %></td>
         <td>
           <%- if related_work.translation? -%>
@@ -69,15 +75,19 @@
     <%- @related_works_as_child.each do |related_work| -%>
       <%- if related_work.parent && related_work.work -%>
       <tr>
-        <td><%= link_to related_work.parent.title, related_work.parent %> by <%= byline(related_work.parent) %></td>
-        <td><%= link_to related_work.work.title, related_work.work %></td>
-        <td>
-          <%- if related_work.translation? -%>
-            From <%= language_link(related_work.parent) %> to <%= language_link(related_work.work) %>
+        <%- if related_work.parent.is_a?(Work) && (related_work.parent.unrevealed? || related_work.parent.anonymous?) -%>
+        <td><%= "A work in an unrevealed or anonymous challenge" %></td>  
+        <%- else -%>
+          <td><%= link_to related_work.parent.title, related_work.parent %> by <%= byline(related_work.parent) %></td>
+          <td><%= link_to related_work.work.title, related_work.work %></td>
+          <td>
+            <%- if related_work.translation? -%>
+              From <%= language_link(related_work.parent) %> to <%= language_link(related_work.work) %>
+            <%- end -%>
+          </td>
+          <%- if current_user == @user -%>
+          <td><%= link_to "Remove", {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></td>
           <%- end -%>
-        </td>
-        <%- if current_user == @user -%>
-        <td><%= link_to "Remove", {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></td>
         <%- end -%>
       </tr>
       <%- end -%>
