@@ -47,8 +47,8 @@ module HtmlFormatter
     sanitize_and_format_for_display(text, options)
   end
   
-  INLINE_HTML_TAGS = %w(a b big br cite code del em i img q s small span strike strong sub sup tt u)
-  BLOCK_HTML_TAGS = %w(div blockquote center ul ol li dl dt dd table tbody tfoot thead td tr th)
+  INLINE_HTML_TAGS = %w(a abbr acronym b big br cite code del dfn em i img ins kbd q s samp small span strike strong sub sup tt u var)
+  BLOCK_HTML_TAGS = %w(div address blockquote center ul ol li dl dt dd table tbody tfoot thead td tr th)
   NO_PARAGRAPHS_REQUIRED = %w(caption dt h1 h2 h3 h4 h5 h6 hr pre)
   
   # Ensure that all text that isn't a heading is contained in a paragraph
@@ -124,7 +124,7 @@ module HtmlFormatter
           last_line = lines.last
           for line in lines
             # add a linebreak before any line that comes after a newline
-            unless first_line
+            unless first_line || (line == lines.last && line == "____spacer____")
               working_parent.add_child(br_node.dup)
             end
             # Add the text to the current working tag

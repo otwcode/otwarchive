@@ -29,14 +29,14 @@
     <%- @related_works_as_parent.each do |related_work| -%>
       <%- if related_work.parent && related_work.work -%>
       <tr>
+        <td><%= link_to related_work.parent.title, related_work.parent %></td>
         <td>
           <%- if related_work.work.unrevealed? -%>
           <%= "A work in an unrevealed challenge" %>  
           <%- else -%>
-          <%= link_to related_work.parent.title, related_work.parent %>
+          <%= link_to related_work.work.title, related_work.work %> by <%= byline(related_work.work) %>
           <%- end -%>
         </td>
-        <td><%= link_to related_work.work.title, related_work.work %> by <%= byline(related_work.work) %></td>
         <td>
           <%- if related_work.translation? -%>
             From <%= language_link(related_work.parent) %> to <%= language_link(related_work.work) %>
@@ -75,7 +75,7 @@
     <%- @related_works_as_child.each do |related_work| -%>
       <%- if related_work.parent && related_work.work -%>
       <tr>
-        <%- if related_work.parent.is_a?(Work) && (related_work.parent.unrevealed? || related_work.parent.anonymous?) -%>
+        <%- if related_work.work.unrevealed? || related_work.work.anonymous? -%>
         <td><%= "A work in an unrevealed or anonymous challenge" %></td>  
         <%- else -%>
           <td><%= link_to related_work.parent.title, related_work.parent %> by <%= byline(related_work.parent) %></td>
