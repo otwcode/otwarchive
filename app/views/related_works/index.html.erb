@@ -29,25 +29,23 @@
     <%- @related_works_as_parent.each do |related_work| -%>
       <%- if related_work.parent && related_work.work -%>
       <tr>
-        <td><%= link_to related_work.parent.title, related_work.parent %></td>
-        <td>
-          <%- if related_work.work.unrevealed? -%>
-          <%= "A work in an unrevealed challenge" %>  
-          <%- else -%>
-          <%= link_to related_work.work.title, related_work.work %> by <%= byline(related_work.work) %>
+        <%- if related_work.work.unrevealed? -%>
+          <td><%= "A work in an unrevealed challenge" %></td>  
+        <%- else -%>
+          <td><%= link_to related_work.parent.title, related_work.parent %></td>
+          <td><%= link_to related_work.work.title, related_work.work %> by <%= byline(related_work.work) %></td>
+          <td>
+            <%- if related_work.translation? -%>
+              From <%= language_link(related_work.parent) %> to <%= language_link(related_work.work) %>
+            <%- end -%>
+          </td>
+          <%- if current_user == @user -%>
+            <%- if related_work.reciprocal? -%>
+              <td><%= link_to "Remove", related_work %></td>
+            <%- else -%>
+              <td><%= link_to "Approve", related_work %></td>
+            <%- end -%>        
           <%- end -%>
-        </td>
-        <td>
-          <%- if related_work.translation? -%>
-            From <%= language_link(related_work.parent) %> to <%= language_link(related_work.work) %>
-          <%- end -%>
-        </td>
-        <%- if current_user == @user -%>
-          <%- if related_work.reciprocal? -%>
-            <td><%= link_to "Remove", related_work %></td>
-          <%- else -%>
-            <td><%= link_to "Approve", related_work %></td>
-          <%- end -%>        
         <%- end -%>
       </tr>
       <%- end -%>
