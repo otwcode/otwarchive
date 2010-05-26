@@ -4,7 +4,7 @@ Feature: Edit profile
   As a humble user
   I want to fill out my profile
 
-  Scenario: View and edit profile
+  Scenario: View and edit profile - add details, edit details, remove details
 
   Given the following activated user exists
     | login         | password   |
@@ -20,14 +20,60 @@ Feature: Edit profile
   When I follow "Edit my profile"
   Then I should see "Edit My Profile"
   When I fill in "Title" with "Test title thingy"
-  And I fill in "Location" with "Alpha Centauri"
-  And I fill in "About me" with "This is some text about me."
-  And I press "Update"
+    And I fill in "Location" with "Alpha Centauri"
+    And I fill in "About me" with "This is some text about me."
+    And I press "Update"
   Then I should see "Your profile has been successfully updated"
-  And I should see "Alpha Centauri" within ".wrapper"
-  And I should see "This is some text about me." within ".user-generated-view"
-    
-  Scenario: Manage pseuds
+    And I should see "Alpha Centauri" within ".wrapper"
+    And I should see "This is some text about me." within ".user-generated-view"
+  When I follow "Edit my profile"
+    And I fill in "Title" with "Alternative title thingy"
+    And I fill in "Location" with "Beta Centauri"
+    And I fill in "About me" with "This is some <font color='red'>text</font> about me and my colours."
+    And I press "Update"
+  Then I should see "Your profile has been successfully updated"
+    And I should see "Alternative title thingy"
+    And I should see "Beta Centauri" within ".wrapper"
+    And I should see "This is some text about me and my colours." within ".user-generated-view"
+  When I follow "Edit my profile"
+    And I fill in "Title" with ""
+    And I fill in "Location" with ""
+    And I fill in "About me" with ""
+    And I press "Update"
+  Then I should see "Your profile has been successfully updated"
+    And I should not see "Alternative title thingy"
+    And I should not see "Beta Centauri" within ".wrapper"
+    And I should not see "This is some text about me and my colours."
+
+  Scenario: View and edit profile - email address, date of birth and password
+
+  Given the following activated user exists
+    | login         | password   |
+    | editname2     | password   |
+    And I am logged in as "editname2" with password "password"
+  When I follow "editname2"
+    And I follow "Profile"
+    And I follow "Edit my profile"
+  Then I should see "Edit My Profile"
+  When I select "1980" from "profile_attributes[date_of_birth(1i)]"
+    And I select "January" from "profile_attributes[date_of_birth(2i)]"
+    And I select "2" from "profile_attributes[date_of_birth(3i)]"
+    And I fill in "Change Email" with "bob.bob.bob"
+    And I press "Update"
+  Then I should see "Email does not seem to be a valid address"
+  When I fill in "Change Email" with "valid2@archiveofourown.org"
+    And I press "Update"
+  Then I should see "Your profile has been successfully updated"
+  When I follow "My Preferences"
+    And I check "Display Email Address"
+    And I check "Display Date of Birth"
+    And I press "Update"
+    And I follow "editname2"
+    And I follow "Profile"
+  Then I should see "My email address: valid2@archiveofourown.org"
+    And I should see "My birthday: 1980-01-02"
+
+  Scenario: Manage pseuds - add, edit
 
   Given the following activated user exists
     | login         | password   |
@@ -57,3 +103,18 @@ Feature: Edit profile
     And I should see "My new name (editpseuds)"
     And I should see "I wanted to add another name"
     And I should see "Default Pseud"
+  When I follow "editpseuds"
+    And I follow "Profile"
+    And I follow "Manage my pseuds"
+  Then I should see "Edit My new name"
+  When I follow "Edit My new name"
+    And I fill in "Description" with "I wanted to add another fancy name"
+    And I fill in "Name" with "My new fancy name"
+    And I press "Update"
+  Then I should see "Pseud was successfully updated"
+  When I follow "Back To Pseuds"
+  Then I should see "editpseuds (editpseuds)"
+    And I should see "My new fancy name (editpseuds)"
+    And I should see "I wanted to add another fancy name"
+    And I should not see "My new name (editpseuds)"
+    And I should not see "I wanted to add another name"

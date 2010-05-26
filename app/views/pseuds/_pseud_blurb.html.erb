@@ -31,14 +31,14 @@
     
     <%- if current_user == pseud.user -%>
   	<ul class="navigation" role="navigation">
-      <li><%= link_to t('edit_link', :default => 'Edit'), [:edit, @user, pseud] -%></li>
+      <li><%= link_to t('edit_link', :default => 'Edit<span class="landmark"> {{pseud}}</span>', :pseud => pseud.name), [:edit, @user, pseud] -%></li>
       <%- unless pseud.works.blank? %>
-        <li><%= link_to t('orphan_link', :default => 'Orphan Works'), {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} -%></li>
+        <li><%= link_to t('orphan_link', :default => 'Orphan Works<span class="landmark"> by {{pseud}}</span>', :pseud => pseud.name), {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} -%></li>
       <%- end -%>
       <%- if pseud.is_default -%>
         <li>Default Pseud</li>
       <%- elsif @user.login != pseud.name -%>
-        <li><%= link_to t('delete_link', :default => 'Delete'), [@user, pseud], :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
+        <li><%= link_to t('delete_link', :default => 'Delete<span class="landmark"> {{pseud}}</span>', :pseud => pseud.name), [@user, pseud], :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
       <% end -%>
     </ul>
     <%- end -%>
