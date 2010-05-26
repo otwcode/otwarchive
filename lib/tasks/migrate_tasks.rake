@@ -134,6 +134,11 @@ namespace :After do
     common_taggings.each {|ct| ct.destroy}
   end 
   
+  desc "Make reading count 1 instead of 0 for existing readings"
+  task(:reading_count_setup => :environment) do
+    Reading.update_all("view_count = 1", "view_count = 0")
+  end
+
 
 end # this is the end that you have to put new tasks above
 
@@ -143,4 +148,5 @@ end # this is the end that you have to put new tasks above
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
 #task :After => ['After:fix_warnings', 'After:tidy_wranglings', 'After:exorcise_syns', 'After:deleted_invites_cleanup']
-task :After => []
+task :After => ['After:reading_count_setup']
+

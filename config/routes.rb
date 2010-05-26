@@ -60,7 +60,7 @@ ActionController::Routing::Routes.draw do |map|
     user.resources :related_works
     user.resources :works, :collection => {:drafts => :get, :show_multiple => :get, :edit_multiple => :post, :update_multiple => :put}
     user.resources :series, :member => {:manage => :get}, :has_many => :serial_works
-    user.resources :readings, :only => [:index, :destroy]
+    user.resources :readings, :only => [:index, :destroy], :collection => {:clear => :post}
     user.resources :comments, :member => { :approve => :put, :reject => :put }
     user.resources :invitations, :member => {:invite_friend => :post}, :collection => {:manage => :get}
     user.resources :collection_items, :only => [:index, :update, :destroy]

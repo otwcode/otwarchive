@@ -16,7 +16,19 @@ class ReadingsController < ApplicationController
   def destroy
     @reading = @user.readings.find(params[:id])
     @reading.destroy
-    flash[:notice] = t('story_deleted', :default => 'Story deleted from your history.')
+    flash[:notice] = t('story_deleted', :default => 'Work deleted from your history.')
+    redirect_to user_readings_url(current_user)
+  end
+  
+  def clear
+    @user.readings.each do |reading|
+       begin
+         reading.destroy
+       rescue
+         @errors << t('destroy_multiple.deletion_failed', :default => "There were problems deleting your history.")
+       end
+     end
+    flash[:notice] = t('history_deleted', :default => 'Your history is now cleared.')
     redirect_to user_readings_url(current_user)
   end
 
