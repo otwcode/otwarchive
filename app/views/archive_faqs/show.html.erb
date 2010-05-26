@@ -3,15 +3,25 @@
 <!--/descriptions-->
 
 <!--subnav-->
+<ul class="navigation" role="navigation">
+	<li><%= link_to t('back_to_archive_faq_text', :default => 'Back to Archive FAQ'), archive_faqs_path %></li>
+</ul>
 <!--/subnav-->
 
 <!--main content-->
-<div class="admin user-generated-view" role="article">
-			<h4>Updated: <%=h @archive_faq.updated_at %>  
-					<%- if logged_in_as_admin? -%>
-				    | <%= link_to 'Edit', edit_archive_faq_path(@archive_faq) %>
-				<%- end -%>
-			</h4>
-	    <%=sanitize_and_format_for_display @archive_faq.content %>
-</div>	
-	<!--/content-->
+<div class="admin" role="article">
+  <div class="admin-header">
+    <h3>
+      <%= sanitize_title_for_display @archive_faq.title %>
+    </h3>
+    <%- if logged_in_as_admin? -%>
+      <h4>
+        Updated: <%=h @archive_faq.updated_at %> | <%= link_to 'Edit', edit_archive_faq_path(@archive_faq) %>
+      </h4>
+    <%- end -%>
+  </div>
+  <div class="admin-content user-generated-view">
+    <%=sanitize_and_format_for_display @archive_faq.content %>
+  </div>
+</div>
+<!--/content-->

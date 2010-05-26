@@ -385,14 +385,19 @@ li.comment h4	{ font-size: 1.25em; margin-top:0; }
  #dashboard.admin-posts li, #dashboard.wrangling li 
                                 { font-size: 90%; margin: .5em 0em; }
  #dashboard.admin-posts a:hover { background: #333; color: #fff; }
- #main.admin_posts-index .wrapper, #main.admin_posts-show .admin-header {clear:right;}
+ #main.admin_posts-index .wrapper, #main.admin_posts-show .admin-header, #main.archive_faqs-show .admin-header{clear:right;}
  #main.admin_posts-show .user-generated-view { margin-top: 2em; } /* hacky fix so the first header doesn't overlap the subnav */
- #main.admin_posts-show .admin-header h3, #main.admin_posts-index .admin-header h3 
+ #main.admin_posts-show .admin-header h3, #main.admin_posts-index .admin-header h3, 
+     #main.archive_faqs-show .admin-header h3, #main.archive_faqs-index .admin-header h3  
        { font-weight:500; padding: 0.125em; border-bottom:0.25em double #fffef9; color: #fffef9; background-color: #333; }
  #main.admin_posts-index .admin-header h3 a, #main.admin_posts-index .admin-header h3 a:link, #main.admin_posts-index .admin-header h3 a:visited, 
-    #main.admin_posts-show .admin-header h3 a, #main.admin_posts-show .admin-header h3 a:link, #main.admin_posts-show .admin-header h3 a:visited
+    #main.admin_posts-show .admin-header h3 a, #main.admin_posts-show .admin-header h3 a:link, #main.admin_posts-show .admin-header h3 a:visited,
+        #main.archive_faqs-index .admin-header h3 a, #main.archive_faqs-index .admin-header h3 a:link, #main.archive_faqs-index .admin-header h3 a:visited, 
+            #main.archive_faqs-show .admin-header h3 a, #main.archive_faqs-show .admin-header h3 a:link, #main.archive_faqs-show .admin-header h3 a:visited
             { border-bottom:0; text-decoration: none; color: #fffef9; }
- #main.admin_posts-show .admin-header h4, #main.admin_posts-index .admin-header h4 { font-variant:small-caps; }
+ #main.admin_posts-show .admin-header h4, #main.admin_posts-index .admin-header h4,
+    #main.archive_faqs-show .admin-header h4, #main.archive_faqs-index .admin-header h4
+       { font-variant:small-caps; }
 
 /* ToS and ADMIN long body copy tweaks*/
  #main #tos .toc li 			{ list-style-type: upper-roman }

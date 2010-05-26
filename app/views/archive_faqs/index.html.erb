@@ -20,17 +20,8 @@
   <h3 id="categories">Available Categories</h3>
   <ol role="navigation">
     <%- for faq in @archive_faqs -%>
-    <li><%= link_to faq.title, "##{faq.title.parameterize}" %></li>
+    <li><%= link_to sanitize_title_for_display(faq.title), faq %></li>
     <%- end -%>
   </ol>
-
-	<%- for faq in @archive_faqs -%>
-		<h3 id="<%= faq.title.parameterize %>"><%=h faq.title %></h3>
-		<%- if logged_in_as_admin? -%>
-		<p class="navigation" role="navigation"><%= link_to "Edit this section", edit_archive_faq_path(faq) %></p>  
-		<%- end -%>	
-	  <%= sanitize_and_format_for_display faq.content %>
-	  <p class="navigation" role="navigation"><a href='#categories'>Back to Available Categories</a></p>
-	<%- end -%>
 <%- end -%>
 </div>   
