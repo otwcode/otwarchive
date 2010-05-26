@@ -16,7 +16,7 @@ Feature: Collection
   When I post the work "Test work thingy"
   Then I should see "Work was successfully posted."
   When I go to the collections page
-  Then I should see "Collections in the Example Archive"
+  Then I should see "Collections in the "
     And I should not see "My Collection Thing"
   When I follow "New Collection"
     And I fill in "Display Title" with "My Collection Thing"
@@ -65,7 +65,7 @@ Feature: Collection
   Then I should see "Hi, mod1!"
     And I should see "Log out"
   When I go to the collections page
-  Then I should see "Collections in the Example Archive"
+  Then I should see "Collections in the "
     And I should not see "My Gift Exchanger"
   When I follow "New Collection"
     And I fill in "Display Title" with "My Gift Exchanger"

@@ -30,6 +30,7 @@ When /^I post the work "([^\"]*)"$/ do |title|
   check("No Archive Warnings Apply")
   fill_in("Fandoms", :with => "Stargate SG-1")
   fill_in("Work Title", :with => title)
+  fill_in("Additional Tags", :with => "Scary tag")
   fill_in("content", :with => "That could be an amusing crossover.")
   click_button("Preview")
   click_button("Post")
