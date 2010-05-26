@@ -34,7 +34,7 @@
   <%- if current_user.is_a?(User) -%>
     <li><%= bookmark_link(@work) %></li>
   <%- end -%>
-    <li><%= link_to "Comments", url_for(:show_comments => true, :anchor => 'comments') %></li>
+    <li><%= link_to "Comments", (params[:view_full_work] == 'true' ? work_path(@work, :view_full_work => 'true', :show_comments => true, :anchor => 'comments') : url_for(:show_comments => true, :anchor => 'comments')) %></li>
     
   <% if params[:style] == 'creator' || (!current_user.is_a?(User) && params[:style] != 'light') || (current_user.is_a?(User) && !current_user.preference.try(:always_light_style) && params[:style] != 'light') -%>
     <li><%- if params[:view_full_work] == 'true' -%>
