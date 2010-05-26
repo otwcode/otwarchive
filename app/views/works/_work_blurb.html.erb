@@ -68,7 +68,7 @@
   		  <dt><%=h t('work_comments', :default => 'Comments') + ': '%></dt>
   			<dd><%= link_to work.count_visible_comments, 
   			            @collection ? collection_work_path(@collection, work, :anchor => "comments", :show_comments => true) : 
-  			                work_path(work, :anchor => "comments", :show_comments => true) -%></dd>
+  			                (work.chapter_total_display.to_i > 1 ? work_path(work, :anchor => "comments", :show_comments => true, :view_full_work => 'true') : work_path(work, :anchor => "comments", :show_comments => true)) -%></dd>
   		<%- end -%>
   		<%- if Bookmark.count_visible_bookmarks(work) > 0 -%>
   		  <dt><%=h t('work_bookmarks', :default => 'Bookmarks') + ': '%></dt>
