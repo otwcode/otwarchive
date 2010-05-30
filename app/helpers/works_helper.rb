@@ -22,7 +22,7 @@ module WorksHelper
     if (bookmark_count = Bookmark.count_visible_bookmarks(work)) > 0
       list.concat([[t('work_bookmarks', :default => 'Bookmarks') + ':', link_to(bookmark_count.to_s, work_bookmarks_path(work))]])
     end
-    list.concat([[t('works_helper.hits:', :default => "Hits:"), work.hit_count]]) if show_hit_count?(work)
+    list.concat([[t('works_helper.hits:', :default => "Hits:"), work.hits]]) if show_hit_count?(work)
 
     if work.chaptered? && work.revised_at
       prefix = work.is_wip ? "Updated:" : "Completed:"

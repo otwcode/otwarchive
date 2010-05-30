@@ -5,7 +5,8 @@ class Work < ActiveRecord::Base
   ########################################################################
   # ASSOCIATIONS
   ########################################################################
-
+  
+  has_one :hit_counter, :dependent => :destroy
   has_many :creatorships, :as => :creation
   has_many :pseuds, :through => :creatorships
 	has_many :users, :through => :pseuds, :uniq => true
@@ -533,14 +534,24 @@ class Work < ActiveRecord::Base
     self.word_count = self.chapters.collect(&:word_count).compact.sum
   end
   
+  after_create :create_hit_counter
+  def create_hit_counter
+    counter = self.build_hit_counter
+    counter.save
+  end
+  
   # save hits
   def increment_hit_count(visitor)
-    if !self.last_visitor || self.last_visitor != visitor
+    counter = self.hit_counter
+    if !counter.last_visitor || counter.last_visitor != visitor
       unless User.current_user.is_a?(User) && User.current_user.is_author_of?(self)
-        self.update_attribute(:last_visitor, visitor)
-        self.update_attribute(:hit_count, self.hit_count + 1)
+        counter.update_attributes(:last_visitor => visitor, :hit_count => counter.hit_count + 1)
       end
     end
+  end
+  
+  def hits
+    self.hit_counter ? self.hit_counter.hit_count : 0
   end
   
   #######################################################################
@@ -966,9 +977,9 @@ class Work < ActiveRecord::Base
     command << (options[:collection] ? collected : '')
     
     if options[:collection]
-      @works = eval("Work#{command + sort}").find(:all).uniq
+      @works = eval("Work#{command + sort}").find(:all, :select => "works.*, hit_counters.hit_count AS hit_count", :joins => :hit_counter).uniq
     else
-      @works = eval("Work#{command + sort}").find(:all, :limit => ArchiveConfig.SEARCH_RESULTS_MAX).uniq
+      @works = eval("Work#{command + sort}").find(:all, :select => "works.*, hit_counters.hit_count AS hit_count", :joins => :hit_counter, :limit => ArchiveConfig.SEARCH_RESULTS_MAX).uniq
     end
 
     # Adds the co-authors of the displayed works to the available list of pseuds to filter on

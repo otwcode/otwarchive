@@ -121,23 +121,18 @@ namespace :After do
 
   #### Add your new tasks here 
   
-  desc "Clean up common taggings"
-  task(:common_tagging_cleanup => :environment) do
-    # Remove common taggings that associate tags with works - they're no longer used
-    CommonTagging.delete_all("filterable_type = 'Work'")
-    
-    # Find common taggings that make a non-media tag the parent of a fandom, and delete them
-    common_taggings = CommonTagging.find(:all, :joins => "INNER JOIN tags ON tags.id = common_taggings.common_tag_id 
-    INNER JOIN tags as parents ON parents.id = common_taggings.filterable_id", 
-    :conditions => "tags.type = 'Fandom' AND common_taggings.filterable_type = 'Tag' AND parents.type != 'Media'")
-
-    common_taggings.each {|ct| ct.destroy}
-  end 
-  
   desc "Make reading count 1 instead of 0 for existing readings"
   task(:reading_count_setup => :environment) do
     Reading.update_all("view_count = 1", "view_count = 0")
   end
+  
+  desc "Move hit counts to their own table"
+  task(:move_hit_counts => :environment) do
+    Work.find_each do |work|
+      counter = work.build_hit_counter(:hit_count => work.hit_count_old, :last_visitor => work.last_visitor_old)
+      counter.save
+    end
+  end  
 
 
 end # this is the end that you have to put new tasks above
@@ -148,5 +143,5 @@ end # this is the end that you have to put new tasks above
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
 #task :After => ['After:fix_warnings', 'After:tidy_wranglings', 'After:exorcise_syns', 'After:deleted_invites_cleanup']
-task :After => ['After:reading_count_setup']
+task :After => ['After:reading_count_setup', 'After:move_hit_counts']
 
