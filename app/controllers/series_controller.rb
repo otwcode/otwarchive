@@ -15,9 +15,15 @@ class SeriesController < ApplicationController
   def index
     if params[:user_id]
       @user = User.find_by_login(params[:user_id])
+      unless @user
+        raise ActiveRecord::RecordNotFound and return
+      end
       pseuds = @user.pseuds
       if params[:pseud_id]
         @author = @user.pseuds.find_by_name(params[:pseud_id])
+        unless @author
+          raise ActiveRecord::RecordNotFound and return
+        end
         pseuds = [@author]
       end
     end
