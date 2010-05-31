@@ -92,13 +92,12 @@ class ChaptersController < ApplicationController
     else
       chapters = @work.chapters.posted.in_order
     end 
-    chapter_position = chapters.index(@chapter)
-    if chapters.length > 1
-      chapter_position = chapters.index(@chapter)
-      @previous_chapter = chapters[chapter_position-1] unless chapter_position == 0
-      @next_chapter = chapters[chapter_position+1]
-    end
     if @chapter.posted? || (logged_in? && current_user.is_author_of?(@work))
+      if chapters.length > 1
+        chapter_position = chapters.index(@chapter)
+        @previous_chapter = chapters[chapter_position-1] unless chapter_position == 0
+        @next_chapter = chapters[chapter_position+1]
+      end
       @chapters = [@chapter]
       @commentable = @work
       @comments = @chapter.comments
