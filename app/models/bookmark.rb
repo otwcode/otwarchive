@@ -79,22 +79,6 @@ class Bookmark < ActiveRecord::Base
     end
   end  
   
-  # Use existing external work if relevant attributes and tags are the same
-  def set_external(id, fandom_string=nil, rating_string=nil, category_string=nil, pairing_string=nil, character_string=nil)
-    fetched = ExternalWork.find(id)
-    p "LOOK HERE" 
-    p fetched.fandom_string
-    p fandom_string
-
-    if (fetched.author == self.bookmarkable.author) && (fetched.title == self.bookmarkable.title) && (fetched.summary == self.bookmarkable.summary) && 
-      (fetched.fandom_string == fandom_string) && (fetched.rating_string == rating_string) && (fetched.category_string == category_string) && (fetched.pairing_string == pairing_string) && (fetched.character_string == character_string)
-      same = true
-    else
-      same = false
-    end
-    self.bookmarkable = fetched if same == true
-  end
-  
   before_save :validate
   # Adds customized error messages for External Work fields
   def validate

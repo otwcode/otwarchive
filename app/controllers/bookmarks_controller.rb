@@ -146,29 +146,16 @@ class BookmarksController < ApplicationController
   # GET /bookmarks/1/edit
   def edit
     @bookmarkable = @bookmark.bookmarkable
-    @tag_string = @bookmark.tag_string
   end
 
   # POST /bookmarks
   # POST /bookmarks.xml
   def create
     @bookmark = Bookmark.new(params[:bookmark])
-    unless params[:fetched].blank? || params[:fetched][:value].blank?
-      fandom_string = params[:bookmark][:external][:fandom_string].to_s
-      rating_string = params[:bookmark][:external][:rating_string].to_s
-      category_string = params[:bookmark][:external][:category_string].to_s
-      pairing_string = params[:bookmark][:external][:pairing_string].to_s
-      character_string = params[:bookmark][:external][:character_string].to_s
-    @bookmark.set_external(params[:fetched][:value].to_i, fandom_string, rating_string, category_string, pairing_string, character_string)
-    end
-    begin
-      if @bookmark.save && @bookmark.tag_string=params[:tag_string]
-        flash[:notice] = t('successfully_created', :default => 'Bookmark was successfully created.')
-       redirect_to(@bookmark) 
-      else
-        raise
-      end
-    rescue
+    if @bookmark.save
+      flash[:notice] = t('successfully_created', :default => 'Bookmark was successfully created.')
+      redirect_to(@bookmark) 
+    else
       @bookmarkable = @bookmark.bookmarkable || ExternalWork.new
       render :action => "new" 
     end 
@@ -177,15 +164,11 @@ class BookmarksController < ApplicationController
   # PUT /bookmarks/1
   # PUT /bookmarks/1.xml
   def update
-    begin
-      if @bookmark.update_attributes(params[:bookmark]) && @bookmark.tag_string=params[:tag_string]
-        flash[:notice] = t('successfully_updated', :default => 'Bookmark was successfully updated.')
-        redirect_to(@bookmark) 
-      else
-        raise
-      end
-    rescue
-      @bookmarkable = @bookmark.bookmarkable || ExternalWork.new
+    if @bookmark.update_attributes(params[:bookmark])
+      flash[:notice] = t('successfully_updated', :default => 'Bookmark was successfully updated.')
+      redirect_to(@bookmark) 
+    else
+      @bookmarkable = @bookmark.bookmarkable
       render :action => :edit
     end
   end
@@ -195,7 +178,7 @@ class BookmarksController < ApplicationController
   def destroy
     @bookmark.destroy
     flash[:notice] = t('successfully_deleted', :default => 'Bookmark was successfully deleted.')
-   redirect_to user_bookmarks_path(current_user)
+    redirect_to user_bookmarks_path(current_user)
   end
 
   # Used on index page to show 4 most recent bookmarks (after bookmark being currently viewed) via RJS

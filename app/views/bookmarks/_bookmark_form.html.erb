@@ -103,7 +103,7 @@
     </dd>
 	<dt><%= f.label :tag_string, t('form_your_tags', :default => "Your Tags") %></dt>
 	<dd>
-    <%= text_field_tag 'tag_string', @tag_string, :size => 80 %>
+    <%= f.text_field :tag_string, :size => 80 %>
     <%= autocomplete_text_field "tag_string" -%>
     <p class="character_counter">
       <%=h t("comma_separated", :default => "Comma separated, #{ArchiveConfig.TAG_MAX} characters per tag") %>
