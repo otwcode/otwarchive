@@ -220,6 +220,12 @@ class Tag < ActiveRecord::Base
   }     
   
   # Class methods
+  
+  # Used for associations, such as work.fandoms.string
+  # Yields a comma-separated list of tag names
+  def self.string
+    all.map{|tag| tag.name}.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+  end  
 
   # Use the tag name in urls and escape url-unfriendly characters
   def to_param
