@@ -108,7 +108,7 @@ class Bookmark < ActiveRecord::Base
   end
   
   def tag_string
-    tags.string
+    tags.map{|tag| tag.name}.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
   end
   
   def tag_string=(tag_string)
