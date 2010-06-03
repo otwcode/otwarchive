@@ -9,74 +9,35 @@ module Taggable
   end
 
   # string methods
-  # (didn't use define_method, despite the redundancy, because it doesn't cache in development)
+  # (didn't use define_method, despite the redundancy, because it doesn't cache in development) 
   def rating_string
-    self.preview_mode ? self.placeholder_tag_string(:ratings) : self.ratings.map(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+    tag_category_string(:ratings)
   end
   def category_string
-    self.preview_mode ? self.placeholder_tag_string(:categories) : self.categories.map(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+    tag_category_string(:categories)
   end
   def category_strings
-    self.preview_mode ? (self.placeholder_tags[:categories] ||= []).map(&:name) : self.categories.map(&:name)
+    tag_category_string(:categories, :return_array => true)
   end
   def warning_string
-    self.preview_mode ? self.placeholder_tag_string(:warnings) : self.warnings.map(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+    tag_category_string(:warnings)
   end
   def warning_strings
-    self.preview_mode ? (self.placeholder_tags[:warnings] ||= []).map(&:name) : self.warnings.map(&:name)
+    tag_category_string(:warnings, :return_array => true)
   end
   def fandom_string
-    self.preview_mode ? self.placeholder_tag_string(:fandoms) : self.fandoms.map(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+    tag_category_string(:fandoms)
   end
   def pairing_string
-    self.preview_mode ? self.placeholder_tag_string(:pairings) : self.pairings.map(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+    tag_category_string(:pairings)
   end
   def character_string
-    self.preview_mode ? self.placeholder_tag_string(:characters) : self.characters.map(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+    tag_category_string(:characters)
   end
   def freeform_string
-    self.preview_mode ? self.placeholder_tag_string(:freeforms) : self.freeforms.map(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+    tag_category_string(:freeforms)
   end
   
-  def placeholder_tag_string(key)
-    if self.placeholder_tags[key].blank? || !self.placeholder_tags[key].flatten.compact.first.respond_to?(:name)
-      ''
-    else
-      self.placeholder_tags[key].flatten.compact.map(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
-    end
-  end
-  
-  # Process a string or array of tags from any tag class
-  def parse_tags(klass, incoming_tags)
-    tags = []
-    self.invalid_tags ||= []
-    klass_symbol = klass.to_s.downcase.pluralize.to_sym
-    tag_array = incoming_tags.is_a?(String) ? incoming_tags.split(ArchiveConfig.DELIMITER_FOR_INPUT) : incoming_tags
-    tag_array.each do |string|
-      string.strip!
-      unless string.blank?
-        tag = klass.find_or_create_by_name(string)
-        if tag.valid?
-          tags << tag if tag.is_a?(klass)
-        else
-          self.invalid_tags << tag
-        end
-      end
-    end
-    if self.preview_mode
-      self.placeholder_tags ||= {}
-      self.placeholder_tags[klass_symbol] = tags.uniq
-    else
-      # we have to destroy the taggings directly in order to trigger the callbacks
-      remove = self.send(klass_symbol) - tags
-      remove.each do |tag|
-        tagging = Tagging.find_by_tag(self, tag)
-        tagging.destroy if tagging
-      end
-      self.send(klass_symbol.to_s + '=', tags.uniq)
-    end    
-  end
-
   # _string= methods
   # always use string= methods to set tags
   # << and = don't trigger callbacks to update common_tags
@@ -183,6 +144,55 @@ module Taggable
     self.rating_string = ArchiveConfig.RATING_TEEN_TAG_NAME
     self.warning_strings = [ArchiveConfig.WARNING_NONE_TAG_NAME]
     self.save
+  end
+  
+  private
+  
+  # Returns a string (or array) of tag names
+  def tag_category_string(category, options={})
+    return "" unless self.respond_to?(category)
+    if self.preview_mode
+      tag_array = self.placeholder_tags[category] || []
+    else
+      tag_array = self.send(category)
+    end
+    tag_names = tag_array.map {|tag| tag.name}  
+    if options[:return_array]
+      tag_names 
+    else
+      tag_names.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+    end   
+  end
+  
+  # Process a string or array of tags from any tag class
+  def parse_tags(klass, incoming_tags)
+    tags = []
+    self.invalid_tags ||= []
+    klass_symbol = klass.to_s.downcase.pluralize.to_sym
+    tag_array = incoming_tags.is_a?(String) ? incoming_tags.split(ArchiveConfig.DELIMITER_FOR_INPUT) : incoming_tags
+    tag_array.each do |string|
+      string.strip!
+      unless string.blank?
+        tag = klass.find_or_create_by_name(string)
+        if tag.valid?
+          tags << tag if tag.is_a?(klass)
+        else
+          self.invalid_tags << tag
+        end
+      end
+    end
+    if self.preview_mode
+      self.placeholder_tags ||= {}
+      self.placeholder_tags[klass_symbol] = tags.uniq
+    else
+      # we have to destroy the taggings directly in order to trigger the callbacks
+      remove = self.send(klass_symbol) - tags
+      remove.each do |tag|
+        tagging = Tagging.find_by_tag(self, tag)
+        tagging.destroy if tagging
+      end
+      self.send(klass_symbol.to_s + '=', tags.uniq)
+    end    
   end  
   
 end
