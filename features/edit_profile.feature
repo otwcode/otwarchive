@@ -45,7 +45,7 @@ Feature: Edit profile
     And I should not see "Beta Centauri" within ".wrapper"
     And I should not see "This is some text about me and my colours."
 
-  Scenario: View and edit profile - email address, date of birth and password
+  Scenario: View and edit profile - email address and date of birth
 
   Given the following activated user exists
     | login         | password   |
@@ -80,6 +80,37 @@ Feature: Edit profile
     And I press "Update"
   Then I should see "Your profile has been successfully updated"
     And I should see "My birthday: 1980-03-02"
+    
+  Scenario: View and edit profile - change password
+
+  Given the following activated user exists
+    | login         | password   |
+    | editname2     | password   |
+    And I am logged in as "editname2" with password "password"
+  When I follow "editname2"
+    And I follow "Profile"
+    And I follow "Edit my profile"
+  Then I should see "Edit My Profile"
+  When I fill in "Change Password" with "newpass1"
+    And I fill in "Confirm New Password" with "newpass1"
+    And I fill in "Please enter your old password" with "wrong"
+    And I press "Update"
+  Then I should see "Your update failed; please try again"
+  When I fill in "Change Password" with "newpass1"
+    And I fill in "Confirm New Password" with "newpass2"
+    And I fill in "Please enter your old password" with "password"
+    And I press "Update"
+  Then I should see "Your update failed; please try again"
+  When I fill in "Change Password" with "newpass1"
+    And I fill in "Confirm New Password" with "newpass1"
+    And I fill in "Please enter your old password" with "password"
+    And I press "Update"
+  Then I should see "Your profile has been successfully updated"
+  When I follow "Log out"
+    And I am logged in as "editname2" with password "password"
+  Then I should see "The password you entered doesn't match our records. Please try again or click the 'forgot password' link below."
+  When I am logged in as "editname2" with password "newpass1"
+  Then I should see "Hi, editname2"
 
   Scenario: Manage pseuds - add, edit
 
