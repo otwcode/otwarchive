@@ -1080,9 +1080,10 @@ class Work < ActiveRecord::Base
     indexes tags(:name), :as => 'tag'
     indexes language(:name), :as => 'language'
     indexes chapters.content, :as => 'content'
+    indexes hit_counter(:hit_count), :as => 'hit_count'
         
     # attributes
-    has word_count, revised_at, hit_count
+    has word_count, revised_at
     has posted, restricted, hidden_by_admin
 
     # properties
