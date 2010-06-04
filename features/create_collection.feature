@@ -170,3 +170,10 @@ Feature: Collection
     And I should see "You can shuffle these assignments around as much as you want."
   When I follow "Generate Potential Matches"
   Then I should see "Beginning generation of potential matches. This may take some time, especially if your challenge is large."
+  Given I wait 2 seconds
+    And the system processes jobs
+    And I wait 15 seconds
+  When I follow "Generate Potential Matches"
+  Then I should see "Main Assignments"
+  When I follow "Send Assignments"
+  Then I should see "Assignments are now being sent out"
