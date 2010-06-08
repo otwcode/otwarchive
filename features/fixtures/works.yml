@@ -34,3 +34,11 @@ fourth:
   hit_count: 0
   language: french
   authors_to_sort_on: testuser2
+fifth:
+  posted:true
+  title:fifth
+  word_count:10000
+  title_to_sort_on: fifth work
+  hit_count: 2
+  language: english
+  authors_to_sort_on: testuser2

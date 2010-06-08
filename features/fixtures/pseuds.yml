@@ -1,9 +1,20 @@
 testuser:
   name: testuser
   user: testuser
+testy:
+  name: testy
+  user: testuser
+tester_pseud:
+  name: tester_pseud
+  user: testuser
+testymctesty:
+  name: testymctesty
+  user: testuser
+  is_default: true
 testuser2:
   name: testuser2
   user: testuser2
 testpseud2:
   name: something else
   user: testuser2
+  is_default: true

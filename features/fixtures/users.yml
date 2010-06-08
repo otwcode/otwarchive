@@ -6,3 +6,8 @@ testuser:
   crypted_password: 9c0ee17fb87de657bed5f271beccfc45fd33b056
 testuser2:
   login: testuser2
+sad_user_with_no_pseuds:
+  login:sad_user_with_no_pseuds
+  password:test
+  
+  

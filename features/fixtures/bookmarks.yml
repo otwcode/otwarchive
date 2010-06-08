@@ -8,3 +8,9 @@ bookm2:
 bookm3:
   pseud: testuser
   bookmarkable: third (Work)
+bookmark4:
+  pseud: testy
+  bookmarkable: fourth (Work)
+bookmark5:
+  pseud: testerpseud
+  bookmarkable: fifth (Work)

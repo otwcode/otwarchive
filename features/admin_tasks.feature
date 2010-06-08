@@ -40,4 +40,5 @@ Feature: Admin tasks
     When I press "Post"
     Then I should see "ArchiveFaq was successfully created"
     When I go to the archive_faqs page
+    And I follow "New subsection"
     Then I should see "Some text, that is sufficiently long to pass validation" within ".user-generated-view"
