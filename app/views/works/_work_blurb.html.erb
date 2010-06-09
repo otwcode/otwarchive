@@ -9,7 +9,7 @@
     <!--title, author, fandom-->
     <div class="header module">
 
-<%- cache("work-#{work.id}-#{work.updated_at}-top") do -%>
+<%- cache("#{work.cache_key}-blurb-top") do -%>
 
       <h4 title="title">
   	    <%= link_to sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small)), @collection ? collection_work_path(@collection, work) : work %>
@@ -19,7 +19,7 @@
         <!-- do not cache -->
         <%= byline(work) -%>
 
-<%- cache("work-#{work.id}-#{work.updated_at}-middle") do -%>
+<%- cache("#{work.cache_key}-blurb-middle") do -%>
         <%= !work.recipients.blank? ? t('works.for_recipients', :default => "for {{recipients}}", :recipients => recipients_link(work)) : "" -%>
    		  <%- if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") -%><%- end -%>
         <%- if work.hidden_by_admin -%><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><%- end -%>
@@ -43,7 +43,7 @@
   	  <%= work_blurb_tag_block(work) -%>
   	</ul>
 
-<%- cache("work-#{work.id}-#{work.updated_at}-bottom") do -%>	
+<%- cache("#{work.cache_key}-blurb-bottom") do -%>	
     <!--summary-->	
   	<%- unless work.summary.blank? -%>
   		<h6 class="landmark">Summary</h6>
