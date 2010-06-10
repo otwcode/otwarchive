@@ -28,7 +28,7 @@
   </div>
 </div>
 
-<%- cache("collection-profile-#{@collection.id}", :expires_in => AdminSetting.cache_expiration.minutes ) do -%> 
+<%- cache("#{@collection.collection_profile.cache_key}") do -%> 
 
 <!--main content-->
 <hr class="clear"/><!-- FRONT END this is here temporarily until the right fix can be put in -->
