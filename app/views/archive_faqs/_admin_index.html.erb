@@ -4,25 +4,45 @@
 
 <!--subnav-->
 <%= render :partial => 'admin/admin_nav' %>
-
-<%- if @archive_faqs.empty? -%>
-<ul class="navigation">
-  	<li><%= link_to 'Create New Archive FAQ', new_archive_faq_path %></li>
-</ul>		
-<% end %>
+<div class="clear"><!--presentational, phase me out--></div>
+<ul class="navigation" role="navigation">
+  <li><%= link_to "Add a new section", new_archive_faq_path %></li>
+  <li><%= link_to "Reorder FAQs", manage_archive_faqs_path %></li>
+</ul>
+<div class="clear"><!--presentational, phase me out--></div> 
 <!--/subnav-->
 
 <!--main content-->
-<% @archive_faqs.each do |archive_faq| %>
-  <h3 class="landmark">Actions</h3>
-	<ul class="navigation">
-    <li><%= link_to "Show", archive_faq %></li>
-    <li><%= link_to "Edit", edit_archive_faq_path(archive_faq) %></li>
-    <li><%= link_to "Delete", archive_faq, :confirm => 'Are you sure?', :method => :delete %></li>
-  </ul>
-  <div class="admin user-generated-view" role="article">
-    <h4>Updated at: <%=h archive_faq.updated_at %></h4>
-    <%= sanitize_and_format_for_display archive_faq.content %>
-  </div>
-<% end %>  
-<!--/content-->	
+<div class="wrapper">
+	<table summary="This table lists Archive FAQs by title, date posted and date updated, and lets you show, edit, and delete each FAQ.">
+	<caption>Manage Archive FAQs</caption>
+	<colgroup>
+	<col class="name" />
+	<col span="5" />
+	</colgroup>
+	<thead>
+		<tr>
+			<th scope="col"><%=h 'Title' -%></th>
+			<th scope="col"><%=h 'Posted' -%></th>
+			<th scope="col"><%=h 'Updated' -%></th>
+			<th scope="col" colspan="3"><%=h 'Actions' -%></th>
+		</tr>
+	</thead>
+	<tbody>	
+  <% @archive_faqs.each do |archive_faq| %>
+    <tr>
+      <td><%= link_to sanitize_title_for_display(archive_faq.title), archive_faq %></td>
+      <td><%=h archive_faq.created_at %></td>
+      <td><%=h archive_faq.updated_at %></td>
+      <td><%= link_to "Show", archive_faq %></td>
+      <td><%= link_to "Edit", edit_archive_faq_path(archive_faq) %></td>
+      <td><%= link_to "Delete", archive_faq, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %> 
+</tbody>
+</table>
+</div>
+<!--/content-->
+<!--subnav-->
+  <%= will_paginate @archive_faqs %>			
+<!--/subnav-->

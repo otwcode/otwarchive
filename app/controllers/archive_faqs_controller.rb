@@ -7,7 +7,7 @@ class ArchiveFaqsController < ApplicationController
   # GET /archive_faqs
   # GET /archive_faqs.xml
   def index
-    @archive_faqs = ArchiveFaq.find(:all, :order => 'position ASC')
+    @archive_faqs = ArchiveFaq.find(:all, :order => 'position ASC').paginate(:page => params[:page], :per_page => 15)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -41,6 +41,11 @@ class ArchiveFaqsController < ApplicationController
   def edit
     @archive_faq = ArchiveFaq.find(params[:id])
   end
+  
+  # GET /archive_faqs/manage
+  def manage
+    @archive_faqs = ArchiveFaq.find(:all, :order => 'position ASC')    
+  end
 
   # POST /archive_faqs
   # POST /archive_faqs.xml
@@ -73,6 +78,17 @@ class ArchiveFaqsController < ApplicationController
         format.html { render :action => "edit" }
         format.xml  { render :xml => @archive_faq.errors, :status => :unprocessable_entity }
       end
+    end
+  end
+  
+  def update_positions
+    if params[:archive_faqs]
+      @archive_faqs = ArchiveFaq.reorder(params[:archive_faqs])       
+      flash[:notice] = t('order_updated', :default => 'Archive FAQs order was successfully updated.')
+      redirect_to(archive_faqs_path)
+    else
+      format.html { render :action => "manage" }
+      format.xml  { render :xml => @archive_faq.errors, :status => :unprocessable_entity }
     end
   end
 

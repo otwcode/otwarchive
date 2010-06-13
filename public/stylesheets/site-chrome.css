@@ -338,6 +338,9 @@ li.comment h4	{ font-size: 1.25em; margin-top:0; }
  
 /* MANAGE SERIES */
  #manage-series h3 {display: inline;}
+ 
+/* MANAGE ARCHIVE FAQS */
+ #manage-archive-faqs h3 {display: inline;}
 
 /* TAG WRANGLERS INDEX */
  #main.tag_wranglers-index .index       { width:100%; margin-top: 2em;}

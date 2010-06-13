@@ -5,7 +5,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :known_issues
 
-  map.resources :archive_faqs
+  map.resources :archive_faqs, :collection => {:manage => :get, :reorder => :post}
   
   map.resources :admin_posts, :has_many => :comments
 
@@ -34,6 +34,7 @@ ActionController::Routing::Routes.draw do |map|
   map.tos '/tos', :controller => 'home', :action => 'tos' 
   map.tos_faq '/tos_faq', :controller => 'home', :action => 'tos_faq'
   map.site_map '/site_map', :controller => 'home', :action => 'site_map' 
+  map.archive_faqs '/archive_faqs', :controller => 'archive_faqs', :action => 'index'
   
   map.resources :redirects, :only => [:index, :show]
   
