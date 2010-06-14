@@ -48,16 +48,6 @@
     <li><%= span_if_current t('collections', :default =>"Collections ({{coll_number}})", :coll_number => @user.owned_collections.count), user_collections_path(@user) %> </li>
     <li><%= span_if_current t('gifts', :default =>"Gifts ({{gift_number}})", :gift_number => @user.gifts.select {|g| g.work.visible?}.count), user_gifts_path(@user) %></li>
   <% end %>
-  
-   
-  
-   
-  
-  
-    
-  
-	
-
 </ul>
 </div>
 
