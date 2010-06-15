@@ -79,9 +79,8 @@ class Bookmark < ActiveRecord::Base
     end
   end  
   
-  before_save :validate
   # Adds customized error messages for External Work fields
-  def validate
+  def validate_on_create
     return false if self.bookmarkable_type.blank?
     if self.bookmarkable.class == ExternalWork && (!self.bookmarkable.valid? || self.bookmarkable.fandoms.blank?)
       if self.bookmarkable.fandoms.blank?

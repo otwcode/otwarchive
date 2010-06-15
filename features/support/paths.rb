@@ -17,6 +17,8 @@ module NavigationHelpers
       user_path(:id => $1)
     when /^(.*)'s works page$/i
       user_works_path(:user_id => $1)
+    when /^(.*)'s bookmarks page$/i
+      user_bookmarks_path(:user_id => $1)
     when /my user page/
       user_path(current_user)
      

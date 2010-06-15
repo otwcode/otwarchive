@@ -75,3 +75,22 @@ Feature: Create bookmarks
     Then I should not see "I liked this story"
     When I go to bookmarkuser1's user page
     Then I should not see "I liked this story"
+
+  Scenario: Create a bookmark on an external work
+    Given the following activated users exist
+      | login           | password   |
+      | bookmarkuser1   | password   |
+      And I am logged in as "bookmarkuser1" with password "password"
+    When I go to bookmarkuser1's bookmarks page
+    Then I should not see "Stuck with You"
+    When I follow "Bookmark External Work"
+      And I fill in "bookmark_external_url" with "http://sidra.livejournal.com/2379.html" 
+      And I fill in "bookmark_external_author" with "Sidra"
+      And I fill in "bookmark_external_title" with "Stuck with You"
+      And I press "Create"
+    Then I should see "Fandom tag is required"
+      When I fill in "bookmark_external_fandom_string" with "Popslash"
+    And I press "Create"
+    Then I should see "this work is not hosted on the Archive"
+    When I go to bookmarkuser1's bookmarks page
+    Then I should see "Stuck with You"
