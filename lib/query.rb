@@ -14,7 +14,7 @@ module Query
   # and turn it into a hash that can be put into separate boxes on the full search page
   # a single multiple-field search operator can be made, but it will stay in the text field
   def Query.standardize(query)
-    return unless query[:text]
+    query[:text] = "" unless query[:text]
     # change something: to @something so we know a section ends when the next section starts
     for string in ALL_INDEXES
       query[:text] = query[:text].sub(/#{string}:/i, "@#{string} ")
