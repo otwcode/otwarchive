@@ -347,6 +347,10 @@ module FixtureReplacement
     Date.civil((1990...2008).to_a.rand, (1..12).to_a.rand, (1..28).to_a.rand)
   end
   
+  def random_past_time
+    random_past_date.to_time + (1..1440).to_a.rand.minutes
+  end
+  
   def random_future_date
     Date.civil(Date.today.year + (1..10).to_a.rand, (1..12).to_a.rand, (1..28).to_a.rand)
   end

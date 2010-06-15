@@ -45,7 +45,7 @@ Feature: Search Works
     When I am on the homepage
       And I fill in "site_search" with "words: >100 language:english"
       And I press "Search"
-    Then I should see "1 Found"
+    Then I should see "2 Found"
     When I follow "Advanced search"
     Then I should be on the search page
     When I fill in "refine_word_count" with ""

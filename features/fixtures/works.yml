@@ -3,7 +3,6 @@ first:
   title: First work
   word_count: 100
   title_to_sort_on: first work
-  hit_count: 1001
   language: english
   authors_to_sort_on: testuser
   revised_at: 2010-04-30
@@ -12,7 +11,6 @@ second:
   title: second work
   word_count: 1000
   title_to_sort_on: second work
-  hit_count: 10
   language: english
   authors_to_sort_on: testuser
   revised_at: 2004-04-30
@@ -21,24 +19,23 @@ third:
   title: third work
   word_count: 10000
   title_to_sort_on: third work
-  hit_count: 10000
   language: german
   authors_to_sort_on: testuser
-  revised_at: 2008-07-10
+  revised_at: 2007-07-10
   summary: for the second time
 fourth:
   posted: true
   title: fourth
   word_count: 10000
   title_to_sort_on: fourth work
-  hit_count: 0
   language: french
   authors_to_sort_on: testuser2
+  revised_at: 2010-04-30
 fifth:
-  posted:true
-  title:fifth
-  word_count:10000
+  posted: true
+  title: fifth
+  word_count: 1000
   title_to_sort_on: fifth work
-  hit_count: 2
   language: english
   authors_to_sort_on: testuser2
+  revised_at: 2009-04-30

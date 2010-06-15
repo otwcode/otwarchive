@@ -26,7 +26,5 @@ Feature: Edit Works
       And I should see "Additional Tags: new tag"
     When I press "Update"
     Then I should see "Work was successfully updated."
-    When I go to the works page
+    When I go to testuser's works page
     Then I should see work "First work" with tags "first fandom & new tag"
-		
-

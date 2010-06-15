@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100502024059) do
+ActiveRecord::Schema.define(:version => 20100530161827) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -378,6 +378,12 @@ ActiveRecord::Schema.define(:version => 20100502024059) do
   add_index "gifts", ["recipient_name"], :name => "index_gifts_on_recipient_name"
   add_index "gifts", ["work_id"], :name => "index_gifts_on_work_id"
 
+  create_table "hit_counters", :force => true do |t|
+    t.integer "work_id"
+    t.integer "hit_count",    :default => 0, :null => false
+    t.string  "last_visitor"
+  end
+
   create_table "inbox_comments", :force => true do |t|
     t.integer  "user_id"
     t.integer  "feedback_comment_id"
@@ -639,6 +645,9 @@ ActiveRecord::Schema.define(:version => 20100502024059) do
     t.integer  "work_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "view_count",         :default => 0
+    t.boolean  "toread",             :default => false, :null => false
+    t.boolean  "toskip",             :default => false, :null => false
   end
 
   add_index "readings", ["user_id"], :name => "index_readings_on_user_id"
@@ -829,8 +838,8 @@ ActiveRecord::Schema.define(:version => 20100502024059) do
     t.boolean  "backdate",                    :default => false, :null => false
     t.text     "endnotes"
     t.string   "imported_from_url"
-    t.integer  "hit_count",                   :default => 0,     :null => false
-    t.string   "last_visitor"
+    t.integer  "hit_count_old",               :default => 0,     :null => false
+    t.string   "last_visitor_old"
   end
 
   add_index "works", ["imported_from_url"], :name => "index_works_on_imported_from_url"

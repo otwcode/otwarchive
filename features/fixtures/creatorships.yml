@@ -4,3 +4,15 @@ work1:
 chapter1:
   pseud: testuser
   creation: chapter1 (Chapter)
+work2:
+  pseud: testuser
+  creation: second (Work)
+work3:
+  pseud: testuser
+  creation: third (Work)
+work4:
+  pseud: testuser2
+  creation: fourth (Work)
+work5:
+  pseud: testuser2
+  creation: fifth (Work)

@@ -32,7 +32,6 @@ Feature: Admin tasks
     Then I should see "dizmo" within "#admin_users_table"
     When I follow "admin posts"
       And I follow "Archive FAQ" within "#main"
-      Then I should see "Some commonly asked questions about the Archive are answered here"
       And I should not see "Some text"
     When I follow "Add a new section"
       And I fill in "content" with "Some text, that is sufficiently long to pass validation."

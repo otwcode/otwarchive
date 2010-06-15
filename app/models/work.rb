@@ -1076,13 +1076,13 @@ class Work < ActiveRecord::Base
     indexes summary
     indexes notes
 
-    # associations
+    # field associations
     indexes tags(:name), :as => 'tag'
     indexes language(:name), :as => 'language'
     indexes chapters.content, :as => 'content'
-    indexes hit_counter(:hit_count), :as => 'hit_count'
         
     # attributes
+    has hit_counter.hit_count, :as => 'hit_count'
     has word_count, revised_at
     has posted, restricted, hidden_by_admin
 

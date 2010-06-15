@@ -1,4 +1,6 @@
-@works
+@wip
+# there's something wrong with the cucumber.sphinx.conf which is generated for bookmarks
+# I haven't been able to figure it out yet. the development.sphinx.conf which is created is correct
 Feature: Search Bookmarks
   In order to test search
   As a humble coder

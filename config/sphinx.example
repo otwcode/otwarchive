@@ -3,7 +3,6 @@ cucumber:
    min_prefix_len: 1 
    min_infix_len: 0 
    max_matches: 1000
-   mem_limit: 256M
    port: 1399
    sql_range_step: 10000000
 development: 

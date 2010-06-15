@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class ExternalWorkTest < ActiveSupport::TestCase
 
-  VALID_URLS    = ['http://godaddy.com', 'http://www.godaddy.com','www.godaddy.com', 'godaddy.com', 'http://archiveofourown.org/works/65087?show_comments=true#comments', ]
+  VALID_URLS    = ['http://godaddy.com', 'http://www.godaddy.com','www.godaddy.com', 'godaddy.com' ]
   INVALID_URLS  = ['https://godaddy.com', 'ftp://godaddy.com', 'adfsadfsd', 'localhost', 'http://godaddy.com/" onclick="whee">']
 
   context "An external work" do

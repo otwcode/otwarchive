@@ -1,4 +1,4 @@
-@users
+@wip
 Feature: Delete pseud.
   In order to tidy some mess
   As a humble user
@@ -6,6 +6,7 @@ Feature: Delete pseud.
 
   Scenario: Delete pseud, have option to move works, delete works, or orphan works. Test if those choices work.
 
+  Given I have loaded the fixtures
   Given I am logged in as "sad_user_with_no_pseuds" with password "test"
     When I visit "My Home"
       And I follow "My Pseuds"

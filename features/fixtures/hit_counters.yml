@@ -1,0 +1,15 @@
+first:
+  work: first
+  hit_count: 1001
+second:
+  work: second
+  hit_count: 10
+third:
+  work: third
+  hit_count: 10000
+fourth:
+  work: fourth
+  hit_count: 0
+fifth:
+  work: fifth
+  hit_count: 2

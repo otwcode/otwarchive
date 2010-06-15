@@ -242,45 +242,39 @@ class WorkTest < ActiveSupport::TestCase
   #Dates
   context "a work with one chapter" do
     setup do
-      @chapter1 = new_chapter(:posted => true, :published_at => random_past_date)
+      @time1 = random_past_time
+      @chapter1 = new_chapter(:posted => true, :published_at => @time1)
       @work = create_work(:chapters => [@chapter1], :posted => true)
-      @work.set_revised_at(@chapter1.published_at)
+      @work.set_revised_at(@time1)
     end
     should "have the same revised_at date as the chapter date" do
-      assert @work.revised_at.to_date == @chapter1.published_at
+      assert_equal @work.revised_at, @chapter1.published_at
     end
     should "have the same published_at date as the chapter date" do
-      assert @work.published_at == @chapter1.published_at
+      assert_equal @work.published_at, @chapter1.published_at.to_date
     end
     context "if a second chapter is added" do
       setup do
-        @chapter2 = new_chapter(:posted => true, :published_at => random_past_date)
+        @time2 = @time1 + (1..3).to_a.rand.months
+        @chapter2 = new_chapter(:posted => true, :published_at => @time2)
         @work.chapters << @chapter2
-        if @chapter2.published_at > @work.revised_at.to_date
-          @work.set_revised_at(@chapter2.published_at)
-        end  
+        @work.set_revised_at(@time2)
       end
       should "have the most recent chapter date as its revised_at date" do
-        if @chapter1.published_at > @chapter2.published_at
-          assert @work.revised_at.to_date == @chapter1.published_at
-        else
-          assert @work.revised_at.to_date == @chapter2.published_at
-        end
+        assert_equal @work.revised_at, @time2
       end
       should "still have the first chapter date as its published_at date" do
-        assert @work.published_at == @chapter1.published_at
+        assert_equal @work.published_at, @time1.to_date
       end
       context "if a third chapter with today as its published_at date is added" do
         setup do
-          @chapter3 = new_chapter(:posted => true, :published_at => Date.today)
+          @time3 = Time.now
+          @chapter3 = new_chapter(:posted => true, :published_at => @time3)
           @work.chapters << @chapter3
-          @work.set_revised_at(@chapter3.published_at)
+          @work.set_revised_at(@time3)
         end
         should "have today's date as its revised_at date" do
-          assert @work.revised_at.to_date == Date.today
-        end
-        should "have a time as its revised_at value" do
-          assert @work.revised_at != Date.today.to_datetime
+          assert_equal @work.revised_at.to_date, Date.today
         end
       end
     end

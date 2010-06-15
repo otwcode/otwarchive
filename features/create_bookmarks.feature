@@ -44,7 +44,7 @@ Feature: Create bookmarks
     When I follow "Bookmark"
     Then I should see "Add a new bookmark"
     When I fill in "bookmark_notes" with "I liked this story"
-      And I fill in "tag_string" with " This is a tag, and another tag,"
+      And I fill in "bookmark_tag_string" with " This is a tag, and another tag,"
       And I check "bookmark_rec"
       And I press "Create"
     Then I should see "Bookmark was successfully created"
