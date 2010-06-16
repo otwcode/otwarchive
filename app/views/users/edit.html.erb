@@ -1,11 +1,12 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h 'Edit My Profile' %></h2>
+<h2><%=h t('edit_profile', :default => "Edit My Profile") %></h2>
 <%= error_messages_for :user %>
 <!--/descriptions-->
 
 <!--subnav-->
 <ul class="navigation" role="navigation">
-  <li><%= link_to 'Edit default pseud and icon', [:edit, @user, @user.default_pseud] %></li>
+  <li><%= link_to t('edit_default_pseud', :default => "Edit default pseud and icon"), [:edit, @user, @user.default_pseud] %></li>
+  <li><%= link_to t('change_username', :default => "Change My Username"), url_for(:controller => :users, :action => :edit_username, :id => @user.login) %></li>
 </ul>
 <!--/subnav-->
 
