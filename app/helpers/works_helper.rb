@@ -19,7 +19,7 @@ module WorksHelper
     if work.count_visible_comments > 0
       list.concat([[t('work_comments', :default => 'Comments') + ':', work.count_visible_comments.to_s]])
     end
-    if (bookmark_count = Bookmark.count_visible_bookmarks(work)) > 0
+    if (bookmark_count = work.bookmarks.public.count) > 0
       list.concat([[t('work_bookmarks', :default => 'Bookmarks') + ':', link_to(bookmark_count.to_s, work_bookmarks_path(work))]])
     end
     list.concat([[t('works_helper.hits:', :default => "Hits:"), work.hits]]) if show_hit_count?(work)
@@ -49,14 +49,15 @@ module WorksHelper
     "<ul>" + bookmark_link + (comments_link ||= '') + collections_link + "</ul>"    
   end
 
-  def work_blurb_tag_block(work)
-    tags = work.warning_tags + work.pairing_tags + work.character_tags + work.freeform_tags
-    last_tag = tags.last
-    tag_block = ""
-
-    [work.warning_tags, work.pairing_tags, work.character_tags, work.freeform_tags].each do |tags|
-      unless tags.empty?
-        class_name = tags.first.type.to_s.downcase.pluralize
+  def work_blurb_tag_block(work, tag_groups=nil)
+    tag_groups ||= work.tags.by_name.group_by { |t| t.type.to_s }
+    categories = ['Warning', 'Pairing', 'Character', 'Freeform']
+    last_tag = categories.collect { |c| tag_groups[c] }.flatten.compact.last
+    tag_block = ""   
+    
+    categories.each do |category|
+      if tags = tag_groups[category]
+        class_name = category.downcase.pluralize
         if (class_name == "warnings" && hide_warnings?(work)) || (class_name == "freeforms" && hide_freeform?(work))
           open_tags = "<li class='#{class_name}' id='work_#{work.id}_category_#{class_name}'><strong>"
           close_tags = "</strong></li>"
@@ -148,17 +149,18 @@ module WorksHelper
     end
   end
   
-  def get_symbols_for(work, symbols_only = false)
+  def get_symbols_for(work, tag_groups=nil, symbols_only = false)
+    tag_groups ||= work.tags.by_name.group_by { |t| t.type.to_s }
     mappings = {}
 
-    warnings = work.tags.select{|tag| tag.type == "Warning"}
+    warnings = tag_groups['Warning']
     mappings[:warning] = {:class_name => get_warnings_class(warnings), :string =>  get_title_string(warnings)}
    
-    ratings = work.tags.select{|tag| tag.type == "Rating"}
+    ratings = tag_groups['Rating']
     rating = ratings.blank? ? nil : ratings.first
     mappings[:rating] = {:class_name => get_ratings_class(rating), :string =>  get_title_string(ratings, "rating")}
     
-    categories = work.tags.select{|tag| tag.type == "Category"}
+    categories = tag_groups['Category']
     mappings[:category] = {:class_name => get_category_class(categories), :string =>  get_title_string(categories, "category")}
     
     if work.class == Work

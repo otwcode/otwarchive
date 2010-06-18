@@ -114,19 +114,23 @@ module Taggable
   end
   
   def pairing_tags
-    line_limited_tags(self.pairings.by_name || [])
+    taglist = self.tags.select {|t| t.is_a?(Pairing)}
+    line_limited_tags(taglist)
   end
   
   def character_tags
-    line_limited_tags(self.characters.by_name || [])
+    taglist = self.tags.select {|t| t.is_a?(Character)}
+    line_limited_tags(taglist)
   end
 
   def freeform_tags
-    line_limited_tags(self.freeforms.by_name || [])
+    taglist = self.tags.select {|t| t.is_a?(Freeform)}
+    line_limited_tags(taglist)
   end
 
   def warning_tags
-    line_limited_tags(self.warnings.by_name || [])
+    taglist = self.tags.select {|t| t.is_a?(Warning)}
+    line_limited_tags(taglist)
   end
   
   def line_limited_tags(taglist)
@@ -135,7 +139,7 @@ module Taggable
   end
   
   def fandom_tags
-    self.fandoms.by_name
+    self.tags.select {|t| t.is_a?(Fandom)}
   end
 
   # for testing

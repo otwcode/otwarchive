@@ -83,11 +83,6 @@ class WorksController < ApplicationController
         # If we're previewing a multichapter work, we want the preview version of the first chapter,
         # so we need to add it back to @chapters
         @chapters[0] = @chapter
-      end 
-
-      unless current_user == :false
-        load_pseuds
-        @series = current_user.series.uniq
       end
     rescue
     end
@@ -312,7 +307,9 @@ class WorksController < ApplicationController
   end
 
   # GET /works/new
-  def new    
+  def new
+    load_pseuds
+    @series = current_user.series.uniq    
     @use_import_form = true if params[:import]
     if params[:assignment_id] && (@challenge_assignment = ChallengeAssignment.find(params[:assignment_id])) && @challenge_assignment.offering_user == current_user
       @work.challenge_assignments << @challenge_assignment
@@ -361,6 +358,8 @@ class WorksController < ApplicationController
 
   # GET /works/1/edit
   def edit
+    load_pseuds
+    @series = current_user.series.uniq
     if params["remove"] == "me"
       pseuds_with_author_removed = @work.pseuds - current_user.pseuds
       if pseuds_with_author_removed.empty?
