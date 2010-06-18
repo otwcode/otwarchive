@@ -3,9 +3,9 @@
 <div class="wrapper">
 
   <dl class="work meta" role="complementary">
-    <%- work_tags = collect_work_tags(work) -%>
+    <%- tag_groups = collect_work_tags(work) -%>
     <%- Tag::VISIBLE.each do |type| -%>
-    <%- tags = work_tags.select{|tag| tag.type == type} -%>
+    <%- tags = tag_groups[type] -%>
     <%- unless tags.blank? -%>
     <dt class="<%= type.downcase -%>">
       <%- if type == "Warning" -%>

@@ -22,12 +22,12 @@
       <div id="chapter-index" style="display:none">
         <h4><%= link_to 'View full-page index', navigate_work_path(@work) %></h4>
         <%- form_tag url_for({:controller => :chapters, :action => :show, :work_id => @work}), :method => :get do -%>
-        <%= select_tag :selected_id, options_from_collection_for_select(@work.chapters.posted.in_order, :id, :abbreviated_display_title, params[:id].to_i) %>
+        <%= select_tag :selected_id, options_from_collection_for_select(@chapters, :id, :abbreviated_display_title, params[:id].to_i) %>
         <%= submit_tag "Go" %>  
         <%- end -%>
       </div>
     </li>
-  <%- elsif @work.chapters.posted.count > 1 -%>
+  <%- elsif @chapters.length > 1 -%>
     <li><%= link_to 'View chapter by chapter', [@work, @chapters.first] %></li>
   <%- end -%>
   
@@ -56,11 +56,11 @@
 <!-- END navigation -->
 <%- end -%>
 
-<%- if @preview_mode || !AdminSetting.enable_test_caching? -%>
+<%- if @preview_mode -%>
    <%= render :partial => 'works/meta', :locals => {:work => @work} %> 
 <%- else -%>
-  <% cachename = "workshowmeta-#{@work.id}-#{@work.major_version}-#{@work.minor_version}-#{hide_warnings?(@work) ? "1" : "0"}-#{hide_freeform?(@work) ? "1" : "0"}" %>
-  <%- cache(cachename, :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
+  <% hide_show = "#{hide_warnings?(@work) ? "1" : "0"}-#{hide_freeform?(@work) ? "1" : "0"}" %>
+  <%- cache([@work, "meta", hide_show]) do -%>
     <%= render :partial => 'works/meta', :locals => {:work => @work} %>
   <%- end -%> 
 <%- end -%>

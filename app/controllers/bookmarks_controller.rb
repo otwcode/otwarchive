@@ -123,7 +123,7 @@ class BookmarksController < ApplicationController
       end
       @bookmarks = @bookmarks.sort_by{|b| - b.id}
     end
-    @bookmarks = @bookmarks.compact.paginate(:page => params[:page])
+    @bookmarks = @bookmarks.compact.paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
   end
   
   # GET    /:locale/bookmark/:id

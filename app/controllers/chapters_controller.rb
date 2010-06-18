@@ -88,17 +88,16 @@ class ChaptersController < ApplicationController
     end
     @chapter = @work.chapters.find(params[:id])
     if logged_in? && current_user.is_author_of?(@work)
-      chapters = @work.chapters.in_order
+      @chapters = @work.chapters.in_order.find(:all, :select => "chapters.id, chapters.title, chapters.position")
     else
-      chapters = @work.chapters.posted.in_order
+      @chapters = @work.chapters.posted.in_order.find(:all, :select => "chapters.id, chapters.title, chapters.position")
     end 
     if @chapter.posted? || (logged_in? && current_user.is_author_of?(@work))
-      if chapters.length > 1
-        chapter_position = chapters.index(@chapter)
-        @previous_chapter = chapters[chapter_position-1] unless chapter_position == 0
-        @next_chapter = chapters[chapter_position+1]
+      if @chapters.length > 1
+        chapter_position = @chapters.index(@chapter)
+        @previous_chapter = @chapters[chapter_position-1] unless chapter_position == 0
+        @next_chapter = @chapters[chapter_position+1]
       end
-      @chapters = [@chapter]
       @commentable = @work
       @comments = @chapter.comments
       

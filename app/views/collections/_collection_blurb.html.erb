@@ -12,7 +12,7 @@
         <%= image_tag(collection.icon.url(:standard), :size => "100x100", :alt => "icon for #{collection.name}", :class => "icon") %>
       </div>
 			<p class="datetime"><!--collection updated at--></p>
-<%- cache("collections-#{collection.id}", :expires_in => AdminSetting.cache_expiration.minutes ) do -%>
+<%- cache([collection, "index"], :expires_at => 1.hour) do -%>
 	<% if collection.all_moderators.length > 0%>
 			<h6 class="landmark">Mods</h6>
 			<ul title="moderated by" class="mods">

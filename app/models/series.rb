@@ -72,6 +72,23 @@ class Series < ActiveRecord::Base
     self.visible(user) == self
   end
   
+  def visible_work_count
+    if User.current_user == :false
+      self.works.posted.unrestricted.count      
+    else
+      self.works.posted.count
+    end 
+  end
+  
+  def visible_word_count
+    if User.current_user == :false
+      works = self.works.posted.unrestricted.find(:all, :select => "works.word_count")
+    else
+      works = self.works.posted.find(:all, :select => "works.word_count")
+    end
+    works.collect(&:word_count).sum
+  end
+  
   def anonymous?
     !self.works.select { |work| work.anonymous? }.empty?    
   end

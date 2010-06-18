@@ -16,16 +16,19 @@
     <%= byline(bookmark.bookmarkable) %>
   <%- end -%>
 </h4>
-<h5 title="fandom"><%= bookmark.bookmarkable.fandom_tags.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', ') %></h5>
+
+<%- tag_groups = bookmark.bookmarkable.tags.by_name.group_by { |t| t.type.to_s } -%>
+
+<h5 title="fandom"><%= tag_groups['Fandom'].collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', ') %></h5>
 
 <%- if not bookmark.bookmarkable.nil? -%>
-  <%= get_symbols_for(bookmark.bookmarkable) -%>
+  <%= get_symbols_for(bookmark.bookmarkable, tag_groups) -%>
 <%- end -%>
 </div>
 <!--tags-->
 <%- if not bookmark.bookmarkable.nil? -%>
 <ul class="tags" title="tags">
-  <%= work_blurb_tag_block(bookmark.bookmarkable) -%>
+  <%= work_blurb_tag_block(bookmark.bookmarkable, tag_groups) -%>
 </ul>
 <%- end -%>
 </div>

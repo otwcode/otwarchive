@@ -84,9 +84,9 @@ module WorksHelper
   # work.tags doesn't include unsaved tags on preview
   def collect_work_tags(work)
     if work.preview_mode
-      work.placeholder_tags.values.flatten
+      work.placeholder_tags.values.flatten.sort.group_by { |t| t.type.to_s }
     else
-      work.tags
+      work.tags.by_name.group_by { |t| t.type.to_s }
     end  
   end
 
