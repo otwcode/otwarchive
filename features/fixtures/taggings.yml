@@ -29,5 +29,8 @@ tagging10:
   tagger: fandom1 (Tag)
   taggable: fourth (Work)
 tagging11:
+  tagger: fandom3 (Tag)
+  taggable: fifth (Work)
+tagging12:
   tagger: classic (Tag)
   taggable: bookm3 (Bookmark)
