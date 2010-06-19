@@ -11,7 +11,6 @@ class WorksController < ApplicationController
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import ]
   before_filter :set_instance_variables_tags, :only => [ :edit_tags, :update_tags, :preview_tags ]
   after_filter :update_or_create_reading, :only => [ :show ]
-  after_filter :increment_hit_counter, :only => [:show]
 
   def load_work
     @work = Work.find(params[:id])
@@ -288,18 +287,15 @@ class WorksController < ApplicationController
     if params[:view_adult]
       session[:adult] = true
     elsif @work.adult? && !see_adult?
-      render :partial => "adult", :layout => "application"
+      render :partial => "adult", :layout => "application" and return
     end
 
     @tag_categories_limited = Tag::VISIBLE - ["Warning"]
 
     @page_title = @work.unrevealed? ? t('works.mystery_title', :default => "Mystery Work") : 
       get_page_title(@work.fandoms.string, @work.anonymous? ?  t('works.anonymous', :default => "Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '), @work.title)
-  end
-  
-  def increment_hit_counter
-    # increment view
-    @work.increment_hit_count(request.env['REMOTE_ADDR'])    
+    render :action => 'show'
+    @work.increment_hit_count(request.env['REMOTE_ADDR'])
   end
   
   def navigate
