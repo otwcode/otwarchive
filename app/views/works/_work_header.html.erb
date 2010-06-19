@@ -27,8 +27,8 @@
         <%- end -%>
       </div>
     </li>
-  <%- elsif @chapters.length > 1 -%>
-    <li><%= link_to 'View chapter by chapter', [@work, @chapters.first] %></li>
+  <%- elsif @chapters -%>
+    <li><%= link_to 'View chapter by chapter', [@work, @chapter] %></li>
   <%- end -%>
   
   <%- if current_user.is_a?(User) -%>

@@ -38,7 +38,7 @@ class WorksEditControllerTest < ActionController::TestCase
       should_respond_with :success
       should_render_template :edit
       should_assign_to(:work) {@work}
-      should_assign_to(:chapters) {[@chapter]}
+      should_assign_to(:chapter) {@chapter}
       should_assign_to(:pseuds) {[@user.default_pseud, @pseud].sort}
       should_assign_to(:selected_pseuds) {[@pseud.id]}
       should_assign_to(:coauthors) {[]}

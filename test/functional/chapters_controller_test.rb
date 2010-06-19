@@ -75,14 +75,7 @@ class ChaptersControllerTest < ActionController::TestCase
     work.add_default_tags
     work.update_attribute("posted", true)
     get :index, :locale => 'en', :work_id => work.id
-    assert_response :success
-    assert_equal work, assigns(:work)
-    assert_equal [chapter], assigns(:chapters)
-    new_chapter = create_chapter(:work => work, :posted=> true, :authors => work.pseuds)
-    get :index, :locale => 'en', :work_id => work.id
-    assert_response :success
-    assert_equal work, assigns(:work)
-    assert_equal [chapter, new_chapter], assigns(:chapters)
+    assert_redirected_to work_path(work.id)
   end
   # Test new  GET  /:locale/chapters/new  (named path: new_chapter)
   # Test new  GET  /:locale/works/:work_id/chapters/new  (named path: new_work_chapter)

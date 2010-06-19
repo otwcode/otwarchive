@@ -262,7 +262,8 @@ class Collection < ActiveRecord::Base
   end
   
   def get_participants_for_user(user)
-    CollectionParticipant.in_collection(self).for_user(user)
+    return [] if user == :false
+    CollectionParticipant.in_collection(self).for_user(user) 
   end
   
   def gift_notification

@@ -493,6 +493,15 @@ class Work < ActiveRecord::Base
      #Chapter.maximum(:position, :conditions => {:work_id => self.id, :posted => true}) || 0
   end
 
+  # pass true only if you are viewing the full work and need all the chapter content. 
+  def chapters_in_order(include_content = true)
+    if include_content
+      self.chapters.find(:all, :order => 'position ASC')
+    else # for navigation you only need some of the chapter information
+      self.chapters.find(:all, :order => 'position ASC', :select => 'published_at, id, work_id, title, position, posted')
+    end
+  end
+
   # Gets the current first chapter
   def first_chapter
     self.chapters.find(:first, :order => 'position ASC') || self.chapters.first

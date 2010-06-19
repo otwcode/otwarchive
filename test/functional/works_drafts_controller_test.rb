@@ -30,6 +30,7 @@ class WorksDraftsControllerTest < ActionController::TestCase
     context "when you have one" do
       setup do
         @work = create_work(:authors => [@user.default_pseud])
+        @work.fandoms = [create_fandom]
         @request.session[:user] = @user
         get :drafts, :locale => 'en', :user_id => @user.login
       end

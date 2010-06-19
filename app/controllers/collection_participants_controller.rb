@@ -57,7 +57,7 @@ class CollectionParticipantsController < ApplicationController
       flash[:error] = t('no_collection', :default => "Which collection did you want to join?")
       redirect_to :back and return
     end
-    participants = CollectionParticipant.in_collection(@collection).for_user(current_user)
+    participants = CollectionParticipant.in_collection(@collection).for_user(current_user) unless current_user == :false
     if participants.empty?
       @participant = CollectionParticipant.new(:collection => @collection, :pseud => current_user.default_pseud, 
                         :participant_role => CollectionParticipant::NONE)

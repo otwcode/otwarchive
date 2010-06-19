@@ -13,7 +13,11 @@ class WorksController < ApplicationController
   after_filter :update_or_create_reading, :only => [ :show ]
 
   def load_work
-    @work = Work.find(params[:id])
+    @work = Work.find_by_id(params[:id])
+    unless @work
+      flash[:error] = t('work_not_found', :default => "Sorry, we couldn't find the work you were looking for.")
+      redirect_to root_path and return
+    end
     @check_ownership_of = @work
     @check_visibility_of = @work
   end
@@ -74,14 +78,10 @@ class WorksController < ApplicationController
 
       @serial_works = @work.serial_works
 
-      @chapters = @work.chapters.in_order.blank? ? @work.chapters : @work.chapters.in_order
-      @chapter = @chapters.first
+      @chapter = @work.first_chapter
       # If we're in preview mode, we want to pick up any changes that have been made to the first chapter
       if params[:work] && params[:work][:chapter_attributes]
         @chapter.attributes = params[:work][:chapter_attributes]
-        # If we're previewing a multichapter work, we want the preview version of the first chapter,
-        # so we need to add it back to @chapters
-        @chapters[0] = @chapter
       end
     rescue
     end
@@ -266,28 +266,21 @@ class WorksController < ApplicationController
 
   # GET /works/1
   # GET /works/1.xml
-  def show
-    unless @work
-  	  flash[:error] = t('work_not_found', :default => "Sorry, we couldn't find the work you were looking for.")
-      redirect_to works_path and return
-    end
-
-    unless params[:view_full_work]
-      unless logged_in? && current_user.preference && current_user.preference.view_full_works
-        if @work.chapters.posted.count > 1
-          if params[:view_adult]
-            session[:adult] = true
-          end
-          redirect_to [@work, @chapters.first] and return
-        end
-      end
-    end
-
+  def show 
     # Users must explicitly okay viewing of adult content
     if params[:view_adult]
       session[:adult] = true
     elsif @work.adult? && !see_adult?
       render :partial => "adult", :layout => "application" and return
+    end
+
+    # Users must explicitly okay viewing of entire work
+    if @work.number_of_posted_chapters > 1
+      if params[:view_full_work] || (logged_in? && current_user.preference.try(:view_full_works))
+        @chapters = @work.chapters_in_order
+      else
+        redirect_to [@work, @chapter] and return
+      end
     end
 
     @tag_categories_limited = Tag::VISIBLE - ["Warning"]
@@ -299,7 +292,7 @@ class WorksController < ApplicationController
   end
   
   def navigate
-    @chapters = @work.chapters.posted.in_order.blank? ? @work.chapters.posted : @work.chapters.posted.in_order   
+    @chapters = @work.chapters_in_order(false)
   end
 
   # GET /works/new
@@ -354,6 +347,7 @@ class WorksController < ApplicationController
 
   # GET /works/1/edit
   def edit
+    @chapters = @work.chapters_in_order(false) if @work.number_of_chapters > 1
     load_pseuds
     @series = current_user.series.uniq
     if params["remove"] == "me"
@@ -382,8 +376,6 @@ class WorksController < ApplicationController
     load_pseuds
     @series = current_user.series.uniq
     
-    @chapter ||= @work.chapters.in_order.first
-
     if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
       @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
     elsif params[:preview_button] || params[:cancel_coauthor_button]
@@ -417,7 +409,7 @@ class WorksController < ApplicationController
         if params[:post_button] || (defined?(@previous_published_at) && @previous_published_at != @chapter.published_at)
           # if work has only one chapter - so we don't need to take any other chapter dates into account, 
           # OR the date is set to today AND the backdating setting has not been changed
-          if @work.chapters.size == 1 || (@chapter.published_at == Date.today && defined?(@previous_backdate_setting) && @previous_backdate_setting == @work.backdate)
+          if @work.number_of_chapters == 1 || (@chapter.published_at == Date.today && defined?(@previous_backdate_setting) && @previous_backdate_setting == @work.backdate)
             @work.set_revised_at(@chapter.published_at)
           # work has more than one chapter and the published_at date for this chapter is not today
           # so we can't tell if there is a later date than this one elsewhere, and need to grab all
@@ -650,7 +642,7 @@ class WorksController < ApplicationController
       @use_import_form = false
       
       @work = @works.first
-      @chapter = @work.chapters.first if @work
+      @chapter = @work.first_chapter if @work
       if @work.nil? || !@work.valid?
         redirect_to :action => :new and return
       elsif @work.posted

@@ -61,38 +61,29 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters
   # GET /work/:work_id/chapters.xml
   def index
-    @chapters = @work.chapters.find(:all, :conditions => {:posted => true}, :order => "position")
-    if @chapters.empty?
-      flash[:notice] = t('none_posted', :default => "That work has no posted chapters")
-     redirect_to ('/') and return
-    end
-    @old_chapter = params[:old_chapter] ? @work.chapters.find(params[:old_chapter]) : @work.first_chapter 
-    @commentable = @work
-    @comments = @work.find_all_comments
-    respond_to do |format|
-      format.html { render :template => "works/show" }
-      format.js
-    end
+    # this route is never used
+    redirect_to work_path(params[:work_id])
   end
   
   # GET /work/:work_id/chapters/manage
   def manage
-    @chapters = @work.chapters.find(:all, :conditions => {:posted => true}, :order => "position")                    
+    @chapters = @work.chapters_in_order(false).select(&:posted)
   end
   
-  # GET /work/:work_id/chapters/1
-  # GET /work/:work_id/chapters/1.xml
+  # GET /work/:work_id/chapters/:id
+  # GET /work/:work_id/chapters/:id.xml
   def show
     if params[:selected_id]
       redirect_to url_for(:controller => :chapters, :action => :show, :work_id => @work.id, :id => params[:selected_id]) and return
     end
     @chapter = @work.chapters.find(params[:id])
-    if logged_in? && current_user.is_author_of?(@work)
-      @chapters = @work.chapters.in_order.find(:all, :select => "chapters.id, chapters.title, chapters.position")
-    else
-      @chapters = @work.chapters.posted.in_order.find(:all, :select => "chapters.id, chapters.title, chapters.position")
+    @chapters = @work.chapters_in_order(false)
+    if !logged_in? || !current_user.is_author_of?(@work)
+      @chapters = @chapters.select(&:posted)
     end 
-    if @chapter.posted? || (logged_in? && current_user.is_author_of?(@work))
+    if !@chapters.include?(@chapter)
+      access_denied
+    else
       if @chapters.length > 1
         chapter_position = @chapters.index(@chapter)
         @previous_chapter = @chapters[chapter_position-1] unless chapter_position == 0
@@ -110,8 +101,6 @@ class ChaptersController < ApplicationController
         format.html
         format.js
       end
-    else
-      access_denied
     end 
   end
   

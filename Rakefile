@@ -26,7 +26,7 @@ end
 begin
   load File.join(RAILS_ROOT, Dir["vendor/gems/relevance-tarantula-*/tasks/*.rake"])
 rescue Exception
-  puts "after installing the tarantula gem, do the following to run its rake tests:"
-  puts " cd vendor/gems"
-  puts " gem unpack relevance-tarantula"
+#  puts "after installing the tarantula gem, do the following to run its rake tests:"
+#  puts " cd vendor/gems"
+#  puts " gem unpack relevance-tarantula"
 end

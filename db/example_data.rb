@@ -287,6 +287,9 @@ module FixtureReplacement
     a.authors = [user.default_pseud]
     a.chapters = [new_chapter(:authors => [user.default_pseud])]
     a.revised_at = DateTime.now
+    a.fandom_string = random_tag_name
+    a.warning_string = random_tag_name
+    a.rating_string = random_tag_name
   end
 
   ##### some random generators  

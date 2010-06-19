@@ -1,6 +1,6 @@
 <ul class="navigation">
 	<li><%= link_to t('add_chapter', :default => 'Add Chapter'), new_work_chapter_path(@work) -%></li>
-  <%- if @chapters && @chapters.size > 1 -%>
+  <%- if @chapters -%>
     <li><%= t('edit_chapter', :default => 'Edit Chapter:') %> 
       <%- for chapter in @chapters -%>
         <%= link_to h(chapter.position), [:edit, @work, chapter] -%>
