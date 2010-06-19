@@ -8,8 +8,14 @@
 <% else %>
 <h2><%=h t('listing_collections', :default => "Collections in the {{archive_name}}", :archive_name => ArchiveConfig.APP_NAME) %></h2>
 <% end %>
-<!--/descriptions-->
 
+ <% if @collections.empty? %>
+  <%= t('no_collections_found', :default => "Sorry, there were no collections found.") %>
+ <%else %>
+  <h2><%= collection_search_header @collections, @query %> </h2>
+ <% end %>
+ 
+<!--/descriptions-->
 <!--Subnavigation, sorting and actions-->
 <div class="navigation module">
 <%- if logged_in? %>
