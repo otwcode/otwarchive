@@ -50,7 +50,7 @@ module WorksHelper
   end
 
   def work_blurb_tag_block(work, tag_groups=nil)
-    tag_groups ||= work.tags.by_name.group_by { |t| t.type.to_s }
+    tag_groups ||= work.tags.group_by { |t| t.type.to_s }
     categories = ['Warning', 'Pairing', 'Character', 'Freeform']
     last_tag = categories.collect { |c| tag_groups[c] }.flatten.compact.last
     tag_block = ""   
@@ -84,9 +84,9 @@ module WorksHelper
   # work.tags doesn't include unsaved tags on preview
   def collect_work_tags(work)
     if work.preview_mode
-      work.placeholder_tags.values.flatten.sort.group_by { |t| t.type.to_s }
+      work.placeholder_tags.values.flatten.group_by { |t| t.type.to_s }
     else
-      work.tags.by_name.group_by { |t| t.type.to_s }
+      work.tags.group_by { |t| t.type.to_s }
     end  
   end
 
@@ -150,7 +150,7 @@ module WorksHelper
   end
   
   def get_symbols_for(work, tag_groups=nil, symbols_only = false)
-    tag_groups ||= work.tags.by_name.group_by { |t| t.type.to_s }
+    tag_groups ||= work.tags.group_by { |t| t.type.to_s }
     mappings = {}
 
     warnings = tag_groups['Warning']

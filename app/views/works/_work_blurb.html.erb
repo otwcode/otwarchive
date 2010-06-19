@@ -1,5 +1,5 @@
 <%- author_of_work = is_author_of?(work) -%>
-<%- tag_groups = work.tags.by_name.group_by { |t| t.type.to_s } -%>
+<%- tag_groups = work.tags.group_by { |t| t.type.to_s } -%>
 
 <li class="<%- if author_of_work -%>own <%- end -%>work blurb" id="work_<%=h work.id %>" role="article">
 

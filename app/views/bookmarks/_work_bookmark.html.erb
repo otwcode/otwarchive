@@ -17,7 +17,7 @@
   <%- end -%>
 </h4>
 
-<%- tag_groups = bookmark.bookmarkable.tags.by_name.group_by { |t| t.type.to_s } -%>
+<%- tag_groups = bookmark.bookmarkable.tags.group_by { |t| t.type.to_s } -%>
 
 <h5 title="fandom"><%= tag_groups['Fandom'].collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', ') %></h5>
 

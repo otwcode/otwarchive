@@ -534,6 +534,7 @@ class WorksController < ApplicationController
   # GET /works/1/preview
   def preview
     @preview_mode = true
+    load_pseuds   
   end
   
   def preview_tags
