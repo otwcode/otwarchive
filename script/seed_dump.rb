@@ -11,7 +11,7 @@
 # users who have webdavs or asked to be added
 SEEDS = ["Sidra", "astolat", "Enigel", "hope", "awils1", 
          "Cesy", "elz", "justira", "lim", "melange", "eel",
-          "rklyne", "zelempa", "Zooey_Glass"] 
+          "rklyne", "zelempa", "Zooey_Glass", "erda", "Anneli"] 
 ADD_EXTERNAL = true
 NTH = 30
 #### private bookmarks and unpublished works are not dumped by default
@@ -73,7 +73,10 @@ def add_works(items)
     x << add_pseuds(work.pseuds)
     x << work.creatorships
     x << work.chapters
+    x << work.hit_counter
     work.chapters.each do |c|
+      x << add_pseuds(c.pseuds)
+      x << c.creatorships
       x << c.comments
       x << add_pseuds(c.comments.map(&:pseud))
     end
@@ -109,6 +112,7 @@ def user_records(u)
     p.bookmarks.each do |bookmark|
       if !bookmark.private? || PRIVATE
         x << bookmark
+        TAGGABLES << bookmark
         bookmarkable = bookmark.bookmarkable
         if bookmarkable.is_a?(Work)
           WORKS << bookmarkable if ADD_EXTERNAL

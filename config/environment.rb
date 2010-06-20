@@ -119,7 +119,7 @@ Rails::Initializer.run do |config|
   config.gem 'delayed_job', :version => "<2" 
   config.gem 'thinking-sphinx', :lib => 'thinking_sphinx'
   config.gem 'ts-delayed-delta', :lib => 'thinking_sphinx/deltas/delayed_delta'
-  config.gem 'daemon-spawn'
+  config.gem 'daemon-spawn', :version => '0.2.0'
   config.gem 'aws-s3', :lib => 'aws/s3'
   # config.gem 'fastercsv' -- will use this eventually for exporting to excel tsv format
   config.gem 'mocha'
