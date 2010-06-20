@@ -1,14 +1,14 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h 'Editing series' %></h2>
+<h2><%=h t('edit_series', :default =>"Editing series") %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
 <h3 class="landmark">Actions</h3>
 <ul class="navigation" role="navigation">
-<li><%= link_to 'Delete Series', @series, :confirm => 'Are you sure?', :method => :delete %></li>
-<li><%= link_to 'Reorder Series', manage_series_path(@series) %></li>
-<li><%= link_to 'Show', @series %></li>
-<li><%= link_to 'Back', series_path %></li>
+<li><%= link_to t('delete_series', :default =>"Delete Series"), @series, :confirm => 'Are you sure?', :method => :delete %></li>
+<li><%= link_to t('reorder_series', :default =>"Reorder Series"), manage_series_path(@series) %></li>
+<li><%= link_to t('show', :default =>"Show"), @series %></li>
+<li><%= link_to t('back', :default =>"Back"), series_path %></li>
 </ul>
 <!--/subnav-->
 
@@ -19,14 +19,14 @@
   <p class="notice required"><%=h t('required', :default => '* Required information') %></p>
   <fieldset>
     <dl>
-      <dt><%= f.label :title, "Series Title*", :class => "required" %></dt>
+      <dt><%= f.label :title, t('series_title', :default =>"Series Title*"), :class => "required" %></dt>
       <dd><%= f.text_field :title%></dd>
       <%= render :partial => 'pseuds/byline', :locals => {:form => f, :type => 'series'} -%>
     </dl>
   </fieldset>
   <fieldset>
     <dl>      
-      <dt><%= f.label :summary, "Series Description" %><dt>
+      <dt><%= f.label :summary, t('series_description', :default =>"Series Description") %><dt>
       <dd>
         <%= allowed_html_instructions -%>
         <%= f.text_area :summary %>
@@ -34,7 +34,7 @@
       <dd class="validation">
         <%= generate_countdown_html("series_summary", ArchiveConfig.SUMMARY_MAX) -%>
       </dd>
-      <dt><%= f.label :notes, "Series Notes" %><dt>
+      <dt><%= f.label :notes, t('series_notes', :default =>"Series Notes") %><dt>
       <dd>
         <%= allowed_html_instructions -%>
         <%= f.text_area :notes %>
@@ -46,8 +46,8 @@
   </fieldset>
   <fieldset>
     <p class="submit navigation">
-    <%= f.submit "Update" %>
-    <%= link_to 'Cancel', series_path %>
+    <%= f.submit t('update', :default =>"Update") %>
+    <%= link_to t('cancel', :default =>"Cancel"), series_path %>
     </p>
   </fieldset>
 <% end %>
