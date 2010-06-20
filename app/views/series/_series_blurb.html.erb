@@ -1,27 +1,29 @@
 <li class="series blurb  <%- if is_author_of?(series) -%>own<% end -%>" id="series_<%=h series.id %>_blurb" role="article">
 <!--title etc-->
 	<div class="header module">
-			<h4 title="Series Title">
-				<%= link_to sanitize_title_for_display(series.title), series %>
-				<%=h 'by' %>
-				<%= byline(series) -%>
-				<%- if series.restricted %>
-					<%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") -%>
-				<%- end -%>
-				<% if series.hidden_by_admin %>
-					<%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %>
-				<% end %>
-			</h4>
-			<h5 title="fandoms">
-        <%= series.work_tags.select{|tag| tag.type == "Fandom"}.sort.collect{|tag| link_to_tag(tag) }.join(', ') %>
-      </h5>
+		<h4 title="Series Title">
+			<%= link_to sanitize_title_for_display(series.title), series %>
+			<%=h 'by' %>
+			<%= byline(series) -%>
+			<%- if series.restricted %>
+				<%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") -%>
+			<%- end -%>
+			<% if series.hidden_by_admin %>
+				<%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %>
+			<% end %>
+		</h4>
+		<h5 title="fandoms">
+      <%= series.work_tags.select{|tag| tag.type == "Fandom"}.sort.collect{|tag| link_to_tag(tag) }.join(', ') %>
+    </h5>
     <%= get_series_symbols_for(series) -%>
 		<p class="datetime"><%= set_format_for_date(series.revised_at) %></p>
-		</div>
+	</div>
 <!--tags-->
     <ul class="tags">
       <%= series_blurb_tag_block(series) %>
     </ul>
+
+<%- cache([series, "blurb", logged_in?]) do -%>    
 <!--summary-->
 		<%- unless series.summary.blank? %>
       <h6 class="landmark">Summary</h6>
@@ -38,6 +40,8 @@
         <dd><%= link_to_bookmarkable_bookmarks(series, bookmark_count.to_s) -%></dd>
       <%- end -%>
 			</dl>
+<%- end -%>
+
 <!--actions-->
     <%- if is_author_of?(series) -%>
 	    <p class="navigation"><%= link_to t('links.edit', :default => 'Edit'), edit_series_path(series) -%></p>

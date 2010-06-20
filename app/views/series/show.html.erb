@@ -33,6 +33,9 @@
     <dt><%=h 'Works included:' %></dt>
     <dd><%= @serial_works.length %></dd>
 
+    <dt><%=h 'Complete:' %></dt>
+    <dd><%= @series.complete? ? "Yes" : "No" %></dd>
+
     <dt><%=h 'Word count:' %></dt>
     <dd><%= number_with_delimiter(@serial_works.collect{|sw| sw.work.word_count}.sum) %></dd>
 

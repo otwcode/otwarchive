@@ -37,7 +37,7 @@ module SeriesHelper
     mappings[:category] = {:class_name => get_series_category_class(categories), :string =>  get_series_title_string(categories, "category")}
     
     # placeholder
-    iswip_string = true ? "Series in Progress" : "Complete Series"
+    iswip_string = series.complete? ? "Complete Series" : "Series in Progress"
     mappings[:iswip] = {:class_name => get_series_complete_class(series), :string =>  iswip_string}
 
     symbol_block = ""
@@ -112,7 +112,11 @@ module SeriesHelper
 
   #TODO: add complete attribute to series and adjust accordingly
   def get_series_complete_class(series)
-    "category-none iswip"
+    if series.complete?
+      "complete-yes iswip"
+    else
+      "category-none iswip"
+    end
   end
   
   # TODO: merge with work_blurb_tag_block
