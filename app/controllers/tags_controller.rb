@@ -99,7 +99,7 @@ class TagsController < ApplicationController
       end
     end
   end
-  
+
   # GET /tags/new
   # GET /tags/new.xml
   def new
@@ -162,6 +162,7 @@ class TagsController < ApplicationController
     elsif @tag.respond_to?(:fandoms) && !@tag.fandoms.empty?
       @wranglers = @tag.fandoms.collect(&:wranglers).flatten.uniq
     end
+    @suggested_fandoms = @tag.suggested_fandoms - @tag.fandoms if @tag.respond_to?(:fandoms)
   end
 
   def update
@@ -217,11 +218,11 @@ class TagsController < ApplicationController
         sort = sort + ", name ASC"
       end
       if %w(unfilterable canonical noncanonical).include?(params[:status])          
-        @tags = @tag.send(params[:show]).send(params[:status]).find(:all, :order => sort).paginate(:page => params[:page], :per_page => 50)
+        @tags = @tag.send(params[:show]).send(params[:status]).find(:all, :order => sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
       elsif params[:status] == "unwrangled"
-        @tags = @tag.same_work_tags.unwrangled.by_type(params[:show].singularize.camelize).find(:all, :order => sort).paginate(:page => params[:page], :per_page => 50)
+        @tags = @tag.same_work_tags.unwrangled.by_type(params[:show].singularize.camelize).find(:all, :order => sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
       else
-        @tags = @tag.send(params[:show]).find(:all, :order => sort).paginate(:page => params[:page], :per_page => 50)
+        @tags = @tag.send(params[:show]).find(:all, :order => sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
       end       
     end    
   end

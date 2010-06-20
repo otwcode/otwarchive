@@ -15,24 +15,21 @@ class TagWranglingsController < ApplicationController
       params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], 'tag')
       params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
       sort = params[:sort_column] + " " + params[:sort_direction] 
-      if sort.include?('suggested')
-        sort = sort + ", name ASC"
-      end
       if params[:show] == "fandoms"
         @media_names = Media.by_name.collect(&:name)
-        @tags = Fandom.unwrangled.find(:all, :order => sort).paginate(:page => params[:page], :per_page => 50)       
+        @tags = Fandom.unwrangled.find(:all, :order => sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)       
       elsif params[:show] == "character_pairings"
         if params[:fandom_string]
           @fandom = Fandom.find_by_name(params[:fandom_string])
           if @fandom && @fandom.canonical?
-            @tags = @fandom.children.by_type("Pairing").canonical.find(:all, :order => sort).paginate(:page => params[:page], :per_page => 50)
+            @tags = @fandom.children.by_type("Pairing").canonical.find(:all, :order => sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
           else
             flash[:error] = "#{params[:fandom_string]} is not a canonical fandom."
           end
         end
-      else
+      else # by fandom
         klass = params[:show].classify.constantize        
-        @tags = klass.unwrangled.with_related_tags("Fandom", sort).paginate(:page => params[:page], :per_page => 50)               
+        @tags = klass.unwrangled.find(:all, :order => sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)               
       end
     end
   end

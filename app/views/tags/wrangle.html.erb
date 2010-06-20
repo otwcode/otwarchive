@@ -25,7 +25,7 @@
 <p><%= link_to "wrangle pairings to characters", tag_wranglings_path(:show => 'character_pairings', :fandom_string => @tag.name) %></p>
 <%- end -%>
 
-<%- if params[:show] -%>
+<%- if params[:show] && params[:show] !~ /suggested/ -%>
   <h3>Add new <%= params[:show] %></h3>
   <%- form_for :tag, @tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| -%>
     <%= f.text_area "#{params[:show].singularize}_string", :size => "100x5" %>

@@ -72,7 +72,7 @@ get started. (Note: to associate pairings with characters, first choose a fandom
 		<legend>Choose tags from a table</legend>
 <h3 class="landmark">Individual Selection Table</h3>
 <div class="wrapper">
-	<table summary="A subset of tags listed by name, with options to edit, wrangle, or view works tagged thus. Also listed is when each tag was created, suggested fandoms, whether each is canonical, and the number of works tagged thus." id="wrangulise">
+	<table summary="A subset of tags listed by name, with options to edit, wrangle, or view works tagged thus. Also listed is when each tag was created, whether each is canonical, and the number of works tagged thus." id="wrangulise">
 	<caption><%= @tags.first.class.to_s.pluralize %> to be wrangled</caption>
 	<colgroup>
 		<col class="name" />
@@ -89,10 +89,6 @@ get started. (Note: to associate pairings with characters, first choose a fandom
       </th>
       <%- if params[:show] == 'character_pairings' -%>
         <th scope="col">Characters</th>  
-      <%- elsif params[:show] != "fandoms" -%>
-        <th scope="col">
-          <%= sort_link t('sort.suggested_fandoms', :default => 'Suggested Fandoms'), :suggested_fandoms, {:title => 'Fandoms associated with the same works as this tag.'} -%>
-        </th>
       <%- end -%>
       <th scope="col">Canonical</th>
       <th scope="col">
@@ -121,8 +117,6 @@ get started. (Note: to associate pairings with characters, first choose a fandom
             <ul><%= tag_link_list(tag.characters) %></ul>
             <%- end -%>
           </td>  
-          <%- elsif params[:show] != "fandoms" -%>
-          <td><%= tag.suggested_fandoms %></td>
           <%- end -%>        
           <td>
             <%- if tag.canonical? -%>

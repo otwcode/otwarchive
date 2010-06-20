@@ -53,7 +53,7 @@ class Tag < ActiveRecord::Base
   has_many :direct_sub_tags, :through => :sub_taggings, :source => :sub_tag, :conditions => "meta_taggings.direct = 1"
   
   has_many :same_work_tags, :through => :works, :source => :tags, :uniq => true
-  has_many :same_work_fandoms, :through => :works, :source => :fandoms, :uniq => true
+  has_many :suggested_fandoms, :through => :works, :source => :fandoms, :uniq => true
 
   has_many :taggings, :as => :tagger
   has_many :works, :through => :taggings, :source => :taggable, :source_type => 'Work'
@@ -209,16 +209,6 @@ class Tag < ActiveRecord::Base
         :conditions => 'filter_counts.public_works_count > 0' }
     }
     
-  named_scope :with_related_tags, lambda {|tag_type, sort_order|
-    {:select => "DISTINCT tags.*, GROUP_CONCAT(DISTINCT tags_2.name SEPARATOR ', ') AS suggested_fandoms",
-    :joins => "LEFT JOIN taggings ON ( tags.id = taggings.tagger_id AND taggings.tagger_type = 'Tag') 
-    LEFT JOIN works ON ( taggings.taggable_id = works.id AND taggings.taggable_type = 'Work') 
-    LEFT JOIN taggings taggings_2 ON ( works.id = taggings_2.taggable_id AND taggings_2.taggable_type = 'Work') 
-    LEFT JOIN tags tags_2 ON ( tags_2.id = taggings_2.tagger_id AND tags_2.type = '#{tag_type}')",
-    :group => 'tags.id',
-    :order => sort_order}
-  }     
-  
   # Class methods
   
   # Used for associations, such as work.fandoms.string
