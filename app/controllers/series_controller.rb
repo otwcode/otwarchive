@@ -82,7 +82,7 @@ class SeriesController < ApplicationController
   
   # GET /series/1/manage
   def manage
-    @serial_works = @series.serial_works.find(:all, :include => [:work], :order => :position, :conditions => ['works.posted = ?', true])    
+    @serial_works = @series.serial_works.find(:all, :include => [:work], :order => :position)    
   end
 
   # POST /series

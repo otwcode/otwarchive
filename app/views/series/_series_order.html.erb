@@ -5,7 +5,7 @@
       <li id="serial_<%= serial.id %>">
         <%= text_field_tag 'serial_works[]', nil, :size => 3, :maxlength => 3, :class => 'serial-position-field' -%>
         <span id='position-for-<%= serial.id %>'><%= serial.position %></span>. 
-        <h3><%=h serial.work.title %></h3>
+        <h3><%=h serial.work.title + (serial.work.posted? ? "" : " (DRAFT)") %></h3>
       </li>
     <% end %>    
   </ul>
