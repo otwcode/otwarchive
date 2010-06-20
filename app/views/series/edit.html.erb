@@ -1,18 +1,22 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h t('.edit_series', :default =>"Editing series") %></h2>
+<h2><%=h t('.edit_series', :default =>"Edit Series") %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
 <h3 class="landmark">Actions</h3>
 <ul class="navigation" role="navigation">
-<li><%= link_to t('.delete_series', :default =>"Delete Series"), @series, :confirm => 'Are you sure?', :method => :delete %></li>
-<li><%= link_to t('.reorder_series', :default =>"Reorder Series"), manage_series_path(@series) %></li>
-<li><%= link_to t('.show', :default =>"Show"), @series %></li>
-<li><%= link_to t('.back', :default =>"Back"), series_path %></li>
+  <li><%= link_to t('.back_to_series', :default =>"Back To Series"), @series %></li>
+  <li><%= link_to t('.delete_series', :default =>"Delete Series"), @series, :confirm => 'Are you sure?', :method => :delete %></li>
+  <li><%= link_to t('.reorder_series', :default =>"Reorder Series"), manage_series_path(@series) %></li>
+  <li><%= link_to t('.orphan_series', :default => 'Orphan Series'), {:controller => 'orphans', :action => 'new', :series_id => @series.id} -%></li>    	
+  <%- unless (@series.pseuds - current_user.pseuds).empty? -%>
+    <li><%= link_to t('.remove_me_as_author', :default => 'Remove Me As Author'), edit_series_path(@series, :remove => 'me'), :confirm => series_removal_confirmation(@series, current_user) -%></li>
+  <%- end -%>
 </ul>
 <!--/subnav-->
 
 <!--main content-->
+
 <div id="work-form" class="work-form">
 <% form_for(@series) do |f| %>
   <%= f.error_messages %>

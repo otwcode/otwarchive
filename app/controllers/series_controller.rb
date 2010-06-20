@@ -62,6 +62,22 @@ class SeriesController < ApplicationController
     @coauthors = @series.pseuds.select{ |p| p.user.id != current_user.id}
     to_select = @series.pseuds.blank? ? [current_user.default_pseud] : @series.pseuds
     @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
+    
+    if params["remove"] == "me"
+      pseuds_with_author_removed = @series.pseuds - current_user.pseuds
+      if pseuds_with_author_removed.empty?
+        redirect_to :controller => 'orphans', :action => 'new', :series_id => @series.id
+      else
+        begin
+          @series.remove_author(current_user)
+          flash[:notice] = t('author_successfully_removed', :default => "You have been removed as an author from the series and its works.")
+          redirect_to @series
+        rescue Exception => error
+          flash[:error] = error.message
+          redirect_to @series        
+        end
+      end
+    end    
   end
   
   # GET /series/1/manage

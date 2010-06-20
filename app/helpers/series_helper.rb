@@ -151,4 +151,13 @@ module SeriesHelper
     tag_block
   end
   
+  # Generates confirmation message for 'remove me as author'
+  def series_removal_confirmation(series, user)
+    if !(series.work_pseuds & user.pseuds).empty?
+      "You're listed as an author of works in this series. Do you want to remove yourself as an author of this series and all of its works?"
+    else
+      "Are you sure you want to be removed as an author of this series?"
+    end
+  end
+  
 end

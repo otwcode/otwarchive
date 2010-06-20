@@ -189,20 +189,26 @@ class Pseud < ActiveRecord::Base
   end
 
   # Change the ownership of a creation from one pseud to another
-  def change_ownership(creation, pseud)
+  # Options: skip_series -- if you begin by changing ownership of the series, you don't
+  # want to go back up again and get stuck in a loop
+  def change_ownership(creation, pseud, options={})
     creation.pseuds.delete(self)
     creation.pseuds << pseud rescue nil
     if creation.is_a?(Work)
       creation.chapters.each {|chapter| self.change_ownership(chapter, pseud)}
-      for series in creation.series
-        if series.works.count > 1 && (series.works - [creation]).collect(&:pseuds).flatten.include?(self)
-          series.pseuds << pseud rescue nil
-        else
-          self.change_ownership(series, pseud)
+      unless options[:skip_series]
+        for series in creation.series
+          if series.works.count > 1 && (series.works - [creation]).collect(&:pseuds).flatten.include?(self)
+            series.pseuds << pseud rescue nil
+          else
+            self.change_ownership(series, pseud)
+          end
         end
       end
       comment_ids = creation.find_all_comments.collect(&:id).join(",")
       Comment.update_all("pseud_id = #{pseud.id}", "pseud_id = '#{self.id}' AND id IN (#{comment_ids})") unless comment_ids.blank?
+    elsif creation.is_a?(Series) && options[:skip_series]
+      creation.works.each {|work| self.change_ownership(work, pseud)}    
     end
   end
   

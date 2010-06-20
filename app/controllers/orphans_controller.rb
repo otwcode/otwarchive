@@ -10,6 +10,8 @@ class OrphansController < ApplicationController
   def new
     @to_be_orphaned = if params[:work_id]
                         Work.find(params[:work_id])
+                      elsif params[:series_id]
+                        Series.find(params[:series_id])
                       elsif params[:pseud_id]
                         Pseud.find(params[:pseud_id])
                       else
@@ -18,19 +20,24 @@ class OrphansController < ApplicationController
   end
   
   def create
+    new_orphans = {}
     if params[:work_id]
       work = Work.find(params[:work_id])
       pseuds = (current_user.pseuds & work.pseuds)
-      works = [work]      
+      orphans = [work]
+    elsif params[:series_id]
+      series = Series.find(params[:series_id])
+      pseuds = (current_user.pseuds & series.pseuds)
+      orphans = [series]            
     elsif params[:pseud_id]
       pseuds = [Pseud.find(params[:pseud_id])]
-      works = pseuds.first.works
+      orphans = pseuds.first.works
     else 
       pseuds = current_user.pseuds
-      works = current_user.works      
+      orphans = current_user.works      
     end
     use_default = params[:use_default] == "true"
-    if !pseuds.blank? && !works.blank? && Creatorship.orphan(pseuds, works, use_default)
+    if !pseuds.blank? && Creatorship.orphan(pseuds, orphans, use_default)
       flash[:notice] = t('success', :default => 'Orphaning was successful.')
       redirect_to(current_user)
     else

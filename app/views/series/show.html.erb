@@ -16,6 +16,10 @@
     <li><%= link_to "Edit", edit_series_path(@series) %></li>
     <li><%= link_to 'Delete Series', @series, :confirm => 'Are you sure?', :method => :delete %></li>
     <li><%= link_to "Reorder Series", manage_series_path(@series) %></li>
+    <li><%= link_to t('.orphan_series', :default => 'Orphan Series'), {:controller => 'orphans', :action => 'new', :series_id => @series.id} -%></li>    	
+    <%- unless (@series.pseuds - current_user.pseuds).empty? -%>
+      <li><%= link_to t('.remove_me_as_author', :default => 'Remove Me As Author'), edit_series_path(@series, :remove => 'me'), :confirm => series_removal_confirmation(@series, current_user) -%></li>
+    <%- end -%>
   <%- end -%>
 </ul>
 <%- end -%>
@@ -31,13 +35,13 @@
     <dd><%= @series.revised_at ? @series.revised_at.to_date : @series.published_at %></dd>
 
     <dt><%=h 'Works included:' %></dt>
-    <dd><%= @serial_works.length %></dd>
+    <dd><%= @series.visible_work_count %></dd>
 
     <dt><%=h 'Complete:' %></dt>
     <dd><%= @series.complete? ? "Yes" : "No" %></dd>
 
     <dt><%=h 'Word count:' %></dt>
-    <dd><%= number_with_delimiter(@serial_works.collect{|sw| sw.work.word_count}.sum) %></dd>
+    <dd><%= number_with_delimiter(@series.visible_word_count) %></dd>
 
     <% if @series.pseuds.many?%>
       <dt><%=h 'Authors:' %></dt>

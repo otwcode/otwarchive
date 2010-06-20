@@ -235,7 +235,7 @@ class Work < ActiveRecord::Base
   
   def remove_author(author_to_remove)
     pseuds_with_author_removed = self.pseuds - author_to_remove.pseuds
-    raise "Cannot remove all authors" if pseuds_with_author_removed.empty?
+    raise Exception.new("Sorry, we can't remove all authors of a work.") if pseuds_with_author_removed.empty?
     self.pseuds = pseuds_with_author_removed
     save
     self.chapters.each do |chapter|

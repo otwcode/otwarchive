@@ -2,6 +2,7 @@ class Series < ActiveRecord::Base
   has_many :serial_works, :dependent => :destroy
   has_many :works, :through => :serial_works
   has_many :work_tags, :through => :works, :uniq => true, :source => :tags
+  has_many :work_pseuds, :through => :works, :uniq => true, :source => :pseuds
 
   has_many :taggings, :as => :taggable, :dependent => :destroy
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
@@ -139,6 +140,19 @@ class Series < ActiveRecord::Base
     end
     self.authors.flatten!
     self.authors.uniq!
+  end
+  
+  # Remove a user as an author of this series
+  def remove_author(author_to_remove)
+    pseuds_with_author_removed = self.pseuds - author_to_remove.pseuds
+    raise Exception.new("Sorry, we can't remove all authors of a series.") if pseuds_with_author_removed.empty?
+    Series.transaction do
+      self.pseuds = pseuds_with_author_removed
+      authored_works_in_series = (author_to_remove.works & self.works)
+      authored_works_in_series.each do |work|
+        work.remove_author(author_to_remove)
+      end
+    end
   end
   
   # returns list of fandoms on this series
