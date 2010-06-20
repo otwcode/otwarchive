@@ -124,13 +124,13 @@ module UsersHelper
   
   def authored_items(pseud)
     visible_works = pseud.visible_works_count
-    visible_bookmarks_count = logged_in_as_admin? ? pseud.bookmarks.count : pseud.bookmarks.visible.size
+    visible_recs = pseud.visible_recs_count
     items = (visible_works == 1) ? link_to(visible_works.to_s + " work", user_pseud_works_path(pseud.user, pseud)) : ((visible_works > 1) ? link_to(visible_works.to_s + " works", user_pseud_works_path(pseud.user, pseud)) : "")
-    if (visible_works > 0) && (visible_bookmarks_count > 0)
+    if (visible_works > 0) && (visible_recs > 0)
       items += " | "
     end
-    if visible_bookmarks_count > 0
-      items += (visible_bookmarks_count == 1) ? link_to(visible_bookmarks_count.to_s + " bookmark", user_pseud_bookmarks_path(pseud.user, pseud)) : link_to(visible_bookmarks_count.to_s + " bookmarks", user_pseud_bookmarks_path(pseud.user, pseud))
+    if visible_recs > 0
+      items += (visible_recs == 1) ? link_to(visible_recs.to_s + " rec", user_pseud_bookmarks_path(pseud.user, pseud, :recs_only => true)) : link_to(visible_recs.to_s + " recs", user_pseud_bookmarks_path(pseud.user, pseud, :recs_only => true))
     end
     return items
   end
@@ -140,22 +140,25 @@ module UsersHelper
 #    link_to_unless_current t('my_drafts', :default =>"My Drafts") + " (#{total})", drafts_user_pseud_works_path(@user, pseud)
 #  end
   
-  def authors_header(collection)
+  def authors_header(collection, what = "People")
     if collection.total_pages < 2
       case collection.size
-      when 0; "0 People"
-      when 1; "1 Person"
-      else; collection.total_entries.to_s + " People"
+        when 0
+          "0 #{what}"
+        when 1
+          "1 #{what.singularize}"
+        else
+          collection.total_entries.to_s + " #{what}"
       end
     else
       %{ %d - %d of %d }% [
         collection.offset + 1,
         collection.offset + collection.length,
         collection.total_entries
-      ] + "People"
+      ] + what
     end
   end
-  
+
   def log_item_action_name(action)
     if action == ArchiveConfig.ACTION_ACTIVATE
       t('log_validated', :default => 'Account Validated')

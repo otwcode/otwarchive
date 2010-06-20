@@ -6,7 +6,6 @@ class PeopleControllerTest < ActionController::TestCase
       assert @user = create_user
       get :index
     end
-    should_assign_to :authors
     should_not_set_the_flash
     should_render_template :index
     should_respond_with :success

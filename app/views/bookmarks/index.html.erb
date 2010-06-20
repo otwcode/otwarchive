@@ -2,7 +2,11 @@
 <%- if @most_recent_bookmarks -%>
   <h2>Recent Bookmarks</h2>
 <%- elsif @user -%>
-<h2><%=h t('owned_bookmarks', :default => "{{user_name}}'s Bookmarks", :user_name => @user.login) %></h2>
+  <%- if params[:recs_only] %>
+    <h2><%=h t('owned_bookmarks', :default => "{{user_name}}'s Recs", :user_name => @user.login) %></h2>
+  <%- else %>
+    <h2><%=h t('owned_bookmarks', :default => "{{user_name}}'s Bookmarks", :user_name => @user.login) %></h2>
+  <%- end -%>
 <%- else -%>
   <h2><%=h t('listing', :default => 'Listing bookmarks') %></h2>
 <%- end -%>

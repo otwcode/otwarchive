@@ -12,7 +12,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :media, :only => [:index, :show], :has_many => :fandoms
   map.resources :fandoms, :only => [:index, :show] 
   
-  map.resources :people, :only => [:index, :search], :collection => {:search => :get}
+  map.resources :people, :only => [:index, :show, :search], :collection => {:search => :get}
 
   map.feedbacks '/support/', :controller => 'feedbacks', :action => 'create' , :conditions => { :method => :post }
   map.new_feedback_report '/support/', :controller => 'feedbacks', :action => 'new' 

@@ -70,14 +70,6 @@ class Pseud < ActiveRecord::Base
   named_scope :alphabetical, :order => :name
   named_scope :starting_with, lambda {|letter| {:conditions => ['SUBSTR(name,1,1) = ?', letter]}}
   
-  begin
-   ActiveRecord::Base.connection
-   ALPHABET = Pseud.find(:all, :select => :name).collect {|pseud| pseud.name[0,1].upcase}.uniq.sort
-  rescue
-    puts "no database yet, not initializing pseud alphabet"
-    ALPHABET = ['A']
-  end
-
 
   # Enigel Dec 12 08: added sort method
   # sorting by pseud name or by login name in case of equality
@@ -96,8 +88,14 @@ class Pseud < ActiveRecord::Base
 
   # Gets the number of works by this user that the current user can see
   def visible_works_count
-    self.works.select{|w| w.visible?(User.current_user)}.uniq.size
+    self.works(:all, :select => 'id, restricted, posted, hidden_by_admin').select{|w| w.visible?(User.current_user)}.uniq.size
   end
+
+  # Gets the number of recs by this user
+  def visible_recs_count
+    self.recs.public.size
+  end
+  
   
   # Options can include :categories and :limit
   # Gets all the canonical tags used by a given pseud (limited to certain 

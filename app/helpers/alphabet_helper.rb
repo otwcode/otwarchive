@@ -4,7 +4,7 @@ module AlphabetHelper
     link_to_unless_current(text.blank? ? letter : text, url_for(:overwrite_params => {:letter => letter, :page => 1}))
   end
   
-  def alpha_paginated_section(alphabet = User::ALPHABET)
+  def alpha_paginated_section(alphabet = People.all.map(&:char))
     return "" if alphabet.blank? 
     block = '<div class="pagination">'
     active_letter = params[:letter] || alphabet[0]
@@ -42,4 +42,27 @@ module AlphabetHelper
     block << "</div>"
   end
   
+  def people_paginated_section(type)
+    active_letter = params[:id].upcase
+    block = '<div class="pagination">'
+    # Link all the letters
+    show = case type
+      when "Authors"
+         '?show=authors'
+      when "Reccers"
+         '?show=reccers'
+      else
+         ''
+    end
+    People.all.each do |character|
+      link = "<a href=\"/people/" + character.to_param + show + "\">" + character.char + "</a>" 
+      unless character.char == active_letter
+        block << " " + link
+      else
+        block << ' <span class="current">' + link + '</span>'
+      end
+    end
+    
+    block << "</div>"
+  end
 end

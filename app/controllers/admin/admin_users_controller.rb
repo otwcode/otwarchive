@@ -150,7 +150,7 @@ class Admin::AdminUsersController < ApplicationController
     if params[:letter] && params[:letter].is_a?(String)
       letter = params[:letter][0,1]
     else
-      letter = User::ALPHABET[0]
+      letter = '0'
     end
     @all_users = User.alphabetical.starting_with(letter)
   end

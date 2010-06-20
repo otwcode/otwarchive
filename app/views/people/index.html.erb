@@ -1,36 +1,27 @@
 <!--Descriptive page name, messages and instructions-->
 <% if @collection %>
-<h2><%= authors_header @authors -%> <%= "in" -%> '<%= (params[:letter] && params[:letter].is_a?(String)) ? params[:letter] : @pseuds_alphabet[0] -%>' <%= t('people.collection', :default => "in {{collection}}", :collection => @collection.title) -%></h2>
-<% else -%>
-<h2><%= authors_header @authors -%> <%= "in" -%> '<%= (params[:letter] && params[:letter].is_a?(String)) ? params[:letter] : @pseuds_alphabet[0] -%>'</h2>
-<!--/descriptions-->
-
-<!--subnav-->
-<h3 class="landmark">Filter</h3>
-<ul class="navigation">
-  <li><%= link_to t('people.All', :default => "All"), people_path(:letter => params[:letter], 
-      :page => params[:page], :per_page => params[:per_page], :show => "all") -%></li>
-  <li><%= link_to t('people.Authors', :default => "Authors"), people_path(:letter => params[:letter], 
-      :page => params[:page], :per_page => params[:per_page], :show => "authors") -%></li>  
-  <li><%= link_to t('people.Reccers', :default => "Reccers"), people_path(:letter => params[:letter], 
-      :page => params[:page], :per_page => params[:per_page], :show => "reccers") -%></li>
-</ul>
+  <h2><%= authors_header @authors -%> <%= "in" -%> '<%= (params[:letter] && params[:letter].is_a?(String)) ? params[:letter] : @pseuds_alphabet[0] -%>' <%= t('people.collection', :default => "in {{collection}}", :collection => @collection.title) -%></h2>
+  <h3 class="landmark">Next Page Navigation</h3>
+  <%= alpha_paginated_section @pseuds_alphabet -%>
+  <% paginated_section @authors, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
+  <!--/subnav-->
+  <!--main content-->
+  <ul class="pseud index">
+    <%- @authors.each do |author| -%>
+      <%= render :partial => 'author_blurb', :locals => {:author => author} -%>
+    <%- end -%>  
+  </ul>
+  <% end %>
+  <!--/content-->
+  <!--subnav-->
+  <%= alpha_paginated_section @pseuds_alphabet -%>
+<% else %>
+  <div class="pagination">
+  <% for character in @navigation %>
+    <a href="<%= person_path(character) %>"><%= character.char %></a>
+  <% end %>
+  </div>
+  <div>
+  <%= link_to "People Search (Alpha)", search_people_path %>
+  </div>
 <% end %>
-
-<h3 class="landmark">Next Page Navigation</h3>
-<%= alpha_paginated_section @pseuds_alphabet -%>
-<% paginated_section @authors, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
-<!--/subnav-->
-
-<!--main content-->
-<ul class="pseud index">
-  <%- @authors.each do |author| -%>
-    <%= render :partial => 'author_blurb', :locals => {:author => author} -%>
-  <%- end -%>  
-</ul>
-<% end %>
-<!--/content-->
-
-<!--subnav-->
-<%= alpha_paginated_section @pseuds_alphabet -%>
-<!--/subnav-->
