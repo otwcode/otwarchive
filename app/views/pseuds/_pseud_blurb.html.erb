@@ -6,8 +6,8 @@
     <%- end -%>
     </h4>
     <!--BACK END- suggest comma separator instead of pipe-->
-	  <%- unless authored_items(pseud).blank? -%>
-      <h5><%= authored_items(pseud) -%></h5>
+	  <%- unless authored_items(pseud, @work_counts, @rec_counts).blank? -%>
+      <h5><%= authored_items(pseud, @work_counts, @rec_counts) -%></h5>
     <%- end -%>
 	<div class="icon">
       <%= standard_icon_display(@user, pseud) %>

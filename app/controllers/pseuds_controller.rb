@@ -14,6 +14,8 @@ class PseudsController < ApplicationController
   def index
     if @user
       @pseuds = @user.pseuds.find(:all)
+      @rec_counts = Pseud.rec_counts_for_pseuds(@pseuds)
+      @work_counts = Pseud.work_counts_for_pseuds(@pseuds)      
     else
       redirect_to people_path
     end
