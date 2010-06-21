@@ -118,6 +118,14 @@ namespace :After do
 # end
 # 
 
+  #### Leave this one here
+  
+  desc "Update the translation file each time we deploy"
+  task(:update_translations => :environment) do
+    tg = TranslationGenerator.new
+    tg.generate_default_translation_file    
+  end
+
 
   #### Add your new tasks here 
   

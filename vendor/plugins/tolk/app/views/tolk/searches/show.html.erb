@@ -1,0 +1,60 @@
+<% content_for :locale do %>
+  <span class="locale"><%= @locale.language_name %></span>
+<% end %>
+
+<h3 class="search">
+  <% form_tag "/tolk/search", :method => :get do %>
+    <%= hidden_field_tag :locale, @locale.name %>
+    Search for an English phrase:
+    <%= text_field_tag :q, params[:q] %>
+    <%= submit_tag "Search", :name => nil %>
+  <% end %>
+</h3>
+
+<div class="search_exits">
+  <%= link_to "Phrases missing translation", @locale %>
+  &nbsp;
+  <%= link_to "Completed translations", all_tolk_locale_path(@locale) %>
+</div>
+
+<div class="translations">
+  <% if @phrases.any? %>
+     <% form_for @locale do |locale_form| %>
+      <table class="translations">
+        <tr>
+          <th class="translation"><%= @locale.language_name -%></th>
+          <th class="key"><%= Tolk::Locale.primary_language_name -%></th>
+        </tr>
+        <% @phrases.each do |phrase| %>
+
+          <% if translation = phrase.translations.find_by_locale_id(@locale.id) || Tolk::Translation.new(:locale => @locale, :phrase => phrase) %>
+            <tr>
+              <td class="translation">
+                <%= hidden_field_tag :"translations[][id]", translation.id, :id => "#{translation.object_id}_id" %>
+                <%= hidden_field_tag :"translations[][phrase_id]", phrase.id, :id => "#{translation.object_id}_phrase_id" %>
+                <%= hidden_field_tag :"translations[][locale_id]", translation.locale_id, :id => "#{translation.object_id}_locale_id" %>
+                <%= text_area_tag :"translations[][text]", format_i18n_text_area_value(translation.text), :class => "locale", :id => "#{translation.object_id}_text", :onfocus => "$(this).up('tr').addClassName('active');", :onblur => "$(this).up('tr').removeClassName('active');" %>
+              </td>
+              <td class="phrase">
+                <% if params[:q].present? -%>
+                  <%= highlight(format_i18n_value(phrase.translations.primary.text), params[:q]) -%>
+                <% else -%>
+                  <%= format_i18n_value(phrase.translations.primary.text) -%>
+                <% end -%>
+                <span class="key" title="<%= phrase.key %>"><%= truncate(phrase.key, :length => 100) %></span>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      </table>
+      <div class="table_submit">
+        <p><%= locale_form.submit "Save changes" %></p>
+      </div>
+    <% end %>
+    <div class="paginate">
+      <%= will_paginate @phrases, :renderer => Tolk::LinkRenderer %>
+    </div>
+  <% else %>
+    <p style="text-align: left">No search results.</p>
+  <% end %>
+</div>
