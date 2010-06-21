@@ -17,12 +17,12 @@ module WorksHelper
             [t('works_helper.chapters', :default => "Chapters:"), work.chapter_total_display]]
 
     if work.count_visible_comments > 0
-      list.concat([[t('work_comments', :default => 'Comments') + ':', work.count_visible_comments.to_s]])
+      list.concat([[t('works_helper.work_comments', :default => 'Comments') + ':', work.count_visible_comments.to_s]])
     end
     if (bookmark_count = work.bookmarks.public.count) > 0
-      list.concat([[t('work_bookmarks', :default => 'Bookmarks') + ':', link_to(bookmark_count.to_s, work_bookmarks_path(work))]])
+      list.concat([[t('works_helper.work_bookmarks', :default => 'Bookmarks') + ':', link_to(bookmark_count.to_s, work_bookmarks_path(work))]])
     end
-    list.concat([[t('works_helper.hits:', :default => "Hits:"), work.hits]]) if show_hit_count?(work)
+    list.concat([[t('works_helper.hits', :default => "Hits:"), work.hits]]) if show_hit_count?(work)
 
     if work.chaptered? && work.revised_at
       prefix = work.is_wip ? "Updated:" : "Completed:"
@@ -42,7 +42,7 @@ module WorksHelper
 
   def work_top_links_list(work)
     collections_link = work.approved_collections.empty? ? '' : 
-      ("<li>" + link_to(t('work_collections_link', :default => "Collections: {{num_of_collections}}", 
+      ("<li>" + link_to(t('works_helper.work_collections_link', :default => "Collections: {{num_of_collections}}", 
                           :num_of_collections => work.approved_collections.length), work_collections_path(work)) + "</li>")
     bookmark_link = logged_in? ? '<li>' + bookmark_link(work) + '</li>' : ''			
     comments_link = '<li>' + link_to("Comment(s)", work_path(work, :show_comments => true, :anchor => 'comments')) + '</li>'  

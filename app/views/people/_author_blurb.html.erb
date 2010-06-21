@@ -1,13 +1,13 @@
 <li class="user blurb" role="article">
     <div class="module">
 		  <h4><%= link_to(author.name, user_pseud_path(author.user, author)) -%> 
-      <%- if (author.name != author.user_name || author.user.pseuds.size > 1) -%>
+      <%- if (author.name != author.user.login) -%>
         (<%= link_to(author.user_name, user_path(author.user)) -%>)
       <%- end -%>
       </h4>
       <!--BACK END- suggest comma separator instead of pipe-->
-		<%- unless authored_items(author).blank? -%>
-        <h5><%= authored_items(author) -%></h5>
+		<%- unless authored_items(author, @work_counts, @rec_counts).blank? -%>
+        <h5><%= authored_items(author, @work_counts, @rec_counts) -%></h5>
       <%- end -%>
 		<div class="icon">
 	        <%= standard_icon_display(author.user, author) %>

@@ -18,7 +18,7 @@
     <dd><%= check_box_tag "notify_all[]", 0, nil, {:id => "notify_all"} -%></dd>
     
     <%- Role.all.collect(&:name).uniq.each do |role_name| -%>
-      <dt><%= label_tag "notify_all_#{role_name}", t("notify_all_#{role_name}", :default => "Notify All #{role_name.humanize.titlecase.pluralize}") -%></dt>
+      <dt><%= label_tag "notify_all_#{role_name}", t("notify_all_with_role", :default => "Notify All {{role_name}}", :role_name => role_name.humanize.titlecase.pluralize) -%></dt>
       <dd><%= check_box_tag "notify_all[]", role_name, nil, {:id => "notify_all_#{role_name}"} -%></dd>
     <%- end -%>
 	</dl>

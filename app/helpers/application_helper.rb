@@ -35,7 +35,7 @@ module ApplicationHelper
   end
   
   def allowed_html_instructions
-    h(t('plain_text', :default =>"Plain text with limited html")) + 
+    h(t('application_helper.plain_text', :default =>"Plain text with limited html")) + 
     link_to_help("html-help") + 
     "<br /><code>a, abbr, acronym, address, [alt], b, big, blockquote, br, caption, center, cite, [class], code, 
     col, colgroup, datetime, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, [height], hr, [href], i, img, 
@@ -44,7 +44,7 @@ module ApplicationHelper
   end
   
   def limited_html_instructions
-    h(t('plain_text', :default =>"Plain text with limited html")) + 
+    h(t('application_helper.plain_text', :default =>"Plain text with limited html")) + 
     link_to_help("html-help") + 
     "<br /><code>a, [alt], b, big, blockquote, br, center, cite, code, del, em, [href], i, img, ins, p, pre, q, small, [src], strike, strong, sub, sup, u</code>"
   end
@@ -56,7 +56,7 @@ module ApplicationHelper
   # and show only the authors when in preview_mode, unless they're empty
   def byline(creation)
     if creation.respond_to?(:anonymous?) && creation.anonymous?
-      anon_byline = t('byline.anonymous', :default => "Anonymous") 
+      anon_byline = t('application_helper.byline.anonymous', :default => "Anonymous") 
       anon_byline += " [" + non_anonymous_byline(creation) + "]" if logged_in_as_admin? || is_author_of?(creation)
       return anon_byline
     end
@@ -85,7 +85,7 @@ module ApplicationHelper
         archivists[pseud].nil? ? 
           link_to(pseud.byline, [pseud.user, pseud], :class => "login author") : 
           archivists[pseud] + 
-            t('byline.archived_by', :default => "[archived by {{archivist}}]", 
+            t('application_helper.byline.archived_by', :default => "[archived by {{archivist}}]", 
               :archivist => link_to(pseud.byline, [pseud.user, pseud], :class => "login author"))
       }.join(', ')
     end
@@ -211,7 +211,7 @@ module ApplicationHelper
   def generate_countdown_html(field_id, max) 
     generated_html = "<p class=\"character_counter\">"
     generated_html += "<span id=\"#{field_id}_counter\">?</span>"
-    generated_html += countdown_field(field_id, field_id + "_counter", max) + " " + t('characters_left', :default => 'characters left')
+    generated_html += countdown_field(field_id, field_id + "_counter", max) + " " + t('application_helper.characters_left', :default => 'characters left')
     generated_html += "</p>"
     return generated_html
   end
@@ -282,7 +282,7 @@ module ApplicationHelper
         time.in_time_zone(user.preference.time_zone).strftime('<span class="time">%I:%M%p</span>') +
           " <abbr class=\"timezone\" title=\"#{user.preference.time_zone}\">#{time_zone_abbr(user.preference.time_zone)}</abbr>)" : 
         (user.is_a?(User) ? 
-          link_to(h(t('application.set_time_zone', :default => "(set timezone)")), (@host ? user_preferences_url(user, :host => @host) : user_preferences_path(user)) ) : ""))
+          link_to(h(t('application_helper.set_time_zone', :default => "(set timezone)")), (@host ? user_preferences_url(user, :host => @host) : user_preferences_path(user)) ) : ""))
   end
   
   def mailto_link(user, options={})

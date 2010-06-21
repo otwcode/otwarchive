@@ -57,7 +57,7 @@ So if anyone can think of a better design for this, that would be awesome
     <% if @challenge.send("#{prompt_type}_num_allowed") > @challenge.send("#{prompt_type}_num_required") %>
       <p class="navigation">
         <%= link_to_add_section(
-             t("challenge_signups.add_#{prompt_type}", :default => "Add another? (Up to {{allowed}} allowed.)", :allowed => @challenge.send("#{prompt_type}_num_allowed")), 
+             t("challenge_signups.add_prompt", :default => "Add another? (Up to {{allowed}} allowed.)", :allowed => @challenge.send("#{prompt_type}_num_allowed")), 
              signup_form, prompt_type.to_sym, "prompts/prompt_form", {:is_offer => (prompt_type == "offers"), :required => false}) 
         %>
       </p>

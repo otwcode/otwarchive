@@ -10,15 +10,15 @@ module BookmarksHelper
       
       if bookmarkable.class == Work
         fallback = new_work_bookmark_path(bookmarkable)
-        blurb == true ? text = t('save_bookmark', :default => 'Save') : 
-        text = t('bookmark', :default => 'Bookmark') 
+        blurb == true ? text = t('bookmarks_helper.save_bookmark', :default => 'Save') : 
+        text = t('bookmarks_helper.bookmark_link', :default => 'Bookmark') 
       elsif bookmarkable.class == ExternalWork
         fallback = new_external_work_bookmark_path(bookmarkable)
-        blurb == true ? text = t('save_bookmark', :default => 'Save') :
-        text = t('add_new_bookmark', :default => 'Add A New Bookmark')
+        blurb == true ? text = t('bookmarks_helper.save_bookmark', :default => 'Save') :
+        text = t('bookmarks_helper.add_new_bookmark', :default => 'Add A New Bookmark')
       elsif bookmarkable.class == Series
         fallback = new_series_bookmark_path(bookmarkable)
-        blurb == true ? text = t('save_bookmark', :default => 'Save') : text = t('bookmark', :default => 'Bookmark Series')
+        blurb == true ? text = t('bookmarks_helper.save_bookmark', :default => 'Save') : text = t('bookmarks_helper.bookmark_series', :default => 'Bookmark Series')
       end
       # Check to see if the user has an existing bookmark on this object. Note: on work page we eventually want to change this so an 
       # existing bookmark is opened for editing but a new bookmark can be created by selecting a different pseud on the form.
@@ -31,15 +31,15 @@ module BookmarksHelper
         if blurb == true 
           if @existing.many?
             id_symbol = (bookmarkable.class.to_s.underscore + '_id').to_sym
-            link_to t('saved_bookmarks', :default => 'Saved'), {:controller => :bookmarks, :action => :index, id_symbol => bookmarkable, :existing => true} 
+            link_to t('bookmarks_helper.saved_bookmarks', :default => 'Saved'), {:controller => :bookmarks, :action => :index, id_symbol => bookmarkable, :existing => true} 
           else
-            link_to t('saved_bookmark', :default => 'Saved'), bookmark_path(@existing)
+            link_to t('bookmarks_helper.saved_bookmark', :default => 'Saved'), bookmark_path(@existing)
           end
         else 
           if @existing.many?
-            link_to t('edit_bookmark', :default => "Edit/Add Bookmark"), edit_bookmark_path(@existing.last, :existing => true)
+            link_to t('bookmarks_helper.edit_bookmark', :default => "Edit/Add Bookmark"), edit_bookmark_path(@existing.last, :existing => true)
           else
-            link_to t('edit_bookmark', :default => "Edit/Add Bookmark"), edit_bookmark_path(@existing.last, :existing => false)
+            link_to t('bookmarks_helper.edit_bookmark', :default => "Edit/Add Bookmark"), edit_bookmark_path(@existing.last, :existing => false)
           end
         end      
       end

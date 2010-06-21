@@ -34,12 +34,16 @@ class PeopleController < ApplicationController
     case params[:show]
       when "authors"
         @people = @character.authors.paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
+        @rec_counts = Pseud.rec_counts_for_pseuds(@people)
         @what = "Authors"
       when "reccers"
         @people = @character.reccers.paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
+        @work_counts = Pseud.work_counts_for_pseuds(@people)
         @what = "Reccers"
       else
         @people = @character.pseuds.paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
+        @rec_counts = Pseud.rec_counts_for_pseuds(@people)
+        @work_counts = Pseud.work_counts_for_pseuds(@people)
         @what = "People"
     end
   end

@@ -16,7 +16,7 @@
   <!--main content-->
   <p><%=h t('tag_belongs_to', :default => "This tag belongs to the") %> <%= @tag.class::NAME %> <%=h "Category" %>.
   <%- if @tag.canonical -%>
-    <%=h t('common_tag_can_use_to', :default => 'It\'s a common tag. You can use it to ') %> 
+    <%=h t('common_tag_can_use_to', :default => "It's a common tag. You can use it to ") %> 
     <%= link_to 'filter works', {:controller => :works, :action => :index, :tag_id => @tag} %> <%=h t('and_to', :default => 'and to') %> 
     <%= link_to "filter bookmarks", {:controller => :bookmarks, :action => :index, :tag_id => @tag} %>.
   <%- end -%>

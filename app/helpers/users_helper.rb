@@ -55,18 +55,18 @@ module UsersHelper
   def print_bookmarks_link(user)
     total = logged_in_as_admin? ? @user.bookmarks.count : @user.bookmarks.visible.size
     if @user == current_user
-	  span_if_current t('my_bookmarks', :default => "My Bookmarks ({{bookmark_number}})", :bookmark_number => total.to_s), user_bookmarks_path(@user)
+	  span_if_current t('users_helper.my_bookmarks', :default => "My Bookmarks ({{bookmark_number}})", :bookmark_number => total.to_s), user_bookmarks_path(@user)
 	else
-	  span_if_current t('bookmarks', :default => "Bookmarks ({{bookmark_number}})", :bookmark_number => total.to_s), user_bookmarks_path(@user)
+	  span_if_current t('users_helper.bookmarks', :default => "Bookmarks ({{bookmark_number}})", :bookmark_number => total.to_s), user_bookmarks_path(@user)
 	end
   end
 	
   def print_pseud_bookmarks_link(pseud)
     total = logged_in_as_admin? ? pseud.bookmarks.count : pseud.bookmarks.visible.size
     if @user == current_user
-	  span_if_current t('my_pseud_bookmarks', :default => "My Bookmarks ({{bookmark_number}})", :bookmark_number => total.to_s), user_pseud_bookmarks_path(@user, pseud)
+	  span_if_current t('users_helper.my_pseud_bookmarks', :default => "My Bookmarks ({{bookmark_number}})", :bookmark_number => total.to_s), user_pseud_bookmarks_path(@user, pseud)
 	else
-	  span_if_current t('pseud_bookmarks', :default => "Bookmarks ({{bookmark_number}})", :bookmark_number => total.to_s), user_pseud_bookmarks_path(@user, pseud)
+	  span_if_current t('users_helper.pseud_bookmarks', :default => "Bookmarks ({{bookmark_number}})", :bookmark_number => total.to_s), user_pseud_bookmarks_path(@user, pseud)
 	end
   end
   
@@ -75,18 +75,18 @@ module UsersHelper
   def print_works_link(user)
     total = user.visible_work_count
     if @user == current_user
-	  span_if_current t('my_works', :default => "My Works ({{works_number}})", :works_number => total.to_s), user_works_path(@user)
+	  span_if_current t('users_helper.my_works', :default => "My Works ({{works_number}})", :works_number => total.to_s), user_works_path(@user)
 	else
-	  span_if_current t('works', :default => "Works ({{works_number}})", :works_number => total.to_s), user_works_path(@user)
+	  span_if_current t('users_helper.works', :default => "Works ({{works_number}})", :works_number => total.to_s), user_works_path(@user)
 	end
   end
   
   def print_pseud_works_link(pseud)
     total = pseud.visible_works_count
     if @user == current_user
-	  span_if_current t('my_works', :default => "My Works ({{works_number}})", :works_number => total.to_s), user_pseud_works_path(@user, pseud)
+	  span_if_current t('users_helper.my_works', :default => "My Works ({{works_number}})", :works_number => total.to_s), user_pseud_works_path(@user, pseud)
 	else
-	  span_if_current t('works', :default => "Works ({{works_number}})", :works_number => total.to_s), user_pseud_works_path(@user, pseud)
+	  span_if_current t('users_helper.works', :default => "Works ({{works_number}})", :works_number => total.to_s), user_pseud_works_path(@user, pseud)
 	end
   end
 
@@ -98,9 +98,9 @@ module UsersHelper
       total = Series.visible_logged_in.exclude_anonymous.for_pseuds(user.pseuds).length
     end
     if @user == current_user
-  	  span_if_current t('my_series', :default => "My Series ({{series_number}})", :series_number => total.to_s), user_series_index_path(@user)
+  	  span_if_current t('users_helper.my_series', :default => "My Series ({{series_number}})", :series_number => total.to_s), user_series_index_path(@user)
   	else
-  	  span_if_current t('series', :default => "Series ({{series_number}})", :series_number => total.to_s), user_series_index_path(@user)
+  	  span_if_current t('users_helper.series', :default => "Series ({{series_number}})", :series_number => total.to_s), user_series_index_path(@user)
   	end
   end
   
@@ -111,20 +111,20 @@ module UsersHelper
       total = Series.visible_logged_in.exclude_anonymous.for_pseuds([pseud]).length
     end
   	if @user == current_user
-  	  span_if_current t('my_series', :default => "My Series ({{series_number}})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)
+  	  span_if_current t('users_helper.my_series', :default => "My Series ({{series_number}})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)
   	else
-  	  span_if_current t('series', :default => "Series ({{series_number}})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)
+  	  span_if_current t('users_helper.series', :default => "Series ({{series_number}})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)
   	end
   end
 
   def print_drafts_link(user)
     total = @user.unposted_works.size
-    span_if_current t('my_drafts', :default => "My Drafts") + " (#{total})", drafts_user_works_path(@user)
+    span_if_current t('users_helper.my_drafts', :default => "My Drafts") + " (#{total})", drafts_user_works_path(@user)
   end
   
-  def authored_items(pseud)
-    visible_works = pseud.visible_works_count
-    visible_recs = pseud.visible_recs_count
+  def authored_items(pseud, work_counts={}, rec_counts={})
+    visible_works = pseud.respond_to?(:work_count) ? pseud.work_count.to_i : (work_counts[pseud.id] || 0)
+    visible_recs = pseud.respond_to?(:rec_count) ? pseud.rec_count.to_i : (rec_counts[pseud.id] || 0)
     items = (visible_works == 1) ? link_to(visible_works.to_s + " work", user_pseud_works_path(pseud.user, pseud)) : ((visible_works > 1) ? link_to(visible_works.to_s + " works", user_pseud_works_path(pseud.user, pseud)) : "")
     if (visible_works > 0) && (visible_recs > 0)
       items += " | "
@@ -161,21 +161,21 @@ module UsersHelper
 
   def log_item_action_name(action)
     if action == ArchiveConfig.ACTION_ACTIVATE
-      t('log_validated', :default => 'Account Validated')
+      t('users_helper.log_validated', :default => 'Account Validated')
     elsif action == ArchiveConfig.ACTION_ADD_ROLE
-      t('log_role_added', :default => 'Role Added: ')
+      t('users_helper.log_role_added', :default => 'Role Added: ')
     elsif action == ArchiveConfig.ACTION_REMOVE_ROLE
-      t('log_role_removed', :default => 'Role Removed: ')
+      t('users_helper.log_role_removed', :default => 'Role Removed: ')
     elsif action == ArchiveConfig.ACTION_SUSPEND
-      t('log_suspended', :default => 'Suspended until ')
+      t('users_helper.log_suspended', :default => 'Suspended until ')
     elsif action == ArchiveConfig.ACTION_UNSUSPEND
-      t('log_lift_suspension', :default => 'Suspension Lifted')
+      t('users_helper.log_lift_suspension', :default => 'Suspension Lifted')
     elsif action == ArchiveConfig.ACTION_BAN
-      t('log_ban', :default => 'Suspended Permanently')
+      t('users_helper.log_ban', :default => 'Suspended Permanently')
     elsif action == ArchiveConfig.ACTION_WARN
-      t('log_warn', :default => 'Warned')
+      t('users_helper.log_warn', :default => 'Warned')
     elsif action == ArchiveConfig.ACTION_RENAME
-      t('log_rename', :default => 'Username Changed')
+      t('users_helper.log_rename', :default => 'Username Changed')
     end
   end
   

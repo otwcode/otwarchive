@@ -28,6 +28,7 @@
     <dt><%= ew.label :url, t('form_url', :default => "URL: ") %></dt>
     <dd>
 	    <%= ew.text_field :url, :value => params[:url_from_external] %>
+	    <%= autocomplete_text_field "bookmark_external_url", :no_comma => true -%>
 	    <%= observe_field 'bookmark_external_url', :url => {:controller => 'external_works', :action => 'fetch'}, :with => 'external_url', :on => 'blur' %>
 	    <%= hidden_field 'fetched', :value => '' %>
     </dd>
@@ -52,7 +53,8 @@
   </fieldset>
   <fieldset>
     <legend>Work Tags</legend>
-    <p><%= "Author's Tags (comma separated, #{ArchiveConfig.TAG_MAX} characters per tag). Please note that only fandom is required." -%><%= link_to_help "tagging-help" -%></p>
+    <p><%= t('authors_tags', :default => "Author's Tags (comma separated, {{max}} characters per tag). Please note that only fandom is required.", :max => ArchiveConfig.TAG_MAX) -%>
+    <%= link_to_help "tagging-help" -%></p>
   <dl>
     <dt>
       <%= ew.label :fandom_string, Fandom::NAME.pluralize -%>
@@ -106,7 +108,8 @@
     <%= f.text_field :tag_string, :size => 80 %>
     <%= autocomplete_text_field "tag_string" -%>
     <p class="character_counter">
-      <%=h t("comma_separated", :default => "Comma separated, #{ArchiveConfig.TAG_MAX} characters per tag") %>
+      <%=h t("user_tags", :default => "Comma separated, {{max}} characters per tag", :max => ArchiveConfig.TAG_MAX) %>
+    </p>
   </dd>
 </dl>
 </fieldset>

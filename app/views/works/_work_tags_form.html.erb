@@ -1,5 +1,5 @@
 <fieldset class="work meta">
-  <p><%= h t('tags', :default =>"Work Tags (comma separated, #{ArchiveConfig.TAG_MAX} characters per tag)") -%><%= link_to_help "tagging-help" -%></p>
+  <p><%= h t('tags', :default =>"Work Tags (comma separated, {{max}} characters per tag)", :max => ArchiveConfig.TAG_MAX) -%><%= link_to_help "tagging-help" -%></p>
   <dl>
     <dt class="rating required">
       <label for="work_rating_string"><%= Rating::NAME -%>*<%= link_to_help "rating-help" -%></label>

@@ -26,15 +26,19 @@ class People
   end
 
   def pseuds
-    Pseud.find(:all, :conditions => ["name LIKE ?", escaped + '%' ], :order => "name")
+    Pseud.find(:all, :include => :user, :conditions => ["name LIKE ?", escaped + '%' ], :order => "name")
   end
 
   def authors
-    pseuds.select {|a| a.visible_works_count > 0}
+    if User.current_user == :false
+      Pseud.with_public_works.find(:all, :include => :user, :conditions => ["name LIKE ?", escaped + '%' ], :order => "name")    
+    else
+      Pseud.with_posted_works.find(:all, :include => :user, :conditions => ["name LIKE ?", escaped + '%' ], :order => "name")
+    end
   end
 
   def reccers
-    pseuds.select {|a| a.visible_recs_count > 0}
+    Pseud.with_public_recs.find(:all, :include => :user, :conditions => ["name LIKE ?", escaped + '%' ], :order => "name")
   end
 
 end

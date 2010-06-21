@@ -152,5 +152,9 @@ class AutocompleteController < ApplicationController
       render_output(ExternalWork.find(:all, :conditions => ["url LIKE ?", '%' + params[:external_work_url] + '%'], :limit => 10, :order => :url).map(&:url))    
     end    
   end
-  
+  def bookmark_external_url
+    unless params[:bookmark_external_url].blank?
+      render_output(ExternalWork.find(:all, :conditions => ["url LIKE ?", '%' + params[:bookmark_external_url] + '%'], :limit => 10, :order => :url).map(&:url))    
+    end    
+  end
 end

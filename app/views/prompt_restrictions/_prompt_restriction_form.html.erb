@@ -51,7 +51,7 @@
         <% restriction.build_tag_set unless restriction.tag_set %>
         <% prompt_restriction_form.fields_for :tag_set_attributes do |tag_set_form| %>
           <% TagSet::TAG_TYPES.each do |tag_type| %>
-            <dt><%= tag_set_form.label "#{tag_type}_tagnames".to_sym, t("offer_restrictions.#{tag_type}_tagnames", :default => "#{tag_type.classify}: ") %> </dt>
+            <dt><%= tag_set_form.label "#{tag_type}_tagnames".to_sym, "#{tag_type.classify}: " %> </dt>
             <dd>
               <%= tag_set_form.text_area "#{tag_type}_tagnames".to_sym, :rows => 2, :cols => 50, 
                     :value => (restriction.tag_set ? eval("restriction.tag_set.#{tag_type}_tagnames") : "") %>

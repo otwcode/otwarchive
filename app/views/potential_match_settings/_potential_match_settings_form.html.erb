@@ -26,7 +26,7 @@
       <dd><%= match_settings_form.select(:num_required_prompts, PotentialMatchSettings::REQUIRED_MATCH_OPTIONS.select {|k,v| k != "0"}, :selected => potential_match_settings.num_required_prompts) -%></dd>
       
       <% %w(fandoms characters pairings freeforms categories ratings warnings).each do |type| %>
-        <dt><%= match_settings_form.label("num_required_#{type}", t("#{type}", :default => "#{type.capitalize}:")) -%></dt>
+        <dt><%= match_settings_form.label("num_required_#{type}", "#{type.capitalize}:") -%></dt>
         <dd><%= match_settings_form.select("num_required_#{type}", PotentialMatchSettings::REQUIRED_MATCH_OPTIONS, :selected => potential_match_settings.send("num_required_#{type}")) -%></dd>
       <% end %>
 
@@ -36,7 +36,7 @@
       </dt>
       <% %w(fandoms characters pairings freeforms categories ratings warnings).each do |type| %>
         <dd>
-          <%= match_settings_form.label("include_optional_#{type}", t("potential_match_settings.include_optional_#{type}", :default => "#{type.capitalize}")) %><%= match_settings_form.check_box("include_optional_#{type}", :checked => potential_match_settings.send("include_optional_#{type}")) %>
+          <%= match_settings_form.label("include_optional_#{type}", type.capitalize) %><%= match_settings_form.check_box("include_optional_#{type}", :checked => potential_match_settings.send("include_optional_#{type}")) %>
         </dd>
       <% end %>
     </dl>

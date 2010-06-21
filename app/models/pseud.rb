@@ -67,6 +67,38 @@ class Pseud < ActiveRecord::Base
     }
   }
   
+  named_scope :with_posted_works, {
+    :select => "pseuds.*, count(pseuds.id) AS work_count",
+    :joins => :works,
+    :conditions => {:works => {:posted => true, :hidden_by_admin => false}},
+    :group => 'pseuds.id',
+    :order => :name
+  }
+  
+  named_scope :with_public_works, {
+    :select => "pseuds.*, count(pseuds.id) AS work_count",
+    :joins => :works,
+    :conditions => {:works => {:posted => true, :hidden_by_admin => false, :restricted => false}},
+    :group => 'pseuds.id',
+    :order => :name
+  }
+
+  named_scope :with_public_bookmarks, {
+    :select => "pseuds.*, count(pseuds.id) AS bookmark_count",
+    :joins => :bookmarks,
+    :conditions => {:bookmarks => {:private => false, :hidden_by_admin => false}},
+    :group => 'pseuds.id',
+    :order => :name   
+  }
+  
+  named_scope :with_public_recs, {
+    :select => "pseuds.*, count(pseuds.id) AS rec_count",
+    :joins => :bookmarks,
+    :conditions => {:bookmarks => {:private => false, :hidden_by_admin => false, :rec => true}},
+    :group => 'pseuds.id',
+    :order => :name   
+  }
+  
   named_scope :alphabetical, :order => :name
   named_scope :starting_with, lambda {|letter| {:conditions => ['SUBSTR(name,1,1) = ?', letter]}}
   
@@ -88,7 +120,11 @@ class Pseud < ActiveRecord::Base
 
   # Gets the number of works by this user that the current user can see
   def visible_works_count
-    self.works(:all, :select => 'id, restricted, posted, hidden_by_admin').select{|w| w.visible?(User.current_user)}.uniq.size
+    if User.current_user == :false
+      self.works.posted.unhidden.unrestricted.count      
+    else
+      self.works.posted.unhidden.count
+    end
   end
 
   # Gets the number of recs by this user
@@ -96,6 +132,58 @@ class Pseud < ActiveRecord::Base
     self.recs.public.size
   end
   
+  named_scope :public_work_count_for, lambda {|pseud_ids|
+    {
+      :select => "pseuds.id, count(pseuds.id) AS work_count",
+      :joins => :works,
+      :conditions => {:works => {:posted => true, :hidden_by_admin => false, :restricted => false}, :pseuds => {:id => pseud_ids}},
+      :group => 'pseuds.id'
+    }
+  }  
+
+  named_scope :posted_work_count_for, lambda {|pseud_ids|
+    {
+      :select => "pseuds.id, count(pseuds.id) AS work_count",
+      :joins => :works,
+      :conditions => {:works => {:posted => true, :hidden_by_admin => false}, :pseuds => {:id => pseud_ids}},
+      :group => 'pseuds.id'
+    }
+  }
+
+  named_scope :public_rec_count_for, lambda {|pseud_ids|
+    {
+      :select => "pseuds.id, count(pseuds.id) AS rec_count",
+      :joins => :bookmarks,
+      :conditions => {:bookmarks => {:private => false, :hidden_by_admin => false, :rec => true}, :pseuds => {:id => pseud_ids}},
+      :group => 'pseuds.id'
+    }
+  }
+  
+  def self.rec_counts_for_pseuds(pseuds)
+    if pseuds.blank?
+      {}
+    else
+      pseuds_with_counts = Pseud.public_rec_count_for(pseuds.collect(&:id))
+      count_hash = {}
+      pseuds_with_counts.each {|p| count_hash[p.id] = p.rec_count.to_i}
+      count_hash    
+    end
+  end
+  
+  def self.work_counts_for_pseuds(pseuds)
+    if pseuds.blank?
+      {}
+    else    
+      if User.current_user == :false
+        pseuds_with_counts = Pseud.public_work_count_for(pseuds.collect(&:id))
+      else
+        pseuds_with_counts = Pseud.posted_work_count_for(pseuds.collect(&:id))
+      end
+      count_hash = {}
+      pseuds_with_counts.each {|p| count_hash[p.id] = p.work_count.to_i}
+      count_hash    
+    end
+  end 
   
   # Options can include :categories and :limit
   # Gets all the canonical tags used by a given pseud (limited to certain 

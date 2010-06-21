@@ -28,7 +28,7 @@
   
 
       <dt class="summary">
-        <%= f.label :summary, t('summary', :default =>"Summary (max " + ArchiveConfig.SUMMARY_MAX.to_s + " characters)") %>
+        <%= f.label :summary, t('summary', :default =>"Summary (max {{max}} characters)", :max => ArchiveConfig.SUMMARY_MAX.to_s) %>
       </dt>
       <dd class="summary">
         <%= f.text_area :summary, :rows => 4, :cols => 60, :class => "summary-field" %>
