@@ -13,6 +13,8 @@ class PeopleController < ApplicationController
         flash.now[:error] = t('errors.search_engine_down', :default => "The search engine seems to be down at the moment, sorry!")
       end
     end
+    @rec_counts = Pseud.rec_counts_for_pseuds(@people)
+    @work_counts = Pseud.work_counts_for_pseuds(@people)
   end  
 
     
