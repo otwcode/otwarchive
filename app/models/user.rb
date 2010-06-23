@@ -259,9 +259,9 @@ class User < ActiveRecord::Base
     self.is_archivist?
   end
   
-  # Set tag wrangler role for this user and log change
-  def archivist=(is_tag_wrangler)
-    if is_tag_wrangler == "1"
+  # Set archivist role for this user and log change
+  def archivist=(should_be_archivist)
+    if should_be_archivist == "1"
       unless self.is_archivist?
         self.is_archivist
         self.create_log_item( options = {:action => ArchiveConfig.ACTION_ADD_ROLE, :role_id => Role.find_by_name('archivist').id, :note => 'Change made by Admin'})
