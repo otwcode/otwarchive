@@ -1,3 +1,17 @@
+<!--page description, messages-->
+<% if @work.unrevealed? %>
+<p class="message"><%= t('.works.unrevealed', :default => "This work is part of an ongoing challenge, {{challenge}}, and will be revealed soon!",
+    :challenge => @work.collections.unrevealed.collect {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ")) -%></p>
+<% end %>
+<!--/descriptions-->
+
+<!--subnav-->
+<%- if logged_in_as_admin? -%>
+<%= render :partial => 'admin/admin_options', :locals => {:item => @work} %>
+<%- end -%>
+<!--/subnav-->
+
+<% if !@work.unrevealed? || logged_in_as_admin? || is_author_of?(@work) || (@work.unrevealed? && can_see_work(@work, current_user)) %>
 <!-- BEGIN work --> 
 <div class="work"><p class="landmark"><a name="top">&nbsp;</a></p>
   <%= render :partial => 'works/work_header' -%>
@@ -24,3 +38,4 @@
 <!-- BEGIN comment section -->
 <%= render :partial => 'comments/commentable', :locals => {:commentable => @chapter} %>
 <!-- END comment section -->
+<%- end -%>
