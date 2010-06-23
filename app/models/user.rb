@@ -246,7 +246,7 @@ class User < ActiveRecord::Base
   
   # Method for setting user roles, used by the various role setter methods
   def set_user_role(role_name, should_have_role)
-    role = Role.find_by_name(role_name)
+    role = Role.find_or_create_by_name(role_name)
     if should_have_role
       unless self.roles.include?(role)
         self.roles << role
