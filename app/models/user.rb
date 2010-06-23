@@ -220,18 +220,8 @@ class User < ActiveRecord::Base
   end
   
   # Set translator role for this user and log change
-  def translation_admin=(is_translation_admin)
-    if is_translation_admin == "1"
-      unless self.is_translation_admin?
-        self.is_translation_admin
-        self.create_log_item( options = {:action => ArchiveConfig.ACTION_ADD_ROLE, :role_id => Role.find_by_name('translation_admin').id, :note => 'Change made by Admin'})
-      end
-    else
-      if self.is_translation_admin?
-        self.is_not_translation_admin
-        self.create_log_item( options = {:action => ArchiveConfig.ACTION_REMOVE_ROLE, :role_id => Role.find_by_name('translation_admin').id, :note => 'Change made by Admin'})
-      end
-    end
+  def translation_admin=(should_be_translation_admin)
+    set_user_role('translation_admin', should_be_translation_admin == '1')
   end
    
   # Is this user an authorized tag wrangler?
@@ -240,18 +230,8 @@ class User < ActiveRecord::Base
   end
   
   # Set tag wrangler role for this user and log change
-  def tag_wrangler=(is_tag_wrangler)
-    if is_tag_wrangler == "1"
-      unless self.is_tag_wrangler?
-        self.is_tag_wrangler
-        self.create_log_item( options = {:action => ArchiveConfig.ACTION_ADD_ROLE, :role_id => Role.find_by_name('tag_wrangler').id, :note => 'Change made by Admin'})
-      end
-    else
-      if self.is_tag_wrangler?
-        self.is_not_tag_wrangler
-        self.create_log_item( options = {:action => ArchiveConfig.ACTION_REMOVE_ROLE, :role_id => Role.find_by_name('tag_wrangler').id, :note => 'Change made by Admin'})
-      end
-    end
+  def tag_wrangler=(should_be_tag_wrangler)
+    set_user_role('tag_wrangler', should_be_tag_wrangler == '1')
   end
 
   # Is this user an authorized archivist?
@@ -261,17 +241,23 @@ class User < ActiveRecord::Base
   
   # Set archivist role for this user and log change
   def archivist=(should_be_archivist)
-    if should_be_archivist == "1"
-      unless self.is_archivist?
-        self.is_archivist
-        self.create_log_item( options = {:action => ArchiveConfig.ACTION_ADD_ROLE, :role_id => Role.find_by_name('archivist').id, :note => 'Change made by Admin'})
+    set_user_role('archivist', should_be_archivist == '1')
+  end
+  
+  # Method for setting user roles, used by the various role setter methods
+  def set_user_role(role_name, should_have_role)
+    role = Role.find_by_name(role_name)
+    if should_have_role
+      unless self.roles.include?(role)
+        self.roles << role
+        self.create_log_item( options = {:action => ArchiveConfig.ACTION_ADD_ROLE, :role_id => role.id, :note => 'Change made by Admin'})
       end
     else
-      if self.is_archivist?
-        self.is_not_archivist
-        self.create_log_item( options = {:action => ArchiveConfig.ACTION_REMOVE_ROLE, :role_id => Role.find_by_name('archivist').id, :note => 'Change made by Admin'})
+      if self.roles.include?(role)
+        self.roles.delete(role)
+        self.create_log_item( options = {:action => ArchiveConfig.ACTION_REMOVE_ROLE, :role_id => role.id, :note => 'Change made by Admin'})
       end
-    end
+    end    
   end
   
   # Creates log item tracking changes to user
