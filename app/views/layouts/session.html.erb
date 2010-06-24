@@ -18,7 +18,7 @@
 		<div id="main" class="<%= controller.controller_name + '-' + controller.action_name -%> session">
 			<%= flash_div :error, :warning, :notice %>
 			<h1 role="banner"><%= link_to ArchiveConfig.APP_NAME , :controller => 'home', :action => 'index' %></h1>
-			<h2 role="banner"><%=h t('layout.session.project_of_otw', :default => "A project of the") %> <a href="http://transformativeworks.org"><%=h "Organization For Transformative Works" %></a></h2>
+			<h2 role="banner"><%=h t('.layout.session.project_of_otw', :default => "A project of the") %> <a href="http://transformativeworks.org"><%=h "Organization For Transformative Works" %></a></h2>
 			<p id="logo">
 				<%= image_tag(ArchiveConfig.LOGO, :alt => ArchiveConfig.ALT_LOGO) -%>
 			</p>

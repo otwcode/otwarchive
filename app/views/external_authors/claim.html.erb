@@ -37,29 +37,29 @@
   <%= hidden_field_tag :invitation_token, @invitation.token -%>
   <p>
     <%= radio_button_tag "imported_stories", "orphan" %>
-    <%= label_tag "imported_stories_orphan", t('claim.orphan_stories', :default => "Orphan my stories and take my contact information off them.")%>
+    <%= label_tag "imported_stories_orphan", t('.claim.orphan_stories', :default => "Orphan my stories and take my contact information off them.")%>
   <!--investigate-->
     <%= check_box_tag "remove_pseud" -%>
-    <%= label_tag "remove_pseud", t('claim.orphan_remove_pseud', :default => "Also remove my name.") -%>
+    <%= label_tag "remove_pseud", t('.claim.orphan_remove_pseud', :default => "Also remove my name.") -%>
   </p>
   <p>
     <%= radio_button_tag "imported_stories", "delete" %>
-    <%= label_tag "imported_stories_delete", t('claim.delete_stories', :default => "Please remove my stories from the archive entirely.") -%>
+    <%= label_tag "imported_stories_delete", t('.claim.delete_stories', :default => "Please remove my stories from the archive entirely.") -%>
   </p>
   <p>
     <%= f.check_box :do_not_email %>
-    <%= f.label :do_not_email, t('claim.do_not_email', :default => "Do not email me in future when stories are imported with this email address.") %>
+    <%= f.label :do_not_email, t('.claim.do_not_email', :default => "Do not email me in future when stories are imported with this email address.") %>
   </p>
   <p>
     <%= f.check_box :do_not_import %>
-    <%= f.label :do_not_import, t('claim.do_not_import', :default => "Do not import stories with this email address in future at all.") %>
+    <%= f.label :do_not_import, t('.claim.do_not_import', :default => "Do not import stories with this email address in future at all.") %>
   </p>
   <p class="important message">
     If you do not block importing, but do turn off email notification, stories from this email account may still be imported, 
     you will just not be informed. If that's not what you want, please be sure to turn off importing.
   </p>
   <p class="submit">
-    <%= f.submit t('update', :default => 'Update') %>
+    <%= f.submit t('.update', :default => 'Update') %>
   </p>
 <% end %>
 

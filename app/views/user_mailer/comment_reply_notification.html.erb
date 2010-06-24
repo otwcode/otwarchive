@@ -1,15 +1,15 @@
 <h4>
 <%= @comment.comment_owner ? (link_to @comment.comment_owner_name, @comment_owner_link_or_name) : @comment_owner_link_or_name -%>
- <%= t('user_mailer.comment_reply', :default => 'replied to your comment on') -%> 
+ <%= t('.user_mailer.comment_reply', :default => 'replied to your comment on') -%> 
 <%= link_to @commentable.commentable_name, @commentable_link -%>.
 </h4>
 
-<p><%=h t('user_mailer.comment_reply_youwrote', :default => "You wrote: ") -%></p>
+<p><%=h t('.user_mailer.comment_reply_youwrote', :default => "You wrote: ") -%></p>
 <blockquote>  
   <%=sanitize_limit_and_format_for_display @comment.commentable && @comment.commentable.content ? @comment.commentable.content : "" %>
 </blockquote>
 
-<p><%= @comment.comment_owner ? (link_to @comment.comment_owner_name, @comment_owner_link_or_name) : @comment_owner_link_or_name -%> <%= t('user_mailer.comment_reply_responded', :default => "responded:") -%></p>
+<p><%= @comment.comment_owner ? (link_to @comment.comment_owner_name, @comment_owner_link_or_name) : @comment_owner_link_or_name -%> <%= t('.user_mailer.comment_reply_responded', :default => "responded:") -%></p>
 
 <p><%=sanitize_limit_and_format_for_display @comment.content %></p>
 

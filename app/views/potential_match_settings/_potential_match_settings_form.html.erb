@@ -21,7 +21,7 @@
     
     <dl>
       <dt>
-        <%= match_settings_form.label(:num_required_prompts, t('num_required_prompts', :default => "Requests: ")) -%> 
+        <%= match_settings_form.label(:num_required_prompts, t('.num_required_prompts', :default => "Requests: ")) -%> 
       </dt>
       <dd><%= match_settings_form.select(:num_required_prompts, PotentialMatchSettings::REQUIRED_MATCH_OPTIONS.select {|k,v| k != "0"}, :selected => potential_match_settings.num_required_prompts) -%></dd>
       

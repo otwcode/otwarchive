@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h t('listing', :default => "Listing admins") %></h2>
+<h2><%=h t('.listing', :default => "Listing admins") %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -7,14 +7,14 @@
 
 <!--main content-->
 <table summary="">
-<caption><%=h t('a_list_of', :default => "All the administrator accounts in the archive.") -%></caption>
+<caption><%=h t('.a_list_of', :default => "All the administrator accounts in the archive.") -%></caption>
   <tr>
   </tr>
 
 <% for admin in @admins %>
   <tr>
-    <td><%= link_to t('show_link', :default => 'Show'), admin %></td>
-    <td><%= link_to t('destroy_link', :default => 'Destroy'), admin, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= link_to t('.show_link', :default => 'Show'), admin %></td>
+    <td><%= link_to t('.destroy_link', :default => 'Destroy'), admin, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>

@@ -1,17 +1,17 @@
 <ul class="navigation" role="navigation"><li>
-  <%= link_to(t('refine_search', :default => "Advanced search"), search_index_path(:query => @query)) %>
+  <%= link_to(t('.refine_search', :default => "Advanced search"), search_index_path(:query => @query)) %>
 </li></ul>
 
 <p>
-  <%= t('you_searched_for', :default => 'You searched for:') %>
-    <%- unless @query[:text].blank? %><%= t('text', :default => 'Text') %>: <%= @query[:text] %> <%- end %>
-    <%- unless @query[:tag].blank? %><%= t('tag', :default => 'Tag') %>: <%= @query[:tag] %> <%- end %>
-    <%- unless @query[:title].blank? %><%= t('title', :default => 'Title') %>: <%=  @query[:title] %> <%- end %>
-    <%- unless @query[:author].blank? %><%= t('author', :default => 'Author') %>: <%= @query[:author] %> <%- end %>
-    <%- unless @query[:words].blank? %><%= t('words', :default => 'Words') %>: <%= @query[:words] %> <%- end %>
-    <%- unless @query[:hits].blank? %><%= t('hits', :default => 'Hits') %>: <%= @query[:hits] %> <%- end %>
-    <%- unless @query[:date].blank? %><%= t('date_desc', :default => 'Date') %>: <%= @query[:date] %> <%- end %>
-    <%- unless @query[:language].blank? %><%= t('language', :default => 'Language') %>: <%= @query[:language] %> <%- end %>
+  <%= t('.you_searched_for', :default => 'You searched for:') %>
+    <%- unless @query[:text].blank? %><%= t('.text', :default => 'Text') %>: <%= @query[:text] %> <%- end %>
+    <%- unless @query[:tag].blank? %><%= t('.tag', :default => 'Tag') %>: <%= @query[:tag] %> <%- end %>
+    <%- unless @query[:title].blank? %><%= t('.title', :default => 'Title') %>: <%=  @query[:title] %> <%- end %>
+    <%- unless @query[:author].blank? %><%= t('.author', :default => 'Author') %>: <%= @query[:author] %> <%- end %>
+    <%- unless @query[:words].blank? %><%= t('.words', :default => 'Words') %>: <%= @query[:words] %> <%- end %>
+    <%- unless @query[:hits].blank? %><%= t('.hits', :default => 'Hits') %>: <%= @query[:hits] %> <%- end %>
+    <%- unless @query[:date].blank? %><%= t('.date_desc', :default => 'Date') %>: <%= @query[:date] %> <%- end %>
+    <%- unless @query[:language].blank? %><%= t('.language', :default => 'Language') %>: <%= @query[:language] %> <%- end %>
     </p>
 
 <%- form_tag url_for(:controller => 'works', :action => 'search'), :class => 'search', :method => :get do -%>
@@ -32,7 +32,7 @@
   <%= hidden_field_tag "query[language]", @query[:language], :id => 'refine_language' %>
   
   <span class="submit">
-    <%= submit_tag t('forms.search', :default => 'Refine search'), :class => 'button', :name => nil %>
+    <%= submit_tag t('.forms.search', :default => 'Refine search'), :class => 'button', :name => nil %>
   </span>
 </fieldset>
 <% end -%>

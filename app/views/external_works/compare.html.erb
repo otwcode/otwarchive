@@ -5,7 +5,7 @@
         <%= label_tag :external_work_url -%>: 
         <%= text_field_tag :external_work_url, params[:external_work_url] %>
         <%= autocomplete_text_field "external_work_url", :no_comma => true -%>
-        <%= submit_tag t('forms.search', :default => 'Search') %>
+        <%= submit_tag t('.forms.search', :default => 'Search') %>
       </p>
   </fieldset>
 <%- end -%>

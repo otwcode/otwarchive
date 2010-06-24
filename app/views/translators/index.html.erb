@@ -1,9 +1,9 @@
 <!--Descriptive page name, messages and instructions-->
 <h2>
 <%- if @locale -%>
-  <%= t('translators_for_locale', :default => 'Translators for {{current_locale}}', :current_locale => @locale.name) %>
+  <%= t('.translators_for_locale', :default => 'Translators for {{current_locale}}', :current_locale => @locale.name) %>
 <%- else -%>  
-  <%= t('translators_header', :default => 'Translators') %>
+  <%= t('.translators_header', :default => 'Translators') %>
 <%- end -%>
 </h2>
 <!--/descriptions-->
@@ -11,7 +11,7 @@
 <!--subnav-->
 <%- if current_user.is_a?(User) && current_user.is_translation_admin? -%>
 <ul class="navigation">
-<li><%= link_to t('link_to_new', :default => 'Add new translators'), 
+<li><%= link_to t('.link_to_new', :default => 'Add new translators'), 
         (@locale ? new_locale_translator_path(@locale) : new_translator_path) %></li>
 </ul>
 <%- end -%>
@@ -19,13 +19,13 @@
 
 <!--main content-->
 <table id="translators_table" summary="">
-  <caption><%=h t('list', :default => "List of active translators") -%></caption>
+  <caption><%=h t('.list', :default => "List of active translators") -%></caption>
   <thead>
 	<tr>
-  	<th scope="col"><%=h t('name', :default => "Name") -%></th>
-  	<th scope="col"><%=h t('email', :default => "Email") -%></th>
+  	<th scope="col"><%=h t('.name', :default => "Name") -%></th>
+  	<th scope="col"><%=h t('.email', :default => "Email") -%></th>
   	<%- if @locale.blank? -%>
-  	<th scope="col"><%=h t('current_locale', :default => "Locale") -%></th>
+  	<th scope="col"><%=h t('.current_locale', :default => "Locale") -%></th>
   	<%- end -%>
   </tr>
  </thead>

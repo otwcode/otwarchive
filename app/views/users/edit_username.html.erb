@@ -11,16 +11,16 @@
   <dl>
 	  <dt>Current Username</dt>
 		<dd><strong><%= @user.login %></strong></dd>
-	  <dt><%= f.label :login, t('desired_username', :default => "Desired Username") %></dt>
+	  <dt><%= f.label :login, t('.desired_username', :default => "Desired Username") %></dt>
 		<dd><%= f.text_field :login %></dd>
     <%= live_validation_for_field('user_login', 
 				      :exclusion => User.find(:all, :select => :login).map{|user| user.login}, 
-				      :failureMessage => t('username_taken', :default => "username already taken"),
-				      :validMessage => t('username_available', :default => "username available")) -%>
+				      :failureMessage => t('.username_taken', :default => "username already taken"),
+				      :validMessage => t('.username_available', :default => "username available")) -%>
   </dl>
   <p>Please also enter your password in order to change your username.</p>
   <dl id="passwd">
-	  <dt><%= f.label :password, t('password', :default => "Password") %></dt>
+	  <dt><%= f.label :password, t('.password', :default => "Password") %></dt>
 	  <dd><%= f.password_field :password %></dd>
 	</dl>
   

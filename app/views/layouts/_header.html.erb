@@ -8,7 +8,7 @@
 
 <div id="header"<% if @collection %> class="collection"<% end %> role="banner">
 	<% if @collection %>
-	  <h1 class="collection"><%= link_to ArchiveConfig.APP_NAME, root_path -%> <% unless ArchiveConfig.REVISION.blank? %> (BETA <%=h t('revision', :default => 'rev. {{rev_number}}', :rev_number => ArchiveConfig.REVISION) %>)<% end %></h1>
+	  <h1 class="collection"><%= link_to ArchiveConfig.APP_NAME, root_path -%> <% unless ArchiveConfig.REVISION.blank? %> (BETA <%=h t('.revision', :default => 'rev. {{rev_number}}', :rev_number => ArchiveConfig.REVISION) %>)<% end %></h1>
 	<% end %>
   <div id="login-block">
   <%- if logged_in? || logged_in_as_admin? -%>
@@ -17,8 +17,8 @@
     <ul id="greeting" class="logged-out">
       <li>
 		    <%= render :partial => 'session/login' -%>
-        <span><a id='signin_closed' onclick='toggleLogin("signin")' style='display:none;'><%=h t('layout.header.sign_in', :default => 'Log in') %></a>
-        <a id='signin_open' onclick='toggleLogin("signin")'><%=h t('links.cancel', :default => 'Cancel') %></a></span>
+        <span><a id='signin_closed' onclick='toggleLogin("signin")' style='display:none;'><%=h t('.layout.header.sign_in', :default => 'Log in') %></a>
+        <a id='signin_open' onclick='toggleLogin("signin")'><%=h t('.links.cancel', :default => 'Cancel') %></a></span>
 		  </li>
     </ul>
   <% end -%>
@@ -26,10 +26,10 @@
 </div>
 
 <% if @collection -%>
-  <h1 class="collections"><%= @collection.title ? @collection.title : (@collection_parent ? @collection_parent.title : t('layouts.new_collection', :default => "New Collection")) -%></h1>
+  <h1 class="collections"><%= @collection.title ? @collection.title : (@collection_parent ? @collection_parent.title : t('.layouts.new_collection', :default => "New Collection")) -%></h1>
 <% else -%>
   <h1><%= link_to ArchiveConfig.APP_NAME, root_path %>
-  <% unless ArchiveConfig.REVISION.blank? %> (BETA <%=h t('revision', :default => 'rev. {{rev_number}}', :rev_number => ArchiveConfig.REVISION) %>)<% end %>
+  <% unless ArchiveConfig.REVISION.blank? %> (BETA <%=h t('.revision', :default => 'rev. {{rev_number}}', :rev_number => ArchiveConfig.REVISION) %>)<% end %>
   </h1>
 <% end -%>
 

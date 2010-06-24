@@ -17,7 +17,7 @@
 
   <% if @collection.children.empty? %>
 	<dt>
-    <%= collection_form.label :parent_name, t('collections.parent_name', :default => "Parent collection (must be one you maintain): ") -%></dt>
+    <%= collection_form.label :parent_name, t('.collections.parent_name', :default => "Parent collection (must be one you maintain): ") -%></dt>
     <dd>
       <%= collection_form.text_field :parent_name -%>
       <%= autocomplete_text_field("collection_parent_name", :no_comma => true) -%>      

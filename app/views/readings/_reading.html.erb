@@ -1,25 +1,25 @@
 <div class="reading module">
 <% if reading.work.nil? %>
-  <h3><%= t('deleted_work', :default => '(deleted work, last viewed {{date}})', :date => reading.updated_at) -%></h3>
+  <h3><%= t('.deleted_work', :default => '(deleted work, last viewed {{date}})', :date => reading.updated_at) -%></h3>
 <% else %>
   <ul><%= render :partial => 'works/work_blurb', :locals => {:work => 
 reading.work} %></ul>
   <h3>
-  <%= t('last_read', :default => '<span>Last viewed:</span> {{date}}', :date => set_format_for_date(reading.updated_at)) %> 
+  <%= t('.last_read', :default => '<span>Last viewed:</span> {{date}}', :date => set_format_for_date(reading.updated_at)) %> 
   <% if reading.major_version_read < reading.work.major_version -%>
-    <%= t('new_version_available', :default => '(New version available.)') %>
+    <%= t('.new_version_available', :default => '(New version available.)') %>
   <% elsif reading.minor_version_read != reading.work.minor_version -%>
-    <%= t('minor_edits', :default => '(Minor edits made since then.)') %>
+    <%= t('.minor_edits', :default => '(Minor edits made since then.)') %>
   <% else -%>
-    <%= t('most_recent_version', :default => '(Most recent version.)') %>
+    <%= t('.most_recent_version', :default => '(Most recent version.)') %>
   <% end -%>	  
-  <%= t('view_count', :default => 'Number of times viewed: {{count}}', 
+  <%= t('.view_count', :default => 'Number of times viewed: {{count}}', 
 :count => reading.view_count) %>
   </h3>
 <% end %>
 <!-- actions -->
   <ul class="navigation">
-     <li><%= link_to t('links.delete', :default => "Delete"), user_reading_path(current_user, reading), :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
+     <li><%= link_to t('.links.delete', :default => "Delete"), user_reading_path(current_user, reading), :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
   </ul>
 </div>
 

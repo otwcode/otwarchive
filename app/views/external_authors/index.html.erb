@@ -1,8 +1,8 @@
 <% if @user && current_user == @user -%>
-<h2><%= t('external_authors_for', :default => "External author identities for {{user}}", :user => @user.login) -%></h2>
+<h2><%= t('.external_authors_for', :default => "External author identities for {{user}}", :user => @user.login) -%></h2>
 
   <p>
-    <%= t('external_authors_explanation', 
+    <%= t('.external_authors_explanation', 
     :default => "If the owner of an archive where you previously kept your stories under a different email address moves or backs up that archive into the AO<sup>3</sup>, 
     you will be given control over those stories under that email address here.)") -%>
   </p>
@@ -10,11 +10,11 @@
   <!--
   Adding/removing new external identities is coming soon 
     <ul class="navigation">
-      <li><%= link_to t('new_external_author', :default => 'New external author identity'), new_user_external_author_path(@user) %></li>
+      <li><%= link_to t('.new_external_author', :default => 'New external author identity'), new_user_external_author_path(@user) %></li>
     </ul>
   -->
 <% elsif current_user.archivist -%>
-<h2><%= t('external_authors_unclaimed', :default => "External Authors Imported") %></h2>
+<h2><%= t('.external_authors_unclaimed', :default => "External Authors Imported") %></h2>
 <% end %>
 
 <ul class="index">
@@ -23,11 +23,11 @@
       <h4>Identity: <%= external_author.external_author_names.collect(&:name).join(", ") -%>
       </h4>
       <% if external_author.do_not_email -%>
-        <p><%= t('do_not_email', :default => "No notifications will be sent to this email address." ) -%></p>
+        <p><%= t('.do_not_email', :default => "No notifications will be sent to this email address." ) -%></p>
       <%- end -%>
 
       <% if external_author.do_not_import -%>
-        <p><%= t('do_not_import', :default => "Archivists may not import stories with this email." ) -%></p>
+        <p><%= t('.do_not_import', :default => "Archivists may not import stories with this email." ) -%></p>
       <%- end -%>
       
       <h4>Works:</h4>
@@ -40,11 +40,11 @@
     
       <% if @user && current_user == @user -%>
         <ul class="navigation">
-          <li><%= link_to t('edit_link', :default => 'Edit'), [:edit, @user, external_author] -%></li>
+          <li><%= link_to t('.edit_link', :default => 'Edit'), [:edit, @user, external_author] -%></li>
           <!-- coming soon 
           <li>
-            <%= link_to t('delete_link', :default => 'Delete'), [@user, external_author], 
-                          :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %>
+            <%= link_to t('.delete_link', :default => 'Delete'), [@user, external_author], 
+                          :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :delete %>
           </li>
           -->
         </ul>

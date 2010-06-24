@@ -4,7 +4,7 @@
 
 <!--subnav-->
 <ul class="navigation" role="navigation">
-	<li><%= link_to t('admin_posts_link_text', :default => 'Back to AO3 News Index'), admin_posts_path %></li>
+	<li><%= link_to t('.admin_posts_link_text', :default => 'Back to AO3 News Index'), admin_posts_path %></li>
 </ul>
 <!--/subnav-->
 
@@ -17,7 +17,7 @@
 			<h4>
 				Published:<%=h @admin_post.created_at %>  
         <%- if logged_in_as_admin? -%>
-				    <%= link_to t('edit', :default => 'Edit Post', :class => 'navigation'), edit_admin_post_path(@admin_post) %>
+				    <%= link_to t('.edit', :default => 'Edit Post', :class => 'navigation'), edit_admin_post_path(@admin_post) %>
 				<%- end -%>
       </h4>
   </div>

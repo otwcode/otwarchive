@@ -1,6 +1,6 @@
 <!-- expects local variable "challenge_signup" -->
 <% challenge_signup.offers.each_with_index do |offer, index| %>
-  <h3><%=h t('signup.show.offer', :default => "Offer {{num}}", :num => index+1) %></h3>
+  <h3><%=h t('.signup.show.offer', :default => "Offer {{num}}", :num => index+1) %></h3>
   <div class="wrapper">
     <dl class="collection meta">
       <%= offer.url.blank? ? "" : "<dt>URL:</dt><dd>" + link_to(offer.url, offer.url) + "</dd>" -%>

@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h t('edit_multiple', :default => "Editing Multiple Works") -%></h2>
+<h2><%=h t('.edit_multiple', :default => "Editing Multiple Works") -%></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -8,7 +8,7 @@
 <!--main content-->
 <% form_for :work, :url => update_multiple_user_works_path(@user), :html => { :method => :put } do |form| %>
   <h3>Works Edited</h3>
-  <p class="important message"><%=sanitize_title_for_display t('all_stories', :default => "Note that your edits will be applied to <em>all</em> of these stories, <em>replacing</em> any existing values for these fields!") %></p>
+  <p class="important message"><%=sanitize_title_for_display t('.all_stories', :default => "Note that your edits will be applied to <em>all</em> of these stories, <em>replacing</em> any existing values for these fields!") %></p>
 
   <table summary="lists the works being mass-edited">
     <caption>Lists the works being mass-edited.</caption>
@@ -31,11 +31,11 @@
     <%- end -%>
   </table>
 
-  <p class="required message"><%=h t('required_info', :default => "* Required information") %></p>
+  <p class="required message"><%=h t('.required_info', :default => "* Required information") %></p>
 
   <div id="work-form" class="work-form"><%= render :partial => 'work_tags_form', :locals => {:include_blank => true} -%></div>
 
-  <p class="submit"><%= submit_tag t('update_multiple', :default => "Update All Stories"), :confirm => "Are you sure? Remember this will replace all existing values!" %></p>
+  <p class="submit"><%= submit_tag t('.update_multiple', :default => "Update All Stories"), :confirm => "Are you sure? Remember this will replace all existing values!" %></p>
   
 <% end %>
 <!--/content-->

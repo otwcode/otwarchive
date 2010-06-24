@@ -1,4 +1,4 @@
-<!--Descriptive page name, messages and instructions--><h2><%= t('find_users', :default => "Find users:") -%></h2>
+<!--Descriptive page name, messages and instructions--><h2><%= t('.find_users', :default => "Find users:") -%></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -6,7 +6,7 @@
 
 <!--main content-->
 <% form_tag url_for(:controller => "admin/admin_users", :action => "index"), :method => :get do -%>
-    <p><%= t('search_by', :default => 'Search for a user by username, pseud or email, or search by role') -%></p>
+    <p><%= t('.search_by', :default => 'Search for a user by username, pseud or email, or search by role') -%></p>
 <dl>
     <dt><%= label_tag "query", t("user_find_query", :default => "Name or email") -%></dt>
       <dd><%= text_field_tag "query", params[:query] -%></dd>
@@ -23,20 +23,20 @@
 <%- if @users.size > 0 -%>
   <div class="wrapper">
 	<table id="admin_users_table">
-  <caption><%=h t('list', :default => "List of users") -%></caption>
+  <caption><%=h t('.list', :default => "List of users") -%></caption>
   <colgroup>
 	<col class="name"/>
 	<col span="6" />
 	</colgroup>
 	<thead>
 		<tr>
-    		<th scope="col"><%=h t('username', :default => "Username") -%></th>
-    		<th scope="col"><%=h t('email', :default => "Email") -%></th>
-    		<th scope="col"><%=h t('translation_admin', :default => "Translation Admin") -%></th>
-    		<th scope="col"><%=h t('tag_wrangler', :default => "Tag Wrangler") -%></th>
-    		<th scope="col"><%=h t('archivist', :default => "Archivist") -%></th>
-    		<th scope="col"><%=h t('update', :default => "Update") -%></th>
-    		<th scope="col"><%=h t('details', :default => "Details") -%></th>
+    		<th scope="col"><%=h t('.username', :default => "Username") -%></th>
+    		<th scope="col"><%=h t('.email', :default => "Email") -%></th>
+    		<th scope="col"><%=h t('.translation_admin', :default => "Translation Admin") -%></th>
+    		<th scope="col"><%=h t('.tag_wrangler', :default => "Tag Wrangler") -%></th>
+    		<th scope="col"><%=h t('.archivist', :default => "Archivist") -%></th>
+    		<th scope="col"><%=h t('.update', :default => "Update") -%></th>
+    		<th scope="col"><%=h t('.details', :default => "Details") -%></th>
   		</tr>
 	</thead>
 	<tbody>

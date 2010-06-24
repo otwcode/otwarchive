@@ -4,16 +4,16 @@
   <h3 class="landmark">Actions</h3>
 	<ul class="navigation" role="navigation">
 <%- if @work || @admin_post -%>
-    <li><%= link_to t('top_link_text', :default => "&#8593; Top"), :anchor => "main" %></li>
+    <li><%= link_to t('.top_link_text', :default => "&#8593; Top"), :anchor => "main" %></li>
 <%- end -%>
 <%- if @work && @previous_chapter -%>
-    <li><%= link_to t('previous_chapter', :default => "&#8592; Previous Chapter"), [@work, @previous_chapter] %></li>
+    <li><%= link_to t('.previous_chapter', :default => "&#8592; Previous Chapter"), [@work, @previous_chapter] %></li>
 <%- end -%>
 <%- if @work && @next_chapter -%>
-    <li><%= link_to t('next_chapter', :default => "Next Chapter &#8594;"), [@work, @next_chapter] %></li>
+    <li><%= link_to t('.next_chapter', :default => "Next Chapter &#8594;"), [@work, @next_chapter] %></li>
 <%- end -%>
 <%- if @admin_post -%>
-    <li><%= link_to t('admin_posts_link_text', :default => 'Back to AO3 News Index'), admin_posts_path %></li>
+    <li><%= link_to t('.admin_posts_link_text', :default => 'Back to AO3 News Index'), admin_posts_path %></li>
 <%- end -%>
 <%- if is_author_of?(commentable) && commentable.class == Work -%>
     <li id="add_collection_link"><%= collection_link(commentable) -%></li>
@@ -37,7 +37,7 @@
   <%- if params[:add_comment] -%>
     <div id="add_comment_placeholder">
       <div id="add_comment">
-        <%= render :partial => 'comments/comment_form', :locals => {:comment => Comment.new, :commentable => commentable, :button_name => t('forms.add_comment', :default => "Add Comment")}%> 		
+        <%= render :partial => 'comments/comment_form', :locals => {:comment => Comment.new, :commentable => commentable, :button_name => t('.forms.add_comment', :default => "Add Comment")}%> 		
       </div>
   <%- else -%>
     <div id="add_comment_placeholder" style="display:none;">

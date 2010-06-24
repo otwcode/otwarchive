@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h t('my_inbox', :default => 'My Inbox') %> (<%= t('inbox_count', :default => "{{total}} comments, {{unread}} unread", :total => @inbox_total, :unread => @unread) %>)</h2>
+<h2><%=h t('.my_inbox', :default => 'My Inbox') %> (<%= t('.inbox_count', :default => "{{total}} comments, {{unread}} unread", :total => @inbox_total, :unread => @unread) %>)</h2>
 
 <%= flash_div :comment_error, :comment_notice -%>
 <!--/descriptions-->
@@ -20,9 +20,9 @@
   </ul>
 	<p class="submit">
       <%= "Mark checked as:" %> 
-      <%= submit_tag t('read', :default => 'Read'), :name => 'read' %>
-      <%= submit_tag t('unread', :default => 'Unread'), :name => 'unread' %>
-      <%= submit_tag t('delete_from_inbox', :default => 'Delete From Inbox'), :name => 'delete' %>
+      <%= submit_tag t('.read', :default => 'Read'), :name => 'read' %>
+      <%= submit_tag t('.unread', :default => 'Unread'), :name => 'unread' %>
+      <%= submit_tag t('.delete_from_inbox', :default => 'Delete From Inbox'), :name => 'delete' %>
   </p>
 	</fieldset>
 	<fieldset>
@@ -76,12 +76,12 @@
       <%= hidden_field_tag("filters[replied_to]", params[:filters][:replied_to]) if params[:filters] %>
       <%= hidden_field_tag("filters[date]", params[:filters][:date]) if params[:filters] %>
       <%= "Mark checked as:" %> 
-      <%= submit_tag t('read', :default => 'Read'), :name => 'read' %>
-      <%= submit_tag t('unread', :default => 'Unread'), :name => 'unread' %>
-      <%= submit_tag t('delete_from_inbox', :default => 'Delete From Inbox'), :name => 'delete' %>
+      <%= submit_tag t('.read', :default => 'Read'), :name => 'read' %>
+      <%= submit_tag t('.unread', :default => 'Unread'), :name => 'unread' %>
+      <%= submit_tag t('.delete_from_inbox', :default => 'Delete From Inbox'), :name => 'delete' %>
     </p>
   </fieldset>
-    <!-- coming soon <%= submit_tag t('mass_reply', :default => 'mass reply') %> -->
+    <!-- coming soon <%= submit_tag t('.mass_reply', :default => 'mass reply') %> -->
   <%- end -%> <!-- end of inbox form -->
   
   <!-- we can't open comment forms inside the inbox form, which is why this is down here -->
@@ -134,7 +134,7 @@
       </dd>
     </dl>
   <%- end -%>
-  <p class="submit"><%= submit_tag t('filter_inbox', :default => 'Filter Inbox') %></p>
+  <p class="submit"><%= submit_tag t('.filter_inbox', :default => 'Filter Inbox') %></p>
 <%- end -%>
 <!--/subnav-->
 

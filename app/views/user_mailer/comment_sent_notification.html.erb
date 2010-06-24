@@ -1,4 +1,4 @@
-<h4><%= t('user_mailer.own_comment', :default => 'You left the following comment on') -%> <%= link_to @commentable.commentable_name, @commentable_link -%>:</h4> 
+<h4><%= t('.user_mailer.own_comment', :default => 'You left the following comment on') -%> <%= link_to @commentable.commentable_name, @commentable_link -%>:</h4> 
 
 <p><%=sanitize_limit_and_format_for_display @comment.content %></p>
 

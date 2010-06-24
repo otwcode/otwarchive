@@ -4,12 +4,12 @@
 <td><%= check_box_tag "work_ids[]", work.id %></td>
   <td class="navigation">
 	<ul class="navigation">
-	<li><%= link_to t('short_blurb.edit', :default => 'Edit'), edit_work_path(work) -%></li>
-	<li><%= link_to t('short_blurb.orphan_work', :default => 'Orphan'), {:controller => 'orphans', :action => 'new', :work_id => work.id} -%></li>
-	<li><%= link_to t('short_blurb.delete_work', :default => 'Delete'), work, 
-	        :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete -%></li>
+	<li><%= link_to t('.short_blurb.edit', :default => 'Edit'), edit_work_path(work) -%></li>
+	<li><%= link_to t('.short_blurb.orphan_work', :default => 'Orphan'), {:controller => 'orphans', :action => 'new', :work_id => work.id} -%></li>
+	<li><%= link_to t('.short_blurb.delete_work', :default => 'Delete'), work, 
+	        :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :delete -%></li>
 	<%- if !work.posted %>
-		<li><%= link_to t('short_blurb.post', :default => 'Post'), post_draft_work_path(work), :method => :put -%></li>
+		<li><%= link_to t('.short_blurb.post', :default => 'Post'), post_draft_work_path(work), :method => :put -%></li>
 	    <%- end -%>
 	</ul></td>
 </tr>

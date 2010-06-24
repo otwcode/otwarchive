@@ -16,14 +16,14 @@
 
       <h4 title="title">
   	    <%= link_to sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small)), @collection ? collection_work_path(@collection, work) : work %>
-   		  <%= t('title_by_author', :default => 'by') %>
+   		  <%= t('.title_by_author', :default => 'by') %>
 <%- end -%>
         
         <!-- do not cache -->
         <%= byline(work) -%>
 
 <%- cache("#{work.cache_key}-blurb-middle") do -%>
-        <%= !work.recipients.blank? ? t('works.for_recipients', :default => "for {{recipients}}", :recipients => recipients_link(work)) : "" -%>
+        <%= !work.recipients.blank? ? t('.works.for_recipients', :default => "for {{recipients}}", :recipients => recipients_link(work)) : "" -%>
    		  <%- if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") -%><%- end -%>
         <%- if work.hidden_by_admin -%><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><%- end -%>
       </h4>
@@ -57,31 +57,31 @@
 
     <!--stats-->
   	<dl class="stats" title="stats">
-  		<dt><%=h t('words', :default => 'Words') + ': ' %></dt>
+  		<dt><%=h t('.words', :default => 'Words') + ': ' %></dt>
   		<dd><%= number_with_delimiter(work.word_count) %></dd>
-  		<dt><%=h t('work_chapters', :default => 'Chapters') + ': ' %></dt>
+  		<dt><%=h t('.work_chapters', :default => 'Chapters') + ': ' %></dt>
   		<dd><%= work.chapter_total_display %></dd>
 	 
   	  <%- unless work.approved_collections.empty? %>
-  			<dt><%=h t('work_collections', :default => 'Collections') + ': ' -%></dt>
+  			<dt><%=h t('.work_collections', :default => 'Collections') + ': ' -%></dt>
   			<dd><%= link_to work.approved_collections.length, work_collections_path(work) %></dd>
   		<%- end -%>
 		
   		<%- if work.count_visible_comments > 0 -%>
-  		  <dt><%=h t('work_comments', :default => 'Comments') + ': '%></dt>
+  		  <dt><%=h t('.work_comments', :default => 'Comments') + ': '%></dt>
   			<dd><%= link_to work.count_visible_comments, 
   			            @collection ? collection_work_path(@collection, work, :anchor => "comments", :show_comments => true) : 
   			                (work.chapter_total_display.to_i > 1 ? work_path(work, :anchor => "comments", :show_comments => true, :view_full_work => 'true') : work_path(work, :anchor => "comments", :show_comments => true)) -%></dd>
   		<%- end -%>
   		<%- if (bookmark_count = work.bookmarks.public.count) > 0 -%>
-  		  <dt><%=h t('work_bookmarks', :default => 'Bookmarks') + ': '%></dt>
+  		  <dt><%=h t('.work_bookmarks', :default => 'Bookmarks') + ': '%></dt>
   			<dd><%= link_to_bookmarkable_bookmarks(work, bookmark_count.to_s) -%></dd>
   		<%- end -%>
 
 <%- end -%>		
 
     	<% if show_hit_count?(work) %>
-     		<dt><%=h t('works.hit_count', :default => "Hits: ") -%></dt>
+     		<dt><%=h t('.works.hit_count', :default => "Hits: ") -%></dt>
      		<dd><%= work.hits -%></dd>
      	<% end %>
 			
@@ -90,10 +90,10 @@
     <%- if author_of_work -%>
       <h6 class="landmark">Author Actions</h6>
   	  <ul class="navigation" role="navigation">
-  		  <li><%= link_to t('links.edit', :default => 'Edit'), edit_work_path(work) -%></li>
-  	    <li><%= link_to t('edit_tags', :default => "Edit Tags"), edit_tags_work_path(work) %></li> 
+  		  <li><%= link_to t('.links.edit', :default => 'Edit'), edit_work_path(work) -%></li>
+  	    <li><%= link_to t('.edit_tags', :default => "Edit Tags"), edit_tags_work_path(work) %></li> 
         <%- if work.is_wip %>
-          <li><%= link_to t('links.add_chapter', :default => 'Add Chapter'), new_work_chapter_path(work) -%></li>
+          <li><%= link_to t('.links.add_chapter', :default => 'Add Chapter'), new_work_chapter_path(work) -%></li>
         <%- end -%>
       </ul>
     <%- end -%>

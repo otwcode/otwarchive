@@ -84,7 +84,7 @@
             <%- end -%>
           </td>
           <%- if current_user == @user -%>
-          <td><%= link_to "Remove", {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => t('links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></td>
+          <td><%= link_to "Remove", {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></td>
           <%- end -%>
         <%- end -%>
       </tr>

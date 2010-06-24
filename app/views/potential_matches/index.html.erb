@@ -62,7 +62,7 @@
         <td><%= mailto_link assignment.offer_signup.pseud.user,  :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %></td>
         <td>
           <%= link_to "Edit", edit_collection_signup_path(@collection, assignment.offer_signup) %>
-          <%= link_to t('challenge_signups.delete', :default => "Delete"), 
+          <%= link_to t('.challenge_signups.delete', :default => "Delete"), 
                   collection_signup_path(@collection, assignment.offer_signup), :confirm => 'Are you sure?', :method => :delete %>
               
         </td>

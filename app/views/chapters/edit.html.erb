@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h t('chapters.edit.edit_chapter', :default => 'Edit Chapter') %></h2>
+<h2><%=h t('.chapters.edit.edit_chapter', :default => 'Edit Chapter') %></h2>
 
 <%= error_messages_for :chapter %>
 
@@ -9,5 +9,5 @@
 <!--/subnav-->
 
 <!--main content-->
-<%= render :partial => 'chapter_form', :locals => { :chapter => @chapter, :button_text => t('forms.update', :default => "Update") } %>
+<%= render :partial => 'chapter_form', :locals => { :chapter => @chapter, :button_text => t('.forms.update', :default => "Update") } %>
 <!--/content-->

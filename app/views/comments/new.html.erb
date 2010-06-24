@@ -1,15 +1,15 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h t('new_comment', :default => 'New comment') %></h2>
+<h2><%=h t('.new_comment', :default => 'New comment') %></h2>
 <%= error_messages_for :comment %>
 <!--/descriptions-->
 
 <!--main content-->
 <%= render :partial => 'comments/comment_form', :locals => {:comment => @comment, :commentable => @comment.commentable, 
-												:button_name => t('forms.create', :default => 'Create')} -%>
+												:button_name => t('.forms.create', :default => 'Create')} -%>
 <!--/content-->
 
 <!--subnav-->
 <ul class="navigation"><!--INVESTIGATE-->
-<li><%= link_to t('links.back', :default => 'Back'), @commentable %></li>
+<li><%= link_to t('.links.back', :default => 'Back'), @commentable %></li>
 </ul>
 <!--/subnav-->

@@ -2,15 +2,15 @@
 <% if @collection.challenge.signup_open %>
   <% if logged_in? %>
     <% if (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first) %>
-      <li><%= link_to t('gift_exchange.edit_signup', :default => "Edit Signup"), edit_collection_signup_path(@collection, @challenge_signup) %></li>
+      <li><%= link_to t('.gift_exchange.edit_signup', :default => "Edit Signup"), edit_collection_signup_path(@collection, @challenge_signup) %></li>
       <li>
-        <%= link_to t('gift_exchange.delete_signup', :default => "Cancel Signup"), 
+        <%= link_to t('.gift_exchange.delete_signup', :default => "Cancel Signup"), 
           collection_signup_path(@collection, @challenge_signup), 
-          :confirm => t('gift_exchange.confirm_delete_signup', :default => "Are you sure you want to cancel your signup? All signup information will be lost."), 
+          :confirm => t('.gift_exchange.confirm_delete_signup', :default => "Are you sure you want to cancel your signup? All signup information will be lost."), 
           :method => :delete %>
       </li>
     <% elsif (!@collection.moderated? || @collection.user_is_posting_participant?(current_user)) %>
-      <li><%= link_to t('gift_exchange.signup', :default => "Sign Up"), new_collection_signup_path(@collection) %></li>
+      <li><%= link_to t('.gift_exchange.signup', :default => "Sign Up"), new_collection_signup_path(@collection) %></li>
     <% end %>
   <% end %>
 <% end %>

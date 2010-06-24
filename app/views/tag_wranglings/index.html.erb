@@ -19,7 +19,7 @@ get started. (Note: to associate pairings with characters, first choose a fandom
   <%- form_tag url_for(:controller => 'tag_wranglings', :action => 'index'), :method => :get do -%>
   <fieldset>
     <legend>Choose fandom</legend>
-    <p><%= label_tag :fandom_string, t('fandom', :default => 'Fandom:') %> <%= text_field_tag 'fandom_string', params[:fandom_string] %><%= autocomplete_text_field "fandom_string", :no_comma => true -%></p>
+    <p><%= label_tag :fandom_string, t('.fandom', :default => 'Fandom:') %> <%= text_field_tag 'fandom_string', params[:fandom_string] %><%= autocomplete_text_field "fandom_string", :no_comma => true -%></p>
   </fieldset>
 	<fieldset>
     <legend>Submit</legend>
@@ -43,13 +43,13 @@ get started. (Note: to associate pairings with characters, first choose a fandom
   <legend>Assign and Mass Select</legend>
   <dl>
   <%- if params[:show] == "fandoms" -%>
-    <dt><%= label_tag :media, t('media', :default => 'Wrangle to Media') %></dt>
+    <dt><%= label_tag :media, t('.media', :default => 'Wrangle to Media') %></dt>
     <dd><%= select_tag :media, options_for_select(@media_names) %></dd>  
   <%- elsif params[:show] == "character_pairings" -%>
-    <dt><%= label_tag :character_string, t('character', :default => 'Wrangle to Character') %></dt>
+    <dt><%= label_tag :character_string, t('.character', :default => 'Wrangle to Character') %></dt>
     <dd><%= text_field_tag 'character_string' %><%= autocomplete_text_field "character_string", :no_comma => true -%></dd>     
   <%- else -%>      
-    <dt><%= label_tag :fandom_string, t('fandom', :default => 'Wrangle to Fandom') %></dt>
+    <dt><%= label_tag :fandom_string, t('.fandom', :default => 'Wrangle to Fandom') %></dt>
     <dd><%= text_field_tag 'fandom_string', params[:fandom_string] %><%= autocomplete_text_field "fandom_string", :no_comma => true -%></dd>  
 	<%- end -%>
 	<dt>Wrangle All <span class="landmark">the tags shown in <a href="#wrangulise">the table</a> (following)</span></dt>
@@ -81,18 +81,18 @@ get started. (Note: to associate pairings with characters, first choose a fandom
 	<thead> 
     <tr>
 			<th scope="col">
-        <%= sort_link t('sort.tag_name', :default => 'Tag Name'), :name, {:sort_default => true} -%>
+        <%= sort_link t('.sort.tag_name', :default => 'Tag Name'), :name, {:sort_default => true} -%>
       </th>
       <th scope="col">Mass Wrangle</th>         
       <th scope="col">
-        <%= sort_link t('sort.created_at', :default => 'Created'), :created_at, {:desc_default => true} -%>
+        <%= sort_link t('.sort.created_at', :default => 'Created'), :created_at, {:desc_default => true} -%>
       </th>
       <%- if params[:show] == 'character_pairings' -%>
         <th scope="col">Characters</th>  
       <%- end -%>
       <th scope="col">Canonical</th>
       <th scope="col">
-        <%= sort_link t('sort.taggings_count', :default => 'Taggings Count'), :taggings_count, {:desc_default => true} -%>
+        <%= sort_link t('.sort.taggings_count', :default => 'Taggings Count'), :taggings_count, {:desc_default => true} -%>
       </th> 
       <th scope="col">Manage</th>  
     </tr>

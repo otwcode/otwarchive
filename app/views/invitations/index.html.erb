@@ -1,8 +1,8 @@
 <!--Descriptive page name, messages and instructions-->
 <%- if logged_in_as_admin?  -%>
-<h2><%= t('create_more', :default => 'Create more invitations for this user') %></h2>
+<h2><%= t('.create_more', :default => 'Create more invitations for this user') %></h2>
   <% form_tag user_invitations_url(@user) do %>
-    <p><%= label_tag :number_of_invites, t('number_of_invites', :default => 'Number of invitations:') %> <%= text_field_tag :number_of_invites  %> <%= submit_tag 'Create' %></p>
+    <p><%= label_tag :number_of_invites, t('.number_of_invites', :default => 'Number of invitations:') %> <%= text_field_tag :number_of_invites  %> <%= submit_tag 'Create' %></p>
   <% end %> 
 <%- end -%>
   
@@ -26,9 +26,9 @@
   <p>You have <%= @user.invitations.unsent.count.to_s %> open invitations and <%= @user.invitations.unredeemed.count.to_s %> that have been sent but not yet used.</p>
   <%- form_tag url_for(:controller => 'invitations', :action => 'invite_friend', :user_id => @user) do -%>
     <dl>
-      <dt><%= label_tag :invitee_email, t('email address', :default => 'Email address') %></dt>
+      <dt><%= label_tag :invitee_email, t('.email address', :default => 'Email address') %></dt>
       <dd><%= text_field_tag :invitee_email %></dd>
-      <dt><%= label_tag :id, t('choose_invite', :default => 'Choose an invitation') %></dt>
+      <dt><%= label_tag :id, t('.choose_invite', :default => 'Choose an invitation') %></dt>
       <dd>
         <ul>
           <%- for unsent_invite in @unsent_invitations -%>
@@ -40,7 +40,7 @@
         </ul>
       </dd>
     </dl>
-    <p class="submit"><%= submit_tag t('submit_invite', :default => 'Send invite')  %></p>
+    <p class="submit"><%= submit_tag t('.submit_invite', :default => 'Send invite')  %></p>
   <%- end -%>
 <%- end -%>
 </div>

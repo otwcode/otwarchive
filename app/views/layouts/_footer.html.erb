@@ -15,7 +15,7 @@
     <%- if ENV["RAILS_ENV"] == "development"  && ArchiveConfig.DEVELOPMENT_PROFILING_ENABLED -%>
       <li> <%= link_to 'Devmode', devmode_path -%>&#8212;</li>
     <%- end -%>
-    <li><a href="http://creativecommons.org/licenses/GPL/2.0/" title="View License">GPL/CC</a> <%=h t('layout.footer.by_the_otw', :default => 'by the') %> <a href="http://transformativeworks.org/" title="The Organization for Transformative Works">OTW</a></li>
+    <li><a href="http://creativecommons.org/licenses/GPL/2.0/" title="View License">GPL/CC</a> <%=h t('.layout.footer.by_the_otw', :default => 'by the') %> <a href="http://transformativeworks.org/" title="The Organization for Transformative Works">OTW</a></li>
   </ul>
 </div>
 <!-- END footer -->

@@ -1,9 +1,9 @@
 <div class="works module" id="collection-works">
   <h3>
     <%- if collection.collection_preference.show_random || params[:show_random] -%>
-    <%=h t('collections.random_works', :default => "Random works") %>  
+    <%=h t('.collections.random_works', :default => "Random works") %>  
     <%- else -%>  
-    <%=h t('recent_works', :default => "Recent works") %>
+    <%=h t('.recent_works', :default => "Recent works") %>
     <%- end -%>
   </h3>
   <ul class="index">

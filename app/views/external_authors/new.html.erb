@@ -1,4 +1,4 @@
-<h2><%= t('new_external_author', :default => 'New external author identity') -%></h2>
+<h2><%= t('.new_external_author', :default => 'New external author identity') -%></h2>
 
 <% form_for([@user, @external_author]) do |f| %>
   <%= f.error_messages %>
@@ -25,11 +25,11 @@
     <%= f.label :do_not_import %>
   </p>
   <p class="submit">
-    <%= f.submit t('create', :default => 'Create') %>
+    <%= f.submit t('.create', :default => 'Create') %>
   </p>
 <% end %>
 
 <ul class="navigation">
-	<li><%= link_to t('back', :default => 'Back'), user_external_authors_path(@user) %></li>
+	<li><%= link_to t('.back', :default => 'Back'), user_external_authors_path(@user) %></li>
 </ul>
 

@@ -8,10 +8,10 @@
 
 <!--subnav-->
   <ul class="navigation" role="navigation">
-    <li><%= link_to_unless_current t('profile', :default =>"Profile"), collection_profile_path(@collection) %></li>
+    <li><%= link_to_unless_current t('.profile', :default =>"Profile"), collection_profile_path(@collection) %></li>
 
     <% if logged_in? && !@collection.closed? %>
-      <li><%= link_to t('collections.post_new', :default => "Post To Collection"), new_collection_work_path(@collection) %></li>
+      <li><%= link_to t('.collections.post_new', :default => "Post To Collection"), new_collection_work_path(@collection) %></li>
     <% end %>
 
   	<% if @collection.challenge # add custom navigation for the specific challenge if there is one %>
@@ -20,8 +20,8 @@
 
     <% unless @collection.user_is_owner?(current_user) %>
       <% if (@participant ||= @collection.get_participants_for_user(current_user).first) -%>  
-        <li><%= link_to t('participant_remove', :default => "Leave"), collection_participant_path(@collection, @participant), 
-          :confirm => t('participant_confirm_delete', :default => 'Are you certain you want to leave this collection?', 
+        <li><%= link_to t('.participant_remove', :default => "Leave"), collection_participant_path(@collection, @participant), 
+          :confirm => t('.participant_confirm_delete', :default => 'Are you certain you want to leave this collection?', 
                       :participant => @participant.pseud.name), 
           :method => :delete %></li>
       <% elsif logged_in? && @collection.moderated? %>
@@ -30,8 +30,8 @@
     <% end -%>
 
     <% if @collection.user_is_maintainer?(current_user) %>
-    	<li><%= link_to t('collections.participants', :default => "Membership", :count => @collection.collection_participants.count), collection_participants_path(@collection) -%></li>
-    	<li><%= link_to t('collections.items', :default => "Manage Items", :count => @collection.collection_items.count), collection_items_path(@collection) -%></li>
+    	<li><%= link_to t('.collections.participants', :default => "Membership", :count => @collection.collection_participants.count), collection_participants_path(@collection) -%></li>
+    	<li><%= link_to t('.collections.items', :default => "Manage Items", :count => @collection.collection_items.count), collection_items_path(@collection) -%></li>
     <% end %>
 
   </ul>

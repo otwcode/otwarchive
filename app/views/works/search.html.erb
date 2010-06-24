@@ -15,6 +15,6 @@
   <div class="clear"><!-- presentational--></div>
   <%= will_paginate @works, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>
 <%- rescue Riddle::ConnectionError %>
-   <%= t('errors.search_engine_down', :default => "The search engine seems to be down at the moment, try back later!")%>
+   <%= t('.errors.search_engine_down', :default => "The search engine seems to be down at the moment, try back later!")%>
   <%- end -%>
 <%- end -%>

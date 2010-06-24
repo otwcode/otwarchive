@@ -5,10 +5,10 @@
 <th scope="row"><%= link_to participant.pseud.byline, user_path(participant.pseud.user) %><%= form.hidden_field :id %><%= form.hidden_field :collection_id %></th>
 <td><%= form.select(:participant_role, CollectionParticipant::PARTICIPANT_ROLE_OPTIONS) %></td>
 <td class="submit">
-  <%= form.submit t('forms.update', :default => "Update") -%>
+  <%= form.submit t('.forms.update', :default => "Update") -%>
   <%- end -%>
-  <%= button_to t('participant_remove', :default => "Remove"), collection_participant_path(@collection, participant), 
-    :confirm => t('participant_confirm_delete', :default => 'Are you certain you want to remove {{participant}}?', 
+  <%= button_to t('.participant_remove', :default => "Remove"), collection_participant_path(@collection, participant), 
+    :confirm => t('.participant_confirm_delete', :default => 'Are you certain you want to remove {{participant}}?', 
               :participant => participant.pseud.name), 
               :method => :delete %>
 </td>

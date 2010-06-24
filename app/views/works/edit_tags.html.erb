@@ -1,6 +1,6 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h t('works.edit.edit_work_tags', :default =>'Edit Work Tags for "{{title}}"', :title => @work.title) %></h2>
-<p><%= link_to t('back_to_work', :default => 'Return to work'), @work -%></p>
+<h2><%=h t('.works.edit.edit_work_tags', :default =>'Edit Work Tags for "{{title}}"', :title => @work.title) %></h2>
+<p><%= link_to t('.back_to_work', :default => 'Return to work'), @work -%></p>
 <%= error_messages_for :work %>
 <!--/descriptions-->
 
@@ -14,9 +14,9 @@
   <fieldset>
     <legend><%= 'Post Work' -%></legend>
     <p class="submit">
-      <%= submit_tag t('forms.preview', :default => 'Preview'), :name => 'preview_button' %>
-      <%= submit_tag t('forms.update', :default => 'Update'), :name => 'update_button' %>
-      <%= submit_tag t('forms.cancel', :default => 'Cancel'), :name => 'cancel_button' %>
+      <%= submit_tag t('.forms.preview', :default => 'Preview'), :name => 'preview_button' %>
+      <%= submit_tag t('.forms.update', :default => 'Update'), :name => 'update_button' %>
+      <%= submit_tag t('.forms.cancel', :default => 'Cancel'), :name => 'cancel_button' %>
     </p> 
   </fieldset>
 <%- end -%> <!-- end of form_for -->

@@ -5,7 +5,7 @@
   <!--/subnav-->
   <!--main content-->
   <h3>
-    <%=h t('potential_match.view', :default => "Potential Match for {{requester}}: {{offerer}}", 
+    <%=h t('.potential_match.view', :default => "Potential Match for {{requester}}: {{offerer}}", 
       :requester => @potential_match.request_signup.pseud.byline, :offerer => @potential_match.offer_signup.pseud.byline) -%>
   </h3>
 

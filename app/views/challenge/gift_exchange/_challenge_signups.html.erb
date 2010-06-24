@@ -14,19 +14,19 @@
 
 <% unless @hide_navigation %>
   <ul class="navigation">
-    <li><%= link_to t('gift_exchange.download_excel', :default => "Download (Excel)"), collection_signups_path(@collection, :format => :xls) %></li>
+    <li><%= link_to t('.gift_exchange.download_excel', :default => "Download (Excel)"), collection_signups_path(@collection, :format => :xls) %></li>
     <% if show_offer_description || show_request_description %>
-      <li><%= link_to t('gift_exchange.hide_desc', :default => "Hide Descriptions"), 
+      <li><%= link_to t('.gift_exchange.hide_desc', :default => "Hide Descriptions"), 
           collection_signups_path(@collection, :hide_descriptions => true, :hide_urls => params[:hide_urls]) -%></li>
     <% elsif params[:hide_descriptions] %>
-      <li><%= link_to t('gift_exchange.show_desc', :default => "Show Descriptions"), 
+      <li><%= link_to t('.gift_exchange.show_desc', :default => "Show Descriptions"), 
           collection_signups_path(@collection, :hide_descriptions => false, :hide_urls => params[:hide_urls]) -%></li>
     <% end %>
     <% if show_offer_url|| show_request_url %>
-      <li><%= link_to t('gift_exchange.hide_url', :default => "Hide URLs"), 
+      <li><%= link_to t('.gift_exchange.hide_url', :default => "Hide URLs"), 
           collection_signups_path(@collection, :hide_descriptions => params[:hide_descriptions], :hide_urls => true) -%></li>
     <% elsif params[:hide_urls] %>
-      <li><%= link_to t('gift_exchange.show_desc', :default => "Show URLs"), 
+      <li><%= link_to t('.gift_exchange.show_desc', :default => "Show URLs"), 
           collection_signups_path(@collection, :hide_descriptions => params[:hide_descriptions], :hide_urls => false) -%></li>
     <% end %>
   </ul>
@@ -36,7 +36,7 @@
   <!-- top header row showing requests and offers numbered -->
   <tr>
     <% unless @hide_navigation %>
-      <th rowspan=2 abbr="options" scope="col"><%=h t('editing options', :default =>"Editing Options") %></th>
+      <th rowspan=2 abbr="options" scope="col"><%=h t('.editing options', :default =>"Editing Options") %></th>
     <% end %>
     <th rowspan=2>Pseud</th>
     <th rowspan=2>Email</th>

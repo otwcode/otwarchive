@@ -36,7 +36,7 @@
       <dt><%=h 'Works' + ': ' %></dt> 
         <dd><%=h series.visible_work_count %></dd>
       <%- if (bookmark_count = series.bookmarks.public.count) > 0 -%>
-      <dt><%=h t('work_bookmarks', :default => 'Bookmarks') + ': '%></dt>
+      <dt><%=h t('.work_bookmarks', :default => 'Bookmarks') + ': '%></dt>
         <dd><%= link_to_bookmarkable_bookmarks(series, bookmark_count.to_s) -%></dd>
       <%- end -%>
 			</dl>
@@ -44,6 +44,6 @@
 
 <!--actions-->
     <%- if is_author_of?(series) -%>
-	    <p class="navigation"><%= link_to t('links.edit', :default => 'Edit'), edit_series_path(series) -%></p>
+	    <p class="navigation"><%= link_to t('.links.edit', :default => 'Edit'), edit_series_path(series) -%></p>
     <%- end -%>
 </li>

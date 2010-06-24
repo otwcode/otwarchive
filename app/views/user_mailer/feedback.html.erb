@@ -1,14 +1,14 @@
 <%= sanitize_and_format_for_display @summary %>
 
-<p><%=h t('asap', :default => "Hi! We're working really hard to reply to everyone, and we'll be with you as soon as we can.")%> 
-<%=h t('meanwhile', :default => "In the meantime, please enjoy this automated response as a sign of our appreciation; your feedback is greatly valued, and will be reviewed by our volunteers as soon as possible.")%> 
-<%=h t('message', :default => "Below is a copy of your message for your reference.") %></p>
+<p><%=h t('.asap', :default => "Hi! We're working really hard to reply to everyone, and we'll be with you as soon as we can.")%> 
+<%=h t('.meanwhile', :default => "In the meantime, please enjoy this automated response as a sign of our appreciation; your feedback is greatly valued, and will be reviewed by our volunteers as soon as possible.")%> 
+<%=h t('.message', :default => "Below is a copy of your message for your reference.") %></p>
 
 <%= sanitize_and_format_for_display @comment %>
 
-<p><%=h t('love_support', :default => "Love, the AO3 Support team")%></p>
+<p><%=h t('.love_support', :default => "Love, the AO3 Support team")%></p>
 
 
-<p><%=h t('sent_at', :default => "Sent at:") %>&nbsp;<%= Time.now.strftime(common_timestring) -%></p>
+<p><%=h t('.sent_at', :default => "Sent at:") %>&nbsp;<%= Time.now.strftime(common_timestring) -%></p>
 
 

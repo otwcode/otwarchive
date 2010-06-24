@@ -4,9 +4,9 @@
 <% if logged_in? %>
   <!-- signup form or link -->
   <% if (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first) %>
-    <li><%= span_if_current t('gift_exchange.my_signup', :default => "Your Signup"), collection_signup_path(@collection, @challenge_signup) %></li>
+    <li><%= span_if_current t('.gift_exchange.my_signup', :default => "Your Signup"), collection_signup_path(@collection, @challenge_signup) %></li>
   <% elsif @collection.challenge.user_allowed_to_sign_up?(current_user) || !@collection.moderated? || @collection.user_is_posting_participant?(current_user) %>
-    <li><%= span_if_current t('gift_exchange.signup', :default => "Signup Form"), new_collection_signup_path(@collection) %></li>
+    <li><%= span_if_current t('.gift_exchange.signup', :default => "Signup Form"), new_collection_signup_path(@collection) %></li>
   <% end %>
 
   <!-- assignment link -->
@@ -21,7 +21,7 @@
 
   <% if @collection.challenge.user_allowed_to_see_signups?(current_user) %>
     <li>
-      <%= span_if_current t('gift_exchange.signups', :default => "Signups ({{count}})", :count => @collection.signups.count), collection_signups_path(@collection) %>
+      <%= span_if_current t('.gift_exchange.signups', :default => "Signups ({{count}})", :count => @collection.signups.count), collection_signups_path(@collection) %>
     </li>
   <% end %>
 

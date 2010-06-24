@@ -2,13 +2,13 @@
 <div class="header module">
 	<h4>
   <%- if bookmark.bookmarkable.nil? -%>
-    (<%= t('bookmark_oh_noes', :default => 'Oh noes, this work has been deleted.') -%>)
+    (<%= t('.bookmark_oh_noes', :default => 'Oh noes, this work has been deleted.') -%>)
   <%- else -%>
     <%- if bookmark.bookmarkable.hidden_by_admin -%>
       <%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %>
     <%- end -%>
     <%= link_to bookmark.bookmarkable.title, bookmark.bookmarkable.url -%>
-    <%=h t('bookmark_by', :default => 'by') %>
+    <%=h t('.bookmark_by', :default => 'by') %>
     <%= bookmark.bookmarkable.author -%>
   <%- end -%>   
   </h4>
@@ -28,5 +28,5 @@
 <%- else -%>
 </div>
 <%- end -%>
-  <p class="message"><%= t('external_work_warning', :default => 'Please note: this work is not hosted on the Archive; the information here may be incomplete or inaccurate.') %></p>
+  <p class="message"><%= t('.external_work_warning', :default => 'Please note: this work is not hosted on the Archive; the information here may be incomplete or inaccurate.') %></p>
 </div>

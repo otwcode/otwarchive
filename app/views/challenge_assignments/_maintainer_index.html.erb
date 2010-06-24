@@ -83,8 +83,8 @@
         <th>Work Info</th>
         <th>
           Default? 
-          <%= button_to_function t('select_all', :default => "All"), "$$('input[type=checkbox]').each(function(box) {box.checked = true})" %>
-          <%= button_to_function t('deselect_all', :default => "None"), "$$('input[type=checkbox]').each(function(box) {box.checked = false})" %>
+          <%= button_to_function t('.select_all', :default => "All"), "$$('input[type=checkbox]').each(function(box) {box.checked = true})" %>
+          <%= button_to_function t('.deselect_all', :default => "None"), "$$('input[type=checkbox]').each(function(box) {box.checked = false})" %>
         </th>
       </tr>
     </thead>

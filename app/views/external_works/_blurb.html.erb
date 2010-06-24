@@ -5,7 +5,7 @@
 
     <h4 title="title">
       <%= link_to sanitize_title_for_display(external_work.title, :tags => %w(em i b strong strike small)), external_work.url %>
-      <%= t('title_by_author', :default => 'by') %>
+      <%= t('.title_by_author', :default => 'by') %>
       <%= byline(external_work) -%>
     </h4>
 
@@ -35,18 +35,18 @@
   <!--stats-->
   <dl class="stats" title="stats">
     <%- if Bookmark.count_visible_bookmarks(external_work) > 0 -%>
-    <dt><%=h t('external_work_bookmarks', :default => 'Bookmarks') + ': '%></dt>
+    <dt><%=h t('.external_work_bookmarks', :default => 'Bookmarks') + ': '%></dt>
     <dd><%= link_to_bookmarkable_bookmarks(external_work) -%></dd>
     <%- end -%>
 
-    <dt><%=h t('related_works_link', :default => 'Related Works') + ': '%></dt>
+    <dt><%=h t('.related_works_link', :default => 'Related Works') + ': '%></dt>
     <dd><%= link_to external_work.related_works.count.to_s, external_work  -%></dd>
   </dl>
 
   <%- if logged_in_as_admin? -%>
   <h6 class="landmark">Author Actions</h6>
   <ul class="navigation" role="navigation">
-    <li><%= link_to t('links.edit', :default => 'Edit'), edit_external_work_path(external_work) -%></li>
+    <li><%= link_to t('.links.edit', :default => 'Edit'), edit_external_work_path(external_work) -%></li>
   </ul>
   <%- end -%>
 

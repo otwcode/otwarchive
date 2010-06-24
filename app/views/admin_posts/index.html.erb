@@ -19,7 +19,7 @@
 				<h4>
 					Published: <%=h admin_post.created_at %>  
 						<%- if logged_in_as_admin? -%>
-					    <%= link_to t('edit', :default => 'Edit Post', :class => 'navigation'), edit_admin_post_path(@admin_post) %>
+					    <%= link_to t('.edit', :default => 'Edit Post', :class => 'navigation'), edit_admin_post_path(@admin_post) %>
 						<%- end -%>
         </h4>
       </div>
@@ -35,7 +35,7 @@
                             t("comments.read_many", :default => "Read {{comment_count}} Comments", :comment_count => admin_post.count_visible_comments.to_s)),
                           admin_post_path(:id => admin_post.id, :anchor => "comments", :show_comments => true) -%></li> 
           <% end %>
-          <li><%= link_to t('admin_post_comments_add', :default => 'Add Comment'), admin_post_path(:id => admin_post.id, :anchor => "comments", :add_comment => true) -%></li>
+          <li><%= link_to t('.admin_post_comments_add', :default => 'Add Comment'), admin_post_path(:id => admin_post.id, :anchor => "comments", :add_comment => true) -%></li>
 				</ul>	
 			<!-- END comment section -->
 	

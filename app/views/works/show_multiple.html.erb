@@ -2,16 +2,16 @@
 
 <% form_tag edit_multiple_user_works_path(@user),  :id => 'edit-multiple-works' do %>
 <table class="work index" summary="This page shows a list of your works. You can select a work, or many works, and then choose to edit, orphan, or delete them. You can post multiple drafts on this page too.">
-    <caption><%=h t('works.editing multiple', :default => "Editing Multiple Works") -%></caption>
+    <caption><%=h t('.works.editing multiple', :default => "Editing Multiple Works") -%></caption>
 	<thead>
       	<tr>
 		<td colspan="4"><%= render :partial => 'edit_multiple_controls' %></td>
 		</tr>
 		<tr>
-			<th scope="col"><%=h t('title', :default =>"Title") %></th>
-      <th scope="col"><%=h t('fandom', :default =>"Fandom") %></th>
-		  <th scope="col"><%=h t('Select', :default =>"Select") %></th>
-      <th abbr="options" scope="col"><%=h t('editing options', :default =>"Editing Options") %></th>
+			<th scope="col"><%=h t('.title', :default =>"Title") %></th>
+      <th scope="col"><%=h t('.fandom', :default =>"Fandom") %></th>
+		  <th scope="col"><%=h t('.Select', :default =>"Select") %></th>
+      <th abbr="options" scope="col"><%=h t('.editing options', :default =>"Editing Options") %></th>
 </tr>
     </thead>
     <tbody>

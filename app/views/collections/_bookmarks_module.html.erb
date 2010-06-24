@@ -1,9 +1,9 @@
 <div class="bookmarks module" id="collection-bookmarks">
   <h3>
     <%- if collection.collection_preference.show_random || params[:show_random] -%>
-    <%=h t('collections.random_bookmarks', :default => "Random bookmarks") %>  
+    <%=h t('.collections.random_bookmarks', :default => "Random bookmarks") %>  
     <%- else -%>  
-    <%=h t('recent_bookmarks', :default => "Recent bookmarks") %>
+    <%=h t('.recent_bookmarks', :default => "Recent bookmarks") %>
     <%- end -%>
   </h3>
   <ul class="index">

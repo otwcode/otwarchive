@@ -31,7 +31,7 @@
 
   <%- unless @work.series.blank? -%>
     <dt class="series">
-      <%= t('works.series', :default => "Series:") %>
+      <%= t('.works.series', :default => "Series:") %>
     </dt>
     <dd class="series">
       <%= show_series_data(@work) %>
@@ -40,7 +40,7 @@
 
   <%- unless @work.approved_collections.empty? %>
     <dt class="collections">
-      <%= t('work_collections', :default => 'Collections:') %>
+      <%= t('.work_collections', :default => 'Collections:') %>
     </dt>
     <dd class="collections">
       <%= show_collections_data(@work) %>

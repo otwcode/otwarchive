@@ -15,14 +15,14 @@
     <% end %>
     <li>
       <% unless challenge_signup.collection.potential_matches.count == 0 %>
-        <%= link_to t('challenge_signup.delete_signup', :default => "Delete"), 
+        <%= link_to t('.challenge_signup.delete_signup', :default => "Delete"), 
           collection_signup_path(challenge_signup.collection, challenge_signup), 
-          :confirm => t('challenge_signup.confirm_delete_signup', :default => "Are you sure? Potential matches will need to be regenerated afterwards."), 
+          :confirm => t('.challenge_signup.confirm_delete_signup', :default => "Are you sure? Potential matches will need to be regenerated afterwards."), 
           :method => :delete %>
       <% else %>
-        <%= link_to t('challenge_signup.delete_signup', :default => "Delete"), 
+        <%= link_to t('.challenge_signup.delete_signup', :default => "Delete"), 
           collection_signup_path(challenge_signup.collection, challenge_signup), 
-          :confirm => t('challenge_signup.confirm_delete_signup', :default => "Are you sure? All information will be lost."), 
+          :confirm => t('.challenge_signup.confirm_delete_signup', :default => "Are you sure? All information will be lost."), 
           :method => :delete %>
       <% end %>
     </li>

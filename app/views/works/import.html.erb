@@ -2,7 +2,7 @@
 
 <% if @works && !@works.empty? %>
   <p>
-    <%= t('import.successful', :default => "We were able to successfully upload the following works.") %>
+    <%= t('.import.successful', :default => "We were able to successfully upload the following works.") %>
   </p>
   <ul>
     <%- for work in @works -%>
