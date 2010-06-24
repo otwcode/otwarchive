@@ -32,3 +32,7 @@ Given /^I am logged in as a random user$/ do
   check "Remember me"
   click_button "Log in"
 end
+
+Given /^I am logged out$/ do
+  visit logout_path
+end

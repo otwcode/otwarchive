@@ -164,7 +164,7 @@ class ChaptersController < ApplicationController
       render :action => "edit"
     else
       params[:chapter][:posted] = true if params[:post_button]
-      if @chapter.update_attributes(params[:chapter]) && @work.save
+      if @work.save && @chapter.save
         @work.update_minor_version
         if defined?(@previous_published_at) && @previous_published_at != @chapter.published_at #if published_at has changed
           if @chapter.published_at == Date.today # if today, set revised_at to this date

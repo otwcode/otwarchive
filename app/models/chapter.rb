@@ -45,9 +45,7 @@ class Chapter < ActiveRecord::Base
   
   # There seem to be chapters without works in the tests, hence the if self.work_id
   def after_validation
-    if self.work.respond_to?(:chapters)
-      self.insert_at(self.position) if self.position != self.work.chapters.size
-    end
+    self.insert_at(position) if self.position_changed? && self.work_id
   end
 
   # strip leading spaces from title
