@@ -1,5 +1,5 @@
 <ul class="navigation" role="navigation"><li>
-  <%= link_to(t('refine_search', :default => "Advanced search"), url_for(:controller => "works", :action => "advancedsearch", :query => @query)) %>
+  <%= link_to(t('refine_search', :default => "Advanced search"), search_index_path(:query => @query)) %>
 </li></ul>
 
 <p>

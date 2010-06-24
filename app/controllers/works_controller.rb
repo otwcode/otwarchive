@@ -10,101 +10,6 @@ class WorksController < ApplicationController
   before_filter :check_visibility, :only => [ :show, :navigate ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import ]
   before_filter :set_instance_variables_tags, :only => [ :edit_tags, :update_tags, :preview_tags ]
-  after_filter :update_or_create_reading, :only => [ :show ]
-
-  def load_work
-    @work = Work.find_by_id(params[:id])
-    unless @work
-      flash[:error] = t('work_not_found', :default => "Sorry, we couldn't find the work you were looking for.")
-      redirect_to root_path and return
-    end
-    @check_ownership_of = @work
-    @check_visibility_of = @work
-  end
-
-  # Sets values for @work, @chapter, @coauthor_results, @pseuds, and @selected_pseuds
-  # and @tags[category]
-  def set_instance_variables
-
-    # if we don't have author_attributes[:ids], which shouldn't be allowed to happen
-    # (this can happen if a user with multiple pseuds decides to unselect *all* of them)
-    sorry = "Sorry, you cannot remove yourself entirely as an author of the work!<br />
-             <br />Please use Remove Me As Author or consider orphaning your work instead if you do not wish to be associated with it anymore."
-    if params[:work] && params[:work][:author_attributes] && !params[:work][:author_attributes][:ids]
-      flash.now[:notice] = t('needs_author', :default => sorry)
-      params[:work][:author_attributes][:ids] = [current_user.default_pseud]
-    end
-    if params[:work] && !params[:work][:author_attributes]
-      flash.now[:notice] = t('needs_author', :default => sorry)
-      params[:work][:author_attributes] = {:ids => [current_user.default_pseud]}
-    end
-
-    # stuff new bylines into author attributes to be parsed by the work model
-    if params[:work] && params[:pseud] && params[:pseud][:byline] && params[:pseud][:byline] != ""
-      params[:work][:author_attributes][:byline] = params[:pseud][:byline]
-      params[:pseud][:byline] = ""
-    end
-
-    # stuff co-authors into author attributes too so we won't lose them
-    if params[:work] && params[:work][:author_attributes] && params[:work][:author_attributes][:coauthors]
-      params[:work][:author_attributes][:ids].concat(params[:work][:author_attributes][:coauthors]).uniq!
-    end
-
-    begin
-      if params[:id] # edit, update, preview, manage_chapters
-        @work ||= Work.find(params[:id])
-        @previous_published_at = @work.first_chapter.published_at
-        @previous_backdate_setting = @work.backdate
-        if params[:work]  # editing, save our changes
-          if params[:preview_button] || params[:cancel_button]
-            @work.preview_mode = true
-          else
-            @work.preview_mode = false
-          end 
-          @work.attributes = params[:work]
-          @work.save_parents if @work.preview_mode
-        end
-      elsif params[:work] # create
-         @work = Work.new(params[:work])
-      else # new
-        current_user.cleanup_unposted_works
-        if params[:load_unposted] && current_user.unposted_work
-          @work = current_user.unposted_work
-        else
-          @work = Work.new
-          @work.chapters.build
-        end
-      end
-
-      @serial_works = @work.serial_works
-
-      @chapter = @work.first_chapter
-      # If we're in preview mode, we want to pick up any changes that have been made to the first chapter
-      if params[:work] && params[:work][:chapter_attributes]
-        @chapter.attributes = params[:work][:chapter_attributes]
-      end
-    rescue
-    end
-  end
-
-  # Sets values for @work and @tags[category]
-  def set_instance_variables_tags
-    begin
-      if params[:id] # edit_tags, update_tags, preview_tags
-        @work ||= Work.find(params[:id])
-        if params[:work]  # editing, save our changes
-          if params[:preview_button] || params[:cancel_button] || params[:edit_button]
-            @work.preview_mode = true
-          else
-            @work.preview_mode = false
-          end 
-          @work.attributes = params[:work]
-          @work.save_parents if @work.preview_mode
-        end
-      end
-    rescue
-    end
-  end
 
   def search
     @languages = Language.all(:order => :short)
@@ -126,18 +31,6 @@ class WorksController < ApplicationController
     end
   end  
   
-  def advancedsearch
-    @languages = Language.all(:order => :short)
-    @query = {}
-    if params[:query]
-      @query = Query.standardize(params[:query])
-      unless @query == params[:query]
-        params[:query] = @query
-        redirect_to url_for(params)
-      end
-    end
-  end  
-
   # GET /works
   def index
     # what we're getting for the view
@@ -289,6 +182,7 @@ class WorksController < ApplicationController
       get_page_title(@work.fandoms.string, @work.anonymous? ?  t('works.anonymous', :default => "Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '), @work.title)
     render :action => 'show'
     @work.increment_hit_count(request.env['REMOTE_ADDR'])
+    Reading.update_or_create(@work, current_user)
   end
   
   def navigate
@@ -716,42 +610,6 @@ class WorksController < ApplicationController
     redirect_to show_multiple_user_works_path(@user)        
   end
 
-  # def post_multiple
-  #   @user = current_user
-  #   @works = Work.find(params[:work_ids]) & @user.works
-  #   @errors = []
-  #   
-  #   @works.each do |work|
-  #     work.posted = true
-  #     work.update_minor_version
-  #     unless work.save!
-  #       @errors << t('post_multiple.problem', :default => "The work {{title}} could not be posted: {{error}}", :title => work.title, :error => work.errors_on.to_s)
-  #     end
-  #   end
-  #   unless @errors.empty?
-  #     flash[:error] = t('post_multiple.error_message', :default => "There were problems posting some works: {{errors}}", :errors => @errors.join(", "))
-  #   end
-  #   redirect_to show_multiple_user_works_path(@user)
-  # end
-  # 
-  # def destroy_multiple
-  #   @user = current_user
-  #   @works = Work.find(params[:work_ids]) & @user.works
-  #   @errors = []
-  #   @works.each do |work|
-  #     begin
-  #       work.destroy
-  #     rescue
-  #       @errors << t('destroy_multiple.deletion_failed', :default => "There were problems deleting work {{title}}.", :title => work.title)
-  #     end
-  #   end
-  #   
-  #   unless @errors.empty?
-  #     flash[:error] = t('destroy_multiple.error_message', :default => "There were problems deleting some works: {{errors}}", :errors => @errors.join(", "))
-  #   end
-  #   redirect_to show_multiple_user_works_path(@user)
-  # end
-
   protected
 
   def load_pseuds
@@ -762,20 +620,98 @@ class WorksController < ApplicationController
     @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }.uniq
   end
 
-  # create a reading object when showing a work, but only if the user has reading
-  # history enabled and is not the author of the work
-  def update_or_create_reading
-    return unless @work
-    if logged_in? && current_user.preference.try(:history_enabled)
-      unless current_user.is_author_of?(@work)
-        reading = Reading.find_or_initialize_by_work_id_and_user_id(@work.id, current_user.id)
-        reading.major_version_read, reading.minor_version_read = @work.major_version, @work.minor_version
-        reading.touch
-        reading.view_count = reading.view_count + 1
-        reading.save
-      end
+  def load_work
+    @work = Work.find_by_id(params[:id])
+    unless @work
+      flash[:error] = t('work_not_found', :default => "Sorry, we couldn't find the work you were looking for.")
+      redirect_to root_path and return
     end
-    true
+    @check_ownership_of = @work
+    @check_visibility_of = @work
+  end
+
+  # Sets values for @work, @chapter, @coauthor_results, @pseuds, and @selected_pseuds
+  # and @tags[category]
+  def set_instance_variables
+
+    # if we don't have author_attributes[:ids], which shouldn't be allowed to happen
+    # (this can happen if a user with multiple pseuds decides to unselect *all* of them)
+    sorry = "Sorry, you cannot remove yourself entirely as an author of the work!<br />
+             <br />Please use Remove Me As Author or consider orphaning your work instead if you do not wish to be associated with it anymore."
+    if params[:work] && params[:work][:author_attributes] && !params[:work][:author_attributes][:ids]
+      flash.now[:notice] = t('needs_author', :default => sorry)
+      params[:work][:author_attributes][:ids] = [current_user.default_pseud]
+    end
+    if params[:work] && !params[:work][:author_attributes]
+      flash.now[:notice] = t('needs_author', :default => sorry)
+      params[:work][:author_attributes] = {:ids => [current_user.default_pseud]}
+    end
+
+    # stuff new bylines into author attributes to be parsed by the work model
+    if params[:work] && params[:pseud] && params[:pseud][:byline] && params[:pseud][:byline] != ""
+      params[:work][:author_attributes][:byline] = params[:pseud][:byline]
+      params[:pseud][:byline] = ""
+    end
+
+    # stuff co-authors into author attributes too so we won't lose them
+    if params[:work] && params[:work][:author_attributes] && params[:work][:author_attributes][:coauthors]
+      params[:work][:author_attributes][:ids].concat(params[:work][:author_attributes][:coauthors]).uniq!
+    end
+
+    begin
+      if params[:id] # edit, update, preview, manage_chapters
+        @work ||= Work.find(params[:id])
+        @previous_published_at = @work.first_chapter.published_at
+        @previous_backdate_setting = @work.backdate
+        if params[:work]  # editing, save our changes
+          if params[:preview_button] || params[:cancel_button]
+            @work.preview_mode = true
+          else
+            @work.preview_mode = false
+          end 
+          @work.attributes = params[:work]
+          @work.save_parents if @work.preview_mode
+        end
+      elsif params[:work] # create
+         @work = Work.new(params[:work])
+      else # new
+        current_user.cleanup_unposted_works
+        if params[:load_unposted] && current_user.unposted_work
+          @work = current_user.unposted_work
+        else
+          @work = Work.new
+          @work.chapters.build
+        end
+      end
+
+      @serial_works = @work.serial_works
+
+      @chapter = @work.first_chapter
+      # If we're in preview mode, we want to pick up any changes that have been made to the first chapter
+      if params[:work] && params[:work][:chapter_attributes]
+        @chapter.attributes = params[:work][:chapter_attributes]
+      end
+    rescue
+    end
+  end
+
+  # Sets values for @work and @tags[category]
+  def set_instance_variables_tags
+    begin
+      if params[:id] # edit_tags, update_tags, preview_tags
+        @work ||= Work.find(params[:id])
+        if params[:work]  # editing, save our changes
+          if params[:preview_button] || params[:cancel_button] || params[:edit_button]
+            @work.preview_mode = true
+          else
+            @work.preview_mode = false
+          end 
+          @work.attributes = params[:work]
+          @work.save_parents if @work.preview_mode
+        end
+      end
+    rescue
+    end
   end
 
   def cancel_posting_and_redirect
@@ -792,5 +728,6 @@ class WorksController < ApplicationController
       redirect_to drafts_user_works_path(current_user)
     end
   end
+
 
 end

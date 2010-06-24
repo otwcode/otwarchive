@@ -189,7 +189,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.devmode "/devmode", :controller => "devmode", :action => "index", :view => "index"
 
-  map.search "/search", :controller => "works", :action => "advancedsearch"
+  map.resources :search, :only => :index 
+  map.search '/search', :controller => "search", :action => "index"
 
   # The priority is based upon order of creation: first created -> highest priority.
 
