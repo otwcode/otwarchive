@@ -18,3 +18,7 @@ testpseud2:
   name: something else
   user: testuser2
   is_default: true
+sad_user_with_no_pseuds:
+  name: sad_user_with_no_pseuds
+  user: sad_user_with_no_pseuds
+  is_default: true

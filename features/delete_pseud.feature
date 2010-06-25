@@ -1,4 +1,4 @@
-@wip
+@users
 Feature: Delete pseud.
   In order to tidy some mess
   As a humble user
@@ -7,43 +7,27 @@ Feature: Delete pseud.
   Scenario: Delete pseud, have option to move works, delete works, or orphan works. Test if those choices work.
 
   Given I have loaded the fixtures
-  Given I am logged in as "sad_user_with_no_pseuds" with password "test"
-    When I visit "My Home"
-      And I follow "My Pseuds"
-      Then I should not see a "Delete" button
-  Given I am logged in as "testuser" with password "test"
-    When I visit "My Home"
-      And I follow "My Pseuds"
-      Then I should see a "Delete" button for pseud "testy"
-    When I follow the "Delete" button for pseud "testy"
-      And I press "OK"
-      Then I should see the bookmarks_action form
-        Given I select the radio button "delete_bookmarks"
-          And I click "Submit"
-          When I click "OK"
-          Then I should see "The pseud was successfully deleted."
-    When I follow "My Home"
-      And I follow "My Pseuds"
-      Then I should not see pseud "testy"
-    When I follow "My Home"
-      And I follow "My Pseuds"
-      Then pseud "testuser" should not show a "Delete" button
-    When I follow "My Home"
-      And I follow "My Pseuds"
-      Then pseud "testymctesty" should not show a "Delete" button
-    When I follow "My Home"
-      And I follow "My Pseuds"
-      And I follow the "Delete" button for pseud "testerpseud"
-        And I press "OK"
-          Then I should see the bookmarks_action form
-          When I select the radio button "transfer_bookmarks"
-            And I click "Submit"
-            And I click "OK"
-            Then I should see "The pseud was successfully deleted."
-    When I follow "My Home"
-      And I follow "My Pseuds"
-      And I follow "testymctesty"
-      Then I should see fifth_work
+  When I am logged in as "sad_user_with_no_pseuds" with password "test"
+    And I am on sad_user_with_no_pseuds's pseuds page
+  Then I should not see "Delete"
+  When I am logged in as "testuser" with password "testuser"
+  Then I should see "Hi, testuser!"
+    And I am on testuser's pseuds page
+  When I follow "Delete tester_pseud"
+  Then I should see "Delete these bookmarks"
+  When I choose "Delete these bookmarks"
+    And I press "Submit"
+  Then I should see "The pseud was successfully deleted."
+  When I am on testuser's pseuds page
+    Then I should not see "tester_pseud"
+    And I follow "Delete testy"
+    And I choose "Transfer these bookmarks to the default pseud"
+    And I press "Submit"
+  Then I should see "The pseud was successfully deleted."
+  When I am on testuser's pseuds page
+    And I follow "testymctesty"
+  Then I should see "fourth"
+    And I should not see "fifth work"
               
      
     
