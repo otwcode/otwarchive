@@ -1,7 +1,7 @@
 class ChaptersController < ApplicationController
   # only registered users and NOT admin should be able to create new chapters
-  before_filter :users_only, :except => [ :show, :destroy ]
-  before_filter :load_work, :except => [:auto_complete_for_pseud_name, :update_positions]
+  before_filter :users_only, :except => [ :index, :show, :destroy ]
+  before_filter :load_work, :except => [:index, :auto_complete_for_pseud_name, :update_positions]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :preview, :post ]
   # only authors of a work should be able to edit its chapters
   before_filter :check_ownership, :only => [ :edit, :update, :manage, :destroy ]
@@ -82,9 +82,9 @@ class ChaptersController < ApplicationController
     load_pseuds
     
     if !@chapter.invalid_pseuds.blank? || !@chapter.ambiguous_pseuds.blank?
-      @chapter.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
+      @chapter.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :new)
     elsif params[:edit_button]
-      render :action => :new
+      render :new
     elsif params[:cancel_button]
       redirect_back_or_default('/')    
     else  # :preview or :cancel_coauthor_button
@@ -96,7 +96,7 @@ class ChaptersController < ApplicationController
         flash[:notice] = t('preview', :default => "This is a preview of what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting.")
         redirect_to [:preview, @work, @chapter]
       else
-        render :action => :new 
+        render :new 
       end
     end
   end    
@@ -109,15 +109,15 @@ class ChaptersController < ApplicationController
     load_pseuds
     
     if !@chapter.invalid_pseuds.blank? || !@chapter.ambiguous_pseuds.blank?
-      @chapter.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
+      @chapter.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :new)
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       @preview_mode = true # Enigel Jan 31
-      render :partial => 'preview_edit', :layout => 'application'
+      render :preview_edit
     elsif params[:cancel_button]
       # Not quite working yet - should send the user back to wherever they were before they hit edit
       redirect_back_or_default('/')
     elsif params[:edit_button]
-      render :action => "edit"
+      render :edit
     else
       params[:chapter][:posted] = true if params[:post_button]
       if @work.save && @chapter.save
@@ -132,7 +132,7 @@ class ChaptersController < ApplicationController
         flash[:notice] = t('successfully_updated', :default => 'Chapter was successfully updated.')
         redirect_to [@work, @chapter]
       else
-        render :action => "edit" 
+        render :edit
       end
     end 
   end
@@ -171,7 +171,7 @@ class ChaptersController < ApplicationController
         flash[:notice] = t('successfully_posted', :default => 'Chapter has been posted!')
        redirect_to(@work)
       else
-        render :action => "preview"
+        render :preview
       end
     end
   end

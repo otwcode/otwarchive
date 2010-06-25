@@ -62,13 +62,7 @@ class ChaptersControllerTest < ActionController::TestCase
   end
   # Test index  GET  /:locale/chapters  (named path: chapters)
   # Test index  GET  /:locale/works/:work_id/chapters  (named path: work_chapters)
-  def test_work_chapters_path_fail
-    chapter = new_chapter
-    work = create_work(:chapters => [chapter])
-    work.add_default_tags
-    get :index, :locale => 'en', :work_id => work.id
-    assert_redirected_to new_session_path
-  end
+  # unused path. redirect to work
   def test_work_chapters_path
     chapter = new_chapter
     work = create_work(:chapters => [chapter])

@@ -47,15 +47,14 @@ class WorksNewControllerTest < ActionController::TestCase
           @work = create_work(:authors => [@user.default_pseud])
           get :new, :locale => 'en', :load_unposted => true
         end
-        should_render_template :new
+        should_render_template :edit
         should_assign_to(:work) {@work}
       end
       context "upload work" do
         setup do
           get :new, :locale => 'en', :import => true
         end
-        should_render_template :new
-        should_assign_to(:use_import_form) {true}
+        should_render_template :new_import
       end
     end
   end

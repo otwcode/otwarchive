@@ -4,5 +4,47 @@
 <!--/descriptions-->
 
 <!--main content-->
-<%= render :partial => 'preview_edit' -%>
+<div id="previewpane">
+  <div class="draft work">
+    <%= render :partial => 'works/work_header' -%>
+    <div id="chapters">
+    <% if @chapters -%>
+      <%- @chapters.each do |chapter| -%>
+        <%= render :partial => 'chapters/chapter', :locals => {:chapter => chapter} -%>
+      <%- end -%>
+    <%- else -%>
+        <div class="user-generated-view"><%= sanitize_and_format_for_display(@chapter.content) -%></div>
+    <%- end -%>
+    </div>
+    <%- unless @work.endnotes.blank? -%>
+      <div class="preface notes">
+          <h3><%=h t('.notes', :default => "Notes:") %></h3>
+          <blockquote class="user-generated-view"><%=sanitize_and_format_for_display @work.endnotes %></blockquote>
+       </div>
+
+    <%- end -%>
+  	<%= render :partial => 'works/work_footer' -%>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<%- form_for(@work) do |f| -%>
+
+  <%= render :partial => 'hidden_fields', :locals => {:form => f} -%>
+
+  <fieldset>
+    <legend><%= t('.post_work', :default => 'Post Work') -%></legend>
+    <p class="submit">
+  	<% if @work.posted? %>
+  		<%= submit_tag t('.forms.update', :default => 'Update'), :name => 'update_button' %>
+  	<% else %>
+  		<%= submit_tag t('.forms.post', :default => 'Post'), :name => 'post_button' %>
+  	<% end %>
+      <%= submit_tag t('.forms.edit', :default => 'Edit'), :name => 'edit_button' %>
+      <%= submit_tag t('.forms.cancel', :default => 'Cancel'), :name => 'cancel_button' %> 
+    </p>
+  </fieldset>
+
+<% end %>
 <!--/content-->

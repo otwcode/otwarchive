@@ -180,7 +180,7 @@ class WorksController < ApplicationController
 
     @page_title = @work.unrevealed? ? t('works.mystery_title', :default => "Mystery Work") : 
       get_page_title(@work.fandoms.string, @work.anonymous? ?  t('works.anonymous', :default => "Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '), @work.title)
-    render :action => 'show'
+    render :show
     @work.increment_hit_count(request.env['REMOTE_ADDR'])
     Reading.update_or_create(@work, current_user)
   end
@@ -193,17 +193,20 @@ class WorksController < ApplicationController
   def new
     load_pseuds
     @series = current_user.series.uniq    
-    @use_import_form = true if params[:import]
+    @unposted = current_user.unposted_work
     if params[:assignment_id] && (@challenge_assignment = ChallengeAssignment.find(params[:assignment_id])) && @challenge_assignment.offering_user == current_user
       @work.challenge_assignments << @challenge_assignment
       @work.collection_names = @challenge_assignment.collection.name
     else   
       @work.collection_names = @collection.name if @collection  
     end
-    
-    respond_to do |format|
-      format.html 
-      format.js 
+    if params[:import]
+      render :new_import and return
+    elsif params[:load_unposted]
+      @work = @unposted
+      render :edit and return
+    else
+      render :new and return
     end
   end
 
@@ -213,7 +216,7 @@ class WorksController < ApplicationController
     @series = current_user.series.uniq
 
     if params[:edit_button]
-      render :action => :new
+      render :new
     elsif params[:cancel_button]
       flash[:notice] = t('posting_canceled', :default => "New work posting canceled.")
       redirect_to current_user
@@ -233,7 +236,7 @@ class WorksController < ApplicationController
               @work.errors.add(:base, "Required tags are missing.")
             end
           end
-          render :action => :new
+          render :new
         end
       end
     end
@@ -263,7 +266,7 @@ class WorksController < ApplicationController
   # PUT /works/1
   def update
     unless @work.errors.empty?
-      render :action => :edit and return
+      render :edit and return
     end
 
     # Need to update @pseuds and @selected_pseuds values so we don't lose new co-authors if the form needs to be rendered again
@@ -271,12 +274,12 @@ class WorksController < ApplicationController
     @series = current_user.series.uniq
     
     if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
-      @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :action => :new)
+      @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :new)
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       @preview_mode = true
 
       if @work.has_required_tags? && @work.invalid_tags.blank?
-        render :action => "preview"
+        render :preview
       else
         if !@work.invalid_tags.blank?
           @work.check_for_invalid_tags
@@ -286,12 +289,12 @@ class WorksController < ApplicationController
         elsif !@work.has_required_tags?
           @work.errors.add_to_base("Updating: Please add all required tags.")
         end
-        render :action => :edit
+        render :edit
       end
     elsif params[:cancel_button]
       cancel_posting_and_redirect
     elsif params[:edit_button]
-      render :partial => 'work_form', :layout => 'application'
+      render :edit
     else
       saved = true
 
@@ -354,21 +357,21 @@ class WorksController < ApplicationController
             @work.errors.add(:base, "Updating: Required tags are missing.")
           end
         end
-        render :action => :edit
+        render :edit
       end
     end
   end
 
   def update_tags
     unless @work.errors.empty?
-      render :action => :edit_tags and return
+      render :edit_tags and return
     end
 
     if params[:preview_button]
       @preview_mode = true
 
       if @work.has_required_tags? && @work.invalid_tags.blank?
-        render :action => "preview_tags"
+        render :preview_tags
       else
         if !@work.invalid_tags.blank?
           @work.check_for_invalid_tags
@@ -378,12 +381,12 @@ class WorksController < ApplicationController
         elsif !@work.has_required_tags?
           @work.errors.add_to_base("Updating: Please add all required tags.")
         end
-        render :action => :edit_tags
+        render :edit_tags
       end
     elsif params[:cancel_button]
       cancel_posting_and_redirect
     elsif params[:edit_button]
-      render :action => :edit_tags # render :partial => 'work_tags_form', :layout => 'application'
+      render :edit_tags
     else
       saved = true
 
@@ -407,7 +410,7 @@ class WorksController < ApplicationController
             @work.errors.add(:base, "Updating: Required tags are missing.")
           end
         end
-        render :action => :edit_tags
+        render :edit_tags
       end
     end
   end
@@ -436,30 +439,28 @@ class WorksController < ApplicationController
 
   # POST /works/import
   def import
-    @use_import_form = true
     storyparser = StoryParser.new
 
     # check to make sure we have some urls to work with
     @urls = params[:urls].split
     unless @urls.length > 0
       flash.now[:error] = t('enter_an_url', :default => "Did you want to enter a URL?")      
-      params[:import] = true
-      render :action => :new and return
+      render :new_import and return
     end
     
     # is this an archivist importing? 
     if params[:importing_for_others] && !current_user.archivist
       flash.now[:error] = t('import.only_archivist', :default => "You may not import stories by other users unless you are an approved archivist.")
-      render :action => :new and return
+      render :new_import and return
     end
 
     # make sure we're not importing too many at once
     if params[:import_multiple] == "works" && (!current_user.archivist && @urls.length > ArchiveConfig.IMPORT_MAX_WORKS || @urls.length > ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST)
       flash.now[:error] = t('too_many_works', :default => "You cannot import more than {{max}} works at a time.", :max => current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS)
-      render :action => :new and return
+      render :new_import and return
     elsif params[:import_multiple] == "chapters" && @urls.length > ArchiveConfig.IMPORT_MAX_CHAPTERS
       flash.now[:error] = t('too_many_chapters', :default => "You cannot import more than {{max}} chapters at a time.", :max => ArchiveConfig.IMPORT_MAX_CHAPTERS)
-      render :action => :new and return
+      render :new_import and return
     end
 
     # otherwise let's build the options
@@ -497,14 +498,14 @@ class WorksController < ApplicationController
         else
           @failed_urls << @urls.first
           @errors << t('import.could_not_save', :default => "We couldn't save that chaptered work. Anything we managed to import is below.")
-          redirect_to :action => :new and return
+          render :new_import and return
         end
       rescue Timeout::Error
         flash[:error] = t('timed_out', :default => "Sorry, but we timed out trying to get that URL. If the site seems to be down, you can try again later.")
-        redirect_to :action => :new and return
+        render :new_import and return
       rescue Exception => exception
         flash[:error] = t('upload_failed', :default => "We couldn't successfully import that story, sorry: {{message}}", :message => exception.message)
-        redirect_to :action => :new and return
+        render :new_import and return
       end
     end
     
@@ -533,12 +534,14 @@ class WorksController < ApplicationController
     
     if @urls.length == 1 || params[:import_multiple] == "chapters"
       # importing a single work, let the user preview or view it
-      @use_import_form = false
-      
       @work = @works.first
       @chapter = @work.first_chapter if @work
-      if @work.nil? || !@work.valid?
+      if @work.nil?
         redirect_to :action => :new and return
+      elsif !@work.valid?
+        load_pseuds
+        @series = current_user.series.uniq
+        render :edit and return
       elsif @work.posted
         redirect_to work_path(@work) and return
       else
