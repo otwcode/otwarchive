@@ -35,7 +35,7 @@ Feature: Admin tasks
       And I should not see "Some text"
     When I follow "Add a new section"
       And I fill in "content" with "Some text, that is sufficiently long to pass validation."
-      And I fill in "archive_faq_title" with "New subsection"
+      And I fill in "title" with "New subsection"
     When I press "Post"
     Then I should see "ArchiveFaq was successfully created"
     When I go to the archive_faqs page
