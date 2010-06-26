@@ -5,7 +5,10 @@
  <fieldset>
 	<legend>Title FAQ Subsection</legend>
 	<p><%= f.label :title, t('.faq_title', :default => "FAQ Subsection Title") %>
-	<%= f.text_field :title %>
+	<%= f.text_field :title, :id => "title" %>
+  <%= live_validation_for_field('title',
+  :failureMessage => t('.validations.title.failure', :default => 'Please enter a title.')) %>
+  
 	</p>
 </fieldset>
 <fieldset>
