@@ -1,5 +1,3 @@
-# there's something wrong with the cucumber.sphinx.conf which is generated for bookmarks
-# I haven't been able to figure it out yet. the development.sphinx.conf which is created is correct
 @wip
 Feature: Search Bookmarks
   In order to test search
@@ -8,7 +6,7 @@ Feature: Search Bookmarks
 
   Scenario: Search bookmarks
     Given I have loaded the fixtures
-      And the Sphinx indexes are updated
+      And the bookmark indexes are updated
     When I am on the search bookmarks page
       And I fill in "refine_indirect_tag" with "first"
       And I press "Search bookmarks"

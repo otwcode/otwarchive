@@ -29,3 +29,4 @@ config.gem 'rspec-rails',      :lib => false, :version => '>=1.3.2' unless File.
 
 require "shoulda/autoload_macros"
 config.gem 'database_cleaner'
+config.gem 'factory_girl'

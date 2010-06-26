@@ -1,4 +1,4 @@
-@works
+@no-txn
 Feature: Search Works
   In order to test search
   As a humble coder
@@ -6,9 +6,9 @@ Feature: Search Works
 
   # do everything that doesn't modify the works in one scenario 
   # so you only have to load the fixtures and update the sphinx indexes once
-  Scenario: Search works from univeral search box
+  Scenario: Search works 
     Given I have loaded the fixtures
-      And the Sphinx indexes are updated
+      And the work indexes are updated
     When I am on the homepage
       And I fill in "site_search" with "(title,summary): second words: >100"
       And I press "Search"
@@ -63,3 +63,13 @@ Feature: Search Works
       And I press "Search works"
     Then I should see "1 Found"
       And I should see "First work"
+   When I am on the homepage.
+     And I fill in "site_search" with "testuser2"
+     And I press "Search"
+   Then I should see "2 Found"
+   When I follow "Advanced search"
+     Then I should be on the search page
+     When I fill in "refine_text" with ""
+       And I fill in "refine_author" with "testuser"
+       And I press "Search"
+   Then I should see "5 Found"

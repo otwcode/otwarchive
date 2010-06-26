@@ -1,4 +1,4 @@
-@tags
+@no-txn
 Feature: Search Tags
   In order to figure out how to use cucumber with thinking sphinx
   As a humble coder
@@ -7,7 +7,7 @@ Feature: Search Tags
   Scenario: Search tags
     Given a fandom exists with name: "first fandom"
       And a character exists with name: "first last", canonical: true
-      And the Sphinx indexes are updated
+      And the tag indexes are updated
     When I am on the search tags page
       And I fill in "tag_search" with "first"
       And I press "Search tags"
