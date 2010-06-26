@@ -35,3 +35,8 @@ When /^I post the work "([^\"]*)"$/ do |title|
   click_button("Preview")
   click_button("Post")
 end
+
+Then /^I should see Updated today$/ do
+  today = Date.today.to_s
+  Given "I should see \"Updated:#{today}\""
+end

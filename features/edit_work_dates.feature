@@ -1,5 +1,4 @@
 ﻿@works
-@wip
 Feature: Edit Works Dates
   In order to have an archive full of works
   As an author
@@ -36,7 +35,7 @@ Feature: Edit Works Dates
     When I follow "Post Chapter"
     Then I should see "Chapter has been posted"
       And I should see "Published:2010-04-30"
-      And I should see "Updated:2010-06-25"
+      And I should see Updated today
     When I am on testuser's works page
     Then I should see "less than 1 minute ago"
       And I should not see "29 Apr 2010"
