@@ -35,7 +35,7 @@ class Chapter < ActiveRecord::Base
   attr_accessor :ambiguous_pseuds
   attr_accessor :wip_length_placeholder
 
-  before_save :validate_authors, :clean_title #, :clean_emdashes
+  before_save :validate_authors, :strip_title #, :clean_emdashes
   before_save :set_word_count
   before_save :validate_published_at
 #  before_update :clean_emdashes
@@ -49,15 +49,22 @@ class Chapter < ActiveRecord::Base
   end
 
   # strip leading spaces from title
-  def clean_title
+  def strip_title
     unless self.title.blank?
       self.title = self.title.gsub(/^\s*/, '')
     end
   end
   
+  def chapter_header
+    t('alt_title', :default => "Chapter {{position}}", :position => self.position)
+  end
+  
+  def chapter_title
+    self.title.blank? ? self.chapter_header : self.title
+  end
+  
   def display_title
-    t = self.title.blank? ? "Chapter #{self.position}" : self.title
-    self.position.to_s + '. ' + t
+    self.position.to_s + '. ' + self.chapter_title
   end
   
   def abbreviated_display_title

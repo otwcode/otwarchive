@@ -412,8 +412,12 @@ class Work < ActiveRecord::Base
   def published_at
     self.first_chapter.published_at
   end
-
-
+  
+  def default_date
+    backdate = first_chapter.try(:published_at) if self.backdate
+    backdate || Date.today
+  end
+  
   ########################################################################
   # SERIES
   ########################################################################

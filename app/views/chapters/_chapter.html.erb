@@ -20,7 +20,7 @@
 
 <div class="chapter preface" role="complementary">
   <h3 class="title">
-    <%= chapter_link(chapter) %>
+    <%= link_to chapter.chapter_header, [chapter.work, chapter] %>
     <%- unless chapter.title.blank? -%>: <%=h chapter.title %>
     <%- end -%>
   </h3>
