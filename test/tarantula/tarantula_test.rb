@@ -14,9 +14,10 @@ class TarantulaTest < ActionController::IntegrationTest
     # log in to your application.  Doing so allows Tarantula to crawl the 
     # pages that are only accessible to logged-in users.
     # 
-    #   post '/session', :login => 'quentin', :password => 'monkey'
-    #   follow_redirect!
-    
-    tarantula_crawl(self)
+    post '/session', :login => 'testuser', :password => 'test'
+    follow_redirect!
+    t = tarantula_crawler(self)
+    t.crawl_timeout = 5.minutes
+    t.crawl "/"
   end
 end

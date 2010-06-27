@@ -69,7 +69,8 @@ class TagsController < ApplicationController
 
   def show_hidden
     unless params[:creation_id].blank? || params[:creation_type].blank? || params[:tag_type].blank?
-      @display_creation = params[:creation_type].constantize.find(params[:creation_id])
+      model = params[:creation_type].classify.constantize rescue nil
+      @display_creation = model.find(params[:creation_id]) if model.is_a? Class
       # Tags aren't directly on series, so we need to handle them differently
       if params[:creation_type] == 'Series'
         if params[:tag_type] == 'warnings'
@@ -115,7 +116,8 @@ class TagsController < ApplicationController
   def create
     type = params[:tag][:type] if params[:tag]
     if type
-      @tag = type.constantize.find_or_create_by_name(params[:tag][:name])
+      model = type.classify.constantize rescue nil
+      @tag = model.find_or_create_by_name(params[:tag][:name])  if model.is_a? Class
     else
       flash[:error] = t('please_provide_category', :default => "Please provide a category.")
       @tag = Tag.new(:name => params[:tag][:name])
