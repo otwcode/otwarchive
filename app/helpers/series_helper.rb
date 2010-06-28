@@ -119,38 +119,6 @@ module SeriesHelper
     end
   end
   
-  # TODO: merge with work_blurb_tag_block
-  def series_blurb_tag_block(series)    
-    warnings = series.work_tags.select{|tag| tag.type == "Warning"}.sort
-    pairings = series.work_tags.select{|tag| tag.type == "Pairing"}.sort
-    characters = series.work_tags.select{|tag| tag.type == "Character"}.sort
-    freeforms = series.work_tags.select{|tag| tag.type == "Freeform"}.sort
-
-    last_tag = (warnings + pairings + characters + freeforms).last
-    tag_block = ""
-
-    [warnings, pairings, characters, freeforms].each do |tags|
-      unless tags.empty?
-        class_name = tags.first.type.to_s.downcase.pluralize
-        if (class_name == "warnings" && hide_warnings?(series)) || (class_name == "freeforms" && hide_freeform?(series))
-          open_tags = "<li class='#{class_name}' id='series_#{series.id}_category_#{class_name}'><strong>"
-          close_tags = "</strong></li>"
-          delimiter = (class_name == 'freeforms' || last_tag.is_a?(Warning)) ? '' : ArchiveConfig.DELIMITER_FOR_OUTPUT
-          tag_block <<  open_tags + show_hidden_tags_link(series, class_name) + delimiter + close_tags
-        elsif class_name == "warnings"
-          open_tags = "<li class='#{class_name}'><strong>"
-          close_tags = "</strong></li>"
-          link_array = tags.collect{|tag| link_to_tag(tag) + (tag == last_tag ? '' : ArchiveConfig.DELIMITER_FOR_OUTPUT) }
-          tag_block <<  open_tags + link_array.join("</strong></li> <li class='#{class_name}'><strong>") + close_tags
-        else
-          link_array = tags.collect{|tag| link_to_tag(tag) + (tag == last_tag ? '' : ArchiveConfig.DELIMITER_FOR_OUTPUT) }
-          tag_block << "<li class='#{class_name}'>" + link_array.join("</li> <li class='#{class_name}'>") + '</li>'        
-        end
-      end
-    end
-    tag_block
-  end
-  
   # Generates confirmation message for 'remove me as author'
   def series_removal_confirmation(series, user)
     if !(series.work_pseuds & user.pseuds).empty?

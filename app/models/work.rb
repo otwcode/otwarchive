@@ -572,6 +572,14 @@ class Work < ActiveRecord::Base
   # Works are taggable objects.
   ####################################################################### 
 
+  def tag_groups
+    if self.placeholder_tags
+      self.placeholder_tags.values.flatten.group_by { |t| t.type.to_s }
+    else
+      self.tags.group_by { |t| t.type.to_s }
+    end
+  end
+  
   # Check to see that a work is tagged appropriately
   def has_required_tags?
     return false if self.fandom_string.blank?

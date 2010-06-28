@@ -203,7 +203,7 @@
         </dl>
       </dd>
     
-    <% fields_for_associated('work', @chapter) do |c| %>
+    <% fields_for "work[chapter_attributes]", @chapter do |c| %>
       <!-- Chaptered checkbox (work_is_wip) -->
       <!-- Checking this box causes the expected number of chapters box to appear; unchecking it causes it to disappear. -->
       <dt class="work-is_wip">
@@ -291,7 +291,7 @@
     </fieldset>
   <%- end -%>
   
-  <%- end -%> <!-- end of fields_for_associated -->
+  <%- end -%> <!-- end of fields for chapters -->
 
   <fieldset class="post-work">
     <legend><%= 'Post New Work' -%></legend>

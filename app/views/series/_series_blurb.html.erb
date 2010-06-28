@@ -20,7 +20,7 @@
 	</div>
 <!--tags-->
     <ul class="tags">
-      <%= series_blurb_tag_block(series) %>
+      <%= blurb_tag_block(series) %>
     </ul>
 
 <%- cache([series, "blurb", logged_in?]) do -%>    

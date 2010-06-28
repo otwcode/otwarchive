@@ -164,6 +164,10 @@ class Series < ActiveRecord::Base
     self.work_tags.select{|t| t.type == "Pairing"}.sort + self.work_tags.select{|t| t.type == "Character"}.sort + self.work_tags.select{|t| t.type == "Freeform"}.sort
   end
   
+  def tag_groups
+    self.work_tags.group_by { |t| t.type.to_s }
+  end
+  
   # Grabs the earliest published_at date of the visible works in the series
   def published_at
     if self.works.visible.posted.blank?

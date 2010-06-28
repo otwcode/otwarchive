@@ -12,7 +12,7 @@
 	  <blockquote class="user-generated-view summary" title="summary">
 		  <p><%= t('.works.will_be_revealed', :default => "This work is part of an ongoing challenge and will be revealed soon!") %></p>
   	</blockquote>
-  <% elsif (@user || @pseud) && work.anonymous? && !author_of_work && !allowed_controllers %>
+  <% elsif (@user || @pseud) && work.anonymous? && !author_of_work && !(['gifts', 'readings'].include?(controller.controller_name)) %>
     <div class="header module mystery">
 	    <h4 title="title"><%= t('.works.anonymous', :default => "Mystery Work") %></h4>
 	    <h5><%= t('.works.part_of', :default => "Part of: {{collections}}", :collections => work.collections.anonymous.map {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ")) %></h5>
@@ -57,7 +57,7 @@
     <!--warnings again, cast, freeform tags-->
   	<h6 class="landmark">Tags</h6>
   	<ul class="tags">
-  	  <%= work_blurb_tag_block(work, tag_groups) -%>
+  	  <%= blurb_tag_block(work, tag_groups) -%>
   	</ul>
 
 <%- cache("#{work.cache_key}-blurb-bottom") do -%>	

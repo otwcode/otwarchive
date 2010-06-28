@@ -12,7 +12,7 @@
  <% if @collections.empty? %>
   <%= t('.no_collections_found', :default => "Sorry, there were no collections found.") %>
  <%else %>
-  <h2><%= collection_search_header @collections, @query %> </h2>
+  <h2><%= search_header @collections, @query, "Collection" %> </h2>
  <% end %>
  
 <!--/descriptions-->

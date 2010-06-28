@@ -189,4 +189,132 @@ module TagsHelper
     end
     sub_ul
   end
+  
+  
+  def blurb_tag_block(item, tag_groups=nil)
+    item_class = item.class.to_s.underscore
+    tag_groups ||= item.tag_groups
+    categories = ['Warning', 'Pairing', 'Character', 'Freeform']
+    last_tag = categories.collect { |c| tag_groups[c] }.flatten.compact.last
+    tag_block = ""   
+    
+    categories.each do |category|
+      if tags = tag_groups[category]
+        class_name = category.downcase.pluralize
+        if (class_name == "warnings" && hide_warnings?(item)) || (class_name == "freeforms" && hide_freeform?(item))
+          open_tags = "<li class='#{class_name}' id='#{item_class}_#{item.id}_category_#{class_name}'><strong>"
+          close_tags = "</strong></li>"
+          delimiter = (class_name == 'freeforms' || last_tag.is_a?(Warning)) ? '' : ArchiveConfig.DELIMITER_FOR_OUTPUT
+          tag_block <<  open_tags + show_hidden_tags_link(item, class_name) + delimiter + close_tags
+        elsif class_name == "warnings"
+          open_tags = "<li class='#{class_name}'><strong>"
+          close_tags = "</strong></li>"
+          link_array = tags.collect{|tag| link_to_tag(tag) + (tag == last_tag ? '' : ArchiveConfig.DELIMITER_FOR_OUTPUT) }
+          tag_block <<  open_tags + link_array.join("</strong></li> <li class='#{class_name}'><strong>") + close_tags
+        else
+          link_array = tags.collect{|tag| link_to_tag(tag) + (tag == last_tag ? '' : ArchiveConfig.DELIMITER_FOR_OUTPUT) }
+          tag_block << "<li class='#{class_name}'>" + link_array.join("</li> <li class='#{class_name}'>") + '</li>'        
+        end
+      end
+    end
+    tag_block
+  end
+
+  def get_title_string(tags, category_name = "")
+    if tags && tags.size > 0
+      tags.collect(&:name).join(", ")
+    else
+      category_name.blank? ? "" : "No" + " " + category_name
+    end
+  end
+  
+  def get_symbols_for(item, tag_groups=nil, symbols_only = false)
+    tag_groups ||= item.tag_groups
+    mappings = {}
+
+    warnings = tag_groups['Warning']
+    mappings[:warning] = {:class_name => get_warnings_class(warnings), :string =>  get_title_string(warnings)}
+   
+    ratings = tag_groups['Rating']
+    rating = ratings.blank? ? nil : ratings.first
+    mappings[:rating] = {:class_name => get_ratings_class(rating), :string =>  get_title_string(ratings, "rating")}
+    
+    categories = tag_groups['Category']
+    mappings[:category] = {:class_name => get_category_class(categories), :string =>  get_title_string(categories, "category")}
+    
+    if item.class == Work
+      iswip_string = item.is_wip ? "Work in Progress" : "Complete Work"
+      iswip_class = item.is_wip ? "complete-no iswip" : "complete-yes iswip"
+      mappings[:iswip] = {:class_name => iswip_class, :string =>  iswip_string}
+    elsif item.class == ExternalWork
+      mappings[:iswip] = {:class_name => 'external-work', :string =>  "External Work"}
+    end
+
+    symbol_block = ""
+    symbol_block << "<ul class=\"required-tags\">\n" if not symbols_only
+    %w(rating category warning iswip).each do |w|
+      css_class = mappings[w.to_sym][:class_name]
+      title_string = mappings[w.to_sym][:string]
+      symbol_block << "<li>"
+      symbol_block << link_to_help('symbols-key', link = "<div class=\"#{css_class}\" title=\"#{title_string}\"><span>" + title_string + "</span></div>")
+      symbol_block << "</li>\n"
+    end
+    symbol_block << "</ul>\n" if not symbols_only
+    return symbol_block
+  end
+
+  def get_warnings_class(warning_tags)
+    return "warning-yes warnings" unless warning_tags
+    none = true
+    choosenotto = true
+    warning_tags.map(&:name).each do |name|
+      none = false if name != ArchiveConfig.WARNING_NONE_TAG_NAME
+      choosenotto = false if name !=ArchiveConfig.WARNING_DEFAULT_TAG_NAME
+    end
+    return "warning-no warnings" if none
+    return "warning-choosenotto warnings" if choosenotto
+    "warning-yes warnings"
+  end
+
+  def get_ratings_class(rating_tag)
+    return "rating-notrated rating" unless rating_tag
+    case rating_tag.name
+    when ArchiveConfig.RATING_EXPLICIT_TAG_NAME
+      "rating-explicit rating"
+    when ArchiveConfig.RATING_MATURE_TAG_NAME
+      "rating-mature rating"
+    when ArchiveConfig.RATING_TEEN_TAG_NAME
+      "rating-teen rating"
+    when ArchiveConfig.RATING_GENERAL_TAG_NAME
+      "rating-general-audience rating"
+    else
+      "rating-notrated rating"
+    end
+  end
+
+  def get_category_class(category_tags)
+    if category_tags.blank?
+      "category-none category"
+    elsif category_tags.length > 1
+      "category-multi category"
+    else
+      case category_tags.first.name
+      when ArchiveConfig.CATEGORY_GEN_TAG_NAME
+        "category-gen category"
+      when ArchiveConfig.CATEGORY_SLASH_TAG_NAME
+        "category-slash category"
+      when ArchiveConfig.CATEGORY_HET_TAG_NAME
+        "category-het category"
+      when ArchiveConfig.CATEGORY_FEMSLASH_TAG_NAME
+        "category-femslash category"
+      when ArchiveConfig.CATEGORY_MULTI_TAG_NAME
+        "category-multi category"
+      when ArchiveConfig.CATEGORY_OTHER_TAG_NAME
+        "category-other category"
+      else
+        "category-none category"
+      end
+    end
+  end
+
 end

@@ -3,55 +3,54 @@
 <div class="wrapper">
 
   <dl class="work meta" role="complementary">
-    <%- tag_groups = collect_work_tags(work) -%>
     <%- Tag::VISIBLE.each do |type| -%>
-    <%- tags = tag_groups[type] -%>
-    <%- unless tags.blank? -%>
-    <dt class="<%= type.downcase -%>">
-      <%- if type == "Warning" -%>
-      <%= link_to( tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize, tos_faq_path(:anchor => "tags") ) %>:
-      <%- elsif type.constantize::NAME == ArchiveConfig.FREEFORM_CATEGORY_NAME -%>
-      <%= type.constantize::NAME %>:
-      <%- else -%>
-      <%= tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize %>:
+      <%- tags = work.tag_groups[type] -%>
+        <%- unless tags.blank? -%>
+          <dt class="<%= type.downcase -%>">
+            <%- if type == "Warning" -%>
+              <%= link_to( tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize, tos_faq_path(:anchor => "tags") ) %>:
+            <%- elsif type.constantize::NAME == ArchiveConfig.FREEFORM_CATEGORY_NAME -%>
+              <%= type.constantize::NAME %>:
+            <%- else -%>
+              <%= tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize %>:
+            <%- end -%>
+          </dt>
+      
+          <dd class="<%= type.downcase -%>">
+            <ul>
+              <%- if (type == "Warning" && hide_warnings?(work)) || (type == "Freeform" && hide_freeform?(work)) -%>        
+                <li id="work_<%= work.id %>_category_<%= type.downcase.pluralize %>"><%= show_hidden_tags_link(work, type.downcase.pluralize) %> </li>
+             <%- else -%>                   
+               <%= tag_link_list(tags) %>
+             <%- end -%>
+            </ul>
+          </dd>
       <%- end -%>
-    </dt>
-
-    <dd class="<%= type.downcase -%>">
-      <ul>
-        <%- if (type == "Warning" && hide_warnings?(work)) || (type == "Freeform" && hide_freeform?(work)) -%>        
-        <li id="work_<%= work.id %>_category_<%= type.downcase.pluralize %>"><%= show_hidden_tags_link(work, type.downcase.pluralize) %> </li>
-        <%- else -%>                   
-        <%= tag_link_list(tags) %>
-        <%- end -%>
-      </ul>
+    <%- end -%>
+    
+    <%- unless @work.series.blank? -%>
+      <dt class="series">
+        <%= t('.works.series', :default => "Series:") %>
+      </dt>
+      <dd class="series">
+        <%= show_series_data(@work) %>
       </dd>
     <%- end -%>
-  <%- end -%>
-
-  <%- unless @work.series.blank? -%>
-    <dt class="series">
-      <%= t('.works.series', :default => "Series:") %>
+    
+    <%- unless @work.approved_collections.empty? %>
+      <dt class="collections">
+        <%= t('.work_collections', :default => 'Collections:') %>
+      </dt>
+      <dd class="collections">
+        <%= show_collections_data(@work) %>
+      </dd>
+    <%- end -%>
+    
+    <dt class="stats">
+      <%= t("works.stats", :default => "Stats") %>:
     </dt>
-    <dd class="series">
-      <%= show_series_data(@work) %>
+    <dd class="stats">
+      <%= work_meta_list(@work, @chapter) %>
     </dd>
-  <%- end -%>
-
-  <%- unless @work.approved_collections.empty? %>
-    <dt class="collections">
-      <%= t('.work_collections', :default => 'Collections:') %>
-    </dt>
-    <dd class="collections">
-      <%= show_collections_data(@work) %>
-    </dd>
-  <%- end -%>
-
-  <dt class="stats">
-    <%= t("works.stats", :default => "Stats") %>:
-  </dt>
-  <dd class="stats">
-    <%= work_meta_list(@work, @chapter) %>
-  </dd>
-</dl>
+  </dl>
 </div>

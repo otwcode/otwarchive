@@ -68,26 +68,4 @@ module CollectionsHelper
     end
   end
   
-  def collection_search_header(collection, search_query)
-    if search_query.blank?
-      search_query = " found"
-    else
-      search_query = html_escape search_query
-      search_query = " found for '" + search_query + "'"
-    end
-  
-    if collection.total_pages < 2
-      case collection.size
-      when 1; "1 Collection" + search_query
-      else; collection.total_entries.to_s + " Collections" + search_query
-      end
-    else
-      %{ %d - %d of %d }% [
-        collection.offset + 1,
-        collection.offset + collection.length,
-        collection.total_entries
-      ] + "Collections" + search_query
-    end
-  end
-  
 end

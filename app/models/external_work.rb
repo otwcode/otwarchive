@@ -145,5 +145,9 @@ class ExternalWork < ActiveRecord::Base
       end
     end
   end
+
+  def tag_groups
+    self.tags.group_by { |t| t.type.to_s }
+  end
    
 end
