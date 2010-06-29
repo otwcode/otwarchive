@@ -30,6 +30,7 @@ class PseudsController < ApplicationController
         flash[:error] = t('pseud_not_found', :default => "Sorry, could not find this pseud.")
         redirect_to :action => :index and return
       end
+      @fandoms = @author.filters.by_type("Fandom").by_name.find(:all, :select => "DISTINCT tags.*")
       @works = Work.written_by_conditions([@author]).visible.ordered_by_date_desc.limited(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
       if current_user == :false
         @series = Series.visible_to_public.exclude_anonymous.for_pseuds([@author]).find(:all, :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).paginate(:page => params[:page])

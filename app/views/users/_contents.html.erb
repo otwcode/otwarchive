@@ -10,13 +10,13 @@
         <%- else -%>
         <li>
         <%- end -%>       
-          <%= link_to fandom.name, user_works_path(@user, :selected_tags => [fandom.id]) %>
+          <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :selected_tags => [fandom.id]} %>
         </li>
       <%- end -%>
       <%- if @fandoms.length > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD -%> 
         <li>
           <%- if params[:expand_fandoms] -%>
-          <%= link_to "< Hide full list", @user, :id => "expandable-link" %>
+          <%= link_to "< Hide full list", [@user, @author], :id => "expandable-link" %>
           <%- else -%>
           <%= link_to "> Expand full list", url_for(:expand_fandoms => true), :id => "expandable-link" %>
           <%- end -%>
