@@ -9,6 +9,10 @@ $j(document).ready(function() {
     // initSelect('languages_menu');
     hideExpandable();
     hideHideMe();
+    $j('#expandable-link').click(function(){
+          expandList();
+          return false;
+      });
 });
 
 function visualizeTables() {
@@ -133,6 +137,35 @@ function hideFormFields() {
         $('work-form').className = $('work-form').className;
     }
 }
+
+// TODO: combine and simplify during Javascript review
+// Currently used to expand/show fandoms on the user dashboard
+function expandList() {
+    var hidden_lis = $$('li.hidden');
+    hidden_lis.each(function(li) {
+        li.removeClassName('hidden');
+        li.addClassName('not-hidden');
+    });
+    $j('#expandable-link').text("\< Hide full list");    
+    $j('#expandable-link').click(function(){
+        contractList();
+        return false;
+    });
+}
+
+function contractList() {
+    var hidden_lis = $$('li.not-hidden');
+    hidden_lis.each(function(li) {
+        li.removeClassName('not-hidden');
+        li.addClassName('hidden');  
+    });
+    $j('#expandable-link').text("\> Expand full list");    
+    $j('#expandable-link').click(function(){
+        expandList();
+        return false;
+    });
+}
+
 
 // Toggles items in filter list
 function toggleFilters(id, blind_duration) {

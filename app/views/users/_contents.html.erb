@@ -1,5 +1,31 @@
 ﻿<!--main content-->
-<!-- expects @works, @series, @bookmarks -->
+<!-- expects @fandoms, @works, @series, @bookmarks -->
+  <%- unless @fandoms.blank? -%>
+  <div class="fandom module" id="user-fandoms">
+    <h3><%=h t('.user_fandoms', :default => "Fandoms") %></h3>
+    <ul class="index">
+      <%- @fandoms.each_with_index do |fandom, i| -%>
+        <%- if !params[:expand_fandoms] && i > (ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD - 1) -%>
+        <li class='hidden'>
+        <%- else -%>
+        <li>
+        <%- end -%>       
+          <%= link_to fandom.name, user_works_path(@user, :selected_tags => [fandom.id]) %>
+        </li>
+      <%- end -%>
+      <%- if @fandoms.length > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD -%> 
+        <li>
+          <%- if params[:expand_fandoms] -%>
+          <%= link_to "< Hide full list", @user, :id => "expandable-link" %>
+          <%- else -%>
+          <%= link_to "> Expand full list", url_for(:expand_fandoms => true), :id => "expandable-link" %>
+          <%- end -%>
+        </li>
+      <%- end -%>
+    </ul>
+  </div>
+  <%- end -%> 
+              
   <%- unless @works.blank? -%>
   <div class="work module<%- if current_user == @user -%> works-own<%- end -%>" id="user-works">
     <h3><%=h t('.recent_works', :default => "Recent works") %></h3>
