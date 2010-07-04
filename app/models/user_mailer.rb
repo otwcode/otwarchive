@@ -7,7 +7,7 @@ class UserMailer < ActionMailer::Base
   def invitation(invitation)
     subject       "[#{ArchiveConfig.APP_NAME}] Invitation"
     recipients    invitation.invitee_email
-    from            ArchiveConfig.RETURN_ADDRESS
+    from          ArchiveConfig.RETURN_ADDRESS
     sent_on       Time.now
     content_type  "text/html"
     body          :invitation => invitation, :user_name => (invitation.creator.is_a?(User) ? invitation.creator.login : ''), :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
@@ -36,7 +36,7 @@ class UserMailer < ActionMailer::Base
   # Emails a recipient to say that a gift has been posted for them
   def recipient_notification(user, work, collection=nil)
     setup_email(user)
-    subject       "[#{ArchiveConfig.APP_NAME}][#{collection ? collection.title : ''}] A Gift Story For You #{collection ? "From " + collection.title : ''}"
+    subject       "[#{ArchiveConfig.APP_NAME}]#{collection ? '[' + collection.title + ']' : ''} A Gift Story For You #{collection ? 'From ' + collection.title : ''}"
     sent_on       Time.now
     from          ArchiveConfig.RETURN_ADDRESS
     content_type  "text/html"
@@ -67,7 +67,7 @@ class UserMailer < ActionMailer::Base
   def potential_match_generation_notification(collection)
     setup_email_without_name(collection.get_maintainers_email)
     subject    "[#{ArchiveConfig.APP_NAME}][#{collection.title}] Potential Match Generation Complete"
-    body	:collection => collection, :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
+    body	     :collection => collection, :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
   end
 
   def challenge_assignment_notification(collection, assigned_user, assignment)
