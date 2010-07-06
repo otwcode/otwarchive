@@ -1,6 +1,4 @@
 @tag
-@wip
-
 Feature: Comment on tag
 As a tag wrangler
 I'd like to comment on a tag
@@ -42,4 +40,4 @@ Scenario: Log in as a tag wrangler and see wrangler pages.
       And I press "Add comment"
     Then I should see "Comment created!"
       And I should see "Shouldn't this be a metatag with Stargate?"
-      And I should see "Posted today"
+      And I should see Posted today
