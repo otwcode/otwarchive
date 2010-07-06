@@ -9,3 +9,8 @@ end
 When 'I reload the page' do
   reload
 end
+
+Then /^I should see Posted now$/ do
+	now = Time.now.to_s
+  Given "I should see \"Posted #{now}\""
+  end
