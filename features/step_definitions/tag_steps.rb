@@ -26,3 +26,8 @@ When /^I create the tag "([^\"]*)" with type "([^\"]*)"$/ do |name, type|
  tag.canonical = true
  tag.save
 end
+
+Given /^I add the fandom "([^\"]*)" to the character "([^\"]*)"$/ do |fandom, character|
+  char = Tag.find_by_name!(character)
+  char.add_association(fandom)
+end

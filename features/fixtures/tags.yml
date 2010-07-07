@@ -8,6 +8,7 @@ none:
 fandom1:
   name: first fandom
   type: Fandom
+  canonical: true
 fandom2:
   name: second fandom
   type: Fandom
@@ -17,3 +18,14 @@ classic:
 fandom3:
   name: third fandom
   type: Fandom
+media1:
+  name: TV Shows
+  type: Media
+char1:
+  name: Person A
+  type: Character
+  canonical: true
+char1a:
+  name: Persone A
+  type: Character
+  taggings_count: 1
