@@ -5,7 +5,7 @@ class Chapter < ActiveRecord::Base
   has_many :pseuds, :through => :creatorships
 
   belongs_to :work
-  acts_as_list :scope => 'work_id = #{work_id} AND posted = 1'
+  acts_as_list :scope => 'work_id = #{work_id}'
 
   acts_as_commentable
 
