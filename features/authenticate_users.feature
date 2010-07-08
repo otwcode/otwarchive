@@ -1,4 +1,5 @@
 @users
+@admin
 Feature: User Authentication
 
   Scenario: Forgot password

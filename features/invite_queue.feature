@@ -1,4 +1,5 @@
-﻿@users
+﻿@admin
+@wip
 Feature: Invite queue management
 
   Scenario: Turn on queue, join queue and check status
@@ -31,3 +32,9 @@ Feature: Invite queue management
       And I press "Go"
     Then I should see "Invitation Status for test@archiveofourown.org"
       And I should see "You are currently number 1 on our waiting list! At our current rate, you should receive an invitation on or around"
+    Given the system processes jobs
+    Then 1 email should be delivered
+    When I fill in "email" with "test@archiveofourown.org"
+      And I press "Go"
+    Then I should see "Invitation Status for test@archiveofourown.org"
+      And I should see "You are not on our waiting list"

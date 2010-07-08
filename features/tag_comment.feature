@@ -41,3 +41,5 @@ Scenario: Log in as a tag wrangler and see wrangler pages.
     Then I should see "Comment created!"
       And I should see "Shouldn't this be a metatag with Stargate?"
       And I should see Posted today
+    When I view the tag "Stargate Atlantis"
+    Then I should see "1 comment"

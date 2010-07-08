@@ -1,7 +1,7 @@
-﻿@users
+﻿@admin
 Feature: Admin tasks
 
-  Scenario: Log in as an admin and do admin-y things
+  Scenario: Log in as an admin and do admin-y things. Wrong password fails admin login, you can find users, post a new FAQ section.
     Given I have no users
       And the following admin exists
       | login       | password | 
