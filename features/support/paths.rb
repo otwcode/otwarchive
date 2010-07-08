@@ -23,6 +23,8 @@ module NavigationHelpers
       user_pseuds_path(:user_id => $1)
     when /my user page/
       user_path(current_user)
+    when /the import page/
+      new_work_path(:import => 'true')
      
     # Here is an example that pulls values out of the Regexp:
     #
