@@ -33,7 +33,16 @@ class AdminSetting < ActiveRecord::Base
   def self.cache_expiration
     self.first ? self.first.cache_expiration : 10
   end  
-    
+
+  def self.check_queue
+    if self.invite_from_queue_enabled? && InviteRequest.count > 0
+      unless Time.now < self.invite_from_queue_at
+        InviteRequest.invite
+        new_date = self.invite_from_queue_at + (self.invite_from_queue_frequency).days
+        self.first.update_attribute(:invite_from_queue_at, new_date)
+      end
+    end
+  end
     
   private
   

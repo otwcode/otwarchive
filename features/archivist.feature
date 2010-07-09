@@ -1,6 +1,4 @@
-﻿@users
-@admin
-@wip
+﻿@wip @users @admin
 Feature: Archivist bulk imports
 
   Scenario: Log in as an archivist and import a big archive.
@@ -29,7 +27,11 @@ Feature: Archivist bulk imports
       And I follow "Import"
     Then I should see "Import works for others"
     When I check "Import works for others"
-      And I fill in "urls" with "http://cesy.dreamwidth.org/154770.html \n http://cesy.dreamwidth.org/394320.html"
+      And I fill in "urls" with 
+        """
+        http://cesy.dreamwidth.org/154770.html
+        http://cesy.dreamwidth.org/394320.html
+        """
       And I check "Post without previewing"
       And I press "Import"
     Then I should see "Importing completed successfully! (But please check the results over carefully!)"

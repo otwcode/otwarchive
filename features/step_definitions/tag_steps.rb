@@ -28,6 +28,7 @@ When /^I create the tag "([^\"]*)" with type "([^\"]*)"$/ do |name, type|
 end
 
 Given /^I add the fandom "([^\"]*)" to the character "([^\"]*)"$/ do |fandom, character|
-  char = Tag.find_by_name!(character)
-  char.add_association(fandom)
+  char = Character.find_or_create_by_name(character)
+  fand = Fandom.find_or_create_by_name(fandom)
+  char.add_association(fand)
 end

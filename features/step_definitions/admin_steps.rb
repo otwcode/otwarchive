@@ -9,3 +9,11 @@ Given /^I have an AdminSetting$/ do
     settings.save(false)
   end
 end
+
+When /^the invite_from_queue_at is yesterday$/ do
+  AdminSetting.first.update_attribute(:invite_from_queue_at, Time.now - 1.day)
+end
+
+When /^the check_queue rake task is run$/ do
+  AdminSetting.check_queue
+end

@@ -1,5 +1,4 @@
 ﻿@tags
-@wip
 Feature: Tag wrangling more
 
   Scenario: Log in as a tag wrangler and see wrangler pages.

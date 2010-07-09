@@ -1,5 +1,4 @@
 ﻿@admin
-@wip
 Feature: Invite queue management
 
   Scenario: Turn on queue, join queue and check status
@@ -20,6 +19,7 @@ Feature: Invite queue management
     When I follow "Log out"
     Then I should see "You have been logged out"
     When I am on the homepage
+      And all emails have been delivered
       And I follow "SIGN UP NOW"
     Then I should see "Request an invite"
     When I fill in "invite_request_email" with "test@archiveofourown.org"
@@ -32,9 +32,8 @@ Feature: Invite queue management
       And I press "Go"
     Then I should see "Invitation Status for test@archiveofourown.org"
       And I should see "You are currently number 1 on our waiting list! At our current rate, you should receive an invitation on or around"
-    Given the system processes jobs
+    When the invite_from_queue_at is yesterday
+    And the check_queue rake task is run
     Then 1 email should be delivered
-    When I fill in "email" with "test@archiveofourown.org"
-      And I press "Go"
-    Then I should see "Invitation Status for test@archiveofourown.org"
-      And I should see "You are not on our waiting list"
+    When I reload the page
+    Then I should see "Sorry, we couldn't find that address in our queue."
