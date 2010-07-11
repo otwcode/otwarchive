@@ -9,8 +9,6 @@ Feature: Edit preferences
   Given the following activated user exists
     | login         | password   |
     | editname      | password   |
-    And a warning exists with name: "No Archive Warnings Apply", canonical: true
-    And a rating exists with name: "Not Rated", canonical: true
   When I go to editname's user page
     And I follow "Profile"
   Then I should not see "My email address"
@@ -19,8 +17,7 @@ Feature: Edit preferences
   Then I should see "Hi, editname!"
     And I should see "Log out"
   When I post the work "This has two chapters"
-  Then I should see "This has two chapters"
-  When I follow "Add chapter"
+  And I follow "Add chapter"
     And I fill in "content" with "Secondy chapter"
     And I press "Preview"
     And I press "Post"
@@ -57,17 +54,11 @@ Feature: Edit preferences
     | login          | password   |
     | mywarning1     | password   |
     | mywarning2     | password   |
-    And a warning exists with name: "No Archive Warnings Apply", canonical: true
-    And a rating exists with name: "Not Rated", canonical: true
   When I am logged in as "mywarning1" with password "password"
-  Then I should see "Hi, mywarning1!"
-    And I should see "Log out"
   When I post the work "This work has warnings and tags"
-  Then I should see "This work has warnings and tags"
   When I follow "Log out"
-    And I am logged in as "mywarning2" with password "password"
+  When I am logged in as "mywarning2" with password "password"
     And I post the work "This also has warnings and tags"
-  Then I should see "This also has warnings and tags"
   When I go to the works page
   Then I should see "No Archive Warnings Apply"
     And I should not see "Show warnings"

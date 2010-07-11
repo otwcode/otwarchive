@@ -167,13 +167,6 @@ class User < ActiveRecord::Base
     @unposted_works = works.find(:all, :conditions => {:posted => false}, :order => 'works.created_at DESC')
   end
   
-  # gets rid of unposted works older than a week
-  def cleanup_unposted_works
-    works.find(:all, :conditions => ['works.posted = ? AND works.created_at < ?', false, 1.week.ago]).each do |w|
-      w.destroy
-    end
-  end
-  
   # removes ALL unposted works
   def wipeout_unposted_works
     works.find(:all, :conditions => {:posted => false}).each do |w|

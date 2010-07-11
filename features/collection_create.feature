@@ -9,12 +9,8 @@ Feature: Collection
   Given the following activated user exists
     | login          | password    |
     | myname1        | something   |
-    And a warning exists with name: "No Archive Warnings Apply", canonical: true
     And I am logged in as "myname1" with password "something"
-  Then I should see "Hi, myname1!"
-    And I should see "Log out"
   When I post the work "Test work thingy"
-  Then I should see "Work was successfully posted."
   When I go to the collections page
   Then I should see "Collections in the "
     And I should not see "My Collection Thing"
@@ -55,7 +51,6 @@ Feature: Collection
     | myname3        | something   |
     | myname4        | something   |
     And I have no tags
-    And a warning exists with name: "No Archive Warnings Apply", canonical: true
     And I create the tag "Stargate Atlantis" with id 27 and type "Fandom"
     And I create the tag "Stargate SG-1" with id 28 and type "Fandom"
     And a freeform exists with name: "Alternate Universe - Historical", canonical: true

@@ -9,7 +9,7 @@ Feature: Import Works
   Then I should see "Please log in"
 
   Scenario: Creating a new minimally valid work
-    Given a warning exists with name: "No Warnings", canonical: true
+    Given basic tags
       And I am logged in as a random user
     When I go to the import page
     Then I should see "Import New Work"
@@ -24,7 +24,7 @@ Feature: Import Works
     Then I should see "Recent Entries"
     
   Scenario: Creating a new work from an LJ story
-    Given a warning exists with name: "No Warnings", canonical: true
+    Given basic tags
       And a category exists with name: "Gen", canonical: true
       And a category exists with name: "F/M", canonical: true
       And the following activated user exists

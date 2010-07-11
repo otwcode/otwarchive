@@ -9,16 +9,10 @@ Scenario: Orphan all works belonging to one pseud
     | login         | password   |
     | orphanpseud   | password   |
     And I am logged in as "orphanpseud" with password "password"
-    And a warning exists with name: "No Archive Warnings Apply", canonical: true
-  Then I should see "Hi, orphanpseud!"
-    And I should see "Log out"
   When I post the work "Shenanigans"
-  Then I should see "Work was successfully posted."
-  When I post the work "Shenanigans 2"
-  Then I should see "Work was successfully posted."
+    And I post the work "Shenanigans 2"
   When I follow "orphanpseud"
-  Then I should see "Shenanigans by orphanpseud"
-    And I should see "Shenanigans 2 by orphanpseud"
+  Then I should see "Shenanigans 2 by orphanpseud"
   When I follow "My Pseuds"
   Then I should see "orphanpseud"
     And I should see "2 works"
@@ -39,13 +33,8 @@ Scenario: Orphan all works belonging to one pseud
         | login         | password   |
         | orphanpseud   | password   |
         And I am logged in as "orphanpseud" with password "password"
-        And a warning exists with name: "No Archive Warnings Apply", canonical: true
-      Then I should see "Hi, orphanpseud!"
-        And I should see "Log out"
       When I post the work "Shenanigans"
-      Then I should see "Work was successfully posted."
       When I post the work "Shenanigans 2"
-      Then I should see "Work was successfully posted."
       When I follow "orphanpseud"
       Then I should see "Shenanigans by orphanpseud"
         And I should see "Shenanigans 2 by orphanpseud"

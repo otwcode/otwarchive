@@ -13,7 +13,6 @@ Scenario: Log in as a tag wrangler and see wrangler pages.
       And the following activated user exists
       | login       | password      | 
       | dizmo       | wrangulator   |
-      And a warning exists with name: "No Warnings", canonical: true
       And I create the tag "TV Shows" with type "Media"
       And I create the tag "Stargate Atlantis" with type "Fandom"
     When I go to the admin_login page

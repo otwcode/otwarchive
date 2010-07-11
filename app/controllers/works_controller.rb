@@ -146,7 +146,6 @@ class WorksController < ApplicationController
         flash[:error] = t('not_your_drafts', :default => "You can only see your own drafts, sorry!")
         redirect_to current_user
       else
-        current_user.cleanup_unposted_works
         if params[:pseud_id]
           @author = @user.pseuds.find_by_name(params[:pseud_id])
           @works = @author.unposted_works.paginate(:page => params[:page])
@@ -678,7 +677,6 @@ class WorksController < ApplicationController
       elsif params[:work] # create
          @work = Work.new(params[:work])
       else # new
-        current_user.cleanup_unposted_works
         if params[:load_unposted] && current_user.unposted_work
           @work = current_user.unposted_work
         else
@@ -724,10 +722,6 @@ class WorksController < ApplicationController
     else
       flash[:notice] = t('not_posted', :default => "<p>This work was not posted.</p>
       <p>It will be saved here in your drafts for one week, then cleaned up.</p>")
-      begin
-        current_user.cleanup_unposted_works
-      rescue ThinkingSphinx::ConnectionError
-      end
       redirect_to drafts_user_works_path(current_user)
     end
   end

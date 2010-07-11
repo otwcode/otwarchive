@@ -54,3 +54,8 @@ every 1.day, :at => '2:10 am' do
   rake "Tag:delete_unused"
 end
 
+# Delete old drafts
+every 1.day, :at => '2:40 am' do
+  rake "work:purge_old_drafts"
+end
+

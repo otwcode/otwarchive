@@ -8,7 +8,10 @@ Feature: User Authentication
       | login    | password | 
       | sam      | secret   |
       And all emails have been delivered
-    When I am logged in as "sam" with password "test"
+    When I am on the home page
+      And I fill in "User name" with "sam"
+      And I fill in "Password" with "test"
+      And I press "Log in"
     Then I should see "The password you entered doesn't match our records"
     When I follow "forgot password?"
     Then I should see "Never fear - if you've forgotten your password, we can send you a link to reset it"

@@ -5,13 +5,12 @@ Feature: Delete pseud.
   I want to delete a pseud
 
   Scenario: Delete pseud, have option to move works, delete works, or orphan works. Test if those choices work.
-
   Given I have loaded the fixtures
-  When I am logged in as "sad_user_with_no_pseuds" with password "test"
+  When I am logged in as "sad_user_with_no_pseuds" with password "testuser"
     And I am on sad_user_with_no_pseuds's pseuds page
   Then I should not see "Delete"
-  When I am logged in as "testuser" with password "testuser"
-  Then I should see "Hi, testuser!"
+  When I am logged out
+  And I am logged in as "testuser" with password "testuser"
     And I am on testuser's pseuds page
   When I follow "Delete tester_pseud"
   Then I should see "Delete these bookmarks"

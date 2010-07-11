@@ -9,7 +9,6 @@ Feature: Edit tags on a work
   Given the following activated user exists
     | login         | password    |
     | myname        | something   |
-    And a warning exists with name: "No Archive Warnings Apply", canonical: true
     And I am logged in as "myname" with password "something"
   Then I should see "Hi, myname!"
     And I should see "Log out"

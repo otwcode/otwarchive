@@ -41,6 +41,7 @@ class WorksDraftsControllerTest < ActionController::TestCase
       setup do
         @work = create_work(:authors => [@user.default_pseud], :created_at => 2.weeks.ago)
         @request.session[:user] = @user
+        Work.purge_old_drafts
         get :drafts, :locale => 'en', :user_id => @user.login
       end
       should_render_template 'drafts'

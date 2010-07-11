@@ -36,6 +36,7 @@ class WorksNewControllerTest < ActionController::TestCase
       context "new with old unposted" do
         setup do
           @work = create_work(:authors => [@user.default_pseud], :created_at => 2.weeks.ago)
+          Work.purge_old_drafts
           get :new, :locale => 'en'
         end
         should "not have unposted link" do

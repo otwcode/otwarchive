@@ -3,6 +3,11 @@ Given /^I have no tags$/ do
   silence_warnings {load "#{RAILS_ROOT}/app/models/fandom.rb"}
 end
 
+Given /^basic tags$/ do
+  Warning.find_or_create_by_name_and_canonical("No Archive Warnings Apply", true)
+  Rating.find_or_create_by_name_and_canonical("Not Rated", true)
+end
+
 When /^I edit the tag "([^\"]*)"$/ do |tag|
   tag = Tag.find_by_name!(tag)
   visit tag_url(tag)
@@ -32,3 +37,4 @@ Given /^I add the fandom "([^\"]*)" to the character "([^\"]*)"$/ do |fandom, ch
   fand = Fandom.find_or_create_by_name(fandom)
   char.add_association(fand)
 end
+

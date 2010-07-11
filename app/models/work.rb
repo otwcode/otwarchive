@@ -176,6 +176,13 @@ class Work < ActiveRecord::Base
   before_update :validate_tags
 	after_update :save_series_data
 
+
+  def self.purge_old_drafts
+    drafts = Work.find(:all, :conditions => ['works.posted = ? AND works.created_at < ?', false, 1.week.ago])
+    drafts.map(&:destroy)
+    drafts.size
+  end
+
   # SECTION IN PROGRESS -- CONSIDERING MOVE OF WORK CODE INTO HERE
 
   ########################################################################

@@ -8,6 +8,7 @@ Feature: Archivist bulk imports
       And the following activated user exists
       | login       | password      | 
       | elynross    | Yulet1de      |
+      And all emails have been delivered
     When I am logged in as "elynross" with password "Yulet1de"
       And I follow "Import"
     Then I should not see "Import works for others"
@@ -35,11 +36,11 @@ Feature: Archivist bulk imports
       And I check "Post without previewing"
       And I press "Import"
     Then I should see "Importing completed successfully! (But please check the results over carefully!)"
-      And I should see "We have notified the author(s) you imported stories for. You can also add them as co-authors manually."
+#      And I should see "We have notified the author(s) you imported stories for. You can also add them as co-authors manually."
       And I should see "Imported Works"
       And I should see "We were able to successfully upload the following works."
       And I should see "Welcome"
       And I should see "OTW Meetup in London"
     Given the system processes jobs
-    Then 2 emails should be delivered
+    Then 1 emails should be delivered
 

@@ -9,12 +9,10 @@ Feature: Edit chapters
   Given the following activated user exists
     | login         | password   |
     | epicauthor    | password   |
-    And a warning exists with name: "No Archive Warnings Apply", canonical: true
-    And a rating exists with name: "Not Rated", canonical: true
+    And basic tags
   When I go to epicauthor's user page
     Then I should see "There are no works"
   When I am logged in as "epicauthor" with password "password"
-  Then I should see "Hi, epicauthor!"
   When I follow "Post New"
   Then I should see "Post New Work"
   When I select "Not Rated" from "Rating"

@@ -7,13 +7,13 @@ Feature: Tag wrangling
         Make a new synonym of a character and check that the fandom transfers.
     Given I have no users
       And I have no tags
+      And basic tags
       And the following admin exists
       | login       | password | 
       | Zooey       | secret   |
       And the following activated user exists
       | login       | password      | 
       | dizmo       | wrangulator   |
-      And a warning exists with name: "No Warnings", canonical: true
       And I create the tag "TV Shows" with type "Media"
     When I am logged in as "dizmo" with password "wrangulator"
     Then I should not see "Tag Wrangling"
@@ -45,7 +45,7 @@ Feature: Tag wrangling
       And I should not see "Stargate SG-1"
     When I go to the new work page
       And I select "Not Rated" from "Rating"
-      And I check "No Warnings"
+      And I check "No Archive Warnings Apply"
       And I fill in "Fandoms" with "Stargate SG-1, Star Wars"
       And I fill in "Work Title" with "Revenge of the Sith 2"
       And I fill in "Characters" with "Daniel Jackson, Jack O'Neil"

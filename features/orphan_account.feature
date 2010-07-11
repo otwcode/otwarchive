@@ -9,15 +9,9 @@ Scenario: Orphan all works belonging to a user
     | login         | password   |
     | orphaneer     | password   |
     And I am logged in as "orphaneer" with password "password"
-    And a warning exists with name: "No Archive Warnings Apply", canonical: true
-  Then I should see "Hi, orphaneer!"
-    And I should see "Log out"
   When I post the work "Shenanigans"
-  Then I should see "Work was successfully posted."
-  When I post the work "Shenanigans 2"
-  Then I should see "Work was successfully posted."
-  When I post the work "Shenanigans - the early years"
-  Then I should see "Work was successfully posted."
+  And I post the work "Shenanigans 2"
+  And I post the work "Shenanigans - the early years"
   When I follow "orphaneer"
   Then I should see "Recent works"
     And I should see "Shenanigans"
@@ -46,15 +40,9 @@ Given the following activated user exists
   | login         | password   |
   | orphaneer     | password   |
   And I am logged in as "orphaneer" with password "password"
-  And a warning exists with name: "No Archive Warnings Apply", canonical: true
-  Then I should see "Hi, orphaneer!"
-    And I should see "Log out"
   When I post the work "Shenanigans"
-  Then I should see "Work was successfully posted."
   When I post the work "Shenanigans 2"
-  Then I should see "Work was successfully posted."
   When I post the work "Shenanigans - the early years"
-  Then I should see "Work was successfully posted."
   When I follow "orphaneer"
   Then I should see "Recent works"
     And I should see "Shenanigans"

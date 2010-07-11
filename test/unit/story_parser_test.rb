@@ -158,14 +158,15 @@ class StoryParserTest < ActiveSupport::TestCase
     assert_match /I dream of a circle/, work.title
   end
   
-  def test_livejournal_cutid
-    storyparser = StoryParser.new
-    url = 'http://angstslashhope.livejournal.com/1560574.html#cutid1'
-    work = storyparser.download_and_parse_story(url, :pseuds => [create_pseud])
-    assert_match /Jack had liked the old one far better/, work.chapters.first.content
-    assert_match /Kiss Kiss, Pew Pew/, work.title
-    assert_no_match /Adventures in space for great yay/, work.chapters.first.content
-  end
+# story has been moved
+#  def test_livejournal_cutid
+#    storyparser = StoryParser.new
+#    url = 'http://angstslashhope.livejournal.com/1560574.html#cutid1'
+#    work = storyparser.download_and_parse_story(url, :pseuds => [create_pseud])
+#    assert_match /Jack had liked the old one far better/, work.chapters.first.content
+#    assert_match /Kiss Kiss, Pew Pew/, work.title
+#    assert_no_match /Adventures in space for great yay/, work.chapters.first.content
+#  end
 
   # test importing of stories with long fandom
   def test_long_fandom

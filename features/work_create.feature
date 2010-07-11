@@ -9,12 +9,12 @@ Feature: Create Works
   Then I should see "Please log in"
 
   Scenario: Creating a new minimally valid work
-    Given a warning exists with name: "No Warnings", canonical: true
+    Given basic tags
       And I am logged in as a random user
     When I go to the new work page
     Then I should see "Post New Work"
       And I select "Not Rated" from "Rating"
-      And I check "No Warnings"
+      And I check "No Archive Warnings Apply"
       And I fill in "Fandoms" with "Supernatural"
       And I fill in "Work Title" with "All Hell Breaks Loose"
       And I fill in "content" with "Bad things happen, etc."
@@ -26,7 +26,7 @@ Feature: Create Works
     Then I should see "All Hell Breaks Loose"
     
   Scenario: Creating a new work with everything filled in
-    Given a warning exists with name: "No Warnings", canonical: true
+    Given basic tags
       And a category exists with name: "Gen", canonical: true
       And a category exists with name: "F/M", canonical: true
       And the following activated user exists
@@ -51,7 +51,7 @@ Feature: Create Works
     When I go to the new work page
     Then I should see "Post New Work"
     When I select "Not Rated" from "Rating"
-      And I check "No Warnings"
+      And I check "No Archive Warnings Apply"
     Then I should see "F/M"
       And I should see "Gen"
     When I check "F/M"
@@ -77,7 +77,7 @@ Feature: Create Works
     Then I should see "All Something Breaks Loose"
       And I should see "Fandom: Supernatural"
       And I should see "Rating: Not Rated"
-      And I should see "Archive Warning: No Warnings"
+      And I should see "Archive Warning: No Archive Warnings Apply"
       And I should see "Category: F/M"
       And I should see "Characters: Sam Winchester, Dean Winchester"
       And I should see "Pairing: Harry/Ginny"

@@ -5,14 +5,9 @@
     | login          | password   |
     | mywarning1     | password   |
     | mywarning2     | password   |
-    And a warning exists with name: "No Archive Warnings Apply", canonical: true
-    And a rating exists with name: "Not Rated", canonical: true
     And a rating exists with name: "Mature", canonical: true, adult: true
   When I am logged in as "mywarning1" with password "password"
-  Then I should see "Hi, mywarning1!"
-    And I should see "Log out"
-  When I post the work "Adult Work by mywarning1"
-  Then I should see "Adult Work by mywarning1"
+  And I post the work "Adult Work by mywarning1"
   When I edit the work "Adult Work by mywarning1"
     And I select "Mature" from "Rating"
     And I press "Preview"
