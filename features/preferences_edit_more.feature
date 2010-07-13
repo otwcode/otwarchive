@@ -1,4 +1,6 @@
 ﻿@users
+
+Feature: Preferences
   Scenario: View and edit preferences - show/hide mature content warning
 
   Given the following activated users exist
