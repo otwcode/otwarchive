@@ -22,8 +22,7 @@
     <ul class="tags">
       <%= blurb_tag_block(series) %>
     </ul>
-
-<%- cache([series, "blurb", logged_in?]) do -%>    
+    
 <!--summary-->
 		<%- unless series.summary.blank? %>
       <h6 class="landmark">Summary</h6>
@@ -40,7 +39,6 @@
         <dd><%= link_to_bookmarkable_bookmarks(series, bookmark_count.to_s) -%></dd>
       <%- end -%>
 			</dl>
-<%- end -%>
 
 <!--actions-->
     <%- if is_author_of?(series) -%>
