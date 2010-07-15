@@ -43,7 +43,8 @@
       </h4>
 
   	  <h5 title="fandom">
-        <%= tag_groups['Fandom'].collect{|tag| link_to_tag(tag) }.join(', ') %>
+        <%- fandoms = tag_groups['Fandom'] -%>
+        <%= fandoms.collect{|tag| link_to_tag(tag) }.join(', ') if fandoms %>
   		  &nbsp;
   	  </h5>
 
