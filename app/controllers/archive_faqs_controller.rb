@@ -7,7 +7,7 @@ class ArchiveFaqsController < ApplicationController
   # GET /archive_faqs
   # GET /archive_faqs.xml
   def index
-    @archive_faqs = ArchiveFaq.find(:all, :order => 'position ASC').paginate(:page => params[:page], :per_page => 15)
+    @archive_faqs = ArchiveFaq.find(:all, :order => 'position ASC')
 
     respond_to do |format|
       format.html # index.html.erb
