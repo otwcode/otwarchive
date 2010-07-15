@@ -146,7 +146,8 @@ function expandList() {
         li.removeClassName('hidden');
         li.addClassName('not-hidden');
     });
-    $j('#expandable-link').text("\< Hide full list");    
+    $j('#expandable-link').text("\< Hide full list");
+    $j('#expandable-link').unbind('click');
     $j('#expandable-link').click(function(){
         contractList();
         return false;
@@ -160,6 +161,7 @@ function contractList() {
         li.addClassName('hidden');  
     });
     $j('#expandable-link').text("\> Expand full list");    
+    $j('#expandable-link').unbind('click');
     $j('#expandable-link').click(function(){
         expandList();
         return false;
