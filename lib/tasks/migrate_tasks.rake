@@ -118,6 +118,19 @@ namespace :After do
 # end
 # 
 
+#  desc "Make reading count 1 instead of 0 for existing readings"
+#  task(:reading_count_setup => :environment) do
+#    Reading.update_all("view_count = 1", "view_count = 0")
+#  end
+  
+#  desc "Move hit counts to their own table"
+#  task(:move_hit_counts => :environment) do
+#    Work.find_each do |work|
+#      counter = work.build_hit_counter(:hit_count => work.hit_count_old, :last_visitor => work.last_visitor_old)
+#      counter.save
+#    end
+#  end  
+
   #### Leave this one here
   
   desc "Update the translation file each time we deploy"
@@ -129,19 +142,6 @@ namespace :After do
 
   #### Add your new tasks here 
   
-  desc "Make reading count 1 instead of 0 for existing readings"
-  task(:reading_count_setup => :environment) do
-    Reading.update_all("view_count = 1", "view_count = 0")
-  end
-  
-  desc "Move hit counts to their own table"
-  task(:move_hit_counts => :environment) do
-    Work.find_each do |work|
-      counter = work.build_hit_counter(:hit_count => work.hit_count_old, :last_visitor => work.last_visitor_old)
-      counter.save
-    end
-  end  
-
 
 end # this is the end that you have to put new tasks above
 
@@ -150,6 +150,6 @@ end # this is the end that you have to put new tasks above
 
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
-#task :After => ['After:fix_warnings', 'After:tidy_wranglings', 'After:exorcise_syns', 'After:deleted_invites_cleanup']
-task :After => ['After:reading_count_setup', 'After:move_hit_counts']
+#task :After => ['After:reading_count_setup', 'After:move_hit_counts']
+task :After => []
 
