@@ -21,13 +21,19 @@ class PeopleController < ApplicationController
   def index
     if @collection
       @pseuds_alphabet = @collection.participants.find(:all, :select => 'name')
+      @pseuds_alphabet = @pseuds_alphabet.collect {|pseud| pseud.name.scan(/./mu)[0].upcase}.uniq.sort
+      if params[:letter] && params[:letter].is_a?(String)		
+        letter = params[:letter][0,1]		
+      else		
+	letter = @pseuds_alphabet[0]		
+      end
+      @authors = @collection.participants.alphabetical.starting_with(letter).paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
+      @rec_counts = Pseud.rec_counts_for_pseuds(@authors)
+      @work_counts = Pseud.work_counts_for_pseuds(@authors)
     else
       @navigation = People.all
     end
     
-    if @collection
-      @authors = @collection.participants.alphabetical.starting_with(letter).paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
-    end
   end 
  
   def show
