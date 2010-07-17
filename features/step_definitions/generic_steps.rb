@@ -7,7 +7,7 @@ When 'the system processes jobs' do
 end
 
 When 'I reload the page' do
-  reload
+  visit current_url
 end
 
 Then /^I should see Posted now$/ do

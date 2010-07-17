@@ -12,7 +12,7 @@ Feature: Invite queue management
       And I fill in "admin_password" with "password"
       And I press "Log in as admin"
     Then I should see "Logged in successfully"
-    When I follow "Settings"
+    When I follow "settings"
       And I check "admin_setting_invite_from_queue_enabled"
       And I press "Update"
     Then I should see "Archive settings were successfully updated"
@@ -35,5 +35,7 @@ Feature: Invite queue management
     When the invite_from_queue_at is yesterday
     And the check_queue rake task is run
     Then 1 email should be delivered
-    When I reload the page
+    When I am on the invite_requests page
+      And I fill in "email" with "test@archiveofourown.org"
+      And I press "Go"
     Then I should see "Sorry, we couldn't find that address in our queue."

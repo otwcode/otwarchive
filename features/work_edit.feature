@@ -29,7 +29,9 @@ Feature: Edit Works
     When I press "Update"
     Then I should see "Work was successfully updated."
     When I go to testuser's works page
-    Then I should see work "First work" with tags "first fandom & new tag"
+    Then I should see "First work"
+      And I should see "first fandom"
+      And I should see "new tag"
     When I follow "Edit"
       And I follow "Add Chapter"
       And I fill in "content" with "second chapter content"

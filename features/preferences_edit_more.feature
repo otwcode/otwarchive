@@ -18,7 +18,7 @@ Feature: Preferences
     And I am logged in as "mywarning2" with password "password"
   When I follow "mywarning2"
     And I follow "My Preferences"
-    And I check "Show Me Adult Content Without Prompting"
+    And I check "Show me adult content without prompting"
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
   When I go to the works page
@@ -27,7 +27,7 @@ Feature: Preferences
     And I should see "Rating: Mature"
   When I follow "mywarning2"
     And I follow "My Preferences"
-    And I uncheck "Show Me Adult Content Without Prompting"
+    And I uncheck "Show me adult content without prompting"
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
   When I go to the works page

@@ -17,7 +17,7 @@ Feature: Edit preferences
   Then I should see "Hi, editname!"
     And I should see "Log out"
   When I post the work "This has two chapters"
-  And I follow "Add chapter"
+  And I follow "Add Chapter"
     And I fill in "content" with "Secondy chapter"
     And I press "Preview"
     And I press "Post"
@@ -79,7 +79,7 @@ Feature: Edit preferences
   Then I should see "My Dashboard"
   When I follow "My Preferences"
   Then I should see "Update My Preferences"
-  When I check "Hide Warnings"
+  When I check "Hide warnings"
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
   When I go to the works page
@@ -100,7 +100,7 @@ Feature: Edit preferences
     And I should not see "Show additional tags"
   When I follow "mywarning2"
     And I follow "My Preferences"
-    And I check "Hide Freeform Tags"
+    And I check "Hide freeform tags"
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
   When I go to the works page
@@ -121,7 +121,7 @@ Feature: Edit preferences
     And I should not see "Show additional tags"
   When I follow "mywarning2"
     And I follow "My Preferences"
-    And I uncheck "Hide Warnings"
+    And I uncheck "Hide warnings"
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
   When I go to the works page

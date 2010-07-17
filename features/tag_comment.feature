@@ -34,9 +34,9 @@ Scenario: Log in as a tag wrangler and see wrangler pages.
     When I view the tag "Stargate Atlantis"
     Then I should see "0 comments"
     When I follow "0 comments"
-      And I follow "Add comment"
-      And I fill in "comment" with "Shouldn't this be a metatag with Stargate?"
-      And I press "Add comment"
+      And I follow "Add Comment"
+      And I fill in "Comment" with "Shouldn't this be a metatag with Stargate?"
+      And I press "Add Comment"
     Then I should see "Comment created!"
       And I should see "Shouldn't this be a metatag with Stargate?"
       And I should see Posted today

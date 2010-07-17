@@ -4,9 +4,9 @@ Feature: Search Works
   As a humble coder
   I have to use cucumber with thinking sphinx
 
-  # do everything that doesn't modify the works in one scenario 
+  # do everything that doesn't modify the works in one scenario
   # so you only have to load the fixtures and update the sphinx indexes once
-  Scenario: Search works 
+  Scenario: Search works
     Given I have loaded the fixtures
       And the work indexes are updated
     When I am on the homepage
@@ -30,7 +30,7 @@ Feature: Search Works
       And I press "Search works"
     Then I should see "1 Found"
     When I am on the search page
-      And I fill in "refine_language" with "Deutsch"
+      And I select "Deutsch" from "Language:"
       And I press "Search works"
     Then I should see "1 Found"
     When I am on the homepage

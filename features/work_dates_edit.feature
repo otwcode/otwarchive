@@ -28,7 +28,7 @@ Feature: Edit Works Dates
     When I press "Update"
     Then I should see "Work was successfully updated."
       And I should see "Published:2010-04-30"
-    When I follow "Add chapter"
+    When I follow "Add Chapter"
       And I fill in "content" with "this is my second chapter"
       And I press "Preview"
     Then I should see "This is a preview of what this chapter will look like"

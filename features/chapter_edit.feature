@@ -19,7 +19,7 @@ Feature: Edit chapters
     And I check "No Archive Warnings Apply"
     And I fill in "Fandoms" with "New Fandom"
     And I fill in "Work Title" with "New Epic Work"
-    And I fill in "Work Text" with "Well, maybe not so epic."
+    And I fill in "Work text" with "Well, maybe not so epic."
     And I press "Preview"
   Then I should see "Draft was successfully created"
     And I should see "1/1"
