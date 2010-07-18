@@ -13,7 +13,7 @@ SEEDS = ["Sidra", "astolat", "Enigel", "hope", "awils1",
          "Cesy", "elz", "justira", "lim", "melange", "eel",
           "rklyne", "zelempa", "Zooey_Glass", "erda", "Anneli"] 
 ADD_EXTERNAL = true
-NTH = 30
+NTH = 50
 #### private bookmarks and unpublished works are not dumped by default
 PRIVATE = false
 
@@ -116,6 +116,9 @@ def user_records(u)
         bookmarkable = bookmark.bookmarkable
         if bookmarkable.is_a?(Work)
           WORKS << bookmarkable if ADD_EXTERNAL
+        elsif bookmarkable.is_a?(Series)
+          x << bookmarkable if ADD_EXTERNAL
+          bookmarkable.works.each {|w| WORKS<< w} if ADD_EXTERNAL
         else
           TAGGABLES << bookmarkable
           x << bookmarkable if ADD_EXTERNAL
