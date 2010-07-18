@@ -9,6 +9,14 @@ Given /the following activated users? exists?/ do |table|
   end
 end
 
+Given /the following activated tag wranglers? exists?/ do |table|
+  table.hashes.each do |hash|
+    user = Factory.create(:user, hash)
+    user.activate
+    user.tag_wrangler = '1'
+  end
+end
+
 Given /the following admins? exists?/ do |table|
   table.hashes.each do |hash|
     admin = Factory.create(:admin, hash)
@@ -29,7 +37,7 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
   Then "I should see \"Log out\""
 end
 
-Given /^I am logged in as a random user$/ do 
+Given /^I am logged in as a random user$/ do
   user = Factory.create(:user, :login => "testuser", :password => "password")
   user.activate
   visit login_path

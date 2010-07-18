@@ -9,12 +9,12 @@ Feature: Tag wrangling
       And I have no tags
       And basic tags
       And the following admin exists
-      | login       | password | 
+      | login       | password |
       | Zooey       | secret   |
       And the following activated user exists
-      | login       | password      | 
+      | login       | password      |
       | dizmo       | wrangulator   |
-      And I create the tag "TV Shows" with type "Media"
+      And a media exists with name: "TV Shows", canonical: true
     When I am logged in as "dizmo" with password "wrangulator"
     Then I should not see "Tag Wrangling"
     When I follow "Log out"

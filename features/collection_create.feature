@@ -40,7 +40,7 @@ Feature: Collection
     And I press "Update"
   Then I should see "collect-y work"
     And I should see "Collections: My Collection Thing"
-    
+
   Scenario: Create a gift exchange, sign up for it
 
   Given the following activated users exist
@@ -51,8 +51,8 @@ Feature: Collection
     | myname3        | something   |
     | myname4        | something   |
     And I have no tags
-    And I create the tag "Stargate Atlantis" with id 27 and type "Fandom"
-    And I create the tag "Stargate SG-1" with id 28 and type "Fandom"
+    And I create the fandom "Stargate Atlantis" with id 27
+    And I create the fandom "Stargate SG-1" with id 28
     And a freeform exists with name: "Alternate Universe - Historical", canonical: true
     And a freeform exists with name: "Alternate Universe - High School", canonical: true
     And a freeform exists with name: "Something else weird", canonical: true

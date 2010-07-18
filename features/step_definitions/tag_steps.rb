@@ -19,17 +19,17 @@ When /^I view the tag "([^\"]*)"$/ do |tag|
   visit tag_url(tag)
 end
 
-When /^I create the tag "([^\"]*)" with id (\d+) and type "([^\"]*)"$/ do |name, id, type|
- tag = type.constantize.new(:name => name)
+When /^I create the fandom "([^\"]*)" with id (\d+)$/ do |name, id|
+ tag = Fandom.new(:name => name)
  tag.id = id.to_i
  tag.canonical = true
  tag.save
 end
 
-When /^I create the tag "([^\"]*)" with type "([^\"]*)"$/ do |name, type|
- tag = type.constantize.new(:name => name)
- tag.canonical = true
- tag.save
+Given /^I have a canonical "([^\"]*)" fandom tag named "([^\"]*)"$/ do |media, fandom|
+  fandom = Fandom.find_or_create_by_name_and_canonical(fandom, true)
+  media = Media.find_or_create_by_name_and_canonical(media, true)
+  fandom.add_association media
 end
 
 Given /^I add the fandom "([^\"]*)" to the character "([^\"]*)"$/ do |fandom, character|
