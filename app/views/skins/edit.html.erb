@@ -1,0 +1,9 @@
+<h2><%= t('edit_skin', :default => 'Edit skin')  %></h2>
+
+<% form_for @skin do |f| -%>
+
+  <%= render :partial => 'form', :locals => {:f => f} %>
+
+  <%= f.submit t('edit_skin_button', :default => 'Edit skin')  %>
+
+<% end -%>

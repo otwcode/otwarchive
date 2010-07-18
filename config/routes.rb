@@ -1,4 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
+
+  map.resources :skins
+
   map.resources :user_invite_requests
 
   map.resources :invite_requests, :collection => {:manage => :get, :reorder => :post}

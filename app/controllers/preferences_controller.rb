@@ -11,12 +11,15 @@ class PreferencesController < ApplicationController
   def index
     @user = User.find_by_login(params[:user_id])
     @preference = @user.preference || Preference.create(:user_id => @user.id)
+    @available_skins = (current_user.skins + Skin.public_skins).uniq
   end
 
   def update
     @user = User.find_by_login(params[:user_id])
     @preference = @user.preference
     @user.preference.attributes = params[:preference]
+    @available_skins = (current_user.skins + Skin.public_skins).uniq
+    
     if @user.preference.save
       flash[:notice] = t('successfully_updated', :default => 'Your preferences were successfully updated.')
       redirect_to user_preferences_path(@user) 

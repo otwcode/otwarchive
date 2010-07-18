@@ -39,6 +39,8 @@ class User < ActiveRecord::Base
   
   has_one :preference, :dependent => :destroy
   validates_associated :preference
+
+  has_many :skins, :foreign_key=> 'author_id', :dependent => :nullify
   
   before_create :create_default_associateds
   

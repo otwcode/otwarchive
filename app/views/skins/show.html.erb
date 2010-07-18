@@ -1,0 +1,10 @@
+<div class="skin">
+ <h2><%=  h(@skin.title) %></h2>
+ <p><%= t('author', :default => "by") %> <%= link_to(@skin.author.login, @skin.author) if @skin.author %>  </p>
+ <pre>
+ <%= h @skin.css %>
+ </pre>
+</div>
+
+
+<%= link_to t('edit_skin', :default => 'Edit skin'), edit_skin_url(@skin) %>

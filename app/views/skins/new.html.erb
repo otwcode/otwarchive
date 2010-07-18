@@ -1,0 +1,10 @@
+
+<h2><%= t('new_skin', :default => 'Create new skin')  %></h2>
+
+<% form_for @skin do |f| -%>
+
+  <%= render :partial => 'form', :locals => {:f => f} %>
+
+  <%= f.submit t('create_skin_button', :default => 'Create skin')  %>
+
+<% end -%>

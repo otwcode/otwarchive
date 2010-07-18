@@ -144,6 +144,14 @@
 			<%= link_to_help "work_title_format" -%>
     </li>
   </ul>
+
+  <h4>Skin</h4>
+  <ul>
+    <li>
+      <%= f.label :skin_id, t('skin', :default => "Select skin: ")%>
+      <%= f.select :skin_id, @available_skins.collect{|s| [s.title, s.id]}, :include_blank => true %>
+    </li>
+  </ul>
   
   	<p class="submit">
     	<%= f.submit t('.forms.update', :default => "Update") %>

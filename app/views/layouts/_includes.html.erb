@@ -55,6 +55,14 @@
 <%= stylesheet_link_tag 'ie8_overrides', :media => 'all' %>
 <![endif]-->
 
+
+<%- if current_user.is_a?(User) && current_user.preference.skin -%>
+  <style type="text/css">
+  <%= current_user.preference.skin.css %>
+  </style>
+<%- end -%>
+
+
 <!-- yield :tinymce needs to be before the scriptaculous elements. See http://wiki.moxiecode.com/index.php/TinyMCE:Ruby_on_Rails for more information. -->
 <%= yield :tinymce %>
 <%= javascript_include_tag 'jquery-1.3.2.min.js' %>

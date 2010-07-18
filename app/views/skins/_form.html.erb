@@ -1,0 +1,9 @@
+<%= f.error_messages %>
+
+<p><%= f.label :title, t('skin_title', :default => 'Skin title') %>
+<%= f.text_field :title %></p>
+
+<p><%= f.label :css, t('skin_css', :default => 'Write your css here') %> <br/>
+<%= f.text_area :css %></p>
+
+<p><%= f.check_box :public %> <%= f.label :public, t('skin_public', :default => 'Public skin') %></p>
