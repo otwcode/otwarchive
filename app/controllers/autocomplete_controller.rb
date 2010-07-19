@@ -75,7 +75,7 @@ class AutocompleteController < ApplicationController
   end 
 
   # generic canonical tag finders
-  %w(canonical_tag_finder tag_string).each do |field|
+  %w(canonical_tag_finder tag_string bookmark_tag_string).each do |field|
     define_method("#{field}") do
       tag_finder(Tag, params[params[:fieldname]])
     end
