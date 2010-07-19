@@ -142,6 +142,17 @@ namespace :After do
 
   #### Add your new tasks here 
   
+  desc "Add a default skin"
+  task(:add_default_skin => :environment) do
+    if User.find_by_login("Cesy") == nil
+      cesyid = User.find_by_login("testuser").id
+    else
+      cesyid = User.find_by_login("Cesy").id
+    end
+    Skin.create(:title => 'Default', :author_id => cesyid, :css => '', :public => true, :official => true)
+    Preference.update_all("skin_id = 1")
+  end
+  
 
 end # this is the end that you have to put new tasks above
 
@@ -151,5 +162,5 @@ end # this is the end that you have to put new tasks above
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
 #task :After => ['After:reading_count_setup', 'After:move_hit_counts']
-task :After => []
+task :After => ['After:add_default_skin']
 

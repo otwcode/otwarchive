@@ -5,6 +5,7 @@ class CreateSkins < ActiveRecord::Migration
       t.integer 'author_id'
       t.text 'css'
       t.boolean 'public', :default => 0
+      t.boolean 'official', :default => 0
 
       t.timestamps
     end

@@ -56,7 +56,7 @@
 <![endif]-->
 
 
-<%- if current_user.is_a?(User) && current_user.preference.skin -%>
+<%- if current_user.is_a?(User) && current_user.preference && current_user.preference.skin -%>
   <style type="text/css">
   <%= current_user.preference.skin.css %>
   </style>
