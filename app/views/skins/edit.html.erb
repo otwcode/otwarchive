@@ -1,5 +1,15 @@
 <h2><%= t('edit_skin', :default => 'Edit skin')  %></h2>
 
+<!--subnav-->
+<h3 class="landmark">Navigation</h3>
+<ul class="navigation" role="navigation">
+	<li><%= link_to t('public_skins', :default => 'Public skins'), skins_url %></li>
+  <li><%= link_to t('my_skins', :default => 'My skins'), skins_url(:q => 'mine') %></li>
+  <li><%= link_to t('create_new_skin', :default => 'Create new skin'), new_skin_url %></li>
+  <li><%= link_to t('preferences', :default => 'Change your skin'), user_preferences_path(@current_user) -%></li>
+</ul>
+<!--/subnav-->
+
 <% form_for @skin do |f| -%>
 
   <%= render :partial => 'form', :locals => {:f => f} %>

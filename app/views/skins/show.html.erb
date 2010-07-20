@@ -1,3 +1,8 @@
+<ul class="navigation>
+  <li><%= link_to t('.index', :default => 'View all skins'), skins_path -%></li>
+  <li><%= link_to t('.preferences', :default => 'Change your skin'), user_preferences_path(@current_user) -%></li>
+</ul>
+
 <div class="skin">
  <h2><%=  h(@skin.title) %></h2>
  <p><%= t('author', :default => "by") %> <%= link_to(@skin.author.login, @skin.author) if @skin.author %>  </p>

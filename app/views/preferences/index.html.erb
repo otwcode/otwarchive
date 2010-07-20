@@ -150,6 +150,7 @@
     <li>
       <%= f.label :skin_id, t('skin', :default => "Select skin: ")%>
       <%= f.select :skin_id, @available_skins.collect{|s| [s.title, s.id]}, :include_blank => true %>
+      <%= link_to t('.index', :default => 'View all skins'), skins_path -%>
     </li>
   </ul>
   
