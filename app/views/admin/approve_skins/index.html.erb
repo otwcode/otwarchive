@@ -1,0 +1,59 @@
+<!--Descriptive page name, messages and instructions-->
+<h2><%h= 'Approve skins' -%></h2>
+<!--/descriptions-->
+
+<!--subnav-->
+<!--/subnav-->
+
+<!--main content-->
+
+<% if @unapproved_skins && !@unapproved_skins.empty? %>
+<table>
+  <tr>
+    <th>Creator</th>
+    <th>Title</th>
+    <th>Approve?</th>
+  </tr>
+  <% @unapproved_skins.each do |skin| %>
+    <tr>
+    <td><%= skin.author.login %></td>
+    <td><%= link_to skin.title, skin_path(skin) %></td>
+    <td>
+    <% form_tag url_for(:controller => 'admin/approve_skins', :action => 'update'), :method => :post do %>
+    <%= check_box_tag :official %>
+    <%= hidden_field_tag :skin_id, skin.id %>
+      <p class="submit"><%= submit_tag "Go" %></p>
+    <% end %>
+    </td>
+    </tr>
+  <% end %>
+</table>
+<% end %>
+  
+<% if @approved_skins && !@approved_skins.empty? %>
+<table>
+  <tr>
+    <th>Creator</th>
+    <th>Title</th>
+    <th>Approved?</th>
+  </tr>
+  <% @approved_skins.each do |skin| %>
+    <tr>
+    <td><%= skin.author.login %></td>
+    <td><%= link_to skin.title, skin_path(skin) %></td>
+    <td>
+    <% form_tag url_for(:controller => 'admin/approve_skins', :action => 'update'), :method => :post do %>
+    <%= check_box_tag :official, "1", true %>
+    <%= hidden_field_tag :skin_id, skin.id %>
+      <p class="submit"><%= submit_tag "Go" %></p>
+    <% end %>
+    </td>
+    </tr>
+  <% end %>
+</table>
+<% end %>
+
+<!--/content-->
+
+<!--subnav-->
+<!--/subnav-->

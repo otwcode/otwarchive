@@ -1,6 +1,6 @@
 class SkinsController < ApplicationController
 
-  before_filter :users_only
+  before_filter :users_only, :except => [:index, :show]
 
   def index
     if params[:q] == 'mine'

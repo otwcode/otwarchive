@@ -3,4 +3,6 @@ class Skin < ActiveRecord::Base
   has_many :preferences
 
   named_scope :public_skins, :conditions => {:public => true}
+  named_scope :approved_skins, :conditions => {:official => true, :public => true}
+  named_scope :unapproved_skins, :conditions => {:public => true, :official => false}
 end
