@@ -18,6 +18,11 @@ class SkinsController < ApplicationController
 
   def new
     @skin = Skin.new
+    if params[:wizard]
+      render :new_wizard and return
+    else
+      render :new and return
+    end
   end
 
   def create

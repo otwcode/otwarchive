@@ -1,0 +1,16 @@
+
+<h2><%= t('new_skin', :default => 'Create new skin')  %></h2>
+
+<ul class="navigation">
+  <li id="form-link">
+     <%= link_to( t('.standard', :default => 'Write Custom CSS Instead?'),
+       {:url => {:controller => :skins, :action => :new, :wizard => false}},
+       :href => url_for(:controller => :skins, :action => :new, :wizard => false)) -%>
+  </li>
+</ul>
+
+
+
+
+  <%= render :partial => 'wizard_form' %>
+

@@ -1,6 +1,15 @@
 
 <h2><%= t('new_skin', :default => 'Create new skin')  %></h2>
 
+<ul class="navigation">
+  <li id="wizard-link">
+    <%= link_to( t('.wizard', :default => 'Use Wizard Instead?'),
+      {:url => {:controller => :skins, :action => :new, :wizard => true}},
+      :href => url_for(:controller => :skins, :action => :new, :wizard => true)) -%>
+  </li>
+</ul>
+
+
 <% form_for @skin do |f| -%>
 
   <%= render :partial => 'form', :locals => {:f => f} %>
