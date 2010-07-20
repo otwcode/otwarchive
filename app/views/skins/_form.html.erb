@@ -3,7 +3,7 @@
 <p><%= f.label :title, t('skin_title', :default => 'Skin title') %>
 <%= f.text_field :title %></p>
 
-<p><%= f.label :css, t('skin_css', :default => 'Write your css here') %> <br/>
+<p><%= f.label :css, t('skin_css', :default => 'Write your css here') %> <%= link_to_help "skins-creating" -%> <br/>
 <%= f.text_area :css %></p>
 
-<p><%= f.check_box :public %> <%= f.label :public, t('skin_public', :default => 'Public skin') %></p>
+<p><%= f.check_box :public %> <%= f.label :public, t('skin_public', :default => 'Public skin') %> <%= link_to_help "skins-creating" -%></p>

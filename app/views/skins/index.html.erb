@@ -15,7 +15,7 @@
 <% for s in @skins -%>
  <div class="skin">
    <h4><%= link_to h(s.title), s %> by <%= s.author.login %>
-   <% unless s.official? %> (Warning: Not officially approved)<% end %>
+   <% unless s.official? %> (Warning: Not officially approved) <%= link_to_help "skins-approval" -%><% end %>
    </h4>
  </div>
 <% end -%>
