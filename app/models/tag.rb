@@ -595,8 +595,8 @@ class Tag < ActiveRecord::Base
           syn.medias.each {|medium| self.add_association(medium)}
           self.medias.each {|medium| syn.add_association(medium)}
         else
-          syn.fandoms.canonical.each {|fandom| self.add_association(fandom)}
-          self.fandoms.canonical.each {|fandom| syn.add_association(fandom)}
+          syn.parents.by_type("Fandom").canonical.each {|fandom| self.add_association(fandom)}
+          self.parents.by_type("Fandom").canonical.each {|fandom| syn.add_association(fandom)}
         end
       end
     end          
