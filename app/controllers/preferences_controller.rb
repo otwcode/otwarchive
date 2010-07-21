@@ -11,7 +11,7 @@ class PreferencesController < ApplicationController
   def index
     @user = User.find_by_login(params[:user_id])
     @preference = @user.preference || Preference.create(:user_id => @user.id)
-    @available_skins = (current_user.skins + Skin.public_skins).uniq
+    @available_skins = (current_user.skins + Skin.approved_skins).uniq
   end
 
   def update

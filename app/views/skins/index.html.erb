@@ -18,7 +18,7 @@
   <div class="skin">
     <h4><%= link_to h(s.title), s %> by <%= s.author.login %>
     <% unless s.official? %> (Warning: Not officially approved) <%= link_to_help "skins-approval" -%><% end %>
-    <% if @current_user && s.author == @current_user %>
+    <% if @current_user && s.author == @current_user && !s.official? %>
       <%= link_to t('edit_skin', :default => 'Edit skin'), edit_skin_url(s) %>
     <% end %>
     </h4>
