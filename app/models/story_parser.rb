@@ -185,7 +185,7 @@ class StoryParser
   # Everything below here is protected and should not be touched by outside
   # code -- please use the above functions to parse external works.
 
-  protected
+  #protected
   
     # download an entire story from an archive type where we know how to parse multi-chaptered works
     # this should only be called from download_and_parse_story
@@ -448,7 +448,7 @@ class StoryParser
 
     def parse_story_from_yuletide(story)
       work_params = {:chapter_attributes => {}}
-      storytext = (@doc/"/html/body/p/table/tr/td[2]/table/tr/td[2]").inner_html
+      storytext = (@doc/"table[@class='form']/tr/td[2]").inner_html
       if storytext.empty?
         storytext = (@doc/"body").inner_html
       end
@@ -460,7 +460,7 @@ class StoryParser
       work_params.merge!(scan_text_for_meta(storytext))
       work_params[:chapter_attributes][:content] = storytext
       work_params[:title] = (@doc/"title").inner_html
-      work_params[:notes] = (@doc/"/html/body/p/table/tr/td[2]/table/tr/td[2]/center/p").inner_html
+      work_params[:notes] = (@doc/"table[@class='form']/tr/td[2]/center/p").inner_html
 
       tags = ['yuletide']
 

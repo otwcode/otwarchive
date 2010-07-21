@@ -180,6 +180,21 @@ class StoryParserTest < ActiveSupport::TestCase
     assert work.fandoms.first.name.length <= ArchiveConfig.TAG_MAX    
   end
 
+  def test_yuletide
+    http_mock = mock('Net::HTTPResponse')
+    http_mock.stubs(:code => '200', :message => "OK", :content_type => "text/html", 
+                     :body => File.read(Rails.root + "test/mocks/stories/littlemiss.html"))
+    @storyparser = StoryParser.new
+    url = "http://yuletidetreasure.org/archive/79/littlemiss.html"
+    work = @storyparser.download_and_parse_story(url, :pseuds => [create_pseud])
+    assert_match /A horrified silence fell over the classroom./, work.chapters.first.content
+    assert_equal "Little Miss Curious", work.title
+    assert work.save
+    assert_match /Little Miss Sunshine/, work.fandoms.first.name
+    assert_match /Yule Madness Treat, unbetaed./, work.notes
+    assert_no_match /Search Engine/, work.chapters.first.content
+  end
+  
   # single-chaptered work
   def test_ffnet
     @storyparser = StoryParser.new

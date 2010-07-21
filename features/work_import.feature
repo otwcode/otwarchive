@@ -40,3 +40,20 @@ Feature: Import Works
     Then I should see "Work was successfully posted."
     When I go to the works page
     Then I should see "OTW Meetup"
+
+  Scenario: Creating a new work from a Yuletide story
+    Given basic tags
+      And the following activated user exists
+        | login          | password    |
+        | cosomeone      | something   |
+      And I am logged in as a random user
+    When I go to the import page
+      And I fill in "urls" with "http://yuletidetreasure.org/archive/79/littlemiss.html"
+    When I press "Import"
+    Then I should see "Preview Work"
+      And I should see "Little Miss Curious"
+    When I press "Post"
+    Then I should see "Work was successfully posted."
+      And I should see "Little Miss Sunshine" within "dd"
+      And I should see "Yule Madness Treat, unbetaed." within "div"
+      And I should not see "Search Engine"
