@@ -22,6 +22,14 @@ I'd like to comment on a tag
       And I press "Add Comment"
     Then I should see "Comment created!"
       And I should see "Shouldn't this be a metatag with Stargate?"
-      And I should see Posted today
+      And I should see Posted nowish
+    When I follow "Edit"
+    Then the "Comment" field should contain "Shouldn't this be a metatag with Stargate?"
+    When I fill in "Comment" with "Yep, we should have a Stargate franchise metatag."
+      And I press "Update"
+    Then I should see "Comment was successfully updated."
+      And I should see "Yep, we should have a Stargate franchise metatag."
+      And I should see Last Edited nowish
     When I view the tag "Stargate Atlantis"
     Then I should see "1 comment"
+ 
