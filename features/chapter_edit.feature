@@ -72,6 +72,9 @@ Feature: Edit chapters
   Then I should see "Chapter was successfully updated"
     And I should see "Chapter 4"
     And I should see "4/4"
+  When I follow "Edit"
+    And I follow "Manage Chapters"
+    Then I should see "Drag chapters to change their order."
   When I am logged out
     And I go to epicauthor's works page
     And I follow "New Epic Work"
