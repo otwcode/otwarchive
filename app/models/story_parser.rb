@@ -3,7 +3,6 @@
 #
 class StoryParser
   require 'timeout'
-  require 'hpricot'
   require 'nokogiri'
   require 'mechanize'
   require 'open-uri'
