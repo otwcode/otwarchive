@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100530161827) do
+ActiveRecord::Schema.define(:version => 20100620185742) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -384,6 +384,8 @@ ActiveRecord::Schema.define(:version => 20100530161827) do
     t.string  "last_visitor"
   end
 
+  add_index "hit_counters", ["work_id"], :name => "index_hit_counters_on_work_id", :unique => true
+
   create_table "inbox_comments", :force => true do |t|
     t.integer  "user_id"
     t.integer  "feedback_comment_id"
@@ -565,6 +567,7 @@ ActiveRecord::Schema.define(:version => 20100530161827) do
     t.boolean  "plain_text_skin",                   :default => false,                     :null => false
     t.boolean  "admin_emails_off",                  :default => false,                     :null => false
     t.boolean  "always_light_style",                :default => false,                     :null => false
+    t.integer  "skin_id"
   end
 
   add_index "preferences", ["user_id"], :name => "index_preferences_on_user_id"
@@ -707,11 +710,22 @@ ActiveRecord::Schema.define(:version => 20100530161827) do
     t.text     "notes"
     t.boolean  "hidden_by_admin", :default => false, :null => false
     t.boolean  "restricted",      :default => true,  :null => false
+    t.boolean  "complete",        :default => false, :null => false
   end
 
   create_table "set_taggings", :force => true do |t|
     t.integer  "tag_id"
     t.integer  "tag_set_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "skins", :force => true do |t|
+    t.string   "title"
+    t.integer  "author_id"
+    t.text     "css"
+    t.boolean  "public",     :default => false
+    t.boolean  "official",   :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -840,6 +854,7 @@ ActiveRecord::Schema.define(:version => 20100530161827) do
     t.string   "imported_from_url"
     t.integer  "hit_count_old",               :default => 0,     :null => false
     t.string   "last_visitor_old"
+    t.boolean  "complete",                    :default => false, :null => false
   end
 
   add_index "works", ["imported_from_url"], :name => "index_works_on_imported_from_url"
