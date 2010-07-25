@@ -1,4 +1,4 @@
-@series
+@wip @series
 Feature: Edit Series
 
   Scenario: Three ways to add a work to a series

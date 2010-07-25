@@ -1,4 +1,5 @@
 class FeedbacksController < ApplicationController
+  skip_before_filter :store_location 
   
   # GET /feedbacks/new
   # GET /feedbacks/new.xml

@@ -103,15 +103,12 @@ Rails::Initializer.run do |config|
   # It's necessary to specify the libraries for openid and will_paginate, otherwise the auto-require doesn't work.
   # This is possibly because the name of the gem is different from the main file  it may crop up with other gems. 
   
-
   config.gem 'ruby-openid', :lib => 'openid'
   config.gem 'chronic'
   config.gem 'mislav-will_paginate', :version => '~> 2.3.8', :lib => 'will_paginate', :source => 'http://gems.github.com'
-  config.gem 'hpricot'
   config.gem 'thoughtbot-shoulda', :lib => 'shoulda/rails', :source => "http://gems.github.com", :version => '~> 2.10.0'
   config.gem 'andand'
   config.gem 'htmlentities'
-  config.gem 'relevance-tarantula', :source => "http://gems.github.com", :lib => 'relevance/tarantula'
   config.gem 'javan-whenever', :lib => false, :source => 'http://gems.github.com'
   config.gem 'nokogiri', :version => '~> 1.4.0'
   config.gem 'mechanize', :version => '~> 1.0.0'

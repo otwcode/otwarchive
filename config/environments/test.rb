@@ -22,7 +22,10 @@ config.action_controller.allow_forgery_protection    = false
 # ActionMailer::Base.deliveries array.
 config.action_mailer.delivery_method = :test
 
-config.gem 'relevance-tarantula', :source => "http://gems.github.com", :lib => 'relevance/tarantula'
+# only need the following if you're running the tarantula tests, which most people won't, and don't run on windows anyway
+#config.gem 'hpricot'
+#config.gem 'relevance-tarantula', :source => "http://gems.github.com", :lib => 'relevance/tarantula'
+
 #config.gem "rspec", :lib => false, :version => ">=1.2.2"  
 #config.gem "rspec-rails", :lib => false, :version => ">=1.2.2"  
 #config.gem "webrat", :lib => false, :version => ">=0.4.3"  
