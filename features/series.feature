@@ -1,4 +1,4 @@
-@wip @series
+@series
 Feature: Edit Series
 
   Scenario: Three ways to add a work to a series
@@ -17,6 +17,7 @@ Feature: Edit Series
       And I fill in "content" with "First little pony is all alone"
       And I press "Preview"
     Then I should see "Part 1 of the Ponies series"
+      And I should see "Draft was successfully created"
     When I press "Post"
     Then I should see "Work was successfully posted"
     When I view the series "Ponies"

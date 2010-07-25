@@ -1,12 +1,12 @@
-﻿@wip @users @admin
+@users @admin
 Feature: Archivist bulk imports
 
   Scenario: Log in as an archivist and import a big archive.
     Given the following admin exists
-      | login       | password | 
+      | login       | password |
       | EYalkut     | secret   |
       And the following activated user exists
-      | login       | password      | 
+      | login       | password      |
       | elynross    | Yulet1de      |
       And all emails have been delivered
     When I am logged in as "elynross" with password "Yulet1de"
@@ -28,7 +28,7 @@ Feature: Archivist bulk imports
       And I follow "Import"
     Then I should see "Import works for others"
     When I check "Import works for others"
-      And I fill in "urls" with 
+      And I fill in "urls" with
         """
         http://cesy.dreamwidth.org/154770.html
         http://cesy.dreamwidth.org/394320.html

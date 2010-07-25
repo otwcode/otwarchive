@@ -24,13 +24,13 @@ class WorksController < ApplicationController
         rescue Riddle::ConnectionError
           flash.now[:error] = t('errors.search_engine_down', :default => "The search engine seems to be down at the moment, sorry!")
         end
-      else 
+      else
         params[:query] = @query
         redirect_to url_for(params)
       end
     end
-  end  
-  
+  end
+
   # GET /works
   def index
     # what we're getting for the view
@@ -105,26 +105,26 @@ class WorksController < ApplicationController
       @language_id = nil
       @most_recent_works = true
     end
-    
+
     # Now let's build the query
     @works, @filters, @pseuds = Work.find_with_options(:user => @user, :author => @author, :selected_pseuds => @selected_pseuds,
                                                     :tag => @tag, :selected_tags => @selected_tags,
-                                                    :collection => @collection,                                                    
+                                                    :collection => @collection,
                                                     :language_id => @language_id,
                                                     :sort_column => @sort_column, :sort_direction => @sort_direction,
                                                     :page => params[:page], :per_page => params[:per_page],
                                                     :boolean_type => params[:boolean_type])
-                                                      
+
 
     # Limit the number of works returned and let users know that it's happening
     if @most_recent_works && @works.total_entries >= ArchiveConfig.SEARCH_RESULTS_MAX
-      flash.now[:notice] = "More than #{ArchiveConfig.SEARCH_RESULTS_MAX} works were returned. The first #{ArchiveConfig.SEARCH_RESULTS_MAX} works 
-      we found using the current sort and filters are shown."        
+      flash.now[:notice] = "More than #{ArchiveConfig.SEARCH_RESULTS_MAX} works were returned. The first #{ArchiveConfig.SEARCH_RESULTS_MAX} works
+      we found using the current sort and filters are shown."
     end
 
     # we now have @works found
     @over_anon_threshold = @works.collect(&:authors_to_sort_on).uniq.count > ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT
-  
+
     if @works.empty? && !@selected_tags.empty?
       begin
         # build filters so we can go back
@@ -158,7 +158,7 @@ class WorksController < ApplicationController
 
   # GET /works/1
   # GET /works/1.xml
-  def show 
+  def show
     # Users must explicitly okay viewing of adult content
     if params[:view_adult]
       session[:adult] = true
@@ -177,13 +177,13 @@ class WorksController < ApplicationController
 
     @tag_categories_limited = Tag::VISIBLE - ["Warning"]
 
-    @page_title = @work.unrevealed? ? t('works.mystery_title', :default => "Mystery Work") : 
+    @page_title = @work.unrevealed? ? t('works.mystery_title', :default => "Mystery Work") :
       get_page_title(@work.fandoms.string, @work.anonymous? ?  t('works.anonymous', :default => "Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '), @work.title)
     render :show
     @work.increment_hit_count(request.env['REMOTE_ADDR'])
     Reading.update_or_create(@work, current_user)
   end
-  
+
   def navigate
     @chapters = @work.chapters_in_order(false)
   end
@@ -191,13 +191,13 @@ class WorksController < ApplicationController
   # GET /works/new
   def new
     load_pseuds
-    @series = current_user.series.uniq    
+    @series = current_user.series.uniq
     @unposted = current_user.unposted_work
     if params[:assignment_id] && (@challenge_assignment = ChallengeAssignment.find(params[:assignment_id])) && @challenge_assignment.offering_user == current_user
       @work.challenge_assignments << @challenge_assignment
       @work.collection_names = @challenge_assignment.collection.name
-    else   
-      @work.collection_names = @collection.name if @collection  
+    else
+      @work.collection_names = @collection.name if @collection
     end
     if params[:import]
       render :new_import and return
@@ -219,10 +219,12 @@ class WorksController < ApplicationController
     elsif params[:cancel_button]
       flash[:notice] = t('posting_canceled', :default => "New work posting canceled.")
       redirect_to current_user
-    else # now also treating the cancel_coauthor_button case, bc it should function like a preview, really 
+    else # now also treating the cancel_coauthor_button case, bc it should function like a preview, really
       valid = (@work.errors.empty? && @work.invalid_pseuds.blank? && @work.ambiguous_pseuds.blank? && @work.has_required_tags?)
       if valid && @work.save && @work.set_revised_at(@chapter.published_at) && @work.set_challenge_info
         flash[:notice] = t('draft_created', :default => 'Draft was successfully created.')
+        #hack for empty chapter authors in cucumber series tests
+        @chapter.pseuds = @work.pseuds if @chapter.pseuds.blank?
         redirect_to preview_work_path(@work)
       else
         if @work.errors.empty? && (!@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?)
@@ -271,7 +273,7 @@ class WorksController < ApplicationController
     # Need to update @pseuds and @selected_pseuds values so we don't lose new co-authors if the form needs to be rendered again
     load_pseuds
     @series = current_user.series.uniq
-    
+
     if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
       @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :new)
     elsif params[:preview_button] || params[:cancel_coauthor_button]
@@ -303,7 +305,7 @@ class WorksController < ApplicationController
         # Setting the @work.revised_at datetime if appropriate
         # if @chapter.published_at has been changed or work is being posted
         if params[:post_button] || (defined?(@previous_published_at) && @previous_published_at != @chapter.published_at)
-          # if work has only one chapter - so we don't need to take any other chapter dates into account, 
+          # if work has only one chapter - so we don't need to take any other chapter dates into account,
           # OR the date is set to today AND the backdating setting has not been changed
           if @work.number_of_chapters == 1 || (@chapter.published_at == Date.today && defined?(@previous_backdate_setting) && @previous_backdate_setting == @work.backdate)
             @work.set_revised_at(@chapter.published_at)
@@ -314,13 +316,13 @@ class WorksController < ApplicationController
             # if backdate has been changed to positive
             if defined?(@previous_backdate_setting) && @previous_backdate_setting == false && @work.backdate
               @work.set_revised_at(@chapter.published_at) # set revised_at to the date on this form
-            # if backdate has been changed to negative 
+            # if backdate has been changed to negative
             # OR there is no change in the backdate setting but the date isn't today
-            else 
+            else
               @work.set_revised_at
             end
           end
-        # elsif the date hasn't been changed, but the backdate setting has  
+        # elsif the date hasn't been changed, but the backdate setting has
         elsif defined?(@previous_backdate_setting) && @previous_backdate_setting != @work.backdate
           if @previous_backdate_setting == false && @work.backdate  # if backdate has been changed to positive
             @work.set_revised_at(@chapter.published_at) # set revised_at to the date on this form
@@ -418,9 +420,9 @@ class WorksController < ApplicationController
   # GET /works/1/preview
   def preview
     @preview_mode = true
-    load_pseuds   
+    load_pseuds
   end
-  
+
   def preview_tags
     @preview_mode = true
   end
@@ -443,11 +445,11 @@ class WorksController < ApplicationController
     # check to make sure we have some urls to work with
     @urls = params[:urls].split
     unless @urls.length > 0
-      flash.now[:error] = t('enter_an_url', :default => "Did you want to enter a URL?")      
+      flash.now[:error] = t('enter_an_url', :default => "Did you want to enter a URL?")
       render :new_import and return
     end
-    
-    # is this an archivist importing? 
+
+    # is this an archivist importing?
     if params[:importing_for_others] && !current_user.archivist
       flash.now[:error] = t('import.only_archivist', :default => "You may not import stories by other users unless you are an approved archivist.")
       render :new_import and return
@@ -466,7 +468,7 @@ class WorksController < ApplicationController
     if params[:pseuds_to_apply]
       @pseuds_to_apply = Pseud.find_by_name(params[:pseuds_to_apply])
     end
-    options = {:pseuds => @pseuds_to_apply, 
+    options = {:pseuds => @pseuds_to_apply,
       :post_without_preview => params[:post_without_preview],
       :importing_for_others => params[:importing_for_others],
       :restricted => params[:restricted],
@@ -476,9 +478,9 @@ class WorksController < ApplicationController
       :rating => params[:rating],
       :pairing => params[:pairing],
       :category => params[:category],
-      :freeform => params[:freeform]      
+      :freeform => params[:freeform]
     }
-    
+
     # now let's do the import
     @works = []
     @failed_urls = []
@@ -507,7 +509,7 @@ class WorksController < ApplicationController
         render :new_import and return
       end
     end
-    
+
     # if we are importing for others, we need to send invitations
     if params[:importing_for_others]
       @external_authors = @works.collect(&:external_authors).flatten.uniq
@@ -518,19 +520,19 @@ class WorksController < ApplicationController
         flash[:notice] = t('import.for_others', :default => "We have notified the author(s) you imported stories for. You can also add them as co-authors manually.")
       end
     end
-    
+
     # collect the errors
     if !@failed_urls.empty?
       flash[:error] = "<h3>Failed Imports</h3>\n<dl>"
-      0.upto(@failed_urls.length) do |index| 
+      0.upto(@failed_urls.length) do |index|
         flash[:error] += "<dt>#{@failed_urls[index]}</dt>\n"
         flash[:error] += "<dd>#{@errors[index]}</dd>"
       end
       flash[:error] += "</dl>"
     else
-      flash[:notice] = t('successfully_uploaded', :default => "Importing completed successfully! (But please check the results over carefully!)") 
+      flash[:notice] = t('successfully_uploaded', :default => "Importing completed successfully! (But please check the results over carefully!)")
     end
-    
+
     if @urls.length == 1 || params[:import_multiple] == "chapters"
       # importing a single work, let the user preview or view it
       @work = @works.first
@@ -556,27 +558,27 @@ class WorksController < ApplicationController
       flash[:error] = t('post_draft.not_your_work', :default => "You can only post your own works.")
       redirect_to current_user
     end
-    
+
     if @work.posted
       flash[:error] = t('post_draft.already_posted', :default => "That work is already posted. Do you want to edit it instead?")
       redirect_to edit_user_work_path(@user, @work)
     end
-    
+
     @work.posted = true
-    @work.update_minor_version    
+    @work.update_minor_version
     unless @work.valid? && @work.save
       flash[:error] = t('post_draft.problem', :default => "There were problems posting your work.")
       redirect_to edit_user_work_path(@user, @work)
     end
-    
+
     flash[:notice] = t('post_draft.success', :default => "Your work was successfully posted.")
     redirect_to @work
   end
 
-  
-  
+
+
   # WORK ON MULTIPLE WORKS
-  
+
   def show_multiple
     @user = current_user
     if params[:pseud_id]
@@ -589,13 +591,13 @@ class WorksController < ApplicationController
       @works = @works & Work.find(params[:work_ids])
     end
   end
-  
+
   def edit_multiple
     @user = current_user
     @works = Work.find(params[:work_ids]) & @user.works
-    
+
   end
-  
+
   def update_multiple
     @user = current_user
     @works = Work.find(params[:work_ids]) & @user.works
@@ -609,7 +611,7 @@ class WorksController < ApplicationController
     unless @errors.empty?
       flash[:error] = t('update_multiple.error_message', :default => "There were problems editing some works: {{errors}}", :errors => @errors.join(", "))
     end
-    redirect_to show_multiple_user_works_path(@user)        
+    redirect_to show_multiple_user_works_path(@user)
   end
 
   protected
@@ -670,7 +672,7 @@ class WorksController < ApplicationController
             @work.preview_mode = true
           else
             @work.preview_mode = false
-          end 
+          end
           @work.attributes = params[:work]
           @work.save_parents if @work.preview_mode
         end
@@ -706,7 +708,7 @@ class WorksController < ApplicationController
             @work.preview_mode = true
           else
             @work.preview_mode = false
-          end 
+          end
           @work.attributes = params[:work]
           @work.save_parents if @work.preview_mode
         end
