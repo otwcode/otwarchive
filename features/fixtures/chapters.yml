@@ -23,3 +23,8 @@ chapter5:
   work: fourth
   content: This work is by a different user.
   published_at: 2010-04-30
+chapter6:
+  posted: true
+  work: fifth
+  content: something something something
+  published_at: 2010-06-30

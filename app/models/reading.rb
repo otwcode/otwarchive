@@ -17,5 +17,6 @@ class Reading < ActiveRecord::Base
         reading.save
       end
     end
+    return reading
   end
 end
