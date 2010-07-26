@@ -1,6 +1,6 @@
 class FeedbacksController < ApplicationController
-  skip_before_filter :store_location 
-  
+  skip_before_filter :store_location
+
   # GET /feedbacks/new
   # GET /feedbacks/new.xml
   def new
@@ -11,19 +11,19 @@ class FeedbacksController < ApplicationController
     else
       @feedback.email = ""
     end
-	
+
     respond_to do |format|
       format.html # new.html.erb
     end
   end
-  
+
   def create
     @feedback = Feedback.new(params[:feedback])
     respond_to do |format|
       if @feedback.save
         require 'rest_client'
         # Send bug to 16bugs
-        if ArchiveConfig.PERFORM_DELIVERIES == true
+        if ArchiveConfig.PERFORM_DELIVERIES == true && ENV['RAILS_ENV'] == 'production'
           # For some reason it won't let me move use and password into the config :(
           site = RestClient::Resource.new(ArchiveConfig.BUGS_SITE, :user => 'otwadmin', :password => '11egbiaon6bockky1l5b5fkts6i1sbsshhsqywxb8t4bq9v918')
           site['/projects/4911/bugs'].post build_post_info(@feedback), :content_type => 'application/xml', :accept => 'application/xml'
@@ -45,7 +45,7 @@ class FeedbacksController < ApplicationController
 
 
  protected
- 
+
  def build_post_info(feedback)
    post_info = ""
    post_info << "<bug>"
@@ -59,5 +59,5 @@ class FeedbacksController < ApplicationController
    post_info << "</bug>"
    return post_info
  end
- 
+
 end

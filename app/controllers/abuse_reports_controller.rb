@@ -23,7 +23,7 @@ class AbuseReportsController < ApplicationController
       if @abuse_report.save
         require 'rest_client'
         # Send bug to 16bugs
-        if ArchiveConfig.PERFORM_DELIVERIES == true
+        if ArchiveConfig.PERFORM_DELIVERIES == true && ENV['RAILS_ENV'] == 'production'
           site = RestClient::Resource.new(ArchiveConfig.BUGS_SITE, :user => 'otwadmin', :password => '11egbiaon6bockky1l5b5fkts6i1sbsshhsqywxb8t4bq9v918')
           site['/projects/4603/bugs'].post build_post_info(@abuse_report), :content_type => 'application/xml', :accept => 'application/xml'
         end
@@ -50,17 +50,17 @@ class AbuseReportsController < ApplicationController
   def index
     @abuse_reports = AbuseReport.paginate(:page => params[:page])
   end
-  
+
   def show
     @abuse_report = AbuseReport.find(params[:id])
   end
-  
+
  protected
- 
+
  def build_post_info(report)
    post_info = ""
    post_info << "<bug>"
-   post_info << "<description><![CDATA[" + report.comment + "]]></description>" unless report.comment.blank? 
+   post_info << "<description><![CDATA[" + report.comment + "]]></description>" unless report.comment.blank?
    post_info << "<project-id>4603</project-id>"
    post_info << "<title><![CDATA[" + report.url + "]]></title>" unless report.url.blank?
    post_info << "<category-id type='integer'><![CDATA[" + report.category + "]]></category-id>" unless report.category.blank?
@@ -69,6 +69,6 @@ class AbuseReportsController < ApplicationController
    post_info << "<custom-1408><![CDATA[" + report.ip_address + "]]></custom-1408>" unless report.ip_address.blank?
    post_info << "</bug>"
    return post_info
- end  
+ end
 
 end
