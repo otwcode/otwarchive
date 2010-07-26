@@ -38,7 +38,7 @@ class AdminSetting < ActiveRecord::Base
     if self.invite_from_queue_enabled? && InviteRequest.count > 0
       unless Time.now < self.invite_from_queue_at
         InviteRequest.invite
-        new_date = self.invite_from_queue_at + (self.invite_from_queue_frequency).days
+        new_date = Time.now + self.invite_from_queue_frequency.days
         self.first.update_attribute(:invite_from_queue_at, new_date)
       end
     end
