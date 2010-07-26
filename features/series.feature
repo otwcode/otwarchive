@@ -20,6 +20,8 @@ Feature: Edit Series
       And I should see "Draft was successfully created"
     When I press "Post"
     Then I should see "Work was successfully posted"
+      And I should see "Part 1 of the Ponies series" within "p"
+      And I should see "Part 1 of the Ponies series" within "dd"
     When I view the series "Ponies"
     Then I should see "Sweetie Belle"
     When I go to the new work page

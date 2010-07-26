@@ -37,6 +37,8 @@ module NavigationHelpers
       user_pseuds_path(:user_id => $1)
     when /^(.*)'s reading page$/i
       user_readings_path(:user_id => $1)
+    when /^(.*)'s series page$/i
+      user_series_index_path(:user_id => $1)
     when /my user page/
       user_path(current_user)
     when /the import page/

@@ -35,3 +35,15 @@ Then /^I should not find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
     end
   end
 end
+
+Then /^I should see the "(alt|title)" text "([^\"]*)"(?: within "([^"]*)")?$/ do |texttype, text, selector|
+  with_scope(selector) do
+    (texttype == "alt") ? (page.should have_xpath("//img[@alt='#{text}']")) : (page.should have_xpath("//img[@title='#{text}']"))
+  end
+end
+
+Then /^I should not see the "(alt|title)" text "([^\"]*)"(?: within "([^"]*)")?$/ do |texttype, text, selector|
+  with_scope(selector) do
+    (texttype == "alt") ? (page.should have_no_xpath("//img[@alt='#{text}']")) : (page.should have_no_xpath("//img[@title='#{text}']"))
+  end
+end
