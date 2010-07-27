@@ -3,7 +3,7 @@ Feature: Locked and partially locked series
   In order to keep my works under the radar
   As a registered archive user
   I should be able to make my serial works visible only to other registered users
-  
+
 Scenario: Post a series with a restricted work, then add a draft, then make the draft public and post it
     Given I am logged in as "fandomer" with password "password"
       And basic tags
@@ -72,3 +72,19 @@ Scenario: Post a series with a restricted work, then add a draft, then make the 
   Then I should see "Works included: 2"
     And I should see "Humbug"
     And I should see "Antivalentine"
+
+  Scenario: edit a locked work to add it to a series
+    Given I am logged in as "fandomer" with password "password"
+      And basic tags
+      And I post the locked work "Boohoo"
+    When I edit the work "Boohoo"
+      And I uncheck "work_restricted"
+      And I check "front-notes-options-show"
+      And I fill in "work_notes" with "Humbugness!"
+      And I check "series-options-show"
+      And I fill in "work_series_attributes_title" with "Antiholidays"
+      And I press "Preview"
+    Then I should see "Preview Work"
+      And I should see "Part 1 of the Antiholidays series"
+    When I press "Update"
+    Then I should see "Work was successfully updated"

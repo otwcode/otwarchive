@@ -1,15 +1,15 @@
 module Taggable
-  
+
   def self.included(taggable)
-    taggable.class_eval do      
+    taggable.class_eval do
       attr_accessor :invalid_tags
-      attr_accessor :preview_mode, :placeholder_tags  
+      attr_accessor :preview_mode, :placeholder_tags
       after_update :reset_placeholders
     end
   end
 
   # string methods
-  # (didn't use define_method, despite the redundancy, because it doesn't cache in development) 
+  # (didn't use define_method, despite the redundancy, because it doesn't cache in development)
   def rating_string
     tag_category_string(:ratings)
   end
@@ -37,12 +37,12 @@ module Taggable
   def freeform_string
     tag_category_string(:freeforms)
   end
-  
+
   # _string= methods
   # always use string= methods to set tags
   # << and = don't trigger callbacks to update common_tags
   # or call after_destroy on taggings
-  # see rails bug http://dev.rubyonrails.org/ticket/7743  
+  # see rails bug http://dev.rubyonrails.org/ticket/7743
   def rating_string=(tag_string)
     parse_tags(Rating, tag_string)
   end
@@ -67,24 +67,24 @@ module Taggable
   def freeform_string=(tag_string)
     parse_tags(Freeform, tag_string)
   end
-  
+
   # a work can only have one rating, so using first will work
   # should always have a rating, if it doesn't err conservatively
   def adult?
     self.ratings.blank? || self.ratings.first.adult?
   end
-  
+
   # Make sure we don't have any phantom values hanging around
   def reset_placeholders
     self.preview_mode = false
     self.placeholder_tags = {}
   end
-  
+
   def validate_tags
     errors.add_to_base("Work must have required tags.") unless self.has_required_tags?
     self.has_required_tags?
   end
-  
+
   # Add an error message if the user tried to add invalid tags to the work
   def check_for_invalid_tags
     unless self.invalid_tags.blank?
@@ -95,7 +95,7 @@ module Taggable
         end
       end
     end
-    self.invalid_tags.blank?  
+    self.invalid_tags.blank?
   end
 
   def cast_tags
@@ -112,12 +112,12 @@ module Taggable
 
     line_limited_tags(pairings + characters - pairing_characters)
   end
-  
+
   def pairing_tags
     taglist = self.tags.select {|t| t.is_a?(Pairing)}
     line_limited_tags(taglist)
   end
-  
+
   def character_tags
     taglist = self.tags.select {|t| t.is_a?(Character)}
     line_limited_tags(taglist)
@@ -132,12 +132,12 @@ module Taggable
     taglist = self.tags.select {|t| t.is_a?(Warning)}
     line_limited_tags(taglist)
   end
-  
+
   def line_limited_tags(taglist)
     taglist = taglist[0..(ArchiveConfig.TAGS_PER_LINE-1)] if taglist.size > ArchiveConfig.TAGS_PER_LINE
     taglist
   end
-  
+
   def fandom_tags
     self.tags.select {|t| t.is_a?(Fandom)}
   end
@@ -149,25 +149,25 @@ module Taggable
     self.warning_strings = [ArchiveConfig.WARNING_NONE_TAG_NAME]
     self.save
   end
-  
+
   private
-  
+
   # Returns a string (or array) of tag names
   def tag_category_string(category, options={})
     return "" unless self.respond_to?(category)
-    if self.preview_mode
+    if !self.placeholder_tags.blank?
       tag_array = self.placeholder_tags[category] || []
     else
       tag_array = self.send(category)
     end
-    tag_names = tag_array.map {|tag| tag.name}  
+    tag_names = tag_array.map {|tag| tag.name}
     if options[:return_array]
-      tag_names 
+      tag_names
     else
       tag_names.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
-    end   
+    end
   end
-  
+
   # Process a string or array of tags from any tag class
   def parse_tags(klass, incoming_tags)
     tags = []
@@ -196,7 +196,7 @@ module Taggable
         tagging.destroy if tagging
       end
       self.send(klass_symbol.to_s + '=', tags.uniq)
-    end    
-  end  
-  
+    end
+  end
+
 end

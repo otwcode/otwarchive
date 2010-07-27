@@ -278,8 +278,8 @@ class WorksController < ApplicationController
       @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :new)
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       @preview_mode = true
-
       if @work.has_required_tags? && @work.invalid_tags.blank?
+        @chapter = @work.chapters.first unless @chapter
         render :preview
       else
         if !@work.invalid_tags.blank?
