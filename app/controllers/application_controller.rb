@@ -97,13 +97,13 @@ class ApplicationController < ActionController::Base
   def collection_maintainers_only
     logged_in? && @collection && @collection.user_is_maintainer?(current_user) || access_denied
   end
-  
+
   def collection_owners_only
     logged_in? && @collection && @collection.user_is_owner?(current_user) || access_denied
   end
-  
-  @over_anon_threshold = true if @over_anon_threshold.nil? 
-  
+
+  @over_anon_threshold = true if @over_anon_threshold.nil?
+
   def get_page_title(fandom, author, title)
     @page_title = ""
     if logged_in? && !current_user.preference.try(:work_title_format).blank?
@@ -116,13 +116,13 @@ class ApplicationController < ActionController::Base
     end
     @page_title += " [#{ArchiveConfig.APP_NAME}]"
   end
-  
+
   ### GLOBALIZATION ###
 
 #  before_filter :load_locales
 #  before_filter :set_preferred_locale
-  
-#  I18n.backend = I18nDB::Backend::DBBased.new 
+
+#  I18n.backend = I18nDB::Backend::DBBased.new
 #  I18n.record_missing_keys = false # if you want to record missing translations
 
   protected
@@ -139,30 +139,30 @@ class ApplicationController < ActionController::Base
     else
       set_locale Locale.find_main_cached.iso.to_sym
     end
-    @current_locale = Locale.find_by_iso(I18n.locale.to_s)  
+    @current_locale = Locale.find_by_iso(I18n.locale.to_s)
   end
-  
+
   ### -- END GLOBALIZATION -- ###
-  
+
   public
 
-  #### -- AUTHORIZATION -- #### 
-  
+  #### -- AUTHORIZATION -- ####
+
   # It is just much easier to do this here than to try to stuff variable values into a constant in environment.rb
   before_filter :set_redirects
   def set_redirects
     @logged_in_redirect = url_for(current_user) if current_user.is_a?(User)
     @logged_out_redirect = url_for({:controller => 'session', :action => 'new'})
   end
-  
+
   def is_registered_user?
     logged_in? || logged_in_as_admin?
   end
-  
+
   def is_admin?
     logged_in_as_admin?
   end
-  
+
   def see_adult?
     return true if session[:adult] || logged_in_as_admin?
     return false if current_user == :false
@@ -172,11 +172,11 @@ class ApplicationController < ActionController::Base
   end
 
   protected
-   
+
   # Prevents banned and suspended users from adding/editing content
   def check_user_status
     if current_user.is_a?(User) && (current_user.suspended? || current_user.banned?)
-      if current_user.suspended? 
+      if current_user.suspended?
         flash[:error] = t('suspension_notice', :default => "Your account has been suspended. You may not add or edit content until your suspension has been resolved. Please contact us for more information.")
      else
         flash[:error] = t('ban_notice', :default => "Your account has been banned. You are not permitted to add or edit archive content. Please contact us for more information.")
@@ -184,39 +184,41 @@ class ApplicationController < ActionController::Base
       redirect_to current_user
     end
   end
-  
+
   # Does the current user own a specific object?
   def current_user_owns?(item)
-  	!item.nil? && current_user.is_a?(User) && (item.is_a?(User) ? current_user == item : current_user.is_author_of?(item))    
+  	!item.nil? && current_user.is_a?(User) && (item.is_a?(User) ? current_user == item : current_user.is_author_of?(item))
   end
-  
+
   # Make sure a specific object belongs to the current user and that they have permission
   # to view, edit or delete it
-  def check_ownership 	
+  def check_ownership
   	access_denied(:redirect => @check_ownership_of) unless current_user_owns?(@check_ownership_of)
   end
-  
+
   # Make sure the user is allowed to see a specific page
   # includes a special case for restricted works and series, since we want to encourage people to sign up to read them
   def check_visibility
     if @check_visibility_of.respond_to?(:restricted) && @check_visibility_of.restricted && User.current_user == :false
       redirect_to new_session_path(:restricted => true)
+    elsif @check_visibility_of.is_a? Skin
+      access_denied unless logged_in_as_admin? || current_user_owns?(@check_visibility_of) || @check_visibility_of.official?
     else
       is_hidden = @check_visibility_of.respond_to?(:visible) ? !@check_visibility_of.visible : @check_visibility_of.hidden_by_admin?
       can_view_hidden = logged_in_as_admin? || current_user_owns?(@check_visibility_of)
       access_denied if (is_hidden && !can_view_hidden)
     end
   end
-  
+
   private
  # With thanks from here: http://blog.springenwerk.com/2008/05/set-date-attribute-from-dateselect.html
   def convert_date(hash, date_symbol_or_string)
     attribute = date_symbol_or_string.to_s
-    return Date.new(hash[attribute + '(1i)'].to_i, hash[attribute + '(2i)'].to_i, hash[attribute + '(3i)'].to_i)   
+    return Date.new(hash[attribute + '(1i)'].to_i, hash[attribute + '(2i)'].to_i, hash[attribute + '(3i)'].to_i)
   end
-  
+
   public
-  
+
   # with thanks to http://henrik.nyh.se/2008/07/rails-404
   def render_optional_error_file(status_code)
     case(status_code)
@@ -248,7 +250,7 @@ class ApplicationController < ActionController::Base
   def valid_sort_direction(param)
     !param.blank? && ['asc', 'desc'].include?(param.to_s.downcase)
   end
-      
+
   #### -- AUTHORIZATION -- ####
 
   # See ActionController::RequestForgeryProtection for details

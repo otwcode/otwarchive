@@ -47,3 +47,8 @@ Then /^I should not see the "(alt|title)" text "([^\"]*)"(?: within "([^"]*)")?$
     (texttype == "alt") ? (page.should have_no_xpath("//img[@alt='#{text}']")) : (page.should have_no_xpath("//img[@title='#{text}']"))
   end
 end
+
+Then /^"([^"]*)" should be selected within "([^"]*)"$/ do |value, field|
+  find_field(field).node.xpath(".//option[@selected = 'selected']").inner_html.should =~ /#{value}/
+end
+

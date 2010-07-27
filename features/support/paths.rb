@@ -43,6 +43,12 @@ module NavigationHelpers
       user_path(current_user)
     when /the import page/
       new_work_path(:import => 'true')
+    when /my skin page/
+      skins_path(:q => 'mine')
+    when /^"(.*)" skin page/
+      skin_path(Skin.find_by_title($1))
+    when /^"(.*)" edit skin page/
+      edit_skin_path(Skin.find_by_title($1))
 
     # Here is an example that pulls values out of the Regexp:
     #

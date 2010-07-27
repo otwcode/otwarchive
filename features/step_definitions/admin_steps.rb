@@ -17,3 +17,25 @@ end
 When /^the check_queue rake task is run$/ do
   AdminSetting.check_queue
 end
+
+Given /the following admins? exists?/ do |table|
+  table.hashes.each do |hash|
+    admin = Factory.create(:admin, hash)
+  end
+end
+
+Given /^I am logged in as an admin$/ do
+  admin = Admin.find_by_login("testadmin")
+  if admin.blank?
+    admin = Factory.create(:admin, :login => "testadmin", :password => "testadmin")
+  end
+  visit admin_login_path
+  fill_in "Admin user name", :with => "testadmin"
+  fill_in "Admin password", :with => "testadmin"
+  click_button "Log in as admin"
+end
+
+Given /^I am logged out as an admin$/ do
+  visit admin_logout_path
+  Then "I should see \"Log in\""
+end

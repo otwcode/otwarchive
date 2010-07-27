@@ -1,15 +1,18 @@
 <ul class="navigation">
-  <li><%= link_to t('.index', :default => 'View all skins'), skins_path -%></li>
+  <li><%= link_to t('.public', :default => 'Public skins'), skins_path -%></li>
+  <li><%= link_to t('.mine', :default => 'My skins'), skins_url(:q => 'mine') %></li>
   <li><%= link_to t('.preferences', :default => 'Change your skin'), user_preferences_path(@current_user) -%></li>
 </ul>
 
 <div class="skin">
  <h2><%=  h(@skin.title) %></h2>
- <p><%= t('author', :default => "by") %> <%= link_to(@skin.author.login, @skin.author) if @skin.author %>  </p>
+ <p><%= t('author', :default => "by") %> <%= skin_author_link(@skin) %></p>
  <pre>
  <%= h @skin.css %>
  </pre>
 </div>
 
 
-<%= link_to t('edit_skin', :default => 'Edit skin'), edit_skin_url(@skin) %>
+<% if @skin.editable? %>
+  <%= link_to t('.edit', :default => 'Edit skin'), edit_skin_url(@skin) %>
+<% end %>

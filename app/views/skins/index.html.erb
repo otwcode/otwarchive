@@ -5,10 +5,12 @@
 <!--subnav-->
 <h3 class="landmark">Navigation</h3>
 <ul class="navigation" role="navigation">
-	<li><%= link_to t('public_skins', :default => 'Public skins'), skins_url %></li>
-  <li><%= link_to t('my_skins', :default => 'My skins'), skins_url(:q => 'mine') %></li>
-  <li><%= link_to t('create_new_skin', :default => 'Create new skin'), new_skin_url %></li>
-  <li><%= link_to t('preferences', :default => 'Change your skin'), user_preferences_path(@current_user) -%></li>
+	<li><%= link_to t('.public', :default => 'Public skins'), skins_url %></li>
+	<% if logged_in? %>
+    <li><%= link_to t('.mine', :default => 'My skins'), skins_url(:q => 'mine') %></li>
+    <li><%= link_to t('.new', :default => 'Create new skin'), new_skin_url %></li>
+    <li><%= link_to t('.change', :default => 'Change your skin'), user_preferences_path(@current_user) -%></li>
+  <% end %>
 </ul>
 <!--/subnav-->
 
@@ -16,10 +18,17 @@
 
 <% for s in @skins -%>
   <div class="skin">
-    <h4><%= link_to h(s.title), s %> by <%= s.author.login %>
-    <% unless s.official? %> (Warning: Not officially approved) <%= link_to_help "skins-approval" -%><% end %>
-    <% if @current_user && s.author == @current_user && !s.official? %>
-      <%= link_to t('edit_skin', :default => 'Edit skin'), edit_skin_url(s) %>
+    <h4><%= link_to h(s.title), s %>
+    <% if @user %>
+      <% if s.official? %> (Approved)
+      <% elsif s.public? %> (Not yet approved)
+        <%= link_to_help "skins-approval" -%>
+      <% end %>
+    <% else %>
+      by <%= s.byline %>
+    <% end %>
+    <% if s.editable? %>
+      <%= link_to t('.edit', :default => 'Edit skin'), edit_skin_url(s) %>
     <% end %>
     </h4>
   </div>

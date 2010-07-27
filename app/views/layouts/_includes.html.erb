@@ -1,4 +1,4 @@
-<%- unless params[:style] == 'light' || (current_user.is_a?(User) && current_user.preference.try(:always_light_style) && params[:style] != 'creator') -%>
+<%- unless Skin.light?(params[:style]) -%>
   <%= stylesheet_link_tag 'font', :media => 'screen' %>
 <%- end -%>
 <%= stylesheet_link_tag 'archive_core', :media => 'all' %>
@@ -6,7 +6,7 @@
 <%= stylesheet_link_tag 'site-chrome', :media => 'screen' %>
 <%= stylesheet_link_tag 'forms', :media => 'screen' %>
 <%= stylesheet_link_tag 'user-generated-views', :media => 'all' %>
-<%- if controller.controller_name == 'home' && params[:action] == 'index' -%> 
+<%- if controller.controller_name == 'home' && params[:action] == 'index' -%>
   <%= stylesheet_link_tag 'home', :media => 'screen' %>
 <%- end -%>
 <%- if controller.controller_name == 'translations' || controller.controller_name == 'translation_notes' -%>
@@ -23,18 +23,7 @@
 <%= stylesheet_link_tag 'auto_complete', :media => 'screen' %>
 <%= stylesheet_link_tag 'visualize.jQuery', :media => 'screen' %>
 
-<%- if current_user.is_a?(User) && current_user.preference.try(:plain_text_skin) -%>
-  <%= stylesheet_link_tag 'plain_text_skin', :media => 'all' %>
-<%- end -%>
-
-<%- if params[:style] == 'light' || (current_user.is_a?(User) && current_user.preference.try(:always_light_style) && params[:style] != 'creator') -%>
-  <style type="text/css">
-  body {
-  background-color: white;
-  color: black !important;
-  }
-  </style>
-<%- else -%>
+<%- unless Skin.light?(params[:style]) -%>
   <%= stylesheet_link_tag 'ugv-style-creator', :media => 'all' %>
 <%- end -%>
 
@@ -56,12 +45,6 @@
 <![endif]-->
 
 
-<%- if current_user.is_a?(User) && current_user.preference && current_user.preference.skin -%>
-  <style type="text/css">
-  <%= current_user.preference.skin.css %>
-  </style>
-<%- end -%>
-
 
 <!-- yield :tinymce needs to be before the scriptaculous elements. See http://wiki.moxiecode.com/index.php/TinyMCE:Ruby_on_Rails for more information. -->
 <%= yield :tinymce %>
@@ -74,3 +57,9 @@
 <%= yield :tinymce_init %>
 
 <%= iboxify_page %>
+
+<%- if current_user.is_a?(User) && current_user.try(:preference).try(:skin) -%>
+  <style type="text/css">
+  <%= current_user.preference.skin.css %>
+  </style>
+<%- end -%>

@@ -7,50 +7,47 @@
 
 <!--main content-->
 
-<% if @unapproved_skins && !@unapproved_skins.empty? %>
-<table>
-  <tr>
-    <th>Creator</th>
-    <th>Title</th>
-    <th>Approve?</th>
-  </tr>
-  <% @unapproved_skins.each do |skin| %>
+<% unless @unapproved_skins.blank? %>
+  <% form_tag url_for(:controller => 'admin/approve_skins', :action => 'update'), :method => :post do %>
+  <table id="unapproved">
     <tr>
-    <td><%= skin.author.login %></td>
-    <td><%= link_to skin.title, skin_path(skin) %></td>
-    <td>
-    <% form_tag url_for(:controller => 'admin/approve_skins', :action => 'update'), :method => :post do %>
-    <%= check_box_tag :official %>
-    <%= hidden_field_tag :skin_id, skin.id %>
-      <p class="submit"><%= submit_tag "Go" %></p>
-    <% end %>
-    </td>
+      <th>Skin</th>
+      <th>Creator</th>
     </tr>
+    <% @unapproved_skins.each_with_index do |skin, i| %>
+      <tr>
+      <td>
+      <%= check_box_tag "make_official[]", skin.id, false, :id => "make_official_#{skin.id}" %>
+      <%= label_tag "make_official_#{skin.id}", (link_to skin.title, skin_path(skin)) %></td>
+      <td><%= skin_author_link(skin) %></td>
+      <td>
+      </td>
+      </tr>
+    <% end %>
+  </table>
+  <p class="submit"><%= submit_tag "Approve skins" %></p>
   <% end %>
-</table>
 <% end %>
-  
-<% if @approved_skins && !@approved_skins.empty? %>
-<table>
-  <tr>
-    <th>Creator</th>
-    <th>Title</th>
-    <th>Approved?</th>
-  </tr>
-  <% @approved_skins.each do |skin| %>
+
+<% unless @approved_skins.blank? %>
+  <% form_tag url_for(:controller => 'admin/approve_skins', :action => 'update'), :method => :post do %>
+  <table id="approved">
     <tr>
-    <td><%= skin.author.login %></td>
-    <td><%= link_to skin.title, skin_path(skin) %></td>
-    <td>
-    <% form_tag url_for(:controller => 'admin/approve_skins', :action => 'update'), :method => :post do %>
-    <%= check_box_tag :official, "1", true %>
-    <%= hidden_field_tag :skin_id, skin.id %>
-      <p class="submit"><%= submit_tag "Go" %></p>
-    <% end %>
-    </td>
+      <th>Skin</th>
+      <th>Creator</th>
     </tr>
+    <% @approved_skins.each_with_index do |skin, i| %>
+      <tr>
+      <td>
+      <%= check_box_tag "make_unofficial[]", skin.id, false, :id => "make_unofficial_#{skin.id}" %>
+      <%= label_tag "make_unofficial_#{skin.id}", (link_to skin.title, skin_path(skin)) %>
+      </td>
+      <td><%= skin_author_link(skin) %></td>
+      </tr>
+    <% end %>
+  </table>
+  <p class="submit"><%= submit_tag "Unapprove skins (and remove them from use)" %></p>
   <% end %>
-</table>
 <% end %>
 
 <!--/content-->

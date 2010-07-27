@@ -15,50 +15,47 @@
 <!--/subnav-->
 
 <!--main content-->
-<%- form_for(@preference, :url => { :action => "update", :user_id => @user }) do |f| -%>  
+<%- form_for(@preference, :url => { :action => "update", :user_id => @user }) do |f| -%>
 <h4>Privacy</h4>
   <ul>
   	<li>
-   	  <%= f.check_box :email_visible %> 
+   	  <%= f.check_box :email_visible %>
    	  <%= f.label :email_visible, t('.display_email', :default => "Display Email Address") %>
    	</li>
-    	
+
   	<li>
-    	  <%= f.check_box :date_of_birth_visible %> 
+    	  <%= f.check_box :date_of_birth_visible %>
     	  <%= f.label :date_of_birth_visible, t('.display_birthday', :default => "Display Date of Birth") %>
   	</li>
   </ul>
 <h4>Site Display</h4>
   <ul>
   	<li>
-    	  <%= f.check_box :adult %> 
+    	  <%= f.check_box :adult %>
     	  <%= f.label :adult, t('.show_adult_content', :default => "Show me adult content without prompting") %>
   	</li>
 
   	<li>
-    	  <%= f.check_box :view_full_works %> 
+    	  <%= f.check_box :view_full_works %>
     	  <%= f.label :view_full_works, t('.view_full_works', :default => "Always view entire work by default") %>
   	</li>
- 
+
   	<li>
-    	  <%= f.check_box :hide_warnings %> 
+    	  <%= f.check_box :hide_warnings %>
     	  <%= f.label :hide_warnings, t('.hide_warnings', :default => "Hide warnings by default (you will still have the option of revealing them)")  %>
   	</li>
-      
+
   	<li>
-  	  <%= f.check_box :hide_freeform %> 
+  	  <%= f.check_box :hide_freeform %>
   	  <%= f.label :hide_freeform, t('.hide_freeform', :default => "Hide freeform tags by default (you will still have the option of revealing them)")  %>
 	  </li>
-  	
+
     <li>
-    	<%= f.check_box :plain_text_skin %> 
-    	<%= f.label :plain_text_skin, t('.preferences.plain_text_skin', :default => "Display in plain text skin")  %>
+      <%= f.select :skin_id, @available_skins.collect{|s| [s.title, s.id]} %>
+      <%= f.label :skin_id, t('skin', :default => "skin")%>
+      (<%= link_to t('.index', :default => 'Public skins'), skins_path -%>)
     </li>
-  	
-    <li>
-    	<%= f.check_box :always_light_style %> 
-    	<%= f.label :always_light_style, t('.preferences.always_light_style', :default => "View all works in light style by default")  %>
-    </li>
+
   </ul>
 <h4>Statistics</h4>
   <ul>
@@ -66,12 +63,12 @@
       <%= f.check_box :hide_all_hit_counts -%>
       <%= f.label :hide_all_hit_counts, t('.preferences.hide_all_hit_counts', :default => "Don't show me any hit counts.") -%>
     </li>
-  	
+
     <li>
       <%= f.check_box :hide_private_hit_count -%>
       <%= f.label :hide_private_hit_count, t('.preferences.hide_private_hit_count', :default => "Don't show me hits on my works.") -%>
     </li>
-  	
+
     <li>
       <%= f.check_box :hide_public_hit_count -%>
       <%= f.label :hide_public_hit_count, t('.preferences.hide_public_hit_count', :default => "Don't publicly display hits on my works.") -%>
@@ -80,22 +77,22 @@
 <h4>Comments</h4>
   <ul>
   	<li>
-    	  <%= f.check_box :comment_emails_off %> 
+    	  <%= f.check_box :comment_emails_off %>
     	  <%= f.label :comment_emails_off, t('.comment_notifications_email', :default => "Turn off comment notification emails")  %>
   	</li>
-  	
+
   	<li>
-    	  <%= f.check_box :comment_inbox_off %> 
+    	  <%= f.check_box :comment_inbox_off %>
     	  <%= f.label :comment_inbox_off, t('.comment_notifications_inbox', :default => "Turn off comment notification messages to your Inbox")  %>
   	</li>
-  	
+
   	<li>
-    	  <%= f.check_box :admin_emails_off %> 
+    	  <%= f.check_box :admin_emails_off %>
     	  <%= f.label :admin_emails_off, t('.admin_notifications_email', :default => "Turn off admin notification emails")  %>
   	</li>
 
   	<li>
-    	  <%= f.check_box :comment_copy_to_self_off %> 
+    	  <%= f.check_box :comment_copy_to_self_off %>
     	  <%= f.label :comment_copy_to_self_off, t('.own_comments', :default => "Turn off copies of your own comments")  %>
   	</li>
   </ul>
@@ -105,21 +102,21 @@
   	  <%= f.check_box :automatically_approve_collections -%>
   	  <%= f.label :pref, t('.preferences.automatically_approve_collections', :default => "Automatically approve when a moderator adds your work to a collection in the archive.") -%>
   	</li>
-  	
+
   	<li>
-    	  <%= f.check_box :collection_emails_off %> 
+    	  <%= f.check_box :collection_emails_off %>
     	  <%= f.label :collection_emails_off, t('.preferences.collection_emails_off', :default => "Turn off notification emails from Collections.") %>
-  	</li>  	
+  	</li>
 
   	<li>
-    	  <%= f.check_box :collection_inbox_off %> 
+    	  <%= f.check_box :collection_inbox_off %>
     	  <%= f.label :collection_inbox_off, t('.preferences.collection_inbox_off', :default => "Turn off Inbox messages from Collections.") %>
-  	</li>  	
+  	</li>
 
   	<li>
-    	  <%= f.check_box :recipient_emails_off %> 
+    	  <%= f.check_box :recipient_emails_off %>
     	  <%= f.label :recipient_emails_off, t('.preferences.recipient_emails_off', :default => "Turn off gift work notification emails.") %>
-  	</li>  	
+  	</li>
   </ul>
 <h4>Misc</h4>
   <ul>
@@ -129,31 +126,23 @@
     </li>
 
   	<li>
-  	  <%= f.check_box :history_enabled %> 
+  	  <%= f.check_box :history_enabled %>
   	  <%= f.label :history_enabled, t('.enable_history', :default => "Enable Viewing History") %>
   	</li>
-    
+
     <li>
-    	<%= f.check_box :first_login %> 
+    	<%= f.check_box :first_login %>
     	<%= f.label :first_login, t('.first_login_display', :default => "Turn on the first login help banner")  %>
     </li>
-    
+
     <li>
-      <%= f.label :work_title_format, t('.format_titles', :default => "Format the titles on your works and series")  %>: 
-			<%= f.text_field :work_title_format %> 
+      <%= f.label :work_title_format, t('.format_titles', :default => "Format the titles on your works and series")  %>:
+			<%= f.text_field :work_title_format %>
 			<%= link_to_help "work_title_format" -%>
     </li>
   </ul>
 
-  <h4>Skin</h4>
-  <ul>
-    <li>
-      <%= f.label :skin_id, t('skin', :default => "Select skin: ")%>
-      <%= f.select :skin_id, @available_skins.collect{|s| [s.title, s.id]}, :include_blank => true %>
-      <%= link_to t('.index', :default => 'View all skins'), skins_path -%>
-    </li>
-  </ul>
-  
+
   	<p class="submit">
     	<%= f.submit t('.forms.update', :default => "Update") %>
   	</p>
