@@ -80,3 +80,83 @@ Feature: Create bookmarks
     Then I should see "this work is not hosted on the Archive"
     When I go to bookmarkuser1's bookmarks page
     Then I should see "Stuck with You"
+
+  Scenario: Create bookmarks and recs on restricted works, check how they behave from various access points
+    Given the following activated users exist
+      | login           | password   |
+      | bookmarkuser1   | password   |
+      | bookmarkuser2   | password   |
+      And a fandom exists with name: "Stargate SG-1", canonical: true
+      And I am logged in as "bookmarkuser1" with password "password"
+      And I post the locked work "Secret Masterpiece"
+      And I post the locked work "Mystery"
+      And I post the work "Public Masterpiece"
+      And I post the work "Publicky"
+    When I follow "Log out"
+      And I am logged in as "bookmarkuser2" with password "password"
+      And I view the work "Secret Masterpiece"
+      And I follow "Bookmark"
+      And I check "bookmark_rec"
+      And I press "Create"
+    Then I should see "Bookmark was successfully created"
+      And I should see the "title" text "Restricted Work"
+      And I should see the "title" text "Rec"
+    When I view the work "Public Masterpiece"
+      And I follow "Bookmark"
+      And I check "bookmark_rec"
+      And I press "Create"
+    Then I should see "Bookmark was successfully created"
+    When I view the work "Mystery"
+      And I follow "Bookmark"
+      And I press "Create"
+    Then I should see "Bookmark was successfully created"
+    When I view the work "Publicky"
+      And I follow "Bookmark"
+      And I press "Create"
+    Then I should see "Bookmark was successfully created"
+    When I go to the bookmarks page
+    Then I should see "Secret Masterpiece"
+    When I follow "Log out"
+      And I go to the bookmarks page
+    Then I should not see "Secret Masterpiece"
+      And I should not see "Mystery"
+      But I should see "Public Masterpiece"
+      And I should see "Publicky"
+    When I follow "View Recs Only"
+    Then I should see "Public Masterpiece"
+      But I should not see "Publicky"
+    When I go to bookmarkuser2's bookmarks page
+    Then I should not see "Secret Masterpiece"
+    When I am logged in as "bookmarkuser1" with password "password"
+      And I go to bookmarkuser2's bookmarks page
+    Then I should see "Secret Masterpiece"
+    When I go to the bookmarks page
+    Then I should see "Secret Masterpiece"
+      And I should see "Mystery"
+      And I should see "Public Masterpiece"
+      And I should see "Publicky"
+    When I follow "View Recs Only"
+    Then I should see "Secret Masterpiece"
+      But I should not see "Mystery"
+      And I should see "Public Masterpiece"
+      But I should not see "Publicky"
+    When I go to the bookmarks page
+    Then I should see "Stargate SG-1"
+      And I should see "Secret Masterpiece"
+      And I should see "Mystery"
+      And I should see "Public Masterpiece"
+      And I should see "Publicky"
+    When I am logged out
+      And I go to the bookmarks page
+    Then I should see "Stargate SG-1"
+      And I should not see "Secret Masterpiece"
+      And I should not see "Mystery"
+      But I should see "Public Masterpiece"
+      And I should see "Publicky"
+      
+# TO DO
+Scenario Outline: private bookmarks on public and restricted works
+# check their visibility to logged in and logged out user, owner or not
+# (not even the bookmark owner should see her private bookmarks on the main bookmarks page, for example)
+# on the main bookmarks page, on users' bookmarks, on a tag's bookmarks
+# private bookmarks should also not increase a bookmark's counter

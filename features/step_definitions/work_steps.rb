@@ -52,3 +52,28 @@ When /^the work "([^\"]*)" was created (\d+) days ago$/ do |title, number|
   work = Work.find_by_title(title)
   work.update_attribute(:created_at, number.to_i.days.ago)
 end
+
+When /^I post the locked work "([^\"]*)"$/ do |title|
+  work = Work.find_by_title(work)
+  if work.blank?
+    Given "the locked draft \"#{title}\""
+    work = Work.find_by_title(title)
+  end
+  visit preview_work_url(work)
+  click_button("Post")
+  Then "I should see \"Work was successfully posted.\""
+end
+
+When /^the locked draft "([^\"]*)"$/ do |title|
+  Given "basic tags"
+  visit new_work_url
+  select("Not Rated", :from => "Rating")
+  check("No Archive Warnings Apply")
+  fill_in("Fandoms", :with => "Stargate SG-1")
+  fill_in("Work Title", :with => title)
+  fill_in("Additional Tags", :with => "Scary tag")
+  check("work_restricted")
+  fill_in("content", :with => "That could be an amusing crossover.")
+  click_button("Preview")
+  Then "I should see \"Draft was successfully created.\""
+end
