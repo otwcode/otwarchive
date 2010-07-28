@@ -145,10 +145,8 @@ namespace :After do
   desc "Add skins"
   task(:add_skins => :environment) do
     default = Skin.create_default
-    light = Skin.create_light
     plain = Skin.import_plain_text
     Preference.update_all("skin_id = #{default.id}")
-    Preference.update_all("skin_id = #{light.id}", "always_light_style = 1")
     Preference.update_all("skin_id = #{plain.id}", "plain_text_skin = 1")
   end
 

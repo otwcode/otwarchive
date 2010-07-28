@@ -51,6 +51,11 @@
 	  </li>
 
     <li>
+    	<%= f.check_box :disable_ugs %>
+    	<%= f.label :disable_ugs, t('.preferences.disable_ugs', :default => "Disable User Generated Styles")  %>
+    </li>
+
+    <li>
       <%= f.select :skin_id, @available_skins.collect{|s| [s.title, s.id]} %>
       <%= f.label :skin_id, t('skin', :default => "skin")%>
       (<%= link_to t('.index', :default => 'Public skins'), skins_path -%>)

@@ -6,7 +6,6 @@ Feature: creating and editing skins
   Given basic skins
   When I am on the skins page
   Then I should see "Default by AO3"
-    And I should see "Light by AO3"
     And I should see "Plain Text by AO3"
   Given I am logged in as "skinner" with password "password"
   When I am on skin's new page
@@ -19,7 +18,6 @@ Feature: creating and editing skins
   When I follow "Change your skin"
   Then "Default" should be selected within "preference_skin_id"
   When I select "Plain Text" from "preference_skin_id"
-    And I select "Light" from "preference_skin_id"
     And I select "my blinking skin" from "preference_skin_id"
     And I press "Update"
   Then "my blinking skin" should be selected within "preference_skin_id"

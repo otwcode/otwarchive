@@ -48,7 +48,6 @@ class PreferencesControllerTest < ActionController::TestCase
         form.preference.date_of_birth_visible.check
         form.preference.adult.check
         form.preference.view_full_works.check
-        form.preference.plain_text_skin.check
         form.preference.hide_freeform.check
         form.preference.hide_warnings.check
         form.preference.hide_all_hitcounts.check
@@ -74,7 +73,6 @@ class PreferencesControllerTest < ActionController::TestCase
         assert @user.preference.date_of_birth_visible
         assert @user.preference.adult
         assert @user.preference.view_full_works
-        assert @user.preference.plain_text_skin
         assert @user.preference.hide_freeform
         assert @user.preference.hide_warnings
         assert @user.preference.hide_all_hitcounts

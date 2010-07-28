@@ -23,46 +23,45 @@
         <h4><%= link_to 'View full-page index', navigate_work_path(@work) %></h4>
         <%- form_tag url_for({:controller => :chapters, :action => :show, :work_id => @work}), :method => :get do -%>
         <%= select_tag :selected_id, options_from_collection_for_select(@chapters, :id, :abbreviated_display_title, params[:id].to_i) %>
-        <%= submit_tag "Go" %>  
+        <%= submit_tag "Go" %>
         <%- end -%>
       </div>
     </li>
   <%- elsif @chapters -%>
     <li><%= link_to 'View chapter by chapter', [@work, @chapter] %></li>
   <%- end -%>
-  
+
   <%- if current_user.is_a?(User) -%>
     <li><%= bookmark_link(@work) %></li>
   <%- end -%>
     <li><%= link_to "Comments", (params[:view_full_work] == 'true' ? work_path(@work, :view_full_work => 'true', :show_comments => true, :anchor => 'comments') : url_for(:show_comments => true, :anchor => 'comments')) %></li>
-    
-  <% if params[:style] == 'creator' || (!current_user.is_a?(User) && params[:style] != 'light') || (current_user.is_a?(User) && !current_user.preference.try(:always_light_style) && params[:style] != 'light') -%>
+
+  <% if !Preference.light?(params[:style]) -%>
     <li><%- if params[:view_full_work] == 'true' -%>
       <%= link_to(t('.light_style', :default => 'Switch to light style'), url_for(:style => 'light', :view_full_work => 'true')) -%>
       <%- else -%>
       <%= link_to(t('.light_style', :default => 'Switch to light style'), url_for(:style => 'light')) -%>
     <%- end -%></li>
-  <%- end -%>
-  <% if params[:style] == 'light' || (current_user.is_a?(User) && current_user.preference.try(:always_light_style) && params[:style] != 'creator') -%>
+  <%- elsif params[:style] != 'creator' -%>
     <li><%- if params[:view_full_work] == 'true' -%>
       <%= link_to(t('.creator_style', :default => "Switch to creator's style"), url_for(:style => 'creator', :view_full_work => 'true')) -%>
       <%- else -%>
       <%= link_to(t('.creator_style', :default => "Switch to creator's style"), url_for(:style => 'creator')) -%>
     <%- end -%></li>
-  <%- end -%>  
-    
+  <% end %>
+
     <li class="landmark"><a name="top">&nbsp;</a></li>
 </ul>
 <!-- END navigation -->
 <%- end -%>
 
 <%- if @preview_mode -%>
-   <%= render :partial => 'works/meta', :locals => {:work => @work} %> 
+   <%= render :partial => 'works/meta', :locals => {:work => @work} %>
 <%- else -%>
   <% hide_show = "#{hide_warnings?(@work) ? "1" : "0"}-#{hide_freeform?(@work) ? "1" : "0"}" %>
   <%- cache([@work, "meta", hide_show]) do -%>
     <%= render :partial => 'works/meta', :locals => {:work => @work} %>
-  <%- end -%> 
+  <%- end -%>
 <%- end -%>
 
 <div class="preface">
@@ -74,9 +73,9 @@
   <h3 class="byline">
    <%= byline(@work) -%>
   </h3>
-  
+
   <%- if @chapter == @work.first_chapter -%>
-  
+
     <%- unless @work.summary.blank? -%>
       <div class="summary module" role="complementary">
         <h3><%=h t('.work_header.summary', :default => "Summary:") %></h3>
@@ -85,7 +84,7 @@
         <%- end -%>
       </div>
     <%- end -%>
-    
+
     <%- unless @work.notes.blank? && @work.endnotes.blank? && @work.parents.blank? && @work.recipients.blank? && @work.approved_children.blank? -%>
       <%- current_page?(:controller => 'chapters', :action => 'show') ? linkpath = chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes') : (params[:view_full_work] == 'true' ? linkpath = work_path(@work, :view_full_work => 'true', :anchor => 'work_endnotes') : linkpath = work_path(@work, :anchor => 'work_endnotes')) %>
       <div class="notes module" role="complementary">
@@ -119,7 +118,7 @@
           </h4>
         <%- else -%><%- if @work.notes.blank? && @work.endnotes.blank? && @work.parents.blank? && @work.recipients.blank? -%>
           <h4><%= t('.link_to_inspired_works', :default => "See the end of the work for other works inspired by this one.") %></h4>
-        <%- end -%><%- end -%> 
+        <%- end -%><%- end -%>
       <%- end -%>
     <%- end -%>
     <%- unless @work.notes.blank? && @work.endnotes.blank? -%>
@@ -128,15 +127,15 @@
     <%- else -%>
         <blockquote class="user-generated-view"><%= sanitize_and_format_for_display(@work.notes) -%></blockquote>
         <%- unless @work.endnotes.blank? -%>
-          <span class="endnotes-link"> 
-          <%= t('.work_header.link_more_endnotes', :default => "See the end of the work for more {{notes_link}}.", 
+          <span class="endnotes-link">
+          <%= t('.work_header.link_more_endnotes', :default => "See the end of the work for more {{notes_link}}.",
                                     :notes_link => link_to( t('.notes_link', :default => 'notes'), linkpath)) -%>
           </span>
-        <%- end -%>  
-    <%- end -%> 
+        <%- end -%>
+    <%- end -%>
     <%- end -%>
       </div>
     <%- end -%>
-  
-  <%- end -%>  
+
+  <%- end -%>
 </div>

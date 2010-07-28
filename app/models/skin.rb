@@ -15,7 +15,7 @@ class Skin < ActiveRecord::Base
   end
 
   def self.create_default
-    skin = Skin.new(:title => "Default", :css => "", :public => true)
+    skin = Skin.find_or_create_by_title(:title => "Default", :css => "", :public => true)
     skin.official = true
     skin.save
     skin
@@ -25,30 +25,9 @@ class Skin < ActiveRecord::Base
     Skin.find_by_title("Default") || Skin.create_default
   end
 
-  def self.create_light
-     css = <<EOF
-body {
-background-color: white;
-color: black !important;
-}
-EOF
-    skin = Skin.new(:title => "Light", :css => css, :public => true)
-    skin.official = true
-    skin.save
-    skin
-  end
-
-  def self.light?(skin_param)
-     return false if skin_param == 'creator'
-     return true if skin_param == 'light'
-     return false unless User.current_user.is_a? User
-     return true if User.current_user.try(:preference).try(:skin).try(:title) == "Light"
-     return false
-  end
-
   def self.import_plain_text
     css = File.read(Rails.public_path + "/stylesheets/plain_text_skin.css")
-    skin = Skin.new(:title => "Plain Text", :css => css, :public => true)
+    skin = Skin.find_or_create_by_title(:title => "Plain Text", :css => css, :public => true)
     skin.official = true
     skin.save
     skin

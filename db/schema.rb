@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100620185742) do
+ActiveRecord::Schema.define(:version => 20100727212342) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -566,7 +566,7 @@ ActiveRecord::Schema.define(:version => 20100620185742) do
     t.string   "time_zone"
     t.boolean  "plain_text_skin",                   :default => false,                     :null => false
     t.boolean  "admin_emails_off",                  :default => false,                     :null => false
-    t.boolean  "always_light_style",                :default => false,                     :null => false
+    t.boolean  "disable_ugs",                       :default => false,                     :null => false
     t.integer  "skin_id"
   end
 
