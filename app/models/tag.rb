@@ -555,7 +555,9 @@ class Tag < ActiveRecord::Base
     else
       new_merger = Tag.find_by_name(tag_string)
       unless new_merger && new_merger == self.merger
-        if new_merger && !new_merger.canonical?
+        if new_merger && new_merger == self
+          self.errors.add_to_base(tag_string + " is considered the same as " + self.name + " by the database.")
+        elsif new_merger && !new_merger.canonical?
           self.errors.add_to_base(new_merger.name + " is not a canonical tag. Please make it canonical before adding synonyms to it.")
         elsif new_merger && new_merger.class != self.class
           self.errors.add_to_base(new_merger.name + " is a #{new_merger.type.to_s.downcase}. Synonyms must belong to the same category.")
