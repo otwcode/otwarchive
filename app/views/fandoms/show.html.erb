@@ -10,18 +10,18 @@
 <!--subnav-->
 
 <!--main content-->
-<h3>Characters and Pairings</h3>
+<h3>Characters and Relationships</h3>
 <%- unless @characters.blank? -%>
 <ul>
   <%- for character in @characters -%>
   <li>
     <%= link_to character.name, tag_works_path(character) %>
-    <%- unless character.pairings.empty? -%>
+    <%- unless character.relationships.empty? -%>
     <ul>
-      <%- for pairing in character.pairings -%>
-      <li><%= link_to pairing.name, tag_works_path(pairing) %></li>
+      <%- for relationship in character.relationships -%>
+      <li><%= link_to relationship.name, tag_works_path(relationship) %></li>
       <%- end -%>
-    </ul>  
+    </ul>
     <%- end -%>
   </li>
   <%- end -%>

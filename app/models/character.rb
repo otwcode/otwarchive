@@ -2,8 +2,8 @@ class Character < Tag
 
   NAME = ArchiveConfig.CHARACTER_CATEGORY_NAME
   
-  named_scope :by_pairings, lambda {|pairings| 
-    {:select => 'DISTINCT tags.*', :joins => :children, :conditions => ['childrens_tags.id IN (?)', pairings.collect(&:id)]}
+  named_scope :by_relationships, lambda {|relationships| 
+    {:select => 'DISTINCT tags.*', :joins => :children, :conditions => ['childrens_tags.id IN (?)', relationships.collect(&:id)]}
   }
   
   # Types of tags to which a character tag can belong via common taggings or meta taggings
@@ -11,15 +11,15 @@ class Character < Tag
     ['Fandom', 'MetaTag']
   end
   def child_types
-    ['Pairing', 'SubTag', 'Merger']
+    ['Relationship', 'SubTag', 'Merger']
   end
 
   def characters
     (children + parents).select {|t| t.is_a? Character}.sort
   end
 
-  def pairings
-    children.by_type('Pairing').by_name
+  def relationships
+    children.by_type('Relationship').by_name
   end
 
   def freeforms

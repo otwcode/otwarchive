@@ -1,4 +1,4 @@
-﻿@users
+@users
 Feature: Tag wrangling
 
   Scenario: Log in as a tag wrangler and see wrangler pages.
@@ -49,7 +49,7 @@ Feature: Tag wrangling
       And I fill in "Fandoms" with "Stargate SG-1, Star Wars"
       And I fill in "Work Title" with "Revenge of the Sith 2"
       And I fill in "Characters" with "Daniel Jackson, Jack O'Neil"
-      And I fill in "Pairings" with "McShep"
+      And I fill in "Relationships" with "McShep"
       And I fill in "content" with "That could be an amusing crossover."
       And I press "Preview"
       And I press "Post"
@@ -59,7 +59,7 @@ Feature: Tag wrangling
       And I should see "Mass Wrangling"
       And I should see "Fandoms by media (2)"
       And I should see "Characters by fandom (2)"
-      And I should see "Pairings by fandom (1)"
+      And I should see "Relationships by fandom (1)"
     When I follow "Fandoms by media (2)"
     Then I should see "Mass Wrangle New/Unwrangled Tags"
       And I should see "Stargate SG-1"

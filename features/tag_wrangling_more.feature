@@ -1,14 +1,14 @@
-﻿@tags
+@tags
 Feature: Tag wrangling more
 
   Scenario: Log in as a tag wrangler and see wrangler pages.
         View new tags in your fandoms
     Given I have loaded the fixtures
       And the following admin exists
-      | login       | password | 
+      | login       | password |
       | Zooey       | secret   |
       And the following activated user exists
-      | login       | password      | 
+      | login       | password      |
       | dizmo       | wrangulator   |
     When I go to the admin_login page
       And I fill in "admin_login" with "Zooey"

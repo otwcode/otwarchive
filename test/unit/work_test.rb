@@ -183,41 +183,41 @@ class WorkTest < ActiveSupport::TestCase
     setup do
       @work = create_work
       @work.add_default_tags
-      @pairing = create_pairing(:canonical => true)
+      @relationship = create_relationship(:canonical => true)
       @character = create_character(:canonical => true)
-      @work.pairing_string=@pairing.name
+      @work.relationship_string=@relationship.name
       @work.character_string=@character.name
       @work.reload
     end
     should "have both in cast list" do
-      assert_equal [@pairing, @character], @work.cast_tags
+      assert_equal [@relationship, @character], @work.cast_tags
     end
     context "where the character is wrangled" do
       setup do
-        @character.add_association(@pairing)
+        @character.add_association(@relationship)
       end
-      should "only have the pairing in cast list" do
-        assert_equal [@pairing], @work.cast_tags
+      should "only have the relationship in cast list" do
+        assert_equal [@relationship], @work.cast_tags
       end
     end
-    context "where the character is wrangled but not to the pairing" do
+    context "where the character is wrangled but not to the relationship" do
       setup do
-        @new_pairing = create_pairing(:canonical => true)
-        @character.add_association(@new_pairing)
+        @new_relationship = create_relationship(:canonical => true)
+        @character.add_association(@new_relationship)
       end
       should "have both in cast list" do
-        assert_equal [@pairing, @character], @work.cast_tags
+        assert_equal [@relationship, @character], @work.cast_tags
       end
     end
-    context "where the character is wrangled but to the pairing's merger" do
+    context "where the character is wrangled but to the relationship's merger" do
       setup do
-        @new_pairing = create_pairing(:canonical => true)
-        @pairing.update_attribute(:merger_id, @new_pairing.id)
-        @character.add_association(@new_pairing)
+        @new_relationship = create_relationship(:canonical => true)
+        @relationship.update_attribute(:merger_id, @new_relationship.id)
+        @character.add_association(@new_relationship)
         @work.reload
       end
-      should "only have the pairing in cast list" do
-        assert_equal [@pairing], @work.cast_tags
+      should "only have the relationship in cast list" do
+        assert_equal [@relationship], @work.cast_tags
       end
     end
   end
@@ -226,15 +226,15 @@ class WorkTest < ActiveSupport::TestCase
     setup do
       @work = create_work
       @work.add_default_tags
-      @pairing = create_pairing
-      @work.pairing_string=@pairing.name
+      @relationship = create_relationship
+      @work.relationship_string=@relationship.name
     end
     context "when the tag is removed" do
       setup do
-        @work.pairing_string=""
+        @work.relationship_string=""
       end
       should "delete the tag" do
-        assert_raises(ActiveRecord::RecordNotFound) { @pairing.reload }
+        assert_raises(ActiveRecord::RecordNotFound) { @relationship.reload }
       end
     end 
   end

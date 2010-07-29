@@ -1,4 +1,4 @@
-﻿<h3 class="landmark">Work Header</h3>
+<h3 class="landmark">Work Header</h3>
 
 <div class="wrapper">
 
@@ -15,19 +15,19 @@
               <%= tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize %>:
             <%- end -%>
           </dt>
-      
+
           <dd class="<%= type.downcase -%>">
             <ul>
-              <%- if (type == "Warning" && hide_warnings?(work)) || (type == "Freeform" && hide_freeform?(work)) -%>        
+              <%- if (type == "Warning" && hide_warnings?(work)) || (type == "Freeform" && hide_freeform?(work)) -%>
                 <li id="work_<%= work.id %>_category_<%= type.downcase.pluralize %>"><%= show_hidden_tags_link(work, type.downcase.pluralize) %> </li>
-             <%- else -%>                   
+             <%- else -%>
                <%= tag_link_list(tags) %>
              <%- end -%>
             </ul>
           </dd>
       <%- end -%>
     <%- end -%>
-    
+
     <%- unless @work.series.blank? -%>
       <dt class="series">
         <%= t('.works.series', :default => "Series:") %>
@@ -36,7 +36,7 @@
         <%= show_series_data(@work) %>
       </dd>
     <%- end -%>
-    
+
     <%- unless @work.approved_collections.empty? %>
       <dt class="collections">
         <%= t('.work_collections', :default => 'Collections:') %>
@@ -45,7 +45,7 @@
         <%= show_collections_data(@work) %>
       </dd>
     <%- end -%>
-    
+
     <dt class="stats">
       <%= t("works.stats", :default => "Stats") %>:
     </dt>

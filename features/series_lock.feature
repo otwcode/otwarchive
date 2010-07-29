@@ -1,4 +1,4 @@
-﻿@series
+@series
 Feature: Locked and partially locked series
   In order to keep my works under the radar
   As a registered archive user

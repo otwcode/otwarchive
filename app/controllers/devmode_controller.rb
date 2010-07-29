@@ -351,7 +351,7 @@ class DevmodeController < ApplicationController
   end
 
   # Assists seedworks
-  def create_work(name, authors, ratings, warnings, characters, pairings, fandoms, chapter_count, chapter_char_count)
+  def create_work(name, authors, ratings, warnings, characters, relationships, fandoms, chapter_count, chapter_char_count)
     raise "Provide fandoms" if fandoms.nil? or fandoms.empty?
     raise "Provide chapter count" if chapter_count.nil?
     raise "Provide chapter char count" if chapter_char_count.nil?
@@ -371,7 +371,7 @@ class DevmodeController < ApplicationController
     # # warning
     # # fandoms
     # # category
-    # # pairings
+    # # relationships
     # # characters
     # # freeform
 
@@ -404,7 +404,7 @@ class DevmodeController < ApplicationController
       :fandoms => fandoms,
       :ratings => ratings,
       :characters => characters,
-      :pairings => pairings,
+      :relationships => relationships,
       :warnings => warnings,
       :notes => notes,
       :endnotes => end_notes,
@@ -497,7 +497,7 @@ class DevmodeController < ApplicationController
 
       [:Tags, nil],
       [:max_new_characters, [:text, '5', 'At most this many new characters will be created']],
-      [:max_new_pairings, [:text, '5', 'At most this many new pairings will be created']]
+      [:max_new_relationships, [:text, '5', 'At most this many new relationships will be created']]
     ] unless @params
 
     if params['seed']
@@ -577,11 +577,11 @@ class DevmodeController < ApplicationController
           new_name
         )
       }
-      all_pairings = Pairing.all
-      all_pairings += [nil] * params['max_new_pairings'].to_i
-      new_pairing_func = lambda {
+      all_relationships = Relationship.all
+      all_relationships += [nil] * params['max_new_relationships'].to_i
+      new_relationship_func = lambda {
         new_name = [random_sentence(4 + rand(12)), random_sentence(4 + rand(12))].join('/')
-        Pairing.new(
+        Relationship.new(
           :name => new_name
         )
       }
@@ -636,13 +636,13 @@ class DevmodeController < ApplicationController
         warnings = [all_warnings.choice]
         ratings = [all_ratings.choice]
         num_characters = 2
-        num_pairings = 1
+        num_relationships = 1
 
         # parameterise later
         characters = []
         num_characters.times {characters.push pick_or_create.call(all_characters, new_character_func)}
-        pairings = []
-        num_pairings.times {pairings.push pick_or_create.call(all_pairings, new_pairing_func)}
+        relationships = []
+        num_relationships.times {relationships.push pick_or_create.call(all_relationships, new_relationship_func)}
 
         # Select some random authors
         authors = []
@@ -650,7 +650,7 @@ class DevmodeController < ApplicationController
         num_authors.times {authors.push all_authors.choice.pseuds.choice}
 
         begin
-          work = create_work(work_name.call, authors, ratings, warnings, characters, pairings, fandoms, chapter_count.choice, chapter_length.choice)
+          work = create_work(work_name.call, authors, ratings, warnings, characters, relationships, fandoms, chapter_count.choice, chapter_length.choice)
         rescue Exception => ex
           # I include the backtrace because this is a development server tool.
           errors.push "EXCEPTION OCURRED '#{ex.message}':<br/>#{ex.backtrace}"

@@ -14,9 +14,9 @@ class CommonTagging < ActiveRecord::Base
     end
   end
   
-  # A pairing should inherit its characters' fandoms
+  # A relationship should inherit its characters' fandoms
   def inherit_parents
-    if common_tag.is_a?(Pairing) && filterable.is_a?(Character)
+    if common_tag.is_a?(Relationship) && filterable.is_a?(Character)
       filterable.fandoms.each do |fandom|
         common_tag.parents << fandom unless common_tag.parents.include?(fandom)
       end

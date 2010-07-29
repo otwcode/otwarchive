@@ -24,7 +24,7 @@ Feature: Create Works
     Then I should see "Work was successfully posted."
     When I go to the works page
     Then I should see "All Hell Breaks Loose"
-    
+
   Scenario: Creating a new work with everything filled in
     Given basic tags
       And a category exists with name: "Gen", canonical: true
@@ -63,7 +63,7 @@ Feature: Create Works
       And I fill in "work_endnotes" with "This is my endingnote"
       And I fill in "Summary" with "Have a short summary"
       And I fill in "Characters" with "Sam Winchester, Dean Winchester,"
-      And I fill in "Pairings" with "Harry/Ginny"
+      And I fill in "Relationships" with "Harry/Ginny"
       And I fill in "Recipient" with "Someone else"
       And I select "Pseud2" from "work_author_attributes_ids_"
       And I select "Pseud3" from "work_author_attributes_ids_"
@@ -80,7 +80,7 @@ Feature: Create Works
       And I should see "Archive Warning: No Archive Warnings Apply"
       And I should see "Category: F/M"
       And I should see "Characters: Sam Winchester, Dean Winchester"
-      And I should see "Pairing: Harry/Ginny"
+      And I should see "Relationship: Harry/Ginny"
       And I should see "For Someone else"
       And I should see "Notes"
       And I should see "This is my beginning note"

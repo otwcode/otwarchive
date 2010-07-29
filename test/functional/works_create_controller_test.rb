@@ -142,7 +142,7 @@ class WorksCreateControllerTest < ActionController::TestCase
   #           ["Graphic Depictions Of Violence", "Major Character Death", "Underage"]
   #       form.work.category_string=ArchiveConfig.CATEGORY_MULTI_TAG_NAME
   #       form.work.fandom_string="Harry Potter, xover"
-  #       form.work.pairing_string=
+  #       form.work.relationship_string=
   #         "character3/everyone, character4/character6/character5"
   #       form.work.character_string="character1, character2"
   #       form.work.freeform_string="free tag, another free tag"
@@ -166,7 +166,7 @@ class WorksCreateControllerTest < ActionController::TestCase
   #       assert_equal "Graphic Depictions Of Violence, Major Character Death, Underage" , @work.warning_string
   #       assert_equal Category.find_by_name(ArchiveConfig.CATEGORY_MULTI_TAG_NAME), @work.categories.first
   #       assert_equal ["Harry Potter", "xover"], @work.fandoms.map(&:name)
-  #       assert_contains(@work.pairings, Pairing.find_by_name("character3/everyone"))
+  #       assert_contains(@work.relationships, Relationship.find_by_name("character3/everyone"))
   #       assert_equal Character.find_by_name("character1"), @work.characters.first
   #       assert_equal ["free tag", "another free tag"], Freeform.all.map(&:name)
   #       # restricted

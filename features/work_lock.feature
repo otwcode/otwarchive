@@ -1,9 +1,9 @@
-﻿@works
+@works
 Feature: Locking works to archive users only
   In order to keep my works under the radar
   As a registered archive user
   I should be able to make my works visible only to other registered users
-  
+
 Scenario: Posting locked work
     Given I am logged in as "fandomer" with password "password"
       And basic tags

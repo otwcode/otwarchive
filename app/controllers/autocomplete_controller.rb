@@ -16,12 +16,12 @@ class AutocompleteController < ApplicationController
     end
   end
   
-  # handle pairings specially
-  def pairing_finder(search_param)
+  # handle relationships specially
+  def relationship_finder(search_param)
     if search_param && search_param.match(/(\&|\/)/)
-      tag_finder(Pairing, search_param)
+      tag_finder(Relationship, search_param)
     else
-      tags = Pairing.canonical.find(:all, :order => ['taggings_count DESC'], 
+      tags = Relationship.canonical.find(:all, :order => ['taggings_count DESC'], 
         :conditions => ["name LIKE ? OR name LIKE ? OR name LIKE ?", 
             search_param + '%', '%/' + search_param + '%', '%& ' + search_param + '%'],
             :limit => 15)
@@ -88,10 +88,10 @@ class AutocompleteController < ApplicationController
     end
   end
 
-  # pairing finders
-  %w(canonical_pairing_finder work_pairing tag_pairing_string bookmark_external_pairing_string).each do |field|
+  # relationship finders
+  %w(canonical_relationship_finder work_relationship tag_relationship_string bookmark_external_relationship_string).each do |field|
     define_method("#{field}") do
-      pairing_finder(params[params[:fieldname]]) 
+      relationship_finder(params[params[:fieldname]]) 
     end
   end
 

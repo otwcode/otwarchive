@@ -17,7 +17,7 @@ class ExternalWork < ActiveRecord::Base
   has_many :categories, :through => :taggings, :source => :tagger, :source_type => 'Category', :before_remove => :remove_filter_tagging
   has_many :warnings, :through => :taggings, :source => :tagger, :source_type => 'Warning', :before_remove => :remove_filter_tagging
   has_many :fandoms, :through => :taggings, :source => :tagger, :source_type => 'Fandom', :before_remove => :remove_filter_tagging
-  has_many :pairings, :through => :taggings, :source => :tagger, :source_type => 'Pairing', :before_remove => :remove_filter_tagging
+  has_many :relationships, :through => :taggings, :source => :tagger, :source_type => 'Relationship', :before_remove => :remove_filter_tagging
   has_many :characters, :through => :taggings, :source => :tagger, :source_type => 'Character', :before_remove => :remove_filter_tagging
   has_many :freeforms, :through => :taggings, :source => :tagger, :source_type => 'Freeform', :before_remove => :remove_filter_tagging
 

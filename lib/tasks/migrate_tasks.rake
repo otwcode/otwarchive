@@ -55,7 +55,7 @@ namespace :After do
 #
 #  desc "Clear up wrangling relationships"
 #  task(:tidy_wranglings => :environment) do
-#    [Character, Pairing, Freeform].each do |klass|
+#    [Character, Relationship, Freeform].each do |klass|
 #      puts "Updating #{klass.to_s.downcase.pluralize}"
 #      klass.by_name.find(:all, :conditions => "fandom_id IS NOT NULL").each do |tag|
 #        begin
@@ -150,6 +150,11 @@ namespace :After do
     Preference.update_all("skin_id = #{plain.id}", "plain_text_skin = 1")
   end
 
+  desc "Rename Pairing tag type to Relationship"
+  task(:rename_pairing => :environment) do
+    Tag.update_all("type = 'Relationship'", "type = 'Pairing'")
+  end
+
 
 end # this is the end that you have to put new tasks above
 
@@ -159,5 +164,5 @@ end # this is the end that you have to put new tasks above
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
 #task :After => ['After:reading_count_setup', 'After:move_hit_counts']
-task :After => ['After:add_skins']
+task :After => ['After:add_skins', 'After:rename_pairing']
 

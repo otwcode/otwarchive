@@ -40,7 +40,7 @@ class TagWranglersController < ApplicationController
     @wrangler = User.find_by_login(params[:id])
     @fandoms = @wrangler.fandoms.by_name
     @counts = {}
-    [Fandom, Character, Pairing, Freeform].each do |klass|
+    [Fandom, Character, Relationship, Freeform].each do |klass|
       @counts[klass.to_s.downcase.pluralize.to_sym] = klass.unwrangled.count
     end
   end

@@ -243,7 +243,7 @@ module FixtureReplacement
     a.name = random_tag_name
   end
 
-  attributes_for :pairing do |a|
+  attributes_for :relationship do |a|
     a.name = random_tag_name[0...21] + '/' + random_tag_name[0...20]
   end
 

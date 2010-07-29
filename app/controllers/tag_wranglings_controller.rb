@@ -8,7 +8,7 @@ class TagWranglingsController < ApplicationController
 
   def index
     @counts = {}
-    [Fandom, Character, Pairing, Freeform].each do |klass|
+    [Fandom, Character, Relationship, Freeform].each do |klass|
       @counts[klass.to_s.downcase.pluralize.to_sym] = klass.unwrangled.count
     end
     unless params[:show].blank?
@@ -18,11 +18,11 @@ class TagWranglingsController < ApplicationController
       if params[:show] == "fandoms"
         @media_names = Media.by_name.collect(&:name)
         @tags = Fandom.unwrangled.find(:all, :order => sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)       
-      elsif params[:show] == "character_pairings"
+      elsif params[:show] == "character_relationships"
         if params[:fandom_string]
           @fandom = Fandom.find_by_name(params[:fandom_string])
           if @fandom && @fandom.canonical?
-            @tags = @fandom.children.by_type("Pairing").canonical.find(:all, :order => sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+            @tags = @fandom.children.by_type("Relationship").canonical.find(:all, :order => sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
           else
             flash[:error] = "#{params[:fandom_string]} is not a canonical fandom."
           end
@@ -56,7 +56,7 @@ class TagWranglingsController < ApplicationController
       if @character && @character.canonical?
         @tags = Tag.find(params[:selected_tags])
         @tags.each { |tag| tag.add_association(@character) }
-        flash[:notice] = "#{@tags.length} pairings were wrangled to #{params[:character_string]}."
+        flash[:notice] = "#{@tags.length} relationships were wrangled to #{params[:character_string]}."
         redirect_to tag_wranglings_path(options) and return        
       else
         flash[:error] = "#{params[:character_string]} is not a canonical character."

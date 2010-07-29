@@ -27,20 +27,20 @@ class CharacterTest < ActiveSupport::TestCase
       setup do
         @character.update_attributes(:canonical => true)
       end
-      context "which gets a pairing added" do
+      context "which gets a relationship added" do
         setup do
-          @pairing = create_pairing
-          @character.add_association(@pairing)
+          @relationship = create_relationship
+          @character.add_association(@relationship)
         end
-        should "have the pairing as a child" do
-          assert_contains(@character.children, @pairing)
+        should "have the relationship as a child" do
+          assert_contains(@character.children, @relationship)
         end
         context "which is later removed" do
           setup do
-            @character.remove_association(@pairing)
+            @character.remove_association(@relationship)
           end
-          should "not have the pairing as a child" do
-            assert_does_not_contain(@character.children, @pairing)
+          should "not have the relationship as a child" do
+            assert_does_not_contain(@character.children, @relationship)
           end
         end
       end

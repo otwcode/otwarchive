@@ -14,7 +14,7 @@ class StoryParser
                    :freeform_string => "Tag",
                    :fandom_string => "Fandom",
                    :rating_string => "Rating",
-                   :pairing_string => "Pairing",
+                   :relationship_string => "Relationship",
                    :published_at => 'Date|Posted|Posted on|Posted at'
                    }
   
@@ -84,7 +84,7 @@ class StoryParser
   # do_not_set_current_author - true means do not save the current user as an author
   # importing for others - true means try and add external author for the work
   # pseuds - a list of pseuds to set as authors
-  # :set_tags, :fandom, :rating, :warning, :character, :pairing - sets these tags
+  # :set_tags, :fandom, :rating, :warning, :character, :relationship - sets these tags
   # :override_tags - set tag values even if some were parsed out of the work
   # post_without_preview - mark the story as posted without previewing
   #
@@ -245,7 +245,7 @@ class StoryParser
       work.warning_strings = (options[:warning] || ArchiveConfig.WARNING_DEFAULT_TAG_NAME) if (work.warnings.empty? || options[:override_tags])
       work.category_string = options[:category] if options[:category] && (work.categories.empty? || options[:override_tags])
       work.character_string = options[:character] if options[:character] && (work.characters.empty? || options[:override_tags])
-      work.pairing_string = options[:pairing] if options[:pairing] && (work.pairings.empty? || options[:override_tags])
+      work.relationship_string = options[:relationship] if options[:relationship] && (work.relationships.empty? || options[:override_tags])
       work.freeform_string = options[:freeform] if options[:freeform] && (work.freeforms.empty? || options[:override_tags])
 
       # set default value for title
@@ -549,7 +549,7 @@ class StoryParser
       meta = {}
       metapatterns = META_PATTERNS
       is_tag = {}
-      ["fandom_string", "pairing_string", "freeform_string", "rating_string"].each do |c|
+      ["fandom_string", "relationship_string", "freeform_string", "rating_string"].each do |c|
         is_tag[c.to_sym] = true
       end
       metapatterns.each do |metaname, pattern|

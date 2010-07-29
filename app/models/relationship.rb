@@ -1,6 +1,6 @@
-class Pairing < Tag
+class Relationship < Tag
 
-  NAME = ArchiveConfig.PAIRING_CATEGORY_NAME
+  NAME = ArchiveConfig.RELATIONSHIP_CATEGORY_NAME
   
   # Types of tags to which a character tag can belong via common taggings or meta taggings
   def parent_types
@@ -24,8 +24,8 @@ class Pairing < Tag
     all_with_synonyms.flatten.uniq.compact
   end
 
-  def pairings
-    (parents + children).select {|t| t.is_a? Pairing}.sort
+  def relationships
+    (parents + children).select {|t| t.is_a? Relationship}.sort
   end
 
   def freeforms

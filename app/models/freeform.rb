@@ -43,8 +43,8 @@ class Freeform < Tag
     parents.select {|t| t.is_a? Character}.sort
   end
 
-  def pairings
-    parents.select {|t| t.is_a? Pairing}.sort
+  def relationships
+    parents.select {|t| t.is_a? Relationship}.sort
   end
 
   def freeforms

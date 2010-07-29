@@ -8,7 +8,7 @@ class Fandom < Tag
   has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag', :after_remove => :check_media
   has_many :medias, :through => :common_taggings, :source => :filterable, :source_type => 'Tag', :conditions => "type = 'Media'"
   has_many :characters, :through => :child_taggings, :source => :common_tag, :conditions => "type = 'Character'"
-  has_many :pairings, :through => :child_taggings, :source => :common_tag, :conditions => "type = 'Pairing'"
+  has_many :relationships, :through => :child_taggings, :source => :common_tag, :conditions => "type = 'Relationship'"
   has_many :freeforms, :through => :child_taggings, :source => :common_tag, :conditions => "type = 'Freeform'"
     
   named_scope :by_media, lambda{|media| {:conditions => {:media_id => media.id}}}
@@ -87,7 +87,7 @@ class Fandom < Tag
     ['Media', 'MetaTag']
   end
   def child_types
-    ['Character', 'Pairing', 'Freeform', 'SubTag', 'Merger']
+    ['Character', 'Relationship', 'Freeform', 'SubTag', 'Merger']
   end
   
   def add_association(tag)

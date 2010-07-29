@@ -28,8 +28,8 @@ module Taggable
   def fandom_string
     tag_category_string(:fandoms)
   end
-  def pairing_string
-    tag_category_string(:pairings)
+  def relationship_string
+    tag_category_string(:relationships)
   end
   def character_string
     tag_category_string(:characters)
@@ -58,8 +58,8 @@ module Taggable
   def fandom_string=(tag_string)
     parse_tags(Fandom, tag_string)
   end
-  def pairing_string=(tag_string)
-    parse_tags(Pairing, tag_string)
+  def relationship_string=(tag_string)
+    parse_tags(Relationship, tag_string)
   end
   def character_string=(tag_string)
     parse_tags(Character, tag_string)
@@ -99,22 +99,22 @@ module Taggable
   end
 
   def cast_tags
-    # we combine pairing and character tags up to the limit
+    # we combine relationship and character tags up to the limit
     characters = self.characters.by_name || []
-    pairings = self.pairings.by_name || []
-    return [] if pairings.empty? && characters.empty?
-    canonical_pairings = Pairing.canonical.find(:all, :conditions => {:id => pairings.collect(&:merger_id).compact.uniq})
-    all_pairings = (pairings + canonical_pairings).flatten.uniq.compact
+    relationships = self.relationships.by_name || []
+    return [] if relationships.empty? && characters.empty?
+    canonical_relationships = Relationship.canonical.find(:all, :conditions => {:id => relationships.collect(&:merger_id).compact.uniq})
+    all_relationships = (relationships + canonical_relationships).flatten.uniq.compact
 
-    #pairing_characters = all_pairings.collect{|p| p.all_characters}.flatten.uniq.compact
-    pairing_characters = Character.by_pairings(all_pairings)
-    pairing_characters = (pairing_characters + pairing_characters.collect(&:mergers).flatten).compact.uniq
+    #relationship_characters = all_relationships.collect{|p| p.all_characters}.flatten.uniq.compact
+    relationship_characters = Character.by_relationships(all_relationships)
+    relationship_characters = (relationship_characters + relationship_characters.collect(&:mergers).flatten).compact.uniq
 
-    line_limited_tags(pairings + characters - pairing_characters)
+    line_limited_tags(relationships + characters - relationship_characters)
   end
 
-  def pairing_tags
-    taglist = self.tags.select {|t| t.is_a?(Pairing)}
+  def relationship_tags
+    taglist = self.tags.select {|t| t.is_a?(Relationship)}
     line_limited_tags(taglist)
   end
 

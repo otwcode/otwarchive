@@ -4,7 +4,7 @@
 <!--subnav-->
 <ul class="navigation">
 <li><%= link_to 'edit tag and parent associations', {:controller => :tags, :action => :edit, :id => @tag} %></li>
-<li><%= tag_comment_link(@tag) %></li>  
+<li><%= tag_comment_link(@tag) %></li>
 </ul>
 <!--/subnav-->
 
@@ -21,8 +21,8 @@
 <h3><%= showing_header %></h3>
 <%- end -%>
 
-<%- if @tag.is_a?(Fandom) && params[:show] == "pairings" -%>
-<p><%= link_to "wrangle pairings to characters", tag_wranglings_path(:show => 'character_pairings', :fandom_string => @tag.name) %></p>
+<%- if @tag.is_a?(Fandom) && params[:show] == "relationships" -%>
+<p><%= link_to "wrangle relationships to characters", tag_wranglings_path(:show => 'character_relationships', :fandom_string => @tag.name) %></p>
 <%- end -%>
 
 <%- if params[:show] && params[:show] !~ /suggested/ -%>
@@ -30,12 +30,12 @@
   <%- form_for :tag, @tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| -%>
     <%= f.text_area "#{params[:show].singularize}_string", :size => "100x5" %>
     <%= autocomplete_text_field_with_type @tag, "tag_#{params[:show].singularize}_string" -%>
-    <%= hidden_field_tag :show, params[:show] %> 
+    <%= hidden_field_tag :show, params[:show] %>
     <%= hidden_field_tag :sort_column, params[:sort_column] %>
     <%= hidden_field_tag :sort_direction, params[:sort_direction] %>
-    <%= hidden_field_tag :page, params[:page] %> 
+    <%= hidden_field_tag :page, params[:page] %>
     <%= hidden_field_tag :status, params[:status] %>
-    <%= f.submit 'Wrangle' %>    
+    <%= f.submit 'Wrangle' %>
   <%- end -%>
 <%- end -%>
 
@@ -49,13 +49,13 @@
     <li><%= link_to 'unwrangled', url_for(:show => params[:show], :status => 'unwrangled'), :title => "tags which were used on the same works but haven't been wrangled yet" %></li>
   </ul>
 <%- end -%>
-  
+
 <%- if @tags && @tags.empty? -%>
   <p>There are no tags in this category at the moment.</p>
 <%- elsif @tags -%>
   <%= will_paginate @tags %>
-  
-  <%- form_tag url_for(:controller => 'tags', :action => 'mass_update'), :method => :post, :id => 'wrangulator' do -%>   
+
+  <%- form_tag url_for(:controller => 'tags', :action => 'mass_update'), :method => :post, :id => 'wrangulator' do -%>
     <p class="submit"><%= submit_tag "Wrangle" %></p>
     <% sort_url_options = {:show => params[:show], :status => params[:status], :sort_column => params[:sort_column]} %>
     <table>
@@ -63,9 +63,9 @@
         <th>
           <%= sort_link t('.sort.tag_name', :default => 'Tag Name'), :name, {:sort_default => true} -%>
         </th>
-        <%- if params[:show] == "pairings" -%>
+        <%- if params[:show] == "relationships" -%>
         <th>Characters</th>
-        <%- end -%>      
+        <%- end -%>
         <th>Canonical</th>
         <%- if params[:status] == "canonical" -%>
         <th>Metatag</th>
@@ -78,21 +78,21 @@
         <th>
           <%= sort_link t('.sort.taggings_count', :default => 'Taggings Count'), :taggings_count, {:desc_default => true} -%>
         </th>
-        <th scope="col">Manage</th>    
+        <th scope="col">Manage</th>
       </tr>
       <%- for tag in @tags -%>
-      <tr>     
+      <tr>
         <td>
           <%= label_tag "canonicals_#{tag.id}", tag.name %>
         </td>
 
-        <%- if params[:show] == "pairings" -%>
+        <%- if params[:show] == "relationships" -%>
         <td>
           <%- unless !tag.canonical? || tag.characters.empty? -%>
           <ul><%= tag_link_list(tag.characters) %></ul>
           <%- end -%>
         </td>
-        <%- end -%>        
+        <%- end -%>
         <td>
           <%- if tag.canonical? -%>
           Yes
@@ -114,7 +114,7 @@
             <%- unless params[:status] == "unwrangled" -%>
             <li><%= link_to 'remove', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %></li>
             <%- end -%>
-            <li><%= link_to 'edit', {:controller => :tags, :action => :edit, :id => tag} %></li> 
+            <li><%= link_to 'edit', {:controller => :tags, :action => :edit, :id => tag} %></li>
             <li><%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => tag} %></li>
             <li><%= link_to 'works', {:controller => :works, :action => :index, :tag_id => tag} %></li>
           </ul>
@@ -123,7 +123,7 @@
       <%- end -%>
     </table>
     <p>
-    <%= hidden_field_tag :show, params[:show] %> 
+    <%= hidden_field_tag :show, params[:show] %>
     <%= hidden_field_tag :sort_column, params[:sort_column] %>
     <%= hidden_field_tag :sort_direction, params[:sort_direction] %>
     <%= hidden_field_tag :page, params[:page] %>
@@ -134,6 +134,6 @@
 <!--/content-->
 <!--subnav-->
 
-  <%= will_paginate @tags %>  
+  <%= will_paginate @tags %>
 <%- end -%>
 <!--/subnav-->

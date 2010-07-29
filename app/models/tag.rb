@@ -3,7 +3,7 @@ class Tag < ActiveRecord::Base
   # Note: the order of this array is important.
   # It is the order that tags are shown in the header of a work
   # (banned tags are not shown)
-  TYPES = ['Rating', 'Warning', 'Category', 'Media', 'Fandom', 'Pairing', 'Character', 'Freeform', 'Banned' ]
+  TYPES = ['Rating', 'Warning', 'Category', 'Media', 'Fandom', 'Relationship', 'Character', 'Freeform', 'Banned' ]
 
   # these tags can be filtered on
   FILTERS = TYPES - ['Banned', 'Media']
@@ -12,7 +12,7 @@ class Tag < ActiveRecord::Base
   VISIBLE = TYPES - ['Media', 'Banned']
 
   # these are tags which have been created by users
-  USER_DEFINED = ['Fandom', 'Pairing', 'Character', 'Freeform']
+  USER_DEFINED = ['Fandom', 'Relationship', 'Character', 'Freeform']
   
   acts_as_commentable
   def commentable_name
@@ -504,7 +504,7 @@ class Tag < ActiveRecord::Base
     true
   end
   
-  attr_reader :media_string, :fandom_string, :character_string, :pairing_string, :freeform_string, :meta_tag_string, :sub_tag_string, :merger_string
+  attr_reader :media_string, :fandom_string, :character_string, :relationship_string, :freeform_string, :meta_tag_string, :sub_tag_string, :merger_string
   
   def add_parent_string(tag_string)
     names = tag_string.split(',').map(&:squish)
@@ -517,7 +517,7 @@ class Tag < ActiveRecord::Base
   def fandom_string=(tag_string); self.add_parent_string(tag_string); end
   def media_string=(tag_string); self.add_parent_string(tag_string); end
   def character_string=(tag_string); self.add_parent_string(tag_string); end
-  def pairing_string=(tag_string); self.add_parent_string(tag_string); end
+  def relationship_string=(tag_string); self.add_parent_string(tag_string); end
   def freeform_string=(tag_string); self.add_parent_string(tag_string); end
   def meta_tag_string=(tag_string)
     names = tag_string.split(',').map(&:squish)

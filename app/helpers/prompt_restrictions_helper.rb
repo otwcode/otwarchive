@@ -29,8 +29,8 @@ module PromptRestrictionsHelper
     result += dt_wrapper(form.label(:character_num_required, t('prompt_restrictions_helper.character_num_required', :default => "Character(s): ")))
     result += required_and_allowed(form, "character")
 
-    result += dt_wrapper(form.label(:pairing_num_required, t('prompt_restrictions_helper.pairing_num_required', :default => "Pairing(s):")))
-    result += required_and_allowed(form, "pairing")
+    result += dt_wrapper(form.label(:relationship_num_required, t('prompt_restrictions_helper.relationship_num_required', :default => "Relationship(s):")))
+    result += required_and_allowed(form, "relationship")
 
     result += dt_wrapper(form.label(:rating_num_required, t('prompt_restrictions_helper.rating_num_required', :default => "Rating(s):")))
     result += required_and_allowed(form, "rating")

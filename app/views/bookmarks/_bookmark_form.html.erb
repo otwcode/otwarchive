@@ -35,19 +35,19 @@
     <dt><%= ew.label :author, t('.form_author', :default => "Author: ") %></dt>
     <dd>
       <%= ew.text_field :author %>
-      <%= generate_countdown_html("bookmark_external_author", ExternalWork::AUTHOR_LENGTH_MAX) -%>      
+      <%= generate_countdown_html("bookmark_external_author", ExternalWork::AUTHOR_LENGTH_MAX) -%>
     </dd>
 	<dt><%= ew.label :title, t('.form_title', :default => "Title: ") %></dt>
 		<dd>
       <%= ew.text_field :title, :value => params[:title_from_external] %>
-      <%= generate_countdown_html("bookmark_external_title", ArchiveConfig.TITLE_MAX) -%>      
+      <%= generate_countdown_html("bookmark_external_title", ArchiveConfig.TITLE_MAX) -%>
     </dd>
 	<dt>
 	<%= ew.label :summary, t('.form_authors_summary', :default => "Author's Summary") %>
 	<%=h t('.form_please_paste', :default => "(please copy and paste from original work)") %></dt>
 		<dd>
       <%= ew.text_area :summary, :rows => 5, :class => "summary-field"%>
-      <%= generate_countdown_html("bookmark_external_summary", ArchiveConfig.SUMMARY_MAX) -%>      
+      <%= generate_countdown_html("bookmark_external_summary", ArchiveConfig.SUMMARY_MAX) -%>
     </dd>
   </dl>
   </fieldset>
@@ -67,20 +67,20 @@
       <%= ew.label :rating_string, Rating::NAME -%><%= link_to_help "rating-help" -%>
     </dt>
     <dd>
-      <%= ew.collection_select(:rating_string, Rating.canonical, :name, :name, {:selected => ArchiveConfig.RATING_DEFAULT_TAG_NAME}) -%>		
-    </dd>  
+      <%= ew.collection_select(:rating_string, Rating.canonical, :name, :name, {:selected => ArchiveConfig.RATING_DEFAULT_TAG_NAME}) -%>
+    </dd>
     <dt>
       <%= ew.label :category_string, Category::NAME -%>
     </dt>
     <dd>
-      <%= ew.collection_select(:category_string, Category.canonical, :name, :name, {:include_blank => true}) -%>		
+      <%= ew.collection_select(:category_string, Category.canonical, :name, :name, {:include_blank => true}) -%>
     </dd>
     <dt>
-      <%= ew.label :pairing_string, Pairing::NAME.pluralize -%>
+      <%= ew.label :relationship_string, Relationship::NAME.pluralize -%>
     </dt>
     <dd>
-      <%= ew.text_field :pairing_string %>
-      <%= autocomplete_text_field "bookmark_external_pairing_string" -%>
+      <%= ew.text_field :relationship_string %>
+      <%= autocomplete_text_field "bookmark_external_relationship_string" -%>
     </dd>
     <dt>
       <%= ew.label :character_string, Character::NAME.pluralize -%>
@@ -88,7 +88,7 @@
     <dd>
       <%= ew.text_field :character_string %>
       <%= autocomplete_text_field "bookmark_external_character_string" -%>
-    </dd>    
+    </dd>
   </dl>
   </fieldset>
   <% end %>
@@ -100,8 +100,8 @@
   <dd>
     <code>a href, b, big, blockquote, br, center, cite, code, del, em, i, img, ins, p, pre, q, small, strike, strong, sub, sup, u </code>
       <%= f.text_area :notes, :rows => 4 %>
-      <%= generate_countdown_html("bookmark_notes", ArchiveConfig.NOTES_MAX) -%> 
-      
+      <%= generate_countdown_html("bookmark_notes", ArchiveConfig.NOTES_MAX) -%>
+
     </dd>
 	<dt><%= f.label :tag_string, t('.form_your_tags', :default => "Your Tags") %></dt>
 	<dd>

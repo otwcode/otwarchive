@@ -194,7 +194,7 @@ module TagsHelper
   def blurb_tag_block(item, tag_groups=nil)
     item_class = item.class.to_s.underscore
     tag_groups ||= item.tag_groups
-    categories = ['Warning', 'Pairing', 'Character', 'Freeform']
+    categories = ['Warning', 'Relationship', 'Character', 'Freeform']
     last_tag = categories.collect { |c| tag_groups[c] }.flatten.compact.last
     tag_block = ""   
     

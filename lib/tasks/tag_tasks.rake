@@ -17,10 +17,10 @@ namespace :Tag do
     end
     puts "Tag count reset."
   end
-  desc "Update pairing has_characters"
+  desc "Update relationship has_characters"
   task(:update_has_characters => :environment) do
-    Pairing.all.each do |pairing|
-      pairing.update_attribute(:has_characters, true) unless pairing.characters.blank?
+    Relationship.all.each do |relationship|
+      relationship.update_attribute(:has_characters, true) unless relationship.characters.blank?
     end
   end
   desc "Delete unused tags"
@@ -39,7 +39,7 @@ namespace :Tag do
   end
   desc "Clean up orphaned taggings"
   task(:clean_up_taggings => :environment) do
-    Tagging.find_each {|t| t.destroy if t.taggable.nil?}  
+    Tagging.find_each {|t| t.destroy if t.taggable.nil?}
   end
   desc "Reset filter taggings"
   task(:reset_filters => :environment) do
@@ -54,6 +54,6 @@ namespace :Tag do
   task(:unsuspend_filter_counts => :environment) do
     if AdminSetting.first && AdminSetting.first.suspend_filter_counts_at
       FilterTagging.update_filter_counts_since(AdminSetting.first.suspend_filter_counts_at)
-    end    
+    end
   end
 end

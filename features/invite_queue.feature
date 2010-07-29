@@ -1,4 +1,4 @@
-﻿@admin
+@admin
 Feature: Invite queue management
 
   Scenario: Turn on queue, join queue and check status

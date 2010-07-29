@@ -1,13 +1,13 @@
-﻿@admin
+@admin
 Feature: Admin tasks
 
   Scenario: Log in as an admin and do admin-y things. Wrong password fails admin login, you can find users, post a new FAQ section.
     Given I have no users
       And the following admin exists
-      | login       | password | 
+      | login       | password |
       | Zooey       | secret   |
       And the following activated user exists
-      | login       | password      | 
+      | login       | password      |
       | dizmo       | wrangulator   |
    When I go to the home page
       And I fill in "login" with "Zooey"

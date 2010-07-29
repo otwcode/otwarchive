@@ -26,7 +26,7 @@
           <%= link_to sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small)), work %>
         </th>
         <td><%= work.fandoms.collect {|tag| link_to_tag(tag) }.join(', ') %></td>
-        <td><%= %w(characters pairings freeforms categories ratings warnings).collect {|type| work.send("#{type}")}.flatten.collect {|tag| link_to_tag(tag) }.join(', ') -%></td>
+        <td><%= %w(characters relationships freeforms categories ratings warnings).collect {|type| work.send("#{type}")}.flatten.collect {|tag| link_to_tag(tag) }.join(', ') -%></td>
       </tr>
     <%- end -%>
   </table>
@@ -36,7 +36,7 @@
   <div id="work-form" class="work-form"><%= render :partial => 'work_tags_form', :locals => {:include_blank => true} -%></div>
 
   <p class="submit"><%= submit_tag t('.update_multiple', :default => "Update All Stories"), :confirm => "Are you sure? Remember this will replace all existing values!" %></p>
-  
+
 <% end %>
 <!--/content-->
 

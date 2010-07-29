@@ -60,7 +60,7 @@ class Work < ActiveRecord::Base
     :before_remove => :remove_filter_tagging
   has_many :fandoms, :through => :taggings, :source => :tagger, :source_type => 'Fandom',
     :before_remove => :remove_filter_tagging
-  has_many :pairings, :through => :taggings, :source => :tagger, :source_type => 'Pairing',
+  has_many :relationships, :through => :taggings, :source => :tagger, :source_type => 'Relationship',
     :before_remove => :remove_filter_tagging
   has_many :characters, :through => :taggings, :source => :tagger, :source_type => 'Character',
     :before_remove => :remove_filter_tagging

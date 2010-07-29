@@ -31,7 +31,7 @@ tag_1063753936:
   taggings_count: 1
   adult: false
   id: 1063753936
-  type: Pairing
+  type: Relationship
 tag_1063753746: 
   name: Dean
   merger_id: 
@@ -53,7 +53,7 @@ tag_1063754079:
   taggings_count: 1
   adult: false
   id: 1063754079
-  type: Pairing
+  type: Relationship
 tag_1063753984: 
   name: steps song stuck in my head now
   merger_id: 
@@ -97,7 +97,7 @@ tag_1063753747:
   taggings_count: 1
   adult: false
   id: 1063753747
-  type: Pairing
+  type: Relationship
 tag_1063753985: 
   name: masterpiece
   merger_id: 
@@ -218,7 +218,7 @@ tag_1063753797:
   taggings_count: 1
   adult: false
   id: 1063753797
-  type: Pairing
+  type: Relationship
 tag_1063754132: 
   name: Forest
   merger_id: 
@@ -251,7 +251,7 @@ tag_1063753798:
   taggings_count: 1
   adult: false
   id: 1063753798
-  type: Pairing
+  type: Relationship
 tag_1063754133: 
   name: Graham
   merger_id: 
@@ -295,7 +295,7 @@ tag_1063753800:
   taggings_count: 1
   adult: false
   id: 1063753800
-  type: Pairing
+  type: Relationship
 tag_1063753799: 
   name: OFC/OMC
   merger_id: 
@@ -306,7 +306,7 @@ tag_1063753799:
   taggings_count: 1
   adult: false
   id: 1063753799
-  type: Pairing
+  type: Relationship
 tag_1063754134: 
   name: some tags
   merger_id: 
@@ -482,7 +482,7 @@ tag_1063753853:
   taggings_count: 0
   adult: false
   id: 1063753853
-  type: Pairing
+  type: Relationship
 tag_1063753806: 
   name: People of Gomorrah
   merger_id: 
@@ -559,7 +559,7 @@ tag_1063753808:
   taggings_count: 0
   adult: false
   id: 1063753808
-  type: Pairing
+  type: Relationship
 tag_1063753856: 
   name: bli
   merger_id: 
@@ -592,7 +592,7 @@ tag_1063753809:
   taggings_count: 0
   adult: false
   id: 1063753809
-  type: Pairing
+  type: Relationship
 tag_1063753857: 
   name: boo
   merger_id: 
@@ -603,7 +603,7 @@ tag_1063753857:
   taggings_count: 1
   adult: false
   id: 1063753857
-  type: Pairing
+  type: Relationship
 tag_1063754002: 
   name: Choose Not To Use Archive Warnings
   merger_id: 
@@ -647,7 +647,7 @@ tag_1063754003:
   taggings_count: 1
   adult: false
   id: 1063754003
-  type: Pairing
+  type: Relationship
 tag_1063754051: 
   name: Moay Crew
   merger_id: 
@@ -757,7 +757,7 @@ tag_1063753911:
   taggings_count: 2
   adult: false
   id: 1063753911
-  type: Pairing
+  type: Relationship
 tag_1063754055: 
   name: Back to Earth
   merger_id: 
@@ -911,7 +911,7 @@ tag_1063753914:
   taggings_count: 1
   adult: false
   id: 1063753914
-  type: Pairing
+  type: Relationship
 tag_1063754058: 
   name: Futrue!Fic
   merger_id: 
@@ -944,7 +944,7 @@ tag_1063753773:
   taggings_count: 1
   adult: false
   id: 1063753773
-  type: Pairing
+  type: Relationship
 tag_1063753915: 
   name: OT3
   merger_id: 
@@ -988,7 +988,7 @@ tag_1063753916:
   taggings_count: 1
   adult: false
   id: 1063753916
-  type: Pairing
+  type: Relationship
 tag_1063753964: 
   name: hurt!dean
   merger_id: 
@@ -1186,7 +1186,7 @@ tag_1063754113:
   taggings_count: 1
   adult: false
   id: 1063754113
-  type: Pairing
+  type: Relationship
 tag_1063753969: 
   name: bathtime fun
   merger_id: 
@@ -1208,7 +1208,7 @@ tag_1063753779:
   taggings_count: 3
   adult: false
   id: 1063753779
-  type: Pairing
+  type: Relationship
 tag_1063754114: 
   name: cheating
   merger_id: 
@@ -1274,7 +1274,7 @@ tag_1063753880:
   taggings_count: 1
   adult: false
   id: 1063753880
-  type: Pairing
+  type: Relationship
 tag_1063754117: 
   name: cheerios
   merger_id: 
@@ -1362,7 +1362,7 @@ tag_1063753834:
   taggings_count: 1
   adult: false
   id: 1063753834
-  type: Pairing
+  type: Relationship
 tag_1063753883: 
   name: newest small
   merger_id: 
@@ -1406,7 +1406,7 @@ tag_1063753884:
   taggings_count: 1
   adult: false
   id: 1063753884
-  type: Pairing
+  type: Relationship
 tag_1063753837: 
   name: y/y
   merger_id: 
@@ -1417,7 +1417,7 @@ tag_1063753837:
   taggings_count: 0
   adult: false
   id: 1063753837
-  type: Pairing
+  type: Relationship
 tag_1063753885: 
   name: picky
   merger_id: 
@@ -1452,7 +1452,7 @@ tag_1063753838:
   id: 1063753838
   type: Character
 tag_1063753886: 
-  name: Janto - Pairing
+  name: Janto - Relationship
   merger_id: 1063753889
   canonical: false
   created_at: 2009-03-18 20:15:26 +00:00
@@ -1461,7 +1461,7 @@ tag_1063753886:
   taggings_count: 1
   adult: false
   id: 1063753886
-  type: Pairing
+  type: Relationship
 tag_1063754031: 
   name: Bar
   merger_id: 
@@ -1560,7 +1560,7 @@ tag_1063753889:
   taggings_count: 0
   adult: false
   id: 1063753889
-  type: Pairing
+  type: Relationship
 tag_1063754034: 
   name: Flannery O'Connor
   merger_id: 
@@ -1593,7 +1593,7 @@ tag_1063754082:
   taggings_count: 1
   adult: false
   id: 1063754082
-  type: Pairing
+  type: Relationship
 tag_1063754035: 
   name: NCIS
   merger_id: 
@@ -1626,7 +1626,7 @@ tag_1063753750:
   taggings_count: 1
   adult: false
   id: 1063753750
-  type: Pairing
+  type: Relationship
 tag_1063754083: 
   name: Jack/Daniel
   merger_id: 
@@ -1637,7 +1637,7 @@ tag_1063754083:
   taggings_count: 1
   adult: false
   id: 1063754083
-  type: Pairing
+  type: Relationship
 tag_1063754036: 
   name: NCIS series
   merger_id: 
@@ -1681,7 +1681,7 @@ tag_1063754084:
   taggings_count: 0
   adult: false
   id: 1063754084
-  type: Pairing
+  type: Relationship
 tag_1063754037: 
   name: Abby Scuito
   merger_id: 
@@ -1714,7 +1714,7 @@ tag_1063754085:
   taggings_count: 1
   adult: false
   id: 1063754085
-  type: Pairing
+  type: Relationship
 tag_1063753990: 
   name: mullet
   merger_id: 
@@ -1736,7 +1736,7 @@ tag_1063753942:
   taggings_count: 1
   adult: false
   id: 1063753942
-  type: Pairing
+  type: Relationship
 tag_1063753752: 
   name: Rodney McKay
   merger_id: 
@@ -1758,7 +1758,7 @@ tag_1063754086:
   taggings_count: 0
   adult: false
   id: 1063754086
-  type: Pairing
+  type: Relationship
 tag_1063753991: 
   name: DOOM
   merger_id: 
@@ -1802,7 +1802,7 @@ tag_1063753753:
   taggings_count: 1
   adult: false
   id: 1063753753
-  type: Pairing
+  type: Relationship
 tag_1063754087: 
   name: Giles/Buffy
   merger_id: 
@@ -1813,7 +1813,7 @@ tag_1063754087:
   taggings_count: 0
   adult: false
   id: 1063754087
-  type: Pairing
+  type: Relationship
 tag_1063753992: 
   name: multi-chapter
   merger_id: 
@@ -1890,7 +1890,7 @@ tag_1063753755:
   taggings_count: 2
   adult: false
   id: 1063753755
-  type: Pairing
+  type: Relationship
 tag_1063754089: 
   name: femslash
   merger_id: 
@@ -1967,7 +1967,7 @@ tag_1063753757:
   taggings_count: 1
   adult: false
   id: 1063753757
-  type: Pairing
+  type: Relationship
 tag_1063753995: 
   name: private bookmark
   merger_id: 
@@ -2033,7 +2033,7 @@ tag_1063754141:
   taggings_count: 1
   adult: false
   id: 1063754141
-  type: Pairing
+  type: Relationship
 tag_1063753949: 
   name: "spn: season one"
   merger_id: 
@@ -2077,7 +2077,7 @@ tag_1063754142:
   taggings_count: 1
   adult: false
   id: 1063754142
-  type: Pairing
+  type: Relationship
 tag_1063753810: 
   name: Jack Harkness/Sam Anders
   merger_id: 1063753809
@@ -2088,7 +2088,7 @@ tag_1063753810:
   taggings_count: 0
   adult: false
   id: 1063753810
-  type: Pairing
+  type: Relationship
 tag_1063753998: 
   name: Speed/Trixie
   merger_id: 
@@ -2099,7 +2099,7 @@ tag_1063753998:
   taggings_count: 1
   adult: false
   id: 1063753998
-  type: Pairing
+  type: Relationship
 tag_1063754143: 
   name: solid black
   merger_id: 
@@ -2121,7 +2121,7 @@ tag_1063753811:
   taggings_count: 0
   adult: false
   id: 1063753811
-  type: Pairing
+  type: Relationship
 tag_1063753999: 
   name: Speed Racer
   merger_id: 
@@ -2154,7 +2154,7 @@ tag_1063753812:
   taggings_count: 0
   adult: false
   id: 1063753812
-  type: Pairing
+  type: Relationship
 tag_1063754145: 
   name: override all
   merger_id: 
@@ -2187,7 +2187,7 @@ tag_1063753813:
   taggings_count: 0
   adult: false
   id: 1063753813
-  type: Pairing
+  type: Relationship
 tag_177887685: 
   name: Doctor Who
   merger_id: 
@@ -2220,7 +2220,7 @@ tag_1063753861:
   taggings_count: 0
   adult: false
   id: 1063753861
-  type: Pairing
+  type: Relationship
 tag_1063754147: 
   name: w3c
   merger_id: 
@@ -2242,7 +2242,7 @@ tag_1063753814:
   taggings_count: 0
   adult: false
   id: 1063753814
-  type: Pairing
+  type: Relationship
 tag_362175678: 
   name: fluff
   merger_id: 
@@ -2330,7 +2330,7 @@ tag_1063753865:
   taggings_count: 0
   adult: false
   id: 1063753865
-  type: Pairing
+  type: Relationship
 tag_1063754011: 
   name: crack
   merger_id: 
@@ -2352,7 +2352,7 @@ tag_1063753819:
   taggings_count: 0
   adult: false
   id: 1063753819
-  type: Pairing
+  type: Relationship
 tag_545584597: 
   name: Dean Winchester/Sam Winchester
   merger_id: 
@@ -2363,7 +2363,7 @@ tag_545584597:
   taggings_count: 4
   adult: false
   id: 545584597
-  type: Pairing
+  type: Relationship
 tag_1063753866: 
   name: maa
   merger_id: 
@@ -2836,7 +2836,7 @@ tag_1063753926:
   taggings_count: 1
   adult: false
   id: 1063753926
-  type: Pairing
+  type: Relationship
 tag_1063753736: 
   name: M/M
   merger_id: 
@@ -2880,7 +2880,7 @@ tag_1063753784:
   taggings_count: 1
   adult: false
   id: 1063753784
-  type: Pairing
+  type: Relationship
 tag_211186876: 
   name: American Idol
   merger_id: 
@@ -3122,7 +3122,7 @@ tag_1063753840:
   taggings_count: 1
   adult: false
   id: 1063753840
-  type: Pairing
+  type: Relationship
 tag_1063753841: 
   name: j
   merger_id: 1063753891
@@ -3243,7 +3243,7 @@ tag_1063753844:
   taggings_count: 0
   adult: false
   id: 1063753844
-  type: Pairing
+  type: Relationship
 tag_1063753892: 
   name: Connor/Murphy
   merger_id: 
@@ -3254,7 +3254,7 @@ tag_1063753892:
   taggings_count: 0
   adult: false
   id: 1063753892
-  type: Pairing
+  type: Relationship
 tag_1063754129: 
   name: Ulrika Johnsson
   merger_id: 
@@ -3287,7 +3287,7 @@ tag_1063753893:
   taggings_count: 0
   adult: false
   id: 1063753893
-  type: Pairing
+  type: Relationship
 tag_1063753846: 
   name: "#"
   merger_id: 
@@ -3309,7 +3309,7 @@ tag_1063753894:
   taggings_count: 1
   adult: false
   id: 1063753894
-  type: Pairing
+  type: Relationship
 tag_1063753847: 
   name: twen
   merger_id: 
@@ -3353,7 +3353,7 @@ tag_1063753849:
   taggings_count: 0
   adult: false
   id: 1063753849
-  type: Pairing
+  type: Relationship
 tag_1063753896: 
   name: McShep
   merger_id: 1063753811
@@ -3364,7 +3364,7 @@ tag_1063753896:
   taggings_count: 2
   adult: false
   id: 1063753896
-  type: Pairing
+  type: Relationship
 tag_1063753897: 
   name: McDex
   merger_id: 1063753899
@@ -3375,7 +3375,7 @@ tag_1063753897:
   taggings_count: 2
   adult: false
   id: 1063753897
-  type: Pairing
+  type: Relationship
 tag_1063754043: 
   name: Bridges verse
   merger_id: 
@@ -3397,7 +3397,7 @@ tag_1063753900:
   taggings_count: 0
   adult: false
   id: 1063753900
-  type: Pairing
+  type: Relationship
 tag_1063754090: 
   name: het
   merger_id: 
@@ -3419,7 +3419,7 @@ tag_1063753898:
   taggings_count: 0
   adult: false
   id: 1063753898
-  type: Pairing
+  type: Relationship
 tag_130714128: 
   name: Stargate SG-1
   merger_id: 
@@ -3441,7 +3441,7 @@ tag_1063753901:
   taggings_count: 0
   adult: false
   id: 1063753901
-  type: Pairing
+  type: Relationship
 tag_1063754091: 
   name: rimming
   merger_id: 
@@ -3463,7 +3463,7 @@ tag_1063753899:
   taggings_count: 0
   adult: false
   id: 1063753899
-  type: Pairing
+  type: Relationship
 tag_1063754044: 
   name: mini slayers
   merger_id: 
@@ -3496,7 +3496,7 @@ tag_1063753902:
   taggings_count: 0
   adult: false
   id: 1063753902
-  type: Pairing
+  type: Relationship
 tag_1063754092: 
   name: pissing
   merger_id: 
@@ -3562,7 +3562,7 @@ tag_1063753903:
   taggings_count: 0
   adult: false
   id: 1063753903
-  type: Pairing
+  type: Relationship
 tag_1063754046: 
   name: Xander Harris
   merger_id: 
@@ -3595,7 +3595,7 @@ tag_1063753762:
   taggings_count: 1
   adult: false
   id: 1063753762
-  type: Pairing
+  type: Relationship
 tag_1063754094: 
   name: biting
   merger_id: 
@@ -3738,7 +3738,7 @@ tag_1063753764:
   taggings_count: 1
   adult: false
   id: 1063753764
-  type: Pairing
+  type: Relationship
 tag_1063754097: 
   name: shouting
   merger_id: 
@@ -3859,7 +3859,7 @@ tag_1063753909:
   taggings_count: 1
   adult: false
   id: 1063753909
-  type: Pairing
+  type: Relationship
 tag_385776504: 
   name: Iron Man (2008)
   merger_id: 
@@ -4046,7 +4046,7 @@ tag_1063753870:
   taggings_count: 1
   adult: false
   id: 1063753870
-  type: Pairing
+  type: Relationship
 tag_1063754107: 
   name: let's break the layout
   merger_id: 
@@ -4178,7 +4178,7 @@ tag_1063753826:
   taggings_count: 2
   adult: false
   id: 1063753826
-  type: Pairing
+  type: Relationship
 tag_1063753874: 
   name: piiiiii
   merger_id: 
@@ -4222,7 +4222,7 @@ tag_1063754020:
   taggings_count: 1
   adult: false
   id: 1063754020
-  type: Pairing
+  type: Relationship
 tag_1063753828: 
   name: poony
   merger_id: 
@@ -4277,7 +4277,7 @@ tag_1063753877:
   taggings_count: 1
   adult: false
   id: 1063753877
-  type: Pairing
+  type: Relationship
 tag_1063754022: 
   name: "#yuletide/NCIS"
   merger_id: 
@@ -4288,7 +4288,7 @@ tag_1063754022:
   taggings_count: 1
   adult: false
   id: 1063754022
-  type: Pairing
+  type: Relationship
 tag_1063753878: 
   name: short
   merger_id: 
@@ -4530,7 +4530,7 @@ tag_1063754027:
   taggings_count: 0
   adult: false
   id: 1063754027
-  type: Pairing
+  type: Relationship
 tag_1063754075: 
   name: OCs
   merger_id: 
@@ -4596,7 +4596,7 @@ tag_1063754028:
   taggings_count: 1
   adult: false
   id: 1063754028
-  type: Pairing
+  type: Relationship
 tag_1063754076: 
   name: OFC - Character
   merger_id: 
@@ -4618,7 +4618,7 @@ tag_1063753744:
   taggings_count: 1
   adult: false
   id: 1063753744
-  type: Pairing
+  type: Relationship
 tag_1063753934: 
   name: pwp
   merger_id: 
@@ -4662,7 +4662,7 @@ tag_1063754029:
   taggings_count: 1
   adult: false
   id: 1063754029
-  type: Pairing
+  type: Relationship
 tag_1063754078: 
   name: Jack Harkness/Harry Potter
   merger_id: 
@@ -4673,7 +4673,7 @@ tag_1063754078:
   taggings_count: 1
   adult: false
   id: 1063754078
-  type: Pairing
+  type: Relationship
 tag_1063753793: 
   name: pillars of salt
   merger_id: 

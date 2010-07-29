@@ -68,20 +68,20 @@ class FandomTest < ActiveSupport::TestCase
           end
         end
       end
-      context "with a pairing" do
+      context "with a relationship" do
         setup do
-          @pairing = create_pairing
-          @myfandom.add_association(@pairing)
+          @relationship = create_relationship
+          @myfandom.add_association(@relationship)
         end
-        should "have the pairing as a child" do
-          assert_contains(@myfandom.children, @pairing)
+        should "have the relationship as a child" do
+          assert_contains(@myfandom.children, @relationship)
         end
         context "and later removed" do
           setup do
-            @myfandom.remove_association(@pairing)
+            @myfandom.remove_association(@relationship)
           end
-          should "not have the pairing in its children" do
-            assert_does_not_contain(@myfandom.children, @pairing)
+          should "not have the relationship in its children" do
+            assert_does_not_contain(@myfandom.children, @relationship)
           end
         end
       end

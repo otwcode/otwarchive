@@ -93,7 +93,7 @@ class TagSetTest < ActiveSupport::TestCase
   test "tagnames functions" do
     @tagset = TagSet.new
     @taglist = []
-    %w(fandom character pairing rating warning category freeform).each do |type| 
+    %w(fandom character relationship rating warning category freeform).each do |type| 
       eval("#{type}_tag = create_#{type}(:canonical => true)")
       eval("@taglist << #{type}_tag")
       eval("@tagset.#{type}_tagnames = #{type}_tag.name")

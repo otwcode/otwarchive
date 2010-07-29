@@ -3,7 +3,7 @@ class TagSet < ActiveRecord::Base
   # a complete match is numerically represented with ALL
   ALL = -1
   
-  TAG_TYPES = %w(fandom character pairing freeform category rating warning)
+  TAG_TYPES = %w(fandom character relationship freeform category rating warning)
   
   has_many :set_taggings, :dependent => :destroy
   has_many :tags, :through => :set_taggings

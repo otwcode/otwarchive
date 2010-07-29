@@ -161,7 +161,7 @@ class Series < ActiveRecord::Base
   end
   
   def author_tags
-    self.work_tags.select{|t| t.type == "Pairing"}.sort + self.work_tags.select{|t| t.type == "Character"}.sort + self.work_tags.select{|t| t.type == "Freeform"}.sort
+    self.work_tags.select{|t| t.type == "Relationship"}.sort + self.work_tags.select{|t| t.type == "Character"}.sort + self.work_tags.select{|t| t.type == "Freeform"}.sort
   end
   
   def tag_groups

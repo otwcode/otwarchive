@@ -476,7 +476,7 @@ class WorksController < ApplicationController
       :fandom => params[:fandom],
       :character => params[:character],
       :rating => params[:rating],
-      :pairing => params[:pairing],
+      :relationship => params[:relationship],
       :category => params[:category],
       :freeform => params[:freeform]
     }
