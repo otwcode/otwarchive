@@ -77,3 +77,10 @@ When /^the locked draft "([^\"]*)"$/ do |title|
   click_button("Preview")
   Then "I should see \"Draft was successfully created.\""
 end
+
+When /^I list the work "([^\"]*)" as inspiration$/ do |title|
+  work = Work.find_by_title!(title)
+  check("parent-options-show")
+  url_of_work = work_url(work).sub("www.example.com", ArchiveConfig.APP_URL)
+  fill_in("Url", :with => url_of_work)
+end
