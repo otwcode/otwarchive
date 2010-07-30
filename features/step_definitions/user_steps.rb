@@ -32,10 +32,11 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
 end
 
 Given /^I am logged in as a random user$/ do
-  user = Factory.create(:user, :login => "testuser", :password => "password")
+  name = "testuser#{User.count + 1}"
+  user = Factory.create(:user, :login => name, :password => "password")
   user.activate
   visit login_path
-  fill_in "User name", :with => "testuser"
+  fill_in "User name", :with => name
   fill_in "Password", :with => "password"
   check "Remember me"
   click_button "Log in"

@@ -33,13 +33,14 @@ namespace :Tag do
       end
     end
     unless deleted_names.blank?
-      puts "The following unused tags were deleted:"
+      puts "The following #{deleted_names.length} unused tags were deleted:"
       puts deleted_names.join(", ")
     end
   end
   desc "Clean up orphaned taggings"
   task(:clean_up_taggings => :environment) do
     Tagging.find_each {|t| t.destroy if t.taggable.nil?}
+    CommonTagging.find_each {|t| t.destroy if t.common_tag.nil?}
   end
   desc "Reset filter taggings"
   task(:reset_filters => :environment) do

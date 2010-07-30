@@ -10,7 +10,7 @@ Feature: Create Works
 
   Scenario: Creating a new minimally valid work
     Given basic tags
-      And I am logged in as a random user
+      And I am logged in as "newbie" with password "password"
     When I go to the new work page
     Then I should see "Post New Work"
       And I select "Not Rated" from "Rating"
@@ -32,8 +32,8 @@ Feature: Create Works
       And the following activated user exists
         | login          | password    |
         | cosomeone      | something   |
-      And I am logged in as a random user
-    When I go to testuser's user page
+      And I am logged in as "thorough" with password "something"
+    When I go to thorough's user page
       And I follow "Profile"
     Then I should see "About"
     When I follow "Manage My Pseuds"

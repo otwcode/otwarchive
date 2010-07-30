@@ -298,7 +298,7 @@ module FixtureReplacement
   end
 
   def random_tag_name(count=42)
-    name = random_phrase[1...count]
+    name = random_phrase[1...count].strip
     name = random_tag_name if Tag.find_by_name(name)
     return name
   end

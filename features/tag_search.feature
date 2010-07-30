@@ -5,7 +5,8 @@ Feature: Search Tags
   I want to figure out how to test tag search
 
   Scenario: Search tags
-    Given a fandom exists with name: "first fandom"
+    Given I have no tags
+      And a fandom exists with name: "first fandom"
       And a character exists with name: "first last", canonical: true
       And the tag indexes are updated
     When I am on the search tags page

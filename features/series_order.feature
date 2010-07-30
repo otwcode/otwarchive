@@ -8,12 +8,11 @@ Feature: Rearrange works within a series
     Given the following activated user exists
       | login         | password   |
       | author        | password   |
-      And a warning exists with name: "Choose Not To Use Archive Warnings", canonical: true
-      And a rating exists with name: "Not Rated", canonical: true
+      And basic tags
     When I am logged in as "author" with password "password"
       And I go to the new work page
       And I select "Not Rated" from "Rating"
-      And I check "Choose Not To Use Archive Warnings"
+      And I check "No Archive Warnings Apply"
       And I fill in "Fandoms" with "Supernatural"
       And I fill in "Work Title" with "A Bad, Bad Day"
       And I fill in "work_series_attributes_title" with "Tale of Woe"
@@ -26,7 +25,7 @@ Feature: Rearrange works within a series
     Then I should see "A Bad, Bad Day"
     When I go to the new work page
       And I select "Not Rated" from "Rating"
-      And I check "Choose Not To Use Archive Warnings"
+      And I check "No Archive Warnings Apply"
       And I fill in "Fandoms" with "Supernatural"
       And I select "Tale of Woe" from "work_series_attributes_id"
       And I fill in "Work Title" with "A Bad, Bad Night"
@@ -36,7 +35,7 @@ Feature: Rearrange works within a series
     When I press "Post"
     Then I follow "Post New"
       And I select "Not Rated" from "Rating"
-      And I check "Choose Not To Use Archive Warnings"
+      And I check "No Archive Warnings Apply"
       And I fill in "Fandoms" with "Supernatural"
       And I select "Tale of Woe" from "work_series_attributes_id"
       And I fill in "Work Title" with "Things Get Worse"

@@ -149,6 +149,14 @@ def user_records(u)
     inbox_comment = batch.last
     x << inbox_comment
     x << inbox_comment.feedback_comment
+    commentable = inbox_comment.feedback_comment.ultimate_parent
+    if ADD_EXTERNAL
+      if commentable.is_a?(Work)
+        WORKS << commentable
+      else
+        x << commentable
+      end
+    end
     x << add_pseuds([inbox_comment.feedback_comment.pseud])
     thing = inbox_comment.feedback_comment.ultimate_parent
     WORKS << thing if (ADD_EXTERNAL && thing.is_a?(Work))
