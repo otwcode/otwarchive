@@ -52,3 +52,6 @@ Then /^"([^"]*)" should be selected within "([^"]*)"$/ do |value, field|
   find_field(field).node.xpath(".//option[@selected = 'selected']").inner_html.should =~ /#{value}/
 end
 
+When /^issue "([^\"]*)" is fixed$/ do |issue_no|
+  print "DEFERRED (Issue #{issue_no})"
+end
