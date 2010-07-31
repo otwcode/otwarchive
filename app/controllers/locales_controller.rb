@@ -15,7 +15,7 @@ class LocalesController < ApplicationController
       available in your language</a>, too! \\o/ If you want to help us add more languages, 
       <a href='http://transformativeworks.org/node/540'>please consider volunteering</a>."
     end
-    redirect_to :back rescue redirect_to '/'
+    redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
   
   def index

@@ -59,26 +59,26 @@ class Admin::AdminUsersController < ApplicationController
       @user.archivist = params[:user][:archivist] if params[:user][:archivist]
       if @user.save(false)
         flash[:notice] = t('successfully_updated', :default => 'User was successfully updated.')
-        redirect_to :back
+        redirect_to(request.env["HTTP_REFERER"] || root_path)
       else
         flash[:error] = t('error_updating', :default => 'There was an error updating user {{name}}', :name => params[:user][:login])
-        redirect_to :back
+        redirect_to(request.env["HTTP_REFERER"] || root_path)
       end
     elsif params[:admin_action]
       @user = User.find_by_login(params[:user_login])
       @admin_note = params[:admin_note]
       if @admin_note.blank?
         flash[:error] = t('note_required', :default => "You must include notes in order to perform this action")
-        redirect_to :back
+        redirect_to(request.env["HTTP_REFERER"] || root_path)
       else
         if params[:admin_action] == 'warn'
           @user.create_log_item( options = {:action => ArchiveConfig.ACTION_WARN, :note => @admin_note, :admin_id => current_admin.id})
           flash[:notice] = t('success_warned', :default => "Warning was recorded") 
-          redirect_to :back
+          redirect_to(request.env["HTTP_REFERER"] || root_path)
         elsif params[:admin_action] == 'suspend'
           if params[:suspend_days].blank?
             flash[:error] = t('error_date_required', :default => "Please enter the number of days for which the user should be suspended.")
-            redirect_to :back
+            redirect_to(request.env["HTTP_REFERER"] || root_path)
           else
             @user.suspended = true
             @suspension_days = params[:suspend_days].to_i
@@ -86,10 +86,10 @@ class Admin::AdminUsersController < ApplicationController
             if @user.save && @user.suspended? && !@user.suspended_until.blank?
               @user.create_log_item( options = {:action => ArchiveConfig.ACTION_SUSPEND, :note => @admin_note, :admin_id => current_admin.id, :enddate => @user.suspended_until})
               flash[:notice] = t('success_suspended', :default => "User has been temporarily suspended") 
-              redirect_to :back
+              redirect_to(request.env["HTTP_REFERER"] || root_path)
             else
               flash[:error] = t('error_suspended', :default => "User could not be suspended") 
-              redirect_to :back             
+              redirect_to(request.env["HTTP_REFERER"] || root_path)
             end
           end
         elsif params[:admin_action] == 'ban'
@@ -97,10 +97,10 @@ class Admin::AdminUsersController < ApplicationController
           if @user.save && @user.banned?
             @user.create_log_item( options = {:action => ArchiveConfig.ACTION_BAN, :note => @admin_note, :admin_id => current_admin.id})
             flash[:notice] = t('success_banned', :default => "User has been permanently suspended") 
-            redirect_to :back  
+            redirect_to(request.env["HTTP_REFERER"] || root_path)
           else  
             flash[:error] = t('error_banned', :default => "User could not be permanently suspended") 
-            redirect_to :back  
+            redirect_to(request.env["HTTP_REFERER"] || root_path)
           end
         elsif params[:admin_action] == 'unsuspend'
           if @user.suspended?
@@ -109,14 +109,14 @@ class Admin::AdminUsersController < ApplicationController
             if @user.save && !@user.suspended? && @user.suspended_until.blank?
               @user.create_log_item( options = {:action => ArchiveConfig.ACTION_UNSUSPEND, :note => @admin_note, :admin_id => current_admin.id})
               flash[:notice] = t('success_unsuspend', :default => "Suspension has been lifted") 
-              redirect_to :back
+              redirect_to(request.env["HTTP_REFERER"] || root_path)
             else
               flash[:error] = t('error_unsuspend', :default => "Suspension could not be lifted") 
-              redirect_to :back
+              redirect_to(request.env["HTTP_REFERER"] || root_path)
             end
           else
             flash[:notice] = t('not_suspended', :default => "User had not been suspended") 
-            redirect_to :back
+            redirect_to(request.env["HTTP_REFERER"] || root_path)
           end
         elsif params[:admin_action] == 'unban'
           if @user.banned?
@@ -124,14 +124,14 @@ class Admin::AdminUsersController < ApplicationController
             if @user.save && !@user.banned?
               @user.create_log_item( options = {:action => ArchiveConfig.ACTION_UNSUSPEND, :note => @admin_note, :admin_id => current_admin.id})
               flash[:notice] = t('success_unsuspend', :default => "Suspension has been lifted") 
-              redirect_to :back
+              redirect_to(request.env["HTTP_REFERER"] || root_path)
             else
               flash[:error] = t('error_unsuspend', :default => "Suspension could not be lifted") 
-              redirect_to :back
+              redirect_to(request.env["HTTP_REFERER"] || root_path)
             end
           else
             flash[:notice] = t('not_banned', :default => "User had not been permanently suspended") 
-            redirect_to :back
+            redirect_to(request.env["HTTP_REFERER"] || root_path)
           end
         end
       end

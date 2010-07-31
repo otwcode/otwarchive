@@ -28,7 +28,7 @@ class SessionController < ApplicationController
     # During testing, logout redirected to the feedback page, using the commented out
     # code below.
     #redirect_to :controller => "feedbacks", :action => "new"
-    redirect_to :back
+    redirect_to(request.env["HTTP_REFERER"] || root_path)
     
   end
 

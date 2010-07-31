@@ -36,7 +36,7 @@ class CommentsController < ApplicationController
   def check_permission_to_edit
     unless @comment && @comment.count_all_comments == 0
       flash[:error] = t('edits_disabled', :default => 'Comments with replies cannot be edited')
-      redirect_to :back and return
+      redirect_to(request.env["HTTP_REFERER"] || root_path) and return
     end  
   end
     
@@ -90,7 +90,7 @@ class CommentsController < ApplicationController
   def new
     if @commentable.nil?
       flash[:error] = t('no_commentable', :default => "What did you want to comment on?")
-      redirect_to :back rescue redirect_to '/'
+      redirect_to(request.env["HTTP_REFERER"] || root_path)
     else
       @comment = Comment.new
       @controller_name = params[:controller_name] if params[:controller_name]
@@ -107,7 +107,7 @@ class CommentsController < ApplicationController
   def create
     if @commentable.nil?
       flash[:error] = t('no_commentable', :default => "What did you want to comment on?")
-      redirect_to :back rescue redirect_to '/'
+      redirect_to(request.env["HTTP_REFERER"] || root_path)
     else
       @comment = Comment.new(params[:comment])
       @comment.user_agent = request.env['HTTP_USER_AGENT']
@@ -135,7 +135,7 @@ class CommentsController < ApplicationController
         else
           # this shouldn't come up any more
           flash[:comment_notice] = t('spam', :default => 'Sorry, but this comment looks like spam to us.')
-         redirect_to :back
+         redirect_to(request.env["HTTP_REFERER"] || root_path)
         end
       else
         flash[:comment_error] = t('problem_saving', :default => "There was a problem saving your comment:") 

@@ -61,6 +61,6 @@ class RelatedWorksController < ApplicationController
   # DELETE /related_works/1.xml
   def destroy
     @related_work.destroy
-    redirect_to :back
+    redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
 end

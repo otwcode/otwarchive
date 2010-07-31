@@ -14,7 +14,7 @@ class Admin::UserCreationsController < ApplicationController
     if creation_class == Comment 
       redirect_to(creation.ultimate_parent) 
     elsif creation_class == ExternalWork
-      redirect_to :back
+      redirect_to(request.env["HTTP_REFERER"] || root_path)
     else
      redirect_to(creation)
     end

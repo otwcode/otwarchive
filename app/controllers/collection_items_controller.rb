@@ -82,11 +82,11 @@ class CollectionItemsController < ApplicationController
   def create
     unless params[:collection_names] 
       flash[:error] = t('collection_items.no_collections', :default => "What collections did you want to add?")
-      redirect_to :back and return
+      redirect_to(request.env["HTTP_REFERER"] || root_path) and return
     end
     unless @item
       flash[:error] = t('collection_items.no_item', :default => "What did you want to add to a collection?")
-      redirect_to :back and return
+      redirect_to(request.env["HTTP_REFERER"] || root_path) and return
     end
     # for each collection name
     # see if it exists, is open, and isn't already one of this item's collections
@@ -161,7 +161,7 @@ class CollectionItemsController < ApplicationController
       redirect_to collection_items_path(@collection) and return
     else
       flash[:error] = t('collection_items.update_not_allowed', :default => "You're not allowed to make that change.")
-      redirect_to :back and return
+      redirect_to(request.env["HTTP_REFERER"] || root_path) and return
     end
   end
   

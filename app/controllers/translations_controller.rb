@@ -70,7 +70,7 @@ class TranslationsController < ApplicationController
     respond_to do |format|
       if @translation.save
         flash[:notice] = 'Translation was successfully created.'
-        format.html { redirect_to :back }
+        format.html { redirect_to(request.env["HTTP_REFERER"] || root_path) }
       else
         format.html { render :action => "new" }
       end
@@ -90,7 +90,7 @@ class TranslationsController < ApplicationController
     respond_to do |format|
       if @translation.update_attributes(params[:translation])
         flash[:notice] = 'Translation was successfully updated.'
-        format.html { redirect_to :back }
+        format.html { redirect_to(request.env["HTTP_REFERER"] || root_path) }
         format.js
       else
         format.html { render :action => "edit" }
