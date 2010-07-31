@@ -155,7 +155,7 @@ Feature: Create bookmarks
       And I should see "Publicky"
       
 # TO DO
-Scenario Outline: private bookmarks on public and restricted works
+# Scenario: private bookmarks on public and restricted works
 # check their visibility to logged in and logged out user, owner or not
 # (not even the bookmark owner should see her private bookmarks on the main bookmarks page, for example)
 # on the main bookmarks page, on users' bookmarks, on a tag's bookmarks

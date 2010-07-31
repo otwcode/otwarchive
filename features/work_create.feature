@@ -25,13 +25,16 @@ Feature: Create Works
     When I go to the works page
     Then I should see "All Hell Breaks Loose"
 
-  Scenario: Creating a new work with everything filled in
+  Scenario: Creating a new work with everything filled in, and we do mean everything
     Given basic tags
       And a category exists with name: "Gen", canonical: true
       And a category exists with name: "F/M", canonical: true
-      And the following activated user exists
-        | login          | password    |
-        | cosomeone      | something   |
+      And the following activated users exist
+        | login          | password    | email                 |
+        | coauthor       | something   | coauthor@example.org  |
+        | cosomeone      | something   | cosomeone@example.org |
+        | giftee         | something   | giftee@example.org    |
+        | recipient      | something   | recipient@example.org |
       And I am logged in as "thorough" with password "something"
     When I go to thorough's user page
       And I follow "Profile"
@@ -50,7 +53,8 @@ Feature: Create Works
     Then I should see "Pseud was successfully created."
     When I go to the new work page
     Then I should see "Post New Work"
-    When I select "Not Rated" from "Rating"
+    When all emails have been delivered
+      And I select "Not Rated" from "Rating"
       And I check "No Archive Warnings Apply"
     Then I should see "F/M"
       And I should see "Gen"
@@ -64,13 +68,16 @@ Feature: Create Works
       And I fill in "Summary" with "Have a short summary"
       And I fill in "Characters" with "Sam Winchester, Dean Winchester,"
       And I fill in "Relationships" with "Harry/Ginny"
-      And I fill in "Recipient" with "Someone else"
+      And I fill in "Recipient" with "Someone else, recipient"
       And I select "Pseud2" from "work_author_attributes_ids_"
       And I select "Pseud3" from "work_author_attributes_ids_"
+      And I fill in "pseud_byline" with "coauthor"
       And I press "Preview"
     Then I should see "Preview Work"
     When I press "Post"
     Then I should see "Work was successfully posted."
+      And 1 email should be delivered to "coauthor@example.org"
+      And 1 email should be delivered to "recipient@example.org"
     When I go to the works page
     Then I should see "All Something Breaks Loose"
     When I follow "All Something Breaks Loose"
@@ -81,7 +88,7 @@ Feature: Create Works
       And I should see "Category: F/M"
       And I should see "Characters: Sam Winchester, Dean Winchester"
       And I should see "Relationship: Harry/Ginny"
-      And I should see "For Someone else"
+      And I should see "For Someone else, recipient"
       And I should see "Notes"
       And I should see "This is my beginning note"
       And I should see "See the end of the work for more notes"
@@ -113,10 +120,25 @@ Feature: Create Works
       And I press "Preview"
     Then I should see "Please verify the names of your co-authors"
       And I should see "These pseuds are invalid: Does_not_exist"
-    When I fill in "pseud_byline" with "cosomeone"
-      And I press "Preview"
+    When all emails have been delivered
+      And I fill in "pseud_byline" with "cosomeone"
+    Then I should find "cosomeone" within ".auto_complete"
+    When I press "Preview"
       And I press "Update"
     Then I should see "Work was successfully updated"
       And I should see "cosomeone" within ".byline"
+      And I should see "coauthor" within ".byline"
       And I should see "Pseud2" within ".byline"
       And I should see "Pseud3" within ".byline"
+      And 1 email should be delivered to "cosomeone@example.org"
+    When all emails have been delivered
+      And I follow "Edit"
+      And I fill in "work_recipients" with "giftee"
+      And I press "Preview"
+      And I press "Update"
+    Then I should see "Work was successfully updated"
+      And I should see "For giftee"
+      And issue "1807" is fixed
+      # And 1 email should be delivered to "giftee@example.org"
+    When I go to giftee's user page
+    Then I should see "Gifts (1)"
