@@ -1,6 +1,7 @@
 <ul class="navigation">
   <li><%= link_to t('.public', :default => 'Public skins'), skins_path -%></li>
   <li><%= link_to t('.mine', :default => 'My skins'), skins_url(:q => 'mine') %></li>
+  <li><%= link_to t('create_new_skin', :default => 'Create new skin'), new_skin_url %></li>
   <li><%= link_to t('.preferences', :default => 'Change your skin'), user_preferences_path(@current_user) -%></li>
 </ul>
 
