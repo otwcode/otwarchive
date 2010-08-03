@@ -1,8 +1,18 @@
 .dropcap					{ font:3em Georgia, serif; }
 .flashback					{ font-style:italic; }
 .caps						{ font-variant:small-caps; }
+
+/* colours */
 .user-generated-view .font-red { color: red; }
 .user-generated-view .font-blue { color: blue; }
+.user-generated-view .font-pink { color: pink; }
+.user-generated-view .font-green { color: green; }
+.user-generated-view .font-orange { color: orange; }
+.user-generated-view .font-teal { color: #008282; }
+.user-generated-view .font-vomityellow { color: #a1a100; }
+.user-generated-view .font-redbrown { color: #a15000; }
+
+/* other display */
 .user-generated-view .font-serif { font-family: "Cambria, Constantia, Palatino, Georgia, serif"; }
 .user-generated-view .font-big { font-size: bigger; }
 .user-generated-view .font-small { font-size: smaller; }
