@@ -56,8 +56,8 @@
     </li>
 
     <li>
+      <%= f.label :skin_id, t('skin', :default => "Site skin")%>: 
       <%= f.select :skin_id, @available_skins.collect{|s| [s.title, s.id]} %>
-      <%= f.label :skin_id, t('skin', :default => "skin")%>
       (<%= link_to t('.index', :default => 'Public skins'), skins_path -%>)
     </li>
 
