@@ -8,9 +8,7 @@
 <div class="skin">
  <h2><%=  h(@skin.title) %></h2>
  <p><%= t('author', :default => "by") %> <%= skin_author_link(@skin) %></p>
- <pre>
- <%= h @skin.css %>
- </pre>
+ <pre><%= h @skin.css %></pre>
 </div>
 
 
