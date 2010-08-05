@@ -34,46 +34,52 @@
       <dd class="summary">
         <%= f.text_area :summary, :rows => 4, :cols => 60, :live => true %>
         <%= generate_countdown_html("chapter_summary", ArchiveConfig.SUMMARY_MAX) -%>
-      </dd>    
-      <dt class="work-endnotes">
-        Add notes <%= f.label 'front-notes-options-show', "at the beginning" %> 
-      </dt>
-      <dd class="work-endnotes">
-        <%= check_box_tag "front-notes-options-show", "1", !chapter.notes.blank?, :onclick => "toggleFormField('front-notes-options')" %>
-        <span id="worknoteswarning" class="warning" <%- if chapter.notes.blank? -%> style="display: none" <%- end -%>>
-        <%=h t('.worknotes_warning', :default =>"Warning: Unchecking this box will delete any existing beginning note.") %></span>
       </dd>
-      <dd id="front-notes-options" class="work-endnotes optionalField">
-        <dl>     
-          <dt class="notes">
-            <%= f.label :notes, t('.form_notes', :default => "Chapter notes (max {{max}} characters)", :max => ArchiveConfig.NOTES_MAX.to_s) %>
+      
+      <dt><%=h t('.add_notes', :default => "Add notes:") -%></dt>
+      <dd>
+        <dl class="notes">
+          <dt class="endnotes">
+            <%= check_box_tag "front-notes-options-show", "1", !chapter.notes.blank?, :onclick => "toggleFormField('front-notes-options')" %>
           </dt>
-          <dd class="notes">
-            <%= f.text_area :notes, :rows => 4, :cols => 60, :live => true %>
-            <%= generate_countdown_html("chapter_notes", ArchiveConfig.NOTES_MAX) -%>
+          <dd class="endnotes">
+            <%= label_tag 'front-notes-options-show', t('.beginning_notes', :default => "at the beginning") %>
+            <span id="worknoteswarning" class="warning" <%- if chapter.notes.blank? -%> style="display: none" <%- end -%>>
+            <%=h t('.worknotes_warning', :default =>"Warning: Unchecking this box will delete any existing beginning note.") %></span>
           </dd>
-        </dl>
-      </dd>      
+          <dd id="front-notes-options" class="work-endnotes optionalField">
+            <dl>     
+              <dt class="notes">
+                <%= f.label :notes, t('.form_notes', :default => "Chapter notes (max {{max}} characters)", :max => ArchiveConfig.NOTES_MAX.to_s) %>
+              </dt>
+              <dd class="notes">
+                <%= f.text_area :notes, :rows => 4, :cols => 60, :live => true %>
+                <%= generate_countdown_html("chapter_notes", ArchiveConfig.NOTES_MAX) -%>
+              </dd>
+            </dl>
+          </dd>      
         
-      <dt class="work-endnotes">
-       Add notes <%= f.label :storyendnotescheck, "at the end" %> 
-      </dt>
-      <dd class="work-endnotes">
-        <%= check_box_tag "end-notes-options-show", "1", !chapter.endnotes.blank?, :onclick => "toggleFormField('end-notes-options')" %>
-        <span id="workendnoteswarning" class="warning" <%- if chapter.endnotes.blank? -%> style="display: none" <%- end -%>>
-        <%=h t('.workendnotes_warning', :default =>"Warning: Unchecking this box will delete any existing end note.") %></span>
-      </dd>
-      <dd id="end-notes-options" class="work-endnotes optionalField">
-        <dl>
-          <dt class="notes">
-            <%= f.label :endnotes, t('.form_notes', :default => "Chapter notes (max {{max}} characters)", :max => ArchiveConfig.NOTES_MAX.to_s) %>
+          <dt class="endnotes">
+            <%= check_box_tag "end-notes-options-show", "1", !chapter.endnotes.blank?, :onclick => "toggleFormField('end-notes-options')" %>
           </dt>
-          <dd class="notes">
-            <%= f.text_area :endnotes, :rows => 4, :cols => 60, :live => true %>
-            <%= generate_countdown_html("chapter_endnotes", ArchiveConfig.NOTES_MAX) -%>
+          <dd class="endnotes">
+            <%= label_tag 'end-notes-options-show', t('.end_notes', :default => "at the end") %>
+            <span id="workendnoteswarning" class="warning" <%- if chapter.endnotes.blank? -%> style="display: none" <%- end -%>>
+            <%=h t('.workendnotes_warning', :default =>"Warning: Unchecking this box will delete any existing end note.") %></span>
+          </dd>
+          <dd id="end-notes-options" class="work-endnotes optionalField">
+            <dl>
+              <dt class="notes">
+                <%= f.label :endnotes, t('.form_notes', :default => "Chapter notes (max {{max}} characters)", :max => ArchiveConfig.NOTES_MAX.to_s) %>
+              </dt>
+              <dd class="notes">
+                <%= f.text_area :endnotes, :rows => 4, :cols => 60, :live => true %>
+                <%= generate_countdown_html("chapter_endnotes", ArchiveConfig.NOTES_MAX) -%>
+              </dd>
+            </dl>
           </dd>
         </dl>
-      </dd>       
+      </dd>
     </dl>
 </fieldset>
 

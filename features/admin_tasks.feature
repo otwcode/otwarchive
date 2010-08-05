@@ -1,7 +1,7 @@
 @admin
 Feature: Admin tasks
 
-  Scenario: Log in as an admin and do admin-y things. Wrong password fails admin login, you can find users, post a new FAQ section.
+Scenario: Log in as an admin and do admin-y things. Wrong password fails admin login, you can find users, post a new FAQ section.
     Given I have no users
       And the following admin exists
       | login       | password |
@@ -39,5 +39,5 @@ Feature: Admin tasks
     When I press "Post"
     Then I should see "ArchiveFaq was successfully created"
     When I go to the archive_faqs page
-    And I follow "New subsection"
+      And I follow "New subsection"
     Then I should see "Some text, that is sufficiently long to pass validation" within ".user-generated-view"

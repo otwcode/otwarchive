@@ -1,42 +1,42 @@
 Feature: Comment on work 
-In order to give feedback
-As a redaer
-I'd like to comment on a work
+  In order to give feedback
+  As a reader
+  I'd like to comment on a work
 
 Scenario: When logged in I can comment on a work 
-Given the following activated user exists
-| login         | password   |
-| author        | password   |
-And given the following activated users exist
-| login         | password   |
-| commenter     | password   | 
-When I am logged in as "author" with password "password"
-And I post the work "The One Where Neal is Awesome"
-When I am logged out
-And I am logged in as "commenter" with password "password" 
-Then I view the work "The One Where Neal is Awesome" 
-Then I should see "Add Comment" 
-When I follow "Add Comment" 
-Then I fill in "Comment" with "I loved this!"
-And I press "Add Comment" 
-Then I should see "Comment created!" 
-And I should see "I loved this!"
-When I follow "Reply"
-Then I fill in "Comment" with "I wanted to say more."
-And I press "Add Comment"
-Then I should see "Comment created!"
-And I should see "I wanted to say more."
-When I follow "Log out" 	
-And I am logged in as "commenter2" with password "password" 
-And I follow "Reply"
-Then I fill in "Comment" with "I loved it, too."
-And I press "Add Comment"
-Then I should see "Comment created!"
-And I should see "I loved it, too."
-When I follow "Log out" 	
-And I am logged in as "author" with password "password" 
-And I follow "Reply"
-Then I fill in "Comment" with "Thank you."
-And I press "Add Comment"
-Then I should see "Comment created!"
-And I should see "Thank you."
+  Given the following activated user exists
+    | login         | password   |
+    | author        | password   |
+    And given the following activated users exist
+    | login         | password   |
+    | commenter     | password   | 
+  When I am logged in as "author" with password "password"
+    And I post the work "The One Where Neal is Awesome"
+  When I am logged out
+    And I am logged in as "commenter" with password "password" 
+  Then I view the work "The One Where Neal is Awesome" 
+  Then I should see "Add Comment" 
+  When I follow "Add Comment" 
+    And I fill in "Comment" with "I loved this!"
+    And I press "Add Comment" 
+  Then I should see "Comment created!" 
+    And I should see "I loved this!"
+  When I follow "Reply"
+    And I fill in "Comment" with "I wanted to say more."
+    And I press "Add Comment"
+  Then I should see "Comment created!"
+    And I should see "I wanted to say more."
+  When I follow "Log out" 	
+    And I am logged in as "commenter2" with password "password" 
+    And I follow "Reply"
+    And I fill in "Comment" with "I loved it, too."
+    And I press "Add Comment"
+  Then I should see "Comment created!"
+    And I should see "I loved it, too."
+  When I follow "Log out" 	
+    And I am logged in as "author" with password "password" 
+    And I follow "Reply"
+    And I fill in "Comment" with "Thank you."
+    And I press "Add Comment"
+  Then I should see "Comment created!"
+    And I should see "Thank you."

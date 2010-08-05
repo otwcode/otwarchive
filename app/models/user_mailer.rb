@@ -150,8 +150,8 @@ class UserMailer < ActionMailer::Base
   # Sends email when a user is added as a co-author
   def coauthor_notification(user, creation)
     setup_email(user)
-    @subject    += "Co-Author Notification"
-    @body[:creation] = creation
+    setup_coauthor_links(user, creation)
+    @subject += "Co-Author Notification"
   end 
    
   # Sends emails to authors whose stories were listed as the inspiration of another work
@@ -283,6 +283,12 @@ class UserMailer < ActionMailer::Base
       @body[:related_work] = related_work
       @body[:related_parent_link] = url_for(:host => @body[:host], :controller => :works, :action => :show, :id => @body[:related_work].parent)
       @body[:related_child_link] = url_for(:host => @body[:host], :controller => :works, :action => :show, :id => @body[:related_work].work)
+    end
+    
+    def setup_coauthor_links(user, creation)
+      @body[:linking_author] = user
+      @body[:creation] = creation
+      @body[:linking_author_link] = url_for(:host => @body[:host], :controller => :users, :action => :show, :id => @body[:linking_author])
     end
       
 end

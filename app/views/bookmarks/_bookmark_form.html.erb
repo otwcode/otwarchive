@@ -99,7 +99,7 @@
   <dt><%= f.label :notes, t('.form_your_notes', :default => "Your Notes") %></dt>
   <dd>
     <code>a href, b, big, blockquote, br, center, cite, code, del, em, i, img, ins, p, pre, q, small, strike, strong, sub, sup, u </code>
-      <%= f.text_area :notes, :rows => 4 %>
+      <%= f.text_area :notes, :rows => 4, :class => "notes-field" %>
       <%= generate_countdown_html("bookmark_notes", ArchiveConfig.NOTES_MAX) -%>
 
     </dd>

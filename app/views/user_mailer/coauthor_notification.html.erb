@@ -1,4 +1,4 @@
-<p><%=h User.current_user.login %> <%=h 'listed you as a co-author of the following creation:' %></p>
+<p><%= link_to(@linking_author.login, @linking_author_link) %> <%=h 'listed you as a co-author of the following creation:' %></p>
 
 <p><%= link_to(@creation.title, @creation.class == Series ? series_url(@creation, :host => @host) : work_url(@creation, :host => @host)) %></p>
 
