@@ -12,9 +12,8 @@ reading.work} %></ul>
     <%= t('.minor_edits', :default => '(Minor edits made since then.)') %>
   <% else -%>
     <%= t('.most_recent_version', :default => '(Most recent version.)') %>
-  <% end -%>	  
-  <%= t('.view_count', :default => 'Number of times viewed: {{count}}', 
-:count => reading.view_count) %>
+  <% end -%>
+  <%= t('.view_count', :default => 'Number of times viewed: {{count}}', :count => reading.view_count) %>
   </h3>
 <% end %>
 <!-- actions -->
