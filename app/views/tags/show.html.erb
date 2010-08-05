@@ -4,7 +4,7 @@
     <h2><%= @tag.name %></h2>
     <%- if can_wrangle? -%>
     <ul class="navigation" role="navigation">
-      <li><%= link_to ' Edit', {:controller => :tags, :action => :edit, :id => @tag} %> </li>
+      <li><%= link_to 'Edit', {:controller => :tags, :action => :edit, :id => @tag} %> </li>
       <li><%= tag_comment_link(@tag) %></li>  
     </ul>
     <%- end -%>
