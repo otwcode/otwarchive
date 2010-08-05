@@ -43,7 +43,8 @@ Feature: Preferences
   Then I should find "ugv-style-creator.css"
     And I should not see "Switch to creator's style"
   When I follow "Switch to light style"
-    Then I should not find "ugv-style-creator.css"
+  Then I should not find "ugv-style-creator.css"
+    And I should see "Switch to creator's style"
   When I follow "tasteless"
     And I follow "My Preferences"
   Then the "Disable User Generated Styles" checkbox should not be checked
@@ -53,7 +54,8 @@ Feature: Preferences
   Then I should not find "ugv-style-creator.css"
     And I should not see "Switch to light style"
   When I follow "Switch to creator's style"
-    Then I should find "ugv-style-creator.css"
+  Then I should find "ugv-style-creator.css"
+    And I should see "Switch to light style"
   Given I am logged out
     And I am logged in as "tasteful" with password "something"
     And I go to the "Big and Loud" work page
@@ -61,6 +63,8 @@ Feature: Preferences
     And I should not see "Switch to creator's style"
   When I follow "Switch to light style"
     Then I should not find "ugv-style-creator.css"
+  When I follow "Switch to creator's style"
+    Then I should find "ugv-style-creator.css"
   When I follow "tasteful"
     And I follow "My Preferences"
   When I check "Disable User Generated Styles"
@@ -70,9 +74,19 @@ Feature: Preferences
     And I should not see "Switch to light style"
   When I follow "Switch to creator's style"
     Then I should find "ugv-style-creator.css"
+  When I follow "Switch to light style"
+    Then I should not find "ugv-style-creator.css"
   When I follow "tasteful"
     And I follow "My Preferences"
   When I uncheck "Disable User Generated Styles"
     And I press "Update"
   When I go to the "Big and Loud" work page
   Then I should find "ugv-style-creator.css"
+  Given I am logged out
+    And I go to the "Big and Loud" work page
+  Then I should find "ugv-style-creator.css"
+    And I should not see "Switch to creator's style"
+  When I follow "Switch to light style"
+    Then I should not find "ugv-style-creator.css"
+  When I follow "Switch to creator's style"
+    Then I should find "ugv-style-creator.css"
