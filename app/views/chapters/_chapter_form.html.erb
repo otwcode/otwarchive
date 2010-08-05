@@ -8,24 +8,23 @@
 		<dd><p><%= f.text_field :title, :class => "storyinputfield", :live => true %>
     <%= link_to_help "story-title" -%></p>
     <%= generate_countdown_html("chapter_title", ArchiveConfig.TITLE_MAX) -%>
-  </dd>
+    </dd>
 	
     <dt><%= f.label :position, t('.form_position', :default => 'Chapter number') %></dt>
 		<dd><p><%= f.text_field :position, :class => "number-field" %> 
 		<%= f.label :wip_length, t('.form_x_of_x', :default => 'of'), :title => t('.form_of_total', :default => 'of total chapters') %> 
 		<%= f.text_field :wip_length, :class => "number-field" %> 
-  </p>
-</dd>
-  <dt id="managePublicationDate">
+    </p></dd>
+    <dt id="managePublicationDate">
   	<%= f.label :published_at, t('.form_date', :default => 'Chapter publication date') %></dt>
-	<dd><p><%= f.date_select "published_at", :start_year => Date.today.year, :end_year => 1950, :default => @work.default_date, :order => [:day, :month, :year] %>
+    <dd><p><%= f.date_select "published_at", :start_year => Date.today.year, :end_year => 1950, :default => @work.default_date, :order => [:day, :month, :year] %>
     <%= link_to_help "backdating-help" -%>
-  </p></dd>
-</dl>
+    </p></dd>
+  </dl>
 </fieldset>
 
 <fieldset>
-<legend><%= t('.form_summary_and_notes', :default => 'Chapter Preface') %></legend>
+  <legend><%= t('.form_summary_and_notes', :default => 'Chapter Preface') %></legend>
     <dl class="preface">      
 
       <%= render :partial => 'pseuds/byline', :locals =>{:form => f, :type => 'chapter'} %>
