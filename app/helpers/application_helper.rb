@@ -190,8 +190,10 @@ module ApplicationHelper
   end
 
   # character counter helpers
+  # countdown should count newlines as "\r\n" combos, regardless of the OS and browsers' whim;
+  # so we count any single "\n"s and "\r"s as "\r\n", which is what they'd end up as in the db anyway
   def countdown_field(field_id, update_id, max, options = {})
-    function = "$('#{update_id}').innerHTML = (#{max} - $F('#{field_id}').length);"
+    function = "value = $F('#{field_id}'); value=(value.replace(/\\r\\n/g,'\\n')).replace(/\\r|\\n/g,'\\r\\n'); $('#{update_id}').innerHTML = (#{max} - value.length);"
     count_field_tag(field_id, function, options)
   end
   

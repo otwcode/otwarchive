@@ -270,6 +270,11 @@ LiveValidation.prototype = {
   validateElement: function(validationFunction, validationParamsObj){
     var originalValue = (this.elementType == LiveValidation.SELECT) ? this.element.options[this.element.selectedIndex].value : this.element.value;
     var value = $j.trim(originalValue); //we want validations to ignore leading and trailing whitespace, since it will be removed     
+    // we also want newlines to be counted as "\r\n"s, regardless of the OS and browsers' whim;
+    // so we count any single "\n"s and "\r"s as "\r\n", which is what they'll end up as in the db anyway
+    if(typeof(value)=="string"){
+      value = (value.replace(/\r\n/g,"\n")).replace(/\r|\n/g,"\r\n");
+    }
     if(validationFunction == Validate.Acceptance){
       if(this.elementType != LiveValidation.CHECKBOX) throw new Error('LiveValidation::validateElement - Element to validate acceptance must be a checkbox!');
       value = this.element.checked;
