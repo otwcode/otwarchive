@@ -106,10 +106,12 @@ Feature: Create bookmarks
       And I check "bookmark_rec"
       And I press "Create"
     Then I should see "Bookmark was successfully created"
+      And I should not see the "title" text "Restricted Work"
     When I view the work "Mystery"
       And I follow "Bookmark"
       And I press "Create"
     Then I should see "Bookmark was successfully created"
+      And I should not see the "title" text "Rec"
     When I view the work "Publicky"
       And I follow "Bookmark"
       And I press "Create"
@@ -154,9 +156,79 @@ Feature: Create bookmarks
       But I should see "Public Masterpiece"
       And I should see "Publicky"
       
+  Scenario: private bookmarks on public and restricted works
 # TO DO
-# Scenario: private bookmarks on public and restricted works
-# check their visibility to logged in and logged out user, owner or not
-# (not even the bookmark owner should see her private bookmarks on the main bookmarks page, for example)
-# on the main bookmarks page, on users' bookmarks, on a tag's bookmarks
+# check their visibility on a tag's bookmarks
 # private bookmarks should also not increase a bookmark's counter
+
+    Given the following activated users exist
+      | login           | password   |
+      | workauthor      | password   |
+      | bookmarker      | password   |
+      | otheruser       | password   |
+      And a fandom exists with name: "Stargate SG-1", canonical: true
+      And I am logged in as "workauthor" with password "password"
+      And I post the locked work "Secret Masterpiece"
+      And I post the work "Public Masterpiece"
+    When I follow "Log out"
+      And I am logged in as "bookmarker" with password "password"
+      And I view the work "Secret Masterpiece"
+      And I follow "Bookmark"
+      And I check "bookmark_rec"
+      And I check "bookmark_private"
+      And I press "Create"
+    Then I should see "Bookmark was successfully created"
+      And I should see the "title" text "Restricted Work"
+      And I should not see the "title" text "Rec"
+      And I should see the "title" text "Private Bookmark"
+      And I should see "0"
+    When I view the work "Public Masterpiece"
+      And I follow "Bookmark"
+      And I check "bookmark_rec"
+      And I check "bookmark_private"
+      And I press "Create"
+    Then I should see "Bookmark was successfully created"
+      And I should not see the "title" text "Restricted Work"
+      And I should not see the "title" text "Rec"
+      And I should see the "title" text "Private Bookmark"
+      And I should see "0"
+    
+    # Private bookmarks should not show on the main bookmark page, but should show on your own bookmark page
+    
+    When I go to the bookmarks page
+    Then I should not see "Secret Masterpiece"
+      And I should not see "Public Masterpiece"
+    When I am on bookmarker's bookmarks page
+    Then I should see "Secret Masterpiece"
+      And I should see "Public Masterpiece"
+      
+    # Private bookmarks should not be visible when logged out
+    
+    When I follow "Log out"
+      And I go to the bookmarks page
+    Then I should not see "Secret Masterpiece"
+      And I should not see "Public Masterpiece"
+    When I go to bookmarker's bookmarks page
+    Then I should not see "Secret Masterpiece"
+      And I should not see "Public Masterpiece"
+      
+    # Private bookmarks should not be visible to other users
+    
+    When I am logged in as "otheruser" with password "password"
+      And I go to the bookmarks page
+    Then I should not see "Secret Masterpiece"
+      And I should not see "Public Masterpiece"
+    When I go to bookmarker's bookmarks page
+    Then I should not see "Secret Masterpiece"
+      And I should not see "Public Masterpiece"
+      
+    # Private bookmarks should not be visible even to the author
+    
+    When I follow "Log out"
+      And I am logged in as "workauthor" with password "password"
+      And I go to the bookmarks page
+    Then I should not see "Secret Masterpiece"
+      And I should not see "Public Masterpiece"
+    When I go to bookmarker's bookmarks page
+    Then I should not see "Secret Masterpiece"
+      And I should not see "Public Masterpiece"

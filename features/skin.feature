@@ -1,6 +1,6 @@
 Feature: creating and editing skins
 
-  Scenario: only the user who creates it should be able to edit it
+  Scenario: Only the user who creates a skin should be able to edit it
     and only if it's not official
 
   Given basic skins
@@ -116,3 +116,19 @@ Feature: creating and editing skins
   When I follow "Change your skin"
   Then "Default" should be selected within "preference_skin_id"
   And I should not see "public blinking skin"
+
+  
+  Scenario: Create skin using the wizard
+
+  Given basic skins
+  When I am on the skins page
+  Then I should see "Default by AO3"
+    And I should see "Plain Text by AO3"
+  Given I am logged in as "skinner" with password "password"
+  When I am on skin's new page
+  Then I should see "Write your css here"
+  When I follow "Use Wizard Instead?"
+  Then I should see "Wizard coming soon"
+  When I follow "Write Custom CSS Instead?"
+  Then I should see "Write your css here"
+  

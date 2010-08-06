@@ -43,6 +43,8 @@ module NavigationHelpers
       user_series_index_path(:user_id => $1)
     when /my user page/
       user_path(current_user)
+    when /my bookmarks page/
+      user_bookmarks_path(current_user)
     when /the import page/
       new_work_path(:import => 'true')
     when /my skin page/
@@ -51,6 +53,8 @@ module NavigationHelpers
       skin_path(Skin.find_by_title($1))
     when /^"(.*)" edit skin page/
       edit_skin_path(Skin.find_by_title($1))
+    when /^(.*) collection's page$/i
+      collection_path(:collection_id => $1)
 
     # Here is an example that pulls values out of the Regexp:
     #
