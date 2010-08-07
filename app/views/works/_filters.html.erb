@@ -1,6 +1,6 @@
 <%- unless @filters.blank? && (@pseuds.size < 1 || (@user && @pseuds.size < 2)) -%>
 <h3 class="landmark">Filters</h3>
-<%- form_tag( @collection ? collection_works_path(@collection) : works_path, :class => 'filters', :method => :get) do -%>
+<%- form_tag( @collection ? collection_works_path(@collection) : works_path, :class => 'filters', :method => :get, :id => 'work_filters') do -%>
   <%- field_set_tag t('.filter_these', :default => 'Filter results:') + link_to_help("filters") do -%>
  		<dl class="filters" role="complementary navigation">
 			<%- unless (@pseuds.size < 1 || (@user && @pseuds.size < 2 && !@author)) -%>
