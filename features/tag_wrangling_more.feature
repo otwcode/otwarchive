@@ -10,6 +10,8 @@ Feature: Tag wrangling more
       And the following activated user exists
       | login       | password      |
       | dizmo       | wrangulator   |
+      
+    # making a user into a tag wrangler
     When I go to the admin_login page
       And I fill in "admin_login" with "Zooey"
       And I fill in "admin_password" with "secret"
@@ -21,6 +23,8 @@ Feature: Tag wrangling more
       And I press "Update"
     Then I should see "User was successfully updated"
     When I follow "Log out"
+    
+    # accessing tag wrangling pages
       And I am logged in as "dizmo" with password "wrangulator"
       And I follow "Tag Wrangling"
     Then I should see "Wrangling Home"
@@ -32,6 +36,8 @@ Feature: Tag wrangling more
     Then I should see "Edit"
     When I follow "Edit" within ".header"
     Then I should see "Edit first fandom Tag"
+    
+    # assigning media to a fandom
     When I fill in "Medias" with "TV Shows"
       And I press "Save changes"
     Then I should see "Tag was updated"
@@ -42,6 +48,8 @@ Feature: Tag wrangling more
     Then I should see "Tag Wrangling Assignments"
       And I should see "first fandom"
       And I should not see "dizmo" within ".wranglers"
+    
+    # assigning a wrangler to a fandom
     When I fill in "tag_fandom_string" with "first fandom"
       And I press "Assign"
       And I follow "Wrangling Home"
@@ -49,6 +57,8 @@ Feature: Tag wrangling more
     Then I should see "first fandom"
       And I should see "dizmo" within ".wranglers"
     Given I add the fandom "first fandom" to the character "Person A"
+    
+    # checking that wrangling home shows unfilterables
     When I follow "Wrangling Home"
     Then I should see "first fandom"
       And I should see "Unfilterable"

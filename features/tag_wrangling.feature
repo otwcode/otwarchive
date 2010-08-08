@@ -26,10 +26,14 @@ Feature: Tag wrangling
     When I fill in "query" with "dizmo"
       And I press "Find"
     Then I should see "dizmo" within "#admin_users_table"
+    
+    # admin making user tag wrangler
     When I check "user_tag_wrangler"
       And I press "Update"
     Then I should see "User was successfully updated"
     When I follow "Log out"
+    
+    # accessing wrangling pages
       And I am logged in as "dizmo" with password "wrangulator"
     Then I should see "Hi, dizmo!"
     When I follow "Tag Wrangling"
@@ -54,6 +58,8 @@ Feature: Tag wrangling
       And I press "Preview"
       And I press "Post"
 		Then I should see "Work was successfully posted."
+    
+    # mass wrangling
     When I follow "Tag Wrangling"
     Then I should see "Wrangling Home"
       And I should see "Mass Wrangling"
@@ -65,6 +71,8 @@ Feature: Tag wrangling
       And I should see "Stargate SG-1"
     When I view the work "Revenge of the Sith 2"
     Then I should see "Stargate SG-1"
+    
+    # making a fandom canonical and assigning media to it
     When I follow "Stargate SG-1"
     Then I should see "Edit"
     When I follow "Edit" within ".header"
@@ -80,6 +88,8 @@ Feature: Tag wrangling
     Then I should see "Tag Wrangling Assignments"
       And I should see "Stargate SG-1"
       And I should not see "dizmo" within ".wranglers"
+      
+    # assign wrangler to a fandom
     When I fill in "tag_fandom_string" with "Stargate SG-1"
       And I press "Assign"
       And I follow "Wrangling Home"
@@ -91,6 +101,8 @@ Feature: Tag wrangling
       And I follow "Characters by fandom (2)"
     Then I should see "Daniel Jackson"
       And I should see "Jack O'Neil"
+     
+    # making a character tag canonical and assigning it a fandom
     When I view the tag "Daniel Jackson"
       And I follow "Edit" within ".header"
     Then I should see "Edit Daniel Jackson Tag"
@@ -98,11 +110,15 @@ Feature: Tag wrangling
       And I fill in "Fandoms" with "Stargate SG-1"
       And I press "Save changes"
     Then I should see "Tag was updated"
+    
+    # assigning a fandom to a non-canonical character
     When I view the tag "Jack O'Neil"
       And I follow "Edit" within ".header"
       And I fill in "Fandoms" with "Stargate SG-1"
       And I press "Save changes"
     Then I should see "Tag was updated"
+    
+    # assigning (and creating) a canonical merger to a non-canonical character
     When I fill in "Synonym of" with "Jack O'Neill"
       And I press "Save changes"
       And I follow "Jack O'Neill"
@@ -111,22 +127,30 @@ Feature: Tag wrangling
     Then I should see "Daniel Jackson"
       And I should see "Jack O'Neil"
       And I should see "Jack O'Neill"
+      
+    # creating a new non-canonical fandom tag
     When I follow "Tag Wrangling"
       And I follow "New Tag"
       And I fill in "Name" with "Stargate Atlantis"
       And I choose "Fandom"
       And I press "Save changes"
     Then I should see "Tag was successfully created"
+    
+    # creating a new canonical character
     When I follow "New Tag"
       And I fill in "Name" with "John Sheppard"
       And I choose "Character"
       And I check "Canonical"
       And I press "Save changes"
     Then I should see "Tag was successfully created"
+    
+    # trying to assign a non-canonical fandom to a character
     When I fill in "Fandoms" with "Stargate Atlantis"
       And I press "Save changes"
     Then I should see "Tag was updated"
       And I should not see "Stargate Atlantis"
+      
+    # making a fandom tag canonical, then assigning it to a character
     When I view the tag "Stargate Atlantis"
       And I follow "Edit" within ".header"
       And I check "tag_canonical"
@@ -146,15 +170,22 @@ Feature: Tag wrangling
     When I fill in "Fandoms" with "Stargate Atlantis"
       And I press "Save changes"
     Then I should see "Tag was updated"
+    
+    # assigning a fandom to a non-canonical relationship tag
     When I view the tag "McShep"
       And I follow "Edit" within ".header"
       And I fill in "Fandoms" with "Stargate Atlantis"
       And I press "Save changes"
     Then I should see "Tag was updated"
+    
+    # assigning (and creating) a canonical merger to a non-canonical relationship
     When I fill in "Synonym of" with "Rodney McKay/John Sheppard"
       And I press "Save changes"
       And I follow "Rodney McKay/John Sheppard"
-      And I fill in "Characters" with "Rodney McKay, John Sheppard"
+    Then I should see "Stargate Atlantis"
+
+    # assigning characters to a canonical relationship
+    When I fill in "Characters" with "Rodney McKay, John Sheppard"
       And I press "Save changes"
     Then I should see "Tag was updated"
       And I should see "Stargate Atlantis"
