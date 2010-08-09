@@ -149,4 +149,4 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
   # trying to syn a non-canonical to a canonical of a different category
   When I fill in "Synonym of" with "Neal Caffrey"
     And I press "Save changes"
-  Then I should see "Neal Caffrey is a character. Synonyms must belong to the same category."    
+  Then I should see "Neal Caffrey is a character. Synonyms must belong to the same category."

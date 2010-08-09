@@ -57,6 +57,8 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
   Then I should see "Make tag non-canonical and unhook all associations"
     And I should see "Wash/Zoe"
     And I should see "Hoban Washburne/Zoe Washburne"
+    And I should see "Hoban Washburne" within "ul.tags"
+    And I should see "Zoe Washburne" within "ul.tags"
     And the "tag_canonical" checkbox should be checked
     And the "tag_canonical" checkbox should be disabled
   

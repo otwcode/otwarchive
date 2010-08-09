@@ -142,3 +142,51 @@ Feature: Create Works
       # And 1 email should be delivered to "giftee@example.org"
     When I go to giftee's user page
     Then I should see "Gifts (1)"
+    
+  Scenario: Creating a new work with some maybe-invalid things
+  # needs some more actually invalid things as well
+    Given basic tags
+      And a category exists with name: "Gen", canonical: true
+      And a category exists with name: "F/M", canonical: true
+      And the following activated users exist
+        | login          | password    | email                 |
+        | coauthor       | something   | coauthor@example.org  |
+        | cosomeone      | something   | cosomeone@example.org |
+        | giftee         | something   | giftee@example.org    |
+        | recipient      | something   | recipient@example.org |
+      And I am logged in as "thorough" with password "something"
+    When I go to thorough's user page
+      And I follow "Profile"
+    Then I should see "About"
+    When I follow "Manage My Pseuds"
+    Then I should see "Pseuds for"
+    When I follow "New Pseud"
+    Then I should see "New pseud"
+    When I fill in "Name" with "Pseud2"
+      And I press "Create"
+    Then I should see "Pseud was successfully created."
+    When I follow "Back To Pseuds"
+      And I follow "New Pseud"
+      And I fill in "Name" with "Pseud3"
+      And I press "Create"
+    Then I should see "Pseud was successfully created."
+    When I go to the new work page
+    Then I should see "Post New Work"
+    When all emails have been delivered
+      And I select "Not Rated" from "Rating"
+      And I check "No Archive Warnings Apply"
+    Then I should see "F/M"
+      And I should see "Gen"
+    When I check "F/M"
+      And I fill in "Fandoms" with "Invalid12./"
+      And I fill in "Work Title" with "/"
+      And I fill in "content" with "T"
+      And I check "chapters-options-show"
+      And I fill in "work_wip_length" with "text"
+      And I press "Preview"
+    Then I should see "Brevity is the soul of wit, but your content does have to be at least 10 characters long."
+    When I fill in "content" with "Text and some longer text"
+      And I press "Preview"
+    Then I should see "Draft was successfully created"
+      And I should see "Chapter"
+      And I should see "1/?"

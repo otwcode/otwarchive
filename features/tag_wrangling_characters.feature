@@ -10,9 +10,6 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
     And basic tags
     And a fandom exists with name: "Doctor Who", canonical: true
     And a relationship exists with name: "First Doctor/TARDIS", canonical: true
-    And a relationship exists with name: "Zoe Washburne", canonical: true
-    And a relationship exists with name: "Jack Harkness", canonical: true
-    And a relationship exists with name: "Ianto Jones", canonical: true
     And I am logged in as "Enigel" with password "wrangulate!"
     And I follow "Tag Wrangling"
     
@@ -77,6 +74,9 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
     But I should not find "The First Doctor" within ".auto_complete"
   When I fill in "Synonym of" with "First Doctor"
     And I fill in "Fandoms" with "Doc"
+    
+    # don't we want this to pull the fandom as well? if it doesn't already, I think we should add it
+    
     And I should find "Doctor Who" within ".auto_complete"
     And I fill in "Fandoms" with "Doctor Who"
     And I press "Save changes"
