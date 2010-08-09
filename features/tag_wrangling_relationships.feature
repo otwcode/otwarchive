@@ -35,7 +35,7 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     And the "tag_canonical" checkbox should not be checked
     And the "tag_canonical" checkbox should not be disabled
   
-  # assigning characters AND a merger to a non-canonical relationship
+  # assigning characters AND a new merger to a non-canonical relationship
   When I fill in "Characters" with "Hoban Washburne, Zoe Washburne"
     And I fill in "Synonym of" with "Hoban Washburne/Zoe Washburne"
     And I press "Save changes"
@@ -48,7 +48,7 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     And the "tag_canonical" checkbox should be checked
     And the "tag_canonical" checkbox should be disabled
     
-  # creating a new canonical relationship
+  # creating a new canonical relationship by renaming
   When I fill in "Synonym of" with "Hoban 'Wash' Washburne/Zoe Washburne"
     And I press "Save changes"
   Then I should see "Tag was updated"
@@ -147,3 +147,21 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     And I should see "Janto"
     And I should see "Jack/Ianto"
     And I should see "Jack Harkness/Ianto Jones" within "ul.tags"
+    
+  # trying to syn a non-canonical to another non-canonical
+  When I follow "New Tag"
+    And I fill in "Name" with "James Norrington/Jack Sparrow"
+    And I choose "Relationship"
+    And I press "Save changes"
+    And I follow "New Tag"
+    And I fill in "Name" with "Sparrington"
+    And I choose "Relationship"
+    And I press "Save changes"
+    And I fill in "Synonym of" with "James Norrington/Jack Sparrow"
+    And I press "Save changes"
+  Then I should see "James Norrington/Jack Sparrow is not a canonical tag. Please make it canonical before adding synonyms to it."
+
+  # trying to syn a non-canonical to a canonical of a different category
+  When I fill in "Synonym of" with "Torchwood"
+    And I press "Save changes"
+  Then I should see "Torchwood is a fandom. Synonyms must belong to the same category."
