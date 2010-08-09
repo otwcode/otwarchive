@@ -15,9 +15,11 @@
 <!--/subnav-->
 
 
-
+<ul class="skins-index">
 <% for s in @skins -%>
-  <div class="skin">
+  <li class="skin">
+  <span class="byline">
+    <span class="icon"><%= skin_preview_display(s) %></span>
     <h4><%= link_to h(s.title), s %>
     <% if @user %>
       <% if s.official? %> (Approved)
@@ -30,6 +32,7 @@
     <% if s.editable? %>
       <%= link_to t('.edit', :default => 'Edit skin'), edit_skin_url(s) %>
     <% end %>
-    </h4>
-  </div>
+    </h4></span>
+  </li>
 <% end -%>
+</ul>

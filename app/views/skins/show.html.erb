@@ -6,9 +6,13 @@
 </ul>
 
 <div class="skin">
- <h2><%=  h(@skin.title) %></h2>
- <p><%= t('author', :default => "by") %> <%= skin_author_link(@skin) %></p>
- <pre><%= h @skin.css %></pre>
+  <h2><%=  h(@skin.title) %></h2>
+  <p><%= t('author', :default => "by") %> <%= skin_author_link(@skin) %></p>
+  <pre><%= h @skin.css %></pre>
+  <dl>
+    <dt>Wizard properties, if set</dt><dd>Note, these can be overridden by custom CSS</dd>
+    <%- if @skin.margin -%><dt>Wizard margin</dt><dd><%= h @skin.margin %><%- end  -%>
+  </dl>
 </div>
 
 

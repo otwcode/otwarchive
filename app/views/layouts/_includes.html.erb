@@ -57,7 +57,9 @@
 <%= iboxify_page %>
 
 <%- if current_user.is_a?(User) && current_user.try(:preference).try(:skin) -%>
+  <%- s = current_user.preference.skin -%>
   <style type="text/css">
-  <%= current_user.preference.skin.css %>
+    <%- if s.margin -%>#chapters {margin: auto <%= s.margin %>% 2.5em; padding: 0.5em <%= s.margin %>% 0;}<%- end -%>
+    <%= current_user.preference.skin.css %>
   </style>
 <%- end -%>

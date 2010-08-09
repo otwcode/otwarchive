@@ -2,6 +2,7 @@
 <h2><%= t('new_skin', :default => 'Create new skin')  %></h2>
 
 <ul class="navigation">
+  <li>Custom CSS</li>
   <li id="wizard-link">
     <%= link_to( t('.wizard', :default => 'Use Wizard Instead?'),
       {:url => {:controller => :skins, :action => :new, :wizard => true}},

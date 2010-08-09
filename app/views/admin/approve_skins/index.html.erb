@@ -8,11 +8,12 @@
 <!--main content-->
 
 <% unless @unapproved_skins.blank? %>
-  <% form_tag url_for(:controller => 'admin/approve_skins', :action => 'update'), :method => :post do %>
+  <% form_tag url_for(:controller => 'admin/approve_skins', :action => 'update'), {:method => :post, :multipart => true} do %>
   <table id="unapproved">
     <tr>
       <th>Skin</th>
       <th>Creator</th>
+      <th>Preview</th>
     </tr>
     <% @unapproved_skins.each_with_index do |skin, i| %>
       <tr>
@@ -20,7 +21,8 @@
       <%= check_box_tag "make_official[]", skin.id, false, :id => "make_official_#{skin.id}" %>
       <%= label_tag "make_official_#{skin.id}", (link_to skin.title, skin_path(skin)) %></td>
       <td><%= skin_author_link(skin) %></td>
-      <td>
+      <td><%= label_tag skin.icon, "Upload a new icon:" %>
+      <%= file_field_tag skin.icon %>
       </td>
       </tr>
     <% end %>

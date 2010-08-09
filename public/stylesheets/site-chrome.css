@@ -341,6 +341,13 @@ li.comment h4	{ font-size: 1.25em; margin-top:0; }
  
 /* MANAGE ARCHIVE FAQS */
  #manage-archive-faqs h3 {display: inline;}
+ 
+/* SKINS */
+  ul.skins-index li.skin {display: block; position: relative;}
+  ul.skins-index li.skin h4 {display: inline; padding-left: 2em; position: absolute;}
+  #main.skins-show dl	{ position: relative }
+  #main.skins-show dt	{ font-size: 0.875em; font-weight: 100; width: 13.5em }
+  #main.skins-show dd	{ margin: -1.1em 0 .7em 16em; }
 
 /* TAG WRANGLERS INDEX */
  #main.tag_wranglers-index .index       { width:100%; margin-top: 2em;}

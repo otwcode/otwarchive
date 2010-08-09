@@ -7,10 +7,13 @@
        {:url => {:controller => :skins, :action => :new, :wizard => false}},
        :href => url_for(:controller => :skins, :action => :new, :wizard => false)) -%>
   </li>
+  <li>Wizard</li>
 </ul>
 
+<% form_for @skin do |f| -%>
 
+  <%= render :partial => 'wizard_form', :locals => {:f => f} %>
 
+  <%= f.submit t('create_skin_button', :default => 'Create skin')  %>
 
-  <%= render :partial => 'wizard_form' %>
-
+<% end -%>

@@ -1,5 +1,13 @@
+<p>More features in the wizard coming soon.</p>
 
+<%= f.error_messages %>
 
-<p>Wizard coming soon.</p>
+<dl>
+  <dt><%= f.label :title, t('skin_title', :default => 'Skin title') %></dt>
+  <dd><%= f.text_field :title %></dd>
 
+  <dt><%= f.label :margin, t('skin_margin', :default => 'Width of margins (default is 3)') %></dt>
+  <dd><%= f.text_field :margin %></dd>
+</dl>
 
+<p><%= f.check_box :public %> <%= f.label :public, t('skin_public', :default => 'Public skin') %> <%= link_to_help "skins-creating" -%></p>

@@ -1,6 +1,22 @@
 class Skin < ActiveRecord::Base
   belongs_to :author, :class_name => 'User'
   has_many :preferences
+  
+  has_attached_file :icon,
+  :styles => { :standard => "100x100>" },
+  :url => "/system/:class/:attachment/:id/:style/:basename.:extension", 
+  :path => ENV['RAILS_ENV'] == 'production' ? ":class/:attachment/:id/:style.:extension" : ":rails_root/public:url",  
+  :storage => ENV['RAILS_ENV'] == 'production' ? :s3 : :filesystem,
+  :s3_credentials => "#{RAILS_ROOT}/config/s3.yml",
+  :bucket => ENV['RAILS_ENV'] == 'production' ? YAML.load_file("#{RAILS_ROOT}/config/s3.yml")['bucket'] : "",
+  :default_url => "/images/skin_preview_none.png"
+   
+  ICON_ALT_MAX = 50
+  
+  validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true 
+  validates_attachment_size :icon, :less_than => 500.kilobytes, :allow_nil => true 
+  validates_length_of :icon_alt_text, :allow_blank => true, :maximum => ICON_ALT_MAX,
+    :too_long => t('icon_alt_too_long', :default => "must be less than {{max}} characters long.", :max => ICON_ALT_MAX)
 
   attr_protected :official
 
