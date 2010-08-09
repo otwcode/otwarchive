@@ -8,6 +8,18 @@
 
   <dt><%= f.label :margin, t('skin_margin', :default => 'Width of margins (default is 3)') %></dt>
   <dd><%= f.text_field :margin %></dd>
+  
+  <dt><%= f.label :font, t('font', :default => "Font, with comma-separated fallbacks (default is 'Lucida Grande',Verdana,Helvetica,Arial,sans-serif)") %></dt>
+  <dd><%= f.text_field :font %></dd>
+  
+  <dt><%= f.label :background_color, t('background_color', :default => 'Background color, in words or hex code (default is #FFFEF9)') %></dt>
+  <dd><%= f.text_field :background_color %></dd>
+  
+  <dt><%= f.label :foreground_color, t('foreground_color', :default => 'Foreground color (default is #222222)') %></dt>
+  <dd><%= f.text_field :foreground_color %></dd>
+  
+  <dt><%= f.label :base_em, t('base_em', :default => 'Relative font size (default is 100)') %></dt>
+  <dd><%= f.text_field :base_em %></dd>
 </dl>
 
 <p><%= f.check_box :public %> <%= f.label :public, t('skin_public', :default => 'Public skin') %> <%= link_to_help "skins-creating" -%></p>

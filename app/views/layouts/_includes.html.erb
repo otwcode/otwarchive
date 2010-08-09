@@ -60,6 +60,12 @@
   <%- s = current_user.preference.skin -%>
   <style type="text/css">
     <%- if s.margin -%>#chapters {margin: auto <%= s.margin %>% 2.5em; padding: 0.5em <%= s.margin %>% 0;}<%- end -%>
+    <%- if s.background_color || s.foreground_color || s.font || s.base_em -%>
+    <%- bgcolor = s.background_color ? s.background_color : "#FFFEF9" -%>
+      body	{background: <%= bgcolor %>; 
+        color: <%= s.foreground_color ? s.foreground_color : "#222" %>; 
+        font: <%= s.base_em ? s.base_em : "100" %>%/1.125 <%= s.font ? s.font : "'Lucida Grande', Verdana, Helvetica, Arial, sans-serif" %>;}
+    <%- end -%>
     <%= current_user.preference.skin.css %>
   </style>
 <%- end -%>

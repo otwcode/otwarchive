@@ -7,12 +7,31 @@
   <li><%= link_to t('my_skins', :default => 'My skins'), skins_url(:q => 'mine') %></li>
   <li><%= link_to t('create_new_skin', :default => 'Create new skin'), new_skin_url %></li>
   <li><%= link_to t('preferences', :default => 'Change your skin'), user_preferences_path(@current_user) -%></li>
+  <%- if params[:wizard] -%>
+    <li id="form-link">
+     <%= link_to( t('.standard', :default => 'Write Custom CSS Instead?'),
+       {:url => {:controller => :skins, :action => :edit, :wizard => false, :id => @skin.id}},
+       :href => url_for(:controller => :skins, :action => :edit, :wizard => false, :id => @skin.id)) -%>
+    </li>
+    <li>Wizard</li>
+  <%- else -%>
+    <li>Custom CSS</li>
+    <li id="wizard-link">
+      <%= link_to( t('.wizard', :default => 'Use Wizard Instead?'),
+      {:url => {:controller => :skins, :action => :edit, :wizard => true, :id => @skin.id}},
+      :href => url_for(:controller => :skins, :action => :edit, :wizard => true, :id => @skin.id)) -%>
+    </li>
+  <%- end -%>
 </ul>
 <!--/subnav-->
 
 <% form_for @skin do |f| -%>
 
-  <%= render :partial => 'form', :locals => {:f => f} %>
+  <%- if params[:wizard] -%>
+    <%= render :partial => 'wizard_form', :locals => {:f => f} %>
+  <%- else -%>
+    <%= render :partial => 'form', :locals => {:f => f} %>
+  <%- end -%>
 
   <%= f.submit t('edit_skin_button', :default => 'Edit skin')  %>
 

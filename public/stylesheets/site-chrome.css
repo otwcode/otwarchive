@@ -348,6 +348,7 @@ li.comment h4	{ font-size: 1.25em; margin-top:0; }
   #main.skins-show dl	{ position: relative }
   #main.skins-show dt	{ font-size: 0.875em; font-weight: 100; width: 13.5em }
   #main.skins-show dd	{ margin: -1.1em 0 .7em 16em; }
+  #main.skins-edit form dt, #main.skins-new form dt {width: 15em;}
 
 /* TAG WRANGLERS INDEX */
  #main.tag_wranglers-index .index       { width:100%; margin-top: 2em;}
