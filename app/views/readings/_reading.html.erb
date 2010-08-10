@@ -14,6 +14,8 @@ reading.work} %></ul>
     <%= t('.most_recent_version', :default => '(Most recent version.)') %>
   <% end -%>
   <%= t('.view_count', :default => 'Number of times viewed: {{count}}', :count => reading.view_count) %>
+  <% if reading.toread? -%><%= t('to_read', :default => '(Flagged to read later.)') %><% end -%>
+  <% if reading.toskip? -%><%= t('to_skip', :default => '(Flagged to skip.)') %><% end -%>
   </h3>
 <% end %>
 <!-- actions -->

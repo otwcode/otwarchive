@@ -76,3 +76,37 @@ Feature: Reading count
       And I should not see "second work"
       And I should not see "fifth"
 
+  Scenario: Mark a story to read later
+    
+  Given I am logged in as "writer" with password "something"
+  When I post the work "Testy"
+  Then I should see "Work was successfully posted"
+  When I am logged out
+    And I am logged in as "reader" with password "something_else"
+    And I view the work "Testy"
+  Then I should see "Mark to read later"
+  When I follow "Mark to read later"
+  Then I should see "The work was marked to read later. You can find it in your history."
+  When I go to reader's reading page
+  Then I should see "Testy"
+    And I should see "Flagged to read later"
+  When I view the work "Testy"
+  Then I should see "Mark as read"
+  When I follow "Mark as read"
+  Then I should see "The work was marked as read."
+  When I go to reader's reading page
+  Then I should see "Testy"
+    And I should not see "Flagged to read later"
+    
+  Scenario: You can't mark a story to read later if you're not logged in or not the author
+  
+  Given I am logged in as "writer" with password "something"
+  When I post the work "Testy"
+  Then I should see "Work was successfully posted"
+  When I view the work "Testy"
+  Then I should not see "Mark to read later"
+    And I should not see "Mark as read"
+  When I am logged out
+    And I view the work "Testy"
+  Then I should not see "Mark to read later"
+    And I should not see "Mark as read"

@@ -19,7 +19,10 @@
     <li id="add_collection_link"><%= collection_link(commentable) -%></li>
 <%- end -%>
 <%- if logged_in? && @work -%>
-    <li id="add_bookmark_link"><%= bookmark_link(commentable) %></li>			
+    <li id="add_bookmark_link"><%= bookmark_link(commentable) %></li>
+    <%- unless current_user.is_author_of?(@work) -%>
+      <li><%= marktoread_link(commentable) %></li>
+    <%- end -%>
 <%- end -%>
 <% if commentable.count_visible_comments > 0 && !commentable.is_a?(Tag) -%>
     <li id="show_comments_link"><%= show_hide_comments_link(commentable) -%></li>

@@ -575,7 +575,28 @@ class WorksController < ApplicationController
     redirect_to @work
   end
 
-
+  def marktoread
+    @work = Work.find(params[:id])
+    return unless @work
+    if logged_in? && current_user.preference.history_enabled
+      unless current_user.is_author_of?(@work)
+        reading = Reading.find_by_work_id_and_user_id(@work.id, current_user.id)
+        reading.major_version_read, reading.minor_version_read = @work.major_version, @work.minor_version
+        if reading.toread?
+          reading.toread = false
+          flash[:notice] = t('savedtoread', :default => "The work was marked as read.")
+        else
+          reading.toread = true
+          flash[:notice] = t('savedtoread', :default => "The work was marked to read later. You can find it in your history.")
+        end
+        reading.save
+      end
+    elsif logged_in?
+      flash[:error] = t('needhistoryenabled', :default => "You need to enable your history first.")
+    end
+    true
+    redirect_to(request.env["HTTP_REFERER"] || root_path)
+  end
 
   # WORK ON MULTIPLE WORKS
 
