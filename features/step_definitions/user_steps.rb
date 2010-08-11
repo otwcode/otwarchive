@@ -46,3 +46,18 @@ Given /^I am logged out$/ do
   visit logout_path
   Then "I should see \"Log in\""
 end
+
+When /^"([^\"]*)" creates the pseud "([^\"]*)"$/ do |username, newpseud|
+  visit user_pseuds_path(username)
+  click_link("New Pseud")
+  fill_in "Name", :with => newpseud
+  click_button "Create"
+end
+
+When /^"([^\"]*)" creates the default pseud "([^\"]*)"$/ do |username, newpseud|
+  visit user_pseuds_path(username)
+  click_link("New Pseud")
+  fill_in "Name", :with => newpseud
+  check "Is default"
+  click_button "Create"
+end
