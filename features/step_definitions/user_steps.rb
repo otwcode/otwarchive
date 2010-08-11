@@ -58,6 +58,7 @@ When /^"([^\"]*)" creates the default pseud "([^\"]*)"$/ do |username, newpseud|
   visit user_pseuds_path(username)
   click_link("New Pseud")
   fill_in "Name", :with => newpseud
+  # this isn't currently working
   check "Is default"
   click_button "Create"
 end

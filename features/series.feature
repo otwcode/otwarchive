@@ -93,8 +93,12 @@ Feature: Edit Series
       | author        | password   |
       And a warning exists with name: "Choose Not To Use Archive Warnings", canonical: true
     When I am logged in as "author" with password "password"
-      And "author" creates the default pseud "Pointless Pseud"
-      And I go to the new work page
+      And "author" creates the pseud "Pointless Pseud"
+      And I follow "Edit"
+      And I check "Is default"
+      And I press "Update"
+    Then I should see "Pseud was successfully updated."
+    When I go to the new work page
       And I select "Not Rated" from "Rating"
       And I check "Choose Not To Use Archive Warnings"
       And I fill in "Fandoms" with "My Little Pony"
