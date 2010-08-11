@@ -14,7 +14,7 @@ Feature: Search Tags
       And I press "Search tags"
     Then I should see "2 Found"
       And I should see "Fandom: first fandom (0)"
-      And I should see "Character: first last (0)"
+      And I should see "Character: first last (0)" within ".canonical"
     When I am on the search tags page
       And I fill in "tag_search" with "first"
       And I select "Fandom" from "type"
@@ -27,5 +27,5 @@ Feature: Search Tags
       And I check "canonical?"
       And I press "Search tags"
     Then I should see "1 Found"
-      And I should see "first last (0)"
+      And I should see "first last (0)" within ".canonical"
       And I should not see "Fandom: first fandom (0)"

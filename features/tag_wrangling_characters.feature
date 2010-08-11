@@ -1,4 +1,4 @@
-@tags @users
+@no-txn @tags @users 
 
 Feature: Tag Wrangling - Characters
 
@@ -31,9 +31,19 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
   Then I should see "Tag was successfully created"
     And the "tag_canonical" checkbox should not be checked
     And the "tag_canonical" checkbox should not be disabled
+    
+  # check those two created properly
+  When I am on the search tags page
+    And the tag indexes are updated
+    And I fill in "tag_search" with "Doctor"
+    And I press "Search tags"
+  Then I should see "The First Doctor" within ".canonical"
+    And I should see "The Doctor (1st)"
+    And I should not see "The Doctor (1st)" within ".canonical"
   
   # assigning an existing merger to a non-canonical character
-  When I fill in "Synonym of" with "The First Doctor"
+  When I edit the tag "The Doctor (1st)"
+    And I fill in "Synonym of" with "The First Doctor"
     And I press "Save changes"
   Then I should see "Tag was updated"
   When I follow "The First Doctor"
