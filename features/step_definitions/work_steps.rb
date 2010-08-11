@@ -1,3 +1,8 @@
+Given /^I have no works or comments$/ do
+  Work.delete_all
+  Comment.delete_all
+end
+
 When /^I view the work "([^\"]*)"$/ do |work|
   work = Work.find_by_title!(work)
   visit work_url(work)
