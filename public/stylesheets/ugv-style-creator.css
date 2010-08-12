@@ -11,6 +11,24 @@
 .user-generated-view .font-teal { color: #008282; }
 .user-generated-view .font-vomityellow { color: #a1a100; }
 .user-generated-view .font-redbrown { color: #a15000; }
+.user-generated-view .font-cherryred { color: #e00707; }
+.user-generated-view .font-white { color: white; }
+.user-generated-view .font-midblue { color: #0715cd; }
+.user-generated-view .font-midviolet { color: #b536da; }
+.user-generated-view .font-jade { color: #4ac925; }
+.user-generated-view .font-brickred { color: #a10000; }
+.user-generated-view .font-reallydarkgray { color: #626262; }
+.user-generated-view .font-darkolive { color: #416600; }
+.user-generated-view .font-dimgreen { color: #008141; }
+.user-generated-view .font-dimblue { color: #005682; }
+.user-generated-view .font-darknavy { color: #000056; }
+.user-generated-view .font-verydarkpurple { color: #2b0057; }
+.user-generated-view .font-darkplum { color: #6a006a; }
+.user-generated-view .font-darkmaroon { color: #77003c; }
+.user-generated-view .font-mediumskyblue { color: #00d5f2; }
+.user-generated-view .font-lightpurple { color: #f141ef; }
+.user-generated-view .font-dimorange { color: #f2a400; }
+.user-generated-view .font-othergreen { color: #1f9400; }
 
 /* other display */
 .user-generated-view .font-serif { font-family: "Cambria, Constantia, Palatino, Georgia, serif"; }
