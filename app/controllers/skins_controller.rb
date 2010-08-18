@@ -6,6 +6,9 @@ class SkinsController < ApplicationController
   before_filter :check_visibility, :only => [:show]
 
   def index
+    if current_user && current_user.is_a?(User)
+      @preference = current_user.preference
+    end
     if params[:q] == 'mine'
       redirect_to new_session_path and return unless logged_in?
       @user = current_user

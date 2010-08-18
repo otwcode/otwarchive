@@ -32,7 +32,14 @@
     <% if s.editable? %>
       <%= link_to t('.edit', :default => 'Edit skin'), edit_skin_url(s) %>
     <% end %>
-    </h4></span>
+    </h4>
+    <% if logged_in? %>
+    <%- form_for(@preference, :url => {:controller => :preferences, :action => :update, :user_id => current_user}, :method => "put") do |f| -%>
+      <%= f.hidden_field :skin_id, :value => s.id %>
+    	<%= f.submit t('.forms.update', :default => "Use {{name}} skin", :name => s.title) %>
+    <%- end -%>
+    <% end %>
+  </span>
   </li>
 <% end -%>
 </ul>

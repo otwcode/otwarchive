@@ -343,6 +343,7 @@ li.comment h4	{ font-size: 1.25em; margin-top:0; }
  #manage-archive-faqs h3 {display: inline;}
  
 /* SKINS */
+  ul.skins-index {clear: right;}
   ul.skins-index li.skin {display: block; position: relative;}
   ul.skins-index li.skin h4 {display: inline; padding-left: 2em; position: absolute;}
   #main.skins-show dl	{ position: relative }
