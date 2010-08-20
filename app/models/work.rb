@@ -439,7 +439,7 @@ class Work < ActiveRecord::Base
       new_series = Series.new
       new_series.title = attributes[:title]
       new_series.restricted = self.restricted
-      new_series.authors = (self.pseuds & self.authors).flatten.uniq
+      new_series.authors = (self.pseuds & (self.authors.blank? ? [] : self.authors)).flatten.uniq
       new_series.save
       self.series << new_series
     end
@@ -567,6 +567,14 @@ class Work < ActiveRecord::Base
       unless User.current_user.is_a?(User) && User.current_user.is_author_of?(self)
         counter.update_attributes(:last_visitor => visitor, :hit_count => counter.hit_count + 1)
       end
+    end
+  end
+
+  # save downloads
+  def increment_download_count
+    counter = self.hit_counter
+    unless User.current_user.is_a?(User) && User.current_user.is_author_of?(self)
+      counter.download_count = counter.download_count + 1
     end
   end
 
