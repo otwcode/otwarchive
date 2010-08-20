@@ -48,6 +48,11 @@ Then /^I should see Updated today$/ do
   Given "I should see \"Updated:#{today}\""
 end
 
+Then /^I should not see Updated today$/ do
+  today = Date.today.to_s
+  Given "I should not see \"Updated:#{today}\""
+end
+
 When /^the purge_old_drafts rake task is run$/ do
   Work.purge_old_drafts
 end

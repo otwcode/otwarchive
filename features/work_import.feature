@@ -40,6 +40,8 @@ Feature: Import Works
     Then I should see "Work was successfully posted."
     When I go to the works page
     Then I should see "OTW Meetup"
+      And I should not see "Rambling musings"
+      And I should not see "Profile" within "#main"
 
   Scenario: Creating a new work from a Yuletide story
     Given basic tags
