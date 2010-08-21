@@ -104,7 +104,14 @@ class ApplicationController < ActionController::Base
 
   @over_anon_threshold = true if @over_anon_threshold.nil?
 
-  def get_page_title(fandom, author, title)
+  def get_page_title(fandom, author, title, options = {})
+    # truncate any piece that is over 15 chars long to the nearest word
+    if options[:truncate]
+      fandom.gsub!(/^(.{15}[\w.]*)(.*)/) {$2.empty? ? $1 : $1 + '...'}
+      author.gsub!(/^(.{15}[\w.]*)(.*)/) {$2.empty? ? $1 : $1 + '...'}
+      title.gsub!(/^(.{15}[\w.]*)(.*)/) {$2.empty? ? $1 : $1 + '...'}
+    end
+
     @page_title = ""
     if logged_in? && !current_user.preference.try(:work_title_format).blank?
       @page_title = current_user.preference.work_title_format
@@ -114,7 +121,9 @@ class ApplicationController < ActionController::Base
     else
       @page_title = title + " - " + author + " - " + fandom
     end
-    @page_title += " [#{ArchiveConfig.APP_NAME}]"
+    
+    @page_title += " [#{ArchiveConfig.APP_NAME}]" unless options[:omit_archive_name]
+    @page_title
   end
 
   ### GLOBALIZATION ###
