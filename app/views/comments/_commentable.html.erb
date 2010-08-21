@@ -34,6 +34,11 @@
   <div id="dynamic-collection_item" class="wrapper" style="display:none;"></div>
   <!-- if we have javascript, here is where the bookmark window will pop up -->
   <div style="position:relative;"><div id="dynamic-bookmark" class="wrapper" style="display:none;"></div></div>
+
+  <% if params[:show_comments] || params[:tag_id] || params[:add_comment] -%>
+    <h3 class="landmark"><a name="comments">Comments</a></h3>
+  <% end %>
+  
   <%= flash_div :comment_error, :comment_notice -%>
   <!-- If we have javascript, here is where the Add Comment window will appear. -->
   <!-- If not, and we have params telling us to comment on this object, we will manually display the comment window. --> 
@@ -42,21 +47,20 @@
       <div id="add_comment">
         <%= render :partial => 'comments/comment_form', :locals => {:comment => Comment.new, :commentable => commentable, :button_name => t('.forms.add_comment', :default => "Add Comment")}%> 		
       </div>
-  <%- else -%>
-    <div id="add_comment_placeholder" style="display:none;">
-  <%- end -%>	
     </div>
+  <%- else -%>
+    <div id="add_comment_placeholder" style="display:none;"></div>
+  <%- end -%>	
 
   <!-- If we have javascript, here is where the comments will be spiffily inserted -->
   <!-- If not, and show_comments is true, here is where the comments will be rendered -->
   <%- if params[:show_comments] || params[:tag_id] -%>
-    	<h3 class="landmark"><a name="comments">Comments</a></h3>
 		<div id="comments_placeholder">
       <%= render :partial => 'comments/comment_thread', :locals => { :comments => commentable.comments, :depth => 0 }%></ol>
-  <%- else -%>
-    <div id="comments_placeholder" style="display: none;">
-  <%- end -%>
     </div>
+  <%- else -%>
+    <div id="comments_placeholder" style="display: none;"></div>
+  <%- end -%>
 
 </div>
 <!-- END comments -->
