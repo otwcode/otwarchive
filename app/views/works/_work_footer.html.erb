@@ -7,7 +7,7 @@
     <%- for related_work in @work.approved_related_works -%>
       <li>
         <%= link_to related_work.work.title, related_work.work %> by <%= byline(related_work.work) %> 
-        <%- if is_author_of?(@work) -%>
+        <%- if is_author_of?(@work) && !@downloading -%>
           <h5 class="inline"><%= link_to t('.remove_relationship', :default => '[Remove link]'), {:controller => :related_works, :action => :update, :parent_id => @work.id, :work_id => related_work.work.id}, :method => :put %></h5>
         <%- end -%>
         <%- if related_work.translation -%>

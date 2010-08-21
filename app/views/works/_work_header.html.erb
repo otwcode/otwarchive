@@ -1,4 +1,4 @@
-<%- unless @preview_mode -%>
+<%- unless @preview_mode || @downloading -%>
 <!-- BEGIN navigation -->
 <h3 class="landmark">Actions</h3>
 <ul class="navigation" role="navigation">
@@ -49,15 +49,24 @@
       <%= link_to(t('.creator_style', :default => "Switch to creator's style"), url_for(:style => 'creator')) -%>
     <%- end -%></li>
   <% end %>
-
-    <li class="landmark"><a name="top">&nbsp;</a></li>
+  
+  <li>
+    <a onclick="subnav_view.toggle()" title="Download Options"><%= t('.download', :default =>"Download") + " &#8595;" -%></a>
+    <ul id="subnav">
+      <li><%= link_to(t('.mobi', :default => "Mobi"), download_work_path(@work, :format => :mobi)) -%></li>
+      <li><%= link_to(t('.epub', :default => "Epub"), download_work_path(@work, :format => :epub)) -%></li>
+      <li><%= link_to(t('.pdf', :default => "PDF"), download_work_path(@work, :format => :pdf)) -%></li>
+      <li><%= link_to(t('.html', :default => "HTML"), download_work_path(@work, :format => :html)) -%></li>
+			<li><a onclick="subnav_view.toggle()" style='cursor: pointer;' title="Close Download Options">Close</a></li>
+    </ul>
+  </li>
 </ul>
 <!-- END navigation -->
 <%- end -%>
 
 <%- if @preview_mode -%>
    <%= render :partial => 'works/meta', :locals => {:work => @work} %>
-<%- else -%>
+<% elsif !@downloading %>
   <% hide_show = "#{hide_warnings?(@work) ? "1" : "0"}-#{hide_freeform?(@work) ? "1" : "0"}" %>
   <%- cache([@work, "meta", hide_show]) do -%>
     <%= render :partial => 'works/meta', :locals => {:work => @work} %>
@@ -102,7 +111,7 @@
               <%= t('.inspired_by', :default => 'Inspired by') -%>
             <%- end -%>
             <%= link_to related_work.parent.title, related_work.parent %> by <%= byline(related_work.parent) %>
-            <%- if is_author_of?(@work) -%>
+            <%- if is_author_of?(@work) && !@downloading -%>
               <%= link_to t('.remove_relationship', :default => '[Remove link]'), {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :delete %>
             <%- end -%>
             </h4>

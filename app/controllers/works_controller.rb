@@ -5,10 +5,10 @@ class WorksController < ApplicationController
   before_filter :load_collection
   before_filter :users_only, :only => [ :new, :create, :import, :import_multiple, :drafts, :preview, :show_multiple ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview, :show_multiple, :edit_multiple ]
-  before_filter :load_work, :only => [ :show, :navigate, :edit, :update, :destroy, :preview, :edit_tags, :update_tags ]
+  before_filter :load_work, :only => [ :show, :download, :navigate, :edit, :update, :destroy, :preview, :edit_tags, :update_tags ]
   before_filter :check_ownership, :only => [ :edit, :update, :destroy, :preview ]
-  before_filter :check_visibility, :only => [ :show, :navigate ]
-  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import ]
+  before_filter :check_visibility, :only => [ :show, :download, :navigate ]
+  before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :download, :navigate, :import ]
   before_filter :set_instance_variables_tags, :only => [ :edit_tags, :update_tags, :preview_tags ]
 
   def search
@@ -178,12 +178,181 @@ class WorksController < ApplicationController
     @tag_categories_limited = Tag::VISIBLE - ["Warning"]
 
     @page_title = @work.unrevealed? ? t('works.mystery_title', :default => "Mystery Work") :
-      get_page_title(@work.fandoms.string, @work.anonymous? ?  t('works.anonymous', :default => "Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '), @work.title)
+      get_page_title(@work.fandoms.size > 3 ? t("works.multifandom", :default => "Multifandom") : @work.fandoms.string, 
+        @work.anonymous? ?  t('works.anonymous', :default => "Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '), 
+        @work.title)
     render :show
     @work.increment_hit_count(request.env['REMOTE_ADDR'])
     Reading.update_or_create(@work, current_user)
   end
+  
+  def download
+    @page_title = @work.unrevealed? ? t('works.mystery_title', :default => "Mystery Work") :
+      get_page_title(@work.fandoms.size > 3 ? t("works.multifandom", :default => "Multifandom") : @work.fandoms.string, 
+        @work.anonymous? ?  t('works.anonymous', :default => "Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '), 
+        @work.title,
+        :omit_archive_name => true, :truncate => true)
 
+    @filename = @page_title.gsub(/\s+/, '_').gsub(/[^\w_-]+/, '').gsub(/_-_/, '-').gsub(/__+/, '_')
+
+    # we use entire work
+    if @work.number_of_posted_chapters > 1
+      @chapters = @work.chapters_in_order 
+    else
+      @chapters = @work.chapters
+    end
+      
+    respond_to do |format|
+      format.html do
+        @template.template_format = :html
+        @html_content = render_to_string(:template => "works/download", :layout => "download")
+        send_data(@html_content, :filename => "#{@filename}.html")
+      end
+      
+      # mobipocket for kindle
+      format.mobi {download_mobi}
+      
+      # epub for ibooks        
+      format.epub {download_epub}      
+      
+      # pdf
+      format.pdf {download_pdf}
+    end
+    
+    @work.increment_download_count
+  end
+  
+protected
+
+  # returns the HTML file written
+  def write_html_content
+    @template.template_format = :html
+    @html_content = convert_urls_to_absolute(render_to_string(:template => "works/download", :layout => "download"))
+
+    @tempdir = "#{Rails.root}/tmp"
+  	File.open("#{@tempdir}/#{@filename}.html", 'w') {|f| f.write(@html_content)}
+    
+    "#{@tempdir}/#{@filename}.html"
+  end
+  
+  def convert_urls_to_absolute(content)
+    content.gsub(/a href=\"\//, "a href=\"#{ArchiveConfig.APP_URL}/")
+  end
+  
+  def download_pdf
+    html_file = write_html_content
+    %x{wkhtmltopdf #{html_file} #{@tempdir}/#{@filename}.pdf}
+    
+    # clean up temp HTML file
+    File.delete(html_file)
+    
+    # send the PDF
+    send_file("#{@tempdir}/#{@filename}.pdf", :type => "application/pdf", :stream => false, :filename => "#{@filename}.pdf")
+    
+    # clean up temp file
+    File.delete("#{@tempdir}/#{@filename}.pdf")
+  end
+
+  def download_mobi
+    tempdir = "#{Rails.root}/tmp/#{@filename}_mobi"
+    Dir.mkdir(tempdir) unless File.exists?(tempdir)
+
+    @chapters.each_with_index do |chapter, index|
+      @chapter = chapter
+      @page_title = @chapter.title.blank? ? "Chapter #{index + 1}" : @chapter.title
+      @template.template_format = :html
+      chapter_html_content = convert_urls_to_absolute(render_to_string(:template => "chapters/download", :layout => "barebones"))
+      
+      # write content to OEBPS/chapter[#].xhtml
+      File.open("#{tempdir}/chapter#{index}.html", 'w') {|f| f.write(chapter_html_content)}
+    end
+
+    # converts the tempfile to mobi using MobiPerl
+    # note! can't have a linebreak in here 
+    html_files = 0.upto(@chapters.size - 1).map {|i| "chapter#{i}.html"}.join(' ')
+    %x{cd #{tempdir} ; html2mobi #{html_files} --mobifile "#{@filename}.mobi" --gentoc --title \"#{@work.title}\" --author \"#{@work.anonymous? ?  t('works.anonymous', :default => "Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', ')}\"}
+    
+    # clean up the temp HTML files
+    @chapters.size.times {|i| File.delete("#{tempdir}/chapter#{i}.html")}
+
+    # sends the new mobi file
+    send_file("#{tempdir}/#{@filename}.mobi", :type => "application/mobi", :stream => false, :filename => "#{@filename}.mobi")
+
+    # clean up mobi file and dir
+    File.delete("#{tempdir}/#{@filename}.mobi")
+    Dir.delete(tempdir)
+  end
+  
+  # Manually building an epub file here 
+  # See http://www.jedisaber.com/eBooks/tutorial.asp for details
+  def download_epub
+    @uuid = @filename + "_" + ArchiveConfig.APP_NAME + "_#{Time.now.to_i}"
+    
+    # create temp folder with filename
+    tempdir = "#{Rails.root}/tmp/#{@filename}_epub"
+    Dir.mkdir(tempdir) unless File.exists?(tempdir)
+    
+    # write "mimetype" file 
+    File.open("#{tempdir}/mimetype", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/mimetype"))}
+    
+    # create subdirs META-INF and OEBPS
+    Dir.mkdir("#{tempdir}/META-INF") unless File.exists?("#{tempdir}/META-INF")
+    Dir.mkdir("#{tempdir}/OEBPS") unless File.exists?("#{tempdir}/OEBPS")
+    #Dir.mkdir("#{tempdir}/images") unless File.exists?("#{tempdir}/images")
+    #Dir.mkdir("#{tempdir}/stylesheets") unless File.exists?("#{tempdir}/stylesheets")
+    
+    # write the META-INF/container.xml file
+    File.open("#{tempdir}/META-INF/container.xml", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/container.xml"))}
+    
+    # write the OEBPS/toc.ncx file
+    File.open("#{tempdir}/OEBPS/toc.ncx", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/toc.ncx"))}
+
+    # write the OEBPS/content.opf file
+    File.open("#{tempdir}/OEBPS/content.opf", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/content.opf"))}
+    
+    # copy over the appropriate stylesheets
+    # %w{font archive_core site-chrome}.each {|sheet| FileUtils.copy("#{Rails.root}/public/stylesheets/#{sheet}.css", "#{tempdir}/stylesheets")}
+      
+    @template.template_format = :html
+    @chapters.each_with_index do |chapter, index|
+      @chapter = chapter
+      chapter_html_content = convert_urls_to_absolute(render_to_string(:template => "chapters/download", :layout => "barebones"))
+      
+      # turn @html_content into xhtml
+      ## NOT DONE YET
+      # convert all ampersands to &amp;
+      chapter_html_content.gsub!(/&\s/, '&amp; ')
+      
+      # write content to OEBPS/chapter[#].xhtml
+      File.open("#{tempdir}/OEBPS/chapter#{index}.xhtml", 'w') {|f| f.write(chapter_html_content)}
+    end
+
+    # stuff contents of directory into a zip file named with .epub extension
+    # note: we have to zip this up in this particular order because "mimetype" must be the first item in the zipfile
+    %x{cd #{tempdir} ; zip #{@filename}.epub mimetype ; zip -r #{@filename}.epub META-INF OEBPS}
+    
+    # send the file
+    send_file("#{tempdir}/#{@filename}.epub", :type => "application/epub", :stream => false, :filename => "#{@filename}.epub")
+    
+    # clean up temp files
+    File.delete("#{tempdir}/#{@filename}.epub")
+    @chapters.size.times do |index|
+      File.delete("#{tempdir}/OEBPS/chapter#{index}.xhtml")
+    end
+    # %w{font archive_core site-chrome}.each {|sheet| File.delete("#{tempdir}/stylesheets/#{sheet}.css")}
+    File.delete("#{tempdir}/OEBPS/toc.ncx")
+    File.delete("#{tempdir}/OEBPS/content.opf")
+    File.delete("#{tempdir}/META-INF/container.xml")
+    File.delete("#{tempdir}/mimetype")
+    #Dir.delete("#{tempdir}/stylesheets")
+    #Dir.delete("#{tempdir}/images")
+    Dir.delete("#{tempdir}/OEBPS")
+    Dir.delete("#{tempdir}/META-INF")
+    Dir.delete(tempdir)
+  end
+  
+public
+  
   def navigate
     @chapters = @work.chapters_in_order(false)
   end
@@ -661,8 +830,7 @@ class WorksController < ApplicationController
 
     # if we don't have author_attributes[:ids], which shouldn't be allowed to happen
     # (this can happen if a user with multiple pseuds decides to unselect *all* of them)
-    sorry = "Sorry, you cannot remove yourself entirely as an author of the work!<br />
-             <br />Please use Remove Me As Author or consider orphaning your work instead if you do not wish to be associated with it anymore."
+    sorry = "You haven't selected any pseuds for this work. Please use Remove Me As Author or consider orphaning your work instead if you do not wish to be associated with it anymore."
     if params[:work] && params[:work][:author_attributes] && !params[:work][:author_attributes][:ids]
       flash.now[:notice] = t('needs_author', :default => sorry)
       params[:work][:author_attributes][:ids] = [current_user.default_pseud]
@@ -698,7 +866,7 @@ class WorksController < ApplicationController
           @work.save_parents if @work.preview_mode
         end
       elsif params[:work] # create
-         @work = Work.new(params[:work])
+        @work = Work.new(params[:work])
       else # new
         if params[:load_unposted] && current_user.unposted_work
           @work = current_user.unposted_work

@@ -81,7 +81,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :works,
                 :collection => { :import => :post, :search => :get },
-                :member => { :preview => :get, :post => :post, :post_draft => :put, :navigate => :get, :edit_tags => :get, :preview_tags => :get, :update_tags => :put, :marktoread => :get } do |work|
+                :member => { :preview => :get, :post => :post, :post_draft => :put, :navigate => :get, :edit_tags => :get, :preview_tags => :get, :update_tags => :put, :marktoread => :get, :download => :get  } do |work|
       work.resources :chapters, :has_many => :comments,
                                 :collection => {:manage => :get,
                                                 :update_positions => :post},
