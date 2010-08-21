@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package version="2.0" xmlns="http://www.idpf.org/2007/opf"
+       unique-identifier="BookId">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/"
+           xmlns:opf="http://www.idpf.org/2007/opf">
+    <dc:title><%= @work.title -%></dc:title> 
+    <dc:creator><%= @work.anonymous? ?  t('works.anonymous', :default => "Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', ') -%></dc:creator>
+    <dc:language><%= @work.language.short -%></dc:language> 
+    <dc:publisher><%= ArchiveConfig.APP_NAME -%></dc:publisher> 
+    <dc:identifier id="bookid">urn:uuid:<%= @uuid -%></dc:identifier>
+  </metadata>
+  <manifest>
+    <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
+    <% @chapters.size.times do |index| %>
+      <item id="chapter<%= index -%>" href="chapter<%= index -%>.xhtml" media-type="application/xhtml+xml"/>
+    <% end %>
+  </manifest>
+  <spine toc="ncx">
+    <% @chapters.size.times do |index| %>
+      <itemref idref="chapter<%= index -%>"/>
+    <% end %>
+  </spine>
+</package>
