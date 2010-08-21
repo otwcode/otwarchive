@@ -164,7 +164,7 @@ protected
 
   # We just export an HTML table, but we give it the xls suffix to have Excel/Open Office recognize it correctly
   def export_html
-    @title = "#{@collection.name} Signups at #{Time.now.strftime('%Y-%m-%d-%H%M')}"
+    @page_title = "#{@collection.name} Signups at #{Time.now.strftime('%Y-%m-%d-%H%M')}"
     @hide_navigation = true
     filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.xls"
     content = render("index", :layout => "barebones")
