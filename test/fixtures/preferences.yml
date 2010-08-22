@@ -96,6 +96,7 @@ preference_484751124:
   user_id: 21
   recipient_emails_off: false
   date_of_birth_visible: false
+  minimise_search_engines: true
   edit_emails_off: false
   hide_warnings: false
   automatically_approve_collections: false
