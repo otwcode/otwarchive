@@ -6,7 +6,7 @@
 	<li><%= link_to t('public_skins', :default => 'Public skins'), skins_url %></li>
   <li><%= link_to t('my_skins', :default => 'My skins'), skins_url(:q => 'mine') %></li>
   <li><%= link_to t('create_new_skin', :default => 'Create new skin'), new_skin_url %></li>
-  <li><%= link_to t('preferences', :default => 'Change your skin'), user_preferences_path(@current_user) -%></li>
+  <li><%= link_to t('preferences', :default => 'Change your skin'), skins_url -%></li>
   <%- if params[:wizard] -%>
     <li id="form-link">
      <%= link_to( t('.standard', :default => 'Write Custom CSS Instead?'),
