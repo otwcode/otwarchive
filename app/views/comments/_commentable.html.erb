@@ -15,13 +15,13 @@
 <%- if @admin_post -%>
     <li><%= link_to t('.admin_posts_link_text', :default => 'Back to AO3 News Index'), admin_posts_path %></li>
 <%- end -%>
-<%- if is_author_of?(commentable) && commentable.class == Work -%>
-    <li id="add_collection_link"><%= collection_link(commentable) -%></li>
+<%- if @work && is_author_of?(@work) -%>
+    <li id="add_collection_link"><%= collection_link(@work) -%></li>
 <%- end -%>
 <%- if logged_in? && @work -%>
     <li id="add_bookmark_link"><%= bookmark_link(commentable) %></li>
     <%- unless current_user.is_author_of?(@work) -%>
-      <li><%= marktoread_link(commentable) %></li>
+      <li><%= marktoread_link(@work) %></li>
     <%- end -%>
 <%- end -%>
 <% if commentable.count_visible_comments > 0 && !commentable.is_a?(Tag) -%>

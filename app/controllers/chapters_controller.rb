@@ -52,7 +52,13 @@ class ChaptersController < ApplicationController
         get_page_title(@work.fandoms.string, 
           @work.anonymous? ? t('chapters.anonymous', :default => "Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '), 
           @work.title + " - Chapter " + @chapter.position.to_s)
-    
+          
+      # TEMPORARY hack-like thing to fix the fact that chaptered works weren't hit-counted or added to history at all
+      if chapter_position == 0
+        Reading.update_or_create(@work, current_user)
+        @work.increment_hit_count(request.env['REMOTE_ADDR'])
+      end
+      
       respond_to do |format|
         format.html
         format.js
@@ -153,7 +159,7 @@ class ChaptersController < ApplicationController
   
   # GET /chapters/1/preview
   def preview
-    @preview_mode = true #Enigel Jan 31
+    @preview_mode = true
   end
   
   # POST /chapters/1/post

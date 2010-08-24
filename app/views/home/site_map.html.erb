@@ -9,8 +9,7 @@
 	  <li><%= link_to t('.bookmarks', :default => "Bookmarks"), bookmarks_path %></li>
 	  <li><%= link_to t('.freeform_tag_cloud', :default => "Freeform Tag Cloud"), tags_path %></li>
 	  <li><%= link_to t('.languages', :default => "Languages"), languages_path %></li>
-	  <li><%= link_to t('.collections', :default => "Collections"), collections_path %></li>
-	  <li>Challenges - coming soon</li>
+	  <li><%= link_to t('.collections', :default => "Collections and Challenges"), collections_path %></li>
 	</ul>
 	
 <h3>About the Archive of Our Own</h3>
@@ -31,11 +30,10 @@
 		<li><%= link_to t('.my_drafts', :default => "My Drafts"), drafts_user_works_path(current_user) %></li>
 		<li><%= link_to t('.my_series', :default => "My Series"), user_series_index_path(current_user) %></li>
 		<li><%= link_to t('.my_bookmarks', :default => "My Bookmarks"), user_bookmarks_path(current_user) %></li>
-		<li><%= link_to t('.my_collections', :default => "My Collections"), user_collections_path(current_user) %></li>
-		<li>My Challenges - coming soon</li>
+		<li><%= link_to t('.my_collections', :default => "My Collections and Challenges"), user_collections_path(current_user) %></li>
 		<li><%= link_to t('.my_inbox', :default => "My Inbox"), user_inbox_path(current_user) %></li>
 		<% if current_user.preference.history_enabled? %>
-		<li><%= link_to t('.my_reading_history', :default => "My Reading History"), user_readings_path(current_user) %></li>
+		<li><%= link_to t('.my_history', :default =>"My History"), user_readings_path(current_user) %></li>
 		<% end %>
 		<li>My Subscriptions - coming soon</li>
 		<li><%= link_to t('.set_preferences', :default => "Set My Preferences"), user_preferences_path(current_user) %>

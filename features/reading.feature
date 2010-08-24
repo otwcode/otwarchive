@@ -120,11 +120,14 @@ Feature: Reading count
     And I fill in "content" with "Second blah blah"
     And I press "Preview"
     And I press "Post"
-  Then I should see "Chapter 2"
+  Then I should see "some work"
   When I am logged out
     And I am logged in as "fandomer" with password "password"
     And I go to fandomer's reading page
-  Then I should not see "some work"
+  Then I should see "some work"
+    And I should see "Number of times viewed: 1"
+  When I follow "Delete"
+  Then I should see "Work deleted from your history."
   When I go to the works page
     And I follow "some work"
   Then I should not see "Second blah blah"
@@ -138,3 +141,13 @@ Feature: Reading count
   When I go to fandomer's reading page
   Then I should see "some work"
     And I should see "Number of times viewed: 2"
+  When I go to the works page
+    And I follow "some work"
+    And I follow "Next Chapter"
+  Then I should see "Second blah blah"
+  When I follow "Mark to read later"
+  Then I should see "The work was marked to read later. You can find it in your history."
+  When I go to fandomer's reading page
+  Then I should see "some work"
+    And I should see "Number of times viewed: 3"
+    And I should see "(Flagged to read later.)"
