@@ -41,7 +41,7 @@ Feature: Invite requests
     When I follow "invitations"
       And I follow "Manage requests"
     Then I should see "user1"
-      And I should see "3"
+      And the "requests[user1]" field should contain "3"
       And I should see "I want them for a friend"
     When I fill in "requests[user1]" with "2"
       And I press "Update"
