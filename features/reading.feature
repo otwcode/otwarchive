@@ -110,3 +110,31 @@ Feature: Reading count
     And I view the work "Testy"
   Then I should not see "Mark to read later"
     And I should not see "Mark as read"
+    
+  Scenario: Read a multi-chapter work
+  
+  Given I am logged in as "writer" with password "something"
+    And I post the work "some work"
+  When I view the work "some work"
+    And I follow "Add Chapter"
+    And I fill in "content" with "Second blah blah"
+    And I press "Preview"
+    And I press "Post"
+  Then I should see "Chapter 2"
+  When I am logged out
+    And I am logged in as "fandomer" with password "password"
+    And I go to fandomer's reading page
+  Then I should not see "some work"
+  When I go to the works page
+    And I follow "some work"
+  Then I should not see "Second blah blah"
+  When I go to fandomer's reading page
+  Then I should see "some work"
+    And I should see "Number of times viewed: 1"
+  When I go to the works page
+    And I follow "some work"
+    And I follow "Next Chapter"
+  Then I should see "Second blah blah"
+  When I go to fandomer's reading page
+  Then I should see "some work"
+    And I should see "Number of times viewed: 2"
