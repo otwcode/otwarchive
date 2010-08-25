@@ -1,5 +1,5 @@
 <!-- This partial requires local variable 'chapter' -->
-<div class="chapter <%= 'draft' unless chapter.posted? %>">
+<div class="chapter<%= ' draft' unless chapter.posted? %>" id="chapter-<%= chapter.position.to_s %>">
 <!-- chapter management -->  
   <%- if is_author_of?(@work) && !@downloading -%>
 	<h3 class="landmark">Chapter Management</h3>
