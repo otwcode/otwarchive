@@ -9,6 +9,8 @@ Scenario: Autocomplete tags for new work
       | fandomer   | password   |
       And a fandom exists with name: "Supernatural", canonical: true
       And a fandom exists with name: "suppper", canonical: false
+      And a fandom exists with name: "Somesuper", canonical: true
+      And a fandom exists with name: "Some Super", canonical: true
       And a character exists with name: "Ellen Harvelle", canonical: true
       And a character exists with name: "ellen tigh", canonical: false
       And a relationship exists with name: "Destiel", canonical: false
@@ -20,6 +22,8 @@ Scenario: Autocomplete tags for new work
       And I fill in "Fandoms" with "Sup"
     Then I should find "Supernatural" within "div.auto_complete"
       But I should not find "suppper" within "div.auto_complete"
+      And I should find "Somesuper" within "div.auto_complete"
+      And I should find "Some Super" within "div.auto_complete"
     When I fill in "Characters" with "ellen"
     Then I should find "Ellen Harvelle" within "div.auto_complete"
       But I should not find "ellen tigh" within "div.auto_complete"
@@ -84,3 +88,38 @@ Scenario: URL autocomplete for external works
       And I fill in "URL" with "http://z"
     Then I should find "zooey-glass.dreamwidth.org"
       But I should not find "parenthetical.livejournal.com"
+
+Scenario: Autocompletes for all other stuff: co-authors, recipients, collections
+    Given the following activated users exist
+        | login          | password    |
+        | coauthor       | something   |
+        | cosomeone      | something   |
+        | giftee         | something   |
+        | recipient      | something   |
+      And I am logged in as "coauthor" with password "something"
+      And I follow "Profile"
+      And I follow "Manage My Pseuds"
+      And I follow "New Pseud"
+      And I fill in "Name" with "Pseud2"
+      And I press "Create"
+    Then I should see "Pseud was successfully created."
+    When I am logged out
+      And I am logged in as "cosomeone" with password "something"
+      And I go to the new work page
+      And I check "co-authors-options-show"
+      And I fill in "pseud_byline" with "co"
+    Then I should find "coauthor" within "div.auto_complete"
+      And I should find "Psued2" within ".auto_complete"
+      But I should not find "cosomeone" within ".auto_complete"
+    When I am logged out
+      And I am logged in as "coauthor" with password "something"
+      And I go to the new work page
+      And I check "co-authors-options-show"
+      And I fill in "pseud_byline" with "co"
+    Then I should find "Psued2" within ".auto_complete"
+      And I should find "cosomeone" within ".auto_complete"
+    
+    When I fill in "work_recipients" with "Gif"
+    Then I should find "giftee" within ".auto_complete"
+    
+    # TODO: Add collections, beef up the rest
