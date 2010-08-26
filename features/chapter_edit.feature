@@ -109,15 +109,14 @@ Feature: Edit chapters
     And I should see "Chapter 2"
     And I should see "Chapter 3"
     And I should see "Chapter 4"
+  When I am logged out
     
   # move chapters around using rearrange page
-  When I am logged out
-    And I am logged in as "epicauthor" with password "password"
+  When I am logged in as "epicauthor" with password "password"
     And I view the work "New Epic Work"
     And I follow "Edit"
     And I follow "Manage Chapters"
   Then I should see "Drag chapters to change their order."
-  Then show me the page
   When I fill in "chapters_1" with "4"
     And I fill in "chapters_2" with "3"
     And I fill in "chapters_3" with "2"
@@ -136,4 +135,3 @@ Feature: Edit chapters
     And I should see "entering chapter three out of order" within "#chapter-2"
     And I should see "Chapter 4"
     And I should see "entering last chapter out of order" within "#chapter-1"
-  
