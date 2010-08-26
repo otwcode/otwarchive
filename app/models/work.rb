@@ -439,7 +439,7 @@ class Work < ActiveRecord::Base
       new_series = Series.new
       new_series.title = attributes[:title]
       new_series.restricted = self.restricted
-      new_series.authors = (self.pseuds & (self.authors.blank? ? [] : self.authors)).flatten.uniq
+      new_series.authors = (self.pseuds + (self.authors.blank? ? [] : self.authors)).flatten.uniq
       new_series.save
       self.series << new_series
     end
