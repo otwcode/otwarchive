@@ -17,6 +17,7 @@ Feature: Collection
     And I create the fandom "Tiny fandom" with id 29
     And I create the fandom "Care Bears" with id 30
     And I create the fandom "Yuletide Hippos RPF" with id 31
+    And basic tags
     And a character exists with name: "John Sheppard", canonical: true
     And a character exists with name: "Teyla Emmagan", canonical: true
     And a character exists with name: "Obscure person", canonical: true
@@ -208,11 +209,107 @@ Feature: Collection
     And I wait 3 seconds
   When I reload the page
   Then I should see "Main Assignments"
-  When I follow "Send Assignments"
+    And I should not see "Missing Recipients"
+    And I should not see "Missing Givers"
+  
+  # mod sends assignments out
+  When all emails have been delivered
+    And I follow "Send Assignments"
   Then I should see "Assignments are now being sent out"
     And I should see "No defaulted assignments!"
     And I should see "Not yet posted"
-  When I follow "Settings"
+    And I should not see "No recipient"
+    # TODO: fix this broken line
+    # And 4 emails should be delivered
+  
+  # first user starts posting
+  When I follow "Log out"
+    And I am logged in as "myname1" with password "something"
+    And I go to myname1's user page
+  Then I should see "My Assignments (1)"
+  When I follow "My Assignments"
+  Then I should see "Writing For" within "table"
+    And I should see "myname" within "table"
+    And I should see "Yuletide" within "table"
+    And I should see "Post To Fulfill"
+  When I follow "Post To Fulfill"
+    And I fill in "work_title" with "Fulfilling Story"
+    And I fill in "content" with "This is an exciting story about Atlantis"
+    And I select "Not Rated" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "Fandom" with "Stargate SG-1"
+    And I press "Preview"
+  Then I should see "Preview"
+    And I should see "Draft was successfully created"
+    
+  # someone looks while it's still a draft
+  When I follow "Log out"
+    And I am logged in as "myname2" with password "something"
+    And I go to myname2's user page
+  Then I should see "My Gifts (0)"
+    And I should not see "My Gifts (1)"
+  When I follow "My Gifts"
+  Then I should not see "Stargate Atlantis"
+    And I should not see "myname" within "#main ul.gift"
+  When I go to the collections page
+    And I follow "Yuletide"
+  Then I should see "Works (0)"
+    And I should see "Fandoms (0)"
+  When I follow "Works (0)"
+  Then I should not see "Stargate"
+    And I should not see "myname" within "#main"
+  When I follow "Fandoms (0)"
+  Then I should not see "Stargate"
+    And I should not see "myname" within "#main"
+  When I follow "Random Items"
+  Then I should not see "Stargate"
+    And I should not see "myname" within "#main"
+    
+  # first user posts the work
+  When I follow "Log out"
+    And I am logged in as "myname1" with password "something"
+    And I go to myname1's user page
+    And I follow "My Drafts"
+  Then I should see "Fulfilling Story"
+  When I follow "Edit"
+    And I fill in "Fandoms" with "Stargate Atlantis"
+    And I press "Preview"
+  Then I should see "Preview"
+    And I should see "Fulfilling Story"
+    And I should see "myname" within "#main"
+    And I should see "Anonymous"
+  When I press "Post"
+  Then I should see "Work was successfully posted"
+    And I should see "For myname"
+    And I should see "Collections:"
+    And I should see "Yuletide" within ".meta"
+    And I should see "Anonymous"
+    
+  # someone tries to view it: TODO
+  
+  # mod reveals challenge on Dec 25th
+  When I follow "Log out"
+    And I am logged in as "mod1" with password "something"
+    And I go to the collections page
+    And I follow "Yuletide"
+    And I follow "Settings"
     And I uncheck "Is this collection currently unrevealed?"
     And I press "Submit"
   Then I should see "Collection was successfully updated"
+  
+  # someone views their gift and it is anonymous: TODO
+  
+  # mod reveals authors on Jan 1st
+  When issue "1847" is fixed
+  # When I follow "Log out"
+  When I am on the collections page
+    And I follow "Log out"
+    And I am logged in as "mod1" with password "something"
+    And I go to the collections page
+    And I follow "Yuletide"
+    And I follow "Settings"
+    And I uncheck "Is this collection currently anonymous?"
+    And I press "Submit"
+  Then I should see "Collection was successfully updated"
+  
+  # someone can now see their writer: TODO
