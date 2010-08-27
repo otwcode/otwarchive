@@ -7,9 +7,10 @@
 .user-generated-view .font-blue { color: blue; }
 .user-generated-view .font-pink { color: pink; }
 .user-generated-view .font-green { color: green; }
+.user-generated-view .font-yellow { color: yellow; }
 .user-generated-view .font-orange { color: orange; }
 .user-generated-view .font-teal { color: #008282; }
-.user-generated-view .font-vomityellow { color: #a1a100; }
+.user-generated-view .font-murkyyellow { color: #a1a100; }
 .user-generated-view .font-redbrown { color: #a15000; }
 .user-generated-view .font-cherryred { color: #e00707; }
 .user-generated-view .font-white { color: white; }
@@ -28,7 +29,7 @@
 .user-generated-view .font-mediumskyblue { color: #00d5f2; }
 .user-generated-view .font-lightpurple { color: #f141ef; }
 .user-generated-view .font-dimorange { color: #f2a400; }
-.user-generated-view .font-othergreen { color: #1f9400; }
+.user-generated-view .font-leafgreen { color: #1f9400; }
 
 /* other display */
 .user-generated-view .font-serif { font-family: "Cambria, Constantia, Palatino, Georgia, serif"; }
