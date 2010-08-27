@@ -4,6 +4,7 @@ class SkinsController < ApplicationController
   before_filter :load_skin, :except => [:index, :new, :create]
   before_filter :check_ownership, :only => [:edit, :update, :destroy]
   before_filter :check_visibility, :only => [:show]
+  before_filter :check_editability, :only => [:edit, :update, :destroy]
 
   def index
     if current_user && current_user.is_a?(User)
@@ -67,4 +68,25 @@ class SkinsController < ApplicationController
     @check_visibility_of = @skin
   end
 
+  def check_editability
+    unless @skin.editable?
+      flash[:error] = "This skin can't be edited anymore!"
+      redirect_to @skin and return 
+    end
+  end
+  
+  def destroy
+    @skin = Skin.find_by_id(params[:id])
+    begin
+      @skin.destroy
+    rescue
+      flash[:error] = t('deletion_failed', :default => "We couldn't delete that right now, sorry! Please try again later.")
+    end
+
+    if current_user && current_user.is_a?(User) && current_user.preference.skin_id == @skin.id
+      current_user.preference.update_attribute("skin_id", Skin.default.id)
+    end
+    redirect_to(skins_url(:q => "mine"))
+  end
+  
 end

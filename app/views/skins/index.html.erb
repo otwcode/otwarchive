@@ -31,12 +31,17 @@
     <% end %>
     <% if s.editable? %>
       <%= link_to t('.edit', :default => 'Edit skin'), edit_skin_url(s) %>
+      <%= link_to t('.delete', :default => 'Delete skin'), s, :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :delete %>
     <% end %>
     </h4>
     <% if logged_in? %>
     <%- form_for(@preference, :url => {:controller => :preferences, :action => :update, :user_id => current_user}, :method => "put") do |f| -%>
       <%= f.hidden_field :skin_id, :value => s.id %>
-    	<%= f.submit t('.forms.update', :default => "Use {{name}} skin", :name => s.title) %>
+      <% if s.id == current_user.preference.skin_id %>
+        <%= f.submit t('.forms.update_in_use', :default => "{{name}} skin (in use)", :name => s.title) %>
+      <% else %>
+        <%= f.submit t('.forms.update', :default => "Use {{name}} skin", :name => s.title) %>
+      <% end %>
     <%- end -%>
     <% end %>
   </span>

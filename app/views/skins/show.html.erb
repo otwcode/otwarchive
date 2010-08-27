@@ -22,4 +22,5 @@
 
 <% if @skin.editable? %>
   <%= link_to t('.edit', :default => 'Edit skin'), edit_skin_url(@skin) %>
+  <%= link_to t('.delete', :default => 'Delete skin'), @skin, :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :delete %>
 <% end %>
