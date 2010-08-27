@@ -12,9 +12,9 @@
   <dl>
     <dt>Wizard properties, if set</dt><dd>Note, these can be overridden by custom CSS</dd>
     <%- if @skin.margin -%><dt>Margin</dt><dd><%= h @skin.margin %><%- end  -%>
-    <%- if @skin.font -%><dt>Font</dt><dd><%= h @skin.font %><%- end  -%>
-    <%- if @skin.background_color -%><dt>Background color</dt><dd><%= h @skin.background_color %><%- end  -%>
-    <%- if @skin.foreground_color -%><dt>Foreground color</dt><dd><%= h @skin.foreground_color %><%- end  -%>
+    <%- unless @skin.font.blank? -%><dt>Font</dt><dd><%= h @skin.font %><%- end  -%>
+    <%- unless @skin.background_color.blank? -%><dt>Background color</dt><dd><%= h @skin.background_color %><%- end  -%>
+    <%- unless @skin.foreground_color.blank? -%><dt>Foreground color</dt><dd><%= h @skin.foreground_color %><%- end  -%>
     <%- if @skin.base_em -%><dt>Relative font size</dt><dd><%= h @skin.base_em %><%- end  -%>
   </dl>
 </div>
