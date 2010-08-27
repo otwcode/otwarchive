@@ -2,9 +2,9 @@
 chapter_00041: 
   posted: true
   position: 1
-  created_at: 2009-03-12 00:56:30 +00:00
+  created_at: 2009-03-12 00:56:30 Z
   title: ""
-  updated_at: 2009-06-19 11:12:16 +00:00
+  updated_at: 2009-06-19 12:12:16 Z
   notes: 
   word_count: 13
   id: 41
@@ -20,9 +20,9 @@ chapter_00041:
 chapter_00155: 
   posted: true
   position: 35
-  created_at: 2009-12-12 23:03:58 +00:00
+  created_at: 2009-12-12 23:03:58 Z
   title: Negotiations
-  updated_at: 2010-01-06 18:50:55 +00:00
+  updated_at: 2010-01-06 18:50:55 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1221
   id: 155
@@ -81,9 +81,9 @@ chapter_00155:
 chapter_00126: 
   posted: true
   position: 6
-  created_at: 2009-12-12 23:03:53 +00:00
+  created_at: 2009-12-12 23:03:53 Z
   title: Awakenings
-  updated_at: 2010-01-06 18:50:53 +00:00
+  updated_at: 2010-01-06 18:50:53 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1266
   id: 126
@@ -144,9 +144,9 @@ chapter_00126:
 chapter_00013: 
   posted: true
   position: 1
-  created_at: 2008-12-06 23:24:00 +00:00
+  created_at: 2008-12-06 23:24:00 Z
   title: ""
-  updated_at: 2009-06-19 11:12:15 +00:00
+  updated_at: 2009-06-19 12:12:15 Z
   notes: 
   word_count: 97
   id: 13
@@ -171,9 +171,9 @@ chapter_00013:
 chapter_00127: 
   posted: true
   position: 7
-  created_at: 2009-12-12 23:03:53 +00:00
+  created_at: 2009-12-12 23:03:53 Z
   title: Moya
-  updated_at: 2010-01-06 18:50:53 +00:00
+  updated_at: 2010-01-06 18:50:53 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 2783
   id: 127
@@ -281,9 +281,9 @@ chapter_00127:
 chapter_00070: 
   posted: true
   position: 1
-  created_at: 2009-07-17 22:21:52 +00:00
+  created_at: 2009-07-17 23:21:52 Z
   title: ""
-  updated_at: 2009-07-17 22:22:14 +00:00
+  updated_at: 2009-07-17 23:22:14 Z
   notes: 
   word_count: 1684
   id: 70
@@ -420,9 +420,9 @@ chapter_00070:
 chapter_00042: 
   posted: true
   position: 1
-  created_at: 2009-03-12 01:43:37 +00:00
+  created_at: 2009-03-12 01:43:37 Z
   title: ""
-  updated_at: 2009-06-19 11:12:16 +00:00
+  updated_at: 2009-06-19 12:12:16 Z
   notes: 
   word_count: 3
   id: 42
@@ -435,9 +435,9 @@ chapter_00042:
 chapter_00156: 
   posted: true
   position: 36
-  created_at: 2009-12-12 23:03:58 +00:00
+  created_at: 2009-12-12 23:03:58 Z
   title: Slumber Party
-  updated_at: 2010-01-06 18:50:55 +00:00
+  updated_at: 2010-01-06 18:50:55 Z
   notes: "AN: I apologize for the four-week wait but things got hectic and then I didn't have internet for three weeks. I hope the six posts (31-36) make up for it. Pathways is finally winding down and should be finished this week in time for the Sparky Awards. Thank you for being patient with me and thanks for reading."
   word_count: 1121
   id: 156
@@ -495,9 +495,9 @@ chapter_00156:
 chapter_00014: 
   posted: true
   position: 1
-  created_at: 2008-12-06 23:26:41 +00:00
+  created_at: 2008-12-06 23:26:41 Z
   title: ""
-  updated_at: 2009-06-19 11:12:15 +00:00
+  updated_at: 2009-06-19 12:12:15 Z
   notes: 
   word_count: 262
   id: 14
@@ -529,9 +529,9 @@ chapter_00014:
 chapter_00128: 
   posted: true
   position: 8
-  created_at: 2009-12-12 23:03:54 +00:00
+  created_at: 2009-12-12 23:03:54 Z
   title: Plans
-  updated_at: 2010-01-06 18:50:53 +00:00
+  updated_at: 2010-01-06 18:50:53 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 2037
   id: 128
@@ -625,9 +625,9 @@ chapter_00128:
 chapter_00071: 
   posted: true
   position: 1
-  created_at: 2009-07-17 22:25:26 +00:00
+  created_at: 2009-07-17 23:25:26 Z
   title: ""
-  updated_at: 2009-07-17 22:26:01 +00:00
+  updated_at: 2009-07-17 23:26:01 Z
   notes: 
   word_count: 2940
   id: 71
@@ -864,9 +864,9 @@ chapter_00071:
 chapter_00043: 
   posted: true
   position: 1
-  created_at: 2009-03-12 02:51:07 +00:00
+  created_at: 2009-03-12 02:51:07 Z
   title: ""
-  updated_at: 2009-06-19 11:12:16 +00:00
+  updated_at: 2009-06-19 12:12:16 Z
   notes: 
   word_count: 1
   id: 43
@@ -879,9 +879,9 @@ chapter_00043:
 chapter_00157: 
   posted: true
   position: 37
-  created_at: 2009-12-12 23:03:58 +00:00
+  created_at: 2009-12-12 23:03:58 Z
   title: Getting Back to Business
-  updated_at: 2009-12-12 23:04:05 +00:00
+  updated_at: 2009-12-12 23:04:05 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1054
   id: 157
@@ -930,9 +930,9 @@ chapter_00157:
 chapter_00015: 
   posted: true
   position: 1
-  created_at: 2008-12-06 23:34:39 +00:00
+  created_at: 2008-12-06 23:34:39 Z
   title: ""
-  updated_at: 2009-06-19 11:12:15 +00:00
+  updated_at: 2009-06-19 12:12:15 Z
   notes: 
   word_count: 74
   id: 15
@@ -948,9 +948,9 @@ chapter_00015:
 chapter_00129: 
   posted: true
   position: 9
-  created_at: 2009-12-12 23:03:54 +00:00
+  created_at: 2009-12-12 23:03:54 Z
   title: Prisoners
-  updated_at: 2010-01-06 18:50:53 +00:00
+  updated_at: 2010-01-06 18:50:53 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1295
   id: 129
@@ -1010,9 +1010,9 @@ chapter_00129:
 chapter_00072: 
   posted: true
   position: 1
-  created_at: 2009-07-17 22:28:47 +00:00
+  created_at: 2009-07-17 23:28:47 Z
   title: ""
-  updated_at: 2009-07-17 22:29:07 +00:00
+  updated_at: 2009-07-17 23:29:07 Z
   notes: 
   word_count: 3001
   id: 72
@@ -1243,9 +1243,9 @@ chapter_00072:
 chapter_00044: 
   posted: true
   position: 2
-  created_at: 2009-03-18 00:35:15 +00:00
+  created_at: 2009-03-18 00:35:15 Z
   title: Dilemma!
-  updated_at: 2009-06-19 11:12:16 +00:00
+  updated_at: 2009-06-19 12:12:16 Z
   notes: tralala
   word_count: 40
   id: 44
@@ -1263,9 +1263,9 @@ chapter_00044:
 chapter_00158: 
   posted: true
   position: 1
-  created_at: 2009-12-12 23:03:58 +00:00
+  created_at: 2009-12-12 23:03:58 Z
   title: Broken Doors
-  updated_at: 2010-01-06 18:50:55 +00:00
+  updated_at: 2010-01-06 18:50:55 Z
   notes: 
   word_count: 1448
   id: 158
@@ -1322,9 +1322,9 @@ chapter_00158:
 chapter_00016: 
   posted: true
   position: 1
-  created_at: 2008-12-07 20:52:14 +00:00
+  created_at: 2008-12-07 20:52:14 Z
   title: ""
-  updated_at: 2009-06-19 11:12:15 +00:00
+  updated_at: 2009-06-19 12:12:15 Z
   notes: 
   word_count: 398
   id: 16
@@ -1345,9 +1345,9 @@ chapter_00016:
 chapter_00073: 
   posted: true
   position: 1
-  created_at: 2009-07-17 22:33:24 +00:00
+  created_at: 2009-07-17 23:33:24 Z
   title: ""
-  updated_at: 2009-07-17 22:33:56 +00:00
+  updated_at: 2009-07-17 23:33:56 Z
   notes: 
   word_count: 959
   id: 73
@@ -1398,9 +1398,9 @@ chapter_00073:
 chapter_00045: 
   posted: true
   position: 3
-  created_at: 2009-03-18 03:46:59 +00:00
+  created_at: 2009-03-18 03:46:59 Z
   title: boomed chapter
-  updated_at: 2009-06-19 11:12:16 +00:00
+  updated_at: 2009-06-19 12:12:16 Z
   notes: ""
   word_count: 1
   id: 45
@@ -1413,9 +1413,9 @@ chapter_00045:
 chapter_00100: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:45:07 +00:00
+  created_at: 2009-12-12 21:45:07 Z
   title: ""
-  updated_at: 2009-12-12 21:45:15 +00:00
+  updated_at: 2009-12-12 21:45:15 Z
   notes: 
   word_count: 9
   id: 100
@@ -1428,9 +1428,9 @@ chapter_00100:
 chapter_00159: 
   posted: true
   position: 2
-  created_at: 2009-12-12 23:09:22 +00:00
+  created_at: 2009-12-12 23:09:22 Z
   title: The Extraterrestrial
-  updated_at: 2009-12-12 23:21:40 +00:00
+  updated_at: 2009-12-12 23:21:40 Z
   notes: "*******************************<br>Part 2: The Extra Terrestrial"
   word_count: 16339
   id: 159
@@ -1922,9 +1922,9 @@ chapter_00159:
 chapter_00017: 
   posted: true
   position: 1
-  created_at: 2009-02-22 04:25:24 +00:00
+  created_at: 2009-02-22 04:25:24 Z
   title: ""
-  updated_at: 2009-06-19 11:12:15 +00:00
+  updated_at: 2009-06-19 12:12:15 Z
   notes: 
   word_count: 12
   id: 17
@@ -1937,9 +1937,9 @@ chapter_00017:
 chapter_00074: 
   posted: true
   position: 1
-  created_at: 2009-07-17 22:38:12 +00:00
+  created_at: 2009-07-17 23:38:12 Z
   title: ""
-  updated_at: 2009-07-17 22:38:30 +00:00
+  updated_at: 2009-07-17 23:38:30 Z
   notes: 
   word_count: 2824
   id: 74
@@ -2166,9 +2166,9 @@ chapter_00074:
 chapter_00018: 
   posted: true
   position: 1
-  created_at: 2009-02-24 06:34:22 +00:00
+  created_at: 2009-02-24 06:34:22 Z
   title: ""
-  updated_at: 2009-06-19 11:12:15 +00:00
+  updated_at: 2009-06-19 12:12:15 Z
   notes: 
   word_count: 1
   id: 18
@@ -2181,9 +2181,9 @@ chapter_00018:
 chapter_00130: 
   posted: true
   position: 10
-  created_at: 2009-12-12 23:03:54 +00:00
+  created_at: 2009-12-12 23:03:54 Z
   title: Escape n Rescue
-  updated_at: 2010-01-06 18:50:54 +00:00
+  updated_at: 2010-01-06 18:50:54 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 2880
   id: 130
@@ -2293,9 +2293,9 @@ chapter_00130:
 chapter_00046: 
   posted: true
   position: 4
-  created_at: 2009-03-18 04:01:46 +00:00
+  created_at: 2009-03-18 04:01:46 Z
   title: shite
-  updated_at: 2009-06-19 11:12:16 +00:00
+  updated_at: 2009-06-19 12:12:16 Z
   notes: ""
   word_count: 1
   id: 46
@@ -2308,9 +2308,9 @@ chapter_00046:
 chapter_00101: 
   posted: true
   position: 1
-  created_at: 2009-12-12 22:14:12 +00:00
+  created_at: 2009-12-12 22:14:12 Z
   title: ""
-  updated_at: 2009-12-12 22:14:56 +00:00
+  updated_at: 2009-12-12 22:14:56 Z
   notes: 
   word_count: 390
   id: 101
@@ -2323,9 +2323,9 @@ chapter_00101:
 chapter_00076: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:10:08 +00:00
+  created_at: 2009-12-12 21:10:08 Z
   title: ""
-  updated_at: 2009-12-12 21:11:47 +00:00
+  updated_at: 2009-12-12 21:11:47 Z
   notes: 
   word_count: 326
   id: 76
@@ -2338,9 +2338,9 @@ chapter_00076:
 chapter_00131: 
   posted: true
   position: 11
-  created_at: 2009-12-12 23:03:54 +00:00
+  created_at: 2009-12-12 23:03:54 Z
   title: Who are you and where do you come from?
-  updated_at: 2010-01-06 18:50:54 +00:00
+  updated_at: 2010-01-06 18:50:54 Z
   notes: "************************************************************************ ***********************************************************************"
   word_count: 1513
   id: 131
@@ -2414,9 +2414,9 @@ chapter_00131:
 chapter_00047: 
   posted: true
   position: 5
-  created_at: 2009-03-18 04:05:17 +00:00
+  created_at: 2009-03-18 04:05:17 Z
   title: bleah
-  updated_at: 2009-06-19 11:12:16 +00:00
+  updated_at: 2009-06-19 12:12:16 Z
   notes: ""
   word_count: 1
   id: 47
@@ -2429,9 +2429,9 @@ chapter_00047:
 chapter_00102: 
   posted: true
   position: 1
-  created_at: 2009-12-12 22:43:32 +00:00
+  created_at: 2009-12-12 22:43:32 Z
   title: ""
-  updated_at: 2009-12-12 22:44:41 +00:00
+  updated_at: 2009-12-12 22:44:41 Z
   notes: 
   word_count: 4672
   id: 102
@@ -2626,9 +2626,9 @@ chapter_00102:
 chapter_00019: 
   posted: true
   position: 1
-  created_at: 2009-02-24 08:47:22 +00:00
+  created_at: 2009-02-24 08:47:22 Z
   title: ""
-  updated_at: 2009-06-19 11:12:15 +00:00
+  updated_at: 2009-06-19 12:12:15 Z
   notes: 
   word_count: 3
   id: 19
@@ -2641,9 +2641,9 @@ chapter_00019:
 chapter_00160: 
   posted: true
   position: 3
-  created_at: 2009-12-12 23:09:23 +00:00
+  created_at: 2009-12-12 23:09:23 Z
   title: Battlefield Moya
-  updated_at: 2009-12-12 23:21:40 +00:00
+  updated_at: 2009-12-12 23:21:40 Z
   notes: Part Three is dedicated to my friends who encouraged me while I panicked and were patient with me when I left them to write in the library, even without understanding why the hell I'm doing this or even what it's about exactly. (Et non, je ne vais pas la traduire!)
   word_count: 21070
   id: 160
@@ -3302,9 +3302,9 @@ chapter_00160:
 chapter_00077: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:11:01 +00:00
+  created_at: 2009-12-12 21:11:01 Z
   title: ""
-  updated_at: 2009-12-12 21:11:11 +00:00
+  updated_at: 2009-12-12 21:11:11 Z
   notes: 
   word_count: 23
   id: 77
@@ -3317,9 +3317,9 @@ chapter_00077:
 chapter_00132: 
   posted: true
   position: 12
-  created_at: 2009-12-12 23:03:54 +00:00
+  created_at: 2009-12-12 23:03:54 Z
   title: Walkabout
-  updated_at: 2010-01-06 18:50:54 +00:00
+  updated_at: 2010-01-06 18:50:54 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 2191
   id: 132
@@ -3424,9 +3424,9 @@ chapter_00132:
 chapter_00048: 
   posted: true
   position: 6
-  created_at: 2009-03-18 04:06:50 +00:00
+  created_at: 2009-03-18 04:06:50 Z
   title: simple
-  updated_at: 2009-06-19 11:12:16 +00:00
+  updated_at: 2009-06-19 12:12:16 Z
   notes: ""
   word_count: 1
   id: 48
@@ -3439,9 +3439,9 @@ chapter_00048:
 chapter_00103: 
   posted: true
   position: 1
-  created_at: 2009-12-12 22:47:33 +00:00
+  created_at: 2009-12-12 22:47:33 Z
   title: ""
-  updated_at: 2009-12-12 22:47:44 +00:00
+  updated_at: 2009-12-12 22:47:44 Z
   notes: 
   word_count: 2870
   id: 103
@@ -3454,9 +3454,9 @@ chapter_00103:
 chapter_00161: 
   posted: true
   position: 4
-  created_at: 2009-12-12 23:09:24 +00:00
+  created_at: 2009-12-12 23:09:24 Z
   title: "2010: Earth Odyssey"
-  updated_at: 2009-12-12 23:21:41 +00:00
+  updated_at: 2009-12-12 23:21:41 Z
   notes: "*****************************<br>Part 4: 2010: Earth Odyssey"
   word_count: 25454
   id: 161
@@ -4245,9 +4245,9 @@ chapter_00161:
 chapter_00078: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:11:53 +00:00
+  created_at: 2009-12-12 21:11:53 Z
   title: ""
-  updated_at: 2009-12-12 21:12:04 +00:00
+  updated_at: 2009-12-12 21:12:04 Z
   notes: 
   word_count: 37
   id: 78
@@ -4263,9 +4263,9 @@ chapter_00078:
 chapter_00133: 
   posted: true
   position: 13
-  created_at: 2009-12-12 23:03:54 +00:00
+  created_at: 2009-12-12 23:03:54 Z
   title: Equations
-  updated_at: 2010-01-06 18:50:54 +00:00
+  updated_at: 2010-01-06 18:50:54 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1108
   id: 133
@@ -4316,9 +4316,9 @@ chapter_00133:
 chapter_00049: 
   posted: true
   position: 1
-  created_at: 2009-03-18 04:08:12 +00:00
+  created_at: 2009-03-18 04:08:12 Z
   title: ""
-  updated_at: 2009-06-19 11:12:16 +00:00
+  updated_at: 2009-06-19 12:12:16 Z
   notes: 
   word_count: 1
   id: 49
@@ -4331,9 +4331,9 @@ chapter_00049:
 chapter_00104: 
   posted: true
   position: 1
-  created_at: 2009-12-12 22:51:14 +00:00
+  created_at: 2009-12-12 22:51:14 Z
   title: ""
-  updated_at: 2009-12-12 22:51:22 +00:00
+  updated_at: 2009-12-12 22:51:22 Z
   notes: 
   word_count: 1557
   id: 104
@@ -4346,9 +4346,9 @@ chapter_00104:
 chapter_00105: 
   posted: true
   position: 2
-  created_at: 2009-12-12 22:54:02 +00:00
+  created_at: 2009-12-12 22:54:02 Z
   title: Second Time Through
-  updated_at: 2009-12-12 23:02:21 +00:00
+  updated_at: 2009-12-12 23:02:21 Z
   notes: "Bridges 2: Second Time Through"
   word_count: 4777
   id: 105
@@ -4487,9 +4487,9 @@ chapter_00105:
 chapter_00162: 
   posted: true
   position: 5
-  created_at: 2009-12-12 23:09:25 +00:00
+  created_at: 2009-12-12 23:09:25 Z
   title: Epilogue
-  updated_at: 2009-12-12 23:21:42 +00:00
+  updated_at: 2009-12-12 23:21:42 Z
   notes: "Author's note: Okay, I know I should have had this out about three months ago but now that I'm in school, I have no time and oh so many other distractions from writing. So now that I've caught up on sleep, I know I can't put it off any longer. Thank you all for being patient (and if you weren't, like I get when authors take forever to finish their fic - don't tell me. My sisters probably give me enough flak to make up for all of yours.) So let the denounment begin..."
   word_count: 2019
   id: 162
@@ -4579,9 +4579,9 @@ chapter_00162:
 chapter_00079: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:13:13 +00:00
+  created_at: 2009-12-12 21:13:13 Z
   title: ""
-  updated_at: 2009-12-12 21:19:17 +00:00
+  updated_at: 2009-12-12 21:19:17 Z
   notes: 
   word_count: 159
   id: 79
@@ -4625,9 +4625,9 @@ chapter_00079:
 chapter_00134: 
   posted: true
   position: 14
-  created_at: 2009-12-12 23:03:54 +00:00
+  created_at: 2009-12-12 23:03:54 Z
   title: Storm Front
-  updated_at: 2010-01-06 18:50:54 +00:00
+  updated_at: 2010-01-06 18:50:54 Z
   notes: "**************************************************************************** ********************************************************************"
   word_count: 1690
   id: 134
@@ -4708,9 +4708,9 @@ chapter_00134:
 chapter_00106: 
   posted: true
   position: 3
-  created_at: 2009-12-12 22:54:02 +00:00
+  created_at: 2009-12-12 22:54:02 Z
   title: Three Minutes Late
-  updated_at: 2009-12-12 23:02:21 +00:00
+  updated_at: 2009-12-12 23:02:21 Z
   notes: "Bridges 3: Three Minutes Late"
   word_count: 3524
   id: 106
@@ -4825,9 +4825,9 @@ chapter_00106:
 chapter_00163: 
   posted: true
   position: 6
-  created_at: 2009-12-12 23:09:25 +00:00
+  created_at: 2009-12-12 23:09:25 Z
   title: Original Author's Notes
-  updated_at: 2009-12-12 23:09:37 +00:00
+  updated_at: 2009-12-12 23:09:37 Z
   notes: "Part 1:"
   word_count: 1631
   id: 163
@@ -4879,9 +4879,9 @@ chapter_00163:
 chapter_00021: 
   posted: true
   position: 1
-  created_at: 2009-03-09 15:43:33 +00:00
+  created_at: 2009-03-09 15:43:33 Z
   title: ""
-  updated_at: 2009-06-19 11:12:15 +00:00
+  updated_at: 2009-06-19 12:12:15 Z
   notes: 
   word_count: 2
   id: 21
@@ -4896,9 +4896,9 @@ chapter_00021:
 chapter_00135: 
   posted: true
   position: 15
-  created_at: 2009-12-12 23:03:54 +00:00
+  created_at: 2009-12-12 23:03:54 Z
   title: Rushing About
-  updated_at: 2010-01-06 18:50:54 +00:00
+  updated_at: 2010-01-06 18:50:54 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1149
   id: 135
@@ -4953,9 +4953,9 @@ chapter_00135:
 chapter_00107: 
   posted: true
   position: 4
-  created_at: 2009-12-12 22:54:02 +00:00
+  created_at: 2009-12-12 22:54:02 Z
   title: Four Phone Calls
-  updated_at: 2009-12-12 23:02:21 +00:00
+  updated_at: 2009-12-12 23:02:21 Z
   notes: "Bridges 4: Four Phone Calls"
   word_count: 4360
   id: 107
@@ -5141,9 +5141,9 @@ chapter_00107:
 chapter_00050: 
   posted: true
   position: 1
-  created_at: 2009-03-18 04:09:43 +00:00
+  created_at: 2009-03-18 04:09:43 Z
   title: ""
-  updated_at: 2009-06-19 11:12:16 +00:00
+  updated_at: 2009-06-19 12:12:16 Z
   notes: 
   word_count: 18
   id: 50
@@ -5161,9 +5161,9 @@ chapter_00050:
 chapter_00164: 
   posted: true
   position: 1
-  created_at: 2009-12-12 23:09:26 +00:00
+  created_at: 2009-12-12 23:09:26 Z
   title: A Distant Encounter of the Third Kind
-  updated_at: 2009-12-12 23:21:42 +00:00
+  updated_at: 2009-12-12 23:21:42 Z
   notes: 
   word_count: 14905
   id: 164
@@ -5642,9 +5642,9 @@ chapter_00164:
 chapter_00022: 
   posted: true
   position: 1
-  created_at: 2009-03-09 16:31:18 +00:00
+  created_at: 2009-03-09 16:31:18 Z
   title: ""
-  updated_at: 2009-06-19 11:12:15 +00:00
+  updated_at: 2009-06-19 12:12:15 Z
   notes: 
   word_count: 4
   id: 22
@@ -5657,9 +5657,9 @@ chapter_00022:
 chapter_00136: 
   posted: true
   position: 16
-  created_at: 2009-12-12 23:03:55 +00:00
+  created_at: 2009-12-12 23:03:55 Z
   title: Guns 'n' Roses
-  updated_at: 2010-01-06 18:50:54 +00:00
+  updated_at: 2010-01-06 18:50:54 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1647
   id: 136
@@ -5743,9 +5743,9 @@ chapter_00136:
 chapter_00108: 
   posted: true
   position: 5
-  created_at: 2009-12-12 22:54:03 +00:00
+  created_at: 2009-12-12 22:54:03 Z
   title: Five Days Under the Sun
-  updated_at: 2009-12-12 23:02:21 +00:00
+  updated_at: 2009-12-12 23:02:21 Z
   notes: Hola! Yes, I am alive and yes, I am getting your reviews that keep asking me where the next update is. I realize it's been three+ weeks, but I did warn you and I'm not apologizing. But now that dead week, finals week, and spring break are finished, I will be hopefully updating every week. I actually would have had this part up more quickly if it had stuck to the length of the first four chapters, but as it is almost twice as long and I wanted to finish it before posting. So think of the extra time lag as the time it took to get out more than you normally would get. (Ha!)
   word_count: 8165
   id: 108
@@ -5992,9 +5992,9 @@ chapter_00108:
 chapter_00051: 
   posted: true
   position: 1
-  created_at: 2009-03-19 01:02:12 +00:00
+  created_at: 2009-03-19 01:02:12 Z
   title: ""
-  updated_at: 2009-06-19 11:12:16 +00:00
+  updated_at: 2009-06-19 12:12:16 Z
   notes: 
   word_count: 9
   id: 51
@@ -6007,9 +6007,9 @@ chapter_00051:
 chapter_00165: 
   posted: false
   position: 1
-  created_at: 2009-12-12 23:24:56 +00:00
+  created_at: 2009-12-12 23:24:56 Z
   title: ""
-  updated_at: 2009-12-12 23:24:56 +00:00
+  updated_at: 2009-12-12 23:24:56 Z
   notes: 
   word_count: 9019
   id: 165
@@ -6536,9 +6536,9 @@ chapter_00165:
 chapter_00137: 
   posted: true
   position: 17
-  created_at: 2009-12-12 23:03:55 +00:00
+  created_at: 2009-12-12 23:03:55 Z
   title: Boom Ship
-  updated_at: 2010-01-06 18:50:54 +00:00
+  updated_at: 2010-01-06 18:50:54 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1030
   id: 137
@@ -6609,9 +6609,9 @@ chapter_00137:
 chapter_00080: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:13:50 +00:00
+  created_at: 2009-12-12 21:13:50 Z
   title: 
-  updated_at: 2009-12-12 21:13:50 +00:00
+  updated_at: 2009-12-12 21:13:50 Z
   notes: 
   word_count: 501
   id: 80
@@ -6678,18 +6678,18 @@ chapter_00080:
     <i> </i>
     <table align="center" width="90%"><tr>
     <td width="30%"> 
-          
+    
     <p align="center"><a href="mailto:llwyden@trickster.org">Send me Feedback</a> 
         </p>
     </td>
         <td width="40%"> 
-          
+    
     <p align="center"><a href="index.html">Return to Gabriel Knight Fiction 
             Page</a> 
         </p>
     </td>
         <td width="30%"> 
-          
+    
     <p align="center"><a href="../index.html">Return to Fiction Index</a> 
         </p>
     </td>
@@ -6699,16 +6699,16 @@ chapter_00080:
     
     
     
-     
     
-      
+    
+    
     <p><b><i>Pages created and maintained
     
     
     by Lorelei</i></b></p>
-      
+    
     <p><b><i>Last modified 30 December 2007</i></b></p>
-      
+    
     <p>&nbsp; </p>
     
     <i></i>
@@ -6720,9 +6720,9 @@ chapter_00080:
 chapter_00109: 
   posted: true
   position: 6
-  created_at: 2009-12-12 22:54:03 +00:00
+  created_at: 2009-12-12 22:54:03 Z
   title: Six Hours Till Dinner
-  updated_at: 2009-12-12 23:02:21 +00:00
+  updated_at: 2009-12-12 23:02:21 Z
   notes: "Author's Notes: Thanks once again for everyone who reviewed and to everyone reading and enjoying Bridges. I love hearing from you because it lets me know what's confusing and what people are looking for in my story. So just a few things I'd like to respond to."
   word_count: 9419
   id: 109
@@ -6941,9 +6941,9 @@ chapter_00109:
 chapter_00052: 
   posted: true
   position: 1
-  created_at: 2009-03-20 01:24:26 +00:00
+  created_at: 2009-03-20 01:24:26 Z
   title: ""
-  updated_at: 2009-06-19 11:12:16 +00:00
+  updated_at: 2009-06-19 12:12:16 Z
   notes: 
   word_count: 1
   id: 52
@@ -6956,9 +6956,9 @@ chapter_00052:
 chapter_00166: 
   posted: true
   position: 1
-  created_at: 2009-12-12 23:27:58 +00:00
+  created_at: 2009-12-12 23:27:58 Z
   title: ""
-  updated_at: 2009-12-12 23:32:29 +00:00
+  updated_at: 2009-12-12 23:32:29 Z
   notes: 
   word_count: 51133
   id: 166
@@ -8139,9 +8139,9 @@ chapter_00166:
 chapter_00138: 
   posted: true
   position: 18
-  created_at: 2009-12-12 23:03:55 +00:00
+  created_at: 2009-12-12 23:03:55 Z
   title: Change in Down
-  updated_at: 2010-01-06 18:50:54 +00:00
+  updated_at: 2010-01-06 18:50:54 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1795
   id: 138
@@ -8209,9 +8209,9 @@ chapter_00138:
 chapter_00081: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:13:51 +00:00
+  created_at: 2009-12-12 21:13:51 Z
   title: 
-  updated_at: 2009-12-12 21:13:51 +00:00
+  updated_at: 2009-12-12 21:13:51 Z
   notes: 
   word_count: 1774
   id: 81
@@ -8429,18 +8429,18 @@ chapter_00081:
     <i> </i>
     <table align="center" width="90%"><tr>
     <td width="30%"> 
-          
+    
     <p align="center"><a href="mailto:llwyden@trickster.org">Send me Feedback</a> 
         </p>
     </td>
         <td width="40%"> 
-          
+    
     <p align="center"><a href="index.html">Return to Gabriel Knight Fiction 
             Page</a> 
         </p>
     </td>
         <td width="30%"> 
-          
+    
     <p align="center"><a href="../index.html">Return to Fiction Index</a> 
         </p>
     </td>
@@ -8450,16 +8450,16 @@ chapter_00081:
     
     
     
-     
     
-      
+    
+    
     <p><b><i>Pages created and maintained
     
     
     by Lorelei</i></b></p>
-      
+    
     <p><b><i>Last modified 30 December 2007</i></b></p>
-      
+    
     <p>&nbsp; </p>
     
     <i></i>
@@ -8471,9 +8471,9 @@ chapter_00081:
 chapter_00053: 
   posted: true
   position: 1
-  created_at: 2009-03-20 01:28:02 +00:00
+  created_at: 2009-03-20 01:28:02 Z
   title: ""
-  updated_at: 2009-06-19 11:12:16 +00:00
+  updated_at: 2009-06-19 12:12:16 Z
   notes: 
   word_count: 12
   id: 53
@@ -8486,9 +8486,9 @@ chapter_00053:
 chapter_00082: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:13:52 +00:00
+  created_at: 2009-12-12 21:13:52 Z
   title: 
-  updated_at: 2009-12-12 21:13:52 +00:00
+  updated_at: 2009-12-12 21:13:52 Z
   notes: 
   word_count: 2028
   id: 82
@@ -8506,18 +8506,18 @@ chapter_00082:
         truth be told, he still preferred feeling ground beneath his feet, despite 
         a deep, irrational fear that Aragorn would show up in the midst of everything 
         and scold him for the impropriety. </p>
-      
+    
     <p>"Peregrin Took, you look 
         fine and dashing," his wife informed him fondly from the other side of the 
         room. "Stop fussing." She walked over and stretched up to peck him on the 
         cheek as she finished tying her sash. </p>
-      
+    
     <p>"You always say that," 
         he protested as she shoved him before her out the door. </p>
-      
+    
     <p>"Well, it's nearly always 
         true. Now come on, we'll be late!" </p>
-      
+    
     <p>They hurried out of Bag 
         End and down the hill to the party field. Sam had been there all morning, 
         one of his burdens as Mayor; Rose, Marigold, and Tom had herded the youngsters 
@@ -8525,14 +8525,14 @@ chapter_00082:
         He'd have one of his own, soon -- they'd just found out for certain a few 
         days ago -- but he couldn't even imagine having that many small ones at once. 
     </p>
-      
+    
     <p>They could hear the squealing 
         of various children as they made their way to the gate, and were nearly bowled 
         over by a pair of unknown youngsters on their way in. The younger stopped 
         to gape up at Pippin, and he mock-scowled at the boy, whose eyes widened before 
         he ran off after his friend. Pippin answered Diamond's sideways look with 
         an innocent expression, and she snorted indelicately. </p>
-      
+    
     <p>The field was a study 
         in gaiety and chaos -- every anniversary of the Battle of Bywater was a festive 
         occasion, but this year, the tenth, had been specially planned. Participants, 
@@ -8543,184 +8543,184 @@ chapter_00082:
         last in the Shire. <i>But no fireworks this time,</i> he thought wistfully. 
         <i>No Gandalf. Though with any luck, no peculiar disappearances, either!</i> 
     </p>
-      
+    
     <p>"Takes your mind back, 
         don't it?" Sam came up and nodded around at the gathering. </p>
-      
+    
     <p>"Yes." Pippin nodded.</p>
-      
+    
     <p>"Mayor Gamgee," Diamond 
         greeted him politely. Then noticing Pippin's distraction, she touched him 
         lightly on the shoulder and wandered off to leave them together.</p>
-      
+    
     <p>Introspection not a natural 
         state of mind for him, though, Pippin soon shrugged it off, and hugged Sam 
         in welcome. Scanning the noisy, milling crowd, he voiced one of the only two 
         questions that mattered. "Is there plenty of food to go around?"</p>
-      
+    
     <p>Sam frowned worriedly, 
         though he nodded. "There ought to be. That is, we've got enough of the foodstuffs. 
         The only question is if we can cook it up fast enough. For all we started 
         yesterday, it's not near as quick to make as eat!"</p>
-      
+    
     <p>Pippin grinned cheekily 
         and slapped him on the back. "Best of luck to you, Master Mayor; I place perfect 
         trust in your ability."</p>
-      
+    
     <p>Sam squinted up at him. 
         "By which you mean to say, it's better me than you."</p>
-      
+    
     <p>"Exactly. Is --"</p>
-      
+    
     <p>"Mister Merry's not shown 
         yet, though I've no doubt he'll make it for elevenses," Sam answered. "If 
         you don't mind being useful till he does turn up, we've still some tables 
         and such as need setting out."</p>
-      
+    
     <p>Pippin laughed; one consequence 
         of being the biggest around was that he inevitably got drafted to help with 
         the lifting. <i>Oh, well,</i> he thought ruefully. <i>Need to keep able to 
         fit the uniform somehow.</i> "Lead on, Sam."</p>
-      
     
-      
+    
+    
     <p>He was straightening a 
         trestle, cursing his mailshirt and the unseasonable warmth impartially, when 
         a creak of leather behind him made him spin so fast Merry nearly spilled the 
         flagons of ale he carried.</p>
-      
+    
     <p>"Merry!" Grabbing the 
         ale and thunking it down unceremoniously on the table, Pippin threw his arms 
         around his best friend, and they hugged each other close.</p>
-      
+    
     <p>"It's so good to see you, 
         Pip." Merry's voice was thick with emotion.</p>
-      
+    
     <p>"And you." They each took 
         a half-step back, gazing long at each other, hands on their shoulders as if 
         afraid to let go. Merry in his horseman's boots topped Pip by several inches, 
         but he otherwise looked the same as ever. "It's been almost a year," Pippin 
         lamented.</p>
-      
+    
     <p>"Yes." Merry smiled wistfully. 
         "And longer since we've really spent some time together. Between my cousins 
         and your dad-in-law..."</p>
-      
+    
     <p>Pippin snorted. "If I 
         ever volunteer like that again, please tie me up and thump me soundly."</p>
-      
+    
     <p>Merry laughed and pulled 
         Pippin back into his arms. "I have missed you, Pip."</p>
-      
+    
     <p>"You remember that next 
         time you tell me to go soak my head," Pippin shot back cheerfully, poking 
         him in the chest. "Come on, then -- we'd best get out while we can, or they'll 
         put you to work as well. Hurry!" Grabbing Merry by the hand, he ran for the 
         back way, pulling him along.</p>
-      
+    
     <p>They made it out safely 
         and headed over the back side of Bag End and down to the water. Just the other 
         side of a small copse of trees, they threw themselves down breathlessly in 
         the long grass.</p>
-      
+    
     <p>Pippin picked his head 
         up long enough to peer back through the branches. "Don't think anyone saw 
         us," he said after a moment.</p>
-      
+    
     <p>"Peregrin Took," Merry 
         shook his head, "you're as daft as a tweenager. What if somebody needs us?"</p>
-      
+    
     <p>"For what?" Pippin asked 
         archly. "No speeches before supper, anyhow. Though now I think on it, I do 
         wish we'd rescued some ale first. I'm parched!" He leaned down to drink from 
         the river, dunking his face in for good measure.</p>
-      
+    
     <p>"I did try," Merry pointed 
         out.</p>
-      
+    
     <p>Pippin shrugged philosophically. 
         "We'll just have more later. To make up for lost time. Speaking of which..." 
         A glint in his eye, he leaned closer to Merry, close enough that their breath 
         mingled. "Hello." He leaned in the last inch, their lips melting slowly together. 
         This heat was welcome, and their tongues flicked out to touch and dance lightly 
         together, then dove deeper, each in turn.</p>
-      
+    
     <p>They were both breathing 
         heavily as they separated. Pippin smiled, then cocked his head at Merry's 
         stunned expression. "What is it? Merry?"</p>
-      
+    
     <p>Merry shook his head, 
         both to clear it and in answer. "I didn't know ... I wasn't sure that you 
         wanted to go on with me." It was Pippin's turn to look shocked, and Merry 
         shrugged at him uncomfortably. "You've got Diamond, now."</p>
-      
+    
     <p>Pippin frowned at him 
         fiercely. "Meriadoc Brandybuck, I told you it wouldn't make a difference. 
         It's sheer bad luck we haven't been together since then, and I mean to mend 
         that now." He reached out decisively and undid Merry's brooch, casting his 
         cloak to one side.</p>
-      
+    
     <p>"But what if --" Pippin 
         reached for Merry's buckles, but Merry grabbed his hand, his face growing 
         stern. "We've got duties now, Pip. You have a wife, you need an heir --"</p>
-      
+    
     <p>"Got one," Pippin informed 
         him succinctly.</p>
-      
+    
     <p>"What?"</p>
-      
+    
     <p>He grinned at having startled 
         his friend. "Diamond's carrying now. Mum says it's a boy, and she ought to 
         know."</p>
-      
+    
     <p>"How can she?" Merry asked, 
         momentarily distracted.</p>
-      
+    
     <p>Pippin shrugged. "How 
         am I supposed to know? Some female thing, no doubt. Come on, Merry," he pouted. 
         "Are you done being responsible yet?" He gave up on the disrobing and simply 
         launched himself at the other hobbit, landing full-length on top of him. He 
         nuzzled Merry's cheek and traced his jawline with the tip of his nose, then 
         leaned in further to lick along the tendons of his neck. </p>
-      
+    
     <p>Merry's breath caught 
         in his throat, but he shook his head. "I like Diamond --"</p>
-      
+    
     <p>Pippin ran his tongue 
         back up to Merry's lips and plunged it into his mouth in a fierce but brief 
         kiss. "So do I," he answered. "I like her very much. I like you more, and 
         she knows that. You don't think I'd try to keep it from her? Not that I probably 
         could," he acknowledged his wife's keen mind wryly.</p>
-      
+    
     <p>Merry looked up at him 
         searchingly, painful hope dawning on his face. "Truly?"</p>
-      
+    
     <p>Smiling, Pippin leaned 
         in for another kiss, slower this time, filled with more love than lust. Merry 
         joined in wholeheartedly this time, and they lingered over it, rediscovering 
         long-missed tastes and textures. Their hands tangled in each other's hair, 
         then moved lower, only to stop suddenly as they both laughed.</p>
-      
+    
     <p>Pippin snickered down 
         at Merry. "There is no romantic way out of mail, I don't think." He sat back, 
         pulling the surcoat over his head.</p>
-      
+    
     <p>"I think it's to stop 
         you fooling about on duty," Merry informed him sardonically. "No, wait."</p>
-      
+    
     <p>Pippin stopped, hands 
         on his mailshirt. "What?"</p>
-      
+    
     <p>Merry sat up, leaving 
         Pippin to kneel over his legs, and reached for the shirt himself. Running 
         his fingers down the closely-knit links, he slid his thumbs under the bottom 
         edge and raised his hands, gathering the mail as he went, his eyes never leaving 
         Pippin's.</p>
-      
+    
     <p>Pippin raised his arms 
         automatically as Merry slid his hands through the shirt's neck to caress his 
         face, protecting his hair from the chain as he slid it off.</p>
-      
+    
     <p>"I take it back," Pippin 
         managed after a moment. Merry grinned. Nevertheless, they resumed peeling 
         off their layers of armour with more alacrity than seduction. Somehow, it 
@@ -8728,15 +8728,15 @@ chapter_00082:
         resulted in the process taking twice as long as it should have and the royal 
         emblems of Gondor and Rohan lying strewn about the grass beside the two now 
         madly giggling hobbits.</p>
-      
+    
     <p>The hilarity changed to 
         deeper joy as they lay back in each other's arms, hands now freely roaming 
         over sun-warmed, familiar flesh.</p>
-      
+    
     <p>They kissed again, sucking 
         at each other's lips, the sensations rushing through their bodies, intensified 
         at every point they met.</p>
-      
+    
     <p>Pippin sighed happily 
         and pulled at Merry's bottom lip with his teeth, licking inside it, encouraging 
         Merry's tongue back into his own mouth. Merry's hands ran down his sides and 
@@ -8746,7 +8746,7 @@ chapter_00082:
         nipples, making him groan and arch up as much as he was able. He shifted, 
         and Pippin rolled to one side, giving them both greater freedom of movement. 
     </p>
-      
+    
     <p>After so long apart, they 
         had little patience for the finer complexities of lovemaking. That could come 
         later in the day, or the week. For this time, they swiftly reached the never-forgotten 
@@ -8756,50 +8756,50 @@ chapter_00082:
         piercing them through with delight. They cried out one last time and lay still, 
         panting in the grass. Pippin collapsed to lay half on Merry, the closeness 
         more important than any heat, and they remained there for some time in silence.</p>
-      
+    
     <p>Eventually, Merry stirred 
         underneath him. "Are we expected for anything other than meals?"</p>
-      
+    
     <p>Pippin shrugged and squirmed 
         closer yet. "Not that I know of."</p>
-      
+    
     <p>"Good." Merry sounded 
         half-asleep already; loving often took him like that.</p>
-      
+    
     <p>"Go to sleep, old gaffer," 
         Pippin teased him. "Have to keep your strength up."</p>
-      
+    
     <p>Merry smacked him smartly 
         on the arse. "I'll show you old," he affirmed around a yawn, and glared at 
         Pippin even as his eyes drifted closed. "Soon as I wake up," he vowed. </p>
-      
+    
     <p>Pippin watched him fondly 
         and caressed his shoulder and arm with simple possessive joy. "I look forward 
         to it," he told his sleeping lover, and settled in to wait. "Old, and older, 
         and oldest."</p>
-      
     
-      
+    
+    
     
     <p align="center"><img src="../images/lotr/shiresumr.jpg" height="445" width="464"></img></p>
-      
+    
     
     
     <table align="center" width="90%"><tr>
     <td width="30%"> 
-          
+    
     <p align="center"><a href="mailto:llwyden@trickster.org" class="link">Send 
             me Feedback</a> 
         </p>
     </td>
         <td width="40%"> 
-          
+    
     <p align="center"><a href="index.html" class="link">Return to Lord of the 
             Rings Fiction Page</a> 
         </p>
     </td>
         <td width="30%"> 
-          
+    
     <p align="center"><a href="../index.html" class="link">Return to Fiction 
             Index</a> 
         </p>
@@ -8812,7 +8812,7 @@ chapter_00082:
     
     
     by Lorelei</i></b></p>
-      
+    
     <p><b><i>Last modified 13 March 2004</i></b></p>
   summary: 
   published_at: 2009-12-12
@@ -8822,9 +8822,9 @@ chapter_00082:
 chapter_00054: 
   posted: true
   position: 1
-  created_at: 2009-03-20 23:11:56 +00:00
+  created_at: 2009-03-20 23:11:56 Z
   title: ""
-  updated_at: 2009-06-19 11:12:16 +00:00
+  updated_at: 2009-06-19 12:12:16 Z
   notes: 
   word_count: 5
   id: 54
@@ -8837,9 +8837,9 @@ chapter_00054:
 chapter_00167: 
   posted: true
   position: 1
-  created_at: 2009-12-12 23:52:00 +00:00
+  created_at: 2009-12-12 23:52:00 Z
   title: ""
-  updated_at: 2009-12-12 23:53:29 +00:00
+  updated_at: 2009-12-12 23:53:29 Z
   notes: 
   word_count: 2963
   id: 167
@@ -9066,9 +9066,9 @@ chapter_00167:
 chapter_00139: 
   posted: true
   position: 19
-  created_at: 2009-12-12 23:03:55 +00:00
+  created_at: 2009-12-12 23:03:55 Z
   title: In Flight Conversation
-  updated_at: 2010-01-06 18:50:54 +00:00
+  updated_at: 2010-01-06 18:50:54 Z
   notes: "**************************************************************************** ********************************************************************"
   word_count: 1279
   id: 139
@@ -9137,9 +9137,9 @@ chapter_00139:
 chapter_00083: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:13:53 +00:00
+  created_at: 2009-12-12 21:13:53 Z
   title: 
-  updated_at: 2009-12-12 21:13:53 +00:00
+  updated_at: 2009-12-12 21:13:53 Z
   notes: 
   word_count: 1131
   id: 83
@@ -9155,7 +9155,7 @@ chapter_00083:
         of Rohan whips around Edoras on its high hill, and his cloak and robes billow 
         around him unceasingly. His hair streams out silver-white in the sun, gleaming 
         brighter than Meduseld's golden roof behind us.</p>
-      
+    
     <p>I still search for signs of the 
         Gandalf that was -- Mithrandir, the Grey Pilgrim, hair the colour of stormclouds 
         and experience mapped in his face and hands. But as he looks out over the 
@@ -9165,19 +9165,19 @@ chapter_00083:
         the grit and the sweat of humanity. I cannot think of him drinking beer in 
         a tavern, muddy feet on a stool, blowing many-shaped smoke rings. Will his 
         successor? </p>
-      
+    
     <p>Then he sighs and shakes his head, 
         turns from his contemplation, and he could be no-one else. The wry humour 
         that twists his mouth, the fondness and life twinkling in those still-grey 
         eyes -- this is my beloved friend.</p>
-      
+    
     <p>"North, you said?"</p>
-      
+    
     <p>I nod, and point out Eomer's path 
         to him, near as I can make it from our vantage point. "But exiled or not, 
         I think it likely he will keep to the trails of orcs and wild men. He did 
         not strike me as one to flee from a fight." </p>
-      
+    
     <p>He nods in return and squeezes 
         my shoulder. His hand stays there as our eyes search for any hint of the exiles, 
         though even Legolas could not find them now. But perhaps this new Gandalf, 
@@ -9186,13 +9186,13 @@ chapter_00083:
         his task are coming. This war with Sauron must end soon, and he will either 
         fall or return whence he came. Almost, I could wish this conflict would continue, 
         so long as he would remain with us. With me. I do not want to lose him again.</p>
-      
+    
     <p>Yet he returned. I close my eyes 
         to remember the moment, the joy that froze me in my tracks. Not the same as 
         before, but he is with us. Perhaps. We have been on the move since the grey 
         dawn of morning, no time for comfort, and indeed I do not even know if this 
         new Gandalf has need of any. </p>
-      
+    
     <p>I open my eyes to find him looking 
         at me. His brow creases as if in pain, a look I am familiar with. Often the 
         same look would chide me when I had missed something painfully obvious. I 
@@ -9201,36 +9201,36 @@ chapter_00083:
         face may not show all his years, but that does not mean those times have been 
         erased. He could appear as young as the children playing in the city, and 
         that would not change who he is. </p>
-      
+    
     <p>I was raised in the house of Elrond; 
         I know the truth of the Istari. Had I become acquainted with Saruman as a 
         child, perhaps that knowledge would have overawed me, but learning the ways 
         of Mithrandir only made me curious, hungering for more of his knowledge and 
         company. Much of what I learned of the world, I can trace to his wisdom. Or 
         to his foolishness.</p>
-      
+    
     <p>He lifts his hand to hail one of 
         Theoden's guards, and I miss its presence almost immediately. The man hurries 
         over to us, bowing before the great wizard, and I hide my smile at what my 
         friend would undoubtedly call senseless flattery, given this same man denied 
         us entrance earlier, with little courtesy.</p>
-      
+    
     <p>"Which villages to the north still 
         stand?"</p>
-      
+    
     <p>Too few, as it happens. The wild 
         men have done their master's work well. Yet fewer of the Rohirrim have died 
         than I would expect. He dismisses the guard and we are on our own once again. 
         He sighs. "How far Saruman has fallen." His voice is deep and weary, and I 
         curl my hand around the one on his staff, taking the other in a strong grip.</p>
-      
+    
     <p>"We will not fail. We must not."</p>
-      
+    
     <p>He smiles at me, and his smile 
         is the same I remember from childhood, my mentor approving of some new skill 
         learned, and from my adulthood, my dearest friend sharing confidences or a 
         blanket. And that is a comfort we've not had in too long.</p>
-      
+    
     <p>It was not a smile I got when first 
         I stroked him as a lover, I remember; it was a laugh. Never have I been refused 
         so courteously! But as Lord Elrond may attest, I am a stubborn suitor. A child 
@@ -9239,11 +9239,11 @@ chapter_00083:
         heart may beat in their chest, their blood can still be stirred as ours. But 
         in these darkened days, the delight of men must give way to necessity. I stroke 
         his hand where I hold it, the only pleasure we can take at this moment.</p>
-      
+    
     <p>"We will prevail," he agrees, but 
         I know he has not seen it. He speaks from the same hope and fear that I do. 
         We can allow no other outcome here, not even in our thoughts.</p>
-      
+    
     <p>He lays a hand on my cheek for 
         a moment, then turns to go. I follow him to the stables, unwilling to part 
         sooner than we must. So little time since I thought him dead, and all our 
@@ -9251,35 +9251,35 @@ chapter_00083:
         come to quiet conversation, and time is too precious to squander on the confirmation 
         of his being my body and heart would have. Instead, I will trust to him as 
         I always have, and fight for him and with him.</p>
-      
+    
     <p>I have no kingdom, and he would 
         tell me to keep my sword for my own use. War is no time for the giving of 
         hearts. My body he may have again, if fate is good, but that will wait. All 
         I can offer him in these hours are my allegiance and my promise: Rohan's defences 
         will hold until his return.</p>
-      
+    
     <p>And, I promise him silently as 
         he rides off, lit by his own light as well as that of the sun, so will I.</p>
-      
     
-        
+    
+    
     
     
     <table align="center" width="90%"><tr>
     <td width="30%"> 
-          
+    
     <p align="center"><a href="mailto:llwyden@trickster.org" class="link">Send 
             me Feedback</a> 
         </p>
     </td>
         <td width="40%"> 
-          
+    
     <p align="center"><a href="index.html" class="link">Return to Lord of the 
             Rings Fiction Page</a> 
         </p>
     </td>
         <td width="30%"> 
-          
+    
     <p align="center"><a href="../index.html" class="link">Return to Fiction 
             Index</a> 
         </p>
@@ -9302,9 +9302,9 @@ chapter_00083:
 chapter_00055: 
   posted: true
   position: 1
-  created_at: 2009-03-20 23:14:14 +00:00
+  created_at: 2009-03-20 23:14:14 Z
   title: ""
-  updated_at: 2009-06-19 11:12:17 +00:00
+  updated_at: 2009-06-19 12:12:17 Z
   notes: 
   word_count: 7
   id: 55
@@ -9317,9 +9317,9 @@ chapter_00055:
 chapter_00110: 
   posted: true
   position: 7
-  created_at: 2009-12-12 22:54:04 +00:00
+  created_at: 2009-12-12 22:54:04 Z
   title: Seven Swans
-  updated_at: 2009-12-12 23:02:21 +00:00
+  updated_at: 2009-12-12 23:02:21 Z
   notes: "AN: Shout out to all my wonderful readers and a big thanks to everyone who reviews. It means a lot and keeps me working."
   word_count: 8923
   id: 110
@@ -9596,9 +9596,9 @@ chapter_00110:
 chapter_00168: 
   posted: true
   position: 1
-  created_at: 2009-12-13 16:31:45 +00:00
+  created_at: 2009-12-13 16:31:45 Z
   title: Buggery!
-  updated_at: 2009-12-18 18:25:32 +00:00
+  updated_at: 2009-12-18 18:25:32 Z
   notes: 
   word_count: 356
   id: 168
@@ -9628,9 +9628,9 @@ chapter_00168:
 chapter_00056: 
   posted: true
   position: 1
-  created_at: 2009-03-20 23:17:43 +00:00
+  created_at: 2009-03-20 23:17:43 Z
   title: ""
-  updated_at: 2009-06-19 11:12:17 +00:00
+  updated_at: 2009-06-19 12:12:17 Z
   notes: 
   word_count: 9
   id: 56
@@ -9643,9 +9643,9 @@ chapter_00056:
 chapter_00111: 
   posted: true
   position: 8
-  created_at: 2009-12-12 22:54:04 +00:00
+  created_at: 2009-12-12 22:54:04 Z
   title: Eight Men in Black
-  updated_at: 2009-12-12 23:02:22 +00:00
+  updated_at: 2009-12-12 23:02:22 Z
   notes: "AN: Just a few things to mention. First, yes the chapter titles are done on purpose and have something to do with the chapter. It actually started by accident (much like the story) and it wasn't until ch 3 that I started doing it intentionally. Second, the slayer activation at puberty is something I made up because it was never mentioned in the last two minutes of the season finale how it was going to work. And the idea of slayers younger than twelve is just scary."
   word_count: 9360
   id: 111
@@ -9870,9 +9870,9 @@ chapter_00111:
 chapter_00169: 
   posted: true
   position: 1
-  created_at: 2009-12-18 17:56:45 +00:00
+  created_at: 2009-12-18 17:56:45 Z
   title: ""
-  updated_at: 2009-12-18 17:57:27 +00:00
+  updated_at: 2009-12-18 17:57:27 Z
   notes: 
   word_count: 2363
   id: 169
@@ -10227,9 +10227,9 @@ chapter_00169:
 chapter_00027: 
   posted: true
   position: 1
-  created_at: 2009-03-09 21:54:33 +00:00
+  created_at: 2009-03-09 21:54:33 Z
   title: ""
-  updated_at: 2009-06-19 11:12:15 +00:00
+  updated_at: 2009-06-19 12:12:15 Z
   notes: 
   word_count: 3
   id: 27
@@ -10242,9 +10242,9 @@ chapter_00027:
 chapter_00084: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:13:54 +00:00
+  created_at: 2009-12-12 21:13:54 Z
   title: 
-  updated_at: 2009-12-12 21:13:55 +00:00
+  updated_at: 2009-12-12 21:13:55 Z
   notes: 
   word_count: 5875
   id: 84
@@ -10264,9 +10264,9 @@ chapter_00084:
 chapter_00140: 
   posted: true
   position: 20
-  created_at: 2009-12-12 23:03:55 +00:00
+  created_at: 2009-12-12 23:03:55 Z
   title: Galley Philosophy
-  updated_at: 2010-01-06 18:50:54 +00:00
+  updated_at: 2010-01-06 18:50:54 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1780
   id: 140
@@ -10343,9 +10343,9 @@ chapter_00140:
 chapter_00085: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:13:56 +00:00
+  created_at: 2009-12-12 21:13:56 Z
   title: 
-  updated_at: 2009-12-12 21:13:56 +00:00
+  updated_at: 2009-12-12 21:13:56 Z
   notes: 
   word_count: 1251
   id: 85
@@ -10363,9 +10363,9 @@ chapter_00085:
 chapter_00057: 
   posted: true
   position: 1
-  created_at: 2009-03-20 23:20:17 +00:00
+  created_at: 2009-03-20 23:20:17 Z
   title: ""
-  updated_at: 2009-06-19 11:12:17 +00:00
+  updated_at: 2009-06-19 12:12:17 Z
   notes: 
   word_count: 5
   id: 57
@@ -10378,9 +10378,9 @@ chapter_00057:
 chapter_00112: 
   posted: true
   position: 9
-  created_at: 2009-12-12 22:54:05 +00:00
+  created_at: 2009-12-12 22:54:05 Z
   title: Nine Lives of Scary Cats
-  updated_at: 2009-12-12 23:02:22 +00:00
+  updated_at: 2009-12-12 23:02:22 Z
   notes: "Bridges 9: Nine Lives of Scary Cats"
   word_count: 10060
   id: 112
@@ -10657,9 +10657,9 @@ chapter_00112:
 chapter_00086: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:13:56 +00:00
+  created_at: 2009-12-12 21:13:56 Z
   title: 
-  updated_at: 2009-12-12 21:13:57 +00:00
+  updated_at: 2009-12-12 21:13:57 Z
   notes: 
   word_count: 625
   id: 86
@@ -10774,9 +10774,9 @@ chapter_00086:
 chapter_00141: 
   posted: true
   position: 21
-  created_at: 2009-12-12 23:03:55 +00:00
+  created_at: 2009-12-12 23:03:55 Z
   title: New Plan
-  updated_at: 2010-01-06 18:50:54 +00:00
+  updated_at: 2010-01-06 18:50:54 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1438
   id: 141
@@ -10844,12 +10844,237 @@ chapter_00141:
   endnotes: 
   work_id: 98
   hidden_by_admin: false
+chapter_00058: 
+  posted: true
+  position: 1
+  created_at: 2009-03-20 23:22:23 Z
+  title: ""
+  updated_at: 2009-06-19 12:12:17 Z
+  notes: 
+  word_count: 14
+  id: 58
+  content: wherein John and Ronon figure out that they can share! all is well again.
+  summary: 
+  published_at: 2009-03-20
+  endnotes: 
+  work_id: 51
+  hidden_by_admin: false
+chapter_00113: 
+  posted: true
+  position: 10
+  created_at: 2009-12-12 22:54:05 Z
+  title: Ten Years Taken Off of Life
+  updated_at: 2009-12-12 23:02:22 Z
+  notes: "Bridges 10: Ten Years Taken Off of Life"
+  word_count: 8452
+  id: 113
+  content: "<p>Bridges 10: Ten Years Taken Off of Life</p>\n\
+    <p>AN: Two things. First, I'm sorry taking so long with this part. I had little writer's impediment (of execution and not ideas) that had me rewriting most of this a dozen times. On top of that, it's that time of the quarter again when homework abounds and everything is due. On the bright side I have through chapter 16 outlined on 'paper' finally.</p>\n\
+    <p>Secondly, I've gotten a few notes about consistency of details such as Jack's estimations of how much Buffy weighs (Ch 2 and 9) and Courtney's age (Ch 7 and 9) and Xander's initial response to Jack being in the military (he says army in Ch 2). I just wanted to explain that because the story is being told from two points of view that often theses little things are deliberate since this is what Xander and Jack's reactions are. Unless it has been explicitly told to either of them, they don't know and are free to make assumptions and estimations as they see fit, and they're not always going to remember the exact numbers they came up with the last time they did so a week or months earlier. That said, sometimes they are screwups on my part because this is a really long story and it's difficult to keep track of everything.</p>\n\
+    <p>Last: Thanks go to my new beta reader Finn for finding and fixing all those nasty typos and stuff. Cheers!</p>\n\
+    <hr>Ten Years Taken Off of Life<hr>A brisk breeze greeted Xander when he stepped outside onto the back porch, escaping the after-dinner cleanup in the kitchen. Jack stood on the steps in borrowed shoes, having slipped away as soon as he could. He was looking up at the stars, muted by the neighborhood lights, and a waxing moon when Xander joined him, the older man barely acknowledging his presence with a slight flicker of his eyes.<p>Xander didn't know what to say so he said nothing and simply looked over the back yard that seemed to glow from the reflected light on the snow. It was his first winter in Cleveland and Xander had already had enough snow to last him a lifetime. The delight of those first flakes had quickly given way to weary annoyance as more just fell from the sky. Though making snow angels had been fun back in November. Dawn, Vi, and Diana had gone all out with a snow vampire too and then practiced demolishing it.</p>\n\
+    <p>Jack hadn't moved from stargazing when Xander snuck a look at him. Following his eyes to the constellations, he wondered what the older man saw when he looked up there. Teal'c's planet? Were there other aliens that had made contact with Earth? Were they a threat, he couldn't help but wonder given that it was a top military secret. Xander had never given much thought to it. E.T. was about as far as he had gotten in thinking about life from other planets. Though there had been that Queller demon the year of Glory. Probably all sorts of things living on the moon. Did that mean then, that aliens were really demons? Murray or Teal'c, or whatever his name was, was certainly human enough looking. His beanie probably hid an ingrown horn or something.</p>\n\
+    <p>He wanted to ask about a million things, but Jack didn't look like he was up for questions he probably couldn't answer anyway. It was as if he had completely forgotten Xander was there even though he had been standing there for at least a minute in the freezing cold that didn't seem to be bothering Jack. They were back to the not talking awkwardness of those first meetings last summer. Not that they had really pushed the big things before, or at all, but now that they had both fessed up to being Batman, it was as if Jack didn't even know where to start, and neither did Xander for that matter. Here they were, standing on a dark winter's night, supposing to be friends. \"So aliens,\" Xander said breaking the stillness. He still wasn't sure how he felt about that, somewhere up there on the cool but weirded out scale.</p>\n\
+    <p>\"Yep,\" said Jack without moving, his eyes remaining on the stars.</p>\n\
+    <p>Xander decided to take the verbal response as a good sign. \"How'd that happen?\"</p>\n\
+    <p>Jack sighed and finally looked away from the sky at him. \"It's classified,\" he said softly, his words underscored by regret both in his voice and eyes and how they quickly darted away.</p>\n\
+    <p>\"I guess I'm gonna get that a lot, aren't I?\" said Xander just as softly, also looking away over the yard. Jack didn't answer. \"So much for sharing.\" So much for getting past the gaping plot holes in their lives.</p>\n\
+    <p>\"Xander,\" Jack sounded tired. \"You already know too much.\"</p>\n\
+    <p>\"I don't know anything,\" Xander countered. \"I only know you have an alien in a mountain in Colorado. Except here, now because some guys want you to retire or something.\"</p>\n\
+    <p>\"It's a power play and definitely more than you should know,\" said Jack with annoyance. \"I don't know what Willow did with the computer stuff or the . . . the . . . thing she did with Teal'c, but whatever it was I wish she hadn't. I don't know how I'm going to explain this to the General,\" he sighed again, running a hand through his hair. \"The computer breach alone is going to send him through the roof.\"</p>\n\
+    <p>\"Willow's not in any trouble, is she?\" Xander asked apprehensively. Jack gave him a what-do-you-think look that obviously said 'yes' in big bold letters. \"It was completely justified, you know,\" he replied, immediately defending his friend.</p>\n\
+    <p>\"I know. If I was in your place I'd have ordered the same thing,\" Jack nodded, then asked after a pause, \"The magic stuff's real, isn't it? Not some sort of technology? Even seeing the thing in the basement . . .\" he trailed off, but Xander understood. There was nothing like watching someone do their mojo to make you a believer.</p>\n\
+    <p>\"Yeah, it's real.\"</p>\n\
+    <p>\"Is she really going to erase their memories?\"</p>\n\
+    <p>\"She's done it before,\" Xander replied.</p>\n\
+    <p>\"Could you do it?\"</p>\n\
+    <p>\"Me? No,\" said Xander, his thoughts flickering back to both times Tara had broken up with Willow because of memory magic. He remembered Anya wondering later if this would have fallen in her jurisdiction had she still been a 'justice' demon. \"I don't hone my inner warlock.\" Off Jack's questioning look he added, \"Even with a spell to follow it takes skill and power to do something drastic like that. I can only do the little stuff any idiot who can read can do.\"</p>\n\
+    <p>Jack smiled a little at that but it didn't reach his eyes. Instead he regarded Xander as if he were searching for something but couldn't find it, and it was beginning to make him uncomfortable. \"What?\" Xander finally asked, hoping against hope that he didn't have alfredo sauce anywhere embarrassing.</p>\n\
+    <p>\"Nothing,\" said Jack glancing away, the awkwardness like a shroud between them. But there was definitely a something there.</p>\n\
+    <p>\"What?\" Xander repeated as his curiosity won out over caution.</p>\n\
+    <p>\"It's nothing. Really,\" said Jack looking up and away again, crossing then uncrossing his arms and jamming his hands in his pockets. \"I was just thinking about . . . about how much I don't know about you at all.\"</p>\n\
+    <p>\"Yeah, well same here,\" Xander agreed. A lifetime's worth of stuff he thought, even as the word 'classified' echoed in his mind. \"But I guess you won't tell me much about what you do.\"</p>\n\
+    <p>\"There's all this paperwork and a pesky court martial if you spill the beans,\" Jack said regretfully, and Xander knew he was too good of an officer to do that. \"So vampires,\" Jack echoed his earlier comment about aliens. \"Andrew showed us his bite mark.\" Xander smiled at that. \"How did you find out about them?\"</p>\n\
+    <p>\"I met Buffy,\" said Xander pretty much summing up the day everything changed with a slightly nostalgic smile. \"Tenth grade. I overheard her and Giles talking about them in the library first day of school, then Buffy saved Willow from a vamp a few days later and, voila, the beginning of a beautiful friendship full of untold danger with a dash of terror thrown in for kicks.\" The rest was history, Xander added to himself even as Jack regarded him with a carefully neutral expression. High school felt so long ago now, like a dream that bordered on a nightmare but one you still recognized as just a dream that you could wake yourself up from if it got too bad.</p>\n\
+    <p>\"How much danger?\" Jack asked.</p>\n\
+    <p>Xander looked at him for a moment wondering how much to tell him. He'd never told his own parents, his mom and the man he'd thought was his father, never told them anything. Even at his wedding all of Anya's friends had been introduced as circus people still in costume. Tony had been too drunk to notice.</p>\n\
+    <p>But Jack wasn't Tony. Jack had noticed and he had worried and he hadn't been put off by excuses. His words from a week ago \xE2\x80\x93 'you are my business' \xE2\x80\x93 suddenly came back to him, and Xander decided that he wanted this to work. He wanted what Buffy had found with her mom and not what Willow held onto with her own parents from afar.</p>\n\
+    <p>\"It's dangerous. We fight against creatures that go out every night to find someone to eat. People die,\" he said. \"Do you remember about Jesse?\" he paused, continuing when Jack nodded at the familiar name. \"He was the first vampire I staked.\" Jack started at this but Xander went on. \"Me, Giles, Willow, we've all lost a girlfriend along the way, in Buffy's case two boyfriends. Two years ago I lost my eye.\"</p>\n\
+    <p>\"A fight?\"</p>\n\
+    <p>He nodded abruptly. \"I got in the way of a really powerful guy who was more interested in playing. Thought it'd be funny,\" he added with a bitter twist to his lips. The memory of how it felt, the sickening squish of his left eye into his head still gave him nightmares, and even now made him shudder.</p>\n\
+    <p>\"I'm sorry,\" said Jack but Xander carefully shrugged it away. It wasn't going to bring his eye back, or Anya or any of the other slayers or Tara or Jenny or kids he'd grown up with or . . . he stopped because he could think of too many more people that were dead or forever hurt by the supernatural. \"I guess . . .\" said Jack, \"at this point it's pointless to ask you to stop.\" He crossed his arms across his chest again as if he were trying to distance himself from the Xander's life.</p>\n\
+    <p>\"Pretty much,\" Xander agreed though he appreciated him saying it. But there was too much work to be done, too many reasons to stay. The fight had become so much of his life that he didn't think he would ever be able to just walk away.</p>\n\
+    <p>\"Why do you train them?\" asked Jack suddenly. \"The girls. If it's so dangerous they shouldn't be anywhere near this.\"</p>\n\
+    <p>'Them' being the slayers, Xander couldn't fault him for demanding an answer, but at the same time there was no choice in the matter. \"That's what Courtney's parents said,\" he said quietly. \"They wouldn't let Courtney come to training last summer. Didn't take us seriously. If they had, maybe they'd be alive now.\" He returned Jack's heavy gaze with one of his own. \"It's not fair and it's not easy but slayers just can't ignore the Slayer inside. It gets them killed.\"</p>\n\
+    <p>Jack sighed and ran his hand over his face as he absorbed this, clearly not happy with the situation.</p>\n\
+    <p>\"Xander,\" the back door banged open and Andrew leaned around it while keeping his feet safely inside. \"Buffy wants you. Courtney's aunt and uncle are here,\" he said before quickly closing the door on the cold.</p>\n\
+    <p>\"I gotta go,\" Xander turned back to Jack who simply nodded without looking at him. After a tense moment when neither one of them said anything, Xander left him on the porch and went inside. When he glanced out the window as he kicked off his shoes, Jack was again staring at the stars.</p>\n\
+    <hr>Jack's eyes flittered from Orion to Cassiopeia seeing planets filled with trees and people he didn't understand, and he felt suddenly that he was on another such planet now as anger gave way to helplessness. It reminded him of the children on that one world upon whom the fate of their people rested to the point where they hadn't a chance to just be kids. Here it felt worse: the slayers were losing their innocence to violence. They were essentially soldiers born to fight a never-ending war. And despite what Xander had told him about Courtney, Jack almost had a mind to go up to Giles or Buffy and demand that they just stop training them and let professionals take care of the vampires.<p>And Xander . . . tenth grade, Jack thought. He'd been what? Fifteen? Sixteen years-old? Christ. It made him wonder again if this was all real because sixteen was just way too young to be killing what was left of your best friend. It was a wonder Xander was as normal as he was. Hell, he was still a kid to Jack, younger than most of the recruits they saw at the SGC. But at the same time so much older.</p>\n\
+    <p>There had to be another way. This just couldn't be the only way to hold off all the . . . ugly evil things. Maybe he could talk to Davis about it since this would fall into the category of national security. At least he hoped so. If the government didn't know and hadn't done anything about it at this point, convincing the people who mattered might be a little difficult but if he could get Xander's help with the briefing, or even Buffy's, he was sure they could at least get people thinking about it. And put a bullseye on the girls . . . so maybe not Buffy's help. If they spun it right though, the Pentagon would never have to know about the girls or Xander or anybody, just the monsters.</p>\n\
+    <p>With a parting look at the stars, Jack went back into the house quickly passing through the now clean kitchen and the dining room into the den. On the floor in front of the tv, Teal'c and Andrew were playing Jedi Knights while Daniel, Carter, and Dawn chatted on the couch. Or rather on closer inspection, Daniel and Carter were discussing mythology that could be reinterpreted while Dawn read a book and cast glances at the foyer.</p>\n\
+    <p>\"Hey, Jack,\" Daniel greeted him looking up from the conversation when he walked in. His eyebrows lifted slightly in a small frown as if to ask Jack if he was all right. Nodding in response to both the greeting and the question, Jack glanced once more over the sparely populated room.</p>\n\
+    <p>\"Where is everyone?\" he asked.</p>\n\
+    <p>\"Xander, Giles, Buffy, and Courtney are with her relatives in the front room,\" Carter supplied. \"Don't know where Willow and Kennedy are.\"</p>\n\
+    <p>\"On patrol,\" Dawn spoke up.</p>\n\
+    <p>\"Patrol?\"</p>\n\
+    <p>\"In the city,\" she said. \"I think tonight's the west side. Today's Sunday, right?\"</p>\n\
+    <p>\"So they're out looking for . . . \" Daniel didn't know quite how to finish but Dawn understood anyway.</p>\n\
+    <p>\"The usual fledges and signs of impending doom. Not much happens around Christmas though.\" She cast another look at the foyer before shrugging. \"They'll probably make a date out of it.\"</p>\n\
+    <p>Jack stared at her and wondered if she even heard what she was saying. What Xander had just told him was a very dangerous life where people died Dawn was shrugging off as nothing to worry about. \"When are they checking in?\" he asked perhaps a little more harshly than he intended.</p>\n\
+    <p>\"You mean call?\" asked Dawn. \"They'll only do that if they need help. Otherwise they'll be back by morning at the latest.\"</p>\n\
+    <p>Morning was an awful long time for them to be out there on their own, especially in a city at night where other dangers lurked besides the ones they were looking for. They could be mugged or trapped in a bad neighborhood or lost, and Dawn wasn't even sure where they were? To Jack's military mind, that was too many risks to take without enough back up.</p>\n\
+    <p>\"What do you mean by 'signs of impending doom?'\" asked Daniel, getting back to her earlier comment.</p>\n\
+    <p>\"Weird stuff that doesn't fall into the normal category of weird,\" Dawn frowned, having trouble defining it herself. \"Like, really strong demons \xE2\x80\x93 or talkative, threatening ones. Or missing artifacts from graves. Stuff like that . . .\" she shrugged. \"It's the kind of stuff that when you see it, you know it's gonna be bad, I guess. Though sometimes we miss it till it's almost too late.\"</p>\n\
+    <p>Her last comment didn't sound very reassuring and neither was the thoughtful look on her face that was obviously thinking of specific examples. \"What sort of impending doom are we talking about here?\" asked Jack sharply.</p>\n\
+    <p>Dawn glanced at Andrew on the floor who snuck a look over his shoulder full of apprehension and a hundred meanings. \"Massacres,\" said Dawn carefully. \"Rituals for any number of things. Sometimes the end of the world.\"</p>\n\
+    <p>\"End of the world?\" Jack asked in chorus with Daniel and Carter. Even Teal'c paused in his game with Andrew and looked up at this news.</p>\n\
+    <p>\"It hasn't really happened in while,\" Dawn rushed on to reassure them, but Jack if anything felt even less reassured. \"There's only been, like, one major try here, everything else's been local scale stuff.\"</p>\n\
+    <p>\"You're saying there have been attempts to end the world?\" asked Daniel who was the first to recover. \"What are we talking about here? A magical destruction of Earth's existence or some apocalyptic scenario of wide spread natural destruction? There are many myths that \xE2\x80\x93\"</p>\n\
+    <p>\"Hell on Earth,\" Dawn interrupted, her bluntness prompting him and everyone to silence. \"Mostly they just want that.\"</p>\n\
+    <p>Jack's mind flashed to Netu, the Goa'uld hell world that had been beyond anything he had ever imagined that Hell could be. If Dawn's definition was anything like what they'd been through . . . but it couldn't be, right? But if it was . . . Jack's outrage only increased at what these kids were dealing with. Damnit, they knew. SG-1 had been there, done that and bought out the save-the-world t-shirts. It was difficult enough when you had years of training to fall back on. \"And Willow and Kennedy are out there on their own?\" he asked. Looking for things that wanted Hell?</p>\n\
+    <p>\"They're not going to die from walking in the street,\" said Dawn as if it were obvious but nonetheless on the defensive. \"You should pity who they meet.\"</p>\n\
+    <p>\"Besides nothing smart is stupid enough to attack them if Willow's there,\" added Andrew in that brand of logic that was prevalent around this house which Jack for the life of him couldn't follow. He took a small measure of relief from the fact that both Carter and Daniel looked at each other in mild confusion before turning to the young man and asking,</p>\n\
+    <p>\"Why would they be afraid of Willow?\" asked Daniel. It was a very good question, and one that Jack wanted an answer to as well. Andrew blushed under the sudden scrutiny, shifting uncomfortably from side to side as everyone stared at him for the split second before Dawn drew SG-1's attention back to her.</p>\n\
+    <p>\"Willow's a witch,\" she said which was no answer at all since Jack and his teammates had already surmised as much from dinner. And from what Xander had said, she had enough skill and power to do more than low level spells, whatever that meant exactly.</p>\n\
+    <p>\"Just how powerful is she?\" asked Jack suspiciously. Because if even the bad guys were afraid of her \xE2\x80\x93 and from Dawn's uncomfortable glance away, that was more telling than anything she could have said. Willow added up to more than just average. Andrew was suddenly very absorbed in his video game, doing moves even though Teal'c was no longer actively playing. \"Dawn?\" Jack turned back to the young woman on the couch.</p>\n\
+    <p>\"What?\" she said defensively. \"She's good, big deal.\"</p>\n\
+    <p>Jack didn't answer. Big deal, indeed. It didn't really change anything except for the fact that Willow's power was considered something not to be discussed, but maybe they were simply wary of talking to virtual strangers about it, especially with the problems they had with the military in general. Don't let the enemy know just how powerful your weapons really are. Carter and Daniel for once taking their cue from him didn't press the matter, instead simply exchanging looks with Jack, Teal'c, and each other. At every turn, things were more than they seemed, convincing Jack further that these kids needed help. And that matter of national security? Hell on Earth definitely qualified.</p>\n\
+    <p>Sudden shouting from the direction of the foyer broke off any further thought of how exactly Jack was going to get them help. \"You expect . . . believe . . . crap?!\" an unfamiliar man yelled, his words obscured by the doors and distance. Every head in the den snapped up but the reply was too soft to hear. Then, \"No!! We . . . Courtney away . . . lunatics . . . police . . . near my niece again!!\"</p>\n\
+    <p>\"They . . . dead . . . didn't listen . . .!!\" he heard Buffy shout back this time. \". . . want that?!\"</p>\n\
+    <p>\"Stay away . . .!!\"</p>\n\
+    <p>\"Hey!!\" That was Xander.</p>\n\
+    <p>\"Stop it!! Stop it!! Stop it!! Stop it!!\" Courtney's high voice broke over the argument ringing clearly through the house. \"They're dead!\" she screamed, her voice breaking at the sudden abuse. \"Vampires . . . right in front of me! They . . . screaming and they died! They died!!\" Then the sound of a door crashing open and running feet and the front door slamming open and closed. Dawn jumped up and ran after her while Jack and the rest of them got up, bewildered and wondering if they should follow or not. Andrew was the first to move, going to the window and pulling the curtain back just enough to see out into the front yard. Jack and his teammates soon joined him. In the background they could hear the murmuring voices of those in the sitting room.</p>\n\
+    <p>Outside under the dull illumination of a street light, Courtney had run to one of the three trees in the front yard and started hitting it, knocking snow from the branches above. Dawn stood several feet behind her, not trying to stop her but waiting until she had tired herself out and collapsed to the ground. Then Dawn was there, cautiously at first then suddenly pulling the younger girl into a close hug as her anguished sobs echoed softly through the night.</p>\n\
+    <p>\"Oh, god,\" Daniel whispered as they pulled away from the window, the haunted look in his eye no doubt remembering the loss of his own parents as a child.</p>\n\
+    <p>\"I thought . . .\" Carter never finished her sentence but from the stunned look on her face she felt as Jack did \xE2\x80\x93 that his stomach had just clenched into a knot. What had been haltingly accepted till now, even with the disturbing facts he'd since learned, was now devastatingly summed up in one little girl crying in the snow.</p>\n\
+    <p>\"We've got to help them,\" Jack murmured. \"This isn't right.\"</p>\n\
+    <p>\"What are you suggesting, O'Neill?\" asked Teal'c. \"At the moment we are unequipped to deal with the vampires and other demons.\"</p>\n\
+    <p>\"I'm not saying right this instant,\" said Jack. \"When we get back to base we make a few phone calls, see if we can get some ball rolling so these kids don't have to deal with all this . . . crap.\"</p>\n\
+    <p>\"You're gonna tell?!\" Andrew's sudden entrance into the conversation reigned Jack's thoughts in, reminding him of Xander's demand that he not tell anyone beyond his team and Hammond. \"You can't do that!\"</p>\n\
+    <p>\"Andrew, we're not going to tell anyone about the slayers,\" Jack turned to him impatiently. \"That's the whole point: to keep them out of this. Her parents are dead because she got dragged into all this vampire stuff!\" He didn't know who he was angrier at right now, the vampires, Xander and Giles and Buffy for dragging Courtney into their world, or Andrew for not seeing that it had to stop.</p>\n\
+    <p>\"But . . . but . . . that's impossible!\" Andrew protested. \"That's like asking Superman to stay in the phonebooth or Aragorn to stop being noble and kingly or \xE2\x80\x93\"</p>\n\
+    <p>\"That is not the same,\" Teal'c interrupted before anyone else came out of his mouth.</p>\n\
+    <p>\"Did you not see Spiderman?\" Andrew shouted, his voice squeaking slightly even as his eyes took on a slightly impatient manic glint that was perhaps the most surprising thing off all about the young man's outburst, aside from the fact that he was standing up to them at all. \"Courtney was Chosen,\" said Andrew, the capitals practically audible. \"It's destiny!\"</p>\n\
+    <p>\"Destiny?!\" Jack shouted back. \"Getting her life destroyed was destiny?!\"</p>\n\
+    <p>\"Andrew,\" Daniel interjected in his reasonable voice that had calmed many an excited native. \"Don't you think destiny is exaggerating things a little? What about free will?\"</p>\n\
+    <p>Gotcha, the thought flickered through Jack's mind as Andrew floundered for words, his face melting through an array of frustration. \"There's free will . . . but there's also destiny . . . like an umbrella . . . destiny, I mean. Only instead of keeping the rain out it just wants you to stay dry underneath. It doesn't care what you do under there as long as you stay dry . . . dry is free will . . . You can't escape,\" he said. \"'With great power comes great responsibility.'\"</p>\n\
+    <p>\"So you're saying that because they can fight, they should?\" said Daniel looking over the tops of his glasses. He glanced quickly at Jack, and then said, \"Is that right?\"</p>\n\
+    <p>\"No, you don't understand!\" Andrew said in a more normal voice though he was clearly still frustrated with them. Daniel's soothing tone had worked its magic and had even made Jack's own temper simmer down. \"It's not about the fighting, it's about the power!\"</p>\n\
+    <p>\"Power?\" asked Jack, unsure what he meant.</p>\n\
+    <p>\"You know, power. Everyone has it, but slayers more,\" said Andrew, again trying to explain but not having the words. \"She could kill a regular person if she wanted, or by accident. She could join the Dark Side of the Force just 'cause. If she hides she'll be found. She's always going to be involved because she is power. Destiny. The rest is keeping dry.\" He huffed. \"It makes more sense when Buffy explains it,\" he half whined.</p>\n\
+    <p>But Jack thought he sort of understood where they were coming from, Spiderman not withstanding. Kids with superpowers were like kids with guns and Jack knew only too well what innocent tragedies came from that combination. If Xander and Giles and everyone else here didn't find them, train them, and give them an acceptable target then the death toll might be just that much higher. In their war, these were the soldiers they needed and they weren't going to turn them away. But it still didn't make it right, and given Andrew's resistance, of all people, he knew they would have their work cut out for them convincing the others.</p>\n\
+    <p>He let out an explosive sigh, barely listening as Daniel continued arguing with Andrew. Here he'd come to Cleveland, fearing the worst from having inadvertently dragged Xander into his world, when in fact it was he who had been irrecoverably drawn into Xander's.</p>\n\
+    <hr>\"I hate parents!\" Buffy groaned as she flopped back on the shoddy sitting room couch. Xander merely rolled his head to look at her from where he sat already splayed out. The relatives had just left, and it was only nine- thirty. It felt like half the night had already passed away.<p>\"Aunt and uncle,\" he corrected her, but Buffy only muttered a half hearted \"Guardians, whatever\" in response, which made Xander grin. Poor Buffy had no patience for normal people. He pitied the families she would have to talk to in Europe \xE2\x80\x93 in a foreign language. Thankfully they'd done a lot of the initial legwork last year so it wouldn't be quite the same disaster, but there were still all those newbies out there that had been called since then and all the ones to come. Xander was just glad he got to stay in America.</p>\n\
+    <p>\"Well, at least they finally listened,\" said Giles from where he sat a little straighter in the armchair. \"That's something. I suspect they'll be all right in the end.\"</p>\n\
+    <p>\"I hope so for Courtney's sake,\" said Xander though he agreed with the assessment. Kim and Paul Laysan had reacted by the book and had only lashed out in fear and denial. However, they loved their niece enough to take Courtney's blowup to heart. This family would make it. Others hadn't; some probably shouldn't have been told. A couple of the slayers had told him they had ended up denying it again to their parents who couldn't cope. Getting them back for the summer was going to be a challenge that Xander was not looking forward to.</p>\n\
+    <p>As for the Laysans, Giles as the resident 'parent' was going to meet with them tomorrow, somewhere more neutral to talk about the details. Courtney would probably stay in Cleveland until all the legalities and school stuff were taken care of so they could maximize her training time. The real work wouldn't begin until the summer of course, but she needed more than just instinct for the interim.</p>\n\
+    <p>Xander sighed. He hated this part of the watcher gig, dealing with the support systems and families that were changed forever. Sure the system was better now for the slayers but it was still pretty high up on the sucking scale.</p>\n\
+    <p>Thinking of families and the Laysans in particular made Xander think of his previous revelation of the day. All things considered, Jack had taken it fairly well, but that was where Xander's experience with parents ran out. His own he had avoided as much as possible after eighth grade, like squeaky boards when you were trying to sneak in after curfew. Not that they had really cared enough to give him a curfew. Had Jack been his dad growing up, he was sure there would have been not only a curfew but an angry and worried-out-of-his-mind parent waiting up for him. Xander could handle Jack mad now only because of nerves steeled from years of standing up to Buffy and Giles, but his high school self would have stood no chance.</p>\n\
+    <p>\"Hey Buffy,\" he said, again rolling his head to look at her. \"How did your mom take finding out, after you came back, I mean?\" he added referring to the summer Buffy had run away to LA.</p>\n\
+    <p>She thought for a moment before answering. \"Things were different,\" she said slowly. \"At first I think we were both just getting used to each other again. She didn't push too much but she did ask what was going on.\" Buffy smiled faintly, \"A couple times she stayed up late and made cookies that were warm and gooey when I got home.\"</p>\n\
+    <p>\"It was hard on her,\" said Giles softly. \"She held up remarkably well.\"</p>\n\
+    <p>\"She was amazing,\" Buffy agreed sadly. \"And it took me so long to see it. It was almost too late.\" She let out a sigh that held the edges of tears though her eyes were still dry.</p>\n\
+    <p>\"But such are teenagers,\" Giles replied gently. \"No one ever knows as much as they do about anything.\"</p>\n\
+    <p>\"Were we really as awful as I remember?\" she asked.</p>\n\
+    <p>\"Do you really want to know?\" There was a teasing twinkle in Giles's eye as he said this, lightening the mood.</p>\n\
+    <p>\"Buffy, think of Dawn and multiply by three,\" Xander suggested. He, Buffy, and Willow had probably broken every school rule there was for their regular teachers, and poor Giles had had to deal with them the rest of the time along with their significant others. \"And add a factor of ten for Cordelia,\" he added at the thought of his ex-girlfriend.</p>\n\
+    <p>\"Uhhgg. I am never having kids,\" Buffy declared.</p>\n\
+    <p>\"Yes, because that plan works out, oh so well,\" said Giles dryly surprising a bark of laughter out of Xander and a wide eyed look from Buffy.</p>\n\
+    <p>\"Great,\" she said resettling. \"I can just see myself in ten years, old and fat, clucking over my glasses at my slayers about doing their homework.\" The image of her little and old made Xander laugh again that prompted an arch look from the 'little old lady.'</p>\n\
+    <p>\"I wouldn't worry Buffy,\" he said consolingly. \"You'll never be fat or wear glasses.\"</p>\n\
+    <p>\"I'll still be old,\" she grumbled.</p>\n\
+    <p>\"And this is a bad thing?\" asked Giles.</p>\n\
+    <p>Buffy turned to him a smiled, serious now. \"No,\" she said quietly. \"I guess . . . I'm still getting used to the idea that I've got at life beyond twenty-five.\" Giles smiled back, as did Xander, the three of them sharing mutual love and hope for a better life for all of them. Leaving Sunnydale had been like breaking free of a curse, and traveling America and Europe looking for slayers had been the best medicine for all the hurt and pain they'd suffered. The trip had shown them that despite all the bad stuff \xE2\x80\x93 vampires, corrupt cops, human crime, global climate change \xE2\x80\x93 there was still so much to live for in the world, so much to fight for. There were puppies and basketball games and carnivals and cafes and Yosemite Park and people. Millions and billions of people who loved life too.</p>\n\
+    <p>Xander knew it wasn't all black and white, he'd need only look at their own lives to see that, and he was cynical enough to ask twice what the catch was. Good people messed up, bad people changed for the better, and everyone was just struggling through life as best they could. It was having that chance to struggle that was important. Hope. Somehow it was easier to see outside of Sunnydale.</p>\n\
+    <p>\"So Xander, how's the dad thing going?\" Buffy broke the silence that had fallen over them like a warm blanket. \"He didn't look too happy at dinner.\"</p>\n\
+    <p>Xander thought back over their stilted conversation on the porch that hadn't done anything it seemed except reinforce the gap between them. \"He's not happy about any of it. His work's classified and no one is supposed to know about it.\" Jack hadn't appeared too angry though, just tired and worried. \"I think he was more upset about us fighting vampires for a living.\"</p>\n\
+    <p>\"This from a guy who's friends with an alien?\" asked Buffy.</p>\n\
+    <p>\"I suspect his problem arises more from the existence of the supernatural,\" said Giles. \"Dr. Jackson and Major Carter earlier were trying to rationalize everything with science. Honestly, I couldn't understand half of what they were saying, but they were more concerned with the reasons behind the belief than the actual beliefs.\"</p>\n\
+    <p>Thinking back on it, Xander wasn't so sure. \"Not Jack,\" he disagreed. \"He had a problem with us fighting. 'Kids'. Basically told me he wanted me to stop because it was too dangerous.\"</p>\n\
+    <p>A ghost of a smile flittered over Buffy's face at that news. \"I like him,\" she said. \"Not that you should stop,\" she quickly added, suddenly worried Xander might take it the wrong way, \"but it's cool that he asked.\"</p>\n\
+    <p>\"So I can keep him?\" Xander joked, but internally giddy that Jack had won Buffy's approval.</p>\n\
+    <p>\"Xander, I think you would be foolish to let him go,\" said Giles, making Xander this time look at the other man in surprise. Giles was actually for Jack now? After all the hemming and hawing about the American military and casual questions about his visits and general disapproving vibes? Xander was so startled, he just stared at the one adult that had been constant in his life and who now smiled knowingly back at him, clearly amused by his frank disbelief that he approved.</p>\n\
+    <p>\"Xand, you're gonna catch flies if you leave your jaw there,\" said Buffy with a giggle. Abruptly, he shut his mouth and looked from one to the other.</p>\n\
+    <p>\"He's been good for you,\" said Giles still smiling like he knew everything. \"And I must say that I'm impressed he has not disappeared on you.\"</p>\n\
+    <p>\"I don't think I could get him to if I wanted it,\" Xander replied, finally over most of his shock and decidedly happy about Giles's sudden support.</p>\n\
+    <p>\"Just as long as the military thing doesn't backfire on us,\" said Buffy. \"If it does I reserve the right to blow up their mountain.\"</p>\n\
+    <p>\"I know I'm going to regret asking, but why blow it up?\" asked Giles wincing in anticipation.</p>\n\
+    <p>Buffy shrugged impishly. \"I'm better at blowing up stuff. Three for two record, you know.\"</p>\n\
+    <p>\"Besides,\" Xander couldn't help but add. \"Finding the mountain would be a hell of a lot easier than going after the people involved.\"</p>\n\
+    <p>\"Plus, we could give them time to evacuate,\" said Buffy magnanimously, as if utter destruction were not her goal. Giles merely regarded them calmly, unfazed by their plan.</p>\n\
+    <p>\"Just as long as I am not in the country when you do so,\" was all he said. He stood up and grimaced from moving stiff muscles. \"Either of you like tea?\" he asked as his back popped.</p>\n\
+    <p>\"Coffee.\"</p>\n\
+    <p>\"Hot chocolate,\" they requested. Giles shook his head at them but nodded anyway and left for the kitchen. Xander and Buffy just stayed on the comfy couch, too lazy to move.</p>\n\
+    <p>\"You really like Jack?\" Xander asked a minute later.</p>\n\
+    <p>\"Yeah,\" Buffy sighed, turning her head towards him and smiling. \"I do. He's around, you know? You guys visit. He calls. Sometimes I wish my dad would bother himself about it, but then I remember how much I don't like him. But I like Jack. He's a lot like you.\"</p>\n\
+    <p>\"Witty and ridiculously good looking?\" Xander joked.</p>\n\
+    <p>\"He could pass for cute,\" said Buffy with the devil in her eye. Xander threw his head back against the couch.</p>\n\
+    <p>\"First Dawn, now you!\" he groaned.</p>\n\
+    <p>\"Dawn said he was cute?\"</p>\n\
+    <p>\"Not Jack, Daniel. Which is marginally better I guess. At least he's not supposed to be my father.\" He looked critically at Buffy and tried thinking about her and Jack. It was a bad idea. \"I need therapy,\" he said. \"I think I just scarred myself for life.\"</p>\n\
+    <p>\"Why?\" asked Buffy giving him a quizzical look at his odd statement.</p>\n\
+    <p>Xander's mouth opened to share before he could stop it. \"You as my stepmom. I will never forgive you if that happens.\"</p>\n\
+    <p>Buffy looked at him a little stricken by that, and then burst out laughing. After a second, Xander joined in. The idea was ridiculous and so completely beyond messed up, but stranger things had happened. It felt good to laugh, like all the uncertainty and stress just drained away from his chest, down his arms, and out his fingertips, leaving only a relaxed tiredness behind. By the time Giles came in a few minutes later, their laughter had melted into spurts of giggles. The Head Watcher simply handed them two steaming mugs and quirked an eyebrow.</p>\n\
+    <p>\"Trust me, you don't want to know,\" Buffy told him as she accepted her hot chocolate.</p>\n\
+    <p>\"Do either of you have objections to putting up Colonel O'Neill and his friends for the night?\" Giles took her advice to heart.</p>\n\
+    <p>Xander shrugged. \"No, why?\"</p>\n\
+    <p>\"Oh, he just told me they were going to have to leave soon to get back to the base they're staying at. I thought why not stay here.\"</p>\n\
+    <p>\"Sure, but I want Willow or someone to put an alarm on their door.\"</p>\n\
+    <p>\"Buffy,\"</p>\n\
+    <p>\"Xander, we're not chaining them up, but they could still be dangerous,\" the Slayer overrode his protest. \"It's just in case. They won't even know it's there.\"</p>\n\
+    <p>Unable to argue with that logic, and knowing he wouldn't win anyway if he did, Xander agreed to it. \"Okay,\" he sighed. \"I'll go ask them.\" With that, he pulled himself to his feet and went in search of Jack.</p>\n\
+    <hr>\"Hey Jack,\" Xander's voice interrupted the discussion around the dining room table. Jack and his team were solidifying what they knew and trying to come up with a report for Hammond and possibly Davis about the situation here. Top on his list of recommendations was a program that eliminated the need for underage slayers.<p>\"Xander, what's up?\" he asked as his son joined them at the table with a cup of coffee. Jack wondered if there was any left in the kitchen.</p>\n\
+    <p>\"Giles said you have to leave soon. Do you wanna just stay here for the night?\" he asked. \"We've got plenty of space.\"</p>\n\
+    <p>\"That'd be great,\" Jack smiled, not very surprised by the offer but glad for it nonetheless. They needed to be back here in the morning anyway to see about the rogue NID agents and it would save them a long drive each way.</p>\n\
+    <p>\"Cool. So whatcha doing here?\" Xander turned his attention to the looseleaf paper Jack was writing on. \"'Intelligence, armament . . .' You planning a war or something?\"</p>\n\
+    <p>\"Uh, yeah,\" said Jack carefully. Considering the way Andrew had blown up over this, he wasn't too sure he was ready for Xander's reaction to his little brainchild. He cast looks to Daniel, Carter, and Teal'c, silently asking them if he should broach the subject.</p>\n\
+    <p>\"We were actually thinking of what we could do to help,\" said Daniel, ever the diplomat. \"From what you've told us, it sounds like a pretty big job protecting the world from vampires from out of Cleveland.\"</p>\n\
+    <p>\"So when you say help, you mean have the military come in with intelligence and weapons and just do the job for us?\" Xander looked from Daniel to Jack questioningly. So far, no explosions, that was good.</p>\n\
+    <p>\"That would be the long term goal,\" said Carter. \"With such a big project we would need a transition period but the ultimate goal is that the need for slayers would be gone.\"</p>\n\
+    <p>\"Gone.\" Xander let out a half laugh of disbelief, pulling Jack's piece of paper over and looking at it one more time. \"You have no idea what you're talking about, do you?\"</p>\n\
+    <p>A little taken aback by this response, Jack lifted his eyebrows and suggested, \"Vampires? Ugly evil things? Look, I know we're new to this stuff, but there's got to be a better way to fight them than with little girls.\"</p>\n\
+    <p>Xander leveled his eye on him. \"And what about the next hell god or when the First makes his next move? Will your soldiers be able to handle that?\"</p>\n\
+    <p>\"True gods do not exist,\" said Teal'c, but Xander wasn't smiling when he turned to the Jaffa.</p>\n\
+    <p>\"Yeah? Tell that to someone who wasn't there.\"</p>\n\
+    <p>Jack glanced down the table at Daniel and Carter who looked just as bewildered as he felt. But Xander went on.</p>\n\
+    <p>\"It's not just vampires,\" he said sitting back in his chair so he could see them all more easily. \"And it's not just demons you can kill by shooting. There are a lot of things out there, that trying to shoot them full of bullets will just piss them off. Intelligence isn't just finding out where they are either.\"</p>\n\
+    <p>\"We realize it's not that simple,\" said Jack a little annoyed at being talked down to. \"This is just a start.\"</p>\n\
+    <p>\"You're talking about setting up a system we already have in place,\" Xander replied.</p>\n\
+    <p>\"Oh?\" said Jack. This was news. Where was this marvelous system then? \"You have people gathering info on all hostile movements? Backup standing by for Willow and Kennedy? Measures in place in case someone tries to end the world?\"</p>\n\
+    <p>\"Yeah, us.\"</p>\n\
+    <p>Great. Jack sighed impatiently. That was hardly an answer and all this was getting nowhere. \"Xander, training hardly counts. We're talking about an organized defense against all the supernatural crap. No more kids fighting and dying.\"</p>\n\
+    <p>\"Taking them out of the action won't protect them,\" Xander shook his head. \"You need the supernatural to fight the supernatural, and that's the slayers. They're drawn to it. Half your soldiers will be dead in their first skirmish. I'm not kidding, Jack,\" he added when the older man opened his mouth to protest. He was dead serious. \"I know you don't like it,\" he said a little more softly. \"Most of the time I don't like it either, but more people will die if we don't do it our way.\"</p>\n\
+    <p>\"What's the system you have?\" Carter asked into the ensuing silence. Xander broke off his staring contest with Jack and smiled sourly.</p>\n\
+    <p>\"Welcome to the North American Headquarters of the International Watchers Council,\" he said.</p>\n\
+    <p>\"International Watcher's Council?\" Jack repeated, not sure he was hearing this. He looked around at the china cabinet and the framed Ansel Adams posters on the walls. \"Here?\"</p>\n\
+    <p>\"This is just the central operations room,\" said Xander dryly, \"also known three times a day as the dining room.\"</p>\n\
+    <p>\"You're saying that you run an international organization against vampires out of the dining room?\" he asked.</p>\n\
+    <p>Xander shrugged. \"It's the table. Giles actually runs the international part as Head of the Watchers. I just take care of the slayers in North America, though Mexico and all those little countries down there are getting transferred to the South American office once Willow gets set up.\"</p>\n\
+    <p>\"Mr. North America,\" Jack recalled Xander's confusing statement from that morning. Xander was responsible for maintaining the safety of an entire continent? That was insane!</p>\n\
+    <p>\"Why have you been chosen for these positions?\" asked Teal'c. \"Would it not be more fitting for an elder generation to carry out these duties?\"</p>\n\
+    <p>\"Because the 'elder generation' also known as the Stuffy Assholes in England Who Thought They Knew What Was Going On But Really Didn't went kablewie two years ago,\" Xander said, a little irritated. \"Giles and about fifteen people he's found since then are all that's left of the old Council. That left us with a whole lot of new slayers all over the place so we decided to reform the council so that it would actually help the Slayer instead of try to enslave her.\"</p>\n\
+    <p>\"Wait a minute,\" said Jack, holding up a hand to slow him down. There had been a bit too much information for him to process in that last explanation. \"There was another organization before you, who did the same thing?\"</p>\n\
+    <p>\"No.\" Xander corrected him. \"There was an older Council that claimed to do the same thing. The Slayer was just their tool in the fight. They didn't really do anything except cause trouble for us. It was about power,\" he practically spat the same word Andrew had used earlier. \"We still do what we've always done just on a bigger scale now that there are more slayers.\"</p>\n\
+    <p>\"More slayers?\" asked Daniel.</p>\n\
+    <p>\"There used to be one, Buffy. And I am so not explaining right now. Point is, we're set up to handle it. You'd just be getting in our way.\"</p>\n\
+    <p>More complications, Jack figured. He could feel a headache coming on already. It sounded like some serious history, for what was clicking together in Jack's head was the timeframe. Two years ago Xander had lost his eye, Sunnydale had sunk into the ground, and his girlfriend had died. That sounded like too much of a coincidence for comfort. He almost asked what had happened but decided to wait until he and Xander were alone. Instead, he simply watched his son as Daniel tried to convince him that quitting would give him a chance at a better life, but Xander wasn't having any of it. Jack saw the same determination in his eye that had been there out on the porch, when he'd asked about it. Xander was in too deep. 'I'm talking about my life,' he'd said just that morning. Jack had thought earlier that maybe he would see reason and let the soldiers take over, but once again, Xander's deep seated mistrust of the military wouldn't give ground, no matter what Daniel said.</p>\n\
+    <p>\"Look, the last time you guys tried to take over we had to bail you out,\" Xander brought Jack crashing back to the present. \"So just forget it already. The government tries to take over again we'll stop you. And trust me when I say you don't want to get Buffy or Willow mad.\" But it was his first statement that got Jack's attention.</p>\n\
+    <p>\"What do you mean 'the last time we took over'?\"</p>\n\
+    <p>Xander sighed, obviously wishing he hadn't said anything. \"It was called the Initiative. Top secret, obviously. Ended with a lot of dead soldiers. The ones that made it only did because we stepped in. They didn't know what they were dealing with; you don't know what you're dealing with. And I don't care about your good intentions, there's always going to be some mad scientist who wants to play god and damn the consequences. So I'm telling you now, we will not let that happen again. If it does I'd stay away from that mountain of yours.\"</p>\n\
+    <p>Jack sat up at the words that sounded ominously like a threat. \"Why?\" he asked.</p>\n\
+    <p>Xander glanced at him then at the others. \"Buffy said something about blowing it up,\" he said casually. And something in the way he said it made Jack certain he wasn't joking around. \"Come on,\" Xander abruptly stood up, effectively putting an end to the conversation. \"I'll show you where you're staying.\" He left the room by way of the kitchen, and as Jack and his team got up to follow him, he knew that they'd be spending the night talking instead of sleeping.</p>\n\
+    <hr>AN: Honestly, I don't know how I feel about this chapter. For those that feel as ambiguous about it as I do, I think the next few chapters will make up for it, and they will definitely be out sooner."
+  summary: 
+  published_at: 2009-12-12
+  endnotes: 
+  work_id: 96
+  hidden_by_admin: false
 chapter_00170: 
   posted: true
   position: 1
-  created_at: 2010-01-04 12:35:25 +00:00
+  created_at: 2010-01-04 12:35:25 Z
   title: ""
-  updated_at: 2010-01-04 12:35:37 +00:00
+  updated_at: 2010-01-04 12:35:37 Z
   notes: 
   word_count: 1643
   id: 170
@@ -11084,237 +11309,12 @@ chapter_00170:
   endnotes: 
   work_id: 105
   hidden_by_admin: false
-chapter_00058: 
-  posted: true
-  position: 1
-  created_at: 2009-03-20 23:22:23 +00:00
-  title: ""
-  updated_at: 2009-06-19 11:12:17 +00:00
-  notes: 
-  word_count: 14
-  id: 58
-  content: wherein John and Ronon figure out that they can share! all is well again.
-  summary: 
-  published_at: 2009-03-20
-  endnotes: 
-  work_id: 51
-  hidden_by_admin: false
-chapter_00113: 
-  posted: true
-  position: 10
-  created_at: 2009-12-12 22:54:05 +00:00
-  title: Ten Years Taken Off of Life
-  updated_at: 2009-12-12 23:02:22 +00:00
-  notes: "Bridges 10: Ten Years Taken Off of Life"
-  word_count: 8452
-  id: 113
-  content: "<p>Bridges 10: Ten Years Taken Off of Life</p>\n\
-    <p>AN: Two things. First, I'm sorry taking so long with this part. I had little writer's impediment (of execution and not ideas) that had me rewriting most of this a dozen times. On top of that, it's that time of the quarter again when homework abounds and everything is due. On the bright side I have through chapter 16 outlined on 'paper' finally.</p>\n\
-    <p>Secondly, I've gotten a few notes about consistency of details such as Jack's estimations of how much Buffy weighs (Ch 2 and 9) and Courtney's age (Ch 7 and 9) and Xander's initial response to Jack being in the military (he says army in Ch 2). I just wanted to explain that because the story is being told from two points of view that often theses little things are deliberate since this is what Xander and Jack's reactions are. Unless it has been explicitly told to either of them, they don't know and are free to make assumptions and estimations as they see fit, and they're not always going to remember the exact numbers they came up with the last time they did so a week or months earlier. That said, sometimes they are screwups on my part because this is a really long story and it's difficult to keep track of everything.</p>\n\
-    <p>Last: Thanks go to my new beta reader Finn for finding and fixing all those nasty typos and stuff. Cheers!</p>\n\
-    <hr>Ten Years Taken Off of Life<hr>A brisk breeze greeted Xander when he stepped outside onto the back porch, escaping the after-dinner cleanup in the kitchen. Jack stood on the steps in borrowed shoes, having slipped away as soon as he could. He was looking up at the stars, muted by the neighborhood lights, and a waxing moon when Xander joined him, the older man barely acknowledging his presence with a slight flicker of his eyes.<p>Xander didn't know what to say so he said nothing and simply looked over the back yard that seemed to glow from the reflected light on the snow. It was his first winter in Cleveland and Xander had already had enough snow to last him a lifetime. The delight of those first flakes had quickly given way to weary annoyance as more just fell from the sky. Though making snow angels had been fun back in November. Dawn, Vi, and Diana had gone all out with a snow vampire too and then practiced demolishing it.</p>\n\
-    <p>Jack hadn't moved from stargazing when Xander snuck a look at him. Following his eyes to the constellations, he wondered what the older man saw when he looked up there. Teal'c's planet? Were there other aliens that had made contact with Earth? Were they a threat, he couldn't help but wonder given that it was a top military secret. Xander had never given much thought to it. E.T. was about as far as he had gotten in thinking about life from other planets. Though there had been that Queller demon the year of Glory. Probably all sorts of things living on the moon. Did that mean then, that aliens were really demons? Murray or Teal'c, or whatever his name was, was certainly human enough looking. His beanie probably hid an ingrown horn or something.</p>\n\
-    <p>He wanted to ask about a million things, but Jack didn't look like he was up for questions he probably couldn't answer anyway. It was as if he had completely forgotten Xander was there even though he had been standing there for at least a minute in the freezing cold that didn't seem to be bothering Jack. They were back to the not talking awkwardness of those first meetings last summer. Not that they had really pushed the big things before, or at all, but now that they had both fessed up to being Batman, it was as if Jack didn't even know where to start, and neither did Xander for that matter. Here they were, standing on a dark winter's night, supposing to be friends. \"So aliens,\" Xander said breaking the stillness. He still wasn't sure how he felt about that, somewhere up there on the cool but weirded out scale.</p>\n\
-    <p>\"Yep,\" said Jack without moving, his eyes remaining on the stars.</p>\n\
-    <p>Xander decided to take the verbal response as a good sign. \"How'd that happen?\"</p>\n\
-    <p>Jack sighed and finally looked away from the sky at him. \"It's classified,\" he said softly, his words underscored by regret both in his voice and eyes and how they quickly darted away.</p>\n\
-    <p>\"I guess I'm gonna get that a lot, aren't I?\" said Xander just as softly, also looking away over the yard. Jack didn't answer. \"So much for sharing.\" So much for getting past the gaping plot holes in their lives.</p>\n\
-    <p>\"Xander,\" Jack sounded tired. \"You already know too much.\"</p>\n\
-    <p>\"I don't know anything,\" Xander countered. \"I only know you have an alien in a mountain in Colorado. Except here, now because some guys want you to retire or something.\"</p>\n\
-    <p>\"It's a power play and definitely more than you should know,\" said Jack with annoyance. \"I don't know what Willow did with the computer stuff or the . . . the . . . thing she did with Teal'c, but whatever it was I wish she hadn't. I don't know how I'm going to explain this to the General,\" he sighed again, running a hand through his hair. \"The computer breach alone is going to send him through the roof.\"</p>\n\
-    <p>\"Willow's not in any trouble, is she?\" Xander asked apprehensively. Jack gave him a what-do-you-think look that obviously said 'yes' in big bold letters. \"It was completely justified, you know,\" he replied, immediately defending his friend.</p>\n\
-    <p>\"I know. If I was in your place I'd have ordered the same thing,\" Jack nodded, then asked after a pause, \"The magic stuff's real, isn't it? Not some sort of technology? Even seeing the thing in the basement . . .\" he trailed off, but Xander understood. There was nothing like watching someone do their mojo to make you a believer.</p>\n\
-    <p>\"Yeah, it's real.\"</p>\n\
-    <p>\"Is she really going to erase their memories?\"</p>\n\
-    <p>\"She's done it before,\" Xander replied.</p>\n\
-    <p>\"Could you do it?\"</p>\n\
-    <p>\"Me? No,\" said Xander, his thoughts flickering back to both times Tara had broken up with Willow because of memory magic. He remembered Anya wondering later if this would have fallen in her jurisdiction had she still been a 'justice' demon. \"I don't hone my inner warlock.\" Off Jack's questioning look he added, \"Even with a spell to follow it takes skill and power to do something drastic like that. I can only do the little stuff any idiot who can read can do.\"</p>\n\
-    <p>Jack smiled a little at that but it didn't reach his eyes. Instead he regarded Xander as if he were searching for something but couldn't find it, and it was beginning to make him uncomfortable. \"What?\" Xander finally asked, hoping against hope that he didn't have alfredo sauce anywhere embarrassing.</p>\n\
-    <p>\"Nothing,\" said Jack glancing away, the awkwardness like a shroud between them. But there was definitely a something there.</p>\n\
-    <p>\"What?\" Xander repeated as his curiosity won out over caution.</p>\n\
-    <p>\"It's nothing. Really,\" said Jack looking up and away again, crossing then uncrossing his arms and jamming his hands in his pockets. \"I was just thinking about . . . about how much I don't know about you at all.\"</p>\n\
-    <p>\"Yeah, well same here,\" Xander agreed. A lifetime's worth of stuff he thought, even as the word 'classified' echoed in his mind. \"But I guess you won't tell me much about what you do.\"</p>\n\
-    <p>\"There's all this paperwork and a pesky court martial if you spill the beans,\" Jack said regretfully, and Xander knew he was too good of an officer to do that. \"So vampires,\" Jack echoed his earlier comment about aliens. \"Andrew showed us his bite mark.\" Xander smiled at that. \"How did you find out about them?\"</p>\n\
-    <p>\"I met Buffy,\" said Xander pretty much summing up the day everything changed with a slightly nostalgic smile. \"Tenth grade. I overheard her and Giles talking about them in the library first day of school, then Buffy saved Willow from a vamp a few days later and, voila, the beginning of a beautiful friendship full of untold danger with a dash of terror thrown in for kicks.\" The rest was history, Xander added to himself even as Jack regarded him with a carefully neutral expression. High school felt so long ago now, like a dream that bordered on a nightmare but one you still recognized as just a dream that you could wake yourself up from if it got too bad.</p>\n\
-    <p>\"How much danger?\" Jack asked.</p>\n\
-    <p>Xander looked at him for a moment wondering how much to tell him. He'd never told his own parents, his mom and the man he'd thought was his father, never told them anything. Even at his wedding all of Anya's friends had been introduced as circus people still in costume. Tony had been too drunk to notice.</p>\n\
-    <p>But Jack wasn't Tony. Jack had noticed and he had worried and he hadn't been put off by excuses. His words from a week ago \xE2\x80\x93 'you are my business' \xE2\x80\x93 suddenly came back to him, and Xander decided that he wanted this to work. He wanted what Buffy had found with her mom and not what Willow held onto with her own parents from afar.</p>\n\
-    <p>\"It's dangerous. We fight against creatures that go out every night to find someone to eat. People die,\" he said. \"Do you remember about Jesse?\" he paused, continuing when Jack nodded at the familiar name. \"He was the first vampire I staked.\" Jack started at this but Xander went on. \"Me, Giles, Willow, we've all lost a girlfriend along the way, in Buffy's case two boyfriends. Two years ago I lost my eye.\"</p>\n\
-    <p>\"A fight?\"</p>\n\
-    <p>He nodded abruptly. \"I got in the way of a really powerful guy who was more interested in playing. Thought it'd be funny,\" he added with a bitter twist to his lips. The memory of how it felt, the sickening squish of his left eye into his head still gave him nightmares, and even now made him shudder.</p>\n\
-    <p>\"I'm sorry,\" said Jack but Xander carefully shrugged it away. It wasn't going to bring his eye back, or Anya or any of the other slayers or Tara or Jenny or kids he'd grown up with or . . . he stopped because he could think of too many more people that were dead or forever hurt by the supernatural. \"I guess . . .\" said Jack, \"at this point it's pointless to ask you to stop.\" He crossed his arms across his chest again as if he were trying to distance himself from the Xander's life.</p>\n\
-    <p>\"Pretty much,\" Xander agreed though he appreciated him saying it. But there was too much work to be done, too many reasons to stay. The fight had become so much of his life that he didn't think he would ever be able to just walk away.</p>\n\
-    <p>\"Why do you train them?\" asked Jack suddenly. \"The girls. If it's so dangerous they shouldn't be anywhere near this.\"</p>\n\
-    <p>'Them' being the slayers, Xander couldn't fault him for demanding an answer, but at the same time there was no choice in the matter. \"That's what Courtney's parents said,\" he said quietly. \"They wouldn't let Courtney come to training last summer. Didn't take us seriously. If they had, maybe they'd be alive now.\" He returned Jack's heavy gaze with one of his own. \"It's not fair and it's not easy but slayers just can't ignore the Slayer inside. It gets them killed.\"</p>\n\
-    <p>Jack sighed and ran his hand over his face as he absorbed this, clearly not happy with the situation.</p>\n\
-    <p>\"Xander,\" the back door banged open and Andrew leaned around it while keeping his feet safely inside. \"Buffy wants you. Courtney's aunt and uncle are here,\" he said before quickly closing the door on the cold.</p>\n\
-    <p>\"I gotta go,\" Xander turned back to Jack who simply nodded without looking at him. After a tense moment when neither one of them said anything, Xander left him on the porch and went inside. When he glanced out the window as he kicked off his shoes, Jack was again staring at the stars.</p>\n\
-    <hr>Jack's eyes flittered from Orion to Cassiopeia seeing planets filled with trees and people he didn't understand, and he felt suddenly that he was on another such planet now as anger gave way to helplessness. It reminded him of the children on that one world upon whom the fate of their people rested to the point where they hadn't a chance to just be kids. Here it felt worse: the slayers were losing their innocence to violence. They were essentially soldiers born to fight a never-ending war. And despite what Xander had told him about Courtney, Jack almost had a mind to go up to Giles or Buffy and demand that they just stop training them and let professionals take care of the vampires.<p>And Xander . . . tenth grade, Jack thought. He'd been what? Fifteen? Sixteen years-old? Christ. It made him wonder again if this was all real because sixteen was just way too young to be killing what was left of your best friend. It was a wonder Xander was as normal as he was. Hell, he was still a kid to Jack, younger than most of the recruits they saw at the SGC. But at the same time so much older.</p>\n\
-    <p>There had to be another way. This just couldn't be the only way to hold off all the . . . ugly evil things. Maybe he could talk to Davis about it since this would fall into the category of national security. At least he hoped so. If the government didn't know and hadn't done anything about it at this point, convincing the people who mattered might be a little difficult but if he could get Xander's help with the briefing, or even Buffy's, he was sure they could at least get people thinking about it. And put a bullseye on the girls . . . so maybe not Buffy's help. If they spun it right though, the Pentagon would never have to know about the girls or Xander or anybody, just the monsters.</p>\n\
-    <p>With a parting look at the stars, Jack went back into the house quickly passing through the now clean kitchen and the dining room into the den. On the floor in front of the tv, Teal'c and Andrew were playing Jedi Knights while Daniel, Carter, and Dawn chatted on the couch. Or rather on closer inspection, Daniel and Carter were discussing mythology that could be reinterpreted while Dawn read a book and cast glances at the foyer.</p>\n\
-    <p>\"Hey, Jack,\" Daniel greeted him looking up from the conversation when he walked in. His eyebrows lifted slightly in a small frown as if to ask Jack if he was all right. Nodding in response to both the greeting and the question, Jack glanced once more over the sparely populated room.</p>\n\
-    <p>\"Where is everyone?\" he asked.</p>\n\
-    <p>\"Xander, Giles, Buffy, and Courtney are with her relatives in the front room,\" Carter supplied. \"Don't know where Willow and Kennedy are.\"</p>\n\
-    <p>\"On patrol,\" Dawn spoke up.</p>\n\
-    <p>\"Patrol?\"</p>\n\
-    <p>\"In the city,\" she said. \"I think tonight's the west side. Today's Sunday, right?\"</p>\n\
-    <p>\"So they're out looking for . . . \" Daniel didn't know quite how to finish but Dawn understood anyway.</p>\n\
-    <p>\"The usual fledges and signs of impending doom. Not much happens around Christmas though.\" She cast another look at the foyer before shrugging. \"They'll probably make a date out of it.\"</p>\n\
-    <p>Jack stared at her and wondered if she even heard what she was saying. What Xander had just told him was a very dangerous life where people died Dawn was shrugging off as nothing to worry about. \"When are they checking in?\" he asked perhaps a little more harshly than he intended.</p>\n\
-    <p>\"You mean call?\" asked Dawn. \"They'll only do that if they need help. Otherwise they'll be back by morning at the latest.\"</p>\n\
-    <p>Morning was an awful long time for them to be out there on their own, especially in a city at night where other dangers lurked besides the ones they were looking for. They could be mugged or trapped in a bad neighborhood or lost, and Dawn wasn't even sure where they were? To Jack's military mind, that was too many risks to take without enough back up.</p>\n\
-    <p>\"What do you mean by 'signs of impending doom?'\" asked Daniel, getting back to her earlier comment.</p>\n\
-    <p>\"Weird stuff that doesn't fall into the normal category of weird,\" Dawn frowned, having trouble defining it herself. \"Like, really strong demons \xE2\x80\x93 or talkative, threatening ones. Or missing artifacts from graves. Stuff like that . . .\" she shrugged. \"It's the kind of stuff that when you see it, you know it's gonna be bad, I guess. Though sometimes we miss it till it's almost too late.\"</p>\n\
-    <p>Her last comment didn't sound very reassuring and neither was the thoughtful look on her face that was obviously thinking of specific examples. \"What sort of impending doom are we talking about here?\" asked Jack sharply.</p>\n\
-    <p>Dawn glanced at Andrew on the floor who snuck a look over his shoulder full of apprehension and a hundred meanings. \"Massacres,\" said Dawn carefully. \"Rituals for any number of things. Sometimes the end of the world.\"</p>\n\
-    <p>\"End of the world?\" Jack asked in chorus with Daniel and Carter. Even Teal'c paused in his game with Andrew and looked up at this news.</p>\n\
-    <p>\"It hasn't really happened in while,\" Dawn rushed on to reassure them, but Jack if anything felt even less reassured. \"There's only been, like, one major try here, everything else's been local scale stuff.\"</p>\n\
-    <p>\"You're saying there have been attempts to end the world?\" asked Daniel who was the first to recover. \"What are we talking about here? A magical destruction of Earth's existence or some apocalyptic scenario of wide spread natural destruction? There are many myths that \xE2\x80\x93\"</p>\n\
-    <p>\"Hell on Earth,\" Dawn interrupted, her bluntness prompting him and everyone to silence. \"Mostly they just want that.\"</p>\n\
-    <p>Jack's mind flashed to Netu, the Goa'uld hell world that had been beyond anything he had ever imagined that Hell could be. If Dawn's definition was anything like what they'd been through . . . but it couldn't be, right? But if it was . . . Jack's outrage only increased at what these kids were dealing with. Damnit, they knew. SG-1 had been there, done that and bought out the save-the-world t-shirts. It was difficult enough when you had years of training to fall back on. \"And Willow and Kennedy are out there on their own?\" he asked. Looking for things that wanted Hell?</p>\n\
-    <p>\"They're not going to die from walking in the street,\" said Dawn as if it were obvious but nonetheless on the defensive. \"You should pity who they meet.\"</p>\n\
-    <p>\"Besides nothing smart is stupid enough to attack them if Willow's there,\" added Andrew in that brand of logic that was prevalent around this house which Jack for the life of him couldn't follow. He took a small measure of relief from the fact that both Carter and Daniel looked at each other in mild confusion before turning to the young man and asking,</p>\n\
-    <p>\"Why would they be afraid of Willow?\" asked Daniel. It was a very good question, and one that Jack wanted an answer to as well. Andrew blushed under the sudden scrutiny, shifting uncomfortably from side to side as everyone stared at him for the split second before Dawn drew SG-1's attention back to her.</p>\n\
-    <p>\"Willow's a witch,\" she said which was no answer at all since Jack and his teammates had already surmised as much from dinner. And from what Xander had said, she had enough skill and power to do more than low level spells, whatever that meant exactly.</p>\n\
-    <p>\"Just how powerful is she?\" asked Jack suspiciously. Because if even the bad guys were afraid of her \xE2\x80\x93 and from Dawn's uncomfortable glance away, that was more telling than anything she could have said. Willow added up to more than just average. Andrew was suddenly very absorbed in his video game, doing moves even though Teal'c was no longer actively playing. \"Dawn?\" Jack turned back to the young woman on the couch.</p>\n\
-    <p>\"What?\" she said defensively. \"She's good, big deal.\"</p>\n\
-    <p>Jack didn't answer. Big deal, indeed. It didn't really change anything except for the fact that Willow's power was considered something not to be discussed, but maybe they were simply wary of talking to virtual strangers about it, especially with the problems they had with the military in general. Don't let the enemy know just how powerful your weapons really are. Carter and Daniel for once taking their cue from him didn't press the matter, instead simply exchanging looks with Jack, Teal'c, and each other. At every turn, things were more than they seemed, convincing Jack further that these kids needed help. And that matter of national security? Hell on Earth definitely qualified.</p>\n\
-    <p>Sudden shouting from the direction of the foyer broke off any further thought of how exactly Jack was going to get them help. \"You expect . . . believe . . . crap?!\" an unfamiliar man yelled, his words obscured by the doors and distance. Every head in the den snapped up but the reply was too soft to hear. Then, \"No!! We . . . Courtney away . . . lunatics . . . police . . . near my niece again!!\"</p>\n\
-    <p>\"They . . . dead . . . didn't listen . . .!!\" he heard Buffy shout back this time. \". . . want that?!\"</p>\n\
-    <p>\"Stay away . . .!!\"</p>\n\
-    <p>\"Hey!!\" That was Xander.</p>\n\
-    <p>\"Stop it!! Stop it!! Stop it!! Stop it!!\" Courtney's high voice broke over the argument ringing clearly through the house. \"They're dead!\" she screamed, her voice breaking at the sudden abuse. \"Vampires . . . right in front of me! They . . . screaming and they died! They died!!\" Then the sound of a door crashing open and running feet and the front door slamming open and closed. Dawn jumped up and ran after her while Jack and the rest of them got up, bewildered and wondering if they should follow or not. Andrew was the first to move, going to the window and pulling the curtain back just enough to see out into the front yard. Jack and his teammates soon joined him. In the background they could hear the murmuring voices of those in the sitting room.</p>\n\
-    <p>Outside under the dull illumination of a street light, Courtney had run to one of the three trees in the front yard and started hitting it, knocking snow from the branches above. Dawn stood several feet behind her, not trying to stop her but waiting until she had tired herself out and collapsed to the ground. Then Dawn was there, cautiously at first then suddenly pulling the younger girl into a close hug as her anguished sobs echoed softly through the night.</p>\n\
-    <p>\"Oh, god,\" Daniel whispered as they pulled away from the window, the haunted look in his eye no doubt remembering the loss of his own parents as a child.</p>\n\
-    <p>\"I thought . . .\" Carter never finished her sentence but from the stunned look on her face she felt as Jack did \xE2\x80\x93 that his stomach had just clenched into a knot. What had been haltingly accepted till now, even with the disturbing facts he'd since learned, was now devastatingly summed up in one little girl crying in the snow.</p>\n\
-    <p>\"We've got to help them,\" Jack murmured. \"This isn't right.\"</p>\n\
-    <p>\"What are you suggesting, O'Neill?\" asked Teal'c. \"At the moment we are unequipped to deal with the vampires and other demons.\"</p>\n\
-    <p>\"I'm not saying right this instant,\" said Jack. \"When we get back to base we make a few phone calls, see if we can get some ball rolling so these kids don't have to deal with all this . . . crap.\"</p>\n\
-    <p>\"You're gonna tell?!\" Andrew's sudden entrance into the conversation reigned Jack's thoughts in, reminding him of Xander's demand that he not tell anyone beyond his team and Hammond. \"You can't do that!\"</p>\n\
-    <p>\"Andrew, we're not going to tell anyone about the slayers,\" Jack turned to him impatiently. \"That's the whole point: to keep them out of this. Her parents are dead because she got dragged into all this vampire stuff!\" He didn't know who he was angrier at right now, the vampires, Xander and Giles and Buffy for dragging Courtney into their world, or Andrew for not seeing that it had to stop.</p>\n\
-    <p>\"But . . . but . . . that's impossible!\" Andrew protested. \"That's like asking Superman to stay in the phonebooth or Aragorn to stop being noble and kingly or \xE2\x80\x93\"</p>\n\
-    <p>\"That is not the same,\" Teal'c interrupted before anyone else came out of his mouth.</p>\n\
-    <p>\"Did you not see Spiderman?\" Andrew shouted, his voice squeaking slightly even as his eyes took on a slightly impatient manic glint that was perhaps the most surprising thing off all about the young man's outburst, aside from the fact that he was standing up to them at all. \"Courtney was Chosen,\" said Andrew, the capitals practically audible. \"It's destiny!\"</p>\n\
-    <p>\"Destiny?!\" Jack shouted back. \"Getting her life destroyed was destiny?!\"</p>\n\
-    <p>\"Andrew,\" Daniel interjected in his reasonable voice that had calmed many an excited native. \"Don't you think destiny is exaggerating things a little? What about free will?\"</p>\n\
-    <p>Gotcha, the thought flickered through Jack's mind as Andrew floundered for words, his face melting through an array of frustration. \"There's free will . . . but there's also destiny . . . like an umbrella . . . destiny, I mean. Only instead of keeping the rain out it just wants you to stay dry underneath. It doesn't care what you do under there as long as you stay dry . . . dry is free will . . . You can't escape,\" he said. \"'With great power comes great responsibility.'\"</p>\n\
-    <p>\"So you're saying that because they can fight, they should?\" said Daniel looking over the tops of his glasses. He glanced quickly at Jack, and then said, \"Is that right?\"</p>\n\
-    <p>\"No, you don't understand!\" Andrew said in a more normal voice though he was clearly still frustrated with them. Daniel's soothing tone had worked its magic and had even made Jack's own temper simmer down. \"It's not about the fighting, it's about the power!\"</p>\n\
-    <p>\"Power?\" asked Jack, unsure what he meant.</p>\n\
-    <p>\"You know, power. Everyone has it, but slayers more,\" said Andrew, again trying to explain but not having the words. \"She could kill a regular person if she wanted, or by accident. She could join the Dark Side of the Force just 'cause. If she hides she'll be found. She's always going to be involved because she is power. Destiny. The rest is keeping dry.\" He huffed. \"It makes more sense when Buffy explains it,\" he half whined.</p>\n\
-    <p>But Jack thought he sort of understood where they were coming from, Spiderman not withstanding. Kids with superpowers were like kids with guns and Jack knew only too well what innocent tragedies came from that combination. If Xander and Giles and everyone else here didn't find them, train them, and give them an acceptable target then the death toll might be just that much higher. In their war, these were the soldiers they needed and they weren't going to turn them away. But it still didn't make it right, and given Andrew's resistance, of all people, he knew they would have their work cut out for them convincing the others.</p>\n\
-    <p>He let out an explosive sigh, barely listening as Daniel continued arguing with Andrew. Here he'd come to Cleveland, fearing the worst from having inadvertently dragged Xander into his world, when in fact it was he who had been irrecoverably drawn into Xander's.</p>\n\
-    <hr>\"I hate parents!\" Buffy groaned as she flopped back on the shoddy sitting room couch. Xander merely rolled his head to look at her from where he sat already splayed out. The relatives had just left, and it was only nine- thirty. It felt like half the night had already passed away.<p>\"Aunt and uncle,\" he corrected her, but Buffy only muttered a half hearted \"Guardians, whatever\" in response, which made Xander grin. Poor Buffy had no patience for normal people. He pitied the families she would have to talk to in Europe \xE2\x80\x93 in a foreign language. Thankfully they'd done a lot of the initial legwork last year so it wouldn't be quite the same disaster, but there were still all those newbies out there that had been called since then and all the ones to come. Xander was just glad he got to stay in America.</p>\n\
-    <p>\"Well, at least they finally listened,\" said Giles from where he sat a little straighter in the armchair. \"That's something. I suspect they'll be all right in the end.\"</p>\n\
-    <p>\"I hope so for Courtney's sake,\" said Xander though he agreed with the assessment. Kim and Paul Laysan had reacted by the book and had only lashed out in fear and denial. However, they loved their niece enough to take Courtney's blowup to heart. This family would make it. Others hadn't; some probably shouldn't have been told. A couple of the slayers had told him they had ended up denying it again to their parents who couldn't cope. Getting them back for the summer was going to be a challenge that Xander was not looking forward to.</p>\n\
-    <p>As for the Laysans, Giles as the resident 'parent' was going to meet with them tomorrow, somewhere more neutral to talk about the details. Courtney would probably stay in Cleveland until all the legalities and school stuff were taken care of so they could maximize her training time. The real work wouldn't begin until the summer of course, but she needed more than just instinct for the interim.</p>\n\
-    <p>Xander sighed. He hated this part of the watcher gig, dealing with the support systems and families that were changed forever. Sure the system was better now for the slayers but it was still pretty high up on the sucking scale.</p>\n\
-    <p>Thinking of families and the Laysans in particular made Xander think of his previous revelation of the day. All things considered, Jack had taken it fairly well, but that was where Xander's experience with parents ran out. His own he had avoided as much as possible after eighth grade, like squeaky boards when you were trying to sneak in after curfew. Not that they had really cared enough to give him a curfew. Had Jack been his dad growing up, he was sure there would have been not only a curfew but an angry and worried-out-of-his-mind parent waiting up for him. Xander could handle Jack mad now only because of nerves steeled from years of standing up to Buffy and Giles, but his high school self would have stood no chance.</p>\n\
-    <p>\"Hey Buffy,\" he said, again rolling his head to look at her. \"How did your mom take finding out, after you came back, I mean?\" he added referring to the summer Buffy had run away to LA.</p>\n\
-    <p>She thought for a moment before answering. \"Things were different,\" she said slowly. \"At first I think we were both just getting used to each other again. She didn't push too much but she did ask what was going on.\" Buffy smiled faintly, \"A couple times she stayed up late and made cookies that were warm and gooey when I got home.\"</p>\n\
-    <p>\"It was hard on her,\" said Giles softly. \"She held up remarkably well.\"</p>\n\
-    <p>\"She was amazing,\" Buffy agreed sadly. \"And it took me so long to see it. It was almost too late.\" She let out a sigh that held the edges of tears though her eyes were still dry.</p>\n\
-    <p>\"But such are teenagers,\" Giles replied gently. \"No one ever knows as much as they do about anything.\"</p>\n\
-    <p>\"Were we really as awful as I remember?\" she asked.</p>\n\
-    <p>\"Do you really want to know?\" There was a teasing twinkle in Giles's eye as he said this, lightening the mood.</p>\n\
-    <p>\"Buffy, think of Dawn and multiply by three,\" Xander suggested. He, Buffy, and Willow had probably broken every school rule there was for their regular teachers, and poor Giles had had to deal with them the rest of the time along with their significant others. \"And add a factor of ten for Cordelia,\" he added at the thought of his ex-girlfriend.</p>\n\
-    <p>\"Uhhgg. I am never having kids,\" Buffy declared.</p>\n\
-    <p>\"Yes, because that plan works out, oh so well,\" said Giles dryly surprising a bark of laughter out of Xander and a wide eyed look from Buffy.</p>\n\
-    <p>\"Great,\" she said resettling. \"I can just see myself in ten years, old and fat, clucking over my glasses at my slayers about doing their homework.\" The image of her little and old made Xander laugh again that prompted an arch look from the 'little old lady.'</p>\n\
-    <p>\"I wouldn't worry Buffy,\" he said consolingly. \"You'll never be fat or wear glasses.\"</p>\n\
-    <p>\"I'll still be old,\" she grumbled.</p>\n\
-    <p>\"And this is a bad thing?\" asked Giles.</p>\n\
-    <p>Buffy turned to him a smiled, serious now. \"No,\" she said quietly. \"I guess . . . I'm still getting used to the idea that I've got at life beyond twenty-five.\" Giles smiled back, as did Xander, the three of them sharing mutual love and hope for a better life for all of them. Leaving Sunnydale had been like breaking free of a curse, and traveling America and Europe looking for slayers had been the best medicine for all the hurt and pain they'd suffered. The trip had shown them that despite all the bad stuff \xE2\x80\x93 vampires, corrupt cops, human crime, global climate change \xE2\x80\x93 there was still so much to live for in the world, so much to fight for. There were puppies and basketball games and carnivals and cafes and Yosemite Park and people. Millions and billions of people who loved life too.</p>\n\
-    <p>Xander knew it wasn't all black and white, he'd need only look at their own lives to see that, and he was cynical enough to ask twice what the catch was. Good people messed up, bad people changed for the better, and everyone was just struggling through life as best they could. It was having that chance to struggle that was important. Hope. Somehow it was easier to see outside of Sunnydale.</p>\n\
-    <p>\"So Xander, how's the dad thing going?\" Buffy broke the silence that had fallen over them like a warm blanket. \"He didn't look too happy at dinner.\"</p>\n\
-    <p>Xander thought back over their stilted conversation on the porch that hadn't done anything it seemed except reinforce the gap between them. \"He's not happy about any of it. His work's classified and no one is supposed to know about it.\" Jack hadn't appeared too angry though, just tired and worried. \"I think he was more upset about us fighting vampires for a living.\"</p>\n\
-    <p>\"This from a guy who's friends with an alien?\" asked Buffy.</p>\n\
-    <p>\"I suspect his problem arises more from the existence of the supernatural,\" said Giles. \"Dr. Jackson and Major Carter earlier were trying to rationalize everything with science. Honestly, I couldn't understand half of what they were saying, but they were more concerned with the reasons behind the belief than the actual beliefs.\"</p>\n\
-    <p>Thinking back on it, Xander wasn't so sure. \"Not Jack,\" he disagreed. \"He had a problem with us fighting. 'Kids'. Basically told me he wanted me to stop because it was too dangerous.\"</p>\n\
-    <p>A ghost of a smile flittered over Buffy's face at that news. \"I like him,\" she said. \"Not that you should stop,\" she quickly added, suddenly worried Xander might take it the wrong way, \"but it's cool that he asked.\"</p>\n\
-    <p>\"So I can keep him?\" Xander joked, but internally giddy that Jack had won Buffy's approval.</p>\n\
-    <p>\"Xander, I think you would be foolish to let him go,\" said Giles, making Xander this time look at the other man in surprise. Giles was actually for Jack now? After all the hemming and hawing about the American military and casual questions about his visits and general disapproving vibes? Xander was so startled, he just stared at the one adult that had been constant in his life and who now smiled knowingly back at him, clearly amused by his frank disbelief that he approved.</p>\n\
-    <p>\"Xand, you're gonna catch flies if you leave your jaw there,\" said Buffy with a giggle. Abruptly, he shut his mouth and looked from one to the other.</p>\n\
-    <p>\"He's been good for you,\" said Giles still smiling like he knew everything. \"And I must say that I'm impressed he has not disappeared on you.\"</p>\n\
-    <p>\"I don't think I could get him to if I wanted it,\" Xander replied, finally over most of his shock and decidedly happy about Giles's sudden support.</p>\n\
-    <p>\"Just as long as the military thing doesn't backfire on us,\" said Buffy. \"If it does I reserve the right to blow up their mountain.\"</p>\n\
-    <p>\"I know I'm going to regret asking, but why blow it up?\" asked Giles wincing in anticipation.</p>\n\
-    <p>Buffy shrugged impishly. \"I'm better at blowing up stuff. Three for two record, you know.\"</p>\n\
-    <p>\"Besides,\" Xander couldn't help but add. \"Finding the mountain would be a hell of a lot easier than going after the people involved.\"</p>\n\
-    <p>\"Plus, we could give them time to evacuate,\" said Buffy magnanimously, as if utter destruction were not her goal. Giles merely regarded them calmly, unfazed by their plan.</p>\n\
-    <p>\"Just as long as I am not in the country when you do so,\" was all he said. He stood up and grimaced from moving stiff muscles. \"Either of you like tea?\" he asked as his back popped.</p>\n\
-    <p>\"Coffee.\"</p>\n\
-    <p>\"Hot chocolate,\" they requested. Giles shook his head at them but nodded anyway and left for the kitchen. Xander and Buffy just stayed on the comfy couch, too lazy to move.</p>\n\
-    <p>\"You really like Jack?\" Xander asked a minute later.</p>\n\
-    <p>\"Yeah,\" Buffy sighed, turning her head towards him and smiling. \"I do. He's around, you know? You guys visit. He calls. Sometimes I wish my dad would bother himself about it, but then I remember how much I don't like him. But I like Jack. He's a lot like you.\"</p>\n\
-    <p>\"Witty and ridiculously good looking?\" Xander joked.</p>\n\
-    <p>\"He could pass for cute,\" said Buffy with the devil in her eye. Xander threw his head back against the couch.</p>\n\
-    <p>\"First Dawn, now you!\" he groaned.</p>\n\
-    <p>\"Dawn said he was cute?\"</p>\n\
-    <p>\"Not Jack, Daniel. Which is marginally better I guess. At least he's not supposed to be my father.\" He looked critically at Buffy and tried thinking about her and Jack. It was a bad idea. \"I need therapy,\" he said. \"I think I just scarred myself for life.\"</p>\n\
-    <p>\"Why?\" asked Buffy giving him a quizzical look at his odd statement.</p>\n\
-    <p>Xander's mouth opened to share before he could stop it. \"You as my stepmom. I will never forgive you if that happens.\"</p>\n\
-    <p>Buffy looked at him a little stricken by that, and then burst out laughing. After a second, Xander joined in. The idea was ridiculous and so completely beyond messed up, but stranger things had happened. It felt good to laugh, like all the uncertainty and stress just drained away from his chest, down his arms, and out his fingertips, leaving only a relaxed tiredness behind. By the time Giles came in a few minutes later, their laughter had melted into spurts of giggles. The Head Watcher simply handed them two steaming mugs and quirked an eyebrow.</p>\n\
-    <p>\"Trust me, you don't want to know,\" Buffy told him as she accepted her hot chocolate.</p>\n\
-    <p>\"Do either of you have objections to putting up Colonel O'Neill and his friends for the night?\" Giles took her advice to heart.</p>\n\
-    <p>Xander shrugged. \"No, why?\"</p>\n\
-    <p>\"Oh, he just told me they were going to have to leave soon to get back to the base they're staying at. I thought why not stay here.\"</p>\n\
-    <p>\"Sure, but I want Willow or someone to put an alarm on their door.\"</p>\n\
-    <p>\"Buffy,\"</p>\n\
-    <p>\"Xander, we're not chaining them up, but they could still be dangerous,\" the Slayer overrode his protest. \"It's just in case. They won't even know it's there.\"</p>\n\
-    <p>Unable to argue with that logic, and knowing he wouldn't win anyway if he did, Xander agreed to it. \"Okay,\" he sighed. \"I'll go ask them.\" With that, he pulled himself to his feet and went in search of Jack.</p>\n\
-    <hr>\"Hey Jack,\" Xander's voice interrupted the discussion around the dining room table. Jack and his team were solidifying what they knew and trying to come up with a report for Hammond and possibly Davis about the situation here. Top on his list of recommendations was a program that eliminated the need for underage slayers.<p>\"Xander, what's up?\" he asked as his son joined them at the table with a cup of coffee. Jack wondered if there was any left in the kitchen.</p>\n\
-    <p>\"Giles said you have to leave soon. Do you wanna just stay here for the night?\" he asked. \"We've got plenty of space.\"</p>\n\
-    <p>\"That'd be great,\" Jack smiled, not very surprised by the offer but glad for it nonetheless. They needed to be back here in the morning anyway to see about the rogue NID agents and it would save them a long drive each way.</p>\n\
-    <p>\"Cool. So whatcha doing here?\" Xander turned his attention to the looseleaf paper Jack was writing on. \"'Intelligence, armament . . .' You planning a war or something?\"</p>\n\
-    <p>\"Uh, yeah,\" said Jack carefully. Considering the way Andrew had blown up over this, he wasn't too sure he was ready for Xander's reaction to his little brainchild. He cast looks to Daniel, Carter, and Teal'c, silently asking them if he should broach the subject.</p>\n\
-    <p>\"We were actually thinking of what we could do to help,\" said Daniel, ever the diplomat. \"From what you've told us, it sounds like a pretty big job protecting the world from vampires from out of Cleveland.\"</p>\n\
-    <p>\"So when you say help, you mean have the military come in with intelligence and weapons and just do the job for us?\" Xander looked from Daniel to Jack questioningly. So far, no explosions, that was good.</p>\n\
-    <p>\"That would be the long term goal,\" said Carter. \"With such a big project we would need a transition period but the ultimate goal is that the need for slayers would be gone.\"</p>\n\
-    <p>\"Gone.\" Xander let out a half laugh of disbelief, pulling Jack's piece of paper over and looking at it one more time. \"You have no idea what you're talking about, do you?\"</p>\n\
-    <p>A little taken aback by this response, Jack lifted his eyebrows and suggested, \"Vampires? Ugly evil things? Look, I know we're new to this stuff, but there's got to be a better way to fight them than with little girls.\"</p>\n\
-    <p>Xander leveled his eye on him. \"And what about the next hell god or when the First makes his next move? Will your soldiers be able to handle that?\"</p>\n\
-    <p>\"True gods do not exist,\" said Teal'c, but Xander wasn't smiling when he turned to the Jaffa.</p>\n\
-    <p>\"Yeah? Tell that to someone who wasn't there.\"</p>\n\
-    <p>Jack glanced down the table at Daniel and Carter who looked just as bewildered as he felt. But Xander went on.</p>\n\
-    <p>\"It's not just vampires,\" he said sitting back in his chair so he could see them all more easily. \"And it's not just demons you can kill by shooting. There are a lot of things out there, that trying to shoot them full of bullets will just piss them off. Intelligence isn't just finding out where they are either.\"</p>\n\
-    <p>\"We realize it's not that simple,\" said Jack a little annoyed at being talked down to. \"This is just a start.\"</p>\n\
-    <p>\"You're talking about setting up a system we already have in place,\" Xander replied.</p>\n\
-    <p>\"Oh?\" said Jack. This was news. Where was this marvelous system then? \"You have people gathering info on all hostile movements? Backup standing by for Willow and Kennedy? Measures in place in case someone tries to end the world?\"</p>\n\
-    <p>\"Yeah, us.\"</p>\n\
-    <p>Great. Jack sighed impatiently. That was hardly an answer and all this was getting nowhere. \"Xander, training hardly counts. We're talking about an organized defense against all the supernatural crap. No more kids fighting and dying.\"</p>\n\
-    <p>\"Taking them out of the action won't protect them,\" Xander shook his head. \"You need the supernatural to fight the supernatural, and that's the slayers. They're drawn to it. Half your soldiers will be dead in their first skirmish. I'm not kidding, Jack,\" he added when the older man opened his mouth to protest. He was dead serious. \"I know you don't like it,\" he said a little more softly. \"Most of the time I don't like it either, but more people will die if we don't do it our way.\"</p>\n\
-    <p>\"What's the system you have?\" Carter asked into the ensuing silence. Xander broke off his staring contest with Jack and smiled sourly.</p>\n\
-    <p>\"Welcome to the North American Headquarters of the International Watchers Council,\" he said.</p>\n\
-    <p>\"International Watcher's Council?\" Jack repeated, not sure he was hearing this. He looked around at the china cabinet and the framed Ansel Adams posters on the walls. \"Here?\"</p>\n\
-    <p>\"This is just the central operations room,\" said Xander dryly, \"also known three times a day as the dining room.\"</p>\n\
-    <p>\"You're saying that you run an international organization against vampires out of the dining room?\" he asked.</p>\n\
-    <p>Xander shrugged. \"It's the table. Giles actually runs the international part as Head of the Watchers. I just take care of the slayers in North America, though Mexico and all those little countries down there are getting transferred to the South American office once Willow gets set up.\"</p>\n\
-    <p>\"Mr. North America,\" Jack recalled Xander's confusing statement from that morning. Xander was responsible for maintaining the safety of an entire continent? That was insane!</p>\n\
-    <p>\"Why have you been chosen for these positions?\" asked Teal'c. \"Would it not be more fitting for an elder generation to carry out these duties?\"</p>\n\
-    <p>\"Because the 'elder generation' also known as the Stuffy Assholes in England Who Thought They Knew What Was Going On But Really Didn't went kablewie two years ago,\" Xander said, a little irritated. \"Giles and about fifteen people he's found since then are all that's left of the old Council. That left us with a whole lot of new slayers all over the place so we decided to reform the council so that it would actually help the Slayer instead of try to enslave her.\"</p>\n\
-    <p>\"Wait a minute,\" said Jack, holding up a hand to slow him down. There had been a bit too much information for him to process in that last explanation. \"There was another organization before you, who did the same thing?\"</p>\n\
-    <p>\"No.\" Xander corrected him. \"There was an older Council that claimed to do the same thing. The Slayer was just their tool in the fight. They didn't really do anything except cause trouble for us. It was about power,\" he practically spat the same word Andrew had used earlier. \"We still do what we've always done just on a bigger scale now that there are more slayers.\"</p>\n\
-    <p>\"More slayers?\" asked Daniel.</p>\n\
-    <p>\"There used to be one, Buffy. And I am so not explaining right now. Point is, we're set up to handle it. You'd just be getting in our way.\"</p>\n\
-    <p>More complications, Jack figured. He could feel a headache coming on already. It sounded like some serious history, for what was clicking together in Jack's head was the timeframe. Two years ago Xander had lost his eye, Sunnydale had sunk into the ground, and his girlfriend had died. That sounded like too much of a coincidence for comfort. He almost asked what had happened but decided to wait until he and Xander were alone. Instead, he simply watched his son as Daniel tried to convince him that quitting would give him a chance at a better life, but Xander wasn't having any of it. Jack saw the same determination in his eye that had been there out on the porch, when he'd asked about it. Xander was in too deep. 'I'm talking about my life,' he'd said just that morning. Jack had thought earlier that maybe he would see reason and let the soldiers take over, but once again, Xander's deep seated mistrust of the military wouldn't give ground, no matter what Daniel said.</p>\n\
-    <p>\"Look, the last time you guys tried to take over we had to bail you out,\" Xander brought Jack crashing back to the present. \"So just forget it already. The government tries to take over again we'll stop you. And trust me when I say you don't want to get Buffy or Willow mad.\" But it was his first statement that got Jack's attention.</p>\n\
-    <p>\"What do you mean 'the last time we took over'?\"</p>\n\
-    <p>Xander sighed, obviously wishing he hadn't said anything. \"It was called the Initiative. Top secret, obviously. Ended with a lot of dead soldiers. The ones that made it only did because we stepped in. They didn't know what they were dealing with; you don't know what you're dealing with. And I don't care about your good intentions, there's always going to be some mad scientist who wants to play god and damn the consequences. So I'm telling you now, we will not let that happen again. If it does I'd stay away from that mountain of yours.\"</p>\n\
-    <p>Jack sat up at the words that sounded ominously like a threat. \"Why?\" he asked.</p>\n\
-    <p>Xander glanced at him then at the others. \"Buffy said something about blowing it up,\" he said casually. And something in the way he said it made Jack certain he wasn't joking around. \"Come on,\" Xander abruptly stood up, effectively putting an end to the conversation. \"I'll show you where you're staying.\" He left the room by way of the kitchen, and as Jack and his team got up to follow him, he knew that they'd be spending the night talking instead of sleeping.</p>\n\
-    <hr>AN: Honestly, I don't know how I feel about this chapter. For those that feel as ambiguous about it as I do, I think the next few chapters will make up for it, and they will definitely be out sooner."
-  summary: 
-  published_at: 2009-12-12
-  endnotes: 
-  work_id: 96
-  hidden_by_admin: false
 chapter_00087: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:13:57 +00:00
+  created_at: 2009-12-12 21:13:57 Z
   title: 
-  updated_at: 2009-12-12 21:13:57 +00:00
+  updated_at: 2009-12-12 21:13:57 Z
   notes: 
   word_count: 1156
   id: 87
@@ -11332,9 +11332,9 @@ chapter_00087:
 chapter_00142: 
   posted: true
   position: 22
-  created_at: 2009-12-12 23:03:55 +00:00
+  created_at: 2009-12-12 23:03:55 Z
   title: Rabbit Holes
-  updated_at: 2010-01-06 18:50:54 +00:00
+  updated_at: 2010-01-06 18:50:54 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1138
   id: 142
@@ -11386,9 +11386,9 @@ chapter_00142:
 chapter_00059: 
   posted: true
   position: 1
-  created_at: 2009-03-20 23:24:08 +00:00
+  created_at: 2009-03-20 23:24:08 Z
   title: ""
-  updated_at: 2009-06-19 11:12:17 +00:00
+  updated_at: 2009-06-19 12:12:17 Z
   notes: 
   word_count: 8
   id: 59
@@ -11401,9 +11401,9 @@ chapter_00059:
 chapter_00114: 
   posted: true
   position: 11
-  created_at: 2009-12-12 22:54:05 +00:00
+  created_at: 2009-12-12 22:54:05 Z
   title: Eleventh Hour Tango
-  updated_at: 2009-12-12 23:02:22 +00:00
+  updated_at: 2009-12-12 23:02:22 Z
   notes: "Bridges 11: Eleventh Hour Tango"
   word_count: 8022
   id: 114
@@ -11613,12 +11613,36 @@ chapter_00114:
   endnotes: 
   work_id: 96
   hidden_by_admin: false
+chapter_00171: 
+  posted: false
+  position: 1
+  created_at: 2010-07-28 13:10:03 Z
+  title: ""
+  updated_at: 2010-07-28 13:10:03 Z
+  notes: 
+  word_count: 90
+  id: 171
+  content: |-
+    'What a funny watch!' she remarked. 'It tells the day of the month, and doesn't tell what o'clock it is!'
+    
+    'Why should it?' muttered the Hatter. 'Does your watch tell you what year it is?'
+    
+    Of course not,' Alice replied very readily: 'but that's because it stays the same year for such a long time altogether.'
+    
+    'Which is just the case with mine,' said the Hatter. 
+    
+    Alice felt dreadfully puzzled. The hatter's remark seemed to her to have no sort of meaning in it, and yet it was certainly English.
+  summary: 
+  published_at: 2010-07-28
+  endnotes: 
+  work_id: 106
+  hidden_by_admin: false
 chapter_00088: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:13:58 +00:00
+  created_at: 2009-12-12 21:13:58 Z
   title: 
-  updated_at: 2009-12-12 21:13:58 +00:00
+  updated_at: 2009-12-12 21:13:58 Z
   notes: 
   word_count: 3909
   id: 88
@@ -11642,9 +11666,9 @@ chapter_00088:
 chapter_00143: 
   posted: true
   position: 23
-  created_at: 2009-12-12 23:03:55 +00:00
+  created_at: 2009-12-12 23:03:55 Z
   title: Prisoners Again
-  updated_at: 2010-01-06 18:50:54 +00:00
+  updated_at: 2010-01-06 18:50:54 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1381
   id: 143
@@ -11715,9 +11739,9 @@ chapter_00143:
 chapter_00001: 
   posted: true
   position: 1
-  created_at: 2008-11-09 01:26:01 +00:00
+  created_at: 2008-11-09 01:26:01 Z
   title: First Chapter Title
-  updated_at: 2009-06-19 11:12:15 +00:00
+  updated_at: 2009-06-19 12:12:15 Z
   notes: Notes on first chapter
   word_count: 5
   id: 1
@@ -11727,12 +11751,36 @@ chapter_00001:
   endnotes: 
   work_id: 1
   hidden_by_admin: false
+chapter_00172: 
+  posted: true
+  position: 1
+  created_at: 2010-07-28 13:10:16 Z
+  title: ""
+  updated_at: 2010-07-28 13:11:35 Z
+  notes: 
+  word_count: 90
+  id: 172
+  content: |-
+    'What a funny watch!' she remarked. 'It tells the day of the month, and doesn't tell what o'clock it is!'
+    
+    'Why should it?' muttered the Hatter. 'Does your watch tell you what year it is?'
+    
+    Of course not,' Alice replied very readily: 'but that's because it stays the same year for such a long time altogether.'
+    
+    'Which is just the case with mine,' said the Hatter. 
+    
+    Alice felt dreadfully puzzled. The hatter's remark seemed to her to have no sort of meaning in it, and yet it was certainly English.
+  summary: 
+  published_at: 2010-07-28
+  endnotes: 
+  work_id: 107
+  hidden_by_admin: false
 chapter_00115: 
   posted: true
   position: 12
-  created_at: 2009-12-12 22:54:06 +00:00
+  created_at: 2009-12-12 22:54:06 Z
   title: Twelve Little Monkeys Hoppin' on the Bed
-  updated_at: 2009-12-12 23:02:23 +00:00
+  updated_at: 2009-12-12 23:02:23 Z
   notes: "Bridges 12: Twelve Little Monkeys Hoppin' on the Bed"
   word_count: 7933
   id: 115
@@ -12004,9 +12052,9 @@ chapter_00115:
 chapter_00089: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:13:59 +00:00
+  created_at: 2009-12-12 21:13:59 Z
   title: 
-  updated_at: 2009-12-12 21:13:59 +00:00
+  updated_at: 2009-12-12 21:13:59 Z
   notes: 
   word_count: 547
   id: 89
@@ -12024,9 +12072,9 @@ chapter_00089:
 chapter_00144: 
   posted: true
   position: 24
-  created_at: 2009-12-12 23:03:56 +00:00
+  created_at: 2009-12-12 23:03:56 Z
   title: The Almighty
-  updated_at: 2010-01-06 18:50:55 +00:00
+  updated_at: 2010-01-06 18:50:55 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1197
   id: 144
@@ -12080,9 +12128,9 @@ chapter_00144:
 chapter_00116: 
   posted: true
   position: 13
-  created_at: 2009-12-12 22:54:06 +00:00
+  created_at: 2009-12-12 22:54:06 Z
   title: Thirteen of Friday
-  updated_at: 2009-12-12 23:02:23 +00:00
+  updated_at: 2009-12-12 23:02:23 Z
   notes: "Bridges 13: Thirteen of Friday"
   word_count: 8903
   id: 116
@@ -12351,9 +12399,9 @@ chapter_00116:
 chapter_00031: 
   posted: true
   position: 1
-  created_at: 2009-03-10 00:24:30 +00:00
+  created_at: 2009-03-10 00:24:30 Z
   title: ""
-  updated_at: 2009-06-19 11:12:15 +00:00
+  updated_at: 2009-06-19 12:12:15 Z
   notes: 
   word_count: 2
   id: 31
@@ -12366,9 +12414,9 @@ chapter_00031:
 chapter_00002: 
   posted: true
   position: 2
-  created_at: 2008-11-09 01:26:01 +00:00
+  created_at: 2008-11-09 01:26:01 Z
   title: Second Chapter Title
-  updated_at: 2009-06-19 11:12:15 +00:00
+  updated_at: 2009-06-19 12:12:15 Z
   notes: Notes on second chapter
   word_count: 5
   id: 2
@@ -12381,9 +12429,9 @@ chapter_00002:
 chapter_00117: 
   posted: true
   position: 14
-  created_at: 2009-12-12 22:54:07 +00:00
+  created_at: 2009-12-12 22:54:07 Z
   title: Fourteen Gazillion To Go
-  updated_at: 2009-12-12 23:02:23 +00:00
+  updated_at: 2009-12-12 23:02:23 Z
   notes: "Bridges 14: Fourteen Gazillion To Go"
   word_count: 11290
   id: 117
@@ -12684,9 +12732,9 @@ chapter_00117:
 chapter_00060: 
   posted: true
   position: 1
-  created_at: 2009-05-10 12:20:06 +00:00
+  created_at: 2009-05-10 13:20:06 Z
   title: ""
-  updated_at: 2009-06-19 11:12:17 +00:00
+  updated_at: 2009-06-19 12:12:17 Z
   notes: 
   word_count: 1131
   id: 60
@@ -12761,9 +12809,9 @@ chapter_00060:
 chapter_00032: 
   posted: true
   position: 1
-  created_at: 2009-03-11 21:51:22 +00:00
+  created_at: 2009-03-11 21:51:22 Z
   title: ""
-  updated_at: 2009-06-19 11:12:16 +00:00
+  updated_at: 2009-06-19 12:12:16 Z
   notes: 
   word_count: 1
   id: 32
@@ -12776,9 +12824,9 @@ chapter_00032:
 chapter_00145: 
   posted: true
   position: 25
-  created_at: 2009-12-12 23:03:56 +00:00
+  created_at: 2009-12-12 23:03:56 Z
   title: Of Cabbages and Kings
-  updated_at: 2010-01-06 18:50:55 +00:00
+  updated_at: 2010-01-06 18:50:55 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1102
   id: 145
@@ -12853,9 +12901,9 @@ chapter_00145:
 chapter_00003: 
   posted: true
   position: 1
-  created_at: 2008-11-09 01:26:01 +00:00
+  created_at: 2008-11-09 01:26:01 Z
   title: Only Chapter Title
-  updated_at: 2009-06-19 11:12:15 +00:00
+  updated_at: 2009-06-19 12:12:15 Z
   notes: Notes on one and only chapter
   word_count: 11
   id: 3
@@ -12868,9 +12916,9 @@ chapter_00003:
 chapter_00061: 
   posted: true
   position: 2
-  created_at: 2009-05-10 12:50:52 +00:00
+  created_at: 2009-05-10 13:50:52 Z
   title: ""
-  updated_at: 2009-06-19 11:12:17 +00:00
+  updated_at: 2009-06-19 12:12:17 Z
   notes: ""
   word_count: 121
   id: 61
@@ -12919,9 +12967,9 @@ chapter_00061:
 chapter_00146: 
   posted: true
   position: 26
-  created_at: 2009-12-12 23:03:56 +00:00
+  created_at: 2009-12-12 23:03:56 Z
   title: Snake Charming
-  updated_at: 2010-01-06 18:50:55 +00:00
+  updated_at: 2010-01-06 18:50:55 Z
   notes: This part is rated PG-13 for content.
   word_count: 1090
   id: 146
@@ -12978,9 +13026,9 @@ chapter_00146:
 chapter_00004: 
   posted: true
   position: 1
-  created_at: 2008-11-09 01:26:01 +00:00
+  created_at: 2008-11-09 01:26:01 Z
   title: Only Chapter Title
-  updated_at: 2009-06-19 11:12:15 +00:00
+  updated_at: 2009-06-19 12:12:15 Z
   notes: Notes on one and only chapter
   word_count: 12
   id: 4
@@ -12993,9 +13041,9 @@ chapter_00004:
 chapter_00118: 
   posted: true
   position: 15
-  created_at: 2009-12-12 22:54:07 +00:00
+  created_at: 2009-12-12 22:54:07 Z
   title: Fifteen Thousand Miles From Earth
-  updated_at: 2009-12-12 23:02:24 +00:00
+  updated_at: 2009-12-12 23:02:24 Z
   notes: "Bridges 15: Fifteen Thousand Miles From Earth"
   word_count: 5315
   id: 118
@@ -13207,9 +13255,9 @@ chapter_00118:
 chapter_00119: 
   posted: true
   position: 16
-  created_at: 2009-12-12 22:54:08 +00:00
+  created_at: 2009-12-12 22:54:08 Z
   title: Sixteen Happier Endings
-  updated_at: 2009-12-12 22:54:22 +00:00
+  updated_at: 2009-12-12 22:54:22 Z
   notes: "Bridges 16: Sixteen Happier Endings"
   word_count: 5007
   id: 119
@@ -13387,9 +13435,9 @@ chapter_00119:
 chapter_00147: 
   posted: true
   position: 27
-  created_at: 2009-12-12 23:03:57 +00:00
+  created_at: 2009-12-12 23:03:57 Z
   title: Snakehead
-  updated_at: 2010-01-06 18:50:55 +00:00
+  updated_at: 2010-01-06 18:50:55 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1095
   id: 147
@@ -13431,9 +13479,9 @@ chapter_00147:
 chapter_00034: 
   posted: true
   position: 1
-  created_at: 2009-03-11 22:22:29 +00:00
+  created_at: 2009-03-11 22:22:29 Z
   title: ""
-  updated_at: 2009-06-19 11:12:16 +00:00
+  updated_at: 2009-06-19 12:12:16 Z
   notes: 
   word_count: 19
   id: 34
@@ -13449,9 +13497,9 @@ chapter_00034:
 chapter_00062: 
   posted: true
   position: 1
-  created_at: 2009-05-10 12:57:47 +00:00
+  created_at: 2009-05-10 13:57:47 Z
   title: ""
-  updated_at: 2009-09-17 21:06:58 +00:00
+  updated_at: 2009-09-17 22:06:58 Z
   notes: 
   word_count: 448
   id: 62
@@ -13487,9 +13535,9 @@ chapter_00062:
 chapter_00005: 
   posted: true
   position: 1
-  created_at: 2008-11-09 01:26:01 +00:00
+  created_at: 2008-11-09 01:26:01 Z
   title: Only Chapter Title
-  updated_at: 2009-06-19 11:12:15 +00:00
+  updated_at: 2009-06-19 12:12:15 Z
   notes: Notes on one and only chapter
   word_count: 13
   id: 5
@@ -13502,9 +13550,9 @@ chapter_00005:
 chapter_00090: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:14:00 +00:00
+  created_at: 2009-12-12 21:14:00 Z
   title: 
-  updated_at: 2009-12-12 21:14:00 +00:00
+  updated_at: 2009-12-12 21:14:00 Z
   notes: 
   word_count: 3980
   id: 90
@@ -13522,9 +13570,9 @@ chapter_00090:
 chapter_00063: 
   posted: false
   position: 1
-  created_at: 2009-06-07 16:24:44 +00:00
+  created_at: 2009-06-07 17:24:44 Z
   title: ""
-  updated_at: 2009-06-07 16:24:44 +00:00
+  updated_at: 2009-06-07 17:24:44 Z
   notes: 
   word_count: 7
   id: 63
@@ -13537,9 +13585,9 @@ chapter_00063:
 chapter_00148: 
   posted: true
   position: 28
-  created_at: 2009-12-12 23:03:57 +00:00
+  created_at: 2009-12-12 23:03:57 Z
   title: Escape  The Sequel
-  updated_at: 2010-01-06 18:50:55 +00:00
+  updated_at: 2010-01-06 18:50:55 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1277
   id: 148
@@ -13598,9 +13646,9 @@ chapter_00148:
 chapter_00006: 
   posted: true
   position: 1
-  created_at: 2008-11-09 01:26:01 +00:00
+  created_at: 2008-11-09 01:26:01 Z
   title: Only Chapter Title
-  updated_at: 2009-06-19 11:12:15 +00:00
+  updated_at: 2009-06-19 12:12:15 Z
   notes: Notes on one and only chapter
   word_count: 14
   id: 6
@@ -13613,9 +13661,9 @@ chapter_00006:
 chapter_00091: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:14:01 +00:00
+  created_at: 2009-12-12 21:14:01 Z
   title: 
-  updated_at: 2009-12-12 21:14:01 +00:00
+  updated_at: 2009-12-12 21:14:01 Z
   notes: 
   word_count: 683
   id: 91
@@ -13633,9 +13681,9 @@ chapter_00091:
 chapter_00092: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:14:01 +00:00
+  created_at: 2009-12-12 21:14:01 Z
   title: 
-  updated_at: 2009-12-12 21:14:01 +00:00
+  updated_at: 2009-12-12 21:14:01 Z
   notes: 
   word_count: 218
   id: 92
@@ -13653,9 +13701,9 @@ chapter_00092:
 chapter_00007: 
   posted: true
   position: 1
-  created_at: 2008-12-05 13:59:14 +00:00
+  created_at: 2008-12-05 13:59:14 Z
   title: ""
-  updated_at: 2009-06-19 11:12:15 +00:00
+  updated_at: 2009-06-19 12:12:15 Z
   notes: 
   word_count: 73
   id: 7
@@ -13668,9 +13716,9 @@ chapter_00007:
 chapter_00035: 
   posted: true
   position: 1
-  created_at: 2009-03-11 22:25:59 +00:00
+  created_at: 2009-03-11 22:25:59 Z
   title: ""
-  updated_at: 2009-06-19 11:12:16 +00:00
+  updated_at: 2009-06-19 12:12:16 Z
   notes: 
   word_count: 16
   id: 35
@@ -13686,9 +13734,9 @@ chapter_00035:
 chapter_00149: 
   posted: true
   position: 29
-  created_at: 2009-12-12 23:03:57 +00:00
+  created_at: 2009-12-12 23:03:57 Z
   title: Medics and Movies
-  updated_at: 2010-01-06 18:50:55 +00:00
+  updated_at: 2010-01-06 18:50:55 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1167
   id: 149
@@ -13738,9 +13786,9 @@ chapter_00149:
 chapter_00064: 
   posted: true
   position: 1
-  created_at: 2009-07-17 21:50:31 +00:00
+  created_at: 2009-07-17 22:50:31 Z
   title: ""
-  updated_at: 2009-07-17 21:51:11 +00:00
+  updated_at: 2009-07-17 22:51:11 Z
   notes: 
   word_count: 3067
   id: 64
@@ -13889,9 +13937,9 @@ chapter_00064:
 chapter_00065: 
   posted: true
   position: 1
-  created_at: 2009-07-17 21:55:32 +00:00
+  created_at: 2009-07-17 22:55:32 Z
   title: ""
-  updated_at: 2009-07-17 21:56:18 +00:00
+  updated_at: 2009-07-17 22:56:18 Z
   notes: 
   word_count: 2035
   id: 65
@@ -14040,9 +14088,9 @@ chapter_00065:
 chapter_00093: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:14:02 +00:00
+  created_at: 2009-12-12 21:14:02 Z
   title: 
-  updated_at: 2009-12-12 21:14:03 +00:00
+  updated_at: 2009-12-12 21:14:03 Z
   notes: 
   word_count: 5807
   id: 93
@@ -14060,9 +14108,9 @@ chapter_00093:
 chapter_00036: 
   posted: true
   position: 1
-  created_at: 2009-03-11 22:30:12 +00:00
+  created_at: 2009-03-11 22:30:12 Z
   title: ""
-  updated_at: 2009-06-19 11:12:16 +00:00
+  updated_at: 2009-06-19 12:12:16 Z
   notes: 
   word_count: 27
   id: 36
@@ -14078,9 +14126,9 @@ chapter_00036:
 chapter_00008: 
   posted: true
   position: 1
-  created_at: 2008-12-06 22:28:54 +00:00
+  created_at: 2008-12-06 22:28:54 Z
   title: Tale ten
-  updated_at: 2009-06-19 11:12:15 +00:00
+  updated_at: 2009-06-19 12:12:15 Z
   notes: ""
   word_count: 4593
   id: 8
@@ -14140,9 +14188,9 @@ chapter_00008:
 chapter_00120: 
   posted: true
   position: 1
-  created_at: 2009-12-12 22:54:08 +00:00
+  created_at: 2009-12-12 22:54:08 Z
   title: First Meeting
-  updated_at: 2009-12-12 23:02:24 +00:00
+  updated_at: 2009-12-12 23:02:24 Z
   notes: 
   word_count: 4366
   id: 120
@@ -14301,9 +14349,9 @@ chapter_00120:
 chapter_00066: 
   posted: true
   position: 1
-  created_at: 2009-07-17 22:03:02 +00:00
+  created_at: 2009-07-17 23:03:02 Z
   title: ""
-  updated_at: 2009-07-17 22:03:20 +00:00
+  updated_at: 2009-07-17 23:03:20 Z
   notes: 
   word_count: 979
   id: 66
@@ -14396,9 +14444,9 @@ chapter_00066:
 chapter_00094: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:14:03 +00:00
+  created_at: 2009-12-12 21:14:03 Z
   title: 
-  updated_at: 2009-12-12 21:14:03 +00:00
+  updated_at: 2009-12-12 21:14:03 Z
   notes: 
   word_count: 862
   id: 94
@@ -14416,9 +14464,9 @@ chapter_00094:
 chapter_00037: 
   posted: true
   position: 1
-  created_at: 2009-03-11 23:22:55 +00:00
+  created_at: 2009-03-11 23:22:55 Z
   title: fuckery!
-  updated_at: 2009-06-19 11:12:16 +00:00
+  updated_at: 2009-06-19 12:12:16 Z
   notes: blip
   word_count: 15
   id: 37
@@ -14431,9 +14479,9 @@ chapter_00037:
 chapter_00121: 
   posted: true
   position: 1
-  created_at: 2009-12-12 23:00:54 +00:00
+  created_at: 2009-12-12 23:00:54 Z
   title: ""
-  updated_at: 2009-12-12 23:01:10 +00:00
+  updated_at: 2009-12-12 23:01:10 Z
   notes: 
   word_count: 17224
   id: 121
@@ -14446,9 +14494,9 @@ chapter_00121:
 chapter_00150: 
   posted: true
   position: 30
-  created_at: 2009-12-12 23:03:57 +00:00
+  created_at: 2009-12-12 23:03:57 Z
   title: Briefing
-  updated_at: 2010-01-06 18:50:55 +00:00
+  updated_at: 2010-01-06 18:50:55 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1458
   id: 150
@@ -14512,9 +14560,9 @@ chapter_00150:
 chapter_00067: 
   posted: true
   position: 1
-  created_at: 2009-07-17 22:08:06 +00:00
+  created_at: 2009-07-17 23:08:06 Z
   title: ""
-  updated_at: 2009-07-17 22:08:55 +00:00
+  updated_at: 2009-07-17 23:08:55 Z
   notes: 
   word_count: 1006
   id: 67
@@ -14563,9 +14611,9 @@ chapter_00067:
 chapter_00095: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:14:04 +00:00
+  created_at: 2009-12-12 21:14:04 Z
   title: 
-  updated_at: 2009-12-12 21:14:04 +00:00
+  updated_at: 2009-12-12 21:14:04 Z
   notes: 
   word_count: 209
   id: 95
@@ -14583,9 +14631,9 @@ chapter_00095:
 chapter_00038: 
   posted: true
   position: 1
-  created_at: 2009-03-12 00:28:57 +00:00
+  created_at: 2009-03-12 00:28:57 Z
   title: ""
-  updated_at: 2009-06-19 11:12:16 +00:00
+  updated_at: 2009-06-19 12:12:16 Z
   notes: 
   word_count: 5
   id: 38
@@ -14598,9 +14646,9 @@ chapter_00038:
 chapter_00122: 
   posted: true
   position: 2
-  created_at: 2009-12-12 23:03:53 +00:00
+  created_at: 2009-12-12 23:03:53 Z
   title: Follow the Yellow Brick Road
-  updated_at: 2010-01-06 18:50:53 +00:00
+  updated_at: 2010-01-06 18:50:53 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1266
   id: 122
@@ -14642,9 +14690,9 @@ chapter_00122:
 chapter_00096: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:14:04 +00:00
+  created_at: 2009-12-12 21:14:04 Z
   title: ""
-  updated_at: 2009-12-12 21:28:21 +00:00
+  updated_at: 2009-12-12 21:28:21 Z
   notes: 
   word_count: 119
   id: 96
@@ -14672,9 +14720,9 @@ chapter_00096:
 chapter_00151: 
   posted: true
   position: 31
-  created_at: 2009-12-12 23:03:57 +00:00
+  created_at: 2009-12-12 23:03:57 Z
   title: Mission's End
-  updated_at: 2010-01-06 18:50:55 +00:00
+  updated_at: 2010-01-06 18:50:55 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1060
   id: 151
@@ -14728,9 +14776,9 @@ chapter_00151:
 chapter_00152: 
   posted: true
   position: 32
-  created_at: 2009-12-12 23:03:57 +00:00
+  created_at: 2009-12-12 23:03:57 Z
   title: Above Ground
-  updated_at: 2010-01-06 18:50:55 +00:00
+  updated_at: 2010-01-06 18:50:55 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1127
   id: 152
@@ -14780,9 +14828,9 @@ chapter_00152:
 chapter_00123: 
   posted: true
   position: 3
-  created_at: 2009-12-12 23:03:53 +00:00
+  created_at: 2009-12-12 23:03:53 Z
   title: New Friends
-  updated_at: 2010-01-06 18:50:53 +00:00
+  updated_at: 2010-01-06 18:50:53 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1461
   id: 123
@@ -14846,9 +14894,9 @@ chapter_00123:
 chapter_00097: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:14:05 +00:00
+  created_at: 2009-12-12 21:14:05 Z
   title: 
-  updated_at: 2009-12-12 21:14:05 +00:00
+  updated_at: 2009-12-12 21:14:05 Z
   notes: 
   word_count: 2329
   id: 97
@@ -14866,9 +14914,9 @@ chapter_00097:
 chapter_00010: 
   posted: true
   position: 1
-  created_at: 2008-12-06 22:52:02 +00:00
+  created_at: 2008-12-06 22:52:02 Z
   title: ""
-  updated_at: 2009-06-19 11:12:15 +00:00
+  updated_at: 2009-06-19 12:12:15 Z
   notes: 
   word_count: 2034
   id: 10
@@ -14890,9 +14938,9 @@ chapter_00010:
 chapter_00068: 
   posted: true
   position: 1
-  created_at: 2009-07-17 22:13:51 +00:00
+  created_at: 2009-07-17 23:13:51 Z
   title: ""
-  updated_at: 2009-07-17 22:15:46 +00:00
+  updated_at: 2009-07-17 23:15:46 Z
   notes: 
   word_count: 6337
   id: 68
@@ -15245,9 +15293,9 @@ chapter_00068:
 chapter_00124: 
   posted: true
   position: 4
-  created_at: 2009-12-12 23:03:53 +00:00
+  created_at: 2009-12-12 23:03:53 Z
   title: Deals
-  updated_at: 2010-01-06 18:50:53 +00:00
+  updated_at: 2010-01-06 18:50:53 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1490
   id: 124
@@ -15317,9 +15365,9 @@ chapter_00124:
 chapter_00098: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:19:12 +00:00
+  created_at: 2009-12-12 21:19:12 Z
   title: ""
-  updated_at: 2009-12-12 21:19:21 +00:00
+  updated_at: 2009-12-12 21:19:21 Z
   notes: 
   word_count: 147
   id: 98
@@ -15343,9 +15391,9 @@ chapter_00098:
 chapter_00011: 
   posted: true
   position: 1
-  created_at: 2008-12-06 22:55:58 +00:00
+  created_at: 2008-12-06 22:55:58 Z
   title: ""
-  updated_at: 2009-06-19 11:12:15 +00:00
+  updated_at: 2009-06-19 12:12:15 Z
   notes: 
   word_count: 1534
   id: 11
@@ -15561,9 +15609,9 @@ chapter_00011:
 chapter_00069: 
   posted: true
   position: 2
-  created_at: 2009-07-17 22:15:44 +00:00
+  created_at: 2009-07-17 23:15:44 Z
   title: ""
-  updated_at: 2009-07-17 22:15:58 +00:00
+  updated_at: 2009-07-17 23:15:58 Z
   notes: ""
   word_count: 2079
   id: 69
@@ -15710,9 +15758,9 @@ chapter_00069:
 chapter_00153: 
   posted: true
   position: 33
-  created_at: 2009-12-12 23:03:57 +00:00
+  created_at: 2009-12-12 23:03:57 Z
   title: Day On
-  updated_at: 2010-01-06 18:50:55 +00:00
+  updated_at: 2010-01-06 18:50:55 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1140
   id: 153
@@ -15766,9 +15814,9 @@ chapter_00153:
 chapter_00154: 
   posted: true
   position: 34
-  created_at: 2009-12-12 23:03:58 +00:00
+  created_at: 2009-12-12 23:03:58 Z
   title: More Problems, More Plans
-  updated_at: 2010-01-06 18:50:55 +00:00
+  updated_at: 2010-01-06 18:50:55 Z
   notes: "************************************************************************ ************************************************************************"
   word_count: 1161
   id: 154
@@ -15821,9 +15869,9 @@ chapter_00154:
 chapter_00125: 
   posted: true
   position: 5
-  created_at: 2009-12-12 23:03:53 +00:00
+  created_at: 2009-12-12 23:03:53 Z
   title: Taxi
-  updated_at: 2010-01-06 18:50:53 +00:00
+  updated_at: 2010-01-06 18:50:53 Z
   notes: "**************************************************************************** ********************************************************************"
   word_count: 1081
   id: 125
@@ -15870,9 +15918,9 @@ chapter_00125:
 chapter_00040: 
   posted: true
   position: 1
-  created_at: 2009-03-12 00:50:20 +00:00
+  created_at: 2009-03-12 00:50:20 Z
   title: ""
-  updated_at: 2009-06-19 11:12:16 +00:00
+  updated_at: 2009-06-19 12:12:16 Z
   notes: 
   word_count: 4
   id: 40
@@ -15885,9 +15933,9 @@ chapter_00040:
 chapter_00099: 
   posted: true
   position: 1
-  created_at: 2009-12-12 21:20:47 +00:00
+  created_at: 2009-12-12 21:20:47 Z
   title: ""
-  updated_at: 2009-12-12 21:22:54 +00:00
+  updated_at: 2009-12-12 21:22:54 Z
   notes: 
   word_count: 297
   id: 99
@@ -15911,9 +15959,9 @@ chapter_00099:
 chapter_00012: 
   posted: true
   position: 1
-  created_at: 2008-12-06 23:19:49 +00:00
+  created_at: 2008-12-06 23:19:49 Z
   title: ""
-  updated_at: 2009-06-19 11:12:15 +00:00
+  updated_at: 2009-06-19 12:12:15 Z
   notes: 
   word_count: 429
   id: 12
