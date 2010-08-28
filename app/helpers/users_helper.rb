@@ -47,7 +47,7 @@ module UsersHelper
   
   def skin_preview_display(skin)
     if skin
-      image_tag(skin.icon.url(:standard), :alt => (skin.icon_file_name ? skin.icon_alt_text : "No skin preview available"), :class => "icon")
+      link_to image_tag(skin.icon.url(:standard), :alt => (skin.icon_file_name ? skin.icon_alt_text : "No skin preview available"), :class => "icon"), skin.icon.url(:original)
     else
       image_tag("/images/skin_preview_none.png", :alt => "No skin preview available", :class => "icon")
     end
