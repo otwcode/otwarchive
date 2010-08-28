@@ -19,7 +19,7 @@ class Admin::ApproveSkinsController < ApplicationController
       params[:make_official].each_with_index do |id, i|
         skin = Skin.find_by_id(id.to_i)
         skin.update_attribute(:official, true)
-        skin.update_attribute(:icon, params[:skin_icon][i.to_i])
+        skin.update_attribute(:icon, params[:skin_icon][id])
       end
       flash[:notice] = 'Skins were approved and preview images uploaded.'
     elsif !params[:make_official].blank? && params[:skin_icon].blank?
