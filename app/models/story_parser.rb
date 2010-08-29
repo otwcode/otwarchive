@@ -14,7 +14,7 @@ class StoryParser
                    :freeform_string => "Tag",
                    :fandom_string => "Fandom",
                    :rating_string => "Rating",
-                   :relationship_string => "Relationship",
+                   :relationship_string => "Relationship|Pairing",
                    :published_at => 'Date|Posted|Posted on|Posted at'
                    }
   
@@ -611,6 +611,7 @@ class StoryParser
     end
 
     def clean_storytext(storytext)
+      storytext = storytext.toutf8 unless storytext.isutf8
       return sanitize_whitelist(cleanup_and_format(storytext))
     end
 
