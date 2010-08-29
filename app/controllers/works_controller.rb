@@ -819,9 +819,11 @@ public
 
   def load_work
     @work = Work.find_by_id(params[:id])
-    unless @work
+    if @work.nil?
       flash[:error] = t('work_not_found', :default => "Sorry, we couldn't find the work you were looking for.")
       redirect_to root_path and return
+    elsif @collection && !@work.collections.include?(@collection)
+      redirect_to @work and return
     end
     @check_ownership_of = @work
     @check_visibility_of = @work

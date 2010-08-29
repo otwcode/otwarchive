@@ -26,17 +26,13 @@
     <!--title, author, fandom-->
     <div class="header module">
 
-<%- cache("#{work.cache_key}-blurb-top") do -%>
-
       <h4 title="title">
   	    <%= link_to sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small)), @collection ? collection_work_path(@collection, work) : work %>
    		  <%= t('.title_by_author', :default => 'by') %>
-<%- end -%>
         
         <!-- do not cache -->
         <%= byline(work) -%>
 
-<%- cache("#{work.cache_key}-blurb-middle") do -%>
         <%= !work.recipients.blank? ? t('.works.for_recipients', :default => "for {{recipients}}", :recipients => recipients_link(work)) : "" -%>
    		  <%- if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") -%><%- end -%>
         <%- if work.hidden_by_admin -%><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><%- end -%>
@@ -52,7 +48,6 @@
   	  <%= get_symbols_for(work, tag_groups) -%>
   	  <p class="datetime"><%= set_format_for_date(work.revised_at) %></p>
     </div>
-<%- end -%>
 	  
 	  <!-- do not cache -->
     <!--warnings again, cast, freeform tags-->
@@ -61,7 +56,6 @@
   	  <%= blurb_tag_block(work, tag_groups) -%>
   	</ul>
 
-<%- cache("#{work.cache_key}-blurb-bottom") do -%>	
     <!--summary-->	
   	<%- unless work.summary.blank? -%>
   		<h6 class="landmark">Summary</h6>
@@ -92,8 +86,6 @@
   		  <dt><%=h t('.work_bookmarks', :default => 'Bookmarks') + ': '%></dt>
   			<dd><%= link_to_bookmarkable_bookmarks(work, bookmark_count.to_s) -%></dd>
   		<%- end -%>
-
-<%- end -%>		
 
     	<% if show_hit_count?(work) %>
      		<dt><%=h t('.works.hit_count', :default => "Hits: ") -%></dt>
