@@ -1,5 +1,7 @@
 /* GLOBAL */
-/*form buttons (input, button, are currently styled the same as navigation and sorting buttons, in site-chrome.css)*/
+/*form buttons (input, button, are currently styled the same as navigation and sorting buttons, in site-chrome.css)
+  forms embedded in navigation are also styled in site-chrome.css
+*/
 form fieldset legend, legend { height:0; width:0; font-size:0; color:#fffef9;}
 #main form fieldset.table		{ border:none;}
 form input { font-size: 1em;}

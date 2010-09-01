@@ -66,6 +66,9 @@ NAVIGATION, ACTIONS (BUTTONS)*/
 			{ color: #111111; }
  .navigation .pagination a 						
 			{ border: 0; padding: 0 }
+ .navigation form.edit_preference {float:left; margin:0;}
+ #main .navigation form.edit_preference input {padding:0; margin:0; }			
+
 
 /* Navigation in contexts - easier to have it all together */
 #main li.blurb .navigation, #main td.submit input, #main.readings-index .module .navigation 						
@@ -128,6 +131,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  .meta dd blockquote		{ margin: -1em 0 0 0 !important;}
 
 /* BLURB*/
+/* the blurb class is used on index pages where we create individual blurbs for each item */
  .blurb ul li,.blurb dd ul li	{ display: inline }
  li.blurb 						{ padding-left: 0.5em; padding-right: 0.5em; padding-top: 0.25em; padding-bottom: 0.25em; position: relative; clear:left; min-height: 100px }
  .blurb .module					{ float:none;}
@@ -174,6 +178,17 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  .blurb dl.stats 				{ background: #eee; font-size: 0.8575em; text-align: right; padding: 0 0.3em 0.3em; margin-top: 0.1em; }
  .blurb.own dl.stats     { padding-left: 11em; }
  .own dl.stats					{ background: #fffef9; padding-bottom: 0.10em}
+
+ /* PICTURE */
+ /* use this along with "index" and "blurb" for indices where we have icon pictures, 
+  * eg collections, users, skins
+  */
+  .picture .blurb  { min-height:100px; padding-bottom: 0.5em; }
+  .picture .blurb h4, .picture .blurb .mods, .picture .blurb  blockquote, #main .picture .blurb p.type, 
+     .picture .blurb  dl.stats    { margin:0 0 0 120px; }
+  #main .picture .blurb .navigation { margin-left: 120px; }
+  #main .picture .blurb p.type { margin-bottom: 0.3em; margin-top: 0.3em; }
+  .picture div.icon { top: 0.1em; }
 
 /* BOOKMARK*/
  .bookmark p.count 				{ float: right }
@@ -323,12 +338,6 @@ li.comment h4	{ font-size: 1.25em; margin-top:0; }
 /* COLLECTIONS INDEX*/
  .collections-index .index 		{ width: 75% }
  #main.collections-show h2 span { font-size: smaller }
- .collection .blurb  { min-height:100px; padding-bottom: 0.5em; }
- .collection .blurb h4, .collection .blurb .mods, .collection .blurb  blockquote, #main .collection
- .blurb p.type, .collection .blurb  dl.stats    { margin:0 0 0 120px; }
- #main .collection .blurb .navigation { margin-left: 120px; }
- #main .collection .blurb p.type { margin-bottom: 0.3em; margin-top: 0.3em; }
- .collection div.icon { top: 0.1em; }
 
 /* Collections */
   .twobutton { width: 12em }
@@ -343,9 +352,9 @@ li.comment h4	{ font-size: 1.25em; margin-top:0; }
  #manage-archive-faqs h3 {display: inline;}
  
 /* SKINS */
-  ul.skins-index {clear: right;}
-  ul.skins-index li.skin {display: block; position: relative;}
-  ul.skins-index li.skin h4 {display: inline; padding-left: 2em; position: absolute;}
+  .skins-index .index 		{ width: 75% }
+  #main.skins-show h2 span { font-size: smaller }
+
   #main.skins-show dl	{ position: relative }
   #main.skins-show dt	{ font-size: 0.875em; font-weight: 100; width: 13.5em }
   #main.skins-show dd	{ margin: -1.1em 0 .7em 16em; }

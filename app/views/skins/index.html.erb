@@ -1,50 +1,38 @@
 
-
 <h2><%= @title %></h2>
 
-<!--subnav-->
-<h3 class="landmark">Navigation</h3>
-<ul class="navigation" role="navigation">
-	<li><%= link_to t('.public', :default => 'Public skins'), skins_url %></li>
-	<% if logged_in? %>
-    <li><%= link_to t('.mine', :default => 'My skins'), skins_url(:q => 'mine') %></li>
-    <li><%= link_to t('.new', :default => 'Create new skin'), new_skin_url %></li>
-    <li><%= link_to t('.change', :default => 'Change your skin'), skins_url -%></li>
-  <% end %>
-</ul>
-<!--/subnav-->
+<%= render :partial => "skin_top_navigation" -%>
 
-
-<ul class="skins-index">
+<h3 class="landmark">List of Skins</h3>
+<ul class="skins picture index">
 <% for s in @skins -%>
-  <li class="skin">
-  <span class="byline">
-    <span class="icon"><%= skin_preview_display(s) %></span>
-    <h4><%= link_to h(s.title), s %>
-    <% if @user %>
-      <% if s.official? %> (Approved)
-      <% elsif s.public? %> (Not yet approved)
-        <%= link_to_help "skins-approval" -%>
-      <% end %>
-    <% else %>
-      by <%= s.byline %>
-    <% end %>
-    <% if s.editable? %>
-      <%= link_to t('.edit', :default => 'Edit skin'), edit_skin_url(s) %>
-      <%= link_to t('.delete', :default => 'Delete skin'), s, :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :delete %>
-    <% end %>
-    </h4>
-    <% if logged_in? %>
-    <%- form_for(@preference, :url => {:controller => :preferences, :action => :update, :user_id => current_user}, :method => "put") do |f| -%>
-      <%= f.hidden_field :skin_id, :value => s.id %>
-      <% if s.id == current_user.preference.skin_id %>
-        <%= f.submit t('.forms.update_in_use', :default => "{{name}} skin (in use)", :name => s.title) %>
-      <% else %>
-        <%= f.submit t('.forms.update', :default => "Use {{name}} skin", :name => s.title) %>
-      <% end %>
-    <%- end -%>
-    <% end %>
-  </span>
+  <li class="skins <% if s.editable? %>own<%- end -%> picture blurb">
+    <div class="header module">
+      <h4 title="title">
+        <%= link_to h(s.title), s %>
+        <span class="byline">
+          by <%= s.byline %>
+          <% if @user %>
+            <% if s.official? %> 
+              (Approved)
+            <% elsif s.public? %> 
+              (Not yet approved) <%= link_to_help "skins-approval" -%>
+            <% end %>
+          <% end %>
+        </span>
+      </h4>
+
+      <div class="icon"><%= skin_preview_display(s) %></div>
+    </div>
+      
+    <!--summary/descriptions-->
+    <h6 class="landmark">Description</h6>
+    <blockquote class="user-generated-view summary">
+      <%= sanitize_strip_images_and_format_for_display s.description.blank? ? t("skins.no_description", :default => "(No Description Provided)") : s.description %>
+    </blockquote>
+    
+    <%= render :partial => "skin_navigation", :locals => {:skin => s} -%>
+
   </li>
 <% end -%>
 </ul>

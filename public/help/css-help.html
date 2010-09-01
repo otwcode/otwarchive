@@ -1,0 +1,81 @@
+<h4>Limited CSS</h4>
+
+<p>For security reasons, you can only use a limited set of CSS properties and values on this archive.</p>
+
+<dl id="help">
+  <dt>Comments</dt>
+  <dd id="css_comments">
+    <p>You can use comments either before or after a complete block of CSS, but not in the middle. (PS: comments are awesome!)</p>
+    <p>This will work fine:<br />
+    <code>
+      /* here is a comment before my awesome code */<br />
+      body {background: #fff;}<br />
+      /* here is a comment after my  awesome code */
+    </code>
+    </p>
+    <p>This will not work:<br />
+      <code>
+        body {/* comment in the middle of my code */ background: #fff;}
+      </code>
+    </p>
+  </dd>
+  
+  <dt>Properties</dt>
+  <dd id="css_properties">
+    We allow the following properties: <br />
+    <code>
+      background, border, margin, padding, azimuth, background-color, border-bottom-color, border-collapse, border-color, border-left-color, border-right-color, border-top-color, clear, color, cursor, direction, display, elevation, float, font, font-family, font-size, font-style, font-variant, font-weight, height, letter-spacing, line-height, min-height, overflow, pause, pause-after, pause-before, pitch, pitch-range, position, richness, speak, speak-header, speak-numeral, speak-punctuation, speech-rate, stress, text-align, text-decoration, text-indent, unicode-bidi, vertical-align, voice-family, volume, white-space, width, -moz-border-radius
+    </code>
+  </dd>
+
+  <dt>URLs</dt>
+  <dd id="css_urls">
+    We allow external image urls (specified as url('http://somesite.com/my_awesome_image.jpg')) in JPG, GIF, and PNG formats. 
+    Please note however that skins using external images will not be approved for public use.  
+  </dd> 
+
+  <dt>Keywords</dt>
+  <dd id="css_keywords">
+    We allow the following keywords: <br />
+    <code>
+      absolute, auto, blink, block, bold, both, bottom, center, collapse, dashed, dotted, !important, inline, italic, left, medium, none, no-repeat, normal, nowrap, pointer, repeat, right, scroll, solid, static, top, transparent, underline
+    </code>
+  </dd>
+  
+  <dt>Numeric Values</dt>
+  <dd id="css_numeric">
+    <p>
+      You can specify numeric values up to two decimal places, either as percentages or in <a href="http://w3schools.com/css/css_units.asp">various units</a>: <br />
+      <code>cm, em, ex, in, mm, pc, pt, px</code>
+    </p>
+    <p>
+      PS: we highly encourage learning about and using <code>em</code>, which lets you set things relative to the viewer's current font size! 
+      It will make your layouts much more flexible and responsive to different browser/font settings.
+    </p>
+  </dd>
+
+  <dt>Colors</dt> 
+  <dd id="css_colors">
+    You can specify colors using hex values (eg, #000000 is black in hex) or with rgb values (eg, rgb(0,0,0) is black). 
+    This may be safer since not all browsers will necessarily support all color names. However, color names are more
+    readable and easier to remember, so we allow 
+    <a href="http://www.w3schools.com/css/css_colornames.asp">the set of commonly-supported color names</a>:<br />
+    
+    <code>aliceblue, antiquewhite, aqua, aquamarine, azure, beige, bisque, black, blanchedalmond, blue, blueviolet, brown, burlywood, cadetblue, chartreuse, chocolate, coral, cornflowerblue, cornsilk, crimson, cyan, darkblue, darkcyan, darkgoldenrod, darkgray, darkgreen, darkkhaki, darkmagenta, darkolivegreen, darkorange, darkorchid, darkred, darksalmon, darkseagreen, darkslateblue, darkslategray, darkturquoise, darkviolet, deeppink, deepskyblue, dimgray, dodgerblue, firebrick, floralwhite, forestgreen, fuchsia, gainsboro, ghostwhite, gold, goldenrod, gray, green, greenyellow, honeydew, hotpink, indianred, indigo, ivory, khaki, lavender, lavenderblush, lawngreen, lemonchiffon, lightblue, lightcoral, lightcyan, lightgoldenrodyellow, lightgrey, lightgreen, lightpink, lightsalmon, lightseagreen, lightskyblue, lightslategray, lightsteelblue, lightyellow, lime, limegreen, linen, magenta, maroon, mediumaquamarine, mediumblue, mediumorchid, mediumpurple, mediumseagreen, mediumslateblue, mediumspringgreen, mediumturquoise, mediumvioletred, midnightblue, mintcream, mistyrose, moccasin, navajowhite, navy, oldlace, olive, olivedrab, orange, orangered, orchid, palegoldenrod, palegreen, paleturquoise, palevioletred, papayawhip, peachpuff, peru, pink, plum, powderblue, purple, red, rosybrown, royalblue, saddlebrown, salmon, sandybrown, seagreen, seashell, sienna, silver, skyblue, slateblue, slategray, snow, springgreen, steelblue, tan, teal, thistle, tomato, turquoise, violet, wheat, white, whitesmoke, yellow, yellowgreen</code><br />
+        
+  </dd>
+
+  <dt>Font Families</dt>
+  <dd id="css_fonts">
+    <p>
+      Keep in mind that a font has to be installed on the user's operating system to work. It's a good idea when specifying fonts to use 
+      fallbacks in case your first-choice font isn't available. 
+      See <a href="http://www.fonttester.com/help/list_of_web_safe_fonts.html">the set of web-safe fonts with fallbacks</a>.
+    </p>
+    <p>
+      We allow the following font families:<br />
+      <code>serif, sans-serif, monospace, cursive, fantasy, andale mono, arial, arial black, book antiqua, bookman old style, calibri, cambria, candara, charcoal, comic sans ms, consolas, constantia, corbel, courier, courier new, fertigoproregular, gadget, garamond, geneva, georgia, helvetica, impact, liberation mono, liberation sans, liberation serif, lucida console, lucida grande, lucida sans unicode, monaco, ms sans serif, ms serif, palatino, palatino linotype, symbol, tahoma, times, times new roman, trebuchet ms, verdana, webdings, wingdings, zapf dingbats</code>
+    </p>
+  </dd>
+  
+</dl>

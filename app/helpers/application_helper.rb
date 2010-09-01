@@ -48,7 +48,11 @@ module ApplicationHelper
     link_to_help("html-help") + 
     "<br /><code>a, [alt], b, big, blockquote, br, center, cite, code, del, em, [href], i, img, ins, p, pre, q, small, [src], strike, strong, sub, sup, u</code>"
   end
-    	
+  
+  def allowed_css_instructions
+    h(t('application_helper.allowed_css', :default =>"Limited CSS properties and keywords allowed")) + 
+    link_to_help("css-help")
+  end
     
   # modified by Enigel Dec 13 08 to use pseud byline rather than just pseud name
   # in order to disambiguate in the case of identical pseuds
@@ -277,14 +281,23 @@ module ApplicationHelper
   end
   
   def time_in_zone(time, zone, user=User.current_user)
-    abbr = 
-    time.in_time_zone(zone).strftime('<abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span> <span class="time">%I:%M%p</span>') + 
-      " <abbr class=\"timezone\" title=\"#{zone}\">#{time_zone_abbr(zone)}</abbr> " + 
-      ((user.is_a?(User) && user.preference.time_zone) ? "(" + 
-        time.in_time_zone(user.preference.time_zone).strftime('<span class="time">%I:%M%p</span>') +
-          " <abbr class=\"timezone\" title=\"#{user.preference.time_zone}\">#{time_zone_abbr(user.preference.time_zone)}</abbr>)" : 
-        (user.is_a?(User) ? 
-          link_to(h(t('application_helper.set_time_zone', :default => "(set timezone)")), (@host ? user_preferences_url(user, :host => @host) : user_preferences_path(user)) ) : ""))
+    time_in_zone = time.in_time_zone(zone).strftime('<abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> 
+                                                     <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span> 
+                                                     <span class="time">%I:%M%p</span>') + 
+                                          " <abbr class=\"timezone\" title=\"#{zone}\">#{time_zone_abbr(zone)}</abbr> "
+    
+    user_time = ""
+    if user.is_a?(User) && user.preference.time_zone
+      if user.preference.time_zone != zone
+        user_time = "(" + time.in_time_zone(user.preference.time_zone).strftime('<span class="time">%I:%M%p</span>') +
+          " <abbr class=\"timezone\" title=\"#{user.preference.time_zone}\">#{time_zone_abbr(user.preference.time_zone)}</abbr>)"
+      elsif !user.preference.time_zone
+        user_time = link_to(h(t('application.set_time_zone', :default => "(set timezone)")), 
+                        (@host ? user_preferences_url(user, :host => @host) : user_preferences_path(user)))
+      end
+    end
+    
+    time_in_zone + user_time
   end
   
   def mailto_link(user, options={})

@@ -1,0 +1,10 @@
+<!--subnav-->
+<h3 class="landmark">Navigation</h3>
+<ul class="navigation" role="navigation">
+	<li><%= link_to t('.public', :default => 'Public Skins'), skins_url %></li>
+	<% if logged_in? %>
+    <li><%= link_to t('.mine', :default => 'My Skins'), skins_url(:q => 'mine') %></li>
+    <li><%= link_to t('.new', :default => 'Create New Skin'), new_skin_url %></li>
+  <% end %>
+</ul>
+<!--/subnav-->

@@ -1,5 +1,7 @@
 
-<h2><%= t('new_skin', :default => 'Create new skin')  %></h2>
+<h2><%= t('new_skin', :default => 'Create New Archive Skin')  %></h2>
+
+<%= error_messages_for :skin %>
 
 <ul class="navigation">
   <li>Custom CSS</li>
@@ -10,6 +12,7 @@
   </li>
 </ul>
 
+<h3 class="landmark">New Archive Skin Form</h3>
 
 <% form_for @skin do |f| -%>
 

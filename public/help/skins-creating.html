@@ -1,4 +1,41 @@
-<h4>Creating skins</h4>
-<p>You can enter any CSS in this box. There are public skins with examples of the kind of thing that will work well.</p>
-<p>If you need help creating a skin that will do what you want, please contact <a href="http://archiveofourown.org/support">Support</a>.</p>
-<p>If you want to allow other users to use your skin, tick the box to mark it as "Public". Our volunteers will add it to the list of official skins after checking it for malicious code. Once it has been marked official, you will no longer be able to edit it.</p>
+<dl id="help">
+  <dt>You can create new skins for the archive using our wizard, or by writing your own CSS (cascading style sheets) code</dt>
+  <dd>Note that for security reasons, you can only use a limited set of CSS code.</dd>
+  
+  <dt>Look at other public skins for examples</dt>
+  <dd>
+    All approved public skins are visible and you can read their code and copy them to edit for 
+    your own use. 
+  </dd> 
+
+  <dt>If you are new to CSS, here are the basics:</dt>
+  <dd id="basics">
+    <p>
+      A line of CSS code looks pretty much like this: 
+      <br /><code>selector {property: value;}</code>
+    </p>
+    <p>
+      The <strong>selector</strong> is either the name of an HTML tag (like <code>body</code> or <code>h1</code>),
+       or it can be an id or class that has been set on a tag. 
+      The <strong>property</strong> is what you want to change in the contents of that tag (for instance the font size), 
+      and the <strong>value</strong> is what you want to set it to.
+    </p> 
+    <p>
+      Examples:
+      <ul>
+        <li>Inside the "body" tag, set the font size slightly larger than the baseline: <code>body {font-size: 1.1em;}</code></li>
+        <li>Inside any tags with the id "header", set the background color to purple: <code>#header {background-color: purple}</code></li>
+        <li>Inside any tags with the class "meta", make the text blink: (we do not advise this) <code>.meta {font-style: blink}</code></li>
+      </ul>
+    </p>
+    
+    <p>
+      Some useful CSS tutorials for more information:
+      <ul>
+        <li><a href="http://www.cssbasics.com/">CSS Basics tutorial</a></li>
+        <li><a href="http://www.w3schools.com/css/">CSS tutorial from W3schools</a></li>
+      </ul>
+    </p>
+  </dd>
+
+</dl>

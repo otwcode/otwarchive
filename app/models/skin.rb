@@ -1,3 +1,6 @@
+require 'css_parser'
+include CssParser
+
 class Skin < ActiveRecord::Base
   belongs_to :author, :class_name => 'User'
   has_many :preferences
@@ -21,6 +24,56 @@ class Skin < ActiveRecord::Base
   attr_protected :official
 
   validates_uniqueness_of :title, :message => t('skin_title_already_used', :default => 'must be unique')
+
+  validate :clean_css
+  def clean_css
+    scanner = StringScanner.new(self.css)
+    if !scanner.exist?(/\/\*/) 
+      # no comments, clean the whole thing
+      self.css = clean_css_code(self.css)
+    else
+      clean_code = []
+      while (scanner.exist?(/\/\*/)) 
+        clean_code << (clean = clean_css_code(scanner.scan_until(/\/\*/)))
+        clean_code << '/*' + scanner.scan_until(/\*\//) if scanner.exist?(/\*\//)
+      end
+      clean_code << (clean = clean_css_code(scanner.rest))
+      self.css = clean_code.delete_if {|code_block| code_block.blank?}.join("\n")
+    end
+  end
+        
+protected
+  def clean_css_code(css_code)
+    clean_css = ""
+    parser = CssParser::Parser.new
+    parser.add_block!(css_code)
+    parser.each_rule_set do |rs|
+      clean_rule = "#{rs.selectors.join(',')} {\n"
+      rs.each_declaration do |property, value, is_important|
+        declaration = "#{property}: #{value}#{is_important ? ' !important' : ''};".downcase
+        clean_declaration = ActionController::Base.helpers.sanitize_css(declaration)
+        if declaration != clean_declaration
+          if clean_declaration.empty?
+            if declaration !~ /^(\s*[-\w]+\s*:\s*[^:;]*(;|$)\s*)*$/ 
+              errors.add_to_base("The code for #{rs.selectors.join(',')} doesn't seem to be a valid CSS rule.")
+            else
+              # the property is not allowed
+              errors.add_to_base("The declarations for #{rs.selectors.join(',')} cannot use the property <strong>#{property}</strong>")
+            end
+          else
+            errors.add_to_base("The #{property} property in #{rs.selectors.join(',')} cannot have the value <strong>#{value}</strong>")
+          end
+        else
+          clean_rule += "  #{clean_declaration}\n"
+        end
+      end
+      clean_rule += "}\n\n"
+      clean_css += "#{clean_rule}"
+    end
+    return clean_css
+  end
+  
+public
 
   named_scope :public_skins, :conditions => {:public => true}
   named_scope :approved_skins, :conditions => {:official => true, :public => true}

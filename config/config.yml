@@ -143,6 +143,9 @@ FREEFORM_CATEGORY_NAME: 'Additional Tags'
 COMMON_CATEGORY_NAME: 'Common'
 BANNED_CATEGORY_NAME: 'Banned'
 
+# SEARCH TIPS
+SEARCH_TIPS: ['tag: arthur/merlin, words: >1000', 'words: 100', 'tag: buffy gen teen "no archive warnings"', 'tag: lex slash (mature|explicit)', '"cerulean orbs"']
+
 # This is used to determine how many recent items
 # to cache for recent lookups -- eg if we want to
 # provide a "ten most recent" items to browse.
@@ -158,6 +161,50 @@ ANONYMOUS_THRESHOLD_COUNT: 10
 # Only the following fields are allowed to have HTML. In all others,
 # all HTML tags will be stripped.
 FIELDS_ALLOWING_HTML: %w(content summary notes endnotes about_me comment note description intro faq rules signup_instructions_general signup_instructions_requests signup_instructions_offers)
+
+# Allowed CSS
+#
+# *** IMPORTANT: if you edit these values please also update the css-help.html file in public/help ***
+# 
+# the following properties and keywords will be ADDED to the default set allowed in user-submitted CSS code, along with:
+# - hex and rgb color values
+# - numeric values specified with percentages or cm|em|ex|in|mm|pc|pt|px|%
+# - image files specified with url(http://image.url/blahblah/whatever.(jpg|png|gif))
+#
+# Note: if you put in a shorthand property (eg "background") that automatically lets 
+# through all the sub-properties like background-color and background-image. 
+#
+SUPPORTED_CSS_SHORTHAND_PROPERTIES: []
+SUPPORTED_CSS_PROPERTIES: ["-moz-border-radius", "position", "min-height"]
+
+# mostly color and font names here 
+SUPPORTED_CSS_KEYWORDS: ["url", "inline", "blink", "static", "absolute", "repeat", "no-repeat", "repeat-x", "repeat-y", "scroll", 
+  "serif", "sans-serif", "monospace", "cursive", "fantasy", 
+  "andale mono", "arial", "arial black", "book antiqua", "bookman old style", "calibri", "cambria", "candara", "charcoal", 
+  "comic sans ms", "consolas", "constantia", "corbel", "courier", "courier new", "fertigoproregular", "gadget", "garamond", "geneva", "georgia", 
+  "helvetica", "impact", "liberation mono", "liberation sans", "liberation serif", "lucida console", "lucida grande", 
+  "lucida sans unicode", "monaco", "ms sans serif", "ms serif", "palatino", "palatino linotype", "symbol", "tahoma", "times", 
+  "times new roman", "trebuchet ms", "verdana", "webdings", "wingdings", "zapf dingbats",
+  "aliceblue", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "black", "blanchedalmond", 
+  "blue", "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse", "chocolate", "coral", "cornflowerblue", "cornsilk", "crimson", 
+  "cyan", "darkblue", "darkcyan", "darkgoldenrod", "darkgray", "darkgreen", "darkkhaki", "darkmagenta", "darkolivegreen", "darkorange", 
+  "darkorchid", "darkred", "darksalmon", "darkseagreen", "darkslateblue", "darkslategray", "darkturquoise", "darkviolet", "deeppink", 
+  "deepskyblue", "dimgray", "dodgerblue", "firebrick", "floralwhite", "forestgreen", "fuchsia", "gainsboro", "ghostwhite", "gold", 
+  "goldenrod", "gray", "green", "greenyellow", "honeydew", "hotpink", "indianred", "indigo", "ivory", "khaki", "lavender", "lavenderblush", 
+  "lawngreen", "lemonchiffon", "lightblue", "lightcoral", "lightcyan", "lightgoldenrodyellow", "lightgrey", "lightgreen", "lightpink", 
+  "lightsalmon", "lightseagreen", "lightskyblue", "lightslategray", "lightsteelblue", "lightyellow", "lime", "limegreen", "linen", 
+  "magenta", "maroon", "mediumaquamarine", "mediumblue", "mediumorchid", "mediumpurple", "mediumseagreen", "mediumslateblue", 
+  "mediumspringgreen", "mediumturquoise", "mediumvioletred", "midnightblue", "mintcream", "mistyrose", "moccasin", "navajowhite", "navy", 
+  "oldlace", "olive", "olivedrab", "orange", "orangered", "orchid", "palegoldenrod", "palegreen", "paleturquoise", "palevioletred", 
+  "papayawhip", "peachpuff", "peru", "pink", "plum", "powderblue", "purple", "red", "rosybrown", "royalblue", "saddlebrown", "salmon", 
+  "sandybrown", "seagreen", "seashell", "sienna", "silver", "skyblue", "slateblue", "slategray", "snow", "springgreen", "steelblue", "tan", 
+  "teal", "thistle", "tomato", "turquoise", "violet", "wheat", "white", "whitesmoke", "yellow", "yellowgreen"]
+
+# if you include "url" in the SUPPORTED_CSS_KEYWORDS, only urls pointing to this kind of
+# resource will be allowed
+SUPPORTED_EXTERNAL_URLS: ["jpg", "png", "gif"]
+
+
 
 # variables for Askimet http://akismet.com/
 AKISMET_KEY: '6833ee7298cf'

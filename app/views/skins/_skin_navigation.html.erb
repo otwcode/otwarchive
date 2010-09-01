@@ -1,0 +1,20 @@
+<% if logged_in? || skin.editable? %>
+  <ul class="navigation" role="navigation">
+    <li>
+      <% if logged_in? %>
+        <%- form_for(current_user.preference, :url => {:controller => :preferences, :action => :update, :user_id => current_user}, :method => "put") do |f| -%>
+          <%= f.hidden_field :skin_id, :value => skin.id %>
+          <% if skin.id == current_user.preference.skin_id %>
+            <%= f.submit t('.formskin.update_in_use', :default => "(In Use)") %>
+          <% else %>
+            <%= f.submit t('.formskin.update', :default => "Use") %>
+          <% end %>
+        <%- end -%>
+      <% end %>
+    </li>
+    <% if skin.editable? %>
+      <li><%= link_to t('.edit', :default => 'Edit'), edit_skin_url(skin) %></li>
+      <li><%= link_to t('.delete', :default => 'Delete'), skin, :confirm => t('.linkskin.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
+    <% end %>
+  </ul>
+<% end %>

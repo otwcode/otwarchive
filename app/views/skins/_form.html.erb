@@ -1,9 +1,23 @@
-<%= f.error_messages %>
 
-<p><%= f.label :title, t('skin_title', :default => 'Skin title') %>
-<%= f.text_field :title %></p>
+<fieldset class="preface">
+  <legend>Archive Skin</legend>
+  <h3>Archive Skin</h3>
 
-<p><%= f.label :css, t('skin_css', :default => 'Write your CSS here') %> <%= link_to_help "skins-creating" -%> <br/>
-<%= f.text_area :css %></p>
+  <dl>
+    <dt><%= f.label :title, t('skin_title', :default => 'Title') %></dt>
+    <dd><%= f.text_field :title %></dd>
 
-<p><%= f.check_box :public %> <%= f.label :public, t('skin_public', :default => 'Public skin') %> <%= link_to_help "skins-creating" -%></p>
+    <dt><%= f.label :description, t('skin_description', :default => 'Description') -%></dt>
+    <dd><%= f.text_field :description %></dd>
+
+    <dt>
+      <%= f.label :css, t('skin_css', :default => 'CSS') %> 
+      <%= link_to_help "skins-creating" -%>
+      <p id="plainTextNotes" style="display: block"><%= allowed_css_instructions -%></p>
+    </dt>
+    <dd><%= f.text_area :css, :cols => 70 %></dd>
+
+    <dt><%= f.label :public, t('skin_public', :default => 'Apply to make this a public skin?') %> <%= link_to_help "skins-approval" -%></dt>
+    <dd><%= f.check_box :public %></dd>
+  </dl>
+</fieldset>
