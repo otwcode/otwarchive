@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100727212342) do
+ActiveRecord::Schema.define(:version => 20100901154501) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -380,8 +380,9 @@ ActiveRecord::Schema.define(:version => 20100727212342) do
 
   create_table "hit_counters", :force => true do |t|
     t.integer "work_id"
-    t.integer "hit_count",    :default => 0, :null => false
+    t.integer "hit_count",      :default => 0, :null => false
     t.string  "last_visitor"
+    t.integer "download_count", :default => 0, :null => false
   end
 
   add_index "hit_counters", ["work_id"], :name => "index_hit_counters_on_work_id", :unique => true
@@ -495,21 +496,21 @@ ActiveRecord::Schema.define(:version => 20100727212342) do
   end
 
   create_table "potential_match_settings", :force => true do |t|
-    t.integer  "num_required_prompts",        :default => 1,     :null => false
-    t.integer  "num_required_fandoms",        :default => 0,     :null => false
-    t.integer  "num_required_characters",     :default => 0,     :null => false
-    t.integer  "num_required_pairings",       :default => 0,     :null => false
-    t.integer  "num_required_freeforms",      :default => 0,     :null => false
-    t.integer  "num_required_categories",     :default => 0,     :null => false
-    t.integer  "num_required_ratings",        :default => 0,     :null => false
-    t.integer  "num_required_warnings",       :default => 0,     :null => false
-    t.boolean  "include_optional_fandoms",    :default => false, :null => false
-    t.boolean  "include_optional_characters", :default => false, :null => false
-    t.boolean  "include_optional_pairings",   :default => false, :null => false
-    t.boolean  "include_optional_freeforms",  :default => false, :null => false
-    t.boolean  "include_optional_categories", :default => false, :null => false
-    t.boolean  "include_optional_ratings",    :default => false, :null => false
-    t.boolean  "include_optional_warnings",   :default => false, :null => false
+    t.integer  "num_required_prompts",           :default => 1,     :null => false
+    t.integer  "num_required_fandoms",           :default => 0,     :null => false
+    t.integer  "num_required_characters",        :default => 0,     :null => false
+    t.integer  "num_required_relationships",     :default => 0,     :null => false
+    t.integer  "num_required_freeforms",         :default => 0,     :null => false
+    t.integer  "num_required_categories",        :default => 0,     :null => false
+    t.integer  "num_required_ratings",           :default => 0,     :null => false
+    t.integer  "num_required_warnings",          :default => 0,     :null => false
+    t.boolean  "include_optional_fandoms",       :default => false, :null => false
+    t.boolean  "include_optional_characters",    :default => false, :null => false
+    t.boolean  "include_optional_relationships", :default => false, :null => false
+    t.boolean  "include_optional_freeforms",     :default => false, :null => false
+    t.boolean  "include_optional_categories",    :default => false, :null => false
+    t.boolean  "include_optional_ratings",       :default => false, :null => false
+    t.boolean  "include_optional_warnings",      :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -530,7 +531,7 @@ ActiveRecord::Schema.define(:version => 20100727212342) do
     t.integer  "request_id"
     t.integer  "num_fandoms_matched"
     t.integer  "num_characters_matched"
-    t.integer  "num_pairings_matched"
+    t.integer  "num_relationships_matched"
     t.integer  "num_freeforms_matched"
     t.integer  "num_categories_matched"
     t.integer  "num_ratings_matched"
@@ -568,6 +569,7 @@ ActiveRecord::Schema.define(:version => 20100727212342) do
     t.boolean  "admin_emails_off",                  :default => false,                     :null => false
     t.boolean  "disable_ugs",                       :default => false,                     :null => false
     t.integer  "skin_id"
+    t.boolean  "minimise_search_engines",           :default => false,                     :null => false
   end
 
   add_index "preferences", ["user_id"], :name => "index_preferences_on_user_id"
@@ -586,27 +588,27 @@ ActiveRecord::Schema.define(:version => 20100727212342) do
 
   create_table "prompt_restrictions", :force => true do |t|
     t.integer  "tag_set_id"
-    t.boolean  "optional_tags_allowed",  :default => false, :null => false
-    t.boolean  "description_allowed",    :default => true,  :null => false
-    t.boolean  "url_required",           :default => false, :null => false
-    t.integer  "fandom_num_required",    :default => 0,     :null => false
-    t.integer  "category_num_required",  :default => 0,     :null => false
-    t.integer  "rating_num_required",    :default => 0,     :null => false
-    t.integer  "character_num_required", :default => 0,     :null => false
-    t.integer  "pairing_num_required",   :default => 0,     :null => false
-    t.integer  "freeform_num_required",  :default => 0,     :null => false
-    t.integer  "warning_num_required",   :default => 0,     :null => false
-    t.integer  "fandom_num_allowed",     :default => 0,     :null => false
-    t.integer  "category_num_allowed",   :default => 0,     :null => false
-    t.integer  "rating_num_allowed",     :default => 0,     :null => false
-    t.integer  "character_num_allowed",  :default => 0,     :null => false
-    t.integer  "pairing_num_allowed",    :default => 0,     :null => false
-    t.integer  "freeform_num_allowed",   :default => 0,     :null => false
-    t.integer  "warning_num_allowed",    :default => 0,     :null => false
+    t.boolean  "optional_tags_allowed",     :default => false, :null => false
+    t.boolean  "description_allowed",       :default => true,  :null => false
+    t.boolean  "url_required",              :default => false, :null => false
+    t.integer  "fandom_num_required",       :default => 0,     :null => false
+    t.integer  "category_num_required",     :default => 0,     :null => false
+    t.integer  "rating_num_required",       :default => 0,     :null => false
+    t.integer  "character_num_required",    :default => 0,     :null => false
+    t.integer  "relationship_num_required", :default => 0,     :null => false
+    t.integer  "freeform_num_required",     :default => 0,     :null => false
+    t.integer  "warning_num_required",      :default => 0,     :null => false
+    t.integer  "fandom_num_allowed",        :default => 0,     :null => false
+    t.integer  "category_num_allowed",      :default => 0,     :null => false
+    t.integer  "rating_num_allowed",        :default => 0,     :null => false
+    t.integer  "character_num_allowed",     :default => 0,     :null => false
+    t.integer  "relationship_num_allowed",  :default => 0,     :null => false
+    t.integer  "freeform_num_allowed",      :default => 0,     :null => false
+    t.integer  "warning_num_allowed",       :default => 0,     :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "description_required",   :default => false, :null => false
-    t.boolean  "url_allowed",            :default => false, :null => false
+    t.boolean  "description_required",      :default => false, :null => false
+    t.boolean  "url_allowed",               :default => false, :null => false
   end
 
   create_table "prompts", :force => true do |t|
@@ -724,10 +726,22 @@ ActiveRecord::Schema.define(:version => 20100727212342) do
     t.string   "title"
     t.integer  "author_id"
     t.text     "css"
-    t.boolean  "public",     :default => false
-    t.boolean  "official",   :default => false
+    t.boolean  "public",            :default => false
+    t.boolean  "official",          :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "icon_file_name"
+    t.string   "icon_content_type"
+    t.integer  "icon_file_size"
+    t.datetime "icon_updated_at"
+    t.string   "icon_alt_text",     :default => ""
+    t.integer  "margin"
+    t.integer  "paragraph_gap"
+    t.string   "font"
+    t.integer  "base_em"
+    t.string   "background_color"
+    t.string   "foreground_color"
+    t.text     "description"
   end
 
   create_table "tag_sets", :force => true do |t|
