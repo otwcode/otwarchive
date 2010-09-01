@@ -120,6 +120,7 @@ Rails::Initializer.run do |config|
   config.gem 'aws-s3', :lib => 'aws/s3'
   # config.gem 'fastercsv' -- will use this eventually for exporting to excel tsv format
   config.gem 'mocha'
+  config.gem 'css_parser'
   
   # Override the sanitize defaults to allow some extra formatting attributes. 
   config.action_view.sanitized_allowed_attributes = 'align'
