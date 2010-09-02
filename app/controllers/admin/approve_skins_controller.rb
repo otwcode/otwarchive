@@ -23,7 +23,7 @@ class Admin::ApproveSkinsController < ApplicationController
         has_previews = !previews.empty?
       end 
       if has_previews
-        params[:make_official].each_with_index do |id, i|
+        params[:make_official].each do |id|
           skin = Skin.find_by_id(id.to_i)
           skin.update_attribute(:official, true)
           skin.update_attribute(:icon, params[:skin_icon][id])

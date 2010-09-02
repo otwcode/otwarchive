@@ -46,7 +46,7 @@ class PreferencesControllerTest < ActionController::TestCase
         form.preference.history_enabled.uncheck
         form.preference.email_visible.check
         form.preference.date_of_birth_visible.check
-        form.preference.minimise_search_engines.check
+        form.preference.minimize_search_engines.check
         form.preference.adult.check
         form.preference.view_full_works.check
         form.preference.hide_freeform.check
@@ -72,7 +72,7 @@ class PreferencesControllerTest < ActionController::TestCase
         assert !@user.preference.history_enabled
         assert @user.preference.email_visible
         assert @user.preference.date_of_birth_visible
-        assert @user.preference.minimise_search_engines
+        assert @user.preference.minimize_search_engines
         assert @user.preference.adult
         assert @user.preference.view_full_works
         assert @user.preference.hide_freeform
