@@ -25,6 +25,7 @@ Feature: creating and editing skins
     And I select "my blinking skin" from "preference_skin_id"
     And I press "Update"
   Then "my blinking skin" should be selected within "preference_skin_id"
+    And I should see "#title {" within "style"
     And I should see "text-decoration: blink;" within "style"
   When I am on the skins page
   Then I should not see "my blinking skin"
@@ -141,11 +142,12 @@ Feature: creating and editing skins
     And I should see "Plain Text by AO3"
   Given I am logged in as "skinner" with password "password"
   When I am on skin's new page
-  Then I should see "CSS"
+  Then I should see "CSS" within "dl"
   When I follow "Use Wizard Instead?"
   Then I should see "More options coming soon"
+    And I should not see "CSS" within "dl"
   When I follow "Write Custom CSS Instead?"
-  Then I should see "CSS"
+  Then I should see "CSS" within "dl"
   When I follow "Use Wizard Instead?"
     And I fill in "Title" with "Wide margins"
     And I fill in "Description" with "Layout skin"

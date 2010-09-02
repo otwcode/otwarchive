@@ -11,6 +11,8 @@ Feature: Create bookmarks
       | bookmarkuser2   | password   |
       And I am logged in as "bookmarkuser1" with password "password"
     Then I should see "Hi, bookmarkuser1!"
+    When I go to bookmarkuser2's user page
+    Then I should see "There are no works or bookmarks under this name yet"
     When I follow "bookmarkuser1"
     Then I should see "My Dashboard"
       And I should see "You don't have anything posted under this name yet"

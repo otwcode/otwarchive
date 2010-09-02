@@ -9,9 +9,12 @@ Feature: Edit profile
   Given the following activated user exists
     | login         | password   |
     | editname      | password   |
+    | othername     | password   |
     And I am logged in as "editname" with password "password"
   Then I should see "Hi, editname!"
     And I should see "Log out"
+  When I am on othername's user page
+  Then I should see "There are no works or bookmarks under this name yet"
   When I follow "editname"
   Then I should see "My Dashboard"
     And I should see "You don't have anything posted under this name yet"
@@ -125,7 +128,7 @@ Feature: Edit profile
     And I should see "Log out"
   When I follow "editpseuds"
   Then I should see "My Dashboard"
-    And I should see "There are no works or bookmarks under this name yet"
+    And I should see "You don't have anything posted under this name yet"
   When I follow "Profile"
   Then I should see "About editpseuds"
   When I follow "Manage My Pseuds"
