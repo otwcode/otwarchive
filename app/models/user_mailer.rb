@@ -150,7 +150,7 @@ class UserMailer < ActionMailer::Base
   # Sends email when a user is added as a co-author
   def coauthor_notification(user, creation)
     setup_email(user)
-    setup_coauthor_links(user, creation)
+    @body[:creation] = creation
     @subject += "Co-Author Notification"
   end 
    
@@ -285,10 +285,4 @@ class UserMailer < ActionMailer::Base
       @body[:related_child_link] = url_for(:host => @body[:host], :controller => :works, :action => :show, :id => @body[:related_work].work)
     end
     
-    def setup_coauthor_links(user, creation)
-      @body[:linking_author] = user
-      @body[:creation] = creation
-      @body[:linking_author_link] = url_for(:host => @body[:host], :controller => :users, :action => :show, :id => @body[:linking_author])
-    end
-      
 end
