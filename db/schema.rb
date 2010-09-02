@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100901154501) do
+ActiveRecord::Schema.define(:version => 20100901165448) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -569,7 +569,7 @@ ActiveRecord::Schema.define(:version => 20100901154501) do
     t.boolean  "admin_emails_off",                  :default => false,                     :null => false
     t.boolean  "disable_ugs",                       :default => false,                     :null => false
     t.integer  "skin_id"
-    t.boolean  "minimise_search_engines",           :default => false,                     :null => false
+    t.boolean  "minimize_search_engines",           :default => false,                     :null => false
   end
 
   add_index "preferences", ["user_id"], :name => "index_preferences_on_user_id"
