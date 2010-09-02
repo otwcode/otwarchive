@@ -14,7 +14,6 @@ class Pseud < ActiveRecord::Base
   NAME_LENGTH_MIN = 1
   NAME_LENGTH_MAX = 40
   DESCRIPTION_MAX = 500
-  ICON_ALT_MAX = 50
   
   belongs_to :user
   has_many :bookmarks, :dependent => :destroy
@@ -53,8 +52,8 @@ class Pseud < ActiveRecord::Base
     :with => /[a-zA-Z0-9]/
   validates_length_of :description, :allow_blank => true, :maximum => DESCRIPTION_MAX, 
     :too_long => t('description_too_long', :default => "must be less than {{max}} characters long.", :max => DESCRIPTION_MAX)
-  validates_length_of :icon_alt_text, :allow_blank => true, :maximum => ICON_ALT_MAX,
-    :too_long => t('icon_alt_too_long', :default => "must be less than {{max}} characters long.", :max => ICON_ALT_MAX)
+  validates_length_of :icon_alt_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_ALT_MAX,
+    :too_long => t('icon_alt_too_long', :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.ICON_ALT_MAX)
   
   after_update :check_default_pseud
   

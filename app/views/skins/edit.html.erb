@@ -5,6 +5,7 @@
 <!--subnav-->
 <h3 class="landmark">Navigation</h3>
 <ul class="navigation" role="navigation">
+  <li><%= link_to t('.new', :default => 'Create New Skin'), new_skin_path(:wizard => true) %></li>
   <%- if params[:wizard] -%>
     <li id="form-link">
      <%= link_to( t('.standard', :default => 'Write Custom CSS Instead?'),
@@ -12,7 +13,6 @@
        :href => url_for(:controller => :skins, :action => :edit, :wizard => false, :id => @skin.id)) -%>
     </li>
   <%- else -%>
-    <li>Custom CSS</li>
     <li id="wizard-link">
       <%= link_to( t('.wizard', :default => 'Use Wizard Instead?'),
       {:url => {:controller => :skins, :action => :edit, :wizard => true, :id => @skin.id}},
@@ -31,6 +31,6 @@
     <%= render :partial => 'form', :locals => {:f => f} %>
   <%- end -%>
 
-  <%= f.submit t('edit_skin_button', :default => 'Edit skin')  %>
+  <%= f.submit t('update_skin_button', :default => 'Update')  %>
 
 <% end -%>

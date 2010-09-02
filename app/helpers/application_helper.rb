@@ -50,7 +50,7 @@ module ApplicationHelper
   end
   
   def allowed_css_instructions
-    h(t('application_helper.allowed_css', :default =>"Limited CSS properties and keywords allowed")) + 
+    h(t('application_helper.allowed_css', :default =>"Limited CSS properties and values allowed")) + 
     link_to_help("css-help")
   end
     

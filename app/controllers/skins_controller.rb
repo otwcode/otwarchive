@@ -42,7 +42,11 @@ class SkinsController < ApplicationController
       redirect_to @skin
       flash[:notice] = "Skin was created successfully"
     else
-      render :action => "new"
+      if params[:wizard]
+        render :new_wizard
+      else
+        render :new
+      end
     end
   end
 

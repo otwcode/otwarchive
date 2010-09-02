@@ -6,6 +6,11 @@ class AutocompleteController < ApplicationController
     render :inline  => @results.length > 0 ? "<ul><%= @results.map {|string| '<li>' + string + '</li>'} -%></ul>" : ""
   end
 
+  # works for finding items in any set
+  def set_finder(search_param, set)
+    render_output(set.grep(/#{search_param}/).to_a.sort) unless search_param.blank?
+  end
+
   # works for any tag class where what you want to return are the names
   def tag_finder(tag_class, search_param)
     if search_param
@@ -152,9 +157,17 @@ class AutocompleteController < ApplicationController
       render_output(ExternalWork.find(:all, :conditions => ["url LIKE ?", '%' + params[:external_work_url] + '%'], :limit => 10, :order => :url).map(&:url))    
     end    
   end
+  
   def bookmark_external_url
     unless params[:bookmark_external_url].blank?
       render_output(ExternalWork.find(:all, :conditions => ["url LIKE ?", '%' + params[:bookmark_external_url] + '%'], :limit => 10, :order => :url).map(&:url))    
     end    
   end
+  
+  # css finders for skins
+  def css_keyword
+    set_finder(params[params[:fieldname]], HTML::WhiteListSanitizer.allowed_css_keywords)
+  end
+  
 end
+

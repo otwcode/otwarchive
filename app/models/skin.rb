@@ -1,5 +1,6 @@
 require 'css_parser'
 include CssParser
+include SanitizeParams
 
 class Skin < ActiveRecord::Base
   belongs_to :author, :class_name => 'User'
@@ -14,19 +15,49 @@ class Skin < ActiveRecord::Base
   :bucket => ENV['RAILS_ENV'] == 'production' ? YAML.load_file("#{RAILS_ROOT}/config/s3.yml")['bucket'] : "",
   :default_url => "/images/skin_preview_none.png"
    
-  ICON_ALT_MAX = 50
-  
   validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true 
   validates_attachment_size :icon, :less_than => 500.kilobytes, :allow_nil => true 
-  validates_length_of :icon_alt_text, :allow_blank => true, :maximum => ICON_ALT_MAX,
-    :too_long => t('icon_alt_too_long', :default => "must be less than {{max}} characters long.", :max => ICON_ALT_MAX)
+  validates_length_of :icon_alt_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_ALT_MAX,
+    :too_long => t('icon_alt_too_long', :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.ICON_ALT_MAX)
+
+  validates_length_of :description, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX,
+    :too_long => t("skin.description_too_long", :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
+
+  validates_length_of :css, :allow_blank => true, :maximum => ArchiveConfig.CONTENT_MAX,
+    :too_long => t("skin.css_too_long", :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.CONTENT_MAX)
 
   attr_protected :official
 
   validates_uniqueness_of :title, :message => t('skin_title_already_used', :default => 'must be unique')
 
+  validates_numericality_of :margin, :base_em, :allow_nil => true
+  validate :valid_font
+  def valid_font
+    return if self.font.blank?
+    get_white_list_sanitizer
+    self.font.split(',').each do |subfont|
+      if @white_list_sanitizer.sanitize_css_value(subfont).blank?
+        errors.add(:font, "cannot use #{subfont}.")
+      end
+    end
+  end
+  
+  validate :valid_colors
+  def valid_colors
+    get_white_list_sanitizer
+    
+    if !self.background_color.blank? && @white_list_sanitizer.sanitize_css_value(self.background_color).blank?
+      errors.add(:background_color, "uses a color that is not allowed.")
+    end
+      
+    if !self.foreground_color.blank? && @white_list_sanitizer.sanitize_css_value(self.foreground_color).blank?
+      errors.add(:foreground_color, "uses a color that is not allowed.")
+    end
+  end
+        
   validate :clean_css
   def clean_css
+    return if self.css.blank?
     scanner = StringScanner.new(self.css)
     if !scanner.exist?(/\/\*/) 
       # no comments, clean the whole thing
@@ -45,13 +76,14 @@ class Skin < ActiveRecord::Base
 protected
   def clean_css_code(css_code)
     clean_css = ""
+    get_white_list_sanitizer
     parser = CssParser::Parser.new
     parser.add_block!(css_code)
     parser.each_rule_set do |rs|
       clean_rule = "#{rs.selectors.join(',')} {\n"
       rs.each_declaration do |property, value, is_important|
         declaration = "#{property}: #{value}#{is_important ? ' !important' : ''};".downcase
-        clean_declaration = ActionController::Base.helpers.sanitize_css(declaration)
+        clean_declaration = @white_list_sanitizer.sanitize_css(declaration)
         if declaration != clean_declaration
           if clean_declaration.empty?
             if declaration !~ /^(\s*[-\w]+\s*:\s*[^:;]*(;|$)\s*)*$/ 

@@ -4,7 +4,6 @@
 <%= error_messages_for :skin %>
 
 <ul class="navigation">
-  <li>Custom CSS</li>
   <li id="wizard-link">
     <%= link_to( t('.wizard', :default => 'Use Wizard Instead?'),
       {:url => {:controller => :skins, :action => :new, :wizard => true}},
@@ -18,6 +17,6 @@
 
   <%= render :partial => 'form', :locals => {:f => f} %>
 
-  <%= f.submit t('create_skin_button', :default => 'Create skin')  %>
+  <%= f.submit t('create_skin_button', :default => 'Create')  %>
 
 <% end -%>
