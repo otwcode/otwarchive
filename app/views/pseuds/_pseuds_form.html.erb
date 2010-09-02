@@ -36,7 +36,7 @@
  <dt><%= f.label :icon_alt_text, 'Icon alt text for screenreaders' %><%= link_to_help "icon-alt-text" -%></dt>
  <dd>
     <%= f.text_field :icon_alt_text %>
-    <%= generate_countdown_html("pseud_icon_alt_text", Pseud::ICON_ALT_MAX) -%>
+    <%= generate_countdown_html("pseud_icon_alt_text", ArchiveConfig.ICON_ALT_MAX) -%>
  </dd>
 
 </dd>
