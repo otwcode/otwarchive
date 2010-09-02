@@ -41,8 +41,12 @@ module NavigationHelpers
       user_readings_path(:user_id => $1)
     when /^(.*)'s series page$/i
       user_series_index_path(:user_id => $1)
+    when /^(.*)'s preferences page$/i
+      user_preferences_path(:user_id => $1)
     when /my user page/
       user_path(current_user)
+    when /my preferences page/
+      user_preferences_path(current_user)
     when /my bookmarks page/
       user_bookmarks_path(current_user)
     when /the import page/
