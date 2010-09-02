@@ -80,11 +80,11 @@ protected
     parser = CssParser::Parser.new
     parser.add_block!(css_code)
     parser.each_rule_set do |rs|
-      clean_rule = "#{rs.selectors.join(',')} {\n"
+      clean_rule = "#{rs.selectors.map {|selector| selector.gsub(/\n/, '').strip}.join(",\n")} {\n"
       rs.each_declaration do |property, value, is_important|
-        declaration = "#{property}: #{value}#{is_important ? ' !important' : ''};".downcase
+        declaration = "#{property}: #{value}#{is_important ? ' !important' : ''};"
         clean_declaration = @white_list_sanitizer.sanitize_css(declaration)
-        if declaration != clean_declaration
+        if declaration.downcase != clean_declaration.downcase
           if clean_declaration.empty?
             if declaration !~ /^(\s*[-\w]+\s*:\s*[^:;]*(;|$)\s*)*$/ 
               errors.add_to_base("The code for #{rs.selectors.join(',')} doesn't seem to be a valid CSS rule.")

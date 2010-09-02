@@ -49,13 +49,14 @@ module HTML
     # all values must either appear in allowed_css_keywords, be urls of the format url(http://url/) or be 
     # rgb(), hex (#), or numeric values, or a comma-separated list of same
     def sanitize_css_value(value)
-      value_dc = value.downcase.gsub(/('|"|!important)/, '').strip
-      if allowed_css_keywords.include?(value_dc) || 
-        value_dc.split(',').all? {|subval| allowed_css_keywords.include?(subval.strip)} || 
-        value_dc =~ /^(#[0-9a-f]+|rgb\(\d+%?,\d*%?,?\d*%?\)|\d{0,2}\.?\d{0,2}(cm|em|ex|in|mm|pc|pt|px|%|,)?)$/
+      value_stripped = value.downcase.gsub(/('|"|!important)/, '').strip
+      if allowed_css_keywords.include?(value_stripped) || 
+        value_stripped.split(',').all? {|subval| allowed_css_keywords.include?(subval.strip)} || 
+        value_stripped =~ /^(#[0-9a-f]+|rgb\(\d+%?,\d*%?,?\d*%?\)|\d{0,2}\.?\d{0,2}(cm|em|ex|in|mm|pc|pt|px|%|,)?)$/
+        # return original value 
         return value
-      elsif value_dc.match(/\burl\b/) && allowed_css_keywords.include?("url")
-        return sanitize_css_url(value_dc)
+      elsif value_stripped.match(/\burl\b/) && allowed_css_keywords.include?("url")
+        return sanitize_css_url(value)
       else
         return ""
       end
@@ -69,10 +70,10 @@ module HTML
     # extra space inside or outside the enclosing parentheses is fine
     # must end in an allowed type (eg, jpg, png, gif)
     def sanitize_css_url(value)
-      if value.match(/^\s*url\s*\(\s*([\"|\'])?(https?:\/\/[\-\w\.\/]+)([\"|\'])?\s*\)\s*$/)
+      if value.downcase.match(/^\s*url\s*\(\s*([\"|\'])?(https?:\/\/[\-\w\.\/]+)([\"|\'])?\s*\)\s*$/)
         url = $2
         # make sure url ends in an allowed type and quotes are balanced if present
-        if url.match(/\.(#{ArchiveConfig.SUPPORTED_EXTERNAL_URLS.join('|')})$/) && $1 == $3
+        if $1 == $3 && url.match(/\.(#{ArchiveConfig.SUPPORTED_EXTERNAL_URLS.join('|')})$/)
           return value
         end
       else
