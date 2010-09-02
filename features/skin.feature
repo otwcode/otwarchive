@@ -1,3 +1,4 @@
+@skins
 Feature: creating and editing skins
 
   Scenario: Only the user who creates a skin should be able to edit it
