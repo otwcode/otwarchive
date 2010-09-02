@@ -65,25 +65,35 @@
   <div class="bookmark module" id="user-bookmarks">
     <h3><%=h t('.recent_bookmarks', :default => "Recent bookmarks") %></h3>
     <ul class="index">
-<%- for bookmark in @bookmarks -%>
-      <%= render :partial => 'bookmarks/bookmark', :locals => {:bookmark => bookmark} %>
-    <%- end -%>
-    <%- unless @user == User.orphan_account -%>
-      <%- if @author -%>
-        <%- if @author.bookmarks.visible.size > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD -%>
-        <ul class="navigation"><li><%= print_pseud_bookmarks_link(@author) %></li></ul>
-        <%- end -%>
-      <%- else -%>
-        <%- if @user.bookmarks.visible.size > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD -%>
-        <ul class="navigation"><li><%= print_bookmarks_link(@user) %></li></ul>
-        <%- end -%>
-      <%- end -%> 
-  <%- end -%>
-</ul>
+      <%- for bookmark in @bookmarks -%>
+        <%= render :partial => 'bookmarks/bookmark', :locals => {:bookmark => bookmark} %>
+      <%- end -%>
+      <%- unless @user == User.orphan_account -%>
+        <%- if @author -%>
+          <%- if @author.bookmarks.visible.size > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD -%>
+            <ul class="navigation"><li><%= print_pseud_bookmarks_link(@author) %></li></ul>
+          <%- end -%>
+        <%- else -%>
+          <%- if @user.bookmarks.visible.size > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD -%>
+            <ul class="navigation"><li><%= print_bookmarks_link(@user) %></li></ul>
+          <%- end -%>
+        <%- end -%> 
+      <%- end -%>
+    </ul>
   </div>
   <%- end -%>
 
 <% if @works.blank? && @series.blank? && @bookmarks.blank? %>
-  <p class="alt message">There are no works or bookmarks under this name yet.</p>
+  <% if current_user == @user %>
+    <p class="alt message">
+      <%= t("users.nothing_posted", :default => "You don't have anything posted under this name yet. ") -%>
+      <%= t("users.post_something_1", :default => "Would you like to ")%>
+      <%= link_to t("users.post_new_work", :default => "post a new work"), new_work_path -%>
+      <%= t("users.post_something_2", :default => "or maybe")-%>
+      <%= link_to t("users.post_new_bookmark", :default => "a new bookmark"), new_external_work_path -%>?
+    </p>
+  <% else %>
+    <p class="alt message">There are no works or bookmarks under this name yet.</p>
+  <% end %>
 <% end %>
 <!--/content-->
