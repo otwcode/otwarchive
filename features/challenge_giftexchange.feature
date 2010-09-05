@@ -74,10 +74,8 @@ Feature: Collection
   When I follow "Profile"
   Then I should see "Signup: CURRENTLY OPEN" within ".collection.meta"
     And I should see "Signup closes:"
-    # And I should see Today in 2009
     And I should see "EDT ("
     And I should see "AKDT)"
-    # And I should see "Signup closes:Wed 02 Sep 2009 10:00AM EDT (06:00AM AKDT)"
   When I follow "Challenge Settings"
     And I select "(GMT-09:00) Alaska" from "gift_exchange_time_zone"
     # TODO: Raise an issue to rename this button to something more descriptive

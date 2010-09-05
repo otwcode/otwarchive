@@ -19,7 +19,21 @@ When /^I fill in "([^\"]*)" with$/ do |field, value|
   fill_in(field, :with => value)
 end
 
+When /^I fill in "([^\"]*)" with `([^\`]*)`$/ do |field, value|
+  fill_in(field, :with => value)
+end
+
+When /^I fill in "([^\"]*)" with '([^\']*)'$/ do |field, value|
+  fill_in(field, :with => value)
+end
+
 Then /^I should find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
+  with_scope(selector) do
+    page.find(text)
+  end
+end
+
+Then /^I should find '([^']*)'(?: within "([^"]*)")?$/ do |text, selector|
   with_scope(selector) do
     page.find(text)
   end
