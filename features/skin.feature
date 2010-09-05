@@ -1,6 +1,35 @@
 @skins
 Feature: creating and editing skins
 
+  Scenario: A user should not be able to put evil code into skins. 
+  Given I am logged in as "skinner" with password "password"
+  When I am on skin's new page
+    And I fill in "Title" with "Evil Skin"
+    And I fill in "CSS" with "body {-moz-binding:url('http://ha.ckers.org/xssmoz.xml#xss')}"
+    And I press "Create"
+  Then I should see "code for body doesn't seem to be a valid CSS rule"
+  When I fill in "CSS" with "body {behavior: url(xss.htc);}"
+    And I press "Create"
+  Then I should see "The declarations for body cannot use the property"
+  When I fill in "CSS" with "body {@import 'http://ha.ckers.org/xss.css';}"
+    And I press "Create"
+  Then I should see "The code for body doesn't seem to be a valid CSS rule."
+  When I fill in "CSS" with "li {background-image: url(javascript:alert('XSS'));}"
+    And I press "Create"
+  Then I should see "The code for li doesn't seem to be a valid CSS rule"
+  When I fill in "CSS" with "div {width: expression(alert('XSS'));}"
+    And I press "Create"
+  Then I should see "The width property in div cannot have the value"
+  When I fill in "CSS" with "div {background-image: url(&#1;javascript:alert('XSS'))}"
+    And I press "Create"
+  Then I should see "background-image property in div cannot have the value"
+    And I should see "The declarations for div cannot use the property"
+  When I fill in "CSS" with "div {xss:expr/*XSS*/ession(alert('XSS'))}"
+    And I press "Create"
+  Then I should see "Skin was created successfully"
+    And I should see "/*XSS*/"
+    And I should not see "expression"
+
   Scenario: Only the user who creates a skin should be able to edit it
     and only if it's not official
 
