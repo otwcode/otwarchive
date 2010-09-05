@@ -58,7 +58,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
             { cursor: text;}
 #main.admin_users-show .navigation form, #main.admin_users-show .navigation div 					
 			{ display: inline; } /* cancelling out the side-effects of button_to */
- .navigation a:hover, .submit a:hover, .submit input:hover 
+ .navigation a:hover, .submit a:hover, .submit input:hover, .navigation input:hover 
 			{ background: #ddd !important;  color: #111 }
  .navigation a:active 							
 			{ background: #999; border: 1px solid #777 }

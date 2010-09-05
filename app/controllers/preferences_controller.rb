@@ -22,7 +22,7 @@ class PreferencesController < ApplicationController
     
     if @user.preference.save
       flash[:notice] = t('successfully_updated', :default => 'Your preferences were successfully updated.')
-      redirect_to user_preferences_path(@user) 
+      redirect_to(request.env["HTTP_REFERER"] || user_preferences_path(@user))
     else
       flash[:error] = t('failed_update', :default => 'Sorry, something went wrong. Please try that again.')
       render :action => :index
