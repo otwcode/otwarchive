@@ -45,14 +45,6 @@ module UsersHelper
     end
   end
   
-  def skin_preview_display(skin)
-    if skin
-      link_to image_tag(skin.icon.url(:standard), :alt => (skin.icon_file_name ? skin.icon_alt_text : "No skin preview available"), :class => "icon"), skin.icon.url(:original)
-    else
-      image_tag("/images/skin_preview_none.png", :size => "100x100", :alt => "No skin preview available", :class => "icon")
-    end
-  end
-  
   # Prints coauthors
   def print_coauthors(user)
     user.coauthors.collect(&:name).join(", ")
