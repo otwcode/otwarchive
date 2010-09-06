@@ -3,23 +3,7 @@
 <%= error_messages_for :skin %>
 
 <!--subnav-->
-<h3 class="landmark">Navigation</h3>
-<ul class="navigation" role="navigation">
-  <li><%= link_to t('.new', :default => 'Create New Skin'), new_skin_path(:wizard => true) %></li>
-  <%- if params[:wizard] -%>
-    <li id="form-link">
-     <%= link_to( t('.standard', :default => 'Write Custom CSS Instead?'),
-       {:url => {:controller => :skins, :action => :edit, :wizard => false, :id => @skin.id}},
-       :href => url_for(:controller => :skins, :action => :edit, :wizard => false, :id => @skin.id)) -%>
-    </li>
-  <%- else -%>
-    <li id="wizard-link">
-      <%= link_to( t('.wizard', :default => 'Use Wizard Instead?'),
-      {:url => {:controller => :skins, :action => :edit, :wizard => true, :id => @skin.id}},
-      :href => url_for(:controller => :skins, :action => :edit, :wizard => true, :id => @skin.id)) -%>
-    </li>
-  <%- end -%>
-</ul>
+<%= render :partial => "skin_top_navigation" -%>
 <!--/subnav-->
 
 <h3 class="landmark">Edit Archive Skin Form</h3>

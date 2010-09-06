@@ -3,13 +3,7 @@
 
 <%= error_messages_for :skin %>
 
-<ul class="navigation">
-  <li id="wizard-link">
-    <%= link_to( t('.wizard', :default => 'Use Wizard Instead?'),
-      {:url => {:controller => :skins, :action => :new, :wizard => true}},
-      :href => url_for(:controller => :skins, :action => :new, :wizard => true)) -%>
-  </li>
-</ul>
+<%= render :partial => "skin_top_navigation" -%>
 
 <h3 class="landmark">New Archive Skin Form</h3>
 
