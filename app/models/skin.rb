@@ -36,7 +36,7 @@ class Skin < ActiveRecord::Base
 
   validates_attachment_presence :icon, :if => :public?, :message => t('skin.preview_not_set', :default => "should be set for the skin to be public: please take a screencap of your skin in action.")
   
-  attr_protected :official
+  attr_protected :official, :icon_file_name, :icon_content_type, :icon_size
 
   validates_uniqueness_of :title, :message => t('skin_title_already_used', :default => 'must be unique')
 

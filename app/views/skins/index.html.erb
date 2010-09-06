@@ -1,38 +1,51 @@
 
 <h2><%= @title %></h2>
 
+<p class="notes">
+  A skin lets you change the way the archive looks in your browser and customize your reading experience.
+  <%= link_to_help "skins-basics" -%>
+</p>
+
 <%= render :partial => "skin_top_navigation" -%>
 
 <h3 class="landmark">List of Skins</h3>
-<ul class="skins picture index">
-<% for s in @skins -%>
-  <li class="skins <% if s.editable? %>own<%- end -%> picture blurb">
-    <div class="header module">
-      <h4 title="title">
-        <%= link_to h(s.title), s %>
-        <span class="byline">
-          by <%= s.byline %>
-          <% if @user %>
-            <% if s.official? %> 
-              (Approved)
-            <% elsif s.public? %> 
-              (Not yet approved) <%= link_to_help "skins-approval" -%>
+
+<% if @skins.empty? %>
+  <p>
+    No skins here yet! 
+    <% if logged_in? %>Why not try and <%= link_to t('.new', :default => 'make one'), new_skin_path %>?<% end %>
+  </p>
+<% else %>
+  <ul class="skins picture index">
+  <% for s in @skins -%>
+    <li class="skins <% if s.editable? %>own<%- end -%> picture blurb">
+      <div class="header module">
+        <h4 title="title">
+          <%= link_to h(s.title), s %>
+          <span class="byline">
+            by <%= s.byline %>
+            <% if @user %>
+              <% if s.official? %> 
+                (Approved)
+              <% elsif s.public? %> 
+                (Not yet approved) <%= link_to_help "skins-approval" -%>
+              <% end %>
             <% end %>
-          <% end %>
-        </span>
-      </h4>
+          </span>
+        </h4>
 
-      <div class="icon"><%= skin_preview_display(s) %></div>
-    </div>
+        <div class="icon"><%= skin_preview_display(s) %></div>
+      </div>
       
-    <!--summary/descriptions-->
-    <h6 class="landmark">Description</h6>
-    <blockquote class="user-generated-view summary">
-      <%= sanitize_strip_images_and_format_for_display s.description.blank? ? t("skins.no_description", :default => "(No Description Provided)") : s.description %>
-    </blockquote>
+      <!--summary/descriptions-->
+      <h6 class="landmark">Description</h6>
+      <blockquote class="user-generated-view summary">
+        <%= sanitize_strip_images_and_format_for_display s.description.blank? ? t("skins.no_description", :default => "(No Description Provided)") : s.description %>
+      </blockquote>
     
-    <%= render :partial => "skin_navigation", :locals => {:skin => s} -%>
+      <%= render :partial => "skin_navigation", :locals => {:skin => s} -%>
 
-  </li>
-<% end -%>
-</ul>
+    </li>
+  <% end -%>
+  </ul>
+<% end %>

@@ -29,6 +29,8 @@ Feature: creating and editing skins
   Then I should see "Skin was created successfully"
     And I should see "/*XSS*/"
     And I should not see "expression"
+    And I should not see "xss:"
+    And I should not see "alert"
 
   Scenario: Only the user who creates a skin should be able to edit it
     and only if it's not official
@@ -70,6 +72,9 @@ Feature: creating and editing skins
     And I fill in "Title" with "public blinking skin"
     And I fill in "Description" with "Blinky love"
     And I check "skin_public"
+    And I press "Update"
+  Then I should see "Skin preview should be set for the skin to be public"
+  When I attach the file "test/fixtures/skin_test_preview.png" to "skin_icon"
     And I press "Update"
   Then I should see "Skin updated"
     And I should not see "#title"
@@ -117,14 +122,12 @@ Feature: creating and editing skins
   When I check "public blinking skin"
     And I press "Approve skins"
   Then I should see "Skins were approved."
-    And I should see "Please note, this skin has no preview image. To fix this, unapprove it and then reapprove with a preview"
     And I should see "public blinking skin" within "table#approved"
   Given I am logged out as an admin
     And I am logged in as "skinner" with password "password"
   When I am on my skin page
   Then I should see "(Approved)"
     And I should not see "Edit"
-    And I should see the "alt" text "No skin preview available"
   When I follow "skinner"
     And I follow "My Preferences"
   Then "public blinking skin" should be selected within "preference_skin_id"
