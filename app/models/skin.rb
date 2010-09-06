@@ -127,6 +127,7 @@ public
 
   def self.create_default
     skin = Skin.find_or_create_by_title(:title => "Default", :css => "", :public => true)
+    File.open(Rails.public_path + '/images/skin_preview_default.png', 'rb') {|preview_file| skin.icon = preview_file} 
     skin.official = true
     skin.save
     skin
@@ -139,6 +140,7 @@ public
   def self.import_plain_text
     css = File.read(Rails.public_path + "/stylesheets/plain_text_skin.css")
     skin = Skin.find_or_create_by_title(:title => "Plain Text", :css => css, :public => true)
+    File.open(Rails.public_path + '/images/skin_preview_plaintext.png', 'rb') {|preview_file| skin.icon = preview_file} 
     skin.official = true
     skin.save
     skin
