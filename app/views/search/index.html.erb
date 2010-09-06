@@ -2,14 +2,12 @@
 
   <%= render :partial => 'works/search_form' -%> 
 
-<h2>Tag Search: Beta</h2>
+<h2><%= link_to t("tag_search", :default => "Tag Search: Beta"), search_tags_path %></h2>
 
-  <%= render :partial => 'tags/search_form' -%> 
+<br />
 
-<h2>Bookmark Search: Beta</h2>
-  
-  <%= render :partial => 'bookmarks/search_form' %>
+<h2><%= link_to t("bookmark_search", :default => "Bookmark Search: Beta"), search_bookmarks_path %></h2>
 
-<h2>People Search: Alpha</h2>
+<br />
 
-  <%= render :partial => 'people/search_form' %>
+<h2><%= link_to t("people_search", :default => "People Search: Alpha"), search_people_path %></h2>
