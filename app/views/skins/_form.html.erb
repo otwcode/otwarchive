@@ -9,7 +9,7 @@
 
     <dt><%= f.label :description, t('skin_description', :default => 'Description') -%></dt>
     <dd><%= f.text_field :description %></dd>
-
+      
     <dt>
       <%= f.label :css, t('skin_css', :default => 'CSS') %> 
       <%= link_to_help "skins-creating" -%>
@@ -21,6 +21,9 @@
       </p>
     </dt>
     <dd><%= f.text_area :css, :cols => 70 %></dd>
+
+    <dt><%= f.label :icon, t("skin_preview", :default => "Upload a preview (png, jpeg or gif)") %></dt>
+    <dd><%= f.file_field :icon %></dd>
 
     <dt><%= f.label :public, t('skin_public', :default => 'Apply to make this a public skin?') %> <%= link_to_help "skins-approval" -%></dt>
     <dd><%= f.check_box :public %></dd>

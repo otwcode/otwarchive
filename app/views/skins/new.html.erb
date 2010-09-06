@@ -13,7 +13,7 @@
 
 <h3 class="landmark">New Archive Skin Form</h3>
 
-<% form_for @skin do |f| -%>
+<% form_for(@skin, :html => {:multipart => true}) do |f| -%>
 
   <%= render :partial => 'form', :locals => {:f => f} %>
 

@@ -23,7 +23,7 @@
 <!--/subnav-->
 
 <h3 class="landmark">Edit Archive Skin Form</h3>
-<% form_for @skin do |f| -%>
+<% form_for(@skin, :html => {:multipart => true}) do |f| -%>
 
   <%- if params[:wizard] -%>
     <%= render :partial => 'wizard_form', :locals => {:f => f} %>

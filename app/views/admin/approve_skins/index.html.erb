@@ -21,7 +21,8 @@
       <%= check_box_tag "make_official[]", skin.id, false, :id => "make_official_#{skin.id}" %>
       <%= label_tag "make_official_#{skin.id}", (link_to skin.title, skin_path(skin)) %></td>
       <td><%= skin_author_link(skin) %></td>
-      <td><%= label_tag "skin_icon_#{skin.id}", "Upload a preview:" %>
+      <td><%= link_to skin.title + " preview", skin.icon.url(:original) if skin.icon_file_name %>
+      <%= label_tag "skin_icon_#{skin.id}", "Upload a preview:" %>
       <%= file_field_tag "skin_icon[#{skin.id}]" %>
       </td>
       </tr>

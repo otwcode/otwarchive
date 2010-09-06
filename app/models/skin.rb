@@ -5,6 +5,14 @@ include SanitizeParams
 class Skin < ActiveRecord::Base
   belongs_to :author, :class_name => 'User'
   has_many :preferences
+
+  HUMANIZED_ATTRIBUTES = {
+    :icon_file_name => "Skin preview"
+  }
+
+  def self.human_attribute_name(attr)
+    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
+  end
   
   has_attached_file :icon,
   :styles => { :standard => "100x100>" },
@@ -26,6 +34,8 @@ class Skin < ActiveRecord::Base
   validates_length_of :css, :allow_blank => true, :maximum => ArchiveConfig.CONTENT_MAX,
     :too_long => t("skin.css_too_long", :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.CONTENT_MAX)
 
+  validates_attachment_presence :icon, :if => :public?, :message => t('skin.preview_not_set', :default => "should be set for the skin to be public: please take a screencap of your skin in action.")
+  
   attr_protected :official
 
   validates_uniqueness_of :title, :message => t('skin_title_already_used', :default => 'must be unique')
