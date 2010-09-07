@@ -1,11 +1,11 @@
 <!--subnav-->
 <h3 class="landmark">Navigation</h3>
 <ul class="navigation" role="navigation">
-	<li><%= link_to t('.public', :default => 'Public Skins'), skins_path %></li>
+	<li><%= span_if_current t('.public', :default => 'Public Skins'), skins_path %></li>
 	<% if logged_in? %>
-    <li><%= link_to t('.mine', :default => 'My Skins'), skins_path(:q => 'mine') %></li>
+    <li><%= span_if_current t('.mine', :default => 'My Skins'), user_skins_path(current_user) %></li>
     <% unless controller.action_name == "new" %>
-      <li><%= link_to_unless_current t('.new', :default => 'Create New Skin'), new_skin_path %></li>
+      <li><%= link_to t('.new', :default => 'Create New Skin'), new_skin_path %></li>
     <% end %>
     <!-- wizard-to-custom-css switchers for new and edit -->
     <% if controller.action_name == "new" ||  controller.action_name == "edit" %>
