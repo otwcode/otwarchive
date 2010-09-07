@@ -10,14 +10,17 @@ class SkinsController < ApplicationController
     if current_user && current_user.is_a?(User)
       @preference = current_user.preference
     end
-    if params[:q] == 'mine'
+    if params[:user_id] && @user = User.find_by_login(params[:user_id])
       redirect_to new_session_path and return unless logged_in?
-      @user = current_user
+      if (@user != current_user)
+        flash[:error] = "You can only browse your own skins and approved public skins." 
+        redirect_to skins_path and return
+      end
       @skins = @user.skins
-      @title = t('my_skins', :default => 'My skins')
+      @title = t('my_skins', :default => 'My Skins')
     else
       @skins = Skin.approved_skins
-      @title = t('public_skins', :default => 'Public skins')
+      @title = t('public_skins', :default => 'Public Skins')
     end
   end
 
