@@ -31,6 +31,27 @@ class ReadingsController < ApplicationController
     flash[:notice] = t('history_deleted', :default => 'Your history is now cleared.')
     redirect_to user_readings_url(current_user)
   end
+  
+  # marks a work to read later, or unmarks it if the work is already marked
+  def marktoread
+    reading = Reading.find(params[:id])
+    @work = Work.find(params[:work_id])
+      if reading == nil # failsafe
+          flash[:error] = t('marktoreadfailed', :default => "Marking a work to read later failed")
+      else
+        reading.major_version_read, reading.minor_version_read = @work.major_version, @work.minor_version
+        if reading.toread?
+          reading.toread = false
+          flash[:notice] = t('savedtoread', :default => "The work was marked as read.")
+        else
+          reading.toread = true
+          flash[:notice] = t('savedtoread', :default => "The work was marked to read later. You can find it in your history.")
+        end
+        reading.save
+      end
+    true
+    redirect_to(request.env["HTTP_REFERER"] || root_path)
+  end
 
   protected
 

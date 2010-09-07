@@ -20,7 +20,7 @@
 <%- end -%>
 <%- if logged_in? && @work -%>
     <li id="add_bookmark_link"><%= bookmark_link(commentable) %></li>
-    <%- unless current_user.is_author_of?(@work) -%>
+    <%- unless current_user.is_author_of?(@work) || !current_user.preference.history_enabled? -%>
       <li><%= marktoread_link(@work) %></li>
     <%- end -%>
 <%- end -%>

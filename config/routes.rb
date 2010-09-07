@@ -64,7 +64,7 @@ ActionController::Routing::Routes.draw do |map|
     user.resources :related_works
     user.resources :works, :collection => {:drafts => :get, :show_multiple => :get, :edit_multiple => :post, :update_multiple => :put}
     user.resources :series, :member => {:manage => :get}, :has_many => :serial_works
-    user.resources :readings, :only => [:index, :destroy], :collection => {:clear => :post}
+    user.resources :readings, :only => [:index, :destroy], :collection => {:clear => :post}, :member => {:marktoread => :get}
     user.resources :comments, :member => { :approve => :put, :reject => :put }
     user.resources :invitations, :member => {:invite_friend => :post}, :collection => {:manage => :get}
     user.resources :collection_items, :only => [:index, :update, :destroy]
@@ -81,7 +81,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :works,
                 :collection => { :import => :post, :search => :get },
-                :member => { :preview => :get, :post => :post, :post_draft => :put, :navigate => :get, :edit_tags => :get, :preview_tags => :get, :update_tags => :put, :marktoread => :get, :download => :get  } do |work|
+                :member => { :preview => :get, :post => :post, :post_draft => :put, :navigate => :get, :edit_tags => :get, :preview_tags => :get, :update_tags => :put, :download => :get  } do |work|
       work.resources :chapters, :has_many => :comments,
                                 :collection => {:manage => :get,
                                                 :update_positions => :post},

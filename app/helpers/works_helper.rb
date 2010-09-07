@@ -87,9 +87,14 @@ module WorksHelper
   def marktoread_link(work)
     reading = Reading.find_by_work_id_and_user_id(work.id, current_user.id)
     if reading && reading.toread?
-      link_to "Mark as read", marktoread_work_path(work)
+      link_to "Mark as read", marktoread_user_reading_path(current_user, reading, :work_id => work.id)
+    elsif reading
+      link_to "Mark to read later", marktoread_user_reading_path(current_user, reading, :work_id => work.id)
     else
-      link_to "Mark to read later", marktoread_work_path(work)
+      reading = Reading.create(:work_id => work.id, :user_id => current_user.id)
+      reading.major_version_read, reading.minor_version_read = @work.major_version, @work.minor_version
+      reading.save
+      link_to "Mark to read later", marktoread_user_reading_path(current_user, reading, :work_id => work.id)
     end
   end
 end
