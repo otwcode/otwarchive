@@ -179,7 +179,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace :admin, :path_prefix => 'admin' do |admin|
     admin.resources :settings, :only => [:index, :update]
-    admin.resources :approve_skins, :only => [:index, :update]
+    admin.resources :skins, :only => [:index, :update], :collection => {:index_rejected => :get, :index_approved => :get}
     admin.resources :user_creations, :only => :destroy, :member => { :hide => :get }
     admin.resources :users, :controller => 'admin_users', :collection => {:notify => :get, :send_notification => :post}, :except => [:new, :create]
     admin.resources :invitations, :controller => 'admin_invitations', :only => [:index, :new, :create], :collection => {:invite_from_queue => :post, :grant_invites_to_users => :post, :find => :get}

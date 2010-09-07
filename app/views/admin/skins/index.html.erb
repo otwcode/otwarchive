@@ -1,0 +1,58 @@
+<!--Descriptive page name, messages and instructions-->
+<h2>Skin Approval Queue</h2>
+<!--/descriptions-->
+
+<!--subnav-->
+<%= render :partial => 'admin/skins/navigation' %>
+<!--/subnav-->
+
+<!--main content-->
+<h3 class="landmark">Manage Skins</h3>
+
+<% form_tag url_for(:controller => 'admin/skins', :action => 'update'), {:method => :post} do %>
+
+  <!-- approval queue -->
+  <fieldset>
+    <legend>Approval Queue</legend>
+    <h3>Approval Queue</h3>
+
+    <table id="unapproved">
+      <tr>
+        <th>Skin</th>
+        <th>Creator</th>
+        <th>Preview</th>
+        <th>Description</th>
+        <th>Admin Note</th>
+        <th>Approve</th>
+        <th>Reject</th>
+      </tr>
+      <% @unapproved_skins.each_with_index do |skin, i| %>
+        <tr>
+          <td>
+            <%= label_tag "make_official_#{skin.id}", (link_to skin.title, skin_path(skin)) %>
+          </td>
+          <td><%= skin_author_link(skin) %></td>
+          <td><%= skin_preview_display(skin) %></td>
+          <td>
+            <%= sanitize_strip_images_and_format_for_display skin.description.blank? ? t("skins.no_description", :default => "(No Description Provided)") : skin.description %>
+          </td>
+          <td><%= text_field_tag "skin_admin_note[#{skin.id}]", h(skin.admin_note) -%></td>
+          <td>
+            <%= check_box_tag "make_official[]", skin.id, false, :id => "make_official_#{skin.id}" %>
+          </td>
+          <td>
+            <%= check_box_tag "make_rejected[]", skin.id, false, :id => "make_rejected_#{skin.id}" %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </fieldset>
+
+  <p class="submit"><%= submit_tag "Update" %></p>
+
+<% end %>
+
+<!--/content-->
+
+<!--subnav-->
+<!--/subnav-->

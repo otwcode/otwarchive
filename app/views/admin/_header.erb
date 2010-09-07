@@ -19,7 +19,7 @@
 <li><%- if current_page?(admin_settings_path) -%><span class="current"><%- end -%>
   <%= link_to_unless_current t('.admin_header_settings', :default => "settings"), admin_settings_path %>
 <%- if current_page?(admin_settings_path) -%></span><%- end -%></li>
-<li><%- if current_page?(admin_approve_skins_path) -%><span class="current"><%- end -%>
-  <%= link_to_unless_current t('.admin_header_skins', :default => "skins"), admin_approve_skins_path %>
-<%- if current_page?(admin_approve_skins_path) -%></span><%- end -%></li>
+<li><%- if current_page?(admin_skins_path) -%><span class="current"><%- end -%>
+  <%= link_to_unless_current t('.admin_header_skins', :default => "skins"), admin_skins_path %>
+<%- if current_page?(admin_skins_path) -%></span><%- end -%></li>
 </ul>
