@@ -15,11 +15,13 @@
 /*turn off icons */
  .blurb ul.required-tags .rating-general-audience, .blurb ul.required-tags .rating-explicit, .blurb ul.required-tags .rating-mature, .blurb ul.required-tags .rating-notrated, .blurb ul.required-tags .rating-teen, .blurb ul.required-tags .category-femslash, .blurb ul.required-tags .category-gen, .blurb ul.required-tags .category-slash, .blurb ul.required-tags .category-het, .blurb ul.required-tags .category-multi, .blurb ul.required-tags .category-other, .blurb ul.required-tags .category-none, .blurb ul.required-tags .complete-no, .blurb ul.required-tags .complete-yes, .blurb ul.required-tags .warning-yes, .blurb ul.required-tags .warning-no, .blurb ul.required-tags .warning-choosenotto , .blurb ul.required-tags .external-work 
 								{ background: none; }
- .collection .blurb .header, .blurb .mystery 
+ .picture .blurb .header, .blurb .mystery 
 								{ background: none; }
-.collection .blurb .header h4, .collection .blurb .header h5, .collection .blurb .header ul { margin: auto 6em auto 120px; }
+.picture .blurb .header h4, .picture .blurb .header h5, .picture .blurb .header ul { margin: auto 6em auto 120px; }
 
 /*css3 non-critical perks*/
+/* the "content" property is not currently supported but will be made available soon.
+
  .blurb ul.required-tags:before { content: "(";}
  .blurb ul.required-tags:after 	{ content: ")";}
  .blurb ul.required-tags div:after
@@ -27,3 +29,4 @@
  .blurb ul.required-tags div.warnings:after, .blurb ul.required-tags li:last-child div:after
 								{ content: "";}
 								
+*/
