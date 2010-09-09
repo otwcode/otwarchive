@@ -28,7 +28,7 @@
               <% if s.official? %> 
                 (Approved)
               <% elsif s.rejected? %>
-                (Declined: <%=h s.admin_note -%>) <%= link_to_help "skins-approval" -%>
+                (Declined: <%= link_to_help "skins-approval" -%> <%=h s.admin_note -%>) 
               <% elsif s.public? %> 
                 (Not yet reviewed) <%= link_to_help "skins-approval" -%>
               <% end %>
