@@ -24,13 +24,14 @@ class StoryParser
 
   # These attributes need to be copied from the work to the chapter
   CHAPTER_ATTRIBUTES_ALSO = {:revised_at => :published_at}
-  
+
+  ### NOTE ON KNOWN SOURCES
   # These lists will stop with the first one it matches, so put more-specific matches
   # towards the front of the list.
 
   # places for which we have a custom parse_story_from_[source] method
   # for getting information out of the downloaded text
-  KNOWN_STORY_PARSERS = %w(lj yuletide ffnet)
+  KNOWN_STORY_PARSERS = %w(dw lj yuletide ffnet)
   
   # places for which we have a custom parse_author_from_[source] method
   # which returns an external_author object including an email address
@@ -46,6 +47,7 @@ class StoryParser
 
   # regular expressions to match against the URLS
   SOURCE_LJ = '((live|dead|insane)?journal(fen)?\.com)|dreamwidth\.org'
+  SOURCE_DW = 'dreamwidth\.org'
   SOURCE_YULETIDE = 'yuletidetreasure\.org'
   SOURCE_FFNET = 'fanfiction\.net'
 
@@ -156,26 +158,12 @@ class StoryParser
   end
 
   ### PARSING METHODS
-
+  
   # Parses the text of a story, optionally from a given location.
   def parse_story(story, location, options = {})
     work_params = parse_common(story, location)
     
     # move any attributes from work to chapter if necessary
-    CHAPTER_ATTRIBUTES_ONLY.each_pair do |work_attrib, chapter_attrib|
-      if work_params[work_attrib]
-        work_params[:chapter_attributes][chapter_attrib] = work_params[work_attrib]
-        work_params.delete(work_attrib)
-      end
-    end
-
-    # copy any attributes from work to chapter as necessary
-    CHAPTER_ATTRIBUTES_ALSO.each_pair do |work_attrib, chapter_attrib|
-      if work_params[work_attrib]
-        work_params[:chapter_attributes][chapter_attrib] = work_params[work_attrib]
-      end
-    end
-    
     return set_work_attributes(Work.new(work_params), location, options)
   end
 
@@ -189,16 +177,15 @@ class StoryParser
 
   def parse_chapters_into_story(location, chapter_contents, options = {})
     work = nil
-    work_params = { :title => "UPLOADED WORK", :chapter_attributes => {} }
     chapter_contents.each do |content|
       @doc = Nokogiri.parse(content)
       
-      chapter_params = parse_common(content, location)
+      work_params = parse_common(content, location)
       if work.nil?
         # create the new work
-        work = Work.new(work_params.merge!(chapter_params))
+        work = Work.new(work_params)
       else
-        new_chapter = get_chapter_from_work_params(chapter_params)
+        new_chapter = get_chapter_from_work_params(work_params)
         work.chapters << set_chapter_attributes(work, new_chapter, location, options)
       end
     end
@@ -219,6 +206,7 @@ class StoryParser
   # code -- please use the above functions to parse external works.
 
   #protected
+  
   
     # download an entire story from an archive type where we know how to parse multi-chaptered works
     # this should only be called from download_and_parse_story
@@ -355,7 +343,7 @@ class StoryParser
     end
 
     def get_chapter_from_work_params(work_params)
-      @chapter = Chapter.new({:content => work_params[:chapter_attributes][:content]})
+      @chapter = Chapter.new(work_params[:chapter_attributes])
       chapter_params = work_params.delete_if {|name, param| !@chapter.attribute_names.include?(name.to_s)}
       @chapter.update_attributes(chapter_params)
       return @chapter
@@ -443,7 +431,7 @@ class StoryParser
         work_params.merge!(parse_story_from_unknown(story))
       end
       
-      return sanitize_params(work_params)
+      return shift_chapter_attributes(sanitize_params(work_params))
     end
 
     # our fallback: parse a story from an unknown source, so we have no special
@@ -492,6 +480,22 @@ class StoryParser
       work_params[:title] = @doc.css("title").inner_html
       work_params[:title].gsub! /^[^:]+: /, ""
       work_params.merge!(scan_text_for_meta(storytext))
+      
+      font_blocks = @doc.xpath('//font')
+      unless font_blocks.empty?
+        date = font_blocks.first.inner_text
+        work_params[:revised_at] = convert_revised_at(date)
+      end
+
+      return work_params
+    end
+
+    def parse_story_from_dw(story)
+      work_params = parse_story_from_lj(story)
+      
+      # get the date
+      date = @doc.css("span.time").inner_text
+      work_params[:revised_at] = convert_revised_at(date)
 
       return work_params
     end
@@ -588,6 +592,28 @@ class StoryParser
 
       return work_params
     end
+    
+    
+    # Move and/or copy any meta attributes that need to be on the chapter rather 
+    # than on the work itself
+    def shift_chapter_attributes(work_params)
+      CHAPTER_ATTRIBUTES_ONLY.each_pair do |work_attrib, chapter_attrib|
+        if work_params[work_attrib]
+          work_params[:chapter_attributes][chapter_attrib] = work_params[work_attrib]
+          work_params.delete(work_attrib)
+        end
+      end
+
+      # copy any attributes from work to chapter as necessary
+      CHAPTER_ATTRIBUTES_ALSO.each_pair do |work_attrib, chapter_attrib|
+        if work_params[work_attrib]
+          work_params[:chapter_attributes][chapter_attrib] = work_params[work_attrib]
+        end
+      end
+      
+      work_params
+    end
+
 
     # Find any cases of the given pieces of meta in the given text
     # and return a hash of meta values
