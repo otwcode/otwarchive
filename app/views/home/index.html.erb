@@ -23,11 +23,10 @@
     <%= render :partial => 'works/search_box' %>
   </div>
 
-<%= image_tag('logo.png', :alt => ArchiveConfig.APP_NAME + ' logo', :class => 'logo', :height=> '70', :width => '105') %>
+<%= image_tag('logo-glitter-hat-noisemaker.gif', :alt => 'AO3 logo all dressed up for our first birthday!', :title => 'AO3 logo all dressed up for our first birthday!', :class => 'logo', :height=> '96', :width => '105') %>
   
 	<div class="titles">
-		<h1><%= ArchiveConfig.APP_NAME -%>
-  <% unless ArchiveConfig.REVISION.blank? %>(BETA <%=h t('.revision', :default => 'rev. {{rev_number}}', :rev_number => ArchiveConfig.REVISION) %>)<% end %></h1>
+		<h1><%= ArchiveConfig.APP_NAME -%></h1>
 
 		<h2><%= t('.otw_link', :default => "A project of the {{otw}}", :otw => '<a href="http://transformativeworks.org">Organization For Transformative Works</a>') %></h2>
 	</div>

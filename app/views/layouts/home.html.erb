@@ -2,22 +2,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<%= I18n.locale %>" lang="<%= I18n.locale %>">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="keywords" content="fanfiction, transformative works, otw, fair use, archive" />
-	<meta name="language" content="en-US" />
-	<meta name="subject" content="fandom" />
-	<meta name="description" content="An Archive of Our Own, a project of the
-	Organization for Transformative Works" />
-	<meta name="distribution" content="GLOBAL" />
-	<meta name="classification" content="transformative works" />
-	<meta name="author" content="Organization for Transformative Works" />
+  	<meta name="keywords" content="fanfiction, transformative works, otw, fair use, archive" />
+  	<meta name="language" content="en-US" />
+  	<meta name="subject" content="fandom" />
+  	<meta name="description" content="An Archive of Our Own, a project of the
+  	Organization for Transformative Works" />
+  	<meta name="distribution" content="GLOBAL" />
+  	<meta name="classification" content="transformative works" />
+  	<meta name="author" content="Organization for Transformative Works" />
 
-	<title><%=h ArchiveConfig.APP_NAME  %> 
-		<% unless ArchiveConfig.REVISION.blank? -%>(rev. <%= ArchiveConfig.REVISION %>)<% end %>&gt;&gt;<%= controller.controller_name %>
-        <%= controller.action_name %>
+  	<title>
+  	  <%=h ArchiveConfig.APP_NAME  %>&gt;&gt;<%= controller.controller_name %> <%= controller.action_name %>
     </title>
 
-	<%= render :partial => 'layouts/includes' %>
-
+  	<%= render :partial => 'layouts/includes' %>
   </head>
 
   <body onload="hideFormFields(); initSelect('languages_menu')" >
