@@ -7,6 +7,8 @@ Feature: Invite queue management
       And the following admin exists
       | login       | password   | email                    |
       | admin-sam   | password   | test@archiveofourown.org |
+    
+    # turn on queue
     When I go to the admin_login page
       And I fill in "admin_login" with "admin-sam"
       And I fill in "admin_password" with "password"
@@ -18,6 +20,8 @@ Feature: Invite queue management
     Then I should see "Archive settings were successfully updated"
     When I follow "Log out"
     Then I should see "You have been logged out"
+    
+    # join the queue
     When I am on the homepage
       And all emails have been delivered
       And I follow "SIGN UP NOW"
@@ -32,6 +36,8 @@ Feature: Invite queue management
       And I press "Go"
     Then I should see "Invitation Status for test@archiveofourown.org"
       And I should see "You are currently number 1 on our waiting list! At our current rate, you should receive an invitation on or around"
+    
+    # queue sends out invites
     When the invite_from_queue_at is yesterday
     And the check_queue rake task is run
     Then 1 email should be delivered
@@ -39,3 +45,18 @@ Feature: Invite queue management
       And I fill in "email" with "test@archiveofourown.org"
       And I press "Go"
     Then I should see "Sorry, we couldn't find that address in our queue."
+    
+    # invite can be used
+    When I go to the admin_login page
+      And I fill in "admin_login" with "admin-sam"
+      And I fill in "admin_password" with "password"
+      And I press "Log in as admin"
+    Then I should see "Logged in successfully"
+    When I follow "invitations"
+      And I fill in "invitee_email" with "test@archiveofourown.org"
+      And I press "Go"
+    Then I should see "Sender queue"
+      And I should see "copy and use"
+    When I follow "copy and use"
+    Then I should see "You are already logged in!"
+    # TODO: When I copy that invitation, log out and try to use it
