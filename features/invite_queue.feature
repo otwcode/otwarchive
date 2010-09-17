@@ -7,6 +7,9 @@ Feature: Invite queue management
       And the following admin exists
       | login       | password   | email                    |
       | admin-sam   | password   | test@archiveofourown.org |
+      And the following users exist
+      | login | password |
+      | user1 | password |
     
     # turn on queue
     When I go to the admin_login page
@@ -40,7 +43,7 @@ Feature: Invite queue management
     # queue sends out invites
     When the invite_from_queue_at is yesterday
     And the check_queue rake task is run
-    Then 1 email should be delivered
+    Then 1 email should be delivered to test@archiveofourown.org
     When I am on the invite_requests page
       And I fill in "email" with "test@archiveofourown.org"
       And I press "Go"
@@ -59,4 +62,36 @@ Feature: Invite queue management
       And I should see "copy and use"
     When I follow "copy and use"
     Then I should see "You are already logged in!"
-    # TODO: When I copy that invitation, log out and try to use it
+    When I follow "Log out"
+    
+    # user uses email invite
+    Then 1 email should contain "[Example Archive] Invitation" in the subject
+    When I click the first link in the email
+    
+    # user creates account, with error messages
+    When I fill in "user_login" with "user1"
+      And I fill in "user_password" with "password1"
+      And I fill in "user_password_confirmation" with "password2"
+      And I press "Create Account"
+    Then I should see "Login Sorry, that name is already taken. Try again, please!"
+      And I should see "Terms of service Sorry, you need to accept the Terms of Service in order to sign up."
+      And I should see "Age over 13 Sorry, you have to be over 13!"
+      And I should see "Password Your passwords don't match; please re-enter!"
+    When I fill in "user_login" with "newuser"
+      And I fill in "user_password_confirmation" with "password1"
+      And I check "user_age_over_13"
+      And I check "user_terms_of_service"
+      And I press "Create Account"
+    Then I should see "Account Created!"
+      And the system processes jobs
+    # TODO: from here onwards fails, because the activation email doesn't deliver, for some reason
+#      And 1 email should be delivered
+#    Then show me the emails
+#      And 1 email should contain "[Example Archive] Please activate your new account" in the subject
+#    When I click the first link in the email
+#    Then show me the page
+    
+    # user activates account
+#    Then 1 email should be delivered
+#    Then show me the emails
+#      And 1 email should contain "Your account has been activated" in the subject
