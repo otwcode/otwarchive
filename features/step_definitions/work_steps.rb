@@ -94,3 +94,13 @@ When /^I list the work "([^\"]*)" as inspiration$/ do |title|
   url_of_work = work_url(work).sub("www.example.com", ArchiveConfig.APP_URL)
   fill_in("Url", :with => url_of_work)
 end
+
+When /^I set the publication date to today$/ do
+  today = Time.new
+  month = today.strftime("%B")
+  
+  check("backdate-options-show")
+  select("#{today.day}", :from => "work[chapter_attributes][published_at(3i)]")
+  select("#{month}", :from => "work[chapter_attributes][published_at(2i)]")
+  select("#{today.year}", :from => "work[chapter_attributes][published_at(1i)]")
+end
