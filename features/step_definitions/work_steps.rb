@@ -31,6 +31,53 @@ When /^I post the work "([^\"]*)"$/ do |title|
   Then "I should see \"Work was successfully posted.\""
 end
 
+When /^I post the work "([^\"]*)" with fandom "([^\"]*)"$/ do |title, fandom|
+  work = Work.find_by_title(work)
+  if work.blank?
+    Given "the draft \"#{title}\" with fandom \"#{fandom}\""
+    work = Work.find_by_title(title)
+  end
+  visit preview_work_url(work)
+  click_button("Post")
+  Then "I should see \"Work was successfully posted.\""
+end
+
+When /^I post the work "([^\"]*)" with fandom "([^\"]*)" with freeform "([^\"]*)"$/ do |title, fandom, freeform|
+  work = Work.find_by_title(work)
+  if work.blank?
+    Given "the draft \"#{title}\" with fandom \"#{fandom}\" with freeform \"#{freeform}\""
+    work = Work.find_by_title(title)
+  end
+  visit preview_work_url(work)
+  click_button("Post")
+  Then "I should see \"Work was successfully posted.\""
+end
+
+# The optional extras (fandom and freeform) in the When line don't seem to be working here - can anyone fix them?
+When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")(?: with freeform "([^\"]*)")$/ do |title, fandom, freeform|
+  Given "basic tags"
+  visit new_work_url
+  select("Not Rated", :from => "Rating")
+  check("No Archive Warnings Apply")
+  fill_in("Fandoms", :with => fandom.nil? ? "Stargate SG-1" : fandom)
+  fill_in("Work Title", :with => title)
+  fill_in("Additional Tags", :with => freeform.nil? ? "Scary tag" : freeform)
+  fill_in("content", :with => "That could be an amusing crossover.")
+  click_button("Preview")
+end
+
+When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")$/ do |title, fandom|
+  Given "basic tags"
+  visit new_work_url
+  select("Not Rated", :from => "Rating")
+  check("No Archive Warnings Apply")
+  fill_in("Fandoms", :with => fandom.nil? ? "Stargate SG-1" : fandom)
+  fill_in("Work Title", :with => title)
+  fill_in("Additional Tags", :with => "Scary tag")
+  fill_in("content", :with => "That could be an amusing crossover.")
+  click_button("Preview")
+end
+
 When /^the draft "([^\"]*)"$/ do |title|
   Given "basic tags"
   visit new_work_url

@@ -65,8 +65,7 @@ Feature: Import Works
     Then I should see "OTW Meetup"
     When I press "Post"
     Then I should see "Work was successfully posted."
-    When I go to the works page
-    Then I should see "OTW Meetup"
+      And I should see "OTW Meetup"
       And I should not see "Rambling musings"
       And I should not see "Profile" within "#main"
 
