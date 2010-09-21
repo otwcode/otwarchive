@@ -59,6 +59,7 @@ Feature: Create Works
         | giftee         | something   | giftee@example.org    |
         | recipient      | something   | recipient@example.org |
       And I am logged in as "thorough" with password "something"
+      And all emails have been delivered
     When I go to thorough's user page
       And I follow "Profile"
     Then I should see "About"
@@ -92,6 +93,8 @@ Feature: Create Works
       And I fill in "Characters" with "Sam Winchester, Dean Winchester,"
       And I fill in "Relationships" with "Harry/Ginny"
       And I fill in "Recipient" with "Someone else, recipient"
+      And I check "series-options-show"
+      And I fill in "work_series_attributes_title" with "My new series"
       And I select "Pseud2" from "work_author_attributes_ids_"
       And I select "Pseud3" from "work_author_attributes_ids_"
       And I fill in "pseud_byline" with "coauthor"
@@ -99,7 +102,7 @@ Feature: Create Works
     Then I should see "Preview Work"
     When I press "Post"
     Then I should see "Work was successfully posted."
-      And 1 email should be delivered to "coauthor@example.org"
+      And 2 emails should be delivered to "coauthor@example.org"
       And 1 email should be delivered to "recipient@example.org"
     When I go to the works page
     Then I should see "All Something Breaks Loose"
@@ -120,6 +123,7 @@ Feature: Create Works
       And I should see "Have a short summary"
       And I should see "Pseud2" within ".byline"
       And I should see "Pseud3" within ".byline"
+      And I should see "My new series"
       And I should see "Bad things happen, etc."
     When I follow "Add Chapter"
       And I fill in "title" with "This is my second chapter"
