@@ -54,7 +54,8 @@
 	  <div id="main" class="<%= classes_for_main %>" role="main">
 	    <%= flash_div :error, :warning, :notice %>
 	    <%= yield  %>
-	  </div>
+	  <div class="clear"><!--presentational--></div>
+	</div>
 	  <!-- END main -->
 		
 	  <%= render :partial => 'layouts/footer' %>
