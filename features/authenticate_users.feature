@@ -18,6 +18,30 @@ Feature: User Authentication
     When I fill in "login" with "sam"
       And I press "Reset password"
     Then 1 email should be delivered
+    
+  Scenario: Wrong username
+    Given I have no users
+      And the following activated user exists
+      | login    | password | 
+      | sam      | secret   |
+      And all emails have been delivered
+    When I am on the home page
+      And I fill in "User name" with "sammy"
+      And I fill in "Password" with "test"
+      And I press "Log in"
+    Then I should see "We couldn't find that name in our database. Please try again."
+    
+  Scenario: Wrong username
+    Given I have no users
+      And the following activated user exists
+      | login    | password | 
+      | sam      | secret   |
+      And all emails have been delivered
+    When I am on the home page
+      And I fill in "User name" with "sam"
+      And I fill in "Password" with "tester"
+      And I press "Log in"
+    Then I should see "The password you entered doesn't match our records. Please try again or click the 'forgot password' link below."
 
   Scenario: Logged out
     Given I have no users
