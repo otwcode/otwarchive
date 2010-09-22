@@ -10,6 +10,7 @@ Scenario: Deleting users
     | downthemall | password |
     | otheruser   | secret   |
     | orphaner    | secret   |
+    | moderator   | password |
     
   # delete a user with no works
   When I am logged in as "downthemall" with password "password"
@@ -76,3 +77,26 @@ Scenario: Deleting users
   Then I should see "To be orphaned"
     And I should see "orphan_account"
     And I should not see "orphaner"
+    
+  # delete a user with a collection
+  When I am logged in as "moderator" with password "password"
+    And all emails have been delivered
+    And I create the collection "fake"
+    And I go to the collections page
+  Then I should see "fake"
+    And I should see "moderator" within "#main"
+  When I go to moderator's user page
+    And I follow "Profile"
+  Then I should see "Delete My Account"
+  When I follow "Delete My Account"
+  Then I should see "You have 1 collection(s) under the following pseuds: moderator."
+  When I choose "Change my pseud to 'orphan' and attach to the orphan account"
+    And I press "Save"
+  Then I should see "You have successfully deleted your account."
+    And 0 emails should be delivered
+    And I should not see "Log out"
+    And I should see "Log in"
+  When I go to the collections page
+  Then I should see "fake"
+    And I should see "orphan_account"
+    And I should not see "moderator"
