@@ -175,17 +175,24 @@ FIELDS_ALLOWING_HTML: %w(content summary notes endnotes about_me comment note de
 # Note: if you put in a shorthand property (eg "background") that automatically lets 
 # through all the sub-properties like background-color and background-image. 
 #
-SUPPORTED_CSS_SHORTHAND_PROPERTIES: []
-SUPPORTED_CSS_PROPERTIES: ["-moz-border-radius", "position", "min-height"]
-
+SUPPORTED_CSS_SHORTHAND_PROPERTIES: ["background", "border", "box-shadow", "-moz-box-shadow", "-webkit-box-shadow", "cue", "font", "layer-background", 
+  "layout-grid", "list-style", "margin", 
+  "-moz-border", "-moz-outline", "outline", "overflow", "padding", "page-break", "pause", "scrollbar", "text", "transition", "-moz-transition", "-webkit-transition"]
+  
+SUPPORTED_CSS_PROPERTIES: ["accelerator", "azimuth", "behavior", "bottom", 
+  "caption-side", "clear", "clip", "color", "content", "counter-increment", "counter-reset", "cursor", "direction", "display", "elevation", 
+  "empty-cells", "filter", "float", "height", 
+  "ime-mode", "include-source", "layout-flow", "left", "letter-spacing", "line-break", "line-height", "marker-offset", "marks", 
+  "max-height", "max-width", "min-height", "min-width", "-moz-opacity", "-moz-user-select", "orphans", "page", "pitch", "pitch-range", 
+  "play-during", "position", "quotes", "-replace", "richness", "right", "ruby-align", "ruby-overhang", "ruby-position", "size", "speak", 
+  "speak-header", "speak-numeral", "speak-punctuation", "speech-rate", "stress", "table-layout", "top", "transform", "-moz-transform", "-webkit-transform", 
+  "unicode-bidi", 
+  "-use-link-source", "vertical-align", "visibility", "voice-family", "volume", "white-space", "widows", "width", "word-break", 
+  "word-spacing", "word-wrap", "writing-mode", "z-index"]
+  
 # mostly color and font names here 
-SUPPORTED_CSS_KEYWORDS: ["url", "inline", "blink", "static", "absolute", "repeat", "no-repeat", "repeat-x", "repeat-y", "scroll", 
-  "serif", "sans-serif", "monospace", "cursive", "fantasy", 
-  "andale mono", "arial", "arial black", "book antiqua", "bookman old style", "calibri", "cambria", "candara", "charcoal", 
-  "comic sans ms", "consolas", "constantia", "corbel", "courier", "courier new", "fertigoproregular", "gadget", "garamond", "geneva", "georgia", 
-  "helvetica", "impact", "liberation mono", "liberation sans", "liberation serif", "lucida console", "lucida grande", 
-  "lucida sans unicode", "monaco", "ms sans serif", "ms serif", "palatino", "palatino linotype", "symbol", "tahoma", "times", 
-  "times new roman", "trebuchet ms", "verdana", "webdings", "wingdings", "zapf dingbats",
+SUPPORTED_CSS_KEYWORDS: ["all", "url", "inline", "blink", "static", "absolute", "repeat", "no-repeat", "repeat-x", "repeat-y", "scroll", 
+  "hidden", "normal", "overline", "ease-in", 
   "aliceblue", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "black", "blanchedalmond", 
   "blue", "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse", "chocolate", "coral", "cornflowerblue", "cornsilk", "crimson", 
   "cyan", "darkblue", "darkcyan", "darkgoldenrod", "darkgray", "darkgreen", "darkkhaki", "darkmagenta", "darkolivegreen", "darkorange", 

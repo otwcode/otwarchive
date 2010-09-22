@@ -1,5 +1,3 @@
-require 'css_parser'
-include CssParser
 include SanitizeParams
 
 class Skin < ActiveRecord::Base
@@ -84,6 +82,8 @@ class Skin < ActiveRecord::Base
   end
         
 protected
+
+  # We parse and clean the CSS line by line in order to provide more helpful error messages.
   def clean_css_code(css_code)
     clean_css = ""
     get_white_list_sanitizer
@@ -93,8 +93,9 @@ protected
       clean_rule = "#{rs.selectors.map {|selector| selector.gsub(/\n/, '').strip}.join(",\n")} {\n"
       rs.each_declaration do |property, value, is_important|
         declaration = "#{property}: #{value}#{is_important ? ' !important' : ''};"
-        clean_declaration = @white_list_sanitizer.sanitize_css(declaration)
-        if declaration.downcase != clean_declaration.downcase
+        clean_declaration = @white_list_sanitizer.sanitize_css_declaration(declaration)
+        # if we differ in anything but case or whitespace, there's an issue
+        if declaration.downcase.gsub(/\s+/, '') != clean_declaration.downcase.gsub(/\s+/, '') 
           if clean_declaration.empty?
             if declaration !~ /^(\s*[-\w]+\s*:\s*[^:;]*(;|$)\s*)*$/ 
               errors.add_to_base("The code for #{rs.selectors.join(',')} doesn't seem to be a valid CSS rule.")

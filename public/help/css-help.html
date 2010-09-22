@@ -24,7 +24,7 @@
   <dd id="css_properties">
     We allow the following properties: <br />
     <code>
-      background, border, margin, padding, azimuth, background-color, border-bottom-color, border-collapse, border-color, border-left-color, border-right-color, border-top-color, clear, color, cursor, direction, display, elevation, float, font, font-family, font-size, font-style, font-variant, font-weight, height, letter-spacing, line-height, min-height, overflow, pause, pause-after, pause-before, pitch, pitch-range, position, richness, speak, speak-header, speak-numeral, speak-punctuation, speech-rate, stress, text-align, text-decoration, text-indent, unicode-bidi, vertical-align, voice-family, volume, white-space, width, -moz-border-radius
+      accelerator, azimuth, background, behavior, border, bottom, box-shadow, caption-side, clear, clip, color, content, counter-increment, counter-reset, cue, cursor, direction, display, elevation, empty-cells, filter, float, font-family, font-size, font-size-adjust, font-stretch, font-style, font-variant, font-weight, height, ime-mode, include-source, layer-background, layout-flow, layout-grid, left, letter-spacing, line-break, line-height, list-style, margin, marker-offset, marks, max-height, max-width, min-height, min-width, orphans, outline, overflow, padding, page, page-break, pause, pitch, pitch-range, play-during, position, quotes, richness, right, ruby-align, ruby-overhang, ruby-position, scrollbar, size, speak, speak-header, speak-numeral, speak-punctuation, speech-rate, stress, table-layout, text, top, transform, unicode-bidi, vertical-align, visibility, voice-family, volume, white-space, widows, width, word-break, word-spacing, word-wrap, writing-mode, z-index, -moz-border, -moz-box-shadow, -moz-opacity, -moz-outline, -moz-transform, -moz-user-select, -replace, -use-link-source, -webkit-box-shadow, -webkit-transform
     </code>
   </dd>
 
@@ -38,7 +38,7 @@
   <dd id="css_keywords">
     We allow the following keywords: <br />
     <code>
-      absolute, auto, blink, block, bold, both, bottom, center, collapse, dashed, dotted, !important, inline, italic, left, medium, none, no-repeat, normal, nowrap, pointer, repeat, right, scroll, solid, static, top, transparent, underline
+      absolute, all, auto, blink, block, bold, both, bottom, center, collapse, dashed, dotted, hidden, !important, inline, italic, left, medium, none, no-repeat, normal, nowrap, overline, pointer, repeat, right, scroll, solid, static, top, transparent, underline
     </code>
   </dd>
   
@@ -56,7 +56,7 @@
 
   <dt>Colors</dt> 
   <dd id="css_colors">
-    You can specify colors using hex values (eg, #000000 is black in hex) or with rgb values (eg, rgb(0,0,0) is black). 
+    You can specify colors using hex values (eg, #000000 is black in hex) or with rgb or rgba values (eg, rgb(0,0,0) and rgba(0,0,0,0) both give you black). 
     This may be safer since not all browsers will necessarily support all color names. However, color names are more
     readable and easier to remember, so we allow 
     <a href="http://www.w3schools.com/css/css_colornames.asp">the set of commonly-supported color names</a>:<br />
@@ -73,9 +73,20 @@
       See <a href="http://www.fonttester.com/help/list_of_web_safe_fonts.html">the set of web-safe fonts with fallbacks</a>.
     </p>
     <p>
-      We allow the following font families:<br />
-      <code>serif, sans-serif, monospace, cursive, fantasy, andale mono, arial, arial black, book antiqua, bookman old style, calibri, cambria, candara, charcoal, comic sans ms, consolas, constantia, corbel, courier, courier new, fertigoproregular, gadget, garamond, geneva, georgia, helvetica, impact, liberation mono, liberation sans, liberation serif, lucida console, lucida grande, lucida sans unicode, monaco, ms sans serif, ms serif, palatino, palatino linotype, symbol, tahoma, times, times new roman, trebuchet ms, verdana, webdings, wingdings, zapf dingbats</code>
+      We allow you to specify any font with an alphanumeric name. You can (but don't have to) specify the name with single or double quotes
+      around it, just make sure the quotes match. (eg, 'Gill Sans' and "Gill Sans" are both fine; 'Gill Sans" won't work.)
+    </p>
+    <p>
+      We CANNOT allow the font-face attribute. Sorry! If you have an uncommon font that you want to 
+      use in a skin you would like to share,we suggest adding a comment in your skin with a pointer to a place for users 
+      to download the font themselves, and using web-safe fonts as fallbacks.
     </p>
   </dd>
   
+  <dt>Scale</dt>
+  <dd id="css_scale">
+    <p>
+      You can specify scale (for the "transform" property) as <code>scale(numeric value)</code> where the numeric value can be 
+      specified up to two decimal places. 
+    </p>
 </dl>
