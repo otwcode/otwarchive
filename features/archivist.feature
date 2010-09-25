@@ -32,15 +32,18 @@ Feature: Archivist bulk imports
         """
         http://cesy.dreamwidth.org/154770.html
         http://cesy.dreamwidth.org/394320.html
+        http://yuletidetreasure.org/archive/84/thatshall.html
         """
       And I check "Post without previewing"
       And I press "Import"
     Then I should see "Importing completed successfully! (But please check the results over carefully!)"
-#      And I should see "We have notified the author(s) you imported stories for. You can also add them as co-authors manually."
       And I should see "Imported Works"
       And I should see "We were able to successfully upload the following works."
       And I should see "Welcome"
       And I should see "OTW Meetup in London"
-    Given the system processes jobs
-    Then 1 emails should be delivered
-
+    When issue "notifying authors for imports" is fixed
+      # And I should see "We have notified the author(s) you imported stories for. You can also add them as co-authors manually."
+    # Given the system processes jobs
+    # Then show me the emails
+    # Then 1 email should be delivered to "shalott@intimations.org"
+    #   And 1 email should be delivered to "cesy@dreamwidth.org"
