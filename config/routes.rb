@@ -1,233 +1,430 @@
-ActionController::Routing::Routes.draw do |map|
-
-  map.resources :skins
-
-  map.resources :user_invite_requests
-
-  map.resources :invite_requests, :collection => {:manage => :get, :reorder => :post}
+Otwarchive2::Application.routes.draw do
   
-  map.resources :known_issues
+  #### INVITATIONS ####
 
-  map.resources :archive_faqs, :collection => {:manage => :get, :reorder => :post}
-  
-  map.resources :admin_posts, :has_many => :comments
-
-  map.resources :media, :only => [:index, :show], :has_many => :fandoms
-  map.resources :fandoms, :only => [:index, :show] 
-  
-  map.resources :people, :only => [:index, :show, :search], :collection => {:search => :get}
-
-  map.feedbacks '/support/', :controller => 'feedbacks', :action => 'create' , :conditions => { :method => :post }
-  map.new_feedback_report '/support/', :controller => 'feedbacks', :action => 'new' 
-
-  map.resources :tag_wranglings, :member => {:wrangle => :post}, :collection => {:discuss => :get}, :only => [:index]
-  map.resources :tag_wranglers
-
-  map.resources :tags, :member => {:wrangle => :get, :mass_update => :post, :remove_association => :get}, :collection =>  {:show_hidden => :get, :search => :get},  :requirements => { :id => %r([^/;,?]+) } do |tag|
-        tag.with_options :requirements => { :tag_id => %r([^/;,?]+) } do |tag_requirements|
-        tag_requirements.resources :works
-        tag_requirements.resources :bookmarks
-        tag_requirements.resources :comments
+  resources :invitations  
+  resources :user_invite_requests
+  resources :invite_requests do
+    collection do
+      get :manage
+      post :reorder
     end
+  end
+  
+  match 'signup/:invitation_token' => 'users#new', :as => 'signup'
+  match 'claim/:invitation_token' => 'external_authors#claim', :as => 'claim'
+  match 'complete_claim/:invitation_token' => 'external_authors#complete_claim', :as => 'complete_claim'
+    
+  #### TAGS ####
+  
+  resources :media do
+    resources :fandoms
+  end
+  resources :fandoms
+  resources :tag_wranglings do
+    member do
+      post :wrangle
+    end
+    collection do
+      get :discuss
+    end
+  end
+  resources :tag_wranglers
+  resources :tags do
+    member do
+      get :wrangle
+      post :mass_update
+      get :remove_association
+    end
+    collection do
+      get :show_hidden
+      get :search
+    end
+    resources :works
+    resources :bookmarks
+    resources :comments
 	end
-
-
-  map.root :controller => 'home', :action => 'index'
-  map.connect 'home/:action', :controller => "home" 
-  map.tos '/tos', :controller => 'home', :action => 'tos' 
-  map.tos_faq '/tos_faq', :controller => 'home', :action => 'tos_faq'
-  map.site_map '/site_map', :controller => 'home', :action => 'site_map' 
-  map.archive_faqs '/archive_faqs', :controller => 'archive_faqs', :action => 'index'
+    
   
-  map.resources :redirects, :only => [:index, :show]
-  
-  map.resources :abuse_reports, :except => [:edit, :update, :destroy] 
-
-  map.resources :passwords, :only => [:new, :create] 
-
-  map.resources :admins, :only => [:index, :show] 
-
-  map.signup '/signup/:invitation_token', :controller => 'users', :action => 'new' 
-  map.resources :invitations
-  
-  map.claim '/claim/:invitation_token', :controller => 'external_authors', :action => 'claim'
-  map.complete_claim '/complete_claim/:invitation_token', :controller => 'external_authors', :action => 'complete_claim'  
-  map.resources :external_authors, :has_many => [:external_author_names]
-
-  map.resources :users, :member => {:edit_username => :get, :end_first_login => :post} do |user|
-    user.resources :pseuds, :has_many => [:works, :series, :bookmarks]
-    user.resources :external_authors, :has_many => [:external_author_names]
-    user.resources :preferences, :only => [:index, :update]
-    user.resource :profile, :controller => 'profile', :only => :show
-    user.resource :inbox, :controller => 'inbox', :collection => {:reply => :get, :cancel_reply => :get}, :only => [:show, :update]
-    user.resources :bookmarks
-    user.resources :related_works
-    user.resources :works, :collection => {:drafts => :get, :show_multiple => :get, :edit_multiple => :post, :update_multiple => :put}
-    user.resources :series, :member => {:manage => :get}, :has_many => :serial_works
-    user.resources :readings, :only => [:index, :destroy], :collection => {:clear => :post}, :member => {:marktoread => :get}
-    user.resources :comments, :member => { :approve => :put, :reject => :put }
-    user.resources :invitations, :member => {:invite_friend => :post}, :collection => {:manage => :get}
-    user.resources :collection_items, :only => [:index, :update, :destroy]
-    user.resources :collections, :only => [:index]
-    user.resources :gifts, :only => [:index]
-    user.resources :signups, :controller => "challenge_signups", :only => [:index]
-    user.resources :assignments, :controller => "challenge_assignments", :only => [:index], :member => {:default => :get}
-    user.resources :skins, :only => [:index]
+  #### ADMIN ####
+  resources :admins
+  resources :admin_posts do
+    resources :comments
   end
-
-  map.first_login_help '/first_login_help', :controller => 'home', :action => 'first_login_help'
-
-  map.delete_confirmation '/delete_confirmation', :controller => 'users', :action => 'delete_confirmation'
-
-  map.resources :works,
-                :collection => { :import => :post, :search => :get },
-                :member => { :preview => :get, :post => :post, :post_draft => :put, :navigate => :get, :edit_tags => :get, :preview_tags => :get, :update_tags => :put, :download => :get  } do |work|
-      work.resources :chapters, :has_many => :comments,
-                                :collection => {:manage => :get,
-                                                :update_positions => :post},
-                                :member => { :preview => :get, :post => :post }
-      work.resources :comments, :member => { :approve => :put, :reject => :put }
-      work.resources :bookmarks
-      work.resources :collections, :only => [:index]
-      work.resources :collection_items, :only => [:new, :create]
-  end
-
-  map.resources :chapters, :has_many => :comments, :member => { :preview => :get, :post => :post } 
-
-  map.resources :comments,
-    :has_many => :comments,
-    :member => { :approve => :put, :reject => :put },
-    :collection => {:hide_comments => :get, :show_comments => :get,
-                    :add_comment => :get, :cancel_comment => :get,
-                    :add_comment_reply => :get, :cancel_comment_reply => :get,
-                    :cancel_comment_edit => :get, :delete_comment => :get ,
-                    :cancel_comment_delete => :get}
-
-  map.resources :bookmarks , :collection => {:search => :get}
-  map.resource :media, :only => [:index, :show]
-  map.resource :people, :only => [:index]
-  map.resource :tags, :only => []
   
-  map.resources :prompt_restrictions
-  map.resources :prompts
-  map.resources :collections do |collection|
-    collection.resource  :profile, :controller => "collection_profile", :only => [:show]
+  match '/admin/login' => 'admin/admin_session#new', :as => 'admin_login' 
+  match '/admin/logout' => 'admin/admin_session#destroy', :as => 'admin_logout'
 
-    collection.resources :collections
-    collection.resources :works
-    collection.resources :bookmarks
-    collection.resources :media, :only => [:index, :show]
-    collection.resources :fandoms, :only => [:index, :show]
-    collection.resources :people, :only => [:index]
-    collection.resources :tags, :requirements => { :id => %r([^/;,?]+) }, :has_many => :works
-    collection.resources :participants, :controller => "collection_participants", :collection => {:add => :get, :join => :get}
-    collection.resources :items, :controller => "collection_items"
-    collection.resources :gifts, :only => [:index]
-
-    collection.resources :signups, :controller => "challenge_signups"
-    collection.resources :assignments, :controller => "challenge_assignments", :only => [:index, :show, :create], 
-                            :collection => {:generate => :get, :set => :put, :purge => :get, :send_out => :get, :default_multiple => :put, :default_all => :get}, 
-                            :member => {:undefault => :get, :cover_default => :get, :uncover_default => :get}
-    collection.resources :potential_matches, :only => [:index, :show], :collection => {:generate => :get, :cancel_generate => :get}
-
-    # challenge types
-    collection.resource :gift_exchange, :controller => 'challenge/gift_exchange'
-
+  namespace :admin do
+    resources :settings
+    resources :approve_skins
+    resources :skins
+    resources :user_creations do
+      member do
+        get :hide
+      end
+    end
+    resources :users, :controller => 'admin_users' do
+      collection do
+        get :notify
+        post :send_notification
+      end
+    end
+    resources :invitations, :controller => 'admin_invitations' do
+      collection do
+        post :invite_from_queue
+        post :grant_invites_to_users
+        get :find
+      end
+    end
+    resource :session, :controller => 'admin_session'
+  end
+  
+  
+  #### USERS ####
+  
+  resources :people do
+    collection do
+      get :search
+    end
+  end
+  
+  resources :passwords
+  
+  resources :users do
+    member do
+      get :edit_username
+      post :end_first_login
+    end
+    resources :pseuds do
+      resources :works
+      resources :series
+      resources :bookmarks
+    end
+    resources :external_authors do
+      resources :external_author_names
+    end
+    resources :preferences
+    resource :profile
+    resource :inbox do
+      member do
+        get :reply
+        get :cancel_reply
+      end
+    end 
+    resources :bookmarks
+    resources :related_works
+    resources :works do
+      collection do
+        get :drafts
+        get :show_multiple
+        post :edit_multiple
+        put :update_multiple
+      end
+    end
+    resources :series do
+      member do
+        get :manage
+      end
+      resources :serial_works
+    end
+    resources :readings do
+      collection do
+        post :clear
+      end
+    end
+    resources :comments do
+      member do
+        put :approve
+        put :reject
+      end
+    end
+    resources :invitations do
+      member do 
+        post :invite_friend
+      end
+      collection do
+        get :manage
+      end
+    end
+    resources :collection_items
+    resources :collections
+    resources :gifts
+    resources :signups, :controller => "challenge_signups"
+    resources :assignments, :controller => "challenge_assignments" do
+      member do
+        get :default
+      end
+    end    
   end 
   
-  map.resources :gifts, :only => [:index]
+  
+  #### WORKS ####
+  
+  resources :works do
+    collection do
+      post :import
+      get :search
+    end
+    member do
+      get :preview
+      post :post
+      put :post_draft
+      get :navigate
+      get :edit_tags
+      get :preview_tags
+      put :update_tags
+      get :marktoread
+      get :download
+    end
+    resources :chapters do
+      collection do
+        get :manage
+        post :update_positions
+      end
+      member do
+        get :preview
+        post :post
+      end
+      resources :comments
+    end
+    resources :comments do
+      member do
+        put :approve
+        put :reject
+      end
+    end
+    resources :bookmarks
+    resources :collections
+    resources :collection_items
+  end
+
+  resources :chapters do
+    member do
+      get :preview
+      post :post
+    end
+    resources :comments
+  end  
+
+  resources :external_works do
+    collection do
+      get :compare
+      post :merge
+    end
+    resources :bookmarks
+    resources :related_works
+  end
+  resources :related_works 
+  resources :serial_works 
+  resources :series do
+    member do
+      get :manage
+      post :update_positions
+    end
+    resources :bookmarks
+  end
+  
+  #### COLLECTIONS ####
+  
+  resources :gifts
+  resources :prompt_restrictions
+  resources :prompts
+  resources :collections do
+    resource  :profile, :controller => "collection_profile"
+    resources :collections
+    resources :works
+    resources :gifts
+    resources :bookmarks
+    resources :media
+    resources :fandoms
+    resources :people
+    resources :tags do
+      resources :works
+    end
+    resources :participants, :controller => "collection_participants" do
+      collection do
+        get :add
+        get :join
+      end
+    end
+    resources :items, :controller => "collection_items"
+    resources :signups, :controller => "challenge_signups"
+    resources :assignments, :controller => "challenge_assignments" do
+      collection do
+        get :generate
+        put :set
+        get :purge
+        get :send_out
+        put :default_multiple
+        get :default_all
+      end
+      member do
+        get :undefault
+        get :cover_default
+        get :uncover_default
+      end 
+    end
+    resources :potential_matches do
+      collection do
+        get :generate
+        get :cancel_generate
+      end
+    end
+    # challenge types
+    resource :gift_exchange, :controller => 'challenge/gift_exchange'
+  end 
+  
+  #### I18N ####
   
   # should stay below the main works mapping
-  map.resources :languages do |language|
-    language.resources :works
-  end
-  
-  map.resources :locales, :collection => {:set => :get} do |locale|
-    locale.resources :translations, :collection => {:assign => :post}
-    locale.resources :translators do |translator|
-      translator.resources :translations
+  resources :languages do
+    resources :works
+  end 
+  resources :locales do
+    collection do
+      get :set
     end
-    locale.resources :translation_notes
+    resources :translations do
+      collection do
+        post :assign
+      end
+    end
+    resources :translators do
+      resources :translations
+    end
+    resources :translation_notes
   end
   
-  map.resources :translations, :collection => {:assign => :post}
-  map.resources :translators, :has_many => :translations
-  map.resources :translation_notes
-
-  map.resources :orphans, :collection => {:about => :get}, :only => [:index, :new, :create] 
-
-  map.resources :external_works, :collection => {:compare => :get, :merge => :post} do |external_work|
-    external_work.resources :bookmarks
-    external_work.resources :related_works
+  resources :translations do
+    collection do
+      post :assign
+    end
   end
-
-  map.resources :communities 
-
-  map.resources :related_works, :except => [:new, :edit, :create] 
-  map.resources :serial_works, :only => :destroy 
-
-  map.resources :series , :member => {:manage => :get, :update_positions => :post}, :has_many => :bookmarks
-
-  map.open_id_complete 'session', :controller => "session", :action => "create", :requirements => { :method => :get } 
-
-  map.resource :session, :controller => 'session' 
-  map.login '/login', :controller => 'session', :action => 'new' 
-  map.logout '/logout', :controller => 'session', :action => 'destroy' 
-
-  map.admin_login '/admin/login', :controller => 'admin/admin_session', :action => 'new' 
-  map.admin_logout '/admin/logout', :controller => 'admin/admin_session', :action => 'destroy' 
-
-  map.namespace :admin, :path_prefix => 'admin' do |admin|
-    admin.resources :settings, :only => [:index, :update]
-    admin.resources :skins, :only => [:index, :update], :collection => {:index_rejected => :get, :index_approved => :get}
-    admin.resources :user_creations, :only => :destroy, :member => { :hide => :get }
-    admin.resources :users, :controller => 'admin_users', :collection => {:notify => :get, :send_notification => :post}, :except => [:new, :create]
-    admin.resources :invitations, :controller => 'admin_invitations', :only => [:index, :new, :create], :collection => {:invite_from_queue => :post, :grant_invites_to_users => :post, :find => :get}
-    admin.resource :session, :controller => 'admin_session', :only => [:new, :create, :destroy]
+  resources :translators do
+    resources :translations
   end
-
-  map.activate '/activate/:id', :controller => 'users', :action => 'activate'
-
-  # to preserve links with locales in the route
-  map.with_locale '/en/works/:id', :controller => 'works', :action => 'show', :id => :id
-
-  map.devmode "/devmode", :controller => "devmode", :action => "index", :view => "index"
-
-  map.resources :search, :only => :index 
-  map.search '/search', :controller => "search", :action => "index"
-
-  # The priority is based upon order of creation: first created -> highest priority.
+  resources :translation_notes
+  
+  #### SESSIONS ####
+  
+  resource :session, :controller => 'session' 
+  match 'login' => 'session#new'
+  match 'logout' => 'session#destroy' 
+  match  '/opensession' => "session#create", :as => "open_id_complete", :requirements => { :method => :get }
+    
+  #### MISC ####
+  
+  resources :comments do
+    member do
+      put :approve
+      put :reject
+    end
+    collection do
+      get :hide_comments
+      get :show_comments
+      get :add_comment
+      get :cancel_comment
+      get :add_comment_reply
+      get :cancel_comment_reply
+      get :cancel_comment_edit
+      get :delete_comment
+      get :cancel_comment_delete
+    end
+    resources :comments
+  end
+  resources :bookmarks do
+    collection do
+      get :search
+    end
+  end
+  
+  resources :skins
+  resources :known_issues
+  resources :archive_faqs do
+    collection do
+      get :manage
+      post :reorder
+    end
+  end
+  
+  resources :redirects  
+  resources :abuse_reports 
+  resources :external_authors do
+    resources :external_author_names
+  end
+  resources :orphans do
+    collection do
+      get :about
+    end
+  end
+  resources :search, :only => :index
+  
+  match 'search' => 'search#index'
+  match 'support' => 'feedbacks#create', :as => 'feedbacks', :requirements => { :method => :post }
+  match 'support' => 'feedbacks#new', :as => 'new_feedback_report'
+  match 'tos' => 'home#tos'
+  match 'tos_faq' => 'home#tos_faq'
+  match 'site_map' => 'home#site_map'
+  match 'first_login_help' => 'home#first_login_help'
+  match 'delete_confirmation' => 'users#delete_confirmation'
+  match 'activate/:id' => 'users#activate', :as => 'activate'
+  match 'devmode' => 'devmode#index'
+  
+  # The priority is based upon order of creation:
+  # first created -> highest priority.
 
   # Sample of regular route:
-  #   map.connect 'products/:id', :controller => 'catalog', :action => 'view'
+  #   match 'products/:id' => 'catalog#view'
   # Keep in mind you can assign values other than :controller and :action
 
   # Sample of named route:
-  #   map.purchase 'products/:id/purchase', :controller => 'catalog', :action => 'purchase'
+  #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
-  #   map.resources :products
+  #   resources :products
 
   # Sample resource route with options:
-  #   map.resources :products, :member => { :short => :get, :toggle => :post }, :collection => { :sold => :get }
-
-  # Sample resource route with sub-resources:
-  #   map.resources :products, :has_many => [ :comments, :sales ], :has_one => :seller
-
-  # Sample resource route within a namespace:
-  #   map.namespace :admin do |admin|
-  #     # Directs /admin/products/* to Admin::ProductsController (app/controllers/admin/products_controller.rb)
-  #     admin.resources :products
+  #   resources :products do
+  #     member do
+  #       get 'short'
+  #       post 'toggle'
+  #     end
+  #
+  #     collection do
+  #       get 'sold'
+  #     end
   #   end
 
-  # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
-  # map.root :controller => :works
+  # Sample resource route with sub-resources:
+  #   resources :products do
+  #     resources :comments, :sales
+  #     resource :seller
+  #   end
+
+  # Sample resource route with more complex sub-resources
+  #   resources :products do
+  #     resources :comments
+  #     resources :sales do
+  #       get 'recent', :on => :collection
+  #     end
+  #   end
+
+  # Sample resource route within a namespace:
+  #   namespace :admin do
+  #     # Directs /admin/products/* to Admin::ProductsController
+  #     # (app/controllers/admin/products_controller.rb)
+  #     resources :products
+  #   end
+
+  # You can have the root of your site routed with "root"
+  # just remember to delete public/index.html.
+  root :to => "home#index"
 
   # See how all your routes lay out with "rake routes"
 
-  # Install the default routes as the lowest priority.
-  map.connect ':controller/:action'
-  map.connect ':controller/:action/:id'
-  map.connect ':controller/:action/:id.:format'
+  # This is a legacy wild controller route that's not recommended for RESTful applications.
+  # Note: This route will make all actions in every controller accessible via GET requests.
+  match ':controller(/:action(/:id(.:format)))'
 end
