@@ -1,4 +1,4 @@
-Otwarchive2::Application.routes.draw do
+Otwarchive::Application.routes.draw do
   
   #### INVITATIONS ####
 
