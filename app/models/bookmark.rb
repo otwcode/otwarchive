@@ -12,13 +12,13 @@ class Bookmark < ActiveRecord::Base
 
   default_scope :order => "bookmarks.id DESC" # id's stand in for creation date
   
-  named_scope :public, :conditions => {:private => false, :hidden_by_admin => false}
-  named_scope :not_public, :conditions => {:private => true}
-  named_scope :since, lambda { |*args| {:conditions => ["bookmarks.created_at > ?", (args.first || 1.week.ago)]} }
-  named_scope :recent, :limit => ArchiveConfig.SEARCH_RESULTS_MAX
-  named_scope :recs, :conditions => {:rec => true} #must come before visible in the chain
+  scope :public, :conditions => {:private => false, :hidden_by_admin => false}
+  scope :not_public, :conditions => {:private => true}
+  scope :since, lambda { |*args| {:conditions => ["bookmarks.created_at > ?", (args.first || 1.week.ago)]} }
+  scope :recent, :limit => ArchiveConfig.SEARCH_RESULTS_MAX
+  scope :recs, :conditions => {:rec => true} #must come before visible in the chain
   
-  named_scope :in_collection, lambda {|collection|
+  scope :in_collection, lambda {|collection|
     {
       :select => "DISTINCT bookmarks.*",
       :joins => "INNER JOIN collection_items ON (collection_items.item_id = works.id AND collection_items.item_type = 'Bookmark')
@@ -28,12 +28,12 @@ class Bookmark < ActiveRecord::Base
     }
   }
 
-   named_scope :visible_to_public, {
+   scope :visible_to_public, {
    	:joins => "LEFT JOIN works ON (bookmarks.bookmarkable_id = works.id AND bookmarks.bookmarkable_type = 'Work')",
    	:conditions => "private = 0 AND bookmarks.hidden_by_admin = 0 AND works.restricted != 1 AND works.hidden_by_admin != 1"
   }
   
-   named_scope :visible_logged_in, {
+   scope :visible_logged_in, {
    	:joins => "LEFT JOIN works ON (bookmarks.bookmarkable_id = works.id AND bookmarks.bookmarkable_type = 'Work')",
    	:conditions => "private = 0 AND bookmarks.hidden_by_admin = 0 AND works.hidden_by_admin != 1"
   }

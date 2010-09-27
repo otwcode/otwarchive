@@ -31,7 +31,7 @@ class ChallengeSignup < ActiveRecord::Base
                         }
   }
 
-  named_scope :by_user, lambda {|user|
+  scope :by_user, lambda {|user|
     {
       :select => "DISTINCT challenge_signups.*",
       :joins => "INNER JOIN pseuds ON challenge_signups.pseud_id = pseuds.id
@@ -40,15 +40,15 @@ class ChallengeSignup < ActiveRecord::Base
     }
   }
 
-  named_scope :by_pseud, lambda {|pseud|
+  scope :by_pseud, lambda {|pseud|
     {
       :conditions => ['pseud_id = ?', pseud.id]
     }
   }
    
-  named_scope :order_by_pseud, {:joins => :pseud, :order => "pseuds.name"}
+  scope :order_by_pseud, {:joins => :pseud, :order => "pseuds.name"}
 
-  named_scope :in_collection, lambda {|collection| {:conditions => ['challenge_signups.collection_id = ?', collection.id] }}
+  scope :in_collection, lambda {|collection| {:conditions => ['challenge_signups.collection_id = ?', collection.id] }}
 
   ### VALIDATION
   # we validate number of prompts/requests/offers at the challenge

@@ -7,9 +7,9 @@ class Invitation < ActiveRecord::Base
 
   validate_on_create :recipient_is_not_registered
   
-  named_scope :unsent, :conditions => {:invitee_email => nil, :redeemed_at => nil}
-  named_scope :unredeemed, :conditions => 'invitee_email IS NOT NULL and redeemed_at IS NULL'
-  named_scope :redeemed, :conditions => 'redeemed_at IS NOT NULL'
+  scope :unsent, :conditions => {:invitee_email => nil, :redeemed_at => nil}
+  scope :unredeemed, :conditions => 'invitee_email IS NOT NULL and redeemed_at IS NULL'
+  scope :redeemed, :conditions => 'redeemed_at IS NOT NULL'
 
   before_validation_on_create :generate_token
   before_save :send_and_set_date

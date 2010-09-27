@@ -2,7 +2,7 @@ class Character < Tag
 
   NAME = ArchiveConfig.CHARACTER_CATEGORY_NAME
   
-  named_scope :by_relationships, lambda {|relationships| 
+  scope :by_relationships, lambda {|relationships| 
     {:select => 'DISTINCT tags.*', :joins => :children, :conditions => ['childrens_tags.id IN (?)', relationships.collect(&:id)]}
   }
   

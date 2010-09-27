@@ -22,7 +22,7 @@ class CollectionParticipant < ActiveRecord::Base
   validates_inclusion_of :participant_role, :in => PARTICIPANT_ROLES,
     :message => t('collection.item.invalid_type', :default => "That is not a valid participant role.")
 
-  named_scope :for_user, lambda {|user|
+  scope :for_user, lambda {|user|
     {
       :select => "DISTINCT collection_participants.*",
       :joins => "INNER JOIN pseuds ON collection_participants.pseud_id = pseuds.id
@@ -31,7 +31,7 @@ class CollectionParticipant < ActiveRecord::Base
     }
   }
 
-  named_scope :in_collection, lambda {|collection|
+  scope :in_collection, lambda {|collection|
     {
       :select => "DISTINCT collection_participants.*",
       :joins => "INNER JOIN collections ON collection_participants.collection_id = collections.id",

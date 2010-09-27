@@ -105,10 +105,10 @@ class User < ActiveRecord::Base
     inbox_comments.count(:all, :conditions => {:read => false})
   end
 
-  named_scope :alphabetical, :order => :login
-  named_scope :starting_with, lambda {|letter| {:conditions => ['SUBSTR(login,1,1) = ?', letter]}}
-  named_scope :valid, :conditions => {:banned => false, :suspended => false}
-  named_scope :out_of_invites, :conditions => {:out_of_invites => true}
+  scope :alphabetical, :order => :login
+  scope :starting_with, lambda {|letter| {:conditions => ['SUBSTR(login,1,1) = ?', letter]}}
+  scope :valid, :conditions => {:banned => false, :suspended => false}
+  scope :out_of_invites, :conditions => {:out_of_invites => true}
 
   validates_format_of :login,
     :message => t('login_invalid', :default => 'must begin and end with a letter or number; it may also contain underscores but no other characters.'),

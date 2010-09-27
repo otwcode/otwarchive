@@ -771,40 +771,40 @@ class Work < ActiveRecord::Base
 
   public
 
-  named_scope :ordered_by_author_desc, :order => "authors_to_sort_on DESC"
-  named_scope :ordered_by_author_asc, :order => "authors_to_sort_on ASC"
-  named_scope :ordered_by_title_desc, :order => "title_to_sort_on DESC"
-  named_scope :ordered_by_title_asc, :order => "title_to_sort_on ASC"
-  named_scope :ordered_by_word_count_desc, :order => "word_count DESC"
-  named_scope :ordered_by_word_count_asc, :order => "word_count ASC"
-  named_scope :ordered_by_hit_count_desc, :order => "hit_count DESC"
-  named_scope :ordered_by_hit_count_asc, :order => "hit_count ASC"
-  named_scope :ordered_by_date_desc, :order => "revised_at DESC"
-  named_scope :ordered_by_date_asc, :order => "revised_at ASC"
-  named_scope :random_order, :order => "RAND()"
+  scope :ordered_by_author_desc, :order => "authors_to_sort_on DESC"
+  scope :ordered_by_author_asc, :order => "authors_to_sort_on ASC"
+  scope :ordered_by_title_desc, :order => "title_to_sort_on DESC"
+  scope :ordered_by_title_asc, :order => "title_to_sort_on ASC"
+  scope :ordered_by_word_count_desc, :order => "word_count DESC"
+  scope :ordered_by_word_count_asc, :order => "word_count ASC"
+  scope :ordered_by_hit_count_desc, :order => "hit_count DESC"
+  scope :ordered_by_hit_count_asc, :order => "hit_count ASC"
+  scope :ordered_by_date_desc, :order => "revised_at DESC"
+  scope :ordered_by_date_asc, :order => "revised_at ASC"
+  scope :random_order, :order => "RAND()"
 
-  named_scope :limited, lambda {|limit|
+  scope :limited, lambda {|limit|
     {:limit => limit.kind_of?(Fixnum) ? limit : 5}
   }
 
-  named_scope :recent, lambda { |*args| {:conditions => ["revised_at > ?", (args.first || 4.weeks.ago.to_date)]} }
-  named_scope :within_date_range, lambda { |*args| {:conditions => ["revised_at BETWEEN ? AND ?", (args.first || 4.weeks.ago), (args.last || Time.now)]} }
-  named_scope :posted, :conditions => {:posted => true}
-  named_scope :unposted, :conditions => {:posted => false}
-  named_scope :restricted , :conditions => {:restricted => true}
-  named_scope :unrestricted, :conditions => {:restricted => false}
-  named_scope :hidden, :conditions => {:hidden_by_admin => true}
-  named_scope :unhidden, :conditions => {:hidden_by_admin => false}
-  named_scope :visible_to_owner, :conditions => VISIBLE_TO_ADMIN_CONDITIONS
-  named_scope :visible_to_user, :conditions => VISIBLE_TO_USER_CONDITIONS
-  named_scope :visible_to_all, :conditions => VISIBLE_TO_ALL_CONDITIONS
-  named_scope :all_with_tags, :include => [:tags]
+  scope :recent, lambda { |*args| {:conditions => ["revised_at > ?", (args.first || 4.weeks.ago.to_date)]} }
+  scope :within_date_range, lambda { |*args| {:conditions => ["revised_at BETWEEN ? AND ?", (args.first || 4.weeks.ago), (args.last || Time.now)]} }
+  scope :posted, :conditions => {:posted => true}
+  scope :unposted, :conditions => {:posted => false}
+  scope :restricted , :conditions => {:restricted => true}
+  scope :unrestricted, :conditions => {:restricted => false}
+  scope :hidden, :conditions => {:hidden_by_admin => true}
+  scope :unhidden, :conditions => {:hidden_by_admin => false}
+  scope :visible_to_owner, :conditions => VISIBLE_TO_ADMIN_CONDITIONS
+  scope :visible_to_user, :conditions => VISIBLE_TO_USER_CONDITIONS
+  scope :visible_to_all, :conditions => VISIBLE_TO_ALL_CONDITIONS
+  scope :all_with_tags, :include => [:tags]
 
 
   # These named scopes include the OWNERSHIP_JOIN so they can be chained
   # with "visible" (visible must go first) without clobbering the combined
   # joins.
-  named_scope :with_all_tags, lambda {|tags_to_find|
+  scope :with_all_tags, lambda {|tags_to_find|
     {
       :select => "DISTINCT works.*",
       :joins => :tags,
@@ -813,7 +813,7 @@ class Work < ActiveRecord::Base
     }
   }
 
-  named_scope :with_any_tags, lambda {|tags_to_find|
+  scope :with_any_tags, lambda {|tags_to_find|
     {
       :select => "DISTINCT works.*",
       :joins => :tags,
@@ -821,7 +821,7 @@ class Work < ActiveRecord::Base
     }
   }
 
-  named_scope :with_all_tag_ids, lambda {|tag_ids_to_find|
+  scope :with_all_tag_ids, lambda {|tag_ids_to_find|
     {
       :select => "DISTINCT works.*",
       :joins => :filter_taggings,
@@ -830,7 +830,7 @@ class Work < ActiveRecord::Base
     }
   }
 
-  named_scope :with_any_tag_ids, lambda {|tag_ids_to_find|
+  scope :with_any_tag_ids, lambda {|tag_ids_to_find|
     {
       :select => "DISTINCT works.*",
       :joins => :tags,
@@ -839,7 +839,7 @@ class Work < ActiveRecord::Base
   }
 
   # Skip the ownership join if you're combining it with owned_by, or the two joins will conflict
-  named_scope :visible, lambda { |*skip_ownership|
+  scope :visible, lambda { |*skip_ownership|
     {
      :select => "DISTINCT works.*",
      :joins => (skip_ownership.empty? ? OWNERSHIP_JOIN : '')
@@ -851,9 +851,9 @@ class Work < ActiveRecord::Base
       )
   }
 
-  named_scope :ids_only, :select => "DISTINCT works.id"
+  scope :ids_only, :select => "DISTINCT works.id"
 
-  named_scope :tags_with_count, lambda {|*args|
+  scope :tags_with_count, lambda {|*args|
     {
       :select => "tags.type as tag_type, tags.id as tag_id, tags.name as tag_name, count(distinct works.id) as count",
       :joins => :tags,
@@ -862,7 +862,7 @@ class Work < ActiveRecord::Base
     }.merge(args.first.size > 0 ? {:conditions => ["works.id in (?)", args.first]} : {})
   }
 
-  named_scope :owned_by, lambda {|user|
+  scope :owned_by, lambda {|user|
     {
       :select => "DISTINCT works.*",
       :joins => OWNERSHIP_JOIN,
@@ -870,14 +870,14 @@ class Work < ActiveRecord::Base
     }
   }
 
-  named_scope :owned_by_conditions, lambda {|user|
+  scope :owned_by_conditions, lambda {|user|
     {
       :joins => OWNERSHIP_JOIN,
       :conditions => ['users.id = ?', user.id]
     }
   }
 
-  named_scope :written_by, lambda {|pseuds|
+  scope :written_by, lambda {|pseuds|
     {
       :select => "DISTINCT works.*",
       :joins => "INNER JOIN creatorships ON (creatorships.creation_id = works.id AND creatorships.creation_type = 'Work')
@@ -887,7 +887,7 @@ class Work < ActiveRecord::Base
     }
   }
 
-  named_scope :written_by_conditions, lambda {|pseuds|
+  scope :written_by_conditions, lambda {|pseuds|
     {
       :joins => OWNERSHIP_JOIN,
       :conditions => ['pseuds.id IN (?)', pseuds.collect(&:id)],
@@ -895,7 +895,7 @@ class Work < ActiveRecord::Base
     }
   }
 
-  named_scope :written_by_id_conditions, lambda {|pseud_ids|
+  scope :written_by_id_conditions, lambda {|pseud_ids|
     {
       :joins => OWNERSHIP_JOIN,
       :conditions => ['pseuds.id IN (?)', pseud_ids],
@@ -903,7 +903,7 @@ class Work < ActiveRecord::Base
     }
   }
 
-  named_scope :in_collection, lambda {|collection|
+  scope :in_collection, lambda {|collection|
     {
       :select => "DISTINCT works.*",
       :joins => "INNER JOIN collection_items ON (collection_items.item_id = works.id AND collection_items.item_type = 'Work')
@@ -913,7 +913,7 @@ class Work < ActiveRecord::Base
     }
   }
 
-  named_scope :in_collection_conditions, lambda {|collection|
+  scope :in_collection_conditions, lambda {|collection|
     {
       :joins => "INNER JOIN collection_items ON (collection_items.item_id = works.id AND collection_items.item_type = 'Work')
                  INNER JOIN collections ON collection_items.collection_id = collections.id",
@@ -922,7 +922,7 @@ class Work < ActiveRecord::Base
     }
   }
 
-  named_scope :for_recipient, lambda {|recipient|
+  scope :for_recipient, lambda {|recipient|
     {
       :select => "DISTINCT works.*",
       :joins => "INNER JOIN gifts ON (gifts.work_id = works.id)",
@@ -932,10 +932,10 @@ class Work < ActiveRecord::Base
 
   # shouldn't really use a named scope for this, but I'm afraid to try
   # to change the way work filtering works
-  named_scope :by_language, lambda {|lang_id| {:conditions => ['language_id = ?', lang_id]}}
+  scope :by_language, lambda {|lang_id| {:conditions => ['language_id = ?', lang_id]}}
 
   # returns an array, must come last
-  # TODO: if you know how to turn this into a named_scope, please do!
+  # TODO: if you know how to turn this into a scope, please do!
   # find all the works that do not have a tag in the given category (i.e. no fandom, no characters etc.)
   def self.no_tags(tag_category, options = {})
     tags = tag_category.tags

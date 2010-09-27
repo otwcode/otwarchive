@@ -35,11 +35,11 @@ class Series < ActiveRecord::Base
   attr_accessor :authors
   attr_accessor :toremove
   
-  named_scope :visible_logged_in, {:conditions => {:hidden_by_admin => false}, :order => 'updated_at DESC'}
-  named_scope :visible_to_public, {:conditions => {:hidden_by_admin => false, :restricted => false}, :order => 'updated_at DESC'}
+  scope :visible_logged_in, {:conditions => {:hidden_by_admin => false}, :order => 'updated_at DESC'}
+  scope :visible_to_public, {:conditions => {:hidden_by_admin => false, :restricted => false}, :order => 'updated_at DESC'}
   
   #TODO: figure out why select distinct gets clobbered
-  named_scope :exclude_anonymous, {
+  scope :exclude_anonymous, {
     :select => "DISTINCT series.*, MAX(collection_items.anonymous) AS anon, MAX(collection_items.unrevealed) AS unrevealed",
     :joins => "INNER JOIN `serial_works` ON (`series`.`id` = `serial_works`.`series_id`) 
     INNER JOIN `works` ON (`works`.`id` = `serial_works`.`work_id`) 
@@ -48,7 +48,7 @@ class Series < ActiveRecord::Base
     :having => "(anon IS NULL OR anon = 0) AND (unrevealed IS NULL OR unrevealed = 0)"}
   
   # Needed to keep the normal pseud.series association from eating the exclude_anonymous selects  
-  named_scope :for_pseuds, lambda {|pseuds|
+  scope :for_pseuds, lambda {|pseuds|
     {:joins => "INNER JOIN creatorships ON (series.id = creatorships.creation_id AND creatorships.creation_type = 'Series')",
     :conditions => ["creatorships.pseud_id IN (?)", pseuds.collect(&:id)]}   
   }

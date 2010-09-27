@@ -108,16 +108,16 @@ class Tag < ActiveRecord::Base
     end
   end
 
-  named_scope :id_only, {:select => "tags.id"}
+  scope :id_only, {:select => "tags.id"}
 
-  named_scope :canonical, {:conditions => {:canonical => true}, :order => 'name ASC'}
-  named_scope :noncanonical, {:conditions => {:canonical => false}, :order => 'name ASC'}
-  named_scope :nonsynonymous, {:conditions => {:merger_id => nil, :canonical => false}, :order => 'name ASC'}
-  named_scope :unfilterable, {:conditions => {:merger_id => nil, :canonical => false}}
-  named_scope :unwrangled, {:joins => "LEFT JOIN `common_taggings` ON common_taggings.common_tag_id = tags.id", 
+  scope :canonical, {:conditions => {:canonical => true}, :order => 'name ASC'}
+  scope :noncanonical, {:conditions => {:canonical => false}, :order => 'name ASC'}
+  scope :nonsynonymous, {:conditions => {:merger_id => nil, :canonical => false}, :order => 'name ASC'}
+  scope :unfilterable, {:conditions => {:merger_id => nil, :canonical => false}}
+  scope :unwrangled, {:joins => "LEFT JOIN `common_taggings` ON common_taggings.common_tag_id = tags.id", 
     :conditions => "common_taggings.id IS NULL"}
   
-  named_scope :related_tags, lambda {|tag| 
+  scope :related_tags, lambda {|tag| 
     {
       :joins => "INNER JOIN taggings ON (tags.id = taggings.tagger_id)
                 INNER JOIN works ON (taggings.taggable_id = works.id AND taggings.taggable_type = 'Work') 
@@ -127,7 +127,7 @@ class Tag < ActiveRecord::Base
     }
   }
   
-  named_scope :related_tags_for_all, lambda {|tags|
+  scope :related_tags_for_all, lambda {|tags|
     {
       :joins => "INNER JOIN taggings ON (tags.id = taggings.tagger_id)
                 INNER JOIN works ON (taggings.taggable_id = works.id AND taggings.taggable_type = 'Work') 
@@ -137,29 +137,29 @@ class Tag < ActiveRecord::Base
     }    
   }
   
-  named_scope :visible, {:conditions => ['type in (?)', VISIBLE], :order => 'name ASC' }
+  scope :visible, {:conditions => ['type in (?)', VISIBLE], :order => 'name ASC' }
 
-  named_scope :by_popularity, {:order => 'taggings_count DESC'}
-  named_scope :by_name, {:order => 'name ASC'}
-  named_scope :by_date, {:order => 'created_at DESC'}
+  scope :by_popularity, {:order => 'taggings_count DESC'}
+  scope :by_name, {:order => 'name ASC'}
+  scope :by_date, {:order => 'created_at DESC'}
 
-  named_scope :first_class, {:joins => "LEFT JOIN `meta_taggings` ON meta_taggings.sub_tag_id = tags.id", 
+  scope :first_class, {:joins => "LEFT JOIN `meta_taggings` ON meta_taggings.sub_tag_id = tags.id", 
     :conditions => "meta_taggings.id IS NULL"}
 
-  named_scope :by_pseud, lambda {|pseud|
+  scope :by_pseud, lambda {|pseud|
     {
       :joins => [{:works => :pseuds}],
       :conditions => {:pseuds => {:id => pseud.id}}
     }
   }
 
-  named_scope :by_type, lambda {|*types| {:conditions => (types.first.blank? ? {} : {:type => types.first})}}
-  named_scope :with_type, lambda {|type| {:conditions =>  {:type => type}}}
+  scope :by_type, lambda {|*types| {:conditions => (types.first.blank? ? {} : {:type => types.first})}}
+  scope :with_type, lambda {|type| {:conditions =>  {:type => type}}}
 
   # enigel Feb 09
-  named_scope :starting_with, lambda {|letter| {:conditions => ['SUBSTR(name,1,1) = ?', letter]}}
+  scope :starting_with, lambda {|letter| {:conditions => ['SUBSTR(name,1,1) = ?', letter]}}
 
-  named_scope :visible_to_user, lambda { |user_id|
+  scope :visible_to_user, lambda { |user_id|
     {
       :select => "DISTINCT works.*",
       :joins => "INNER JOIN creatorships ON (creatorships.creation_id = works.id AND creatorships.creation_type = 'Work')
@@ -169,7 +169,7 @@ class Tag < ActiveRecord::Base
     }
   }
   
-  named_scope :filters_with_count, lambda { |work_ids|
+  scope :filters_with_count, lambda { |work_ids|
     {
       :select => "tags.*, count(distinct works.id) as count",
       :joins => :filtered_works,
@@ -179,7 +179,7 @@ class Tag < ActiveRecord::Base
     }     
   }
   
-  named_scope :public_top, lambda { |tag_count|
+  scope :public_top, lambda { |tag_count|
     {
       :select => "tags.*, filter_counts.public_works_count as count",
       :joins => :filter_count,
@@ -189,7 +189,7 @@ class Tag < ActiveRecord::Base
     }     
   }
   
-  named_scope :unhidden_top, lambda { |tag_count|
+  scope :unhidden_top, lambda { |tag_count|
     {
       :select => "tags.*, filter_counts.unhidden_works_count as count",
       :joins => :filter_count,
@@ -199,7 +199,7 @@ class Tag < ActiveRecord::Base
     }     
   }
   
-  named_scope :with_count, lambda {
+  scope :with_count, lambda {
       ([Admin, User].include?(User.current_user.class)) ? 
       { :select => "tags.*, filter_counts.unhidden_works_count as count", 
         :joins => :filter_count, 

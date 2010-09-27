@@ -40,8 +40,8 @@ class Chapter < ActiveRecord::Base
   before_save :validate_published_at
 #  before_update :clean_emdashes
 
-  named_scope :in_order, {:order => :position}
-  named_scope :posted, :conditions => {:posted => true}
+  scope :in_order, {:order => :position}
+  scope :posted, :conditions => {:posted => true}
   
   # There seem to be chapters without works in the tests, hence the if self.work_id
   def after_validation

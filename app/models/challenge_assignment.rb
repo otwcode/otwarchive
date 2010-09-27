@@ -9,15 +9,15 @@ class ChallengeAssignment < ActiveRecord::Base
   belongs_to :pinch_request_signup, :class_name => "ChallengeSignup"
   belongs_to :creation, :polymorphic => true
 
-  named_scope :for_request_signup, lambda {|signup|
+  scope :for_request_signup, lambda {|signup|
     {:conditions => ['request_signup_id = ?', signup.id]}
   }
 
-  named_scope :for_offer_signup, lambda {|signup|
+  scope :for_offer_signup, lambda {|signup|
     {:conditions => ['offer_signup_id = ?', signup.id]}
   }
 
-  named_scope :by_offering_user, lambda {|user|
+  scope :by_offering_user, lambda {|user|
     {
       :select => "DISTINCT challenge_assignments.*",
       :joins => "INNER JOIN challenge_signups ON challenge_assignments.offer_signup_id = challenge_signups.id
@@ -27,7 +27,7 @@ class ChallengeAssignment < ActiveRecord::Base
     }
   }
 
-  named_scope :by_requesting_user, lambda {|user|
+  scope :by_requesting_user, lambda {|user|
     {
       :select => "DISTINCT challenge_assignments.*",
       :joins => "INNER JOIN challenge_signups ON challenge_assignments.request_signup_id = challenge_signups.id
@@ -37,18 +37,18 @@ class ChallengeAssignment < ActiveRecord::Base
     }
   }
 
-  named_scope :in_collection, lambda {|collection| {:conditions => ['challenge_assignments.collection_id = ?', collection.id] }}
+  scope :in_collection, lambda {|collection| {:conditions => ['challenge_assignments.collection_id = ?', collection.id] }}
   
-  named_scope :defaulted, {:conditions => ["defaulted_at IS NOT NULL"]}
-  named_scope :open, {:conditions => ["defaulted_at IS NULL"]}
-  named_scope :uncovered, {:conditions => ["covered_at IS NULL"]}
-  named_scope :covered, {:conditions => ["covered_at IS NOT NULL"]}
+  scope :defaulted, {:conditions => ["defaulted_at IS NOT NULL"]}
+  scope :open, {:conditions => ["defaulted_at IS NULL"]}
+  scope :uncovered, {:conditions => ["covered_at IS NULL"]}
+  scope :covered, {:conditions => ["covered_at IS NOT NULL"]}
   
-  named_scope :with_offer, {:conditions => ["offer_signup_id IS NOT NULL"]}
-  named_scope :with_request, {:conditions => ["request_signup_id IS NOT NULL"]}
-  named_scope :with_no_request, {:conditions => ["request_signup_id IS NULL"]}
-  named_scope :with_no_offer, {:conditions => ["offer_signup_id IS NULL"]}
-  named_scope :unposted, {:conditions => ["challenge_assignments.creation_id IS NULL"]}  
+  scope :with_offer, {:conditions => ["offer_signup_id IS NOT NULL"]}
+  scope :with_request, {:conditions => ["request_signup_id IS NOT NULL"]}
+  scope :with_no_request, {:conditions => ["request_signup_id IS NULL"]}
+  scope :with_no_offer, {:conditions => ["offer_signup_id IS NULL"]}
+  scope :unposted, {:conditions => ["challenge_assignments.creation_id IS NULL"]}  
 
   REQUESTING_PSEUD_JOIN = "INNER JOIN challenge_signups ON (challenge_assignments.request_signup_id = challenge_signups.id 
                                                             OR challenge_assignments.pinch_request_signup_id = challenge_signups.id)
@@ -65,24 +65,24 @@ class ChallengeAssignment < ActiveRecord::Base
                                                                 collection_items.item_id = challenge_assignments.creation_id AND 
                                                                 collection_items.item_type = challenge_assignments.creation_type)"
 
-  named_scope :order_by_requesting_pseud, {
+  scope :order_by_requesting_pseud, {
     :joins => REQUESTING_PSEUD_JOIN, 
     :order => "pseuds.name"
   }
   
-  named_scope :order_by_offering_pseud, {
+  scope :order_by_offering_pseud, {
     :joins => OFFERING_PSEUD_JOIN,
     :order => "pseuds.name"
   }
 
-  named_scope :fulfilled, {
+  scope :fulfilled, {
     :joins => COLLECTION_ITEMS_JOIN,
     :conditions => ['challenge_assignments.creation_id IS NOT NULL AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', 
                     CollectionItem::APPROVED, CollectionItem::APPROVED]
   }
   
   # has to be a left join to get works that don't have a collection item
-  named_scope :unfulfilled, {
+  scope :unfulfilled, {
     :joins => COLLECTION_ITEMS_LEFT_JOIN,
     :conditions => ['challenge_assignments.creation_id IS NULL OR collection_items.user_approval_status != ? OR collection_items.collection_approval_status != ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
   }

@@ -30,7 +30,7 @@ class Freeform < Tag
     end
   end
 
-  named_scope :for_collections, lambda { |collections|
+  scope :for_collections, lambda { |collections|
     {:select =>  "tags.*, count(tags.id) as count", 
     :joins => COLLECTION_JOIN,
     :conditions => ["collection_items.collection_id IN (?) 

@@ -133,15 +133,15 @@ class Collection < ActiveRecord::Base
   validates_format_of :header_image_url, :allow_blank => true, :with => URI::regexp(%w(http https)), :message => t('collection.url_invalid', :default => "Not a valid URL.")
   validates_format_of :header_image_url, :allow_blank => true, :with => /\.(png|gif|jpg)$/, :message => t('collection.image_invalid', :default => "Only gif, jpg, png files allowed.")
 
-  named_scope :top_level, :conditions => {:parent_id => nil}
-  named_scope :closed, :joins => :collection_preference, :conditions => ["collection_preferences.closed = ?", true]
-  named_scope :open, :joins => :collection_preference, :conditions => ["collection_preferences.closed = ?", false]
-  named_scope :unrevealed, :joins => :collection_preference, :conditions => ["collection_preferences.unrevealed = ?", true]
-  named_scope :anonymous, :joins => :collection_preference, :conditions => ["collection_preferences.anonymous = ?", true]
-  named_scope :name_only, :select => :name
-  named_scope :by_title, :order => :title
+  scope :top_level, :conditions => {:parent_id => nil}
+  scope :closed, :joins => :collection_preference, :conditions => ["collection_preferences.closed = ?", true]
+  scope :open, :joins => :collection_preference, :conditions => ["collection_preferences.closed = ?", false]
+  scope :unrevealed, :joins => :collection_preference, :conditions => ["collection_preferences.unrevealed = ?", true]
+  scope :anonymous, :joins => :collection_preference, :conditions => ["collection_preferences.anonymous = ?", true]
+  scope :name_only, :select => :name
+  scope :by_title, :order => :title
   
-  named_scope :with_name_like, lambda {|name|
+  scope :with_name_like, lambda {|name|
     {
       :conditions => ["collections.name LIKE ?", '%' + name + '%'],
       :limit => 10

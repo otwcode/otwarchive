@@ -5,7 +5,7 @@ class UserInviteRequest < ActiveRecord::Base
   
   before_update :check_status, :grant_request
   
-  named_scope :not_handled, :conditions => {:handled => false}
+  scope :not_handled, :conditions => {:handled => false}
   
   private
   

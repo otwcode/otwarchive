@@ -21,7 +21,7 @@ class ExternalWork < ActiveRecord::Base
   has_many :characters, :through => :taggings, :source => :tagger, :source_type => 'Character', :before_remove => :remove_filter_tagging
   has_many :freeforms, :through => :taggings, :source => :tagger, :source_type => 'Freeform', :before_remove => :remove_filter_tagging
 
-  named_scope :duplicate, :group => "url HAVING count(DISTINCT id) > 1"
+  scope :duplicate, :group => "url HAVING count(DISTINCT id) > 1"
 
   AUTHOR_LENGTH_MAX = 500
   

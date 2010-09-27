@@ -11,8 +11,8 @@ class Fandom < Tag
   has_many :relationships, :through => :child_taggings, :source => :common_tag, :conditions => "type = 'Relationship'"
   has_many :freeforms, :through => :child_taggings, :source => :common_tag, :conditions => "type = 'Freeform'"
     
-  named_scope :by_media, lambda{|media| {:conditions => {:media_id => media.id}}}
-  named_scope :unwrangled, {:joins => "INNER JOIN `common_taggings` ON tags.id = common_taggings.common_tag_id", 
+  scope :by_media, lambda{|media| {:conditions => {:media_id => media.id}}}
+  scope :unwrangled, {:joins => "INNER JOIN `common_taggings` ON tags.id = common_taggings.common_tag_id", 
     :conditions => ["common_taggings.filterable_id = ? AND common_taggings.filterable_type = 'Tag'", Media.uncategorized.andand.id]}
     
   COLLECTION_JOIN =  "INNER JOIN filter_taggings ON ( tags.id = filter_taggings.filter_id ) 
@@ -21,7 +21,7 @@ class Fandom < Tag
                                                        AND collection_items.collection_approval_status = '#{CollectionItem::APPROVED}'
                                                        AND collection_items.user_approval_status = '#{CollectionItem::APPROVED}' )"
 
-  named_scope :for_collection, lambda { |collection|
+  scope :for_collection, lambda { |collection|
     {:select =>  "tags.*, count(tags.id) as count", 
     :joins => COLLECTION_JOIN,
     :conditions => ["collection_items.collection_id = ? 
@@ -30,7 +30,7 @@ class Fandom < Tag
     :order => 'name ASC'}    
   }
   
-  named_scope :for_collections, lambda { |collections|
+  scope :for_collections, lambda { |collections|
     {:select =>  "tags.*, count(tags.id) as count", 
     :joins => COLLECTION_JOIN,
     :conditions => ["collection_items.collection_id IN (?) 
@@ -40,7 +40,7 @@ class Fandom < Tag
   }
   
   # when we don't need the counts, just a unique list
-  named_scope :for_collections_without_count, lambda { |collections|
+  scope :for_collections_without_count, lambda { |collections|
     {
       :select => "DISTINCT tags.*",
       :joins => COLLECTION_JOIN,
@@ -50,7 +50,7 @@ class Fandom < Tag
   }
 
   # This one can be '.count'ed, the others can't!
-  named_scope :id_for_collections, lambda { |collections|
+  scope :id_for_collections, lambda { |collections|
     {
       :select => "DISTINCT tags.id",
       :joins => COLLECTION_JOIN,

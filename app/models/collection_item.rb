@@ -39,9 +39,9 @@ class CollectionItem < ActiveRecord::Base
     end
   end
   
-  named_scope :include_for_works, :include => [{:work => :pseuds}]
-  named_scope :unrevealed, :conditions => {:unrevealed => true}
-  named_scope :anonymous, :conditions =>  {:anonymous => true}
+  scope :include_for_works, :include => [{:work => :pseuds}]
+  scope :unrevealed, :conditions => {:unrevealed => true}
+  scope :anonymous, :conditions =>  {:anonymous => true}
   
   before_save :set_anonymous_and_unrevealed
   def set_anonymous_and_unrevealed

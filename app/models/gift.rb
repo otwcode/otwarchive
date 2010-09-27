@@ -21,13 +21,13 @@ class Gift < ActiveRecord::Base
     end
   end
 
-  named_scope :for_pseud, lambda {|pseud| {:conditions => ["pseud_id = ?", pseud.id]}}
+  scope :for_pseud, lambda {|pseud| {:conditions => ["pseud_id = ?", pseud.id]}}
   
-  named_scope :for_user, lambda {|user| {:conditions => ["pseud_id IN (?)", user.pseuds.collect(&:id).flatten]}}
+  scope :for_user, lambda {|user| {:conditions => ["pseud_id IN (?)", user.pseuds.collect(&:id).flatten]}}
 
-  named_scope :for_recipient_name, lambda {|name| {:conditions => ["recipient_name = ?", name]}}
+  scope :for_recipient_name, lambda {|name| {:conditions => ["recipient_name = ?", name]}}
   
-  named_scope :in_collection, lambda {|collection|
+  scope :in_collection, lambda {|collection|
     {
       :select => "DISTINCT gifts.*",
       :joins => "INNER JOIN works ON (gifts.work_id = works.id) 
@@ -36,9 +36,9 @@ class Gift < ActiveRecord::Base
     }
   }
   
-  named_scope :name_only, :select => :recipient_name
+  scope :name_only, :select => :recipient_name
   
-  named_scope :include_pseuds, :include => [{:work => :pseuds}]
+  scope :include_pseuds, :include => [{:work => :pseuds}]
 
   def recipient=(new_recipient_name)
     self.pseud = Pseud.parse_byline(new_recipient_name, :assume_matching_login => true).first

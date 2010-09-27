@@ -108,9 +108,9 @@ class Prompt < ActiveRecord::Base
     true # everything empty
   end
 
-  named_scope :in_collection, lambda {|collection| { :conditions => ["collection.id = ?", collection.id] }}
+  scope :in_collection, lambda {|collection| { :conditions => ["collection.id = ?", collection.id] }}
 
-  named_scope :unused, {:conditions => {:used_up => false}}
+  scope :unused, {:conditions => {:used_up => false}}
 
   # We want to have all the matching methods defined on
   # TagSet available here, too, without rewriting them,

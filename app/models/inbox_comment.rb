@@ -6,7 +6,7 @@ class InboxComment < ActiveRecord::Base
   belongs_to :feedback_comment, :class_name => 'Comment'
   
   # Filters inbox comments by read and/or replied to and sorts by date
-  named_scope :find_by_filters, lambda { |filters| 
+  scope :find_by_filters, lambda { |filters| 
     read = case filters[:read]
       when 'true' then true
       when 'false' then false

@@ -21,12 +21,12 @@ class Comment < ActiveRecord::Base
     errors.add_to_base(t('invalid_spam', :default => "This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam
   end
   
-  named_scope :recent, lambda { |*args| {:conditions => ["created_at > ?", (args.first || 1.week.ago.to_date)]} }
-  named_scope :limited, lambda {|limit| {:limit => limit.kind_of?(Fixnum) ? limit : 5} }
-  named_scope :ordered_by_date, :order => "created_at DESC"
-  named_scope :top_level, :conditions => ["commentable_type in (?)", ["Chapter", "Bookmark"]]
-  named_scope :include_pseud, :include => :pseud
-  named_scope :not_deleted, :conditions => {:is_deleted => false}
+  scope :recent, lambda { |*args| {:conditions => ["created_at > ?", (args.first || 1.week.ago.to_date)]} }
+  scope :limited, lambda {|limit| {:limit => limit.kind_of?(Fixnum) ? limit : 5} }
+  scope :ordered_by_date, :order => "created_at DESC"
+  scope :top_level, :conditions => ["commentable_type in (?)", ["Chapter", "Bookmark"]]
+  scope :include_pseud, :include => :pseud
+  scope :not_deleted, :conditions => {:is_deleted => false}
   
   # Gets methods and associations from acts_as_commentable plugin
   acts_as_commentable

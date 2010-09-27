@@ -76,7 +76,7 @@ class TagSet < ActiveRecord::Base
     end
   end
   
-  named_scope :matching, lambda {|tag_set_to_match|
+  scope :matching, lambda {|tag_set_to_match|
     {
       :select => "DISTINCT tag_sets.*",
       :joins => :tags,

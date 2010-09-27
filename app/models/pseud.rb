@@ -57,7 +57,7 @@ class Pseud < ActiveRecord::Base
   
   after_update :check_default_pseud
   
-  named_scope :on_works, lambda {|owned_works|
+  scope :on_works, lambda {|owned_works|
     {
       :select => "DISTINCT pseuds.*",
       :joins => :works,
@@ -66,7 +66,7 @@ class Pseud < ActiveRecord::Base
     }
   }
   
-  named_scope :with_posted_works, {
+  scope :with_posted_works, {
     :select => "pseuds.*, count(pseuds.id) AS work_count",
     :joins => :works,
     :conditions => {:works => {:posted => true, :hidden_by_admin => false}},
@@ -74,7 +74,7 @@ class Pseud < ActiveRecord::Base
     :order => :name
   }
   
-  named_scope :with_public_works, {
+  scope :with_public_works, {
     :select => "pseuds.*, count(pseuds.id) AS work_count",
     :joins => :works,
     :conditions => {:works => {:posted => true, :hidden_by_admin => false, :restricted => false}},
@@ -82,7 +82,7 @@ class Pseud < ActiveRecord::Base
     :order => :name
   }
 
-  named_scope :with_public_bookmarks, {
+  scope :with_public_bookmarks, {
     :select => "pseuds.*, count(pseuds.id) AS bookmark_count",
     :joins => :bookmarks,
     :conditions => {:bookmarks => {:private => false, :hidden_by_admin => false}},
@@ -90,7 +90,7 @@ class Pseud < ActiveRecord::Base
     :order => :name   
   }
   
-  named_scope :with_public_recs, {
+  scope :with_public_recs, {
     :select => "pseuds.*, count(pseuds.id) AS rec_count",
     :joins => :bookmarks,
     :conditions => {:bookmarks => {:private => false, :hidden_by_admin => false, :rec => true}},
@@ -98,8 +98,8 @@ class Pseud < ActiveRecord::Base
     :order => :name   
   }
   
-  named_scope :alphabetical, :order => :name
-  named_scope :starting_with, lambda {|letter| {:conditions => ['SUBSTR(name,1,1) = ?', letter]}}
+  scope :alphabetical, :order => :name
+  scope :starting_with, lambda {|letter| {:conditions => ['SUBSTR(name,1,1) = ?', letter]}}
   
 
   # Enigel Dec 12 08: added sort method
@@ -131,7 +131,7 @@ class Pseud < ActiveRecord::Base
     self.recs.public.size
   end
   
-  named_scope :public_work_count_for, lambda {|pseud_ids|
+  scope :public_work_count_for, lambda {|pseud_ids|
     {
       :select => "pseuds.id, count(pseuds.id) AS work_count",
       :joins => :works,
@@ -140,7 +140,7 @@ class Pseud < ActiveRecord::Base
     }
   }  
 
-  named_scope :posted_work_count_for, lambda {|pseud_ids|
+  scope :posted_work_count_for, lambda {|pseud_ids|
     {
       :select => "pseuds.id, count(pseuds.id) AS work_count",
       :joins => :works,
@@ -149,7 +149,7 @@ class Pseud < ActiveRecord::Base
     }
   }
 
-  named_scope :public_rec_count_for, lambda {|pseud_ids|
+  scope :public_rec_count_for, lambda {|pseud_ids|
     {
       :select => "pseuds.id, count(pseuds.id) AS rec_count",
       :joins => :bookmarks,
@@ -207,7 +207,7 @@ class Pseud < ActiveRecord::Base
   
 
   # look up by byline
-  named_scope :by_byline, lambda {|byline|
+  scope :by_byline, lambda {|byline|
     {
       :conditions => ['users.login = ? AND pseuds.name = ?', 
         (byline.include?('(') ? byline.split('(', 2)[1].strip.chop : byline),

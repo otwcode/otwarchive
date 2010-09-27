@@ -118,10 +118,10 @@ protected
   
 public
 
-  named_scope :public_skins, :conditions => {:public => true}
-  named_scope :approved_skins, :conditions => {:official => true, :public => true}
-  named_scope :unapproved_skins, :conditions => {:public => true, :official => false, :rejected => false}
-  named_scope :rejected_skins, :conditions => {:public => true, :official => false, :rejected => true}
+  scope :public_skins, :conditions => {:public => true}
+  scope :approved_skins, :conditions => {:official => true, :public => true}
+  scope :unapproved_skins, :conditions => {:public => true, :official => false, :rejected => false}
+  scope :rejected_skins, :conditions => {:public => true, :official => false, :rejected => true}
 
   def remove_me_from_preferences
     Preference.update_all("skin_id = #{Skin.default.id}", "skin_id = #{self.id}")
