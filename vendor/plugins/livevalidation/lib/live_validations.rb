@@ -1,24 +1,53 @@
-module ActiveRecord
+module ActiveModel
   module Validations
     LIVE_VALIDATIONS_OPTIONS = {
       :failureMessage => :message,
-      :validMessage => :valid_message,
       :pattern => :with,
       :onlyInteger => :only_integer
     }
     # more complicated mappings in map_configuration method
 
     VALIDATION_METHODS = {
-      :presence => "Validate.Presence",
-      :numericality => "Validate.Numericality",
-      :format => "Validate.Format",
-      :length => "Validate.Length",
-      :acceptance => "Validate.Acceptance",
-      :confirmation => "Validate.Confirmation"
+      :presence => { :method => "Validate.Presence", 
+  		  :messages => { 
+  			  :failureMessage => "live_validation.presence.failure" 
+  			} 
+  		},
+      :numericality =>  { :method => "Validate.Numericality",
+		    :messages => { 
+    			:notANumberMessage => "live_validation.numericality.not_a_number", 
+    			:notAnIntegerMessage => "live_validation.numericality.not_an_integer",
+    			:wrongNumberMessage => "live_validation.numericality.wrong_number",
+    			:tooLowMessage => "live_validation.numericality.too_low",
+    			:tooHighMessage => "live_validation.numericality.too_high"
+    		} 
+		  },
+      :format => { :method => "Validate.Format",
+    		:messages => { 
+    			:failureMessage => "live_validation.format.failure"
+    		} 
+    	},
+      :length => { :method => "Validate.Length",
+    		:messages => { 
+    			:wrongLengthMessage => "live_validation.length.wrong_length", 
+    			:tooShortMessage => "live_validation.length.too_short",
+    			:tooLongMessage => "live_validation.length.too_long" 
+    		}
+    	},
+      :acceptance => { :method => "Validate.Acceptance",
+    		:messages => { 
+    			:failureMessage => "live_validation.acceptance.failure"
+    		}
+    	},
+      :confirmation => { :method => "Validate.Confirmation",
+    		:messages => { 
+    			:failureMessage => "live_validation.confirmation.failure"
+    		} 
+    	}
     }
 
 
-    module ClassMethods
+    module HelperMethods
 
       VALIDATION_METHODS.keys.each do |type|
         define_method "validates_#{type}_of_with_live_validations".to_sym do |*attr_names|
@@ -62,13 +91,11 @@ module ActiveRecord
         if type == :length and range = ( configuration.delete(:in) || configuration.delete(:within) )
           configuration[:minimum] = range.begin
           configuration[:maximum] = range.end
-          configuration[:tooShortMessage] = configuration.delete(:failureMessage)
-          configuration[:tooLongMessage] = configuration[:tooShortMessage]
         end
         if type == :confirmation
           configuration[:match] = self.to_s.underscore + '_' + attr_name.to_s + '_confirmation'
         end
-        configuration[:validMessage] ||= ''
+#        configuration[:validMessage] ||= ''
         configuration.reject {|k, v| v.nil? }
       end
     end

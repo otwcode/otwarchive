@@ -1,2 +1,2 @@
-# require 'live_validations'
-# require 'form_helpers'
+require 'live_validations'
+require 'form_helpers'

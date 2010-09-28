@@ -43,9 +43,7 @@ module Innerfusion
    
    # add this in your layout file which will add in the necessary files that you need for ibox
    def iboxify_page
-     content = stylesheet_link_tag("ibox/ibox")
-     content << "\n#{javascript_include_tag('ibox/ibox')}"
-     content
+     stylesheet_link_tag("ibox/ibox") + "\n" + javascript_include_tag('ibox/ibox')
    end
    
    def determine_file_type(type)
