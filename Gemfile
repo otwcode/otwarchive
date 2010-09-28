@@ -20,9 +20,6 @@ gem 'fastthread'
 # Deploy with Capistrano
 # gem 'capistrano'
 
-# To use debugger
-# gem 'ruby-debug'
-
 # Here are all our application-specific gems
 gem 'ruby-openid', :require => 'openid'
 gem 'chronic'
@@ -48,7 +45,12 @@ gem 'tolk'
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
-# group :development, :test do
-#   gem 'webrat'
-# end
+group :development, :test do
+  # enable debugging with "rails server -u" or "rails server --debugger"
+  if RUBY_VERSION >= '1.9'
+    gem 'ruby-debug19', :require => 'ruby-debug'
+  else
+    gem 'ruby-debug'
+  end
+end
 
