@@ -28,7 +28,7 @@
 	<div class="titles">
 		<h1><%= ArchiveConfig.APP_NAME -%></h1>
 
-		<h2><%= t('.otw_link', :default => "A project of the {{otw}}", :otw => '<a href="http://transformativeworks.org">Organization For Transformative Works</a>') %></h2>
+		<h2><%= t('home.otw_link', :default => "A project of the") %> <%= link_to("Organization for Transformative Works", "http://transformativeworks.org") %></h2>
 	</div>
 
 	<ul class="navigation">

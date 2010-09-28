@@ -2,8 +2,9 @@
   <%= label_tag 'login', t('.user_name', :default => "User name:")  %>
   <%= text_field_tag 'login', '', :class => 'text' %>
   <%- if ArchiveConfig.USE_OPENID -%>
-    <%= link_to_remote image_tag("openid.png", :class => 'openid', :alt => 'OpenID', :title => 'OpenID') , 
+    <%= link_to image_tag("openid.png", :class => 'openid', :alt => 'OpenID', :title => 'OpenID') , 
                                   {:url => {:controller => :session, :action => 'openid_small'}}, 
+                                  :remote => true,
                                   :href => url_for(:overwrite_params => { :use_openid => true }) 
                                   -%>
   <%- end -%>

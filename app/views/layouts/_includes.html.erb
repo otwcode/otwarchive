@@ -4,7 +4,7 @@
 <%= stylesheet_link_tag 'site-chrome', :media => 'screen' %>
 <%= stylesheet_link_tag 'forms', :media => 'screen' %>
 <%= stylesheet_link_tag 'user-generated-views', :media => 'all' %>
-<%- if controller.controller_name == 'home' && params[:action] == 'index' -%>
+<%- if controller.controller_name == 'home' && controller.action_name == 'index' -%>
   <%= stylesheet_link_tag 'home', :media => 'screen' %>
 <%- end -%>
 <%- if controller.controller_name == 'translations' || controller.controller_name == 'translation_notes' -%>
@@ -51,6 +51,8 @@
 <%= javascript_include_tag :defaults %>
 <%= javascript_include_tag 'live_validation' %>
 <%= javascript_include_tag 'accessible' %>
+
+<%= csrf_meta_tag %>
 
 <%= yield :tinymce_init %>
 

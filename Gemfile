@@ -26,7 +26,7 @@ gem 'fastthread'
 # Here are all our application-specific gems
 gem 'ruby-openid', :require => 'openid'
 gem 'chronic'
-gem 'will_paginate'
+gem 'will_paginate', '3.0.pre'
 gem 'shoulda', :require => 'shoulda/rails'
 gem 'andand'
 gem 'htmlentities'
@@ -42,6 +42,8 @@ gem 'aws-s3', :require => 'aws/s3'
 # gem 'fastercsv' -- will use this eventually for exporting to excel tsv format
 gem 'mocha'
 gem 'css_parser'
+
+gem 'tolk'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators

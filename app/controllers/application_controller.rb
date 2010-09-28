@@ -1,6 +1,3 @@
-# Filters added to this controller apply to all controllers in the application.
-# Likewise, all the methods added will be available for all controllers.
-
 PROFILER_SESSIONS_FILE = 'used_tags.txt'
 
 class ApplicationController < ActionController::Base
@@ -262,7 +259,6 @@ class ApplicationController < ActionController::Base
 
   #### -- AUTHORIZATION -- ####
 
-  # See ActionController::RequestForgeryProtection for details
-  # Uncomment the :secret if you're not using the cookie session store
-  #protect_from_forgery # :secret => 'ac9a60d7583c3455f6ac2ad6ba21d83e'
+  protect_from_forgery
+
 end
