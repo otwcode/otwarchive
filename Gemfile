@@ -42,7 +42,7 @@ gem 'aws-s3', :require => 'aws/s3'
 # gem 'fastercsv' -- will use this eventually for exporting to excel tsv format
 gem 'mocha'
 gem 'css_parser'
-
+gem 'paperclip'
 gem 'tolk'
 
 # Bundle gems for the local environment. Make sure to
