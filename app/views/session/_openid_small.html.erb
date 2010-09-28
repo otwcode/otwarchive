@@ -5,8 +5,8 @@
 <p class="footnote">
   <%= check_box_tag('remember_me', '1', false) %>
   <%= label_tag 'remember_me', t('.remember_me', :default => "Remember me") %>&nbsp;|
-  <%= link_to_remote 'standard login', {:url => {:controller => :session, :action => 'passwd_small'}}, 
- 										 :href => url_for(:overwrite_params => { :use_openid => false }), :class => 'footnote' %>
+  <%= link_to 'standard login', {:url => {:controller => :session, :action => 'passwd_small'}}, :remote => true,
+              :href => url_for(:overwrite_params => { :use_openid => false }), :class => 'footnote' %>
 </p>
 <p>
   <%= submit_tag t('.login', :default => "Log in"), :class => 'button' %>

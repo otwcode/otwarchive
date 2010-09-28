@@ -18,6 +18,6 @@
 	</p>
 	<% if ArchiveConfig.USE_OPENID %>
 	<p class="openid">
-		<%= image_tag("openid.png", :alt => '') %> <%= link_to_remote(t('.open_id_login', :default => "Log in with OpenID"), {:url => { :action => 'openid' }}, :href => url_for(:action => 'new', :use_openid => true ) )%>
+		<%= image_tag("openid.png", :alt => '') %> <%= link_to(t('.open_id_login', :default => "Log in with OpenID"), {:url => { :action => 'openid' }}, :remote => true, :href => url_for(:action => 'new', :use_openid => true ) )%>
 	</p>
 <%- end -%>

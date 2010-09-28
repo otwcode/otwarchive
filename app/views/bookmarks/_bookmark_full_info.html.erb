@@ -31,12 +31,12 @@
     <%- if params[:tag_id] || @most_recent_bookmarks -%>
     <li id="recent_link_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.bookmarkable_id}" -%>" style="display: none;">
       <%- if @most_recent_bookmarks -%>
-        <%= link_to_remote "View most recent bookmarks", :url => {:controller => 'bookmarks', :action => 'fetch_recent', :id => bookmark.id, :params => {:fetch => true} },
-      :method => :get %></li>
+        <%= link_to "View most recent bookmarks", :url => {:controller => 'bookmarks', :action => 'fetch_recent', :id => bookmark.id, :params => {:fetch => true} },
+      :method => :get, :remote => true %></li>
       <%- else -%>
       <%- @tag = Tag.find_by_name(params[:tag_id]) -%>
-      <%= link_to_remote "View most recent bookmarks", :url => {:controller => 'bookmarks', :action => 'fetch_recent', :id => bookmark.id, :params => {:fetch => true, :tag_id => params[:tag_id]} },
-      :method => :get %></li>
+      <%= link_to "View most recent bookmarks", :url => {:controller => 'bookmarks', :action => 'fetch_recent', :id => bookmark.id, :params => {:fetch => true, :tag_id => params[:tag_id]} },
+      :method => :get, :remote => true %></li>
       <%- end -%>
 <!--/actions-->
     <!-- SCRIPT hides recent link if no JS available-->

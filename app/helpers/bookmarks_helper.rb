@@ -24,7 +24,7 @@ module BookmarksHelper
       # existing bookmark is opened for editing but a new bookmark can be created by selecting a different pseud on the form.
       @existing = Bookmark.find(:all, :conditions => ["bookmarkable_type = ? AND bookmarkable_id = ? AND pseud_id IN (?)", bookmarkable.class.name.to_s, bookmarkable.id, current_user.pseuds.collect(&:id)])
       if @existing.blank?                                         
-        link_to_remote text, {:url => fallback, :method => :get}, :href => fallback
+        link_to text, {:url => fallback, :method => :get}, :remote => true, :href => fallback
       else
         # eventually we want to add the option here to remove the existing bookmark
         # Enigel Dec 10 08 - adding an edit link for now

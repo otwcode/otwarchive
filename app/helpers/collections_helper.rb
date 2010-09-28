@@ -8,7 +8,7 @@ module CollectionsHelper
     if logged_in? && item.class == Work
       fallback_url = new_work_collection_item_path(item)
       text = t('collections_helper.add_to_collection', :default => "Add To Collection")
-      link_to_remote text, {:url => fallback_url, :method => :get, :href => fallback_url}
+      link_to text, {:url => fallback_url, :method => :get, :remote => true, :href => fallback_url}
     end
   end
   

@@ -11,5 +11,5 @@
 		<%= submit_tag 'Log in', :class => 'submit' %>
 	</p>
 	<p class="footnote openid">
-		<%= link_to_remote 'Return to standard log in' , {:url => {:action => 'passwd'}}, :href => url_for( :action => 'new', :use_openid => false ) %>
+		<%= link_to 'Return to standard log in' , {:url => {:action => 'passwd'}}, :remote => true, :href => url_for( :action => 'new', :use_openid => false ) %>
 	</p>

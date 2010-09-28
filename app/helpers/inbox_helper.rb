@@ -19,7 +19,7 @@ module InboxHelper
     else
       fallback_url = fallback_url_for_comment(comment, {:add_comment_reply_id => comment.id})
     end    
-    link_to_remote "Reply", {:url => reply_user_inbox_path(current_user, :comment_id => comment), :method => :get}, :href => fallback_url
+    link_to "Reply", {:url => reply_user_inbox_path(current_user, :comment_id => comment), :method => :get}, :remote => true, :href => fallback_url
   end
   
 end

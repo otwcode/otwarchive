@@ -1,7 +1,7 @@
 <!-- Note: anticipates that current_user is set -->
 <h2>Welcome to the Archive of Our Own!</h2>
 <p>Here are some tips to help you get started. <% if current_user %>
-<%= link_to_remote "Dismiss this message permanently", { :url => { :controller => "users", :action => "end_first_login", :id => current_user.login} }, { :class => 'navigation' } %></p>
+<%= link_to "Dismiss this message permanently", { :url => { :controller => "users", :action => "end_first_login", :id => current_user.login} }, { :class => 'navigation', :remote => true } %></p>
 <% end %>
 
 <h3 class="landmark">Table Of Contents</h3>
