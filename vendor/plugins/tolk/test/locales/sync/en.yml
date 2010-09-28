@@ -1,7 +1,0 @@
---- 
-en: 
-  nested: 
-    hello_country: Nested Hello Country
-  hello_world: Hello World
-  i18n:
-    plural: Locale specific pluralization rules
